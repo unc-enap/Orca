@@ -221,15 +221,15 @@ NSString* ORLakeShore336InputChanged  = @"ORLakeShore336InputChanged";
     [encoder encodeBool:powerUpEnable   forKey:@"powerUpEnable"];
 }
 
-- (int) numberPointsInTimeRate
+- (NSUInteger) numberPointsInTimeRate
 {
     return [timeRate count];
 }
 
 - (void) timeRateAtIndex:(int)i x:(double*)xValue y:(double*)yValue
 {
-    int count   = [timeRate count];
-    int index   = count-i-1;
+    NSUInteger count   = [timeRate count];
+    NSUInteger index   = count-i-1;
     *xValue     = [timeRate timeSampledAtIndex:index];
     *yValue     = [timeRate valueAtIndex:index];
 }

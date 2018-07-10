@@ -40,7 +40,7 @@
 }
 
 - (NSUndoManager*) undoManager;
-- (int) numberPointsInTimeRate;
+- (NSUInteger) numberPointsInTimeRate;
 - (void) timeRateAtIndex:(int)i x:(double*)xValue y:(double*)yValue;
 - (BOOL) sensorEnabled;
 - (NSString*) inputSetupString;

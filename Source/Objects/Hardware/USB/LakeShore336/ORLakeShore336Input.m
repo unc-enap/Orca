@@ -266,7 +266,7 @@ NSString* ORLakeShore336InputTemperatureChanged  = @"ORLakeShore336InputTemperat
 }
 
 
-- (int) numberPointsInTimeRate
+- (NSUInteger) numberPointsInTimeRate
 {
     return [timeRate count];
 }

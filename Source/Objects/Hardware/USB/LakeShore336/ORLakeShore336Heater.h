@@ -51,7 +51,7 @@
 - (id)   initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
 
-- (int)  numberPointsInTimeRate;
+- (NSUInteger)  numberPointsInTimeRate;
 - (void) timeRateAtIndex:(int)i x:(double*)xValue y:(double*)yValue;
 - (NSString*) heaterSetupString;
 - (NSString*) pidSetupString;
