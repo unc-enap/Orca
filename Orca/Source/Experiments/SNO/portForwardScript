@@ -1,0 +1,66 @@
+#!/usr/bin/expect -f
+# Expect script to forward a local port to port 8000 on ioserver
+# This script needs four arguments to connect to remote server:
+# userName = username on remote ioserver
+# password = Password of remote ioserver
+# ipaddr = IP Addreess of remote ioserver
+# localport = local port to be forwarded
+# For example:
+#  ./portForwardScript userName password 142.51.71.160 localport
+
+set userName [lrange $argv 0 0] 
+set password [lrange $argv 1 1] 
+set ipaddr [lrange $argv 2 2]
+set localport [lrange $argv 3 3] 
+set timeout -1   
+
+spawn -noecho bash
+send -- "PS1='>'\r"
+expect -re ">$"
+
+set prompt ">"
+
+#if port is already connected, get pid of process listening to port $localport
+spawn lsof -t -i:$localport
+expect -re "(.*).*$prompt"
+set pid $expect_out(buffer)
+
+#forward localport to IOS if port is free
+if { $pid != ""} {
+#  exec kill -9 $pid
+  spawn -noecho echo "Port already connected"
+} else {
+  spawn ssh -L $localport:localhost:8000 -l $userName $ipaddr
+  expect {
+    "(yes/no)?" {
+      send -- "yes\r"
+      expect {
+        "*?assword:*" {
+          send -- "$password\r"
+        }
+      }
+    }
+    "*?assword:*" {
+      send -- "$password\r"
+      expect {
+        "*?assword:*" {
+          send -- "$password\r"
+          expect {
+            "*?assword:*" {
+              send -- "$password\r"
+              expect {
+                "Permission denied" {
+                
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    "not known" {
+    }
+  }
+}
+
+expect eof

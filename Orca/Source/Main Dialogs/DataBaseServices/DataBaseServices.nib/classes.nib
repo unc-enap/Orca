@@ -1,0 +1,20 @@
+{
+    IBClasses = (
+        {CLASS = OApplication; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {subscribe = id; unsubscribe = id; }; 
+            CLASS = ORDataBaseServicesController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {servicesListView = NSTableView; sqlConnection = id; }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {
+            ACTIONS = {print = id; }; 
+            CLASS = ORPrintableOutlineView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSOutlineView; 
+        }, 
+        {CLASS = ORTimedTextField; LANGUAGE = ObjC; SUPERCLASS = NSTextField; }
+    ); 
+    IBVersion = 1; 
+}

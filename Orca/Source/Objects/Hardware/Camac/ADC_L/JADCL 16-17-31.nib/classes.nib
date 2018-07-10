@@ -1,0 +1,52 @@
+{
+    IBClasses = (
+        {CLASS = C617Hardware; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = OHexFormatter; LANGUAGE = ObjC; SUPERCLASS = NSFormatter; }, 
+        {
+            ACTIONS = {
+                alarmsEnabledMaskMatrixAction = id; 
+                enabledMaskMatrixAction = id; 
+                highLimitsMatrixAction = id; 
+                initAction = id; 
+                lowLimitsMatrixAction = id; 
+                pollingStatePopupAction = id; 
+                rangeIndexPopupAction = id; 
+                readAdcsAction = id; 
+                readLimitsAction = id; 
+                settingLockAction = id; 
+            }; 
+            CLASS = ORJADCLController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                adcValueMatrix = NSMatrix; 
+                alarmsEnabledMaskMatrix = NSMatrix; 
+                enabledMaskMatrix = NSMatrix; 
+                highLimitsMatrix = NSMatrix; 
+                lastReadTextField = NSTextField; 
+                lowLimitsMatrix = NSMatrix; 
+                plotter0 = ORPlotter1D; 
+                plotter1 = ORPlotter1D; 
+                plotter2 = ORPlotter1D; 
+                plotter3 = ORPlotter1D; 
+                pollingStatePopup = NSPopUpButton; 
+                rangeIndexPopup = NSPopUpButton; 
+                settingLockButton = NSButton; 
+                settingLockDocField = NSTextField; 
+            }; 
+            SUPERCLASS = OrcaObjectController; 
+        }, 
+        {
+            ACTIONS = {showAboutBox = id; showConfiguration = id; showStatus = id; }; 
+            CLASS = OrcaController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = OrcaObjectController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}

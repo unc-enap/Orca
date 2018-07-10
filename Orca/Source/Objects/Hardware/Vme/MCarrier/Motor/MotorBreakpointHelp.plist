@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+<string>
+The stepping motor has hit a software defined breakpoint limit. 
+Check the dialog and verify that the limit is correct. If the 
+limit is correct and you have a limit switch that should have 
+been hit before the software limit, then there may be a problem
+with the limit switch.
+
+Acknowledging this alarm will make it go away. Otherwise, it
+will be cleared the next time the motor is moved and the 
+motor doesn't cross the software breakpoint limit.
+</string>
+</array>
+</plist>
+

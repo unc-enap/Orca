@@ -1,0 +1,10 @@
+#!/usr/bin/expect --
+spawn ftp <userName>@<host>
+expect "* (yes/no)?" {send "yes\r"; expect "*assword:"} "*assword:" 
+send "<password>\n"
+
+expect "*ftp>"
+send "get <remotePath> <localPath>\n"
+set timeout -1 
+expect "*ftp>"
+send "quit\n"

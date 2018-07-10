@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+<string>
+A CAMAC crate is showing no power or can not be reached.
+
+Possible reasons:
+1) No power.
+2) Either:
+	a)No PCI-CAMAC card installed in the Mac or..
+	b)if using USB, cable is disconnected or USB device not selected in the Controller dialog or..
+	c)the configuration connections between the crate and the mac may not be correct.
+3) Driver not installed. (Should also be a 'No Driver' alarm posted)
+4) A bad cable.
+
+This alarm will go away when the crate can be reached.
+
+Acknowledging this alarm will silence it. 
+</string>
+</array>
+</plist>
+

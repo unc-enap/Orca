@@ -1,0 +1,153 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {"" = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = NSObject; LANGUAGE = ObjC; }, 
+        {CLASS = OHexFormatter; LANGUAGE = ObjC; SUPERCLASS = NSFormatter; }, 
+        {
+            ACTIONS = {
+                broadcastTimeAction = id; 
+                checkWaveFormEnabledAction = id; 
+                gainAction = id; 
+                hitRateAllAction = id; 
+                hitRateEnableAction = id; 
+                hitRateLengthAction = id; 
+                hitRateNoneAction = id; 
+                initTPAction = id; 
+                loadTimeAction = id; 
+                modeAction = id; 
+                numTestPatternsAction = id; 
+                readControlButtonAction = id; 
+                readThresholdsGains = id; 
+                readTimeAction = id; 
+                readoutPagesAction = id; 
+                resetAction = id; 
+                settingLockAction = id; 
+                shapingTimeAction = id; 
+                statusAction = id; 
+                tModeAction = id; 
+                testAction = id; 
+                testEnabledAction = id; 
+                testParamAction = id; 
+                thresholdAction = id; 
+                triggerAction = id; 
+                triggerEnableAction = id; 
+                versionAction = id; 
+                writeControlButtonAction = id; 
+                writeThresholdsGains = id; 
+            }; 
+            CLASS = ORAugerFLTController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                broadcastTimeCB = NSButton; 
+                checkWaveFormEnabledButton = NSButton; 
+                gainTextFields = NSMatrix; 
+                hitRateAllButton = NSButton; 
+                hitRateEnabledCBs = NSMatrix; 
+                hitRateLengthField = NSTextField; 
+                hitRateNoneButton = NSButton; 
+                initTPButton = NSButton; 
+                loadTimeButton = NSButton; 
+                modeButton = NSPopUpButton; 
+                numTestPatternsField = NSTextField; 
+                numTestPatternsStepper = NSStepper; 
+                patternTable = NSTableView; 
+                rate0 = ORValueBar; 
+                rateLogCB = NSButton; 
+                rateTextFields = NSMatrix; 
+                readControlButton = NSButton; 
+                readThresholdsGainsButton = NSButton; 
+                readTimeButton = NSButton; 
+                readoutPagesField = NSTextField; 
+                resetButton = NSButton; 
+                settingLockButton = NSButton; 
+                shapingTimePU0 = NSPopUpButton; 
+                shapingTimePU1 = NSPopUpButton; 
+                shapingTimePU2 = NSPopUpButton; 
+                shapingTimePU3 = NSPopUpButton; 
+                statusButton = NSButton; 
+                tModeMatrix = NSMatrix; 
+                tabView = NSTabView; 
+                testButton = NSButton; 
+                testEnabledMatrix = NSMatrix; 
+                testParamsMatrix = NSMatrix; 
+                testStatusMatrix = NSMatrix; 
+                thresholdTextFields = NSMatrix; 
+                timeRateLogCB = NSButton; 
+                timeRatePlot = ORPlotter1D; 
+                totalHitRateField = NSTextField; 
+                totalRate = ORValueBar; 
+                totalRateLogCB = NSButton; 
+                totalView = NSView; 
+                triggerButton = NSButton; 
+                triggerEnabledCBs = NSMatrix; 
+                versionButton = NSButton; 
+                writeControlButton = NSButton; 
+                writeThresholdsGainsButton = NSButton; 
+            }; 
+            SUPERCLASS = OrcaObjectController; 
+        }, 
+        {
+            ACTIONS = {
+                setLogScale = id; 
+                shiftLeft = id; 
+                shiftRight = id; 
+                zoomIn = id; 
+                zoomOut = id; 
+            }; 
+            CLASS = ORAxis; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {preferenceController = id; viewToScale = NSView; }; 
+            SUPERCLASS = NSView; 
+        }, 
+        {
+            ACTIONS = {
+                addGateAction = id; 
+                analyze = id; 
+                autoScale = id; 
+                averageWindowAction = id; 
+                centerOnPeak = id; 
+                clearActiveCurveGates = id; 
+                clearActiveGate = id; 
+                clearAllGates = id; 
+                copy = id; 
+                differentiateAction = id; 
+                removeGateAction = id; 
+                resetScales = id; 
+                savePDF = id; 
+            }; 
+            CLASS = ORPlotter1D; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                analysisDrawer = NSDrawer; 
+                analysisView = ZFlowLayout; 
+                mDataSource = id; 
+                mXScale = ORAxis; 
+                mYScale = ORAxis; 
+            }; 
+            SUPERCLASS = NSView; 
+        }, 
+        {
+            CLASS = ORValueBar; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {chainedView = id; dataSource = id; mXScale = id; }; 
+            SUPERCLASS = NSView; 
+        }, 
+        {
+            ACTIONS = {showAboutBox = id; showConfiguration = id; showStatus = id; }; 
+            CLASS = OrcaController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = OrcaObjectController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}

@@ -1,0 +1,50 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = NSObject; LANGUAGE = ObjC; }, 
+        {
+            ACTIONS = {timeAction = id; }; 
+            CLASS = NcdLogAmpTask; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                stepTask = id; 
+                thePulserModel = id; 
+                timeField = NSTextField; 
+                timeStepper = NSStepper; 
+            }; 
+            SUPERCLASS = ORTask; 
+        }, 
+        {
+            ACTIONS = {
+                runDelayAction = id; 
+                startAction = id; 
+                timeDelayAction = id; 
+                timeIntervalAction = id; 
+                willRepeatAction = id; 
+            }; 
+            CLASS = ORTask; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                bottomSpaceHolder = NSView; 
+                customView = NSView; 
+                delayStartCB = NSButton; 
+                delegate = id; 
+                extraView = NSView; 
+                messageField = NSTextField; 
+                nextRunTimeField = NSTextField; 
+                runStateField = NSTextField; 
+                startButton = NSButton; 
+                taskBox = NSBox; 
+                timeDelayField = NSTextField; 
+                timeDelayStepper = NSStepper; 
+                timeIntervalField = NSTextField; 
+                timeIntervalStepper = NSStepper; 
+                titleField = NSTextField; 
+                view = NSView; 
+                willRepeatMatrix = NSMatrix; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

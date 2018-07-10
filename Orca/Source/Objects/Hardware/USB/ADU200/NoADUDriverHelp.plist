@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+<string>
+The configuration has one of the ADU200 USB relay I/O interfaces, but it appears that the driver has not been installed. 
+You need to locate the ADU200.pkg installer in the Drivers folder of the distribution, double-click on the installer, and reboot.
+
+The driver is a code-less kext that prevents the system from grabbing the ADU unit for exclusive access.
+
+Acknowledging this alarm will make it go away. 
+</string>
+</array>
+</plist>
+

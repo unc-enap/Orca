@@ -1,0 +1,13 @@
+#!/usr/bin/expect --
+set timeout -1
+spawn scp  -o StrictHostKeyChecking=no -o NumberOfPasswordPrompts=1 <userName>@<host>:<remotePath> <localPath>
+expect {
+  "*>* " { }
+  "*$* " { }
+  "*#* " { }
+  "*%* " { }
+  "assword:" {send "<password>\n"}
+}
+expect eof
+catch wait result
+exit [lindex $result 3]

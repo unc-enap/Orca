@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>ofs</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>OrcaFilterScript</string>
+			<key>CFBundleTypeName</key>
+			<string>FilterScript</string>
+			<key>CFBundleTypeRole</key>
+			<string>None</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>NSPersistentStoreTypeKey</key>
+			<string>XML</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>Orca</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>OrcaDoc</string>
+			<key>CFBundleTypeName</key>
+			<string>Orca Experiment</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>ORCA</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>NSDocumentClass</key>
+			<string>ORDocument</string>
+		</dict>
+	</array>
+	<key>CFBundleExecutable</key>
+	<string>Orca</string>
+	<key>CFBundleIconFile</key>
+	<string>Orca</string>
+	<key>CFBundleIdentifier</key>
+	<string>edu.washington.npl.orca</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleSignature</key>
+	<string>ORCA</string>
+	<key>CFBundleVersion</key>
+	<string>12.0h</string>
+	<key>CFfile://localhost/Users/markhowe/Dev/Orca/Source/Objects/Misc%20Objects/SQL/BundleGetInfoString</key>
+	<string>Orca 12, Copyright ©2014 Mark Howe Physics Dept, University of North Carolina</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.6</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSMainNibFile</key>
+	<string>MainMenu</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>ReportBugsTo</key>
+	<string>mhowe@physics.unc.edu</string>
+</dict>
+</plist>

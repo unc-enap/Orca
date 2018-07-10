@@ -1,0 +1,4 @@
+
+The HV MPod crate either has no power or the Ethernet connection has been lost. 
+
+This alarm can be acknowledged, but will exist until the power and/or connection is restored.

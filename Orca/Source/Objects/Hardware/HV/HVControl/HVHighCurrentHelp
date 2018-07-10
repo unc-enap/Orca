@@ -1,0 +1,8 @@
+
+The HV posted a high current condition. This alarm is sticky so
+the alarm will remain in place until it is acknowledged.
+
+If the alarm condition is still in effect, the alarm will
+be reposted after acknowledgment.
+
+Acknowledging this alarm will silence it. 

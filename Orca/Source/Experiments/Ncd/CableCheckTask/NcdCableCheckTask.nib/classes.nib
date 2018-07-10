@@ -1,0 +1,96 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = NSObject; LANGUAGE = ObjC; }, 
+        {
+            ACTIONS = {
+                amplitudeAction = id; 
+                muxThresholdAction = id; 
+                numPulsesAction = id; 
+                shaperThresholdAction = id; 
+                verboseAction = id; 
+                widthAction = id; 
+            }; 
+            CLASS = NcdCableCheckTask; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                amplitudeField = NSTextField; 
+                amplitudeStepper = NSStepper; 
+                muxThresholdField = NSTextField; 
+                muxThresholdStepper = NSStepper; 
+                numPulsesField = NSTextField; 
+                numPulsesStepper = NSStepper; 
+                shaperThresholdField = NSTextField; 
+                shaperThresholdStepper = NSStepper; 
+                thePDSModel = id; 
+                thePulserModel = id; 
+                verboseButton = NSButton; 
+                widthField = NSTextField; 
+                widthStepper = NSStepper; 
+            }; 
+            SUPERCLASS = ORTask; 
+        }, 
+        {
+            ACTIONS = {
+                burstRateAction = id; 
+                endAmplitudeAction = id; 
+                numOfValuesAction = id; 
+                startAmplitudeAction = id; 
+                timeAction = id; 
+                widthAction = id; 
+            }; 
+            CLASS = NcdThresholdTask; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                burstRateField = NSTextField; 
+                burstRateStepper = NSStepper; 
+                endAmplitudeField = NSTextField; 
+                endAmplitudeStepper = NSStepper; 
+                numValuesField = NSTextField; 
+                numValuesStepper = NSStepper; 
+                startAmplitudeField = NSTextField; 
+                startAmplitudeStepper = NSStepper; 
+                thePDSModel = id; 
+                thePulserModel = id; 
+                timeField = NSTextField; 
+                timeStepper = NSStepper; 
+                widthField = NSTextField; 
+                widthStepper = NSStepper; 
+            }; 
+            SUPERCLASS = ORTask; 
+        }, 
+        {CLASS = OHexFormatter; LANGUAGE = ObjC; SUPERCLASS = NSFormatter; }, 
+        {
+            ACTIONS = {
+                detailsAction = id; 
+                runDelayAction = id; 
+                startAction = id; 
+                timeDelayAction = id; 
+                timeIntervalAction = id; 
+                willRepeatAction = id; 
+            }; 
+            CLASS = ORTask; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                delayStartCB = NSButton; 
+                delegate = id; 
+                detailsButton = NSButton; 
+                extraView = NSView; 
+                messageField = NSTextField; 
+                nextRunTimeField = NSTextField; 
+                runStateField = NSTextField; 
+                startButton = NSButton; 
+                taskBox = NSBox; 
+                timeDelayField = NSTextField; 
+                timeDelayStepper = NSStepper; 
+                timeIntervalField = NSTextField; 
+                timeIntervalStepper = NSStepper; 
+                titleField = NSTextField; 
+                view = NSView; 
+                willRepeatMatrix = NSMatrix; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

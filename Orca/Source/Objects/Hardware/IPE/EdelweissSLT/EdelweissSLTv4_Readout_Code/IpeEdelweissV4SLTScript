@@ -1,0 +1,116 @@
+#!/bin/bash
+#
+##################################################################################
+# This file: 	IpeV4SLTScript
+# Date:		2010-02-27 
+# Author:	Till.Bergmann@kit.edu
+# Purpose:	Customn Script to configure the PrPMC (e.g. for simulation mode)
+#		or to execute commands on the PrPMC
+##################################################################################
+
+echo This is IpeV4SLTScript - number of arguments is $# 
+
+if [ "$1" = "arg1" ]
+then
+	echo "- I recognized the argument '$1'! - "
+elif  test "$1" = "InstallIpe4reader" -o   "$1" = "InstallAndCompileIpe4reader"  
+#elif  [ "$1" = "InstallIpe4reader" -o   "$1" = "InstallAndCompileIpe4reader"  ]
+then
+    #copy all ipe4reader files to ~/ipe4reader
+	echo "- I recognized the argument '$1'! - "
+    pwd
+    ls .
+    ls ../ipe4reader
+	if test -d ~/ORCA/ ; then
+		#cd ~/ORCA
+        echo Folder ORCA exists
+    else
+        echo Folder ORCA does NOT exists, exiting
+        exit
+    fi
+	if test -d ~/ipe4reader/ ; then
+		#cd ~/ORCA
+        echo Folder ipe4reader exists
+    else
+        echo Folder ipe4reader does NOT exists, make it
+        mkdir ~/ipe4reader/
+    fi
+    (cd ORCA; cp ipe4reader.cpp ipe4reader.h ipe4structure.h ipe4tbtools.cpp ipe4tbtools.h Makefile.ipe4reader ~/ipe4reader/ ; cd ;)
+	if test -f ~/ipe4reader/ipe4reader.config ; then
+        echo File ipe4reader.config exists
+    else
+        echo File ipe4reader.config does NOT exist
+        (cd ORCA; cp ipe4reader.config ~/ipe4reader/ ; cd ;)
+    fi
+	if test  "$1" = "InstallAndCompileIpe4reader"  ; then
+        cd ~/ipe4reader/
+        make -f Makefile.ipe4reader
+    fi
+elif  [ "$1" = "SimulationConfigScriptON" ]
+then
+	echo "- I recognized the argument '$1'! - "
+	if test -a ~/ORCA; then
+		cd ~/ORCA
+		echo "PMC_COMPILE_IN_SIMULATION_MODE=1"> simulationmode.mk
+		#touch HW_Readout.cc
+		#touch ORSLTv4Readout.cc
+		#touch ORFLTv4Readout.cc
+		make -B
+		if [ x"$2" = x"" ] ; then
+			echo Start OrcaReadout with standard port 44667 ...
+			~/ORCA/OrcaReadout 44667 &
+		else
+			echo Start OrcaReadout with port $2 ...
+			~/ORCA/OrcaReadout $2 &
+		fi
+	else 
+		echo Directory ORCA does not exist: upload readout code, send ON again and recompile!
+	fi
+elif  [ "$1" = "SimulationConfigScriptOFF" ]
+then
+	echo "- I recognized the argument '$1'! - "
+	if test -a ~/ORCA/ ; then
+		cd ~/ORCA
+		echo "PMC_COMPILE_IN_SIMULATION_MODE=0"> simulationmode.mk
+		#touch HW_Readout.cc
+		#touch ORSLTv4Readout.cc
+		#touch ORFLTv4Readout.cc
+		#rm simulationmode.mk
+		make -B
+		# maybe I should leave it to the user to restart the readout code? -tb-
+		if [ x"$2" = x"" ] ; then
+			echo Start OrcaReadout with standard port 44667 ...
+			~/ORCA/OrcaReadout 44667 &
+		else
+			echo Start OrcaReadout with port $2 ...
+			~/ORCA/OrcaReadout $2 &
+		fi
+	else echo "OK (nothing needed to be done)"
+	# shall I remove the file simulationmode.mk?
+	fi
+elif  [ "$1" = "shellcommand" ]
+then
+	echo "- I recognized the argument '$1'! - "
+	echo "Executing shell command ..." "$2 $3 $4 $5 $6 $7 $8 $9"
+	$2 $3 $4 $5 $6 $7 $8
+else
+	echo "Unknown argument"
+fi
+
+
+
+# some tests:
+if [ "$1" = "tilltest" ]
+    then
+    cd ~/tmp
+    touch tillsScriptWasHere.txt
+    echo arguments are: XXX $0 $1 $2 XXX
+    for X in $*
+    do
+        echo $X
+    done
+    echo Writing tillsScriptWasHere.txt
+    echo hallo >>tillsScriptWasHere.txt
+
+    rm ../IpeV4SLTScript
+fi

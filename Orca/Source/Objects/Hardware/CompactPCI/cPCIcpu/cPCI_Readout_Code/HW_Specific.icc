@@ -1,0 +1,17 @@
+#include "SBC_Cmds.h"
+#include "ORVCard.hh"
+#include "ORAcqirisDC440Readout.hh"
+int32_t load_card(SBC_card_info* card_info, int32_t index) 
+{
+  ORVCard* aCard = NULL;
+  switch(card_info->hw_type_id){
+    case kAcqirisDC440:       
+      aCard = new ORAcqirisDC440Readout(card_info); 
+      break;
+  }
+  if (!aCard) return 0;
+  gSetOfCards[index] = aCard;
+  return 1; 
+}
+
+

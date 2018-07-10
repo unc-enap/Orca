@@ -1,0 +1,35 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            CLASS = ORAugerCrateController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                groupView = ORGroupView; 
+                lockDocField = NSTextField; 
+                powerField = NSTextField; 
+            }; 
+            SUPERCLASS = OrcaObjectController; 
+        }, 
+        {CLASS = ORAugerCrateView; LANGUAGE = ObjC; SUPERCLASS = ORGroupView; }, 
+        {
+            ACTIONS = {
+                concludeDragOperation = id; 
+                copy = id; 
+                cut = id; 
+                draggingExited = id; 
+                paste = id; 
+            }; 
+            CLASS = ORGroupView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {mouseTask = id; }; 
+            SUPERCLASS = NSView; 
+        }, 
+        {
+            CLASS = OrcaObjectController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}

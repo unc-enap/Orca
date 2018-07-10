@@ -1,0 +1,134 @@
+#include "VME_HW_Definitions.h"
+#include "ORVCard.hh"
+#include "ORGretinaReadout.hh"
+#include "ORGretina4MReadout.hh"
+#include "ORGretina4AReadout.hh"
+#include "ORLAMData.hh"
+#include "ORDataGenReadout.hh"
+#include "ORMTCReadout.hh"
+#include "ORSNOCrateReadout.hh"
+#include "ORShaperReadout.hh"
+#include "ORCAENReadout.hh"
+#include "ORCAEN775Readout.hh"
+#include "ORCAEN792Readout.hh"
+#include "ORCAEN1730Readout.hh"
+#include "ORCAEN1720Readout.hh"
+#include "ORCAEN1721Readout.hh"
+#include "ORCAEN1724Readout.hh"
+#include "ORCAEN419Readout.hh"
+#include "ORCAEN965Readout.hh"
+#include "ORCAEN785Readout.hh"
+#include "ORCAEN1785Readout.hh"
+#include "ORCAEN260Readout.hh"
+#include "ORSIS3300Readout.hh"
+#include "ORSIS3302Card.hh"
+#include "ORSIS3316Card.hh"
+#include "ORSIS3305Card.hh"
+#include "ORVMETrigger32Readout.hh"
+#include "ORSIS3350Readout.hh"
+#include "ORSIS3320Readout.hh"
+#include "ORCAEN830Readout.hh"
+#include "ORPollingTimeStampReadout.hh"
+#include "ORXyCom564Readout.hh"
+
+int32_t load_card(SBC_card_info* card_info, int32_t index) 
+{
+  ORVCard* aCard = NULL;
+  switch(card_info->hw_type_id){
+    case kDataGen:       
+      aCard = new ORDataGenReadout(card_info); 
+      break;
+    case kShaper:
+      aCard = new ORShaperReadout(card_info); 
+      break;
+    case kGretina:
+      aCard = new ORGretinaReadout(card_info); 
+      break;
+    case kGretina4M:
+      aCard = new ORGretina4MReadout(card_info); 
+      break;
+   case kGretina4A:
+      aCard = new ORGretina4AReadout(card_info); 
+      break;
+    case kTrigger32:
+      aCard = new ORVMETrigger32Readout(card_info); 
+      break;
+    case kCaen:    
+      aCard = new ORCAENReadout(card_info); 
+      break;
+    case kSBCLAM: 
+      aCard = new ORLAMData(card_info); 
+      break;
+    case kCaen1730:
+      aCard = new ORCAEN1730Readout(card_info); 
+      break;    
+    case kCaen1720:
+      aCard = new ORCAEN1720Readout(card_info); 
+      break;    
+    case kCaen1721:
+      aCard = new ORCAEN1721Readout(card_info); 
+      break;
+    case kCaen1724:
+      aCard = new ORCAEN1724Readout(card_info); 
+      break;
+    case kMtc:
+      aCard = new ORMTCReadout(card_info);
+      break;
+    case kSnoCrate:
+      aCard = new ORSNOCrateReadout(card_info);
+      break;
+    case kSIS3300:
+      aCard = new ORSIS3300Readout(card_info);
+      break;
+    case kCaen419:
+      aCard = new ORCAEN419Readout(card_info);
+      break;
+    case kSIS3350:
+      aCard = new ORSIS3350Readout(card_info);
+      break;
+    case kSIS3302:
+        aCard = new ORSIS3302Card(card_info);
+        break;
+    case kSIS3316:
+        aCard = new ORSIS3316Card(card_info);
+        break;
+    case kSIS3305:
+      aCard = new ORSIS3305Card(card_info);
+      break;
+    case kCaen965:
+      aCard = new ORCaen965Readout(card_info);
+      break;
+     case kCaen785:
+      aCard = new ORCaen785Readout(card_info);
+      break;
+   case kCaen1785:
+      aCard = new ORCAEN1785Readout(card_info);
+      break;
+   case kCaen775:
+      aCard = new ORCAEN775Readout(card_info);
+      break;
+    case kCaen792:
+      aCard = new ORCAEN792Readout(card_info);
+      break;
+  case kCaen260:
+      aCard = new ORCAEN260Readout(card_info);
+      break;
+   case kCaen830:
+      aCard = new ORCAEN830Readout(card_info);
+      break;
+    case kSIS3320:
+      aCard = new ORSIS3320Readout(card_info);
+      break;
+    case kPollingTimeStamp:
+      aCard = new ORPollingTimeStampReadout(card_info);
+      break;
+    case kXyCom564:
+      aCard = new ORXyCom564Readout(card_info);
+      break;
+  }
+  if (!aCard) return 0;
+  gSetOfCards[index] = aCard;
+  return 1; 
+}
+
+

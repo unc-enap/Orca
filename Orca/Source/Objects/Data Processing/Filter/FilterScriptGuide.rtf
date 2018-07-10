@@ -1,0 +1,189 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf370
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+
+\f0\i\b\fs22 \cf0 \
+
+\i0\b0 Tip: you can cut and paste from this guide. Also note that, for the most part, the syntax is just like 'C'.
+\i\b \
+
+\i0\b0 Tip: you can drag an object from the configuration into the script view to get the id text that is used by the find command.
+\i\b \
+
+\i0 \
+Program Structure\
+\
+
+\b0 start\
+\{\
+	//code to be executed at start of run\
+\}\
+\
+filter\
+\{\
+	//code to be executed for 
+\i\b every
+\i0\b0  data record\
+\}\
+\
+finish\
+\{\
+	//code to be executed at end of run\
+\}\
+\
+Note: All parts are optional.
+\b \
+\
+
+\b0 \
+
+\b Special Arguments
+\b0 \
+The arguments in the FilterTask dialog are special hidden arguments. They can be accessed by name (i.e. $1,$2, etc...) in the body of any of the filter functions.\
+\
+
+\b Loops
+\b0 \
+for(<exp>;<exp>;<exp>) \{\
+	<statements>\
+\}\
+\
+do \{\
+	<statements>\
+\} while(<exp>);\
+\
+while(<exp>)\{\
+	<statements>\
+\}\
+\
+break;		
+\i //exit loop early
+\i0 \
+continue;		
+\i //goto next iteration
+\i0 \
+\
+
+\b Logic\
+
+\b0 if(<condition>)\{\
+	<statements>\
+\}\
+\
+if(<condition>)\{\
+	<statements>\
+\}\
+else \{\
+	<statements>\
+\}\
+\
+unless(<condition>)\{\
+	<statements>\
+\}\
+\
+
+\b Switch Statements\
+
+\b0 switch(<condition>)\{\
+	case <val>: <statements> break;\
+	case <val>: <statements> break;\
+	..\
+	default: <statements> break;\
+\}\
+\
+
+\b Conditional\
+
+\b0 var = <expression>?<stmt>:<stmt>\
+\
+
+\b ORCA Filter functions
+\b0 \
+currentRecordIs(<var>);		//returns YES  if current record is of type <var>\
+id = extractRecordID(<var>);	//returns dataid of current record\
+len = extractRecordLen(<var>);	//returns # longs in current record\
+val = extractValue(<var>,<mask>,<shift>); //returns (var & mask) >> shift\
+shipRecord(<ptr>);			//ships record pointed to by <ptr>\
+push(<var>,<ptr>);			//push record pointed to by <ptr> onto stack <var>\
+ptr = pop(<var>);				//pop a record from stack <var>\
+ptr = bottomPop(<var>);		//pop a record from bottom of stack <var>\
+stackCount(<var>);			//returns the number of items in stack <var>\
+dumpStack(<var>);			//delete all records from stack <var>\
+shipStack(<var>);			//put the contents stack <var> into data stream\
+						//
+\b NOTE
+\b0 : contents shipped in reverse order they\
+						//were pushed onto stack\
+histo1D(<var1>,<var2>);		//load the value <val2> into 1D histogram <var1>\
+histo2D(<var1>,<x>,<y>);		//load the values <x>,<y> into 2D histogram <var1>\
+stripChart(<var1>,<time>,<var2>);	//load <var2> into strip chart <var1> at <time>\
+display(<var1>,<var2>);		//load value <var2> into display slot <var1>\
+resetDisplays();				//load value 0 into all display slots\
+time();					//returns number of seconds since 1/1/1970\
+random(<high>,<low>);			//returns a random number between high and low\
+\
+
+\b Special Variables\
+
+\b0 CurrentRecordPtr			//Points to first word of the current record\
+CurrentRecordLen			//Holds the length of the current record\
+ElapsedTime				//Holds run elapsed time in milliseconds\
+						//Note this is the actual time since the script started\
+						//it is 
+\b not 
+\b0 decoded from the data stream.\
+\
+Other special variables include 
+\i\b ALL
+\i0\b0  of the data ids that are in the run header. An example would be 
+\i ORShaperDecoderForShaper
+\i0  is the name of the data id for the Shaper card adc data id. Others must be gleaned from knowledge of the run header itself. Look at an example run header or examine the ORCA source code to discover the proper names.\
+\
+
+\b Important:\
+
+\b0 Note that some of the functions take 
+\i variables
+\i0  and some take 
+\i pointers 
+\i0 as arguments. For example, you would use 
+\i extractRecordLen(CurrentRecordPtr[0]) 
+\i0\b NOT 
+\i\b0 extractRecordLen(CurrentRecordPtr).
+\i0  Unfortunately, it is not possible for FilterScript to warn you of type mismatches.\
+\
+
+\b Output
+\b0 \
+print <var>; 				//
+\b NOTE
+\b0 : care should be taken not swamp \
+print (<var>);				//the Log by printing from the filter part \
+printh <var>; 				//print hex value\
+printh (<var>);				//print hex value\
+
+\b \
+Array Declaration
+\b0 \
+array varName[<size>];\
+\
+Note: Arrays can not be used just anywhere. i.e. a[i]++ will pass the syntax checker but will cause a run-time exception. Other operators that do not work with arrays include, +=, -=,*=, etc...\
+\
+
+\b Operators
+\b0 \
++	-	/	*	%	++	--	+=	-=\
+*=	/=	&=	^=	&= 	!= 	!	&	&&\
+|	||	==	>=	<=	<<	>>	^	<\
+>	\
+\
+
+\b Predefined Constants\
+
+\b0 true, false, TRUE, FALSE\
+yes, no, YES, NO\
+nil, NUL
+\b \
+}

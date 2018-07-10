@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>Orca</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>OrcaDoc</string>
+			<key>CFBundleTypeName</key>
+			<string>Orca Experiment</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>ORCA</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>NSDocumentClass</key>
+			<string>ORDocument</string>
+		</dict>
+	</array>
+	<key>CFBundleExecutable</key>
+	<string>Orca</string>
+	<key>CFBundleGetInfoString</key>
+	<string>Orca 1.6, Copyright ©2002 Mark Howe CENPA, University of Washington</string>
+	<key>CFBundleHelpBookFolder</key>
+	<string>OrcaHelp</string>
+	<key>CFBundleHelpBookName</key>
+	<string>OrcaHelp</string>
+	<key>CFBundleIconFile</key>
+	<string>Orca</string>
+	<key>CFBundleIdentifier</key>
+	<string>edu.washington.npl.orca</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleSignature</key>
+	<string>ORCA</string>
+	<key>CFBundleVersion</key>
+	<string>1.6</string>
+	<key>NSMainNibFile</key>
+	<string>MainMenu</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+</dict>
+</plist>

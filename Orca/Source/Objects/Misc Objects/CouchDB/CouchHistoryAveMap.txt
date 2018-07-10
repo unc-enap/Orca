@@ -1,0 +1,20 @@
+function(doc) {
+	var theDate = new Date(doc.timestamp);
+	var y = theDate.getFullYear();
+	var m = theDate.getMonth()+1;
+	var d = theDate.getDate();
+	var h = theDate.getHours();
+	var min = theDate.getMinutes();
+	var t = [y,m,d,h,min];
+	var title = doc.title;
+	for(var i in doc.adcs) {
+		for(var key in doc.adcs[i]){
+			var k = key.replace('#','');
+		 	//k = k.replace('.','');
+		 	k = k.replace(',',' ');
+		 	k = k.replace(/^\s+|\s+$/g, '') ;
+			var keys = [title,k];
+			emit(keys.concat(t), doc.adcs[i][key]);
+		}
+	}	
+}

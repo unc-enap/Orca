@@ -1,0 +1,377 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf200
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f0\i\b\fs22 \cf0 \
+
+\i0\b0 Tip: you can cut and paste from this guide. Also note that, for the most part, the syntax is just like 'C'.
+\i\b \
+
+\i0\b0 Tip: you can drag an object from the configuration into the script view to get the id text that is used by the find command.
+\i\b \
+
+\i0 \
+Program Structure\
+\
+
+\b0 #import "aFilePath"\
+function main(args)\
+\{\
+....\
+\}\
+function <name> (args)\
+\{\
+\}\
+Note: There must be a 'main' function. Additional functions are, of course, optional.
+\b \
+\
+#import
+\b0 \
+optionally import external files:\
+#import "aFullPath"\
+\
+Note that imported files should not have a main function or duplicate function names from other imported files.\
+The last function found will be the one used.\
+
+\b \
+Functions
+\b0 \
+function <name> (args)	
+\i //declaration
+\i0 \
+<fuction>(args);			
+\i //calling
+\i0 \
+return <result>;			
+\i //return
+\i0 \
+exit;					//quit script and exit\
+\
+
+\b Special Function Arguments
+\b0 \
+The arguments in the ScriptTask dialog are special hidden arguments. They should not be listed in the argument list of any function, but can be accessed by name (i.e. $1,$2, etc...) in the body of the main function.
+\fs24 \
+
+\fs22 \
+
+\b Loops
+\b0 \
+for(<exp>;<exp>;<exp>) \{\
+	<statements>\
+\}\
+\
+for looping over arrays  or dictionaries you can optionally use the  obj-c format:\
+\
+for(<var> in <array>)\{\
+	<statements>\
+\}\
+\
+do \{\
+	<statements>\
+\} while(<exp>);\
+\
+while(<exp>)\{\
+	<statements>\
+\}\
+\
+break;		
+\i //exit loop early
+\i0 \
+continue;		
+\i //goto next iteration
+\i0 \
+exit;			//quit script and exit\
+\
+
+\b Logic\
+
+\b0 if(<condition>)\{\
+	<statements>\
+\}\
+\
+if(<condition>)\{\
+	<statements>\
+\}\
+else \{\
+	<statements>\
+\}\
+\
+unless(<condition>) \{\
+	<statements>\
+\}\
+\
+
+\b Switch Statements\
+
+\b0 switch(<condition>)\{\
+	case <val>: <statements> break;\
+	case <val>: <statements> break;\
+	case <val1> <rangeConditional> <val2>: <statements> break;\
+	case <conditional> <val1>: <statements> break;\
+	..\
+	default: <statements> break;\
+\}\
+\
+
+\b Switch Case Conditionals\
+
+\b0 case <val1> <<  <val2>    //check condition is between <val1> and <val2>\
+case <val1> <=<  <val2>  //check if condition is in range of <val1> & <val2> inclusive\
+case <= <val>		     //check if <val> less than or equal to condition\
+case >= <val>                   //check if <val> greater than or equal to condition\
+case < <val>                     //check if <val> less than condition\
+case > <val>                     //check if <val> greater than  condition\
+\
+
+\b Conditional\
+
+\b0 var = <expression>?<stmt>:<stmt>\
+\
+
+\b Bit Field Extract
+\b0 \
+var = <expression>@<bit1>,<bit2> //extract the value between bit1 and bit2\
+\
+
+\b Exception Handling\
+
+\b0 try \{\
+	<statements>\
+\}\
+catch (<var>)  \{\
+	<statements>      //<var> is the exception\
+\}\
+finally \{			//this block is optional\
+	<statements>	//and will execute whether \
+\}				//or not an exception happens
+\b \
+
+\b0 \
+throw(<exception>);    //throw an exception\
+\
+var = nsexception(<name>,<reason>,<userInfo>); //make an exception for throwing\
+\
+
+\b User Confirmation\
+
+\b0 var = confirm(<string>); //returns 1 if user confirms, 0 otherwise\
+var = confirm(<string>,<timeout>); //returns 2 if timed out, 1 if user confirms, 0 otherwise\
+\
+
+\b User Input\
+
+\b0 var = request(<var,var ...>); //returns 1 if user confirms, 0 otherwise\
+\
+
+\b User Dialog\
+
+\b0 obj = show(<var,var ...>); //opens a window and returns ptr to window controller\
+[obj refresh];                     //update the user dialog\
+\
+
+\b ORCA Interface\
+
+\b0 obj = find(<className>);			//tag defaults to 0\
+obj = find(<className>,<tag or slot>); 	//crate defauts to 0\
+obj = find(<className>,<crate>,<tag or slot>);\
+obj = find(<className>,<crate>,<slot>,<carrier slot>);\
+obj = find(<className>,<slot>,<carrier slot>); //crate defauts to 0\
+result = [obj <selector>];\
+x = pointx([obj <selectorReturnsPoint>]);\
+\
+obj = make(<className>);  //create an object (experts only)\
+\
+
+\b Special ObjC functions\
+
+\b0 point(x,y) 			   
+\i //makes a NSPoint object
+\i0 \
+rect(x,y,w,h) 		   
+\i //makes a NSRect object
+\i0 \
+range(loc,len) 		   
+\i //makes a NSRange object
+\i0 \
+pointx(<point structure>) 
+\i //returns x value
+\i0 \
+pointy(<point structure>) 
+\i //returns y value
+\i0 \
+rectx(<rect structure>)   
+\i //returns x value
+\i0 \
+recty(<rect structure>)   
+\i //returns y value
+\i0 \
+recth(<rect structure>)   
+\i //returns h value
+\i0 \
+rectw(<rect structure>)  
+\i //returns w value
+\i0 \
+rangeloc(<range structure>)   
+\i //returns loc value
+\i0 \
+rangelen(<range structure>)  
+\i //returns len value
+\i0 \
+\
+
+\b Strings\
+
+\b0 Strings can be formed as either  'C' strings or ObjC string objects.\
+b = "a String";  	//or\
+b = @"a String";\
+\
+Strings can now be concatenated with '+'
+\b \
+
+\b0 a = "Hello" + " " + "World";\
+\
+\
+
+\b Output
+\b0 \
+print(<var,var,...>);\
+print <var,var,...>;\
+printfile(<var,var,...>); //log only to log file\
+printfile <var,var,...>;\
+display("label", <exp>); //value is logged to dialog outputs\
+Note the 'display' is a 
+\i\b very
+\i0\b0  expensive operation. \
+\
+
+\b Output Formating\
+
+\b0 sci(<var>,<exp>); //returns <valr> formated to x.xxExx using <exp> as the precisition\
+fixed(<var>,<exp>); //returns <valr> formated to x.xx using <exp> as the precisition\
+\
+
+\b LogFiles\
+
+\b0 logfile (<var,var,...>); //subsequent printfile comands print to this file\
+logfile  <var,var,...>; \
+\
+example:  logfile "~/MyOutputLog",10 ; //output file is "MyOutputLog10" in your home dir.\
+Note: Output is appended to the end of existing files. If you wish \
+to start a new empty file with the same name, you must manually delete the old file.\
+\
+
+\b Special
+\b0 \
+global var<,var><,var=var>.....   //set up variables for global access\
+waituntil (<true>)		       //returns true always\
+waituntil (<true>,<timeout>) //returns false if timed-out, true otherwise.\
+sleep(<# seconds>);	       //# seconds can be a float value\
+yield(<# seconds>);	       //# seconds is rounded to int value (1 second granularity)\
+hex(<var>)		                
+\i //convert to hex string
+\i0 \
+string(<var,var,...>)	      
+\i //produce a string for printing or an argument\
+strcat(<var,var,...>)	      //concatenate values into string for printing or an argument
+\i0 \
+postalarm(<alarmName>, <alarmSeverity> [,<alarmHelp>]);  //the help string is optional\
+clearalarm(<alarmName>);\
+nsdictionary()                     
+\i //makes an empty NSDictionary
+\i0 \
+nsdictionary(<key>,<value>, ...)     
+\i //makes a NSDictionary with those keys and values\
+@\{
+\i0 <key>:<value>, ...\}        
+\i //makes a NSDictionary with those keys and values
+\i0 \
+nsarray()                            
+\i //makes an NSArray\
+
+\i0 nsarray(<var>,<var>,...)    
+\i //makes an NSArray and inits it with the <var> list\
+@[
+\i0 <var>,<var>,...]             
+\i //makes an NSArray and inits it with the <var> list\
+
+\i0 nsdatecomponents()
+\i          //returns the date from system\
+                                          //methods are: year, month, weekday, day, hour, minute, second
+\i0 \
+time()                                 
+\i //returns time from Unix getTimeOfDay() 
+\i0 \
+shell "cmd"                        
+\i //executes cmd  in the shell. ***
+\i0\b Blocks
+\i\b0  -- don't call anything like 'top'
+\i0 \
+nsfilemanager()                
+\i //makes an NSFileManager
+\i0 \
+stringFromFile(<path>)      
+\i //reads file at path and return a string with the contents
+\i0 \
+writeLine(<path>,<var,var,...>) 
+\i //write list of variables to file at path. Appends to file.
+\i0 \
+deleteFile(<path>)             
+\i //delete file at path\
+
+\i0 seedRandom()                  
+\i //seed the random number generator\
+
+\i0 random(<min>,<max>)     
+\i //return random number between min and max\
+
+\i0 sort(<var>);		     //return sorted array or dictionary keys in ascending order\
+sortRev(<var>);		     //return sorted array or dictionary keys in descending order\
+
+\b \
+Array Declaration
+\b0 \
+array varName[<size>];\
+array varName[<size>] = \{<var>,<var>, ... <var>\};\
+\
+Note: Arrays can not be used just anywhere. i.e. a[i]++ will pass the syntax checker but will cause a run-time exception. Other operators that do not work with arrays include, +=, -=,*=, etc...\
+\
+
+\b Standard Library Functions\
+
+\b0 pow(), sqrt(), ceil(), floor(), round(), cos(), acos()\
+sin(), asin(), tan(), atan(), abs(), exp(), log(), log10(), fmod()\
+\
+
+\b Operators
+\b0 \
++	-	/	*	%	++	--	+=	-=\
+*=	/=	&=	^=	&= 	!= 	!	&	&&\
+|	||	==	>=	<=	<<	>>	^	<\
+>	~\
+\
+
+\b Predefined Constants\
+
+\b0 true, false, TRUE, FALSE\
+yes, no, YES, NO\
+nil, NUL
+\b \
+
+\b0 \
+
+\b Special Notes\
+
+\b0 Arrays and vars are passed by value. \
+\
+
+\b Self Inspection\
+
+\b0 _func_  		//variable holding the function name\
+_symbols_		//variable holding the local symbol table\
+_globals_		//variable holding the global symbol table\
+\
+}

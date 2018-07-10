@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+<string>
+The offline run mode is selected. 
+This means that data will NOT be saved to disk, nor will it be broadcast by the dispatcher.
+
+Selecting a normal run in the run control dialog will make this alarm go away.
+
+Acknowledging this alarm will silence it. 
+</string>
+</array>
+</plist>
+

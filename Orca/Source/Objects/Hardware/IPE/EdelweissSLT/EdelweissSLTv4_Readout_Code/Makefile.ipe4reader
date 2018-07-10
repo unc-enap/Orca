@@ -1,0 +1,35 @@
+#usage:
+# make -f Makefile.ipe4reader
+#  -tb- 2013-01-03
+
+all: ipe4reader
+
+#	g++ test.cpp -o test -lFE -lHw -lhw4 -lPbusSim -lakutil -I../fdhwlib/fdhwlib/ -L../fdhwlib/fdhwlib/FE/ -L../fdhwlib/fdhwlib/hw4
+#all:
+#	g++ test.cpp -o test -lFE -lHw -lhw4 -lPbusSim -lakutil -I../fdhwlib/fdhwlib/ -L../fdhwlib/fdhwlib/FE/ -L../fdhwlib/fdhwlib/hw4
+
+
+# struct size test
+sizetest: sizetest.cpp
+	g++ -g sizetest.cpp -o sizetest -lFE -lFEdata -lHw -lhw4 -lPbusProxy -lakshell -lgpsoncore -lreadline -lhistory -lncurses -lakutil -I../fdhwlib/fdhwlib/ -L../fdhwlib/fdhwlib/FE/ -L../fdhwlib/fdhwlib/hw4
+
+
+
+# EDELWEISS apps
+
+
+ipe4readsltrev: ipe4readsltrev.cpp Makefile
+	g++ ipe4readsltrev.cpp -o ipe4readsltrev  -g -Wall  -gstabs+ -I ~/src/v4/fdhwlib/src    -g -Wall  -gstabs+ -I ~/src/v4/fdhwlib/src  -fexceptions   -lkatrinhw4  -lhw4  -lPbusPCIDMA   -lakutil -lpthread -lm
+
+
+readword: readword.cpp Makefile
+	g++ readword.cpp -o readword  -g -Wall  -gstabs+ -I ~/src/v4/fdhwlib/src    -g -Wall  -gstabs+ -I ~/src/v4/fdhwlib/src  -fexceptions   -lkatrinhw4  -lhw4  -lPbusPCIDMA   -lakutil -lpthread -lm
+
+writeword: writeword.cpp Makefile
+	g++ writeword.cpp -o writeword  -g -Wall  -gstabs+ -I ~/src/v4/fdhwlib/src    -g -Wall  -gstabs+ -I ~/src/v4/fdhwlib/src  -fexceptions   -lkatrinhw4  -lhw4  -lPbusPCIDMA   -lakutil -lpthread -lm
+
+
+
+ipe4reader: ipe4reader.cpp ipe4reader.h ipe4structure.h ipe4tbtools.cpp ipe4tbtools.h Makefile.ipe4reader
+	g++ ipe4reader.cpp -o ipe4reader  -ggdb -Wall  -gstabs+ -I ~/src/v4/fdhwlib/src -I /home/bergmann/src/v4/fdhwlib/src    -g -Wall  -gstabs+ -L /home/bergmann/lib    -fexceptions    -lPbusPCIDMA   -lakutil -lpthread -lm
+

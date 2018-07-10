@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>DefaultItems</key>
+	<array>
+		<string>statusWindow</string>
+		<string>alarmMaster</string>
+		<string>catalog</string>
+		<string>Wizard</string>
+		<string>preferences</string>
+		<string>CommandCenter</string>
+		<string>NSToolbarPrintItem</string>
+		<string>NSToolbarFlexibleSpaceItem</string>
+		<string>NSToolbarCustomizeToolbarItem</string>
+	</array>
+	<key>Items</key>
+	<dict>
+		<key>AutoTester</key>
+		<dict>
+			<key>Action</key>
+			<string>showAutoTester:</string>
+			<key>Label</key>
+			<string>AutoTester</string>
+			<key>ToolTip</key>
+			<string>Open AutoTester</string>
+		</dict>
+		<key>statusWindow</key>
+		<dict>
+			<key>Action</key>
+			<string>statusLog:</string>
+			<key>Label</key>
+			<string>Status Log</string>
+			<key>ToolTip</key>
+			<string>Open Status Log</string>
+		</dict>
+		<key>alarmMaster</key>
+		<dict>
+			<key>Action</key>
+			<string>alarmMaster:</string>
+			<key>Label</key>
+			<string>Alarm Master</string>
+			<key>ToolTip</key>
+			<string>Open Alarm Master</string>
+		</dict>
+		<key>catalog</key>
+		<dict>
+			<key>Action</key>
+			<string>openCatalog:</string>
+			<key>Label</key>
+			<string>Catalog</string>
+			<key>ToolTip</key>
+			<string>Open Object Catalog</string>
+		</dict>
+		<key>Wizard</key>
+		<dict>
+			<key>Action</key>
+			<string>openHWWizard:</string>
+			<key>Label</key>
+			<string>HW Wizard</string>
+			<key>ToolTip</key>
+			<string>Open Hardware Wizard</string>
+		</dict>
+		<key>preferences</key>
+		<dict>
+			<key>Action</key>
+			<string>openPreferences:</string>
+			<key>Label</key>
+			<string>Preferences</string>
+			<key>ToolTip</key>
+			<string>Open Preferences</string>
+		</dict>
+		<key>CommandCenter</key>
+		<dict>
+			<key>Action</key>
+			<string>openCommandCenter:</string>
+			<key>Label</key>
+			<string>CommandCenter</string>
+			<key>ToolTip</key>
+			<string>Open Command Center</string>
+		</dict>
+		<key>TaskMaster</key>
+		<dict>
+			<key>Action</key>
+			<string>openTaskMaster:</string>
+			<key>Label</key>
+			<string>TaskMaster</string>
+			<key>ToolTip</key>
+			<string>Open Task Master</string>
+		</dict>
+		<key>ProcessCenter</key>
+		<dict>
+			<key>Action</key>
+			<string>showProcessCenter:</string>
+			<key>Label</key>
+			<string>ProcessCenter</string>
+			<key>ToolTip</key>
+			<string>Open ProcessCenter</string>
+		</dict>
+		<key>ORCARootService</key>
+		<dict>
+			<key>Action</key>
+			<string>openORCARootService:</string>
+			<key>Label</key>
+			<string>ORCARootService</string>
+			<key>ToolTip</key>
+			<string>Open ORCARoot Service</string>
+		</dict>
+		<key>NSToolbarPrintItem</key>
+		<dict/>
+		<key>help</key>
+		<dict>
+			<key>Action</key>
+			<string>openHelp:</string>
+			<key>Label</key>
+			<string>Help</string>
+			<key>ToolTip</key>
+			<string>Open ORCA Help</string>
+		</dict>
+	</dict>
+</dict>
+</plist>
