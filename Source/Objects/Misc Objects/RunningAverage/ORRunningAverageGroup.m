@@ -165,11 +165,11 @@ NSString* ORSpikeStateChangedNotification       = @"ORSpikeStateChangedNotificat
         [ra reset];
     }
 }
-- (int) tag
+- (NSUInteger) tag
 {
     return tag;
 }
-- (void) setTag:(int)newTag
+- (void) setTag:(NSUInteger)newTag
 {
     tag=newTag;
 }

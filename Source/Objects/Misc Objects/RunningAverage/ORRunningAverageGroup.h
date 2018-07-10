@@ -29,7 +29,7 @@
     BOOL            verbose;
     NSMutableArray* runningAverages;
     int             windowLength;
-    int             tag;
+    NSUInteger      tag;
     int             groupSize;
     float           triggerValue;
     int             triggerType;
@@ -51,8 +51,8 @@
 - (void)        reset;
 - (void)        addValuesUsingTimer;
 - (void)        addNewValue:(float)aValue toIndex:(int)i;
-- (int)         tag;
-- (void)        setTag:(int)newTag;
+- (NSUInteger)         tag;
+- (void)        setTag:(NSUInteger)newTag;
 - (int)         groupSize;
 - (void)        setGroupSize:(int)a;
 - (void)        setVerbose:(BOOL)b;
