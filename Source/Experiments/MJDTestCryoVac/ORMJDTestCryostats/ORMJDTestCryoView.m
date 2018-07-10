@@ -21,7 +21,7 @@
 #import "ORMJDTestCryostat.h"
 
 @implementation ORMJDTestCryoView
-- (int) tag
+- (NSUInteger) tag
 {
 	return tag;
 }

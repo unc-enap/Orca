@@ -36,7 +36,7 @@
 @interface ORPlot : NSObject {
 	ORPlotView*				plotView;
     id						dataSource;
-    int						tag;
+    NSUInteger						tag;
  	NSMutableDictionary*	attributes;
 	BOOL					showCursorPosition;
 	NSPoint					cursorPosition;
@@ -53,8 +53,8 @@
 - (NSMutableDictionary*) attributes;
 - (void) setAttributes:(NSMutableDictionary *)anAttributes;
 
-- (void) setTag:(int)aTag;
-- (int) tag;
+- (void) setTag:(NSUInteger)aTag;
+- (NSUInteger) tag;
 - (NSString*) name;
 - (void) setName:(NSString*)aName;
 

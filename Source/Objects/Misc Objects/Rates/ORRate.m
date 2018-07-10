@@ -68,7 +68,7 @@ NSString* ORRateValue 				= @"ORRateValue";
 	lastTime = newLastTime;
 }
 
-- (int) tag
+- (NSUInteger) tag
 {
 	return tag;
 }

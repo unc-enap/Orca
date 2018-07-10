@@ -20,7 +20,7 @@
 @interface ORMJDTestCryoView : ORMJDPumpCartView {
 	int tag;
 }
-- (int) tag;
+- (NSUInteger) tag;
 - (void) setTag:(int)aValue;
 - (void) drawString:(NSString*)aString atPoint:(NSPoint)aPoint;
 @end

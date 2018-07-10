@@ -104,7 +104,7 @@
 - (BOOL) legalAdcRange:(int)adcChan;
 - (int)  displayChanFromAdcChan:(int)adcChan;
 - (int) startChannel;
-- (int) tagToAdcIndex:(int)aTag;
+- (NSUInteger) tagToAdcIndex:(int)aTag;
 
 #pragma mark ***Interface Management
 - (void) slotChanged:(NSNotification*)aNote;

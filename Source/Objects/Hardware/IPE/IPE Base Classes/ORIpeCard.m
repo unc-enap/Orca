@@ -92,7 +92,7 @@ NSString* ORIpeCardExceptionCountChanged		= @"ORIpeCardExceptionCountChanged";
     registers = aRegisters;
 }
 
-- (int) tagBase
+- (NSUInteger) tagBase
 {
     return 1;
 }

@@ -1010,7 +1010,7 @@ NSString*	OROscChnl								= @"Osc Chnl";
 
 - (void) reset {};
 
-- (int) tag
+- (NSUInteger) tag
 {
     return [self primaryAddress];
 }

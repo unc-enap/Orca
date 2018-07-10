@@ -34,19 +34,19 @@
     float           spikeValue;
     float           averageAtTimeOfSpike;
     int             windowLength;
-    int             tag;
+    NSUInteger             tag;
     int             groupTag;
     BOOL            spikeState;
     BOOL            lastSpikeState;
 }
-- (id)      initWithTag:(short)aTag andLength:(short)wl;
+- (id)      initWithTag:(NSUInteger)aTag andLength:(short)wl;
 - (void)    setWindowLength:(int) wl;
 - (void)    resetCounter:(float) rate;
 - (void)    reset;
 - (float)   runningAverage;
 - (float)   spikeValue;
-- (int)     tag;
-- (void)    setTag:(int)newTag;
+- (NSUInteger)     tag;
+- (void)    setTag:(NSUInteger)newTag;
 - (int)     groupTag;
 - (void)    setGroupTag:(int)newGroupTag;
 - (void) calculateAverage:(float)dataPoint minSamples:(int)minSamples triggerValue:(float)triggerValue spikeType:(BOOL)triggerType group:(ORRunningAverageGroup*)aGroup;
@@ -66,14 +66,14 @@
 @interface ORRunningAveSpike : NSObject
 {
     BOOL    spiked;
-    int     tag;
+    NSUInteger     tag;
     float   ave;
     float   spikeValue;
 }
-@property (assign) BOOL     spiked;
-@property (assign) int      tag;
-@property (assign) float    ave;
-@property (assign) float    spikeValue;
+@property (assign) BOOL         spiked;
+@property (assign) NSUInteger   tag;
+@property (assign) float        ave;
+@property (assign) float        spikeValue;
 
 @end
 

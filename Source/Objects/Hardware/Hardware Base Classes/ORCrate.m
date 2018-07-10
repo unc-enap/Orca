@@ -216,7 +216,7 @@ NSString* ORCrateModelLockMovementChanged   = @"ORCrateModelLockMovementChanged"
     }
 }
 
-- (int)tag
+- (NSUInteger)tag
 {
     return crateNumber;
 }

@@ -53,7 +53,7 @@ typedef struct IpeRegisterNamesStruct {
 - (void) addRegister:(id)aRegister atIndex:(unsigned int)index;
 - (NSMutableArray*) registers;
 - (void) setRegisters:(NSMutableArray*)aRegisters;
-- (int) tagBase;
+- (NSUInteger) tagBase;
 - (Class) guardianClass;
 - (NSString*) cardSlotChangedNotification;
 - (NSString*) identifier;

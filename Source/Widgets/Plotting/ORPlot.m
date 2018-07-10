@@ -72,12 +72,12 @@
 	
 }
 
-- (void) setTag:(int)aTag
+- (void) setTag:(NSUInteger)aTag
 {
 	tag = aTag;
 }
 
-- (int)tag									{ return tag; }
+- (NSUInteger)tag						    { return tag; }
 - (id) dataSource							{ return dataSource; }
 - (BOOL) dataSourceIsSetupToAllowDrawing	{ return dataSource!=nil; }
 - (NSMutableDictionary *)attributes			{ return attributes;  }

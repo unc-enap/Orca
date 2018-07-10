@@ -61,7 +61,7 @@
 - (void) viewChanged:(NSNotification*)aNotification;
 - (void) childChanged:(NSNotification*)aNotification;
 
-- (int)tag;
+- (NSUInteger)tag;
 - (int) crateNumber;
 - (void) setCrateNumber: (unsigned int) aCrateNumber;
 - (void) sortCards;

@@ -29,7 +29,7 @@ NSString* ORcPCICardSlotChangedNotification 	= @"ORcPCICardSlotChangedNotificati
 @implementation ORcPCICard
 #pragma mark ¥¥¥accessors
 
-- (int) tagBase
+- (NSUInteger) tagBase
 {
     return 1;
 }

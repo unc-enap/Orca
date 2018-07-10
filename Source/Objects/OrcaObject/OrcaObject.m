@@ -310,12 +310,12 @@ NSString* ORMiscAttributeKey		= @"ORMiscAttributeKey";
     return [self tag] + [self tagBase];
 }
 
-- (int) tag
+- (NSUInteger) tag
 {
     return tag;
 }
 
-- (void) setTag:(int)aTag
+- (void) setTag:(NSUInteger)aTag
 {
     tag = aTag;
     
@@ -324,7 +324,7 @@ NSString* ORMiscAttributeKey		= @"ORMiscAttributeKey";
                        object:self];
 }
 
-- (int) tagBase
+- (NSUInteger) tagBase
 {
     //some objects, i.e. CAMAC start at 1 instead of 0. those object will override this method.
     return 0;

@@ -50,7 +50,7 @@ NSString* ORSNOCardBoardIDChanged 	= @"ORSNOCardBoardIDChanged";
     return ORSNOCardSlotChanged;
 }
 
-- (int) tagBase
+- (NSUInteger) tagBase
 {
     return 0;
 }

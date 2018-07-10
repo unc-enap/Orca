@@ -41,7 +41,7 @@
 - (NSString*) rateNotification;
 - (NSDate*) lastTime;
 - (void) setLastTime:(NSDate*)newLastTime;
-- (int) tag;
+- (NSUInteger) tag;
 - (void) setTag:(int)newTag;
 - (float) rate:(int)paramIgnored;
 - (float) rate;

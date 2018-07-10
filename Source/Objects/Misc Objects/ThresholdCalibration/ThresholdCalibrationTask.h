@@ -53,8 +53,8 @@
 - (void) setStepTime:(float)aTime;
 - (NSString*) name;
 - (void) setName:(NSString*)aName;
-- (void) setTag:(int)aTag;
-- (int) tag;
+- (void) setTag:(NSUInteger)aTag;
+- (NSUInteger) tag;
 - (id) delegate;
 - (void) setDelegate:(id)aDelegate;
 - (NSMutableArray *)channelArray;

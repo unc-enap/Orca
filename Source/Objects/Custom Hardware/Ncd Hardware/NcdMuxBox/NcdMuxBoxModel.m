@@ -949,7 +949,7 @@ static NSString* ORMuxBoxBusNumber          = @"ORMuxBoxBusNumber";
 #pragma mark ¥¥¥Threshold Calibration
 
 
-- (int) tag
+- (NSUInteger) tag
 {
     ORConnector* aConnection = [[[self connectors] objectForKey:MuxBoxToControllerConnect] connector];
     return [aConnection identifer];

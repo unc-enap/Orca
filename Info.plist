@@ -48,7 +48,7 @@
 	<key>CFBundleIconFile</key>
 	<string>Orca</string>
 	<key>CFBundleIdentifier</key>
-	<string>edu.washington.npl.orca</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>

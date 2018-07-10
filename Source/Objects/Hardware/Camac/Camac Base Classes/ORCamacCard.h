@@ -47,7 +47,7 @@
 
 #pragma mark ¥¥¥accessors
 - (Class) guardianClass;
-- (int) tagBase;
+- (NSUInteger) tagBase;
 - (NSString*) cardSlotChangedNotification;
 - (NSString*) identifier;
 - (int)  stationNumber;

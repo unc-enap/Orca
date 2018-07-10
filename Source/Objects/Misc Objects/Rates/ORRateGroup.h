@@ -44,7 +44,7 @@
 - (void) setIntegrationTime:(double)newIntegrationTime;
 - (double) totalRate;
 - (void) setTotalRate:(double)newTotalRate;
-- (int) tag;
+- (NSUInteger) tag;
 - (void) setTag:(int)newTag;
 - (ORTimeRate*) timeRate;
 - (void) setTimeRate:(ORTimeRate*)newTimeRate;

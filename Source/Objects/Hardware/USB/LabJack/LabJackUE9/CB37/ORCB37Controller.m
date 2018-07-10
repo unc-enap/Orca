@@ -565,7 +565,7 @@
     [gSecurity tryToSetLock:ORCB37Lock to:[sender intValue] forWindow:[self window]];
 }
 
-- (int) tagToAdcIndex:(int)aTag
+- (NSUInteger) tagToAdcIndex:(int)aTag
 {
 	switch([model slot]){
 		case 0: return aTag;

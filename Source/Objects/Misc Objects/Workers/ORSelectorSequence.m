@@ -65,7 +65,7 @@ NSString* ORSequenceStopped  = @"ORSequenceStopped";
 	return self;
 }
 
-- (void) setTag:(int)aTag
+- (void) setTag:(NSUInteger)aTag
 {
 	tag = aTag;
 }

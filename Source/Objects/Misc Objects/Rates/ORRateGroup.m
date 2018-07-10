@@ -104,7 +104,7 @@ NSString* ORRateGroupTotalRateChangedNotification   = @"ORRateGroupTotalRateChan
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORRateGroupTotalRateChangedNotification object:self userInfo:nil];
 }
 
-- (int) tag
+- (NSUInteger) tag
 {
 	return tag;
 }

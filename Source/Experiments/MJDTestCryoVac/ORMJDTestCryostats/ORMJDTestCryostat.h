@@ -40,7 +40,7 @@
 - (id) model;
 - (int) connectionStatus;
 - (void) setConnectionStatus:(int) aState;
-- (int) tag;
+- (NSUInteger) tag;
 - (void) setTag:(int)aValue;
 - (BOOL) showGrid;
 - (void) setDelegate:(id)aDelegate;

@@ -29,7 +29,7 @@ NSString* ORCamacCardSlotChangedNotification 	= @"ORCamacCardSlotChangedNotifica
 @implementation ORCamacCard
 #pragma mark ¥¥¥accessors
 
-- (int) tagBase
+- (NSUInteger) tagBase
 {
     return 1;
 }

@@ -80,12 +80,12 @@
 {
     rateGroup = aRateGroup;
 }
-- (int) tag
+- (NSUInteger) tag
 {
 	return tag;
 }
 
-- (void) setTag:(int)aTag
+- (void) setTag:(NSUInteger)aTag
 {
     tag = aTag;
 }

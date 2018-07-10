@@ -44,8 +44,8 @@
 - (void) setDataSource:(id)aSource;
 - (void) setChainedView:(id)aView;
 - (ORValueBar*) chainedView;
-- (int) tag;
-- (void) setTag:(int)newTag;
+- (NSUInteger) tag;
+- (void) setTag:(NSUInteger)newTag;
 
 - (void) setNeedsDisplay:(BOOL)flag;
 
