@@ -582,12 +582,12 @@ static NSString* DT5725StartStopRunModeString[4] = {
 
 //------------------------------
 //Reg Custom Size (0x8020)
-- (int) eventSize
+- (unsigned long) eventSize
 {
     return eventSize;
 }
 
-- (void) setEventSize:(int)aEventSize
+- (void) setEventSize:(unsigned long)aEventSize
 {
     //customSize < bufferOrganization
     if(aEventSize!=eventSize){
@@ -1903,7 +1903,7 @@ static NSString* DT5725StartStopRunModeString[4] = {
 
 #pragma mark ***Archival
 //returns 0 if success; -1 if request fails, and number of bytes returned by digitizer in otherwise
-- (int) writeLongBlock:(unsigned long*) writeValue atAddress:(unsigned int) anAddress
+- (int) writeLongBlock:(unsigned long*) writeValue atAddress:(unsigned long) anAddress
 {
     //-----------------------------------------------
     //AM = 0x09 A32 non-priviledged access
@@ -1964,7 +1964,7 @@ static NSString* DT5725StartStopRunModeString[4] = {
 
 
 //returns 0 if success, -1 if request fails, and number of bytes returned by digitizer otherwise
--(int) readLongBlock:(unsigned long*) readValue atAddress:(unsigned int) anAddress
+-(int) readLongBlock:(unsigned long*) readValue atAddress:(unsigned long) anAddress
 {
     
     //-----------------------------------------------
