@@ -1,0 +1,50 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = NSObject; LANGUAGE = ObjC; }, 
+        {
+            ACTIONS = {
+                cardNumberAction = id; 
+                channelNumberAction = id; 
+                crateNumberAction = id; 
+                globalEnabledAction = id; 
+                insertRampItem = id; 
+                panic = id; 
+                paramSelectionAction = id; 
+                rampTargetAction = id; 
+                removeRampItem = id; 
+                selectItem = id; 
+                startStop = id; 
+                targetSelectionAction = id; 
+            }; 
+            CLASS = ORRampItemController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                cardNumberField = NSTextField; 
+                channelNumberField = NSTextField; 
+                crateNumberField = NSTextField; 
+                currentValueField = NSTextField; 
+                globalEnableButton = NSButton; 
+                listLockButton = NSButton; 
+                minusButton = NSButton; 
+                model = id; 
+                plusButton = NSButton; 
+                progressIndicator = NSProgressIndicator; 
+                rampTargetField = NSTextField; 
+                selectorPU = NSPopUpButton; 
+                startStopButton = NSButton; 
+                targetNamePU = NSPopUpButton; 
+                view = NSView; 
+                visibleButton = NSButton; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = ORRamperItem; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {controller = id; view = NSView; }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

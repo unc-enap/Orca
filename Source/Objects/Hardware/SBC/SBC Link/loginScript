@@ -1,0 +1,47 @@
+#!/usr/bin/expect -f
+# Expect script to supply username, password for remote ssh server 
+# and execute command.
+# This script needs three argument to(s) connect to remote server:
+# password = Password of remote UNIX server, for root user.
+# ipaddr = IP Addreess of remote UNIX server, no hostname
+# scriptname = Path to remote script which will execute on remote server
+# For example:
+#  ./sshlogin.exp username password 192.168.1.11 who 
+set userName [lrange $argv 0 0] 
+set password [lrange $argv 1 1] 
+set ipaddr [lrange $argv 2 2]   
+set scriptname [lrange $argv 3 3] 
+set timeout -1   
+# now connect to remote UNIX box (ipaddr) with given script to execute
+match_max 100000
+send_user "Performing $scriptname\n"
+send_user "Connecting to $ipaddr with username $userName\n"
+spawn -noecho ssh -o StrictHostKeyChecking=no -o NumberOfPasswordPrompts=1 $userName@$ipaddr 
+expect {
+  "*>* " { }
+  "*$* " { }
+  "*#* " { }
+  "*%* " { }
+  "assword:" {
+        send "$password\r"
+        expect {
+          "*>* " { }
+          "*$* " { }
+          "*#* " { }
+          "*%* " { }
+        default {
+                send_user "Login failed\n"
+                exit 1
+          }
+
+        }
+  }
+  default {
+        send_user "Login failed\n"
+        exit 1
+  }
+}
+
+send "$scriptname [lrange $argv 4 9]; exit\n\r"
+expect eof
+send_user "Completed $scriptname \n"

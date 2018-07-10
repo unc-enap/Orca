@@ -1,0 +1,84 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {"" = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = OHexFormatter; LANGUAGE = ObjC; SUPERCLASS = NSFormatter; }, 
+        {
+            ACTIONS = {
+                controlCheckBoxAction = id; 
+                controlRegAction = id; 
+                deadTimeAction = id; 
+                dumpROMAction = id; 
+                inhibitCheckBoxAction = id; 
+                loadPulserAction = id; 
+                nHitAction = id; 
+                nHitThresholdAction = id; 
+                pulseOnceAction = id; 
+                pulserAmpAction = id; 
+                pulserDelayAction = id; 
+                readControlButtonAction = id; 
+                readRegAction = id; 
+                readStatusButtonAction = id; 
+                resetHWAction = id; 
+                selectRegisterAction = id; 
+                settingLockAction = id; 
+                usePBusSimAction = id; 
+                versionAction = id; 
+                vetoTimeAction = id; 
+                writeControlButtonAction = id; 
+                writeRegAction = id; 
+                writeValueAction = id; 
+            }; 
+            CLASS = ORAugerSLTController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                controlCheckBoxMatrix = NSMatrix; 
+                deadTimeButton = NSButton; 
+                dumpROMButton = NSButton; 
+                inhibitCheckBoxMatrix = NSMatrix; 
+                nHitField = NSTextField; 
+                nHitStepper = NSStepper; 
+                nHitThresholdField = NSTextField; 
+                nHitThresholdStepper = NSStepper; 
+                pulserAmpField = NSTextField; 
+                pulserDelayField = NSTextField; 
+                readControlButton = NSButton; 
+                readStatusButton = NSButton; 
+                regReadButton = NSButton; 
+                regWriteButton = NSButton; 
+                regWriteValueStepper = NSStepper; 
+                regWriteValueTextField = NSTextField; 
+                registerPopUp = NSPopUpButton; 
+                resetHWButton = NSButton; 
+                secStrobeSrcPU = NSPopUpButton; 
+                settingLockButton = NSButton; 
+                startSrcPU = NSPopUpButton; 
+                statusCheckBoxMatrix = NSMatrix; 
+                triggerSrcPU = NSPopUpButton; 
+                usePBusSimButton = NSButton; 
+                versionButton = NSButton; 
+                versionField = NSTextField; 
+                vetoTimeButton = NSButton; 
+                watchDogPU = NSPopUpButton; 
+                writeControlButton = NSButton; 
+            }; 
+            SUPERCLASS = OrcaObjectController; 
+        }, 
+        {
+            ACTIONS = {showAboutBox = id; showConfiguration = id; showStatus = id; }; 
+            CLASS = OrcaController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = OrcaObjectController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}

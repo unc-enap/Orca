@@ -1,0 +1,454 @@
+%{
+#import <stdio.h>
+#import <stdlib.h>
+#import <stdarg.h>
+#import "FilterScript.h"
+#import "ORHashTable.h"
+
+/* prototypes */
+void addFilterNode(nodeType* aNod);
+nodeType* opr(int oper, ...);
+nodeType* ident(char* aString);
+
+nodeType* con(char* value);
+nodeType* stringNode(char* aString);
+
+int yylex(void);
+NSMutableDictionary* functionList = nil;
+NSMutableArray* nodeList = nil;
+extern void FilterScripterror(char *);
+extern long num_lines;
+%}
+
+%union {
+    int iValue;         /* integer value */
+    char symKey[64];	/* symbol table key i.e. a variable name */
+	char cString[64];	/* a string*/
+    nodeType* nPtr;             /* node pointer */
+};
+
+%token <iValue> INTEGER
+%token <cString> CONSTANT
+%token <cString> STRING
+%token <symKey> VARIABLE
+%token FUNCTION WHILE DO FOR IF PRINT LOGFILE FIND BREAK EXIT CONTINUE SLEEP RETURN WAITUNTIL HEX MAKEARRAY
+%token INC_OP DEC_OP ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN ORQUALS LEFT_ASSIGN RIGHT_ASSIGN
+%token AND_ASSIGN XOR_ASSIGN MOD_ASSIGN OR_ASSIGN MAKESTRING SWITCH CASE DEFAULT MAKEPOINT MAKERECT
+%token LEFT_OP RIGHT_OP  EQ_OP NE_OP GE_OP LE_OP AND_OP OR_OP ALARM CLEAR
+%nonassoc ELSE
+
+%left '+' '-' 
+%left  '%' '*' '/' ','
+%nonassoc NOT UMINUS INVERT
+
+%type <nPtr> program  functionCall statement arrayElement make_string  break_statement
+%type <nPtr> hex_str expr statement_list  selection_statement iteration_statement 
+%type <nPtr> print_list log_list print_statement log_statement arg_list argName_list clear_statement
+%type <nPtr> compound_statement expression_statement jump_statement special_statement
+%type <nPtr> case_statement case_list constant_expr  wait_statement alarm_statement
+%type <nPtr> primary_expr multiplicative_expr postfix_expr unary_expr  additive_expr
+%type <nPtr> shift_expr relational_expr equality_expr and_expr exclusive_or_expr inclusive_or_expr
+%type <nPtr> logical_and_expr logical_or_expr conditional_expr assignment_expr leftArrayElement
+
+%start program
+
+%%
+
+program
+		: funclist	{return 1;}
+		;
+		
+funclist
+		:  funcdef
+		| funclist funcdef
+		;
+	
+funcdef
+        : FUNCTION VARIABLE '(' ')' '{' function '}'				//{ addFunction(ident($2),nil); }
+        | FUNCTION VARIABLE '(' argName_list ')' '{' function '}'	//{ addFunction(ident($2),$4); }
+        ;
+
+
+function
+		: function statement		{ addFilterNode($2); }
+		| /*NULL*/
+        ;
+		
+statement
+		: compound_statement		{ $$ = $1;}
+		| expression_statement		{ $$ = $1;}
+		| selection_statement		{ $$ = $1;}
+		| iteration_statement		{ $$ = $1;}
+		| jump_statement			{ $$ = $1;}
+		| special_statement			{ $$ = $1;}
+		| VARIABLE ';'				{ FilterScripterror ("unrecognized keyword"); return 1;}
+		;
+
+special_statement 
+		: print_statement					{ $$ = $1; }
+		| log_statement ';' 				{ $$ = $1; }
+		| wait_statement ';'				{ $$ = $1; }
+		| alarm_statement ';'				{ $$ = $1; }
+		| clear_statement ';'				{ $$ = $1; }
+		| SLEEP '(' expr ')' ';'			{ $$ = opr(SLEEP,$3,nil);}
+		| MAKEARRAY arrayElement ';'		{ $$ = $2; }
+		| VARIABLE '=' make_string ';'		{ $$ = opr('=', ident($1), $3,nil); }
+		| VARIABLE '=' wait_statement ';'	{ $$ = opr('=', ident($1), $3,nil); }
+		;
+
+wait_statement
+		: WAITUNTIL '(' expr ')'			{ $$ = opr(WAITUNTIL,$3,nil);}
+		| WAITUNTIL '(' expr ',' expr ')'	{ $$ = opr(kWaitTimeOut,$3,$5,nil);}
+		;
+
+clear_statement
+		: CLEAR '(' expr ')'				{ $$ = opr(CLEAR,$3,nil);}
+		;
+
+alarm_statement
+		: ALARM '(' expr ',' expr ')'			{ $$ = opr(ALARM,$3,$5,nil);}
+		| ALARM '(' expr ',' expr ',' expr ')'	{ $$ = opr(ALARM,$3,$5,$7,nil);}
+		;
+
+
+compound_statement 
+		: '{' '}'						{ $$ = opr(';', nil); }
+		| '{' statement_list '}'		{ $$ = $2;}
+		;							
+
+statement_list
+		: statement						{ $$ = $1; }
+        | statement_list statement		{ $$ = opr(';', $1, $2,nil); }
+        ;
+
+expression_statement
+		: ';'							{ $$ = opr(';', nil); }
+		| expr ';'						{ $$ = $1;}
+		;		
+
+selection_statement
+		: IF '(' expr ')' statement					{ $$ = opr(IF, $3, $5,nil); }
+		| IF '(' expr ')' statement ELSE statement	{ $$ = opr(IF, $3, $5, $7,nil); }
+		| SWITCH '(' expr ')'  '{' case_list '}'	{ $$ = opr(SWITCH, $3, $6,nil); }
+		;
+
+iteration_statement
+		: WHILE '(' expr ')' statement					{ $$ = opr(WHILE, $3, $5,nil); }
+		| DO statement WHILE '(' expr ')' ';'			{ $$ = opr(DO, $2, $5,nil); }
+		| FOR '(' expr ';' expr ';' expr ')' statement	{ $$ = opr(FOR, $3,$5,$7,$9,nil); }
+		;
+
+jump_statement 
+		: CONTINUE ';'		{ $$ = opr(CONTINUE,nil);}
+		| BREAK ';'			{ $$ = opr(BREAK,nil); }
+		| RETURN ';'		{ $$ = opr(RETURN,nil);}
+		| EXIT ';'			{ $$ = opr(EXIT,nil);}
+		| RETURN expr ';'	{ $$ = opr(RETURN,$2,nil);}
+		;
+
+case_list
+	: case_statement							{ $$ = $1;}
+	| case_list case_statement					{ $$ = opr(';', $1, $2,nil); }
+	;
+	
+case_statement
+	: CASE constant_expr ':' statement_list	break_statement		{ $$ = opr(CASE, $2, $4, $5,nil); }
+	| DEFAULT ':' statement_list	break_statement				{ $$ = opr(DEFAULT, $3, $4, nil); }
+	;
+
+break_statement
+	: BREAK	';'							{ $$ = opr(BREAK,nil); }
+
+
+//array declaration
+//ex: array b[10];
+arrayElement
+		: VARIABLE '[' expr ']'							{ $$ = opr(kDefineArray, ident($1), $3, nil);}
+		| VARIABLE '[' expr ']' '=' '{' arg_list '}'	{ $$ = opr(kArrayListAssign,ident($1),$3,$7,nil);}
+		;
+
+//array lvar use, ex: a[1] = 10;
+leftArrayElement
+		: VARIABLE '[' expr ']'				{ $$ = opr(kLeftArray, ident($1), $3, nil);}
+		;
+
+//the mass of syntax that follows takes care of thing like a += 1; a++; 
+//etc... basically anything that produces a value 
+constant_expr
+	: conditional_expr				{ $$ = $1; }
+	;
+
+expr
+		: assignment_expr			{ $$ = $1; }
+		//| leftArrayElement		{ $$ = $1; }
+		| wait_statement			{ $$ = $1; }
+        ;
+
+primary_expr
+		: VARIABLE					{ $$ = ident($1); }
+		| CONSTANT					{ $$ = cont($1); }
+		| STRING					{ $$ = stringNode($1); }
+		| functionCall				{ $$ = $1; }
+		| leftArrayElement			{ $$ = $1; }
+		| '(' expr ')'				{ $$ = $2; }
+		;
+	
+postfix_expr
+		: primary_expr				{ $$ = $1;}
+		| postfix_expr INC_OP		{ $$ = opr(kPostInc,$1,nil);}
+		| postfix_expr DEC_OP		{ $$ = opr(kPostDec,$1,nil);}
+		| leftArrayElement INC_OP   { FilterScripterror ("Array++ not allowed"); return 1;}
+		| leftArrayElement DEC_OP   { FilterScripterror ("Array-- not allowed"); return 1;}
+		;
+
+unary_expr
+		: postfix_expr				{ $$ = $1;}
+		| INC_OP unary_expr			{ $$ = opr(kPreInc,$2,nil);}
+		| DEC_OP unary_expr			{ $$ = opr(kPreDec,$2,nil);}
+		| '-' primary_expr %prec UMINUS		{ $$ = opr(UMINUS, $2,nil); }
+        | '!' primary_expr %prec NOT		{ $$ = opr('!', $2,nil); }
+        | '~' primary_expr %prec INVERT		{ $$ = opr('~', $2,nil); }
+		;
+
+multiplicative_expr
+		: unary_expr								{$$ = $1;}
+		| multiplicative_expr '*' unary_expr		{ $$ = opr('*', $1, $3,nil); }
+		| multiplicative_expr '/' unary_expr		{ $$ = opr('/', $1, $3,nil); }
+		| multiplicative_expr '%' unary_expr		{ $$ = opr('%', $1, $3,nil); }
+		;
+
+additive_expr
+		: multiplicative_expr						{ $$ = $1;}
+		| additive_expr '+' multiplicative_expr		{ $$ = opr('+', $1, $3,nil); }
+		| additive_expr '-' multiplicative_expr		{ $$ = opr('-', $1, $3,nil); }
+		;
+
+shift_expr
+		: additive_expr								{ $$ = $1;}
+		| shift_expr LEFT_OP additive_expr			{ $$ = opr(LEFT_OP,  $1, $3,nil); }
+		| shift_expr RIGHT_OP additive_expr			{ $$ = opr(RIGHT_OP,  $1, $3,nil); }
+		;
+
+relational_expr
+		: shift_expr								{ $$ = $1;}
+		| relational_expr '<' shift_expr			{ $$ = opr('<',  $1, $3,nil); }
+		| relational_expr '>' shift_expr			{ $$ = opr('>',  $1, $3,nil); }
+		| relational_expr LE_OP shift_expr			{ $$ = opr(LE_OP,  $1, $3,nil); }
+		| relational_expr GE_OP shift_expr			{ $$ = opr(GE_OP,  $1, $3,nil); }
+		;
+
+equality_expr
+		: relational_expr								{ $$ = $1;}
+		| equality_expr EQ_OP relational_expr			{ $$ = opr(EQ_OP,  $1, $3,nil); }
+		| equality_expr NE_OP relational_expr			{ $$ = opr(NE_OP,  $1, $3,nil); }
+		;
+	
+
+and_expr
+		: equality_expr									{ $$ = $1;}
+		| and_expr '&' equality_expr					{ $$ = opr('&',  $1, $3,nil); }
+		;
+
+exclusive_or_expr
+		: and_expr										{ $$ = $1;}
+		| exclusive_or_expr '^' and_expr				{ $$ = opr('^',  $1, $3,nil); }
+		;
+
+inclusive_or_expr
+		: exclusive_or_expr								{ $$ = $1;}
+		| inclusive_or_expr '|' exclusive_or_expr		{ $$ = opr('|',  $1, $3,nil); }
+		;
+
+logical_and_expr
+		: inclusive_or_expr								{ $$ = $1;}
+		| logical_and_expr AND_OP inclusive_or_expr		{ $$ = opr(AND_OP,  $1, $3,nil); }
+		;
+
+logical_or_expr
+		: logical_and_expr								{ $$ = $1;}
+		| logical_or_expr OR_OP logical_and_expr		{ $$ = opr(OR_OP,  $1, $3,nil); }
+		;
+
+conditional_expr
+		: logical_or_expr											{ $$ = $1;}
+		| logical_or_expr '?' logical_or_expr ':' conditional_expr	{ $$ = opr(kConditional,$1,$3,$5,nil);}
+		;
+
+assignment_expr
+		: conditional_expr									{ $$ = $1;}
+		| VARIABLE '=' assignment_expr						{ $$ = opr('=',ident($1),$3,nil);}
+		| leftArrayElement '=' expr							{ $$ = opr(kArrayAssign, $1, $3, nil); }
+		| unary_expr MUL_ASSIGN assignment_expr				{ $$ = opr(MUL_ASSIGN,$1,$3,nil);}
+		| unary_expr DIV_ASSIGN assignment_expr				{ $$ = opr(DIV_ASSIGN,$1,$3,nil);}
+		| unary_expr MOD_ASSIGN assignment_expr				{ $$ = opr(MOD_ASSIGN,$1,$3,nil);}
+		| unary_expr ADD_ASSIGN assignment_expr				{ $$ = opr(ADD_ASSIGN,$1,$3,nil);}
+		| unary_expr SUB_ASSIGN assignment_expr				{ $$ = opr(SUB_ASSIGN,$1,$3,nil);}
+		| unary_expr LEFT_ASSIGN assignment_expr			{ $$ = opr(LEFT_ASSIGN,$1,$3,nil);}
+		| unary_expr RIGHT_ASSIGN assignment_expr			{ $$ = opr(RIGHT_ASSIGN,$1,$3,nil);}
+		| unary_expr AND_ASSIGN assignment_expr				{ $$ = opr(AND_ASSIGN,$1,$3,nil);}
+		| unary_expr XOR_ASSIGN assignment_expr				{ $$ = opr(XOR_ASSIGN,$1,$3,nil);}
+		| unary_expr OR_ASSIGN assignment_expr				{ $$ = opr(OR_ASSIGN,$1,$3,nil);}
+		| make_string										{ $$ = $1; }
+		;
+
+//create a string from a list of variables...useful only for printing and method calls that take a string
+make_string
+		: MAKESTRING '(' print_list ')' 	{ $$ = opr(MAKESTRING, $3,nil); }
+		;
+	
+//---print stuff-----------------------------------------------------------
+//ex: print "test:",i;
+//ex: print ("test:",i);
+print_statement
+		: PRINT '(' print_list ')' ';'	{ $$ = opr(PRINT, $3,nil); }
+		| PRINT  print_list  ';'		{ $$ = opr(PRINT, $2,nil); }
+		;
+
+//the arguments for the print or string functions
+print_list
+		: assignment_expr					{ $$ = $1; }
+		| hex_str							{ $$ = $1; }
+		| print_list ',' hex_str			{ $$ = opr(kAppend, $1, $3,nil); }
+		| print_list ',' assignment_expr	{ $$ = opr(kAppend, $1, $3,nil); }
+		;
+
+log_statement
+		: LOGFILE '(' log_list ')'	{ $$ = opr(LOGFILE, $3,nil); }
+		| LOGFILE  log_list			{ $$ = opr(LOGFILE, $2,nil); }
+		;
+
+log_list
+		: assignment_expr				{ $$ = $1; }
+		| hex_str						{ $$ = $1; }
+		| log_list ',' hex_str			{ $$ = opr(kTightAppend, $1, $3,nil); }
+		| log_list ',' assignment_expr	{ $$ = opr(kTightAppend, $1, $3,nil); }
+		;
+
+			
+//convert a value to a hex string..useful for printing only
+hex_str
+		: HEX '(' expr ')'				{ $$ = opr(HEX,$3,nil);}
+		;
+		
+//ex: doTest(1,a,c)
+functionCall
+		: VARIABLE '('')'			{ $$ = opr(kFuncCall,ident($1),nil); }
+		| VARIABLE '(' arg_list ')'	{ $$ = opr(kFuncCall,ident($1),$3,nil); }
+		;
+
+//the list of arguments in a function call. ex: doTest(1,a,c)
+arg_list
+		: expr					{ $$ = $1; }
+		| arg_list ',' expr		{ $$ = opr(kMakeArgList, $1, $3,nil); }
+		;
+
+//the list of arguments in a function definition. ex: function doTest(1,a,c)
+argName_list
+		: VARIABLE						{ $$ = stringNode($1);}
+		| argName_list ',' VARIABLE		{ $$ = opr(',', $1, stringNode($3),nil); }
+		;
+		
+%%
+
+//----------------------------------------------------------------------------------------------
+// node creation functions.
+//----------------------------------------------------------------------------------------------
+nodeType *con(int value) {
+    nodeType *p;
+    size_t nodeSize;
+
+    /* allocate node */
+    nodeSize = SIZEOF_NODETYPE + sizeof(conNodeType);
+    if ((p = malloc(nodeSize)) == NULL) yyerror("out of memory");
+
+    /* copy information */
+    p->type = typeCon;
+    p->con.value = value;
+
+    return p;
+}
+
+
+id stringNode(char* aString) 
+{
+	Node* p = [[Node alloc] init];
+	[p setType:typeStr];
+	[p setNodeData:[NSString stringWithCString:aString]];
+    return [p autorelease];
+}
+
+nodeType *ident(char* key) {
+    nodeType *p;
+    size_t nodeSize;
+
+    /* allocate node */
+    nodeSize = SIZEOF_NODETYPE + sizeof(idNodeType);
+    if ((p = malloc(nodeSize)) == NULL) yyerror("out of memory");
+
+    /* copy information */
+    p->type = typeId;
+    strcpy(p->ident.key,key);
+
+    return p;
+}
+
+nodeType *opr(int oper, int nops, ...) {
+    va_list ap;
+    nodeType *p;
+    size_t nodeSize;
+    int i;
+
+    /* allocate node */
+    nodeSize = SIZEOF_NODETYPE + sizeof(oprNodeType) + (nops - 1) * sizeof(nodeType*);
+    if ((p = malloc(nodeSize)) == NULL) yyerror("out of memory");
+
+    /* copy information */
+    p->type = typeOpr;
+    p->opr.oper = oper;
+    p->opr.nops = nops;
+    va_start(ap, nops);
+    for (i = 0; i < nops; i++) p->opr.op[i] = va_arg(ap, nodeType*);
+    va_end(ap);
+    return p;
+}
+
+void freeNode(nodeType *p) {
+    int i;
+
+    if (!p) return;
+    if (p->type == typeOpr) {
+        for (i = 0; i < p->opr.nops; i++) freeNode(p->opr.op[i]);
+    }
+    free (p);
+}
+
+
+#define SIZEOF_NODETYPE ((char *)&p->con - (char *)p)
+
+void addFilterNode(nodeType* aNode)
+{
+	if(!allFilterNodes){
+		filterNodeCount = 0;
+		maxFilterNodeCount = 1000;
+		allFilterNodes = (nodeType**)malloc(maxFilterNodeCount*sizeof(nodeType));
+		symbolTable = [[ORHashTable alloc] init];
+	}
+	allFilterNodes[filterNodeCount++] = aNode;
+	if(filterNodeCount>maxFilterNodeCount){
+		maxFilterNodeCount += 1000;
+		allFilterNodes = (nodeType**)realloc(allFilterNodes, maxFilterNodeCount*sizeof(nodeType));
+	}
+}
+
+
+void addFunction(id node,id nodeArgs)
+{
+	if(!functionList) functionList = [[NSMutableDictionary dictionary] retain];
+	[functionList setObject:nodeList forKey:[node nodeData]];
+	if(nodeArgs){
+		[functionList setObject:nodeArgs forKey:[NSString stringWithFormat:@"%@_ArgNode",[node nodeData]]];
+	}
+	[nodeList release];
+	nodeList = nil;
+}
+

@@ -1,0 +1,5 @@
+#!/bin/bash
+cd ~/ORCA
+cp HW_Readout/* .
+rm -rf HW_Readout
+make

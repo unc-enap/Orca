@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+<string>
+The configuration has a National Instruments device which requires the NI-488.2 drivers.  These drivers are available online at www.ni.com
+
+For Intel: http://joule.ni.com/nidu/cds/view/p/id/419/lang/en
+For PPC: http://joule.ni.com/nidu/cds/view/p/id/342/lang/en 
+
+Currently the Intel drivers are only available in beta.
+
+Acknowledging this alarm will make it go away. 
+</string>
+</array>
+</plist>

@@ -1,0 +1,452 @@
+//
+//  FilterScript.hym
+//  Orca
+//
+//  Created by Mark Howe on Fri Jan 25 2008.
+//  Copyright (c) 2002 CENPA, University of Washington. All rights reserved.
+//-----------------------------------------------------------
+//This program was prepared for the Regents of the University of 
+//Washington at the Center for Experimental Nuclear Physics and 
+//Astrophysics (CENPA) sponsored in part by the United States 
+//Department of Energy (DOE) under Grant #DE-FG02-97ER41020. 
+//The University has certain rights in the program pursuant to 
+//the contract and the program should not be copied or distributed 
+//outside your organization.  The DOE and the University of 
+//Washington reserve all rights in the program. Neither the authors,
+//University of Washington, or U.S. Government make any warranty, 
+//express or implied, or assume any liability or responsibility 
+//for the use of this software.
+//-------------------------------------------------------------
+%{
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include "FilterScript.h"
+#import "ORFilterSymbolTable.h"
+
+/* prototypes */
+nodeType* opr(int oper, int nops, ...);
+nodeType* ident(char*);
+nodeType* con(int value);
+
+void addFilterNode(int type,nodeType* node);
+
+nodeType** startFilterNodes = 0;
+long startFilterNodeCount = 0;
+long maxStartFilterNodeCount = 0;
+
+nodeType** filterNodes = 0;
+long filterNodeCount = 0;
+long maxFilterNodeCount = 0;
+
+nodeType** finishFilterNodes = 0;
+long finishFilterNodeCount = 0;
+long maxFinishFilterNodeCount = 0;
+
+
+int ex(nodeType *p);
+int yylex(void);
+BOOL parsedSuccessfully;
+void FilterScripterror(char *s);
+
+%}
+
+%union {
+    unsigned long iValue;       /* integer value */
+    char sIndex[100];           /* symbol table key */
+    nodeType *nPtr;             /* node pointer */
+};
+
+%token <iValue> INTEGER
+%token <sIndex> VARIABLE
+%token FILTER START FINISH WHILE DO FOR IF PRINT PRINTH BREAK CONTINUE UNLESS
+%token INC_OP DEC_OP ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN ORQUALS LEFT_ASSIGN RIGHT_ASSIGN
+%token AND_ASSIGN XOR_ASSIGN MOD_ASSIGN OR_ASSIGN MAKESTRING SWITCH CASE DEFAULT MAKEARRAY
+%token LEFT_OP RIGHT_OP  EQ_OP NE_OP GE_OP LE_OP AND_OP OR_OP FREEARRAY EXTRACTRECORD_LEN EXTRACTRECORD_ID CURRENTRECORD_IS
+%token SHIP_RECORD PUSH_RECORD POP_RECORD SHIP_STACK DUMP_STACK STACK_COUNT HISTO_1D HISTO_2D STRIPCHART
+%token DISPLAY_VALUE RESET_DISPLAYS TIME RANDOM AVE_STACK BOTTOM_POP_RECORD EXTRACT_VALUE
+
+%nonassoc IFX
+%nonassoc ELSE
+
+%left GE LE EQ NE '>' '<'
+%left '+' '-'
+%left  '%' '*' '/'
+%nonassoc NOT UMINUS INVERT
+
+%type <nPtr>  filterFunction startFunction finishFunction statement expr statement_list compound_statement expression_statement arrayElement leftArrayElement
+%type <nPtr>  selection_statement iteration_statement primary_expr postfix_expr unary_expr multiplicative_expr
+%type <nPtr>  additive_expr shift_expr relational_expr equality_expr and_expr exclusive_or_expr inclusive_or_expr
+%type <nPtr>  logical_and_expr logical_or_expr conditional_expr assignment_expr jump_statement case_statement
+%type <nPtr>  case_list break_statement constant_expr print_statement printhex_statement  special_statement arg_list
+%type <nPtr>  rightArrayElement free_statement
+%%
+
+program
+        : funclist                { parsedSuccessfully = YES; return 1; }
+        ;
+
+
+funclist
+		: funcdef
+		| funclist funcdef
+		;
+
+funcdef
+		: FILTER	'{' filterFunction '}'
+		| START		'{' startFunction '}'
+		| FINISH	'{' finishFunction '}'
+        ;
+
+
+filterFunction
+		: filterFunction statement         {addFilterNode(filterNodeType,$2);}
+		| /*NULL*/
+        ;
+
+startFunction
+		: startFunction statement         {addFilterNode(startNodeType,$2);}
+		| /*NULL*/
+        ;
+
+finishFunction
+		: finishFunction statement         {addFilterNode(finishNodeType,$2);}
+		| /*NULL*/
+        ;
+
+statement
+		: compound_statement			{ $$ = $1;}
+		| expression_statement			{ $$ = $1;}
+ 		| selection_statement			{ $$ = $1;}
+		| iteration_statement			{ $$ = $1;}
+		| jump_statement				{ $$ = $1;}
+		| special_statement				{ $$ = $1;}
+		| VARIABLE ';'					{ FilterScripterror ("unrecognized keyword"); return 1;}
+		;
+		
+special_statement 
+		: print_statement				{ $$ = $1; }
+		| printhex_statement			{ $$ = $1; }
+		| MAKEARRAY arrayElement ';'	{ $$ = $2; }
+		| free_statement				{ $$ = $1;}
+		;
+
+compound_statement
+		: '{' '}'						{ $$ = opr(';', 0); }
+		| '{' statement_list '}'		{ $$ = $2;}
+		;							
+
+statement_list
+		: statement						{ $$ = $1; }
+        | statement_list statement		{ $$ = opr(';', 2, $1, $2); }
+        ;
+
+
+expression_statement
+		: ';'							{ $$ = opr(';', 0); }
+		| expr ';'						{ $$ = $1;}
+		;		
+
+selection_statement
+		: IF '(' expr ')' statement					{ $$ = opr(IF,2, $3, $5); }
+		| IF '(' expr ')' statement ELSE statement	{ $$ = opr(IF,3, $3, $5, $7); }
+		| SWITCH '(' expr ')'  '{' case_list '}'	{ $$ = opr(SWITCH, 2, $3, $6); }
+		| UNLESS '(' expr ')' statement				{ $$ = opr(UNLESS,2, $3, $5); }
+		;
+
+iteration_statement
+		: WHILE '(' expr ')' statement					{ $$ = opr(WHILE, 2, $3, $5); }
+		| FOR '(' expr ';' expr ';' expr ')' statement	{ $$ = opr(FOR,4, $3,$5,$7,$9); }
+		| DO statement WHILE '(' expr ')'				{ $$ = opr(DO,2, $2,$5); }
+		;
+
+jump_statement 
+		: CONTINUE ';'		{ $$ = opr(CONTINUE,0);}
+		| BREAK ';'			{ $$ = opr(BREAK,0); }
+		;
+
+case_list
+	: case_statement				{ $$ = $1;}
+	| case_list case_statement		{ $$ = opr(';', 2, $1, $2); }
+	;
+	
+case_statement
+	: CASE constant_expr ':' statement_list	break_statement		{ $$ = opr(CASE, 3, $2, $4, $5); }
+	| CASE constant_expr ':' break_statement					{ $$ = opr(CASE, 2, $2, $4); }
+	| DEFAULT			 ':' statement_list	break_statement		{ $$ = opr(DEFAULT,2, $3, $4); }
+	;
+
+break_statement
+	: BREAK	';'					{ $$ = opr(BREAK,0); }
+
+//the list of arguments in a function call. ex: doTest(1,a,c)
+arg_list
+		: expr					{ $$ = $1; }
+		| arg_list ',' expr		{ $$ = opr(kMakeArgList, 2, $1, $3); }
+		;
+
+//array declaration
+//ex: array b[10];
+arrayElement
+		: VARIABLE '[' expr ']'							{ $$ = opr(kDefineArray, 2, ident($1), $3);}
+		| VARIABLE '[' expr ']' '=' '{' arg_list '}'	{ $$ = opr(kArrayListAssign, 3, ident($1),$3,$7);}
+		;
+
+//array lvar use, ex: a[1] = 10;
+leftArrayElement
+		: VARIABLE '[' expr ']'							{ $$ = opr(kLeftArray, 2, ident($1), $3);}
+		;
+
+//ex: j =  a[1];
+rightArrayElement
+		: VARIABLE '[' expr ']'							{ $$ = opr(kArrayElement, 2, ident($1), $3);}
+		;
+
+constant_expr
+	:INTEGER					{ $$ = con($1); }
+	|VARIABLE					{ $$ = ident($1); }
+	;
+
+expr
+		: assignment_expr		{ $$ = $1; }
+        ;
+
+primary_expr
+		: VARIABLE					{ $$ = ident($1); }
+		| INTEGER					{ $$ = con($1); }
+		| '(' expr ')'				{ $$ = $2; }
+		| rightArrayElement			{ $$ = $1; }
+		| CURRENTRECORD_IS  '(' expr ')'	{ $$ = opr(CURRENTRECORD_IS,1,$3);}
+		| EXTRACTRECORD_ID  '(' expr ')'	{ $$ = opr(EXTRACTRECORD_ID,1,$3);}
+		| EXTRACTRECORD_LEN '(' expr ')'	{ $$ = opr(EXTRACTRECORD_LEN,1,$3);}
+		| EXTRACT_VALUE '(' expr ',' expr ',' expr ')'	{ $$ = opr(EXTRACT_VALUE,3, $3, $5, $7);}
+		| SHIP_RECORD '(' expr ')'			{ $$ = opr(SHIP_RECORD,1,$3);}
+		| PUSH_RECORD '(' expr ',' expr ')'	{ $$ = opr(PUSH_RECORD,2,$3,$5);}
+		| POP_RECORD  '(' expr ')'			{ $$ = opr(POP_RECORD,1,$3);}
+		| BOTTOM_POP_RECORD  '(' expr ')'	{ $$ = opr(BOTTOM_POP_RECORD,1,$3);}
+		| SHIP_STACK  '(' expr ')'			{ $$ = opr(SHIP_STACK,1,$3);}
+		| DUMP_STACK  '(' expr ')'			{ $$ = opr(DUMP_STACK,1,$3);}
+		| STACK_COUNT '(' expr ')'			{ $$ = opr(STACK_COUNT,1,$3);}
+		| HISTO_1D    '(' expr ',' expr ')'				{ $$ = opr(HISTO_1D,2,$3,$5);}
+		| HISTO_2D    '(' expr ',' expr ',' expr ')'	{ $$ = opr(HISTO_2D,3,$3,$5,$7);}
+		| STRIPCHART   '(' expr ',' expr ',' expr ')'	{ $$ = opr(STRIPCHART,3,$3,$5,$7);}
+		| DISPLAY_VALUE '(' expr ',' expr ')'	{ $$ = opr(DISPLAY_VALUE,2,$3,$5);}
+		| RESET_DISPLAYS '('  ')'				{ $$ = opr(RESET_DISPLAYS,0);}
+		| TIME '('  ')'							{ $$ = opr(TIME,0);}
+		| RANDOM '(' expr ',' expr ')'			{ $$ = opr(RANDOM,2,$3,$5);}
+		;
+	
+postfix_expr
+		: primary_expr				{ $$ = $1;}
+		| postfix_expr INC_OP		{ $$ = opr(kPostInc,1,$1);}
+		| postfix_expr DEC_OP		{ $$ = opr(kPostDec,1,$1);}
+		| leftArrayElement INC_OP   { FilterScripterror ("Array++ not allowed"); return 1;}
+		| leftArrayElement DEC_OP   { FilterScripterror ("Array-- not allowed"); return 1;}
+		;
+
+unary_expr
+		: postfix_expr					{ $$ = $1;}
+		| INC_OP unary_expr				{ $$ = opr(kPreInc,1,$2);}
+		| DEC_OP unary_expr				{ $$ = opr(kPreDec,1,$2);}
+		| '-' primary_expr %prec UMINUS	{ $$ = opr(UMINUS,1, $2); }
+        | '!' primary_expr %prec NOT	{ $$ = opr('!',1, $2); }
+        | '~' primary_expr %prec INVERT	{ $$ = opr('~',1, $2); }
+		;
+
+multiplicative_expr
+		: unary_expr								{$$ = $1;}
+		| multiplicative_expr '*' unary_expr		{ $$ = opr('*', 2, $1, $3); }
+		| multiplicative_expr '/' unary_expr		{ $$ = opr('/', 2, $1, $3); }
+		| multiplicative_expr '%' unary_expr		{ $$ = opr('%', 2, $1, $3); }
+		;
+
+additive_expr
+		: multiplicative_expr						{ $$ = $1;}
+		| additive_expr '+' multiplicative_expr		{ $$ = opr('+', 2, $1, $3); }
+		| additive_expr '-' multiplicative_expr		{ $$ = opr('-', 2, $1, $3); }
+		;
+
+shift_expr
+		: additive_expr								{ $$ = $1;}
+		| shift_expr LEFT_OP additive_expr			{ $$ = opr(LEFT_OP, 2,  $1, $3); }
+		| shift_expr RIGHT_OP additive_expr			{ $$ = opr(RIGHT_OP, 2,  $1, $3); }
+		;
+
+relational_expr
+		: shift_expr								{ $$ = $1;}
+		| relational_expr '<' shift_expr			{ $$ = opr('<',   2,  $1, $3); }
+		| relational_expr '>' shift_expr			{ $$ = opr('>',   2,  $1, $3); }
+		| relational_expr LE_OP shift_expr			{ $$ = opr(LE_OP, 2,  $1, $3); }
+		| relational_expr GE_OP shift_expr			{ $$ = opr(GE_OP, 2,  $1, $3); }
+		;
+
+equality_expr
+		: relational_expr								{ $$ = $1;}
+		| equality_expr EQ_OP relational_expr			{ $$ = opr(EQ_OP, 2,  $1, $3); }
+		| equality_expr NE_OP relational_expr			{ $$ = opr(NE_OP, 2,  $1, $3); }
+		;
+		
+and_expr
+		: equality_expr									{ $$ = $1;}
+		| and_expr '&' equality_expr					{ $$ = opr('&', 2,  $1, $3); }
+		;
+
+exclusive_or_expr
+		: and_expr										{ $$ = $1;}
+		| exclusive_or_expr '^' and_expr				{ $$ = opr('^', 2,  $1, $3); }
+		;
+
+inclusive_or_expr
+		: exclusive_or_expr								{ $$ = $1;}
+		| inclusive_or_expr '|' exclusive_or_expr		{ $$ = opr('|', 2,  $1, $3); }
+		;
+
+logical_and_expr
+		: inclusive_or_expr								{ $$ = $1;}
+		| logical_and_expr AND_OP inclusive_or_expr		{ $$ = opr(AND_OP, 2,  $1, $3); }
+		;
+
+logical_or_expr
+		: logical_and_expr								{ $$ = $1;}
+		| logical_or_expr OR_OP logical_and_expr		{ $$ = opr(OR_OP, 2,  $1, $3); }
+		;
+
+conditional_expr
+		: logical_or_expr											{ $$ = $1;}
+		| logical_or_expr '?' logical_or_expr ':' conditional_expr	{ $$ = opr(kConditional, 3,$1,$3,$5);}
+		;
+
+assignment_expr
+		: conditional_expr									{ $$ = $1;}
+		| VARIABLE '=' assignment_expr						{ $$ = opr('=',2,ident($1),$3);}
+		| leftArrayElement '=' expr							{ $$ = opr(kArrayAssign, 2, $1, $3); }
+		| unary_expr MUL_ASSIGN assignment_expr				{ $$ = opr(MUL_ASSIGN,2,$1,$3);}
+		| unary_expr DIV_ASSIGN assignment_expr				{ $$ = opr(DIV_ASSIGN,2,$1,$3);}
+		| unary_expr MOD_ASSIGN assignment_expr				{ $$ = opr(MOD_ASSIGN,2,$1,$3);}
+		| unary_expr ADD_ASSIGN assignment_expr				{ $$ = opr(ADD_ASSIGN,2,$1,$3);}
+		| unary_expr SUB_ASSIGN assignment_expr				{ $$ = opr(SUB_ASSIGN,2,$1,$3);}
+		| unary_expr LEFT_ASSIGN assignment_expr			{ $$ = opr(LEFT_ASSIGN,2,$1,$3);}
+		| unary_expr RIGHT_ASSIGN assignment_expr			{ $$ = opr(RIGHT_ASSIGN,2,$1,$3);}
+		| unary_expr AND_ASSIGN assignment_expr				{ $$ = opr(AND_ASSIGN,2,$1,$3);}
+		| unary_expr XOR_ASSIGN assignment_expr				{ $$ = opr(XOR_ASSIGN,2,$1,$3);}
+		| unary_expr OR_ASSIGN assignment_expr				{ $$ = opr(OR_ASSIGN,2,$1,$3);}
+		;
+
+//---print stuff-----------------------------------------------------------
+//ex: print "test:",i;
+//ex: print ("test:",i);
+print_statement
+		: PRINT '(' assignment_expr ')' ';'	{ $$ = opr(PRINT,1, $3); }
+		| PRINT  assignment_expr  ';'		{ $$ = opr(PRINT,1, $2); }
+		;
+
+printhex_statement
+		: PRINTH '(' assignment_expr ')' ';'	{ $$ = opr(PRINTH,1, $3); }
+		| PRINTH  assignment_expr  ';'			{ $$ = opr(PRINTH,1, $2); }
+		;
+
+
+free_statement
+		: FREEARRAY '(' VARIABLE ')' ';'	{ $$ = opr(FREEARRAY,1, ident($3)); }
+		| FREEARRAY  VARIABLE  ';'			{ $$ = opr(FREEARRAY,1, ident($2)); }
+		;
+
+%%
+
+//#define SIZEOF_NODETYPE ((char *)&p->con - (char *)p)
+#define SIZEOF_NODETYPE (sizeof(nodeType))
+
+void addFilterNode(int type,nodeType* aNode)
+{
+
+	if(!filterNodes){
+		filterNodeCount = 0;
+		maxFilterNodeCount = 1000;
+		filterNodes = (nodeType**)malloc(maxFilterNodeCount*sizeof(nodeType));
+	}
+	
+	if(!startFilterNodes){
+		startFilterNodeCount = 0;
+		maxStartFilterNodeCount = 1000;
+		startFilterNodes = (nodeType**)malloc(maxStartFilterNodeCount*sizeof(nodeType));
+	}
+	
+	if(!finishFilterNodes){
+		finishFilterNodeCount = 0;
+		maxFinishFilterNodeCount = 1000;
+		finishFilterNodes = (nodeType**)malloc(maxFinishFilterNodeCount*sizeof(nodeType));
+	}
+	
+	if(type == startNodeType){
+		startFilterNodes[startFilterNodeCount++] = aNode;
+		if(startFilterNodeCount>maxStartFilterNodeCount){
+			maxStartFilterNodeCount += 1000;
+			startFilterNodes = (nodeType**)realloc(startFilterNodes, maxStartFilterNodeCount*sizeof(nodeType));
+		}
+	}
+	else if(type == filterNodeType){
+		filterNodes[filterNodeCount++] = aNode;
+		if(filterNodeCount>maxFilterNodeCount){
+			maxFilterNodeCount += 1000;
+			filterNodes = (nodeType**)realloc(filterNodes, maxFilterNodeCount*sizeof(nodeType));
+		}
+	}
+	else if(type == finishNodeType){
+		finishFilterNodes[finishFilterNodeCount++] = aNode;
+		if(finishFilterNodeCount>maxFinishFilterNodeCount){
+			maxFinishFilterNodeCount += 1000;
+			finishFilterNodes = (nodeType**)realloc(finishFilterNodes, maxFinishFilterNodeCount*sizeof(nodeType));
+		}
+	}
+}
+
+nodeType *con(int value) 
+{
+    /* allocate node */
+	nodeType* p = malloc(SIZEOF_NODETYPE + sizeof(conNodeType));
+    if (p == NULL) FilterScripterror("out of memory");
+
+    /* copy information */
+    p->type		 = typeCon;
+    p->con.value = value;
+
+    return p;
+}
+
+nodeType *ident(char* key) 
+{	
+    /* allocate node */
+	nodeType* p = malloc(SIZEOF_NODETYPE + sizeof(idNodeType));
+    if (p == NULL) FilterScripterror("out of memory");
+
+    /* copy information */
+    p->type = typeId;
+    strcpy(p->ident.key,key);
+
+    return p;
+}
+
+nodeType *opr(int oper, int nops, ...) 
+{
+    va_list ap;
+    int i;
+
+    /* allocate node */
+	nodeType* p = malloc(SIZEOF_NODETYPE + sizeof(oprNodeType) + (nops - 1) * sizeof(nodeType*));
+    if (p == NULL) FilterScripterror("out of memory");
+
+    /* copy information */
+    p->type = typeOpr;
+    p->opr.oper = oper;
+    p->opr.nops = nops;
+    va_start(ap, nops);
+    for (i = 0; i < nops; i++) p->opr.op[i] = va_arg(ap, nodeType*);
+    va_end(ap);
+    return p;
+}
+
+
+void FilterScripterror(char *s) 
+{
+    fprintf(stdout, "%s\n", s);
+}

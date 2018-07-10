@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+    <dependencies>
+        <deployment version="1050" identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
+        <capability name="box content view" minToolsVersion="7.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="ORMotoGPSController">
+            <connections>
+                <outlet property="accSignalStrengthField" destination="GAx-fy-UfS" id="dan-lW-qxa"/>
+                <outlet property="antennaSenseField" destination="h4e-d1-ZET" id="Dlc-Bv-de9"/>
+                <outlet property="approxCableLengthField" destination="kNa-y9-sRb" id="MAa-uS-cpX"/>
+                <outlet property="autoSurveyButton" destination="1309" id="Owe-Yo-2Il"/>
+                <outlet property="cableDelayCorButton" destination="8H4-PC-ySg" id="cqV-dy-M44"/>
+                <outlet property="cableDelayCorField" destination="cB4-K8-wOy" id="MPt-mt-S1H"/>
+                <outlet property="deviceContent" destination="6" id="XCe-8O-Rq9"/>
+                <outlet property="deviceIDButton" destination="NcR-ZQ-WcR" id="rLw-a2-tHw"/>
+                <outlet property="deviceIDField" destination="bBH-kP-NTG" id="IUT-nG-Dff"/>
+                <outlet property="oscTemperatureField" destination="jC7-JI-m5R" id="4rG-nb-utJ"/>
+                <outlet property="receivedMessageField" destination="XZc-Vg-KTl" id="4L6-H2-b9m"/>
+                <outlet property="setDefaults" destination="Fz6-v5-shJ" id="EwZ-Sj-AuD"/>
+                <outlet property="statusButton" destination="Z1f-bu-KCh" id="mR6-0Y-gjT"/>
+                <outlet property="statusPollCB" destination="PTL-qh-Owa" id="owt-rm-OG5"/>
+                <outlet property="trackedSatsField" destination="vSi-se-QWx" id="9bu-xk-pqO"/>
+                <outlet property="visibleSatsField" destination="Ahj-Lx-Dud" id="zG6-KO-cUL"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="MotoGPS" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="5" userLabel="Window">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="17" y="546" width="501" height="583"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="878"/>
+            <value key="minSize" type="size" width="213" height="107"/>
+            <view key="contentView" misplaced="YES" id="6">
+                <rect key="frame" x="0.0" y="0.0" width="501" height="583"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView misplaced="YES" id="5Ml-P8-820">
+                        <rect key="frame" x="28" y="518" width="87" height="54"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="MotoGPS" id="97A-Mp-Zf5"/>
+                    </imageView>
+                    <box misplaced="YES" title="Received Message" id="ogs-5E-wqy">
+                        <rect key="frame" x="17" y="9" width="475" height="182"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <view key="contentView" id="MdJ-wJ-lGM">
+                            <rect key="frame" x="2" y="2" width="471" height="165"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <textField verticalHuggingPriority="750" misplaced="YES" id="XZc-Vg-KTl">
+                                    <rect key="frame" x="6" y="9" width="447" height="149"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" controlSize="small" lineBreakMode="charWrapping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="m1W-5E-sBz">
+                                        <font key="font" metaFont="smallSystem"/>
+                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                            </subviews>
+                        </view>
+                    </box>
+                    <box autoresizesSubviews="NO" misplaced="YES" borderType="line" title="GPS Clock Control" id="1308">
+                        <rect key="frame" x="21" y="195" width="471" height="315"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <view key="contentView" id="9tv-X0-Ise">
+                            <rect key="frame" x="1" y="1" width="469" height="299"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <textField verticalHuggingPriority="750" misplaced="YES" id="cB4-K8-wOy">
+                                    <rect key="frame" x="22" y="40" width="105" height="19"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="iyk-oh-c8N">
+                                        <font key="font" metaFont="smallSystem"/>
+                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <textField verticalHuggingPriority="750" misplaced="YES" id="kNa-y9-sRb">
+                                    <rect key="frame" x="304" y="10" width="105" height="19"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="8oS-Os-4fk">
+                                        <font key="font" metaFont="smallSystem"/>
+                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <textField verticalHuggingPriority="750" misplaced="YES" id="bBH-kP-NTG">
+                                    <rect key="frame" x="135" y="73" width="322" height="19"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="fC2-F4-4Ri">
+                                        <font key="font" metaFont="smallSystem"/>
+                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <button verticalHuggingPriority="750" misplaced="YES" id="8H4-PC-ySg">
+                                    <rect key="frame" x="141" y="35" width="288" height="28"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <buttonCell key="cell" type="push" title="Cable Delay Correction / ns (999 us max)" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bpa-CA-96W">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="smallSystem"/>
+                                    </buttonCell>
+                                    <connections>
+                                        <action selector="cableDelayCorAction:" target="-2" id="7kv-Xj-Be7"/>
+                                    </connections>
+                                </button>
+                                <box misplaced="YES" boxType="custom" cornerRadius="4" title="Box" id="Vn5-FS-Zeb">
+                                    <rect key="frame" x="7" y="103" width="450" height="157"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <view key="contentView" id="XC7-MW-B2Z">
+                                        <rect key="frame" x="1" y="1" width="448" height="155"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <subviews>
+                                            <textField verticalHuggingPriority="750" misplaced="YES" id="LKt-aW-LuX">
+                                                <rect key="frame" x="-2" y="95" width="90" height="14"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Visible satellites" id="4EV-DR-eDN">
+                                                    <font key="font" metaFont="label"/>
+                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <textField verticalHuggingPriority="750" id="Ahj-Lx-Dud">
+                                                <rect key="frame" x="94" y="93" width="105" height="19"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="wLj-JW-ihB">
+                                                    <font key="font" metaFont="smallSystem"/>
+                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <textField verticalHuggingPriority="750" misplaced="YES" id="nuc-X3-Cdr">
+                                                <rect key="frame" x="234" y="99" width="90" height="13"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Tracked satellites" id="smU-uV-EJ2">
+                                                    <font key="font" metaFont="label"/>
+                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <button verticalHuggingPriority="750" misplaced="YES" id="Z1f-bu-KCh">
+                                                <rect key="frame" x="5" y="120" width="77" height="28"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <buttonCell key="cell" type="push" title="Status" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="AbV-6Q-PaZ">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="smallSystem"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="statusAction:" target="-2" id="aBx-mk-sUr"/>
+                                                </connections>
+                                            </button>
+                                            <textField verticalHuggingPriority="750" misplaced="YES" id="vSi-se-QWx">
+                                                <rect key="frame" x="330" y="95" width="105" height="19"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="v8a-yd-hwX">
+                                                    <font key="font" metaFont="smallSystem"/>
+                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <textField verticalHuggingPriority="750" misplaced="YES" id="hEZ-de-XhG">
+                                                <rect key="frame" x="234" y="67" width="90" height="13"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Antenna sense" id="spr-dw-pWf">
+                                                    <font key="font" metaFont="label"/>
+                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <textField verticalHuggingPriority="750" misplaced="YES" id="h4e-d1-ZET">
+                                                <rect key="frame" x="330" y="63" width="105" height="19"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="2op-d3-9Mk">
+                                                    <font key="font" metaFont="smallSystem"/>
+                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <textField verticalHuggingPriority="750" misplaced="YES" id="qfM-Qt-SGz">
+                                                <rect key="frame" x="-2" y="10" width="90" height="26"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Accumulated signal strength" id="7kQ-39-7hV">
+                                                    <font key="font" metaFont="label"/>
+                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <textField verticalHuggingPriority="750" misplaced="YES" id="GAx-fy-UfS">
+                                                <rect key="frame" x="94" y="12" width="105" height="22"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="T4a-pY-Si8">
+                                                    <font key="font" metaFont="system"/>
+                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <textField verticalHuggingPriority="750" misplaced="YES" id="RIj-6n-o6r">
+                                                <rect key="frame" x="229" y="8" width="95" height="26"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Oscillator temperature / °C" id="b7x-XR-1Gg">
+                                                    <font key="font" metaFont="label"/>
+                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <textField verticalHuggingPriority="750" misplaced="YES" id="jC7-JI-m5R">
+                                                <rect key="frame" x="330" y="10" width="105" height="19"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="lvW-M1-YQE">
+                                                    <font key="font" metaFont="smallSystem"/>
+                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <button misplaced="YES" id="PTL-qh-Owa">
+                                                <rect key="frame" x="91" y="124" width="45" height="20"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <buttonCell key="cell" type="check" title="Poll" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="fTu-G6-pCd">
+                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                    <font key="font" metaFont="smallSystem"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="statusPollAction:" target="-2" id="WAj-Ak-xry"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </view>
+                                    <color key="fillColor" red="0.27340640311304804" green="0.41541147586613031" blue="0.74589135362694303" alpha="0.36147293173598555" colorSpace="custom" customColorSpace="sRGB"/>
+                                </box>
+                                <button verticalHuggingPriority="750" misplaced="YES" id="NcR-ZQ-WcR">
+                                    <rect key="frame" x="17" y="67" width="96" height="28"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <buttonCell key="cell" type="push" title="Device ID" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gEx-2a-Nmx">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="smallSystem"/>
+                                    </buttonCell>
+                                    <connections>
+                                        <action selector="deviceIDAction:" target="-2" id="J6P-GB-qcN"/>
+                                    </connections>
+                                </button>
+                                <textField verticalHuggingPriority="750" misplaced="YES" id="1286">
+                                    <rect key="frame" x="112" y="13" width="186" height="14"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="approx. cable length (from delay)" id="1287">
+                                        <font key="font" metaFont="smallSystem"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <button verticalHuggingPriority="750" misplaced="YES" id="Fz6-v5-shJ">
+                                    <rect key="frame" x="2" y="267" width="113" height="28"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <buttonCell key="cell" type="push" title="Set Defaults" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eP5-Uv-gSq">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="smallSystem"/>
+                                    </buttonCell>
+                                    <connections>
+                                        <action selector="setDefaultsAction:" target="-2" id="fBs-ty-cym"/>
+                                    </connections>
+                                </button>
+                                <button verticalHuggingPriority="750" misplaced="YES" imageHugsTitle="YES" id="1309" userLabel="Load Amp Button">
+                                    <rect key="frame" x="234" y="267" width="228" height="28"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <buttonCell key="cell" type="push" title="Auto-survey: calibrate position" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="1310">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="system"/>
+                                    </buttonCell>
+                                    <connections>
+                                        <action selector="autoSurveyAction:" target="-2" id="7ju-kN-pvo"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                        </view>
+                    </box>
+                </subviews>
+            </view>
+            <connections>
+                <outlet property="delegate" destination="-2" id="61"/>
+            </connections>
+            <point key="canvasLocation" x="278.5" y="156.5"/>
+        </window>
+    </objects>
+    <resources>
+        <image name="MotoGPS" width="100" height="60"/>
+    </resources>
+</document>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+<string>
+The pumping has reported a low oil condition. This is very serious and must be corrected at once.
+
+This alarm will not go away until the low oil condition is corrected. But acknowledging this alarm will make silent. 
+</string>
+</array>
+</plist>
+

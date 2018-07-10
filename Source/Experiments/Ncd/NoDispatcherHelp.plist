@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+<string>
+
+The NCD experimental setup requires that there be one and only one dispatcher present in the configuration. Check the configuration and fix as needed.
+
+ORCA checks this alarm every 30 seconds while a run is in progress.
+This alarm will go away when the number of dispatchers in the configuration is equal to one.
+Acknowledging this alarm will silence it. 
+</string>
+</array>
+</plist>
+

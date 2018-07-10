@@ -1,0 +1,8 @@
+function(doc) {
+    if(doc.title == "Events"){
+        if(doc.timestamp && doc.title && doc.name){
+            var sk = doc.title+","+doc.name+","+doc.timestamp;
+            emit(sk, [doc.time*1000,doc.name,doc.symbol,doc.comment]);
+        }
+    }	
+}

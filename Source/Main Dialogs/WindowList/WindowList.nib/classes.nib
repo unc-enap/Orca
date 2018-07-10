@@ -1,0 +1,33 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {changeTransparency = id; }; 
+            CLASS = Controller; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {itsWindow = id; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {changeColor = id; }; 
+            CLASS = CustomView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSView; 
+        }, 
+        {
+            ACTIONS = {showHelp = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = MyView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {CLASS = ORTransparentWindow; LANGUAGE = ObjC; SUPERCLASS = NSWindow; }, 
+        {
+            CLASS = ORWindowListController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {listView = NSView; }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = ORWindowListView; LANGUAGE = ObjC; SUPERCLASS = NSTextField; }
+    ); 
+    IBVersion = 1; 
+}

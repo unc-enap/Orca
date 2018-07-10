@@ -1,0 +1,33 @@
+#!/bin/bash
+
+STATUS_FILE=${HOME}/ORCA/stat.txt
+
+if [ "$(pidof -s OrcaReadout)" ]
+then
+	#Orca loop running
+	#output is logged if it includes "goScript:"
+	#any output is logged if the verbose flag is checked in the gui
+	#"error:" and/or "warning" and/or "min/avg/max/stddev" not allowed in any output
+	echo "goScript: Can not start the crate, the crate is running already."
+
+	if [ -r $STATUS_FILE ]
+	then
+		#we have the status file
+		while read line
+		do
+			ORCA_USER="$line"
+			read line
+			START="$line"
+		done < $STATUS_FILE
+		START="$((($(date +%s) - $START) / 60))"
+		echo "goScript: The crate was started by $ORCA_USER $START minutes ago."
+	else
+		echo "goScript: Status file not found."
+	fi
+
+	echo "goScript: You may kill the crate."
+
+
+else
+~/ORCA/OrcaReadout <port> &
+fi

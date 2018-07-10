@@ -1,0 +1,46 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = NSObject; LANGUAGE = ObjC; }, 
+        {CLASS = OHexFormatter; LANGUAGE = ObjC; SUPERCLASS = NSFormatter; }, 
+        {
+            ACTIONS = {
+                ampFieldAction = id; 
+                loadHWAction = id; 
+                negPulseStateMatrixAction = id; 
+                rateAction = id; 
+                readHWAction = id; 
+                settingLockAction = id; 
+                ttlPulseStateMatrixAction = id; 
+            }; 
+            CLASS = ORRandomPulserController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                ampField = NSTextField; 
+                ampStepper = NSStepper; 
+                loadHWButton = NSButton; 
+                negPulseStateMatrix = NSMatrix; 
+                rateField = NSTextField; 
+                rateStepper = NSStepper; 
+                readHWButton = NSButton; 
+                settingLockButton = NSButton; 
+                ttlPulseStateMatrix = NSMatrix; 
+            }; 
+            SUPERCLASS = OrcaObjectController; 
+        }, 
+        {
+            ACTIONS = {
+                copy = id; 
+                decDialog = id; 
+                incDialog = id; 
+                saveDocument = id; 
+                saveDocumentAs = id; 
+            }; 
+            CLASS = OrcaObjectController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {model = id; }; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}

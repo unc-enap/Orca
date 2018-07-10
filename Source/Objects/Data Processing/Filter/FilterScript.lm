@@ -1,0 +1,150 @@
+
+%{
+#include <stdlib.h>
+#include "FilterScript.h"
+#include "FilterScript.tab.h"
+void FilterScripterror(char *);
+void fsComment();
+void fsSingleLineComment();
+long numFilterLines = 1;
+extern nodeType** filterNodes;
+extern long filterNodeCount;
+extern long maxFilterNodeCount;
+extern void freeNode(nodeType *p);
+
+%}
+
+D			[0-9]
+L			[a-zA-Z_$]
+H			[a-fA-F0-9]
+
+%%
+
+
+{D}+      {
+                FilterScriptlval.iValue = atol(yytext);
+                return INTEGER;
+            }
+
+0[xX]{H}+			{
+						char tempString[64];
+						strncpy(tempString,yytext,yyleng);
+						tempString[yyleng] = '\0';
+						unsigned long n = strtoul(tempString,0,16);
+						FilterScriptlval.iValue = n;
+						return INTEGER;
+					}
+
+
+[-()<>=+*/%!;:\[\],{}~^&|?.] { return *yytext; }
+
+"filter"		return FILTER;
+"start"			return START;
+"finish"		return FINISH;
+
+"/*"			{ fsComment(); }
+"//"			{ fsSingleLineComment(); }
+
+">>="			return RIGHT_ASSIGN;
+"<<="			return LEFT_ASSIGN;
+"+="			return ADD_ASSIGN;
+"-="			return SUB_ASSIGN;
+"*="			return MUL_ASSIGN;
+"/="			return DIV_ASSIGN;
+"|="			return OR_ASSIGN;
+"%="			return MOD_ASSIGN;
+"&="			return AND_ASSIGN;
+"^="			return XOR_ASSIGN;
+"++"			return INC_OP;
+"--"			return DEC_OP;
+">="            return GE_OP;
+"<="            return LE_OP;
+"=="            return EQ_OP;
+"!="            return NE_OP;
+"&&"			return AND_OP;
+"||"			return OR_OP;
+
+"<<"			return LEFT_OP;
+">>"			return RIGHT_OP;
+"do"			return DO;
+"for"			return FOR;
+"while"         return WHILE;
+"unless"        return UNLESS;
+"if"            return IF;
+"else"          return ELSE;
+"switch"        return SWITCH;
+"case"			return CASE;
+"default"		return DEFAULT;
+"print"         return PRINT;
+"printh"        return PRINTH;
+"break"			return BREAK;
+"continue"		return CONTINUE;
+"array"			return MAKEARRAY;
+"free"			return FREEARRAY;
+"currentRecordIs"		return CURRENTRECORD_IS;
+"extractRecordID"		return EXTRACTRECORD_ID;
+"extractRecordLen"		return EXTRACTRECORD_LEN;
+"extractValue"			return EXTRACT_VALUE;
+"shipRecord"			return SHIP_RECORD;
+"push"					return PUSH_RECORD;
+"pop"					return POP_RECORD;
+"bottomPop"				return BOTTOM_POP_RECORD;
+"histo2D"				return HISTO_2D;
+"histo1D"				return HISTO_1D;
+"stripChart"			return STRIPCHART;
+"shipStack"				return SHIP_STACK;
+"dumpStack"				return DUMP_STACK;
+"stackCount"			return STACK_COUNT;
+"display"				return DISPLAY_VALUE;
+"resetDisplays"			return RESET_DISPLAYS;
+"time"					return TIME;
+"random"				return RANDOM;
+
+{L}({L}|{D})* { 
+                strncpy(FilterScriptlval.sIndex,yytext,yyleng);
+				FilterScriptlval.sIndex[yyleng] = '\0';
+                return VARIABLE;
+             }
+
+[ \t\r]+        ;       /* ignore whitespace */
+
+\n				{++numFilterLines;}
+
+.               ;
+%%
+int yywrap(void) {
+    return 1;
+}
+
+void fsComment()
+{
+	//just eat comments, carefully counting lines as needed
+	char c, c1;
+loop:
+	while ((c = input()) != '*' && c != 0){
+		if(c=='\n')numFilterLines++;
+	}
+
+	if ((c1 = input()) != '/' && c != 0){
+		unput(c1);
+		goto loop;
+	}
+}
+
+void fsSingleLineComment()
+{
+	//just eat comments, carefully counting lines as needed
+	char c;
+	while ((c = input())){
+		if(c=='\n'){
+			numFilterLines++;
+			break;
+		}
+	}
+}
+
+
+void resetFilterState()
+{
+	BEGIN(INITIAL);
+}

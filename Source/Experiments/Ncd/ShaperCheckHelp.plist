@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+<string>
+At the start of a run the state of the hardware is checked against an earlier snapshot of the hardware state.
+
+The position of the shapers cards, thresholds, gains,  and modes are compared to the snapshot. This alarm indicates that something has changed.
+Check the status log for more information.
+
+This alarm will go away when the current state matches the snapshot. You can capture the current state using the controls on the NCD dialog.
+
+Acknowledging this alarm will silence it. 
+</string>
+</array>
+</plist>
+

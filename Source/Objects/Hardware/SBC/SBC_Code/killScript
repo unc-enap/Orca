@@ -1,0 +1,3 @@
+#!/bin/bash
+#ps ax | grep OrcaReadout | awk '{print $1}' | xargs -i kill {} 2&>/dev/null
+pkill -9 OrcaReadout 2&> /dev/null

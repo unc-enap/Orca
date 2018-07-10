@@ -1,0 +1,77 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {"" = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = NSObject; LANGUAGE = ObjC; }, 
+        {
+            ACTIONS = {
+                burstRateAction = id; 
+                doAllChannelsAction = id; 
+                endAmplitudeAction = id; 
+                numOfValuesAction = id; 
+                selectWaveformAction = id; 
+                startAmplitudeAction = id; 
+                timeAction = id; 
+                widthAction = id; 
+            }; 
+            CLASS = NcdThresholdTask; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                burstRateField = NSTextField; 
+                burstRateStepper = NSStepper; 
+                doAllButton = NSButton; 
+                endAmplitudeField = NSTextField; 
+                endAmplitudeStepper = NSStepper; 
+                numValuesField = NSTextField; 
+                numValuesStepper = NSStepper; 
+                selectionPopUpButton = NSPopUpButton; 
+                startAmplitudeField = NSTextField; 
+                startAmplitudeStepper = NSStepper; 
+                stepTask = id; 
+                thePDSModel = id; 
+                thePulserModel = id; 
+                timeField = NSTextField; 
+                timeStepper = NSStepper; 
+                widthField = NSTextField; 
+                widthStepper = NSStepper; 
+            }; 
+            SUPERCLASS = ORTask; 
+        }, 
+        {
+            ACTIONS = {
+                detailsAction = id; 
+                runDelayAction = id; 
+                startAction = id; 
+                timeDelayAction = id; 
+                timeIntervalAction = id; 
+                willRepeatAction = id; 
+            }; 
+            CLASS = ORTask; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                delayStartCB = NSButton; 
+                delegate = id; 
+                detailsButton = NSButton; 
+                extraView = NSView; 
+                messageField = NSTextField; 
+                nextRunTimeField = NSTextField; 
+                runStateField = NSTextField; 
+                startButton = NSButton; 
+                taskBox = NSBox; 
+                timeDelayField = NSTextField; 
+                timeDelayStepper = NSStepper; 
+                timeIntervalField = NSTextField; 
+                timeIntervalStepper = NSStepper; 
+                titleField = NSTextField; 
+                view = NSView; 
+                willRepeatMatrix = NSMatrix; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

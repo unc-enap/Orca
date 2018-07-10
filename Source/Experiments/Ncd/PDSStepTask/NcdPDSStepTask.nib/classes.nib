@@ -1,0 +1,64 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = NSObject; LANGUAGE = ObjC; }, 
+        {
+            ACTIONS = {
+                clrAllAction = id; 
+                ignorePDS = id; 
+                patternAction = id; 
+                reloadPDS = id; 
+                setAllAction = id; 
+                timeAction = id; 
+            }; 
+            CLASS = NcdPDSStepTask; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                clrAllButton = NSButton; 
+                ignorePDSButton = NSButton; 
+                patternMatrix0 = NSMatrix; 
+                patternMatrix1 = NSMatrix; 
+                patternMatrix2 = NSMatrix; 
+                patternMatrix3 = NSMatrix; 
+                reloadPDSButton = NSButton; 
+                setAllButton = NSButton; 
+                thePDSModel = id; 
+                timeField = NSTextField; 
+                timeStepper = NSStepper; 
+            }; 
+            SUPERCLASS = ORTask; 
+        }, 
+        {
+            ACTIONS = {
+                runDelayAction = id; 
+                startAction = id; 
+                timeDelayAction = id; 
+                timeIntervalAction = id; 
+                willRepeatAction = id; 
+            }; 
+            CLASS = ORTask; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                bottomSpaceHolder = NSView; 
+                customView = NSView; 
+                delayStartCB = NSButton; 
+                delegate = id; 
+                extraView = NSView; 
+                messageField = NSTextField; 
+                nextRunTimeField = NSTextField; 
+                runStateField = NSTextField; 
+                startButton = NSButton; 
+                taskBox = NSBox; 
+                timeDelayField = NSTextField; 
+                timeDelayStepper = NSStepper; 
+                timeIntervalField = NSTextField; 
+                timeIntervalStepper = NSStepper; 
+                titleField = NSTextField; 
+                view = NSView; 
+                willRepeatMatrix = NSMatrix; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

@@ -1,0 +1,192 @@
+{
+    IBClasses = (
+        {CLASS = C617Hardware; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = OHexFormatter; LANGUAGE = ObjC; SUPERCLASS = NSFormatter; }, 
+        {
+            ACTIONS = {
+                addressModifierAction = id; 
+                doTests = id; 
+                ioSpaceAction = id; 
+                read = id; 
+                readWriteTypeMatrixAction = id; 
+                reset = id; 
+                rwAddressStepperAction = id; 
+                rwAddressTextAction = id; 
+                sysReset = id; 
+                write = id; 
+                writeValueStepperAction = id; 
+                writeValueTextAction = id; 
+            }; 
+            CLASS = OR617Controller; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                addressStepper = NSStepper; 
+                addressValueField = NSTextField; 
+                readWriteAddressModifierPopUp = NSPopUpButton; 
+                readWriteIOSpacePopUp = NSPopUpButton; 
+                readWriteTypeMatrix = NSMatrix; 
+                writeValueField = NSTextField; 
+                writeValueStepper = NSStepper; 
+            }; 
+            SUPERCLASS = OrcaObjectController; 
+        }, 
+        {
+            ACTIONS = {
+                addressModifierAction = id; 
+                doTests = id; 
+                ioSpaceAction = id; 
+                read = id; 
+                readWriteTypeMatrixAction = id; 
+                reset = id; 
+                rwAddressStepperAction = id; 
+                rwAddressTextAction = id; 
+                sysReset = id; 
+                write = id; 
+                writeValueStepperAction = id; 
+                writeValueTextAction = id; 
+            }; 
+            CLASS = OR620Controller; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                addressStepper = NSStepper; 
+                addressValueField = NSTextField; 
+                readWriteAddressModifierPopUp = NSPopUpButton; 
+                readWriteIOSpacePopUp = NSPopUpButton; 
+                readWriteTypeMatrix = NSMatrix; 
+                writeValueField = NSTextField; 
+                writeValueStepper = NSStepper; 
+            }; 
+            SUPERCLASS = OrcaObjectController; 
+        }, 
+        {
+            ACTIONS = {
+                disableLAMEnableLatchAction = id; 
+                enableLAMEnableLatchAction = id; 
+                generalResetAction = id; 
+                onlineAction = id; 
+                readNoResetAction = id; 
+                readResetAction = id; 
+                resetLAMAction = id; 
+                settingLockAction = id; 
+                suppressZerosAction = id; 
+                testAllChansAction = id; 
+                testBusyAction = id; 
+                testLAMAction = id; 
+            }; 
+            CLASS = ORAD811Controller; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                disableLAMEnableLatchButton = NSButton; 
+                enableLAMEnableLatchButton = NSButton; 
+                generalResetButton = NSButton; 
+                onlineMaskMatrix = NSMatrix; 
+                readNoResetButton = NSButton; 
+                readResetButton = NSButton; 
+                resetLAMButton = NSButton; 
+                settingLockButton = NSButton; 
+                settingLockDocField = NSTextField; 
+                suppressZerosButton = NSButton; 
+                testAllChansButton = NSButton; 
+                testBusyButton = NSButton; 
+                testLAMButton = NSButton; 
+            }; 
+            SUPERCLASS = OrcaObjectController; 
+        }, 
+        {
+            ACTIONS = {
+                disableLAMEnableLatchAction = id; 
+                enableLAMEnableLatchAction = id; 
+                generalResetAction = id; 
+                includeTimingAction = id; 
+                onlineAction = id; 
+                readNoResetAction = id; 
+                readResetAction = id; 
+                resetLAMAction = id; 
+                settingLockAction = id; 
+                suppressZerosAction = id; 
+                testAllChansAction = id; 
+                testBusyAction = id; 
+                testLAMAction = id; 
+            }; 
+            CLASS = ORADC2249Controller; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                disableLAMEnableLatchButton = NSButton; 
+                enableLAMEnableLatchButton = NSButton; 
+                generalResetButton = NSButton; 
+                includeTimingButton = NSButton; 
+                onlineMaskMatrix = NSMatrix; 
+                readNoResetButton = NSButton; 
+                readResetButton = NSButton; 
+                resetLAMButton = NSButton; 
+                settingLockButton = NSButton; 
+                settingLockDocField = NSTextField; 
+                suppressZerosButton = NSButton; 
+                testAllChansButton = NSButton; 
+                testBusyButton = NSButton; 
+                testLAMButton = NSButton; 
+            }; 
+            SUPERCLASS = OrcaObjectController; 
+        }, 
+        {
+            ACTIONS = {init = id; resetController = id; test = id; }; 
+            CLASS = ORCC32Controller; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = OrcaObjectController; 
+        }, 
+        {
+            ACTIONS = {
+                alarmsEnabledMaskMatrixAction = id; 
+                enabledMaskMatrixAction = id; 
+                highLimitsMatrixAction = id; 
+                initAction = id; 
+                lowLimitsMatrixAction = id; 
+                pollingStatePopupAction = id; 
+                rangeIndexPopupAction = id; 
+                readAdcsAction = id; 
+                readLimitsAction = id; 
+                settingLockAction = id; 
+            }; 
+            CLASS = ORJADCLController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                adcValueMatrix = NSMatrix; 
+                alarmsEnabledMaskMatrix = NSMatrix; 
+                enabledMaskMatrix = NSMatrix; 
+                highLimitsMatrix = NSMatrix; 
+                lastReadTextField = NSTextField; 
+                lowLimitsMatrix = NSMatrix; 
+                pollingStatePopup = NSPopUpButton; 
+                rangeIndexPopup = NSPopUpButton; 
+                settingLockButton = NSButton; 
+                settingLockDocField = NSTextField; 
+            }; 
+            SUPERCLASS = OrcaObjectController; 
+        }, 
+        {
+            ACTIONS = {init = id; printConfig = id; resetController = id; test = id; }; 
+            CLASS = ORPCICamacController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = OrcaObjectController; 
+        }, 
+        {
+            ACTIONS = {init = id; resetController = id; test = id; }; 
+            CLASS = ORTRS1Controller; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = OrcaObjectController; 
+        }, 
+        {
+            ACTIONS = {showAboutBox = id; showConfiguration = id; showStatus = id; }; 
+            CLASS = OrcaController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = OrcaObjectController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}

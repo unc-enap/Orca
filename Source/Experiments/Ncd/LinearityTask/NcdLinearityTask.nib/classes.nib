@@ -1,0 +1,88 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = NSObject; LANGUAGE = ObjC; }, 
+        {
+            ACTIONS = {
+                burstRateAction = id; 
+                cycleWidthAction = id; 
+                endAmplitudeAction = id; 
+                endWidthAction = id; 
+                extendedLinearityAction = id; 
+                numAmpValuesAction = id; 
+                numWidthValuesAction = id; 
+                selectFileAction = id; 
+                selectWaveformAction = id; 
+                startAmplitudeAction = id; 
+                startWidthAction = id; 
+                timeAction = id; 
+                useFileAction = id; 
+                widthAction = id; 
+            }; 
+            CLASS = NcdLinearityTask; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                burstRateField = NSTextField; 
+                burstRateStepper = NSStepper; 
+                chooseFileButton = NSButton; 
+                cycleWidthButton = NSButton; 
+                endAmplitudeField = NSTextField; 
+                endAmplitudeStepper = NSStepper; 
+                endWidthField = NSTextField; 
+                endWidthStepper = NSStepper; 
+                extendedLinearityButton = NSButton; 
+                fileNameField = NSTextField; 
+                numAmpValuesField = NSTextField; 
+                numAmpValuesStepper = NSStepper; 
+                numWidthValuesField = NSTextField; 
+                numWidthValuesStepper = NSStepper; 
+                selectionPopUpButton = NSPopUpButton; 
+                startAmplitudeField = NSTextField; 
+                startAmplitudeStepper = NSStepper; 
+                startWidthField = NSTextField; 
+                startWidthStepper = NSStepper; 
+                stepTask = id; 
+                thePDSModel = id; 
+                thePulserModel = id; 
+                timeField = NSTextField; 
+                timeStepper = NSStepper; 
+                useFileButton = NSButton; 
+                widthField = NSTextField; 
+                widthStepper = NSStepper; 
+            }; 
+            SUPERCLASS = ORTask; 
+        }, 
+        {
+            ACTIONS = {
+                runDelayAction = id; 
+                startAction = id; 
+                timeDelayAction = id; 
+                timeIntervalAction = id; 
+                willRepeatAction = id; 
+            }; 
+            CLASS = ORTask; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                bottomSpaceHolder = NSView; 
+                customView = NSView; 
+                delayStartCB = NSButton; 
+                delegate = id; 
+                extraView = NSView; 
+                messageField = NSTextField; 
+                nextRunTimeField = NSTextField; 
+                runStateField = NSTextField; 
+                startButton = NSButton; 
+                taskBox = NSBox; 
+                timeDelayField = NSTextField; 
+                timeDelayStepper = NSStepper; 
+                timeIntervalField = NSTextField; 
+                timeIntervalStepper = NSStepper; 
+                titleField = NSTextField; 
+                view = NSView; 
+                willRepeatMatrix = NSMatrix; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

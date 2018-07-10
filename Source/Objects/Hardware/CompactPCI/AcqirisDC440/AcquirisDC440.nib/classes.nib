@@ -1,0 +1,72 @@
+{
+    IBClasses = (
+        {CLASS = C617Hardware; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = NSObject; LANGUAGE = ObjC; }, 
+        {CLASS = OHexFormatter; LANGUAGE = ObjC; SUPERCLASS = NSFormatter; }, 
+        {
+            CLASS = ORAcqirisDC440Controller; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = OrcaObjectController; 
+        }, 
+        {
+            CLASS = ORQueueView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {dataSource = id; }; 
+            SUPERCLASS = NSView; 
+        }, 
+        {
+            ACTIONS = {
+                addressAction = id; 
+                filePathAction = id; 
+                ipNumberAction = id; 
+                passWordAction = id; 
+                portNumberAction = id; 
+                readAction = id; 
+                reloadClientAction = id; 
+                startCrateAction = id; 
+                stopCrateAction = id; 
+                userNameAction = id; 
+                writeAction = id; 
+                writeValueAction = id; 
+            }; 
+            CLASS = ORcPCIcpuController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                addressField = NSTextField; 
+                addressStepper = NSStepper; 
+                chooseDirButton = NSButton; 
+                filePathTextField = NSTextField; 
+                hostIPNumberField = NSTextField; 
+                ipNumberField = NSTextField; 
+                lockButton = NSButton; 
+                passWordField = NSSecureTextField; 
+                portNumberField = NSTextField; 
+                queView = ORQueueView; 
+                readButton = NSButton; 
+                reloadButton = NSButton; 
+                runInfoField = NSTextField; 
+                startButton = NSButton; 
+                stopButton = NSButton; 
+                toggleServiceButton = NSButton; 
+                userNameField = NSTextField; 
+                writeValueButton = NSButton; 
+                writeValueField = NSTextField; 
+                writeValueStepper = NSStepper; 
+            }; 
+            SUPERCLASS = OrcaObjectController; 
+        }, 
+        {
+            ACTIONS = {showAboutBox = id; showConfiguration = id; showStatus = id; }; 
+            CLASS = OrcaController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = OrcaObjectController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}

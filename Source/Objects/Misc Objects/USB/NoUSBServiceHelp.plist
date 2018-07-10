@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+<string>
+A USB device's service has been interrupted.
+
+Possible reasons:
+1) No power.
+4) A bad cable.
+
+This alarm will go away when the device can be reached.
+
+Acknowledging this alarm will silence it. 
+</string>
+</array>
+</plist>
+

@@ -1,0 +1,58 @@
+#include "EdelweissSLTv4_HW_Definitions.h"
+#include "ORVCard.hh"
+#include "OREdelweissSLTv4Readout.hh"
+#include "OREdelweissFLTv4Readout.hh"
+int32_t load_card(SBC_card_info* card_info, int32_t index) 
+{
+  ORVCard* aCard = NULL;
+  switch(card_info->hw_type_id){
+    case kFLTv4EW:       
+      aCard = new ORFLTv4Readout(card_info); 
+      break;
+    case kSLTv4EW:       
+      aCard = new ORSLTv4Readout(card_info); 
+      break;
+  }
+  if (!aCard) return 0;
+  gSetOfCards[index] = aCard;
+  return 1; 
+}
+
+
+
+//FIFO-to-FLT mapping 
+int fifoReadsFLTIndex(int fltIndex, int numfifo, int availableNumFIFO, int maxNumFIFO)
+{
+    if(availableNumFIFO==0) return 1;//this was the 'old' firmware: all FLTs to one FIFO (however, 'availableNumFIFO' should be 1)
+    
+    if(availableNumFIFO==1){
+        if(numfifo==0 && fltIndex>=0 && fltIndex<maxNumFIFO)
+            return 1;
+        else
+            return 0;
+    }
+    
+    if(availableNumFIFO==8){//mapping: fifo0=FLT0,1; fifo1=FLT2,3; fifo2=FLT4,5; fifo3=FLT6,7; ...
+        if(fltIndex>=0 && fltIndex<maxNumFIFO){
+            return (fltIndex >>1) == numfifo;
+        }else
+            return 0;
+    }
+    
+    if(availableNumFIFO==4){//mapping: fifo0=FLT0,1,2,3; fifo1=FLT4,5,6,7; fifo2=FLT8,9,10,11; fifo3=FLT12,13,14,15
+        if(fltIndex>=0 && fltIndex<maxNumFIFO){
+            return (fltIndex >> 2) == numfifo;
+        }else
+            return 0;
+    }
+    
+    if(availableNumFIFO==2){//mapping: fifo0=FLT0,1,2,3,4,5,6,7; fifo1=FLT8,9,10,11,12,13,14,15
+        if(fltIndex>=0 && fltIndex<maxNumFIFO){
+            return (fltIndex >> 3) == numfifo;
+        }else
+            return 0;
+    }
+    
+    return 0;
+}
+

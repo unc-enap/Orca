@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+<string>
+The ECPU's heartbeat is no longer incrementing. It looks like it is not running. 
+
+There are several things you can do to try to solve this problem:
+1)Start a new run.
+2)Stop, then start a run with the quick start disabled.
+3)Stop the run. Go to the eCPU dialog. Push the stop button. Push the download code button. Restart the run. 
+4)Stop the run. Push the reset button on the eCPU hardware. Restart run with the quick start disabled.
+5)Stop the run. Cycle vme power. Restart the run with the quick start disabled. 
+
+Acknowledging this alarm will silence it. 
+</string>
+</array>
+</plist>
+

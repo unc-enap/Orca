@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>THURLBY THANDAR</key>
+	<dict>
+		<key>CPX400DP</key>
+		<string>ORTTCPX400DPModel</string>
+	</dict>
+	<key>Agilent Technologies</key>
+	<dict>
+		<key>33220A</key>
+		<string>ORPulser33220Model</string>
+	</dict>
+</dict>
+</plist>

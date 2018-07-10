@@ -1,0 +1,13 @@
+function(doc) {
+	if(doc.timestamp && doc.title && doc.adcs){
+		for(var i in doc.adcs) {
+			for(var key in doc.adcs[i]){
+				var k = key.replace('#','');
+		 		k = k.replace(',',' ');
+		 		k = k.replace(/^\s+|\s+$/g, '');
+				var sk = k+","+doc.title+","+doc.timestamp;
+				emit(sk, [doc.time*1000,doc.adcs[i][key]]);
+			}
+		}
+	}	
+}

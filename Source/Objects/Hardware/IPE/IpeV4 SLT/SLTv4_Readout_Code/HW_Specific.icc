@@ -1,0 +1,21 @@
+#include "SLTv4_HW_Definitions.h"
+#include "ORVCard.hh"
+#include "ORSLTv4Readout.hh"
+#include "ORFLTv4Readout.hh"
+int32_t load_card(SBC_card_info* card_info, int32_t index) 
+{
+  ORVCard* aCard = NULL;
+  switch(card_info->hw_type_id){
+    case kFLTv4:       
+      aCard = new ORFLTv4Readout(card_info); 
+      break;
+    case kSLTv4:       
+      aCard = new ORSLTv4Readout(card_info); 
+      break;
+  }
+  if (!aCard) return 0;
+  gSetOfCards[index] = aCard;
+  return 1; 
+}
+
+

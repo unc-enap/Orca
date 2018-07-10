@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+<string>
+This configuration includes a device which requires the NI488 plugin that should have been distributed with your Orca installation.  Please reinstall Orca.
+
+Acknowledging this alarm will make it go away. 
+</string>
+</array>
+</plist>

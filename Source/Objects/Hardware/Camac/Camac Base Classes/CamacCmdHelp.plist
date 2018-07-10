@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Read Group 1 Reg</string>
+        <key>Help</key>
+        <string>
+        This command selects, by subaddress, one register from the first group in the module 
+        and transfers the contents of this register to the controller. The contents of the 
+        register remain unchanged.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Read Group 2 Reg</string>
+        <key>Help</key>
+        <string>
+        This command selects, by subaddress, one register from the second group 
+        in the module and transfers the contents of this register to the controller. 
+        The contents of the register remain unchanged.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Read,Clear Group 1 Reg</string>
+        <key>Help</key>
+        <string>
+        This command selects, by subaddress, one register from the first group in 
+        the module and transfers the contents of this register to the controller. 
+        The module register is cleared at time S2
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Read,Compl Group 1 Reg</string>
+        <key>Help</key>
+        <string>
+        This command selects, by subaddress, one register from the first group in 
+        the module and transfers the complement of the contents of this register to 
+        the controller. The contents of the register remain unchanged.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Nonstandard</string>
+        <key>Help</key>
+        <string>
+        Defined by the module.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Reserved</string>
+        <key>Help</key>
+        <string>
+        Unassigned at this time. Function is undefined.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Nonstandard</string>
+        <key>Help</key>
+        <string>
+        Unassigned at this time. Function is undefined.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Reserved</string>
+        <key>Help</key>
+        <string>
+        Unassigned at this time. Function is undefined.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Test LAM</string>
+        <key>Help</key>
+        <string>
+        This command selects a Look-at-Me source in the module and presents the 
+        state of this source on the Q bus line.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Clear Group 1 Reg</string>
+        <key>Help</key>
+        <string>
+        This command selects, by subaddress, a register from the first group in 
+        the module and clears the contents of this register.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Clear LAM</string>
+        <key>Help</key>
+        <string>
+        This command selects a Look-at-Me source in the module and presents the 
+        state of this source on the Q bus line. The Look-at-Me source is cleared 
+        at time S2.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Clear Group 2 Reg</string>
+        <key>Help</key>
+        <string>
+        This command selects, by subaddress, a register from the second group in 
+        the module and clears the contents of this register.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Nonstandard</string>
+        <key>Help</key>
+        <string>
+        Defined by the module.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Reserved</string>
+        <key>Help</key>
+        <string>
+        Unassigned at this time. Function is undefined.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Nonstandard</string>
+        <key>Help</key>
+        <string>
+        Defined by the module.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Reserved</string>
+        <key>Help</key>
+        <string>
+        Unassigned at this time. Function is undefined.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Overwrite Group 1 Reg</string>
+        <key>Help</key>
+        <string>
+        This command selects, by subaddress, one register in the first group in 
+        the module and sets the contents of this register to correspond with the 
+        data generated on the W bus lines by the controller.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Overwrite Group 2 Reg</string>
+        <key>Help</key>
+        <string>
+        This command selects, by subaddress, one register in the second group in 
+        the module and sets the contents of this register to correspond with the 
+        data generated on the W bus lines by the controller.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Selective Overwrite Group 1 Reg</string>
+        <key>Help</key>
+        <string>
+        This command selects, by subaddress, one register in the first group in 
+        the module. A separate "mask" register defines which bits in the selected 
+        register are set.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Selective Overwrite Group 2 Reg</string>
+        <key>Help</key>
+        <string>
+        This command selects, by subaddress, one register in the second group 
+        in the module. A separate "mask" register defines which bits in the 
+        selected register are set.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Nonstandard</string>
+        <key>Help</key>
+        <string>
+        Defined by the module.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Selective Clear Group 1 Reg</string>
+        <key>Help</key>
+        <string>
+        This command selects, by subaddress, one register in the first group 
+        in the module. A separate "mask" register defines which bits in the 
+        selected register are cleared.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Nonstandard</string>
+        <key>Help</key>
+        <string>
+        Defined by the module.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Selective Clear Group 1 Reg</string>
+        <key>Help</key>
+        <string>
+        This command selects, by subaddress, one register in the second group 
+        in the module. A separate "mask" register defines which bits in the 
+        selected register are cleared.
+        </string>
+    </dict>
+    <dict>
+    <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Disable</string>
+        <key>Help</key>
+        <string>
+        This command selects, by subaddress, and disables a feature of the module; 
+        e.g., a Look-at-Me source or a data input.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Inc Preselected Regs</string>
+        <key>Help</key>
+        <string>
+        This command adds one simultaneously to the contents of each register in 
+        one of 16 groups, defined by the subaddress.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Enable</string>
+        <key>Help</key>
+        <string>
+        This command enables the feature of the module selected by the subaddress, 
+        e.g., a Look-at-Me source or a data input.This command selects, by subaddress, 
+        any feature of a module other than a source of a Look-at-Me request and tests 
+        it by producing a response on the Q bus line.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Test Status</string>
+        <key>Help</key>
+        <string>
+        This command selects, by subaddress, any feature of a module other than a source 
+        of a Look-at-Me request and tests it by producing a response on the Q bus line.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Nonstandard</string>
+        <key>Help</key>
+        <string>
+        Defined by the module.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Reserved</string>
+        <key>Help</key>
+        <string>
+        Unassigned at this time. Function is undefined.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Nonstandard</string>
+        <key>Help</key>
+        <string>
+        Defined by the module.
+        </string>
+    </dict>
+    <dict>
+        <key>Active</key>
+        <integer>1</integer>
+        <key>EnabledMask</key>
+        <integer>0x00</integer>
+        <key>Name</key>
+        <string>Reserved</string>
+        <key>Help</key>
+        <string>
+        Unassigned at this time. Function is undefined.
+        </string>
+    </dict>
+</array>
+</plist>

@@ -1,0 +1,6 @@
+#!/bin/bash
+killall -9 OrcaReadout 2&> /dev/null
+rm -rf installUniverseDriver.sh*
+wget http://majorana.npl.washington.edu/drivers/universe/installUniverseDriver.sh
+chmod 744 installUniverseDriver.sh
+./installUniverseDriver.sh upgrade

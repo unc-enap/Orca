@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+<string>
+The NCDBuilder MUST be connected so the data con be built as the run progresses. If it is not connected, it is a pain to build the data offline.
+
+If the builder is running properly it will connect to ORCA automatically. It may have crashed. Restart the builder as needed. 
+
+Note that there is NO need to restart ORCA. 
+
+ORCA checks this alarm every 30 seconds while a run is in progress.
+This alarm will go away when the builder is connected.
+Acknowledging this alarm will silence it. 
+</string>
+</array>
+</plist>
+
