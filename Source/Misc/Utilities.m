@@ -25,7 +25,7 @@
 #include <IOKit/network/IOEthernetController.h>
 #import <SystemConfiguration/SystemConfiguration.h>
 
-NSString* fullVersion()
+NSString* fullVersion(void)
 {
 	CFBundleRef localInfoBundle = CFBundleGetMainBundle();
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
@@ -45,7 +45,7 @@ NSString* fullVersion()
 	return [NSString stringWithFormat:@"%@%@%@",versionString,[svnVersion length]?@":":@"",[svnVersion length]?svnVersion:@""];
 }
 
-NSString* appPath()
+NSString* appPath(void)
 {
 	NSArray* args = [[NSProcessInfo processInfo] arguments];
 	if([args count]){
@@ -59,7 +59,7 @@ NSString* appPath()
 	else return nil;
 }
 
-NSString* launchPath()
+NSString* launchPath(void)
 {
 	NSArray* args = [[NSProcessInfo processInfo] arguments];
 	if([args count]){
@@ -151,7 +151,7 @@ int random_range(int lowest_number, int highest_number)
  * \brief	Returns the service associated with the master IO port.
  */
 //-----------------------------------------------------------------------------
-io_service_t rootService()
+io_service_t rootService(void)
 {
 	static io_service_t gRootService = 0 ;
 
@@ -356,7 +356,7 @@ NSString* commonScriptMethodsByObj(id anObj,BOOL includeSuperClass)
 }
 
 
-NSString* computerName()
+NSString* computerName(void)
 {
 	//return  [(NSString*)CSCopyMachineName() autorelease];
     CFStringRef temp = SCDynamicStoreCopyComputerName(NULL,NULL);
@@ -365,7 +365,7 @@ NSString* computerName()
     return name;
 }
 
-NSString* macAddress()
+NSString* macAddress(void)
 {
 	kern_return_t	kernResult = KERN_SUCCESS; // on PowerPC this is an int (4 bytes)
 	/*
