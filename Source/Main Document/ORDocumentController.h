@@ -90,7 +90,7 @@
 #pragma mark ¥¥¥Data Source
 - (id)   outlineView:(NSOutlineView *)outlineView child:(NSUInteger)index ofItem:(id)item;
 - (BOOL) outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item;
-- (int)  outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item;
+- (NSInteger)  outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item;
 - (id)  outlineView:(NSOutlineView *)outlineView  objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item;
 - (void)outlineView:(NSOutlineView *)outlineView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn byItem:(id)item;
 - (void) outlineView:(NSOutlineView*)tv didClickTableColumn:(NSTableColumn *)tableColumn;

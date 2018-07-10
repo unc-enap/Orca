@@ -34,8 +34,8 @@
 #import "ORArchive.h"
 #import "ORVXI11HardwareFinderController.h"
 
-int sortListUpFunc(id element1,id element2, void* context){ return [element1 compareStringTo:element2 usingKey:context];}
-int sortListDnFunc(id element1,id element2, void* context){return [element2 compareStringTo:element1 usingKey:context];}
+NSInteger sortListUpFunc(id element1,id element2, void* context){ return [element1 compareStringTo:element2 usingKey:context];}
+NSInteger sortListDnFunc(id element1,id element2, void* context){return [element2 compareStringTo:element1 usingKey:context];}
 
 #define ORDataTakerItem @"ORDataTaker Drag Item"
 
@@ -379,11 +379,11 @@ int sortListDnFunc(id element1,id element2, void* context){return [element2 comp
 	NSPrintInfo* printInfo = [NSPrintInfo sharedPrintInfo];
 	NSSize imageSize = [tempImage size];
 	if(imageSize.width>imageSize.height){
-		[printInfo setOrientation:NSLandscapeOrientation];
+		[printInfo setOrientation:NSPaperOrientationLandscape];
 		[printInfo setHorizontalPagination: NSFitPagination];
 	}
 	else {
-		[printInfo setOrientation:NSPortraitOrientation];
+		[printInfo setOrientation:NSPaperOrientationPortrait];
 		[printInfo setVerticalPagination: NSFitPagination];
 	}
 	
@@ -433,7 +433,7 @@ int sortListDnFunc(id element1,id element2, void* context){return [element2 comp
 
 - (IBAction) setProductionMode:(id)sender
 {     
-     int tag = [[productionModeMatrix selectedCell] tag];
+     NSInteger tag = [[productionModeMatrix selectedCell] tag];
      if(tag != [[ORGlobal sharedGlobal] inProductionMode]){
          [[ORGlobal sharedGlobal] setInProductionMode:tag];
      }
@@ -463,7 +463,7 @@ int sortListDnFunc(id element1,id element2, void* context){return [element2 comp
 	else return NO;
 }
 
-- (int)  outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item
+- (NSInteger)  outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item
 {
 	if(item==nil)return [[self group] count];
 	else if([item isKindOfClass:NSClassFromString(@"ORGroup")])return [[item orcaObjects] count];
@@ -511,7 +511,7 @@ int sortListDnFunc(id element1,id element2, void* context){return [element2 comp
     NSString *key = [self sortColumn];
     NSArray *a = [outlineView tableColumns];
     NSTableColumn *column = [outlineView tableColumnWithIdentifier:key];
-    unsigned i = [a count];
+    NSUInteger i = [a count];
     
     while (i-- > 0) [outlineView setIndicatorImage:nil inTableColumn:[a objectAtIndex:i]];
     
