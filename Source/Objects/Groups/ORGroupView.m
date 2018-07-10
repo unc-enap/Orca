@@ -427,7 +427,7 @@
 		NSEvent* theCurrentEvent = [NSApp currentEvent];
 		NSEvent *event =  [NSEvent mouseEventWithType:NSLeftMouseDown
 											 location:[theCurrentEvent locationInWindow]
-										modifierFlags:NSLeftMouseDownMask // 0x100
+										modifierFlags:NSEventModifierFlagControl // 0x100
 											timestamp:(NSTimeInterval)0
 										 windowNumber:[theCurrentEvent windowNumber]
 											  context:[theCurrentEvent context]
@@ -548,7 +548,7 @@
 
 - (BOOL) validateMenuItem:(NSMenuItem*)menuItem
 {
-    int selectedCount = [[group selectedObjects]count];
+    NSUInteger selectedCount = [[group selectedObjects]count];
     BOOL changesAllowed = [group changesAllowed];
     if ([menuItem action] == @selector(paste:)) {
         NSPasteboard *pb = [NSPasteboard pasteboardWithName:NSGeneralPboard];
@@ -679,7 +679,7 @@
 
 - (IBAction) arrangeInCircle:(id)sender
 {
-	int count = [[group selectedObjects] count];
+	NSUInteger count = [[group selectedObjects] count];
 	NSArray* sortedArray = [[group selectedObjects] sortedArrayUsingSelector:@selector(sortCompare:)];
 	//first find ranges
 	float xMin = 9.99E100;
@@ -891,7 +891,7 @@
 {
     // make sure we can accept the drag.  If so, then turn on the highlight.
     NSPasteboard *pboard = [sender draggingPasteboard];
-    unsigned int mask = [sender draggingSourceOperationMask];
+    NSDragOperation mask = [sender draggingSourceOperationMask];
     unsigned int ret = NSDragOperationNone;
     
     if(goodObjectsInDrag){
