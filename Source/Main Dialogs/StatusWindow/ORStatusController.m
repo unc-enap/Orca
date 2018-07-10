@@ -109,7 +109,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(StatusController);
 
 	NSString* s = [NSString stringWithContentsOfFile:alarmHistoryPath encoding:NSASCIIStringEncoding error:nil];
 	NSArray* lines = [s componentsSeparatedByString:@"\n"];
-    int total = [lines count];
+    NSUInteger total = [lines count];
     BOOL displayPercent = NO;
     if(total<100000){
         [[NSNotificationCenter defaultCenter] postNotificationName:@"ORStartUpMessage"
@@ -211,7 +211,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(StatusController);
 
 -(void) printAlarm: (NSString*)s1
 {
-	int filterIndex = [alarmFilterPU indexOfSelectedItem];
+	NSInteger filterIndex = [alarmFilterPU indexOfSelectedItem];
 	NSString* filter = [[alarmFilterPU titleOfSelectedItem] stringByAppendingString:@"]"];
 	
 	if([s1 length]){
