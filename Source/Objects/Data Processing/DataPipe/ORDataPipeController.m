@@ -103,7 +103,7 @@
 - (void) setupRunTypeNames:(NSNotification*)aNote
 {
     NSArray* theNames = [[model runModel] runTypeNames];
-    int n = [theNames count];
+    NSUInteger n = [theNames count];
     int i;
     [[runTypeMatrix cellWithTag:0] setTitle:@"DAQExpertMode"];
     if(n){

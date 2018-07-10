@@ -71,7 +71,7 @@
 - (void) setUpImage;
 - (void) makeMainController;
 - (Class) guardianClass;
-- (int) stationNumber;
+- (NSUInteger) stationNumber;
 - (ORTimeRate*) totalRate;
 
 #pragma mark ***Notifications

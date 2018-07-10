@@ -418,7 +418,7 @@
 }
 - (IBAction) sendCntrlCAction:(id)sender
 {
-    int index = [serialPortView selectedRow];
+    NSInteger index = [serialPortView selectedRow];
     if(index >= 0){
         ORSerialPort* thePort = [[ORSerialPortList sharedSerialPortList] objectAtIndex:index];
         if([thePort isOpen]){
@@ -443,7 +443,7 @@
 
 
 #pragma mark ¥¥¥Data Source Methods
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
 	if(aTableView == serialPortView){
         ORSerialPort* aPort = [[ORSerialPortList sharedSerialPortList] objectAtIndex:rowIndex];
@@ -462,13 +462,13 @@
 }
 
 // just returns the number of items we have.
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
 	if(aTableView == serialPortView){
 		return [[ORSerialPortList sharedSerialPortList] count];
 	}
 	else if(aTableView == usbDevicesView){
-		int n =  [model usbDeviceCount];
+		NSInteger n =  [model usbDeviceCount];
 		if(n==0)[usbDetailsView setString:@""];
 		return n;
 	}

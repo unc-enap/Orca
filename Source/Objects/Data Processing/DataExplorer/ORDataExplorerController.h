@@ -98,7 +98,7 @@
 #pragma mark ¥¥¥Data Source Methods
 - (void) tableViewSelectionDidChange:(NSNotification *)aNotification;
 - (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex;
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView;
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;
 - (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item; 
 - (id)outlineView:(NSOutlineView *)outlineView child:(int)index ofItem:(id)item;
 - (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item; 

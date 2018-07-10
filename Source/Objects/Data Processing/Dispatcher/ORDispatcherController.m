@@ -218,14 +218,14 @@
 }
 
 #pragma mark ¥¥¥Data Source Methods
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
 	id obj = [[model clients]  objectAtIndex:rowIndex];
 	return [obj valueForKey:[aTableColumn identifier]];
 }
 
 // just returns the number of items we have.
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
 	return [[model clients] count];
 }

@@ -465,7 +465,7 @@
 
 - (IBAction) setJumperSettings:(id)sender
 {
-	[model setCardJumperSetting:[[sender selectedItem] tag]];	
+	[model setCardJumperSetting:(int)[[sender selectedItem] tag]];
 }
 
 - (IBAction) calibrateAction:(id)sender
@@ -596,12 +596,12 @@
 
 
 // just returns the number of items we have.
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
     return kNumIP320Channels/2;
 }
 
-- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
 	if(anObject!=nil){
 		rowIndex += [aTableView tag];
@@ -620,7 +620,7 @@
 }
 
 #pragma mark ¥¥¥Data Source Methods
-- (int)outlineView:(NSOutlineView *)ov numberOfChildrenOfItem:(id)item
+- (NSUInteger)outlineView:(NSOutlineView *)ov numberOfChildrenOfItem:(id)item
 {
     if(ov == outlineView){
         return  (item == nil) ? [model numberOfChildren]  : [item numberOfChildren];

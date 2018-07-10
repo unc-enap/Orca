@@ -89,9 +89,9 @@
 - (void) lockChanged:(NSNotification*)aNotification;
 
 #pragma mark •••DataSource
-- (int)  numberOfRowsInTableView:(NSTableView *)aTable;
-- (id) tableView:(NSTableView *)aTable objectValueForTableColumn:(NSTableColumn *)aCol row:(int)aRow;
-- (void) tableView:(NSTableView*)aTable setObjectValue:(id)aData forTableColumn:(NSTableColumn*)aCol row:(int)aRow;
+- (NSInteger)  numberOfRowsInTableView:(NSTableView *)aTable;
+- (id) tableView:(NSTableView *)aTable objectValueForTableColumn:(NSTableColumn *)aCol row:(NSInteger)aRow;
+- (void) tableView:(NSTableView*)aTable setObjectValue:(id)aData forTableColumn:(NSTableColumn*)aCol row:(NSInteger)aRow;
 - (int) numberPointsInPlot:(id)aPlotter;
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 

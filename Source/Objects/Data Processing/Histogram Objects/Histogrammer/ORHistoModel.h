@@ -83,7 +83,7 @@
 - (void) runTaskBoundary;
 - (void) processData:(NSArray*)dataArray decoder:(ORDecoder*)aDecoder;
 
-- (int)  outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(ORDataSet*)item;
+- (NSUInteger)  outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(ORDataSet*)item;
 - (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(ORDataSet*)item;
 - (id)outlineView:(NSOutlineView *)outlineView child:(NSUInteger)index ofItem:(ORDataSet*)item;
 - (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(ORDataSet*)item;

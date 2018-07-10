@@ -117,12 +117,12 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmCollection);
     return [alarms objectEnumerator];
 }
 
-- (int) alarmCount
+- (NSUInteger) alarmCount
 {
     return [alarms count];
 }
 
-- (ORAlarm*) objectAtIndex:(int)index
+- (ORAlarm*) objectAtIndex:(NSUInteger)index
 {
     return [alarms objectAtIndex:index];
 }
@@ -194,7 +194,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmCollection);
 {
 //  crashes sometimes..... Don't know why... try ensuring it's only executed on main thread
     if ([NSThread isMainThread]) {
-        if([alarms count]) [[NSApp dockTile] setBadgeLabel: [NSString stringWithFormat:@"%d",[alarms count]]];
+        if([alarms count]) [[NSApp dockTile] setBadgeLabel: [NSString stringWithFormat:@"%ld",[alarms count]]];
         else			   [[NSApp dockTile] setBadgeLabel: nil];
     }
 }
@@ -283,7 +283,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmCollection);
 }
 
 #pragma mark •••EMail Management
-- (int) eMailCount
+- (NSUInteger) eMailCount
 {
     return [eMailList count];
 }
@@ -315,14 +315,14 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmCollection);
     id newAddress = [[[ORAlarmEMailDestination alloc] init] autorelease];
     [newAddress setMailAddress:anAddress];
     [newAddress setSeverityMask:aMask];
-    [self addAddress:newAddress atIndex:[eMailList count]];
+    [self addAddress:newAddress atIndex:(int)[eMailList count]];
 }
 
 - (void) addAddress
 {	
 	if(!eMailList) [self setEMailList:[NSMutableArray array]];
 	id newAddress = [[[ORAlarmEMailDestination alloc] init] autorelease];
-	[self addAddress:newAddress atIndex:[eMailList count]];
+	[self addAddress:newAddress atIndex:(int)[eMailList count]];
     [[ORAlarmCollection sharedAlarmCollection] postAGlobalNotification];
 }
 
@@ -330,7 +330,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmCollection);
 {
 	if(!eMailList) eMailList= [[NSMutableArray array] retain];
 	if([eMailList count] == 0)anIndex = 0;
-	anIndex = MIN(anIndex,[eMailList count]);
+	anIndex = MIN(anIndex,(int)[eMailList count]);
 	[[[(ORAppDelegate*)[NSApp delegate] undoManager] prepareWithInvocationTarget:self] removeAddressAtIndex:anIndex];
 	[eMailList insertObject:anAddress atIndex:anIndex];
 	NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:anIndex] forKey:@"Index"];
@@ -463,7 +463,7 @@ NSString* ORAlarmAddressChanged			  = @"ORAlarmAddressChanged";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [encoder encodeObject:mailAddress forKey:@"Address"];
-    [encoder encodeInt32:severityMask forKey:@"SeverityMask"];
+    [encoder encodeInt32:(int32_t)severityMask forKey:@"SeverityMask"];
 }
 
 #pragma mark •••Notifications
@@ -563,7 +563,7 @@ NSString* ORAlarmAddressChanged			  = @"ORAlarmAddressChanged";
 				NSArray* names =  [[NSHost currentHost] addresses];
 				id aName;
 				int index = 0;
-				int n = [names count];
+				NSUInteger n = [names count];
 				for(i=0;i<n;i++){
 					aName = [names objectAtIndex:i];
 					if([aName rangeOfString:@"::"].location == NSNotFound){

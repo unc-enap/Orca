@@ -199,9 +199,9 @@
 
 // Methods from NSTableDataSource protocol
 
-- (int) numberOfRowsInTableView:(NSTableView *) tableView
+- (NSInteger) numberOfRowsInTableView:(NSTableView *) tableView
 {
-    int count = 0;
+    NSInteger count = 0;
     
     if ([self isValidDelegateForSelector: _cmd]){
 	count = [[self delegate] numberOfRowsInTableView: tableView];
@@ -210,7 +210,7 @@
     return count;
 }
 
-- (BOOL) tableView:(NSTableView *) tableView acceptDrop:(id <NSDraggingInfo>) info row:(int) row dropOperation:(NSTableViewDropOperation) operation
+- (BOOL) tableView:(NSTableView *) tableView acceptDrop:(id <NSDraggingInfo>) info row:(NSInteger) row dropOperation:(NSTableViewDropOperation) operation
 {
     if ([self isValidDelegateForSelector: _cmd]){
 	return [[self delegate] tableView: tableView acceptDrop: info row: row dropOperation: operation];
@@ -220,7 +220,7 @@
     }
 }
 
-- (id) tableView:(NSTableView *) tableView objectValueForTableColumn:(NSTableColumn *) tableColumn row:(int) row
+- (id) tableView:(NSTableView *) tableView objectValueForTableColumn:(NSTableColumn *) tableColumn row:(NSInteger) row
 {
     id obj = nil;
 
@@ -231,14 +231,14 @@
     return obj;
 }
 
-- (void) tableView:(NSTableView *) tableView setObjectValue:(id) obj forTableColumn:(NSTableColumn *) tableColumn row:(int) row
+- (void) tableView:(NSTableView *) tableView setObjectValue:(id) obj forTableColumn:(NSTableColumn *) tableColumn row:(NSInteger) row
 {
     if ((tableColumn != subviewTableColumn) && [self isValidDelegateForSelector: _cmd]){
 	[[self delegate] tableView: tableView objectValueForTableColumn: tableColumn row: row];
     }
 }
 
-- (NSDragOperation) tableView:(NSTableView *) tableView validateDrop:(id <NSDraggingInfo>) info proposedRow:(int) row proposedDropOperation:(NSTableViewDropOperation) operation
+- (NSDragOperation) tableView:(NSTableView *) tableView validateDrop:(id <NSDraggingInfo>) info proposedRow:(NSInteger) row proposedDropOperation:(NSTableViewDropOperation) operation
 {
     if ([self isValidDelegateForSelector: _cmd]){
 	return [[self delegate] tableView: tableView validateDrop: info proposedRow: row proposedDropOperation: operation];

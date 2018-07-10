@@ -85,9 +85,9 @@
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 
 #pragma mark ***Pressure Table Data Source
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView;
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;
 - (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn 
-			 row:(int) rowIndex;
+			 row:(NSInteger) rowIndex;
 
 @end
 

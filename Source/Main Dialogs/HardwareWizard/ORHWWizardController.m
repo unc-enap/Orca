@@ -970,7 +970,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
 
 // Methods from NSTableDataSource protocol
 
-- (int) numberOfRowsInTableView:(NSTableView *) tableView
+- (NSInteger) numberOfRowsInTableView:(NSTableView *) tableView
 {
     if(tableView == actionTableView)return [[self actionControllers] count];
     else return [[self selectionControllers] count];

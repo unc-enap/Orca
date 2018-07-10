@@ -127,9 +127,9 @@
 
 - (IBAction) newAction:(id) sender
 {
-    int count = [[model variableNames] count];
+    NSInteger count = [[model variableNames] count];
     if(count<10){
-        int index =  [variableTable selectedRow];
+        NSInteger index =  [variableTable selectedRow];
         if(index<0)index = count;
         else index++;
         [[model variableNames] insertObject:@"Var" atIndex:index];
@@ -157,7 +157,7 @@
 }
 
 // just returns the number of items we have.
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
     return [[model variableNames] count];
 }

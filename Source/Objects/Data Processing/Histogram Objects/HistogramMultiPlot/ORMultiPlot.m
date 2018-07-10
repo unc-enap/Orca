@@ -107,7 +107,7 @@ NSString* ORMultiPlotNameChangedNotification         = @"ORMultiPlotNameChangedN
    	@synchronized(self){  
 		[cachedDataSets release];
 		cachedDataSets = [[NSMutableArray array] retain];
-		int n = [dataSetItems count];
+		NSUInteger n = [dataSetItems count];
 		int i;
 		for(i=0;i<n;i++){
 			ORDataSet* obj = [dataSource dataSetWithName:[[dataSetItems objectAtIndex:i]name]];

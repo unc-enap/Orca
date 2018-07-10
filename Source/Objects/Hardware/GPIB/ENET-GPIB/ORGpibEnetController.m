@@ -267,9 +267,8 @@
 - (IBAction) changePrimaryAddress: (id) aSender
 {
 	// Make sure that value has changed.
-    if ( [ aSender indexOfSelectedItem ] != mPrimaryAddressValue )
-    {
-		
+    if ( [ aSender indexOfSelectedItem ] != mPrimaryAddressValue ){
+
 		// Get the users new selection
         mPrimaryAddressValue = [ aSender indexOfSelectedItem ];
 		//        [self updatePopUpButton:mPrimaryAddress setting:mPrimaryAddressValue];

@@ -513,7 +513,7 @@ int sortDnFunction(id element1,id element2, void* context){return [element2 comp
 }
 
 #pragma mark ¥¥¥Data Source
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
 	if(aTableView == tableView){
 		NSParameterAssert(rowIndex >= 0 && rowIndex < [[model orcaObjects] count]);
@@ -534,7 +534,7 @@ int sortDnFunction(id element1,id element2, void* context){return [element2 comp
 		else return @"";
 	}
 }
-- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
 	if(aTableView == tableView){
 		NSParameterAssert(rowIndex >= 0 && rowIndex < [[model orcaObjects] count]);
@@ -549,7 +549,7 @@ int sortDnFunction(id element1,id element2, void* context){return [element2 comp
 }
 
 // just returns the number of items we have.
-- (int) numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView
 {
  	if(aTableView == tableView){
 		return [[model orcaObjects] count];
@@ -561,14 +561,14 @@ int sortDnFunction(id element1,id element2, void* context){return [element2 comp
 
 - (void) tabView:(NSTabView*)aTabView didSelectTabViewItem:(NSTabViewItem*)item
 {
-    int index = [tabView indexOfTabViewItem:item];
+    NSInteger index = [tabView indexOfTabViewItem:item];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:[NSString stringWithFormat:@"orca.Process%lu.selectedtab",[model uniqueIdNumber]]];
 }
 
 - (void) tableViewSelectionDidChange:(NSNotification *)aNotification
 {
 	if([aNotification object] == emailListTable || aNotification == nil){
-		int selectedIndex = [emailListTable selectedRow];
+		NSInteger selectedIndex = [emailListTable selectedRow];
 		[removeAddressButton setEnabled:selectedIndex>=0];
 	}
 }

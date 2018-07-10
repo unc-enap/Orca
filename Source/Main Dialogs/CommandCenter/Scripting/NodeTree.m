@@ -63,7 +63,7 @@
 
 - (id) description
 {
-	return [NSString stringWithFormat:@"line-type-data-retainCount: %d-%d-%@-%d\n",line,type,nodeData,[nodeData retainCount]];
+	return [NSString stringWithFormat:@"line-type-data-retainCount: %d-%d-%@-%ld\n",line,type,nodeData,[nodeData retainCount]];
 }
 
 @end

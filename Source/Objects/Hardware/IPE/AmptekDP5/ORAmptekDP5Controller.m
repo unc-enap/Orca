@@ -2345,7 +2345,7 @@ NSLog(@"This is my _killCrateDidEnd: -tb-\n");
 
 
 #pragma mark •••Data Source Methods (TableView)
-- (int) numberOfRowsInTableView:(NSTableView *)tableView
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
 	if(tableView==commandTableView){
         return [model commandTableCount];
@@ -2369,7 +2369,7 @@ NSLog(@"This is my _killCrateDidEnd: -tb-\n");
 }
 
 
-- (id) tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(int)row
+- (id) tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
 //return @"till";
     if(tableView==commandTableView){
@@ -2417,7 +2417,7 @@ NSLog(@"This is my _killCrateDidEnd: -tb-\n");
 }
 
 
-- (void) tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(int)row
+- (void) tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
 	if(tableView==commandTableView){
 		if(row<[model commandTableCount]){

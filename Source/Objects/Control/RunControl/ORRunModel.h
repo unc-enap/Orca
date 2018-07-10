@@ -100,7 +100,7 @@
     
         NSMutableArray* objectsRequestingStateChangeWait;
         NSMutableArray* objectsRequestingRunStartAbort;
-        int selectedRunTypeScript;
+        NSInteger selectedRunTypeScript;
         int savedSelectedRunTypeScript;
 }
 
@@ -110,8 +110,8 @@
 - (void) registerNotificationObservers;
 
 #pragma mark ¥¥¥Accessors
-- (int) selectedRunTypeScript;
-- (void) setSelectedRunTypeScript:(int)aSelectedRunTypeScript;
+- (NSInteger) selectedRunTypeScript;
+- (void) setSelectedRunTypeScript:(NSInteger)aSelectedRunTypeScript;
 - (void) selectRunTypeScriptByName:(NSString*)aName;
 - (NSDictionary*)runInfo;
 - (NSDictionary*) fullRunInfo;

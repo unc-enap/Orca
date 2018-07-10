@@ -127,9 +127,9 @@
 - (IBAction) cleadModuleAction:(id)sender;
 
 #pragma mark •••Table Data Source Methods
-- (int) numberOfRowsInTableView:(NSTableView *)aTableView;
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex;
-- (void) tableView: (NSTableView*) aTableView setObjectValue: (id) anObject forTableColumn: (NSTableColumn*) aTableColumn row: (int) aRowIndex;
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView;
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex;
+- (void) tableView: (NSTableView*) aTableView setObjectValue: (id) anObject forTableColumn: (NSTableColumn*) aTableColumn row: (NSInteger) aRowIndex;
 
 #pragma mark •••Plot Data Source
 - (int)	numberPointsInPlot:(id)aPlotter;

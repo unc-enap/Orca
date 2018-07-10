@@ -237,7 +237,7 @@ typedef struct Fec32CmosShiftReg{
 
 #pragma mark •••Accessors
 - (uint32_t) boardIDAsInt;
-- (int)             stationNumber;
+- (NSUInteger)             stationNumber;
 - (long)			cmosRate:(short)index;
 - (void)			setCmosRate:(short)index withValue:(long)aCmosRate;
 - (id)				xl1;

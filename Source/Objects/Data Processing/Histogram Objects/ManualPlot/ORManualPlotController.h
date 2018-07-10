@@ -78,7 +78,7 @@
 - (NSMutableArray*) roiArrayForPlotter:(id)aPlot;
 - (int) numberPointsInPlot:(id)aPlotter;
 - (BOOL) plotter:(id)aPlotter index:(unsigned long)index x:(double*)xValue y:(double*)yValue;
-- (int) numberOfRowsInTableView:(NSTableView *)tableView;
-- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(int)row;
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView;
+- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row;
 
 @end

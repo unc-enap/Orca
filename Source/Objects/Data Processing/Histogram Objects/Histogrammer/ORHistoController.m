@@ -464,7 +464,7 @@
 }
 
 #pragma mark ¥¥¥Data Source Methods
-- (int)outlineView:(NSOutlineView *)ov numberOfChildrenOfItem:(id)item
+- (NSInteger)outlineView:(NSOutlineView *)ov numberOfChildrenOfItem:(id)item
 {
     if(ov == outlineView){
         return  (item == nil) ? [model numberOfChildren]  : [item numberOfChildren];

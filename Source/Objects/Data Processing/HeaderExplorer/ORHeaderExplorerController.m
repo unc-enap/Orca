@@ -80,7 +80,7 @@
 {
 	NSIndexSet* selectedSet = [searchKeyTableView selectedRowIndexes];
 	if([selectedSet count]){
-		NSUInteger i = [selectedSet firstIndex];
+		int i = (int)[selectedSet firstIndex];
 		while (i != NSNotFound){
 			[model assembleDataForPlotting:i];
 			i = [selectedSet indexGreaterThanIndex: i];
@@ -92,7 +92,7 @@
 - (IBAction) doubleClick:(id)sender
 {
 	if(sender == fileListView || sender==runTimeView){
-		int index = [fileListView selectedRow];
+		int index = (int)[fileListView selectedRow];
 		NSArray* files = [model filesToProcess];
 		if(index>=0 && index<[files count]){
 			id selectedFile = [files objectAtIndex: [fileListView selectedRow]];
@@ -229,7 +229,7 @@
 		[fileListView deselectAll:self];
 		[model removeFilesWithIndexes:selectedSet];
 
-        NSInteger lastIndex = [selectedSet lastIndex];
+        int lastIndex = (int)[selectedSet lastIndex];
         [model setSelectedFileIndex:lastIndex];
 		[fileListView reloadData];
 		[headerView reloadData];
@@ -324,7 +324,7 @@
 		if([s hasSuffix:@"\n"]){
 			s = [s substringWithRange:NSMakeRange(0,[s length]-1)];
 		}
-		int index = [searchKeyTableView selectedRow];
+		int index = (int)[searchKeyTableView selectedRow];
 		NSMutableArray* keys = [model searchKeys];
 		if(s){	
 			[keys replaceObjectAtIndex:index withObject:s];
@@ -569,9 +569,9 @@
 
 - (void) fileListChanged:(NSNotification*)aNote
 {
-	int n = [fileListView numberOfSelectedRows];
+	NSUInteger n = [fileListView numberOfSelectedRows];
 	if(n == 1){
-		int i = [fileListView selectedRow];
+		int i = (int)[fileListView selectedRow];
 		[model selectFirstRunForFileIndex:i];
 	}
 
@@ -586,7 +586,7 @@
 
 #pragma mark •••Data Source Methods
 
-- (int)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item 
+- (NSUInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item
 {
     if(outlineView == headerView){
         if(!item) return [[model header] count];
@@ -633,7 +633,7 @@
         else if([[tableColumn identifier] isEqualToString:@"Value"]){
             if(item==0){
                 return [[[NSAttributedString alloc] 
-                        initWithString:[NSString stringWithFormat:@"%d key/value pairs",[[model header] count]] 
+                        initWithString:[NSString stringWithFormat:@"%ld key/value pairs",(unsigned long)[[model header] count]]
                             attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSColor grayColor],NSForegroundColorAttributeName,nil]]autorelease];
             }
             else {
@@ -643,7 +643,7 @@
 					}
 					else {
 						return [[[NSAttributedString alloc] 
-							initWithString:[NSString stringWithFormat:@"%d key/value pairs",[item count]] 
+							initWithString:[NSString stringWithFormat:@"%ld key/value pairs",(unsigned long)[item count]]
 								attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSColor grayColor],NSForegroundColorAttributeName,nil]] autorelease];            
 					}
 				}
@@ -656,7 +656,7 @@
     else return nil;
 }
 
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
 	if(aTableView == fileListView){
 		if([[model filesToProcess] count]){
@@ -673,7 +673,7 @@
     return nil;
 }
 
-- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
 	if(aTableView == searchKeyTableView){ 
 		NSParameterAssert(rowIndex >= 0 && rowIndex < [[model searchKeys] count]);
@@ -682,7 +682,7 @@
 }
 
 // just returns the number of items we have.
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
     if(aTableView == fileListView){
 		return [[model filesToProcess] count];
@@ -706,7 +706,7 @@
     return [model fileHasBeenProcessed:rowIndex];
 }
 
-- (NSDragOperation) tableView:(NSTableView *) aTableView validateDrop:(id <NSDraggingInfo>) info proposedRow:(int) row proposedDropOperation:(NSTableViewDropOperation) operation
+- (NSDragOperation) tableView:(NSTableView *) aTableView validateDrop:(id <NSDraggingInfo>) info proposedRow:(NSInteger) row proposedDropOperation:(NSTableViewDropOperation) operation
 {
 	if(aTableView == fileListView)return NSDragOperationEvery;
 	else {
@@ -727,7 +727,7 @@
     return cell;
 }
 
-- (BOOL)tableView:(NSTableView*)aTableView acceptDrop:(id <NSDraggingInfo>)info row:(int)row dropOperation:(NSTableViewDropOperation)op
+- (BOOL)tableView:(NSTableView*)aTableView acceptDrop:(id <NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)op
 {
 	NSPasteboard* pb = [info draggingPasteboard];
 	if(aTableView == fileListView){
@@ -754,9 +754,9 @@
 - (void) tableViewSelectionDidChange:(NSNotification *)aNote
 {
 	if([aNote object] == fileListView){
-		int n = [fileListView numberOfSelectedRows];
+		NSInteger n = [fileListView numberOfSelectedRows];
 		if(n == 1){
-			int i = [fileListView selectedRow];
+			NSInteger i = [fileListView selectedRow];
 			[model setSelectedFileIndex:i];
 			[model selectFirstRunForFileIndex:i];
 			unsigned long absStart = [model minRunStartTime];

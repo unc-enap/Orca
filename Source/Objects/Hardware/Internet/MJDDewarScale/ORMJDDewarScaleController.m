@@ -254,7 +254,7 @@
 }
 
 #pragma mark •••Data Source Methods
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
  if(aTableView == processTableView){
         if([[aTableColumn identifier] isEqualToString:@"Name"]) return [NSString stringWithFormat:@"Dewar %d",rowIndex];
@@ -276,7 +276,7 @@
 
 //
 // just returns the number of items we have.
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
 if(aTableView == processTableView){
         return kNumMJDDewarScaleChannels;

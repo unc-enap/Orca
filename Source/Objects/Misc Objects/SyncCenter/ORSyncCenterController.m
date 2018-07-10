@@ -234,7 +234,7 @@
     }
 }
 
-- (NSUInteger)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
     if(aTableView == orcaListView){
         return [[model orcaList] count];

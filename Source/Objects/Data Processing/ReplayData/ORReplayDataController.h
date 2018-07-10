@@ -54,8 +54,8 @@
 - (void) fileChanged:(NSNotification *)aNotification;
 
 #pragma mark ¥¥¥Data Source Methods
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex;
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView;
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex;
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;
 
 
 #pragma mark ¥¥¥Interface Management

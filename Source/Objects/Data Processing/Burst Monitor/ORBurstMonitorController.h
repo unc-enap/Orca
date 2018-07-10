@@ -62,7 +62,7 @@
 - (IBAction) removeAddress:(id)sender;
 
 #pragma mark •••Table Data Source
-- (int) numberOfRowsInTableView:(NSTableView *)aTableView;
-- (id) tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aCol row:(int)aRow;
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView;
+- (id) tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aCol row:(NSInteger)aRow;
 
 @end

@@ -127,9 +127,9 @@
 
 - (IBAction) newAction:(id) sender
 {
-    int count = [[model variableNames] count];
+    NSUInteger count = [[model variableNames] count];
     if(count<10){
-        int index =  [variableTable selectedRow];
+        NSInteger index =  [variableTable selectedRow];
         if(index<0)index = count;
         else index++;
         [[model variableNames] insertObject:@"Var" atIndex:index];
@@ -140,7 +140,7 @@
 
 - (IBAction) deleteAction:(id) sender
 {
-    int index =  [variableTable selectedRow];
+    NSInteger index =  [variableTable selectedRow];
     if(index>=0){
         [[model variableNames] removeObjectAtIndex:index];
     }
@@ -157,12 +157,12 @@
 }
 
 // just returns the number of items we have.
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
     return [[model variableNames] count];
 }
 
-- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
     NSParameterAssert(rowIndex >= 0 && rowIndex < [[model variableNames] count]);
     [[model variableNames] replaceObjectAtIndex:rowIndex withObject:anObject];

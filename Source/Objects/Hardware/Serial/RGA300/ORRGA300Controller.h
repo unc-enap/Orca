@@ -190,8 +190,8 @@
 
 - (int) numberPointsInPlot:(id)aPlotter;
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
-- (int) numberOfRowsInTableView:(NSTableView *)tableView;
-- (id) tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(int)row;
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView;
+- (id) tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row;
 
 - (IBAction) closeConstraintPanel:(id)sender;
 - (void) beginConstraintPanel:(NSDictionary*)constraints actionTitle:(NSString*)aTitle;

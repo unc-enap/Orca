@@ -211,9 +211,9 @@
 
 - (int) numberPointsInPlot:(id)aPlot
 {
-	int tag = [aPlot tag];
-	if(tag>=0 && tag<[model cachedCount]){
-		return [[model cachedObjectAtIndex:tag] numberBins];
+	NSUInteger tag = [aPlot tag];
+	if(tag<[model cachedCount]){
+		return [[model cachedObjectAtIndex:(int)tag] numberBins];
 	}
 	else return 0;
 }
@@ -221,12 +221,12 @@
 - (void) plotter:(id)aPlot index:(int)i x:(double*)xValue y:(double*)yValue;
 {
 	*xValue = (double)i;
-	*yValue =  [[model cachedObjectAtIndex:[aPlot tag]] value:i];
+	*yValue =  [[model cachedObjectAtIndex:(int)[aPlot tag]] value:i];
 }
 
 - (NSMutableArray*) roiArrayForPlotter:(id)aPlot
 {
-	return [model rois:[aPlot tag]];
+	return [model rois:(int)[aPlot tag]];
 }
 @end
 

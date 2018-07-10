@@ -88,7 +88,7 @@
 
 -(void)writeMaskChanged:(NSNotification*)aNotification
 {
-	int value = [model writeMask];
+	unsigned long value = [model writeMask];
 	[writeMaskDecimalField setIntValue: value];
 	[writeMaskHexField setIntValue: value];
 	short i;

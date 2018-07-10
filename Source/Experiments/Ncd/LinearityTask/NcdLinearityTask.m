@@ -211,7 +211,7 @@
     return width[extendedLinearity];
 }
 
-- (void)setWidth:(float)aWidth 
+- (void)setWidth:(CGFloat)aWidth 
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setWidth:width[extendedLinearity]];
     width[extendedLinearity] = aWidth;

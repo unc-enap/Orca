@@ -105,8 +105,8 @@
 - (IBAction) pollNow:(id)sender;
 
 #pragma mark ¥¥¥Data Source
-- (id)  tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex;
-- (int) numberOfRowsInTableView:(NSTableView *)aTableView;
+- (id)  tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex;
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView;
 - (void) tabView:(NSTabView*)aTabView didSelectTabViewItem:(NSTabViewItem*)item;
 - (void) setSortColumn:(NSString *)identifier;
 - (NSString *)sortColumn;

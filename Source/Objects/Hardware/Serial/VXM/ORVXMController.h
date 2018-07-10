@@ -138,9 +138,9 @@
 - (IBAction) motorTypeAction:(id)sender;
 
 #pragma mark •••Table Data Source
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView;
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex;
-- (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex;
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex;
+- (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex;
 
 @end
 

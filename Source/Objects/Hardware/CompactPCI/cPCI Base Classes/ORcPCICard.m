@@ -49,7 +49,7 @@ NSString* ORcPCICardSlotChangedNotification 	= @"ORcPCICardSlotChangedNotificati
     return [NSString stringWithFormat:@"station %d",[self stationNumber]];
 }
 
-- (int) stationNumber
+- (NSUInteger) stationNumber
 {
     return [self tag]+1;
 }

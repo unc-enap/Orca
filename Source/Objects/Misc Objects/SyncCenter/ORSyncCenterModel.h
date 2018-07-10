@@ -38,7 +38,7 @@
 - (void) addOrca:(id)anAddress atIndex:(NSUInteger)anIndex;
 - (void) removeOrcaAtIndex:(NSUInteger) anIndex;
 - (NSUInteger)  orcaCount;
-- (void) setIndex:(int)anIndex value:(id)anObject forKey:(id)aKey;
+- (void) setIndex:(NSUInteger)anIndex value:(id)anObject forKey:(id)aKey;
 - (void) syncNow;
 - (void) setStatus:(int)index state:(NSString*)aState;
 - (NSUInteger)  orcaCount;

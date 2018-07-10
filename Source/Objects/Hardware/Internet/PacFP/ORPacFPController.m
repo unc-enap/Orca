@@ -675,7 +675,7 @@
 }
 
 // just returns the number of items we have.
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
 	if(gainTableView == aTableView)return 37;
 	else if(gainReadBackTableView == aTableView)return 37;
@@ -683,7 +683,7 @@
 	else return 0;
 }
 
-- (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
     if(anObject == nil)return;
     
@@ -719,7 +719,7 @@
 		default: [self resizeWindowToSize:normalSize];	    break;
     }
 
-    int index = [tabView indexOfTabViewItem:item];
+    NSInteger index = [tabView indexOfTabViewItem:item];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:[NSString stringWithFormat:@"orca.PacFP%lu.selectedtab",[model uniqueIdNumber]]];
     [[self window] setContentView:totalView];
 }
@@ -732,9 +732,9 @@
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-	int set = [aPlotter tag];
-	int count = [[model timeRate:set] count];
-	int index = count-i-1;
+	NSUInteger set = [aPlotter tag];
+	NSUInteger count = [[model timeRate:set] count];
+	NSUInteger index = count-i-1;
 	*yValue = [[model timeRate:set] valueAtIndex:index];
 	*xValue = [[model timeRate:set] timeSampledAtIndex:index];
 }

@@ -509,7 +509,7 @@
         return [model numPointsInOldHistory]; 
     }
     else {
-        int set = [aPlotter tag];
+        NSUInteger set = [aPlotter tag];
         if([model displayComponents]){
             if(set == 3) return 0;
             else return kModeNodeTraceLength;
@@ -525,7 +525,7 @@
 {
     if(aPlotter == [plotter0 topPlot]){
         if(i==0){
-            int n = [model numPointsInOldHistory];
+            NSUInteger n = [model numPointsInOldHistory];
             if(n!=0){
                 deltaTime           = ([model oldHistoryEndTime]-[model oldHistoryStartTime])/(NSTimeInterval)n;
                 [(ORTimeAxis*)[plotter0 xAxis] setStartTime: [model oldHistoryEndTime]];
@@ -536,7 +536,8 @@
     }
     else {
         double aValue = 0;
-        int set = [aPlotter tag];
+        NSUInteger set = [aPlotter tag];
+ set = [aPlotter tag];
         if([model showDeltaFromAve]){
             if(set == 0)		aValue =  [model axDeltaAveAt:i];
             else if(set == 1)	aValue =  [model ayDeltaAveAt:i];

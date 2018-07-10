@@ -846,7 +846,7 @@ static MotionNodeCalibrations motionNodeCalibrationV10[3] = {
     else NSLog(@"[%@] file not found\n",filePath);
 }
 
-- (int) numPointsInOldHistory
+- (NSUInteger) numPointsInOldHistory
 {
     if(oldHistoryData){
         MotionNodeHistoryHeader* header = (MotionNodeHistoryHeader*)[oldHistoryData bytes];
@@ -875,8 +875,8 @@ static MotionNodeCalibrations motionNodeCalibrationV10[3] = {
 {
     if(oldHistoryData){
         //these have to come out in reverse order
-        int numPoints      = [self numPointsInOldHistory];
-        int convertedIndex = numPoints - index - 1;
+        NSUInteger numPoints      = [self numPointsInOldHistory];
+        NSUInteger convertedIndex = numPoints - index - 1;
         
         MotionNodeHistoryHeader*  header    = (MotionNodeHistoryHeader*)[oldHistoryData bytes];
         MotionNodeHistoryData*    dataPtr   = (MotionNodeHistoryData*)([oldHistoryData bytes] + sizeof(MotionNodeHistoryHeader));
@@ -1349,9 +1349,9 @@ static MotionNodeCalibrations motionNodeCalibrationV10[3] = {
                                     [self fullID],               @"name",
                                     [NSString stringWithFormat:@"Seismic%lu", [self uniqueIdNumber]], @"title",
                                     [[specialTrace copy] autorelease],                                @"trace",
-                                    [NSNumber numberWithInt:    [self uniqueIdNumber]],               @"module",
+                                    [NSNumber numberWithInteger:    [self uniqueIdNumber]],               @"module",
                                     [NSNumber numberWithInt:    eventInProgress],                     @"highResolution",
-                                    [NSNumber numberWithInt:    [specialTrace count]],                @"numPoints",
+                                    [NSNumber numberWithInteger:    [specialTrace count]],                @"numPoints",
                                     [NSNumber numberWithDouble: t1],        @"startTime",
                                     [NSNumber numberWithDouble: t2],        @"endTime",
                                     [NSNumber numberWithDouble: t2-t1],     @"deltaTime",

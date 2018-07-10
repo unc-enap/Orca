@@ -86,8 +86,8 @@
 - (IBAction) decRunSelection:(id)sender;
 
 #pragma mark •••Data Source Methods
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex;
-- (int) numberOfRowsInTableView:(NSTableView *)aTableView;
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex;
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView;
 - (unsigned long) minRunStartTime;
 - (unsigned long) maxRunEndTime;
 - (long) numberRuns;

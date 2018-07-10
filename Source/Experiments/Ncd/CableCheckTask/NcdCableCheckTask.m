@@ -204,7 +204,7 @@ enum {
     return width;
 }
 
-- (void)setWidth:(float)aWidth 
+- (void)setWidth:(CGFloat)aWidth 
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setWidth:width];
     width = aWidth;

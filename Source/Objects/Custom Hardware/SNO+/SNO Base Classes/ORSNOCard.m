@@ -55,7 +55,7 @@ NSString* ORSNOCardBoardIDChanged 	= @"ORSNOCardBoardIDChanged";
     return 0;
 }
 
-- (int) stationNumber
+- (NSUInteger) stationNumber
 {
 	return [[self crate] maxNumberOfObjects] - [self slot] - 1;
 }
@@ -131,7 +131,7 @@ NSString* ORSNOCardBoardIDChanged 	= @"ORSNOCardBoardIDChanged";
 }
 
 //Added the following during a sweep to put the CrateView functionality into the Crate  objects MAH 11/18/08
-- (int) station
+- (NSUInteger) station
 {
 	return [[self crate] maxNumberOfObjects] - [self slot] - 1;
 }

@@ -590,7 +590,7 @@
 }
 
 #pragma mark ¥¥¥Table Data Source
-- (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(int)row
+- (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
 {
 	if(tableView == secondaryTableView){
 		return ![gSecurity isLocked:[model experimentMapLock]];
@@ -613,7 +613,7 @@
 	else return [super tableView:tableView shouldSelectRow:row];
 }
 
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
 	if(aTableView == secondaryTableView || aTableView == secondaryValuesView){
 		return [[model segmentGroup:1] segment:rowIndex objectForKey:[aTableColumn identifier]];
@@ -634,7 +634,7 @@
 }
 
 // just returns the number of items we have.
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
 	if( aTableView == secondaryTableView || 
 		aTableView == secondaryValuesView)    return [[model segmentGroup:1] numSegments];
@@ -645,7 +645,7 @@
 	else								      return [super numberOfRowsInTableView:aTableView];
 }
 
-- (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
 	ORDetectorSegment* aSegment;
 	if(aTableView == secondaryTableView){

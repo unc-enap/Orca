@@ -36,7 +36,7 @@ NSString* ORCamacCardSlotChangedNotification 	= @"ORCamacCardSlotChangedNotifica
 
 - (NSString*) fullID
 {
-    return [NSString stringWithFormat:@"%@,%d,%d",NSStringFromClass([self class]),[self crateNumber], [self stationNumber]];
+    return [NSString stringWithFormat:@"%@,%ld,%ld",NSStringFromClass([self class]),(unsigned long)[self crateNumber], (unsigned long)[self stationNumber]];
 }
 
 - (Class) guardianClass 
@@ -51,10 +51,10 @@ NSString* ORCamacCardSlotChangedNotification 	= @"ORCamacCardSlotChangedNotifica
 
 - (NSString*) identifier
 {
-    return [NSString stringWithFormat:@"station %d",[self stationNumber]];
+    return [NSString stringWithFormat:@"station %ld",(unsigned long)[self stationNumber]];
 }
 
-- (NSUInteger) slot
+- (int) slot
 {
 	return [self tag];
 }

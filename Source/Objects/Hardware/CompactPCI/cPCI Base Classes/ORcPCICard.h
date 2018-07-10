@@ -35,7 +35,7 @@
 - (NSUInteger) tagBase;
 - (NSString*) cardSlotChangedNotification;
 - (NSString*) identifier;
-- (int)  stationNumber;
+- (NSUInteger)  stationNumber;
 
 #pragma mark ¥¥¥archival
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary;

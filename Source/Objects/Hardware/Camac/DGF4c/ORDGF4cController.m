@@ -1079,7 +1079,7 @@
 }
 
 // just returns the number of items we have.
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
     if(aTableView == dspParamTableView){
         return [model countForArray:@"DSPParams"];
@@ -1089,7 +1089,7 @@
     }
 }
 
-- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
     if(aTableView == dspParamTableView){
         [model set:@"DSPParams" index:rowIndex toObject:anObject forKey:[aTableColumn identifier]];

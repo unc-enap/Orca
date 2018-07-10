@@ -381,7 +381,7 @@ NSString* ORSNOCrateSlotChanged = @"ORSNOCrateSlotChanged";
     return 12;
 }
 
-- (int) stationForSlot:(int)aSlot
+- (NSUInteger) stationForSlot:(int)aSlot
 {
 	return 16-aSlot;
 }

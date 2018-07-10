@@ -193,8 +193,7 @@ typedef struct MotionNodeHistoryHeader {
 - (NSString*) historyFolder;
 - (void) setHistoryFolder:(NSString*)aHistoryFolder;
 - (void) viewPastHistory:(NSString*)filePath;
-- (int) numPointsInOldHistory;
-- (int) numPointsInOldHistory;
+- (NSUInteger) numPointsInOldHistory;
 - (float) oldHistoryValue:(int)index;
 - (NSTimeInterval) oldHistoryStartTime;
 - (NSTimeInterval) oldHistoryEndTime;

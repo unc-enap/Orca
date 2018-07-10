@@ -758,12 +758,12 @@
 
 
 #pragma mark •••Table Data Source
-- (int) numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView
 {
 	return [model cmdQueueCount];
 }
 
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
 	if([[aTableColumn identifier] isEqualToString:@"Command"]) return [model cmdQueueCommand:rowIndex];
 	else if([[aTableColumn identifier] isEqualToString:@"CmdIndex"]) {
@@ -773,7 +773,7 @@
 	else return  [model cmdQueueDescription:rowIndex];
 }
 
-- (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
 	ORVXMMotorCmd* aCmd = [model motorCmd:rowIndex];
 	if(aCmd){

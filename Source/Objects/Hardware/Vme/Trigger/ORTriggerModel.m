@@ -719,7 +719,7 @@ static NSString *ORTriggerUseMSAM		= @"ORTriggerUseMSAM";
     [encoder encodeBool:[self initWithTrig2InhibitEnabled] forKey:ORTriggerInitWithTrig2InhibitEnabled];
     
     [encoder encodeBool:[self useSoftwareGtId] forKey:ORTriggerUseSoftwareGtId];
-    [encoder encodeInt32:[self softwareGtId] forKey:ORTriggerSoftwareGtId];
+    [encoder encodeInt32:(int32_t)[self softwareGtId] forKey:ORTriggerSoftwareGtId];
     
     [encoder encodeObject:[self trigger1Name] forKey:ORTrigger1Name];
     [encoder encodeObject:[self trigger2Name] forKey:ORTrigger2Name];

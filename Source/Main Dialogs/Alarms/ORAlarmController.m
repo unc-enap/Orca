@@ -407,7 +407,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmController);
 }
 
 // just returns the number of items we have.
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
 	if(aTableView == tableView){
 		return [[self alarmCollection] alarmCount];

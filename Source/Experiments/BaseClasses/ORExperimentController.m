@@ -951,7 +951,7 @@
     [captureDateField setObjectValue:[model captureDate]]; 
 }
 
-- (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(int)row
+- (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
 {
 	if(tableView == primaryTableView){
 		return ![gSecurity isLocked:[model experimentMapLock]];
@@ -1087,7 +1087,7 @@
 }
 
 #pragma mark •••Data Source For Tables
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
 	if(aTableView == primaryTableView || aTableView == primaryValuesView){
 		return [[model segmentGroup:0] segment:rowIndex objectForKey:[aTableColumn identifier]];
@@ -1095,7 +1095,7 @@
 	else return nil;
 }
 
-- (int) numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView
 {
 	if(aTableView == primaryTableView || aTableView == primaryValuesView){
 		return [[model segmentGroup:0] numSegments];
@@ -1103,7 +1103,7 @@
 	else return 0;
 }
 
-- (void) tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (void) tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
 	ORDetectorSegment* aSegment;
 	if(aTableView == primaryTableView){
@@ -1124,7 +1124,7 @@
 
 - (void) tabView:(NSTabView*)aTabView didSelectTabViewItem:(NSTabViewItem*)item
 {
-    int index = [tabView indexOfTabViewItem:item];
+    NSInteger index = [tabView indexOfTabViewItem:item];
 	NSString* tabPrefName = [NSString stringWithFormat:@"orca.%@.selectedtab",[self className]];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:tabPrefName];
 }

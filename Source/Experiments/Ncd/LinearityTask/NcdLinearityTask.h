@@ -111,7 +111,7 @@
 - (float) burstRate;
 - (void)  setBurstRate:(float)aBurstRate;
 - (float) width;
-- (void)  setWidth:(float)aWidth;
+- (void)  setWidth:(CGFloat)aWidth;
 - (int)   numAmpValues;
 - (void)  setNumAmpValues:(int)aNumAmpValues;
 - (float) endAmplitude;

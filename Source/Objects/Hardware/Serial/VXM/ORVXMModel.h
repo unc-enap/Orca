@@ -94,7 +94,7 @@
 - (NSArray*) motors;
 - (ORVXMMotor*) motor:(int)aMotor;
 - (void) addItem:(id)anItem atIndex:(int)anIndex;
-- (void) removeItemAtIndex:(int) anIndex;
+- (void) removeItemAtIndex:(NSInteger) anIndex;
 - (BOOL) isMoving;
 
 #pragma mark ***Data Records

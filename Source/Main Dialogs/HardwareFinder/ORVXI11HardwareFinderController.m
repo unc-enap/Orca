@@ -124,7 +124,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(VXI11HardwareFinderController);
 }
 
 #pragma mark •••Data Source Methods
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
     NSDictionary* aDict = [[ORVXI11HardwareFinder sharedVXI11HardwareFinder] availableHardware];
     ORVXI11IPDevice* dev = [aDict objectForKey:[[aDict allKeys] objectAtIndex:rowIndex]];
@@ -138,7 +138,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(VXI11HardwareFinderController);
 }
 
 // just returns the number of items we have.
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
     return [[[ORVXI11HardwareFinder sharedVXI11HardwareFinder] availableHardware] count];
 }
@@ -147,7 +147,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(VXI11HardwareFinderController);
     return YES;
 }
 
-- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
 }
 

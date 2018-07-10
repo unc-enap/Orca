@@ -62,7 +62,7 @@
 @interface ORSNOCrateModel (OROrderedObjHolding)
 - (int) maxNumberOfObjects;
 - (int) objWidth;
-- (int) stationForSlot:(int)aSlot;
+- (NSUInteger) stationForSlot:(int)aSlot;
 @end
 
 extern NSString* ORSNOCrateSlotChanged;

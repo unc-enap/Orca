@@ -758,11 +758,11 @@
 	}
 }
 
-- (int) numberOfRowsInTableView:(NSTableView *)aTable
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)aTable
 {
-	if(aTable == inputVariablesTableView)		return ([[model inputValues] count]);
-	else if(aTable == outputVariablesTableView)	return ([[[model scriptRunner] displayDictionary] count]);
-	else if(aTable == debuggerTableView)		return ([[model evaluator] symbolTableCount]);
+	if(aTable == inputVariablesTableView)		return (NSInteger)([[model inputValues] count]);
+	else if(aTable == outputVariablesTableView)	return (NSInteger)([[[model scriptRunner] displayDictionary] count]);
+	else if(aTable == debuggerTableView)		return (NSInteger)([[model evaluator] symbolTableCount]);
 	else return 0;
 }
 

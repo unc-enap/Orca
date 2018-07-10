@@ -513,7 +513,7 @@ static NSString *ORHistoPassThruConnection 	= @"Histogrammer PassThru Connector"
 
 }
 
-- (int)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(ORDataSet*)item
+- (NSUInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(ORDataSet*)item
 {
     return (item == nil) ? 1  : [item numberOfChildren];
 }
@@ -536,7 +536,7 @@ static NSString *ORHistoPassThruConnection 	= @"Histogrammer PassThru Connector"
 
 - (NSUInteger)  numberOfChildren
 {
-    int count =  [dataSet count];
+    NSUInteger count =  [dataSet count];
     return count;
 }
 

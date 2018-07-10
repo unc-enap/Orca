@@ -255,7 +255,7 @@ NSString* ORSyncCenterModelReloadTable      = @"ORSyncCenterModelReloadTable";
     return [orcaList count];
 }
 
-- (void) setIndex:(int)anIndex value:(id)anObject forKey:(id)aKey
+- (void) setIndex:(NSUInteger)anIndex value:(id)anObject forKey:(id)aKey
 {
     if(!anObject)anObject = @"";
     if(anIndex < [orcaList count]){

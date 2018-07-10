@@ -531,14 +531,14 @@ NSString* ORVXMLock							= @"ORVXMLock";
 {
 	if(!cmdList) cmdList= [[NSMutableArray array] retain];
 	if([cmdList count] == 0)anIndex = 0;
-	anIndex = MIN(anIndex,[cmdList count]);
+	anIndex = MIN(anIndex,(int)[cmdList count]);
 	[[[self undoManager] prepareWithInvocationTarget:self] removeItemAtIndex:anIndex];
 	[cmdList insertObject:anItem atIndex:anIndex];
 	NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:anIndex] forKey:@"Index"];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORVXMModelListItemsAdded object:self userInfo:userInfo];
 }
 
-- (void) removeItemAtIndex:(int) anIndex
+- (void) removeItemAtIndex:(NSInteger) anIndex
 {
 	id anItem = [cmdList objectAtIndex:anIndex];
 	[[[self undoManager] prepareWithInvocationTarget:self] addItem:anItem atIndex:anIndex];

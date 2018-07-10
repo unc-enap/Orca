@@ -40,12 +40,12 @@
 - (NSMutableArray*) eMailList;
 - (void) setEMailList:(NSMutableArray*)aEMailList;
 - (NSMutableArray*) alarms;
-- (int) alarmCount;
+- (NSUInteger) alarmCount;
 - (void) setAlarms:(NSMutableArray*)someAlarms;
 - (NSTimer*) beepTimer;
 - (void) setBeepTimer:(NSTimer*)aTimer;
 - (NSEnumerator*) alarmEnumerator;
-- (ORAlarm*) objectAtIndex:(int)index;
+- (ORAlarm*) objectAtIndex:(NSUInteger)index;
 - (void) drawBadge;
 
 #pragma mark •••Notifications
@@ -64,7 +64,7 @@
 
 #pragma mark •••EMail Management
 - (void) removeAllAddresses;
-- (int) eMailCount;
+- (NSUInteger) eMailCount;
 - (void) decodeEMailList:(NSCoder*) aDecoder;
 - (void) encodeEMailList:(NSCoder*) anEncoder;
 - (void) addAddress:(NSString*)anAddress severityMask:(unsigned long)aMask;

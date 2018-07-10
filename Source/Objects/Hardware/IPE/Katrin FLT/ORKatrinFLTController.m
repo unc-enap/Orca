@@ -65,7 +65,7 @@
 	
     blankView = [[NSView alloc] init];
     
-    NSString* key = [NSString stringWithFormat: @"orca.ORKatrinFLT%d.selectedtab",[model stationNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORKatrinFLT%d.selectedtab",(int)[model stationNumber]];
     int index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
@@ -1914,12 +1914,12 @@
 }
 
 // just returns the number of items we have.
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
     return [[model testPatterns] count];
 }
 
-- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
 	if(rowIndex>=0 && rowIndex<24){
 		[[model testPatterns] replaceObjectAtIndex:rowIndex withObject:anObject];

@@ -176,10 +176,10 @@
 
 #pragma mark •••Data Source For Tables
 - (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn 
-                                row:(int) rowIndex;
-- (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(int)row;
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView;
+                                row:(NSInteger) rowIndex;
+- (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row;
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;
 - (void)tableView:(NSTableView *)aTableView setObjectValue:anObject 
-            forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex;
+            forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex;
  
 @end

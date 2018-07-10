@@ -347,7 +347,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 	return (eventMask & (1L<<chan)) != 0;
 }
 
-- (int) stationNumber //counts FLT #: 1, 2, 3, ... (slot: 0, 1, ... SLT gap ... )
+- (NSUInteger) stationNumber //counts FLT #: 1, 2, 3, ... (slot: 0, 1, ... SLT gap ... )
 {
 	//is it a minicrate?
 	if([[[self crate] class]  isSubclassOfClass: NSClassFromString(@"ORIpeV4MiniCrateModel")]){

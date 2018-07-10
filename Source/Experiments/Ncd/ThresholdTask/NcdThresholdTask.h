@@ -74,7 +74,7 @@
 - (float)   burstRate;
 - (void)    setBurstRate:(float)aBurstRate;
 - (float)   width;
-- (void)    setWidth:(float)aWidth;
+- (void)    setWidth:(CGFloat)aWidth;
 - (int)     numOfValues;
 - (void)    setNumOfValues:(int)aNumOfValues;
 - (void)    setDefaults;

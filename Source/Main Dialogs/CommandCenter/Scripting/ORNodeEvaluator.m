@@ -252,7 +252,7 @@
 {
 	[symbolTableLock lock];
 
-	int theCount = [[self minSymbolTable] count];
+	NSUInteger theCount = [[self minSymbolTable] count];
 	[symbolTableLock unlock];
 	return theCount;
 }
@@ -401,10 +401,10 @@
 
 
 #pragma mark •••Individual Evaluators
-#define NodeValue(aNode) [self execute:[[p nodeData] objectAtIndex:aNode] container:nil]
-#define NodeValueWithContainer(aNode,aContainer) [self execute:[[p nodeData] objectAtIndex:aNode] container:aContainer]
-#define VARIABLENAME(aNode)  [[[p nodeData] objectAtIndex:aNode] nodeData]
-#define LineNumber(aNode) [[[p nodeData] objectAtIndex:0] line]
+#define NodeValue(aNode) [self execute:[[(Node*)p nodeData] objectAtIndex:aNode] container:nil]
+#define NodeValueWithContainer(aNode,aContainer) [self execute:[[(Node*)p nodeData] objectAtIndex:aNode] container:aContainer]
+#define VARIABLENAME(aNode)  [[[(Node*)p nodeData] objectAtIndex:aNode] nodeData]
+#define LineNumber(aNode) [[[(Node*)p nodeData] objectAtIndex:0] line]
 
 - (id) execute:(id) p container:(id)aContainer
 {
@@ -474,14 +474,14 @@
 		else if([anObj isKindOfClass:NSClassFromString(@"ORCard")])  return [self findCard:p collection:objects];
 		else if([anObj isKindOfClass:NSClassFromString(@"ORCrate")])  return [self findCrate:p collection:objects];
 		else {
-			int numArgs = [[p nodeData] count];
+			NSUInteger numArgs = [[p nodeData] count];
 			if(numArgs == 1){
 				//use the first obj found
 				return [objects objectAtIndex:0];
 			}
 			else {
 				//assume node 1 holds a tag #
-				int tag = [NodeValue(1) longValue];
+				NSUInteger tag = [NodeValue(1) longValue];
 				id anObj;
 				NSEnumerator* e = [objects objectEnumerator];
 				while(anObj = [e nextObject]){
@@ -501,8 +501,8 @@
 {
 	id anObj;
 	NSEnumerator* e = [objects objectEnumerator];
-	int numArgs = [[p nodeData] count];
-	int crateNumber;
+	NSUInteger numArgs = [[p nodeData] count];
+	NSUInteger crateNumber;
 	if(numArgs == 1){
 		crateNumber = 0;
 	}
@@ -526,7 +526,7 @@
 	//CAMAC and AUGER use station numbers instead of slot number (station numbers are +1)
 	id anObj;
 	NSEnumerator* e = [objects objectEnumerator];
-	int numArgs = [[p nodeData] count];
+	NSUInteger numArgs = [[p nodeData] count];
 	int crateNumber, cardNumber;
 	if(numArgs == 3){
 		//both crate and slot numbers are included
@@ -560,7 +560,7 @@
 {
 	id anObj;
 	NSEnumerator* e = [objects objectEnumerator];
-	int numArgs = [[p nodeData] count];
+	NSUInteger numArgs = [[p nodeData] count];
 	int crateNumber, carrierSlot,cardNumber;
 	if(numArgs == 4){
 		//both crate and slot numbers are included
@@ -980,7 +980,7 @@
 
 - (id) processStatements:(id) p
 {
-	unsigned numNodes = [[p nodeData] count];
+	NSUInteger numNodes = [[p nodeData] count];
 	int i;
 	for(i=0;i<numNodes;i++)NodeValue(i);
 	return nil;
@@ -1214,7 +1214,7 @@
 - (id) arrayAssignment:(id)p leftBranch:(id)leftNode withValue:(id)aValue
 {
 	NSMutableArray* theArray = [self execute:[[leftNode nodeData] objectAtIndex:0] container:nil];
-	int n = [[self execute:[[leftNode nodeData] objectAtIndex:1] container:nil] longValue];
+	NSInteger n = [[self execute:[[leftNode nodeData] objectAtIndex:1] container:nil] longValue];
 	if(n>=0 && n<[theArray count]){
 		[theArray replaceObjectAtIndex:n withObject:aValue];
 	}
@@ -1255,7 +1255,7 @@
         [functionEvaluator setGlobalSymbolTable:globalSymbolTable];
 		@try {
 			unsigned i;
-			unsigned numNodes = [someNodes count];
+			NSUInteger numNodes = [someNodes count];
 			for(i=0;i<numNodes;i++){
 				if([delegate exitNow])break;
 				id aNode = [someNodes objectAtIndex:i];
@@ -1315,7 +1315,7 @@
 
 - (id) defineArray:(id) p
 {
-	int n = [NodeValue(1) longValue];
+	long n = [NodeValue(1) longValue];
 	NSMutableArray* theArray = [NSMutableArray arrayWithCapacity:n];
 	//fill it with zeros;
 	int i;
@@ -1326,11 +1326,11 @@
 
 - (id) arrayList:(id) p
 {
-	int n = [NodeValue(1) longValue];
+	long n = [NodeValue(1) longValue];
 	NSMutableArray* argObject = [[[NSMutableArray alloc] initWithCapacity:100] autorelease];
 	id result = NodeValueWithContainer(2,argObject);
 	if([argObject count] == 0 && result!=nil)[argObject addObject:result];
-	int m = [argObject count];
+	NSUInteger m = [argObject count];
 	[self setValue:argObject forSymbol:VARIABLENAME(0)];
 	if(n<m)[argObject removeObjectsInRange:NSMakeRange(n,m-n)];
 	else {
@@ -1351,7 +1351,7 @@
 
 - (id) processLeftArray:(id) p
 {
-	int n = [NodeValue(1) longValue];
+	NSInteger n = [NodeValue(1) longValue];
 	NSMutableArray* theArray = NodeValue(0);
 	if(n>=0 && n<[theArray count]){
 		return [theArray objectAtIndex:n];
@@ -1427,7 +1427,7 @@
     else {
         NSMutableDictionary* d = [NSMutableDictionary dictionary];
         NSMutableArray* anArray = [NSMutableArray arrayWithArray:NodeValue(0)];
-        int n = [anArray count];
+        NSUInteger n = [anArray count];
         int i;
         for(i=0;i<n;i+=2){
             [d setObject:[anArray objectAtIndex:i+1] forKey:[anArray objectAtIndex:i]];
@@ -1531,8 +1531,8 @@
 - (id) bitExtract:(id) p
 {
     unsigned long theValue = [NodeValue(0) unsignedLongValue];
-    long val1 = [NodeValue(1) unsignedLongValue];
-    long val2 = [NodeValue(2) unsignedLongValue];
+    NSInteger val1 = [NodeValue(1) unsignedLongValue];
+    NSInteger val2 = [NodeValue(2) unsignedLongValue];
     if(val1 > val2) {
         [NSException raise:@"Run Time Exception" format:@"Bit extract parameters out of order. Line: %d",LineNumber(1)];
     }
@@ -1544,7 +1544,7 @@
     }
     unsigned short aShift = MIN(val1,val2);
     unsigned long aMask = 0L;
-    int numBits = abs(val2 - val1)+1;
+    NSInteger numBits = labs(val2 - val1)+1;
     int i;
     for(i=0;i<numBits;i++){
         aMask |= 0x1<<i;
@@ -1755,7 +1755,7 @@
         }
         
         int i;
-        int n = [collectionObj count];
+        NSUInteger n = [collectionObj count];
         for(i=0;i<n;i++){
             NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
             if([self exitNow]){
@@ -2220,7 +2220,7 @@
 	[line insertString:prependString atIndex:0];
 	[line appendString:@"\n"];
 	
-	int count = 0;
+	NSUInteger count = 0;
 	if ([(Node*)p type] == typeOpr){
 		count = [[(Node*)p nodeData] count];
 	}
@@ -2255,8 +2255,8 @@
 	while(1) {
 		NSRange r = NSMakeRange(r1,2);
 		BOOL delete = YES;
-		int count = [lines count];
-		int i;
+		NSInteger count = [lines count];
+		NSInteger i;
 		BOOL done = YES;
 		for(i=count-1;i>=0;i--){
 			aLine = [lines objectAtIndex:i];
@@ -2312,7 +2312,7 @@
 
 - (id) executeWithArgs:(NSArray*)valueArray
 {
-	float (*pt0Func)();
+	float (*pt0Func)(void);
 	float (*pt1Func)(float);
 	float (*pt2Func)(float,float);
 	if(numArgs == [valueArray count]){
@@ -2432,7 +2432,7 @@
     [titleField setStringValue:title];
     
     NSArray* variables = [variableList componentsSeparatedByString:@","];
-    int variableCount = [variables count];
+    NSUInteger variableCount = [variables count];
     
     NSRect windowFrame = [[self window] frame];
     float yStart = 30;
@@ -2538,7 +2538,7 @@
     [titleField setStringValue:title];
     
     NSArray* variables = [variableList componentsSeparatedByString:@","];
-    int variableCount  = [variables count];
+    NSUInteger variableCount  = [variables count];
     
     NSRect windowFrame = [[self window] frame];
     float yStart = 20;

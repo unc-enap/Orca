@@ -364,7 +364,7 @@ NSString* ORVmecpuLock = @"ORVmecpuLock";
  do this: 0xFF. */
 -(void) readLong:(unsigned long *) readAddress
 	   atAddress:(unsigned long) vmeAddress
-	 timesToRead:(unsigned int) numberLongs
+	 timesToRead:(unsigned long) numberLongs
 	  withAddMod:(unsigned short) anAddressModifier
    usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -380,7 +380,7 @@ NSString* ORVmecpuLock = @"ORVmecpuLock";
 
 -(void) readByteBlock:(unsigned char *) readAddress
 			atAddress:(unsigned long) vmeAddress
-			numToRead:(unsigned int) numberBytes
+			numToRead:(unsigned long) numberBytes
 		   withAddMod:(unsigned short) anAddressModifier
 		usingAddSpace:(unsigned short) anAddressSpace
 {

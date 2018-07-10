@@ -1014,11 +1014,11 @@
 {
     [[model mjdInterlocks:0] reset:YES];
     [[model mjdInterlocks:1] reset:YES];
-	[model setPollTime:[sender indexOfSelectedItem]];
+	[model setPollTime:(int)[sender indexOfSelectedItem]];
 }
 - (IBAction) viewTypeAction:(id)sender
 {
-	[model setViewType:[sender indexOfSelectedItem]];
+	[model setViewType:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) autoscaleSecondayColorScale:(id)sender
@@ -1150,11 +1150,11 @@
         [self resizeWindowToSize:calibrationViewSize];
         [[self window] setContentView:tabView];
     }
-	int index = [tabView indexOfTabViewItem:tabViewItem];
+	NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:@"orca.MajoranaController.selectedtab"];
 }
 
-- (int) numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView
 {
     if( aTableView == secondaryTableView ||
        aTableView == secondaryValuesView){
@@ -1175,9 +1175,9 @@
     else return [super numberOfRowsInTableView:aTableView]/2;
 }
 
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) aRowIndex
 {
-    
+    int rowIndex = (int)aRowIndex;
 	if(aTableView == primaryTableView){
         if([[aTableColumn identifier] isEqualToString:@"kChanLo"]){
            return [[model segmentGroup:0] segment:rowIndex*2 objectForKey:@"kChannel"];
@@ -1187,7 +1187,7 @@
         }
  
         else if([[aTableColumn identifier] isEqualToString:@"kSegmentNumber"]){
-            return [NSNumber numberWithInt:rowIndex];
+            return [NSNumber numberWithInteger:rowIndex];
         }
         else {
             return [[model segmentGroup:0] segment:rowIndex*2 objectForKey:[aTableColumn identifier]];
@@ -1209,7 +1209,7 @@
     }
     else if(aTableView == secondaryTableView || aTableView == secondaryValuesView){
         if([[aTableColumn identifier] isEqualToString:@"kPanelNumber"]){
-            return [NSNumber numberWithInt:rowIndex];
+            return [NSNumber numberWithInteger:rowIndex];
         }
         else if([[aTableColumn identifier] isEqualToString:@"threshold"]){
             return [[model segmentGroup:1] segment:rowIndex objectForKey:@"threshold"];
@@ -1247,10 +1247,10 @@
 }
 
 
-- (void) tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (void) tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)aRowIndex
 {
     if(!anObject)anObject= @"--";
-    
+    int rowIndex = (int)aRowIndex;
 	ORDetectorSegment* aSegment;
 	if(aTableView == primaryTableView){
         if([[aTableColumn identifier] isEqualToString:@"kChanLo"]){

@@ -329,7 +329,7 @@
 }
 
 #pragma mark ***Table Data Source
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
     if(setPointTableView == aTableView){
         if([[aTableColumn identifier] isEqualToString:@"index"]){
@@ -383,7 +383,7 @@
 }
 
 // just returns the number of items we have.
-- (int) numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView
 {
 	if(setPointTableView == aTableView)return [model numSetPoints];
     else if(measuredValueTableView == aTableView)return [model numMeasuredValues];
@@ -391,7 +391,7 @@
 	else return 0;
 }
 
-- (void) tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (void) tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
     if(anObject == nil)return;
     

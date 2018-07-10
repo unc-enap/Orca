@@ -198,57 +198,57 @@
 }
 
 #pragma mark •••Data Source Methods
-- (int) numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView
 {
 	if(aTableView == ramperTableView)	return 8;
 	else return [super numberOfRowsInTableView:aTableView];
 }
 
-- (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
 	if(aTableView == hvTableView){
 		if([[aTableColumn identifier] isEqualToString:@"stagedRamp"]){
-			[[model ramper:rowIndex] setEnabled:[anObject intValue]];
+			[[model ramper:(int)rowIndex] setEnabled:[anObject intValue]];
 		}
 	}
 	else if(aTableView == ramperTableView){
 		if([[aTableColumn identifier] isEqualToString:@"stepWait"]){
-			[[model ramper:rowIndex] setStepWait:[anObject intValue]];
+			[[model ramper:(int)rowIndex] setStepWait:[anObject intValue]];
 		}
 		else if([[aTableColumn identifier] isEqualToString:@"lowVoltageWait"]){
-			[[model ramper:rowIndex] setLowVoltageWait:[anObject intValue]];
+			[[model ramper:(int)rowIndex] setLowVoltageWait:[anObject intValue]];
 		}
 		else if([[aTableColumn identifier] isEqualToString:@"lowVoltageThreshold"]){
-			[[model ramper:rowIndex] setLowVoltageThreshold:[anObject floatValue]];
+			[[model ramper:(int)rowIndex] setLowVoltageThreshold:[anObject floatValue]];
 		}
 		else if([[aTableColumn identifier] isEqualToString:@"voltageStep"]){
-			[[model ramper:rowIndex] setVoltageStep:[anObject floatValue]];
+			[[model ramper:(int)rowIndex] setVoltageStep:[anObject floatValue]];
 		}
 		else if([[aTableColumn identifier] isEqualToString:@"lowVoltageStep"]){
-			[[model ramper:rowIndex] setLowVoltageStep:[anObject floatValue]];
+			[[model ramper:(int)rowIndex] setLowVoltageStep:[anObject floatValue]];
 		}
 		else if([[aTableColumn identifier] isEqualToString:@"maxVoltage"]){
-			[[model ramper:rowIndex] setMaxVoltage:[anObject floatValue]];
+			[[model ramper:(int)rowIndex] setMaxVoltage:[anObject floatValue]];
 		}
 		else if([[aTableColumn identifier] isEqualToString:@"minVoltage"]){
-			[[model ramper:rowIndex] setMinVoltage:[anObject floatValue]];
+			[[model ramper:(int)rowIndex] setMinVoltage:[anObject floatValue]];
 		}
 	}
 }
 
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
 	if(aTableView == hvTableView){
 		NSParameterAssert(rowIndex >= 0 && rowIndex < 8);
-		if([[aTableColumn identifier] isEqualToString:@"channel"])return [NSNumber numberWithInt:rowIndex];
+		if([[aTableColumn identifier] isEqualToString:@"channel"])return [NSNumber numberWithInteger:rowIndex];
 		else if([[aTableColumn identifier] isEqualToString:@"outputSwitch"]){
 			return [model channelState:rowIndex];
 		}
 		else if([[aTableColumn identifier] isEqualToString:@"stagedRamp"]){
-			return [NSNumber numberWithInt:[[model ramper:rowIndex] enabled]];
+			return [NSNumber numberWithInt:[[model ramper:(int)rowIndex] enabled]];
 		}
 		else if([[aTableColumn identifier] isEqualToString:@"ramperState"]){
-			return [[model ramper:rowIndex] stateString];
+			return [[model ramper:(int)rowIndex] stateString];
 		}
 		else if([[aTableColumn identifier] isEqualToString:@"target"]){
 			return [NSNumber numberWithInt:[model target:rowIndex]];
@@ -269,7 +269,7 @@
 		}
 		
 		else if([[aTableColumn identifier] isEqualToString:@"outputSupervisionBehavior"]){
-			return [model behaviourString:rowIndex];
+			return [model behaviourString:(int)rowIndex];
 		}
 		else {
 				//for now return value as object
@@ -282,37 +282,37 @@
 	}
 	else if(aTableView == ramperTableView){
 		NSParameterAssert(rowIndex >= 0 && rowIndex < 8);
-		if([[aTableColumn identifier] isEqualToString:@"channel"])return [NSNumber numberWithInt:rowIndex];
+		if([[aTableColumn identifier] isEqualToString:@"channel"])return [NSNumber numberWithInt:(int)rowIndex];
 		else if([[aTableColumn identifier] isEqualToString:@"stepWait"]){
-			return [NSNumber numberWithInt:[[model ramper:rowIndex] stepWait]];
+			return [NSNumber numberWithInt:[[model ramper:(int)rowIndex] stepWait]];
 		}
 		else if([[aTableColumn identifier] isEqualToString:@"lowVoltageThreshold"]){
-			return [NSNumber numberWithInt:[[model ramper:rowIndex] lowVoltageThreshold]];
+			return [NSNumber numberWithInt:[[model ramper:(int)rowIndex] lowVoltageThreshold]];
 		}
 		else if([[aTableColumn identifier] isEqualToString:@"voltageStep"]){
-			return [NSNumber numberWithInt:[[model ramper:rowIndex] voltageStep]];
+			return [NSNumber numberWithInt:[[model ramper:(int)rowIndex] voltageStep]];
 		}
 		else if([[aTableColumn identifier] isEqualToString:@"lowVoltageWait"]){
-			return [NSNumber numberWithInt:[[model ramper:rowIndex] lowVoltageWait]];
+			return [NSNumber numberWithInt:[[model ramper:(int)rowIndex] lowVoltageWait]];
 		}
 		else if([[aTableColumn identifier] isEqualToString:@"lowVoltageStep"]){
-			return [NSNumber numberWithInt:[[model ramper:rowIndex] lowVoltageStep]];
+			return [NSNumber numberWithInt:[[model ramper:(int)rowIndex] lowVoltageStep]];
 		}
 		else if([[aTableColumn identifier] isEqualToString:@"maxVoltage"]){
-			return [NSNumber numberWithInt:[[model ramper:rowIndex] maxVoltage]];
+			return [NSNumber numberWithInt:[[model ramper:(int)rowIndex] maxVoltage]];
 		}
 		else if([[aTableColumn identifier] isEqualToString:@"minVoltage"]){
-			return [NSNumber numberWithInt:[[model ramper:rowIndex] minVoltage]];
+			return [NSNumber numberWithInt:[[model ramper:(int)rowIndex] minVoltage]];
 		}
 		else return @"";
 	}
 	else return @"";
 }
 
-- (void)tableView:(NSTableView *)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex 
+- (void)tableView:(NSTableView *)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {    
 	if(aTableView == hvTableView){
-		if([[aTableColumn identifier] isEqualToString:@"stagedRamp"] && [[model ramper:rowIndex] running]) {   
+		if([[aTableColumn identifier] isEqualToString:@"stagedRamp"] && [[model ramper:(int)rowIndex] running]) {   
 			[aCell setEnabled:NO];
 		}  
 		else [aCell setEnabled:YES];

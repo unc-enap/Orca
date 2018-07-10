@@ -496,13 +496,13 @@
 }
 
 
-- (int)numberOfRowsInTableView:(NSTableView *)aTable
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTable
 {
 	if(aTable == inputVariablesTableView) return ([[model inputValues] count]);
 	else  return ([[model outputValues] count]);
 }
 
-- (id) tableView:(NSTableView *)aTable objectValueForTableColumn:(NSTableColumn *)aCol row:(int)aRow
+- (id) tableView:(NSTableView *)aTable objectValueForTableColumn:(NSTableColumn *)aCol row:(NSInteger)aRow
 {
 	id anArray;
     id ident = [aCol identifier];
@@ -513,7 +513,7 @@
 	return [[anArray objectAtIndex:aRow] objectForKey:ident];
 }
 
-- (void) tableView:(NSTableView*)aTable setObjectValue:(id)aData forTableColumn:(NSTableColumn*)aCol row:(int)aRow
+- (void) tableView:(NSTableView*)aTable setObjectValue:(id)aData forTableColumn:(NSTableColumn*)aCol row:(NSInteger)aRow
 {
 	if(aTable == inputVariablesTableView) {
 		id ident = [aCol identifier];

@@ -367,10 +367,11 @@
 }
 
 #pragma mark Data Source Methods
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) aRowIndex
 {
+    int rowIndex = (int)aRowIndex;
 	if(aTableView == notesListView){
-		id anItem = [model itemAtIndex:rowIndex];
+		NSInteger anItem = [model itemAtIndex:rowIndex];
         NSArray* allKeys = [anItem allKeys];
         if([allKeys count] == 1){
             if([[aTableColumn identifier] isEqualToString:@"Label"]){
@@ -384,8 +385,9 @@
     return nil;
 }
 
-- (void) tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (void) tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)aRowIndex
 {
+    int rowIndex = (int)aRowIndex;
 	if(aTableView == notesListView){
 		id anItem = [model itemAtIndex:rowIndex];
         NSArray* allKeys = [anItem allKeys];
@@ -396,8 +398,9 @@
 }
 
 // just returns the number of items we have.
-- (int) numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView
 {
+    int rowIndex = (int)aRowIndex;
 	if(aTableView == notesListView){
 		return [model itemCount];
 	}

@@ -515,7 +515,7 @@
         else if([[tableColumn identifier] isEqualToString:@"Value"]){
             if(item==0){
                 return [[[NSAttributedString alloc] 
-                        initWithString:[NSString stringWithFormat:@"%d key/value pairs",[[model header] count]] 
+                        initWithString:[NSString stringWithFormat:@"%ld key/value pairs",(unsigned long)[[model header] count]]
                             attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSColor grayColor],NSForegroundColorAttributeName,nil]] autorelease];
             }
             else {
@@ -524,7 +524,7 @@
                 }
                 else {
                     return [[[NSAttributedString alloc] 
-                        initWithString:[NSString stringWithFormat:@"%d key/value pairs",[item count]] 
+                        initWithString:[NSString stringWithFormat:@"%ld key/value pairs",(unsigned long)[item count]]
                             attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSColor grayColor],NSForegroundColorAttributeName,nil]] autorelease];            
                 }
             }
@@ -534,15 +534,15 @@
     }
 }
 
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
    return [[model dataRecords] count];
 }
 
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
     if([[aTableColumn identifier] isEqualToString: @"Number"]){
-        return [NSNumber numberWithInt:rowIndex];
+        return [NSNumber numberWithInteger:rowIndex];
     }
    else {
         NSDictionary* aDictionary = [[model dataRecords] objectAtIndex:rowIndex];
@@ -563,7 +563,7 @@
 - (void) tableViewSelectionDidChange:(NSNotification *)aNotification
 {
     NSTableView* tv = [aNotification object];
-    int row = [tv selectedRow];
+    NSInteger row = [tv selectedRow];
     if(tv == dataView && row != -1){
         [self process:row];
 		if([model multiCatalog])[model setHistoErrorFlag:YES];

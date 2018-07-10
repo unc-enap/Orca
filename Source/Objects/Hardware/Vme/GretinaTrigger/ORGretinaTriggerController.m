@@ -768,7 +768,7 @@
 	return @"";
 }
 
-- (int) numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView
 {
 	if(aTableView == miscStatTable)return 8;
     else if(aTableView == stateStatusTable){

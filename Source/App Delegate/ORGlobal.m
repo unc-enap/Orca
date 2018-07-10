@@ -219,7 +219,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(Global);
     }
 }
 
-- (int) cpuCount
+- (NSUInteger) cpuCount
 {
 	if(!cpuCount) {
 		//NSProcessInfo* pinfo = [NSProcessInfo processInfo];
@@ -335,7 +335,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(Global);
 	return [runVetos count];
 }
 
-- (int) vetoCount
+- (NSUInteger) vetoCount
 {
 	return [runVetos count];
 }

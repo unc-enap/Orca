@@ -187,7 +187,7 @@
 - (void) countChannels;
 - (void) askForFileAndExecute;
 - (BOOL) needToRestore;
-- (int) numberOfRowsInTableView:(NSTableView *) tableView;
+- (NSInteger) numberOfRowsInTableView:(NSTableView *) tableView;
 
 @end
 

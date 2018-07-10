@@ -2023,7 +2023,7 @@ static NSString* DT5725StartStopRunModeString[4] = {
 }
 
 //returns 0 if success; -1 if request fails, and number of bytes returned by digitizer otherwise
-- (int) readFifo:(char*)readBuffer numBytesToRead:(unsigned int)    numBytes
+- (int) readFifo:(char*)readBuffer numBytesToRead:(unsigned long)    numBytes
 {
     unsigned long fifoAddress = 0x0000;
     

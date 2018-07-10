@@ -195,8 +195,8 @@ NSString* historyConnectors[4] = {
 #pragma mark ¥¥¥Plot Data Source
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	int set = [aPlotter tag];
-	return [inputValue[set] count];
+	int set = (int)[aPlotter tag];
+	return (int)[inputValue[set] count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue

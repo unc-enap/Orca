@@ -56,7 +56,7 @@
     
     [self tabView:tabView didSelectTabViewItem:[tabView selectedTabViewItem]];    
     NSString* key = [NSString stringWithFormat: @"orca.ORSIS3302%d.selectedtab",[model slot]];
-    int index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];   
 
@@ -207,7 +207,7 @@
 
 - (void) baseAddressChanged:(NSNotification*)aNote
 {
-    [addressText setIntValue:[model baseAddress]];
+    [addressText setIntegerValue:[model baseAddress]];
 }
 
 - (void) readoutModeChanged:(NSNotification*) aNotification
@@ -350,7 +350,7 @@
 {
     if ([aSender indexOfSelectedItem] != [model readoutMode]){
 	    [[[model document] undoManager] setActionName:@"Readout Mode"]; // Set undo name
-	    [model setReadoutMode:[aSender indexOfSelectedItem]]; // set new value
+	    [model setReadoutMode:(int)[aSender indexOfSelectedItem]]; // set new value
     }
 }
 
@@ -363,7 +363,7 @@
 {
     if ([aSender indexOfSelectedItem] != [model operationMode]){
 	    [[[model document] undoManager] setActionName:@"Operation Mode"]; // Set undo name
-	    [model setOperationMode:[aSender indexOfSelectedItem]]; // set new value
+	    [model setOperationMode:(int)[aSender indexOfSelectedItem]]; // set new value
     }    
 }
 
@@ -371,7 +371,7 @@
 {
     if ([aSender indexOfSelectedItem] != [model autoscanMode]){
 	    [[[model document] undoManager] setActionName:@"Autoscan Mode"]; // Set undo name
-	    [model setAutoscanMode:[aSender indexOfSelectedItem]]; // set new value
+	    [model setAutoscanMode:(int)[aSender indexOfSelectedItem]]; // set new value
     }    
 }
 
@@ -382,13 +382,13 @@
     short channel = rows*[sender selectedColumn] + [sender selectedRow];
     if ([cell indexOfSelectedItem] != [model getGain:channel]) {
         [[[model document] undoManager] setActionName:@"Channel Gain"]; // Set undo name
-        [model setGain:[cell indexOfSelectedItem] channel:channel];
+        [model setGain:(int)[cell indexOfSelectedItem] channel:channel];
     }
 }
 
 - (IBAction) setAllChannelGains:(id)sender
 {
-    [model setGain:[setAllChannelGains indexOfSelectedItem]];
+    [model setGain:(int)[setAllChannelGains indexOfSelectedItem]];
 }
 
 - (IBAction) read:(id) pSender
@@ -396,13 +396,13 @@
 	@try {
 		[self endEditing];		// Save in memory user changes before executing command.
 		uint8_t val = 0;
-        [model read:&val atRegisterIndex:[registerAddressPopUp indexOfSelectedItem]];
+        [model read:&val atRegisterIndex:(int)[registerAddressPopUp indexOfSelectedItem]];
         [readbackField setStringValue:[NSString stringWithFormat:@"0x%02x",val]];
         
     }
 	@catch(NSException* localException) {
         ORRunAlertPanel([localException name], @"%@\nRead of %@ failed", @"OK", nil, nil,
-                        localException,[model getRegisterName:[registerAddressPopUp indexOfSelectedItem]]);
+                        localException,[model getRegisterName:(int)[registerAddressPopUp indexOfSelectedItem]]);
     }
 }
 
@@ -411,11 +411,11 @@
 	@try {
 		[self endEditing];		// Save in memory user changes before executing command.
 		uint8_t val = [writeValueTextField intValue];
-        [model write:val atRegisterIndex:[registerAddressPopUp indexOfSelectedItem]];    
+        [model write:val atRegisterIndex:(int)[registerAddressPopUp indexOfSelectedItem]];
     }
 	@catch(NSException* localException) {
         ORRunAlertPanel([localException name], @"%@\nWrite to %@ failed", @"OK", nil, nil,
-                        localException,[model getRegisterName:[registerAddressPopUp indexOfSelectedItem]]);
+                        localException,[model getRegisterName:(int)[registerAddressPopUp indexOfSelectedItem]]);
     }
 }
 
@@ -506,26 +506,26 @@
     return YES;
 }
 
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
     rowIndex += [aTableView tag];
-    int chan = [[aTableView tableColumns] indexOfObject:aTableColumn]/2;
+    NSInteger chan = [[aTableView tableColumns] indexOfObject:aTableColumn]/2;
     chan = rowIndex + chan*[self numberOfRowsInTableView:aTableView];  
 	if([[aTableColumn identifier] hasPrefix:kXVME564ChannelKey]){
-        return [NSString stringWithFormat:@"%d",chan];
+        return [NSString stringWithFormat:@"%lu",(unsigned long)chan];
 	} else {
-        return [self stringOfADCValue:[model convertedValue:chan] withFormat:[model interpretADC]];
+        return [self stringOfADCValue:[model convertedValue:(int)chan] withFormat:[model interpretADC]];
     }
 }
 
 
 // just returns the number of items we have.
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
     return [model getNumberOfChannels]*2/[aTableView numberOfColumns];
 }
 
-- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
 }
 
@@ -548,7 +548,7 @@
     }
 	
     NSString* key = [NSString stringWithFormat: @"orca.ORSIS3302%d.selectedtab",[model slot]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSUInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 	
 }

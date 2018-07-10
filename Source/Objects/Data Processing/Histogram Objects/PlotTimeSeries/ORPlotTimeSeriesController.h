@@ -31,6 +31,6 @@
 - (int)	numberPointsInPlot:(id)aPlotter;
 - (float)  plotter:(id) aPlotter dataValue:(int)i;
 - (void)  plotter:(id) aPlotter index:(int)i x:(double*)x y:(double*)y;
-- (int)numberOfRowsInTableView:(NSTableView *)tableView;
-- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(int)row;
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView;
+- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row;
 @end

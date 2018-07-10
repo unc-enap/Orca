@@ -35,7 +35,7 @@
 {
     [super awakeFromNib];
     NSString* key = [NSString stringWithFormat: @"orca.Trigger%d.selectedtab",[model slot]];
-    int index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
 }
@@ -279,7 +279,7 @@
 - (void) tabView:(NSTabView*)aTabView didSelectTabViewItem:(NSTabViewItem*)item
 {
     NSString* key = [NSString stringWithFormat: @"orca.ORTrigger%d.selectedtab",[model slot]];
-    int index = [tabView indexOfTabViewItem:item];
+    NSUInteger index = [tabView indexOfTabViewItem:item];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 	
 }
@@ -364,7 +364,7 @@
 
 - (void) gtErrorCountChanged:(NSNotification*)aNotification
 {
-	[gtErrorField setIntValue:[model gtErrorCount]];
+	[gtErrorField setIntegerValue:[model gtErrorCount]];
 }
 
 - (void) shipEvt1ClkChanged:(NSNotification*)aNotification
@@ -385,7 +385,7 @@
 
 - (void) baseAddressChanged:(NSNotification*)aNotification
 {
-	[[self addressText] setIntValue: [model baseAddress]];
+	[[self addressText] setIntegerValue: [model baseAddress]];
 	[self updateStepper:[self addressStepper] setting:[model baseAddress]];
 }
 
@@ -422,7 +422,7 @@
 {
 	[useSoftwareGtIdCB setState: [model useSoftwareGtId]];
 	if(![model useSoftwareGtId])[softwareGtIdField setStringValue:@"--"];
-	else [softwareGtIdField setIntValue:[model softwareGtId]];
+	else [softwareGtIdField setIntegerValue:[model softwareGtId]];
 }
 
 - (void) useNoHardwareChanged:(NSNotification*)aNotification
@@ -440,7 +440,7 @@
 
 - (void) softwareGtIdChanged:(NSNotification*)aNotification
 {
-	[softwareGtIdField setIntValue:[model softwareGtId]];
+	[softwareGtIdField setIntegerValue:[model softwareGtId]];
 }
 
 - (void) trigger1NameChanged:(NSNotification*)aNotification

@@ -37,7 +37,7 @@
 { 
     if(!cachedDataSets)[self reCache:nil];
     if(set>=[cachedDataSets count])return 0;
-    else return [[cachedDataSets objectAtIndex:set] count];
+    else return (int)[[cachedDataSets objectAtIndex:set] count];
 }
 
 @end

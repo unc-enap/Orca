@@ -374,7 +374,7 @@ NSString* ORBreakpointsAction = @"ORBreakpointsAction";
 			nil];
 }
 
-- (float) requiredThickness
+- (CGFloat) requiredThickness
 {    
     long lineCount = [[self lineIndices] count];
     long digits    = (NSUInteger)log10(lineCount) + 1;

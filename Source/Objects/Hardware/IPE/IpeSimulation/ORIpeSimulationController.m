@@ -948,7 +948,7 @@ autoselect an edge, and we want this drawer to open only on specific edges. */
 }
 
 #pragma mark ‚Ä¢‚Ä¢‚Ä¢Data Source Methods (TableView)
-- (int) numberOfRowsInTableView:(NSTableView *)tableView
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
     if(tableView==itemTableView){
         return [model pollingLookUpCount];
@@ -959,7 +959,7 @@ autoselect an edge, and we want this drawer to open only on specific edges. */
 	return 0;
 }
 
-- (id) tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(int)row
+- (id) tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
     if(tableView==itemTableView){
 		if(row<[model pollingLookUpCount]){

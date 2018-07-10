@@ -701,12 +701,12 @@
 - (void) tableViewSelectionDidChange:(NSNotification *)aNotification
 {
 	if([aNotification object] == emailListTable || aNotification == nil){
-		int selectedIndex = [emailListTable selectedRow];
+		NSInteger selectedIndex = [emailListTable selectedRow];
 		[removeAddressButton setEnabled:selectedIndex>=0];
 	}
 }
 
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
 	if(aTableView == emailListTable){
 		if(rowIndex < [[model emailList] count]){
@@ -721,7 +721,7 @@
     else return [super tableView:aTableView objectValueForTableColumn:aTableColumn row:rowIndex];
 }
 
-- (void) tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (void) tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
     ORDetectorSegment* aSegment;
 	if(aTableView == emailListTable){
@@ -747,10 +747,10 @@
 }
 
 // just returns the number of items we have.
-- (int) numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView
 {
  	if(aTableView == emailListTable){
-		return [[model emailList] count];
+		return (NSInteger)[[model emailList] count];
     }
     else if( aTableView == secondaryTableView ||
            aTableView == secondaryValuesView)    return [[model segmentGroup:1] numSegments];

@@ -126,7 +126,7 @@
 
 - (IBAction) integrationAction:(id)sender;
 
-- (int) numberPointsInPlot:(id)aPlotter;
+- (int)    numberPointsInPlot:(id)aPlotter;
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 
 @end

@@ -240,17 +240,17 @@ NSString* ORSelectionControllerSelectionValueChangedNotification = @"ORSelection
 
 - (IBAction) logicalPopUpButtonAction:(id)sender
 {
-    [self setLogicalTag:[sender indexOfSelectedItem]];
+    [self setLogicalTag:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) objPopUpButtonAction:(id)sender
 {
-    [self setObjTag:[sender indexOfSelectedItem]];
+    [self setObjTag:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) selectionPopUpButtonAction:(id)sender
 {
-    [self setSelectionTag:[sender indexOfSelectedItem]];
+    [self setSelectionTag:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) selectionTextFieldAction:(id)sender

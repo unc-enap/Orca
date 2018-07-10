@@ -612,14 +612,14 @@ const int MAXcCHNLS_PER_PLOT = 6;
 }
 
 #pragma mark •••Table handling routines
-- (int) numberOfRowsInTableView: (NSTableView*) aTableView
+- (NSInteger) numberOfRowsInTableView: (NSTableView*) aTableView
 {	return( UVkNumChannels );
 }
 
 - (void) tableView: (NSTableView*) aTableView
        setObjectValue: (id) anObject
 	   forTableColumn: (NSTableColumn*) aTableColumn
-	   row: (int) aRowIndex
+	   row: (NSInteger) aRowIndex
 {
 //	NSMutableDictionary* tmpChnl = [[model dictionary] objectAtIndex: aRowIndex];
 	NSString* colIdentifier = [aTableColumn identifier];
@@ -629,7 +629,7 @@ const int MAXcCHNLS_PER_PLOT = 6;
 
 - (id) tableView: (NSTableView*) aTableView
 	   objectValueForTableColumn: (NSTableColumn*) aTableColumn
-	   row: (int) aRowIndex
+	   row: (NSInteger) aRowIndex
 {
 	NSMutableDictionary* tmpChnl = [model channelDictionary: aRowIndex];
 	NSString* colIdentifier = [aTableColumn identifier];

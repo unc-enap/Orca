@@ -105,14 +105,14 @@
 //- (float) demandHV: (int) aChannel;
 
 #pragma mark ***Data methods
-- (int) numberOfRowsInTableView: (NSTableView*) aTableView;
+- (NSInteger) numberOfRowsInTableView: (NSTableView*) aTableView;
 - (void) tableView: (NSTableView*) aTableView
        setObjectValue: (id) anObject
 	   forTableColumn: (NSTableColumn*) aTableColumn
-	   row: (int) aRowIndex;
+	   row: (NSInteger) aRowIndex;
 - (id) tableView: (NSTableView*) aTableView
 	   objectValueForTableColumn: (NSTableColumn*) aTableColumn
-	   row: (int) aRowIndex;
+	   row: (NSInteger) aRowIndex;
 
 #pragma mark ***Accessors
 

@@ -96,9 +96,9 @@
 - (IBAction) spikeValueAction:(id)sender;
 
 #pragma mark •••Data Source For Tables
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView;
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;
 - (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn 
-			 row:(int) rowIndex;
+			 row:(NSInteger) rowIndex;
 
 @end
 

@@ -532,25 +532,25 @@
 //	return ![gSecurity isLocked:[model experimentMapLock]];;
 //}
 
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
 //	NSLog(@"%@\n",[[tableEntries objectAtIndex:rowIndex] valueForKey:[aTableColumn identifier]]);
 	NSString *columnName = [aTableColumn identifier];
 	if ([columnName isEqualToString:@"parameterSelected"]){
 	    //return [[tableEntries objectAtIndex:rowIndex] valueForKey:columnName];
-		BOOL isSelected = [[[model getSlowControlVariable:rowIndex] valueForKey:columnName] boolValue];
+		BOOL isSelected = [[[model getSlowControlVariable:(int)rowIndex] valueForKey:columnName] boolValue];
 		return [NSNumber numberWithInteger:(isSelected ? NSOnState : NSOffState)];
 	}else {
-		return [[model getSlowControlVariable:rowIndex] valueForKey:columnName];
+		return [[model getSlowControlVariable:(int)rowIndex] valueForKey:columnName];
 	}
 }
 
-- (void) tableView:(NSTableView*)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (void) tableView:(NSTableView*)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
-	NSString *status = [[model getSlowControlVariable:rowIndex] parameterStatus];
+	NSString *status = [[model getSlowControlVariable:(int)rowIndex] parameterStatus];
 	NSString *columnName = [aTableColumn identifier];
 						
-	if ([[model getSlowControlVariable:rowIndex] isSlowControlParameterChanged] &&
+	if ([[model getSlowControlVariable:(int)rowIndex] isSlowControlParameterChanged] &&
 		![columnName isEqualToString:@"parameterSelected"]) {
 		[aCell setTextColor:[NSColor redColor]];
 	} else if ([columnName isEqualToString:@"parameterStatus"]) {
@@ -570,12 +570,12 @@
 		
 }
 
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
 	return kNumSlowControlParameters;
 }
 
-- (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {	
 	NSString *columnName = [aTableColumn identifier];
 	SNOSlowControl *slowControlVariable=[model getSlowControlVariable:rowIndex];

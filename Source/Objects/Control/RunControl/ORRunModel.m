@@ -253,12 +253,12 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
 
 #pragma mark ¥¥¥Accessors
 
-- (int) selectedRunTypeScript
+- (NSInteger) selectedRunTypeScript
 {
     return selectedRunTypeScript;
 }
 
-- (void) setSelectedRunTypeScript:(int)aSelectedRunTypeScript
+- (void) setSelectedRunTypeScript:(NSInteger)aSelectedRunTypeScript
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setSelectedRunTypeScript:selectedRunTypeScript];
     [self setIgnoreSelectedScript:NO];
@@ -2051,7 +2051,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
 
 - (NSUInteger) waitRequestersCount
 {
-    unsigned count;
+    NSUInteger count;
 	@synchronized (self){
         count = [objectsRequestingStateChangeWait count];
     }

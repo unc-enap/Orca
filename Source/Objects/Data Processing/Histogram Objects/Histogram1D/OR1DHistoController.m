@@ -145,12 +145,12 @@
 	[fitController setModel:[topRoi fit]];
 }
 
-- (int)numberOfRowsInTableView:(NSTableView *)tableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
 	return [model numberBins];
 }
 
-- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(int)row
+- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
 	if([[tableColumn identifier] isEqualToString:@"Value"])return [NSNumber numberWithInt:[model value:row]];
 	else return [NSNumber numberWithInt:row];

@@ -279,13 +279,13 @@
 }
 
 #pragma mark •••Table Data Source
-- (int) numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView
 {
 	if( aTableView == calibrationTableView)return [[calibration calibrationArray] count];
 	else return 0;
 }
 
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
 	if(aTableView == calibrationTableView ){
 		return [[[calibration calibrationArray] objectAtIndex:rowIndex] objectForKey:[aTableColumn identifier]];
@@ -293,7 +293,7 @@
 	else return nil;
 }
 
-- (void) tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (void) tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
 	if(aTableView == calibrationTableView){
 		[[[calibration calibrationArray] objectAtIndex:rowIndex] setObject: anObject forKey:[aTableColumn identifier]];

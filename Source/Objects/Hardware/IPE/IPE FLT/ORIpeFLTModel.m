@@ -1238,11 +1238,11 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 {
     [super encodeWithCoder:encoder];
 	
-    [encoder encodeInt32:dataMask			forKey:@"ORIpeFLTModelDataMask"];
+    [encoder encodeInt32:(int32_t)dataMask			forKey:@"ORIpeFLTModelDataMask"];
     [encoder encodeInt:thresholdOffset		forKey:@"ORIpeFLTModelThresholdOffset"];
-    [encoder encodeInt32:interruptMask		forKey:@"ORIpeFLTModelInterruptMask"];
-    [encoder encodeInt32:coinTime			forKey:@"coinTime"];
-    [encoder encodeInt32:integrationTime	forKey:@"integrationTime"];
+    [encoder encodeInt32:(int32_t)interruptMask		forKey:@"ORIpeFLTModelInterruptMask"];
+    [encoder encodeInt32:(int32_t)coinTime			forKey:@"coinTime"];
+    [encoder encodeInt32:(int32_t)integrationTime	forKey:@"integrationTime"];
     [encoder encodeInt:page					forKey:@"ORIpeFLTModelPage"];
     [encoder encodeInt:iterations			forKey:@"ORIpeFLTModelIterations"];
     [encoder encodeInt:endChan				forKey:@"ORIpeFLTModelEndChan"];
@@ -1433,7 +1433,7 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 	}
 	@catch(NSException* localException) {
 		
-		NSLogError(@"",@"Ipe FLT Card Error",[NSString stringWithFormat:@"Card%d",[self stationNumber]],@"Data Readout",nil);
+		NSLogError(@"",@"Ipe FLT Card Error",[NSString stringWithFormat:@"Card%d",(int)[self stationNumber]],@"Data Readout",nil);
 		[self incExceptionCount];
 		[localException raise];
 		
@@ -1879,7 +1879,7 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 		
 		if([self readMode] != kIpeFlt_Run_Mode){
 			NSLogColor([NSColor redColor],@"Could not put FLT %d into run mode\n",[self stationNumber]);
-			[NSException raise:@"Ram Test Failed" format:@"Could not put FLT %d into test mode\n",[self stationNumber]];
+			[NSException raise:@"Ram Test Failed" format:@"Could not put FLT %d into test mode\n",(int)[self stationNumber]];
 		}
 		
 		[self initBoard];
@@ -1935,7 +1935,7 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 			  shift:(int) shift
 				  n:(int) n 
 {
-	unsigned int i, j;
+    int i, j;
 	
 	// Check for errors
 	for (i=0;i<n;i++) {
@@ -1975,7 +1975,7 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 	[self writeControlStatus];
 	if([self readMode] != kIpeFlt_Test_Mode){
 		NSLogColor([NSColor redColor],@"Could not put FLT %d into test mode\n",[self stationNumber]);
-		[NSException raise:@"Ram Test Failed" format:@"Could not put FLT %d into test mode\n",[self stationNumber]];
+		[NSException raise:@"Ram Test Failed" format:@"Could not put FLT %d into test mode\n",(int)[self stationNumber]];
 	}
 }
 

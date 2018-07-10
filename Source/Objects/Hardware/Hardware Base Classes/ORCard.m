@@ -88,7 +88,7 @@
 
 - (int) 	slot
 {
-    return [self tag];    
+    return (int)[self tag];    
 }
 
 - (int) displayedSlotNumber

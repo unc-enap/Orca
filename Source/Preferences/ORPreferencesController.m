@@ -195,21 +195,21 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(PreferencesController);
 
 - (IBAction) openingDocPrefAction:(id)sender
 {
-    int tag = [[openingDocPrefMatrix selectedCell] tag];
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:tag] forKey:OROpeningDocPreferences];    
+    NSInteger tag = [[openingDocPrefMatrix selectedCell] tag];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInteger:tag] forKey:OROpeningDocPreferences];
 }
 
 - (IBAction) openingDialogAction:(id)sender
 {
-    int tag = [[openingDialogMatrix selectedCell] tag];
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:tag] forKey:OROpeningDialogPreferences];    
+    NSInteger tag = [[openingDialogMatrix selectedCell] tag];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInteger:tag] forKey:OROpeningDialogPreferences];
 }
 
 
 - (IBAction) lineTypeAction:(id)sender
 {
-    int tag = [[lineTypeMatrix selectedCell] tag];
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:tag] forKey:ORLineType];
+    NSInteger tag = [[lineTypeMatrix selectedCell] tag];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInteger:tag] forKey:ORLineType];
 
     [[NSNotificationCenter defaultCenter]
         postNotificationName:ORLineTypeChangedNotification
@@ -358,8 +358,8 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(PreferencesController);
 
 - (IBAction) helpFileLocationPrefAction:(id)sender
 {
-    int tag = [[helpFileLocationMatrix selectedCell] tag];
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:tag] forKey:ORHelpFilesUseDefault];    
+    NSInteger tag = [[helpFileLocationMatrix selectedCell] tag];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInteger:tag] forKey:ORHelpFilesUseDefault];
 	[helpFileLocationPathField setEnabled:tag];
 	[helpFileLocationPathField setNeedsDisplay:YES];
 	[[NSNotificationCenter defaultCenter]postNotificationName:ORHelpFilesPathChanged object:nil];
@@ -406,8 +406,8 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(PreferencesController);
 
 - (IBAction) mailSelectionAction:(id)sender
 {
-    int tag = [[mailSelectionMatrix selectedCell] tag];
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:tag] forKey:ORMailSelectionPreference];
+    NSInteger tag = [[mailSelectionMatrix selectedCell] tag];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInteger:tag] forKey:ORMailSelectionPreference];
     
     [mailServerField   setEnabled: tag == 1];
     [mailAddressField  setEnabled: tag == 1];

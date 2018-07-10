@@ -65,8 +65,8 @@
 
 - (void) errorCountChanged:(NSNotification*)aNotification
 {
-	[armErrorField setIntValue: [model armError]];
-	[eventReadErrorField setIntValue: [model eventReadError]];
+	[armErrorField setIntegerValue: [model armError]];
+	[eventReadErrorField setIntegerValue: [model eventReadError]];
 }
 
 #pragma mark ¥¥¥Interface Management

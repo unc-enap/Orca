@@ -287,7 +287,7 @@
     [aMachine setValue:anObject forKey:[aTableColumn identifier]];
 }
 
-- (int) numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView
 {
     return [model machineCount];
 }

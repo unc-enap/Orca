@@ -108,8 +108,8 @@ extern NSString* ORTaskStateName[eMaxTaskState];
 - (void) removeRunVeto:(NSString*)vetoName;
 - (void) listVetoReasons;
 - (BOOL) anyVetosInPlace;
-- (int) vetoCount;
-- (int) cpuCount;
+- (NSUInteger) vetoCount;
+- (NSUInteger) cpuCount;
 
 #pragma mark •••Archival
 - (id)loadParams:(NSCoder*)decoder;

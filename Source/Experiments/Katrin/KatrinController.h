@@ -116,11 +116,11 @@
 
 #pragma mark ¥¥¥Table Data Source
 - (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn 
-                                row:(int) rowIndex;
-- (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(int)row;
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView;
+                                row:(NSInteger) rowIndex;
+- (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row;
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;
 - (void)tableView:(NSTableView *)aTableView setObjectValue:anObject 
-            forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex;
+            forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex;
 - (void) tabView:(NSTabView*)aTabView didSelectTabViewItem:(NSTabViewItem*)tabViewItem;
 
 - (ORSegmentGroup*) segmentGroup:(int)aSet;

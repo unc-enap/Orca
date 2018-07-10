@@ -48,7 +48,7 @@
 
 	int			 lineType;
 	int 		 connectorImageType;
-	int 		 connectorType;
+	unsigned long 		 connectorType;
 	int 		 ioType;
 	int 		 identifer;
     NSColor*     onColor;

@@ -338,7 +338,7 @@
     else {
 	
 		[quickStartCB setEnabled:YES];
-        int n = [model waitRequestersCount];
+        NSUInteger n = [model waitRequestersCount];
         if(n>0){
             [startRunButton setEnabled:NO];
             [endSubRunButton setEnabled:NO];
@@ -501,7 +501,7 @@
 
 - (void) runNumberChanged:(NSNotification*)aNotification
 {
-	[runNumberText setIntValue:[model runNumber]];
+	[runNumberText setIntegerValue:[model runNumber]];
 	if([[ORGlobal sharedGlobal] runMode] == kNormalRun){
 		[runNumberField setStringValue:[model fullRunNumberString]];
 	}
@@ -799,7 +799,7 @@
                 [self performSelector:@selector(deferredRunNumberChange) withObject:nil afterDelay:0];
             }
             else {
-                [runNumberText setIntValue:[model runNumber]];
+                [runNumberText setIntegerValue:[model runNumber]];
             }
         }];
 #else
@@ -823,7 +823,7 @@
 
 - (IBAction) runModeAction:(id)sender
 {
-    int tag = [[runModeMatrix selectedCell] tag];
+    int tag = (int)[[runModeMatrix selectedCell] tag];
     if(tag != [[ORGlobal sharedGlobal] runMode]){
         [[self undoManager] setActionName: @"Set Run Mode"];
 		[model setOfflineRun:tag];
@@ -1065,7 +1065,7 @@
 }
 
 // just returns the number of items we have.
-- (NSUInteger) numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView
 {
 	if(aTableView == waitRequestersTableView){
 		return [model waitRequestersCount];

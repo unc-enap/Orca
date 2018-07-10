@@ -24,7 +24,7 @@
 
 @protocol ORPlotDataSourceMethods
 - (int)   numberPointsInPlot:(id)aPlot;
-- (void) plotter:(id)aPlot index:(int)i x:(double*)xValue y:(double*)yValue;
+- (void) plotter:(id)aPlot index:(unsigned long)i x:(double*)xValue y:(double*)yValue;
 @end
 
 @protocol ORFastPlotDataSourceMethods

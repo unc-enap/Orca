@@ -137,17 +137,17 @@
 			aMask |= (1L<<bit);
 		}
 	}
-	[model setPatternMaskForArray:[sender tag] to:aMask];
+	[model setPatternMaskForArray:(int)[sender tag] to:aMask];
 }
 
 - (IBAction) allColAction:(id)sender
 {
-	[model setPatternMaskForArray:[sender selectedTag] to:0xffffffff];
+	[model setPatternMaskForArray:(int)[sender selectedTag] to:0xffffffff];
 }
 
 - (IBAction) noneColAction:(id)sender
 {
-	[model setPatternMaskForArray:[sender selectedTag] to:0x0];
+	[model setPatternMaskForArray:(int)[sender selectedTag] to:0x0];
 }
 
 - (IBAction) disableForPulserAction:(id)sender

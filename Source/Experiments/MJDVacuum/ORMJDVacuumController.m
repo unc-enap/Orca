@@ -500,7 +500,7 @@
 }
 
 #pragma mark •••Data Source For Tables
-- (int) numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView
 {
 	if(aTableView == valueTableView){
 		return [[model valueLabels] count];
@@ -513,7 +513,7 @@
 	}
 	else return 0;
 }
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
 	if((aTableView == valueTableView) || (aTableView == statusTableView)){
 		NSArray* theLabels;
@@ -522,7 +522,7 @@
 		if(rowIndex < [theLabels count]){
 			ORVacuumDynamicLabel* theLabel = [theLabels objectAtIndex:rowIndex];
 			if([[aTableColumn identifier] isEqualToString:@"partTag"]){
-				return [NSNumber numberWithInt:rowIndex];
+				return [NSNumber numberWithInteger:rowIndex];
 			}
 			else if([[aTableColumn identifier] isEqualToString:@"label"]){
 				return [theLabel label];

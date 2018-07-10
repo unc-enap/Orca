@@ -541,7 +541,7 @@ NSString* OROrcaFinalQuitNotice      = @"OROrcaFinalQuitNotice";
 	
 	[[self undoManager] removeAllActions];
 
-	int     count  = [[ORGlobal sharedGlobal] cpuCount];
+	NSUInteger     count  = [[ORGlobal sharedGlobal] cpuCount];
 	if(count==1){
 		[self closeSplashWindow];
 		NSLogColor([NSColor redColor],@"Number of processors: %d\n",count);

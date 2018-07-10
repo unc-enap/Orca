@@ -799,7 +799,7 @@
 }
 
 // just returns the number of items we have.
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
 	if(gainTableView == aTableView)return 37;
 	else if(gainReadBackTableView == aTableView)return 37;
@@ -807,7 +807,7 @@
 	else return 0;
 }
 
-- (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
     if(anObject == nil)return;
     
@@ -848,7 +848,7 @@
 		default: [self resizeWindowToSize:normalSize];	    break;
     }
     
-    int index = [tabView indexOfTabViewItem:item];
+    NSInteger index = [tabView indexOfTabViewItem:item];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:[NSString stringWithFormat:@"orca.Pac%lu.selectedtab",[model uniqueIdNumber]]];
     [[self window] setContentView:totalView];
 }

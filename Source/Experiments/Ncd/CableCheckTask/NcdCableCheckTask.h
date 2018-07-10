@@ -111,7 +111,7 @@
 - (float)amplitude;
 - (void)setAmplitude:(float)anAmplitude;
 - (float)width;
-- (void)setWidth:(float)aWidth;
+- (void)setWidth:(CGFloat)aWidth;
 - (int) numPulses;
 - (void) setNumPulses: (int) aNumPulses;
 - (unsigned short) muxThreshold;

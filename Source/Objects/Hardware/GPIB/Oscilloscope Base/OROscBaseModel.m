@@ -1200,7 +1200,7 @@ static NSString*	OROscTriggerSource		= @"ORTriggerSource";
 	// Save horizontal parameters
     [ anEncoder encodeFloat: [self horizontalPos]      forKey: OROscHorizPos];
     [ anEncoder encodeFloat: [self horizontalScale]     forKey: OROscHorizScale];
-    [ anEncoder encodeInt32: [self waveformLength]      forKey: OROscPulseLength];
+    [ anEncoder encodeInt32: (int32_t)[self waveformLength]      forKey: OROscPulseLength];
 	
 	// Save trigger parameters
     [anEncoder encodeInt: [self triggerCoupling]	forKey: OROscTriggerCoupling ];

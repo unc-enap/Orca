@@ -638,7 +638,7 @@ NSString* ORWG1220PulserLock = @"ORWG1220PulserLock";
   return [NSData dataWithBytes:cmdData length:7];
 }
 
-- (NSData*) checkReadyForProg:(NSUInteger) nPoints{  // Start-Ready-request: 'X','b',0,HIBYTE(an),LOBYTE(an),knr,CRC
+- (NSData*) checkReadyForProg:(int) nPoints{  // Start-Ready-request: 'X','b',0,HIBYTE(an),LOBYTE(an),knr,CRC
   unsigned char cmdData[7];
   cmdData[0] = 'X'; cmdData[1] = kWGRdyPrgrmCmd;  // 'b'
   cmdData[2] = '0';

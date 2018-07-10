@@ -113,12 +113,12 @@
     return [model plotter:aPlotter index:index x:xValue y:yValue];
 }
 
-- (int)numberOfRowsInTableView:(NSTableView *)tableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
 	return [model numberChans];
 }
 
-- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(int)row
+- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
 	if([[tableColumn identifier] isEqualToString:@"Real"]){
 		return [NSNumber numberWithFloat:[model plotter:nil dataSet:0 dataValue:row]];

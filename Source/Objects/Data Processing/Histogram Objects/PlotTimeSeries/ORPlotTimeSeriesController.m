@@ -64,7 +64,7 @@
 	return (NSTimeInterval)[[model timeSeries] startTime];
 }
 
-- (int)	numberPointsInPlot:(id)aPlotter
+- (int)    numberPointsInPlot:(id)aPlotter
 {
 	return [[model timeSeries] count];
 }
@@ -85,12 +85,12 @@
 	*x = (double)theTime;
 }
 
-- (int)numberOfRowsInTableView:(NSTableView *)tableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
 	return [[model timeSeries] count];
 }
 
-- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(int)row
+- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
 	if([[tableColumn identifier] isEqualToString:@"Value"])return [NSNumber numberWithFloat:[[model timeSeries] valueAtIndex:row]];
 	else return [NSDate dateWithTimeIntervalSince1970:[[model timeSeries] timeAtIndex:row]];

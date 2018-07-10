@@ -4284,7 +4284,7 @@ clean_up_mark:
 	@catch(NSException* localException) {
 		
         //TODO: CRASH: in case of exceptions and in trace mode we should stop the run (?) -tb- 2008-02-27
-		NSLogError(@"",@"Katrin FLT Card Error",[NSString stringWithFormat:@"Card%d",[self stationNumber]],@"Data Readout",nil);
+		NSLogError(@"",@"Katrin FLT Card Error",[NSString stringWithFormat:@"Card%d",(int)[self stationNumber]],@"Data Readout",nil);
 		[self incExceptionCount];
 		[localException raise];
 		

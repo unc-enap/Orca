@@ -59,7 +59,7 @@
 
 #pragma mark ¥¥¥DataSource
 - (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex;
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView;
-- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex;
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;
+- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex;
 
 @end

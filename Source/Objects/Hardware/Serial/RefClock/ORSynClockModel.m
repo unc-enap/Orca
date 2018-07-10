@@ -433,7 +433,7 @@ NSString* ORSynClockIDChanged                   = @"ORSynClockIDChanged";
 {
     [encoder encodeInt:   trackMode   forKey:@"trackMode"];
     [encoder encodeInt:   syncMode    forKey:@"syncMode"];
-    [encoder encodeInt32: alarmWindow forKey:@"alarmWindow"];
+    [encoder encodeInt32: (int32_t)alarmWindow forKey:@"alarmWindow"];
     [encoder encodeObject:previousStatusMessages forKey:@"previousStatusMessages"];
 }
 

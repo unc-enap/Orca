@@ -279,8 +279,8 @@
      }
     else {
         theTag -= kMaxDetectors;
-        int count = [model numberPointsInPreAmpPlot:theTag];
-        int index = count-i-1;
+        NSUInteger count = [model numberPointsInPreAmpPlot:theTag];
+        NSUInteger index = count-i-1;
         [model preAmpPlot:theTag dataIndex:index x:xValue y:yValue];
        
     }

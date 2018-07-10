@@ -498,7 +498,7 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
 {
 	if(!inputValues)inputValues = [[NSMutableArray array] retain];
 	[inputValues addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:
-							[NSString stringWithFormat:@"$%d",[inputValues count]],	@"name",
+							[NSString stringWithFormat:@"$%ld",[inputValues count]],	@"name",
 							[NSDecimalNumber numberWithUnsignedLong:0],				@"iValue",
 							nil]];
 	

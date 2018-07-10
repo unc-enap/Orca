@@ -657,7 +657,7 @@
 }
 
 #pragma mark •••Data Source Methods
-- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(int) rowIndex
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
 	if(aTableView == hvTableView){
 		NSParameterAssert(rowIndex >= 0 && rowIndex < [model numberOfChannels]);
@@ -693,7 +693,7 @@
 	else return @"";
 }
 
-- (void) tableView: (NSTableView*) aTableView setObjectValue: (id) anObject forTableColumn: (NSTableColumn*) aTableColumn row: (int) aRowIndex
+- (void) tableView: (NSTableView*) aTableView setObjectValue: (id) anObject forTableColumn: (NSTableColumn*) aTableColumn row: (NSInteger) aRowIndex
 {
 	if(aTableView == hvTableView){
 		NSParameterAssert(aRowIndex >= 0 && aRowIndex < [model numberOfChannels]);
@@ -707,7 +707,7 @@
 	}
 }
 
-- (int) numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView
 {
 	if(aTableView == hvTableView)return [model numberOfChannels];
 	else return 0;
