@@ -919,7 +919,7 @@
 - (IBAction) runTypeAction:(id)sender
 {
     short i     = [[sender selectedCell] tag];
-    BOOL state  = [[sender selectedCell] state];
+    BOOL state  = [(NSButton*)[sender selectedCell] state];
     unsigned long currentRunMask = [model runType];
     if(state) currentRunMask |= (1L<<i);
     else      currentRunMask &= ~(1L<<i);
@@ -1040,7 +1040,7 @@
 - (void) setupRunTypeNames
 {
     NSArray* theNames = [model runTypeNames];
-    int n = [theNames count];
+    NSUInteger n = [theNames count];
     int i;
     if(n){
         for(i=1;i<n;i++){
@@ -1065,7 +1065,7 @@
 }
 
 // just returns the number of items we have.
-- (int) numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSUInteger) numberOfRowsInTableView:(NSTableView *)aTableView
 {
 	if(aTableView == waitRequestersTableView){
 		return [model waitRequestersCount];

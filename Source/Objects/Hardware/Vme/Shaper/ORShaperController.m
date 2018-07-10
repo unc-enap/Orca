@@ -45,8 +45,8 @@
 {
     [super awakeFromNib];
     NSString* key = [NSString stringWithFormat: @"orca.ORShaper%d.selectedtab",[model slot]];
-    int index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
-    if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
+    NSUInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
+    if(index>[tabView numberOfTabViewItems])index = 0;
     [tabView selectTabViewItemAtIndex: index];
 	[[rate0 xAxis] setRngLimitsLow:0 withHigh:500000 withMinRng:128];
 	[[totalRate xAxis] setRngLimitsLow:0 withHigh:500000 withMinRng:128];
@@ -287,7 +287,7 @@
 - (void) tabView:(NSTabView*)aTabView didSelectTabViewItem:(NSTabViewItem*)item
 {
     NSString* key = [NSString stringWithFormat: @"orca.ORShaper%d.selectedtab",[model slot]];
-    int index = [tabView indexOfTabViewItem:item];
+    NSUInteger index = [tabView indexOfTabViewItem:item];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 	
 }
@@ -332,7 +332,7 @@
 - (void) baseAddressChanged:(NSNotification*)aNotification
 {
 	[self updateStepper:addressStepper setting:[model baseAddress]];
-	[addressText setIntValue: [model baseAddress]];
+	[addressText setIntegerValue: [model baseAddress]];
 }
 
 - (void) thresholdChanged:(NSNotification*)aNotification

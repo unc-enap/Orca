@@ -586,7 +586,7 @@ NSString* ORMiscAttributeKey		= @"ORMiscAttributeKey";
 	NSEvent* theCurrentEvent = [NSApp currentEvent];
     NSEvent *event =  [NSEvent mouseEventWithType:NSLeftMouseDown
                                          location:[theCurrentEvent locationInWindow]
-                                    modifierFlags:NSLeftMouseDownMask // 0x100
+                                    modifierFlags:NSEventModifierFlagControl // 0x100
                                         timestamp:(NSTimeInterval)0
                                      windowNumber:[theCurrentEvent windowNumber]
                                           context:[theCurrentEvent context]
@@ -662,7 +662,7 @@ static NSString* OROrcaObjectUniqueIDNumber = @"OROrcaObjectUniqueIDNumber";
 	      
 
     [self setConnectors:[decoder decodeObjectForKey:OROrcaObjectConnectors]];
-    [self setTag:[decoder decodeIntForKey:OROrcaObjectTag]];
+    [self setTag:[decoder decodeInt32ForKey:OROrcaObjectTag]];
     [self setUniqueIdNumber:[decoder decodeInt32ForKey:OROrcaObjectUniqueIDNumber]];
     miscAttributes = [[decoder decodeObjectForKey:@"miscAttributes"] retain];
 	
@@ -678,8 +678,8 @@ static NSString* OROrcaObjectUniqueIDNumber = @"OROrcaObjectUniqueIDNumber";
     [encoder encodePoint:offset forKey:@"offset"];
     [encoder encodeRect: bounds forKey:@"bounds"];
     [encoder encodeObject:connectors forKey:OROrcaObjectConnectors];
-    [encoder encodeInt:[self tag] forKey:OROrcaObjectTag];
-    [encoder encodeInt32:uniqueIdNumber forKey:OROrcaObjectUniqueIDNumber];
+    [encoder encodeInt32:(int32_t)[self tag] forKey:OROrcaObjectTag];
+    [encoder encodeInt32:(int32_t)uniqueIdNumber forKey:OROrcaObjectUniqueIDNumber];
 	[encoder encodeObject:miscAttributes forKey:@"miscAttributes"];
 }
 
@@ -995,32 +995,32 @@ static NSString* OROrcaObjectUniqueIDNumber = @"OROrcaObjectUniqueIDNumber";
 	return 1;
 }
 
-- (int) second 
+- (NSInteger) second
 {
 	return [[NSDate date] secondOfMinute];
 }
 
-- (int) minute 
+- (NSInteger) minute
 {
 	return [[NSDate date] minuteOfHour];
 }
 
-- (int) hour 
+- (NSInteger) hour
 {
 	return [[NSDate date] hourOfDay];
 }
 
-- (int) day 
+- (NSInteger) day
 {
 	return [[NSDate date] dayOfMonth];
 }
 
-- (int) month 
+- (NSInteger) month
 {
 	return [[NSDate date] monthOfYear];
 }
 
-- (int) year
+- (NSInteger) year
 {
 	return [[NSDate date] yearOfCommonEra];
 }

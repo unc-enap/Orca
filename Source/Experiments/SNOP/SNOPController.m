@@ -913,7 +913,7 @@ snopGreenColor;
 
 - (IBAction) nhitMonitorAutoRunAction: (id) sender
 {
-    [model setNhitMonitorAutoRun:[sender state]];
+    [model setNhitMonitorAutoRun:[(NSButton*)sender state]];
 }
 
 - (IBAction) nhitMonitorAutoPulserRateAction: (id) sender
@@ -934,7 +934,7 @@ snopGreenColor;
 - (IBAction) nhitMonitorRunTypeAction: (id) sender
 {
     short bit = [sender selectedRow];
-    BOOL state  = [[sender selectedCell] state];
+    BOOL state  = [(NSButton*)[sender selectedCell] state];
     unsigned long currentRunMask = [model nhitMonitorRunType];
     if (state) {
         currentRunMask |= (1L << bit);
@@ -947,7 +947,7 @@ snopGreenColor;
 - (IBAction) nhitMonitorCrateMaskAction: (id) sender
 {
     short bit = [sender selectedRow];
-    BOOL state  = [[sender selectedCell] state];
+    BOOL state  = [(NSButton*)[sender selectedCell] state];
     unsigned long currentCrateMask = [model nhitMonitorCrateMask];
     if (state) {
         currentCrateMask |= (1L << bit);
@@ -2125,7 +2125,7 @@ snopGreenColor;
 - (IBAction)runTypeWordAction:(id)sender
 {
     short bit = [sender selectedRow];
-    BOOL state  = [[sender selectedCell] state];
+    BOOL state  = [(NSButton*)[sender selectedCell] state];
     unsigned long currentRunMask = [model runTypeWord];
     if(state) currentRunMask |= (1L<<bit);
     else      currentRunMask &= ~(1L<<bit);

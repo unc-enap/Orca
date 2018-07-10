@@ -20,12 +20,13 @@
 
 
 #import "ORProcessNub.h"
+#import "ORProcessElementModel.h"
 
 //this is a placeholder class for logic objects that have to intercept the
 //eval message and do something to the state before returning it.
 
 @implementation ORProcessNub
-- (void) setGuardian:(id)aGuardian
+- (void) setGuardian:(ORProcessElementModel*)aGuardian
 {
     //note the children do NOT retain their guardians to avoid retain cycles.
     guardian = aGuardian;

@@ -323,26 +323,26 @@ NSString* ORModelChangedNotification = @"ORModelChangedNotification";
     }
 }
 
-- (void)updateSlider:(NSSlider *)control setting:(int)inValue
+- (void)updateSlider:(NSSlider *)control setting:(NSInteger)inValue
 { 
 	// Updates a slider. The inValue parameter must be a int.
     if (inValue != [control intValue]) {
-        [control setIntValue:inValue];
+        [control setIntegerValue:inValue];
     }
 }
 
-- (void)updateStepper:(NSStepper *)control setting:(int)inValue
+- (void)updateStepper:(NSStepper *)control setting:(NSInteger)inValue
 {
 	// Updates a slider. The inValue parameter must be a int.
     if (inValue != [control intValue]) {
-        [control setIntValue:inValue];
+        [control setIntegerValue:inValue];
     }
 }
-- (void)updateIntText:(NSTextField *)control setting:(int)inValue
+- (void)updateIntText:(NSTextField *)control setting:(NSInteger)inValue
 {
 	// Updates a slider. The inValue parameter must be a int.
     if (inValue != [control intValue]) {
-        [control setIntValue:inValue];
+        [control setIntegerValue:inValue];
     }
 }
 

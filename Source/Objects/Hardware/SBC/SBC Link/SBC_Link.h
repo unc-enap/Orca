@@ -147,7 +147,7 @@ typedef enum eSBC_ThrottleConsts{
 	ORSBCLinkJobStatus* jobStatus;
 	int				errorTimeOut;
 	NSMutableArray* connectionHistory;
-	unsigned 		ipNumberIndex;
+	NSUInteger 		ipNumberIndex;
 	NSString*		mainStagingFolder;
 	long			sbcCodeVersion;
     NSDate*         lastRateUpdate;
@@ -291,45 +291,45 @@ typedef enum eSBC_ThrottleConsts{
 
 - (void) readLongBlock:(long*) buffer
 			 atAddress:(unsigned long) anAddress
-			 numToRead:(unsigned int) numberLongs;
+			 numToRead:(unsigned long) numberLongs;
 
 - (void) writeLongBlock:(long*) buffer
 			  atAddress:(unsigned long) anAddress
-			 numToWrite:(unsigned int)  numberLongs;
+			 numToWrite:(unsigned long)  numberLongs;
 
 - (void) readLongBlock:(unsigned long *) readAddress
 			 atAddress:(unsigned long) vmeAddress
-			 numToRead:(unsigned int) numberLongs
+			 numToRead:(unsigned long) numberLongs
 			withAddMod:(unsigned short) anAddressModifier
 		 usingAddSpace:(unsigned short) anAddressSpace;
 
 - (void) writeLongBlock:(unsigned long *) writeAddress
 			  atAddress:(unsigned long) vmeAddress
-			 numToWrite:(unsigned int) numberLongs
+			 numToWrite:(unsigned long) numberLongs
 			 withAddMod:(unsigned short) anAddressModifier
 		  usingAddSpace:(unsigned short) anAddressSpace;
 
 - (void) readByteBlock:(unsigned char *) readAddress
 			 atAddress:(unsigned long) vmeAddress
-			 numToRead:(unsigned int) numberBytes
+			 numToRead:(unsigned long) numberBytes
 			withAddMod:(unsigned short) anAddressModifier
 		 usingAddSpace:(unsigned short) anAddressSpace;
 
 - (void) writeByteBlock:(unsigned char *) writeAddress
 			  atAddress:(unsigned long) vmeAddress
-			 numToWrite:(unsigned int) numberBytes
+			 numToWrite:(unsigned long) numberBytes
 			 withAddMod:(unsigned short) anAddressModifier
 		  usingAddSpace:(unsigned short) anAddressSpace;
 
 - (void) readWordBlock:(unsigned short *) readAddress
 			 atAddress:(unsigned long) vmeAddress
-			 numToRead:(unsigned int) numberWords
+			 numToRead:(unsigned long) numberWords
 			withAddMod:(unsigned short) anAddressModifier
 		 usingAddSpace:(unsigned short) anAddressSpace;
 
 - (void) writeWordBlock:(unsigned short *) writeAddress
 			  atAddress:(unsigned long) vmeAddress
-			 numToWrite:(unsigned int) numberWords
+			 numToWrite:(unsigned long) numberWords
 			 withAddMod:(unsigned short) anAddressModifier
 		  usingAddSpace:(unsigned short) anAddressSpace;
 

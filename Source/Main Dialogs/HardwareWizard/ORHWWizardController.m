@@ -926,7 +926,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
 
 // Methods from SubviewTableViewDataSourceProtocol
 
-- (NSView *) tableView:(NSTableView *) tableView viewForRow:(int) row
+- (NSView *) tableView:(NSTableView *) tableView viewForRow:(NSUInteger) row
 {
     if(tableView == actionTableView){
         return [[[self actionControllers] objectAtIndex: row] view];

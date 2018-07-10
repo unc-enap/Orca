@@ -321,7 +321,7 @@
 #pragma mark ¥¥¥Actions
 - (IBAction) allDisabledAction:(id)sender
 {
-    [model setAllDisabled:[sender state]];
+    [model setAllDisabled:[(NSButton*)sender state]];
 }
 
 - (IBAction) captureStateAction:(id)sender
@@ -401,13 +401,13 @@
 - (IBAction) colorBarUsesLogAction:(id)sender
 {
     NSMutableDictionary* attributes = [[detectorColorBar colorAxis]attributes];
-    [attributes setObject:[NSNumber numberWithBool:[sender state]] forKey:ORAxisUseLog];
+    [attributes setObject:[NSNumber numberWithBool:[(NSButton*)sender state]] forKey:ORAxisUseLog];
     [model setColorBarAttributes:attributes];
 }
 
 - (IBAction) setDisplayOptionAction:(id)sender
 {
-    [model setDisplayOption:[[sender selectedCell]tag] state:[[sender selectedCell]state]];
+    [model setDisplayOption:[[sender selectedCell]tag] state:[(NSButton*)[sender selectedCell]state]];
 }
 
 - (IBAction) readMapFileAction:(id)sender

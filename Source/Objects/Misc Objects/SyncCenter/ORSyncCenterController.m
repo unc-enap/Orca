@@ -133,7 +133,7 @@
 
 - (void) orcaAdded:(NSNotification*)aNote
 {
-    int index = [[[aNote userInfo] objectForKey:@"Index"] intValue];
+    NSUInteger index = [[[aNote userInfo] objectForKey:@"Index"] intValue];
     index = MIN(index,[model orcaCount]);
     index = MAX(index,0);
     [orcaListView reloadData];
@@ -143,7 +143,7 @@
 
 - (void) orcaRemoved:(NSNotification*)aNote
 {
-    int index = [[[aNote userInfo] objectForKey:@"Index"] intValue];
+    NSUInteger index = [[[aNote userInfo] objectForKey:@"Index"] intValue];
     index = MIN(index,[model orcaCount]-1);
     index = MAX(index,0);
     [orcaListView reloadData];
@@ -154,7 +154,7 @@
 - (void) tableViewSelectionDidChange:(NSNotification *)aNotification
 {
     if([aNotification object] == orcaListView || aNotification == nil){
-        int selectedIndex = [orcaListView selectedRow];
+        NSInteger selectedIndex = [orcaListView selectedRow];
         [removeOrcaButton setEnabled:selectedIndex>=0];
     }
 }
@@ -234,7 +234,7 @@
     }
 }
 
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSUInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
     if(aTableView == orcaListView){
         return [[model orcaList] count];

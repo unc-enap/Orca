@@ -58,7 +58,7 @@
     blankView = [[NSView alloc] init];
     
     NSString* key = [NSString stringWithFormat: @"orca.ORTristanFLT%d.selectedtab",[model stationNumber]];
-    int index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
 	
@@ -205,7 +205,7 @@
 
 - (void) portChanged:(NSNotification*)aNote
 {
-    [portField setIntValue:[(ORTristanFLTModel*)model  port]];
+    [portField setIntegerValue:[(ORTristanFLTModel*)model  port]];
 }
 
 - (void) shapingLengthChanged:(NSNotification*)aNote
@@ -229,7 +229,7 @@
 - (void) thresholdChanged:(NSNotification*)aNotification
 {
     int chan = [[[aNotification userInfo] objectForKey:@"Channel"] intValue];
-    [[thresholdMatrix cellWithTag:chan] setIntValue: [model threshold:chan]];
+    [[thresholdMatrix cellWithTag:chan] setIntegerValue: [model threshold:chan]];
 }
 
 - (void) postTriggerTimeChanged:(NSNotification*)aNotification

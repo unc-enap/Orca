@@ -65,7 +65,7 @@
 - (void) processResponse:(NSData*)someData forRequest:(NSDictionary*)lastRequest;
 - (NSDictionary*) resetCommand;
 - (NSDictionary*) errMessgOffCommand;
-- (NSDictionary*) alarmWindowCommand:(unsigned int)nanoseconds;
+- (NSDictionary*) alarmWindowCommand:(unsigned long)nanoseconds;
 - (NSDictionary*) statusCommand;
 - (NSDictionary*) iDCommand;
 - (NSDictionary*) trackModeCommand:(unsigned int)mode;

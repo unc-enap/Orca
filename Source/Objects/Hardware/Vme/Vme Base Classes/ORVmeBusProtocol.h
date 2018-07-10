@@ -29,45 +29,45 @@
 
 - (void) readLongBlock:(unsigned long *) readAddress
 			 atAddress:(unsigned long) vmeAddress
-			 numToRead:(unsigned int) numberLongs
+			 numToRead:(unsigned long) numberLongs
 			withAddMod:(unsigned short) addressModifier
 		 usingAddSpace:(unsigned short) addressSpace;
 
 - (void) readLong:(unsigned long *) readAddress
 		atAddress:(unsigned long) vmeAddress
-	  timesToRead:(unsigned int) numberLongs
+	  timesToRead:(unsigned long) numberLongs
 	   withAddMod:(unsigned short) addModifier
 	usingAddSpace:(unsigned short) addressSpace;
 
 
 - (void) writeLongBlock:(unsigned long *) writeAddress
 			  atAddress:(unsigned long) vmeAddress
-			 numToWrite:(unsigned int) numberLongs
+			 numToWrite:(unsigned long) numberLongs
 			 withAddMod:(unsigned short) addressModifier
 		  usingAddSpace:(unsigned short) addressSpace;
 
 - (void) readByteBlock:(unsigned char *) readAddress
 			 atAddress:(unsigned long) vmeAddress
-			 numToRead:(unsigned int) numberBytes
+			 numToRead:(unsigned long) numberBytes
 			withAddMod:(unsigned short) addressModifier
 		 usingAddSpace:(unsigned short) addressSpace;
 
 - (void) writeByteBlock:(unsigned char *) writeAddress
 			  atAddress:(unsigned long) vmeAddress
-			 numToWrite:(unsigned int) numberBytes
+			 numToWrite:(unsigned long) numberBytes
 			 withAddMod:(unsigned short) addressModifier
 		  usingAddSpace:(unsigned short) addressSpace;
 
 
 - (void) readWordBlock:(unsigned short *) readAddress
 			 atAddress:(unsigned long) vmeAddress
-			 numToRead:(unsigned int) numberWords
+			 numToRead:(unsigned long) numberWords
 			withAddMod:(unsigned short) addressModifier
 		 usingAddSpace:(unsigned short) addressSpace;
 
 - (void) writeWordBlock:(unsigned short *) writeAddress
 			  atAddress:(unsigned long) vmeAddress
-			 numToWrite:(unsigned int) numberWords
+			 numToWrite:(unsigned long) numberWords
 			 withAddMod:(unsigned short) addressModifier
 		  usingAddSpace:(unsigned short) addressSpace;
 

@@ -327,7 +327,7 @@ NSString* ORVmecpuLock = @"ORVmecpuLock";
 
 -(void) readLongBlock:(unsigned long *) readAddress
 			atAddress:(unsigned long) vmeAddress
-			numToRead:(unsigned int) numberLongs
+			numToRead:(unsigned long) numberLongs
 		   withAddMod:(unsigned short) anAddressModifier
 		usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -343,7 +343,7 @@ NSString* ORVmecpuLock = @"ORVmecpuLock";
 
 -(void) writeLongBlock:(unsigned long *) writeAddress
 			 atAddress:(unsigned long) vmeAddress
-			numToWrite:(unsigned int) numberLongs
+			numToWrite:(unsigned long) numberLongs
 			withAddMod:(unsigned short) anAddressModifier
 		 usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -397,7 +397,7 @@ NSString* ORVmecpuLock = @"ORVmecpuLock";
 
 -(void) writeByteBlock:(unsigned char *) writeAddress
 			 atAddress:(unsigned long) vmeAddress
-			numToWrite:(unsigned int) numberBytes
+			numToWrite:(unsigned long) numberBytes
 			withAddMod:(unsigned short) anAddressModifier
 		 usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -414,7 +414,7 @@ NSString* ORVmecpuLock = @"ORVmecpuLock";
 
 -(void) readWordBlock:(unsigned short *) readAddress
 			atAddress:(unsigned long) vmeAddress
-			numToRead:(unsigned int) numberWords
+			numToRead:(unsigned long) numberWords
 		   withAddMod:(unsigned short) anAddressModifier
 		usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -432,7 +432,7 @@ NSString* ORVmecpuLock = @"ORVmecpuLock";
 
 -(void) writeWordBlock:(unsigned short *) writeAddress
 			 atAddress:(unsigned long) vmeAddress
-			numToWrite:(unsigned int) numberWords
+			numToWrite:(unsigned long) numberWords
 			withAddMod:(unsigned short) anAddressModifier
 		 usingAddSpace:(unsigned short) anAddressSpace
 {

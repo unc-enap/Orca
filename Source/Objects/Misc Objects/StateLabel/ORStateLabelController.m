@@ -92,7 +92,7 @@
 #pragma mark •••Actions
 - (IBAction) boolTypeAction:(id)sender
 {
-	[model setBoolType:[sender indexOfSelectedItem]];
+	[model setBoolType:(BOOL)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) trueColorAction:(id)sender

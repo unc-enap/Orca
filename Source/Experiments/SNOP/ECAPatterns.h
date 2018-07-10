@@ -22,12 +22,12 @@
 
 int getECAPatternNSteps(int pattern);
 
-NSMutableArray* eca_pattern_bb();
-NSMutableArray* eca_pattern_solar();
-NSMutableArray* eca_pattern_crates();
-NSMutableArray* eca_pattern_bonus();
-NSMutableArray* eca_pattern_channels();
-NSMutableArray* eca_pattern_hcrates();
+NSMutableArray* eca_pattern_bb(void);
+NSMutableArray* eca_pattern_solar(void);
+NSMutableArray* eca_pattern_crates(void);
+NSMutableArray* eca_pattern_bonus(void);
+NSMutableArray* eca_pattern_channels(void);
+NSMutableArray* eca_pattern_hcrates(void);
 NSMutableArray* getECAPattern(int pattern);
 NSString* getECAPatternName(int pattern);
 

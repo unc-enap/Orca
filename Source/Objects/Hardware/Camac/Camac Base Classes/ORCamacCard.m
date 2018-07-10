@@ -54,12 +54,12 @@ NSString* ORCamacCardSlotChangedNotification 	= @"ORCamacCardSlotChangedNotifica
     return [NSString stringWithFormat:@"station %d",[self stationNumber]];
 }
 
-- (int) slot
+- (NSUInteger) slot
 {
 	return [self tag];
 }
 
-- (int) stationNumber
+- (NSUInteger) stationNumber
 {
     return [self tag]+1;
 }

@@ -60,7 +60,7 @@ NSMutableArray* getECAPattern(int pattern){
 
 }
 
-NSMutableArray* eca_pattern_bb()
+NSMutableArray* eca_pattern_bb(void)
 {
 
     const int nsteps = 8;
@@ -264,7 +264,7 @@ NSMutableArray* eca_pattern_bb()
 
 }
 
-NSMutableArray* eca_pattern_crates()
+NSMutableArray* eca_pattern_crates(void)
 {
 
     const int nsteps = 19;
@@ -708,7 +708,7 @@ NSMutableArray* eca_pattern_crates()
 
 }
 
-NSMutableArray* eca_pattern_bonus()
+NSMutableArray* eca_pattern_bonus(void)
 {
 
     const int nsteps = 9;
@@ -933,7 +933,7 @@ NSMutableArray* eca_pattern_bonus()
 
 }
 
-NSMutableArray* eca_pattern_channels()
+NSMutableArray* eca_pattern_channels(void)
 {
 
     const int nsteps = 32;
@@ -1665,7 +1665,7 @@ NSMutableArray* eca_pattern_channels()
 
 }
 
-NSMutableArray* eca_pattern_hcrates()
+NSMutableArray* eca_pattern_hcrates(void)
 {
 
     const int nsteps = 38;
@@ -2528,7 +2528,7 @@ NSMutableArray* eca_pattern_hcrates()
 
 }
 
-NSMutableArray* eca_pattern_solar()
+NSMutableArray* eca_pattern_solar(void)
 {
 
     const int nsteps = 32;

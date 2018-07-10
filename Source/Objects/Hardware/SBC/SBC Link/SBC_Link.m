@@ -894,12 +894,12 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 	 object:self];
 }
 
-- (unsigned long) addressModifier
+- (unsigned int) addressModifier
 {
     return addressModifier;
 }
 
-- (void) setAddressModifier:(unsigned long)aValue
+- (void) setAddressModifier:(unsigned int)aValue
 {
 	if(aValue == 0)aValue = 0x29; //default
     [[[self undoManager] prepareWithInvocationTarget:self] setAddressModifier:addressModifier];
@@ -982,8 +982,8 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
     [encoder encodeBool:doRange			forKey:@"DoRange"];
 	[encoder encodeInt:loadMode			forKey:@"loadMode"];
 	[encoder encodeBool:initAfterConnect forKey:@"InitAfterConnect"];
-	[encoder encodeInt32:writeValue		forKey:@"WriteValue"];
-	[encoder encodeInt32:writeAddress	forKey:@"WriteAddress"];
+	[encoder encodeInt32:(int32_t)writeValue		forKey:@"WriteValue"];
+	[encoder encodeInt32:(int32_t)writeAddress	forKey:@"WriteAddress"];
 	[encoder encodeObject:filePath		forKey:@"FilePath"];
 	[encoder encodeObject:userName		forKey:@"UserName"];
 	[encoder encodeObject:passWord		forKey:@"PassWord"];
@@ -1570,7 +1570,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 
 - (void) writeLongBlock:(long*) buffer
 			  atAddress:(unsigned long) anAddress
-			 numToWrite:(unsigned int)  numberLongs
+			 numToWrite:(unsigned long)  numberLongs
 {
     id pw = [[SBCPacketWrapper alloc] init];    
 	@try {
@@ -1578,11 +1578,11 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 		SBC_Packet* aPacket = [pw sbcPacket];
 		aPacket->cmdHeader.destination			= kSBC_Process;
 		aPacket->cmdHeader.cmdID				= kSBC_WriteBlock;
-		aPacket->cmdHeader.numberBytesinPayload	= sizeof(SBC_WriteBlockStruct) + numberLongs*sizeof(long);
+		aPacket->cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(SBC_WriteBlockStruct) + numberLongs*sizeof(long));
 		
 		SBC_WriteBlockStruct* writeBlockPtr = (SBC_WriteBlockStruct*)aPacket->payload;
 		writeBlockPtr->address		= (uint32_t)anAddress;
-		writeBlockPtr->numLongs		= numberLongs;
+		writeBlockPtr->numLongs		= (uint32_t)numberLongs;
 		writeBlockPtr++;
 		memcpy(writeBlockPtr,buffer,numberLongs*sizeof(long));
 		
@@ -1600,7 +1600,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 
 - (void) readLongBlock:(long*) buffer
 			 atAddress:(unsigned long) anAddress
-			 numToRead:(unsigned int) numberLongs
+			 numToRead:(unsigned long) numberLongs
 {
     id pw = [[SBCPacketWrapper alloc] init];    
 	@try {
@@ -1612,7 +1612,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 		
 		SBC_ReadBlockStruct* readBlockPtr = (SBC_ReadBlockStruct*)aPacket->payload;
 		readBlockPtr->address		= (uint32_t)anAddress;
-		readBlockPtr->numLongs		= numberLongs;
+		readBlockPtr->numLongs		= (uint32_t)numberLongs;
 		
 		//Do NOT call the combo send:receive method here... we have the locks already in place
 		[self write:socketfd buffer:aPacket]; //write the packet
@@ -1639,7 +1639,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 
 - (void) _readBlock:(void *) buffer
           atAddress:(unsigned long) aVmeAddress
-           numBytes:(unsigned int) numberBytes
+           numBytes:(unsigned long) numberBytes
          withAddMod:(unsigned short) anAddressModifier
       usingAddSpace:(unsigned short) anAddressSpace
        withUnitSize:(unsigned short) unitSize
@@ -1658,7 +1658,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 		readBlockPtr->addressModifier	= anAddressModifier;
 		readBlockPtr->addressSpace		= anAddressSpace;
 		readBlockPtr->unitSize			= unitSize;
-		readBlockPtr->numItems			= numberBytes/unitSize;
+		readBlockPtr->numItems			= (uint32_t)numberBytes/unitSize;
 		
 		//Do NOT call the combo send:receive method here... we have the locks already in place
 		[self write:socketfd buffer:aPacket]; //write the packet
@@ -1683,7 +1683,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 
 - (void) readByteBlock:(unsigned char *) buffer
 			 atAddress:(unsigned long) aVmeAddress
-			 numToRead:(unsigned int) numberBytes
+			 numToRead:(unsigned long) numberBytes
 			withAddMod:(unsigned short) anAddressModifier
 		 usingAddSpace:(unsigned short) anAddressSpace;
 {
@@ -1697,7 +1697,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 
 - (void) readWordBlock:(unsigned short *) buffer
 			 atAddress:(unsigned long) aVmeAddress
-			 numToRead:(unsigned int) numberWords
+			 numToRead:(unsigned long) numberWords
 			withAddMod:(unsigned short) anAddressModifier
 		 usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -1711,7 +1711,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 
 - (void) readLongBlock:(unsigned long *) buffer
 			 atAddress:(unsigned long) aVmeAddress
-			 numToRead:(unsigned int) numberLongs
+			 numToRead:(unsigned long) numberLongs
 			withAddMod:(unsigned short) anAddressModifier
 		 usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -1726,7 +1726,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 
 - (void) _writeBlock:(void *) buffer
            atAddress:(unsigned long) aVmeAddress
-            numBytes:(unsigned int) numberBytes
+            numBytes:(unsigned long) numberBytes
           withAddMod:(unsigned short) anAddressModifier
        usingAddSpace:(unsigned short) anAddressSpace
         withUnitSize:(unsigned short) unitSize
@@ -1739,14 +1739,14 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 		SBC_Packet* aPacket = [pw sbcPacket];
 		aPacket->cmdHeader.destination			= kSBC_Process;
 		aPacket->cmdHeader.cmdID				= kSBC_WriteBlock;
-		aPacket->cmdHeader.numberBytesinPayload	= sizeof(SBC_VmeWriteBlockStruct) + numberBytes;
+		aPacket->cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(SBC_VmeWriteBlockStruct) + numberBytes);
 		
 		SBC_VmeWriteBlockStruct* writeBlockPtr = (SBC_VmeWriteBlockStruct*)aPacket->payload;
 		writeBlockPtr->address			= (uint32_t)aVmeAddress;
 		writeBlockPtr->addressModifier	= anAddressModifier;
 		writeBlockPtr->addressSpace		= anAddressSpace;
 		writeBlockPtr->unitSize			= unitSize;
-		writeBlockPtr->numItems			= numberBytes/unitSize;
+		writeBlockPtr->numItems			= (uint32_t)(numberBytes/unitSize);
 		writeBlockPtr++; //point to the payload
 		memcpy(writeBlockPtr,buffer,numberBytes);
 		
@@ -1769,7 +1769,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 }
 - (void) writeByteBlock:(unsigned char *) buffer
 			  atAddress:(unsigned long) aVmeAddress
-			 numToWrite:(unsigned int) numberBytes
+			 numToWrite:(unsigned long) numberBytes
 			 withAddMod:(unsigned short) anAddressModifier
 		  usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -1784,7 +1784,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 
 - (void) writeWordBlock:(unsigned short *) buffer
 			  atAddress:(unsigned long) aVmeAddress
-			 numToWrite:(unsigned int) numberWords
+			 numToWrite:(unsigned long) numberWords
 			 withAddMod:(unsigned short) anAddressModifier
 		  usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -1798,7 +1798,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 
 - (void) writeLongBlock:(unsigned long *) buffer
 			  atAddress:(unsigned long) aVmeAddress
-			 numToWrite:(unsigned int) numberLongs
+			 numToWrite:(unsigned long) numberLongs
 			 withAddMod:(unsigned short) anAddressModifier
 		  usingAddSpace:(unsigned short) anAddressSpace
 {

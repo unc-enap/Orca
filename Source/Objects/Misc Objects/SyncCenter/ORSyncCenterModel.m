@@ -202,7 +202,7 @@ NSString* ORSyncCenterModelReloadTable      = @"ORSyncCenterModelReloadTable";
 	[anObj moveTo:slotPoint];
 }
 
-- (int) slotForObj:(id)anObj
+- (NSUInteger) slotForObj:(id)anObj
 {
     return [anObj tag];
 }
@@ -226,23 +226,23 @@ NSString* ORSyncCenterModelReloadTable      = @"ORSyncCenterModelReloadTable";
     [self addOrca:entry atIndex:[orcaList count]];
 }
 
-- (void) addOrca:(id)anAddress atIndex:(int)anIndex
+- (void) addOrca:(id)anAddress atIndex:(NSUInteger)anIndex
 {
     if(!orcaList) self.orcaList = [NSMutableArray array];
     if([orcaList count] == 0) anIndex = 0;
     anIndex = MIN(anIndex,[orcaList count]);
     [[[(ORAppDelegate*)[NSApp delegate] undoManager] prepareWithInvocationTarget:self] removeOrcaAtIndex:anIndex];
     [orcaList insertObject:anAddress atIndex:anIndex];
-    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:anIndex] forKey:@"Index"];
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:anIndex] forKey:@"Index"];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORSyncCenterOrcaAdded object:self userInfo:userInfo];
 }
 
-- (void) removeOrcaAtIndex:(int) anIndex
+- (void) removeOrcaAtIndex:(NSUInteger) anIndex
 {
     id anOrca = [orcaList objectAtIndex:anIndex];
     [[[(ORAppDelegate*)[NSApp delegate] undoManager] prepareWithInvocationTarget:self] addOrca:anOrca atIndex:anIndex];
     [orcaList removeObjectAtIndex:anIndex];
-    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:anIndex] forKey:@"Index"];
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:anIndex] forKey:@"Index"];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORSyncCenterOrcaRemoved object:self userInfo:userInfo];
 }
 - (NSArray*) orcaList
@@ -250,7 +250,7 @@ NSString* ORSyncCenterModelReloadTable      = @"ORSyncCenterModelReloadTable";
     return orcaList;
 }
 
-- (int)  orcaCount
+- (NSUInteger)  orcaCount
 {
     return [orcaList count];
 }
@@ -425,7 +425,7 @@ NSString* ORSyncCommanderStateChanged     = @"ORSyncCommanderStateChanged";
         case kSyncCommander_CheckListCount:
             response = [remoteOpStatus objectForKey:@"listCount"];
             if(response){
-                int countToMatch;
+                NSUInteger countToMatch;
                 if(workPhase==kDoingOnCallList) countToMatch = [onCallList count];
                 else                            countToMatch = [[ORAlarmCollection sharedAlarmCollection] eMailCount];
                 if([response intValue] != countToMatch){

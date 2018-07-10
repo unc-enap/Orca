@@ -2023,7 +2023,7 @@ static NSString* DT5725StartStopRunModeString[4] = {
 }
 
 //returns 0 if success; -1 if request fails, and number of bytes returned by digitizer otherwise
-- (int) readFifo:(char*)readBuffer numBytesToRead:(unsigned long)    numBytes
+- (int) readFifo:(char*)readBuffer numBytesToRead:(unsigned int)    numBytes
 {
     unsigned long fifoAddress = 0x0000;
     
@@ -2031,7 +2031,7 @@ static NSString* DT5725StartStopRunModeString[4] = {
     int maxBLTSize = 0x100000; //8 MBytes
     numBytes = (numBytes + 7) & ~7UL;
 
-    int np = numBytes/maxBLTSize;
+    unsigned long np = numBytes/maxBLTSize;
     if(np*maxBLTSize != numBytes)np++;
 
     //request is an array of readLongBlock like requests
@@ -2129,17 +2129,17 @@ static NSString* DT5725StartStopRunModeString[4] = {
     [self setTrigOnUnderThreshold:      [aDecoder decodeBoolForKey:     @"trigOnUnderThreshold"]];
     [self setTestPatternEnabled:        [aDecoder decodeBoolForKey:     @"testPatternEnabled"]];
     [self setTrigOverlapEnabled:        [aDecoder decodeBoolForKey:     @"trigOverlapEnabled"]];
-    [self setEventSize:                 [aDecoder decodeIntForKey:      @"eventSize"]];
+    [self setEventSize:                 [aDecoder decodeInt32ForKey:    @"eventSize"]];
     [self setClockSource:               [aDecoder decodeBoolForKey:     @"clockSource"]];
     [self setCountAllTriggers:          [aDecoder decodeBoolForKey:     @"countAllTriggers"]];
     [self setMemFullMode:               [aDecoder decodeBoolForKey:     @"memFullMode"]];
     [self setStartStopRunMode:          [aDecoder decodeBoolForKey:     @"startStopRunMode"]];
     [self setSoftwareTrigEnabled:       [aDecoder decodeBoolForKey:     @"softwareTrigEnabled"]];
     [self setExternalTrigEnabled:       [aDecoder decodeBoolForKey:     @"externalTrigEnabled"]];
-    [self setTriggerSourceMask:         [aDecoder decodeIntForKey:      @"triggerSourceMask"]];
+    [self setTriggerSourceMask:         [aDecoder decodeInt32ForKey:    @"triggerSourceMask"]];
     [self setExtTrigOutEnabled:         [aDecoder decodeBoolForKey:     @"fpExternalTrigEnabled"]];
     [self setSwTrigOutEnabled:          [aDecoder decodeBoolForKey:     @"fpSoftwareTrigEnabled"]];
-    [self setTriggerOutMask:            [aDecoder decodeIntForKey:      @"triggerOutMask"]];
+    [self setTriggerOutMask:            [aDecoder decodeInt32ForKey:      @"triggerOutMask"]];
     [self setTriggerOutLogic:           [aDecoder decodeIntForKey:      @"triggerOutLogic"]];
     [self setTrigOutCoincidenceLevel:   [aDecoder decodeIntForKey:      @"trigOutCoincidenceLevel"]];
     [self setPostTriggerSetting:        [aDecoder decodeInt32ForKey:    @"postTriggerSetting"]];
@@ -2192,20 +2192,20 @@ static NSString* DT5725StartStopRunModeString[4] = {
     [anEncoder encodeBool:trigOnUnderThreshold      forKey:@"trigOnUnderThreshold"];
     [anEncoder encodeBool:testPatternEnabled        forKey:@"testPatternEnabled"];
     [anEncoder encodeBool:trigOverlapEnabled        forKey:@"trigOverlapEnabled"];
-    [anEncoder encodeInt:eventSize                  forKey:@"eventSize"];
+    [anEncoder encodeInt32:(int32_t)eventSize       forKey:@"eventSize"];
     [anEncoder encodeBool:clockSource               forKey:@"clockSource"];
     [anEncoder encodeBool:countAllTriggers          forKey:@"countAllTriggers"];
     [anEncoder encodeBool:startStopRunMode          forKey:@"startStopRunMode"];
     [anEncoder encodeBool:memFullMode               forKey:@"memFullMode"];
     [anEncoder encodeBool:softwareTrigEnabled       forKey:@"softwareTrigEnabled"];
     [anEncoder encodeBool:externalTrigEnabled       forKey:@"externalTrigEnabled"];
-    [anEncoder encodeInt:triggerSourceMask          forKey:@"triggerSourceMask"];
+    [anEncoder encodeInt32:(int32_t)triggerSourceMask forKey:@"triggerSourceMask"];
     [anEncoder encodeBool:swTrigOutEnabled          forKey:@"swTrigOutEnabled"];
     [anEncoder encodeBool:extTrigOutEnabled         forKey:@"extTrigOutEnabled"];
-    [anEncoder encodeInt:triggerOutMask             forKey:@"triggerOutMask"];
+    [anEncoder encodeInt32:(int32_t)triggerOutMask  forKey:@"triggerOutMask"];
     [anEncoder encodeInt:triggerOutLogic            forKey:@"triggerOutLogic"];
     [anEncoder encodeInt:trigOutCoincidenceLevel    forKey:@"trigOutCoincidenceLevel"];
-    [anEncoder encodeInt32:postTriggerSetting       forKey:@"postTriggerSetting"];
+    [anEncoder encodeInt32:(int32_t)postTriggerSetting       forKey:@"postTriggerSetting"];
     [anEncoder encodeInt:enabledMask                forKey:@"enabledMask"];
     [anEncoder encodeBool:fpLogicType               forKey:@"fpLogicType"];
     [anEncoder encodeBool:fpTrigInSigEdgeDisable    forKey:@"fpTrigInSigEdgeDisable"];
@@ -2218,7 +2218,7 @@ static NSString* DT5725StartStopRunModeString[4] = {
     [anEncoder encodeInt:fpHeaderPattern            forKey:@"fpHeaderPattern"];
     [anEncoder encodeBool:fanSpeedMode              forKey:@"fanSpeedMode"];
     [anEncoder encodeInt:almostFullLevel            forKey:@"almostFullLevel"];
-    [anEncoder encodeInt32:runDelay                 forKey:@"runDelay"];
+    [anEncoder encodeInt32:(int32_t)runDelay        forKey:@"runDelay"];
     [anEncoder encodeInt:coincidenceWindow          forKey:@"coincidenceWindow"];
 	[anEncoder encodeInt:coincidenceLevel           forKey:@"coincidenceLevel"];
     [anEncoder encodeObject:waveFormRateGroup       forKey:@"waveFormRateGroup"];
@@ -2244,20 +2244,20 @@ static NSString* DT5725StartStopRunModeString[4] = {
     [objDictionary setObject:[NSNumber numberWithInt:trigOnUnderThreshold]      forKey:@"trigOnUnderThreshold"];
     [objDictionary setObject:[NSNumber numberWithInt:testPatternEnabled]        forKey:@"testPatternEnabled"];
     [objDictionary setObject:[NSNumber numberWithInt:trigOverlapEnabled]        forKey:@"trigOverlapEnabled"];
-    [objDictionary setObject:[NSNumber numberWithInt:eventSize]                 forKey:@"eventSize"];
+    [objDictionary setObject:[NSNumber numberWithInteger:eventSize]             forKey:@"eventSize"];
     [objDictionary setObject:[NSNumber numberWithInt:clockSource]               forKey:@"clockSource"];
     [objDictionary setObject:[NSNumber numberWithInt:countAllTriggers]          forKey:@"countAllTriggers"];
     [objDictionary setObject:[NSNumber numberWithInt:startStopRunMode]          forKey:@"startStopRunMode"];
     [objDictionary setObject:[NSNumber numberWithInt:memFullMode]               forKey:@"memFullMode"];
     [objDictionary setObject:[NSNumber numberWithInt:softwareTrigEnabled]       forKey:@"softwareTrigEnabled"];
     [objDictionary setObject:[NSNumber numberWithInt:externalTrigEnabled]       forKey:@"externalTrigEnabled"];
-    [objDictionary setObject:[NSNumber numberWithInt:triggerSourceMask]         forKey:@"triggerSourceMask"];
+    [objDictionary setObject:[NSNumber numberWithInteger:triggerSourceMask]     forKey:@"triggerSourceMask"];
     [objDictionary setObject:[NSNumber numberWithInt:swTrigOutEnabled]          forKey:@"swTrigOutEnabled"];
     [objDictionary setObject:[NSNumber numberWithInt:extTrigOutEnabled]         forKey:@"extTrigOutEnabled"];
-    [objDictionary setObject:[NSNumber numberWithInt:triggerOutMask]            forKey:@"triggerOutMask"];
+    [objDictionary setObject:[NSNumber numberWithInteger:triggerOutMask]        forKey:@"triggerOutMask"];
     [objDictionary setObject:[NSNumber numberWithInt:triggerOutLogic]           forKey:@"triggerOutLogic"];
     [objDictionary setObject:[NSNumber numberWithInt:trigOutCoincidenceLevel]   forKey:@"trigOutCoincidenceLevel"];
-    [objDictionary setObject:[NSNumber numberWithInt:postTriggerSetting]        forKey:@"postTriggerSetting"];
+    [objDictionary setObject:[NSNumber numberWithInteger:postTriggerSetting]    forKey:@"postTriggerSetting"];
     [objDictionary setObject:[NSNumber numberWithInt:enabledMask]               forKey:@"enabledMask"];
     [objDictionary setObject:[NSNumber numberWithInt:fpLogicType]               forKey:@"fpLogicType"];
     [objDictionary setObject:[NSNumber numberWithInt:fpTrigInSigEdgeDisable]    forKey:@"fpTrigInSigEdgeDisable"];
@@ -2270,7 +2270,7 @@ static NSString* DT5725StartStopRunModeString[4] = {
     [objDictionary setObject:[NSNumber numberWithInt:fpHeaderPattern]           forKey:@"fpHeaderPatter"];
     [objDictionary setObject:[NSNumber numberWithInt:fanSpeedMode]              forKey:@"fanSpeedMode"];
     [objDictionary setObject:[NSNumber numberWithInt:almostFullLevel]           forKey:@"almostFullLevel"];
-    [objDictionary setObject:[NSNumber numberWithInt:runDelay]                  forKey:@"runDelay"];
+    [objDictionary setObject:[NSNumber numberWithInteger:runDelay]              forKey:@"runDelay"];
     [objDictionary setObject:[NSNumber numberWithInt:coincidenceWindow]         forKey:@"coincidenceWindow"];
     [objDictionary setObject:[NSNumber numberWithInt:coincidenceLevel]          forKey:@"coincidenceLevel"];
     

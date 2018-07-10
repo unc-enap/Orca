@@ -34,7 +34,7 @@
 
 - (void) stateChanged:(NSNotification*)aNote
 {
-	if([model state]){
+	if([(ORProcessElementModel*)model state]){
 		[runVetoStateField setTextColor:[NSColor redColor]];
 		[runVetoStateField setStringValue:@"Run Is Vetoed"];
 	}

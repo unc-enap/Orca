@@ -53,9 +53,9 @@
 - (void)updateMixedStateCheckbox:(NSButton *)control setting:(int)inValue;
 - (void)updateRadioCluster:(NSMatrix *)control setting:(int)inValue;
 - (void)updatePopUpButton:(NSPopUpButton *)control setting:(int)inValue;
-- (void)updateSlider:(NSSlider *)control setting:(int)inValue;
-- (void)updateStepper:(NSStepper *)control setting:(int)inValue;
-- (void)updateIntText:(NSTextField *)control setting:(int)inValue;
+- (void)updateSlider:(NSSlider *)control setting:(NSInteger)inValue;
+- (void)updateStepper:(NSStepper *)control setting:(NSInteger)inValue;
+- (void)updateIntText:(NSTextField *)control setting:(NSInteger)inValue;
 - (void) updateValueMatrix:(NSMatrix*)aMatrix getter:(SEL)aGetter;
 - (void) incModelSortedBy:(SEL)aSelector;
 - (void) decModelSortedBy:(SEL)aSelector;

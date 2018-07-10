@@ -39,12 +39,12 @@ NSString* ORNcdTubeMapReadNotification        = @"ORNcdTubeMapReadNotification";
 NSString* ORNcdTubeAddedNotification          = @"ORNcdTubeAddedNotification";
 NSString* ORNcdTubeRemovedNotification        = @"ORNcdTubeRemovedNotification";
 
-int sortUpIntFunction(id tube1,id tube2, void* context){ return [tube1 compareIntTo:tube2 usingKey:context];}
-int sortDnIntFunction(id tube1,id tube2, void* context){return [tube2 compareIntTo:tube1 usingKey:context];}
-int sortUpStringFunction(id tube1,id tube2, void* context){ return [tube1 compareStringTo:tube2 usingKey:context];}
-int sortDnStringFunction(id tube1,id tube2, void* context){return [tube2 compareStringTo:tube1 usingKey:context];}
-int sortUpFloatFunction(id tube1,id tube2, void* context){ return [tube1 compareFloatTo:tube2 usingKey:context];}
-int sortDnFloatFunction(id tube1,id tube2, void* context){return [tube2 compareFloatTo:tube1 usingKey:context];}
+NSInteger sortUpIntFunction(id tube1,id tube2, void* context){ return [tube1 compareIntTo:tube2 usingKey:context];}
+NSInteger sortDnIntFunction(id tube1,id tube2, void* context){return [tube2 compareIntTo:tube1 usingKey:context];}
+NSInteger sortUpStringFunction(id tube1,id tube2, void* context){ return [tube1 compareStringTo:tube2 usingKey:context];}
+NSInteger sortDnStringFunction(id tube1,id tube2, void* context){return [tube2 compareStringTo:tube1 usingKey:context];}
+NSInteger sortUpFloatFunction(id tube1,id tube2, void* context){ return [tube1 compareFloatTo:tube2 usingKey:context];}
+NSInteger sortDnFloatFunction(id tube1,id tube2, void* context){return [tube2 compareFloatTo:tube1 usingKey:context];}
 
 static NcdDetector *ncdInstance = nil;
 
@@ -130,7 +130,7 @@ static NcdDetector *ncdInstance = nil;
     [tubes autorelease];
     tubes=[newTubes retain];
 }
-- (int) numberOfTubes
+- (NSUInteger) numberOfTubes
 {
     return [tubes count];
 }
@@ -364,7 +364,7 @@ static NSString *ORDetectorMapFile	= @"ORDetectorMapFile";
 - (void) saveMuxMementos
 {
     int i;
-    int n = [muxBoxes count];
+    NSUInteger n = [muxBoxes count];
     if(!muxMementos){
         muxMementos = [[NSMutableArray alloc] init];
         for(i=0;i<n;i++){
@@ -381,7 +381,7 @@ static NSString *ORDetectorMapFile	= @"ORDetectorMapFile";
 {
     
     int i;
-    int n = [muxBoxes count];
+    NSUInteger n = [muxBoxes count];
     for(i=0;i<n;i++){
         id mux = [muxBoxes objectAtIndex:i];
         [mux restoreFromMemento:[muxMementos objectAtIndex:i]];
@@ -394,7 +394,7 @@ static NSString *ORDetectorMapFile	= @"ORDetectorMapFile";
 - (void) saveMuxMementos:(NSMutableArray*)anArray
 {
     int i;
-    int n = [muxBoxes count];
+    NSUInteger n = [muxBoxes count];
 	[anArray removeAllObjects];
 	for(i=0;i<n;i++){
 		[anArray addObject:[NSNull null]];
@@ -409,7 +409,7 @@ static NSString *ORDetectorMapFile	= @"ORDetectorMapFile";
 - (void) restoreMuxMementos:(NSArray*)anArray
 {
     int i;
-    int n = [muxBoxes count];
+    NSUInteger n = [muxBoxes count];
     for(i=0;i<n;i++){
         id mux = [muxBoxes objectAtIndex:i];
         [mux restoreFromMemento:[anArray objectAtIndex:i]];
@@ -419,7 +419,7 @@ static NSString *ORDetectorMapFile	= @"ORDetectorMapFile";
 - (void) saveShaperGainMementos:(NSMutableArray*)anArray
 {
     int i;
-    int n = [shaperCards count];
+    NSUInteger n = [shaperCards count];
 	[anArray removeAllObjects];
 	for(i=0;i<n;i++){
 		[anArray addObject:[NSNull null]];
@@ -434,7 +434,7 @@ static NSString *ORDetectorMapFile	= @"ORDetectorMapFile";
 - (void) restoreShaperGainMementos:(NSArray*)anArray
 {
     int i;
-    int n = [shaperCards count];
+    NSUInteger n = [shaperCards count];
     for(i=0;i<n;i++){
         id shaper = [shaperCards objectAtIndex:i];
         [shaper restoreGainsFromMemento:[anArray objectAtIndex:i]];
@@ -444,7 +444,7 @@ static NSString *ORDetectorMapFile	= @"ORDetectorMapFile";
 - (void) saveShaperThresholdMementos:(NSMutableArray*)anArray
 {
     int i;
-    int n = [shaperCards count];
+    NSUInteger n = [shaperCards count];
 	[anArray removeAllObjects];
 	for(i=0;i<n;i++){
 		[anArray addObject:[NSNull null]];
@@ -459,7 +459,7 @@ static NSString *ORDetectorMapFile	= @"ORDetectorMapFile";
 - (void) restoreShaperThresholdMementos:(NSArray*)anArray
 {
     int i;
-    int n = [shaperCards count];
+    NSUInteger n = [shaperCards count];
     for(i=0;i<n;i++){
         id shaper = [shaperCards objectAtIndex:i];
         [shaper restoreThresholdsFromMemento:[anArray objectAtIndex:i]];
@@ -469,7 +469,7 @@ static NSString *ORDetectorMapFile	= @"ORDetectorMapFile";
 - (void) setMuxEfficiency:(float)efficiency
 {
     int i;
-    int n = [muxBoxes count];
+    NSUInteger n = [muxBoxes count];
     for(i=0;i<n;i++){
         id mux = [muxBoxes objectAtIndex:i];
 		
@@ -497,7 +497,7 @@ static NSString *ORDetectorMapFile	= @"ORDetectorMapFile";
     NSString* contents = [NSString stringWithContentsOfFile:[path stringByExpandingTildeInPath] encoding:NSASCIIStringEncoding error:nil];
     if(contents){
         NSArray* theLines = [contents lines];
-        int numLines = [theLines count];
+        NSUInteger numLines = [theLines count];
         int chan;
         [[self undoManager] disableUndoRegistration];
         NSCharacterSet* delimiters = [NSCharacterSet whitespaceAndNewlineCharacterSet]; 
@@ -506,7 +506,7 @@ static NSString *ORDetectorMapFile	= @"ORDetectorMapFile";
             if(chan<13){
                 NSArray* theValues = [[theLines objectAtIndex:chan] tokensSeparatedByCharactersFromSet:delimiters];
                 int box;
-                int numBoxes = [muxBoxes count];
+                NSUInteger numBoxes = [muxBoxes count];
                 for(box=0;box<numBoxes;box++){
                     id mux = [muxBoxes objectAtIndex:box];
                     int boxIndex = [mux muxID];
@@ -612,9 +612,9 @@ static NSString *ORDetectorMapFile	= @"ORDetectorMapFile";
     [theFileManager createFileAtPath:newFileName contents:theContents attributes:nil];
 }
 
-- (void) removeTubeAtIndex:(int)index
+- (void) removeTubeAtIndex:(NSUInteger)index
 {
-    if(index>=0 && index<[tubes count]){
+    if(index<[tubes count]){
         [[[self undoManager] prepareWithInvocationTarget:self] addTube:[tubes objectAtIndex:index] atIndex:index];
         [tubes removeObjectAtIndex:index];
         [[NSNotificationCenter defaultCenter]
@@ -624,7 +624,7 @@ static NSString *ORDetectorMapFile	= @"ORDetectorMapFile";
     }
 }
 
-- (void) addTube:(NcdTube*)aTube atIndex:(int)index
+- (void) addTube:(NcdTube*)aTube atIndex:(NSUInteger)index
 {
     if(aTube){
         [[[self undoManager] prepareWithInvocationTarget:self] removeTubeAtIndex:index];

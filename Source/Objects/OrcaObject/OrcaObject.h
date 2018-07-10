@@ -211,12 +211,12 @@ extern NSString* ORObjArrayPtrPBType;
 
 @interface OrcaObject (scriptingAdditions)
 - (long) longValue;
-- (int) second;
-- (int) minute; 
-- (int) hour; 
-- (int) day; 
-- (int) month; 
-- (int) year; 
+- (NSInteger) second;
+- (NSInteger) minute;
+- (NSInteger) hour;
+- (NSInteger) day;
+- (NSInteger) month;
+- (NSInteger) year; 
 @end
 
 @interface OrcaObject (compilerErrorFix)

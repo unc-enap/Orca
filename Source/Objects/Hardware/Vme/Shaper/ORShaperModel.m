@@ -1318,15 +1318,15 @@ NSString* ORShaperSettingsLock							= @"ORShaperSettingsLock";
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id = kShaper; //should be unique
-	configStruct->card_info[index].hw_mask[0] = dataId; //better be unique
-	configStruct->card_info[index].slot 	 = [self slot];
-	configStruct->card_info[index].crate 	 = [self crateNumber];
-	configStruct->card_info[index].add_mod 	 = [self addressModifier];
-	configStruct->card_info[index].base_add  = [self baseAddress];
-	configStruct->card_info[index].deviceSpecificData[0] = onlineMask;
-	configStruct->card_info[index].deviceSpecificData[1] = register_offsets[kConversionStatusRegister];
-	configStruct->card_info[index].deviceSpecificData[2] = register_offsets[kADC1OutputRegister];
-	configStruct->card_info[index].deviceSpecificData[3] = shipTimeStamp;
+	configStruct->card_info[index].hw_mask[0] = (uint32_t)dataId; //better be unique
+	configStruct->card_info[index].slot 	  = (uint32_t)[self slot];
+	configStruct->card_info[index].crate 	  = (uint32_t)[self crateNumber];
+	configStruct->card_info[index].add_mod 	  = (uint32_t)[self addressModifier];
+	configStruct->card_info[index].base_add   = (uint32_t)[self baseAddress];
+	configStruct->card_info[index].deviceSpecificData[0] = (uint32_t)onlineMask;
+	configStruct->card_info[index].deviceSpecificData[1] = (uint32_t)register_offsets[kConversionStatusRegister];
+	configStruct->card_info[index].deviceSpecificData[2] = (uint32_t)register_offsets[kADC1OutputRegister];
+	configStruct->card_info[index].deviceSpecificData[3] = (uint32_t)shipTimeStamp;
 	configStruct->card_info[index].num_Trigger_Indexes = 0;
 	
 	configStruct->card_info[index].next_Card_Index 	= index+1;	
@@ -1390,7 +1390,7 @@ static NSString *ORShaperDisplayRaw 		= @"ORShaper DisplayRaw";
 		[self setOnlineMask:0xff];
     }
     [self setScanStart:[decoder decodeInt32ForKey:ORShaperScanStart]];
-    [self setScanDelta:[decoder decodeIntForKey:ORShaperScanDelta]];
+    [self setScanDelta:[decoder decodeInt32ForKey:ORShaperScanDelta]];
     [self setScanNumber:[decoder decodeIntForKey:ORShaperScanNumber]];
 	
     [self setAdcRateGroup:[decoder decodeObjectForKey:ORShaperAdcRateGroup]];
@@ -1432,8 +1432,8 @@ static NSString *ORShaperDisplayRaw 		= @"ORShaper DisplayRaw";
     [encoder encodeInt:[self scalerMask]		forKey:ORShaperScalerMask];
     [encoder encodeInt:[self onlineMask]		forKey:ORShaperOnlineMask];
 	
-    [encoder encodeInt32:[self scanStart]		forKey:ORShaperScanStart];
-    [encoder encodeInt:[self scanDelta]			forKey:ORShaperScanDelta];
+    [encoder encodeInt32:(int32_t)[self scanStart]		forKey:ORShaperScanStart];
+    [encoder encodeInt:(int32_t)[self scanDelta]			forKey:ORShaperScanDelta];
     [encoder encodeInt:[self scanNumber]		forKey:ORShaperScanNumber];
 	
     [encoder encodeObject:[self adcRateGroup] forKey:ORShaperAdcRateGroup];

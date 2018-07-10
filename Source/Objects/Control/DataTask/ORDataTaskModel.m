@@ -781,14 +781,14 @@ static NSString *ORDataTaskTimeScaler		= @"ORDataTaskTimeScaler";
             if([objGuardian isKindOfClass:NSClassFromString(@"ORCrate")]){
                 [objDictionary setObject:[NSNumber numberWithInt:[anObj crateNumber]] forKey:@"crate"];
                 if([anObj respondsToSelector:@selector(stationNumber)]){
-                    [objDictionary setObject:[NSNumber numberWithInt:[anObj stationNumber]] forKey:@"station"];
+                    [objDictionary setObject:[NSNumber numberWithInteger:[anObj stationNumber]] forKey:@"station"];
                 }
                 else if([anObj respondsToSelector:@selector(slot)]){
                     [objDictionary setObject:[NSNumber numberWithInt:[anObj slot]] forKey:@"slot"];
                 }
             }
             else {
-                [objDictionary setObject:[NSNumber numberWithInt:[anObj uniqueIdNumber]] forKey:@"uniqueID"];
+                [objDictionary setObject:[NSNumber numberWithInteger:[anObj uniqueIdNumber]] forKey:@"uniqueID"];
             }
             someChildren = [anObj children];
             if([someChildren count]){

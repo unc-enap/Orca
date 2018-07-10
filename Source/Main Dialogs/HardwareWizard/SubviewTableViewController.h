@@ -83,6 +83,6 @@ and will forward all data source and delegate methods to the original owner.
 // The view retreived will not be retained, and will be resized to fit the
 // cell in the table view. Please adjust the row height and column width in
 // ib (or in code) to make sure that it is appropriate for the views used.
-- (NSView *) tableView:(NSTableView *) tableView viewForRow:(int) row;
+- (NSView *) tableView:(NSTableView *) tableView viewForRow:(NSUInteger) row;
 
 @end

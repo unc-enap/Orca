@@ -135,7 +135,7 @@ NSString* ORSynClockIDChanged                   = @"ORSynClockIDChanged";
 
 - (unsigned long) alarmWindow
 {
-    int err = alarmWindow % 50;  // make the alarm windown divisible by 50 according to datasheet..
+    unsigned long err = alarmWindow % 50;  // make the alarm windown divisible by 50 according to datasheet..
     if (err > 25){
         err = 50 - err;
         alarmWindow += err;
@@ -312,12 +312,12 @@ NSString* ORSynClockIDChanged                   = @"ORSynClockIDChanged";
     return commandDict;
 }
 
-- (NSDictionary*) alarmWindowCommand:(unsigned int)nanoseconds
+- (NSDictionary*) alarmWindowCommand:(unsigned long)nanoseconds
 {
     char cmdData[9];
     cmdData[0] = 'A';
     cmdData[1] = 'W';
-    sprintf(&cmdData[2], "%.5u", nanoseconds);
+    sprintf(&cmdData[2], "%.5lu", nanoseconds);
     cmdData[7] = '\r';
     cmdData[8] = '\n';
     //NSLog(@"alarmWindowCommand: %9s \n", cmdData);
@@ -411,7 +411,7 @@ NSString* ORSynClockIDChanged                   = @"ORSynClockIDChanged";
     [self setTrackMode:  [decoder decodeIntForKey:  @"trackMode"]];
     [self setSyncMode:   [decoder decodeIntForKey:  @"syncMode"]];
     
-    unsigned long aValue = [decoder decodeInt32ForKey:@"alarmWindow"];
+    int32_t aValue = [decoder decodeInt32ForKey:@"alarmWindow"];
     if(aValue == 0)aValue = 2000; //0 is illegal and means first start, so set to default value
     [self setAlarmWindow:aValue];
     

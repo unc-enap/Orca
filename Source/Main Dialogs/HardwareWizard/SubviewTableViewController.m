@@ -121,7 +121,7 @@
     }
 }
 
-- (BOOL) tableView:(NSTableView *) tableView shouldEditTableColumn:(NSTableColumn *) tableColumn row:(int) row
+- (BOOL) tableView:(NSTableView *) tableView shouldEditTableColumn:(NSTableColumn *) tableColumn row:(NSInteger) row
 {
     if ([self isValidDelegateForSelector: _cmd]){
 	return [[self delegate] tableView: tableView shouldEditTableColumn: tableColumn row: row];
@@ -131,7 +131,7 @@
     }
 }
 
-- (BOOL) tableView:(NSTableView *) tableView shouldSelectRow:(int) row
+- (BOOL) tableView:(NSTableView *) tableView shouldSelectRow:(NSInteger) row
 {
     if ([self isValidDelegateForSelector: _cmd]){
 	return [[self delegate] tableView: tableView shouldSelectRow: row];
@@ -151,7 +151,7 @@
     }
 }
 
-- (void) tableView:(NSTableView *) tableView willDisplayCell:(id) cell forTableColumn:(NSTableColumn *) tableColumn row:(int) row
+- (void) tableView:(NSTableView *) tableView willDisplayCell:(id) cell forTableColumn:(NSTableColumn *) tableColumn row:(NSInteger) row
 {
     if (tableColumn == subviewTableColumn){
         // This is one of the few interesting things going on in this class. This is where

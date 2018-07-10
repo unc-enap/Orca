@@ -35,13 +35,13 @@
 #pragma mark ***Utilities
 - (NSArray*) orcaList;
 - (void) addOrca;
-- (void) addOrca:(id)anAddress atIndex:(int)anIndex;
-- (void) removeOrcaAtIndex:(int) anIndex;
-- (int)  orcaCount;
+- (void) addOrca:(id)anAddress atIndex:(NSUInteger)anIndex;
+- (void) removeOrcaAtIndex:(NSUInteger) anIndex;
+- (NSUInteger)  orcaCount;
 - (void) setIndex:(int)anIndex value:(id)anObject forKey:(id)aKey;
 - (void) syncNow;
 - (void) setStatus:(int)index state:(NSString*)aState;
-- (int)  orcaCount;
+- (NSUInteger)  orcaCount;
 - (BOOL) okToSyncOnCallList:(int)index;
 - (BOOL) okToSyncAlarmList:(int)index;
 - (void) doDelayedSync:(NSNotification*)aNote;
@@ -60,7 +60,7 @@
 - (int) slotAtPoint:(NSPoint)aPoint;
 - (NSPoint) pointForSlot:(int)aSlot;
 - (void) place:(id)anObj intoSlot:(int)aSlot;
-- (int) slotForObj:(id)anObj;
+- (NSUInteger) slotForObj:(id)anObj;
 - (int) numberSlotsNeededFor:(id)anObj;
 
 @property (retain, nonatomic) NSMutableArray* orcaList;

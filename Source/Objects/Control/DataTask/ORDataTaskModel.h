@@ -128,7 +128,7 @@ extern NSString* ORDataTaskCycleRateChangedNotification;
 extern NSString* ORDataTaskModelTimerEnableChanged;
 
 @interface NSObject (ORDataTaskModel)
-- (int) stationNumber;
+- (NSUInteger) stationNumber;
 - (int) slot;
 - (int) crateNumber;
 - (void) runIsStopping:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;

@@ -83,7 +83,7 @@
 
 - (void) updateTuningRunCB:(NSNotification *)aNote
 {
-    [tellieExpertTuningCb setState:[model tuningRun]];
+    [tellieExpertTuningCb setState:[[model tuningRun]boolValue]];
 }
 
 - (IBAction) serverSettingsChanged:(id)sender {

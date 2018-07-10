@@ -60,7 +60,7 @@
 - (NSMutableArray*) tubes;
 - (void) setTubes:(NSMutableArray*)newTubes;
 - (NcdTube*) tube:(int)index;
-- (int) numberOfTubes;
+- (NSUInteger) numberOfTubes;
 - (ORTimeRate*) shaperTotalRate;
 - (void) setShaperTotalRate:(ORTimeRate*)newShaperTotalRate;
 - (ORTimeRate*) muxTotalRate;
@@ -81,8 +81,8 @@
 - (id)loadWithCoder:(NSCoder*)decoder;
 - (void)saveWithCoder:(NSCoder*)encoder;
 
-- (void) removeTubeAtIndex:(int)index;
-- (void) addTube:(NcdTube*)aTube atIndex:(int)index;
+- (void) removeTubeAtIndex:(NSUInteger)index;
+- (void) addTube:(NcdTube*)aTube atIndex:(NSUInteger)index;
 - (float) shaperRate;
 - (float) muxRate;
 

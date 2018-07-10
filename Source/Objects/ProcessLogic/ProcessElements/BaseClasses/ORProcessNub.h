@@ -20,14 +20,14 @@
 
 
 
-
+@class ORProcessElementModel;
 
 @interface ORProcessNub : NSObject
 {
-    id guardian;
+    ORProcessElementModel* guardian;
 }
 
-- (void) setGuardian:(id)aGuardian;
+- (void) setGuardian:(ORProcessElementModel*)aGuardian;
 - (id) eval;
 - (void) processIsStopping;
 - (void) processIsStarting;
