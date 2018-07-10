@@ -401,14 +401,14 @@ NSString* ORWG1220PulserLock = @"ORWG1220PulserLock";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORWG1220PulserModelAmplitudeChanged object:self];
 }
 
-- (int) signalForm
+- (enum SignalForms) signalForm
 {
     return signalForm;
 }
 
 
 
-- (void) setSignalForm:(int)aSignalForm
+- (void) setSignalForm:(enum SignalForms)aSignalForm
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setSignalForm:signalForm];
 	signalForm = aSignalForm;
@@ -543,14 +543,14 @@ NSString* ORWG1220PulserLock = @"ORWG1220PulserLock";
           // }
         }
   }
-  unsigned int entries = [arbWaveform count];
+  NSUInteger entries = [arbWaveform count];
   if([self verbose]){
     NSLog(@"Waveform data (%d Entries): \n", entries);
     NSLog(@"last two entries: %f %f \n\n", [arbWaveform[entries - 2] floatValue], [arbWaveform[entries - 1] floatValue]);
   }
 }
 - (void) commitWaveform{
-  unsigned int entries = [arbWaveform count];
+  NSUInteger entries = [arbWaveform count];
   if(entries < 4 || entries > 32768){
     NSLog(@"Warning: Number of datapoints: %d cannot commit waveform! (min 4, max 32768; ASCII float list separated by newlines) \n");
     return;
@@ -638,7 +638,7 @@ NSString* ORWG1220PulserLock = @"ORWG1220PulserLock";
   return [NSData dataWithBytes:cmdData length:7];
 }
 
-- (NSData*) checkReadyForProg:(int) nPoints{  // Start-Ready-request: 'X','b',0,HIBYTE(an),LOBYTE(an),knr,CRC
+- (NSData*) checkReadyForProg:(NSUInteger) nPoints{  // Start-Ready-request: 'X','b',0,HIBYTE(an),LOBYTE(an),knr,CRC
   unsigned char cmdData[7];
   cmdData[0] = 'X'; cmdData[1] = kWGRdyPrgrmCmd;  // 'b'
   cmdData[2] = '0';
@@ -651,7 +651,7 @@ NSString* ORWG1220PulserLock = @"ORWG1220PulserLock";
 
 - (NSData*) isReadyForProgReturned{  // this is expected from the device when it signals redyness for the next command
   unsigned char cmdData[7];
-  unsigned int nPoints = [arbWaveform count];
+  NSUInteger nPoints = [arbWaveform count];
   cmdData[0] = 'X'; cmdData[1] = kWGRdyPrgrmCmd;  // 'b'
   cmdData[2] = '0';
   cmdData[3] = nPoints >> 8;
@@ -664,7 +664,7 @@ NSString* ORWG1220PulserLock = @"ORWG1220PulserLock";
 - (NSData*) WGBytesFromFloat{
   // only the upper 12 Bit of a 16 Bit Point are used by the 12-Bit WG1220. max Voltages: 0x0000:-10 (-1) V  0xFFF0:10(1)V ;
   // min Voltages:0.2(0.02)V normal output (with attenuation)
-  unsigned nPoints = [arbWaveform count];
+  NSUInteger nPoints = [arbWaveform count];
  // NSPredicate *bPredicate = [NSPredicate predicateWithFormat:@"SELF beginswith[c] 'b'"];
   NSPredicate *pred = [NSPredicate predicateWithFormat:@"floatValue > 1.0 || floatValue < -1.0"];
   //filteredArr = [arbWaveform filteredArrayUsingPredicate:pred];
@@ -710,7 +710,7 @@ NSString* ORWG1220PulserLock = @"ORWG1220PulserLock";
   cmdData[6] = cmdData[1] ^  cmdData[2] ^ cmdData[3] ^ cmdData[4] ^ cmdData[5];
   return [NSData dataWithBytes:cmdData length:7];
 }
-- (NSData*) checkStoppedProg:(int) nPoints{  // Poll if device is ready after arbitrary waveform transfer is completed
+- (NSData*) checkStoppedProg:(NSUInteger) nPoints{  // Poll if device is ready after arbitrary waveform transfer is completed
   unsigned char cmdData[7];
   cmdData[0] = 'X'; cmdData[1] = kWGFinPrgrmCmd;  // 'u'
   cmdData[2] = '0';
@@ -723,7 +723,7 @@ NSString* ORWG1220PulserLock = @"ORWG1220PulserLock";
 
 - (NSData*) isStoppedProgReturned{  // this is expected from the device when it signals redyness for the next command
   unsigned char cmdData[7];
-  unsigned int nPoints = [arbWaveform count];
+  NSUInteger nPoints = [arbWaveform count];
   cmdData[0] = 'X'; cmdData[1] = kWGFinPrgrmCmd;  // 'u'
   cmdData[2] = '0';
   cmdData[3] = nPoints >> 8;

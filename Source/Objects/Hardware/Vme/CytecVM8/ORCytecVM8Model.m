@@ -253,8 +253,8 @@ NSString* ORCytectVM8FormCChanged       = @"ORCytectVM8FormCChanged";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt32:writeValue  forKey:@"writeValue"];
-    [encoder encodeBool:formC        forKey:@"formC"];
+    [encoder encodeInteger:writeValue  forKey:@"writeValue"];
+    [encoder encodeBool:formC          forKey:@"formC"];
 }
 @end
 

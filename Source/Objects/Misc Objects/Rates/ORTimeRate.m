@@ -104,7 +104,7 @@ NSString* ORRateAverageChangedNotification 	= @"ORRateAverageChangedNotification
 
 - (NSUInteger) count
 {
-    unsigned theCount = 0;
+    NSUInteger theCount = 0;
     @synchronized(self){
         if(timeAverageWrite > timeAverageRead)theCount =  timeAverageWrite - timeAverageRead;
         else theCount = kTimeAverageBufferSize-timeAverageRead + timeAverageWrite;
@@ -136,10 +136,10 @@ NSString* ORRateAverageChangedNotification 	= @"ORRateAverageChangedNotification
 - (NSArray*) ratesAsArray
 {
     NSMutableArray* theList = [NSMutableArray arrayWithCapacity:4096];
-    int n = [self count];
-    int i;
+    NSUInteger n = [self count];
+    NSUInteger i;
     for(i=0;i<n;i++){
-        int index = n-i-1;
+        NSUInteger index = n-i-1;
         NSString* aValue;
 		if(n==0) aValue = @"0";
 		else     aValue = [NSString stringWithFormat:@"%.4f",[self valueAtIndex:index]];
@@ -161,7 +161,7 @@ static NSString *ORTimeRate_SampleTime 	= @"ORTimeRate_SampleTime";
 
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
-    [encoder encodeInt32:[self sampleTime] forKey:ORTimeRate_SampleTime];
+    [encoder encodeInt32:(int32_t)[self sampleTime] forKey:ORTimeRate_SampleTime];
 }
 
 @end
@@ -172,9 +172,9 @@ static NSString *ORTimeRate_SampleTime 	= @"ORTimeRate_SampleTime";
 - (float) _getAverageFromStack
 {
 	if(averageStackCount){
-		int total = averageStackCount;
+		NSUInteger total = averageStackCount;
 		float sum = 0;
-		int i;
+		NSUInteger i;
 		for(i=0;i<total;++i){
 			sum += averageStack[i];
 		}

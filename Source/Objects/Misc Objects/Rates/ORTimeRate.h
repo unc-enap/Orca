@@ -34,7 +34,7 @@
 	NSTimeInterval timeSampled[kTimeAverageBufferSize];
 	int timeAverageWrite;
 	int timeAverageRead;
-	int averageStackCount;
+	NSUInteger averageStackCount;
 	NSDate* lastAverageTime;
 	unsigned long sampleTime;
 }

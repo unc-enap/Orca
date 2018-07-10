@@ -131,7 +131,7 @@ static NSString *ORVmeCardAddressModifier 	= @"vme Address Modifier";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-	[encoder encodeInt32:[self baseAddress] forKey:ORVmeCardBaseAddress];
+	[encoder encodeInteger:[self baseAddress] forKey:ORVmeCardBaseAddress];
 	[encoder encodeInt:[self addressModifier] forKey:ORVmeCardAddressModifier];
 }
 

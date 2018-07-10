@@ -32,25 +32,25 @@
 - (void) checkStatusErrors;
 
 -(void) readLongBlock:(unsigned long *) readAddress
-									atAddress:(unsigned int) vmeAddress
+									atAddress:(unsigned long) vmeAddress
 									numToRead:(unsigned int) numberLongs
 								   withAddMod:(unsigned short) anAddressModifier
 					   usingAddSpace:(unsigned short) anAddressSpace;
 
 -(void) writeLongBlock:(unsigned long *) writeAddress
-										atAddress:(unsigned int) vmeAddress
+										atAddress:(unsigned long) vmeAddress
 										numToWrite:(unsigned int) numberLongs
 									withAddMod:(unsigned short) anAddressModifier
 						   usingAddSpace:(unsigned short) anAddressSpace;
 
 -(void) readByteBlock:(unsigned char *) readAddress
-									atAddress:(unsigned int) vmeAddress
+									atAddress:(unsigned long) vmeAddress
 									numToRead:(unsigned int) numberBytes
 								   withAddMod:(unsigned short) anAddressModifier
 					   usingAddSpace:(unsigned short) anAddressSpace;
 
 -(void) writeByteBlock:(unsigned char *) writeAddress
-										atAddress:(unsigned int) vmeAddress
+										atAddress:(unsigned long) vmeAddress
 										numToWrite:(unsigned int) numberBytes
 									withAddMod:(unsigned short) anAddressModifier
 						   usingAddSpace:(unsigned short) anAddressSpace;
@@ -62,7 +62,7 @@
 					   usingAddSpace:(unsigned short) anAddressSpace;
 
 -(void) writeWordBlock:(unsigned short *) writeAddress
-										atAddress:(unsigned int) vmeAddress
+										atAddress:(unsigned long) vmeAddress
 										numToWrite:(unsigned int) numberWords
 									withAddMod:(unsigned short) anAddressModifier
 						   usingAddSpace:(unsigned short) anAddressSpace;

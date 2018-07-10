@@ -52,8 +52,8 @@
 #pragma mark ¥¥¥Accessors
 + (ORStatusController*) sharedStatusController;
 
-- (int) statusTextlength;
-- (int) alarmLogTextlength;
+- (NSUInteger) statusTextlength;
+- (NSUInteger) alarmLogTextlength;
 - (void) setDataSet: (ORDataSet *) aDataSet;
 - (NSString*) substringWithRange:(NSRange)aRange;
 - (void) handleInvocation:(NSInvocation*) anInvocation;
@@ -82,7 +82,7 @@
 
 #pragma mark ¥¥¥Data Source Methods
 - (BOOL) outlineView:(NSOutlineView*)ov isItemExpandable:(id)item;
-- (int)  outlineView:(NSOutlineView*)ov numberOfChildrenOfItem:(id)item;
+- (NSUInteger)  outlineView:(NSOutlineView*)ov numberOfChildrenOfItem:(id)item;
 - (id)   outlineView:(NSOutlineView*)ov child:(NSUInteger)index ofItem:(id)item;
 - (id)   outlineView:(NSOutlineView*)ov objectValueForTableColumn:(NSTableColumn*)tableColumn byItem:(id)item;
 - (NSUInteger)  numberOfChildren;

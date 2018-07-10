@@ -224,7 +224,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(StatusController);
 			else {
 				[alarmLogView setString:s1];
 			}
-			int len = [s1 length];
+			NSUInteger len = [s1 length];
 			
 			if([s1 hasSuffix:@"ORCA started\n"]){
 				[[alarmLogView textStorage] setAttributes:[NSDictionary dictionaryWithObject:[NSColor grayColor] forKey:NSForegroundColorAttributeName ]
@@ -272,7 +272,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(StatusController);
 
         //get the current date
         NSDate* now = [NSDate date];
-        NSString* theFileName = [NSString stringWithFormat:@"StatusLog_%04d_%02d_%02d",[now yearOfCommonEra],[now monthOfYear],[now dayOfMonth]];
+        NSString* theFileName = [NSString stringWithFormat:@"StatusLog_%04ld_%02ld_%02ld",(long)[now yearOfCommonEra],(long)[now monthOfYear],(long)[now dayOfMonth]];
         aPath = [aPath stringByAppendingPathComponent:theFileName];
         BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:aPath];
         NSString* contents = [[ORStatusController sharedStatusController] contents];
@@ -351,21 +351,21 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(StatusController);
 {
     scheduledToUpdate = NO;
     [outlineView reloadItem:dataSet reloadChildren:YES];
-    [errorField setIntValue:[dataSet totalCounts]];
+    [errorField setIntegerValue:[dataSet totalCounts]];
 }
 
-- (int) statusTextlength
+- (NSUInteger) statusTextlength
 {
-    int theLength;
+    NSUInteger theLength;
     @synchronized(self){
         theLength =  [[statusView textStorage] length];
     }
     return theLength;
 }
 
-- (int) alarmLogTextlength
+- (NSUInteger) alarmLogTextlength
 {
-    int theLength;
+    NSUInteger theLength;
     @synchronized(self){
         theLength = [[alarmLogView textStorage] length];
     }
@@ -389,7 +389,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(StatusController);
 
 
 #pragma mark ¥¥¥Data Source Methods
-- (int)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item
+- (NSUInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item
 {
     return (item == nil) ? 1  : [item numberOfChildren];
 }
@@ -447,7 +447,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(StatusController);
     [dataSet clear];
     [outlineView reloadItem:dataSet  reloadChildren:YES];
     [outlineView setNeedsDisplay:YES];
-    [errorField setIntValue:[dataSet totalCounts]];
+    [errorField setIntegerValue:[dataSet totalCounts]];
 }
 
 - (IBAction)delete:(id)sender
@@ -524,7 +524,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(StatusController);
     }
     [outlineView deselectAll:self];
     [dataSet recountTotal];
-    [errorField setIntValue:[dataSet totalCounts]];
+    [errorField setIntegerValue:[dataSet totalCounts]];
     [outlineView reloadData];
     
 }
@@ -988,7 +988,7 @@ void NSLogStartTable(NSString* aTitle,int aWidth)
 {
     aTitle = [aTitle stringByReplacingOccurrencesOfString:@"\n" withString:@""];
     NSString* dashes = @"_";
-    int len = [aTitle length];
+    NSUInteger len = [aTitle length];
     int i;
     for(i=0;i<len;i++){
         dashes = [dashes stringByAppendingString:@"_"];
@@ -1084,7 +1084,7 @@ void NSLogError(NSString* aString,...)
         [[statusView textStorage] deleteCharactersInRange:NSMakeRange(0,kMaxTextSize/3)];
         NSString* theText = [[statusView textStorage] string];
         NSRange endOfLineRange = [theText rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"\n"]];
-        int extra = 0;
+        NSUInteger extra = 0;
         if(endOfLineRange.location != NSNotFound){
             [[statusView textStorage] deleteCharactersInRange:NSMakeRange(0,endOfLineRange.location)];
             extra = endOfLineRange.location;
@@ -1092,10 +1092,10 @@ void NSLogError(NSString* aString,...)
         [[NSNotificationCenter defaultCenter]postNotificationName:ORStatusFlushedNotification
                                                            object:self
                                                          userInfo: [NSDictionary dictionaryWithObjectsAndKeys:
-                                                                    [NSNumber numberWithInt:kMaxTextSize/3+extra],ORStatusFlushSize,nil]];
+                                                                    [NSNumber numberWithInteger:kMaxTextSize/3+extra],ORStatusFlushSize,nil]];
     }
     
-    int len = [now_Attr length];
+    NSUInteger len = [now_Attr length];
     NSUInteger i=0;
     while (i<len) {
         NSRange range;

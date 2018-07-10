@@ -100,7 +100,7 @@ extern NSString* ORObjArrayPtrPBType;
 - (void)		setSkipConnectionDraw:(BOOL)state;
 - (NSMutableArray*) 	children;
 - (NSMutableArray*) 	familyList;
-- (int)         stationNumber;
+- (NSUInteger)         stationNumber;
 - (NSUInteger)	tag;
 - (void)		setTag:(NSUInteger)aTag;
 - (NSUInteger)         tagBase;

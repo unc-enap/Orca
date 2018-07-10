@@ -253,7 +253,7 @@
 
 - (void) signalFormAction:(id)sender
 {
-	[model setSignalForm:[sender indexOfSelectedItem]];
+	[model setSignalForm:(enum SignalForms)[sender indexOfSelectedItem]];
 }
 
 

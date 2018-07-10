@@ -80,8 +80,8 @@
 - (float) amplitude;
 - (void) setAmplitude:(float)aAmplitude;
 - (void) commitAmplitude;
-- (int) signalForm;
-- (void) setSignalForm:(int)aSignalForm;
+- (enum SignalForms) signalForm;
+- (void) setSignalForm:(enum SignalForms)aSignalForm;
 - (ORSerialPort*) serialPort;
 - (void) setSerialPort:(ORSerialPort*)aSerialPort;
 - (BOOL) portWasOpen;
@@ -113,7 +113,7 @@
 - (NSData*) isReadyForProgReturned;
 - (NSData*) WGBytesFromFloat;
 - (NSData*) stopProgCommand;
-- (NSData*) checkStoppedProg:(int) nPoints;
+- (NSData*) checkStoppedProg:(NSUInteger) nPoints;
 - (NSData*) isStoppedProgReturned;
 
 #pragma mark ***Archival

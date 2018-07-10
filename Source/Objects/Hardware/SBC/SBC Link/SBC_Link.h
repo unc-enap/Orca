@@ -77,7 +77,7 @@ typedef enum eSBC_ThrottleConsts{
     NSTimeInterval	updateInterval;
     unsigned long	writeAddress;
     unsigned long	writeValue;
-	unsigned long   addressModifier;
+	unsigned int   addressModifier;
     SBC_info_struct runInfo;
     SBC_error_struct errorInfo;
     NSString*       sbcMacAddress;
@@ -99,9 +99,9 @@ typedef enum eSBC_ThrottleConsts{
 	BOOL			verbose;
 	BOOL			forceReload;
     BOOL			initAfterConnect;
-	long			payloadSize;
-	unsigned long   bytesReceived;
-	unsigned long   bytesSent;
+	uint32_t		payloadSize;
+	uint32_t        bytesReceived;
+	uint32_t        bytesSent;
 	float			byteRateReceived;
 	float			byteRateSent;
     int				loadMode;
@@ -124,10 +124,10 @@ typedef enum eSBC_ThrottleConsts{
 	//cbTest varibles
 	int				numTestPoints;
 	int				cbTestCount;
-	long			startBlockSize;
-	long			endBlockSize;
-	long			deltaBlockSize;
-	long			currentBlockSize;
+	uint32_t			startBlockSize;
+	uint32_t			endBlockSize;
+	uint32_t			deltaBlockSize;
+	uint32_t		currentBlockSize;
 	BOOL			cbTestRunning;
 	BOOL			exitCBTest;
 	NSDate*			lastInfoUpdate;
@@ -151,7 +151,7 @@ typedef enum eSBC_ThrottleConsts{
 	NSString*		mainStagingFolder;
 	long			sbcCodeVersion;
     NSDate*         lastRateUpdate;
-	unsigned long	sbcPollingRate;
+	unsigned int	sbcPollingRate;
     int             updateCount;
     long            timeSkew;
     BOOL            timeSkewValid;
@@ -165,8 +165,8 @@ typedef enum eSBC_ThrottleConsts{
 - (void) clearHistory;
 
 #pragma mark ¥¥¥Accessors
-- (unsigned long)sbcPollingRate;
-- (void) setSbcPollingRate:(unsigned long)aValue;
+- (unsigned int)sbcPollingRate;
+- (void) setSbcPollingRate:(unsigned int)aValue;
 - (long) sbcCodeVersion;
 - (void) setSbcCodeVersion:(long)aVersion;
 - (NSUInteger) ipNumberIndex;
@@ -225,10 +225,10 @@ typedef enum eSBC_ThrottleConsts{
 - (void) setDoRange:(BOOL)aDoRange;
 - (unsigned int) readWriteType;
 - (void) setReadWriteType:(unsigned int)aValue;
-- (unsigned long) addressModifier;
-- (void) setAddressModifier:(unsigned long)aValue;
-- (long) payloadSize;
-- (void) setPayloadSize:(long)aValue;
+- (unsigned int) addressModifier;
+- (void) setAddressModifier:(unsigned int)aValue;
+- (uint32_t) payloadSize;
+- (void) setPayloadSize:(uint32_t)aValue;
 - (ORSBCLinkJobStatus*) jobStatus;
 - (void) setJobStatus:(ORSBCLinkJobStatus*)theJobStatus;
 - (NSUInteger) connectionHistoryCount;
@@ -279,8 +279,8 @@ typedef enum eSBC_ThrottleConsts{
 - (long) timeSkew;
 - (BOOL) timeSkewValid;
 
-- (void) sendCommand:(long)aCmd withOptions:(SBC_CmdOptionStruct*)optionBlock expectResponse:(BOOL)askForResponse;
-- (void) sendPayloadSize:(long)aSize;
+- (void) sendCommand:(unsigned long)aCmd withOptions:(SBC_CmdOptionStruct*)optionBlock expectResponse:(BOOL)askForResponse;
+- (void) sendPayloadSize:(uint32_t)aSize;
 
 /* For the read*Block functions, the address space is used in VME 
    to determine if the block read is incrementing or not.  
@@ -298,37 +298,37 @@ typedef enum eSBC_ThrottleConsts{
 			 numToWrite:(unsigned int)  numberLongs;
 
 - (void) readLongBlock:(unsigned long *) readAddress
-			 atAddress:(unsigned int) vmeAddress
+			 atAddress:(unsigned long) vmeAddress
 			 numToRead:(unsigned int) numberLongs
 			withAddMod:(unsigned short) anAddressModifier
 		 usingAddSpace:(unsigned short) anAddressSpace;
 
 - (void) writeLongBlock:(unsigned long *) writeAddress
-			  atAddress:(unsigned int) vmeAddress
+			  atAddress:(unsigned long) vmeAddress
 			 numToWrite:(unsigned int) numberLongs
 			 withAddMod:(unsigned short) anAddressModifier
 		  usingAddSpace:(unsigned short) anAddressSpace;
 
 - (void) readByteBlock:(unsigned char *) readAddress
-			 atAddress:(unsigned int) vmeAddress
+			 atAddress:(unsigned long) vmeAddress
 			 numToRead:(unsigned int) numberBytes
 			withAddMod:(unsigned short) anAddressModifier
 		 usingAddSpace:(unsigned short) anAddressSpace;
 
 - (void) writeByteBlock:(unsigned char *) writeAddress
-			  atAddress:(unsigned int) vmeAddress
+			  atAddress:(unsigned long) vmeAddress
 			 numToWrite:(unsigned int) numberBytes
 			 withAddMod:(unsigned short) anAddressModifier
 		  usingAddSpace:(unsigned short) anAddressSpace;
 
 - (void) readWordBlock:(unsigned short *) readAddress
-			 atAddress:(unsigned int) vmeAddress
+			 atAddress:(unsigned long) vmeAddress
 			 numToRead:(unsigned int) numberWords
 			withAddMod:(unsigned short) anAddressModifier
 		 usingAddSpace:(unsigned short) anAddressSpace;
 
 - (void) writeWordBlock:(unsigned short *) writeAddress
-			  atAddress:(unsigned int) vmeAddress
+			  atAddress:(unsigned long) vmeAddress
 			 numToWrite:(unsigned int) numberWords
 			 withAddMod:(unsigned short) anAddressModifier
 		  usingAddSpace:(unsigned short) anAddressSpace;
@@ -389,19 +389,19 @@ typedef enum eSBC_ThrottleConsts{
 - (BOOL) canWriteTo:(int) sck;
 - (void) readSocket:(int)aSocket buffer:(SBC_Packet*)aPacket;
 - (void) sampleCBTransferSpeed;
-- (void) doOneCBTransferTest:(long)payloadSize;
+- (void) doOneCBTransferTest:(uint32_t)payloadSize;
 - (void) doCBTransferTest;
 - (void) monitorJobFor:(id)aDelegate statusSelector:(SEL)aSelector;
 - (void) monitorJob;
 - (NSString*) sbcMacAddress;
 
 - (void) writeGeneral:(long*) buffer
-			operation:(unsigned long) anOperationID
-			numToWrite:(unsigned int) numberLongs;
+			operation:(uint32_t) anOperationID
+			numToWrite:(uint32_t) numberLongs;
 			
 - (void) readGeneral:(long*) buffer
-		   operation:(unsigned long) anOperationID
-		   numToRead:(unsigned int) numberLongs;
+		   operation:(uint32_t) anOperationID
+		   numToRead:(uint32_t) numberLongs;
 
 - (void) postCouchDBRecord;
 @end

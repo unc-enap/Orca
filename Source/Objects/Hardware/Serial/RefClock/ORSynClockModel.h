@@ -30,7 +30,7 @@
         ORRefClockModel*    refClock;
         int                 trackMode;
         int                 syncMode;
-        unsigned int       alarmWindow;
+        unsigned long       alarmWindow;
         // int reTxCount;  // in case of errors or timeout retransmit; if retransmit
         // // is required, put last command to cmdQueue and dequeueFromBottom
         //
