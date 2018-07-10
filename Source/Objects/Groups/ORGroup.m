@@ -346,8 +346,8 @@ static NSString *ORGroupObjects 			= @"ORGroupObjects";
 
 - (void) drawContents:(NSRect)aRect
 {
-    int n = [orcaObjects count];
-    int i;
+    NSUInteger n = [orcaObjects count];
+    NSUInteger i;
     for(i=0;i<n;i++){
         [[orcaObjects objectAtIndex:i] drawSelf:aRect];
     }
@@ -355,8 +355,8 @@ static NSString *ORGroupObjects 			= @"ORGroupObjects";
 
 - (void) drawIcons:(NSRect)aRect
 {
-    int n = [orcaObjects count];
-    int i;
+    NSUInteger n = [orcaObjects count];
+    NSUInteger i;
     for(i=0;i<n;i++){
         [[orcaObjects objectAtIndex:i] drawIcon:aRect withTransparency:1];
     }
@@ -366,8 +366,8 @@ static NSString *ORGroupObjects 			= @"ORGroupObjects";
 - (NSArray*)selectedObjects
 {
     NSMutableArray* theSelectedObjects = [[NSMutableArray alloc] init];
-    int n = [orcaObjects count];
-    int i;
+    NSUInteger n = [orcaObjects count];
+    NSUInteger i;
     for(i=0;i<n;i++){
         OrcaObject* anObject = [orcaObjects objectAtIndex:i];
         if([anObject highlighted] && [anObject changesAllowed]){
@@ -380,8 +380,8 @@ static NSString *ORGroupObjects 			= @"ORGroupObjects";
 - (NSArray*)allSelectedObjects
 {
     NSMutableArray* theSelectedObjects = [[NSMutableArray alloc] init];
-    int n = [orcaObjects count];
-    int i;
+    NSUInteger n = [orcaObjects count];
+    NSUInteger i;
     for(i=0;i<n;i++){
         OrcaObject* anObject = [orcaObjects objectAtIndex:i];
         if([anObject highlighted]){
@@ -407,8 +407,8 @@ static NSString *ORGroupObjects 			= @"ORGroupObjects";
 - (void) checkSelectionRect:(NSRect)aRect inView:(NSView*)aView;
 {
 
-    int n = [orcaObjects count];
-    int i;
+    NSUInteger n = [orcaObjects count];
+    NSUInteger i;
     for(i=0;i<n;i++){
         OrcaObject* anObject = [orcaObjects objectAtIndex:i];
 
@@ -444,8 +444,8 @@ static NSString *ORGroupObjects 			= @"ORGroupObjects";
 
 - (void) checkRedrawRect:(NSRect)aRect inView:(NSView*)aView;
 {
-    int n = [orcaObjects count];
-    int i;
+    NSUInteger n = [orcaObjects count];
+    NSUInteger i;
     for(i=0;i<n;i++){
         OrcaObject* anObject = [orcaObjects objectAtIndex:i];
         if([anObject rectIntersectsIcon:aRect]){      //touched by the selection rect
@@ -458,8 +458,8 @@ static NSString *ORGroupObjects 			= @"ORGroupObjects";
 {
     NSRect theEnclosingRect = NSZeroRect;
     BOOL first = YES;
-    int n = [someObjects count];
-    int i;
+    NSUInteger n = [someObjects count];
+    NSUInteger i;
     for(i=0;i<n;i++){
         OrcaObject* anObject = [someObjects objectAtIndex:i];
         if(first){
