@@ -36,7 +36,7 @@
 - (void) setUnitSize:(int)aUnitSize;
 - (unsigned long) dataOffset;
 - (void) setDataOffset:(unsigned long)newOffset;
-- (int)  numberBins;
+- (unsigned long)  numberBins;
 - (long) value:(unsigned long)channel;
 - (long) value:(unsigned long)channel callerLockedMe:(BOOL)callerLockedMe;
 -(NSUInteger) manyValues:(NSRange)overRange to:(double*)output stride:(NSUInteger)stride callerLockedMe:(BOOL)callerLockedMe;

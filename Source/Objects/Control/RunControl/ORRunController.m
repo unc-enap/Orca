@@ -396,12 +396,12 @@
 
 - (void) numberOfWaitsChanged:(NSNotification*)aNote
 {
-    int n = [model waitRequestersCount];
+    NSUInteger n = [model waitRequestersCount];
     [showWaitRequestersButton setHidden:n==0 && ([waitRequestersDrawer state] == NSDrawerClosedState)];
     [forceClearWaitsButton setEnabled:n>0];
     [abortRunFromWaitButton setEnabled:n>0];
-    [waitCountField setIntValue:n];
-    [waitCountField1 setIntValue:n];
+    [waitCountField setIntegerValue:n];
+    [waitCountField1 setIntegerValue:n];
     [waitCountField2 setStringValue:n==0?@"":@"Waits In Place"];
     [waitRequestersTableView reloadData];
     [self updateButtons];
@@ -477,8 +477,8 @@
 
 - (void) vetosChanged:(NSNotification*)aNotification
 {
-	int vetoCount = [[ORGlobal sharedGlobal] vetoCount];
-	[vetoCountField setIntValue: vetoCount]; 
+	NSUInteger vetoCount = [[ORGlobal sharedGlobal] vetoCount];
+	[vetoCountField setIntegerValue: vetoCount]; 
 	[listVetosButton setHidden:vetoCount==0];
 	[vetoedTextField setStringValue:vetoCount?@"Vetoed":@""];
 	[self updateButtons];

@@ -260,7 +260,7 @@ static NSString *ORCBAddressSpace 			= @"CB address space";
 
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
-	[encoder encodeInt:[self baseAddress] forKey:ORCBBaseAddress];
+	[encoder encodeInt:(int32_t)[self baseAddress] forKey:ORCBBaseAddress];
 	[encoder encodeInt:addressModifier forKey:ORCBAddressModifier];
 	[encoder encodeInt:addressSpace forKey:ORCBAddressSpace];
 }

@@ -306,7 +306,7 @@
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"DGF4c (Station %d)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"DGF4c (Station %ld)",[model stationNumber]]];
 }
 - (void) tauChanged:(NSNotification*)aNotification 
 {

@@ -219,23 +219,23 @@ followed by waveform data (n x 1024 16-bit words)
     //NSLog(@"ORKatrinFLTDecoder::decodeData: flag isSwapped is  %d (0x%x), (ntohl(1) == 1) is  (%d) \n", isSwapped,ePtr->eventID, (ntohl(1) == 1));
     //if( (ntohl(1) == 1) ) NSLog(@"    ORKatrinFLTDecoder::decodeData:   is big endian host!\n" );
     #endif
-	if ((ntohl(1) == 1) && (!isSwapped) ){ // big endian host
-        #ifdef __ORCA_DEVELOPMENT__CONFIGURATION__
-        //NSLog(@"    ORKatrinFLTDecoder::decodeData:   will swap unsigned long  NOW!\n" );
-        #endif
-		// Point to ADC data
-		ptr += (sizeof(katrinEventDataStruct)+sizeof(katrinDebugDataStruct))/sizeof(unsigned long);
-		
-		// The order of the shorts has to be switched (endianess)
-		int i;
-		int traceLen = (length / 512) * 512;
-		
-		for (i=0;i< traceLen;i++)
-		    ptr[i] = (ptr[i] >> 16)  |  (ptr[i] << 16);
-			
-		ePtr->eventID = ePtr->eventID | (0x1 << 31); // set isSpapped flag	
-	    isSwapped          = ePtr->eventID >> 31; 
-    }
+//    if ((ntohl(1) == 1) && (!isSwapped) ){ // big endian host
+//        #ifdef __ORCA_DEVELOPMENT__CONFIGURATION__
+//        //NSLog(@"    ORKatrinFLTDecoder::decodeData:   will swap unsigned long  NOW!\n" );
+//        #endif
+//        // Point to ADC data
+//        ptr += (sizeof(katrinEventDataStruct)+sizeof(katrinDebugDataStruct))/sizeof(unsigned long);
+//
+//        // The order of the shorts has to be switched (endianess)
+//        int i;
+//        int traceLen = (length / 512) * 512;
+//
+//        for (i=0;i< traceLen;i++)
+//            ptr[i] = (ptr[i] >> 16)  |  (ptr[i] << 16);
+//
+//        ePtr->eventID = ePtr->eventID | (0x1 << 31); // set isSpapped flag
+//        isSwapped          = ePtr->eventID >> 31;
+//    }
 	
 	// Set up the waveform
 	NSData* waveFormdata = [NSData dataWithBytes:someData length:length*sizeof(long)];
@@ -256,25 +256,25 @@ followed by waveform data (n x 1024 16-bit words)
     ++ptr;
     ++ptr;
     //  2. swap back:
-	if ((ntohl(1) == 1) && (isSwapped) ){ // big endian host
-        #ifdef __ORCA_DEVELOPMENT__CONFIGURATION__
-		//this was swamping the statuslog comment out mah 04/20/09
-        //NSLog(@"    ORKatrinFLTDecoder::decodeData:   will swap back unsigned long  NOW!\n" );
-        #endif
-		// Point to ADC data
-		ptr += (sizeof(katrinEventDataStruct)+sizeof(katrinDebugDataStruct))/sizeof(unsigned long);
-		
-		// The order of the shorts has to be switched (endianess)
-		int i;
-		int traceLen = (length / 512) * 512;
-		
-		for (i=0;i< traceLen;i++)
-		    ptr[i] = (ptr[i] >> 16)  |  (ptr[i] << 16);
-			
-		ePtr->eventID = ePtr->eventID & ~(0x1 << 31); // unset isSpapped flag	
-	    isSwapped          = ePtr->eventID >> 31; 
-        if(isSwapped) NSLog(@"ERROR: swap-flag wrong in ORKatrinFLTDecoder!\n");
-    }
+//    if ((ntohl(1) == 1) && (isSwapped) ){ // big endian host
+//        #ifdef __ORCA_DEVELOPMENT__CONFIGURATION__
+//        //this was swamping the statuslog comment out mah 04/20/09
+//        //NSLog(@"    ORKatrinFLTDecoder::decodeData:   will swap back unsigned long  NOW!\n" );
+//        #endif
+//        // Point to ADC data
+//        ptr += (sizeof(katrinEventDataStruct)+sizeof(katrinDebugDataStruct))/sizeof(unsigned long);
+//        
+//        // The order of the shorts has to be switched (endianess)
+//        int i;
+//        int traceLen = (length / 512) * 512;
+//        
+//        for (i=0;i< traceLen;i++)
+//            ptr[i] = (ptr[i] >> 16)  |  (ptr[i] << 16);
+//            
+//        ePtr->eventID = ePtr->eventID & ~(0x1 << 31); // unset isSpapped flag    
+//        isSwapped          = ePtr->eventID >> 31; 
+//        if(isSwapped) NSLog(@"ERROR: swap-flag wrong in ORKatrinFLTDecoder!\n");
+//    }
 					
 
     #if 0

@@ -306,15 +306,15 @@
 		NSColor* e = [endColor colorUsingColorSpaceName:NSDeviceRGBColorSpace];
 
         short i;
-        float startRed      = [s redComponent];
-        float startGreen    = [s greenComponent];
-        float startBlue     = [s blueComponent];
-        float startAlpha    = [s alphaComponent];
-        float endRed        = [e redComponent];
-        float endGreen      = [e greenComponent];
-        float endBlue       = [e blueComponent];
-        float endAlpha      = [e alphaComponent];
-        float red,green,blue,alpha;
+        CGFloat startRed      = [s redComponent];
+        CGFloat startGreen    = [s greenComponent];
+        CGFloat startBlue     = [s blueComponent];
+        CGFloat startAlpha    = [s alphaComponent];
+        CGFloat endRed        = [e redComponent];
+        CGFloat endGreen      = [e greenComponent];
+        CGFloat endBlue       = [e blueComponent];
+        CGFloat endAlpha      = [e alphaComponent];
+        CGFloat red,green,blue,alpha;
         if(numColors==0)numColors = 256;
         for (i=0; i<numColors; i++){
             float factor = i/(float)numColors;

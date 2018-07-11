@@ -1477,27 +1477,27 @@ struct {
     if(!connected)return;
     
     return; //temps don't work -- don't alarm
-    
-    float maxAllowedTemperature = 1000; //temporarily set high because the temp readout isn't working right
-    int aChip;
-    float aTemperature;
-    for(aChip=0;aChip<2;aChip++){
-        if(aChip == 0)  aTemperature = [self adc:7];
-        else            aTemperature = [self adc:15];
-        if(aTemperature >= maxAllowedTemperature){
- 			if(!temperatureAlarm[aChip]){
-				temperatureAlarm[aChip] = [[ORAlarm alloc] initWithName:[NSString stringWithFormat:@"Controller %lu Temperature",[self uniqueIdNumber]] severity:kRangeAlarm];
-                [temperatureAlarm[aChip] setHelpString:[NSString stringWithFormat:@"Controller %lu has exceeded %.1f C. This alarm will be in effect until the temperature returns to normal limits. It can be silenced by acknowledging it.",[self uniqueIdNumber],maxAllowedTemperature]];
-				[temperatureAlarm[aChip] setSticky:YES];
-                [temperatureAlarm[aChip] postAlarm];
-			}
-        }
-        else {
-            [temperatureAlarm[aChip] clearAlarm];
-			[temperatureAlarm[aChip] release];
-			temperatureAlarm[aChip] = nil;
-        }
-    }
+//    
+//    float maxAllowedTemperature = 1000; //temporarily set high because the temp readout isn't working right
+//    int aChip;
+//    float aTemperature;
+//    for(aChip=0;aChip<2;aChip++){
+//        if(aChip == 0)  aTemperature = [self adc:7];
+//        else            aTemperature = [self adc:15];
+//        if(aTemperature >= maxAllowedTemperature){
+//             if(!temperatureAlarm[aChip]){
+//                temperatureAlarm[aChip] = [[ORAlarm alloc] initWithName:[NSString stringWithFormat:@"Controller %lu Temperature",[self uniqueIdNumber]] severity:kRangeAlarm];
+//                [temperatureAlarm[aChip] setHelpString:[NSString stringWithFormat:@"Controller %lu has exceeded %.1f C. This alarm will be in effect until the temperature returns to normal limits. It can be silenced by acknowledging it.",[self uniqueIdNumber],maxAllowedTemperature]];
+//                [temperatureAlarm[aChip] setSticky:YES];
+//                [temperatureAlarm[aChip] postAlarm];
+//            }
+//        }
+//        else {
+//            [temperatureAlarm[aChip] clearAlarm];
+//            [temperatureAlarm[aChip] release];
+//            temperatureAlarm[aChip] = nil;
+//        }
+//    }
 }
 
 - (void) checkLeakageCurrentIsWithinLimits:(int)aChan

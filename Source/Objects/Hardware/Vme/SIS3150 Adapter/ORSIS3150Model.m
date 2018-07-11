@@ -458,8 +458,8 @@ uint8_t verbose = 0;
 }
 
 -(void) readLongBlock:(unsigned long *) readAddress
-			atAddress:(unsigned int) vmeAddress
-			numToRead:(unsigned int) numberLongs
+			atAddress:(unsigned long) vmeAddress
+			numToRead:(unsigned long) numberLongs
 		   withAddMod:(unsigned short) anAddressModifier
 					   usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -467,8 +467,8 @@ uint8_t verbose = 0;
 }
 
 -(void) writeLongBlock:(unsigned long *) writeAddress
-			 atAddress:(unsigned int) vmeAddress
-			numToWrite:(unsigned int) numberLongs
+			 atAddress:(unsigned long) vmeAddress
+			numToWrite:(unsigned long) numberLongs
 			withAddMod:(unsigned short) anAddressModifier
 						   usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -477,8 +477,8 @@ uint8_t verbose = 0;
 }
 
 -(void) readLong:(unsigned long *) readAddress
-	   atAddress:(unsigned int) vmeAddress
-	 timesToRead:(unsigned int) numberLongs
+	   atAddress:(unsigned long) vmeAddress
+	 timesToRead:(unsigned long) numberLongs
 	  withAddMod:(unsigned short) anAddressModifier
    usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -486,8 +486,8 @@ uint8_t verbose = 0;
 }
 
 -(void) readByteBlock:(unsigned char *) readAddress
-			atAddress:(unsigned int) vmeAddress
-			numToRead:(unsigned int) numberBytes
+			atAddress:(unsigned long) vmeAddress
+			numToRead:(unsigned long) numberBytes
 		   withAddMod:(unsigned short) anAddressModifier
 					   usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -496,8 +496,8 @@ uint8_t verbose = 0;
 }
 
 -(void) writeByteBlock:(unsigned char *) writeAddress
-			 atAddress:(unsigned int) vmeAddress
-			numToWrite:(unsigned int) numberBytes
+			 atAddress:(unsigned long) vmeAddress
+			numToWrite:(unsigned long) numberBytes
 			withAddMod:(unsigned short) anAddressModifier
 						   usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -506,13 +506,13 @@ uint8_t verbose = 0;
 
 
 -(void) readWordBlock:(unsigned short *) data
-			atAddress:(unsigned int) vmeAddress
-			numToRead:(unsigned int) numberWords
+			atAddress:(unsigned long) vmeAddress
+			numToRead:(unsigned long) numberWords
 		   withAddMod:(unsigned short) anAddressModifier
 					   usingAddSpace:(unsigned short) anAddressSpace
 {
 	unsigned int nBytes  = 0;
-	unsigned long req_nof_bytes = numberWords*sizeof(unsigned int);
+	unsigned int req_nof_bytes = (int)numberWords*sizeof(unsigned int);
 	char cUsbBuf[0x100 + USB_MAX_NOF_BYTES];
 	char cInPacket[0x100 + USB_MAX_NOF_BYTES];
 		
@@ -542,8 +542,8 @@ uint8_t verbose = 0;
 	cUsbBuf[11] =   (char) (vmeAddress >> 24);   //addr 31:24
 	
 	
-	unsigned long usb_wlength = 12;
-	unsigned long usb_rlength = (req_nof_bytes) ; // data: (req_nof_lwords * 4) Bytes; 
+	unsigned int usb_wlength = 12;
+	unsigned int usb_rlength = (req_nof_bytes) ; // data: (req_nof_lwords * 4) Bytes;
 	usb_rlength = (usb_rlength + 0x1ff) & 0xffffe00; // 512 byte boundary.
 	
 	
@@ -581,8 +581,8 @@ uint8_t verbose = 0;
 }
 
 -(void) writeWordBlock:(unsigned short *) writeAddress
-			 atAddress:(unsigned int) vmeAddress
-			numToWrite:(unsigned int) numberWords
+			 atAddress:(unsigned long) vmeAddress
+			numToWrite:(unsigned long) numberWords
 			withAddMod:(unsigned short) anAddressModifier
 						   usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -653,8 +653,8 @@ uint8_t verbose = 0;
     [encoder encodeObject:outConnector		forKey:@"outConnector"];
     [encoder encodeInt:rangeToDo			forKey:@"rangeToDo"];
     [encoder encodeBool:doRange				forKey:@"doRange"];
-    [encoder encodeInt:rwAddress			forKey:@"rwAddress"];
-    [encoder encodeInt:writeValue			forKey:@"writeValue"];
+    [encoder encodeInt:(int32_t)rwAddress			forKey:@"rwAddress"];
+    [encoder encodeInt:(int32_t)writeValue			forKey:@"writeValue"];
     [encoder encodeInt:rwAddressModifier	forKey:@"rwAddressModifier"];
     [encoder encodeInt:readWriteIOSpace		forKey:@"readWriteIOSpace"];
     [encoder encodeInt:readWriteType		forKey:@"readWriteType"];

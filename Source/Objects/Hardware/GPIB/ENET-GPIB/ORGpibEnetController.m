@@ -264,13 +264,13 @@
  * \note	
  */
 //--------------------------------------------------------------------------------
-- (IBAction) changePrimaryAddress: (id) aSender
+- (IBAction) changePrimaryAddress: (NSPopUpButton*) aSender
 {
 	// Make sure that value has changed.
     if ( [ aSender indexOfSelectedItem ] != mPrimaryAddressValue ){
 
 		// Get the users new selection
-        mPrimaryAddressValue = [ aSender indexOfSelectedItem ];
+        mPrimaryAddressValue = (int)[ aSender indexOfSelectedItem ];
 		//        [self updatePopUpButton:mPrimaryAddress setting:mPrimaryAddressValue];
         [ mPrimaryAddress selectItemAtIndex: mPrimaryAddressValue ];
         

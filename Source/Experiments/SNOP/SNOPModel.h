@@ -47,7 +47,7 @@
 #define STANDARD_RUN_VERSION 2 //Increase if Standard Runs table structure is changed
 #define SNOP_ORCA_VERSION "1.0.1" //The current Orca release
 
-BOOL isNotRunningOrIsInMaintenance();
+BOOL isNotRunningOrIsInMaintenance(void);
 
 @interface SNOPModel: ORExperimentModel <snotDbDelegate>
 {

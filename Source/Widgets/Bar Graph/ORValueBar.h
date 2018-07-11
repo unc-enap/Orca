@@ -30,7 +30,7 @@
     IBOutlet id         mXScale;
 	NSColor* 			backgroundColor;
 	NSColor* 			barColor;
-	int 				tag;
+	NSUInteger			tag;
 	NSGradient*			gradient;
 }
 

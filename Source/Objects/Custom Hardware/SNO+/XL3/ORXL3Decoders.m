@@ -29,7 +29,7 @@
 {
 	BOOL swapBundle = YES;
 	if (0x0000ABCD != htonl(0x0000ABCD) && indexerSwaps) swapBundle = NO;
-	if (0x0000ABCD == htonl(0x0000ABCD) && !indexerSwaps) swapBundle = NO;
+	//if (0x0000ABCD == htonl(0x0000ABCD) && !indexerSwaps) swapBundle = NO;
 
     NSMutableString* dsc = [NSMutableString string];
 
@@ -101,7 +101,7 @@
 
 	BOOL swapBundle = YES;
 	if (0x0000ABCD != htonl(0x0000ABCD) && indexerSwaps) swapBundle = NO;
-	if (0x0000ABCD == htonl(0x0000ABCD) && !indexerSwaps) swapBundle = NO;
+	//if (0x0000ABCD == htonl(0x0000ABCD) && !indexerSwaps) swapBundle = NO;
 
 	unsigned long length = ExtractLength(*ptr);
 	unsigned short i = 0;

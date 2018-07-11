@@ -405,7 +405,7 @@ static void _cfsocketCallback( CFSocketRef inCFSocketRef, CFSocketCallBackType i
 	}
     
     // Determine how much to actually read
-    unsigned amountToRead = MIN( inAmount, [mIncomingBuffer length] );
+    NSUInteger amountToRead = MIN( inAmount, [mIncomingBuffer length] );
     
     // Read bytes from our incoming buffer
     [mIncomingBuffer getBytes:inBuffer length:amountToRead];
@@ -425,7 +425,7 @@ static void _cfsocketCallback( CFSocketRef inCFSocketRef, CFSocketCallBackType i
 		return 0;
 	}
     // Remember the length of our incoming buffer
-    unsigned amountRead = [mIncomingBuffer length];
+    NSUInteger amountRead = [mIncomingBuffer length];
     
     // Read bytes from our incoming buffer
     [inData appendData:mIncomingBuffer];
@@ -447,7 +447,7 @@ static void _cfsocketCallback( CFSocketRef inCFSocketRef, CFSocketCallBackType i
 		return 0;
     }
     // Determine how much to actually read
-    unsigned amountToRead = MIN( inAmount, [mIncomingBuffer length] );
+    NSUInteger amountToRead = MIN( inAmount, [mIncomingBuffer length] );
     
     // Read bytes from our incoming buffer
     [inData appendBytes:[mIncomingBuffer bytes] length:amountToRead];
@@ -468,7 +468,7 @@ static void _cfsocketCallback( CFSocketRef inCFSocketRef, CFSocketCallBackType i
 	}
     
     // Determine how much to actually read
-    unsigned amountToRead = MIN( inAmount, [mIncomingBuffer length] );
+    NSUInteger amountToRead = MIN( inAmount, [mIncomingBuffer length] );
     NSString* readString = [[NSString alloc] initWithBytes:[mIncomingBuffer bytes] length: amountToRead encoding:inEncoding];
     [mIncomingBuffer replaceBytesInRange:NSMakeRange( 0, amountToRead ) withBytes:NULL length:0];
     [inString appendString:readString];
@@ -509,7 +509,7 @@ static void _cfsocketCallback( CFSocketRef inCFSocketRef, CFSocketCallBackType i
 		return nil;
     }
     // Determine how much to actually read
-    unsigned amountToRead = MIN( inAmount, [mIncomingBuffer length] );
+    NSUInteger amountToRead = MIN( inAmount, [mIncomingBuffer length] );
     
     // Read bytes from our incoming buffer
     NSData* readData = [NSData dataWithBytes:[mIncomingBuffer bytes] length:amountToRead];
@@ -559,7 +559,7 @@ static void _cfsocketCallback( CFSocketRef inCFSocketRef, CFSocketCallBackType i
     }
     
     // Determine how much to actually read
-    unsigned amountToRead = MIN( inAmount, [mIncomingBuffer length] );
+    NSUInteger amountToRead = MIN( inAmount, [mIncomingBuffer length] );
 
     
     // Create a new NSString from the read bytes using the specified encoding
@@ -717,7 +717,7 @@ static void _cfsocketCallback( CFSocketRef inCFSocketRef, CFSocketCallBackType i
 {
  	[mLock lock];
 	
-    int i =  [mIncomingBuffer length];
+    NSUInteger i =  [mIncomingBuffer length];
 	[mLock unlock];
 	return i;
 }
@@ -725,7 +725,7 @@ static void _cfsocketCallback( CFSocketRef inCFSocketRef, CFSocketCallBackType i
 - (NSUInteger)outgoingBufferLength
 {
  	[mLock lock];
-    int i =  [mOutgoingBuffer length];
+    NSUInteger i =  [mOutgoingBuffer length];
 	[mLock unlock];
 	return i;
 }
@@ -865,7 +865,7 @@ static void _cfsocketCallback( CFSocketRef inCFSocketRef, CFSocketCallBackType i
 - (void)_cfsocketDataAvailable
 {
  	[mLock lock];
-    unsigned oldIncomingBufferLength;
+    NSUInteger oldIncomingBufferLength;
     
     // Store the old incoming buffer length
     oldIncomingBufferLength = [mIncomingBuffer length];
@@ -952,7 +952,7 @@ static void _cfsocketCallback( CFSocketRef inCFSocketRef, CFSocketCallBackType i
     CFSocketNativeHandle	nativeSocket;
     void*			readBuffer;
     int			amountAvailable;
-    int			amountRead;
+    ssize_t			amountRead;
     
 	[mLock lock];
     // Determine how many bytes are available on the socket to read
@@ -996,7 +996,7 @@ static void _cfsocketCallback( CFSocketRef inCFSocketRef, CFSocketCallBackType i
 - (void)_socketWriteData
 {
     CFSocketNativeHandle	nativeSocket;
-    int						amountSent;
+    ssize_t					amountSent;
 	[mLock lock];
     
     // Return if our CFSocketRef has not been created, the outgoing buffer has no data in it or we are simply not connected

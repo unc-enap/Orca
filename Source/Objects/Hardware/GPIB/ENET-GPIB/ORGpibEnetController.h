@@ -63,7 +63,7 @@
 - (IBAction) 	write: (id) aSender;
 - (IBAction) 	read: (id) aSender;
 - (IBAction) 	connect: (id) aSender;
-- (IBAction)	changePrimaryAddress: (id) aSender;
+- (IBAction)	changePrimaryAddress: (NSPopUpButton*) aSender;
 - (IBAction) 	changeBoardIndexAction: (id) aSender;
 - (IBAction)    testLockAction:(id)sender;
 - (IBAction)	changeMonitorRead: (NSButton*) aSender;

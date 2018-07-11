@@ -49,7 +49,7 @@
 - (void) awakeFromNib
 {		
     NSString* key = [NSString stringWithFormat: @"orca.ORHeaderExplorer%lu.selectedtab",[model uniqueIdNumber]];
-    int index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
 
@@ -882,7 +882,7 @@
 
 - (void) awakeFromNib
 {
-	float red,green,blue;
+	CGFloat red,green,blue;
 	red = 0; green = 1; blue = 0;
 	normalGradient = [[NSGradient alloc]
 						initWithStartingColor:[NSColor colorWithCalibratedRed:red green:green blue:blue alpha:1]

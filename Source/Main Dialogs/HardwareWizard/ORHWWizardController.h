@@ -79,7 +79,7 @@
     NSMutableDictionary *objects;
     NSMutableDictionary *fileHeader;
 
-    int objectTag;
+    NSInteger objectTag;
     NSMutableArray* controlArray;
     BOOL containerExists;
     
@@ -155,10 +155,10 @@
 - (IBAction) restoreAllAction:(id) sender;
 - (void) clearUndoStacks;
 
-- (void) removeActionControllerAtIndex:(int) index;
-- (void) addActionController:(id) obj atIndex:(int) index;
-- (void) addSelectionController:(id) obj atIndex:(int) index;
-- (void) removeSelectionControllerAtIndex:(int) index;
+- (void) removeActionControllerAtIndex:(NSInteger) index;
+- (void) addActionController:(id) obj atIndex:(NSInteger) index;
+- (void) addSelectionController:(id) obj atIndex:(NSInteger) index;
+- (void) removeSelectionControllerAtIndex:(NSInteger) index;
 
 - (void) adjustActionSize:(int)amount;
 - (void) adjustSelectionSize:(int)amount;

@@ -121,7 +121,7 @@ static void *createStringObject(const redisReadTask *task, char *str, size_t len
     memcpy(buf,str,len);
     buf[len] = '\0';
     r->str = buf;
-    r->len = len;
+    r->len = (int)len;
 
     if (task->parent) {
         parent = task->parent->obj;
@@ -515,7 +515,7 @@ int redisFormatSdsCommandArgv(sds *target, int argc, const char **argv,
     assert(sdslen(cmd)==totlen);
 
     *target = cmd;
-    return totlen;
+    return (int)totlen;
 }
 
 void redisFreeSdsCommand(sds cmd) {
@@ -793,7 +793,7 @@ int redisEnableKeepAlive(redisContext *c) {
  * see if there is a reply available. */
 int redisBufferRead(redisContext *c) {
     char buf[1024*16];
-    int nread;
+    ssize_t nread;
 
     /* Return early when the context has seen an error. */
     if (c->err)

@@ -62,7 +62,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(Security);
 
 - (int) numberItemsUnlocked
 {
-    return [locks count];
+    return (int)[locks count];
 }
 
 - (void) tryToSetLock:(NSString*)aLockName to:(BOOL)aState forWindow:(NSWindow*)aWindow

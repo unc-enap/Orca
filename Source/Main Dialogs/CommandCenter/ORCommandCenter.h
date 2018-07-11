@@ -64,7 +64,7 @@
 - (void) setSocketPort:(int)aPort;
 - (void) setClients:(NSMutableArray*)someClients;
 - (NSArray*)clients;
-- (int) clientCount;
+- (NSUInteger) clientCount;
 - (BOOL) clientWithNameExists:(NSString*)aName;
 - (void) taskListChanged:(NSNotification*)aNotification;
 - (void) documentClosed:(NSNotification*)aNotification;

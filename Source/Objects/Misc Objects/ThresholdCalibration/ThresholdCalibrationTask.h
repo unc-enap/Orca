@@ -37,7 +37,7 @@
 
 @interface ThresholdCalibrationTask : NSObject {
 	NSString* name;
-    int tag;
+    NSUInteger tag;
     id delegate;
     double savedIntegrationTime;
     NSMutableArray* channelArray;

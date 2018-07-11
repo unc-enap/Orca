@@ -149,5 +149,5 @@
 
 #pragma mark ¥¥¥Plot DataSource
 - (int) numberPointsInPlot:(id)aPlotter;
-- (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
+- (void) plotter:(id)aPlotter index:(unsigned long)i x:(double*)xValue y:(double*)yValue;
 @end

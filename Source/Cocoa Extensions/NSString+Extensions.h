@@ -72,7 +72,7 @@ typedef enum {
 @end
 
 @interface NSMutableString (NSStringWithExtensions)
-- (unsigned int)replace:(NSString *)target with:(NSString *)replacement;
+- (NSUInteger)replace:(NSString *)target with:(NSString *)replacement;
 @end
 
     

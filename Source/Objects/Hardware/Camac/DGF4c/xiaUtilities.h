@@ -28,6 +28,6 @@ double Tau_Finder(double Tau);
 double Tau_Fit(unsigned int* Trace, long kmin, long kmax, double dt);
 double Phi_Value(unsigned int* ydat,double qq, long kmin, long kmax);
 double Thresh_Finder(unsigned int* Trace, double Tau, double* FF, double* FF2, long FL, long FG, unsigned short Xwait);
-long RandomSwap();
+long RandomSwap(void);
 long linefit (double* data, double* coeff);
 

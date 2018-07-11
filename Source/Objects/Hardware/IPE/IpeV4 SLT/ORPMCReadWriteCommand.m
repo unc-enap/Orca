@@ -27,8 +27,8 @@
 }
 
 + (id) writeLongBlock:(unsigned long *) writeAddress
-			 atAddress:(unsigned int) pmcAddress
-			numToWrite:(unsigned int) numberLongs
+			 atAddress:(unsigned long) pmcAddress
+			numToWrite:(unsigned long) numberLongs
 {
 	return [[[ORPMCReadWriteCommand alloc] initWithOp: kSBC_WriteBlock
 										   dataAdress: writeAddress
@@ -37,8 +37,8 @@
 	
 }
 
-+ (id) readLongBlockAtAddress:(unsigned int) pmcAddress
-		   numToRead:(unsigned int) numberLongs
++ (id) readLongBlockAtAddress:(unsigned long) pmcAddress
+		   numToRead:(unsigned long) numberLongs
 {
 	return [[[ORPMCReadWriteCommand alloc] initWithOp: kSBC_ReadBlock
 										   dataAdress: 0		
@@ -57,8 +57,8 @@
 
 - (id) initWithOp: (int) anOpType
 	   dataAdress: (unsigned long*) dataAddress
-	   pmcAddress: (unsigned int) apmcAddress
-	  numberItems: (unsigned int) aNumberItems
+	   pmcAddress: (unsigned long) apmcAddress
+	  numberItems: (unsigned long) aNumberItems
 {
 	self			= [super init];
 	opType			= anOpType;
@@ -79,8 +79,8 @@
 
 - (unsigned long) milliSecondDelay { return milliSecondDelay;}
 - (int)	opType				 { return opType; }
-- (int) numberItems			 { return numberItems; }
-- (unsigned int) pmcAddress  { return pmcAddress; }
+- (unsigned long) numberItems			 { return numberItems; }
+- (unsigned long) pmcAddress  { return pmcAddress; }
 - (int) returnCode			 { return returnCode; }
 - (void) setReturnCode:(int)aCode {  returnCode = aCode; }
 - (NSMutableData*) data		 { return data; }
@@ -92,22 +92,22 @@
 	aPacket->cmdHeader.destination		= kSBC_Process;
 	if(opType == kSBC_WriteBlock){
 		aPacket->cmdHeader.cmdID			= kSBC_WriteBlock;
-		aPacket->cmdHeader.numberBytesinPayload	= sizeof(SBC_IPEv4WriteBlockStruct) + numberItems*sizeof(long);
+		aPacket->cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(SBC_IPEv4WriteBlockStruct) + numberItems*sizeof(long));
         if (aPacket->cmdHeader.numberBytesinPayload > kSBC_MaxPayloadSizeBytes) [self throwError:ENOMEM];
 		SBC_IPEv4WriteBlockStruct* writeBlockPtr = (SBC_IPEv4WriteBlockStruct*)aPacket->payload;
-		writeBlockPtr->address			= pmcAddress;
-		writeBlockPtr->numItems			= numberItems;
+		writeBlockPtr->address			= (uint32_t)pmcAddress;
+		writeBlockPtr->numItems			= (uint32_t)numberItems;
 		writeBlockPtr++;				//point to the payload
 		char* p = (char*)[data bytes];
 		memcpy(writeBlockPtr,p,numberItems*sizeof(long));		
 	}
 	else if(opType == kSBC_ReadBlock){
 		aPacket->cmdHeader.cmdID			= kSBC_ReadBlock;
-		aPacket->cmdHeader.numberBytesinPayload	= sizeof(SBC_IPEv4ReadBlockStruct) + numberItems*sizeof(long);
+		aPacket->cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(SBC_IPEv4ReadBlockStruct) + numberItems*sizeof(long));
         if (aPacket->cmdHeader.numberBytesinPayload > kSBC_MaxPayloadSizeBytes) [self throwError:ENOMEM];        
 		SBC_IPEv4ReadBlockStruct* readBlockPtr = (SBC_IPEv4ReadBlockStruct*)aPacket->payload;
-		readBlockPtr->address			= pmcAddress;
-		readBlockPtr->numItems			= numberItems;
+		readBlockPtr->address			= (uint32_t)pmcAddress;
+		readBlockPtr->numItems			= (uint32_t)numberItems;
 		//payload is empty, will have data on return, fill with zeros for now
 		readBlockPtr++;				//point to the payload
 		memset(readBlockPtr,0,numberItems*sizeof(long));
@@ -117,7 +117,7 @@
 		aPacket->cmdHeader.cmdID			= kSBC_TimeDelay;
 		aPacket->cmdHeader.numberBytesinPayload	= sizeof(SBC_TimeDelay);
 		SBC_TimeDelay* delayStructPtr = (SBC_TimeDelay*)aPacket->payload;
-		delayStructPtr->milliSecondDelay			= milliSecondDelay;
+		delayStructPtr->milliSecondDelay			= (uint32_t)milliSecondDelay;
 	}
 	else validOp = NO;
 	
@@ -136,7 +136,7 @@
 	else if(aPacket->cmdHeader.cmdID == kSBC_ReadBlock){
 		SBC_IPEv4ReadBlockStruct* rp = (SBC_IPEv4ReadBlockStruct*)aPacket->payload;
 		if(!rp->errorCode){		
-			int num = numberItems;
+			unsigned long num = numberItems;
 			char* dp = (char*)(rp+1); //point to the data
 			[data replaceBytesInRange:NSMakeRange(0,num*sizeof(long)) withBytes:dp];
 		}

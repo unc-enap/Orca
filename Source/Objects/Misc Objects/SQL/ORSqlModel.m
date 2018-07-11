@@ -922,7 +922,7 @@ static NSString* ORSqlModelInConnector 	= @"ORSqlModelInConnector";
 			if([arrayOfHistos count]){
 				id histoObj = [arrayOfHistos objectAtIndex:0];
 				//assume first one in the data chain
-				[anOp setDataMonitorId:[histoObj uniqueIdNumber]];
+				[anOp setDataMonitorId:(int)[histoObj uniqueIdNumber]];
 				[ORSqlDBQueue addOperation:anOp];
 			}
 			[anOp release];
@@ -1715,7 +1715,7 @@ Table: Histogram2Ds
 								if(lastCounts != countsNow){
 									NSData* theData = [aDataSet getNonZeroRawDataWithStart:&start end:&end];
                                     //also need it as a string for couchdb
-                                    int n = [theData length]/4;
+                                    int n = (int)[theData length]/4;
                                     NSMutableString* dataStr = [NSMutableString stringWithCapacity:n*64];
                                     unsigned long* dataPtr = (unsigned long*)[theData bytes];
                                     if(dataPtr){
@@ -1740,7 +1740,7 @@ Table: Histogram2Ds
 								NSData* theData = [aDataSet getNonZeroRawDataWithStart:&start end:&end];
 								NSString* convertedData = [sqlConnection quoteObject:theData];
 								NSString* dataStr = [aDataSet getnonZeroDataAsStringWithStart:&start end:&end];
-								NSString* theQuery = [NSString stringWithFormat:@"INSERT INTO Histogram1Ds (monitor_id,machine_id,name,counts,type,start,end,length,data,datastr) VALUES (%lu,%@,%@,%lu,1,%lu,%lu,%d,%@,%@)",
+								NSString* theQuery = [NSString stringWithFormat:@"INSERT INTO Histogram1Ds (monitor_id,machine_id,name,counts,type,start,end,length,data,datastr) VALUES (%lu,%@,%@,%lu,1,%lu,%lu,%ld,%@,%@)",
 													  [aMonitor uniqueIdNumber],
 													  [sqlConnection quoteObject:machine_id],
 													  [sqlConnection quoteObject:[aDataSet fullName]],
@@ -1797,7 +1797,7 @@ Table: Histogram2Ds
 													  [aDataSet totalCounts],
 													  binsPerSide,
 													  minX,maxX,minY,maxY,
-													  [aDataSet numberBins],
+													  (int)[aDataSet numberBins],
 													  convertedData];
 								[sqlConnection queryString:theQuery];
 							}
@@ -1833,7 +1833,7 @@ Table: Histogram2Ds
 														  [aDataSet mask],
 														  [aDataSet specialBitMask],
 														  [aDataSet dataOffset],
-														  [aDataSet numberBins],
+														  (int)[aDataSet numberBins],
 														  convertedData,
 														  [sqlConnection quoteObject:dataset_id]];
 									[sqlConnection queryString:theQuery];
@@ -1850,7 +1850,7 @@ Table: Histogram2Ds
 													  [aDataSet mask],
 													  [aDataSet specialBitMask],
 													  [aDataSet dataOffset],
-													  [aDataSet numberBins],
+													  (int)[aDataSet numberBins],
 													  convertedData];
 								[sqlConnection queryString:theQuery];
 							}

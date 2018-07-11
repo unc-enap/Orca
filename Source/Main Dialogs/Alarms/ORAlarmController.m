@@ -140,7 +140,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmController);
 - (void) tableViewSelectionDidChange:(NSNotification *)aNotification
 {
 	if([aNotification object] == tableView || aNotification == nil){
-		int selectedIndex = [tableView selectedRow];
+		NSInteger selectedIndex = [tableView selectedRow];
 		if(selectedIndex>=0){
 			[self setUpHelpText];
 			//[helpDrawer open];
@@ -154,7 +154,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmController);
 		}
 	}
 	if([aNotification object] == addressList || aNotification == nil){
-		int selectedIndex = [addressList selectedRow];
+		NSInteger selectedIndex = [addressList selectedRow];
 		[removeAddressButton setEnabled:selectedIndex>=0];
 		if(selectedIndex>=0){
 			[addressField setEnabled:YES];
@@ -286,7 +286,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmController);
 
 - (IBAction) addressAction:(id)sender
 {
-	int selectedIndex = [addressList selectedRow];
+	NSInteger selectedIndex = [addressList selectedRow];
 	if(selectedIndex>=0) {
 		id addressObj = [[self alarmCollection] addressAtIndex:selectedIndex];
 		[addressObj setMailAddress:[sender stringValue]];
@@ -313,7 +313,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmController);
 
 - (void) severitySelectionChanged:(NSNotification*)aNotification
 {
-	int selectedIndex = [addressList selectedRow];
+	NSInteger selectedIndex = [addressList selectedRow];
 	if(selectedIndex>=0) {
 		id addressObj = [[self alarmCollection] addressAtIndex:selectedIndex];
 		if([aNotification object] == addressObj){
@@ -333,7 +333,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmController);
 }
 - (void) addressAdded:(NSNotification*)aNote
 {
-	int index = [[[aNote userInfo] objectForKey:@"Index"] intValue];
+	NSInteger index = [[[aNote userInfo] objectForKey:@"Index"] intValue];
 	index = MIN(index,[[self alarmCollection] eMailCount]);
 	index = MAX(index,0);
 	[addressList reloadData];
@@ -343,7 +343,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmController);
 
 - (void) addressRemoved:(NSNotification*)aNote
 {
-	int index = [[[aNote userInfo] objectForKey:@"Index"] intValue];
+	NSInteger index = [[[aNote userInfo] objectForKey:@"Index"] intValue];
 	index = MIN(index,[[self alarmCollection] eMailCount]-1);
 	index = MAX(index,0);
 	[addressList reloadData];
@@ -353,7 +353,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmController);
 
 - (void) addressChanged:(NSNotification*)aNotification
 {
-	int selectedIndex = [addressList selectedRow];
+	NSInteger selectedIndex = [addressList selectedRow];
 	if(selectedIndex>=0) {
 		id addressObj = [[self alarmCollection] addressAtIndex:selectedIndex];
 		if([aNotification object] == addressObj){

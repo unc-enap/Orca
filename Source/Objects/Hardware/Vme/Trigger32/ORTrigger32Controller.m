@@ -35,7 +35,7 @@
 {
     [super awakeFromNib];
     NSString* key = [NSString stringWithFormat: @"orca.Trigger32%d.selectedtab",[model slot]];
-    int index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
 }
@@ -248,7 +248,7 @@
 - (void) tabView:(NSTabView*)aTabView didSelectTabViewItem:(NSTabViewItem*)item
 {
     NSString* key = [NSString stringWithFormat: @"orca.ORTrigger32%d.selectedtab",[model slot]];
-    int index = [tabView indexOfTabViewItem:item];
+    NSInteger index = [tabView indexOfTabViewItem:item];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
     
 }
@@ -368,7 +368,7 @@
 
 - (void) gtErrorCountChanged:(NSNotification*)aNotification
 {
-	[gtErrorField setIntValue:[model gtErrorCount]];
+	[gtErrorField setIntegerValue:[model gtErrorCount]];
     
 }
 
@@ -390,7 +390,7 @@
 
 - (void) baseAddressChanged:(NSNotification*)aNotification
 {
-	[addressText setIntValue: [model baseAddress]];
+	[addressText setIntegerValue: [model baseAddress]];
 	[self updateStepper:addressStepper setting:[model baseAddress]];
 }
 
@@ -403,7 +403,7 @@
 
 - (void) gtIdValueChanged:(NSNotification*)aNotification
 {
-	[gtIdValueText setIntValue: [model gtIdValue]];
+	[gtIdValueText setIntegerValue: [model gtIdValue]];
 	[self updateStepper:gtIdValueStepper setting:[model gtIdValue]];
     
 }
@@ -480,19 +480,19 @@
 
 - (void) timeClockLowerChanged:(NSNotification*)aNotification
 {
-	[timeClockLowerText setIntValue: [model lowerTimeValue]];
+	[timeClockLowerText setIntegerValue: [model lowerTimeValue]];
 	[self updateStepper:timeClockLowerStepper setting:[model lowerTimeValue]];
 }
 
 - (void) timeClockUpperChanged:(NSNotification*)aNotification
 {
-	[timeClockUpperText setIntValue: [model upperTimeValue]];
+	[timeClockUpperText setIntegerValue: [model upperTimeValue]];
 	[self updateStepper:timeClockUpperStepper setting:[model upperTimeValue]];
 }
 
 - (void) testRegChanged:(NSNotification*)aNotification
 {
-	[testRegText setIntValue: [model testRegisterValue]];
+	[testRegText setIntegerValue: [model testRegisterValue]];
 	[self updateStepper:testRegStepper setting:[model testRegisterValue]];
 }
 

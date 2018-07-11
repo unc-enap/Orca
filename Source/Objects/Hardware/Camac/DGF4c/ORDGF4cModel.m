@@ -732,7 +732,7 @@ enum {
 		 object:self
 		 userInfo: [NSDictionary dictionaryWithObjectsAndKeys: 
 					arrayName, @"ArrayName",
-					[NSNumber numberWithInt:index], @"ArrayIndex",
+					[NSNumber numberWithInteger:index], @"ArrayIndex",
 					[item objectForKey:@"name"], @"ParamName",
 					nil]];
         
@@ -820,7 +820,7 @@ enum {
 		
 		NSLog(@"Begining DFG4c (station %d) System Configuration\n",[self stationNumber]);
 		NSData* fpgaData = [NSData dataWithContentsOfFile:filePath];
-		int len = [fpgaData length];
+		unsigned long len = [fpgaData length];
 		if(fpgaData){
 			int i;
 			const unsigned char* dataPtr = (unsigned char*)[fpgaData bytes];
@@ -968,7 +968,7 @@ enum {
         
         NSLog(@"Begining DFG4c (station %d) DSP load/boot\n",[self stationNumber]);
         NSData* fpgaData = [NSData dataWithContentsOfFile:dspCodePath];
-        int len = [fpgaData length]/4;
+        unsigned long len = [fpgaData length]/4;
         if(fpgaData && len){
             int i;
             const unsigned long* dataPtr = (unsigned long*)[fpgaData bytes];
@@ -1042,7 +1042,7 @@ enum {
 		
 		//first the DSP Chan Params
 		paramArray = [params objectForKey:@"DSPChanParams"];
-		int n = [paramArray count];
+		NSUInteger n = [paramArray count];
 		for(i=0;i<n;i++){
 			paramDict = [paramArray objectAtIndex:i];
 			int chan;
@@ -1178,7 +1178,7 @@ enum {
 		
 		//first the DSP Chan Params
 		paramArray = [params objectForKey:@"DSPChanParams"];
-		int n = [paramArray count];
+		NSUInteger n = [paramArray count];
 		for(i=0;i<n;i++){
 			paramDict = [paramArray objectAtIndex:i];
 			int chan;
@@ -1448,7 +1448,8 @@ enum {
 
 - (void) calcOffsets
 {
-	long j, ret;
+    int j;
+    long ret;
 	double a, b, abdiff, abmid;
 	unsigned short adcMax = 4095;
 	double coeff[2], TDACwave[kLinearBufferSize],low,high;
@@ -1797,7 +1798,7 @@ enum {
 		[self loadParamsWithReadBack:YES]; //load all params to HW
 	}
 	else {
-		[NSException raise:@"Trace Length Too long" format:@"DGF4c station %d",[self stationNumber]];
+		[NSException raise:@"Trace Length Too long" format:@"DGF4c station %ld",[self stationNumber]];
 	}
 }
 
@@ -2075,7 +2076,7 @@ enum {
 - (void)encodeWithCoder:(NSCoder*)coder
 {
     [super encodeWithCoder:coder];
-    [coder encodeInt32:runBehaviorMask forKey:@"ORDGF4cModelRunBehaviorMask"];
+    [coder encodeInt32:(int32_t)runBehaviorMask forKey:@"ORDGF4cModelRunBehaviorMask"];
     [coder encodeInt:runTask forKey:@"ORDGF4cModelRunTask"];
     [coder encodeObject: firmWarePath forKey:@"firmWarePath"];
     [coder encodeObject: dspCodePath forKey:@"dspCodePath"];
@@ -2201,7 +2202,7 @@ enum {
     NSMutableArray* dspChanArray = [NSMutableArray array];
     
     
-    int numLines = [theLines count];
+    NSUInteger numLines = [theLines count];
     int i;
     for(i=0;i<numLines;i++){
         NSString* lineNoSpaces = [[theLines objectAtIndex:i] removeExtraSpaces];
@@ -2264,7 +2265,7 @@ enum {
     //will end up being set to zero.
     { //--start a new scope so no conflict with above code
         NSArray* dspParams = [params objectForKey:@"DSPParams"];
-        int count = [dspParams count];
+        NSUInteger count = [dspParams count];
         int i;
         for(i=0;i<count;i++){
             NSDictionary* item = [dspParams objectAtIndex:i];
@@ -2285,7 +2286,7 @@ enum {
     { //--start a new scope so no conflict with above code
         
         NSArray* dspChanParams = [params objectForKey:@"DSPChanParams"];
-        int count = [dspChanParams count];
+        NSUInteger count = [dspChanParams count];
         int i;
         for(i=0;i<count;i++){
             NSDictionary* item = [dspChanParams objectAtIndex:i];
@@ -2534,7 +2535,8 @@ enum {
 - (long) computeMaxEvents:(long) runType
 {
 	
-	long k,maximumEvents;
+    int k;
+    long maximumEvents;
 	unsigned short bhl,ehl,chl,leventbuffer,loutputbuffer,lengthin,lengthout;
 	
 	/* Check InputEventSize for list modes (0x101, 0x102, 0x103)  */
@@ -2844,7 +2846,7 @@ enum {
 {
     NSDictionary* paramDict;
     NSArray* paramArray = [params objectForKey:@"DSPParams"];
-    int n = [paramArray count];
+    NSUInteger n = [paramArray count];
     int i;
     for(i=0;i<n;i++){
         paramDict = [paramArray objectAtIndex:i];
@@ -2861,7 +2863,7 @@ enum {
 {
     if(!lookUpTable)[self setLookUpTable:[NSMutableDictionary dictionary]];
     NSMutableArray* array = [params objectForKey:@"DSPParams"];
-    int n = [array count];
+    NSUInteger n = [array count];
     int i;
     for(i=0;i<n;i++){
         NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:

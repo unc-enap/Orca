@@ -376,38 +376,38 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 
     return; //currently unused -tb-
     
+//
+//
+//
+//    //NSLog(@"Called %@::%@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//DEBUG -tb-
+//
+//    NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
+//     [notifyCenter removeObserver:self]; //guard against a double register
+//
+//    //[super registerNotificationObservers]; ORIpeV4FLTModel does not implement it ... -tb-
+//
+//    [notifyCenter addObserver : self
+//                     selector : @selector(runIsAboutToStart:)
+//                         name : ORRunAboutToStartNotification
+//                       object : nil];
+//
+//    #if 0
+//    [notifyCenter addObserver : self
+//                     selector : @selector(XXXXsettingsLockChanged:)
+//                         name : ORRunStatusChangedNotification
+//                       object : nil];
+//
+//    [notifyCenter addObserver : self
+//                     selector : @selector(runIsAboutToStop:)
+//                         name : ORRunAboutToStopNotification
+//                       object : nil];
+//
+//    [notifyCenter addObserver : self
+//                     selector : @selector(runIsAboutToChangeState:)
+//                         name : ORRunAboutToChangeState
+//                       object : nil];
+//    #endif
     
-    
-    
-    //NSLog(@"Called %@::%@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//DEBUG -tb-
-	
-    NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
- 	[notifyCenter removeObserver:self]; //guard against a double register
-   
-    //[super registerNotificationObservers]; ORIpeV4FLTModel does not implement it ... -tb-
-					   
-    [notifyCenter addObserver : self
-                     selector : @selector(runIsAboutToStart:)
-                         name : ORRunAboutToStartNotification
-                       object : nil];
-					   
-	#if 0
-    [notifyCenter addObserver : self
-                     selector : @selector(XXXXsettingsLockChanged:)
-                         name : ORRunStatusChangedNotification
-                       object : nil];
-					   
-    [notifyCenter addObserver : self
-                     selector : @selector(runIsAboutToStop:)
-                         name : ORRunAboutToStopNotification
-                       object : nil];
-    
-    [notifyCenter addObserver : self
-                     selector : @selector(runIsAboutToChangeState:)
-                         name : ORRunAboutToChangeState
-                       object : nil];
-	#endif
-					   
 }
 
 #if 0
@@ -459,7 +459,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     if(![self isPartOfRun]) return;
     
 
-    if(1 || state==eRunStarting){
+    if(state==eRunStarting){
         //DEBUG
         NSLog(@"%@::%@ FLT#%i: run is starting, read back statusReg and FPGA version\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[self stationNumber],hitRateEnabledMask);//DEBUG -tb-
 	    //TODO: [self addRunWaitWithReason:@"FLTv4: wait for next hitrate event."];
@@ -587,12 +587,12 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     [[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissFLTModelProgressOfChargeFICChanged object:self];
 }
 
-- (uint32_t) ficCardTriggerCmdForFiber:(int)aFiber
+- (unsigned long) ficCardTriggerCmdForFiber:(int)aFiber
 {
     return ficCardTriggerCmd[aFiber];
 }
 
-- (void) setFicCardTriggerCmd:(uint32_t)aFicCardTriggerCmd  forFiber:(int)aFiber
+- (void) setFicCardTriggerCmd:(unsigned long)aFicCardTriggerCmd  forFiber:(int)aFiber
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setFicCardTriggerCmd:ficCardTriggerCmd[aFiber] forFiber:aFiber];
     
@@ -601,12 +601,12 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     [[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissFLTModelFicCardTriggerCmdChanged object:self];
 }
 
-- (uint32_t) ficCardADC23CtrlRegForFiber:(int)aFiber
+- (unsigned long) ficCardADC23CtrlRegForFiber:(int)aFiber
 {
     return ficCardADC23CtrlReg[aFiber];
 }
 
-- (void) setFicCardADC23CtrlReg:(uint32_t)aFicCardADC23CtrlReg forFiber:(int)aFiber
+- (void) setFicCardADC23CtrlReg:(unsigned long)aFicCardADC23CtrlReg forFiber:(int)aFiber
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setFicCardADC23CtrlReg:ficCardADC23CtrlReg[aFiber] forFiber:aFiber];
     
@@ -615,12 +615,12 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     [[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissFLTModelFicCardADC23CtrlRegChanged object:self];
 }
 
-- (uint32_t) ficCardADC01CtrlRegForFiber:(int)aFiber
+- (unsigned long) ficCardADC01CtrlRegForFiber:(int)aFiber
 {
     return ficCardADC01CtrlReg[aFiber];
 }
 
-- (void) setFicCardADC01CtrlReg:(uint32_t)aFicCardADC01CtrlReg forFiber:(int)aFiber
+- (void) setFicCardADC01CtrlReg:(unsigned long)aFicCardADC01CtrlReg forFiber:(int)aFiber
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setFicCardADC01CtrlReg:ficCardADC01CtrlReg[aFiber] forFiber:aFiber];
     
@@ -629,12 +629,12 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     [[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissFLTModelFicCardADC01CtrlRegChanged object:self];
 }
 
-- (uint32_t) ficCardCtrlReg2ForFiber:(int)aFiber
+- (unsigned long) ficCardCtrlReg2ForFiber:(int)aFiber
 {
     return ficCardCtrlReg2[aFiber];
 }
 
-- (void) setFicCardCtrlReg2:(uint32_t)aFicCardCtrlReg2 forFiber:(int)aFiber
+- (void) setFicCardCtrlReg2:(unsigned long)aFicCardCtrlReg2 forFiber:(int)aFiber
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setFicCardCtrlReg2:ficCardCtrlReg2[aFiber] forFiber:aFiber];
     
@@ -643,21 +643,21 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     [[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissFLTModelFicCardCtrlReg2Changed object:self];
 }
 
-- (void) setFicCardCtrlReg2AddrOffs:(uint32_t)aOffset forFiber:(int)aFiber
+- (void) setFicCardCtrlReg2AddrOffs:(unsigned long)aOffset forFiber:(int)aFiber
 {
     //[[[self undoManager] prepareWithInvocationTarget:self] setFicCardCtrlReg2:ficCardCtrlReg2[aFiber] forFiber:aFiber];
-    uint32_t aFicCardCtrlReg2 = ficCardCtrlReg2[aFiber];
+    unsigned long aFicCardCtrlReg2 = ficCardCtrlReg2[aFiber];
     aFicCardCtrlReg2 = (aFicCardCtrlReg2 & 0xff00) |  (aOffset & 0x00ff);
     [self setFicCardCtrlReg2: aFicCardCtrlReg2 forFiber: aFiber];
     //[[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissFLTModelFicCardCtrlReg2Changed object:self];
 }
 
-- (uint32_t) ficCardCtrlReg1ForFiber:(int)aFiber
+- (unsigned long) ficCardCtrlReg1ForFiber:(int)aFiber
 {
     return ficCardCtrlReg1[aFiber];
 }
 
-- (void) setFicCardCtrlReg1:(uint32_t)aFicCardCtrlReg1 forFiber:(int)aFiber
+- (void) setFicCardCtrlReg1:(unsigned long)aFicCardCtrlReg1 forFiber:(int)aFiber
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setFicCardCtrlReg1:ficCardCtrlReg1[aFiber] forFiber:aFiber];
     
@@ -740,16 +740,16 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     [slt chargeBBusingSBCinBackgroundWithData:theData forFLT:self];
 
 
-    return [theData length];
+    return (int)[theData length];
 }
 
 
-- (uint32_t) BB0x0ACmdMask
+- (unsigned long) BB0x0ACmdMask
 {
     return BB0x0ACmdMask;
 }
 
-- (void) setBB0x0ACmdMask:(uint32_t)aBB0x0ACmdMask
+- (void) setBB0x0ACmdMask:(unsigned long)aBB0x0ACmdMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setBB0x0ACmdMask:BB0x0ACmdMask];
     BB0x0ACmdMask = aBB0x0ACmdMask;
@@ -1756,12 +1756,12 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 
 //BB status bit buffer
 
-- (uint32_t) statusBB32forFiber:(int)aFiber atIndex:(int)aIndex   
+- (unsigned long) statusBB32forFiber:(int)aFiber atIndex:(int)aIndex
 {
     return statusBitsBB[aFiber][aIndex];
 }
 
-- (void) setStatusBB32forFiber:(int)aFiber atIndex:(int)aIndex to:(uint32_t)aValue
+- (void) setStatusBB32forFiber:(int)aFiber atIndex:(int)aIndex to:(unsigned long)aValue
 {
     statusBitsBB[aFiber][aIndex]=aValue;
 }
@@ -1834,12 +1834,12 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     [[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissFLTModelFiberSelectForBBStatusBitsChanged object:self];
 }
 
-- (uint32_t) fiberOutMask
+- (unsigned long) fiberOutMask
 {
     return fiberOutMask;
 }
 
-- (void) setFiberOutMask:(uint32_t)aFiberOutMask
+- (void) setFiberOutMask:(unsigned long)aFiberOutMask
 {
         //DEBUG OUTPUT: 	        NSLog(@"%@::%@: UNDER CONSTRUCTION! aFiberOutMask %x\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),aFiberOutMask);//TODO : DEBUG testing ...-tb-
     [[[self undoManager] prepareWithInvocationTarget:self] setFiberOutMask:fiberOutMask];
@@ -1900,12 +1900,12 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 
 
 
-- (uint32_t) controlRegister
+- (unsigned long) controlRegister
 {
     return controlRegister;
 }
 
-- (void) setControlRegister:(uint32_t)aControlRegister
+- (void) setControlRegister:(unsigned long)aControlRegister
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setControlRegister:controlRegister];
 	
@@ -1922,7 +1922,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 
 - (void) setStatusLatency:(int)aValue//obsolete 2014 -tb-
 {
-    uint32_t cr = controlRegister & ~(kEWFlt_ControlReg_StatusLatency_Mask << kEWFlt_ControlReg_StatusLatency_Shift);
+    unsigned long cr = controlRegister & ~(kEWFlt_ControlReg_StatusLatency_Mask << kEWFlt_ControlReg_StatusLatency_Shift);
     cr = cr | ((aValue & kEWFlt_ControlReg_StatusLatency_Mask) << kEWFlt_ControlReg_StatusLatency_Shift);
 	[self setControlRegister:cr];
 }
@@ -1932,23 +1932,22 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 
 - (void) setVetoFlag:(int)aValue
 {
-    uint32_t cr = controlRegister & ~(kEWFlt_ControlReg_VetoFlag_Mask << kEWFlt_ControlReg_VetoFlag_Shift);
+    unsigned long cr = controlRegister & ~(kEWFlt_ControlReg_VetoFlag_Mask << kEWFlt_ControlReg_VetoFlag_Shift);
     cr = cr | ((aValue & kEWFlt_ControlReg_VetoFlag_Mask) << kEWFlt_ControlReg_VetoFlag_Shift);
 	[self setControlRegister:cr];
 }
 
 
 
-- (int) selectFiberTrig//obsolete 2014 -tb-
+- (unsigned long) selectFiberTrig//obsolete 2014 -tb-
 {
-    uint32_t aselectFiberTrig = (controlRegister >> kEWFlt_ControlReg_SelectFiber_Shift) & kEWFlt_ControlReg_SelectFiber_Mask;
-    return aselectFiberTrig;
+    return (controlRegister >> kEWFlt_ControlReg_SelectFiber_Shift) & kEWFlt_ControlReg_SelectFiber_Mask;
 }
 
 - (void) setSelectFiberTrig:(int)aSelectFiberTrig//obsolete 2014 -tb-
 {
     //[[[self undoManager] prepareWithInvocationTarget:self] setSelectFiberTrig:selectFiberTrig];
-    uint32_t cr = controlRegister & ~(kEWFlt_ControlReg_SelectFiber_Mask << kEWFlt_ControlReg_SelectFiber_Shift);
+    unsigned long cr = controlRegister & ~(kEWFlt_ControlReg_SelectFiber_Mask << kEWFlt_ControlReg_SelectFiber_Shift);
     selectFiberTrig = aSelectFiberTrig;
     cr = cr | ((selectFiberTrig & kEWFlt_ControlReg_SelectFiber_Mask) << kEWFlt_ControlReg_SelectFiber_Shift);
 	[self setControlRegister:cr];
@@ -1973,7 +1972,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     //BBv1Mask = aBBv1Mask;
     //[[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissFLTModelBBv1MaskChanged object:self];
     //BBv1Mask = aBBv1Mask;
-    uint32_t cr = controlRegister & ~(kEWFlt_ControlReg_BBv1_Mask << kEWFlt_ControlReg_BBv1_Shift);
+    unsigned long cr = controlRegister & ~(kEWFlt_ControlReg_BBv1_Mask << kEWFlt_ControlReg_BBv1_Shift);
     cr = cr | ((aBBv1Mask & kEWFlt_ControlReg_BBv1_Mask) << kEWFlt_ControlReg_BBv1_Shift);
 	[self setControlRegister:cr];
 }
@@ -1993,7 +1992,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     //[[[self undoManager] prepareWithInvocationTarget:self] setFiberEnableMask:fiberEnableMask];
     //fiberEnableMask = aFiberEnableMask;
     //[[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissFLTModelFiberEnableMaskChanged object:self];
-    uint32_t cr = controlRegister & ~(kEWFlt_ControlReg_FiberEnable_Mask << kEWFlt_ControlReg_FiberEnable_Shift);
+    unsigned long cr = controlRegister & ~(kEWFlt_ControlReg_FiberEnable_Mask << kEWFlt_ControlReg_FiberEnable_Shift);
     fiberEnableMask = aFiberEnableMask;
     cr = cr | ((aFiberEnableMask & kEWFlt_ControlReg_FiberEnable_Mask) << kEWFlt_ControlReg_FiberEnable_Shift);
 	[self setControlRegister:cr];
@@ -2009,7 +2008,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     //fltModeFlags = aFltModeFlags;
     //[[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissFLTModelFltModeFlagsChanged object:self];
     fltModeFlags = aFltModeFlags;
-    uint32_t cr = controlRegister & ~(kEWFlt_ControlReg_ModeFlags_Mask << kEWFlt_ControlReg_ModeFlags_Shift);
+    unsigned long cr = controlRegister & ~(kEWFlt_ControlReg_ModeFlags_Mask << kEWFlt_ControlReg_ModeFlags_Shift);
     cr = cr | ((aFltModeFlags & kEWFlt_ControlReg_ModeFlags_Mask) << kEWFlt_ControlReg_ModeFlags_Shift);
 	[self setControlRegister:cr];
 }
@@ -2026,7 +2025,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     //tpix = aTpix;
     //[[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissFLTModelTpixChanged object:self];
     //tpix = aTpix;
-    uint32_t cr = controlRegister & ~(kEWFlt_ControlReg_tpix_Mask << kEWFlt_ControlReg_tpix_Shift);
+    unsigned long cr = controlRegister & ~(kEWFlt_ControlReg_tpix_Mask << kEWFlt_ControlReg_tpix_Shift);
     cr = cr |              ((aTpix & kEWFlt_ControlReg_tpix_Mask) << kEWFlt_ControlReg_tpix_Shift);
 	[self setControlRegister:cr];
 }
@@ -2037,7 +2036,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 
 - (void) setStatusBitPos:(int)aValue//new 2014 -tb-
 {
-    uint32_t cr = controlRegister & ~(kEWFlt_ControlReg_statusBitPos_Mask << kEWFlt_ControlReg_statusBitPos_Shift);
+    unsigned long cr = controlRegister & ~(kEWFlt_ControlReg_statusBitPos_Mask << kEWFlt_ControlReg_statusBitPos_Shift);
     cr = cr |              ((aValue & kEWFlt_ControlReg_statusBitPos_Mask) << kEWFlt_ControlReg_statusBitPos_Shift);
 	[self setControlRegister:cr];
 }
@@ -2053,7 +2052,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 
 - (void) setFicOnFiberMask:(int)aMask
 {
-    uint32_t cr = controlRegister & ~(kEWFlt_ControlReg_FIConFib_Mask << kEWFlt_ControlReg_FIConFib_Shift);
+    unsigned long cr = controlRegister & ~(kEWFlt_ControlReg_FIConFib_Mask << kEWFlt_ControlReg_FIConFib_Shift);
     cr = cr | ((aMask & kEWFlt_ControlReg_FIConFib_Mask) << kEWFlt_ControlReg_FIConFib_Shift);
 	[self setControlRegister:cr];
 }
@@ -2075,12 +2074,12 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     [[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissFLTModelTotalTriggerNRegisterChanged object:self];
 }
 
-- (uint32_t) statusRegister
+- (unsigned long) statusRegister
 {
     return statusRegister;
 }
 
-- (void) setStatusRegister:(uint32_t)aStatusRegister
+- (void) setStatusRegister:(unsigned long)aStatusRegister
 {
     statusRegister = aStatusRegister;
 
@@ -2128,16 +2127,16 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     return streamMask;
 }
 
-- (uint32_t) streamMask1
+- (unsigned long) streamMask1
 {
-    uint32_t val=0;
+    unsigned long val=0;
 	val = streamMask & 0xffffffffLL;
-	return (uint32_t)val;
+	return (unsigned long)val;
 }
 
-- (uint32_t) streamMask2
+- (unsigned long) streamMask2
 {
-    uint32_t val;
+    unsigned long val;
 	val = (streamMask & 0xffffffff00000000LL) >> 32;
 	return val;
 }
@@ -2172,16 +2171,16 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     return ionTriggerMask;
 }
 
-- (uint32_t) ionTriggerMask1
+- (unsigned long) ionTriggerMask1
 {
-    uint32_t val=0;
+    unsigned long val=0;
 	val = ionTriggerMask & 0xffffffffLL;
-	return (uint32_t)val;
+	return (unsigned long)val;
 }
 
-- (uint32_t) ionTriggerMask2
+- (unsigned long) ionTriggerMask2
 {
-    uint32_t val;
+    unsigned long val;
 	val = (ionTriggerMask & 0xffffffff00000000LL) >> 32;
 	return val;
 }
@@ -2210,16 +2209,16 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     return heatTriggerMask;
 }
 
-- (uint32_t) heatTriggerMask1
+- (unsigned long) heatTriggerMask1
 {
-    uint32_t val=0;
+    unsigned long val=0;
 	val = heatTriggerMask & 0xffffffffLL;
-	return (uint32_t)val;
+	return (unsigned long)val;
 }
 
-- (uint32_t) heatTriggerMask2
+- (unsigned long) heatTriggerMask2
 {
-    uint32_t val;
+    unsigned long val;
 	val = (heatTriggerMask & 0xffffffff00000000LL) >> 32;
 	return val;
 }
@@ -2421,7 +2420,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 - (void) setHitRateEnabled:(unsigned short) aChan withValue:(BOOL) aState
 {
 	if(aChan<kNumEWFLTHeatIonChannels){
-        uint32_t mask = hitRateEnabledMask;
+        unsigned long mask = hitRateEnabledMask;
 	    if(aState) mask |= (1L<<aChan);
 	    else       mask &= ~(1L<<aChan);
         [self setHitRateEnabledMask: mask];
@@ -2474,7 +2473,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
         NSLog(@"----------------------------\n");
     int i;
     for(i=0;i<kNumEWFLTHeatIonChannels;i++){
-        unsigned int val=[self readTriggerPar:i];
+        unsigned long val=[self readTriggerPar:i];
         [self setTriggerPar: i withValue: val];
         //triggerPar[i]=val;
         NSLog(@"TriggerParameter[%i]: 0x%08x\n",i,triggerPar[i]);
@@ -2534,7 +2533,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     }    
 }
 
-- (void) setTriggerPar:(unsigned short)chan  withValue:(uint32_t) val
+- (void) setTriggerPar:(unsigned short)chan  withValue:(unsigned long) val
 {
     if(chan>=kNumEWFLTHeatIonChannels){
         //DEBUG OUTPUT:
@@ -2547,7 +2546,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     [[NSNotificationCenter defaultCenter]postNotificationName:OREdelweissFLTModelTriggerEnabledMaskChanged object:self];
 }
 
-- (uint32_t) triggerPar:(unsigned short)chan
+- (unsigned long) triggerPar:(unsigned short)chan
 {
     if(chan<kNumEWFLTHeatIonChannels) return triggerPar[chan];
     return 0;
@@ -2570,8 +2569,8 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 -(void) setThreshold:(unsigned short) aChan withValue:(unsigned long) aThreshold
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setThreshold:aChan withValue:[self threshold:aChan]];
-	aThreshold = [self restrictUnsignedIntValue:aThreshold min:0 max:0xffffffff];
-    [thresholds replaceObjectAtIndex:aChan withObject:[NSNumber numberWithUnsignedInt:aThreshold]];
+	aThreshold = [self restrictUnsignedIntValue:(unsigned int)aThreshold min:0 max:0xffffffff];
+    [thresholds replaceObjectAtIndex:aChan withObject:[NSNumber numberWithUnsignedLong:aThreshold]];
 	
     NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
     [userInfo setObject:[NSNumber numberWithUnsignedInt:aChan] forKey: OREdelweissFLTChan];
@@ -2883,9 +2882,9 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 }
 
 #pragma mark ‚Ä¢‚Ä¢‚Ä¢HW Access
-- (int32_t) readFiberOutMask
+- (unsigned long) readFiberOutMask
 {
-	int32_t value = [self readReg:kFLTV4FiberOutMaskReg];
+	unsigned long value = [self readReg:kFLTV4FiberOutMaskReg];
         //DEBUG OUTPUT: 	        NSLog(@"%@::%@: UNDER CONSTRUCTION! read 0x%x\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),value);//TODO : DEBUG testing ...-tb-
     [self setFiberOutMask: value];
 	return value;
@@ -2893,7 +2892,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 
 - (void) writeFiberOutMask
 {
-    uint32_t aValue = fiberOutMask;
+    unsigned long aValue = fiberOutMask;
         //DEBUG OUTPUT: 	        NSLog(@"%@::%@: UNDER CONSTRUCTION!  write 0x%x\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),aValue);//TODO : DEBUG testing ...-tb-
 	[self writeReg: kFLTV4FiberOutMaskReg value:aValue];
 }
@@ -3066,7 +3065,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 
 - (unsigned long) readTotalTriggerNRegister 
 {
-    unsigned long n = [self readReg: kFLTV4TotalTriggerNReg ];
+    int n = (int)[self readReg: kFLTV4TotalTriggerNReg ];
  	NSLog(@"%@::%@ status: 0x%08x\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),n);//TODO: DEBUG testing ...-tb-
 	[self setTotalTriggerNRegister: n ];
 	return n;
@@ -3074,8 +3073,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 
 - (unsigned long) readControl
 {
-    unsigned long control = 0;
-	control = [self readReg: kFLTV4ControlReg];
+	unsigned long control = [self readReg: kFLTV4ControlReg];
     [self setControlRegister: control];
 	return control;
 }
@@ -3086,7 +3084,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 {
  	//DEBUG     NSLog(@"%@::%@ \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: DEBUG testing ...-tb-
 
-    //  never used: uint32_t highestBit = fls(hitRateLengthSec); if(highestBit) highestBit --;
+    //  never used: unsigned long highestBit = fls(hitRateLengthSec); if(highestBit) highestBit --;
 	//  never used:  unsigned long aValue = ((highestBit) & 0xf) << 16 ;
 	//unsigned long aValue = ((hitRateLength-1) & 0xf) << 16 ; //before 2014-11
 	unsigned long aValue = ((hitRateLength) & 0xff) << 16 ;
@@ -3218,7 +3216,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 }
 
 
-- (void) writeTriggerPar:(int)i value:(unsigned int)aValue
+- (void) writeTriggerPar:(int)i value:(unsigned long)aValue
 {
 	//aValue &= 0xfffff;
     if(i>=0 && i<kNumEWFLTHeatChannels)
@@ -3227,7 +3225,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     	[self writeReg: kFLTV4IonTriggParReg channel:i-kNumEWFLTHeatChannels value:aValue];
 }
 
-- (unsigned int) readTriggerPar:(int)i
+- (unsigned long) readTriggerPar:(int)i
 {
     if(i>=0 && i<kNumEWFLTHeatChannels)
 	    return [self readReg:kFLTV4HeatTriggParReg channel:i];
@@ -3243,7 +3241,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 - (void) writeFiberDelays
 {
  	//NSLog(@"%@::%@ \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd) );//TODO: DEBUG testing ...-tb-
-    uint32_t val=0;
+    unsigned long val=0;
 	val = fiberDelays & 0xffffffffLL;
 	[self writeReg: kFLTV4FiberSet_1Reg value:val];
 	val = (fiberDelays & 0xffffffff00000000LL) >> 32;
@@ -3353,7 +3351,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     //DEBUG 	    
     NSLog(@"%@::%@  test: %@\n", NSStringFromClass([self class]),NSStringFromSelector(_cmd),aFile);//TODO: DEBUG testing ...-tb-
     char filename[4*1024+1];
-    int numBytes=0;
+    unsigned  long numBytes=0;
     if([aFile getCString: filename maxLength: 4*1024 encoding:NSASCIIStringEncoding]){//or use [... cStringUsingEncoding: NSASCIIStringEncoding]
         numBytes=strlen(filename)+1;//+1 : I need the terminating /0
         OREdelweissSLTModel *slt=0;
@@ -3471,9 +3469,9 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
         //DEBUG OUTPUT:           NSLog(@"%@::%@: UNDER CONSTRUCTION! \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO : DEBUG testing ...-tb-
         NSLog(@"  Read BB status bits from FLT %i, fiber in #%i\n",[self stationNumber],fiberSelectForBBAccess);//TODO : DEBUG testing ...-tb-
         
-        //uint32_t BBStatus32[30];
+        //unsigned long BBStatus32[30];
         //uint16_t *BBStatus16 = (uint16_t *)BBStatus32;
-        uint32_t *BBStatus32=statusBitsBB[fiber];
+        unsigned long *BBStatus32=statusBitsBB[fiber];
         uint16_t *BBStatus16 = (uint16_t *)&BBStatus32[0];
         
         int i;
@@ -3534,7 +3532,7 @@ static int counter=0;
         //DEBUG OUTPUT:           NSLog(@"%@::%@: UNDER CONSTRUCTION! \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO : DEBUG testing ...-tb-
         //NSLog(@"  read from fiber in #%i\n",fiberSelectForBBStatusBits);//TODO : DEBUG testing ...-tb-
         
-        uint32_t BBStatus32[30];
+        unsigned long BBStatus32[30];
         uint16_t *BBStatus16 = (uint16_t *)BBStatus32;
         
         int i;
@@ -3604,7 +3602,7 @@ counter++;
  	NSLog(@"     adress:   0x%x\n",TriggChannels & 0x7ff);//TODO: DEBUG testing ...-tb-
  	NSLog(@"     heatMask: 0x%x\n",(TriggChannels >>12) & 0x3f);//TODO: DEBUG testing ...-tb-
  	NSLog(@"     ionMask:  0x%x\n",(TriggChannels >>18) & 0xfff);//TODO: DEBUG testing ...-tb-
-    uint32_t allTriggerMask = (TriggChannels >>12) & 0x3ffff;
+    unsigned long allTriggerMask = (TriggChannels >>12) & 0x3ffff;
  	NSLog(@"     allTriggerMask:  0x%x\n",allTriggerMask);//TODO: DEBUG testing ...-tb-
  	NSLog(@" selectFiberTrig (obsolete?): %i\n",selectFiberTrig);//TODO: DEBUG testing ...-tb-
 	int num=2048;//MUST be > 48 (DMA block size)! max. 2048
@@ -3613,7 +3611,7 @@ counter++;
 	//numChan=1;
 
     #if 1
-    //uint32_t buf[2048];
+    //unsigned long buf[2048];
     unsigned long  buf[2048];
     int i,chan;
     for(chan=0; chan<numChan;chan++){
@@ -3708,7 +3706,7 @@ for(chan=0; chan<6;chan++)
 {
     int i;
     for(i=0;i<kNumEWFLTHeatIonChannels;i++){
-        uint32_t val=[self threshold:i];
+        unsigned long val=[self threshold:i];
         [self writeThreshold: i value: val];
     }
 }
@@ -3717,7 +3715,7 @@ for(chan=0; chan<6;chan++)
 {
     int i;
     for(i=0;i<kNumEWFLTHeatIonChannels;i++){
-        uint32_t val=[self readThreshold:i];
+        unsigned long val=[self readThreshold:i];
         [self setThreshold: i withValue: val];
     }    
 }
@@ -3827,7 +3825,7 @@ for(chan=0; chan<6;chan++)
 	//1,0 always 0
 	//1,1 always 1
 	//[self writeReg:kFLTV4PixelSettings1Reg value:0]; //must be handled by readout, single pixels cannot be disabled for KATRIN - OK, FIRMWARE FIXED -tb-
-	//uint32_t mask = (~triggerEnabledMask) & 0xffffff;
+	//unsigned long mask = (~triggerEnabledMask) & 0xffffff;
 	//[self writeReg:kFLTV4PixelSettings2Reg value: mask];
 }
 
@@ -4339,7 +4337,7 @@ for(chan=0; chan<6;chan++)
     [objDictionary setObject:thresholds										forKey:@"thresholds"];
     
     int i;
-	for(i=0;i<kNumEWFLTHeatIonChannels;i++)    [triggerParameter replaceObjectAtIndex:i withObject:[NSNumber numberWithUnsignedInt:triggerPar[i]]];
+	for(i=0;i<kNumEWFLTHeatIonChannels;i++)    [triggerParameter replaceObjectAtIndex:i withObject:[NSNumber numberWithUnsignedLong:triggerPar[i]]];
     [objDictionary setObject:triggerParameter								forKey:@"triggerParameter"];
     [objDictionary setObject:[NSNumber numberWithLong:postTriggerTime]		forKey:@"postTriggerTime"];
     if(sizeof(uint64_t) < sizeof(long long)) NSLog(@"%@::%@: ERROR - WARNING - sizeof(uint64_t) < sizeof(long long) - cannot store: ionTriggerMask, heatTriggerMask without information loss! \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO : DEBUG testing ...-tb-
@@ -4886,15 +4884,15 @@ for(chan=0; chan<6;chan++)
 	//TODO:  replace by V4 code -tb-
 	NSLog(@"FLTv4: printStatistics not implemented \n");//TODO: needs implementation -tb-
 	return;
-    int j;
-	double mean;
-	double var;
-	NSFont* aFont = [NSFont userFixedPitchFontOfSize:10];
-    NSLogFont(aFont,@"Statistics      :\n");
-	for (j=0;j<kNumEWFLTHeatIonChannels;j++){
-		[self getStatistics:j mean:&mean var:&var];
-		NSLogFont(aFont,@"  %2d -- %10.2f +/-  %10.2f\n", j, mean, var);
-	}
+//    int j;
+//    double mean;
+//    double var;
+//    NSFont* aFont = [NSFont userFixedPitchFontOfSize:10];
+//    NSLogFont(aFont,@"Statistics      :\n");
+//    for (j=0;j<kNumEWFLTHeatIonChannels;j++){
+//        [self getStatistics:j mean:&mean var:&var];
+//        NSLogFont(aFont,@"  %2d -- %10.2f +/-  %10.2f\n", j, mean, var);
+//    }
 }
 
 - (void) findNoiseFloors

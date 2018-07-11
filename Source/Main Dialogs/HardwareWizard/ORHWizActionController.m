@@ -164,14 +164,14 @@ static NSString* valueChangeString[kNumActions] = {
 - (BOOL)validateMenuItem:(NSMenuItem*)anItem 
 {
     if([anItem action] == @selector(parameterPopupButtonAction:)){
-        int tag = [anItem tag];
+        NSUInteger tag = [anItem tag];
         id param = [paramArray objectAtIndex:tag];
         if(![param enabledWhileRunning] && [gOrcaGlobals runInProgress])return NO;
     }
     else {
         if([anItem action] == @selector(actionPopupButtonAction:)){  
             id param = [paramArray objectAtIndex:[[parameterPopupButton selectedItem] tag]];
-            int tag = [actionPopupButton indexOfItem:anItem];
+            NSUInteger tag = [actionPopupButton indexOfItem:anItem];
             if([param actionMask] == 0)return YES;
             else {
                 if([param actionMask]&(1<<tag))return YES;

@@ -939,7 +939,7 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
     return theValue;
 }
 
-- (void) writeRegister:(unsigned int)index withValue:(unsigned short)value
+- (void) writeRegister:(unsigned int)index withValue:(unsigned long)value
 {
 	if (index >= kNumberOfGretinaTriggerRegisters) return;
 	if (![self canWriteRegister:index]) return;
@@ -2510,7 +2510,7 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
         aPacket.cmdHeader.numberBytesinPayload	= sizeof(MJDFlashGretinaFPGAStruct);
         
         MJDFlashGretinaFPGAStruct* p = (MJDFlashGretinaFPGAStruct*) aPacket.payload;
-        p->baseAddress      = [self baseAddress];
+        p->baseAddress      = (uint32_t)[self baseAddress];
         @try {
             NSLog(@"GretinaTrigger (%d) launching firmware load job in SBC\n",[self uniqueIdNumber]);
             

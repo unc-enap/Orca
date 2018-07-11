@@ -251,8 +251,8 @@ NSString* ORFolderPercentDoneChanged                = @"ORFolderPercentDoneChang
 	NSString* path = @"~"; //default
 	if(useFolderStructure){
 		NSDate* date = [NSDate date];
-		NSString* year  = [NSString stringWithFormat:@"%d",[date yearOfCommonEra]];
-		NSString* month = [NSString stringWithFormat:@"%02d",[date monthOfYear]];
+		NSString* year  = [NSString stringWithFormat:@"%ld",[date yearOfCommonEra]];
+		NSString* month = [NSString stringWithFormat:@"%02ld",[date monthOfYear]];
 		path = [self directoryName];
 		path = [path stringByAppendingPathComponent:year];
 		path = [path stringByAppendingPathComponent:month];
@@ -798,7 +798,7 @@ NSString* ORFolderPercentDoneChanged                = @"ORFolderPercentDoneChang
 
 - (IBAction) transferPopupButtonAction:(id)sender
 {
-	[self setTransferType:[sender indexOfSelectedItem]];
+	[self setTransferType:(int)[(NSPopUpButton*)sender indexOfSelectedItem]];
 }
 
 

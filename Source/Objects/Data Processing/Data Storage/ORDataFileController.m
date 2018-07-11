@@ -48,7 +48,7 @@ enum {
 - (void) awakeFromNib
 {
     [super awakeFromNib];
-    int index = [[NSUserDefaults standardUserDefaults] integerForKey: @"orca.ORDataFileMode.selectedtab"];
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: @"orca.ORDataFileMode.selectedtab"];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
 	
@@ -110,7 +110,7 @@ enum {
 
 - (IBAction) sizeLimitReachedAction:(NSMatrix*)sender
 {
-	[model setSizeLimitReachedAction:[[sender selectedCell] tag]];
+	[model setSizeLimitReachedAction:(int)[[sender selectedCell] tag]];
 }
 
 - (IBAction) lockButtonAction:(id)sender

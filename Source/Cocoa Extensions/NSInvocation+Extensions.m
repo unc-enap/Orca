@@ -101,7 +101,7 @@
 
 + (SEL) makeSelectorFromArray:(NSArray*)cmdItems
 {
-    int n = [cmdItems count];
+    NSUInteger n = [cmdItems count];
     int i=0;
     NSMutableString* theSelectorString = [NSMutableString string];
     if(n>1)for(i=0;i<n;i+=2){
@@ -320,7 +320,7 @@
 	NSArray* pairList = [args componentsSeparatedByString:@"#"];
 	NSMutableArray* orderedList = [NSMutableArray array];
 	NSString* pairString;
-	int n = [pairList count];
+	NSUInteger n = [pairList count];
 	int i;
 	for(i=0;i<n;i++){
 		pairString = [pairList objectAtIndex:i];
@@ -343,7 +343,7 @@
 		returnLength = [theSignature methodReturnLength];
 		NSInvocation* theInvocation = [NSInvocation invocationWithMethodSignature:theSignature];
 		[theInvocation setSelector:theSelector];
-		int n = [theSignature numberOfArguments]-2; //first two are hidden
+		NSUInteger n = [theSignature numberOfArguments]-2; //first two are hidden
 		int i;
 		int argI;
 		BOOL ok = YES;

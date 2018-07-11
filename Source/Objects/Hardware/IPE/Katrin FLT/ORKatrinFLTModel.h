@@ -171,8 +171,8 @@
     int histoPreToggleSec;             //!<  time (sec) of last pre toggle cycle.
     int histoPreToggleUSec;            //!<  time (usec) of last pre toggle cycle.
     double lastDiffTime;               //!<used for timing of histogramming
-    int lastDelayTime;               //!<used for timing: number of 0.1 (0delayTime) seconds since histoStartTimeSec/USec
-    int currentDelayTime;               //!<used for timing: number of 0.1 (0delayTime) seconds since histoStartTimeSec/USec
+    long lastDelayTime;               //!<used for timing: number of 0.1 (0delayTime) seconds since histoStartTimeSec/USec
+    long currentDelayTime;               //!<used for timing: number of 0.1 (0delayTime) seconds since histoStartTimeSec/USec
     int histoLastActivePage;         //!<  number (0/1) of last active memory page
     
     BOOL histoCalibrationIsRunning;  //!< Used for calibration run and normal run - TRUE if intentionally  running

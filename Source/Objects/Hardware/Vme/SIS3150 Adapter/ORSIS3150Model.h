@@ -30,8 +30,8 @@
 	ORUSBInterface* usbInterface;
     NSString* serialNumber;
 	ORAlarm*  noUSBAlarm;
-	unsigned int 	rwAddress;
-	unsigned int 	writeValue;
+	unsigned long 	rwAddress;
+	unsigned long 	writeValue;
 	unsigned int	readWriteType;
 	unsigned int 	rwAddressModifier;
 	unsigned int 	readWriteIOSpace;
@@ -88,38 +88,38 @@
 - (void) checkStatusErrors;
 
 -(void) readLongBlock:(unsigned long *) readAddress
-									atAddress:(unsigned int) vmeAddress
-									numToRead:(unsigned int) numberLongs
+									atAddress:(unsigned long) vmeAddress
+									numToRead:(unsigned long) numberLongs
 								   withAddMod:(unsigned short) anAddressModifier
 					   usingAddSpace:(unsigned short) anAddressSpace;
 
 -(void) writeLongBlock:(unsigned long *) writeAddress
-										atAddress:(unsigned int) vmeAddress
-										numToWrite:(unsigned int) numberLongs
+										atAddress:(unsigned long) vmeAddress
+										numToWrite:(unsigned long) numberLongs
 									withAddMod:(unsigned short) anAddressModifier
 						   usingAddSpace:(unsigned short) anAddressSpace;
 
 -(void) readByteBlock:(unsigned char *) readAddress
-									atAddress:(unsigned int) vmeAddress
-									numToRead:(unsigned int) numberBytes
+									atAddress:(unsigned long) vmeAddress
+									numToRead:(unsigned long) numberBytes
 								   withAddMod:(unsigned short) anAddressModifier
 					   usingAddSpace:(unsigned short) anAddressSpace;
 
 -(void) writeByteBlock:(unsigned char *) writeAddress
-										atAddress:(unsigned int) vmeAddress
-										numToWrite:(unsigned int) numberBytes
+										atAddress:(unsigned long) vmeAddress
+										numToWrite:(unsigned long) numberBytes
 									withAddMod:(unsigned short) anAddressModifier
 						   usingAddSpace:(unsigned short) anAddressSpace;
 
 -(void) readWordBlock:(unsigned short *) readAddress
-									atAddress:(unsigned int) vmeAddress
-									numToRead:(unsigned int) numberWords
+									atAddress:(unsigned long) vmeAddress
+									numToRead:(unsigned long) numberWords
 								   withAddMod:(unsigned short) anAddressModifier
 					   usingAddSpace:(unsigned short) anAddressSpace;
 
 -(void) writeWordBlock:(unsigned short *) writeAddress
-										atAddress:(unsigned int) vmeAddress
-										numToWrite:(unsigned int) numberWords
+										atAddress:(unsigned long) vmeAddress
+										numToWrite:(unsigned long) numberWords
 									withAddMod:(unsigned short) anAddressModifier
 						   usingAddSpace:(unsigned short) anAddressSpace;
 

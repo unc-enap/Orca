@@ -4170,7 +4170,7 @@ NSString* tauTable[4] ={
 
 - (void) writeGainTerminationValues
 {
-    unsigned long iGroup;
+    int iGroup;
     unsigned long all    = termination<<2 | gain;
     unsigned long aValue = all | (all<<8) | (all<<16) | (all<<24);
     for (iGroup=0; iGroup < kNumSIS3316Groups; iGroup++) {
@@ -4616,17 +4616,17 @@ NSString* tauTable[4] ={
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id				= kSIS3316; //should be unique
-    configStruct->card_info[index].hw_mask[0]                = dataId;  //better be unique
-    configStruct->card_info[index].hw_mask[1]                = histoId; //better be unique
-    configStruct->card_info[index].hw_mask[2]                = statId; //better be unique
+    configStruct->card_info[index].hw_mask[0]                = (uint32_t)dataId;  //better be unique
+    configStruct->card_info[index].hw_mask[1]                = (uint32_t)histoId; //better be unique
+    configStruct->card_info[index].hw_mask[2]                = (uint32_t)statId; //better be unique
 	configStruct->card_info[index].slot						= [self slot];
 	configStruct->card_info[index].crate					= [self crateNumber];
 	configStruct->card_info[index].add_mod					= [self addressModifier];
-	configStruct->card_info[index].base_add					= [self baseAddress];
-    configStruct->card_info[index].deviceSpecificData[0]    = [self rawDataBufferLen];
-    configStruct->card_info[index].deviceSpecificData[1]    = [self headerLen];
-    configStruct->card_info[index].deviceSpecificData[2]    = [self writeHitsToEventMemoryMask]<<16 | [self histogramsEnabledMask];
-    configStruct->card_info[index].deviceSpecificData[3]    = [self enabledMask];
+	configStruct->card_info[index].base_add					= (uint32_t)[self baseAddress];
+    configStruct->card_info[index].deviceSpecificData[0]    = (uint32_t)[self rawDataBufferLen];
+    configStruct->card_info[index].deviceSpecificData[1]    = (uint32_t)[self headerLen];
+    configStruct->card_info[index].deviceSpecificData[2]    = (uint32_t)([self writeHitsToEventMemoryMask]<<16 | [self histogramsEnabledMask]);
+    configStruct->card_info[index].deviceSpecificData[3]    = (uint32_t)[self enabledMask];
 	configStruct->card_info[index].num_Trigger_Indexes		= 0;
 	
 	configStruct->card_info[index].next_Card_Index 	= index+1;	
@@ -4810,34 +4810,33 @@ NSString* tauTable[4] ={
 
     [encoder encodeInt:   gain                       forKey:@"gain"];
     [encoder encodeInt:   termination                forKey:@"termination"];
-    [encoder encodeInt32: enabledMask                forKey:@"enabledMask"];
-    [encoder encodeInt32: formatMask                 forKey:@"formatMask"];
-    [encoder encodeInt32: eventConfigMask            forKey:@"eventConfigMask"];
+    [encoder encodeInt32: (int32_t)enabledMask                forKey:@"enabledMask"];
+    [encoder encodeInt32: (int32_t)formatMask                 forKey:@"formatMask"];
+    [encoder encodeInt32: (int32_t)eventConfigMask            forKey:@"eventConfigMask"];
     [encoder encodeInt32: extendedEventConfigBit     forKey:@"extendedEventConfigBit"];
-    [encoder encodeInt32: endAddressSuppressionMask  forKey:@"endAddressSuppressionMask"];
-    [encoder encodeInt32: histogramsEnabledMask      forKey:@"histogramsEnabledMask"];
-    [encoder encodeInt32: pileupEnabledMask          forKey:@"pileupEnabledMask"];
-    [encoder encodeInt32: clrHistogramsWithTSMask    forKey:@"clrHistogramsWithTSMask"];
-    [encoder encodeInt32: writeHitsToEventMemoryMask forKey:@"writeHitsToEventMemoryMask"];
-    [encoder encodeInt32: heSuppressTriggerMask      forKey:@"heSuppressTriggerMask"];
-    [encoder encodeInt32: trigBothEdgesMask          forKey:@"trigBothEdgesMask"];
-    [encoder encodeInt32: intHeTrigOutPulseMask      forKey:@"intHeTrigOutPulseMask"];
-    [encoder encodeInt32: lemoToMask                 forKey:@"lemoToMask"];
-    [encoder encodeInt32: lemoUoMask                 forKey:@"lemoUoMask"];
-    [encoder encodeInt32: lemoCoMask                 forKey:@"lemoCoMask"];
-    [encoder encodeInt32: acquisitionControlMask     forKey:@"acquisitionControlMask"];
-    [encoder encodeInt32: rawDataBufferLen           forKey:@"rawDataBufferLen"];
-    [encoder encodeInt32: rawDataBufferStart         forKey:@"rawDataBufferStart"];
+    [encoder encodeInt32: (int32_t)endAddressSuppressionMask  forKey:@"endAddressSuppressionMask"];
+    [encoder encodeInt32: (int32_t)histogramsEnabledMask      forKey:@"histogramsEnabledMask"];
+    [encoder encodeInt32: (int32_t)pileupEnabledMask          forKey:@"pileupEnabledMask"];
+    [encoder encodeInt32: (int32_t)clrHistogramsWithTSMask    forKey:@"clrHistogramsWithTSMask"];
+    [encoder encodeInt32: (int32_t)writeHitsToEventMemoryMask forKey:@"writeHitsToEventMemoryMask"];
+    [encoder encodeInt32: (int32_t)heSuppressTriggerMask      forKey:@"heSuppressTriggerMask"];
+    [encoder encodeInt32: (int32_t)trigBothEdgesMask          forKey:@"trigBothEdgesMask"];
+    [encoder encodeInt32: (int32_t)intHeTrigOutPulseMask      forKey:@"intHeTrigOutPulseMask"];
+    [encoder encodeInt32: (int32_t)lemoToMask                 forKey:@"lemoToMask"];
+    [encoder encodeInt32: (int32_t)lemoUoMask                 forKey:@"lemoUoMask"];
+    [encoder encodeInt32: (int32_t)acquisitionControlMask     forKey:@"acquisitionControlMask"];
+    [encoder encodeInt32: (int32_t)rawDataBufferLen           forKey:@"rawDataBufferLen"];
+    [encoder encodeInt32: (int32_t)rawDataBufferStart         forKey:@"rawDataBufferStart"];
 
     //clocks
-    [encoder encodeInt:   clockSource                forKey:@"clockSource"];
+    [encoder encodeInt:   (int32_t)clockSource                forKey:@"clockSource"];
     [encoder encodeInt:   sharing                    forKey:@"sharing"];
 //    [encoder encodeInt:   hsDiv                      forKey:@"hsDiv"];
 //    [encoder encodeInt:   n1Div                      forKey:@"n1Div"];
     [encoder encodeObject:waveFormRateGroup          forKey:@"waveFormRateGroup"];
-    [encoder encodeInt32: nimControlStatusMask       forKey:@"nimControlStatusMask"];
-    [encoder encodeInt32: pileUpWindowLength         forKey:@"pileUpWindowLength"];
-    [encoder encodeInt32: rePileUpWindowLength       forKey:@"rePileUpWindowLength"];
+    [encoder encodeInt32: (int32_t)nimControlStatusMask       forKey:@"nimControlStatusMask"];
+    [encoder encodeInt32: (int32_t)pileUpWindowLength         forKey:@"pileUpWindowLength"];
+    [encoder encodeInt32: (int32_t)rePileUpWindowLength       forKey:@"rePileUpWindowLength"];
 
     //handle all the C Arrays
     [encoder encodeObject: [NSArray arrayFromULongCArray:mawBufferLength            size:kNumSIS3316Channels] forKey:@"mawBufferLength"];
@@ -4956,7 +4955,7 @@ NSString* tauTable[4] ={
 	[objDictionary setObject: [NSNumber numberWithBool:gateMode]			forKey:@"gateMode"];
 
  	//clocks
-	[objDictionary setObject: [NSNumber numberWithInt:clockSource]			forKey:@"clockSource"];
+	[objDictionary setObject: [NSNumber numberWithInteger:clockSource]			forKey:@"clockSource"];
 	
     return objDictionary;
 }
@@ -5265,9 +5264,9 @@ NSString* tauTable[4] ={
     }
     
     //double double_clock_configure_fft_frequency = double_fft_frequency_array[clock_freq_choice] ;
-    unsigned long clock_N1div_val = clock_N1div_array[clock_freq_choice] ;
-    unsigned long clock_HSdiv_val = clock_HSdiv_array[clock_freq_choice] ;
-    unsigned long iobDelayValue ;
+    int clock_N1div_val = clock_N1div_array[clock_freq_choice] ;
+    int clock_HSdiv_val = clock_HSdiv_array[clock_freq_choice] ;
+    int iobDelayValue ;
     
     if (adc125MHzFlag == 1) iobDelayValue = iob_delay_16bit_array[clock_freq_choice];
     else                    iobDelayValue = iob_delay_14bit_array[clock_freq_choice];

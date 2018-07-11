@@ -569,7 +569,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(USB);
 		HRESULT res = (*plugInInterface)->QueryInterface(plugInInterface, CFUUIDGetUUIDBytes(kIOUSBInterfaceInterfaceID), (void**) &intf);
 		(*plugInInterface)->Release(plugInInterface);                   // done with this
 		if (res || !intf) {
-			[NSException raise: @"USB Exception" format:@"couldn't create an IOUSBInterfaceInterface (%08lx)\n", res];
+			[NSException raise: @"USB Exception" format:@"couldn't create an IOUSBInterfaceInterface (%08lx)\n", (int)res];
 		}
 		
 		//kr = (*intf)->GetInterfaceClass(intf, &intfClass);

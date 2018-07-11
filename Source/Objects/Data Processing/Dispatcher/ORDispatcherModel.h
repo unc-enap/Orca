@@ -71,7 +71,7 @@
 - (BOOL) refuseConnection:(ORDispatcherClient*)aNewClient;
 - (void) checkConnectedClients;
 - (void) report;
-- (int) clientCount;
+- (NSUInteger) clientCount;
 - (void) scheduleUpdateOnMainThread;
 - (void) postUpdateOnMainThread;
 - (void) postUpdate;

@@ -1891,12 +1891,12 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
 {
     configStruct->total_cards++;
     configStruct->card_info[index].hw_type_id		= kTrigger32;  //should be unique 
-    configStruct->card_info[index].hw_mask[0]		= clockDataId; //better be unique
-    configStruct->card_info[index].hw_mask[1]		= gtid1DataId; //better be unique
-    configStruct->card_info[index].hw_mask[2]		= gtid2DataId; //better be unique
+    configStruct->card_info[index].hw_mask[0]		= (uint32_t)clockDataId; //better be unique
+    configStruct->card_info[index].hw_mask[1]		= (uint32_t)gtid1DataId; //better be unique
+    configStruct->card_info[index].hw_mask[2]		= (uint32_t)gtid2DataId; //better be unique
     configStruct->card_info[index].slot				= [self slot];
     configStruct->card_info[index].add_mod			= [self addressModifier];
-    configStruct->card_info[index].base_add			= [self baseAddress];
+    configStruct->card_info[index].base_add			= (uint32_t)[self baseAddress];
     
 	configStruct->card_info[index].deviceSpecificData[0] = 0;
     if(shipEvt1Clk)		configStruct->card_info[index].deviceSpecificData[0] |= 1<<0;

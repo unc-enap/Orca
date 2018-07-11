@@ -53,7 +53,7 @@
         NSString*               key = [self ccd__keyForLayoutName: name];
         NSMutableArray* viewRects = [[NSUserDefaults standardUserDefaults] objectForKey: key];
         NSArray*                views = [self subviews];
-        int                             i, count;
+        unsigned long           i, count;
         NSRect                  frame;
 
         count = MIN( [viewRects count], [views count] );

@@ -25,19 +25,19 @@
 
 - (NSString*) rightJustified:(NSUInteger)aWidth
 {
-    return [NSString stringWithFormat:@"%*s", aWidth,[self UTF8String]];
+    return [NSString stringWithFormat:@"%*s", (int)aWidth,[self UTF8String]];
 }
 
 - (NSString*) leftJustified:(NSUInteger)aWidth
 {
-    return [NSString stringWithFormat:@"%-*s", aWidth,[self UTF8String]];
+    return [NSString stringWithFormat:@"%-*s", (int)aWidth,[self UTF8String]];
 }
 - (NSString*) centered:(NSUInteger)aWidth
 {
-    int len = [self length];
+    NSUInteger len = [self length];
     if(len >= aWidth)return self;
     else {
-        int w = (aWidth - len)/2;
+        NSUInteger w = (aWidth - len)/2;
         return [[self leftJustified:len+w] rightJustified:aWidth];
     }
 }
@@ -235,7 +235,7 @@
 @end
 
 @implementation NSMutableString (NSStringWithExtensions)
-- (unsigned int)replace:(NSString *)target with:(NSString *)replacement
+- (NSUInteger)replace:(NSString *)target with:(NSString *)replacement
 {
 	if(!replacement)replacement = @"";
     return [self replaceOccurrencesOfString:target withString:replacement options:NSLiteralSearch range:NSMakeRange(0,[self length])];

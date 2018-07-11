@@ -147,7 +147,7 @@
 }
 - (void) loadLongCArray:(long*)cArray size:(int)num
 {
-    int n = MIN([self count],num);
+    unsigned long n = MIN([self count],num);
     int i;
     for(i=0;i<n;i++)cArray[i] = [[self objectAtIndex:i] longValue];
 }
@@ -155,7 +155,7 @@
 
 - (void) loadULongCArray:(unsigned long*)cArray size:(int)num
 {
-    int n = MIN([self count],num);
+    unsigned long n = MIN([self count],num);
     int i;
     for(i=0;i<n;i++)cArray[i] = [[self objectAtIndex:i] unsignedLongValue];
 }
@@ -163,33 +163,33 @@
 
 - (void) loadShortCArray:(short*)cArray size:(int)num
 {
-    int n = MIN([self count],num);
+    unsigned long n = MIN([self count],num);
     int i;
     for(i=0;i<n;i++)cArray[i] = [[self objectAtIndex:i] shortValue];
 }
 
 - (void) loadUShortCArray:(unsigned short*)cArray size:(int)num
 {
-    int n = MIN([self count],num);
+    unsigned long n = MIN([self count],num);
     int i;
     for(i=0;i<n;i++)cArray[i] = [[self objectAtIndex:i] unsignedShortValue];
 }
 
 - (void) loadBoolCArray:(BOOL*)cArray size:(int)num
 {
-    int n = MIN([self count],num);
+    unsigned long n = MIN([self count],num);
     int i;
     for(i=0;i<n;i++)cArray[i] = [[self objectAtIndex:i] boolValue];
 }
 - (void) loadCharCArray:(char*)cArray size:(int)num
 {
-    int n = MIN([self count],num);
+    unsigned long n = MIN([self count],num);
     int i;
     for(i=0;i<n;i++)cArray[i] = [[self objectAtIndex:i] charValue];
 }
 - (void) loadUCharCArray:(unsigned char*)cArray size:(int)num
 {
-    int n = MIN([self count],num);
+    unsigned long n = MIN([self count],num);
     int i;
     for(i=0;i<n;i++)cArray[i] = [[self objectAtIndex:i] unsignedCharValue];
 }

@@ -191,7 +191,7 @@ NSDate* burstStart = NULL;
 {
 	if(!emailList) emailList= [[NSMutableArray array] retain];
 	if([emailList count] == 0)anIndex = 0;
-	anIndex = MIN(anIndex,[emailList count]);
+	anIndex = (int)MIN(anIndex,[emailList count]);
 	
 	[[[self undoManager] prepareWithInvocationTarget:self] removeAddressAtIndex:anIndex];
 	[emailList insertObject:anAddress atIndex:anIndex];
@@ -534,7 +534,7 @@ double facto(unsigned long long num)
                                     if(!queueArray) queueArray = [[NSMutableArray array] retain];
                                     
                                     //haven't seen this one before so make a look up table and add a queue for it
-                                    [queueMap   setObject:[NSNumber numberWithInt:[queueArray count]] forKey:aShaperKey];
+                                    [queueMap   setObject:[NSNumber numberWithInteger:[queueArray count]] forKey:aShaperKey];
                                     [queueArray addObject:[NSMutableArray array]];
                                 }
                                 
@@ -568,8 +568,8 @@ double facto(unsigned long long num)
                                 //NSLog(@"2length of Nchans is %i", Nchans.count);
                                 
                                 if([Nchans count] >= nHit){ //There is enough data in the buffer now, start looking for bursts
-                                    int countofchan = [chans count];
-                                    int countofNchan = [Nchans count]; //CB this probs needs implementing
+                                    NSUInteger countofchan = [chans count];
+                                    NSUInteger countofNchan = [Nchans count]; //CB this probs needs implementing
                                     double lastTime = ([[Nsecs objectAtIndex:0] longValue] + 0.000001*[[Nmics objectAtIndex:0] longValue]);
                                     double firstTime = ([[Nsecs objectAtIndex:(nHit-1)] longValue] + 0.000001*[[Nmics objectAtIndex:(nHit-1)] longValue]);
                                     double diffTime = (lastTime - firstTime);
@@ -625,7 +625,7 @@ double facto(unsigned long long num)
                                                     //NSLog(@"count %i t=%f, adc=%i, chan=%i-%i \n", iter, countTime, [[adcs objectAtIndex:iter] intValue], [[cards objectAtIndex:iter] intValue], [[chans objectAtIndex:iter] intValue]);
                                                     //bString = [bString stringByAppendingString:[NSString stringWithFormat:@"count %i t=%lf, t-tB=%lf, adc=%i, chan=%i-%i ", (countofchan - iter), countTime, (countTime-firstTime), [[Badcs objectAtIndex:iter] intValue], [[Bcards objectAtIndex:iter] intValue], [[Bchans objectAtIndex:iter] intValue]]];
                                                     lString = @"";
-                                                    lString = [lString stringByAppendingString:[NSString stringWithFormat:@"count %i ",(countofchan - iter)]];
+                                                    lString = [lString stringByAppendingString:[NSString stringWithFormat:@"count %lu ",(countofchan - iter)]];
                                                     lString = [lString stringByPaddingToLength:10 withString:@" " startingAtIndex:0];               //lenth 10
                                                     lString = [lString stringByAppendingString:[NSString stringWithFormat:@"t=%lf, ",countTime]];   //lenth 21
                                                     lString = [lString stringByAppendingString:[NSString stringWithFormat:@"t-tB=%lf,  ",(countTime-firstTime)]];
@@ -806,11 +806,11 @@ double facto(unsigned long long num)
                                                 int adcStart = ([[Nadcs objectAtIndex:(countofNchan-1)] intValue]);
                                                 durSec = (endTime - startTime);
                                                 NSLog(@"Burst duration is %f, start is %f, end is %f, adc %i \n", durSec, startTime, endTime, adcStart);
-                                                countsInBurst = countofNchan - 1;
+                                                countsInBurst = (int)countofNchan - 1;
                                                 
                                                 //Position and reduced duration of burst
                                                 rSec = 0;
-                                                int BurstLen = Nchans.count;
+                                                NSUInteger BurstLen = Nchans.count;
                                                 int m;
                                                 Xcenter = 0;
                                                 Ycenter = 0;
@@ -1293,7 +1293,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
             }
             else break; //done -- no records in queue are older than the time window
         }
-		numTotalCounts = numTotalCounts + [aQueue count];
+		numTotalCounts = numTotalCounts + (int)[aQueue count];
         //check if the number still in the queue would signify a burst then count it.
          if([aQueue count] >= 1){
             numBurstingChannels++;
@@ -1317,7 +1317,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
     if(burstState == 1){
         quietSec++;
         //loudSec = 1; //temp
-        loudSec=[[Nsecs objectAtIndex:1] longValue] - [[Nsecs objectAtIndex:(Nsecs.count-1)] longValue];  //CB crash source??? use Bsecs?  can't, not writen yet
+        loudSec=(int)([[Nsecs objectAtIndex:1] longValue] - [[Nsecs objectAtIndex:(Nsecs.count-1)] longValue]);  //CB crash source??? use Bsecs?  can't, not writen yet
         if(quietSec > 10){
             burstForce=1;
             [theBurstMonitoredObject processData:[NSArray arrayWithObject:header] decoder:theDecoder];
@@ -1386,7 +1386,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
             NSLog(@"Level reduced to 1 (possible)\n");
         }
         NSInteger signif = (multInBurst*0.5)+3; //cbmod current background and best (round) fit with likelyhood as of dec 2016 with logaritmic rounding
-        burstcommand = [burstcommand stringByAppendingFormat:@"cd snews/coinccode/ ; ./ctestgcli %i %i 0 %i %i 9", dateint, timeint, level, signif];  //maybe add nanoseconds? 9 is halo
+        burstcommand = [burstcommand stringByAppendingFormat:@"cd snews/coinccode/ ; ./ctestgcli %li %li 0 %li %li 9", (long)dateint, timeint, level, signif];  //maybe add nanoseconds? 9 is halo
         NSLog(@"burstcommand witha a space on each side: | %@ |\n", burstcommand);
         NSTask* Cping;
         Cping =[[NSTask alloc] init];
@@ -1511,8 +1511,8 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
     for(id aKey in allKeys){
         int i     = [[queueMap  objectForKey:aKey]intValue];
         id aQueue = [queueArray objectAtIndex:i];
-        int count = [aQueue count];
-        theContent = [theContent stringByAppendingFormat:@"Channel: %@ Number Events: %d %@\n",aKey,[aQueue count],count>=1?@" <---":@""];
+        NSUInteger count = [aQueue count];
+        theContent = [theContent stringByAppendingFormat:@"Channel: %@ Number Events: %ld %@\n",aKey,[aQueue count],count>=1?@" <---":@""];
     }
     if(novaState == 3 && [[runbits objectAtIndex:6] intValue]){  //if supernova candidate
         [emailList insertObject:@"halo_snews_burst@snolab.ca"  atIndex:0]; //add halo full, HALO_full@snolab.ca
@@ -1564,7 +1564,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
     NSLog(@"early revstring is %@\n", revstring);
     NSRange revnumstart = [revstring rangeOfString:@"rev\":\""];
     NSRange revnumend =[revstring rangeOfString:@"\",\"novaState\":"];
-    int revnumlen = revnumend.location - (revnumstart.location + 6);
+    int revnumlen = (int)(revnumend.location - (revnumstart.location + 6));
     NSRange revRange = NSMakeRange((revnumstart.location + 6), revnumlen);
     revstring = [revstring substringWithRange:revRange];
     bursttextstr = [bursttextstr stringByAppendingString:revstring];
@@ -1705,7 +1705,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
     //Make the data record from the burst array
     @synchronized(self)
     {
-    int BurstSize = Bchans.count;
+    int BurstSize = (int)Bchans.count;
     NSLog(@"Size of burst file: %i \n", (BurstSize - 1) );
     int l;
     for(l=1;l<BurstSize; l++)

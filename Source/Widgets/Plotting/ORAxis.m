@@ -483,9 +483,9 @@ enum {
         if (dv < [self minimumRange]) {
             if (dv < 0) {
 				return NO;
-                v1 = [self minLimit];
-                v2 = [self maxLimit];
-                dv = v2 - v1;
+//                v1 = [self minLimit];
+//                v2 = [self maxLimit];
+//                dv = v2 - v1;
 			} 
             else {
                 /* expand scale, keeping the same center */

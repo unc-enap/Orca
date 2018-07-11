@@ -60,7 +60,7 @@
     ascendingSortingImage = [[NSImage imageNamed:@"NSAscendingSortIndicator"] retain];
     descendingSortingImage = [[NSImage imageNamed:@"NSDescendingSortIndicator"] retain];
     
-    int index = [[NSUserDefaults standardUserDefaults] integerForKey: @"orca.NcdController.selectedtab"];
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: @"orca.NcdController.selectedtab"];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
     
@@ -681,7 +681,7 @@
 
 - (void) displayOptionsChanged:(NSNotification*)aNote 
 {
-    int numberRows = [displayOptionMatrix numberOfRows];
+    int numberRows = (int)[displayOptionMatrix numberOfRows];
     int i;
     for(i=0;i<numberRows;i++){
         [[displayOptionMatrix cellWithTag:i] setState:[model displayOptionState:i]];
@@ -895,7 +895,7 @@
     [allDisabledButton setState:[model allDisabled]]; 
 }
 
-- (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(int)row
+- (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
 {
     return ![gSecurity isLocked:ORNcdTubeMapLock];
 }
@@ -942,7 +942,7 @@
 - (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
     NSParameterAssert(rowIndex >= 0 && rowIndex < [[[NcdDetector sharedInstance]tubes] count]);
-    NcdTube* tube = [[NcdDetector sharedInstance] tube:rowIndex];
+    NcdTube* tube = [[NcdDetector sharedInstance] tube:(int)rowIndex];
     return [tube objectForKey:[aTableColumn identifier]];
 }
 
@@ -955,7 +955,7 @@
 - (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
     NSParameterAssert(rowIndex >= 0 && rowIndex < [[[NcdDetector sharedInstance]tubes] count]);
-    NcdTube* tube = [[NcdDetector sharedInstance] tube:rowIndex];
+    NcdTube* tube = [[NcdDetector sharedInstance] tube:(int)rowIndex];
     [tube setObject:anObject forKey:[aTableColumn identifier]];
 }
 

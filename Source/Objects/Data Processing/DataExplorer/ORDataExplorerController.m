@@ -573,7 +573,7 @@
 - (void) process:(unsigned long)row
 {
     if(![model dataSet])[model createDataSet];
-    NSMutableDictionary* dataDictionary = [model dataRecordAtIndex:row];
+    NSMutableDictionary* dataDictionary = [model dataRecordAtIndex:(int)row];
     unsigned long offset = [[dataDictionary objectForKey:@"StartingOffset"] longValue];
     id aKey = [dataDictionary objectForKey:@"Key"];
 	BOOL alreadyDecodedOnce = [[dataDictionary objectForKey:@"DecodedOnce"] boolValue];

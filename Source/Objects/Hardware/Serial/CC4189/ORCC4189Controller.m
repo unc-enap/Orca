@@ -77,7 +77,7 @@
     plotSize		 = NSMakeSize(400,315);
 	
 	NSString* key = [NSString stringWithFormat: @"orca.ORCC4189%lu.selectedtab",[model uniqueIdNumber]];
-    int index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
 	

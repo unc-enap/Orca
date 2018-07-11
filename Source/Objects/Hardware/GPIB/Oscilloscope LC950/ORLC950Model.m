@@ -1092,11 +1092,12 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 			[ self writeToGPIBDevice: @"TRIG_SELECT EDGE,SR,C1"];
 			break;	
 			
-			// Since trigger source is reset make sure it has the correct parameters.
-			[ self oscSetTriggerCoupling ];
-			[ self oscSetTriggerSlopeIsPos ];
-			[ self oscSetTriggerLevel ];
-	}	
+	}
+    // Since trigger source is reset make sure it has the correct parameters.
+    [ self oscSetTriggerCoupling ];
+    [ self oscSetTriggerSlopeIsPos ];
+    [ self oscSetTriggerLevel ];
+
 }
 
 #pragma mark ***Hardware - Get and Set specific settings.

@@ -61,7 +61,7 @@
 	[detectorView setDelegate:model];	
     
 	NSString* tabPrefName = [NSString stringWithFormat:@"orca.%@.selectedtab",[self className]];
-    int index = [[NSUserDefaults standardUserDefaults] integerForKey: tabPrefName];
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: tabPrefName];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
 	

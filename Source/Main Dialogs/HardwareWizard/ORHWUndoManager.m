@@ -106,7 +106,7 @@
 - (void) undo
 {
     if(index>=0){
-        if(index >= [undoList count])index = [undoList count]-1;
+        if(index >= [undoList count])index = (int)[undoList count]-1;
         id group = [undoList objectAtIndex:index];
         NSEnumerator* e = [group objectEnumerator];
         id item;
@@ -136,7 +136,7 @@
     if(markIndex!=-1){
         id markedGroup = [markList objectAtIndex:markIndex];
         //find the group in the undoList
-        int markIndex = [undoList indexOfObject:markedGroup];
+        int markIndex = (int)[undoList indexOfObject:markedGroup];
         if(markIndex<=index){
             do{
                 if(![self canUndo])break;

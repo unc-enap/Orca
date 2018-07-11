@@ -491,7 +491,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
         [marksPU setEnabled:YES];
         [clearMarksButton setEnabled:YES];
         [goToMarkButton setEnabled:YES];
-        int selectedItem = [marksPU indexOfSelectedItem];
+        NSInteger selectedItem = [marksPU indexOfSelectedItem];
         [marksPU removeAllItems];
         int n = [hwUndoManager numberOfMarks];
         int i;
@@ -575,7 +575,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
 }
 
 
-- (void) addActionController:(id) obj atIndex:(int) index
+- (void) addActionController:(id) obj atIndex:(NSInteger) index
 {
     if (index < [actionControllers count]-1) [[self actionControllers] insertObject: obj atIndex: (index + 1)];
     else	    [[self actionControllers] addObject: obj];
@@ -585,7 +585,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
     [[[self undoManager] prepareWithInvocationTarget:self] removeActionControllerAtIndex:index+1];
 }
 
-- (void) removeActionControllerAtIndex:(int) index
+- (void) removeActionControllerAtIndex:(NSInteger) index
 {
     id obj = [[self actionControllers] objectAtIndex:index];
     [[[self undoManager] prepareWithInvocationTarget:self] addActionController:obj atIndex:index-1];
@@ -595,7 +595,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
 }
 
 
-- (void) addSelectionController:(id) obj atIndex:(int) index
+- (void) addSelectionController:(id) obj atIndex:(NSInteger) index
 {
     if (index < [selectionControllers count]-1) [[self selectionControllers] insertObject: obj atIndex: (index + 1)];
     else	    [[self selectionControllers] addObject: obj];
@@ -744,7 +744,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
 
 - (IBAction) undoToMark:(id) sender
 {
-    [hwUndoManager undoToMark:[marksPU indexOfSelectedItem]];
+    [hwUndoManager undoToMark:(int)[marksPU indexOfSelectedItem]];
     [undoButton setEnabled:[hwUndoManager canUndo]];
     [redoButton setEnabled:[hwUndoManager canRedo]];
 }

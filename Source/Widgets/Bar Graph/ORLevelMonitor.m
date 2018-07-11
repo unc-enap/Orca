@@ -70,7 +70,7 @@
 	[tankColor release];
 	tankColor = aColor;
 	
-	float red,green,blue,alpha;
+	CGFloat red,green,blue,alpha;
 	[tankColor  getRed:&red green:&green blue:&blue alpha:&alpha];
 	
 	red   *= .5;
@@ -98,7 +98,7 @@
 	[contentsColor release];
 	contentsColor = aColor;
 	
-	float red,green,blue,alpha;
+	CGFloat red,green,blue,alpha;
 	[contentsColor getRed:&red green:&green blue:&blue alpha:&alpha];
 	
 	red   *= .5;

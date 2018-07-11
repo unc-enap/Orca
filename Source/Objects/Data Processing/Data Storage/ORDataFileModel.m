@@ -202,7 +202,6 @@ static const int currentVersion = 1;           // Current version
 - (void) statusLogFlushed:(NSNotification*)aNotification
 {
     statusStart -= [[[aNotification userInfo] objectForKey:ORStatusFlushSize] intValue];
-    if(statusStart<0)statusStart = 0;
 }
 
 
@@ -622,7 +621,7 @@ static const int currentVersion = 1;           // Current version
 - (void) closeOutLogFiles:(NSNotification*)aNote
 {
     NSDictionary* userInfo = [aNote userInfo];
-    int statusEnd;
+    NSUInteger statusEnd;
     if(runMode == kNormalRun){
         
         //start a copy of the Status File
@@ -973,7 +972,7 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
         NSDate* theDate;
         if(startTime) theDate = startTime;
         else          theDate = [NSDate date];
-		s = [NSString stringWithFormat:@"%d-%d-%d-%@",[theDate yearOfCommonEra], [theDate monthOfYear], [theDate dayOfMonth],s];
+		s = [NSString stringWithFormat:@"%ld-%ld-%ld-%@",(long)[theDate yearOfCommonEra], (long)[theDate monthOfYear], (long)[theDate dayOfMonth],s];
 	}
 	return s;
 }

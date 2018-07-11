@@ -148,7 +148,7 @@ NSString* ORBiRa3251OModelOutputRegisterChanged = @"ORBiRa3251OModelOutputRegist
 
 - (NSString*) processingTitle
 {
-    return [NSString stringWithFormat:@"%d,%d,%@",[self crateNumber],[self  stationNumber],[self identifier]];
+    return [NSString stringWithFormat:@"%d,%ld,%@",[self crateNumber],[self  stationNumber],[self identifier]];
 }
 - (BOOL) processValue:(int)channel;
 {

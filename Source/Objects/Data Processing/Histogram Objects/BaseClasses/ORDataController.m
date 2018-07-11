@@ -59,8 +59,8 @@ NSInteger windowSort(id w1, id w2, void *context) { return [[w2 title] compare:[
     CGFloat smallestScreenWidth  = 9e10;
     CGFloat smallestScreenHeight = 9e10;
     NSArray* screenArray = [NSScreen screens];
-    unsigned screenCount = [screenArray count];
-    unsigned index;
+    NSUInteger screenCount = [screenArray count];
+    NSUInteger index;
     
     for (index=0; index < screenCount; index++) {
         NSScreen* aScreen = [screenArray objectAtIndex: index];
@@ -334,7 +334,7 @@ NSInteger windowSort(id w1, id w2, void *context) { return [[w2 title] compare:[
 }
 - (IBAction) refreshModeAction:(id)sender 
 {
-	[model setRefreshMode:[sender indexOfSelectedItem]];
+	[model setRefreshMode:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) pauseAction:(id)sender 
@@ -387,8 +387,8 @@ NSInteger windowSort(id w1, id w2, void *context) { return [[w2 title] compare:[
 
 - (IBAction) toggleRaw:(NSToolbarItem*)item
 {
-	int index = [rawDataTabView indexOfTabViewItem:[rawDataTabView selectedTabViewItem]];
-	int maxIndex = [rawDataTabView numberOfTabViewItems];
+	NSInteger index = [rawDataTabView indexOfTabViewItem:[rawDataTabView selectedTabViewItem]];
+	NSInteger maxIndex = [rawDataTabView numberOfTabViewItems];
 	index++;
 	if(index>=maxIndex)index = 0;
 	[rawDataTabView selectTabViewItemAtIndex:index];
@@ -465,7 +465,7 @@ NSInteger windowSort(id w1, id w2, void *context) { return [[w2 title] compare:[
 			[plotWindows addObject:aWindow];
 		}
 	}
-	int numWindows = [plotWindows count];
+	NSUInteger numWindows = [plotWindows count];
 	NSRect screenRect = [[NSScreen mainScreen] frame];
 	
 	if(numWindows>1){

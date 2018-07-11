@@ -945,7 +945,7 @@ static NSString *ORNcdMuxFullEfficiencyThresholds = @"ORNcdMuxFullEfficiencyThre
     [encoder encodeObject:ncdCableCheckTask forKey:ORNcdCableCheckTask];
     
     [encoder encodeObject:colorBarAttributes forKey:ORNcdColorBarAttributes];
-    [encoder encodeInt32:displayOptionMask forKey:ORNcdDisplayOptionMask];
+    [encoder encodeInt32:(int32_t)displayOptionMask forKey:ORNcdDisplayOptionMask];
     [encoder encodeObject:xAttributes forKey:ORNcdXAttributes];
     [encoder encodeObject:yAttributes forKey:ORNcdYAttributes];
     
@@ -1354,7 +1354,7 @@ static NSString *ORNcdMuxFullEfficiencyThresholds = @"ORNcdMuxFullEfficiencyThre
 
 - (void) shipTaskRecord:(id)aTask running:(BOOL)aState
 {
-    int taskId = -1;
+    unsigned long taskId = 0;
     if(aTask == ncdLogAmpTask)taskId = logAmpDataId;
     else if(aTask == ncdLinearityTask)taskId = linearityDataId;
     else if(aTask == ncdThresholdTask)taskId = thresholdDataId;
@@ -1368,7 +1368,7 @@ static NSString *ORNcdMuxFullEfficiencyThresholds = @"ORNcdMuxFullEfficiencyThre
             taskId = stepPDSDataId;
         }
     }
-    if(taskId!= -1){
+    if(taskId != 0){
         NSArray* triggerCards = [[(ORAppDelegate*)[NSApp delegate]  document] collectObjectsOfClass:NSClassFromString(@"ORTrigger32Model")];
         if([triggerCards count]){
             @try {

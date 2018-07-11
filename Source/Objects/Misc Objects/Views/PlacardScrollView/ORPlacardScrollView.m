@@ -105,7 +105,7 @@
 - (void) drawRect:(NSRect)aRect
 {
 	NSRect bounds = [self bounds];
-	float red,green,blue,alpha;
+	CGFloat red,green,blue,alpha;
 	NSColor* color = [[self backgroundColor] colorUsingColorSpaceName:NSDeviceRGBColorSpace];
 	[color getRed:&red green:&green blue:&blue alpha:&alpha];
 

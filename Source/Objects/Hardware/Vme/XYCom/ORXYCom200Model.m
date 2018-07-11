@@ -356,7 +356,7 @@ NSString* mIOXY200SubModeName[4][3] = {
 	aValue |= (([chip H4Sense]   & 0x1)<<3);	//H4 Sense
 	aValue |= (([chip H12Enable] & 0x1)<<4);	//H12 Enable
 	aValue |= (([chip H34Enable] & 0x1)<<5);	//H34 Enable
-	aValue |= (([chip mode]      & 0x3)<<6);	//Port Mode
+	aValue |= (([chip opMode]      & 0x3)<<6);	//Port Mode
 	
 	[self write:kGeneralControl sendValue:aValue chip:anIndex];
 }
@@ -465,7 +465,7 @@ NSString* mIOXY200SubModeName[4][3] = {
 	[chip setPortAData:0x00];			// all A output lines will be low
 	[chip setPortCData:0xf];			// all C (control) output lines will be high
 	[chip setPortCDirection:0x1b];		// manual rec. for control register direction
-	[chip setMode:0x00];
+	[chip setOpMode:0x00];
 	[chip setH34Enable:0x00];
 	[chip setH12Enable:0x00];
 	[chip setH1Sense:0x00];
@@ -488,7 +488,7 @@ NSString* mIOXY200SubModeName[4][3] = {
 	[chip setPortBData:0x00];			// all A output lines will be low
 	[chip setPortCData:0xf];			// all C (control) output lines will be high
 	[chip setPortCDirection:0x1b];		// manual rec. for control register direction
-	[chip setMode:0x00];
+	[chip setOpMode:0x00];
 	[chip setH34Enable:0x00];
 	[chip setH12Enable:0x00];
 	[chip setH1Sense:0x00];
@@ -635,21 +635,21 @@ NSString* ORPISlashTChipPeriodChanged			= @"ORPISlashTChipPeriodChanged";
 	return [(ORAppDelegate*)[NSApp delegate] undoManager];
 }
 
-- (int) mode
+- (int) opMode
 {
-    return mode;
+    return opMode;
 }
 
-- (void) setMode:(int)aMode
+- (void) setOpMode:(int)aMode
 {
-    [[[self undoManager] prepareWithInvocationTarget:self] setMode:mode];
-    mode = aMode;
+    [[[self undoManager] prepareWithInvocationTarget:self] setOpMode:opMode];
+    opMode = aMode;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORPISlashTChipModeChanged object:self];
 }
 
 - (NSString*) subModeName:(int)subModeIndex
 {
-	return mIOXY200SubModeName[mode][subModeIndex];
+	return mIOXY200SubModeName[opMode][subModeIndex];
 }
 
 #pragma mark --------------------
@@ -914,7 +914,7 @@ NSString* ORPISlashTChipPeriodChanged			= @"ORPISlashTChipPeriodChanged";
     [[self undoManager] disableUndoRegistration];
 	
 	//Gen Cntrl Reg
-    [self setMode:				[decoder decodeIntForKey:@"mode"]];
+    [self setOpMode:				[decoder decodeIntForKey:@"mode"]];
     [self setH1Sense:			[decoder decodeBoolForKey:@"H1Sense"]];
     [self setH2Sense:			[decoder decodeBoolForKey:@"H2Sense"]];
     [self setH3Sense:			[decoder decodeBoolForKey:@"H3Sense"]];
@@ -960,7 +960,7 @@ NSString* ORPISlashTChipPeriodChanged			= @"ORPISlashTChipPeriodChanged";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
 	//Gen Cntrl Reg
-	[encoder encodeInt:mode				forKey:@"mode"];
+	[encoder encodeInt:opMode			forKey:@"mode"];
 	[encoder encodeBool:H1Sense			forKey:@"H1Sense"];
 	[encoder encodeBool:H2Sense			forKey:@"H2Sense"];
 	[encoder encodeBool:H3Sense			forKey:@"H3Sense"];
@@ -1004,7 +1004,7 @@ NSString* ORPISlashTChipPeriodChanged			= @"ORPISlashTChipPeriodChanged";
     [objDictionary setObject:NSStringFromClass([self class]) forKey:@"Class Name"];
 	
 	//Gen Cntrl Reg
-    [objDictionary setObject:[NSNumber numberWithInt:mode]				forKey:@"mode"];
+    [objDictionary setObject:[NSNumber numberWithInt:opMode]				forKey:@"mode"];
     [objDictionary setObject:[NSNumber numberWithBool:H1Sense]			forKey:@"H1Sense"];
     [objDictionary setObject:[NSNumber numberWithBool:H2Sense]			forKey:@"H2Sense"];
     [objDictionary setObject:[NSNumber numberWithBool:H3Sense]			forKey:@"H3Sense"];

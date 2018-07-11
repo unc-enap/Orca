@@ -101,7 +101,7 @@
         NSMutableArray* objectsRequestingStateChangeWait;
         NSMutableArray* objectsRequestingRunStartAbort;
         NSInteger selectedRunTypeScript;
-        int savedSelectedRunTypeScript;
+        NSInteger savedSelectedRunTypeScript;
 }
 
 

@@ -115,7 +115,7 @@ NSString* ORDispatcherLock                      = @"ORDispatcherLock";
     
     [super setGuardian:aGuardian];
 }
-- (int) clientCount
+- (NSUInteger) clientCount
 {
 	return [clients count];
 }

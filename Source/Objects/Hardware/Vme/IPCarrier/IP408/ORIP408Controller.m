@@ -89,45 +89,45 @@
 -(void)writeMaskChanged:(NSNotification*)aNotification
 {
 	unsigned long value = [model writeMask];
-	[writeMaskDecimalField setIntValue: value];
-	[writeMaskHexField setIntValue: value];
+	[writeMaskDecimalField setIntegerValue: value];
+	[writeMaskHexField setIntegerValue: value];
 	short i;
 	for(i=0;i<[writeMaskBitMatrix numberOfColumns];i++){
-		[[writeMaskBitMatrix cellWithTag:i] setIntValue:(value & 1L<<i)];
+		[[writeMaskBitMatrix cellWithTag:i] setIntegerValue:(value & 1L<<i)];
 	}
 }
 
 -(void)writeValueChanged:(NSNotification*)aNotification
 {
-	int value = [model writeValue];
-	[writeDecimalField setIntValue: value];
-	[writeHexField setIntValue: value];
+	unsigned long value = [model writeValue];
+	[writeDecimalField setIntegerValue: value];
+	[writeHexField setIntegerValue: value];
 	short i;
 	for(i=0;i<[writeBitMatrix numberOfColumns];i++){
-		[[writeBitMatrix cellWithTag:i] setIntValue:(value & 1L<<i)];
+		[[writeBitMatrix cellWithTag:i] setIntegerValue:(value & 1L<<i)];
 	}
 }
 
 -(void)readMaskChanged:(NSNotification*)aNotification
 {
-	int value = [model readMask];
-	[readMaskDecimalField setIntValue: value];
-	[readMaskHexField setIntValue: value];
+	unsigned long value = [model readMask];
+	[readMaskDecimalField setIntegerValue: value];
+	[readMaskHexField setIntegerValue: value];
 	short i;
 	for(i=0;i<[readMaskBitMatrix numberOfColumns];i++){
-		[[readMaskBitMatrix cellWithTag:i] setIntValue:(value & 1L<<i)];
+		[[readMaskBitMatrix cellWithTag:i] setIntegerValue:(value & 1L<<i)];
 	}
 	
 }
 
 -(void)readValueChanged:(NSNotification*)aNotification
 {
-	int value = [model readValue];
-	[readDecimalField setIntValue: value];
-	[readHexField setIntValue: value];
+	unsigned long value = [model readValue];
+	[readDecimalField setIntegerValue: value];
+	[readHexField setIntegerValue: value];
 	short i;
 	for(i=0;i<[readBitMatrix numberOfColumns];i++){
-		[[readBitMatrix cellWithTag:i] setIntValue:(value & 1L<<i)];
+		[[readBitMatrix cellWithTag:i] setIntegerValue:(value & 1L<<i)];
 	}    
 }
 
@@ -181,17 +181,15 @@
     if([sender intValue] != [model writeMask]){
         [[self undoManager] setActionName: @"Set 408 Write Mask"];
         int i;
-        int number = [writeMaskBitMatrix numberOfColumns];
+        NSInteger number = [writeMaskBitMatrix numberOfColumns];
         NSButtonCell* anObj;
         long val = 0;
-        int tag;
+        NSUInteger tag;
         for(i=0;i<number;i++){
             anObj = [writeMaskBitMatrix cellAtRow:0 column:i];
             tag = [anObj tag];
-            if(tag>=0){
-                if([anObj intValue]){
-                    val |= 1L<<tag;
-                }
+            if([anObj intValue]){
+                val |= 1L<<tag;
             }
         }
         [model setWriteMask:val];
@@ -219,17 +217,15 @@
     if([sender intValue] != [model writeValue]){
         [[self undoManager] setActionName: @"Set 408 Value Mask"];
         int i;
-        int number = [writeBitMatrix numberOfColumns];
+        NSInteger number = [writeBitMatrix numberOfColumns];
         NSButtonCell* anObj;
         long val = 0;
-        int tag;
+        NSUInteger tag;
         for(i=0;i<number;i++){
             anObj = [writeBitMatrix cellAtRow:0 column:i];
             tag = [anObj tag];
-            if(tag>=0){
-                if([anObj intValue]){
-                    val |= 1L<<tag;
-                }
+            if([anObj intValue]){
+                val |= 1L<<tag;
             }
         }
         [model setWriteValue:val];
@@ -258,17 +254,15 @@
     if([sender intValue] != [model readMask]){
         [[self undoManager] setActionName: @"Set 408 Read Mask"];
         int i;
-        int number = [readMaskBitMatrix numberOfColumns];
+        NSInteger number = [readMaskBitMatrix numberOfColumns];
         NSButtonCell* anObj;
         long val = 0;
-        int tag;
+        NSUInteger tag;
         for(i=0;i<number;i++){
             anObj = [readMaskBitMatrix cellAtRow:0 column:i];
             tag = [anObj tag];
-            if(tag>=0){
-                if([anObj intValue]){
-                    val |= 1L<<tag;
-                }
+            if([anObj intValue]){
+                val |= 1L<<tag;
             }
         }
         [model setReadMask:val];

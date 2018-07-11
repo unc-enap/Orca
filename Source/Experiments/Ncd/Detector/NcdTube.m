@@ -258,7 +258,7 @@ static struct {
     }
     NSArray* items = [aString componentsSeparatedByString:@","];
     int i;
-    int count = [items count];
+    NSUInteger count = [items count];
     if(count<=kNumKeys){
         for(i=0;i<count;i++){
             [params setObject:[items objectAtIndex:i] forKey:tubeParam[i].key];

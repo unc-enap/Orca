@@ -228,7 +228,7 @@
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"L4532 (Station %d)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"L4532 (Station %ld)",[model stationNumber]]];
 }
 
 #pragma mark ¥¥¥Actions
@@ -246,7 +246,7 @@
 	int offset;
 	if(sender == delayEnableMask0_15)offset = 0;
 	else offset = 16;
-	[model setDelayEnabledMaskBit:[[sender selectedCell] tag]+offset withValue:[sender intValue]];
+	[model setDelayEnabledMaskBit:(int)[[(NSMatrix*)sender selectedCell] tag]+offset withValue:[sender intValue]];
 }
 
 - (void) delaysAction:(id)sender

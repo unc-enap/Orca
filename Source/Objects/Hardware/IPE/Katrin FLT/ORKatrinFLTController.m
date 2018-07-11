@@ -66,7 +66,7 @@
     blankView = [[NSView alloc] init];
     
     NSString* key = [NSString stringWithFormat: @"orca.ORKatrinFLT%d.selectedtab",(int)[model stationNumber]];
-    int index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
 		

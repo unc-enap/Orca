@@ -42,7 +42,7 @@
         unsigned long long	dataFileSize;
         NSString*		fileName;
 
-        int				statusStart;
+        NSUInteger	    statusStart;
         BOOL			saveConfiguration;
         BOOL			ignoreMode;
         BOOL			processedRunStart;

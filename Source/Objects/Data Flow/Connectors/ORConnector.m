@@ -584,7 +584,7 @@ NSString* ORConnectionChanged = @"OR Connection Changed";
     [encoder encodeConditionalObject:objectLink forKey:@"ORConnector ObjectLink"];
     [encoder encodeConditionalObject:connector forKey:@"ORConnector Connection"];
     [encoder encodeInt:connectorImageType forKey:@"ORConnectorImageType"];
-    [encoder encodeInt32:connectorType forKey:@"ORConnector Type"];
+    [encoder encodeInt32:(int32_t)connectorType forKey:@"ORConnector Type"];
     [encoder encodeInt:ioType forKey:@"ORConnector IO Type"];
     [encoder encodeInt:identifer forKey:@"ORConnectorID"];
     [encoder encodeObject:restrictedList forKey:@"ORConnectorRestrictedList"];

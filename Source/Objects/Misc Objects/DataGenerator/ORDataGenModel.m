@@ -282,10 +282,10 @@
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id = kDataGen; 
-	configStruct->card_info[index].hw_mask[0] = dataId1D; 
-	configStruct->card_info[index].hw_mask[1] = dataId2D; 
-	configStruct->card_info[index].hw_mask[2] = dataIdWaveform; 
-	configStruct->card_info[index].hw_mask[3] = burstDataId; 
+	configStruct->card_info[index].hw_mask[0] = (uint32_t)dataId1D;
+	configStruct->card_info[index].hw_mask[1] = (uint32_t)dataId2D;
+	configStruct->card_info[index].hw_mask[2] = (uint32_t)dataIdWaveform;
+	configStruct->card_info[index].hw_mask[3] = (uint32_t)burstDataId; 
 	configStruct->card_info[index].num_Trigger_Indexes = 0;	
 	configStruct->card_info[index].next_Card_Index 	= index+1;	
 	return index+1;

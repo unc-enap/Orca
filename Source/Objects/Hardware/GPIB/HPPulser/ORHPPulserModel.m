@@ -199,7 +199,7 @@ static HPPulserCustomWaveformStruct waveformData[kNumWaveforms] = {
 					[self setMaxTime:temp];
 					[[self undoManager] enableUndoRegistration];
 				}
-				srand((NSUInteger)(time(0)));		
+				srand((unsigned int)(time(0)));
 				float deltaTime = random_range((int)(minTime*10),(int)(maxTime*10))/10000.;
 				[self performSelector:@selector(firePulserRandom) withObject:nil afterDelay:deltaTime];
 			}

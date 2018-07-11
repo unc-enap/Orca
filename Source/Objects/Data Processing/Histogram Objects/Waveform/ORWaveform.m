@@ -73,11 +73,11 @@ NSString* ORWaveformUseUnsignedChanged   = @"ORWaveformUseUnsignedChanged";
 	dataOffset=newOffset;
 }
 
--(int) numberBins
+-(unsigned long) numberBins
 {
     if(waveform){
 		[dataSetLock lock];
-		int temp;
+		unsigned long temp;
 		if(unitSize == 0)unitSize = 1;
 		temp =  ([waveform length] - dataOffset)/unitSize;
 		[dataSetLock unlock];
@@ -177,7 +177,7 @@ if (cptr != 0) {                                            \
 
 - (int)	numberOfPointsInPlot:(id)aPlotter dataSet:(int)set
 {
-    return [self numberBins];
+    return (int)[self numberBins];
 }
 
 - (unsigned long) startingByteOffset:(id)aPlotter  dataSet:(int)set
@@ -245,7 +245,7 @@ static NSString *ORWaveformUnitSize 	= @"Waveform Data Unit Size";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt32:dataOffset forKey:ORWaveformDataOffset];
+    [encoder encodeInt32:(int32_t)dataOffset forKey:ORWaveformDataOffset];
     [encoder encodeInt:unitSize forKey:ORWaveformUnitSize];
     [encoder encodeBool:useUnsignedValues forKey:@"UseUnsignedValues"];
     [encoder encodeObject:rois forKey:@"rois"];
@@ -264,7 +264,7 @@ static NSString *ORWaveformUnitSize 	= @"Waveform Data Unit Size";
 
 - (int) numberPointsInPlot:(id)aPlot
 {
-	return [self numberBins];
+	return (int)[self numberBins];
 }
 
 - (NSUInteger) plotter:(id)aPlot indexRange:(NSRange)aRange stride:(NSUInteger)stride x:(NSMutableData*)x y:(NSMutableData*)y

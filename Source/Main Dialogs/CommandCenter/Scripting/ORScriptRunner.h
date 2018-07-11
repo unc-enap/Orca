@@ -32,7 +32,7 @@
 @private
 	id					 finishTarget;
 	SEL					 finishSelector;
-	unsigned			 yaccInputPosition;
+	unsigned long    	 yaccInputPosition;
 	BOOL				 stopThread;
 	BOOL				 running;
 	BOOL				 parsedOK;
@@ -110,7 +110,7 @@
 - (void)	printAll;
 
 #pragma mark ¥¥¥Yacc Input
-- (int)		 yyinputToBuffer:(char* )theBuffer withSize:(int)maxSize;
+- (unsigned long)		 yyinputToBuffer:(char* )theBuffer withSize:(int)maxSize;
 
 @end
 

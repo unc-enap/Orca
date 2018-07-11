@@ -43,7 +43,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ORCARootService);
     self = [super init];
     requestTag = 0;
     [[self undoManager] disableUndoRegistration];
-    int port = [[NSUserDefaults standardUserDefaults] integerForKey: @"orca.rootservice.ServiceHostPort"];
+    NSInteger port = [[NSUserDefaults standardUserDefaults] integerForKey: @"orca.rootservice.ServiceHostPort"];
     if(port==0)port = kORCARootServicePort;
 	[self setAutoReconnect:[[NSUserDefaults standardUserDefaults] integerForKey: @"orca.rootservice.AutoReconnect"]];
 	[self setConnectAtStart:[[NSUserDefaults standardUserDefaults] integerForKey: @"orca.rootservice.ConnectAtStartUp"]];

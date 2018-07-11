@@ -588,7 +588,7 @@ readon:
 		s = [s stringByAppendingFormat:@"SW Object: %@\n",[registeredObject className]];
 	}
 	else      s = [s stringByAppendingString:@"SW Object: ---\n"];
-	s = [s stringByAppendingFormat:@"Location : 0x%lx\n",locationID];
+	s = [s stringByAppendingFormat:@"Location : 0x%lx\n",(unsigned int)locationID];
 	if(serialNumber){
 		s = [s stringByAppendingFormat:@"Serial # : %@\n",serialNumber];
 	}

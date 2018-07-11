@@ -30,7 +30,7 @@
 {
     @private
 		NSMutableData*	inComingData;
-        int             mode;
+        int             opMode;
         int             modeTime;
         float           radValue;
         NSString*       units;
@@ -82,8 +82,8 @@
 - (void)    setRadValue:(float)aRadValue;
 - (int)     modeTime;
 - (void)    setModeTime:(int)aSeconds;
-- (int)     mode;
-- (void)    setMode:(int)aMode;
+- (int)     opMode;
+- (void)    setOpMode:(int)aMode;
 - (void)    dataReceived:(NSNotification*)note;
 - (BOOL)    isLog;
 - (void)    setIsLog:(BOOL)aIsLog;

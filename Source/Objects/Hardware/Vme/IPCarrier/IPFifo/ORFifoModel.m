@@ -141,7 +141,7 @@ static short register_offset[] = { 0x01,0x03,0x04,0x09 };
     
     
     // setup address for read operation
-    unsigned int address = [self baseAddress] + [self slotConv]*0x100 + (unsigned int)register_offset[xregister];
+    unsigned long address = [self baseAddress] + [self slotConv]*0x100 + (unsigned int)register_offset[xregister];
     
     
     // read Fifo

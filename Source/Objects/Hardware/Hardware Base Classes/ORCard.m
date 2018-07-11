@@ -180,7 +180,7 @@
 	NSDictionary* crateDictionary;
 	NSDictionary* cardDictionary;
 	//could be old style
-	crateDictionary = [fileHeader objectForKey:     [NSString stringWithFormat:@"crate %d",[[self crate] tag]]];
+	crateDictionary = [fileHeader objectForKey:     [NSString stringWithFormat:@"crate %ld",[[self crate] tag]]];
 	cardDictionary  = [crateDictionary objectForKey:[NSString stringWithFormat:@"card %d",[self slot]]];
 	if(!cardDictionary){
 		//nope, new style -- a little harder....

@@ -5,10 +5,10 @@
 #include "OrcaScript.tab.h"
 
 void OrcaScripterror(char *);
-void comment();
-void singleLineComment();
-void grabString();
-void yyreset_state();
+void comment(void);
+void singleLineComment(void);
+void grabString(void);
+void yyreset_state(void);
 char escapedCharacterInString(char c);
 long num_lines = 1;
 extern NSMutableArray* nodeList;

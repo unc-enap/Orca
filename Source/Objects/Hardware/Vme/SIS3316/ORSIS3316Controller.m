@@ -54,7 +54,7 @@
     [self tabView:tabView didSelectTabViewItem:[tabView selectedTabViewItem]];
 	
     NSString* key = [NSString stringWithFormat: @"orca.SIS3316%d.selectedtab",[model slot]];
-    int index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
 				

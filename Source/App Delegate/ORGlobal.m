@@ -342,7 +342,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(Global);
 
 - (void) listVetoReasons
 {
-	int n = [runVetos count];
+	NSUInteger n = [runVetos count];
 	if(n){
 		NSLog(@"There %@ %d veto%@in force:\n",n>1?@"are":@"is",n,n>1?@"s ":@" ");
 		NSEnumerator* e = [runVetos keyEnumerator];

@@ -82,7 +82,7 @@
 {
 	if([model scopeSelection] != [[scopeSelectionMatrix selectedCell] tag]){
 		[[self undoManager] setActionName: @"Set Mux Scope Selection"];
-		[model setScopeSelection:[[sender selectedCell] tag]];
+		[model setScopeSelection:(int)[[sender selectedCell] tag]];
 	}
 }
 

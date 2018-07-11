@@ -269,7 +269,7 @@ void* receiveFromDataReplyServerThreadFunction (void* p)
     const int maxSizeOfReadbuffer=4096*2;
     char readBuffer[maxSizeOfReadbuffer];
 	
-	int retval=-1;
+	ssize_t retval=-1;
 	
 	
 	int64_t l=0;
@@ -444,7 +444,7 @@ void* receiveFromDataReplyServerThreadFunction (void* p)
                 counterStatusPacket=dataReplyThreadData->numStatusPackets[*wrIndex];
                 if((counterStatusPacket < kMaxNumUDPStatusPackets) && (retval<1500)){
                     memcpy(&(dataReplyThreadData->statusBuf[*wrIndex][counterStatusPacket]), readBuffer, retval);
-                    dataReplyThreadData->statusBufSize[*wrIndex][counterStatusPacket]=retval;
+                    dataReplyThreadData->statusBufSize[*wrIndex][counterStatusPacket]=(int)retval;
                     dataReplyThreadData->numStatusPackets[*wrIndex]++;
                 }else{
                     //the buffer is full, skip succeeding packets (show a warning?) -tb-
@@ -515,7 +515,7 @@ void* receiveFromDataReplyServerThreadFunction (void* p)
  	         		    //NSLog(@"ERROR: received packet %i at least twice!!!!!!\n", index);
                     }
                     memcpy(dataReplyThreadData->adcBuf[*wrIndex][index], readBuffer, size);//copy UDP packet with header
-                    dataReplyThreadData->adcBufSize[*wrIndex][index]=size;
+                    dataReplyThreadData->adcBufSize[*wrIndex][index] = (int)size;
                     if(debugCounter<2 && index <2){
                         NSLog(@"copy   packet with index %i num %i TS %i (size %i (%i))\n", index, adc16ptr[0],adc16ptr[1], size, dataReplyThreadData->adcBufSize[*wrIndex][index]);
                     }
@@ -1777,7 +1777,7 @@ NSLog(@"  arguments: %@ \n" , arguments);
     const int maxSizeOfReadbuffer=4096;
     char readBuffer[maxSizeOfReadbuffer];
 
-	int retval=-1;
+	ssize_t retval=-1;
     sockaddr_fromLength = sizeof(sockaddr_from);
     //while( (retval = recvfrom(MY_UDP_SERVER_SOCKET, (char*)InBuffer,sizeof(InBuffer) , MSG_DONTWAIT,(struct sockaddr *) &servaddr, &AddrLength)) >0 ){
     retval = recvfrom(UDP_REPLY_SERVER_SOCKET, readBuffer, maxSizeOfReadbuffer, MSG_DONTWAIT,(struct sockaddr *) &sockaddr_from, &sockaddr_fromLength);
@@ -1849,7 +1849,7 @@ NSLog(@"  arguments: %@ \n" , arguments);
 	
 	if(	[self isListeningOnServerSocket]) [self performSelector:@selector(receiveFromReplyServer) withObject:nil afterDelay: 0];
 
-    return retval;
+    return (int)retval;
 }
 
 
@@ -2036,7 +2036,7 @@ commands:
 	size_t length        = [aString lengthOfBytesUsingEncoding: NSASCIIStringEncoding];
 	const char* receiverIPAddr = [crateUDPCommandIP cStringUsingEncoding: NSASCIIStringEncoding];;
 
-	int retval=0;
+	ssize_t retval=0;
 	
   //	if(port==0) port = GLOBAL_UDP_CLIENT_PORT;//use default port
 	
@@ -2053,7 +2053,7 @@ commands:
     //TODO: only recommended when using a char buffer ...  ((char*)buffer)[length]=0;    fprintf(stderr, "    sendtoGlobalClient3: %s\n",buffer); //DEBUG
 	
 	retval = sendto(UDP_COMMAND_CLIENT_SOCKET, buffer, length, 0 /*flags*/, (struct sockaddr *)&UDP_COMMAND_sockaddrin_to, sockaddrin_to_len);
-    return retval;
+    return (int)retval;
 
 }
 
@@ -2331,7 +2331,7 @@ for(l=0;l<2500;l++){
 	size_t length        = len;
 	const char* receiverIPAddr = [crateUDPDataIP cStringUsingEncoding: NSASCIIStringEncoding];;
 
-	int retval=0;
+	ssize_t retval=0;
 	
   //	if(port==0) port = GLOBAL_UDP_CLIENT_PORT;//use default port
 	
@@ -2348,7 +2348,7 @@ for(l=0;l<2500;l++){
     //TODO: only recommended when using a char buffer ...  ((char*)buffer)[length]=0;    fprintf(stderr, "    sendtoGlobalClient3: %s\n",buffer); //DEBUG
 	
 	retval = sendto(UDP_DATA_COMMAND_CLIENT_SOCKET, buffer, length, 0 /*flags*/, (struct sockaddr *)&UDP_DATA_COMMAND_sockaddrin_to, sizeof(UDP_DATA_COMMAND_sockaddrin_to));
-    return retval;
+    return (int)retval;
 
 
 }
@@ -2362,7 +2362,7 @@ for(l=0;l<2500;l++){
 	NSLog(@"Called %@::%@! Send data socket command: >%@<\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd) , aString);//TODO: DEBUG -tb-
     const void *buffer   = [[aString dataUsingEncoding: NSASCIIStringEncoding allowLossyConversion: YES] bytes]; 
 	size_t length        = [aString lengthOfBytesUsingEncoding: NSASCIIStringEncoding];
-    return [self sendUDPDataCommand:(char*)buffer length: length];
+    return [self sendUDPDataCommand:(char*)buffer length: (int)length];
 }
 
 
@@ -2462,7 +2462,7 @@ for(l=0;l<2500;l++){
 
 #pragma mark ***HW Access
 
-- (int)           chargeBBWithFile:(char*)data numBytes:(int) numBytes
+- (int)           chargeBBWithFile:(char*)data numBytes:(unsigned long) numBytes
 {
 
 
@@ -2472,7 +2472,7 @@ for(l=0;l<2500;l++){
 
    long buf32[1024+2]; //cannot exceed size of cmd FIFO
    //uint32_t buf32[257]; //cannot exceed size of cmd FIFO
-   int num32ToSend = (numBytes+3)/4 + 1;//round up if not multiple of 4; add 1 for first word containing numBytes
+   unsigned long num32ToSend = (numBytes+3)/4 + 1;//round up if not multiple of 4; add 1 for first word containing numBytes
    if(numBytes>1024+2) return -1;
    buf32[0]=numBytes;
    char* buf=(char*)&buf32[1];
@@ -2517,10 +2517,10 @@ for(l=0;l<2500;l++){
 	SBC_Packet aPacket;
 	aPacket.cmdHeader.destination			= kPMC;//kSBC_Command;//kSBC_Process;
 	aPacket.cmdHeader.cmdID					= kEdelweissSLTchargeBB;
-	aPacket.cmdHeader.numberBytesinPayload	= sizeof(EdelweissSLTchargeBBStruct) + numLongs*sizeof(long);
+	aPacket.cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(EdelweissSLTchargeBBStruct) + numLongs*sizeof(long));
 	
 	EdelweissSLTchargeBBStruct* payloadPtr	= (EdelweissSLTchargeBBStruct*)aPacket.payload;
-	payloadPtr->fileSize					= [theData length];
+	payloadPtr->fileSize					= (uint32_t)[theData length];
 	
 	const char* dataPtr						= (const char*)[theData bytes];
 	//really should be an error check here that the file isn't bigger than the max payload size
@@ -2557,7 +2557,7 @@ for(l=0;l<2500;l++){
 {
 	if(![jobStatus running]){
 		NSLog(@"SLT job NOT running: job message: %@   progress: %i finalStatus: %i\n",[jobStatus message],[jobStatus  progress],[jobStatus  finalStatus]);
-        if(fltChargingBB) [fltChargingBB setProgressOfChargeBB: [jobStatus  progress]];
+        if(fltChargingBB) [fltChargingBB setProgressOfChargeBB: (int)[jobStatus  progress]];
         if([jobStatus  finalStatus]==666){//job killed
             if(fltChargingBB) [fltChargingBB setProgressOfChargeBB: 101];
         }
@@ -2567,7 +2567,7 @@ for(l=0;l<2500;l++){
     else{
 		//NSLog(@"SLT: %@   progress: %i\n",[jobStatus message],[jobStatus  progress]);
 		NSLog(@"SLT job running: job message: %@   progress: %i finalStatus: %i\n",[jobStatus message],[jobStatus  progress],[jobStatus  finalStatus]);
-        if(fltChargingBB) [fltChargingBB setProgressOfChargeBB: [jobStatus  progress]];
+        if(fltChargingBB) [fltChargingBB setProgressOfChargeBB: (int)[jobStatus  progress]];
     }
 }
 
@@ -2597,10 +2597,10 @@ for(l=0;l<2500;l++){
 	SBC_Packet aPacket;
 	aPacket.cmdHeader.destination			= kPMC;//kSBC_Command;//kSBC_Process;
 	aPacket.cmdHeader.cmdID					= kEdelweissSLTchargeFIC;
-	aPacket.cmdHeader.numberBytesinPayload	= sizeof(EdelweissSLTchargeBBStruct) + numLongs*sizeof(long);
+	aPacket.cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(EdelweissSLTchargeBBStruct) + numLongs*sizeof(long));
 	
 	EdelweissSLTchargeBBStruct* payloadPtr	= (EdelweissSLTchargeBBStruct*)aPacket.payload;
-	payloadPtr->fileSize					= [theData length];
+	payloadPtr->fileSize					= (uint32_t)[theData length];
 	
 	const char* dataPtr						= (const char*)[theData bytes];
 	//really should be an error check here that the file isn't bigger than the max payload size
@@ -2637,7 +2637,7 @@ for(l=0;l<2500;l++){
 {
 	if(![jobStatus running]){
 		NSLog(@"SLT job NOT running: job message: %@   progress: %i finalStatus: %i\n",[jobStatus message],[jobStatus  progress],[jobStatus  finalStatus]);
-        if(fltChargingFIC) [fltChargingFIC setProgressOfChargeFIC: [jobStatus  progress]];
+        if(fltChargingFIC) [fltChargingFIC setProgressOfChargeFIC: (int)[jobStatus  progress]];
         if([jobStatus  finalStatus]==666){//job killed
             if(fltChargingFIC) [fltChargingFIC setProgressOfChargeFIC: 101];
         }
@@ -2647,7 +2647,7 @@ for(l=0;l<2500;l++){
     else{
 		//NSLog(@"SLT: %@   progress: %i\n",[jobStatus message],[jobStatus  progress]);
 		NSLog(@"SLT job running: job message: %@   progress: %i finalStatus: %i\n",[jobStatus message],[jobStatus  progress],[jobStatus  finalStatus]);
-        if(fltChargingFIC) [fltChargingFIC setProgressOfChargeFIC: [jobStatus  progress]];
+        if(fltChargingFIC) [fltChargingFIC setProgressOfChargeFIC: (int)[jobStatus  progress]];
     }
 }
 

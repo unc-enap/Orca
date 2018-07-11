@@ -204,7 +204,7 @@ NSString* ORBiRa2351IModelLastReadChanged		= @"ORBiRa2351IModelLastReadChanged";
 
 - (NSString*) processingTitle
 {
-    return [NSString stringWithFormat:@"%d,%d,%@",[self crateNumber],[self  stationNumber],[self identifier]];
+    return [NSString stringWithFormat:@"%d,%ld,%@",[self crateNumber],[self  stationNumber],[self identifier]];
 }
 
 @end

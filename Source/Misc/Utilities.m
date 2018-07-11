@@ -230,7 +230,7 @@ NSString* listMethodWithExtendedOptions(Class aClass,BOOL verbose,BOOL includeSu
 		NSString* aName = NSStringFromSelector(method_getName(methods[i]));
 		NSArray* parts = [aName componentsSeparatedByString:@":"];
 		NSMethodSignature* sig = [aClass instanceMethodSignatureForSelector:method_getName(methods[i])];
-		int n = [sig numberOfArguments];
+		NSUInteger n = [sig numberOfArguments];
 		int j;
 		NSString* finalName = @"";
 		if(n==2){
@@ -556,7 +556,7 @@ BOOL ORRunAlertPanel(NSString* mainMessage, NSString* msg, NSString* defaultButt
     if(defaultButtonTitle)  [alert addButtonWithTitle:defaultButtonTitle];
     if(alternateButtonTitle)[alert addButtonWithTitle:alternateButtonTitle];
     if(otherButtonTitle)    [alert addButtonWithTitle:otherButtonTitle];
-    int choice = [alert runModal];
+    long choice = [alert runModal];
     if(choice == NSAlertFirstButtonReturn)  result = YES;
     else                                    result = NO;
 #else

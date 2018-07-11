@@ -42,7 +42,7 @@
 {
     [super awakeFromNib];
     NSString* key = [NSString stringWithFormat: @"orca.ORCaen419_%d.selectedtab",[model slot]];
-    int index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
 	[[rate0 xAxis] setRngLimitsLow:0 withHigh:500000 withMinRng:128];

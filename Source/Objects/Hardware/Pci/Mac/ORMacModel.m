@@ -129,7 +129,7 @@ void registryChanged(
 
 - (NSString*) identifier
 {
-    return [NSString stringWithFormat:@"%@ %d",[self className],[self tag]];
+    return [NSString stringWithFormat:@"%@ %ld",[self className],[self tag]];
 }
 
 -(void)makeConnectors

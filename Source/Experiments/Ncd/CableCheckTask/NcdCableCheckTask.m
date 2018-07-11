@@ -579,7 +579,7 @@ static NSString* NcdCableCheckMuxVerbose  = @"NcdCableCheckMuxVerbose";
         pulseCount = 0;
         [self setCurrentTube:[tubeArray objectAtIndex:tubeIndex]];  //get the next tube to work on
         
-        [self setMessage:[NSString stringWithFormat:@" Checking %@ (%d/%d)",[currentTube objectForKey:@"kLabel"],tubeIndex+1,[tubeArray count]]];
+        [self setMessage:[NSString stringWithFormat:@" Checking %@ (%ld/%ld)",[currentTube objectForKey:@"kLabel"],tubeIndex+1,[tubeArray count]]];
 		
         [self findShaperForCurrentTube];
         [self findMuxForCurrentTube];

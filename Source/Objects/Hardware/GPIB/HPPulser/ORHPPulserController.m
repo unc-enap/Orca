@@ -554,7 +554,7 @@
 {
     if([sender indexOfSelectedItem] != [model selectedWaveform]){ 	
         [[self undoManager] setActionName: @"Selected Waveform"];
-        [model setSelectedWaveform:[selectionPopUpButton indexOfSelectedItem]];
+        [model setSelectedWaveform:(int)[selectionPopUpButton indexOfSelectedItem]];
     }
 }
 
@@ -711,7 +711,7 @@
 
 - (void) randomCountChanged:(NSNotification*)aNote
 {
-	[randomCountField setIntValue:[model randomCount]];
+	[randomCountField setIntegerValue:[model randomCount]];
 }
 
 

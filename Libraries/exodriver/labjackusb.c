@@ -486,7 +486,7 @@ HANDLE LJUSB_OpenDevice(UINT DevNum, unsigned int dwReserved, unsigned long Prod
     libusb_device **devs = NULL, *dev = NULL;
     struct libusb_device_handle *devh = NULL;
     struct libusb_device_descriptor desc;
-    ssize_t cnt = 0;
+    int cnt = 0;
     int r = 1;
     unsigned int i = 0;
     unsigned int ljFoundCount = 0;

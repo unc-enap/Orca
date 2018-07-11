@@ -51,9 +51,9 @@ NSString* ORFilterLock                      = @"ORFilterLock";
 //========================================================================
 #pragma mark •••YACC interface
 #import "OrcaScript.tab.h"
-extern void resetFilterState();
-extern void FilterScriptrestart();
-extern int FilterScriptparse();
+extern void resetFilterState(void);
+extern void FilterScriptrestart(void);
+extern int FilterScriptparse(void);
 
 //-----------------------------------------
 //we will take over ownership of these pointers
@@ -797,7 +797,7 @@ int filterGraph(nodeType*);
 		@try { 
 			
 			resetFilterState();
-			FilterScriptrestart(NULL);
+			FilterScriptrestart();
 			
             [symbolTable release];
             symbolTable = [[ORFilterSymbolTable alloc] init];

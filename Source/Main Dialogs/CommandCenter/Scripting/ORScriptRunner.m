@@ -33,11 +33,11 @@ NSString* ORScriptRunnerDisplayDictionaryChanged= @"ORScriptRunnerDisplayDiction
 //========================================================================
 #pragma mark ¥¥¥YACC interface
 #import "OrcaScript.tab.h"
-extern void yyreset_state();
-extern void OrcaScriptrestart();
+extern void yyreset_state(void);
+extern void OrcaScriptrestart(void);
 extern long num_lines;
 extern id functionList;
-extern int OrcaScriptparse();
+extern int OrcaScriptparse(void);
 ORScriptRunner* theScriptRunner = nil;
 int OrcaScriptYYINPUT(char* theBuffer,int maxSize) 
 {
@@ -307,7 +307,7 @@ int OrcaScriptYYINPUT(char* theBuffer,int maxSize)
 {
 	@try { 
 		yyreset_state();
-		OrcaScriptrestart(NULL);
+		OrcaScriptrestart();
 		
 		theScriptRunner = self;
 		
@@ -331,7 +331,7 @@ int OrcaScriptYYINPUT(char* theBuffer,int maxSize)
 
 	@catch(NSException* e) { 
 		parsedOK = NO;
-		int lineCount = num_lines;
+		long lineCount = num_lines;
 		if([e userInfo]){
 			NSLog(@"Caught Exception %@: %@\n",[e name],[e reason]);
 			lineCount = [[[e userInfo] objectForKey:@"LineNum"] intValue];
@@ -358,7 +358,7 @@ int OrcaScriptYYINPUT(char* theBuffer,int maxSize)
 		if([trimmedLine hasPrefix:@"#"]){
 			NSArray* files = [[trimmedLine stringByReplacingOccurrencesOfString:@"#" withString:@""] componentsSeparatedByString:@"import"];
 			for(id aFile in files){
-                int commentLocation = [aFile rangeOfString:@"//"].location;
+                NSUInteger commentLocation = [aFile rangeOfString:@"//"].location;
                 if(commentLocation!=NSNotFound){
                     aFile = [aFile substringToIndex:commentLocation];
                 }
@@ -451,10 +451,10 @@ int OrcaScriptYYINPUT(char* theBuffer,int maxSize)
 
 
 #pragma mark ¥¥¥Yacc Input
--(int)yyinputToBuffer:(char* )theBuffer withSize:(int)maxSize 
+-(unsigned long)yyinputToBuffer:(char* )theBuffer withSize:(int)maxSize
 {
-	int theNumberOfBytesRemaining = ([expressionAsData length] - yaccInputPosition);
-	int theCopySize = maxSize < theNumberOfBytesRemaining ? maxSize : theNumberOfBytesRemaining;
+	unsigned long theNumberOfBytesRemaining = ([expressionAsData length] - yaccInputPosition);
+	unsigned long theCopySize = maxSize < theNumberOfBytesRemaining ? maxSize : theNumberOfBytesRemaining;
 	[expressionAsData getBytes:theBuffer range:NSMakeRange(yaccInputPosition,theCopySize)];  
 	yaccInputPosition = yaccInputPosition + theCopySize;
 	return theCopySize;
@@ -544,8 +544,8 @@ int OrcaScriptYYINPUT(char* theBuffer,int maxSize)
 	}
 	[someNodes retain];
 	
-	unsigned i;
-	unsigned numNodes = [someNodes count];
+	NSUInteger i;
+	NSUInteger numNodes = [someNodes count];
 	BOOL failed		= NO;
 	BOOL reported	= NO;
     id aNode = nil;

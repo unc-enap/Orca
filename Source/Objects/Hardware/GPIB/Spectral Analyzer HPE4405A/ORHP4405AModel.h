@@ -189,7 +189,7 @@
 - (float) limitFloatValue:(float)aValue min:(float)aMin max:(float)aMax;
 - (float) limitIntValue:(int)aValue min:(float)aMin max:(float)aMax;
 - (int) numPoints;
-- (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
+- (void) plotter:(id)aPlotter index:(unsigned long)i x:(double*)xValue y:(double*)yValue;
 - (NSString*) triggerSourceName:(int)anIndex;
 - (NSString*) dataTypeName:(int)anIndex;
 - (NSString*) unitName:(int)anIndex;

@@ -105,7 +105,7 @@ instance vars of ORLinkedList:
 {
     
     ORLinkedList* list = [[ORLinkedList alloc] init];
-    int s = [array count];
+    NSUInteger s = [array count];
     int i = 0;
     
     if (!array || s < 1){ /*do nothing*/}

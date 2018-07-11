@@ -134,7 +134,7 @@ extern NSString* ORXYCom200WriteValueChanged;
 	@private
 		int				chipIndex;
 		//Gen Reg
-		int				mode;
+		int				opMode;
 		BOOL			H34Enable;
 		BOOL			H12Enable;
 		BOOL			H4Sense;
@@ -177,8 +177,8 @@ extern NSString* ORXYCom200WriteValueChanged;
 - (NSString*) subModeName:(int)subModeIndex;
 
 #pragma mark •••Gen Reg
-- (int) mode;
-- (void) setMode:(int)aMode;
+- (int) opMode;
+- (void) setOpMode:(int)aMode;
 - (BOOL) H1Sense;
 - (void) setH1Sense:(BOOL)aH1Sense;
 - (BOOL) H2Sense;

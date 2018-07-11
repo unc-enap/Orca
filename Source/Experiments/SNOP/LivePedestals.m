@@ -279,7 +279,7 @@
     for (ORFec32Model *fec in aFECModel) {
         int crate_number = [fec crateNumber];
         if(crate_number == 19) crate_number = 0; //hack for the teststand
-        int card_number = [fec stationNumber];
+        int card_number = (int)[fec stationNumber];
         int mask = [[[pedestal_mask objectAtIndex:crate_number] objectAtIndex:card_number] intValue];
         dispatch_sync(dispatch_get_main_queue(), ^{
             [fec setPedEnabledMask:mask];

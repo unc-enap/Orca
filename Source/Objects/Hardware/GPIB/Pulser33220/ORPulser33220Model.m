@@ -226,7 +226,7 @@ NSString* ORPulser33220ModelUSBInterfaceChanged = @"ORPulser33220ModelUSBInterfa
 		case kHPPulserUseUSB:	return [NSString stringWithFormat:@"33220 Pulser (Serial# %@)",[usbInterface serialNumber]];
 		case kHPPulserUseIP:	return [NSString stringWithFormat:@"33220 Pulser (%@)",[self ipAddress]];
 	}
-	return [NSString stringWithFormat:@"33220 Pulser (%d)",[self tag]];
+	return [NSString stringWithFormat:@"33220 Pulser (%ld)",[self tag]];
 }
 
 - (NSUInteger) vendorID

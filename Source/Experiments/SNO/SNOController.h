@@ -143,7 +143,7 @@
 
 #pragma mark •••Table Data Source
 - (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn 
-			 row:(int) rowIndex;
+			 row:(NSInteger) rowIndex;
 //- (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(int)row;
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;
 - (void)tableView:(NSTableView *)aTableView setObjectValue:anObject 

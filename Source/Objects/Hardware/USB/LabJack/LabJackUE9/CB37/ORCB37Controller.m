@@ -137,7 +137,7 @@
     setupSize		= NSMakeSize(700,700);
 	
     NSString* key = [NSString stringWithFormat: @"orca.ORCB37%lu.selectedtab",[model uniqueIdNumber]];
-    int index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
 	[super awakeFromNib];
@@ -264,7 +264,7 @@
 	[self resizeWindowToSize:newSize];
     [[self window] setContentView:totalView];
     NSString* key = [NSString stringWithFormat: @"orca.ORCB37%lu.selectedtab",[[model guardian] uniqueIdNumber]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
     
 }
@@ -565,7 +565,7 @@
     [gSecurity tryToSetLock:ORCB37Lock to:[sender intValue] forWindow:[self window]];
 }
 
-- (NSUInteger) tagToAdcIndex:(int)aTag
+- (int) tagToAdcIndex:(int)aTag
 {
 	switch([model slot]){
 		case 0: return aTag;
@@ -573,51 +573,51 @@
 	}
 }
 
-- (IBAction) channelNameAction:(id)sender
+- (IBAction) channelNameAction:(NSMatrix*)sender
 {
-	int adcChan = [self tagToAdcIndex:[[sender selectedCell] tag]];	
+	int adcChan = [self tagToAdcIndex:(int)[[sender selectedCell] tag]];
 	[[model guardian] setChannel:adcChan name:[[sender selectedCell] stringValue]];
 }
 
-- (IBAction) channelUnitAction:(id)sender
+- (IBAction) channelUnitAction:(NSMatrix*)sender
 {
-	int adcChan = [self tagToAdcIndex:[[sender selectedCell] tag]];
+	int adcChan = [self tagToAdcIndex:(int)[[sender selectedCell] tag]];
 	[[model guardian] setChannel:adcChan unit:[[sender selectedCell] stringValue]];
 }
 
-- (IBAction) lowLimitAction:(id)sender
+- (IBAction) lowLimitAction:(NSMatrix*)sender
 {
-	int adcChan = [self tagToAdcIndex:[[sender selectedCell] tag]];
+	int adcChan = [self tagToAdcIndex:(int)[[sender selectedCell] tag]];
 	[[model guardian] setLowLimit:adcChan value:[[sender selectedCell] floatValue]];	
 }
 
-- (IBAction) hiLimitAction:(id)sender
+- (IBAction) hiLimitAction:(NSMatrix*)sender
 {
-	int adcChan = [self tagToAdcIndex:[[sender selectedCell] tag]];
+	int adcChan = [self tagToAdcIndex:(int)[[sender selectedCell] tag]];
 	[[model guardian] setHiLimit:adcChan value:[[sender selectedCell] floatValue]];	
 }
 
-- (IBAction) minValueAction:(id)sender
+- (IBAction) minValueAction:(NSMatrix*)sender
 {
-	int adcChan = [self tagToAdcIndex:[[sender selectedCell] tag]];
+	int adcChan = [self tagToAdcIndex:(int)[[sender selectedCell] tag]];
 	[[model guardian] setMinValue:adcChan value:[[sender selectedCell] floatValue]];	
 }
 
-- (IBAction) maxValueAction:(id)sender
+- (IBAction) maxValueAction:(NSMatrix*)sender
 {
-	int adcChan = [self tagToAdcIndex:[[sender selectedCell] tag]];
+	int adcChan = [self tagToAdcIndex:(int)[[sender selectedCell] tag]];
 	[[model guardian] setMaxValue:adcChan value:[[sender selectedCell] floatValue]];	
 }
 
-- (IBAction) slopeAction:(id)sender
+- (IBAction) slopeAction:(NSMatrix*)sender
 {
-	int adcChan = [self tagToAdcIndex:[[sender selectedCell] tag]];
+	int adcChan = [self tagToAdcIndex:(int)[[sender selectedCell] tag]];
 	[[model guardian] setSlope:adcChan value:[[sender selectedCell] floatValue]];	
 }
 
-- (IBAction) interceptAction:(id)sender
+- (IBAction) interceptAction:(NSMatrix*)sender
 {
-	int adcChan = [self tagToAdcIndex:[[sender selectedCell] tag]];
+	int adcChan = [self tagToAdcIndex:(int)[[sender selectedCell] tag]];
 	[[model guardian] setIntercept:adcChan value:[[sender selectedCell] floatValue]];	
 }
 
@@ -626,21 +626,21 @@
 	[[model guardian] makeMainController];
 }
 
-- (IBAction) gainAction:(id)sender
+- (IBAction) gainAction:(NSPopUpButton*)sender
 {
-	int adcChan = [self tagToAdcIndex:[sender tag]];
-	[[model guardian] setGain:adcChan value:[sender indexOfSelectedItem]];
+	int adcChan = (int)[self tagToAdcIndex:(int)[sender tag]];
+	[[model guardian] setGain:adcChan value:(int)[sender indexOfSelectedItem]];
 }
 
-- (IBAction) bipolarAction:(id)sender
+- (IBAction) bipolarAction:(NSPopUpButton*)sender
 {
-	int adcChan = [self tagToAdcIndex:[sender tag]];
-	[[model guardian] setBipolar:adcChan value:[sender indexOfSelectedItem]];
+	int adcChan = (int)[self tagToAdcIndex:(int)[sender tag]];
+	[[model guardian] setBipolar:adcChan value:(int)[sender indexOfSelectedItem]];
 }
 
-- (IBAction) adcEnabledAction:(id)sender
+- (IBAction) adcEnabledAction:(NSMatrix*)sender
 {
-	int adcChan = [self tagToAdcIndex:[[sender selectedCell] tag]];
+	int adcChan = (int)[self tagToAdcIndex:(int)[[sender selectedCell] tag]];
 	[[model guardian] setAdcEnabled:adcChan value:[sender intValue]];
 	
 }

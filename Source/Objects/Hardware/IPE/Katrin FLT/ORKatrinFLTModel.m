@@ -1142,18 +1142,18 @@ static NSString* fltTestName[kNumKatrinFLTTests]= {
     // debug output -tb- NSLog(@"writeEMax: Pbus register is 0x%x, TRun is %i\n",
     // debug output -tb-    [self read:([self slot] << 24) | (func << 21) | (Pixel << 16) | (LAddr12 <<12)], TRun  ); 	
 	
-	val = [self read:   ([self slot] << 24) | (func << 21) | (LAddr0)];
+	val = (int)[self read:   ([self slot] << 24) | (func << 21) | (LAddr0)];
     NSLog(@"reading in HW  postTriggTime  FPGA %i is %i\n",Pixel,val);
 	
 	//	[self write: 0x09c02000 value: EMin];
     Pixel = 1;
-	val = [self read:   ([self slot] << 24) | (func << 21) | (Pixel << 16) | (LAddr0)];
+	val = (int)[self read:   ([self slot] << 24) | (func << 21) | (Pixel << 16) | (LAddr0)];
     NSLog(@"reading in HW  postTriggTime  FPGA %i is %i\n",Pixel,val);
     Pixel = 2;
-	val = [self read:   ([self slot] << 24) | (func << 21) | (Pixel << 16) | (LAddr0)];
+	val = (int)[self read:   ([self slot] << 24) | (func << 21) | (Pixel << 16) | (LAddr0)];
     NSLog(@"reading in HW  postTriggTime  FPGA %i is %i\n",Pixel,val);
     Pixel = 3;
-	val = [self read:   ([self slot] << 24) | (func << 21) | (Pixel << 16) | (LAddr0)];
+	val = (int)[self read:   ([self slot] << 24) | (func << 21) | (Pixel << 16) | (LAddr0)];
     NSLog(@"reading in HW  postTriggTime  FPGA %i is %i\n",Pixel,val);
 }
 
@@ -2255,7 +2255,7 @@ static NSString* fltTestName[kNumKatrinFLTTests]= {
     adress  = ([self slot] << 24) | (func << 21) | (aChan << 16) | (LAddr12 <<12);
     if([self versionRegHWVersion]<0x3){
         //old version (<3.0): we had only one HistTrigg ControlReg
-        regVal = [self read: adress];// read  HistogrmControlReg
+        regVal = (int)[self read: adress];// read  HistogrmControlReg
         regVal &= 0xfffffffc;// set the start/stop bit0 to 0=stop and prepare bit1 to 0
         regVal |= (numBit << 1) ; //
     }else{
@@ -2379,7 +2379,7 @@ static NSString* fltTestName[kNumKatrinFLTTests]= {
 		histoLastPageToggleSec=0;  // in simulation mode used for counting to TRun/RefreshTime
 		[self setHistoCalibrationIsRunning:TRUE];
 		[self setHistoRecordingTime:0];
-		histoStartTimeSec = [self readTime]; 
+		histoStartTimeSec = (int)[self readTime];
 		[self setHistoCalibrationElapsedTime: 0];
 		[self performSelector:@selector(checkCalibrationHistogram) withObject:nil afterDelay:0.1 /*0.1 sec*/];
 		return;
@@ -2498,15 +2498,15 @@ static NSString* fltTestName[kNumKatrinFLTTests]= {
         //wait after second strobe to give FPGA time to clear the histogram, so it has at least 1 sec until next page toggle
         //  (I also could read subseconds with readTimeSubSec and start immediatly if >0.1 sec before sec strobe)
         gettimeofday(&t,NULL);
-        histoLastSecStrobeSec = t.tv_sec;  
-        histoLastSecStrobeUSec = t.tv_usec;  
-        int lastSecStrobe = [self readTime];
+        histoLastSecStrobeSec = (int)t.tv_sec;
+        histoLastSecStrobeUSec = (int)t.tv_usec;
+        int lastSecStrobe = (int)[self readTime];
         DebugHistoTB(  NSLog(@"lastSecStrobe is %i\n",lastSecStrobe);  )
         int sec;
         do{
-            histoLastSecStrobeSec = t.tv_sec;  
-            histoLastSecStrobeUSec = t.tv_usec;  
-            sec = [self readTime];
+            histoLastSecStrobeSec = (int)t.tv_sec;
+            histoLastSecStrobeUSec = (int)t.tv_usec;
+            sec = (int)[self readTime];
             gettimeofday(&t,NULL);
         }while(sec==lastSecStrobe);
         DebugHistoTB(  NSLog(@"sec is %i \n",sec);  )
@@ -2517,13 +2517,13 @@ static NSString* fltTestName[kNumKatrinFLTTests]= {
         [self writeStartHistogramForChan:31 withClear: histoClearAtStart];
         //wait again until next sec strope - THEN histogramming will start
         gettimeofday(&t,NULL);
-        histoLastSecStrobeSec = t.tv_sec;  
-        histoLastSecStrobeUSec = t.tv_usec;  
-        lastSecStrobe = [self readTime];// lastSecStrobe=sec;
+        histoLastSecStrobeSec = (int)t.tv_sec;
+        histoLastSecStrobeUSec = (int)t.tv_usec;
+        lastSecStrobe = (int)[self readTime];// lastSecStrobe=sec;
         do{
-            histoLastSecStrobeSec = t.tv_sec;  
-            histoLastSecStrobeUSec = t.tv_usec;  
-            sec = [self readTime];
+            histoLastSecStrobeSec = (int)t.tv_sec;
+            histoLastSecStrobeUSec = (int)t.tv_usec;
+            sec = (int)[self readTime];
             gettimeofday(&t,NULL);
         }while(sec==lastSecStrobe);
         DebugHistoTB(  NSLog(@"sec is %i\n",sec);  )
@@ -2543,8 +2543,8 @@ static NSString* fltTestName[kNumKatrinFLTTests]= {
         // there are (Auger) methods readTime and readTimeSubSec (from self), do they work for Katrin? -tb-
         //struct timeval t;//    struct timezone tz; is obsolete ... -tb-
         gettimeofday(&t,NULL);
-        histoStartTimeSec = t.tv_sec;  
-        histoStartTimeUSec = t.tv_usec;  
+        histoStartTimeSec = (int)t.tv_sec;
+        histoStartTimeUSec = (int)t.tv_usec;
         
         // start delayed timing ...
         [self performSelector:@selector(checkCalibrationHistogram) withObject:nil afterDelay:0.1 /*sec*/];
@@ -2633,8 +2633,8 @@ static NSString* fltTestName[kNumKatrinFLTTests]= {
         // there are (Auger) methods readTime and readTimeSubSec (from self), do they work for Katrin? -tb-
         struct timeval t;//    struct timezone tz; is obsolete ... -tb-
         gettimeofday(&t,NULL);
-        histoStartTimeSec = t.tv_sec;  
-        histoStartTimeUSec = t.tv_usec;  
+        histoStartTimeSec = (int)t.tv_sec;
+        histoStartTimeUSec = (int)t.tv_usec;
         
         // start delayed timing ...
         [self performSelector:@selector(checkCalibrationHistogram) withObject:nil afterDelay:0.1 /*sec*/];
@@ -2719,8 +2719,8 @@ static NSString* fltTestName[kNumKatrinFLTTests]= {
         struct timeval t;//    struct timezone tz; is obsolete ... -tb-
         //timing
         gettimeofday(&t,NULL);
-        currentSec = t.tv_sec;  
-        currentUSec = t.tv_usec;  
+        currentSec = (int)t.tv_sec;
+        currentUSec = (int)t.tv_usec;
         double diffTime = (double)(currentSec  - histoLastPageToggleSec) +
 		((double)(currentUSec - histoLastPageToggleUSec)) * 0.000001;
 		
@@ -2818,7 +2818,7 @@ static NSString* fltTestName[kNumKatrinFLTTests]= {
         //NSLog(@"This is checkHistogramOfPixel:       %20.12f \n",  histoTestElapsedTime); 	
         
         // recording time etc. from FLT
-        [self setHistoRecordingTime:[self readTRec]];//TODO: which one for multiple pixel ? -tb-
+        [self setHistoRecordingTime:(int)[self readTRec]];//TODO: which one for multiple pixel ? -tb-
 		//TODO: use ch 0 and use broadcasts
 		//TODO:  broadcasts
         //[self setHistoFirstBin:[self readFirstBinForChan:aPixel]];
@@ -2858,16 +2858,16 @@ static NSString* fltTestName[kNumKatrinFLTTests]= {
         int histoCurrTimeUSec; 
         struct timeval t;//    struct timezone tz; is obsolete ... -tb-
         gettimeofday(&t,NULL);
-        histoCurrTimeSec = t.tv_sec;  
-        histoCurrTimeUSec = t.tv_usec; 
+        histoCurrTimeSec = (int)t.tv_sec;
+        histoCurrTimeUSec = (int)t.tv_usec;
         [self setHistoCalibrationElapsedTime: (double)(histoCurrTimeSec - histoStartTimeSec) + 0.000001 * (double)(histoCurrTimeUSec - histoStartTimeUSec)];
         //NSLog(@"This is checkHistogramOfPixel:       %20i %20i \n",  histoCurrTimeSec,histoCurrTimeUSec); 	
         //NSLog(@"This is checkHistogramOfPixel:       %20.12f \n",  histoTestElapsedTime); 	
         
         // recording time etc. from FLT
-        [self setHistoRecordingTime:[self readTRec]];//TODO: which one for multiple pixel ? -tb-
-        [self setHistoFirstBin:[self readFirstBinForChan:aPixel]];
-        [self setHistoLastBin:[self readLastBinForChan:aPixel]];
+        [self setHistoRecordingTime:(int)[self readTRec]];//TODO: which one for multiple pixel ? -tb-
+        [self setHistoFirstBin:(int)[self readFirstBinForChan:aPixel]];
+        [self setHistoLastBin:(int)[self readLastBinForChan:aPixel]];
         
         // send notification to GUI
         [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinFLTModelHistoCalibrationValuesChanged object:self];
@@ -2923,7 +2923,7 @@ static NSString* fltTestName[kNumKatrinFLTTests]= {
         //this is for FPGA version >= 3 (since April 2008), with new feature "paging" etc. -tb-
 		
         //to update the GUI
-        [self setHistoRecordingTime:[self readTRec]];
+        [self setHistoRecordingTime:(int)[self readTRec]];
         //first/last bin is updated after page toggle, see below
         
         //set vars
@@ -2948,8 +2948,8 @@ static NSString* fltTestName[kNumKatrinFLTTests]= {
         // there are (Auger) methods readTime and readTimeSubSec (from self), do they work for Katrin? -tb-
         struct timeval t;//    struct timezone tz; is obsolete ... -tb-
         gettimeofday(&t,NULL);
-        histoStopTimeSec = t.tv_sec;  
-        histoStopTimeUSec = t.tv_usec;  
+        histoStopTimeSec = (int)t.tv_sec;
+        histoStopTimeUSec = (int)t.tv_usec;
         [self setHistoCalibrationElapsedTime:(histoStopTimeSec - histoStartTimeSec) + 0.000001 * (histoStopTimeUSec - histoStartTimeUSec)];
         
         //SLT: set SW inhibit
@@ -2978,8 +2978,8 @@ static NSString* fltTestName[kNumKatrinFLTTests]= {
         [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinFLTModelHistoCalibrationValuesChanged object:self];
         // update page textfield TODO: make more elegant? -tb- (write setter/getter etc...)
         [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinFLTModelHistoPageNumChanged object:self];
-        [self setHistoFirstBin:[self readFirstBinForChan:Pixel]];
-        [self setHistoLastBin:[self readLastBinForChan:Pixel]];
+        [self setHistoFirstBin:(int)[self readFirstBinForChan:Pixel]];
+        [self setHistoLastBin:(int)[self readLastBinForChan:Pixel]];
 		
         if(savedDaqRunMode != -1){
             [self setDaqRunMode: savedDaqRunMode];
@@ -3014,8 +3014,8 @@ static NSString* fltTestName[kNumKatrinFLTTests]= {
         // there are (Auger) methods readTime and readTimeSubSec (from self), do they work for Katrin? -tb-
         struct timeval t;//    struct timezone tz; is obsolete ... -tb-
         gettimeofday(&t,NULL);
-        histoStopTimeSec = t.tv_sec;  
-        histoStopTimeUSec = t.tv_usec;  
+        histoStopTimeSec  = (int)t.tv_sec;
+        histoStopTimeUSec = (int)t.tv_usec;
         [self setHistoCalibrationElapsedTime:(histoStopTimeSec - histoStartTimeSec) + 0.000001 * (histoStopTimeUSec - histoStartTimeUSec)];
         //SLT: set SW inhibit
         sltmodel = [[self crate] adapter];
@@ -3170,8 +3170,8 @@ clean_up_mark:
 {
     unsigned int i,firstBin, lastBin, currVal, sum;
     //int group = [self histoChanToGroupMap:aPixel];
-    firstBin = [self readFirstBinForChan:aPixel];
-    lastBin  = [self readLastBinForChan:aPixel];
+    firstBin = (unsigned int)[self readFirstBinForChan:aPixel];
+    lastBin  = (unsigned int)[self readLastBinForChan:aPixel];
     DebugHistoTB(
 				 int thepage = [self readCurrentHistogramPageNum];
 				 NSLog(@"readHistogramDataForChan  %u ( page %i): has range %u ... %u \n",
@@ -3208,7 +3208,7 @@ clean_up_mark:
 	
     //TODO: could read in one block from first bin to last bin
     for(i=firstBin; i<=lastBin; i++){
-        currVal =  [self read: adress | i];
+        currVal =  (unsigned int)[self read: adress | i];
         sum += currVal;
         DebugHistoTB(  if(currVal) NSLogFont(aFont,@"    bin %4u: %6u \n",i , currVal); 	 )
         //[[histogramData objectAtIndex:i] setIntValue:currVal];
@@ -3236,7 +3236,7 @@ clean_up_mark:
 {
     unsigned int currVal;
     unsigned int adress  = [self histogramDataAdress:aBin forChan: aPixel];
-    currVal =  [self read: adress ];
+    currVal =  (unsigned int)[self read: adress ];
     return currVal;
 }
 
@@ -3412,12 +3412,12 @@ clean_up_mark:
     
     //unsigned int enableBit = 0x1 ;
     //unsigned int regVal= 0x1 & aState;
-    unsigned int regVal ;
+    int regVal ;
     
     
     //NSLog(@"readLastBinForChan:%i Pbus register is %x\n",aPixel, ([self slot] << 24) | (func << 21) | (Pixel << 16) | (LAddr12 <<12)  ); 	
 	
-	regVal = [self read:   adress ];
+	regVal = (int)[self read:   adress ];
     NSLog(@"  vetoState: adress %8x, state %8x\n",adress,regVal  ); 	
     return regVal;
 	
@@ -3435,7 +3435,7 @@ clean_up_mark:
     unsigned int baseadress  = ([self slot] << 24) | (func << 21);
     unsigned int adress;
     
-    unsigned int word00, word01, word10;
+    unsigned long word00, word01, word10;
     int i;
     for(i=fromIndex; i<=toIndex; i++){
         adress = baseadress | (i << 2);
@@ -3770,7 +3770,7 @@ clean_up_mark:
     [encoder encodeBool:vetoFeatureIsAvailable forKey:@"vetoFeatureIsAvailable"];	
     [encoder encodeBool:histoFeatureIsAvailable forKey:@"histoFeatureIsAvailable"];	
     [encoder encodeBool:filterGapFeatureIsAvailable forKey:@"filterGapFeatureIsAvailable"];	
-    [encoder encodeInt:versionRegister forKey:@"versionRegister"];	
+    [encoder encodeInt:(int)versionRegister forKey:@"versionRegister"];
 	
     [encoder encodeInt:filterGap forKey:@"filterGapSetting"];	
 	
@@ -4049,7 +4049,7 @@ clean_up_mark:
             histoLastPageToggleSec=0;  // in simulation mode used for counting to TRun/RefreshTime
             [self setHistoCalibrationIsRunning:TRUE];
             [self setHistoRecordingTime:0];
-            histoStartTimeSec = [self readTime]; 
+            histoStartTimeSec = (int)[self readTime];
             [self setHistoCalibrationElapsedTime: 0];
             return;
         }
@@ -4104,8 +4104,8 @@ clean_up_mark:
             //wait after second strobe to give FPGA time to clear the histogram, so it has at least 1 sec until next page toggle
             //  (I also could read subseconds with readTimeSubSec and start immediatly if >0.1 sec before sec strobe)
             gettimeofday(&t,NULL);
-            histoLastSecStrobeSec = t.tv_sec;  
-            histoLastSecStrobeUSec = t.tv_usec;  
+            histoLastSecStrobeSec = (int)t.tv_sec;
+            histoLastSecStrobeUSec = (int)t.tv_usec;
 #if 0 //MOVED TO SLT -tb-
             int lastSecStrobe = [self readTime];
             DebugHistoTB(  NSLog(@"lastSecStrobe is %i\n",lastSecStrobe);  )
@@ -4157,8 +4157,8 @@ clean_up_mark:
 			// there are (Auger) methods readTime and readTimeSubSec (from self), do they work for Katrin? -tb-
 			//struct timeval t;//    struct timezone tz; is obsolete ... -tb-
 			gettimeofday(&t,NULL);
-			histoStartTimeSec = t.tv_sec;  
-			histoStartTimeUSec = t.tv_usec;  
+			histoStartTimeSec = (int)t.tv_sec;
+			histoStartTimeUSec = (int)t.tv_usec;
 			lastDelayTime = 0;//I use this to call takeDataHistogramMode only every 0.1 sec (see takeDataHistogramMode) -tb-
 			
 			// start delayed timing ... stuff from checkCalibrationHistogram is in takeDataHistogramMode
@@ -4323,8 +4323,8 @@ clean_up_mark:
 	// variable nextEventPage. The page number actually written is read from 
 	// the status register.
 	// ak 15.6.07
-	int page0 = nextEventPage; // Next page to be read
-	int page1 = (statusWord >> 11) & 0x1ff;	// Get write page pointer
+	unsigned long page0 = nextEventPage; // Next page to be read
+	unsigned long page1 = (statusWord >> 11) & 0x1ff;	// Get write page pointer
 	
 	if(usingPBusSimulation){
 		// In simulation mode generate a trigger from time to time...
@@ -4390,12 +4390,10 @@ clean_up_mark:
 		//       This time is different from the central nextpage delay used by the Slt
 		//       ak, 29.2.08
         //       the post trigger time is now a free parameter -tb- 2008-06-xx
-		int firstEventSubSec = data[1];
+		unsigned long firstEventSubSec = data[1];
 		//int startBin = firstEventSubSec - (512 + (readoutPages-1) * 1024);
-		int startBin = firstEventSubSec - (readoutPages  * 1024) + postTriggerTime;// -tb- 2008-03-10
-		if(startBin < 0){
-			startBin = 0x10000 + startBin;
-		}
+		unsigned long startBin = firstEventSubSec - (readoutPages  * 1024) + postTriggerTime;// -tb- 2008-03-10
+        startBin = 0x10000 + startBin;
 		
 		
 		if( (fltRunMode == kKatrinFlt_Debug_Mode) && checkWaveFormEnabled){
@@ -4790,7 +4788,7 @@ clean_up_mark:
 				}
 				
 				// Detect changes
-				int diffHitrate = lastHitrate[i] - hitrate[i];	 	
+				unsigned long diffHitrate = lastHitrate[i] - hitrate[i];
 				if (diffHitrate < 5)	nNoChanges[i] += 1;
 				else					nNoChanges[i] = 0;
 				
@@ -4943,8 +4941,8 @@ clean_up_mark:
         static double delayTime = 0.1; // in sec.: its a kind of 'local const' -tb-
         unsigned int aPixel=0;// I use pixel 0, as all channels should run syncronized ... [self histoCalibrationChan];
         int histoCurrentActivePage=0;
-        int currentSec;
-        int currentUSec;
+        long currentSec;
+        long currentUSec;
         struct timeval t;//    struct timezone tz; is obsolete ... -tb-
         //timing
         gettimeofday(&t,NULL);
@@ -4953,7 +4951,7 @@ clean_up_mark:
         double diffTime = (double)(currentSec  - histoLastPageToggleSec) +
 		((double)(currentUSec - histoLastPageToggleUSec)) * 0.000001;
         //I want run this method only every 0.1 sec (=delayTime) or less -tb-
-        currentDelayTime =10*               (currentSec  - histoStartTimeSec) +
+        currentDelayTime = 10*               (currentSec  - histoStartTimeSec) +
 		(int)(    ((double)(currentUSec - histoStartTimeUSec)) * 0.00001  );// in fact we compute (...)/delayTime!
         if(currentDelayTime <= lastDelayTime){//I could also check histoStartWaitingForPageToggle -tb-
             return ;//wait longer time
@@ -5008,7 +5006,7 @@ clean_up_mark:
             //here I should read out TRec recording time
             int chan;
             for(chan=0; chan<kNumFLTChannels;chan++){
-                if([self histoChanToGroupMap:chan] != -1) histogramDataRecTimeSec[chan]=[self readTRecForChan:chan];
+                if([self histoChanToGroupMap:chan] != -1) histogramDataRecTimeSec[chan]=(int)[self readTRecForChan:chan];
             }
         }
         //TODO: test the time
@@ -5054,16 +5052,16 @@ clean_up_mark:
             } // else continue ... waiting for toggle ...
         }
         //remember for next call
-        histoPreToggleSec      = currentSec; 
-        histoPreToggleUSec     = currentUSec; 
+        histoPreToggleSec      = (int)currentSec;
+        histoPreToggleUSec     = (int)currentUSec;
         
         
         
         //HANDLE THE GUI (the KatrinFLTController)
         //NSLog(@"This is checkHistogramOfPixel: %i\n",aPixel  ); 	
         //update time
-        int histoCurrTimeSec; 
-        int histoCurrTimeUSec; 
+        long histoCurrTimeSec;
+        long histoCurrTimeUSec;
         //gettimeofday(&t,NULL);
         //histoCurrTimeSec = t.tv_sec;  
         //histoCurrTimeUSec = t.tv_usec; 
@@ -5074,7 +5072,7 @@ clean_up_mark:
         //NSLog(@"This is checkHistogramOfPixel:       %20.12f \n",  histoTestElapsedTime); 	
         
         // recording time etc. from FLT
-        [self setHistoRecordingTime:[self readTRecForChan:aPixel]];
+        [self setHistoRecordingTime:(int)[self readTRecForChan:aPixel]];
         
         // send notification to GUI
         [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinFLTModelHistoCalibrationValuesChanged object:self];
@@ -5120,9 +5118,9 @@ clean_up_mark:
             // send notification to GUI
             // read recording time etc
             unsigned int aPixel=0;   //TODO : for release version check all pixels ? -tb- ... old firmware ... -tb-
-            [self setHistoRecordingTime:[self readTRecForChan:0]];
-            [self setHistoFirstBin:[self readFirstBinForChan:aPixel]]; 
-            [self setHistoLastBin:[self readLastBinForChan:aPixel]];
+            [self setHistoRecordingTime:(int)[self readTRecForChan:0]];
+            [self setHistoFirstBin:(int)[self readFirstBinForChan:aPixel]];
+            [self setHistoLastBin:(int)[self readLastBinForChan:aPixel]];
             //[[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinFLTModelHistoCalibrationValuesChanged object:self];
             lastSec = sec; // Store the  actual second counter
             // Found second counter
@@ -5289,10 +5287,11 @@ clean_up_mark:
         if(aPixel == 1) Pixel=1;
         if(aPixel == 12) Pixel=2;
         if(aPixel == 13) Pixel=3;
-        unsigned int adress  = ([self slot] << 24) | (func << 21) | (Pixel << 16) | (LAddr12 <<12);
-        int i,currVal;
+        unsigned int address  = ([self slot] << 24) | (func << 21) | (Pixel << 16) | (LAddr12 <<12);
+        unsigned long i;
+        unsigned long currVal;
         for(i=theEventData.firstBin; i<=theEventData.lastBin; i++){
-            currVal =  [self read: adress | i];
+            currVal =  [self read: address | i];
             sum += currVal;
             NSLog(@"    bin %4u: %4u \n",i , currVal); 	
             //[[histogramData objectAtIndex:i] setIntValue:currVal];
@@ -5366,7 +5365,7 @@ clean_up_mark:
             if(histogramData){
                 unsigned int *dataPtr=0;
                 dataPtr=(unsigned int *)[[histogramData objectAtIndex:chan] bytes];
-                int i,currVal;
+                long i,currVal;
                 int sum=0;
                 for(i=theEventData.firstBin; i<=theEventData.lastBin; i++){
                     currVal =  dataPtr[i];
@@ -5554,8 +5553,8 @@ clean_up_mark:
             //now display it, care not to clear the display in the next lines ...
             [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinFLTModelHistoCalibrationPlotterChanged object:self];
             //first bin/last bin needs display now, they will be cleared afterwards
-            [self setHistoFirstBin:[self readFirstBinForChan:chan]];
-            [self setHistoLastBin: [self readLastBinForChan:chan]];
+            [self setHistoFirstBin:(int)[self readFirstBinForChan:chan]];
+            [self setHistoLastBin: (int)[self readLastBinForChan:chan]];
             //CLEAR
             if([self histoClearAfterReadout]){
                 DebugHistoTB(  NSLog(@"CLEAR HISTOGRAM\n");  )
@@ -6164,7 +6163,7 @@ clean_up_mark:
 		[self writeMode:kKatrinFlt_Test_Mode];
 		if([self readMode] != kKatrinFlt_Test_Mode){
 			NSLogColor([NSColor redColor],@"Could not put FLT %d into test mode\n",[self stationNumber]);
-			[NSException raise:@"Ram Test Failed" format:@"Could not put FLT %d into test mode\n",[self stationNumber]];
+			[NSException raise:@"Ram Test Failed" format:@"Could not put FLT %ld into test mode\n",[self stationNumber]];
 		}
 		
 		//[[[self crate] adapter] hw_configure];		
@@ -6273,7 +6272,7 @@ clean_up_mark:
 		if (waveFormPtr[j] >> 15) nTrigger += 1;
 	}
 	if (nTrigger>1){
-		NSLogError(@"",@"Katrin FLT Card Error",[NSString stringWithFormat:@"Card%d",[self stationNumber]],@"Too many triggers",nil);
+		NSLogError(@"",@"Katrin FLT Card Error",[NSString stringWithFormat:@"Card%ld",[self stationNumber]],@"Too many triggers",nil);
 		//NSLog(@"Event %d: Too many trigger flags in waveform (n=%d)\n", nEvents, nTrigger); // DEBUG: comment out -tb-
 	}
 	
@@ -6285,14 +6284,14 @@ clean_up_mark:
     //NSLog(@"Searching trigger between %i and %i\n",start,end);
     if(start<0) start = 0;// raw error check -tb-
     if(end<0){
-		NSLogError(@"",@"Katrin FLT Card Error",[NSString stringWithFormat:@"Card%d",[self stationNumber]],@"Trigger flag region out of ADC trace",nil);
+		NSLogError(@"",@"Katrin FLT Card Error",[NSString stringWithFormat:@"Card%ld",[self stationNumber]],@"Trigger flag region out of ADC trace",nil);
         return; //cannot check -tb-
     }
 	for (j=start;j<end;j++){ //-tb-
 		if (waveFormPtr[j] >> 15) nTrigger += 1;
 	}
 	if (nTrigger == 0){
-		NSLogError(@"",@"Katrin FLT Card Error",[NSString stringWithFormat:@"Card%d",[self stationNumber]],@"Trigger flag in wrong place",nil);
+		NSLogError(@"",@"Katrin FLT Card Error",[NSString stringWithFormat:@"Card%ld",[self stationNumber]],@"Trigger flag in wrong place",nil);
 		//NSLog(@"Event %d: Trigger flag not found in right place\n", nEvents, nTrigger);								
 	}																
 }
@@ -6314,7 +6313,7 @@ clean_up_mark:
 	[self writeMode:kKatrinFlt_Test_Mode];
 	if([self readMode] != kKatrinFlt_Test_Mode){
 		NSLogColor([NSColor redColor],@"Could not put FLT %d into test mode\n",[self stationNumber]);
-		[NSException raise:@"Ram Test Failed" format:@"Could not put FLT %d into test mode\n",[self stationNumber]];
+		[NSException raise:@"Ram Test Failed" format:@"Could not put FLT %ld into test mode\n",[self stationNumber]];
 	}
 }
 

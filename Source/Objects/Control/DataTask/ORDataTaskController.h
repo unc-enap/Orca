@@ -79,8 +79,8 @@
 
 #pragma mark ¥¥¥Data Source Methods
 - (BOOL) outlineView:(NSOutlineView*)ov isItemExpandable:(id)item;
-- (int)  outlineView:(NSOutlineView*)ov numberOfChildrenOfItem:(id)item;
-- (id)   outlineView:(NSOutlineView*)ov child:(int)index ofItem:(id)item;
+- (NSUInteger)  outlineView:(NSOutlineView*)ov numberOfChildrenOfItem:(id)item;
+- (id)   outlineView:(NSOutlineView*)ov child:(NSInteger)index ofItem:(id)item;
 - (id)   outlineView:(NSOutlineView*)ov objectValueForTableColumn:(NSTableColumn*)tableColumn byItem:(id)item;
 
 #pragma mark ¥¥¥Delegate Methods

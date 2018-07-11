@@ -419,7 +419,7 @@
 #pragma mark ***HW Access
 //note that most of these method can raise 
 //exceptions either directly or indirectly
-- (int)           chargeBBWithFile:(char*)data numBytes:(int) numBytes;
+- (int)           chargeBBWithFile:(char*)data numBytes:(unsigned long) numBytes;
 - (int)           chargeBBusingSBCinBackgroundWithData:(NSData*)theData   forFLT:(OREdelweissFLTModel*) aFLT;
 - (void)          chargeBBStatus:(ORSBCLinkJobStatus*) jobStatus;
 - (int)           chargeFICusingSBCinBackgroundWithData:(NSData*)theData   forFLT:(OREdelweissFLTModel*) aFLT;

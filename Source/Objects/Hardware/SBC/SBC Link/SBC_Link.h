@@ -396,12 +396,12 @@ typedef enum eSBC_ThrottleConsts{
 - (NSString*) sbcMacAddress;
 
 - (void) writeGeneral:(long*) buffer
-			operation:(uint32_t) anOperationID
-			numToWrite:(uint32_t) numberLongs;
+			operation:(unsigned long) anOperationID
+			numToWrite:(unsigned long) numberLongs;
 			
 - (void) readGeneral:(long*) buffer
-		   operation:(uint32_t) anOperationID
-		   numToRead:(uint32_t) numberLongs;
+		   operation:(unsigned long) anOperationID
+		   numToRead:(unsigned long) numberLongs;
 
 - (void) postCouchDBRecord;
 @end

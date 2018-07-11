@@ -70,7 +70,7 @@ static NSDictionary* xl3Ops;
     msbox = [[ORMultiStateBox alloc] initWithStates:statedict size:20 pad:4 bevel:2];
 
 	NSString* key = [NSString stringWithFormat: @"orca.ORXL3%d.selectedtab",[model crateNumber]]; //uniqueIdNumber?
-	int index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
+	NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
 	if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
 
 	[tabView selectTabViewItemAtIndex: index];

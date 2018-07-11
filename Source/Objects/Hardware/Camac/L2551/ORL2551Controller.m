@@ -132,7 +132,7 @@
     [self pollWhenRunningChanged:nil];
     int i;
     for(i=0;i<12;i++){
-        [[countsMatrix cellWithTag:i] setIntValue:[model scalerCount:i]];
+        [[countsMatrix cellWithTag:i] setIntegerValue:[model scalerCount:i]];
         [[rateMatrix cellWithTag:i] setFloatValue:[model scalerRate:i]];
     }
 }
@@ -195,7 +195,7 @@
 	unsigned short index = [[[aNotification userInfo] objectForKey:@"Channel"] intValue];
 	if(index<12){
 		id cell = [countsMatrix cellWithTag:index];
-		[cell setIntValue:[model scalerCount:index]];
+		[cell setIntegerValue:[model scalerCount:index]];
 		
 		//check for half scale and adjust color
 		if([model scalerCount:index]>0x00800000)[cell setTextColor:[NSColor colorWithCalibratedRed:.7 green:0 blue:0 alpha:1.0]];
@@ -215,7 +215,7 @@
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"L2551 Scaler (Station %d)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"L2551 Scaler (Station %ld)",[model stationNumber]]];
 }
 
 - (void) shipScalersChanged:(NSNotification*)aNotification
@@ -254,9 +254,9 @@
 
 - (IBAction) onlineAction:(id)sender
 {
-	if([[sender selectedCell] intValue] != [model onlineMaskBit:[[sender selectedCell] tag]]){
+	if([[(NSMatrix*)sender selectedCell] intValue] != [model onlineMaskBit:(int)[[(NSMatrix*)sender selectedCell] tag]]){
 		[[self undoManager] setActionName: @"Set Online Mask"];
-		[model setOnlineMaskBit:[[sender selectedCell] tag] withValue:[[sender selectedCell] intValue]];
+		[model setOnlineMaskBit:(int)[[(NSMatrix*)sender selectedCell] tag] withValue:[[(NSMatrix*)sender selectedCell] intValue]];
 	}
 }
 

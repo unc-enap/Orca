@@ -129,7 +129,7 @@
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"AD413A (Station %d)",[model stationNumber]+1]];
+	[[self window] setTitle:[NSString stringWithFormat:@"AD413A (Station %ld)",[model stationNumber]+1]];
 }
 
 - (void) onlineMaskChanged:(NSNotification*)aNotification

@@ -173,7 +173,7 @@ NSString* ORPlotFFTShowChanged = @"ORPlotFFTShowChanged";
 - (void) plotter:(id)aPlotter index:(unsigned long)i x:(double*)xValue y:(double*)yValue
 {
 	[dataLock lock];
-	int set = [aPlotter tag];
+	int set = (int)[aPlotter tag];
 	if(set==0){
 		*yValue = [[realArray objectAtIndex:i] floatValue];
 		*xValue = i;
@@ -192,12 +192,19 @@ NSString* ORPlotFFTShowChanged = @"ORPlotFFTShowChanged";
 - (float) plotter:(id) aPlotter dataSet:(int)set dataValue:(int) x 
 {
 	[dataLock lock];
-	if(set==0)return [[realArray objectAtIndex:x] floatValue];
-    else if(set==1)return [[imaginaryArray objectAtIndex:x] floatValue];
-    else return [[powerSpectrumArray objectAtIndex:x] floatValue];
-	[dataLock unlock];
+    @try{
+        if(set==0)      return [[realArray objectAtIndex:x] floatValue];
+        else if(set==1) return [[imaginaryArray objectAtIndex:x] floatValue];
+        else            return [[powerSpectrumArray objectAtIndex:x] floatValue];
+    }
+    @catch(NSException*e){
+        
+    }
+    @finally
+    {
+        [dataLock unlock];
+    }
 }
-
 
 - (NSColor*) colorForDataSet:(int)set
 {

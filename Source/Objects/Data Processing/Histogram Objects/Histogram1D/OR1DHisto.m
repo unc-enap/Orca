@@ -66,7 +66,7 @@
     dataId = aDataId;
 }
 
--(void)setNumberBins:(int)aNumberBins
+-(void)setNumberBins:(unsigned long)aNumberBins
 {
 	[dataSetLock lock];
     [histogram release];
@@ -75,7 +75,7 @@
 	[dataSetLock unlock];
 }
 
--(int) numberBins
+-(unsigned long) numberBins
 {
     return numberBins;
 }
@@ -117,7 +117,7 @@
 - (void) writeDataToFile:(FILE*)aFile
 {
 	[dataSetLock lock];
-    fprintf( aFile, "WAVES/I/N=(%d) '%s'\nBEGIN\n",numberBins,[shortName cStringUsingEncoding:NSASCIIStringEncoding]);
+    fprintf( aFile, "WAVES/I/N=(%ld) '%s'\nBEGIN\n",numberBins,[shortName cStringUsingEncoding:NSASCIIStringEncoding]);
     unsigned long* histogramPtr = (unsigned long*)[histogram bytes];
     unsigned long n = [histogram length]/sizeof(unsigned long);
     int i;
@@ -224,7 +224,7 @@
 {
 	NSData* pd = [self getNonZeroRawDataWithStart:start end:end];
 	unsigned long* plotData = (unsigned long*)[pd bytes];
-	int n = [pd length]/4;
+	unsigned long n = [pd length]/4;
 	int i;
 	NSMutableString* s = [NSMutableString stringWithCapacity:n*64];
 	for(i=0;i<n;i++){
@@ -320,7 +320,7 @@
 	[dataSetLock lock];
 	if(histogram){
         unsigned long* histogramPtr = (unsigned long*)[histogram bytes];
-		int i,index;
+		unsigned long i,index;
 		for( (index=firstBin,i=0); i<numBins; (index+=stepSize,i++) ){
 			if(index>=numberBins){
 				overFlow += ptr[i];

@@ -33,7 +33,7 @@
     int i;
     if (extend==NO) [self deselectAll:nil];
     for (i=0;i<[items count];i++) {
-        int row = [self rowForItem:[items objectAtIndex:i]];
+        NSInteger row = [self rowForItem:[items objectAtIndex:i]];
 		if(row>=0) {
 			NSIndexSet* aSet = [NSIndexSet indexSetWithIndex:row];
 			[self selectRowIndexes:aSet byExtendingSelection:YES];
@@ -42,11 +42,11 @@
 }
 - (id) parentOfSelectedRow
 {
-	int currentRow = [self selectedRow];
+	NSInteger currentRow = [self selectedRow];
 	if (currentRow == -1) { // i.e. no selected row
 		return nil;
 	}
-	int currentRowLevel = [self levelForRow:currentRow];
+	NSInteger currentRowLevel = [self levelForRow:currentRow];
 	if (currentRowLevel == 0) {
 		// i.e. it's at the top level
 		return nil;

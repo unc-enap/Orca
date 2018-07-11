@@ -27,33 +27,33 @@ for the use of this software.
 @interface ORPMCReadWriteCommand : NSObject {
 	long			milliSecondDelay;
 	int				opType;				//read/write
-	int				numberItems;
-	unsigned int	pmcAddress;			//hw Address
+	unsigned long	numberItems;
+	unsigned long	pmcAddress;			//hw Address
 	int				returnCode;			//should be 1 for success, 0 for failure
 	NSMutableData*	data;			//if read theData == returned data, if write theData = writeData
 }
 + (id) delayCmd:(unsigned long) milliSeconds;
 	
 + (id) writeLongBlock:(unsigned long *) writeAddress
-			atAddress:(unsigned int) pmcAddress
-		   numToWrite:(unsigned int) numberLongs;
+			atAddress:(unsigned long) pmcAddress
+		   numToWrite:(unsigned long) numberLongs;
 
-+ (id) readLongBlockAtAddress:(unsigned int) pmcAddress
-					numToRead:(unsigned int) numberLongs;
++ (id) readLongBlockAtAddress:(unsigned long) pmcAddress
+					numToRead:(unsigned long) numberLongs;
 
 - (id) initWithMilliSecondDelay:(unsigned long) aMilliSecondDelay;
 	
 - (id) initWithOp: (int) aOpType
 	   dataAdress: (unsigned long*) dataAddress
-	   pmcAddress: (unsigned int) pmcAddress
-	  numberItems: (unsigned int) aNumberItems;
+	   pmcAddress: (unsigned long) pmcAddress
+	  numberItems: (unsigned long) aNumberItems;
 
 - (unsigned long) milliSecondDelay;
 - (int)	opType;
-- (int) numberItems;
+- (unsigned long) numberItems;
 - (int)	returnCode;
 - (void) setReturnCode:(int)aCode;
-- (unsigned int)	pmcAddress;
+- (unsigned long)	pmcAddress;
 - (unsigned char*) bytes;
 - (NSMutableData*)	data;
 

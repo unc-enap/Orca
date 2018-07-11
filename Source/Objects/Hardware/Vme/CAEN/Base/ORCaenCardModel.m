@@ -617,7 +617,7 @@ static NSString*	CAENThresholdChnl       = @"CAENThresholdChnl%d";
     // Save the information from first TAB.
     [anEncoder encodeInt:[self selectedRegIndex] forKey:CAENSelectedRegIndex];
     [anEncoder encodeInt:[self selectedChannel] forKey:CAENSelectedChannelIndex];
-    [anEncoder encodeInt32:[self writeValue] forKey:CAENWriteValue];
+    [anEncoder encodeInt32:(int32_t)[self writeValue] forKey:CAENWriteValue];
     
     // Save the thresholds
     for (i = 0; i < [self numberOfChannels]; i++){
@@ -921,17 +921,17 @@ static NSString*	CAENThresholdChnl       = @"CAENThresholdChnl%d";
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id	= kCaen; //should be unique
-	configStruct->card_info[index].hw_mask[0]	= dataId; //better be unique
+	configStruct->card_info[index].hw_mask[0]	= (int32_t)dataId; //better be unique
 	configStruct->card_info[index].slot			= [self slot];
 	configStruct->card_info[index].crate		= [self crateNumber];
 	configStruct->card_info[index].add_mod		= [self addressModifier];
-	configStruct->card_info[index].base_add		= [self baseAddress];
-	configStruct->card_info[index].deviceSpecificData[0] = [self getAddressOffset:[self getStatusRegisterIndex:1]];
-	configStruct->card_info[index].deviceSpecificData[1] = [self getAddressOffset:[self getStatusRegisterIndex:2]];
-	configStruct->card_info[index].deviceSpecificData[2] = [self getDataBufferSize]/sizeof(long);
-	configStruct->card_info[index].deviceSpecificData[3] = [self baseAddress] + [self getBufferOffset];
-	configStruct->card_info[index].deviceSpecificData[4] = [self getAccessType:[self getStatusRegisterIndex:1]];
-	configStruct->card_info[index].deviceSpecificData[5] = [self getAccessType:[self getStatusRegisterIndex:2]];
+	configStruct->card_info[index].base_add		= (int32_t)[self baseAddress];
+	configStruct->card_info[index].deviceSpecificData[0] = (int32_t)[self getAddressOffset:[self getStatusRegisterIndex:1]];
+	configStruct->card_info[index].deviceSpecificData[1] = (int32_t)[self getAddressOffset:[self getStatusRegisterIndex:2]];
+	configStruct->card_info[index].deviceSpecificData[2] = (int32_t)[self getDataBufferSize]/sizeof(long);
+	configStruct->card_info[index].deviceSpecificData[3] = (int32_t)([self baseAddress] + [self getBufferOffset]);
+	configStruct->card_info[index].deviceSpecificData[4] = (int32_t)[self getAccessType:[self getStatusRegisterIndex:1]];
+	configStruct->card_info[index].deviceSpecificData[5] = (int32_t)[self getAccessType:[self getStatusRegisterIndex:2]];
 	configStruct->card_info[index].num_Trigger_Indexes = 0;
 	configStruct->card_info[index].next_Card_Index 	= index+1;	
 	return index+1;

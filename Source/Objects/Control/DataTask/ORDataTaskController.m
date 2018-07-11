@@ -60,7 +60,7 @@
     
 	[plotter setUseGradient:YES];
 	
-    int index = [[NSUserDefaults standardUserDefaults] integerForKey: @"orca.ORDataTaker.selectedtab"];
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: @"orca.ORDataTaker.selectedtab"];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
     
@@ -192,7 +192,7 @@
 
 - (void) cycleRateChanged:(NSNotification*)aNote
 {
-	[cycleRateField setIntValue: [model cycleRate]];
+	[cycleRateField setIntegerValue: [model cycleRate]];
 }
 
 - (void) timeScalerChanged:(NSNotification*)aNote
@@ -234,7 +234,7 @@
 
 - (void) refreshRateAction:(id)sender
 {
-	[model setRefreshRate:[sender indexOfSelectedItem]];	
+	[model setRefreshRate:(int)[sender indexOfSelectedItem]];
 }
 
 - (void) doTimedRefresh
@@ -373,13 +373,13 @@ else {\
 }
 
 
-- (int)  outlineView:(NSOutlineView*)ov numberOfChildrenOfItem:(id)item
+- (NSUInteger)  outlineView:(NSOutlineView*)ov numberOfChildrenOfItem:(id)item
 {
 	GET_CHILDREN; //macro: given an item, sets children array and guardian.
-	return [children count];
+	return (int)[children count];
 }
 
-- (id)   outlineView:(NSOutlineView*)ov child:(int)index ofItem:(id)item
+- (id)   outlineView:(NSOutlineView*)ov child:(NSInteger)index ofItem:(id)item
 {
 	GET_CHILDREN; //macro: given an item, sets children array and guardian.
 	if(!children || ([children count] <= index)) return nil;
@@ -433,7 +433,7 @@ else {\
 }
 
 
-- (unsigned int)outlineView:(NSOutlineView*)ov validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(int)index
+- (NSUInteger)outlineView:(NSOutlineView*)ov validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(int)index
 {
     // This method is used by NSOutlineView to determine a valid drop target.  Based on the mouse position, the outline view will suggest a proposed drop location.  This method must return a value that indicates which dragging operation the data source will perform.  The data source may "re-target" a drop if desired by calling setDropItem:dropChildIndex: and returning something other than NSDragOperationNone.  One may choose to re-target for various reasons (eg. for better visual feedback when inserting into a sorted position).
     //	[ov setDropItem:item dropChildIndex:index]; // No-op?
@@ -476,7 +476,7 @@ else {\
         
 		if(item == nil || [[item class] isSubclassOfClass: NSClassFromString(@"ORReadOutList")]){
 					
-			int realIndex;
+			NSUInteger realIndex;
 			if(item == nil && index == NSOutlineViewDropOnItemIndex) realIndex = [[guardian children] count];
 			else if (index == NSOutlineViewDropOnItemIndex)          realIndex = 0;
 			else                                                     realIndex = index;
@@ -487,7 +487,7 @@ else {\
             else {
 				// insert new children
 				int i;
-				for (i=([nodeItems count]-1); i>=0; i--) {
+				for (i=((int)[nodeItems count]-1); i>=0; i--) {
                     if([guardian containsObject:[nodeItems objectAtIndex:i]]){
                         [guardian moveObject:[nodeItems objectAtIndex:i] toIndex:realIndex];
                     }
@@ -608,7 +608,7 @@ else {\
 - (void) tabView:(NSTabView*)aTabView didSelectTabViewItem:(NSTabViewItem*)aTabItem
 {
     if(aTabView == tabView){
-        int index = [tabView indexOfTabViewItem:aTabItem];
+        NSInteger index = [tabView indexOfTabViewItem:aTabItem];
         if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
         [[NSUserDefaults standardUserDefaults] setInteger:index forKey:@"orca.ORDataTaker.selectedtab"];
     }
@@ -621,7 +621,7 @@ else {\
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-	int set = [aPlotter tag];
+	NSInteger set = [aPlotter tag];
 	double aValue = 0;
     if(set == 0)aValue =  [model dataTimeHist:i];
     else		aValue =  [model processingTimeHist:i];

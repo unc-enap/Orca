@@ -4,8 +4,8 @@
 #include "FilterScript.h"
 #include "FilterScript.tab.h"
 void FilterScripterror(char *);
-void fsComment();
-void fsSingleLineComment();
+void fsComment(void);
+void fsSingleLineComment(void);
 long numFilterLines = 1;
 extern nodeType** filterNodes;
 extern long filterNodeCount;

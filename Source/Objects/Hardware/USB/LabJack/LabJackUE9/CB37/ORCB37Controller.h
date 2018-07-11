@@ -104,7 +104,7 @@
 - (BOOL) legalAdcRange:(int)adcChan;
 - (int)  displayChanFromAdcChan:(int)adcChan;
 - (int) startChannel;
-- (NSUInteger) tagToAdcIndex:(int)aTag;
+- (int) tagToAdcIndex:(int)aTag;
 
 #pragma mark ***Interface Management
 - (void) slotChanged:(NSNotification*)aNote;
@@ -123,19 +123,19 @@
 - (void) tabView:(NSTabView *)aTabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem;
 
 #pragma mark •••Actions
-- (IBAction) adcEnabledAction:(id)sender;
+- (IBAction) adcEnabledAction:(NSMatrix*)sender;
 - (IBAction) settingLockAction:(id) sender;
-- (IBAction) channelNameAction:(id)sender;
-- (IBAction) channelUnitAction:(id)sender;
-- (IBAction) minValueAction:(id)sender;
-- (IBAction) maxValueAction:(id)sender;
-- (IBAction) lowLimitAction:(id)sender;
-- (IBAction) hiLimitAction:(id)sender;
-- (IBAction) slopeAction:(id)sender;
-- (IBAction) interceptAction:(id)sender;
+- (IBAction) channelNameAction:(NSMatrix*)sender;
+- (IBAction) channelUnitAction:(NSMatrix*)sender;
+- (IBAction) minValueAction:(NSMatrix*)sender;
+- (IBAction) maxValueAction:(NSMatrix*)sender;
+- (IBAction) lowLimitAction:(NSMatrix*)sender;
+- (IBAction) hiLimitAction:(NSMatrix*)sender;
+- (IBAction) slopeAction:(NSMatrix*)sender;
+- (IBAction) interceptAction:(NSMatrix*)sender;
 - (IBAction) showLabJackUE9:(id)sender;
-- (IBAction) bipolarAction:(id)sender;
-- (IBAction) gainAction:(id)sender;
+- (IBAction) bipolarAction:(NSPopUpButton*)sender;
+- (IBAction) gainAction:(NSPopUpButton*)sender;
 - (IBAction) printChannelLocations:(id)sender;
 
 @end

@@ -141,7 +141,7 @@
 
 - (void) alarmWindowChanged:(NSNotification*)aNote
 {
-    [alarmWindowField setIntValue:[model alarmWindow]];
+    [alarmWindowField setIntegerValue:[model alarmWindow]];
 }
 
 - (void) statusChanged:(NSNotification*)aNote

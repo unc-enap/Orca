@@ -22,7 +22,7 @@
 #import "OROpSequence.h"
 #import "OROpSequenceQueue.h"
 #import "OROpSeqStep.h"
-NSArray *ScriptSteps();
+NSArray *ScriptSteps(void);
 
 NSString* OROpSeqStepsChanged               = @"OROpSeqStepsChanged";
 NSString* ORSequenceQueueCountChanged       = @"ORSequenceQueueCountChanged";

@@ -72,7 +72,7 @@
 #pragma mark ¥¥¥Interface Management
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"TR8818 (Station %d)",[model stationNumber]+1]];
+	[[self window] setTitle:[NSString stringWithFormat:@"TR8818 (Station %ld",[model stationNumber]+1]];
 }
 
 - (void) offsetRegisterChanged:(NSNotification*)aNote

@@ -594,7 +594,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 - (void)loadHistogram:(unsigned long*)ptr numBins:(unsigned long)numBins withKeyArray:(NSArray*)keyArray
 {
 	@synchronized(self){  
-		int n = [keyArray count];
+		NSUInteger n = [keyArray count];
 		int i;
 		ORDataSet* currentLevel = self;
 		ORDataSet* nextLevel    = nil;
@@ -736,7 +736,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 {
 	@synchronized(self){  
 		
-		int n = [keyArray count];
+		NSUInteger n = [keyArray count];
 		int i;
 		ORDataSet* currentLevel = self;
 		ORDataSet* nextLevel    = nil;
@@ -886,7 +886,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 {
 	@synchronized(self){  
 		
-		int n = [keyArray count];
+		NSUInteger n = [keyArray count];
 		int i;
 		ORDataSet* currentLevel = self;
 		ORDataSet* nextLevel    = nil;
@@ -1612,7 +1612,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 - (void)loadFFTReal:(NSArray*)realArray imaginary:(NSArray*)imaginaryArray withKeyArray:(NSArray*)keyArray
 {
  	@synchronized(self){     
-		int n = [keyArray count];
+		NSUInteger n = [keyArray count];
 		int i;
 		ORDataSet* currentLevel = self;
 		ORDataSet* nextLevel    = nil;

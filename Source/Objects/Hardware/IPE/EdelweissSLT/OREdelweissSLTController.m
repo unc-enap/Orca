@@ -401,7 +401,7 @@ NSString* fltEdelweissV4TriggerSourceNames[2][kFltNumberTriggerSources] = {
             //DEBUG OUTPUT:
             static int debFlag=1;if(debFlag) NSLog(@"   %@::%@: UNDER CONSTRUCTION \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));debFlag=0;//TODO: DEBUG testing ...-tb-
 return;
-	[statusHighRegTextField setIntValue: [model statusHighReg]];
+	//[statusHighRegTextField setIntValue: [model statusHighReg]];
 }
 
 - (void) statusLowRegChanged:(NSNotification*)aNote
@@ -409,7 +409,7 @@ return;
             //DEBUG OUTPUT:
             static int debFlag=1;if(debFlag) NSLog(@"   %@::%@: UNDER CONSTRUCTION \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));debFlag=0;//TODO: DEBUG testing ...-tb-
 return;
-	[statusLowRegTextField setIntValue: [model statusLowReg]];
+	//[statusLowRegTextField setIntValue: [model statusLowReg]];
 }
 
 - (void) takeADCChannelDataChanged:(NSNotification*)aNote

@@ -500,7 +500,7 @@ struct {
 
 - (NSString*) processingTitle
 {
-    return [NSString stringWithFormat:@"%d,%d,JADC-L",[self crateNumber],[self  stationNumber]];
+    return [NSString stringWithFormat:@"%ld,%ld,JADC-L",[self crateNumber],[self  stationNumber]];
 }
 
 - (double) convertedValue:(int)channel

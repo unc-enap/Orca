@@ -24,7 +24,7 @@
 #import "SynthesizeSingleton.h"
 
 //aux function for sorting window names
-int windowNameSort(id w1, id w2, void *context) { return [[w2 title] compare:[w1 title]]; }
+NSInteger windowNameSort(id w1, id w2, void *context) { return [[w2 title] compare:[w1 title]]; }
 
 @implementation ORWindowListController
 

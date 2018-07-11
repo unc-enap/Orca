@@ -291,15 +291,15 @@ NSString* ORNMon5085IsLogChanged                  = @"ORNMon5085IsLogChanged";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORNMon5085ModelModeTimeChanged object:self];
 }
 
-- (int) mode
+- (int) opMode
 {
-    return mode;
+    return opMode;
 }
 
-- (void) setMode:(int)aMode
+- (void) setOpMode:(int)aMode
 {
-    [[[self undoManager] prepareWithInvocationTarget:self] setMode:mode];
-    mode = aMode;
+    [[[self undoManager] prepareWithInvocationTarget:self] setOpMode:opMode];
+    opMode = aMode;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORNMon5085ModelModeChanged object:self];
 }
 
@@ -324,7 +324,7 @@ NSString* ORNMon5085IsLogChanged                  = @"ORNMon5085IsLogChanged";
 	[[self undoManager] disableUndoRegistration];
 	[self setIsLog:		[decoder decodeBoolForKey:@"isLog"]];
 	[self setModeTime:  [decoder decodeIntForKey:@"modeTime"]];
-    [self setMode:      [decoder decodeIntForKey:@"mode"]];
+    [self setOpMode:      [decoder decodeIntForKey:@"mode"]];
 	[[self undoManager] enableUndoRegistration];
 	
 	return self;
@@ -335,7 +335,7 @@ NSString* ORNMon5085IsLogChanged                  = @"ORNMon5085IsLogChanged";
     [super encodeWithCoder:encoder];
     [encoder encodeBool:isLog	forKey:@"isLog"];
     [encoder encodeInt:modeTime forKey:@"modeTime"];
-    [encoder encodeInt:mode		forKey:@"mode"];
+    [encoder encodeInt:opMode		forKey:@"mode"];
 }
 
 #pragma mark •••Commands
@@ -343,15 +343,15 @@ NSString* ORNMon5085IsLogChanged                  = @"ORNMon5085IsLogChanged";
 {
     
     NSString* modeCmd[4] = {@"R",@"I",@"C",@"S"};
-    if(mode>=0 && mode<4){
+    if(opMode>=0 && opMode<4){
         [self enqueueCmd:@"M"];
-        [self enqueueCmd:modeCmd[mode]];
+        [self enqueueCmd:modeCmd[opMode]];
     }
 }
 
 - (NSString*) modeString
 {
-    switch(mode){
+    switch(opMode){
         case kNMon5085RateMode:     return @"Rate Mode";
         case kNMon5085Integrate:    return @"Integrate Mode";
         case kNMon5085CountsPerS:   return @"Counts/Sec";
@@ -365,11 +365,11 @@ NSString* ORNMon5085IsLogChanged                  = @"ORNMon5085IsLogChanged";
 {
     NSLog(@"Started Neutron Monitor (%@)\n",[self modeString]);
     
-    if(mode == kNMon5085Scaler || 
-       mode == kNMon5085Integrate) autoRestart  = YES;
+    if(opMode == kNMon5085Scaler ||
+       opMode == kNMon5085Integrate) autoRestart  = YES;
     else                           autoRestart  = NO;
     
-    if(mode == kNMon5085Scaler || mode == kNMon5085Integrate){
+    if(opMode == kNMon5085Scaler || opMode == kNMon5085Integrate){
         [self enqueueCmd:@"S"];
         [self startCountDown];
     }
@@ -402,7 +402,7 @@ NSString* ORNMon5085IsLogChanged                  = @"ORNMon5085IsLogChanged";
 }
 - (void) sendTime
 {
-    if(mode == kNMon5085Integrate || mode == kNMon5085Scaler){
+    if(opMode == kNMon5085Integrate || opMode == kNMon5085Scaler){
         
         int t = modeTime;
         int h = t / 3600;
@@ -430,7 +430,7 @@ NSString* ORNMon5085IsLogChanged                  = @"ORNMon5085IsLogChanged";
     }
     
     else {
-        switch([self mode]){
+        switch([self opMode]){
             case kNMon5085Integrate:
             case kNMon5085Scaler:
                 autoRestart = NO;
@@ -521,7 +521,7 @@ NSString* ORNMon5085IsLogChanged                  = @"ORNMon5085IsLogChanged";
                 if(firstPoll){
                     firstPoll = NO;
                     [[self undoManager] disableUndoRegistration];
-                    [self setMode:kNMon5085RateMode];
+                    [self setOpMode:kNMon5085RateMode];
                     [[self undoManager] enableUndoRegistration];
                 }
             }
@@ -530,7 +530,7 @@ NSString* ORNMon5085IsLogChanged                  = @"ORNMon5085IsLogChanged";
                 if(firstPoll){
                     firstPoll = NO;
                     [[self undoManager] disableUndoRegistration];
-                    [self setMode:kNMon5085Integrate];
+                    [self setOpMode:kNMon5085Integrate];
                     [[self undoManager] enableUndoRegistration];
                 }
             }
@@ -540,7 +540,7 @@ NSString* ORNMon5085IsLogChanged                  = @"ORNMon5085IsLogChanged";
                 if(firstPoll){
                     firstPoll = NO;
                     [[self undoManager] disableUndoRegistration];
-                    [self setMode:kNMon5085Scaler];
+                    [self setOpMode:kNMon5085Scaler];
                     [[self undoManager] enableUndoRegistration];
                 }
             }
@@ -550,7 +550,7 @@ NSString* ORNMon5085IsLogChanged                  = @"ORNMon5085IsLogChanged";
                 if(firstPoll){
                     firstPoll = NO;
                     [[self undoManager] disableUndoRegistration];
-                    [self setMode:kNMon5085CountsPerS];
+                    [self setOpMode:kNMon5085CountsPerS];
                     [[self undoManager] enableUndoRegistration];
                 }
             }

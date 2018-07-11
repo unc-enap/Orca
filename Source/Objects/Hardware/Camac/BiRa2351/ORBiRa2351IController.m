@@ -102,13 +102,13 @@
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"BiRa2351I (Station %d)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"BiRa2351I (Station %dl)",[model stationNumber]]];
 }
 
 #pragma mark ¥¥¥Actions
 - (void) pollingStatePopupAction:(id)sender
 {
-	int index = [sender indexOfSelectedItem];
+	int index = (int)[(NSPopUpButton*)sender indexOfSelectedItem];
 	if(index == 0) [model setPollingState:0];	
 	else [model setPollingState:[[sender titleOfSelectedItem] intValue]]; 
 }

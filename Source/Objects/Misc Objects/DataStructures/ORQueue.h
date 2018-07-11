@@ -33,7 +33,7 @@
 
 //releases the queue and starts a new one.
 -(void) removeAllObjects;
-- (unsigned int)count;
+- (NSUInteger)count;
 
 /**
  * Returns an autoreleased queue with the contents of your 

@@ -68,7 +68,7 @@
 
 -(void) readLongBlock:(unsigned long *) readAddress
 			atAddress:(unsigned long) pxiAddress
-			numToRead:(unsigned int) numberLongs
+			numToRead:(unsigned long) numberLongs
 {
 	id controller = [[self crate] controllerCard];
 	if(!controller){
@@ -81,7 +81,7 @@
 
 -(void) writeLongBlock:(unsigned long *) writeAddress
 			 atAddress:(unsigned long) pxiAddress
-			numToWrite:(unsigned int) numberLongs
+			numToWrite:(unsigned long) numberLongs
 
 {
 	id controller = [[self crate] controllerCard];
@@ -95,7 +95,7 @@
 
 -(void) readLong:(unsigned long *) readAddress
 	   atAddress:(unsigned long) pxiAddress
-	 timesToRead:(unsigned int) numberLongs
+	 timesToRead:(unsigned long) numberLongs
 {
 	id controller = [[self crate] controllerCard];
 	if(!controller){
@@ -108,7 +108,7 @@
 
 -(void) readByteBlock:(unsigned char *) readAddress
 			atAddress:(unsigned long) pxiAddress
-			numToRead:(unsigned int) numberBytes
+			numToRead:(unsigned long) numberBytes
 {
 	id controller = [[self crate] controllerCard];
 	if(!controller){
@@ -121,7 +121,7 @@
 
 -(void) writeByteBlock:(unsigned char *) writeAddress
 			 atAddress:(unsigned long) pxiAddress
-			numToWrite:(unsigned int) numberBytes
+			numToWrite:(unsigned long) numberBytes
 {
 	id controller = [[self crate] controllerCard];
 	if(!controller){
@@ -135,7 +135,7 @@
 
 -(void) readWordBlock:(unsigned short *) readAddress
 			atAddress:(unsigned long) pxiAddress
-			numToRead:(unsigned int) numberWords
+			numToRead:(unsigned long) numberWords
 {
 	id controller = [[self crate] controllerCard];
 	if(!controller){
@@ -148,7 +148,7 @@
 
 -(void) writeWordBlock:(unsigned short *) writeAddress
 			 atAddress:(unsigned long) pxiAddress
-			numToWrite:(unsigned int) numberWords
+			numToWrite:(unsigned long) numberWords
 {
 	id controller = [[self crate] controllerCard];
 	if(!controller){

@@ -124,7 +124,7 @@ uint8 extendedChecksum8( uint8 *b);
 //Returns the Checksum8 for a extended command data packet.
 //b = data packet for extended command
 
-void listDeviceSerialNumbers();
+void listDeviceSerialNumbers(void);
 HANDLE openU6Connection(int searchValue);
 HANDLE openUSBConnection(int searchValue,BOOL verbose);
 //Opens a U6 connection over USB.  Returns NULL on failure, or a HANDLE
@@ -134,7 +134,7 @@ HANDLE openUSBConnection(int searchValue,BOOL verbose);
 void closeUSBConnection( HANDLE hDevice);
 //Closes a HANDLE to a U6 device.
 
-long getTickCount();
+long getTickCount(void);
 //Returns the number of milliseconds that has elasped since the system was
 //started.
 

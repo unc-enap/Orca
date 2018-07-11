@@ -80,33 +80,33 @@
 
 - (void) readLongBlock:(unsigned long *) readAddress
              atAddress:(unsigned long) pxiAddress
-             numToRead:(unsigned int) numberLongs;
+             numToRead:(unsigned long) numberLongs;
 
 //a special read for reading fifos that reads one address multiple times
 - (void) readLong:(unsigned long *) readAddress
 		atAddress:(unsigned long) pxiAddress
-	  timesToRead:(unsigned int) numberLongs;
+	  timesToRead:(unsigned long) numberLongs;
 
 
 - (void) writeLongBlock:(unsigned long *) writeAddress
               atAddress:(unsigned long) pxiAddress
-             numToWrite:(unsigned int) numberLongs;
+             numToWrite:(unsigned long) numberLongs;
 
 - (void) readByteBlock:(unsigned char *) readAddress
              atAddress:(unsigned long) pxiAddress
-             numToRead:(unsigned int) numberBytes;
+             numToRead:(unsigned long) numberBytes;
 
 - (void) writeByteBlock:(unsigned char *) writeAddress
               atAddress:(unsigned long) pxiAddress
-             numToWrite:(unsigned int) numberBytes;
+             numToWrite:(unsigned long) numberBytes;
 
 -  (void) readWordBlock:(unsigned short *) readAddress
               atAddress:(unsigned long) pxiAddress
-              numToRead:(unsigned int) numberWords;
+              numToRead:(unsigned long) numberWords;
 
 -  (void) writeWordBlock:(unsigned short *) writeAddress
                atAddress:(unsigned long) pxiAddress
-              numToWrite:(unsigned int) numberWords;
+              numToWrite:(unsigned long) numberWords;
 
 #pragma mark •••Archival
 - (id)initWithCoder:(NSCoder*)decoder;

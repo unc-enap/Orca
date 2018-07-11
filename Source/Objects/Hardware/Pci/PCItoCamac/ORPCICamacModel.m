@@ -664,7 +664,7 @@ static UInt32 *fVPCICamacMem;
             [theHWLock lock];   //---begin critical section
             // read dataway
             UInt32 lnafOffset = (UInt32)(offsetNAF(n,a,f) / 4);	 // note divide by 4
-            volatile UInt32 *wPCICamacMemBase = (UInt32 *)&fVPCICamacMem[lnafOffset];
+            volatile unsigned long *wPCICamacMemBase = (unsigned long *)&fVPCICamacMem[lnafOffset];
             
             //The PCI-CAMAC hardware forces all NAF command writes to set
             //the F16 bit to a 1 and all NAF command reads to set the F16
@@ -672,7 +672,7 @@ static UInt32 *fVPCICamacMem;
             //be used with CAMAC bus read accesses and all F values from
             //F16 through F31 MUST be used with CAMAC bus write accesses.
 			if(f < 16){
-                UInt32 temp = *wPCICamacMemBase;
+                unsigned long temp = *wPCICamacMemBase;
                 if(data)*data = Swap8Bits(temp);
             }
             else     *wPCICamacMemBase = Swap8Bits(*data);

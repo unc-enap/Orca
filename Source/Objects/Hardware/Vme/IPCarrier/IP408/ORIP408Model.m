@@ -294,9 +294,9 @@ static NSString *ORIP408ReadMask 		= @"IP408 ReadMask";
 {
     [super encodeWithCoder:encoder];
     
-    [encoder encodeInt:[self writeMask] forKey:ORIP408WriteMask];
-    [encoder encodeInt:[self readMask] forKey:ORIP408ReadMask];
-    [encoder encodeInt:[self writeValue] forKey:ORIP408WriteValue];
+    [encoder encodeInt:(int32_t)[self writeMask] forKey:ORIP408WriteMask];
+    [encoder encodeInt:(int32_t)[self readMask] forKey:ORIP408ReadMask];
+    [encoder encodeInt:(int32_t)[self writeValue] forKey:ORIP408WriteValue];
 }
 
 #pragma mark ¥¥¥Bit Processing Protocol

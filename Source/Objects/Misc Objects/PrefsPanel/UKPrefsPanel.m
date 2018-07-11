@@ -94,7 +94,7 @@
 -(void)	awakeFromNib
 {
 	NSString*		key;
-	int				index = 0;
+	NSInteger				index = 0;
 	NSString*		wndTitle = nil;
 	
 	// Generate a string containing the window's title so we can display the original window title plus the selected pane:
@@ -110,7 +110,7 @@
 	
 	// Select the preferences page the user last had selected when this window was opened:
 	key = [NSString stringWithFormat: @"%@.prefspanel.recentpage", autosaveName];
-	index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
+	index = (int)[[NSUserDefaults standardUserDefaults] integerForKey: key];
 	[tabView selectTabViewItemAtIndex: index];
 	
 	// Actually hook up our toolbar and the tabs:
@@ -130,7 +130,7 @@
 {
     // Create a new toolbar instance, and attach it to our document window 
     NSToolbar		*toolbar =[[tabView window] toolbar];
-	int				itemCount = 0,
+	NSInteger				itemCount = 0,
 					x = 0;
 	NSTabViewItem	*currPage = nil;
 	
@@ -303,7 +303,7 @@
 
 -(NSArray*) toolbarDefaultItemIdentifiers: (NSToolbar *) toolbar
 {
-	int					itemCount = [tabView numberOfTabViewItems],
+	NSInteger			itemCount = [tabView numberOfTabViewItems],
 						x;
 	NSTabViewItem*		theItem;
 	//NSMutableArray*	defaultItems = [NSMutableArray arrayWithObjects: [theItem identifier], NSToolbarSeparatorItemIdentifier, nil];

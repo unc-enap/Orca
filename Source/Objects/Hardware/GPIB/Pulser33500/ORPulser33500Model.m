@@ -571,11 +571,11 @@ NSString* ORPulser33500ShowInKHzChanged				= @"ORPulser33500ShowInKHzChanged";
 	}
 	else {
 		return;   //stopped asking for response because of device time-outs and errors. MAH 12/18/09
-		char reply[1024];
-		long n = [self writeReadDevice:@"SYST:ERR?" data:reply maxLength:1024];
-		if(n && [[NSString stringWithCString:reply encoding:NSASCIIStringEncoding] rangeOfString:@"No error"].location == NSNotFound){
-			NSLog(@"%s\n",reply);
-		}
+//        char reply[1024];
+//        long n = [self writeReadDevice:@"SYST:ERR?" data:reply maxLength:1024];
+//        if(n && [[NSString stringWithCString:reply encoding:NSASCIIStringEncoding] rangeOfString:@"No error"].location == NSNotFound){
+//            NSLog(@"%s\n",reply);
+//        }
 		
 	}
 }

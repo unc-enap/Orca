@@ -79,7 +79,7 @@
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"BiRa3251O (Station %d)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"BiRa3251O (Station %ld)",[model stationNumber]]];
 }
 
 #pragma mark ¥¥¥Actions
@@ -87,7 +87,7 @@
 - (void) outputRegisterMatrixAction:(id)sender
 {
 	unsigned short theMask = [model outputRegister];
-	int tag = [[sender selectedCell] tag];
+	int tag = (int)[[(NSMatrix*)sender selectedCell] tag];
 	if(![sender intValue]) theMask &= ~(1<<tag);
 	else theMask |= (1<<tag);
 	[model setOutputRegister:theMask];	

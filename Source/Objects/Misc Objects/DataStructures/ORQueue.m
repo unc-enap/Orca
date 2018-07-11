@@ -29,7 +29,7 @@
     [list release];
     [super dealloc];
 }
-- (unsigned int)count
+- (NSUInteger)count
 {
     return [list count];
 }
@@ -77,7 +77,7 @@
                   ofOrder:(BOOL)direction
 {
     ORQueue* q = [[ORQueue alloc] init];
-    int s = [array count];
+    NSUInteger s = [array count];
     int i = 0;
     
     if (!array || !s){ /*do nothing*/}

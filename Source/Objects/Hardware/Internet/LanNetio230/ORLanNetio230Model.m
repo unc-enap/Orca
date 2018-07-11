@@ -298,15 +298,15 @@ NSString* ORLanNetio230ModelOutletNameChanged	 = @"ORLanNetio230ModelOutletNameC
 return;
 
 
-
-	if(!isConnected && [IPNumber length]){
-		[self setSocket:[NetSocket netsocketConnectedToHost:IPNumber port:kLanNetio230Port]];	
-        [self setIsConnected:[socket isConnected]];
-	}
-	else {
-		[self setSocket:nil];	
-        [self setIsConnected:[socket isConnected]];
-	}
+//
+//    if(!isConnected && [IPNumber length]){
+//        [self setSocket:[NetSocket netsocketConnectedToHost:IPNumber port:kLanNetio230Port]];    
+//        [self setIsConnected:[socket isConnected]];
+//    }
+//    else {
+//        [self setSocket:nil];    
+//        [self setIsConnected:[socket isConnected]];
+//    }
 }
 
 - (BOOL) isConnected
@@ -358,11 +358,11 @@ return;
 
 
 
-	if([password length]){
-		NSString* cmd = [NSString stringWithFormat:@"%c%@%dON\r",0x1B,password,i];
-		[self setPendingCmd:cmd];
-		NSLog(@"LanNetio230 %d: %@ turned ON\n",[self uniqueIdNumber],[self outletName:i]);
-	}
+//    if([password length]){
+//        NSString* cmd = [NSString stringWithFormat:@"%c%@%dON\r",0x1B,password,i];
+//        [self setPendingCmd:cmd];
+//        NSLog(@"LanNetio230 %d: %@ turned ON\n",[self uniqueIdNumber],[self outletName:i]);
+//    }
 }
 
 - (void) turnOffOutlet:(int) i
@@ -379,13 +379,13 @@ return;
         [self setOutlet:i status:false];
 return;
 
-
-
-	if([password length]){
-		NSString* cmd = [NSString stringWithFormat:@"%c%@%dOFF\r",0x1B,password,i];
-		[self setPendingCmd:cmd];
-		NSLog(@"LanNetio230 %d: %@ turned OFF\n",[self uniqueIdNumber],[self outletName:i]);
-	}
+//
+//
+//    if([password length]){
+//        NSString* cmd = [NSString stringWithFormat:@"%c%@%dOFF\r",0x1B,password,i];
+//        [self setPendingCmd:cmd];
+//        NSLog(@"LanNetio230 %d: %@ turned OFF\n",[self uniqueIdNumber],[self outletName:i]);
+//    }
 }
 
 - (void) getStatus
@@ -408,12 +408,12 @@ return;
 //outletStatus[2]=1;
 return;
 
-
-
-	if([password length]){
-		NSString* cmd = [NSString stringWithFormat:@"%c%@?\r",0x1B,password];
-		[self setPendingCmd:cmd];
-	}
+//
+//
+//    if([password length]){
+//        NSString* cmd = [NSString stringWithFormat:@"%c%@?\r",0x1B,password];
+//        [self setPendingCmd:cmd];
+//    }
 }
 
 - (BOOL) outletStatus:(int)i
@@ -694,11 +694,11 @@ See my comment(s) at beginning of this file.
     NSLog(@"%@::%@: UNDER CONSTRUCTION!  \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: DEBUG testing ...-tb-
 return;
 
-
-    if(inNetSocket == socket){
-        [self setIsConnected:[socket isConnected]];
-		[self sendCmd];
-    }
+//
+//    if(inNetSocket == socket){
+//        [self setIsConnected:[socket isConnected]];
+//        [self sendCmd];
+//    }
 }
 
 - (void) netsocket:(NetSocket*)inNetSocket dataAvailable:(NSUInteger)inAmount
@@ -707,28 +707,28 @@ return;
     NSLog(@"%@::%@: UNDER CONSTRUCTION!  \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: DEBUG testing ...-tb-
 return;
 
-
-    if(inNetSocket == socket){
-		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(connect) object:nil];
-		NSString* theString = [[[[NSString alloc] initWithData:[inNetSocket readData] encoding:NSASCIIStringEncoding] autorelease] uppercaseString];
-		NSArray* lines = [theString componentsSeparatedByString:@"\n\r"];
-		for(NSString* anOutlet in lines){
-			if([anOutlet length] >= 4){
-				NSArray* parts = [anOutlet componentsSeparatedByString:@" "];
-				if([parts count]>=2){
-					int index = [[parts objectAtIndex:0] intValue];
-					if([[parts objectAtIndex:1] isEqualToString:@"ON"]){
-						[self setOutlet:index status:YES];
-					}
-					else if([[parts objectAtIndex:1] isEqualToString:@"OFF"]){
-						[self setOutlet:index status:NO];
-					}
-				}
-			}
-		}
-		[self disconnect];
-		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(timeout) object:nil];
-	}
+//
+//    if(inNetSocket == socket){
+//        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(connect) object:nil];
+//        NSString* theString = [[[[NSString alloc] initWithData:[inNetSocket readData] encoding:NSASCIIStringEncoding] autorelease] uppercaseString];
+//        NSArray* lines = [theString componentsSeparatedByString:@"\n\r"];
+//        for(NSString* anOutlet in lines){
+//            if([anOutlet length] >= 4){
+//                NSArray* parts = [anOutlet componentsSeparatedByString:@" "];
+//                if([parts count]>=2){
+//                    int index = [[parts objectAtIndex:0] intValue];
+//                    if([[parts objectAtIndex:1] isEqualToString:@"ON"]){
+//                        [self setOutlet:index status:YES];
+//                    }
+//                    else if([[parts objectAtIndex:1] isEqualToString:@"OFF"]){
+//                        [self setOutlet:index status:NO];
+//                    }
+//                }
+//            }
+//        }
+//        [self disconnect];
+//        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(timeout) object:nil];
+//    }
 }
 
 - (void) netsocketDisconnected:(NetSocket*)inNetSocket
@@ -737,14 +737,14 @@ return;
     NSLog(@"%@::%@: UNDER CONSTRUCTION!  \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: DEBUG testing ...-tb-
 return;
 
-
-    if(inNetSocket == socket){
-		
-		[self setIsConnected:NO];
-		[socket autorelease];
-		socket = nil;
-		[self setPendingCmd:nil];
-    }
+//
+//    if(inNetSocket == socket){
+//
+//        [self setIsConnected:NO];
+//        [socket autorelease];
+//        socket = nil;
+//        [self setPendingCmd:nil];
+//    }
 }
 
 - (BOOL) isBusy
@@ -784,25 +784,25 @@ return;
     NSLog(@"%@::%@: UNDER CONSTRUCTION!  \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: DEBUG testing ...-tb-
 return;
 
-
-    if([IPNumber length] && [password length]){
-        NSMutableDictionary* values = [NSMutableDictionary dictionary];
-        NSMutableArray* statesAndNames = [NSMutableArray array];
-        int i;
-        for(i=0;i<4;i++){
-            [statesAndNames addObject:
-                [NSDictionary dictionaryWithObjectsAndKeys:
-                    [NSNumber numberWithInt:i],@"index",
-                    [outletNames objectAtIndex:i],@"name",
-                    [NSNumber numberWithBool:outletStatus[i]],@"state",
-                     nil]];
-        }
-        [values setObject:statesAndNames forKey:@"states"];
-        [values setObject:IPNumber forKey:@"ipNumber"];
-        [values setObject:[NSNumber numberWithInt:30] forKey:@"pollTime"];
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"ORCouchDBAddObjectRecord" object:self userInfo:values];
-    }
+//
+//    if([IPNumber length] && [password length]){
+//        NSMutableDictionary* values = [NSMutableDictionary dictionary];
+//        NSMutableArray* statesAndNames = [NSMutableArray array];
+//        int i;
+//        for(i=0;i<4;i++){
+//            [statesAndNames addObject:
+//                [NSDictionary dictionaryWithObjectsAndKeys:
+//                    [NSNumber numberWithInt:i],@"index",
+//                    [outletNames objectAtIndex:i],@"name",
+//                    [NSNumber numberWithBool:outletStatus[i]],@"state",
+//                     nil]];
+//        }
+//        [values setObject:statesAndNames forKey:@"states"];
+//        [values setObject:IPNumber forKey:@"ipNumber"];
+//        [values setObject:[NSNumber numberWithInt:30] forKey:@"pollTime"];
+//        
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"ORCouchDBAddObjectRecord" object:self userInfo:values];
+//    }
 }
 - (void) sendCmd
 {

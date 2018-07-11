@@ -468,7 +468,7 @@ NSString* OR2228ASuppressZerosChangedNotification   = @"OR2228ASuppressZerosChan
 			}
 			[overflowAlarm setAcknowledged:NO];
 			[overflowAlarm postAlarm];
-            NSLogError(@"Over Flow",@"2228A TDC",[NSString stringWithFormat:@"Station %d",[self stationNumber]],nil);
+            NSLogError(@"Over Flow",@"2228A TDC",[NSString stringWithFormat:@"Station %ld",[self stationNumber]],nil);
 		}
     }
 	

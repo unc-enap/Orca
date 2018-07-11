@@ -327,7 +327,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 		unsigned short status = [[self adapter] camacShortNAF:[self stationNumber] a:0 f:2 data:&value];
 		if(!isQbitSet(status))break;
 		if(count++ > 100){
-			[NSException raise:@"FIFO clear Error" format:@"Unable to clear FIFO on HV2132 %d",[self stationNumber]];
+			[NSException raise:@"FIFO clear Error" format:@"Unable to clear FIFO on HV2132 %ld",[self stationNumber]];
 		}
 	}
 }
@@ -449,7 +449,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 		//response should be T8
 		[self readData:&dataWord numWords:1];
 		if(((dataWord & 0xf) != 8) || (((dataWord>>4) & 0x3f) != aMainFrame)){
-			[NSException raise:@"HV cmd Error" format:@"HV2132 %d bad reponse: read Target",[self stationNumber]];
+			[NSException raise:@"HV cmd Error" format:@"HV2132 %ld bad reponse: read Target",[self stationNumber]];
 		}
 		else *aValue = dataWord>>4;
 		[commLock unlock];
@@ -480,7 +480,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 				aValues[i] = values[i]>>4;
 			}
 			else {
-				[NSException raise:@"HV cmd Error" format:@"HV2132 %d bad reponse: read Target",[self stationNumber]];
+				[NSException raise:@"HV cmd Error" format:@"HV2132 %ld bad reponse: read Target",[self stationNumber]];
 			}
 		}
 		[commLock unlock];
@@ -554,7 +554,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 		//response should be P10
 		[self readData:typeMask numWords:1];
 		if(((*typeMask & 0xf) != 10) || (((*typeMask>>4) & 0x3f) != aMainFrame)){
-			[NSException raise:@"HV cmd Error" format:@"HV2132 %d bad reponse: read Target",[self stationNumber]];
+			[NSException raise:@"HV cmd Error" format:@"HV2132 %ld bad reponse: read Target",[self stationNumber]];
 		}
 		else *typeMask = *typeMask>>4;
 		//1 for 7KV and 0 3.3KV Bit2^7 is pod 0 Bit0 is pod 0
@@ -603,7 +603,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 	
 	unsigned short statusWord = [[self adapter] camacShortNAF:[self stationNumber] a:0 f:16 data:&aCmd];
 	if(!isQbitSet(statusWord)){
-		[NSException raise:@"HV cmd Error" format:@"HV2132 %d refused cmd: %@",[self stationNumber],aLabel];
+		[NSException raise:@"HV cmd Error" format:@"HV2132 %ld refused cmd: %@",[self stationNumber],aLabel];
 	}
 	else [ORTimer delay:.8];
 #	endif
@@ -645,13 +645,13 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 				if(isQbitSet(statusWord)){
 					//check for errors
 					if(data[wordCount] & 15){
-						[NSException raise:@"HV reponse Error" format:@"HV2132 %d Transmission error in response",[self stationNumber]];
+						[NSException raise:@"HV reponse Error" format:@"HV2132 %ld Transmission error in response",[self stationNumber]];
 					}
 					else if(data[wordCount] & 12){
-						[NSException raise:@"HV reponse Error" format:@"HV2132 %d Parity error in response",[self stationNumber]];
+						[NSException raise:@"HV reponse Error" format:@"HV2132 %ld Parity error in response",[self stationNumber]];
 					}
 					else if(data[wordCount] & 13){
-						[NSException raise:@"HV reponse Error" format:@"HV2132 %d Overwrite error in response",[self stationNumber]];
+						[NSException raise:@"HV reponse Error" format:@"HV2132 %ld Overwrite error in response",[self stationNumber]];
 					}
 					wordCount++;
 				}
@@ -660,17 +660,17 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 			//clear LAM2
 			[[self adapter] camacShortNAF:[self stationNumber] a:0 f:10];
 			if(wordCount > num){
-				[NSException raise:@"HV reponse Error" format:@"HV2132 %d Incorrect word count in response",[self stationNumber]];
+				[NSException raise:@"HV reponse Error" format:@"HV2132 %ld Incorrect word count in response",[self stationNumber]];
 			}
 			break;
 		}
 	}
 	if(timeOut){
 		NSLog(@"HV2132 %d TimeOut\n",[self stationNumber]);
-		[NSException raise:@"HV cmd TimeOut" format:@"HV2132 %d Cmd TimeOut",[self stationNumber]];
+		[NSException raise:@"HV cmd TimeOut" format:@"HV2132 %ld Cmd TimeOut",[self stationNumber]];
 	}
 	else if(wordCount != num){
-		[NSException raise:@"HV reponse Error" format:@"HV2132 %d Incorrect word count in response",[self stationNumber]];
+		[NSException raise:@"HV reponse Error" format:@"HV2132 %ld Incorrect word count in response",[self stationNumber]];
 	}
 	
 }

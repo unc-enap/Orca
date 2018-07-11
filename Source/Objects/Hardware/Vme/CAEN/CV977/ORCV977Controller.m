@@ -56,7 +56,7 @@
 	[super awakeFromNib];
     
     NSString* key = [NSString stringWithFormat: @"orca.ORCaen977%d.selectedtab",[model slot]];
-    int index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
 

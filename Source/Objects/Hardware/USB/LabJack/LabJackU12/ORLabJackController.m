@@ -242,7 +242,7 @@
     setupSize		= NSMakeSize(521,551);
 	
     NSString* key = [NSString stringWithFormat: @"orca.ORLabJac%ld.selectedtab",[model uniqueIdNumber]];
-    int index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
 }

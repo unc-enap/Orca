@@ -715,9 +715,9 @@ NSString* ORSimpleInConnection   = @"ORSimpleInConnection";
     [finalImage lockFocus];
     [anImage drawAtPoint:NSMakePoint(iconStart,0) fromRect:[anImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
 	if(!normalGradient){
-		float red   = 1.0; 
-		float green = 1.0; 
-		float blue  = 1.0;
+		CGFloat red   = 1.0;
+		CGFloat green = 1.0;
+		CGFloat blue  = 1.0;
 		
 		normalGradient = [[NSGradient alloc] 
 						  initWithStartingColor:[NSColor colorWithCalibratedRed:red green:green blue:blue alpha:1]
@@ -839,9 +839,9 @@ NSString* ORSimpleInConnection   = @"ORSimpleInConnection";
     [finalImage lockFocus];
     [anImage drawAtPoint:NSMakePoint(iconStart,0) fromRect:[anImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
 	if(!normalGradient){
-		float red   = 0.0; 
-		float green = 1.0; 
-		float blue  = 0.0;
+		CGFloat red   = 0.0;
+		CGFloat green = 1.0;
+		CGFloat blue  = 0.0;
 		
 		normalGradient = [[NSGradient alloc] 
 						   initWithStartingColor:[NSColor colorWithCalibratedRed:red green:green blue:blue alpha:1]
@@ -849,9 +849,9 @@ NSString* ORSimpleInConnection   = @"ORSimpleInConnection";
 	}
 	
 	if(!alarmGradient){
-		float red   = 1.0; 
-		float green = 0.0; 
-		float blue  = 0.0;
+		CGFloat red   = 1.0;
+		CGFloat green = 0.0;
+		CGFloat blue  = 0.0;
 		
 		alarmGradient = [[NSGradient alloc]
 						  initWithStartingColor:[NSColor colorWithCalibratedRed:red green:green blue:blue alpha:.3]

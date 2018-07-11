@@ -186,7 +186,7 @@
 	id subController;
 	NSEnumerator* e = [subControllers objectEnumerator];
 	while(subController = [e nextObject]){
-		[subController setModel: [model chip:[subControllers indexOfObject:subController]]];
+		[subController setModel: [model chip:(int)[subControllers indexOfObject:subController]]];
 	}
 }
 
@@ -198,7 +198,7 @@
 
 - (void) baseAddressChanged:(NSNotification*)aNote
 {
-    [addressText setIntValue: [model baseAddress]];
+    [addressText setIntegerValue: [model baseAddress]];
 }
 
 - (void) selectedRegIndexChanged:(NSNotification*) aNotification
@@ -211,7 +211,7 @@
 - (void) writeValueChanged:(NSNotification*) aNotification
 {
 	[self updateStepper:writeValueStepper setting:[model writeValue]];
-	[writeValueTextField setIntValue:[model writeValue]];
+	[writeValueTextField setIntegerValue:[model writeValue]];
 }
 
 #pragma mark •••Actions
@@ -241,7 +241,7 @@
 
 - (void) selectedPLTPUAction:(id)sender
 {
-	[model setSelectedPLT:[sender indexOfSelectedItem]];	
+	[model setSelectedPLT:(int)[(NSPopUpButton*)sender indexOfSelectedItem]];
 }
 
 -(IBAction) baseAddressAction:(id)sender
@@ -641,7 +641,7 @@
 //Gen Reg
 - (void) modeChanged:(NSNotification*)aNote
 {
-	[modePU selectItemAtIndex: [model mode]];
+	[modePU selectItemAtIndex: [model opMode]];
     [self populatePopup];
 }
 
@@ -678,8 +678,8 @@
 //Port A
 - (void) portASubModeChanged:(NSNotification*)aNote
 {
-	int count = [portASubModePU numberOfItems];
-	int indexToSelect = [model portASubMode];
+	NSInteger count = [portASubModePU numberOfItems];
+	NSInteger indexToSelect = [model portASubMode];
 	if(indexToSelect >= count-1) indexToSelect = count-1;
 	[portASubModePU selectItemAtIndex: indexToSelect];
 }
@@ -719,8 +719,8 @@
 //Port B
 - (void) portBSubModeChanged:(NSNotification*)aNote
 {
-	int count = [portBSubModePU numberOfItems];
-	int indexToSelect = [model portBSubMode];
+	NSInteger count = [portBSubModePU numberOfItems];
+	NSInteger indexToSelect = [model portBSubMode];
 	if(indexToSelect >= count-1) indexToSelect = count-1;
 	[portBSubModePU selectItemAtIndex: indexToSelect];
 }
@@ -837,22 +837,22 @@
 //Port A
 - (IBAction) portASubModePUAction:(id)sender
 {
-	[model setPortASubMode:[sender indexOfSelectedItem]];	
+	[model setPortASubMode:(int)[(NSPopUpButton*)sender indexOfSelectedItem]];
 }
 
 - (IBAction) portAH1ControlPUAction:(id)sender
 {
-	[model setPortAH1Control:[sender indexOfSelectedItem]];	
+	[model setPortAH1Control:(int)[(NSPopUpButton*)sender indexOfSelectedItem]];
 }
 
 - (IBAction) portAH2InterruptPUAction:(id)sender
 {
-	[model setPortAH2Interrupt:[sender indexOfSelectedItem]];	
+	[model setPortAH2Interrupt:(int)[(NSPopUpButton*)sender indexOfSelectedItem]];
 }
 
 - (IBAction) portAH2ControlPUAction:(id)sender
 {
-	[model setPortAH2Control:[sender indexOfSelectedItem]];	
+	[model setPortAH2Control:(int)[(NSPopUpButton*)sender indexOfSelectedItem]];
 }
 
 - (IBAction) portADirectionMatrixAction:(id)sender
@@ -867,7 +867,7 @@
 
 - (IBAction) portATransceiverDirPUAction:(id)sender
 {
-	[model setPortATransceiverDir:[sender indexOfSelectedItem]];	
+	[model setPortATransceiverDir:(int)[(NSPopUpButton*)sender indexOfSelectedItem]];
 	unsigned char portCData = [model portCData];
 	portCData &= ~0x1;
 	if([sender indexOfSelectedItem])portCData |= 0x1;	
@@ -882,32 +882,32 @@
 //Port B
 - (IBAction) portBSubModePUAction:(id)sender
 {
-	[model setPortBSubMode:[sender indexOfSelectedItem]];	
+	[model setPortBSubMode:(int)[(NSPopUpButton*)sender indexOfSelectedItem]];
 }
 
 - (IBAction) portBH1ControlPUAction:(id)sender
 {
-	[model setPortBH1Control:[sender indexOfSelectedItem]];	
+	[model setPortBH1Control:(int)[(NSPopUpButton*)sender indexOfSelectedItem]];
 }
 
 - (IBAction) portBH2InterruptPUAction:(id)sender
 {
-	[model setPortBH2Interrupt:[sender indexOfSelectedItem]];	
+	[model setPortBH2Interrupt:(int)[(NSPopUpButton*)sender indexOfSelectedItem]];
 }
 
 - (IBAction) portBH2ControlPUAction:(id)sender
 {
-	[model setPortBH2Control:[sender indexOfSelectedItem]];	
+	[model setPortBH2Control:(int)[(NSPopUpButton*)sender indexOfSelectedItem]];
 }
 
 - (IBAction) portBDataAction:(id)sender
 {
-	[model setPortBData:[sender intValue]];	
+	[model setPortBData:[(NSPopUpButton*)sender intValue]];
 }
 
 - (IBAction) portBTransceiverDirPUAction:(id)sender
 {
-	[model setPortBTransceiverDir:[sender indexOfSelectedItem]];
+	[model setPortBTransceiverDir:(int)[(NSPopUpButton*)sender indexOfSelectedItem]];
 	unsigned char portCData = [model portCData];
 	portCData &= ~0x2;
 	if([sender indexOfSelectedItem]) portCData |= 0x2;	

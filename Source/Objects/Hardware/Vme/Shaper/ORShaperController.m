@@ -45,7 +45,7 @@
 {
     [super awakeFromNib];
     NSString* key = [NSString stringWithFormat: @"orca.ORShaper%d.selectedtab",[model slot]];
-    NSUInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if(index>[tabView numberOfTabViewItems])index = 0;
     [tabView selectTabViewItemAtIndex: index];
 	[[rate0 xAxis] setRngLimitsLow:0 withHigh:500000 withMinRng:128];
@@ -764,7 +764,7 @@
 
 - (int)    numberPointsInPlot:(id)aPlotter
 {
-	return [[[model adcRateGroup]timeRate]count];
+	return (int)[[[model adcRateGroup]timeRate]count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;

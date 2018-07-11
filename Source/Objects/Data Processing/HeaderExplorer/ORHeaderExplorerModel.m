@@ -207,8 +207,8 @@ NSString* ORHeaderExplorerProgressChanged		= @"ORHeaderExplorerProgressChanged";
 }
 - (void) setSelectedFileIndex:(int)anIndex
 {
-	if(anIndex>=(int)[filesToProcess count])	selectedFileIndex = [filesToProcess count]-1;
-	else								selectedFileIndex = anIndex;
+	if(anIndex>=(int)[filesToProcess count])	selectedFileIndex = (int)[filesToProcess count]-1;
+	else								        selectedFileIndex = anIndex;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORHeaderExplorerFileSelectionChanged object:self];
 }
 
@@ -299,7 +299,7 @@ NSString* ORHeaderExplorerProgressChanged		= @"ORHeaderExplorerProgressChanged";
 - (NSMutableDictionary*) filteredHeader:(id)aHeader
 {
 	int index;
-	int n = [searchKeys count];
+	NSUInteger n = [searchKeys count];
 	id headerData;
 	NSMutableDictionary* filteredStuff = [NSMutableDictionary dictionary];
 	if(n){
@@ -392,7 +392,7 @@ NSString* ORHeaderExplorerProgressChanged		= @"ORHeaderExplorerProgressChanged";
 		unsigned long minTime = 0xFFFFFFFF;
 		NSString* selectedRunFilePath = nil;
 		if(anIndex<[filesToProcess count]) selectedRunFilePath = [filesToProcess objectAtIndex:anIndex];
-		int foundIndex = 0;
+		NSUInteger foundIndex = 0;
 		for(id runDictionary in runArray){
 			NSString* runFilePath = [runDictionary objectForKey:@"FilePath"];
 			if([selectedRunFilePath isEqual:runFilePath]){
@@ -403,7 +403,7 @@ NSString* ORHeaderExplorerProgressChanged		= @"ORHeaderExplorerProgressChanged";
 				}
 			}
 		}
-		[self setSelectedRunIndex: foundIndex];
+		[self setSelectedRunIndex: (int)foundIndex];
 	}
 }
 
@@ -412,7 +412,7 @@ NSString* ORHeaderExplorerProgressChanged		= @"ORHeaderExplorerProgressChanged";
 	BOOL valid = NO;
 	unsigned long actualDate	= minRunStartTime + ((maxRunEndTime - minRunStartTime) * (selectionDate/1000.));
 
-	int n = [runArray count];
+	NSUInteger n = [runArray count];
 	int index;
 	for(index=0;index<n;index++){
 		NSDictionary* runDictionary = [runArray objectAtIndex:index];
@@ -429,7 +429,7 @@ NSString* ORHeaderExplorerProgressChanged		= @"ORHeaderExplorerProgressChanged";
 	
 	if(!valid){
 		if(actualDate>=maxRunEndTime){
-			[self setSelectedRunIndex: [runArray count]-1];
+			[self setSelectedRunIndex: (int)[runArray count]-1];
 		}
 		else {
 			[self setHeader:nil];
@@ -439,13 +439,13 @@ NSString* ORHeaderExplorerProgressChanged		= @"ORHeaderExplorerProgressChanged";
 
 - (int) indexOfFile:(NSString*)aFilePath
 {
-	return [filesToProcess indexOfObject:aFilePath];
+	return (int)[filesToProcess indexOfObject:aFilePath];
 }
 
 - (void) assembleDataForPlotting
 {
 	if(useFilter){
-		int n = [searchKeys count];
+		NSUInteger n = [searchKeys count];
 		int i;
 		for(i=0;i<n;i++){
 			[self assembleDataForPlotting:i];
@@ -456,7 +456,7 @@ NSString* ORHeaderExplorerProgressChanged		= @"ORHeaderExplorerProgressChanged";
 - (void) assembleDataForPlotting:(int)keyNumber
 {
 	NSLog(@"Key %d : %@ (by Run Number)\n",keyNumber,[searchKeys objectAtIndex:keyNumber]);
-	int n = [runArray count];
+	NSUInteger n = [runArray count];
 	int i;
 	for(i=0;i<n;i++){
 		NSNumber* runNumber = [[runArray objectAtIndex:i] objectForKey:@"RunNumber"];
@@ -480,7 +480,7 @@ NSString* ORHeaderExplorerProgressChanged		= @"ORHeaderExplorerProgressChanged";
 					}
 					else {
 						NSArray* array = [keyItem items];
-						int n = [array count];
+						NSUInteger n = [array count];
 						int i;
 						for(i=0;i<n;i++){
 							ORHeaderItem* lowestItem = [array objectAtIndex:i];

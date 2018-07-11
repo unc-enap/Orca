@@ -302,7 +302,7 @@ NSString* ORPulseCheckModelReloadTable      = @"ORPulseCheckModelReloadTable";
             else if([lines count]>=2){
                 time_t postTime = [[[lines objectAtIndex:0] substringFromIndex:5] unsignedLongValue];
                 time_t nextTime = [[[lines objectAtIndex:1] substringFromIndex:5] unsignedLongValue];
-                time_t delta  = abs(nextTime - postTime);
+                time_t delta  = labs(nextTime - postTime);
                 time_t overDue  = nextTime + 6*delta;
                 //if the postTime is older than the delta, then something is wrong
                 time_t	now;

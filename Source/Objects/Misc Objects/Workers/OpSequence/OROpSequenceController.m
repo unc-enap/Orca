@@ -167,7 +167,7 @@
 	else {
 		[cancelButton setTitle:@"Cancel"];
 		[progressLabel setStringValue: [NSString stringWithFormat:
-                                            @"Finished %d/%ld",
+                                            @"Finished %ld/%ld",
                                             total - remaining,
                                             (long)total]];
 		[progressIndicator setMaxValue:   (double) total];

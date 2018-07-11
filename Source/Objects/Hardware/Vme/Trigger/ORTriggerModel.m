@@ -1060,7 +1060,7 @@ static NSString *ORTriggerUseMSAM		= @"ORTriggerUseMSAM";
             }
             
             //keep track if data is taken if in the useSoftware GtId mode.
-            int lastDataCount = 0;
+            unsigned long lastDataCount = 0;
             if(useSoftwareGtId || useNoHardware){
                 lastDataCount = [aDataPacket dataCount];
             }
@@ -1147,7 +1147,7 @@ static NSString *ORTriggerUseMSAM		= @"ORTriggerUseMSAM";
             
             //go out and read all the data takers scheduled to be read out with a trigger 2 event.
             //also we keep track if any data was actually taken
-            int lastDataCount = [aDataPacket frameIndex];
+            unsigned long lastDataCount = [aDataPacket frameIndex];
             errorLocation = @"Reading Event2 Children";
             [self _readOutChildren:dataTakers2 dataPacket:aDataPacket withGTID:0  isMSAMEvent:isMSAMEvent]; //don't know the gtid so pass 0
             BOOL dataWasTaken = [aDataPacket frameIndex]>lastDataCount;

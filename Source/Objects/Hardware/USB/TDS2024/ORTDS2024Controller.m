@@ -197,7 +197,7 @@
 #pragma mark •••Actions
 - (IBAction) pollTimeAction:(id)sender
 {
-	[model setPollTime:[[sender selectedItem] tag]];
+	[model setPollTime:(int)[[sender selectedItem] tag]];
 }
 
 - (IBAction) sendCommandAction:(id)sender
@@ -303,13 +303,13 @@
 
 - (int) numberPointsInPlot:(id)aPlotter
 {
-    int set = [aPlotter tag];
+    int set = (int)[aPlotter tag];
     return [model numPoints:set];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-    int set = [aPlotter tag];
+    int set = (int)[aPlotter tag];
     *xValue = i;
     *yValue = [model dataSet:set valueAtChannel:i];
 }

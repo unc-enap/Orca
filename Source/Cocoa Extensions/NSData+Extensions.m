@@ -68,10 +68,10 @@
 - (NSString *)description
 {
 	unsigned char *bytes = (unsigned char *)[self bytes];
-	NSMutableString *s   = [NSMutableString stringWithFormat:@"NSData (total length: %d bytes):\n", [self length]];
+	NSMutableString *s   = [NSMutableString stringWithFormat:@"NSData (total length: %ld bytes):\n", [self length]];
 	int maxIndex = 1024;
 	int i, j;
-	int len = MIN([self length],maxIndex);
+	unsigned long len = MIN([self length],maxIndex);
 	for (i=0 ; i<len ; i+=16 ){
 		for (j=0 ; j<16 ; j++) {
 			int index = i+j;

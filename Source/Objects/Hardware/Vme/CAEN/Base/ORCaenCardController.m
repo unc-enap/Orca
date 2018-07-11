@@ -69,7 +69,7 @@
     [super awakeFromNib];
 	
     NSString* key = [NSString stringWithFormat: @"orca.ORCaenCard%d.selectedtab",[model slot]];
-    int index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
 	
@@ -286,7 +286,7 @@
 {
 	//  Set value of both text and stepper
 	[self updateStepper:writeValueStepper setting:[model writeValue]];
-	[writeValueTextField setIntValue:[model writeValue]];
+	[writeValueTextField setIntegerValue:[model writeValue]];
 }
 
 //--------------------------------------------------------------------------------

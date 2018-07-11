@@ -60,7 +60,7 @@
     blankView = [[NSView alloc] init];
     
     NSString* key = [NSString stringWithFormat: @"orca.ORMuxBox%d.selectedtab",[model muxID]];
-    int index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
     
@@ -518,7 +518,7 @@
     [[self window] setContentView:tabView];
 	
     NSString* key = [NSString stringWithFormat: @"orca.ORMuxBox%d.selectedtab",[model muxID]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
     
 }
@@ -529,7 +529,7 @@
     unsigned short index = 	[theRateObj tag];
     [[rateTextFields cellWithTag:index] setFloatValue: [theRateObj rate]];
     [[calibrationRateTextMatrix cellWithTag:index] setFloatValue: [theRateObj rate]];
-    [[countTextFields cellWithTag:index] setIntValue: [model rateCount:index]];
+    [[countTextFields cellWithTag:index] setIntegerValue: [model rateCount:index]];
     [rate0 setNeedsDisplay:YES];
 }
 
@@ -801,13 +801,13 @@
 
 - (int) numberPointsInPlot:(id)aPlotter
 {
-    return [[[model rateGroup]timeRate]count];
+    return (int)[[[model rateGroup]timeRate]count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-	int count = [[[model rateGroup]timeRate] count];
-	int index = count-i-1;
+	NSUInteger count = [[[model rateGroup]timeRate] count];
+	NSUInteger index = count-i-1;
 	*yValue =  [[[model rateGroup]timeRate]valueAtIndex:index];
 	*xValue =  [[[model rateGroup]timeRate]timeSampledAtIndex:index];
 }

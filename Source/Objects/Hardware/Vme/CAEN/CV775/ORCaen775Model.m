@@ -495,16 +495,16 @@ static RegisterNamesStruct reg[kNumRegisters] = {
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id = kCaen775; //should be unique
-	if(modelType == kModel775)	configStruct->card_info[index].hw_mask[0] 	 = dataId; //better be unique
-	else						configStruct->card_info[index].hw_mask[0] 	 = dataIdN;
+	if(modelType == kModel775)	configStruct->card_info[index].hw_mask[0] 	 = (int32_t)dataId; //better be unique
+	else						configStruct->card_info[index].hw_mask[0] 	 = (int32_t)dataIdN;
 	configStruct->card_info[index].slot 	 = [self slot];
 	configStruct->card_info[index].crate 	 = [self crateNumber];
 	configStruct->card_info[index].add_mod 	 = [self addressModifier];
-	configStruct->card_info[index].base_add  = [self baseAddress];
-	configStruct->card_info[index].deviceSpecificData[0] = reg[kStatusRegister1].addressOffset;
-	configStruct->card_info[index].deviceSpecificData[1] = reg[kOutputBuffer].addressOffset;
-	configStruct->card_info[index].deviceSpecificData[2] = reg[kStatusRegister2].addressOffset;
-	configStruct->card_info[index].deviceSpecificData[3] = [self getDataBufferSize]/sizeof(long);
+	configStruct->card_info[index].base_add  = (int32_t)[self baseAddress];
+	configStruct->card_info[index].deviceSpecificData[0] = (int32_t)reg[kStatusRegister1].addressOffset;
+	configStruct->card_info[index].deviceSpecificData[1] = (int32_t)reg[kOutputBuffer].addressOffset;
+	configStruct->card_info[index].deviceSpecificData[2] = (int32_t)reg[kStatusRegister2].addressOffset;
+	configStruct->card_info[index].deviceSpecificData[3] = (int32_t)[self getDataBufferSize]/sizeof(long);
 	configStruct->card_info[index].num_Trigger_Indexes = 0;
 	
 	configStruct->card_info[index].next_Card_Index 	= index+1;	

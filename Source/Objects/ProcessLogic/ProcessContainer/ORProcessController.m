@@ -51,7 +51,7 @@ int sortDnFunction(id element1,id element2, void* context){return [element2 comp
 {
     [super awakeFromNib];
     
-    int index = [[NSUserDefaults standardUserDefaults] integerForKey:[NSString stringWithFormat:@"orca.Process%lu.selectedtab",[model uniqueIdNumber]]];
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey:[NSString stringWithFormat:@"orca.Process%lu.selectedtab",[model uniqueIdNumber]]];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];	
     [tableView setDoubleAction:@selector(doubleClick:)];

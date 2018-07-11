@@ -1864,15 +1864,15 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 	//TODO:  replace by V4 code -tb-
 	NSLog(@"FLTv4: printStatistics not implemented \n");//TODO: needs implementation -tb-
 	return;
-    int j;
-	double mean;
-	double var;
-	NSFont* aFont = [NSFont userFixedPitchFontOfSize:10];
-    NSLogFont(aFont,@"Statistics      :\n");
-	for (j=0;j<kNumV4FLTChannels;j++){
-		[self getStatistics:j mean:&mean var:&var];
-		NSLogFont(aFont,@"  %2d -- %10.2f +/-  %10.2f\n", j, mean, var);
-	}
+//    int j;
+//    double mean;
+//    double var;
+//    NSFont* aFont = [NSFont userFixedPitchFontOfSize:10];
+//    NSLogFont(aFont,@"Statistics      :\n");
+//    for (j=0;j<kNumV4FLTChannels;j++){
+//        [self getStatistics:j mean:&mean var:&var];
+//        NSLogFont(aFont,@"  %2d -- %10.2f +/-  %10.2f\n", j, mean, var);
+//    }
 }
 
 - (void) findNoiseFloors

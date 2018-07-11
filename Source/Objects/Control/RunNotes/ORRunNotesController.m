@@ -371,7 +371,7 @@
 {
     int rowIndex = (int)aRowIndex;
 	if(aTableView == notesListView){
-		NSInteger anItem = [model itemAtIndex:rowIndex];
+		id anItem = [model itemAtIndex:rowIndex];
         NSArray* allKeys = [anItem allKeys];
         if([allKeys count] == 1){
             if([[aTableColumn identifier] isEqualToString:@"Label"]){
@@ -400,7 +400,6 @@
 // just returns the number of items we have.
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView
 {
-    int rowIndex = (int)aRowIndex;
 	if(aTableView == notesListView){
 		return [model itemCount];
 	}

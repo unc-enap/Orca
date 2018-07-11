@@ -45,7 +45,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(CommandCenter);
     self = [super init];
     
     [[self undoManager] disableUndoRegistration];
-    int port = [[NSUserDefaults standardUserDefaults] integerForKey: @"orca.CommandCenter.ListeningPort"];
+    NSInteger port = [[NSUserDefaults standardUserDefaults] integerForKey: @"orca.CommandCenter.ListeningPort"];
     if(port==0)port = kORCommandPort;
 	
     NSString* theScript = [[NSUserDefaults standardUserDefaults] objectForKey: @"orca.CommandCenter.script"];
@@ -208,7 +208,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(CommandCenter);
 	return NO;
 }
 
-- (int) clientCount
+- (NSUInteger) clientCount
 {
     return [clients count];
 }

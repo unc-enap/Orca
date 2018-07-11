@@ -44,7 +44,7 @@
 - (void) setDoNotOpen:(BOOL)aDoNotOpen;
 - (BOOL) ignoreValues;
 - (void) setIgnoreValues:(BOOL)aIgnoreValues;
-- (void) removeItemAtIndex:(int) anIndex;
+- (void) removeItemAtIndex:(NSInteger) anIndex;
 - (id) itemAtIndex:(int)anIndex;
 - (unsigned long) itemCount;
 - (NSString*) comments;

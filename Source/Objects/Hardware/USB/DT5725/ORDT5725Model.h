@@ -388,7 +388,7 @@ typedef struct  {
 - (int)     readLongBlock:(unsigned long*)  readValue atAddress:(unsigned long) vmeAddress;
 - (void)    writeChan:(unsigned short)chan reg:(unsigned short) pReg sendValue:(unsigned long) pValue;
 - (void)    readChan:(unsigned short)chan reg:(unsigned short) pReg returnValue:(unsigned long*) pValue;
-- (int)     readFifo:(char*)destBuff numBytesToRead:(unsigned long)    numBytes;
+- (int)     readFifo:(char*)destBuff numBytesToRead:(int)    numBytes;
 
 
 @end

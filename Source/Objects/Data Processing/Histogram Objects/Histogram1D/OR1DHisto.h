@@ -30,7 +30,7 @@
 @interface OR1DHisto : ORDataSetModel  {
     unsigned long dataId;
     unsigned long 	overFlow;
-    unsigned int 	numberBins;
+    unsigned long 	numberBins;
     NSMutableData* 	histogram;
     NSData*         pausedHistogram;
 	NSMutableArray* rois;
@@ -41,8 +41,8 @@
 - (void) processResponse:(NSDictionary*)aResponse;
 - (unsigned long) dataId;
 - (void) setDataId: (unsigned long) DataId;
-- (void)setNumberBins:(int)aNumberBins;
-- (int) numberBins;
+- (void)setNumberBins:(unsigned long)aNumberBins;
+- (unsigned long) numberBins;
 - (unsigned long)value:(unsigned long)aBin;
 - (unsigned long) overFlow;
 - (NSMutableArray*) rois;

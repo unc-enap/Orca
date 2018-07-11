@@ -324,7 +324,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
                                     NSCalendarUnitYear
                                         fromDate:[NSDate date]];
 
-    NSString* yearPart = [NSString stringWithFormat:@"%02d%02d%02d%02d%d.%02d",[c month],[c day],[c hour],[c minute],[c year],[c second]];
+    NSString* yearPart = [NSString stringWithFormat:@"%02ld%02ld%02ld%02ld%ld.%02ld",[c month],[c day],[c hour],[c minute],[c year],[c second]];
     
     [aSequence addTask:[resourcePath stringByAppendingPathComponent:@"loginScript"]
                  arguments:[NSArray arrayWithObjects:@"root",pwd,IPNumber,@"date",yearPart,nil]];
@@ -3021,8 +3021,8 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 }
 
 - (void) writeGeneral:(long*) buffer
-			  operation:(uint32_t) anOperationID
-			 numToWrite:(uint32_t)  numberLongs
+			  operation:(unsigned long) anOperationID
+			 numToWrite:(unsigned long)  numberLongs
 {
     id pw = [[SBCPacketWrapper alloc] init];
 	@try {
@@ -3030,11 +3030,11 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 		SBC_Packet* aPacket = [pw sbcPacket];
 		aPacket->cmdHeader.destination			= kSBC_Process;
 		aPacket->cmdHeader.cmdID					= kSBC_GeneralWrite;
-		aPacket->cmdHeader.numberBytesinPayload	= sizeof(SBC_WriteBlockStruct) + numberLongs*sizeof(long);
+		aPacket->cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(SBC_WriteBlockStruct) + numberLongs*sizeof(long));
 		
 		SBC_WriteBlockStruct* dataPtr = (SBC_WriteBlockStruct*)aPacket->payload;
-		dataPtr->address		= anOperationID;
-		dataPtr->numLongs		= numberLongs;
+		dataPtr->address		= (uint32_t)anOperationID;
+		dataPtr->numLongs		= (uint32_t)numberLongs;
 		dataPtr++;
 		memcpy(dataPtr,buffer,numberLongs*sizeof(long));
 		
@@ -3063,8 +3063,8 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 
 
 - (void) readGeneral:(long*) buffer
-		   operation:(uint32_t) anOperationID
-		   numToRead:(uint32_t) numberLongs
+		   operation:(unsigned long) anOperationID
+		   numToRead:(unsigned long) numberLongs
 {
     id pw = [[SBCPacketWrapper alloc] init];    
 	@try {
@@ -3075,8 +3075,8 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 		aPacket->cmdHeader.numberBytesinPayload	= sizeof(SBC_ReadBlockStruct);
 		
 		SBC_ReadBlockStruct* readBlockPtr = (SBC_ReadBlockStruct*)aPacket->payload;
-		readBlockPtr->address		= anOperationID;
-		readBlockPtr->numLongs		= numberLongs;
+		readBlockPtr->address		= (uint32_t)anOperationID;
+		readBlockPtr->numLongs		= (uint32_t)numberLongs;
 		
 		//Do NOT call the combo send:receive method here... we have the locks already in place
 		[self write:socketfd buffer:aPacket]; //write the packet
