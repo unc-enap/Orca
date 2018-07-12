@@ -72,8 +72,7 @@ NSString* CBeValue		= @"Value";
 			mFWrapped = YES;
 		}
 	
-		int maxCount;
-		maxCount = [mStorageArray count] > 5 ? 5: [mStorageArray count];
+		//int maxCount = (int)([mStorageArray count] > 5 ? 5: [mStorageArray count]);
 /*
 		for( i = 0; i < [mStorageArray count]; i++ )
 		{

@@ -399,12 +399,12 @@ static NSString* ORListenerConnector = @"ORListenerConnector";
 
 - (void) processDataBuffer
 {
-	unsigned long* p                = (unsigned long*)[dataToProcess bytes];
-	unsigned long* endPtr           = p + [dataToProcess length]/sizeof(long);
+	uint32_t* p                = (uint32_t*)[dataToProcess bytes];
+	uint32_t* endPtr           = p + [dataToProcess length]/sizeof(long);
 	unsigned long bytesProcessed	= 0;
     unsigned long longsInBuffer     = [dataToProcess length]/sizeof(long);
 	while(p<endPtr){
-		unsigned long firstWord		= *p;
+		uint32_t firstWord		= *p;
 		//the first time is a special case. We have to have a header as the first record or we can not continue
 		if(firstTime){
 			runEnded = NO;
@@ -414,7 +414,7 @@ static NSString* ORListenerConnector = @"ORListenerConnector";
 					unsigned long recordLength	= ExtractLength(firstWord);
 					if(longsInBuffer >= recordLength){
 						//OK we have enough to load the header and make a decoder
-						[currentDecoder loadHeader:p];
+						[currentDecoder loadHeader:(unsigned long*)p];
 						needToSwap = [currentDecoder needToSwap];
 						[self loadRunInfoFromHeader];
                         runDataID = [[currentDecoder headerObject:@"dataDescription",@"ORRunModel",@"Run",@"dataId",nil] longValue];
@@ -440,14 +440,14 @@ static NSString* ORListenerConnector = @"ORListenerConnector";
 			
 			if(longsInBuffer >= recordLength){
 				if(needToSwap){
-					[currentDecoder byteSwapData:p forKey:[NSNumber numberWithLong:dataId]];
+					[currentDecoder byteSwapData:(unsigned long*)p forKey:[NSNumber numberWithLong:dataId]];
 				}
 				if(dataId == 0x0){
-					[currentDecoder loadHeader:p];
+					[currentDecoder loadHeader:(unsigned long*)p];
 					needToSwap = [currentDecoder needToSwap];
 					runDataID = [[currentDecoder headerObject:@"dataDescription",@"ORRunModel",@"Run",@"dataId",nil] longValue];
 				}
-				else if(dataId == runDataID)[self processRunRecord:p];
+				else if(dataId == runDataID)[self processRunRecord:(unsigned long*)p];
 				
 				[dataArray addObject:[NSData dataWithBytes:p length:recordLength*sizeof(long)]];
 				

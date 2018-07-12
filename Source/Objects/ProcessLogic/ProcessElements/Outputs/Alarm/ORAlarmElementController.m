@@ -118,7 +118,7 @@
 
 - (IBAction) severityAction:(id)sender
 {
-    [model setAlarmSeverity:[[sender selectedCell]tag]];
+    [model setAlarmSeverity:(int)[[sender selectedCell]tag]];
 }
 
 - (IBAction) eMailDelayAction:(id)sender

@@ -644,12 +644,12 @@ static NSString* rad7ThoronNames[kNumberRad7ThoronNames] = {
     [[NSNotificationCenter defaultCenter] postNotificationName:ORRad7ModelThoronChanged object:self];
 }
 
-- (int) mode
+- (int) opMode
 {
     return mode;
 }
 
-- (void) setMode:(int)aMode
+- (void) setOpMode:(int)aMode
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setMode:mode];
     

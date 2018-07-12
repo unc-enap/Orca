@@ -201,12 +201,12 @@
 
 - (void) histogramLengthChanged:(NSNotification*)aNote
 {
-	[histogramLengthTextField setIntValue: [model histogramLength]];
+	[histogramLengthTextField setIntegerValue: [model histogramLength]];
 }
 
 - (void) histogramStartChanged:(NSNotification*)aNote
 {
-	[histogramStartTextField setIntValue: [model histogramStart]];
+	[histogramStartTextField setIntegerValue: [model histogramStart]];
 }
 
 - (void) checkGlobalSecurity
@@ -223,7 +223,7 @@
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"CMC203 (Station %d)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"CMC203 (Station %lu)",[model stationNumber]]];
 }
 
 - (void) totalRateChanged:(NSNotification*)aNotification
@@ -350,7 +350,7 @@
 
 - (IBAction) operationModeAction:(id)sender
 {
-	[model setOperationMode:[[sender selectedCell]tag]];	
+	[model setOperationMode:(int)[[sender selectedCell]tag]];
 }
 
 - (IBAction) adcBitsAction:(id)sender
@@ -360,7 +360,7 @@
 
 - (IBAction) histogramModeAction:(id)sender
 {
-	[model setHistogramMode:[sender indexOfSelectedItem]];	
+	[model setHistogramMode:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) wordSizeAction:(id)sender
@@ -435,16 +435,16 @@
 
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	int tag = [aPlotter tag];
-	if(tag == 0) return [[[model fifoRateGroup]timeRate]count];
+	int tag = (int)[aPlotter tag];
+	if(tag == 0) return (int)[[[model fifoRateGroup]timeRate]count];
 	else		 return [model histogramCount];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-	int tag = [aPlotter tag];
+	int tag = (int)[aPlotter tag];
 	if(tag == 0){
-		int count = [[[model fifoRateGroup]timeRate] count];
+		int count = (int)[[[model fifoRateGroup]timeRate] count];
 		int index = count-i-1;
 		*yValue =  [[[model fifoRateGroup] timeRate] valueAtIndex:index];
 		*xValue =  [[[model fifoRateGroup] timeRate] timeSampledAtIndex:index];

@@ -574,11 +574,11 @@ NSString* ORTristanFLTSettingsLock                   = @"ORTristanFLTSettingsLoc
     unsigned long data[len];
     data[0] = dataId | len;
     data[1] =    (([self crateNumber] & 0x0000000f)<<21) | (([self stationNumber] & 0x0000001f)<<16);
-    unsigned long ptr = (unsigned long*)[udpData bytes];
+    unsigned long* ptr = (unsigned long*)[udpData bytes];
     int i;
-    int n = [udpData length]/sizeof(unsigned long);
+    int n = (int)([udpData length]/sizeof(unsigned long));
     for(i=0;i<n;i++){
-        data[2+i] = ptr++;
+        data[2+i] = *ptr++;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification
                                                         object:[NSData dataWithBytes:data length:len]];
@@ -646,7 +646,7 @@ NSString* ORTristanFLTSettingsLock                   = @"ORTristanFLTSettingsLoc
 {
     [super encodeWithCoder:encoder];
     
-    [encoder encodeInt:port                forKey:@"port"];
+    [encoder encodeInt:(int32_t)port                forKey:@"port"];
     [encoder encodeObject:hostName         forKey:@"hostName"];
     [encoder encodeInt:shapingLength       forKey:@"shapingLength"];
     [encoder encodeInt:gapLength           forKey:@"gapLength"];
@@ -654,7 +654,7 @@ NSString* ORTristanFLTSettingsLock                   = @"ORTristanFLTSettingsLoc
     [encoder encodeInt:udpFrameSize        forKey:@"udpFrameSize"];
     int i;
     for(i=0;i<kNumTristanFLTChannels;i++) {
-        [encoder encodeInt32: threshold[i] forKey:[NSString stringWithFormat:@"threshold%d",i]];
+        [encoder encodeInt32: (int32_t)threshold[i] forKey:[NSString stringWithFormat:@"threshold%d",i]];
         [encoder encodeBool:  enabled[i]   forKey:[NSString stringWithFormat:@"enabled%d",i]];
     }
 }

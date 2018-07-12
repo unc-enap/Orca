@@ -3,7 +3,7 @@
 
 @interface ORLineMarker : NSRulerMarker
 {
-	unsigned		lineNumber;
+	NSUInteger		lineNumber;
 }
 
 - (id) initWithRulerView:(NSRulerView *)aRulerView lineNumber:(float)line image:(NSImage *)anImage imageOrigin:(NSPoint)imageOrigin;

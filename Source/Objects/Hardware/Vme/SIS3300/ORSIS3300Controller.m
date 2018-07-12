@@ -456,7 +456,7 @@
 
 - (void) baseAddressChanged:(NSNotification*)aNote
 {
-    [addressText setIntValue: [model baseAddress]];
+    [addressText setIntegerValue: [model baseAddress]];
 }
 
 - (void) integrationChanged:(NSNotification*)aNotification
@@ -633,7 +633,7 @@
 
 - (IBAction) clockSourceAction:(id)sender
 {
-	[model setClockSource:[sender indexOfSelectedItem]];	
+	[model setClockSource:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) stopDelayAction:(id)sender
@@ -643,7 +643,7 @@
 
 - (IBAction) pageSizeAction:(id)sender
 {
-	[model setPageSize:[[sender selectedItem] tag]];	
+	[model setPageSize:(int)[[sender selectedItem] tag]];
 }
 
 - (IBAction) enabledAction:(id)sender
@@ -713,7 +713,7 @@
     }
 	
     NSString* key = [NSString stringWithFormat: @"orca.ORSIS3300%d.selectedtab",[model slot]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 	
 }
@@ -759,20 +759,20 @@
 
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	int set = [aPlotter tag];
+	int set = (int)[aPlotter tag];
 	if(set<8)return [model numberOfSamples];
 	else return [[[model waveFormRateGroup] timeRate]count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 {
-	int set = [aPlotter tag];
+	int set = (int)[aPlotter tag];
 	if(set<8){
 		*yValue =  [model dataWord:set index:i];
 		*xValue = i;
 	}
 	else if(set == 8){
-		int count = [[[model waveFormRateGroup]timeRate] count];
+		int count = (int)[[[model waveFormRateGroup]timeRate] count];
 		int index = count-i-1;
 		*yValue = [[[model waveFormRateGroup] timeRate] valueAtIndex:index];
 		*xValue = [[[model waveFormRateGroup] timeRate] timeSampledAtIndex:index];

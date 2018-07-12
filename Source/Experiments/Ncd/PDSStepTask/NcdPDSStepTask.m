@@ -319,7 +319,7 @@
             }
         }
     }
-    [self setPatternMaskForArray:[sender tag] to:aMask];
+    [self setPatternMaskForArray:(int)[sender tag] to:aMask];
 }
 
 - (IBAction) timeAction:(id)sender
@@ -336,7 +336,7 @@
             aMask |= (1L<<bit);
         }
     }
-    [self setPatternMaskForArray:[sender tag] to:aMask];
+    [self setPatternMaskForArray:(int)[sender tag] to:aMask];
     [self updateButtons];    
 }
 

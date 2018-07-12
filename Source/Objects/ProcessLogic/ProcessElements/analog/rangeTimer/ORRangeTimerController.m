@@ -170,13 +170,13 @@
 
 - (IBAction) directionAction:(id)sender
 {
-	[model setDirection:[sender indexOfSelectedItem]];
+	[model setDirection:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) delete:(id)sender
 {
 	if([addressList selectedRow]>=0){
-		[model removeAddressAtIndex:[addressList selectedRow]];
+		[model removeAddressAtIndex:(int)[addressList selectedRow]];
 		[addressList reloadData];
 	}
 }
@@ -184,7 +184,7 @@
 - (IBAction) cut:(id)sender
 {
 	if([addressList selectedRow]>=0){
-		[model removeAddressAtIndex:[addressList selectedRow]];
+		[model removeAddressAtIndex:(int)[addressList selectedRow]];
 		[addressList reloadData];
 	}
 }

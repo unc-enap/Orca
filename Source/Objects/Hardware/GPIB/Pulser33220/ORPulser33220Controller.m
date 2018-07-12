@@ -169,7 +169,7 @@
 
 - (IBAction) connectionProtocolAction:(id)sender
 {
-	[model setConnectionProtocol:[[connectionProtocolMatrix selectedCell] tag]];
+	[model setConnectionProtocol:(int)[[connectionProtocolMatrix selectedCell] tag]];
 	
 	BOOL undoWasEnabled = [[model undoManager] isUndoRegistrationEnabled];
     if(undoWasEnabled)[[model undoManager] disableUndoRegistration];

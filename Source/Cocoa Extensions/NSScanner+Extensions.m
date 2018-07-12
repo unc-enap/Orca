@@ -26,7 +26,7 @@
 -(BOOL) skipUpToCharactersFromSet:(NSCharacterSet*)set
 {
 	NSString*		vString = [self string];
-	int				x = [self scanLocation];
+	int				x = (int)[self scanLocation];
 	
 	while( x < [vString length] ){
 		if( ![set characterIsMember: [vString characterAtIndex: x]] ) x++;

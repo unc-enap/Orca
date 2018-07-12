@@ -1117,7 +1117,7 @@ NSLog(@"  arguments: %@ \n" , arguments);
 
 }
 
-- (unsigned long) readReg:(int) index
+- (unsigned long) readReg:(short) index
 {
 	return [self read: [self getAddress:index]];
 
@@ -1813,7 +1813,7 @@ return;
     //if there are FLTs in non-histogramming mode, the filter will start after next 1PPs - wait for it ... -tb-
     if(countNonHistoMode && [[userInfo objectForKey:@"doinit"]intValue]){
         //wait for next second strobe/1PPs
-		uint32_t i,subsec0, subsec1 = 0;
+		unsigned long i,subsec0, subsec1 = 0;
 		subsec0 = [self readSubSecondsCounter];
         for(i=0; i<1000; i++){
 		    subsec1 = [self readSubSecondsCounter];

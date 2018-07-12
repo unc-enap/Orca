@@ -308,7 +308,7 @@
 
 
     [groupView setGroup:(ORGroup*)model];
-	[fecNumberField setIntValue:[model stationNumber]];
+	[fecNumberField setIntegerValue:[model stationNumber]];
 	[crateNumberField setIntValue:[[model guardian] crateNumber]];
 	[pmtView setNeedsDisplay:YES];
     for (id db in [[groupView group] orcaObjects]) [db setHighlighted:NO];
@@ -328,7 +328,7 @@
 - (void) updatePMTInfo:(NSNotification*)aNote
 {
 	int crate = [model crateNumber];
-	int card  = [model stationNumber];
+	int card  = (int)[model stationNumber];
 	int i;
 	ORPmtImages* pmtImageCatalog = [ORPmtImages sharedPmtImages];
 	for(i=0;i<kNumSNOPmts;i++){
@@ -455,7 +455,7 @@
 	for(i=0;i<32;i++){
 		NSMatrix* matrix = i<16 ? cmosRates0Matrix : cmosRates1Matrix;
 		id displayItem = [matrix cellAtRow:displayRow column:0];
-		[displayItem setIntValue:[model cmosRate:i]];
+		[displayItem setIntegerValue:[model cmosRate:i]];
 		displayRow++;
 		if(displayRow>15)displayRow=0;
 	}
@@ -593,8 +593,8 @@
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"Fec32 (%d,%d)",[[model guardian] crateNumber],[model stationNumber]]];
-	[fecNumberField setIntValue:[model stationNumber]];
+	[[self window] setTitle:[NSString stringWithFormat:@"Fec32 (%d,%lu)",[[model guardian] crateNumber],[model stationNumber]]];
+	[fecNumberField setIntegerValue:[model stationNumber]];
 	[crateNumberField setIntValue:[[model guardian] crateNumber]];
 	[pmtView setNeedsDisplay:YES];
 }
@@ -648,12 +648,12 @@
 
 - (IBAction) variableDisplayPUAction:(id)sender
 {
-	[model setVariableDisplay:[sender indexOfSelectedItem]];
+	[model setVariableDisplay:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) onlineMaskAction:(id)sender
 {
-	int tag = [[sender selectedCell] tag];
+	NSInteger tag = [[sender selectedCell] tag];
 	unsigned long mask = [model onlineMask];
 	mask ^= (1L<<tag);
 	[model setOnlineMask:mask];
@@ -734,7 +734,7 @@
 
 - (IBAction) cmosAction:(id)sender
 {
-	int i = [[cmosMatrix selectedCell] tag];
+	NSInteger i = [[cmosMatrix selectedCell] tag];
 	if([model showVolts]){
 		[model setCmosVoltage:i withValue:[sender floatValue]];
 	}
@@ -762,8 +762,8 @@
     int offset = 0;
     if(sender == pmtStateMatrix16_31)offset=16;
     
-    int channel = [sender selectedRow]+offset;
-    int col     = [sender selectedColumn];
+    NSInteger channel = [sender selectedRow]+offset;
+    NSInteger col     = [sender selectedColumn];
     BOOL cmdKeyDown = ([[NSApp currentEvent] modifierFlags] & NSCommandKeyMask) != 0;
     
     if(cmdKeyDown)[[model undoManager] disableUndoRegistration];

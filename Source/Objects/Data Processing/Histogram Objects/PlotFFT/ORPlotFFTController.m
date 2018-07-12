@@ -108,7 +108,7 @@
     return [model numberPointsInPlot:aPlotter];
 }
 
-- (void) plotter:(id)aPlotter index:(unsigned long)index x:(double*)xValue y:(double*)yValue
+- (void) plotter:(id)aPlotter index:(int)index x:(double*)xValue y:(double*)yValue
 {
     return [model plotter:aPlotter index:index x:xValue y:yValue];
 }
@@ -121,15 +121,15 @@
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
 	if([[tableColumn identifier] isEqualToString:@"Real"]){
-		return [NSNumber numberWithFloat:[model plotter:nil dataSet:0 dataValue:row]];
+		return [NSNumber numberWithFloat:[model plotter:nil dataSet:0 dataValue:(int)row]];
 	}
 	else if([[tableColumn identifier] isEqualToString:@"Imaginary"]){
-		return [NSNumber numberWithFloat:[model plotter:nil dataSet:1 dataValue:row]];
+		return [NSNumber numberWithFloat:[model plotter:nil dataSet:1 dataValue:(int)row]];
 	}
 	else if([[tableColumn identifier] isEqualToString:@"PowerSpectrum"]){
-		return [NSNumber numberWithFloat:[model plotter:nil dataSet:2 dataValue:row]];
+		return [NSNumber numberWithFloat:[model plotter:nil dataSet:2 dataValue:(int)row]];
 	}
-	else return [NSNumber numberWithInt:row];
+	else return [NSNumber numberWithInteger:row];
 }
 
 @end

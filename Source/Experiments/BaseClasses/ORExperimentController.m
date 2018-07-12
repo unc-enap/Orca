@@ -493,7 +493,7 @@
 {
 	if(runControl)	{
 		[runStatusField setStringValue:[runControl shortStatus]];
-		[runNumberField setIntValue:[runControl runNumber]];
+		[runNumberField setIntegerValue:(int)[runControl runNumber]];
 		
 		if([runControl isRunning]){
 			[runBar setIndeterminate:!([runControl timedRun] && ![runControl remoteControl])];
@@ -559,7 +559,7 @@
 }
 - (IBAction) colorScaleTypeAction:(id)sender
 {
-    [model setColorScaleType:[[sender selectedCell]tag]];
+    [model setColorScaleType:(int)[[sender selectedCell]tag]];
 }
 
 - (IBAction) customColor1Action:(id)sender
@@ -626,7 +626,7 @@
 - (IBAction) runModeAction:(id)sender
 {
 	[self endEditing];
-    int tag = [[runModeMatrix selectedCell] tag];
+    int tag = (int)[[runModeMatrix selectedCell] tag];
     if(tag != [[ORGlobal sharedGlobal] runMode]){
         [[ORGlobal sharedGlobal] setRunMode:tag];
     }
@@ -635,7 +635,7 @@
 - (IBAction) displayTypeAction:(id)sender
 {
 	[self endEditing];
-	int type = [[sender selectedCell]tag];
+	int type = (int)[[sender selectedCell]tag];
 	[model setDisplayType:type];	
 	[self setValueHistogramTitle];
 	[self scaleValueHistogram];
@@ -1041,10 +1041,10 @@
 #pragma mark •••Data Source For Plots
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	int tag = [aPlotter tag];
+	int tag = (int)[aPlotter tag];
 	if(tag < 10){ //rate plots
 		int set = tag;
-		return [[[model segmentGroup:set]  totalRate] count];
+		return (int)[[[model segmentGroup:set]  totalRate] count];
 	}
 	else if(tag >= 10){ //value plots
 		int set = tag-10;
@@ -1062,10 +1062,10 @@
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
 	double aValue = 0;
-	int tag = [aPlotter tag];
+	int tag = (int)[aPlotter tag];
 	if(tag < 10){ //rate plots
 		int set = tag;
-		int count = [[[model segmentGroup:set] totalRate] count];
+		int count = (int)[[[model segmentGroup:set] totalRate] count];
 		int index = count-i-1;
 		if(count==0) aValue = 0;
 		else		 aValue = [[[model segmentGroup:set] totalRate] valueAtIndex:index];
@@ -1090,7 +1090,7 @@
 - (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
 	if(aTableView == primaryTableView || aTableView == primaryValuesView){
-		return [[model segmentGroup:0] segment:rowIndex objectForKey:[aTableColumn identifier]];
+		return [[model segmentGroup:0] segment:(int)rowIndex objectForKey:[aTableColumn identifier]];
 	}
 	else return nil;
 }
@@ -1107,12 +1107,12 @@
 {
 	ORDetectorSegment* aSegment;
 	if(aTableView == primaryTableView){
-		aSegment = [[model segmentGroup:0] segment:rowIndex];
+		aSegment = [[model segmentGroup:0] segment:(int)rowIndex];
 		[aSegment setObject:anObject forKey:[aTableColumn identifier]];
 		[[model segmentGroup:0] configurationChanged:nil];
 	}
 	else if(aTableView == primaryValuesView){
-		aSegment = [[model segmentGroup:0] segment:rowIndex];
+		aSegment = [[model segmentGroup:0] segment:(int)rowIndex];
 		if([[aTableColumn identifier] isEqualToString:@"threshold"]){
 			[aSegment setThreshold:anObject];
 		}

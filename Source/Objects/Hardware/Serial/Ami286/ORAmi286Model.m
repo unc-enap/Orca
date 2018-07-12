@@ -844,7 +844,7 @@ NSString* ORAmi286Lock = @"ORAmi286Lock";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeBool:sendOnAlarm forKey:@"sendOnAlarm"];
-    [encoder encodeInt32:expiredTime forKey:@"expiredTime"];
+    [encoder encodeInt32:(int32_t)expiredTime forKey:@"expiredTime"];
     [encoder encodeBool:sendOnExpired forKey:@"sendOnExpired"];
     [encoder encodeBool:sendOnValveChange forKey:@"sendOnValveChange"];
     [encoder encodeInt:enabledMask forKey:@"enabledMask"];

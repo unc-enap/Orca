@@ -663,7 +663,7 @@
 - (IBAction) controllAction:(id)sender
 {
     [self endEditing];
-    int i = [[sender selectedCell] tag];
+    int i = (int)[[sender selectedCell] tag];
     if([sender intValue] != [[[model supplies] objectAtIndex:i] controlled]){
 		[[self undoManager] setActionName: @"Set HV Controlled"];
 		[[[model supplies] objectAtIndex:i] setControlled: [sender intValue]];
@@ -674,7 +674,7 @@
 - (IBAction) rampTimeAction:(id)sender
 {
     [self endEditing];
-    int i = [[sender selectedCell] tag];
+    int i = (int)[[sender selectedCell] tag];
     if([sender intValue] != [[[model supplies] objectAtIndex:i] rampTime]){
 		[[self undoManager] setActionName: @"Set HV Ramp Time"];
 		[[[model supplies] objectAtIndex:i] setRampTime: [sender intValue]];
@@ -683,7 +683,7 @@
 
 - (IBAction) targetAction:(id)sender
 {
-    int i = [[sender selectedCell] tag];
+    int i = (int)[[sender selectedCell] tag];
     if([sender intValue] != [[[model supplies] objectAtIndex:i] targetVoltage]){
 		[[self undoManager] setActionName: @"Set HV Ramp Time"];
 		[[[model supplies] objectAtIndex:i] setTargetVoltage: [sender intValue]];
@@ -692,7 +692,7 @@
 
 - (IBAction) adcOffsetAction:(id)sender
 {
-    int i = [[sender selectedCell] tag];
+    int i = (int)[[sender selectedCell] tag];
     if([sender floatValue] != [[[model supplies] objectAtIndex:i] voltageAdcOffset]){
 		[[self undoManager] setActionName: @"Set HV Adc Offset"];
 		[[[model supplies] objectAtIndex:i] setVoltageAdcOffset: [sender floatValue]];
@@ -702,7 +702,7 @@
 
 - (IBAction) adcSlopeAction:(id)sender
 {
-	int i = [[sender selectedCell] tag];
+	int i = (int)[[sender selectedCell] tag];
     if([sender floatValue] != [[[model supplies] objectAtIndex:i] voltageAdcSlope]){
 		[[self undoManager] setActionName: @"Set HV ADC Slope"];
 		[[[model supplies] objectAtIndex:i] setVoltageAdcSlope: [sender floatValue]];
@@ -855,15 +855,15 @@
 
 - (int)	numberPointsInPlot:(id)aPlotter
 {
-	int set = [aPlotter tag];
+	int set = (int)[aPlotter tag];
 	return [model currentTrendCount:set];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
 	double aValue = 0;
-	int set = [aPlotter tag];
-	int count = [model currentTrendCount:set];
+	int set = (int)[aPlotter tag];
+	int count = (int)[model currentTrendCount:set];
 	aValue =  [model currentValue:count-i-1 supply:set];
 	*xValue = (double)i;
 	*yValue = aValue;

@@ -188,13 +188,13 @@
 #pragma mark ¥¥¥Actions
 - (IBAction) pollTimeAction:(id)sender
 {
-	[model setPollTime:[[sender selectedItem] tag]];	
+	[model setPollTime:(int)[[sender selectedItem] tag]];
 }
 
 - (IBAction) debounceAction:(id)sender
 {
 	@try {
-		[model setDebounce:[sender indexOfSelectedItem]];
+		[model setDebounce:(int)[sender indexOfSelectedItem]];
 		[model sendDebounce];	
 	}
 	@catch(NSException* localException) {
@@ -261,7 +261,7 @@
 - (IBAction) relayControlAction:(id)sender
 {
 	@try {
-		[model toggleRelay:[[sender selectedCell]tag]];
+		[model toggleRelay:(unsigned int)[[sender selectedCell]tag]];
 	}
 	@catch(NSException* localException) {
         NSLog( [ localException reason ] );

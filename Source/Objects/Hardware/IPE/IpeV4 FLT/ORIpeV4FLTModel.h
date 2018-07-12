@@ -131,7 +131,7 @@
 	
 	BOOL noiseFloorRunning;
 	int noiseFloorState;
-	long noiseFloorOffset;
+	int noiseFloorOffset;
     int targetRate;
 	long noiseFloorLow[kNumV4FLTChannels];
 	long noiseFloorHigh[kNumV4FLTChannels];
@@ -264,19 +264,19 @@
 
 #pragma mark •••HW Access
 //all can raise exceptions
-- (unsigned long) regAddress:(int)aReg channel:(int)aChannel;
-- (unsigned long) regAddress:(int)aReg;
-- (unsigned long) adcMemoryChannel:(int)aChannel page:(int)aPage;
-- (unsigned long) readReg:(int)aReg;
-- (unsigned long) readReg:(int)aReg channel:(int)aChannel;
-- (void) writeReg:(int)aReg value:(unsigned long)aValue;
-- (void) writeReg:(int)aReg channel:(int)aChannel value:(unsigned long)aValue;
+- (unsigned long) regAddress:(short)aReg channel:(int)aChannel;
+- (unsigned long) regAddress:(short)aReg;
+- (unsigned long) adcMemoryChannel:(short)aChannel page:(int)aPage;
+- (unsigned long) readReg:(short)aReg;
+- (unsigned long) readReg:(short)aReg channel:(int)aChannel;
+- (void) writeReg:(short)aReg value:(unsigned long)aValue;
+- (void) writeReg:(short)aReg channel:(int)aChannel value:(unsigned long)aValue;
 
 - (void) executeCommandList:(ORCommandList*)aList;
-- (id) readRegCmd:(unsigned long) aRegister channel:(short) aChannel;
-- (id) writeRegCmd:(unsigned long) aRegister channel:(short) aChannel value:(unsigned long)aValue;
-- (id) readRegCmd:(unsigned long) aRegister;
-- (id) writeRegCmd:(unsigned long) aRegister value:(unsigned long)aValue;
+- (id) readRegCmd:(short) aRegister channel:(short) aChannel;
+- (id) writeRegCmd:(short) aRegister channel:(short) aChannel value:(unsigned long)aValue;
+- (id) readRegCmd:(short) aRegister;
+- (id) writeRegCmd:(short) aRegister value:(unsigned long)aValue;
 
 - (unsigned long)  readSeconds;
 - (void)  writeSeconds:(unsigned long)aValue;

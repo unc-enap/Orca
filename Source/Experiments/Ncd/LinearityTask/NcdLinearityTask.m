@@ -363,7 +363,7 @@
 {
     if([sender indexOfSelectedItem] != selectedWaveform[extendedLinearity]){ 	
         [[self undoManager] setActionName: @"Selected Waveform"];
-        [self setSelectedWaveform:[selectionPopUpButton indexOfSelectedItem]];
+        [self setSelectedWaveform:(int)[selectionPopUpButton indexOfSelectedItem]];
     }
 }
 

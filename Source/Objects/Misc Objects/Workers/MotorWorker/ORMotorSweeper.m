@@ -165,7 +165,7 @@
 - (int) numSteps
 {
     if(positionArray){
-        return [positionArray count];
+        return (int)[positionArray count];
     }
     else  return numSteps;
 }

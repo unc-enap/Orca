@@ -604,7 +604,7 @@
 
 - (void) statusChanged:(NSNotification*)aNote
 {
-	int mask = [model status];
+	int mask = [(ORCP8CryopumpModel*)model status];
 	[pumpOnBiStateView				 setState: mask & (0x1<<0)];
 	[roughOpenBiStateView			 setState: (mask & (0x1<<1))>0];
 	[purgeOpenBiStateView			 setState: (mask & (0x1<<2))>0];
@@ -1311,14 +1311,14 @@
 #pragma mark ***Data Source
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	int set = [aPlotter tag];
+	int set = (int)[aPlotter tag];
 	return [[model timeRate:set] count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-	int set = [aPlotter tag];
-	int count = [[model timeRate:set] count];
+	int set = (int)[aPlotter tag];
+	int count = (int)[[model timeRate:set] count];
 	int index = count-i-1;
 	*xValue = [[model timeRate:set]timeSampledAtIndex:index];
 	*yValue = [[model timeRate:set] valueAtIndex:index];

@@ -340,7 +340,7 @@
 	int returnLength = 0;
 	if([aTarget respondsToSelector:theSelector]){
 		NSMethodSignature* theSignature = [aTarget methodSignatureForSelector:theSelector];
-		returnLength = [theSignature methodReturnLength];
+		returnLength = (int)[theSignature methodReturnLength];
 		NSInvocation* theInvocation = [NSInvocation invocationWithMethodSignature:theSignature];
 		[theInvocation setSelector:theSelector];
 		NSUInteger n = [theSignature numberOfArguments]-2; //first two are hidden

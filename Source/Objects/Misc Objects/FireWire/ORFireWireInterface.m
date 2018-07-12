@@ -394,7 +394,7 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 { 
 	[fwLock lock];
 	if(mDevice && serviceAlive && isOpen){
-		IOReturn error = (**mDevice).CompareSwap64(mDevice, abs ? 0 : (**mDevice).GetDevice(mDevice), addr, expectedVal, newVal, oldVal, size, failOnReset, generation);     
+		IOReturn error = (**mDevice).CompareSwap64(mDevice, abs ? 0 : (**mDevice).GetDevice(mDevice), (UInt32)addr, expectedVal, newVal, oldVal, size, failOnReset, generation);
 		if(error!=kIOReturnSuccess){
             NSLogError(@" ",@"FireWire",@"compareSwap64 error",nil);
 			[fwLock unlock];
@@ -442,7 +442,7 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 { 
 	[fwLock lock];
 	if(mDevice && serviceAlive && isOpen){
-		IOReturn error = (**mDevice).GetLocalNodeIDWithGeneration(mDevice, checkGeneration, localNodeID);     
+		IOReturn error = (**mDevice).GetLocalNodeIDWithGeneration(mDevice, (uint32_t)checkGeneration, localNodeID);
 		if(error!=kIOReturnSuccess){
             NSLogError(@" ",@"FireWire",@"getLocalNodeIDWithGeneration error",nil);
 			[fwLock unlock];
@@ -458,7 +458,7 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 { 
 	[fwLock lock];
 	if(mDevice && serviceAlive && isOpen){
-		IOReturn error = (**mDevice).GetRemoteNodeID(mDevice, checkGeneration, remoteNodeID);     
+		IOReturn error = (**mDevice).GetRemoteNodeID(mDevice, (uint32_t)checkGeneration, remoteNodeID);
 		if(error!=kIOReturnSuccess){
             NSLogError(@" ",@"FireWire",@"getRemoteNodeID error",nil);
 			[fwLock unlock];
@@ -473,7 +473,7 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 { 
 	[fwLock lock];
 	if(mDevice && serviceAlive && isOpen){
-		IOReturn error = (**mDevice).GetSpeedToNode(mDevice, checkGeneration, speed);     
+		IOReturn error = (**mDevice).GetSpeedToNode(mDevice, (uint32_t)checkGeneration, speed);
 		if(error!=kIOReturnSuccess){
             NSLogError(@" ",@"FireWire",@"getSpeedToNode error",nil);
 			[fwLock unlock];
@@ -491,7 +491,7 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 {
 	[fwLock lock];
 	if(mDevice && serviceAlive && isOpen){
-		IOReturn error = (**mDevice).GetSpeedBetweenNodes(mDevice, checkGeneration, srcNodeID, destNodeID, speed);     
+		IOReturn error = (**mDevice).GetSpeedBetweenNodes(mDevice, (uint32_t)checkGeneration, srcNodeID, destNodeID, speed);     
 		if(error!=kIOReturnSuccess){
             NSLogError(@" ",@"FireWire",@"getSpeedBetweenNodes error",nil);
 			[fwLock unlock];

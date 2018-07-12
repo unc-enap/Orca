@@ -241,11 +241,11 @@ NSString* ORModelChangedNotification = @"ORModelChangedNotification";
 	NSPrintInfo* printInfo = [NSPrintInfo sharedPrintInfo];
 	NSSize imageSize = [tempImage size];
 	if(imageSize.width>imageSize.height){
-		[printInfo setOrientation:NSLandscapeOrientation];
+		[printInfo setOrientation:NSPaperOrientationLandscape];
 		[printInfo setHorizontalPagination: NSFitPagination];
 	}
 	else {
-		[printInfo setOrientation:NSPortraitOrientation];
+		[printInfo setOrientation:NSPaperOrientationPortrait];
 		[printInfo setVerticalPagination: NSFitPagination];
 	}
 
@@ -275,7 +275,7 @@ NSString* ORModelChangedNotification = @"ORModelChangedNotification";
 	[self endEditing];
 	NSMutableArray* allModels = [[[(ORAppDelegate*)[NSApp delegate] document] collectObjectsOfClass:[model class]] mutableCopy];
 	[allModels sortUsingSelector:aSelector];
-	int index = [allModels indexOfObject:model] + 1;
+	unsigned long index = [allModels indexOfObject:model] + 1;
 	if(index>[allModels count]-1) index = 0;
 	[self setModel:[allModels objectAtIndex:index]];
  	[allModels release];
@@ -286,8 +286,8 @@ NSString* ORModelChangedNotification = @"ORModelChangedNotification";
 	[self endEditing];
 	NSMutableArray* allModels = [[[(ORAppDelegate*)[NSApp delegate] document] collectObjectsOfClass:[model class]] mutableCopy];
 	[allModels sortUsingSelector:aSelector];
-	int index = [allModels indexOfObject:model] - 1;
-	if(index<0) index = [allModels count]-1;
+	unsigned long index = [allModels indexOfObject:model] - 1;
+	//if(index<0) index = [allModels count]-1;
 	[self setModel:[allModels objectAtIndex:index]];
  	[allModels release];
 }
@@ -526,14 +526,14 @@ static NSString *OROrcaObjectControllerNibName	= @"OROrcaObjectControllerNibName
             {
                 long aValue;
                 [invocation getReturnValue:&aValue];
-                if(!updatedOnce || ([aCell intValue] != aValue))[aCell setIntValue:aValue];
+                if(!updatedOnce || ([aCell intValue] != aValue))[aCell setIntegerValue:aValue];
             }
                 break;
             case 'L':
             {
                 unsigned long aValue;
                 [invocation getReturnValue:&aValue];
-                if(!updatedOnce || ([aCell intValue] != aValue))[aCell setIntValue:aValue];
+                if(!updatedOnce || ([aCell intValue] != aValue))[aCell setIntegerValue:aValue];
             }
                 break;
        }

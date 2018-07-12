@@ -183,7 +183,8 @@ NSString* ORIpeV4CrateConnectedChanged = @"ORIpeV4CrateConnectedChanged";
 - (void) updateKatrinV4FLTs
 {
 	//change/update dialog for all FLTs
-	int i,n = [self count];
+    int i;
+    int n = (int)[self count];
 	for(i=0;i<n;i++){
 	    id obj = [self objectAtIndex: i];
 		//ORKatrinV4FLTModel *flt;

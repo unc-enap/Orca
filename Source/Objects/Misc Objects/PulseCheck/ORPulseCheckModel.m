@@ -85,18 +85,18 @@ NSString* ORPulseCheckModelReloadTable      = @"ORPulseCheckModelReloadTable";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORPulseCheckMachineAdded object:self];
 }
 
-- (void) removeMachineAtIndex:(int) anIndex
+- (void) removeMachineAtIndex:(NSInteger) anIndex
 {
     if(anIndex < [machines count]){
         ORMachineToCheck* aMachine = [machines objectAtIndex:anIndex];
         [aMachine clearHeartbeatAlarm];
         [machines removeObjectAtIndex:anIndex];
-        NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:anIndex] forKey:@"Index"];
+        NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:anIndex] forKey:@"Index"];
         [[NSNotificationCenter defaultCenter] postNotificationName:ORPulseCheckMachineRemoved object:self userInfo:userInfo];
    }
 }
 
-- (ORMachineToCheck*) machineAtIndex:(int)anIndex
+- (ORMachineToCheck*) machineAtIndex:(NSInteger)anIndex
 {
 	if(anIndex>=0 && anIndex<[machines count])return [machines objectAtIndex:anIndex];
 	else return nil;

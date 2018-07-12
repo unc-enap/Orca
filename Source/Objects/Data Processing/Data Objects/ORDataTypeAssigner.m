@@ -48,7 +48,7 @@
         [firstObj setDataIds:self];
         [classList removeObject:firstObj];
         
-        for(i=[classList count]-1;i>=0;i--){
+        for(i=(int)[classList count]-1;i>=0;i--){
             id anObj = [classList objectAtIndex:i];
             if( [anObj class] == lastObjectClass){
                 [anObj syncDataIdsWith:firstObj];

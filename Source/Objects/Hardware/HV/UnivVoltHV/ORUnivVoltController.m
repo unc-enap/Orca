@@ -207,13 +207,13 @@ const int MAXcCHNLS_PER_PLOT = 6;
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"Univ Volt Card (Slot %d)",[model stationNumber]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"Univ Volt Card (Slot %lu)",[model stationNumber]]];
 }
 
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"Univ Volt Card (Slot %d)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"Univ Volt Card (Slot %lu)",[model stationNumber]]];
 }
 
 - (void) updateWindow
@@ -526,13 +526,13 @@ const int MAXcCHNLS_PER_PLOT = 6;
 #pragma mark •••Code for plotter
 - (int)	numberPointsInPlot: (id) aPlotter
 {
-	int aChnl = [aPlotter tag];
+	int aChnl = (int)[aPlotter tag];
 	return( [model numPointsInCB: aChnl] );
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-	int aChnl = [aPlotter tag];
+	int aChnl = (int)[aPlotter tag];
 	double aValue = 0;
 	if ( aChnl >= 0 ) {
 		ORCircularBufferUV* cbObj = [model circularBuffer: aChnl];
@@ -623,7 +623,7 @@ const int MAXcCHNLS_PER_PLOT = 6;
 {
 //	NSMutableDictionary* tmpChnl = [[model dictionary] objectAtIndex: aRowIndex];
 	NSString* colIdentifier = [aTableColumn identifier];
-	NSMutableDictionary* tmpChnl = [model channelDictionary: aRowIndex];
+	NSMutableDictionary* tmpChnl = [model channelDictionary: (int)aRowIndex];
 	[tmpChnl setObject: anObject forKey: colIdentifier];
 }
 
@@ -631,7 +631,7 @@ const int MAXcCHNLS_PER_PLOT = 6;
 	   objectValueForTableColumn: (NSTableColumn*) aTableColumn
 	   row: (NSInteger) aRowIndex
 {
-	NSMutableDictionary* tmpChnl = [model channelDictionary: aRowIndex];
+	NSMutableDictionary* tmpChnl = [model channelDictionary: (int)aRowIndex];
 	NSString* colIdentifier = [aTableColumn identifier];
 //	if ( [colIdentifier isEqualToString: @"chnlEnabled"]) NSLog( @"ORUnivVoltCont - Row: %d, column: %@", aRowIndex, colIdentifier );
 	return( [tmpChnl objectForKey: colIdentifier] );

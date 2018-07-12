@@ -128,7 +128,7 @@ NSString* ORDataExplorerDataChanged                 = @"ORDataExplorerDataChange
     dataRecords = aDataRecords;
 }
 
-- (id) dataRecordAtIndex:(int)index
+- (id) dataRecordAtIndex:(long)index
 {
     return [dataRecords objectAtIndex:index];
 }
@@ -191,8 +191,7 @@ NSString* ORDataExplorerDataChanged                 = @"ORDataExplorerDataChange
 
 - (NSUInteger)  numberOfChildren
 {
-    int count =  [dataSet count];
-    return count;
+    return [dataSet count];
 }
 
 - (void) removeDataSet:(ORDataSet*)item

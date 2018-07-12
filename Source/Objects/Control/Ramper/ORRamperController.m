@@ -366,7 +366,7 @@
 
 - (IBAction) downRampPathAction:(id)sender
 {
-	[[model selectedRampItem]  setDownRampPath: [[sender selectedCell] tag]];	
+	[[model selectedRampItem]  setDownRampPath: (int)[[sender selectedCell] tag]];	
 }
 
 - (IBAction) downRateTextFieldAction:(id)sender

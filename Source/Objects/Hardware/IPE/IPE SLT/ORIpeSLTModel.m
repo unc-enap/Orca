@@ -990,7 +990,7 @@ NSString* ORIpeSLTModelHW_ResetChanged          = @"ORIpeSLTModelHW_ResetChanged
 			id aCard;
 			while(aCard = [e nextObject]){
 				if([aCard isKindOfClass:NSClassFromString(@"ORIpeFireWireCard")])continue;
-				int index = [aCard stationNumber] - 1;
+				int index = (int)[aCard stationNumber] - 1;
 				if(index<20){
 					cards[index] = aCard;
 				}
@@ -1019,9 +1019,9 @@ NSString* ORIpeSLTModelHW_ResetChanged          = @"ORIpeSLTModelHW_ResetChanged
 			NSLogFont(aFont,@"Index|  Time    | Mask                              Amplitude = %5d\n",amplitude);			
 			NSLogFont(aFont,@"-----------------------------------------------------------------------------\n");			
 			NSLogFont(aFont,@"     |    delta |  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20\n");			
-			unsigned int delta = time[0];
+			unsigned long delta = time[0];
 			for(i=0;i<len;i++){
-				NSMutableString* line = [NSMutableString stringWithFormat:@"  %2d |=%4d=%4lu|",i,delta,time[i]];
+				NSMutableString* line = [NSMutableString stringWithFormat:@"  %2d |=%4ld=%4lu|",i,delta,time[i]];
 				delta += time[i];
 				for(j=0;j<20;j++){
 					//if(mask[j][i] != 0x1000000)[line appendFormat:@"%3s",mask[j][i]?"¥":"-"];
@@ -1439,7 +1439,7 @@ NSString* ORIpeSLTModelHW_ResetChanged          = @"ORIpeSLTModelHW_ResetChanged
 	
 	//status reg
 	[encoder encodeObject:patternFilePath forKey:@"ORIpeSLTModelPatternFilePath"];
-	[encoder encodeInt32:interruptMask	 forKey:@"ORIpeSLTModelInterruptMask"];
+	[encoder encodeInt32:(int32_t)interruptMask	 forKey:@"ORIpeSLTModelInterruptMask"];
 	[encoder encodeFloat:pulserDelay	 forKey:@"ORIpeSLTModelPulserDelay"];
 	[encoder encodeFloat:pulserAmp		 forKey:@"ORIpeSLTModelPulserAmp"];
 	[encoder encodeBool:inhibit			 forKey:@"ORIpeSLTStatusInhibit"];
@@ -1463,12 +1463,12 @@ NSString* ORIpeSLTModelHW_ResetChanged          = @"ORIpeSLTModelHW_ResetChanged
 	[encoder encodeInt:nHitThreshold	 forKey:@"ORIpeSLTModelNHitThreshold"];
 	[encoder encodeInt:nHit				 forKey:@"ORIpeSLTModelNHit"];
 	[encoder encodeBool:readAll			 forKey:@"readAll"];
-    [encoder encodeInt:nextPageDelay     forKey:@"nextPageDelay"]; // ak, 5.10.07
+    [encoder encodeInt:(int32_t)nextPageDelay     forKey:@"nextPageDelay"]; // ak, 5.10.07
 	
 	[encoder encodeObject:readOutGroup  forKey:@"ReadoutGroup"];
     [encoder encodeObject:poller         forKey:@"poller"];
 	
-    [encoder encodeInt:pageSize         forKey:@"ORIpeSLTPageSize"]; // ak, 9.12.07
+    [encoder encodeInt:(int32_t)pageSize         forKey:@"ORIpeSLTPageSize"]; // ak, 9.12.07
     [encoder encodeBool:displayTrigger   forKey:@"ORIpeSLTDisplayTrigger"];
     [encoder encodeBool:displayEventLoop forKey:@"ORIpeSLTDisplayEventLoop"];
 	
@@ -1664,7 +1664,7 @@ NSString* ORIpeSLTModelHW_ResetChanged          = @"ORIpeSLTModelHW_ResetChanged
 				}
             }
 			
-			int nTriggered = 0;
+			unsigned long nTriggered = 0;
 		    unsigned long xyProj[20];
 			unsigned long tyProj[100];
 			nTriggered = [self calcProjection:pMult xyProj:xyProj tyProj:tyProj];
@@ -1704,8 +1704,8 @@ NSString* ORIpeSLTModelHW_ResetChanged          = @"ORIpeSLTModelHW_ResetChanged
 			NSMutableDictionary* userInfo = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 											 [NSNumber numberWithInt:actualPageIndex], @"page",
 											 [NSNumber numberWithInt:lStart],		  @"lStart",
-											 [NSNumber numberWithInt:eventCounter],	  @"eventCounter",
-											 [NSNumber numberWithInt:pageSize],		  @"pageSize",
+											 [NSNumber numberWithInteger:eventCounter],	  @"eventCounter",
+											 [NSNumber numberWithInteger:pageSize],		  @"pageSize",
 											 nil];
 			id obj;
 			while(obj = [e nextObject]){			    
@@ -1731,7 +1731,7 @@ NSString* ORIpeSLTModelHW_ResetChanged          = @"ORIpeSLTModelHW_ResetChanged
 				// 7.12.07 ak
 				if (t0.tv_sec > lastDisplaySec){
 					NSFont* aFont = [NSFont userFixedPitchFontOfSize:9];
-					int nEv = eventCounter - lastDisplayCounter;
+					int nEv = (int)(eventCounter - lastDisplayCounter);
 					double rate = 0.1 * nEv / (t0.tv_sec-lastDisplaySec) + 0.9 * lastDisplayRate;
 					
 					unsigned long tRead = (t1.tv_sec - t0.tv_sec) * 1000000 + (t1.tv_usec - t0.tv_usec);
@@ -1785,7 +1785,7 @@ NSString* ORIpeSLTModelHW_ResetChanged          = @"ORIpeSLTModelHW_ResetChanged
 { 
 	//temp----
 	int i, j, k;
-	int sltSize = pageSize * 20;	
+	unsigned long sltSize = pageSize * 20;
 	
 	
 	// Dislay the matrix of triggered pixel and timing

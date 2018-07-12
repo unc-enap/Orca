@@ -167,7 +167,7 @@
 
 - (int) numberOfMarks
 {
-    return [markList count];
+    return (int)[markList count];
 }
 
 @end

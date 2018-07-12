@@ -193,7 +193,7 @@
 
 - (IBAction) updateIntervalAction:(id)sender
 {
-	[model setUpdateInterval:[[sender selectedItem] tag]];
+	[model setUpdateInterval:(int)[[sender selectedItem] tag]];
 }
 
 - (IBAction) textSizeAction:(id)sender
@@ -203,7 +203,7 @@
 
 - (IBAction) labelTypeAction:(id)sender
 {
-	[model setLabelType:[[sender selectedCell] tag]];
+	[model setLabelType:(int)[[sender selectedCell] tag]];
 }
 
 - (IBAction)labelLockAction:(id)sender

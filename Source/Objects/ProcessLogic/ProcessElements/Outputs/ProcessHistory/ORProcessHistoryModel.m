@@ -201,8 +201,8 @@ NSString* historyConnectors[4] = {
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-	int set = [aPlotter tag];
-	int count = [inputValue[set] count];
+	int set = (int)[aPlotter tag];
+	int count = (int)[inputValue[set] count];
 	int index = count-i-1;
 	*yValue =  [inputValue[set] valueAtIndex:index];
 	*xValue =  [inputValue[set] timeSampledAtIndex:index];
@@ -312,7 +312,7 @@ NSString* historyConnectors[4] = {
 	float scaleFactorX = 0;
 	int i,plot,numPoints;
 	float yValue,xValue;
-	int count = [inputValue[0] count];
+	int count = (int)[inputValue[0] count];
 	if(aRect.size.width != 0 && aRect.size.height != 0){
 		[NSBezierPath setDefaultLineWidth:0];
 		[[NSColor colorWithCalibratedRed:.9 green:.9 blue:.9 alpha:1] set];

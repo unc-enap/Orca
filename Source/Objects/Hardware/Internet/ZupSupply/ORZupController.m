@@ -297,7 +297,7 @@
     [[self window] setContentView:totalView];
             
     NSString* key = [NSString stringWithFormat: @"orca.ORZup%lu.selectedtab",[model uniqueIdNumber]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
     
 }

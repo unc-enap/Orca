@@ -91,7 +91,7 @@
 
 - (int) rackNumber
 {
-	return [self uniqueIdNumber];
+	return (int)[self uniqueIdNumber];
 }
 
 - (void) viewChanged:(NSNotification*)aNotification

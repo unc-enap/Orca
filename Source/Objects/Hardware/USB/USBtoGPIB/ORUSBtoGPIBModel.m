@@ -187,7 +187,7 @@ NSString* ORUSBtoGPIBUSBOutConnection			= @"ORUSBtoGPIBUSBOutConnection";
 		[self selectDevice:aPrimaryAddress];
 		NSString* cmd = [NSString stringWithFormat:@"++eoi %d\r",state];
 		if(fd){
-			int n = write(fd,[cmd cStringUsingEncoding:NSASCIIStringEncoding],[cmd length]);
+			ssize_t n = write(fd,[cmd cStringUsingEncoding:NSASCIIStringEncoding],[cmd length]);
 			if(n<=0){
 				[theHWLock unlock];   //-----end critical section
 				[NSException raise:@"Serial Write" format:@"ORUSBtoBPIBMode.m %u: Write to serial port <%@> failed\n", __LINE__,serialNumber];
@@ -229,7 +229,7 @@ NSString* ORUSBtoGPIBUSBOutConnection			= @"ORUSBtoGPIBUSBOutConnection";
 		if(aPrimaryAddress != lastSelectedAddress){
 			NSString* cmd = [NSString stringWithFormat:@"++addr %d\r++mode 1\r++auto 0\r++eos 3\r++eoi 1\r",aPrimaryAddress];
 			if(fd){
-				int n = write(fd,[cmd cStringUsingEncoding:NSASCIIStringEncoding],[cmd length]);
+				ssize_t n = write(fd,[cmd cStringUsingEncoding:NSASCIIStringEncoding],[cmd length]);
 				if(n<=0){
 					[NSException raise:@"Serial Write" format:@"ORUSBtoBPIBMode.m %u: Write to serial port <%@> failed\n", __LINE__,serialNumber];
 				}
@@ -274,7 +274,7 @@ NSString* ORUSBtoGPIBUSBOutConnection			= @"ORUSBtoGPIBUSBOutConnection";
 		[cmd replaceOccurrencesOfString:@"\n" withString:@"\033\n" options:NSLiteralSearch range:NSMakeRange(0,[cmd length])];
 		if(![cmd hasSuffix:@"\r"])[cmd appendString:@"\r"];
 		
-		int n = write(fd,[cmd cStringUsingEncoding:NSASCIIStringEncoding],[cmd length]);
+		ssize_t n = write(fd,[cmd cStringUsingEncoding:NSASCIIStringEncoding],[cmd length]);
 		if(n<=0){
 			[theHWLock unlock];   //-----end critical section
 			[NSException raise:@"Serial Write" format:@"ORUSBtoBPIBMode.m %u: Write to serial port <%@> failed\n", __LINE__,serialNumber];
@@ -289,7 +289,7 @@ NSString* ORUSBtoGPIBUSBOutConnection			= @"ORUSBtoGPIBUSBOutConnection";
 
 - (long) readFromDevice: (short) aPrimaryAddress data: (char*) aData maxLength: (long) aMaxLength
 {
-	int result = 0;
+	ssize_t result = 0;
 	if(!fd)return result;
     @try {
 		[theHWLock lock];   //-----begin critical section

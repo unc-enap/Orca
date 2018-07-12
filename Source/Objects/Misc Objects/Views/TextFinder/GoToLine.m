@@ -117,8 +117,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(GoToLine);
 
 -(void)showLine:(NSUInteger)lineNumber
 {
-	unsigned indexLine = 0;
-	unsigned charIndex = 0;
+	NSUInteger indexLine = 0;
+	NSUInteger charIndex = 0;
 	NSRange lineRange;
 	
 	// Skip all lines that are visible at the top of the text view (if any)
@@ -129,7 +129,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(GoToLine);
 		charIndex = NSMaxRange( lineRange );
 	}
 	
-	unsigned targetCharIndex =  charIndex - 1;
+	NSUInteger targetCharIndex =  charIndex - 1;
 
 	[self showCharacter:targetCharIndex granularity:-1];
 }

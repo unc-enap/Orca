@@ -65,7 +65,7 @@
 	[rateTextFields setFormatter:rateFormatter];
     blankView = [[NSView alloc] init];
     
-    NSString* key = [NSString stringWithFormat: @"orca.ORIpeV4FLT%d.selectedtab",[model stationNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORIpeV4FLT%lu.selectedtab",[model stationNumber]];
     NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
@@ -312,27 +312,27 @@
 #pragma mark •••Interface Management
 - (void) targetRateChanged:(NSNotification*)aNote
 {
-	[targetRateField setIntValue: [model targetRate]];
+	[targetRateField setIntegerValue: [model targetRate]];
 }
 
 - (void) histMaxEnergyChanged:(NSNotification*)aNote
 {
-	[histMaxEnergyTextField setIntValue: [model histEMax]];
+	[histMaxEnergyTextField setIntegerValue: [model histEMax]];
 }
 
 - (void) histPageABChanged:(NSNotification*)aNote
 {
 	[histPageABTextField setStringValue: [model histPageAB]?@"B":@"A"];
-	//[histPageABTextField setIntValue: [model histPageAB]];
+	//[histPageABTextField setIntegerValue: [model histPageAB]];
 }
 - (void) histLastEntryChanged:(NSNotification*)aNote
 {
-	[histLastEntryField setIntValue: [model histLastEntry]];
+	[histLastEntryField setIntegerValue: [model histLastEntry]];
 }
 
 - (void) histFirstEntryChanged:(NSNotification*)aNote
 {
-	[histFirstEntryField setIntValue: [model histFirstEntry]];
+	[histFirstEntryField setIntegerValue: [model histFirstEntry]];
 }
 
 - (void) histClrModeChanged:(NSNotification*)aNote
@@ -352,17 +352,17 @@
 
 - (void) histEMinChanged:(NSNotification*)aNote
 {
-	[histEMinTextField setIntValue: [model histEMin]];
+	[histEMinTextField setIntegerValue: [model histEMin]];
 }
 
 - (void) runBoxCarFilterChanged:(NSNotification*)aNote
 {
-	[runBoxCarFilterCB setIntValue: [model runBoxCarFilter]];
+	[runBoxCarFilterCB setIntegerValue: [model runBoxCarFilter]];
 }
 
 - (void) storeDataInRamChanged:(NSNotification*)aNote
 {
-	[storeDataInRamCB setIntValue: [model storeDataInRam]];
+	[storeDataInRamCB setIntegerValue: [model storeDataInRam]];
 }
 
 - (void) filterLengthChanged:(NSNotification*)aNote
@@ -377,22 +377,22 @@
 
 - (void) histNofMeasChanged:(NSNotification*)aNote
 {
-	[histNofMeasField setIntValue: [model histNofMeas]];
+	[histNofMeasField setIntegerValue: [model histNofMeas]];
 }
 
 - (void) histMeasTimeChanged:(NSNotification*)aNote
 {
-	[histMeasTimeField setIntValue: [model histMeasTime]];
+	[histMeasTimeField setIntegerValue: [model histMeasTime]];
 }
 
 - (void) histRecTimeChanged:(NSNotification*)aNote
 {
-	[histRecTimeField setIntValue: [model histRecTime]];
+	[histRecTimeField setIntegerValue: [model histRecTime]];
 }
 
 - (void) postTriggerTimeChanged:(NSNotification*)aNote
 {
-	[postTriggerTimeField setIntValue: [model postTriggerTime]];
+	[postTriggerTimeField setIntegerValue: [model postTriggerTime]];
 }
 
 - (void) fifoBehaviourChanged:(NSNotification*)aNote
@@ -402,12 +402,12 @@
 
 - (void) analogOffsetChanged:(NSNotification*)aNote
 {
-	[analogOffsetField setIntValue: [model analogOffset]];
+	[analogOffsetField setIntegerValue: [model analogOffset]];
 }
 
 - (void) interruptMaskChanged:(NSNotification*)aNote
 {
-	[interruptMaskField setIntValue: [model interruptMask]];
+	[interruptMaskField setIntegerValue: [model interruptMask]];
 }
 
 - (void) populatePullDown
@@ -572,7 +572,7 @@
 
 - (void) noiseFloorOffsetChanged:(NSNotification*)aNote
 {
-	[noiseFloorOffsetField setIntValue:[model noiseFloorOffset]];
+	[noiseFloorOffsetField setIntegerValue:[model noiseFloorOffset]];
 }
 
 
@@ -580,7 +580,7 @@
 {
 	int i;
 	for(i=0;i<kNumIpeV4FLTTests;i++){
-		[[testEnabledMatrix cellWithTag:i] setIntValue:[model testEnabled:i]];
+		[[testEnabledMatrix cellWithTag:i] setIntegerValue:[model testEnabled:i]];
 	}    
 }
 
@@ -667,7 +667,7 @@
 - (void) gainChanged:(NSNotification*)aNotification
 {
 	int chan = [[[aNotification userInfo] objectForKey:ORIpeV4FLTChan] intValue];
-	[[gainTextFields cellWithTag:chan] setIntValue: [model gain:chan]];
+	[[gainTextFields cellWithTag:chan] setIntegerValue: [model gain:chan]];
 }
 
 - (void) triggerEnabledChanged:(NSNotification*)aNotification
@@ -689,22 +689,22 @@
 - (void) thresholdChanged:(NSNotification*)aNotification
 {
 	int chan = [[[aNotification userInfo] objectForKey:ORIpeV4FLTChan] intValue];
-	[[thresholdTextFields cellWithTag:chan] setIntValue: [(ORIpeV4FLTModel*)model threshold:chan]];
+	[[thresholdTextFields cellWithTag:chan] setIntegerValue: [(ORIpeV4FLTModel*)model threshold:chan]];
 }
 
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
 	// Set title of FLT configuration window, ak 15.6.07
-	[[self window] setTitle:[NSString stringWithFormat:@"IPE-DAQ-V4 FLT Card (Slot %d, FLT# %d)",[model slot]+1,[model stationNumber]]];
-    [fltSlotNumTextField setStringValue: [NSString stringWithFormat:@"FLT# %d",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"IPE-DAQ-V4 FLT Card (Slot %d, FLT# %lu)",[model slot]+1,[model stationNumber]]];
+    [fltSlotNumTextField setStringValue: [NSString stringWithFormat:@"FLT# %lu",[model stationNumber]]];
 }
 
 - (void) gainArrayChanged:(NSNotification*)aNotification
 {
 	short chan;
 	for(chan=0;chan<kNumV4FLTChannels;chan++){
-		[[gainTextFields cellWithTag:chan] setIntValue: [model gain:chan]];
+		[[gainTextFields cellWithTag:chan] setIntegerValue: [model gain:chan]];
 		
 	}	
 }
@@ -713,7 +713,7 @@
 {
 	short chan;
 	for(chan=0;chan<kNumV4FLTChannels;chan++){
-		[[thresholdTextFields cellWithTag:chan] setIntValue: [(ORIpeV4FLTModel*)model threshold:chan]];
+		[[thresholdTextFields cellWithTag:chan] setIntegerValue: [(ORIpeV4FLTModel*)model threshold:chan]];
 	}
 }
 
@@ -721,7 +721,7 @@
 {
 	short chan;
 	for(chan=0;chan<kNumV4FLTChannels;chan++){
-		[[triggerEnabledCBs cellWithTag:chan] setIntValue: [model triggerEnabled:chan]];
+		[[triggerEnabledCBs cellWithTag:chan] setIntegerValue: [model triggerEnabled:chan]];
 		
 	}
 }
@@ -730,7 +730,7 @@
 {
 	short chan;
 	for(chan=0;chan<kNumV4FLTChannels;chan++){
-		[[hitRateEnabledCBs cellWithTag:chan] setIntValue: [model hitRateEnabled:chan]];
+		[[hitRateEnabledCBs cellWithTag:chan] setIntegerValue: [model hitRateEnabled:chan]];
 		
 	}
 }
@@ -785,7 +785,7 @@
 
 - (void) writeValueChanged:(NSNotification*) aNote
 {
-    [regWriteValueTextField setIntValue: [model writeValue]];
+    [regWriteValueTextField setIntegerValue: [model writeValue]];
 }
 
 - (void) selectedChannelValueChanged:(NSNotification*) aNote
@@ -808,8 +808,8 @@
     }
     [[self window] setContentView:totalView];
 	
-    NSString* key = [NSString stringWithFormat: @"orca.ORIpeV4FLT%d.selectedtab",[model stationNumber]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSString* key = [NSString stringWithFormat: @"orca.ORIpeV4FLT%lu.selectedtab",[model stationNumber]];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
     
 }
@@ -856,12 +856,12 @@
 
 - (IBAction) histClrModeAction:(id)sender
 {
-	[model setHistClrMode:[sender indexOfSelectedItem]];	
+	[model setHistClrMode:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) histModeAction:(id)sender
 {
-	[model setHistMode:[sender indexOfSelectedItem]];	
+	[model setHistMode:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) histEBinAction:(id)sender
@@ -886,12 +886,12 @@
 
 - (IBAction) filterLengthAction:(id)sender
 {
-	[model setFilterLength:[sender indexOfSelectedItem]+2];	 //tranlate back to range of 2 to 8
+	[model setFilterLength:(int)[sender indexOfSelectedItem]+2];	 //tranlate back to range of 2 to 8
 }
 
 - (IBAction) gapLengthAction:(id)sender
 {
-	[model setGapLength:[sender indexOfSelectedItem]];	
+	[model setGapLength:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) histNofMeasAction:(id)sender
@@ -932,7 +932,7 @@
 - (IBAction) fifoBehaviourAction:(id)sender
 {
 	@try {
-		[model setFifoBehaviour:[[sender selectedCell]tag]];	
+		[model setFifoBehaviour:(int)[[sender selectedCell]tag]];
 	}
 	@catch(NSException* localException) {
 		NSLog(@"Exception setting FLT behavior\n");
@@ -1090,7 +1090,7 @@
 
 - (IBAction) modeAction: (id) sender
 {
-	[model setRunMode:[modeButton indexOfSelectedItem]];
+	[model setRunMode:(int)[modeButton indexOfSelectedItem]];
 }
 
 - (IBAction) versionAction: (id) sender
@@ -1222,7 +1222,7 @@
 - (IBAction) writeRegAction: (id) sender
 {
 	[self endEditing];
-	int index = [registerPopUp indexOfSelectedItem];
+	int index = (int)[registerPopUp indexOfSelectedItem];
 	@try {
 		unsigned long val = [model writeValue];
         if(([model getAccessType:index] & kIpeRegNeedsChannel)){
@@ -1257,12 +1257,12 @@
 #pragma mark •••Plot DataSource
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	return [[model  totalRate]count];
+	return (int)[[model  totalRate]count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-	int count = [[model totalRate]count];
+	int count = (int)[[model totalRate]count];
 	int index = count-i-1;
 	*yValue =  [[model totalRate] valueAtIndex:index];
 	*xValue =  [[model totalRate] timeSampledAtIndex:index];

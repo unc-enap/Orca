@@ -130,7 +130,7 @@ NSString* ORManualPlotDataChanged			= @"ORManualPlotDataChanged";
 
 - (void) fillHistogram:(float)value weight:(float)weight
 {
-  int nBins = [data count];
+  int nBins = (int)[data count];
   if(nBins == 0) {
     NSLogColor([NSColor redColor],@"Must call setHistogramBins before filling!\n");
     return;

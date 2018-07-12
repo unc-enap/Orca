@@ -30,8 +30,8 @@
 
 #pragma mark •••Accessors
 - (void) addMachine;
-- (void) removeMachineAtIndex:(int) anIndex;
-- (ORMachineToCheck*) machineAtIndex:(int)anIndex;
+- (void) removeMachineAtIndex:(NSInteger) anIndex;
+- (ORMachineToCheck*) machineAtIndex:(NSInteger)anIndex;
 - (NSInteger) machineCount;
 - (void) checkMachines:(NSTimer*)aTimer;
 - (void) setUpQueue;

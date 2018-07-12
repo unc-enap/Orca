@@ -243,7 +243,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 //!< A argument -1 will auto-recalculate the maximum energy which fits still into the histogram. -tb-
 - (void) setHistEMax:(int)aHistMaxEnergy
 {
-    if(aHistMaxEnergy<0) histEMax = histEMin + 2048*(1<<histEBin);
+    if(aHistMaxEnergy<0) histEMax = (int)(histEMin + 2048*(1<<histEBin));
     else histEMax = aHistMaxEnergy;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORIpeV4FLTModelHistMaxEnergyChanged object:self];
 }
@@ -293,7 +293,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 - (BOOL) noiseFloorRunning { return noiseFloorRunning; }
 
 - (int) noiseFloorOffset { return noiseFloorOffset; }
-- (void) setNoiseFloorOffset:(int)aNoiseFloorOffset
+- (void) setNoiseFloorOffset:(int) aNoiseFloorOffset
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setNoiseFloorOffset:noiseFloorOffset];
     noiseFloorOffset = aNoiseFloorOffset;
@@ -420,7 +420,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 - (void) setPostTriggerTime:(unsigned long)aPostTriggerTime
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setPostTriggerTime:postTriggerTime];
-    postTriggerTime = [self restrictIntValue:aPostTriggerTime min:6 max:2047];//min 6 is found 'experimental' -tb-
+    postTriggerTime = [self restrictIntValue:(int)aPostTriggerTime min:6 max:2047];//min 6 is found 'experimental' -tb-
     [[NSNotificationCenter defaultCenter] postNotificationName:ORIpeV4FLTModelPostTriggerTimeChanged object:self];
 }
 
@@ -527,8 +527,8 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 -(void) setThreshold:(unsigned short) aChan withValue:(unsigned long) aThreshold
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setThreshold:aChan withValue:[self threshold:aChan]];
-	aThreshold = [self restrictIntValue:aThreshold min:0 max:0xfffff];
-    [thresholds replaceObjectAtIndex:aChan withObject:[NSNumber numberWithInt:aThreshold]];
+	aThreshold = [self restrictIntValue:(int)aThreshold min:0 max:0xfffff];
+    [thresholds replaceObjectAtIndex:aChan withObject:[NSNumber numberWithInteger:aThreshold]];
 	
     NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
     [userInfo setObject:[NSNumber numberWithInt:aChan] forKey: ORIpeV4FLTChan];
@@ -895,18 +895,18 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 	[self writeReg:kFLTV4HistgrSettingsReg value:aValue];
 }
 
-- (unsigned long) regAddress:(int)aReg channel:(int)aChannel
+- (unsigned long) regAddress:(short)aReg channel:(int)aChannel
 {
 	return ([self stationNumber] << 17) | (aChannel << 12)   | regV4[aReg].addressOffset; //TODO: the channel ... -tb-   | ((aChannel&0x01f)<<kIpeFlt_ChannelAddress)
 }
 
-- (unsigned long) regAddress:(int)aReg
+- (unsigned long) regAddress:(short)aReg
 {
 	
 	return ([self stationNumber] << 17) |  regV4[aReg].addressOffset; //TODO: NEED <<17 !!! -tb-
 }
 
-- (unsigned long) adcMemoryChannel:(int)aChannel page:(int)aPage
+- (unsigned long) adcMemoryChannel:(short)aChannel page:(int)aPage
 {
 	//TODO:  replace by V4 code -tb-
     //adc access now is very different from v3 -tb-
@@ -915,22 +915,22 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 	return ([self slot] << 24) | (0x2 << kIpeFlt_AddressSpace) | (aChannel << kIpeFlt_ChannelAddress)	| (aPage << kIpeFlt_PageNumber);
 }
 
-- (unsigned long) readReg:(int)aReg
+- (unsigned long) readReg:(short)aReg
 {
 	return [self read: [self regAddress:aReg]];
 }
 
-- (unsigned long) readReg:(int)aReg channel:(int)aChannel
+- (unsigned long) readReg:(short)aReg channel:(int)aChannel
 {
 	return [self read:[self regAddress:aReg channel:aChannel]];
 }
 
-- (void) writeReg:(int)aReg value:(unsigned long)aValue
+- (void) writeReg:(short)aReg value:(unsigned long)aValue
 {
 	[self write:[self regAddress:aReg] value:aValue];
 }
 
-- (void) writeReg:(int)aReg channel:(int)aChannel value:(unsigned long)aValue
+- (void) writeReg:(short)aReg channel:(int)aChannel value:(unsigned long)aValue
 {
 	[self write:[self regAddress:aReg channel:aChannel] value:aValue];
 }
@@ -1144,24 +1144,24 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 	[[[self crate] adapter] executeCommandList:aList];
 }
 
-- (id) readRegCmd:(unsigned long) aRegister channel:(short) aChannel
+- (id) readRegCmd:(short) aRegister channel:(short) aChannel
 {
 	unsigned long theAddress = [self regAddress:aRegister channel:aChannel];
 	return [[[self crate] adapter] readHardwareRegisterCmd:theAddress];		
 }
 
-- (id) readRegCmd:(unsigned long) aRegister
+- (id) readRegCmd:(short) aRegister
 {
 	return [[[self crate] adapter] readHardwareRegisterCmd:[self regAddress:aRegister]];		
 }
 
-- (id) writeRegCmd:(unsigned long) aRegister channel:(short) aChannel value:(unsigned long)aValue
+- (id) writeRegCmd:(short) aRegister channel:(short) aChannel value:(unsigned long)aValue
 {
 	unsigned long theAddress = [self regAddress:aRegister channel:aChannel];
 	return [[[self crate] adapter] writeHardwareRegisterCmd:theAddress value:aValue];		
 }
 
-- (id) writeRegCmd:(unsigned long) aRegister value:(unsigned long)aValue
+- (id) writeRegCmd:(short) aRegister value:(unsigned long)aValue
 {
 	return [[[self crate] adapter] writeHardwareRegisterCmd:[self regAddress:aRegister] value:aValue];		
 }
@@ -1180,7 +1180,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     //DEBUG OUTPUT - NSLog(@"HistoStatus: recTime: %i  histoID: %i, pageAB: %i \n",recTime,histoID, pageAB);
     [self setHistRecTime: recTime];
     [self setHistNofMeas: histoID];
-    [self setHistPageAB: pageAB];
+    [self setHistPageAB: (int)pageAB];
     
 	[self performSelector:@selector(readHistogrammingStatus) withObject:nil afterDelay:histoUpdateRate];
 }
@@ -1227,7 +1227,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     [self setSelectedRegIndex:  [decoder decodeIntForKey:@"selectedRegIndex"]];
     [self setSelectedChannelValue:  [decoder decodeIntForKey:@"selectedChannelValue"]];
 	
-	int i;
+	NSUInteger i;
 	if(!thresholds){
 		[self setThresholds: [NSMutableArray array]];
 		for(i=0;i<kNumV4FLTChannels;i++) [thresholds addObject:[NSNumber numberWithInt:50]];
@@ -1266,31 +1266,31 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     [encoder encodeInt:targetRate			forKey:@"targetRate"];
     [encoder encodeInt:histClrMode			forKey:@"histClrMode"];
     [encoder encodeInt:histMode				forKey:@"histMode"];
-    [encoder encodeInt32:histEBin			forKey:@"histEBin"];
-    [encoder encodeInt32:histEMin			forKey:@"histEMin"];
+    [encoder encodeInt32:(int32_t)histEBin			forKey:@"histEBin"];
+    [encoder encodeInt32:(int32_t)histEMin			forKey:@"histEMin"];
     [encoder encodeInt:runMode				forKey:@"runMode"];
     [encoder encodeBool:runBoxCarFilter		forKey:@"runBoxCarFilter"];
     [encoder encodeBool:storeDataInRam		forKey:@"storeDataInRam"];
     [encoder encodeInt:(filterLength+2)			forKey:@"filterLength"];//to be backward compatible with old Orca config files (this is the register value)-tb-
     [encoder encodeInt:gapLength			forKey:@"gapLength"];
-    [encoder encodeInt32:histNofMeas		forKey:@"histNofMeas"];
-    [encoder encodeInt32:histMeasTime		forKey:@"histMeasTime"];
-    [encoder encodeInt32:histRecTime		forKey:@"histRecTime"];
-    [encoder encodeInt32:postTriggerTime	forKey:@"postTriggerTime"];
+    [encoder encodeInt32:(int32_t)histNofMeas		forKey:@"histNofMeas"];
+    [encoder encodeInt32:(int32_t)histMeasTime		forKey:@"histMeasTime"];
+    [encoder encodeInt32:(int32_t)histRecTime		forKey:@"histRecTime"];
+    [encoder encodeInt32:(int32_t)postTriggerTime	forKey:@"postTriggerTime"];
     [encoder encodeInt:fifoBehaviour		forKey:@"fifoBehaviour"];
     [encoder encodeInt:analogOffset			forKey:@"analogOffset"];
-    [encoder encodeInt32:interruptMask		forKey:@"interruptMask"];
-    [encoder encodeInt32:hitRateEnabledMask	forKey:@"hitRateEnabledMask"];
-    [encoder encodeInt32:triggerEnabledMask	forKey:@"triggerEnabledMask"];
+    [encoder encodeInt32:(int32_t)interruptMask		forKey:@"interruptMask"];
+    [encoder encodeInt32:(int32_t)hitRateEnabledMask	forKey:@"hitRateEnabledMask"];
+    [encoder encodeInt32:(int32_t)triggerEnabledMask	forKey:@"triggerEnabledMask"];
     [encoder encodeInt:hitRateLength		forKey:@"ORIpeV4FLTModelHitRateLength"];
     [encoder encodeObject:gains				forKey:@"gains"];
     [encoder encodeObject:thresholds		forKey:@"thresholds"];
     [encoder encodeObject:totalRate			forKey:@"totalRate"];
     [encoder encodeObject:testEnabledArray	forKey:@"testEnabledArray"];
     [encoder encodeObject:testStatusArray	forKey:@"testStatusArray"];
-    [encoder encodeInt:writeValue           forKey:@"writeValue"];	
+    [encoder encodeInt:(int32_t)writeValue           forKey:@"writeValue"];
     [encoder encodeInt:selectedRegIndex  	forKey:@"selectedRegIndex"];	
-    [encoder encodeInt:selectedChannelValue	forKey:@"selectedChannelValue"];	
+    [encoder encodeInt:(int32_t)selectedChannelValue	forKey:@"selectedChannelValue"];
 }
 
 #pragma mark Data Taking
@@ -1507,17 +1507,17 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id	= kFLTv4;					//unique identifier for readout hw
-	configStruct->card_info[index].hw_mask[0] 	= dataId;					//record id for energies
-	configStruct->card_info[index].hw_mask[1] 	= waveFormId;				//record id for the waveforms
-	configStruct->card_info[index].hw_mask[2] 	= histogramId;				//record id for the histograms
-	configStruct->card_info[index].slot			= [self stationNumber];		//the PMC readout uses col 0 thru n
-	configStruct->card_info[index].crate		= [self crateNumber];
+	configStruct->card_info[index].hw_mask[0] 	= (uint32_t)dataId;					//record id for energies
+	configStruct->card_info[index].hw_mask[1] 	= (uint32_t)waveFormId;				//record id for the waveforms
+	configStruct->card_info[index].hw_mask[2] 	= (uint32_t)histogramId;				//record id for the histograms
+	configStruct->card_info[index].slot			= (uint32_t)[self stationNumber];		//the PMC readout uses col 0 thru n
+	configStruct->card_info[index].crate		= (uint32_t)[self crateNumber];
 	
-	configStruct->card_info[index].deviceSpecificData[0] = postTriggerTime;	//needed to align the waveforms
+	configStruct->card_info[index].deviceSpecificData[0] = (uint32_t)postTriggerTime;	//needed to align the waveforms
 	
 	unsigned long eventTypeMask = 0;
 	if(readWaveforms) eventTypeMask |= kReadWaveForms;
-	configStruct->card_info[index].deviceSpecificData[1] = eventTypeMask;	
+	configStruct->card_info[index].deviceSpecificData[1] = (uint32_t)eventTypeMask;
 	configStruct->card_info[index].deviceSpecificData[2] = fltRunMode;	
 	
     //"first time" flag (needed for histogram mode)
@@ -1526,11 +1526,11 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     if(runMode == kIpeFltV4_EnergyDaqMode | runMode == kIpeFltV4_EnergyTraceDaqMode)
         runFlagsMask |= kSyncFltWithSltTimerFlag;//bit 17 = "sync flt with slt timer" flag
     
-	configStruct->card_info[index].deviceSpecificData[3] = runFlagsMask;	
+	configStruct->card_info[index].deviceSpecificData[3] = (uint32_t)runFlagsMask;
 //NSLog(@"RunFlags 0x%x\n",configStruct->card_info[index].deviceSpecificData[3]);
 
     //for all daq modes
-	configStruct->card_info[index].deviceSpecificData[4] = triggerEnabledMask;	
+	configStruct->card_info[index].deviceSpecificData[4] = (uint32_t)triggerEnabledMask;	
     //the daq mode (should replace the flt mode)
     configStruct->card_info[index].deviceSpecificData[5] = runMode;//the daqRunMode
 
@@ -2346,7 +2346,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 	//if([self readMode] != kIpeFltV4Katrin_Test_Mode){
 	if(1){//TODO: test mode has changed for V4 -tb-
 		NSLogColor([NSColor redColor],@"Could not put FLT %d into test mode\n",[self stationNumber]);
-		[NSException raise:@"Ram Test Failed" format:@"Could not put FLT %d into test mode\n",[self stationNumber]];
+		[NSException raise:@"Ram Test Failed" format:@"Could not put FLT %lu into test mode\n",[self stationNumber]];
 	}
 }
 

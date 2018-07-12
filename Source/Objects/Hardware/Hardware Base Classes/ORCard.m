@@ -98,7 +98,7 @@
 
 - (void) 	setSlot:(int)aSlot
 {
-    [[[self undoManager] prepareWithInvocationTarget:self] setSlot:[self tag]];
+    [[[self undoManager] prepareWithInvocationTarget:self] setSlot:(int)[self tag]];
     [self setTag:aSlot];
     
     NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];

@@ -334,18 +334,18 @@ NSString* UVkWrite = @"W";
 	int		i;	
 	int		slot;
 	
-	slot = [self stationNumber];
+	slot = (int)[self stationNumber];
     if ( aCurrentChnl > -1 )
 	{
 		NSString* command = [NSString stringWithFormat: @"DMP S%d.%d", slot, aCurrentChnl];
-		[[self crate] queueCommand: 0 totalCmds: 1 slot: [self stationNumber] channel: aCurrentChnl command: command];
+		[[self crate] queueCommand: 0 totalCmds: 1 slot: (int)[self stationNumber] channel: aCurrentChnl command: command];
 	}
 	else 
 	{
 		for ( i = 0; i < UVkNumChannels; i++ )
 		{
 			NSString* command = [NSString stringWithFormat: @"DMP S%d.%d", slot, i];
-			[[self crate] queueCommand: i totalCmds: UVkNumChannels slot: [self stationNumber] channel: i command: command];
+			[[self crate] queueCommand: i totalCmds: UVkNumChannels slot: (int)[self stationNumber] channel: i command: command];
 		}
 	}
 }
@@ -397,7 +397,7 @@ NSString* UVkWrite = @"W";
 									  loadAll: NO];
 				//[command retain]; //mah 09/01/09 ... don't retain ... causes memory leak queueCommand should be responsible for retaining/
 //				[[ self crate] queueCommand: jParam totalCmds: 1 slot: [self slot] channel: aCurrentChnl command: command];
-				[[ self crate] queueCommand: writeCmdCtr totalCmds: mWParams slot: [self stationNumber] channel: aCurrentChnl command: command];
+				[[ self crate] queueCommand: writeCmdCtr totalCmds: mWParams slot: (int)[self stationNumber] channel: aCurrentChnl command: command];
 				writeCmdCtr++;
 			}
 			
@@ -442,9 +442,9 @@ NSString* UVkWrite = @"W";
 		// LD command handles all channels at once so unit identifier is Sx followed by parameter followed
 		// by values for all 12 channels.
 		if ( aLoadAllValues == YES )
-			aCommand = [NSString stringWithFormat: @"LD S%d %@", [self stationNumber], param];
+			aCommand = [NSString stringWithFormat: @"LD S%ld %@", [self stationNumber], param];
 		else
-			aCommand = [NSString stringWithFormat: @"LD S%d.%d %@", [self stationNumber], aCurChnl, param];
+			aCommand = [NSString stringWithFormat: @"LD S%ld.%d %@", [self stationNumber], aCurChnl, param];
 	}
 			
 	if ( [[aDictParamObj objectForKey: UVkType] isEqualTo: UVkINT] )
@@ -765,7 +765,7 @@ NSString* UVkWrite = @"W";
 
 - (int) numPointsInCB: (int) aChnl
 {
-	return [[mCircularBuffers objectAtIndex:aChnl] count];
+	return (int)[[mCircularBuffers objectAtIndex:aChnl] count];
 }
 
 - (bool) updateFirst: (int) aCurrentChnl
@@ -788,7 +788,7 @@ NSString* UVkWrite = @"W";
 //[returnData retain]; MAJ commented out -- memory leak;
 			
 		NSNumber* slotNum = [returnData objectForKey: UVkSlot];
-		slotThisUnit = [self stationNumber];
+		slotThisUnit = (int)[self stationNumber];
 		if ( [slotNum intValue] == slotThisUnit )
 		{
 			NSString* retCmd = [returnData objectForKey: UVkCommand];
@@ -906,7 +906,7 @@ NSString* UVkWrite = @"W";
 			case eHVUTripForHVError:
 				statusStr = @"Trip HV for volt. error";
 				if (!mHVValueLmtsAlarm) {
-					mHVValueLmtsAlarm = [[ORAlarm alloc] initWithName: [NSString stringWithFormat: @"HV out of limits for slot: %d channel: %d", [self stationNumber], aCurChnl] severity: kHardwareAlarm];
+                    mHVValueLmtsAlarm = [[ORAlarm alloc] initWithName: [NSString stringWithFormat: @"HV out of limits for slot: %ld channel: %d", [self stationNumber], aCurChnl] severity: kHardwareAlarm];
 					[mHVValueLmtsAlarm setSticky: YES];		
 				}
 				[mHVValueLmtsAlarm setAcknowledged: NO];

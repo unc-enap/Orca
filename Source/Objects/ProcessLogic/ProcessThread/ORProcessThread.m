@@ -450,7 +450,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(ProcessThread);
 - (void) startProcessCycle
 {
 	int i;
-	int n = [processes count];
+	int n = (int)[processes count];
 	for(i=0;i<n;i++){
 		ORProcessModel* aProcess = [processes objectAtIndex:i];
 		if([aProcess sampleGateOpen]){
@@ -463,7 +463,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(ProcessThread);
 - (void) endProcessCycle
 {
 	int i;
-	int n = [processes count];
+	int n = (int)[processes count];
 	for(i=0;i<n;i++){
 		ORProcessModel* aProcess = [processes objectAtIndex:i];
 		if([aProcess sampleGateOpen]){

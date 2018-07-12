@@ -165,7 +165,7 @@ NSString* ExperimentModelCustomColor2Changed             = @"ExperimentModelCust
 
 - (int) numberOfSegmentGroups
 {
-	return [segmentGroups count];
+	return (int)[segmentGroups count];
 }
 
 - (ORSegmentGroup*) segmentGroup:(int)aSet
@@ -821,7 +821,7 @@ NSString* ExperimentModelCustomColor2Changed             = @"ExperimentModelCust
     if([[[(ORAppDelegate*)[NSApp delegate] document] collectObjectsOfClass:NSClassFromString(@"ORCouchDBModel")] count]==0)return;
     NSMutableDictionary*  values  = [NSMutableDictionary dictionary];
     int aSet;
-    int numGroups = [segmentGroups count];
+    int numGroups = (int)[segmentGroups count];
     for(aSet=0;aSet<numGroups;aSet++){
         NSMutableDictionary* aDictionary= [NSMutableDictionary dictionary];
         NSMutableArray* thresholdArray  = [NSMutableArray array];
@@ -978,7 +978,7 @@ NSString* ExperimentModelCustomColor2Changed             = @"ExperimentModelCust
 				if(!segmentErrorNoted){
 					segmentErrorNoted = YES;
 					if([newValues isKindOfClass:NSClassFromString(@"NSArray")]){
-						int numChannels = [newValues count];
+						int numChannels = (int)[newValues count];
 						int channel;
 						for(channel = 0;channel<numChannels;channel++){
 							id newValue = [newValues objectAtIndex:channel];

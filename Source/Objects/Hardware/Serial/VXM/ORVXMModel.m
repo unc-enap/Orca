@@ -527,14 +527,14 @@ NSString* ORVXMLock							= @"ORVXMLock";
 	}
 }
 
-- (void) addItem:(id)anItem atIndex:(int)anIndex
+- (void) addItem:(id)anItem atIndex:(NSInteger)anIndex
 {
 	if(!cmdList) cmdList= [[NSMutableArray array] retain];
 	if([cmdList count] == 0)anIndex = 0;
 	anIndex = MIN(anIndex,(int)[cmdList count]);
 	[[[self undoManager] prepareWithInvocationTarget:self] removeItemAtIndex:anIndex];
 	[cmdList insertObject:anItem atIndex:anIndex];
-	NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:anIndex] forKey:@"Index"];
+	NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:anIndex] forKey:@"Index"];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORVXMModelListItemsAdded object:self userInfo:userInfo];
 }
 
@@ -543,7 +543,7 @@ NSString* ORVXMLock							= @"ORVXMLock";
 	id anItem = [cmdList objectAtIndex:anIndex];
 	[[[self undoManager] prepareWithInvocationTarget:self] addItem:anItem atIndex:anIndex];
 	[cmdList removeObjectAtIndex:anIndex];
-	NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:anIndex] forKey:@"Index"];
+	NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:anIndex] forKey:@"Index"];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORVXMModelListItemsRemoved object:self userInfo:userInfo];
 }
 

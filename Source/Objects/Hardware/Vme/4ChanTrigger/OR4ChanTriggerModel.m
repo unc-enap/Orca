@@ -390,8 +390,8 @@ static NSString *OR4ChanEnableClock     = @"OR4ChanEnableClock";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeBool:shipFirstLast forKey:@"shipFirstLast"];
-    [encoder encodeInt32:lowerClock forKey:OR4ChanLowerClock];
-    [encoder encodeInt32:upperClock forKey:OR4ChanUpperClock];
+    [encoder encodeInt32:(int32_t)lowerClock forKey:OR4ChanLowerClock];
+    [encoder encodeInt32:(int32_t)upperClock forKey:OR4ChanUpperClock];
     [encoder encodeObject:triggerGroups forKey:OR4ChanGroups];
     [encoder encodeObject:triggerNames forKey:OR4ChanTriggerNames];
     [encoder encodeInt:shipClockMask forKey:OR4ChanShipClockMask];
@@ -674,7 +674,7 @@ static NSString *OR4ChanEnableClock     = @"OR4ChanEnableClock";
 #pragma mark ¥¥¥Private Methods
 - (void) _readOutChildren:(NSArray*)children dataPacket:(ORDataPacket*)aDataPacket
 {
-    int n =  [children count];
+    int n =  (int)[children count];
     int i;
     for(i=0;i<n;i++){
         [[children objectAtIndex:i] takeData:aDataPacket userInfo:nil];

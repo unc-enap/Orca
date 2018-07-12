@@ -146,7 +146,7 @@
 		aPacket->cmdHeader.numberBytesinPayload	= sizeof(SBC_VmeWriteBlockStruct) + numberItems*itemSize;
         if (aPacket->cmdHeader.numberBytesinPayload > kSBC_MaxPayloadSizeBytes) [self throwError:ENOMEM];
 		SBC_VmeWriteBlockStruct* writeBlockPtr = (SBC_VmeWriteBlockStruct*)aPacket->payload;
-		writeBlockPtr->address			= vmeAddress;
+		writeBlockPtr->address			= (uint32_t)vmeAddress;
 		writeBlockPtr->addressModifier	= addressModifier;
 		writeBlockPtr->addressSpace		= addressSpace;
 		writeBlockPtr->unitSize			= itemSize;
@@ -160,7 +160,7 @@
 		aPacket->cmdHeader.numberBytesinPayload	= sizeof(SBC_VmeReadBlockStruct) + numberItems*itemSize;
         if (aPacket->cmdHeader.numberBytesinPayload > kSBC_MaxPayloadSizeBytes) [self throwError:ENOMEM];        
 		SBC_VmeReadBlockStruct* readBlockPtr = (SBC_VmeReadBlockStruct*)aPacket->payload;
-		readBlockPtr->address			= vmeAddress;
+		readBlockPtr->address			= (uint32_t)vmeAddress;
 		readBlockPtr->addressModifier	= addressModifier;
 		readBlockPtr->addressSpace		= addressSpace;
 		readBlockPtr->unitSize			= itemSize;
@@ -173,7 +173,7 @@
 		aPacket->cmdHeader.cmdID			= kSBC_TimeDelay;
 		aPacket->cmdHeader.numberBytesinPayload	= sizeof(SBC_TimeDelay);
 		SBC_TimeDelay* delayStructPtr = (SBC_TimeDelay*)aPacket->payload;
-		delayStructPtr->milliSecondDelay			= milliSecondDelay;
+		delayStructPtr->milliSecondDelay			= (uint32_t)milliSecondDelay;
 	}
 	else validOp = NO;
 	if(validOp) aPacket->numBytes = sizeof(unsigned long) + sizeof(SBC_CommandHeader) + kSBC_MaxMessageSizeBytes + aPacket->cmdHeader.numberBytesinPayload;

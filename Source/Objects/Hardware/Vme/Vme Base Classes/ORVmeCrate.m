@@ -32,7 +32,7 @@
 		while(aCard = [e nextObject]){
 			if([aCard isKindOfClass:[ORVmeIOCard class]]){
 				NSRange aRange = [aCard memoryFootprint];
-				NSString* s = [NSString stringWithFormat:@"%4d %-20s 0x%08x - 0x%08x",[aCard slot],[[aCard className] cStringUsingEncoding:NSASCIIStringEncoding],aRange.location,NSMaxRange(aRange)];
+				NSString* s = [NSString stringWithFormat:@"%4d %-20s 0x%08lx - 0x%08x",[aCard slot],[[aCard className] cStringUsingEncoding:NSASCIIStringEncoding],aRange.location,NSMaxRange(aRange)];
 				NSLogFont([NSFont fontWithName:@"Monaco" size:12], @"%@\n",s);
 			}
 		}

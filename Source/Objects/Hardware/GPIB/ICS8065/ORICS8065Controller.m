@@ -271,7 +271,7 @@
 	// Make sure that value has changed.
     if ( [aSender indexOfSelectedItem] != [model primaryAddress]){
 		
-        [model setPrimaryAddress: [aSender indexOfSelectedItem]];
+        [model setPrimaryAddress: (int)[aSender indexOfSelectedItem]];
 		[model setupDevice:[model primaryAddress]];
         NSLog ( [NSString stringWithFormat: @"New Address %d\n", [model primaryAddress]] );
         

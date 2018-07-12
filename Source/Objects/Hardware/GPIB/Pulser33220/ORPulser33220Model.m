@@ -688,7 +688,7 @@ NSString* ORPulser33220ModelUSBInterfaceChanged = @"ORPulser33220ModelUSBInterfa
 		case kHPPulserUseGPIB: return [super readFromGPIBDevice:aData maxLength:aMaxLength];
 		case kHPPulserUseUSB:  
 			if(usbInterface && [self getUSBController]){
-				return [usbInterface readUSB488:aData length:aMaxLength];;
+				return [usbInterface readUSB488:aData length:(uint32_t)aMaxLength];;
 			}
 			else {
 				NSString *errorMsg = @"Must establish connection prior to issuing command\n";

@@ -174,7 +174,7 @@ static short register_offset[] = { 0x01,0x03,0x04,0x09 };
     [[self adapter] checkStatusErrors];
     
     // setup address for write operation
-    unsigned int address = [self baseAddress] + [self slotConv]*0x100 + (unsigned int)register_offset[xregister];
+    unsigned long address = [self baseAddress] + [self slotConv]*0x100 + register_offset[xregister];
     
     // write Fifo
     if( xregister == FIFO_DATA_REGISTER ) {
@@ -215,7 +215,7 @@ static short register_offset[] = { 0x01,0x03,0x04,0x09 };
     // check for crate power
     [[self adapter] checkStatusErrors];
     
-    unsigned int address = [self baseAddress] + [self slotConv]*0x100 + (unsigned int)register_offset[FIFO_DATA_REGISTER];
+    unsigned long address = [self baseAddress] + [self slotConv]*0x100 + register_offset[FIFO_DATA_REGISTER];
     
     // read Fifo
     // NOTE: ReadVMEWordBlock does not work to Fifo Data register - perhaps a
@@ -245,7 +245,7 @@ static short register_offset[] = { 0x01,0x03,0x04,0x09 };
     
     
     // setup address for write Fifo operation
-    unsigned int address = [self baseAddress] + [self slotConv]*0x100 + (unsigned int)register_offset[FIFO_DATA_REGISTER];
+    unsigned long address = [self baseAddress] + [self slotConv]*0x100 + register_offset[FIFO_DATA_REGISTER];
     
     // write Fifo
     // NOTE: WriteVMEWordBlock does not work to Fifo Data register - perhaps a

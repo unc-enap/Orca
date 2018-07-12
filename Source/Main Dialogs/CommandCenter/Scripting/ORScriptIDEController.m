@@ -354,10 +354,10 @@
 - (void) debuggerStateChanged:(NSNotification*)aNote
 {
 	int debuggerState = [[model scriptRunner] debuggerState];
-	int line = [[model scriptRunner] lastLine];
+	long line = [[model scriptRunner] lastLine];
 	NSString* functionName = [[[model scriptRunner] eval] functionName];
 	if(debuggerState == kDebuggerPaused) {
-		[debugStatusField setStringValue:[NSString stringWithFormat:@"<%@()> Stopped on Line: %d",functionName,line]];
+		[debugStatusField setStringValue:[NSString stringWithFormat:@"<%@()> Stopped on Line: %ld",functionName,line]];
 		[pauseButton setImage:[NSImage imageNamed:@"Continue"]];
 		[stepButton setEnabled:YES];
 		[stepInButton setEnabled:YES];
@@ -729,8 +729,8 @@
 - (IBAction) removeInput:(id)sender
 {
 	NSIndexSet* indexSet = [inputVariablesTableView selectedRowIndexes];
-	NSUInteger i;
-	NSUInteger last = [indexSet lastIndex];
+	int i;
+	int last = (int)[indexSet lastIndex];
 	for(i=last;i!=NSNotFound;i = [indexSet indexLessThanIndex:i]){
 		[model removeInputValue:i];
 	}

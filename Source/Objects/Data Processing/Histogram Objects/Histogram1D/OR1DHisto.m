@@ -402,7 +402,7 @@ static NSString *OR1DHistoNumberBins	= @"1D Histogram Number Bins";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:numberBins forKey:OR1DHistoNumberBins];
+    [encoder encodeInt:(int)numberBins forKey:OR1DHistoNumberBins];
     [encoder encodeObject:rois forKey:@"rois"];
 }
 
@@ -418,7 +418,7 @@ static NSString *OR1DHistoNumberBins	= @"1D Histogram Number Bins";
 
 - (int) numberPointsInPlot:(id)aPlot
 {
-	return [self numberBins];
+	return (int)[self numberBins];
 }
 
 - (void) plotter:(id)aPlot index:(int)i x:(double*)xValue y:(double*)yValue

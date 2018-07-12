@@ -491,7 +491,7 @@
 
 - (IBAction) dataTypeAction:(id)sender
 {
-	[model setDataType:[sender indexOfSelectedItem]];	
+	[model setDataType:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) continuousMeasurementAction:(id)sender
@@ -551,7 +551,7 @@
 
 - (IBAction) triggerSourceAction:(id)sender
 {
-	[model setTriggerSource:[sender indexOfSelectedItem]];	
+	[model setTriggerSource:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) triggerOffsetEnabledAction:(id)sender
@@ -566,7 +566,7 @@
 
 - (IBAction) triggerSlopeAction:(id)sender
 {
-	[model setTriggerSlope:[sender indexOfSelectedItem]];	
+	[model setTriggerSlope:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) triggerDelayEnabledAction:(id)sender
@@ -591,7 +591,7 @@
 
 - (IBAction) unitsAction:(id)sender
 {
-	[model setUnits:[sender indexOfSelectedItem]];	
+	[model setUnits:(int)[sender indexOfSelectedItem]];	
 }
 
 - (IBAction) stopFreqAction:(id)sender

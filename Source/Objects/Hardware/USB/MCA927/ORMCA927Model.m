@@ -924,7 +924,7 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 		NSLogFont(aFont,@"    Gate Enabled|%17s |%17s\n",(aValue0&kGateEnableMask)?   "YES":"NO",(aValue1&kGateEnableMask)?"YES":"NO");
 		NSLogFont(aFont,@"UL Discriminator|%17s |%17s\n",(aValue0&kDisableULMask)?    "Disabled":"Enabled",(aValue1&kDisableULMask)?"Disabled":"Enabled");
 		NSLogFont(aFont,@"         Trigger|%17s |%17s\n",(aValue0&kEnableTriggerMask)?"Enabled":"Disabled",(aValue1&kEnableTriggerMask)?"Enabled":"Disabled");
-		NSLogFont(aFont,@"        ConvGain|%17s |%17s\n",[self convGainLabel:[self readReg:kConvGain adc:0]],[self convGainLabel:[self readReg:kConvGain adc:1]]);
+		NSLogFont(aFont,@"        ConvGain|%17s |%17s\n",[self convGainLabel:(int)[self readReg:kConvGain adc:0]],[self convGainLabel:[self readReg:kConvGain adc:1]]);
 		NSLogFont(aFont,@" LiveTime Preset|%13.2f (%1s) |%13.2f (%1s)\n",[self readReg:kLtPreset adc:0]*0.02,      (presetCtrl0&kEnableLiveTimeMask)?"X":" ",[self readReg:kLtPreset adc:1]*0.02,     (presetCtrl1&kEnableLiveTimeMask)?"X":" ");
 		NSLogFont(aFont,@" RealTime Preset|%13.2f (%1s) |%13.2f (%1s)\n",[self readReg:kRtPreset adc:0]*0.02,      (presetCtrl0&kEnableRealTimeMask)?"X":" ",[self readReg:kRtPreset adc:1]*0.02,     (presetCtrl1&kEnableRealTimeMask)?"X":" ");
 		NSLogFont(aFont,@" ROI Peak Preset|%13d (%1s) |%13d (%1s)\n",[self readReg:kRoiPeakPreset adc:0], (presetCtrl0&kEnableRoiPeakMask)?"X":" ", [self readReg:kRoiPeakPreset adc:1],(presetCtrl1&kEnableRoiPeakMask)?"X":" ");
@@ -1019,7 +1019,7 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 		if(len){
 			unsigned char* p = (unsigned char*)[fpgaFileData bytes];
 			do {
-				int nbytes = MIN(len,kChunkSize);
+				uint32_t nbytes = (uint32_t)MIN(len,kChunkSize);
 				memcpy(packet,aCommand,4);			//copy in the command
 				memcpy(&packet[4],p,nbytes);	//append the fpga data
 				///need to change to load blocks of the fpga file
@@ -1147,20 +1147,20 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
     [encoder encodeObject:serialNumber	forKey:@"serialNumber"];
 	int i;
 	for(i=0;i<2;i++){
-		[encoder encodeInt32:controlReg[i] forKey:[@"controlReg" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt32:liveTime[i] forKey:[@"liveTime" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt32:realTime[i] forKey:[@"realTime" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt32:presetCtrlReg[i] forKey:[@"presetCtrlReg" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt32:ltPreset[i] forKey:[@"ltPreset" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt32:rtPreset[i] forKey:[@"rtPreset" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt32:roiPeakPreset[i] forKey:[@"roiPeakPreset" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt32:roiPreset[i] forKey:[@"roiPreset" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt32:convGain[i] forKey:[@"convGain" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt32:lowerDiscriminator[i] forKey:[@"lowerDiscriminator" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt32:upperDiscriminator[i] forKey:[@"upperDiscriminator" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt32:runOptions[i] forKey:[@"runOptions" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt32:(int32_t)controlReg[i] forKey:[@"controlReg" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt32:(int32_t)liveTime[i] forKey:[@"liveTime" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt32:(int32_t)realTime[i] forKey:[@"realTime" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt32:(int32_t)presetCtrlReg[i] forKey:[@"presetCtrlReg" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt32:(int32_t)ltPreset[i] forKey:[@"ltPreset" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt32:(int32_t)rtPreset[i] forKey:[@"rtPreset" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt32:(int32_t)roiPeakPreset[i] forKey:[@"roiPeakPreset" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt32:(int32_t)roiPreset[i] forKey:[@"roiPreset" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt32:(int32_t)convGain[i] forKey:[@"convGain" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt32:(int32_t)lowerDiscriminator[i] forKey:[@"lowerDiscriminator" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt32:(int32_t)upperDiscriminator[i] forKey:[@"upperDiscriminator" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt32:(int32_t)runOptions[i] forKey:[@"runOptions" stringByAppendingFormat:@"%d",i]];
 		[encoder encodeBool:autoClear[i] forKey:[@"autoClear" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt32:zdtMode[i] forKey:[@"zdtMode" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt32:(int32_t)zdtMode[i] forKey:[@"zdtMode" stringByAppendingFormat:@"%d",i]];
 	}
 }
 

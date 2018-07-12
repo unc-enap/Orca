@@ -373,7 +373,7 @@ NSString* ORVacuumConstraintChanged = @"ORVacuumConstraintChanged";
 	//assume worst case for the other states 
 	return state != kGVClosed;
 }
-- (int) constraintCount
+- (NSUInteger) constraintCount
 {
 	return [constraints count];
 }
@@ -433,7 +433,7 @@ NSString* ORVacuumConstraintChanged = @"ORVacuumConstraintChanged";
 		default:
 			{
 				NSBezierPath* aPath = [NSBezierPath bezierPath];
-				const float pattern[2] = {1.0,1.0};
+				const CGFloat pattern[2] = {1.0,1.0};
 				[aPath setLineWidth:2*kPipeThickness];
 				[aPath setLineDash:pattern count:2 phase:0];
 				[aPath moveToPoint:NSMakePoint(location.x,location.y-kPipeRadius)];
@@ -511,7 +511,7 @@ NSString* ORVacuumConstraintChanged = @"ORVacuumConstraintChanged";
 		default:
 		{
 			NSBezierPath* aPath = [NSBezierPath bezierPath];
-			const float pattern[2] = {1.0,1.0};
+			const CGFloat pattern[2] = {1.0,1.0};
 			[aPath setLineWidth:2*kPipeThickness];
 			[aPath setLineDash:pattern count:2 phase:0];
 			[aPath moveToPoint:NSMakePoint(location.x-kPipeRadius,location.y)];
@@ -564,7 +564,7 @@ NSString* ORVacuumConstraintChanged = @"ORVacuumConstraintChanged";
 	[controlColor release];
 	controlColor = aColor;
 
-	float red=0,green=0,blue=0,alpha=0;
+	CGFloat red=0,green=0,blue=0,alpha=0;
 		
 	[controlColor getRed:&red green:&green blue:&blue alpha:&alpha];
 	red = MIN(1.0,red*1.5);

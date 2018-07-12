@@ -530,7 +530,7 @@
 - (void) itemsAdded:(NSNotification*)aNote
 {
 	int index = [[[aNote userInfo] objectForKey:@"Index"] intValue];
-	index = MIN(index,[model cmdQueueCount]);
+	index = MIN(index,(int)[model cmdQueueCount]);
 	index = MAX(index,0);
 	[cmdQueueTable reloadData];
 	NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:index];
@@ -540,7 +540,7 @@
 - (void) itemsRemoved:(NSNotification*)aNote
 {
 	int index = [[[aNote userInfo] objectForKey:@"Index"] intValue];
-	index = MIN(index,[model cmdQueueCount]-1);
+	index = MIN(index,(int)[model cmdQueueCount]-1);
 	index = MAX(index,0);
 	[cmdQueueTable reloadData];
 	NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:index];
@@ -550,7 +550,7 @@
 #pragma mark ***Actions
 - (void) useCmdQueueAction:(id)sender
 {
-	int tag = [[useCmdQueueMatrix selectedCell] tag];
+	int tag = (int)[[useCmdQueueMatrix selectedCell] tag];
 	[model setUseCmdQueue:tag];	
 }
 

@@ -68,14 +68,14 @@
 	unsigned long processOutputMask;  //controlls which bits are written
     BOOL involvedInProcess;
     HANDLE          deviceHandle;
-    unsigned long   deviceSerialNumber;
+    int   deviceSerialNumber;
     u6CalibrationInfo caliInfo;
 
 }
 
 #pragma mark ***Accessors
-- (unsigned long) deviceSerialNumber;
-- (void) setDeviceSerialNumber:(unsigned long)aDeviceSerialNumber;
+- (int) deviceSerialNumber;
+- (void) setDeviceSerialNumber:(int)aDeviceSerialNumber;
 - (HANDLE) deviceHandle;
 - (BOOL) deviceOpen;
 - (void) openDevice;

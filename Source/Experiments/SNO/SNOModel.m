@@ -252,7 +252,10 @@ NSString* totalRatePlotChanged                      = @"totalRatePlotChanged";
 	} else if (xl3PollingState > 0 && !pollXl3){
 		NSLog(@"Polling from Morca database...\n");
   
-        if (parameterRate) [parameterRate release], parameterRate = nil;
+        if (parameterRate){
+            [parameterRate release];
+            parameterRate = nil;
+        }
         
         isPlottingGraph = false;
         parameterRate = [[ORTimeRate alloc] init];
@@ -291,7 +294,10 @@ NSString* totalRatePlotChanged                      = @"totalRatePlotChanged";
 {
     if (!isPollingXl3TotalRate) {
         isPollingXl3TotalRate = true;
-        if (totalDataRate) [totalDataRate release], totalDataRate = nil;
+        if (totalDataRate){
+            [totalDataRate release];
+            totalDataRate = nil;
+        }
         totalDataRate = [[ORTimeRate alloc] init];
         [totalDataRate setSampleTime:2];
         
@@ -302,7 +308,10 @@ NSString* totalRatePlotChanged                      = @"totalRatePlotChanged";
 
 - (void) stopTotalXL3RatePoll
 {
-    if (totalDataRate) [totalDataRate release], totalDataRate = nil;
+    if (totalDataRate){
+        [totalDataRate release];
+        totalDataRate = nil;
+    }
     isPollingXl3TotalRate = false;
     [[SNOMonitoredHardware sharedSNOMonitoredHardware] collectingXL3Rates:NO];
 }
@@ -687,7 +696,10 @@ NSString* totalRatePlotChanged                      = @"totalRatePlotChanged";
 	NSArray *slowControlVariablesView = [[NSArray alloc] initWithArray:[jsonSlowControlVariablesView objectForKey:@"rows"]];
 
 	//slowcontrolmap stores the channel->parameter map in a dict. for quick access
-    if (slowControlMap) [slowControlMap release], slowControlMap=nil;
+    if (slowControlMap){
+        [slowControlMap release];
+        slowControlMap=nil;
+    }
     slowControlMap = [[NSMutableDictionary alloc] init];
     
     //tableEntries is the parameter->channel map

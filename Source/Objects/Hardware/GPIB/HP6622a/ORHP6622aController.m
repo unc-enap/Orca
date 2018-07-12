@@ -321,7 +321,7 @@
 - (IBAction) outputOnAction:(id)sender
 {
 	@try {
-		[model setOutputOn:[[sender selectedCell] tag] withValue:[[sender selectedCell] intValue]];
+		[model setOutputOn:(int)[[sender selectedCell] tag] withValue:[[sender selectedCell] intValue]];
 	}
 	@catch(NSException* localException) {
         NSLog( [ localException reason ] );
@@ -337,7 +337,7 @@
 - (IBAction) ocProtectionOnAction:(id)sender
 {
 	@try {
-		[model setOcProtectionOn:[[sender selectedCell] tag] withValue:[[sender selectedCell] intValue]];
+		[model setOcProtectionOn:(int)[[sender selectedCell] tag] withValue:[[sender selectedCell] intValue]];
 	}
 	@catch(NSException* localException) {
         NSLog( [ localException reason ] );
@@ -353,7 +353,7 @@
 - (IBAction) setVoltageAction:(id)sender
 {
 	@try {
-		[model setSetVoltage:[[sender selectedCell] tag] withValue:[[sender selectedCell] floatValue]];
+		[model setSetVoltage:(int)[[sender selectedCell] tag] withValue:[[sender selectedCell] floatValue]];
 	}
 	@catch(NSException* localException) {
         NSLog( [ localException reason ] );
@@ -369,7 +369,7 @@
 - (IBAction) setCurrentAction:(id)sender
 {
 	@try {
-		[model setSetCurrent:[[sender selectedCell] tag] withValue:[[sender selectedCell] floatValue]];
+		[model setSetCurrent:(int)[[sender selectedCell] tag] withValue:[[sender selectedCell] floatValue]];
 	}
 	@catch(NSException* localException) {
         NSLog( [ localException reason ] );
@@ -385,7 +385,7 @@
 - (IBAction) setOverVoltageAction:(id)sender
 {
 	@try {
-		[model setOverVoltage:[[sender selectedCell] tag] withValue:[[sender selectedCell] floatValue]];
+		[model setOverVoltage:(int)[[sender selectedCell] tag] withValue:[[sender selectedCell] floatValue]];
 	}
 	@catch(NSException* localException) {
         NSLog( [ localException reason ] );
@@ -401,7 +401,7 @@
 - (IBAction) resetOverVoltageAction:(id)sender
 {
 	@try {
-		[model resetOverVoltage:[[sender selectedCell] tag]];
+		[model resetOverVoltage:(int)[[sender selectedCell] tag]];
 	}
 	@catch(NSException* localException) {
         NSLog( [ localException reason ] );
@@ -417,7 +417,7 @@
 - (IBAction) resetOcProtectionAction:(id)sender
 {
 	@try {
-		[model resetOcProtection:[[sender selectedCell] tag]];
+		[model resetOcProtection:(int)[[sender selectedCell] tag]];
 	}
 	@catch(NSException* localException) {
         NSLog( [ localException reason ] );

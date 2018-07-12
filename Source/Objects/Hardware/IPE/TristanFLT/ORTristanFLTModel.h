@@ -58,7 +58,7 @@
     unsigned long   eventCount[kNumTristanFLTChannels];
     ORUDPConnection*    client;
     NSString*       hostName;
-    int             port;
+    NSUInteger             port;
     BOOL            udpConnected;
 
 }

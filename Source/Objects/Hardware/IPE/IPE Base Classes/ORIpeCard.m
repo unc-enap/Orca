@@ -70,7 +70,7 @@ NSString* ORIpeCardExceptionCountChanged		= @"ORIpeCardExceptionCountChanged";
 {
 	if(!registers)registers = [[NSMutableArray array] retain];
 	if(index > [registers count]){
-		int i;
+		unsigned long i;
 		for(i=[registers count];i<index;i++){
 			[registers addObject:[NSNull null]];
 		}
@@ -103,7 +103,7 @@ NSString* ORIpeCardExceptionCountChanged		= @"ORIpeCardExceptionCountChanged";
 }
 - (NSString*) fullID
 {
-    return [NSString stringWithFormat:@"%@,%d,%d",NSStringFromClass([self class]),[self crateNumber], [self stationNumber]];
+    return [NSString stringWithFormat:@"%@,%d,%ld",NSStringFromClass([self class]),[self crateNumber], [self stationNumber]];
 }
 
 - (NSString*) cardSlotChangedNotification
@@ -113,7 +113,7 @@ NSString* ORIpeCardExceptionCountChanged		= @"ORIpeCardExceptionCountChanged";
 
 - (NSString*) identifier
 {
-    return [NSString stringWithFormat:@"station %d",[self stationNumber]];
+    return [NSString stringWithFormat:@"station %ld",[self stationNumber]];
 }
 
 - (NSUInteger) stationNumber
@@ -122,7 +122,7 @@ NSString* ORIpeCardExceptionCountChanged		= @"ORIpeCardExceptionCountChanged";
 }
 - (int) displayedSlotNumber
 {
-	return [self stationNumber];
+	return (int)[self stationNumber];
 }
 
 - (unsigned long)   exceptionCount
@@ -260,7 +260,7 @@ NSString* ORIpeCardExceptionCountChanged		= @"ORIpeCardExceptionCountChanged";
 {
     NSMutableDictionary* objDictionary = [NSMutableDictionary dictionary];
     [objDictionary setObject:NSStringFromClass([self class]) forKey:@"Class Name"];
-    [objDictionary setObject:[NSNumber numberWithInt:[self stationNumber]] forKey:@"Card"];
+    [objDictionary setObject:[NSNumber numberWithInteger:[self stationNumber]] forKey:@"Card"];
     [dictionary setObject:objDictionary forKey:[self identifier]];
     return objDictionary;
 }

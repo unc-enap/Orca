@@ -46,7 +46,7 @@
 	if(aCommand){
 		if(!commands)commands = [[NSMutableArray array] retain];
 		[commands addObject:aCommand];
-		return [commands count] - 1;
+		return (int)[commands count] - 1;
 	}
 	else return -1;
 }
@@ -55,7 +55,7 @@
 	if(anOtherList){
 		if(!commands)commands = [[NSMutableArray array] retain];
 		[commands addObjectsFromArray:[anOtherList commands]];
-		return [commands count] - 1;
+		return (int)[commands count] - 1;
 	}
 	else return -1;
 }

@@ -41,7 +41,7 @@ extern int OrcaScriptparse(void);
 ORScriptRunner* theScriptRunner = nil;
 int OrcaScriptYYINPUT(char* theBuffer,int maxSize) 
 {
-	return [theScriptRunner yyinputToBuffer:theBuffer withSize:maxSize];
+	return (int)[theScriptRunner yyinputToBuffer:theBuffer withSize:maxSize];
 }
 //========================================================================
 
@@ -572,9 +572,9 @@ int OrcaScriptYYINPUT(char* theBuffer,int maxSize)
 				break;
 			}
 			else {
-                int theLine = [[aNode nodeData] line];
+                long theLine = [[aNode nodeData] line];
 				NSLogColor([NSColor redColor],
-                           @"Script will exit because of exception (at line %i): \n%@\n",theLine,localException);
+                           @"Script will exit because of exception (at line %lu): \n%@\n",theLine,localException);
 				failed = YES;
                 [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORScriptRunnerParseError
                                                                     object:self

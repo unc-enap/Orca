@@ -203,19 +203,19 @@ enum {
 
 - (void) neutrinoMatrixAction:(id)sender
 {
-	[self setNeutrinoParam:[[sender selectedCell] tag] value:[[sender selectedCell] floatValue]];
+	[self setNeutrinoParam:(int)[[sender selectedCell] tag] value:[[sender selectedCell] floatValue]];
 }
 
 - (void) sourceMatrixAction:(id)sender
 {
-	[self setSourceParam:[[sender selectedCell] tag] value:[[sender selectedCell] floatValue]];
+	[self setSourceParam:(int)[[sender selectedCell] tag] value:[[sender selectedCell] floatValue]];
 }
 
 - (IBAction) neutrinoWaveformAction:(id)sender;
 {
     if([sender indexOfSelectedItem] != neutrinoWaveform){ 	
         [[self undoManager] setActionName: @"Selected Neutrino Waveform"];
-        [self setNeutrinoWaveform:[neutrinoWaveformPopUpButton indexOfSelectedItem]];
+        [self setNeutrinoWaveform:(int)[neutrinoWaveformPopUpButton indexOfSelectedItem]];
     }
 }
 
@@ -223,7 +223,7 @@ enum {
 {
     if([sender indexOfSelectedItem] != sourceWaveform){ 	
         [[self undoManager] setActionName: @"Selected Source Waveform"];
-        [self setSourceWaveform:[sourceWaveformPopUpButton indexOfSelectedItem]];
+        [self setSourceWaveform:(int)[sourceWaveformPopUpButton indexOfSelectedItem]];
     }
 }
 

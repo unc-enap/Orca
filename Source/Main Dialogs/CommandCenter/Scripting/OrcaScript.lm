@@ -10,7 +10,7 @@ void singleLineComment(void);
 void grabString(void);
 void yyreset_state(void);
 char escapedCharacterInString(char c);
-long num_lines = 1;
+int num_lines = 1;
 extern NSMutableArray* nodeList;
 extern NSMutableArray* functionList;
 static NSDictionary* map_dict = nil;

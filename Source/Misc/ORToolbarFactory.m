@@ -132,7 +132,7 @@
 -(NSArray*) toolbarAllowedItemIdentifiers: (NSToolbar*)toolbar
 {
 	NSDictionary*	allItems = [toolbarItems objectForKey: @"Items"];
-	int				icount   = [allItems count];
+	int				icount   = (int)[allItems count];
 	NSMutableArray*	allowedItems = [NSMutableArray arrayWithCapacity: icount +4];
 	NSEnumerator*   allItemItty;
 	NSString*		currItem;

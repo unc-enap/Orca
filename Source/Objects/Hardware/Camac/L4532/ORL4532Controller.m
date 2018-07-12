@@ -238,7 +238,7 @@
 	int offset;
 	if(sender == triggerNames0_15)offset = 0;
 	else offset = 16;
-	[model setTrigger:[[sender selectedCell] tag]+offset withName:[sender stringValue]];	
+	[model setTrigger:(int)[[sender selectedCell] tag]+offset withName:[sender stringValue]];
 }
 
 - (void) delayEnableMaskAction:(id)sender
@@ -254,7 +254,7 @@
 	int offset;
 	if(sender == delays0_15)offset = 0;
 	else offset = 16;
-	[model setDelay:[[sender selectedCell] tag]+offset withValue:[sender intValue]];
+	[model setDelay:(int)[[sender selectedCell] tag]+offset withValue:[sender intValue]];
 }
 
 - (void) numberTriggersAction:(id)sender

@@ -674,7 +674,7 @@ static struct {
     [[NSNotificationCenter defaultCenter] postNotificationName:ORGretina4ModelNoiseFloorIntegrationTimeChanged object:self];
 }
 
-- (int) fifoState
+- (unsigned long) fifoState
 {
     return fifoState;
 }
@@ -1493,7 +1493,7 @@ static struct {
 
 - (int) readIntegrationTime { return [self readCardInfo:kIntegrationTimeIndex]; }
 
-- (int) readDownSample 
+- (unsigned long) readDownSample
 {
     unsigned long theValue = 0 ;
     [[self adapter] readLongBlock:&theValue
@@ -1840,7 +1840,7 @@ static struct {
 - (void) flashFpgaStatus:(ORSBCLinkJobStatus*) jobStatus
 {
     [self setDownLoadMainFPGAInProgress: [jobStatus running]];
-    [self setFpgaDownProgress:           [jobStatus progress]];
+    [self setFpgaDownProgress:           (int)[jobStatus progress]];
     NSArray* parts = [[jobStatus message] componentsSeparatedByString:@"$"];
     NSString* stateString   = @"";
     NSString* verboseString = @"";
@@ -2376,17 +2376,17 @@ static struct {
     
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id	= kGretina; //should be unique
-	configStruct->card_info[index].hw_mask[0] 	= dataId; //better be unique
+	configStruct->card_info[index].hw_mask[0] 	=  (uint32_t)dataId; //better be unique
 	configStruct->card_info[index].slot			= [self slot];
 	configStruct->card_info[index].crate		= [self crateNumber];
 	configStruct->card_info[index].add_mod		= [self addressModifier];
-	configStruct->card_info[index].base_add		= [self baseAddress];
-	configStruct->card_info[index].deviceSpecificData[0]	= [self baseAddress] + register_information[kProgrammingDone].offset; //fifoStateAddress
+	configStruct->card_info[index].base_add		= (uint32_t)[self baseAddress];
+	configStruct->card_info[index].deviceSpecificData[0]	= (uint32_t)([self baseAddress] + register_information[kProgrammingDone].offset); //fifoStateAddress
     configStruct->card_info[index].deviceSpecificData[1]	= kGretina4FIFOEmpty; // fifoEmptyMask
-    configStruct->card_info[index].deviceSpecificData[2]	= [self baseAddress] + 0x1000; // fifoAddress
+    configStruct->card_info[index].deviceSpecificData[2]	= (uint32_t)([self baseAddress] + 0x1000); // fifoAddress
     configStruct->card_info[index].deviceSpecificData[3]	= 0x0B; // fifoAM
     configStruct->card_info[index].deviceSpecificData[4]	= 0x1FFFF; // size of FIFO
-    configStruct->card_info[index].deviceSpecificData[5]	= location; // crate,card,serial
+    configStruct->card_info[index].deviceSpecificData[5]	= (uint32_t)location; // crate,card,serial
 	configStruct->card_info[index].num_Trigger_Indexes		= 0;
 	
 	configStruct->card_info[index].next_Card_Index 	= index+1;	
@@ -2455,8 +2455,8 @@ static struct {
     [encoder encodeInt:downSample					forKey:@"downSample"];
     [encoder encodeInt:histEMultiplier                           forKey:@"histEMultiplier"];
     [encoder encodeInt:registerIndex				forKey:@"registerIndex"];
-    [encoder encodeInt32:registerWriteValue			forKey:@"registerWriteValue"];
-    [encoder encodeInt32:spiWriteValue			    forKey:@"spiWriteValue"];
+    [encoder encodeInt32:(int32_t)registerWriteValue			forKey:@"registerWriteValue"];
+    [encoder encodeInt32:(int32_t)spiWriteValue			    forKey:@"spiWriteValue"];
     [encoder encodeObject:fpgaFilePath				forKey:@"fpgaFilePath"];
     [encoder encodeFloat:noiseFloorIntegrationTime	forKey:@"NoiseFloorIntegrationTime"];
     [encoder encodeInt:noiseFloorOffset				forKey:@"NoiseFloorOffset"];
@@ -2672,7 +2672,7 @@ static struct {
                 [self writeToAddress:0x900 aValue:kGretina4ResetMainFPGACmd];
                 [self writeToAddress:0x900 aValue:kGretina4ReloadMainFPGACmd];
                 [self setProgressStateOnMainThread:  @"Finishing$Flash Memory-->FPGA"];
-                uint32_t statusRegValue = [self readFromAddress:0x904];
+                unsigned long statusRegValue = [self readFromAddress:0x904];
                 while(!(statusRegValue & kGretina4MainFPGAIsLoaded)) {
                     if(stopDownLoadingMainFPGA)return;
                     statusRegValue = [self readFromAddress:0x904];
@@ -2936,7 +2936,7 @@ static struct {
         aPacket.cmdHeader.numberBytesinPayload	= sizeof(MJDFlashGretinaFPGAStruct);
         
         MJDFlashGretinaFPGAStruct* p = (MJDFlashGretinaFPGAStruct*) aPacket.payload;
-        p->baseAddress      = [self baseAddress];
+        p->baseAddress      = (uint32_t)[self baseAddress];
         @try {
             NSLog(@"Gretina4 (%d) launching firmware load job in SBC\n",[self uniqueIdNumber]);
             

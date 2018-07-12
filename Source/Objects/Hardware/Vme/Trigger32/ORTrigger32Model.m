@@ -1200,16 +1200,16 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
     [super encodeWithCoder:encoder];
     
     [encoder encodeBool:restartClkAtRunStart forKey:@"ORTrigger32ModelRestartClkAtRunStart"];
-    [encoder encodeInt32:[self lowerTimeValue] forKey:ORTriggerClockLow];
-    [encoder encodeInt32:[self upperTimeValue] forKey:ORTriggerClockUpper];
-    [encoder encodeInt32:[self testRegisterValue] forKey:ORTriggerTestReg];
+    [encoder encodeInt32:(int32_t)[self lowerTimeValue] forKey:ORTriggerClockLow];
+    [encoder encodeInt32:(int32_t)[self upperTimeValue] forKey:ORTriggerClockUpper];
+    [encoder encodeInt32:(int32_t)[self testRegisterValue] forKey:ORTriggerTestReg];
     [encoder encodeBool:[self clockEnabled] forKey:ORTriggerClockEnabled];
     [encoder encodeBool:[self trigger1GtXor] forKey:ORTriggerTrigger1Xor];
     [encoder encodeBool:[self trigger2GtXor] forKey:ORTriggerTrigger2Xor];
     
-    [encoder encodeInt:[self gtIdValue] forKey:ORTriggerGTID];
-    [encoder encodeInt:[self lowerTimeValue] forKey:ORTriggerLowerClock];
-    [encoder encodeInt:[self upperTimeValue] forKey:ORTriggerUpperClock];
+    [encoder encodeInt:(int32_t)[self gtIdValue] forKey:ORTriggerGTID];
+    [encoder encodeInt:(int32_t)[self lowerTimeValue] forKey:ORTriggerLowerClock];
+    [encoder encodeInt:(int32_t)[self upperTimeValue] forKey:ORTriggerUpperClock];
     
     [encoder encodeObject:[self trigger1Group] forKey:ORTriggerGroup1];
     [encoder encodeObject:[self trigger2Group] forKey:ORTriggerGroup2];
@@ -1673,7 +1673,7 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
 			
 			//go out and read all the data takers scheduled to be read out with a trigger 2 event.
 			//also we keep track if any data was actually taken
-			int lastFrameIndex = [aDataPacket frameIndex];
+			unsigned long lastFrameIndex = [aDataPacket frameIndex];
 			errorLocation = @"Reading Event2 Children";
 			[self _readOutChildren:dataTakers2 dataPacket:aDataPacket useParams:NO withGTID:0  isMSAMEvent:0]; //don't know the gtid so pass 0
 			BOOL dataWasTaken = [aDataPacket frameIndex]>lastFrameIndex;

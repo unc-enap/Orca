@@ -64,8 +64,8 @@
   * This objects are generated in Flt measure mode.
   */
 @interface ORKatrinFLTDecoderForThresholdScan : ORIpeCardDecoder {
-  int lastEnergy[22];		//!< Energy of the last sample. Used to calculate the difference per sample
-  int lastHitrate[22];		//!< Trigger rate of the last sample. Used to calculate the difference per sample
+  unsigned long lastEnergy[22];		//!< Energy of the last sample. Used to calculate the difference per sample
+  unsigned long lastHitrate[22];		//!< Trigger rate of the last sample. Used to calculate the difference per sample
 }
 // Documentation in m-file
 - (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;

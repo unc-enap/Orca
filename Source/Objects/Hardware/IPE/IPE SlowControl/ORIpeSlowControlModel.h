@@ -361,7 +361,7 @@
     int				 channelDataId;
  	NSString*		 IPNumber;
 	NSMutableArray*	 connectionHistory;
-	unsigned 		 ipNumberIndex;	
+	NSInteger 		 ipNumberIndex;	
     int				 pollTime;
 	
 	NSMutableArray* itemTreeRoot;

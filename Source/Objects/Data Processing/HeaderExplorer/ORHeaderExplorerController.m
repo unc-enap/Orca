@@ -80,9 +80,9 @@
 {
 	NSIndexSet* selectedSet = [searchKeyTableView selectedRowIndexes];
 	if([selectedSet count]){
-		int i = (int)[selectedSet firstIndex];
+		NSInteger i = [selectedSet firstIndex];
 		while (i != NSNotFound){
-			[model assembleDataForPlotting:i];
+			[model assembleDataForPlotting:(int)i];
 			i = [selectedSet indexGreaterThanIndex: i];
 		}
 
@@ -666,7 +666,7 @@
 	}
 	else if(aTableView == searchKeyTableView){
 		if([[model searchKeys] count]){
-			if([[aTableColumn identifier] isEqualToString:@"index"])return [NSString stringWithFormat:@"%d",rowIndex];
+			if([[aTableColumn identifier] isEqualToString:@"index"])return [NSString stringWithFormat:@"%ld",rowIndex];
 			else return [[model searchKeys] objectAtIndex:rowIndex];
 		}
 	}
@@ -756,7 +756,7 @@
 	if([aNote object] == fileListView){
 		NSInteger n = [fileListView numberOfSelectedRows];
 		if(n == 1){
-			NSInteger i = [fileListView selectedRow];
+			int i = (int)[fileListView selectedRow];
 			[model setSelectedFileIndex:i];
 			[model selectFirstRunForFileIndex:i];
 			unsigned long absStart = [model minRunStartTime];
@@ -776,7 +776,7 @@
 		}
 	}
 	if([aNote object] == searchKeyTableView || !aNote){
-		int n = [[searchKeyTableView selectedRowIndexes] count];
+		int n = (int)[[searchKeyTableView selectedRowIndexes] count];
 		[removeSearchKeyButton setEnabled:n>0];
 		[printButton setEnabled:n>0];
 	}
@@ -795,7 +795,7 @@
 - (void)tabView:(NSTabView *)aTabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem
 {
     NSString* key = [NSString stringWithFormat: @"orca.ORHeaderExplorer%lu.selectedtab",[model uniqueIdNumber]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 	
 }

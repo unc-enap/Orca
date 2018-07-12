@@ -77,12 +77,12 @@ NSString* ORCMC203SettingsLock					= @"ORCMC203SettingsLock";
 
 #pragma mark ***Accessors
 
-- (int) histoMask
+- (unsigned long) histoMask
 {
     return histoMask;
 }
 
-- (void) setHistoMask:(int)aHistoMask
+- (void) setHistoMask:(unsigned long)aHistoMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setHistoMask:histoMask];
     

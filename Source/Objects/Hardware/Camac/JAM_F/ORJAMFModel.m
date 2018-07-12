@@ -544,7 +544,7 @@ struct {
 
 - (NSString*) processingTitle
 {
-    return [NSString stringWithFormat:@"%d,%d,JAM-F",[self crateNumber],[self  stationNumber]];
+    return [NSString stringWithFormat:@"%d,%lu,JAM-F",[self crateNumber],[self  stationNumber]];
 }
 
 - (double) convertedValue:(int)channel

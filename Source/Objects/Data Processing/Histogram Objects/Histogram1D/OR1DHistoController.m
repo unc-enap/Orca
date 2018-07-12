@@ -124,7 +124,7 @@
 
 - (int) numberPointsInPlot:(id)aPlot
 {
-	return [model numberBins];
+	return (int)[model numberBins];
 }
 
 - (void) plotter:(id)aPlot index:(int)i x:(double*)xValue y:(double*)yValue
@@ -152,8 +152,8 @@
 
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-	if([[tableColumn identifier] isEqualToString:@"Value"])return [NSNumber numberWithInt:[model value:row]];
-	else return [NSNumber numberWithInt:row];
+	if([[tableColumn identifier] isEqualToString:@"Value"])return [NSNumber numberWithInteger:[model value:row]];
+	else return [NSNumber numberWithInteger:row];
 }
 
 @end

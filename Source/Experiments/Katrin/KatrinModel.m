@@ -856,7 +856,7 @@ static NSString* KatrinDbConnector		= @"KatrinDbConnector";
 	result = [result substringToIndex:[result length]-1];
 	result = [result stringByAppendingString:@"\n"];
 	for(id anItem in auxArray){
-		int n = [keys count];
+		int n = (int)[keys count];
 		int i;
 		for(i=0;i<n;i++){
 			id aParam = [anItem objectForKey:[keys objectAtIndex:i]];

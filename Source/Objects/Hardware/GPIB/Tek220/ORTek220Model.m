@@ -772,7 +772,7 @@ NSString* ORTek220GpibLock  = @"ORTek220GpibLock";
                     memset( theHeader, 0, kSizeTek220Header );
 					
 					[self writeToGPIBDevice: @"WFMP:NR_PT?"];
-					int len = [self readFromGPIBDevice:theHeader maxLength:kSizeTek220Header];
+					long len = [self readFromGPIBDevice:theHeader maxLength:kSizeTek220Header];
 					if(len){
 						theHeader[len-1] = ';';
 						// Send command to retrieve header information.

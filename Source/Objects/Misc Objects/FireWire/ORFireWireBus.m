@@ -54,7 +54,7 @@
 	//io_object_t service = [[[devices objectForKey:[NSNumber numberWithLong:aVendorID]] objectAtIndex:0] longValue];
 	//if(!service){
 	[self getDevicesWithVenderID:aVendorID];
-	io_object_t service = [[[devices objectForKey:[NSNumber numberWithLong:aVendorID]] objectAtIndex:0] longValue];
+	io_object_t service = (unsigned int)[[[devices objectForKey:[NSNumber numberWithLong:aVendorID]] objectAtIndex:0] longValue];
 	//}
 	if(!service)return nil;
 	else return [[[ORFireWireInterface alloc] initWithService:service] autorelease];

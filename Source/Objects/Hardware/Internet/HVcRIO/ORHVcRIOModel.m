@@ -1064,7 +1064,7 @@ static NSString* itemsToShip[kNumToShip*2] = {
 - (NSString*) measuredValueName:(NSUInteger)anIndex
 {
     [self checkShipValueDictionary];
-    NSString* aKey = [NSString stringWithFormat:@"%d",anIndex];
+    NSString* aKey = [NSString stringWithFormat:@"%ld",anIndex];
     NSString* aName = [shipValueDictionary objectForKey:aKey];
     if(aName){
         return aName;
@@ -1074,7 +1074,7 @@ static NSString* itemsToShip[kNumToShip*2] = {
         NSString* part2 = [[measuredValues objectAtIndex:anIndex] objectForKey:@"data"];
         return [part1 stringByAppendingFormat:@" %@",part2];
     }
-    return [NSString stringWithFormat:@"Index %d",anIndex];
+    return [NSString stringWithFormat:@"Index %ld",anIndex];
 }
 
 - (NSUInteger) numMeasuredValues
@@ -1429,7 +1429,7 @@ static NSString* itemsToShip[kNumToShip*2] = {
     setPointFile = [aPath copy];
 }
 
-- (int) queCount
+- (NSUInteger) queCount
 {
 	return [cmdQueue count];
 }
@@ -1567,7 +1567,7 @@ static NSString* itemsToShip[kNumToShip*2] = {
         NSMutableString* cmd = [NSMutableString stringWithString:@"write sp"];
         [cmd appendString:@":"];
         int i;
-        int maxIndex = [setPoints count];
+        int maxIndex = (int)[setPoints count];
         for(i=0;i<maxIndex;i++){
             float valueToWrite = [[[setPoints objectAtIndex:i] objectForKey:@"setPoint"] floatValue];
             [cmd appendFormat:@"%f",valueToWrite];

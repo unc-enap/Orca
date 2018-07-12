@@ -591,7 +591,7 @@ static HPPulserCustomWaveformStruct waveformData[kNumWaveforms] = {
 - (void) normalizeWaveform
 {
 	float* w = (float*)[waveform bytes];
-	int n = [waveform length]/sizeof(float);
+	int n = (int)[waveform length]/sizeof(float);
 	int i;
 	float maxValue = -9.9E10;
 	float minValue = 9.9E10;

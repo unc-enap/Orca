@@ -215,27 +215,27 @@ static NSString* ORRunListDataOut1	= @"ORRunListDataOut1";
 	[self addItem:newItem atIndex:[items count]];
 }
 
-- (void) addItem:(id)anItem atIndex:(int)anIndex
+- (void) addItem:(id)anItem atIndex:(NSInteger)anIndex
 {
 	if(!items) items= [[NSMutableArray array] retain];
 	if([items count] == 0)anIndex = 0;
 	anIndex = MIN(anIndex,[items count]);
 	[[[self undoManager] prepareWithInvocationTarget:self] removeItemAtIndex:anIndex];
 	[items insertObject:anItem atIndex:anIndex];
-	NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:anIndex] forKey:@"Index"];
+	NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:anIndex] forKey:@"Index"];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORRunListItemsAdded object:self userInfo:userInfo];
 }
 
-- (void) removeItemAtIndex:(int) anIndex
+- (void) removeItemAtIndex:(NSInteger) anIndex
 {
 	id anItem = [items objectAtIndex:anIndex];
 	[[[self undoManager] prepareWithInvocationTarget:self] addItem:anItem atIndex:anIndex];
 	[items removeObjectAtIndex:anIndex];
-	NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:anIndex] forKey:@"Index"];
+	NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:anIndex] forKey:@"Index"];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORRunListItemsRemoved object:self userInfo:userInfo];
 }
 
-- (id) itemAtIndex:(int)anIndex
+- (id) itemAtIndex:(NSInteger)anIndex
 {
 	if(anIndex>=0 && anIndex<[items count])return [items objectAtIndex:anIndex];
 	else return nil;

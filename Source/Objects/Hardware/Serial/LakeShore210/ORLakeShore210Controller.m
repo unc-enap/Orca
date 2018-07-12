@@ -361,7 +361,7 @@
 
 - (void) unitsTypeAction:(id)sender
 {
-	[model setUnitsType:[[sender selectedCell] tag]];	
+	[model setUnitsType:(int)[[sender selectedCell] tag]];
 	[model readTemps];
 }
 
@@ -377,7 +377,7 @@
 
 - (IBAction) pollTimeAction:(id)sender
 {
-	[model setPollTime:[[sender selectedItem] tag]];
+	[model setPollTime:(int)[[sender selectedItem] tag]];
 }
 
 
@@ -385,13 +385,13 @@
 
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	return [[model timeRate:[aPlotter tag]] count];
+	return (int)[[model timeRate:(int)[aPlotter tag]] count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-	int set = [aPlotter tag];
-	int count = [[model timeRate:set] count];
+	int set = (int)[aPlotter tag];
+	int count = (int)[[model timeRate:set] count];
 	int index = count-i-1;
 	*xValue = [[model timeRate:set] timeSampledAtIndex:index];
 	*yValue = [[model timeRate:set] valueAtIndex:index];
@@ -407,19 +407,19 @@
 {
     if(aTableView == processLimitTableView){
 		if([[aTableColumn identifier] isEqualToString:@"channel"]){
-			return [NSNumber numberWithInt:rowIndex];
+			return [NSNumber numberWithInteger:rowIndex];
 		}
 		else if([[aTableColumn identifier] isEqualToString:@"hiLimit"]){
-			return [NSString stringWithFormat:@"%.2f",[model highLimit:rowIndex]];
+			return [NSString stringWithFormat:@"%.2f",[model highLimit:(int)rowIndex]];
 		}
 		else if([[aTableColumn identifier] isEqualToString:@"lowLimit"]){
-			return [NSString stringWithFormat:@"%.2f",[model lowLimit:rowIndex]];
+			return [NSString stringWithFormat:@"%.2f",[model lowLimit:(int)rowIndex]];
 		}
 		else if([[aTableColumn identifier] isEqualToString:@"lowAlarm"]){
-			return [NSString stringWithFormat:@"%.2f",[model lowAlarm:rowIndex]];
+			return [NSString stringWithFormat:@"%.2f",[model lowAlarm:(int)rowIndex]];
 		}
 		else if([[aTableColumn identifier] isEqualToString:@"hiAlarm"]){
-			return [NSString stringWithFormat:@"%.2f",[model highAlarm:rowIndex]];
+			return [NSString stringWithFormat:@"%.2f",[model highAlarm:(int)rowIndex]];
 		}
 		else return @"";
 	}
@@ -435,16 +435,16 @@
         if([[aTableColumn identifier] isEqualToString:@"Channel"]) return;
 		
         if([[aTableColumn identifier] isEqualToString:@"hiLimit"]){
-			[model setHighLimit:rowIndex value:[anObject doubleValue]];
+			[model setHighLimit:(int)rowIndex value:[anObject doubleValue]];
 		}
         else if([[aTableColumn identifier] isEqualToString:@"lowLimit"]){
-			[model setLowLimit:rowIndex value:[anObject doubleValue]];
+			[model setLowLimit:(int)rowIndex value:[anObject doubleValue]];
 		}
         else if([[aTableColumn identifier] isEqualToString:@"lowAlarm"]){
-			[model setLowAlarm:rowIndex value:[anObject doubleValue]];
+			[model setLowAlarm:(int)rowIndex value:[anObject doubleValue]];
 		}
         else if([[aTableColumn identifier] isEqualToString:@"hiAlarm"]){
-			[model setHighAlarm:rowIndex value:[anObject doubleValue]];
+			[model setHighAlarm:(int)rowIndex value:[anObject doubleValue]];
 		}
     }
 }

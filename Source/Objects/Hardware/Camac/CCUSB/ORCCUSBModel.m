@@ -667,16 +667,16 @@ enum {
     [encoder encodeInt:aValue forKey:@"ORCCUSBModelAValue"];
     [encoder encodeInt:nValue forKey:@"ORCCUSBModelNValue"];
     [encoder encodeInt:usbTransferSetup forKey:@"ORCCUSBModelUsbTransferSetup"];
-    [encoder encodeInt32:LAMMaskValue forKey:@"ORCCUSBModelLAMMaskValue"];
-    [encoder encodeInt32:scalerB forKey:@"ORCCUSBModelScalerB"];
-    [encoder encodeInt32:scalerA forKey:@"ORCCUSBModelScalerA"];
-    [encoder encodeInt32:delayAndGateExt forKey:@"ORCCUSBModelDelayAndGateExt"];
-    [encoder encodeInt32:delayAndGateB forKey:@"ORCCUSBModelDelayAndGateB"];
-    [encoder encodeInt32:delayAndGateA forKey:@"ORCCUSBModelDelayAndGateA"];
-    [encoder encodeInt32:scalerReadout forKey:@"ORCCUSBModelScalerReadout"];
-    [encoder encodeInt32:userDeviceSelector forKey:@"ORCCUSBModelUserDeviceSelector"];
-    [encoder encodeInt:userNIMSelector forKey:@"ORCCUSBModelUserNIMSelector"];
-    [encoder encodeInt:userLEDSelector forKey:@"ORCCUSBModelUserLEDSelector"];
+    [encoder encodeInt32:(int32_t)LAMMaskValue forKey:@"ORCCUSBModelLAMMaskValue"];
+    [encoder encodeInt32:(int32_t)scalerB forKey:@"ORCCUSBModelScalerB"];
+    [encoder encodeInt32:(int32_t)scalerA forKey:@"ORCCUSBModelScalerA"];
+    [encoder encodeInt32:(int32_t)delayAndGateExt forKey:@"ORCCUSBModelDelayAndGateExt"];
+    [encoder encodeInt32:(int32_t)delayAndGateB forKey:@"ORCCUSBModelDelayAndGateB"];
+    [encoder encodeInt32:(int32_t)delayAndGateA forKey:@"ORCCUSBModelDelayAndGateA"];
+    [encoder encodeInt32:(int32_t)scalerReadout forKey:@"ORCCUSBModelScalerReadout"];
+    [encoder encodeInt32:(int32_t)userDeviceSelector forKey:@"ORCCUSBModelUserDeviceSelector"];
+    [encoder encodeInt:(int32_t)userNIMSelector forKey:@"ORCCUSBModelUserNIMSelector"];
+    [encoder encodeInt:(int32_t)userLEDSelector forKey:@"ORCCUSBModelUserLEDSelector"];
     [encoder encodeInt:delays forKey:@"ORCCUSBModelDelays"];
     [encoder encodeInt:globalMode forKey:@"ORCCUSBModelGlobalMode"];
     [encoder encodeInt:registerValue forKey:@"ORCCUSBModelRegisterValue"];
@@ -799,14 +799,14 @@ enum {
 	return -1;
 }
 
-- (long) readReg:(int) ireg
+- (unsigned long) readReg:(int) ireg
 {
 	unsigned long lValue; 
 	[self camacLongNAF:25 a:ireg f:0 data:&lValue];
 	return  lValue & ccusbRegs[ireg].mask;
 }
 
-- (int) writeReg:(int) ireg value:(int) value
+- (int) writeReg:(int) ireg value:(unsigned long) value
 {
 	unsigned long lValue = ccusbRegs[ireg].mask & value;
 	return [self camacLongNAF:25 a:ireg f:16 data:&lValue];
@@ -814,7 +814,7 @@ enum {
 
 -(int) reset
 {
-	char cmd[512];
+	unsigned char cmd[512];
 
 	cmd[0] = 255;
 	cmd[1] = 255;

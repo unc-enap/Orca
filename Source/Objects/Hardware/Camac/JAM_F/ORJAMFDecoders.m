@@ -72,7 +72,7 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx- adc word n
 	NSDate* date = [NSDate dateWithTimeIntervalSince1970:*ptr];
 
 	NSString* adcString = @"";
-	int n = length - 3;
+	int n = (int)(length - 3);
 	int i;
 	for(i=0;i<n;i++){
 		ptr++;

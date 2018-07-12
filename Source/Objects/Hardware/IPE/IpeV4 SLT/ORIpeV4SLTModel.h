@@ -421,10 +421,10 @@ static IpeRegisterNamesStruct regSLTV4[kSltV4NumRegs] = {
 - (void)		  printInterrupt:(int)regIndex;
 //- (void)		  dumpTriggerRAM:(int)aPageIndex;
 
-- (void)		  writeReg:(int)index value:(unsigned long)aValue;
+- (void)		  writeReg:(short)index value:(unsigned long)aValue;
 - (void)		  rawWriteReg:(unsigned long) address  value:(unsigned long)aValue;//TODO: FOR TESTING AND DEBUGGING ONLY -tb-
 - (unsigned long) rawReadReg:(unsigned long) address; //TODO: FOR TESTING AND DEBUGGING ONLY -tb-
-- (unsigned long) readReg:(int) index;
+- (unsigned long) readReg:(short) index;
 - (id) writeHardwareRegisterCmd:(unsigned long)regAddress value:(unsigned long) aValue;
 - (id) readHardwareRegisterCmd:(unsigned long)regAddress;
 - (unsigned long) readHwVersion;

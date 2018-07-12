@@ -202,7 +202,7 @@ followed by waveform data (n x 1024 16-bit words)
 	
 	
 	katrinEventDataStruct* ePtr = (katrinEventDataStruct*) ptr;
-	bool isSwapped          = ePtr->eventID >> 31; 
+	//bool isSwapped          = ePtr->eventID >> 31; 
 	
 	[aDataSet histogram:ePtr->energy 
 			  numBins:65536 //-tb- 32768 
@@ -473,11 +473,11 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx Hitrate
 
 - (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    int i;
+    unsigned long i;
 	//int j;
 	//int mult;
 	//int width;
-	int energy;
+	unsigned long energy;
 
     unsigned long* ptr = (unsigned long*)someData;
 	unsigned long length	= ExtractLength(*ptr);	 //get length from first word

@@ -169,9 +169,9 @@
 
 - (IBAction) onlineAction:(id)sender
 {
-	if([sender intValue] != [model onlineMaskBit:[[sender selectedCell] tag]]){
+	if([sender intValue] != [model onlineMaskBit:(int)[[sender selectedCell] tag]]){
 		[[self undoManager] setActionName: @"Set Online Mask"];
-		[model setOnlineMaskBit:[[sender selectedCell] tag] withValue:[sender intValue]];
+		[model setOnlineMaskBit:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 	}
 }
 

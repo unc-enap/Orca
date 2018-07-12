@@ -299,7 +299,7 @@ static struct {
 		[fh seekToEndOfFile];
 		
 		int i;
-		int n = [logBuffer count];
+		int n = (int)[logBuffer count];
 		for(i=0;i<n;i++){
 			[fh writeData:[[logBuffer objectAtIndex:i] dataUsingEncoding:NSASCIIStringEncoding]];
 		}
@@ -1100,7 +1100,7 @@ static struct {
 
 - (int)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item
 {
-    return (item == nil) ? 1  : [item numberOfChildren];
+    return (item == nil) ? 1  : (int)[item numberOfChildren];
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item
@@ -1121,8 +1121,7 @@ static struct {
 
 - (NSUInteger)  numberOfChildren
 {
-    int count =  [dataSet count];
-    return count;
+    return [dataSet count];
 }
 
 - (id)   childAtIndex:(NSUInteger)index

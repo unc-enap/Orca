@@ -278,7 +278,7 @@ NSString* ORPacModelVetoChanged			= @"ORPacModelVetoChanged";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORPacModelGainDisplayTypeChanged object:self];
 }
 
-- (int) queCount
+- (NSUInteger) queCount
 {
 	return [cmdQueue count];
 }

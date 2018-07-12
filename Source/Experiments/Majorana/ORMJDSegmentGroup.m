@@ -48,7 +48,7 @@
 			if(![aLine hasPrefix:@"--"]){
                 detectorIndex = [aLine intValue];
                 NSArray* parts = [aLine componentsSeparatedByString:@","];
-                int numParts = [parts count];
+                int numParts = (int)[parts count];
                 if (numParts < 12)continue;
 
                 if(detectorIndex>=0 && detectorIndex < [segments count]){
@@ -143,7 +143,7 @@
 - (void) saveMapFileAs:(NSString*)newFileName
 {
     NSMutableData* theContents = [NSMutableData data];
-    int numSegs = [segments count];
+    int numSegs = (int)[segments count];
     if(numSegs>0){
         NSString* header = [[segments objectAtIndex:0] paramHeader];
         header = [header stringByReplacingOccurrencesOfString:@",k" withString:@","];
@@ -208,7 +208,7 @@
 - (NSString*) paramsAsString
 {
     NSMutableString* theContents = [NSMutableString string];
-    int numSegs = [segments count];
+    int numSegs = (int)[segments count];
     int i;
     BOOL headerDone = NO;
     for(i=0;i<numSegs;i+=2){

@@ -135,7 +135,7 @@
 - (void) machineRemoved:(NSNotification*)aNote
 {
 	int index = [[[aNote userInfo] objectForKey:@"Index"] intValue];
-    index = MIN(index,[model machineCount]-1);
+    index = (int)MIN(index,[model machineCount]-1);
 	index = MAX(index,0);
 	[pulseCheckView reloadData];
 	NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:index];
@@ -160,7 +160,7 @@
 - (void) tableViewSelectionDidChange:(NSNotification *)aNotification
 {
 	if([aNotification object] == pulseCheckView || aNotification == nil){
-		int selectedIndex = [pulseCheckView selectedRow];
+		int selectedIndex = (int)[pulseCheckView selectedRow];
 		[removeMachineButton setEnabled:selectedIndex>=0];
 	}
 }

@@ -289,7 +289,7 @@ typedef struct  {
 - (void) removeConstraintName:(NSString*)aName;
 - (BOOL) isClosed;
 - (BOOL) isOpen;
-- (int) constraintCount;
+- (NSUInteger) constraintCount;
 - (NSString*) stateName:(int)aValue;
 @end
 

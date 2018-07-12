@@ -201,14 +201,14 @@ resistorDocDic = _resistorDocDic;
         reasonString = [updateReasonBox stringValue];   //update from the reason string 
     }
     
-    unsigned int currentRunNumber;
+    unsigned long currentRunNumber;
     currentRunNumber = [model getCurrentRunNumber];
 
     
     //Whenever we update the resistor document we are also going to need to change the run range
     NSMutableArray * runRange = [NSMutableArray arrayWithCapacity:20];
     [runRange setObject:[NSNumber numberWithInt:[[model startRunNumber] intValue]] atIndexedSubscript:0];
-    [runRange setObject:[NSNumber numberWithInt:currentRunNumber] atIndexedSubscript:1];
+    [runRange setObject:[NSNumber numberWithInegert:currentRunNumber] atIndexedSubscript:1];
     
     //Update the old document with the new values
     NSMutableDictionary *oldResistorDocDic = [[model currentQueryResults] mutableCopy];
@@ -222,7 +222,7 @@ resistorDocDic = _resistorDocDic;
     
     
     NSMutableArray * newRunRange = [NSMutableArray arrayWithCapacity:20];
-    [newRunRange setObject:[NSNumber numberWithInt:(currentRunNumber + 1)] atIndexedSubscript:0];
+    [newRunRange setObject:[NSNumber numberWithInteger:(currentRunNumber + 1)] atIndexedSubscript:0];
     [newRunRange setObject:[NSNumber numberWithInt:-1] atIndexedSubscript:1];
     
     //Check the old runRange against the new runRange. If these are the same then we don't need to add a new document as it has already been updated. This will only occur if someone tries to update the resistor database on the same crate/card/channel combination within the same run.

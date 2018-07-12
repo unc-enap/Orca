@@ -104,7 +104,7 @@ NSString* ORUSBRegisteredObjectChanged	= @"ORUSBRegisteredObjectChanged";
 
 - (NSString*) serialNumber
 {
-	if([serialNumber isEqualToString:@"0"])return [NSString stringWithFormat:@"0x%8lx", locationID];
+	if([serialNumber isEqualToString:@"0"])return [NSString stringWithFormat:@"0x%8x", locationID];
     else return serialNumber;
 }
 
@@ -259,7 +259,7 @@ readon:
 	else pipe  = outPipes[0];
     
 	char* p = (char*)[aCommand cStringUsingEncoding:NSASCIIStringEncoding];
-	IOReturn kr = (*interface)->WritePipe(interface, pipe, p, strlen(p));
+	IOReturn kr = (*interface)->WritePipe(interface, pipe, p, (uint32_t)strlen(p));
 	if(kr)	{
 		[usbLock unlock];
 		[NSException raise:@"USB Write" format:@"ORUSBInterface.m %u: WritePipe failed for <%@> error: 0x%x\n", __LINE__,NSStringFromClass([self class]),kr];
@@ -275,10 +275,10 @@ readon:
 		char buffer[512];
 		USB488Header* hp;
 		
-		unsigned int commandLength =  [aCommand length];
+		uint32_t commandLength =  (uint32_t)[aCommand length];
 		
-		unsigned long unpaddedLength = commandLength + sizeof(USB488Header);
-		unsigned long paddedLength;
+		uint32_t unpaddedLength = commandLength + sizeof(USB488Header);
+		uint32_t paddedLength;
 		if(unpaddedLength%4 != 0){
 			paddedLength = ((unpaddedLength + 4)/4)*4;	
 		}
@@ -309,12 +309,12 @@ readon:
 	[usbLock unlock];
 }
 
-- (void) writeBytes:(void*)bytes length:(int)length
+- (void) writeBytes:(void*)bytes length:(uint32_t)length
 {
 	[self writeBytes:bytes length:length pipe:0];
 }
 
-- (void) writeBytes:(void*)bytes length:(int)length pipe:(int)aPipeIndex
+- (void) writeBytes:(void*)bytes length:(uint32_t)length pipe:(int)aPipeIndex
 {
 	[usbLock lock];
 	UInt8 pipe;
@@ -345,7 +345,7 @@ readon:
 }
 
 
-- (int) readUSB488:(char*)resultData length:(unsigned long)amountRead
+- (int) readUSB488:(char*)resultData length:(uint32_t)amountRead
 {
 	int bytesRead = 0;
 	[usbLock lock];
@@ -377,16 +377,16 @@ readon:
 	return bytesRead;
 }
 
-- (int) readBytes:(void*)bytes length:(int)length
+- (int) readBytes:(void*)bytes length:(uint32_t)length
 {
 	return [self readBytes:bytes length:length pipe:0];
 }
 
-- (int) readBytes:(void*)bytes length:(int)amountRead pipe:(int)aPipeIndex
+- (int) readBytes:(void*)bytes length:(uint32_t)amountRead pipe:(int)aPipeIndex
 {
 	int result;
     [usbLock lock];
-	unsigned long actualRead = amountRead;
+	uint32_t actualRead = amountRead;
 	UInt8 pipe = inPipes[aPipeIndex];
 	
 	IOReturn kr = (*interface)->ReadPipeTO(interface, pipe, bytes, &actualRead, 1000, 1000);
@@ -418,11 +418,11 @@ readon:
 }
 
 
-- (int) readBytesOnInterruptPipe:(void*)bytes length:(int)amountRead
+- (int) readBytesOnInterruptPipe:(void*)bytes length:(uint32_t)amountRead
 {
 	int result;
     [usbLock lock];
-	unsigned long actualRead = amountRead;
+	uint32_t actualRead = amountRead;
 	UInt8 pipe;
 	if(transferType == kUSBBulk)		 pipe = inPipes[0];
 	else if(transferType == kUSBInterrupt) pipe = interruptInPipes[0];
@@ -454,10 +454,10 @@ readon:
 	
 	return result;
 }
-- (int) readBytesOnInterruptPipeNoLock:(void*)bytes length:(int)amountRead
+- (int) readBytesOnInterruptPipeNoLock:(void*)bytes length:(uint32_t)amountRead
 {
 	int result;
-	unsigned long actualRead = amountRead;
+	uint32_t actualRead = amountRead;
 	UInt8 pipe;
 	if(transferType == kUSBBulk)		 pipe = inPipes[0];
 	else if(transferType == kUSBInterrupt) pipe = interruptInPipes[0];
@@ -486,7 +486,7 @@ readon:
 	return result;
 }
 
-- (void) writeBytesOnInterruptPipe:(void*)bytes length:(int)length
+- (void) writeBytesOnInterruptPipe:(void*)bytes length:(uint32_t)length
 {
 	[usbLock lock];
 	UInt8 pipe;
@@ -520,13 +520,13 @@ readon:
 }
 
 
-- (int) readBytesFastNoThrow:(void*)bytes length:(int)amountRead
+- (int) readBytesFastNoThrow:(void*)bytes length:(uint32_t)amountRead
 {
 	int result;
 	[usbLock lock];
 	UInt8 pipe;
 	pipe = inPipes[0];
-	unsigned long actualRead = amountRead;
+	uint32_t actualRead = amountRead;
 	IOReturn kr = (*interface)->ReadPipeTO(interface, pipe, bytes, &actualRead, 10, 10);
 	if(kr)	{
 		kr = (*interface)->GetPipeStatus(interface, pipe);
@@ -588,7 +588,7 @@ readon:
 		s = [s stringByAppendingFormat:@"SW Object: %@\n",[registeredObject className]];
 	}
 	else      s = [s stringByAppendingString:@"SW Object: ---\n"];
-	s = [s stringByAppendingFormat:@"Location : 0x%lx\n",(unsigned int)locationID];
+	s = [s stringByAppendingFormat:@"Location : 0x%x\n",(unsigned int)locationID];
 	if(serialNumber){
 		s = [s stringByAppendingFormat:@"Serial # : %@\n",serialNumber];
 	}

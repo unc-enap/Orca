@@ -178,7 +178,7 @@ NSString* ORCmdLableDetailsChanged  = @"ORCmdLableDetailsChanged";
 				NSArray*			selectorItems	= [NSInvocation argumentsListFromSelector:setterString];
 				
 				[theInvocation setSelector:theSetterSelector];
-				int n = [theSignature numberOfArguments];
+				int n = (int)[theSignature numberOfArguments];
 				int i;
 				int count=0;
 				for(i=1;i<n;i+=2){
@@ -211,7 +211,7 @@ NSString* ORCmdLableDetailsChanged  = @"ORCmdLableDetailsChanged";
 					NSArray*			selectorItems = [NSInvocation argumentsListFromSelector:loadString];
 					
 					[theInvocation setSelector:theLoadSelector];
-					int n = [theSignature numberOfArguments];
+					int n = (int)[theSignature numberOfArguments];
 					int count=0;
 					int i;
 					//load selectors shouldn't have any arguments, but just in case the user is trying something funny....

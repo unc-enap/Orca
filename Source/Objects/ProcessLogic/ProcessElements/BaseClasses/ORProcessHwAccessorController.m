@@ -263,12 +263,12 @@
 }
 - (IBAction) viewIconTypeAction:(id)sender
 {
-	[model setViewIconType:[sender indexOfSelectedItem]];	
+	[model setViewIconType:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) labelTypeAction:(id)sender
 {
-	[model setLabelType:[[sender selectedCell]tag]];	
+	[model setLabelType:(int)[[sender selectedCell]tag]];	
 }
 
 - (IBAction) customLabelAction:(id)sender

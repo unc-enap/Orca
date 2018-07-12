@@ -24,8 +24,8 @@
 
 @interface ORSafeBuffer : NSObject {
 	NSMutableArray* buffer;
-	unsigned maxSize;
-	unsigned startIndex;
+	NSUInteger maxSize;
+	NSUInteger startIndex;
 	NSLock* bufferLock;
 }
 - (id) init;

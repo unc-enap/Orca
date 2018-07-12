@@ -315,22 +315,22 @@
 
 - (IBAction) col3KeyAction:(id)sender
 {
-	[model setCol3Key:[sender indexOfSelectedItem]];	
+	[model setCol3Key:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) col2KeyAction:(id)sender
 {
-	[model setCol2Key:[sender indexOfSelectedItem]];	
+	[model setCol2Key:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) col1KeyAction:(id)sender
 {
-	[model setCol1Key:[sender indexOfSelectedItem]];	
+	[model setCol1Key:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) col0KeyAction:(id)sender
 {
-	[model setCol0Key:[sender indexOfSelectedItem]];	
+	[model setCol0Key:(int)[sender indexOfSelectedItem]];	
 }
 
 - (IBAction) writeDataFileAction:(id)sender

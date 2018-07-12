@@ -20,7 +20,7 @@
 //-------------------------------------------------------------
 
 @interface ORCmdHistory : NSObject {
-	unsigned				historyIndex;
+	unsigned long				historyIndex;
 	NSMutableArray*			history;
 
 }

@@ -229,7 +229,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
     objects = anObjects;
 }
 
-- (int)objectTag
+- (NSInteger)objectTag
 {
     return objectTag;
 }
@@ -604,7 +604,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
     [[[self undoManager] prepareWithInvocationTarget:self] removeSelectionControllerAtIndex:index+1];
 }
 
-- (void) removeSelectionControllerAtIndex:(int) index
+- (void) removeSelectionControllerAtIndex:(NSInteger) index
 {
     id obj = [[self selectionControllers] objectAtIndex:index];
     [[[self undoManager] prepareWithInvocationTarget:self] addSelectionController:obj atIndex:index-1];
@@ -1071,7 +1071,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
     //fill with nil objects at start, will fill in below.
     NSArray* containers = [[(ORAppDelegate*)[NSApp delegate] document] collectObjectsOfClass:containerClass]; 
     [self setControlArray:[NSMutableArray array]];
-    int maxContainerTag = 0;
+    NSUInteger maxContainerTag = 0;
     for( id containerObj in containers){
         if([containerObj stationNumber]>maxContainerTag){
             maxContainerTag = [containerObj stationNumber];
@@ -1088,7 +1088,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
     if([containers count]){
         
         for(id containerObj in containers){
-            int containerTag = [containerObj stationNumber];
+            int containerTag = (int)[containerObj stationNumber];
             [controlArray replaceObjectAtIndex:containerTag withObject:[NSMutableArray array]]; //insert the container object
 			//set up this container's objects
             NSArray* objectList = [containerObj collectObjectsOfClass:objectClass]; 
@@ -1179,7 +1179,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
 
 - (void) setUpMasks:(NSNotification*)aNote
 {
-    int i;
+    long i;
     unsigned long       mask;
     eSelectionLogic	selectionLogic;
     eSelectionLevel	selectionLevel;
@@ -1444,7 +1444,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
     
     SEL setterSelector = [paramObj setMethodSelector];
     SEL getterSelector = [paramObj getMethodSelector];
-    int numSetArgs = [[target methodSignatureForSelector:[paramObj setMethodSelector]] numberOfArguments]-2;
+    int numSetArgs = (int)[[target methodSignatureForSelector:[paramObj setMethodSelector]] numberOfArguments]-2;
     int numGetArgs = 0;
     //convert the chan to a NSNumber
     NSNumber* theChan = [NSNumber numberWithInt:chan];
@@ -1452,7 +1452,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
     //set up the invocation for the 'getter'
 	if(getterSelector){
 	    invocationForGetter = [NSInvocation invocationWithMethodSignature:[target methodSignatureForSelector:getterSelector]];
-	    numGetArgs = [[target methodSignatureForSelector:getterSelector] numberOfArguments]-2;
+	    numGetArgs = (int)[[target methodSignatureForSelector:getterSelector] numberOfArguments]-2;
 	    //[invocationForGetter retainArguments];
 	    [invocationForGetter setSelector:getterSelector];
 	    [invocationForGetter setTarget:target];
@@ -1537,7 +1537,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
 				ORHWWizParam* aParam;
 				NSEnumerator* e = [[self selectedObjectsParameters] objectEnumerator];
 				while(aParam = [e nextObject]){
-					int numSetArgs = [[target methodSignatureForSelector:[aParam setMethodSelector]] numberOfArguments]-2;
+					int numSetArgs = (int)[[target methodSignatureForSelector:[aParam setMethodSelector]] numberOfArguments]-2;
 					if(numSetArgs>0){
 						[self doAction:kAction_Restore target:target parameter:aParam channel:chan value:aValue];
 					}
@@ -1620,7 +1620,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
                 
 				SEL methodSel = [paramObj setMethodSelector];
 				int numberOfSettableArguments = 0;
-				if(methodSel) numberOfSettableArguments = [[target methodSignatureForSelector:methodSel] numberOfArguments]-2;
+				if(methodSel) numberOfSettableArguments = (int)[[target methodSignatureForSelector:methodSel] numberOfArguments]-2;
 				
 				if(![paramObj enabledWhileRunning] && [[ORGlobal sharedGlobal] runInProgress]){
 					NSLog(@"HW Wizard selection <%@> can not be executed while running. It was skipped.\n",[paramObj name]);
@@ -1725,12 +1725,12 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
 	while([actionControllers count] > 1)    [self removeActionControllerAtIndex:1];
 	while([selectionControllers count] > 1) [self removeSelectionControllerAtIndex:1];
 	
-	int oldObjectIndex = [objectPU indexOfSelectedItem];
+	int oldObjectIndex = (int)[objectPU indexOfSelectedItem];
 	
     [[self undoManager] enableUndoRegistration];
 	
 	//loop thru all availiable objects and do a 'Restore All'
-	n = [objectPU numberOfItems];
+	n = (int)[objectPU numberOfItems];
 	for(i=0;i<n;i++){
 		[objectPU selectItemAtIndex:i];
 		[self selectObject:objectPU];

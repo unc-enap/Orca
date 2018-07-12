@@ -160,7 +160,7 @@
 - (void) setLogFile:(NSString*)aLogFile;
 - (BOOL) logToFile;
 - (void) setLogToFile:(BOOL)aLogToFile;
-- (int) queCount;
+- (NSUInteger) queCount;
 - (void) setProcessLimitDefaults;
 
 #pragma mark •••Data Records

@@ -38,7 +38,7 @@
 
 #pragma mark ¥¥¥Data Source
 - (int)  numberPointsInPlot:(id)aPlotter;
-- (void) plotter:(id)aPlotter index:(unsigned long)index x:(double*)xValue y:(double*)yValue;
+- (void) plotter:(id)aPlotter index:(int)index x:(double*)xValue y:(double*)yValue;
 - (NSInteger)  numberOfRowsInTableView:(NSTableView *)tableView;
 - (id)   tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row;
 @end

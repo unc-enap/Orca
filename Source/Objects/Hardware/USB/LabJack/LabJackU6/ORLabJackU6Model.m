@@ -143,12 +143,12 @@ NSString* ORLabJackU6CounterEnabledChanged      = @"ORLabJackU6CounterEnabledCha
     return deviceHandle!=0;
 }
 
-- (unsigned long) deviceSerialNumber
+- (int) deviceSerialNumber
 {
     return deviceSerialNumber;
 }
 
-- (void) setDeviceSerialNumber:(unsigned long)aDeviceSerialNumber
+- (void) setDeviceSerialNumber:(int)aDeviceSerialNumber
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setDeviceSerialNumber:deviceSerialNumber];
 
@@ -964,7 +964,7 @@ NSString* ORLabJackU6CounterEnabledChanged      = @"ORLabJackU6CounterEnabledCha
     }
 	
     [encoder encodeInt:adcDiff		forKey:@"adcDiff"];
-    [encoder encodeInt32:doDirection	forKey:@"doDirection"];
+    [encoder encodeInt32:(int32_t)doDirection	forKey:@"doDirection"];
     [encoder encodeBool:[self deviceOpen] forKey:@"wasOpen"];
 }
 

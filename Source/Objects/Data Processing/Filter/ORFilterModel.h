@@ -119,7 +119,7 @@
 - (NSMutableArray*) inputValues;
 - (NSMutableArray*) outputValues;
 - (void) addInputValue;
-- (void) removeInputValue:(int)i;
+- (void) removeInputValue:(NSUInteger)i;
 
 #pragma mark •••Data Handling
 - (unsigned long) dataId1D;
@@ -156,14 +156,14 @@
 - (unsigned long) extractRecordLen:(unsigned long)aValue;
 - (unsigned long) extractValue:(unsigned long)aValue mask:(unsigned long)aMask thenShift:(unsigned long)shift;
 - (void) shipRecord:(unsigned long*)p length:(long)length;
-- (void) checkStackIndex:(int) i;
-- (void) checkStack:(int)index ptr:(unsigned long) ptr;
-- (void) pushOntoStack:(int)i ptrCheck:(unsigned long)ptrCheck record:(unsigned long*)p;
-- (unsigned long*) popFromStack:(int)i;
-- (unsigned long*) popFromStackBottom:(int)i;
-- (void) shipStack:(int)i;
-- (void) dumpStack:(int)i;
-- (long) stackCount:(int)i;
+- (void) checkStackIndex:(unsigned long) i;
+- (void) checkStack:(unsigned long)index ptr:(unsigned long) ptr;
+- (void) pushOntoStack:(unsigned long)i ptrCheck:(unsigned long)ptrCheck record:(unsigned long*)p;
+- (unsigned long*) popFromStack:(unsigned long)i;
+- (unsigned long*) popFromStackBottom:(unsigned long)i;
+- (void) shipStack:(unsigned long)i;
+- (void) dumpStack:(unsigned long)i;
+- (long) stackCount:(unsigned long)i;
 - (void) histo1D:(int)i value:(unsigned long)aValue;
 - (void) histo2D:(int)i x:(unsigned long)x y:(unsigned long)y;
 - (void) stripChart:(int)i time:(unsigned long)x value:(unsigned long)y;

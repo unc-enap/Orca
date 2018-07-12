@@ -260,7 +260,7 @@
 
 - (void) boardIDChanged:(NSNotification*)aNote
 {
-	[boardIdField setIntValue: [model boardID]];
+	[boardIdField setIntegerValue: [model boardID]];
 }
 
 - (void) enableMaskChanged:(NSNotification*)aNote
@@ -325,18 +325,18 @@
 - (void) slotChanged:(NSNotification*)aNote
 {
 	//[slotField setIntValue: [model slot]];
-	[[self window] setTitle:[NSString stringWithFormat:@"Acqiris DC440 (Station %d)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"Acqiris DC440 (Station %ld)",[model stationNumber]]];
 }
 
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"Acqiris DC440 (Station %d)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"Acqiris DC440 (Station %ld)",[model stationNumber]]];
 }
 
 - (void) baseAddressChanged:(NSNotification*)aNote
 {
-	[baseAddressField setIntValue: [model baseAddress]];
+	[baseAddressField setIntegerValue: [model baseAddress]];
 }
 
 - (void) triggerSlopeChanged:(NSNotification*)aNote
@@ -396,7 +396,7 @@
 
 - (void)  numberSamplesChanged:(NSNotification*)aNote
 {
-	[numberSamplesField setIntValue:[model numberSamples]];
+	[numberSamplesField setIntegerValue:[model numberSamples]];
 }
 
 - (void)  dataChanged:(NSNotification*)aNote
@@ -454,7 +454,7 @@
 
 - (void) enableMaskAction:(id)sender
 {
-	[model setEnableMaskBit:[[sender selectedCell] tag] withValue:[sender intValue]];
+	[model setEnableMaskBit:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 - (void) readContinouslyAction:(id)sender
@@ -465,7 +465,7 @@
 
 - (IBAction) triggerSlopeAction:(id)sender
 {
-	[model setTriggerSlope:[sender indexOfSelectedItem]];	
+	[model setTriggerSlope:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) triggerLevel2FieldAction:(id)sender
@@ -480,17 +480,17 @@
 
 - (IBAction) triggerCouplingAction:(id)sender
 {
-	[model setTriggerCoupling:[sender indexOfSelectedItem]];	
+	[model setTriggerCoupling:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) triggerSourceAction:(id)sender
 {
-	[model setTriggerSource:[sender indexOfSelectedItem]];	
+	[model setTriggerSource:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) couplingAction:(id)sender
 {
-	[model setCoupling:[sender indexOfSelectedItem]];	
+	[model setCoupling:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) verticalOffsetAction:(id)sender
@@ -500,7 +500,7 @@
 
 - (IBAction) fullScalePUAction:(id)sender
 {
-	[model setFullScale:[sender indexOfSelectedItem]];	
+	[model setFullScale:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) delayTimeFieldAction:(id)sender
@@ -582,7 +582,7 @@
 
 - (int) numberPointsInPlot:(id)aPlotter;
 {
-	int set = [aPlotter tag];
+	int set = (int)[aPlotter tag];
 	int len =  [model lengthBuffer:set];
 	if(len<0)return 0;
 	else return len;
@@ -590,7 +590,7 @@
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 {
-	int set = [aPlotter tag];
+	int set = (int)[aPlotter tag];
 	*yValue =  [model buffer:i set:set];
 	*xValue = i;
 }

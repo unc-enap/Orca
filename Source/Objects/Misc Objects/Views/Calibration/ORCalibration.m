@@ -334,12 +334,12 @@
     
     NSMutableArray* dataArray = [NSMutableArray arrayWithArray:calibrationArray];
 
-	int n = [dataArray count];
+	int n = (int)[dataArray count];
     
 	if(n!=0){
         if(n==1){
             [dataArray insertObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:0],@"Channel",[NSNumber numberWithDouble:0],@"Energy", nil] atIndex:0];
-            n = [dataArray count];
+            n = (int)[dataArray count];
         }
 		for(id pt in dataArray){
 			double x = [[pt objectForKey:@"Channel"] doubleValue];

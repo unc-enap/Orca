@@ -342,8 +342,8 @@ typedef struct  {
 - (void) encodeWithCoder:(NSCoder*)encoder;
 
 #pragma mark ***HW Read/Write API
-- (int)     writeLongBlock:(unsigned long*) writeValue atAddress:(unsigned int) vmeAddress;
-- (int)     readLongBlock:(unsigned long*)  readValue atAddress:(unsigned int) vmeAddress;
+- (int)     writeLongBlock:(unsigned long*) writeValue atAddress:(unsigned long) vmeAddress;
+- (int)     readLongBlock:(unsigned long*)  readValue atAddress:(unsigned long) vmeAddress;
 - (void)    writeChan:(unsigned short)chan reg:(unsigned short) pReg sendValue:(unsigned long) pValue;
 - (void)    readChan:(unsigned short)chan reg:(unsigned short) pReg returnValue:(unsigned long*) pValue;
 - (int) readFifo:(char*)destBuff numBytesToRead:(unsigned long)    numBytes;

@@ -320,8 +320,8 @@
 - (void) updateThresholdsDisplay:(NSNotification *)aNote
 {
     int nhit_units,esum_units;
-    int nhit_view_unit_index = [[nHitViewTypeMatrix selectedCell] tag];
-    int esum_view_unit_index = [[eSumViewTypeMatrix selectedCell] tag];
+    int nhit_view_unit_index = (int)[[nHitViewTypeMatrix selectedCell] tag];
+    int esum_view_unit_index = (int)[[eSumViewTypeMatrix selectedCell] tag];
     @try {
         nhit_units = [self convert_view_unit_index_to_model_index: nhit_view_unit_index];
         esum_units = [self convert_view_unit_index_to_model_index: esum_view_unit_index];
@@ -385,12 +385,12 @@
 
 - (void) writeValueChanged:(NSNotification*)aNote
 {
-	[writeValueField setIntValue: [model writeValue]];
+	[writeValueField setIntegerValue: [model writeValue]];
 }
 
 - (void) memoryOffsetChanged:(NSNotification*)aNote
 {
-	[memoryOffsetField setIntValue: [model memoryOffset]];
+	[memoryOffsetField setIntegerValue: [model memoryOffset]];
 }
 
 - (void) selectedRegisterChanged:(NSNotification*)aNote
@@ -407,7 +407,7 @@
 
 - (void) fixedPulserRateCountChanged:(NSNotification*)aNote
 {
-	[fixedTimePedestalsCountField setIntValue:[model fixedPulserRateCount]];
+	[fixedTimePedestalsCountField setIntegerValue:[model fixedPulserRateCount]];
 }
 
 - (void) fixedPulserRateDelayChanged:(NSNotification*)aNote
@@ -523,7 +523,7 @@
     }
 
     NSString* key = [NSString stringWithFormat: @"orca.ORMTC%d.selectedtab",[model slot]];
-    int index = [tabView indexOfTabViewItem:item];
+    int index = (int)[tabView indexOfTabViewItem:item];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 }
 
@@ -541,27 +541,27 @@
 
 - (void) regBaseAddressChanged:(NSNotification*)aNotification
 {
-	[regBaseAddressText setIntValue: [model baseAddress]];
+	[regBaseAddressText setIntegerValue: [model baseAddress]];
 }
 
 - (void) memBaseAddressChanged:(NSNotification*)aNotification
 {
-	[memBaseAddressText setIntValue: [model memBaseAddress]];
+	[memBaseAddressText setIntegerValue: [model memBaseAddress]];
 }
 
 - (void) triggerMTCAMaskChanged:(NSNotification*)aNotification
 {
     NSArray* matrices = @[mtcaN100Matrix, mtcaN20Matrix, mtcaEHIMatrix, mtcaELOMatrix,
                           mtcaOWLNMatrix,mtcaOEHIMatrix,mtcaOELOMatrix];
-    uint32_t masks[7] = {[model mtcaN100Mask],[model mtcaN20Mask],[model mtcaEHIMask],
+    unsigned long masks[7] = {[model mtcaN100Mask],[model mtcaN20Mask],[model mtcaEHIMask],
                             [model mtcaELOMask],[model mtcaOWLNMask],[model mtcaOEHIMask],
                             [model mtcaOELOMask]};
     for (int matrix_index = 0; matrix_index < [matrices count]; matrix_index++) {
-        uint32_t maskValue = masks[matrix_index];
+        unsigned long maskValue = masks[matrix_index];
         NSMatrix* thisMatrix = matrices[matrix_index];
         for (int i = 0; i < [thisMatrix numberOfRows]; i++) {
             NSCell* thisCell = [thisMatrix cellAtRow:i column:0];
-            int bitPos = [thisCell tag];
+            int bitPos = (int)[thisCell tag];
             [thisCell setIntValue:(maskValue & (1<<bitPos))];
         }
     }
@@ -577,7 +577,7 @@
 //basic ops
 - (IBAction) basicUseMemoryAction:(id)sender
 {
-	[model setUseMemory:[[sender selectedCell] tag]];	
+	[model setUseMemory:(int)[[sender selectedCell] tag]];
 }
 
 - (IBAction) basicRepeatDelayAction:(id)sender
@@ -602,7 +602,7 @@
 
 - (void) basicSelectedRegisterAction:(id)sender
 {
-	[model setSelectedRegister:[sender indexOfSelectedItem]];	
+	[model setSelectedRegister:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) basicLockAction:(id)sender
@@ -729,7 +729,7 @@
 - (IBAction) eSumViewTypeAction:(id)sender
 {
     int unit_index;
-    int view_index = [[sender selectedCell] tag];
+    int view_index = (int)[[sender selectedCell] tag];
     @try {
         unit_index = [self convert_view_unit_index_to_model_index:view_index];
     } @catch (NSException *exception) {
@@ -742,7 +742,7 @@
 - (IBAction) nHitViewTypeAction:(id)sender
 {
     int unit_index;
-    int view_index = [[sender selectedCell] tag];
+    int view_index = (int)[[sender selectedCell] tag];
     @try {
         unit_index = [self convert_view_unit_index_to_model_index:view_index];
         [self changeNhitThresholdsDisplay: unit_index];
@@ -979,8 +979,8 @@
 {
     int threshold_index, unit_index;
     @try {
-        threshold_index = [self convert_view_threshold_index_to_model_index:[[sender selectedCell] tag]];
-        unit_index = [self convert_view_unit_index_to_model_index:[[nHitViewTypeMatrix selectedCell] tag]];
+        threshold_index = [self convert_view_threshold_index_to_model_index:(int)[[sender selectedCell] tag]];
+        unit_index = [self convert_view_unit_index_to_model_index:(int)[[nHitViewTypeMatrix selectedCell] tag]];
         float threshold = [[sender selectedCell] floatValue];
         [model setThresholdOfType:threshold_index fromUnits:unit_index toValue:threshold];
     } @catch (NSException *exception) {
@@ -992,8 +992,8 @@
 {
     int threshold_index, unit_index;
     @try {
-        threshold_index = [self convert_view_threshold_index_to_model_index:[[sender selectedCell]tag]];
-        unit_index = [self convert_view_unit_index_to_model_index:[[eSumViewTypeMatrix selectedCell] tag]];
+        threshold_index = [self convert_view_threshold_index_to_model_index:(int)[[sender selectedCell]tag]];
+        unit_index = [self convert_view_unit_index_to_model_index:(int)[[eSumViewTypeMatrix selectedCell] tag]];
         float threshold = [[sender selectedCell] floatValue];
         [model setThresholdOfType:threshold_index fromUnits:unit_index toValue:threshold];
     } @catch (NSException *excep) {
@@ -1016,7 +1016,7 @@
     uint32_t mask = 0;
     for (int i = 0; i < [boxes numberOfRows]; i++){
         if([[boxes cellAtRow:i column:0] intValue]) {
-            int position = [[boxes cellAtRow:i column:0] tag];
+            int position = (int)[[boxes cellAtRow:i column:0] tag];
             mask |= (1L << position);
         }
     }

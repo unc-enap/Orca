@@ -621,7 +621,7 @@ NSString* ORHP4405AModelTraceChanged		= @"ORHP4405AModelTraceChanged";
 		if(p[0] == '#'){
 			int headerSizeBytes = 2 + (p[1] - 48);
 			NSData* theData = [NSData dataWithBytes:&p[headerSizeBytes] length:[someData length] - headerSizeBytes];
-			int lenInBytes = [theData length];
+			NSUInteger lenInBytes = [theData length];
 			switch (dataType) {
 				case 1: //Int32
 				{
@@ -695,7 +695,7 @@ NSString* ORHP4405AModelTraceChanged		= @"ORHP4405AModelTraceChanged";
 	NSDateComponents *components = [gregorian components:(NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit) fromDate:today];
 
 #endif
-    [ self writeToGPIBDevice: [ NSString stringWithFormat: @"SYST:DATE %d,%d,%d", [components hour],[components minute],[components second]]];
+    [ self writeToGPIBDevice: [ NSString stringWithFormat: @"SYST:DATE %ld,%ld,%ld", [components hour],[components minute],[components second]]];
 }
 
 - (unsigned long)	getPowerOnTime
@@ -1061,7 +1061,7 @@ NSString* ORHP4405AModelTraceChanged		= @"ORHP4405AModelTraceChanged";
 	 
 - (int) numPoints
 {
-	return [trace1 count];
+	return (int)[trace1 count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue

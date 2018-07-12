@@ -62,7 +62,7 @@ NSString* ORSNOCardBoardIDChanged 	= @"ORSNOCardBoardIDChanged";
 
 - (NSString*) fullID
 {
-	return [NSString stringWithFormat:@"%@,%d,%d",NSStringFromClass([self class]),[self crateNumber], [self stationNumber]];
+	return [NSString stringWithFormat:@"%@,%d,%lu",NSStringFromClass([self class]),[self crateNumber], [self stationNumber]];
 }
 
 - (void) guardian:(id)aGuardian positionConnectorsForCard:(id)aCard

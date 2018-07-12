@@ -55,8 +55,8 @@
 - (void) setModel:(id)aModel
 {
     if(!aModel){
-        int i;
-        int n = [model numberOfChildren];
+        NSUInteger i;
+        NSUInteger n = [model numberOfChildren];
         NSNotificationCenter* nc = [NSNotificationCenter defaultCenter];
         for(i=0;i<n;i++){
             id oldModel = [(ORDataSet*)[model childAtIndex:i]data];

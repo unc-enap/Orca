@@ -175,7 +175,7 @@ SOCKET csock_udpconnect(char *ipAddress, int port, struct sockaddr_in *dest)
 ////////////////////////////////////////////
 // csock_close
 ////////////////////////////////////////////
-int csock_close(SOCKET sck)
+ssize_t csock_close(SOCKET sck)
 {
 	shutdown(sck, 2);
 	closesocket(sck);
@@ -185,7 +185,7 @@ int csock_close(SOCKET sck)
 ////////////////////////////////////////////
 // csock_canwrite
 ////////////////////////////////////////////
-int csock_canwrite(SOCKET sck)
+ssize_t csock_canwrite(SOCKET sck)
 {
 	fd_set wfds;
 	struct timeval tv;
@@ -210,7 +210,7 @@ int csock_canwrite(SOCKET sck)
 ////////////////////////////////////////////
 // csock_canread 
 ////////////////////////////////////////////
-int csock_canread(SOCKET sck)
+ssize_t csock_canread(SOCKET sck)
 {
 	fd_set rfds;
 	struct timeval tv;
@@ -236,9 +236,9 @@ int csock_canread(SOCKET sck)
 ////////////////////////////////////////////
 //	csock_send
 ////////////////////////////////////////////
-int csock_send(SOCKET sck, void *buffer, int size)
+ssize_t csock_send(SOCKET sck, void *buffer, int size)
 {
-	int ret = 0;
+	ssize_t ret = 0;
 	int pos = 0;
 	char* p = (char*)buffer;
 	while (size) {
@@ -255,7 +255,7 @@ int csock_send(SOCKET sck, void *buffer, int size)
 ////////////////////////////////////////////
 //	csock_sendto
 ////////////////////////////////////////////
-int csock_sendto(SOCKET sck, void *buffer, int size, struct sockaddr *dest)
+ssize_t csock_sendto(SOCKET sck, void *buffer, int size, struct sockaddr *dest)
 { 
 	return sendto(sck, (char *) buffer, size, 0, dest, sizeof(struct sockaddr_in));
 }
@@ -263,7 +263,7 @@ int csock_sendto(SOCKET sck, void *buffer, int size, struct sockaddr *dest)
 ////////////////////////////////////////////
 //	csock_recv
 ////////////////////////////////////////////
-int csock_recv(SOCKET sck, void *buffer, int size)
+ssize_t csock_recv(SOCKET sck, void *buffer, int size)
 {
 	return recv(sck, (char *) buffer, size, 0);
 }
@@ -271,7 +271,7 @@ int csock_recv(SOCKET sck, void *buffer, int size)
 ////////////////////////////////////////////
 //	csock_recvfrom
 ////////////////////////////////////////////
-int csock_recvfrom(SOCKET sck, void *buffer, int size, struct sockaddr *dest)
+ssize_t csock_recvfrom(SOCKET sck, void *buffer, int size, struct sockaddr *dest)
 {
 #ifdef WIN32
 	int addr_len = sizeof(struct sockaddr_in);
@@ -284,9 +284,9 @@ int csock_recvfrom(SOCKET sck, void *buffer, int size, struct sockaddr *dest)
 ////////////////////////////////////////////
 //	csock_recv_t
 ////////////////////////////////////////////
-int csock_recv_t(SOCKET sck, void *buffer, int size, int timeout)
+ssize_t csock_recv_t(SOCKET sck, void *buffer, int size, int timeout)
 {
-	int rp, pos;
+	ssize_t rp, pos;
 	time_t now = time(NULL);
 	char *buf = (char *) buffer;
 
@@ -312,16 +312,16 @@ int csock_recv_t(SOCKET sck, void *buffer, int size, int timeout)
 ////////////////////////////////////////////
 //	csock_recvline
 ////////////////////////////////////////////
-int csock_recvline(SOCKET sck, char *buffer, int size)
+ssize_t csock_recvline(SOCKET sck, char *buffer, int size)
 {
-	int rp, pos;
+	ssize_t rp, pos;
 	
 	pos = 0;
 	buffer[pos] = '\0';
 	
 	while (pos < size)  {
 		rp = recv(sck, &buffer[pos], 1, 0);
-		printf("rp: %d %d %c\n",rp,buffer[pos],buffer[pos]);
+		printf("rp: %ld %d %c\n",rp,buffer[pos],buffer[pos]);
 		if (rp > 0) {
 			buffer[pos + 1] = '\0';
 
@@ -351,9 +351,9 @@ int csock_recvline(SOCKET sck, char *buffer, int size)
 ////////////////////////////////////////////
 //	csock_recvline_f
 ////////////////////////////////////////////
-int csock_recvline_f(SOCKET sck, char *buffer, int size)
+ssize_t csock_recvline_f(SOCKET sck, char *buffer, int size)
 {
-	int rp, pos;
+	ssize_t rp, pos;
 	
 	pos = 0;
 	buffer[pos] = '\0';
@@ -390,9 +390,9 @@ int csock_recvline_f(SOCKET sck, char *buffer, int size)
 ////////////////////////////////////////////
 //	csock_recvline_t
 ////////////////////////////////////////////
-int csock_recvline_t(SOCKET sck, char *buffer, int size, int timeout)
+ssize_t csock_recvline_t(SOCKET sck, char *buffer, int size, int timeout)
 {
-	int rp, pos;
+	ssize_t rp, pos;
 	time_t now = time(NULL);
 
 	pos = 0;
@@ -436,10 +436,10 @@ int csock_recvline_t(SOCKET sck, char *buffer, int size, int timeout)
 ////////////////////////////////////////////
 //	csock_recv_nb
 ////////////////////////////////////////////
-int csock_recv_nb(SOCKET sck, void *buffer, int size)
+ssize_t csock_recv_nb(SOCKET sck, void *buffer, int size)
 {
 
-	int rp = 0;
+	ssize_t rp = 0;
 	int oflag = 0;
 	
 	memset(buffer, 0, size);
@@ -459,7 +459,7 @@ int csock_recv_nb(SOCKET sck, void *buffer, int size)
 ////////////////////////////////////////////
 //	csock_flush
 ////////////////////////////////////////////
-int csock_flush(SOCKET sck)
+ssize_t csock_flush(SOCKET sck)
 {
 	char buffer;
 	while (csock_canread(sck)) 
@@ -470,11 +470,11 @@ int csock_flush(SOCKET sck)
 ////////////////////////////////////////////
 //	csock_sendrecvline
 ////////////////////////////////////////////
-int csock_sendrecvline(SOCKET sck, char *cmd, char* response, int size)
+ssize_t csock_sendrecvline(SOCKET sck, char *cmd, char* response, int size)
 {
-	int resp;
+	ssize_t resp;
 	
-	resp = csock_send(sck, cmd, strlen(cmd));
+	resp = csock_send(sck, cmd, (int)strlen(cmd));
 	if (resp <= 0) {
 		return 1;
 	}
@@ -490,11 +490,11 @@ int csock_sendrecvline(SOCKET sck, char *cmd, char* response, int size)
 ////////////////////////////////////////////
 //	csock_sendrecvline_t
 ////////////////////////////////////////////
-int csock_sendrecvline_t(SOCKET sck, char *cmd, char* response, int size, int timeout)
+ssize_t csock_sendrecvline_t(SOCKET sck, char *cmd, char* response, int size, int timeout)
 {
-	int resp;
+	ssize_t resp;
 	
-	resp = csock_send(sck, cmd, strlen(cmd));
+	resp = csock_send(sck, cmd, (int)strlen(cmd));
 	if (resp <= 0) {
 		return 1;
 	}
@@ -538,9 +538,9 @@ void BIN_ShowData(unsigned char *bin_buf, int size)
 ////////////////////////////////////////////
 //	BIN_Response
 ////////////////////////////////////////////
-int BIN_Response(short crate_id, unsigned char *buffer, int size)
+ssize_t BIN_Response(short crate_id, unsigned char *buffer, int size)
 {
-	int res, pos = 0, stuff = 0;
+	ssize_t res, pos = 0, stuff = 0;
 	short etx_found = 0;
 	unsigned char buf;
 
@@ -675,15 +675,15 @@ void* IRQ_Handler(void *arg)
 						switch (cmd[0]) {
 							case 'L':
 								irq_type = LAM_INT;
-								irq_data = strtoul(&cmd[2], 0, 16);
+								irq_data = (unsigned int)strtoul(&cmd[2], 0, 16);
 								break;
 							case 'C':
 								irq_type = COMBO_INT;
-								irq_data = strtoul(&cmd[2], 0, 16);
+								irq_data = (unsigned int)strtoul(&cmd[2], 0, 16);
 								break;
 							case 'D':
 								irq_type = DEFAULT_INT;
-								irq_data = strtoul(&cmd[2], 0, 16);
+								irq_data = (unsigned int)strtoul(&cmd[2], 0, 16);
 								break;
 						}
 						crate_info[crate_id].irq_callback((short)crate_id, irq_type, irq_data, crate_info[crate_id].userInfo);
@@ -1379,10 +1379,10 @@ short BLKBUFFS(short crate_id, short value)
 short BLKTRANSF(short crate_id, BLK_TRANSF_INFO *blk_info, unsigned int *buffer)
 {
 	int i, j, bytes_per_row, bytes_received, bytes_sent, rows;
-	int resp = 0;
+	ssize_t resp = 0;
 	short retcode = CRATE_OK;
 	char blk_ascii_buf[4096];
-	unsigned int row_buf[2048], transf_res;
+	unsigned long row_buf[2048], transf_res;
 	//PARAMETER lParam[MAX_PAR];
 
 	if ((crate_id > MAX_CRATE) || (crate_id < 0))			return CRATE_ID_ERROR;
@@ -1457,7 +1457,7 @@ short BLKTRANSF(short crate_id, BLK_TRANSF_INFO *blk_info, unsigned int *buffer)
 				if (blk_info->ascii_transf == 0) {
 					for (j = 0; j < blk_info->blksize;j++) {
 						if (row_buf[0] > 0) {
-							buffer[(i * blk_info->blksize) + j] = row_buf[j + 1];
+							buffer[(i * blk_info->blksize) + j] = (unsigned int)row_buf[j + 1];
 						}
 					}
 				}
@@ -1524,14 +1524,14 @@ short BLKTRANSF(short crate_id, BLK_TRANSF_INFO *blk_info, unsigned int *buffer)
 				strcat(blk_ascii_buf, "\r");
 				
 				bytes_sent = 0;
-				int bytesToSend = strlen(blk_ascii_buf);
+				int bytesToSend = (int)strlen(blk_ascii_buf);
 				while (bytes_sent < bytesToSend) {
 					resp = csock_send(crate_info[crate_id].sock_ascii, &blk_ascii_buf[bytes_sent], bytesToSend - bytes_sent);
 					if (resp < 0)return CRATE_ERROR;
 					else if (resp > 0) bytes_sent += resp;
 				}
 				usleep(100);
-				printf("buffer: %d ret: %d  %d/%d\n",ccc,resp,t,blk_info->totsize);
+				printf("buffer: %d ret: %ld  %ld/%d\n",ccc,resp,t,blk_info->totsize);
 				ccc++;
 				
 				numValuesRemaining -= numToSend;
@@ -1609,7 +1609,7 @@ short NOSOS(short crate_id, char nimo, char value)
 ////////////////////////////////////////////
 short CMDS(short crate_id, char *cmd, int size)
 {
-	int res;
+	ssize_t res;
 	if ((crate_id > MAX_CRATE) || (crate_id < 0))
 		return CRATE_ID_ERROR;
 
@@ -1628,7 +1628,7 @@ short CMDS(short crate_id, char *cmd, int size)
 ////////////////////////////////////////////
 short CMDR(short crate_id, char *resp, int size)
 {
-	int res;
+	ssize_t res;
 
 	if ((crate_id > MAX_CRATE) || (crate_id < 0))
 		return CRATE_ID_ERROR;
@@ -1652,7 +1652,7 @@ short CMDR(short crate_id, char *resp, int size)
 ////////////////////////////////////////////
 short CMDSR(short crate_id, char *cmd, char *resp, int size)
 {
-	int res;
+	ssize_t res;
 
 	if ((crate_id > MAX_CRATE) || (crate_id < 0))
 		return CRATE_ID_ERROR;

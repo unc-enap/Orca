@@ -112,7 +112,7 @@
 {
 	NSOperationQueue* queue = [[ORSqlDBQueue sharedSqlDBQueue] queue];
     if (object == queue && [keyPath isEqual:@"operationCount"]) {
-		NSNumber* n = [NSNumber numberWithInt:[[[ORSqlDBQueue queue] operations] count]];
+		NSNumber* n = [NSNumber numberWithInteger:[[[ORSqlDBQueue queue] operations] count]];
 		[self performSelectorOnMainThread:@selector(setQueCount:) withObject:n waitUntilDone:NO];
     }
     else {

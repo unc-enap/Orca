@@ -68,7 +68,7 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 	ptr++;
 	NSDate* date = [NSDate dateWithTimeIntervalSince1970:*ptr];
 	NSString* valueString = @"";
-	int n = length - 3;
+	int n = (int)length - 3;
 	int i;
 	for(i=0;i<n;i++){
 		ptr++;

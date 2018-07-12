@@ -638,7 +638,7 @@ NSString* ORXTR6Lock                            = @"ORXTR6Lock";
 
 #pragma mark ***Comm methods
 
-- (void) readFromDevice: (char*) aData maxLength: (long) aMaxLength
+- (void) readFromDevice: (char*) aData maxLength: (uint32_t) aMaxLength
 {
 	switch(connectionProtocol){
 		case kHPXTR6UseRS232:

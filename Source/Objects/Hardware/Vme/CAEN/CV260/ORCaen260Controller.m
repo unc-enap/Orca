@@ -214,13 +214,13 @@
 	if(aNotification==nil){
 		int i;
 		for(i=0;i<kNumCaen260Channels;i++){
-			[[scalerValueMatrix cellAtRow:i column:0] setIntValue:[model scalerValue:i]];
+			[[scalerValueMatrix cellAtRow:i column:0] setIntegerValue:[model scalerValue:i]];
 		}
 	}
 	else {
 		int index = [[[aNotification userInfo]objectForKey:@"Channel"] intValue];
 		if(index>=0 && index < kNumCaen260Channels){
-			[[scalerValueMatrix cellAtRow:index column:0] setIntValue:[model scalerValue:index]];
+			[[scalerValueMatrix cellAtRow:index column:0] setIntegerValue:[model scalerValue:index]];
 		}
 	}
 }
@@ -371,7 +371,7 @@
     }
 	
     NSString* key = [NSString stringWithFormat: @"orca.ORCaenCard%d.selectedtab",[model slot]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 	
 }

@@ -1245,19 +1245,19 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
     [super encodeWithCoder:anEncoder];
 	[anEncoder encodeInt:eventSize forKey:@"SNOCaenModelEventSize"];
 	[anEncoder encodeInt:enabledMask forKey:@"SNOCaenModelEnabledMask"];
-	[anEncoder encodeInt32:postTriggerSetting forKey:@"SNOCaenModelPostTriggerSetting"];
-	[anEncoder encodeInt32:triggerSourceMask forKey:@"SNOCaenModelTriggerSourceMask"];
-	[anEncoder encodeInt32:triggerOutMask forKey:@"SNOCaenModelTriggerOutMask"];
-	[anEncoder encodeInt32:frontPanelControlMask forKey:@"SNOCaenModelFrontPanelControlMask"];
+	[anEncoder encodeInt32:(int32_t)postTriggerSetting forKey:@"SNOCaenModelPostTriggerSetting"];
+	[anEncoder encodeInt32:(int32_t)triggerSourceMask forKey:@"SNOCaenModelTriggerSourceMask"];
+	[anEncoder encodeInt32:(int32_t)triggerOutMask forKey:@"SNOCaenModelTriggerOutMask"];
+	[anEncoder encodeInt32:(int32_t)frontPanelControlMask forKey:@"SNOCaenModelFrontPanelControlMask"];
 	[anEncoder encodeInt:coincidenceLevel forKey:@"SNOCaenModelCoincidenceLevel"];
 	[anEncoder encodeInt:acquisitionMode forKey:@"acquisitionMode"];
 	[anEncoder encodeBool:countAllTriggers forKey:@"countAllTriggers"];
-	[anEncoder encodeInt32:customSize forKey:@"customSize"];
+	[anEncoder encodeInt32:(int32_t)customSize forKey:@"customSize"];
 	[anEncoder encodeBool:isCustomSize forKey:@"isCustomSize"];
 	[anEncoder encodeBool:isFixedSize forKey:@"isFixedSize"];
 	[anEncoder encodeInt:channelConfigMask forKey:@"channelConfigMask"];
     [anEncoder encodeObject:waveFormRateGroup forKey:@"waveFormRateGroup"];
-    [anEncoder encodeInt32:numberBLTEventsToReadout forKey:@"numberBLTEventsToReadout"];
+    [anEncoder encodeInt32:(int32_t)numberBLTEventsToReadout forKey:@"numberBLTEventsToReadout"];
     [anEncoder encodeBool:continuousMode forKey:@"continuousMode"];
 	int i;
 	for (i = 0; i < [self numberOfChannels]; i++){

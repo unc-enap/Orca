@@ -66,7 +66,7 @@ NSString* ORBreakpointsAction = @"ORBreakpointsAction";
     [super dealloc];
 }
 
-- (void) setRuleThickness:(float)thickness
+- (void) setRuleThickness:(CGFloat)thickness
 {
 	[super setRuleThickness:thickness];
 	
@@ -150,7 +150,7 @@ NSString* ORBreakpointsAction = @"ORBreakpointsAction";
 	NSEnumerator* e = [aCopy objectEnumerator];
 	ORLineMarker* aMarker;
 	while (aMarker = [e nextObject]) {
-		unsigned aLine = [aMarker lineNumber];
+		NSUInteger aLine = [aMarker lineNumber];
 		ORLineMarker* marker = [[ORLineMarker alloc] initWithRulerView:self
 											  lineNumber:aLine
 												   image:[self markerImageWithSize:NSMakeSize([self ruleThickness], kMarkerHeight)]
@@ -272,11 +272,11 @@ NSString* ORBreakpointsAction = @"ORBreakpointsAction";
 		NSRange nullRange = NSMakeRange(NSNotFound, 0);
 		NSLayoutManager* layoutManager = [view layoutManager];
 		NSTextContainer* container = [view textContainer];
-		unsigned count = [lines count];
-		unsigned line;
+		unsigned long count = [lines count];
+		unsigned long line;
 		for (line = 0; line < count; line++){
-			unsigned index = [[lines objectAtIndex:line] unsignedIntValue];
-			unsigned rectCount;
+			unsigned long index = [[lines objectAtIndex:line] unsignedIntValue];
+			unsigned long rectCount;
 			NSRectArray rects = [layoutManager rectArrayForCharacterRange:NSMakeRange(index, 0)
 											 withinSelectedCharacterRange:nullRange
 														  inTextContainer:container
@@ -294,7 +294,7 @@ NSString* ORBreakpointsAction = @"ORBreakpointsAction";
 
 - (ORLineMarker*) markerAtLine:(NSUInteger)line
 {
-	return [linesToMarkers objectForKey:[NSNumber numberWithUnsignedInt:line - 1]];
+	return [linesToMarkers objectForKey:[NSNumber numberWithUnsignedLong:line - 1]];
 }
 
 
@@ -305,24 +305,24 @@ NSString* ORBreakpointsAction = @"ORBreakpointsAction";
     if ([view isKindOfClass:[NSTextView class]]) {
         
         NSString* text = [view string];
-        unsigned stringLength = [text length];
+        NSUInteger stringLength = [text length];
         [lineIndices release];
         lineIndices = [[NSMutableArray alloc] init];
         
-        unsigned index = 0;
-        unsigned numberOfLines = 0;
+        NSUInteger index = 0;
+        NSUInteger numberOfLines = 0;
         do {
-            [lineIndices addObject:[NSNumber numberWithUnsignedInt:index]];
+            [lineIndices addObject:[NSNumber numberWithUnsignedLong:index]];
             index = NSMaxRange([text lineRangeForRange:NSMakeRange(index, 0)]);
             numberOfLines++;
         } while (index < stringLength);
 		
         // Check if text ends with a new line.
-		unsigned lineEnd;
-		unsigned contentEnd;
+		NSUInteger lineEnd;
+		NSUInteger contentEnd;
         [text getLineStart:NULL end:&lineEnd contentsEnd:&contentEnd forRange:NSMakeRange([[lineIndices lastObject] unsignedIntValue], 0)];
         if (contentEnd < lineEnd) {
-            [lineIndices addObject:[NSNumber numberWithUnsignedInt:index]];
+            [lineIndices addObject:[NSNumber numberWithInteger:index]];
         }
 		
         float oldThickness = [self ruleThickness];
@@ -345,12 +345,12 @@ NSString* ORBreakpointsAction = @"ORBreakpointsAction";
 	NSMutableArray* lines = [self lineIndices];
 	
     // Binary search
-    unsigned left = 0;
-    unsigned right = [lines count];
+    NSUInteger left = 0;
+    NSUInteger right = [lines count];
 	
     while ((right - left) > 1) {
-		unsigned mid = (right + left) / 2;
-        unsigned lineStart = [[lines objectAtIndex:mid] unsignedIntValue];
+		NSUInteger mid = (right + left) / 2;
+        NSUInteger lineStart = [[lines objectAtIndex:mid] unsignedIntValue];
         if (index < lineStart) right = mid;
         else if (index > lineStart) left = mid;
         else return mid;
@@ -428,14 +428,14 @@ NSString* ORBreakpointsAction = @"ORBreakpointsAction";
         // It doesn't show up in the glyphs so would not be accounted for.
         range.length++;
         
-        unsigned count = [lines count];
-        unsigned index = 0;
-        unsigned line;
+        NSUInteger count = [lines count];
+        NSUInteger index = 0;
+        NSUInteger line;
         for (line = [self lineNumberForCharacterIndex:range.location inText:text]; line < count; line++) {
             index = [[lines objectAtIndex:line] unsignedIntValue];
             
             if (NSLocationInRange(index, range)) {        
-				unsigned rectCount;
+				NSUInteger rectCount;
 				NSRectArray rects = [layoutManager rectArrayForCharacterRange:NSMakeRange(index, 0)
 												 withinSelectedCharacterRange:nullRange
 															  inTextContainer:container
@@ -446,7 +446,7 @@ NSString* ORBreakpointsAction = @"ORBreakpointsAction";
                     // portion. Need to compensate for the clipview's coordinates.
                     float ypos = yinset + NSMinY(rects[0]) - NSMinY(visibleRect);
 					
-					ORLineMarker* marker = [linesToMarkers objectForKey:[NSNumber numberWithUnsignedInt:line]];
+					ORLineMarker* marker = [linesToMarkers objectForKey:[NSNumber numberWithInteger:line]];
 					if(showBreakpoints){
 						
 						if (marker != nil){
@@ -462,7 +462,7 @@ NSString* ORBreakpointsAction = @"ORBreakpointsAction";
 						}
                     }
                     // Line numbers are internally stored starting at 0
-                    NSString* labelText = [NSString stringWithFormat:@"%d", line + 1];
+                    NSString* labelText = [NSString stringWithFormat:@"%ld", line + 1];
                     
                     NSSize stringSize = [labelText sizeWithAttributes:textAttributes];
 					
@@ -499,7 +499,7 @@ NSString* ORBreakpointsAction = @"ORBreakpointsAction";
 {
 	if ([aMarker isKindOfClass:[ORLineMarker class]]) {
 		[linesToMarkers setObject:aMarker
-						   forKey:[NSNumber numberWithUnsignedInt:[(ORLineMarker *)aMarker lineNumber] - 1]];
+						   forKey:[NSNumber numberWithInteger:[(ORLineMarker *)aMarker lineNumber] - 1]];
 	}
 	else [super addMarker:aMarker];
 }
@@ -507,7 +507,7 @@ NSString* ORBreakpointsAction = @"ORBreakpointsAction";
 - (void) removeMarker:(NSRulerMarker*)aMarker
 {
 	if ([aMarker isKindOfClass:[ORLineMarker class]]) {
-		[linesToMarkers removeObjectForKey:[NSNumber numberWithUnsignedInt:[(ORLineMarker *)aMarker lineNumber] - 1]];
+		[linesToMarkers removeObjectForKey:[NSNumber numberWithInteger:[(ORLineMarker *)aMarker lineNumber] - 1]];
 	}
 	else [super removeMarker:aMarker];
 }

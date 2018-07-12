@@ -615,7 +615,7 @@
 
 - (IBAction) gainDisplayTypeAction:(id)sender
 {
-	[model setGainDisplayType:[[sender selectedCell] tag]];
+	[model setGainDisplayType:(int)[[sender selectedCell] tag]];
 }
 
 - (IBAction) setAllGainsAction:(id)sender
@@ -699,7 +699,7 @@
 {
     [self endEditing];
     int start,end;
-	int board = [sender tag];
+	int board = (int)[sender tag];
 	if(board == 4){ //all
 		start = 0;
 		end = 148;
@@ -818,11 +818,11 @@
         else if([[aTableColumn identifier] isEqualToString:@"Board1"])board = 1;
         else if([[aTableColumn identifier] isEqualToString:@"Board2"])board = 2;
         else board = 3;
-        [model setGain:rowIndex+(board*37) withValue:[anObject intValue]];
+        [model setGain:(int)rowIndex+(board*37) withValue:[anObject intValue]];
         if(rowIndex+(board*37) == [model gainChannel]){
             [model setGainValue:[anObject intValue]];
         }
-        [model writeGain:rowIndex+(board*37) value:[anObject intValue]];
+        [model writeGain:(int)rowIndex+(board*37) value:[anObject intValue]];
         [model readAllGains];
         
     }
@@ -856,13 +856,13 @@
 #pragma mark •••Data Source
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	return [[model timeRate:[aPlotter tag]]   count];
+	return (int)[[model timeRate:[aPlotter tag]]   count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-	int set = [aPlotter tag];
-	int count = [[model timeRate:set] count];
+	int set = (int)[aPlotter tag];
+	int count = (int)[[model timeRate:set] count];
 	int index = count-i-1;
 	*yValue = [[model timeRate:set] valueAtIndex:index];
 	*xValue = [[model timeRate:set] timeSampledAtIndex:index];

@@ -59,7 +59,7 @@
 - (void) setUpPlots
 {
 	[plotView removeAllPlots];
-	int n = [model cachedCount];
+	int n = (int)[model cachedCount];
     int i;
     for(i=0;i<n;i++){
 		

@@ -177,7 +177,7 @@ unsigned long xl2_register_offsets[] =
 
 - (NSString*) identifier
 {
-    return [NSString stringWithFormat:@"card %d",[self stationNumber]];
+    return [NSString stringWithFormat:@"card %lu",[self stationNumber]];
 }
 
 - (NSComparisonResult)	slotCompare:(id)otherCard
@@ -439,16 +439,16 @@ unsigned long xl2_register_offsets[] =
 	SBC_Packet aPacket;
 	aPacket.cmdHeader.destination			= kSNO;
 	aPacket.cmdHeader.cmdID					= kSNOXL2LoadClocks;
-	aPacket.cmdHeader.numberBytesinPayload	= sizeof(SNOXL2_ClockLoadStruct) + numLongs*sizeof(long);
+	aPacket.cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(SNOXL2_ClockLoadStruct) + numLongs*sizeof(long));
 	
 	SNOXL2_ClockLoadStruct* payloadPtr		= (SNOXL2_ClockLoadStruct*)aPacket.payload;
 	payloadPtr->addressModifier				= [self addressModifier];
-	payloadPtr->xl2_select_reg				= [self xl2RegAddress:XL2_SELECT_REG];
-	payloadPtr->xl2_clock_cs_reg			= [self xl2RegAddress:XL2_CLOCK_CS_REG];
+	payloadPtr->xl2_select_reg				= (uint32_t)[self xl2RegAddress:XL2_SELECT_REG];
+	payloadPtr->xl2_clock_cs_reg			= (uint32_t)[self xl2RegAddress:XL2_CLOCK_CS_REG];
 	payloadPtr->xl2_select_xl2				= XL2_SELECT_XL2;
 	payloadPtr->xl2_master_clk_en			= XL2_MASTER_CLK_EN;
 	payloadPtr->allClocksEnabled			= XL2_MASTER_CLK_EN | XL2_MEMORY_CLK_EN | XL2_SEQUENCER_CLK_EN | XL2_ADC_CLK_EN;
-	payloadPtr->fileSize					= [theData length];
+	payloadPtr->fileSize					= (uint32_t)[theData length];
 	const char* dataPtr						= (const char*)[theData bytes];
 	//really should be an error check here that the file isn't bigger than the max payload size
 	char* p = (char*)payloadPtr + sizeof(SNOXL2_ClockLoadStruct);
@@ -479,15 +479,15 @@ unsigned long xl2_register_offsets[] =
 	SBC_Packet aPacket;
 	aPacket.cmdHeader.destination			= kSNO;
 	aPacket.cmdHeader.cmdID					= kSNOXL2LoadXilinx;
-	aPacket.cmdHeader.numberBytesinPayload	= sizeof(SNOXL2_XilinixLoadStruct) + numLongs*sizeof(long);
+	aPacket.cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(SNOXL2_XilinixLoadStruct) + numLongs*sizeof(long));
 	
 	SNOXL2_XilinixLoadStruct* payloadPtr	= (SNOXL2_XilinixLoadStruct*)aPacket.payload;
 	payloadPtr->addressModifier				= [self addressModifier];
-	payloadPtr->selectBits					= selectBits | XL2_SELECT_XL2;
-	payloadPtr->xl2_select_reg				= [self xl2RegAddress:XL2_SELECT_REG];
+	payloadPtr->selectBits					= (uint32_t)(selectBits | XL2_SELECT_XL2);
+	payloadPtr->xl2_select_reg				= (uint32_t)[self xl2RegAddress:XL2_SELECT_REG];
 	NSLog(@"sending the xilinx file to reg: 0x%08x selectBits: 0x%08x\n", payloadPtr->xl2_select_reg, payloadPtr->selectBits);
-	payloadPtr->xl2_control_status_reg		= [self xl2RegAddress:XL2_CONTROL_STATUS_REG];
-	payloadPtr->xl2_xilinx_user_control		= [self xl2RegAddress:XL2_XILINX_USER_CONTROL];
+	payloadPtr->xl2_control_status_reg		= (uint32_t)[self xl2RegAddress:XL2_CONTROL_STATUS_REG];
+	payloadPtr->xl2_xilinx_user_control		= (uint32_t)[self xl2RegAddress:XL2_XILINX_USER_CONTROL];
 	payloadPtr->xl2_select_xl2				= XL2_SELECT_XL2;
 	payloadPtr->xl2_control_bit11			= XL2_CONTROL_BIT11;
 	payloadPtr->xl2_xlpermit				= XL2_XLPERMIT;
@@ -496,7 +496,7 @@ unsigned long xl2_register_offsets[] =
 	payloadPtr->xl2_control_clock			= XL2_CONTROL_CLOCK;
 	payloadPtr->xl2_control_data			= XL2_CONTROL_DATA;
 	payloadPtr->xl2_control_done_prog		= XL2_CONTROL_DONE_PROG;
-	payloadPtr->fileSize					= [theData length];
+	payloadPtr->fileSize					= (uint32_t)[theData length];
 	
 	const char* dataPtr						= (const char*)[theData bytes];
 	//really should be an error check here that the file isn't bigger than the max payload size

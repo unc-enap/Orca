@@ -94,7 +94,7 @@ NSString* ORcPCIBaseAddressChanged 			= @"ORcPCIBaseAddressChanged";
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
 	[super encodeWithCoder:encoder];
-	[encoder encodeInt32:baseAddress forKey:@"baseAddress"];
+	[encoder encodeInt32:(int32_t)baseAddress forKey:@"baseAddress"];
 }
 
 @end

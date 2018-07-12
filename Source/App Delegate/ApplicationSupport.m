@@ -64,7 +64,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ApplicationSupport);
 	NSArray* names =  [[NSHost currentHost] addresses];
 	id aName;
 	int index = 0;
-	int n = [names count];
+	int n = (int)[names count];
 	int i;
 	for(i=0;i<n;i++){
 		aName = [names objectAtIndex:i];

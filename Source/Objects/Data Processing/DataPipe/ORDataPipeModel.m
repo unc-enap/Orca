@@ -336,7 +336,7 @@ NSString* ORDataPipeTypeChangedNotification = @"ORDataPipeTypeChangedNotificatio
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt32:runType            forKey:@"runType"];
+    [encoder encodeInt32:(int32_t)runType            forKey:@"runType"];
     [encoder encodeObject:readerPath         forKey:@"readerPath"];
     [encoder encodeObject:pipeName           forKey:@"pipeName"];
 }

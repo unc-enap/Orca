@@ -127,16 +127,16 @@
                color: (NSColor*)color
 {
 #define kNumPoints 80
-    float endRed;
-    float endGreen;
-    float endBlue;
-    float alpha;
+    CGFloat endRed;
+    CGFloat endGreen;
+    CGFloat endBlue;
+    CGFloat alpha;
     NSColor* convertedColor = [color colorUsingColorSpaceName:NSDeviceRGBColorSpace];
     [convertedColor getRed:&endRed green:&endGreen blue:&endBlue alpha:&alpha];
 
-	float startRed   = endRed/5.;
-	float startGreen = endGreen/5.;
-	float startBlue  = endBlue/5.;
+	CGFloat startRed   = endRed/5.;
+	CGFloat startGreen = endGreen/5.;
+	CGFloat startBlue  = endBlue/5.;
 	GLfloat xInner[kNumPoints];
 	GLfloat yInner[kNumPoints];
 	GLfloat xOuter[kNumPoints];

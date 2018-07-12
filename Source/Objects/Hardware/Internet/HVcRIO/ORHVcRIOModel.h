@@ -93,7 +93,7 @@
 - (void) setSetPointFile:(NSString*)aPath;
 - (NSString*) lastRequest;
 - (void) setLastRequest:(NSString*)aRequest;
-- (int) queCount;
+- (NSUInteger) queCount;
 - (BOOL) isBusy;
 - (void) flushQueue;
 - (void) createSetPointArray;

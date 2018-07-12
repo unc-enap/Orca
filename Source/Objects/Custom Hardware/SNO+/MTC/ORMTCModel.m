@@ -384,7 +384,7 @@ tubRegister;
 
 - (void) waitForTriggerScan: (ORPQResult *) result
 {
-    int numRows, numCols;
+    unsigned long long numRows, numCols;
     int threshold_index;
     int error_count = 0;
     NSString* name = nil;
@@ -457,7 +457,7 @@ tubRegister;
 
 - (void) waitForThresholds: (ORPQResult *) result
 {
-    int numRows, numCols;
+    unsigned long long numRows, numCols;
 
     if (!result) {
         NSLogColor([NSColor redColor], @"Failed to receive threshold results from database.\n");
@@ -1070,19 +1070,19 @@ tubRegister;
 	[encoder encodeInt:useMemory		forKey:@"ORMTCModelUseMemory"];
 	[encoder encodeInt:repeatDelay		forKey:@"ORMTCModelRepeatDelay"];
 	[encoder encodeInt:repeatOpCount	forKey:@"ORMTCModelRepeatCount"];
-	[encoder encodeInt32:writeValue		forKey:@"ORMTCModelWriteValue"];
-	[encoder encodeInt32:memoryOffset	forKey:@"ORMTCModelMemoryOffset"];
+	[encoder encodeInt32:(int32_t)writeValue		forKey:@"ORMTCModelWriteValue"];
+	[encoder encodeInt32:(int32_t)memoryOffset	forKey:@"ORMTCModelMemoryOffset"];
 	[encoder encodeInt:selectedRegister	forKey:@"ORMTCModelSelectedRegister"];
 	[encoder encodeBool:isPulserFixedRate	forKey:@"ORMTCModelIsPulserFixedRate"];
-	[encoder encodeInt:fixedPulserRateCount forKey:@"ORMTCModelFixedPulserRateCount"];
+	[encoder encodeInt:(int32_t)fixedPulserRateCount forKey:@"ORMTCModelFixedPulserRateCount"];
 	[encoder encodeFloat:fixedPulserRateDelay forKey:@"ORMTCModelFixedPulserRateDelay"];
-    [encoder encodeInt:[self mtcaN100Mask] forKey:@"mtcaN100Mask"];
-    [encoder encodeInt:[self mtcaN20Mask] forKey:@"mtcaN20Mask"];
-    [encoder encodeInt:[self mtcaEHIMask] forKey:@"mtcaEHIMask"];
-    [encoder encodeInt:[self mtcaELOMask] forKey:@"mtcaELOMask"];
-    [encoder encodeInt:[self mtcaOELOMask] forKey:@"mtcaOELOMask"];
-    [encoder encodeInt:[self mtcaOEHIMask] forKey:@"mtcaOEHIMask"];
-    [encoder encodeInt:[self mtcaOWLNMask] forKey:@"mtcaOWLNMask"];
+    [encoder encodeInt:(int32_t)[self mtcaN100Mask] forKey:@"mtcaN100Mask"];
+    [encoder encodeInt:(int32_t)[self mtcaN20Mask] forKey:@"mtcaN20Mask"];
+    [encoder encodeInt:(int32_t)[self mtcaEHIMask] forKey:@"mtcaEHIMask"];
+    [encoder encodeInt:(int32_t)[self mtcaELOMask] forKey:@"mtcaELOMask"];
+    [encoder encodeInt:(int32_t)[self mtcaOELOMask] forKey:@"mtcaOELOMask"];
+    [encoder encodeInt:(int32_t)[self mtcaOEHIMask] forKey:@"mtcaOEHIMask"];
+    [encoder encodeInt:(int32_t)[self mtcaOWLNMask] forKey:@"mtcaOWLNMask"];
     [encoder encodeBool:[self isPedestalEnabledInCSR] forKey:@"isPedestalEnabledInCSR"];
     
     [encoder encodeBool:[self pulserEnabled] forKey:@"pulserEnabled"];
@@ -1344,9 +1344,9 @@ tubRegister;
     return reg[anIndex].regName;
 }
 
-- (uint32_t) read:(int)aReg
+- (unsigned long) read:(int)aReg
 {
-	uint32_t theValue = 0;
+	unsigned long theValue = 0;
 	@try {
         theValue = [mtc intCommand:"mtcd_read %d", reg[aReg].addressOffset];
 	} @catch(NSException* localException) {
@@ -1356,7 +1356,7 @@ tubRegister;
 	return theValue;
 }
 
-- (void) write:(int)aReg value:(uint32_t)aValue
+- (void) write:(int)aReg value:(unsigned long)aValue
 {
 	@try {
         [mtc okCommand:"mtcd_write %d %d", reg[aReg].addressOffset, aValue];
@@ -1366,14 +1366,14 @@ tubRegister;
 	}
 }
 
-- (void) setBits:(int)aReg mask:(uint32_t)aMask
+- (void) setBits:(int)aReg mask:(unsigned long)aMask
 {
 	unsigned long old_value = [self read:aReg];
 	unsigned long new_value = (old_value & ~aMask) | aMask;
 	[self write:aReg value:new_value];
 }
 
-- (void) clrBits:(int)aReg mask:(uint32_t)aMask
+- (void) clrBits:(int)aReg mask:(unsigned long)aMask
 {
 	unsigned long old_value = [self read:aReg];
 	unsigned long new_value = (old_value & ~aMask);
@@ -1469,7 +1469,7 @@ tubRegister;
 		NSLog(@"Exception: %@\n",localException);
 		[localException raise];
 	}
-	return aValue;
+	return (uint32_t)aValue;
 }
 
 - (void) setSingleGTWordMask:(unsigned long) gtWordMask
@@ -1561,7 +1561,7 @@ tubRegister;
 		[localException raise];
 	}
 
-	return aValue;	
+	return (uint32_t)aValue;	
 }
 
 - (void) clearTheControlRegister

@@ -170,7 +170,7 @@
 - (IBAction) onlineAction:(id)sender
 {
 	[[self undoManager] setActionName: @"Set Online Mask"];
-	[model setOnlineMaskBit:[[sender selectedCell] tag] withValue:[sender intValue]];
+	[model setOnlineMaskBit:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 - (IBAction) readNoResetAction:(id)sender

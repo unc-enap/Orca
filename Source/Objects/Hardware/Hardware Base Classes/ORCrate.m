@@ -74,7 +74,7 @@ NSString* ORCrateModelLockMovementChanged   = @"ORCrateModelLockMovementChanged"
 - (void) setUniqueIdNumber:(unsigned long)anIdNumber
 {
 	[super setUniqueIdNumber:anIdNumber];
-	[self setCrateNumber:anIdNumber-1];
+	[self setCrateNumber:(int)anIdNumber-1];
 }
 
 - (NSString*) fullID

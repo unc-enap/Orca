@@ -150,14 +150,14 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MemoryWatcherController);
 
 - (int) numberPointsInPlot:(id)aPlot
 {
-	int theTag = [aPlot tag];
-	if(theTag < kNumWatchedValues) return [watcher timeRateCount:theTag];
+	int theTag = (int)[aPlot tag];
+	if(theTag < kNumWatchedValues) return (int)[watcher timeRateCount:theTag];
 	else return 0;
 }
 
 - (void) plotter:(id)aPlot index:(int)i x:(double*)xValue y:(double*)yValue;
 {
-	int theTag = [aPlot tag];
+	int theTag = (int)[aPlot tag];
 	if(theTag < kNumWatchedValues) *yValue =  [watcher timeRate:theTag value:i];
 	else *yValue = 0;
     *xValue = i;

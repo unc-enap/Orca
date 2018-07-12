@@ -1420,23 +1420,43 @@ struct {
     // now can call methods to communicate with user client and rest of driver
     // call clientMemoryFortype() in driver user client to map Bit3 address spaces
     // map Bit3 CSR register address space
-    ret = IOConnectMapMemory(dataPort, 1, mach_task_self(), &CSRRegisterAddress,
-                             &CSRRegisterLength, kIOMapAnywhere);
+    
+//    IOConnectMapMemory(
+//                       io_connect_t        connect,
+//                       uint32_t        memoryType,
+//                       task_port_t        intoTask,
+//                       mach_vm_address_t    *atAddress,
+//                       mach_vm_size_t        *ofSize,
+//                       IOOptionBits         options );
+    ret = IOConnectMapMemory(dataPort,
+                             1,
+                             mach_task_self(),
+                             &CSRRegisterAddress,
+                             &CSRRegisterLength,
+                             kIOMapAnywhere);
     if( ret != KERN_SUCCESS ) {
         return NO;
     }
     fVStatusReg = (unsigned char *)CSRRegisterAddress + PCIVME_CSR_LOCAL_STATUS_OFFSET;
 	
     // map Bit3 mapping register address space
-    ret = IOConnectMapMemory(dataPort, 2, mach_task_self(), &mapRegisterAddress,
-                             &mapRegisterLength, kIOMapAnywhere);
+    ret = IOConnectMapMemory(dataPort,
+                             2,
+                             mach_task_self(),
+                             &mapRegisterAddress,
+                             &mapRegisterLength,
+                             kIOMapAnywhere);
     if( ret != KERN_SUCCESS ) {
         return NO;
     }
     
     // map Bit3 remote memory register address space
-    ret = IOConnectMapMemory(dataPort, 3, mach_task_self(), &remMemRegisterAddress,
-                             &remMemRegisterLength, kIOMapAnywhere);
+    ret = IOConnectMapMemory(dataPort,
+                             3,
+                             mach_task_self(),
+                             &remMemRegisterAddress,
+                             &remMemRegisterLength,
+                             kIOMapAnywhere);
     if( ret != KERN_SUCCESS ) {
         return NO;
     }        
@@ -2120,8 +2140,8 @@ static NSString *ORPciBit3ErrorRateYAttributes  = @"Bit3 ErrorRateYAttributes";
     [encoder encodeInt32:dualPortAddress forKey:ORPciBit3DualPortAddress];
     [encoder encodeInt32:dualPortRamSize forKey:ORPciBit3DualPortRamSize];
     
-    [encoder encodeInt:rwAddress forKey:ORPciBit3RWAddress];
-    [encoder encodeInt:writeValue forKey:ORPciBit3WriteValue];
+    [encoder encodeInt:(int32_t)rwAddress forKey:ORPciBit3RWAddress];
+    [encoder encodeInt:(int32_t)writeValue forKey:ORPciBit3WriteValue];
     [encoder encodeInt:rwAddressModifier forKey:ORPciBit3ReadWriteAddMod];
     [encoder encodeInt:readWriteIOSpace forKey:ORPciBit3ReadWriteAddSpace];
     [encoder encodeInt:readWriteType forKey:ORPciBit3ReadWriteType];

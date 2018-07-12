@@ -716,7 +716,7 @@
 
 - (void) postTriggerSettingChanged:(NSNotification*)aNote
 {
-    [postTriggerSettingTextField setIntValue:[model postTriggerSetting]];
+    [postTriggerSettingTextField setIntegerValue:(int)[model postTriggerSetting]];
 }
 
 - (void) gpoEnabledChanged:(NSNotification*)aNote
@@ -796,7 +796,7 @@
 {
 	//  Set value of both text and stepper
 	[self updateStepper:writeValueStepper setting:[model selectedRegValue]];
-	[writeValueTextField setIntValue:[model selectedRegValue]];
+	[writeValueTextField setIntegerValue:[model selectedRegValue]];
 }
 
 - (void) selectedRegIndexChanged:(NSNotification*) aNotification
@@ -933,7 +933,7 @@
 #pragma mark •••Actions
 - (IBAction) logicTypeAction:(id)sender
 {
-    [model setLogicType:[sender selectedRow] withValue:[[sender selectedCell] indexOfSelectedItem]];
+    [model setLogicType:[sender selectedRow] withValue:(int)[[sender selectedCell] indexOfSelectedItem]];
 }
 
 - (IBAction) zsThresholdAction:(id) sender
@@ -976,7 +976,7 @@
 
 - (IBAction) zsAlgorithmAction:(id)sender
 {
-    [model setZsAlgorithm:[sender indexOfSelectedItem]];
+    [model setZsAlgorithm:(int)[sender indexOfSelectedItem]];
 }
 
 - (void) packedAction:(id)sender
@@ -1001,7 +1001,7 @@
 
 - (void) eventSizeAction:(id)sender
 {
-    [model setEventSize:[sender indexOfSelectedItem]];
+    [model setEventSize:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) clockSourceAction:(id)sender
@@ -1076,7 +1076,7 @@
 
 - (IBAction) ttlEnabledAction:(id)sender
 {
-    [model setTtlEnabled:[[sender selectedCell] tag]];
+    [model setTtlEnabled:(int)[[sender selectedCell] tag]];
 }
 
 - (void) enabledMaskAction:(id)sender
@@ -1268,7 +1268,7 @@
     }
 	
     NSString* key = [NSString stringWithFormat: @"orca.%@%lu.selectedtab",[model className],[model uniqueIdNumber]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 	
 }
@@ -1288,12 +1288,12 @@
 
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	return [[[model waveFormRateGroup]timeRate]count];
+	return (int)[[[model waveFormRateGroup]timeRate]count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 {
-	int count = [[[model waveFormRateGroup]timeRate] count];
+	int count = (int)[[[model waveFormRateGroup]timeRate] count];
 	int index = count-i-1;
 	*yValue = [[[model waveFormRateGroup] timeRate] valueAtIndex:index];
 	*xValue = [[[model waveFormRateGroup] timeRate] timeSampledAtIndex:index];

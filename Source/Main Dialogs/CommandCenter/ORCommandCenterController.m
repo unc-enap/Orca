@@ -193,7 +193,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(CommandCenterController);
     if(aNotification==nil  || [aNotification object]== [self commandCenter]){
         [clientListView reloadData];
         [portField setEnabled:[[self commandCenter] clientCount]==0];
-		[clientCountField setIntValue:[[self commandCenter] clientCount]];
+		[clientCountField setIntegerValue:[[self commandCenter] clientCount]];
     }
 }
 

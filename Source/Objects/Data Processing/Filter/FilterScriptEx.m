@@ -191,7 +191,7 @@
 
 - (void) defineArray:(nodeType*)p delegate:(id) delegate
 {
-	int n = [self ex:p->opr.op[1] delegate:delegate].val.lValue;
+	int n = (int)[self ex:p->opr.op[1] delegate:delegate].val.lValue;
 	unsigned long* ptr = 0;
 	if(n>0) ptr = calloc(n, sizeof(unsigned long)); //freed in 'freeArray'
 	filterData tempData;
@@ -244,7 +244,7 @@
 - (void) arrayList:(nodeType*)p delegate:(id) delegate
 
 {
-	int n = [self ex:p->opr.op[1] delegate:delegate].val.lValue;
+	int n = (int)[self ex:p->opr.op[1] delegate:delegate].val.lValue;
 	unsigned long* ptr = 0;
 	if(n>0) ptr = calloc(n, sizeof(unsigned long)); //freed in 'freeArray'
 	filterData tempData;
@@ -481,7 +481,7 @@
 					
 				case PUSH_RECORD:
 				{
-					long stack = [self ex:p->opr.op[0] delegate:delegate].val.lValue;
+					unsigned long stack = [self ex:p->opr.op[0] delegate:delegate].val.lValue;
 					unsigned long* ptr  = [self ex:p->opr.op[1] delegate:delegate].val.pValue;
 					unsigned long ptrValue  = [self ex:p->opr.op[1] delegate:delegate].val.lValue;
 					[delegate pushOntoStack:stack ptrCheck:ptrValue record:ptr]; 

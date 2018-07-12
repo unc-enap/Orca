@@ -251,10 +251,10 @@
 
 - (void) loadHeader
 {
-    int n = [fileListView numberOfSelectedRows];
+    int n = (int)[fileListView numberOfSelectedRows];
     if(n <= 1){
         int index;
-        if(n == 1)index = [fileListView selectedRow];
+        if(n == 1)index = (int)[fileListView selectedRow];
         else index = 0;
         [model readHeaderForFileIndex:index];
         if([[model filesToReplay] count]){
@@ -297,11 +297,11 @@
 
 #pragma mark ¥¥¥Data Source Methods
 
-- (int)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item 
+- (NSUInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item
 {
     if(outlineView == headerView){
         if(!item) return [[model header] count];
-        else      return [item count]; 
+        else      return [item count];
     }
     else return 0;
 }

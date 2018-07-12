@@ -500,7 +500,7 @@
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"JAMF (Station %d)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"JAMF (Station %lu)",[model stationNumber]]];
 }
 
 #pragma mark •••Actions
@@ -517,24 +517,24 @@
 
 - (void) scanLimitAction:(id)sender
 {
-	int tag = [[sender selectedCell] tag];
+	int tag = (int)[[sender selectedCell] tag];
 	[model setScanLimit:tag];	
 }
 
 - (void) pollingStatePopupAction:(id)sender
 {
-	[model setPollingState:[[sender selectedItem]tag]]; 
+	[model setPollingState:(int)[[sender selectedItem]tag]];
 }
 
 - (void) rangeIndexPopupAction:(id)sender
 {
-	[model setRangeIndex:[sender tag] withValue:[sender indexOfSelectedItem]];	
+	[model setRangeIndex:(int)[sender tag] withValue:(int)[sender indexOfSelectedItem]];
 }
 
 - (void) enabledMaskMatrixAction:(id)sender
 {
 	unsigned short theMask = [model enabledMask];
-	int tag = [[sender selectedCell] tag];
+	NSInteger tag = [[sender selectedCell] tag];
 	if(![sender intValue]) theMask &= ~(1<<tag);
 	else theMask |= (1<<tag);
 	[model setEnabledMask:theMask];	
@@ -543,7 +543,7 @@
 - (void) alarmsEnabledMaskMatrixAction:(id)sender
 {
 	unsigned short theMask = [model alarmsEnabledMask];
-	int tag = [[sender selectedCell] tag];
+	NSInteger tag = [[sender selectedCell] tag];
 	if(![sender intValue]) theMask &= ~(1<<tag);
 	else theMask |= (1<<tag);
 	[model setAlarmsEnabledMask:theMask];	
@@ -639,14 +639,14 @@
 #pragma mark •••Data Source
 - (int) numberPointsInPlot:(id)aPlotter;
 {
-	int set = [aPlotter tag];
-	return [[model timeRate:set] count];
+	int set = (int)[aPlotter tag];
+	return (int)[[model timeRate:set] count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 {
-	int set = [aPlotter tag];
-	int count = [[model timeRate:set] count];
+	int set = (int)[aPlotter tag];
+	int count = (int)[[model timeRate:set] count];
 	int index = count-i-1;
 	*yValue =  [[model timeRate:set] valueAtIndex:index];
 	*xValue =  [[model timeRate:set] timeSampledAtIndex:index];

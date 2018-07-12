@@ -506,7 +506,7 @@
 - (int)	numberPointsInPlot:(id)aPlotter
 {
     if(aPlotter == [plotter0 topPlot]){
-        return [model numPointsInOldHistory]; 
+        return (int)[model numPointsInOldHistory]; 
     }
     else {
         NSUInteger set = [aPlotter tag];

@@ -346,7 +346,7 @@ Turns out this approach of building the new string and inserting it at the appro
 
 - (NSRange) findString:(NSString *)string selectedRange:(NSRange)selectedRange options:(NSUInteger)options wrap:(BOOL)wrap {
     BOOL forwards = (options & NSBackwardsSearch) == 0;
-    unsigned length = [self length];
+    NSUInteger length = [self length];
     NSRange searchRange, range;
 
     if (forwards) {

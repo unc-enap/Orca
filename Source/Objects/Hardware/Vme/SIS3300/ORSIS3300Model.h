@@ -209,7 +209,7 @@
 - (unsigned long) readTriggerEventBank:(int)bank index:(int)index;
 - (void) readAddressCounts;
 
-- (int) dataWord:(int)chan index:(int)index;
+- (unsigned long) dataWord:(int)chan index:(int)index;
 
 - (unsigned long) acqReg;
 - (unsigned long) configReg;

@@ -58,7 +58,7 @@ NSString* ORDBLock = @"ORDBLock";
 
 - (uint32_t) boardIDAsInt
 {
-    return strtoul([[self boardID] UTF8String], NULL, 16);
+    return (uint32_t)strtoul([[self boardID] UTF8String], NULL, 16);
 }
 
 -(void)dealloc
@@ -83,13 +83,13 @@ NSString* ORDBLock = @"ORDBLock";
 }
 - (NSString*) identifier
 {
-    return [NSString stringWithFormat:@"DC (%d,%d,%d)",[[guardian guardian ] crateNumber],[guardian stationNumber],[self stationNumber]];
+    return [NSString stringWithFormat:@"DC (%d,%lu,%lu)",[[guardian guardian ] crateNumber],[guardian stationNumber],[self stationNumber]];
 }
 #pragma mark •••Accessors
 - (int) globalCardNumber
 {
 	//return ([[guardian guardian ] crateNumber] * 16) + ([guardian stationNumber] * 4) + [self slot];
-	return ([[[[self guardian] guardian] adapter] crateNumber] *16*4) + ([[self guardian] stationNumber] * 4) + [self slot];
+	return (int)(([[[[self guardian] guardian] adapter] crateNumber] *16*4) + ([[self guardian] stationNumber] * 4) + [self slot]);
 }
 
 - (NSComparisonResult) globalCardNumberCompare:(id)aCard

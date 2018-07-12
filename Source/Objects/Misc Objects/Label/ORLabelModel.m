@@ -485,7 +485,7 @@ NSString* ORLabelModelFormatChanged				 = @"ORLabelModelFormatChanged";
 	}
 	else {
 		int i;
-		int n = [displayValues count];
+		int n = (int)[displayValues count];
 		NSArray* formats = [displayFormat componentsSeparatedByString:@"\n"];
 		NSString* newString = @"";
 		NSString* aFormat;

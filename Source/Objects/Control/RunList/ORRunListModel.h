@@ -87,9 +87,9 @@ enum eRunListStates {
 - (void) restartRunning;
 - (void) stopRunning;
 - (void) addItem;
-- (void) removeItemAtIndex:(int) anIndex;
-- (void) addItem:(id)anItem atIndex:(int)anIndex;
-- (id) itemAtIndex:(int)anIndex;
+- (void) removeItemAtIndex:(NSInteger) anIndex;
+- (void) addItem:(id)anItem atIndex:(NSInteger)anIndex;
+- (id) itemAtIndex:(NSInteger)anIndex;
 - (unsigned long) itemCount;
 - (TimedWorker*) timedWorker;
 - (NSString*) runStateName;

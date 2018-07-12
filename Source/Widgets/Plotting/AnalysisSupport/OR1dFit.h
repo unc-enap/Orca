@@ -19,7 +19,7 @@
 //-------------------------------------------------------------
 @interface NSObject (OR1dFitDataSourceMethods)
 - (int)   numberPointsInPlot:(id)aPlot;
-- (void) plotter:(id)aPlot index:(unsigned long)index x:(double*)x y:(double*)y;
+- (void) plotter:(id)aPlot index:(int)index x:(double*)x y:(double*)y;
 - (BOOL)  plotterShouldShowRoi:(id)aPlot;
 - (id)    plotView;
 - (id)    topPlot;

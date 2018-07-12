@@ -449,7 +449,7 @@ static NSString* ORHVRampConnector				= @"HV Ramp Connector";
 
 - (int) currentTrendCount:(int)index 
 {
-	return [[currentTrends objectAtIndex:index] count];
+	return (int)[[currentTrends objectAtIndex:index] count];
 }
 
 - (float) currentValue:(int)index supply:(int)aSupplyIndex

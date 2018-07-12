@@ -562,7 +562,7 @@ NSString* ORWG1220PulserLock = @"ORWG1220PulserLock";
     [self writeData:[self progModeCommand]];  // enter programming mode of the WG1220
     [self writeData:[self startProgCommand]];  // enter programming mode of the WG1220 part 2
     // Start-Ready-Abfrage: 'X','b',0,HIBYTE(an),LOBYTE(an),knr,CRC
-    [self writeData:[self checkReadyForProg:entries]];  // enter programming mode of the WG1220 part 3
+    [self writeData:[self checkReadyForProg:(int)entries]];  // enter programming mode of the WG1220 part 3
     // the above command will be repeated by dataRecived if not yet ready
     NSMutableData* waveformData = [[NSMutableData alloc] init];
     [waveformData appendData: [self WGBytesFromFloat]];
@@ -933,7 +933,7 @@ NSString* ORWG1220PulserLock = @"ORWG1220PulserLock";
     [self setLastRequest:cmdData];
     [serialPort writeDataInBackground:cmdData];
     float delay = 10.0;
-    unsigned int cmdLength = [cmdData length];
+    unsigned long cmdLength = [cmdData length];
     if(cmdLength > 7){
       delay +=2;
       delay += cmdLength / 2000;  // todo: check if additional time is sufficient for max data points (32768)

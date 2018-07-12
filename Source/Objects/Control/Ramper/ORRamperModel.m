@@ -132,7 +132,7 @@ NSString* ORRamperNeedsUpdate		= @"ORRamperNeedsUpdate";
 
 - (void) addRampItem:(ORRampItem*)anItem afterItem:(ORRampItem*)anotherItem
 {
-	int index = [rampItems indexOfObject:anotherItem];
+	int index = (int)[rampItems indexOfObject:anotherItem];
 	if(![rampItems containsObject:anItem]){
 		[rampItems insertObject:anItem atIndex:index];
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORRamperItemAdded object:self userInfo:[NSDictionary dictionaryWithObject:anItem forKey:@"RampItem"]];
@@ -203,7 +203,7 @@ NSString* ORRamperNeedsUpdate		= @"ORRamperNeedsUpdate";
 #pragma mark •••Ramping
 - (int) runningCount
 {
-	return [rampingItems count];
+	return (int)[rampingItems count];
 }
 
 - (int) enabledCount

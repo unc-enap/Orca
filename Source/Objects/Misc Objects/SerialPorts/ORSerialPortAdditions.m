@@ -3,7 +3,7 @@
 //  ORCA
 //
 //  Created by Mark Howe on Mon Feb 10 2003.
-//  Copyright © 2002 CENPA, University of Washington. All rights reserved.
+//  Copyright ï¿½ 2002 CENPA, University of Washington. All rights reserved.
 //-----------------------------------------------------------
 //This program was prepared for the Regents of the University of 
 //Washington at the Center for Experimental Nuclear Physics and 
@@ -52,18 +52,18 @@
 -(NSString *)readString
 {
     if (buffer == nil) buffer = malloc(AMSER_MAXBUFSIZE);
-    int len = read(fileDescriptor, buffer, AMSER_MAXBUFSIZE);
+    ssize_t len = read(fileDescriptor, buffer, AMSER_MAXBUFSIZE);
 	return [[[NSString alloc] initWithBytes:buffer length:len encoding:NSASCIIStringEncoding] autorelease];
 }
 
 - (int) writeString:(NSString *)string
 {
     int totalWritten = 0;
-    int totalNeedToWrite = [string length];
+    NSUInteger totalNeedToWrite = [string length];
     int i;
     for(i=0;i<totalNeedToWrite;i++){
         NSString* stringToWrite = [string substringFromIndex:totalWritten];
-        int len = [stringToWrite length];
+        NSUInteger len = [stringToWrite length];
         const char* cString = [stringToWrite cStringUsingEncoding:NSASCIIStringEncoding];
         totalWritten  +=  write(fileDescriptor, cString, len);
         if(totalWritten >= totalNeedToWrite)break;
@@ -78,7 +78,7 @@
     int totalNeedToWrite = theLength;
     int i;
     for(i=0;i<totalNeedToWrite;i++){
-        int numWritten =  write(fileDescriptor, ptr, theLength-totalWritten);
+        NSUInteger numWritten =  write(fileDescriptor, ptr, theLength-totalWritten);
         ptr          += numWritten;
         totalWritten += numWritten;
         if(totalWritten >= totalNeedToWrite)break;
@@ -89,8 +89,7 @@
 
 - (int) readCharArray:(unsigned char *)ptr length:(int)theLength
 {
-    int len = read(fileDescriptor, (void*)ptr, theLength);
-    return len;
+    return (int)read(fileDescriptor, (void*)ptr, theLength);
 }
 
 
@@ -198,7 +197,7 @@
         [closeLock lock];
         //NSLog(@"closeLock locked: %@", [NSThread currentThread]);
         if ((res >= 1) && (fileDescriptor >= 0)) {
-            bytesRead = read(fileDescriptor, localBuffer, AMSER_MAXBUFSIZE);
+            bytesRead = (int)read(fileDescriptor, localBuffer, AMSER_MAXBUFSIZE);
         }
 		if(bytesRead>0){
 			data = [NSData dataWithBytes:localBuffer length:bytesRead];
@@ -254,7 +253,7 @@
     [stopWriteInBackgroundLock unlock];
     [writeLock lock];	// write in sequence
     pos = 0;
-    dataLen = [data length];
+    dataLen = (unsigned int)[data length];
     speed = [self getSpeed];
     estimatedTime = (dataLen*8)/speed;
     if (estimatedTime > 3) { // will take more than 3 seconds
@@ -268,7 +267,7 @@
         bufferLen = MIN(AMSER_MAXBUFSIZE, dataLen-pos);
         
         [data getBytes:localBuffer range:NSMakeRange(pos, bufferLen)];
-        written = write(fileDescriptor, localBuffer, bufferLen);
+        written = (unsigned int)write(fileDescriptor, localBuffer, bufferLen);
         if ((error = (written == 0))) // error condition
             break;
         pos += written;

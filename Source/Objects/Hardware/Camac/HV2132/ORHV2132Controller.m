@@ -223,7 +223,7 @@
 		[model setMainFrame:0xff];
 	}
 	else {
-		[model setMainFrame:[sender indexOfSelectedItem]-1];
+		[model setMainFrame:(int)[sender indexOfSelectedItem]-1];
 	}
 }
 
@@ -233,7 +233,7 @@
 		[model setChannel:0xff];
 	}
 	else {
-		[model setChannel:[sender indexOfSelectedItem]-1];
+		[model setChannel:(int)[sender indexOfSelectedItem]-1];
 	}
 }
 

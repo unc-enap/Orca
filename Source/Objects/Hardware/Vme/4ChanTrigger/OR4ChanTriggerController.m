@@ -151,7 +151,7 @@
 - (void) tabView:(NSTabView*)aTabView didSelectTabViewItem:(NSTabViewItem*)item
 {
     NSString* key = [NSString stringWithFormat: @"orca.OR4Chan%d.selectedtab",[model slot]];
-    int index = [tabView indexOfTabViewItem:item];
+    int index = (int)[tabView indexOfTabViewItem:item];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 	
 }
@@ -225,7 +225,7 @@
 
 - (void) errorCountChanged:(NSNotification*)aNotification
 {
-	[errorField setIntValue:[model errorCount]];
+	[errorField setIntValue:(int)[model errorCount]];
 }
 
 - (void) updateClockMask
@@ -249,19 +249,19 @@
 
 - (void) baseAddressChanged:(NSNotification*)aNotification
 {
-	[addressText setIntValue: [model baseAddress]];
+	[addressText setIntegerValue: [model baseAddress]];
 	[self updateStepper:addressStepper setting:[model baseAddress]];
 }
 
 - (void) lowerClockChanged:(NSNotification*)aNotification
 {
-	[lowerClockField setIntValue: [model lowerClock]];
+	[lowerClockField setIntegerValue: [model lowerClock]];
 	[self updateStepper:lowerClockStepper setting:[model lowerClock]];
 }
 
 - (void) upperClockChanged:(NSNotification*)aNotification
 {
-	[upperClockField setIntValue: [model upperClock]];
+	[upperClockField setIntegerValue: [model upperClock]];
 	[self updateStepper:upperClockStepper setting:[model upperClock]];
 }
 

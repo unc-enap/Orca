@@ -93,7 +93,7 @@
 - (void) setDisplayRaw:(BOOL)aDisplayRaw;
 - (NSArray*) motors;
 - (ORVXMMotor*) motor:(int)aMotor;
-- (void) addItem:(id)anItem atIndex:(int)anIndex;
+- (void) addItem:(id)anItem atIndex:(NSInteger)anIndex;
 - (void) removeItemAtIndex:(NSInteger) anIndex;
 - (BOOL) isMoving;
 

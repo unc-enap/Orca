@@ -265,17 +265,17 @@
 
 - (void) scalerBChanged:(NSNotification*)aNote
 {
-	[scalerBTextField setIntValue: [model scalerB]];
+	[scalerBTextField setIntegerValue: [model scalerB]];
 }
 
 - (void) scalerAChanged:(NSNotification*)aNote
 {
-	[scalerATextField setIntValue: [model scalerA]];
+	[scalerATextField setIntegerValue: [model scalerA]];
 }
 
 - (void) LAMMaskChanged:(NSNotification*)aNote
 {
-	[lamMaskValueField setIntValue: [model LAMMaskValue]];
+	[lamMaskValueField setIntegerValue: [model LAMMaskValue]];
 }
 
 - (void) delayAndGateExtChanged:(NSNotification*)aNote
@@ -671,7 +671,7 @@
 
 - (void) internalRegSelectionAction:(id)sender
 {
-	[model setInternalRegSelection:[sender indexOfSelectedItem]];	
+	[model setInternalRegSelection:(int)[sender indexOfSelectedItem]];
 	[self setButtonStates];
 }
 

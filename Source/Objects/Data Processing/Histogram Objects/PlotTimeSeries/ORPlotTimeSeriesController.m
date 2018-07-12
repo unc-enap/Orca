@@ -66,7 +66,7 @@
 
 - (int)    numberPointsInPlot:(id)aPlotter
 {
-	return [[model timeSeries] count];
+	return (int)[[model timeSeries] count];
 }
 
 - (float)  plotter:(id) aPlotter dataValue:(int)i

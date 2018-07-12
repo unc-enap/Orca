@@ -113,7 +113,7 @@
         NSEnumerator* e = [objects objectEnumerator];
         OrcaObject<ORHWWizard>* obj;
         while(obj = [e nextObject]){
-            int objectTag = [obj stationNumber]; //some objs, i.e. CAMAC objects aren't zero based.;
+            int objectTag = (int)[obj stationNumber]; //some objs, i.e. CAMAC objects aren't zero based.;
             if(objectTag > maxValue){
                 [self setMaxValue:objectTag];
             }

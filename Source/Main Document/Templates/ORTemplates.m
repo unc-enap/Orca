@@ -55,13 +55,13 @@
 
 - (IBAction)done:(id)sender
 {	
-	int dataChainOption = [[dataChainMatrix selectedCell] tag];
+	int dataChainOption = (int)[[dataChainMatrix selectedCell] tag];
 	
 	if(dataChainOption==1)		[self makeDataChain1];
 	else if(dataChainOption==2)	[self makeDataChain2];
 	
 	if([vmeOption state]){
-		int vmeAdapterOption = [[vmeAdapterMatrix selectedCell] tag];
+		int vmeAdapterOption = (int)[[vmeAdapterMatrix selectedCell] tag];
 		if(vmeAdapterOption == 0)   [self makeVmeBit3];
 		else						[self makeVmeSBC];
 	}
@@ -274,7 +274,7 @@
 		NSString* objClassName = objsToMake[i].name;
 		
 		if([objClassName isEqualTo:@"ORVmeCrateModel"]){
-			int vme64Option = [[vme64Matrix selectedCell] tag];
+			int vme64Option = (int)[[vme64Matrix selectedCell] tag];
 			if(vme64Option)objClassName = @"ORVme64CrateModel";
 		}
 		   

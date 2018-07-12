@@ -36,7 +36,7 @@
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
 	[super encodeWithCoder:encoder];	
-    [encoder encodeObject:[NSNumber numberWithUnsignedInt:lineNumber] forKey:@"line"];
+    [encoder encodeObject:[NSNumber numberWithInteger:lineNumber] forKey:@"line"];
 }
 
 

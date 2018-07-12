@@ -24,33 +24,33 @@
 - (void) checkStatusErrors;
 
 - (void) readLongBlock:(unsigned long *) readAddress
-			 atAddress:(unsigned int) pxiAddress
-			 numToRead:(unsigned int) numberLongs;
+			 atAddress:(unsigned long) pxiAddress
+			 numToRead:(unsigned long) numberLongs;
 
 - (void) readLong:(unsigned long *) readAddress
 		atAddress:(unsigned long) pxiAddress
-	  timesToRead:(unsigned int) numberLongs;
+	  timesToRead:(unsigned long) numberLongs;
 
 
 - (void) writeLongBlock:(unsigned long *) writeAddress
-			  atAddress:(unsigned int) pxiAddress
-			 numToWrite:(unsigned int) numberLongs;
+			  atAddress:(unsigned long) pxiAddress
+			 numToWrite:(unsigned long) numberLongs;
 
 - (void) readByteBlock:(unsigned char *) readAddress
-			 atAddress:(unsigned int) pxiAddress
-			 numToRead:(unsigned int) numberBytes;
+			 atAddress:(unsigned long) pxiAddress
+			 numToRead:(unsigned long) numberBytes;
 
 - (void) writeByteBlock:(unsigned char *) writeAddress
-			  atAddress:(unsigned int) pxiAddress
-			 numToWrite:(unsigned int) numberBytes;
+			  atAddress:(unsigned long) pxiAddress
+			 numToWrite:(unsigned long) numberBytes;
 
 
 - (void) readWordBlock:(unsigned short *) readAddress
-			 atAddress:(unsigned int) pxiAddress
-			 numToRead:(unsigned int) numberWords;
+			 atAddress:(unsigned long) pxiAddress
+			 numToRead:(unsigned long) numberWords;
 
 - (void) writeWordBlock:(unsigned short *) writeAddress
-			  atAddress:(unsigned int) pxiAddress
-			 numToWrite:(unsigned int) numberWords;
+			  atAddress:(unsigned long) pxiAddress
+			 numToWrite:(unsigned long) numberWords;
 
 @end

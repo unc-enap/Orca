@@ -129,7 +129,7 @@ NSString* ORHeaderExplorerProgressChanged		= @"ORHeaderExplorerProgressChanged";
 	
 }
 
-- (void) replace:(int)index withSearchKey:(NSString*)aKey
+- (void) replace:(NSInteger)index withSearchKey:(NSString*)aKey
 {
     if(!searchKeys)searchKeys = [[NSMutableArray array] retain];
 	[searchKeys replaceObjectAtIndex:index withObject:aKey];
@@ -138,7 +138,7 @@ NSString* ORHeaderExplorerProgressChanged		= @"ORHeaderExplorerProgressChanged";
                               object: self];      
 }
 
-- (void) insert:(int)index withSearchKey:(NSString*)aKey
+- (void) insert:(NSInteger)index withSearchKey:(NSString*)aKey
 {
     if(!searchKeys)searchKeys = [[NSMutableArray array] retain];
 	if(index>[searchKeys count])[searchKeys addObject:aKey];
@@ -225,12 +225,12 @@ NSString* ORHeaderExplorerProgressChanged		= @"ORHeaderExplorerProgressChanged";
 }
 
 
-- (int) selectionDate
+- (long) selectionDate
 {
 	return selectionDate;
 }
 
-- (void) setSelectionDate:(int)aValue
+- (void) setSelectionDate:(long)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setSelectionDate:selectionDate];
 

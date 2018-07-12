@@ -2576,7 +2576,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 		}
 		
 		//ack any lams that have been processed on this side
-		int n = [lamsToAck count];
+		int n = (int)[lamsToAck count];
 		if(n){
 			SBC_LamAckStruct *p = (SBC_LamAckStruct*)aPacket->payload;
 			char* lamPtr = (char*)(p+1);

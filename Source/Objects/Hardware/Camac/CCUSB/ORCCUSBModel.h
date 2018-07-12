@@ -204,8 +204,8 @@
 
 - (void) checkStatus:(unsigned short)x station:(unsigned short)n;
 - (int) flush;
-- (long) readReg:(int) ireg;
-- (int) writeReg:(int) ireg value:(int) value;
+- (unsigned long) readReg:(int) ireg;
+- (int) writeReg:(int) ireg value:(unsigned long) value;
 - (int) reset;
 - (void) getStatus;
 - (int) sendNAF:(int)n a:(int) a f:(int) f d24:(BOOL) d24 data:(unsigned long*) data;

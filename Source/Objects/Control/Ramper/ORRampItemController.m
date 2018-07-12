@@ -195,7 +195,7 @@
 			NSArray* parameters = [model rampableParametersForTarget:obj];
 			if([parameters count]){
 				NSString* theName = [obj className];
-				int index = [targetNamePU indexOfItemWithTitle:theName];
+				int index = (int)[targetNamePU indexOfItemWithTitle:theName];
 				if(index<0)[targetNamePU addItemWithTitle:theName];
 			}
 		}

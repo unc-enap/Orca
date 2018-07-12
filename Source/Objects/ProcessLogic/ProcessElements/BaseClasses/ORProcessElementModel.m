@@ -497,7 +497,7 @@ NSString* ORProcessElementForceUpdateNotification   = @"ORProcessElementForceUpd
     [encoder encodeRect:altFrame   forKey:@"altFrame"];
     [encoder encodePoint:altOffset forKey:@"altOffset"];
 	[encoder encodeRect:altBounds  forKey:@"altBounds"];
-	[encoder encodeInt32:processID forKey:@"processID"];
+	[encoder encodeInt32:(int32_t)processID forKey:@"processID"];
 }
 
 @end

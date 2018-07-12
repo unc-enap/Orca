@@ -149,12 +149,12 @@
 #pragma mark •••Actions
 - (void) maxInputAction:(id)sender
 {
-	[model setMaxInput:[sender indexOfSelectedItem]];	
+	[model setMaxInput:(int)[sender indexOfSelectedItem]];
 }
 
 - (void) functionDefAction:(id)sender
 {
-	[model setFunctionDef:[[sender selectedItem] tag]];	
+	[model setFunctionDef:(int)[[sender selectedItem] tag]];	
 }
 
 - (IBAction) sendCommandAction:(id)sender

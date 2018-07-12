@@ -19,7 +19,7 @@
 
 - (unsigned int) hash:(const char *)data
 {
-uint32_t len = strlen(data);
+uint32_t len = (uint32_t)strlen(data);
 uint32_t hash = len, tmp;
 int rem;
 

@@ -107,7 +107,7 @@
 - (void)setSelectionControllers:(NSMutableArray *)aSelectionControllers;
 - (NSDictionary *)objects;
 - (void)setObjects:(NSMutableDictionary *)anObjects;
-- (int)objectTag;
+- (NSInteger)objectTag;
 - (void)setObjectTag:(int)anObjectTag;
 - (NSMutableArray *)controlArray;
 - (void)setControlArray:(NSMutableArray *)aControlArray;

@@ -77,7 +77,7 @@ NSString* ORPlotTimeSeriesShowChanged = @"ORPlotTimeSeriesShowChanged";
 
 - (int)	count
 {
-	return [timeSeries count];
+	return (int)[timeSeries count];
 }
 
 #pragma mark ¥¥¥Writing Data

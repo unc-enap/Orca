@@ -145,11 +145,11 @@
 #pragma mark •••Data Source For Plots
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	int tag = [aPlotter tag];
+	int tag = (int)[aPlotter tag];
 	if(tag == 0){ 
-		return [[model parameterRate] count];
+		return (int)[[model parameterRate] count];
 	} else if (tag ==1){
-        return [[model totalDataRate] count];
+        return (int)[[model totalDataRate] count];
     }
 	else return 0;
 }
@@ -157,16 +157,16 @@
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
 	double aValue = 0;
-	int tag = [aPlotter tag];
+	int tag = (int)[aPlotter tag];
 	if(tag == 0){ 
-		int count = [[model parameterRate] count];
+		int count = (int)[[model parameterRate] count];
 		int index = count-i-1;
 		if(count==0) aValue = 0;
 		else		 aValue = [[model parameterRate] valueAtIndex:index];
 		*xValue = [[model parameterRate] timeSampledAtIndex:index];
 		*yValue = aValue;
 	} else if (tag == 1){
-		int count = [[model totalDataRate] count];
+		int count = (int)[[model totalDataRate] count];
 		int index = count-i-1;
 		if(count==0) aValue = 0;
 		else		 aValue = [[model totalDataRate] valueAtIndex:index];
@@ -225,7 +225,7 @@
 {
 	if(runControl)	{
 		[runStatusField setStringValue:[runControl shortStatus]];
-		[runNumberField setIntValue:[runControl runNumber]];
+		[runNumberField setIntegerValue:[runControl runNumber]];
 		
 		if([runControl isRunning]){
 			[startRunButton setState:1];
@@ -333,7 +333,7 @@
         [[selectionModeButton itemWithTitle:@"Voltage"] setEnabled:NO];
         [selectionModeButton selectItemWithTitle:@"Crate"];
         [[viewSelectionButton itemWithTitle:@"PSUP view"] setEnabled:YES];
-        [detectorView setSelectionMode:[[selectionModeButton itemWithTitle:@"Crate"] tag]];
+        [detectorView setSelectionMode:(int)[[selectionModeButton itemWithTitle:@"Crate"] tag]];
     }else if ([[[sender selectedItem] title] isEqualToString:@"FIFO"]){
         [[selectionModeButton itemWithTitle:@"Tube"] setEnabled:NO];
         [[selectionModeButton itemWithTitle:@"Card"] setEnabled:YES];
@@ -341,7 +341,7 @@
         [[selectionModeButton itemWithTitle:@"Voltage"] setEnabled:NO];
         [selectionModeButton selectItemWithTitle:@"Card"];
         [[viewSelectionButton itemWithTitle:@"PSUP view"] setEnabled:YES];
-        [detectorView setSelectionMode:[[selectionModeButton itemWithTitle:@"Card"] tag]];
+        [detectorView setSelectionMode:(int)[[selectionModeButton itemWithTitle:@"Card"] tag]];
     }else {
         [[selectionModeButton itemWithTitle:@"Tube"] setEnabled:YES];
         [[selectionModeButton itemWithTitle:@"Card"] setEnabled:YES];
@@ -349,14 +349,14 @@
         [[selectionModeButton itemWithTitle:@"Voltage"] setEnabled:NO];
         [[viewSelectionButton itemWithTitle:@"PSUP view"] setEnabled:YES];
     }
-	[detectorView setParameterToDisplay:[[sender selectedItem] tag]];
+	[detectorView setParameterToDisplay:(int)[[sender selectedItem] tag]];
     [detectorView setDetectorTitleString:[[sender selectedItem] title]];
 	[model getDataFromMorca];
 }
 
 - (void) selectionModeAction:(id)sender
 {
-	[detectorView setSelectionMode:[[sender selectedItem] tag]];
+	[detectorView setSelectionMode:(int)[[sender selectedItem] tag]];
 	//[model getDataFromMorca];
 	[detectorView updateSNODetectorView];
 }
@@ -368,7 +368,7 @@
 
 - (void) setXl3PollingAction:(id)sender
 {
-	[model setXl3Polling:[[sender selectedItem] tag]];
+	[model setXl3Polling:(int)[[sender selectedItem] tag]];
 }
 
 - (void) startXl3PollingAction:(id)sender
@@ -391,7 +391,7 @@
 //slow control actions
 - (IBAction) setSlowControlPollingAction:(id)sender
 {
-	[model setSlowControlPolling:[[sender selectedItem] tag]];
+	[model setSlowControlPolling:(int)[[sender selectedItem] tag]];
 }
 
 - (IBAction) startSlowControlPollingAction:(id)sender
@@ -578,7 +578,7 @@
 - (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {	
 	NSString *columnName = [aTableColumn identifier];
-	SNOSlowControl *slowControlVariable=[model getSlowControlVariable:rowIndex];
+	SNOSlowControl *slowControlVariable=[model getSlowControlVariable:(int)rowIndex];
 	
 	if ([columnName isEqualToString:@"parameterName"]) {
 		[slowControlVariable setParameterName:anObject];

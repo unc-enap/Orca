@@ -355,7 +355,7 @@
 	if(([aNote object] == itemTableView) || (aNote==nil)){
 		NSIndexSet* selectedSet = [itemTableView selectedRowIndexes];
 		if([selectedSet count] == 1){
-			unsigned index = [selectedSet firstIndex];
+			int index = (int)[selectedSet firstIndex];
 			if([model itemExists:index]){
 				[viewItemInWebButton setEnabled:YES];
 				[itemDetailsView setString: [model itemDetails:index]]; 
@@ -490,7 +490,7 @@
 
 - (void) manualTypePopupAction:(id)sender
 {
-	[model setManualType:[sender indexOfSelectedItem]];	
+	[model setManualType:(int)[sender indexOfSelectedItem]];
 }
 
 - (void) manualPathTextFieldAction:(id)sender
@@ -522,7 +522,7 @@
 	[self endEditing];
 	NSIndexSet* selectedSet = [itemTableView selectedRowIndexes];
 	if([selectedSet count] == 1){
-		unsigned index = [selectedSet firstIndex];
+		int index = (int)[selectedSet firstIndex];
 		[model writeSetPoint:index value:[model setPoint]];
 	}
 }
@@ -533,7 +533,7 @@
 	[self endEditing];
 	NSIndexSet* selectedSet = [itemTableView selectedRowIndexes];
 	if([selectedSet count] == 1){
-		unsigned index = [selectedSet firstIndex];
+		int index = (int)[selectedSet firstIndex];
 		[model sendControlSetpointForChan: [model findChanOfIndex: index] value:[model setPoint]];
 	}
 }
@@ -544,7 +544,7 @@
 	//NSLog(@"%@::%@\n", NSStringFromClass([self class]), NSStringFromSelector(_cmd));//DEBUG OUTPUT -tb-  
 	NSIndexSet* selectedSet = [itemTableView selectedRowIndexes];
 	if([selectedSet count] == 1){
-		unsigned index = [selectedSet firstIndex];
+		int index = (int)[selectedSet firstIndex];
 		[model queueControlSetpointForIndex:index value:[model setPoint]];
 	}
 }
@@ -565,7 +565,7 @@
 
 - (IBAction) itemTypeAction:(id)sender
 {
-	[model setItemType:[[sender selectedCell]tag]];	
+	[model setItemType:(int)[[sender selectedCell]tag]];
 }
 
 - (void) viewItemNameAction:(id)sender
@@ -577,7 +577,7 @@
 {	
 	NSIndexSet* selectedSet = [itemTableView selectedRowIndexes];
 	if([selectedSet count] == 1){
-		unsigned index = [selectedSet firstIndex];
+		int index = (int)[selectedSet firstIndex];
 		NSString* requestString = [model createWebRequestForItem:index];
 		[[webView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString: requestString ]]];
 		[webDrawer open: nil];
@@ -631,7 +631,7 @@
 
 - (IBAction) pollTimeAction:(id)sender
 {
-	[model setPollTime:[[sender selectedItem] tag]];
+	[model setPollTime:(int)[[sender selectedItem] tag]];
 }
 
 - (IBAction) pollNowAction:(id)sender
@@ -655,8 +655,8 @@
 
 - (IBAction)adeiListContextMenuLoadValueAction:(id)sender
 {
-    int row = [itemTableView selectedRow] ; 
-    int numRow = [itemTableView numberOfSelectedRows] ; 
+    int row = (int)[itemTableView selectedRow] ;
+    int numRow = (int)[itemTableView numberOfSelectedRows] ;
     if(numRow != 1){//
         NSLog(@"ORIpeSlowControlController: Nothing selected or bad selection!\n");
         return;
@@ -679,8 +679,8 @@
 
 - (IBAction)adeiListContextMenuRemoveAction:(id)sender
 {
-    int row = [itemTableView selectedRow] ; 
-    int numRow = [itemTableView numberOfSelectedRows] ; 
+    int row = (int)[itemTableView selectedRow] ;
+    int numRow = (int)[itemTableView numberOfSelectedRows] ;
     if(numRow != 1){//
         NSLog(@"ORIpeSlowControlController: Nothing selected or bad selection! %i\n",row);
         return;
@@ -731,7 +731,7 @@
 {
     //NSLog(@"STILL UNDER DEVELOPMENT! -tb-\n");
     //int row = [itemTableView selectedRow] ; 
-    int numRow = [itemTableView numberOfSelectedRows] ; 
+    int numRow = (int)[itemTableView numberOfSelectedRows] ;
     //NSLog(@"numberOfSelectedRows: %i, selectedRow: %i\n",numRow,row);
     if(numRow != 1){//
         NSLog(@"ORIpeSlowControlController: Nothing selected or bad selection!\n");
@@ -781,7 +781,7 @@
 	//[model ChannelNumber:[[[sender selectedItem] title] intValue]; //TODO: -tb-
     #endif
     
-    int row = [itemTableView selectedRow] ; 
+    int row = (int)[itemTableView selectedRow] ;
 
     [model setChannelNumber: [[[sender selectedItem]title]intValue]      forItemKey: [model requestCacheItemKey:row]  ];
     [self cancelEditChannelNumberAction: nil];
@@ -817,13 +817,13 @@ autoselect an edge, and we want this drawer to open only on specific edges. */
 #pragma mark •••Data Source Methods  (OutlineView)
 - (int) outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item 
 {
-	if (item == nil)return [[model itemTreeRoot] count];
+	if (item == nil)return (int)[[model itemTreeRoot] count];
 	else {
 		if ([item isKindOfClass:[NSArray class]]) {
-			return [item count];
+			return (int)[item count];
 		}
 		else if ([item isKindOfClass:[NSDictionary class]]) {
-			return [[item objectForKey:@"Children"] count];
+			return (int)[[item objectForKey:@"Children"] count];
 		}
 		else return 0;
 	}
@@ -880,7 +880,7 @@ autoselect an edge, and we want this drawer to open only on specific edges. */
 		[pboard declareTypes:types owner:self];
 		NSString* s = @"";
 		for(id obj in writeItems){
-			int componentCount = [[[obj objectForKey:@"Path"] componentsSeparatedByString:@"/"] count];
+			int componentCount = (int)[[[obj objectForKey:@"Path"] componentsSeparatedByString:@"/"] count];
 			if(componentCount==4){
 				[draggedNodes addObject:[[obj mutableCopy] autorelease]];
 				NSString* aUrl = [obj objectForKey:@"URL"];
@@ -943,7 +943,7 @@ autoselect an edge, and we want this drawer to open only on specific edges. */
     if(tableView==itemTableView){
 		if(row<[model pollingLookUpCount]){
 			//things are slightly complicated because some of the items are in the topLevelDictionary and some are in the item's dictionary
-			NSString*		itemKey				= [model requestCacheItemKey:row];
+			NSString*		itemKey				= [model requestCacheItemKey:(int)row];
 			NSDictionary*	topLevelDictionary	= [model topLevelPollingDictionary:itemKey];
 			NSDictionary*	itemDictionary		= [topLevelDictionary objectForKey:itemKey];
 			//BOOL isControl						= [[itemDictionary objectForKey:@"Control"] boolValue];
@@ -1075,7 +1075,7 @@ autoselect an edge, and we want this drawer to open only on specific edges. */
 {
     if(aTableView==itemTableView){
 		if(row<[model pollingLookUpCount]){
-			if([model isControlItem:row]) return [NSColor colorWithCalibratedRed:1.0 green:.2 blue:.2 alpha:.3];
+			if([model isControlItem:(int)row]) return [NSColor colorWithCalibratedRed:1.0 green:.2 blue:.2 alpha:.3];
 			else return nil;
 		}
     }
@@ -1087,9 +1087,9 @@ autoselect an edge, and we want this drawer to open only on specific edges. */
 	NSUInteger current_index = [rowIndexes firstIndex];
 	NSString* s = @"";
     while (current_index != NSNotFound) {
-		NSDictionary* itemDictionary = [model requestCacheItem:current_index];
+		NSDictionary* itemDictionary = [model requestCacheItem:(int)current_index];
 		if(itemDictionary){
-			int componentCount = [[[itemDictionary objectForKey:@"Path"] componentsSeparatedByString:@"/"] count];
+			int componentCount = (int)[[[itemDictionary objectForKey:@"Path"] componentsSeparatedByString:@"/"] count];
 			if(componentCount==4){
 				NSString* aUrl = [itemDictionary objectForKey:@"URL"];
 				NSString* aPath = [itemDictionary objectForKey:@"Path"];

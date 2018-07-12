@@ -59,7 +59,7 @@
 	
 	
     NSString* key = [NSString stringWithFormat: @"orca.SIS3305%d.selectedtab",[model slot]];
-    int index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
 				
@@ -754,9 +754,9 @@
     short i;
     for(i=0;i<kNumSIS3305Channels;i++){
         if (i<4)
-            [[offset14Matrix cellWithTag:i] setIntValue:[model adcOffset:i]];
+            [[offset14Matrix cellWithTag:i] setIntegerValue:[model adcOffset:i]];
         else if (i >= 4)
-            [[offset58Matrix cellWithTag:(i-4)] setIntValue:[model adcOffset:i]];
+            [[offset58Matrix cellWithTag:(i-4)] setIntegerValue:[model adcOffset:i]];
     }
 }
 
@@ -765,8 +765,8 @@
     short chPerGroup = kNumSIS3305Channels/kNumSIS3305Groups;
     short chan;
     for (chan=0; chan<chPerGroup; chan++) {
-        [[gain14Matrix cellWithTag:chan] setIntValue:[model adcGain:chan]];
-        [[gain58Matrix cellWithTag:(chan)] setIntValue:[model adcGain:(chan+4)]];
+        [[gain14Matrix cellWithTag:chan] setIntegerValue:[model adcGain:chan]];
+        [[gain58Matrix cellWithTag:(chan)] setIntegerValue:[model adcGain:(chan+4)]];
 
     }
 }
@@ -775,8 +775,8 @@
 {
     short i;
     for (i=0; i<4; i++) {
-        [[phase14Matrix cellWithTag:i] setIntValue:[model adcPhase:i]];
-        [[phase58Matrix cellWithTag:i] setIntValue:[model adcPhase:(i+4)]];
+        [[phase14Matrix cellWithTag:i] setIntegerValue:[model adcPhase:i]];
+        [[phase58Matrix cellWithTag:i] setIntegerValue:[model adcPhase:(i+4)]];
     }
 }
 
@@ -1045,7 +1045,7 @@
     /* Sample length is the same for all channels in each group */
 	short i;
 	for(i=0;i<kNumSIS3305Groups;i++){
-		[[sampleLengthMatrix cellWithTag:i] setIntValue:[model sampleLength:i]];
+		[[sampleLengthMatrix cellWithTag:i] setIntegerValue:[model sampleLength:i]];
 	}
 	[runSummaryField setStringValue: [model runSummary]];
 }
@@ -1284,7 +1284,7 @@
 
 - (void) baseAddressChanged:(NSNotification*)aNote
 {
-    [addressText setIntValue: [model baseAddress]];
+    [addressText setIntegerValue: [model baseAddress]];
 }
 
 - (void) integrationChanged:(NSNotification*)aNotification
@@ -1573,7 +1573,7 @@
 
 - (IBAction) runModeAction:(id)sender
 {
-	[model setRunMode:[sender indexOfSelectedItem]];	
+	[model setRunMode:(int)[sender indexOfSelectedItem]];
 }
 
 
@@ -1600,7 +1600,7 @@
     int chan;
     BOOL mode;
 
-    chan = [[sender selectedCell] tag];     // set to 0-3
+    chan = (int)[[sender selectedCell] tag];     // set to 0-3
     mode = [[sender selectedCell] state];
     
     [model setLemoOutSelectTrigger:chan toState:mode];
@@ -1717,7 +1717,7 @@
 
 - (IBAction) registerIndexPUAction:(id)sender
 {
-    unsigned int index = [sender indexOfSelectedItem];
+    int index = (int)[sender indexOfSelectedItem];
     [model setRegisterIndex:index];
     [self setRegisterDisplay:index];
 }
@@ -1779,7 +1779,7 @@
 
 - (IBAction) clockSourceAction:(id)sender
 {
-	[model setClockSource:[sender indexOfSelectedItem]];	
+	[model setClockSource:(int)[sender indexOfSelectedItem]];
 }
 
 
@@ -2107,7 +2107,7 @@
 - (IBAction) preTriggerDelay14Action:(id)sender
 {
     int value = [sender intValue];
-    int chan = [[sender selectedCell] tag];
+    int chan = (int)[[sender selectedCell] tag];
     
     if(value != [model preTriggerDelay:chan]){
         [model setPreTriggerDelay:chan withValue:value];
@@ -2116,7 +2116,7 @@
 - (IBAction) preTriggerDelay58Action:(id)sender
 {
     int value = [sender intValue];
-    int chan = [[sender selectedCell] tag] + 4;     // the +4 corrects for the split matrix
+    int chan = (int)[[sender selectedCell] tag] + 4;     // the +4 corrects for the split matrix
     
     if(value != [model preTriggerDelay:chan ]){
         [model setPreTriggerDelay:chan withValue:value];
@@ -2189,8 +2189,8 @@
 
 - (IBAction) sampleStartIndexAction:(id)sender
 {
-	if([sender intValue] != [model sampleStartIndex:[[sender selectedCell] tag]]){
-		[model setSampleStartIndex:[[sender selectedCell] tag] withValue:[sender intValue]];
+	if([sender intValue] != [model sampleStartIndex:(int)[[sender selectedCell] tag]]){
+		[model setSampleStartIndex:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 	}
 }
 
@@ -2283,7 +2283,7 @@
         [[self window] setContentView:tabView];
     }
     NSString* key = [NSString stringWithFormat: @"orca.ORSIS3305%d.selectedtab",[model slot]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 	
 }
@@ -2344,12 +2344,12 @@
 
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	return [[[model waveFormRateGroup]timeRate]count];
+	return (int)[[[model waveFormRateGroup]timeRate]count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 {
-	int count = [[[model waveFormRateGroup]timeRate] count];
+	int count = (int)[[[model waveFormRateGroup]timeRate] count];
 	int index = count-i-1;
 	*yValue = [[[model waveFormRateGroup] timeRate]valueAtIndex:index];
 	*xValue = [[[model waveFormRateGroup] timeRate]timeSampledAtIndex:index];

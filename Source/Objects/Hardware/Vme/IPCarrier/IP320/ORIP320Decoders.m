@@ -55,7 +55,7 @@ static NSString* kIPSlotKey[4] = {
 	ptr++; //point to time
 	unsigned long theTime = *ptr;
 
-	int n = length - 3;
+	int n = (int)(length - 3);
 	int i;
 	for(i=0;i<n;i++){
 		ptr++;	//channel
@@ -87,7 +87,7 @@ static NSString* kIPSlotKey[4] = {
 	NSDate* date = [NSDate dateWithTimeIntervalSince1970:*ptr];
 
 	NSString* adcString = @"";
-	int n = length - 3;
+	int n = (int)length - 3;
 	int i;
 	for(i=0;i<n;i++){
 		ptr++;
@@ -126,7 +126,7 @@ static NSString* kIPSlotKey[4] = {
 	unsigned long theTime = *ptr;
 	//[aDataSet loadGenericData:@" " sender:self withKeys:@"IP320",crateKey,cardKey,ipSlotKey,nil];
 
-	int n = (length - 3)/2;
+	int n = ((int)length - 3)/2;
 	
 	union {
 		float asFloat;
@@ -136,7 +136,7 @@ static NSString* kIPSlotKey[4] = {
 	int i;
 	for(i=0;i<n;i++){
 		ptr++;	//channel
-		int chan   = *ptr;
+		int chan   = (int)*ptr;
 		ptr++;	//value (encoded as long)
 		theValue.asLong = *ptr;
 		[aDataSet loadTimeSeries:theValue.asFloat atTime:theTime sender:self withKeys:@"IP320",@"Value",
@@ -167,7 +167,7 @@ static NSString* kIPSlotKey[4] = {
 	NSDate* date = [NSDate dateWithTimeIntervalSince1970:*ptr];
 
 	NSString* adcString = @"";
-	int n = (length - 3)/2;
+	int n = ((int)length - 3)/2;
 	
 	union {
 		float asFloat;
@@ -177,7 +177,7 @@ static NSString* kIPSlotKey[4] = {
 	int i;
 	for(i=0;i<n;i++){
 		ptr++;	//channel
-		int chan   = *ptr;
+		int chan   = (int)*ptr;
 		ptr++;	//value (encoded as long)
 		theValue.asLong = *ptr;
 		[adcString stringByAppendingFormat:@"ADC(%02d) = %.4f\n",chan, theValue.asFloat];

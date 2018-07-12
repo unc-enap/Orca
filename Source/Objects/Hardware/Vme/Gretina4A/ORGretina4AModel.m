@@ -512,7 +512,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
     int i;
     for(i=0;i<kNumberOfGretina4ARegisters;i++){
-        snapShot[i] = [self readRegister:i channel:[self selectedChannel]];
+        snapShot[i] = [self readRegister:i channel:(int)[self selectedChannel]];
     }
     
     for(i=0;i<kNumberOfFPGARegisters;i++){
@@ -529,7 +529,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     
     int i;
     for(i=0;i<kNumberOfGretina4ARegisters;i++){
-        unsigned long theValue = [self readRegister:i  channel:[self selectedChannel]];
+        unsigned long theValue = [self readRegister:i  channel:(int)[self selectedChannel]];
         if(snapShot[i] != theValue){
             NSLogFont(aFont,@"0x%04x 0x%08x != 0x%08x %@\n",[Gretina4ARegisters offsetforReg:i],snapShot[i],theValue,[Gretina4ARegisters registerName:i]);
             
@@ -553,7 +553,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     NSLog(@"Register Values for Channel #%d\n",[self selectedChannel]);
     int i;
     for(i=0;i<kNumberOfGretina4ARegisters;i++){
-        unsigned long theValue = [self readRegister:i channel:[self selectedChannel]];
+        unsigned long theValue = [self readRegister:i channel:(int)[self selectedChannel]];
         NSLogFont(aFont,@"0x%04x 0x%08x %10lu %@\n",[Gretina4ARegisters offsetforReg:i],theValue,theValue,[Gretina4ARegisters registerName:i]);
         snapShot[i] = theValue;
         if(i == kBoardId)           [self dumpBoardIdDetails:theValue];
@@ -639,7 +639,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
         @"Main Trigger",
         @"Ge_preamp_kill",
         @"undef"};
-    int  i = [self selectedChannel];
+    int  i = (int)[self selectedChannel];
     int index = (aValue>>(i*3))&0x7;
     NSLogFont(aFont,@"     %d: %@\n",i,name[index]);
 }
@@ -703,7 +703,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
         @"195 kHz",
         @"OFF"
     };
-    int  i = [self selectedChannel];
+    int  i = (int)[self selectedChannel];
     NSLogFont(aFont,@"     Ext Disc Sel    : %@\n", descSel[(aValue>>2+i)&0x3]);
     NSLogFont(aFont,@"     Ext Dixc TS Sel : %@\n", descTsSel[(aValue>>27)&0x7]);
 }
@@ -711,7 +711,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 - (void) dumpMasterStatusDetails:(unsigned long)aValue
 {
     NSFont* aFont = [NSFont fontWithName:@"Monaco" size:10.0];
-    int  i = [self selectedChannel];
+    int  i = (int)[self selectedChannel];
     NSLogFont(aFont,@"     Master Logic Enable  : %@\n", (aValue>>0)&0x1?@"Enabled":@"Reset");
     NSLogFont(aFont,@"     Diag isync           : %@\n", (aValue>>1)&0x1?@"Run":@"ImpSync");
     NSLogFont(aFont,@"     Counter Mode         : %@\n", (aValue>>4)&0x1?@"Internal":@"SERDES");
@@ -1021,7 +1021,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
                               spikeObj,@"spikeInfo",
                               [NSNumber numberWithInt:[self crateNumber]],  @"crate",
                               [NSNumber numberWithInt:[self slot]],         @"card",
-                              [NSNumber numberWithInt:[spikeObj tag]],      @"channel",
+                              [NSNumber numberWithInteger:[spikeObj tag]],      @"channel",
                               nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORGretina4AModelRateSpiked object:self userInfo:userInfo];
 }
@@ -3374,14 +3374,14 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 {
     configStruct->total_cards++;
     configStruct->card_info[index].hw_type_id				= kGretina4A; //should be unique
-    configStruct->card_info[index].hw_mask[0]				= dataId; //better be unique
+    configStruct->card_info[index].hw_mask[0]				= (uint32_t)dataId; //better be unique
     configStruct->card_info[index].slot						= [self slot];
     configStruct->card_info[index].crate					= [self crateNumber];
     configStruct->card_info[index].add_mod					= [self addressModifier];
-    configStruct->card_info[index].base_add					= [self baseAddress];
-    configStruct->card_info[index].deviceSpecificData[0]	= [Gretina4ARegisters offsetforReg:kProgrammingDone];  //fifoStateAddress
-    configStruct->card_info[index].deviceSpecificData[1]	= [Gretina4ARegisters offsetforReg:kFifo]; // fifoAddress
-    configStruct->card_info[index].deviceSpecificData[2]	= [Gretina4ARegisters offsetforReg:kProgrammingDone];   // fifoReset Address
+    configStruct->card_info[index].base_add					= (uint32_t)[self baseAddress];
+    configStruct->card_info[index].deviceSpecificData[0]	= (uint32_t)[Gretina4ARegisters offsetforReg:kProgrammingDone];  //fifoStateAddress
+    configStruct->card_info[index].deviceSpecificData[1]	= (uint32_t)[Gretina4ARegisters offsetforReg:kFifo]; // fifoAddress
+    configStruct->card_info[index].deviceSpecificData[2]	= (uint32_t)[Gretina4ARegisters offsetforReg:kProgrammingDone];   // fifoReset Address
     configStruct->card_info[index].deviceSpecificData[3]	= [self rawDataWindow]/2 + 1; //longs
     configStruct->card_info[index].num_Trigger_Indexes		= 0;
     
@@ -3493,19 +3493,19 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     [encoder encodeObject:linkConnector				forKey:@"linkConnector"];
     [encoder encodeInt:registerIndex				forKey:@"registerIndex"];
     [encoder encodeInt:selectedChannel              forKey:@"selectedChannel"];
-    [encoder encodeInt32:registerWriteValue			forKey:@"registerWriteValue"];
-    [encoder encodeInt32:spiWriteValue			    forKey:@"spiWriteValue"];
+    [encoder encodeInt32:(int32_t)registerWriteValue			forKey:@"registerWriteValue"];
+    [encoder encodeInt32:(int32_t)spiWriteValue			    forKey:@"spiWriteValue"];
     [encoder encodeObject:fpgaFilePath				forKey:@"fpgaFilePath"];
-    [encoder encodeInt32:extDiscriminatorSrc        forKey:@"extDiscriminatorMode"];
-    [encoder encodeInt32:extDiscriminatorMode       forKey:@"extDiscriminatorSrc"];
-    [encoder encodeInt32:userPackageData            forKey:@"userPackageData"];
+    [encoder encodeInt32:(int32_t)extDiscriminatorSrc        forKey:@"extDiscriminatorMode"];
+    [encoder encodeInt32:(int32_t)extDiscriminatorMode       forKey:@"extDiscriminatorSrc"];
+    [encoder encodeInt32:(int32_t)userPackageData            forKey:@"userPackageData"];
     [encoder encodeInt32:windowCompMin              forKey:@"windowCompMin"];
     [encoder encodeInt32:windowCompMax              forKey:@"windowCompMax"];
-    [encoder encodeInt:p2Window                     forKey:@"p2Window"];
+    [encoder encodeInt:(int32_t)p2Window                     forKey:@"p2Window"];
     [encoder encodeInt:dacChannelSelect             forKey:@"dacChannelSelect"];
     [encoder encodeInt:dacAttenuation               forKey:@"dacAttenuation"];
-    [encoder encodeInt32:channelPulsedControl       forKey:@"channelPulsedControl"];
-    [encoder encodeInt32:diagMuxControl             forKey:@"diagMuxControl"];
+    [encoder encodeInt32:(int32_t)channelPulsedControl       forKey:@"channelPulsedControl"];
+    [encoder encodeInt32:(int32_t)diagMuxControl             forKey:@"diagMuxControl"];
     [encoder encodeInt:holdOffTime                  forKey:@"holdOffTime"];
     [encoder encodeInt:downSampleHoldOffTime        forKey:@"downSampleHoldOffTime"];
     [encoder encodeBool:downSamplePauseEnable       forKey:@"downSamplePauseEnable"];
@@ -3515,16 +3515,16 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     [encoder encodeInt:baselineDelay                forKey:@"baselineDelay"];
     [encoder encodeInt:diagInput                    forKey:@"diagInput"];
     [encoder encodeInt32:diagChannelEventSel        forKey:@"diagChannelEventSel"];
-    [encoder encodeInt32:rj45SpareIoMuxSel          forKey:@"rj45SpareIoMuxSel"];
+    [encoder encodeInt32:(int32_t)rj45SpareIoMuxSel          forKey:@"rj45SpareIoMuxSel"];
     [encoder encodeBool:rj45SpareIoDir              forKey:@"rj45SpareIoDir"];
     [encoder encodeInt:vetoGateWidth                forKey:@"vetoGateWidth"];
     [encoder encodeInt:triggerConfig                forKey:@"triggerConfig"];
-    [encoder encodeInt32:tSErrCntCtrl               forKey:@"tSErrCntCtrl"];
+    [encoder encodeInt32:(int32_t)tSErrCntCtrl               forKey:@"tSErrCntCtrl"];
     [encoder encodeBool:clkSelect0                  forKey:@"clkSelect0"];
     [encoder encodeBool:clkSelect1                  forKey:@"clkSelect1"];
-    [encoder encodeInt32:auxIoRead                  forKey:@"auxIoRead"];
-    [encoder encodeInt32:auxIoWrite                 forKey:@"auxIoWrite"];
-    [encoder encodeInt32:auxIoConfig                forKey:@"auxIoConfig"];
+    [encoder encodeInt32:(int32_t)auxIoRead                  forKey:@"auxIoRead"];
+    [encoder encodeInt32:(int32_t)auxIoWrite                 forKey:@"auxIoWrite"];
+    [encoder encodeInt32:(int32_t)auxIoConfig                forKey:@"auxIoConfig"];
     [encoder encodeInt:rawDataLength                forKey:@"rawDataLength"];
     [encoder encodeInt:rawDataWindow                forKey:@"rawDataWindow"];
     [encoder encodeInt:clockSource                  forKey:@"clockSource"];
@@ -3562,10 +3562,10 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     [objDictionary setObject:[NSNumber numberWithBool:forceFullCardInit]             forKey:@"forceFullCardInit"];
     
     [objDictionary setObject:[NSNumber numberWithUnsignedLong:extDiscriminatorSrc]  forKey:@"extDiscriminatorSrc"];
-    [objDictionary setObject:[NSNumber numberWithInt:userPackageData]               forKey:@"userPackageData"];
+    [objDictionary setObject:[NSNumber numberWithInteger:userPackageData]               forKey:@"userPackageData"];
     [objDictionary setObject:[NSNumber numberWithUnsignedLong:windowCompMin]        forKey:@"windowCompMin"];
     [objDictionary setObject:[NSNumber numberWithUnsignedLong:windowCompMax]        forKey:@"windowCompMax"];
-    [objDictionary setObject:[NSNumber numberWithInt:p2Window]                      forKey:@"p2Window"];
+    [objDictionary setObject:[NSNumber numberWithInteger:p2Window]                      forKey:@"p2Window"];
     [objDictionary setObject:[NSNumber numberWithInt:dacChannelSelect]              forKey:@"dacChannelSelect"];
     [objDictionary setObject:[NSNumber numberWithInt:dacAttenuation]                forKey:@"dacAttenuation"];
     [objDictionary setObject:[NSNumber numberWithUnsignedLong:channelPulsedControl] forKey:@"channelPulsedControl"];
@@ -3747,7 +3747,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
                 [self writeToAddress:0x900 aValue:kGretina4AResetMainFPGACmd];
                 [self writeToAddress:0x900 aValue:kGretina4AReloadMainFPGACmd];
                 [self setProgressStateOnMainThread:  @"Finishing$Flash Memory-->FPGA"];
-                uint32_t statusRegValue = [self readFromAddress:0x904];
+                unsigned long statusRegValue = [self readFromAddress:0x904];
                 while(!(statusRegValue & kGretina4AMainFPGAIsLoaded)) {
                     if(stopDownLoadingMainFPGA)return;
                     statusRegValue = [self readFromAddress:0x904];
@@ -4054,7 +4054,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
         aPacket.cmdHeader.numberBytesinPayload	= sizeof(MJDFlashGretinaFPGAStruct);
         
         MJDFlashGretinaFPGAStruct* p = (MJDFlashGretinaFPGAStruct*) aPacket.payload;
-        p->baseAddress      = [self baseAddress];
+        p->baseAddress      = (uint32_t)[self baseAddress];
         @try {
             NSLog(@"Gretina4A (%d) launching firmware load job in SBC\n",[self uniqueIdNumber]);
             

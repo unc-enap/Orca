@@ -234,7 +234,7 @@
 {
     [super setModel:aModel];
 	[dcNumberField setIntValue:[model slot]];
-	[fecNumberField setIntValue:[[model guardian] stationNumber]];
+	[fecNumberField setIntValue:(int)[[model guardian] stationNumber]];
 	[crateNumberField setIntValue:[[[model guardian] guardian] crateNumber]];
 }
 
@@ -287,10 +287,10 @@
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"FecDaughterCard (%d,%d,%d)",[[[model guardian] guardian] crateNumber],[[model guardian] stationNumber],[model slot]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"FecDaughterCard (%d,%lu,%d)",[[[model guardian] guardian] crateNumber],[[model guardian] stationNumber],[model slot]]];
 	[dcNumberField setIntValue:[model slot]];
-	[fecNumberField setIntValue:[[model guardian] stationNumber]];
-	[crateNumberField setIntValue:[[[model guardian] guardian] crateNumber]];
+	[fecNumberField setIntegerValue:[[model guardian] stationNumber]];
+	[crateNumberField setIntegerValue:[[[model guardian] guardian] crateNumber]];
 }
 
 - (void) setAllCmosChanged:(NSNotification*)aNote
@@ -448,28 +448,28 @@
 
 - (IBAction) rp1Action:(id)sender
 {
-	int i = [[rp1Matrix selectedCell] tag];
+	int i = (int)[[rp1Matrix selectedCell] tag];
 	if([model showVolts])	[model setRp1Voltage:i withValue:[sender floatValue]];
 	else					[model setRp1:i withValue:[sender intValue]];
 }
 
 - (IBAction) rp2Action:(id)sender
 {
-	int i = [[rp2Matrix selectedCell] tag];
+	int i = (int)[[rp2Matrix selectedCell] tag];
 	if([model showVolts])	[model setRp2Voltage:i withValue:[sender floatValue]];
 	else					[model setRp2:i withValue:[sender intValue]];
 }
  
 - (IBAction) vliAction:(id)sender
 {
-	int i = [[vliMatrix selectedCell] tag];
+	int i = (int)[[vliMatrix selectedCell] tag];
 	if([model showVolts])	[model setVliVoltage:i withValue:[sender floatValue]];
 	else					[model setVli:i withValue:[sender intValue]];
 }
  
 - (IBAction) vsiAction:(id)sender
 {
-	int i = [[vsiMatrix selectedCell] tag];
+	int i = (int)[[vsiMatrix selectedCell] tag];
 	if([model showVolts])	[model setVsiVoltage:i withValue:[sender floatValue]];
 	else					[model setVsi:i withValue:[sender intValue]];
 }
@@ -479,8 +479,7 @@
     [[sender window] makeFirstResponder:imgView];
     //todo: rethink the logic
     //safety is done in model silentUpdateVt
-    int aVal;
-    aVal = [[sender selectedCell] integerValue];
+    int aVal = (int)[[sender selectedCell] integerValue];
     if (aVal < 0) {
         aVal = 0;
     }
@@ -495,8 +494,7 @@
     [[sender window] makeFirstResponder:imgView];
     //todo: rethink the logic
     //safety is done in model silentUpdateVt
-    int aVal;
-    aVal = [[sender selectedCell] integerValue];
+    int aVal = (int)[[sender selectedCell] integerValue];
     if (aVal < -255) { //zero==0, ecal==255, safety==0
         aVal = -255;
     }
@@ -527,8 +525,7 @@
     [[sender window] makeFirstResponder:imgView];
     //todo: rethink the logic
     //safety is done in model silentUpdateVt
-    int aVal;
-    aVal = [[sender selectedCell] integerValue];
+    int aVal = (int)[[sender selectedCell] integerValue];
     if (aVal < 0) {
         aVal = 0;
     }
@@ -549,7 +546,7 @@
  
 - (IBAction) vbAction:(id)sender
 {
-	int i = [[vbMatrix selectedCell] tag];
+	int i = (int)[[vbMatrix selectedCell] tag];
 	if([model showVolts])	[model setVbVoltage:i withValue:[sender floatValue]];
 	else					[model setVb:i withValue:[sender intValue]];
 } 

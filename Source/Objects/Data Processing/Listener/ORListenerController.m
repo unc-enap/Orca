@@ -127,7 +127,7 @@
 
 - (void) byteCountChanged:(NSNotification*)aNote
 {
-	[byteRecievedField setIntValue:[model byteCount]];
+	[byteRecievedField setIntegerValue:[model byteCount]];
 }
 
 - (void) lockChanged:(NSNotification*)aNotification

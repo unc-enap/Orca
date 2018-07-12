@@ -34,11 +34,11 @@ endRunNumber = _endRunNumber;
     [self setImage:[NSImage imageNamed:@"resistor"]];
 }
 
-- (unsigned int) getCurrentRunNumber
+- (unsigned long) getCurrentRunNumber
 {
     NSArray* runObjects = [[self document] collectObjectsOfClass:NSClassFromString(@"ORRunModel")];
     ORRunModel* rc = [runObjects objectAtIndex:0];
-    unsigned int current_run_number;
+    unsigned long current_run_number;
     current_run_number = [rc runNumber];
     return current_run_number;
 }
@@ -96,7 +96,7 @@ endRunNumber = _endRunNumber;
     NSArray * fec32ControllerObjs = [[(ORAppDelegate*)[NSApp delegate] document] collectObjectsOfClass:NSClassFromString(@"ORFec32Model")];
     
     //Count all Fec32 Cards on the DAQ
-    int numberFec32Cards = [fec32ControllerObjs count];
+    int numberFec32Cards = (int)[fec32ControllerObjs count];
             
     //extract the channel status from the json file for a given crate,card,channel
     //loop through the couchDb response to see pick out the crate and slot for this channel

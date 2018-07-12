@@ -442,7 +442,7 @@
 - (void) runTaskChanged:(NSNotification*)aNote
 {
 	unsigned short aValue = [model runTask];
-	int n = [runTypePopup numberOfItems];
+	int n = (int)[runTypePopup numberOfItems];
 	int i;
 	for(i=0;i<n;i++){
 		if([[runTypePopup itemAtIndex:i] tag] == aValue){
@@ -1101,9 +1101,9 @@
 
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	int set = [aPlotter tag];
+	int set = (int)[aPlotter tag];
 	if([model oscEnabledMask] & (1<<set)){
-		return [model numOscPoints];
+		return (int)[model numOscPoints];
 	}
 	else return 0;
 }

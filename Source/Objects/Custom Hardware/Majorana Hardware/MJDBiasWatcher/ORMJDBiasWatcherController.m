@@ -259,11 +259,11 @@
 
     if(theTag<kMaxDetectors){
         //hv plot
-        return [model numberPointsInHVPlot:theTag];
+        return (int)[model numberPointsInHVPlot:theTag];
     }
     else if(theTag >= kMaxDetectors){
         theTag -= kMaxDetectors;
-        return [model numberPointsInPreAmpPlot:theTag];
+        return (int)[model numberPointsInPreAmpPlot:theTag];
     }
     else return 0;
 }

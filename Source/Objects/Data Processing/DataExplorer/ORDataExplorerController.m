@@ -87,7 +87,7 @@
 
 - (IBAction) scanNextButtonAction:(id)sender
 {
-    int row = [dataView selectedRow];
+    int row = (int)[dataView selectedRow];
     if(row != -1){    
 
         [dataView deselectAll:self];
@@ -137,7 +137,7 @@
 
 - (IBAction) scanPreviousButtonAction:(id)sender
 {
-   int row = [dataView selectedRow];
+   int row = (int)[dataView selectedRow];
     if(row >= 1){  
         
         [dataView deselectAll:self];
@@ -457,7 +457,7 @@
 
 
 #pragma mark ¥¥¥Data Source Methods
-- (int)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item 
+- (NSUInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item
 {
     if(outlineView == dataCatalogView){
         if(!item) return 1;

@@ -692,7 +692,7 @@ NSString* ORPDcuLock						= @"ORPDcuLock";
 	int e = [[parts objectAtIndex:1] intValue];
 	s= [NSString stringWithFormat:@"%.1fE%d",m,e];
 	s = [[s componentsSeparatedByString:@".0"] componentsJoinedByString:@""];
-	int len = [s length];
+	NSUInteger len = [s length];
 	if(len<6){
 		int i;
 		for(i=0;i<6-len;i++){

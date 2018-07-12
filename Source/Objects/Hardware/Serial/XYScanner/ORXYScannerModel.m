@@ -529,7 +529,7 @@ NSString* ORXYScannerLock = @"ORXYScannerLock";
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt32:optionMask forKey:@"ORXYScannerModelOptionMask"];
+    [encoder encodeInt32:(int32_t)optionMask forKey:@"ORXYScannerModelOptionMask"];
     [encoder encodeInt:patternType forKey:@"ORXYScannerModelPatternType"];
     [encoder encodeObject:cmdFile forKey:  @"ORXYScannerModelCmdFile"];
     [encoder encodeBool:absMotion forKey:  @"ORXYScannerModelAbsMotion"];

@@ -140,7 +140,7 @@
 
 - (IBAction) deleteAction:(id) sender
 {
-    int index =  [variableTable selectedRow];
+    int index =  (int)[variableTable selectedRow];
     if(index>=0){
         [[model variableNames] removeObjectAtIndex:index];
     }

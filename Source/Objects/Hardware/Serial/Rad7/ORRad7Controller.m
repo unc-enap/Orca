@@ -462,7 +462,7 @@
 
 - (void) modeChanged:(NSNotification*)aNote
 {
-	[modePU selectItemAtIndex: [model mode]];
+	[modePU selectItemAtIndex: [model opMode]];
 }
 
 - (void) recycleChanged:(NSNotification*)aNote

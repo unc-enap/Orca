@@ -836,17 +836,17 @@
 }
 - (void) selectedChannelChanged:(NSNotification*)aNote
 {
-    [selectedChannelField setIntValue: [model selectedChannel]];
+    [selectedChannelField setIntegerValue: [model selectedChannel]];
 }
 
 - (void) registerWriteValueChanged:(NSNotification*)aNote
 {
-    [registerWriteValueField setIntValue: [model registerWriteValue]];
+    [registerWriteValueField setIntValue: (int)[model registerWriteValue]];
 }
 
 - (void) spiWriteValueChanged:(NSNotification*)aNote
 {
-    [spiWriteValueField setIntValue: [model spiWriteValue]];
+    [spiWriteValueField setIntValue: (int)[model spiWriteValue]];
 }
 
 - (void) diagnosticsEnabledChanged:(NSNotification*)aNote
@@ -858,7 +858,7 @@
 {
     int i;
     for(i=0;i<kNumGretina4AChannels;i++){
-         [[aHitCountMatrix cellWithTag:i] setIntValue:[model aHitCount:i]];
+         [[aHitCountMatrix cellWithTag:i] setIntegerValue:(int)[model aHitCount:i]];
     }
 }
 
@@ -866,7 +866,7 @@
 {
     int i;
     for(i=0;i<kNumGretina4AChannels;i++){
-        [[droppedEventCountMatrix cellWithTag:i] setIntValue:[model droppedEventCount:i]];
+        [[droppedEventCountMatrix cellWithTag:i] setIntegerValue:[model droppedEventCount:i]];
     }
 }
 
@@ -874,7 +874,7 @@
 {
     int i;
     for(i=0;i<kNumGretina4AChannels;i++){
-        [[discriminatorCountMatrix cellWithTag:i] setIntValue:[model discCount:i]];
+        [[discriminatorCountMatrix cellWithTag:i] setIntegerValue:[model discCount:i]];
     }
 }
 
@@ -882,7 +882,7 @@
 {
     int i;
     for(i=0;i<kNumGretina4AChannels;i++){
-        [[acceptedEventCountMatrix cellWithTag:i] setIntValue:[model acceptedEventCount:i]];
+        [[acceptedEventCountMatrix cellWithTag:i] setIntegerValue:[model acceptedEventCount:i]];
     }
 }
 
@@ -1020,7 +1020,7 @@
 //single values
 - (void) forceFullCardInitChanged:  (NSNotification*)aNote  { [forceFullCardInitCB setIntValue:[model forceFullCardInit]];      }
 - (void) initSerDesStateChanged:    (NSNotification*)aNote  { [initSerDesStateField setStringValue:[model serDesStateName]];    }
-- (void) userPackageDataChanged:    (NSNotification*)aNote  { [userPackageDataField setIntValue:[model userPackageData]];       }
+- (void) userPackageDataChanged:    (NSNotification*)aNote  { [userPackageDataField setIntegerValue:[model userPackageData]];       }
 - (void) windowCompMinChanged:      (NSNotification*)aNote  { [windowCompMinField   setIntValue:[model windowCompMin]];         }
 - (void) windowCompMaxChanged:      (NSNotification*)aNote  { [windowCompMaxField   setIntValue:[model windowCompMax]];         }
 - (void) rawDataLengthChanged:      (NSNotification*)aNote  { [rawDataLengthField   setIntValue:[model rawDataLength]];         }
@@ -1502,7 +1502,7 @@
 
 - (IBAction) registerIndexPUAction:(id)sender
 {
-	unsigned int index = [sender indexOfSelectedItem];
+	 int index = (int)[sender indexOfSelectedItem];
 	[model setRegisterIndex:index];
 	[self setRegisterDisplay:index];
 }
@@ -1542,7 +1542,7 @@
         unsigned long address   = [Gretina4ARegisters offsetforReg:index];
         NSString* chanString;
         if([Gretina4ARegisters hasChannels:index]){
-            int chan = [model selectedChannel];
+            int chan = (int)[model selectedChannel];
             address += chan*0x04;
             chanString = [NSString stringWithFormat:@",%d",chan];
         }
@@ -1568,7 +1568,7 @@
         unsigned long address   = [Gretina4ARegisters offsetforReg:index];
         NSString* chanString;
         if([Gretina4ARegisters hasChannels:index]){
-            int chan = [model selectedChannel];
+            int chan = (int)[model selectedChannel];
             address += chan*0x04;
             chanString = [NSString stringWithFormat:@"%d",chan];
         }
@@ -1815,7 +1815,7 @@
     }
     
     NSString* key = [NSString stringWithFormat: @"orca.ORGretina4A%d.selectedtab",[model slot]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
     
 }
@@ -1828,12 +1828,12 @@
 
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	return [[[model waveFormRateGroup]timeRate]count];
+	return (int)[[[model waveFormRateGroup]timeRate]count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 {
-	int count = [[[model waveFormRateGroup]timeRate] count];
+	int count = (int)[[[model waveFormRateGroup]timeRate] count];
 	int index = count-i-1;
 	*yValue = [[[model waveFormRateGroup] timeRate] valueAtIndex:index];
 	*xValue = [[[model waveFormRateGroup] timeRate] timeSampledAtIndex:index];

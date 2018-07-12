@@ -177,7 +177,7 @@
     NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter]; 
 	[notifyCenter removeObserver:self name:ORSerialPortDataReceived object:nil];
 	if([aNote object] == serialPortView || !aNote){
-		int index = [serialPortView selectedRow];
+		long index = [serialPortView selectedRow];
 		if(index >= 0){
             ORSerialPort* thePort = [[ORSerialPortList sharedSerialPortList] objectAtIndex: index];
 			[selectedPortNameField setStringValue:[thePort name]];
@@ -229,7 +229,7 @@
 	}
 
 	if([aNote object] == usbDevicesView  || !aNote){
-		int index = [usbDevicesView selectedRow];
+		long index = [usbDevicesView selectedRow];
 		if(index>=0 && [model usbDeviceCount]>0)[usbDetailsView setString:[[model usbDeviceAtIndex:index] usbInterfaceDescription]];
 		else [usbDetailsView setString:@"<nothing selected>"];
 	}
@@ -249,7 +249,7 @@
     [self tableViewSelectionDidChange:nil];
     [groupView setNeedsDisplay:YES];
     [self reloadSerialPortList];
-	int index = [usbDevicesView selectedRow];
+	long index = [usbDevicesView selectedRow];
 	if(index>=0 && [model usbDeviceCount]>0)[usbDetailsView setString:[[model usbDeviceAtIndex:index] usbInterfaceDescription]];
 	else [usbDetailsView setString:@"<nothing selected>"];
 	[self eolTypeChanged:nil];
@@ -275,7 +275,7 @@
 {
     [usbDevicesView reloadData];
 	
-	int index = [usbDevicesView selectedRow];
+	long index = [usbDevicesView selectedRow];
 	if(index>=0 && [model usbDeviceCount]>0)[usbDetailsView setString:[[model usbDeviceAtIndex:index] usbInterfaceDescription]];
 	else [usbDetailsView setString:@"<nothing selected>"];
 }
@@ -292,7 +292,7 @@
 
 - (void) dataReceived:(NSNotification*)note
 {
-    int index = [serialPortView selectedRow];
+    long index = [serialPortView selectedRow];
     if(index >=0){
         ORSerialPort* thePort = [[ORSerialPortList sharedSerialPortList] objectAtIndex:index];
         if([[note userInfo] objectForKey:@"serialPort"] == thePort){
@@ -340,12 +340,12 @@
 
 - (IBAction) eolTypeAction:(id)sender
 {
-	[model setEolType:[[sender selectedCell] tag]];	
+	[model setEolType:(int)[[sender selectedCell] tag]];
 }
 
 - (IBAction) openPortAction:(id)sender
 {
-    int index = [serialPortView selectedRow];
+    long index = [serialPortView selectedRow];
     if(index >=0){
         ORSerialPort* thePort = [[ORSerialPortList sharedSerialPortList] objectAtIndex:index];
         if([thePort isOpen]){
@@ -361,7 +361,7 @@
 
 - (IBAction) optionAction:(id)sender
 {
-    int index = [serialPortView selectedRow];
+    long index = [serialPortView selectedRow];
     if(index >=0){
         ORSerialPort* thePort = [[ORSerialPortList sharedSerialPortList] objectAtIndex:index];
         if([thePort isOpen]){
@@ -399,7 +399,7 @@
 - (IBAction) sendAction:(id)sender
 {
     [self endEditing];
-    int index = [serialPortView selectedRow];
+    long index = [serialPortView selectedRow];
     if(index >= 0){
         ORSerialPort* thePort = [[ORSerialPortList sharedSerialPortList] objectAtIndex:index];
         if([thePort isOpen]){

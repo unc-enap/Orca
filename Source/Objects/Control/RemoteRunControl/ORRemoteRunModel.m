@@ -652,7 +652,7 @@ static NSString *ORRunRemoteConnectAtStart	= @"ORRunRemoteConnectAtStart";
     [encoder encodeObject:remoteHost forKey:ORRunRemoteHost];
     [encoder encodeBool:autoReconnect forKey:ORRunRemoteAutoReconnect];
     [encoder encodeBool:connectAtStart forKey:ORRunRemoteConnectAtStart];
-    [encoder encodeInt:remotePort forKey:ORRunRemotePort];
+    [encoder encodeInt:(int)remotePort forKey:ORRunRemotePort];
 }
 
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary
@@ -696,7 +696,7 @@ static NSString *ORRunRemoteConnectAtStart	= @"ORRunRemoteConnectAtStart";
 {
     [[self undoManager] disableUndoRegistration];
     NSArray* lines= [inString componentsSeparatedByString:@"\n"];
-    int n = [lines count];
+    int n = (int)[lines count];
     int i;
     NSCharacterSet* numberSet =  [NSCharacterSet decimalDigitCharacterSet];
     

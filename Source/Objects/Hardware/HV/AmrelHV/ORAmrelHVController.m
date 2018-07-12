@@ -490,7 +490,7 @@
 
 - (IBAction) numberOfChannelsAction:(id)sender
 {
-	[model setNumberOfChannels:[sender indexOfSelectedItem]+1];	
+	[model setNumberOfChannels:(int)[sender indexOfSelectedItem]+1];
 }
 
 - (IBAction) polarityAction:(id)sender
@@ -505,7 +505,7 @@
 
 - (IBAction) pollTimeAction:(id)sender
 {
-	[model setPollTime:[[sender selectedItem] tag]];	
+	[model setPollTime:(int)[[sender selectedItem] tag]];	
 }
 
 - (IBAction) lockAction:(id) sender

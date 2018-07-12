@@ -123,13 +123,13 @@
 - (int) waitForSecondStrobeOfFLT:(ORKatrinFLTModel *)flt;
 {
     if(!flt) return -1;
-    int i,lastSec,sec;
+    unsigned long i,lastSec,sec;
     lastSec=[flt readTime];
     for(i=0;i<10000;i++){
         sec = [flt readTime];
         if(sec!=lastSec){
             DebugHistoTB(  NSLog(@"SLT:waitForSecondStrobeOfFLT until i=%i (x 100 usecs) for page toggle\n",i);  )
-            return sec;
+            return (int)sec;
         }
         usleep(100);
     }
@@ -144,8 +144,8 @@
     //
     struct timeval t;//    struct timezone tz; is obsolete ... -tb-
     //timing
-        int currentSec;
-        int currentUSec;
+        long currentSec;
+        long currentUSec;
     gettimeofday(&t,NULL);
     currentSec = t.tv_sec;  
     currentUSec = t.tv_usec;  
@@ -162,7 +162,7 @@
                     //set timing info
                     [flt setHistoStartWaitingForPageToggle: FALSE];
                     [flt setHistoLastActivePage: [flt readCurrentHistogramPageNum]];
-                    [flt setHistoLastPageToggleSec: currentSec usec: currentUSec];
+                    [flt setHistoLastPageToggleSec: (int)currentSec usec: currentUSec];
                     // write TRun, EMin, BinWidth
                     //histogramming registers (now I use a broadcast: chan 31)
                     [flt writeEMin:[flt histoMinEnergy] forChan: 31];

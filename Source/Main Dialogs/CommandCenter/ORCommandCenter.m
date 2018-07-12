@@ -62,7 +62,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(CommandCenter);
 	//}
 
     
-    [self setSocketPort:port];
+    [self setSocketPort:(int)port];
     [self setClients:[NSMutableArray array]];
     [[self undoManager] enableUndoRegistration];
     NSArray* objectsToRegister = [[(ORAppDelegate*)[NSApp delegate] document] collectObjectsRespondingTo:@selector(commandID)];
@@ -399,7 +399,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(CommandCenter);
 	if(aCommandString){
 		[history addObject:aCommandString];
 		if([history count] > 50)[history removeObjectAtIndex:0];
-		historyIndex = [history count]-1;
+		historyIndex = (int)[history count]-1;
 	}
 }
 
@@ -565,7 +565,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(CommandCenter);
                     NSMethodSignature* theSignature = [theObj methodSignatureForSelector:theSelector];
                     NSInvocation* theInvocation = [NSInvocation invocationWithMethodSignature:theSignature];
                     [theInvocation setSelector:theSelector];
-                    int n = [theSignature numberOfArguments]-2; //first two are hidden
+                    int n = (int)[theSignature numberOfArguments]-2; //first two are hidden
                     int i;
                     int argI;
                     BOOL ok = YES;
@@ -666,7 +666,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(CommandCenter);
 			NSMethodSignature* theSignature = [theObj methodSignatureForSelector:theSelector];
 			NSInvocation* theInvocation = [NSInvocation invocationWithMethodSignature:theSignature];
 			[theInvocation setSelector:theSelector];
-			int n = [theSignature numberOfArguments]-2; //first two are hidden
+			int n = (int)[theSignature numberOfArguments]-2; //first two are hidden
 			int i;
 			int argI;
 			BOOL ok = YES;

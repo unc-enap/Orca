@@ -71,12 +71,12 @@ typedef struct  {
 - (UInt8)		usingPipeType;
 - (void)		writeString:(NSString*)aCommand;
 - (void)		writeUSB488Command:(NSString*)aCommand eom:(BOOL)eom;
-- (int)			readUSB488:(char*)resultData length:(unsigned long)amountRead;
-- (void)		writeBytes:(void*)bytes length:(int)length pipe:(int)aPipeIndex;
-- (int)			readBytes:(void*)bytes length:(int)length pipe:(int)aPipeIndex;
-- (void)		writeBytes:(void*)bytes length:(int)length;
-- (int)			readBytes:(void*)bytes length:(int)amountToRead;
-- (int)			readBytesFastNoThrow:(void*)bytes length:(int)amountToRead;
+- (int)			readUSB488:(char*)resultData length:(uint32_t)amountRead;
+- (void)		writeBytes:(void*)bytes length:(uint32_t)length pipe:(int)aPipeIndex;
+- (int)			readBytes:(void*)bytes length:(uint32_t)length pipe:(int)aPipeIndex;
+- (void)		writeBytes:(void*)bytes length:(uint32_t)length;
+- (int)			readBytes:(void*)bytes length:(uint32_t)amountToRead;
+- (int)			readBytesFastNoThrow:(void*)bytes length:(uint32_t)amountToRead;
 - (void)		setRegisteredObject:(id)anObj;
 - (id)			registeredObject;
 - (UInt16)		product;
@@ -102,10 +102,10 @@ typedef struct  {
 - (void)		setConnectionState:(NSString*)aState;
 - (void)		interruptRecieved:(IOReturn) result length:(int) len;
 - (void)		startReadingInterruptPipe;
-- (int)			readBytesOnInterruptPipeNoLock:(void*)bytes length:(int)amountRead;
+- (int)			readBytesOnInterruptPipeNoLock:(void*)bytes length:(uint32_t)amountRead;
 
-- (int) readBytesOnInterruptPipe:(void*)bytes length:(int)amountRead;
-- (void) writeBytesOnInterruptPipe:(void*)bytes length:(int)amountRead;
+- (int) readBytesOnInterruptPipe:(void*)bytes length:(uint32_t)amountRead;
+- (void) writeBytesOnInterruptPipe:(void*)bytes length:(uint32_t)amountRead;
 
 @end
 

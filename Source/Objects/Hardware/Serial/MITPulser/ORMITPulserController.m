@@ -243,12 +243,12 @@
 
 - (void) clockSpeedAction:(id)sender
 {
-	[model setClockSpeed:[sender indexOfSelectedItem]];	
+	[model setClockSpeed:(int)[sender indexOfSelectedItem]];
 }
 
 - (void) pulserVersionAction:(id)sender
 {
-	[model setPulserVersion:[sender indexOfSelectedItem]];	
+	[model setPulserVersion:(int)[sender indexOfSelectedItem]];	
 }
 
 - (IBAction) portListAction:(id) sender

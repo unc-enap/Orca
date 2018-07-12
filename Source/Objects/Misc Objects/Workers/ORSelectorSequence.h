@@ -21,8 +21,8 @@
 @interface ORSelectorSequence : NSObject {
 	@private
 		id  delegate;
-		int	tag;
-		int startCount;
+		NSUInteger	tag;
+		NSUInteger startCount;
 	
 		NSMutableArray*			selectors;
 		NSMutableDictionary*	nextSelector;

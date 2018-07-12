@@ -205,7 +205,7 @@ enum Gretina4FIFOStates {
     short			pileUp[kNumGretina4Channels];
     short			polarity[kNumGretina4Channels];
     short			triggerMode[kNumGretina4Channels];
-    unsigned long               ledThreshold[kNumGretina4Channels];
+    int               ledThreshold[kNumGretina4Channels];
     short			cfdDelay[kNumGretina4Channels];
     short			cfdThreshold[kNumGretina4Channels];
     short			cfdFraction[kNumGretina4Channels];
@@ -223,7 +223,7 @@ enum Gretina4FIFOStates {
 	unsigned long 	waveFormCount[kNumGretina4Channels];
 	BOOL			isRunning;
 
-    int fifoState;
+    unsigned long  fifoState;
 	ORAlarm*        fifoFullAlarm;
 	int				fifoEmptyCount;
     int             fifoLostEvents;
@@ -235,8 +235,8 @@ enum Gretina4FIFOStates {
 	unsigned long fifoStateAddress;
 
 	BOOL oldEnabled[kNumGretina4Channels];
-	unsigned long oldLEDThreshold[kNumGretina4Channels];
-	unsigned long newLEDThreshold[kNumGretina4Channels];
+	int oldLEDThreshold[kNumGretina4Channels];
+	int newLEDThreshold[kNumGretina4Channels];
 	BOOL noiseFloorRunning;
 	int noiseFloorState;
 	int noiseFloorWorkingChannel;
@@ -305,7 +305,7 @@ enum Gretina4FIFOStates {
 - (void) setFpgaFilePath:(NSString*)aFpgaFilePath;
 - (float) noiseFloorIntegrationTime;
 - (void) setNoiseFloorIntegrationTime:(float)aNoiseFloorIntegrationTime;
-- (int) fifoState;
+- (unsigned long) fifoState;
 - (void) setFifoState:(int)aFifoState;
 - (int) noiseFloorOffset;
 - (void) setNoiseFloorOffset:(int)aNoiseFloorOffset;
@@ -436,7 +436,7 @@ enum Gretina4FIFOStates {
 - (int) readExtTrigLength;
 - (int) readCollectionTime;
 - (int) readIntegrationTime;
-- (int) readDownSample;
+- (unsigned long) readDownSample;
 - (BOOL) controllerIsSBC;
 - (void) copyFirmwareFileToSBC:(NSString*)firmwarePath;
 - (void) writeClockSource;

@@ -211,7 +211,7 @@
 	}
     NSString* portName = [[owner model] portName];
     if([portName length]!=0){
-        int index = [portListPopup indexOfItemWithTitle:portName];
+        NSUInteger index = [portListPopup indexOfItemWithTitle:portName];
         if(index>0)[portListPopup selectItemWithTitle:portName];
         else [portListPopup selectItemAtIndex:0];
     }

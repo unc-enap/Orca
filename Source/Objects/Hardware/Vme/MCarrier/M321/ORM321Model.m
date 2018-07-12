@@ -567,7 +567,7 @@ NSString* ORM321FourPhaseChangedNotification		= @"ORM321FourPhaseChangedNotifica
 - (void)resetIRQ:(id)aMotor
 {
     unsigned short irqValue = [self readIRQ];
-    int theMotorTag = [aMotor tag];
+    NSInteger theMotorTag = [aMotor tag];
     unsigned short mask;
     if(theMotorTag==0){
         mask = kM361_IrqBreakPtA | kM361_IrqTrajA | kM361_IrqHomeA;

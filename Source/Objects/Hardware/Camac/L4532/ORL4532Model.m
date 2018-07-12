@@ -296,7 +296,7 @@ NSString* ORL4532ModelTriggerNamesChanged	  = @"ORL4532ModelTriggerNamesChanged"
 {
     [super encodeWithCoder:encoder];	
     [encoder encodeObject:triggerNames forKey:@"ORL4532ModelTriggerNames"];
-    [encoder encodeInt32:delayEnableMask forKey:@"ORL4532ModelDelayEnableMask"];
+    [encoder encodeInt32:(int32_t)delayEnableMask forKey:@"ORL4532ModelDelayEnableMask"];
     [encoder encodeObject:delays forKey:@"ORL4532ModelDelays"];
     [encoder encodeInt:numberTriggers forKey:@"ORL4532ModelNumberTriggers"];
     [encoder encodeBool:includeTiming forKey:@"ORL4532ModelIncludeTiming"];
@@ -310,7 +310,7 @@ NSString* ORL4532ModelTriggerNamesChanged	  = @"ORL4532ModelTriggerNamesChanged"
 {
     NSMutableDictionary* objDictionary = [super addParametersToDictionary:dictionary];
     [objDictionary setObject:delays forKey:@"delays"];
-    [objDictionary setObject:[NSNumber numberWithInt:delayEnableMask] forKey:@"delayEnableMask"];
+    [objDictionary setObject:[NSNumber numberWithInteger:delayEnableMask] forKey:@"delayEnableMask"];
     
 	return objDictionary;
 }

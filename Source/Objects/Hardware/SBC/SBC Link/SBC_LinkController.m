@@ -128,7 +128,7 @@
 - (void) tabView:(NSTabView*)aTabView didSelectTabViewItem:(NSTabViewItem*)item
 {
     NSString* key = [NSString stringWithFormat: @"orca.%@%d.selectedtab",[model className],[model slot]];
-    int index = [tabView indexOfTabViewItem:item];
+    NSInteger index = [tabView indexOfTabViewItem:item];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 }
 
@@ -403,8 +403,8 @@
 
 - (void) codeVersionChanged:(NSNotification*)aNote
 {
-	int theVersion = [[model sbcLink] sbcCodeVersion];
-	if(theVersion)	[codeVersionField setIntValue:theVersion];
+	long theVersion = [[model sbcLink] sbcCodeVersion];
+	if(theVersion)	[codeVersionField setIntegerValue:theVersion];
 	else			[codeVersionField setObjectValue:@"?"];
 }
 
@@ -424,8 +424,8 @@
 {
 	[plotter setNeedsDisplay:YES];
 	long size = [[model sbcLink] payloadSize]/1000;
-	[payloadSizeSlider setIntValue:size];
-	[payloadSizeField setIntValue:size];
+	[payloadSizeSlider setIntegerValue:size];
+	[payloadSizeField setIntegerValue:size];
 	if(size<25)[payloadSizeField setTextColor:[NSColor colorWithCalibratedRed:.6 green:0 blue:0 alpha:1.0]];
 	else [payloadSizeField setTextColor:[NSColor blackColor]];
 	
@@ -462,8 +462,8 @@
 	
 	[plotter setNeedsDisplay:YES];
 	[cbTestButton setNeedsDisplay:YES];
-	[numRecordsField setIntValue:[[model sbcLink] totalRecordsChecked]];
-	[numErrorsField setIntValue:[[model sbcLink] totalErrors]];
+	[numRecordsField setIntegerValue:[[model sbcLink] totalRecordsChecked]];
+	[numErrorsField setIntegerValue:[[model sbcLink] totalErrors]];
 	[histogram setNeedsDisplay:YES];
 }
 
@@ -766,14 +766,14 @@
 
 - (void) addressChanged:(NSNotification*)aNote
 {
-	[addressField setIntValue:[[model sbcLink] writeAddress]];
-	[addressStepper setIntValue:[[model sbcLink] writeAddress]];
+	[addressField setIntegerValue:[[model sbcLink] writeAddress]];
+	[addressStepper setIntegerValue:[[model sbcLink] writeAddress]];
 }
 
 - (void) writeValueChanged:(NSNotification*)aNote
 {
-	[writeValueField setIntValue:[[model sbcLink] writeValue]];
-	[writeValueStepper setIntValue:[[model sbcLink] writeValue]];
+	[writeValueField setIntegerValue:[[model sbcLink] writeValue]];
+	[writeValueStepper setIntegerValue:[[model sbcLink] writeValue]];
 }
 
 #pragma mark ¥¥¥Actions
@@ -783,7 +783,7 @@
 }
 - (IBAction) sbcPollingTimeAction:(id)sender
 {
-    [[model sbcLink] setSbcPollingRate:[[sender selectedItem]tag]];
+    [[model sbcLink] setSbcPollingRate:(unsigned int)[[sender selectedItem]tag]];
 }
 
 - (IBAction) clearHistory:(id) sender
@@ -818,7 +818,7 @@
 
 - (IBAction) loadModeAction:(id)sender
 {
-	[[model sbcLink] setLoadMode:[[sender selectedCell] tag]];	
+	[[model sbcLink] setLoadMode:(int)[[sender selectedCell] tag]];
 }
 
 - (IBAction) toggleCrateAction:(id)sender
@@ -942,7 +942,7 @@
 
 - (IBAction) errorTimeOutAction:(id)sender
 {
-	[[model sbcLink] setErrorTimeOut:[sender indexOfSelectedItem]];
+	[[model sbcLink] setErrorTimeOut:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) portNumberAction:(id)sender
@@ -988,11 +988,11 @@
     unsigned char  cdata;
 	[self endEditing];
 	long value = [[model sbcLink] writeValue];
-	int address = 0;
+	unsigned long address = 0;
     @try {
 		if([model isKindOfClass:[ORVmeAdapter class]]){
-			int 			startAddress 	= [[model sbcLink] writeAddress];
-			int				endAddress		= [[model sbcLink] doRange]?startAddress + [[model sbcLink] range]*[addressStepper increment] : startAddress;
+			unsigned long 			startAddress 	= [[model sbcLink] writeAddress];
+			unsigned long				endAddress		= [[model sbcLink] doRange]?startAddress + [[model sbcLink] range]*[addressStepper increment] : startAddress;
 			unsigned short 	addressModifier = [[model sbcLink] addressModifier];
 			unsigned short 	addressSpace	= 1;  //[[model sbcLink] rwIOSpaceValue];
 			unsigned long  	ldata			= [[model sbcLink] writeValue];
@@ -1145,19 +1145,19 @@
 - (IBAction) readWriteTypeMatrixAction:(id)sender
 { 
     if ([[model sbcLink] readWriteType] != [sender selectedTag]){
-        [[model sbcLink] setReadWriteType:[sender selectedTag]];
+        [[model sbcLink] setReadWriteType:(unsigned int)[sender selectedTag]];
     }
 }
 
 - (IBAction) addressModifierPUAction:(id)sender
 {
-	[[model sbcLink] setAddressModifier:[[sender selectedItem] tag]];
+	[[model sbcLink] setAddressModifier:(unsigned int)[[sender selectedItem] tag]];
 }
 
 - (IBAction) infoTypeAction:(id)sender
 {
     if ([[model sbcLink] infoType] != [sender selectedTag]){
-        [[model sbcLink] setInfoType:[sender selectedTag]];
+        [[model sbcLink] setInfoType:(int)[sender selectedTag]];
     }
 }
 
@@ -1214,14 +1214,14 @@
 
 - (int)	numberPointsInPlot:(id)aPlotter
 {
-	int tag = [aPlotter tag];
+	int tag = (int)[aPlotter tag];
     if(tag == 0) return [[model sbcLink] cbTestCount];
 	else		 return 1000;
 }
    
 - (void) plotter:(id)aPlotter index:(unsigned long)index x:(double*)xValue y:(double*)yValue
 {
-	int tag = [aPlotter tag];
+	int tag = (int)[aPlotter tag];
     if(tag == 0){
 		if(index>100){
 			*xValue = 0;
@@ -1234,7 +1234,7 @@
 		}
 	}
 	else {
-		*yValue = [[model sbcLink] recordSizeHisto:index];
+		*yValue = [[model sbcLink] recordSizeHisto:(int)index];
 		*xValue = index;
 	}
 }

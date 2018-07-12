@@ -154,7 +154,7 @@
 	int displayType = [delegate displayType];
 	BOOL displayErrors = ([delegate hardwareCheck]==0) || ([delegate cardCheck]==0);
 	int setIndex;
-	int numSets = [segmentPathSet count];
+	int numSets = (int)[segmentPathSet count];
 	NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
 																		[NSFont fontWithName:@"Monaco" size:9], NSFontAttributeName,
 																		[NSColor whiteColor], NSForegroundColorAttributeName,
@@ -162,7 +162,7 @@
 	for(setIndex = 0;setIndex<numSets;setIndex++){
 		int segmentIndex;
 		NSArray* arrayOfSegmentPaths = [segmentPathSet objectAtIndex:setIndex];
-		int numSegments = [arrayOfSegmentPaths count];
+		int numSegments = (int)[arrayOfSegmentPaths count];
 		ORSegmentGroup* segmentGroup = [delegate segmentGroup:setIndex];
 		for(segmentIndex = 0;segmentIndex<numSegments;segmentIndex++){
 			NSBezierPath*   segmentPath  = [arrayOfSegmentPaths objectAtIndex:segmentIndex];
@@ -215,7 +215,7 @@
 		for(setIndex = 0;setIndex<numSets;setIndex++){
 			int segmentIndex;
 			NSArray* arrayOfSegmentPaths = [segmentPathSet objectAtIndex:setIndex];
-			int numSegments = [arrayOfSegmentPaths count];
+			int numSegments = (int)[arrayOfSegmentPaths count];
 			ORSegmentGroup* segmentGroup = [delegate segmentGroup:setIndex];
 			for(segmentIndex = 0;segmentIndex<numSegments;segmentIndex++){
 				NSString* name = [[segmentGroup segment:segmentIndex] objectForKey:@"kName"];

@@ -27,8 +27,8 @@
 #import "ORProcessElementModel.h"
 #import "ORProcessCenter.h"
 
-int sortUpFunction(id element1,id element2, void* context){ return [element1 compareStringTo:element2 usingKey:context];}
-int sortDnFunction(id element1,id element2, void* context){return [element2 compareStringTo:element1 usingKey:context];}
+NSInteger sortUpFunction(id element1,id element2, void* context){ return [element1 compareStringTo:element2 usingKey:context];}
+NSInteger sortDnFunction(id element1,id element2, void* context){return [element2 compareStringTo:element1 usingKey:context];}
 
 @implementation ORProcessController
 
@@ -353,7 +353,7 @@ int sortDnFunction(id element1,id element2, void* context){return [element2 comp
         }
     }
     
-    int selectedIndex = [emailListTable selectedRow];
+    long selectedIndex = [emailListTable selectedRow];
 
     [emailListTable      setHidden:  aDiffMasterExists];
 	[addAddressButton    setEnabled:!aDiffMasterExists];
@@ -377,7 +377,7 @@ int sortDnFunction(id element1,id element2, void* context){return [element2 comp
         
         NSIndexSet* theSelectedSet =  [tableView selectedRowIndexes];
         if(theSelectedSet){
-            int rowIndex = [theSelectedSet firstIndex];
+            long rowIndex = [theSelectedSet firstIndex];
             id item = [[model orcaObjects]objectAtIndex:rowIndex];
             theDetails = [NSString stringWithFormat:@"%@",[item description:@""]];
         }
@@ -400,7 +400,7 @@ int sortDnFunction(id element1,id element2, void* context){return [element2 comp
 }
 - (IBAction) addAddress:(id)sender
 {
-	int index = [[model emailList] count];
+	int index = (int)[[model emailList] count];
 	[model addAddress:@"<eMail>" atIndex:index];
 	NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:index];
 	[emailListTable selectRowIndexes:indexSet byExtendingSelection:NO];
@@ -415,7 +415,7 @@ int sortDnFunction(id element1,id element2, void* context){return [element2 comp
 	NSIndexSet* theSet = [emailListTable selectedRowIndexes];
 	NSUInteger current_index = [theSet firstIndex];
     if(current_index != NSNotFound){
-		[model removeAddressAtIndex:current_index];
+		[model removeAddressAtIndex:(int)current_index];
 	}
 	[self updateButtons];
 	[emailListTable reloadData];
@@ -434,7 +434,7 @@ int sortDnFunction(id element1,id element2, void* context){return [element2 comp
 - (IBAction) heartBeatIndexAction:(id)sender
 {
     if([sender indexOfSelectedItem] != [model heartBeatIndex]){
-        [model setHeartBeatIndex:[sender indexOfSelectedItem]];	
+        [model setHeartBeatIndex:(int)[sender indexOfSelectedItem]];
         if([model heartbeatSeconds] == 0){
             [model sendHeartbeatShutOffWarning];
         }
@@ -598,7 +598,7 @@ int sortDnFunction(id element1,id element2, void* context){return [element2 comp
     NSString *key = [self sortColumn];
     NSArray *a = [tableView tableColumns];
     NSTableColumn *column = [tableView tableColumnWithIdentifier:key];
-    unsigned i = [a count];
+    unsigned long i = [a count];
     
     while (i-- > 0) [tableView setIndicatorImage:nil inTableColumn:[a objectAtIndex:i]];
     

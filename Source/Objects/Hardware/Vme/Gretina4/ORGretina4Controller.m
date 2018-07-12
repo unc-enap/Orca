@@ -471,7 +471,7 @@
 
 - (void) registerWriteValueChanged:(NSNotification*)aNote
 {
-	[registerWriteValueField setIntValue: [model registerWriteValue]];
+	[registerWriteValueField setIntegerValue: [model registerWriteValue]];
 }
 
 - (void) registerIndexChanged:(NSNotification*)aNote
@@ -482,7 +482,7 @@
 
 - (void) spiWriteValueChanged:(NSNotification*)aNote
 {
-	[spiWriteValueField setIntValue: [model spiWriteValue]];
+	[spiWriteValueField setIntegerValue: [model spiWriteValue]];
 }
 
 - (void) fpgaDownInProgressChanged:(NSNotification*)aNote
@@ -749,7 +749,7 @@
 		[fifoState setStringValue:@"--"];
 	}
 	else {
-		int val = [model fifoState];
+		unsigned long val = [model fifoState];
 		if((val & kGretina4FIFOAllFull)!=0) {
 			[fifoState setTextColor:[NSColor redColor]];
 			[fifoState setStringValue:@"Full"];
@@ -789,7 +789,7 @@
 
 - (void) baseAddressChanged:(NSNotification*)aNote
 {
-    [addressText setIntValue: [model baseAddress]];
+    [addressText setIntegerValue: [model baseAddress]];
 }
 
 - (void) integrationChanged:(NSNotification*)aNotification
@@ -910,7 +910,7 @@
 - (IBAction) downSampleAction:(id)sender
 {
 	if([sender indexOfSelectedItem] != [model downSample]){
-		[model setDownSample:[sender indexOfSelectedItem]];
+		[model setDownSample:(int)[sender indexOfSelectedItem]];
 	}
 }
 
@@ -925,7 +925,7 @@
 }
 - (IBAction) registerIndexPUAction:(id)sender
 {
-	unsigned int index = [sender indexOfSelectedItem];
+	int index = (int)[sender indexOfSelectedItem];
 	[model setRegisterIndex:index];
 	[self setRegisterDisplay:index];
 }
@@ -976,14 +976,14 @@
 - (IBAction) polarityAction:(id)sender
 {
 	if([sender indexOfSelectedItem] != [model polarity:[sender tag]]){
-		[model setPolarity:[sender tag] withValue:[sender indexOfSelectedItem]];
+		[model setPolarity:(int)[sender tag] withValue:(int)[sender indexOfSelectedItem]];
 	}
 }
 
 - (IBAction) triggerModeAction:(id)sender
 {
 	if([sender indexOfSelectedItem] != [model triggerMode:[sender tag]]){
-		[model setTriggerMode:[sender tag] withValue:[sender indexOfSelectedItem]];
+		[model setTriggerMode:(int)[sender tag] withValue:(int)[sender indexOfSelectedItem]];
 	}
 }
 
@@ -1154,7 +1154,7 @@
 
 - (IBAction) cardInfoAction:(id) sender
 {
-    int index = [[sender selectedCell] tag];
+    int index = (int)[[sender selectedCell] tag];
     id theRawValue = [model rawCardValue:index value:[sender objectValue]];
     [model cardInfo:index setObject: theRawValue];
 }
@@ -1225,7 +1225,7 @@
         NSLog(@"Gretina BoardID (slot %d): [0x%x] ID = 0x%x\n",[model slot],[model baseAddress],[model readBoardID]);
         int chan;
         for(chan = 0;chan<kNumGretina4Channels;chan++){
-            unsigned value = [model readControlReg:chan];
+            unsigned long value = [model readControlReg:chan];
             NSLogFont([NSFont fontWithName:@"Monaco" size:10],@"chan: %d Enabled: %@ Debug: %@  PileUp: %@ CFD: %@ Pole-zero: %@ Polarity: 0x%02x TriggerMode: 0x%02x\n",
                       chan, 
                       (value&0x1)?@"[YES]":@"[ NO]",		//enabled
@@ -1283,7 +1283,7 @@
     }  
 	
     NSString* key = [NSString stringWithFormat: @"orca.ORGretina4%d.selectedtab",[model slot]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 	
 }
@@ -1316,12 +1316,12 @@
 
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	return [[[model waveFormRateGroup]timeRate]count];
+	return (int)[[[model waveFormRateGroup]timeRate]count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 {
-	int count = [[[model waveFormRateGroup]timeRate] count];
+	int count = (int)[[[model waveFormRateGroup]timeRate] count];
 	int index = count-i-1;
 	*yValue = [[[model waveFormRateGroup] timeRate] valueAtIndex:index];
 	*xValue = [[[model waveFormRateGroup] timeRate] timeSampledAtIndex:index];

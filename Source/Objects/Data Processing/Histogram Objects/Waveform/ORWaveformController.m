@@ -163,7 +163,7 @@
 
 - (int) numberPointsInPlot:(id)aPlot
 {
-	int numBins = [model numberBins];
+	int numBins = (int)[model numberBins];
 	if(numBins != [[plotView xAxis] maxLimit]){
 	   [[plotView xAxis] setRngLimitsLow:0 withHigh:numBins withMinRng:25];
 	}
@@ -329,13 +329,13 @@
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
 	if([[tableColumn identifier] isEqualToString:@"Value"]){
-		return [NSNumber numberWithInt:[model value:row]];
+		return [NSNumber numberWithInteger:[model value:row]];
 	}
     else if([[tableColumn identifier] isEqualToString:@"Hex"]){
 		return [NSString stringWithFormat:@"0x%lx",[model value:row]];
 	}
 
-	else return [NSNumber numberWithInt:row];
+	else return [NSNumber numberWithInteger:row];
 }
 
 - (BOOL) useUnsignedValues
@@ -351,7 +351,7 @@
 
 - (int) numberPointsInPlot:(id)aPlot
 {
-	int numBins = [model numberBins];
+	int numBins = (int)[model numberBins];
 	if(numBins != [[plotView xAxis] maxLimit]){
 	   [[plotView xAxis] setRngLimitsLow:0 withHigh:numBins withMinRng:25];
 	}

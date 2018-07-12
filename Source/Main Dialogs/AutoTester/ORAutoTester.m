@@ -244,7 +244,7 @@ else children = nil;\
 	return YES;
 }
 
-- (int)  outlineView:(NSOutlineView*)ov numberOfChildrenOfItem:(id)item
+- (NSUInteger)  outlineView:(NSOutlineView*)ov numberOfChildrenOfItem:(id)item
 {
 	GET_CHILDREN; //macro: given an item, sets children array and guardian.
 	return [children count];

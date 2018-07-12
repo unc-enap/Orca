@@ -97,7 +97,7 @@ NSString* ORSequenceStopped  = @"ORSequenceStopped";
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORSequenceRunning 
 														object:delegate
-													  userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:tag],@"tag",nil]];
+													  userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:tag],@"tag",nil]];
 	startCount = [selectors count];
 	[self retain];
 	[self performSelector:@selector(doOneItem) withObject:nil afterDelay:0];
@@ -109,7 +109,7 @@ NSString* ORSequenceStopped  = @"ORSequenceStopped";
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORSequenceStopped 
 														object:delegate
-													  userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:tag],@"tag",nil]];
+													  userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:tag],@"tag",nil]];
 	
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	[selectors release];
@@ -135,7 +135,7 @@ NSString* ORSequenceStopped  = @"ORSequenceStopped";
 			float progress = 100. - 100.*[selectors count]/(float)startCount;
 			[[NSNotificationCenter defaultCenter] postNotificationName:ORSequenceProgress 
 																object:delegate
-															  userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:progress],@"progress",[NSNumber numberWithInt:tag],@"tag",nil]];
+															  userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:progress],@"progress",[NSNumber numberWithInteger:tag],@"tag",nil]];
 			
 			[self performSelector:@selector(doOneItem) withObject:nil afterDelay:0];
 			

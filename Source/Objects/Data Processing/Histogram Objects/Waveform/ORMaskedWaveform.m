@@ -58,7 +58,7 @@
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt32:mask forKey:@"mask"];
+    [encoder encodeInt32:(int32_t)mask forKey:@"mask"];
 }
 
 @end
@@ -97,7 +97,7 @@
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt32:startIndex forKey:@"startIndex"];
+    [encoder encodeInt32:(int32_t)startIndex forKey:@"startIndex"];
 }
 @end
 
@@ -185,8 +185,8 @@
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt32:specialBitMask forKey:@"specialBitMask"];
-    [encoder encodeInt32:scaleOffset    forKey:@"scaleOffset"];
+    [encoder encodeInt32:(int32_t)specialBitMask forKey:@"specialBitMask"];
+    [encoder encodeInt32:(int32_t)scaleOffset    forKey:@"scaleOffset"];
     [encoder encodeObject:bitNames      forKey:@"bitNames"];
 }
 

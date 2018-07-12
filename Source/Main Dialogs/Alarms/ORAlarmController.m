@@ -140,7 +140,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmController);
 - (void) tableViewSelectionDidChange:(NSNotification *)aNotification
 {
 	if([aNotification object] == tableView || aNotification == nil){
-		NSInteger selectedIndex = [tableView selectedRow];
+		int selectedIndex = (int)[tableView selectedRow];
 		if(selectedIndex>=0){
 			[self setUpHelpText];
 			//[helpDrawer open];
@@ -154,7 +154,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmController);
 		}
 	}
 	if([aNotification object] == addressList || aNotification == nil){
-		NSInteger selectedIndex = [addressList selectedRow];
+		int selectedIndex = (int)[addressList selectedRow];
 		[removeAddressButton setEnabled:selectedIndex>=0];
 		if(selectedIndex>=0){
 			[addressField setEnabled:YES];
@@ -195,7 +195,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmController);
 - (void) setUpHelpText
 {
     if([tableView numberOfSelectedRows] == 1){
-        int selectedIndex = [tableView selectedRow];
+        int selectedIndex = (int)[tableView selectedRow];
         ORAlarm* selectedAlarm = [[self alarmCollection] objectAtIndex:selectedIndex];
         [helpTextView setString:[selectedAlarm helpString]];
     }
@@ -261,7 +261,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmController);
 	//only one can be selected at a time. If that restriction is lifted then the following will have to be changed
 	//to something a lot more complicated.
 	NSIndexSet* theSet = [addressList selectedRowIndexes];
-	NSUInteger current_index = [theSet firstIndex];
+	int current_index = (int)[theSet firstIndex];
     if(current_index != NSNotFound){
 		[[self alarmCollection] removeAddressAtIndex:current_index];
 	}
@@ -269,7 +269,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmController);
 
 - (IBAction) severityAction:(id)sender
 {
-	int selectedIndex = [addressList selectedRow];
+	int selectedIndex = (int)[addressList selectedRow];
 	if(selectedIndex>=0) {
 		id addressObj = [[self alarmCollection] addressAtIndex:selectedIndex];
 		int i;
@@ -286,7 +286,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmController);
 
 - (IBAction) addressAction:(id)sender
 {
-	NSInteger selectedIndex = [addressList selectedRow];
+	int selectedIndex = (int)[addressList selectedRow];
 	if(selectedIndex>=0) {
 		id addressObj = [[self alarmCollection] addressAtIndex:selectedIndex];
 		[addressObj setMailAddress:[sender stringValue]];
@@ -313,7 +313,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmController);
 
 - (void) severitySelectionChanged:(NSNotification*)aNotification
 {
-	NSInteger selectedIndex = [addressList selectedRow];
+	int selectedIndex = (int)[addressList selectedRow];
 	if(selectedIndex>=0) {
 		id addressObj = [[self alarmCollection] addressAtIndex:selectedIndex];
 		if([aNotification object] == addressObj){
@@ -353,7 +353,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmController);
 
 - (void) addressChanged:(NSNotification*)aNotification
 {
-	NSInteger selectedIndex = [addressList selectedRow];
+	int selectedIndex = (int)[addressList selectedRow];
 	if(selectedIndex>=0) {
 		id addressObj = [[self alarmCollection] addressAtIndex:selectedIndex];
 		if([aNotification object] == addressObj){

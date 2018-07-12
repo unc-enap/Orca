@@ -544,7 +544,7 @@ NSInteger windowSort(id w1, id w2, void *context) { return [[w2 title] compare:[
 @end
 #endif
 @implementation NSObject (ORDataController_Cat)
-- (int) numberBins
+- (unsigned long) numberBins
 {
     return 0;
 }

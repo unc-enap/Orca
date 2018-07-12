@@ -189,7 +189,7 @@
     
     if ([theString length]==0) return @"";
     
-    unsigned int theLength = strlen(theCStringBuffer);
+    unsigned long theLength = strlen(theCStringBuffer);
     char *theCEscStr = PQescapeLiteral(mConnection, theCStringBuffer, theLength);
     NSString *theReturn = [NSString stringWithCString:theCEscStr encoding:NSISOLatin1StringEncoding];
     PQfreemem(theCEscStr);

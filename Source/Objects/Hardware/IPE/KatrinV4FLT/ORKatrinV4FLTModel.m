@@ -125,13 +125,13 @@ static NSString* fltTestName[kNumKatrinV4FLTTests]= {
 	histMeasTime = 5;
     [self registerNotificationObservers];
     return self;
-//    
-//    inhibitDuringLastHitrateReading = 0;
-//    runStatusDuringLastHitrateReading = 0;
-//    lastSltSecondCounter = 0;
-//    nHitrateCount = 0;
-//    
-//    lastHistReset = 0;
+    
+    inhibitDuringLastHitrateReading = 0;
+    runStatusDuringLastHitrateReading = 0;
+    lastSltSecondCounter = 0;
+    nHitrateCount = 0;
+    
+    lastHistReset = 0;
 }
 
 - (void) dealloc

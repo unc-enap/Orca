@@ -205,10 +205,10 @@
 {
 	NSIndexSet* theSelectedSet =  [commandTable selectedRowIndexes];
 	if(theSelectedSet){
-		int index = [theSelectedSet firstIndex];
+		int index = (int)[theSelectedSet firstIndex];
 		[model removeCommand:index];
 		if(index>1)index--;
-		else index = [model commandCount]-1;
+		else index = (int)[model commandCount]-1;
 		NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:index];
 		[commandTable selectRowIndexes:indexSet byExtendingSelection:NO];
 		[model postDetailsChanged];
@@ -223,13 +223,13 @@
 
 - (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
-    id obj = [model commandAtIndex:rowIndex];
+    id obj = [model commandAtIndex:(int)rowIndex];
     return [obj valueForKey:[aTableColumn identifier]];
 }
 
 - (void) tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
-    id obj = [model commandAtIndex:rowIndex];
+    id obj = [model commandAtIndex:(int)rowIndex];
 	[obj setObject:anObject forKey:[aTableColumn identifier]];
 	[self commandSelectionChanged:nil];
 	[model postDetailsChanged];

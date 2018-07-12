@@ -56,13 +56,13 @@
 - (BOOL)			memoryConflictsWith:(NSRange)aRange;
 
 - (void)            writeAndCheckLong:(unsigned long)aValue
-                        addressOffset:(short)anOffset
+                        addressOffset:(unsigned long)anOffset
                                  mask:(unsigned long)aMask
                             reportKey:(NSString*)aKey
                         forceFullInit:(BOOL) forceFullInit;
 
 - (void)            writeAndCheckLong:(unsigned long)aValue
-                        addressOffset:(short)anOffset
+                        addressOffset:(unsigned long)anOffset
                                  mask:(unsigned long)aMask
                             reportKey:(NSString*)aKey;
 

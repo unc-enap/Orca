@@ -63,7 +63,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ORCARootService);
 	if(hostNameIndex<[connectionHistory count]){
 		[self setHostName:[connectionHistory objectAtIndex:	hostNameIndex]];
 	}
-    [self setSocketPort:port];
+    [self setSocketPort:(int)port];
     [[self undoManager] enableUndoRegistration];
     	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestNotification:) name:ORCARootServiceRequestNotification object:nil];

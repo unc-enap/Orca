@@ -144,7 +144,7 @@ static NSString *ORVmeCardAddressModifier 	= @"vme Address Modifier";
 
 
 - (void) writeAndCheckLong:(unsigned long)aValue
-             addressOffset:(short)anOffset
+             addressOffset:(unsigned long)anOffset
                       mask:(unsigned long)aMask
                  reportKey:(NSString*)aKey
 {
@@ -152,7 +152,7 @@ static NSString *ORVmeCardAddressModifier 	= @"vme Address Modifier";
 }
 
 - (void) writeAndCheckLong:(unsigned long)aValue
-             addressOffset:(short)anOffset
+             addressOffset:(unsigned long)anOffset
                       mask:(unsigned long)aMask
                  reportKey:(NSString*)aKey
              forceFullInit:(BOOL) forceFullInit

@@ -772,7 +772,7 @@ static NSString *ORMotorLinkInConnection = @"ORMotorLinkInConnection";
     [encoder encodeFloat:patternDwellTime forKey:@"PatternDwellTime"];
     [encoder encodeInt:patternNumSweeps forKey:@"PatternNumSweeps"];
     [encoder encodeInt:patternType forKey:@"PatternType"];
-    [encoder encodeInt32:optionMask forKey:@"OptionMask"];
+    [encoder encodeInt32:(int32_t)optionMask forKey:@"OptionMask"];
     [encoder encodeInt:useFileForPattern forKey:@"UsePatternFileName"];
     [encoder encodeObject:patternFileName forKey:@"PatternFileName"];
     
@@ -877,7 +877,7 @@ static NSString *ORMotorLinkInConnection = @"ORMotorLinkInConnection";
             NSString* processedContent = [[fileContents componentsSeparatedByString:@"\r"] componentsJoinedByString:@"\n"];
             processedContent = [[processedContent componentsSeparatedByString:@"\n\n"] componentsJoinedByString:@"\n"];
             NSArray* lines = [processedContent componentsSeparatedByString:@"\n"];
-            long numSweeps = [[lines objectAtIndex:0] intValue];
+            int numSweeps = [[lines objectAtIndex:0] intValue];
             NSMutableArray* somePositions = [NSMutableArray array];
             NSMutableArray* someDwells = [NSMutableArray array];
             int i;

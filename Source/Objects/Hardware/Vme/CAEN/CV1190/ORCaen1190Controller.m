@@ -169,7 +169,7 @@
     }
 
     NSString* key = [NSString stringWithFormat: @"orca.ORCaenCard%d.selectedtab",[model slot]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    int index = (int)[tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 }
 
@@ -178,17 +178,17 @@
 
 #pragma mark •••Actions
 
-- (IBAction) deadTimeAction:(id)sender				   { [model setDeadTime:				[sender indexOfSelectedItem]];	}
-- (IBAction) leadingWidthResolutionAction:(id)sender   { [model setLeadingWidthResolution:	[sender indexOfSelectedItem]];	}
-- (IBAction) leadingTimeResolutionAction:(id)sender	   { [model setLeadingTimeResolution:	[sender indexOfSelectedItem]];	}
-- (IBAction) leadingTrailingLSBAction:(id)sender	   { [model setLeadingTrailingLSB:		[sender indexOfSelectedItem]];	}
-- (IBAction) edgeDetectionAction:(id)sender			   { [model setEdgeDetection:			[sender indexOfSelectedItem]];	}
+- (IBAction) deadTimeAction:(id)sender				   { [model setDeadTime:				(int)[sender indexOfSelectedItem]];	}
+- (IBAction) leadingWidthResolutionAction:(id)sender   { [model setLeadingWidthResolution:	(int)[sender indexOfSelectedItem]];	}
+- (IBAction) leadingTimeResolutionAction:(id)sender	   { [model setLeadingTimeResolution:	(int)[sender indexOfSelectedItem]];	}
+- (IBAction) leadingTrailingLSBAction:(id)sender	   { [model setLeadingTrailingLSB:		(int)[sender indexOfSelectedItem]];	}
+- (IBAction) edgeDetectionAction:(id)sender			   { [model setEdgeDetection:			(int)[sender indexOfSelectedItem]];	}
 - (IBAction) windowWidthAction:(id)sender			   { [model setWindowWidth:				[sender intValue] / 25]; }
 - (IBAction) searchMarginAction:(id)sender			   { [model setSearchMargin:			[sender intValue] / 25]; }
 - (IBAction) rejectMarginAction:(id)sender			   { [model setRejectMargin:			[sender intValue] / 25]; }
 - (IBAction) windowOffsetAction:(id)sender			   { [model setWindowOffset:			[sender intValue] / 25]; } 
 - (IBAction) enableTrigTimeSubAction:(id)sender		   { [model setEnableTrigTimeSub:		[sender intValue]]; }
-- (IBAction) acqModeAction:(id)sender				   { [model setAcqMode:					[sender indexOfSelectedItem]]; }
+- (IBAction) acqModeAction:(id)sender				   { [model setAcqMode:					(int)[sender indexOfSelectedItem]]; }
 - (IBAction) paramGroupAction:(id)sender			   { [model setParamGroup:				[sender intValue]]; }
 - (IBAction) loadDefaultsAction:(id)sender			   { [model loadDefaults]; }
 

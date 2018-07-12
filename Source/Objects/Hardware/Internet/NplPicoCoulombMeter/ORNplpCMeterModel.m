@@ -255,7 +255,7 @@ NSString* ORNplpCMeterLowLimitChanged		= @"ORNplpCMeterLowLimitChanged";
 - (void) shipValues
 {
 	
-	unsigned int numBytes = [meterData length];
+	int numBytes =(int)[meterData length];
 	if((numBytes>23) /*&& (numBytes%4 == 0)*/) {											//OK, we know we got a integer number of long words
 		if([self validateMeterData]){
 			unsigned long data[1003];									//max buffer size is 1000 data words + ORCA header
@@ -275,7 +275,7 @@ NSString* ORNplpCMeterLowLimitChanged		= @"ORNplpCMeterLowLimitChanged";
 			
 			int i;
 			for(i=0;i<numLongsToShip;i++){
-				p[i] = CFSwapInt32BigToHost(p[i]);
+				p[i] = (unsigned long)CFSwapInt32BigToHost((uint32_t)p[i]);
 				data[3+i] = p[i];
 				int chan = (p[i] & 0x00600000) >> 21;
 				if(chan < kNplpCNumChannels) [dataStack[chan] enqueue: [NSNumber numberWithLong:p[i] & 0x000fffff]];
@@ -293,7 +293,7 @@ NSString* ORNplpCMeterLowLimitChanged		= @"ORNplpCMeterLowLimitChanged";
 		
 		else {
 			unsigned char* p = (unsigned char*)[meterData bytes];
-			unsigned int ctmax = [meterData length] - 4;
+			unsigned int ctmax = (unsigned int)[meterData length] - 4;
 			
 			unsigned int ctgood = 0;
 			for (; ctgood<ctmax && (p[ctgood]+1)%256 == p[ctgood+4]; ctgood+=4); // ctgood is now the first bad data entry
@@ -339,7 +339,7 @@ NSString* ORNplpCMeterLowLimitChanged		= @"ORNplpCMeterLowLimitChanged";
 {
 	int chan;
 	for(chan=0;chan<kNplpCNumChannels;chan++){
-		int count = [dataStack[chan] count];
+		int count = (int)[dataStack[chan] count];
 		if(count){
 			NSEnumerator* e = [dataStack[chan] objectEnumerator];
 			NSNumber* aValue;
@@ -361,13 +361,13 @@ NSString* ORNplpCMeterLowLimitChanged		= @"ORNplpCMeterLowLimitChanged";
 - (BOOL) validateMeterData
 {
 	unsigned long* p = (unsigned long*)[meterData bytes];
-	unsigned int len = [meterData length]/4;
+	unsigned long len = [meterData length]/4;
 	int i;
 	short lastCount = 0;
 	short count;
 	short missing = 0;
 	for(i=0;i<len;i++){
-		count = CFSwapInt32BigToHost(p[i])>>24;
+		count = CFSwapInt32BigToHost((uint32_t)p[i])>>24;
 		if(i!=0)
 			if(count != (lastCount+1)%256){
 				missing+=(count-lastCount+255)%256;

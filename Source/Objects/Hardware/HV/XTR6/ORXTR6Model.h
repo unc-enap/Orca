@@ -123,7 +123,7 @@
 - (void) turnOffPower;
 
 #pragma mark ***Low Level R/W
-- (void) readFromDevice:  (char*)     aData maxLength: (long)  aMaxLength;
+- (void) readFromDevice:  (char*)     aData maxLength: (uint32_t)  aMaxLength;
 - (void) writeToDevice:   (NSString*) aCommand;
 
 #pragma mark ***Archival

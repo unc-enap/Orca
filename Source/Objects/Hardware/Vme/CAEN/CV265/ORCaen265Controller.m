@@ -135,7 +135,7 @@
 - (void) baseAddressChanged:(NSNotification*)aNotification
 {
 	[self updateStepper:addressStepper setting:[model baseAddress]];
-	[addressText setIntValue: [model baseAddress]];
+	[addressText setIntegerValue: [model baseAddress]];
 }
 
 #pragma mark •••Actions

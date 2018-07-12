@@ -27,7 +27,7 @@
 {
 	self = [super init];
     if(aBufferSize==0)aBufferSize = 1024*100; //if passed zero, put something in....
-	bufferSize		 = aBufferSize;
+	bufferSize		 = (uint32_t)aBufferSize;
 	buffer			 = [[NSMutableData dataWithLength:bufferSize * sizeof(long)] retain];
 	[buffer setLength:bufferSize * sizeof(long)];
 	bufferLock		 = [[NSLock alloc] init];
@@ -225,7 +225,7 @@ static BOOL cbThreadTestPassed = YES;
 	char testBuffer[]= {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17};
 	BOOL passed = YES;
 	int j;
-	srandom((long)[NSDate timeIntervalSinceReferenceDate]);
+	srandom((unsigned)[NSDate timeIntervalSinceReferenceDate]);
 	for(j=0;j<5000;j++){
 		int ranSize = 1+random()%16;
 

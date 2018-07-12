@@ -1692,7 +1692,7 @@ static NSString* DT5720RunModeString[4] = {
 
 #pragma mark ***Archival
 //returns 0 if success; -1 if request fails, and number of bytes returned by digitizer in otherwise
-- (int) writeLongBlock:(unsigned long*) writeValue atAddress:(unsigned int) anAddress
+- (int) writeLongBlock:(unsigned long*) writeValue atAddress:(unsigned long) anAddress
 {
     //-----------------------------------------------
     //AM = 0x09 A32 non-priviledged access
@@ -1753,7 +1753,7 @@ static NSString* DT5720RunModeString[4] = {
 
 
 //returns 0 if success, -1 if request fails, and number of bytes returned by digitizer otherwise
--(int) readLongBlock:(unsigned long*) readValue atAddress:(unsigned int) anAddress
+-(int) readLongBlock:(unsigned long*) readValue atAddress:(unsigned long) anAddress
 {
     
     //-----------------------------------------------
@@ -1820,7 +1820,7 @@ static NSString* DT5720RunModeString[4] = {
     int maxBLTSize = 0x100000; //8 MBytes
     numBytes = (numBytes + 7) & ~7UL;
 
-    int np = numBytes/maxBLTSize;
+    int np = (int)(numBytes/maxBLTSize);
     if(np*maxBLTSize != numBytes)np++;
 
     //request is an array of readLongBlock like requests
@@ -1880,7 +1880,7 @@ static NSString* DT5720RunModeString[4] = {
   
     int num_read = 0;
     @try {
-        num_read = [[self usbInterface] readBytes:readBuffer length:numBytes+2 pipe:0];
+        num_read = [[self usbInterface] readBytes:readBuffer length:(uint32_t)numBytes+2 pipe:0];
         num_read -= 2;
         if( num_read < 0 ) {
             // -----------------------------------------------------------
@@ -1977,13 +1977,13 @@ static NSString* DT5720RunModeString[4] = {
     [anEncoder encodeBool:gpiRunMode                forKey:@"gpiRunMode"];
     [anEncoder encodeBool:softwareTrigEnabled       forKey:@"softwareTrigEnabled"];
     [anEncoder encodeBool:externalTrigEnabled       forKey:@"externalTrigEnabled"];
-    [anEncoder encodeInt:triggerSourceMask          forKey:@"triggerSourceMask"];
+    [anEncoder encodeInt:(int32_t)triggerSourceMask          forKey:@"triggerSourceMask"];
     [anEncoder encodeBool:fpExternalTrigEnabled     forKey:@"fpExternalTrigEnabled"];
     [anEncoder encodeBool:fpSoftwareTrigEnabled     forKey:@"fpSoftwareTrigEnabled"];
-    [anEncoder encodeInt32:postTriggerSetting       forKey:@"postTriggerSetting"];
+    [anEncoder encodeInt32:(int32_t)postTriggerSetting       forKey:@"postTriggerSetting"];
     [anEncoder encodeBool:gpoEnabled                forKey:@"gpoEnabled"];
     [anEncoder encodeInt:ttlEnabled                 forKey:@"ttlEnabled"];
-    [anEncoder encodeInt:triggerOutMask             forKey:@"triggerOutMask"];
+    [anEncoder encodeInt:(int32_t)triggerOutMask             forKey:@"triggerOutMask"];
     [anEncoder encodeInt:enabledMask                forKey:@"enabledMask"];
 
 	[anEncoder encodeInt:coincidenceLevel           forKey:@"coincidenceLevel"];
@@ -2019,11 +2019,11 @@ static NSString* DT5720RunModeString[4] = {
     [objDictionary setObject:[NSNumber numberWithInt:fpSoftwareTrigEnabled] forKey:@"fpSoftwareTrigEnabled"];
     [objDictionary setObject:[NSNumber numberWithInt:gpoEnabled]            forKey:@"gpoEnabled"];
     [objDictionary setObject:[NSNumber numberWithInt:ttlEnabled]            forKey:@"ttlEnabled"];
-    [objDictionary setObject:[NSNumber numberWithInt:triggerSourceMask]     forKey:@"triggerSourceMask"];
+    [objDictionary setObject:[NSNumber numberWithInt:(int32_t)triggerSourceMask]     forKey:@"triggerSourceMask"];
     [objDictionary setObject:[NSNumber numberWithInt:countAllTriggers]      forKey:@"countAllTriggers"];
     [objDictionary setObject:[NSNumber numberWithInt:coincidenceLevel]      forKey:@"coincidenceLevel"];
-    [objDictionary setObject:[NSNumber numberWithInt:triggerOutMask]        forKey:@"triggerOutMask"];
-    [objDictionary setObject:[NSNumber numberWithInt:postTriggerSetting]    forKey:@"postTriggerSetting"];
+    [objDictionary setObject:[NSNumber numberWithInt:(int32_t)triggerOutMask]        forKey:@"triggerOutMask"];
+    [objDictionary setObject:[NSNumber numberWithInt:(int32_t)postTriggerSetting]    forKey:@"postTriggerSetting"];
     [objDictionary setObject:[NSNumber numberWithInt:enabledMask]           forKey:@"enabledMask"];
     [objDictionary setObject:[NSNumber numberWithInt:eventSize]             forKey:@"eventSize"];
     

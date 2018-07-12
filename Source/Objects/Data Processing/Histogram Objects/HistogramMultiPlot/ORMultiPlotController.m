@@ -95,7 +95,7 @@
                          name : ORMultiPlotNameChangedNotification
                         object: model];
 
-    int n = [model cachedCount];
+    int n = (int)[model cachedCount];
     int i;
     for(i=0;i<n;i++){
         [notifyCenter addObserver : self
@@ -213,7 +213,7 @@
 {
 	NSUInteger tag = [aPlot tag];
 	if(tag<[model cachedCount]){
-		return [[model cachedObjectAtIndex:(int)tag] numberBins];
+		return (int)[[model cachedObjectAtIndex:(int)tag] numberBins];
 	}
 	else return 0;
 }
@@ -241,7 +241,7 @@
 - (void) setUpPlots
 {
 	[plotView removeAllPlots];
-	int n = [model cachedCount];
+	int n = (int)[model cachedCount];
     int i;
     for(i=0;i<n;i++){
 		

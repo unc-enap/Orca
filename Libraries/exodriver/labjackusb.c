@@ -486,7 +486,7 @@ HANDLE LJUSB_OpenDevice(UINT DevNum, unsigned int dwReserved, unsigned long Prod
     libusb_device **devs = NULL, *dev = NULL;
     struct libusb_device_handle *devh = NULL;
     struct libusb_device_descriptor desc;
-    int cnt = 0;
+    ssize_t cnt = 0;
     int r = 1;
     unsigned int i = 0;
     unsigned int ljFoundCount = 0;
@@ -505,7 +505,7 @@ HANDLE LJUSB_OpenDevice(UINT DevNum, unsigned int dwReserved, unsigned long Prod
     cnt = libusb_get_device_list(gLJContext, &devs);
     if (cnt < 0) {
         fprintf(stderr, "failed to get device list\n");
-        LJUSB_libusbError(cnt);
+        LJUSB_libusbError((int)cnt);
         LJUSB_libusb_exit();
         return NULL;
     }
@@ -602,7 +602,7 @@ int LJUSB_OpenAllDevices(HANDLE* devHandles, UINT* productIds, UINT maxDevices)
     cnt = libusb_get_device_list(gLJContext, &devs);
     if (cnt < 0) {
         fprintf(stderr, "failed to get device list\n");
-        LJUSB_libusbError(cnt);
+        LJUSB_libusbError((int)cnt);
         LJUSB_libusb_exit();
         return -1;
     }
@@ -741,7 +741,7 @@ static unsigned long LJUSB_DoTransfer(HANDLE hDevice, unsigned char endpoint, BY
             return r;
         }
         else {
-            r = libusb_interrupt_transfer(hDevice, endpoint, pBuff, count, &transferred, timeout);
+            r = libusb_interrupt_transfer(hDevice, endpoint, pBuff, (int)count, &transferred, timeout);
         }
     }
 
@@ -1039,7 +1039,7 @@ unsigned int LJUSB_GetDevCount(unsigned long ProductID)
     cnt = libusb_get_device_list(gLJContext, &devs);
     if (cnt < 0) {
         fprintf(stderr, "failed to get device list\n");
-        LJUSB_libusbError(cnt);
+        LJUSB_libusbError((int)cnt);
         LJUSB_libusb_exit();
         return 0;
     }
@@ -1091,7 +1091,7 @@ unsigned int LJUSB_GetDevCounts(UINT *productCounts, UINT * productIds, UINT n)
     cnt = libusb_get_device_list(gLJContext, &devs);
     if (cnt < 0) {
         fprintf(stderr, "failed to get device list\n");
-        LJUSB_libusbError(cnt);
+        LJUSB_libusbError((int)cnt);
         LJUSB_libusb_exit();
         return 0;
     }

@@ -499,7 +499,7 @@ static RegisterNamesStruct reg[kNumRegisters] = {
 {
     [super encodeWithCoder:anEncoder];
 	[anEncoder encodeInt:modelType forKey:@"modelType"];
-	[anEncoder encodeInt32:onlineMask forKey:@"onlineMask"];
+	[anEncoder encodeInt32:(int32_t)onlineMask forKey:@"onlineMask"];
 }
 
 @end

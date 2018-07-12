@@ -240,7 +240,7 @@ static NSString* valueChangeString[kNumActions] = {
             id param = [paramArray objectAtIndex:parameterTag];
 			int numberOfSettableArguments = 0;
 			SEL paramMethodSelector = [param setMethodSelector];
-            if(paramMethodSelector) numberOfSettableArguments = [[param methodSignatureForSelector:paramMethodSelector] numberOfArguments]-2;
+            if(paramMethodSelector) numberOfSettableArguments = (int)[[param methodSignatureForSelector:paramMethodSelector] numberOfArguments]-2;
             if(numberOfSettableArguments == 0){
                 [valueChangeField setStringValue:@""];
             }
@@ -288,13 +288,13 @@ static NSString* valueChangeString[kNumActions] = {
 
 - (IBAction) actionPopupButtonAction:(id)sender
 {
-    [self setActionTag:[sender indexOfSelectedItem]];
+    [self setActionTag:(int)[sender indexOfSelectedItem]];
     
 }
 
 - (IBAction) parameterPopupButtonAction:(id)sender
 {
-    [self setParameterTag:[sender indexOfSelectedItem]];
+    [self setParameterTag:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) parameterValueTextFieldAction:(id)sender

@@ -184,7 +184,7 @@ sessionKey = _sessionKey;
 
     /* Launch the modal. */
     [[NSRunningApplication currentApplication] activateWithOptions:NSApplicationActivateIgnoringOtherApps];
-    int modalAction = [alert runModal];
+    long modalAction = [alert runModal];
 
     if (modalAction == NSAlertFirstButtonReturn) {  // Quit Orca
         ORAppDelegate* delegate = [NSApp delegate];
@@ -325,7 +325,7 @@ sessionKey = _sessionKey;
 
     /* Launch the modal. */
     [[NSRunningApplication currentApplication] activateWithOptions:NSApplicationActivateIgnoringOtherApps];
-    int modalAction = [alert runModal];
+    long modalAction = [alert runModal];
 
     if (modalAction == NSAlertFirstButtonReturn) {  // Quit Orca
         [alert release];

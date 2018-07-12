@@ -109,7 +109,7 @@
 
 - (unsigned int)countOfAltMuxThresholds 
 {
-    return [[model altMuxThresholds] count];
+    return (unsigned int)[[model altMuxThresholds] count];
 }
 
 
@@ -914,7 +914,7 @@
     else        return (int)[[[model detector]muxTotalRate]count];
 }
 
-- (void) plotter:(id)aPlotter index:(NSInteger)i x:(double*)xValue y:(double*)yValue
+- (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
   	int set = (int)[aPlotter tag];
 	double aValue = 0;

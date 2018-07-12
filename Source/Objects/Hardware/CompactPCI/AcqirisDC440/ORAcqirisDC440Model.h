@@ -95,7 +95,7 @@
 - (void) setNumberSamples:(unsigned long)aNumberSamples;
 - (unsigned long) probe:(BOOL) verbose;
 - (void) assignBoardID;
-- (int) boardID;
+- (unsigned long) boardID;
 - (unsigned long) dataId;
 - (void) setDataId: (unsigned long) DataId;
 - (BOOL) samplingWaveforms;

@@ -34,8 +34,8 @@
         NSArray*        dataRecords;
         ORDataSet*      dataSet;
 
-        unsigned        totalLength;
-        unsigned        lengthDecoded;
+        NSUInteger        totalLength;
+        NSUInteger        lengthDecoded;
 		BOOL			multiCatalog;
 		BOOL			histoErrorFlag;
 		ORRecordIndexer* recordIndexer;
@@ -58,7 +58,7 @@
 - (void)        setHeader:(ORHeaderItem *)aHeader;
 - (NSArray *)   dataRecords;
 - (void)        setDataRecords: (NSArray *) aDataRecords;
-- (id)          dataRecordAtIndex:(int)index;
+- (id)          dataRecordAtIndex:(long)index;
 - (void) removeDataSet:(ORDataSet*)item;
 - (id)   childAtIndex:(NSUInteger)index;
 - (NSUInteger)  numberOfChildren;

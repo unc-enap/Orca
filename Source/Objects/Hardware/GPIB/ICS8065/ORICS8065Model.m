@@ -320,7 +320,7 @@ NSString*	ORICS8065ModelIpAddressChanged		= @"ORICS8065ModelIpAddressChanged";
         [theHWLock lock];   //-----begin critical section
 		
 		Create_LinkParms crlp;
-		crlp.clientId = (long)rpcClient;
+		crlp.clientId = (int)rpcClient;
 		crlp.lockDevice = 0;
 		crlp.lock_timeout = 10000;
 		char device[64];
@@ -387,7 +387,7 @@ NSString*	ORICS8065ModelIpAddressChanged		= @"ORICS8065ModelIpAddressChanged";
 	        thisRead = -1;
 			// Perform the read.				
 			devReadP.lid = mDeviceLink[aPrimaryAddress].lid; 
-			devReadP.requestSize = aMaxLength;
+			devReadP.requestSize = (unsigned int)aMaxLength;
 			devReadP.io_timeout = 1000; 
 			devReadP.lock_timeout = 10000;
 			devReadP.flags = 0;
@@ -475,7 +475,7 @@ NSString*	ORICS8065ModelIpAddressChanged		= @"ORICS8065ModelIpAddressChanged";
 		devReadP.lock_timeout = 10000;
 		devReadP.flags = 0;
 		if(![aCommand hasSuffix:@"\n"])aCommand = [aCommand stringByAppendingString:@"\n"];
-		devReadP.data.data_len = [aCommand length];
+		devReadP.data.data_len = (unsigned int)[aCommand length];
 		devReadP.data.data_val = (char *)[aCommand cStringUsingEncoding:NSASCIIStringEncoding];
 		dwrr = device_write_1(&devReadP, rpcClient); 
 		if(dwrr == 0){

@@ -236,7 +236,7 @@ typedef struct Fec32CmosShiftReg{
 - (void) makeMainController;
 
 #pragma mark •••Accessors
-- (uint32_t) boardIDAsInt;
+- (unsigned long) boardIDAsInt;
 - (NSUInteger)             stationNumber;
 - (long)			cmosRate:(short)index;
 - (void)			setCmosRate:(short)index withValue:(long)aCmosRate;
@@ -301,8 +301,7 @@ typedef struct Fec32CmosShiftReg{
 - (BOOL)			cmosReadPendingDisabled:(short)chan;
 - (void)            makeAllCmosPendingStatesSameAs:(short)chan;
 - (void)            loadHardware;
-- (uint32_t) boardIDAsInt;
-- (void) checkConfig: (FECConfiguration *) config;
+- (void)            checkConfig: (FECConfiguration *) config;
 
 - (void)            setTrigger20ns100ns:(short)chan enabled:(short)state;
 - (BOOL)			trigger20ns100nsEnabled:(short)chan;

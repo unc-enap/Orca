@@ -47,7 +47,7 @@
 	unsigned long *dataPtr  = (unsigned long*)someData;
     int objId               = dataPtr[1] & 0xfffff;
     unsigned long timeStamp = dataPtr[2];
-    int dataIndex           = dataPtr[3];
+    unsigned long dataIndex = dataPtr[3];
     union {
         double asDouble;
         unsigned long asLong[2];
@@ -89,7 +89,7 @@
 	theString = [theString stringByAppendingFormat:@"Unit %d\n",ident];
     NSDate* date = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)dataPtr[2]];
     int objId               = dataPtr[1] & 0xfffff;
-    int dataIndex = dataPtr[3];
+    unsigned long dataIndex = dataPtr[3];
     union {
         double asDouble;
         unsigned long asLong[2];

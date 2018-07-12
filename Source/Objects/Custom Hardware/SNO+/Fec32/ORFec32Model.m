@@ -144,7 +144,7 @@ static int              sChannelsNotChangedCount = 0;
 
 - (NSString*) identifier
 {
-    return [NSString stringWithFormat:@"Fec32 (%d,%d)",[self crateNumber],[self stationNumber]];
+    return [NSString stringWithFormat:@"Fec32 (%d,%lu)",[self crateNumber],[self stationNumber]];
 }
 
 - (NSComparisonResult)	slotCompare:(id)otherCard
@@ -609,7 +609,7 @@ static int              sChannelsNotChangedCount = 0;
     [[self undoManager] enableUndoRegistration];
 }
 
-- (uint32_t) boardIDAsInt
+- (unsigned long) boardIDAsInt
 {
     return strtoul([[self boardID] UTF8String], NULL, 16);
 }
@@ -789,7 +789,7 @@ static int              sChannelsNotChangedCount = 0;
 - (int) globalCardNumber
 {
 	//return ([guardian crateNumber] * 16) + [self stationNumber];
-	return ([[[self guardian] adapter] crateNumber] * 16) + [self stationNumber];
+	return (int)(([[[self guardian] adapter] crateNumber] * 16) + [self stationNumber]);
 }
 
 - (NSComparisonResult) globalCardNumberCompare:(id)aCard
@@ -976,17 +976,17 @@ static int              sChannelsNotChangedCount = 0;
     [encoder encodeObject:comments                  forKey: @"comments"];
     [encoder encodeFloat:vRes                       forKey: @"vRes"];
     [encoder encodeFloat:hVRef                      forKey: @"hVRef"];
-    [encoder encodeInt32:onlineMask                 forKey: @"onlineMask"];
+    [encoder encodeInt32:(int32_t)onlineMask                 forKey: @"onlineMask"];
     [encoder encodeInt:adcVoltageStatusOfCard       forKey: @"adcVoltageStatusOfCard"];
-    [encoder encodeInt32:pedEnabledMask             forKey: @"pedEnabledMask"];
-    [encoder encodeInt32:seqDisabledMask                    forKey: @"seqDisabledMask"];
-    [encoder encodeInt32:cmosReadDisabledMask               forKey: @"cmosReadDisabledMask"];
-    [encoder encodeInt32:trigger20nsDisabledMask            forKey: @"trigger20nsDisabledMask"];
-    [encoder encodeInt32:trigger100nsDisabledMask           forKey: @"trigger100nsDisabledMask"];
-    [encoder encodeInt32:seqPendingDisabledMask             forKey: @"seqDisabledPendingMask"];
-    [encoder encodeInt32:cmosReadPendingDisabledMask        forKey: @"cmosReadPendingDisabledMask"];
-    [encoder encodeInt32:trigger20nsPendingDisabledMask     forKey: @"trigger20nsPendingDisabledMask"];
-    [encoder encodeInt32:trigger100nsPendingDisabledMask    forKey: @"trigger100nsPendingDisabledMask"];
+    [encoder encodeInt32:(int32_t)pedEnabledMask             forKey: @"pedEnabledMask"];
+    [encoder encodeInt32:(int32_t)seqDisabledMask                    forKey: @"seqDisabledMask"];
+    [encoder encodeInt32:(int32_t)cmosReadDisabledMask               forKey: @"cmosReadDisabledMask"];
+    [encoder encodeInt32:(int32_t)trigger20nsDisabledMask            forKey: @"trigger20nsDisabledMask"];
+    [encoder encodeInt32:(int32_t)trigger100nsDisabledMask           forKey: @"trigger100nsDisabledMask"];
+    [encoder encodeInt32:(int32_t)seqPendingDisabledMask             forKey: @"seqDisabledPendingMask"];
+    [encoder encodeInt32:(int32_t)cmosReadPendingDisabledMask        forKey: @"cmosReadPendingDisabledMask"];
+    [encoder encodeInt32:(int32_t)trigger20nsPendingDisabledMask     forKey: @"trigger20nsPendingDisabledMask"];
+    [encoder encodeInt32:(int32_t)trigger100nsPendingDisabledMask    forKey: @"trigger100nsPendingDisabledMask"];
 
     for(i = 0; i < 6; i++) {
         [encoder encodeFloat:cmos[i] forKey:[NSString stringWithFormat:@"cmos%d",i]];
@@ -998,7 +998,7 @@ static int              sChannelsNotChangedCount = 0;
     }
 
     for(i = 0; i < 32; i++){
-        [encoder encodeInt32:cmosRate[i] forKey: [NSString stringWithFormat:@"cmosRate%d",i]];
+        [encoder encodeInt32:(int32_t)cmosRate[i] forKey: [NSString stringWithFormat:@"cmosRate%d",i]];
         [encoder encodeFloat:baseCurrent[i] forKey: [NSString stringWithFormat:@"baseCurrent%d",i]];
     }
 }
@@ -1712,7 +1712,7 @@ static int              sChannelsNotChangedCount = 0;
 
     if (!detDB) return;
 
-    PQ_FEC *fec = (PQ_FEC *)[detDB getFEC:[self stationNumber] crate:[self crateNumber] ];
+    PQ_FEC *fec = (PQ_FEC *)[detDB getFEC:(int)[self stationNumber] crate:[self crateNumber] ];
 
     if (!fec || !fec->valid[kFEC_exists]) return;  // nothing to do if fec doesn't exist in the current detector state
 
@@ -1980,11 +1980,11 @@ static int              sChannelsNotChangedCount = 0;
 {
     // make sure channels with HV disabled aren't enabled
     // (note: we do this even if the database is stale)
-    PQ_FEC *fec = [sDetectorDbData getPmthv:[self stationNumber] crate:[self crateNumber]];
+    PQ_FEC *fec = [sDetectorDbData getPmthv:(int)[self stationNumber] crate:[self crateNumber]];
     if (fec) {
-        uint32_t notChanged = 0;
+        unsigned long notChanged = 0;
         // sequencer must be disabled on channels with HV disabled
-        uint32_t wanted = seqDisabledMask;
+        unsigned long wanted = seqDisabledMask;
         seqDisabledMask |= (seqDisabledMask ^ startSeqDisabledMask) & fec->hvDisabled;
         notChanged |= (wanted ^ seqDisabledMask);
         // pedestals must be disabled on channels with HV disabled
@@ -2777,7 +2777,7 @@ static int              sChannelsNotChangedCount = 0;
 	// now read the data value; 17 reads, the last data bit is a dummy bit
 	writeValue = boardSelectVal;
 	
-	int cmdRef[16];
+	unsigned long cmdRef[16];
 	for (index = 15; index >= 0; index--){
 		[self writeToFec32Register:FEC32_BOARD_ID_REG value:writeValue];
 		[self writeToFec32Register:FEC32_BOARD_ID_REG value:(writeValue | BOARD_ID_SK)];	// now clock in value
@@ -2920,7 +2920,7 @@ const short kVoltageADCMaximumAttempts = 10;
 		//pull the results
 		for (channel=0; channel<32; ++channel) {
 			if(aChannelMask & (1UL<<channel) && ![self cmosReadDisabled:channel]){
-				theCount = [aList longValueForCmd:resultIndex[channel]];
+				theCount = [aList longValueForCmd:(int)resultIndex[channel]];
 				//if( (theCount & 0x80000000) == 0x80000000 ){
 				//busy... TBD put out error or something MAH 12/19/08
 				//}
@@ -3027,7 +3027,7 @@ const short kVoltageADCMaximumAttempts = 10;
     CheckTotalCountResults results;
     
     args.slotMask |= 0x1 << [self stationNumber];
-    args.channelMasks[[self stationNumber]] = aChannelMask;
+    args.channelMasks[[self stationNumber]] = (uint32_t)aChannelMask;
     //what about disabled??? [self cmosReadDisabled:channel]
     
     @try {
@@ -3050,7 +3050,7 @@ const short kVoltageADCMaximumAttempts = 10;
     CrateNoiseRateResults results;
 
     args.slotMask |= 0x1 << [self stationNumber];
-    args.channelMask[[self stationNumber]] = aChannelMask;
+    args.channelMask[[self stationNumber]] = (uint32_t)aChannelMask;
     args.period = 1; //usec according to doc, msec according to code
     
     @try {

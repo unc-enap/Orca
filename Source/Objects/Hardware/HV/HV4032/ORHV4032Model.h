@@ -115,10 +115,10 @@
 
 @interface NSObject (HV4032Model)
 - (void) readPowerState;
-- (void) setHV:(BOOL)state mainFrame:(int)aMainFrame;
-- (void) readStatus:(int*) aValue failedMask:(unsigned short*)failed mainFrame:(int) aMainFrame;
-- (void) readVoltage:(int*) aValue mainFrame:(int) aMainFrame channel:(int) aChannel;
-- (void) setVoltage:(int) aValue mainFrame:(int) aMainFrame channel:(int) aChannel;
+- (void) setHV:(BOOL)state mainFrame:(unsigned long)aMainFrame;
+- (void) readStatus:(int*) aValue failedMask:(unsigned short*)failed mainFrame:(unsigned long) aMainFrame;
+- (void) readVoltage:(int*) aValue mainFrame:(unsigned long) aMainFrame channel:(int) aChannel;
+- (void) setVoltage:(int) aValue mainFrame:(unsigned long) aMainFrame channel:(int) aChannel;
 
 @end
 

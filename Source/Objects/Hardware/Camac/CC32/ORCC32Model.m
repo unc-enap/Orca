@@ -561,7 +561,7 @@ NSString* ORCC32SettingsLock			= @"ORCC32SettingsLock";
 	id aCard;
 	NSEnumerator* e = [cardList objectEnumerator];
 	while(aCard = [e nextObject]){
-		int aSlot = [aCard stationNumber];
+		NSUInteger aSlot = [aCard stationNumber];
 		if(aSlot<25){
 			dataTakers[aSlot] = aCard;
 		}

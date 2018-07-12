@@ -180,7 +180,7 @@
 
 - (void) personRemoved:(NSNotification*)aNote
 {
-	int index = [[[aNote userInfo] objectForKey:@"Index"] intValue];
+	long index = [[[aNote userInfo] objectForKey:@"Index"] intValue];
     index = MIN(index,[model onCallListCount]-1);
 	index = MAX(index,0);
 	[onCallListView reloadData];
@@ -206,7 +206,7 @@
 - (void) tableViewSelectionDidChange:(NSNotification *)aNotification
 {
 	if([aNotification object] == onCallListView || aNotification == nil){
-		int selectedIndex = [onCallListView selectedRow];
+		long selectedIndex = [onCallListView selectedRow];
 		[removePersonButton setEnabled:selectedIndex>=0];
 	}
 }
@@ -264,7 +264,7 @@
 	NSIndexSet* theSet = [onCallListView selectedRowIndexes];
 	NSUInteger current_index = [theSet firstIndex];
     if(current_index != NSNotFound){
-		[model removePersonAtIndex:current_index];
+		[model removePersonAtIndex:(int)current_index];
 	}
 	[self setButtonStates];
 }
@@ -329,7 +329,7 @@
 - (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
 	if(aTableView == onCallListView){
-		id aPerson = [model personAtIndex:rowIndex];
+		id aPerson = [model personAtIndex:(int)rowIndex];
 		return [aPerson valueForKey:[aTableColumn identifier]];
 	}
 	else return nil;
@@ -338,7 +338,7 @@
 - (void) tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
 	if(aTableView == onCallListView){
-		id aPerson = [model personAtIndex:rowIndex];
+		id aPerson = [model personAtIndex:(int)rowIndex];
 		[aPerson setValue:anObject forKey:[aTableColumn identifier]];
         if([[aTableColumn identifier] isEqualToString:kPersonRole]){
             [model personTakingNewRole:aPerson];

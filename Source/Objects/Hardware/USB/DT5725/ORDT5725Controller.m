@@ -669,7 +669,7 @@
 
 - (void) eventSizeChanged:(NSNotification*)aNote
 {
-    [eventSizeTextField setIntValue: [model eventSize]];
+    [eventSizeTextField setIntegerValue: [model eventSize]];
 }
 
 - (void) clockSourceChanged:(NSNotification*)aNote
@@ -752,7 +752,7 @@
 
 - (void) postTriggerSettingChanged:(NSNotification*)aNote
 {
-    [postTriggerSettingTextField setIntValue:[model postTriggerSetting]];
+    [postTriggerSettingTextField setIntegerValue:[model postTriggerSetting]];
 }
 
 - (void) fpLogicTypeChanged:(NSNotification*)aNote
@@ -822,7 +822,7 @@
 
 - (void) runDelayChanged:(NSNotification*)aNote;
 {
-    [runDelayTextField setIntValue:[model runDelay]];
+    [runDelayTextField setIntegerValue:[model runDelay]];
 }
 
 - (void) registerRates
@@ -881,7 +881,7 @@
 {
 	//  Set value of both text and stepper
 	[self updateStepper:writeValueStepper setting:[model selectedRegValue]];
-	[writeValueTextField setIntValue:[model selectedRegValue]];
+	[writeValueTextField setIntegerValue:[model selectedRegValue]];
 }
 
 - (void) selectedRegIndexChanged:(NSNotification*) aNotification
@@ -1446,7 +1446,7 @@
     }
 	
     NSString* key = [NSString stringWithFormat: @"orca.%@%lu.selectedtab",[model className],[model uniqueIdNumber]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 	
 }
@@ -1466,12 +1466,12 @@
 
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	return [[[model waveFormRateGroup]timeRate]count];
+	return (int)[[[model waveFormRateGroup]timeRate]count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 {
-	int count = [[[model waveFormRateGroup]timeRate] count];
+	int count = (int)[[[model waveFormRateGroup]timeRate] count];
 	int index = count-i-1;
 	*yValue = [[[model waveFormRateGroup] timeRate] valueAtIndex:index];
 	*xValue = [[[model waveFormRateGroup] timeRate] timeSampledAtIndex:index];

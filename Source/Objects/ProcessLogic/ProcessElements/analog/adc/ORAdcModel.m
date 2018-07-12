@@ -907,13 +907,13 @@ NSString* ORSimpleInConnection   = @"ORSimpleInConnection";
 - (id) eval
 {
 	[guardian eval];
-	BOOL aValue = [guardian valueTooLow];
+	BOOL aValue = [(ORAdcModel*)guardian valueTooLow];
 	return [ORProcessResult processState:aValue value:aValue];
 }
 
 - (int) evaluatedState
 {
-	return [guardian valueTooLow];
+	return [(ORAdcModel*)guardian valueTooLow];
 }
 
 @end
@@ -923,13 +923,13 @@ NSString* ORSimpleInConnection   = @"ORSimpleInConnection";
 - (id) eval
 {
 	[guardian eval];
-	BOOL aValue = [guardian valueTooHigh];
+	BOOL aValue = [(ORAdcModel*)guardian valueTooHigh];
 	return [ORProcessResult processState:aValue value:aValue];
 
 }
 - (int) evaluatedState
 {
-	return [guardian valueTooHigh];
+	return [(ORAdcModel*)guardian valueTooHigh];
 }
 
 @end

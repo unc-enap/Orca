@@ -375,7 +375,7 @@ enum {
 
 - (void) tabView:(NSTabView*)aTabView didSelectTabViewItem:(NSTabViewItem*)item
 {
-    int index = [tabView indexOfTabViewItem:item];
+    int index = (int)[tabView indexOfTabViewItem:item];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:@"orca.ORDataFileMode.selectedtab"];
 	
 }

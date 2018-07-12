@@ -179,7 +179,7 @@ NSString* ORSegmentGroupConfiguationChanged = @"ORSegmentGroupConfiguationChange
 
 - (int) numSegments
 {
-	return [segments count];
+	return (int)[segments count];
 }
 
 - (id) segment:(int)index objectForKey:(id)aKey
@@ -352,7 +352,7 @@ NSString* ORSegmentGroupConfiguationChanged = @"ORSegmentGroupConfiguationChange
 {
 	int i;
 	ORDetectorSegment* aSegment;
-	int n = [segments count];
+	NSUInteger n = [segments count];
 	for(i=0;i<n;i++){
 		aSegment = [segments objectAtIndex:i];
 		if([[aSegment hardwareClassName] isEqualToString:aClassName] && [aSegment cardSlot] == card && [aSegment channel] == channel){
@@ -366,7 +366,7 @@ NSString* ORSegmentGroupConfiguationChanged = @"ORSegmentGroupConfiguationChange
 {
 	float sum = 0;
 	int i;	
-	int n = [segments count];
+	NSUInteger n = [segments count];
     NSMutableDictionary* visitedSegments = [NSMutableDictionary dictionary];
 	for(i=0;i<n;i++){
         ORDetectorSegment* aSegment = [segments objectAtIndex:i];
@@ -406,7 +406,7 @@ NSString* ORSegmentGroupConfiguationChanged = @"ORSegmentGroupConfiguationChange
 	memset(totalCountsHistogram,0,sizeof(int) * 1024);
 	
 	int i;
-	int n = [segments count];
+	NSUInteger n = [segments count];
 	for(i=0;i<n;i++){
 		if([[segments objectAtIndex:i] hwPresent]){
 			int thresholdValue = (int)[self getThreshold:i];

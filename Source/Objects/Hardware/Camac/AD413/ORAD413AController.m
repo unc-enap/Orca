@@ -186,17 +186,17 @@
 
 - (IBAction) onlineAction:(id)sender
 {
-	if([sender intValue] != [model onlineMaskBit:[[sender selectedCell] tag]]){
+	if([sender intValue] != [model onlineMaskBit:(int)[[sender selectedCell] tag]]){
 		[[self undoManager] setActionName: @"Set Online Mask"];
-		[model setOnlineMaskBit:[[sender selectedCell] tag] withValue:[sender intValue]];
+		[model setOnlineMaskBit:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 	}
 }
 
 - (IBAction) discriminatorAction:(id)sender
 {
-	if([sender intValue] != [model discriminatorForChan:[[sender selectedCell] tag]]){
+	if([sender intValue] != [model discriminatorForChan:(int)[[sender selectedCell] tag]]){
 		[[self undoManager] setActionName: @"Set Discrininator"];
-		[model setDiscriminator:[sender intValue] forChan:[[sender selectedCell] tag]];
+		[model setDiscriminator:[sender intValue] forChan:(int)[[sender selectedCell] tag]];
 	}
 }
 
@@ -236,7 +236,7 @@
 
 - (IBAction) controlReg1Action:(id)sender
 {
-	int tag = [[sender selectedCell] tag];
+	int tag = (int)[[sender selectedCell] tag];
 	BOOL state = [[sender selectedCell] intValue];
 	switch(tag){
 		case kSinglesBit:			[model setSingles:state];			break;
@@ -249,7 +249,7 @@
 
 - (IBAction) controlReg2Action:(id)sender
 {
-	int tag = [[sender selectedCell] tag];
+	int tag = (int)[[sender selectedCell] tag];
 	BOOL state = [[sender selectedCell] intValue];
     [model setGateEnable:tag withValue:state];
 }

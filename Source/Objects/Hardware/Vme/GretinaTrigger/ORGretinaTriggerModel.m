@@ -939,7 +939,7 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
     return theValue;
 }
 
-- (void) writeRegister:(unsigned int)index withValue:(unsigned long)value
+- (void) writeRegister:(unsigned int)index withValue:(unsigned short)value
 {
 	if (index >= kNumberOfGretinaTriggerRegisters) return;
 	if (![self canWriteRegister:index]) return;

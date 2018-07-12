@@ -56,7 +56,7 @@ NSString* ORCamacCardSlotChangedNotification 	= @"ORCamacCardSlotChangedNotifica
 
 - (int) slot
 {
-	return [self tag];
+	return (int)[self tag];
 }
 
 - (NSUInteger) stationNumber
@@ -118,7 +118,7 @@ NSString* ORCamacCardSlotChangedNotification 	= @"ORCamacCardSlotChangedNotifica
 {
     NSMutableDictionary* objDictionary = [NSMutableDictionary dictionary];
     [objDictionary setObject:NSStringFromClass([self class]) forKey:@"Class Name"];
-    [objDictionary setObject:[NSNumber numberWithInt:[self stationNumber]] forKey:@"Card"];
+    [objDictionary setObject:[NSNumber numberWithInteger:[self stationNumber]] forKey:@"Card"];
     [dictionary setObject:objDictionary forKey:[self identifier]];
     return objDictionary;
 }

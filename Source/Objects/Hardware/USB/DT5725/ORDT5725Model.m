@@ -2335,7 +2335,7 @@ static NSString* DT5725StartStopRunModeString[4] = {
             
             
             unsigned long* theData = (unsigned long*)[eventData bytes];
-            int num     = [self readFifo:(char*)theData numBytesToRead:[eventData length]];
+            int num     = [self readFifo:(char*)theData numBytesToRead:(int)[eventData length]];
             if(num>0){
                 unsigned long index=0;
                 do {

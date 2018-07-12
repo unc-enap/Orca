@@ -202,9 +202,9 @@ static int redisContextWaitReady(redisContext *c, const struct timeval *timeout)
     }
 
     if (errno == EINPROGRESS) {
-        int res;
+        long res;
 
-        if ((res = poll(wfd, 1, msec)) == -1) {
+        if ((res = poll(wfd, 1, (int)msec)) == -1) {
             __redisSetErrorFromErrno(c, REDIS_ERR_IO, "poll(2)");
             redisContextCloseFd(c);
             return REDIS_ERR;

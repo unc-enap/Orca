@@ -355,7 +355,7 @@
 {
 	if([runModePopUp indexOfSelectedItem] != [model controlMode]){
 		[[self undoManager] setActionName: @"Set Run Mode"];
-		[model setControlMode:[runModePopUp indexOfSelectedItem]];
+		[model setControlMode:(int)[runModePopUp indexOfSelectedItem]];
 	}
 }
 

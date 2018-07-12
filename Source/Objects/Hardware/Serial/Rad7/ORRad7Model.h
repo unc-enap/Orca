@@ -220,8 +220,8 @@ enum {
 - (void) setPumpMode:(int)aPumpMode;
 - (BOOL) thoron;
 - (void) setThoron:(BOOL)aThoron;
-- (int) mode;
-- (void) setMode:(int)aMode;
+- (int) opMode;
+- (void) setOpMode:(int)aMode;
 - (int) recycle;
 - (void) setRecycle:(int)aRecycle;
 - (int) cycleTime;

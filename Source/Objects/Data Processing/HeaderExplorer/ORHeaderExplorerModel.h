@@ -45,7 +45,7 @@
 		NSMutableArray* runArray;
 		unsigned long	minRunStartTime;
 		unsigned long	maxRunEndTime;
-		int				selectionDate;
+		long			selectionDate;
 		int				selectedRunIndex;
 		int				selectedFileIndex;
 
@@ -66,16 +66,16 @@
 - (void) addSearchKeys:(NSMutableArray*)newKeys;
 - (void) removeSearchKeys:(NSMutableArray*)anArray;
 - (void) removeSearchKeysWithIndexes:(NSIndexSet*)indexSet;
-- (void) replace:(int)index withSearchKey:(NSString*)aKey;
-- (void) insert:(int)index withSearchKey:(NSString*)aKey;
+- (void) replace:(NSInteger)index withSearchKey:(NSString*)aKey;
+- (void) insert:(NSInteger)index withSearchKey:(NSString*)aKey;
 - (BOOL) autoProcess;
 - (void) setAutoProcess:(BOOL)aAutoProcess;
 - (int) selectedRunIndex;
 - (int) selectedFileIndex;
 - (void) setSelectedFileIndex:(int)anIndex;
 - (void) setSelectedRunIndex:(int)anIndex;
-- (int)  selectionDate;
-- (void) setSelectionDate:(int)aValue;
+- (long)  selectionDate;
+- (void) setSelectionDate:(long)aValue;
 - (NSDictionary*) runDictionaryForIndex:(int)index;
 - (unsigned long)   total;
 - (NSString*)   fileToProcess;

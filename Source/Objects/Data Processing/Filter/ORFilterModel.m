@@ -260,7 +260,7 @@ int filterGraph(nodeType*);
 {
 	if(!inputValues)inputValues = [[NSMutableArray array] retain];
 	[inputValues addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:
-							[NSString stringWithFormat:@"$%d",[inputValues count]],	@"name",
+							[NSString stringWithFormat:@"$%lu",[inputValues count]],	@"name",
 							[NSNumber numberWithUnsignedLong:0],					@"iValue",
 							nil]];
 	
@@ -274,7 +274,7 @@ int filterGraph(nodeType*);
 	return collection;
 }
 
-- (void) removeInputValue:(int)i
+- (void) removeInputValue:(NSUInteger)i
 {
 	[inputValues removeObjectAtIndex:i];
 }
@@ -864,8 +864,8 @@ int filterGraph(nodeType*);
 
 -(int)yyinputToBuffer:(char* )theBuffer withSize:(int)maxSize 
 {
-	int theNumberOfBytesRemaining = ([expressionAsData length] - yaccInputPosition);
-	int theCopySize = maxSize < theNumberOfBytesRemaining ? maxSize : theNumberOfBytesRemaining;
+	unsigned long theNumberOfBytesRemaining = ([expressionAsData length] - yaccInputPosition);
+	int theCopySize = (int)(maxSize < theNumberOfBytesRemaining ? maxSize : theNumberOfBytesRemaining);
 	[expressionAsData getBytes:theBuffer range:NSMakeRange(yaccInputPosition,theCopySize)];  
 	yaccInputPosition = yaccInputPosition + theCopySize;
 	return theCopySize;
@@ -902,30 +902,30 @@ int filterGraph(nodeType*);
 	}
 }
 
-- (void) checkStackIndex:(int) i
+- (void) checkStackIndex:(unsigned long) i
 {
-	if(i<0 || i>=kNumFilterStacks){
-		if(![stackIndexErrorReported objectForKey:[NSNumber numberWithInt:i]]){
+	if(i>=kNumFilterStacks){
+		if(![stackIndexErrorReported objectForKey:[NSNumber numberWithInteger:i]]){
 			if(!stackIndexErrorReported)stackIndexErrorReported = [[NSMutableDictionary dictionary] retain];
-			[stackIndexErrorReported setObject:@"dummy" forKey:[NSNumber numberWithInt:i]];
+			[stackIndexErrorReported setObject:@"dummy" forKey:[NSNumber numberWithInteger:i]];
 			NSLog(@"Filter <%@>: Stack Index (%d) not greater than 0 and less than %d. Script behaviour is now undefined!! \n",scriptName,i,kNumFilterStacks);
 		}
 		[NSException raise:@"Filter Script Error" format:@"Stack Index out of bounds."];
 	}
 }
 
-- (void) checkStack:(int)i ptr:(unsigned long) ptr
+- (void) checkStack:(unsigned long)i ptr:(unsigned long) ptr
 {
 	if(!ptr){
-		if(![stackPtrErrorReported objectForKey:[NSNumber numberWithInt:i]]){
+		if(![stackPtrErrorReported objectForKey:[NSNumber numberWithInteger:i]]){
 			if(!stackPtrErrorReported)stackPtrErrorReported = [[NSMutableDictionary dictionary] retain];
-			[stackPtrErrorReported setObject:@"dummy" forKey:[NSNumber numberWithInt:i]];
+			[stackPtrErrorReported setObject:@"dummy" forKey:[NSNumber numberWithInteger:i]];
 			NSLog(@"Filter <%@>: Tried to put a nil pointer onto stack (%d). Script behaviour is now undefined!! \n",scriptName,i,kNumFilterStacks);
 		}
 		[NSException raise:@"Filter Script Error" format:@"Stack nil pointer."];
 	}
 }
-- (void) pushOntoStack:(int)i ptrCheck:(unsigned long)ptrCheck record:(unsigned long*)p
+- (void) pushOntoStack:(unsigned long)i ptrCheck:(unsigned long)ptrCheck record:(unsigned long*)p
 {
 	[self checkStackIndex:i]; //can throw
 	[self checkStack:i ptr:ptrCheck]; //can throw
@@ -935,7 +935,7 @@ int filterGraph(nodeType*);
 	[stacks[i] enqueue:theRecord];
 }
 
-- (unsigned long*) popFromStack:(int)i
+- (unsigned long*) popFromStack:(unsigned long)i
 {
 	[self checkStackIndex:i]; //can throw
 	
@@ -943,14 +943,14 @@ int filterGraph(nodeType*);
 	return (unsigned long*)[data bytes];
 }
 
-- (unsigned long*) popFromStackBottom:(int)i
+- (unsigned long*) popFromStackBottom:(unsigned long)i
 {
 	[self checkStackIndex:i]; //can throw
 	NSData* data = [stacks[i] dequeueFromBottom];
 	return (unsigned long*)[data bytes];
 }
 
-- (void) shipStack:(int)i
+- (void) shipStack:(unsigned long)i
 {
 	[self checkStackIndex:i]; //can throw
 	if(stacks[i] && ![stacks[i] isEmpty]) {
@@ -963,13 +963,13 @@ int filterGraph(nodeType*);
 	}
 }
 
-- (long) stackCount:(int)i
+- (long) stackCount:(unsigned long)i
 {
 	[self checkStackIndex:i]; //can throw
 	return [stacks[i] count];
 }
 
-- (void) dumpStack:(int)i
+- (void) dumpStack:(unsigned long)i
 {
 	[self checkStackIndex:i]; //can throw
 	[stacks[i] release];
@@ -1015,10 +1015,10 @@ int filterGraph(nodeType*);
 {
 	if(!outputValues) outputValues = [[NSMutableArray array] retain];
 	if(index>[outputValues count]){
-		int i;
+		NSUInteger i;
 		for(i=[outputValues count];i<index;i++){
 			[outputValues addObject: [NSMutableDictionary dictionaryWithObjectsAndKeys:
-									  [NSString stringWithFormat:@"%d",i], @"name",
+									  [NSString stringWithFormat:@"%ld",i], @"name",
 									  [NSString stringWithFormat:@"%d",0], @"iValue",
 									  nil]];
 		}

@@ -234,7 +234,7 @@ NSString* ORForceProcessPollNotification			= @"ORForceProcessPollNotification";
 {
 	if(!emailList) emailList= [[NSMutableArray array] retain];
 	if([emailList count] == 0)anIndex = 0;
-	anIndex = MIN(anIndex,[emailList count]);
+	anIndex = MIN(anIndex,(int)[emailList count]);
 	
 	[[[self undoManager] prepareWithInvocationTarget:self] removeAddressAtIndex:anIndex];
 	[emailList insertObject:anAddress atIndex:anIndex];
@@ -812,7 +812,7 @@ NSString* ORForceProcessPollNotification			= @"ORForceProcessPollNotification";
                     if([anObj isKindOfClass:NSClassFromString(@"ORAdcModel")]){
                         NSString* theValue = [anObj iconValue];
                         theValue = [theValue trimSpacesFromEnds];
-                        int firstSpace = [theValue rangeOfString:@" "].location;
+                        NSInteger firstSpace = [theValue rangeOfString:@" "].location;
                         if(firstSpace!=NSNotFound) theValue = [theValue substringToIndex:firstSpace];
                         
                         s = [s stringByAppendingFormat:@"\t%@",theValue ];

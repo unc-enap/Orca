@@ -321,7 +321,7 @@
 
 - (void) lowerDiscriminatorChanged:(NSNotification*)aNote
 {
-	int raw = [model lowerDiscriminator:[model selectedChannel]];
+	int raw = (int)[model lowerDiscriminator:[model selectedChannel]];
 	int n = [model numChannels:[model selectedChannel]];
 	[lowerDiscriminatorField setIntValue:raw*n/16384.];	
 	[lowerDiscriminatorPercentField setFloatValue:raw/16384.];	
@@ -329,7 +329,7 @@
 
 - (void) upperDiscriminatorChanged:(NSNotification*)aNote
 {
-	int raw = [model upperDiscriminator:[model selectedChannel]];
+	int raw = (int)[model upperDiscriminator:[model selectedChannel]];
 	int n = [model numChannels:[model selectedChannel]];
 	[upperDiscriminatorField setIntValue:raw*n/16384.];
 	[upperDiscriminatorPercentField setFloatValue:raw/16384.];	
@@ -349,12 +349,12 @@
 
 - (void) roiPresetChanged:(NSNotification*)aNote
 {
-	[roiPresetField setIntValue: [model roiPreset:[model selectedChannel]]];
+	[roiPresetField setIntegerValue: [model roiPreset:[model selectedChannel]]];
 }
 
 - (void) roiPeakPresetChanged:(NSNotification*)aNote
 {
-	[roiPeakPresetField setIntValue: [model roiPeakPreset:[model selectedChannel]]];
+	[roiPeakPresetField setIntegerValue: [model roiPeakPreset:[model selectedChannel]]];
 }
 
 - (void) statusParamsChanged:(NSNotification*)aNote
@@ -547,7 +547,7 @@
 - (IBAction) selectedChannelAction:(id)sender
 {
 	[self endEditing];
-	[model setSelectedChannel:[[sender selectedCell] tag]];	
+	[model setSelectedChannel:(int)[[sender selectedCell] tag]];
 }
 
 - (IBAction) clearSpectrumAction:(id)sender;
@@ -798,12 +798,12 @@
 {
 	unsigned long mask = [model controlReg:[model selectedChannel]];
 	mask &= 0x00000001; //clear all but start bit
-	int rows,columns;
+	NSInteger rows,columns;
 	[sender getNumberOfRows:&rows columns:&columns];
-	int i;
+	NSInteger i;
 	for(i=0;i<rows;i++){
 		if([[sender cellAtRow:i column:0] intValue]){
-			int bit = [[sender cellAtRow:i column:0] tag];
+			int bit = (int)[[sender cellAtRow:i column:0] tag];
 			mask |= (0x1L<<bit);
 		}
 	}
@@ -814,12 +814,12 @@
 - (IBAction) presetCtrlRegAction:(id)sender
 {
 	unsigned long mask = 0;
-	int rows,columns;
+	NSInteger rows,columns;
 	[sender getNumberOfRows:&rows columns:&columns];
 	int i;
 	for(i=0;i<rows;i++){
 		if([[sender cellAtRow:i column:0] intValue]){
-			int bit = [[sender cellAtRow:i column:0] tag];
+			int bit = (int)[[sender cellAtRow:i column:0] tag];
 			mask |= (0x1L<<bit);
 		}
 	}
@@ -887,7 +887,7 @@
 
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	int set = [aPlotter tag];
+	int set = (int)[aPlotter tag];
 	if(set == 0 || set == 1)return [model numChannels:set];
 	else {
 		if(set==2){
@@ -904,7 +904,7 @@
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-	int set = [aPlotter tag];
+	int set = (int)[aPlotter tag];
 	*xValue = i;
 	*yValue = [model spectrum:set valueAtChannel:i];
 }

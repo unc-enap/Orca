@@ -461,11 +461,12 @@ void IRQHandler(short crate_id, short irq_type, unsigned int irq_data,unsigned l
 {
 	short result;
 	[socketLock lock];		//begin critical section
+    int* pp = (int*)data;
 	CRATE_OP cr_op;
 	cr_op.F = f;
 	cr_op.N = n;
 	cr_op.A = a;
-	cr_op.DATA = *data;
+	cr_op.DATA = *pp;
 	if(trackTransactions)[transactionTimer reset];
 	result = CFSA(crate_id,&cr_op);
 	[ORTimer delay:kTinyDelay]; //without this to flush the event loop, the rate is 1/sec
@@ -562,7 +563,8 @@ void IRQHandler(short crate_id, short irq_type, unsigned int irq_data,unsigned l
 	else {
 		//CAMAC write
 		unsigned int* dp = buffer;
-		for(i=0;i<numWords;i++) *dp++ = *data++;
+        unsigned int* pp = (unsigned int*)data;
+		for(i=0;i<numWords;i++) *dp++ = *pp++;
 		result = BLKTRANSF(crate_id, &blk_info, buffer);
 	}
 	if(trackTransactions)[self histogramTransactions];

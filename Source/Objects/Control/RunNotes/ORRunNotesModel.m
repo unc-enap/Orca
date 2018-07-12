@@ -255,7 +255,7 @@ NSString* ORRunNotesItemChanged				 = @"ORRunNotesItemChanged";
 }
 
 
-- (void) removeItemAtIndex:(int) anIndex
+- (void) removeItemAtIndex:(NSInteger) anIndex
 {
 	id anItem = [items objectAtIndex:anIndex];
 	[[[self undoManager] prepareWithInvocationTarget:self] addItem:anItem atIndex:anIndex];
@@ -264,7 +264,7 @@ NSString* ORRunNotesItemChanged				 = @"ORRunNotesItemChanged";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORRunNotesItemsRemoved object:self userInfo:userInfo];
 }
 
-- (id) itemAtIndex:(int)anIndex
+- (id) itemAtIndex:(NSInteger)anIndex
 {
 	if(anIndex>=0 && anIndex<[items count])return [items objectAtIndex:anIndex];
 	else return nil;

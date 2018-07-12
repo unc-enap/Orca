@@ -2498,7 +2498,7 @@ static NSString *ORRunTypeNames 	= @"ORRunTypeNames";
 
 - (int) slotForObj:(id)anObj
 {
-	return [anObj tag];
+	return (int)[anObj tag];
 }
 
 - (int) numberSlotsNeededFor:(id)anObj
@@ -2585,7 +2585,7 @@ static NSString *ORRunTypeNames 	= @"ORRunTypeNames";
 {
     NSString* runState;
     NSString* thirdWordKey;
-	int subRunNumber = 0;
+	unsigned long subRunNumber = 0;
     NSString* init = @"";
     NSString* title= @"Run Control Record\n\n";
 	BOOL showSubRun = NO;

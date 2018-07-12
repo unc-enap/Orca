@@ -27,8 +27,8 @@
 #pragma mark •••Accessors
 
 - (void) readLongBlockPmc:(unsigned long *) buffer
-				 atAddress:(unsigned int) aPmcAddress
-				 numToRead:(unsigned int) numberLongs
+				 atAddress:(unsigned long) aPmcAddress
+				 numToRead:(unsigned long) numberLongs
 {
 	@try {
 		[socketLock lock]; //begin critical section
@@ -38,8 +38,8 @@
 		aPacket.cmdHeader.numberBytesinPayload	= sizeof(SBC_IPEv4ReadBlockStruct);
 		
 		SBC_IPEv4ReadBlockStruct* readBlockPtr = (SBC_IPEv4ReadBlockStruct*)aPacket.payload;
-		readBlockPtr->address			= aPmcAddress;
-		readBlockPtr->numItems			= numberLongs;
+		readBlockPtr->address			= (uint32_t)aPmcAddress;
+		readBlockPtr->numItems			= (uint32_t)numberLongs;
 				
 		//Do NOT call the combo send:receive method here... we have the locks already in place
 		[self write:socketfd buffer:&aPacket];	//write the packet
@@ -65,8 +65,8 @@
 
 
 - (void) writeLongBlockPmc:(unsigned long *) buffer
-				  atAddress:(unsigned int) aPmcAddress
-				 numToWrite:(unsigned int) numberLongs
+				  atAddress:(unsigned long) aPmcAddress
+				 numToWrite:(unsigned long) numberLongs
 {
 	
 	@try {
@@ -75,11 +75,11 @@
 		SBC_Packet aPacket;
 		aPacket.cmdHeader.destination			= kSBC_Process;
 		aPacket.cmdHeader.cmdID					= kSBC_WriteBlock;
-		aPacket.cmdHeader.numberBytesinPayload	= sizeof(SBC_IPEv4WriteBlockStruct) + numberLongs*sizeof(long);   //TODO: this was SBC_VmeWriteBlockStruct (instead of SBC_IPEv4WriteBlockStruct), is that correct? -tb-
+		aPacket.cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(SBC_IPEv4WriteBlockStruct) + numberLongs*sizeof(long));   //TODO: this was SBC_VmeWriteBlockStruct (instead of SBC_IPEv4WriteBlockStruct), is that correct? -tb-
 		
 		SBC_IPEv4WriteBlockStruct* writeBlockPtr = (SBC_IPEv4WriteBlockStruct*)aPacket.payload;
-		writeBlockPtr->address			= aPmcAddress;
-		writeBlockPtr->numItems			= numberLongs;
+		writeBlockPtr->address			= (uint32_t)aPmcAddress;
+		writeBlockPtr->numItems			= (uint32_t)numberLongs;
 		writeBlockPtr++;				//point to the payload
 		memcpy(writeBlockPtr,buffer,numberLongs*sizeof(long));
 		

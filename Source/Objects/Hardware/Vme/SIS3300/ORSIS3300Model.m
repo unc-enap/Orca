@@ -527,7 +527,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 
 - (int) numberOfSamples
 {
-	static unsigned long sampleSize[8]={
+	static int sampleSize[8]={
 		0x20000,
 		0x4000,
 		0x1000,
@@ -903,7 +903,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 	return triggerWord;
 }
 
-- (int) dataWord:(int)chan index:(int)index
+- (unsigned long) dataWord:(int)chan index:(int)index
 {
 	if([self enabled:chan]){	
 		unsigned long dataMask = ((moduleID==0x3300)?0xfff:0x3fff);
@@ -1159,7 +1159,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 		}
 	}
 	if(!timeout){
-		int numEvents= [self eventNumberGroup:0 bank:0];
+		int numEvents= (int)[self eventNumberGroup:0 bank:0];
 		NSLog(@"Number Events: %d\n",numEvents);
 		unsigned long triggerEventDir;
 		triggerEventDir = [self readTriggerEventBank:0 index:0];
@@ -1381,7 +1381,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 		if([self bankIsFull:currentBank] && ![self bankIsBusy:currentBank]){
 			int bankToUse = currentBank;
 			
-			int numEvents = [self eventNumberGroup:0 bank:bankToUse];
+			int numEvents = (int)[self eventNumberGroup:0 bank:bankToUse];
 			int event,group;
 			for(event=0;event<numEvents;event++){
 				unsigned long triggerEventDir = [self readTriggerEventBank:bankToUse index:event];
@@ -1460,11 +1460,11 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id				= kSIS3300; //should be unique
-	configStruct->card_info[index].hw_mask[0]				= dataId; //better be unique
+	configStruct->card_info[index].hw_mask[0]				= (uint32_t)dataId; //better be unique
 	configStruct->card_info[index].slot						= [self slot];
 	configStruct->card_info[index].crate					= [self crateNumber];
 	configStruct->card_info[index].add_mod					= [self addressModifier];
-	configStruct->card_info[index].base_add					= [self baseAddress];
+	configStruct->card_info[index].base_add					= (uint32_t)[self baseAddress];
     configStruct->card_info[index].deviceSpecificData[0]	= bankSwitchMode;
     configStruct->card_info[index].deviceSpecificData[1]	= [self numberOfSamples];
 	configStruct->card_info[index].deviceSpecificData[2]	= moduleID;
@@ -1601,9 +1601,9 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
     [encoder encodeBool:stopTrigger				forKey:@"stopTrigger"];
 
     [encoder encodeInt:pageSize					forKey:@"pageSize"];
-    [encoder encodeInt32:enabledMask			forKey:@"enabledMask"];
+    [encoder encodeInt32:(int32_t)enabledMask			forKey:@"enabledMask"];
     [encoder encodeObject:thresholds			forKey:@"thresholds"];
-    [encoder encodeInt:ltGtMask					forKey:@"ltGtMask"];
+    [encoder encodeInt:(int32_t)ltGtMask					forKey:@"ltGtMask"];
 	
     [encoder encodeObject:waveFormRateGroup forKey:@"waveFormRateGroup"];
 	

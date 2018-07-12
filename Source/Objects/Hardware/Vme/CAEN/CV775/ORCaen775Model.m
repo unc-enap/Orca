@@ -530,10 +530,10 @@ static RegisterNamesStruct reg[kNumRegisters] = {
 - (void) encodeWithCoder: (NSCoder*) anEncoder
 {
     [super encodeWithCoder: anEncoder];
-	[anEncoder encodeInt:fullScaleRange forKey:@"fullScaleRange"];
+	[anEncoder encodeInt:(int32_t)fullScaleRange forKey:@"fullScaleRange"];
 	[anEncoder encodeBool:commonStopMode	forKey:@"commonStopMode"];
 	[anEncoder encodeInt:modelType			forKey:@"modelType"];
-	[anEncoder encodeInt32:onlineMask		forKey:@"onlineMask"];
+	[anEncoder encodeInt32:(int32_t)onlineMask		forKey:@"onlineMask"];
 }
 
 @end
