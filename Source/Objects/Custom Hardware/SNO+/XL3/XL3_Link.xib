@@ -1213,8 +1213,8 @@
                                                             <outlet property="formatter" destination="979" id="3982"/>
                                                         </connections>
                                                     </textField>
-                                                    <button id="3962">
-                                                        <rect key="frame" x="15" y="198" width="84" height="18"/>
+                                                    <button misplaced="YES" id="3962">
+                                                        <rect key="frame" x="15" y="198" width="100" height="18"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="CMOS rates" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="3963">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -3162,6 +3162,7 @@
             <connections>
                 <outlet property="delegate" destination="-2" id="924"/>
             </connections>
+            <point key="canvasLocation" x="131.5" y="161"/>
         </window>
         <customObject id="979" userLabel="OHexFormatter" customClass="OHexFormatter"/>
     </objects>

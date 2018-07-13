@@ -1292,8 +1292,8 @@
                             <action selector="vtSafetyAction:" target="-2" id="1348"/>
                         </connections>
                     </textField>
-                    <button id="nAM-Nl-UMk">
-                        <rect key="frame" x="41" y="544" width="33" height="37"/>
+                    <button misplaced="YES" id="nAM-Nl-UMk">
+                        <rect key="frame" x="34" y="535" width="46" height="45"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="Unlocked" imagePosition="above" alignment="center" alternateImage="Locked" inset="2" id="rSl-aQ-WOn">
                             <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
