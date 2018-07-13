@@ -342,21 +342,21 @@
 
 - (IBAction) cmdRemoveAction:(id)sender
 {
-    [model removeCommand:[cmdTable selectedRow]];
+    [model removeCommand:(int)[cmdTable selectedRow]];
     
 }
 
 - (IBAction) cmdEditAction:(id)sender
 {
     [self endEditing];
-    id cmd = [model commandAtIndex:[cmdTable selectedRow]];
+    id cmd = [model commandAtIndex:(int)[cmdTable selectedRow]];
     [cmdLabelField setStringValue:[cmd objectForKey:@"Label"]];
     [cmdObjectBox setStringValue:[cmd objectForKey:@"Object"]];
     [cmdMethodBox setStringValue:[cmd objectForKey:@"Selector"]];
     [cmdValueField setStringValue:[cmd objectForKey:@"Value"]];
     [cmdInfoField setStringValue:[cmd objectForKey:@"Info"]];
     
-    [model removeCommand:[cmdTable selectedRow]];
+    [model removeCommand:(int)[cmdTable selectedRow]];
     
 }
 - (IBAction) cmdApplyAction:(id)sender
@@ -388,7 +388,7 @@
 }
 - (IBAction) testExecute:(id)sender
 {
-    NSString* key=[[model commandAtIndex:[cmdTable selectedRow]] objectForKey:@"Label"];
+    NSString* key=[[model commandAtIndex:(int)[cmdTable selectedRow]] objectForKey:@"Label"];
     id returnVal = [NSNull null];
     if([model executeCommand:key arguments:nil returnVal:&returnVal]){
         [model log:[NSString stringWithFormat:@"successfully executed command with label '%@'", key]];
@@ -436,14 +436,14 @@
 
 - (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
-    id obj = [model commandAtIndex:rowIndex];
+    id obj = [model commandAtIndex:(int)rowIndex];
     return [obj valueForKey:[aTableColumn identifier]];
 
 }
 
 - (void) tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
-    id obj = [model commandAtIndex:rowIndex];
+    id obj = [model commandAtIndex:(int)rowIndex];
 	[obj setObject:anObject forKey:[aTableColumn identifier]];
 
 }

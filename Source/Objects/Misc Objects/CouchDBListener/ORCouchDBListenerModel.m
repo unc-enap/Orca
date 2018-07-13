@@ -665,11 +665,11 @@ if (strcmp(@encode(atype), the_type) == 0)     \
 				NSInvocation*		theInvocation	= [NSInvocation invocationWithMethodSignature:theSignature];
 				
 				[theInvocation setSelector:theSetterSelector];
-				int n = [theSignature numberOfArguments];
+				int n = (int)[theSignature numberOfArguments];
 				int i;
                 if ((n-2) != [theValue count]) {
                     [NSException raise:@"ORCouchDBListenerInvalidArguments"
-                                format:@"Invalid argument number: (%i) seen, (%i) needed",[theValue count],(n-2)];
+                                format:@"Invalid argument number: (%ld) seen, (%i) needed",[theValue count],(n-2)];
                 }
 				for(i=2;i<n;i++){
                     id o = [theValue objectAtIndex:i-2];
