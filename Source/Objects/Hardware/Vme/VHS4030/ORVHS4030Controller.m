@@ -206,7 +206,7 @@
 
 - (void) baseAddressChanged:(NSNotification*)aNotification 
 { 
-	[addressText setIntValue: [model baseAddress]]; 
+	[addressText setIntegerValue: [model baseAddress]];
 }
 
 - (void) slotChanged:(NSNotification*)aNotification
@@ -574,7 +574,7 @@
 
 - (IBAction) pollTimeAction:(id)sender
 {
-	[model setPollTime:[[sender selectedItem] tag]];	
+	[model setPollTime:(int)[[sender selectedItem] tag]];	
 }
 
 - (IBAction) loadStartAction:(id)sender

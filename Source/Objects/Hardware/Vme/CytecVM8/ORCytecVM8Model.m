@@ -242,7 +242,7 @@ NSString* ORCytectVM8FormCChanged       = @"ORCytectVM8FormCChanged";
     self = [super initWithCoder:decoder];
     
     [[self undoManager] disableUndoRegistration];
-    [self setWriteValue:[decoder decodeInt32ForKey:@"writeValue"]];
+    [self setWriteValue:[decoder decodeIntegerForKey:@"writeValue"]];
     [self setFormC:[decoder decodeBoolForKey:@"formC"]];
     [[self undoManager] enableUndoRegistration];
     

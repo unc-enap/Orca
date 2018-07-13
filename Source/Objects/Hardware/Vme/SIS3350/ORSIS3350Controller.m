@@ -321,7 +321,7 @@
 #pragma mark •••Interface Management
 - (void) memoryWrapLengthChanged:(NSNotification*)aNote
 {
-	[memoryWrapLengthField setIntValue: [model memoryWrapLength]];
+	[memoryWrapLengthField setIntegerValue: [model memoryWrapLength]];
 }
 
 - (void) endAddressThresholdChanged:(NSNotification*)aNote
@@ -351,7 +351,7 @@
 
 - (void) maxNumEventsChanged:(NSNotification*)aNote
 {
-	[maxNumEventsField setIntValue: [model maxNumEvents]];
+	[maxNumEventsField setIntegerValue: [model maxNumEvents]];
 }
 
 - (void) freqNChanged:(NSNotification*)aNote
@@ -366,12 +366,12 @@
 
 - (void) memoryStartModeLengthChanged:(NSNotification*)aNote
 {
-	[memoryStartModeLengthField setIntValue: [model memoryStartModeLength]];
+	[memoryStartModeLengthField setIntegerValue: [model memoryStartModeLength]];
 }
 
 - (void) memoryTriggerDelayChanged:(NSNotification*)aNote
 {
-	[memoryTriggerDelayField setIntValue: [model memoryTriggerDelay]];
+	[memoryTriggerDelayField setIntegerValue: [model memoryTriggerDelay]];
 }
 
 - (void) invertLemoChanged:(NSNotification*)aNote
@@ -433,11 +433,11 @@
 {
 	if(![aNote userInfo]){
 		short i;
-		for(i=0;i<kNumSIS3350Channels;i++)[[gainMatrix cellWithTag:i] setIntValue:[model gain:i]];
+		for(i=0;i<kNumSIS3350Channels;i++)[[gainMatrix cellWithTag:i] setIntegerValue:[model gain:i]];
 	}
 	else {
 		int i = [[[aNote userInfo] objectForKey:@"Channel"] intValue];
-		[[gainMatrix cellWithTag:i] setIntValue:[model gain:i]];
+		[[gainMatrix cellWithTag:i] setIntegerValue:[model gain:i]];
 	}
 }
 
@@ -445,11 +445,11 @@
 {
 	if(![aNote userInfo]){
 		short i;
-		for(i=0;i<kNumSIS3350Channels;i++)[[dacValueMatrix cellWithTag:i] setIntValue:[model dacValue:i]];
+		for(i=0;i<kNumSIS3350Channels;i++)[[dacValueMatrix cellWithTag:i] setIntegerValue:[model dacValue:i]];
 	}
 	else {
 		int i = [[[aNote userInfo] objectForKey:@"Channel"] intValue];
-		[[dacValueMatrix cellWithTag:i] setIntValue:[model dacValue:i]];
+		[[dacValueMatrix cellWithTag:i] setIntegerValue:[model dacValue:i]];
 	}
 }
 
@@ -693,7 +693,7 @@
 
 - (void) baseAddressChanged:(NSNotification*)aNote
 {
-    [addressText setIntValue: [model baseAddress]];
+    [addressText setIntegerValue: [model baseAddress]];
 }
 
 - (void) integrationChanged:(NSNotification*)aNotification
@@ -834,7 +834,7 @@
 
 - (IBAction) freqNAction:(id)sender
 {
-	[model setFreqN:[sender indexOfSelectedItem]];	
+	[model setFreqN:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) freqMAction:(id)sender
@@ -874,12 +874,12 @@
 
 - (IBAction) clockSourceAction:(id)sender
 {
-	[model setClockSource:[sender indexOfSelectedItem]];	
+	[model setClockSource:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) operationModeAction:(id)sender
 {
-	[model setOperationMode:[sender indexOfSelectedItem]];	
+	[model setOperationMode:(int)[sender indexOfSelectedItem]];
 }
 
 //hardware actions
@@ -914,14 +914,14 @@
 
 - (IBAction) gainAction:(id)sender
 {
-    if([sender intValue] != [model gain:[[sender selectedCell] tag]]){
-		[model setGain:[[sender selectedCell] tag] withValue:[sender intValue]];
+    if([sender intValue] != [model gain:(int)[[sender selectedCell] tag]]){
+		[model setGain:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 	}
 }
 - (IBAction) dacValueAction:(id)sender
 {
-    if([sender intValue] != [model dacValue:[[sender selectedCell] tag]]){
-		[model setDacValue:[[sender selectedCell] tag] withValue:[sender intValue]];
+    if([sender intValue] != [model dacValue:(int)[[sender selectedCell] tag]]){
+		[model setDacValue:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 	}
 }
 
@@ -1006,7 +1006,7 @@
     }
 
     NSString* key = [NSString stringWithFormat: @"orca.ORSIS3350%d.selectedtab",[model slot]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 }
 
@@ -1027,12 +1027,12 @@
 
 - (int) numberPointsInPlot:(id)aPlotter;
 {
-	return [[[model waveFormRateGroup]timeRate]count];
+	return (int)[[[model waveFormRateGroup]timeRate]count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 {
-	int count = [[[model waveFormRateGroup]timeRate] count];
+	int count = (int)[[[model waveFormRateGroup]timeRate] count];
 	int index = count-i-1;
 	*yValue =  [[[model waveFormRateGroup]timeRate]valueAtIndex:index];
 	*xValue =  [[[model waveFormRateGroup]timeRate]timeSampledAtIndex:index];

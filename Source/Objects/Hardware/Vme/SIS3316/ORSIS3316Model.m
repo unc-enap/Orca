@@ -4688,29 +4688,29 @@ NSString* tauTable[4] ={
     
     [[self undoManager] disableUndoRegistration];
     
-    [self setEnabledMask:               [decoder decodeInt32ForKey: @"enabledMask"]];
-    [self setFormatMask:                [decoder decodeInt32ForKey: @"formatMask"]];
-    [self setEventConfigMask:           [decoder decodeInt32ForKey: @"eventConfigMask"]];
-    [self setExtendedEventConfigBit:    [decoder decodeInt32ForKey: @"extendedEventConfigBit"]];
-    [self setEndAddressSuppressionMask: [decoder decodeInt32ForKey: @"endAddressSuppressionMask"]];
-    [self setHistogramsEnabledMask:     [decoder decodeInt32ForKey: @"histogramsEnabledMask"]];
-    [self setHeSuppressTriggerMask:     [decoder decodeInt32ForKey: @"heSuppressTriggerMask"]];
-    [self setGain:                      [decoder decodeIntForKey:   @"gain"]];
-    [self setTermination:               [decoder decodeIntForKey:   @"termination"]];
-    [self setTrigBothEdgesMask:         [decoder decodeInt32ForKey: @"trigBothEdgesMask"]];
-    [self setIntHeTrigOutPulseMask:     [decoder decodeInt32ForKey: @"intHeTrigOutPulseMask"]];
-    [self setLemoCoMask:                [decoder decodeInt32ForKey: @"lemoCoMask"]];
-    [self setLemoUoMask:                [decoder decodeInt32ForKey: @"lemoUoMask"]];
-    [self setLemoToMask:                [decoder decodeInt32ForKey: @"lemoToMask"]];
-    [self setAcquisitionControlMask:    [decoder decodeInt32ForKey: @"acquisitionControlMask"]];
-    [self setNIMControlStatusMask:      [decoder decodeInt32ForKey: @"nimControlStatusMask"]];
+    [self setEnabledMask:               [decoder decodeIntegerForKey: @"enabledMask"]];
+    [self setFormatMask:                [decoder decodeIntegerForKey: @"formatMask"]];
+    [self setEventConfigMask:           [decoder decodeIntegerForKey: @"eventConfigMask"]];
+    [self setExtendedEventConfigBit:    [decoder decodeIntegerForKey: @"extendedEventConfigBit"]];
+    [self setEndAddressSuppressionMask: [decoder decodeIntegerForKey: @"endAddressSuppressionMask"]];
+    [self setHistogramsEnabledMask:     [decoder decodeIntegerForKey: @"histogramsEnabledMask"]];
+    [self setHeSuppressTriggerMask:     [decoder decodeIntegerForKey: @"heSuppressTriggerMask"]];
+    [self setGain:                      [decoder decodeIntegerForKey:   @"gain"]];
+    [self setTermination:               [decoder decodeIntegerForKey:   @"termination"]];
+    [self setTrigBothEdgesMask:         [decoder decodeIntegerForKey: @"trigBothEdgesMask"]];
+    [self setIntHeTrigOutPulseMask:     [decoder decodeIntegerForKey: @"intHeTrigOutPulseMask"]];
+    [self setLemoCoMask:                [decoder decodeIntegerForKey: @"lemoCoMask"]];
+    [self setLemoUoMask:                [decoder decodeIntegerForKey: @"lemoUoMask"]];
+    [self setLemoToMask:                [decoder decodeIntegerForKey: @"lemoToMask"]];
+    [self setAcquisitionControlMask:    [decoder decodeIntegerForKey: @"acquisitionControlMask"]];
+    [self setNIMControlStatusMask:      [decoder decodeIntegerForKey: @"nimControlStatusMask"]];
     [self setSharing:                   [decoder decodeIntForKey:   @"sharing"]];
-//    [self setHsDiv:                     [decoder decodeIntForKey:   @"hsDiv"]];
-//    [self setN1Div:                     [decoder decodeIntForKey:   @"n1Div"]];
-    [self setRawDataBufferLen:          [decoder decodeInt32ForKey: @"rawDataBufferLen"]];
-    [self setRawDataBufferStart:        [decoder decodeInt32ForKey: @"rawDataBufferStart"]];
-    [self setPileUpWindow:              [decoder decodeInt32ForKey: @"pileUpWindowLength"]];
-    [self setRePileUpWindow:            [decoder decodeInt32ForKey: @"rePileUpWindowLength"]];
+//    [self setHsDiv:                     [decoder decodeIntegerForKey:   @"hsDiv"]];
+//    [self setN1Div:                     [decoder decodeIntegerForKey:   @"n1Div"]];
+    [self setRawDataBufferLen:          [decoder decodeIntegerForKey: @"rawDataBufferLen"]];
+    [self setRawDataBufferStart:        [decoder decodeIntegerForKey: @"rawDataBufferStart"]];
+    [self setPileUpWindow:              [decoder decodeIntegerForKey: @"pileUpWindowLength"]];
+    [self setRePileUpWindow:            [decoder decodeIntegerForKey: @"rePileUpWindowLength"]];
 
     //load up all the C Arrays
     [[decoder decodeObjectForKey: @"mawBufferLength"]   loadULongCArray:mawBufferLength      size:kNumSIS3316Channels];
@@ -4758,7 +4758,7 @@ NSString* tauTable[4] ={
     [[decoder decodeObjectForKey: @"internalCoinGateLen"]       loadULongCArray:internalCoinGateLen         size:kNumSIS3316Groups];
 
 	//clocks
-    [self setClockSource:			[decoder decodeIntForKey:@"clockSource"]];
+    [self setClockSource:			[decoder decodeIntegerForKey:@"clockSource"]];
 			
     [self setWaveFormRateGroup:     [decoder decodeObjectForKey:@"waveFormRateGroup"]];
     
@@ -4808,35 +4808,35 @@ NSString* tauTable[4] ={
 {
     [super encodeWithCoder:encoder];
 
-    [encoder encodeInt:   gain                       forKey:@"gain"];
-    [encoder encodeInt:   termination                forKey:@"termination"];
-    [encoder encodeInt32: (int32_t)enabledMask                forKey:@"enabledMask"];
-    [encoder encodeInt32: (int32_t)formatMask                 forKey:@"formatMask"];
-    [encoder encodeInt32: (int32_t)eventConfigMask            forKey:@"eventConfigMask"];
-    [encoder encodeInt32: extendedEventConfigBit     forKey:@"extendedEventConfigBit"];
-    [encoder encodeInt32: (int32_t)endAddressSuppressionMask  forKey:@"endAddressSuppressionMask"];
-    [encoder encodeInt32: (int32_t)histogramsEnabledMask      forKey:@"histogramsEnabledMask"];
-    [encoder encodeInt32: (int32_t)pileupEnabledMask          forKey:@"pileupEnabledMask"];
-    [encoder encodeInt32: (int32_t)clrHistogramsWithTSMask    forKey:@"clrHistogramsWithTSMask"];
-    [encoder encodeInt32: (int32_t)writeHitsToEventMemoryMask forKey:@"writeHitsToEventMemoryMask"];
-    [encoder encodeInt32: (int32_t)heSuppressTriggerMask      forKey:@"heSuppressTriggerMask"];
-    [encoder encodeInt32: (int32_t)trigBothEdgesMask          forKey:@"trigBothEdgesMask"];
-    [encoder encodeInt32: (int32_t)intHeTrigOutPulseMask      forKey:@"intHeTrigOutPulseMask"];
-    [encoder encodeInt32: (int32_t)lemoToMask                 forKey:@"lemoToMask"];
-    [encoder encodeInt32: (int32_t)lemoUoMask                 forKey:@"lemoUoMask"];
-    [encoder encodeInt32: (int32_t)acquisitionControlMask     forKey:@"acquisitionControlMask"];
-    [encoder encodeInt32: (int32_t)rawDataBufferLen           forKey:@"rawDataBufferLen"];
-    [encoder encodeInt32: (int32_t)rawDataBufferStart         forKey:@"rawDataBufferStart"];
+    [encoder encodeInteger:   gain                       forKey:@"gain"];
+    [encoder encodeInteger:   termination                forKey:@"termination"];
+    [encoder encodeInteger: (int32_t)enabledMask                forKey:@"enabledMask"];
+    [encoder encodeInteger: (int32_t)formatMask                 forKey:@"formatMask"];
+    [encoder encodeInteger: (int32_t)eventConfigMask            forKey:@"eventConfigMask"];
+    [encoder encodeInteger: extendedEventConfigBit     forKey:@"extendedEventConfigBit"];
+    [encoder encodeInteger: (int32_t)endAddressSuppressionMask  forKey:@"endAddressSuppressionMask"];
+    [encoder encodeInteger: (int32_t)histogramsEnabledMask      forKey:@"histogramsEnabledMask"];
+    [encoder encodeInteger: (int32_t)pileupEnabledMask          forKey:@"pileupEnabledMask"];
+    [encoder encodeInteger: (int32_t)clrHistogramsWithTSMask    forKey:@"clrHistogramsWithTSMask"];
+    [encoder encodeInteger: (int32_t)writeHitsToEventMemoryMask forKey:@"writeHitsToEventMemoryMask"];
+    [encoder encodeInteger: (int32_t)heSuppressTriggerMask      forKey:@"heSuppressTriggerMask"];
+    [encoder encodeInteger: (int32_t)trigBothEdgesMask          forKey:@"trigBothEdgesMask"];
+    [encoder encodeInteger: (int32_t)intHeTrigOutPulseMask      forKey:@"intHeTrigOutPulseMask"];
+    [encoder encodeInteger: (int32_t)lemoToMask                 forKey:@"lemoToMask"];
+    [encoder encodeInteger: (int32_t)lemoUoMask                 forKey:@"lemoUoMask"];
+    [encoder encodeInteger: (int32_t)acquisitionControlMask     forKey:@"acquisitionControlMask"];
+    [encoder encodeInteger: (int32_t)rawDataBufferLen           forKey:@"rawDataBufferLen"];
+    [encoder encodeInteger: (int32_t)rawDataBufferStart         forKey:@"rawDataBufferStart"];
 
     //clocks
-    [encoder encodeInt:   (int32_t)clockSource                forKey:@"clockSource"];
-    [encoder encodeInt:   sharing                    forKey:@"sharing"];
-//    [encoder encodeInt:   hsDiv                      forKey:@"hsDiv"];
-//    [encoder encodeInt:   n1Div                      forKey:@"n1Div"];
+    [encoder encodeInteger:   (int32_t)clockSource                forKey:@"clockSource"];
+    [encoder encodeInteger:   sharing                    forKey:@"sharing"];
+//    [encoder encodeInteger:   hsDiv                      forKey:@"hsDiv"];
+//    [encoder encodeInteger:   n1Div                      forKey:@"n1Div"];
     [encoder encodeObject:waveFormRateGroup          forKey:@"waveFormRateGroup"];
-    [encoder encodeInt32: (int32_t)nimControlStatusMask       forKey:@"nimControlStatusMask"];
-    [encoder encodeInt32: (int32_t)pileUpWindowLength         forKey:@"pileUpWindowLength"];
-    [encoder encodeInt32: (int32_t)rePileUpWindowLength       forKey:@"rePileUpWindowLength"];
+    [encoder encodeInteger: (int32_t)nimControlStatusMask       forKey:@"nimControlStatusMask"];
+    [encoder encodeInteger: (int32_t)pileUpWindowLength         forKey:@"pileUpWindowLength"];
+    [encoder encodeInteger: (int32_t)rePileUpWindowLength       forKey:@"rePileUpWindowLength"];
 
     //handle all the C Arrays
     [encoder encodeObject: [NSArray arrayFromULongCArray:mawBufferLength            size:kNumSIS3316Channels] forKey:@"mawBufferLength"];

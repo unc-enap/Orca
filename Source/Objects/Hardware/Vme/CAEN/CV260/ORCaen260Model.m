@@ -600,9 +600,9 @@ NSString* ORCaen260ModelAllScalerValuesChanged= @"ORCaen260ModelAllScalerValuesC
     [self setChannelForTriggeredShip:[decoder decodeIntForKey:@"channelForTriggeredShip"]];
     [self setShipOnChange:[decoder decodeBoolForKey:@"shipOnChange"]];
     [self setAutoInhibit:	[decoder decodeBoolForKey:@"autoInhibit"]];
-	[self setPollingState:	[decoder decodeIntForKey:@"pollingState"]];
+	[self setPollingState:	[decoder decodeIntegerForKey:@"pollingState"]];
 	[self setShipRecords:	[decoder decodeBoolForKey:@"shipRecords"]];
-	[self setEnabledMask:	[decoder decodeIntForKey:@"enabledMask"]];
+	[self setEnabledMask:	[decoder decodeIntegerForKey:@"enabledMask"]];
 	
     [[self undoManager] enableUndoRegistration];
     [self registerNotificationObservers];
@@ -615,12 +615,12 @@ NSString* ORCaen260ModelAllScalerValuesChanged= @"ORCaen260ModelAllScalerValuesC
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:channelForTriggeredShip forKey:@"channelForTriggeredShip"];
+    [encoder encodeInteger:channelForTriggeredShip forKey:@"channelForTriggeredShip"];
     [encoder encodeBool:shipOnChange forKey:@"shipOnChange"];
     [encoder encodeBool:autoInhibit forKey:@"autoInhibit"];
-    [encoder encodeInt:[self pollingState] forKey:@"pollingState"];
+    [encoder encodeInteger:[self pollingState] forKey:@"pollingState"];
     [encoder encodeBool:[self pollingState] forKey:@"shipRecords"];
-	[encoder encodeInt:[self enabledMask] forKey:@"enabledMask"];
+	[encoder encodeInteger:[self enabledMask] forKey:@"enabledMask"];
 }
 
 @end

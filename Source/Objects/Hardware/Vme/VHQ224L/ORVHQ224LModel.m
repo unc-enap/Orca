@@ -469,7 +469,7 @@ NSString* ORVHQ224LMaxCurrentChanged		= @"ORVHQ224LMaxCurrentChanged";
 			else return @"HV OFF  ";
 		}
 	}
-	else return kHVOff;
+	else return @"HV OFF  ";
 }
 
 - (eVHQ224LRampingState) rampingState:(unsigned short)aChannel
@@ -558,7 +558,7 @@ NSString* ORVHQ224LMaxCurrentChanged		= @"ORVHQ224LMaxCurrentChanged";
 	for(i=0;i<kNumVHQ224LChannels;i++){
 		[self setVoltage:i withValue:   [decoder decodeFloatForKey:[NSString stringWithFormat:@"voltage%d",i]]];
 		[self setMaxCurrent:i withValue:[decoder decodeFloatForKey:[NSString stringWithFormat:@"maxCurrent%d",i]]];
-		[self setRampRate:i withValue:  [decoder decodeIntForKey:  [NSString stringWithFormat:@"rampRate%d",i]]];
+		[self setRampRate:i withValue:  [decoder decodeIntegerForKey:  [NSString stringWithFormat:@"rampRate%d",i]]];
 	}
 	[self setPollTime:[decoder decodeIntForKey:@"pollTime"]];
     [[self undoManager] enableUndoRegistration];
@@ -573,9 +573,9 @@ NSString* ORVHQ224LMaxCurrentChanged		= @"ORVHQ224LMaxCurrentChanged";
 	for(i=0;i<kNumVHQ224LChannels;i++){
 		[encoder encodeFloat:voltage[i]    forKey:[NSString stringWithFormat:@"voltage%d",i]];
 		[encoder encodeFloat:maxCurrent[i] forKey:[NSString stringWithFormat:@"maxCurrent%d",i]];
-		[encoder encodeInt:rampRate[i]     forKey:[NSString stringWithFormat:@"rampRate%d",i]];
+		[encoder encodeInteger:rampRate[i]     forKey:[NSString stringWithFormat:@"rampRate%d",i]];
 	}
-	[encoder encodeInt:pollTime forKey:@"pollTime"];
+	[encoder encodeInteger:pollTime forKey:@"pollTime"];
 }
 
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary

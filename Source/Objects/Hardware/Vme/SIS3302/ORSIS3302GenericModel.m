@@ -1236,10 +1236,10 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
             unsigned long pageNumberTag = 0;
             unsigned long readLongs = 0;
             unsigned int readAtAddress = 0;
-            unsigned int longsToRead = check/2;
+            unsigned int longsToRead = (unsigned int)(check/2);
             for (;readLongs < longsToRead;readLongs += maxSubWaveformLength) {
                 // Get the next number of longs to read
-                unsigned int nextToRead = (longsToRead - readLongs > maxSubWaveformLength) ? maxSubWaveformLength : (longsToRead - readLongs);
+                unsigned int nextToRead = (unsigned int)((longsToRead - readLongs > maxSubWaveformLength) ? maxSubWaveformLength : (longsToRead - readLongs));
  
                 unsigned int tempToRead = nextToRead;
                 unsigned int ptrOffset = 0;
@@ -1251,7 +1251,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
                                        withAddMod:addressModifier
                                     usingAddSpace:0x01];  
                     unsigned int bytesToRead = (4*tempToRead & totalPageNumberMask);
-                    unsigned int addrToRead = [self baseAddress] + [self getAdcMemory:chan] + (readAtAddress & totalPageNumberMask);
+                    unsigned long addrToRead = [self baseAddress] + [self getAdcMemory:chan] + (readAtAddress & totalPageNumberMask);
                     if (((bytesToRead + (readAtAddress & totalPageNumberMask)) > totalPageNumberMask)) {
                         bytesToRead = totalPageNumberMask - (readAtAddress & totalPageNumberMask) + 1;
                     }
@@ -1401,22 +1401,22 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
     [self setFirmwareVersion:			[decoder decodeFloatForKey:@"firmwareVersion"]];
 	
 
-    [self setClockSource:				[decoder decodeIntForKey:@"clockSource"]];
-	[self setGtMask:					[decoder decodeIntForKey:@"gtMask"]];
-	[self setUseTrapTriggerMask:		[decoder decodeIntForKey:@"trapMask"]];    
+    [self setClockSource:				[decoder decodeIntegerForKey:@"clockSource"]];
+	[self setGtMask:					[decoder decodeIntegerForKey:@"gtMask"]];
+	[self setUseTrapTriggerMask:		[decoder decodeIntegerForKey:@"trapMask"]];    
     [self setWaveFormRateGroup:			[decoder decodeObjectForKey:@"waveFormRateGroup"]];
-    [self setStopEventAtLength:         [decoder decodeIntForKey:@"stopEventAtLength"]];
-    [self setPageWrap:                  [decoder decodeIntForKey:@"enablePageWrap"]];
-    [self setEnableTestData:            [decoder decodeIntForKey:@"enableTestData"]];    
-    [self setLemoTimestampEnabled:            [decoder decodeIntForKey:@"lemoTimestampEnabled"]];    
-    [self setLemoStartStopEnabled:            [decoder decodeIntForKey:@"lemoStartStopEnabled"]];    
-    [self setInternalTrigStartEnabled:        [decoder decodeIntForKey:@"internalTrigStartEnabled"]];    
-    [self setInternalTrigStopEnabled:         [decoder decodeIntForKey:@"internalTrigStopEnabled"]];    
-    [self setMultiEventModeEnabled:           [decoder decodeIntForKey:@"multiEventModeEnabled"]];    
-    [self setAutostartModeEnabled:            [decoder decodeIntForKey:@"autostartModeEnabled"]];    
-    [self setStartDelay:                      [decoder decodeIntForKey:@"startDelay"]];    
-    [self setStopDelay:                       [decoder decodeIntForKey:@"stopDelay"]];    
-    [self setMaxEvents:                       [decoder decodeIntForKey:@"maxEvents"]];    
+    [self setStopEventAtLength:         [decoder decodeIntegerForKey:@"stopEventAtLength"]];
+    [self setPageWrap:                  [decoder decodeIntegerForKey:@"enablePageWrap"]];
+    [self setEnableTestData:            [decoder decodeIntegerForKey:@"enableTestData"]];    
+    [self setLemoTimestampEnabled:            [decoder decodeIntegerForKey:@"lemoTimestampEnabled"]];    
+    [self setLemoStartStopEnabled:            [decoder decodeIntegerForKey:@"lemoStartStopEnabled"]];    
+    [self setInternalTrigStartEnabled:        [decoder decodeIntegerForKey:@"internalTrigStartEnabled"]];    
+    [self setInternalTrigStopEnabled:         [decoder decodeIntegerForKey:@"internalTrigStopEnabled"]];    
+    [self setMultiEventModeEnabled:           [decoder decodeIntegerForKey:@"multiEventModeEnabled"]];    
+    [self setAutostartModeEnabled:            [decoder decodeIntegerForKey:@"autostartModeEnabled"]];    
+    [self setStartDelay:                      [decoder decodeIntegerForKey:@"startDelay"]];    
+    [self setStopDelay:                       [decoder decodeIntegerForKey:@"stopDelay"]];    
+    [self setMaxEvents:                       [decoder decodeIntegerForKey:@"maxEvents"]];    
 	
     sampleLengths = 			[[decoder decodeObjectForKey:@"sampleLengths"]retain];
    
@@ -1460,13 +1460,13 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 	
 	[encoder encodeFloat:firmwareVersion		forKey:@"firmwareVersion"];
 
-    [encoder encodeInt:gtMask					forKey:@"gtMask"];
-	[encoder encodeInt:useTrapTriggerMask       forKey:@"trapMask"];        
-    [encoder encodeInt:clockSource				forKey:@"clockSource"];
+    [encoder encodeInteger:gtMask					forKey:@"gtMask"];
+	[encoder encodeInteger:useTrapTriggerMask       forKey:@"trapMask"];        
+    [encoder encodeInteger:clockSource				forKey:@"clockSource"];
     
-    [encoder encodeInt:stopAtEventLengthMask    forKey:@"stopEventAtLength"];
-    [encoder encodeInt:enablePageWrapMask       forKey:@"enablePageWrap"];
-    [encoder encodeInt:enableTestDataMask       forKey:@"enableTestData"]; 
+    [encoder encodeInteger:stopAtEventLengthMask    forKey:@"stopEventAtLength"];
+    [encoder encodeInteger:enablePageWrapMask       forKey:@"enablePageWrap"];
+    [encoder encodeInteger:enableTestDataMask       forKey:@"enableTestData"]; 
     
     [encoder encodeObject:waveFormRateGroup		forKey:@"waveFormRateGroup"];
 	[encoder encodeObject:thresholds			forKey:@"thresholds"];
@@ -1482,15 +1482,15 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
     [encoder encodeObject:pageWrapSize forKey:@"pageWrapSize"];
     [encoder encodeObject:testDataType forKey:@"testDataType"];
 
-    [encoder encodeInt:lemoTimestampEnabled   forKey:@"lemoTimestampEnabled"];    
-    [encoder encodeInt:lemoStartStopEnabled   forKey:@"lemoStartStopEnabled"];    
-    [encoder encodeInt:internalTrigStartEnabled   forKey:@"internalTrigStartEnabled"];    
-    [encoder encodeInt:internalTrigStopEnabled   forKey:@"internalTrigStopEnabled"];    
-    [encoder encodeInt:multiEventModeEnabled   forKey:@"multiEventModeEnabled"];    
-    [encoder encodeInt:autostartModeEnabled   forKey:@"autostartModeEnabled"];    
-    [encoder encodeInt:startDelay   forKey:@"startDelay"];    
-    [encoder encodeInt:stopDelay   forKey:@"stopDelay"];    
-    [encoder encodeInt:maxEvents   forKey:@"maxEvents"];    
+    [encoder encodeInteger:lemoTimestampEnabled   forKey:@"lemoTimestampEnabled"];    
+    [encoder encodeInteger:lemoStartStopEnabled   forKey:@"lemoStartStopEnabled"];    
+    [encoder encodeInteger:internalTrigStartEnabled   forKey:@"internalTrigStartEnabled"];    
+    [encoder encodeInteger:internalTrigStopEnabled   forKey:@"internalTrigStopEnabled"];    
+    [encoder encodeInteger:multiEventModeEnabled   forKey:@"multiEventModeEnabled"];    
+    [encoder encodeInteger:autostartModeEnabled   forKey:@"autostartModeEnabled"];    
+    [encoder encodeInteger:startDelay   forKey:@"startDelay"];    
+    [encoder encodeInteger:stopDelay   forKey:@"stopDelay"];    
+    [encoder encodeInteger:maxEvents   forKey:@"maxEvents"];    
 	
 	
 }

@@ -353,7 +353,7 @@ NSString* ORCaen265SettingsLock			= @"ORCaen265SettingsLock";
  
  NSMutableDictionary* objDictionary = [super addParametersToDictionary:dictionary];
  [encoder encodeBool:suppressZeros forKey:@"ORCaen265ModelSuppressZeros"];
- [encoder encodeInt:enabledMask forKey:@"ORCaen265ModelEnabledMask"];
+ [encoder encodeInteger:enabledMask forKey:@"ORCaen265ModelEnabledMask"];
  [objDictionary setObject:thresholds forKey:@"thresholds"];
  
  return objDictionary;

@@ -471,12 +471,12 @@ NSString* ORCaen1785WriteValueChanged			= @"ORCaen1785WriteValueChanged";
 
 - (int) lowThresholdOffset:(unsigned short)aChan
 {
-	return reg[kLowThresholds].addressOffset + (aChan * 8);
+	return (int)(reg[kLowThresholds].addressOffset + (aChan * 8));
 }
 
 - (int) highThresholdOffset:(unsigned short)aChan
 {
-	return reg[kHiThresholds].addressOffset + (aChan * 8);
+	return (int)(reg[kHiThresholds].addressOffset + (aChan * 8));
 }
 
 - (short) getNumberRegisters
@@ -801,13 +801,13 @@ NSString* ORCaen1785WriteValueChanged			= @"ORCaen1785WriteValueChanged";
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id = kCaen1785; //should be unique
-	configStruct->card_info[index].hw_mask[0] 	 = dataId; //better be unique
+	configStruct->card_info[index].hw_mask[0] 	 = (uint32_t)dataId; //better be unique
 	configStruct->card_info[index].slot 	 = [self slot];
 	configStruct->card_info[index].crate 	 = [self crateNumber];
 	configStruct->card_info[index].add_mod 	 = [self addressModifier];
-	configStruct->card_info[index].base_add  = [self baseAddress];
-	configStruct->card_info[index].deviceSpecificData[0] = reg[kStatusRegister1].addressOffset;
-	configStruct->card_info[index].deviceSpecificData[1] = reg[kOutputBuffer].addressOffset;
+	configStruct->card_info[index].base_add  = (uint32_t)[self baseAddress];
+	configStruct->card_info[index].deviceSpecificData[0] = (uint32_t)reg[kStatusRegister1].addressOffset;
+	configStruct->card_info[index].deviceSpecificData[1] = (uint32_t)reg[kOutputBuffer].addressOffset;
 	
 	configStruct->card_info[index].num_Trigger_Indexes = 1;
     int nextIndex = index+1;
@@ -970,14 +970,14 @@ NSString* ORCaen1785WriteValueChanged			= @"ORCaen1785WriteValueChanged";
     [[self undoManager] disableUndoRegistration];
 	int i;
     for (i = 0; i < kCV1785NumberChannels; i++){
-        [self setLowThreshold:i withValue:[aDecoder decodeIntForKey: [NSString stringWithFormat:@"CAENLowThresholdChnl%d", i]]];
-        [self setHighThreshold:i withValue:[aDecoder decodeIntForKey: [NSString stringWithFormat:@"CAENHighThresholdChnl%d", i]]];
+        [self setLowThreshold:i withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENLowThresholdChnl%d", i]]];
+        [self setHighThreshold:i withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENHighThresholdChnl%d", i]]];
     }    
 	
-	[self setOnlineMask:[aDecoder decodeIntForKey:@"onlineMask"]];
-    [self setSelectedRegIndex:[aDecoder decodeIntForKey:@"selectedRegIndex"]];
-    [self setSelectedChannel:[aDecoder decodeIntForKey:@"selectedChannel"]];
-    [self setWriteValue:[aDecoder decodeInt32ForKey:@"writeValue"]];
+	[self setOnlineMask:[aDecoder decodeIntegerForKey:@"onlineMask"]];
+    [self setSelectedRegIndex:[aDecoder decodeIntegerForKey:@"selectedRegIndex"]];
+    [self setSelectedChannel:[aDecoder decodeIntegerForKey:@"selectedChannel"]];
+    [self setWriteValue:[aDecoder decodeIntegerForKey:@"writeValue"]];
     [self setTrigger1Group:[aDecoder decodeObjectForKey:@"trigger1Group"]];
 	
     [[self undoManager] enableUndoRegistration];
@@ -987,15 +987,15 @@ NSString* ORCaen1785WriteValueChanged			= @"ORCaen1785WriteValueChanged";
 - (void) encodeWithCoder:(NSCoder*) anEncoder
 {
     [super encodeWithCoder:anEncoder];
-    [anEncoder encodeInt:onlineMask forKey:@"onlineMask"];
+    [anEncoder encodeInteger:onlineMask forKey:@"onlineMask"];
 	int i;
 	for (i = 0; i < kCV1785NumberChannels; i++){
-        [anEncoder encodeInt:lowThresholds[i] forKey:[NSString stringWithFormat:@"CAENLowThresholdChnl%d", i]];
-        [anEncoder encodeInt:highThresholds[i] forKey:[NSString stringWithFormat:@"CAENHighThresholdChnl%d", i]];
+        [anEncoder encodeInteger:lowThresholds[i] forKey:[NSString stringWithFormat:@"CAENLowThresholdChnl%d", i]];
+        [anEncoder encodeInteger:highThresholds[i] forKey:[NSString stringWithFormat:@"CAENHighThresholdChnl%d", i]];
     }
-	[anEncoder encodeInt:selectedRegIndex forKey:@"selectedRegIndex"];
-    [anEncoder encodeInt:selectedChannel forKey:@"selectedChannel"];
-    [anEncoder encodeInt32:writeValue forKey:@"writeValue"];
+	[anEncoder encodeInteger:selectedRegIndex forKey:@"selectedRegIndex"];
+    [anEncoder encodeInteger:selectedChannel forKey:@"selectedChannel"];
+    [anEncoder encodeInteger:writeValue forKey:@"writeValue"];
     [anEncoder encodeObject:[self trigger1Group] forKey:@"trigger1Group"];
 }
 

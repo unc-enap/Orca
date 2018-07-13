@@ -905,7 +905,7 @@ NSString* ORSIS3820ModelShipAtRunEndOnlyChanged		 = @"ORSIS3820ModelShipAtRunEnd
 	[self setShipAtRunEndOnly:[decoder decodeBoolForKey:@"shipAtRunEndOnly"]];
 	[self setInvertLemoOut:[decoder decodeBoolForKey:@"invertLemoOut"]];
     [self setInvertLemoIn:[decoder decodeBoolForKey:@"invertLemoIn"]];
-    [self setLemoOutMode:[decoder decodeIntForKey:@"lemoOutMode"]];
+    [self setLemoOutMode:[decoder decodeIntegerForKey:@"lemoOutMode"]];
     [self setSyncWithRun:[decoder decodeBoolForKey:@"syncWithRun"]];
     [self setClearOnRunStart:[decoder decodeBoolForKey:@"clearOnRunStart"]];
     [self setEnableReferencePulser:[decoder decodeBoolForKey:@"enableReferencePulser"]];
@@ -913,7 +913,7 @@ NSString* ORSIS3820ModelShipAtRunEndOnlyChanged		 = @"ORSIS3820ModelShipAtRunEnd
     [self setEnable25MHzPulses:[decoder decodeBoolForKey:@"enable25MHzPulses"]];
     [self setLemoInMode:[decoder decodeIntForKey:@"lemoInMode"]];
     [self setPollTime:[decoder decodeIntForKey:@"pollTime"]];
-    [self setCountEnableMask:[decoder decodeInt32ForKey:@"countEnableMask"]];
+    [self setCountEnableMask:[decoder decodeIntegerForKey:@"countEnableMask"]];
 	int i;
 	for(i=0;i<32;i++) {
 		NSString* aName = [decoder decodeObjectForKey:[NSString stringWithFormat:@"channelName%d",i]];
@@ -930,19 +930,19 @@ NSString* ORSIS3820ModelShipAtRunEndOnlyChanged		 = @"ORSIS3820ModelShipAtRunEnd
 {
     [super encodeWithCoder:encoder];
 	[encoder encodeBool:showDeadTime forKey:@"showDeadTime"];
-	[encoder encodeInt:deadTimeRefChannel forKey:@"deadTimeRefChannel"];
+	[encoder encodeInteger:deadTimeRefChannel forKey:@"deadTimeRefChannel"];
 	[encoder encodeBool:shipAtRunEndOnly forKey:@"shipAtRunEndOnly"];
 	[encoder encodeBool:invertLemoOut forKey:@"invertLemoOut"];
     [encoder encodeBool:invertLemoIn forKey:@"invertLemoIn"];
-    [encoder encodeInt:lemoOutMode forKey:@"lemoOutMode"];
+    [encoder encodeInteger:lemoOutMode forKey:@"lemoOutMode"];
     [encoder encodeBool:syncWithRun forKey:@"syncWithRun"];
     [encoder encodeBool:clearOnRunStart forKey:@"clearOnRunStart"];
     [encoder encodeBool:enableReferencePulser forKey:@"enableReferencePulser"];
     [encoder encodeBool:enableCounterTestMode forKey:@"enableCounterTestMode"];
     [encoder encodeBool:enable25MHzPulses forKey:@"enable25MHzPulses"];
-    [encoder encodeInt:lemoInMode forKey:@"lemoInMode"];
-    [encoder encodeInt:pollTime forKey:@"pollTime"];
-    [encoder encodeInt32:countEnableMask forKey:@"countEnableMask"];
+    [encoder encodeInteger:lemoInMode forKey:@"lemoInMode"];
+    [encoder encodeInteger:pollTime forKey:@"pollTime"];
+    [encoder encodeInteger:countEnableMask forKey:@"countEnableMask"];
 	int i;
 	for(i=0;i<32;i++) {
 		[encoder encodeObject:channelName[i] forKey:[NSString stringWithFormat:@"channelName%d",i]];

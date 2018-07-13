@@ -188,7 +188,7 @@ NSString* ORContainerBackgroundImageChangedNotification = @"ORContainerBackgroun
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:scaleFactor forKey:@"scaleFactor"];						
+    [encoder encodeInteger:scaleFactor forKey:@"scaleFactor"];						
     [encoder encodeObject:backgroundImagePath forKey:@"backgroundImagePath"];						
 }
 

@@ -607,9 +607,9 @@
 
 
 - (unsigned long) readADCSerialInterface:(BOOL)verbose;
-- (unsigned long) readADCSerialInterfaceOnADC:(char)adcSelect fromAddress:(unsigned int)addr;
-- (void) writeADCSerialInterface:(unsigned int)data onADC:(char)adcSelect toAddress:(unsigned int)addr viaSPI:(char)spiOn;
-- (void) writeADCSerialInterface:(unsigned int)data onADC:(char)adcSelect toAddress:(unsigned int)addr;
+- (unsigned long) readADCSerialInterfaceOnADC:(char)adcSelect fromAddress:(unsigned long)addr;
+- (void) writeADCSerialInterface:(unsigned long)data onADC:(char)adcSelect toAddress:(unsigned long)addr viaSPI:(char)spiOn;
+- (void) writeADCSerialInterface:(unsigned long)data onADC:(char)adcSelect toAddress:(unsigned long)addr;
 - (void) writeADCSerialInterface;
 - (unsigned long) readADCChipID;
 - (unsigned long) readADCControlReg:(bool)verbose;

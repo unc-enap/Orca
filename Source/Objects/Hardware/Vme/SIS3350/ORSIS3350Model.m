@@ -530,7 +530,7 @@ unsigned long rblt_data[kMaxNumberWords];
 	if(aValue<0)aValue = 0;
 	if(aValue>4)aValue = 4;
 	[[[self undoManager] prepareWithInvocationTarget:self] setTriggerMode:aChan withValue:[self triggerMode:aChan]];
-	[triggerModes replaceObjectAtIndex:aChan withObject:[NSNumber numberWithInt:aValue]];
+	[triggerModes replaceObjectAtIndex:aChan withObject:[NSNumber numberWithInteger:aValue]];
 	NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:aChan] forKey:@"Channel"];
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORSIS3350ModelTriggerModeChanged object:self userInfo:userInfo];	
 }
@@ -555,7 +555,7 @@ unsigned long rblt_data[kMaxNumberWords];
 	if(aValue<0)aValue = 0;
 	if(aValue>0x7f)aValue = 0x7f;
     [[[self undoManager] prepareWithInvocationTarget:self] setGain:aChan withValue:[self gain:aChan]];
-    [gains replaceObjectAtIndex:aChan withObject:[NSNumber numberWithInt:aValue]];
+    [gains replaceObjectAtIndex:aChan withObject:[NSNumber numberWithInteger:aValue]];
 	NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:aChan] forKey:@"Channel"];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORSIS3350ModelGainChanged object:self userInfo:userInfo];
 }
@@ -580,7 +580,7 @@ unsigned long rblt_data[kMaxNumberWords];
 	if(aValue<0)aValue = 0;
 	if(aValue>0xffff)aValue = 0xffff;
     [[[self undoManager] prepareWithInvocationTarget:self] setDacValue:aChan withValue:[self dacValue:aChan]];
-    [dacValues replaceObjectAtIndex:aChan withObject:[NSNumber numberWithInt:aValue]];
+    [dacValues replaceObjectAtIndex:aChan withObject:[NSNumber numberWithInteger:aValue]];
 	NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:aChan] forKey:@"Channel"];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORSIS3350ModelDacValueChanged object:self userInfo:userInfo];
 }
@@ -1360,13 +1360,13 @@ unsigned long rblt_data[kMaxNumberWords];
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id				= kSIS3350; //should be unique
-	configStruct->card_info[index].hw_mask[0]				= dataId;	//better be unique
+	configStruct->card_info[index].hw_mask[0]				= (uint32_t)dataId;	//better be unique
 	configStruct->card_info[index].slot						= [self slot];
 	configStruct->card_info[index].crate					= [self crateNumber];
 	configStruct->card_info[index].add_mod					= addressModifier;
-	configStruct->card_info[index].base_add					= baseAddress;
+	configStruct->card_info[index].base_add					= (uint32_t)baseAddress;
     configStruct->card_info[index].deviceSpecificData[0]	= operationMode;
-    configStruct->card_info[index].deviceSpecificData[1]	= [self memoryWrapLength];
+    configStruct->card_info[index].deviceSpecificData[1]	= (uint32_t)[self memoryWrapLength];
 	configStruct->card_info[index].num_Trigger_Indexes		= 0;
 	
 	configStruct->card_info[index].next_Card_Index 	= index+1;	
@@ -1463,17 +1463,17 @@ unsigned long rblt_data[kMaxNumberWords];
     self = [super initWithCoder:decoder];
     
     [[self undoManager] disableUndoRegistration];
-    [self setMemoryWrapLength:		[decoder decodeInt32ForKey:@"memoryWrapLength"]];
+    [self setMemoryWrapLength:		[decoder decodeIntegerForKey:@"memoryWrapLength"]];
     [self setEndAddressThreshold:	[decoder decodeIntForKey:@"endAddressThreshold"]];
     [self setRingBufferPreDelay:	[decoder decodeIntForKey:@"ringBufferPreDelay"]];
     [self setRingBufferLen:			[decoder decodeIntForKey:@"ringBufferLen"]];
     [self setGateSyncExtendLength:	[decoder decodeIntForKey:@"gateSyncExtendLength"]];
     [self setGateSyncLimitLength:	[decoder decodeIntForKey:@"gateSyncLimitLength"]];
-    [self setMaxNumEvents:			[decoder decodeInt32ForKey:@"maxNumEvents"]];
+    [self setMaxNumEvents:			[decoder decodeIntegerForKey:@"maxNumEvents"]];
     [self setFreqN:					[decoder decodeIntForKey:@"freqN"]];
     [self setFreqM:					[decoder decodeIntForKey:@"freqM"]];
-    [self setMemoryStartModeLength:	[decoder decodeInt32ForKey:@"memoryStartModeLength"]];
-    [self setMemoryTriggerDelay:	[decoder decodeInt32ForKey:@"memoryTriggerDelay"]];
+    [self setMemoryStartModeLength:	[decoder decodeIntegerForKey:@"memoryStartModeLength"]];
+    [self setMemoryTriggerDelay:	[decoder decodeIntegerForKey:@"memoryTriggerDelay"]];
     [self setInvertLemo:			[decoder decodeBoolForKey:@"invertLemo"]];
     [self setMultiEvent:			[decoder decodeBoolForKey:@"multiEvent"]];
     [self setTriggerMask:			[decoder decodeIntForKey:@"triggerMask"]];
@@ -1505,22 +1505,22 @@ unsigned long rblt_data[kMaxNumberWords];
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt32:memoryWrapLength		forKey:@"memoryWrapLength"];
-    [encoder encodeInt:endAddressThreshold		forKey:@"endAddressThreshold"];
-    [encoder encodeInt:ringBufferPreDelay		forKey:@"ringBufferPreDelay"];
-    [encoder encodeInt:ringBufferLen			forKey:@"ringBufferLen"];
-    [encoder encodeInt:gateSyncExtendLength		forKey:@"gateSyncExtendLength"];
-    [encoder encodeInt:gateSyncLimitLength		forKey:@"gateSyncLimitLength"];
-    [encoder encodeInt32:maxNumEvents			forKey:@"maxNumEvents"];
-    [encoder encodeInt:freqN					forKey:@"freqN"];
-    [encoder encodeInt:freqM					forKey:@"freqM"];
-    [encoder encodeInt32:memoryStartModeLength	forKey:@"memoryStartModeLength"];
-    [encoder encodeInt32:memoryTriggerDelay		forKey:@"memoryTriggerDelay"];
+    [encoder encodeInteger:memoryWrapLength		forKey:@"memoryWrapLength"];
+    [encoder encodeInteger:endAddressThreshold		forKey:@"endAddressThreshold"];
+    [encoder encodeInteger:ringBufferPreDelay		forKey:@"ringBufferPreDelay"];
+    [encoder encodeInteger:ringBufferLen			forKey:@"ringBufferLen"];
+    [encoder encodeInteger:gateSyncExtendLength		forKey:@"gateSyncExtendLength"];
+    [encoder encodeInteger:gateSyncLimitLength		forKey:@"gateSyncLimitLength"];
+    [encoder encodeInteger:maxNumEvents			forKey:@"maxNumEvents"];
+    [encoder encodeInteger:freqN					forKey:@"freqN"];
+    [encoder encodeInteger:freqM					forKey:@"freqM"];
+    [encoder encodeInteger:memoryStartModeLength	forKey:@"memoryStartModeLength"];
+    [encoder encodeInteger:memoryTriggerDelay		forKey:@"memoryTriggerDelay"];
     [encoder encodeBool:invertLemo				forKey:@"invertLemo"];
     [encoder encodeBool:multiEvent				forKey:@"multiEvent"];
-    [encoder encodeInt:triggerMask				forKey:@"triggerMask"];
-    [encoder encodeInt:clockSource				forKey:@"clockSource"];
-    [encoder encodeInt:operationMode			forKey:@"operationMode"];
+    [encoder encodeInteger:triggerMask				forKey:@"triggerMask"];
+    [encoder encodeInteger:clockSource				forKey:@"clockSource"];
+    [encoder encodeInteger:operationMode			forKey:@"operationMode"];
 	
     if(gains)			[encoder encodeObject:gains			forKey:@"gains"];
 	if(dacValues)		[encoder encodeObject:dacValues		forKey:@"dacValues"];
@@ -1627,7 +1627,7 @@ unsigned long rblt_data[kMaxNumberWords];
 			}
 			if (stop_next_sample_addr != 0) {
 				int n = 1;
-				if(multiEvent)n = [self readEventCounter];
+				if(multiEvent)n = (int)[self readEventCounter];
 				if(n>0){
 					int event;
 					unsigned long start = 0;

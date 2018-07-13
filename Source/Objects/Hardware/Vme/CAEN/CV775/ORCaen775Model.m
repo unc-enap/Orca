@@ -517,10 +517,10 @@ static RegisterNamesStruct reg[kNumRegisters] = {
     self = [super initWithCoder: aDecoder];
     
     [[self undoManager] disableUndoRegistration];
-    [self setFullScaleRange:[aDecoder decodeIntForKey:@"fullScaleRange"]];
+    [self setFullScaleRange:[aDecoder decodeIntegerForKey:@"fullScaleRange"]];
     [self setCommonStopMode:	[aDecoder decodeBoolForKey:@"commonStopMode"]];
     [self setModelType:			[aDecoder decodeIntForKey:@"modelType"]];
-   	[self setOnlineMask:		[aDecoder decodeInt32ForKey:@"onlineMask"]];
+   	[self setOnlineMask:		[aDecoder decodeIntegerForKey:@"onlineMask"]];
  
     [[self undoManager] enableUndoRegistration];
     return self;
@@ -530,10 +530,10 @@ static RegisterNamesStruct reg[kNumRegisters] = {
 - (void) encodeWithCoder: (NSCoder*) anEncoder
 {
     [super encodeWithCoder: anEncoder];
-	[anEncoder encodeInt:(int32_t)fullScaleRange forKey:@"fullScaleRange"];
+	[anEncoder encodeInteger:(int32_t)fullScaleRange forKey:@"fullScaleRange"];
 	[anEncoder encodeBool:commonStopMode	forKey:@"commonStopMode"];
-	[anEncoder encodeInt:modelType			forKey:@"modelType"];
-	[anEncoder encodeInt32:(int32_t)onlineMask		forKey:@"onlineMask"];
+	[anEncoder encodeInteger:modelType			forKey:@"modelType"];
+	[anEncoder encodeInteger:onlineMask		forKey:@"onlineMask"];
 }
 
 @end

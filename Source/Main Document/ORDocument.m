@@ -429,7 +429,7 @@ static NSString* ORDocumentScaleFactor  = @"ORDocumentScaleFactor";
 		//PH comment out so archiver uses the default binary plist format
 		//[archiver setOutputFormat:NSPropertyListXMLFormat_v1_0];
 		
-		[archiver encodeInt:ORDocumentVersion forKey:ORDocumentVersionKey];
+		[archiver encodeInteger:ORDocumentVersion forKey:ORDocumentVersionKey];
 		
 		[archiver encodeObject:[self group] forKey:ORGroupKey];
 		
@@ -437,7 +437,7 @@ static NSString* ORDocumentScaleFactor  = @"ORDocumentScaleFactor";
 		
 		[archiver encodeBool:[[[ORTaskMaster sharedTaskMaster] window] isVisible] forKey:ORTaskMasterVisibleKey];
 		
-		[archiver encodeInt:scaleFactor forKey:ORDocumentScaleFactor];						
+		[archiver encodeInteger:scaleFactor forKey:ORDocumentScaleFactor];						
         
 		
 		[[ORAlarmCollection sharedAlarmCollection] encodeEMailList:archiver];

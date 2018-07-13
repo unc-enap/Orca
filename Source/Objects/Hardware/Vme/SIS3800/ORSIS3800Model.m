@@ -907,7 +907,7 @@ NSString* ORSIS3800ChannelNameChanged				 = @"ORSIS3800ChannelNameChanged";
     [self setEnable25MHzPulses:[decoder decodeBoolForKey:@"enable25MHzPulses"]];
     [self setLemoInMode:[decoder decodeIntForKey:@"lemoInMode"]];
     [self setPollTime:[decoder decodeIntForKey:@"pollTime"]];
-    [self setCountEnableMask:[decoder decodeInt32ForKey:@"countEnableMask"]];
+    [self setCountEnableMask:[decoder decodeIntegerForKey:@"countEnableMask"]];
 	int i;
 	for(i=0;i<32;i++) {
 		NSString* aName = [decoder decodeObjectForKey:[NSString stringWithFormat:@"channelName%d",i]];
@@ -923,16 +923,16 @@ NSString* ORSIS3800ChannelNameChanged				 = @"ORSIS3800ChannelNameChanged";
 {
     [super encodeWithCoder:encoder];
 	[encoder encodeBool:showDeadTime forKey:@"showDeadTime"];
-	[encoder encodeInt:deadTimeRefChannel forKey:@"deadTimeRefChannel"];
+	[encoder encodeInteger:deadTimeRefChannel forKey:@"deadTimeRefChannel"];
     [encoder encodeBool:shipAtRunEndOnly forKey:@"shipAtRunEndOnly"];
     [encoder encodeBool:syncWithRun forKey:@"syncWithRun"];
     [encoder encodeBool:clearOnRunStart forKey:@"clearOnRunStart"];
     [encoder encodeBool:enableReferencePulser forKey:@"enableReferencePulser"];
     [encoder encodeBool:enableInputTestMode forKey:@"enableInputTestMode"];
     [encoder encodeBool:enable25MHzPulses forKey:@"enable25MHzPulses"];
-    [encoder encodeInt:lemoInMode forKey:@"lemoInMode"];
-    [encoder encodeInt:pollTime forKey:@"pollTime"];
-    [encoder encodeInt32:countEnableMask forKey:@"countEnableMask"];
+    [encoder encodeInteger:lemoInMode forKey:@"lemoInMode"];
+    [encoder encodeInteger:pollTime forKey:@"pollTime"];
+    [encoder encodeInteger:countEnableMask forKey:@"countEnableMask"];
 	int i;
 	for(i=0;i<32;i++) {
 		[encoder encodeObject:channelName[i] forKey:[NSString stringWithFormat:@"channelName%d",i]];

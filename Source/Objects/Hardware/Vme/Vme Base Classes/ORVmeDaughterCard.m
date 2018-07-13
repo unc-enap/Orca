@@ -185,7 +185,7 @@ static NSString *ORIPSlot 			= @"IP Slot";
     [encoder encodeObject:[self connector] forKey:ORIPConnector];
     [encoder encodeObject:[self connectorName2] forKey:ORIPConnectorName2];
     [encoder encodeObject:[self connector2] forKey:ORIPConnector2];
-    [encoder encodeInt:[self slot] forKey:ORIPSlot];
+    [encoder encodeInteger:[self slot] forKey:ORIPSlot];
 }
 
 - (void) probe

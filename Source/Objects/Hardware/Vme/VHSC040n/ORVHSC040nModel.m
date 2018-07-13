@@ -1066,7 +1066,7 @@ NSString* ORVHSC040nVoltageBoundsChanged				= @"ORVHSC040nVoltageBoundsChanged";
     [super encodeWithCoder:encoder];
 	[encoder encodeBool:fineAdjustEnabled	forKey:@"fineAdjustEnabled"];
 	[encoder encodeBool:killEnabled			forKey:@"killEnabled"];
-	[encoder encodeInt:pollTime				forKey:@"pollTime"];
+	[encoder encodeInteger:pollTime				forKey:@"pollTime"];
 	[encoder encodeFloat:voltageRampSpeed	forKey:@"voltageRampSpeed"];
 	int i;	
 	for(i=0;i<kNumVHSC040nChannels;i++){

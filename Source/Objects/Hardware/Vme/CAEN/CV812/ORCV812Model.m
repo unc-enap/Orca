@@ -166,8 +166,8 @@ NSString* ORCV812ModelDeadTime8_15Changed = @"ORCV812ModelDeadTime8_15Changed";
     self = [super initWithCoder:aDecoder];
     [[self undoManager] disableUndoRegistration];
 	
- 	[self setDeadTime0_7:[aDecoder decodeIntForKey:@"deadTime0_7"]];
-	[self setDeadTime8_15:[aDecoder decodeIntForKey:@"deadTime8_15"]];
+ 	[self setDeadTime0_7:[aDecoder decodeIntegerForKey:@"deadTime0_7"]];
+	[self setDeadTime8_15:[aDecoder decodeIntegerForKey:@"deadTime8_15"]];
 	
     [[self undoManager] enableUndoRegistration];
     return self;
@@ -176,8 +176,8 @@ NSString* ORCV812ModelDeadTime8_15Changed = @"ORCV812ModelDeadTime8_15Changed";
 - (void) encodeWithCoder:(NSCoder*) anEncoder
 {
     [super encodeWithCoder:anEncoder];
-    [anEncoder encodeInt:deadTime0_7 forKey:@"deadTime0_7"];
-    [anEncoder encodeInt:deadTime8_15 forKey:@"deadTime8_15"];
+    [anEncoder encodeInteger:deadTime0_7 forKey:@"deadTime0_7"];
+    [anEncoder encodeInteger:deadTime8_15 forKey:@"deadTime8_15"];
 }
 
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary

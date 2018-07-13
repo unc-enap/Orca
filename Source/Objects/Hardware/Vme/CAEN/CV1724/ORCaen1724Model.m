@@ -1229,21 +1229,21 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id				= kCaen1724; //should be unique
-	configStruct->card_info[index].hw_mask[0]				= dataId; //better be unique
+	configStruct->card_info[index].hw_mask[0]				= (uint32_t)dataId; //better be unique
 	configStruct->card_info[index].slot						= [self slot];
 	configStruct->card_info[index].crate					= [self crateNumber];
 	configStruct->card_info[index].add_mod					= [self addressModifier];
-	configStruct->card_info[index].base_add					= [self baseAddress];
-	configStruct->card_info[index].deviceSpecificData[0]	= reg[kEventStored].addressOffset;	//Status buffer
-    configStruct->card_info[index].deviceSpecificData[1]	= reg[kEventSize].addressOffset;	// "next event size" address
-    configStruct->card_info[index].deviceSpecificData[2]	= reg[kOutputBuffer].addressOffset; // fifo Address
+	configStruct->card_info[index].base_add					= (uint32_t)[self baseAddress];
+	configStruct->card_info[index].deviceSpecificData[0]	= (uint32_t)reg[kEventStored].addressOffset;	//Status buffer
+    configStruct->card_info[index].deviceSpecificData[1]	= (uint32_t)reg[kEventSize].addressOffset;	// "next event size" address
+    configStruct->card_info[index].deviceSpecificData[2]	= (uint32_t)reg[kOutputBuffer].addressOffset; // fifo Address
     configStruct->card_info[index].deviceSpecificData[3]	= 0x0C;								// fifo Address Modifier (A32 MBLT)
     configStruct->card_info[index].deviceSpecificData[4]	= 0xFFC;							// fifo Size
-    configStruct->card_info[index].deviceSpecificData[5]	= location;
-    configStruct->card_info[index].deviceSpecificData[6]	= reg[kVMEControl].addressOffset;	// VME Control address
-    configStruct->card_info[index].deviceSpecificData[7]	= reg[kBLTEventNum].addressOffset;	// Num of BLT events address
+    configStruct->card_info[index].deviceSpecificData[5]	= (uint32_t)location;
+    configStruct->card_info[index].deviceSpecificData[6]	= (uint32_t)reg[kVMEControl].addressOffset;	// VME Control address
+    configStruct->card_info[index].deviceSpecificData[7]	= (uint32_t)reg[kBLTEventNum].addressOffset;	// Num of BLT events address
     
-	unsigned sizeOfEvent = 0; // number of uint32_t for DMA transfer
+	unsigned long sizeOfEvent = 0; // number of uint32_t for DMA transfer
 	if (isFixedSize) {
 		unsigned long numChan = 0;
 		unsigned long chanMask = [self enabledMask];
@@ -1255,11 +1255,9 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 			sizeOfEvent = numChan * (1UL << 20 >> [self eventSize]) / 4 + 4; //(1MB / num of blocks)
 		//}
 	}
-	configStruct->card_info[index].deviceSpecificData[8]	= sizeOfEvent;
-	
+	configStruct->card_info[index].deviceSpecificData[8]	= (uint32_t)sizeOfEvent;
 	configStruct->card_info[index].num_Trigger_Indexes		= 0;
-	
-	configStruct->card_info[index].next_Card_Index 	= index+1;	
+	configStruct->card_info[index].next_Card_Index 	= index+1;
 	
 	return index+1;
 }
@@ -1271,17 +1269,17 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 	
     [[self undoManager] disableUndoRegistration];
     [self setEventSize:[aDecoder decodeIntForKey:@"ORCaen1724ModelEventSize"]];
-    [self setEnabledMask:[aDecoder decodeIntForKey:@"ORCaen1724ModelEnabledMask"]];
-    [self setPostTriggerSetting:[aDecoder decodeInt32ForKey:@"ORCaen1724ModelPostTriggerSetting"]];
-    [self setTriggerSourceMask:[aDecoder decodeInt32ForKey:@"ORCaen1724ModelTriggerSourceMask"]];
-    [self setCoincidenceLevel:[aDecoder decodeIntForKey:@"ORCaen1724ModelCoincidenceLevel"]];
-    [self setAcquisitionMode:[aDecoder decodeIntForKey:@"acquisitionMode"]];
+    [self setEnabledMask:[aDecoder decodeIntegerForKey:@"ORCaen1724ModelEnabledMask"]];
+    [self setPostTriggerSetting:[aDecoder decodeIntegerForKey:@"ORCaen1724ModelPostTriggerSetting"]];
+    [self setTriggerSourceMask:[aDecoder decodeIntegerForKey:@"ORCaen1724ModelTriggerSourceMask"]];
+    [self setCoincidenceLevel:[aDecoder decodeIntegerForKey:@"ORCaen1724ModelCoincidenceLevel"]];
+    [self setAcquisitionMode:[aDecoder decodeIntegerForKey:@"acquisitionMode"]];
     [self setCountAllTriggers:[aDecoder decodeBoolForKey:@"countAllTriggers"]];
-    [self setCustomSize:[aDecoder decodeInt32ForKey:@"customSize"]];
+    [self setCustomSize:[aDecoder decodeIntegerForKey:@"customSize"]];
 	[self setIsFixedSize:[aDecoder decodeBoolForKey:@"isFixedSize"]];
-    [self setChannelConfigMask:[aDecoder decodeIntForKey:@"channelConfigMask"]];
+    [self setChannelConfigMask:[aDecoder decodeIntegerForKey:@"channelConfigMask"]];
     [self setWaveFormRateGroup:[aDecoder decodeObjectForKey:@"waveFormRateGroup"]];
-    [self setNumberBLTEventsToReadout:[aDecoder decodeInt32ForKey:@"numberBLTEventsToReadout"]];
+    [self setNumberBLTEventsToReadout:[aDecoder decodeIntegerForKey:@"numberBLTEventsToReadout"]];
     
     if(!waveFormRateGroup){
         [self setWaveFormRateGroup:[[[ORRateGroup alloc] initGroup:8 groupTag:0] autorelease]];
@@ -1292,9 +1290,9 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 	
 	int i;
     for (i = 0; i < [self numberOfChannels]; i++){
-        [self setDac:i withValue:      [aDecoder decodeInt32ForKey: [NSString stringWithFormat:@"CAENDacChnl%d", i]]];
-        [self setThreshold:i withValue:[aDecoder decodeInt32ForKey: [NSString stringWithFormat:@"CAENThresChnl%d", i]]];
-        [self setOverUnderThreshold:i withValue:[aDecoder decodeIntForKey: [NSString stringWithFormat:@"CAENOverUnderChnl%d", i]]];
+        [self setDac:i withValue:      [aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENDacChnl%d", i]]];
+        [self setThreshold:i withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENThresChnl%d", i]]];
+        [self setOverUnderThreshold:i withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENOverUnderChnl%d", i]]];
     }
     
     [[self undoManager] enableUndoRegistration];
@@ -1304,23 +1302,23 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 - (void) encodeWithCoder:(NSCoder*) anEncoder
 {
     [super encodeWithCoder:anEncoder];
-	[anEncoder encodeInt:eventSize forKey:@"ORCaen1724ModelEventSize"];
-	[anEncoder encodeInt:enabledMask forKey:@"ORCaen1724ModelEnabledMask"];
-	[anEncoder encodeInt32:postTriggerSetting forKey:@"ORCaen1724ModelPostTriggerSetting"];
-	[anEncoder encodeInt32:triggerSourceMask forKey:@"ORCaen1724ModelTriggerSourceMask"];
-	[anEncoder encodeInt:coincidenceLevel forKey:@"ORCaen1724ModelCoincidenceLevel"];
-	[anEncoder encodeInt:acquisitionMode forKey:@"acquisitionMode"];
+	[anEncoder encodeInteger:eventSize forKey:@"ORCaen1724ModelEventSize"];
+	[anEncoder encodeInteger:enabledMask forKey:@"ORCaen1724ModelEnabledMask"];
+	[anEncoder encodeInteger:postTriggerSetting forKey:@"ORCaen1724ModelPostTriggerSetting"];
+	[anEncoder encodeInteger:triggerSourceMask forKey:@"ORCaen1724ModelTriggerSourceMask"];
+	[anEncoder encodeInteger:coincidenceLevel forKey:@"ORCaen1724ModelCoincidenceLevel"];
+	[anEncoder encodeInteger:acquisitionMode forKey:@"acquisitionMode"];
 	[anEncoder encodeBool:countAllTriggers forKey:@"countAllTriggers"];
-	[anEncoder encodeInt32:customSize forKey:@"customSize"];
+	[anEncoder encodeInteger:customSize forKey:@"customSize"];
 	[anEncoder encodeBool:isFixedSize forKey:@"isFixedSize"];
-	[anEncoder encodeInt:channelConfigMask forKey:@"channelConfigMask"];
+	[anEncoder encodeInteger:channelConfigMask forKey:@"channelConfigMask"];
     [anEncoder encodeObject:waveFormRateGroup forKey:@"waveFormRateGroup"];
-    [anEncoder encodeInt32:numberBLTEventsToReadout forKey:@"numberBLTEventsToReadout"];
+    [anEncoder encodeInteger:numberBLTEventsToReadout forKey:@"numberBLTEventsToReadout"];
 	int i;
 	for (i = 0; i < [self numberOfChannels]; i++){
-        [anEncoder encodeInt32:dac[i] forKey:[NSString stringWithFormat:@"CAENDacChnl%d", i]];
-        [anEncoder encodeInt32:thresholds[i] forKey:[NSString stringWithFormat:@"CAENThresChnl%d", i]];
-        [anEncoder encodeInt:overUnderThreshold[i] forKey:[NSString stringWithFormat:@"CAENOverUnderChnl%d", i]];
+        [anEncoder encodeInteger:dac[i] forKey:[NSString stringWithFormat:@"CAENDacChnl%d", i]];
+        [anEncoder encodeInteger:thresholds[i] forKey:[NSString stringWithFormat:@"CAENThresChnl%d", i]];
+        [anEncoder encodeInteger:overUnderThreshold[i] forKey:[NSString stringWithFormat:@"CAENOverUnderChnl%d", i]];
     }
 }
 

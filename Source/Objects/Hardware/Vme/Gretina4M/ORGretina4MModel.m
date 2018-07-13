@@ -949,7 +949,7 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
                               spikeObj,@"spikeInfo",
                               [NSNumber numberWithInt:[self crateNumber]],  @"crate",
                               [NSNumber numberWithInt:[self slot]],         @"card",
-                              [NSNumber numberWithInt:[spikeObj tag]],      @"channel",
+                              [NSNumber numberWithInteger:[spikeObj tag]],      @"channel",
                               nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORGretina4MModelRateSpiked object:self userInfo:userInfo];
  
@@ -2392,9 +2392,9 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
 					oldEnabled[i] = [self enabled:i];
 					[self setEnabled:i withValue:NO];
 					[self writeControlReg:i enabled:NO];
-					oldThreshold[i] = [self testThreshold:i];
-                    [self setTestThreshold:i withValue:[self maxTestThreshold:i]];
-                    newThreshold[i] = [self testThreshold:i];
+					oldThreshold[i] = (int)[self testThreshold:i];
+                    [self setTestThreshold:i withValue:(int)[self maxTestThreshold:i]];
+                    newThreshold[i] = (int)[self testThreshold:i];
 				}
 				[self initBoard];
 				noiseFloorWorkingChannel = -1;
@@ -2408,7 +2408,7 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
 				}
 				if(noiseFloorWorkingChannel>=0){
 					noiseFloorLow		= 0;
-					noiseFloorHigh		= [self maxTestThreshold:noiseFloorWorkingChannel];
+					noiseFloorHigh		= (int)[self maxTestThreshold:noiseFloorWorkingChannel];
 					noiseFloorTestValue	= noiseFloorHigh/2;              //Initial probe position
 					[self setTestThreshold:noiseFloorWorkingChannel withValue:noiseFloorHigh];
 					[self writeTestThreshold:noiseFloorWorkingChannel];
@@ -3113,25 +3113,25 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
     self = [super initWithCoder:decoder];
     
     [[self undoManager] disableUndoRegistration];
-    [self setBaselineRestoredDelay:     [decoder decodeIntForKey:@"baselineRestoredDelay"]];
-    [self setNoiseWindow:               [decoder decodeIntForKey:@"noiseWindow"]];
-    [self setIntegrateTime:             [decoder decodeIntForKey:@"integrateTime"]];
-    [self setCollectionTime:            [decoder decodeIntForKey:@"collectionTime"]];
-    [self setExtTrigLength:             [decoder decodeIntForKey:@"extTrigLength"]];
-    [self setPileUpWindow:              [decoder decodeIntForKey:@"pileUpWindow"]];
-    [self setExternalWindow:            [decoder decodeIntForKey:@"externalWindow"]];
-    [self setClockSource:               [decoder decodeIntForKey:@"clockSource"]];
-    [self setClockPhase:                [decoder decodeIntForKey:@"clockPhase"]];
+    [self setBaselineRestoredDelay:     [decoder decodeIntegerForKey:@"baselineRestoredDelay"]];
+    [self setNoiseWindow:               [decoder decodeIntegerForKey:@"noiseWindow"]];
+    [self setIntegrateTime:             [decoder decodeIntegerForKey:@"integrateTime"]];
+    [self setCollectionTime:            [decoder decodeIntegerForKey:@"collectionTime"]];
+    [self setExtTrigLength:             [decoder decodeIntegerForKey:@"extTrigLength"]];
+    [self setPileUpWindow:              [decoder decodeIntegerForKey:@"pileUpWindow"]];
+    [self setExternalWindow:            [decoder decodeIntegerForKey:@"externalWindow"]];
+    [self setClockSource:               [decoder decodeIntegerForKey:@"clockSource"]];
+    [self setClockPhase:                [decoder decodeIntegerForKey:@"clockPhase"]];
     [self setSpiConnector:              [decoder decodeObjectForKey:@"spiConnector"]];
     [self setLinkConnector:             [decoder decodeObjectForKey:@"linkConnector"]];
-    [self setDownSample:				[decoder decodeIntForKey:@"downSample"]];
-    [self setRegisterIndex:				[decoder decodeIntForKey:@"registerIndex"]];
-    [self setRegisterWriteValue:		[decoder decodeInt32ForKey:@"registerWriteValue"]];
-    [self setSPIWriteValue:     		[decoder decodeInt32ForKey:@"spiWriteValue"]];
+    [self setDownSample:				[decoder decodeIntegerForKey:@"downSample"]];
+    [self setRegisterIndex:				[decoder decodeIntegerForKey:@"registerIndex"]];
+    [self setRegisterWriteValue:		[decoder decodeIntegerForKey:@"registerWriteValue"]];
+    [self setSPIWriteValue:     		[decoder decodeIntegerForKey:@"spiWriteValue"]];
     [self setFpgaFilePath:				[decoder decodeObjectForKey:@"fpgaFilePath"]];
     [self setNoiseFloorIntegrationTime:	[decoder decodeFloatForKey:@"NoiseFloorIntegrationTime"]];
-    [self setNoiseFloorOffset:			[decoder decodeIntForKey:@"NoiseFloorOffset"]];
-    [self setHistEMultiplier:			[decoder decodeIntForKey:@"histEMultiplier"]];
+    [self setNoiseFloorOffset:			[decoder decodeIntegerForKey:@"NoiseFloorOffset"]];
+    [self setHistEMultiplier:			[decoder decodeIntegerForKey:@"histEMultiplier"]];
     [self setForceFullInitCard:			[decoder decodeBoolForKey:@"forceFullInitCard"]];
     [self setDoHwCheck:                 [decoder decodeBoolForKey:@"doHwCheck"]];
     
@@ -3154,28 +3154,28 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
     int i;
 	for(i=0;i<kNumGretina4MChannels;i++){
         
-        [self setForceFullInit:i withValue:[decoder decodeIntForKey:[@"forceFullInit"	    stringByAppendingFormat:@"%d",i]]];
-        [self setEnabled:i		withValue:[decoder decodeIntForKey:[@"enabled"	    stringByAppendingFormat:@"%d",i]]];
-		[self setTrapEnabled:i	withValue:[decoder decodeIntForKey:[@"trapEnabled"	stringByAppendingFormat:@"%d",i]]];
-		[self setDebug:i		withValue:[decoder decodeIntForKey:[@"debug"	    stringByAppendingFormat:@"%d",i]]];
-		[self setPileUp:i		withValue:[decoder decodeIntForKey:[@"pileUp"	    stringByAppendingFormat:@"%d",i]]];
-		[self setPoleZeroEnabled:i withValue:[decoder decodeIntForKey:[@"poleZeroEnabled" stringByAppendingFormat:@"%d",i]]];
-		[self setPoleZeroMultiplier:i withValue:[decoder decodeIntForKey:[@"poleZeroMult" stringByAppendingFormat:@"%d",i]]];
-		[self setBaselineRestoreEnabled:i withValue:[decoder decodeIntForKey:[@"baselineRestoreEnabled" stringByAppendingFormat:@"%d",i]]];
-		[self setPZTraceEnabled:i withValue:[decoder decodeIntForKey:[@"pzTraceEnabled" stringByAppendingFormat:@"%d",i]]];
-		[self setTriggerMode:i	withValue:[decoder decodeIntForKey:[@"triggerMode"	stringByAppendingFormat:@"%d",i]]];
-		[self setLEDThreshold:i withValue:[decoder decodeIntForKey:[@"ledThreshold" stringByAppendingFormat:@"%d",i]]];
-		[self setTrapThreshold:i withValue:[decoder decodeIntForKey:[@"trapThreshold" stringByAppendingFormat:@"%d",i]]];
-		[self setMrpsrt:i       withValue:[decoder decodeIntForKey:[@"mrpsrt"       stringByAppendingFormat:@"%d",i]]];
-		[self setFtCnt:i        withValue:[decoder decodeIntForKey:[@"ftCnt"        stringByAppendingFormat:@"%d",i]]];
-		[self setMrpsdv:i       withValue:[decoder decodeIntForKey:[@"mrpsdv"       stringByAppendingFormat:@"%d",i]]];
-		[self setChpsrt:i       withValue:[decoder decodeIntForKey:[@"chpsrt"       stringByAppendingFormat:@"%d",i]]];
-		[self setChpsdv:i       withValue:[decoder decodeIntForKey:[@"chpsdv"       stringByAppendingFormat:@"%d",i]]];
-		[self setPrerecnt:i     withValue:[decoder decodeIntForKey:[@"prerecnt"     stringByAppendingFormat:@"%d",i]]];
-		[self setPostrecnt:i    withValue:[decoder decodeIntForKey:[@"postrecnt"    stringByAppendingFormat:@"%d",i]]];
-		[self setTpol:i         withValue:[decoder decodeIntForKey:[@"tpol"         stringByAppendingFormat:@"%d",i]]];
-		[self setPresumEnabled:i withValue:[decoder decodeIntForKey:[@"presumEnabled"         stringByAppendingFormat:@"%d",i]]];
-        [self setEasySelected:i		withValue:[decoder decodeIntForKey:[@"easySelected"	    stringByAppendingFormat:@"%d",i]]];
+        [self setForceFullInit:i withValue:[decoder decodeIntegerForKey:[@"forceFullInit"	    stringByAppendingFormat:@"%d",i]]];
+        [self setEnabled:i		withValue:[decoder decodeIntegerForKey:[@"enabled"	    stringByAppendingFormat:@"%d",i]]];
+		[self setTrapEnabled:i	withValue:[decoder decodeIntegerForKey:[@"trapEnabled"	stringByAppendingFormat:@"%d",i]]];
+		[self setDebug:i		withValue:[decoder decodeIntegerForKey:[@"debug"	    stringByAppendingFormat:@"%d",i]]];
+		[self setPileUp:i		withValue:[decoder decodeIntegerForKey:[@"pileUp"	    stringByAppendingFormat:@"%d",i]]];
+		[self setPoleZeroEnabled:i withValue:[decoder decodeIntegerForKey:[@"poleZeroEnabled" stringByAppendingFormat:@"%d",i]]];
+		[self setPoleZeroMultiplier:i withValue:[decoder decodeIntegerForKey:[@"poleZeroMult" stringByAppendingFormat:@"%d",i]]];
+		[self setBaselineRestoreEnabled:i withValue:[decoder decodeIntegerForKey:[@"baselineRestoreEnabled" stringByAppendingFormat:@"%d",i]]];
+		[self setPZTraceEnabled:i withValue:[decoder decodeIntegerForKey:[@"pzTraceEnabled" stringByAppendingFormat:@"%d",i]]];
+		[self setTriggerMode:i	withValue:[decoder decodeIntegerForKey:[@"triggerMode"	stringByAppendingFormat:@"%d",i]]];
+		[self setLEDThreshold:i withValue:[decoder decodeIntegerForKey:[@"ledThreshold" stringByAppendingFormat:@"%d",i]]];
+		[self setTrapThreshold:i withValue:[decoder decodeIntegerForKey:[@"trapThreshold" stringByAppendingFormat:@"%d",i]]];
+		[self setMrpsrt:i       withValue:[decoder decodeIntegerForKey:[@"mrpsrt"       stringByAppendingFormat:@"%d",i]]];
+		[self setFtCnt:i        withValue:[decoder decodeIntegerForKey:[@"ftCnt"        stringByAppendingFormat:@"%d",i]]];
+		[self setMrpsdv:i       withValue:[decoder decodeIntegerForKey:[@"mrpsdv"       stringByAppendingFormat:@"%d",i]]];
+		[self setChpsrt:i       withValue:[decoder decodeIntegerForKey:[@"chpsrt"       stringByAppendingFormat:@"%d",i]]];
+		[self setChpsdv:i       withValue:[decoder decodeIntegerForKey:[@"chpsdv"       stringByAppendingFormat:@"%d",i]]];
+		[self setPrerecnt:i     withValue:[decoder decodeIntegerForKey:[@"prerecnt"     stringByAppendingFormat:@"%d",i]]];
+		[self setPostrecnt:i    withValue:[decoder decodeIntegerForKey:[@"postrecnt"    stringByAppendingFormat:@"%d",i]]];
+		[self setTpol:i         withValue:[decoder decodeIntegerForKey:[@"tpol"         stringByAppendingFormat:@"%d",i]]];
+		[self setPresumEnabled:i withValue:[decoder decodeIntegerForKey:[@"presumEnabled"         stringByAppendingFormat:@"%d",i]]];
+        [self setEasySelected:i		withValue:[decoder decodeIntegerForKey:[@"easySelected"	    stringByAppendingFormat:@"%d",i]]];
 	}
     
     [[self undoManager] enableUndoRegistration];
@@ -3187,53 +3187,53 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:baselineRestoredDelay forKey:@"baselineRestoredDelay"];
-    [encoder encodeInt:noiseWindow                  forKey:@"noiseWindow"];
-    [encoder encodeInt:integrateTime                forKey:@"integrateTime"];
-    [encoder encodeInt:collectionTime               forKey:@"collectionTime"];
-    [encoder encodeInt:extTrigLength                forKey:@"extTrigLength"];
-    [encoder encodeInt:pileUpWindow                 forKey:@"pileUpWindow"];
-    [encoder encodeInt:externalWindow               forKey:@"externalWindow"];
-    [encoder encodeInt:clockSource                  forKey:@"clockSource"];
-    [encoder encodeInt:clockPhase                   forKey:@"clockPhase"];
+    [encoder encodeInteger:baselineRestoredDelay forKey:@"baselineRestoredDelay"];
+    [encoder encodeInteger:noiseWindow                  forKey:@"noiseWindow"];
+    [encoder encodeInteger:integrateTime                forKey:@"integrateTime"];
+    [encoder encodeInteger:collectionTime               forKey:@"collectionTime"];
+    [encoder encodeInteger:extTrigLength                forKey:@"extTrigLength"];
+    [encoder encodeInteger:pileUpWindow                 forKey:@"pileUpWindow"];
+    [encoder encodeInteger:externalWindow               forKey:@"externalWindow"];
+    [encoder encodeInteger:clockSource                  forKey:@"clockSource"];
+    [encoder encodeInteger:clockPhase                   forKey:@"clockPhase"];
     [encoder encodeObject:spiConnector				forKey:@"spiConnector"];
     [encoder encodeObject:linkConnector				forKey:@"linkConnector"];
-    [encoder encodeInt:downSample					forKey:@"downSample"];
-    [encoder encodeInt:registerIndex				forKey:@"registerIndex"];
-    [encoder encodeInt32:registerWriteValue			forKey:@"registerWriteValue"];
-    [encoder encodeInt32:spiWriteValue			    forKey:@"spiWriteValue"];
+    [encoder encodeInteger:downSample					forKey:@"downSample"];
+    [encoder encodeInteger:registerIndex				forKey:@"registerIndex"];
+    [encoder encodeInteger:registerWriteValue			forKey:@"registerWriteValue"];
+    [encoder encodeInteger:spiWriteValue			    forKey:@"spiWriteValue"];
     [encoder encodeObject:fpgaFilePath				forKey:@"fpgaFilePath"];
     [encoder encodeFloat:noiseFloorIntegrationTime	forKey:@"NoiseFloorIntegrationTime"];
-    [encoder encodeInt:noiseFloorOffset				forKey:@"NoiseFloorOffset"];
+    [encoder encodeInteger:noiseFloorOffset				forKey:@"NoiseFloorOffset"];
     [encoder encodeObject:waveFormRateGroup			forKey:@"waveFormRateGroup"];
-    [encoder encodeInt:histEMultiplier              forKey:@"histEMultiplier"];
+    [encoder encodeInteger:histEMultiplier              forKey:@"histEMultiplier"];
     [encoder encodeBool:forceFullInitCard           forKey:@"forceFullInitCard"];
     [encoder encodeBool:doHwCheck                   forKey:@"doHwCheck"];
 
 	int i;
  	for(i=0;i<kNumGretina4MChannels;i++){
-        [encoder encodeInt:forceFullInit[i]	forKey:[@"forceFullInit"		stringByAppendingFormat:@"%d",i]];
-        [encoder encodeInt:enabled[i]		forKey:[@"enabled"		stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:trapEnabled[i]	forKey:[@"trapEnabled"  stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:debug[i]			forKey:[@"debug"		stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:pileUp[i]		forKey:[@"pileUp"		stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:poleZeroEnabled[i] forKey:[@"poleZeroEnabled" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:poleZeroMult[i]  forKey:[@"poleZeroMult" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:baselineRestoreEnabled[i] forKey:[@"baselineRestoreEnabled" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:pzTraceEnabled[i] forKey:[@"pzTraceEnabled" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:triggerMode[i]	forKey:[@"triggerMode"	stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:ledThreshold[i]	forKey:[@"ledThreshold" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:trapThreshold[i]	forKey:[@"trapThreshold" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:mrpsrt[i]        forKey:[@"mrpsrt"       stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:ftCnt[i]         forKey:[@"ftCnt"        stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:mrpsdv[i]        forKey:[@"mrpsdv"       stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:chpsrt[i]        forKey:[@"chpsrt"       stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:chpsdv[i]        forKey:[@"chpsdv"       stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:prerecnt[i]      forKey:[@"prerecnt"     stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:postrecnt[i]     forKey:[@"postrecnt"    stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:tpol[i]          forKey:[@"tpol"         stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:presumEnabled[i] forKey:[@"presumEnabled" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:easySelected[i]	forKey:[@"easySelected"		stringByAppendingFormat:@"%d",i]];
+        [encoder encodeInteger:forceFullInit[i]	forKey:[@"forceFullInit"		stringByAppendingFormat:@"%d",i]];
+        [encoder encodeInteger:enabled[i]		forKey:[@"enabled"		stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:trapEnabled[i]	forKey:[@"trapEnabled"  stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:debug[i]			forKey:[@"debug"		stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:pileUp[i]		forKey:[@"pileUp"		stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:poleZeroEnabled[i] forKey:[@"poleZeroEnabled" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:poleZeroMult[i]  forKey:[@"poleZeroMult" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:baselineRestoreEnabled[i] forKey:[@"baselineRestoreEnabled" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:pzTraceEnabled[i] forKey:[@"pzTraceEnabled" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:triggerMode[i]	forKey:[@"triggerMode"	stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:ledThreshold[i]	forKey:[@"ledThreshold" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:trapThreshold[i]	forKey:[@"trapThreshold" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:mrpsrt[i]        forKey:[@"mrpsrt"       stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:ftCnt[i]         forKey:[@"ftCnt"        stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:mrpsdv[i]        forKey:[@"mrpsdv"       stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:chpsrt[i]        forKey:[@"chpsrt"       stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:chpsdv[i]        forKey:[@"chpsdv"       stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:prerecnt[i]      forKey:[@"prerecnt"     stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:postrecnt[i]     forKey:[@"postrecnt"    stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:tpol[i]          forKey:[@"tpol"         stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:presumEnabled[i] forKey:[@"presumEnabled" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:easySelected[i]	forKey:[@"easySelected"		stringByAppendingFormat:@"%d",i]];
 	}
 	
 }

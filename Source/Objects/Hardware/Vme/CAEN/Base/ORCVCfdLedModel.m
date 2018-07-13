@@ -356,14 +356,14 @@ NSString* ORCVCfdLedModelThresholdLock				= @"ORCVCfdLedModelThresholdLock";
     [[self undoManager] disableUndoRegistration];
 	int i;
 	for(i=0;i<16;i++){
-		[self setThreshold:i threshold:[aDecoder decodeIntForKey:[NSString stringWithFormat:@"threshold%d",i]]];
+		[self setThreshold:i threshold:[aDecoder decodeIntegerForKey:[NSString stringWithFormat:@"threshold%d",i]]];
 	}
     [self setAutoInitWithRun:[aDecoder decodeBoolForKey:@"autoInitWithRun"]];
-	[self setTestPulse:[aDecoder decodeIntForKey:@"testPulse"]];
-	[self setPatternInhibit:[aDecoder decodeIntForKey:@"patternInhibit"]];
-	[self setMajorityThreshold:[aDecoder decodeIntForKey:@"majorityThreshold"]];
-	[self setOutputWidth0_7:[aDecoder decodeIntForKey:@"outputWidth0_7"]];
-	[self setOutputWidth8_15:[aDecoder decodeIntForKey:@"outputWidth8_15"]];
+	[self setTestPulse:[aDecoder decodeIntegerForKey:@"testPulse"]];
+	[self setPatternInhibit:[aDecoder decodeIntegerForKey:@"patternInhibit"]];
+	[self setMajorityThreshold:[aDecoder decodeIntegerForKey:@"majorityThreshold"]];
+	[self setOutputWidth0_7:[aDecoder decodeIntegerForKey:@"outputWidth0_7"]];
+	[self setOutputWidth8_15:[aDecoder decodeIntegerForKey:@"outputWidth8_15"]];
     [self registerNotificationObservers];
 	
     [[self undoManager] enableUndoRegistration];
@@ -375,14 +375,14 @@ NSString* ORCVCfdLedModelThresholdLock				= @"ORCVCfdLedModelThresholdLock";
     [super encodeWithCoder:anEncoder];
 	int i;
 	for(i=0;i<16;i++){
-		[anEncoder encodeInt:[self threshold:i] forKey:[NSString stringWithFormat:@"threshold%d",i]];
+		[anEncoder encodeInteger:[self threshold:i] forKey:[NSString stringWithFormat:@"threshold%d",i]];
 	}
 	[anEncoder encodeBool:autoInitWithRun forKey:@"autoInitWithRun"];
-    [anEncoder encodeInt:testPulse forKey:@"testPulse"];
-    [anEncoder encodeInt:patternInhibit forKey:@"patternInhibit"];
-    [anEncoder encodeInt:majorityThreshold forKey:@"majorityThreshold"];
-    [anEncoder encodeInt:outputWidth0_7 forKey:@"outputWidth0_7"];
-    [anEncoder encodeInt:outputWidth8_15 forKey:@"outputWidth8_15"];
+    [anEncoder encodeInteger:testPulse forKey:@"testPulse"];
+    [anEncoder encodeInteger:patternInhibit forKey:@"patternInhibit"];
+    [anEncoder encodeInteger:majorityThreshold forKey:@"majorityThreshold"];
+    [anEncoder encodeInteger:outputWidth0_7 forKey:@"outputWidth0_7"];
+    [anEncoder encodeInteger:outputWidth8_15 forKey:@"outputWidth8_15"];
 }
 
 @end

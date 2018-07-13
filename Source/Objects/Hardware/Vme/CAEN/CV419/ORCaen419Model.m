@@ -323,12 +323,12 @@ static Caen419Registers reg[kNumRegisters] = {
 
 - (int) lowThresholdOffset:(unsigned short)aChan
 {
-	return reg[kCh0LowThreshold].addressOffset + (aChan * 4);
+	return (int)(reg[kCh0LowThreshold].addressOffset + (aChan * 4));
 }
 
 - (int) highThresholdOffset:(unsigned short)aChan
 {
-	return reg[kCh0HighThreshold].addressOffset + (aChan * 4);
+	return (int)(reg[kCh0HighThreshold].addressOffset + (aChan * 4));
 }
 
 - (void) writeControlStatusRegisters
@@ -519,14 +519,14 @@ static Caen419Registers reg[kNumRegisters] = {
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id = kCaen419; //should be unique
-	configStruct->card_info[index].hw_mask[0] 	 = dataId; //better be unique
+	configStruct->card_info[index].hw_mask[0] 	 = (uint32_t)dataId; //better be unique
 	configStruct->card_info[index].slot 	 = [self slot];
 	configStruct->card_info[index].crate 	 = [self crateNumber];
 	configStruct->card_info[index].add_mod 	 = [self addressModifier];
-	configStruct->card_info[index].base_add  = [self baseAddress];
+	configStruct->card_info[index].base_add  = (uint32_t)[self baseAddress];
 	configStruct->card_info[index].deviceSpecificData[0] = enabledMask;
-	configStruct->card_info[index].deviceSpecificData[1] = reg[kCh0ControlStatus].addressOffset;
-	configStruct->card_info[index].deviceSpecificData[2] = reg[kCh0DataRegister].addressOffset;
+	configStruct->card_info[index].deviceSpecificData[1] = (uint32_t)reg[kCh0ControlStatus].addressOffset;
+	configStruct->card_info[index].deviceSpecificData[2] = (uint32_t)reg[kCh0DataRegister].addressOffset;
 	configStruct->card_info[index].num_Trigger_Indexes = 0;
 	
 	configStruct->card_info[index].next_Card_Index 	= index+1;	
@@ -707,15 +707,15 @@ static Caen419Registers reg[kNumRegisters] = {
     self = [super initWithCoder:aDecoder];
     
 	[[self undoManager] disableUndoRegistration];
-    [self setEnabledMask:[aDecoder decodeIntForKey:@"enabledMask"]];
+    [self setEnabledMask:[aDecoder decodeIntegerForKey:@"enabledMask"]];
     [self setResetMask:[aDecoder decodeBoolForKey:@"resetMask"]];
-    [self setAuxAddress:[aDecoder decodeInt32ForKey:@"auxAddress"]];
+    [self setAuxAddress:[aDecoder decodeIntegerForKey:@"auxAddress"]];
 	int i;
     for (i = 0; i < kCV419NumberChannels; i++){
-        [self setLowThreshold:i withValue:[aDecoder decodeIntForKey: [NSString stringWithFormat:@"CAENLowThresholdChnl%d", i]]];
-        [self setHighThreshold:i withValue:[aDecoder decodeIntForKey: [NSString stringWithFormat:@"CAENHighThresholdChnl%d", i]]];
-		[self setLinearGateMode:i withValue:[aDecoder decodeIntForKey:[NSString stringWithFormat:@"CAENLinearGateModeChnl%d", i]]];
-		[self setRiseTimeProtection:i withValue:[aDecoder decodeIntForKey:[NSString stringWithFormat:@"CAENRiseTimeProtectionChnl%d", i]]];
+        [self setLowThreshold:i withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENLowThresholdChnl%d", i]]];
+        [self setHighThreshold:i withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENHighThresholdChnl%d", i]]];
+		[self setLinearGateMode:i withValue:[aDecoder decodeIntegerForKey:[NSString stringWithFormat:@"CAENLinearGateModeChnl%d", i]]];
+		[self setRiseTimeProtection:i withValue:[aDecoder decodeIntegerForKey:[NSString stringWithFormat:@"CAENRiseTimeProtectionChnl%d", i]]];
     }    
     [self setAdcRateGroup:[aDecoder decodeObjectForKey:@"adcRateGroup"]];
  
@@ -736,15 +736,15 @@ static Caen419Registers reg[kNumRegisters] = {
 - (void) encodeWithCoder:(NSCoder*) anEncoder
 {
     [super encodeWithCoder:anEncoder];
-	[anEncoder encodeInt:enabledMask forKey:@"enabledMask"];
+	[anEncoder encodeInteger:enabledMask forKey:@"enabledMask"];
 	[anEncoder encodeBool:resetMask forKey:@"resetMask"];
-	[anEncoder encodeInt32:auxAddress forKey:@"auxAddress"];
+	[anEncoder encodeInteger:auxAddress forKey:@"auxAddress"];
 	int i;
     for (i = 0; i < kCV419NumberChannels; i++){
-        [anEncoder encodeInt:lowThresholds[i] forKey:[NSString stringWithFormat:@"CAENLowThresholdChnl%d", i]];
-        [anEncoder encodeInt:highThresholds[i] forKey:[NSString stringWithFormat:@"CAENHighThresholdChnl%d", i]];
-		[anEncoder encodeInt:linearGateMode[i] forKey:[NSString stringWithFormat:@"CAENLinearGateModeChnl%d", i]];
-		[anEncoder encodeInt:riseTimeProtection[i] forKey:[NSString stringWithFormat:@"CAENRiseTimeProtectionChnl%d", i]];
+        [anEncoder encodeInteger:lowThresholds[i] forKey:[NSString stringWithFormat:@"CAENLowThresholdChnl%d", i]];
+        [anEncoder encodeInteger:highThresholds[i] forKey:[NSString stringWithFormat:@"CAENHighThresholdChnl%d", i]];
+		[anEncoder encodeInteger:linearGateMode[i] forKey:[NSString stringWithFormat:@"CAENLinearGateModeChnl%d", i]];
+		[anEncoder encodeInteger:riseTimeProtection[i] forKey:[NSString stringWithFormat:@"CAENRiseTimeProtectionChnl%d", i]];
     }
     [anEncoder encodeObject:adcRateGroup forKey:@"adcRateGroup"];
 }

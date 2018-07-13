@@ -457,7 +457,7 @@
 
 - (void) baseAddressChanged:(NSNotification*)aNote
 {
-    [addressText setIntValue: [model baseAddress]];
+    [addressText setIntegerValue: [model baseAddress]];
 }
 
 - (void) countEnableMaskChanged:(NSNotification*)aNote
@@ -537,7 +537,7 @@
 
 - (void) lemoOutModeAction:(id)sender
 {
-	[model setLemoOutMode:[sender indexOfSelectedItem]];	
+	[model setLemoOutMode:(int)[sender indexOfSelectedItem]];	
 }
 - (void) syncWithRunAction:(id)sender
 {

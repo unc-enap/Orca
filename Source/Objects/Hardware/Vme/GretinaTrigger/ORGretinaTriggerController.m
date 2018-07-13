@@ -549,7 +549,7 @@
 
 - (IBAction) registerIndexPUAction:(id)sender
 {
-	unsigned int index = [sender indexOfSelectedItem];
+	int index = (int)[sender indexOfSelectedItem];
 	[model setRegisterIndex:index];
 	[self setRegisterDisplay:index];
 }

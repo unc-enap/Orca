@@ -124,7 +124,7 @@ enum {
     unsigned long   numberBLTEventsToReadout;
 	
 	//cached variables, valid only during running
-	unsigned int    statusReg;
+	unsigned long    statusReg;
 	unsigned long   location;
 	unsigned long	eventSizeReg;
 	unsigned long	dataReg;

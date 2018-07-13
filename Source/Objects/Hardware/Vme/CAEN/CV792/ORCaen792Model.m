@@ -870,15 +870,15 @@ NSString* ORCaen792ModelShipTimeStampChanged          = @"ORCaen792ModelShipTime
     [self setTotalCycleZTime:       [aDecoder decodeIntForKey:  @"totalCycleZTime"]];
     [self setPercentZeroOff:        [aDecoder decodeIntForKey:  @"percentZeroOff"]];
     [self setCycleZeroSuppression:  [aDecoder decodeBoolForKey: @"cycleZeroSuppression"]];
-    [self setSlideConstant:         [aDecoder decodeIntForKey:  @"slideConstant"]];
+    [self setSlideConstant:         [aDecoder decodeIntegerForKey:  @"slideConstant"]];
     [self setSlidingScaleEnable:    [aDecoder decodeBoolForKey: @"slidingScaleEnable"]];
     [self setEventCounterInc:       [aDecoder decodeBoolForKey: @"eventCounterInc"]];
     [self setZeroSuppressThresRes:  [aDecoder decodeBoolForKey: @"zeroSuppressThresRes"]];
     [self setZeroSuppressEnable:    [aDecoder decodeBoolForKey: @"zeroSuppressEnable"]];
     [self setOverflowSuppressEnable:[aDecoder decodeBoolForKey: @"overflowSuppressEnable"]];
-    [self setIPed:                  [aDecoder decodeIntForKey:  @"iPed"]];
+    [self setIPed:                  [aDecoder decodeIntegerForKey:  @"iPed"]];
     [self setModelType:             [aDecoder decodeIntForKey:  @"modelType"]];
-   	[self setOnlineMask:            [aDecoder decodeInt32ForKey:@"onlineMask"]];
+   	[self setOnlineMask:            [aDecoder decodeIntegerForKey:@"onlineMask"]];
     [self setShipTimeStamp:         [aDecoder decodeBoolForKey:@"shipTimeStamp"]];
 
     [self setQdcRateGroup:[aDecoder decodeObjectForKey:@"qdcRateGroup"]];
@@ -899,18 +899,18 @@ NSString* ORCaen792ModelShipTimeStampChanged          = @"ORCaen792ModelShipTime
 {
     [super encodeWithCoder:anEncoder];
     [anEncoder encodeBool:useHWReset              forKey:@"useHWReset"];
-	[anEncoder encodeInt:totalCycleZTime          forKey:@"totalCycleZTime"];
-	[anEncoder encodeInt:percentZeroOff           forKey:@"percentZeroOff"];
+	[anEncoder encodeInteger:totalCycleZTime          forKey:@"totalCycleZTime"];
+	[anEncoder encodeInteger:percentZeroOff           forKey:@"percentZeroOff"];
 	[anEncoder encodeBool:cycleZeroSuppression    forKey:@"cycleZeroSuppression"];
-	[anEncoder encodeInt:  slideConstant          forKey:@"slideConstant"];
+	[anEncoder encodeInteger:  slideConstant          forKey:@"slideConstant"];
 	[anEncoder encodeBool: slidingScaleEnable     forKey:@"slidingScaleEnable"];
 	[anEncoder encodeBool: eventCounterInc        forKey:@"eventCounterInc"];
 	[anEncoder encodeBool: zeroSuppressThresRes   forKey:@"zeroSuppressThresRes"];
 	[anEncoder encodeBool: zeroSuppressEnable     forKey:@"zeroSuppressEnable"];
 	[anEncoder encodeBool: overflowSuppressEnable forKey:@"overflowSuppressEnable"];
-	[anEncoder encodeInt:  iPed                   forKey:@"iPed"];
-	[anEncoder encodeInt:  modelType              forKey:@"modelType"];
-	[anEncoder encodeInt32:(int32_t)onlineMask             forKey:@"onlineMask"];
+	[anEncoder encodeInteger:  iPed                   forKey:@"iPed"];
+	[anEncoder encodeInteger:  modelType              forKey:@"modelType"];
+	[anEncoder encodeInteger:onlineMask             forKey:@"onlineMask"];
     [anEncoder encodeObject: qdcRateGroup         forKey:@"qdcRateGroup"];
     [anEncoder encodeBool: shipTimeStamp          forKey:@"shipTimeStamp"];
 }

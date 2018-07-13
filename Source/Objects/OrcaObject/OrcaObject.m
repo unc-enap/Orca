@@ -662,8 +662,8 @@ static NSString* OROrcaObjectUniqueIDNumber = @"OROrcaObjectUniqueIDNumber";
 	      
 
     [self setConnectors:[decoder decodeObjectForKey:OROrcaObjectConnectors]];
-    [self setTag:[decoder decodeInt32ForKey:OROrcaObjectTag]];
-    [self setUniqueIdNumber:[decoder decodeInt32ForKey:OROrcaObjectUniqueIDNumber]];
+    [self setTag:[decoder decodeIntegerForKey:OROrcaObjectTag]];
+    [self setUniqueIdNumber:[decoder decodeIntegerForKey:OROrcaObjectUniqueIDNumber]];
     miscAttributes = [[decoder decodeObjectForKey:@"miscAttributes"] retain];
 	
     [[self undoManager] enableUndoRegistration];
@@ -672,14 +672,14 @@ static NSString* OROrcaObjectUniqueIDNumber = @"OROrcaObjectUniqueIDNumber";
 
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
-	[encoder encodeInt:1 forKey:@"newVersion"];
+	[encoder encodeInteger:1 forKey:@"newVersion"];
 
     [encoder encodeRect:frame forKey:@"localFrame"];
     [encoder encodePoint:offset forKey:@"offset"];
     [encoder encodeRect: bounds forKey:@"bounds"];
     [encoder encodeObject:connectors forKey:OROrcaObjectConnectors];
-    [encoder encodeInt32:(int32_t)[self tag] forKey:OROrcaObjectTag];
-    [encoder encodeInt32:(int32_t)uniqueIdNumber forKey:OROrcaObjectUniqueIDNumber];
+    [encoder encodeInteger:[self tag] forKey:OROrcaObjectTag];
+    [encoder encodeInteger:uniqueIdNumber forKey:OROrcaObjectUniqueIDNumber];
 	[encoder encodeObject:miscAttributes forKey:@"miscAttributes"];
 }
 

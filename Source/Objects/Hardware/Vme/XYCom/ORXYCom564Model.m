@@ -720,12 +720,12 @@ static XyCom564RegisterInformation mIOXY564Reg[kNumberOfXyCom564Registers] = {
 
     configStruct->total_cards++;
     configStruct->card_info[index].hw_type_id	= kXyCom564; //should be unique
-    configStruct->card_info[index].hw_mask[0] 	= dataId; //better be unique
+    configStruct->card_info[index].hw_mask[0] 	= (uint32_t)dataId; //better be unique
     configStruct->card_info[index].slot			= [self slot];
     configStruct->card_info[index].crate		= [self crateNumber];
     configStruct->card_info[index].add_mod		= [self addressModifier];
-    configStruct->card_info[index].base_add		= [self baseAddress];
-    configStruct->card_info[index].deviceSpecificData[0]	= mIOXY564Reg[kADScan].offset; // autoreadout register
+    configStruct->card_info[index].base_add		= (uint32_t)[self baseAddress];
+    configStruct->card_info[index].deviceSpecificData[0]	= (uint32_t)mIOXY564Reg[kADScan].offset; // autoreadout register
     configStruct->card_info[index].deviceSpecificData[1]	= kXVME564_NumAutoScanChannelsPerGroup << ([self autoscanMode]); //numberOfChannelsToRead
     configStruct->card_info[index].deviceSpecificData[2]	= [self averageValueNumber]; // how many points to average
     configStruct->card_info[index].deviceSpecificData[3]	= !pollRunning; // When we are polling, do not ship data
@@ -751,7 +751,7 @@ static XyCom564RegisterInformation mIOXY564Reg[kNumberOfXyCom564Registers] = {
     }
 
     [self setOperationMode:[decoder decodeIntForKey:@"kORXYCom564OperationMode"]];
-    [self setAverageValueNumber:[decoder decodeIntForKey:@"kORXYCom564AvgValNumber"]];    
+    [self setAverageValueNumber:[decoder decodeIntForKey:@"kORXYCom564AvgValNumber"]];
     [self setAutoscanMode:[decoder decodeIntForKey:@"kORXYCom564AutoscanMode"]];
     [self setShipRecords:[decoder decodeBoolForKey:@"kORXYCom564ShipRecords"]];
     [self setInterpretADC:[decoder decodeIntForKey:@"kORXYCom564InterpretADC"]];
@@ -767,11 +767,11 @@ static XyCom564RegisterInformation mIOXY564Reg[kNumberOfXyCom564Registers] = {
 {
     [super encodeWithCoder:encoder];
     [encoder encodeObject:channelGains forKey:@"kORXYCom564chanGains"];
-    [encoder encodeInt:[self operationMode] forKey:@"kORXYCom564OperationMode"];    
-    [encoder encodeInt:[self autoscanMode] forKey:@"kORXYCom564AutoscanMode"];
-    [encoder encodeInt:[self averageValueNumber] forKey:@"kORXYCom564AvgValNumber"];
+    [encoder encodeInteger:[self operationMode] forKey:@"kORXYCom564OperationMode"];    
+    [encoder encodeInteger:[self autoscanMode] forKey:@"kORXYCom564AutoscanMode"];
+    [encoder encodeInteger:[self averageValueNumber] forKey:@"kORXYCom564AvgValNumber"];
     [encoder encodeBool:shipRecords forKey:@"kORXYCom564ShipRecords"];
-    [encoder encodeInt:interpretADC forKey:@"kORXYCom564InterpretADC"];
+    [encoder encodeInteger:interpretADC forKey:@"kORXYCom564InterpretADC"];
     [encoder encodeObject:userLocked forKey:@"kORXYCom564UL"];
 }
 

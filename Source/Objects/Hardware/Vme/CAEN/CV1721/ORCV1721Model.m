@@ -1350,21 +1350,21 @@ NSString* ORCV1721ModelBufferCheckChanged                 = @"ORCV1721ModelBuffe
     self = [super initWithCoder:aDecoder];
 	
     [[self undoManager] disableUndoRegistration];
-    [self setEventSize:             [aDecoder decodeIntForKey:@"eventSize"]];
-    [self setEnabledMask:           [aDecoder decodeIntForKey:@"enabledMask"]];
-    [self setPostTriggerSetting:    [aDecoder decodeInt32ForKey:@"postTriggerSetting"]];
-    [self setTriggerSourceMask:     [aDecoder decodeInt32ForKey:@"triggerSourceMask"]];
-	[self setTriggerOutMask:        [aDecoder decodeInt32ForKey:@"OtriggerOutMask"]];
-	[self setFrontPanelControlMask: [aDecoder decodeInt32ForKey:@"frontPanelControlMask"]];
-    [self setCoincidenceLevel:      [aDecoder decodeIntForKey:@"coincidenceLevel"]];
-    [self setAcquisitionMode:       [aDecoder decodeIntForKey:@"acquisitionMode"]];
+    [self setEventSize:             [aDecoder decodeIntegerForKey:@"eventSize"]];
+    [self setEnabledMask:           [aDecoder decodeIntegerForKey:@"enabledMask"]];
+    [self setPostTriggerSetting:    [aDecoder decodeIntegerForKey:@"postTriggerSetting"]];
+    [self setTriggerSourceMask:     [aDecoder decodeIntegerForKey:@"triggerSourceMask"]];
+	[self setTriggerOutMask:        [aDecoder decodeIntegerForKey:@"OtriggerOutMask"]];
+	[self setFrontPanelControlMask: [aDecoder decodeIntegerForKey:@"frontPanelControlMask"]];
+    [self setCoincidenceLevel:      [aDecoder decodeIntegerForKey:@"coincidenceLevel"]];
+    [self setAcquisitionMode:       [aDecoder decodeIntegerForKey:@"acquisitionMode"]];
     [self setCountAllTriggers:      [aDecoder decodeBoolForKey:@"countAllTriggers"]];
-    [self setCustomSize:            [aDecoder decodeInt32ForKey:@"customSize"]];
+    [self setCustomSize:            [aDecoder decodeIntegerForKey:@"customSize"]];
 	[self setIsCustomSize:          [aDecoder decodeBoolForKey:@"isCustomSize"]];
 	[self setIsFixedSize:           [aDecoder decodeBoolForKey:@"isFixedSize"]];
-    [self setChannelConfigMask:     [aDecoder decodeIntForKey:@"channelConfigMask"]];
+    [self setChannelConfigMask:     [aDecoder decodeIntegerForKey:@"channelConfigMask"]];
     [self setWaveFormRateGroup:     [aDecoder decodeObjectForKey:@"waveFormRateGroup"]];
-    [self setNumberBLTEventsToReadout:[aDecoder decodeInt32ForKey:@"numberBLTEventsToReadout"]];
+    [self setNumberBLTEventsToReadout:[aDecoder decodeIntegerForKey:@"numberBLTEventsToReadout"]];
     
     if(!waveFormRateGroup){
         [self setWaveFormRateGroup:[[[ORRateGroup alloc] initGroup:8 groupTag:0] autorelease]];
@@ -1375,9 +1375,9 @@ NSString* ORCV1721ModelBufferCheckChanged                 = @"ORCV1721ModelBuffe
 	
 	int i;
     for (i = 0; i < [self numberOfChannels]; i++){
-        [self setDac:i withValue:      [aDecoder decodeInt32ForKey: [NSString stringWithFormat:@"CAENDacChnl%d", i]]];
-        [self setThreshold:i withValue:[aDecoder decodeInt32ForKey: [NSString stringWithFormat:@"CAENThresChnl%d", i]]];
-        [self setOverUnderThreshold:i withValue:[aDecoder decodeIntForKey: [NSString stringWithFormat:@"CAENOverUnderChnl%d", i]]];
+        [self setDac:i withValue:      [aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENDacChnl%d", i]]];
+        [self setThreshold:i withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENThresChnl%d", i]]];
+        [self setOverUnderThreshold:i withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENOverUnderChnl%d", i]]];
     }
     
     [[self undoManager] enableUndoRegistration];
@@ -1387,26 +1387,26 @@ NSString* ORCV1721ModelBufferCheckChanged                 = @"ORCV1721ModelBuffe
 - (void) encodeWithCoder:(NSCoder*) anEncoder
 {
     [super encodeWithCoder:anEncoder];
-	[anEncoder encodeInt:eventSize              forKey:@"eventSize"];
-	[anEncoder encodeInt:enabledMask            forKey:@"enabledMask"];
-	[anEncoder encodeInt32:postTriggerSetting   forKey:@"postTriggerSetting"];
-	[anEncoder encodeInt32:triggerSourceMask    forKey:@"triggerSourceMask"];
-	[anEncoder encodeInt32:triggerOutMask       forKey:@"triggerOutMask"];
-	[anEncoder encodeInt32:frontPanelControlMask forKey:@"frontPanelControlMask"];
-	[anEncoder encodeInt:coincidenceLevel       forKey:@"coincidenceLevel"];
-	[anEncoder encodeInt:acquisitionMode        forKey:@"acquisitionMode"];
+	[anEncoder encodeInteger:eventSize              forKey:@"eventSize"];
+	[anEncoder encodeInteger:enabledMask            forKey:@"enabledMask"];
+	[anEncoder encodeInteger:postTriggerSetting   forKey:@"postTriggerSetting"];
+	[anEncoder encodeInteger:triggerSourceMask    forKey:@"triggerSourceMask"];
+	[anEncoder encodeInteger:triggerOutMask       forKey:@"triggerOutMask"];
+	[anEncoder encodeInteger:frontPanelControlMask forKey:@"frontPanelControlMask"];
+	[anEncoder encodeInteger:coincidenceLevel       forKey:@"coincidenceLevel"];
+	[anEncoder encodeInteger:acquisitionMode        forKey:@"acquisitionMode"];
 	[anEncoder encodeBool:countAllTriggers      forKey:@"countAllTriggers"];
-	[anEncoder encodeInt32:customSize           forKey:@"customSize"];
+	[anEncoder encodeInteger:customSize           forKey:@"customSize"];
 	[anEncoder encodeBool:isCustomSize          forKey:@"isCustomSize"];
 	[anEncoder encodeBool:isFixedSize           forKey:@"isFixedSize"];
-	[anEncoder encodeInt:channelConfigMask      forKey:@"channelConfigMask"];
+	[anEncoder encodeInteger:channelConfigMask      forKey:@"channelConfigMask"];
     [anEncoder encodeObject:waveFormRateGroup   forKey:@"waveFormRateGroup"];
-    [anEncoder encodeInt32:numberBLTEventsToReadout forKey:@"numberBLTEventsToReadout"];
+    [anEncoder encodeInteger:numberBLTEventsToReadout forKey:@"numberBLTEventsToReadout"];
 	int i;
 	for (i = 0; i < [self numberOfChannels]; i++){
-        [anEncoder encodeInt32:dac[i] forKey:[NSString stringWithFormat:@"CAENDacChnl%d", i]];
-        [anEncoder encodeInt32:thresholds[i] forKey:[NSString stringWithFormat:@"CAENThresChnl%d", i]];
-        [anEncoder encodeInt:overUnderThreshold[i] forKey:[NSString stringWithFormat:@"CAENOverUnderChnl%d", i]];
+        [anEncoder encodeInteger:dac[i] forKey:[NSString stringWithFormat:@"CAENDacChnl%d", i]];
+        [anEncoder encodeInteger:thresholds[i] forKey:[NSString stringWithFormat:@"CAENThresChnl%d", i]];
+        [anEncoder encodeInteger:overUnderThreshold[i] forKey:[NSString stringWithFormat:@"CAENOverUnderChnl%d", i]];
     }
 }
 

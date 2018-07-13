@@ -663,12 +663,12 @@ static NSString *ORTriggerUseMSAM		= @"ORTriggerUseMSAM";
     
     [[self undoManager] disableUndoRegistration];
     
-    [self setGtidLower:[decoder decodeIntForKey:ORTriggerGtIdLower]];
-    [self setGtidUpper:[decoder decodeIntForKey:ORTriggerGtIdUpper]];
+    [self setGtidLower:[decoder decodeIntegerForKey:ORTriggerGtIdLower]];
+    [self setGtidUpper:[decoder decodeIntegerForKey:ORTriggerGtIdUpper]];
     
-    //[self setVmeClkLower:[decoder decodeIntForKey:ORTriggerVmeClkLower]];
-    //[self setVmeClkMiddle:[decoder decodeIntForKey:ORTriggerVmeClkMiddle]];
-    //[self setVmeClkUpper:[decoder decodeIntForKey:ORTriggerVmeClkUpper]];
+    //[self setVmeClkLower:[decoder decodeIntegerForKey:ORTriggerVmeClkLower]];
+    //[self setVmeClkMiddle:[decoder decodeIntegerForKey:ORTriggerVmeClkMiddle]];
+    //[self setVmeClkUpper:[decoder decodeIntegerForKey:ORTriggerVmeClkUpper]];
     
     [self setTrigger1Group:[decoder decodeObjectForKey:ORTriggerGroup1]];
     [self setTrigger2Group:[decoder decodeObjectForKey:ORTriggerGroup2]];
@@ -679,7 +679,7 @@ static NSString *ORTriggerUseMSAM		= @"ORTriggerUseMSAM";
     [self setInitWithTrig2InhibitEnabled:[decoder decodeBoolForKey:ORTriggerInitWithTrig2InhibitEnabled]];
     
     [self setUseSoftwareGtId:[decoder decodeBoolForKey:ORTriggerUseSoftwareGtId]];
-    [self setSoftwareGtId:[decoder decodeInt32ForKey:ORTriggerSoftwareGtId]];
+    [self setSoftwareGtId:[decoder decodeIntegerForKey:ORTriggerSoftwareGtId]];
     
     [self setTrigger1Name:[decoder decodeObjectForKey:ORTrigger1Name]];
     [self setTrigger2Name:[decoder decodeObjectForKey:ORTrigger2Name]];
@@ -704,12 +704,12 @@ static NSString *ORTriggerUseMSAM		= @"ORTriggerUseMSAM";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:[self gtidLower] forKey:ORTriggerGtIdLower];
-    [encoder encodeInt:[self gtidUpper] forKey:ORTriggerGtIdUpper];
+    [encoder encodeInteger:[self gtidLower] forKey:ORTriggerGtIdLower];
+    [encoder encodeInteger:[self gtidUpper] forKey:ORTriggerGtIdUpper];
     
-    //[encoder encodeInt:[self vmeClkLower] forKey:ORTriggerVmeClkLower];
-    //[encoder encodeInt:[self vmeClkMiddle] forKey:ORTriggerVmeClkMiddle];
-    //[encoder encodeInt:[self vmeClkUpper] forKey:ORTriggerVmeClkUpper];
+    //[encoder encodeInteger:[self vmeClkLower] forKey:ORTriggerVmeClkLower];
+    //[encoder encodeInteger:[self vmeClkMiddle] forKey:ORTriggerVmeClkMiddle];
+    //[encoder encodeInteger:[self vmeClkUpper] forKey:ORTriggerVmeClkUpper];
     
     [encoder encodeObject:[self trigger1Group] forKey:ORTriggerGroup1];
     [encoder encodeObject:[self trigger2Group] forKey:ORTriggerGroup2];
@@ -719,7 +719,7 @@ static NSString *ORTriggerUseMSAM		= @"ORTriggerUseMSAM";
     [encoder encodeBool:[self initWithTrig2InhibitEnabled] forKey:ORTriggerInitWithTrig2InhibitEnabled];
     
     [encoder encodeBool:[self useSoftwareGtId] forKey:ORTriggerUseSoftwareGtId];
-    [encoder encodeInt32:(int32_t)[self softwareGtId] forKey:ORTriggerSoftwareGtId];
+    [encoder encodeInteger:[self softwareGtId] forKey:ORTriggerSoftwareGtId];
     
     [encoder encodeObject:[self trigger1Name] forKey:ORTrigger1Name];
     [encoder encodeObject:[self trigger2Name] forKey:ORTrigger2Name];

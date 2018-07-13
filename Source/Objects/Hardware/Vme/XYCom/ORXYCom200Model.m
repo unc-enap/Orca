@@ -564,7 +564,7 @@ NSString* mIOXY200SubModeName[4][3] = {
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-	[encoder encodeInt:selectedPLT		forKey:@"selectedPLT"];
+	[encoder encodeInteger:selectedPLT		forKey:@"selectedPLT"];
 	[encoder encodeObject:chips			forKey:@"chips"];
 	
 }
@@ -929,7 +929,7 @@ NSString* ORPISlashTChipPeriodChanged			= @"ORPISlashTChipPeriodChanged";
     [self setPortAH2Control:	[decoder decodeIntForKey:@"portAH2Control"]];
     [self setPortADirection:	[decoder decodeIntForKey:@"portADirection"]];
  	[self setPortATransceiverDir:	[decoder decodeIntForKey:@"portATransceiverDir"]];
-	[self setPortAData:			[decoder decodeIntForKey:@"portAData"]];
+	[self setPortAData:			[decoder decodeIntegerForKey:@"portAData"]];
 	
 	//Port B
 	[self setPortBSubMode:		[decoder decodeIntForKey:@"portBSubMode"]];
@@ -938,11 +938,11 @@ NSString* ORPISlashTChipPeriodChanged			= @"ORPISlashTChipPeriodChanged";
     [self setPortBH2Control:	[decoder decodeIntForKey:@"portBH2Control"]];
 	[self setPortBDirection:	[decoder decodeIntForKey:@"portBDirection"]];
 	[self setPortBTransceiverDir:	[decoder decodeIntForKey:@"portBTransceiverDir"]];
-    [self setPortBData:			[decoder decodeIntForKey:@"portBData"]];
+    [self setPortBData:			[decoder decodeIntegerForKey:@"portBData"]];
 	
 	//Port B
     [self setPortCDirection:	[decoder decodeIntForKey:@"portCDirection"]];
-    [self setPortCData:			[decoder decodeIntForKey:@"portCData"]];
+    [self setPortCData:			[decoder decodeIntegerForKey:@"portCData"]];
 	
 	//Timer
 	[self setPreloadLow:		[decoder decodeIntForKey:@"preloadLow"]];
@@ -960,7 +960,7 @@ NSString* ORPISlashTChipPeriodChanged			= @"ORPISlashTChipPeriodChanged";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
 	//Gen Cntrl Reg
-	[encoder encodeInt:opMode			forKey:@"mode"];
+	[encoder encodeInteger:opMode			forKey:@"mode"];
 	[encoder encodeBool:H1Sense			forKey:@"H1Sense"];
 	[encoder encodeBool:H2Sense			forKey:@"H2Sense"];
 	[encoder encodeBool:H3Sense			forKey:@"H3Sense"];
@@ -969,33 +969,33 @@ NSString* ORPISlashTChipPeriodChanged			= @"ORPISlashTChipPeriodChanged";
 	[encoder encodeBool:H34Enable		forKey:@"H34Enable"];
 	
 	//Port A
-	[encoder encodeInt:portASubMode		forKey:@"portASubMode"];
-	[encoder encodeInt:portAH1Control	forKey:@"portAH1Control"];
-	[encoder encodeInt:portAH2Interrupt	forKey:@"portAH2Interrupt"];
-	[encoder encodeInt:portAH2Control	forKey:@"portAH2Control"];
-	[encoder encodeInt:portADirection	forKey:@"portADirection"];
-	[encoder encodeInt:portATransceiverDir	forKey:@"portATransceiverDir"];
-	[encoder encodeInt:portAData		forKey:@"portAData"];
+	[encoder encodeInteger:portASubMode		forKey:@"portASubMode"];
+	[encoder encodeInteger:portAH1Control	forKey:@"portAH1Control"];
+	[encoder encodeInteger:portAH2Interrupt	forKey:@"portAH2Interrupt"];
+	[encoder encodeInteger:portAH2Control	forKey:@"portAH2Control"];
+	[encoder encodeInteger:portADirection	forKey:@"portADirection"];
+	[encoder encodeInteger:portATransceiverDir	forKey:@"portATransceiverDir"];
+	[encoder encodeInteger:portAData		forKey:@"portAData"];
 	
 	//Port B
-	[encoder encodeInt:portBSubMode		forKey:@"portBSubMode"];
-	[encoder encodeInt:portBH1Control	forKey:@"portBH1Control"];
-	[encoder encodeInt:portBH2Interrupt	forKey:@"portBH2Interrupt"];
-	[encoder encodeInt:portBH2Control	forKey:@"portBH2Control"];
-	[encoder encodeInt:portBDirection	forKey:@"portBDirection"];
-	[encoder encodeInt:portBTransceiverDir	forKey:@"portBTransceiverDir"];
-	[encoder encodeInt:portBData		forKey:@"portBData"];
+	[encoder encodeInteger:portBSubMode		forKey:@"portBSubMode"];
+	[encoder encodeInteger:portBH1Control	forKey:@"portBH1Control"];
+	[encoder encodeInteger:portBH2Interrupt	forKey:@"portBH2Interrupt"];
+	[encoder encodeInteger:portBH2Control	forKey:@"portBH2Control"];
+	[encoder encodeInteger:portBDirection	forKey:@"portBDirection"];
+	[encoder encodeInteger:portBTransceiverDir	forKey:@"portBTransceiverDir"];
+	[encoder encodeInteger:portBData		forKey:@"portBData"];
 	
 	//Port C
-	[encoder encodeInt:portCDirection	forKey:@"portCDirection"];
- 	[encoder encodeInt:portCData		forKey:@"portCData"];
+	[encoder encodeInteger:portCDirection	forKey:@"portCDirection"];
+ 	[encoder encodeInteger:portCData		forKey:@"portCData"];
 	
 	//Timer
-	[encoder encodeInt:preloadLow		forKey:@"preloadLow"];
-	[encoder encodeInt:preloadMiddle	forKey:@"preloadMiddle"];
-	[encoder encodeInt:preloadHigh		forKey:@"preloadHigh"];
-	[encoder encodeInt:timerControl		forKey:@"timerControl"];
-	[encoder encodeInt:period			forKey:@"period"];
+	[encoder encodeInteger:preloadLow		forKey:@"preloadLow"];
+	[encoder encodeInteger:preloadMiddle	forKey:@"preloadMiddle"];
+	[encoder encodeInteger:preloadHigh		forKey:@"preloadHigh"];
+	[encoder encodeInteger:timerControl		forKey:@"timerControl"];
+	[encoder encodeInteger:period			forKey:@"period"];
 }
 
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary

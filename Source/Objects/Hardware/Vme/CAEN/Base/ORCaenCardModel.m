@@ -585,14 +585,14 @@ static NSString*	CAENThresholdChnl       = @"CAENThresholdChnl%d";
     [[self undoManager] disableUndoRegistration];
     
     // Get the last values from the first tab of the dialog box.
-    [self setSelectedRegIndex:[aDecoder decodeIntForKey:CAENSelectedRegIndex]];
-    [self setSelectedChannel:[aDecoder decodeIntForKey:CAENSelectedChannelIndex]];
-    [self setWriteValue:[aDecoder decodeInt32ForKey:CAENWriteValue]];
+    [self setSelectedRegIndex:[aDecoder decodeIntegerForKey:CAENSelectedRegIndex]];
+    [self setSelectedChannel:[aDecoder decodeIntegerForKey:CAENSelectedChannelIndex]];
+    [self setWriteValue:[aDecoder decodeIntegerForKey:CAENWriteValue]];
     
     // Get the thresholds
     for (i = 0; i < [self numberOfChannels]; i++){
         [self setThreshold:i
-                 threshold:[aDecoder decodeIntForKey:
+                 threshold:[aDecoder decodeIntegerForKey:
 							[NSString stringWithFormat:CAENThresholdChnl, i]]];
     }
     
@@ -615,13 +615,13 @@ static NSString*	CAENThresholdChnl       = @"CAENThresholdChnl%d";
     [super encodeWithCoder:anEncoder];
     
     // Save the information from first TAB.
-    [anEncoder encodeInt:[self selectedRegIndex] forKey:CAENSelectedRegIndex];
-    [anEncoder encodeInt:[self selectedChannel] forKey:CAENSelectedChannelIndex];
-    [anEncoder encodeInt32:(int32_t)[self writeValue] forKey:CAENWriteValue];
+    [anEncoder encodeInteger:[self selectedRegIndex] forKey:CAENSelectedRegIndex];
+    [anEncoder encodeInteger:[self selectedChannel] forKey:CAENSelectedChannelIndex];
+    [anEncoder encodeInteger:[self writeValue] forKey:CAENWriteValue];
     
     // Save the thresholds
     for (i = 0; i < [self numberOfChannels]; i++){
-        [anEncoder encodeInt:[self threshold:i]
+        [anEncoder encodeInteger:[self threshold:i]
                       forKey:[NSString stringWithFormat:CAENThresholdChnl, i]];
     }
     

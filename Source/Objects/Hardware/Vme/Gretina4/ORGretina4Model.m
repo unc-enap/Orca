@@ -2402,14 +2402,14 @@ static struct {
     [[self undoManager] disableUndoRegistration];
     [self setSpiConnector:			[decoder decodeObjectForKey:@"spiConnector"]];
     [self setLinkConnector:			[decoder decodeObjectForKey:@"linkConnector"]];
-    [self setDownSample:				[decoder decodeIntForKey:@"downSample"]];
-    [self setHistEMultiplier:				[decoder decodeIntForKey:@"histEMultiplier"]];
-    [self setRegisterIndex:				[decoder decodeIntForKey:@"registerIndex"]];
-    [self setRegisterWriteValue:		[decoder decodeInt32ForKey:@"registerWriteValue"]];
-    [self setSPIWriteValue:     		[decoder decodeInt32ForKey:@"spiWriteValue"]];
+    [self setDownSample:				[decoder decodeIntegerForKey:@"downSample"]];
+    [self setHistEMultiplier:				[decoder decodeIntegerForKey:@"histEMultiplier"]];
+    [self setRegisterIndex:				[decoder decodeIntegerForKey:@"registerIndex"]];
+    [self setRegisterWriteValue:		[decoder decodeIntegerForKey:@"registerWriteValue"]];
+    [self setSPIWriteValue:     		[decoder decodeIntegerForKey:@"spiWriteValue"]];
     [self setFpgaFilePath:				[decoder decodeObjectForKey:@"fpgaFilePath"]];
     [self setNoiseFloorIntegrationTime:	[decoder decodeFloatForKey:@"NoiseFloorIntegrationTime"]];
-    [self setNoiseFloorOffset:			[decoder decodeIntForKey:@"NoiseFloorOffset"]];
+    [self setNoiseFloorOffset:			[decoder decodeIntegerForKey:@"NoiseFloorOffset"]];
     cardInfo = [[decoder decodeObjectForKey:@"cardInfo"] retain];
     
     
@@ -2421,17 +2421,17 @@ static struct {
     }
     [waveFormRateGroup resetRates];
     [waveFormRateGroup calcRates];
-    [self setClockSource:               [decoder decodeIntForKey:@"clockSource"]];
+    [self setClockSource:               [decoder decodeIntegerForKey:@"clockSource"]];
 	
 	int i;
 	for(i=0;i<kNumGretina4Channels;i++){
-		[self setEnabled:i		withValue:[decoder decodeIntForKey:[@"enabled"	    stringByAppendingFormat:@"%d",i]]];
-		[self setDebug:i		withValue:[decoder decodeIntForKey:[@"debug"	    stringByAppendingFormat:@"%d",i]]];
-		[self setPileUp:i		withValue:[decoder decodeIntForKey:[@"pileUp"	    stringByAppendingFormat:@"%d",i]]];
-		[self setCFDEnabled:i 	withValue:[decoder decodeIntForKey:[@"cfdEnabled"   stringByAppendingFormat:@"%d",i]]];
-		[self setPoleZeroEnabled:i withValue:[decoder decodeIntForKey:[@"poleZeroEnabled" stringByAppendingFormat:@"%d",i]]];
-		[self setPoleZeroMultiplier:i withValue:[decoder decodeIntForKey:[@"poleZeroMult" stringByAppendingFormat:@"%d",i]]];
-		[self setPZTraceEnabled:i withValue:[decoder decodeIntForKey:[@"pzTraceEnabled" stringByAppendingFormat:@"%d",i]]];
+		[self setEnabled:i		withValue:[decoder decodeIntegerForKey:[@"enabled"	    stringByAppendingFormat:@"%d",i]]];
+		[self setDebug:i		withValue:[decoder decodeIntegerForKey:[@"debug"	    stringByAppendingFormat:@"%d",i]]];
+		[self setPileUp:i		withValue:[decoder decodeIntegerForKey:[@"pileUp"	    stringByAppendingFormat:@"%d",i]]];
+		[self setCFDEnabled:i 	withValue:[decoder decodeIntegerForKey:[@"cfdEnabled"   stringByAppendingFormat:@"%d",i]]];
+		[self setPoleZeroEnabled:i withValue:[decoder decodeIntegerForKey:[@"poleZeroEnabled" stringByAppendingFormat:@"%d",i]]];
+		[self setPoleZeroMultiplier:i withValue:[decoder decodeIntegerForKey:[@"poleZeroMult" stringByAppendingFormat:@"%d",i]]];
+		[self setPZTraceEnabled:i withValue:[decoder decodeIntegerForKey:[@"pzTraceEnabled" stringByAppendingFormat:@"%d",i]]];
 		[self setPolarity:i		withValue:[decoder decodeIntForKey:[@"polarity"     stringByAppendingFormat:@"%d",i]]];
 		[self setTriggerMode:i	withValue:[decoder decodeIntForKey:[@"triggerMode"	stringByAppendingFormat:@"%d",i]]];
 		[self setLEDThreshold:i withValue:[decoder decodeIntForKey:[@"ledThreshold" stringByAppendingFormat:@"%d",i]]];
@@ -2452,34 +2452,34 @@ static struct {
     [super encodeWithCoder:encoder];
     [encoder encodeObject:spiConnector				forKey:@"spiConnector"];
     [encoder encodeObject:linkConnector				forKey:@"linkConnector"];
-    [encoder encodeInt:downSample					forKey:@"downSample"];
-    [encoder encodeInt:histEMultiplier                           forKey:@"histEMultiplier"];
-    [encoder encodeInt:registerIndex				forKey:@"registerIndex"];
-    [encoder encodeInt32:(int32_t)registerWriteValue			forKey:@"registerWriteValue"];
-    [encoder encodeInt32:(int32_t)spiWriteValue			    forKey:@"spiWriteValue"];
+    [encoder encodeInteger:downSample					forKey:@"downSample"];
+    [encoder encodeInteger:histEMultiplier                           forKey:@"histEMultiplier"];
+    [encoder encodeInteger:registerIndex				forKey:@"registerIndex"];
+    [encoder encodeInteger:registerWriteValue			forKey:@"registerWriteValue"];
+    [encoder encodeInteger:spiWriteValue			    forKey:@"spiWriteValue"];
     [encoder encodeObject:fpgaFilePath				forKey:@"fpgaFilePath"];
     [encoder encodeFloat:noiseFloorIntegrationTime	forKey:@"NoiseFloorIntegrationTime"];
-    [encoder encodeInt:noiseFloorOffset				forKey:@"NoiseFloorOffset"];
+    [encoder encodeInteger:noiseFloorOffset				forKey:@"NoiseFloorOffset"];
     [encoder encodeObject:cardInfo					forKey:@"cardInfo"];
     [encoder encodeObject:waveFormRateGroup			forKey:@"waveFormRateGroup"];
-    [encoder encodeInt:clockSource                  forKey:@"clockSource"];
+    [encoder encodeInteger:clockSource                  forKey:@"clockSource"];
 	int i;
  	for(i=0;i<kNumGretina4Channels;i++){
-		[encoder encodeInt:enabled[i]		forKey:[@"enabled"		stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:debug[i]			forKey:[@"debug"		stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:pileUp[i]		forKey:[@"pileUp"		stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:cfdEnabled[i]  	forKey:[@"cfdEnabled"  	stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:poleZeroEnabled[i] forKey:[@"poleZeroEnabled" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:poleZeroMult[i]  forKey:[@"poleZeroMult" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:pzTraceEnabled[i] forKey:[@"pzTraceEnabled" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:polarity[i]		forKey:[@"polarity"		stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:triggerMode[i]	forKey:[@"triggerMode"	stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:cfdFraction[i]	forKey:[@"cfdFraction"	stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:cfdDelay[i]		forKey:[@"cfdDelay"		stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:cfdThreshold[i]	forKey:[@"cfdThreshold" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:ledThreshold[i]	forKey:[@"ledThreshold" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:dataDelay[i]		forKey:[@"dataDelay"	stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:dataLength[i]	forKey:[@"dataLength"	stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:enabled[i]		forKey:[@"enabled"		stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:debug[i]			forKey:[@"debug"		stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:pileUp[i]		forKey:[@"pileUp"		stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:cfdEnabled[i]  	forKey:[@"cfdEnabled"  	stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:poleZeroEnabled[i] forKey:[@"poleZeroEnabled" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:poleZeroMult[i]  forKey:[@"poleZeroMult" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:pzTraceEnabled[i] forKey:[@"pzTraceEnabled" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:polarity[i]		forKey:[@"polarity"		stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:triggerMode[i]	forKey:[@"triggerMode"	stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:cfdFraction[i]	forKey:[@"cfdFraction"	stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:cfdDelay[i]		forKey:[@"cfdDelay"		stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:cfdThreshold[i]	forKey:[@"cfdThreshold" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:ledThreshold[i]	forKey:[@"ledThreshold" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:dataDelay[i]		forKey:[@"dataDelay"	stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:dataLength[i]	forKey:[@"dataLength"	stringByAppendingFormat:@"%d",i]];
 	}
 	
 }

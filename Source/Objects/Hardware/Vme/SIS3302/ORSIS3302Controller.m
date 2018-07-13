@@ -610,8 +610,8 @@
 	BOOL mcaBusy = (acqRegValue & 0x100000) || (acqRegValue & 0x200000);
 	[mcaBusyField setStringValue:mcaBusy?@"MCA Busy":@"--"];
 	
-	[mcaScanHistogramCounterField setIntValue:[model mcaStatusResult:1]];
-	[mcaMultiScanScanCounterField setIntValue:[model mcaStatusResult:2]];
+	[mcaScanHistogramCounterField setIntegerValue:[model mcaStatusResult:1]];
+	[mcaMultiScanScanCounterField setIntegerValue:[model mcaStatusResult:2]];
 	int i;
 	for(i=0;i<kNumSIS3302Channels;i++){
 		unsigned long aValue;
@@ -619,25 +619,25 @@
 		if(aValue>100000){
 			[[mcaTriggerStartCounterMatrix	cellWithTag:i] setStringValue:[NSString stringWithFormat:@"%luK",aValue/1000]];
 		}
-		else [[mcaTriggerStartCounterMatrix	cellWithTag:i] setIntValue:aValue];
+		else [[mcaTriggerStartCounterMatrix	cellWithTag:i] setIntegerValue:aValue];
 
 		aValue = [model mcaStatusResult:4 + (4*i)];
 		if(aValue>100000){
 			[[mcaPileupCounterMatrix	cellWithTag:i] setStringValue:[NSString stringWithFormat:@"%luK",aValue/1000]];
 		}
-		else [[mcaPileupCounterMatrix	cellWithTag:i] setIntValue:aValue];
+		else [[mcaPileupCounterMatrix	cellWithTag:i] setIntegerValue:aValue];
 
 		aValue = [model mcaStatusResult:5 + (4*i)];
 		if(aValue>100000){
 			[[mcaEnergy2LowCounterMatrix	cellWithTag:i] setStringValue:[NSString stringWithFormat:@"%luK",aValue/1000]];
 		}
-		else [[mcaEnergy2LowCounterMatrix	cellWithTag:i] setIntValue:aValue];
+		else [[mcaEnergy2LowCounterMatrix	cellWithTag:i] setIntegerValue:aValue];
 
 		aValue = [model mcaStatusResult:6 + (4*i)];
 		if(aValue>100000){
 			[[mcaEnergy2HighCounterMatrix	cellWithTag:i] setStringValue:[NSString stringWithFormat:@"%luK",aValue/1000]];
 		}
-		else [[mcaEnergy2HighCounterMatrix	cellWithTag:i] setIntValue:aValue];
+		else [[mcaEnergy2HighCounterMatrix	cellWithTag:i] setIntegerValue:aValue];
 	}
 }
 
@@ -659,7 +659,7 @@
 
 - (void) mcaNofScansPresetChanged:(NSNotification*)aNote
 {
-	[mcaNofScansPresetField setIntValue: [model mcaNofScansPreset]];
+	[mcaNofScansPresetField setIntegerValue: [model mcaNofScansPreset]];
 }
 
 - (void) mcaAutoClearChanged:(NSNotification*)aNote
@@ -669,7 +669,7 @@
 
 - (void) mcaPrescaleFactorChanged:(NSNotification*)aNote
 {
-	[mcaPrescaleFactorField setIntValue: [model mcaPrescaleFactor]];
+	[mcaPrescaleFactorField setIntegerValue: [model mcaPrescaleFactor]];
 }
 
 - (void) mcaLNESetupChanged:(NSNotification*)aNote
@@ -679,7 +679,7 @@
 
 - (void) mcaNofHistoPresetChanged:(NSNotification*)aNote
 {
-	[mcaNofHistoPresetField setIntValue: [model mcaNofHistoPreset]];
+	[mcaNofHistoPresetField setIntegerValue: [model mcaNofHistoPreset]];
 }
 
 - (void) internalExternalTriggersOredChanged:(NSNotification*)aNote
@@ -1198,7 +1198,7 @@
 
 - (void) baseAddressChanged:(NSNotification*)aNote
 {
-    [addressText setIntValue: [model baseAddress]];
+    [addressText setIntegerValue: [model baseAddress]];
 }
 
 - (void) integrationChanged:(NSNotification*)aNotification
@@ -1316,7 +1316,7 @@
 
 - (IBAction) mcaModeAction:(id)sender
 {
-	[model setMcaMode:[sender indexOfSelectedItem]];	
+	[model setMcaMode:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) mcaPileupEnabledAction:(id)sender
@@ -1326,7 +1326,7 @@
 
 - (IBAction) mcaHistoSizeAction:(id)sender
 {
-	[model setMcaHistoSize:[sender indexOfSelectedItem]];	
+	[model setMcaHistoSize:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) mcaNofScansPresetAction:(id)sender
@@ -1391,7 +1391,7 @@
 
 - (IBAction) runModeAction:(id)sender
 {
-	[model setRunMode:[sender indexOfSelectedItem]];	
+	[model setRunMode:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) energySampleStartIndex3Action:(id)sender
@@ -1469,7 +1469,7 @@
 
 - (IBAction) clockSourceAction:(id)sender
 {
-	[model setClockSource:[sender indexOfSelectedItem]];	
+	[model setClockSource:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) triggerOutEnabledAction:(id)sender
@@ -1553,8 +1553,8 @@
 
 - (IBAction) sampleStartIndexAction:(id)sender
 {
-	if([sender intValue] != [model sampleStartIndex:[[sender selectedCell] tag]]){
-		[model setSampleStartIndex:[[sender selectedCell] tag] withValue:[sender intValue]];
+	if([sender intValue] != [model sampleStartIndex:(int)[[sender selectedCell] tag]]){
+		[model setSampleStartIndex:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 	}
 }
 
@@ -1677,7 +1677,7 @@
     }
 	
     NSString* key = [NSString stringWithFormat: @"orca.ORSIS3302%d.selectedtab",[model slot]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 	
 }
@@ -1724,12 +1724,12 @@
 
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	return [[[model waveFormRateGroup]timeRate]count];
+	return (int)[[[model waveFormRateGroup]timeRate]count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 {
-	int count = [[[model waveFormRateGroup]timeRate] count];
+	int count = (int)[[[model waveFormRateGroup]timeRate] count];
 	int index = count-i-1;
 	*yValue = [[[model waveFormRateGroup] timeRate]valueAtIndex:index];
 	*xValue = [[[model waveFormRateGroup] timeRate]timeSampledAtIndex:index];

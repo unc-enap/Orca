@@ -505,13 +505,13 @@ NSString* ORCV977ModelWriteValueChanged         = @"ORCV977ModelWriteValueChange
     [self setOrMaskBit:         [aDecoder decodeBoolForKey:@"orMaskBit"]];
     [self setGateMaskBit:       [aDecoder decodeBoolForKey:@"gateMaskBit"]];
     [self setPatternBit:        [aDecoder decodeBoolForKey:@"patternBit"]];
-    [self setSelectedRegIndex:  [aDecoder decodeIntForKey:  @"selectedRegIndex"]];
-    [self setWriteValue:        [aDecoder decodeInt32ForKey:@"writeValue"]];
-   	[self setInputSet:          [aDecoder decodeInt32ForKey:@"inputSet"]];
-   	[self setInputMask:         [aDecoder decodeInt32ForKey:@"inputMask"]];
-   	[self setOutputSet:         [aDecoder decodeInt32ForKey:@"outputSet"]];
-   	[self setOutputMask:        [aDecoder decodeInt32ForKey:@"outputMask"]];
-   	[self setInterruptMask:     [aDecoder decodeInt32ForKey:@"interruptMask"]];
+    [self setSelectedRegIndex:  [aDecoder decodeIntegerForKey:  @"selectedRegIndex"]];
+    [self setWriteValue:        [aDecoder decodeIntegerForKey:@"writeValue"]];
+   	[self setInputSet:          [aDecoder decodeIntegerForKey:@"inputSet"]];
+   	[self setInputMask:         [aDecoder decodeIntegerForKey:@"inputMask"]];
+   	[self setOutputSet:         [aDecoder decodeIntegerForKey:@"outputSet"]];
+   	[self setOutputMask:        [aDecoder decodeIntegerForKey:@"outputMask"]];
+   	[self setInterruptMask:     [aDecoder decodeIntegerForKey:@"interruptMask"]];
     [self registerNotificationObservers];
 
     [[self undoManager] enableUndoRegistration];
@@ -524,13 +524,13 @@ NSString* ORCV977ModelWriteValueChanged         = @"ORCV977ModelWriteValueChange
     [anEncoder encodeBool:orMaskBit         forKey:@"orMaskBit"];
     [anEncoder encodeBool:gateMaskBit       forKey:@"gateMaskBit"];
     [anEncoder encodeBool:patternBit        forKey:@"patternBit"];
-    [anEncoder encodeInt:selectedRegIndex   forKey:@"selectedRegIndex"];
-    [anEncoder encodeInt32:writeValue       forKey:@"writeValue"];
-	[anEncoder encodeInt32:inputSet         forKey:@"inputSet"];
-	[anEncoder encodeInt32:inputMask        forKey:@"inputMask"];
-	[anEncoder encodeInt32:outputSet        forKey:@"outputSet"];
-	[anEncoder encodeInt32:outputMask       forKey:@"outputMask"];
-	[anEncoder encodeInt32:interruptMask    forKey:@"interruptMask"];
+    [anEncoder encodeInteger:selectedRegIndex   forKey:@"selectedRegIndex"];
+    [anEncoder encodeInteger:writeValue       forKey:@"writeValue"];
+	[anEncoder encodeInteger:inputSet         forKey:@"inputSet"];
+	[anEncoder encodeInteger:inputMask        forKey:@"inputMask"];
+	[anEncoder encodeInteger:outputSet        forKey:@"outputSet"];
+	[anEncoder encodeInteger:outputMask       forKey:@"outputMask"];
+	[anEncoder encodeInteger:interruptMask    forKey:@"interruptMask"];
 }
 @end
 

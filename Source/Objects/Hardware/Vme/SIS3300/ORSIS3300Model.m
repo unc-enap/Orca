@@ -1550,9 +1550,9 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
     [self setPageWrap:				[decoder decodeBoolForKey:@"pageWrap"]];
     [self setStopTrigger:			[decoder decodeBoolForKey:@"stopTrigger"]];
     [self setPageSize:				[decoder decodeIntForKey:@"pageSize"]];
-    [self setEnabledMask:			[decoder decodeInt32ForKey:@"enabledMask"]];
+    [self setEnabledMask:			[decoder decodeIntegerForKey:@"enabledMask"]];
 	[self setThresholds:			[decoder decodeObjectForKey:@"thresholds"]];
-	[self setLtGtMask:				[decoder decodeIntForKey:@"ltGtMask"]];
+	[self setLtGtMask:				[decoder decodeIntegerForKey:@"ltGtMask"]];
 		
     [self setWaveFormRateGroup:[decoder decodeObjectForKey:@"waveFormRateGroup"]];
     
@@ -1593,17 +1593,17 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
     [encoder encodeBool:randomClock				forKey:@"randomClock"];
     [encoder encodeBool:startDelayEnabled		forKey:@"startDelayEnabled"];
     [encoder encodeBool:stopDelayEnabled		forKey:@"stopDelayEnabled"];
-    [encoder encodeInt:stopDelay				forKey:@"stopDelay"];
-    [encoder encodeInt:startDelay				forKey:@"startDelay"];
-    [encoder encodeInt:clockSource				forKey:@"clockSource"];
+    [encoder encodeInteger:stopDelay				forKey:@"stopDelay"];
+    [encoder encodeInteger:startDelay				forKey:@"startDelay"];
+    [encoder encodeInteger:clockSource				forKey:@"clockSource"];
 	
     [encoder encodeBool:pageWrap				forKey:@"pageWrap"];
     [encoder encodeBool:stopTrigger				forKey:@"stopTrigger"];
 
-    [encoder encodeInt:pageSize					forKey:@"pageSize"];
-    [encoder encodeInt32:(int32_t)enabledMask			forKey:@"enabledMask"];
+    [encoder encodeInteger:pageSize					forKey:@"pageSize"];
+    [encoder encodeInteger:enabledMask			forKey:@"enabledMask"];
     [encoder encodeObject:thresholds			forKey:@"thresholds"];
-    [encoder encodeInt:(int32_t)ltGtMask					forKey:@"ltGtMask"];
+    [encoder encodeInteger:(int32_t)ltGtMask					forKey:@"ltGtMask"];
 	
     [encoder encodeObject:waveFormRateGroup forKey:@"waveFormRateGroup"];
 	

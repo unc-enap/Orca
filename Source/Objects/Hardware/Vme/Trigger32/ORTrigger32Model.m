@@ -1150,16 +1150,16 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
     
     
     [self setRestartClkAtRunStart:[decoder decodeBoolForKey:@"ORTrigger32ModelRestartClkAtRunStart"]];
-    [self setLowerTimeValue:[decoder decodeInt32ForKey:ORTriggerClockLow]];
-    [self setUpperTimeValue:[decoder decodeInt32ForKey:ORTriggerClockUpper]];
-    [self setTestRegisterValue:[decoder decodeInt32ForKey:ORTriggerTestReg]];
+    [self setLowerTimeValue:[decoder decodeIntegerForKey:ORTriggerClockLow]];
+    [self setUpperTimeValue:[decoder decodeIntegerForKey:ORTriggerClockUpper]];
+    [self setTestRegisterValue:[decoder decodeIntegerForKey:ORTriggerTestReg]];
     [self setClockEnabled:[decoder decodeBoolForKey:ORTriggerClockEnabled]];
     [self setTrigger1GtXor:[decoder decodeBoolForKey:ORTriggerTrigger1Xor]];
     [self setTrigger1GtXor:[decoder decodeBoolForKey:ORTriggerTrigger2Xor]];
     
-    [self setGtIdValue:[decoder decodeIntForKey:ORTriggerGTID]];
-    [self setLowerTimeValue:[decoder decodeIntForKey:ORTriggerLowerClock]];
-    [self setUpperTimeValue:[decoder decodeIntForKey:ORTriggerUpperClock]];
+    [self setGtIdValue:[decoder decodeIntegerForKey:ORTriggerGTID]];
+    [self setLowerTimeValue:[decoder decodeIntegerForKey:ORTriggerLowerClock]];
+    [self setUpperTimeValue:[decoder decodeIntegerForKey:ORTriggerUpperClock]];
     
     [self setTrigger1Group:[decoder decodeObjectForKey:ORTriggerGroup1]];
     [self setTrigger2Group:[decoder decodeObjectForKey:ORTriggerGroup2]];
@@ -1178,7 +1178,7 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
     [self setUseMSAM:[decoder decodeBoolForKey:ORTriggerUseMSAM]];
     [self setMSamPrescale:[decoder decodeIntForKey:ORTriggerMSamPrescale]];
     
-    [self setLiveTimeEnabled:[decoder decodeIntForKey:ORTriggerEnableLiveTime]];
+    [self setLiveTimeEnabled:[decoder decodeIntegerForKey:ORTriggerEnableLiveTime]];
     
     if(mSamPrescale == 0)mSamPrescale = 50;
     
@@ -1200,16 +1200,16 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
     [super encodeWithCoder:encoder];
     
     [encoder encodeBool:restartClkAtRunStart forKey:@"ORTrigger32ModelRestartClkAtRunStart"];
-    [encoder encodeInt32:(int32_t)[self lowerTimeValue] forKey:ORTriggerClockLow];
-    [encoder encodeInt32:(int32_t)[self upperTimeValue] forKey:ORTriggerClockUpper];
-    [encoder encodeInt32:(int32_t)[self testRegisterValue] forKey:ORTriggerTestReg];
+    [encoder encodeInteger:[self lowerTimeValue] forKey:ORTriggerClockLow];
+    [encoder encodeInteger:[self upperTimeValue] forKey:ORTriggerClockUpper];
+    [encoder encodeInteger:[self testRegisterValue] forKey:ORTriggerTestReg];
     [encoder encodeBool:[self clockEnabled] forKey:ORTriggerClockEnabled];
     [encoder encodeBool:[self trigger1GtXor] forKey:ORTriggerTrigger1Xor];
     [encoder encodeBool:[self trigger2GtXor] forKey:ORTriggerTrigger2Xor];
     
-    [encoder encodeInt:(int32_t)[self gtIdValue] forKey:ORTriggerGTID];
-    [encoder encodeInt:(int32_t)[self lowerTimeValue] forKey:ORTriggerLowerClock];
-    [encoder encodeInt:(int32_t)[self upperTimeValue] forKey:ORTriggerUpperClock];
+    [encoder encodeInteger:(int32_t)[self gtIdValue] forKey:ORTriggerGTID];
+    [encoder encodeInteger:(int32_t)[self lowerTimeValue] forKey:ORTriggerLowerClock];
+    [encoder encodeInteger:(int32_t)[self upperTimeValue] forKey:ORTriggerUpperClock];
     
     [encoder encodeObject:[self trigger1Group] forKey:ORTriggerGroup1];
     [encoder encodeObject:[self trigger2Group] forKey:ORTriggerGroup2];
@@ -1224,8 +1224,8 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
     [encoder encodeObject:[self trigger2Name] forKey:ORTrigger2Name];
     [encoder encodeBool:[self useNoHardware] forKey:ORTriggerNoHardware];
     [encoder encodeBool:[self useMSAM] forKey:ORTriggerUseMSAM];
-    [encoder encodeInt:[self mSamPrescale] forKey:ORTriggerMSamPrescale];
-    [encoder encodeInt:[self liveTimeEnabled] forKey:ORTriggerEnableLiveTime];
+    [encoder encodeInteger:[self mSamPrescale] forKey:ORTriggerMSamPrescale];
+    [encoder encodeInteger:[self liveTimeEnabled] forKey:ORTriggerEnableLiveTime];
     
 }
 

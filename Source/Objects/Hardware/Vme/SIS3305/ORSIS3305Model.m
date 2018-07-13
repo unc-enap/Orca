@@ -1351,15 +1351,15 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
     
     if ([self eventSavingMode:group] <= 4 ) {
-        aValue = [self limitIntValue:aValue min:0 max:0xff];
+        aValue = [self limitIntValue:(int)aValue min:0 max:0xff];
     }
     else if([self eventSavingMode:group] >4){
-        aValue = [self limitIntValue:aValue min:0 max:0xffFFFF];
+        aValue = [self limitIntValue:(int)aValue min:0 max:0xffFFFF];
     }
     
 //    aValue = (aValue/4)*4;  // FIX: What is this for again?
     
-    [sampleLengths replaceObjectAtIndex:group withObject:[NSNumber numberWithInt:aValue]];
+    [sampleLengths replaceObjectAtIndex:group withObject:[NSNumber numberWithInteger:aValue]];
 //    [self calculateSampleValues];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORSIS3305SampleLengthChanged object:self];
 }
@@ -1540,7 +1540,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     
 	if(aGroup>kNumSIS3305Groups)return;
     [[[self undoManager] prepareWithInvocationTarget:self] setTriggerGateLength:aGroup withValue:[self triggerGateLength:aGroup]];
-	if (aTriggerGateLength < [self sampleLength:aGroup]) aTriggerGateLength = [self sampleLength:aGroup];
+	if (aTriggerGateLength < [self sampleLength:aGroup]) aTriggerGateLength = (int)[self sampleLength:aGroup];
     int triggerGateLength = [self limitIntValue:aTriggerGateLength min:0 max:65535];
 	[triggerGateLengths replaceObjectAtIndex:aGroup withObject:[NSNumber numberWithInt:triggerGateLength]];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORSIS3305ModelTriggerGateLengthChanged object:self];
@@ -1551,7 +1551,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
  //   if(aChannel>kNumSIS3305Channels)return 0; //FIX: set this up to use the array, or change the other bits to use this object
 //    int value  = [[preTriggerDelays objectAtIndex:aChannel] intValue];
     
-    return ringbufferPreDelay[aChannel];
+    return (int)ringbufferPreDelay[aChannel];
     
  //   return value;
 }
@@ -1945,7 +1945,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 - (void) setEndAddressThreshold:(short)aGroup withValue:(unsigned long)aValue 
 {
 	[[[self undoManager] prepareWithInvocationTarget:self] setEndAddressThreshold:aGroup withValue:[self endAddressThreshold:aGroup]];
-	[endAddressThresholds replaceObjectAtIndex:aGroup withObject:[NSNumber numberWithInt:aValue]];
+	[endAddressThresholds replaceObjectAtIndex:aGroup withObject:[NSNumber numberWithInteger:aValue]];
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORSIS3305ModelEndAddressThresholdChanged object:self];
 }
 
@@ -2557,7 +2557,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     // FIX: since I haven't implemented the write method for this register, we can't setup broadcast yet...
     unsigned long value;
     BOOL bEnabled,bMaster;
-    unsigned int bAddr;
+    unsigned long bAddr;
     
     [[self adapter] readLongBlock:&value
                         atAddress:[self baseAddress] + kSIS3305CbltBroadcastSetup
@@ -2905,7 +2905,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return value;
 }
 
-- (unsigned long) readADCSerialInterfaceOnADC:(char)adcSelect fromAddress:(unsigned int)addr
+- (unsigned long) readADCSerialInterfaceOnADC:(char)adcSelect fromAddress:(unsigned long)addr
 {
     // Reading from the Serial Interface is a 2 step process:
     //      1: Write to the interface with the address you're interested in
@@ -2922,7 +2922,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return value;
 }
 
-- (void) writeADCSerialInterface:(unsigned int)data onADC:(char)adcSelect toAddress:(unsigned int)addr viaSPI:(char)spi
+- (void) writeADCSerialInterface:(unsigned long)data onADC:(char)adcSelect toAddress:(unsigned long)addr viaSPI:(char)spi
 {
     // write to the ADC SPI on 0x74
     // used for talking directly to the ADC chip to setup bandwidth, channel mode (1.25/2.5/5 gsps)
@@ -2941,7 +2941,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return;
 }
 
-- (void) writeADCSerialInterface:(unsigned int)data onADC:(char)adcSelect toAddress:(unsigned int)addr
+- (void) writeADCSerialInterface:(unsigned long)data onADC:(char)adcSelect toAddress:(unsigned long)addr
 {
     [self writeADCSerialInterface:data onADC:adcSelect toAddress:addr viaSPI:NO];
 }
@@ -3019,7 +3019,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
             NSLog(@"SIS3305 ADC %d SPI logic is busy, unable to write to it...",adc);
             return 0x0;
         }
-        packet.chipID[adc] = readValue;
+        packet.chipID[adc] = (unsigned int)readValue;
     }
     
     // make the output as expected
@@ -3086,7 +3086,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
             NSLog(@"SIS3305 ADC %d SPI logic is busy, unable to write to it...",adc);
             return 0x0;
         }
-        packet.control[adc] = readValue;
+        packet.control[adc] = (unsigned int)readValue;
     }
     
     if (verbose) {
@@ -3240,7 +3240,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
                 |   (([self bandwidth:adc]      & 0x1)  << 8)
                 |   (([self testMode:adc]       & 0x1)  << 12);
         
-        [self writeADCSerialInterface:writeData onADC:adc toAddress:addr viaSPI:NO];
+        [self writeADCSerialInterface:(unsigned int)writeData onADC:adc toAddress:addr viaSPI:NO];
     }
     [self waitUntilADCSerialInterfaceNotBusy];
     [self ADCSynchReset];   // this is necessary every time you change channel mode, I write it every time here.
@@ -5980,14 +5980,14 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 		configStruct->total_cards++;
 		configStruct->card_info[index].hw_type_id				= kSIS3305; //should be unique
-		configStruct->card_info[index].hw_mask[0]				= dataId;	//better be unique
+		configStruct->card_info[index].hw_mask[0]				= (uint32_t)dataId;	//better be unique
 		configStruct->card_info[index].slot						= [self slot];
 		configStruct->card_info[index].crate					= [self crateNumber];
 		configStruct->card_info[index].add_mod					= [self addressModifier];
-		configStruct->card_info[index].base_add					= [self baseAddress];
+		configStruct->card_info[index].base_add					= (uint32_t)[self baseAddress];
         
-        configStruct->card_info[index].deviceSpecificData[0]    = [self longsInSample:0];
-        configStruct->card_info[index].deviceSpecificData[1]    = [self longsInSample:1];
+        configStruct->card_info[index].deviceSpecificData[0]    = (uint32_t)[self longsInSample:0];
+        configStruct->card_info[index].deviceSpecificData[1]    = (uint32_t)[self longsInSample:1];
         
         configStruct->card_info[index].deviceSpecificData[2]    = [self channelMode:0];
         configStruct->card_info[index].deviceSpecificData[3]    = [self channelMode:1];
@@ -6069,40 +6069,40 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 	
     [self setRunMode:					[decoder decodeIntForKey:@"runMode"]];
     [self setInternalExternalTriggersOred:[decoder decodeBoolForKey:@"internalExternalTriggersOred"]];
-    [self setLemoInEnabledMask:			[decoder decodeIntForKey:@"lemoInEnabledMask"]];
+    [self setLemoInEnabledMask:			[decoder decodeIntegerForKey:@"lemoInEnabledMask"]];
     
-    [self setLemoInMode:				[decoder decodeIntForKey:@"lemoInMode"]];
-    [self setLemoOutMode:				[decoder decodeIntForKey:@"lemoOutMode"]];
+    [self setLemoInMode:				[decoder decodeIntegerForKey:@"lemoInMode"]];
+    [self setLemoOutMode:				[decoder decodeIntegerForKey:@"lemoOutMode"]];
 	
     [self setClockSource:				[decoder decodeIntForKey:@"clockSource"]];
-    [self setTriggerOutEnabledMask:		[decoder decodeInt32ForKey:@"triggerOutEnabledMask"]];
+    [self setTriggerOutEnabledMask:		[decoder decodeIntegerForKey:@"triggerOutEnabledMask"]];
 
-    [self setInputInvertedMask:			[decoder decodeInt32ForKey:@"inputInvertedMask"]];
+    [self setInputInvertedMask:			[decoder decodeIntegerForKey:@"inputInvertedMask"]];
     
     int i;
     for (i=0; i<kNumSIS3305Groups; i++) {
-        [self setEventSavingModeOf:i            toValue:[decoder decodeInt32ForKey:[@"eventSavingMode" stringByAppendingFormat:@"%d",i]]];
+        [self setEventSavingModeOf:i            toValue:[decoder decodeIntegerForKey:[@"eventSavingMode" stringByAppendingFormat:@"%d",i]]];
 
-        [self setGlobalTriggerEnabledOnGroup:i toValue:[decoder decodeInt32ForKey:[@"globalTriggerEnabled" stringByAppendingFormat:@"%d",i]]];
-        [self setInternalTriggerEnabled:i toValue:[decoder decodeInt32ForKey:[@"internalTriggerEnabled" stringByAppendingFormat:@"%d",i]]];
-        [self setStartEventSamplingWithExtTrigEnabled:i toValue:[decoder decodeInt32ForKey:[@"startSamplingAfterFirstExternalTrigger" stringByAppendingFormat:@"%d",i]]];
-        [self setClearTimestampWhenSamplingEnabledEnabled:i toValue:[decoder decodeInt32ForKey:[@"clearTimestampWhenSamplingEnabledEnabled" stringByAppendingFormat:@"%d",i]]];
-        [self setClearTimestampDisabled:i toValue:[decoder decodeInt32ForKey:[@"clearTimestampDisabled" stringByAppendingFormat:@"%d",i]]];
-        [self setWaitPreTrigTimeBeforeDirectMemTrig:i toValue:[decoder decodeInt32ForKey:[@"waitPreTrigTimeBeforeDirectMemTrig" stringByAppendingFormat:@"%d",i]]];
-        [self setDirectMemoryHeaderDisabled:i toValue:[decoder decodeInt32ForKey:[@"directMemoryHeaderDisabled" stringByAppendingFormat:@"%d",i]]];
+        [self setGlobalTriggerEnabledOnGroup:i toValue:[decoder decodeIntegerForKey:[@"globalTriggerEnabled" stringByAppendingFormat:@"%d",i]]];
+        [self setInternalTriggerEnabled:i toValue:[decoder decodeIntegerForKey:[@"internalTriggerEnabled" stringByAppendingFormat:@"%d",i]]];
+        [self setStartEventSamplingWithExtTrigEnabled:i toValue:[decoder decodeIntegerForKey:[@"startSamplingAfterFirstExternalTrigger" stringByAppendingFormat:@"%d",i]]];
+        [self setClearTimestampWhenSamplingEnabledEnabled:i toValue:[decoder decodeIntegerForKey:[@"clearTimestampWhenSamplingEnabledEnabled" stringByAppendingFormat:@"%d",i]]];
+        [self setClearTimestampDisabled:i toValue:[decoder decodeIntegerForKey:[@"clearTimestampDisabled" stringByAppendingFormat:@"%d",i]]];
+        [self setWaitPreTrigTimeBeforeDirectMemTrig:i toValue:[decoder decodeIntegerForKey:[@"waitPreTrigTimeBeforeDirectMemTrig" stringByAppendingFormat:@"%d",i]]];
+        [self setDirectMemoryHeaderDisabled:i toValue:[decoder decodeIntegerForKey:[@"directMemoryHeaderDisabled" stringByAppendingFormat:@"%d",i]]];
         
         
-        [self setGrayCodeEnabled:i toValue:[decoder decodeInt32ForKey:[@"grayCodeEnabled" stringByAppendingFormat:@"%d",i]]];
-        [self setADCGateModeEnabled:i toValue:[decoder decodeInt32ForKey:[@"ADCGateModeEnabled" stringByAppendingFormat:@"%d",i]]];
-        [self setBandwidth:i withValue:[decoder decodeInt32ForKey:[@"bandwidth" stringByAppendingFormat:@"%d",i]]];
+        [self setGrayCodeEnabled:i toValue:[decoder decodeIntegerForKey:[@"grayCodeEnabled" stringByAppendingFormat:@"%d",i]]];
+        [self setADCGateModeEnabled:i toValue:[decoder decodeIntegerForKey:[@"ADCGateModeEnabled" stringByAppendingFormat:@"%d",i]]];
+        [self setBandwidth:i withValue:[decoder decodeIntegerForKey:[@"bandwidth" stringByAppendingFormat:@"%d",i]]];
         
-        [self setTestMode:i withValue:[decoder decodeInt32ForKey:[@"testMode" stringByAppendingFormat:@"%d",i]]];
-        [self setChannelMode:i withValue:[decoder decodeInt32ForKey:[@"channelMode" stringByAppendingFormat:@"%d",i]]];
+        [self setTestMode:i withValue:[decoder decodeIntegerForKey:[@"testMode" stringByAppendingFormat:@"%d",i]]];
+        [self setChannelMode:i withValue:[decoder decodeIntegerForKey:[@"channelMode" stringByAppendingFormat:@"%d",i]]];
     }
     
-    [self setExternalTriggerEnabledMask:[decoder decodeInt32ForKey:@"externalTriggerEnabledMask"]];
-    [self setInternalGateEnabledMask:	[decoder decodeInt32ForKey:@"internalGateEnabledMask"]];
-    [self setExternalGateEnabledMask:	[decoder decodeInt32ForKey:@"externalGateEnabledMask"]];
+    [self setExternalTriggerEnabledMask:[decoder decodeIntegerForKey:@"externalTriggerEnabledMask"]];
+    [self setInternalGateEnabledMask:	[decoder decodeIntegerForKey:@"internalGateEnabledMask"]];
+    [self setExternalGateEnabledMask:	[decoder decodeIntegerForKey:@"externalGateEnabledMask"]];
     
 //	[self setShipSummedWaveform:		[decoder decodeBoolForKey:@"shipSummedWaveform"]];
     [self setWaveFormRateGroup:			[decoder decodeObjectForKey:@"waveFormRateGroup"]];
@@ -6112,17 +6112,17 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     for (chan = 0; chan<kNumSIS3305Channels; chan++)
     {
         //threshold mode can't be set directly, since we store the individual LT ang GT enabled with the encoder
-        [self setLTThresholdEnabled:chan    withValue:[decoder decodeIntForKey:[@"LTThresholdEnabled"	    stringByAppendingFormat:@"%d",chan]]];
-        [self setGTThresholdEnabled:chan    withValue:[decoder decodeIntForKey:[@"GTThresholdEnabled"	    stringByAppendingFormat:@"%d",chan]]];
+        [self setLTThresholdEnabled:chan    withValue:[decoder decodeIntegerForKey:[@"LTThresholdEnabled"	    stringByAppendingFormat:@"%d",chan]]];
+        [self setGTThresholdEnabled:chan    withValue:[decoder decodeIntegerForKey:[@"GTThresholdEnabled"	    stringByAppendingFormat:@"%d",chan]]];
         [self setLTThresholdOn:chan         withValue:[decoder decodeIntForKey:[@"LTThresholdOn"            stringByAppendingFormat:@"%d",chan]]];
         [self setLTThresholdOff:chan        withValue:[decoder decodeIntForKey:[@"LTThresholdOff"           stringByAppendingFormat:@"%d",chan]]];
         [self setGTThresholdOn:chan         withValue:[decoder decodeIntForKey:[@"GTThresholdOn"            stringByAppendingFormat:@"%d",chan]]];
         [self setGTThresholdOff:chan        withValue:[decoder decodeIntForKey:[@"GTThresholdOff"           stringByAppendingFormat:@"%d",chan]]];
 
         [self setPreTriggerDelay:chan       withValue:[decoder decodeIntForKey:[@"preTriggerDelay"          stringByAppendingFormat:@"%d",chan]]];
-        [self setAdcOffset:chan             toValue:[decoder decodeIntForKey:[@"adcOffset"                  stringByAppendingFormat:@"%d",chan]]];
-        [self setAdcGain:chan               toValue:[decoder decodeIntForKey:[@"adcGain"                    stringByAppendingFormat:@"%d",chan]]];
-        [self setAdcPhase:chan              toValue:[decoder decodeIntForKey:[@"adcPhase"                   stringByAppendingFormat:@"%d",chan]]];
+        [self setAdcOffset:chan             toValue:[decoder decodeIntegerForKey:[@"adcOffset"                  stringByAppendingFormat:@"%d",chan]]];
+        [self setAdcGain:chan               toValue:[decoder decodeIntegerForKey:[@"adcGain"                    stringByAppendingFormat:@"%d",chan]]];
+        [self setAdcPhase:chan              toValue:[decoder decodeIntegerForKey:[@"adcPhase"                   stringByAppendingFormat:@"%d",chan]]];
         
     }
     
@@ -6146,7 +6146,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     
 	//firmware 15xx
 //    cfdControls =					[[decoder decodeObjectForKey:@"cfdControls"] retain];
-    [self setBufferWrapEnabledMask:	[decoder decodeInt32ForKey:@"bufferWrapEnabledMask"]];
+    [self setBufferWrapEnabledMask:	[decoder decodeIntegerForKey:@"bufferWrapEnabledMask"]];
 	
 	if(!waveFormRateGroup){
 		[self setWaveFormRateGroup:[[[ORRateGroup alloc] initGroup:kNumSIS3305Channels groupTag:0] autorelease]];
@@ -6178,53 +6178,53 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     //channel-level c-arrays:
     int chan;
     for (chan=0; chan<kNumSIS3305Channels; chan++) {
-        [encoder encodeInt:LTThresholdEnabled[chan]		forKey:[@"LTThresholdEnabled"	stringByAppendingFormat:@"%d",chan]];
-        [encoder encodeInt:GTThresholdEnabled[chan]		forKey:[@"GTThresholdEnabled"	stringByAppendingFormat:@"%d",chan]];
-        [encoder encodeInt:LTThresholdOn[chan]          forKey:[@"LTThresholdOn"		stringByAppendingFormat:@"%d",chan]];
-        [encoder encodeInt:LTThresholdOff[chan]         forKey:[@"LTThresholdOff"		stringByAppendingFormat:@"%d",chan]];
-        [encoder encodeInt:GTThresholdOn[chan]          forKey:[@"GTThresholdOn"		stringByAppendingFormat:@"%d",chan]];
-        [encoder encodeInt:GTThresholdOff[chan]         forKey:[@"GTThresholdOff"		stringByAppendingFormat:@"%d",chan]];
+        [encoder encodeInteger:LTThresholdEnabled[chan]		forKey:[@"LTThresholdEnabled"	stringByAppendingFormat:@"%d",chan]];
+        [encoder encodeInteger:GTThresholdEnabled[chan]		forKey:[@"GTThresholdEnabled"	stringByAppendingFormat:@"%d",chan]];
+        [encoder encodeInteger:LTThresholdOn[chan]          forKey:[@"LTThresholdOn"		stringByAppendingFormat:@"%d",chan]];
+        [encoder encodeInteger:LTThresholdOff[chan]         forKey:[@"LTThresholdOff"		stringByAppendingFormat:@"%d",chan]];
+        [encoder encodeInteger:GTThresholdOn[chan]          forKey:[@"GTThresholdOn"		stringByAppendingFormat:@"%d",chan]];
+        [encoder encodeInteger:GTThresholdOff[chan]         forKey:[@"GTThresholdOff"		stringByAppendingFormat:@"%d",chan]];
         
-        [encoder encodeInt:gain[chan]                   forKey:[@"Gain"                 stringByAppendingFormat:@"%d",chan]];
-        [encoder encodeInt:ringbufferPreDelay[chan]       forKey:[@"preTriggerDelay"      stringByAppendingFormat:@"%d",chan]];
+        [encoder encodeInteger:gain[chan]                   forKey:[@"Gain"                 stringByAppendingFormat:@"%d",chan]];
+        [encoder encodeInteger:ringbufferPreDelay[chan]       forKey:[@"preTriggerDelay"      stringByAppendingFormat:@"%d",chan]];
         
         
-        [encoder encodeInt:adcOffset[chan]              forKey:[@"adcOffset"            stringByAppendingFormat:@"%d",chan]];
-        [encoder encodeInt:adcGain[chan]                forKey:[@"adcGain"              stringByAppendingFormat:@"%d",chan]];
-        [encoder encodeInt:adcPhase[chan]               forKey:[@"adcPhase"             stringByAppendingFormat:@"%d",chan]];
+        [encoder encodeInteger:adcOffset[chan]              forKey:[@"adcOffset"            stringByAppendingFormat:@"%d",chan]];
+        [encoder encodeInteger:adcGain[chan]                forKey:[@"adcGain"              stringByAppendingFormat:@"%d",chan]];
+        [encoder encodeInteger:adcPhase[chan]               forKey:[@"adcPhase"             stringByAppendingFormat:@"%d",chan]];
 
     }
     int i;
     for (i=0; i<kNumSIS3305Groups; i++) {
-        [encoder encodeInt:eventSavingMode[i]         forKey:[@"eventSavingMode" stringByAppendingFormat:@"%d",i]];
+        [encoder encodeInteger:eventSavingMode[i]         forKey:[@"eventSavingMode" stringByAppendingFormat:@"%d",i]];
         
-        [encoder encodeInt:globalTriggerEnabled[i] forKey:[@"globalTriggerEnabled" stringByAppendingFormat:@"%d",i]];
-        [encoder encodeInt:internalTriggerEnabled[i] forKey:[@"internalTriggerEnabled" stringByAppendingFormat:@"%d",i]];
-        [encoder encodeInt:startEventSamplingWithExtTrigEnabled[i] forKey:[@"startSamplingAfterFirstExternalTrigger" stringByAppendingFormat:@"%d",i]];
-        [encoder encodeInt:clearTimestampWhenSamplingEnabledEnabled[i] forKey:[@"clearTimestampWhenSamplingEnabledEnabled" stringByAppendingFormat:@"%d",i]];
-        [encoder encodeInt:clearTimestampDisabled[i]  forKey:[@"clearTimestampDisabled" stringByAppendingFormat:@"%d",i]];
-        [encoder encodeInt:waitPreTrigTimeBeforeDirectMemTrig[i]  forKey:[@"waitPreTrigTimeBeforeDirectMemTrig" stringByAppendingFormat:@"%d",i]];
-        [encoder encodeInt:directMemoryHeaderDisabled[i]  forKey:[@"directMemoryHeaderDisabled" stringByAppendingFormat:@"%d",i]];
-        [encoder encodeInt:grayCodeEnabled[i] forKey:[@"grayCodeEnabled" stringByAppendingFormat:@"%d",i]];
-        [encoder encodeInt:ADCGateModeEnabled[i] forKey:[@"ADCGateModeEnabled" stringByAppendingFormat:@"%d",i]];
-        [encoder encodeInt:bandwidth[i] forKey:[@"bandwidth" stringByAppendingFormat:@"%d",i]];
-        [encoder encodeInt:testMode[i] forKey:[@"testMode" stringByAppendingFormat:@"%d",i]];
-        [encoder encodeInt:channelMode[i] forKey:[@"channelMode" stringByAppendingFormat:@"%d",i]];
+        [encoder encodeInteger:globalTriggerEnabled[i] forKey:[@"globalTriggerEnabled" stringByAppendingFormat:@"%d",i]];
+        [encoder encodeInteger:internalTriggerEnabled[i] forKey:[@"internalTriggerEnabled" stringByAppendingFormat:@"%d",i]];
+        [encoder encodeInteger:startEventSamplingWithExtTrigEnabled[i] forKey:[@"startSamplingAfterFirstExternalTrigger" stringByAppendingFormat:@"%d",i]];
+        [encoder encodeInteger:clearTimestampWhenSamplingEnabledEnabled[i] forKey:[@"clearTimestampWhenSamplingEnabledEnabled" stringByAppendingFormat:@"%d",i]];
+        [encoder encodeInteger:clearTimestampDisabled[i]  forKey:[@"clearTimestampDisabled" stringByAppendingFormat:@"%d",i]];
+        [encoder encodeInteger:waitPreTrigTimeBeforeDirectMemTrig[i]  forKey:[@"waitPreTrigTimeBeforeDirectMemTrig" stringByAppendingFormat:@"%d",i]];
+        [encoder encodeInteger:directMemoryHeaderDisabled[i]  forKey:[@"directMemoryHeaderDisabled" stringByAppendingFormat:@"%d",i]];
+        [encoder encodeInteger:grayCodeEnabled[i] forKey:[@"grayCodeEnabled" stringByAppendingFormat:@"%d",i]];
+        [encoder encodeInteger:ADCGateModeEnabled[i] forKey:[@"ADCGateModeEnabled" stringByAppendingFormat:@"%d",i]];
+        [encoder encodeInteger:bandwidth[i] forKey:[@"bandwidth" stringByAppendingFormat:@"%d",i]];
+        [encoder encodeInteger:testMode[i] forKey:[@"testMode" stringByAppendingFormat:@"%d",i]];
+        [encoder encodeInteger:channelMode[i] forKey:[@"channelMode" stringByAppendingFormat:@"%d",i]];
     }
     
-    [encoder encodeInt:runMode					forKey:@"runMode"];
-    [encoder encodeInt:clockSource				forKey:@"clockSource"];
-	[encoder encodeInt:lemoInEnabledMask		forKey:@"lemoInEnabledMask"];
-	[encoder encodeInt:lemoInMode				forKey:@"lemoInMode"];
-	[encoder encodeInt:lemoOutMode				forKey:@"lemoOutMode"];
+    [encoder encodeInteger:runMode					forKey:@"runMode"];
+    [encoder encodeInteger:clockSource				forKey:@"clockSource"];
+	[encoder encodeInteger:lemoInEnabledMask		forKey:@"lemoInEnabledMask"];
+	[encoder encodeInteger:lemoInMode				forKey:@"lemoInMode"];
+	[encoder encodeInteger:lemoOutMode				forKey:@"lemoOutMode"];
 	
 	[encoder encodeBool:internalExternalTriggersOred	forKey:@"internalExternalTriggersOred"];
-	[encoder encodeInt32:triggerOutEnabledMask			forKey:@"triggerOutEnabledMask"];
-	[encoder encodeInt32:inputInvertedMask				forKey:@"inputInvertedMask"];
-	[encoder encodeInt32:internalTriggerEnabledMask		forKey:@"internalTriggerEnabledMask"];
-	[encoder encodeInt32:externalTriggerEnabledMask		forKey:@"externalTriggerEnabledMask"];
-	[encoder encodeInt32:internalGateEnabledMask		forKey:@"internalGateEnabledMask"];
-	[encoder encodeInt32:externalGateEnabledMask		forKey:@"externalGateEnabledMask"];
+	[encoder encodeInteger:triggerOutEnabledMask			forKey:@"triggerOutEnabledMask"];
+	[encoder encodeInteger:inputInvertedMask				forKey:@"inputInvertedMask"];
+	[encoder encodeInteger:internalTriggerEnabledMask		forKey:@"internalTriggerEnabledMask"];
+	[encoder encodeInteger:externalTriggerEnabledMask		forKey:@"externalTriggerEnabledMask"];
+	[encoder encodeInteger:internalGateEnabledMask		forKey:@"internalGateEnabledMask"];
+	[encoder encodeInteger:externalGateEnabledMask		forKey:@"externalGateEnabledMask"];
 	
 
     [encoder encodeObject:waveFormRateGroup		forKey:@"waveFormRateGroup"];
@@ -6237,7 +6237,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 	[encoder encodeObject:triggerGateLengths	forKey:@"triggerGateLengths"];
 	[encoder encodeObject:sampleStartIndexes	forKey:@"sampleStartIndexes"];
 	//firmware 15xx
-    [encoder encodeInt32:bufferWrapEnabledMask	forKey:@"bufferWrapEnabledMask"];
+    [encoder encodeInteger:bufferWrapEnabledMask	forKey:@"bufferWrapEnabledMask"];
 
 	
 }
@@ -6250,8 +6250,6 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
      */
     NSMutableDictionary* objDictionary = [super addParametersToDictionary:dictionary];
 	
-    [objDictionary setObject: [NSNumber numberWithLong:LTThresholdEnabled]			forKey:@"LTThresholdEnabled"];
-    [objDictionary setObject: [NSNumber numberWithLong:GTThresholdEnabled]			forKey:@"GTThresholdEnabled"];
 	[objDictionary setObject: [NSNumber numberWithInt:clockSource]					forKey:@"clockSource"];
 
 	[objDictionary setObject: [NSNumber numberWithLong:triggerOutEnabledMask]		forKey:@"triggerOutEnabledMask"];
@@ -6295,7 +6293,9 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
         [objDictionary setObject:[NSNumber numberWithInteger:adcGain[i]]		forKey:[@"adcGain" stringByAppendingFormat:@"%d",i]];
         [objDictionary setObject:[NSNumber numberWithInteger:adcPhase[i]]		forKey:[@"adcPhase" stringByAppendingFormat:@"%d",i]];
         [objDictionary setObject:[NSNumber numberWithInteger:adcOffset[i]]		forKey:[@"adcOffset" stringByAppendingFormat:@"%d",i]];
-        
+        [objDictionary setObject: [NSNumber numberWithBool:LTThresholdEnabled[i]] forKey:[@"LTThresholdEnabled" stringByAppendingFormat:@"%d",i]];
+        [objDictionary setObject: [NSNumber numberWithBool:GTThresholdEnabled[i]] forKey:[@"GTThresholdEnabled" stringByAppendingFormat:@"%d",i]];
+
     }
     
 	[objDictionary setObject: [NSNumber numberWithLong:bufferWrapEnabledMask]		forKey:@"bufferWrapEnabledMask"];

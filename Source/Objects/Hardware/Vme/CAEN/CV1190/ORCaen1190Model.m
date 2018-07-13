@@ -587,11 +587,11 @@ NSString* ORCaen1190RateGroupChangedNotification    = @"ORCaen1190RateGroupChang
     [self setLeadingWidthResolution:[aDecoder decodeIntForKey:@"leadingWidthResolution"]];
     [self setLeadingTimeResolution:	[aDecoder decodeIntForKey:@"leadingTimeResolution"]];
     [self setLeadingTrailingLSB:	[aDecoder decodeIntForKey:@"leadingTrailingLSB"]];
-    [self setEnableTrigTimeSub:		[aDecoder decodeIntForKey:@"enableTrigTimeSub"]];
+    [self setEnableTrigTimeSub:		[aDecoder decodeIntegerForKey:@"enableTrigTimeSub"]];
     [self setEdgeDetection:	[aDecoder decodeIntForKey:@"edgeDetection"]];
     [self setRejectMargin:	[aDecoder decodeIntForKey:@"rejectMargin"]];
     [self setSearchMargin:	[aDecoder decodeIntForKey:@"searchMargin"]];
-    [self setWindowOffset:	[aDecoder decodeIntForKey:@"windowOffset"]];
+    [self setWindowOffset:	[aDecoder decodeIntegerForKey:@"windowOffset"]];
     [self setWindowWidth:	[aDecoder decodeIntForKey:@"windowWidth"]];
 	[self setParamGroup:	[aDecoder decodeIntForKey:@"paramGroup"]];
 	[self setAcqMode:		[aDecoder decodeIntForKey:@"acqMode"]];
@@ -599,7 +599,7 @@ NSString* ORCaen1190RateGroupChangedNotification    = @"ORCaen1190RateGroupChang
 	
 	int i;
     for (i = 0; i < 4; i++){
-        [self setEnabledMask:i withValue:[aDecoder decodeInt32ForKey: [NSString stringWithFormat:@"enabledMask%d", i]]];
+        [self setEnabledMask:i withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"enabledMask%d", i]]];
     }
 	
 	if(!tdcRateGroup){
@@ -621,21 +621,21 @@ NSString* ORCaen1190RateGroupChangedNotification    = @"ORCaen1190RateGroupChang
     
     [super encodeWithCoder:anEncoder];
 	
-    [anEncoder encodeInt:deadTime			forKey:@"deadTime"];
-    [anEncoder encodeInt:leadingWidthResolution forKey:@"leadingWidthResolution"];
-    [anEncoder encodeInt:leadingTimeResolution	forKey:@"leadingTimeResolution"];
-    [anEncoder encodeInt:leadingTrailingLSB forKey:@"leadingTrailingLSB"];
-    [anEncoder encodeInt:edgeDetection		forKey:@"edgeDetection"];
-    [anEncoder encodeInt:paramGroup			forKey:@"paramGroup"];
-    [anEncoder encodeInt:acqMode			forKey:@"acqMode"];
-	[anEncoder encodeInt:enableTrigTimeSub	forKey:@"enableTrigTimeSub"];
-	[anEncoder encodeInt:rejectMargin		forKey:@"rejectMargin"];
-	[anEncoder encodeInt:searchMargin		forKey:@"searchMargin"];
-	[anEncoder encodeInt:windowOffset		forKey:@"windowOffset"];
-	[anEncoder encodeInt:windowWidth		forKey:@"windowWidth"];
+    [anEncoder encodeInteger:deadTime			forKey:@"deadTime"];
+    [anEncoder encodeInteger:leadingWidthResolution forKey:@"leadingWidthResolution"];
+    [anEncoder encodeInteger:leadingTimeResolution	forKey:@"leadingTimeResolution"];
+    [anEncoder encodeInteger:leadingTrailingLSB forKey:@"leadingTrailingLSB"];
+    [anEncoder encodeInteger:edgeDetection		forKey:@"edgeDetection"];
+    [anEncoder encodeInteger:paramGroup			forKey:@"paramGroup"];
+    [anEncoder encodeInteger:acqMode			forKey:@"acqMode"];
+	[anEncoder encodeInteger:enableTrigTimeSub	forKey:@"enableTrigTimeSub"];
+	[anEncoder encodeInteger:rejectMargin		forKey:@"rejectMargin"];
+	[anEncoder encodeInteger:searchMargin		forKey:@"searchMargin"];
+	[anEncoder encodeInteger:windowOffset		forKey:@"windowOffset"];
+	[anEncoder encodeInteger:windowWidth		forKey:@"windowWidth"];
     [anEncoder encodeObject:tdcRateGroup	forKey:@"tdcRateGroup"];
     for (i = 0; i < 4; i++){
-        [anEncoder encodeInt32:(int32_t)enabledMask[i] forKey:[NSString stringWithFormat:@"enabledMask%d", i]];
+        [anEncoder encodeInteger:enabledMask[i] forKey:[NSString stringWithFormat:@"enabledMask%d", i]];
     }
 }
 

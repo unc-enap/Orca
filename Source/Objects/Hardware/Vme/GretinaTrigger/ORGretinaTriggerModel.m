@@ -658,7 +658,7 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
         [self writeRegister:kAuxTriggerWidth withValue:0xff]; //set to max width ~50µs
    // }
     
-    [self writeRegister:kPulsedCtl1 withValue:0x80000]; //generate 1 manual trigger)
+    [self writeRegister:kPulsedCtl1 withValue:0x8000]; //generate 1 manual trigger)
     
 }
 
@@ -2138,9 +2138,9 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
     self = [super initWithCoder:decoder];
     
     [[self undoManager] disableUndoRegistration];
-    [self setNumTimesToRetry:   [decoder decodeIntForKey:@"numTimesToRetry"]];
+    [self setNumTimesToRetry:   [decoder decodeIntegerForKey:@"numTimesToRetry"]];
     [self setDoNotLock:         [decoder decodeBoolForKey:@"doNotLock"]];
-    [self setInputLinkMask:     [decoder decodeIntForKey:@"inputLinkMask"]];
+    [self setInputLinkMask:     [decoder decodeIntegerForKey:@"inputLinkMask"]];
     [self setIsMaster:          [decoder decodeBoolForKey:@"isMaster"]];
     int i;
     for(i=0;i<9;i++){
@@ -2154,9 +2154,9 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:numTimesToRetry  forKey:@"numTimesToRetry"];
+    [encoder encodeInteger:numTimesToRetry  forKey:@"numTimesToRetry"];
     [encoder encodeBool:doNotLock       forKey:@"doNotLock"];
-    [encoder encodeInt:inputLinkMask    forKey:@"inputLinkMask"];
+    [encoder encodeInteger:inputLinkMask    forKey:@"inputLinkMask"];
     [encoder encodeBool:isMaster        forKey:@"isMaster"];
     int i;
     for(i=0;i<9;i++){

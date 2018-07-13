@@ -181,12 +181,12 @@
 
 - (void) modelTypePUAction:(id)sender
 {
-	[model setModelType:[sender indexOfSelectedItem]];	
+	[model setModelType:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) onlineAction:(id)sender
 {
-	[model setOnlineMaskBit:[[sender selectedCell] tag] withValue:[sender intValue]];
+	[model setOnlineMaskBit:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 - (IBAction) initBoardAction:(id)sender

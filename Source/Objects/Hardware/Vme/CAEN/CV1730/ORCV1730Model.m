@@ -1426,20 +1426,20 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 	
     [[self undoManager] disableUndoRegistration];
     [self setEventSize:                 [aDecoder decodeIntForKey:   @"eventSize"]];
-    [self setEnabledMask:               [aDecoder decodeIntForKey:   @"enabledMask"]];
-    [self setPostTriggerSetting:        [aDecoder decodeInt32ForKey: @"postTriggerSetting"]];
-    [self setTriggerSourceMask:         [aDecoder decodeInt32ForKey: @"triggerSourceMask"]];
-    [self setTriggerOutMask:            [aDecoder decodeInt32ForKey: @"triggerOutMask"]];
-    [self setTriggerOutLogic:           [aDecoder decodeIntForKey:   @"triggerOutLogic"]];
-	[self setFrontPanelControlMask:     [aDecoder decodeInt32ForKey: @"frontPanelControlMask"]];
-    [self setCoincidenceLevel:          [aDecoder decodeIntForKey:   @"coincidenceLevel"]];
-    [self setCoincidenceWindow:         [aDecoder decodeIntForKey:   @"coincidenceWindow"]];
-    [self setMajorityLevel:             [aDecoder decodeIntForKey:   @"majorityLevel"]];
-    [self setAcquisitionMode:           [aDecoder decodeIntForKey:   @"acquisitionMode"]];
+    [self setEnabledMask:               [aDecoder decodeIntegerForKey:   @"enabledMask"]];
+    [self setPostTriggerSetting:        [aDecoder decodeIntegerForKey: @"postTriggerSetting"]];
+    [self setTriggerSourceMask:         [aDecoder decodeIntegerForKey: @"triggerSourceMask"]];
+    [self setTriggerOutMask:            [aDecoder decodeIntegerForKey: @"triggerOutMask"]];
+    [self setTriggerOutLogic:           [aDecoder decodeIntegerForKey:   @"triggerOutLogic"]];
+	[self setFrontPanelControlMask:     [aDecoder decodeIntegerForKey: @"frontPanelControlMask"]];
+    [self setCoincidenceLevel:          [aDecoder decodeIntegerForKey:   @"coincidenceLevel"]];
+    [self setCoincidenceWindow:         [aDecoder decodeIntegerForKey:   @"coincidenceWindow"]];
+    [self setMajorityLevel:             [aDecoder decodeIntegerForKey:   @"majorityLevel"]];
+    [self setAcquisitionMode:           [aDecoder decodeIntegerForKey:   @"acquisitionMode"]];
     [self setCountAllTriggers:          [aDecoder decodeBoolForKey:  @"countAllTriggers"]];
-    [self setChannelConfigMask:         [aDecoder decodeIntForKey:   @"channelConfigMask"]];
+    [self setChannelConfigMask:         [aDecoder decodeIntegerForKey:   @"channelConfigMask"]];
     [self setWaveFormRateGroup:         [aDecoder decodeObjectForKey:@"waveFormRateGroup"]];
-    [self setNumberBLTEventsToReadout:  [aDecoder decodeInt32ForKey: @"numberBLTEventsToReadout"]];
+    [self setNumberBLTEventsToReadout:  [aDecoder decodeIntegerForKey: @"numberBLTEventsToReadout"]];
     
     if(!waveFormRateGroup){
         [self setWaveFormRateGroup:[[[ORRateGroup alloc] initGroup:8 groupTag:0] autorelease]];
@@ -1450,13 +1450,13 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 	
 	int i;
     for (i = 0; i < [self numberOfChannels]; i++){
-        [self setDac:i              withValue:[aDecoder decodeInt32ForKey: [NSString stringWithFormat:@"dac%d",i]]];
-        [self setThreshold:i        withValue:[aDecoder decodeInt32ForKey: [NSString stringWithFormat:@"thresholds%d",i]]];
+        [self setDac:i              withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"dac%d",i]]];
+        [self setThreshold:i        withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"thresholds%d",i]]];
 
     }
     
     for (i = 0; i < [self numberOfChannels]/2; i++){
-        [self setSelfTriggerLogic:i withValue:[aDecoder decodeIntForKey:   [NSString stringWithFormat:@"selfTriggerLogic%d",i]]];
+        [self setSelfTriggerLogic:i withValue:[aDecoder decodeIntegerForKey:   [NSString stringWithFormat:@"selfTriggerLogic%d",i]]];
     }
     
     [[self undoManager] enableUndoRegistration];
@@ -1466,28 +1466,28 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 - (void) encodeWithCoder:(NSCoder*) anEncoder
 {
     [super encodeWithCoder:anEncoder];
-	[anEncoder encodeInt:eventSize                  forKey:@"eventSize"];
-	[anEncoder encodeInt:enabledMask                forKey:@"enabledMask"];
-	[anEncoder encodeInt32:(int32_t)postTriggerSetting       forKey:@"postTriggerSetting"];
-	[anEncoder encodeInt32:(int32_t)triggerSourceMask        forKey:@"triggerSourceMask"];
-    [anEncoder encodeInt32:(int32_t)triggerOutMask           forKey:@"triggerOutMask"];
-    [anEncoder encodeInt:triggerOutLogic            forKey:@"triggerOutLogic"];
-	[anEncoder encodeInt32:(int32_t)frontPanelControlMask    forKey:@"frontPanelControlMask"];
-    [anEncoder encodeInt:coincidenceLevel           forKey:@"coincidenceLevel"];
-    [anEncoder encodeInt:coincidenceWindow          forKey:@"coincidenceWindow"];
-    [anEncoder encodeInt:majorityLevel              forKey:@"majorityLevel"];
-	[anEncoder encodeInt:acquisitionMode            forKey:@"acquisitionMode"];
+	[anEncoder encodeInteger:eventSize                  forKey:@"eventSize"];
+	[anEncoder encodeInteger:enabledMask                forKey:@"enabledMask"];
+	[anEncoder encodeInteger:postTriggerSetting       forKey:@"postTriggerSetting"];
+	[anEncoder encodeInteger:triggerSourceMask        forKey:@"triggerSourceMask"];
+    [anEncoder encodeInteger:triggerOutMask           forKey:@"triggerOutMask"];
+    [anEncoder encodeInteger:triggerOutLogic            forKey:@"triggerOutLogic"];
+	[anEncoder encodeInteger:frontPanelControlMask    forKey:@"frontPanelControlMask"];
+    [anEncoder encodeInteger:coincidenceLevel           forKey:@"coincidenceLevel"];
+    [anEncoder encodeInteger:coincidenceWindow          forKey:@"coincidenceWindow"];
+    [anEncoder encodeInteger:majorityLevel              forKey:@"majorityLevel"];
+	[anEncoder encodeInteger:acquisitionMode            forKey:@"acquisitionMode"];
 	[anEncoder encodeBool:countAllTriggers          forKey:@"countAllTriggers"];
-	[anEncoder encodeInt:channelConfigMask          forKey:@"channelConfigMask"];
+	[anEncoder encodeInteger:channelConfigMask          forKey:@"channelConfigMask"];
     [anEncoder encodeObject:waveFormRateGroup       forKey:@"waveFormRateGroup"];
-    [anEncoder encodeInt32:(int32_t)numberBLTEventsToReadout forKey:@"numberBLTEventsToReadout"];
+    [anEncoder encodeInteger:numberBLTEventsToReadout forKey:@"numberBLTEventsToReadout"];
 	int i;
 	for (i = 0; i < [self numberOfChannels]; i++){
-        [anEncoder encodeInt32:dac[i]               forKey:[NSString stringWithFormat:@"dac%d", i]];
-        [anEncoder encodeInt32:thresholds[i]        forKey:[NSString stringWithFormat:@"thresholds%d", i]];
+        [anEncoder encodeInteger:dac[i]               forKey:[NSString stringWithFormat:@"dac%d", i]];
+        [anEncoder encodeInteger:thresholds[i]        forKey:[NSString stringWithFormat:@"thresholds%d", i]];
     }
     for (i = 0; i < [self numberOfChannels]/2; i++){
-        [anEncoder encodeInt:selfTriggerLogic[i]    forKey:[NSString stringWithFormat:@"selfTriggerLogic%d", i]];
+        [anEncoder encodeInteger:selfTriggerLogic[i]    forKey:[NSString stringWithFormat:@"selfTriggerLogic%d", i]];
     }
 }
 

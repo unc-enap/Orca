@@ -366,7 +366,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(Global);
 
 - (void)saveParams:(NSCoder*)encoder
 {
-    [encoder encodeInt:[self runMode]           forKey:@"ORRunMode"];
+    [encoder encodeInteger:[self runMode]           forKey:@"ORRunMode"];
     [encoder encodeBool:[self inProductionMode] forKey:@"ORInProductionMode"];
 }
 

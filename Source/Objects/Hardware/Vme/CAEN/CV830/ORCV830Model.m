@@ -811,7 +811,7 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
         
 		if(dataReady){
             //there is at least one event
-            int totalWordsInRecord = 4+numEnabledChannels + 1;
+            int totalWordsInRecord = (int)(4+numEnabledChannels + 1);
             dataRecord[0] = dataId | totalWordsInRecord;
             dataRecord[1] = (([self crateNumber]&0x01e)<<21) | ([self slot]& 0x0000001f)<<16;
             dataRecord[2] = 0; //chan 0 roll over. fill in later
@@ -880,17 +880,17 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id   = kCaen830; //should be unique
-	configStruct->card_info[index].hw_mask[0] 	= dataId; //better be unique
+	configStruct->card_info[index].hw_mask[0] 	= (uint32_t)dataId; //better be unique
 	configStruct->card_info[index].slot			= [self slot];
 	configStruct->card_info[index].crate		= [self crateNumber];
 	configStruct->card_info[index].add_mod		= [self addressModifier];
-	configStruct->card_info[index].base_add		= [self baseAddress];
-	configStruct->card_info[index].deviceSpecificData[0] = enabledMask;
-	configStruct->card_info[index].deviceSpecificData[1] = [self getAddressOffset:kStatusReg];
-	configStruct->card_info[index].deviceSpecificData[2] = [self getAddressOffset:kMEBEventNum];
-	configStruct->card_info[index].deviceSpecificData[3] = [self getAddressOffset:kEventBuffer];
+	configStruct->card_info[index].base_add		= (uint32_t)[self baseAddress];
+	configStruct->card_info[index].deviceSpecificData[0] = (uint32_t)enabledMask;
+	configStruct->card_info[index].deviceSpecificData[1] = (uint32_t)[self getAddressOffset:kStatusReg];
+	configStruct->card_info[index].deviceSpecificData[2] = (uint32_t)[self getAddressOffset:kMEBEventNum];
+	configStruct->card_info[index].deviceSpecificData[3] = (uint32_t)[self getAddressOffset:kEventBuffer];
 	configStruct->card_info[index].deviceSpecificData[4] = [self numEnabledChannels];
-    configStruct->card_info[index].deviceSpecificData[5] = [self count0Offset];
+    configStruct->card_info[index].deviceSpecificData[5] = (uint32_t)[self count0Offset];
     configStruct->card_info[index].deviceSpecificData[6] = resetRollOverInSBC;
     
     resetRollOverInSBC = NO; //must be reset for every run
@@ -941,15 +941,15 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
     self = [super initWithCoder:decoder];
 	
     [[self undoManager] disableUndoRegistration];
-    [self setCount0Offset:  [decoder decodeInt32ForKey: @"count0Offset"]];
+    [self setCount0Offset:  [decoder decodeIntegerForKey: @"count0Offset"]];
     [self setAutoReset:		[decoder decodeBoolForKey:  @"autoReset"]];
     [self setClearMeb:		[decoder decodeBoolForKey:  @"clearMeb"]];
     [self setTestMode:		[decoder decodeBoolForKey:  @"testMode"]];
-    [self setAcqMode:		[decoder decodeIntForKey:   @"acqMode"]];
-    [self setDwellTime:		[decoder decodeInt32ForKey: @"dwellTime"]];
-	[self setPollingState:	[decoder decodeIntForKey:   @"pollingState"]];
+    [self setAcqMode:		[decoder decodeIntegerForKey:   @"acqMode"]];
+    [self setDwellTime:		[decoder decodeIntegerForKey: @"dwellTime"]];
+	[self setPollingState:	[decoder decodeIntegerForKey:   @"pollingState"]];
 	[self setShipRecords:	[decoder decodeBoolForKey:  @"shipRecords"]];
-	[self setEnabledMask:	[decoder decodeInt32ForKey: @"enabledMask"]];
+	[self setEnabledMask:	[decoder decodeIntegerForKey: @"enabledMask"]];
 	[self setReadOutGroup:	[decoder decodeObjectForKey:@"ReadoutGroup"]];
 	
     [[self undoManager] enableUndoRegistration];
@@ -970,15 +970,15 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt32:count0Offset   forKey:@"count0Offset"];
+    [encoder encodeInteger:count0Offset   forKey:@"count0Offset"];
     [encoder encodeBool:autoReset		forKey:@"autoReset"];
     [encoder encodeBool:clearMeb		forKey:@"clearMeb"];
     [encoder encodeBool:testMode		forKey:@"testMode"];
-    [encoder encodeInt:acqMode			forKey:@"acqMode"];
-    [encoder encodeInt32:dwellTime		forKey:@"dwellTime"];
-    [encoder encodeInt:pollingState     forKey:@"pollingState"];
+    [encoder encodeInteger:acqMode			forKey:@"acqMode"];
+    [encoder encodeInteger:dwellTime		forKey:@"dwellTime"];
+    [encoder encodeInteger:pollingState     forKey:@"pollingState"];
     [encoder encodeBool:shipRecords     forKey:@"shipRecords"];
-	[encoder encodeInt32:enabledMask    forKey:@"enabledMask"];
+	[encoder encodeInteger:enabledMask    forKey:@"enabledMask"];
 	[encoder encodeObject:readOutGroup  forKey:@"ReadoutGroup"];
 }
 - (void) saveReadOutList:(NSFileHandle*)aFile

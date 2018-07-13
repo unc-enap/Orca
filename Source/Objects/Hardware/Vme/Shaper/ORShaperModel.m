@@ -1382,16 +1382,16 @@ static NSString *ORShaperDisplayRaw 		= @"ORShaper DisplayRaw";
     [self setContinous:			[decoder decodeBoolForKey:ORShaperContinous]];
     [self setScalersEnabled:	[decoder decodeBoolForKey:ORShaperScalersEnabled]];
     [self setMultiBoardEnabled:	[decoder decodeBoolForKey:ORShaperMultiBoardEnabled]];
-    [self setScalerMask:		[decoder decodeIntForKey:ORShaperScalerMask]];
+    [self setScalerMask:		[decoder decodeIntegerForKey:ORShaperScalerMask]];
     if([decoder containsValueForKey:ORShaperOnlineMask]){
-		[self setOnlineMask:[decoder decodeIntForKey:ORShaperOnlineMask]];
+		[self setOnlineMask:[decoder decodeIntegerForKey:ORShaperOnlineMask]];
     }
     else {
 		[self setOnlineMask:0xff];
     }
-    [self setScanStart:[decoder decodeInt32ForKey:ORShaperScanStart]];
-    [self setScanDelta:[decoder decodeInt32ForKey:ORShaperScanDelta]];
-    [self setScanNumber:[decoder decodeIntForKey:ORShaperScanNumber]];
+    [self setScanStart:[decoder decodeIntegerForKey:ORShaperScanStart]];
+    [self setScanDelta:[decoder decodeIntegerForKey:ORShaperScanDelta]];
+    [self setScanNumber:[decoder decodeIntegerForKey:ORShaperScanNumber]];
 	
     [self setAdcRateGroup:[decoder decodeObjectForKey:ORShaperAdcRateGroup]];
     [self setDisplayRaw:[decoder decodeBoolForKey:ORShaperDisplayRaw]];
@@ -1429,12 +1429,12 @@ static NSString *ORShaperDisplayRaw 		= @"ORShaper DisplayRaw";
     [encoder encodeBool:[self continous]		forKey:ORShaperContinous];
     [encoder encodeBool:[self scalersEnabled]	forKey:ORShaperScalersEnabled];
     [encoder encodeBool:[self multiBoardEnabled] forKey:ORShaperMultiBoardEnabled];
-    [encoder encodeInt:[self scalerMask]		forKey:ORShaperScalerMask];
-    [encoder encodeInt:[self onlineMask]		forKey:ORShaperOnlineMask];
+    [encoder encodeInteger:[self scalerMask]		forKey:ORShaperScalerMask];
+    [encoder encodeInteger:[self onlineMask]		forKey:ORShaperOnlineMask];
 	
-    [encoder encodeInt32:(int32_t)[self scanStart]		forKey:ORShaperScanStart];
-    [encoder encodeInt:(int32_t)[self scanDelta]			forKey:ORShaperScanDelta];
-    [encoder encodeInt:[self scanNumber]		forKey:ORShaperScanNumber];
+    [encoder encodeInteger:[self scanStart]		forKey:ORShaperScanStart];
+    [encoder encodeInteger:(int32_t)[self scanDelta]			forKey:ORShaperScanDelta];
+    [encoder encodeInteger:[self scanNumber]		forKey:ORShaperScanNumber];
 	
     [encoder encodeObject:[self adcRateGroup] forKey:ORShaperAdcRateGroup];
 	

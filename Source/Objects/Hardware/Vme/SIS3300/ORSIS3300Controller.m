@@ -761,7 +761,7 @@
 {
 	int set = (int)[aPlotter tag];
 	if(set<8)return [model numberOfSamples];
-	else return [[[model waveFormRateGroup] timeRate]count];
+	else return (int)[[[model waveFormRateGroup] timeRate]count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;

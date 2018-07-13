@@ -655,7 +655,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302ReadRegs]
     [[[self undoManager] prepareWithInvocationTarget:self] setEnergyGateLength:aGroup withValue:[self energyGateLength:aGroup]];
 	
 	if([self bufferWrapEnabled:aGroup]){
-		unsigned long checkValue = [self sampleLength:aGroup] - [self sampleStartIndex:aGroup];
+		int checkValue = [self sampleLength:aGroup] - [self sampleStartIndex:aGroup];
 		//unsigned long maxValue = firmwareVersion>=15?255:63;
 		if(aEnergyGateLength < checkValue)	aEnergyGateLength = checkValue;
 		//if(aEnergyGateLength > maxValue)	aEnergyGateLength = maxValue;
@@ -1280,7 +1280,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302ReadRegs]
 - (void) setEndAddressThreshold:(short)aGroup withValue:(unsigned long)aValue 
 {
 	[[[self undoManager] prepareWithInvocationTarget:self] setEndAddressThreshold:aGroup withValue:[self endAddressThreshold:aGroup]];
-	[endAddressThresholds replaceObjectAtIndex:aGroup withObject:[NSNumber numberWithInt:aValue]];
+	[endAddressThresholds replaceObjectAtIndex:aGroup withObject:[NSNumber numberWithInteger:aValue]];
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORSIS3302ModelEndAddressThresholdChanged object:self];
 }
 
@@ -3210,12 +3210,12 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302ReadRegs]
 	else {
 		configStruct->total_cards++;
 		configStruct->card_info[index].hw_type_id				= kSIS3302; //should be unique
-		configStruct->card_info[index].hw_mask[0]				= dataId;	//better be unique
-		configStruct->card_info[index].hw_mask[1]				= lostDataId;	//better be unique
+		configStruct->card_info[index].hw_mask[0]				= (uint32_t)dataId;	//better be unique
+		configStruct->card_info[index].hw_mask[1]				= (uint32_t)lostDataId;	//better be unique
 		configStruct->card_info[index].slot						= [self slot];
 		configStruct->card_info[index].crate					= [self crateNumber];
 		configStruct->card_info[index].add_mod					= [self addressModifier];
-		configStruct->card_info[index].base_add					= [self baseAddress];
+		configStruct->card_info[index].base_add					= (uint32_t)[self baseAddress];
 		configStruct->card_info[index].deviceSpecificData[0]	= [self sampleLength:0]/2;
 		configStruct->card_info[index].deviceSpecificData[1]	= [self sampleLength:1]/2;
 		configStruct->card_info[index].deviceSpecificData[2]	= [self sampleLength:2]/2;
@@ -3295,34 +3295,34 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302ReadRegs]
     [self setMcaMode:					[decoder decodeIntForKey:@"mcaMode"]];
     [self setMcaPileupEnabled:			[decoder decodeBoolForKey:@"mcaPileupEnabled"]];
     [self setMcaHistoSize:				[decoder decodeIntForKey:@"mcaHistoSize"]];
-    [self setMcaNofScansPreset:			[decoder decodeInt32ForKey:@"mcaNofScansPreset"]];
+    [self setMcaNofScansPreset:			[decoder decodeIntegerForKey:@"mcaNofScansPreset"]];
     [self setMcaAutoClear:				[decoder decodeBoolForKey:@"mcaAutoClear"]];
-    [self setMcaPrescaleFactor:			[decoder decodeInt32ForKey:@"mcaPrescaleFactor"]];
+    [self setMcaPrescaleFactor:			[decoder decodeIntegerForKey:@"mcaPrescaleFactor"]];
     [self setMcaLNESetup:				[decoder decodeBoolForKey:@"mcaLNESetup"]];
-    [self setMcaNofHistoPreset:			[decoder decodeInt32ForKey:@"mcaNofHistoPreset"]];
+    [self setMcaNofHistoPreset:			[decoder decodeIntegerForKey:@"mcaNofHistoPreset"]];
 	
     [self setRunMode:					[decoder decodeIntForKey:@"runMode"]];
     [self setInternalExternalTriggersOred:[decoder decodeBoolForKey:@"internalExternalTriggersOred"]];
-    [self setLemoInEnabledMask:			[decoder decodeIntForKey:@"lemoInEnabledMask"]];
+    [self setLemoInEnabledMask:			[decoder decodeIntegerForKey:@"lemoInEnabledMask"]];
     [self setEnergySampleStartIndex3:	[decoder decodeIntForKey:@"energySampleStartIndex3"]];
     [self setEnergySampleStartIndex2:	[decoder decodeIntForKey:@"energySampleStartIndex2"]];
     [self setEnergySampleStartIndex1:	[decoder decodeIntForKey:@"energySampleStartIndex1"]];
 	[self setEnergyNumberToSum:			[decoder decodeIntForKey:@"energyNumberToSum"]];
     [self setEnergySampleLength:		[decoder decodeIntForKey:@"energySampleLength"]];
-    [self setLemoInMode:				[decoder decodeIntForKey:@"lemoInMode"]];
-    [self setLemoOutMode:				[decoder decodeIntForKey:@"lemoOutMode"]];
+    [self setLemoInMode:				[decoder decodeIntegerForKey:@"lemoInMode"]];
+    [self setLemoOutMode:				[decoder decodeIntegerForKey:@"lemoOutMode"]];
 	
     [self setClockSource:				[decoder decodeIntForKey:@"clockSource"]];
-    [self setTriggerOutEnabledMask:		[decoder decodeInt32ForKey:@"triggerOutEnabledMask"]];
-	[self setHighEnergySuppressMask:	[decoder decodeInt32ForKey:@"highEnergySuppressMask"]];
-    [self setInputInvertedMask:			[decoder decodeInt32ForKey:@"inputInvertedMask"]];
-    [self setInternalTriggerEnabledMask:[decoder decodeInt32ForKey:@"internalTriggerEnabledMask"]];
-    [self setExternalTriggerEnabledMask:[decoder decodeInt32ForKey:@"externalTriggerEnabledMask"]];
-    [self setExtendedThresholdEnabledMask:[decoder decodeInt32ForKey:@"extendedThresholdEnabledMask"]];
-    [self setInternalGateEnabledMask:	[decoder decodeInt32ForKey:@"internalGateEnabledMask"]];
-    [self setExternalGateEnabledMask:	[decoder decodeInt32ForKey:@"externalGateEnabledMask"]];
-    [self setAdc50KTriggerEnabledMask:	[decoder decodeInt32ForKey:@"adc50KtriggerEnabledMask"]];
-	[self setGtMask:					[decoder decodeIntForKey:@"gtMask"]];
+    [self setTriggerOutEnabledMask:		[decoder decodeIntegerForKey:@"triggerOutEnabledMask"]];
+	[self setHighEnergySuppressMask:	[decoder decodeIntegerForKey:@"highEnergySuppressMask"]];
+    [self setInputInvertedMask:			[decoder decodeIntegerForKey:@"inputInvertedMask"]];
+    [self setInternalTriggerEnabledMask:[decoder decodeIntegerForKey:@"internalTriggerEnabledMask"]];
+    [self setExternalTriggerEnabledMask:[decoder decodeIntegerForKey:@"externalTriggerEnabledMask"]];
+    [self setExtendedThresholdEnabledMask:[decoder decodeIntegerForKey:@"extendedThresholdEnabledMask"]];
+    [self setInternalGateEnabledMask:	[decoder decodeIntegerForKey:@"internalGateEnabledMask"]];
+    [self setExternalGateEnabledMask:	[decoder decodeIntegerForKey:@"externalGateEnabledMask"]];
+    [self setAdc50KTriggerEnabledMask:	[decoder decodeIntegerForKey:@"adc50KtriggerEnabledMask"]];
+	[self setGtMask:					[decoder decodeIntegerForKey:@"gtMask"]];
 	[self setShipEnergyWaveform:		[decoder decodeBoolForKey:@"shipEnergyWaveform"]];
 	[self setShipSummedWaveform:		[decoder decodeBoolForKey:@"shipSummedWaveform"]];
     [self setWaveFormRateGroup:			[decoder decodeObjectForKey:@"waveFormRateGroup"]];
@@ -3353,7 +3353,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302ReadRegs]
 	
 	//firmware 15xx
     cfdControls =					[[decoder decodeObjectForKey:@"cfdControls"] retain];
-    [self setBufferWrapEnabledMask:	[decoder decodeInt32ForKey:@"bufferWrapEnabledMask"]];
+    [self setBufferWrapEnabledMask:	[decoder decodeIntegerForKey:@"bufferWrapEnabledMask"]];
 	
 	if(!waveFormRateGroup){
 		[self setWaveFormRateGroup:[[[ORRateGroup alloc] initGroup:kNumSIS3302Channels groupTag:0] autorelease]];
@@ -3379,42 +3379,42 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302ReadRegs]
 	[encoder encodeFloat:firmwareVersion		forKey:@"firmwareVersion"];
 	[encoder encodeBool:shipTimeRecordAlso		forKey:@"shipTimeRecordAlso"];
 	[encoder encodeBool:mcaUseEnergyCalculation forKey:@"mcaUseEnergyCalculation"];
-	[encoder encodeInt:mcaEnergyOffset			forKey:@"mcaEnergyOffset"];
-	[encoder encodeInt:mcaEnergyMultiplier		forKey:@"mcaEnergyMultiplier"];
-	[encoder encodeInt:mcaEnergyDivider			forKey:@"mcaEnergyDivider"];
-	[encoder encodeInt:mcaMode					forKey:@"mcaMode"];
+	[encoder encodeInteger:mcaEnergyOffset			forKey:@"mcaEnergyOffset"];
+	[encoder encodeInteger:mcaEnergyMultiplier		forKey:@"mcaEnergyMultiplier"];
+	[encoder encodeInteger:mcaEnergyDivider			forKey:@"mcaEnergyDivider"];
+	[encoder encodeInteger:mcaMode					forKey:@"mcaMode"];
 	[encoder encodeBool:mcaPileupEnabled		forKey:@"mcaPileupEnabled"];
-	[encoder encodeInt:mcaHistoSize				forKey:@"mcaHistoSize"];
-	[encoder encodeInt32:mcaNofScansPreset		forKey:@"mcaNofScansPreset"];
+	[encoder encodeInteger:mcaHistoSize				forKey:@"mcaHistoSize"];
+	[encoder encodeInteger:mcaNofScansPreset		forKey:@"mcaNofScansPreset"];
 	[encoder encodeBool:mcaAutoClear			forKey:@"mcaAutoClear"];
-	[encoder encodeInt32:mcaPrescaleFactor		forKey:@"mcaPrescaleFactor"];
+	[encoder encodeInteger:mcaPrescaleFactor		forKey:@"mcaPrescaleFactor"];
 	[encoder encodeBool:mcaLNESetup				forKey:@"mcaLNESetup"];
-	[encoder encodeInt32:mcaNofHistoPreset		forKey:@"mcaNofHistoPreset"];
+	[encoder encodeInteger:mcaNofHistoPreset		forKey:@"mcaNofHistoPreset"];
 	
-	[encoder encodeInt:runMode					forKey:@"runMode"];
-    [encoder encodeInt:gtMask					forKey:@"gtMask"];
-    [encoder encodeInt:clockSource				forKey:@"clockSource"];
-	[encoder encodeInt:lemoInEnabledMask		forKey:@"lemoInEnabledMask"];
-	[encoder encodeInt:energySampleStartIndex3	forKey:@"energySampleStartIndex3"];
-	[encoder encodeInt:energySampleStartIndex2	forKey:@"energySampleStartIndex2"];
-	[encoder encodeInt:energySampleStartIndex1	forKey:@"energySampleStartIndex1"];
-	[encoder encodeInt:energyNumberToSum		forKey:@"energyNumberToSum"];
-	[encoder encodeInt:energySampleLength		forKey:@"energySampleLength"];
-	[encoder encodeInt:lemoInMode				forKey:@"lemoInMode"];
-	[encoder encodeInt:lemoOutMode				forKey:@"lemoOutMode"];
+	[encoder encodeInteger:runMode					forKey:@"runMode"];
+    [encoder encodeInteger:gtMask					forKey:@"gtMask"];
+    [encoder encodeInteger:clockSource				forKey:@"clockSource"];
+	[encoder encodeInteger:lemoInEnabledMask		forKey:@"lemoInEnabledMask"];
+	[encoder encodeInteger:energySampleStartIndex3	forKey:@"energySampleStartIndex3"];
+	[encoder encodeInteger:energySampleStartIndex2	forKey:@"energySampleStartIndex2"];
+	[encoder encodeInteger:energySampleStartIndex1	forKey:@"energySampleStartIndex1"];
+	[encoder encodeInteger:energyNumberToSum		forKey:@"energyNumberToSum"];
+	[encoder encodeInteger:energySampleLength		forKey:@"energySampleLength"];
+	[encoder encodeInteger:lemoInMode				forKey:@"lemoInMode"];
+	[encoder encodeInteger:lemoOutMode				forKey:@"lemoOutMode"];
 	[encoder encodeBool:shipEnergyWaveform		forKey:@"shipEnergyWaveform"];
 	[encoder encodeBool:shipSummedWaveform		forKey:@"shipSummedWaveform"];
 	
 	[encoder encodeBool:internalExternalTriggersOred	forKey:@"internalExternalTriggersOred"];
-	[encoder encodeInt32:triggerOutEnabledMask			forKey:@"triggerOutEnabledMask"];
-	[encoder encodeInt32:highEnergySuppressMask			forKey:@"highEnergySuppressMask"];
-	[encoder encodeInt32:inputInvertedMask				forKey:@"inputInvertedMask"];
-	[encoder encodeInt32:internalTriggerEnabledMask		forKey:@"internalTriggerEnabledMask"];
-	[encoder encodeInt32:externalTriggerEnabledMask		forKey:@"externalTriggerEnabledMask"];
-	[encoder encodeInt32:extendedThresholdEnabledMask	forKey:@"extendedThresholdEnabledMask"];
-	[encoder encodeInt32:internalGateEnabledMask		forKey:@"internalGateEnabledMask"];
-	[encoder encodeInt32:externalGateEnabledMask		forKey:@"externalGateEnabledMask"];
-	[encoder encodeInt32:adc50KTriggerEnabledMask		forKey:@"adc50KtriggerEnabledMask"];
+	[encoder encodeInteger:triggerOutEnabledMask			forKey:@"triggerOutEnabledMask"];
+	[encoder encodeInteger:highEnergySuppressMask			forKey:@"highEnergySuppressMask"];
+	[encoder encodeInteger:inputInvertedMask				forKey:@"inputInvertedMask"];
+	[encoder encodeInteger:internalTriggerEnabledMask		forKey:@"internalTriggerEnabledMask"];
+	[encoder encodeInteger:externalTriggerEnabledMask		forKey:@"externalTriggerEnabledMask"];
+	[encoder encodeInteger:extendedThresholdEnabledMask	forKey:@"extendedThresholdEnabledMask"];
+	[encoder encodeInteger:internalGateEnabledMask		forKey:@"internalGateEnabledMask"];
+	[encoder encodeInteger:externalGateEnabledMask		forKey:@"externalGateEnabledMask"];
+	[encoder encodeInteger:adc50KTriggerEnabledMask		forKey:@"adc50KtriggerEnabledMask"];
 	
 	[encoder encodeObject:energyDecimations		forKey:@"energyDecimations"];
 	[encoder encodeObject:energyGapTimes		forKey:@"energyGapTimes"];
@@ -3436,7 +3436,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302ReadRegs]
 	[encoder encodeObject:energyTauFactors		forKey:@"energyTauFactors"];
 	//firmware 15xx
 	[encoder encodeObject:cfdControls			forKey:@"cfdControls"];
-	[encoder encodeInt32:bufferWrapEnabledMask	forKey:@"bufferWrapEnabledMask"];
+	[encoder encodeInteger:bufferWrapEnabledMask	forKey:@"bufferWrapEnabledMask"];
 	
 }
 

@@ -395,9 +395,9 @@ static RegisterNamesStruct reg[kNumRegisters] = {
 
     [[self undoManager] disableUndoRegistration];
     
-    [self setIPed:                  [aDecoder decodeIntForKey:@"iPed"]];
+    [self setIPed:                  [aDecoder decodeIntegerForKey:@"iPed"]];
     [self setEventCounterInc:       [aDecoder decodeBoolForKey: @"eventCounterInc"]];
-    [self setSlideConstant:         [aDecoder decodeIntForKey:  @"slideConstant"]];
+    [self setSlideConstant:         [aDecoder decodeIntegerForKey:  @"slideConstant"]];
     [self setSlidingScaleEnable:    [aDecoder decodeBoolForKey: @"slidingScaleEnable"]];
     [self setZeroSuppressThresRes:  [aDecoder decodeBoolForKey: @"zeroSuppressThresRes"]];
     [self setZeroSuppressEnable:    [aDecoder decodeBoolForKey: @"zeroSuppressEnable"]];
@@ -410,9 +410,9 @@ static RegisterNamesStruct reg[kNumRegisters] = {
 - (void) encodeWithCoder:(NSCoder*) anEncoder
 {
     [super encodeWithCoder:anEncoder];
-    [anEncoder encodeInt:  iPed                   forKey:@"iPed"];
+    [anEncoder encodeInteger:  iPed                   forKey:@"iPed"];
     [anEncoder encodeBool: eventCounterInc        forKey:@"eventCounterInc"];
-    [anEncoder encodeInt:  slideConstant          forKey:@"slideConstant"];
+    [anEncoder encodeInteger:  slideConstant          forKey:@"slideConstant"];
     [anEncoder encodeBool: slidingScaleEnable     forKey:@"slidingScaleEnable"];
     [anEncoder encodeBool: zeroSuppressThresRes   forKey:@"zeroSuppressThresRes"];
     [anEncoder encodeBool: zeroSuppressEnable     forKey:@"zeroSuppressEnable"];

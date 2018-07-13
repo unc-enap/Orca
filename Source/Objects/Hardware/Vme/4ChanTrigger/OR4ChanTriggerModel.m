@@ -374,12 +374,12 @@ static NSString *OR4ChanEnableClock     = @"OR4ChanEnableClock";
     [[self undoManager] disableUndoRegistration];
     
     [self setShipFirstLast:[decoder decodeBoolForKey:@"shipFirstLast"]];
-    [self setLowerClock:[decoder decodeInt32ForKey:OR4ChanLowerClock]];
-    [self setUpperClock:[decoder decodeInt32ForKey:OR4ChanUpperClock]];
+    [self setLowerClock:[decoder decodeIntegerForKey:OR4ChanLowerClock]];
+    [self setUpperClock:[decoder decodeIntegerForKey:OR4ChanUpperClock]];
     [self setTriggerGroups:[decoder decodeObjectForKey:OR4ChanGroups]];
     [self setTriggerNames:[decoder decodeObjectForKey:OR4ChanTriggerNames]];
     [self setShipClockMask:[decoder decodeIntForKey:OR4ChanShipClockMask]];
-	[self setEnableClock:[decoder decodeIntForKey:OR4ChanEnableClock]];
+	[self setEnableClock:[decoder decodeIntegerForKey:OR4ChanEnableClock]];
     
     [[self undoManager] enableUndoRegistration];
     
@@ -390,12 +390,12 @@ static NSString *OR4ChanEnableClock     = @"OR4ChanEnableClock";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeBool:shipFirstLast forKey:@"shipFirstLast"];
-    [encoder encodeInt32:(int32_t)lowerClock forKey:OR4ChanLowerClock];
-    [encoder encodeInt32:(int32_t)upperClock forKey:OR4ChanUpperClock];
+    [encoder encodeInteger:lowerClock forKey:OR4ChanLowerClock];
+    [encoder encodeInteger:upperClock forKey:OR4ChanUpperClock];
     [encoder encodeObject:triggerGroups forKey:OR4ChanGroups];
     [encoder encodeObject:triggerNames forKey:OR4ChanTriggerNames];
-    [encoder encodeInt:shipClockMask forKey:OR4ChanShipClockMask];
-    [encoder encodeInt:enableClock forKey:OR4ChanEnableClock];
+    [encoder encodeInteger:shipClockMask forKey:OR4ChanShipClockMask];
+    [encoder encodeInteger:enableClock forKey:OR4ChanEnableClock];
     
 }
 

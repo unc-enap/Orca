@@ -630,10 +630,10 @@ uint8_t verbose = 0;
     [[self undoManager] disableUndoRegistration];
     
     [self setSerialNumber:	  [decoder decodeObjectForKey:@"serialNumber"]];
-    [self setRangeToDo:			[decoder decodeIntForKey:	@"rangeToDo"]];
+    [self setRangeToDo:			[decoder decodeIntegerForKey:	@"rangeToDo"]];
     [self setDoRange:			[decoder decodeBoolForKey:	@"doRange"]];
-    [self setRwAddress:			[decoder decodeIntForKey:	@"rwAddress"]];
-    [self setWriteValue:		[decoder decodeIntForKey:	@"writeValue"]];
+    [self setRwAddress:			[decoder decodeIntegerForKey:	@"rwAddress"]];
+    [self setWriteValue:		[decoder decodeIntegerForKey:	@"writeValue"]];
     [self setRwAddressModifier:	[decoder decodeIntForKey:	@"rwAddressModifier"]];
     [self setReadWriteIOSpace:	[decoder decodeIntForKey:	@"readWriteIOSpace"]];
     [self setReadWriteType:		[decoder decodeIntForKey:	@"readWriteType"]];	
@@ -651,13 +651,13 @@ uint8_t verbose = 0;
     [encoder encodeObject:serialNumber		forKey:@"serialNumber"];
     [encoder encodeObject:inConnector		forKey:@"inConnector"];
     [encoder encodeObject:outConnector		forKey:@"outConnector"];
-    [encoder encodeInt:rangeToDo			forKey:@"rangeToDo"];
+    [encoder encodeInteger:rangeToDo			forKey:@"rangeToDo"];
     [encoder encodeBool:doRange				forKey:@"doRange"];
-    [encoder encodeInt:(int32_t)rwAddress			forKey:@"rwAddress"];
-    [encoder encodeInt:(int32_t)writeValue			forKey:@"writeValue"];
-    [encoder encodeInt:rwAddressModifier	forKey:@"rwAddressModifier"];
-    [encoder encodeInt:readWriteIOSpace		forKey:@"readWriteIOSpace"];
-    [encoder encodeInt:readWriteType		forKey:@"readWriteType"];
+    [encoder encodeInteger:(int32_t)rwAddress			forKey:@"rwAddress"];
+    [encoder encodeInteger:(int32_t)writeValue			forKey:@"writeValue"];
+    [encoder encodeInteger:rwAddressModifier	forKey:@"rwAddressModifier"];
+    [encoder encodeInteger:readWriteIOSpace		forKey:@"readWriteIOSpace"];
+    [encoder encodeInteger:readWriteType		forKey:@"readWriteType"];
 }
 
 
