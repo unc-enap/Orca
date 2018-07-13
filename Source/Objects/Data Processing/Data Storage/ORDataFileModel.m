@@ -850,12 +850,12 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
     [encoder encodeObject:filePrefix		forKey:@"ORDataFileModelFilePrefix"];
     [encoder encodeFloat:maxFileSize		forKey:@"ORDataFileModelMaxFileSize"];
     [encoder encodeBool:limitSize			forKey:@"ORDataFileModelLimitSize"];
-    [encoder encodeInt:currentVersion		forKey:ORDataVersion];
+    [encoder encodeInteger:currentVersion		forKey:ORDataVersion];
     [encoder encodeObject:dataFolder		forKey:ORDataDataFolderName];
     [encoder encodeObject:statusFolder		forKey:ORDataStatusFolderName];
     [encoder encodeObject:configFolder		forKey:ORDataConfigFolderName];
     [encoder encodeBool:saveConfiguration	forKey:ORDataSaveConfiguration];
-    [encoder encodeInt:sizeLimitReachedAction forKey:@"sizeLimitReachedAction"];
+    [encoder encodeInteger:sizeLimitReachedAction forKey:@"sizeLimitReachedAction"];
 }
 
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary

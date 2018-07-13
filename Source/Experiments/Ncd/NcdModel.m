@@ -903,7 +903,7 @@ static NSString *ORNcdMuxFullEfficiencyThresholds = @"ORNcdMuxFullEfficiencyThre
     [self setColorBarAttributes:[decoder decodeObjectForKey:ORNcdColorBarAttributes]];
     [self setXAttributes:[decoder decodeObjectForKey:ORNcdXAttributes]];
     [self setYAttributes:[decoder decodeObjectForKey:ORNcdYAttributes]];
-    [self setDisplayOptionMask:[decoder decodeInt32ForKey:ORNcdDisplayOptionMask]];
+    [self setDisplayOptionMask:[decoder decodeIntegerForKey:ORNcdDisplayOptionMask]];
     
     [self setHardwareCheck:[decoder decodeIntForKey:ORNcdHardwareCheck]];
     [self setShaperCheck:[decoder decodeIntForKey:ORNcdShaperCheck]];
@@ -945,14 +945,14 @@ static NSString *ORNcdMuxFullEfficiencyThresholds = @"ORNcdMuxFullEfficiencyThre
     [encoder encodeObject:ncdCableCheckTask forKey:ORNcdCableCheckTask];
     
     [encoder encodeObject:colorBarAttributes forKey:ORNcdColorBarAttributes];
-    [encoder encodeInt32:(int32_t)displayOptionMask forKey:ORNcdDisplayOptionMask];
+    [encoder encodeInteger:displayOptionMask forKey:ORNcdDisplayOptionMask];
     [encoder encodeObject:xAttributes forKey:ORNcdXAttributes];
     [encoder encodeObject:yAttributes forKey:ORNcdYAttributes];
     
-    [encoder encodeInt:hardwareCheck forKey:ORNcdHardwareCheck];
-    [encoder encodeInt:shaperCheck forKey:ORNcdShaperCheck];
-    [encoder encodeInt:muxCheck forKey:ORNcdMuxCheck];
-    [encoder encodeInt:triggerCheck forKey:ORNcdTriggerCheck];
+    [encoder encodeInteger:hardwareCheck forKey:ORNcdHardwareCheck];
+    [encoder encodeInteger:shaperCheck forKey:ORNcdShaperCheck];
+    [encoder encodeInteger:muxCheck forKey:ORNcdMuxCheck];
+    [encoder encodeInteger:triggerCheck forKey:ORNcdTriggerCheck];
     
     [encoder encodeObject:captureDate forKey:ORNcdCaptureDate];
     [encoder encodeObject:altMuxThresholds forKey:ORNcdMuxAltThresholds];

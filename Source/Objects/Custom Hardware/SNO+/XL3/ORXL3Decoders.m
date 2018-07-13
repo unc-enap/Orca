@@ -126,8 +126,8 @@
             if (swapBundle) {
                 ptr[0] = swapLong(ptr[0]); ptr[1] = swapLong(ptr[1]); ptr[2] = swapLong(ptr[2]);
             }
-            unsigned int num_longs = ptr[0] & 0xffffff;
-            [dsc appendFormat:@"\ncrate_num: %lu\nnum_longs: %u\npass_min: %lu\nxl3_clock: %lu\n",
+            unsigned long num_longs = ptr[0] & 0xffffff;
+            [dsc appendFormat:@"\ncrate_num: %lu\nnum_longs: %lu\npass_min: %lu\nxl3_clock: %lu\n",
              ptr[0] >> 24, num_longs, ptr[1], ptr[2]];
             if (swapBundle) {
                 ptr[0] = swapLong(ptr[0]); ptr[1] = swapLong(ptr[1]); ptr[2] = swapLong(ptr[2]);
@@ -143,7 +143,7 @@
             }
             
             ptr += 3;            
-            unsigned int mini_header = 0;
+            unsigned long mini_header = 0;
             while (num_longs != 0) {
                 mini_header = ptr[0];
                 if (swapBundle) {

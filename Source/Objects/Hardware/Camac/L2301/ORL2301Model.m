@@ -381,8 +381,8 @@ NSString* ORL2301AllowOverflowChangedNotification   = @"ORL2301AllowOverflowChan
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
     [self setIncludeTiming:[decoder decodeBoolForKey:@"ORL2301ModelIncludeTiming"]];
-    [self setSuppressZeros:[decoder decodeIntForKey:@"ORL2301SuppressZeros"]];
-    [self setAllowOverflow:[decoder decodeIntForKey:@"ORL2301AllowOverflow"]];
+    [self setSuppressZeros:[decoder decodeIntegerForKey:@"ORL2301SuppressZeros"]];
+    [self setAllowOverflow:[decoder decodeIntegerForKey:@"ORL2301AllowOverflow"]];
     [[self undoManager] enableUndoRegistration];
 	
     return self;
@@ -392,8 +392,8 @@ NSString* ORL2301AllowOverflowChangedNotification   = @"ORL2301AllowOverflowChan
 {
     [super encodeWithCoder:encoder];
     [encoder encodeBool:includeTiming forKey:@"ORL2301ModelIncludeTiming"];
-    [encoder encodeInt:suppressZeros forKey:@"ORL2301SuppressZeros"];
-    [encoder encodeInt:allowOverflow forKey:@"ORL2301AllowOverflow"];
+    [encoder encodeInteger:suppressZeros forKey:@"ORL2301SuppressZeros"];
+    [encoder encodeInteger:allowOverflow forKey:@"ORL2301AllowOverflow"];
 }
 
 

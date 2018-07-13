@@ -49,7 +49,7 @@
 {
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
-    [self setMask:[decoder decodeInt32ForKey:@"mask"]];
+    [self setMask:[decoder decodeIntegerForKey:@"mask"]];
     [[self undoManager] enableUndoRegistration];
 
     return self;
@@ -58,7 +58,7 @@
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt32:(int32_t)mask forKey:@"mask"];
+    [encoder encodeInteger:mask forKey:@"mask"];
 }
 
 @end
@@ -88,7 +88,7 @@
 {
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
-    [self setStartIndex:[decoder decodeInt32ForKey:@"startIndex"]];
+    [self setStartIndex:[decoder decodeIntegerForKey:@"startIndex"]];
     [[self undoManager] enableUndoRegistration];
 	
     return self;
@@ -97,7 +97,7 @@
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt32:(int32_t)startIndex forKey:@"startIndex"];
+    [encoder encodeInteger:startIndex forKey:@"startIndex"];
 }
 @end
 
@@ -174,8 +174,8 @@
 {
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
-    [self setSpecialBitMask:[decoder decodeInt32ForKey:@"specialBitMask"]];
-    [self setScaleOffset:   [decoder decodeInt32ForKey:@"scaleOffset"]];
+    [self setSpecialBitMask:[decoder decodeIntegerForKey:@"specialBitMask"]];
+    [self setScaleOffset:   [decoder decodeIntegerForKey:@"scaleOffset"]];
     [self setBitNames:      [decoder decodeObjectForKey:@"bitNames"]];
     [[self undoManager] enableUndoRegistration];
 	
@@ -185,8 +185,8 @@
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt32:(int32_t)specialBitMask forKey:@"specialBitMask"];
-    [encoder encodeInt32:(int32_t)scaleOffset    forKey:@"scaleOffset"];
+    [encoder encodeInteger:specialBitMask forKey:@"specialBitMask"];
+    [encoder encodeInteger:scaleOffset    forKey:@"scaleOffset"];
     [encoder encodeObject:bitNames      forKey:@"bitNames"];
 }
 

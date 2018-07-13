@@ -664,7 +664,7 @@ static NSString* NcdLinearitySelectedWaveform = @"NcdLinearitySelectedWaveform";
     
     
     if([decoder versionForClassName:@"NcdLinearityTask"] < 1){
-        [self setTimeOnOneChannel:[decoder decodeIntForKey:NcdLinearityTaskTime]];    
+        [self setTimeOnOneChannel:[decoder decodeIntForKey:NcdLinearityTaskTime]];
         [self setStartAmplitude:[decoder decodeFloatForKey:NcdLinearityStartAmplitude]];
         [self setBurstRate:[decoder decodeFloatForKey:NcdLinearityBurstRate]];
         [self setWidth:[decoder decodeFloatForKey:NcdLinearityWidth]];
@@ -675,7 +675,7 @@ static NSString* NcdLinearitySelectedWaveform = @"NcdLinearitySelectedWaveform";
     else {
         int i;
         for(i=0;i<2;i++){
-            timeOnOneChannel[i]    =[decoder decodeIntForKey:    [NSString stringWithFormat:@"NcdLinearityTaskTime%d",i]];    
+            timeOnOneChannel[i]    =[decoder decodeIntForKey:    [NSString stringWithFormat:@"NcdLinearityTaskTime%d",i]];
             startAmplitude[i]      =[decoder decodeFloatForKey:  [NSString stringWithFormat:@"NcdLinearityStartAmplitude%d",i]];
             burstRate[i]           =[decoder decodeFloatForKey:  [NSString stringWithFormat:@"NcdLinearityBurstRate%d",i]];
             width[i]               =[decoder decodeFloatForKey:  [NSString stringWithFormat:@"NcdLinearityWidth%d",i]];
@@ -685,7 +685,7 @@ static NSString* NcdLinearitySelectedWaveform = @"NcdLinearitySelectedWaveform";
             startWidth[i]          =[decoder decodeFloatForKey:  [NSString stringWithFormat:@"NcdLinearityStartWidth%d",i]];
             endWidth[i]            =[decoder decodeFloatForKey:  [NSString stringWithFormat:@"NcdLinearityEndWidth%d",i]];
             numWidthValues[i]      =[decoder decodeIntForKey:    [NSString stringWithFormat:@"NcdLinearityNumWidthValues%d",i]];
-            useFile[i]             =[decoder decodeIntForKey:    [NSString stringWithFormat:@"NcdLinearityUseFile%d",i]];
+            useFile[i]             =[decoder decodeIntegerForKey:    [NSString stringWithFormat:@"NcdLinearityUseFile%d",i]];
             fileName[i]            =[[decoder decodeObjectForKey: [NSString stringWithFormat:@"NcdLinearityFileName%d",i]] retain];
 			if(fileName[i] == nil)fileName[i] = @"";
         }
@@ -705,18 +705,18 @@ static NSString* NcdLinearitySelectedWaveform = @"NcdLinearitySelectedWaveform";
     
     int i;
     for(i=0;i<2;i++){
-        [encoder encodeInt:timeOnOneChannel[i] forKey:  [NSString stringWithFormat:@"NcdLinearityTaskTime%d",i]];    
+        [encoder encodeInteger:timeOnOneChannel[i] forKey:  [NSString stringWithFormat:@"NcdLinearityTaskTime%d",i]];    
         [encoder encodeFloat:startAmplitude[i] forKey:  [NSString stringWithFormat:@"NcdLinearityStartAmplitude%d",i]];
         [encoder encodeFloat:burstRate[i] forKey:       [NSString stringWithFormat:@"NcdLinearityBurstRate%d",i]];
         [encoder encodeFloat:width[i]  forKey:          [NSString stringWithFormat:@"NcdLinearityWidth%d",i]];
-        [encoder encodeInt:numAmpValues[i] forKey:      [NSString stringWithFormat:@"NcdLinearityNumOfValues%d",i]];
+        [encoder encodeInteger:numAmpValues[i] forKey:      [NSString stringWithFormat:@"NcdLinearityNumOfValues%d",i]];
         [encoder encodeFloat:endAmplitude[i] forKey:    [NSString stringWithFormat:@"NcdLinearityEndAmplitude%d",i]];
-        [encoder encodeInt:selectedWaveform[i] forKey:  [NSString stringWithFormat:@"NcdLinearitySelectedWaveform%d",i]];
+        [encoder encodeInteger:selectedWaveform[i] forKey:  [NSString stringWithFormat:@"NcdLinearitySelectedWaveform%d",i]];
 		
         [encoder encodeFloat:startWidth[i] forKey:      [NSString stringWithFormat:@"NcdLinearityStartWidth%d",i]];
         [encoder encodeFloat:endWidth[i] forKey:        [NSString stringWithFormat:@"NcdLinearityEndWidth%d",i]];
-        [encoder encodeInt:numWidthValues[i] forKey:    [NSString stringWithFormat:@"NcdLinearityNumWidthValues%d",i]];
-        [encoder encodeInt:useFile[i] forKey:           [NSString stringWithFormat:@"NcdLinearityUseFile%d",i]];
+        [encoder encodeInteger:numWidthValues[i] forKey:    [NSString stringWithFormat:@"NcdLinearityNumWidthValues%d",i]];
+        [encoder encodeInteger:useFile[i] forKey:           [NSString stringWithFormat:@"NcdLinearityUseFile%d",i]];
         [encoder encodeObject:fileName[i] forKey:       [NSString stringWithFormat:@"NcdLinearityFileName%d",i]];
     }
     

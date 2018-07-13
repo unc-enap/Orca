@@ -406,8 +406,8 @@ NSString* ORADC2249SuppressZerosChangedNotification  = @"ORADC2249SuppressZerosC
 	
     [[self undoManager] disableUndoRegistration];
     [self setIncludeTiming:[decoder decodeBoolForKey:@"ORADC2249ModelIncludeTiming"]];
-    [self setOnlineMask:[decoder decodeIntForKey:@"ORADC2249OnlineMask"]];
-    [self setSuppressZeros:[decoder decodeIntForKey:@"ORADC2249SuppressZeros"]];
+    [self setOnlineMask:[decoder decodeIntegerForKey:@"ORADC2249OnlineMask"]];
+    [self setSuppressZeros:[decoder decodeIntegerForKey:@"ORADC2249SuppressZeros"]];
     [[self undoManager] enableUndoRegistration];
 	
 	[self setCheckLAM:YES];
@@ -419,8 +419,8 @@ NSString* ORADC2249SuppressZerosChangedNotification  = @"ORADC2249SuppressZerosC
 {
     [super encodeWithCoder:encoder];
     [encoder encodeBool:includeTiming forKey:@"ORADC2249ModelIncludeTiming"];
-    [encoder encodeInt:onlineMask forKey:@"ORADC2249OnlineMask"];
-    [encoder encodeInt:suppressZeros forKey:@"ORADC2249SuppressZeros"];
+    [encoder encodeInteger:onlineMask forKey:@"ORADC2249OnlineMask"];
+    [encoder encodeInteger:suppressZeros forKey:@"ORADC2249SuppressZeros"];
 	
 }
 

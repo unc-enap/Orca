@@ -326,10 +326,10 @@ NSString* ORMITPulserLock = @"ORMITPulserLock";
     self = [super initWithCoder:decoder];
     
     [[self undoManager] disableUndoRegistration];
-    [self setPulserVersion:[decoder decodeIntForKey:@"pulserVersion"]];	
+    [self setPulserVersion:[decoder decodeIntegerForKey:@"pulserVersion"]];	
 	[self setClockSpeed:[decoder decodeIntForKey:@"clockSpeed"]];
     [self setFrequency:	[decoder decodeFloatForKey:@"frequency"]];
-    [self setDutyCycle:	[decoder decodeIntForKey:@"dutyCycle"]];
+    [self setDutyCycle:	[decoder decodeIntegerForKey:@"dutyCycle"]];
     [self setResistance:	[decoder decodeIntForKey:@"resistance"]];
     [[self undoManager] enableUndoRegistration];    
 	
@@ -339,11 +339,11 @@ NSString* ORMITPulserLock = @"ORMITPulserLock";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:pulserVersion	forKey:@"pulserVersion"];
-    [encoder encodeInt:clockSpeed	    forKey:@"clockSpeed"];
+    [encoder encodeInteger:pulserVersion	forKey:@"pulserVersion"];
+    [encoder encodeInteger:clockSpeed	    forKey:@"clockSpeed"];
     [encoder encodeFloat:frequency	    forKey:@"frequency"];
-    [encoder encodeInt:dutyCycle	    forKey:@"dutyCycle"];
-    [encoder encodeInt:resistance	    forKey:@"resistance"];
+    [encoder encodeInteger:dutyCycle	    forKey:@"dutyCycle"];
+    [encoder encodeInteger:resistance	    forKey:@"resistance"];
 }
 @end
 

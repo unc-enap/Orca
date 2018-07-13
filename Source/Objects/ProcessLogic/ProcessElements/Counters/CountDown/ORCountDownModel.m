@@ -239,7 +239,7 @@ NSString* ORCountDownLock							= @"ORCountDownLock";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:startCount forKey:@"startCount"];
+    [encoder encodeInteger:startCount forKey:@"startCount"];
 }
 
 @end

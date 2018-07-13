@@ -35,8 +35,8 @@
     @private
         NSLock*			theHWLock;
 		NSString*       deviceName;
-        unsigned int 	rwAddress;
-        unsigned int 	writeValue;
+        unsigned long 	rwAddress;
+        unsigned long 	writeValue;
         unsigned int	readWriteType;
                 
         ORAlarm*		noHardwareAlarm;

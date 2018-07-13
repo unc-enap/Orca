@@ -975,7 +975,7 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 {
 	self = [super initWithCoder:decoder];
 	[[self undoManager] disableUndoRegistration];
-	[self setEnableMask:[decoder decodeIntForKey:@"enableMask"]];
+	[self setEnableMask:[decoder decodeIntegerForKey:@"enableMask"]];
 	[self setReadContinously:[decoder decodeBoolForKey:@"readContinously"]];
 	[self setTriggerSlope:[decoder decodeIntForKey:@"triggerSlope"]];
 	[self setTriggerCoupling:[decoder decodeIntForKey:@"triggerCoupling"]];
@@ -984,7 +984,7 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 	[self setVerticalOffset:[decoder decodeDoubleForKey:@"verticalOffset"]];
 	[self setFullScale:[decoder decodeIntForKey:@"fullScaleIndex"]];
 	[self setSampleInterval:[decoder decodeDoubleForKey:@"sampleInterval"]];
-	[self setNumberSamples:[decoder decodeInt32ForKey:@"numberSamples"]];
+	[self setNumberSamples:[decoder decodeIntegerForKey:@"numberSamples"]];
 	[self setDelayTime:[decoder decodeDoubleForKey:@"delayTime"]];
     [self setSampleRateGroup:[decoder decodeObjectForKey:@"sampleRateGroup"]];
 	triggerLevels = [[decoder decodeObjectForKey:@"triggerLevels"] retain];
@@ -1007,18 +1007,18 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
 	[super encodeWithCoder:encoder];
-	[encoder encodeInt:enableMask forKey:@"enableMask"];
+	[encoder encodeInteger:enableMask forKey:@"enableMask"];
 	[encoder encodeBool:readContinously forKey:@"readContinously"];
-	[encoder encodeInt:triggerSlope    forKey:@"triggerSlope"];
+	[encoder encodeInteger:triggerSlope    forKey:@"triggerSlope"];
 	[encoder encodeObject:triggerLevels forKey:@"triggerLevels"];
-	[encoder encodeInt:triggerCoupling forKey:@"triggerCoupling"];
-	[encoder encodeInt:triggerSource  forKey:@"triggerSource"];
-	[encoder encodeInt:coupling forKey:@"coupling"];
+	[encoder encodeInteger:triggerCoupling forKey:@"triggerCoupling"];
+	[encoder encodeInteger:triggerSource  forKey:@"triggerSource"];
+	[encoder encodeInteger:coupling forKey:@"coupling"];
 	[encoder encodeDouble:verticalOffset forKey:@"verticalOffset"];
-	[encoder encodeInt:fullScale forKey:@"fullScaleIndex"];
+	[encoder encodeInteger:fullScale forKey:@"fullScaleIndex"];
 	[encoder encodeDouble:sampleInterval forKey:@"sampleInterval"];
 	[encoder encodeDouble:delayTime forKey:@"delayTime"];
-	[encoder encodeInt32:(int32_t)numberSamples forKey:@"numberSamples"];
+	[encoder encodeInteger:numberSamples forKey:@"numberSamples"];
     [encoder encodeObject:[self sampleRateGroup] forKey:@"sampleRateGroup"];
 }
 

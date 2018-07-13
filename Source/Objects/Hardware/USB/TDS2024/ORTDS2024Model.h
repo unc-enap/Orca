@@ -65,7 +65,7 @@
 #pragma mark •••Cmd Handling
 - (void) interfaceAdded:(NSNotification*)aNote;
 - (void) interfaceRemoved:(NSNotification*)aNote;
-- (long) readFromDevice: (char*) aData maxLength: (long) aMaxLength;
+- (long) readFromDevice: (char*) aData maxLength: (unsigned long) aMaxLength;
 - (void) writeToDevice: (NSString*) aCommand;
 - (void) writeCommand:(NSString*)aCmd;
 

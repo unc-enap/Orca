@@ -137,7 +137,7 @@ static NSString* HaloDbConnector		= @"HaloDbConnector";
 {
     NSMutableDictionary*  values = [NSMutableDictionary dictionary];
     int aSet;
-    int numGroups = [segmentGroups count];
+    int numGroups = (int)[segmentGroups count];
     
     for(aSet = 0; aSet < numGroups; aSet++){
         NSMutableDictionary* aDictionary = [NSMutableDictionary dictionary];
@@ -251,7 +251,7 @@ static NSString* HaloDbConnector		= @"HaloDbConnector";
     [[NSNotificationCenter defaultCenter] postNotificationName:HaloModelEmailListChanged object:self];
 }
 
-- (void) addAddress:(id)anAddress atIndex:(int)anIndex
+- (void) addAddress:(id)anAddress atIndex:(NSUInteger)anIndex
 {
 	if(!emailList) emailList= [[NSMutableArray array] retain];
 	if([emailList count] == 0)anIndex = 0;
@@ -262,7 +262,7 @@ static NSString* HaloDbConnector		= @"HaloDbConnector";
     [[NSNotificationCenter defaultCenter] postNotificationName:HaloModelEmailListChanged object:self];
 }
 
-- (void) removeAddressAtIndex:(int) anIndex
+- (void) removeAddressAtIndex:(NSUInteger) anIndex
 {
 	id anAddress = [emailList objectAtIndex:anIndex];
 	[[[self undoManager] prepareWithInvocationTarget:self] addAddress:anAddress atIndex:anIndex];
@@ -426,9 +426,9 @@ static NSString* HaloDbConnector		= @"HaloDbConnector";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeObject:haloSentry    forKey:@"haloSentry"];
-    [encoder encodeInt:viewType         forKey:@"viewType"];
+    [encoder encodeInteger:viewType         forKey:@"viewType"];
     [encoder encodeObject:emailList     forKey:@"emailList"];
-    [encoder encodeInt:heartBeatIndex forKey:@"heartBeatIndex"];
+    [encoder encodeInteger:heartBeatIndex forKey:@"heartBeatIndex"];
 }
 
 - (void) sendHeartbeat

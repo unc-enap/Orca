@@ -49,8 +49,8 @@
 - (void) takeOverRunning;
 - (NSMutableArray*) emailList;
 - (void) setEmailList:(NSMutableArray*)aEmailList;
-- (void) addAddress:(id)anAddress atIndex:(int)anIndex;
-- (void) removeAddressAtIndex:(int) anIndex;
+- (void) addAddress:(id)anAddress atIndex:(NSUInteger)anIndex;
+- (void) removeAddressAtIndex:(NSUInteger) anIndex;
 - (int) heartBeatIndex;
 - (void) setHeartBeatIndex:(int)aHeartBeatIndex;
 - (int) heartbeatSeconds;

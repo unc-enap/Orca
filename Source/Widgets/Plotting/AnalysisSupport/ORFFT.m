@@ -55,8 +55,8 @@ NSString* ORFFTOptionChanged = @"ORFFTOptionChanged";
 - (long) minChannel					{ return minChannel; }
 - (long) maxChannel					{ return maxChannel; }
 - (BOOL) serviceAvailable			{ return serviceAvailable;}
-- (int) fftOption					{ return fftOption;}
-- (int) fftWindow					{ return fftWindow;}
+- (long) fftOption					{ return fftOption;}
+- (long) fftWindow					{ return fftWindow;}
 
 - (void) setMinChannel:(long)aChannel 
 { 
@@ -68,13 +68,13 @@ NSString* ORFFTOptionChanged = @"ORFFTOptionChanged";
 	maxChannel = aChannel; 
 }
 
-- (void) setFftWindow:(int)aValue
+- (void) setFftWindow:(long)aValue
 { 
 	fftWindow = aValue; 
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORFFTWindowChanged object:self];
 }
 
-- (void) setFftOption:(int)aValue
+- (void) setFftOption:(long)aValue
 {
 	fftOption = aValue; 
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORFFTOptionChanged object:self];
@@ -93,10 +93,10 @@ NSString* ORFFTOptionChanged = @"ORFFTOptionChanged";
 		NSMutableArray* dataArray = [NSMutableArray array];
 		long minChan = [roi minChannel];
 		long maxChan = [roi maxChannel];
-		int ix;
+		long ix;
 		for (ix=minChan; ix<maxChan-1;++ix) {		
 			double xValue,yValue;
-			[dataSource plotter:aPlot index:ix x:&xValue y:&yValue];
+			[dataSource plotter:aPlot index:(int)ix x:&xValue y:&yValue];
 			[dataArray addObject:[NSNumber numberWithDouble:yValue]];
 		}
 	
@@ -108,7 +108,7 @@ NSString* ORFFTOptionChanged = @"ORFFTOptionChanged";
 			NSMutableDictionary* requestInputs = [NSMutableDictionary dictionary];
 			[requestInputs setObject:dataArray forKey:@"Waveform"];
 			NSString* fftOptionString = kORCARootFFTNames[fftOption];
-			int i = fftWindow;
+			long i = fftWindow;
 			if(i>0){
 				fftOptionString = [fftOptionString stringByAppendingString:@","];
 				fftOptionString = [fftOptionString stringByAppendingString:kORCARootFFTWindowOptions[i]];
@@ -151,19 +151,19 @@ NSString* ORFFTOptionChanged = @"ORFFTOptionChanged";
 {
     self = [super init];
     		
-    [self setMinChannel:	[decoder decodeInt32ForKey:@"minChannel"]];
-    [self setMaxChannel:	[decoder decodeInt32ForKey:@"maxChannel"]];
-	[self setFftOption:		[decoder decodeIntForKey:@"fftOption"]];
-	[self setFftWindow:		[decoder decodeIntForKey:@"fftWindow"]];
+    [self setMinChannel:	[decoder decodeIntegerForKey:@"minChannel"]];
+    [self setMaxChannel:	[decoder decodeIntegerForKey:@"maxChannel"]];
+	[self setFftOption:		[decoder decodeIntegerForKey:@"fftOption"]];
+	[self setFftWindow:		[decoder decodeIntegerForKey:@"fftWindow"]];
 	
     return self;
 }
 
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
-    [encoder encodeInt32:minChannel forKey:@"minChannel"];
-    [encoder encodeInt32:maxChannel forKey:@"maxChannel"];
-	[encoder encodeInt:fftOption forKey:@"fftOption"];
-    [encoder encodeInt:fftWindow forKey:@"fftWindow"];
+    [encoder encodeInteger:minChannel forKey:@"minChannel"];
+    [encoder encodeInteger:maxChannel forKey:@"maxChannel"];
+	[encoder encodeInteger:fftOption  forKey:@"fftOption"];
+    [encoder encodeInteger:fftWindow  forKey:@"fftWindow"];
 }
 @end

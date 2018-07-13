@@ -43,7 +43,7 @@
 }
 
 - (long)	line;
-- (void) setLine:(int)aLine;
+- (void) setLine:(long)aLine;
 - (int)				operatorTag;
 - (void)			setOperatorTag:(int)anOperator;
 - (NSMutableArray*) operands;

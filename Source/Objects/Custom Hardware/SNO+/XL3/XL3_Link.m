@@ -120,7 +120,7 @@ NSString* XL3_LinkAutoConnectChanged    = @"XL3_LinkAutoConnectChanged";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
 	[super encodeWithCoder:encoder];
-	[encoder encodeInt:[self errorTimeOut] forKey:@"errorTimeOut"];
+	[encoder encodeInteger:[self errorTimeOut] forKey:@"errorTimeOut"];
     [encoder encodeBool:autoConnect forKey:@"autoConnect"];
 }
 
@@ -317,8 +317,8 @@ NSString* XL3_LinkAutoConnectChanged    = @"XL3_LinkAutoConnectChanged";
 	aCommand->cmdNum = theMultiCommand->howMany;
 	aCommand->packetNum = 0; //redundant
 	aCommand->flags = 0;
-	aCommand->address = anAddress;
-	aCommand->data = aValue;
+	aCommand->address = (uint32_t)anAddress;
+	aCommand->data = (uint32_t)aValue;
 	
 	theMultiCommand->howMany++;
 }
@@ -714,7 +714,7 @@ static void SwapLongBlock(void* p, int32_t n)
     [connectionLock unlock];
     
     workingSocket = 0;
-    if ((workingSocket = anetTcpConnect(err, host, portNumber)) == ANET_ERR) {
+    if ((workingSocket = (int)anetTcpConnect(err, host, (int)portNumber)) == ANET_ERR) {
         if (workingSocket) {
             close(workingSocket);
             workingSocket = 0;
@@ -944,7 +944,7 @@ static void SwapLongBlock(void* p, int32_t n)
 			}
 
 			do {
-				bytesWritten = write(workingSocket, aPacket, numBytesToSend);
+				bytesWritten = (int)write(workingSocket, aPacket, numBytesToSend);
 			} while (bytesWritten < 0 && (errno == EAGAIN || errno == EINTR));
 
 			if (bytesWritten > 0) {
@@ -980,7 +980,7 @@ static void SwapLongBlock(void* p, int32_t n)
 - (void) readPacket:(XL3Packet*)xl3Packet
 {
     char *aPacket = (char*)xl3Packet;
-    int n;
+    ssize_t n;
     int selectionResult = 0;
     int numBytesToGet = XL3_PACKET_SIZE;
     time_t t1 = time(0);

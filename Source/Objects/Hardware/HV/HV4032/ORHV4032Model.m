@@ -548,7 +548,7 @@ static NSString *ORHVPollingState 	= @"ORHVPollingState";
     [[self undoManager] disableUndoRegistration];
 	
     [self setSupplies:[decoder decodeObjectForKey:ORHVSupplies]];
-    [self setPollingState:[decoder decodeIntForKey:ORHVPollingState]];
+    [self setPollingState:[decoder decodeIntegerForKey:ORHVPollingState]];
 	if(!supplies){
 		[self makeSupplies];
 	}
@@ -569,7 +569,7 @@ static NSString *ORHVPollingState 	= @"ORHVPollingState";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeObject:[self supplies] forKey:ORHVSupplies];
-    [encoder encodeInt:[self pollingState] forKey:ORHVPollingState];
+    [encoder encodeInteger:[self pollingState] forKey:ORHVPollingState];
 }
 
 

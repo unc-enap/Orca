@@ -343,7 +343,7 @@ NSString* ORXLGPSModelPpoRepeatsChanged		= @"ORXLGPSModelPpoRepeatsChanged";
 	NSDateComponents *componentsPpo = [gregorian components:(NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit)
                                                    fromDate:ppoDate];
 #endif
-	NSString* time = [NSString stringWithFormat:@"%03d:%02d:%02d:%02d", day, [componentsPpo hour], [componentsPpo minute], [componentsPpo second]];
+	NSString* time = [NSString stringWithFormat:@"%03d:%02ld:%02d:%02d", day, [componentsPpo hour], [componentsPpo minute], [componentsPpo second]];
 
 	if ([self ppoRepeats]) {
 		NSRange ppoMask = {0, 12};
@@ -373,7 +373,7 @@ NSString* ORXLGPSModelPpoRepeatsChanged		= @"ORXLGPSModelPpoRepeatsChanged";
 		}
 	}
 	
-	NSString* cmd = [NSString stringWithFormat:@"PPO %@.000000 %@.%06d", time, time, [self ppoPulseWidth]];
+	NSString* cmd = [NSString stringWithFormat:@"PPO %@.000000 %@.%06ld", time, time, [self ppoPulseWidth]];
 	[self setPpoCommand:cmd];
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORXLGPSModelPpoCommandChanged object:self];
 }
@@ -430,15 +430,15 @@ NSString* ORXLGPSModelPpoRepeatsChanged		= @"ORXLGPSModelPpoRepeatsChanged";
 	[self setUserName:	[decoder decodeObjectForKey:@"userName"]];
 	[self setPassword:	[decoder decodeObjectForKey:@"password"]];
 	[self setIPNumber:	[decoder decodeObjectForKey:@"IPNumber"]];
-	[self setTimeOut:	[decoder decodeIntForKey:@"timeOut"]];
+	[self setTimeOut:	[decoder decodeIntegerForKey:@"timeOut"]];
 	[self setCommand:	[decoder decodeObjectForKey:@"command"]];
 	[self setPpoCommand:	[decoder decodeObjectForKey:@"ppoCommand"]];
 	[self setPpsCommand:	[decoder decodeObjectForKey:@"ppsCommand"]];
 	[self setIsPpo:		[decoder decodeBoolForKey:@"isPpo"]];
 	[self setPpoTime:	[decoder decodeObjectForKey:@"ppoTime"]];
-	[self setPpoTimeOffset:	[decoder decodeIntForKey:@"ppoTimeOffset"]];	
-	[self setPpoPulseWidth:	[decoder decodeIntForKey:@"ppoPulseWidth"]];	
-	[self setPpoPulsePeriod:[decoder decodeIntForKey:@"ppoPulsePeriod"]];
+	[self setPpoTimeOffset:	[decoder decodeIntegerForKey:@"ppoTimeOffset"]];	
+	[self setPpoPulseWidth:	[decoder decodeIntegerForKey:@"ppoPulseWidth"]];	
+	[self setPpoPulsePeriod:[decoder decodeIntegerForKey:@"ppoPulsePeriod"]];
 	[self setPpoRepeats:	[decoder decodeBoolForKey:@"ppoRepeats"]];
 	
 	if (![self ppoTime]) [self setPpoTime:[NSDate date]];
@@ -456,14 +456,14 @@ NSString* ORXLGPSModelPpoRepeatsChanged		= @"ORXLGPSModelPpoRepeatsChanged";
 	[encoder encodeObject:userName		forKey:@"userName"];
 	[encoder encodeObject:password		forKey:@"password"];
 	[encoder encodeObject:IPNumber		forKey:@"IPNumber"];
-	[encoder encodeInt:timeOut		forKey:@"timeOut"];	
+	[encoder encodeInteger:timeOut		forKey:@"timeOut"];	
 	[encoder encodeObject:command		forKey:@"command"];
 	[encoder encodeObject:ppoCommand	forKey:@"ppoCommand"];
 	[encoder encodeObject:ppsCommand	forKey:@"ppsCommand"];
 	[encoder encodeObject:ppoTime		forKey:@"ppoTime"];
-	[encoder encodeInt:ppoTimeOffset	forKey:@"ppoTimeOffset"];
-	[encoder encodeInt:ppoPulseWidth	forKey:@"ppoPulseWidth"];
-	[encoder encodeInt:ppoPulsePeriod	forKey:@"ppoPulsePeriod"];
+	[encoder encodeInteger:ppoTimeOffset	forKey:@"ppoTimeOffset"];
+	[encoder encodeInteger:ppoPulseWidth	forKey:@"ppoPulseWidth"];
+	[encoder encodeInteger:ppoPulsePeriod	forKey:@"ppoPulsePeriod"];
 	[encoder encodeBool:ppoRepeats		forKey:@"ppoRepeats"];
 	[encoder encodeBool:isPpo		forKey:@"isPpo"];
 }

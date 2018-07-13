@@ -94,13 +94,13 @@
  */
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-    [encoder encodeInt32: (int32_t)value forKey:@"value"];
+    [encoder encodeInteger: (int32_t)value forKey:@"value"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
 	unsigned long theValue = 0;
-    theValue = [decoder decodeInt32ForKey:@"value"];
+    theValue = [decoder decodeIntegerForKey:@"value"];
 	[self autorelease];
 	// returning "static" object from init method -- ensure retain count maintained
 	return [[SourceMask sourceMaskForValue:theValue] retain];

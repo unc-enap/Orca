@@ -3556,13 +3556,13 @@ clean_up_mark:
     [self setCheckWaveFormEnabled:[decoder decodeBoolForKey:@"ORKatrinFLTModelCheckWaveFormEnabled"]];
     [self setCheckEnergyEnabled:  [decoder decodeBoolForKey:@"ORKatrinFLTModelCheckEnergyEnabled"]];
     [self setTestPatternCount:	[decoder decodeIntForKey:@"ORKatrinFLTModelTestPatternCount"]];
-    [self setTMode:				[decoder decodeIntForKey:@"ORKatrinFLTModelTMode"]];
+    [self setTMode:				[decoder decodeIntegerForKey:@"ORKatrinFLTModelTMode"]];
     [self setPage:				[decoder decodeIntForKey:@"ORKatrinFLTModelPage"]];
     [self setIterations:		[decoder decodeIntForKey:@"ORKatrinFLTModelIterations"]];
     [self setEndChan:			[decoder decodeIntForKey:@"ORKatrinFLTModelEndChan"]];
     [self setStartChan:			[decoder decodeIntForKey:@"ORKatrinFLTModelStartChan"]];
     [self setBroadcastTime:		[decoder decodeBoolForKey:@"ORKatrinFLTModelBroadcastTime"]];
-    [self setHitRateLength:		[decoder decodeIntForKey:@"ORKatrinFLTModelHitRateLength"]];
+    [self setHitRateLength:		[decoder decodeIntegerForKey:@"ORKatrinFLTModelHitRateLength"]];
     [self setShapingTimes:		[decoder decodeObjectForKey:@"ORKatrinFLTModelShapingTimes"]];
     [self setTriggersEnabled:	[decoder decodeObjectForKey:@"ORKatrinFLTModelTriggersEnabled"]];
     [self setTestPatterns:		[decoder decodeObjectForKey:@"testPatterns"]];
@@ -3577,7 +3577,7 @@ clean_up_mark:
     [self setTotalRate:			[decoder decodeObjectForKey:@"totalRate"]];
 	[self setTestEnabledArray:	[decoder decodeObjectForKey:@"testsEnabledArray"]];
 	[self setTestStatusArray:	[decoder decodeObjectForKey:@"testsStatusArray"]];
-    [self setReadoutPages:		[decoder decodeIntForKey:@"ORKatrinFLTModelReadoutPages"]];	// ak, 2.7.07
+    [self setReadoutPages:		[decoder decodeIntegerForKey:@"ORKatrinFLTModelReadoutPages"]];	// ak, 2.7.07
     [self setPostTriggerTime:	[decoder decodeIntForKey:@"postTriggerTime"]];// -tb- 2008-03-11
     if(![decoder containsValueForKey:@"postTriggerTime"]){// this is for backward compatibility for old files
         [self setPostTriggerTime:511];
@@ -3586,14 +3586,14 @@ clean_up_mark:
     versionRegister = 0x00200000; // emulate "almost version 3"
     [self setHistoBinWidth:		[decoder decodeIntForKey:@"ORKatrinFLTModelHistoBinWidth"]];
     [self setHistoMinEnergy:		[decoder decodeIntForKey:@"ORKatrinFLTModelHistoMinEnergy"]];
-    //[self setHistoMaxEnergy:		[decoder decodeIntForKey:@"ORKatrinFLTModelHistoMaxEnergy"]]; // for now: unused -tb- 2008-03-06
-    //[self setHistoFirstBin:		[decoder decodeIntForKey:@"ORKatrinFLTModelHistoFirstBin"]];
-    //[self setHistoLastBin:		[decoder decodeIntForKey:@"ORKatrinFLTModelHistoLastBin"]];
+    //[self setHistoMaxEnergy:		[decoder decodeIntegerForKey:@"ORKatrinFLTModelHistoMaxEnergy"]]; // for now: unused -tb- 2008-03-06
+    //[self setHistoFirstBin:		[decoder decodeIntegerForKey:@"ORKatrinFLTModelHistoFirstBin"]];
+    //[self setHistoLastBin:		[decoder decodeIntegerForKey:@"ORKatrinFLTModelHistoLastBin"]];
     [self setHistoRunTime:		[decoder decodeIntForKey:@"ORKatrinFLTModelHistoRunTime"]];
     [self setHistoCalibrationChan:		[decoder decodeIntForKey:@"ORKatrinFLTModelHistoCalibrationChan"]];
-    //[self setHistoRecordingTime:		[decoder decodeIntForKey:@"ORKatrinFLTModelHistoRecordingTime"]];
-    //NSLog(@"Decoding ORKatrinFLTModelHistoBinWidth is %i\n",[decoder decodeIntForKey:@"ORKatrinFLTModelHistoBinWidth"]);
-    [self setReadWriteRegisterChan:	[decoder decodeIntForKey:@"ORKatrinFLTModelReadWriteRegisterChan"]];// -tb- 
+    //[self setHistoRecordingTime:		[decoder decodeIntegerForKey:@"ORKatrinFLTModelHistoRecordingTime"]];
+    //NSLog(@"Decoding ORKatrinFLTModelHistoBinWidth is %i\n",[decoder decodeIntegerForKey:@"ORKatrinFLTModelHistoBinWidth"]);
+    [self setReadWriteRegisterChan:	[decoder decodeIntForKey:@"ORKatrinFLTModelReadWriteRegisterChan"]];// -tb-
     if(![decoder containsValueForKey:@"ORKatrinFLTModelReadWriteRegisterChan"]){// for backward compatibility 
         [self setReadWriteRegisterChan:0];
     }
@@ -3602,10 +3602,10 @@ clean_up_mark:
     }else{
         [self setReadWriteRegisterName:	[decoder decodeObjectForKey:@"ORKatrinFLTModelReadWriteRegisterName"]];// -tb- 
     }
-    [self setShowHitratesDuringHistoCalibration:		[decoder decodeIntForKey:@"ORKatrinFLTModelShowHitratesDuringHistoCalibration"]];
-    [self setHistoClearAtStart:		    [decoder decodeIntForKey:@"ORKatrinFLTModelHistoClearAtStart"]];
-    [self setHistoClearAfterReadout:	[decoder decodeIntForKey:@"ORKatrinFLTModelHistoClearAfterReadout"]];
-    [self setHistoStopIfNotCleared:		[decoder decodeIntForKey:@"ORKatrinFLTModelHistoStopIfNotCleared"]];
+    [self setShowHitratesDuringHistoCalibration:		[decoder decodeIntegerForKey:@"ORKatrinFLTModelShowHitratesDuringHistoCalibration"]];
+    [self setHistoClearAtStart:		    [decoder decodeIntegerForKey:@"ORKatrinFLTModelHistoClearAtStart"]];
+    [self setHistoClearAfterReadout:	[decoder decodeIntegerForKey:@"ORKatrinFLTModelHistoClearAfterReadout"]];
+    [self setHistoStopIfNotCleared:		[decoder decodeIntegerForKey:@"ORKatrinFLTModelHistoStopIfNotCleared"]];
     [self setHistoSelfCalibrationPercent:[decoder decodeIntForKey:@"ORKatrinFLTModelHistoSelfCalibrationPercent"]];
     
 	
@@ -3691,9 +3691,9 @@ clean_up_mark:
 	[self setVetoFeatureIsAvailable:  [decoder decodeBoolForKey:@"vetoFeatureIsAvailable"]];
 	[self setHistoFeatureIsAvailable: [decoder decodeBoolForKey:@"histoFeatureIsAvailable"]];
 	[self setFilterGapFeatureIsAvailable: [decoder decodeBoolForKey:@"filterGapFeatureIsAvailable"]];
-	[self setVersionRegister:		  [decoder decodeIntForKey:@"versionRegister"]];
+	[self setVersionRegister:		  [decoder decodeIntegerForKey:@"versionRegister"]];
     
-    [self setFilterGap: [decoder decodeIntForKey:@"filterGapSetting"]];
+    [self setFilterGap: [decoder decodeIntegerForKey:@"filterGapSetting"]];
 	
 	/*
 	 //version control - at this time firewire is (sometimes) not available -tb- 2008-03-13
@@ -3728,51 +3728,51 @@ clean_up_mark:
 	
     [encoder encodeBool:checkWaveFormEnabled forKey:@"ORKatrinFLTModelCheckWaveFormEnabled"];
     [encoder encodeBool:checkEnergyEnabled   forKey:@"ORKatrinFLTModelCheckEnergyEnabled"];
-    [encoder encodeInt:testPatternCount     forKey:@"ORKatrinFLTModelTestPatternCount"];
-    [encoder encodeInt:tMode				forKey:@"ORKatrinFLTModelTMode"];
-    [encoder encodeInt:page					forKey:@"ORKatrinFLTModelPage"];
-    [encoder encodeInt:iterations			forKey:@"ORKatrinFLTModelIterations"];
-    [encoder encodeInt:endChan				forKey:@"ORKatrinFLTModelEndChan"];
-    [encoder encodeInt:startChan			forKey:@"ORKatrinFLTModelStartChan"];
+    [encoder encodeInteger:testPatternCount     forKey:@"ORKatrinFLTModelTestPatternCount"];
+    [encoder encodeInteger:tMode				forKey:@"ORKatrinFLTModelTMode"];
+    [encoder encodeInteger:page					forKey:@"ORKatrinFLTModelPage"];
+    [encoder encodeInteger:iterations			forKey:@"ORKatrinFLTModelIterations"];
+    [encoder encodeInteger:endChan				forKey:@"ORKatrinFLTModelEndChan"];
+    [encoder encodeInteger:startChan			forKey:@"ORKatrinFLTModelStartChan"];
     [encoder encodeBool:broadcastTime		forKey:@"ORKatrinFLTModelBroadcastTime"];
-    [encoder encodeInt:hitRateLength		forKey:@"ORKatrinFLTModelHitRateLength"];
+    [encoder encodeInteger:hitRateLength		forKey:@"ORKatrinFLTModelHitRateLength"];
     [encoder encodeObject:shapingTimes		forKey:@"ORKatrinFLTModelShapingTimes"];
     [encoder encodeObject:triggersEnabled	forKey:@"ORKatrinFLTModelTriggersEnabled"];
     [encoder encodeObject:testPatterns		forKey:@"testPatterns"];
     [encoder encodeObject:gains				forKey:@"gains"];
     [encoder encodeObject:thresholds		forKey:@"thresholds"];
     [encoder encodeObject:hitRatesEnabled	forKey:@"hitRatesEnabled"];
-    [encoder encodeInt:daqRunMode			forKey:@"daqRunMode"];// -tb- 2008-01-31
-    [encoder encodeInt:fltRunMode			forKey:@"mode"];//TODO: remove this ? -tb-
+    [encoder encodeInteger:daqRunMode			forKey:@"daqRunMode"];// -tb- 2008-01-31
+    [encoder encodeInteger:fltRunMode			forKey:@"mode"];//TODO: remove this ? -tb-
     [encoder encodeObject:totalRate			forKey:@"totalRate"];
     [encoder encodeObject:testEnabledArray	forKey:@"testEnabledArray"];
     [encoder encodeObject:testStatusArray	forKey:@"testStatusArray"];
-    [encoder encodeInt:readoutPages  		forKey:@"ORKatrinFLTModelReadoutPages"];	
-    [encoder encodeInt:postTriggerTime 		forKey:@"postTriggerTime"];	
+    [encoder encodeInteger:readoutPages  		forKey:@"ORKatrinFLTModelReadoutPages"];	
+    [encoder encodeInteger:postTriggerTime 		forKey:@"postTriggerTime"];	
     //hardware histogram stuff -tb- 2008-02-08
-    [encoder encodeInt:histoBinWidth  		forKey:@"ORKatrinFLTModelHistoBinWidth"];	
-    [encoder encodeInt:histoMinEnergy  		forKey:@"ORKatrinFLTModelHistoMinEnergy"];	
-    //[encoder encodeInt:histoMaxEnergy  		forKey:@"ORKatrinFLTModelHistoMaxEnergy"];	for now: unused -tb- 2008-03-06
-    //[encoder encodeInt:histoFirstBin  		forKey:@"ORKatrinFLTModelHistoFirstBin"];	
-    //[encoder encodeInt:histoLastBin  		forKey:@"ORKatrinFLTModelHistoLastBin"];	
-    [encoder encodeInt:histoRunTime  		forKey:@"ORKatrinFLTModelHistoRunTime"];	
-    //[encoder encodeInt:histoRecordingTime   forKey:@"ORKatrinFLTModelHistoRecordingTime"];	
-    [encoder encodeInt:histoCalibrationChan  forKey:@"ORKatrinFLTModelHistoCalibrationChan"];	
-    [encoder encodeInt:readWriteRegisterChan    forKey:@"ORKatrinFLTModelReadWriteRegisterChan"];	
+    [encoder encodeInteger:histoBinWidth  		forKey:@"ORKatrinFLTModelHistoBinWidth"];	
+    [encoder encodeInteger:histoMinEnergy  		forKey:@"ORKatrinFLTModelHistoMinEnergy"];	
+    //[encoder encodeInteger:histoMaxEnergy  		forKey:@"ORKatrinFLTModelHistoMaxEnergy"];	for now: unused -tb- 2008-03-06
+    //[encoder encodeInteger:histoFirstBin  		forKey:@"ORKatrinFLTModelHistoFirstBin"];	
+    //[encoder encodeInteger:histoLastBin  		forKey:@"ORKatrinFLTModelHistoLastBin"];	
+    [encoder encodeInteger:histoRunTime  		forKey:@"ORKatrinFLTModelHistoRunTime"];	
+    //[encoder encodeInteger:histoRecordingTime   forKey:@"ORKatrinFLTModelHistoRecordingTime"];	
+    [encoder encodeInteger:histoCalibrationChan  forKey:@"ORKatrinFLTModelHistoCalibrationChan"];	
+    [encoder encodeInteger:readWriteRegisterChan    forKey:@"ORKatrinFLTModelReadWriteRegisterChan"];	
     [encoder encodeObject:readWriteRegisterName forKey:@"ORKatrinFLTModelReadWriteRegisterName"];	
-    [encoder encodeInt:showHitratesDuringHistoCalibration     forKey:@"ORKatrinFLTModelShowHitratesDuringHistoCalibration"];	
-    [encoder encodeInt:histoClearAtStart           forKey:@"ORKatrinFLTModelHistoClearAtStart"];	
-    [encoder encodeInt:histoClearAfterReadout      forKey:@"ORKatrinFLTModelHistoClearAfterReadout"];	
-    [encoder encodeInt:histoStopIfNotCleared       forKey:@"ORKatrinFLTModelHistoStopIfNotCleared"];	
-    [encoder encodeInt:histoSelfCalibrationPercent forKey:@"ORKatrinFLTModelHistoSelfCalibrationPercent"];	
+    [encoder encodeInteger:showHitratesDuringHistoCalibration     forKey:@"ORKatrinFLTModelShowHitratesDuringHistoCalibration"];	
+    [encoder encodeInteger:histoClearAtStart           forKey:@"ORKatrinFLTModelHistoClearAtStart"];	
+    [encoder encodeInteger:histoClearAfterReadout      forKey:@"ORKatrinFLTModelHistoClearAfterReadout"];	
+    [encoder encodeInteger:histoStopIfNotCleared       forKey:@"ORKatrinFLTModelHistoStopIfNotCleared"];	
+    [encoder encodeInteger:histoSelfCalibrationPercent forKey:@"ORKatrinFLTModelHistoSelfCalibrationPercent"];	
 	
     [encoder encodeBool:stdFeatureIsAvailable  forKey:@"stdFeatureIsAvailable"];	
     [encoder encodeBool:vetoFeatureIsAvailable forKey:@"vetoFeatureIsAvailable"];	
     [encoder encodeBool:histoFeatureIsAvailable forKey:@"histoFeatureIsAvailable"];	
     [encoder encodeBool:filterGapFeatureIsAvailable forKey:@"filterGapFeatureIsAvailable"];	
-    [encoder encodeInt:(int)versionRegister forKey:@"versionRegister"];
+    [encoder encodeInteger:(int)versionRegister forKey:@"versionRegister"];
 	
-    [encoder encodeInt:filterGap forKey:@"filterGapSetting"];	
+    [encoder encodeInteger:filterGap forKey:@"filterGapSetting"];	
 	
 }
 

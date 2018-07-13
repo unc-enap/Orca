@@ -25,8 +25,8 @@
 #import "ORProcessCenter.h"
 #import "SynthesizeSingleton.h"
 
-int sortUpFunc(id element1,id element2, void* context){ return [element1 compareStringTo:element2 usingKey:context];}
-int sortDnFunc(id element1,id element2, void* context){return [element2 compareStringTo:element1 usingKey:context];}
+NSInteger sortUpFunc(id element1,id element2, void* context){ return [element1 compareStringTo:element2 usingKey:context];}
+NSInteger sortDnFunc(id element1,id element2, void* context){return [element2 compareStringTo:element1 usingKey:context];}
 
 @implementation ORProcessCenter
 

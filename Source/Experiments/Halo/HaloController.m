@@ -456,7 +456,7 @@
 		[[self window] setContentView:tabView];
     }
     
-	int index = [tabView indexOfTabViewItem:tabViewItem];
+	int index = (int)[tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:@"orca.HaloController.selectedtab"];
 }
 
@@ -526,7 +526,7 @@
 }
 - (IBAction) addAddress:(id)sender
 {
-	int index = [[model emailList] count];
+	int index = (int)[[model emailList] count];
 	[model addAddress:@"<eMail>" atIndex:index];
 	NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:index];
 	[emailListTable selectRowIndexes:indexSet byExtendingSelection:NO];

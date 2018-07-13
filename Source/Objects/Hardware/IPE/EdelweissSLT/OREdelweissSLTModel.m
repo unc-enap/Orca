@@ -3299,12 +3299,12 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 	[self setTakeADCChannelData:[decoder decodeIntForKey:@"takeADCChannelData"]];
 	[self setTakeRawUDPData:[decoder decodeIntForKey:@"takeRawUDPData"]];
 	[self setChargeBBFile:[decoder decodeObjectForKey:@"chargeBBFile"]];
-	[self setUseBroadcastIdBB:[decoder decodeIntForKey:@"useBroadcastIdBB"]];
+	[self setUseBroadcastIdBB:[decoder decodeIntegerForKey:@"useBroadcastIdBB"]];
 	[self setIdBBforWCommand:[decoder decodeIntForKey:@"idBBforWCommand"]];
 	[self setTakeEventData:[decoder decodeIntForKey:@"takeEventData"]];
 	[self setTakeUDPstreamData:[decoder decodeIntForKey:@"takeUDPstreamData"]];
 	[self setCrateUDPDataCommand:[decoder decodeObjectForKey:@"crateUDPDataCommand"]];
-	[self setBBCmdFFMask:[decoder decodeInt32ForKey:@"BBCmdFFMask"]];
+	[self setBBCmdFFMask:[decoder decodeIntForKey:@"BBCmdFFMask"]];
 	[self setCmdWArg4:[decoder decodeIntForKey:@"cmdWArg4"]];
 	[self setCmdWArg3:[decoder decodeIntForKey:@"cmdWArg3"]];
 	[self setCmdWArg2:[decoder decodeIntForKey:@"cmdWArg2"]];
@@ -3314,7 +3314,7 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 	[self setCrateUDPDataReplyPort:[decoder decodeIntForKey:@"crateUDPDataReplyPort"]];
 	[self setCrateUDPDataIP:[decoder decodeObjectForKey:@"crateUDPDataIP"]];
 	[self setCrateUDPDataPort:[decoder decodeIntForKey:@"crateUDPDataPort"]];
-	[self setPixelBusEnableReg:[decoder decodeInt32ForKey:@"pixelBusEnableReg"]];
+	[self setPixelBusEnableReg:[decoder decodeIntegerForKey:@"pixelBusEnableReg"]];
 	[self setSelectedFifoIndex:[decoder decodeIntForKey:@"selectedFifoIndex"]];
 	[self setCrateUDPCommand:[decoder decodeObjectForKey:@"crateUDPCommand"]];
 	[self setCrateUDPReplyPort:[decoder decodeIntForKey:@"crateUDPReplyPort"]];
@@ -3325,7 +3325,7 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 	if(!pmcLink)pmcLink = [[PMC_Link alloc] initWithDelegate:self];
 	else [pmcLink setDelegate:self];
 
-	[self setControlReg:		[decoder decodeInt32ForKey:@"controlReg"]];
+	[self setControlReg:		[decoder decodeIntegerForKey:@"controlReg"]];
 	if([decoder containsValueForKey:@"secondsSetInitWithHost"])
 		[self setSecondsSetInitWithHost:[decoder decodeBoolForKey:@"secondsSetInitWithHost"]];
 	else[self setSecondsSetInitWithHost: YES];
@@ -3333,17 +3333,17 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 
 	//status reg
 	[self setPatternFilePath:		[decoder decodeObjectForKey:@"OREdelweissSLTModelPatternFilePath"]];
-	[self setInterruptMask:			[decoder decodeInt32ForKey:@"OREdelweissSLTModelInterruptMask"]];
+	[self setInterruptMask:			[decoder decodeIntegerForKey:@"OREdelweissSLTModelInterruptMask"]];
 	[self setPulserDelay:			[decoder decodeFloatForKey:@"OREdelweissSLTModelPulserDelay"]];
 	[self setPulserAmp:				[decoder decodeFloatForKey:@"OREdelweissSLTModelPulserAmp"]];
 		
 	//special
-    [self setNextPageDelay:			[decoder decodeIntForKey:@"nextPageDelay"]]; // ak, 5.10.07
+    [self setNextPageDelay:			[decoder decodeIntegerForKey:@"nextPageDelay"]]; // ak, 5.10.07
 	
 	[self setReadOutGroup:			[decoder decodeObjectForKey:@"ReadoutGroup"]];
     [self setPoller:				[decoder decodeObjectForKey:@"poller"]];
 	
-    [self setPageSize:				[decoder decodeIntForKey:@"OREdelweissSLTPageSize"]]; // ak, 9.12.07
+    [self setPageSize:				[decoder decodeIntegerForKey:@"OREdelweissSLTPageSize"]]; // ak, 9.12.07
     [self setDisplayTrigger:		[decoder decodeBoolForKey:@"OREdelweissSLTDisplayTrigger"]];
     [self setDisplayEventLoop:		[decoder decodeBoolForKey:@"OREdelweissSLTDisplayEventLoop"]];
     	
@@ -3368,52 +3368,52 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 	[super encodeWithCoder:encoder];
 	
 	[encoder encodeBool:saveIonChanFilterOutputRecords forKey:@"saveIonChanFilterOutputRecords"];
-	[encoder encodeInt:fifoForUDPDataPort forKey:@"fifoForUDPDataPort"];
-	[encoder encodeInt:useStandardUDPDataPorts forKey:@"useStandardUDPDataPorts"];
-	[encoder encodeInt:resetEventCounterAtRunStart forKey:@"resetEventCounterAtRunStart"];
-	[encoder encodeInt:lowLevelRegInHex forKey:@"lowLevelRegInHex"];
-	[encoder encodeInt:takeADCChannelData forKey:@"takeADCChannelData"];
-	[encoder encodeInt:takeRawUDPData forKey:@"takeRawUDPData"];
+	[encoder encodeInteger:fifoForUDPDataPort forKey:@"fifoForUDPDataPort"];
+	[encoder encodeInteger:useStandardUDPDataPorts forKey:@"useStandardUDPDataPorts"];
+	[encoder encodeInteger:resetEventCounterAtRunStart forKey:@"resetEventCounterAtRunStart"];
+	[encoder encodeInteger:lowLevelRegInHex forKey:@"lowLevelRegInHex"];
+	[encoder encodeInteger:takeADCChannelData forKey:@"takeADCChannelData"];
+	[encoder encodeInteger:takeRawUDPData forKey:@"takeRawUDPData"];
 	[encoder encodeObject:chargeBBFile forKey:@"chargeBBFile"];
-	[encoder encodeInt:useBroadcastIdBB forKey:@"useBroadcastIdBB"];
-	[encoder encodeInt:idBBforWCommand forKey:@"idBBforWCommand"];
-	[encoder encodeInt:takeEventData forKey:@"takeEventData"];
-	[encoder encodeInt:takeUDPstreamData forKey:@"takeUDPstreamData"];
+	[encoder encodeInteger:useBroadcastIdBB forKey:@"useBroadcastIdBB"];
+	[encoder encodeInteger:idBBforWCommand forKey:@"idBBforWCommand"];
+	[encoder encodeInteger:takeEventData forKey:@"takeEventData"];
+	[encoder encodeInteger:takeUDPstreamData forKey:@"takeUDPstreamData"];
 	[encoder encodeObject:crateUDPDataCommand forKey:@"crateUDPDataCommand"];
-	[encoder encodeInt32:BBCmdFFMask forKey:@"BBCmdFFMask"];
-	[encoder encodeInt:cmdWArg4 forKey:@"cmdWArg4"];
-	[encoder encodeInt:cmdWArg3 forKey:@"cmdWArg3"];
-	[encoder encodeInt:cmdWArg2 forKey:@"cmdWArg2"];
-	[encoder encodeInt:cmdWArg1 forKey:@"cmdWArg1"];
-	[encoder encodeInt:sltDAQMode forKey:@"sltDAQMode"];
-	[encoder encodeInt:numRequestedUDPPackets forKey:@"numRequestedUDPPackets"];
-	[encoder encodeInt:crateUDPDataReplyPort forKey:@"crateUDPDataReplyPort"];
+	[encoder encodeInteger:BBCmdFFMask forKey:@"BBCmdFFMask"];
+	[encoder encodeInteger:cmdWArg4 forKey:@"cmdWArg4"];
+	[encoder encodeInteger:cmdWArg3 forKey:@"cmdWArg3"];
+	[encoder encodeInteger:cmdWArg2 forKey:@"cmdWArg2"];
+	[encoder encodeInteger:cmdWArg1 forKey:@"cmdWArg1"];
+	[encoder encodeInteger:sltDAQMode forKey:@"sltDAQMode"];
+	[encoder encodeInteger:numRequestedUDPPackets forKey:@"numRequestedUDPPackets"];
+	[encoder encodeInteger:crateUDPDataReplyPort forKey:@"crateUDPDataReplyPort"];
 	[encoder encodeObject:crateUDPDataIP forKey:@"crateUDPDataIP"];
-	[encoder encodeInt:crateUDPDataPort forKey:@"crateUDPDataPort"];
-	[encoder encodeInt32:pixelBusEnableReg forKey:@"pixelBusEnableReg"];
-	[encoder encodeInt:selectedFifoIndex forKey:@"selectedFifoIndex"];
+	[encoder encodeInteger:crateUDPDataPort forKey:@"crateUDPDataPort"];
+	[encoder encodeInteger:pixelBusEnableReg forKey:@"pixelBusEnableReg"];
+	[encoder encodeInteger:selectedFifoIndex forKey:@"selectedFifoIndex"];
 	[encoder encodeObject:crateUDPCommand forKey:@"crateUDPCommand"];
-	[encoder encodeInt:crateUDPReplyPort forKey:@"crateUDPReplyPort"];
+	[encoder encodeInteger:crateUDPReplyPort forKey:@"crateUDPReplyPort"];
 	[encoder encodeObject:crateUDPCommandIP forKey:@"crateUDPCommandIP"];
-	[encoder encodeInt:crateUDPCommandPort forKey:@"crateUDPCommandPort"];
+	[encoder encodeInteger:crateUDPCommandPort forKey:@"crateUDPCommandPort"];
 	[encoder encodeBool:secondsSetInitWithHost forKey:@"secondsSetInitWithHost"];
 	[encoder encodeObject:sltScriptArguments forKey:@"sltScriptArguments"];
 	[encoder encodeObject:pmcLink		forKey:@"PMC_Link"];
-	[encoder encodeInt32:controlReg	forKey:@"controlReg"];
+	[encoder encodeInteger:controlReg	forKey:@"controlReg"];
 	
 	//status reg
 	[encoder encodeObject:patternFilePath forKey:@"OREdelweissSLTModelPatternFilePath"];
-	[encoder encodeInt32:interruptMask	 forKey:@"OREdelweissSLTModelInterruptMask"];
+	[encoder encodeInteger:interruptMask	 forKey:@"OREdelweissSLTModelInterruptMask"];
 	[encoder encodeFloat:pulserDelay	 forKey:@"OREdelweissSLTModelPulserDelay"];
 	[encoder encodeFloat:pulserAmp		 forKey:@"OREdelweissSLTModelPulserAmp"];
 		
 	//special
-    [encoder encodeInt:nextPageDelay     forKey:@"nextPageDelay"]; // ak, 5.10.07
+    [encoder encodeInteger:nextPageDelay     forKey:@"nextPageDelay"]; // ak, 5.10.07
 	
 	[encoder encodeObject:readOutGroup  forKey:@"ReadoutGroup"];
     [encoder encodeObject:poller         forKey:@"poller"];
 	
-    [encoder encodeInt:pageSize         forKey:@"OREdelweissSLTPageSize"]; // ak, 9.12.07
+    [encoder encodeInteger:pageSize         forKey:@"OREdelweissSLTPageSize"]; // ak, 9.12.07
     [encoder encodeBool:displayTrigger   forKey:@"OREdelweissSLTDisplayTrigger"];
     [encoder encodeBool:displayEventLoop forKey:@"OREdelweissSLTDisplayEventLoop"];
 		

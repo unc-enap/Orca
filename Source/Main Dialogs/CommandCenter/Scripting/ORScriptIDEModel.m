@@ -504,7 +504,7 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
 	
 }
 
-- (void) removeInputValue:(int)i
+- (void) removeInputValue:(NSUInteger)i
 {
 	[inputValues removeObjectAtIndex:i];
 }
@@ -675,7 +675,7 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
 	//if the name and description are prepended then strip off and restore
 	//the name is always first if it exists
 	if([theContents hasPrefix:@"//#Name:"]){
-		unsigned eofLoc = [theContents rangeOfString:@"\n"].location;
+		NSUInteger eofLoc = [theContents rangeOfString:@"\n"].location;
 		NSString* theName = [theContents substringToIndex:eofLoc];
 		theContents = [theContents substringFromIndex:eofLoc+1];
 		theName = [theName substringFromIndex:[theName rangeOfString:@":"].location+1];
@@ -684,7 +684,7 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
 	else [self setScriptName:@"OrcaScript"];
 	//the description comment is always second if it exists
 	if([theContents hasPrefix:@"//#Comments:"]){
-		unsigned eofLoc = [theContents rangeOfString:@"\n"].location;
+		NSUInteger eofLoc = [theContents rangeOfString:@"\n"].location;
 		NSString* theComments = [theContents substringToIndex:eofLoc];
 		theContents = [theContents substringFromIndex:eofLoc+1];
 		theComments = [theComments substringFromIndex:[theComments rangeOfString:@":"].location+1];
@@ -699,7 +699,7 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
 	
 	do {
 		if([theContents hasPrefix:@"//#Global:"]){
-			unsigned eofLoc = [theContents rangeOfString:@"\n"].location;
+			unsigned long eofLoc = [theContents rangeOfString:@"\n"].location;
 			NSString* theLine = [theContents substringToIndex:eofLoc];
 			theContents = [theContents substringFromIndex:eofLoc+1];
 			theLine = [theLine substringFromIndex:[theLine rangeOfString:@":"].location+1];
@@ -966,7 +966,7 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeObject:persistantStore       forKey:@"persistantStore"];
-    [encoder encodeInt:periodicRunInterval      forKey:@"periodicRunInterval"];
+    [encoder encodeInteger:periodicRunInterval      forKey:@"periodicRunInterval"];
     [encoder encodeBool:runPeriodically         forKey:@"runPeriodically"];
     [encoder encodeBool:autoRunAtQuit           forKey:@"autoRunAtQuit"];
     [encoder encodeBool:showCommonOnly			forKey:@"showCommonOnly"];

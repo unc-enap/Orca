@@ -629,7 +629,7 @@ static MotionNodeCalibrations motionNodeCalibrationV10[3] = {
     [encoder encodeBool:autoStart			forKey:@"autoStart"];
     [encoder encodeBool:autoStartWithOrca	forKey:@"autoStartWithOrca"];
     [encoder encodeBool:showLongTermDelta	forKey:@"showLongTermDelta"];
-    [encoder encodeInt:longTermSensitivity	forKey:@"longTermSensitivity"];
+    [encoder encodeInteger:longTermSensitivity	forKey:@"longTermSensitivity"];
     [encoder encodeBool:showDeltaFromAve	forKey:@"showDeltaFromAve"];
     [encoder encodeBool:displayComponents	forKey:@"displayComponents"];
     [encoder encodeObject:historyFolder		forKey:@"historyFolder"];

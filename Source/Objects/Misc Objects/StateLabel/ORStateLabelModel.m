@@ -143,7 +143,7 @@ NSString* ORLabelModelFalseColorChanged = @"ORLabelModelFalseColorChanged";
 - (NSAttributedString*) stringToDisplay:(BOOL)highlight
 {
 	int i;
-	int n = [displayValues count];
+	int n = (int)[displayValues count];
 	NSArray* formats = [displayFormat componentsSeparatedByString:@"\n"];
 	NSString* aPrefix;
 	NSMutableAttributedString* attribString;
@@ -234,7 +234,7 @@ NSString* ORLabelModelFalseColorChanged = @"ORLabelModelFalseColorChanged";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-	[encoder encodeInt:boolType		forKey:@"boolType"];
+	[encoder encodeInteger:boolType		forKey:@"boolType"];
 	[encoder encodeObject:trueColor	forKey:@"trueColor"];
 	[encoder encodeObject:falseColor	forKey:@"falseColor"];
 }

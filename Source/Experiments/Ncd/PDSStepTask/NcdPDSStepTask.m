@@ -500,7 +500,7 @@ static NSString* NcdPDSStepTaskTime  = @"NcdPDSStepTaskTime";
     [encoder encodeObject:patternArray forKey:NcdPDSStepTaskPatternArray];
     [encoder encodeBool:reloadPDS forKey:NcdPDSStepTaskReloadPDS];
     [encoder encodeBool:ignorePDS forKey:NcdPDSStepTaskIgnorePDS];
-    [encoder encodeInt:timeOnOneChannel forKey:NcdPDSStepTaskTime];
+    [encoder encodeInteger:timeOnOneChannel forKey:NcdPDSStepTaskTime];
 }
 
 #pragma mark ¥¥¥Task Methods

@@ -24,7 +24,7 @@
 @interface ORBootBarModel :  OrcaObject
 {
 	NSMutableArray*	connectionHistory;
-	unsigned		ipNumberIndex;
+	NSUInteger		ipNumberIndex;
 	NSString*		IPNumber;
     BOOL			isConnected;
 	NetSocket*		socket;

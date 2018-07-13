@@ -235,10 +235,10 @@ NSString* ORVXMMotorTypeChanged         = @"ORVXMMotorTypeChanged";
     [encoder encodeBool:	absoluteMotion	forKey:@"absoluteMotion"];	
     [encoder encodeBool:	motorEnabled	forKey:@"motorEnabled"];	
     [encoder encodeFloat:	conversion		forKey:@"conversion"];
-    [encoder encodeInt:		fullScale		forKey:@"fullScaleInt"];
-    [encoder encodeInt:		motorSpeed		forKey:@"motorSpeedInt"];
-    [encoder encodeInt:		targetPosition	forKey:@"targetPosition"];
-    [encoder encodeInt:		motorType       forKey:@"motorType"];
+    [encoder encodeInteger:		fullScale		forKey:@"fullScaleInt"];
+    [encoder encodeInteger:		motorSpeed		forKey:@"motorSpeedInt"];
+    [encoder encodeInteger:		targetPosition	forKey:@"targetPosition"];
+    [encoder encodeInteger:		motorType       forKey:@"motorType"];
 }
 
 @end

@@ -373,9 +373,9 @@ NSString* ORBocTIC3Lock = @"ORBocTIC3Lock";
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:pressureScale forKey:@"ORBocTIC3ModelPressureScale"];
+    [encoder encodeInteger:pressureScale forKey:@"ORBocTIC3ModelPressureScale"];
     [encoder encodeBool:shipPressures forKey:@"ORBocTIC3ModelShipPressures"];
-    [encoder encodeInt:pollTime forKey:@"ORBocTIC3ModelPollTime"];
+    [encoder encodeInteger:pollTime forKey:@"ORBocTIC3ModelPollTime"];
     [encoder encodeBool:portWasOpen forKey:@"ORBocTIC3ModelPortWasOpen"];
     [encoder encodeObject:portName forKey: @"portName"];
 }

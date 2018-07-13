@@ -601,7 +601,7 @@ static NSString *ORDataTaskTimeScaler		= @"ORDataTaskTimeScaler";
     [self setRefreshRate:[decoder decodeIntForKey:@"ORDataTaskModelRefreshRate"]];
     [self setReadOutList:[decoder decodeObjectForKey:ORDataTaskReadOutList]];
     [self setLastFile:[decoder decodeObjectForKey:ORDataTaskLastFile]];
-    [self setTimeScaler:[decoder decodeIntForKey:ORDataTaskTimeScaler]];
+    [self setTimeScaler:[decoder decodeIntegerForKey:ORDataTaskTimeScaler]];
     [[self undoManager] enableUndoRegistration];
   	if(timeScaler==0)timeScaler = 1;
     
@@ -614,10 +614,10 @@ static NSString *ORDataTaskTimeScaler		= @"ORDataTaskTimeScaler";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:refreshRate forKey:@"ORDataTaskModelRefreshRate"];
+    [encoder encodeInteger:refreshRate forKey:@"ORDataTaskModelRefreshRate"];
     [encoder encodeObject:readOutList forKey:ORDataTaskReadOutList];
     [encoder encodeObject:lastFile forKey:ORDataTaskLastFile];
-    [encoder encodeInt:timeScaler forKey:ORDataTaskTimeScaler];
+    [encoder encodeInteger:timeScaler forKey:ORDataTaskTimeScaler];
 }
 
 

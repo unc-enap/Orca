@@ -791,24 +791,24 @@ NSString* ORCP8CryopumpConstraintsDisabledChanged    = @"ORCP8CryopumpConstraint
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:secondStageTempControl	forKey:@"secondStageTempControl"];
+    [encoder encodeInteger:secondStageTempControl	forKey:@"secondStageTempControl"];
     [encoder encodeBool:roughingInterlock		forKey:@"roughingInterlock"];
     [encoder encodeBool:standbyMode				forKey:@"standbyMode"];
-    [encoder encodeInt:repurgeTime				forKey:@"repurgeTime"];
-    [encoder encodeInt:pumpsPerCompressor		forKey:@"pumpsPerCompressor"];
-    [encoder encodeInt:restartTemperature		forKey:@"restartTemperature"];
-    [encoder encodeInt:rateOfRiseCycles			forKey:@"rateOfRiseCycles"];
-    [encoder encodeInt:rateOfRise				forKey:@"rateOfRise"];
-    [encoder encodeInt:roughToPressure			forKey:@"roughToPressure"];
-    [encoder encodeInt:repurgeCycles			forKey:@"repurgeCycles"];
-    [encoder encodeInt:extendedPurgeTime		forKey:@"extendedPurgeTime"];
-    [encoder encodeInt:pumpRestartDelay			forKey:@"pumpRestartDelay"];
-    [encoder encodeInt:regenerationStartDelay	forKey: @"regenerationStartDelay"];
-    [encoder encodeInt:powerFailureRecovery		forKey: @"powerFailureRecovery"];
-    [encoder encodeInt:firstStageControlMethod	forKey:@"firstStageControlMethod"];
-    [encoder encodeInt:firstStageControlTemp	forKey:@"firstStageControlTemp"];
+    [encoder encodeInteger:repurgeTime				forKey:@"repurgeTime"];
+    [encoder encodeInteger:pumpsPerCompressor		forKey:@"pumpsPerCompressor"];
+    [encoder encodeInteger:restartTemperature		forKey:@"restartTemperature"];
+    [encoder encodeInteger:rateOfRiseCycles			forKey:@"rateOfRiseCycles"];
+    [encoder encodeInteger:rateOfRise				forKey:@"rateOfRise"];
+    [encoder encodeInteger:roughToPressure			forKey:@"roughToPressure"];
+    [encoder encodeInteger:repurgeCycles			forKey:@"repurgeCycles"];
+    [encoder encodeInteger:extendedPurgeTime		forKey:@"extendedPurgeTime"];
+    [encoder encodeInteger:pumpRestartDelay			forKey:@"pumpRestartDelay"];
+    [encoder encodeInteger:regenerationStartDelay	forKey: @"regenerationStartDelay"];
+    [encoder encodeInteger:powerFailureRecovery		forKey: @"powerFailureRecovery"];
+    [encoder encodeInteger:firstStageControlMethod	forKey:@"firstStageControlMethod"];
+    [encoder encodeInteger:firstStageControlTemp	forKey:@"firstStageControlTemp"];
     [encoder encodeBool:shipTemperatures		forKey: @"shipTemperatures"];
-    [encoder encodeInt: pollTime				forKey: @"pollTime"];
+    [encoder encodeInteger: pollTime				forKey: @"pollTime"];
 }
 
 #pragma mark •••Constraints

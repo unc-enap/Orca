@@ -625,14 +625,14 @@ static NSString *ORRunRemoteConnectAtStart	= @"ORRunRemoteConnectAtStart";
     [[self undoManager] disableUndoRegistration];
     
     [self setOffline:[decoder decodeBoolForKey:@"offline"]];
-    [self setTimeLimit:[decoder decodeInt32ForKey:ORRunTimeLimit]];
+    [self setTimeLimit:[decoder decodeIntegerForKey:ORRunTimeLimit]];
     [self setTimedRun:[decoder decodeBoolForKey:ORRunTimedRun]];
     [self setRepeatRun:[decoder decodeBoolForKey:ORRunRepeatRun]];
     [self setQuickStart:[decoder decodeBoolForKey:ORRunQuickStart]];
     [self setRemoteHost:[decoder decodeObjectForKey:ORRunRemoteHost]];
     [self setAutoReconnect:[decoder decodeBoolForKey:ORRunRemoteAutoReconnect]];
     [self setConnectAtStart:[decoder decodeBoolForKey:ORRunRemoteConnectAtStart]];
-    [self setRemotePort:[decoder decodeIntForKey:ORRunRemotePort]];
+    [self setRemotePort:[decoder decodeIntegerForKey:ORRunRemotePort]];
     
     [[self undoManager] enableUndoRegistration];
     
@@ -645,14 +645,14 @@ static NSString *ORRunRemoteConnectAtStart	= @"ORRunRemoteConnectAtStart";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeBool:offline forKey:@"offline"];
-    [encoder encodeInt32:timeLimit forKey:ORRunTimeLimit];
+    [encoder encodeInteger:timeLimit forKey:ORRunTimeLimit];
     [encoder encodeBool:timedRun forKey:ORRunTimedRun];
     [encoder encodeBool:repeatRun forKey:ORRunRepeatRun];
     [encoder encodeBool:quickStart forKey:ORRunQuickStart];
     [encoder encodeObject:remoteHost forKey:ORRunRemoteHost];
     [encoder encodeBool:autoReconnect forKey:ORRunRemoteAutoReconnect];
     [encoder encodeBool:connectAtStart forKey:ORRunRemoteConnectAtStart];
-    [encoder encodeInt:(int)remotePort forKey:ORRunRemotePort];
+    [encoder encodeInteger:(int)remotePort forKey:ORRunRemotePort];
 }
 
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary

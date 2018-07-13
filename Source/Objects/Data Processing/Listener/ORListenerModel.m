@@ -331,7 +331,7 @@ static NSString* ORListenerConnector = @"ORListenerConnector";
 	[self setRemoteHost:[decoder decodeObjectForKey:@"ORListenerRemoteHost"]];
     [self setConnectAtStart:[decoder decodeBoolForKey:@"ConnectAtStart"]];
     [self setAutoReconnect:[decoder decodeBoolForKey:@"AutoReconnect"]];
-	[self setRemotePort:[decoder decodeIntForKey:@"ORListenerRemotePort"]];
+	[self setRemotePort:[decoder decodeIntegerForKey:@"ORListenerRemotePort"]];
     
 	[[self undoManager] enableUndoRegistration];
     
@@ -346,7 +346,7 @@ static NSString* ORListenerConnector = @"ORListenerConnector";
 	[encoder encodeObject:remoteHost forKey:@"ORListenerRemoteHost"];
     [encoder encodeBool:connectAtStart forKey:@"ConnectAtStart"];
     [encoder encodeBool:autoReconnect forKey:@"AutoReconnect"];
-	[encoder encodeInt:remotePort forKey:@"ORListenerRemotePort"];
+	[encoder encodeInteger:remotePort forKey:@"ORListenerRemotePort"];
 }
 
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary

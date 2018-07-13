@@ -252,17 +252,17 @@ static NSString *ORCBAddressSpace 			= @"CB address space";
 - (id)initWithCoder:(NSCoder*)decoder
 {
     self = [super init];
-	[self setBaseAddress:[decoder decodeIntForKey:ORCBBaseAddress]];
-	[self setAddressModifier:[decoder decodeIntForKey:ORCBAddressModifier]];
-	[self setAddressSpace:[decoder decodeIntForKey:ORCBAddressSpace]];
+	[self setBaseAddress:[decoder decodeIntegerForKey:ORCBBaseAddress]];
+	[self setAddressModifier:[decoder decodeIntegerForKey:ORCBAddressModifier]];
+	[self setAddressSpace:[decoder decodeIntegerForKey:ORCBAddressSpace]];
     return self;
 }
 
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
-	[encoder encodeInt:(int32_t)[self baseAddress] forKey:ORCBBaseAddress];
-	[encoder encodeInt:addressModifier forKey:ORCBAddressModifier];
-	[encoder encodeInt:addressSpace forKey:ORCBAddressSpace];
+	[encoder encodeInteger:(int32_t)[self baseAddress] forKey:ORCBBaseAddress];
+	[encoder encodeInteger:addressModifier forKey:ORCBAddressModifier];
+	[encoder encodeInteger:addressSpace forKey:ORCBAddressSpace];
 }
 
 @end

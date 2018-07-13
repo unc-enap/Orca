@@ -113,8 +113,8 @@
 //- (void) netsocketDisconnected:(NetSocket*)inNetSocket;
 
 #pragma mark ***Comm methods
-- (long) writeReadDevice: (NSString*) aCommand data: (char*) aData maxLength: (long) aMaxLength;
-- (long) readFromDevice: (char*) aData maxLength: (long) aMaxLength;
+- (long) writeReadDevice: (NSString*) aCommand data: (char*) aData maxLength: (unsigned long) aMaxLength;
+- (long) readFromDevice: (char*) aData maxLength: (unsigned long) aMaxLength;
 - (void) writeToDevice: (NSString*) aCommand;
 
 #pragma mark ***Utilities

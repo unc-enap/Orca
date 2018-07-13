@@ -736,9 +736,9 @@ static NSString* ORMuxBoxBusNumber          = @"ORMuxBoxBusNumber";
     [self setTimeRateXAttributes:[decoder decodeObjectForKey:ORMuxBoxTimeRateXAttributes]];
     [self setTimeRateYAttributes:[decoder decodeObjectForKey:ORMuxBoxTimeRateYAttributes]];
     
-    [self setSelectedChannel:[decoder decodeIntForKey:ORMuxBoxSelectedChannel]];
-    [self setDacValue:[decoder decodeIntForKey:ORMuxBoxDacValue]];
-    [self setBusNumber:[decoder decodeIntForKey:ORMuxBoxBusNumber]];
+    [self setSelectedChannel:[decoder decodeIntegerForKey:ORMuxBoxSelectedChannel]];
+    [self setDacValue:[decoder decodeIntegerForKey:ORMuxBoxDacValue]];
+    [self setBusNumber:[decoder decodeIntegerForKey:ORMuxBoxBusNumber]];
     
     
     id scopeChanObj = [decoder decodeObjectForKey:ORNcdMuxBoxScopeChan];
@@ -748,7 +748,7 @@ static NSString* ORMuxBoxBusNumber          = @"ORMuxBoxBusNumber";
 	calibrationFinalDelta = 10;
 	calibrationEnabledMask = 0xff;
 	
-    [self setCalibrationEnabledMask:[decoder decodeIntForKey:ORMuxBoxCalibrationEnabledMask]];
+    [self setCalibrationEnabledMask:[decoder decodeIntegerForKey:ORMuxBoxCalibrationEnabledMask]];
     [self setCalibrationFinalDelta:[decoder decodeIntForKey:ORMuxBoxCalibrationFinalDelta]];
     
     [self setThresholdCalibrationStates:[decoder decodeObjectForKey:ORMuxCalibrationStates]];
@@ -820,13 +820,13 @@ static NSString* ORMuxBoxBusNumber          = @"ORMuxBoxBusNumber";
     [encoder encodeObject:[self timeRateXAttributes] forKey:ORMuxBoxTimeRateYAttributes];
     [encoder encodeObject:[self timeRateYAttributes] forKey:ORMuxBoxTimeRateXAttributes];
     
-    [encoder encodeInt:[self selectedChannel] forKey:ORMuxBoxSelectedChannel];
-    [encoder encodeInt:[self dacValue] forKey:ORMuxBoxDacValue];
+    [encoder encodeInteger:[self selectedChannel] forKey:ORMuxBoxSelectedChannel];
+    [encoder encodeInteger:[self dacValue] forKey:ORMuxBoxDacValue];
     [encoder encodeObject:[NSNumber numberWithInt:scopeChan] forKey:ORNcdMuxBoxScopeChan];
     
-    [encoder encodeInt:[self calibrationEnabledMask] forKey:ORMuxBoxCalibrationEnabledMask];
-    [encoder encodeInt:[self calibrationFinalDelta] forKey:ORMuxBoxCalibrationFinalDelta];
-    [encoder encodeInt:[self busNumber] forKey:ORMuxBoxBusNumber];
+    [encoder encodeInteger:[self calibrationEnabledMask] forKey:ORMuxBoxCalibrationEnabledMask];
+    [encoder encodeInteger:[self calibrationFinalDelta] forKey:ORMuxBoxCalibrationFinalDelta];
+    [encoder encodeInteger:[self busNumber] forKey:ORMuxBoxBusNumber];
     
     [encoder encodeObject:[self thresholdCalibrationStates] forKey:ORMuxCalibrationStates];
     

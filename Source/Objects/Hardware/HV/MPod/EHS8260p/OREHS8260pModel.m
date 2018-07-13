@@ -332,9 +332,9 @@ NSString* OREHS8260pSettingsLock				= @"OREHS8260pSettingsLock";
 	int i;
 	for(i=0;i<8;i++){
 		[[self ramper:i] setDelegate:self];
-		[self setTripTime:i withValue:[decoder decodeIntForKey: [@"tripTime" stringByAppendingFormat:@"%d",i]]];
-		[self setOutputFailureBehavior:i withValue:[decoder decodeIntForKey: [@"outputFailureBehavior" stringByAppendingFormat:@"%d",i]]];
-		[self setCurrentTripBehavior:i withValue:[decoder decodeIntForKey: [@"currentTripBehavior" stringByAppendingFormat:@"%d",i]]];
+		[self setTripTime:i withValue:[decoder decodeIntegerForKey: [@"tripTime" stringByAppendingFormat:@"%d",i]]];
+		[self setOutputFailureBehavior:i withValue:[decoder decodeIntegerForKey: [@"outputFailureBehavior" stringByAppendingFormat:@"%d",i]]];
+		[self setCurrentTripBehavior:i withValue:[decoder decodeIntegerForKey: [@"currentTripBehavior" stringByAppendingFormat:@"%d",i]]];
 	}
 	[[self undoManager] enableUndoRegistration];
     
@@ -347,9 +347,9 @@ NSString* OREHS8260pSettingsLock				= @"OREHS8260pSettingsLock";
     [encoder encodeObject:rampers forKey:@"rampers"];
 	int i;
  	for(i=0;i<8;i++){
-		[encoder encodeInt:tripTime[i]					forKey: [@"tripTime" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:outputFailureBehavior[i]		forKey: [@"outputFailureBehavior" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:currentTripBehavior[i]		forKey: [@"currentTripBehavior" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:tripTime[i]					forKey: [@"tripTime" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:outputFailureBehavior[i]		forKey: [@"outputFailureBehavior" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:currentTripBehavior[i]		forKey: [@"currentTripBehavior" stringByAppendingFormat:@"%d",i]];
 	}
 }
 

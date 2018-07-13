@@ -134,7 +134,7 @@
 - (IBAction) setCmdOneSet:(id)sender
 {
 	NSIndexSet* selection = [savedSetsTableView selectedRowIndexes];
-	int row = [selection firstIndex];
+	NSUInteger row = [selection firstIndex];
 	if(row>=0 && row < [saveSetNames count]) {
 		NSString* theSaveSetName = [[saveSetNames objectAtIndex:row] objectForKey:@"Name"];
 		if([theSaveSetName length]){

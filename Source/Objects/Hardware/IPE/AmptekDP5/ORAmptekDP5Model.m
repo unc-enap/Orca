@@ -4939,45 +4939,45 @@ return ;
 	
 	[self setDropFirstSpectrum:[decoder decodeBoolForKey:@"dropFirstSpectrum"]];
 	[self setAutoReadbackSetpoint:[decoder decodeBoolForKey:@"autoReadbackSetpoint"]];
-	[self setSpectrumRequestRate:[decoder decodeIntForKey:@"spectrumRequestRate"]];
-	[self setSpectrumRequestType:[decoder decodeIntForKey:@"spectrumRequestType"]];
-	[self setNumSpectrumBins:[decoder decodeIntForKey:@"numSpectrumBins"]];
+	[self setSpectrumRequestRate:[decoder decodeIntegerForKey:@"spectrumRequestRate"]];
+	[self setSpectrumRequestType:[decoder decodeIntegerForKey:@"spectrumRequestType"]];
+	[self setNumSpectrumBins:[decoder decodeIntegerForKey:@"numSpectrumBins"]];
 	[self setTextCommand:[decoder decodeObjectForKey:@"textCommand"]];
-	[self setResetEventCounterAtRunStart:[decoder decodeIntForKey:@"resetEventCounterAtRunStart"]];
-	[self setLowLevelRegInHex:[decoder decodeIntForKey:@"lowLevelRegInHex"]];
-	[self setTakeADCChannelData:[decoder decodeIntForKey:@"takeADCChannelData"]];
-	[self setTakeRawUDPData:[decoder decodeIntForKey:@"takeRawUDPData"]];
+	[self setResetEventCounterAtRunStart:[decoder decodeIntegerForKey:@"resetEventCounterAtRunStart"]];
+	[self setLowLevelRegInHex:[decoder decodeIntegerForKey:@"lowLevelRegInHex"]];
+	[self setTakeADCChannelData:[decoder decodeIntegerForKey:@"takeADCChannelData"]];
+	[self setTakeRawUDPData:[decoder decodeIntegerForKey:@"takeRawUDPData"]];
     
 //TODO: rm   slt - - 
 #if 0
 	[self setChargeBBFile:[decoder decodeObjectForKey:@"chargeBBFile"]];
-	[self setUseBroadcastIdBB:[decoder decodeIntForKey:@"useBroadcastIdBB"]];
-	[self setIdBBforWCommand:[decoder decodeIntForKey:@"idBBforWCommand"]];
-	[self setTakeEventData:[decoder decodeIntForKey:@"takeEventData"]];
-	[self setTakeUDPstreamData:[decoder decodeIntForKey:@"takeUDPstreamData"]];
+	[self setUseBroadcastIdBB:[decoder decodeIntegerForKey:@"useBroadcastIdBB"]];
+	[self setIdBBforWCommand:[decoder decodeIntegerForKey:@"idBBforWCommand"]];
+	[self setTakeEventData:[decoder decodeIntegerForKey:@"takeEventData"]];
+	[self setTakeUDPstreamData:[decoder decodeIntegerForKey:@"takeUDPstreamData"]];
 	[self setCrateUDPDataCommand:[decoder decodeObjectForKey:@"crateUDPDataCommand"]];
-	[self setBBCmdFFMask:[decoder decodeInt32ForKey:@"BBCmdFFMask"]];
-	[self setCmdWArg4:[decoder decodeIntForKey:@"cmdWArg4"]];
-	[self setCmdWArg3:[decoder decodeIntForKey:@"cmdWArg3"]];
-	[self setCmdWArg2:[decoder decodeIntForKey:@"cmdWArg2"]];
-	[self setCmdWArg1:[decoder decodeIntForKey:@"cmdWArg1"]];
-	[self setCrateUDPReplyPort:[decoder decodeIntForKey:@"crateUDPReplyPort"]];
-	[self setPixelBusEnableReg:[decoder decodeInt32ForKey:@"pixelBusEnableReg"]];
-	[self setSelectedFifoIndex:[decoder decodeIntForKey:@"selectedFifoIndex"]];
-	[self setNumRequestedUDPPackets:[decoder decodeIntForKey:@"numRequestedUDPPackets"]];
-	[self setCrateUDPDataReplyPort:[decoder decodeIntForKey:@"crateUDPDataReplyPort"]];
+	[self setBBCmdFFMask:[decoder decodeIntegerForKey:@"BBCmdFFMask"]];
+	[self setCmdWArg4:[decoder decodeIntegerForKey:@"cmdWArg4"]];
+	[self setCmdWArg3:[decoder decodeIntegerForKey:@"cmdWArg3"]];
+	[self setCmdWArg2:[decoder decodeIntegerForKey:@"cmdWArg2"]];
+	[self setCmdWArg1:[decoder decodeIntegerForKey:@"cmdWArg1"]];
+	[self setCrateUDPReplyPort:[decoder decodeIntegerForKey:@"crateUDPReplyPort"]];
+	[self setPixelBusEnableReg:[decoder decodeIntegerForKey:@"pixelBusEnableReg"]];
+	[self setSelectedFifoIndex:[decoder decodeIntegerForKey:@"selectedFifoIndex"]];
+	[self setNumRequestedUDPPackets:[decoder decodeIntegerForKey:@"numRequestedUDPPackets"]];
+	[self setCrateUDPDataReplyPort:[decoder decodeIntegerForKey:@"crateUDPDataReplyPort"]];
 	[self setCrateUDPDataIP:[decoder decodeObjectForKey:@"crateUDPDataIP"]];
-	[self setCrateUDPDataPort:[decoder decodeIntForKey:@"crateUDPDataPort"]];
+	[self setCrateUDPDataPort:[decoder decodeIntegerForKey:@"crateUDPDataPort"]];
 #endif
-	[self setSltDAQMode:[decoder decodeIntForKey:@"sltDAQMode"]];
+	[self setSltDAQMode:[decoder decodeIntegerForKey:@"sltDAQMode"]];
 	[self setCrateUDPCommand:[decoder decodeObjectForKey:@"crateUDPCommand"]];
 	[self setCrateUDPCommandIP:[decoder decodeObjectForKey:@"crateUDPCommandIP"]];
-	[self setCrateUDPCommandPort:[decoder decodeIntForKey:@"crateUDPCommandPort"]];
+	[self setCrateUDPCommandPort:[decoder decodeIntegerForKey:@"crateUDPCommandPort"]];
 	[self setSltScriptArguments:[decoder decodeObjectForKey:@"sltScriptArguments"]];
 
 
 
-	[self setControlReg:		[decoder decodeInt32ForKey:@"controlReg"]];
+	[self setControlReg:		[decoder decodeIntegerForKey:@"controlReg"]];
 	if([decoder containsValueForKey:@"secondsSetInitWithHost"])
 		[self setSecondsSetInitWithHost:[decoder decodeBoolForKey:@"secondsSetInitWithHost"]];
 	else[self setSecondsSetInitWithHost: YES];
@@ -4985,17 +4985,17 @@ return ;
 
 	//status reg
 	[self setPatternFilePath:		[decoder decodeObjectForKey:@"ORAmptekDP5ModelPatternFilePath"]];
-//TODO: rm   slt 	[self setInterruptMask:			[decoder decodeInt32ForKey:@"ORAmptekDP5ModelInterruptMask"]];
+//TODO: rm   slt 	[self setInterruptMask:			[decoder decodeIntegerForKey:@"ORAmptekDP5ModelInterruptMask"]];
 	[self setPulserDelay:			[decoder decodeFloatForKey:@"ORAmptekDP5ModelPulserDelay"]];
 	[self setPulserAmp:				[decoder decodeFloatForKey:@"ORAmptekDP5ModelPulserAmp"]];
 		
 	//special
-    [self setNextPageDelay:			[decoder decodeIntForKey:@"nextPageDelay"]]; // ak, 5.10.07
+    [self setNextPageDelay:			[decoder decodeIntegerForKey:@"nextPageDelay"]]; // ak, 5.10.07
 	
 	[self setReadOutGroup:			[decoder decodeObjectForKey:@"ReadoutGroup"]];
     [self setPoller:				[decoder decodeObjectForKey:@"poller"]];
 	
-    [self setPageSize:				[decoder decodeIntForKey:@"ORAmptekDP5PageSize"]]; // ak, 9.12.07
+    [self setPageSize:				[decoder decodeIntegerForKey:@"ORAmptekDP5PageSize"]]; // ak, 9.12.07
     [self setDisplayTrigger:		[decoder decodeBoolForKey:@"ORAmptekDP5DisplayTrigger"]];
     [self setDisplayEventLoop:		[decoder decodeBoolForKey:@"ORAmptekDP5DisplayEventLoop"]];
     	
@@ -5029,27 +5029,27 @@ return ;
 	
 	[encoder encodeBool:dropFirstSpectrum forKey:@"dropFirstSpectrum"];
 	[encoder encodeBool:autoReadbackSetpoint forKey:@"autoReadbackSetpoint"];
-	[encoder encodeInt:spectrumRequestRate forKey:@"spectrumRequestRate"];
-	[encoder encodeInt:spectrumRequestType forKey:@"spectrumRequestType"];
-	[encoder encodeInt:numSpectrumBins forKey:@"numSpectrumBins"];
+	[encoder encodeInteger:spectrumRequestRate forKey:@"spectrumRequestRate"];
+	[encoder encodeInteger:spectrumRequestType forKey:@"spectrumRequestType"];
+	[encoder encodeInteger:numSpectrumBins forKey:@"numSpectrumBins"];
 	[encoder encodeObject:textCommand forKey:@"textCommand"];
-	[encoder encodeInt:resetEventCounterAtRunStart forKey:@"resetEventCounterAtRunStart"];
-	[encoder encodeInt:lowLevelRegInHex forKey:@"lowLevelRegInHex"];
-	[encoder encodeInt:takeADCChannelData forKey:@"takeADCChannelData"];
-	[encoder encodeInt:takeRawUDPData forKey:@"takeRawUDPData"];
-	[encoder encodeInt:takeEventData forKey:@"takeEventData"];
-	[encoder encodeInt:takeUDPstreamData forKey:@"takeUDPstreamData"];
-	[encoder encodeInt:sltDAQMode forKey:@"sltDAQMode"];
+	[encoder encodeInteger:resetEventCounterAtRunStart forKey:@"resetEventCounterAtRunStart"];
+	[encoder encodeInteger:lowLevelRegInHex forKey:@"lowLevelRegInHex"];
+	[encoder encodeInteger:takeADCChannelData forKey:@"takeADCChannelData"];
+	[encoder encodeInteger:takeRawUDPData forKey:@"takeRawUDPData"];
+	[encoder encodeInteger:takeEventData forKey:@"takeEventData"];
+	[encoder encodeInteger:takeUDPstreamData forKey:@"takeUDPstreamData"];
+	[encoder encodeInteger:sltDAQMode forKey:@"sltDAQMode"];
 	[encoder encodeObject:crateUDPCommand forKey:@"crateUDPCommand"];
 	[encoder encodeObject:crateUDPCommandIP forKey:@"crateUDPCommandIP"];
-	[encoder encodeInt:crateUDPCommandPort forKey:@"crateUDPCommandPort"];
+	[encoder encodeInteger:crateUDPCommandPort forKey:@"crateUDPCommandPort"];
 	[encoder encodeBool:secondsSetInitWithHost forKey:@"secondsSetInitWithHost"];
 	[encoder encodeObject:sltScriptArguments forKey:@"sltScriptArguments"];
-	[encoder encodeInt32:controlReg	forKey:@"controlReg"];
+	[encoder encodeInteger:controlReg	forKey:@"controlReg"];
 	
 	//status reg
 	[encoder encodeObject:patternFilePath forKey:@"ORAmptekDP5ModelPatternFilePath"];
-//TODO: rm   slt 	[encoder encodeInt32:interruptMask	 forKey:@"ORAmptekDP5ModelInterruptMask"];
+//TODO: rm   slt 	[encoder encodeInteger:interruptMask	 forKey:@"ORAmptekDP5ModelInterruptMask"];
 	[encoder encodeFloat:pulserDelay	 forKey:@"ORAmptekDP5ModelPulserDelay"];
 	[encoder encodeFloat:pulserAmp		 forKey:@"ORAmptekDP5ModelPulserAmp"];
 		
@@ -5057,13 +5057,13 @@ return ;
 	[encoder encodeObject:commandTable  forKey:@"CommandTable"];
     
 	//special
-    [encoder encodeInt:nextPageDelay     forKey:@"nextPageDelay"]; // ak, 5.10.07
+    [encoder encodeInteger:nextPageDelay     forKey:@"nextPageDelay"]; // ak, 5.10.07
 	
     
 	[encoder encodeObject:readOutGroup  forKey:@"ReadoutGroup"];
     [encoder encodeObject:poller         forKey:@"poller"];
 	
-    [encoder encodeInt:pageSize         forKey:@"ORAmptekDP5PageSize"]; // ak, 9.12.07
+    [encoder encodeInteger:pageSize         forKey:@"ORAmptekDP5PageSize"]; // ak, 9.12.07
     [encoder encodeBool:displayTrigger   forKey:@"ORAmptekDP5DisplayTrigger"];
     [encoder encodeBool:displayEventLoop forKey:@"ORAmptekDP5DisplayEventLoop"];
 		

@@ -431,9 +431,9 @@ NSString* ORHWAccessLock									= @"ORHWAccessLock";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeObject:hwName forKey:@"hwName"];
-    [encoder encodeInt:bit forKey:@"bit"];
-    [encoder encodeInt:viewIconType		forKey:@"viewIconType"];
-    [encoder encodeInt:labelType		forKey:@"labelType"];
+    [encoder encodeInteger:bit forKey:@"bit"];
+    [encoder encodeInteger:viewIconType		forKey:@"viewIconType"];
+    [encoder encodeInteger:labelType		forKey:@"labelType"];
     [encoder encodeObject:customLabel	forKey:@"customLabel"];
     [encoder encodeObject:displayFormat forKey:@"displayFormat"];
 }

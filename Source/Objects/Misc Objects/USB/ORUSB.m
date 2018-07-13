@@ -562,14 +562,14 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(USB);
 		IOCreatePlugInInterfaceForService(usbInterface, kIOUSBInterfaceUserClientTypeID, kIOCFPlugInInterfaceID, &plugInInterface, &score);
 		kr = IOObjectRelease(usbInterface);                             // done with the usbInterface object now that I have the plugin
 		if ((kIOReturnSuccess != kr) || !plugInInterface) {
-			[NSException raise: @"USB Exception" format:@"unable to create a plugin (%08x)\n", kr];
+			[NSException raise: @"USB Exception" format:@"unable to create a plugin (0x%08x)\n", kr];
 		}
 		
 		// I have the interface plugin. I need the interface interface
 		HRESULT res = (*plugInInterface)->QueryInterface(plugInInterface, CFUUIDGetUUIDBytes(kIOUSBInterfaceInterfaceID), (void**) &intf);
 		(*plugInInterface)->Release(plugInInterface);                   // done with this
 		if (res || !intf) {
-			[NSException raise: @"USB Exception" format:@"couldn't create an IOUSBInterfaceInterface (%08lx)\n", (int)res];
+			[NSException raise: @"USB Exception" format:@"couldn't create an IOUSBInterfaceInterface (0x%08x)\n", res];
 		}
 		
 		//kr = (*intf)->GetInterfaceClass(intf, &intfClass);
@@ -584,7 +584,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(USB);
 			if(kr != kIOReturnExclusiveAccess){
 				kr = (*intf)->USBInterfaceClose(intf);				
 				(void) (*intf)->Release(intf);
-				[NSException raise: @"USB Exception" format:@"Interface already open for exclusive access (%08x)\n", kr];
+				[NSException raise: @"USB Exception" format:@"Interface already open for exclusive access (0x%08x)\n", kr];
 			}
 		}
 		
@@ -593,7 +593,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(USB);
 		if (kIOReturnSuccess != kr) {
 			(void) (*intf)->USBInterfaceClose(intf);
 			(void) (*intf)->Release(intf);
-			[NSException raise: @"USB Exception" format:@"unable to get number of endpoints (%08x)\n", kr];
+			[NSException raise: @"USB Exception" format:@"unable to get number of endpoints (0x%08x)\n", kr];
 		}
 		
 		unsigned char inPipes[8];
@@ -645,7 +645,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(USB);
 		//if (kIOReturnSuccess != kr) {
 		//	(void) (*intf)->USBInterfaceClose(intf);
 		//	(void) (*intf)->Release(intf);
-		//	[NSException raise: @"USB Exception" format:@"unable to create async event source (%08x)\n", kr];
+		//	[NSException raise: @"USB Exception" format:@"unable to create async event source (0x%08x)\n", kr];
 		//}
 		//CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopDefaultMode);
 		
@@ -670,7 +670,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(USB);
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORUSBInterfaceAdded object:self userInfo:nil];
 		
 		if (KERN_SUCCESS != kr){
-			[NSException raise: @"USB Exception" format:@"IOServiceAddInterestNotification returned %08x\n", kr];
+			[NSException raise: @"USB Exception" format:@"IOServiceAddInterestNotification returned 0x%08x\n", kr];
 		}
 		//startUp Interrupt handling
 		//        UInt32 numBytesRead = sizeof(_recieveBuffer); // leave one byte at the end for NUL termination

@@ -139,7 +139,7 @@ static NSString *ORDualPortLAMVariables       = @"ORDualPortLAMVariables";
     [super encodeWithCoder:encoder];
     [encoder encodeObject:[self readoutGroup] forKey:ORDualPortLAMGroup1];
     [encoder encodeObject: variableNames forKey: ORDualPortLAMVariables];
-    [encoder encodeInt:[self slot] forKey:ORDualPortLAMSlot];
+    [encoder encodeInteger:[self slot] forKey:ORDualPortLAMSlot];
 }
 
 #pragma mark ***Data Taker

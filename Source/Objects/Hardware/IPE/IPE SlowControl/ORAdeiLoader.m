@@ -197,7 +197,7 @@
 	else {
 		if([aPath hasPrefix:@"/"])aPath = [aPath substringFromIndex:1];
 		components = [aPath componentsSeparatedByString:@"/"];
-		count = [components count];
+		count = (int)[components count];
 	}
 	
 	//@"http://ipepdvadei.ka.fzk.de/test/services/control.php?db_server=test_zeus&db_name=cfp_test&control_group=3&control_mask=3
@@ -379,7 +379,7 @@
     
 	if(didFinishSelector){
 	    NSInvocation* anInvocation = [NSInvocation invocationWithMethodSignature:[delegate methodSignatureForSelector:didFinishSelector]];
-	    int numGetArgs = [[delegate methodSignatureForSelector:didFinishSelector] numberOfArguments]-2;
+	    int numGetArgs = (int)[[delegate methodSignatureForSelector:didFinishSelector] numberOfArguments]-2;
 	    [anInvocation setSelector:didFinishSelector];
 	    [anInvocation setTarget:delegate];
         
@@ -398,7 +398,7 @@
 		if([path isEqual:@"/"] || ([path length]==0)) count = 0;
 		else {
 			components = [path componentsSeparatedByString:@"/"];
-			count = [components count];
+			count = (int)[components count];
 		}
 		
 		switch (count) {

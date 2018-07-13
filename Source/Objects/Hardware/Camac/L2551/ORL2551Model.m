@@ -485,7 +485,7 @@ NSString* ORL2551PollWhenRunningChangedNotification = @"ORL2551PollWhenRunningCh
     self = [super initWithCoder:decoder];
 	
     [[self undoManager] disableUndoRegistration];
-    [self setOnlineMask:		[decoder decodeIntForKey:   @"L2551OnlineMask"]];
+    [self setOnlineMask:		[decoder decodeIntegerForKey:   @"L2551OnlineMask"]];
     [self setRateAttributes:	[decoder decodeObjectForKey:@"L2551RateAttributes"]];
     [self setPoller:			[decoder decodeObjectForKey:@"L2551Poller"]];
     [self setDoNotShipScalers:	[decoder decodeBoolForKey:  @"L2551DoNotShipScalers"]];
@@ -503,7 +503,7 @@ NSString* ORL2551PollWhenRunningChangedNotification = @"ORL2551PollWhenRunningCh
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:onlineMask        forKey:@"L2551OnlineMask"];
+    [encoder encodeInteger:onlineMask        forKey:@"L2551OnlineMask"];
     [encoder encodeObject:rateAttributes forKey:@"L2551RateAttributes"];
     [encoder encodeObject:poller         forKey:@"L2551Poller"];
     [encoder encodeBool:doNotShipScalers forKey:@"L2551DoNotShipScalers"];

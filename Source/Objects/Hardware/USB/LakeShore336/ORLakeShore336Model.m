@@ -764,8 +764,8 @@ NSString* ORLakeShore336PollTimeChanged         = @"ORLakeShore336PollTimeChange
     [super encodeWithCoder:encoder];
     [encoder encodeObject:serialNumber      forKey:@"serialNumber"];
     [encoder encodeObject:ipAddress         forKey:@"ipAddress"];
-    [encoder encodeInt:connectionProtocol   forKey:@"connectionProtocol"];
-    [encoder encodeInt:pollTime             forKey:@"pollTime"];
+    [encoder encodeInteger:connectionProtocol   forKey:@"connectionProtocol"];
+    [encoder encodeInteger:pollTime             forKey:@"pollTime"];
     [encoder encodeObject:inputs            forKey:@"inputs"];
     [encoder encodeObject:heaters           forKey:@"heaters"];
 }

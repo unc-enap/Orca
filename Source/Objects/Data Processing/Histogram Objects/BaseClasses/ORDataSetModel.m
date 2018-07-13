@@ -321,7 +321,7 @@ static NSString *ORDataSetModelFullName         = @"ORDataSetModelFullName";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:refreshMode forKey:@"refreshMode"];
+    [encoder encodeInteger:refreshMode forKey:@"refreshMode"];
     [encoder encodeObject:key forKey:ORDataSetModelKey];
     [encoder encodeObject:fullName forKey:ORDataSetModelFullName];
     [encoder encodeObject:calibration forKey:@"calibration"];

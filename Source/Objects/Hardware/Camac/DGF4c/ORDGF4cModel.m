@@ -2049,12 +2049,12 @@ enum {
     for(i=0;i<4;i++){
         [self setTau:i withValue:[decoder decodeDoubleForKey:NAME(@"ORDGF4cModelTauD%d")]];
         [self setTauSigma:i withValue:[decoder decodeDoubleForKey:NAME(@"ORDGF4cModelTauSigma%d")]];
-        [self setBinFactor:i withValue:[decoder decodeIntForKey:NAME(@"ORDGF4cModelBinFactor%d")]];
-        [self setEMin:i withValue:[decoder decodeIntForKey:NAME(@"ORDGF4cModelEMin%d")]];
+        [self setBinFactor:i withValue:[decoder decodeIntegerForKey:NAME(@"ORDGF4cModelBinFactor%d")]];
+        [self setEMin:i withValue:[decoder decodeIntegerForKey:NAME(@"ORDGF4cModelEMin%d")]];
         [self setPsaEnd:i withValue:[decoder decodeFloatForKey:NAME(@"ORDGF4cModelPsaEndF%d")]];
         [self setPsaStart:i withValue:[decoder decodeFloatForKey:NAME(@"ORDGF4cModelPsaStartF%d")]];
         [self setTraceDelay:i withValue:[decoder decodeFloatForKey:NAME(@"ORDGF4cModelTraceDelayF%d")]];
-        [self setTraceLength:i withValue:[decoder decodeIntForKey:NAME(@"ORDGF4cModelTraceLength%d")]];
+        [self setTraceLength:i withValue:[decoder decodeIntegerForKey:NAME(@"ORDGF4cModelTraceLength%d")]];
         [self setVOffset:i withValue:[decoder decodeFloatForKey:NAME(@"ORDGF4cModelVOffset%d")]];
         [self setVGain:i withValue:[decoder decodeFloatForKey:NAME(@"ORDGF4cModelVGain%d")]];
         [self setTriggerThreshold:i withValue:[decoder decodeFloatForKey:NAME(@"ORDGF4cModelTriggerThreshold%d")]];
@@ -2062,7 +2062,7 @@ enum {
         [self setTriggerRiseTime:i withValue:[decoder decodeFloatForKey:NAME(@"ORDGF4cModelTriggerRiseTime%d")]];
         [self setEnergyFlatTop:i withValue:[decoder decodeFloatForKey:NAME(@"ORDGF4cModelEnergyFlatTop%d")]];
         [self setEnergyRiseTime:i withValue:[decoder decodeFloatForKey:NAME(@"ORDGF4cModelEnergyRiseTime%d")]];
-        [self setXwait:i withValue:[decoder decodeIntForKey:NAME(@"ORDGF4cModelXwait%d")]];
+        [self setXwait:i withValue:[decoder decodeIntegerForKey:NAME(@"ORDGF4cModelXwait%d")]];
     }
 	//[self calcUserParams];
     [self setComputableParams];
@@ -2076,27 +2076,27 @@ enum {
 - (void)encodeWithCoder:(NSCoder*)coder
 {
     [super encodeWithCoder:coder];
-    [coder encodeInt32:(int32_t)runBehaviorMask forKey:@"ORDGF4cModelRunBehaviorMask"];
-    [coder encodeInt:runTask forKey:@"ORDGF4cModelRunTask"];
+    [coder encodeInteger:runBehaviorMask forKey:@"ORDGF4cModelRunBehaviorMask"];
+    [coder encodeInteger:runTask forKey:@"ORDGF4cModelRunTask"];
     [coder encodeObject: firmWarePath forKey:@"firmWarePath"];
     [coder encodeObject: dspCodePath forKey:@"dspCodePath"];
     [coder encodeObject: params forKey: @"params"];
     [coder encodeObject: lastParamPath forKey: @"lastParamPath"];
     [coder encodeObject: lastNewSetPath forKey: @"lastNewSetPath"];
-    [coder encodeInt:channel forKey:@"channel"];
-    [coder encodeInt:revision forKey:@"revision"];
-    [coder encodeInt:decimation forKey:@"decimation"];
-	[coder encodeInt:oscEnabledMask forKey:@"oscEnabledMask"];
+    [coder encodeInteger:channel forKey:@"channel"];
+    [coder encodeInteger:revision forKey:@"revision"];
+    [coder encodeInteger:decimation forKey:@"decimation"];
+	[coder encodeInteger:oscEnabledMask forKey:@"oscEnabledMask"];
     int i;
     for(i=0;i<4;i++){
         [coder encodeDouble:tau[i] forKey:NAME(@"ORDGF4cModelTauD%d")];
         [coder encodeDouble:tauSigma[i] forKey:NAME(@"ORDGF4cModelTauSigma%d")];
-        [coder encodeInt:binFactor[i] forKey:NAME(@"ORDGF4cModelBinFactor%d")];
-        [coder encodeInt:eMin[i] forKey:NAME(@"ORDGF4cModelEMin%d")];
+        [coder encodeInteger:binFactor[i] forKey:NAME(@"ORDGF4cModelBinFactor%d")];
+        [coder encodeInteger:eMin[i] forKey:NAME(@"ORDGF4cModelEMin%d")];
         [coder encodeFloat:psaEnd[i] forKey:NAME(@"ORDGF4cModelPsaEndF%d")];
         [coder encodeFloat:psaStart[i] forKey:NAME(@"ORDGF4cModelPsaStartF%d")];
         [coder encodeFloat:traceDelay[i] forKey:NAME(@"ORDGF4cModelTraceDelayF%d")];
-        [coder encodeInt:traceLength[i] forKey:NAME(@"ORDGF4cModelTraceLength%d")];
+        [coder encodeInteger:traceLength[i] forKey:NAME(@"ORDGF4cModelTraceLength%d")];
         [coder encodeFloat:vOffset[i] forKey:NAME(@"ORDGF4cModelVOffset%d")];
         [coder encodeFloat:vGain[i] forKey:NAME(@"ORDGF4cModelVGain%d")];
         [coder encodeFloat:triggerThreshold[i] forKey:NAME(@"ORDGF4cModelTriggerThreshold%d")];
@@ -2104,7 +2104,7 @@ enum {
         [coder encodeFloat:triggerRiseTime[i] forKey:NAME(@"ORDGF4cModelTriggerRiseTime%d")];
         [coder encodeFloat:energyFlatTop[i] forKey:NAME(@"ORDGF4cModelEnergyFlatTop%d")];
         [coder encodeFloat:energyRiseTime[i] forKey:NAME(@"ORDGF4cModelEnergyRiseTime%d")];
-        [coder encodeInt:xwait[i] forKey:NAME(@"ORDGF4cModelXwait%d")];
+        [coder encodeInteger:xwait[i] forKey:NAME(@"ORDGF4cModelXwait%d")];
     }
     
 }

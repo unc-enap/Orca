@@ -589,12 +589,12 @@ NSString* ORMet637Lock = @"ORMet637Lock";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeBool:	isLog			forKey:@"isLog"];
-    [encoder encodeInt:		holdTime		forKey: @"holdTime"];
-    [encoder encodeInt:		tempUnits		forKey: @"tempUnits"];
-    [encoder encodeInt:		countUnits		forKey: @"countUnits"];
-    [encoder encodeInt:		location		forKey: @"location"];
-    [encoder encodeInt:		cycleDuration	forKey: @"cycleDuration"];
-    [encoder encodeInt:		countingMode	forKey: @"countingMode"];
+    [encoder encodeInteger:		holdTime		forKey: @"holdTime"];
+    [encoder encodeInteger:		tempUnits		forKey: @"tempUnits"];
+    [encoder encodeInteger:		countUnits		forKey: @"countUnits"];
+    [encoder encodeInteger:		location		forKey: @"location"];
+    [encoder encodeInteger:		cycleDuration	forKey: @"cycleDuration"];
+    [encoder encodeInteger:		countingMode	forKey: @"countingMode"];
     [encoder encodeBool:	wasRunning		forKey:	@"wasRunning"];
 	int i; 
 	for(i=0;i<8;i++){

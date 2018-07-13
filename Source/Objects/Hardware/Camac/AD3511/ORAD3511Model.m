@@ -355,8 +355,8 @@ NSString* ORAD3511WarningPosted						= @"ORAD3511WarningPosted";
     [[self undoManager] disableUndoRegistration];
     [self setIncludeTiming:[decoder decodeBoolForKey:@"ORAD3511ModelIncludeTiming"]];
     [self setEnabled:[decoder decodeBoolForKey:@"ORAD3511ModelEnabled"]];
-    [self setStorageOffset:[decoder decodeIntForKey:@"ORAD3511ModelStorageOffset"]];
-    [self setGain:[decoder decodeIntForKey:@"ORAD3511ModelGain"]];
+    [self setStorageOffset:[decoder decodeIntegerForKey:@"ORAD3511ModelStorageOffset"]];
+    [self setGain:[decoder decodeIntegerForKey:@"ORAD3511ModelGain"]];
     [[self undoManager] enableUndoRegistration];
 	
     return self;
@@ -367,8 +367,8 @@ NSString* ORAD3511WarningPosted						= @"ORAD3511WarningPosted";
     [super encodeWithCoder:encoder];
     [encoder encodeBool:includeTiming forKey:@"ORAD3511ModelIncludeTiming"];
     [encoder encodeBool:enabled forKey:@"ORAD3511ModelEnabled"];
-    [encoder encodeInt:storageOffset forKey:@"ORAD3511ModelStorageOffset"];
-    [encoder encodeInt:gain forKey:@"ORAD3511ModelGain"];
+    [encoder encodeInteger:storageOffset forKey:@"ORAD3511ModelStorageOffset"];
+    [encoder encodeInteger:gain forKey:@"ORAD3511ModelGain"];
 	
 }
 

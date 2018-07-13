@@ -396,7 +396,7 @@ static NSDictionary* xl3Ops;
 	}
 		
 	NSString* key = [NSString stringWithFormat: @"orca.ORXL3%d.selectedtab",[model crateNumber]];
-	int index = [tabView indexOfTabViewItem:item];
+	NSInteger index = [tabView indexOfTabViewItem:item];
 	[[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 }
 
@@ -547,8 +547,8 @@ static NSDictionary* xl3Ops;
 
 - (void) writeValueChanged:(NSNotification*)aNote
 { dispatch_async(dispatch_get_main_queue(), ^{
-	[writeValueField setIntValue:[model writeValue]];
-	[writeValueStepper setIntValue:[model writeValue]];
+	[writeValueField setIntegerValue:[model writeValue]];
+	[writeValueStepper setIntegerValue:[model writeValue]];
 }); }
 
 - (void) selectedRegisterChanged:(NSNotification*)aNote
@@ -574,14 +574,14 @@ static NSDictionary* xl3Ops;
 	unsigned long mask = [model slotMask];
 	int i;
 	for(i=0; i<16; i++){
-		[[compositeSlotMaskMatrix cellWithTag:i] setIntValue:(mask & 1UL << i)];
+		[[compositeSlotMaskMatrix cellWithTag:i] setIntegerValue:(mask & 1UL << i)];
 	}
-	[compositeSlotMaskField setIntValue:mask];
+	[compositeSlotMaskField setIntegerValue:mask];
 }); }
 
 - (void) compositeXl3RWAddressChanged:(NSNotification*)aNote
 { dispatch_async(dispatch_get_main_queue(), ^{
-	[compositeXl3RWAddressValueField setIntValue:[model xl3RWAddressValue]];
+	[compositeXl3RWAddressValueField setIntegerValue:[model xl3RWAddressValue]];
 	[compositeXl3RWModePU selectItemAtIndex:([model xl3RWAddressValue] >> 28)];
 
 	[compositeXl3RWSelectPU selectItemWithTitle:

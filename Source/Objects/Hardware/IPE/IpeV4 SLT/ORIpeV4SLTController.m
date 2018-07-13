@@ -240,7 +240,7 @@ NSString* fltV4TriggerSourceNames[2][kFltNumberTriggerSources] = {
 
 - (void) clockTimeChanged:(NSNotification*)aNote
 {
-	[[countersMatrix cellWithTag:3] setIntValue:[model clockTime]];
+	[[countersMatrix cellWithTag:3] setIntegerValue:[model clockTime]];
 }
 
 - (void) runTimeChanged:(NSNotification*)aNote
@@ -270,7 +270,7 @@ NSString* fltV4TriggerSourceNames[2][kFltNumberTriggerSources] = {
 
 - (void) secondsSetChanged:(NSNotification*)aNote
 {
-	[secondsSetField setIntValue: [model secondsSet]];
+	[secondsSetField setIntegerValue: [model secondsSet]];
 }
 
 - (void) statusRegChanged:(NSNotification*)aNote
@@ -325,7 +325,7 @@ NSString* fltV4TriggerSourceNames[2][kFltNumberTriggerSources] = {
 
 - (void) nextPageDelayChanged:(NSNotification*)aNote
 {
-	[nextPageDelaySlider setIntValue:100-[model nextPageDelay]];
+	[nextPageDelaySlider setIntegerValue:100-[model nextPageDelay]];
 	[nextPageDelayField  setFloatValue:[model nextPageDelay]*102.3/100.];
 }
 
@@ -341,8 +341,8 @@ NSString* fltV4TriggerSourceNames[2][kFltNumberTriggerSources] = {
 
 - (void) pageSizeChanged:(NSNotification*)aNote
 {
-	[pageSizeField setIntValue: [model pageSize]];
-	[pageSizeStepper setIntValue: [model pageSize]];
+	[pageSizeField setIntegerValue: [model pageSize]];
+	[pageSizeStepper setIntegerValue: [model pageSize]];
 }
 
 
@@ -454,7 +454,7 @@ NSString* fltV4TriggerSourceNames[2][kFltNumberTriggerSources] = {
 - (void) writeValueChanged:(NSNotification*) aNote
 {
 	[self updateStepper:regWriteValueStepper setting:[model writeValue]];
-	[regWriteValueTextField setIntValue:[model writeValue]];
+	[regWriteValueTextField setIntegerValue:[model writeValue]];
 }
 
 - (void) displayEventLoopChanged:(NSNotification*) aNote
@@ -738,7 +738,7 @@ NSString* fltV4TriggerSourceNames[2][kFltNumberTriggerSources] = {
 
 - (IBAction) readRegAction: (id) sender
 {
-	int index = [registerPopUp indexOfSelectedItem];
+	int index = (int)[registerPopUp indexOfSelectedItem];
 	@try {
 		unsigned long value = [model readReg:index];
 		NSLog(@"SLT reg: %@ value: 0x%x (%u)\n",[model getRegisterName:index],value,value);
@@ -752,7 +752,7 @@ NSString* fltV4TriggerSourceNames[2][kFltNumberTriggerSources] = {
 - (IBAction) writeRegAction: (id) sender
 {
 	[self endEditing];
-	int index = [registerPopUp indexOfSelectedItem];
+	int index = (int)[registerPopUp indexOfSelectedItem];
 	@try {
 		[model writeReg:index value:[model writeValue]];
 		NSLog(@"wrote 0x%x to SLT reg: %@ \n",[model writeValue],[model getRegisterName:index]);

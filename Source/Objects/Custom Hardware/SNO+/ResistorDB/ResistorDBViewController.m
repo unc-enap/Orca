@@ -208,7 +208,7 @@ resistorDocDic = _resistorDocDic;
     //Whenever we update the resistor document we are also going to need to change the run range
     NSMutableArray * runRange = [NSMutableArray arrayWithCapacity:20];
     [runRange setObject:[NSNumber numberWithInt:[[model startRunNumber] intValue]] atIndexedSubscript:0];
-    [runRange setObject:[NSNumber numberWithInegert:currentRunNumber] atIndexedSubscript:1];
+    [runRange setObject:[NSNumber numberWithInteger:currentRunNumber] atIndexedSubscript:1];
     
     //Update the old document with the new values
     NSMutableDictionary *oldResistorDocDic = [[model currentQueryResults] mutableCopy];

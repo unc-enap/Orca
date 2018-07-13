@@ -1149,7 +1149,7 @@ static NSString*	OROscTriggerSource		= @"ORTriggerSource";
 	// Retrieve channel parameters.
     for ( i = 0; i < [self numberChannels]; i++ ){
         [self setChnlAcquire:i setting:[aDecoder decodeBoolForKey:[NSString stringWithFormat: OROscAcqChnl, i]]];
-        [self setChnlCoupling:i coupling:[aDecoder decodeIntForKey:[NSString stringWithFormat: OROscCouplingChnl, i]]];
+        [self setChnlCoupling:i coupling:[aDecoder decodeIntegerForKey:[NSString stringWithFormat: OROscCouplingChnl, i]]];
         [self setChnlPos:i position:[aDecoder decodeFloatForKey:[NSString stringWithFormat: OROscPosChnl, i]]];
         [self setChnlScale:i scale:[aDecoder decodeFloatForKey:[NSString stringWithFormat: OROscScaleChnl, i]]];
     }
@@ -1157,15 +1157,15 @@ static NSString*	OROscTriggerSource		= @"ORTriggerSource";
 	// Retrieve horizontal parameters
     [ self setHorizontalPos:    [aDecoder decodeFloatForKey: OROscHorizPos]];
     [ self setHorizontalScale:  [aDecoder decodeFloatForKey: OROscHorizScale]];
-    [ self setWaveformLength:   [aDecoder decodeInt32ForKey: OROscPulseLength]];
+    [ self setWaveformLength:   [aDecoder decodeIntegerForKey: OROscPulseLength]];
     
 	// Retrieve trigger parameters
-    [ self setTriggerCoupling:  [aDecoder decodeIntForKey:  OROscTriggerCoupling]];
+    [ self setTriggerCoupling:  [aDecoder decodeIntegerForKey:  OROscTriggerCoupling]];
     [ self setTriggerLevel:     [aDecoder decodeFloatForKey:OROscTriggerLevel]];
-    [ self setTriggerMode:      [aDecoder decodeIntForKey:  OROscTriggerMode]];
+    [ self setTriggerMode:      [aDecoder decodeIntegerForKey:  OROscTriggerMode]];
     [ self setTriggerPos:       [aDecoder decodeFloatForKey:OROscTriggerPos]];
     [ self setTriggerSlopeIsPos:[aDecoder decodeBoolForKey: OROscTriggerSlopeIsPos]];
-    [ self setTriggerSource:    [aDecoder decodeIntForKey:  OROscTriggerSource]];
+    [ self setTriggerSource:    [aDecoder decodeIntegerForKey:  OROscTriggerSource]];
 	
     [[ self undoManager ] enableUndoRegistration];
     
@@ -1192,7 +1192,7 @@ static NSString*	OROscTriggerSource		= @"ORTriggerSource";
 	// Save the channel parameters
     for ( i = 0; i < [self numberChannels]; i++ ){
         [anEncoder encodeBool: [self chnlAcquire: i]    forKey: [ NSString stringWithFormat: OROscAcqChnl, i ]];
-        [anEncoder encodeInt: [self chnlCoupling: i]    forKey: [ NSString stringWithFormat: OROscCouplingChnl, i ]];
+        [anEncoder encodeInteger: [self chnlCoupling: i]    forKey: [ NSString stringWithFormat: OROscCouplingChnl, i ]];
         [anEncoder encodeFloat: [self chnlPos: i]       forKey: [ NSString stringWithFormat: OROscPosChnl, i ]];
         [anEncoder encodeFloat: [self chnlScale: i]     forKey: [ NSString stringWithFormat: OROscScaleChnl, i ]];
     }
@@ -1200,15 +1200,15 @@ static NSString*	OROscTriggerSource		= @"ORTriggerSource";
 	// Save horizontal parameters
     [ anEncoder encodeFloat: [self horizontalPos]      forKey: OROscHorizPos];
     [ anEncoder encodeFloat: [self horizontalScale]     forKey: OROscHorizScale];
-    [ anEncoder encodeInt32: (int32_t)[self waveformLength]      forKey: OROscPulseLength];
+    [ anEncoder encodeInteger: (int32_t)[self waveformLength]      forKey: OROscPulseLength];
 	
 	// Save trigger parameters
-    [anEncoder encodeInt: [self triggerCoupling]	forKey: OROscTriggerCoupling ];
+    [anEncoder encodeInteger: [self triggerCoupling]	forKey: OROscTriggerCoupling ];
     [anEncoder encodeFloat: [self triggerLevel]		forKey: OROscTriggerLevel];
-    [anEncoder encodeInt: [self triggerMode]		forKey: OROscTriggerMode];
+    [anEncoder encodeInteger: [self triggerMode]		forKey: OROscTriggerMode];
     [anEncoder encodeFloat: [self triggerPos ]		forKey: OROscTriggerPos];
     [anEncoder encodeBool: [self triggerSlopeIsPos ]    forKey: OROscTriggerSlopeIsPos];
-    [anEncoder encodeInt: [self triggerSource]		forKey: OROscTriggerSource];
+    [anEncoder encodeInteger: [self triggerSource]		forKey: OROscTriggerSource];
 }
 
 

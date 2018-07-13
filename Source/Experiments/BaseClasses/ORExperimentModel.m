@@ -561,7 +561,7 @@ NSString* ExperimentModelCustomColor2Changed             = @"ExperimentModelCust
     
     [self setIgnoreHWChecks:[decoder decodeBoolForKey:	@"ignoreHWChecks"]];
     [self setShowNames:		[decoder decodeBoolForKey:	@"ORExperimentModelShowNames"]];
-    [self setDisplayType:	[decoder decodeIntForKey:   @"ExperimentModelDisplayType"]];	
+    [self setDisplayType:	[decoder decodeIntForKey:   @"ExperimentModelDisplayType"]];
     [self setCaptureDate:	[decoder decodeObjectForKey:@"ExperimentCaptureDate"]];
     [self setColorScaleType:[decoder decodeIntForKey:   @"colorScaleType"]];
     
@@ -600,8 +600,8 @@ NSString* ExperimentModelCustomColor2Changed             = @"ExperimentModelCust
     [super encodeWithCoder:encoder];
     [encoder encodeBool:ignoreHWChecks	forKey: @"ignoreHWChecks"];
     [encoder encodeBool:showNames		forKey: @"ORExperimentModelShowNames"];
-    [encoder encodeInt:displayType		forKey: @"ExperimentModelDisplayType"];
-    [encoder encodeInt:colorScaleType   forKey: @"colorScaleType"];
+    [encoder encodeInteger:displayType		forKey: @"ExperimentModelDisplayType"];
+    [encoder encodeInteger:colorScaleType   forKey: @"colorScaleType"];
     [encoder encodeObject:captureDate	forKey: @"ExperimentCaptureDate"];
     [encoder encodeObject:segmentGroups forKey: @"ExperimentSegmentGroups"];
     [encoder encodeObject:customColor1  forKey: @"customColor1"];

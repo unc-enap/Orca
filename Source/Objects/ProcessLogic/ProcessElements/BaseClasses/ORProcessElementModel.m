@@ -477,7 +477,7 @@ NSString* ORProcessElementForceUpdateNotification   = @"ORProcessElementForceUpd
 	altFrame  =		 [decoder decodeRectForKey:@"altFrame"];
 	altOffset =		 [decoder decodePointForKey:@"altOffset"];
 	altBounds =		 [decoder decodeRectForKey:@"altBounds"];
-	processID =		 [decoder decodeInt32ForKey:@"processID"];
+	processID =		 [decoder decodeIntegerForKey:@"processID"];
 	if(altFrame.origin.x == 0 && altFrame.origin.y == 0){
 		altFrame.origin.x = frame.origin.x+10;
 		altFrame.origin.y = frame.origin.y+10;
@@ -497,7 +497,7 @@ NSString* ORProcessElementForceUpdateNotification   = @"ORProcessElementForceUpd
     [encoder encodeRect:altFrame   forKey:@"altFrame"];
     [encoder encodePoint:altOffset forKey:@"altOffset"];
 	[encoder encodeRect:altBounds  forKey:@"altBounds"];
-	[encoder encodeInt32:(int32_t)processID forKey:@"processID"];
+	[encoder encodeInteger:processID forKey:@"processID"];
 }
 
 @end

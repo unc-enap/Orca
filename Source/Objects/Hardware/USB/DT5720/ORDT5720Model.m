@@ -1926,16 +1926,16 @@ static NSString* DT5720RunModeString[4] = {
     [self setGpiRunMode:            [aDecoder decodeBoolForKey:     @"gpiRunMode"]];
     [self setSoftwareTrigEnabled:   [aDecoder decodeBoolForKey:     @"softwareTrigEnabled"]];
     [self setExternalTrigEnabled:   [aDecoder decodeBoolForKey:     @"externalTrigEnabled"]];
-    [self setTriggerSourceMask:     [aDecoder decodeIntForKey:      @"triggerSourceMask"]];
+    [self setTriggerSourceMask:     [aDecoder decodeIntegerForKey:      @"triggerSourceMask"]];
     [self setFpExternalTrigEnabled: [aDecoder decodeBoolForKey:     @"fpExternalTrigEnabled"]];
     [self setFpSoftwareTrigEnabled: [aDecoder decodeBoolForKey:     @"fpSoftwareTrigEnabled"]];
-    [self setTriggerOutMask:        [aDecoder decodeIntForKey:      @"triggerOutMask"]];
-    [self setPostTriggerSetting:    [aDecoder decodeInt32ForKey:    @"postTriggerSetting"]];
+    [self setTriggerOutMask:        [aDecoder decodeIntegerForKey:      @"triggerOutMask"]];
+    [self setPostTriggerSetting:    [aDecoder decodeIntegerForKey:    @"postTriggerSetting"]];
     [self setGpoEnabled:            [aDecoder decodeBoolForKey:     @"gpoEnabled"]];
     [self setTtlEnabled:            [aDecoder decodeIntForKey:      @"ttlEnabled"]];
-    [self setEnabledMask:           [aDecoder decodeIntForKey:      @"enabledMask"]];
+    [self setEnabledMask:           [aDecoder decodeIntegerForKey:      @"enabledMask"]];
 
-    [self setCoincidenceLevel:      [aDecoder decodeIntForKey:      @"coincidenceLevel"]];
+    [self setCoincidenceLevel:      [aDecoder decodeIntegerForKey:      @"coincidenceLevel"]];
     [self setWaveFormRateGroup:     [aDecoder decodeObjectForKey:   @"waveFormRateGroup"]];
     
     if(!waveFormRateGroup){
@@ -1948,13 +1948,13 @@ static NSString* DT5720RunModeString[4] = {
 	int i;
     for (i = 0; i < kNumDT5720Channels; i++){
         [self setLogicType:i    withValue:           [aDecoder decodeIntForKey:  [NSString stringWithFormat:@"logicType%d", i]]];
-        [self setZsThreshold:i  withValue:           [aDecoder decodeIntForKey:  [NSString stringWithFormat:@"zsThreshold%d", i]]];
-        [self setThreshold:i    withValue:           [aDecoder decodeIntForKey:  [NSString stringWithFormat:@"threshold%d", i]]];
-        [self setNumOverUnderZsThreshold:i withValue:[aDecoder decodeIntForKey:  [NSString stringWithFormat:@"numOverUnderZsThreshold%d", i]]];
-        [self setNlbk:i         withValue:           [aDecoder decodeIntForKey:  [NSString stringWithFormat:@"nLbk%d", i]]];
-        [self setNlfwd:i        withValue:           [aDecoder decodeIntForKey:  [NSString stringWithFormat:@"nLfwd%d", i]]];
-        [self setNumOverUnderThreshold:i withValue:  [aDecoder decodeIntForKey:  [NSString stringWithFormat:@"numOverUnderThreshold%d", i]]];
-        [self setDac:i          withValue:           [aDecoder decodeIntForKey:  [NSString stringWithFormat:@"dac%d", i]]];
+        [self setZsThreshold:i  withValue:           [aDecoder decodeIntegerForKey:  [NSString stringWithFormat:@"zsThreshold%d", i]]];
+        [self setThreshold:i    withValue:           [aDecoder decodeIntegerForKey:  [NSString stringWithFormat:@"threshold%d", i]]];
+        [self setNumOverUnderZsThreshold:i withValue:[aDecoder decodeIntegerForKey:  [NSString stringWithFormat:@"numOverUnderZsThreshold%d", i]]];
+        [self setNlbk:i         withValue:           [aDecoder decodeIntegerForKey:  [NSString stringWithFormat:@"nLbk%d", i]]];
+        [self setNlfwd:i        withValue:           [aDecoder decodeIntegerForKey:  [NSString stringWithFormat:@"nLfwd%d", i]]];
+        [self setNumOverUnderThreshold:i withValue:  [aDecoder decodeIntegerForKey:  [NSString stringWithFormat:@"numOverUnderThreshold%d", i]]];
+        [self setDac:i          withValue:           [aDecoder decodeIntegerForKey:  [NSString stringWithFormat:@"dac%d", i]]];
     }
     
     [[self undoManager] enableUndoRegistration];
@@ -1966,39 +1966,39 @@ static NSString* DT5720RunModeString[4] = {
 {
     [super encodeWithCoder:anEncoder];
     
-    [anEncoder encodeInt: zsAlgorithm               forKey:@"zsAlgorithm"];
+    [anEncoder encodeInteger: zsAlgorithm               forKey:@"zsAlgorithm"];
     [anEncoder encodeBool:packed                    forKey:@"packed"];
     [anEncoder encodeBool:trigOnUnderThreshold      forKey:@"trigOnUnderThreshold"];
     [anEncoder encodeBool:testPatternEnabled        forKey:@"testPatternEnabled"];
     [anEncoder encodeBool:trigOverlapEnabled        forKey:@"trigOverlapEnabled"];
-    [anEncoder encodeInt:eventSize                  forKey:@"eventSize"];
+    [anEncoder encodeInteger:eventSize                  forKey:@"eventSize"];
     [anEncoder encodeBool:clockSource               forKey:@"clockSource"];
     [anEncoder encodeBool:countAllTriggers          forKey:@"countAllTriggers"];
     [anEncoder encodeBool:gpiRunMode                forKey:@"gpiRunMode"];
     [anEncoder encodeBool:softwareTrigEnabled       forKey:@"softwareTrigEnabled"];
     [anEncoder encodeBool:externalTrigEnabled       forKey:@"externalTrigEnabled"];
-    [anEncoder encodeInt:(int32_t)triggerSourceMask          forKey:@"triggerSourceMask"];
+    [anEncoder encodeInteger:(int32_t)triggerSourceMask          forKey:@"triggerSourceMask"];
     [anEncoder encodeBool:fpExternalTrigEnabled     forKey:@"fpExternalTrigEnabled"];
     [anEncoder encodeBool:fpSoftwareTrigEnabled     forKey:@"fpSoftwareTrigEnabled"];
-    [anEncoder encodeInt32:(int32_t)postTriggerSetting       forKey:@"postTriggerSetting"];
+    [anEncoder encodeInteger:postTriggerSetting       forKey:@"postTriggerSetting"];
     [anEncoder encodeBool:gpoEnabled                forKey:@"gpoEnabled"];
-    [anEncoder encodeInt:ttlEnabled                 forKey:@"ttlEnabled"];
-    [anEncoder encodeInt:(int32_t)triggerOutMask             forKey:@"triggerOutMask"];
-    [anEncoder encodeInt:enabledMask                forKey:@"enabledMask"];
+    [anEncoder encodeInteger:ttlEnabled                 forKey:@"ttlEnabled"];
+    [anEncoder encodeInteger:(int32_t)triggerOutMask             forKey:@"triggerOutMask"];
+    [anEncoder encodeInteger:enabledMask                forKey:@"enabledMask"];
 
-	[anEncoder encodeInt:coincidenceLevel           forKey:@"coincidenceLevel"];
+	[anEncoder encodeInteger:coincidenceLevel           forKey:@"coincidenceLevel"];
     [anEncoder encodeObject:waveFormRateGroup       forKey:@"waveFormRateGroup"];
     
 	int i;
 	for (i = 0; i < kNumDT5720Channels; i++){
-        [anEncoder encodeInt:logicType[i]               forKey:[NSString stringWithFormat:@"logicType%d", i]];
-        [anEncoder encodeInt:zsThresholds[i]            forKey:[NSString stringWithFormat:@"zsThreshold%d", i]];
-        [anEncoder encodeInt:numOverUnderZsThreshold[i] forKey:[NSString stringWithFormat:@"numOverUnderZsThreshold%d", i]];
-        [anEncoder encodeInt:nLbk[i]                    forKey:[NSString stringWithFormat:@"nLbk%d", i]];
-        [anEncoder encodeInt:nLfwd[i]                   forKey:[NSString stringWithFormat:@"nLfwd%d", i]];
-        [anEncoder encodeInt:thresholds[i]              forKey:[NSString stringWithFormat:@"threshold%d", i]];
-        [anEncoder encodeInt:numOverUnderThreshold[i]   forKey:[NSString stringWithFormat:@"numOverUnderThreshold%d", i]];
-        [anEncoder encodeInt:dac[i]                     forKey:[NSString stringWithFormat:@"dac%d", i]];
+        [anEncoder encodeInteger:logicType[i]               forKey:[NSString stringWithFormat:@"logicType%d", i]];
+        [anEncoder encodeInteger:zsThresholds[i]            forKey:[NSString stringWithFormat:@"zsThreshold%d", i]];
+        [anEncoder encodeInteger:numOverUnderZsThreshold[i] forKey:[NSString stringWithFormat:@"numOverUnderZsThreshold%d", i]];
+        [anEncoder encodeInteger:nLbk[i]                    forKey:[NSString stringWithFormat:@"nLbk%d", i]];
+        [anEncoder encodeInteger:nLfwd[i]                   forKey:[NSString stringWithFormat:@"nLfwd%d", i]];
+        [anEncoder encodeInteger:thresholds[i]              forKey:[NSString stringWithFormat:@"threshold%d", i]];
+        [anEncoder encodeInteger:numOverUnderThreshold[i]   forKey:[NSString stringWithFormat:@"numOverUnderThreshold%d", i]];
+        [anEncoder encodeInteger:dac[i]                     forKey:[NSString stringWithFormat:@"dac%d", i]];
     }
 }
 

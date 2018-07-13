@@ -331,7 +331,7 @@
 	unsigned long seconds	= ptr[2];
 	unsigned long hitRateTotal = ptr[4];
 	int i;
-	int n = (length - 5)/2; //so far, only using the 16 bit counters.. the 32 bit counter follow
+	int n = (int)((length - 5)/2); //so far, only using the 16 bit counters.. the 32 bit counter follow
 	for(i=0;i<n;i++){
 		int chan = ShiftAndExtract(ptr[5+i],20,0xff);
 		NSString* channelKey    = [self getChannelKey:chan];
@@ -487,10 +487,10 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx histogramInfo (some flags; some spare fo
     // Todo: Avoid comb structure when scaling up !!!
     
     unsigned long *ptrData;
-    int normE;
-    int spacing;
-    int digiErr;
-    int low, high, edge;
+    unsigned long normE;
+    unsigned long spacing;
+    unsigned long digiErr;
+    unsigned long low, high, edge;
     
     ptrData = &ptr[12];
     for (int i=0;i<4095;i++) normHisto[i] = 0;

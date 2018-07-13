@@ -282,7 +282,7 @@ unsigned long xl2_register_offsets[] =
     [super encodeWithCoder:encoder];
     [encoder encodeObject:[self inputConnector]		 forKey:@"inputConnector"];
     [encoder encodeObject:[self outputConnector]	 forKey:@"outputConnector"];
-    [encoder encodeInt:	  [self slot]			     forKey:@"slot"];
+    [encoder encodeInteger:	  [self slot]			     forKey:@"slot"];
 }
 
 #pragma mark •••Hardware Access

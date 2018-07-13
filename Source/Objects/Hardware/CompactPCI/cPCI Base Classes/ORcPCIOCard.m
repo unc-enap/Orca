@@ -87,14 +87,14 @@ NSString* ORcPCIBaseAddressChanged 			= @"ORcPCIBaseAddressChanged";
 {
 	self = [super initWithCoder:decoder];
 	[[self undoManager] disableUndoRegistration];
-	[self setBaseAddress:[decoder decodeInt32ForKey:@"baseAddress"]];
+	[self setBaseAddress:[decoder decodeIntegerForKey:@"baseAddress"]];
 	[[self undoManager] enableUndoRegistration];
 	return self;
 }
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
 	[super encodeWithCoder:encoder];
-	[encoder encodeInt32:(int32_t)baseAddress forKey:@"baseAddress"];
+	[encoder encodeInteger:baseAddress forKey:@"baseAddress"];
 }
 
 @end

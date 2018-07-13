@@ -175,8 +175,8 @@ NSString* ORLakeShore336InputChanged  = @"ORLakeShore336InputChanged";
     [[self undoManager] disableUndoRegistration];
     [self setChannel:       [decoder decodeIntForKey:   @"channel"]];
     [self setResistance:    [decoder decodeIntForKey:   @"resistance"]];
-	//[self setMaxCurrent:    [decoder decodeIntForKey:   @"maxCurrent"]];
-    [self setMaxUserCurrent:[decoder decodeIntForKey:   @"maxUserCurrent"]];
+	//[self setMaxCurrent:    [decoder decodeIntegerForKey:   @"maxCurrent"]];
+    [self setMaxUserCurrent:[decoder decodeIntegerForKey:   @"maxUserCurrent"]];
     [self setCurrentOrPower:[decoder decodeBoolForKey:  @"currentOrPower"]];
     [self setLowLimit:      [decoder decodeFloatForKey: @"lowLimit"]];
     [self setHighLimit:     [decoder decodeFloatForKey: @"highLimit"]];
@@ -184,7 +184,7 @@ NSString* ORLakeShore336InputChanged  = @"ORLakeShore336InputChanged";
     [self setMaxValue:      [decoder decodeFloatForKey: @"maxValue"]];
     [self setPValue:        [decoder decodeFloatForKey: @"pValue"]];
     [self setIValue:        [decoder decodeFloatForKey: @"iValue"]];
-    [self setDValue:        [decoder decodeIntForKey:   @"dValue"]];
+    [self setDValue:        [decoder decodeIntegerForKey:   @"dValue"]];
     [self setLabel:         [decoder decodeObjectForKey:@"label"]];
     [self setOpMode:          [decoder decodeIntForKey:   @"mode"]];
     [self setInput:         [decoder decodeIntForKey:   @"input"]];
@@ -203,10 +203,10 @@ NSString* ORLakeShore336InputChanged  = @"ORLakeShore336InputChanged";
 
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
-    [encoder encodeInt:channel          forKey:@"channel"];
-    [encoder encodeInt:resistance       forKey:@"resistance"];
-    [encoder encodeInt:maxCurrent       forKey:@"maxCurrent"];
-    [encoder encodeInt:maxUserCurrent   forKey:@"maxUserCurrent"];
+    [encoder encodeInteger:channel          forKey:@"channel"];
+    [encoder encodeInteger:resistance       forKey:@"resistance"];
+    [encoder encodeInteger:maxCurrent       forKey:@"maxCurrent"];
+    [encoder encodeInteger:maxUserCurrent   forKey:@"maxUserCurrent"];
     [encoder encodeBool:currentOrPower  forKey:@"currentOrPower"];
     [encoder encodeFloat:lowLimit       forKey:@"lowLimit"];
     [encoder encodeFloat:highLimit      forKey:@"highLimit"];
@@ -214,10 +214,10 @@ NSString* ORLakeShore336InputChanged  = @"ORLakeShore336InputChanged";
     [encoder encodeFloat:maxValue       forKey:@"maxValue"];
     [encoder encodeFloat:pValue         forKey:@"pValue"];
     [encoder encodeFloat:iValue         forKey:@"iValue"];
-    [encoder encodeInt:dValue           forKey:@"dValue"];
+    [encoder encodeInteger:dValue           forKey:@"dValue"];
     [encoder encodeObject:label         forKey:@"label"];
-    [encoder encodeInt:opMode             forKey:@"mode"];
-    [encoder encodeInt:input            forKey:@"input"];
+    [encoder encodeInteger:opMode             forKey:@"mode"];
+    [encoder encodeInteger:input            forKey:@"input"];
     [encoder encodeBool:powerUpEnable   forKey:@"powerUpEnable"];
 }
 

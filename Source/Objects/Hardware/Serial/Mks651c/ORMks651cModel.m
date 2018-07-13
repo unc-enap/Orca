@@ -839,7 +839,7 @@ NSString* ORMks651cLock = @"ORMks651cLock";
 		[self setSetPoint:i      withValue:	[decoder decodeFloatForKey: [NSString stringWithFormat:@"setPoint%d",i]]];
 		[self setLeadValue:i     withValue:	[decoder decodeFloatForKey: [NSString stringWithFormat:@"leadValue%d",i]]];
 		[self setGainValue:i     withValue:	[decoder decodeFloatForKey: [NSString stringWithFormat:@"gainValue%d",i]]];
-		[self setSetPointType:i  withValue:	[decoder decodeIntForKey: [NSString stringWithFormat:@"setPointType%d",i]]];
+		[self setSetPointType:i  withValue:	[decoder decodeIntegerForKey: [NSString stringWithFormat:@"setPointType%d",i]]];
 		[self setSoftstartRate:i withValue:	[decoder decodeFloatForKey: [NSString stringWithFormat:@"softstartRate%d",i]]];
 	}
 	
@@ -860,33 +860,33 @@ NSString* ORMks651cLock = @"ORMks651cLock";
     [super encodeWithCoder:encoder];
     [encoder encodeFloat:spanCalibration	forKey:@"spanCalibration"];
     [encoder encodeFloat:specialZero		forKey:@"specialZero"];
-    [encoder encodeInt:setPtSelection		forKey:@"setPtSelection"];
+    [encoder encodeInteger:setPtSelection		forKey:@"setPtSelection"];
     [encoder encodeBool:positionRange		forKey:@"positionRange"];
     [encoder encodeFloat:openSoftstart		forKey:@"openSoftstart"];
     [encoder encodeFloat:closeSoftstart		forKey:@"closeSoftstart"];
     [encoder encodeFloat:analogSoftstart	forKey:@"analogSoftstart"];
     [encoder encodeFloat:analogSetPoint		forKey:@"analogSetPoint"];
-    [encoder encodeInt:sensorRange			forKey:@"sensorRange"];
-    [encoder encodeInt:sensorVoltageRange	forKey:@"sensorVoltageRange"];
-    [encoder encodeInt:analogRange			forKey:@"analogRange"];
-    [encoder encodeInt:analogFSLevel		forKey:@"analogFSLevel"];
-    [encoder encodeInt:units				forKey: @"units"];
+    [encoder encodeInteger:sensorRange			forKey:@"sensorRange"];
+    [encoder encodeInteger:sensorVoltageRange	forKey:@"sensorVoltageRange"];
+    [encoder encodeInteger:analogRange			forKey:@"analogRange"];
+    [encoder encodeInteger:analogFSLevel		forKey:@"analogFSLevel"];
+    [encoder encodeInteger:units				forKey: @"units"];
     [encoder encodeBool:shipPressures		forKey: @"shipPressures"];
-    [encoder encodeInt: pollTime			forKey: @"pollTime"];
+    [encoder encodeInteger: pollTime			forKey: @"pollTime"];
     [encoder encodeBool:portWasOpen			forKey: @"portWasOpen"];
     [encoder encodeObject:portName			forKey: @"portName"];
-	[encoder encodeInt:pressureScale		forKey: @"pressureScale"];
-	[encoder encodeInt:valveResponse		forKey: @"valveResponse"];
-	[encoder encodeInt:sensorType			forKey: @"sensorType"];
-	[encoder encodeInt:controlType			forKey: @"controlType"];
-	[encoder encodeInt:valveType			forKey: @"valveType"];
+	[encoder encodeInteger:pressureScale		forKey: @"pressureScale"];
+	[encoder encodeInteger:valveResponse		forKey: @"valveResponse"];
+	[encoder encodeInteger:sensorType			forKey: @"sensorType"];
+	[encoder encodeInteger:controlType			forKey: @"controlType"];
+	[encoder encodeInteger:valveType			forKey: @"valveType"];
 	int i;
 	for(i=0;i<5;i++){
 		[encoder encodeFloat:setPoint[i]	  forKey: [NSString stringWithFormat:@"setPoint%d",i]];
 		[encoder encodeFloat:leadValue[i]	  forKey: [NSString stringWithFormat:@"leadValue%d",i]];
 		[encoder encodeFloat:gainValue[i]	  forKey: [NSString stringWithFormat:@"gainValue%d",i]];
 		[encoder encodeFloat:softstartRate[i] forKey: [NSString stringWithFormat:@"softstartRate%d",i]];
-		[encoder encodeInt:setPointType[i]	  forKey: [NSString stringWithFormat:@"setPointType%d",i]];
+		[encoder encodeInteger:setPointType[i]	  forKey: [NSString stringWithFormat:@"setPointType%d",i]];
 	}
 	for(i=0;i<2;i++){
 		[encoder encodeFloat:lowThreshold[i]  forKey: [NSString stringWithFormat:@"lowThreshold%d",i]];

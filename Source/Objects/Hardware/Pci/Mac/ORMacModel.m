@@ -339,7 +339,7 @@ void registryChanged(
 
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
-    [encoder encodeInt:eolType forKey:@"ORMacModelEolType"];
+    [encoder encodeInteger:eolType forKey:@"ORMacModelEolType"];
     [super encodeWithCoder:encoder];	
 }
 

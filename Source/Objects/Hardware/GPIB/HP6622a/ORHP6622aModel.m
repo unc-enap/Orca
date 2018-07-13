@@ -355,8 +355,8 @@ NSString* ORHP6622aLock							= @"ORHP6622aLock";
     [[self undoManager] disableUndoRegistration];
 	int i;
 	for(i=0;i<kHP6622aNumberSupplies;i++){
-		[self setOutputOn:i			withValue:[aDecoder decodeIntForKey:   [@"OutputOn" stringByAppendingFormat:@"%d",i]]];
-		[self setOcProtectionOn:i	withValue:[aDecoder decodeIntForKey:   [@"OcProtectionOn" stringByAppendingFormat:@"%d",i]]];
+		[self setOutputOn:i			withValue:[aDecoder decodeIntegerForKey:   [@"OutputOn" stringByAppendingFormat:@"%d",i]]];
+		[self setOcProtectionOn:i	withValue:[aDecoder decodeIntegerForKey:   [@"OcProtectionOn" stringByAppendingFormat:@"%d",i]]];
 		[self setSetVoltage:i		withValue:[aDecoder decodeFloatForKey: [@"setVoltage" stringByAppendingFormat:@"%d",i]]];
 		[self setOverVoltage:i		withValue:[aDecoder decodeFloatForKey: [@"overVoltage" stringByAppendingFormat:@"%d",i]]];
 		[self setSetCurrent:i		withValue:[aDecoder decodeFloatForKey: [@"setCurrent" stringByAppendingFormat:@"%d",i]]];
@@ -372,8 +372,8 @@ NSString* ORHP6622aLock							= @"ORHP6622aLock";
     [super encodeWithCoder:anEncoder];
 	int i;
 	for(i=0;i<kHP6622aNumberSupplies;i++){
-		[anEncoder encodeInt:	outputOn[i]			forKey: [@"OutputOn" stringByAppendingFormat:@"%d",i]];
-		[anEncoder encodeInt:	ocProtectionOn[i]	forKey: [@"OcProtectionOn" stringByAppendingFormat:@"%d",i]];
+		[anEncoder encodeInteger:	outputOn[i]			forKey: [@"OutputOn" stringByAppendingFormat:@"%d",i]];
+		[anEncoder encodeInteger:	ocProtectionOn[i]	forKey: [@"OcProtectionOn" stringByAppendingFormat:@"%d",i]];
 		[anEncoder encodeFloat: setVoltage[i]		forKey: [@"setVoltage" stringByAppendingFormat:@"%d",i]];
 		[anEncoder encodeFloat: overVoltage[i]		forKey: [@"overVoltage" stringByAppendingFormat:@"%d",i]];
 		[anEncoder encodeFloat: setCurrent[i]		forKey: [@"setCurrent" stringByAppendingFormat:@"%d",i]];

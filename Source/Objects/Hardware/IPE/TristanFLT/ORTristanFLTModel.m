@@ -617,16 +617,16 @@ NSString* ORTristanFLTSettingsLock                   = @"ORTristanFLTSettingsLoc
     self = [super initWithCoder:decoder];
     
     [[self undoManager] disableUndoRegistration];
-    [self setPort:              [decoder decodeIntForKey:@"port"]];
+    [self setPort:              [decoder decodeIntegerForKey:@"port"]];
     [self setHostName:          [decoder decodeObjectForKey:@"hostName"]];
 
-    [self setShapingLength:     [decoder decodeIntForKey:   @"shapingLength"]];
+    [self setShapingLength:     [decoder decodeIntegerForKey:   @"shapingLength"]];
     [self setGapLength:         [decoder decodeIntForKey:   @"gapLength"]];
-    [self setPostTriggerTime:   [decoder decodeIntForKey:   @"postTriggerTime"]];
-    [self setUdpFrameSize:      [decoder decodeIntForKey:   @"udpFrameSize"]];
+    [self setPostTriggerTime:   [decoder decodeIntegerForKey:   @"postTriggerTime"]];
+    [self setUdpFrameSize:      [decoder decodeIntegerForKey:   @"udpFrameSize"]];
     int i;
     for(i=0;i<kNumTristanFLTChannels;i++) {
-        [self setThreshold:i withValue:[decoder decodeInt32ForKey: [NSString stringWithFormat:@"threshold%d",i]]];
+        [self setThreshold:i withValue:[decoder decodeIntegerForKey: [NSString stringWithFormat:@"threshold%d",i]]];
         [self setEnabled:i   withValue:[decoder decodeBoolForKey:  [NSString stringWithFormat:@"enabled%d",i]]];
     }
     
@@ -646,15 +646,15 @@ NSString* ORTristanFLTSettingsLock                   = @"ORTristanFLTSettingsLoc
 {
     [super encodeWithCoder:encoder];
     
-    [encoder encodeInt:(int32_t)port                forKey:@"port"];
+    [encoder encodeInteger:(int32_t)port                forKey:@"port"];
     [encoder encodeObject:hostName         forKey:@"hostName"];
-    [encoder encodeInt:shapingLength       forKey:@"shapingLength"];
-    [encoder encodeInt:gapLength           forKey:@"gapLength"];
-    [encoder encodeInt:postTriggerTime     forKey:@"postTriggerTime"];
-    [encoder encodeInt:udpFrameSize        forKey:@"udpFrameSize"];
+    [encoder encodeInteger:shapingLength       forKey:@"shapingLength"];
+    [encoder encodeInteger:gapLength           forKey:@"gapLength"];
+    [encoder encodeInteger:postTriggerTime     forKey:@"postTriggerTime"];
+    [encoder encodeInteger:udpFrameSize        forKey:@"udpFrameSize"];
     int i;
     for(i=0;i<kNumTristanFLTChannels;i++) {
-        [encoder encodeInt32: (int32_t)threshold[i] forKey:[NSString stringWithFormat:@"threshold%d",i]];
+        [encoder encodeInteger: (int32_t)threshold[i] forKey:[NSString stringWithFormat:@"threshold%d",i]];
         [encoder encodeBool:  enabled[i]   forKey:[NSString stringWithFormat:@"enabled%d",i]];
     }
 }

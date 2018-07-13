@@ -205,7 +205,7 @@ NSString* ORKJL2200IonGaugeModelQueCountChanged			= @"ORKJL2200IonGaugeModelQueC
 
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKJL2200IonGaugeModelSensitivityReadChanged object:self];
 }
-- (int) queCount
+- (NSUInteger) queCount
 {
 	return [cmdQueue count];
 }
@@ -521,12 +521,12 @@ NSString* ORKJL2200IonGaugeModelQueCountChanged			= @"ORKJL2200IonGaugeModelQueC
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:pressureScale forKey:@"pressureScale"];
-    [encoder encodeInt:degasTime forKey:@"degasTime "];
+    [encoder encodeInteger:pressureScale forKey:@"pressureScale"];
+    [encoder encodeInteger:degasTime forKey:@"degasTime "];
     [encoder encodeFloat:emissionCurrent forKey:@"emissionCurrent"];
-    [encoder encodeInt:sensitivity forKey:@"sensitivity"];
+    [encoder encodeInteger:sensitivity forKey:@"sensitivity"];
     [encoder encodeBool:shipPressure forKey:@"shipPressure"];
-    [encoder encodeInt:pollTime		forKey:@"pollTime"];
+    [encoder encodeInteger:pollTime		forKey:@"pollTime"];
     [encoder encodeBool:portWasOpen forKey:@"portWasOpen"];
     [encoder encodeObject:portName	forKey: @"portName"];
 	int i;
@@ -664,7 +664,7 @@ NSString* ORKJL2200IonGaugeModelQueCountChanged			= @"ORKJL2200IonGaugeModelQueC
 	else if([aCmd hasPrefix:@"*="]){
 		aCmd = [aCmd substringFromIndex:2];
 		int i;
-		int n = [aCmd length];
+		int n = (int)[aCmd length];
 		unsigned short aMask = 0;
 		for(i=0;i<n;i++){
 			if([aCmd characterAtIndex:i] == '1'){

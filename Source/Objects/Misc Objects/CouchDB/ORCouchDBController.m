@@ -24,14 +24,14 @@
 #import "ORCouchDB.h"
 #import "ORValueBarGroupView.h"
 
-#if !defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
 @interface ORCouchDBController (private)
+#if !defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
 - (void) createActionDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo;
 - (void) deleteActionDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo;
 - (void) stealthActionDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo;
 - (void) historyActionDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo;
-@end
 #endif
+@end
 
 @implementation ORCouchDBController
 
@@ -63,11 +63,11 @@
 	NSOperationQueue* queue = [[ORCouchDBQueue sharedCouchDBQueue] queue];
     NSOperationQueue* lowPriorityQueue = [[ORCouchDBQueue sharedCouchDBQueue] lowPriorityQueue];
     if (object == queue && [keyPath isEqual:@"operationCount"]) {
-		NSNumber* n = [NSNumber numberWithInt:[[[ORCouchDBQueue queue] operations] count]];
+		NSNumber* n = [NSNumber numberWithInteger:[[[ORCouchDBQueue queue] operations] count]];
 		[self performSelectorOnMainThread:@selector(setQueCount:) withObject:n waitUntilDone:NO];
     }
     else if (object == lowPriorityQueue && [keyPath isEqual:@"operationCount"]) {
-        NSNumber* n = [NSNumber numberWithInt:[[[ORCouchDBQueue lowPriorityQueue] operations] count]];
+        NSNumber* n = [NSNumber numberWithInteger:[[[ORCouchDBQueue lowPriorityQueue] operations] count]];
         [self performSelectorOnMainThread:@selector(setLowPriorityQueCount:) withObject:n waitUntilDone:NO];
     }
     else {
@@ -512,7 +512,7 @@
 
 - (IBAction) alertTypeAction:(id)sender
 {
-    [model setAlertType:[sender indexOfSelectedItem]];
+    [model setAlertType:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) alertMessageAction:(id)sender

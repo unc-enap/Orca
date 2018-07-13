@@ -158,7 +158,7 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 
 -(void) setUpImage
 {
-	int cb37count = [[self orcaObjects] count];
+	int cb37count = (int)[[self orcaObjects] count];
     if(cb37count==0) {
         [self setImage:[NSImage imageNamed:@"LabJackUE9"]];
     }
@@ -1149,12 +1149,12 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
     [[self undoManager] disableUndoRegistration];
     [self setClockDivisor:[decoder decodeIntForKey:@"clockDivisor"]];
     [self setClockSelection:[decoder decodeIntForKey:@"clockSelection"]];
-    [self setDoDirection:[decoder decodeInt32ForKey:@"doDirection"]];
-    [self setTimerEnableMask:[decoder decodeIntForKey:@"timerEnableMask"]];
-    [self setCounterEnableMask:[decoder decodeIntForKey:@"counterEnableMask"]];
+    [self setDoDirection:[decoder decodeIntegerForKey:@"doDirection"]];
+    [self setTimerEnableMask:[decoder decodeIntegerForKey:@"timerEnableMask"]];
+    [self setCounterEnableMask:[decoder decodeIntegerForKey:@"counterEnableMask"]];
   	[self setIpAddress:[decoder decodeObjectForKey:@"ipAddress"]];
-	[self setAOut1:[decoder decodeIntForKey:@"aOut1"]];
-    [self setAOut0:[decoder decodeIntForKey:@"aOut0"]];
+	[self setAOut1:[decoder decodeIntegerForKey:@"aOut1"]];
+    [self setAOut0:[decoder decodeIntegerForKey:@"aOut0"]];
     [self setShipData:[decoder decodeBoolForKey:@"shipData"]];
     [self setDigitalOutputEnabled:[decoder decodeBoolForKey:@"digitalOutputEnabled"]];
 	int i;
@@ -1176,7 +1176,7 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 		[self setIntercept:i value:[decoder decodeFloatForKey:[NSString stringWithFormat:@"intercept%d",i]]];
 	}
 	for(i=0;i<3;i++) {
-		[self setAdcEnabled:i mask:[decoder decodeInt32ForKey:[NSString stringWithFormat:@"adcEnabledMask%d",i]]];
+		[self setAdcEnabled:i mask:[decoder decodeIntegerForKey:[NSString stringWithFormat:@"adcEnabledMask%d",i]]];
 	}
 	
 	for(i=0;i<kUE9NumIO;i++) {
@@ -1190,7 +1190,7 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 	}
 	
 	for(i=0;i<kUE9NumTimers;i++) {
-		[self setTimer:i option:[decoder decodeIntForKey:[NSString stringWithFormat:@"timerOption%d",i]]];
+		[self setTimer:i option:[decoder decodeIntegerForKey:[NSString stringWithFormat:@"timerOption%d",i]]];
 	}
 	
 	wasConnected = [decoder decodeBoolForKey:@"wasConnected"];
@@ -1209,16 +1209,16 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 {
     [super encodeWithCoder:encoder];
 	[encoder encodeBool:wasConnected forKey:@"wasConnected"];
-	[encoder encodeInt:clockDivisor forKey:@"clockDivisor"];
-	[encoder encodeInt:clockSelection forKey:@"clockSelection"];
-	[encoder encodeInt:timerEnableMask forKey:@"timerEnableMask"];
-	[encoder encodeInt:counterEnableMask forKey:@"counterEnableMask"];
+	[encoder encodeInteger:clockDivisor forKey:@"clockDivisor"];
+	[encoder encodeInteger:clockSelection forKey:@"clockSelection"];
+	[encoder encodeInteger:timerEnableMask forKey:@"timerEnableMask"];
+	[encoder encodeInteger:counterEnableMask forKey:@"counterEnableMask"];
 	[encoder encodeObject:ipAddress forKey:@"ipAddress"];
-	[encoder encodeInt:aOut1 forKey:@"aOut1"];
-    [encoder encodeInt:aOut0 forKey:@"aOut0"];
+	[encoder encodeInteger:aOut1 forKey:@"aOut1"];
+    [encoder encodeInteger:aOut0 forKey:@"aOut0"];
     [encoder encodeBool:shipData forKey:@"shipData"];
-    [encoder encodeInt:pollTime forKey:@"pollTime"];
-    [encoder encodeInt32:doDirection forKey:@"doDirection"];
+    [encoder encodeInteger:pollTime forKey:@"pollTime"];
+    [encoder encodeInteger:doDirection forKey:@"doDirection"];
     [encoder encodeBool:digitalOutputEnabled forKey:@"digitalOutputEnabled"];
 	int i;
 	for(i=0;i<kUE9NumAdcs;i++) {
@@ -1232,17 +1232,17 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 		[encoder encodeFloat:maxValue[i] forKey:[NSString stringWithFormat:@"maxValue%d",i]];
 	}
 	for(i=0;i<3;i++) {
-		[encoder encodeInt32:adcEnabledMask[i] forKey:[NSString stringWithFormat:@"adcEnabledMask%d",i]];
+		[encoder encodeInteger:adcEnabledMask[i] forKey:[NSString stringWithFormat:@"adcEnabledMask%d",i]];
 	}
 	
 	for(i=0;i<kUE9NumIO;i++) {
 		[encoder encodeObject:doName[i] forKey:[NSString stringWithFormat:@"DO%d",i]];
 	}
 	for(i=0;i<4;i++) {
-		[encoder encodeInt:gain[i] forKey:[NSString stringWithFormat:@"gain%d",i]];
+		[encoder encodeInteger:gain[i] forKey:[NSString stringWithFormat:@"gain%d",i]];
 	}
 	for(i=0;i<kUE9NumTimers;i++) {
-		[encoder encodeInt:timerOption[i] forKey:[NSString stringWithFormat:@"timerOption%d",i]];
+		[encoder encodeInteger:timerOption[i] forKey:[NSString stringWithFormat:@"timerOption%d",i]];
 	}
 
 }

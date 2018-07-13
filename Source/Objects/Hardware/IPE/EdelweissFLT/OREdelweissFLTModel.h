@@ -596,7 +596,7 @@
 - (void) writeThresholds;
 - (void) readThresholds;
 - (void) writeThreshold:(int)i value:(unsigned int)aValue;
-- (unsigned int) readThreshold:(int)i;
+- (unsigned long) readThreshold:(int)i;
 - (void) writeTriggerControl;
 - (BOOL) partOfEvent:(short)chan;
 - (unsigned long) eventMask;

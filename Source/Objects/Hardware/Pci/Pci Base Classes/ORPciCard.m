@@ -172,7 +172,7 @@ static NSString *ORPciConnector 		= @"ORPciCard Connector";
     [super encodeWithCoder:encoder];
     [encoder encodeObject:[self connectorName] forKey:ORPciConnectorName];
     [encoder encodeObject:[self connector] forKey:ORPciConnector];
-    [encoder encodeInt:[self slot] forKey:ORPciSlotNumber];
+    [encoder encodeInteger:[self slot] forKey:ORPciSlotNumber];
 }
 
 @end

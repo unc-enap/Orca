@@ -239,18 +239,18 @@
 	//draw the data 
 
 	double xValue,yValue;
-	long ix;
+	int ix;
     
 	float maxXValue = [mXScale maxValue];
-    NSUInteger minX = (NSUInteger)[mXScale minValue];
-    NSUInteger maxX = (NSUInteger) maxXValue;
+    int minX = (int)[mXScale minValue];
+    int maxX = (int) maxXValue;
     NSBezierPath* theDataPath = [NSBezierPath bezierPath];
     
     // We limit the total number of plotted points by using a stride    
     NSUInteger totalLength = MIN(maxX - minX,numPoints);
-    NSUInteger stride = (NSUInteger)((double)totalLength)/kMaximumPlotPoints;
+    int stride = (int)((double)totalLength)/kMaximumPlotPoints;
     if (stride == 0) stride = 1;
-    maxX = MIN(maxX, stride*numPoints + minX);
+    maxX = (int)MIN(maxX, stride*numPoints + minX);
     if (![dataSource conformsToProtocol:@protocol(ORFastPlotDataSourceMethods)]) {
         [dataSource plotter:self index:minX x:&xValue y:&yValue];
         x  = [mXScale getPixAbs:minX];
@@ -438,10 +438,10 @@
 		double maxX = 0;
 		double maxY = -9E9;
 		
-		 int i;
+		 long i;
 		 for (i=minChannel; i<maxChannel; ++i) {
 			 double xValue,yValue;
-			 [dataSource plotter:self index:i x:&xValue y:&yValue];
+			 [dataSource plotter:self index:(int)i x:&xValue y:&yValue];
 			 if (yValue > maxY) {
 				 maxY = yValue;
 				 maxX = i;
@@ -559,7 +559,7 @@
 - (NSString*) valueAsStringAtPoint:(long)i
 {		
 	double xValue,yValue;
-	[dataSource plotter:self index:i x:&xValue y:&yValue];
+	[dataSource plotter:self index:(int)i x:&xValue y:&yValue];
 	return [NSString stringWithFormat:@"%f",yValue]; 
 }
 

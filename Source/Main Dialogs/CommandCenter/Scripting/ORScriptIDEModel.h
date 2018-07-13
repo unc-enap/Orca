@@ -115,7 +115,7 @@
 - (ORScriptRunner*)	scriptRunner;
 - (NSMutableArray*) inputValues;
 - (void)		addInputValue;
-- (void)		removeInputValue:(int)i;
+- (void)		removeInputValue:(NSUInteger)i;
 - (NSString*)	identifier;
 
 #pragma mark ***Script Methods

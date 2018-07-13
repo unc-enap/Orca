@@ -591,7 +591,7 @@ NSString* ORPacModelVetoChanged			= @"ORPacModelVetoChanged";
 		[fh seekToEndOfFile];
 		
 		int i;
-		int n = [logBuffer count];
+		int n = (int)[logBuffer count];
 		for(i=0;i<n;i++){
 			[fh writeData:[[logBuffer objectAtIndex:i] dataUsingEncoding:NSASCIIStringEncoding]];
 		}
@@ -622,7 +622,7 @@ NSString* ORPacModelVetoChanged			= @"ORPacModelVetoChanged";
 	[self setModule:		[decoder decodeIntForKey:	 @"ORPacModelModule"]];
 	[self setGainValue:		[decoder decodeIntForKey:	 @"gainValue"]];
 	[self setPortWasOpen:	[decoder decodeBoolForKey:	 @"portWasOpen"]];
-	[self setPollingState:	[decoder decodeIntForKey:	 @"pollingState"]];
+	[self setPollingState:	[decoder decodeIntegerForKey:	 @"pollingState"]];
 	[self setLogFile:		[decoder decodeObjectForKey: @"logFile"]];
     [self setLogToFile:		[decoder decodeBoolForKey:	 @"logToFile"]];
 	[self setAdcChannel:    [decoder decodeIntForKey:    @"ORPacModelAdcChannel"]];
@@ -632,7 +632,7 @@ NSString* ORPacModelVetoChanged			= @"ORPacModelVetoChanged";
 		timeRates[i] = [[ORTimeRate alloc] init];
 	}
 	for(i=0;i<148;i++){
-		[self setGain:i withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"gain%d",i]]];
+		[self setGain:i withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"gain%d",i]]];
 	}
     
     [self setPortName:		[decoder decodeObjectForKey: @"portName"]];
@@ -648,22 +648,22 @@ NSString* ORPacModelVetoChanged			= @"ORPacModelVetoChanged";
     [super encodeWithCoder:encoder];
     [encoder encodeObject:processLimits     forKey:@"processLimits"];
     [encoder encodeObject:lastGainFile  forKey:@"lastGainFile"];
-    [encoder encodeInt:gainDisplayType  forKey:@"gainDisplayType"];
+    [encoder encodeInteger:gainDisplayType  forKey:@"gainDisplayType"];
     [encoder encodeBool:setAllGains		forKey:@"ORPacModelSetAllGains"];
-    [encoder encodeInt:gainChannel		forKey:@"ORPacModelGainChannel"];
+    [encoder encodeInteger:gainChannel		forKey:@"ORPacModelGainChannel"];
     [encoder encodeBool:lcmEnabled		forKey:@"ORPacModelLcmEnabled"];
-    [encoder encodeInt:preAmp			forKey:@"ORPacModelPreAmp"];
-    [encoder encodeInt:module			forKey:@"ORPacModelModule"];
-    [encoder encodeInt:gainValue			forKey:@"gainValue"];
+    [encoder encodeInteger:preAmp			forKey:@"ORPacModelPreAmp"];
+    [encoder encodeInteger:module			forKey:@"ORPacModelModule"];
+    [encoder encodeInteger:gainValue			forKey:@"gainValue"];
     [encoder encodeBool:portWasOpen		forKey:@"portWasOpen"];
     [encoder encodeObject:portName		forKey:@"portName"];
-    [encoder encodeInt:pollingState		forKey:@"pollingState"];
+    [encoder encodeInteger:pollingState		forKey:@"pollingState"];
     [encoder encodeObject:logFile		forKey:@"logFile"];
     [encoder encodeBool:logToFile		forKey:@"logToFile"];
-    [encoder encodeInt:adcChannel       forKey:@"ORPacModelAdcChannel"];
+    [encoder encodeInteger:adcChannel       forKey:@"ORPacModelAdcChannel"];
 	int i;
 	for(i=0;i<148;i++){
-		[encoder encodeInt:gain[i] forKey: [NSString stringWithFormat:@"gain%d",i]];
+		[encoder encodeInteger:gain[i] forKey: [NSString stringWithFormat:@"gain%d",i]];
 	}
 }
 
@@ -913,7 +913,7 @@ NSString* ORPacModelVetoChanged			= @"ORPacModelVetoChanged";
 				else if(theCmd[1] == kPacGainReadAll){
                     unsigned char* ptr	 = (unsigned char*)[inComingData bytes];
                     int i;
-                    unsigned len = [inComingData length];
+                    unsigned len = (int)[inComingData length];
                     if(len >= 297) {
                         if(ptr[296] == kPacOkByte){
                             for(i=0;i<len-1;i+=2){

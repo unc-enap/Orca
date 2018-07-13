@@ -81,7 +81,7 @@
 		unsigned long* p = (unsigned long*)[newData bytes];
 		p++;	 //point to header length
 		unsigned long headerLength = *p; //bytes
-		if(needToSwap)	headerLength = CFSwapInt32(headerLength);			
+		if(needToSwap)	headerLength = CFSwapInt32((uint32_t)headerLength);			
 		p++;	 //point to header itself
 		NSString* theHeaderAsString = [[NSString alloc] initWithBytes:p length:headerLength encoding:NSASCIIStringEncoding];
 		[self setFileHeader:[theHeaderAsString propertyList]]; 
@@ -143,7 +143,7 @@
         }
         else if([result isKindOfClass:NSClassFromString(@"NSArray")]){
             int index = [s intValue];
-            int count = [result count];
+            int count = (int)[result count];
             if(index<count) result = [result objectAtIndex:index];
             else result = nil;
         }
@@ -311,7 +311,7 @@
 		//the dataID for the header is always zero the length of the record is always non-zero -- this
 		//gives us a way to determine endian-ness 
 		needToSwap = YES;
-		theDataId = ExtractDataId(CFSwapInt32(*p));	
+		theDataId = ExtractDataId(CFSwapInt32((uint32_t)*p));
 	}
 	else theDataId = ExtractDataId(*p);	
 	
@@ -332,7 +332,7 @@
 {
 	p++;	 //point to header length
 	unsigned long headerLength = *p; //bytes
-	if(needToSwap)	headerLength = CFSwapInt32(headerLength);			
+	if(needToSwap)	headerLength = CFSwapInt32((uint32_t)headerLength);
 	p++;	 //point to header itself
 	NSString* theHeader = [[NSString alloc] initWithBytes:p length:headerLength encoding:NSASCIIStringEncoding];
     id plist = nil;

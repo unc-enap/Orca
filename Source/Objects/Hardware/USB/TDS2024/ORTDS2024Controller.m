@@ -246,7 +246,7 @@
 
 - (void) validateInterfacePopup
 {
-	NSArray* interfaces = [[model getUSBController] interfacesForVender:[model vendorIDs] product:[model productIDs]];
+	NSArray* interfaces = [[model getUSBController] interfacesForVenders:[model vendorIDs] products:[model productIDs]];
 	NSEnumerator* e = [interfaces objectEnumerator];
 	ORUSBInterface* anInterface;
 	while(anInterface = [e nextObject]){

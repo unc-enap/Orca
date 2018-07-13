@@ -407,9 +407,9 @@ NSString* ORTPG262Lock = @"ORTPG262Lock";
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:pressureScale	forKey:@"ORTPG262ModelPressureScale"];
+    [encoder encodeInteger:pressureScale	forKey:@"ORTPG262ModelPressureScale"];
     [encoder encodeBool:shipPressures	forKey:@"ORTPG262ModelShipPressures"];
-    [encoder encodeInt:pollTime			forKey:@"ORTPG262ModelPollTime"];
+    [encoder encodeInteger:pollTime			forKey:@"ORTPG262ModelPollTime"];
     [encoder encodeBool:portWasOpen		forKey:@"ORTPG262ModelPortWasOpen"];
     [encoder encodeObject:portName		forKey: @"portName"];
 }
@@ -517,7 +517,7 @@ NSString* ORTPG262Lock = @"ORTPG262Lock";
 	theResponse = [theResponse stringByReplacingOccurrencesOfString:@"\r" withString:@""];
 	if([lastRequest hasPrefix:@"PR"]){
 		NSArray* parts = [theResponse componentsSeparatedByString:@","];
-		int n = [parts count];
+		int n = (int)[parts count];
 		if(n >= 2){
 			[self setMeasurementState:[[parts objectAtIndex:0] intValue]];
 			int i;

@@ -48,11 +48,11 @@
 	[roi setDataSource:dataSource];
 	if(roi){
 		NSArray* rois =  [dataSource roiArrayForPlotter:self];
-		int index = [rois indexOfObject:roi];
+		NSUInteger index = [rois indexOfObject:roi];
 		NSString* s;
 		if([[self name] length]>0)s = [self name];
-		else s = [NSString stringWithFormat:@"Plot %d",tag+1];;
-		[roi setLabel:[NSString stringWithFormat:@"%@ Roi %d of %d",s,index+1,[rois count]]];
+		else s = [NSString stringWithFormat:@"Plot %ld",tag+1];;
+		[roi setLabel:[NSString stringWithFormat:@"%@ Roi %ld of %ld",s,index+1,[rois count]]];
 	}
 }
 
@@ -65,7 +65,7 @@
 	if([dataSource respondsToSelector:@selector(roiArrayForPlotter:)]){
 		NSMutableArray* rois =  [dataSource roiArrayForPlotter:self];
 		BOOL didWrap = NO;
-		int roiIndex = [rois indexOfObject:roi];
+		NSUInteger roiIndex = [rois indexOfObject:roi];
 		roiIndex++;
 		if(roiIndex>=[rois count]){
 			roiIndex=0;
@@ -85,7 +85,7 @@
 	if([dataSource respondsToSelector:@selector(roiArrayForPlotter:)]){
 		NSArray* rois =  [dataSource roiArrayForPlotter:self];
 		BOOL didWrap = NO;
-		int roiIndex = [rois indexOfObject:roi]-1;
+		NSInteger roiIndex = [rois indexOfObject:roi]-1;
 		if(roiIndex<0){
 			roiIndex= [rois count]-1;
 			didWrap = YES;

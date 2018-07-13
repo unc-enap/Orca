@@ -473,7 +473,7 @@ NSString* ORPacFPLock						= @"ORPacFPLock";
 
 - (int) queCount
 {
-	return [cmdQueue count];
+	return (int)[cmdQueue count];
 }
 
 
@@ -645,7 +645,7 @@ NSString* ORPacFPLock						= @"ORPacFPLock";
 		[fh seekToEndOfFile];
 		
 		int i;
-		int n = [logBuffer count];
+		int n = (int)[logBuffer count];
 		for(i=0;i<n;i++){
 			[fh writeData:[[logBuffer objectAtIndex:i] dataUsingEncoding:NSASCIIStringEncoding]];
 		}
@@ -669,11 +669,11 @@ NSString* ORPacFPLock						= @"ORPacFPLock";
 	[self setLastGainFile:      [decoder decodeObjectForKey: @"lastGainFile"]];
 	[self setGainDisplayType:   [decoder decodeIntForKey:    @"gainDisplayType"]];
 	[self setWasConnected:      [decoder decodeBoolForKey:	 @"wasConnected"]];
-	[self setPollingState:      [decoder decodeIntForKey:	 @"pollingState"]];
+	[self setPollingState:      [decoder decodeIntegerForKey:	 @"pollingState"]];
 	[self setLogFile:           [decoder decodeObjectForKey: @"logFile"]];
     [self setLogToFile:         [decoder decodeBoolForKey:	 @"logToFile"]];
-	[self setChannelSelection:  [decoder decodeIntForKey:    @"channelSelection"]];
-	[self setPreAmpSelection:   [decoder decodeIntForKey:    @"preAmpSelection"]];
+	[self setChannelSelection:  [decoder decodeIntegerForKey:    @"channelSelection"]];
+	[self setPreAmpSelection:   [decoder decodeIntegerForKey:    @"preAmpSelection"]];
     [self setIpAddress:         [decoder decodeObjectForKey: @"ORPacFPModelIpAddress"]];
     [self setLcmEnabled:	    [decoder decodeBoolForKey:	 @"lcmEnabled"]];
 
@@ -696,12 +696,12 @@ NSString* ORPacFPLock						= @"ORPacFPLock";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeBool:lcmEnabled      forKey:@"lcmEnabled"];
-    [encoder encodeInt:channelSelection forKey:@"channelSelection"];
-    [encoder encodeInt:preAmpSelection  forKey:@"preAmpSelection"];
+    [encoder encodeInteger:channelSelection forKey:@"channelSelection"];
+    [encoder encodeInteger:preAmpSelection  forKey:@"preAmpSelection"];
     [encoder encodeObject:processLimits forKey:@"processLimits"];
     [encoder encodeObject:lastGainFile  forKey:@"lastGainFile"];
-    [encoder encodeInt:gainDisplayType  forKey:@"gainDisplayType"];
-    [encoder encodeInt:pollingState		forKey:@"pollingState"];
+    [encoder encodeInteger:gainDisplayType  forKey:@"gainDisplayType"];
+    [encoder encodeInteger:pollingState		forKey:@"pollingState"];
     [encoder encodeObject:logFile		forKey:@"logFile"];
     [encoder encodeBool:logToFile		forKey:@"logToFile"];
     [encoder encodeBool:wasConnected	forKey:@"wasConnected"];
@@ -709,7 +709,7 @@ NSString* ORPacFPLock						= @"ORPacFPLock";
 
     int i;
 	for(i=0;i<148;i++){
-		[encoder encodeInt:gain[i] forKey: [NSString stringWithFormat:@"gain%d",i]];
+		[encoder encodeInteger:gain[i] forKey: [NSString stringWithFormat:@"gain%d",i]];
 	}
 }
 

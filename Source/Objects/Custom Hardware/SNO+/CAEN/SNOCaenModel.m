@@ -1197,20 +1197,20 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 	
     [[self undoManager] disableUndoRegistration];
     [self setEventSize:[aDecoder decodeIntForKey:@"SNOCaenModelEventSize"]];
-    [self setEnabledMask:[aDecoder decodeIntForKey:@"SNOCaenModelEnabledMask"]];
-    [self setPostTriggerSetting:[aDecoder decodeInt32ForKey:@"SNOCaenModelPostTriggerSetting"]];
-    [self setTriggerSourceMask:[aDecoder decodeInt32ForKey:@"SNOCaenModelTriggerSourceMask"]];
-	[self setTriggerOutMask:[aDecoder decodeInt32ForKey:@"SNOCaenModelTriggerOutMask"]];
-	[self setFrontPanelControlMask:[aDecoder decodeInt32ForKey:@"SNOCaenModelFrontPanelControlMask"]];
-    [self setCoincidenceLevel:[aDecoder decodeIntForKey:@"SNOCaenModelCoincidenceLevel"]];
-    [self setAcquisitionMode:[aDecoder decodeIntForKey:@"acquisitionMode"]];
+    [self setEnabledMask:[aDecoder decodeIntegerForKey:@"SNOCaenModelEnabledMask"]];
+    [self setPostTriggerSetting:[aDecoder decodeIntegerForKey:@"SNOCaenModelPostTriggerSetting"]];
+    [self setTriggerSourceMask:[aDecoder decodeIntegerForKey:@"SNOCaenModelTriggerSourceMask"]];
+	[self setTriggerOutMask:[aDecoder decodeIntegerForKey:@"SNOCaenModelTriggerOutMask"]];
+	[self setFrontPanelControlMask:[aDecoder decodeIntegerForKey:@"SNOCaenModelFrontPanelControlMask"]];
+    [self setCoincidenceLevel:[aDecoder decodeIntegerForKey:@"SNOCaenModelCoincidenceLevel"]];
+    [self setAcquisitionMode:[aDecoder decodeIntegerForKey:@"acquisitionMode"]];
     [self setCountAllTriggers:[aDecoder decodeBoolForKey:@"countAllTriggers"]];
-    [self setCustomSize:[aDecoder decodeInt32ForKey:@"customSize"]];
+    [self setCustomSize:[aDecoder decodeIntegerForKey:@"customSize"]];
 	[self setIsCustomSize:[aDecoder decodeBoolForKey:@"isCustomSize"]];
 	[self setIsFixedSize:[aDecoder decodeBoolForKey:@"isFixedSize"]];
-    [self setChannelConfigMask:[aDecoder decodeIntForKey:@"channelConfigMask"]];
+    [self setChannelConfigMask:[aDecoder decodeIntegerForKey:@"channelConfigMask"]];
     [self setWaveFormRateGroup:[aDecoder decodeObjectForKey:@"waveFormRateGroup"]];
-    [self setNumberBLTEventsToReadout:[aDecoder decodeInt32ForKey:@"numberBLTEventsToReadout"]];
+    [self setNumberBLTEventsToReadout:[aDecoder decodeIntegerForKey:@"numberBLTEventsToReadout"]];
     [self setContinuousMode:[aDecoder decodeBoolForKey:@"continuousMode"]];
     
     if(!waveFormRateGroup){
@@ -1222,9 +1222,9 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 	
 	int i;
     for (i = 0; i < [self numberOfChannels]; i++){
-        [self setDac:i withValue:      [aDecoder decodeInt32ForKey: [NSString stringWithFormat:@"CAENDacChnl%d", i]]];
-        [self setThreshold:i withValue:[aDecoder decodeInt32ForKey: [NSString stringWithFormat:@"CAENThresChnl%d", i]]];
-        [self setOverUnderThreshold:i withValue:[aDecoder decodeIntForKey: [NSString stringWithFormat:@"CAENOverUnderChnl%d", i]]];
+        [self setDac:i withValue:      [aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENDacChnl%d", i]]];
+        [self setThreshold:i withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENThresChnl%d", i]]];
+        [self setOverUnderThreshold:i withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENOverUnderChnl%d", i]]];
     }
 
     [[self undoManager] enableUndoRegistration];
@@ -1243,27 +1243,27 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 - (void) encodeWithCoder:(NSCoder*) anEncoder
 {
     [super encodeWithCoder:anEncoder];
-	[anEncoder encodeInt:eventSize forKey:@"SNOCaenModelEventSize"];
-	[anEncoder encodeInt:enabledMask forKey:@"SNOCaenModelEnabledMask"];
-	[anEncoder encodeInt32:(int32_t)postTriggerSetting forKey:@"SNOCaenModelPostTriggerSetting"];
-	[anEncoder encodeInt32:(int32_t)triggerSourceMask forKey:@"SNOCaenModelTriggerSourceMask"];
-	[anEncoder encodeInt32:(int32_t)triggerOutMask forKey:@"SNOCaenModelTriggerOutMask"];
-	[anEncoder encodeInt32:(int32_t)frontPanelControlMask forKey:@"SNOCaenModelFrontPanelControlMask"];
-	[anEncoder encodeInt:coincidenceLevel forKey:@"SNOCaenModelCoincidenceLevel"];
-	[anEncoder encodeInt:acquisitionMode forKey:@"acquisitionMode"];
+	[anEncoder encodeInteger:eventSize forKey:@"SNOCaenModelEventSize"];
+	[anEncoder encodeInteger:enabledMask forKey:@"SNOCaenModelEnabledMask"];
+	[anEncoder encodeInteger:postTriggerSetting forKey:@"SNOCaenModelPostTriggerSetting"];
+	[anEncoder encodeInteger:triggerSourceMask forKey:@"SNOCaenModelTriggerSourceMask"];
+	[anEncoder encodeInteger:triggerOutMask forKey:@"SNOCaenModelTriggerOutMask"];
+	[anEncoder encodeInteger:frontPanelControlMask forKey:@"SNOCaenModelFrontPanelControlMask"];
+	[anEncoder encodeInteger:coincidenceLevel forKey:@"SNOCaenModelCoincidenceLevel"];
+	[anEncoder encodeInteger:acquisitionMode forKey:@"acquisitionMode"];
 	[anEncoder encodeBool:countAllTriggers forKey:@"countAllTriggers"];
-	[anEncoder encodeInt32:(int32_t)customSize forKey:@"customSize"];
+	[anEncoder encodeInteger:customSize forKey:@"customSize"];
 	[anEncoder encodeBool:isCustomSize forKey:@"isCustomSize"];
 	[anEncoder encodeBool:isFixedSize forKey:@"isFixedSize"];
-	[anEncoder encodeInt:channelConfigMask forKey:@"channelConfigMask"];
+	[anEncoder encodeInteger:channelConfigMask forKey:@"channelConfigMask"];
     [anEncoder encodeObject:waveFormRateGroup forKey:@"waveFormRateGroup"];
-    [anEncoder encodeInt32:(int32_t)numberBLTEventsToReadout forKey:@"numberBLTEventsToReadout"];
+    [anEncoder encodeInteger:numberBLTEventsToReadout forKey:@"numberBLTEventsToReadout"];
     [anEncoder encodeBool:continuousMode forKey:@"continuousMode"];
 	int i;
 	for (i = 0; i < [self numberOfChannels]; i++){
-        [anEncoder encodeInt32:dac[i] forKey:[NSString stringWithFormat:@"CAENDacChnl%d", i]];
-        [anEncoder encodeInt32:thresholds[i] forKey:[NSString stringWithFormat:@"CAENThresChnl%d", i]];
-        [anEncoder encodeInt:overUnderThreshold[i] forKey:[NSString stringWithFormat:@"CAENOverUnderChnl%d", i]];
+        [anEncoder encodeInteger:dac[i] forKey:[NSString stringWithFormat:@"CAENDacChnl%d", i]];
+        [anEncoder encodeInteger:thresholds[i] forKey:[NSString stringWithFormat:@"CAENThresChnl%d", i]];
+        [anEncoder encodeInteger:overUnderThreshold[i] forKey:[NSString stringWithFormat:@"CAENOverUnderChnl%d", i]];
     }
 }
 

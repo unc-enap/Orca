@@ -398,12 +398,12 @@ NSString* ORIpeSimulationPendingRequestsChanged	= @"ORIpeSimulationPendingReques
     [self setChannelDataId:     [anotherObject channelDataId]];
 }
 
-- (int) channelDataId
+- (unsigned long) channelDataId
 {
     return channelDataId;
 }
 
-- (void) setChannelDataId:(int) aValue
+- (void) setChannelDataId:(unsigned long) aValue
 {
     channelDataId = aValue;
 }
@@ -727,10 +727,10 @@ NSString* ORIpeSimulationPendingRequestsChanged	= @"ORIpeSimulationPendingReques
 - (void) removeSet:(NSIndexSet*)aSetToRemove
 {
 	NSMutableArray* itemsToRemove = [NSMutableArray array];
-	unsigned current_index = [aSetToRemove firstIndex];
+	NSUInteger current_index = [aSetToRemove firstIndex];
     while (current_index != NSNotFound) {
 		if(current_index<[pollingLookUp count]){
-			NSString* itemKey = [self requestCacheItemKey:current_index];
+			NSString* itemKey = [self requestCacheItemKey:(int)current_index];
 			[itemsToRemove addObject:itemKey];
 		}
 		current_index = [aSetToRemove indexGreaterThanIndex: current_index];
@@ -849,9 +849,9 @@ NSString* ORIpeSimulationPendingRequestsChanged	= @"ORIpeSimulationPendingReques
 	[encoder encodeBool:shipRecords			forKey:@"shipRecords"];
 	[encoder encodeBool:fastGenSetup		forKey:@"fastGen"];
 	[encoder encodeDouble:setPoint			forKey:@"setPoint"];
-	[encoder encodeInt:itemType				forKey:@"itemType"];
+	[encoder encodeInteger:itemType				forKey:@"itemType"];
 	[encoder encodeBool:viewItemName		forKey:@"viewItemName"];
-	[encoder encodeInt:pollTime				forKey:@"pollTime"];
+	[encoder encodeInteger:pollTime				forKey:@"pollTime"];
  	[encoder encodeObject:IPNumber			forKey:@"IPNumber"];
  	[encoder encodeObject:itemTreeRoot		forKey:@"itemTreeRoot"];
  	[encoder encodeObject:pollingLookUp		forKey:@"pollingLookUp"];

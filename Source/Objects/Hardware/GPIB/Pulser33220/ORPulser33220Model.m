@@ -657,7 +657,7 @@ NSString* ORPulser33220ModelUSBInterfaceChanged = @"ORPulser33220ModelUSBInterfa
     [self setSerialNumber:[decoder decodeObjectForKey:@"ORPulser33220ModelSerialNumber"]];
 	[self setIpAddress:[decoder decodeObjectForKey:@"ORPulser33220ModelIpAddress"]];
     [self setConnectionProtocol:[decoder decodeIntForKey:@"ORPulser33220ModelConnectionProtocol"]];
-    [[self undoManager] enableUndoRegistration];    
+    [[self undoManager] enableUndoRegistration];
 	
     return self;
 }
@@ -667,7 +667,7 @@ NSString* ORPulser33220ModelUSBInterfaceChanged = @"ORPulser33220ModelUSBInterfa
     [super encodeWithCoder:encoder];
     [encoder encodeObject:serialNumber forKey:@"ORPulser33220ModelSerialNumber"];
     [encoder encodeObject:ipAddress forKey:@"ORPulser33220ModelIpAddress"];
-    [encoder encodeInt:connectionProtocol forKey:@"ORPulser33220ModelConnectionProtocol"];
+    [encoder encodeInteger:connectionProtocol forKey:@"ORPulser33220ModelConnectionProtocol"];
 }
 
 

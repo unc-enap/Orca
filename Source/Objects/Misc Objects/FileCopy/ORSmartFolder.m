@@ -853,7 +853,7 @@ static NSString* ORFolderDirectoryName    = @"ORFolderDirectoryName";
     [encoder encodeBool:verbose forKey:ORFolderVerbose];
     [encoder encodeObject:directoryName forKey:ORFolderDirectoryName];
     [encoder encodeObject:title forKey:ORFolderTitle];
-    [encoder encodeInt:transferType forKey:@"transferType"];
+    [encoder encodeInteger:transferType forKey:@"transferType"];
 }
 
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary

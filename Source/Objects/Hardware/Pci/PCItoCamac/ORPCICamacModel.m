@@ -376,16 +376,25 @@ static UInt32 *fVPCICamacMem;
     // now can call methods to communicate with user client and rest of driver
     // call clientMemoryFortype() in driver user client to map PCIADA address spaces
     // map PCIADA LC register address space
-    ret = IOConnectMapMemory(dataPort, 0, mach_task_self(), &mapLCRegisterAddress,
-                             &mapLCRegisterLength, kIOMapAnywhere);
+
+    ret = IOConnectMapMemory(dataPort,
+                             0,
+                             mach_task_self(),
+                             &mapLCRegisterAddress,
+                             &mapLCRegisterLength,
+                             kIOMapAnywhere);
     if( ret != KERN_SUCCESS ) return NO;
     
     fVLCReg = (UInt32 *)mapLCRegisterAddress;
     
     
     // map PCICamac memory address space
-    ret = IOConnectMapMemory(dataPort, 3, mach_task_self(), &mapPCICamacMemoryAddress,
-                             &mapPCICamacMemoryLength, kIOMapAnywhere);
+    ret = IOConnectMapMemory(dataPort,
+                             3,
+                             mach_task_self(),
+                             &mapPCICamacMemoryAddress,
+                             &mapPCICamacMemoryLength,
+                             kIOMapAnywhere);
     if( ret != KERN_SUCCESS ) return NO;
     
     fVPCICamacMem = (UInt32 *)mapPCICamacMemoryAddress;

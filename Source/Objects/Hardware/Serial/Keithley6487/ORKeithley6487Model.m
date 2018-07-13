@@ -337,7 +337,7 @@ NSString* ORKeithley6487Lock = @"ORKeithley6487Lock";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeBool:shipCurrent forKey:@"shipCurrent"];
-    [encoder encodeInt:pollTime		forKey:@"pollTime"];
+    [encoder encodeInteger:pollTime		forKey:@"pollTime"];
     [encoder encodeBool:portWasOpen forKey:@"portWasOpen"];
     [encoder encodeObject:portName	forKey: @"portName"];
 }

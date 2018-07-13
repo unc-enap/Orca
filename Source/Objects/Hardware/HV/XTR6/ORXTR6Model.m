@@ -630,10 +630,10 @@ NSString* ORXTR6Lock                            = @"ORXTR6Lock";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeFloat:targetVoltage      forKey:@"targetVoltage"];
-    [encoder encodeInt:channelAddress       forKey:@"channelAddress"];
+    [encoder encodeInteger:channelAddress       forKey:@"channelAddress"];
     [encoder encodeObject:serialNumber      forKey:@"ORXTR6ModelSerialNumber"];
     [encoder encodeObject:ipAddress         forKey:@"ORXTR6ModelIpAddress"];
-    [encoder encodeInt:connectionProtocol   forKey:@"ORXTR6ModelConnectionProtocol"];
+    [encoder encodeInteger:connectionProtocol   forKey:@"ORXTR6ModelConnectionProtocol"];
 }
 
 #pragma mark ***Comm methods

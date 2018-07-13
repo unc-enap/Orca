@@ -393,7 +393,7 @@ static NSString *OR1DHistoNumberBins	= @"1D Histogram Number Bins";
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
     
-    [self setNumberBins:[decoder decodeIntForKey:OR1DHistoNumberBins]];
+    [self setNumberBins:[decoder decodeIntegerForKey:OR1DHistoNumberBins]];
 	rois = [[decoder decodeObjectForKey:@"rois"] retain];
     [[self undoManager] enableUndoRegistration];
     return self;
@@ -402,7 +402,7 @@ static NSString *OR1DHistoNumberBins	= @"1D Histogram Number Bins";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:(int)numberBins forKey:OR1DHistoNumberBins];
+    [encoder encodeInteger:(int)numberBins forKey:OR1DHistoNumberBins];
     [encoder encodeObject:rois forKey:@"rois"];
 }
 

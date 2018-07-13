@@ -238,13 +238,13 @@ NSString* ORCMC203SettingsLock					= @"ORCMC203SettingsLock";
 {
 	self = [super initWithCoder:decoder];
 	[[self undoManager] disableUndoRegistration];
-	[self setHistoMask:			[decoder decodeIntForKey:@"histoMask"]];
+	[self setHistoMask:			[decoder decodeIntegerForKey:@"histoMask"]];
 	[self setOperationMode:		[decoder decodeIntForKey:	@"operationMode"]];
 	[self setAdcBits:			[decoder decodeIntForKey:   @"adcBits;"]];
 	[self setHistogramMode:		[decoder decodeIntForKey:   @"histogramMode"]];
 	[self setWordSize:			[decoder decodeIntForKey:   @"wordSize"]];
-	[self setHistogramLength:	[decoder decodeInt32ForKey: @"histogramLength"]];
-	[self setHistogramStart:	[decoder decodeInt32ForKey: @"histogramStart"]];
+	[self setHistogramLength:	[decoder decodeIntegerForKey: @"histogramLength"]];
+	[self setHistogramStart:	[decoder decodeIntegerForKey: @"histogramStart"]];
     [self setFifoRateGroup:		[decoder decodeObjectForKey:@"adcRateGroup"]];
 	[self setReadOutGroup:  [decoder decodeObjectForKey:@"ReadoutGroup"]];
 	
@@ -264,13 +264,13 @@ NSString* ORCMC203SettingsLock					= @"ORCMC203SettingsLock";
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:histoMask forKey:@"histoMask"];
-    [encoder encodeInt:	  operationMode	  forKey:@"operationMode"];
-    [encoder encodeInt:	  adcBits		  forKey:@"adcBits;"];
-    [encoder encodeInt:   histogramMode   forKey:@"histogramMode"];
-    [encoder encodeInt:   wordSize		  forKey:@"wordSize"];
-    [encoder encodeInt32: histogramLength forKey:@"histogramLength"];
-    [encoder encodeInt32: histogramStart  forKey:@"histogramStart"];
+    [encoder encodeInteger:(int32_t)histoMask forKey:@"histoMask"];
+    [encoder encodeInteger:	  operationMode	  forKey:@"operationMode"];
+    [encoder encodeInteger:	  adcBits		  forKey:@"adcBits;"];
+    [encoder encodeInteger:   histogramMode   forKey:@"histogramMode"];
+    [encoder encodeInteger:   wordSize		  forKey:@"wordSize"];
+    [encoder encodeInteger: histogramLength forKey:@"histogramLength"];
+    [encoder encodeInteger: histogramStart  forKey:@"histogramStart"];
     [encoder encodeObject:fifoRateGroup	  forKey:@"fifoRateGroup"];
 	[encoder encodeObject:readOutGroup  forKey:@"ReadoutGroup"];
 }

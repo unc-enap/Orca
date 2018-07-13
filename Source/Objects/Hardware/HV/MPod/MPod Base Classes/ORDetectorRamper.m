@@ -257,9 +257,9 @@ NSString* ORDetectorRamperRunningChanged				= @"ORDetectorRamperRunningChanged";
     
     [[self undoManager] disableUndoRegistration];
 			
-	[self setChannel:				[decoder decodeIntForKey: @"channel"]];
-	[self setStepWait:				[decoder decodeIntForKey: @"stepWait"]];
-    [self setLowVoltageWait:		[decoder decodeIntForKey: @"lowVoltageWait"]];
+	[self setChannel:				[decoder decodeIntegerForKey: @"channel"]];
+	[self setStepWait:				[decoder decodeIntegerForKey: @"stepWait"]];
+    [self setLowVoltageWait:		[decoder decodeIntegerForKey: @"lowVoltageWait"]];
     [self setLowVoltageThreshold:	[decoder decodeIntForKey: @"lowVoltageThreshold"]];
     [self setLowVoltageStep:		[decoder decodeIntForKey: @"lowVoltageStep"]];
     [self setMaxVoltage:			[decoder decodeIntForKey: @"maxVoltage"]];
@@ -274,14 +274,14 @@ NSString* ORDetectorRamperRunningChanged				= @"ORDetectorRamperRunningChanged";
 
 - (void)encodeWithCoder:(NSCoder*)encoder
 {	
-	[encoder encodeInt:channel              forKey:@"channel"];
-	[encoder encodeInt:stepWait             forKey:@"stepWait"];
-	[encoder encodeInt:lowVoltageWait		forKey:@"lowVoltageWait"];
-	[encoder encodeInt:lowVoltageThreshold	forKey:@"lowVoltageThreshold"];
-	[encoder encodeInt:lowVoltageStep		forKey:@"lowVoltageStep"];
-	[encoder encodeInt:maxVoltage			forKey:@"maxVoltage"];
-	[encoder encodeInt:minVoltage			forKey:@"minVoltage"];
-	[encoder encodeInt:voltageStep			forKey:@"voltageStep"];
+	[encoder encodeInteger:channel              forKey:@"channel"];
+	[encoder encodeInteger:stepWait             forKey:@"stepWait"];
+	[encoder encodeInteger:lowVoltageWait		forKey:@"lowVoltageWait"];
+	[encoder encodeInteger:lowVoltageThreshold	forKey:@"lowVoltageThreshold"];
+	[encoder encodeInteger:lowVoltageStep		forKey:@"lowVoltageStep"];
+	[encoder encodeInteger:maxVoltage			forKey:@"maxVoltage"];
+	[encoder encodeInteger:minVoltage			forKey:@"minVoltage"];
+	[encoder encodeInteger:voltageStep			forKey:@"voltageStep"];
 	[encoder encodeBool:enabled				forKey:@"enabled"];
 }
 

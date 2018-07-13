@@ -470,7 +470,7 @@
 
 - (NSMutableDictionary*) topLevelPollingDictionary:(id)anItemKey;
 - (int)	 nextUnusedChannelNumber;
-- (BOOL) itemExists:(int)anIndex;
+- (BOOL) itemExists:(NSUInteger)anIndex;
 - (BOOL) channelExists:(int)aChan;
 - (BOOL) isControlItem:(int)anIndex;
 - (BOOL) isControlItemWithItemKey:(NSString*)itemKey;

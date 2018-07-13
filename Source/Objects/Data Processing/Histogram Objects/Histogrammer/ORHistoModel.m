@@ -601,7 +601,7 @@ static NSString *ORHistoMultiPlots 				= @"Histo Multiplot Set";
     [self setDecodingDisabled:[decoder decodeBoolForKey:@"decodingDisabled"]];
     [self setShipFinalHistograms:[decoder decodeBoolForKey:@"shipFinalHistograms"]];
     [self setDirectoryName:[decoder decodeObjectForKey:ORHistoDirName]];
-    [self setWriteFile:[decoder decodeIntForKey:ORHistoWriteFile]];
+    [self setWriteFile:[decoder decodeIntegerForKey:ORHistoWriteFile]];
     [self setDataSet:[decoder decodeObjectForKey:ORHistoDataSet]];
     [self setMultiPlots:[decoder decodeObjectForKey:ORHistoMultiPlots]];
     [[self undoManager] enableUndoRegistration];
@@ -618,7 +618,7 @@ static NSString *ORHistoMultiPlots 				= @"Histo Multiplot Set";
     [encoder encodeBool:accumulate forKey:@"accumulate"];
     [encoder encodeBool:shipFinalHistograms forKey:@"shipFinalHistograms"];
     [encoder encodeObject:[self directoryName] forKey:ORHistoDirName];
-    [encoder encodeInt:[self writeFile] forKey:ORHistoWriteFile];
+    [encoder encodeInteger:[self writeFile] forKey:ORHistoWriteFile];
     [encoder encodeObject:dataSet forKey:ORHistoDataSet];
     [encoder encodeObject:[self multiPlots] forKey:ORHistoMultiPlots];
 }

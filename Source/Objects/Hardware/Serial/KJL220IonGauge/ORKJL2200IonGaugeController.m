@@ -440,7 +440,7 @@
 }
 - (void) pressureScaleAction:(id)sender
 {
-	[model setPressureScale:[sender indexOfSelectedItem]];	
+	[model setPressureScale:(int)[sender indexOfSelectedItem]];
 }
 - (IBAction) readNowAction:(id)sender
 {
@@ -495,7 +495,7 @@
 	s = [s stringByReplacingOccurrencesOfString:@"-" withString:@"E-"];
 	s = [s stringByReplacingOccurrencesOfString:@"EE-" withString:@"E-"];
 	float theValue = [s floatValue];
-	[model setSetPoint:[[sender selectedCell] tag] withValue:theValue];	
+	[model setSetPoint:(int)[[sender selectedCell] tag] withValue:theValue];	
 }
 
 
@@ -516,18 +516,18 @@
 
 - (IBAction) pollTimeAction:(id)sender
 {
-	[model setPollTime:[[sender selectedItem] tag]];
+	[model setPollTime:(int)[[sender selectedItem] tag]];
 }
 
 #pragma mark •••Data Source
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	return [[model timeRate] count];
+	return (int)[[model timeRate] count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-	int count = [[model timeRate] count];
+	int count = (int)[[model timeRate] count];
 	int index = count-i-1;
 	*xValue = [[model timeRate] timeSampledAtIndex:index];
 	*yValue = [[model timeRate] valueAtIndex:index] * [model pressureScaleValue];

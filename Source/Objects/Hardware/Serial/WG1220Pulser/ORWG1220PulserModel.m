@@ -875,11 +875,11 @@ NSString* ORWG1220PulserLock = @"ORWG1220PulserLock";
 
     [[self undoManager] disableUndoRegistration];
     reTxCount = 0;  // no retransmit until first error or timeout
-    //[self setPulserVersion:[decoder decodeIntForKey:@"pulserVersion"]];
+    //[self setPulserVersion:[decoder decodeIntegerForKey:@"pulserVersion"]];
 	[self setSignalForm:[decoder decodeIntForKey:@"signalForm"]];  // todo (necessary?)
     // [self setFrequency:	[decoder decodeFloatForKey:@"frequency"]];
-    // [self setDutyCycle:	[decoder decodeIntForKey:@"dutyCycle"]];
-    // [self setAmplitude:	[decoder decodeIntForKey:@"amplitude"]];
+    // [self setDutyCycle:	[decoder decodeIntegerForKey:@"dutyCycle"]];
+    // [self setAmplitude:	[decoder decodeIntegerForKey:@"amplitude"]];
     [[self undoManager] enableUndoRegistration];
     [self registerNotificationObservers];
     return self;
@@ -888,11 +888,11 @@ NSString* ORWG1220PulserLock = @"ORWG1220PulserLock";
 - (void)encodeWithCoder:(NSCoder*)encoder  // todo: function needed?
 {
     [super encodeWithCoder:encoder];
-    //[encoder encodeInt:pulserVersion	forKey:@"pulserVersion"];
-    [encoder encodeInt:signalForm	    forKey:@"signalForm"];
+    //[encoder encodeInteger:pulserVersion	forKey:@"pulserVersion"];
+    [encoder encodeInteger:signalForm	    forKey:@"signalForm"];
     [encoder encodeFloat:frequency	    forKey:@"frequency"];
-    [encoder encodeInt:dutyCycle	    forKey:@"dutyCycle"];
-    [encoder encodeInt:amplitude	    forKey:@"amplitude"];
+    [encoder encodeInteger:dutyCycle	    forKey:@"dutyCycle"];
+    [encoder encodeInteger:amplitude	    forKey:@"amplitude"];
 }
 @end
 

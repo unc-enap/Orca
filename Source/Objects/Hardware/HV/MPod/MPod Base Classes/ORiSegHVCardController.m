@@ -28,16 +28,17 @@
 #import "ORTimedTextField.h"
 #import "ORMPodCrate.h"
 
-#if !defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
 @interface ORiSegHVCardController (private)
+#if !defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
 - (void) _panicRampSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(id)info;
 - (void) _panicAllRampSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(id)info;
 - (void) _allOnSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(id)info;
 - (void) _allOffSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(id)info;
 - (void) _syncSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(id)info;
 - (void) _allRampToZeroSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(id)info;
-@end
 #endif
+@end
+
 
 @implementation ORiSegHVCardController
 - (void) dealloc
@@ -309,7 +310,7 @@
 - (void) tableViewSelectionDidChange:(NSNotification*)aNote
 {
 	if([aNote object] == hvTableView || !aNote){
-		int index = [hvTableView selectedRow];
+		int index = (int)[hvTableView selectedRow];
         if(index<0 || index>[model numberOfChannels])index=0;
 		[model setSelectedChannel:index];
 		[self maxVoltageChanged:nil];
@@ -343,8 +344,8 @@
 	int numberOnChannels = [model numberChannelsOn];
 	[channelCountField setIntValue:numberOnChannels];
 	[self outputStatusChanged:aNote];
-	int events = [model failureEvents:selectedChannel];
-    int moduleEvents = [model moduleFailureEvents];
+	unsigned long events = [model failureEvents:selectedChannel];
+    unsigned long moduleEvents = [model moduleFailureEvents];
 	int state  = [model channel:selectedChannel readParamAsInt:@"outputSwitch"];
 	[temperatureField setIntValue:[model channel:0 readParamAsInt:@"outputMeasurementTemperature"]];
 
@@ -661,7 +662,7 @@
 {
 	if(aTableView == hvTableView){
 		NSParameterAssert(rowIndex >= 0 && rowIndex < [model numberOfChannels]);
-		if([[aTableColumn identifier] isEqualToString:@"channel"])return [NSNumber numberWithInt:rowIndex];
+		if([[aTableColumn identifier] isEqualToString:@"channel"])return [NSNumber numberWithInteger:rowIndex];
 		else {
 			if([[aTableColumn identifier] isEqualToString:@"outputSwitch"]){
 				return [model channelState:rowIndex];
@@ -995,22 +996,22 @@
 #pragma mark •••Plot Data Source
 - (int)	numberPointsInPlot:(id)aPlotter
 {
-	int set = [aPlotter tag];
-	if(set < [model numberOfChannels]) return [[model currentHistory:set] count];
-	else		return [[model voltageHistory:set-[model numberOfChannels]] count];
+	int set = (int)[aPlotter tag];
+	if(set < [model numberOfChannels]) return (int)[[model currentHistory:set] count];
+	else		return (int)[[model voltageHistory:set-[model numberOfChannels]] count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-	int set = [aPlotter tag];
+	int set = (int)[aPlotter tag];
 	if(set < [model numberOfChannels]){
-		int count = [[model currentHistory:set] count];
+		int count = (int)[[model currentHistory:set] count];
 		int index = count-i-1;
 		*xValue = [[model currentHistory:set] timeSampledAtIndex:index];
 		*yValue = [[model currentHistory:set] valueAtIndex:index] * 1000000.;
 	}
 	else {
-		int count = [[model voltageHistory:set-[model numberOfChannels]] count];
+		int count = (int)[[model voltageHistory:set-[model numberOfChannels]] count];
 		int index = count-i-1;
 		*xValue = [[model voltageHistory:set-[model numberOfChannels]] timeSampledAtIndex:index];
 		*yValue = [[model voltageHistory:set-[model numberOfChannels]] valueAtIndex:index];

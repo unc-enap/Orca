@@ -269,8 +269,8 @@ NSString* ORMPodCrateConstraintsChanged				= @"ORMPodCrateConstraintsChanged";
                         [params setObject:[NSNumber numberWithInt:i] forKey:@"Channel"];
                         
                         //SV
-                        int events = [anHVCard failureEvents:i];
-                        int moduleEvents = [anHVCard moduleFailureEvents];
+                        unsigned long events       = [anHVCard failureEvents:i];
+                        unsigned long moduleEvents = [anHVCard moduleFailureEvents];
                         int state  = [anHVCard channel:i readParamAsInt:@"outputSwitch"];
                         NSString* eventString = @"";
                         

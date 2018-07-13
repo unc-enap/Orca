@@ -162,7 +162,7 @@
                     //set timing info
                     [flt setHistoStartWaitingForPageToggle: FALSE];
                     [flt setHistoLastActivePage: [flt readCurrentHistogramPageNum]];
-                    [flt setHistoLastPageToggleSec: (int)currentSec usec: currentUSec];
+                    [flt setHistoLastPageToggleSec: (int)currentSec usec: (int)currentUSec];
                     // write TRun, EMin, BinWidth
                     //histogramming registers (now I use a broadcast: chan 31)
                     [flt writeEMin:[flt histoMinEnergy] forChan: 31];

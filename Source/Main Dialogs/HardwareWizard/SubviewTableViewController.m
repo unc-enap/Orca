@@ -251,10 +251,10 @@
 - (BOOL) tableView:(NSTableView *) tableView writeRows:(NSArray *) rows toPasteboard:(NSPasteboard *) pboard
 {
     if ([self isValidDelegateForSelector: _cmd]){
-	return [[self delegate] tableView: tableView writeRows: rows toPasteboard: pboard];
+        return [[self delegate] tableView: tableView writeRows: rows toPasteboard: pboard];
     }
     else {
-	return NO;
+        return NO;
     }
 }
 

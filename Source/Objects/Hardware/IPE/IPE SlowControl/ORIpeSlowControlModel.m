@@ -540,7 +540,7 @@ NSString* ORIpeSlowControlSetpointRequestQueueChanged	= @"ORIpeSlowControlSetpoi
 }
 
 #pragma mark ***Polled Item via LookupTable index
-- (BOOL) itemExists:(int)anIndex
+- (BOOL) itemExists:(NSUInteger)anIndex
 {
 	return anIndex<[pollingLookUp count];//TODO: this may be wrong as we can have gaps in the channel numbers? -tb-
 }
@@ -924,16 +924,16 @@ NSString* ORIpeSlowControlSetpointRequestQueueChanged	= @"ORIpeSlowControlSetpoi
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];    
-	[encoder encodeInt:rePostStillPendingRequests forKey:@"rePostStillPendingRequests"];
-	[encoder encodeInt:manualType			forKey:@"manualType"];
+	[encoder encodeInteger:rePostStillPendingRequests forKey:@"rePostStillPendingRequests"];
+	[encoder encodeInteger:manualType			forKey:@"manualType"];
 	[encoder encodeObject:manualPath		forKey:@"manualPath"];
 	[encoder encodeBool:showDebugOutput		forKey:@"showDebugOutput"];
 	[encoder encodeBool:shipRecords			forKey:@"shipRecords"];
 	[encoder encodeBool:fastGenSetup		forKey:@"fastGen"];
 	[encoder encodeDouble:setPoint			forKey:@"setPoint"];
-	[encoder encodeInt:itemType				forKey:@"itemType"];
+	[encoder encodeInteger:itemType				forKey:@"itemType"];
 	[encoder encodeBool:viewItemName		forKey:@"viewItemName"];
-	[encoder encodeInt:pollTime				forKey:@"pollTime"];
+	[encoder encodeInteger:pollTime				forKey:@"pollTime"];
  	[encoder encodeObject:IPNumber			forKey:@"IPNumber"];
  	//[encoder encodeObject:itemTreeRoot		forKey:@"itemTreeRoot"];
  	[encoder encodeObject:pollingLookUp		forKey:@"pollingLookUp"];

@@ -259,7 +259,7 @@ NSString* ORiSegHVCardCustomInfoChanged         = @"ORiSegHVCardCustomInfoChange
         [modParams release];
         modParams = [[aDictionary objectForKey:moduleID] retain];
 
-        int moduleEvents = [self moduleFailureEvents];
+        int moduleEvents = (int)[self moduleFailureEvents];
         
         if(!doNotPostSafetyLoopAlarm && (moduleEvents & moduleEventSafetyLoopNotGood)){
             if(!safetyLoopNotGoodAlarm){
@@ -1032,12 +1032,12 @@ NSString* ORiSegHVCardCustomInfoChanged         = @"ORiSegHVCardCustomInfoChange
     [super encodeWithCoder:encoder];
     
 	[encoder encodeBool:shipRecords                 forKey:@"shipRecords"];
-	[encoder encodeInt:selectedChannel              forKey:@"selectedChannel"];
+	[encoder encodeInteger:selectedChannel              forKey:@"selectedChannel"];
     [encoder encodeFloat:riseRate                   forKey:@"riseRate"];
     
 	int i;
  	for(i=0;i<[self numberOfChannels];i++){
-		[encoder encodeInt:target[i] forKey:[@"target" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:target[i] forKey:[@"target" stringByAppendingFormat:@"%d",i]];
 		[encoder encodeFloat:maxCurrent[i] forKey:[@"maxCurrent" stringByAppendingFormat:@"%d",i]];
 	}
 }

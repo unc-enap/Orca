@@ -623,7 +623,7 @@ NSString* ORM321FourPhaseChangedNotification		= @"ORM321FourPhaseChangedNotifica
     self = [super initWithCoder:decoder];
     
     [[self undoManager] disableUndoRegistration];
-    [self setFourPhase:[decoder decodeIntForKey:@"FourPhase"]];
+    [self setFourPhase:[decoder decodeIntegerForKey:@"FourPhase"]];
     [[self undoManager] enableUndoRegistration];
     
     hwLock = [[NSLock alloc] init];
@@ -635,7 +635,7 @@ NSString* ORM321FourPhaseChangedNotification		= @"ORM321FourPhaseChangedNotifica
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:fourPhase forKey:@"FourPhase"];
+    [encoder encodeInteger:fourPhase forKey:@"FourPhase"];
 }
 
 @end

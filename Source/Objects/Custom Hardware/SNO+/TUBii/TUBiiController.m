@@ -274,7 +274,7 @@
 
 - (void) tabView:(NSTabView*)aTabView didSelectTabViewItem:(NSTabViewItem*)item
 {
-    int tabIndex = [aTabView indexOfTabViewItem:item];
+    NSInteger tabIndex = [aTabView indexOfTabViewItem:item];
     NSSize* newSize = nil;
     switch (tabIndex) {
         case TUBII_GUI_PULSER_TAB_NUM:
@@ -416,7 +416,7 @@
 }
 - (IBAction)LoadDelay:(id)sender {
     //Sends the selected delay value to TUBii
-    int delay =0;
+    NSInteger delay =0;
     if([sender tag] == 1){
         delay = [SmellieDelay_TextField integerValue];
         @try{
@@ -484,7 +484,7 @@
     NSUInteger enableMask = [ComboEnableMask integerValue];
     NSUInteger triggerMask = [ComboTriggerMask integerValue];
     @try{
-        [model setComboTrigger_EnableMask:enableMask TriggerMask:triggerMask];
+        [model setComboTrigger_EnableMask:(uint32_t)enableMask TriggerMask:(uint32_t)triggerMask];
     } @catch(NSException *exception) {
         [self log_error:exception];
         return;
@@ -494,7 +494,7 @@
     float factor = [PrescaleFactor floatValue];
     NSUInteger mask = [PrescaleTriggerMask integerValue];
     @try{
-        [model setPrescaleTrigger_Mask:mask ByFactor:factor];
+        [model setPrescaleTrigger_Mask:(uint32_t)mask ByFactor:factor];
     } @catch(NSException *exception) {
         [self log_error:exception];
         return;

@@ -202,7 +202,7 @@
     if([allKeys count]){
         for(id aKey in allKeys){
             int i  =[[queueMap objectForKey:aKey]intValue];
-            unsigned int theCount = [[[model queueArray]objectAtIndex:i] count];
+            unsigned int theCount = (unsigned int)[[[model queueArray]objectAtIndex:i] count];
             if(i<32){
                 [[channelGroup0Matrix cellAtRow:i column:0] setStringValue:aKey];
                 [[queueLowChannelMatrix cellAtRow:i column:0] setIntValue:theCount];
@@ -270,7 +270,7 @@
 
 - (IBAction) addAddress:(id)sender
 {
-	int index = [[model emailList] count];
+	int index = (int)[[model emailList] count];
 	[model addAddress:@"<eMail>" atIndex:index];
 	NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:index];
 	[emailListTable selectRowIndexes:indexSet byExtendingSelection:NO];

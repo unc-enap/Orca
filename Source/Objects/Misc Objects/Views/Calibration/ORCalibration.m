@@ -464,7 +464,7 @@
 	[encoder encodeObject:label				forKey: @"label"];
 	[encoder encodeBool:ignoreCalibration	forKey: @"ignoreCalibration"];
 	[encoder encodeObject:calibrationName	forKey: @"calibrationName"];
-	[encoder encodeInt:type					forKey: @"type"];
+	[encoder encodeInteger:type					forKey: @"type"];
 }
 
 

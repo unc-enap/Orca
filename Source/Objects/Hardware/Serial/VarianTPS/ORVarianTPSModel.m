@@ -282,8 +282,8 @@ NSString* ORVarianTPSModelControllerTempChanged	= @"ORVarianTPSModelControllerTe
 {
     [super encodeWithCoder:encoder];
     [encoder encodeBool:remote forKey:@"remote"];
-    [encoder encodeInt:pressureScale	forKey: @"pressureScale"];
-    [encoder encodeInt:pollTime			forKey: @"pollTime"];
+    [encoder encodeInteger:pressureScale	forKey: @"pressureScale"];
+    [encoder encodeInteger:pollTime			forKey: @"pollTime"];
 }
 
 #pragma mark •••HW Methods
@@ -469,7 +469,7 @@ NSString* ORVarianTPSModelControllerTempChanged	= @"ORVarianTPSModelControllerTe
 		do {
 			char* p = (char*)[inComingData bytes];
 			int i;
-			int n = [inComingData length];
+			int n = (int)[inComingData length];
 			BOOL foundEnd = NO;
 			for(i=0;i<n;i++){
 				if(p[i] == kEtx && n>=i+2){

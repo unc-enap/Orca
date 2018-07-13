@@ -365,9 +365,9 @@ NSString* ORArduinoUNOModelControlValueChanged		= @"ORArduinoUNOModelControlValu
 
 	}
 	for(i=0;i<kNumArduinoUNOPins;i++) {
-		[self setPin:i type:[decoder decodeIntForKey:[NSString stringWithFormat:@"PinType%d",i]]];
-		[self setPin:i stateOut:[decoder decodeIntForKey:[NSString stringWithFormat:@"PinStateOut%d",i]]];
-		[self setPin:i pwm:[decoder decodeIntForKey:[NSString stringWithFormat:@"PinPwm%d",i]]];
+		[self setPin:i type:[decoder decodeIntegerForKey:[NSString stringWithFormat:@"PinType%d",i]]];
+		[self setPin:i stateOut:[decoder decodeIntegerForKey:[NSString stringWithFormat:@"PinStateOut%d",i]]];
+		[self setPin:i pwm:[decoder decodeIntegerForKey:[NSString stringWithFormat:@"PinPwm%d",i]]];
 	}
 	
 	pollTime = [decoder decodeIntForKey:	@"pollTime"];
@@ -392,11 +392,11 @@ NSString* ORArduinoUNOModelControlValueChanged		= @"ORArduinoUNOModelControlValu
         [encoder encodeFloat:maxValue[i] forKey:[NSString stringWithFormat:@"maxValue%d",i]];
 	}
 	for(i=0;i<kNumArduinoUNOPins;i++) {
-		[encoder encodeInt:pinStateOut[i] forKey:[NSString stringWithFormat:@"pinStateOut%d",i]];
-		[encoder encodeInt:pinType[i] forKey:[NSString stringWithFormat:@"PinType%d",i]];
-		[encoder encodeInt:pwm[i] forKey:[NSString stringWithFormat:@"PinPwm%d",i]];
+		[encoder encodeInteger:pinStateOut[i] forKey:[NSString stringWithFormat:@"pinStateOut%d",i]];
+		[encoder encodeInteger:pinType[i] forKey:[NSString stringWithFormat:@"PinType%d",i]];
+		[encoder encodeInteger:pwm[i] forKey:[NSString stringWithFormat:@"PinPwm%d",i]];
 	}
-	[encoder encodeInt:pollTime			forKey: @"pollTime"];
+	[encoder encodeInteger:pollTime			forKey: @"pollTime"];
 }
 
 - (NSString*) commonScriptMethods { return methodsInCommonSection(self); }
@@ -406,7 +406,7 @@ NSString* ORArduinoUNOModelControlValueChanged		= @"ORArduinoUNOModelControlValu
 
 - (int) numberCommandsInQueue
 {
-	return [cmdQueue count];
+	return (int)[cmdQueue count];
 }
 
 - (NSString*) pinName:(int)i

@@ -312,7 +312,7 @@ HP3458aNamesStruct aciNames[aciCount] = {
     [[self undoManager] disableUndoRegistration];
     [self setMaxInput:[aDecoder decodeIntForKey:@"ORHP3458aModelFullScaleIndex"]];
     [self setFunctionDef:[aDecoder decodeIntForKey:@"ORHP3458aModelFunctionDef"]];
-	//[aDecoder decodeIntForKey:   [@"OutputOn" stringByAppendingFormat:@"%d",i]];
+	//[aDecoder decodeIntegerForKey:   [@"OutputOn" stringByAppendingFormat:@"%d",i]];
 
     [[self undoManager] enableUndoRegistration];
 	    
@@ -322,9 +322,9 @@ HP3458aNamesStruct aciNames[aciCount] = {
 - (void)encodeWithCoder:(NSCoder*)anEncoder
 {
     [super encodeWithCoder:anEncoder];
-	[anEncoder encodeInt:maxInput forKey:@"ORHP3458aModelFullScaleIndex"];
-	[anEncoder encodeInt:functionDef forKey:@"ORHP3458aModelFunctionDef"];
-	//[anEncoder encodeInt:	outputOn[i]			forKey: [@"OutputOn" stringByAppendingFormat:@"%d",i]];
+	[anEncoder encodeInteger:maxInput forKey:@"ORHP3458aModelFullScaleIndex"];
+	[anEncoder encodeInteger:functionDef forKey:@"ORHP3458aModelFunctionDef"];
+	//[anEncoder encodeInteger:	outputOn[i]			forKey: [@"OutputOn" stringByAppendingFormat:@"%d",i]];
 }
 
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary

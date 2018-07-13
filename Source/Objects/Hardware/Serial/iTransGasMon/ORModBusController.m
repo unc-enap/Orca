@@ -233,8 +233,8 @@
 - (void) tileSensors
 {
 	//space Needed
-	int numViewsNeeded = [sensorControllers count];
-	int numViews = [[sensorsView subviews] count];
+	int numViewsNeeded = (int)[sensorControllers count];
+	int numViews       = (int)[[sensorsView subviews] count];
 	if(numViewsNeeded < numViews){
 		int i;
 		int n = numViews-numViewsNeeded;
@@ -263,7 +263,7 @@
 	
 	//loop over all and assign the model
 	int i;
-	int n = [sensorControllers count];
+	int n = (int)[sensorControllers count];
 	for(i=0;i<n;i++){
 		id aController = [sensorControllers objectAtIndex:i];
 		[aController setModel:[model sensor:i]];
@@ -289,7 +289,7 @@
 
 - (IBAction) pollTimeAction:(id)sender
 {
-	[model setPollTime:[[sender selectedItem] tag]];
+	[model setPollTime:(int)[[sender selectedItem] tag]];
 }
 
 - (IBAction) addSensorAction:(id)sender

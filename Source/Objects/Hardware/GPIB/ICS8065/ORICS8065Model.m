@@ -584,7 +584,7 @@ NSString*	ORICS8065ModelIpAddressChanged		= @"ORICS8065ModelIpAddressChanged";
     [super encodeWithCoder: encoder];
 	[encoder encodeObject:command		forKey: @"command"];
 	[encoder encodeObject:ipAddress		forKey: @"ipAddress"];
-	[encoder encodeInt:primaryAddress	forKey: @"primaryAddress"];
+	[encoder encodeInteger:primaryAddress	forKey: @"primaryAddress"];
 }
 
 @end

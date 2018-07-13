@@ -26,7 +26,7 @@
 @interface ORMPodCModel :  ORMPodCard <ORMPodProtocol>
 {
 	NSMutableArray*	connectionHistory;
-	unsigned		ipNumberIndex;
+	NSInteger		ipNumberIndex;
 	NSString*		IPNumber;
 	ORPingTask*		pingTask;
 	BOOL			oldPower;

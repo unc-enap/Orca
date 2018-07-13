@@ -116,7 +116,7 @@
 
 - (void) queueCountChanged:(NSNotification*)aNote
 {
-	[queueCountField setIntValue: [ORSNMPQueue operationCount]];
+	[queueCountField setIntegerValue: [ORSNMPQueue operationCount]];
 	[queueValueBar setNeedsDisplay:YES];
 }	
 

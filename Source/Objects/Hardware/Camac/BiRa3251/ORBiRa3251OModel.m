@@ -106,7 +106,7 @@ NSString* ORBiRa3251OModelOutputRegisterChanged = @"ORBiRa3251OModelOutputRegist
     self = [super initWithCoder:decoder];
 	
     [[self undoManager] disableUndoRegistration];
-    [self setOutputRegister:[decoder decodeIntForKey:  @"outputRegister"]];
+    [self setOutputRegister:[decoder decodeIntegerForKey:  @"outputRegister"]];
     [[self undoManager] enableUndoRegistration];
 	
     return self;
@@ -115,7 +115,7 @@ NSString* ORBiRa3251OModelOutputRegisterChanged = @"ORBiRa3251OModelOutputRegist
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];	
-    [encoder encodeInt:outputRegister forKey:@"outputRegister"];
+    [encoder encodeInteger:outputRegister forKey:@"outputRegister"];
 }
 
 #pragma mark ¥¥¥Bit Processing Protocol

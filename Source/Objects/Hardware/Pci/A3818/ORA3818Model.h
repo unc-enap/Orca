@@ -115,9 +115,9 @@ enum {
         vm_size_t remMemRegisterLength;    
 		unsigned char* fVStatusReg;
         NSString*       deviceName;
-        unsigned int 	rwAddress;
-        unsigned int 	writeValue;
-        unsigned int	readWriteType;
+        unsigned long 	rwAddress;
+        unsigned long 	writeValue;
+        unsigned long	readWriteType;
         unsigned int 	rwAddressModifier;
         unsigned int 	readWriteIOSpace;
         

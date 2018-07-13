@@ -264,7 +264,7 @@ NSString* ORL4532ModelTriggerNamesChanged	  = @"ORL4532ModelTriggerNamesChanged"
 	
     [[self undoManager] disableUndoRegistration];
     [self setTriggerNames:[decoder decodeObjectForKey:@"ORL4532ModelTriggerNames"]];
-    [self setDelayEnableMask:[decoder decodeInt32ForKey:@"ORL4532ModelDelayEnableMask"]];
+    [self setDelayEnableMask:[decoder decodeIntegerForKey:@"ORL4532ModelDelayEnableMask"]];
     [self setDelays:[decoder decodeObjectForKey:@"ORL4532ModelDelays"]];
     [self setNumberTriggers:[decoder decodeIntForKey:@"ORL4532ModelNumberTriggers"]];
     [self setIncludeTiming:[decoder decodeBoolForKey:@"ORL4532ModelIncludeTiming"]];
@@ -296,9 +296,9 @@ NSString* ORL4532ModelTriggerNamesChanged	  = @"ORL4532ModelTriggerNamesChanged"
 {
     [super encodeWithCoder:encoder];	
     [encoder encodeObject:triggerNames forKey:@"ORL4532ModelTriggerNames"];
-    [encoder encodeInt32:(int32_t)delayEnableMask forKey:@"ORL4532ModelDelayEnableMask"];
+    [encoder encodeInteger:delayEnableMask forKey:@"ORL4532ModelDelayEnableMask"];
     [encoder encodeObject:delays forKey:@"ORL4532ModelDelays"];
-    [encoder encodeInt:numberTriggers forKey:@"ORL4532ModelNumberTriggers"];
+    [encoder encodeInteger:numberTriggers forKey:@"ORL4532ModelNumberTriggers"];
     [encoder encodeBool:includeTiming forKey:@"ORL4532ModelIncludeTiming"];
 	int i;
 	for(i=0;i<32;i++){

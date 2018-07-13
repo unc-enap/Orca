@@ -133,10 +133,10 @@ enum {
     io_object_t 	camacDevice;
     io_connect_t 	dataPort;
     io_service_t 	dataService;
-    vm_address_t 	mapLCRegisterAddress;
-    vm_size_t 		mapLCRegisterLength;
-    vm_address_t 	mapPCICamacMemoryAddress;
-    vm_size_t 		mapPCICamacMemoryLength;
+    mach_vm_address_t 	mapLCRegisterAddress;
+    mach_vm_size_t 		mapLCRegisterLength;
+    mach_vm_address_t 	mapPCICamacMemoryAddress;
+    mach_vm_size_t 		mapPCICamacMemoryLength;
 	BOOL powerOK;
 }
 

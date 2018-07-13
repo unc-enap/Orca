@@ -442,7 +442,7 @@ NSDate* MCPYear0000;
 - (unsigned int) fetchFlagsForKey:(NSString *) key
 {
    unsigned int     theRet;
-   unsigned int		index;
+   NSUInteger		index;
    MYSQL_FIELD*		theField;
 
    if (mResult == NULL) {
@@ -498,7 +498,7 @@ NSDate* MCPYear0000;
 - (BOOL) isBlobForKey:(NSString *) key
 {
     BOOL			theRet;
-    unsigned int	index;
+    NSInteger	index;
     MYSQL_FIELD*	theField;
 
     if (mResult == NULL) {

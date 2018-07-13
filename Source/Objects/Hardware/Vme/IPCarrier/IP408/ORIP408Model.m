@@ -278,9 +278,9 @@ static NSString *ORIP408ReadMask 		= @"IP408 ReadMask";
     
     [[self undoManager] disableUndoRegistration];
     
-    [self setWriteMask:[decoder decodeIntForKey:ORIP408WriteMask]];
-    [self setReadMask:[decoder decodeIntForKey:ORIP408ReadMask]];
-    [self setWriteValue:[decoder decodeIntForKey:ORIP408WriteValue]];
+    [self setWriteMask:[decoder decodeIntegerForKey:ORIP408WriteMask]];
+    [self setReadMask:[decoder decodeIntegerForKey:ORIP408ReadMask]];
+    [self setWriteValue:[decoder decodeIntegerForKey:ORIP408WriteValue]];
    
     [[self undoManager] enableUndoRegistration];
     
@@ -294,9 +294,9 @@ static NSString *ORIP408ReadMask 		= @"IP408 ReadMask";
 {
     [super encodeWithCoder:encoder];
     
-    [encoder encodeInt:(int32_t)[self writeMask] forKey:ORIP408WriteMask];
-    [encoder encodeInt:(int32_t)[self readMask] forKey:ORIP408ReadMask];
-    [encoder encodeInt:(int32_t)[self writeValue] forKey:ORIP408WriteValue];
+    [encoder encodeInteger:(int32_t)[self writeMask] forKey:ORIP408WriteMask];
+    [encoder encodeInteger:(int32_t)[self readMask] forKey:ORIP408ReadMask];
+    [encoder encodeInteger:(int32_t)[self writeValue] forKey:ORIP408WriteValue];
 }
 
 #pragma mark ¥¥¥Bit Processing Protocol

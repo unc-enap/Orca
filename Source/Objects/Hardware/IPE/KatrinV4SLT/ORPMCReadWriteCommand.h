@@ -35,18 +35,18 @@ for the use of this software.
 + (id) delayCmd:(unsigned long) milliSeconds;
 	
 + (id) writeLongBlock:(unsigned long *) writeAddress
-			atAddress:(unsigned int) pmcAddress
-		   numToWrite:(unsigned int) numberLongs;
+			atAddress:(unsigned long) pmcAddress
+		   numToWrite:(unsigned long) numberLongs;
 
-+ (id) readLongBlockAtAddress:(unsigned int) pmcAddress
-					numToRead:(unsigned int) numberLongs;
++ (id) readLongBlockAtAddress:(unsigned long) pmcAddress
+					numToRead:(unsigned long) numberLongs;
 
 - (id) initWithMilliSecondDelay:(unsigned long) aMilliSecondDelay;
 	
 - (id) initWithOp: (int) aOpType
 	   dataAdress: (unsigned long*) dataAddress
-	   pmcAddress: (unsigned int) pmcAddress
-	  numberItems: (unsigned int) aNumberItems;
+	   pmcAddress: (unsigned long) pmcAddress
+	  numberItems: (unsigned long) aNumberItems;
 
 - (unsigned long) milliSecondDelay;
 - (int)	opType;

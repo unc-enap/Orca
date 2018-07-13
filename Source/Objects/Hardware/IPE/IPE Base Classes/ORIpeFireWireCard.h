@@ -56,7 +56,7 @@
 
 
 - (unsigned long) read:(unsigned long) address;
-- (void) read:(unsigned long long) address data:(unsigned long*)theData size:(unsigned long)len;
+- (void) read:(unsigned long long) address data:(unsigned long*)theData size:(UInt32)len;
 
 - (void) write:(unsigned long) address 
 			   value:(unsigned long)aValue;

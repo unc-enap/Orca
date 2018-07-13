@@ -706,7 +706,7 @@ static NSString	*ORBoardIndex			= @"GPIB-ENET Board Index";
     
     [[ self undoManager ] disableUndoRegistration ];
     [ self commonInit ];
-    [ self setBoardIndex: [ decoder decodeIntForKey: ORBoardIndex ]];
+    [ self setBoardIndex: [ decoder decodeIntegerForKey: ORBoardIndex ]];
     
     [[ self undoManager ] enableUndoRegistration ];
     
@@ -716,7 +716,7 @@ static NSString	*ORBoardIndex			= @"GPIB-ENET Board Index";
 - (void) encodeWithCoder: (NSCoder*) encoder
 {
     [ super encodeWithCoder: encoder ];
-    [ encoder encodeInt: mBoardIndex forKey: ORBoardIndex ];
+    [ encoder encodeInteger: mBoardIndex forKey: ORBoardIndex ];
 }
 
 

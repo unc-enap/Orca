@@ -391,7 +391,7 @@ extern NSString* ORMotoGPS;
 
 - (void)encodeWithCoder:(NSCoder*)encoder  // todo: function needed?
 {
-    [encoder encodeInt: cableDelayNs  forKey:@"cableDelayNs"];
+    [encoder encodeInteger: cableDelayNs  forKey:@"cableDelayNs"];
 }
 @end
 

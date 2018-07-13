@@ -92,7 +92,7 @@
 {
     errorCount = aValue;
     //also save to persistant storage
-    [persistantStorageObj step:self setObject:[NSNumber numberWithInt:aValue] forKey:@"errorCount"];
+    [persistantStorageObj step:self setObject:[NSNumber numberWithInteger:aValue] forKey:@"errorCount"];
 }
 
 - (void) runStep

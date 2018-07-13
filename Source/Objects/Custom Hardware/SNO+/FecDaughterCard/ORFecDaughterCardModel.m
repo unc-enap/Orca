@@ -562,31 +562,31 @@ NSString* ORDBLock = @"ORDBLock";
     [self setComments:		[decoder decodeObjectForKey:@"comments"]];
     [self setShowVolts:		[decoder decodeBoolForKey:@"showVolts"]];
 	[self setSetAllCmos:	[decoder decodeBoolForKey:@"setAllCmos"]];
-	[self setCmosRegShown:	[decoder decodeIntForKey:@"cmosRegShown"]];
+	[self setCmosRegShown:	[decoder decodeIntegerForKey:@"cmosRegShown"]];
 	int i;
 	for(i=0;i<2;i++){
-		[self setRp1:i withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"rp1_%d",i]]];
-		[self setRp2:i withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"rp2_%d",i]]];
-		[self setVli:i withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"vli_%d",i]]];
-		[self setVsi:i withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"vsi_%d",i]]];
+		[self setRp1:i withValue:[decoder decodeIntegerForKey:[NSString stringWithFormat:@"rp1_%d",i]]];
+		[self setRp2:i withValue:[decoder decodeIntegerForKey:[NSString stringWithFormat:@"rp2_%d",i]]];
+		[self setVli:i withValue:[decoder decodeIntegerForKey:[NSString stringWithFormat:@"vli_%d",i]]];
+		[self setVsi:i withValue:[decoder decodeIntegerForKey:[NSString stringWithFormat:@"vsi_%d",i]]];
 	}
-	[self setVt_safety: [decoder decodeIntForKey:@"vt_safety"]];    
+	[self setVt_safety: [decoder decodeIntegerForKey:@"vt_safety"]];    
  	for(i=0;i<8;i++){
         //the order is important see silentUpdateVt
-		[self setVt_ecal:i withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"vt_ecal_%d",i]]];
-		[self setVt_zero:i withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"vt_zero_%d",i]]];
-		[self setVt_corr:i withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"vt_corr_%d",i]]];
+		[self setVt_ecal:i withValue:[decoder decodeIntegerForKey:[NSString stringWithFormat:@"vt_ecal_%d",i]]];
+		[self setVt_zero:i withValue:[decoder decodeIntegerForKey:[NSString stringWithFormat:@"vt_zero_%d",i]]];
+		[self setVt_corr:i withValue:[decoder decodeIntegerForKey:[NSString stringWithFormat:@"vt_corr_%d",i]]];
         [self silentUpdateVt:i];
         
-		[self setNs100width:i withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"select100nsTrigger_%d",i]]];
-		[self setNs100width:i withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"ns100width_%d",i]]];
-		[self setNs20width:i withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"ns20width_%d",i]]];
-		[self setNs20delay:i withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"ns20delay_%d",i]]];
-		[self setTac0trim:i withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"tac0trim_%d",i]]];
-		[self setTac1trim:i withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"tac1trim_%d",i]]];
+		[self setNs100width:i withValue:[decoder decodeIntegerForKey:[NSString stringWithFormat:@"select100nsTrigger_%d",i]]];
+		[self setNs100width:i withValue:[decoder decodeIntegerForKey:[NSString stringWithFormat:@"ns100width_%d",i]]];
+		[self setNs20width:i withValue:[decoder decodeIntegerForKey:[NSString stringWithFormat:@"ns20width_%d",i]]];
+		[self setNs20delay:i withValue:[decoder decodeIntegerForKey:[NSString stringWithFormat:@"ns20delay_%d",i]]];
+		[self setTac0trim:i withValue:[decoder decodeIntegerForKey:[NSString stringWithFormat:@"tac0trim_%d",i]]];
+		[self setTac1trim:i withValue:[decoder decodeIntegerForKey:[NSString stringWithFormat:@"tac1trim_%d",i]]];
 	}
  	for(i=0;i<16;i++){
-		[self setVb:i withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"vb_%d",i]]];
+		[self setVb:i withValue:[decoder decodeIntegerForKey:[NSString stringWithFormat:@"vb_%d",i]]];
 	}
 	[[self undoManager] enableUndoRegistration];
     return self;
@@ -598,27 +598,27 @@ NSString* ORDBLock = @"ORDBLock";
 	[encoder encodeObject:comments	forKey:@"comments"];
 	[encoder encodeBool:showVolts	forKey:@"showVolts"];
 	[encoder encodeBool:setAllCmos	forKey:@"setAllCmos"];
-	[encoder encodeInt:cmosRegShown forKey:@"cmosRegShown"];
-    [encoder encodeInt:[self vt_safety] forKey:@"vt_safety"];
+	[encoder encodeInteger:cmosRegShown forKey:@"cmosRegShown"];
+    [encoder encodeInteger:[self vt_safety] forKey:@"vt_safety"];
 	int i;
 	for(i=0;i<2;i++){
-		[encoder encodeInt:rp1[i] forKey:[NSString stringWithFormat:@"rp1_%d",i]];
-		[encoder encodeInt:rp2[i] forKey:[NSString stringWithFormat:@"rp2_%d",i]];
-		[encoder encodeInt:vli[i] forKey:[NSString stringWithFormat:@"vli_%d",i]];
-		[encoder encodeInt:vsi[i] forKey:[NSString stringWithFormat:@"vsi_%d",i]];
+		[encoder encodeInteger:rp1[i] forKey:[NSString stringWithFormat:@"rp1_%d",i]];
+		[encoder encodeInteger:rp2[i] forKey:[NSString stringWithFormat:@"rp2_%d",i]];
+		[encoder encodeInteger:vli[i] forKey:[NSString stringWithFormat:@"vli_%d",i]];
+		[encoder encodeInteger:vsi[i] forKey:[NSString stringWithFormat:@"vsi_%d",i]];
 	}
  	for(i=0;i<8;i++){
-		[encoder encodeInt:[self vt_ecal:i] forKey:[NSString stringWithFormat:@"vt_ecal_%d",i]];
-		[encoder encodeInt:[self vt_zero:i] forKey:[NSString stringWithFormat:@"vt_zero_%d",i]];
-		[encoder encodeInt:[self vt_corr:i] forKey:[NSString stringWithFormat:@"vt_corr_%d",i]];
-		[encoder encodeInt:ns100width[i] forKey:[NSString stringWithFormat:@"ns100width_%d",i]];
-		[encoder encodeInt:ns20width[i] forKey:[NSString stringWithFormat:@"ns20width_%d",i]];
-		[encoder encodeInt:ns20delay[i] forKey:[NSString stringWithFormat:@"ns20delay_%d",i]];
-		[encoder encodeInt:tac0trim[i] forKey:[NSString stringWithFormat:@"tac0trim_%d",i]];
-		[encoder encodeInt:tac1trim[i] forKey:[NSString stringWithFormat:@"tac1trim_%d",i]];
+		[encoder encodeInteger:[self vt_ecal:i] forKey:[NSString stringWithFormat:@"vt_ecal_%d",i]];
+		[encoder encodeInteger:[self vt_zero:i] forKey:[NSString stringWithFormat:@"vt_zero_%d",i]];
+		[encoder encodeInteger:[self vt_corr:i] forKey:[NSString stringWithFormat:@"vt_corr_%d",i]];
+		[encoder encodeInteger:ns100width[i] forKey:[NSString stringWithFormat:@"ns100width_%d",i]];
+		[encoder encodeInteger:ns20width[i] forKey:[NSString stringWithFormat:@"ns20width_%d",i]];
+		[encoder encodeInteger:ns20delay[i] forKey:[NSString stringWithFormat:@"ns20delay_%d",i]];
+		[encoder encodeInteger:tac0trim[i] forKey:[NSString stringWithFormat:@"tac0trim_%d",i]];
+		[encoder encodeInteger:tac1trim[i] forKey:[NSString stringWithFormat:@"tac1trim_%d",i]];
 	}
  	for(i=0;i<16;i++){
-		[encoder encodeInt:vb[i] forKey:[NSString stringWithFormat:@"vb_%d",i]];
+		[encoder encodeInteger:vb[i] forKey:[NSString stringWithFormat:@"vb_%d",i]];
 	}
 }
 

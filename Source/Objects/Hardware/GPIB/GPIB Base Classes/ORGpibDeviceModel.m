@@ -565,8 +565,8 @@ static NSString *ORGpibSecondaryAddress			= @"ORGpib Secondary Address";
     
     [[ self undoManager ] disableUndoRegistration ];
     
-    [ self setPrimaryAddress: [ aDecoder decodeIntForKey: ORGpibPrimaryAddress ]]; 
-    [ self setSecondaryAddress: [ aDecoder decodeIntForKey: ORGpibSecondaryAddress ]];
+    [ self setPrimaryAddress: [ aDecoder decodeIntegerForKey: ORGpibPrimaryAddress ]]; 
+    [ self setSecondaryAddress: [ aDecoder decodeIntegerForKey: ORGpibSecondaryAddress ]];
     
     [[ self undoManager ] enableUndoRegistration];
     
@@ -586,8 +586,8 @@ static NSString *ORGpibSecondaryAddress			= @"ORGpib Secondary Address";
 - (void) encodeWithCoder: (NSCoder*) anEncoder
 {
     [ super encodeWithCoder: anEncoder ];
-    [ anEncoder encodeInt: mPrimaryAddress forKey: ORGpibPrimaryAddress ];
-    [ anEncoder encodeInt: mSecondaryAddress forKey: ORGpibSecondaryAddress ];
+    [ anEncoder encodeInteger: mPrimaryAddress forKey: ORGpibPrimaryAddress ];
+    [ anEncoder encodeInteger: mSecondaryAddress forKey: ORGpibSecondaryAddress ];
 }
 
 - (void) addObjectInfoToArray:(NSMutableArray*)anArray

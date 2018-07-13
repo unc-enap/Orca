@@ -233,8 +233,8 @@ static NSString *ORWaveformUnitSize 	= @"Waveform Data Unit Size";
 {
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
-    [self setDataOffset:[decoder decodeInt32ForKey:ORWaveformDataOffset]];
-    [self setUnitSize:[decoder decodeInt32ForKey:ORWaveformUnitSize]];
+    [self setDataOffset:[decoder decodeIntegerForKey:ORWaveformDataOffset]];
+    [self setUnitSize:[decoder decodeIntForKey:ORWaveformUnitSize]];
     [self setUseUnsignedValues:[decoder decodeBoolForKey:@"UseUnsignedValues"]];
 	rois = [[decoder decodeObjectForKey:@"rois"] retain];
     [[self undoManager] enableUndoRegistration];
@@ -245,8 +245,8 @@ static NSString *ORWaveformUnitSize 	= @"Waveform Data Unit Size";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt32:(int32_t)dataOffset forKey:ORWaveformDataOffset];
-    [encoder encodeInt:unitSize forKey:ORWaveformUnitSize];
+    [encoder encodeInteger:dataOffset forKey:ORWaveformDataOffset];
+    [encoder encodeInteger:unitSize forKey:ORWaveformUnitSize];
     [encoder encodeBool:useUnsignedValues forKey:@"UseUnsignedValues"];
     [encoder encodeObject:rois forKey:@"rois"];
 

@@ -449,9 +449,9 @@ NSString* ORiTransGasDecimalPlacesChanged			= @"ORiTransGasDecimalPlacesChanged"
 
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
-    [encoder encodeInt:channel		 forKey:@"channel"];
+    [encoder encodeInteger:channel		 forKey:@"channel"];
     [encoder encodeObject:sensorName forKey:@"sensorName"];
-    [encoder encodeInt:baseAddress	 forKey:@"baseAddress"];
+    [encoder encodeInteger:baseAddress	 forKey:@"baseAddress"];
 }
 
 - (void) shipDataRecords

@@ -267,7 +267,7 @@
 
 - (void) channelAction:(id)sender
 {
-	[model setChannel:[sender indexOfSelectedItem]];	
+	[model setChannel:(int)[sender indexOfSelectedItem]];	
 }
 
 - (void) nameAction:(id)sender

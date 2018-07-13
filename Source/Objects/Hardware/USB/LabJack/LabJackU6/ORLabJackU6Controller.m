@@ -280,7 +280,7 @@
         [openCloseButton setTitle:@"Open"];
     }
     if([model deviceOpen]){
-        [[self window] setTitle:[NSString stringWithFormat:@"LabJack U6 : 0x%lx",[model deviceSerialNumber]]];
+        [[self window] setTitle:[NSString stringWithFormat:@"LabJack U6 : 0x%x",[model deviceSerialNumber]]];
         [openCloseStatusField setStringValue:@"Open"];
     }
     
@@ -301,7 +301,7 @@
     [[self window] setContentView:totalView];
 	
     NSString* key = [NSString stringWithFormat: @"orca.ORLabJac%ld.selectedtab",[model uniqueIdNumber]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
     
 }
@@ -519,7 +519,7 @@
 - (void) doDirectionChanged:(NSNotification*)aNotification
 {
     //i/o on the connector
-	int value = [model doDirection];
+	unsigned long value = [model doDirection];
 	short i;
 	for(i=0;i<kNumU6IOChannels;i++){
 		[[doDirectionMatrix cellWithTag:i] setState:(value & (1L<<i))>0];
@@ -530,7 +530,7 @@
 
 - (void) doValueOutChanged:(NSNotification*)aNotification
 {
-	int value = [model doValueOut];
+	unsigned long value = [model doValueOut];
 	short i;
 	for(i=0;i<kNumU6IOChannels;i++){
 		[[doValueOutMatrix cellWithTag:i] setState:(value & (1L<<i))>0];
@@ -685,7 +685,7 @@
 
 - (IBAction) pollTimeAction:(id)sender
 {
-	[model setPollTime:[[sender selectedItem] tag]];	
+	[model setPollTime:(int)[[sender selectedItem] tag]];
 }
 
 - (void) digitalOutputEnabledAction:(id)sender
@@ -705,17 +705,17 @@
 
 - (IBAction) channelNameAction:(id)sender
 {
-	[model setChannel:[[sender selectedCell] tag] name:[[sender selectedCell] stringValue]];
+	[model setChannel:(int)[[sender selectedCell] tag] name:[[sender selectedCell] stringValue]];
 }
 
 - (IBAction) channelUnitAction:(id)sender
 {
-	[model setChannel:[[sender selectedCell] tag] unit:[[sender selectedCell] stringValue]];
+	[model setChannel:(int)[[sender selectedCell] tag] unit:[[sender selectedCell] stringValue]];
 }
 
 - (IBAction) doNameAction:(id)sender
 {
-	[model setDo:[[sender selectedCell] tag] name:[[sender selectedCell] stringValue]];
+	[model setDo:(int)[[sender selectedCell] tag] name:[[sender selectedCell] stringValue]];
 }
 
 - (IBAction) updateAllAction:(id)sender
@@ -725,18 +725,18 @@
 
 - (IBAction) adcDiffBitAction:(id)sender
 {
-	[model setAdcDiffBit:[[sender selectedCell] tag] withValue:[sender intValue]];
+	[model setAdcDiffBit:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 - (IBAction) doDirectionBitAction:(id)sender
 {
-	int theIndex = [[sender selectedCell] tag];
+	int theIndex = (int)[[sender selectedCell] tag];
 	[model setDoDirectionBit:theIndex withValue:[sender intValue]];
 }
 
 - (IBAction) doValueOutBitAction:(id)sender
 {
-	int theIndex = [[sender selectedCell] tag];
+	int theIndex = (int)[[sender selectedCell] tag];
 	[model setDoValueOutBit:theIndex withValue:[sender intValue]];
 }
 
@@ -751,37 +751,37 @@
 
 - (IBAction) lowLimitAction:(id)sender
 {
-	[model setLowLimit:[[sender selectedCell] tag] withValue:[[sender selectedCell] floatValue]];	
+	[model setLowLimit:(int)[[sender selectedCell] tag] withValue:[[sender selectedCell] floatValue]];
 }
 
 - (IBAction) hiLimitAction:(id)sender
 {
-	[model setHiLimit:[[sender selectedCell] tag] withValue:[[sender selectedCell] floatValue]];	
+	[model setHiLimit:(int)[[sender selectedCell] tag] withValue:[[sender selectedCell] floatValue]];
 }
 
 - (IBAction) minValueAction:(id)sender
 {
-	[model setMinValue:[[sender selectedCell] tag] withValue:[[sender selectedCell] floatValue]];	
+	[model setMinValue:(int)[[sender selectedCell] tag] withValue:[[sender selectedCell] floatValue]];
 }
 
 - (IBAction) maxValueAction:(id)sender
 {
-	[model setMaxValue:[[sender selectedCell] tag] withValue:[[sender selectedCell] floatValue]];
+	[model setMaxValue:(int)[[sender selectedCell] tag] withValue:[[sender selectedCell] floatValue]];
 }
 
 - (IBAction) adcRangeAction:(id)sender
 {
-    [model setAdcRange:[sender selectedRow] withValue:[[sender selectedCell] indexOfSelectedItem]];
+    [model setAdcRange:(int)[sender selectedRow] withValue:[[sender selectedCell] indexOfSelectedItem]];
 }
 
 - (IBAction) slopeAction:(id)sender
 {
-	[model setSlope:[[sender selectedCell] tag] withValue:[[sender selectedCell] floatValue]];	
+	[model setSlope:(int)[[sender selectedCell] tag] withValue:[[sender selectedCell] floatValue]];
 }
 
 - (IBAction) interceptAction:(id)sender
 {
-	[model setIntercept:[[sender selectedCell] tag] withValue:[[sender selectedCell] floatValue]];	
+	[model setIntercept:(int)[[sender selectedCell] tag] withValue:[[sender selectedCell] floatValue]];	
 }
 
 @end

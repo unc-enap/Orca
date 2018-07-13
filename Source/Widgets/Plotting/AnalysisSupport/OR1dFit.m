@@ -77,7 +77,7 @@ NSString* OR1dFitFunctionChanged = @"OR1dFitFunctionChanged";
 - (int) fitType						{ return fitType; }
 - (int) fitOrder					{ return fitOrder; }
 - (void) setFitValid:(BOOL)aState	{ fitValid = aState; }
-- (int) fitParamCount				{ return [fitParamNames count]; }
+- (NSUInteger) fitParamCount		{ return [fitParamNames count]; }
 - (BOOL)	  fitExists				{ return (fit!=nil) && ([fit count] > 0); }
 - (NSString*) fitString				{ return fitString; }
 - (NSString*) fitFunction			{ return fitFunction; }
@@ -196,9 +196,9 @@ NSString* OR1dFitFunctionChanged = @"OR1dFitFunctionChanged";
 		
 		NSBezierPath* theDataPath = [NSBezierPath bezierPath];
 		[theDataPath setLineWidth:.5];
-		int numPoints = [fit count];
-		int minX		= MAX(0,MAX([self minChannel],[mXScale minValue]));
-		int maxX		= MIN(numPoints,MIN(roundToLong([mXScale maxValue]),[self maxChannel]));
+		long numPoints = (long)[fit count];
+		long minX		= MAX(0,MAX([self minChannel],[mXScale minValue]));
+		long maxX		= MIN(numPoints,MIN(roundToLong([mXScale maxValue]),[self maxChannel]));
 		float rawValue  = 0;
 		if(minX<[fit count]) rawValue	= [[fit objectAtIndex:minX] floatValue];
 		float y			= [mYScale getPixAbs:rawValue];
@@ -252,10 +252,10 @@ NSString* OR1dFitFunctionChanged = @"OR1dFitFunctionChanged";
 		if((maxChan - minChan) > 1024){
 			maxChan = minChan + 1024;
 		}
-		int ix;
+		long ix;
 		for (ix=minChan; ix<maxChan;++ix) {		
 			double xValue,yValue;
-			[dataSource plotter:aPlot index:ix x:&xValue y:&yValue];
+			[dataSource plotter:aPlot index:(int)ix x:&xValue y:&yValue];
 			[dataArray addObject:[NSNumber numberWithDouble:yValue]];
 		}
 		
@@ -277,8 +277,8 @@ NSString* OR1dFitFunctionChanged = @"OR1dFitFunctionChanged";
 			
 			NSMutableDictionary* requestInputs = [NSMutableDictionary dictionary];
 
-			[requestInputs setObject:[NSNumber numberWithInt:minChannel] forKey:@"FitLowerBound"];
-			[requestInputs setObject:[NSNumber numberWithInt:maxChannel] forKey:@"FitUpperBound"];	
+			[requestInputs setObject:[NSNumber numberWithInteger:minChannel] forKey:@"FitLowerBound"];
+			[requestInputs setObject:[NSNumber numberWithInteger:maxChannel] forKey:@"FitUpperBound"];
 			
 			NSString* 	theFitFunction = [[kORCARootFitShortNames[fitType] copy] autorelease];
 			NSMutableArray* fitParameters = [NSMutableArray array];
@@ -339,7 +339,7 @@ NSString* OR1dFitFunctionChanged = @"OR1dFitFunctionChanged";
 			NSLog(@"Fit done on %@\n",[[aPlotView window] title]);
 			NSLog(@"Channels %d to %d\n",theMinChannel,theMaxChannel);
 			NSLog(@"Fit Equation: %@\n",[aResponse nestedObjectForKey:@"Request Outputs",@"FitEquation",nil]);
-			int n = [fitParams count];
+			int n = (int)[fitParams count];
 			int i;
 			NSString* s = @""; 
 			s = [s stringByAppendingFormat:@"Fit Equation: %@\n",[aResponse nestedObjectForKey:@"Request Outputs",@"FitEquation",nil]];
@@ -388,8 +388,8 @@ NSString* OR1dFitFunctionChanged = @"OR1dFitFunctionChanged";
     
 	[self setFitValid:[decoder decodeBoolForKey:@"fitValid"]];
 		
-    [self setMinChannel:	[decoder decodeInt32ForKey:@"minChannel"]];
-    [self setMaxChannel:	[decoder decodeInt32ForKey:@"maxChannel"]];
+    [self setMinChannel:	[decoder decodeIntegerForKey:@"minChannel"]];
+    [self setMaxChannel:	[decoder decodeIntegerForKey:@"maxChannel"]];
 	[self setFitParams:		[decoder decodeObjectForKey:@"fitParams"]];
 	[self setFitParamNames:	[decoder decodeObjectForKey:@"fitParamNames"]];
 	[self setFitParamErrors:[decoder decodeObjectForKey:@"fitParamErrors"]];
@@ -407,8 +407,8 @@ NSString* OR1dFitFunctionChanged = @"OR1dFitFunctionChanged";
 
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
-    [encoder encodeInt32:minChannel forKey:@"minChannel"];
-    [encoder encodeInt32:maxChannel forKey:@"maxChannel"];
+    [encoder encodeInteger:minChannel forKey:@"minChannel"];
+    [encoder encodeInteger:maxChannel forKey:@"maxChannel"];
 	
 	[encoder encodeBool:fitValid forKey:@"fitValid"];
 	
@@ -418,7 +418,7 @@ NSString* OR1dFitFunctionChanged = @"OR1dFitFunctionChanged";
 	[encoder encodeObject:chiSquare forKey:@"chiSquare"];
 	
     [encoder encodeObject:fit forKey:@"fit"];
-    [encoder encodeInt:fitOrder forKey:@"fitOrder"];
+    [encoder encodeInteger:fitOrder forKey:@"fitOrder"];
 	[encoder encodeObject:fitString forKey:@"fitString"];
 	[encoder encodeObject:fitFunction forKey:@"fitFuncton"];
 }

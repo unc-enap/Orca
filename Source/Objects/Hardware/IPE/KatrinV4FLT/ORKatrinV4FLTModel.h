@@ -331,10 +331,10 @@ enum {
 - (void) writeReg:(short)aReg channel:(int)aChannel value:(unsigned long)aValue;
 
 - (void) executeCommandList:(ORCommandList*)aList;
-- (id) readRegCmd:(unsigned long) aRegister channel:(short) aChannel;
-- (id) writeRegCmd:(unsigned long) aRegister channel:(short) aChannel value:(unsigned long)aValue;
-- (id) readRegCmd:(unsigned long) aRegister;
-- (id) writeRegCmd:(unsigned long) aRegister value:(unsigned long)aValue;
+- (id) readRegCmd:(short) aRegister channel:(short) aChannel;
+- (id) writeRegCmd:(short) aRegister channel:(short) aChannel value:(unsigned long)aValue;
+- (id) readRegCmd:(short) aRegister;
+- (id) writeRegCmd:(short) aRegister value:(unsigned long)aValue;
 
 - (unsigned long)  readSeconds;
 - (void)  writeSeconds:(unsigned long)aValue;
@@ -374,7 +374,7 @@ enum {
 - (void) resetHistogramMode;
 - (BOOL) waitOnBusyFlag;
 
-- (void) writeThreshold:(int)i value:(unsigned int)aValue;
+- (void) writeThreshold:(int)i value:(unsigned long)aValue;
 - (unsigned int) readThreshold:(int)i;
 - (void) writeGain:(int)i value:(unsigned short)aValue;
 - (unsigned short) readGain:(int)i;

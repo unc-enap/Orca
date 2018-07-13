@@ -123,15 +123,15 @@ enum {
 - (void) clearBuffer;
 - (void) sendCmd:(unsigned short)aCmd label:(NSString*)aLabel;
 - (void) readData:(unsigned short*)data numWords:(int)num;
-- (void) setVoltage:(int) hvValue mainFrame:(int) mainFrame channel:(int) channel;
-- (void) readVoltage:(int*) hvValue mainFrame:(int) mainFrame channel:(int) channel;
-- (void) readAllVoltages:(int*)hvValues mainFrame:(int) mainFrame;
-- (void) setEnableResponse:(BOOL)state mainFrame:(int)aMainFrame;
-- (void) setHV:(BOOL)state mainFrame:(int)aMainFrame;
-- (void) readTarget:(int*) aValue mainFrame:(int) aMainFrame channel:(int) aChannel;
-- (void) readAllTargets:(int*)aValues mainFrame:(int) aMainFrame;
-- (void) readStatus:(int*) aValue failedMask:(unsigned short*)failed mainFrame:(int) aMainFrame;
-- (void) readPodComplement:(unsigned short*) typeMask mainFrame:(int) aMainFrame;
+- (void) setVoltage:(int) hvValue mainFrame:(unsigned long) mainFrame channel:(int) channel;
+- (void) readVoltage:(int*) hvValue mainFrame:(unsigned long) mainFrame channel:(int) channel;
+- (void) readAllVoltages:(int*)hvValues mainFrame:(unsigned long) mainFrame;
+- (void) setEnableResponse:(BOOL)state mainFrame:(unsigned long)aMainFrame;
+- (void) setHV:(BOOL)state mainFrame:(unsigned long)aMainFrame;
+- (void) readTarget:(int*) aValue mainFrame:(unsigned long) aMainFrame channel:(int) aChannel;
+- (void) readAllTargets:(int*)aValues mainFrame:(unsigned long) aMainFrame;
+- (void) readStatus:(int*) aValue failedMask:(unsigned short*)failed mainFrame:(unsigned long) aMainFrame;
+- (void) readPodComplement:(unsigned short*) typeMask mainFrame:(unsigned long) aMainFrame;
 
 #pragma mark ¥¥¥Archival
 - (id) initWithCoder:(NSCoder*)decoder;

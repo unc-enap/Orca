@@ -221,7 +221,7 @@ static NSString* NcdPDSStepTaskTime  = @"NcdPDSStepTaskTime";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:timeOnOneChannel forKey:NcdPDSStepTaskTime];
+    [encoder encodeInteger:timeOnOneChannel forKey:NcdPDSStepTaskTime];
 }
 
 

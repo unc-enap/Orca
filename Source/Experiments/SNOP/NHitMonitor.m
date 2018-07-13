@@ -98,15 +98,15 @@ static int get_nhit_trigger_count(char *err, RedisClient *mtc, int sock, char *b
 {
     /* Get the number of triggers which had an NHIT trigger fire. Returns -1 if
      * there was an error or the current thread was cancelled. */
-    int current_gtid, nrecords, start, i;
+    int current_gtid, nrecords, i;
     int count = 0;
     struct GenericRecordHeader header;
     struct MTCReadoutData *mtc_readout_data;
 
     /* get current GTID */
-    current_gtid = [mtc intCommand:"get_gtid"];
+    current_gtid = (int)[mtc intCommand:"get_gtid"];
 
-    start = time(NULL);
+    time_t start = time(NULL);
 
     while (1) {
         /* Check to see if we should stop. */
@@ -517,15 +517,15 @@ err:
     @try {
         /* Save the current MTC settings so we can set them back when the
          * nhit monitor is done. */
-        control_register = [mtc intCommand:"mtcd_read 0x0"];
-        pedestals_enabled = control_register & 0x1;
-        pulser_enabled = control_register & 0x2;
-        pedestal_mask = [mtc intCommand:"get_ped_crate_mask"];
-        pulser_rate = [mtc intCommand:"get_pulser_freq"];
-        coarse_delay = [mtc intCommand:"get_coarse_delay"];
-        fine_delay = [mtc intCommand:"get_fine_delay"];
-        pedestal_width = [mtc intCommand:"get_pedestal_width"];
-        gt_mask = [mtc intCommand:"get_gt_mask"];
+        control_register    = (uint32_t)[mtc intCommand:"mtcd_read 0x0"];
+        pedestals_enabled   = control_register & 0x1;
+        pulser_enabled      = control_register & 0x2;
+        pedestal_mask       = (uint32_t)[mtc intCommand:"get_ped_crate_mask"];
+        pulser_rate         = (uint32_t)[mtc intCommand:"get_pulser_freq"];
+        coarse_delay        = (uint32_t)[mtc intCommand:"get_coarse_delay"];
+        fine_delay          = (uint32_t)[mtc intCommand:"get_fine_delay"];
+        pedestal_width      = (uint32_t)[mtc intCommand:"get_pedestal_width"];
+        gt_mask             = (uint32_t)[mtc intCommand:"get_gt_mask"];
     } @catch (NSException *e) {
         NSLogColor([NSColor redColor], @"nhit monitor failed to get mtc "
                    "hardware state. error: %@ reason: %@\n",

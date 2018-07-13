@@ -372,8 +372,8 @@ NSString* ORAD811SuppressZerosChangedNotification   = @"ORAD811SuppressZerosChan
 	
     [[self undoManager] disableUndoRegistration];
     [self setIncludeTiming:[decoder decodeBoolForKey:@"ORAD811ModelIncludeTiming"]];
-	[self setOnlineMask:[decoder decodeIntForKey:@"OR811OnlineMask"]];
-    [self setSuppressZeros:[decoder decodeIntForKey:@"OR811SuppressZeros"]];
+	[self setOnlineMask:[decoder decodeIntegerForKey:@"OR811OnlineMask"]];
+    [self setSuppressZeros:[decoder decodeIntegerForKey:@"OR811SuppressZeros"]];
     [[self undoManager] enableUndoRegistration];
 	
     return self;
@@ -383,8 +383,8 @@ NSString* ORAD811SuppressZerosChangedNotification   = @"ORAD811SuppressZerosChan
 {
     [super encodeWithCoder:encoder];
 	[encoder encodeBool:includeTiming forKey:@"ORAD811ModelIncludeTiming"];
-    [encoder encodeInt:onlineMask forKey:@"OR811OnlineMask"];
-    [encoder encodeInt:suppressZeros forKey:@"OR811SuppressZeros"];
+    [encoder encodeInteger:onlineMask forKey:@"OR811OnlineMask"];
+    [encoder encodeInteger:suppressZeros forKey:@"OR811SuppressZeros"];
 	
 }
 

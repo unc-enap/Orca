@@ -34,8 +34,8 @@
     id				dataSource;
 	BOOL			serviceAvailable;
 	NSArray*		fit;
-	int				maxChannel;
-	int				minChannel;
+	long			maxChannel;
+	long			minChannel;
 	int				fitType;
 	int				fitOrder;
 	NSString*		fitString;

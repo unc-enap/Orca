@@ -490,8 +490,8 @@ static NSString* MajoranaDbConnector		= @"MajoranaDbConnector";
 - (void) delayedRemoveBaselineExcursion:(NSString*)aBigKey
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(delayedRemoveBaselineExcursion:) object:aBigKey];
-    int firstComma = [aBigKey rangeOfString:@","].location;
-    int index      = [[aBigKey substringToIndex:firstComma] intValue];
+    NSUInteger firstComma = [aBigKey rangeOfString:@","].location;
+    NSInteger  index      = [[aBigKey substringToIndex:firstComma] integerValue];
     NSString* aKey = [aBigKey substringFromIndex:firstComma+1];
     
     if(verboseDiagnostics){
@@ -1130,7 +1130,7 @@ static NSString* MajoranaDbConnector		= @"MajoranaDbConnector";
 {    
     NSMutableDictionary*  values  = [NSMutableDictionary dictionary];
     int aSet;
-    int numGroups = [segmentGroups count];
+    int numGroups = (int)[segmentGroups count];
     for(aSet=0;aSet<numGroups;aSet++){
         NSMutableDictionary* aDictionary= [NSMutableDictionary dictionary];
         NSMutableArray* thresholdArray  = [NSMutableArray array];
@@ -1458,12 +1458,12 @@ static NSString* MajoranaDbConnector		= @"MajoranaDbConnector";
     [encoder encodeBool:ignoreBreakdownCheckOnA  forKey:@"ignoreBreakdownCheckOnA"];
     [encoder encodeBool:ignoreBreakdownPanicOnB  forKey:@"ignoreBreakdownPanicOnB"];
     [encoder encodeBool:ignoreBreakdownPanicOnA  forKey:@"ignoreBreakdownPanicOnA"];
-    [encoder encodeInt:viewType                  forKey: @"viewType"];
-	[encoder encodeInt:pollTime		             forKey: @"pollTime"];
+    [encoder encodeInteger:viewType                  forKey: @"viewType"];
+	[encoder encodeInteger:pollTime		             forKey: @"pollTime"];
     [encoder encodeObject:stringMap	             forKey: @"stringMap"];
     [encoder encodeObject:specialMap             forKey: @"specialMap"];
     [encoder encodeFloat:maxNonCalibrationRate   forKey: @"maxNonCalibrationRate"];
-    [encoder encodeInt:minNumDetsToAlertExperts  forKey: @"minNumDetsToAlertExperts"];
+    [encoder encodeInteger:minNumDetsToAlertExperts  forKey: @"minNumDetsToAlertExperts"];
 
 }
 
@@ -1740,7 +1740,7 @@ static NSString* MajoranaDbConnector		= @"MajoranaDbConnector";
 - (int) objWidth                        { return 50; }	//In this case, this is really the obj height.
 - (int) groupSeparation                 { return 0; }
 - (NSString*) nameForSlot:(int)aSlot    { return [NSString stringWithFormat:@"Slot %d",aSlot]; }
-- (int) slotForObj:(id)anObj            { return [anObj tag]; }
+- (int) slotForObj:(id)anObj            { return (int)[anObj tag]; }
 - (int) numberSlotsNeededFor:(id)anObj  { return 1;           }
 - (int) slotAtPoint:(NSPoint)aPoint     { return floor(((int)aPoint.y)/[self objWidth]); }
 - (NSPoint) pointForSlot:(int)aSlot     { return NSMakePoint(0,aSlot*[self objWidth]); }

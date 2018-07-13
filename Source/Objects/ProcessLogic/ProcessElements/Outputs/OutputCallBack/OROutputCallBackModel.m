@@ -263,8 +263,8 @@ NSString* ORCallBackLabelTypeChanged		   = @"ORCallBackLabelTypeChanged";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeObject:callBackName			forKey:@"callBackName"];
-    [encoder encodeInt:callBackChannel			forKey:@"callBackChannel"];
-    [encoder encodeInt:callBackLabelType		forKey:@"callBackLabelType"];
+    [encoder encodeInteger:callBackChannel			forKey:@"callBackChannel"];
+    [encoder encodeInteger:callBackLabelType		forKey:@"callBackLabelType"];
     [encoder encodeObject:callBackCustomLabel	forKey:@"callBackCustomLabel"];
 }
 

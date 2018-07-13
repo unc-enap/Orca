@@ -182,7 +182,7 @@ NSString* ORRunScriptSlotChangedNotification = @"ORRunScriptSlotChangedNotificat
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:[self slot] forKey:@"slot"];
+    [encoder encodeInteger:[self slot] forKey:@"slot"];
 }
 
 - (BOOL) acceptsGuardian: (OrcaObject *)aGuardian

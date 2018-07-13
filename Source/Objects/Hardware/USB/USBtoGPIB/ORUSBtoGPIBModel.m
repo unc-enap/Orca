@@ -498,7 +498,7 @@ NSString* ORUSBtoGPIBUSBOutConnection			= @"ORUSBtoGPIBUSBOutConnection";
     
     [[self undoManager] disableUndoRegistration];
     [self setCommand:[decoder decodeObjectForKey:@"ORUSBtoGPIBModelCommand"]];
-    [self setGpibAddress:[decoder decodeIntForKey:@"ORUSBtoGPIBModelAddress"]];
+    [self setGpibAddress:[decoder decodeIntegerForKey:@"ORUSBtoGPIBModelAddress"]];
     [self setSerialNumber:[decoder decodeObjectForKey:@"ORUSBtoGPIBModelSerialNumber"]];
 	lastSelectedAddress = -1;
     [[self undoManager] enableUndoRegistration];    
@@ -510,7 +510,7 @@ NSString* ORUSBtoGPIBUSBOutConnection			= @"ORUSBtoGPIBUSBOutConnection";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeObject:command forKey:@"ORUSBtoGPIBModelCommand"];
-    [encoder encodeInt:gpibAddress forKey:@"ORUSBtoGPIBModelAddress"];
+    [encoder encodeInteger:gpibAddress forKey:@"ORUSBtoGPIBModelAddress"];
     [encoder encodeObject:serialNumber forKey:@"ORUSBtoGPIBModelSerialNumber"];
 }
 

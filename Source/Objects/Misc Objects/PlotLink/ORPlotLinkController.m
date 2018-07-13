@@ -105,7 +105,7 @@
 
 - (void) dataCatalogNameChanged:(NSNotification*)aNotification
 {
-	int index = [dataCatalogPU indexOfItemWithTitle:[model dataCatalogName]];
+	int index = (int)[dataCatalogPU indexOfItemWithTitle:[model dataCatalogName]];
 	if(index == NSNotFound)	[dataCatalogPU selectItemAtIndex:0];
 	else					[dataCatalogPU selectItemAtIndex:index];
 }
@@ -128,7 +128,7 @@
 		[dataCatalogPU addItemWithTitle:[anObject fullID]];
 	}
 	//make the selection
-	int index = [dataCatalogPU indexOfItemWithTitle:[model dataCatalogName]];
+	int index = (int)[dataCatalogPU indexOfItemWithTitle:[model dataCatalogName]];
 	if(index == NSNotFound)	[dataCatalogPU selectItemAtIndex:0];
 	else					[dataCatalogPU selectItemAtIndex:index];
 }
@@ -137,7 +137,7 @@
 
 - (void) iconTypeAction:(id)sender
 {
-	[model setIconType:[[sender selectedCell]tag]];	
+	[model setIconType:(int)[[sender selectedCell]tag]];	
 }
 
 - (IBAction) openAltDialogAction:(id)sender

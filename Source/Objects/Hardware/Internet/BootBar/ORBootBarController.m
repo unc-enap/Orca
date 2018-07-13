@@ -170,7 +170,7 @@
 #pragma mark •••Actions
 -(IBAction) outletNameAction:(id)sender
 {
-	int tag = [[sender selectedCell] tag];
+	int tag = (int)[[sender selectedCell] tag];
 	[model setOutlet:tag name:[[sender selectedCell]stringValue]];
 }
 
@@ -197,7 +197,7 @@
 - (IBAction) turnOnOffAction:(id)sender
 {
     [self endEditing];
-    int chan  = [[turnOnOffMatrix selectedCell] tag];
+    int chan  = (int)[[turnOnOffMatrix selectedCell] tag];
 	int state = [model outletStatus:chan];
     NSString* s1 = [NSString stringWithFormat:@"Really turn %@ Outlet #%d?",state?@"OFF":@"ON",chan];
     NSString* name = [model outletName:chan];

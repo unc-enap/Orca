@@ -394,16 +394,16 @@ NSString* ORMks660BLock = @"ORMks660BLock";
 	[encoder encodeFloat:lowAlarm			forKey:@"lowAlarm"];
 	[encoder encodeFloat:highLimit			forKey:@"highLimit"];
 	[encoder encodeFloat:highAlarm			forKey:@"highAlarm"];
-	[encoder encodeInt:calibrationNumber	forKey:@"calibrationNumber"];
-	[encoder encodeInt:lowHysteresis		forKey:@"lowHysteresis"];
-	[encoder encodeInt:highHysteresis		forKey:@"highHysteresis"];
-	[encoder encodeInt:decimalPtPosition	forKey:@"decimalPtPosition"];
+	[encoder encodeInteger:calibrationNumber	forKey:@"calibrationNumber"];
+	[encoder encodeInteger:lowHysteresis		forKey:@"lowHysteresis"];
+	[encoder encodeInteger:highHysteresis		forKey:@"highHysteresis"];
+	[encoder encodeInteger:decimalPtPosition	forKey:@"decimalPtPosition"];
 	[encoder encodeBool:shipPressures		forKey: @"shipPressures"];
-    [encoder encodeInt: pollTime			forKey: @"pollTime"];
+    [encoder encodeInteger: pollTime			forKey: @"pollTime"];
 	int i;
 	for(i=0;i<2;i++){
-		[encoder encodeInt:lowSetPoint[i]	forKey: [NSString stringWithFormat:@"lowSetPoint%d",i]];
-		[encoder encodeInt:highSetPoint[i]  forKey: [NSString stringWithFormat:@"highSetPoint%d",i]];
+		[encoder encodeInteger:lowSetPoint[i]	forKey: [NSString stringWithFormat:@"lowSetPoint%d",i]];
+		[encoder encodeInteger:highSetPoint[i]  forKey: [NSString stringWithFormat:@"highSetPoint%d",i]];
 	}
 }
 

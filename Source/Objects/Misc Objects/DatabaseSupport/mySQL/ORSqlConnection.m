@@ -412,7 +412,7 @@
     
     if ([theString length]==0) return @"";
     
-    unsigned int theLength = strlen(theCStringBuffer);
+    unsigned long theLength = strlen(theCStringBuffer);
     char* theCEscBuffer = (char *)calloc(sizeof(char),(theLength * 2) + 1);
     mysql_real_escape_string(mConnection, theCEscBuffer, theCStringBuffer, theLength);
     NSString*  theReturn = [NSString stringWithCString:theCEscBuffer encoding:NSISOLatin1StringEncoding];

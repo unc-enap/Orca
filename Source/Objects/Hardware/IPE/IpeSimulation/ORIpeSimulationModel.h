@@ -59,10 +59,10 @@
 
 @interface ORIpeSimulationModel : OrcaObject <ORAdcProcessing>
 {
-    int				 channelDataId;
+    unsigned long    channelDataId;
  	NSString*		 IPNumber;
 	NSMutableArray*	 connectionHistory;
-	unsigned 		 ipNumberIndex;	
+	NSInteger 		 ipNumberIndex;
     int				 pollTime;
 	
 	NSMutableArray* itemTreeRoot;
@@ -103,8 +103,8 @@
 #pragma mark ‚Ä¢‚Ä¢‚Ä¢Data Records
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherCard;
-- (int) channelDataId;
-- (void) setChannelDataId:(int) aValue;
+- (unsigned long) channelDataId;
+- (void) setChannelDataId:(unsigned long) aValue;
 
 #pragma mark ***Accessors
 - (NSString*) fieldlineImageFileName;

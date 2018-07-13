@@ -938,7 +938,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 	if(num == 0) [self setNumTestPoints:20];
 	else [self setNumTestPoints:num];
 	
-	unsigned int lnum = [decoder decodeInt32ForKey:  @"payloadSize"];
+	unsigned int lnum = [decoder decodeIntForKey:  @"payloadSize"];
 	if(lnum==0)[self setPayloadSize:65000];
 	else [self setPayloadSize:lnum];
 
@@ -947,8 +947,8 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 	[self setLoadMode:		[decoder decodeIntForKey:   @"loadMode"]];
     [self setInitAfterConnect:[decoder decodeBoolForKey:@"InitAfterConnect"]];
     [self setDisableThrottle:[decoder decodeBoolForKey: @"disableThrottle"]];
-	[self setWriteValue:	[decoder decodeInt32ForKey: @"WriteValue"]];
-	[self setWriteAddress:	[decoder decodeInt32ForKey: @"WriteAddress"]];
+	[self setWriteValue:	[decoder decodeIntegerForKey: @"WriteValue"]];
+	[self setWriteAddress:	[decoder decodeIntegerForKey: @"WriteAddress"]];
 	[self setFilePath:		[decoder decodeObjectForKey:@"FilePath"]];
 	[self setUserName:		[decoder decodeObjectForKey:@"UserName"]];
 	[self setPassWord:		[decoder decodeObjectForKey:@"PassWord"]];
@@ -956,10 +956,10 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 	[self setIPNumber:		[decoder decodeObjectForKey:@"IPNumber"]];
 	[self setVerbose:		[decoder decodeBoolForKey:	@"Verbose"]];
 	[self setForceReload:	[decoder decodeBoolForKey:	@"ForceReload"]];
-    [self setRange:			[decoder decodeIntForKey:	@"Range"]];
+    [self setRange:			[decoder decodeIntegerForKey:	@"Range"]];
     [self setDoRange:		[decoder decodeBoolForKey:	@"DoRange"]];
-    [self setReadWriteType: [decoder decodeIntForKey:   @"ReadWriteType"]];	
-    [self setAddressModifier: [decoder decodeIntForKey: @"addressModifier"]];	
+    [self setReadWriteType: [decoder decodeIntForKey:   @"ReadWriteType"]];
+    [self setAddressModifier: [decoder decodeIntForKey: @"addressModifier"]];
     [self setErrorTimeOut:  [decoder decodeIntForKey:   @"errorTimeOut"]];
     [self setSbcPollingRate:  [decoder decodeIntForKey: @"sbcPollingRate"]];
 	
@@ -975,26 +975,26 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [encoder encodeBool:disableThrottle    forKey:@"disableThrottle"];
-    [encoder encodeInt32:payloadSize    forKey:@"payloadSize"];
-    [encoder encodeInt:numTestPoints	forKey:@"numTestPoints"];
-    [encoder encodeInt:infoType			forKey:@"infoType"];
-    [encoder encodeInt:range			forKey:@"Range"];
+    [encoder encodeInteger:payloadSize    forKey:@"payloadSize"];
+    [encoder encodeInteger:numTestPoints	forKey:@"numTestPoints"];
+    [encoder encodeInteger:infoType			forKey:@"infoType"];
+    [encoder encodeInteger:range			forKey:@"Range"];
     [encoder encodeBool:doRange			forKey:@"DoRange"];
-	[encoder encodeInt:loadMode			forKey:@"loadMode"];
+	[encoder encodeInteger:loadMode			forKey:@"loadMode"];
 	[encoder encodeBool:initAfterConnect forKey:@"InitAfterConnect"];
-	[encoder encodeInt32:(int32_t)writeValue		forKey:@"WriteValue"];
-	[encoder encodeInt32:(int32_t)writeAddress	forKey:@"WriteAddress"];
+	[encoder encodeInteger:writeValue		forKey:@"WriteValue"];
+	[encoder encodeInteger:writeAddress	forKey:@"WriteAddress"];
 	[encoder encodeObject:filePath		forKey:@"FilePath"];
 	[encoder encodeObject:userName		forKey:@"UserName"];
 	[encoder encodeObject:passWord		forKey:@"PassWord"];
-	[encoder encodeInt:portNumber		forKey:@"PortNumber"];
+	[encoder encodeInteger:portNumber		forKey:@"PortNumber"];
 	[encoder encodeObject:IPNumber		forKey:@"IPNumber"];
 	[encoder encodeBool:verbose			forKey:@"Verbose"];
 	[encoder encodeBool:forceReload		forKey:@"ForceReload"];
-    [encoder encodeInt:readWriteType    forKey:@"ReadWriteType"];
-    [encoder encodeInt:addressModifier  forKey:@"addressModifier"];
-    [encoder encodeInt:errorTimeOut     forKey:@"errorTimeOut"];
-    [encoder encodeInt:sbcPollingRate   forKey:@"sbcPollingRate"];
+    [encoder encodeInteger:readWriteType    forKey:@"ReadWriteType"];
+    [encoder encodeInteger:addressModifier  forKey:@"addressModifier"];
+    [encoder encodeInteger:errorTimeOut     forKey:@"errorTimeOut"];
+    [encoder encodeInteger:sbcPollingRate   forKey:@"sbcPollingRate"];
     
 }
 

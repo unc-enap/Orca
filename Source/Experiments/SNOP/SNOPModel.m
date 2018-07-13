@@ -391,8 +391,8 @@ tellieRunFiles = _tellieRunFiles;
     [[self sessionDB] setPassword:[decoder decodeObjectForKey:@"ORSNOPModelLockDBPassword"]];
     [[self sessionDB] setDbname:[decoder decodeObjectForKey:@"ORSNOPModelLockDBName"]];
     [[self sessionDB] setAddress:[decoder decodeObjectForKey:@"ORSNOPModelLockDBIPAddress"]];
-    [[self sessionDB] setPort:[decoder decodeInt32ForKey:@"ORSNOPModelLockDBPort"]];
-    [[self sessionDB] setLockID:[decoder decodeInt32ForKey:@"ORSNOPModelLockDBLockID"]];
+    [[self sessionDB] setPort:[decoder decodeIntForKey:@"ORSNOPModelLockDBPort"]];
+    [[self sessionDB] setLockID:[decoder decodeIntForKey:@"ORSNOPModelLockDBLockID"]];
 
     /* Initialize ECARun object: this doesn't start the run */
     anECARun = [[ECARun alloc] init];
@@ -408,12 +408,12 @@ tellieRunFiles = _tellieRunFiles;
     self.orcaDBUserName = [decoder decodeObjectForKey:@"ORSNOPModelOrcaDBUserName"];
     self.orcaDBPassword = [decoder decodeObjectForKey:@"ORSNOPModelOrcaDBPassword"];
     self.orcaDBName = [decoder decodeObjectForKey:@"ORSNOPModelOrcaDBName"];
-    self.orcaDBPort = [decoder decodeInt32ForKey:@"ORSNOPModelOrcaDBPort"];
+    self.orcaDBPort = [decoder decodeIntForKey:@"ORSNOPModelOrcaDBPort"];
     self.orcaDBIPAddress = [decoder decodeObjectForKey:@"ORSNOPModelOrcaDBIPAddress"];
     self.debugDBUserName = [decoder decodeObjectForKey:@"ORSNOPModelDebugDBUserName"];
     self.debugDBPassword = [decoder decodeObjectForKey:@"ORSNOPModelDebugDBPassword"];
     self.debugDBName = [decoder decodeObjectForKey:@"ORSNOPModelDebugDBName"];
-    self.debugDBPort = [decoder decodeInt32ForKey:@"ORSNOPModelDebugDBPort"];
+    self.debugDBPort = [decoder decodeIntForKey:@"ORSNOPModelDebugDBPort"];
     self.debugDBIPAddress = [decoder decodeObjectForKey:@"ORSNOPModelDebugDBIPAddress"];
 
     //Standard Runs
@@ -879,7 +879,7 @@ err:
 
 - (void) waitForRunNumber: (ORPQResult *) result
 {
-    int numRows, numCols, run_number;
+    NSInteger numRows, numCols, run_number;
 
     if (!result) {
         NSLogColor([NSColor redColor], @"Error getting the run number from the database. Using default run number. Data is going in the bit bucket.\n");
@@ -1009,9 +1009,9 @@ err:
 {
     ORRunModel *run = [aNote object];
 
-    uint32_t run_type = [run runType];
-    uint32_t run_number = [run runNumber];
-    uint32_t source_mask = 0; /* needs to come from the MANIP system */
+    unsigned long run_type = [run runType];
+    unsigned long run_number = [run runNumber];
+    unsigned long source_mask = 0; /* needs to come from the MANIP system */
 
     @try {
         /* send the run_start command to the MTC server which will send the
@@ -2157,19 +2157,19 @@ static NSComparisonResult compareXL3s(ORXL3Model *xl3_1, ORXL3Model *xl3_2, void
     [encoder encodeObject:[[self sessionDB] password] forKey:@"ORSNOPModelLockDBPassword"];
     [encoder encodeObject:[[self sessionDB] dbname] forKey:@"ORSNOPModelLockDBName"];
     [encoder encodeObject:[[self sessionDB] address] forKey:@"ORSNOPModelLockDBIPAddress"];
-    [encoder encodeInt32:[[self sessionDB] port] forKey:@"ORSNOPModelLockDBPort"];
-    [encoder encodeInt32:[[self sessionDB] lockID] forKey:@"ORSNOPModelLockDBLockID"];
+    [encoder encodeInteger:[[self sessionDB] port] forKey:@"ORSNOPModelLockDBPort"];
+    [encoder encodeInteger:[[self sessionDB] lockID] forKey:@"ORSNOPModelLockDBLockID"];
 
     //CouchDB
     [encoder encodeObject:self.orcaDBUserName forKey:@"ORSNOPModelOrcaDBUserName"];
     [encoder encodeObject:self.orcaDBPassword forKey:@"ORSNOPModelOrcaDBPassword"];
     [encoder encodeObject:self.orcaDBName forKey:@"ORSNOPModelOrcaDBName"];
-    [encoder encodeInt32:self.orcaDBPort forKey:@"ORSNOPModelOrcaDBPort"];
+    [encoder encodeInteger:self.orcaDBPort forKey:@"ORSNOPModelOrcaDBPort"];
     [encoder encodeObject:self.orcaDBIPAddress forKey:@"ORSNOPModelOrcaDBIPAddress"];
     [encoder encodeObject:self.debugDBUserName forKey:@"ORSNOPModelDebugDBUserName"];
     [encoder encodeObject:self.debugDBPassword forKey:@"ORSNOPModelDebugDBPassword"];
     [encoder encodeObject:self.debugDBName forKey:@"ORSNOPModelDebugDBName"];
-    [encoder encodeInt32:self.debugDBPort forKey:@"ORSNOPModelDebugDBPort"];
+    [encoder encodeInteger:self.debugDBPort forKey:@"ORSNOPModelDebugDBPort"];
     [encoder encodeObject:self.debugDBIPAddress forKey:@"ORSNOPModelDebugDBIPAddress"];
 
     //Run status
@@ -2180,36 +2180,36 @@ static NSComparisonResult compareXL3s(ORXL3Model *xl3_1, ORXL3Model *xl3_2, void
     [encoder encodeObject:[self standardRunVersion] forKey:@"SNOPStandardRunVersion"];
 
     //ECA
-    [encoder encodeInt:[anECARun ECA_pattern] forKey:@"SNOPECApattern"];
+    [encoder encodeInteger:[anECARun ECA_pattern] forKey:@"SNOPECApattern"];
     [encoder encodeObject:[anECARun ECA_type] forKey:@"SNOPECAtype"];
-    [encoder encodeInt:[anECARun ECA_tslope_pattern] forKey:@"SNOPECAtslppattern"];
-    [encoder encodeInt:[anECARun ECA_nevents] forKey:@"SNOPECANEvents"];
+    [encoder encodeInteger:[anECARun ECA_tslope_pattern] forKey:@"SNOPECAtslppattern"];
+    [encoder encodeInteger:[anECARun ECA_nevents] forKey:@"SNOPECANEvents"];
     [encoder encodeObject:[anECARun ECA_rate] forKey:@"SNOPECAPulserRate"];
 
     //Settings
     [encoder encodeObject:[self mtcHost] forKey:@"mtcHost"];
-    [encoder encodeInt:[self mtcPort] forKey:@"mtcPort"];
+    [encoder encodeInteger:[self mtcPort] forKey:@"mtcPort"];
 
     [encoder encodeObject:[self xl3Host] forKey:@"xl3Host"];
-    [encoder encodeInt:[self xl3Port] forKey:@"xl3Port"];
+    [encoder encodeInteger:[self xl3Port] forKey:@"xl3Port"];
 
     [encoder encodeObject:[self dataHost] forKey:@"dataHost"];
-    [encoder encodeInt:[self dataPort] forKey:@"dataPort"];
+    [encoder encodeInteger:[self dataPort] forKey:@"dataPort"];
 
     [encoder encodeObject:[self logHost] forKey:@"logHost"];
-    [encoder encodeInt:[self logPort] forKey:@"logPort"];
+    [encoder encodeInteger:[self logPort] forKey:@"logPort"];
 
     /* Nhit Monitor Settings */
-    [encoder encodeInt:[self nhitMonitorCrate] forKey:@"nhitMonitorCrate"];
-    [encoder encodeInt:[self nhitMonitorPulserRate] forKey:@"nhitMonitorPulserRate"];
-    [encoder encodeInt:[self nhitMonitorNumPulses] forKey:@"nhitMonitorNumPulses"];
-    [encoder encodeInt:[self nhitMonitorMaxNhit] forKey:@"nhitMonitorMaxNhit"];
+    [encoder encodeInteger:[self nhitMonitorCrate] forKey:@"nhitMonitorCrate"];
+    [encoder encodeInteger:[self nhitMonitorPulserRate] forKey:@"nhitMonitorPulserRate"];
+    [encoder encodeInteger:[self nhitMonitorNumPulses] forKey:@"nhitMonitorNumPulses"];
+    [encoder encodeInteger:[self nhitMonitorMaxNhit] forKey:@"nhitMonitorMaxNhit"];
     [encoder encodeBool:[self nhitMonitorAutoRun] forKey:@"nhitMonitorAutoRun"];
-    [encoder encodeInt:[self nhitMonitorAutoPulserRate] forKey:@"nhitMonitorAutoPulserRate"];
-    [encoder encodeInt:[self nhitMonitorAutoNumPulses] forKey:@"nhitMonitorAutoNumPulses"];
-    [encoder encodeInt:[self nhitMonitorAutoMaxNhit] forKey:@"nhitMonitorAutoMaxNhit"];
-    [encoder encodeInt:[self nhitMonitorRunType] forKey:@"nhitMonitorRunType"];
-    [encoder encodeInt:[self nhitMonitorCrateMask] forKey:@"nhitMonitorCrateMask"];
+    [encoder encodeInteger:[self nhitMonitorAutoPulserRate] forKey:@"nhitMonitorAutoPulserRate"];
+    [encoder encodeInteger:[self nhitMonitorAutoNumPulses] forKey:@"nhitMonitorAutoNumPulses"];
+    [encoder encodeInteger:[self nhitMonitorAutoMaxNhit] forKey:@"nhitMonitorAutoMaxNhit"];
+    [encoder encodeInteger:[self nhitMonitorRunType] forKey:@"nhitMonitorRunType"];
+    [encoder encodeInteger:[self nhitMonitorCrateMask] forKey:@"nhitMonitorCrateMask"];
     [encoder encodeDouble:[self nhitMonitorTimeInterval] forKey:@"nhitMonitorTimeInterval"];
 }
 
@@ -2300,7 +2300,7 @@ static NSComparisonResult compareXL3s(ORXL3Model *xl3_1, ORXL3Model *xl3_2, void
 {
     /* Use the result returned from the smellie database query to fill a
      * dictionary with all the available run file documents. */
-    unsigned int nFiles = [[aResult objectForKey:@"rows"] count];
+    int nFiles = (int)[[aResult objectForKey:@"rows"] count];
     NSMutableDictionary *runFiles = [[NSMutableDictionary alloc] init];
 
     for (int i = 0; i < nFiles; i++) {
@@ -2340,7 +2340,7 @@ static NSComparisonResult compareXL3s(ORXL3Model *xl3_1, ORXL3Model *xl3_2, void
 {
     // Use the result returned from the tellie database query to fill a dictionary with all the available
     // run file documents.
-    unsigned int nFiles = [[aResult objectForKey:@"rows"] count];
+    int nFiles = (int)[[aResult objectForKey:@"rows"] count];
     NSMutableDictionary *runFiles = [[NSMutableDictionary alloc] init];
 
     for (int i = 0; i < nFiles; i++) {
@@ -2379,7 +2379,7 @@ static NSComparisonResult compareXL3s(ORXL3Model *xl3_1, ORXL3Model *xl3_2, void
 {
     // Use the result returned from the tellie database query to fill a dictionary with all the available
     // run file documents.
-    unsigned int nFiles = [[aResult objectForKey:@"rows"] count];
+    int nFiles = (int)[[aResult objectForKey:@"rows"] count];
     NSMutableDictionary *runFiles = [[NSMutableDictionary alloc] init];
 
     for(int i=0;i<nFiles;i++){

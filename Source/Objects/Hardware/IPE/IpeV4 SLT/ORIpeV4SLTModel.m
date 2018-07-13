@@ -39,69 +39,69 @@
 #import "ORTaskSequence.h"
 #import "ORFileMover.h"
 
-#if 0
-//IPE V4 register definitions
-//MOVED TO .h FILE !!!!!!!!!!!!!!!!     <---------------- NOTE!
-enum IpeV4Enum {
-	kSltV4ControlReg,
-	kSltV4StatusReg,
-	kSltV4CommandReg,
-	kSltV4InterruptReguestReg,
-	kSltV4InterruptMaskReg,
-	kSltV4RequestSemaphoreReg,
-	kSltV4HWRevisionReg,
-	kSltV4PixelBusErrorReg,
-	kSltV4PixelBusEnableReg,
-	kSltV4PixelBusTestReg,
-	kSltV4AuxBusTestReg,
-	kSltV4DebugStatusReg,
-	kSltV4VetoCounterHiReg,		//TODO: the LSB and MSB part of this SLT registers is confused (according to the SLT doc 2.13/2010-May) -tb-
-	kSltV4VetoCounterLoReg,		//TODO: the LSB and MSB part of this SLT registers is confused (according to the SLT doc 2.13/2010-May) -tb-
-	kSltV4DeadTimeCounterHiReg,	//TODO: the LSB and MSB part of this SLT registers is confused (according to the SLT doc 2.13/2010-May) -tb-
-	kSltV4DeadTimeCounterLoReg,	//TODO: the LSB and MSB part of this SLT registers is confused (according to the SLT doc 2.13/2010-May) -tb-
-								//TODO: and dead time and veto time counter are confused, too -tb-
-	kSltV4RunCounterHiReg,		//TODO: the LSB and MSB part of this SLT registers is confused (according to the SLT doc 2.13/2010-May) -tb-
-	kSltV4RunCounterLoReg,		//TODO: the LSB and MSB part of this SLT registers is confused (according to the SLT doc 2.13/2010-May) -tb-
-	kSltV4SecondSetReg,
-	kSltV4SecondCounterReg,
-	kSltV4SubSecondCounterReg,
-	kSltV4PageManagerReg,
-	kSltV4TriggerTimingReg,
-	kSltV4PageSelectReg,
-	kSltV4NumberPagesReg,
-	kSltV4PageNumbersReg,
-	kSltV4EventStatusReg,
-	kSltV4ReadoutCSRReg,
-	kSltV4BufferSelectReg,
-	kSltV4ReadoutDefinitionReg,
-	kSltV4TPTimingReg,
-	kSltV4TPShapeReg,
-	kSltV4i2cCommandReg,
-	kSltV4epcsCommandReg,
-	kSltV4BoardIDLoReg,
-	kSltV4BoardIDHiReg,
-	kSltV4PROMsControlReg,
-	kSltV4PROHiufferReg,
-	kSltV4TriggerDataReg,
-	kSltV4ADCDataReg,
-
-
-
-
-//TODO: WARNING - ONLY FOR 2013-KATRIN-SLT-FIRMWARE -tb-
-//TODO: WARNING - ONLY FOR 2013-KATRIN-SLT-FIRMWARE -tb-
-//TODO: WARNING - ONLY FOR 2013-KATRIN-SLT-FIRMWARE -tb-
-//TODO: WARNING - ONLY FOR 2013-KATRIN-SLT-FIRMWARE -tb-
-//TODO: WARNING - ONLY FOR 2013-KATRIN-SLT-FIRMWARE -tb-
-//TODO: WARNING - ONLY FOR 2013-KATRIN-SLT-FIRMWARE -tb-
-	kSltV4FIFOCsrReg,
-	kSltV4FIFOxRequestReg,
-	kSltV4FIFOMaskReg,
-
-
-	kSltV4NumRegs //must be last
-};
-#endif
+//#if 0
+////IPE V4 register definitions
+////MOVED TO .h FILE !!!!!!!!!!!!!!!!     <---------------- NOTE!
+//enum IpeV4Enum {
+//    kSltV4ControlReg,
+//    kSltV4StatusReg,
+//    kSltV4CommandReg,
+//    kSltV4InterruptReguestReg,
+//    kSltV4InterruptMaskReg,
+//    kSltV4RequestSemaphoreReg,
+//    kSltV4HWRevisionReg,
+//    kSltV4PixelBusErrorReg,
+//    kSltV4PixelBusEnableReg,
+//    kSltV4PixelBusTestReg,
+//    kSltV4AuxBusTestReg,
+//    kSltV4DebugStatusReg,
+//    kSltV4VetoCounterHiReg,        //TODO: the LSB and MSB part of this SLT registers is confused (according to the SLT doc 2.13/2010-May) -tb-
+//    kSltV4VetoCounterLoReg,        //TODO: the LSB and MSB part of this SLT registers is confused (according to the SLT doc 2.13/2010-May) -tb-
+//    kSltV4DeadTimeCounterHiReg,    //TODO: the LSB and MSB part of this SLT registers is confused (according to the SLT doc 2.13/2010-May) -tb-
+//    kSltV4DeadTimeCounterLoReg,    //TODO: the LSB and MSB part of this SLT registers is confused (according to the SLT doc 2.13/2010-May) -tb-
+//                                //TODO: and dead time and veto time counter are confused, too -tb-
+//    kSltV4RunCounterHiReg,        //TODO: the LSB and MSB part of this SLT registers is confused (according to the SLT doc 2.13/2010-May) -tb-
+//    kSltV4RunCounterLoReg,        //TODO: the LSB and MSB part of this SLT registers is confused (according to the SLT doc 2.13/2010-May) -tb-
+//    kSltV4SecondSetReg,
+//    kSltV4SecondCounterReg,
+//    kSltV4SubSecondCounterReg,
+//    kSltV4PageManagerReg,
+//    kSltV4TriggerTimingReg,
+//    kSltV4PageSelectReg,
+//    kSltV4NumberPagesReg,
+//    kSltV4PageNumbersReg,
+//    kSltV4EventStatusReg,
+//    kSltV4ReadoutCSRReg,
+//    kSltV4BufferSelectReg,
+//    kSltV4ReadoutDefinitionReg,
+//    kSltV4TPTimingReg,
+//    kSltV4TPShapeReg,
+//    kSltV4i2cCommandReg,
+//    kSltV4epcsCommandReg,
+//    kSltV4BoardIDLoReg,
+//    kSltV4BoardIDHiReg,
+//    kSltV4PROMsControlReg,
+//    kSltV4PROHiufferReg,
+//    kSltV4TriggerDataReg,
+//    kSltV4ADCDataReg,
+//
+//
+//
+//
+////TODO: WARNING - ONLY FOR 2013-KATRIN-SLT-FIRMWARE -tb-
+////TODO: WARNING - ONLY FOR 2013-KATRIN-SLT-FIRMWARE -tb-
+////TODO: WARNING - ONLY FOR 2013-KATRIN-SLT-FIRMWARE -tb-
+////TODO: WARNING - ONLY FOR 2013-KATRIN-SLT-FIRMWARE -tb-
+////TODO: WARNING - ONLY FOR 2013-KATRIN-SLT-FIRMWARE -tb-
+////TODO: WARNING - ONLY FOR 2013-KATRIN-SLT-FIRMWARE -tb-
+//    kSltV4FIFOCsrReg,
+//    kSltV4FIFOxRequestReg,
+//    kSltV4FIFOMaskReg,
+//
+//
+//    kSltV4NumRegs //must be last
+//};
+//#endif
 
 
 IpeRegisterNamesStruct regSLTV4[kSltV4NumRegs] = {
@@ -1099,7 +1099,7 @@ NSLog(@"  arguments: %@ \n" , arguments);
 }
 */
 
-- (void) writeReg:(int)index value:(unsigned long)aValue
+- (void) writeReg:(short)index value:(unsigned long)aValue
 {
 	[self write: [self getAddress:index] value:aValue];
 }
@@ -1236,7 +1236,7 @@ NSLog(@"  arguments: %@ \n" , arguments);
 	args[0] = 0; //flags
         if(secondsSetInitWithHost)  args[0] |= kSecondsSetInitWithHostFlag;
         if(secondsSetSendToFLTs)    args[0] |= kSecondsSetSendToFLTsFlag;
-	args[1] = secondsSet; //time to write
+	args[1] = (uint32_t)secondsSet; //time to write
 	if(![pmcLink isConnected]){
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];
 	}
@@ -1303,55 +1303,55 @@ NSLog(@"  arguments: %@ \n" , arguments);
     
     [self setHostTimeToFLTsAndSLT];
 return;
-    uint32_t i,sltsec,sltsubsec,sltsubsec2,sltsubsec1,sltsubsecreg;
-
-    //everything else moved to void setHostTimeToFLTsAndSLT(int32_t* args) on SBC called by [self setHostTimeToFLTsAndSLT]; ...
-    //wait until we are not at the end of a second (<0.9 sec)
-	for(i=0;i<1000;i++){
-	    sltsubsecreg  = [self readReg:kSltV4SubSecondCounterReg];//first read subsec counter!
-	    sltsec        = [self readReg:kSltV4SecondCounterReg];
-        sltsubsec1 = sltsubsecreg & 0x7ff  ;
-        sltsubsec2 = (sltsubsecreg >> 11) & 0x3fff  ; //100 usec counter
-        sltsubsec = sltsubsec2 * 2000 + sltsubsec1;
-	    NSLog(@"%@::%@!   sec %u, sltsubsec2 %u, sltsubsec1 %u, subsec %u\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd), sltsec, sltsubsec2, sltsubsec1, sltsubsec);//TODO: DEBUG -tb-
-        if(sltsubsec<18000000) break; //full second is 20000000 clocks
-        usleep(1000);//this loop needs 3-8 milli seconds (with usleep(1000) and two register reads)
-    }
-
-    // add option to set system time of PrPMC/crate computer? -tb- DONE.
-	unsigned long secSetpoint = secondsSet;
-	if(secondsSetInitWithHost){ 
-		struct timeval t;//    call with struct timezone tz; is obsolete ... -tb-
-		gettimeofday(&t,NULL);
-		secSetpoint = t.tv_sec;  
-	}
-	
-	if(secondsSetSendToFLTs){
-        #if 1 //TODO: broadcast to FLTs seems to nor work currently FIX IT -tb-
-	    uint32_t FLTV4SecondCounterRegAddr = (0x1f << 17) | (0x000044>>2);
-	    [self write: FLTV4SecondCounterRegAddr  value:secSetpoint];//(0x1f << 17) is broadcast to all FLTs -tb-
-        #else
-        int j;
-        for(j=1;j<21;j++){
-	        uint32_t FLTV4SecondCounterRegAddr = ( j << 17) | (0x000044>>2);
-	        [self write: FLTV4SecondCounterRegAddr  value:secSetpoint];//(0x1f << 17) is broadcast to all FLTs -tb-
-        }
-        #endif
-    }
-	
-	secSetpoint += 1;  //value will be taken after the NEXT second strobe, so we need the NEXT second
-	[self writeReg:kSltV4SecondSetReg value:secSetpoint];
-    
-    //read back and check value:
-    //Wait until next second srobe!
-    for(i=0;i<10000;i++){// when the time already was set, this will leave the loop immediately
-        usleep(100);
-	    sltsubsecreg  = [self readReg:kSltV4SubSecondCounterReg];//first read subsec counter!
-	    sltsec        = [self readReg:kSltV4SecondCounterReg];
-        if(sltsec==secSetpoint) break;
-    }
-    if(i==10000) NSLog(@"ORIpeV4SLTModel::loadSecondsReg: ERROR: could not read back SLT time %i (is %i)!\n",secSetpoint,sltsec);
-    //NSLog(@"ORIpeV4SLTModel::loadSecondsReg:  setpoint SLT time %i (is %i) loops %i!\n",secSetpoint,sltsec,i);
+//    uint32_t i,sltsec,sltsubsec,sltsubsec2,sltsubsec1,sltsubsecreg;
+//
+//    //everything else moved to void setHostTimeToFLTsAndSLT(int32_t* args) on SBC called by [self setHostTimeToFLTsAndSLT]; ...
+//    //wait until we are not at the end of a second (<0.9 sec)
+//    for(i=0;i<1000;i++){
+//        sltsubsecreg  = [self readReg:kSltV4SubSecondCounterReg];//first read subsec counter!
+//        sltsec        = [self readReg:kSltV4SecondCounterReg];
+//        sltsubsec1 = sltsubsecreg & 0x7ff  ;
+//        sltsubsec2 = (sltsubsecreg >> 11) & 0x3fff  ; //100 usec counter
+//        sltsubsec = sltsubsec2 * 2000 + sltsubsec1;
+//        NSLog(@"%@::%@!   sec %u, sltsubsec2 %u, sltsubsec1 %u, subsec %u\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd), sltsec, sltsubsec2, sltsubsec1, sltsubsec);//TODO: DEBUG -tb-
+//        if(sltsubsec<18000000) break; //full second is 20000000 clocks
+//        usleep(1000);//this loop needs 3-8 milli seconds (with usleep(1000) and two register reads)
+//    }
+//
+//    // add option to set system time of PrPMC/crate computer? -tb- DONE.
+//    unsigned long secSetpoint = secondsSet;
+//    if(secondsSetInitWithHost){
+//        struct timeval t;//    call with struct timezone tz; is obsolete ... -tb-
+//        gettimeofday(&t,NULL);
+//        secSetpoint = t.tv_sec;
+//    }
+//
+//    if(secondsSetSendToFLTs){
+//        #if 1 //TODO: broadcast to FLTs seems to nor work currently FIX IT -tb-
+//        uint32_t FLTV4SecondCounterRegAddr = (0x1f << 17) | (0x000044>>2);
+//        [self write: FLTV4SecondCounterRegAddr  value:secSetpoint];//(0x1f << 17) is broadcast to all FLTs -tb-
+//        #else
+//        int j;
+//        for(j=1;j<21;j++){
+//            uint32_t FLTV4SecondCounterRegAddr = ( j << 17) | (0x000044>>2);
+//            [self write: FLTV4SecondCounterRegAddr  value:secSetpoint];//(0x1f << 17) is broadcast to all FLTs -tb-
+//        }
+//        #endif
+//    }
+//
+//    secSetpoint += 1;  //value will be taken after the NEXT second strobe, so we need the NEXT second
+//    [self writeReg:kSltV4SecondSetReg value:secSetpoint];
+//
+//    //read back and check value:
+//    //Wait until next second srobe!
+//    for(i=0;i<10000;i++){// when the time already was set, this will leave the loop immediately
+//        usleep(100);
+//        sltsubsecreg  = [self readReg:kSltV4SubSecondCounterReg];//first read subsec counter!
+//        sltsec        = [self readReg:kSltV4SecondCounterReg];
+//        if(sltsec==secSetpoint) break;
+//    }
+//    if(i==10000) NSLog(@"ORIpeV4SLTModel::loadSecondsReg: ERROR: could not read back SLT time %i (is %i)!\n",secSetpoint,sltsec);
+//    //NSLog(@"ORIpeV4SLTModel::loadSecondsReg:  setpoint SLT time %i (is %i) loops %i!\n",secSetpoint,sltsec,i);
 }
 
 - (void) writeInterruptMask
@@ -1591,8 +1591,8 @@ return;
 	if(!pmcLink)pmcLink = [[PMC_Link alloc] initWithDelegate:self];
 	else [pmcLink setDelegate:self];
 
-	[self setControlReg:		[decoder decodeInt32ForKey:@"controlReg"]];
-	[self setSecondsSet:		[decoder decodeInt32ForKey:@"secondsSet"]];
+	[self setControlReg:		[decoder decodeIntegerForKey:@"controlReg"]];
+	[self setSecondsSet:		[decoder decodeIntegerForKey:@"secondsSet"]];
 	if([decoder containsValueForKey:@"secondsSetInitWithHost"])
 		[self setSecondsSetInitWithHost:[decoder decodeBoolForKey:@"secondsSetInitWithHost"]];
 	else[self setSecondsSetInitWithHost: YES];
@@ -1602,17 +1602,17 @@ return;
 
 	//status reg
 	[self setPatternFilePath:		[decoder decodeObjectForKey:@"ORIpeV4SLTModelPatternFilePath"]];
-	[self setInterruptMask:			[decoder decodeInt32ForKey:@"ORIpeV4SLTModelInterruptMask"]];
+	[self setInterruptMask:			[decoder decodeIntegerForKey:@"ORIpeV4SLTModelInterruptMask"]];
 	[self setPulserDelay:			[decoder decodeFloatForKey:@"ORIpeV4SLTModelPulserDelay"]];
 	[self setPulserAmp:				[decoder decodeFloatForKey:@"ORIpeV4SLTModelPulserAmp"]];
 		
 	//special
-    [self setNextPageDelay:			[decoder decodeIntForKey:@"nextPageDelay"]]; // ak, 5.10.07
+    [self setNextPageDelay:			[decoder decodeIntegerForKey:@"nextPageDelay"]]; // ak, 5.10.07
 	
 	[self setReadOutGroup:			[decoder decodeObjectForKey:@"ReadoutGroup"]];
     [self setPoller:				[decoder decodeObjectForKey:@"poller"]];
 	
-    [self setPageSize:				[decoder decodeIntForKey:@"ORIpeV4SLTPageSize"]]; // ak, 9.12.07
+    [self setPageSize:				[decoder decodeIntegerForKey:@"ORIpeV4SLTPageSize"]]; // ak, 9.12.07
     [self setDisplayTrigger:		[decoder decodeBoolForKey:@"ORIpeV4SLTDisplayTrigger"]];
     [self setDisplayEventLoop:		[decoder decodeBoolForKey:@"ORIpeV4SLTDisplayEventLoop"]];
     	
@@ -1640,23 +1640,23 @@ return;
 	[encoder encodeBool:secondsSetInitWithHost forKey:@"secondsSetInitWithHost"];
 	[encoder encodeObject:sltScriptArguments forKey:@"sltScriptArguments"];
 	[encoder encodeBool:countersEnabled forKey:@"countersEnabled"];
-	[encoder encodeInt32:secondsSet forKey:@"secondsSet"];
+	[encoder encodeInteger:secondsSet forKey:@"secondsSet"];
 	[encoder encodeObject:pmcLink		forKey:@"PMC_Link"];
-	[encoder encodeInt32:controlReg	forKey:@"controlReg"];
+	[encoder encodeInteger:controlReg	forKey:@"controlReg"];
 	
 	//status reg
 	[encoder encodeObject:patternFilePath forKey:@"ORIpeV4SLTModelPatternFilePath"];
-	[encoder encodeInt32:interruptMask	 forKey:@"ORIpeV4SLTModelInterruptMask"];
+	[encoder encodeInteger:interruptMask	 forKey:@"ORIpeV4SLTModelInterruptMask"];
 	[encoder encodeFloat:pulserDelay	 forKey:@"ORIpeV4SLTModelPulserDelay"];
 	[encoder encodeFloat:pulserAmp		 forKey:@"ORIpeV4SLTModelPulserAmp"];
 		
 	//special
-    [encoder encodeInt:nextPageDelay     forKey:@"nextPageDelay"]; // ak, 5.10.07
+    [encoder encodeInteger:nextPageDelay     forKey:@"nextPageDelay"]; // ak, 5.10.07
 	
 	[encoder encodeObject:readOutGroup  forKey:@"ReadoutGroup"];
     [encoder encodeObject:poller         forKey:@"poller"];
 	
-    [encoder encodeInt:pageSize         forKey:@"ORIpeV4SLTPageSize"]; // ak, 9.12.07
+    [encoder encodeInteger:pageSize         forKey:@"ORIpeV4SLTPageSize"]; // ak, 9.12.07
     [encoder encodeBool:displayTrigger   forKey:@"ORIpeV4SLTDisplayTrigger"];
     [encoder encodeBool:displayEventLoop forKey:@"ORIpeV4SLTDisplayEventLoop"];
 		
@@ -1995,7 +1995,7 @@ return;
 { 
 	//temp----
 	int i, j, k;
-	int sltSize = pageSize * 20;	
+	unsigned long sltSize = pageSize * 20;
 	
 	
 	// Dislay the matrix of triggered pixel and timing
@@ -2182,9 +2182,9 @@ return;
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id	= kSLTv4;	//should be unique
-	configStruct->card_info[index].hw_mask[0] 	= eventDataId;
-	configStruct->card_info[index].hw_mask[1] 	= multiplicityId;
-	configStruct->card_info[index].slot			= [self stationNumber];
+	configStruct->card_info[index].hw_mask[0] 	= (uint32_t)eventDataId;
+	configStruct->card_info[index].hw_mask[1] 	= (uint32_t)multiplicityId;
+	configStruct->card_info[index].slot			= (uint32_t)[self stationNumber];
 	configStruct->card_info[index].crate		= [self crateNumber];
 	configStruct->card_info[index].add_mod		= 0;		//not needed for this HW
     
@@ -2194,7 +2194,7 @@ return;
 	runFlagsMask |= kFirstTimeFlag;          //bit 16 = "first time" flag
     if(secondsSetSendToFLTs)
         runFlagsMask |= kSecondsSetSendToFLTsFlag;//bit ...
-	configStruct->card_info[index].deviceSpecificData[3] = runFlagsMask;	
+	configStruct->card_info[index].deviceSpecificData[3] = (uint32_t)runFlagsMask;
     //SLT specific settings END
     
 

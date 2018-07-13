@@ -116,7 +116,7 @@
 			id anObj = nil;
 			//get length from the first word.
 			unsigned long val = *dPtr;
-			if(needToSwap)val = CFSwapInt32(val); //if data is from old PPC file, must swap.
+			if(needToSwap)val = (unsigned long)CFSwapInt32((uint32_t)val); //if data is from old PPC file, must swap.
 			aKey		  = [NSNumber  numberWithLong:ExtractDataId(val)];
 			decodedLength = ExtractLength(val);
 			anObj		  = [[currentDecoder objectLookup] objectForKey:aKey];

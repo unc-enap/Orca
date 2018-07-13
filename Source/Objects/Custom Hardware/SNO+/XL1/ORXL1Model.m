@@ -322,7 +322,7 @@ NSString* ORXL1Lock						= @"ORXL1Lock";
     [encoder encodeObject:clockFile			forKey:@"clockFile"];
     [encoder encodeObject:connectorName		forKey:@"connectorName"];
     [encoder encodeObject:connector			forKey:@"connector"];
-	[encoder encodeInt:[self slot]			forKey:@"slot"];
+	[encoder encodeInteger:[self slot]			forKey:@"slot"];
 	[encoder encodeObject:xilinxFile		forKey:@"xilinxFile"];
 	[encoder encodeObject:cableFile			forKey:@"cableFile"];
 	[encoder encodeFloat:adcClock			forKey:@"adcClock"];

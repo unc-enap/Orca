@@ -515,8 +515,8 @@ err:
                 [self setECA_currentPoint:ipoint+1];
 
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    [anMTCModel setCoarseDelay:current_coarse_delay];
-                    [anMTCModel setFineDelay:current_fine_delay];
+                    [anMTCModel setCoarseDelay:(int)current_coarse_delay];
+                    [anMTCModel setFineDelay:(int)current_fine_delay];
 #ifndef __TESTING__
                     [anMTCModel loadCoarseDelayToHardware];
                     [anMTCModel loadFineDelayToHardware];
@@ -575,7 +575,7 @@ err:
     for (ORFec32Model *fec in aFECModel) {
         int crate_number = [fec crateNumber];
         if(crate_number == 19) crate_number = 0; //hack for the teststand
-        int card_number = [fec stationNumber];
+        int card_number = (int)[fec stationNumber];
         int mask = [[[aPedestal_mask objectAtIndex:crate_number] objectAtIndex:card_number] intValue];
         //NSLog(@"PEDESTAL MASK: %d, %d, %x \n",crate_number,card_number,mask);
         dispatch_async(dispatch_get_main_queue(), ^{

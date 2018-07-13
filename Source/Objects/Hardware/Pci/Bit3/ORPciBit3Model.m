@@ -2103,16 +2103,16 @@ static NSString *ORPciBit3ErrorRateYAttributes  = @"Bit3 ErrorRateYAttributes";
     
     [[self undoManager] disableUndoRegistration];
     
-    [self setRangeToDo:[decoder decodeIntForKey:@"ORPciBit3ModelRange"]];
+    [self setRangeToDo:[decoder decodeIntegerForKey:@"ORPciBit3ModelRange"]];
     [self setDoRange:[decoder decodeBoolForKey:@"ORPciBit3ModelDoRange"]];
-    [self setDualPortAddress:[decoder decodeInt32ForKey:ORPciBit3DualPortAddress]];
-    [self setDualPortRamSize:[decoder decodeInt32ForKey:ORPciBit3DualPortRamSize]];
+    [self setDualPortAddress:[decoder decodeIntForKey:ORPciBit3DualPortAddress]];
+    [self setDualPortRamSize:[decoder decodeIntForKey:ORPciBit3DualPortRamSize]];
     
-    [self setRwAddress:[decoder decodeIntForKey:ORPciBit3RWAddress]];
-    [self setWriteValue:[decoder decodeIntForKey:ORPciBit3WriteValue]];
+    [self setRwAddress:[decoder decodeIntegerForKey:ORPciBit3RWAddress]];
+    [self setWriteValue:[decoder decodeIntegerForKey:ORPciBit3WriteValue]];
     [self setRwAddressModifier:[decoder decodeIntForKey:ORPciBit3ReadWriteAddMod]];
     [self setReadWriteIOSpace:[decoder decodeIntForKey:ORPciBit3ReadWriteAddSpace]];
-    [self setReadWriteType:[decoder decodeIntForKey:ORPciBit3ReadWriteType]];	
+    [self setReadWriteType:[decoder decodeIntForKey:ORPciBit3ReadWriteType]];
     [self setErrorRateGroup:[decoder decodeObjectForKey:ORPciBit3ErrorRateGroup]];
     [self setErrorRateXAttributes:[decoder decodeObjectForKey:ORPciBit3ErrorRateXAttributes]];
     [self setErrorRateYAttributes:[decoder decodeObjectForKey:ORPciBit3ErrorRateXAttributes]];
@@ -2135,16 +2135,16 @@ static NSString *ORPciBit3ErrorRateYAttributes  = @"Bit3 ErrorRateYAttributes";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:rangeToDo forKey:@"ORPciBit3ModelRange"];
+    [encoder encodeInteger:rangeToDo forKey:@"ORPciBit3ModelRange"];
     [encoder encodeBool:doRange forKey:@"ORPciBit3ModelDoRange"];
-    [encoder encodeInt32:dualPortAddress forKey:ORPciBit3DualPortAddress];
-    [encoder encodeInt32:dualPortRamSize forKey:ORPciBit3DualPortRamSize];
+    [encoder encodeInteger:dualPortAddress forKey:ORPciBit3DualPortAddress];
+    [encoder encodeInteger:dualPortRamSize forKey:ORPciBit3DualPortRamSize];
     
-    [encoder encodeInt:(int32_t)rwAddress forKey:ORPciBit3RWAddress];
-    [encoder encodeInt:(int32_t)writeValue forKey:ORPciBit3WriteValue];
-    [encoder encodeInt:rwAddressModifier forKey:ORPciBit3ReadWriteAddMod];
-    [encoder encodeInt:readWriteIOSpace forKey:ORPciBit3ReadWriteAddSpace];
-    [encoder encodeInt:readWriteType forKey:ORPciBit3ReadWriteType];
+    [encoder encodeInteger:(int32_t)rwAddress forKey:ORPciBit3RWAddress];
+    [encoder encodeInteger:(int32_t)writeValue forKey:ORPciBit3WriteValue];
+    [encoder encodeInteger:rwAddressModifier forKey:ORPciBit3ReadWriteAddMod];
+    [encoder encodeInteger:readWriteIOSpace forKey:ORPciBit3ReadWriteAddSpace];
+    [encoder encodeInteger:readWriteType forKey:ORPciBit3ReadWriteType];
     [encoder encodeObject:errorRateGroup forKey:ORPciBit3ErrorRateGroup];
     
     [encoder encodeObject:errorRateXAttributes forKey:ORPciBit3ErrorRateYAttributes];

@@ -484,7 +484,7 @@ NSString* ORAD413AControlReg2ChangedNotification     = @"ORAD413AControlReg2Chan
 	
     [[self undoManager] disableUndoRegistration];
     
-    [self setOnlineMask:			[decoder decodeIntForKey:   @"ORAD413AOnlineMask"]];
+    [self setOnlineMask:			[decoder decodeIntegerForKey:   @"ORAD413AOnlineMask"]];
     [self setDiscriminators:		[decoder decodeObjectForKey:@"OR413Discriminators"]];
     [self setSingles:				[decoder decodeBoolForKey:	@"singles"]];
     [self setRandomAccessMode:		[decoder decodeBoolForKey:	@"randomAccessMode"]];
@@ -505,7 +505,7 @@ NSString* ORAD413AControlReg2ChangedNotification     = @"ORAD413AControlReg2Chan
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:onlineMask			forKey:@"ORAD413AOnlineMask"];
+    [encoder encodeInteger:onlineMask			forKey:@"ORAD413AOnlineMask"];
     [encoder encodeObject:discriminators	forKey:@"OR413Discriminators"];
 	
     [encoder encodeBool:singles				forKey:@"singles"];

@@ -365,7 +365,7 @@ static NSString *ORFanInNumber 		= @"Number of Fan In Inputs";
     [[self undoManager] disableUndoRegistration];
     
     [self loadDefaults];
-    [self setNumberOfInputs:[decoder decodeIntForKey:ORFanInNumber]];
+    [self setNumberOfInputs:[decoder decodeIntegerForKey:ORFanInNumber]];
     [self registerNotificationObservers];
     
     
@@ -377,7 +377,7 @@ static NSString *ORFanInNumber 		= @"Number of Fan In Inputs";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:[self numberOfInputs] forKey:ORFanInNumber];
+    [encoder encodeInteger:[self numberOfInputs] forKey:ORFanInNumber];
     
 }
 

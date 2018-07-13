@@ -680,7 +680,7 @@ static NSString *ORHVDirName 		= @"ORHVDirName";
     [self setCurrentFile:[decoder decodeObjectForKey:@"ORHVRampModelCurrentFile"]];
     [self setSaveCurrentToFile:[decoder decodeBoolForKey:@"ORHVRampModelSaveCurrentToFile"]];
     [self setSupplies:[decoder decodeObjectForKey:ORHVSupplies]];
-    [self setPollingState:[decoder decodeIntForKey:ORHVPollingState]];
+    [self setPollingState:[decoder decodeIntegerForKey:ORHVPollingState]];
     [self setDirName:[decoder decodeObjectForKey:ORHVDirName]];
     if(dirName == nil){
         [self setDirName:@"~"];
@@ -704,7 +704,7 @@ static NSString *ORHVDirName 		= @"ORHVDirName";
     [encoder encodeObject:currentFile forKey:@"ORHVRampModelCurrentFile"];
     [encoder encodeBool:saveCurrentToFile forKey:@"ORHVRampModelSaveCurrentToFile"];
     [encoder encodeObject:[self supplies] forKey:ORHVSupplies];
-    [encoder encodeInt:[self pollingState] forKey:ORHVPollingState];
+    [encoder encodeInteger:[self pollingState] forKey:ORHVPollingState];
     [encoder encodeObject:[self dirName] forKey:ORHVDirName];
 }
 

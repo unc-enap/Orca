@@ -555,8 +555,7 @@ NSString* ORConnectionChanged = @"OR Connection Changed";
     [self setOffColor:[decoder decodeObjectForKey:@"ORConnectorOffColor"]];
     [self setObjectLink:[decoder decodeObjectForKey:@"ORConnector ObjectLink"]];
     [self setConnection:[decoder decodeObjectForKey:@"ORConnector Connection"]];
-    [self setConnectorImageType:[decoder decodeIntForKey:@"ORConnectorImageType"]];
-    [self setConnectorType:[decoder decodeInt32ForKey:@"ORConnector Type"]];
+    [self setConnectorImageType:[decoder decodeIntForKey:@"ORConnector Type"]];
     [self setIoType:[decoder decodeIntForKey:@"ORConnector IO Type"]];
     [self setIdentifer:[decoder decodeIntForKey:@"ORConnectorID"]];
     [self setRestrictedList:[decoder decodeObjectForKey:@"ORConnectorRestrictedList"]];
@@ -576,17 +575,17 @@ NSString* ORConnectionChanged = @"OR Connection Changed";
 
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
-	[encoder encodeInt:1 forKey:@"newVersion"];
+	[encoder encodeInteger:1 forKey:@"newVersion"];
     [encoder encodeObject:onColor forKey:@"ORConnectorOnColor"];
     [encoder encodeObject:offColor forKey:@"ORConnectorOffColor"];
     [encoder encodeRect:[self localFrame] forKey:@"LocalFrame"];
     [encoder encodeConditionalObject:guardian forKey:@"ORConnector Parent"];
     [encoder encodeConditionalObject:objectLink forKey:@"ORConnector ObjectLink"];
     [encoder encodeConditionalObject:connector forKey:@"ORConnector Connection"];
-    [encoder encodeInt:connectorImageType forKey:@"ORConnectorImageType"];
-    [encoder encodeInt32:(int32_t)connectorType forKey:@"ORConnector Type"];
-    [encoder encodeInt:ioType forKey:@"ORConnector IO Type"];
-    [encoder encodeInt:identifer forKey:@"ORConnectorID"];
+    [encoder encodeInteger:connectorImageType forKey:@"ORConnectorImageType"];
+    [encoder encodeInteger:connectorType forKey:@"ORConnector Type"];
+    [encoder encodeInteger:ioType forKey:@"ORConnector IO Type"];
+    [encoder encodeInteger:identifer forKey:@"ORConnectorID"];
     [encoder encodeObject:restrictedList forKey:@"ORConnectorRestrictedList"];
     [encoder encodeBool:hidden forKey:@"Hidden"];
     [encoder encodeBool:sameGuardianIsOK forKey:@"sameGuardianIsOK"];

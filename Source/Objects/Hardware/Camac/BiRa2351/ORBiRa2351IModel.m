@@ -165,7 +165,7 @@ NSString* ORBiRa2351IModelLastReadChanged		= @"ORBiRa2351IModelLastReadChanged";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];	
-    [encoder encodeInt:pollingState forKey:@"pollingState"];
+    [encoder encodeInteger:pollingState forKey:@"pollingState"];
 }
 
 #pragma mark ¥¥¥Bit Processing Protocol

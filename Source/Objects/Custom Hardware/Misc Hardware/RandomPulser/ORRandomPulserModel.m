@@ -239,7 +239,7 @@ static NSString* ORRandomNegPulserState		= @"ORRandomNegPulserState";
 	[[self undoManager] disableUndoRegistration];
     
 	[self setPulserRate:[decoder decodeIntForKey:ORRandomPulserPulserRate]];
-	[self setPulserAmp:[decoder decodeIntForKey:ORRandomPulserPulserAmp]];
+	[self setPulserAmp:[decoder decodeIntegerForKey:ORRandomPulserPulserAmp]];
 	[self setTtlPulserState:[decoder decodeBoolForKey:ORRandomTTLPulserState]];
 	[self setNegPulserState:[decoder decodeBoolForKey:ORRandomNegPulserState]];
     
@@ -252,8 +252,8 @@ static NSString* ORRandomNegPulserState		= @"ORRandomNegPulserState";
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-	[encoder encodeInt:pulserRate forKey:ORRandomPulserPulserRate];
-    [encoder encodeInt:pulserAmp forKey:ORRandomPulserPulserAmp];
+	[encoder encodeInteger:pulserRate forKey:ORRandomPulserPulserRate];
+    [encoder encodeInteger:pulserAmp forKey:ORRandomPulserPulserAmp];
 	[encoder encodeBool:ttlPulserState forKey:ORRandomTTLPulserState];
 	[encoder encodeBool:negPulserState forKey:ORRandomNegPulserState];
     

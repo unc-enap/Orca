@@ -276,7 +276,7 @@ for (id obj in listOfADCs) [obj x];               \
 
 - (NSMutableData*) _transposeData:(NSMutableData*)inData withColumns:(int)cols
 {
-    int rows = [inData length] /(cols * sizeof(double));
+    int rows = (int)([inData length] /(cols * sizeof(double)));
     NSMutableData* data = [NSMutableData dataWithData:inData];
     NSMutableData* outData = [NSMutableData dataWithLength:[data length]];
     double* dataPtr = (double*) [data bytes];
@@ -327,11 +327,11 @@ for (id obj in listOfADCs) [obj x];               \
     // Y = alpha*A*X + beta*Y
     cblas_dgemv(CblasRowMajor,      // Row-major ordering
                 CblasNoTrans,       // Don't transpose
-                nCoil,      // Row number (A)
-                nChannel,   // Column number (A)
+                (int)nCoil,      // Row number (A)
+                (int)nChannel,   // Column number (A)
                 1,                  // Scaling Factor alpha
                 [FeedbackMatData bytes], // Matrix A
-                nChannel,   // Size of first dimension
+                (int)nChannel,   // Size of first dimension
                 ptr,                // vector X
                 1,                  // Stride (should be 1)
                 simulationMode,     // Scaling Factor beta  //0 for simulation mode
@@ -361,7 +361,7 @@ for (id obj in listOfADCs) [obj x];               \
         CurrentMemorySize += 1;
     }
     double threshold = [self feedbackThreshold] /1000; //division by 1000 to convert from mA to A
-    double nrm2DCur = cblas_dnrm2(nCoil, dCurPtr, 1) / sqrt(nCoil);
+    double nrm2DCur = cblas_dnrm2((int)nCoil, dCurPtr, 1) / sqrt(nCoil);
     if (nrm2DCur < threshold) {
         for (i=0; i<nCoil; i++) {
             dCurPtr[i] = 0;
@@ -627,7 +627,7 @@ for (id obj in listOfADCs) [obj x];               \
 - (BOOL) _checkArray:(NSArray *)anArray
 {
     int i;
-    int len = [[anArray objectAtIndex:0] count];
+    int len = (int)[[anArray objectAtIndex:0] count];
     for (i=0; i<[anArray count]; i++) {
         if([[anArray objectAtIndex:i] count] != len) return FALSE;
     }
@@ -653,8 +653,8 @@ for (id obj in listOfADCs) [obj x];               \
                     }
                 }
             }
-            NumberOfChannels   = [[feedBackMatrix objectAtIndex: 0] count];
-            NumberOfCoils      = [feedBackMatrix count];
+            NumberOfChannels   = (int)[[feedBackMatrix objectAtIndex: 0] count];
+            NumberOfCoils      = (int)[feedBackMatrix count];
         }
 
         for (id e in orMax) {
@@ -1477,8 +1477,8 @@ for (id obj in listOfADCs) [obj x];               \
     //NumberOfCoils = SenNumCoils;
     //nChannel = [self numberOfChannels];
     //nCoil = [self numberOfCoils];
-    nChannel = SenNumChannels;
-    nCoil = SenNumCoils;
+    nChannel = (int)SenNumChannels;
+    nCoil = (int)SenNumCoils;
     NSMutableData* aTA = [NSMutableData dataWithLength:nCoil*nCoil*sizeof(double)];
     NSMutableData* newSensitivityMatData = [NSMutableData dataWithLength:nCoil*nChannel*sizeof(double)];
     double* dblPtr = (double*) [newSensitivityMatData bytes];
@@ -1808,13 +1808,13 @@ for (id obj in listOfADCs) [obj x];               \
     [objMap removeAllObjects];
     NSEnumerator* e = [self objectEnumerator];
     for (id anObject in e) {
-        [objMap setObject:anObject forKey:[NSNumber numberWithInt:[anObject tag]]];
+        [objMap setObject:anObject forKey:[NSNumber numberWithInteger:[anObject tag]]];
     }
 }
 
 - (int) rackNumber
 {
-	return [self uniqueIdNumber];
+	return (int)[self uniqueIdNumber];
 }
 
 - (void) viewChanged:(NSNotification*)aNotification
@@ -1880,7 +1880,7 @@ for (id obj in listOfADCs) [obj x];               \
 }
 - (int) slotForObj:(id)anObj
 {
-    return [anObj tag];
+    return (int)[anObj tag];
 }
 - (int) numberSlotsNeededFor:(id)anObj
 {
@@ -1908,16 +1908,16 @@ for (id obj in listOfADCs) [obj x];               \
     [self _setOrientationMatrix:[decoder decodeObjectForKey:@"kORnEDMCoilOrientationMatrix"]];
     [self _setConversionMatrix:[decoder decodeObjectForKey:@"kORnEDMCoilFeedbackMatrixData"]];
     [self _setSensitivityMatrix:[decoder decodeObjectForKey:@"kORnEDMCoilSensitivityMatrixData"]
-                   withChannels:[decoder decodeIntForKey:@"kORnEDMCoilSensChannels"]
-                      withCoils:[decoder decodeIntForKey:@"kORnEDMCoilSensCoils"]];
+                   withChannels:[decoder decodeIntegerForKey:@"kORnEDMCoilSensChannels"]
+                      withCoils:[decoder decodeIntegerForKey:@"kORnEDMCoilSensCoils"]];
     [self _setFieldTarget:[decoder decodeObjectForKey:@"kORnEDMCoilFieldTarget"]];
     [self _setStartCurrent:[decoder decodeObjectForKey:@"kORnEDMCoilStartCurrent"]];
-    NumberOfChannels = [decoder decodeIntForKey:@"kORnEDMCoilNumChannels"];    
-    NumberOfCoils = [decoder decodeIntForKey:@"kORnEDMCoilNumCoils"]; 
+    NumberOfChannels = [decoder decodeIntForKey:@"kORnEDMCoilNumChannels"];
+    NumberOfCoils = [decoder decodeIntForKey:@"kORnEDMCoilNumCoils"];
     
     [self _setADCList:[decoder decodeObjectForKey:@"kORnEDMCoilListOfADCs"]];
     [self _setADCList:[decoder decodeObjectForKey:@"kORnEDMCoilListOfADCs"]];    
-    [self setVerbose:[decoder decodeIntForKey:@"kORnEDMCoilVerbose"]];
+    [self setVerbose:[decoder decodeIntegerForKey:@"kORnEDMCoilVerbose"]];
     [self setPostDataToDB:[decoder decodeBoolForKey:@"kORnEDMCoilPostDataToDB"]];
     [self setPostToPath:[decoder decodeObjectForKey:@"kORnEDMCoilPostToPath"]];
     [self setPostDataToDBPeriod:[decoder decodeFloatForKey:@"kORnEDMCoilPostToDBPeriod"]];
@@ -1941,11 +1941,11 @@ for (id obj in listOfADCs) [obj x];               \
     [encoder encodeObject:OrientationMatrix forKey:@"kORnEDMCoilOrientationMatrix"];
     [encoder encodeObject:FeedbackMatData forKey:@"kORnEDMCoilFeedbackMatrixData"];
     [encoder encodeObject:SensitivityMatData forKey:@"kORnEDMCoilSensitivityMatrixData"];
-    [encoder encodeInt:NumberOfChannels forKey:@"kORnEDMCoilNumChannels"];    
-    [encoder encodeInt:NumberOfCoils forKey:@"kORnEDMCoilNumCoils"];
-    [encoder encodeInt:SenNumChannels forKey:@"kORnEDMCoilSensChannels"];
-    [encoder encodeInt:SenNumCoils forKey:@"kORnEDMCoilSensCoils"];
-    [encoder encodeInt:verbose forKey:@"kORnEDMCoilVerbose"];
+    [encoder encodeInteger:NumberOfChannels forKey:@"kORnEDMCoilNumChannels"];    
+    [encoder encodeInteger:NumberOfCoils forKey:@"kORnEDMCoilNumCoils"];
+    [encoder encodeInteger:SenNumChannels forKey:@"kORnEDMCoilSensChannels"];
+    [encoder encodeInteger:SenNumCoils forKey:@"kORnEDMCoilSensCoils"];
+    [encoder encodeInteger:verbose forKey:@"kORnEDMCoilVerbose"];
     [encoder encodeBool:postDataToDB forKey:@"kORnEDMCoilPostDataToDB"];
     [encoder encodeObject:postToPath forKey:@"kORnEDMCoilPostToPath"];
     [encoder encodeObject:listOfADCs forKey:@"kORnEDMCoilListOfADCs"];
@@ -1969,7 +1969,7 @@ for (id obj in listOfADCs) [obj x];               \
 
 - (int) coilChannels
 {
-    return [objMap count]*kORTTCPX400DPOutputChannels;
+    return (int)[objMap count]*kORTTCPX400DPOutputChannels;
 }
 
 - (void) enableOutput:(BOOL)enab atCoil:(int)coil

@@ -231,7 +231,7 @@ NSString* ORMJDPumpCartModelConnectionChanged			 = @"ORMJDPumpCartModelConnectio
 {
 	ORTPG256AModel* pressureGauge = [aNote object];
 	int chan = [[[aNote userInfo] objectForKey:@"Channel"]intValue];
-	int componentTag = [pressureGauge tag];
+	int componentTag = (int)[pressureGauge tag];
 	int aRegion;
 	for(aRegion=0;aRegion<kNumberRegions;aRegion++){
 		ORVacuumValueLabel*  aLabel = [self regionValueObj:aRegion]; 
@@ -302,8 +302,8 @@ NSString* ORMJDPumpCartModelConnectionChanged			 = @"ORMJDPumpCartModelConnectio
 {
     [super encodeWithCoder:encoder];
     [encoder encodeBool:showGrid				forKey: @"showGrid"];
-    [encoder encodeInt:leftSideConnection		forKey: @"leftSideConnection"];
-    [encoder encodeInt:rightSideConnection		forKey: @"rightSideConnection"];
+    [encoder encodeInteger:leftSideConnection		forKey: @"leftSideConnection"];
+    [encoder encodeInteger:rightSideConnection		forKey: @"rightSideConnection"];
 }
 
 - (NSArray*) parts
@@ -497,7 +497,7 @@ NSString* ORMJDPumpCartModelConnectionChanged			 = @"ORMJDPumpCartModelConnectio
 
 - (int) slotForObj:(id)anObj
 {
-    return [anObj tag];
+    return (int)[anObj tag];
 }
 
 - (int) numberSlotsNeededFor:(id)anObj
@@ -823,8 +823,8 @@ NSString* ORMJDPumpCartModelConnectionChanged			 = @"ORMJDPumpCartModelConnectio
         NSMutableArray* gvStates = [NSMutableArray array];
         for(ORVacuumGateValve* aGateValve in [self gateValves]){
             [gvStates addObject:[NSArray arrayWithObjects:
-                                 [NSNumber numberWithInt:[aGateValve state]],
-                                 [NSNumber numberWithInt:[aGateValve constraintCount]],
+                                 [NSNumber numberWithInteger:[aGateValve state]],
+                                 [NSNumber numberWithIntger:[aGateValve constraintCount]],
                                  nil]];
         }
         

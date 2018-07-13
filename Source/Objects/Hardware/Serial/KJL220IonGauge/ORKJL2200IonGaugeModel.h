@@ -74,7 +74,7 @@
 - (void) setEmissionRead:(float)aEmissionRead;
 - (int) sensitivityRead;
 - (void) setSensitivityRead:(int)aSensitivityRead;
-- (int) queCount;
+- (NSUInteger) queCount;
 - (float) pressureScaleValue;
 - (int) pressureScale;
 - (void) setPressureScale:(int)aPressureScale;

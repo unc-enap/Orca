@@ -440,17 +440,17 @@ NSString* ORRGA300Lock								= @"ORRGA300Lock";
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:opMode				forKey:@"opMode"];
+    [encoder encodeInteger:opMode				forKey:@"opMode"];
     [encoder encodeFloat:elecMultGain		forKey:@"elecMultGain"];
-    [encoder encodeInt:stepsPerAmu			forKey:@"stepsPerAmu"];
-    [encoder encodeInt:initialMass			forKey:@"initialMass"];
-    [encoder encodeInt:finalMass			forKey:@"finalMass"];
-    [encoder encodeInt:noiseFloorSetting	forKey:@"noiseFloorSetting"];
-    [encoder encodeInt:ionizerElectronEnergy forKey:@"ionizerElectronEnergy"];
-    [encoder encodeInt:ionizerDegassTime	forKey:@"ionizerDegassTime"];
-    [encoder encodeInt:elecMultHVBias			forKey:@"ElecMultHVBias"];
-    [encoder encodeInt:ionizerFocusPlateVoltage forKey:@"ionizerFocusPlateVoltage"];
-    [encoder encodeInt:ionizerIonEnergy			forKey:@"ionizerIonEnergy"];
+    [encoder encodeInteger:stepsPerAmu			forKey:@"stepsPerAmu"];
+    [encoder encodeInteger:initialMass			forKey:@"initialMass"];
+    [encoder encodeInteger:finalMass			forKey:@"finalMass"];
+    [encoder encodeInteger:noiseFloorSetting	forKey:@"noiseFloorSetting"];
+    [encoder encodeInteger:ionizerElectronEnergy forKey:@"ionizerElectronEnergy"];
+    [encoder encodeInteger:ionizerDegassTime	forKey:@"ionizerDegassTime"];
+    [encoder encodeInteger:elecMultHVBias			forKey:@"ElecMultHVBias"];
+    [encoder encodeInteger:ionizerFocusPlateVoltage forKey:@"ionizerFocusPlateVoltage"];
+    [encoder encodeInteger:ionizerIonEnergy			forKey:@"ionizerIonEnergy"];
     [encoder encodeFloat:ionizerEmissionCurrent	forKey:@"ionizerEmissionCurrent1"];
     [encoder encodeObject:amus					forKey:@"amus"];
     [self postCouchDBRecord];
@@ -665,7 +665,7 @@ NSString* ORRGA300Lock								= @"ORRGA300Lock";
 
 - (int)  numberPointsInScan
 {
-	return [scanData length]/4;
+	return (int)[scanData length]/4;
 }
 - (int)  scanValueAtIndex:(int)i
 {
@@ -680,7 +680,7 @@ NSString* ORRGA300Lock								= @"ORRGA300Lock";
 - (int) countsInAmuTableData:(int)i
 {
 	id aKey = [NSNumber numberWithInt:i];
-	return [[amuTableData objectForKey:aKey] count];
+	return (int)[[amuTableData objectForKey:aKey] count];
 }
 
 - (int) amuTable:(int)anAmu valueAtIndex:(int)i
@@ -697,14 +697,14 @@ NSString* ORRGA300Lock								= @"ORRGA300Lock";
 {
 	if(!amus) amus= [[NSMutableArray array] retain];
 	id newAmu = [NSNumber numberWithInt:1];
-	[self addAmu:newAmu atIndex:[amus count]];
+	[self addAmu:newAmu atIndex:(int)[amus count]];
 }
 
 - (void) addAmu:(id)anAmu atIndex:(int)anIndex
 {
 	if(!amus) amus= [[NSMutableArray array] retain];
 	if([amus count] == 0)anIndex = 0;
-	anIndex = MIN(anIndex,[amus count]);
+	anIndex = MIN(anIndex,(int)[amus count]);
 	[[[self undoManager] prepareWithInvocationTarget:self] removeAmuAtIndex:anIndex];
 	[amus insertObject:anAmu atIndex:anIndex];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORRGA300ModelAmuAdded object:self];

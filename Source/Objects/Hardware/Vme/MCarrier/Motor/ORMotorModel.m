@@ -723,9 +723,9 @@ static NSString *ORMotorLinkInConnection = @"ORMotorLinkInConnection";
     [self setStepMode:[decoder decodeIntForKey:@"StepMode"]];
     [self setXyPosition:[decoder decodeIntForKey:@"Position"]];
     [self setHoldCurrent:[decoder decodeIntForKey:@"HoldCurrent"]];
-    [self setRisingEdge:[decoder decodeIntForKey:@"RisingEdge"]];
+    [self setRisingEdge:[decoder decodeIntegerForKey:@"RisingEdge"]];
     [self setBreakPoint:[decoder decodeIntForKey:@"BreakPoint"]];
-    [self setAbsoluteBrkPt:[decoder decodeIntForKey:@"AbsBreakPoint"]];
+    [self setAbsoluteBrkPt:[decoder decodeIntegerForKey:@"AbsBreakPoint"]];
     [self setStepCount:[decoder decodeIntForKey:@"StepCount"]];
     [self setSeekAmount:[decoder decodeIntForKey:@"SeekAmount"]];
     
@@ -735,14 +735,14 @@ static NSString *ORMotorLinkInConnection = @"ORMotorLinkInConnection";
     [self setPatternDwellTime:[decoder decodeFloatForKey:@"PatternDwellTime"]];
     [self setPatternNumSweeps:[decoder decodeIntForKey:@"PatternNumSweeps"]];
     [self setPatternType:[decoder decodeIntForKey:@"PatternType"]];
-    [self setOptionMask:[decoder decodeInt32ForKey:@"OptionMask"]];
-    [self setUseFileForPattern:[decoder decodeIntForKey:@"UsePatternFileName"]];
+    [self setOptionMask:[decoder decodeIntegerForKey:@"OptionMask"]];
+    [self setUseFileForPattern:[decoder decodeIntegerForKey:@"UsePatternFileName"]];
     [self setPatternFileName:[decoder decodeObjectForKey:@"PatternFileName"]];
     
     [self roundPatternEnd];
     
     [self setMultiplierX:[decoder decodeIntForKey:@"Multiplier"]];
-    [self setAbsoluteMotion:[decoder decodeIntForKey:@"AbsoluteMotion"]];
+    [self setAbsoluteMotion:[decoder decodeIntegerForKey:@"AbsoluteMotion"]];
     [self setRiseFreq:[decoder decodeIntForKey:@"RiseFreq"]];
     [self setDriveFreq:[decoder decodeIntForKey:@"DriveFreq"]];
     [self setAcceleration:[decoder decodeIntForKey:@"Acceration"]];
@@ -757,30 +757,30 @@ static NSString *ORMotorLinkInConnection = @"ORMotorLinkInConnection";
 {
     [super encodeWithCoder:encoder];
     
-    [encoder encodeInt:stepCount forKey:@"StepCount"];
-    [encoder encodeInt:holdCurrent forKey:@"HoldCurrent"];
-    [encoder encodeInt:xyPosition forKey:@"Position"];
-    [encoder encodeInt:stepMode forKey:@"StepMode"];
-    [encoder encodeInt:risingEdge forKey:@"RisingEdge"];
-    [encoder encodeInt:breakPoint forKey:@"BreakPoint"];
-    [encoder encodeInt:absoluteBrkPt forKey:@"AbsBreakPoint"];
-    [encoder encodeInt:seekAmount forKey:@"SeekAmount"];
+    [encoder encodeInteger:stepCount forKey:@"StepCount"];
+    [encoder encodeInteger:holdCurrent forKey:@"HoldCurrent"];
+    [encoder encodeInteger:xyPosition forKey:@"Position"];
+    [encoder encodeInteger:stepMode forKey:@"StepMode"];
+    [encoder encodeInteger:risingEdge forKey:@"RisingEdge"];
+    [encoder encodeInteger:breakPoint forKey:@"BreakPoint"];
+    [encoder encodeInteger:absoluteBrkPt forKey:@"AbsBreakPoint"];
+    [encoder encodeInteger:seekAmount forKey:@"SeekAmount"];
     
-    [encoder encodeInt:patternStartCount forKey:@"PatternStartCount"];
-    [encoder encodeInt:patternEndCount forKey:@"PatternEndCount"];
-    [encoder encodeInt:patternDeltaSteps forKey:@"PatternDeltaSteps"];
+    [encoder encodeInteger:patternStartCount forKey:@"PatternStartCount"];
+    [encoder encodeInteger:patternEndCount forKey:@"PatternEndCount"];
+    [encoder encodeInteger:patternDeltaSteps forKey:@"PatternDeltaSteps"];
     [encoder encodeFloat:patternDwellTime forKey:@"PatternDwellTime"];
-    [encoder encodeInt:patternNumSweeps forKey:@"PatternNumSweeps"];
-    [encoder encodeInt:patternType forKey:@"PatternType"];
-    [encoder encodeInt32:(int32_t)optionMask forKey:@"OptionMask"];
-    [encoder encodeInt:useFileForPattern forKey:@"UsePatternFileName"];
+    [encoder encodeInteger:patternNumSweeps forKey:@"PatternNumSweeps"];
+    [encoder encodeInteger:patternType forKey:@"PatternType"];
+    [encoder encodeInteger:optionMask forKey:@"OptionMask"];
+    [encoder encodeInteger:useFileForPattern forKey:@"UsePatternFileName"];
     [encoder encodeObject:patternFileName forKey:@"PatternFileName"];
     
-    [encoder encodeInt:multiplierX forKey:@"Multiplier"];
-    [encoder encodeInt:absoluteMotion forKey:@"AbsoluteMotion"];
-    [encoder encodeInt:riseFreq forKey:@"RiseFreq"];
-    [encoder encodeInt:driveFreq forKey:@"DriveFreq"];
-    [encoder encodeInt:acceleration forKey:@"Acceration"];
+    [encoder encodeInteger:multiplierX forKey:@"Multiplier"];
+    [encoder encodeInteger:absoluteMotion forKey:@"AbsoluteMotion"];
+    [encoder encodeInteger:riseFreq forKey:@"RiseFreq"];
+    [encoder encodeInteger:driveFreq forKey:@"DriveFreq"];
+    [encoder encodeInteger:acceleration forKey:@"Acceration"];
     [encoder encodeObject:motorName forKey:@"MotorName"];
     
     

@@ -1557,7 +1557,7 @@ static NSString* itemsToShip[kNumToShip*2] = {
     [encoder encodeBool:showFormattedDates    forKey:@"showFormattedDates"];
     [encoder encodeObject:postRegulationFile  forKey: @"postRegulationFile"];
     [encoder encodeObject:postRegulationArray forKey: @"postRegulationArray"];
-    [encoder encodeInt:pollTime               forKey: @"pollTime"];
+    [encoder encodeInteger:pollTime               forKey: @"pollTime"];
 }
 
 #pragma mark *** Commands

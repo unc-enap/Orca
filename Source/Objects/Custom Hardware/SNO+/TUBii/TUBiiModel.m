@@ -154,14 +154,14 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
     [super encodeWithCoder:aCoder];
     [aCoder encodeFloat:smellieRate         forKey:@"TUBiiModelSmellieRate"];
     [aCoder encodeFloat:smelliePulseWidth   forKey:@"TUBiiModelSmelliePulseWidth"];
-    [aCoder encodeInt:smellieNPulses		forKey:@"TUBiiModelSmellieNPulses"];
+    [aCoder encodeInteger:smellieNPulses		forKey:@"TUBiiModelSmellieNPulses"];
     [aCoder encodeFloat:tellieRate          forKey:@"TUBiiModelTellieRate"];
     [aCoder encodeFloat:telliePulseWidth    forKey:@"TUBiiModelTelliePulseWidth"];
-    [aCoder encodeInt:tellieNPulses         forKey:@"TUBiiModelTellieNPulses"];
+    [aCoder encodeInteger:tellieNPulses         forKey:@"TUBiiModelTellieNPulses"];
     [aCoder encodeFloat:pulserRate          forKey:@"TUBiiModelPulserRate"];
     [aCoder encodeFloat:pulserPulseWidth    forKey:@"TUBiiModelPulseWidth"];
-    [aCoder encodeInt:pulserNPulses         forKey:@"TUBiiModelNPulses"];
-    [aCoder encodeInt:portNumber            forKey:@"TUBiiModelPortNumber"];
+    [aCoder encodeInteger:pulserNPulses         forKey:@"TUBiiModelNPulses"];
+    [aCoder encodeInteger:portNumber            forKey:@"TUBiiModelPortNumber"];
     [aCoder encodeObject:strHostName        forKey:@"TUBiiModelStrHostName"];
 }
 - (void) registerNotificationObservers{
@@ -196,7 +196,7 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
 }
 - (int) sendIntCmd: (NSString* const) aCmd {
     NSLog(@"Sending %@ to TUBii\n",aCmd);
-    return (int)[connection intCommand: (int)[aCmd UTF8String]];
+    return (int)[connection intCommand:(const char *)[aCmd UTF8String]];
 }
 #pragma mark •••HW Access
 - (void) Initialize {

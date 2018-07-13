@@ -400,10 +400,10 @@ NSString* ORTPG256ALock = @"ORTPG256ALock";
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:units			forKey: @"units"];
-    [encoder encodeInt:pressureScale	forKey: @"pressureScale"];
+    [encoder encodeInteger:units			forKey: @"units"];
+    [encoder encodeInteger:pressureScale	forKey: @"pressureScale"];
     [encoder encodeBool:shipPressures	forKey: @"shipPressures"];
-    [encoder encodeInt:pollTime			forKey: @"pollTime"];
+    [encoder encodeInteger:pollTime			forKey: @"pollTime"];
 	
 	int i;
 	for(i=0;i<6;i++){
@@ -584,7 +584,7 @@ NSString* ORTPG256ALock = @"ORTPG256ALock";
 		int channel = [[lastRequest substringWithRange:NSMakeRange(2,1)] intValue]-1;
 		if(channel>=0 && channel<6){
 			NSArray* parts = [theResponse componentsSeparatedByString:@","];
-			int n = [parts count];
+			int n = (int)[parts count];
 			if(n == 2){
 				[self setMeasurementState:channel value:[[parts objectAtIndex:0] intValue]];
 				float thePressure = 0;

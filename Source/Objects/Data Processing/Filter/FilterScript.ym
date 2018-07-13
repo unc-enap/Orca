@@ -27,7 +27,7 @@
 /* prototypes */
 nodeType* opr(int oper, int nops, ...);
 nodeType* ident(char*);
-nodeType* con(int value);
+nodeType* con(long value);
 
 void addFilterNode(int type,nodeType* node);
 
@@ -400,7 +400,7 @@ void addFilterNode(int type,nodeType* aNode)
 	}
 }
 
-nodeType *con(int value) 
+nodeType *con(long value)
 {
     /* allocate node */
 	nodeType* p = malloc(SIZEOF_NODETYPE + sizeof(conNodeType));

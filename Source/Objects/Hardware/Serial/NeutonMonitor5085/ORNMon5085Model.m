@@ -334,8 +334,8 @@ NSString* ORNMon5085IsLogChanged                  = @"ORNMon5085IsLogChanged";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeBool:isLog	forKey:@"isLog"];
-    [encoder encodeInt:modeTime forKey:@"modeTime"];
-    [encoder encodeInt:opMode		forKey:@"mode"];
+    [encoder encodeInteger:modeTime forKey:@"modeTime"];
+    [encoder encodeInteger:opMode		forKey:@"mode"];
 }
 
 #pragma mark •••Commands

@@ -883,7 +883,7 @@ enum {
 {
     if ([self ignoreMouse]) return;
 	
-	NSEventType modifierKeys = [theEvent modifierFlags];
+	NSEventModifierFlags modifierKeys = [theEvent modifierFlags];
     NSPoint mouseLoc         = [self convertPoint:[theEvent locationInWindow] fromView:nil];
 	
 	NSMutableArray* markers = [attributes objectForKey:ORAxisMarkers];

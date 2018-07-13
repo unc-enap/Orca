@@ -183,7 +183,7 @@
 
 - (int) numberOfPlots
 {
-	return [plotArray count];
+	return (int)[plotArray count];
 }
 
 - (id)  plot:(int)i
@@ -583,7 +583,7 @@
 	BOOL allPlotsValid = YES;
 	for(id aPlot in plotArray){
 		if([aPlot respondsToSelector:@selector(numberPoints)]){
-			maxPoints = MAX(maxPoints,[aPlot numberPoints]);
+			maxPoints = (int)MAX(maxPoints,[aPlot numberPoints]);
 		}
 		if(![aPlot respondsToSelector:@selector(valueAsStringAtPoint:)]){
 			allPlotsValid = NO;
@@ -633,7 +633,7 @@
 	BOOL allPlotsValid = YES;
 	for(id aPlot in plotArray){
 		if([aPlot respondsToSelector:@selector(numberPoints)]){
-			maxPoints = MAX(maxPoints,[aPlot numberPoints]);
+			maxPoints = (int)MAX(maxPoints,[aPlot numberPoints]);
 		}
 		if(![aPlot respondsToSelector:@selector(valueAsStringAtPoint:)]){
 			allPlotsValid = NO;

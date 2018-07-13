@@ -350,8 +350,8 @@ static NSString* ORActionControllerParameter	    = @"ORActionControllerParameter
 }
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
-	[encoder encodeInt:actionTag forKey:ORActionControllerActionTag];
-	[encoder encodeInt:parameterTag forKey:ORActionControllerParameterTag];
+	[encoder encodeInteger:actionTag forKey:ORActionControllerActionTag];
+	[encoder encodeInteger:parameterTag forKey:ORActionControllerParameterTag];
 	[encoder encodeObject:parameterValue forKey:ORActionControllerParameter];
 }
 

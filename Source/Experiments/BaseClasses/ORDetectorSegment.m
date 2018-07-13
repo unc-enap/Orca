@@ -261,7 +261,7 @@ NSString* KSegmentChangedNotification	  =	@"KSegmentChangedNotification";
     }
     NSArray* items = [aString componentsSeparatedByString:@","];
     int i;
-    int count = [items count];
+    int count = (int)[items count];
 	if(count == 5){
 		//old format
 		int x = [[items objectAtIndex:0] intValue];
@@ -272,7 +272,7 @@ NSString* KSegmentChangedNotification	  =	@"KSegmentChangedNotification";
 		isValid = YES;
 	}
 	else {
-		int n = MIN(count,[mapEntries count]);
+		int n = MIN(count,(int)[mapEntries count]);
 		for(i=0;i<n;i++){
 			[params setObject:[items objectAtIndex:i] forKey:mapKey(i)];
 		}
@@ -355,7 +355,7 @@ NSString* KSegmentChangedNotification	  =	@"KSegmentChangedNotification";
 -(id) objectForKey:(id)key
 {
 	if([key isEqualToString:@"threshold"]){
-		if(hardwareCard) return [NSNumber numberWithInt:[self threshold]];
+		if(hardwareCard) return [NSNumber numberWithInteger:[self threshold]];
 		else return @"--";
 	}
 	else if([key isEqualToString:@"gain"]){
@@ -384,7 +384,7 @@ NSString* KSegmentChangedNotification	  =	@"KSegmentChangedNotification";
 - (void) setSegmentNumber:(NSUInteger)index
 {
 	if(!params)[self setParams:[NSMutableDictionary dictionary]];
-	[params setObject:[NSNumber numberWithInt:index] forKey:@"kSegmentNumber"];
+	[params setObject:[NSNumber numberWithInteger:index] forKey:@"kSegmentNumber"];
 }
 
 - (NSUInteger) segmentNumber
@@ -463,7 +463,7 @@ NSString* KSegmentChangedNotification	  =	@"KSegmentChangedNotification";
 
 - (id) description
 {		
-	NSString* string = [NSString stringWithFormat:@"         Segment: %d\n",[self segmentNumber]];
+	NSString* string = [NSString stringWithFormat:@"         Segment: %ld\n",[self segmentNumber]];
 	NSString* theModel = [(NSObject*)hardwareCard className];
 	if([theModel hasPrefix:@"OR"]) theModel   = [theModel substringFromIndex:2];
 	if([theModel hasSuffix:@"Model"])theModel = [theModel substringToIndex:[theModel length]-[@"Model"length]];

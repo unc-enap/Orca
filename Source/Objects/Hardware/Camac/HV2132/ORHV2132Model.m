@@ -38,10 +38,10 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 //  until we get the read back functionality to work use the following methods to
 //  fake readback by storing the hw values in a dictionary
 //-------------------------------------------------------------------------------
-- (void) setHVRecordMainFrame:(int)aMainFrame channel:(int)aChannel voltage:(int)aValue;
-- (void) setHVRecordMainFrame:(int)aMainFrame status:(BOOL)state;
-- (int)  getHVRecordVoltageMainFrame:(int)aMainFrame channel:(int)aChannel;
-- (int)  getHVRecordStatusMainFrame:(int)aMainFrame;
+- (void) setHVRecordMainFrame:(unsigned long)aMainFrame channel:(int)aChannel voltage:(int)aValue;
+- (void) setHVRecordMainFrame:(unsigned long)aMainFrame status:(BOOL)state;
+- (int)  getHVRecordVoltageMainFrame:(unsigned long)aMainFrame channel:(int)aChannel;
+- (int)  getHVRecordStatusMainFrame:(unsigned long)aMainFrame;
 @end
 
 
@@ -332,7 +332,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 	}
 }
 
-- (void) setVoltage:(int) aValue mainFrame:(int) aMainFrame channel:(int) aChannel
+- (void) setVoltage:(int) aValue mainFrame:(unsigned long) aMainFrame channel:(int) aChannel
 {
 	@try {
 		
@@ -354,7 +354,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 			 postNotificationName:ORHV2132VoltageChanged
 			 object: self
 			 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
-					   [NSNumber numberWithInt:aMainFrame],@"MainFrame",
+					   [NSNumber numberWithInteger:aMainFrame],@"MainFrame",
 					   [NSNumber numberWithInt:aChannel],@"Channel",
 					   [NSNumber numberWithInt:aValue],@"Voltage",
 					   nil]];
@@ -368,7 +368,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 	}
 }
 
-- (void) readVoltage:(int*) aValue mainFrame:(int) aMainFrame channel:(int) aChannel
+- (void) readVoltage:(int*) aValue mainFrame:(unsigned long) aMainFrame channel:(int) aChannel
 {
 	@try {
 		[commLock lock];
@@ -399,7 +399,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 	}
 }
 
-- (void) readAllVoltages:(int*)aValues mainFrame:(int) aMainFrame
+- (void) readAllVoltages:(int*)aValues mainFrame:(unsigned long) aMainFrame
 {
 	@try {
 		[commLock lock];
@@ -436,7 +436,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 	}
 }
 
-- (void) readTarget:(int*) aValue mainFrame:(int) aMainFrame channel:(int) aChannel
+- (void) readTarget:(int*) aValue mainFrame:(unsigned long) aMainFrame channel:(int) aChannel
 {
 	@try {
 		[commLock lock];
@@ -461,7 +461,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 	}
 }
 
-- (void) readAllTargets:(int*)aValues mainFrame:(int) aMainFrame
+- (void) readAllTargets:(int*)aValues mainFrame:(unsigned long) aMainFrame
 {
 	@try {
 		[commLock lock];
@@ -492,7 +492,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 	}
 }
 
-- (void) readStatus:(int*) aValue failedMask:(unsigned short*)failed mainFrame:(int) aMainFrame
+- (void) readStatus:(int*) aValue failedMask:(unsigned short*)failed mainFrame:(unsigned long) aMainFrame
 {
 	@try {
 		[commLock lock];
@@ -541,7 +541,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 	}
 }
 
-- (void) readPodComplement:(unsigned short*) typeMask mainFrame:(int) aMainFrame
+- (void) readPodComplement:(unsigned short*) typeMask mainFrame:(unsigned long) aMainFrame
 {
 	@try {
 		[commLock lock];
@@ -568,7 +568,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 }
 
 
-- (void) setHV:(BOOL)state mainFrame:(int)aMainFrame
+- (void) setHV:(BOOL)state mainFrame:(unsigned long)aMainFrame
 {
 	@try {
 		[commLock lock];
@@ -585,7 +585,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 		 postNotificationName:ORHV2132OnOffChanged
 		 object: self
 		 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
-				   [NSNumber numberWithInt:aMainFrame],@"MainFrame",
+				   [NSNumber numberWithInteger:aMainFrame],@"MainFrame",
 				   [NSNumber numberWithInt:state],@"State",
 				   nil]];
 		
@@ -609,7 +609,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 #	endif
 }
 
-- (void) setEnableResponse:(BOOL)state mainFrame:(int)aMainFrame
+- (void) setEnableResponse:(BOOL)state mainFrame:(unsigned long)aMainFrame
 {
 	//send S-M-11 cmd (enable/disable response)
 	unsigned short dataWord = ((state&0x1)<<10) | ((aMainFrame&0x3f)<<4) | 11;
@@ -682,9 +682,9 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
     self = [super initWithCoder:decoder];
 	
     [[self undoManager] disableUndoRegistration];
-    [self setHvValue:		[decoder decodeIntForKey:@"hvValue"]];
-    [self setMainFrame:		[decoder decodeIntForKey:@"mainFrame"]];
-    [self setChannel:		[decoder decodeIntForKey:@"channel"]];
+    [self setHvValue:		[decoder decodeIntegerForKey:@"hvValue"]];
+    [self setMainFrame:		[decoder decodeIntegerForKey:@"mainFrame"]];
+    [self setChannel:		[decoder decodeIntegerForKey:@"channel"]];
 	
     [self setConnectorName:	[decoder decodeObjectForKey:@"connectorName"]];
     [self setConnector:		[decoder decodeObjectForKey:@"connector"]];
@@ -702,9 +702,9 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:hvValue			forKey:@"hvValue"];
-    [encoder encodeInt:mainFrame		forKey:@"mainFrame"];
-    [encoder encodeInt:channel			forKey:@"channel"];
+    [encoder encodeInteger:hvValue			forKey:@"hvValue"];
+    [encoder encodeInteger:mainFrame		forKey:@"mainFrame"];
+    [encoder encodeInteger:channel			forKey:@"channel"];
     [encoder encodeObject:connectorName	forKey:@"connectorName"];
     [encoder encodeObject:connector		forKey:@"connector"];
     [encoder encodeObject:[self dirName] forKey:@"HVDirName"];
@@ -729,10 +729,10 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 //  until we get the read back functionality to work use the following methods to
 //  fake readback by storing the hw values in a dictionary
 //-------------------------------------------------------------------------------
-- (void) setHVRecordMainFrame:(int)aMainFrame channel:(int)aChannel voltage:(int)aValue
+- (void) setHVRecordMainFrame:(unsigned long)aMainFrame channel:(int)aChannel voltage:(int)aValue
 {
 	//make the keys
-	NSString* mainFrameKey	= [NSString stringWithFormat:@"HVMainFrame%d",aMainFrame];
+	NSString* mainFrameKey	= [NSString stringWithFormat:@"HVMainFrame%ld",aMainFrame];
 	NSString* timeKey		= [NSString stringWithFormat:@"SetTime%d",aChannel];
 	NSString* voltageKey	= [NSString stringWithFormat:@"HVVoltage%d",aChannel];
 	
@@ -749,7 +749,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 	
 }
 
-- (void) setHVRecordMainFrame:(int)aMainFrame status:(BOOL)state
+- (void) setHVRecordMainFrame:(unsigned long)aMainFrame status:(BOOL)state
 {
 	//make the keys
 	NSString* mainFrameKey	= [NSString stringWithFormat:@"HVMainFrame%d",aMainFrame];
@@ -765,7 +765,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 	[mainFrameDictionary setObject:[NSNumber numberWithBool:state] forKey:statusKey]; 
 }
 
-- (int)  getHVRecordVoltageMainFrame:(int)aMainFrame channel:(int)aChannel
+- (int)  getHVRecordVoltageMainFrame:(unsigned long)aMainFrame channel:(int)aChannel
 {
 	NSString* mainFrameKey	= [NSString stringWithFormat:@"HVMainFrame%d",aMainFrame];
 	NSString* voltageKey	= [NSString stringWithFormat:@"HVVoltage%d",aChannel];
@@ -773,7 +773,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 	return [[mainFrameDictionary objectForKey:voltageKey] intValue];
 }
 
-- (int)  getHVRecordStatusMainFrame:(int)aMainFrame
+- (int)  getHVRecordStatusMainFrame:(unsigned long)aMainFrame
 {
 	NSString* mainFrameKey	= [NSString stringWithFormat:@"HVMainFrame%d",aMainFrame];
 	NSString* statusKey		= [NSString stringWithFormat:@"HVStatus"];

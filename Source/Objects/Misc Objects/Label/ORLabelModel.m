@@ -439,17 +439,17 @@ NSString* ORLabelModelFormatChanged				 = @"ORLabelModelFormatChanged";
     [super encodeWithCoder:encoder];
     [encoder encodeObject:label				forKey:@"label"];
     [encoder encodeObject:displayFormat		forKey:@"displayFormat"];
-    [encoder encodeInt:textSize				forKey:@"textSize"];
-	[encoder encodeInt:labelType			forKey:@"labelType"];
+    [encoder encodeInteger:textSize				forKey:@"textSize"];
+	[encoder encodeInteger:labelType			forKey:@"labelType"];
     [encoder encodeObject:controllerString	forKey:@"controllerString"];
-	[encoder encodeInt:updateInterval		forKey:@"updateInterval"];
+	[encoder encodeInteger:updateInterval		forKey:@"updateInterval"];
 }
 - (void) doCntrlClick:(NSView*)aView
 {
 	NSEvent* theCurrentEvent = [NSApp currentEvent];
     NSEvent *event =  [NSEvent mouseEventWithType:NSLeftMouseDown
                                          location:[theCurrentEvent locationInWindow]
-                                    modifierFlags:NSLeftMouseDownMask // 0x100
+                                    modifierFlags:NSEventModifierFlagControl // 0x100
                                         timestamp:(NSTimeInterval)0
                                      windowNumber:[theCurrentEvent windowNumber]
                                           context:[theCurrentEvent context]

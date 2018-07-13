@@ -387,10 +387,10 @@ NSString* ORPDcuLock						= @"ORPDcuLock";
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:tmpRotSet		forKey:@"tmpRotSet"];
-    [encoder encodeInt:pressureScale	forKey: @"pressureScale"];
-    [encoder encodeInt:deviceAddress	forKey: @"deviceAddress"];
-    [encoder encodeInt:pollTime			forKey: @"pollTime"];
+    [encoder encodeInteger:tmpRotSet		forKey:@"tmpRotSet"];
+    [encoder encodeInteger:pressureScale	forKey: @"pressureScale"];
+    [encoder encodeInteger:deviceAddress	forKey: @"deviceAddress"];
+    [encoder encodeInteger:pollTime			forKey: @"pollTime"];
 }
 
 #pragma mark •••HW Methods

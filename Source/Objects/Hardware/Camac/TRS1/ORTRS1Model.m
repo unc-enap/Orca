@@ -386,8 +386,8 @@ NSString* ORTRS1ModelControlRegisterChanged = @"ORTRS1ModelControlRegisterChange
     self = [super initWithCoder:decoder];
 	
     [[self undoManager] disableUndoRegistration];
-    [self setOffsetRegister:[decoder decodeIntForKey:@"ORTRS1ModelOffsetRegister"]];
-    [self setControlRegister:[decoder decodeIntForKey:@"ORTRS1ModelControlRegister"]];
+    [self setOffsetRegister:[decoder decodeIntegerForKey:@"ORTRS1ModelOffsetRegister"]];
+    [self setControlRegister:[decoder decodeIntegerForKey:@"ORTRS1ModelControlRegister"]];
     [[self undoManager] enableUndoRegistration];
 	
     return self;
@@ -396,8 +396,8 @@ NSString* ORTRS1ModelControlRegisterChanged = @"ORTRS1ModelControlRegisterChange
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:offsetRegister forKey:@"ORTRS1ModelOffsetRegister"];
-    [encoder encodeInt:controlRegister forKey:@"ORTRS1ModelControlRegister"];
+    [encoder encodeInteger:offsetRegister forKey:@"ORTRS1ModelOffsetRegister"];
+    [encoder encodeInteger:controlRegister forKey:@"ORTRS1ModelControlRegister"];
 }
 
 @end

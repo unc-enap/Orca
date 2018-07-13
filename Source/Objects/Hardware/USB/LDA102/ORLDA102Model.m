@@ -550,11 +550,11 @@ NSString* ORLDA102ModelLock					= @"ORLDA102ModelLock";
     [[self undoManager] disableUndoRegistration];
     [self setRepeatRamp:	[decoder decodeBoolForKey:@"repeatRamp"]];
     [self setIdleTime:		[decoder decodeIntForKey:	@"idleTime"]];
-    [self setDwellTime:		[decoder decodeIntForKey:	@"dwellTime"]];
+    [self setDwellTime:		[decoder decodeIntegerForKey:	@"dwellTime"]];
     [self setRampEnd:		[decoder decodeFloatForKey:	@"rampEnd"]];
     [self setRampStart:		[decoder decodeFloatForKey:	@"rampStart"]];
     [self setStepSize:		[decoder decodeFloatForKey:	@"stepSize"]];
-    [self setAttenuation:	[decoder decodeIntForKey:	@"attenuation"]];
+    [self setAttenuation:	[decoder decodeIntegerForKey:	@"attenuation"]];
     [self setSerialNumber:	[decoder decodeObjectForKey:@"serialNumber"]];
     [[self undoManager] enableUndoRegistration];    
 	
@@ -565,12 +565,12 @@ NSString* ORLDA102ModelLock					= @"ORLDA102ModelLock";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeBool:repeatRamp		forKey:@"repeatRamp"];
-    [encoder encodeInt:idleTime			forKey: @"idleTime"];
-    [encoder encodeInt:dwellTime		forKey: @"dwellTime"];
+    [encoder encodeInteger:idleTime			forKey: @"idleTime"];
+    [encoder encodeInteger:dwellTime		forKey: @"dwellTime"];
     [encoder encodeFloat:rampEnd		forKey: @"rampEnd"];
     [encoder encodeFloat:rampStart		forKey: @"rampStart"];
     [encoder encodeFloat:stepSize		forKey: @"stepSize"];
-    [encoder encodeInt:attenuation		forKey: @"attenuation"];
+    [encoder encodeInteger:attenuation		forKey: @"attenuation"];
     [encoder encodeObject:serialNumber	forKey: @"serialNumber"];
 }
 

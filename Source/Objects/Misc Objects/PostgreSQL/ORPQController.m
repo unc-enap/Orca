@@ -99,7 +99,7 @@
 {
 	NSOperationQueue* queue = [[ORPQDBQueue sharedPQDBQueue] queue];
     if (object == queue && [keyPath isEqual:@"operationCount"]) {
-		NSNumber* n = [NSNumber numberWithInt:[[[ORPQDBQueue queue] operations] count]];
+		NSNumber* n = [NSNumber numberWithInteger:[[[ORPQDBQueue queue] operations] count]];
 		[self performSelectorOnMainThread:@selector(setQueCount:) withObject:n waitUntilDone:NO];
     }
     else {

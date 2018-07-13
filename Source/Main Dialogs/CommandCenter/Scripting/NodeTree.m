@@ -79,7 +79,7 @@
 	return line;
 }
 
-- (void) setLine:(int)aLine
+- (void) setLine:(long)aLine
 {
 	line = aLine;
 }

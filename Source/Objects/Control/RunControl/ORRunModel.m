@@ -2214,11 +2214,11 @@ static NSString *ORRunTypeNames 	= @"ORRunTypeNames";
     
     [[self undoManager] disableUndoRegistration];
     
-    [self setSelectedRunTypeScript:[decoder decodeIntForKey:@"selectedRunTypeScript"]];
+    [self setSelectedRunTypeScript:[decoder decodeIntegerForKey:@"selectedRunTypeScript"]];
     [self setShutDownScript:[decoder decodeObjectForKey:@"shutDownScript"]];
     [self setStartScript:[decoder decodeObjectForKey:@"startScript"]];
-    [self setTimeLimit:[decoder decodeInt32ForKey:ORRunTimeLimit]];
-    [self setRunType:[decoder decodeInt32ForKey:ORRunType_Mask]];
+    [self setTimeLimit:[decoder decodeIntegerForKey:ORRunTimeLimit]];
+    [self setRunType:[decoder decodeIntegerForKey:ORRunType_Mask]];
     [self setTimedRun:[decoder decodeBoolForKey:ORRunTimedRun]];
     [self setRepeatRun:[decoder decodeBoolForKey:ORRunRepeatRun]];
     [self setQuickStart:[decoder decodeBoolForKey:ORRunQuickStart]];
@@ -2239,11 +2239,11 @@ static NSString *ORRunTypeNames 	= @"ORRunTypeNames";
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:(int32_t)selectedRunTypeScript forKey:@"selectedRunTypeScript"];
+    [encoder encodeInteger:(int32_t)selectedRunTypeScript forKey:@"selectedRunTypeScript"];
     [encoder encodeObject:shutDownScript forKey:@"shutDownScript"];
     [encoder encodeObject:startScript forKey:@"startScript"];
-    [encoder encodeInt32:[self timeLimit] forKey:ORRunTimeLimit];
-    [encoder encodeInt32:(int32_t)[self runType] forKey:ORRunType_Mask];
+    [encoder encodeInteger:[self timeLimit] forKey:ORRunTimeLimit];
+    [encoder encodeInteger:[self runType] forKey:ORRunType_Mask];
     [encoder encodeBool:[self timedRun] forKey:ORRunTimedRun];
     [encoder encodeBool:[self repeatRun] forKey:ORRunRepeatRun];
     [encoder encodeBool:[self quickStart] forKey:ORRunQuickStart];
@@ -2618,7 +2618,7 @@ static NSString *ORRunTypeNames 	= @"ORRunTypeNames";
     NSString* remote     = [NSString stringWithFormat:@"Remote     = %@\n",(dataPtr[1] & 0x4)?@"YES":@"NO"];
     NSString* thirdWord  = [NSString stringWithFormat:@"%@%lu",thirdWordKey,dataPtr[2]];
 	if(showSubRun){
-		thirdWord = [thirdWord stringByAppendingFormat:@".%d",subRunNumber];
+		thirdWord = [thirdWord stringByAppendingFormat:@".%ld",subRunNumber];
 	}
 	thirdWord = [thirdWord stringByAppendingString:@"\n"];
 

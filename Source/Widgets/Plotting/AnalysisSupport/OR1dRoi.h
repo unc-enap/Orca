@@ -62,7 +62,7 @@ enum {
 }
 
 #pragma mark ***Initialization
-- (id) initWithMin:(int)aMin max:(int)aMax;
+- (id) initWithMin:(long)aMin max:(long)aMax;
 - (void) dealloc;
 
 #pragma mark ***Accessors

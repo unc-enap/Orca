@@ -393,9 +393,9 @@ NSString* ORRangeTimerModelOKConnection     = @"ORRangeTimerModelOKConnection";
     [super encodeWithCoder:encoder];
     [encoder encodeObject:  eMailList forKey:	@"ORRangeTimerModelEMailList"];
     [encoder encodeBool:	enableMail forKey:	@"ORRangeTimerModelEnableMail"];
-    [encoder encodeInt:		direction forKey:	@"ORRangeTimerModelDirection"];
+    [encoder encodeInteger:		direction forKey:	@"ORRangeTimerModelDirection"];
     [encoder encodeFloat:	limit forKey:		@"ORRangeTimerModelLimit"];
-    [encoder encodeInt:		deadband forKey:	@"ORRangeTimerModelDeadband"];
+    [encoder encodeInteger:		deadband forKey:	@"ORRangeTimerModelDeadband"];
 }
 
 - (void) mailSent:(NSString*)address

@@ -497,11 +497,11 @@ NSString* ORVXMLock							= @"ORVXMLock";
     [encoder encodeBool:useCmdQueue		forKey: @"useCmdQueue"];
     [encoder encodeObject:customCmd		forKey: @"customCmd"];
     [encoder encodeBool:shipRecords		forKey: @"shipRecords"];
-    [encoder encodeInt:repeatCount		forKey: @"repeatCount"];
-    [encoder encodeInt:numTimesToRepeat forKey: @"numTimesToRepeat"];
+    [encoder encodeInteger:repeatCount		forKey: @"repeatCount"];
+    [encoder encodeInteger:numTimesToRepeat forKey: @"numTimesToRepeat"];
     [encoder encodeBool:stopRunWhenDone forKey: @"stopRunWhenDone"];
     [encoder encodeBool:repeatCmds		forKey: @"repeatCmds"];
-    [encoder encodeInt:syncWithRun		forKey: @"syncWithRun"];
+    [encoder encodeInteger:syncWithRun		forKey: @"syncWithRun"];
     [encoder encodeBool:displayRaw		forKey: @"displayRaw"];
     [encoder encodeObject:motors		forKey: @"motors"];
     [encoder encodeObject:listFile		forKey: @"listFile"];
@@ -1049,7 +1049,7 @@ NSString* ORVXMLock							= @"ORVXMLock";
     self = [super init];
 	self.description		= [decoder decodeObjectForKey:	@"description"];
 	self.cmd				= [decoder decodeObjectForKey:	@"cmd"];
-	self.waitToSendNextCmd	= [decoder decodeIntForKey:		@"waitToSendNextCmd"];
+	self.waitToSendNextCmd	= [decoder decodeIntegerForKey:		@"waitToSendNextCmd"];
 	return self;
 }
 
@@ -1057,7 +1057,7 @@ NSString* ORVXMLock							= @"ORVXMLock";
 {
     [encoder encodeObject:	description			forKey:@"description"];	
     [encoder encodeObject:	cmd					forKey:@"cmd"];	
-    [encoder encodeInt:		waitToSendNextCmd	forKey:@"waitToSendNextCmd"];
+    [encoder encodeInteger:		waitToSendNextCmd	forKey:@"waitToSendNextCmd"];
 }
 
 @end

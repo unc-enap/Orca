@@ -1146,12 +1146,12 @@
 
 - (IBAction) triggerOutLogicAction:(id)sender
 {
-    [model triggerOutLogicAction:[sender indexOfSelectedItem]];
+    [model triggerOutLogicAction:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) trigOutCoincidenceLevelAction:(id)sender
 {
-    [model trigOutCoincidenceLevelAction:[sender intValue]];
+    [model trigOutCoincidenceLevelAction:(int)[sender intValue]];
 }
 
 - (IBAction) postTriggerSettingAction:(id)sender

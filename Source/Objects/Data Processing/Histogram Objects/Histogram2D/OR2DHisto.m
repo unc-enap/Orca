@@ -372,7 +372,7 @@ static NSString *OR2DHistoNumberXBins	= @"OR2DHistoNumberXBins";
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
     
-    [self setNumberBinsPerSide:[decoder decodeIntForKey:OR2DHistoNumberXBins]];
+    [self setNumberBinsPerSide:[decoder decodeIntegerForKey:OR2DHistoNumberXBins]];
  	rois = [[decoder decodeObjectForKey:@"rois"] retain];
    
     [[self undoManager] enableUndoRegistration];
@@ -383,7 +383,7 @@ static NSString *OR2DHistoNumberXBins	= @"OR2DHistoNumberXBins";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:numberBinsPerSide forKey:OR2DHistoNumberXBins];
+    [encoder encodeInteger:numberBinsPerSide forKey:OR2DHistoNumberXBins];
     [encoder encodeObject:rois forKey:@"rois"];
 }
 

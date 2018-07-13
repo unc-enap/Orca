@@ -69,9 +69,9 @@
 - (void) encodeEMailList:(NSCoder*) anEncoder;
 - (void) addAddress:(NSString*)anAddress severityMask:(unsigned long)aMask;
 - (void) addAddress;
-- (void) addAddress:(id)anAddress atIndex:(int)anIndex;
-- (void) removeAddressAtIndex:(int) anIndex;
-- (ORAlarmEMailDestination*) addressAtIndex:(int)anIndex;
+- (void) addAddress:(id)anAddress atIndex:(NSUInteger)anIndex;
+- (void) removeAddressAtIndex:(NSUInteger) anIndex;
+- (ORAlarmEMailDestination*) addressAtIndex:(NSUInteger)anIndex;
 @end
 
 extern NSString* ORAlarmCollectionEmailEnabledChanged;

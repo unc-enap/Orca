@@ -501,7 +501,7 @@ static NSString* KatrinDbConnector		= @"KatrinDbConnector";
     [super encodeWithCoder:encoder];
 	
     [encoder encodeObject:slowControlName	forKey: @"slowControlName"];
-    [encoder encodeInt:viewType				forKey: @"viewType"];
+    [encoder encodeInteger:viewType				forKey: @"viewType"];
     [encoder encodeObject:fltSNs			forKey: @"fltSNs"];
     [encoder encodeObject:preAmpSNs			forKey: @"preAmpSNs"];
     [encoder encodeObject:osbSNs			forKey: @"osbSNs"];

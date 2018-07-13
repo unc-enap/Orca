@@ -170,7 +170,7 @@ NSString* ORPlotFFTShowChanged = @"ORPlotFFTShowChanged";
 	else return (int)(showPowerSpectrum?[powerSpectrumArray count]:0);
 }
 
-- (void) plotter:(id)aPlotter index:(unsigned long)i x:(double*)xValue y:(double*)yValue
+- (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
 	[dataLock lock];
 	int set = (int)[aPlotter tag];

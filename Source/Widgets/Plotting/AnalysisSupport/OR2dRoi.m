@@ -105,7 +105,7 @@ NSString* OR2dRoiCurveFitChanged = @"OR2dRoiCurveFitChanged";
 		
 	NSBezierPath* channelPath = [NSBezierPath bezierPath];
 	
-	int n = [points count];
+	int n = (int)[points count];
 	int i;
 	
 	if(n){
@@ -315,7 +315,7 @@ NSString* OR2dRoiCurveFitChanged = @"OR2dRoiCurveFitChanged";
 		aveX += [aPoint xyPosition].x ;
 		aveY += [aPoint xyPosition].y;
 	}
-	int count = [points count];
+	int count = (int)[points count];
 	if(count){
 		
 		double deltaX = centerX - aveX/(double)count;
@@ -345,7 +345,7 @@ NSString* OR2dRoiCurveFitChanged = @"OR2dRoiCurveFitChanged";
 	[theRoiPath release];
 	theRoiPath = [[NSBezierPath bezierPath] retain];
 
-	int n = [points count];
+	int n = (int)[points count];
 	int i;
 	
 	NSPoint aPoint = [[points objectAtIndex:0] xyPosition];

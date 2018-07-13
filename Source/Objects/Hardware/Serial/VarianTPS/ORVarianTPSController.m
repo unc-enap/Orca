@@ -309,7 +309,7 @@
 
 - (IBAction) pressureScaleAction:(id)sender
 {
-	[model setPressureScale:[sender indexOfSelectedItem]];	
+	[model setPressureScale:(int)[sender indexOfSelectedItem]];	
 }
 
 - (IBAction) turnOnAction:(id)sender

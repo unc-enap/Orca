@@ -1660,7 +1660,7 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeBool:skipDataSets            forKey:@"skipDataSets"];
-    [encoder encodeInt:alertType                forKey:@"alertType"];
+    [encoder encodeInteger:alertType                forKey:@"alertType"];
     [encoder encodeObject:alertMessage          forKey:@"alertMessage"];
     [encoder encodeBool:keepHistory             forKey:@"keepHistory"];
     [encoder encodeBool:useHttps                forKey:@"useHttps"];

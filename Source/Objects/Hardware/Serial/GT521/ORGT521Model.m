@@ -491,8 +491,8 @@ NSString* ORGT521Lock = @"ORGT521Lock";
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:     location        forKey:@"location"];
-    [encoder encodeInt:		cycleDuration	forKey:@"cycleDuration"];
+    [encoder encodeInteger:     location        forKey:@"location"];
+    [encoder encodeInteger:		cycleDuration	forKey:@"cycleDuration"];
     [encoder encodeBool:	wasRunning		forKey:	@"wasRunning"];
 	int i;
 	for(i=0;i<4;i++){

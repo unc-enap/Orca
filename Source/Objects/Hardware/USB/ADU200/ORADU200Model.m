@@ -386,8 +386,8 @@ NSString* ORADU200USBNextConnection			= @"ORADU200USBNextConnection";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:pollTime forKey:@"ORADU200ModelPollTime"];
-    [encoder encodeInt:debounce forKey:@"ORADU200ModelDebounce"];
+    [encoder encodeInteger:pollTime forKey:@"ORADU200ModelPollTime"];
+    [encoder encodeInteger:debounce forKey:@"ORADU200ModelDebounce"];
     [encoder encodeObject:serialNumber forKey:@"ORADU200ModelSerialNumber"];
 }
 

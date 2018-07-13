@@ -35,7 +35,7 @@ NSString* ORTimeRoiCurveFitChanged = @"ORTimeRoiCurveFitChanged";
 @implementation ORTimeRoi
 
 #pragma mark ***Initialization
-- (id) initWithMin:(int)aMin max:(int)aMax
+- (id) initWithMin:(long)aMin max:(long)aMax
 {
 	self = [super init];
 	[self setMaxChannel:aMax];
@@ -142,7 +142,7 @@ NSString* ORTimeRoiCurveFitChanged = @"ORTimeRoiCurveFitChanged";
 	if(numPts){
 		
 		double timeStamp,y;
-		long x = 0;
+		int x = 0;
 		do {
 			[dataSource plotter:aPlot index:x x:&timeStamp y:&y];
 			if(timeStamp >= endTime && timeStamp <= startTime) {
@@ -185,9 +185,9 @@ NSString* ORTimeRoiCurveFitChanged = @"ORTimeRoiCurveFitChanged";
 
 - (BOOL) mouseDown:(NSEvent*)theEvent inPlotView:(ORPlotView*)aPlotter
 {
-	gate1 = minChannel;
-	gate2 = maxChannel;
-	NSEventType modifierKeys = [theEvent modifierFlags];
+	gate1 = (int)minChannel;
+	gate2 = (int)maxChannel;
+	NSEventModifierFlags modifierKeys = [theEvent modifierFlags];
 	if((modifierKeys & NSCommandKeyMask) != NSCommandKeyMask){
 		
 		NSPoint p = [aPlotter convertPoint:[theEvent locationInWindow] fromView:nil];
@@ -205,13 +205,13 @@ NSString* ORTimeRoiCurveFitChanged = @"ORTimeRoiCurveFitChanged";
 		else if(!([theEvent modifierFlags] & NSCommandKeyMask)){
 			if(fabs([xScale getPixAbs:startChan]-[xScale getPixAbs:[self minChannel]])<3){
 				dragType = kMinDrag;
-				gate1 = [self maxChannel];
-				gate2 = [self minChannel];
+				gate1 = (int)[self maxChannel];
+				gate2 = (int)[self minChannel];
 			}
 			else if(fabs([xScale getPixAbs:startChan]-[xScale getPixAbs:[self maxChannel]])<3){
 				dragType = kMaxDrag;
-				gate1 = [self minChannel];
-				gate2 = [self maxChannel];
+				gate1 = (int)[self minChannel];
+				gate2 = (int)[self maxChannel];
 			}
 			else if([xScale getPixAbs:startChan]>[xScale getPixAbs:[self minChannel]] && [xScale getPixAbs:startChan]<[xScale getPixAbs:[self maxChannel]]){
 				dragType = kCenterDrag;
@@ -315,16 +315,16 @@ NSString* ORTimeRoiCurveFitChanged = @"ORTimeRoiCurveFitChanged";
 {
     self = [super init];
     
-    [self setMinChannel:[decoder decodeInt32ForKey:@"minChannel"]];
-    [self setMaxChannel:[decoder decodeInt32ForKey:@"maxChannel"]];
+    [self setMinChannel:[decoder decodeIntegerForKey:@"minChannel"]];
+    [self setMaxChannel:[decoder decodeIntegerForKey:@"maxChannel"]];
 
     return self;
 }
 
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
-    [encoder encodeInt32:minChannel forKey:@"minChannel"];
-    [encoder encodeInt32:maxChannel forKey:@"maxChannel"];
+    [encoder encodeInteger:minChannel forKey:@"minChannel"];
+    [encoder encodeInteger:maxChannel forKey:@"maxChannel"];
 }
 
 @end

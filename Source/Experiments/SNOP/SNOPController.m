@@ -893,7 +893,7 @@ snopGreenColor;
 
 - (IBAction) nhitMonitorCrateAction: (id) sender
 {
-    [model setNhitMonitorCrate:[sender indexOfSelectedItem]];
+    [model setNhitMonitorCrate:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) nhitMonitorPulserRateAction: (id) sender
@@ -941,7 +941,7 @@ snopGreenColor;
     } else {
         currentRunMask &= ~(1L << bit);
     }
-    [model setNhitMonitorRunType:currentRunMask];
+    [model setNhitMonitorRunType:(uint32_t)currentRunMask];
 }
 
 - (IBAction) nhitMonitorCrateMaskAction: (id) sender
@@ -954,7 +954,7 @@ snopGreenColor;
     } else {
         currentCrateMask &= ~(1L << bit);
     }
-    [model setNhitMonitorCrateMask:currentCrateMask];
+    [model setNhitMonitorCrateMask:(uint32_t)currentCrateMask];
 }
     
 - (IBAction) nhitMonitorTimeIntervalAction: (id) sender
@@ -1019,8 +1019,8 @@ snopGreenColor;
         for (id xl3 in xl3s) {
             
             xl3Mask ^= 1 << [xl3 crateNumber];
-            int mRow;
-            int mColumn;
+            NSInteger mRow;
+            NSInteger mColumn;
             bool found;
             
             found = [hvStatusMatrix getRow:&mRow column:&mColumn ofCell:[hvStatusMatrix cellWithTag:[xl3 crateNumber]]];
@@ -1043,8 +1043,8 @@ snopGreenColor;
                  [NSString stringWithFormat:@"%3.1f mA",[xl3 hvACurrentReadValue]]];
             }
             if ([xl3 crateNumber] == 16) {//16B
-                int mRow;
-                int mColumn;
+                NSInteger mRow;
+                NSInteger mColumn;
                 bool found;
                 found = [hvStatusMatrix getRow:&mRow column:&mColumn ofCell:[hvStatusMatrix cellWithTag:19]];
                 if (found) {
@@ -1084,8 +1084,8 @@ snopGreenColor;
         }
         for (crate_num=0; crate_num<20; crate_num++) {
             if (xl3Mask & 1 << crate_num) {
-                int mRow;
-                int mColumn;
+                NSInteger mRow;
+                NSInteger mColumn;
                 bool found;
                 found = [hvStatusMatrix getRow:&mRow column:&mColumn ofCell:[hvStatusMatrix cellWithTag:crate_num]];
                 if (found) {
@@ -1100,8 +1100,8 @@ snopGreenColor;
         }
     }
     else { //update from a notification
-        int mRow;
-        int mColumn;
+        NSInteger mRow;
+        NSInteger mColumn;
         bool found;
         found = [hvStatusMatrix getRow:&mRow column:&mColumn ofCell:
                  [hvStatusMatrix cellWithTag:[[aNote object] crateNumber]]];
@@ -1124,8 +1124,8 @@ snopGreenColor;
              [NSString stringWithFormat:@"%3.1f mA",[[aNote object] hvACurrentReadValue]]];
         }
         if ([[aNote object] crateNumber] == 16) {//16B
-            int mRow;
-            int mColumn;
+            NSInteger mRow;
+            NSInteger mColumn;
             bool found;
             found = [hvStatusMatrix getRow:&mRow column:&mColumn ofCell:[hvStatusMatrix cellWithTag:19]];
             if (found) {
@@ -1293,7 +1293,7 @@ snopGreenColor;
 {
 
     NSArray* xl3s = [[(ORAppDelegate*)[NSApp delegate] document] collectObjectsOfClass:NSClassFromString(@"ORXL3Model")];
-    int crateNumber = [sender selectedRow];
+    int crateNumber = (int)[sender selectedRow];
 
     //Handle crates 16B, 17 and 18
     NSString *HVBlabel = @"";
@@ -1379,7 +1379,7 @@ snopGreenColor;
         [[self window] setContentView:snopView];
     }
 
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    int index = (int)[tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:@"orca.SNOPController.selectedtab"];
 }
 
@@ -1396,7 +1396,7 @@ snopGreenColor;
     return 0;
 }
 
-- (id)comboBox:(NSComboBox *)aComboBox objectValueForItemAtIndex:(NSInteger)index
+- (id)comboBox:(NSComboBox *)aComboBox objectValueForItemAtIndex:(int)index
 {
     if (aComboBox == orcaDBIPAddressPU) {
         return [model orcaDBConnectionHistoryItem:index];
@@ -1764,7 +1764,7 @@ snopGreenColor;
 
                 // Estimate run time
                 int no_pulses = [[tellieRunFile objectForKey:@"trigger_per_node"] intValue];
-                int no_nodes = [nodes count];
+                NSUInteger no_nodes = [nodes count];
                 int rate = [[tellieRunFile objectForKey:@"trigger_rate"] intValue];
                 float total_time = (no_nodes*no_pulses)/(rate*60)*1.1;
                 [loadedTellieRunTimeLabel setStringValue:[NSString stringWithFormat:@"%0.1f",total_time]];
@@ -1876,7 +1876,7 @@ snopGreenColor;
                                                                     withNPulses:no_pulses
                                                                withTriggerDelay:delay
                                                                         inSlave:inSlave
-                                                                      isAMELLIE:@NO];
+                                                                      isAMELLIE:NO];
 
         [settingsArray addObject:settings];
     }
@@ -1960,7 +1960,7 @@ snopGreenColor;
 
                 // Estimate run time
                 int no_pulses = [[amellieRunFile objectForKey:@"trigger_per_node"] intValue];
-                int no_nodes = [fibres count];
+                NSUInteger no_nodes = [fibres count];
                 int rate = [[amellieRunFile objectForKey:@"trigger_rate"] intValue];
                 float total_time = (no_nodes*no_pulses)/(rate*60)*1.1;
                 [loadedAmellieRunTimeLabel setStringValue:[NSString stringWithFormat:@"%0.1f",total_time]];
@@ -2070,7 +2070,7 @@ snopGreenColor;
                                                                     withNPulses:no_pulses
                                                                withTriggerDelay:delay
                                                                         inSlave:inSlave
-                                                                      isAMELLIE:@YES];
+                                                                      isAMELLIE:YES];
 
         [settingsArray addObject:settings];
     }
@@ -2411,7 +2411,7 @@ snopGreenColor;
         return;
     }
 
-    int activeCell = [sender selectedRow];
+    NSInteger activeCell = [sender selectedRow];
     float raw;
     int threshold_index;
     float threshold_value;

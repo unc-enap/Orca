@@ -411,7 +411,7 @@ NSString* ORSynClockIDChanged                   = @"ORSynClockIDChanged";
     [self setTrackMode:  [decoder decodeIntForKey:  @"trackMode"]];
     [self setSyncMode:   [decoder decodeIntForKey:  @"syncMode"]];
     
-    int32_t aValue = [decoder decodeInt32ForKey:@"alarmWindow"];
+    int32_t aValue = [decoder decodeIntForKey:@"alarmWindow"];
     if(aValue == 0)aValue = 2000; //0 is illegal and means first start, so set to default value
     [self setAlarmWindow:aValue];
     
@@ -431,9 +431,9 @@ NSString* ORSynClockIDChanged                   = @"ORSynClockIDChanged";
 
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
-    [encoder encodeInt:   trackMode   forKey:@"trackMode"];
-    [encoder encodeInt:   syncMode    forKey:@"syncMode"];
-    [encoder encodeInt32: (int32_t)alarmWindow forKey:@"alarmWindow"];
+    [encoder encodeInteger:   trackMode   forKey:@"trackMode"];
+    [encoder encodeInteger:   syncMode    forKey:@"syncMode"];
+    [encoder encodeInteger: (int32_t)alarmWindow forKey:@"alarmWindow"];
     [encoder encodeObject:previousStatusMessages forKey:@"previousStatusMessages"];
 }
 

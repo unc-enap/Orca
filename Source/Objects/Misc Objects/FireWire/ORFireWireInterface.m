@@ -276,7 +276,7 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 }
 
 // bus transactions
-- (void) write_raw:(unsigned long long)address value:(unsigned long *)theData size:(unsigned long)len
+- (void) write_raw:(unsigned long long)address value:(unsigned long *)theData size:(UInt32)len
 { 
 	FWAddress ioaddr;
 	ioaddr.addressHi = address >> 32;
@@ -292,7 +292,8 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 	
 	[fwLock lock];
 	if(mDevice && serviceAlive && isOpen){
-		IOReturn error = (**mDevice).Write(mDevice, (**mDevice).GetDevice(mDevice), &ioaddr, netData, &len, NO, 0);  
+
+        IOReturn error = (**mDevice).Write(mDevice, (**mDevice).GetDevice(mDevice), &ioaddr, netData, &len, NO, 0);
 		if(error!=kIOReturnSuccess){
             NSLogError(@" ",@"FireWire",@"write error",nil);
 			[fwLock unlock];
@@ -313,7 +314,7 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 	
 	[fwLock lock];	
 	if(mDevice && serviceAlive && isOpen){
-		unsigned long len = 4;
+		UInt32 len = 4;
 		IOReturn error = (**mDevice).Read(mDevice, (**mDevice).GetDevice(mDevice), &ioaddr, &value, &len, NO, 0);    
 		if(error!=kIOReturnSuccess){
             NSLogError(@" ",@"FireWire",@"read error",nil);
@@ -343,7 +344,7 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 	
 	[fwLock lock];
 	if(mDevice && serviceAlive && isOpen){
-		unsigned long len = 4;
+		UInt32 len = 4;
 		IOReturn error = (**mDevice).Write(mDevice, (**mDevice).GetDevice(mDevice), &ioaddr, &netValue, &len, NO, 0);  
 		if(error!=kIOReturnSuccess){
             NSLogError(@" ",@"FireWire",@"write error",nil);
@@ -355,7 +356,7 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 	[fwLock unlock];
 }
 
-- (void) read_raw:(unsigned long long) address data:(unsigned long*)theData size:(unsigned long)len;
+- (void) read_raw:(unsigned long long) address data:(unsigned long*)theData size:(UInt32)len;
 { 
 	FWAddress ioaddr;
 	ioaddr.addressHi = address >> 32;
@@ -383,18 +384,30 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 	
 }
 
-- (void) compareSwap64:(const FWAddress*) addr
-		 expectedValue:(unsigned long*)expectedVal
-				newVal:(unsigned long*)newVal
-				oldVal:(unsigned long*)oldVal
+- (void) compareSwap64:(IOFireWireLibDeviceRef) addr
+		 expectedValue:(UInt32*)expectedVal
+				newVal:(UInt32*)newVal
+				oldVal:(UInt32*)oldVal
 				  size:(IOByteCount)size
 				   abs:(BOOL) abs
 		   failOnReset:(BOOL)failOnReset
-			generation:(unsigned long)generation								
+			generation:(UInt32)generation
 { 
 	[fwLock lock];
 	if(mDevice && serviceAlive && isOpen){
-		IOReturn error = (**mDevice).CompareSwap64(mDevice, abs ? 0 : (**mDevice).GetDevice(mDevice), (UInt32)addr, expectedVal, newVal, oldVal, size, failOnReset, generation);
+//        IOReturn (*CompareSwap64)( IOFireWireLibDeviceRef self, io_object_t device, const FWAddress* addr,
+//                                  UInt32* expectedVal, UInt32* newVal, UInt32* oldVal, IOByteCount size,
+//                                  Boolean failOnReset, UInt32 generation) ;
+
+		IOReturn error = (**mDevice).CompareSwap64((IOFireWireLibDeviceRef)mDevice,
+                                                   abs ? 0 : (**mDevice).GetDevice(mDevice),
+                                                   (const FWAddress*)addr,
+                                                   expectedVal,
+                                                   newVal,
+                                                   oldVal,
+                                                   size,
+                                                   failOnReset,
+                                                   generation);
 		if(error!=kIOReturnSuccess){
             NSLogError(@" ",@"FireWire",@"compareSwap64 error",nil);
 			[fwLock unlock];
@@ -422,7 +435,7 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 }
 
 // topology
-- (void) getBusGeneration:(unsigned long*) generation						
+- (void) getBusGeneration:(UInt32*) generation
 { 
 	[fwLock lock];
 	if(mDevice && serviceAlive && isOpen){
@@ -510,7 +523,7 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 - (void) printConfigROM
 {
 	FWAddress				currentAddress ;
-	unsigned long			readValue ;
+	UInt32			readValue ;
 	unsigned long			size ;
 	
 	NSLog(@"Config ROM for device = %x, service = %x\n", mDevice, [self service]);
@@ -545,7 +558,7 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 	currentAddress.addressHi = 0xffff;
 	currentAddress.addressLo = 0xf000040c;
 	@try {
-		unsigned long len = 4;
+		UInt32 len = 4;
 		IOReturn error = (**mDevice).Read(mDevice, (**mDevice).GetDevice(mDevice), &currentAddress, &readValue, &len, NO, 0);    
 		readValue = ntohl(readValue);
 		if(error!=kIOReturnSuccess){

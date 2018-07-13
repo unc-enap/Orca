@@ -397,7 +397,7 @@ NSString* ORMet237Lock = @"ORMet237Lock";
     [super encodeWithCoder:encoder];
     [encoder encodeFloat:	countAlarmLimit forKey:@"countAlarmLimit"];
     [encoder encodeFloat:	maxCounts		forKey:@"maxCounts"];
-    [encoder encodeInt:		cycleDuration	forKey:@"cycleDuration"];
+    [encoder encodeInteger:		cycleDuration	forKey:@"cycleDuration"];
     [encoder encodeBool:	wasRunning		forKey:	@"wasRunning"];
 }
 

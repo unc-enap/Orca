@@ -17,18 +17,18 @@
 //for the use of this software.
 //-------------------------------------------------------------
 
-#pragma mark ‚Ä¢‚Ä¢‚Ä¢Imported Files
+#pragma mark •••Imported Files
 
 #import "PMC_Link.h"
 
 
 @implementation PMC_Link
 
-#pragma mark ‚Ä¢‚Ä¢‚Ä¢Accessors
+#pragma mark •••Accessors
 
 - (void) readLongBlockPmc:(unsigned long *) buffer
-				 atAddress:(unsigned int) aPmcAddress
-				 numToRead:(unsigned int) numberLongs
+				 atAddress:(unsigned long) aPmcAddress
+				 numToRead:(unsigned long) numberLongs
 {
 	@try {
 		[socketLock lock]; //begin critical section
@@ -65,8 +65,8 @@
 
 
 - (void) writeLongBlockPmc:(unsigned long *) buffer
-				  atAddress:(unsigned int) aPmcAddress
-				 numToWrite:(unsigned int) numberLongs
+				  atAddress:(unsigned long) aPmcAddress
+				 numToWrite:(unsigned long) numberLongs
 {
 	
 	@try {

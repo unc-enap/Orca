@@ -165,8 +165,8 @@ static NSString *ORRate_TimeRate 	= @"ORRate_TimeRate";
 
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
-    [encoder encodeInt:(int32_t)[self tag] forKey:ORRate_Tag];
-    [encoder encodeInt:[self groupTag] forKey:ORRate_GroupTag];
+    [encoder encodeInteger:(int32_t)[self tag] forKey:ORRate_Tag];
+    [encoder encodeInteger:[self groupTag] forKey:ORRate_GroupTag];
     [encoder encodeObject:[self timeRate] forKey:ORRate_TimeRate];
 }
 

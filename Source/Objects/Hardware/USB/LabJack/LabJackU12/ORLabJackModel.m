@@ -1115,8 +1115,8 @@ NSString* ORLabJackMaxValueChanged				= @"ORLabJackMaxValueChanged";
     self = [super initWithCoder:decoder];
     
     [[self undoManager] disableUndoRegistration];
-    [self setAOut1:[decoder decodeIntForKey:@"aOut1"]];
-    [self setAOut0:[decoder decodeIntForKey:@"aOut0"]];
+    [self setAOut1:[decoder decodeIntegerForKey:@"aOut1"]];
+    [self setAOut0:[decoder decodeIntegerForKey:@"aOut0"]];
     [self setShipData:[decoder decodeBoolForKey:@"shipData"]];
     [self setDigitalOutputEnabled:[decoder decodeBoolForKey:@"digitalOutputEnabled"]];
     [self setSerialNumber:	[decoder decodeObjectForKey:@"serialNumber"]];
@@ -1151,9 +1151,9 @@ NSString* ORLabJackMaxValueChanged				= @"ORLabJackMaxValueChanged";
 		else [self setIo:i name:[NSString stringWithFormat:@"IO%d",i]];
 		[self setGain:i withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"gain%d",i]]];
 	}
-	[self setAdcDiff:	[decoder decodeIntForKey:@"adcDiff"]];
-	[self setDoDirection:	[decoder decodeIntForKey:@"doDirection"]];
-	[self setIoDirection:	[decoder decodeIntForKey:@"ioDirection"]];
+	[self setAdcDiff:	[decoder decodeIntegerForKey:@"adcDiff"]];
+	[self setDoDirection:	[decoder decodeIntegerForKey:@"doDirection"]];
+	[self setIoDirection:	[decoder decodeIntegerForKey:@"ioDirection"]];
     [self setPollTime:		[decoder decodeIntForKey:@"pollTime"]];
 
     [[self undoManager] enableUndoRegistration];    
@@ -1164,10 +1164,10 @@ NSString* ORLabJackMaxValueChanged				= @"ORLabJackMaxValueChanged";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:aOut1 forKey:@"aOut1"];
-    [encoder encodeInt:aOut0 forKey:@"aOut0"];
+    [encoder encodeInteger:aOut1 forKey:@"aOut1"];
+    [encoder encodeInteger:aOut0 forKey:@"aOut0"];
     [encoder encodeBool:shipData forKey:@"shipData"];
-    [encoder encodeInt:pollTime forKey:@"pollTime"];
+    [encoder encodeInteger:pollTime forKey:@"pollTime"];
     [encoder encodeBool:digitalOutputEnabled forKey:@"digitalOutputEnabled"];
     [encoder encodeObject:serialNumber	forKey: @"serialNumber"];
 	int i;
@@ -1187,12 +1187,12 @@ NSString* ORLabJackMaxValueChanged				= @"ORLabJackMaxValueChanged";
 	}
 	for(i=0;i<4;i++) {
 		[encoder encodeObject:ioName[i] forKey:[NSString stringWithFormat:@"IO%d",i]];
-		[encoder encodeInt:gain[i] forKey:[NSString stringWithFormat:@"gain%d",i]];
+		[encoder encodeInteger:gain[i] forKey:[NSString stringWithFormat:@"gain%d",i]];
 	}
 
-    [encoder encodeInt:adcDiff		forKey:@"adcDiff"];
-    [encoder encodeInt:doDirection	forKey:@"doDirection"];
-    [encoder encodeInt:ioDirection	forKey:@"ioDirection"];
+    [encoder encodeInteger:adcDiff		forKey:@"adcDiff"];
+    [encoder encodeInteger:doDirection	forKey:@"doDirection"];
+    [encoder encodeInteger:ioDirection	forKey:@"ioDirection"];
 }
 
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary

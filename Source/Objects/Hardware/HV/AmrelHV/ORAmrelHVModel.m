@@ -407,7 +407,7 @@ NSString* ORAmrelHVModelDataIsValidChanged	= @"ORAmrelHVModelDataIsValidChanged"
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-	[encoder encodeInt:numberOfChannels forKey:@"numberOfChannels"];
+	[encoder encodeInteger:numberOfChannels forKey:@"numberOfChannels"];
 	int i;
 	for(i=0;i<kNumAmrelHVChannels;i++){
 		[encoder encodeFloat:voltage[i]		forKey:[NSString stringWithFormat:@"voltage%d",i]];
@@ -417,7 +417,7 @@ NSString* ORAmrelHVModelDataIsValidChanged	= @"ORAmrelHVModelDataIsValidChanged"
 	}
     [encoder encodeBool:portWasOpen		forKey: @"portWasOpen"];
     [encoder encodeObject:portName		forKey: @"portName"];
-    [encoder encodeInt:pollTime			forKey: @"pollTime"];
+    [encoder encodeInteger:pollTime			forKey: @"pollTime"];
 }
 
 - (void) sendCmd:(NSString*)aCommand channel:(short)aChannel value:(float)aValue

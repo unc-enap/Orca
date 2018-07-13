@@ -1178,14 +1178,14 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
     [[self undoManager] disableUndoRegistration];
 	
     [self setThresholdOffset:	[decoder decodeIntForKey:@"ORIpeFLTModelThresholdOffset"]];
-    [self setInterruptMask:		[decoder decodeInt32ForKey:@"ORIpeFLTModelInterruptMask"]];
-    [self setCoinTime:			[decoder decodeInt32ForKey:@"coinTime"]];
-    [self setIntegrationTime:	[decoder decodeInt32ForKey:@"integrationTime"]];
-    [self setPage:				[decoder decodeIntForKey:@"ORIpeFLTModelPage"]];
+    [self setInterruptMask:		[decoder decodeIntegerForKey:@"ORIpeFLTModelInterruptMask"]];
+    [self setCoinTime:			[decoder decodeIntegerForKey:@"coinTime"]];
+    [self setIntegrationTime:	[decoder decodeIntegerForKey:@"integrationTime"]];
+    [self setPage:				[decoder decodeIntegerForKey:@"ORIpeFLTModelPage"]];
     [self setIterations:		[decoder decodeIntForKey:@"ORIpeFLTModelIterations"]];
     [self setEndChan:			[decoder decodeIntForKey:@"ORIpeFLTModelEndChan"]];
     [self setStartChan:			[decoder decodeIntForKey:@"ORIpeFLTModelStartChan"]];
-    [self setHitRateLength:		[decoder decodeIntForKey:@"ORIpeFLTModelHitRateLength"]];
+    [self setHitRateLength:		[decoder decodeIntegerForKey:@"ORIpeFLTModelHitRateLength"]];
     [self setTriggersEnabled:	[decoder decodeObjectForKey:@"ORIpeFLTModelTriggersEnabled"]];
     [self setGains:				[decoder decodeObjectForKey:@"gains"]];
     [self setThresholds:		[decoder decodeObjectForKey:@"thresholds"]];
@@ -1194,8 +1194,8 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
     [self setTotalRate:			[decoder decodeObjectForKey:@"totalRate"]];
 	[self setTestEnabledArray:	[decoder decodeObjectForKey:@"testsEnabledArray"]];
 	[self setTestStatusArray:	[decoder decodeObjectForKey:@"testsStatusArray"]];
-    [self setReadoutPages:		[decoder decodeIntForKey:@"ORIpeFLTModelReadoutPages"]];	// ak, 2.7.07
-    [self setDataMask:			[decoder decodeInt32ForKey:@"ORIpeFLTModelDataMask"]];
+    [self setReadoutPages:		[decoder decodeIntegerForKey:@"ORIpeFLTModelReadoutPages"]];	// ak, 2.7.07
+    [self setDataMask:			[decoder decodeIntegerForKey:@"ORIpeFLTModelDataMask"]];
 	if(dataMask ==0)dataMask=0xfff;
 	//make sure these objects exist and are populated with nil objects.
 	int i;	
@@ -1238,25 +1238,25 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 {
     [super encodeWithCoder:encoder];
 	
-    [encoder encodeInt32:(int32_t)dataMask			forKey:@"ORIpeFLTModelDataMask"];
-    [encoder encodeInt:thresholdOffset		forKey:@"ORIpeFLTModelThresholdOffset"];
-    [encoder encodeInt32:(int32_t)interruptMask		forKey:@"ORIpeFLTModelInterruptMask"];
-    [encoder encodeInt32:(int32_t)coinTime			forKey:@"coinTime"];
-    [encoder encodeInt32:(int32_t)integrationTime	forKey:@"integrationTime"];
-    [encoder encodeInt:page					forKey:@"ORIpeFLTModelPage"];
-    [encoder encodeInt:iterations			forKey:@"ORIpeFLTModelIterations"];
-    [encoder encodeInt:endChan				forKey:@"ORIpeFLTModelEndChan"];
-    [encoder encodeInt:startChan			forKey:@"ORIpeFLTModelStartChan"];
-    [encoder encodeInt:hitRateLength		forKey:@"ORIpeFLTModelHitRateLength"];
+    [encoder encodeInteger:dataMask			forKey:@"ORIpeFLTModelDataMask"];
+    [encoder encodeInteger:thresholdOffset		forKey:@"ORIpeFLTModelThresholdOffset"];
+    [encoder encodeInteger:interruptMask		forKey:@"ORIpeFLTModelInterruptMask"];
+    [encoder encodeInteger:coinTime			forKey:@"coinTime"];
+    [encoder encodeInteger:integrationTime	forKey:@"integrationTime"];
+    [encoder encodeInteger:page					forKey:@"ORIpeFLTModelPage"];
+    [encoder encodeInteger:iterations			forKey:@"ORIpeFLTModelIterations"];
+    [encoder encodeInteger:endChan				forKey:@"ORIpeFLTModelEndChan"];
+    [encoder encodeInteger:startChan			forKey:@"ORIpeFLTModelStartChan"];
+    [encoder encodeInteger:hitRateLength		forKey:@"ORIpeFLTModelHitRateLength"];
     [encoder encodeObject:triggersEnabled	forKey:@"ORIpeFLTModelTriggersEnabled"];
     [encoder encodeObject:gains				forKey:@"gains"];
     [encoder encodeObject:thresholds		forKey:@"thresholds"];
     [encoder encodeObject:hitRatesEnabled	forKey:@"hitRatesEnabled"];
-    [encoder encodeInt:fltRunMode			forKey:@"mode"];
+    [encoder encodeInteger:fltRunMode			forKey:@"mode"];
     [encoder encodeObject:totalRate			forKey:@"totalRate"];
     [encoder encodeObject:testEnabledArray	forKey:@"testEnabledArray"];
     [encoder encodeObject:testStatusArray	forKey:@"testStatusArray"];
-    [encoder encodeInt:readoutPages  		forKey:@"ORIpeFLTModelReadoutPages"];	
+    [encoder encodeInteger:readoutPages  		forKey:@"ORIpeFLTModelReadoutPages"];	
 }
 
 - (NSDictionary*) dataRecordDescription
@@ -1411,7 +1411,9 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 					// Use block read mode.
 					// With every 32bit (long word) two 12bit ADC values are transmitted
 					// documentation says 1000 data words followed by 24 words not used
-					[fireWireCard read:addr data:wPtr size:fltSize*sizeof(long)];	
+					[fireWireCard read:addr
+                                  data:wPtr
+                                  size:(UInt32)fltSize*sizeof(UInt32)];
 					
 					// Remove the flags
 					// TODO: Add a control to enable or disable flags in the data

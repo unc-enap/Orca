@@ -401,10 +401,10 @@ NSString* ORMksPdr2000Lock = @"ORMksPdr2000Lock";
     [super encodeWithCoder:encoder];
     [encoder encodeObject:units			forKey:@"units"];
     [encoder encodeBool:shipPressures	forKey: @"shipPressures"];
-    [encoder encodeInt: pollTime		forKey: @"pollTime"];
+    [encoder encodeInteger: pollTime		forKey: @"pollTime"];
     [encoder encodeBool:portWasOpen		forKey: @"portWasOpen"];
     [encoder encodeObject:portName		forKey: @"portName"];
-	[encoder encodeInt:pressureScale   forKey:@"pressureScale"];
+	[encoder encodeInteger:pressureScale   forKey:@"pressureScale"];
 }
 
 #pragma mark ••• Commands

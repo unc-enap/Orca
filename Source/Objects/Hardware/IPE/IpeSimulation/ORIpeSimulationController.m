@@ -378,7 +378,7 @@
 	if(([aNote object] == itemTableView) || (aNote==nil)){
 		NSIndexSet* selectedSet = [itemTableView selectedRowIndexes];
 		if([selectedSet count] == 1){
-			unsigned index = [selectedSet firstIndex];
+			NSUInteger index = [selectedSet firstIndex];
 			if([model itemExists:index]){
 				[viewItemInWebButton setEnabled:YES];
 				[itemDetailsView setString: [model itemDetails:index]]; 

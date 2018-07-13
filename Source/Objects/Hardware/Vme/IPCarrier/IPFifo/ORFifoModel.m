@@ -445,7 +445,7 @@ short interruptLevel;
     self = [super initWithCoder:decoder];
     
     [[self undoManager] disableUndoRegistration];
-    [self setInterruptLevel:[decoder decodeIntForKey:ORFifoInterruptLevel]];
+    [self setInterruptLevel:[decoder decodeIntegerForKey:ORFifoInterruptLevel]];
     [[self undoManager] enableUndoRegistration];
     
     return self;
@@ -454,7 +454,7 @@ short interruptLevel;
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:[self interruptLevel] forKey:ORFifoInterruptLevel];
+    [encoder encodeInteger:[self interruptLevel] forKey:ORFifoInterruptLevel];
 }
 
 

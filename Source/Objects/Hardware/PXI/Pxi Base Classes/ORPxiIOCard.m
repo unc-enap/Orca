@@ -93,7 +93,7 @@ NSString* ORPxiIOCardExceptionCountChanged 		= @"ORPxiIOCardExceptionCountChange
 {
     self = [super initWithCoder:decoder];
 	[[self undoManager] disableUndoRegistration];
-	[self setBaseAddress:[decoder decodeInt32ForKey:@"baseAddress"]];
+	[self setBaseAddress:[decoder decodeIntegerForKey:@"baseAddress"]];
 	[[self undoManager] enableUndoRegistration];
     return self;
 }
@@ -101,7 +101,7 @@ NSString* ORPxiIOCardExceptionCountChanged 		= @"ORPxiIOCardExceptionCountChange
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-	[encoder encodeInt32:baseAddress forKey:@"baseAddress"];
+	[encoder encodeInteger:baseAddress forKey:@"baseAddress"];
 }
 
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary

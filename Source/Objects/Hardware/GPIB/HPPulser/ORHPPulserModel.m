@@ -636,7 +636,7 @@ static HPPulserCustomWaveformStruct waveformData[kNumWaveforms] = {
         long n = [self writeReadGPIBDevice: @"*IDN?"
                                       data: reply
                                  maxLength: 256 ];
-        reply[n] = "\n";
+        reply[n] = '\n';
         NSString* s =  [NSString stringWithCString:reply encoding:NSASCIIStringEncoding];
         long nlPos = [s rangeOfString:@"\n"].location;
         if(nlPos != NSNotFound){
@@ -1284,7 +1284,7 @@ static NSString* ORHPPulserMaxTime = @"ORHPPulserMaxTime";
 - (void)loadMemento:(NSCoder*)aDecoder
 {
     [[self undoManager] disableUndoRegistration];
-    [self setTriggerSource: [aDecoder decodeIntForKey: HPTriggerMode]];
+    [self setTriggerSource: [aDecoder decodeIntegerForKey: HPTriggerMode]];
     [self setVoltage: [aDecoder decodeFloatForKey: HPVoltage]];
     [self setVoltageOffset: [aDecoder decodeFloatForKey: HPVoltageOffset]];
     [self setFrequency: [aDecoder decodeFloatForKey: HPFrequency]];
@@ -1304,15 +1304,15 @@ static NSString* ORHPPulserMaxTime = @"ORHPPulserMaxTime";
 {
     [anEncoder encodeBool:verbose forKey:@"verbose"];
     [anEncoder encodeBool:negativePulse forKey:@"ORHPPulserModelNegativePulse"];
-    [anEncoder encodeInt: [self triggerSource] forKey: HPTriggerMode];
+    [anEncoder encodeInteger: [self triggerSource] forKey: HPTriggerMode];
     [anEncoder encodeFloat: [self voltage] forKey: HPVoltage];
 	[anEncoder encodeFloat: [self voltageOffset] forKey: HPVoltageOffset];
     [anEncoder encodeFloat: [self burstRate] forKey: HPBurstRate];
     [anEncoder encodeFloat: [self frequency] forKey: HPFrequency];
-    [anEncoder encodeInt: [self burstCycles] forKey: HPBurstCycles];
-    [anEncoder encodeInt: [self burstPhase] forKey: HPBurstPhase];
+    [anEncoder encodeInteger: [self burstCycles] forKey: HPBurstCycles];
+    [anEncoder encodeInteger: [self burstPhase] forKey: HPBurstPhase];
 	//    [anEncoder encodeFloat: [self totalWidth] forKey: HPTotalWidth];
-    [anEncoder encodeInt: [self selectedWaveform] forKey: HPSelectedWaveform];
+    [anEncoder encodeInteger: [self selectedWaveform] forKey: HPSelectedWaveform];
 	[anEncoder encodeBool:enableRandom forKey:ORHPPulserEnableRandom];
 	[anEncoder encodeFloat:minTime forKey:ORHPPulserMinTime];
 	[anEncoder encodeFloat:maxTime forKey:ORHPPulserMaxTime];

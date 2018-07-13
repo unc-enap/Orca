@@ -428,8 +428,8 @@ struct {
     [[self undoManager] disableUndoRegistration];
     [self setPollingState:[decoder decodeIntForKey:@"ORJADCLModelPollingState"]];
     [self setRangeIndex:[decoder decodeIntForKey:  @"ORJADCLModelRangeIndex"]];
-    [self setEnabledMask:[decoder decodeIntForKey: @"ORJADCLModelEnabledMask"]];
-    [self setAlarmsEnabledMask:[decoder decodeIntForKey: @"ORJADCLModelAlarmsEnabledMask"]];
+    [self setEnabledMask:[decoder decodeIntegerForKey: @"ORJADCLModelEnabledMask"]];
+    [self setAlarmsEnabledMask:[decoder decodeIntegerForKey: @"ORJADCLModelAlarmsEnabledMask"]];
 	int i;
 	for(i=0;i<16;i++){
 		timeRates[i] = [[ORTimeRate alloc] init];
@@ -446,10 +446,10 @@ struct {
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];	
-    [encoder encodeInt:pollingState			forKey:@"ORJADCLModelPollingState"];
-    [encoder encodeInt:rangeIndex			forKey:@"ORJADCLModelRangeIndex"];
-    [encoder encodeInt:enabledMask			forKey:	@"ORJADCLModelEnabledMask"];
-    [encoder encodeInt:alarmsEnabledMask	forKey:	@"ORJADCLModelAlarmsEnabledMask"];
+    [encoder encodeInteger:pollingState			forKey:@"ORJADCLModelPollingState"];
+    [encoder encodeInteger:rangeIndex			forKey:@"ORJADCLModelRangeIndex"];
+    [encoder encodeInteger:enabledMask			forKey:	@"ORJADCLModelEnabledMask"];
+    [encoder encodeInteger:alarmsEnabledMask	forKey:	@"ORJADCLModelAlarmsEnabledMask"];
 	
 	int i;
 	for(i=0;i<16;i++){
@@ -500,7 +500,7 @@ struct {
 
 - (NSString*) processingTitle
 {
-    return [NSString stringWithFormat:@"%ld,%ld,JADC-L",[self crateNumber],[self  stationNumber]];
+    return [NSString stringWithFormat:@"%d,%lu,JADC-L",[self crateNumber],[self  stationNumber]];
 }
 
 - (double) convertedValue:(int)channel

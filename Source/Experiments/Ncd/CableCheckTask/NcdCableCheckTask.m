@@ -525,8 +525,8 @@ static NSString* NcdCableCheckMuxVerbose  = @"NcdCableCheckMuxVerbose";
         [self setAmplitude:[decoder decodeFloatForKey:NcdCableCheckAmplitude]];
         [self setWidth:[decoder decodeFloatForKey:NcdCableCheckWidth]];
         [self setNumPulses:[decoder decodeIntForKey:NcdCableCheckNumPulses]];
-        [self setShaperThreshold:[decoder decodeIntForKey:NcdCableCheckShaperThreshold]];
-        [self setMuxThreshold:[decoder decodeIntForKey:NcdCableCheckMuxThreshold]];
+        [self setShaperThreshold:[decoder decodeIntegerForKey:NcdCableCheckShaperThreshold]];
+        [self setMuxThreshold:[decoder decodeIntegerForKey:NcdCableCheckMuxThreshold]];
         [self setVerbose:[decoder decodeBoolForKey:NcdCableCheckMuxVerbose]];
     }
     else {
@@ -541,9 +541,9 @@ static NSString* NcdCableCheckMuxVerbose  = @"NcdCableCheckMuxVerbose";
     [super encodeWithCoder:encoder];
     [encoder encodeFloat:amplitude forKey:NcdCableCheckAmplitude];
     [encoder encodeFloat:width forKey:NcdCableCheckWidth];
-    [encoder encodeInt:numPulses forKey:NcdCableCheckNumPulses];
-    [encoder encodeInt:shaperThreshold forKey:NcdCableCheckShaperThreshold];
-    [encoder encodeInt:muxThreshold forKey:NcdCableCheckMuxThreshold];
+    [encoder encodeInteger:numPulses forKey:NcdCableCheckNumPulses];
+    [encoder encodeInteger:shaperThreshold forKey:NcdCableCheckShaperThreshold];
+    [encoder encodeInteger:muxThreshold forKey:NcdCableCheckMuxThreshold];
     [encoder encodeBool:verbose forKey:NcdCableCheckMuxVerbose];
 }
 @end
@@ -579,7 +579,7 @@ static NSString* NcdCableCheckMuxVerbose  = @"NcdCableCheckMuxVerbose";
         pulseCount = 0;
         [self setCurrentTube:[tubeArray objectAtIndex:tubeIndex]];  //get the next tube to work on
         
-        [self setMessage:[NSString stringWithFormat:@" Checking %@ (%ld/%ld)",[currentTube objectForKey:@"kLabel"],tubeIndex+1,[tubeArray count]]];
+        [self setMessage:[NSString stringWithFormat:@" Checking %@ (%d/%ld)",[currentTube objectForKey:@"kLabel"],tubeIndex+1,[tubeArray count]]];
 		
         [self findShaperForCurrentTube];
         [self findMuxForCurrentTube];

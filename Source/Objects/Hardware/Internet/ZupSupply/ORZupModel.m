@@ -341,11 +341,11 @@ NSString* ORZupModelPortStateChanged		= @"ORZupModelPortStateChanged";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:statusEnableMask forKey:@"ORZupModelStatusEnableMask"];
-    [encoder encodeInt:faultEnableMask forKey:@"ORZupModelFaultEnableMask"];
+    [encoder encodeInteger:statusEnableMask forKey:@"ORZupModelStatusEnableMask"];
+    [encoder encodeInteger:faultEnableMask forKey:@"ORZupModelFaultEnableMask"];
     [encoder encodeFloat:current forKey:@"ORZupModelCurrent"];
     [encoder encodeFloat:actualCurrent forKey:@"ORZupModelActualCurrent"];
-    [encoder encodeInt:boardAddress		forKey:@"boardAddress"];
+    [encoder encodeInteger:boardAddress		forKey:@"boardAddress"];
     [encoder encodeBool:portWasOpen		forKey: @"portWasOpen"];
     [encoder encodeObject:portName		forKey: @"portName"];
 }

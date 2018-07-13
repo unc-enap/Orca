@@ -540,7 +540,7 @@ static NSString *NcdMuxdelayAdcRead 		= @"NcdMuxdelayAdcRead";
 {
     self = [super init];
     [self setConnectorTo408:[decoder decodeObjectForKey:NcdMuxHW408Connector]];
-    [self setDoNotWaitForCSBLow:[decoder decodeIntForKey:NcdMuxHWDoNotWaitForCSLow]];
+    [self setDoNotWaitForCSBLow:[decoder decodeIntegerForKey:NcdMuxHWDoNotWaitForCSLow]];
     [self setScopeSelection:[decoder decodeIntForKey:NcdMuxScopeSelection]];
     adcDelayTimeStart = [decoder decodeBoolForKey:NcdMuxDelayTimeStart];
     delayAdcRead = [decoder decodeBoolForKey:NcdMuxdelayAdcRead];
@@ -553,8 +553,8 @@ static NSString *NcdMuxdelayAdcRead 		= @"NcdMuxdelayAdcRead";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [encoder encodeObject:[self connectorTo408] forKey:NcdMuxHW408Connector];
-    [encoder encodeInt:[self doNotWaitForCSBLow] forKey:NcdMuxHWDoNotWaitForCSLow];
-    [encoder encodeInt:[self scopeSelection] forKey:NcdMuxScopeSelection];
+    [encoder encodeInteger:[self doNotWaitForCSBLow] forKey:NcdMuxHWDoNotWaitForCSLow];
+    [encoder encodeInteger:[self scopeSelection] forKey:NcdMuxScopeSelection];
     [encoder encodeBool:adcDelayTimeStart forKey:NcdMuxDelayTimeStart];
     [encoder encodeBool:delayAdcRead forKey:NcdMuxdelayAdcRead];
 }

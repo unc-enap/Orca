@@ -135,7 +135,7 @@ NSString* ORSBC_LAMLock						= @"ORSBC_LAMLock";
     [super encodeWithCoder:encoder];
     [encoder encodeObject:[self readoutGroup] forKey:@"LAMGroup1"];
     [encoder encodeObject: variableNames forKey: @"LAMVariables"];
-    [encoder encodeInt:[self slot] forKey:@"LAMSlot"];
+    [encoder encodeInteger:[self slot] forKey:@"LAMSlot"];
 }
 
 #pragma mark ***Data Taker

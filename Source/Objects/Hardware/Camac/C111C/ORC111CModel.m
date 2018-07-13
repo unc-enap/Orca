@@ -624,7 +624,7 @@ void IRQHandler(short crate_id, short irq_type, unsigned int irq_data,unsigned l
 {
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
-    [self setStationToTest:[decoder decodeIntForKey:@"ORC111CModelStationToTest"]];
+    [self setStationToTest:[decoder decodeIntegerForKey:@"ORC111CModelStationToTest"]];
 	[self setIpAddress:[decoder decodeObjectForKey:@"IpAddress"]];
     [[self undoManager] enableUndoRegistration];
 	
@@ -636,7 +636,7 @@ void IRQHandler(short crate_id, short irq_type, unsigned int irq_data,unsigned l
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:stationToTest forKey:@"ORC111CModelStationToTest"];
+    [encoder encodeInteger:stationToTest forKey:@"ORC111CModelStationToTest"];
     [encoder encodeObject:ipAddress forKey:@"IpAddress"];
 }
 

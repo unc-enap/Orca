@@ -448,11 +448,11 @@ enum {
 	
 	[self setNeutrinoWaveform:[decoder decodeIntForKey:	@"neutrinoWaveform"]];
 	[self setSourceWaveform:[decoder decodeIntForKey:	@"sourceWaveform"]];
-	[self setAutoStart:[decoder decodeIntForKey:		@"autoStart"]];
-	[self setAutoStartForSourceRun:[decoder decodeIntForKey:@"autoStartForSourceRun"]];
-	[self setPulseOneOnly:[decoder decodeIntForKey:		@"pulseOneOnly"]];
-	[self setCardToPulse:[decoder decodeIntForKey:		@"cardToPulse"]];
-	[self setChannelToPulse:[decoder decodeIntForKey:	@"channelToPulse"]];
+	[self setAutoStart:[decoder decodeIntegerForKey:		@"autoStart"]];
+	[self setAutoStartForSourceRun:[decoder decodeIntegerForKey:@"autoStartForSourceRun"]];
+	[self setPulseOneOnly:[decoder decodeIntegerForKey:		@"pulseOneOnly"]];
+	[self setCardToPulse:[decoder decodeIntegerForKey:		@"cardToPulse"]];
+	[self setChannelToPulse:[decoder decodeIntegerForKey:	@"channelToPulse"]];
 	
     [[self undoManager] enableUndoRegistration];    
     return self;
@@ -468,13 +468,13 @@ enum {
         [encoder encodeFloat:sourceParam[i] forKey:  [NSString stringWithFormat:@"NcdPulseChannelsSourceParam%d",i]];    
     }
 	
-	[encoder encodeInt:neutrinoWaveform forKey: @"neutrinoWaveform"];
-	[encoder encodeInt:sourceWaveform forKey:	@"sourceWaveform"];
-	[encoder encodeInt:autoStart forKey:		@"autoStart"];
-	[encoder encodeInt:autoStartForSourceRun forKey:  @"autoStartForSourceRun"];
-	[encoder encodeInt:pulseOneOnly forKey:		@"pulseOneOnly"];
-	[encoder encodeInt:cardToPulse forKey:		@"cardToPulse"];
-	[encoder encodeInt:channelToPulse forKey:	@"channelToPulse"];
+	[encoder encodeInteger:neutrinoWaveform forKey: @"neutrinoWaveform"];
+	[encoder encodeInteger:sourceWaveform forKey:	@"sourceWaveform"];
+	[encoder encodeInteger:autoStart forKey:		@"autoStart"];
+	[encoder encodeInteger:autoStartForSourceRun forKey:  @"autoStartForSourceRun"];
+	[encoder encodeInteger:pulseOneOnly forKey:		@"pulseOneOnly"];
+	[encoder encodeInteger:cardToPulse forKey:		@"cardToPulse"];
+	[encoder encodeInteger:channelToPulse forKey:	@"channelToPulse"];
     
     [self updateWindow];
     

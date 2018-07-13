@@ -245,11 +245,11 @@
 {
     self = [super initWithCoder:decoder];
     if([decoder allowsKeyedCoding]){
-        [self setNumColors:[decoder decodeIntForKey:@"ORColorScaleNumColors"]];
+        [self setNumColors:[decoder decodeIntegerForKey:@"ORColorScaleNumColors"]];
         [self setSpectrumRange:[decoder decodeFloatForKey:@"ORColorScaleSpectrumRange"]];
         [self setStartColor:[decoder decodeObjectForKey:@"ORColorScaleStartColor"]]; 
         [self setEndColor:[decoder decodeObjectForKey:@"ORColorScaleEndColor"]]; 
-        [self setUseRainBow:[decoder decodeIntForKey:@"ORColorScaleUseRainBow"]];
+        [self setUseRainBow:[decoder decodeIntegerForKey:@"ORColorScaleUseRainBow"]];
 		
 
     }
@@ -272,9 +272,9 @@
 {
     [super encodeWithCoder:encoder];
     if([encoder allowsKeyedCoding]){
-        [encoder encodeInt:numColors forKey:@"ORColorScaleNumColors"];
+        [encoder encodeInteger:numColors forKey:@"ORColorScaleNumColors"];
         [encoder encodeFloat:spectrumRange forKey:@"ORColorScaleSpectrumRange"];
-        [encoder encodeInt:useRainBow forKey:@"ORColorScaleUseRainBow"];
+        [encoder encodeInteger:useRainBow forKey:@"ORColorScaleUseRainBow"];
         [encoder encodeObject:startColor forKey:@"ORColorScaleStartColor"];
         [encoder encodeObject:endColor forKey:@"ORColorScaleEndColor"];
     }

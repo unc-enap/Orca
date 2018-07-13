@@ -287,7 +287,7 @@ static NSString* ORRunListDataOut1	= @"ORRunListDataOut1";
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-	[encoder encodeInt:timesToRepeat    forKey:@"timesToRepeat"];
+	[encoder encodeInteger:timesToRepeat    forKey:@"timesToRepeat"];
 	[encoder encodeObject:lastFile      forKey:@"lastFile"];
 	[encoder encodeBool:randomize       forKey:@"randomize"];
 	[encoder encodeObject:items			forKey:@"items"];

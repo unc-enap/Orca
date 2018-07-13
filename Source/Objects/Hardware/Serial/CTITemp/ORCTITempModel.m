@@ -331,7 +331,7 @@ NSString* ORCTITempLock = @"ORCTITempLock";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeBool:shipTemperature forKey:@"ORCTITempModelShipTemperature"];
-    [encoder encodeInt:pollTime forKey:@"ORCTITempModelPollTime"];
+    [encoder encodeInteger:pollTime forKey:@"ORCTITempModelPollTime"];
     [encoder encodeBool:portWasOpen forKey:@"ORCTITempModelPortWasOpen"];
     [encoder encodeObject:portName forKey: @"portName"];
 }

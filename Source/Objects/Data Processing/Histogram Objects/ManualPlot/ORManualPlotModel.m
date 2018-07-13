@@ -329,10 +329,10 @@ NSString* ORManualPlotDataChanged			= @"ORManualPlotDataChanged";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeObject:comment forKey:@"comment"];
-    [encoder encodeInt:col3Key forKey:@"ORManualPlotModelCol3Key"];
-    [encoder encodeInt:col2Key forKey:@"ORManualPlotModelCol2Key"];
-    [encoder encodeInt:col1Key forKey:@"ORManualPlotModelCol1Key"];
-    [encoder encodeInt:col0Key forKey:@"ORManualPlotModelCol0Key"];
+    [encoder encodeInteger:col3Key forKey:@"ORManualPlotModelCol3Key"];
+    [encoder encodeInteger:col2Key forKey:@"ORManualPlotModelCol2Key"];
+    [encoder encodeInteger:col1Key forKey:@"ORManualPlotModelCol1Key"];
+    [encoder encodeInteger:col0Key forKey:@"ORManualPlotModelCol0Key"];
     [encoder encodeObject:calibration forKey:@"calibration"];
     [encoder encodeObject:roiSet		forKey:@"roiSet"];
 }

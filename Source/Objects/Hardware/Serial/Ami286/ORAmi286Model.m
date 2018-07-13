@@ -806,10 +806,10 @@ NSString* ORAmi286Lock = @"ORAmi286Lock";
 	self = [super initWithCoder:decoder];
 	[[self undoManager] disableUndoRegistration];
 	[self setSendOnAlarm:[decoder decodeBoolForKey:@"sendOnAlarm"]];
-	[self setExpiredTime:[decoder decodeInt32ForKey:@"expiredTime"]];
+	[self setExpiredTime:[decoder decodeIntegerForKey:@"expiredTime"]];
 	[self setSendOnExpired:[decoder decodeBoolForKey:@"sendOnExpired"]];
 	[self setSendOnValveChange:[decoder decodeBoolForKey:@"sendOnValveChange"]];
-	[self setEnabledMask:[decoder decodeIntForKey:@"enabledMask"]];
+	[self setEnabledMask:[decoder decodeIntegerForKey:@"enabledMask"]];
 	[self setShipLevels:[decoder decodeBoolForKey:@"ORAmi286ModelShipLevels"]];
 	[self setPollTime:[decoder decodeIntForKey:@"ORAmi286ModelPollTime"]];
 	[self setPortWasOpen:[decoder decodeBoolForKey:@"ORAmi286ModelPortWasOpen"]];
@@ -844,12 +844,12 @@ NSString* ORAmi286Lock = @"ORAmi286Lock";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeBool:sendOnAlarm forKey:@"sendOnAlarm"];
-    [encoder encodeInt32:(int32_t)expiredTime forKey:@"expiredTime"];
+    [encoder encodeInteger:expiredTime forKey:@"expiredTime"];
     [encoder encodeBool:sendOnExpired forKey:@"sendOnExpired"];
     [encoder encodeBool:sendOnValveChange forKey:@"sendOnValveChange"];
-    [encoder encodeInt:enabledMask forKey:@"enabledMask"];
+    [encoder encodeInteger:enabledMask forKey:@"enabledMask"];
     [encoder encodeBool:shipLevels forKey:@"ORAmi286ModelShipLevels"];
-    [encoder encodeInt:pollTime forKey:@"ORAmi286ModelPollTime"];
+    [encoder encodeInteger:pollTime forKey:@"ORAmi286ModelPollTime"];
     [encoder encodeBool:portWasOpen forKey:@"ORAmi286ModelPortWasOpen"];
     [encoder encodeObject:portName forKey: @"portName"];
     [encoder encodeObject:eMailList forKey: @"eMailList"];
@@ -860,7 +860,7 @@ NSString* ORAmi286Lock = @"ORAmi286Lock";
 		[encoder encodeFloat:hiAlarmLevel[i] forKey:[NSString stringWithFormat:@"HiAlarm%d",i]];
 		[encoder encodeFloat:lowFillPoint[i] forKey:[NSString stringWithFormat:@"lowFillPoint%d",i]];
 		[encoder encodeFloat:hiFillPoint[i] forKey:[NSString stringWithFormat:@"hiFillPoint%d",i]];
-		[encoder encodeInt:fillState[i] forKey:[NSString stringWithFormat:@"FillState%d",i]];
+		[encoder encodeInteger:fillState[i] forKey:[NSString stringWithFormat:@"FillState%d",i]];
 	}
 }
 

@@ -294,9 +294,9 @@ static NSString* ORSelectionControllerSelectionValue = @"ORSelectionControllerSe
 }
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
-	[encoder encodeInt:logicalTag forKey:ORSelectionControllerLogicalTag];
-	[encoder encodeInt:objTag forKey:ORSelectionControllerObjTag];
-	[encoder encodeInt:selectionTag forKey:ORSelectionControllerSelectionTag];
-	[encoder encodeInt:selectionValue forKey:ORSelectionControllerSelectionValue];
+	[encoder encodeInteger:logicalTag forKey:ORSelectionControllerLogicalTag];
+	[encoder encodeInteger:objTag forKey:ORSelectionControllerObjTag];
+	[encoder encodeInteger:selectionTag forKey:ORSelectionControllerSelectionTag];
+	[encoder encodeInteger:selectionValue forKey:ORSelectionControllerSelectionValue];
 }
 @end

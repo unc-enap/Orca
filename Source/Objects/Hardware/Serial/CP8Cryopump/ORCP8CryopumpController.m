@@ -445,7 +445,7 @@
     [[self window] setContentView:totalView];
 	
     NSString* key = [NSString stringWithFormat: @"orca.ORCryoPump%lu.selectedtab",[model uniqueIdNumber]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 }
 
@@ -920,14 +920,14 @@
 - (IBAction) roughValveInterlockAction:(id)sender	  { [model setRoughValveInterlock:		[sender intValue]]; }
 - (IBAction) roughValveStatusAction:(id)sender		  { [model setRoughValveStatus:			[sender intValue]]; }
 - (IBAction) regenerationStartDelayAction:(id)sender  { [model setRegenerationStartDelay:	[sender intValue]]; }
-- (IBAction) powerFailureRecoveryAction:(id)sender	  { [model setPowerFailureRecovery:		[sender indexOfSelectedItem]]; }
-- (IBAction) firstStageControlMethodAction:(id)sender { [model setFirstStageControlMethod:	[sender indexOfSelectedItem]]; }
+- (IBAction) powerFailureRecoveryAction:(id)sender	  { [model setPowerFailureRecovery:		(int)[sender indexOfSelectedItem]]; }
+- (IBAction) firstStageControlMethodAction:(id)sender { [model setFirstStageControlMethod:	(int)[sender indexOfSelectedItem]]; }
 - (IBAction) firstStageControlTempAction:(id)sender   { [model setFirstStageControlTemp:	[sender intValue]]; }
 - (IBAction) shipTemperaturesAction:(id)sender		  { [model setShipTemperatures:			[sender intValue]]; }
 
 - (IBAction) lockAction:(id) sender					  { [gSecurity tryToSetLock:ORCP8CryopumpLock to:[sender intValue] forWindow:[self window]];}
 - (IBAction) readTemperaturesAction:(id)sender		  { [model pollHardware];}
-- (IBAction) pollTimeAction:(id)sender				  { [model setPollTime:[[sender selectedItem] tag]];}
+- (IBAction) pollTimeAction:(id)sender				  { [model setPollTime:(int)[[sender selectedItem] tag]];}
 - (IBAction) pollNowAction:(id)sender				  { [model pollHardware]; }
 
 - (IBAction) initHardwareAction:(id)sender			  
@@ -1079,8 +1079,8 @@
 - (void) beginConstraintPanel:(NSDictionary*)constraints actionTitle:(NSString*)aTitle
 {
 	NSArray* allKeys = [constraints allKeys];
-	int n = [allKeys count];
-	[constraintTitleField setStringValue:[NSString stringWithFormat:@"Action: <%@> can not be done because there %d constraint%@ in effect. See below for more info.",
+	NSUInteger n = [allKeys count];
+	[constraintTitleField setStringValue:[NSString stringWithFormat:@"Action: <%@> can not be done because there %ld constraint%@ in effect. See below for more info.",
 										  aTitle,
 										  n,
 										  n==1?@"":@"s"]];
@@ -1312,7 +1312,7 @@
 - (int) numberPointsInPlot:(id)aPlotter
 {
 	int set = (int)[aPlotter tag];
-	return [[model timeRate:set] count];
+	return (int)[[model timeRate:set] count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue

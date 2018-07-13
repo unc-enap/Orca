@@ -772,7 +772,7 @@ static struct {
     [self setLogToFile:					[decoder decodeBoolForKey:@"ORIP320ModelLogToFile"]];
     [self setDisplayRaw:				[decoder decodeBoolForKey:@"ORIP320ModelDisplayRaw"]];
     [self setChanObjs:					[decoder decodeObjectForKey:@"kORIP320chanObjs"]];
-	[self setPollingState:				[decoder decodeIntForKey:@"kORIP320PollingState"]];
+	[self setPollingState:				[decoder decodeIntegerForKey:@"kORIP320PollingState"]];
 	[self setMultiPlots:				[decoder decodeObjectForKey:@"multiPlots"]];
     [self setDataSet:					[decoder decodeObjectForKey:@"dataSet"]];
     
@@ -796,7 +796,7 @@ static struct {
 		calibrationConstants[gain].kVoltCALLO		= [decoder decodeFloatForKey:[NSString stringWithFormat:@"kVoltCALLO%d",gain]];
 		calibrationConstants[gain].kCountCALLO		= [decoder decodeFloatForKey:[NSString stringWithFormat:@"kCountCALLO%d",gain]];
 		calibrationConstants[gain].kVoltCALHI		= [decoder decodeFloatForKey:[NSString stringWithFormat:@"kVoltCALHI%d",gain]];
-		calibrationConstants[gain].kCountCALHI		= [decoder decodeIntForKey:  [NSString stringWithFormat:@"kCountCALHI%d",gain]];
+		calibrationConstants[gain].kCountCALHI		= [decoder decodeIntegerForKey:  [NSString stringWithFormat:@"kCountCALHI%d",gain]];
 	}
 	
 	[[self undoManager] enableUndoRegistration];
@@ -819,10 +819,10 @@ static struct {
     [encoder encodeBool:logToFile			forKey:@"ORIP320ModelLogToFile"];
     [encoder encodeBool:displayRaw			forKey:@"ORIP320ModelDisplayRaw"];
     [encoder encodeObject:chanObjs			forKey:@"kORIP320chanObjs"];
-    [encoder encodeInt:[self pollingState]	forKey:@"kORIP320PollingState"];
+    [encoder encodeInteger:[self pollingState]	forKey:@"kORIP320PollingState"];
     [encoder encodeObject:multiPlots		forKey:@"multiPlots"];
 	
-	[encoder encodeInt:cardJumperSetting	forKey:@"cardJumperSetting"];
+	[encoder encodeInteger:cardJumperSetting	forKey:@"cardJumperSetting"];
 	int gain;
 	for(gain=0;gain<kNumGainSettings;gain++){
 		[encoder encodeFloat:calibrationConstants[gain].kSlope_m			forKey:[NSString stringWithFormat:@"kSlope_m%d",gain]];
@@ -830,7 +830,7 @@ static struct {
 		[encoder encodeFloat:calibrationConstants[gain].kIdeal_Zero			forKey:[NSString stringWithFormat:@"kIdeal_Zero%d",gain]];
 		[encoder encodeFloat:calibrationConstants[gain].kCountCALLO			forKey:[NSString stringWithFormat:@"kCountCALLO%d",gain]];
 		[encoder encodeFloat:calibrationConstants[gain].kVoltCALHI			forKey:[NSString stringWithFormat:@"kVoltCALHI%d",gain]];
-		[encoder encodeInt:calibrationConstants[gain].kCountCALHI			forKey:[NSString stringWithFormat:@"kCountCALHI%d",gain]];		
+		[encoder encodeInteger:calibrationConstants[gain].kCountCALHI			forKey:[NSString stringWithFormat:@"kCountCALHI%d",gain]];		
 	}
 }
 

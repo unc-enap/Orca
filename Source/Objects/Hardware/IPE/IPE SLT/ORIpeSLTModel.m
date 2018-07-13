@@ -1385,7 +1385,7 @@ NSString* ORIpeSLTModelHW_ResetChanged          = @"ORIpeSLTModelHW_ResetChanged
 	
 	//status reg
 	[self setPatternFilePath:		[decoder decodeObjectForKey:@"ORIpeSLTModelPatternFilePath"]];
-	[self setInterruptMask:			[decoder decodeInt32ForKey:@"ORIpeSLTModelInterruptMask"]];
+	[self setInterruptMask:			[decoder decodeIntegerForKey:@"ORIpeSLTModelInterruptMask"]];
 	[self setPulserDelay:			[decoder decodeFloatForKey:@"ORIpeSLTModelPulserDelay"]];
 	[self setPulserAmp:				[decoder decodeFloatForKey:@"ORIpeSLTModelPulserAmp"]];
 	[self setInhibit:				[decoder decodeBoolForKey:@"ORIpeSLTStatusInhibit"]];
@@ -1400,20 +1400,20 @@ NSString* ORIpeSLTModelHW_ResetChanged          = @"ORIpeSLTModelHW_ResetChanged
 	[self setTestPulseSource:		[decoder decodeIntForKey:@"testPulseSource"]];
 	[self setSecStrobeSource:		[decoder decodeIntForKey:@"secStrobeSource"]];
 	[self setWatchDogStart:			[decoder decodeIntForKey:@"watchDogStart"]];
-	[self setEnableDeadTimeCounter:	[decoder decodeIntForKey:@"enableDeadTimeCounter"]];
+	[self setEnableDeadTimeCounter:	[decoder decodeIntegerForKey:@"enableDeadTimeCounter"]];
 	[self setLedInhibit:			[decoder decodeBoolForKey:@"ledInhibit"]];
 	[self setLedVeto:				[decoder decodeBoolForKey:@"ledVeto"]];
 	
 	//special
-	[self setNHitThreshold:			[decoder decodeIntForKey:@"ORIpeSLTModelNHitThreshold"]];
-	[self setNHit:					[decoder decodeIntForKey:@"ORIpeSLTModelNHit"]];
+	[self setNHitThreshold:			[decoder decodeIntegerForKey:@"ORIpeSLTModelNHitThreshold"]];
+	[self setNHit:					[decoder decodeIntegerForKey:@"ORIpeSLTModelNHit"]];
 	[self setReadAll:				[decoder decodeBoolForKey:@"readAll"]];
-    [self setNextPageDelay:			[decoder decodeIntForKey:@"nextPageDelay"]]; // ak, 5.10.07
+    [self setNextPageDelay:			[decoder decodeIntegerForKey:@"nextPageDelay"]]; // ak, 5.10.07
 	
 	[self setReadOutGroup:			[decoder decodeObjectForKey:@"ReadoutGroup"]];
     [self setPoller:				[decoder decodeObjectForKey:@"poller"]];
 	
-    [self setPageSize:				[decoder decodeIntForKey:@"ORIpeSLTPageSize"]]; // ak, 9.12.07
+    [self setPageSize:				[decoder decodeIntegerForKey:@"ORIpeSLTPageSize"]]; // ak, 9.12.07
     [self setDisplayTrigger:		[decoder decodeBoolForKey:@"ORIpeSLTDisplayTrigger"]];
     [self setDisplayEventLoop:		[decoder decodeBoolForKey:@"ORIpeSLTDisplayEventLoop"]];
 	
@@ -1439,7 +1439,7 @@ NSString* ORIpeSLTModelHW_ResetChanged          = @"ORIpeSLTModelHW_ResetChanged
 	
 	//status reg
 	[encoder encodeObject:patternFilePath forKey:@"ORIpeSLTModelPatternFilePath"];
-	[encoder encodeInt32:(int32_t)interruptMask	 forKey:@"ORIpeSLTModelInterruptMask"];
+	[encoder encodeInteger:interruptMask	 forKey:@"ORIpeSLTModelInterruptMask"];
 	[encoder encodeFloat:pulserDelay	 forKey:@"ORIpeSLTModelPulserDelay"];
 	[encoder encodeFloat:pulserAmp		 forKey:@"ORIpeSLTModelPulserAmp"];
 	[encoder encodeBool:inhibit			 forKey:@"ORIpeSLTStatusInhibit"];
@@ -1449,26 +1449,26 @@ NSString* ORIpeSLTModelHW_ResetChanged          = @"ORIpeSLTModelHW_ResetChanged
 	[encoder encodeBool:veto			 forKey:@"ORIpeSLTStatusVeto"];
 	
 	//control reg
-	[encoder encodeInt:triggerSource	forKey:@"triggerSource"];
-	[encoder encodeInt:inhibitSource	forKey:@"inhibitSource"];
-	[encoder encodeInt:testPulseSource	forKey:@"testPulseSource"];
-	[encoder encodeInt:secStrobeSource	forKey:@"secStrobeSource"];
-	[encoder encodeInt:watchDogStart	forKey:@"watchDogStart"];
-	[encoder encodeInt:enableDeadTimeCounter	forKey:@"enableDeadTimeCounter"];
+	[encoder encodeInteger:triggerSource	forKey:@"triggerSource"];
+	[encoder encodeInteger:inhibitSource	forKey:@"inhibitSource"];
+	[encoder encodeInteger:testPulseSource	forKey:@"testPulseSource"];
+	[encoder encodeInteger:secStrobeSource	forKey:@"secStrobeSource"];
+	[encoder encodeInteger:watchDogStart	forKey:@"watchDogStart"];
+	[encoder encodeInteger:enableDeadTimeCounter	forKey:@"enableDeadTimeCounter"];
 	[encoder encodeBool:ledInhibit		forKey:@"ledInhibit"];
 	[encoder encodeBool:ledVeto			forKey:@"ledVeto"];
 	
 	
 	//special
-	[encoder encodeInt:nHitThreshold	 forKey:@"ORIpeSLTModelNHitThreshold"];
-	[encoder encodeInt:nHit				 forKey:@"ORIpeSLTModelNHit"];
+	[encoder encodeInteger:nHitThreshold	 forKey:@"ORIpeSLTModelNHitThreshold"];
+	[encoder encodeInteger:nHit				 forKey:@"ORIpeSLTModelNHit"];
 	[encoder encodeBool:readAll			 forKey:@"readAll"];
-    [encoder encodeInt:(int32_t)nextPageDelay     forKey:@"nextPageDelay"]; // ak, 5.10.07
+    [encoder encodeInteger:(int32_t)nextPageDelay     forKey:@"nextPageDelay"]; // ak, 5.10.07
 	
 	[encoder encodeObject:readOutGroup  forKey:@"ReadoutGroup"];
     [encoder encodeObject:poller         forKey:@"poller"];
 	
-    [encoder encodeInt:(int32_t)pageSize         forKey:@"ORIpeSLTPageSize"]; // ak, 9.12.07
+    [encoder encodeInteger:(int32_t)pageSize         forKey:@"ORIpeSLTPageSize"]; // ak, 9.12.07
     [encoder encodeBool:displayTrigger   forKey:@"ORIpeSLTDisplayTrigger"];
     [encoder encodeBool:displayEventLoop forKey:@"ORIpeSLTDisplayEventLoop"];
 	

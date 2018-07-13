@@ -136,7 +136,7 @@ NSString* ORMJDVacuumModelSpikeTriggerValueChanged      = @"ORMJDVacuumModelSpik
 - (void) vacuumSpikeChanged:(NSNotification*)aNote
 {
     ORRunningAveSpike* spikeObj = [[aNote userInfo] objectForKey:@"SpikeObject"];
-    int regionIndex = [spikeObj tag];
+    int regionIndex = (int)[spikeObj tag];
     if(regionIndex>=0 && regionIndex <kNumberRegions){
         vacuumSpike[regionIndex] = [spikeObj spiked];
     }
@@ -369,7 +369,7 @@ NSString* ORMJDVacuumModelSpikeTriggerValueChanged      = @"ORMJDVacuumModelSpik
 {
 	ORTPG256AModel* pressureGauge = [aNote object];
 	int chan = [[[aNote userInfo] objectForKey:@"Channel"]intValue];
-	int componentTag = [pressureGauge tag];
+	int componentTag = (int)[pressureGauge tag];
 	int aRegion;
 	for(aRegion=0;aRegion<kNumberRegions;aRegion++){
 		ORVacuumValueLabel*  aLabel = [self regionValueObj:aRegion]; 
@@ -563,7 +563,7 @@ NSString* ORMJDVacuumModelSpikeTriggerValueChanged      = @"ORMJDVacuumModelSpik
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:coolerMode           forKey:@"coolerMode"];
+    [encoder encodeInteger:coolerMode           forKey:@"coolerMode"];
     [encoder encodeBool:showGrid            forKey: @"showGrid"];
     [encoder encodeFloat:spikeTriggerValue  forKey: @"spikeTriggerValue"];
 }
@@ -803,7 +803,7 @@ NSString* ORMJDVacuumModelSpikeTriggerValueChanged      = @"ORMJDVacuumModelSpik
 
 - (int) slotForObj:(id)anObj
 {
-    return [anObj tag];
+    return (int)[anObj tag];
 }
 
 - (int) numberSlotsNeededFor:(id)anObj
@@ -1381,8 +1381,8 @@ NSString* ORMJDVacuumModelSpikeTriggerValueChanged      = @"ORMJDVacuumModelSpik
     NSMutableArray* gvStates = [NSMutableArray array];
     for(ORVacuumGateValve* aGateValve in [self gateValves]){
         [gvStates addObject:[NSArray arrayWithObjects:
-                             [NSNumber numberWithInt:[aGateValve state]],
-                             [NSNumber numberWithInt:[aGateValve constraintCount]],
+                             [NSNumber numberWithInteger:[aGateValve state]],
+                             [NSNumber numberWithInteger:[aGateValve constraintCount]],
                              nil]];
     }
     

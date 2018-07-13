@@ -817,8 +817,8 @@ ORTTCPX_READ_IMPLEMENT(GetSTB, int)
 	
 	[self setIpAddress:[decoder decodeObjectForKey:@"ipAddress"]];
 	[self setSerialNumber:[decoder decodeObjectForKey:@"serialNumber"]];    
-    [self setPort:[decoder decodeIntForKey:@"portNumber"]];
-    [self setVerbose:[decoder decodeIntForKey:@"verbose"]];
+    [self setPort:[decoder decodeIntegerForKey:@"portNumber"]];
+    [self setVerbose:[decoder decodeIntegerForKey:@"verbose"]];
     NSString* ul = [decoder decodeObjectForKey:@"kORTTCPX400DPUL"];
     if (ul != nil) [self setUserLock:YES withString:ul];
     
@@ -831,8 +831,8 @@ ORTTCPX_READ_IMPLEMENT(GetSTB, int)
 	[super encodeWithCoder:encoder];
  	[encoder encodeObject:ipAddress	forKey:@"ipAddress"];
  	[encoder encodeObject:serialNumber	forKey:@"serialNumber"];    
-    [encoder encodeInt:port forKey:@"portNumber"];
-    [encoder encodeInt:verbose forKey:@"verbose"];
+    [encoder encodeInteger:port forKey:@"portNumber"];
+    [encoder encodeInteger:verbose forKey:@"verbose"];
     [encoder encodeObject:userLocked forKey:@"kORTTCPX400DPUL"];
 }
 
@@ -963,7 +963,7 @@ ORTTCPX_READ_IMPLEMENT(GetSTB, int)
     assert(cmd != nil && cmd->responds);
     
     float readBackValue = 0;
-    int numberOfOutputs = [[cmd->responseFormat componentsSeparatedByString:@"%"] count] - 1;
+    int numberOfOutputs = (int)[[cmd->responseFormat componentsSeparatedByString:@"%"] count] - 1;
     @try {
         switch (numberOfOutputs) {
             case 1:
@@ -991,7 +991,7 @@ ORTTCPX_READ_IMPLEMENT(GetSTB, int)
         [e raise];
     }
     if (callSelector) {
-        numberOfOutputs = [[NSStringFromSelector(callSelector) componentsSeparatedByString:@":"] count] - 1;
+        numberOfOutputs = (int)[[NSStringFromSelector(callSelector) componentsSeparatedByString:@":"] count] - 1;
         switch (numberOfOutputs) {
             case 1:
                 [self performSelector:callSelector

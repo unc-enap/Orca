@@ -296,19 +296,19 @@ static NSDictionary* gpsOps;
 	int day = [[frmt stringFromDate:[model ppoTime]] intValue];
 
 	[ppoDayField setIntValue:day];
-	[ppoHourField setIntValue:[componentsPpo hour]];
-	[ppoMinuteField setIntValue:[componentsPpo minute]];
-	[ppoSecondField setIntValue:[componentsPpo second]];
+	[ppoHourField setIntegerValue:[componentsPpo hour]];
+	[ppoMinuteField setIntegerValue:[componentsPpo minute]];
+	[ppoSecondField setIntegerValue:[componentsPpo second]];
 }
 
 - (void) ppoTimeOffsetChanged:(NSNotification*)aNote
 {
-	[ppoTimeOffsetField setIntValue:[model ppoTimeOffset]];
+	[ppoTimeOffsetField setIntegerValue:[model ppoTimeOffset]];
 }
 
 - (void) ppoPulseWidthChanged:(NSNotification*)aNote
 {
-	[ppoPulseWidthField setIntValue:[model ppoPulseWidth]];
+	[ppoPulseWidthField setIntegerValue:[model ppoPulseWidth]];
 }
 
 - (void) ppoPulsePeriodChanged:(NSNotification*)aNote

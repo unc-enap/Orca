@@ -927,7 +927,7 @@ static NSString *NcdMuxTriggerGroup2 = @" NcdMuxTrigger Group 2";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:[self scopeSelection] forKey:NcdMuxScopeSel];
+    [encoder encodeInteger:[self scopeSelection] forKey:NcdMuxScopeSel];
     [encoder encodeObject:[self muxBoxHw] forKey:NcdMuxMuxBoxHw];
     [encoder encodeObject:[self hvHw] forKey:NcdMuxHVHw];
     [encoder encodeObject:[self trigger1Group] forKey:NcdMuxTriggerGroup1];

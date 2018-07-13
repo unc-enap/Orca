@@ -586,8 +586,8 @@
 
 - (IBAction) motorTypeAction:(id)sender
 {
-    ORVXMMotor* aMotor = [model motor:[sender selectedRow]];
-    [aMotor setMotorType:[[sender selectedCell] indexOfSelectedItem]];
+    ORVXMMotor* aMotor = [model motor:(int)[sender selectedRow]];
+    [aMotor setMotorType:(int)[[sender selectedCell] indexOfSelectedItem]];
 }
 
 - (IBAction) manualStateAction:(id)sender
@@ -627,7 +627,7 @@
 
 - (IBAction) displayRawAction:(id)sender
 {
-	int tag = [[displayRawMatrix selectedCell] tag];
+	int tag = (int)[[displayRawMatrix selectedCell] tag];
 	[model setDisplayRaw:tag];	
 }
 
@@ -648,12 +648,12 @@
 
 - (IBAction) conversionAction:(id)sender
 {
-    [[model motor:[[sender selectedCell]tag]] setConversion:[[sender selectedCell] floatValue]];
+    [[model motor:(int)[[sender selectedCell]tag]] setConversion:[[sender selectedCell] floatValue]];
 }
 
 - (IBAction) speedAction:(id)sender
 {
-	ORVXMMotor* aMotor = [model motor:[[sender selectedCell]tag]];
+	ORVXMMotor* aMotor = [model motor:(int)[[sender selectedCell]tag]];
 	float conversion = 1.0;
 	if(![model displayRaw]) conversion = [aMotor conversion];
 	[aMotor setMotorSpeed:(int)[[sender selectedCell] floatValue]*conversion];
@@ -661,7 +661,7 @@
 
 - (IBAction) targetPositionAction:(id)sender
 {
-	ORVXMMotor* aMotor = [model motor:[[sender selectedCell]tag]];
+	ORVXMMotor* aMotor = [model motor:(int)[[sender selectedCell]tag]];
 	float conversion = 1.0;
 	if(![model displayRaw]) conversion = [aMotor conversion];
 	[aMotor setTargetPosition:[[sender selectedCell] floatValue]*conversion];
@@ -669,18 +669,18 @@
 
 - (IBAction) motorEnabledAction:(id)sender
 {
-	[[model motor:[[sender selectedCell]tag]] setMotorEnabled:[[sender selectedCell] intValue]];
+	[[model motor:(int)[[sender selectedCell]tag]] setMotorEnabled:[[sender selectedCell] intValue]];
 }
 
 - (IBAction) absoluteMotionAction:(id)sender
 {
-	[[model motor:[[sender selectedCell]tag]] setAbsoluteMotion:[[sender selectedCell] intValue]];
+	[[model motor:(int)[[sender selectedCell]tag]] setAbsoluteMotion:[[sender selectedCell] intValue]];
 }
 
 - (IBAction) addButtonAction:(id)sender
 {
 	[self endEditing];
-	[model addCmdFromTableFor:[[sender selectedCell]tag]];
+	[model addCmdFromTableFor:(int)[[sender selectedCell]tag]];
 }
 
 - (IBAction) addZeroCounterAction:(id)sender
@@ -696,12 +696,12 @@
 
 - (IBAction) addHomePlusAction:(id)sender
 {
-	[model addHomePlusCmdFor:[[sender selectedCell]tag]];
+	[model addHomePlusCmdFor:(int)[[sender selectedCell]tag]];
 }
 
 - (IBAction) addHomeMinusAction:(id)sender
 {
-	[model addHomeMinusCmdFor:[[sender selectedCell]tag]];
+	[model addHomeMinusCmdFor:(int)[[sender selectedCell]tag]];
 }
 
 - (IBAction) addCustomCmdAction:(id)sender
@@ -765,17 +765,17 @@
 
 - (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
-	if([[aTableColumn identifier] isEqualToString:@"Command"]) return [model cmdQueueCommand:rowIndex];
+	if([[aTableColumn identifier] isEqualToString:@"Command"]) return [model cmdQueueCommand:(int)rowIndex];
 	else if([[aTableColumn identifier] isEqualToString:@"CmdIndex"]) {
 		if(rowIndex == [model cmdIndex])return @"√";
 		else return @"";
 	}
-	else return  [model cmdQueueDescription:rowIndex];
+	else return  [model cmdQueueDescription:(int)rowIndex];
 }
 
 - (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
-	ORVXMMotorCmd* aCmd = [model motorCmd:rowIndex];
+	ORVXMMotorCmd* aCmd = [model motorCmd:(int)rowIndex];
 	if(aCmd){
 		if([[aTableColumn identifier] isEqualToString:@"Command"])			aCmd.cmd         = anObject;
 		else if([[aTableColumn identifier] isEqualToString:@"Description"])	aCmd.description = anObject;

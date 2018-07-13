@@ -27,8 +27,8 @@
 }
 
 + (id) writeLongBlock:(unsigned long *) writeAddress
-			 atAddress:(unsigned int) pmcAddress
-			numToWrite:(unsigned int) numberLongs
+			 atAddress:(unsigned long) pmcAddress
+			numToWrite:(unsigned long) numberLongs
 {
 	return [[[ORPMCReadWriteCommand alloc] initWithOp: kSBC_WriteBlock
 										   dataAdress: writeAddress
@@ -37,8 +37,8 @@
 	
 }
 
-+ (id) readLongBlockAtAddress:(unsigned int) pmcAddress
-		   numToRead:(unsigned int) numberLongs
++ (id) readLongBlockAtAddress:(unsigned long) pmcAddress
+		   numToRead:(unsigned long) numberLongs
 {
 	return [[[ORPMCReadWriteCommand alloc] initWithOp: kSBC_ReadBlock
 										   dataAdress: 0		

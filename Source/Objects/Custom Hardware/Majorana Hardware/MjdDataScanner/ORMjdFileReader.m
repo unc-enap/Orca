@@ -234,7 +234,7 @@
 {
     //first word is the dataID and Record Length
     unsigned long recordLength = ExtractLength(dataRecord[0]);
-    int numEvents = (recordLength-2)/1024;  //records can have more than one event
+    unsigned long numEvents = (recordLength-2)/1024;  //records can have more than one event
     
     //next is the location
     int crate     = (dataRecord[1]>>21) & 0xf;

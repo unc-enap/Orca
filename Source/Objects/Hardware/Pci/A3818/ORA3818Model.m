@@ -1872,16 +1872,16 @@ static NSString *ORA3818ReadWriteAddSpace		= @"A3818 Read/Write Address Space";
     
     [[self undoManager] disableUndoRegistration];
     
-    [self setRangeToDo:[decoder decodeIntForKey:@"ORA3818ModelRange"]];
+    [self setRangeToDo:[decoder decodeIntegerForKey:@"ORA3818ModelRange"]];
     [self setDoRange:[decoder decodeBoolForKey:@"ORA3818ModelDoRange"]];
-    [self setDualPortAddress:[decoder decodeInt32ForKey:ORA3818DualPortAddress]];
-    [self setDualPortRamSize:[decoder decodeInt32ForKey:ORA3818DualPortRamSize]];
+    [self setDualPortAddress:[decoder decodeIntegerForKey:ORA3818DualPortAddress]];
+    [self setDualPortRamSize:[decoder decodeIntegerForKey:ORA3818DualPortRamSize]];
     
-    [self setRwAddress:[decoder decodeIntForKey:ORA3818RWAddress]];
-    [self setWriteValue:[decoder decodeIntForKey:ORA3818WriteValue]];
-    [self setRwAddressModifier:[decoder decodeIntForKey:ORA3818ReadWriteAddMod]];
-    [self setReadWriteIOSpace:[decoder decodeIntForKey:ORA3818ReadWriteAddSpace]];
-    [self setReadWriteType:[decoder decodeIntForKey:ORA3818ReadWriteType]];	
+    [self setRwAddress:[decoder decodeIntegerForKey:ORA3818RWAddress]];
+    [self setWriteValue:[decoder decodeIntegerForKey:ORA3818WriteValue]];
+    [self setRwAddressModifier:[decoder decodeIntegerForKey:ORA3818ReadWriteAddMod]];
+    [self setReadWriteIOSpace:[decoder decodeIntegerForKey:ORA3818ReadWriteAddSpace]];
+    [self setReadWriteType:[decoder decodeIntegerForKey:ORA3818ReadWriteType]];	
     
     [[self undoManager] enableUndoRegistration];
     
@@ -1891,16 +1891,16 @@ static NSString *ORA3818ReadWriteAddSpace		= @"A3818 Read/Write Address Space";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:rangeToDo forKey:@"ORA3818ModelRange"];
+    [encoder encodeInteger:rangeToDo forKey:@"ORA3818ModelRange"];
     [encoder encodeBool:doRange forKey:@"ORA3818ModelDoRange"];
-    [encoder encodeInt32:dualPortAddress forKey:ORA3818DualPortAddress];
-    [encoder encodeInt32:dualPortRamSize forKey:ORA3818DualPortRamSize];
+    [encoder encodeInteger:dualPortAddress forKey:ORA3818DualPortAddress];
+    [encoder encodeInteger:dualPortRamSize forKey:ORA3818DualPortRamSize];
     
-    [encoder encodeInt:rwAddress forKey:ORA3818RWAddress];
-    [encoder encodeInt:writeValue forKey:ORA3818WriteValue];
-    [encoder encodeInt:rwAddressModifier forKey:ORA3818ReadWriteAddMod];
-    [encoder encodeInt:readWriteIOSpace forKey:ORA3818ReadWriteAddSpace];
-    [encoder encodeInt:readWriteType forKey:ORA3818ReadWriteType];
+    [encoder encodeInteger:rwAddress forKey:ORA3818RWAddress];
+    [encoder encodeInteger:writeValue forKey:ORA3818WriteValue];
+    [encoder encodeInteger:rwAddressModifier forKey:ORA3818ReadWriteAddMod];
+    [encoder encodeInteger:readWriteIOSpace forKey:ORA3818ReadWriteAddSpace];
+    [encoder encodeInteger:readWriteType forKey:ORA3818ReadWriteType];
     
 }
 

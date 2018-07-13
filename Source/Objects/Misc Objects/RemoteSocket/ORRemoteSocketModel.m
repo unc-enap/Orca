@@ -322,7 +322,7 @@ NSString* ORRemoteSocketQueueCountChanged = @"ORRemoteSocketQueueCountChanged";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeObject:remoteHost forKey:@"remoteHost"];
-    [encoder encodeInt:remotePort    forKey:@"remotePort"];
+    [encoder encodeInteger:remotePort    forKey:@"remotePort"];
 }
 
 #pragma mark ***Delegate Methods

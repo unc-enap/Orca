@@ -720,7 +720,7 @@ NSString* ORPulser33500ShowInKHzChanged				= @"ORPulser33500ShowInKHzChanged";
     [super encodeWithCoder:encoder];
     [encoder encodeObject:serialNumber		forKey:@"serialNumber"];
     [encoder encodeObject:ipAddress			forKey:@"ipAddress"];
-    [encoder encodeInt:connectionProtocol	forKey:@"connectionProtocol"];
+    [encoder encodeInteger:connectionProtocol	forKey:@"connectionProtocol"];
     [encoder encodeObject:channels			forKey:@"channels"];
     [encoder encodeBool:showInKHz           forKey:@"showInKHz"];
 }
@@ -738,18 +738,18 @@ NSString* ORPulser33500ShowInKHzChanged				= @"ORPulser33500ShowInKHzChanged";
 }
 
 #pragma mark ***Comm methods
-- (long) writeReadDevice: (NSString*) aCommand data: (char*) aData maxLength: (long) aMaxLength
+- (long) writeReadDevice: (NSString*) aCommand data: (char*) aData maxLength: (unsigned long) aMaxLength
 {
     [ self writeToDevice: aCommand ];
     return( [ self readFromDevice: aData maxLength: aMaxLength ] );
 }
-- (long) readFromDevice: (char*) aData maxLength: (long) aMaxLength
+- (long) readFromDevice: (char*) aData maxLength: (unsigned long) aMaxLength
 {
 	switch(connectionProtocol){
 		case kPulser33500UseGPIB: return [super readFromGPIBDevice:aData maxLength:aMaxLength];
 		case kPulser33500UseUSB:  
 			if(usbInterface && [self getUSBController]){
-				return [usbInterface readUSB488:aData length:aMaxLength];;
+				return [usbInterface readUSB488:aData length:(uint32_t)aMaxLength];;
 			}
 			else {
 				NSString *errorMsg = @"Must establish connection prior to issuing command\n";

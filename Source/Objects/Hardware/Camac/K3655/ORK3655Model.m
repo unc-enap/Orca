@@ -374,10 +374,10 @@ NSString* ORK3655Chan							= @"ORK3655Chan";
     [super encodeWithCoder:encoder];
     [encoder encodeBool:useExtClock			forKey:@"ORK3655UseExtClock"];
     [encoder encodeBool:inhibitEnabled		forKey:@"ORK3655InhibitEnabled"];
-    [encoder encodeInt:pulseNumberToSet		forKey:@"ORK3655PulseNumberToSet"];
-    [encoder encodeInt:pulseNumberToClear	forKey:@"ORK3655PulseNumberToClear"];
-    [encoder encodeInt:clockFreq			forKey:@"ORK3655ClockFreq"];
-    [encoder encodeInt:numChansToUse		forKey:@"ORK3655NumChansToUse"];
+    [encoder encodeInteger:pulseNumberToSet		forKey:@"ORK3655PulseNumberToSet"];
+    [encoder encodeInteger:pulseNumberToClear	forKey:@"ORK3655PulseNumberToClear"];
+    [encoder encodeInteger:clockFreq			forKey:@"ORK3655ClockFreq"];
+    [encoder encodeInteger:numChansToUse		forKey:@"ORK3655NumChansToUse"];
     [encoder encodeBool:continous			forKey:@"ORK3655Continous"];
     [encoder encodeObject:setPoints			forKey:@"ORK3655SetPoints"];
 }

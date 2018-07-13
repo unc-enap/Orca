@@ -376,7 +376,7 @@ static unsigned long register_offsets[kNumberOfPxi6289Registers] = {
 	
 	int i;
 	for(i=0;i<kNumPxi6289Channels;i++){
-		[self setEnabled:i withValue:[decoder decodeIntForKey:[@"enabled" stringByAppendingFormat:@"%d",i]]];
+		[self setEnabled:i withValue:[decoder decodeIntegerForKey:[@"enabled" stringByAppendingFormat:@"%d",i]]];
 		[self setThreshold:i withValue:[decoder decodeIntForKey:[@"hreshold" stringByAppendingFormat:@"%d",i]]];
 	}
 	
@@ -391,8 +391,8 @@ static unsigned long register_offsets[kNumberOfPxi6289Registers] = {
     [encoder encodeObject:waveFormRateGroup forKey:@"waveFormRateGroup"];
 	int i;
  	for(i=0;i<kNumPxi6289Channels;i++){
-		[encoder encodeInt:enabled[i] forKey:[@"enabled" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInt:threshold[i] forKey:[@"threshold" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:enabled[i] forKey:[@"enabled" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInteger:threshold[i] forKey:[@"threshold" stringByAppendingFormat:@"%d",i]];
 	}
 	
 }

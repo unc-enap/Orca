@@ -3391,7 +3391,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     [slt chargeFICusingSBCinBackgroundWithData:theData forFLT:self];
 
 
-    return [theData length];
+    return (int)[theData length];
 }
 
 
@@ -3707,7 +3707,7 @@ for(chan=0; chan<6;chan++)
     int i;
     for(i=0;i<kNumEWFLTHeatIonChannels;i++){
         unsigned long val=[self threshold:i];
-        [self writeThreshold: i value: val];
+        [self writeThreshold: i value: (int)val];
     }
 }
 
@@ -3729,7 +3729,7 @@ for(chan=0; chan<6;chan++)
     	[self writeReg: kFLTV4IonThresholdsReg channel:i-kNumEWFLTHeatChannels value:aValue];
 }
 
-- (unsigned int) readThreshold:(int)i
+- (unsigned long) readThreshold:(int)i
 {
     if(i>=0 && i<kNumEWFLTHeatChannels)
 	    return [self readReg:kFLTV4HeatThresholdsReg channel:i];
@@ -4003,88 +4003,88 @@ for(chan=0; chan<6;chan++)
     for(i=0; i<kNumEWFLTFibers; i++){
     //[self setSaveIonChanFilterOutputRecords:[decoder decodeBoolForKey:@"saveIonChanFilterOutputRecords"]];
     [self setRepeatSWTriggerDelay:[decoder decodeDoubleForKey:@"repeatSWTriggerDelay"]];
-    [self setHitrateLimitIon:[decoder decodeIntForKey:@"hitrateLimitIon"]];
-    [self setHitrateLimitHeat:[decoder decodeIntForKey:@"hitrateLimitHeat"]];
+    [self setHitrateLimitIon:[decoder decodeIntegerForKey:@"hitrateLimitIon"]];
+    [self setHitrateLimitHeat:[decoder decodeIntegerForKey:@"hitrateLimitHeat"]];
     [self setChargeFICFile:[decoder decodeObjectForKey:@"chargeFICFile"]];
-        [self setFicCardTriggerCmd:[decoder decodeIntForKey: [NSString stringWithFormat: @"ficCardTriggerCmd%i",i]] forFiber:i];
-        [self setFicCardADC23CtrlReg:[decoder decodeIntForKey: [NSString stringWithFormat: @"ficCardADC23CtrlReg%i",i]] forFiber:i]; 
-        [self setFicCardADC01CtrlReg:[decoder decodeIntForKey: [NSString stringWithFormat: @"ficCardADC01CtrlReg%i",i]] forFiber:i];  
-        [self setFicCardCtrlReg2:[decoder decodeIntForKey: [NSString stringWithFormat: @"ficCardCtrlReg2%i",i]] forFiber:i]; 
-        [self setFicCardCtrlReg1:[decoder decodeIntForKey: [NSString stringWithFormat: @"ficCardCtrlReg1%i",i]] forFiber:i];
+        [self setFicCardTriggerCmd:[decoder decodeIntegerForKey: [NSString stringWithFormat: @"ficCardTriggerCmd%i",i]] forFiber:i];
+        [self setFicCardADC23CtrlReg:[decoder decodeIntegerForKey: [NSString stringWithFormat: @"ficCardADC23CtrlReg%i",i]] forFiber:i]; 
+        [self setFicCardADC01CtrlReg:[decoder decodeIntegerForKey: [NSString stringWithFormat: @"ficCardADC01CtrlReg%i",i]] forFiber:i];  
+        [self setFicCardCtrlReg2:[decoder decodeIntegerForKey: [NSString stringWithFormat: @"ficCardCtrlReg2%i",i]] forFiber:i]; 
+        [self setFicCardCtrlReg1:[decoder decodeIntegerForKey: [NSString stringWithFormat: @"ficCardCtrlReg1%i",i]] forFiber:i];
     }
-    [self setPollBBStatusIntervall:[decoder decodeIntForKey:@"pollBBStatusIntervall"]];
+    [self setPollBBStatusIntervall:[decoder decodeIntegerForKey:@"pollBBStatusIntervall"]];
     [self setChargeBBFile:[decoder decodeObjectForKey:@"chargeBBFileForFiber0"] forFiber:0 ];
     [self setChargeBBFile:[decoder decodeObjectForKey:@"chargeBBFileForFiber1"] forFiber:1 ];
     [self setChargeBBFile:[decoder decodeObjectForKey:@"chargeBBFileForFiber2"] forFiber:2 ];
     [self setChargeBBFile:[decoder decodeObjectForKey:@"chargeBBFileForFiber3"] forFiber:3 ];
     [self setChargeBBFile:[decoder decodeObjectForKey:@"chargeBBFileForFiber4"] forFiber:4 ];
     [self setChargeBBFile:[decoder decodeObjectForKey:@"chargeBBFileForFiber5"] forFiber:5 ];
-    [self setBB0x0ACmdMask:[decoder decodeIntForKey:@"BB0x0ACmdMask"]];
+    [self setBB0x0ACmdMask:[decoder decodeIntegerForKey:@"BB0x0ACmdMask"]];
     [self setChargeBBFile:[decoder decodeObjectForKey:@"chargeBBFile"]];
-    [self setIonToHeatDelay:[decoder decodeIntForKey:@"ionToHeatDelay"]];
-    [self setLowLevelRegInHex:[decoder decodeIntForKey:@"lowLevelRegInHex"]];
-    [self setWriteToBBMode:[decoder decodeIntForKey:@"writeToBBMode"]];
-    [self setWCmdArg2:[decoder decodeIntForKey:@"wCmdArg2"]];
-    [self setWCmdArg1:[decoder decodeIntForKey:@"wCmdArg1"]];
-    [self setWCmdCode:[decoder decodeIntForKey:@"wCmdCode"]];
+    [self setIonToHeatDelay:[decoder decodeIntegerForKey:@"ionToHeatDelay"]];
+    [self setLowLevelRegInHex:[decoder decodeIntegerForKey:@"lowLevelRegInHex"]];
+    [self setWriteToBBMode:[decoder decodeIntegerForKey:@"writeToBBMode"]];
+    [self setWCmdArg2:[decoder decodeIntegerForKey:@"wCmdArg2"]];
+    [self setWCmdArg1:[decoder decodeIntegerForKey:@"wCmdArg1"]];
+    [self setWCmdCode:[decoder decodeIntegerForKey:@"wCmdCode"]];
     
-//    [self setAdcRt:[decoder decodeIntForKey:@"adcRt"]];
-//TODO: remove it      [self setDacb:[decoder decodeIntForKey:@"dacb"]];
-//TODO: remove it      [self setSignb:[decoder decodeIntForKey:@"signb"]];
-//TODO: remove it      [self setDaca:[decoder decodeIntForKey:@"daca"]];
-//TODO: remove it    [self setSigna:[decoder decodeIntForKey:@"signa"]];
+//    [self setAdcRt:[decoder decodeIntegerForKey:@"adcRt"]];
+//TODO: remove it      [self setDacb:[decoder decodeIntegerForKey:@"dacb"]];
+//TODO: remove it      [self setSignb:[decoder decodeIntegerForKey:@"signb"]];
+//TODO: remove it      [self setDaca:[decoder decodeIntegerForKey:@"daca"]];
+//TODO: remove it    [self setSigna:[decoder decodeIntegerForKey:@"signa"]];
     [self setStatusBitsBBData:[decoder decodeObjectForKey:@"statusBitsBBData"]];
 	if(!statusBitsBBData){
 		[self setStatusBitsBBData: [NSMutableData dataWithLength: 4 * kNumEWFLTFibers * kNumBBStatusBufferLength32]];
 	}
     memcpy(&(statusBitsBB[0][0]), [statusBitsBBData bytes], 4 * kNumEWFLTFibers * kNumBBStatusBufferLength32);
     
- //   [self setAdcRtForBBAccess:[decoder decodeIntForKey:@"adcRtForBBAccess"]];
- //   [self setAdcRgForBBAccess:[decoder decodeIntForKey:@"adcRgForBBAccess"]];
- //   [self setAdcValueForBBAccess:[decoder decodeIntForKey:@"adcValueForBBAccess"]];
- //TODO: remove all    [self setAdcMultForBBAccess:[decoder decodeIntForKey:@"adcMultForBBAccess"]];
- //   [self setAdcFreqkHzForBBAccess:[decoder decodeIntForKey:@"adcFreqkHzForBBAccess"]];
-    [self setUseBroadcastIdforBBAccess:[decoder decodeIntForKey:@"useBroadcastIdforBBAccess"]];
-//    [self setIdBBforBBAccess:[decoder decodeIntForKey:@"idBBforBBAccess"]];
-    [self setFiberSelectForBBAccess:[decoder decodeIntForKey:@"fiberSelectForBBAccess"]];
-//RM    [self setRelaisStatesBB:[decoder decodeIntForKey:@"relaisStatesBB"]];
-    [self setFiberSelectForBBStatusBits:[decoder decodeIntForKey:@"fiberSelectForBBStatusBits"]];
-    [self setFiberOutMask:[decoder decodeInt32ForKey:@"fiberOutMask"]];
-    //[self setTpix:[decoder decodeIntForKey:@"tpix"]];
-    [self setRepeatSWTriggerMode:[decoder decodeIntForKey:@"repeatSWTriggerMode"]];
-    [self setControlRegister:[decoder decodeIntForKey:@"controlRegister"]];
-    [self setFastWrite:[decoder decodeIntForKey:@"fastWrite"]];
+ //   [self setAdcRtForBBAccess:[decoder decodeIntegerForKey:@"adcRtForBBAccess"]];
+ //   [self setAdcRgForBBAccess:[decoder decodeIntegerForKey:@"adcRgForBBAccess"]];
+ //   [self setAdcValueForBBAccess:[decoder decodeIntegerForKey:@"adcValueForBBAccess"]];
+ //TODO: remove all    [self setAdcMultForBBAccess:[decoder decodeIntegerForKey:@"adcMultForBBAccess"]];
+ //   [self setAdcFreqkHzForBBAccess:[decoder decodeIntegerForKey:@"adcFreqkHzForBBAccess"]];
+    [self setUseBroadcastIdforBBAccess:[decoder decodeIntegerForKey:@"useBroadcastIdforBBAccess"]];
+//    [self setIdBBforBBAccess:[decoder decodeIntegerForKey:@"idBBforBBAccess"]];
+    [self setFiberSelectForBBAccess:[decoder decodeIntegerForKey:@"fiberSelectForBBAccess"]];
+//RM    [self setRelaisStatesBB:[decoder decodeIntegerForKey:@"relaisStatesBB"]];
+    [self setFiberSelectForBBStatusBits:[decoder decodeIntegerForKey:@"fiberSelectForBBStatusBits"]];
+    [self setFiberOutMask:[decoder decodeIntegerForKey:@"fiberOutMask"]];
+    //[self setTpix:[decoder decodeIntegerForKey:@"tpix"]];
+    [self setRepeatSWTriggerMode:[decoder decodeIntegerForKey:@"repeatSWTriggerMode"]];
+    [self setControlRegister:[decoder decodeIntegerForKey:@"controlRegister"]];
+    [self setFastWrite:[decoder decodeIntegerForKey:@"fastWrite"]];
     [self setFiberDelays:[decoder decodeInt64ForKey:@"fiberDelays"]];
     [self setStreamMask:[decoder decodeInt64ForKey:@"streamMask"]];
     [self setHeatTriggerMask:[decoder decodeInt64ForKey:@"heatTriggerMask"]];
     [self setIonTriggerMask:[decoder decodeInt64ForKey:@"ionTriggerMask"]];
-    [self setSelectFiberTrig:[decoder decodeIntForKey:@"selectFiberTrig"]];
-    //[self setBBv1Mask:[decoder decodeIntForKey:@"BBv1Mask"]];
-//DEBUG OUTPUT:    NSLog(@"%@::%@: UNDER CONSTRUCTION! BBv1Mask %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[decoder decodeIntForKey:@"BBv1Mask"]);//TODO: DEBUG testing ...-tb-
-    [self setFiberEnableMask:[decoder decodeIntForKey:@"fiberEnableMask"]];
-    [self setFltModeFlags:[decoder decodeIntForKey:@"fltModeFlags"]];
-    [self setTargetRate:[decoder decodeIntForKey:@"targetRate"]];
-	[self setRunMode:			[decoder decodeIntForKey:@"runMode"]];
+    [self setSelectFiberTrig:[decoder decodeIntegerForKey:@"selectFiberTrig"]];
+    //[self setBBv1Mask:[decoder decodeIntegerForKey:@"BBv1Mask"]];
+//DEBUG OUTPUT:    NSLog(@"%@::%@: UNDER CONSTRUCTION! BBv1Mask %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[decoder decodeIntegerForKey:@"BBv1Mask"]);//TODO: DEBUG testing ...-tb-
+    [self setFiberEnableMask:[decoder decodeIntegerForKey:@"fiberEnableMask"]];
+    [self setFltModeFlags:[decoder decodeIntegerForKey:@"fltModeFlags"]];
+    [self setTargetRate:[decoder decodeIntegerForKey:@"targetRate"]];
+	[self setRunMode:			[decoder decodeIntegerForKey:@"runMode"]];
     [self setStoreDataInRam:	[decoder decodeBoolForKey:@"storeDataInRam"]];
-    [self setFilterLength:		[decoder decodeIntForKey:@"filterLength"]-2];//to be backward compatible with old Orca config files -tb-
-    [self setGapLength:			[decoder decodeIntForKey:@"gapLength"]];
-    [self setPostTriggerTime:	[decoder decodeInt32ForKey:@"postTriggerTime"]];
-    [self setInterruptMask:		[decoder decodeInt32ForKey:@"interruptMask"]];
-    [self setHitRateLength:		[decoder decodeIntForKey:@"OREdelweissFLTModelHitRateLength"]];
-    [self setHitRateEnabledMask:[decoder decodeIntForKey:@"hitRateEnabledMask"]];
+    [self setFilterLength:		[decoder decodeIntegerForKey:@"filterLength"]-2];//to be backward compatible with old Orca config files -tb-
+    [self setGapLength:			[decoder decodeIntegerForKey:@"gapLength"]];
+    [self setPostTriggerTime:	[decoder decodeIntegerForKey:@"postTriggerTime"]];
+    [self setInterruptMask:		[decoder decodeIntegerForKey:@"interruptMask"]];
+    [self setHitRateLength:		[decoder decodeIntegerForKey:@"OREdelweissFLTModelHitRateLength"]];
+    [self setHitRateEnabledMask:[decoder decodeIntegerForKey:@"hitRateEnabledMask"]];
     [self setGains:				[decoder decodeObjectForKey:@"gains"]];
     [self setThresholds:		[decoder decodeObjectForKey:@"thresholds"]];
     [self setTriggerParameter:	[decoder decodeObjectForKey:@"triggerParameter"]];
     [self setTotalRate:			[decoder decodeObjectForKey:@"totalRate"]];
 	[self setTestEnabledArray:	[decoder decodeObjectForKey:@"testsEnabledArray"]];
 	[self setTestStatusArray:	[decoder decodeObjectForKey:@"testsStatusArray"]];
-    [self setWriteValue:		[decoder decodeIntForKey:@"writeValue"]];
-    [self setSelectedRegIndex:  [decoder decodeIntForKey:@"selectedRegIndex"]];
-    [self setSelectedChannelValue:  [decoder decodeIntForKey:@"selectedChannelValue"]];
+    [self setWriteValue:		[decoder decodeIntegerForKey:@"writeValue"]];
+    [self setSelectedRegIndex:  [decoder decodeIntegerForKey:@"selectedRegIndex"]];
+    [self setSelectedChannelValue:  [decoder decodeIntegerForKey:@"selectedChannelValue"]];
     /* unused
     //TODO: remove from call definition -tb-
-    [self setFifoBehaviour:		[decoder decodeIntForKey:@"fifoBehaviour"]];
-    [self setAnalogOffset:		[decoder decodeIntForKey:@"analogOffset"]];
+    [self setFifoBehaviour:		[decoder decodeIntegerForKey:@"fifoBehaviour"]];
+    [self setAnalogOffset:		[decoder decodeIntegerForKey:@"analogOffset"]];
     */
 	
 	//int i;
@@ -4136,34 +4136,34 @@ for(chan=0; chan<6;chan++)
     [super encodeWithCoder:encoder];
 	
         [encoder encodeDouble:repeatSWTriggerDelay forKey:@"repeatSWTriggerDelay"];
-        [encoder encodeInt:hitrateLimitIon forKey:@"hitrateLimitIon"];
-        [encoder encodeInt:hitrateLimitHeat forKey:@"hitrateLimitHeat"];
+        [encoder encodeInteger:hitrateLimitIon forKey:@"hitrateLimitIon"];
+        [encoder encodeInteger:hitrateLimitHeat forKey:@"hitrateLimitHeat"];
         [encoder encodeObject:chargeFICFile forKey:@"chargeFICFile"];
         //[encoder encodeBool:saveIonChanFilterOutputRecords forKey:@"saveIonChanFilterOutputRecords"];
         
     int i;
     for(i=0; i<kNumEWFLTFibers; i++){
-        [encoder encodeInt:ficCardTriggerCmd[i] forKey: [NSString stringWithFormat: @"ficCardTriggerCmd%i",i]];
-        [encoder encodeInt:ficCardADC23CtrlReg[i] forKey: [NSString stringWithFormat: @"ficCardADC23CtrlReg%i",i]];
-        [encoder encodeInt:ficCardADC01CtrlReg[i] forKey: [NSString stringWithFormat: @"ficCardADC01CtrlReg%i",i]]; 
-        [encoder encodeInt:ficCardCtrlReg2[i] forKey: [NSString stringWithFormat: @"ficCardCtrlReg2%i",i]]; 
-        [encoder encodeInt:ficCardCtrlReg1[i] forKey: [NSString stringWithFormat: @"ficCardCtrlReg1%i",i]];
+        [encoder encodeInteger:ficCardTriggerCmd[i] forKey: [NSString stringWithFormat: @"ficCardTriggerCmd%i",i]];
+        [encoder encodeInteger:ficCardADC23CtrlReg[i] forKey: [NSString stringWithFormat: @"ficCardADC23CtrlReg%i",i]];
+        [encoder encodeInteger:ficCardADC01CtrlReg[i] forKey: [NSString stringWithFormat: @"ficCardADC01CtrlReg%i",i]]; 
+        [encoder encodeInteger:ficCardCtrlReg2[i] forKey: [NSString stringWithFormat: @"ficCardCtrlReg2%i",i]]; 
+        [encoder encodeInteger:ficCardCtrlReg1[i] forKey: [NSString stringWithFormat: @"ficCardCtrlReg1%i",i]];
     }
-    [encoder encodeInt:pollBBStatusIntervall forKey:@"pollBBStatusIntervall"];
+    [encoder encodeInteger:pollBBStatusIntervall forKey:@"pollBBStatusIntervall"];
     [encoder encodeObject:chargeBBFileForFiber[0] forKey:@"chargeBBFileForFiber0"];
     [encoder encodeObject:chargeBBFileForFiber[1] forKey:@"chargeBBFileForFiber1"];
     [encoder encodeObject:chargeBBFileForFiber[2] forKey:@"chargeBBFileForFiber2"];
     [encoder encodeObject:chargeBBFileForFiber[3] forKey:@"chargeBBFileForFiber3"];
     [encoder encodeObject:chargeBBFileForFiber[4] forKey:@"chargeBBFileForFiber4"];
     [encoder encodeObject:chargeBBFileForFiber[5] forKey:@"chargeBBFileForFiber5"];
-    [encoder encodeInt:BB0x0ACmdMask forKey:@"BB0x0ACmdMask"];
+    [encoder encodeInteger:BB0x0ACmdMask forKey:@"BB0x0ACmdMask"];
     [encoder encodeObject:chargeBBFile forKey:@"chargeBBFile"];
-    [encoder encodeInt:ionToHeatDelay forKey:@"ionToHeatDelay"];
-    [encoder encodeInt:lowLevelRegInHex forKey:@"lowLevelRegInHex"];
-    [encoder encodeInt:writeToBBMode forKey:@"writeToBBMode"];
-    [encoder encodeInt:wCmdArg2 forKey:@"wCmdArg2"];
-    [encoder encodeInt:wCmdArg1 forKey:@"wCmdArg1"];
-    [encoder encodeInt:wCmdCode forKey:@"wCmdCode"];
+    [encoder encodeInteger:ionToHeatDelay forKey:@"ionToHeatDelay"];
+    [encoder encodeInteger:lowLevelRegInHex forKey:@"lowLevelRegInHex"];
+    [encoder encodeInteger:writeToBBMode forKey:@"writeToBBMode"];
+    [encoder encodeInteger:wCmdArg2 forKey:@"wCmdArg2"];
+    [encoder encodeInteger:wCmdArg1 forKey:@"wCmdArg1"];
+    [encoder encodeInteger:wCmdCode forKey:@"wCmdCode"];
     
     //BB access tab
 	if(!statusBitsBBData){
@@ -4172,49 +4172,49 @@ for(chan=0; chan<6;chan++)
     //memcpy([statusBitsBBData bytes], &(statusBitsBB[0][0]), 4 * kNumEWFLTFibers * kNumBBStatusBufferLength32);
     NSRange range = {0, [statusBitsBBData length] };
     [statusBitsBBData replaceBytesInRange:range withBytes: &(statusBitsBB[0][0]) ];
-//[encoder encodeInt:adcRt forKey:@"adcRt"];
-//TODO: remove it      [encoder encodeInt:dacb forKey:@"dacb"];
-//TODO: remove it      [encoder encodeInt:signb forKey:@"signb"];
-//TODO: remove it      [encoder encodeInt:daca forKey:@"daca"];
-//    [encoder encodeInt:signa forKey:@"signa"];
+//[encoder encodeInteger:adcRt forKey:@"adcRt"];
+//TODO: remove it      [encoder encodeInteger:dacb forKey:@"dacb"];
+//TODO: remove it      [encoder encodeInteger:signb forKey:@"signb"];
+//TODO: remove it      [encoder encodeInteger:daca forKey:@"daca"];
+//    [encoder encodeInteger:signa forKey:@"signa"];
     [encoder encodeObject:statusBitsBBData forKey:@"statusBitsBBData"];
     
-//    [encoder encodeInt:adcRtForBBAccess forKey:@"adcRtForBBAccess"];
-//    [encoder encodeInt:adcRgForBBAccess forKey:@"adcRgForBBAccess"];
-//    [encoder encodeInt:adcValueForBBAccess forKey:@"adcValueForBBAccess"];
-//    [encoder encodeInt:adcMultForBBAccess forKey:@"adcMultForBBAccess"];
-//    [encoder encodeInt:adcFreqkHzForBBAccess forKey:@"adcFreqkHzForBBAccess"];
-    [encoder encodeInt:useBroadcastIdforBBAccess forKey:@"useBroadcastIdforBBAccess"];
-//    [encoder encodeInt:idBBforBBAccess forKey:@"idBBforBBAccess"];
-    [encoder encodeInt:fiberSelectForBBAccess forKey:@"fiberSelectForBBAccess"];
+//    [encoder encodeInteger:adcRtForBBAccess forKey:@"adcRtForBBAccess"];
+//    [encoder encodeInteger:adcRgForBBAccess forKey:@"adcRgForBBAccess"];
+//    [encoder encodeInteger:adcValueForBBAccess forKey:@"adcValueForBBAccess"];
+//    [encoder encodeInteger:adcMultForBBAccess forKey:@"adcMultForBBAccess"];
+//    [encoder encodeInteger:adcFreqkHzForBBAccess forKey:@"adcFreqkHzForBBAccess"];
+    [encoder encodeInteger:useBroadcastIdforBBAccess forKey:@"useBroadcastIdforBBAccess"];
+//    [encoder encodeInteger:idBBforBBAccess forKey:@"idBBforBBAccess"];
+    [encoder encodeInteger:fiberSelectForBBAccess forKey:@"fiberSelectForBBAccess"];
     
     //others
-//RM    [encoder encodeInt:relaisStatesBB forKey:@"relaisStatesBB"];
-    [encoder encodeInt:fiberSelectForBBStatusBits forKey:@"fiberSelectForBBStatusBits"];
-    [encoder encodeInt32:fiberOutMask forKey:@"fiberOutMask"];
-    //[encoder encodeInt:tpix forKey:@"tpix"];
-    [encoder encodeInt:repeatSWTriggerMode forKey:@"repeatSWTriggerMode"];
-    [encoder encodeInt:controlRegister forKey:@"controlRegister"];
-    [encoder encodeInt:fastWrite forKey:@"fastWrite"];
+//RM    [encoder encodeInteger:relaisStatesBB forKey:@"relaisStatesBB"];
+    [encoder encodeInteger:fiberSelectForBBStatusBits forKey:@"fiberSelectForBBStatusBits"];
+    [encoder encodeInteger:fiberOutMask forKey:@"fiberOutMask"];
+    //[encoder encodeInteger:tpix forKey:@"tpix"];
+    [encoder encodeInteger:repeatSWTriggerMode forKey:@"repeatSWTriggerMode"];
+    [encoder encodeInteger:controlRegister forKey:@"controlRegister"];
+    [encoder encodeInteger:fastWrite forKey:@"fastWrite"];
     [encoder encodeInt64:fiberDelays forKey:@"fiberDelays"];
     [encoder encodeInt64:streamMask forKey:@"streamMask"];
     [encoder encodeInt64:heatTriggerMask forKey:@"heatTriggerMask"];
     [encoder encodeInt64:ionTriggerMask forKey:@"ionTriggerMask"];
-    [encoder encodeInt:selectFiberTrig forKey:@"selectFiberTrig"];
+    [encoder encodeInteger:selectFiberTrig forKey:@"selectFiberTrig"];
 //DEBUG OUTPUT: 	NSLog(@"%@::%@: UNDER CONSTRUCTION! BBv1Mask %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),BBv1Mask);//TODO: DEBUG testing ...-tb-
-    //[encoder encodeInt:BBv1Mask forKey:@"BBv1Mask"];
-    [encoder encodeInt:fiberEnableMask forKey:@"fiberEnableMask"];
-    [encoder encodeInt:fltModeFlags forKey:@"fltModeFlags"];
-    [encoder encodeInt:targetRate			forKey:@"targetRate"];
-    [encoder encodeInt:runMode				forKey:@"runMode"];
+    //[encoder encodeInteger:BBv1Mask forKey:@"BBv1Mask"];
+    [encoder encodeInteger:fiberEnableMask forKey:@"fiberEnableMask"];
+    [encoder encodeInteger:fltModeFlags forKey:@"fltModeFlags"];
+    [encoder encodeInteger:targetRate			forKey:@"targetRate"];
+    [encoder encodeInteger:runMode				forKey:@"runMode"];
     [encoder encodeBool:runBoxCarFilter		forKey:@"runBoxCarFilter"];
     [encoder encodeBool:storeDataInRam		forKey:@"storeDataInRam"];
-    [encoder encodeInt:(filterLength+2)			forKey:@"filterLength"];//to be backward compatible with old Orca config files (this is the register value)-tb-
-    [encoder encodeInt:gapLength			forKey:@"gapLength"];
-    [encoder encodeInt32:postTriggerTime	forKey:@"postTriggerTime"];
-    [encoder encodeInt32:interruptMask		forKey:@"interruptMask"];
-    [encoder encodeInt:hitRateLength		forKey:@"OREdelweissFLTModelHitRateLength"];
-    [encoder encodeInt:hitRateEnabledMask	forKey:@"hitRateEnabledMask"];
+    [encoder encodeInteger:(filterLength+2)			forKey:@"filterLength"];//to be backward compatible with old Orca config files (this is the register value)-tb-
+    [encoder encodeInteger:gapLength			forKey:@"gapLength"];
+    [encoder encodeInteger:postTriggerTime	forKey:@"postTriggerTime"];
+    [encoder encodeInteger:interruptMask		forKey:@"interruptMask"];
+    [encoder encodeInteger:hitRateLength		forKey:@"OREdelweissFLTModelHitRateLength"];
+    [encoder encodeInteger:hitRateEnabledMask	forKey:@"hitRateEnabledMask"];
     [encoder encodeObject:gains				forKey:@"gains"];
     [encoder encodeObject:thresholds		forKey:@"thresholds"];
     //int i;
@@ -4223,13 +4223,13 @@ for(chan=0; chan<6;chan++)
     [encoder encodeObject:totalRate			forKey:@"totalRate"];
     [encoder encodeObject:testEnabledArray	forKey:@"testEnabledArray"];
     [encoder encodeObject:testStatusArray	forKey:@"testStatusArray"];
-    [encoder encodeInt:writeValue           forKey:@"writeValue"];	
-    [encoder encodeInt:selectedRegIndex  	forKey:@"selectedRegIndex"];	
-    [encoder encodeInt:selectedChannelValue	forKey:@"selectedChannelValue"];	
+    [encoder encodeInteger:writeValue           forKey:@"writeValue"];	
+    [encoder encodeInteger:selectedRegIndex  	forKey:@"selectedRegIndex"];	
+    [encoder encodeInteger:selectedChannelValue	forKey:@"selectedChannelValue"];	
     
     /*
-    [encoder encodeInt:fifoBehaviour		forKey:@"fifoBehaviour"];
-    [encoder encodeInt:analogOffset			forKey:@"analogOffset"];
+    [encoder encodeInteger:fifoBehaviour		forKey:@"fifoBehaviour"];
+    [encoder encodeInteger:analogOffset			forKey:@"analogOffset"];
     */
 }
 

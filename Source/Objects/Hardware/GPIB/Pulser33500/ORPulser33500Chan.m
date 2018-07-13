@@ -454,17 +454,17 @@ static Pulser33500CustomWaveformStruct waveformData[kNumWaveforms] = {
     
     [[self undoManager] disableUndoRegistration];
  	
-	channel =				[decoder decodeIntForKey:@"channel"];
+	channel =				[decoder decodeIntegerForKey:@"channel"];
 	[self setVoltage:		[decoder decodeFloatForKey:@"voltage"]];
 	[self setVoltageOffset:	[decoder decodeFloatForKey:@"voltageOffset"]];
     [self setFrequency:     [decoder decodeFloatForKey:@"frequency"]];
     [self setDutyCycle:     [decoder decodeFloatForKey:@"dutyCycle"]];
 	[self setBurstRate:		[decoder decodeFloatForKey:@"burstRate"]];
 	[self setBurstPhase:	[decoder decodeFloatForKey:@"burstPhase"]];
-	[self setBurstCount:	[decoder decodeIntForKey:@"burstCount"]];
-	[self setTriggerSource:	[decoder decodeIntForKey:@"triggerSource"]];
+	[self setBurstCount:	[decoder decodeIntegerForKey:@"burstCount"]];
+	[self setTriggerSource:	[decoder decodeIntegerForKey:@"triggerSource"]];
 	[self setTriggerTimer:	[decoder decodeFloatForKey:@"triggerTimer"]];
-    [self setSelectedWaveform:     [decoder decodeIntForKey:@"selectedWaveform"]];
+    [self setSelectedWaveform:     [decoder decodeIntegerForKey:@"selectedWaveform"]];
     [self setBurstMode:     [decoder decodeBoolForKey:@"burstMode"]];
 
 	if(voltage==0 && frequency==0 && burstCount==0 && burstPhase==0){
@@ -484,17 +484,17 @@ static Pulser33500CustomWaveformStruct waveformData[kNumWaveforms] = {
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
 
-	[encoder encodeInt:channel			forKey:@"channel"];
+	[encoder encodeInteger:channel			forKey:@"channel"];
 	[encoder encodeFloat:voltage		forKey:@"voltage"];
 	[encoder encodeFloat:voltageOffset	forKey:@"voltageOffset"];
     [encoder encodeFloat:frequency      forKey:@"frequency"];
     [encoder encodeFloat:dutyCycle      forKey:@"dutyCycle"];
 	[encoder encodeFloat:burstRate		forKey:@"burstRate"];
 	[encoder encodeFloat:burstPhase		forKey:@"burstPhase"];
-	[encoder encodeInt:burstCount		forKey:@"burstCount"];
-	[encoder encodeInt:triggerSource	forKey:@"triggerSource"];
+	[encoder encodeInteger:burstCount		forKey:@"burstCount"];
+	[encoder encodeInteger:triggerSource	forKey:@"triggerSource"];
 	[encoder encodeFloat:triggerTimer	forKey:@"triggerTimer"];
-    [encoder encodeInt:selectedWaveform forKey:@"selectedWaveform"];
+    [encoder encodeInteger:selectedWaveform forKey:@"selectedWaveform"];
     [encoder encodeBool:burstMode       forKey:@"burstMode"];
 }
 

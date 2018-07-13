@@ -365,9 +365,9 @@ NSString* OR2228ASuppressZerosChangedNotification   = @"OR2228ASuppressZerosChan
     self = [super initWithCoder:decoder];
 	
     [[self undoManager] disableUndoRegistration];
-    [self setOverFlowCheckTime:[decoder decodeIntForKey:@"OR2228AModelOverFlowCheckTime"]];
-    [self setOnlineMask:[decoder decodeIntForKey:@"OR2228OnlineMask"]];
-    [self setSuppressZeros:[decoder decodeIntForKey:@"OR2228SuppressZeros"]];
+    [self setOverFlowCheckTime:[decoder decodeIntegerForKey:@"OR2228AModelOverFlowCheckTime"]];
+    [self setOnlineMask:[decoder decodeIntegerForKey:@"OR2228OnlineMask"]];
+    [self setSuppressZeros:[decoder decodeIntegerForKey:@"OR2228SuppressZeros"]];
     [[self undoManager] enableUndoRegistration];
 	
     return self;
@@ -376,9 +376,9 @@ NSString* OR2228ASuppressZerosChangedNotification   = @"OR2228ASuppressZerosChan
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:overFlowCheckTime forKey:@"OR2228AModelOverFlowCheckTime"];
-    [encoder encodeInt:onlineMask forKey:@"OR2228OnlineMask"];
-    [encoder encodeInt:suppressZeros forKey:@"OR22281SuppressZeros"];
+    [encoder encodeInteger:overFlowCheckTime forKey:@"OR2228AModelOverFlowCheckTime"];
+    [encoder encodeInteger:onlineMask forKey:@"OR2228OnlineMask"];
+    [encoder encodeInteger:suppressZeros forKey:@"OR22281SuppressZeros"];
 	
 }
 

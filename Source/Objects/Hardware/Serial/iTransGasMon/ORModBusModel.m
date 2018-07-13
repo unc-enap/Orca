@@ -291,7 +291,7 @@ NSString* ORModBusLock						= @"ORModBusLock";
 
 - (void) removeSensor:(id)aSensor
 {
-	int index = [sensors indexOfObject:aSensor];
+	int index = (int)[sensors indexOfObject:aSensor];
 	[[[self undoManager] prepareWithInvocationTarget:self] insertSensor:aSensor atIndex:index];
 	[sensors removeObject:aSensor];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORModBusModelSensorRemoved object:self];
@@ -325,7 +325,7 @@ NSString* ORModBusLock						= @"ORModBusLock";
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:pollTime forKey:@"ORModBusModelPollTime"];
+    [encoder encodeInteger:pollTime forKey:@"ORModBusModelPollTime"];
     [encoder encodeBool:shipValues forKey:@"shipValues"];
     [encoder encodeBool:portWasOpen forKey:@"ORModBusModelPortWasOpen"];
     [encoder encodeObject:portName forKey: @"portName"];
@@ -470,7 +470,7 @@ NSString* ORModBusLock						= @"ORModBusLock";
 	else {
 		if((lastAddress == bytes[0]) && (bytes[2]==2)){
 			//check the crc
-			int len = [theData length];
+			int len = (int)[theData length];
 			unsigned short theReceivedCRC = bytes[len-1]<<8 | bytes[len-2];
 			unsigned short actualCRC      = [self crc:bytes count:len-2];
 			if(theReceivedCRC == actualCRC){

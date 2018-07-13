@@ -211,7 +211,7 @@
 - (IBAction)readWriteTypeMatrixAction:(id)sender
 { 
     if ([model readWriteType] != [sender selectedTag]){
-        [model setReadWriteType:[sender selectedTag]];
+        [model setReadWriteType:(unsigned int)[sender selectedTag]];
     }
 }
 
@@ -301,11 +301,11 @@
     unsigned char  cdata;
     
     [self endEditing];
-    int 			startAddress 	= [model rwAddress];
-	int				endAddress		= [model doRange]?startAddress + [model rangeToDo] : startAddress;
+    unsigned long 	startAddress 	= [model rwAddress];
+	unsigned long	endAddress		= [model doRange]?startAddress + [model rangeToDo] : startAddress;
     unsigned long  	ldata			= [model writeValue];
     
-	int address = startAddress;
+	unsigned long   address = startAddress;
 	if([model doRange] && [model rangeToDo]==0){
 		NSLog(@"Range == 0: nothing to do\n");
 		return;

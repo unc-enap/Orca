@@ -1202,30 +1202,30 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     [self setTargetRate:[decoder decodeIntForKey:@"targetRate"]];
     [self setHistClrMode:		[decoder decodeIntForKey:@"histClrMode"]];
     [self setHistMode:			[decoder decodeIntForKey:@"histMode"]];
-    [self setHistEBin:			[decoder decodeInt32ForKey:@"histEBin"]];
-    [self setHistEMin:			[decoder decodeInt32ForKey:@"histEMin"]];
+    [self setHistEBin:			[decoder decodeIntegerForKey:@"histEBin"]];
+    [self setHistEMin:			[decoder decodeIntegerForKey:@"histEMin"]];
 	[self setRunMode:			[decoder decodeIntForKey:@"runMode"]];
     [self setRunBoxCarFilter:	[decoder decodeBoolForKey:@"runBoxCarFilter"]];
     [self setStoreDataInRam:	[decoder decodeBoolForKey:@"storeDataInRam"]];
     [self setFilterLength:		[decoder decodeIntForKey:@"filterLength"]-2];//to be backward compatible with old Orca config files -tb-
     [self setGapLength:			[decoder decodeIntForKey:@"gapLength"]];
-    [self setHistNofMeas:		[decoder decodeInt32ForKey:@"histNofMeas"]];
-    [self setHistMeasTime:		[decoder decodeInt32ForKey:@"histMeasTime"]];
-    [self setPostTriggerTime:	[decoder decodeInt32ForKey:@"postTriggerTime"]];
+    [self setHistNofMeas:		[decoder decodeIntegerForKey:@"histNofMeas"]];
+    [self setHistMeasTime:		[decoder decodeIntegerForKey:@"histMeasTime"]];
+    [self setPostTriggerTime:	[decoder decodeIntegerForKey:@"postTriggerTime"]];
     [self setFifoBehaviour:		[decoder decodeIntForKey:@"fifoBehaviour"]];
     [self setAnalogOffset:		[decoder decodeIntForKey:@"analogOffset"]];
-    [self setInterruptMask:		[decoder decodeInt32ForKey:@"interruptMask"]];
-    [self setHitRateEnabledMask:[decoder decodeInt32ForKey:@"hitRateEnabledMask"]];
-    [self setTriggerEnabledMask:[decoder decodeInt32ForKey:@"triggerEnabledMask"]];
-    [self setHitRateLength:		[decoder decodeIntForKey:@"ORIpeV4FLTModelHitRateLength"]];
+    [self setInterruptMask:		[decoder decodeIntegerForKey:@"interruptMask"]];
+    [self setHitRateEnabledMask:[decoder decodeIntegerForKey:@"hitRateEnabledMask"]];
+    [self setTriggerEnabledMask:[decoder decodeIntegerForKey:@"triggerEnabledMask"]];
+    [self setHitRateLength:		[decoder decodeIntegerForKey:@"ORIpeV4FLTModelHitRateLength"]];
     [self setGains:				[decoder decodeObjectForKey:@"gains"]];
     [self setThresholds:		[decoder decodeObjectForKey:@"thresholds"]];
     [self setTotalRate:			[decoder decodeObjectForKey:@"totalRate"]];
 	[self setTestEnabledArray:	[decoder decodeObjectForKey:@"testsEnabledArray"]];
 	[self setTestStatusArray:	[decoder decodeObjectForKey:@"testsStatusArray"]];
-    [self setWriteValue:		[decoder decodeIntForKey:@"writeValue"]];
-    [self setSelectedRegIndex:  [decoder decodeIntForKey:@"selectedRegIndex"]];
-    [self setSelectedChannelValue:  [decoder decodeIntForKey:@"selectedChannelValue"]];
+    [self setWriteValue:		[decoder decodeIntegerForKey:@"writeValue"]];
+    [self setSelectedRegIndex:  [decoder decodeIntegerForKey:@"selectedRegIndex"]];
+    [self setSelectedChannelValue:  [decoder decodeIntegerForKey:@"selectedChannelValue"]];
 	
 	NSUInteger i;
 	if(!thresholds){
@@ -1263,34 +1263,34 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 {
     [super encodeWithCoder:encoder];
 	
-    [encoder encodeInt:targetRate			forKey:@"targetRate"];
-    [encoder encodeInt:histClrMode			forKey:@"histClrMode"];
-    [encoder encodeInt:histMode				forKey:@"histMode"];
-    [encoder encodeInt32:(int32_t)histEBin			forKey:@"histEBin"];
-    [encoder encodeInt32:(int32_t)histEMin			forKey:@"histEMin"];
-    [encoder encodeInt:runMode				forKey:@"runMode"];
+    [encoder encodeInteger:targetRate			forKey:@"targetRate"];
+    [encoder encodeInteger:histClrMode			forKey:@"histClrMode"];
+    [encoder encodeInteger:histMode				forKey:@"histMode"];
+    [encoder encodeInteger:histEBin			forKey:@"histEBin"];
+    [encoder encodeInteger:histEMin			forKey:@"histEMin"];
+    [encoder encodeInteger:runMode				forKey:@"runMode"];
     [encoder encodeBool:runBoxCarFilter		forKey:@"runBoxCarFilter"];
     [encoder encodeBool:storeDataInRam		forKey:@"storeDataInRam"];
-    [encoder encodeInt:(filterLength+2)			forKey:@"filterLength"];//to be backward compatible with old Orca config files (this is the register value)-tb-
-    [encoder encodeInt:gapLength			forKey:@"gapLength"];
-    [encoder encodeInt32:(int32_t)histNofMeas		forKey:@"histNofMeas"];
-    [encoder encodeInt32:(int32_t)histMeasTime		forKey:@"histMeasTime"];
-    [encoder encodeInt32:(int32_t)histRecTime		forKey:@"histRecTime"];
-    [encoder encodeInt32:(int32_t)postTriggerTime	forKey:@"postTriggerTime"];
-    [encoder encodeInt:fifoBehaviour		forKey:@"fifoBehaviour"];
-    [encoder encodeInt:analogOffset			forKey:@"analogOffset"];
-    [encoder encodeInt32:(int32_t)interruptMask		forKey:@"interruptMask"];
-    [encoder encodeInt32:(int32_t)hitRateEnabledMask	forKey:@"hitRateEnabledMask"];
-    [encoder encodeInt32:(int32_t)triggerEnabledMask	forKey:@"triggerEnabledMask"];
-    [encoder encodeInt:hitRateLength		forKey:@"ORIpeV4FLTModelHitRateLength"];
+    [encoder encodeInteger:(filterLength+2)			forKey:@"filterLength"];//to be backward compatible with old Orca config files (this is the register value)-tb-
+    [encoder encodeInteger:gapLength			forKey:@"gapLength"];
+    [encoder encodeInteger:histNofMeas		forKey:@"histNofMeas"];
+    [encoder encodeInteger:histMeasTime		forKey:@"histMeasTime"];
+    [encoder encodeInteger:histRecTime		forKey:@"histRecTime"];
+    [encoder encodeInteger:postTriggerTime	forKey:@"postTriggerTime"];
+    [encoder encodeInteger:fifoBehaviour		forKey:@"fifoBehaviour"];
+    [encoder encodeInteger:analogOffset			forKey:@"analogOffset"];
+    [encoder encodeInteger:interruptMask		forKey:@"interruptMask"];
+    [encoder encodeInteger:hitRateEnabledMask	forKey:@"hitRateEnabledMask"];
+    [encoder encodeInteger:triggerEnabledMask	forKey:@"triggerEnabledMask"];
+    [encoder encodeInteger:hitRateLength		forKey:@"ORIpeV4FLTModelHitRateLength"];
     [encoder encodeObject:gains				forKey:@"gains"];
     [encoder encodeObject:thresholds		forKey:@"thresholds"];
     [encoder encodeObject:totalRate			forKey:@"totalRate"];
     [encoder encodeObject:testEnabledArray	forKey:@"testEnabledArray"];
     [encoder encodeObject:testStatusArray	forKey:@"testStatusArray"];
-    [encoder encodeInt:(int32_t)writeValue           forKey:@"writeValue"];
-    [encoder encodeInt:selectedRegIndex  	forKey:@"selectedRegIndex"];	
-    [encoder encodeInt:(int32_t)selectedChannelValue	forKey:@"selectedChannelValue"];
+    [encoder encodeInteger:(int32_t)writeValue           forKey:@"writeValue"];
+    [encoder encodeInteger:selectedRegIndex  	forKey:@"selectedRegIndex"];	
+    [encoder encodeInteger:(int32_t)selectedChannelValue	forKey:@"selectedChannelValue"];
 }
 
 #pragma mark Data Taking

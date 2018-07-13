@@ -304,7 +304,7 @@ NSString* ORAlarmElementeMailDelaChangedNotification = @"ORAlarmElementeMailDela
     [self setAlarmSeverity:[decoder decodeIntForKey: @"alarmSeverity"]];
     [self setAlarmName:[decoder decodeObjectForKey:  @"alarmName"]];
     [self setAlarmHelp:[decoder decodeObjectForKey:  @"alarmHelp"]];
-    [self setEMailDelay:[decoder decodeIntForKey:    @"eMailDelay"]];
+    [self setEMailDelay:[decoder decodeIntegerForKey:    @"eMailDelay"]];
 
     [[self undoManager] enableUndoRegistration];
 	[self registerNotificationObservers];
@@ -316,10 +316,10 @@ NSString* ORAlarmElementeMailDelaChangedNotification = @"ORAlarmElementeMailDela
 {
     [super encodeWithCoder:encoder];
     [encoder encodeObject:noAlarmName   forKey:@"noAlarmName"];
-    [encoder encodeInt:alarmSeverity    forKey:@"alarmSeverity"];
+    [encoder encodeInteger:alarmSeverity    forKey:@"alarmSeverity"];
     [encoder encodeObject:alarmName     forKey:@"alarmName"];
     [encoder encodeObject:alarmHelp     forKey:@"alarmHelp"];
-    [encoder encodeInt:eMailDelay       forKey:@"eMailDelay"];
+    [encoder encodeInteger:eMailDelay       forKey:@"eMailDelay"];
 }
 
 @end

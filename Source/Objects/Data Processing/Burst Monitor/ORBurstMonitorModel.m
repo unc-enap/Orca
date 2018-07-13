@@ -1127,10 +1127,10 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
 	
     [[self undoManager] disableUndoRegistration];
     
-    [self setNumBurstsNeeded:       [decoder decodeIntForKey:@"numBurstsNeeded"]];
-    [self setTimeWindow:            [decoder decodeInt32ForKey:ORBurstMonitorTimeWindow]];
-    [self setNHit:                  [decoder decodeInt32ForKey:ORBurstMonitorNHit]];
-    [self setMinimumEnergyAllowed:  [decoder decodeInt32ForKey:ORBurstMonitorMinimumEnergyAllowed]];
+    [self setNumBurstsNeeded:       [decoder decodeIntegerForKey:@"numBurstsNeeded"]];
+    [self setTimeWindow:            [decoder decodeIntegerForKey:ORBurstMonitorTimeWindow]];
+    [self setNHit:                  [decoder decodeIntegerForKey:ORBurstMonitorNHit]];
+    [self setMinimumEnergyAllowed:  [decoder decodeIntegerForKey:ORBurstMonitorMinimumEnergyAllowed]];
     [self setEmailList:             [decoder decodeObjectForKey:@"emailList"]];
 	
     [[self undoManager] enableUndoRegistration];
@@ -1141,10 +1141,10 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:numBurstsNeeded               forKey:@"numBurstsNeeded"];
-    [encoder encodeInt32:[self timeWindow]		     forKey:ORBurstMonitorTimeWindow];
-    [encoder encodeInt32:[self nHit]		         forKey:ORBurstMonitorNHit];
-    [encoder encodeInt32:[self minimumEnergyAllowed] forKey:ORBurstMonitorMinimumEnergyAllowed];
+    [encoder encodeInteger:numBurstsNeeded               forKey:@"numBurstsNeeded"];
+    [encoder encodeInteger:[self timeWindow]		     forKey:ORBurstMonitorTimeWindow];
+    [encoder encodeInteger:[self nHit]		         forKey:ORBurstMonitorNHit];
+    [encoder encodeInteger:[self minimumEnergyAllowed] forKey:ORBurstMonitorMinimumEnergyAllowed];
 	[encoder encodeObject:emailList                  forKey:@"emailList"];
 }
 

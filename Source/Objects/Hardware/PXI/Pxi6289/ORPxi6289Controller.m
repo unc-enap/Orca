@@ -225,7 +225,7 @@
 - (void) waveFormRateChanged:(NSNotification*)aNote
 {
     ORRate* theRateObj = [aNote object];	
-	int channel = [theRateObj tag];
+	int channel = (int)[theRateObj tag];
 	if(channel<16){
 		[[rate1TextFields cellWithTag:channel] setFloatValue: [theRateObj rate]];
 		[rate1 setNeedsDisplay:YES];
@@ -292,7 +292,7 @@
 
 - (void) baseAddressChanged:(NSNotification*)aNote
 {
-    [addressText setIntValue: [model baseAddress]];
+    [addressText setIntegerValue: [model baseAddress]];
 }
 
 - (void) integrationChanged:(NSNotification*)aNotification
@@ -452,7 +452,7 @@
     }
 	
     NSString* key = [NSString stringWithFormat: @"orca.ORPxi6289%d.selectedtab",[model slot]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 }
 
@@ -464,12 +464,12 @@
 
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	return [[[model waveFormRateGroup]timeRate]count];
+	return (int)[[[model waveFormRateGroup]timeRate]count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 {
-	int count = [[[model waveFormRateGroup]timeRate] count];
+	int count = (int)[[[model waveFormRateGroup]timeRate] count];
 	int index = count-i-1;
 	*yValue = [[[model waveFormRateGroup] timeRate] valueAtIndex:index];
 	*xValue = [[[model waveFormRateGroup] timeRate] timeSampledAtIndex:index];

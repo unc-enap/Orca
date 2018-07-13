@@ -2129,35 +2129,35 @@ static NSString* DT5725StartStopRunModeString[4] = {
     [self setTrigOnUnderThreshold:      [aDecoder decodeBoolForKey:     @"trigOnUnderThreshold"]];
     [self setTestPatternEnabled:        [aDecoder decodeBoolForKey:     @"testPatternEnabled"]];
     [self setTrigOverlapEnabled:        [aDecoder decodeBoolForKey:     @"trigOverlapEnabled"]];
-    [self setEventSize:                 [aDecoder decodeInt32ForKey:    @"eventSize"]];
+    [self setEventSize:                 [aDecoder decodeIntegerForKey:    @"eventSize"]];
     [self setClockSource:               [aDecoder decodeBoolForKey:     @"clockSource"]];
     [self setCountAllTriggers:          [aDecoder decodeBoolForKey:     @"countAllTriggers"]];
     [self setMemFullMode:               [aDecoder decodeBoolForKey:     @"memFullMode"]];
     [self setStartStopRunMode:          [aDecoder decodeBoolForKey:     @"startStopRunMode"]];
     [self setSoftwareTrigEnabled:       [aDecoder decodeBoolForKey:     @"softwareTrigEnabled"]];
     [self setExternalTrigEnabled:       [aDecoder decodeBoolForKey:     @"externalTrigEnabled"]];
-    [self setTriggerSourceMask:         [aDecoder decodeInt32ForKey:    @"triggerSourceMask"]];
+    [self setTriggerSourceMask:         [aDecoder decodeIntegerForKey:    @"triggerSourceMask"]];
     [self setExtTrigOutEnabled:         [aDecoder decodeBoolForKey:     @"fpExternalTrigEnabled"]];
     [self setSwTrigOutEnabled:          [aDecoder decodeBoolForKey:     @"fpSoftwareTrigEnabled"]];
-    [self setTriggerOutMask:            [aDecoder decodeInt32ForKey:      @"triggerOutMask"]];
-    [self setTriggerOutLogic:           [aDecoder decodeIntForKey:      @"triggerOutLogic"]];
-    [self setTrigOutCoincidenceLevel:   [aDecoder decodeIntForKey:      @"trigOutCoincidenceLevel"]];
-    [self setPostTriggerSetting:        [aDecoder decodeInt32ForKey:    @"postTriggerSetting"]];
-    [self setEnabledMask:               [aDecoder decodeIntForKey:      @"enabledMask"]];
+    [self setTriggerOutMask:            [aDecoder decodeIntegerForKey:      @"triggerOutMask"]];
+    [self setTriggerOutLogic:           [aDecoder decodeIntegerForKey:      @"triggerOutLogic"]];
+    [self setTrigOutCoincidenceLevel:   [aDecoder decodeIntegerForKey:      @"trigOutCoincidenceLevel"]];
+    [self setPostTriggerSetting:        [aDecoder decodeIntegerForKey:    @"postTriggerSetting"]];
+    [self setEnabledMask:               [aDecoder decodeIntegerForKey:      @"enabledMask"]];
     [self setFpLogicType:               [aDecoder decodeBoolForKey:     @"fpLogicType"]];
     [self setFpTrigInSigEdgeDisable:    [aDecoder decodeBoolForKey:     @"fpTrigInSigEdgeDisable"]];
     [self setFpTrigInToMezzanines:      [aDecoder decodeBoolForKey:     @"fpTrigInToMezzanines"]];
     [self setFpForceTrigOut:            [aDecoder decodeBoolForKey:     @"fpForceTrigOut"]];
     [self setFpTrigOutMode:             [aDecoder decodeBoolForKey:     @"fpTrigOutMode"]];
-    [self setFpTrigOutModeSelect:       [aDecoder decodeIntForKey:      @"fpTrigOutModeSelect"]];
-    [self setFpMBProbeSelect:           [aDecoder decodeIntForKey:      @"fpMBProbeSelect"]];
+    [self setFpTrigOutModeSelect:       [aDecoder decodeIntegerForKey:      @"fpTrigOutModeSelect"]];
+    [self setFpMBProbeSelect:           [aDecoder decodeIntegerForKey:      @"fpMBProbeSelect"]];
     [self setFpBusyUnlockSelect:        [aDecoder decodeBoolForKey:     @"fpBusyUnlockSelect"]];
-    [self setFpHeaderPattern:           [aDecoder decodeIntForKey:      @"fpHeaderPattern"]];
+    [self setFpHeaderPattern:           [aDecoder decodeIntegerForKey:      @"fpHeaderPattern"]];
     [self setFanSpeedMode:              [aDecoder decodeBoolForKey:     @"fanSpeedMode"]];
-    [self setAlmostFullLevel:           [aDecoder decodeIntForKey:      @"almostFullLevel"]];
-    [self setRunDelay:                  [aDecoder decodeInt32ForKey:    @"runDelay"]];
-    [self setCoincidenceWindow:         [aDecoder decodeIntForKey:      @"coincidenceWindow"]];
-    [self setCoincidenceLevel:          [aDecoder decodeIntForKey:      @"coincidenceLevel"]];
+    [self setAlmostFullLevel:           [aDecoder decodeIntegerForKey:      @"almostFullLevel"]];
+    [self setRunDelay:                  [aDecoder decodeIntegerForKey:    @"runDelay"]];
+    [self setCoincidenceWindow:         [aDecoder decodeIntegerForKey:      @"coincidenceWindow"]];
+    [self setCoincidenceLevel:          [aDecoder decodeIntegerForKey:      @"coincidenceLevel"]];
     [self setWaveFormRateGroup:         [aDecoder decodeObjectForKey:   @"waveFormRateGroup"]];
     
     if(!waveFormRateGroup){
@@ -2169,15 +2169,15 @@ static NSString* DT5725StartStopRunModeString[4] = {
 	
 	int i;
     for (i = 0; i < kNumDT5725Channels; i++){
-        [self setInputDynamicRange:i    withValue:[aDecoder decodeIntForKey: [NSString stringWithFormat:@"inputDynamicRange%d", i]]];
-        [self setSelfTrigPulseWidth:i   withValue:[aDecoder decodeIntForKey:  [NSString stringWithFormat:@"selfTrigPulseWidth%d", i]]];
-        [self setThreshold:i            withValue:[aDecoder decodeIntForKey:  [NSString stringWithFormat:@"threshold%d", i]]];
+        [self setInputDynamicRange:i    withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"inputDynamicRange%d", i]]];
+        [self setSelfTrigPulseWidth:i   withValue:[aDecoder decodeIntegerForKey:  [NSString stringWithFormat:@"selfTrigPulseWidth%d", i]]];
+        [self setThreshold:i            withValue:[aDecoder decodeIntegerForKey:  [NSString stringWithFormat:@"threshold%d", i]]];
         [self setSelfTrigPulseType:i    withValue:[aDecoder decodeBoolForKey: [NSString stringWithFormat:@"selfTrigPulseType%d", i]]];
-        [self setDCOffset:i             withValue:[aDecoder decodeIntForKey:  [NSString stringWithFormat:@"dcOffset%d", i]]];
+        [self setDCOffset:i             withValue:[aDecoder decodeIntegerForKey:  [NSString stringWithFormat:@"dcOffset%d", i]]];
     }
     int group;
     for (group = 0; group < kNumDT5725Channels/2; group++){
-        [self setSelfTrigLogic:group        withValue:[aDecoder decodeIntForKey:  [NSString stringWithFormat:@"selfTrigLogic%d", group]]];
+        [self setSelfTrigLogic:group        withValue:[aDecoder decodeIntegerForKey:  [NSString stringWithFormat:@"selfTrigLogic%d", group]]];
     }
     
     [[self undoManager] enableUndoRegistration];
@@ -2192,48 +2192,48 @@ static NSString* DT5725StartStopRunModeString[4] = {
     [anEncoder encodeBool:trigOnUnderThreshold      forKey:@"trigOnUnderThreshold"];
     [anEncoder encodeBool:testPatternEnabled        forKey:@"testPatternEnabled"];
     [anEncoder encodeBool:trigOverlapEnabled        forKey:@"trigOverlapEnabled"];
-    [anEncoder encodeInt32:(int32_t)eventSize       forKey:@"eventSize"];
+    [anEncoder encodeInteger:eventSize       forKey:@"eventSize"];
     [anEncoder encodeBool:clockSource               forKey:@"clockSource"];
     [anEncoder encodeBool:countAllTriggers          forKey:@"countAllTriggers"];
     [anEncoder encodeBool:startStopRunMode          forKey:@"startStopRunMode"];
     [anEncoder encodeBool:memFullMode               forKey:@"memFullMode"];
     [anEncoder encodeBool:softwareTrigEnabled       forKey:@"softwareTrigEnabled"];
     [anEncoder encodeBool:externalTrigEnabled       forKey:@"externalTrigEnabled"];
-    [anEncoder encodeInt32:(int32_t)triggerSourceMask forKey:@"triggerSourceMask"];
+    [anEncoder encodeInteger:triggerSourceMask forKey:@"triggerSourceMask"];
     [anEncoder encodeBool:swTrigOutEnabled          forKey:@"swTrigOutEnabled"];
     [anEncoder encodeBool:extTrigOutEnabled         forKey:@"extTrigOutEnabled"];
-    [anEncoder encodeInt32:(int32_t)triggerOutMask  forKey:@"triggerOutMask"];
-    [anEncoder encodeInt:triggerOutLogic            forKey:@"triggerOutLogic"];
-    [anEncoder encodeInt:trigOutCoincidenceLevel    forKey:@"trigOutCoincidenceLevel"];
-    [anEncoder encodeInt32:(int32_t)postTriggerSetting       forKey:@"postTriggerSetting"];
-    [anEncoder encodeInt:enabledMask                forKey:@"enabledMask"];
+    [anEncoder encodeInteger:triggerOutMask  forKey:@"triggerOutMask"];
+    [anEncoder encodeInteger:triggerOutLogic            forKey:@"triggerOutLogic"];
+    [anEncoder encodeInteger:trigOutCoincidenceLevel    forKey:@"trigOutCoincidenceLevel"];
+    [anEncoder encodeInteger:postTriggerSetting       forKey:@"postTriggerSetting"];
+    [anEncoder encodeInteger:enabledMask                forKey:@"enabledMask"];
     [anEncoder encodeBool:fpLogicType               forKey:@"fpLogicType"];
     [anEncoder encodeBool:fpTrigInSigEdgeDisable    forKey:@"fpTrigInSigEdgeDisable"];
     [anEncoder encodeBool:fpTrigInToMezzanines      forKey:@"fpTrigInToMezzanines"];
     [anEncoder encodeBool:fpForceTrigOut            forKey:@"fpForceTrigOut"];
     [anEncoder encodeBool:fpTrigOutMode             forKey:@"fpTrigOutMode"];
-    [anEncoder encodeInt:fpTrigOutModeSelect        forKey:@"fpTrigOutModeSelect"];
-    [anEncoder encodeInt:fpMBProbeSelect            forKey:@"fpMBProbeSelect"];
+    [anEncoder encodeInteger:fpTrigOutModeSelect        forKey:@"fpTrigOutModeSelect"];
+    [anEncoder encodeInteger:fpMBProbeSelect            forKey:@"fpMBProbeSelect"];
     [anEncoder encodeBool:fpBusyUnlockSelect        forKey:@"fpBusyUnlockSelect"];
-    [anEncoder encodeInt:fpHeaderPattern            forKey:@"fpHeaderPattern"];
+    [anEncoder encodeInteger:fpHeaderPattern            forKey:@"fpHeaderPattern"];
     [anEncoder encodeBool:fanSpeedMode              forKey:@"fanSpeedMode"];
-    [anEncoder encodeInt:almostFullLevel            forKey:@"almostFullLevel"];
-    [anEncoder encodeInt32:(int32_t)runDelay        forKey:@"runDelay"];
-    [anEncoder encodeInt:coincidenceWindow          forKey:@"coincidenceWindow"];
-	[anEncoder encodeInt:coincidenceLevel           forKey:@"coincidenceLevel"];
+    [anEncoder encodeInteger:almostFullLevel            forKey:@"almostFullLevel"];
+    [anEncoder encodeInteger:runDelay        forKey:@"runDelay"];
+    [anEncoder encodeInteger:coincidenceWindow          forKey:@"coincidenceWindow"];
+	[anEncoder encodeInteger:coincidenceLevel           forKey:@"coincidenceLevel"];
     [anEncoder encodeObject:waveFormRateGroup       forKey:@"waveFormRateGroup"];
     
 	int i;
 	for (i = 0; i < kNumDT5725Channels; i++){
-        [anEncoder encodeInt:inputDynamicRange[i]       forKey:[NSString stringWithFormat:@"inputDynamicRange%d", i]];
-        [anEncoder encodeInt:selfTrigPulseWidth[i]      forKey:[NSString stringWithFormat:@"selfTrigPulseWidth%d", i]];
-        [anEncoder encodeInt:thresholds[i]              forKey:[NSString stringWithFormat:@"threshold%d", i]];
+        [anEncoder encodeInteger:inputDynamicRange[i]       forKey:[NSString stringWithFormat:@"inputDynamicRange%d", i]];
+        [anEncoder encodeInteger:selfTrigPulseWidth[i]      forKey:[NSString stringWithFormat:@"selfTrigPulseWidth%d", i]];
+        [anEncoder encodeInteger:thresholds[i]              forKey:[NSString stringWithFormat:@"threshold%d", i]];
         [anEncoder encodeBool:selfTrigPulseType[i]      forKey:[NSString stringWithFormat:@"selfTrigPulseType%d", i]];
-        [anEncoder encodeInt:dcOffset[i]                forKey:[NSString stringWithFormat:@"dcOffset%d", i]];
+        [anEncoder encodeInteger:dcOffset[i]                forKey:[NSString stringWithFormat:@"dcOffset%d", i]];
     }
     int group;
     for (group = 0; group < kNumDT5725Channels/2; group++){
-        [anEncoder encodeInt:selfTrigLogic[group]           forKey:[NSString stringWithFormat:@"selfTrigLogic%d", group]];
+        [anEncoder encodeInteger:selfTrigLogic[group]           forKey:[NSString stringWithFormat:@"selfTrigLogic%d", group]];
     }
 }
 

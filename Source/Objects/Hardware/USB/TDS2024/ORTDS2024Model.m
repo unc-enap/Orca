@@ -481,7 +481,7 @@ NSString* ORWaveFormDataChanged            = @"ORWaveFormDataChanged";
     [[self undoManager] disableUndoRegistration];
     [self setSerialNumber:          [decoder decodeObjectForKey:    @"serialNumber"]];
     [self setPollTime:              [decoder decodeIntForKey:       @"pollTime"]];
-    [self setChanEnabledMask:       [decoder decodeIntForKey:       @"chanEnabledMask"]];
+    [self setChanEnabledMask:       [decoder decodeIntegerForKey:       @"chanEnabledMask"]];
     [[self undoManager] enableUndoRegistration];
     
     return self;
@@ -491,16 +491,16 @@ NSString* ORWaveFormDataChanged            = @"ORWaveFormDataChanged";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeObject:serialNumber      forKey:@"serialNumber"];
-    [encoder encodeInt:pollTime             forKey:@"pollTime"];
-    [encoder encodeInt:chanEnabledMask      forKey:@"chanEnabledMask"];
+    [encoder encodeInteger:pollTime             forKey:@"pollTime"];
+    [encoder encodeInteger:chanEnabledMask      forKey:@"chanEnabledMask"];
 }
 
 #pragma mark ***Comm methods
-- (long) readFromDevice: (char*) aData maxLength: (long) aMaxLength
+- (long) readFromDevice: (char*) aData maxLength: (unsigned long) aMaxLength
 {
     if(usbInterface && [self getUSBController]){
         @try {
-            return [usbInterface readUSB488:aData length:aMaxLength];;
+            return [usbInterface readUSB488:aData length:(uint32_t)aMaxLength];;
         }
         @catch(NSException* e){
         }

@@ -469,10 +469,10 @@ static NSString *ORSupplyVoltageAdcSlope  = @"ORHVSupply Volt adc slope";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [encoder encodeObject:owner forKey:ORHVSupplyOwner];
-    [encoder encodeInt:[self supply] forKey:ORSupplyId];
-    [encoder encodeInt:[self controlled] forKey:ORSupplyControlled];
-    [encoder encodeInt:[self rampTime] forKey:ORSupplyRampTime];
-    [encoder encodeInt:[self targetVoltage] forKey:ORSupplyTargetVoltage];
+    [encoder encodeInteger:[self supply] forKey:ORSupplyId];
+    [encoder encodeInteger:[self controlled] forKey:ORSupplyControlled];
+    [encoder encodeInteger:[self rampTime] forKey:ORSupplyRampTime];
+    [encoder encodeInteger:[self targetVoltage] forKey:ORSupplyTargetVoltage];
     [encoder encodeFloat:[self voltageAdcOffset] forKey:ORSupplyVoltageAdcOffset];
     [encoder encodeFloat:[self voltageAdcSlope] forKey:ORSupplyVoltageAdcSlope];
 }
@@ -504,15 +504,15 @@ static NSString *ORSupplyRelay 		= @"ORHVSupply Relay";
     [[owner undoManager] disableUndoRegistration];
 	
     [self setDacValue:[decoder decodeIntForKey:[ORSupplyDacValue stringByAppendingFormat:@"%d",supply]]];
-    [self setRelay:		[decoder decodeIntForKey:[ORSupplyRelay stringByAppendingFormat:@"%d",supply]]];
+    [self setRelay:		[decoder decodeIntegerForKey:[ORSupplyRelay stringByAppendingFormat:@"%d",supply]]];
     
     [[owner undoManager] enableUndoRegistration];
 }
 
 - (void)saveHVParams:(NSCoder*)encoder
 {
-    [encoder encodeInt:[self dacValue] forKey:[ORSupplyDacValue stringByAppendingFormat:@"%d",supply]];
-    [encoder encodeInt:[self relay] forKey:[ORSupplyRelay stringByAppendingFormat:@"%d",supply]];
+    [encoder encodeInteger:[self dacValue] forKey:[ORSupplyDacValue stringByAppendingFormat:@"%d",supply]];
+    [encoder encodeInteger:[self relay] forKey:[ORSupplyRelay stringByAppendingFormat:@"%d",supply]];
 }
 
 

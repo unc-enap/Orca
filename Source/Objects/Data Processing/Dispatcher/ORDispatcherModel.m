@@ -483,7 +483,7 @@ static NSString *ORDispatcherRefusedList	 	= @"ORDispatcherRefusedList";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:socketPort forKey:ORDispatcherPortNumber];
+    [encoder encodeInteger:socketPort forKey:ORDispatcherPortNumber];
     [encoder encodeBool:checkAllowed forKey:ORDispatcherCheckAllowed];
     [encoder encodeBool:checkRefused forKey:ORDispatcherCheckRefused];
     [encoder encodeObject:allowedList forKey:ORDispatcherAllowedList];

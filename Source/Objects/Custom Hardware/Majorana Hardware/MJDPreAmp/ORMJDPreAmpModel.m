@@ -238,7 +238,7 @@ struct {
                               spikeObj,@"spikeInfo",
                               [NSNumber numberWithInt:[self connectedGretinaCrate]],@"crate",
                               [NSNumber numberWithInt:[self connectedGretinaSlot]], @"card",
-                              [NSNumber numberWithInt:[spikeObj tag]],              @"adcChannel",
+                              [NSNumber numberWithInteger:[spikeObj tag]],              @"adcChannel",
                               nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORMJDPreAmpModelRateSpiked object:self userInfo:userInfo];
 }
@@ -873,7 +873,7 @@ struct {
 {
 	if(aValue>0xffff) aValue = 0xffff;
     [[[self undoManager] prepareWithInvocationTarget:self] setDac:aChan withValue:[self dac:aChan]];
-	[dacs replaceObjectAtIndex:aChan withObject:[NSNumber numberWithInt:aValue]];
+	[dacs replaceObjectAtIndex:aChan withObject:[NSNumber numberWithInteger:aValue]];
 	
     NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
     [userInfo setObject:[NSNumber numberWithInt:aChan] forKey: @"Channel"];
@@ -910,7 +910,7 @@ struct {
 {
 	if(aValue>0xffff) aValue = 0xffff;
     [[[self undoManager] prepareWithInvocationTarget:self] setAmplitude:aChan withValue:[self amplitude:aChan]];
-	[amplitudes replaceObjectAtIndex:aChan withObject:[NSNumber numberWithInt:aValue]];
+	[amplitudes replaceObjectAtIndex:aChan withObject:[NSNumber numberWithInteger:aValue]];
 	
     NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
     [userInfo setObject:[NSNumber numberWithUnsignedShort:aChan] forKey: @"Channel"];
@@ -1032,13 +1032,13 @@ struct {
         for(chip=0;chip<2;chip++){
             SBC_Packet aPacket;
             aPacket.cmdHeader.destination	= kMJD;
-            aPacket.cmdHeader.cmdID			= cmdType;
+            aPacket.cmdHeader.cmdID			= (uint32_t)cmdType;
             aPacket.cmdHeader.numberBytesinPayload	= (8 + 3)*sizeof(long);
             
             GRETINA4_PreAmpReadStruct* p = (GRETINA4_PreAmpReadStruct*) aPacket.payload;
-            p->baseAddress      = [self baseAddress];
+            p->baseAddress      = (uint32_t)[self baseAddress];
             p->chip             = chip;
-            p->readEnabledMask  = adcEnabledMask;
+            p->readEnabledMask  = (uint32_t)adcEnabledMask;
             for(chan=0;chan<8;chan++){
                 int adcIndex = chan + (chip*8);
                 if(adcEnabledMask & (0x1<<adcIndex)){
@@ -1047,7 +1047,7 @@ struct {
                     (0x1 << 4)         |             //use internal voltage reference for conversion
                     (mjdPreAmpTable[adcIndex].conversionType << 5)   |
                     (mjdPreAmpTable[adcIndex].mode << 8);    //set mode, other bits are zero
-                    p->adc[chan] = (mjdPreAmpTable[adcIndex].adcSelection | (controlWord<<8));
+                    p->adc[chan] = (uint32_t)((mjdPreAmpTable[adcIndex].adcSelection | (controlWord<<8)));
                 }
                 else p->adc[chan] = 0;
             }
@@ -1291,7 +1291,7 @@ struct {
 	
     [[self undoManager] disableUndoRegistration];
     [self setBoardRev:      [decoder decodeIntForKey:   @"boardRev"]];
-    [self setAdcEnabledMask:[decoder decodeInt32ForKey: @"adcEnabledMask"]];
+    [self setAdcEnabledMask:[decoder decodeIntegerForKey: @"adcEnabledMask"]];
     [self setShipValues:	[decoder decodeBoolForKey:  @"shipValues"]];
 	[self setPollTime:		[decoder decodeIntForKey:   @"pollTime"]];
     [self setFirmwareRev:   [decoder decodeIntForKey:   @"firmwareRev"]];
@@ -1306,10 +1306,10 @@ struct {
     
 
     [self setLoopForever:	[decoder decodeBoolForKey:   @"loopForever"]];
-    [self setPulseCount:	[decoder decodeIntForKey:    @"pulseCount"]];
+    [self setPulseCount:	[decoder decodeIntegerForKey:    @"pulseCount"]];
 	[self setPulseHighTime:	[decoder decodeIntForKey:    @"pulseHighTime"]];
 	[self setPulseLowTime:	[decoder decodeIntForKey:    @"pulseLowTime"]];
-	[self setPulserMask:	[decoder decodeIntForKey:    @"pulserMask"]];
+	[self setPulserMask:	[decoder decodeIntegerForKey:    @"pulserMask"]];
     [self setDacs:			[decoder decodeObjectForKey: @"dacs"]];
     [self setAmplitudes:	[decoder decodeObjectForKey: @"amplitudes"]];
     [self setFeedBackResistors:	[decoder decodeObjectForKey: @"feedBackResistors"]];
@@ -1337,11 +1337,11 @@ struct {
 {
     [super encodeWithCoder:encoder];
     [encoder encodeBool:doNotUseHWMap   forKey:@"doNotUseHWMap"];
-	[encoder encodeInt:boardRev         forKey:@"boardRev"];
-	[encoder encodeInt32:adcEnabledMask forKey:@"adcEnabledMask"];
+	[encoder encodeInteger:boardRev         forKey:@"boardRev"];
+	[encoder encodeInteger:adcEnabledMask forKey:@"adcEnabledMask"];
 	[encoder encodeBool:shipValues		forKey:@"shipValues"];
-	[encoder encodeInt:pollTime			forKey:@"pollTime"];
-    [encoder encodeInt:firmwareRev      forKey:@"firmwareRev"];
+	[encoder encodeInteger:pollTime			forKey:@"pollTime"];
+    [encoder encodeInteger:firmwareRev      forKey:@"firmwareRev"];
     
 	int i;
 	for(i=0;i<2;i++){
@@ -1354,10 +1354,10 @@ struct {
     }
 
 	[encoder encodeBool:loopForever		forKey:@"loopForever"];
-	[encoder encodeInt:pulseCount		forKey:@"pulseCount"];
-	[encoder encodeInt:pulseHighTime	forKey:@"pulseHighTime"];
-	[encoder encodeInt:pulseLowTime		forKey:@"pulseLowTime"];
-	[encoder encodeInt:pulserMask		forKey:@"pulserMask"];
+	[encoder encodeInteger:pulseCount		forKey:@"pulseCount"];
+	[encoder encodeInteger:pulseHighTime	forKey:@"pulseHighTime"];
+	[encoder encodeInteger:pulseLowTime		forKey:@"pulseLowTime"];
+	[encoder encodeInteger:pulserMask		forKey:@"pulserMask"];
 	[encoder encodeObject:dacs			forKey:@"dacs"];
 	[encoder encodeObject:amplitudes	forKey:@"amplitudes"];
 	[encoder encodeObject:feedBackResistors			forKey:@"feedBackResistors"];
@@ -1381,7 +1381,7 @@ struct {
     [objDictionary setObject:[NSNumber numberWithInt:crate]                 forKey:@"crate"];
     [objDictionary setObject:[NSNumber numberWithInt:slot]                  forKey:@"slot"];
 
-    [objDictionary setObject:[NSNumber numberWithInt:[self uniqueIdNumber]] forKey:@"preampID"];
+    [objDictionary setObject:[NSNumber numberWithInteger:[self uniqueIdNumber]] forKey:@"preampID"];
     [objDictionary setObject:[NSNumber numberWithInt:[self boardRev]]       forKey:@"boardRev"];
     [objDictionary setObject:[NSNumber numberWithLong:adcEnabledMask]       forKey:@"adcEnabledMask"];
     [objDictionary setObject:[NSNumber numberWithInt:pollTime]              forKey:@"pollTime"];

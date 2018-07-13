@@ -507,7 +507,7 @@ NSString* ORXYScannerLock = @"ORXYScannerLock";
 {
 	self = [super initWithCoder:decoder];
 	[[self undoManager] disableUndoRegistration];
-	[self setOptionMask:[decoder decodeInt32ForKey:@"ORXYScannerModelOptionMask"]];
+	[self setOptionMask:[decoder decodeIntegerForKey:@"ORXYScannerModelOptionMask"]];
 	[self setPatternType:[decoder decodeIntForKey:@"ORXYScannerModelPatternType"]];
 	[self setCmdFile:[decoder decodeObjectForKey:  @"ORXYScannerModelCmdFile"]];
 	[self setAbsMotion:[decoder decodeBoolForKey:  @"ORXYScannerModelAbsMotion"]];
@@ -529,8 +529,8 @@ NSString* ORXYScannerLock = @"ORXYScannerLock";
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt32:(int32_t)optionMask forKey:@"ORXYScannerModelOptionMask"];
-    [encoder encodeInt:patternType forKey:@"ORXYScannerModelPatternType"];
+    [encoder encodeInteger:optionMask forKey:@"ORXYScannerModelOptionMask"];
+    [encoder encodeInteger:patternType forKey:@"ORXYScannerModelPatternType"];
     [encoder encodeObject:cmdFile forKey:  @"ORXYScannerModelCmdFile"];
     [encoder encodeBool:absMotion forKey:  @"ORXYScannerModelAbsMotion"];
     [encoder encodeBool:portWasOpen forKey:@"ORXYScannerModelPortWasOpen"];

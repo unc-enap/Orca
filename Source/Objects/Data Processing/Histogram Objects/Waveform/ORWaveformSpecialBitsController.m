@@ -48,7 +48,7 @@
 #pragma mark ¥¥¥Data Source
 - (void) plotter:(id)aPlot index:(int)index x:(double*)x y:(double*)y
 {
-    int thePlotTag = [aPlot tag];
+    int thePlotTag = (int)[aPlot tag];
 	if(thePlotTag == 0){
 		unsigned long aMask =  [(ORMaskedIndexedWaveformWithSpecialBits*)model mask];
 		*y =  ([model value:index] & aMask) + [model scaleOffset];
