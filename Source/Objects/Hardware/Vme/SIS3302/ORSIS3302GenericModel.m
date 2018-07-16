@@ -1306,12 +1306,12 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id				= kSIS3302; //should be unique
-	configStruct->card_info[index].hw_mask[0]				= dataId;	//better be unique
-	configStruct->card_info[index].hw_mask[1]				= lostDataId;	//better be unique
+	configStruct->card_info[index].hw_mask[0]				= (uint32_t)dataId;	//better be unique
+	configStruct->card_info[index].hw_mask[1]				= (uint32_t)lostDataId;	//better be unique
 	configStruct->card_info[index].slot						= [self slot];
 	configStruct->card_info[index].crate					= [self crateNumber];
 	configStruct->card_info[index].add_mod					= [self addressModifier];
-	configStruct->card_info[index].base_add					= [self baseAddress];
+	configStruct->card_info[index].base_add					= (uint32_t)[self baseAddress];
 	configStruct->card_info[index].deviceSpecificData[0]	= [self sampleLength:0]/2;
 	configStruct->card_info[index].deviceSpecificData[1]	= [self sampleLength:1]/2;
 	configStruct->card_info[index].deviceSpecificData[2]	= [self sampleLength:2]/2;
@@ -1401,7 +1401,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
     [self setFirmwareVersion:			[decoder decodeFloatForKey:@"firmwareVersion"]];
 	
 
-    [self setClockSource:				[decoder decodeIntegerForKey:@"clockSource"]];
+    [self setClockSource:				[decoder decodeIntForKey:@"clockSource"]];
 	[self setGtMask:					[decoder decodeIntegerForKey:@"gtMask"]];
 	[self setUseTrapTriggerMask:		[decoder decodeIntegerForKey:@"trapMask"]];    
     [self setWaveFormRateGroup:			[decoder decodeObjectForKey:@"waveFormRateGroup"]];
@@ -1414,9 +1414,9 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
     [self setInternalTrigStopEnabled:         [decoder decodeIntegerForKey:@"internalTrigStopEnabled"]];    
     [self setMultiEventModeEnabled:           [decoder decodeIntegerForKey:@"multiEventModeEnabled"]];    
     [self setAutostartModeEnabled:            [decoder decodeIntegerForKey:@"autostartModeEnabled"]];    
-    [self setStartDelay:                      [decoder decodeIntegerForKey:@"startDelay"]];    
-    [self setStopDelay:                       [decoder decodeIntegerForKey:@"stopDelay"]];    
-    [self setMaxEvents:                       [decoder decodeIntegerForKey:@"maxEvents"]];    
+    [self setStartDelay:                      [decoder decodeIntForKey:@"startDelay"]];
+    [self setStopDelay:                       [decoder decodeIntForKey:@"stopDelay"]];
+    [self setMaxEvents:                       [decoder decodeIntForKey:@"maxEvents"]];
 	
     sampleLengths = 			[[decoder decodeObjectForKey:@"sampleLengths"]retain];
    
@@ -1462,7 +1462,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 
     [encoder encodeInteger:gtMask					forKey:@"gtMask"];
 	[encoder encodeInteger:useTrapTriggerMask       forKey:@"trapMask"];        
-    [encoder encodeInteger:clockSource				forKey:@"clockSource"];
+    [encoder encodeInt:clockSource				forKey:@"clockSource"];
     
     [encoder encodeInteger:stopAtEventLengthMask    forKey:@"stopEventAtLength"];
     [encoder encodeInteger:enablePageWrapMask       forKey:@"enablePageWrap"];
@@ -1488,9 +1488,9 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
     [encoder encodeInteger:internalTrigStopEnabled   forKey:@"internalTrigStopEnabled"];    
     [encoder encodeInteger:multiEventModeEnabled   forKey:@"multiEventModeEnabled"];    
     [encoder encodeInteger:autostartModeEnabled   forKey:@"autostartModeEnabled"];    
-    [encoder encodeInteger:startDelay   forKey:@"startDelay"];    
-    [encoder encodeInteger:stopDelay   forKey:@"stopDelay"];    
-    [encoder encodeInteger:maxEvents   forKey:@"maxEvents"];    
+    [encoder encodeInt:startDelay   forKey:@"startDelay"];
+    [encoder encodeInt:stopDelay   forKey:@"stopDelay"];
+    [encoder encodeInt:maxEvents   forKey:@"maxEvents"];
 	
 	
 }

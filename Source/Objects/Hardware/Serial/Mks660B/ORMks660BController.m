@@ -446,7 +446,7 @@
 
 - (void) decimalPtPositionAction:(id)sender
 {
-	[model setDecimalPtPosition:[sender indexOfSelectedItem]];
+	[model setDecimalPtPosition:(int)[sender indexOfSelectedItem]];
 	[model writeDecimalPtPosition];
 	[model performSelector:@selector(readPressure) withObject:nil afterDelay:.1];
 }
@@ -518,19 +518,19 @@
 
 - (IBAction) pollTimeAction:(id)sender
 {
-	[model setPollTime:[[sender selectedItem] tag]];
+	[model setPollTime:(int)[[sender selectedItem] tag]];
 }
 
 - (IBAction) lowSetPointAction:(id)sender;
 {
-	int index = [[sender selectedCell] tag];
+	int index = (int)[[sender selectedCell] tag];
 	float theValue = [[sender selectedCell] floatValue] * powf(10.,4-[model decimalPtPosition]);;
 	[model setLowSetPoint:index withValue:theValue];
 }
 
 - (IBAction) highSetPointAction:(id)sender;
 {
-	int index = [[sender selectedCell] tag];
+	int index = (int)[[sender selectedCell] tag];
 	float theValue = [[sender selectedCell] floatValue] * powf(10.,4-[model decimalPtPosition]);
 	[model setHighSetPoint:index withValue:theValue];
 }
@@ -624,12 +624,12 @@
 #pragma mark ***Data Source
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	return [[model timeRate] count];
+	return (int)[[model timeRate] count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-	int count = [[model timeRate] count];
+	int count = (int)[[model timeRate] count];
 	int index = count-i-1;
 	*xValue = [[model timeRate]timeSampledAtIndex:index];
 	*yValue = [[model timeRate] valueAtIndex:index];

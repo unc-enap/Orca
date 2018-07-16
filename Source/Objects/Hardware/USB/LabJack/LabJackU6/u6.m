@@ -269,7 +269,7 @@ invalid:
 long getCalibrationInfo(HANDLE hDevice, u6CalibrationInfo *caliInfo)
 {
     uint8 sendBuffer[64], recBuffer[64];
-    int sentRec = 0, offset = 0, i = 0;
+    unsigned long sentRec = 0, offset = 0, i = 0;
 
     /* sending ConfigU6 command to get see if hi res */
     sendBuffer[1] = (uint8)(0xF8);  //command byte
@@ -360,7 +360,7 @@ commandByteError:
 
 long getTdacCalibrationInfo(HANDLE hDevice, u6TdacCalibrationInfo *caliInfo, uint8 DIOAPinNum)
 {
-    int err;
+    long err;
     uint8 options, speedAdjust, sdaPinNum, sclPinNum;
     uint8 address, numByteToSend, numBytesToReceive, errorcode;
     uint8 bytesCommand[1], bytesResponse[32], ackArray[4];
@@ -538,7 +538,8 @@ long I2C(HANDLE hDevice, uint8 I2COptions, uint8 SpeedAdjust, uint8 SDAPinNum, u
     uint8 *sendBuff, *recBuff;
     uint16 checksumTotal = 0;
     uint32 ackArrayTotal, expectedAckArray;
-    int sendChars, recChars, sendSize, recSize, i, ret;
+    unsigned long sendChars, recChars;
+    int sendSize, recSize, i, ret;
 
     *Errorcode = 0;
     ret = 0;
@@ -713,12 +714,12 @@ long eAIN(HANDLE Handle, u6CalibrationInfo *CalibrationInfo, long ChannelP, long
     }
     else {
         if( ChannelP == 14 ){
-            if( getTempKCalibrated(CalibrationInfo, Resolution, gain, 1, bytesV, Voltage) < 0 )
+            if( getTempKCalibrated(CalibrationInfo, (int)Resolution, gain, 1, bytesV, Voltage) < 0 )
                 return -1;
         }
         else {
             gain = recDataBuff[3]/16;
-            if( getAinVoltCalibrated(CalibrationInfo, Resolution, gain, 1, bytesV, Voltage) < 0 )
+            if( getAinVoltCalibrated(CalibrationInfo, (int)Resolution, gain, 1, bytesV, Voltage) < 0 )
                 return -1;
         }
     }
@@ -936,7 +937,7 @@ long ehConfigIO(HANDLE hDevice, uint8 inWriteMask, uint8 inNumberTimersEnabled, 
 {
     uint8 sendBuff[16], recBuff[16];
     uint16 checksumTotal;
-    int sendChars, recChars, i;
+    unsigned long sendChars, recChars, i;
 
     sendBuff[1] = (uint8)(0xF8);  //Command byte
     sendBuff[2] = (uint8)(0x05);  //Number of data words
@@ -1004,7 +1005,7 @@ long ehConfigTimerClock(HANDLE hDevice, uint8 inTimerClockConfig, uint8 inTimerC
 {
     uint8 sendBuff[10], recBuff[10];
     uint16 checksumTotal;
-    int sendChars, recChars;
+    unsigned long sendChars, recChars;
 
     sendBuff[1] = (uint8)(0xF8);  //Command byte
     sendBuff[2] = (uint8)(0x02);  //Number of data words
@@ -1071,7 +1072,8 @@ long ehConfigTimerClock(HANDLE hDevice, uint8 inTimerClockConfig, uint8 inTimerC
 long ehFeedback(HANDLE hDevice, uint8 *inIOTypesDataBuff, long inIOTypesDataSize, uint8 *outErrorcode, uint8 *outErrorFrame, uint8 *outDataBuff, long outDataSize)
 {
     uint16 checksumTotal;
-    int sendChars, recChars, i, sendDWSize, recDWSize;
+    long sendChars, recChars, i;
+    long sendDWSize, recDWSize;
 
     int ret          = 0;
     int commandBytes = 6;
@@ -1099,7 +1101,7 @@ long ehFeedback(HANDLE hDevice, uint8 *inIOTypesDataBuff, long inIOTypesDataSize
 
     for( i = 0; i < inIOTypesDataSize; i++ )sendBuff[i+commandBytes+1] = inIOTypesDataBuff[i];
 
-    extendedChecksum(sendBuff, (sendDWSize+commandBytes));
+    extendedChecksum(sendBuff, (int)(sendDWSize+commandBytes));
 
     //Sending command to U6
     if( (sendChars = LJUSB_Write(hDevice, sendBuff, (sendDWSize+commandBytes))) < sendDWSize+commandBytes ){
@@ -1127,7 +1129,7 @@ long ehFeedback(HANDLE hDevice, uint8 *inIOTypesDataBuff, long inIOTypesDataSize
             NSLog(@"ehFeedback error : did not read all of the expected buffer (received %d, expected %d )\n", recChars, commandBytes+recDWSize);
     }
 
-    checksumTotal = extendedChecksum16(recBuff, recChars);
+    checksumTotal = extendedChecksum16(recBuff, (int)recChars);
     if( (uint8)((checksumTotal / 256 ) & 0xff) != recBuff[5] ){
         NSLog(@"ehFeedback error : read buffer has bad checksum16(MSB)\n");
         ret = -1;

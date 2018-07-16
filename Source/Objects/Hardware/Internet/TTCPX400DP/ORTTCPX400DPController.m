@@ -335,7 +335,7 @@
 
 - (IBAction) commandPulldownAction:(id)sender
 {
-    int selectedRow = [[sender selectedItem] tag];
+    int selectedRow = (int)[[sender selectedItem] tag];
     [inputValueText setEnabled:[model commandTakesInput:selectedRow]];
     [outputNumberPopUp setEnabled:[model commandTakesOutputNumber:selectedRow ]];    
 }
@@ -343,8 +343,8 @@
 - (IBAction) sendCommandAction:(id)sender
 {
     [self endEditing];
-    int cmd = [[commandPopUp selectedItem] tag];
-    int output = [[outputNumberPopUp selectedItem] tag];
+    int cmd = (int)[[commandPopUp selectedItem] tag];
+    int output = (int)[[outputNumberPopUp selectedItem] tag];
     float input = [inputValueText floatValue];
     [model writeCommand:cmd withInput:input withOutputNumber:output];
     //[sendCommandButton setEnabled:NO];
@@ -381,13 +381,13 @@
 
 #define SYNCALL(val)                                                                        \
     [model setWriteToSetOverVoltageProtectionTripPoint:vt ## val                            \
-                                            withOutput:[writeVoltTrip ## val tag]];         \
+                                            withOutput:(unsigned int)[writeVoltTrip ## val tag]];         \
     [model setWriteToSetOverCurrentProtectionTripPoint:ct ## val                            \
-                                            withOutput:[writeCurrentTrip ## val tag]];      \
+                                            withOutput:(unsigned int)[writeCurrentTrip ## val tag]];      \
     [model setWriteToSetCurrentLimit:c ## val                                               \
-                          withOutput:[writeCurrent ## val tag]];                            \
+                          withOutput:(unsigned int)[writeCurrent ## val tag]];                            \
     [model setWriteToSetVoltage:v ## val                                                    \
-                     withOutput:[writeVolt ## val tag]];
+                     withOutput:(unsigned int)[writeVolt ## val tag]];
 
     DEF_TMP_VARS(One)
     DEF_TMP_VARS(Two)

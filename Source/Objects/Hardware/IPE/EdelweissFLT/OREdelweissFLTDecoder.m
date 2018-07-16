@@ -85,24 +85,24 @@
 
 	unsigned long energy = ptr[6];
 	
-	int page = energy/kPageLength;
-	int startPage = page*kPageLength;
-	int endPage = (page+1)*kPageLength;
+	unsigned long page = energy/kPageLength;
+	unsigned long startPage = page*kPageLength;
+	unsigned long endPage = (page+1)*kPageLength;
 	
 	//channel by channel histograms
 	[aDataSet histogram:energy - page*kPageLength 
 				numBins:kPageLength sender:self  
-			   withKeys:@"FLTv4", [NSString stringWithFormat:@"Energy (%d - %d)",startPage,endPage], crateKey,stationKey,channelKey,nil];
+			   withKeys:@"FLTv4", [NSString stringWithFormat:@"Energy (%lld - %d)",startPage,endPage], crateKey,stationKey,channelKey,nil];
 	
 	//accumulated card level histograms
 	[aDataSet histogram:energy - page*kPageLength 
 				numBins:kPageLength sender:self  
-			   withKeys:@"FLTv4", [NSString stringWithFormat:@"Total Card Energy (%d - %d)",startPage,endPage], crateKey,stationKey,nil];
+			   withKeys:@"FLTv4", [NSString stringWithFormat:@"Total Card Energy (%ld - %d)",startPage,endPage], crateKey,stationKey,nil];
 	
 	//accumulated crate level histograms
 	[aDataSet histogram:energy - page*kPageLength 
 				numBins:kPageLength sender:self  
-			   withKeys:@"FLTv4", [NSString stringWithFormat:@"Total Crate Energy (%d - %d)",startPage,endPage], crateKey,nil];
+			   withKeys:@"FLTv4", [NSString stringWithFormat:@"Total Crate Energy (%ld - %d)",startPage,endPage], crateKey,nil];
 
 	//get the actual object
 	if(getRatesFromDecodeStage && !skipRateCounts){
@@ -323,13 +323,13 @@ startIndex=0;
 	//unsigned char crate		= ShiftAndExtract(ptr[1],21,0xf);
 	//unsigned char card		= ShiftAndExtract(ptr[1],16,0x1f);
 	//unsigned char chan		= ShiftAndExtract(ptr[1],8,0xff);
-    uint32_t sec            = ptr[2];
-    uint32_t subsec         = ptr[3]; // ShiftAndExtract(ptr[1],0,0xffffffff);
-    uint32_t chmap          = ptr[4];
-    uint32_t eventID        = ptr[5];
-    uint32_t energy         = ptr[6];
-    uint32_t eventFlags     = ptr[7];
-    uint32_t traceStart16 = ShiftAndExtract(eventFlags,8,0x7ff);//start of trace in short array
+    unsigned long sec            = ptr[2];
+    unsigned long subsec         = ptr[3]; // ShiftAndExtract(ptr[1],0,0xffffffff);
+    unsigned long chmap          = ptr[4];
+    unsigned long eventID        = ptr[5];
+    unsigned long energy         = ptr[6];
+    unsigned long eventFlags     = ptr[7];
+    unsigned long traceStart16 = ShiftAndExtract(eventFlags,8,0x7ff);//start of trace in short array
     
     NSString* title= @"EDELWEISS FLT Waveform Record\n\n";
 
@@ -339,19 +339,19 @@ startIndex=0;
     NSString* card      = [NSString stringWithFormat:@"Station    = %lu\n",(*ptr>>16) & 0x1f];
     NSString* fiber     = [NSString stringWithFormat:@"Fiber      = %lu\n",(*ptr>>12) & 0xf];
     NSString* chan      = [NSString stringWithFormat:@"Channel    = %lu\n",(*ptr>>8) & 0xf];
-    NSString* secStr    = [NSString stringWithFormat:@"Sec        = %d\n", sec];
-    NSString* subsecStr = [NSString stringWithFormat:@"SubSec     = %d\n", subsec];
-    NSString* energyStr = [NSString stringWithFormat:@"Energy     = %d\n", energy];
-    NSString* chmapStr  = [NSString stringWithFormat:@"ChannelMap = 0x%x\n", chmap];
-    NSString* eventIDStr= [NSString stringWithFormat:@"ReadPtr,Pg#= %d,%d\n", ShiftAndExtract(eventID,0,0x3ff),ShiftAndExtract(eventID,10,0x3f)];
-    NSString* offsetStr = [NSString stringWithFormat:@"Offset16   = %d\n", traceStart16];
-    NSString* versionStr= [NSString stringWithFormat:@"RecVersion = %d\n", ShiftAndExtract(eventFlags,0,0xf)];
+    NSString* secStr    = [NSString stringWithFormat:@"Sec        = %ld\n", sec];
+    NSString* subsecStr = [NSString stringWithFormat:@"SubSec     = %ld\n", subsec];
+    NSString* energyStr = [NSString stringWithFormat:@"Energy     = %ld\n", energy];
+    NSString* chmapStr  = [NSString stringWithFormat:@"ChannelMap = 0x%lx\n", chmap];
+    NSString* eventIDStr= [NSString stringWithFormat:@"ReadPtr,Pg#= %ld,%ld\n", ShiftAndExtract(eventID,0,0x3ff),ShiftAndExtract(eventID,10,0x3f)];
+    NSString* offsetStr = [NSString stringWithFormat:@"Offset16   = %ld\n", traceStart16];
+    NSString* versionStr= [NSString stringWithFormat:@"RecVersion = %ld\n", ShiftAndExtract(eventFlags,0,0xf)];
     NSString* eventFlagsStr
-                        = [NSString stringWithFormat:@"Flag(a,ap) = %d,%d\n", ShiftAndExtract(eventFlags,4,0x1),ShiftAndExtract(eventFlags,5,0x1)];
+                        = [NSString stringWithFormat:@"Flag(a,ap) = %ld,%d\n", ShiftAndExtract(eventFlags,4,0x1),ShiftAndExtract(eventFlags,5,0x1)];
     NSString* lengthStr = [NSString stringWithFormat:@"Length     = %lu\n", length];
     
     
-    NSString* evFlagsStr= [NSString stringWithFormat:@"EventFlags = 0x%x\n", eventFlags ];
+    NSString* evFlagsStr= [NSString stringWithFormat:@"EventFlags = 0x%lx\n", eventFlags ];
 
     return [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@",title,crate,card,fiber,chan,  
                 secStr, subsecStr, energyStr, chmapStr, eventIDStr, offsetStr, versionStr, eventFlagsStr, lengthStr,   evFlagsStr]; 
@@ -398,7 +398,7 @@ startIndex=0;
 	unsigned long seconds	= ptr[2];
 	unsigned long hitRateTotal = ptr[4];
 	int i;
-	int n = length - 5;
+	int n = (int)(length - 5);
 	for(i=0;i<n;i++){
 		int chan = ShiftAndExtract(ptr[5+i],20,0xff);
 		NSString* channelKey	= [self getChannelKey:chan];
@@ -431,13 +431,13 @@ startIndex=0;
     NSString* card  = [NSString stringWithFormat:@"Station    = %lu\n",ShiftAndExtract(ptr[1],16,0x1f)];
 	
 	unsigned long length		= ExtractLength(ptr[0]);
-    uint32_t ut_time			= ptr[2];
-    uint32_t hitRateLengthSec	= ptr[3]; // ShiftAndExtract(ptr[1],0,0xffffffff);
-    uint32_t newTotal			= ptr[4];
+    unsigned long ut_time			= ptr[2];
+    unsigned long hitRateLengthSec	= ptr[3]; // ShiftAndExtract(ptr[1],0,0xffffffff);
+    unsigned long newTotal			= ptr[4];
 
 	NSDate* date = [NSDate dateWithTimeIntervalSince1970:ut_time];
 	
-	NSMutableString *hrString = [NSMutableString stringWithFormat:@"UTTime     = %d\nHitrateLen = %d\nTotal HR   = %d\n",
+	NSMutableString *hrString = [NSMutableString stringWithFormat:@"UTTime     = %ld\nHitrateLen = %ld\nTotal HR   = %ld\n",
 						  ut_time,hitRateLengthSec,newTotal];
 	int i;
 	for(i=0; i<length-5; i++){

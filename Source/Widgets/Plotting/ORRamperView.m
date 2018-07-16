@@ -97,9 +97,9 @@
 		[[NSColor colorWithCalibratedRed:.7 green:0 blue:0 alpha:.1] set];
 		float y1 = yLowConstraint;
 		float y2 = yHighConstraint;
-		int index = [[model wayPoints] indexOfObject:selectedWayPoint];
+		int index = (int)[[model wayPoints] indexOfObject:selectedWayPoint];
 		if(index == [model wayPointCount]-1){
-			NSPoint nextToLastPoint = [[model wayPoint:[model wayPointCount]-2] xyPosition];
+			NSPoint nextToLastPoint = [[model wayPoint:(int)[model wayPointCount]-2] xyPosition];
 			float y = [yScale getPixAbs:nextToLastPoint.y];
 			float x = [xScale getPixAbs:nextToLastPoint.x];
 			[[NSColor colorWithCalibratedRed:.7 green:0 blue:0 alpha:.3] set];
@@ -165,7 +165,7 @@
 		[s release];
 	}
 	
-	int n = [model wayPointCount];
+	int n = (int)[model wayPointCount];
 	int i;
 	if(![model isRunning]){
 		for(i=0;i<n;i++){
@@ -234,7 +234,7 @@
 				[p release];
 			}
 			
-			int index = [wayPoints indexOfObject:selectedWayPoint];
+			int index = (int)[wayPoints indexOfObject:selectedWayPoint];
 			if(index == 0){
 				ORWayPoint* more = [wayPoints objectAtIndex:index+1];
 				xLowConstraint  = 0;

@@ -388,12 +388,12 @@ NSString* ORA3818Lock										= @"ORA3818Lock";
     
 }
 
-- (unsigned int) readWriteType
+- (unsigned long) readWriteType
 {
     return readWriteType;
 }
 
-- (void) setReadWriteType:(unsigned int)aValue
+- (void) setReadWriteType:(unsigned long)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setReadWriteType:readWriteType];
     readWriteType = aValue;
@@ -1208,8 +1208,12 @@ typedef struct a3818_comm {
     // now can call methods to communicate with user client and rest of driver
     // call clientMemoryFortype() in driver user client to map A3818 address spaces
     // map A3818 CSR register address space
-    ret = IOConnectMapMemory(dataPort, 1, mach_task_self(), &CSRRegisterAddress,
-                             &CSRRegisterLength, kIOMapAnywhere);
+    ret = IOConnectMapMemory(dataPort,
+                             1,
+                             mach_task_self(),
+                             &CSRRegisterAddress,
+                             &CSRRegisterLength,
+                             kIOMapAnywhere);
     if( ret != KERN_SUCCESS ) {
         return NO;
     }
@@ -1874,13 +1878,13 @@ static NSString *ORA3818ReadWriteAddSpace		= @"A3818 Read/Write Address Space";
     
     [self setRangeToDo:[decoder decodeIntegerForKey:@"ORA3818ModelRange"]];
     [self setDoRange:[decoder decodeBoolForKey:@"ORA3818ModelDoRange"]];
-    [self setDualPortAddress:[decoder decodeIntegerForKey:ORA3818DualPortAddress]];
-    [self setDualPortRamSize:[decoder decodeIntegerForKey:ORA3818DualPortRamSize]];
+    [self setDualPortAddress:[decoder decodeIntForKey:ORA3818DualPortAddress]];
+    [self setDualPortRamSize:[decoder decodeIntForKey:ORA3818DualPortRamSize]];
     
     [self setRwAddress:[decoder decodeIntegerForKey:ORA3818RWAddress]];
     [self setWriteValue:[decoder decodeIntegerForKey:ORA3818WriteValue]];
-    [self setRwAddressModifier:[decoder decodeIntegerForKey:ORA3818ReadWriteAddMod]];
-    [self setReadWriteIOSpace:[decoder decodeIntegerForKey:ORA3818ReadWriteAddSpace]];
+    [self setRwAddressModifier:[decoder decodeIntForKey:ORA3818ReadWriteAddMod]];
+    [self setReadWriteIOSpace:[decoder decodeIntForKey:ORA3818ReadWriteAddSpace]];
     [self setReadWriteType:[decoder decodeIntegerForKey:ORA3818ReadWriteType]];	
     
     [[self undoManager] enableUndoRegistration];
@@ -1893,13 +1897,13 @@ static NSString *ORA3818ReadWriteAddSpace		= @"A3818 Read/Write Address Space";
     [super encodeWithCoder:encoder];
     [encoder encodeInteger:rangeToDo forKey:@"ORA3818ModelRange"];
     [encoder encodeBool:doRange forKey:@"ORA3818ModelDoRange"];
-    [encoder encodeInteger:dualPortAddress forKey:ORA3818DualPortAddress];
-    [encoder encodeInteger:dualPortRamSize forKey:ORA3818DualPortRamSize];
+    [encoder encodeInt:dualPortAddress forKey:ORA3818DualPortAddress];
+    [encoder encodeInt:dualPortRamSize forKey:ORA3818DualPortRamSize];
     
     [encoder encodeInteger:rwAddress forKey:ORA3818RWAddress];
     [encoder encodeInteger:writeValue forKey:ORA3818WriteValue];
-    [encoder encodeInteger:rwAddressModifier forKey:ORA3818ReadWriteAddMod];
-    [encoder encodeInteger:readWriteIOSpace forKey:ORA3818ReadWriteAddSpace];
+    [encoder encodeInt:rwAddressModifier forKey:ORA3818ReadWriteAddMod];
+    [encoder encodeInt:readWriteIOSpace forKey:ORA3818ReadWriteAddSpace];
     [encoder encodeInteger:readWriteType forKey:ORA3818ReadWriteType];
     
 }

@@ -186,14 +186,14 @@
 }
 - (void) rwAddressTextChanged:(NSNotification*)aNotification
 {
-	[addressValueField setIntValue:[model rwAddress]];
-	[addressStepper setIntValue:[model rwAddress]];
+	[addressValueField setIntegerValue:[model rwAddress]];
+	[addressStepper setIntegerValue:[model rwAddress]];
 }
 
 - (void) writeValueTextChanged:(NSNotification*)aNotification
 {
-	[writeValueField setIntValue:[model writeValue]];
-	[writeValueStepper setIntValue:[model writeValue]];
+	[writeValueField setIntegerValue:[model writeValue]];
+	[writeValueStepper setIntegerValue:[model writeValue]];
 }
 
 - (void) readWriteTypeChanged:(NSNotification*)aNotification
@@ -290,21 +290,21 @@
 - (IBAction) readWriteTypeMatrixAction:(id)sender
 { 
     if ([model readWriteType] != [sender selectedTag]){
-        [model setReadWriteType:[sender selectedTag]];
+        [model setReadWriteType:(int)[sender selectedTag]];
     }
 }
 
 - (IBAction) ioSpaceAction:(id)sender
 {
     if ([model readWriteIOSpace] != [sender indexOfSelectedItem]) { 
-        [model setReadWriteIOSpace:[sender indexOfSelectedItem]];
+        [model setReadWriteIOSpace:(int)[sender indexOfSelectedItem]];
     }
 }
 
 - (IBAction) addressModifierAction:(id)sender
 {
     if ([model rwAddressModifier] != [sender indexOfSelectedItem]) {
-        [model setRwAddressModifier:[sender indexOfSelectedItem]];
+        [model setRwAddressModifier:(int)[sender indexOfSelectedItem]];
     }
 }
 
@@ -405,13 +405,13 @@
     unsigned char  cdata;
     
     [self endEditing];
-    int 			startAddress 	= [model rwAddress];
-	int				endAddress		= [model doRange]?startAddress + [model rangeToDo] : startAddress;
+    unsigned long   startAddress 	= [model rwAddress];
+	unsigned long	endAddress		= [model doRange]?startAddress + [model rangeToDo] : startAddress;
     unsigned short 	addressModifier = [model rwAddressModifierValue];
     unsigned short 	addressSpace	= [model rwIOSpaceValue];
     unsigned long  	ldata			= [model writeValue];
     
-	int address = startAddress;
+	unsigned long address = startAddress;
 	if([model doRange] && [model rangeToDo]==0){
 		NSLog(@"Range == 0: nothing to do\n");
 		return;

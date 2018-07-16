@@ -702,8 +702,8 @@
 
 - (IBAction)adeiListContextMenuRemoveAction:(id)sender
 {
-    int row = [itemTableView selectedRow] ; 
-    int numRow = [itemTableView numberOfSelectedRows] ; 
+    int row = (int)[itemTableView selectedRow] ;
+    int numRow = (int)[itemTableView numberOfSelectedRows] ;
     if(numRow != 1){//
         NSLog(@"ORIpeSimulationController: Nothing selected or bad selection! %i\n",row);
         return;
@@ -1079,7 +1079,7 @@ autoselect an edge, and we want this drawer to open only on specific edges. */
 {
     if(aTableView==itemTableView){
 		if(row<[model pollingLookUpCount]){
-			if([model isControlItem:row]) return [NSColor colorWithCalibratedRed:1.0 green:.5 blue:.5 alpha:.3];
+			if([model isControlItem:(int)row]) return [NSColor colorWithCalibratedRed:1.0 green:.5 blue:.5 alpha:.3];
 			else return nil;
 		}
     }
@@ -1093,7 +1093,7 @@ autoselect an edge, and we want this drawer to open only on specific edges. */
     while (current_index != NSNotFound) {
 		NSDictionary* itemDictionary = [model requestCacheItem:current_index];
 		if(itemDictionary){
-			int componentCount = [[[itemDictionary objectForKey:@"Path"] componentsSeparatedByString:@"/"] count];
+			NSUInteger componentCount = [[[itemDictionary objectForKey:@"Path"] componentsSeparatedByString:@"/"] count];
 			if(componentCount==4){
 				NSString* aUrl = [itemDictionary objectForKey:@"URL"];
 				NSString* aPath = [itemDictionary objectForKey:@"Path"];

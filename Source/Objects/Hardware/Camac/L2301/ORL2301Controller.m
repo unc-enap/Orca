@@ -131,7 +131,7 @@
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"L2301 (Station %d)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"L2301 (Station %ld)",[model stationNumber]]];
 }
 
 

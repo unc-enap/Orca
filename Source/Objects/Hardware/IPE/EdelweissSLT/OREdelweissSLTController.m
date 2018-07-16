@@ -524,7 +524,7 @@ return;
 
 - (void) pixelBusEnableRegChanged:(NSNotification*)aNote
 {
-	[pixelBusEnableRegTextField setIntValue: [model pixelBusEnableReg]];
+	[pixelBusEnableRegTextField setIntegerValue: [model pixelBusEnableReg]];
 	int i;
 	for(i=0;i<20;i++){
 		[[pixelBusEnableRegMatrix cellWithTag:i] setIntValue: ([model pixelBusEnableReg] & (0x1 <<i))];
@@ -693,7 +693,7 @@ return;
 
 - (void) nextPageDelayChanged:(NSNotification*)aNote
 {
-	[nextPageDelaySlider setIntValue:100-[model nextPageDelay]];
+	[nextPageDelaySlider setIntegerValue:100-[model nextPageDelay]];
 	[nextPageDelayField  setFloatValue:[model nextPageDelay]*102.3/100.];
 }
 
@@ -709,8 +709,8 @@ return;
 
 - (void) pageSizeChanged:(NSNotification*)aNote
 {
-	[pageSizeField setIntValue: [model pageSize]];
-	[pageSizeStepper setIntValue: [model pageSize]];
+	[pageSizeField setIntegerValue: [model pageSize]];
+	[pageSizeStepper setIntegerValue: [model pageSize]];
 }
 
 
@@ -849,7 +849,7 @@ return;
 - (void) writeValueChanged:(NSNotification*) aNote
 {
 	[self updateStepper:regWriteValueStepper setting:[model writeValue]];
-    [regWriteValueTextField setIntValue:[model writeValue]];
+    [regWriteValueTextField setIntegerValue:[model writeValue]];
 }
 
 - (void) displayEventLoopChanged:(NSNotification*) aNote
@@ -879,7 +879,7 @@ return;
 	[[miscCntrlBitsMatrix cellWithTag:0] setIntValue:value & kCtrlInvert];
 	[[miscCntrlBitsMatrix cellWithTag:1] setIntValue:value & kCtrlLedOff];
 	[[miscCntrlBitsMatrix cellWithTag:2] setIntValue:value & kCtrlOnLine];
-	[controlRegNumFifosTextField setIntValue:(value & kCtrlNumFIFOs)>>28];
+	[controlRegNumFifosTextField setIntegerValue:(value & kCtrlNumFIFOs)>>28];
 }
 
 - (void) populatePullDown
@@ -926,7 +926,7 @@ return;
 
 - (void) fifoForUDPDataPortPUAction:(id)sender
 {
-	[model setFifoForUDPDataPort:[sender indexOfSelectedItem]];	
+	[model setFifoForUDPDataPort:(int)[sender indexOfSelectedItem]];
 }
 
 - (void) useStandardUDPDataPortsCBAction:(id)sender
@@ -942,7 +942,7 @@ return;
 - (void) lowLevelRegInHexPUAction:(id)sender /*lowLevelRegInHexPU*/
 {
 	//[model setLowLevelRegInHex:[sender intValue]];	
-	[model setLowLevelRegInHex:[sender indexOfSelectedItem]];	
+	[model setLowLevelRegInHex:(int)[sender indexOfSelectedItem]];
 }
 
 - (void) statusHighRegTextFieldAction:(id)sender
@@ -1036,7 +1036,7 @@ return;
 
 - (IBAction) sltDAQModePUAction:(id)sender
 {
-	[model setSltDAQMode:[[sltDAQModePU selectedItem] tag]];	
+	[model setSltDAQMode:(int)[[sltDAQModePU selectedItem] tag]];	
 	//[model setSltDAQMode:[[sender selectedItem] tag]];	
 }
 
@@ -1099,7 +1099,7 @@ return;
 
 - (void) selectedFifoIndexPUAction:(id)sender
 {
-	[model setSelectedFifoIndex:[sender indexOfSelectedItem]];	//sender is selectedFifoIndexPU
+	[model setSelectedFifoIndex:(int)[sender indexOfSelectedItem]];	//sender is selectedFifoIndexPU
 }
 
 
@@ -1479,7 +1479,7 @@ return;
 
 - (IBAction) readRegAction: (id) sender
 {
-	int index = [registerPopUp indexOfSelectedItem];
+	int index = (int)[registerPopUp indexOfSelectedItem];
 	@try {
 		//unsigned long value = [model readReg:index];
 		//NSLog(@"SLT reg: %@ value: 0x%x\n",[model getRegisterName:index],value);
@@ -1507,7 +1507,7 @@ return;
 - (IBAction) writeRegAction: (id) sender
 {
 	[self endEditing];
-	int index = [registerPopUp indexOfSelectedItem];
+	int index = (int)[registerPopUp indexOfSelectedItem];
 	@try {
 		//[model writeReg:index value:[model writeValue]];
 		//NSLog(@"wrote 0x%x to SLT reg: %@ \n",[model writeValue],[model getRegisterName:index]);

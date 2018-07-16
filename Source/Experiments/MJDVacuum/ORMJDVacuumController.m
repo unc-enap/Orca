@@ -303,7 +303,7 @@
 
 - (void) coolerModeAction:(id)sender
 {
-	[model setCoolerMode:[sender indexOfSelectedItem]];
+	[model setCoolerMode:(int)[sender indexOfSelectedItem]];
 }
 - (IBAction) showGridAction:(id)sender
 {
@@ -314,14 +314,14 @@
 {
 	[self endEditing];
 	
-	int gateValveTag	  = [sender tag];
+	int gateValveTag	  = (int)[sender tag];
 	ORVacuumGateValve* gv = [model gateValve:gateValveTag];
 	int currentValveState = [gv state];
 	
 	BOOL constraintsInPlace = [[gv constraints] count]>0;
 	if(constraintsInPlace && ![model disableConstraints]){
 		NSArray* allKeys = [[gv constraints] allKeys];
-		int n = [allKeys count];
+		int n = (int)[allKeys count];
 		[constraintTitleField setStringValue:[NSString stringWithFormat:@"%@ can not be opened because it has %d constraint%@ in effect. See below for more info.",
 											  [gv label],
 											  n,
@@ -434,7 +434,7 @@
 {
     [gvControlPanel orderOut:nil];
     [NSApp endSheet:gvControlPanel];
-	int gateValveTag = [gvControlButton tag];
+	int gateValveTag = (int)[gvControlButton tag];
 	int currentValveState = [model stateOfGateValve:gateValveTag];
 	
 	if(currentValveState == kGVOpen)       [model closeGateValve:gateValveTag];
@@ -540,7 +540,7 @@
 		if(rowIndex < [theGateValves count]){
 			ORVacuumGateValve* gv = [theGateValves objectAtIndex:rowIndex];
 			if([[aTableColumn identifier] isEqualToString:@"partTag"]){
-				return [NSNumber numberWithInt:rowIndex];
+				return [NSNumber numberWithInteger:rowIndex];
 			}
 			else if([[aTableColumn identifier] isEqualToString:@"label"]){
 				return [gv label];
@@ -550,7 +550,7 @@
 				else return @" ";
 			}
 			else if([[aTableColumn identifier] isEqualToString:@"constraints"]){
-				return [NSNumber numberWithInt:[gv constraintCount]];
+				return [NSNumber numberWithInteger:[gv constraintCount]];
 			}
 			else if([[aTableColumn identifier] isEqualToString:@"controlChannel"]){
 				if([gv controlObj])return [NSNumber numberWithInt:[gv controlChannel]];

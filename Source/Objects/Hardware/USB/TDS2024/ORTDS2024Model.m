@@ -122,7 +122,7 @@ NSString* ORWaveFormDataChanged            = @"ORWaveFormDataChanged";
 
 - (void) connectionChanged
 {
-	NSArray* interfaces = [[self getUSBController] interfacesForVender:[self vendorIDs] product:[self productIDs]];
+	NSArray* interfaces = [[self getUSBController] interfacesForVenders:[self vendorIDs] products:[self productIDs]];
 	NSString* sn = serialNumber;
 	if([interfaces count] == 1 && ![sn length]){
 		sn = [[interfaces objectAtIndex:0] serialNumber];
@@ -568,10 +568,10 @@ NSString* ORWaveFormDataChanged            = @"ORWaveFormDataChanged";
             [self writeToDevice:@"DATa:START 1"];
             [self writeToDevice:@"DATa:STOP 2500"];
             
-            int numBtyes = [self writeReadFromDevice: @"WFMPre?"
+            long numBtyes = [self writeReadFromDevice: @"WFMPre?"
                                       data: wfmPre[chan]
                                  maxLength: 256];
-            wfmPre[chan][numBtyes] = "\0";
+            wfmPre[chan][numBtyes] = '\0';
             
             unsigned char  reply[2600];
             long n1 = 0;

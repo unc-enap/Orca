@@ -2327,16 +2327,16 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id				= kSIS3320; //should be unique
-	configStruct->card_info[index].hw_mask[0]				= dataId;	//better be unique
+	configStruct->card_info[index].hw_mask[0]				= (uint32_t)dataId;	//better be unique
 	configStruct->card_info[index].slot						= [self slot];
 	configStruct->card_info[index].crate					= [self crateNumber];
 	configStruct->card_info[index].add_mod					= addressModifier;
-	configStruct->card_info[index].base_add					= baseAddress;
+	configStruct->card_info[index].base_add					= (uint32_t)baseAddress;
     int i;
     for(i=0;i<kNumSIS3320Groups;i++){
-        configStruct->card_info[index].deviceSpecificData[i]	= [self endAddressThreshold:i];
+        configStruct->card_info[index].deviceSpecificData[i]	= (uint32_t)[self endAddressThreshold:i];
     }
-    configStruct->card_info[index].deviceSpecificData[kNumSIS3320Groups] = onlineMask;
+    configStruct->card_info[index].deviceSpecificData[kNumSIS3320Groups] = (uint32_t)onlineMask;
     
 	configStruct->card_info[index].num_Trigger_Indexes		= 0;
 	
@@ -2396,7 +2396,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
     [self setGtMask:                    [decoder decodeIntegerForKey:  @"gtMask"]];
     [self setTriggerOutMask:            [decoder decodeIntegerForKey:  @"triggerOutMask"]];
     [self setExtendedTriggerMask:       [decoder decodeIntegerForKey:  @"extendedTriggerMask"]];
-    [self setClockSource:               [decoder decodeIntegerForKey:  @"clockSource"]];
+    [self setClockSource:               [decoder decodeIntForKey:  @"clockSource"]];
     
     [self setOnlineMask:                [decoder decodeIntegerForKey:  @"onlineMask"]];
     
@@ -2466,7 +2466,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
     [encoder encodeInteger:gtMask					forKey:@"gtMask"];
     [encoder encodeInteger:triggerOutMask           forKey:@"triggerOutMask"];
     [encoder encodeInteger:extendedTriggerMask      forKey:@"extendedTriggerMask"];
-    [encoder encodeInteger:clockSource				forKey:@"clockSource"];
+    [encoder encodeInt:clockSource				forKey:@"clockSource"];
     [encoder encodeInteger:onlineMask               forKey:@"onlineMask"];
     
     int i;

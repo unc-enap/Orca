@@ -454,17 +454,17 @@ static Pulser33500CustomWaveformStruct waveformData[kNumWaveforms] = {
     
     [[self undoManager] disableUndoRegistration];
  	
-	channel =				[decoder decodeIntegerForKey:@"channel"];
+	channel =				[decoder decodeIntForKey:@"channel"];
 	[self setVoltage:		[decoder decodeFloatForKey:@"voltage"]];
 	[self setVoltageOffset:	[decoder decodeFloatForKey:@"voltageOffset"]];
     [self setFrequency:     [decoder decodeFloatForKey:@"frequency"]];
     [self setDutyCycle:     [decoder decodeFloatForKey:@"dutyCycle"]];
 	[self setBurstRate:		[decoder decodeFloatForKey:@"burstRate"]];
 	[self setBurstPhase:	[decoder decodeFloatForKey:@"burstPhase"]];
-	[self setBurstCount:	[decoder decodeIntegerForKey:@"burstCount"]];
+	[self setBurstCount:	[decoder decodeIntForKey:@"burstCount"]];
 	[self setTriggerSource:	[decoder decodeIntegerForKey:@"triggerSource"]];
 	[self setTriggerTimer:	[decoder decodeFloatForKey:@"triggerTimer"]];
-    [self setSelectedWaveform:     [decoder decodeIntegerForKey:@"selectedWaveform"]];
+    [self setSelectedWaveform:     [decoder decodeIntForKey:@"selectedWaveform"]];
     [self setBurstMode:     [decoder decodeBoolForKey:@"burstMode"]];
 
 	if(voltage==0 && frequency==0 && burstCount==0 && burstPhase==0){
@@ -484,17 +484,17 @@ static Pulser33500CustomWaveformStruct waveformData[kNumWaveforms] = {
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
 
-	[encoder encodeInteger:channel			forKey:@"channel"];
+	[encoder encodeInt:channel			forKey:@"channel"];
 	[encoder encodeFloat:voltage		forKey:@"voltage"];
 	[encoder encodeFloat:voltageOffset	forKey:@"voltageOffset"];
     [encoder encodeFloat:frequency      forKey:@"frequency"];
     [encoder encodeFloat:dutyCycle      forKey:@"dutyCycle"];
 	[encoder encodeFloat:burstRate		forKey:@"burstRate"];
 	[encoder encodeFloat:burstPhase		forKey:@"burstPhase"];
-	[encoder encodeInteger:burstCount		forKey:@"burstCount"];
+	[encoder encodeInt:burstCount		forKey:@"burstCount"];
 	[encoder encodeInteger:triggerSource	forKey:@"triggerSource"];
 	[encoder encodeFloat:triggerTimer	forKey:@"triggerTimer"];
-    [encoder encodeInteger:selectedWaveform forKey:@"selectedWaveform"];
+    [encoder encodeInt:selectedWaveform forKey:@"selectedWaveform"];
     [encoder encodeBool:burstMode       forKey:@"burstMode"];
 }
 
@@ -1004,7 +1004,7 @@ static Pulser33500CustomWaveformStruct waveformData[kNumWaveforms] = {
 - (void) normalizeWaveform
 {
 	float* w = (float*)[waveform bytes];
-	int n = [waveform length]/sizeof(float);
+	int n = (int)[waveform length]/sizeof(float);
 	int i;
 	float maxValue = -9.9E10;
 	float minValue = 9.9E10;

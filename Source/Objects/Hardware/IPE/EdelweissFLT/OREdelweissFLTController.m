@@ -71,7 +71,7 @@
 	[rateTextFields setFormatter:rateFormatter];
     blankView = [[NSView alloc] init];
     
-    NSString* key = [NSString stringWithFormat: @"orca.OREdelweissFLT%d.selectedtab",[model stationNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.OREdelweissFLT%lu.selectedtab",[model stationNumber]];
     NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
@@ -576,12 +576,12 @@
 
 - (void) hitrateLimitIonChanged:(NSNotification*)aNote
 {
-	[hitrateLimitIonTextField setIntValue: [model hitrateLimitIon]];
+	[hitrateLimitIonTextField setIntegerValue: [model hitrateLimitIon]];
 }
 
 - (void) hitrateLimitHeatChanged:(NSNotification*)aNote
 {
-	[hitrateLimitHeatTextField setIntValue: [model hitrateLimitHeat]];
+	[hitrateLimitHeatTextField setIntegerValue: [model hitrateLimitHeat]];
 }
 
 - (void) chargeFICFileChanged:(NSNotification*)aNote
@@ -591,12 +591,12 @@
 
 - (void) progressOfChargeFICChanged:(NSNotification*)aNote
 {
-	//[progressOfChargeFICIndicator setIntValue: [model progressOfChargeFIC]];
+	//[progressOfChargeFICIndicator setIntegerValue: [model progressOfChargeFIC]];
 
     if([model progressOfChargeFIC]==0){
 	    //[progressOfChargeFICIndicator startAnimation: self];
         [progressOfChargeFICIndicator setDoubleValue: 0.0];
-        //[progressOfChargeFICTextField setIntValue: [model progressOfChargeFIC]];
+        //[progressOfChargeFICTextField setIntegerValue: [model progressOfChargeFIC]];
     }
     else if([model progressOfChargeFIC]==100){
 	    //[progressOfChargeFICIndicator startAnimation: self];
@@ -612,28 +612,28 @@
     {
 	    //[progressOfChargeFICIndicator startAnimation: self];
         [progressOfChargeFICIndicator setDoubleValue: (double)[model progressOfChargeFIC]];
-        [progressOfChargeFICTextField setIntValue: [model progressOfChargeFIC]];
+        [progressOfChargeFICTextField setIntegerValue: [model progressOfChargeFIC]];
     }
 }
 
 - (void) ficCardTriggerCmdChanged:(NSNotification*)aNote
 {
     int fiber = [model fiberSelectForBBAccess];
-    uint32_t val = [model ficCardTriggerCmdForFiber:fiber];
-	[ficCardTriggerCmdTextField setIntValue: val];
+    unsigned long val = [model ficCardTriggerCmdForFiber:fiber];
+	[ficCardTriggerCmdTextField setIntegerValue: val];
     //sub elements
-	[ficCardTriggerCmdDelayTextField setIntValue: val & 0xfff];
+	[ficCardTriggerCmdDelayTextField setIntegerValue: val & 0xfff];
     int i;
     for(i=0;i<4; i++){
-        [[ficCardTriggerCmdChanMaskMatrix cellAtRow:0 column:i] setIntValue: (val & (0x1<<(12+i)))];
+        [[ficCardTriggerCmdChanMaskMatrix cellAtRow:0 column:i] setIntegerValue: (val & (0x1<<(12+i)))];
     }
 }
 
 - (void) ficCardADC23CtrlRegChanged:(NSNotification*)aNote
 {
     int fiber = [model fiberSelectForBBAccess];
-    uint32_t reg = [model ficCardADC23CtrlRegForFiber:fiber];
-	[ficCardADC23CtrlRegTextField setIntValue: reg];
+    unsigned long reg = [model ficCardADC23CtrlRegForFiber:fiber];
+	[ficCardADC23CtrlRegTextField setIntegerValue: reg];
     
     uint32_t val = 0;
     //PUs
@@ -645,11 +645,11 @@
     int i;
     for(i=0; i<5; i++){
         if(reg & (0x1 << i)) val=1; else val=0;
-        [[ficCardADC0123CtrlRegMatrix cellAtRow:2 column:i] setIntValue: val];
+        [[ficCardADC0123CtrlRegMatrix cellAtRow:2 column:i] setIntegerValue: val];
     }
     for(i=0; i<5; i++){
         if(reg & (0x1 << (8+i))) val=1; else val=0;
-        [[ficCardADC0123CtrlRegMatrix cellAtRow:3 column:i] setIntValue: val];
+        [[ficCardADC0123CtrlRegMatrix cellAtRow:3 column:i] setIntegerValue: val];
     }
     
 }
@@ -657,8 +657,8 @@
 - (void) ficCardADC01CtrlRegChanged:(NSNotification*)aNote
 {
     int fiber = [model fiberSelectForBBAccess];
-    uint32_t reg = [model ficCardADC01CtrlRegForFiber:fiber];
-	[ficCardADC01CtrlRegTextField setIntValue: reg];
+    unsigned long reg = [model ficCardADC01CtrlRegForFiber:fiber];
+	[ficCardADC01CtrlRegTextField setIntegerValue: reg];
     
     uint32_t val = 0;
     //PUs
@@ -671,12 +671,12 @@
     for(i=0; i<5; i++){
         if(reg & (0x1 << i)) val=1; else val=0;
         //DEBUG OUTPUT:                 NSLog(@"%@::%@: row: %i   col: %i  val: %i (reg: 0x%08x)\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd), 0, i, val , reg);//TODO : DEBUG testing ...-tb-
-        [[ficCardADC0123CtrlRegMatrix cellAtRow:0 column:i] setIntValue: val];
+        [[ficCardADC0123CtrlRegMatrix cellAtRow:0 column:i] setIntegerValue: val];
     }
     for(i=0; i<5; i++){
         if(reg & (0x1 << (8+i))) val=1; else val=0;
         //DEBUG OUTPUT:                 NSLog(@"%@::%@: row: %i   col: %i  val: %i (reg: 0x%08x)\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd), 1, i+8, val , reg);//TODO : DEBUG testing ...-tb-
-        [[ficCardADC0123CtrlRegMatrix cellAtRow:1 column:i] setIntValue: val];
+        [[ficCardADC0123CtrlRegMatrix cellAtRow:1 column:i] setIntegerValue: val];
     }
     
 }
@@ -684,36 +684,36 @@
 - (void) ficCardCtrlReg2Changed:(NSNotification*)aNote
 {
     int fiber = [model fiberSelectForBBAccess];
-    int reg2 = [model ficCardCtrlReg2ForFiber:fiber];
-	[ficCardCtrlReg2TextField setIntValue: reg2];
+    unsigned long reg2 = [model ficCardCtrlReg2ForFiber:fiber];
+	[ficCardCtrlReg2TextField setIntegerValue: reg2];
     char reg2ch = [model ficCardCtrlReg2ForFiber:fiber];
-	[ficCardCtrlReg2AddrOffsTextField setIntValue: reg2ch];
-	[ficCardCtrlReg2AddrOffsetSlider setIntValue: reg2ch];
+	[ficCardCtrlReg2AddrOffsTextField setIntegerValue: reg2ch];
+	[ficCardCtrlReg2AddrOffsetSlider setIntegerValue: reg2ch];
     
-	[ficCardCtrlReg2GapCB setIntValue: ((reg2 >> kEWFlt_FICCtrl2_gap_Shift) & kEWFlt_FICCtrl2_gap_Mask)];
-	[ficCardCtrlReg2SyncResCB setIntValue: ((reg2 >> kEWFlt_FICCtrl2_SyncRes_Shift) & kEWFlt_FICCtrl2_SyncRes_Mask)];
+	[ficCardCtrlReg2GapCB setIntegerValue: ((reg2 >> kEWFlt_FICCtrl2_gap_Shift) & kEWFlt_FICCtrl2_gap_Mask)];
+	[ficCardCtrlReg2SyncResCB setIntegerValue: ((reg2 >> kEWFlt_FICCtrl2_SyncRes_Shift) & kEWFlt_FICCtrl2_SyncRes_Mask)];
     int i;
     for(i=0;i<6; i++){
-        [[ficCardCtrlReg2SendChMatrix cellAtRow:0 column:i] setIntValue: (reg2 & (0x1<<(kEWFlt_FICCtrl2_SendCh_Shift+i)))];
+        [[ficCardCtrlReg2SendChMatrix cellAtRow:0 column:i] setIntegerValue: (reg2 & (0x1<<(kEWFlt_FICCtrl2_SendCh_Shift+i)))];
     }
 }
 
 - (void) ficCardCtrlReg1Changed:(NSNotification*)aNote
 {
     int fiber = [model fiberSelectForBBAccess];
-    uint32_t val = [model ficCardCtrlReg1ForFiber:fiber];
-	[ficCardCtrlReg1TextField setIntValue: val];
+    unsigned long val = [model ficCardCtrlReg1ForFiber:fiber];
+	[ficCardCtrlReg1TextField setIntegerValue: val];
     //sub elements
-	[ficCardCtrlReg1BlockLenTextField setIntValue: val & 0xfff];
+	[ficCardCtrlReg1BlockLenTextField setIntegerValue: val & 0xfff];
     int i;
     for(i=0;i<4; i++){
-        [[ficCardCtrlReg1ChanEnableMatrix cellAtRow:0 column:i] setIntValue: (val & (0x1<<(12+i)))];
+        [[ficCardCtrlReg1ChanEnableMatrix cellAtRow:0 column:i] setIntegerValue: (val & (0x1<<(12+i)))];
     }
 }
 
 - (void) pollBBStatusIntervallChanged:(NSNotification*)aNote
 {
-	//[pollBBStatusIntervallPU setIntValue: [model pollBBStatusIntervall]];
+	//[pollBBStatusIntervallPU setIntegerValue: [model pollBBStatusIntervall]];
 	[pollBBStatusIntervallPU selectItemAtIndex: [model pollBBStatusIntervall]];
     if([model pollBBStatusIntervall]==0)
         [pollBBStatusIntervallIndicator stopAnimation:nil];
@@ -726,7 +726,7 @@
     if([model progressOfChargeBB]==0){
 	    //[progressOfChargeBBIndicator startAnimation: self];
         [progressOfChargeBBIndicator setDoubleValue: 0.0];
-        //[progressOfChargeBBTextField setIntValue: [model progressOfChargeBB]];
+        //[progressOfChargeBBTextField setIntegerValue: [model progressOfChargeBB]];
     }
     else if([model progressOfChargeBB]==100){
 	    //[progressOfChargeBBIndicator startAnimation: self];
@@ -742,7 +742,7 @@
     {
 	    //[progressOfChargeBBIndicator startAnimation: self];
         [progressOfChargeBBIndicator setDoubleValue: (double)[model progressOfChargeBB]];
-        [progressOfChargeBBTextField setIntValue: [model progressOfChargeBB]];
+        [progressOfChargeBBTextField setIntegerValue: [model progressOfChargeBB]];
     }
 }
 
@@ -755,10 +755,10 @@
 
 - (void) BB0x0ACmdMaskChanged:(NSNotification*)aNote
 {
-	[BB0x0ACmdMaskTextField setIntValue: (int)[model BB0x0ACmdMask]];
+	[BB0x0ACmdMaskTextField setIntegerValue: (int)[model BB0x0ACmdMask]];
    	int i;
 	for(i=0;i<8;i++){
-		[[BB0x0ACmdMaskMatrix cellWithTag:i] setIntValue: ([model BB0x0ACmdMask] & (0x1 <<i))];//cellWithTag:i is not defined for all i, but it works anyway
+		[[BB0x0ACmdMaskMatrix cellWithTag:i] setIntegerValue: ([model BB0x0ACmdMask] & (0x1 <<i))];//cellWithTag:i is not defined for all i, but it works anyway
 	}    
 }
 
@@ -769,12 +769,12 @@
 
 - (void) ionToHeatDelayChanged:(NSNotification*)aNote
 {
-	[ionToHeatDelayTextField setIntValue: [model ionToHeatDelay]];
+	[ionToHeatDelayTextField setIntegerValue: [model ionToHeatDelay]];
 }
 
 - (void) lowLevelRegInHexChanged:(NSNotification*)aNote
 {
-	//[lowLevelRegInHexPU setIntValue: [model lowLevelRegInHex]];
+	//[lowLevelRegInHexPU setIntegerValue: [model lowLevelRegInHex]];
     [self endEditing];
 	[lowLevelRegInHexPU selectItemAtIndex: [model lowLevelRegInHex]];
     if([model lowLevelRegInHex]){
@@ -788,7 +788,7 @@
 
 - (void) writeToBBModeChanged:(NSNotification*)aNote
 {
-	[writeToBBModeCB setIntValue: [model writeToBBMode]];
+	[writeToBBModeCB setIntegerValue: [model writeToBBMode]];
     if([model writeToBBMode]){
         [writeToBBModeIndicator startAnimation:nil];
     }else{
@@ -798,38 +798,38 @@
 
 - (void) wCmdArg2Changed:(NSNotification*)aNote
 {
-	[wCmdArg2TextField setIntValue: [model wCmdArg2]];
+	[wCmdArg2TextField setIntegerValue: [model wCmdArg2]];
 }
 
 - (void) wCmdArg1Changed:(NSNotification*)aNote
 {
-	[wCmdArg1TextField setIntValue: [model wCmdArg1]];
+	[wCmdArg1TextField setIntegerValue: [model wCmdArg1]];
 }
 
 - (void) wCmdCodeChanged:(NSNotification*)aNote
 {
-	[wCmdCodeTextField setIntValue: [model wCmdCode]];
+	[wCmdCodeTextField setIntegerValue: [model wCmdCode]];
 }
 
 - (void) RgRtChanged:(NSNotification*)aNote
 {
     int fiber = [model fiberSelectForBBAccess];
-	[RtTextField setIntValue: [model RtForFiber:fiber]];
-	[RtStepper setIntValue: [model RtForFiber:fiber]];
+	[RtTextField setIntegerValue: [model RtForFiber:fiber]];
+	[RtStepper setIntegerValue: [model RtForFiber:fiber]];
     //DEBUG 	    NSLog(@"%@::%@ fiber %i val %i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),fiber,[model adcRtForFiber:fiber]);//TODO: DEBUG testing ...-tb-
-	[RgTextField setIntValue: [model RgForFiber:fiber]];
+	[RgTextField setIntegerValue: [model RgForFiber:fiber]];
 }
 
 - (void) D2Changed:(NSNotification*)aNote
 {
     int fiber = [model fiberSelectForBBAccess];
-	[D2TextField setIntValue: [model D2ForFiber:fiber]];
+	[D2TextField setIntegerValue: [model D2ForFiber:fiber]];
 }
 
 - (void) D3Changed:(NSNotification*)aNote
 {
     int fiber = [model fiberSelectForBBAccess];
-	[D3TextField setIntValue: [model D3ForFiber:fiber]];
+	[D3TextField setIntegerValue: [model D3ForFiber:fiber]];
 }
 
 
@@ -838,57 +838,57 @@
 
 - (void) dacbChanged:(NSNotification*)aNote
 {
-	//[dacb<custom> setIntValue: [model dacb]];
+	//[dacb<custom> setIntegerValue: [model dacb]];
     int fiber = [model fiberSelectForBBAccess];
     int index = [[[aNote userInfo] objectForKey:OREdelweissFLTIndex] intValue];
-	[[dacbMatrix cellWithTag:index] setIntValue: [model dacbForFiber: fiber atIndex:index]];
+	[[dacbMatrix cellWithTag:index] setIntegerValue: [model dacbForFiber: fiber atIndex:index]];
 }
 
 - (void) signbChanged:(NSNotification*)aNote
 {
-	//[signb<custom> setIntValue: [model signb]];
+	//[signb<custom> setIntegerValue: [model signb]];
     int fiber = [model fiberSelectForBBAccess];
     int index = [[[aNote userInfo] objectForKey:OREdelweissFLTIndex] intValue];
     int sign = [model signbForFiber: fiber atIndex:index];
-	[[signbMatrix cellWithTag:index] setIntValue: sign];
+	[[signbMatrix cellWithTag:index] setIntegerValue: sign];
 	[[signbMatrix cellWithTag:index] setTitle: (sign ? @"-":@"+")];
 }
 
 - (void) dacaChanged:(NSNotification*)aNote
 {
-	//[daca<custom> setIntValue: [model daca]];
+	//[daca<custom> setIntegerValue: [model daca]];
     int fiber = [model fiberSelectForBBAccess];
     int index = [[[aNote userInfo] objectForKey:OREdelweissFLTIndex] intValue];
-	[[dacaMatrix cellWithTag:index] setIntValue: [model dacaForFiber: fiber atIndex:index]];
+	[[dacaMatrix cellWithTag:index] setIntegerValue: [model dacaForFiber: fiber atIndex:index]];
 }
 
 - (void) signaChanged:(NSNotification*)aNote
 {
-	//[signa<custom> setIntValue: [model signa]];
+	//[signa<custom> setIntegerValue: [model signa]];
     int fiber = [model fiberSelectForBBAccess];
     int index = [[[aNote userInfo] objectForKey:OREdelweissFLTIndex] intValue];
     int sign = [model signaForFiber: fiber atIndex:index];
-	[[signaMatrix cellWithTag:index] setIntValue: sign];
+	[[signaMatrix cellWithTag:index] setIntegerValue: sign];
 	[[signaMatrix cellWithTag:index] setTitle: (sign ? @"-":@"+")];
 }
 
 - (void) adcRgForBBAccessChanged:(NSNotification*)aNote
 {
-	//[adcRgForBBAccess<custom> setIntValue: [model adcRgForBBAccess]];
+	//[adcRgForBBAccess<custom> setIntegerValue: [model adcRgForBBAccess]];
     int fiber = [model fiberSelectForBBAccess];
       //not set ...int fiber = [[[aNote userInfo] objectForKey:OREdelweissFLTFiber] intValue];
     int index = [[[aNote userInfo] objectForKey:OREdelweissFLTIndex] intValue];
-	[[adcRgForBBAccessMatrix cellWithTag:index] setIntValue: [model adcRgForBBAccessForFiber: fiber atIndex:index]];
+	[[adcRgForBBAccessMatrix cellWithTag:index] setIntegerValue: [model adcRgForBBAccessForFiber: fiber atIndex:index]];
 }
 
 - (void) adcValueForBBAccessChanged:(NSNotification*)aNote
 {
-	//[adcValueForBBAccess<custom> setIntValue: [model adcValueForBBAccess]];
+	//[adcValueForBBAccess<custom> setIntegerValue: [model adcValueForBBAccess]];
     int fiber = [model fiberSelectForBBAccess];
       //not set ...int fiber = [[[aNote userInfo] objectForKey:OREdelweissFLTFiber] intValue];
     int index = [[[aNote userInfo] objectForKey:OREdelweissFLTIndex] intValue];
     int adcValue = [model adcValueForBBAccessForFiber: fiber atIndex:index];
-	[[adcValueForBBAccessMatrix cellWithTag:index] setIntValue: adcValue];
+	[[adcValueForBBAccessMatrix cellWithTag:index] setIntegerValue: adcValue];
     if(adcValue<-31000 || adcValue>30000){
         //DEBUG 	
         NSLog(@"%@::%@ - adcValue out of range: %i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),adcValue);//TODO: DEBUG testing ...-tb-
@@ -901,11 +901,11 @@
 
 - (void) adcMultForBBAccessChanged:(NSNotification*)aNote
 {
-	//[adcMultForBBAccess<custom> setIntValue: [model adcMultForBBAccess]];
+	//[adcMultForBBAccess<custom> setIntegerValue: [model adcMultForBBAccess]];
     int fiber = [model fiberSelectForBBAccess];
       //not set ...int fiber = [[[aNote userInfo] objectForKey:OREdelweissFLTFiber] intValue];
     int index = [[[aNote userInfo] objectForKey:OREdelweissFLTIndex] intValue];
-	[[adcMultForBBAccessMatrix cellWithTag:index] setIntValue: [model adcMultForBBAccessForFiber: fiber atIndex:index]];
+	[[adcMultForBBAccessMatrix cellWithTag:index] setIntegerValue: [model adcMultForBBAccessForFiber: fiber atIndex:index]];
 }
 
 
@@ -928,8 +928,8 @@
         return;
     }
 
-	//[adcFreqkHzForBBAccess<custom> setIntValue: [model adcFreqkHzForBBAccess]];
-	[[adcFreqkHzForBBAccessMatrix cellWithTag:index] setIntValue: [model adcFreqkHzForBBAccessForFiber: fiber atIndex:index]];
+	//[adcFreqkHzForBBAccess<custom> setIntegerValue: [model adcFreqkHzForBBAccess]];
+	[[adcFreqkHzForBBAccessMatrix cellWithTag:index] setIntegerValue: [model adcFreqkHzForBBAccessForFiber: fiber atIndex:index]];
     
 }
 
@@ -939,7 +939,7 @@
     int fiber = [model fiberSelectForBBAccess];
       //not set ...int fiber = [[[aNote userInfo] objectForKey:OREdelweissFLTFiber] intValue];
     int index = [[[aNote userInfo] objectForKey:OREdelweissFLTIndex] intValue];
-	[[polarDacMatrix cellWithTag:index] setIntValue: [model polarDacForFiber: fiber atIndex:index]];
+	[[polarDacMatrix cellWithTag:index] setIntegerValue: [model polarDacForFiber: fiber atIndex:index]];
 }
 
 
@@ -948,7 +948,7 @@
     int fiber = [model fiberSelectForBBAccess];
       //not set ...int fiber = [[[aNote userInfo] objectForKey:OREdelweissFLTFiber] intValue];
     int index = [[[aNote userInfo] objectForKey:OREdelweissFLTIndex] intValue];
-	[[triDacMatrix cellWithTag:index] setIntValue: [model triDacForFiber: fiber atIndex:index]];
+	[[triDacMatrix cellWithTag:index] setIntegerValue: [model triDacForFiber: fiber atIndex:index]];
 }
 
 - (void) rectDacChanged:(NSNotification*)aNote
@@ -956,7 +956,7 @@
     int fiber = [model fiberSelectForBBAccess];
       //not set ...int fiber = [[[aNote userInfo] objectForKey:OREdelweissFLTFiber] intValue];
     int index = [[[aNote userInfo] objectForKey:OREdelweissFLTIndex] intValue];
-	[[rectDacMatrix cellWithTag:index] setIntValue: [model rectDacForFiber: fiber atIndex:index]];
+	[[rectDacMatrix cellWithTag:index] setIntegerValue: [model rectDacForFiber: fiber atIndex:index]];
 }
 
 
@@ -976,30 +976,30 @@
 
 - (void) useBroadcastIdforBBAccessChanged:(NSNotification*)aNote
 {
-	[useBroadcastIdforBBAccessCB setIntValue: [model useBroadcastIdforBBAccess]];
+	[useBroadcastIdforBBAccessCB setIntegerValue: [model useBroadcastIdforBBAccess]];
     if([model useBroadcastIdforBBAccess]){
     	[idBBforWCommandTextField setStringValue: @"0xFF"];
     	[idBBforAlimCommandTextField setStringValue: @"0xFF"];
     }else{
         int fiber = [model fiberSelectForBBAccess];
-    	[idBBforWCommandTextField setIntValue: [model idBBforBBAccessForFiber:fiber]];
-    	[idBBforAlimCommandTextField setIntValue: [model idBBforBBAccessForFiber:fiber]];
+    	[idBBforWCommandTextField setIntegerValue: [model idBBforBBAccessForFiber:fiber]];
+    	[idBBforAlimCommandTextField setIntegerValue: [model idBBforBBAccessForFiber:fiber]];
     }
 }
 
 - (void) idBBforBBAccessChanged:(NSNotification*)aNote
 {
     int fiber = [model fiberSelectForBBAccess];
-	[idBBforBBAccessTextField setIntValue: [model idBBforBBAccessForFiber:fiber]];
-	//[idBBforWCommandTextField setIntValue: [model idBBforBBAccessForFiber:fiber]];
-	//[idBBforAlimCommandTextField setIntValue: [model idBBforBBAccessForFiber:fiber]];
+	[idBBforBBAccessTextField setIntegerValue: [model idBBforBBAccessForFiber:fiber]];
+	//[idBBforWCommandTextField setIntegerValue: [model idBBforBBAccessForFiber:fiber]];
+	//[idBBforAlimCommandTextField setIntegerValue: [model idBBforBBAccessForFiber:fiber]];
     if([model useBroadcastIdforBBAccess]){
     	[idBBforWCommandTextField setStringValue: @"0xFF"];
     	[idBBforAlimCommandTextField setStringValue: @"0xFF"];
     }else{
         int fiber = [model fiberSelectForBBAccess];
-    	[idBBforWCommandTextField setIntValue: [model idBBforBBAccessForFiber:fiber]];
-    	[idBBforAlimCommandTextField setIntValue: [model idBBforBBAccessForFiber:fiber]];
+    	[idBBforWCommandTextField setIntegerValue: [model idBBforBBAccessForFiber:fiber]];
+    	[idBBforAlimCommandTextField setIntegerValue: [model idBBforBBAccessForFiber:fiber]];
     }
 }
 
@@ -1016,7 +1016,7 @@
 - (void) fiberSelectForBBAccessChanged:(NSNotification*)aNote
 {
         //DEBUG OUTPUT:         NSLog(@"%@::%@: fiberSelectForBBAccess %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[model fiberSelectForBBAccess]);//TODO : DEBUG testing ...-tb-
-	//[fiberSelectForBBAccessPU setIntValue: [model fiberSelectForBBAccess]];
+	//[fiberSelectForBBAccessPU setIntegerValue: [model fiberSelectForBBAccess]];
     int fiber = [model fiberSelectForBBAccess];
 	[fiberSelectForBBAccessPU selectItemAtIndex: fiber];
     
@@ -1029,24 +1029,24 @@
 	[self relaisStatesBBChanged:nil];
 	//[self adcFreqkHzForBBAccessChanged:nil];
     for(index=0;index<6;index++)
-    	[[adcFreqkHzForBBAccessMatrix cellWithTag:index] setIntValue: [model adcFreqkHzForBBAccessForFiber: fiber atIndex:index]];
+    	[[adcFreqkHzForBBAccessMatrix cellWithTag:index] setIntegerValue: [model adcFreqkHzForBBAccessForFiber: fiber atIndex:index]];
     
 	//[self adcMultForBBAccessChanged:nil];
     for(index=0;index<6;index++)
-    	[[adcMultForBBAccessMatrix cellWithTag:index] setIntValue: [model adcMultForBBAccessForFiber: fiber atIndex:index]];
+    	[[adcMultForBBAccessMatrix cellWithTag:index] setIntegerValue: [model adcMultForBBAccessForFiber: fiber atIndex:index]];
 
 	//[self adcValueForBBAccessChanged:nil];
     for(index=0;index<6;index++)
-    	[[adcValueForBBAccessMatrix cellWithTag:index] setIntValue: [model adcValueForBBAccessForFiber: fiber atIndex:index]];
+    	[[adcValueForBBAccessMatrix cellWithTag:index] setIntegerValue: [model adcValueForBBAccessForFiber: fiber atIndex:index]];
     
     for(index=0;index<12;index++)
-    	[[polarDacMatrix cellWithTag:index] setIntValue: [model polarDacForFiber: fiber atIndex:index]];
+    	[[polarDacMatrix cellWithTag:index] setIntegerValue: [model polarDacForFiber: fiber atIndex:index]];
     
     for(index=0;index<6;index++)
-    	[[triDacMatrix cellWithTag:index] setIntValue: [model triDacForFiber: fiber atIndex:index]];
+    	[[triDacMatrix cellWithTag:index] setIntegerValue: [model triDacForFiber: fiber atIndex:index]];
     
     for(index=0;index<6;index++)
-    	[[rectDacMatrix cellWithTag:index] setIntValue: [model rectDacForFiber: fiber atIndex:index]];
+    	[[rectDacMatrix cellWithTag:index] setIntegerValue: [model rectDacForFiber: fiber atIndex:index]];
     
 	/*
     [self adcRgForBBAccessChanged:nil];
@@ -1056,11 +1056,11 @@
 	[self dacbChanged:nil];
     */
     for(index=0;index<6;index++){
-    	[[adcRgForBBAccessMatrix cellWithTag:index] setIntValue: [model adcRgForBBAccessForFiber: fiber atIndex:index]];
-    	[[signaMatrix cellWithTag:index] setIntValue: [model signaForFiber: fiber atIndex:index]];
-    	[[dacaMatrix cellWithTag:index] setIntValue: [model dacaForFiber: fiber atIndex:index]];
-    	[[signbMatrix cellWithTag:index] setIntValue: [model signbForFiber: fiber atIndex:index]];
-    	[[dacbMatrix cellWithTag:index] setIntValue: [model dacbForFiber: fiber atIndex:index]];
+    	[[adcRgForBBAccessMatrix cellWithTag:index] setIntegerValue: [model adcRgForBBAccessForFiber: fiber atIndex:index]];
+    	[[signaMatrix cellWithTag:index] setIntegerValue: [model signaForFiber: fiber atIndex:index]];
+    	[[dacaMatrix cellWithTag:index] setIntegerValue: [model dacaForFiber: fiber atIndex:index]];
+    	[[signbMatrix cellWithTag:index] setIntegerValue: [model signbForFiber: fiber atIndex:index]];
+    	[[dacbMatrix cellWithTag:index] setIntegerValue: [model dacbForFiber: fiber atIndex:index]];
         int signa = [model signaForFiber: fiber atIndex:index];
 	    [[signaMatrix cellWithTag:index] setTitle: (signa ? @"-":@"+")];
         int signb = [model signbForFiber: fiber atIndex:index];
@@ -1080,7 +1080,7 @@
     [self chargeBBFileForFiberChanged:nil];
     //[self chargeFICFileChanged:nil]; not necessary any more, done at updateWWindow ... -tb-
     
-    [statusAlimBBTextField setIntValue: [model statusBB16forFiber: fiber atIndex:kBBstatusAlim] ];
+    [statusAlimBBTextField setIntegerValue: [model statusBB16forFiber: fiber atIndex:kBBstatusAlim] ];
 
     //we need to update the FIC section, too -tb-
 	[fiberSelectForFICCardPU selectItemAtIndex: fiber];
@@ -1093,22 +1093,22 @@
 
 - (void) relaisStatesBBChanged:(NSNotification*)aNote
 {
-//	[relaisStatesBB<custom> setIntValue: [model relaisStatesBB]];
+//	[relaisStatesBB<custom> setIntegerValue: [model relaisStatesBB]];
     int fiber = [model fiberSelectForBBAccess];
 	int i;
     /* //obsolete 2013-08-08
     int32_t relaisStates = [model relaisStatesBBForFiber:fiber];
         //DEBUG OUTPUT: 	        NSLog(@"%@::%@: UNDER CONSTRUCTION! fiberOutMask  %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),fiberOutMask);//TODO : DEBUG testing ...-tb-
 	for(i=0;i<3;i++){
-		[[relaisStatesBBMatrix cellWithTag:i] setIntValue: (relaisStates&(0x1<<i)) ];
+		[[relaisStatesBBMatrix cellWithTag:i] setIntegerValue: (relaisStates&(0x1<<i)) ];
 	} 
     */   
-    [refBBCheckBox setIntValue:[model refForBBAccessForFiber:fiber]];
+    [refBBCheckBox setIntegerValue:[model refForBBAccessForFiber:fiber]];
     
     int32_t adcOnOfVal = [model adcOnOffForBBAccessForFiber:fiber];
         //DEBUG OUTPUT: 	        NSLog(@"%@::%@: UNDER CONSTRUCTION! fiberOutMask  %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),fiberOutMask);//TODO : DEBUG testing ...-tb-
 	for(i=0;i<[adcOnOffBBMatrix numberOfColumns];i++){
-		[[adcOnOffBBMatrix cellAtRow:0 column:i] setIntValue: (adcOnOfVal&(0x1<<i)) ];
+		[[adcOnOffBBMatrix cellAtRow:0 column:i] setIntegerValue: (adcOnOfVal&(0x1<<i)) ];
 	} 
     
     [relais1PU selectItemAtIndex:[model relais1ForBBAccessForFiber:fiber]];
@@ -1117,7 +1117,7 @@
     int32_t mezVal = [model mezForBBAccessForFiber:fiber];
         //DEBUG OUTPUT: 	        NSLog(@"%@::%@: UNDER CONSTRUCTION! fiberOutMask  %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),fiberOutMask);//TODO : DEBUG testing ...-tb-
 	for(i=0;i<[mezOnOffBBMatrix numberOfColumns];i++){
-		[[mezOnOffBBMatrix cellAtRow:0 column:i] setIntValue: (mezVal&(0x1<<i)) ];
+		[[mezOnOffBBMatrix cellAtRow:0 column:i] setIntegerValue: (mezVal&(0x1<<i)) ];
 	} 
 }
 
@@ -1128,12 +1128,12 @@
 
 - (void) fiberOutMaskChanged:(NSNotification*)aNote
 {
-	//[fiberOutMask<custom> setIntValue: [model fiberOutMask]];
+	//[fiberOutMask<custom> setIntegerValue: [model fiberOutMask]];
 	int i;
-    int32_t fiberOutMask = [model fiberOutMask];
+    unsigned long fiberOutMask = [model fiberOutMask];
         //DEBUG OUTPUT: 	        NSLog(@"%@::%@: UNDER CONSTRUCTION! fiberOutMask  %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),fiberOutMask);//TODO : DEBUG testing ...-tb-
 	for(i=0;i<6;i++){
-		[[fiberOutMaskMatrix cellWithTag:i] setIntValue: (fiberOutMask&(0x1<<i)) ];
+		[[fiberOutMaskMatrix cellWithTag:i] setIntegerValue: (fiberOutMask&(0x1<<i)) ];
 	}    
 }
 
@@ -1149,12 +1149,12 @@
 - (void) repeatSWTriggerModeChanged:(NSNotification*)aNote
 {
 	[repeatSWTriggerModePU selectItemAtIndex: [model repeatSWTriggerMode]];
-	//[repeatSWTriggerModeTextField setIntValue: [model repeatSWTriggerMode]];
+	//[repeatSWTriggerModeTextField setIntegerValue: [model repeatSWTriggerMode]];
 }
 
 - (void) controlRegisterChanged:(NSNotification*)aNote
 {
-	[controlRegisterTextField setIntValue: [model controlRegister]];
+	[controlRegisterTextField setIntegerValue: [model controlRegister]];
     [self fiberEnableMaskChanged:nil];
     [self selectFiberTrigChanged:nil];
     [self BBv1MaskChanged:nil];
@@ -1166,29 +1166,29 @@
 
 	//[selectFiberTrigPU selectItemAtIndex: [model selectFiberTrig]];
 	[statusLatencyPU selectItemAtIndex: [model statusLatency]];
-	[vetoFlagCB setIntValue: [model vetoFlag]];
+	[vetoFlagCB setIntegerValue: [model vetoFlag]];
 }
 
 - (void) totalTriggerNRegisterChanged:(NSNotification*)aNote
 {
-	[totalTriggerNRegisterTextField setIntValue: [model totalTriggerNRegister]];
+	[totalTriggerNRegisterTextField setIntegerValue: [model totalTriggerNRegister]];
 }
 
 - (void) statusRegisterChanged:(NSNotification*)aNote
 {
-	[statusRegisterTextField setIntValue: [model statusRegister]];
+	[statusRegisterTextField setIntegerValue: [model statusRegister]];
 }
 
 - (void) fastWriteChanged:(NSNotification*)aNote
 {
-	[fastWriteCB setIntValue: [model fastWrite]];
+	[fastWriteCB setIntegerValue: [model fastWrite]];
 }
 
 - (void) fiberDelaysChanged:(NSNotification*)aNote
 {
     uint64_t val=[model fiberDelays];
     //DEBUG OUTPUT:  	NSLog(@"%@::%@: UNDER CONSTRUCTION! 0x%016llx \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[model fiberDelays]);//TODO: DEBUG testing ...-tb-
-	//[fiberDelaysTextField setIntValue: [model fiberDelays]];
+	//[fiberDelaysTextField setIntegerValue: [model fiberDelays]];
 	[fiberDelaysTextField setStringValue: [NSString stringWithFormat:@"0x%016qx",val]];
 
 	uint64_t fibDelays;
@@ -1208,19 +1208,19 @@
 
 - (void) streamMaskChanged:(NSNotification*)aNote
 {
-	//[streamMaskTextField setIntValue: [model streamMask]];
+	//[streamMaskTextField setIntegerValue: [model streamMask]];
 	[streamMaskTextField setStringValue: [NSString stringWithFormat:@"0x%016qx",[model streamMask]]];
 	//[streamMaskTextField setStringValue: [NSString stringWithFormat:@"0x1234000012340000"]];
 //DEBUG OUTPUT:  	NSLog(@"%@::%@: UNDER CONSTRUCTION! 0x%016qx 0x%032qx 0x%016llx \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[model streamMask],[model streamMask],[model streamMask]);//TODO: DEBUG testing ...-tb-
 
 	//[model setStreamMask:[sender intValue]];	
-	uint64_t chan, fib;
+	unsigned long chan, fib;
     //uint64_t val=[model streamMask];
 	for(fib=0;fib<6;fib++){
 		//debug NSString *s = [NSString stringWithFormat:@"fib %llu:",fib];
 	    for(chan=0;chan<6;chan++){
-		    if([model streamMaskForFiber:fib chan:chan]) [[streamMaskMatrix cellAtRow:fib column: chan] setIntValue: 1];
-			else  [[streamMaskMatrix cellAtRow:fib column: chan] setIntValue: 0];
+		    if([model streamMaskForFiber:(int)fib chan:(int)chan]) [[streamMaskMatrix cellAtRow:fib column: chan] setIntegerValue: 1];
+			else  [[streamMaskMatrix cellAtRow:fib column: chan] setIntegerValue: 0];
 			
 			//debug s=[s stringByAppendingString: [NSString stringWithFormat: @"%u",[model streamMaskForFiber:fib chan:chan]]];
 			#if 0
@@ -1240,18 +1240,18 @@
 
 - (void) heatTriggerMaskChanged:(NSNotification*)aNote
 {
-	//[heatTriggerMaskTextField setIntValue: [model heatTriggerMask]];
+	//[heatTriggerMaskTextField setIntegerValue: [model heatTriggerMask]];
 	[heatTriggerMaskTextField setStringValue: [NSString stringWithFormat:@"0x%016qx",[model heatTriggerMask]]];
 	//[streamMaskTextField setStringValue: [NSString stringWithFormat:@"0x1234000012340000"]];
 //DEBUG OUTPUT:  	NSLog(@"%@::%@: UNDER CONSTRUCTION! 0x%016qx 0x%032qx 0x%016llx \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[model streamMask],[model streamMask],[model streamMask]);//TODO: DEBUG testing ...-tb-
-
-	uint64_t chan, fib;
+    int chan;
+	unsigned long  fib;
     //uint64_t val=[model streamMask];
 	for(fib=0;fib<6;fib++){
 		//debug NSString *s = [NSString stringWithFormat:@"fib %llu:",fib];
 	    for(chan=0;chan<6;chan++){
-		    if([model heatTriggerMaskForFiber:fib chan:chan]) [[heatTriggerMaskMatrix cellAtRow:fib column: chan] setIntValue: 1];
-			else  [[heatTriggerMaskMatrix cellAtRow:fib column: chan] setIntValue: 0];
+		    if([model heatTriggerMaskForFiber:(int)fib chan:chan]) [[heatTriggerMaskMatrix cellAtRow:fib column: chan] setIntegerValue: 1];
+			else  [[heatTriggerMaskMatrix cellAtRow:fib column: chan] setIntegerValue: 0];
 			
 			//debug s=[s stringByAppendingString: [NSString stringWithFormat: @"%u",[model streamMaskForFiber:fib chan:chan]]];
 			#if 0
@@ -1271,14 +1271,14 @@
 
 - (void) ionTriggerMaskChanged:(NSNotification*)aNote
 {
-	//[ionTriggerMaskTextField setIntValue: [model ionTriggerMask]];
+	//[ionTriggerMaskTextField setIntegerValue: [model ionTriggerMask]];
 	[ionTriggerMaskTextField setStringValue: [NSString stringWithFormat:@"0x%016qx",[model ionTriggerMask]]];
-	uint64_t chan, fib;
+	unsigned long chan, fib;
 	for(fib=0;fib<6;fib++){
 		//debug NSString *s = [NSString stringWithFormat:@"fib %llu:",fib];
 	    for(chan=0;chan<6;chan++){
-		    if([model ionTriggerMaskForFiber:fib chan:chan]) [[ionTriggerMaskMatrix cellAtRow:fib column: chan] setIntValue: 1];
-			else  [[ionTriggerMaskMatrix cellAtRow:fib column: chan] setIntValue: 0];
+		    if([model ionTriggerMaskForFiber:(int)fib chan:(int)chan]) [[ionTriggerMaskMatrix cellAtRow:(int)fib column: chan] setIntegerValue: 1];
+			else  [[ionTriggerMaskMatrix cellAtRow:fib column: chan] setIntegerValue: 0];
 		}
 	}
     
@@ -1319,15 +1319,15 @@
 - (void) triggerParameterChanged:(NSNotification*)aNote
 {
     //DEBUG: OUTPUT:          	NSLog(@"%@::%@: UNDER CONSTRUCTION!   \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO : DEBUG testing ...-tb-
-	//[selectFiberTrigPU setIntValue: [model selectFiberTrig]];
+	//[selectFiberTrigPU setIntegerValue: [model selectFiberTrig]];
 	
     //[selectFiberTrigPU selectItemAtIndex: [model selectFiberTrig]];
     
     //negPosPolarityMatrix
     int i;
     for(i=0;i<kNumEWFLTHeatIonChannels;i++){
-        [[negPosPolarityMatrix cellAtRow:i column:0] setIntValue: [model negPolarity:i]];
-        [[negPosPolarityMatrix cellAtRow:i column:1] setIntValue: [model posPolarity:i]];
+        [[negPosPolarityMatrix cellAtRow:i column:0] setIntegerValue: [model negPolarity:i]];
+        [[negPosPolarityMatrix cellAtRow:i column:1] setIntegerValue: [model posPolarity:i]];
     }    
     //gapMatrix
     for(i=0;i<kNumEWFLTHeatIonChannels;i++){
@@ -1339,13 +1339,13 @@
     }    
 	//shapingLengthMatrix
     for(i=0;i<kNumEWFLTHeatIonChannels;i++){
-        [[shapingLengthMatrix cellAtRow:i column:0] setIntValue: [model shapingLength:i]];
+        [[shapingLengthMatrix cellAtRow:i column:0] setIntegerValue: [model shapingLength:i]];
     }    
 	//heat trigger window pos start/end Matrix
     for(i=0;i<kNumEWFLTHeatChannels;i++){
     //DEBUG OUTPUT: 	    NSLog(@"%@::%@: UNDER CONSTRUCTION! heatWindowStartMatrix: index 0x%08x winPosStart %i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),i,[model windowPosStart:i]);//TODO: DEBUG testing ...-tb-
-        [[heatWindowStartMatrix cellAtRow:i column:0] setIntValue: [model windowPosStart:i]];
-        [[heatWindowEndMatrix cellAtRow:i column:0] setIntValue: [model windowPosEnd:i]];
+        [[heatWindowStartMatrix cellAtRow:i column:0] setIntegerValue: [model windowPosStart:i]];
+        [[heatWindowEndMatrix cellAtRow:i column:0] setIntegerValue: [model windowPosEnd:i]];
     }    
 
 }
@@ -1354,16 +1354,16 @@
 - (void) selectFiberTrigChanged:(NSNotification*)aNote
 {
     //DEBUG: OUTPUT:  	NSLog(@"%@::%@: UNDER CONSTRUCTION! [model selectFiberTrig] is %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[model selectFiberTrig]);//TODO : DEBUG testing ...-tb-
-	//[selectFiberTrigPU setIntValue: [model selectFiberTrig]];
+	//[selectFiberTrigPU setIntegerValue: [model selectFiberTrig]];
 	[selectFiberTrigPU selectItemAtIndex: [model selectFiberTrig]];
 }
 
 - (void) BBv1MaskChanged:(NSNotification*)aNote
 {
-	//[BBv1MaskMatrix setIntValue: [model BBv1Mask]];
+	//[BBv1MaskMatrix setIntegerValue: [model BBv1Mask]];
 	int i;
 	for(i=0;i<6;i++){
-		[[BBv1MaskMatrix cellWithTag:i] setIntValue:[model BBv1MaskForChan:i]];
+		[[BBv1MaskMatrix cellWithTag:i] setIntegerValue:[model BBv1MaskForChan:i]];
         //DEBUG OUTPUT: 	NSLog(@"%@::%@: UNDER CONSTRUCTION! [model BBv1MaskForChan:%i] %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),i,[model BBv1MaskForChan:i]);//TODO : DEBUG testing ...-tb-
 	}    
     int fiber = [model fiberSelectForBBAccess];
@@ -1374,10 +1374,10 @@
 
 - (void) fiberEnableMaskChanged:(NSNotification*)aNote
 {
-	//[fiberEnableMask<custom> setIntValue: [model fiberEnableMask]];
+	//[fiberEnableMask<custom> setIntegerValue: [model fiberEnableMask]];
 	int i;
 	for(i=0;i<6;i++){
-		[[fiberEnableMaskMatrix cellAtRow:0 column:i] setIntValue: [model fiberEnableMaskForChan:i] ];
+		[[fiberEnableMaskMatrix cellAtRow:0 column:i] setIntegerValue: [model fiberEnableMaskForChan:i] ];
 	}    
 }
 
@@ -1392,12 +1392,12 @@
 	    default: index=0; break;
 	}
 	[fltModeFlagsPU selectItemAtIndex: index];
-	//[fltModeFlagsPU setIntValue: [model fltModeFlags]];
+	//[fltModeFlagsPU setIntegerValue: [model fltModeFlags]];
 }
 
 - (void) tpixChanged:(NSNotification*)aNote
 {
-	[tpixCB setIntValue: [model tpix]];
+	[tpixCB setIntegerValue: [model tpix]];
 }
 
 - (void) statusBitPosChanged:(NSNotification*)aNote
@@ -1409,7 +1409,7 @@
 {
 	int i;
 	for(i=0;i<6;i++){
-		[[ficOnFiberMaskMatrix cellAtRow:0 column:i] setIntValue: [model ficOnFiberMaskForChan:i] ];
+		[[ficOnFiberMaskMatrix cellAtRow:0 column:i] setIntegerValue: [model ficOnFiberMaskForChan:i] ];
 	}    
 }
 
@@ -1419,13 +1419,13 @@
 
 - (void) targetRateChanged:(NSNotification*)aNote
 {
-	[targetRateField setIntValue: [model targetRate]];
+	[targetRateField setIntegerValue: [model targetRate]];
 }
 
 
 - (void) storeDataInRamChanged:(NSNotification*)aNote
 {
-	[storeDataInRamCB setIntValue: [model storeDataInRam]];
+	[storeDataInRamCB setIntegerValue: [model storeDataInRam]];
 }
 
 - (void) filterLengthChanged:(NSNotification*)aNote
@@ -1440,7 +1440,7 @@
 
 - (void) postTriggerTimeChanged:(NSNotification*)aNote
 {
-	[postTriggerTimeField setIntValue: [model postTriggerTime]];
+	[postTriggerTimeField setIntegerValue: [model postTriggerTime]];
 }
 
 - (void) fifoBehaviourChanged:(NSNotification*)aNote
@@ -1450,7 +1450,7 @@
 
 - (void) interruptMaskChanged:(NSNotification*)aNote
 {
-	[interruptMaskField setIntValue: [model interruptMask]];
+	[interruptMaskField setIntegerValue: [model interruptMask]];
 }
 
 - (void) populatePullDown
@@ -1683,7 +1683,7 @@
 
 - (void) noiseFloorOffsetChanged:(NSNotification*)aNote
 {
-	[noiseFloorOffsetField setIntValue:[model noiseFloorOffset]];
+	[noiseFloorOffsetField setIntegerValue:[model noiseFloorOffset]];
 }
 
 
@@ -1691,7 +1691,7 @@
 {
 	int i;
 	for(i=0;i<kNumEdelweissFLTTests;i++){
-		[[testEnabledMatrix cellWithTag:i] setIntValue:[model testEnabled:i]];
+		[[testEnabledMatrix cellWithTag:i] setIntegerValue:[model testEnabled:i]];
 	}    
 }
 
@@ -1778,7 +1778,7 @@
 - (void) gainChanged:(NSNotification*)aNotification
 {
 	int chan = [[[aNotification userInfo] objectForKey:OREdelweissFLTChan] intValue];
-	[[gainTextFields cellWithTag:chan] setIntValue: [model gain:chan]];
+	[[gainTextFields cellWithTag:chan] setIntegerValue: [model gain:chan]];
 }
 
 - (void) triggerEnabledChanged:(NSNotification*)aNotification
@@ -1797,7 +1797,7 @@
     NSLog(@"%@::%@  OBSOLETE (use triggerEnabledChanged)\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: DEBUG testing ...-tb-
 	short chan;
 	for(chan=0;chan<kNumEWFLTHeatIonChannels;chan++){
-		[[triggerEnabledCBs cellWithTag:chan] setIntValue: [model triggerEnabled:chan]];
+		[[triggerEnabledCBs cellWithTag:chan] setIntegerValue: [model triggerEnabled:chan]];
 		
 	}
 }
@@ -1808,10 +1808,10 @@
 {
     //DEBUG 	NSLog(@"%@::%@ \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: DEBUG testing ...-tb-
 	// Set title of FLT configuration window 
-	[[self window] setTitle:[NSString stringWithFormat:@"IPE-DAQ-V4 EDELWEISS FLT Card (Slot %d, FLT# %d)",[model slot]+1,[model stationNumber]]];
-    [fltSlotNumTextField setStringValue: [NSString stringWithFormat:@"FLT# %d",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"IPE-DAQ-V4 EDELWEISS FLT Card (Slot %d, FLT# %lu)",[model slot]+1,[model stationNumber]]];
+    [fltSlotNumTextField setStringValue: [NSString stringWithFormat:@"FLT# %lu",[model stationNumber]]];
 	//[fltSlotNumMatrix setSe];
-    //[[fltSlotNumMatrix cellWithTag:[model stationNumber]] setIntValue:1];
+    //[[fltSlotNumMatrix cellWithTag:[model stationNumber]] setIntegerValue:1];
 	short chan;//'chan' is slot number -tb-
 	for(chan=0;chan<kNumEWFLTs;chan++){
 	    if(chan==[model stationNumber]-1)
@@ -1825,7 +1825,7 @@
 {
 	short chan;
 	for(chan=0;chan<kNumEWFLTHeatIonChannels;chan++){
-		[[gainTextFields cellWithTag:chan] setIntValue: [model gain:chan]];
+		[[gainTextFields cellWithTag:chan] setIntegerValue: [model gain:chan]];
 		
 	}	
 }
@@ -1835,7 +1835,7 @@
 - (void) thresholdChanged:(NSNotification*)aNotification
 {
 	int chan = [[[aNotification userInfo] objectForKey:OREdelweissFLTChan] intValue];
-	[[thresholdTextFields cellWithTag:chan] setIntValue: [(OREdelweissFLTModel*)model threshold:chan]];
+	[[thresholdTextFields cellWithTag:chan] setIntegerValue: [(OREdelweissFLTModel*)model threshold:chan]];
 }
 
 
@@ -1845,7 +1845,7 @@
     //DEBUG 	    NSLog(@"%@::%@ is OBSOLETE!\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: DEBUG testing ...-tb-
 	short chan;
 	for(chan=0;chan<kNumEWFLTHeatIonChannels;chan++){
-		[[thresholdTextFields cellWithTag:chan] setIntValue: [(OREdelweissFLTModel*)model threshold:chan]];
+		[[thresholdTextFields cellWithTag:chan] setIntegerValue: [(OREdelweissFLTModel*)model threshold:chan]];
 	}
 }
 
@@ -1859,7 +1859,7 @@
 - (void) hitRateLengthChanged:(NSNotification*)aNote
 {
 
-	[hitRateLengthTextField setIntValue:[model hitRateLength]];
+	[hitRateLengthTextField setIntegerValue:[model hitRateLength]];
 	//[hitRateLengthPU selectItemWithTag:[model hitRateLength]];
 	[hitRateLengthPU selectItemAtIndex:[model hitRateLength]];
 }
@@ -1871,7 +1871,7 @@
     //hitRateEnableMatrix
     int i;
     for(i=0;i<kNumEWFLTHeatIonChannels;i++){
-        [[hitRateEnableMatrix cellAtRow:i column:0] setIntValue: [model hitRateEnabled:i]];
+        [[hitRateEnableMatrix cellAtRow:i column:0] setIntegerValue: [model hitRateEnabled:i]];
     }    
 }
 
@@ -1900,7 +1900,7 @@
     //hitrate regulation ON/OFF checkboxes
 	for(chan=0;chan<kNumEWFLTHeatIonChannels;chan++){
 		id theCell = [rateRegulationCBs  cellAtRow:chan column:0];
-        [theCell setIntValue: [model hitRateRegulationIsOn: chan]];
+        [theCell setIntegerValue: [model hitRateRegulationIsOn: chan]];
         //DEBUG OUTPUT: 	NSLog(@"%@::%@:   [model hitRateRegulationIsOn: is %i  chan %i]  \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd), [model hitRateRegulationIsOn: chan],chan);//TODO: DEBUG testing ...-tb-
     }
     
@@ -1925,7 +1925,7 @@
 - (void) writeValueChanged:(NSNotification*) aNote
 {
     //DEBUG        NSLog(@"%@::%@ lowLevelRegInHexPU intVal %i\n", NSStringFromClass([self class]),NSStringFromSelector(_cmd),[lowLevelRegInHexPU intValue]);//TODO: DEBUG testing ...-tb-
-    [regWriteValueTextField setIntValue: [model writeValue]];
+    [regWriteValueTextField setIntegerValue: [model writeValue]];
     [regWriteValueTextField setNeedsDisplay: YES];
 }
 
@@ -1952,8 +1952,8 @@
     }
     [[self window] setContentView:totalView];
 	
-    NSString* key = [NSString stringWithFormat: @"orca.OREdelweissFLT%d.selectedtab",[model stationNumber]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSString* key = [NSString stringWithFormat: @"orca.OREdelweissFLT%lu.selectedtab",[model stationNumber]];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
     
 }
@@ -2055,12 +2055,12 @@
 {
     int fiber = [model fiberSelectForBBAccess];
     
-    uint32_t mask  = kEWFlt_FICADC0Ctrl_Mode_Mask;
-    uint32_t shift = kEWFlt_FICADC0Ctrl_Mode_Shift;
+    unsigned long mask  = kEWFlt_FICADC0Ctrl_Mode_Mask;
+    unsigned long shift = kEWFlt_FICADC0Ctrl_Mode_Shift;
     
-    int val = [sender indexOfSelectedItem] & mask;
-    uint32_t negmask = ~(mask << shift);
-    uint32_t reg = [model ficCardADC01CtrlRegForFiber:fiber];
+    int val = (int)[sender indexOfSelectedItem] & mask;
+    unsigned long negmask = ~(mask << shift);
+    unsigned long reg = [model ficCardADC01CtrlRegForFiber:fiber];
     reg = (reg & negmask) | (val << shift);
 
 	[model setFicCardADC01CtrlReg:reg forFiber:fiber];	
@@ -2070,12 +2070,12 @@
 {
     int fiber = [model fiberSelectForBBAccess];
     
-    uint32_t mask  = kEWFlt_FICADC1Ctrl_Mode_Mask;
-    uint32_t shift = kEWFlt_FICADC1Ctrl_Mode_Shift;
+    unsigned long mask  = kEWFlt_FICADC1Ctrl_Mode_Mask;
+    unsigned long shift = kEWFlt_FICADC1Ctrl_Mode_Shift;
     
-    int val = [sender indexOfSelectedItem] & mask;
-    uint32_t negmask = ~(mask << shift);
-    uint32_t reg = [model ficCardADC01CtrlRegForFiber:fiber];
+    unsigned long val = [sender indexOfSelectedItem] & mask;
+    unsigned long negmask = ~(mask << shift);
+    unsigned long reg = [model ficCardADC01CtrlRegForFiber:fiber];
     reg = (reg & negmask) | (val << shift);
 
 	[model setFicCardADC01CtrlReg:reg forFiber:fiber];	
@@ -2091,8 +2091,8 @@
     uint32_t shift = kEWFlt_FICADC0Ctrl_Mode_Shift;
     
     int val = [sender indexOfSelectedItem] & mask;
-    uint32_t negmask = ~(mask << shift);
-    uint32_t reg = [model ficCardADC23CtrlRegForFiber:fiber];
+    unsigned long negmask = ~(mask << shift);
+    unsigned long reg = [model ficCardADC23CtrlRegForFiber:fiber];
     reg = (reg & negmask) | (val << shift);
 
 	[model setFicCardADC23CtrlReg:reg forFiber:fiber];	
@@ -2102,12 +2102,12 @@
 {
     int fiber = [model fiberSelectForBBAccess];
     
-    uint32_t mask  = kEWFlt_FICADC1Ctrl_Mode_Mask;
-    uint32_t shift = kEWFlt_FICADC1Ctrl_Mode_Shift;
+    unsigned long mask  = kEWFlt_FICADC1Ctrl_Mode_Mask;
+    unsigned long shift = kEWFlt_FICADC1Ctrl_Mode_Shift;
     
-    int val = [sender indexOfSelectedItem] & mask;
-    uint32_t negmask = ~(mask << shift);
-    uint32_t reg = [model ficCardADC23CtrlRegForFiber:fiber];
+    int val = (int)[sender indexOfSelectedItem] & mask;
+    unsigned long negmask = ~(mask << shift);
+    unsigned long reg = [model ficCardADC23CtrlRegForFiber:fiber];
     reg = (reg & negmask) | (val << shift);
 
 	[model setFicCardADC23CtrlReg:reg forFiber:fiber];	
@@ -2124,12 +2124,12 @@
     // ficCardADC0123CtrlRegMatrix
 
     int fiber = [model fiberSelectForBBAccess];
-    int row = [sender selectedRow];
-    int col = [sender selectedColumn];
+    NSInteger row = [sender selectedRow];
+    NSInteger col = [sender selectedColumn];
     int val = [[sender selectedCell] intValue] & 0x1;
-    uint32_t shift = col;
-    uint32_t reg = 0;
-    uint32_t negmask = 0;
+    NSInteger shift = col;
+    unsigned long reg = 0;
+    unsigned long negmask = 0;
     
         //DEBUG OUTPUT:    NSLog(@"%@::%@: row: %i   col: %i  val: %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd), row, col, val);//TODO : DEBUG testing ...-tb-
     
@@ -2169,8 +2169,8 @@
 - (void) ficCardCtrlReg2GapCBAction:(id)sender
 {
     int fiber = [model fiberSelectForBBAccess];
-    uint32_t mask = ~(kEWFlt_FICCtrl2_gap_Mask << kEWFlt_FICCtrl2_gap_Shift);
-    uint32_t reg = [model ficCardCtrlReg2ForFiber:fiber];
+    unsigned long mask = ~(kEWFlt_FICCtrl2_gap_Mask << kEWFlt_FICCtrl2_gap_Shift);
+    unsigned long reg = [model ficCardCtrlReg2ForFiber:fiber];
     reg = (reg & mask) | (([sender intValue] & kEWFlt_FICCtrl2_gap_Mask) << kEWFlt_FICCtrl2_gap_Shift);
 	[model setFicCardCtrlReg2:reg forFiber:fiber];	
 }
@@ -2178,8 +2178,8 @@
 - (void) ficCardCtrlReg2SyncResCBAction:(id)sender
 {
     int fiber = [model fiberSelectForBBAccess];
-    uint32_t mask = ~(kEWFlt_FICCtrl2_SyncRes_Mask << kEWFlt_FICCtrl2_SyncRes_Shift);
-    uint32_t reg = [model ficCardCtrlReg2ForFiber:fiber];
+    unsigned long mask = ~(kEWFlt_FICCtrl2_SyncRes_Mask << kEWFlt_FICCtrl2_SyncRes_Shift);
+    unsigned long reg = [model ficCardCtrlReg2ForFiber:fiber];
     reg = (reg & mask) | (([sender intValue] & kEWFlt_FICCtrl2_SyncRes_Mask) << kEWFlt_FICCtrl2_SyncRes_Shift);
 	[model setFicCardCtrlReg2:reg forFiber:fiber];	
 }
@@ -2195,8 +2195,8 @@
 
 
     int fiber = [model fiberSelectForBBAccess];
-    uint32_t mask = ~(kEWFlt_FICCtrl2_SendCh_Mask << kEWFlt_FICCtrl2_SendCh_Shift);
-    uint32_t reg = [model ficCardCtrlReg2ForFiber:fiber];
+    unsigned long mask = ~(kEWFlt_FICCtrl2_SendCh_Mask << kEWFlt_FICCtrl2_SendCh_Shift);
+    unsigned long reg = [model ficCardCtrlReg2ForFiber:fiber];
     reg = (reg & mask) | ((val & kEWFlt_FICCtrl2_SendCh_Mask) << kEWFlt_FICCtrl2_SendCh_Shift);
 	[model setFicCardCtrlReg2:reg forFiber:fiber];	
 }
@@ -2288,7 +2288,7 @@
     int fiber = [model fiberSelectForBBAccess];
     int idBB=[model idBBforBBAccessForFiber:fiber];
     if([model useBroadcastIdforBBAccess]) idBB=0xff;
-    uint32_t val = [model ficCardCtrlReg1ForFiber:fiber];
+    unsigned long val = [model ficCardCtrlReg1ForFiber:fiber];
     [model sendWCommandIdBB:idBB  cmd:0x71 arg1: ((val>>8) & 0xff)  arg2:(val & 0xff)];
 }
 
@@ -2299,7 +2299,7 @@
     int fiber = [model fiberSelectForBBAccess];
     int idBB=[model idBBforBBAccessForFiber:fiber];
     if([model useBroadcastIdforBBAccess]) idBB=0xff;
-    uint32_t val = [model ficCardCtrlReg2ForFiber:fiber];
+    unsigned long val = [model ficCardCtrlReg2ForFiber:fiber];
     [model sendWCommandIdBB:idBB  cmd:0x72 arg1: ((val>>8) & 0xff)  arg2:(val & 0xff)];
 }
 
@@ -2310,7 +2310,7 @@
     int fiber = [model fiberSelectForBBAccess];
     int idBB=[model idBBforBBAccessForFiber:fiber];
     if([model useBroadcastIdforBBAccess]) idBB=0xff;
-    uint32_t val = [model ficCardADC01CtrlRegForFiber:fiber];
+    unsigned long val = [model ficCardADC01CtrlRegForFiber:fiber];
     [model sendWCommandIdBB:idBB  cmd:0x73 arg1: ((val>>8) & 0xff)  arg2:(val & 0xff)];
 }
 
@@ -2321,7 +2321,7 @@
     int fiber = [model fiberSelectForBBAccess];
     int idBB=[model idBBforBBAccessForFiber:fiber];
     if([model useBroadcastIdforBBAccess]) idBB=0xff;
-    uint32_t val = [model ficCardADC23CtrlRegForFiber:fiber];
+    unsigned long val = [model ficCardADC23CtrlRegForFiber:fiber];
     [model sendWCommandIdBB:idBB  cmd:0x74 arg1: ((val>>8) & 0xff)  arg2:(val & 0xff)];
 }
 
@@ -2332,7 +2332,7 @@
     int fiber = [model fiberSelectForBBAccess];
     int idBB=[model idBBforBBAccessForFiber:fiber];
     if([model useBroadcastIdforBBAccess]) idBB=0xff;
-    uint32_t val = [model ficCardTriggerCmdForFiber:fiber];
+    unsigned long val = [model ficCardTriggerCmdForFiber:fiber];
     [model sendWCommandIdBB:idBB  cmd:0x70 arg1: ((val>>8) & 0xff)  arg2:(val & 0xff)];
 }
 
@@ -2346,7 +2346,7 @@
 - (void) pollBBStatusIntervallPUAction:(id)sender
 {
 	//[model setPollBBStatusIntervall:[sender intValue]];	
-	[model setPollBBStatusIntervall:[sender indexOfSelectedItem]];	
+	[model setPollBBStatusIntervall:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) devTabButtonAction:(id) sender
@@ -2433,7 +2433,7 @@
     int fiber = [model fiberSelectForBBAccess];
     int idBB=[model idBBforBBAccessForFiber:fiber];
     if([model useBroadcastIdforBBAccess]) idBB=0xff;
-    [model sendWCommandIdBB:idBB  cmd:0x0A arg1:0  arg2:[model BB0x0ACmdMask]];
+    [model sendWCommandIdBB:idBB  cmd:0x0A arg1:0  arg2:(int)[model BB0x0ACmdMask]];
 }
 
 
@@ -2475,7 +2475,7 @@
     //DEBUG    
     NSLog(@"%@::%@ lowLevelRegInHexPU intVal %i\n", NSStringFromClass([self class]),NSStringFromSelector(_cmd),[lowLevelRegInHexPU intValue]);//TODO: DEBUG testing ...-tb-
 	//[model setLowLevelRegInHex:[sender intValue]];	
-	[model setLowLevelRegInHex:[sender indexOfSelectedItem]];	
+	[model setLowLevelRegInHex:(int)[sender indexOfSelectedItem]];
 }
 
 - (void) writeToBBModeCBAction:(id)sender
@@ -2629,7 +2629,7 @@
 {
 	//[model setDacb:[sender intValue]];	
     int fiber = [model fiberSelectForBBAccess];
-    int index = [[sender selectedCell] tag];
+    int index = (int)[[sender selectedCell] tag];
     [model setDacbForFiber: fiber atIndex:index to:[sender intValue]];
     
     //if "Write Changes to BB" is selected ...
@@ -2640,7 +2640,7 @@
 {
 	//[model setSignb:[sender intValue]];	
     int fiber = [model fiberSelectForBBAccess];
-    int index = [[sender selectedCell] tag];
+    int index = (int)[[sender selectedCell] tag];
     [model setSignbForFiber: fiber atIndex:index to:[sender intValue]];
     
     //if "Write Changes to BB" is selected ...
@@ -2651,7 +2651,7 @@
 {
 	//[model setDaca:[sender intValue]];	
     int fiber = [model fiberSelectForBBAccess];
-    int index = [[sender selectedCell] tag];
+    int index = (int)[[sender selectedCell] tag];
     [model setDacaForFiber: fiber atIndex:index to:[sender intValue]];
     
     //if "Write Changes to BB" is selected ...
@@ -2662,7 +2662,7 @@
 {
 	//[model setSigna:[sender intValue]];	
     int fiber = [model fiberSelectForBBAccess];
-    int index = [[sender selectedCell] tag];
+    int index = (int)[[sender selectedCell] tag];
     [model setSignaForFiber: fiber atIndex:index to:[sender intValue]];
     
     //if "Write Changes to BB" is selected ...
@@ -2673,7 +2673,7 @@
 {
 	//[model setAdcRgForBBAccess:[sender intValue]];	
     int fiber = [model fiberSelectForBBAccess];
-    int index = [[sender selectedCell] tag];
+    int index = (int)[[sender selectedCell] tag];
     [model setAdcRgForBBAccessForFiber: fiber atIndex:index to:[sender intValue]];
     
     //if "Write Changes to BB" is selected ...
@@ -2684,7 +2684,7 @@
 {
 	//[model setAdcValueForBBAccess:[sender intValue]];	
     int fiber = [model fiberSelectForBBAccess];
-    int index = [[sender selectedCell] tag];
+    int index = (int)[[sender selectedCell] tag];
     [model setAdcValueForBBAccessForFiber: fiber atIndex:index to:[sender intValue]];
     
     //if "Write Changes to BB" is selected ...
@@ -2696,7 +2696,7 @@
 {
 	//[model setAdcMultForBBAccess:[sender intValue]];	
     int fiber = [model fiberSelectForBBAccess];
-    int index = [[sender selectedCell] tag];
+    int index = (int)[[sender selectedCell] tag];
     [model setAdcMultForBBAccessForFiber: fiber atIndex:index to:[sender intValue]];
 
     //if "Write Changes to BB" is selected ...
@@ -2716,12 +2716,12 @@
 
 //	[model setAdcFreqkHzForBBAccess:[sender intValue]];	
     int fiber = [model fiberSelectForBBAccess];
-    int index = [[sender selectedCell] tag];
+    int index = (int)[[sender selectedCell] tag];
         //DEBUG OUTPUT: 	        NSLog(@"%@::%@: tag %i,   intVal %i , fib %i, idx %i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),
             //[[sender selectedCell] tag],[sender intValue],fiber,index);//TODO : DEBUG testing ...-tb-
 	//if([sender intValue] != [model adcFreqkHzForBBAccessForFiber:fiber atIndex:index]){
 		//[[self undoManager] setActionName: @"Set Threshold"];
-		[model setAdcFreqkHzForBBAccessForFiber: fiber atIndex:[[sender selectedCell] tag] to:[sender intValue]];
+		[model setAdcFreqkHzForBBAccessForFiber: fiber atIndex:(int)[[sender selectedCell] tag] to:[sender intValue]];
 	//}
     
     //if "Write Changes to BB" is selected ...
@@ -2735,12 +2735,12 @@
     [self endEditing];
 //	[model setAdcFreqkHzForBBAccess:[sender intValue]];	
     int fiber = [model fiberSelectForBBAccess];
-    int index = [[sender selectedCell] tag];
+    int index = (int)[[sender selectedCell] tag];
         //DEBUG OUTPUT: 	        NSLog(@"%@::%@: tag %i,   intVal %i , fib %i, idx %i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),
             //[[sender selectedCell] tag],[sender intValue],fiber,index);//TODO : DEBUG testing ...-tb-
 	//if([sender intValue] != [model adcFreqkHzForBBAccessForFiber:fiber atIndex:index]){
 		//[[self undoManager] setActionName: @"Set Threshold"];
-		[model setPolarDacForFiber: fiber atIndex:[[sender selectedCell] tag] to:[sender intValue]];
+		[model setPolarDacForFiber: fiber atIndex:(int)[[sender selectedCell] tag] to:[sender intValue]];
 	//}
     
     //if "Write Changes to BB" is selected ...
@@ -2751,8 +2751,8 @@
 - (void) triDacMatrixAction:(id)sender
 {
     int fiber = [model fiberSelectForBBAccess];
-    int index = [[sender selectedCell] tag];
-    [model setTriDacForFiber: fiber atIndex:[[sender selectedCell] tag] to:[sender intValue]];
+    int index = (int)[[sender selectedCell] tag];
+    [model setTriDacForFiber: fiber atIndex:(int)[[sender selectedCell] tag] to:[sender intValue]];
 
     //if "Write Changes to BB" is selected ...
     if([model writeToBBMode]) [model writeTriDacForFiber:fiber atIndex:index];
@@ -2761,8 +2761,8 @@
 - (void) rectDacMatrixAction:(id)sender
 {
     int fiber = [model fiberSelectForBBAccess];
-    int index = [[sender selectedCell] tag];
-    [model setRectDacForFiber: fiber atIndex:[[sender selectedCell] tag] to:[sender intValue]];
+    int index = (int)[[sender selectedCell] tag];
+    [model setRectDacForFiber: fiber atIndex:(int)[[sender selectedCell] tag] to:[sender intValue]];
 
     //if "Write Changes to BB" is selected ...
     if([model writeToBBMode]) [model writeRectDacForFiber:fiber atIndex:index];
@@ -2791,7 +2791,7 @@
 	//[model setFiberSelectForBBAccess:[sender intValue]];	
     //DEBUG 	
     NSLog(@"%@::%@ - selItemIndex: %i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[sender indexOfSelectedItem]);//TODO: DEBUG testing ...-tb-
-	[model setFiberSelectForBBAccess:[sender indexOfSelectedItem]];	
+	[model setFiberSelectForBBAccess:(int)[sender indexOfSelectedItem]];
 }
 
 - (void) relaisStatesBBMatrixAction:(id)sender
@@ -2840,7 +2840,7 @@
     NSLog(@"%@::%@ - selItemIndex: %i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[sender indexOfSelectedItem]);//TODO: DEBUG testing ...-tb-
 
     int fiber = [model fiberSelectForBBAccess];
-	[model setRelais1ForBBAccessForFiber:fiber to:[sender indexOfSelectedItem]];
+	[model setRelais1ForBBAccessForFiber:fiber to:(int)[sender indexOfSelectedItem]];
     
     //if "Write Changes to BB" is selected ...
     if([model writeToBBMode]) [model writeRelaisStatesForBBAccessForFiber:fiber];
@@ -2852,7 +2852,7 @@
     NSLog(@"%@::%@ - selItemIndex: %i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[sender indexOfSelectedItem]);//TODO: DEBUG testing ...-tb-
 
     int fiber = [model fiberSelectForBBAccess];
-	[model setRelais2ForBBAccessForFiber:fiber to:[sender indexOfSelectedItem]];
+	[model setRelais2ForBBAccessForFiber:fiber to:(int)[sender indexOfSelectedItem]];
     
     //if "Write Changes to BB" is selected ...
     if([model writeToBBMode]) [model writeRelaisStatesForBBAccessForFiber:fiber];
@@ -2875,9 +2875,9 @@
 - (void) fiberSelectForBBStatusBitsPUAction:(id)sender
 {
     if(sender==fiberSelectForBBStatusBitsPU)
-    	[model setFiberSelectForBBStatusBits:[fiberSelectForBBStatusBitsPU indexOfSelectedItem]];	
+    	[model setFiberSelectForBBStatusBits:(int)[fiberSelectForBBStatusBitsPU indexOfSelectedItem]];
     if(sender==fiberSelectForFICCardPU)
-    	[model setFiberSelectForBBStatusBits:[fiberSelectForFICCardPU indexOfSelectedItem]];	
+    	[model setFiberSelectForBBStatusBits:(int)[fiberSelectForFICCardPU indexOfSelectedItem]];
 }
 
 
@@ -2947,7 +2947,7 @@
 
 - (void) repeatSWTriggerModePUAction:(id)sender
 {
-	[model setRepeatSWTriggerMode:[repeatSWTriggerModePU indexOfSelectedItem]];	
+	[model setRepeatSWTriggerMode:(int)[repeatSWTriggerModePU indexOfSelectedItem]];
 }
 
 - (void) repeatSWTriggerModeTextFieldAction:(id)sender
@@ -3004,7 +3004,7 @@
 {
     //DEBUG
  	NSLog(@"%@::%@ [sender indexOfSelectedItem] %i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[sender indexOfSelectedItem]);//TODO: DEBUG testing ...-tb-
-	[model setStatusLatency:[sender indexOfSelectedItem]];	
+	[model setStatusLatency:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) vetoFlagCBAction:(id)sender
@@ -3097,8 +3097,8 @@
 	uint64_t fibDelays;
 	for(fib=0;fib<6;fib++){
 		//debug NSString *s = [NSString stringWithFormat:@"fib %llu",fib];
-		    clk12  = [[fiberDelaysMatrix cellAtRow:0 column: fib] indexOfSelectedItem];
-		    clk120 = [[fiberDelaysMatrix cellAtRow:1 column: fib] indexOfSelectedItem];
+		    clk12  = (int)[[fiberDelaysMatrix cellAtRow:0 column: fib] indexOfSelectedItem];
+		    clk120 = (int)[[fiberDelaysMatrix cellAtRow:1 column: fib] indexOfSelectedItem];
 			//debug s=[s stringByAppendingString: [NSString stringWithFormat:@"clk12 %i:",clk12]];
 			//debug s=[s stringByAppendingString: [NSString stringWithFormat:@"clk120 %i:",clk120]];
 			fibDelays = ((clk120 & 0xf) << 4)  |   (clk12 & 0xf);
@@ -3359,7 +3359,7 @@
     //negPosPolarityMatrix
     //DEBUG: OUTPUT:  	    NSLog(@"%@::%@: UNDER CONSTRUCTION! negPosPolarityMatrix: col is %i, row is %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[negPosPolarityMatrix selectedColumn],[negPosPolarityMatrix selectedRow]);//TODO : DEBUG testing ...-tb-
     //DEBUG: OUTPUT:  	    NSLog(@"%@::%@: UNDER CONSTRUCTION! negPosPolarityMatrix: selectedCell %@ , state %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[negPosPolarityMatrix selectedCell],[[negPosPolarityMatrix selectedCell] intValue]);//TODO : DEBUG testing ...-tb-
-    unsigned int col, row, state;
+    NSUInteger col, row, state;
     col=[negPosPolarityMatrix selectedColumn];
     row=[negPosPolarityMatrix selectedRow];
     state = [[negPosPolarityMatrix selectedCell] intValue];
@@ -3372,28 +3372,28 @@
 {
     //gapMatrix
     //DEBUG: OUTPUT:  	    NSLog(@"%@::%@: UNDER CONSTRUCTION! sender: %@, col is %i, row is %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),sender,[sender selectedColumn],[sender selectedRow]);//TODO : DEBUG testing ...-tb-
-    unsigned int col, row, state;
+    NSUInteger col, row, state;
     col=[gapMatrix selectedColumn];
     row=[gapMatrix selectedRow];
     //state = [[gapMatrix selectedCell] intValue];
     state = [[gapMatrix selectedCell] indexOfSelectedItem];
     //DEBUG: OUTPUT:  	    NSLog(@"%@::%@: UNDER CONSTRUCTION!  selectedCell %@ , state %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[gapMatrix selectedCell],state);//TODO : DEBUG testing ...-tb-
     if(row>=kNumEWFLTHeatIonChannels) return;
-    [model setGapLength:row withValue:state];
+    [model setGapLength:row withValue:(int)state];
 }
 
 - (IBAction) downSamplingMatrixAction:(id)sender
 {
     //downSamplingMatrix
     //DEBUG: OUTPUT:  	    NSLog(@"%@::%@: UNDER CONSTRUCTION!  col is %i, row is %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[downSamplingMatrix selectedColumn],[downSamplingMatrix selectedRow]);//TODO : DEBUG testing ...-tb-
-    unsigned int col, row, state;
+    NSUInteger col, row, state;
     col=[downSamplingMatrix selectedColumn];
     row=[downSamplingMatrix selectedRow];
     //state = [[gapMatrix selectedCell] intValue];
     state = [[downSamplingMatrix selectedCell] indexOfSelectedItem];
     //DEBUG: OUTPUT:  	    NSLog(@"%@::%@: UNDER CONSTRUCTION!  selectedCell %@ , state %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[sender selectedCell],state);//TODO : DEBUG testing ...-tb-
     if(row>=kNumEWFLTHeatIonChannels) return;
-    [model setDownSampling:row withValue:state];
+    [model setDownSampling:row withValue:(int)state];
 }
 
 
@@ -3401,20 +3401,21 @@
 {
     //downSamplingMatrix
     //DEBUG: OUTPUT:  	       NSLog(@"%@::%@: UNDER CONSTRUCTION!  col is %i, row is %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[shapingLengthMatrix selectedColumn],[shapingLengthMatrix selectedRow]);//TODO : DEBUG testing ...-tb-
-    unsigned int col, row, state;
+    NSUInteger col, row, state;
     col=[shapingLengthMatrix selectedColumn];
     row=[shapingLengthMatrix selectedRow];
     //state = [[gapMatrix selectedCell] intValue];
     state = [[shapingLengthMatrix selectedCell] intValue];
     //DEBUG: OUTPUT:  	        NSLog(@"%@::%@: UNDER CONSTRUCTION!  selectedCell %@ , state %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[sender selectedCell],state);//TODO : DEBUG testing ...-tb-
     if(row>=kNumEWFLTHeatIonChannels) return;
-    [model setShapingLength:row withValue:state];
+    [model setShapingLength:row withValue:(int)state];
 }
 
 - (IBAction) heatWindowStartMatrixAction:(id)sender
 {
     //DEBUG: OUTPUT:      	       NSLog(@"%@::%@: UNDER CONSTRUCTION!  col is %i, row is %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[heatWindowStartMatrix selectedColumn],[heatWindowStartMatrix selectedRow]);//TODO : DEBUG testing ...-tb-
-    unsigned int col, row, state;
+    NSUInteger col, row;
+    int state;
     
     col=[sender selectedColumn];
     row=[sender selectedRow];
@@ -3437,7 +3438,7 @@
 - (IBAction) heatWindowEndMatrixAction:(id)sender
 {
     //DEBUG: OUTPUT:      	       NSLog(@"%@::%@: UNDER CONSTRUCTION!  col is %i, row is %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[heatWindowEndMatrix selectedColumn],[heatWindowEndMatrix selectedRow]);//TODO : DEBUG testing ...-tb-
-    unsigned int col, row, state;
+    NSUInteger col, row, state;
     col=[heatWindowEndMatrix selectedColumn];
     row=[heatWindowEndMatrix selectedRow];
     //state = [[gapMatrix selectedCell] intValue];
@@ -3445,7 +3446,7 @@
     //DEBUG: OUTPUT:  	
             NSLog(@"%@::%@: UNDER CONSTRUCTION!  selectedCell %@ , state %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[sender selectedCell],state);//TODO : DEBUG testing ...-tb-
     if(row>=kNumEWFLTHeatChannels) return;
-    [model setWindowPosEnd:row withValue:state];
+    [model setWindowPosEnd:row withValue:(int)state];
 }
 
 
@@ -3456,7 +3457,7 @@
 {
 //DEBUG OUTPUT: 	NSLog(@"%@::%@: UNDER CONSTRUCTION! %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[sender indexOfSelectedItem]);//TODO: DEBUG testing ...-tb-
 	//[model setSelectFiberTrig:[sender intValue]];	
-	[model setSelectFiberTrig:[sender indexOfSelectedItem]];	
+	[model setSelectFiberTrig:(int)[sender indexOfSelectedItem]];
 }
 
 - (void) BBv1MaskMatrixAction:(id)sender
@@ -3503,7 +3504,7 @@
 {
     //DEBUG OUTPUT:
  	NSLog(@"%@::%@ is %i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[statusBitPosPU intValue]);//TODO: DEBUG testing ...-tb-
-	[model setStatusBitPos:[statusBitPosPU indexOfSelectedItem]];	// or [sender intValue]
+	[model setStatusBitPos:(int)[statusBitPosPU indexOfSelectedItem]];	// or [sender intValue]
 }
 
 - (IBAction) ficOnFiberMaskMatrixAction:(id)sender
@@ -3626,7 +3627,7 @@
 
 - (IBAction) filterLengthAction:(id)sender
 {
-	[model setFilterLength:[sender indexOfSelectedItem]+2];	 //tranlate back to range of 2 to 8
+	[model setFilterLength:(int)[sender indexOfSelectedItem]+2];	 //tranlate back to range of 2 to 8
 }
 
 - (IBAction) gapLengthAction:(id)sender
@@ -3653,7 +3654,7 @@
 - (IBAction) fifoBehaviourAction:(id)sender
 {
 	@try {
-		[model setFifoBehaviour:[[sender selectedCell]tag]];	
+		[model setFifoBehaviour:(int)[[sender selectedCell]tag]];
 	}
 	@catch(NSException* localException) {
 		NSLog(@"Exception setting FLT behavior\n");
@@ -3761,13 +3762,13 @@
 //		[[self undoManager] setActionName: @"Set Threshold"];
 //		[model setThreshold:[[sender selectedCell] tag] withValue:[sender intValue]];
 //	}
-    unsigned int col, row, state;
+    NSUInteger col, row, state;
     col=[sender selectedColumn];
     row=[sender selectedRow];
     state = [[sender selectedCell] intValue];
     //DEBUG: OUTPUT:      	       NSLog(@"%@::%@: UNDER CONSTRUCTION!    selectedCell %@ , state %i ,col is %i, row is %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[sender selectedCell],state,col,row);//TODO : DEBUG testing ...-tb-
     if(row>=kNumEWFLTHeatIonChannels) return;
-    [model setThreshold:row withValue:state];
+    [model setThreshold:row withValue:(int)state];
 
 }
 
@@ -3832,7 +3833,7 @@
 
 - (IBAction) modeAction: (id) sender
 {
-	[model setRunMode:[modeButton indexOfSelectedItem]];
+	[model setRunMode:(int)[modeButton indexOfSelectedItem]];
 }
 
 - (IBAction) versionAction: (id) sender
@@ -3987,7 +3988,7 @@
 - (IBAction) writeRegAction: (id) sender
 {
 	[self endEditing];
-	int index = [registerPopUp indexOfSelectedItem];
+	int index = (int)[registerPopUp indexOfSelectedItem];
 	@try {
 		unsigned long val = [model writeValue];
         if(([model getAccessType:index] & kIpeRegNeedsChannel)){
@@ -4041,12 +4042,12 @@
 #pragma mark •••Plot DataSource
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	return [[model  totalRate]count];
+	return (int)[[model  totalRate]count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-	int count = [[model totalRate]count];
+	int count = (int)[[model totalRate]count];
 	int index = count-i-1;
 	*yValue =  [[model totalRate] valueAtIndex:index];
 	*xValue =  [[model totalRate] timeSampledAtIndex:index];

@@ -479,7 +479,7 @@
 {
     if(aTableView == powerTableView){
         if([[aTableColumn identifier] isEqualToString:@"Name"]){
-            return [model nameAtIndexInPowerTable:rowIndex];
+            return [model nameAtIndexInPowerTable:(int)rowIndex];
         }
         else {
             if([model dataValid]){
@@ -488,13 +488,13 @@
                     if([[aTableColumn identifier] isEqualToString:@"1"]) return [model valueForKeyInValueDictionary:@"INPUT FREQUENCY"];
                     else return @"";
                 }
-                else return [model valueForPowerPhase:[[aTableColumn identifier] intValue] powerTableIndex:rowIndex];
+                else return [model valueForPowerPhase:[[aTableColumn identifier] intValue] powerTableIndex:(int)rowIndex];
             }
             else return @"?";
         }
     }
     else if(aTableView == loadTableView){
-        if([[aTableColumn identifier] isEqualToString:@"Name"]) return [model nameForIndexInLoadTable:rowIndex];
+        if([[aTableColumn identifier] isEqualToString:@"Name"]) return [model nameForIndexInLoadTable:(int)rowIndex];
         else {
             if([model dataValid]){
                 if(rowIndex==2){
@@ -505,25 +505,25 @@
                     if([[aTableColumn identifier] isEqualToString:@"1"]) return [model valueForKeyInValueDictionary:@"OUTPUT FREQUENCY"];
                     else return @"";
                 }
-                else return [model valueForLoadPhase:[[aTableColumn identifier] intValue] loadTableIndex:rowIndex];
+                else return [model valueForLoadPhase:[[aTableColumn identifier] intValue] loadTableIndex:(int)rowIndex];
             }
             else return @"?";
         }
     }
     else if(aTableView == batteryTableView){
-        if([[aTableColumn identifier] isEqualToString:@"Name"]) return [model nameForIndexInBatteryTable:rowIndex];
+        if([[aTableColumn identifier] isEqualToString:@"Name"]) return [model nameForIndexInBatteryTable:(int)rowIndex];
         else {
             if([model dataValid]){
-                return [model valueForBattery:[[aTableColumn identifier] intValue] batteryTableIndex:rowIndex];
+                return [model valueForBattery:[[aTableColumn identifier] intValue] batteryTableIndex:(int)rowIndex];
             }
             else return @"?";           
         }
     }
     else if(aTableView == processTableView){
-        if([[aTableColumn identifier] isEqualToString:@"Name"]) return [model nameForIndexInProcessTable:rowIndex];
-        else if([[aTableColumn identifier] isEqualToString:@"Channel"]) return [NSNumber numberWithInt:rowIndex];
-        else if([[aTableColumn identifier] isEqualToString:@"LowLimit"]) return [NSNumber numberWithFloat:[model lowLimit:rowIndex]];
-        else if([[aTableColumn identifier] isEqualToString:@"HiLimit"]) return [NSNumber numberWithFloat:[model hiLimit:rowIndex]];
+        if([[aTableColumn identifier] isEqualToString:@"Name"]) return [model nameForIndexInProcessTable:(int)rowIndex];
+        else if([[aTableColumn identifier] isEqualToString:@"Channel"]) return [NSNumber numberWithInt:(int)rowIndex];
+        else if([[aTableColumn identifier] isEqualToString:@"LowLimit"]) return [NSNumber numberWithFloat:[model lowLimit:(int)rowIndex]];
+        else if([[aTableColumn identifier] isEqualToString:@"HiLimit"]) return [NSNumber numberWithFloat:[model hiLimit:(int)rowIndex]];
     }
 
     return nil;
@@ -532,8 +532,8 @@
 - (void) tableView:(NSTableView *) aTableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
     if(aTableView == processTableView){
-        if([[aTableColumn identifier]      isEqualToString:@"LowLimit"])      [model setLowLimit:rowIndex value:[object floatValue]];
-        else if([[aTableColumn identifier] isEqualToString:@"HiLimit"])  [model setHiLimit:rowIndex value:[object floatValue]];
+        if([[aTableColumn identifier]      isEqualToString:@"LowLimit"])      [model setLowLimit:(int)rowIndex value:[object floatValue]];
+        else if([[aTableColumn identifier] isEqualToString:@"HiLimit"])  [model setHiLimit:(int)rowIndex value:[object floatValue]];
     }
 }
 
@@ -559,14 +559,14 @@
 #pragma mark •••Data Source
 - (int) numberPointsInPlot:(id)aPlotter
 {
-    int aTag = [aPlotter tag];
-	return [[model timeRate:aTag] count];
+    int aTag = (int)[aPlotter tag];
+	return (int)[[model timeRate:aTag] count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-    int aTag = [aPlotter tag];
-	int count = [[model timeRate:aTag] count];
+    int aTag = (int)[aPlotter tag];
+	int count = (int)[[model timeRate:aTag] count];
 	int index = count-i-1;
 	*xValue = [[model timeRate:aTag] timeSampledAtIndex:index];
 	*yValue = [[model timeRate:aTag] valueAtIndex:index];

@@ -105,7 +105,7 @@
 {
 	ADVME1314ChannelDat value = [model writeMask];
 	short i,j;
-    int numberOfColumns = [writeMaskBitMatrix numberOfColumns];
+    int numberOfColumns = (int)[writeMaskBitMatrix numberOfColumns];
     for (j=0; j<sizeof(value)/sizeof(value.channelDat[0]);j++) {
         [[writeMaskHexField cellAtRow:j column:0] setIntValue:value.channelDat[j]];
         for(i=0;i<numberOfColumns;i++){
@@ -119,7 +119,7 @@
 {
 	ADVME1314ChannelDat value = [model writeValue];    
 	short i,j;
-    int numberOfColumns = [writeMaskBitMatrix numberOfColumns];    
+    int numberOfColumns = (int)[writeMaskBitMatrix numberOfColumns];
     for (j=0; j<sizeof(value)/sizeof(value.channelDat[0]);j++) {
         [[writeHexField cellAtRow:j column:0] setIntValue:value.channelDat[j]];
         for(i=0;i<numberOfColumns;i++){
@@ -130,7 +130,7 @@
 
 - (void) baseAddressChanged:(NSNotification *)aNotification
 {
-    [baseAddress setIntValue:[model baseAddress]];
+    [baseAddress setIntegerValue:[model baseAddress]];
 }
 
 #pragma mark ¥¥¥Actions
@@ -196,7 +196,7 @@
     memset(&val, 0, sizeof(val));
     for (j=0; j<sizeof(val)/sizeof(val.channelDat[0]);j++) {
         [[writeMaskHexField cellAtRow:j column:0] setIntValue:val.channelDat[j]];
-        int number = [writeMaskBitMatrix numberOfColumns];
+        int number = (int)[writeMaskBitMatrix numberOfColumns];
         for(i=0;i<number;i++){
             NSButtonCell* anObj = [writeMaskBitMatrix cellAtRow:j column:(number-i-1)];
             if([anObj intValue]){
@@ -225,7 +225,7 @@
     memset(&val, 0, sizeof(val));
     for (j=0; j<sizeof(val)/sizeof(val.channelDat[0]);j++) {
         [[writeHexField cellAtRow:j column:0] setIntValue:val.channelDat[j]];
-        int number = [writeBitMatrix numberOfColumns];        
+        int number = (int)[writeBitMatrix numberOfColumns];        
         for(i=0;i<number;i++){
             NSButtonCell* anObj = [writeBitMatrix cellAtRow:j column:(number-i-1)];
             if([anObj intValue]){

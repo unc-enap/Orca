@@ -192,7 +192,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(VXI11HardwareFinder);
 {
     XDR xdr_stream;
     register XDR *xdrs = &xdr_stream;
-    int outlen, inlen;
+    ssize_t outlen, inlen;
     unsigned int fromlen;
     register int sock;
     int on = 1;
@@ -240,7 +240,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(VXI11HardwareFinder);
     if ((rfd < 0) || (read(rfd, &xid, sizeof(xid)) != sizeof(xid)))
     {
         gettimeofday(t, (struct timezone *)0);
-        xid = getpid() ^ t->tv_sec ^ t->tv_usec;
+        xid = (uint32_t)(getpid() ^ t->tv_sec ^ t->tv_usec);
     }
     if (rfd > 0) close(rfd);
     
@@ -361,7 +361,7 @@ done_broad:
         const char* an_addr = inet_ntop(AF_INET, &(addr->sin_addr), str, INET_ADDRSTRLEN);
         CLINK vxi_link;
         if ( vxi11_open_device(an_addr, &vxi_link, "inst0") < 0 ) continue;        
-        int found = vxi11_send_and_receive(&vxi_link, "*IDN?", rcv, MAXSIZE, 10);
+        long found = vxi11_send_and_receive(&vxi_link, "*IDN?", rcv, MAXSIZE, 10);
         if (found > 0) {
             if (found == MAXSIZE - 1) found--;
             rcv[found] = '\0';

@@ -207,13 +207,13 @@
 
 -(IBAction) outletNameAction:(id)sender
 {
-	int tag = [[sender selectedCell] tag];
+	int tag = (int)[[sender selectedCell] tag];
 	[model setOutlet:tag name:[[sender selectedCell]stringValue]];
 }
 
 - (IBAction) turnOnOffAction:(id)sender
 {
-	int chan = [[turnOnOffMatrix selectedCell] tag];
+	int chan = (int)[[turnOnOffMatrix selectedCell] tag];
 	int state = [model relayState:chan];
 	if(!state)[model closeRelay:chan];
 	else     [model openRelay:chan];

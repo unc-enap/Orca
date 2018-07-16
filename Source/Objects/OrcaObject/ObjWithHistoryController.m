@@ -136,7 +136,7 @@
 
 - (NSMutableArray*) roiArrayForPlotter:(id)aPlot
 {
-	return [model rois:[aPlot tag]];
+	return [model rois:(int)[aPlot tag]];
 }
 
 - (void) closeAnalysisDrawer

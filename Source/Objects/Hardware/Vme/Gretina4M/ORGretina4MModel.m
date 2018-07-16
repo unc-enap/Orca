@@ -2448,7 +2448,7 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
 				
 				if((val & kGretina4MFIFOEmpty) == 0){
 					//there's some data in fifo so we're too low with the threshold
-					[self setTestThreshold:noiseFloorWorkingChannel withValue:[self maxTestThreshold:noiseFloorWorkingChannel]];
+					[self setTestThreshold:noiseFloorWorkingChannel withValue:(int)[self maxTestThreshold:noiseFloorWorkingChannel]];
 					[self writeTestThreshold:noiseFloorWorkingChannel];
 					[self resetFIFO];
 					noiseFloorLow = noiseFloorTestValue + 1;
@@ -2470,7 +2470,7 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
 						break;
 					}
 				}
-                noiseFloorHigh		= [self maxTestThreshold:noiseFloorWorkingChannel];
+                noiseFloorHigh		= [(int)self maxTestThreshold:noiseFloorWorkingChannel];
                 noiseFloorTestValue	= noiseFloorHigh/2;              //Initial probe position
 				if(noiseFloorWorkingChannel >= startChan){
 					[self setEnabled:noiseFloorWorkingChannel withValue:YES];
@@ -3086,18 +3086,18 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
 
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id				= kGretina4M; //should be unique
-	configStruct->card_info[index].hw_mask[0]				= dataId; //better be unique
+	configStruct->card_info[index].hw_mask[0]				= (uint32_t)dataId; //better be unique
 	configStruct->card_info[index].slot						= [self slot];
 	configStruct->card_info[index].crate					= [self crateNumber];
 	configStruct->card_info[index].add_mod					= [self addressModifier];
-	configStruct->card_info[index].base_add					= [self baseAddress];
-	configStruct->card_info[index].deviceSpecificData[0]	= [self baseAddress] + register_information[kProgrammingDone].offset; //fifoStateAddress
-    configStruct->card_info[index].deviceSpecificData[1]	= [self baseAddress] + 0x1000; // fifoAddress
+	configStruct->card_info[index].base_add					= (uint32_t)[self baseAddress];
+	configStruct->card_info[index].deviceSpecificData[0]	= (uint32_t)([self baseAddress] + register_information[kProgrammingDone].offset); //fifoStateAddress
+    configStruct->card_info[index].deviceSpecificData[1]	= (uint32_t)[self baseAddress] + 0x1000; // fifoAddress
     configStruct->card_info[index].deviceSpecificData[2]	= 0x0B; // fifoAM
-    configStruct->card_info[index].deviceSpecificData[3]	= [self baseAddress] + 0x04; // fifoReset Address
-    configStruct->card_info[index].deviceSpecificData[4]	= location; //crate, card, serial number
-    configStruct->card_info[index].deviceSpecificData[5]	= runNumberLocal;
-    configStruct->card_info[index].deviceSpecificData[6]	= subRunNumberLocal;
+    configStruct->card_info[index].deviceSpecificData[3]	= (uint32_t)[self baseAddress] + 0x04; // fifoReset Address
+    configStruct->card_info[index].deviceSpecificData[4]	= (uint32_t)location; //crate, card, serial number
+    configStruct->card_info[index].deviceSpecificData[5]	= (uint32_t)runNumberLocal;
+    configStruct->card_info[index].deviceSpecificData[6]	= (uint32_t)subRunNumberLocal;
 
 	configStruct->card_info[index].num_Trigger_Indexes		= 0;
 	
@@ -3247,7 +3247,7 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
     [objDictionary setObject:[NSNumber numberWithInt:extTrigLength] forKey:@"Ext Trig Length"];
     [objDictionary setObject:[NSNumber numberWithInt:collectionTime] forKey:@"Collection Time"];
     [objDictionary setObject:[NSNumber numberWithInt:integrateTime] forKey:@"Integration Time"];
-    [objDictionary setObject:[NSNumber numberWithInt:serialNumber] forKey:@"Serial Number"];
+    [objDictionary setObject:[NSNumber numberWithInteger:serialNumber] forKey:@"Serial Number"];
     
     [self addCurrentState:objDictionary boolArray:(BOOL*)enabled       forKey:@"Enabled"];
     [self addCurrentState:objDictionary boolArray:(BOOL*)forceFullInit forKey:@"forceFullInit"];
@@ -3518,7 +3518,7 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
                 [self writeToAddress:0x900 aValue:kGretina4MResetMainFPGACmd];
                 [self writeToAddress:0x900 aValue:kGretina4MReloadMainFPGACmd];
                 [self setProgressStateOnMainThread:  @"Finishing$Flash Memory-->FPGA"];
-                uint32_t statusRegValue = [self readFromAddress:0x904];
+                uint32_t statusRegValue = (uint32_t)[self readFromAddress:0x904];
                 while(!(statusRegValue & kGretina4MMainFPGAIsLoaded)) {
                     if(stopDownLoadingMainFPGA)return;
                     statusRegValue = [self readFromAddress:0x904];
@@ -3823,7 +3823,7 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
         aPacket.cmdHeader.numberBytesinPayload	= sizeof(MJDFlashGretinaFPGAStruct);
         
         MJDFlashGretinaFPGAStruct* p = (MJDFlashGretinaFPGAStruct*) aPacket.payload;
-        p->baseAddress      = [self baseAddress];
+        p->baseAddress      = (uint32_t)[self baseAddress];
         @try {
             NSLog(@"Gretina4M (%d) launching firmware load job in SBC\n",[self uniqueIdNumber]);
 

@@ -42,7 +42,7 @@
 	unsigned long theTime = *ptr;
     ptr++; // skip the microseconds 
 
-	int n = length - 4;
+	int n = (int)(length - 4);
 	int i;
 	for(i=0;i<n;i++){
 		ptr++;	//channel
@@ -69,7 +69,7 @@
 	NSDate* date = [NSDate dateWithTimeIntervalSince1970:*ptr];
 
 	NSString* adcString = @"";
-	int n = length - 3;
+	int n = (int)length - 3;
 	int i;
 	for(i=0;i<n;i++){
 		ptr++;

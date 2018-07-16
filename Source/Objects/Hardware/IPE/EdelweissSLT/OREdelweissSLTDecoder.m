@@ -320,7 +320,7 @@ followed by multiplicity data (20 longwords -- 1 pixel mask per card)
 
 	//channel by channel histograms
 	//unsigned long energy = ptr[6];
-    uint32_t eventFlags     = ptr[7];
+    unsigned long eventFlags     = ptr[7];
     //uint32_t traceStart16 = ShiftAndExtract(eventFlags,8,0x7ff);//start of trace in short array
     
 #define kPageLength (64*1024)
@@ -479,14 +479,14 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
 	//unsigned char crate		= ShiftAndExtract(ptr[1],21,0xf);
 	//unsigned char card		= ShiftAndExtract(ptr[1],16,0x1f);
 	//unsigned char chan		= ShiftAndExtract(ptr[1],8,0xff);
-    uint32_t sec            = ptr[2];
-    uint32_t subsec         = ptr[3]; // ShiftAndExtract(ptr[1],0,0xffffffff);
-    uint32_t chmap          = ptr[4];
-    uint32_t eventID        = ptr[5];
-    uint32_t numfifo        = ptr[6];
-    uint32_t energy         = ptr[6] & 0x00ffffff;
-    uint32_t eventFlags     = ptr[7];
-    uint32_t traceStart16 = ShiftAndExtract(eventFlags,8,0x7ff);//start of trace in short array
+    unsigned long sec            = ptr[2];
+    unsigned long subsec         = ptr[3]; // ShiftAndExtract(ptr[1],0,0xffffffff);
+    unsigned long chmap          = ptr[4];
+    unsigned long eventID        = ptr[5];
+    unsigned long numfifo        = ptr[6];
+    unsigned long energy         = ptr[6] & 0x00ffffff;
+    unsigned long eventFlags     = ptr[7];
+    unsigned long traceStart16 = ShiftAndExtract(eventFlags,8,0x7ff);//start of trace in short array
 
     uint32_t eventFlags4bit     = eventFlags & 0xf;
     
@@ -502,24 +502,24 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
     NSString* subsecStr = 0;//[NSString stringWithFormat:@"SubSec     = %d\n", subsec];
     NSString* energyStr = 0;//[NSString stringWithFormat:@"NumFIFO     = %d\n", numfifo];
     if(eventFlags4bit == 0x2){//FLT event
-        secStr    = [NSString stringWithFormat:@"Time 0..31 = 0x%08x\n", sec];
-        subsecStr = [NSString stringWithFormat:@"Time32..47 = 0x%08x\n", subsec];
-        energyStr = [NSString stringWithFormat:@"Energy     = 0x%08x\n", energy];
+        secStr    = [NSString stringWithFormat:@"Time 0..31 = 0x%08lx\n", sec];
+        subsecStr = [NSString stringWithFormat:@"Time32..47 = 0x%08lx\n", subsec];
+        energyStr = [NSString stringWithFormat:@"Energy     = 0x%08lx\n", energy];
     }else{
-        secStr    = [NSString stringWithFormat:@"Sec        = %d\n", sec];
-        subsecStr = [NSString stringWithFormat:@"SubSec     = %d\n", subsec];
-        energyStr = [NSString stringWithFormat:@"NumFIFO     = %d\n", numfifo];
+        secStr    = [NSString stringWithFormat:@"Sec        = %ld\n", sec];
+        subsecStr = [NSString stringWithFormat:@"SubSec     = %ld\n", subsec];
+        energyStr = [NSString stringWithFormat:@"NumFIFO     = %ld\n", numfifo];
     }
-    NSString* chmapStr  = [NSString stringWithFormat:@"ChannelMap = 0x%x\n", chmap];
-    NSString* eventIDStr= [NSString stringWithFormat:@"ReadPtr,Pg#= %d,%d\n", ShiftAndExtract(eventID,0,0x3ff),ShiftAndExtract(eventID,10,0x3f)];
-    NSString* offsetStr = [NSString stringWithFormat:@"Offset16   = %d\n", traceStart16];
-    NSString* versionStr= [NSString stringWithFormat:@"RecVersion = %d\n", ShiftAndExtract(eventFlags,0,0xf)];
+    NSString* chmapStr  = [NSString stringWithFormat:@"ChannelMap = 0x%lx\n", chmap];
+    NSString* eventIDStr= [NSString stringWithFormat:@"ReadPtr,Pg#= %ld,%ld\n", ShiftAndExtract(eventID,0,0x3ff),ShiftAndExtract(eventID,10,0x3f)];
+    NSString* offsetStr = [NSString stringWithFormat:@"Offset16   = %ld\n", traceStart16];
+    NSString* versionStr= [NSString stringWithFormat:@"RecVersion = %ld\n", ShiftAndExtract(eventFlags,0,0xf)];
     NSString* eventFlagsStr
-                        = [NSString stringWithFormat:@"Flag(a,ap) = %d,%d\n", ShiftAndExtract(eventFlags,4,0x1),ShiftAndExtract(eventFlags,5,0x1)];
+                        = [NSString stringWithFormat:@"Flag(a,ap) = %ld,%ld\n", ShiftAndExtract(eventFlags,4,0x1),ShiftAndExtract(eventFlags,5,0x1)];
     NSString* lengthStr = [NSString stringWithFormat:@"Length     = %lu\n", length];
     
     
-    NSString* evFlagsStr= [NSString stringWithFormat:@"EventFlags = 0x%x\n", eventFlags ];
+    NSString* evFlagsStr= [NSString stringWithFormat:@"EventFlags = 0x%lx\n", eventFlags ];
 
     return [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@",title,crate,card,fiber,chan,  
                 secStr, subsecStr, energyStr, chmapStr, eventIDStr, offsetStr, versionStr, eventFlagsStr, lengthStr,   evFlagsStr]; 
@@ -613,7 +613,7 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
 
 	//channel by channel histograms
 	//unsigned long energy = ptr[6];
-    uint32_t eventFlags     = ptr[7];
+    unsigned long eventFlags     = ptr[7];
     //uint32_t traceStart16 = ShiftAndExtract(eventFlags,8,0x7ff);//start of trace in short array
     
 #define kPageLength (64*1024)
@@ -841,19 +841,19 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
 	//unsigned char crate		= ShiftAndExtract(ptr[1],21,0xf);
 	//unsigned char card		= ShiftAndExtract(ptr[1],16,0x1f);
 	//unsigned char chan		= ShiftAndExtract(ptr[1],8,0xff);
-	unsigned int trigChan	= ShiftAndExtract(ptr[1],8,0xff);
-    uint32_t sec            = ptr[2]; //f0   
-    uint32_t subsec         = ptr[3]; //f1   // ShiftAndExtract(ptr[1],0,0xffffffff);
-    uint32_t timelo         = ptr[2]; 
-    uint64_t timehi         = ptr[3]; // ShiftAndExtract(ptr[1],0,0xffffffff);
-    uint64_t timestamp=timelo | ((timehi & 0xffff)<<32);
-    uint32_t chmap          = ptr[4]; //f2   
-    uint32_t energy         = ptr[5] & 0x00ffffff;  //f3   
-  //  uint32_t eventID        = ptr[6];
-    uint32_t eventFifo4       = ptr[6]; //f4   
-//    uint32_t numfifo        = ptr[6];
-    uint32_t eventFlags     = ptr[7];
-    uint32_t spareWord      = ptr[8];
+	unsigned long int trigChan	= ShiftAndExtract(ptr[1],8,0xff);
+    unsigned long sec            = ptr[2]; //f0
+    unsigned long subsec         = ptr[3]; //f1   // ShiftAndExtract(ptr[1],0,0xffffffff);
+    unsigned long timelo         = ptr[2];
+    unsigned long timehi         = ptr[3]; // ShiftAndExtract(ptr[1],0,0xffffffff);
+    unsigned long timestamp=timelo | ((timehi & 0xffff)<<32);
+    unsigned long chmap          = ptr[4]; //f2
+    unsigned long energy         = ptr[5] & 0x00ffffff;  //f3
+  //  unsigned long eventID        = ptr[6];
+    unsigned long eventFifo4       = ptr[6]; //f4
+//    unsigned long numfifo        = ptr[6];
+    unsigned long eventFlags     = ptr[7];
+    unsigned long spareWord      = ptr[8];
     //uint32_t traceStart16 = ShiftAndExtract(eventFlags,8,0x7ff);//start of trace in short array
     uint32_t traceStart16 = ShiftAndExtract(ptr[6],0,0xfff);//start of trace in short array
 
@@ -867,28 +867,28 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
     NSString* card      = [NSString stringWithFormat:@"Station    = %lu\n",(*ptr>>16) & 0x1f];
     //NSString* fiber     = [NSString stringWithFormat:@"Fiber      = %lu\n",(*ptr>>12) & 0xf];
     //NSString* chan      = [NSString stringWithFormat:@"Channel    = %lu\n",(*ptr>>8) & 0xf];
-    NSString* chan      = [NSString stringWithFormat:@"Channel    = %u\n",trigChan];
+    NSString* chan      = [NSString stringWithFormat:@"Channel    = %lu\n",trigChan];
     NSString* timeStr    = 0; 
     NSString* secStr    = 0;//[NSString stringWithFormat:@"Sec        = %d\n", sec];
     NSString* subsecStr = 0;//[NSString stringWithFormat:@"SubSec     = %d\n", subsec];
     NSString* energyStr = 0;//[NSString stringWithFormat:@"NumFIFO     = %d\n", numfifo];
     if(eventFlags4bit == 0x2){//FLT event
     }
-        secStr    = [NSString stringWithFormat:@"Time 0..31 = 0x%08x\n", sec];
-        subsecStr = [NSString stringWithFormat:@"Time32..47 = 0x%08x\n", subsec];
-        timeStr   = [NSString stringWithFormat:@"Timestamp  = %lli\n", timestamp];
-        energyStr = [NSString stringWithFormat:@"Energy     = 0x%08x\n", energy];
-    NSString* chmapStr  = [NSString stringWithFormat:@"ChannelMap = 0x%x\n", chmap];
-    NSString* eventIDStr= [NSString stringWithFormat:@"Pg#,offset= %d,%d\n", ShiftAndExtract(eventFifo4,12,0xf),ShiftAndExtract(eventFifo4,0,0xfff)];
+        secStr    = [NSString stringWithFormat:@"Time 0..31 = 0x%08lx\n", sec];
+        subsecStr = [NSString stringWithFormat:@"Time32..47 = 0x%08lx\n", subsec];
+        timeStr   = [NSString stringWithFormat:@"Timestamp  = %lu\n", timestamp];
+        energyStr = [NSString stringWithFormat:@"Energy     = 0x%08lx\n", energy];
+    NSString* chmapStr  = [NSString stringWithFormat:@"ChannelMap = 0x%lx\n", chmap];
+    NSString* eventIDStr= [NSString stringWithFormat:@"Pg#,offset= %ld,%ld\n", ShiftAndExtract(eventFifo4,12,0xf),ShiftAndExtract(eventFifo4,0,0xfff)];
     NSString* offsetStr = [NSString stringWithFormat:@"Offset16   = %d\n", traceStart16];
-    NSString* versionStr= [NSString stringWithFormat:@"RecVersion = %d\n", ShiftAndExtract(eventFlags,0,0xf)];
+    NSString* versionStr= [NSString stringWithFormat:@"RecVersion = %ld\n", ShiftAndExtract(eventFlags,0,0xf)];
     NSString* eventFlagsStr
-                        = [NSString stringWithFormat:@"Flag(a,ap) = %d,%d\n", ShiftAndExtract(eventFlags,4,0x1),ShiftAndExtract(eventFlags,5,0x1)];
+                        = [NSString stringWithFormat:@"Flag(a,ap) = %ld,%ld\n", ShiftAndExtract(eventFlags,4,0x1),ShiftAndExtract(eventFlags,5,0x1)];
     NSString* lengthStr = [NSString stringWithFormat:@"Length     = %lu\n", length];
     
     
-    NSString* evFlagsStr= [NSString stringWithFormat:@"EventFlags = 0x%x\n", eventFlags ];
-    NSString* spareStr= [NSString stringWithFormat:@"spare      = 0x%x\n", spareWord ];
+    NSString* evFlagsStr= [NSString stringWithFormat:@"EventFlags = 0x%lx\n", eventFlags ];
+    NSString* spareStr= [NSString stringWithFormat:@"spare      = 0x%lx\n", spareWord ];
 
     return [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@",title,crate,card,chan,  
                 secStr, subsecStr, timeStr, energyStr, chmapStr, eventIDStr, offsetStr, versionStr, eventFlagsStr, lengthStr,   evFlagsStr, spareStr]; 

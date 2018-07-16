@@ -617,7 +617,7 @@
 
 - (void) baseAddressChanged:(NSNotification*)aNote
 {
-    [addressText setIntValue: [model baseAddress]];
+    [addressText setIntegerValue: [model baseAddress]];
 }
 
 - (void) integrationChanged:(NSNotification*)aNotification
@@ -718,7 +718,7 @@
 
 - (IBAction) clockSourceAction:(id)sender
 {
-	[model setClockSource:[sender indexOfSelectedItem]];	
+	[model setClockSource:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) gtAction:(id)sender
@@ -783,7 +783,7 @@
 - (IBAction) averagingAction:(id)sender
 {
     if([[sender selectedCell] indexOfSelectedItem] != [model averagingType:[sender selectedRow]]){
-		[model setAveragingType:[sender selectedRow] withValue:[[sender selectedCell] indexOfSelectedItem]];
+		[model setAveragingType:(int)[sender selectedRow] withValue:(int)[[sender selectedCell] indexOfSelectedItem]];
 	}
 
 }
@@ -801,7 +801,7 @@
 - (IBAction) pageWrapSizeAction:(id)sender
 {
     if([[sender selectedCell] indexOfSelectedItem] != [model pageWrapSize:[sender selectedRow]]){
-		[model setPageWrapSize:[sender selectedRow] withValue:[[sender selectedCell] indexOfSelectedItem]];
+		[model setPageWrapSize:(int)[sender selectedRow] withValue:(int)[[sender selectedCell] indexOfSelectedItem]];
 	}
 }
 
@@ -813,7 +813,7 @@
 - (IBAction) testDataTypeAction:(id)sender
 {
     if([[sender selectedCell] indexOfSelectedItem] != [model testDataType:[sender selectedRow]]){
-		[model setTestDataType:[sender selectedRow] withValue:[[sender selectedCell] indexOfSelectedItem]];
+		[model setTestDataType:[sender selectedRow] withValue:(int)[[sender selectedCell] indexOfSelectedItem]];
 	}
 }
 
@@ -905,7 +905,7 @@
     }
 	
     NSString* key = [NSString stringWithFormat: @"orca.ORSIS3302%d.selectedtab",[model slot]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 	
 }
@@ -961,12 +961,12 @@
 
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	return [[[model waveFormRateGroup]timeRate]count];
+	return (int)[[[model waveFormRateGroup]timeRate]count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 {
-	int count = [[[model waveFormRateGroup]timeRate] count];
+	int count = (int)[[[model waveFormRateGroup]timeRate] count];
 	int index = count-i-1;
 	*yValue = [[[model waveFormRateGroup] timeRate]valueAtIndex:index];
 	*xValue = [[[model waveFormRateGroup] timeRate]timeSampledAtIndex:index];

@@ -99,7 +99,7 @@
         if(recordSizeInLongs){
                 NSMutableData* tmpData = [NSMutableData dataWithBytes:someData length:recordSizeInLongs*sizeof(long)];
                 unsigned short* dp = (unsigned short*)[tmpData bytes];
-                int i;
+                unsigned long i;
                 for( i = indexToData; i < indexToData + recordSizeInLongs; i++ ){
                     *dp++ = ptr[i] & 0xffff;
                     *dp++ = (ptr[i]>>16) & 0xffff;

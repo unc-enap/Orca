@@ -769,7 +769,7 @@
 - (void) amplitudeChanged:(NSNotification*)aNotification
 {
 	int chan = [[[aNotification userInfo] objectForKey:@"Channel"] intValue];
-	[[amplitudesMatrix cellWithTag:chan] setIntValue: [model amplitude:chan]];		//convert to volts
+	[[amplitudesMatrix cellWithTag:chan] setIntegerValue: [model amplitude:chan]];		//convert to volts
 }
 
 - (void) dacArrayChanged:(NSNotification*)aNotification
@@ -786,14 +786,14 @@
 {
 	short chan;
 	for(chan=0;chan<kMJDPreAmpDacChannels;chan++){
-		[[amplitudesMatrix cellWithTag:chan] setIntValue: [model amplitude:chan]]; //convert to volts
+		[[amplitudesMatrix cellWithTag:chan] setIntegerValue: [model amplitude:chan]]; //convert to volts
 	}
 }
 
 #pragma mark ¥¥¥Actions
 - (IBAction) firmwareRevAction:(id)sender
 {
-    [model setFirmwareRev:[sender indexOfSelectedItem]];
+    [model setFirmwareRev:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) doNotUseHWMapAction:(id)sender
@@ -803,7 +803,7 @@
 
 - (IBAction) boardRevAction:(id)sender
 {
-	[model setBoardRev:[sender indexOfSelectedItem]];
+	[model setBoardRev:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) adcEnabledMaskAction:(id)sender
@@ -824,7 +824,7 @@
 
 - (IBAction) pollTimeAction:(id)sender
 {
-	[model setPollTime:[[sender selectedItem] tag]];
+	[model setPollTime:(int)[[sender selectedItem] tag]];
 }
 
 - (IBAction) loopForeverAction:(id)sender
@@ -844,24 +844,24 @@
 
 - (IBAction) detectorNameAction:(id)sender
 {
-   	[model setDetector:[[sender selectedCell] tag] name:[sender stringValue]];
+   	[model setDetector:(int)[[sender selectedCell] tag] name:[sender stringValue]];
 }
 
 - (IBAction) enabledAction:(id)sender
 {
-	int index = [sender tag];
+	int index = (int)[sender tag];
 	[model setEnabled:index value:[sender indexOfSelectedItem]];	
 }
 
 - (IBAction) attenuatedAction:(id)sender
 {
-	int index = [sender tag];
+	int index = (int)[sender tag];
 	[model setAttenuated:index value:[sender indexOfSelectedItem]];	
 }
 
 - (IBAction) finalAttenuatedAction:(id)sender
 {
-	int index = [sender tag];
+	int index = (int)[sender tag];
 	[model setFinalAttenuated:index value:[sender indexOfSelectedItem]];	
 }
 
@@ -897,7 +897,7 @@
 
 - (IBAction) amplitudesAction:(id)sender
 {
-	[model setAmplitude:[[sender selectedCell] tag] withValue:[sender intValue]]; 
+	[model setAmplitude:(int)[[sender selectedCell] tag] withValue:[sender intValue]]; 
 }
 
 - (IBAction) settingsLockAction:(id)sender
@@ -932,12 +932,12 @@
 
 - (IBAction) feedBackResistorAction:(id)sender
 {
-	[model setFeedBackResistor:[[sender selectedCell] tag]  value:[sender floatValue]];
+	[model setFeedBackResistor:(int)[[sender selectedCell] tag]  value:[sender floatValue]];
 }
 
 - (IBAction) baselineVoltageAction:(id)sender
 {
-  	[model setBaselineVoltage:[[sender selectedCell] tag]  value:[sender floatValue]];
+  	[model setBaselineVoltage:(int)[[sender selectedCell] tag]  value:[sender floatValue]];
   
 }
 
@@ -945,25 +945,25 @@
 - (int) numberPointsInPlot:(id)aPlotter
 {
     if(aPlotter == leakageCurrentPlot0 || aPlotter == leakageCurrentPlot1){
-        return [[model leakageCurrentHistory:[aPlotter tag]] count];
+        return (int)[[model leakageCurrentHistory:(int)[aPlotter tag]] count];
     }
     else {
-        return [[model adcHistory:[aPlotter tag]] count];
+        return (int)[[model adcHistory:(int)[aPlotter tag]] count];
     }
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
     if(aPlotter == leakageCurrentPlot0 || aPlotter == leakageCurrentPlot1){
-        int tag = [aPlotter tag];
-        int count = [[model leakageCurrentHistory:tag] count];
+        int tag = (int)[aPlotter tag];
+        int count = (int)[[model leakageCurrentHistory:tag] count];
         int index = count-i-1;        
         *xValue = [[model leakageCurrentHistory:tag] timeSampledAtIndex:index];
         *yValue = [[model leakageCurrentHistory:tag] valueAtIndex:index];
     }
     else {
-        int tag = [aPlotter tag];
-        int count = [[model adcHistory:tag] count];
+        int tag = (int)[aPlotter tag];
+        int count = (int)[[model adcHistory:tag] count];
         int index = count-i-1;
         *xValue = [[model adcHistory:tag] timeSampledAtIndex:index];
         *yValue = [[model adcHistory:tag] valueAtIndex:index];

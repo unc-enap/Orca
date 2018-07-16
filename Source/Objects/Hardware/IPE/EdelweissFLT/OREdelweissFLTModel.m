@@ -2100,12 +2100,12 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     [[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissFLTModelFastWriteChanged object:self];
 }
 
-- (uint64_t) fiberDelays
+- (unsigned long long) fiberDelays
 {
     return fiberDelays;
 }
 
-- (void) setFiberDelays:(uint64_t)aFiberDelays
+- (void) setFiberDelays:(unsigned long long)aFiberDelays
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setFiberDelays:fiberDelays];
     
@@ -2122,7 +2122,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     [[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissFLTModelFiberDelaysChanged object:self];
 }
 
-- (uint64_t) streamMask
+- (unsigned long long) streamMask
 {
     return streamMask;
 }
@@ -2143,12 +2143,12 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 
 - (int) streamMaskForFiber:(int)aFiber chan:(int)aChan
 {
-    uint64_t mask = ((0x1LL<<aChan) << (aFiber*8));
+    unsigned long long mask = ((0x1LL<<aChan) << (aFiber*8));
 	return ((streamMask & mask) !=0);
 }
 
 
-- (void) setStreamMask:(uint64_t)aStreamMask
+- (void) setStreamMask:(unsigned long long)aStreamMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setStreamMask:streamMask];
     
@@ -2166,7 +2166,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 
 
 
-- (uint64_t) ionTriggerMask
+- (unsigned long long) ionTriggerMask
 {
     return ionTriggerMask;
 }
@@ -2187,13 +2187,13 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 
 - (int) ionTriggerMaskForFiber:(int)aFiber chan:(int)aChan
 {
-    uint64_t mask = ((0x1LL<<aChan) << (aFiber*8));
+    unsigned long long mask = ((0x1LL<<aChan) << (aFiber*8));
 	return ((ionTriggerMask & mask) !=0);
 }
 
 
 
-- (void) setIonTriggerMask:(uint64_t)aIonTriggerMask
+- (void) setIonTriggerMask:(unsigned long long)aIonTriggerMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setIonTriggerMask:ionTriggerMask];
     
@@ -2204,7 +2204,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 
 
 
-- (uint64_t) heatTriggerMask
+- (unsigned long long) heatTriggerMask
 {
     return heatTriggerMask;
 }
@@ -2225,13 +2225,13 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 
 - (int) heatTriggerMaskForFiber:(int)aFiber chan:(int)aChan
 {
-    uint64_t mask = ((0x1LL<<aChan) << (aFiber*8));
+    unsigned long long mask = ((0x1LL<<aChan) << (aFiber*8));
 	return ((heatTriggerMask & mask) !=0);
 }
 
 
 
-- (void) setHeatTriggerMask:(uint64_t)aHeatTriggerMask
+- (void) setHeatTriggerMask:(unsigned long long)aHeatTriggerMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setHeatTriggerMask:heatTriggerMask];
     
@@ -3149,9 +3149,9 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 {
     //DEBUG OUTPUT:
  	NSLog(@"%@::%@ \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd) );//TODO: DEBUG testing ...-tb-
-    uint64_t streamMask1=[self readReg: kFLTV4StreamMask_1Reg];
-    uint64_t streamMask2=[self readReg: kFLTV4StreamMask_2Reg];
-	uint64_t theStreamMask = (streamMask2 << 32) | streamMask1;
+    unsigned long long streamMask1=[self readReg: kFLTV4StreamMask_1Reg];
+    unsigned long long streamMask2=[self readReg: kFLTV4StreamMask_2Reg];
+	unsigned long long theStreamMask = (streamMask2 << 32) | streamMask1;
 	[self setStreamMask: theStreamMask];
 }
 
@@ -3170,9 +3170,9 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 {
     //DEBUG OUTPUT:
  	NSLog(@"%@::%@ \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd) );//TODO: DEBUG testing ...-tb-
-    uint64_t mask1=[self readReg: kFLTV4IonTriggerMask_1Reg];
-    uint64_t mask2=[self readReg: kFLTV4IonTriggerMask_2Reg];
-	uint64_t theMask = (mask2 << 32) | mask1;
+    unsigned long long mask1=[self readReg: kFLTV4IonTriggerMask_1Reg];
+    unsigned long long mask2=[self readReg: kFLTV4IonTriggerMask_2Reg];
+	unsigned long long theMask = (mask2 << 32) | mask1;
 	[self setIonTriggerMask: theMask];
 }
 
@@ -3190,9 +3190,9 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 {
     //DEBUG OUTPUT:
  	NSLog(@"%@::%@ \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd) );//TODO: DEBUG testing ...-tb-
-    uint64_t mask1=[self readReg: kFLTV4HeatTriggerMask_1Reg];
-    uint64_t mask2=[self readReg: kFLTV4HeatTriggerMask_2Reg];
-	uint64_t theMask = (mask2 << 32) | mask1;
+    unsigned long long mask1=[self readReg: kFLTV4HeatTriggerMask_1Reg];
+    unsigned long long mask2=[self readReg: kFLTV4HeatTriggerMask_2Reg];
+	unsigned long long theMask = (mask2 << 32) | mask1;
 	[self setHeatTriggerMask: theMask];
 }
 
@@ -3252,9 +3252,9 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 {
     //DEBUG OUTPUT:
  	NSLog(@"%@::%@ \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd) );//TODO: DEBUG testing ...-tb-
-    uint64_t fiberDelays1=[self readReg: kFLTV4FiberSet_1Reg];
-    uint64_t fiberDelays2=[self readReg: kFLTV4FiberSet_2Reg];
-	uint64_t thefiberDelays = (fiberDelays2 << 32) | fiberDelays1;
+    unsigned long long fiberDelays1=[self readReg: kFLTV4FiberSet_1Reg];
+    unsigned long long fiberDelays2=[self readReg: kFLTV4FiberSet_2Reg];
+	unsigned long long thefiberDelays = (fiberDelays2 << 32) | fiberDelays1;
 	[self setFiberDelays: thefiberDelays];
 }
 
@@ -3645,18 +3645,18 @@ for(chan=0; chan<6;chan++)
     #endif
 }
 
-- (unsigned long) regAddress:(int)aReg channel:(int)aChannel index:(int)index
+- (unsigned long) regAddress:(unsigned long)aReg channel:(int)aChannel index:(int)index
 {
         //DEBUG OUTPUT:         NSLog(@"%@::%@: addr is 0x%08x \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),(([self stationNumber] << 17) | (aChannel << 12)   | regV4[aReg].addressOffset) + index);//TODO : DEBUG testing ...-tb-
 	return (([self stationNumber] << 17) | (aChannel << 12)   | regV4[aReg].addressOffset) | index; //TODO: the channel ... -tb-   | ((aChannel&0x01f)<<kIpeFlt_ChannelAddress)
 }
 
-- (unsigned long) regAddress:(int)aReg channel:(int)aChannel
+- (unsigned long) regAddress:(unsigned long)aReg channel:(int)aChannel
 {
 	return ([self stationNumber] << 17) | (aChannel << 12)   | regV4[aReg].addressOffset; //TODO: the channel ... -tb-   | ((aChannel&0x01f)<<kIpeFlt_ChannelAddress)
 }
 
-- (unsigned long) regAddress:(int)aReg
+- (unsigned long) regAddress:(unsigned long)aReg
 {
 	
 	return ([self stationNumber] << 17) |  regV4[aReg].addressOffset; //TODO: NEED <<17 !!! -tb-
@@ -3671,32 +3671,32 @@ for(chan=0; chan<6;chan++)
 	return ([self slot] << 24) | (0x2 << kIpeFlt_AddressSpace) | (aChannel << kIpeFlt_ChannelAddress)	| (aPage << kIpeFlt_PageNumber);
 }
 
-- (unsigned long) readReg:(int)aReg
+- (unsigned long) readReg:(unsigned long)aReg
 {
 	return [self read: [self regAddress:aReg]];
 }
 
-- (unsigned long) readReg:(int)aReg channel:(int)aChannel
+- (unsigned long) readReg:(unsigned long)aReg channel:(int)aChannel
 {
 	return [self read:[self regAddress:aReg channel:aChannel]];
 }
 
-- (unsigned long) readReg:(int)aReg channel:(int)aChannel  index:(int)aIndex
+- (unsigned long) readReg:(unsigned long)aReg channel:(int)aChannel  index:(int)aIndex
 {
 	return [self read:[self regAddress:aReg channel:aChannel index:aIndex]];
 }
 
-- (void) writeReg:(int)aReg value:(unsigned long)aValue
+- (void) writeReg:(unsigned long)aReg value:(unsigned long)aValue
 {
 	[self write:[self regAddress:aReg] value:aValue];
 }
 
-- (void) writeReg:(int)aReg channel:(int)aChannel value:(unsigned long)aValue
+- (void) writeReg:(unsigned long)aReg channel:(int)aChannel value:(unsigned long)aValue
 {
 	[self write:[self regAddress:aReg channel:aChannel] value:aValue];
 }
 
-- (void) readBlock:(int)aReg dataBuffer:(unsigned long*)aDataBuffer length:(unsigned long)length
+- (void) readBlock:(unsigned long)aReg dataBuffer:(unsigned long*)aDataBuffer length:(unsigned long)length
 {
     [self readBlock:[self regAddress:aReg] dataBuffer:aDataBuffer length:length increment:1];
 
@@ -4340,8 +4340,8 @@ for(chan=0; chan<6;chan++)
 	for(i=0;i<kNumEWFLTHeatIonChannels;i++)    [triggerParameter replaceObjectAtIndex:i withObject:[NSNumber numberWithUnsignedLong:triggerPar[i]]];
     [objDictionary setObject:triggerParameter								forKey:@"triggerParameter"];
     [objDictionary setObject:[NSNumber numberWithLong:postTriggerTime]		forKey:@"postTriggerTime"];
-    if(sizeof(uint64_t) < sizeof(long long)) NSLog(@"%@::%@: ERROR - WARNING - sizeof(uint64_t) < sizeof(long long) - cannot store: ionTriggerMask, heatTriggerMask without information loss! \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO : DEBUG testing ...-tb-
-    //else NSLog(@"%@::%@:  sizeof(uint64_t)(%i) >= sizeof(long long) (%i) -  store: ionTriggerMask, heatTriggerMask - OK! \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),sizeof(uint64_t),sizeof(long long));//TODO : DEBUG testing ...-tb-
+    if(sizeof(unsigned long long) < sizeof(long long)) NSLog(@"%@::%@: ERROR - WARNING - sizeof(unsigned long long) < sizeof(long long) - cannot store: ionTriggerMask, heatTriggerMask without information loss! \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO : DEBUG testing ...-tb-
+    //else NSLog(@"%@::%@:  sizeof(unsigned long long)(%i) >= sizeof(long long) (%i) -  store: ionTriggerMask, heatTriggerMask - OK! \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),sizeof(unsigned long long),sizeof(long long));//TODO : DEBUG testing ...-tb-
     //usually both are 8 ... -tb-
 
     [objDictionary setObject:[NSNumber numberWithLongLong:ionTriggerMask]		forKey:@"ionTriggerMask"];

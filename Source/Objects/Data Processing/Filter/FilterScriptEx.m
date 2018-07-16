@@ -509,14 +509,14 @@
 					return tempData;
 					
 				case HISTO_1D:				
-					[delegate histo1D:[self ex:p->opr.op[0] delegate:delegate].val.lValue value:[self ex:p->opr.op[1] delegate:delegate].val.lValue];
+					[delegate histo1D:(int)[self ex:p->opr.op[0] delegate:delegate].val.lValue value:[self ex:p->opr.op[1] delegate:delegate].val.lValue];
 					break;
 					
 				case HISTO_2D:	
 				{
 					unsigned long x = [self ex:p->opr.op[1] delegate:delegate].val.lValue;
 					unsigned long y = [self ex:p->opr.op[2] delegate:delegate].val.lValue;
-					[delegate histo2D:[self ex:p->opr.op[0] delegate:delegate].val.lValue x:x y:y];
+					[delegate histo2D:(int)[self ex:p->opr.op[0] delegate:delegate].val.lValue x:x y:y];
 				}
 					break;
 					
@@ -524,7 +524,7 @@
 				{
 					unsigned long aTime = [self ex:p->opr.op[1] delegate:delegate].val.lValue;
 					unsigned long aValue = [self ex:p->opr.op[2] delegate:delegate].val.lValue;
-					[delegate stripChart:[self ex:p->opr.op[0] delegate:delegate].val.lValue time:aTime value:aValue];
+					[delegate stripChart:(int)[self ex:p->opr.op[0] delegate:delegate].val.lValue time:aTime value:aValue];
 				}
 					break;
 					
@@ -538,16 +538,16 @@
 					
 					
 				case DISPLAY_VALUE:	
-					[delegate setOutput:[self ex:p->opr.op[0] delegate:delegate].val.lValue 
+					[delegate setOutput:(int)[self ex:p->opr.op[0] delegate:delegate].val.lValue
 							  withValue:[self ex:p->opr.op[1] delegate:delegate].val.lValue];
 					break;
 					
 				case RANDOM:
 				{
-					int high = [self ex:p->opr.op[0] delegate:delegate].val.lValue;
-					int low  = [self ex:p->opr.op[1] delegate:delegate].val.lValue;
+					unsigned long high = [self ex:p->opr.op[0] delegate:delegate].val.lValue;
+					unsigned long low  = [self ex:p->opr.op[1] delegate:delegate].val.lValue;
 					if(low>high){
-						int temp = high;
+						unsigned long temp = high;
 						high = low;
 						low = temp;
 					}

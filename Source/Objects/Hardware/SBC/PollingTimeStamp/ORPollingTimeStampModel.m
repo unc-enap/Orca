@@ -96,7 +96,7 @@
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id = kPollingTimeStamp; //should be unique
-	configStruct->card_info[index].hw_mask[0] = dataId; //better be unique
+	configStruct->card_info[index].hw_mask[0] = (uint32_t)dataId; //better be unique
 	configStruct->card_info[index].num_Trigger_Indexes = 0;
 	configStruct->card_info[index].next_Card_Index 	= index+1;	
 	

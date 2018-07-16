@@ -529,18 +529,18 @@
 
 - (IBAction) pollTimeAction:(id)sender
 {
-	[model setPollTime:[[sender selectedItem] tag]];
+	[model setPollTime:(int)[[sender selectedItem] tag]];
 }
 
 - (IBAction) pinTypeAction:(id)sender
 {
-	int thePin = [sender selectedRow];
+	int thePin = (int)[sender selectedRow];
 	[model setPin:thePin type:[[sender selectedCell] indexOfSelectedItem]];
 }
 
 - (IBAction) pinNameAction:(id)sender
 {
-	int thePin = [[sender selectedCell] tag];
+	int thePin = (int)[[sender selectedCell] tag];
 	if(![[model pinName:thePin] isEqualToString: [sender stringValue]]){
 		[model setPin:thePin name:[sender stringValue]];
 	}
@@ -548,7 +548,7 @@
 
 - (IBAction) pinStateOutAction:(id)sender
 {
-	int thePin = [[sender selectedCell] tag];
+	int thePin = (int)[[sender selectedCell] tag];
 	if([model pinStateOut:thePin]!= [sender intValue]){
 		[model setPin:thePin stateOut:[sender intValue]];
 	}
@@ -556,7 +556,7 @@
 
 - (IBAction) pwmAction:(id)sender
 {
-	int thePin = [[sender selectedCell] tag];
+	int thePin = (int)[[sender selectedCell] tag];
 	if([model pwm:thePin] != [sender intValue]){
 		[model setPin:thePin pwm:[sender intValue]];
 	}
@@ -569,31 +569,31 @@
 }
 - (IBAction) slopeAction:(id)sender
 {
-	[model setSlope:[[sender selectedCell] tag] value:[[sender selectedCell] floatValue]];	
+	[model setSlope:(int)[[sender selectedCell] tag] value:[[sender selectedCell] floatValue]];
 }
 
 - (IBAction) interceptAction:(id)sender
 {
-	[model setIntercept:[[sender selectedCell] tag] value:[[sender selectedCell] floatValue]];	
+	[model setIntercept:(int)[[sender selectedCell] tag] value:[[sender selectedCell] floatValue]];
 }
 - (IBAction) lowLimitAction:(id)sender
 {
-	[model setLowLimit:[[sender selectedCell] tag] value:[[sender selectedCell] floatValue]];	
+	[model setLowLimit:(int)[[sender selectedCell] tag] value:[[sender selectedCell] floatValue]];
 }
 
 - (IBAction) hiLimitAction:(id)sender
 {
-	[model setHiLimit:[[sender selectedCell] tag] value:[[sender selectedCell] floatValue]];	
+	[model setHiLimit:(int)[[sender selectedCell] tag] value:[[sender selectedCell] floatValue]];
 }
 
 - (IBAction) minValueAction:(id)sender
 {
-	[model setMinValue:[[sender selectedCell] tag] value:[[sender selectedCell] floatValue]];	
+	[model setMinValue:(int)[[sender selectedCell] tag] value:[[sender selectedCell] floatValue]];
 }
 
 - (IBAction) maxValueAction:(id)sender
 {
-	[model setMaxValue:[[sender selectedCell] tag] value:[[sender selectedCell] floatValue]];	
+	[model setMaxValue:(int)[[sender selectedCell] tag] value:[[sender selectedCell] floatValue]];
 }
 
 @end

@@ -222,7 +222,7 @@
 	for(i=0;i<16;i++){
 		[[inputSetMatrix cellWithTag:i] setIntValue:(theMask&(1<<i))!=0];
 	}
-    [inputSetField setIntValue:theMask];
+    [inputSetField setIntegerValue:theMask];
 }
 
 - (void) inputMaskChanged:(NSNotification*)aNotification
@@ -232,7 +232,7 @@
 	for(i=0;i<16;i++){
 		[[inputMaskMatrix cellWithTag:i] setIntValue:(theMask&(1<<i))!=0];
 	}
-    [inputMaskField setIntValue:theMask];
+    [inputMaskField setIntegerValue:theMask];
 }
 
 - (void) outputSetChanged:(NSNotification*)aNotification
@@ -242,7 +242,7 @@
 	for(i=0;i<16;i++){
 		[[outputSetMatrix cellWithTag:i] setIntValue:(theMask&(1<<i))!=0];
 	}
-    [outputSetField setIntValue:theMask];
+    [outputSetField setIntegerValue:theMask];
 }
 
 - (void) outputMaskChanged:(NSNotification*)aNotification
@@ -252,7 +252,7 @@
 	for(i=0;i<16;i++){
 		[[outputMaskMatrix cellWithTag:i] setIntValue:(theMask&(1<<i))!=0];
 	}
-    [outputMaskField setIntValue:theMask];
+    [outputMaskField setIntegerValue:theMask];
 }
 
 - (void) interruptMaskChanged:(NSNotification*)aNotification
@@ -262,7 +262,7 @@
 	for(i=0;i<16;i++){
 		[[interruptMaskMatrix cellWithTag:i] setIntValue:(theMask&(1<<i))!=0];
 	}
-    [interruptMaskField setIntValue:theMask];
+    [interruptMaskField setIntegerValue:theMask];
 }
 
 - (void) lowLevelLockChanged:(NSNotification*)aNotification
@@ -298,7 +298,7 @@
 }
 - (void) writeValueChanged:(NSNotification*) aNotification
 {
-	[writeValueTextField setIntValue:[model writeValue]];
+	[writeValueTextField setIntegerValue:[model writeValue]];
 }
 - (void) selectedRegIndexChanged:(NSNotification*) aNotification
 {
@@ -388,23 +388,23 @@
 
 - (IBAction) inputSetAction:(id)sender
 {
-	[model setInputSetBit:[[sender selectedCell] tag] withValue:[sender intValue]];
+	[model setInputSetBit:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 - (IBAction) inputMaskAction:(id)sender
 {
-	[model setInputMaskBit:[[sender selectedCell] tag] withValue:[sender intValue]];
+	[model setInputMaskBit:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 - (IBAction) outputSetAction:(id)sender
 {
-	[model setOutputSetBit:[[sender selectedCell] tag] withValue:[sender intValue]];
+	[model setOutputSetBit:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 - (IBAction) outputMaskAction:(id)sender
 {
-	[model setOutputMaskBit:[[sender selectedCell] tag] withValue:[sender intValue]];
+	[model setOutputMaskBit:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 - (IBAction) interruptMaskAction:(id)sender
 {
-	[model setInterruptMaskBit:[[sender selectedCell] tag] withValue:[sender intValue]];
+	[model setInterruptMaskBit:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 - (IBAction) clearOutputRegisterAction:(id)sender

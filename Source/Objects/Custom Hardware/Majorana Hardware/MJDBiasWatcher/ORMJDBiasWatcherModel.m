@@ -293,7 +293,7 @@ NSString* ORMJDBiasWatcherForceUpdate			= @"ORMJDBiasWatcherForceUpdate";
 
     NSString* key = [self hvId:index];
     //this will include crate,card,chan. We have to strip off the chan part
-    int lastCommaPosition = [key rangeOfString:@"," options:NSBackwardsSearch].location;
+    int lastCommaPosition = (int)[key rangeOfString:@"," options:NSBackwardsSearch].location;
     if(lastCommaPosition == NSNotFound)return nil;
     else {
         key = [key substringWithRange:NSMakeRange(0,lastCommaPosition)];
@@ -320,7 +320,7 @@ NSString* ORMJDBiasWatcherForceUpdate			= @"ORMJDBiasWatcherForceUpdate";
     if(index<0)return nil;
     NSString* key = [self preAmpId:index];
     //this will include crate,card,chan. We have to strip off the chan part
-    int lastCommaPosition = [key rangeOfString:@"," options:NSBackwardsSearch].location;
+    int lastCommaPosition = (int)[key rangeOfString:@"," options:NSBackwardsSearch].location;
     if(lastCommaPosition == NSNotFound)return nil;
     else {
         key = [key substringWithRange:NSMakeRange(0,lastCommaPosition)];

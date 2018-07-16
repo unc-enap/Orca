@@ -243,7 +243,7 @@
     
 	
     NSString* key = @"orca.nEDMExperiment%d.selectedtab";
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 	
 }
@@ -466,7 +466,7 @@
             [[[firstColumn dataCell] formatter] setMaximumFractionDigits:3];
             while ([aTableView numberOfColumns] < nChannel) {
                 NSTableColumn* newColumn = [[NSTableColumn alloc]
-                                            initWithIdentifier:[NSString stringWithFormat:@"%d",[aTableView numberOfColumns]]];
+                                            initWithIdentifier:[NSString stringWithFormat:@"%ld",[aTableView numberOfColumns]]];
                 [newColumn setWidth:[firstColumn width]];
                 [newColumn setDataCell:[firstColumn dataCell]];
                 [[newColumn headerCell] setStringValue:[newColumn identifier]];
@@ -488,7 +488,7 @@
             [[[firstColumn dataCell] formatter] setMaximumFractionDigits:3];
             while ([aTableView numberOfColumns] < nCoil) {
                 NSTableColumn* newColumn = [[NSTableColumn alloc]
-                                            initWithIdentifier:[NSString stringWithFormat:@"%d",[aTableView numberOfColumns]]];
+                                            initWithIdentifier:[NSString stringWithFormat:@"%ld",[aTableView numberOfColumns]]];
                 [newColumn setWidth:[firstColumn width]];
                 [newColumn setDataCell:[firstColumn dataCell]];
                 [[newColumn headerCell] setStringValue:[newColumn identifier]];
@@ -528,53 +528,53 @@
     if (aTableView == listOfRegisteredADCs) return [[[model listOfADCs] objectAtIndex:rowIndex] processingTitle];
     if (aTableView == hardwareMap) {
         NSString* ident = [aTableColumn identifier];
-        if ([ident isEqualToString:@"kSegmentNumber"]) return [NSNumber numberWithInt:rowIndex];
-        if ([ident isEqualToString:@"kCardSlot"]) return [NSNumber numberWithInt:rowIndex];
-        if ([ident isEqualToString:@"kChannel"]) return [NSNumber numberWithInt:[model mappedChannelAtChannel:rowIndex]];
+        if ([ident isEqualToString:@"kSegmentNumber"]) return [NSNumber numberWithInteger:rowIndex];
+        if ([ident isEqualToString:@"kCardSlot"]) return [NSNumber numberWithInteger:rowIndex];
+        if ([ident isEqualToString:@"kChannel"]) return [NSNumber numberWithInteger:[model mappedChannelAtChannel:(int)rowIndex]];
     }
     if (aTableView == orientationMatrix) {
         NSString* ident = [aTableColumn identifier];        
-        if ([ident isEqualToString:@"kChannel"]) return [NSNumber numberWithInt:rowIndex];
+        if ([ident isEqualToString:@"kChannel"]) return [NSNumber numberWithInteger:rowIndex];
         if ([ident isEqualToString:@"kOrientation"]) return [[model orientationMatrix] objectAtIndex:rowIndex];
     }
     if (aTableView == feedbackMatrix) {
-        return [NSNumber numberWithDouble:[model conversionMatrix:[[aTableColumn identifier] intValue] coil:rowIndex]];
+        return [NSNumber numberWithDouble:[model conversionMatrix:[[aTableColumn identifier] intValue] coil:(int)rowIndex]];
     }
     if (aTableView == currentValues) {
         NSString* ident = [aTableColumn identifier];
-        if ([ident isEqualToString:@"kChannel"]) return [NSNumber numberWithInt:rowIndex];
-        if ([ident isEqualToString:@"kValues"]) return [NSNumber numberWithFloat:[model getCurrent:rowIndex]];
+        if ([ident isEqualToString:@"kChannel"]) return [NSNumber numberWithInteger:(int)rowIndex];
+        if ([ident isEqualToString:@"kValues"]) return [NSNumber numberWithFloat:[model getCurrent:(int)rowIndex]];
     }
     if (aTableView == fieldValues) {
         NSString* ident = [aTableColumn identifier];
-        if ([ident isEqualToString:@"kChannel"]) return [NSNumber numberWithInt:rowIndex];
-        if ([ident isEqualToString:@"kValues"]) return [NSNumber numberWithFloat:[model fieldAtMagnetometer:rowIndex]];
+        if ([ident isEqualToString:@"kChannel"]) return [NSNumber numberWithInteger:rowIndex];
+        if ([ident isEqualToString:@"kValues"]) return [NSNumber numberWithFloat:[model fieldAtMagnetometer:(int)rowIndex]];
     }
     if (aTableView == targetFieldValues) {
         NSString* ident = [aTableColumn identifier];
-        if ([ident isEqualToString:@"kChannel"]) return [NSNumber numberWithInt:rowIndex];
-        if ([ident isEqualToString:@"kValues"]) return [NSNumber numberWithFloat:[model targetFieldAtMagnetometer:rowIndex]];
+        if ([ident isEqualToString:@"kChannel"]) return [NSNumber numberWithInteger:rowIndex];
+        if ([ident isEqualToString:@"kValues"]) return [NSNumber numberWithFloat:[model targetFieldAtMagnetometer:(int)rowIndex]];
     }
     if (aTableView == startCurrentValues) {
         NSString* ident = [aTableColumn identifier];
-        if ([ident isEqualToString:@"kChannel"]) return [NSNumber numberWithInt:rowIndex];
-        if ([ident isEqualToString:@"kValues"]) return [NSNumber numberWithFloat:[model startCurrentAtCoil:rowIndex]];
+        if ([ident isEqualToString:@"kChannel"]) return [NSNumber numberWithInteger:rowIndex];
+        if ([ident isEqualToString:@"kValues"]) return [NSNumber numberWithFloat:[model startCurrentAtCoil:(int)rowIndex]];
     }
     if (aTableView == sensitivityMatrix) {
-        return [NSNumber numberWithDouble:[model sensitivityMatrix:[[aTableColumn identifier] intValue] channel:rowIndex]];
+        return [NSNumber numberWithDouble:[model sensitivityMatrix:[[aTableColumn identifier] intValue] channel:(int)rowIndex]];
     }
     if (aTableView == activeChannelMap) {
         NSString* ident = [aTableColumn identifier];
-        if ([ident isEqualToString:@"kChannel"]) return [NSNumber numberWithInt:rowIndex];
-        if ([ident isEqualToString:@"kScaling"]) return [NSNumber numberWithFloat:[model activeChannelAtChannel:rowIndex]];
+        if ([ident isEqualToString:@"kChannel"]) return [NSNumber numberWithInteger:rowIndex];
+        if ([ident isEqualToString:@"kScaling"]) return [NSNumber numberWithFloat:[model activeChannelAtChannel:(int)rowIndex]];
     }
     if (aTableView == sensorInfo) {
         NSString* ident = [aTableColumn identifier];
-        if ([ident isEqualToString:@"kChannel"])return [NSNumber numberWithInt:rowIndex];
-        if ([ident isEqualToString:@"kx (m)"]) return [NSNumber numberWithFloat:[model xPositionAtChannel:rowIndex]];
-        if ([ident isEqualToString:@"ky (m)"]) return [NSNumber numberWithFloat:[model yPositionAtChannel:rowIndex]];
-        if ([ident isEqualToString:@"kz (m)"]) return [NSNumber numberWithFloat:[model zPositionAtChannel:rowIndex]];
-        if ([ident isEqualToString:@"kField Direction"]) return [NSString stringWithString:[model fieldDirectionAtChannel:rowIndex]];
+        if ([ident isEqualToString:@"kChannel"])return [NSNumber numberWithInteger:rowIndex];
+        if ([ident isEqualToString:@"kx (m)"]) return [NSNumber numberWithFloat:[model xPositionAtChannel:(int)rowIndex]];
+        if ([ident isEqualToString:@"ky (m)"]) return [NSNumber numberWithFloat:[model yPositionAtChannel:(int)rowIndex]];
+        if ([ident isEqualToString:@"kz (m)"]) return [NSNumber numberWithFloat:[model zPositionAtChannel:(int)rowIndex]];
+        if ([ident isEqualToString:@"kField Direction"]) return [NSString stringWithString:[model fieldDirectionAtChannel:(int)rowIndex]];
     }
     
     return @"";
@@ -849,8 +849,8 @@
 - (IBAction) sendCommandAction:(id)sender
 {
     [self endEditing];
-    int cmd = [[commandPopUp selectedItem] tag];
-    int output = [[outputNumberPopUp selectedItem] tag];
+    int cmd = (int)[[commandPopUp selectedItem] tag];
+    int output = (int)[[outputNumberPopUp selectedItem] tag];
     float input = [inputValueText floatValue];
     NSEnumerator* anEnum = [[self groupView] objectEnumerator];
     for (id aPowerSupply in anEnum) {    

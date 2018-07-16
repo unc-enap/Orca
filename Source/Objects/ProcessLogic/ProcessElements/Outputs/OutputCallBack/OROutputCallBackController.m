@@ -174,7 +174,7 @@
 
 - (IBAction) callBackLabelTypeAction:(id)sender
 {
-	[model setCallBackLabelType:[[sender selectedCell]tag]];	
+	[model setCallBackLabelType:(int)[[sender selectedCell]tag]];	
 }
 
 - (IBAction) callBackCustomLabelAction:(id)sender

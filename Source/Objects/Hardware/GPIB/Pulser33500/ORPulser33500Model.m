@@ -246,7 +246,7 @@ NSString* ORPulser33500ShowInKHzChanged				= @"ORPulser33500ShowInKHzChanged";
 		case kPulser33500UseUSB:	return [NSString stringWithFormat:@"33500 Pulser (Serial# %@)",[usbInterface serialNumber]];
 		case kPulser33500UseIP:	return [NSString stringWithFormat:@"33500 Pulser (%@)",[self ipAddress]];
 	}
-	return [NSString stringWithFormat:@"33500 Pulser (%d)",[self tag]];
+	return [NSString stringWithFormat:@"33500 Pulser (%ld)",[self tag]];
 }
 
 - (NSArray*) vendorIDs

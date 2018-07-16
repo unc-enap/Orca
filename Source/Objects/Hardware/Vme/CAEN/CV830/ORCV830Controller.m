@@ -119,7 +119,7 @@
 
 - (void) count0OffsetChanged:(NSNotification*)aNote
 {
-	[count0OffsetField setIntValue: [model count0Offset]];
+	[count0OffsetField setIntegerValue: [model count0Offset]];
 }
 
 - (void) autoResetChanged:(NSNotification*)aNote
@@ -145,14 +145,14 @@
 
 - (void) dwellTimeChanged:(NSNotification*)aNote
 {
-	[dwellTimeField setIntValue: [model dwellTime]];
+	[dwellTimeField setIntegerValue: [model dwellTime]];
 }
 
 - (void) enabledMaskChanged:(NSNotification*)aNote
 {
 	int i;
 	for(i=0;i<kNumCV830Channels;i++){
-		[[enabledMaskMatrix cellWithTag:i] setIntValue:[model enabledMask] & (0x1L<<i)];
+		[[enabledMaskMatrix cellWithTag:i] setIntegerValue:[model enabledMask] & (0x1L<<i)];
 	}
 }
 
@@ -426,7 +426,7 @@
     }
 	
     NSString* key = [NSString stringWithFormat: @"orca.ORCaenCard%d.selectedtab",[model slot]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 	
 }

@@ -392,7 +392,7 @@
 - (IBAction) selectWaveformAction:(id)sender;
 {
     if([sender indexOfSelectedItem] != [model selectedWaveform]){ 	
-        [model setSelectedWaveform:[sender indexOfSelectedItem]];
+        [model setSelectedWaveform:(int)[sender indexOfSelectedItem]];
     }
 } 
 

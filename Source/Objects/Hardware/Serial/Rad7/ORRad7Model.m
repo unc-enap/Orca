@@ -252,13 +252,13 @@ static NSString* rad7ThoronNames[kNumberRad7ThoronNames] = {
         [self chunkPrecheck:buffer]; //some of the responses are very long. Check for the special cases
         
         if(gettingData){
-            [self setStatusString:[NSString stringWithFormat:@"Received: %d bytes",[buffer length]]];
+            [self setStatusString:[NSString stringWithFormat:@"Received: %ld bytes",[buffer length]]];
         }
         else if(radLinkLoading && !rebooting){
-            [self setStatusString:[NSString stringWithFormat:@"Loaded: %d/%d bytes",[buffer length],radLinkSize]];
+            [self setStatusString:[NSString stringWithFormat:@"Loaded: %ld/%d bytes",[buffer length],radLinkSize]];
         }
         else if(gettingReview){
-            [self setStatusString:[NSString stringWithFormat:@"Getting Data: %d bytes (Takes a while -- Be patient)",[buffer length]]];
+            [self setStatusString:[NSString stringWithFormat:@"Getting Data: %ld bytes (Takes a while -- Be patient)",[buffer length]]];
         }
        
         NSUInteger eofLocation = [buffer rangeOfString:@"\r\n>"].location;
@@ -836,7 +836,7 @@ static NSString* rad7ThoronNames[kNumberRad7ThoronNames] = {
 	[self setTone:				[decoder decodeIntForKey:	@"tone"]];
 	[self setPumpMode:			[decoder decodeIntForKey:	@"pumpMode"]];
 	[self setThoron:			[decoder decodeBoolForKey:	@"thoron"]];
-	[self setMode:				[decoder decodeIntegerForKey:	@"mode"]];
+	[self setOpMode:				[decoder decodeIntForKey:	@"mode"]];
 	[self setRecycle:			[decoder decodeIntForKey:	@"recycle"]];
 	[self setCycleTime:			[decoder decodeIntForKey:	@"cycleTime"]];
 	[self setProtocol:			[decoder decodeIntForKey:	@"protocol"]];
@@ -870,7 +870,7 @@ static NSString* rad7ThoronNames[kNumberRad7ThoronNames] = {
     [encoder encodeInteger:		tone			forKey: @"tone"];
     [encoder encodeInteger:		pumpMode		forKey: @"pumpMode"];
     [encoder encodeBool:    thoron			forKey: @"thoron"];
-    [encoder encodeInteger:     mode			forKey: @"mode"];
+    [encoder encodeInt:     mode			forKey: @"mode"];
     [encoder encodeInteger:     recycle			forKey: @"recycle"];
     [encoder encodeInteger:     cycleTime		forKey: @"cycleTime"];
     [encoder encodeInteger:		protocol		forKey: @"protocol"];
@@ -1093,7 +1093,7 @@ static NSString* rad7ThoronNames[kNumberRad7ThoronNames] = {
 
 - (int) numPoints
 {
-	return [dataPointArray count];
+	return (int)[dataPointArray count];
 }
 
 - (double) radonValue:(int)index
@@ -1226,7 +1226,7 @@ static NSString* rad7ThoronNames[kNumberRad7ThoronNames] = {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(timeout) object:nil];
     
 	NSString* contents = [NSString stringWithContentsOfFile:filePath encoding:NSASCIIStringEncoding error:nil];
-    radLinkSize = [contents length];
+    radLinkSize = (int)[contents length];
     [self flushAllCommands];
     if([contents length]){
         [self setRadLinkLoading:YES];

@@ -1617,15 +1617,15 @@ void SwapLongBlock(void* p, int32_t n)
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
 
-    [self setSlot:              [decoder decodeIntegerForKey:@"slot"]];
-    [self setSelectedRegister:  [decoder decodeIntegerForKey:@"ORXL3ModelSelectedRegister"]];
+    [self setSlot:              [decoder decodeIntForKey:@"slot"]];
+    [self setSelectedRegister:  [decoder decodeIntForKey:@"ORXL3ModelSelectedRegister"]];
 
     xl3Link = [[decoder decodeObjectForKey:@"XL3_Link"] retain];
 
     [self setAutoIncrement:         [decoder decodeBoolForKey:@"ORXL3ModelAutoIncrement"]];
     [self setRepeatDelay:           [decoder decodeIntegerForKey:@"ORXL3ModelRepeatDelay"]];
     [self setRepeatOpCount:         [decoder decodeIntegerForKey:@"ORXL3ModelRepeatOpCount"]];
-    [self setXl3Mode:               [decoder decodeIntegerForKey:@"ORXL3ModelXl3Mode"]];
+    [self setXl3Mode:               [decoder decodeIntForKey:@"ORXL3ModelXl3Mode"]];
     [self setSlotMask:              [decoder decodeIntegerForKey:@"ORXL3ModelSlotMask"]];
     [self setXl3RWAddressValue:     [decoder decodeIntegerForKey:@"ORXL3ModelXl3RWAddressValue"]];
     [self setXl3RWDataValue:        [decoder decodeIntegerForKey:@"ORXL3ModelXl3RWDataValue"]];
@@ -1655,7 +1655,7 @@ void SwapLongBlock(void* p, int32_t n)
     [self setHvBCMOSRateLimit:  [decoder decodeIntegerForKey:@"ORXL3ModelhvBCMOSRateLimit"]];
     [self setHvACMOSRateIgnore: [decoder decodeIntegerForKey:@"ORXL3ModelhvACMOSRateIgnore"]];
     [self setHvBCMOSRateIgnore: [decoder decodeIntegerForKey:@"ORXL3ModelhvBCMOSRateIgnore"]];
-    [self setXl3Mode:           [decoder decodeIntegerForKey:@"Xl3Mode"]];
+    [self setXl3Mode:           [decoder decodeIntForKey:@"Xl3Mode"]];
     [self setIsTriggerON:       [decoder decodeBoolForKey:@"isTriggerON"]];
 
     initialized = FALSE;
@@ -1697,13 +1697,13 @@ void SwapLongBlock(void* p, int32_t n)
     int i;
 
     [super encodeWithCoder:encoder];
-    [encoder encodeInteger:selectedRegister     forKey:@"ORXL3ModelSelectedRegister"];
-    [encoder encodeInteger:[self slot]          forKey:@"slot"];
+    [encoder encodeInt:selectedRegister     forKey:@"ORXL3ModelSelectedRegister"];
+    [encoder encodeInt:[self slot]          forKey:@"slot"];
     [encoder encodeObject:xl3Link           forKey:@"XL3_Link"];
     [encoder encodeBool:autoIncrement       forKey:@"ORXL3ModelAutoIncrement"];
     [encoder encodeInteger:repeatDelay          forKey:@"ORXL3ModelRepeatDelay"];
     [encoder encodeInteger:repeatOpCount        forKey:@"ORXL3ModelRepeatOpCount"];
-    [encoder encodeInteger:xl3Mode              forKey:@"ORXL3ModelXl3Mode"];
+    [encoder encodeInt:xl3Mode              forKey:@"ORXL3ModelXl3Mode"];
     [encoder encodeInteger:selectedSlotMask     forKey:@"ORXL3ModelSlotMask"];
     [encoder encodeInteger:xl3RWAddressValue    forKey:@"ORXL3ModelXl3RWAddressValue"];
     [encoder encodeInteger:xl3RWDataValue       forKey:@"ORXL3ModelXl3RWDataValue"];
@@ -1735,7 +1735,7 @@ void SwapLongBlock(void* p, int32_t n)
     [encoder encodeInteger:_hvBCMOSRateLimit        forKey:@"ORXL3ModelhvBCMOSRateLimit"];
     [encoder encodeInteger:_hvACMOSRateIgnore       forKey:@"ORXL3ModelhvACMOSRateIgnore"];
     [encoder encodeInteger:_hvBCMOSRateIgnore       forKey:@"ORXL3ModelhvBCMOSRateIgnore"];
-    [encoder encodeInteger:xl3Mode                  forKey:@"Xl3Mode"];
+    [encoder encodeInt:xl3Mode                  forKey:@"Xl3Mode"];
     [encoder encodeBool:_isTriggerON            forKey:@"isTriggerON"];
     
     for (i = 0; i < 12; i++) {
@@ -1748,8 +1748,9 @@ void SwapLongBlock(void* p, int32_t n)
 
 - (void) nominalSettingsCallback: (ORPQResult *) result
 {
-    int i, nrows, ncols, slot, channel;
+    int i, slot, channel;
     int n100, n20, sequencer, hv, resistor_pulled;
+    NSInteger nrows,ncols;
     ORFec32Model *fec;
 
     if (!result) {
@@ -2074,7 +2075,7 @@ void SwapLongBlock(void* p, int32_t n)
 
         args->slotMask |= 1 << slot;
 
-        args->channelMasks[slot] = ~[fec seqDisabledMask];
+        args->channelMasks[slot] = ~(unsigned int)[fec seqDisabledMask];
     }
 
     /* Convert args to network byte order. */
@@ -2152,11 +2153,11 @@ void SwapLongBlock(void* p, int32_t n)
 
 - (void) writeHardwareMemory:(unsigned long)memAddress value:(unsigned long)aValue
 {
-	uint32_t address = memAddress | WRITE_MEM;
-    uint32_t value = aValue;
+	uint32_t address = (uint32_t)(memAddress | WRITE_MEM);
+    uint32_t value = (uint32_t)aValue;
 
 	@try {
-		[xl3Link sendCommand:0UL toAddress:address withData:&value];
+		[xl3Link sendCommand:0UL toAddress:(uint32_t)address withData:&value];
 	}
 	@catch (NSException* e) {
 		NSLog(@"XL3 writeHadwareMemory at address: 0x%08x failed\n", memAddress);
@@ -2166,10 +2167,10 @@ void SwapLongBlock(void* p, int32_t n)
 
 - (unsigned long) readHardwareMemory:(unsigned long) memAddress
 {
-	uint32_t xl3Address = memAddress | READ_MEM;
+	uint32_t xl3Address = (uint32_t)(memAddress | READ_MEM);
 	uint32_t aValue = 0UL;
 	@try {
-		[xl3Link sendCommand:0UL toAddress:xl3Address withData:&aValue];
+		[xl3Link sendCommand:0UL toAddress:(uint32_t)xl3Address withData:&aValue];
 	}
 	@catch (NSException* e) {
 		NSLog(@"XL3 readHadwareMemory at address: 0x%08x failed\n", memAddress);
@@ -3017,12 +3018,12 @@ err:
 
 - (void) compositeXl3RW
 {
-	uint32_t aValue = [self xl3RWDataValue];
+	uint32_t aValue = (uint32_t)[self xl3RWDataValue];
 	NSLog(@"%@ XL3_rw to address: 0x%08x with data: 0x%08x\n",[[self xl3Link] crateName], [self xl3RWAddressValue], aValue);
 	[self setXl3OpsRunning:YES forKey:@"compositeXl3RW"];
 	
 	@try {
-		[xl3Link sendCommand:0UL toAddress:[self xl3RWAddressValue] withData:&aValue];
+		[xl3Link sendCommand:0UL toAddress:(uint32_t)[self xl3RWAddressValue] withData:&aValue];
 		NSLog(@"XL3_rw returned data: 0x%08x\n", aValue);
 	}
 	@catch (NSException* e) {
@@ -3077,7 +3078,7 @@ err:
 
     for (id aFec in fecs) {
         args->slotMask |= 1 << [aFec stationNumber];
-        args->channelMasks[[aFec stationNumber]] = [aFec pedEnabledMask];
+        args->channelMasks[[aFec stationNumber]] = (uint32_t)[aFec pedEnabledMask];
     }
 
     args->slotMask = htonl(args->slotMask);
@@ -3218,7 +3219,7 @@ err:
         slotMaskPresent |= 1 << [aFec stationNumber];
     }
     
-    unsigned int slotMaskSet = [self slotMask];
+    unsigned long slotMaskSet = [self slotMask];
     [self setSlotMask:slotMaskPresent];
     [self setXl3PedestalMask:0];
     [self compositeSetPedestal];
@@ -3342,7 +3343,7 @@ err:
 	[self setXl3OpsRunning:YES forKey:@"compositResetFIFOAndSeuencer"];
 	NSLog(@"Reset FIFO and Sequencer to be implemented.\n");
 	//slot mask?
-	uint32_t xl3Address = XL3_SEL | [self getRegisterAddress:kXl3SelectReg] | WRITE_REG;
+	uint32_t xl3Address = (uint32_t)(XL3_SEL | [self getRegisterAddress:kXl3SelectReg] | WRITE_REG);
 	uint32_t aValue = 0xffffffffUL;
     
 	@try {
@@ -3568,7 +3569,7 @@ err:
     CheckTotalCountResults results;
     
     args.slotMask |= 0x1 << aSlot;
-    args.channelMasks[aSlot] = aChannelMask;
+    args.channelMasks[aSlot] = (uint32_t)aChannelMask;
     
     @try {
         [self readCMOSCountWithArgs:&args counts:&results];
@@ -3690,8 +3691,8 @@ err:
     CrateNoiseRateResults results;
     
     args.slotMask |= 0x1 << aSlot;
-    args.channelMask[aSlot] = aChannelMask;
-    args.period = aDelay;
+    args.channelMask[aSlot] = (uint32_t)aChannelMask;
+    args.period = (uint32_t)aDelay;
     
     @try {
         [self readCMOSRateWithArgs:&args rates:&results];
@@ -3987,7 +3988,7 @@ err:
     ReadPMTCurrentResults results;
 
     args.slotMask |= 0x1 << aSlot;
-    args.channelMask[aSlot] = aChannelMask;
+    args.channelMask[aSlot] = (uint32_t)aChannelMask;
     
     @try {
         [self readPMTBaseCurrentsWithArgs:&args currents:&results];
@@ -4361,7 +4362,7 @@ err:
 
 - (void) setHVSwitchOnForA:(BOOL)aIsOn forB:(BOOL)bIsOn
 {
-	uint32_t xl3Address = XL3_SEL | [self getRegisterAddress:kXl3HvCsReg] | WRITE_REG;
+	uint32_t xl3Address = (uint32_t)(XL3_SEL | [self getRegisterAddress:kXl3HvCsReg] | WRITE_REG);
 	uint32_t aValue = 0UL;
 
     if (aIsOn) aValue |= 1UL;
@@ -4378,7 +4379,7 @@ err:
 
 - (void) readHVSwitchOnForA:(BOOL*)aIsOn forB:(BOOL*)bIsOn
 {
-	uint32_t xl3Address = XL3_SEL | [self getRegisterAddress:kXl3HvCsReg] | READ_REG;
+	uint32_t xl3Address = (uint32_t)(XL3_SEL | [self getRegisterAddress:kXl3HvCsReg] | READ_REG);
 	uint32_t aValue = 0UL;
     
 	@try {
@@ -4712,7 +4713,7 @@ err:
 
 - (void) readHVInterlockGood:(BOOL*)isGood
 {
-	uint32_t xl3Address = XL3_SEL | [self getRegisterAddress:kXl3HvCsReg] | READ_REG;
+	uint32_t xl3Address = (uint32_t)(XL3_SEL | [self getRegisterAddress:kXl3HvCsReg] | READ_REG);
 	uint32_t aValue = 0UL;
     
 	@try {
@@ -4745,7 +4746,7 @@ err:
 {
     //todo a dedicated HV lock
     @synchronized (self) {
-        uint32_t xl3Address = XL3_SEL | [self getRegisterAddress:kXl3HvSetPointReg] | WRITE_REG;
+        uint32_t xl3Address = (uint32_t)(XL3_SEL | [self getRegisterAddress:kXl3HvSetPointReg] | WRITE_REG);
         uint32_t aValue = 0UL;
         
         aValue |= aDac & 0xFFFUL;
@@ -5969,7 +5970,7 @@ float nominals[] = {2110.0, 2240.0, 2075.0, 2160.0, 2043.0, 2170.0, 2170.0, 2170
 
         for (id aFec in fecs) {
             args->slotMask |= 1 << [aFec stationNumber];
-            args->channelMasks[[aFec stationNumber]] = [aFec pedEnabledMask];
+            args->channelMasks[(int)[aFec stationNumber]] = (int)[aFec pedEnabledMask];
         }
 
         args->slotMask = htonl(args->slotMask);

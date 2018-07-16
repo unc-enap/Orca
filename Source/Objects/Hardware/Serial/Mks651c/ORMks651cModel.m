@@ -839,7 +839,7 @@ NSString* ORMks651cLock = @"ORMks651cLock";
 		[self setSetPoint:i      withValue:	[decoder decodeFloatForKey: [NSString stringWithFormat:@"setPoint%d",i]]];
 		[self setLeadValue:i     withValue:	[decoder decodeFloatForKey: [NSString stringWithFormat:@"leadValue%d",i]]];
 		[self setGainValue:i     withValue:	[decoder decodeFloatForKey: [NSString stringWithFormat:@"gainValue%d",i]]];
-		[self setSetPointType:i  withValue:	[decoder decodeIntegerForKey: [NSString stringWithFormat:@"setPointType%d",i]]];
+		[self setSetPointType:i  withValue:	[decoder decodeIntForKey: [NSString stringWithFormat:@"setPointType%d",i]]];
 		[self setSoftstartRate:i withValue:	[decoder decodeFloatForKey: [NSString stringWithFormat:@"softstartRate%d",i]]];
 	}
 	
@@ -886,7 +886,7 @@ NSString* ORMks651cLock = @"ORMks651cLock";
 		[encoder encodeFloat:leadValue[i]	  forKey: [NSString stringWithFormat:@"leadValue%d",i]];
 		[encoder encodeFloat:gainValue[i]	  forKey: [NSString stringWithFormat:@"gainValue%d",i]];
 		[encoder encodeFloat:softstartRate[i] forKey: [NSString stringWithFormat:@"softstartRate%d",i]];
-		[encoder encodeInteger:setPointType[i]	  forKey: [NSString stringWithFormat:@"setPointType%d",i]];
+		[encoder encodeInt:setPointType[i]	  forKey: [NSString stringWithFormat:@"setPointType%d",i]];
 	}
 	for(i=0;i<2;i++){
 		[encoder encodeFloat:lowThreshold[i]  forKey: [NSString stringWithFormat:@"lowThreshold%d",i]];

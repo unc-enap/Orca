@@ -667,7 +667,7 @@ NSString* ORRGA300Lock								= @"ORRGA300Lock";
 {
 	return (int)[scanData length]/4;
 }
-- (int)  scanValueAtIndex:(int)i
+- (int)  scanValueAtIndex:(NSUInteger)i
 {
 	if(i<[scanData length]/4){
 		int* p = (int*)[scanData bytes];
@@ -683,7 +683,7 @@ NSString* ORRGA300Lock								= @"ORRGA300Lock";
 	return (int)[[amuTableData objectForKey:aKey] count];
 }
 
-- (int) amuTable:(int)anAmu valueAtIndex:(int)i
+- (int) amuTable:(int)anAmu valueAtIndex:(NSUInteger)i
 {
 	id aKey = [NSNumber numberWithInt:anAmu];
 	NSArray* dataArray = [amuTableData objectForKey:aKey];
@@ -697,10 +697,10 @@ NSString* ORRGA300Lock								= @"ORRGA300Lock";
 {
 	if(!amus) amus= [[NSMutableArray array] retain];
 	id newAmu = [NSNumber numberWithInt:1];
-	[self addAmu:newAmu atIndex:(int)[amus count]];
+	[self addAmu:newAmu atIndex:[amus count]];
 }
 
-- (void) addAmu:(id)anAmu atIndex:(int)anIndex
+- (void) addAmu:(id)anAmu atIndex:(NSUInteger)anIndex
 {
 	if(!amus) amus= [[NSMutableArray array] retain];
 	if([amus count] == 0)anIndex = 0;
@@ -710,7 +710,7 @@ NSString* ORRGA300Lock								= @"ORRGA300Lock";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORRGA300ModelAmuAdded object:self];
 }
 
-- (void) removeAmuAtIndex:(int) anIndex
+- (void) removeAmuAtIndex:(NSUInteger) anIndex
 {
 	id anAmu = [amus objectAtIndex:anIndex];
 	[[[self undoManager] prepareWithInvocationTarget:self] addAmu:anAmu atIndex:anIndex];
@@ -718,18 +718,18 @@ NSString* ORRGA300Lock								= @"ORRGA300Lock";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORRGA300ModelAmuRemoved object:self];
 }
 
-- (id) amuAtIndex:(int)anIndex
+- (id) amuAtIndex:(NSUInteger)anIndex
 {
 	if(anIndex>=0 && anIndex<[amus count])return [amus objectAtIndex:anIndex];
 	else return nil;
 }
 
-- (unsigned long) amuCount
+- (NSUInteger) amuCount
 {
 	return [amus count];
 }
 
-- (void) replaceAmuAtIndex:(int)anIndex withAmu:(id)anObject
+- (void) replaceAmuAtIndex:(NSUInteger)anIndex withAmu:(id)anObject
 {
 	if(anIndex>=0 && anIndex<[amus count]){
 		[[[self undoManager] prepareWithInvocationTarget:self] replaceAmuAtIndex:anIndex withAmu:[amus objectAtIndex:anIndex]];
@@ -1128,9 +1128,9 @@ NSString* ORRGA300Lock								= @"ORRGA300Lock";
 		[self setCurrentActivity:kRGATableScan];
 		[self setCurrentAmuIndex:0];
 		[self setScanProgress:0];
-		int anAmu = [[amus objectAtIndex:currentAmuIndex] intValue];
-		if(anAmu>0 && anAmu<modelNumber){
-			[self addCmdToQueue:[NSString stringWithFormat:@"MR%d",anAmu]];
+		NSUInteger anAmu = [[amus objectAtIndex:currentAmuIndex] intValue];
+		if(anAmu<modelNumber){
+			[self addCmdToQueue:[NSString stringWithFormat:@"MR%ld",anAmu]];
 		}
 		else {
 			NSLog(@"RGA: AMU in table (entry %d:%d) <0 or >%@\n",modelNumber,currentAmuIndex, [amus objectAtIndex:currentAmuIndex]);

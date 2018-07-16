@@ -2481,7 +2481,7 @@ snopGreenColor;
             break;
     }
     @try{
-        units = (int)[self decideUnitsToUseForRow:activeCell usingModel:mtcModel];
+        units = (int)[self decideUnitsToUseForRow:(int)activeCell usingModel:mtcModel];
         [mtcModel setThresholdOfType:threshold_index fromUnits:units toValue:threshold_value];
     }
     @catch(NSException *excep) {

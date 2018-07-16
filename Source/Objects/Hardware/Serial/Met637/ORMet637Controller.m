@@ -592,7 +592,7 @@
     [[self window] setContentView:totalView];
 	
     NSString* key = [NSString stringWithFormat: @"orca.ORMet637%lu.selectedtab",[model uniqueIdNumber]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 }
 
@@ -617,22 +617,22 @@
 
 - (IBAction) countingModeAction:(id)sender
 {
-	[model setCountingMode:[sender indexOfSelectedItem]];
+	[model setCountingMode:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) tempUnitsAction:(id)sender
 {
-	[model setTempUnits:[sender indexOfSelectedItem]];	
+	[model setTempUnits:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) countAlarmLimitAction:(id)sender
 {
-	[model setIndex:[[sender selectedCell] tag] countAlarmLimit:[[sender selectedCell] floatValue]];	
+	[model setIndex:(int)[[sender selectedCell] tag] countAlarmLimit:[[sender selectedCell] floatValue]];	
 }
 
 - (IBAction) maxCountsAction:(id)sender
 {
-	[model setIndex:[[sender selectedCell] tag] maxCounts:[[sender selectedCell] floatValue]];	
+	[model setIndex:(int)[[sender selectedCell] tag] maxCounts:[[sender selectedCell] floatValue]];
 }
 
 - (IBAction) startCycleAction:(id)sender
@@ -661,7 +661,7 @@
 
 - (IBAction) countUnitsAction:(id)sender
 {
-	[model setCountUnits:[sender indexOfSelectedItem]];
+	[model setCountUnits:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) dumpAllDataAction:(id)sender
@@ -712,13 +712,13 @@
 #pragma mark •••Data Source
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	return [[model timeRate:[aPlotter tag]]   count];
+	return (int)[[model timeRate:(int)[aPlotter tag]]   count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-	int set = [aPlotter tag];
-	int count = [[model timeRate:set] count];
+	int set = (int)[aPlotter tag];
+	int count = (int)[[model timeRate:set] count];
 	int index = count-i-1;
 	*yValue = [[model timeRate:set] valueAtIndex:index];
 	*xValue = [[model timeRate:set] timeSampledAtIndex:index];

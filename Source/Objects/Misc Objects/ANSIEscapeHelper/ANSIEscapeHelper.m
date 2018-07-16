@@ -875,22 +875,22 @@ BOOL floatsEqual(CGFloat first, CGFloat second, CGFloat maxAbsError)
 	NSUInteger sgrCodeShift = (foreground)?0:10;
 	NSArray *ansiFgColorCodes = [NSArray
 		arrayWithObjects:
-			[NSNumber numberWithInt:SGRCodeFgBlack+sgrCodeShift],
-			[NSNumber numberWithInt:SGRCodeFgRed+sgrCodeShift],
-			[NSNumber numberWithInt:SGRCodeFgGreen+sgrCodeShift],
-			[NSNumber numberWithInt:SGRCodeFgYellow+sgrCodeShift],
-			[NSNumber numberWithInt:SGRCodeFgBlue+sgrCodeShift],
-			[NSNumber numberWithInt:SGRCodeFgMagenta+sgrCodeShift],
-			[NSNumber numberWithInt:SGRCodeFgCyan+sgrCodeShift],
-			[NSNumber numberWithInt:SGRCodeFgWhite+sgrCodeShift],
-			[NSNumber numberWithInt:SGRCodeFgBrightBlack+sgrCodeShift],
-			[NSNumber numberWithInt:SGRCodeFgBrightRed+sgrCodeShift],
-			[NSNumber numberWithInt:SGRCodeFgBrightGreen+sgrCodeShift],
-			[NSNumber numberWithInt:SGRCodeFgBrightYellow+sgrCodeShift],
-			[NSNumber numberWithInt:SGRCodeFgBrightBlue+sgrCodeShift],
-			[NSNumber numberWithInt:SGRCodeFgBrightMagenta+sgrCodeShift],
-			[NSNumber numberWithInt:SGRCodeFgBrightCyan+sgrCodeShift],
-			[NSNumber numberWithInt:SGRCodeFgBrightWhite+sgrCodeShift],
+			[NSNumber numberWithInteger:SGRCodeFgBlack+sgrCodeShift],
+			[NSNumber numberWithInteger:SGRCodeFgRed+sgrCodeShift],
+			[NSNumber numberWithInteger:SGRCodeFgGreen+sgrCodeShift],
+			[NSNumber numberWithInteger:SGRCodeFgYellow+sgrCodeShift],
+			[NSNumber numberWithInteger:SGRCodeFgBlue+sgrCodeShift],
+			[NSNumber numberWithInteger:SGRCodeFgMagenta+sgrCodeShift],
+			[NSNumber numberWithInteger:SGRCodeFgCyan+sgrCodeShift],
+			[NSNumber numberWithInteger:SGRCodeFgWhite+sgrCodeShift],
+			[NSNumber numberWithInteger:SGRCodeFgBrightBlack+sgrCodeShift],
+			[NSNumber numberWithInteger:SGRCodeFgBrightRed+sgrCodeShift],
+			[NSNumber numberWithInteger:SGRCodeFgBrightGreen+sgrCodeShift],
+			[NSNumber numberWithInteger:SGRCodeFgBrightYellow+sgrCodeShift],
+			[NSNumber numberWithInteger:SGRCodeFgBrightBlue+sgrCodeShift],
+			[NSNumber numberWithInteger:SGRCodeFgBrightMagenta+sgrCodeShift],
+			[NSNumber numberWithInteger:SGRCodeFgBrightCyan+sgrCodeShift],
+			[NSNumber numberWithInteger:SGRCodeFgBrightWhite+sgrCodeShift],
 			nil
 		];
 	for (NSNumber *thisSGRCodeNumber in ansiFgColorCodes)
@@ -953,12 +953,12 @@ BOOL floatsEqual(CGFloat first, CGFloat second, CGFloat maxAbsError)
 		// 
 		// subjective ordering of colors from most to least 'distinctive':
 		int colorDistinctivenessOrder[6] = {
-			SGRCodeFgRed+sgrCodeShift,
-			SGRCodeFgMagenta+sgrCodeShift,
-			SGRCodeFgBlue+sgrCodeShift,
-			SGRCodeFgGreen+sgrCodeShift,
-			SGRCodeFgCyan+sgrCodeShift,
-			SGRCodeFgYellow+sgrCodeShift
+			(int)(SGRCodeFgRed+sgrCodeShift),
+			(int)(SGRCodeFgMagenta+sgrCodeShift),
+			(int)(SGRCodeFgBlue+sgrCodeShift),
+			(int)(SGRCodeFgGreen+sgrCodeShift),
+			(int)(SGRCodeFgCyan+sgrCodeShift),
+			(int)(SGRCodeFgYellow+sgrCodeShift)
 			};
 		int i;
 		for (i = 0; i < 6; i++)

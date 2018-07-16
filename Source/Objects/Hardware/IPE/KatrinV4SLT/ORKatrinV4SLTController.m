@@ -206,7 +206,7 @@
 
 - (void) pixelBusEnableRegChanged:(NSNotification*)aNote
 {
-	[pixelBusEnableRegTextField setIntValue: [model pixelBusEnableReg]];
+	[pixelBusEnableRegTextField setIntegerValue: [model pixelBusEnableReg]];
 	int i;
 	for(i=0;i<20;i++){
 		[[pixelBusEnableRegMatrix cellWithTag:i] setIntValue: ([model pixelBusEnableReg] & (0x1 <<i))];
@@ -237,7 +237,7 @@
 
 - (void) clockTimeChanged:(NSNotification*)aNote
 {
-	[[countersMatrix cellWithTag:5] setIntValue:[model clockTime]];
+	[[countersMatrix cellWithTag:5] setIntegerValue:[model clockTime]];
 }
 
 - (void) runTimeChanged:(NSNotification*)aNote
@@ -279,7 +279,7 @@
 
 - (void) secondsSetChanged:(NSNotification*)aNote
 {
-	[secondsSetField setIntValue: [model secondsSet]];
+	[secondsSetField setIntegerValue: [model secondsSet]];
 }
 
 - (void) statusRegChanged:(NSNotification*)aNote
@@ -465,7 +465,7 @@
 - (void) writeValueChanged:(NSNotification*) aNote
 {
 	[self updateStepper:regWriteValueStepper setting:[model writeValue]];
-	[regWriteValueTextField setIntValue:[model writeValue]];
+	[regWriteValueTextField setIntegerValue:[model writeValue]];
 }
 
 - (void) selectedRegIndexChanged:(NSNotification*) aNote
@@ -624,7 +624,7 @@
 
 - (IBAction) pollRateAction:(id)sender
 {
-    [model setPollTime:[[pollRatePopup selectedItem] tag]];
+    [model setPollTime:(int)[[pollRatePopup selectedItem] tag]];
 }
 
 - (IBAction) interruptMaskAction:(id)sender
@@ -725,7 +725,7 @@
 
 - (IBAction) readRegAction: (id) sender
 {
-	int index = [registerPopUp indexOfSelectedItem];
+	int index = (int)[registerPopUp indexOfSelectedItem];
 	@try {
 		unsigned long value = [model readReg:index];
 		NSLog(@"SLT reg: %@ value: 0x%x (%u)\n",[model getRegisterName:index],value,value);
@@ -739,7 +739,7 @@
 - (IBAction) writeRegAction: (id) sender
 {
 	[self endEditing];
-	int index = [registerPopUp indexOfSelectedItem];
+	int index = (int)[registerPopUp indexOfSelectedItem];
 	@try {
 		[model writeReg:index value:[model writeValue]];
 		NSLog(@"wrote 0x%x to SLT reg: %@ \n",[model writeValue],[model getRegisterName:index]);

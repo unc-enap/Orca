@@ -81,7 +81,7 @@
     int crate = (*ptr&0x01e00000)>>21;
     int card  = (*ptr&0x001f0000)>>16;
     
-    int numEvents = (length-2)/1024;
+    int numEvents = (int)(length-2)/1024;
 
     ptr++; //point to first word of first data record
     int headerSize = 14; //long words

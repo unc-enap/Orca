@@ -753,7 +753,7 @@
 
 - (void) registerWriteValueChanged:(NSNotification*)aNote
 {
-	[registerWriteValueField setIntValue: [model registerWriteValue]];
+	[registerWriteValueField setIntegerValue: [model registerWriteValue]];
 }
 
 - (void) registerIndexChanged:(NSNotification*)aNote
@@ -764,7 +764,7 @@
 
 - (void) spiWriteValueChanged:(NSNotification*)aNote
 {
-	[spiWriteValueField setIntValue: [model spiWriteValue]];
+	[spiWriteValueField setIntegerValue: [model spiWriteValue]];
 }
 
 - (void) fpgaDownInProgressChanged:(NSNotification*)aNote
@@ -970,12 +970,12 @@
     if(aNote == nil){
         short i;
         for(i=0;i<kNumGretina4MChannels;i++){
-            [[trapThresholdMatrix cellWithTag:i] setIntValue:[model trapThreshold:i]];
+            [[trapThresholdMatrix cellWithTag:i] setIntegerValue:[model trapThreshold:i]];
         }
     }
     else {
         int chan = [[[aNote userInfo] objectForKey:@"Channel"] intValue];
-        [[trapThresholdMatrix cellWithTag:chan] setIntValue:[model trapThreshold:chan]];
+        [[trapThresholdMatrix cellWithTag:chan] setIntegerValue:[model trapThreshold:chan]];
     }
 }
 
@@ -1110,7 +1110,7 @@
     [diagnosticsClearButton  setEnabled:[model diagnosticsEnabled]];
     
     
-    [viewPreampButton setEnabled:[model spiConnector]];
+    [viewPreampButton setEnabled:(int)[model spiConnector]];
     
     if(lockedOrRunningMaintenance || downloading){
         [ledThresholdMatrix setEnabled:NO];
@@ -1401,7 +1401,7 @@
 
 - (IBAction) registerIndexPUAction:(id)sender
 {
-	unsigned int index = [sender indexOfSelectedItem];
+    int index = (int)[sender indexOfSelectedItem];
 	[model setRegisterIndex:index];
 	[self setRegisterDisplay:index];
 }
@@ -1726,7 +1726,7 @@
         NSLog(@"Gretina BoardID (slot %d): [0x%x] ID = 0x%x\n",[model slot],[model baseAddress],[model readBoardID]);
         int chan;
         for(chan = 0;chan<kNumGretina4MChannels;chan++){
-            unsigned value = [model readControlReg:chan];
+            unsigned long value = [model readControlReg:chan];
 			
 			int pol=(value>>10)&0x3;
 			NSString* polString = @"  ?  ";

@@ -711,19 +711,19 @@
 
 - (void) pileUpWindowLenChanged:(NSNotification*)aNote
 {
-    [pileUpWindowLenField setIntValue:[model pileUpWindowLength]];
+    [pileUpWindowLenField setIntegerValue:[model pileUpWindowLength]];
 }
 
 - (void) rePileUpWindowLenChanged:(NSNotification*)aNote
 {
-    [rePileUpWindowLenField setIntValue:[model rePileUpWindowLength]];
+    [rePileUpWindowLenField setIntegerValue:[model rePileUpWindowLength]];
 }
 
 - (void) internalGateLenChanged:(NSNotification*)aNote
 {
     short i;
     for(i=0;i<kNumSIS3316Groups;i++){
-        [[internalGateLengthMatrix cellWithTag:i] setIntValue:[model internalGateLen:i]];
+        [[internalGateLengthMatrix cellWithTag:i] setIntegrValue:[model internalGateLen:i]];
     }
 }
 
@@ -731,7 +731,7 @@
 {
     short i;
     for(i=0;i<kNumSIS3316Groups;i++){
-        [[internalCoinGateLengthMatrix cellWithTag:i] setIntValue:[model internalCoinGateLen:i]];
+        [[internalCoinGateLengthMatrix cellWithTag:i] setIntegerValue:[model internalCoinGateLen:i]];
     }
 }
 
@@ -916,12 +916,12 @@
     if(aNote == nil){
         short i;
         for(i=0;i<kNumSIS3316Channels;i++){
-            [[thresholdMatrix cellWithTag:i] setIntValue:[model threshold:i]];
+            [[thresholdMatrix cellWithTag:i] setIntegerValue:[model threshold:i]];
         }
     }
     else {
         int i = [[[aNote userInfo] objectForKey:@"Channel"] intValue];
-        [[thresholdMatrix cellWithTag:i] setIntValue:[model threshold:i]];
+        [[thresholdMatrix cellWithTag:i] setIntegerValue:[model threshold:i]];
     }
 }
 
@@ -932,12 +932,12 @@
     if(aNote == nil){
         short i;
         for(i=0;i<kNumSIS3316Groups; i++){
-            [[endAddressMatrix cellWithTag:i] setIntValue:[model endAddress:i]];
+            [[endAddressMatrix cellWithTag:i] setIntegerValue:[model endAddress:i]];
         }
     }
     else{
         int i = [[[aNote userInfo] objectForKey:@"Group"] intValue];
-        [[endAddressMatrix cellWithTag:i] setIntValue:[model endAddress:i]];
+        [[endAddressMatrix cellWithTag:i] setIntegerValue:[model endAddress:i]];
     }
 }
 
@@ -1040,12 +1040,12 @@
     if(aNote == nil){
         short i;
         for(i=0;i<kNumSIS3316Channels;i++){
-            [[heTrigThresholdMatrix cellWithTag:i] setIntValue:[model heTrigThreshold:i]];
+            [[heTrigThresholdMatrix cellWithTag:i] setIntegerValue:[model heTrigThreshold:i]];
         }
     }
     else {
         int i = [[[aNote userInfo] objectForKey:@"Channel"] intValue];
-        [[heTrigThresholdMatrix cellWithTag:i] setIntValue:[model heTrigThreshold:i]];
+        [[heTrigThresholdMatrix cellWithTag:i] setIntegerValue:[model heTrigThreshold:i]];
     }
 }
 - (void) enableSumChanged:(NSNotification*)aNote  //bools and possibly more changed like this
@@ -1061,12 +1061,12 @@
     if(aNote == nil){
         short i;
         for(i=0;i<kNumSIS3316Groups; i++){
-            [[thresholdSumMatrix cellWithTag:i] setIntValue:[model thresholdSum:i]];
+            [[thresholdSumMatrix cellWithTag:i] setIntegerValue:[model thresholdSum:i]];
         }
     }
     else{
         int i = [[[aNote userInfo] objectForKey:@"Group"] intValue];
-        [[thresholdSumMatrix cellWithTag:i] setIntValue:[model thresholdSum:i]];
+        [[thresholdSumMatrix cellWithTag:i] setIntegerValue:[model thresholdSum:i]];
     }
 }
 
@@ -1075,12 +1075,12 @@
     if(aNote == nil){
         short i;
         for(i=0;i<kNumSIS3316Groups;i++){
-            [[heTrigThresholdSumMatrix cellWithTag:i] setIntValue:[model heTrigThresholdSum:i]];
+            [[heTrigThresholdSumMatrix cellWithTag:i] setIntegerValue:[model heTrigThresholdSum:i]];
         }
     }
     else {
         int i = [[[aNote userInfo] objectForKey:@"Group"] intValue];
-        [[heTrigThresholdSumMatrix cellWithTag:i] setIntValue:[model heTrigThresholdSum:i]];
+        [[heTrigThresholdSumMatrix cellWithTag:i] setIntegerValue:[model heTrigThresholdSum:i]];
     }
 }
 
@@ -1088,11 +1088,11 @@
 {
     if(aNote == nil){
         short i;
-        for(i=0;i<kNumSIS3316Groups;i++)[[riseTimeSumMatrix cellWithTag:i] setIntValue:[model riseTimeSum:i]];
+        for(i=0;i<kNumSIS3316Groups;i++)[[riseTimeSumMatrix cellWithTag:i] setIntegerValue:[model riseTimeSum:i]];
     }
     else {
         int i = [[[aNote userInfo] objectForKey:@"Group"] intValue];
-        [[riseTimeSumMatrix cellWithTag:i] setIntValue:[model riseTimeSum:i]];
+        [[riseTimeSumMatrix cellWithTag:i] setIntegerValue:[model riseTimeSum:i]];
     }
 }
 
@@ -1100,11 +1100,11 @@
 {
     if(aNote == nil){
         short i;
-        for(i=0;i<kNumSIS3316Groups;i++)[[gapTimeSumMatrix cellWithTag:i] setIntValue:[model gapTimeSum:i]];
+        for(i=0;i<kNumSIS3316Groups;i++)[[gapTimeSumMatrix cellWithTag:i] setIntegerValue:[model gapTimeSum:i]];
     }
     else {
         int i = [[[aNote userInfo] objectForKey:@"Group"] intValue];
-        [[gapTimeSumMatrix cellWithTag:i] setIntValue:[model gapTimeSum:i]];
+        [[gapTimeSumMatrix cellWithTag:i] setIntegerValue:[model gapTimeSum:i]];
     }
 }
 
@@ -1390,7 +1390,7 @@
 {
     short i;
     for(i=0;i<kNumSIS3316Groups;i++){
-        [[mawBufferLengthMatrix cellWithTag:i] setIntValue:[model mawBufferLength:i]];
+        [[mawBufferLengthMatrix cellWithTag:i] setIntegerValue:[model mawBufferLength:i]];
     }
 }
 
@@ -1398,18 +1398,18 @@
 {
     short i;
     for(i=0;i<kNumSIS3316Groups;i++){
-        [[mawPretrigDelayMatrix cellWithTag:i] setIntValue:[model mawPretrigDelay:i]];
+        [[mawPretrigDelayMatrix cellWithTag:i] setIntegerValue:[model mawPretrigDelay:i]];
     }
 }
 
 - (void) rawDataBufferLenChanged:  (NSNotification*)aNote
 {
-    [rawDataBufferLenField setIntValue:[model rawDataBufferLen]];
+    [rawDataBufferLenField setIntegerValue:[model rawDataBufferLen]];
 }
 
 - (void) rawDataBufferStartChanged:(NSNotification*)aNote
 {
-    [rawDataBufferStartField setIntValue:[model rawDataBufferStart]];
+    [rawDataBufferStartField setIntegerValue:[model rawDataBufferStart]];
 }
 
 - (void) acquisitionControlChanged:(NSNotification*)aNote  //bools and possibly more changed like this
@@ -1630,7 +1630,7 @@
 
 - (void) baseAddressChanged:(NSNotification*)aNote
 {
-    [addressText setIntValue: [model baseAddress]];
+    [addressText setIntegerValue: [model baseAddress]];
 }
 
 - (void) integrationChanged:(NSNotification*)aNotification
@@ -1727,12 +1727,12 @@
 }
 - (IBAction) sharingAction:(id)sender
 {
-    [model setSharing:[sender indexOfSelectedItem]];
+    [model setSharing:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) histogramsEnabledAction:(id)sender
 {
-    int tag =[[sender selectedCell] tag];
+    int tag =(int)[[sender selectedCell] tag];
     int aValue = [sender intValue];
     [model setHistogramsEnabled:tag withValue:aValue]; 
 }
@@ -1752,14 +1752,14 @@
 
 - (IBAction) enabledAction:(id)sender //-=**
 {
-    int tag =[[sender selectedCell] tag];
+    int tag =(int)[[sender selectedCell] tag];
     int aValue = [sender intValue];
     [model setEnabledBit:tag withValue:aValue];
 }
 
 - (IBAction) formatAction:(id)sender //-=**
 {
-    int bit =[[sender selectedCell] tag];
+    int bit = (int)[[sender selectedCell] tag];
     int aValue = [sender intValue];
     [model setFormatBit:bit withValue:aValue];
 }
@@ -1772,7 +1772,7 @@
 - (IBAction) lemoToMaskAction:(id)sender
 {
     unsigned long aMask = [model lemoToMask];
-    int tag    = [[sender selectedCell] tag];
+    int tag    = (int)[[sender selectedCell] tag];
     int aValue = [sender intValue];
     if(aValue==0)aMask &= ~(0x1<<tag);
     else         aMask |= (0x1<<tag);
@@ -1783,7 +1783,7 @@
 - (IBAction) lemoUoMaskAction:(id)sender
 {
     unsigned long aMask = [model lemoUoMask];
-    int tag    = [[sender selectedCell] tag];
+    int tag    = (int)[[sender selectedCell] tag];
     int aValue = [sender intValue];
     if(aValue==0)aMask &= ~(0x1<<tag);
     else         aMask |= (0x1<<tag);
@@ -1794,7 +1794,7 @@
 - (IBAction) lemoCoMaskAction:(id)sender
 {
     unsigned long aMask = [model lemoCoMask];
-    int tag    = [[sender selectedCell] tag];
+    int tag    = (int)[[sender selectedCell] tag];
     int aValue = [[sender selectedCell] intValue];
     if(aValue==0)aMask &= ~(0x1<<tag);
     else         aMask |= (0x1<<tag);
@@ -1805,7 +1805,7 @@
 - (IBAction) acquisitionControlAction:(id)sender
 {
     unsigned long aMask = [model acquisitionControlMask];
-    int tag =[[sender selectedCell] tag];
+    int tag =(int)[[sender selectedCell] tag];
     int aValue = [sender intValue];
     if(aValue==0)aMask &= ~(0x1<<tag);
     else         aMask |= (0x1<<tag);
@@ -1815,7 +1815,7 @@
 
 - (IBAction) nimControlStatusAction:(id)sender
 {
-    int tag =[[sender selectedCell] tag];
+    int tag =(int)[[sender selectedCell] tag];
     int aValue = [sender intValue];
     [model setNIMControlStatusBit:tag withValue:aValue];
 }
@@ -1827,7 +1827,7 @@
 
 - (IBAction) enableSumAction:(id)sender
 {
-    int tag =[[sender selectedCell] tag];
+    int tag = (int)[[sender selectedCell] tag];
     int aValue = [sender intValue];
     [model setEnableSum:tag withValue:aValue];
 }
@@ -1844,7 +1844,7 @@
 
 - (IBAction) endAddressSuppressionAction:(id)sender
 {
-    int tag    = [[sender selectedCell] tag];
+    int tag    = (int)[[sender selectedCell] tag];
     int aValue = [sender intValue];
     [model setEndAddressSuppressionBit:tag withValue:aValue];
 }
@@ -1861,7 +1861,7 @@
 
 - (IBAction) eventConfigAction:(id)sender
 {
-    int tag =[[sender selectedCell] tag];
+    int tag = (int)[[sender selectedCell] tag];
     int aValue = [sender intValue];
     [model setEventConfigBit:tag withValue:aValue];
 }
@@ -2107,7 +2107,7 @@
     }
 	
     NSString* key = [NSString stringWithFormat: @"orca.ORSIS3316%d.selectedtab",[model slot]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 	
 }
@@ -2232,12 +2232,12 @@
 
 - (int) numberPointsInPlot:(id)aPlotter
 {
-    return [[[model waveFormRateGroup] timeRate]count];
+    return (int)[[[model waveFormRateGroup] timeRate]count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 {
-    int count = [[[model waveFormRateGroup]timeRate] count];
+    int count = (int)[[[model waveFormRateGroup]timeRate] count];
     int index = count-i-1;
     *yValue = [[[model waveFormRateGroup] timeRate] valueAtIndex:index];
     *xValue = [[[model waveFormRateGroup] timeRate] timeSampledAtIndex:index];

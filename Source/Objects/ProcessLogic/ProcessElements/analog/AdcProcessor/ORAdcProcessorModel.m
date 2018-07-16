@@ -275,13 +275,13 @@
 - (id) eval
 {
 	[guardian eval];
-	BOOL aValue = [guardian valueTooLow];
+	BOOL aValue = [(ORAdcProcessorModel*)guardian valueTooLow];
 	return [ORProcessResult processState:aValue value:aValue];
 }
 
 - (int) evaluatedState
 {
-	return [guardian valueTooLow];
+	return [(ORAdcProcessorModel*)guardian valueTooLow];
 }
 
 @end
@@ -291,13 +291,13 @@
 - (id) eval
 {
 	[guardian eval];
-	BOOL aValue = [guardian valueTooHigh];
+	BOOL aValue = [(ORAdcProcessorModel*)guardian valueTooHigh];
 	return [ORProcessResult processState:aValue value:aValue];
 	
 }
 - (int) evaluatedState
 {
-	return [guardian valueTooHigh];
+	return [(ORAdcProcessorModel*)guardian valueTooHigh];
 }
 
 @end

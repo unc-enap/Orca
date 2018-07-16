@@ -808,7 +808,7 @@
 - (void) setPtSelectionAction:(id)sender
 {
 	[self endEditing];
-	[model setSetPtSelection:[[sender selectedCell ]tag]];	
+	[model setSetPtSelection:(int)[[sender selectedCell ]tag]];
 }
 
 - (void) openSoftstartAction:(id)sender
@@ -830,7 +830,7 @@
 
 - (void) analogFSLevelAction:(id)sender
 {
-	[model setAnalogFSLevel:[sender indexOfSelectedItem]];	
+	[model setAnalogFSLevel:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) pollNowAction:(id)sender
@@ -839,17 +839,17 @@
 }
 - (IBAction) unitsAction:(id)sender
 {
-	[model setUnits:[sender indexOfSelectedItem]];	
+	[model setUnits:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) pressureScaleAction:(id)sender
 {
-	[model setPressureScale:[sender indexOfSelectedItem]];	
+	[model setPressureScale:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) shipPressuresAction:(id)sender
 {
-	[model setShipPressures:[sender intValue]];	
+	[model setShipPressures:(int)[sender intValue]];
 }
 
 - (IBAction) lockAction:(id) sender
@@ -880,12 +880,12 @@
 
 - (IBAction) valveTypeAction:(id)sender
 {
-	[model setValveType:[sender indexOfSelectedItem]];
+	[model setValveType:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) analogRangeAction:(id)sender
 {
-	[model setAnalogRange:[sender indexOfSelectedItem]];
+	[model setAnalogRange:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) positionRangeAction:(id)sender
@@ -900,17 +900,17 @@
 
 - (IBAction) sensorRangeAction:(id)sender;
 {
-	[model setSensorRange: [sender indexOfSelectedItem]];
+	[model setSensorRange: (int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) sensorVoltageRangeAction:(id)sender
 {
-	[model setSensorVoltageRange:[sender indexOfSelectedItem]];
+	[model setSensorVoltageRange:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) sensorTypeAction:(id)sender
 {
-	[model setSensorType:[sender indexOfSelectedItem]];
+	[model setSensorType:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) valveResponseAction:(id)sender
@@ -925,30 +925,30 @@
 
 - (IBAction) controlTypeAction:(id)sender
 {
-	[model setControlType:[sender indexOfSelectedItem]];
+	[model setControlType:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) pollTimeAction:(id)sender
 {
-	[model setPollTime:[[sender selectedItem] tag]];
+	[model setPollTime:(int)[[sender selectedItem] tag]];
 }
 
 - (IBAction) setPointTypeAction:(id)sender
 {
 	int theValue = [[sender selectedCell] intValue];
-	[model setSetPointType:[sender tag] withValue:theValue];
+	[model setSetPointType:(int)[sender tag] withValue:theValue];
 }
 
 - (IBAction) setPointAction:(id)sender;
 {
-	int index = [[sender selectedCell] tag];
+	int index = (int)[[sender selectedCell] tag];
 	float theValue = [[sender selectedCell] floatValue];
 	[model setSetPoint:index withValue:theValue];
 }
 
 - (IBAction) softstartRateAction:(id)sender
 {
-	int index = [[sender selectedCell] tag];
+	int index = (int)[[sender selectedCell] tag];
 	float theValue = [[sender selectedCell] floatValue];
 	[model setSoftstartRate:index withValue:theValue];
 }
@@ -956,7 +956,7 @@
 - (IBAction) lowThresholdAction:(id)sender
 {
 	[self endEditing];
-	int index = [[sender selectedCell] tag];
+	int index = (int)[[sender selectedCell] tag];
 	float theValue = [[sender selectedCell] floatValue];
 	[model setLowThreshold:index withValue:theValue];
 }
@@ -964,7 +964,7 @@
 - (IBAction) highThresholdAction:(id)sender
 {
 	[self endEditing];
-	int index = [[sender selectedCell] tag];
+	int index = (int)[[sender selectedCell] tag];
 	float theValue = [[sender selectedCell] floatValue];
 	[model setHighThreshold:index withValue:theValue];
 }
@@ -972,7 +972,7 @@
 - (IBAction) gainValueAction:(id)sender;
 {
 	[self endEditing];
-	int index = [[sender selectedCell] tag];
+	int index = (int)[[sender selectedCell] tag];
 	float theValue = [[sender selectedCell] floatValue];
 	[model setGainValue:index withValue:theValue];
 }
@@ -980,7 +980,7 @@
 - (IBAction) leadValueAction:(id)sender;
 {
 	[self endEditing];
-	int index = [[sender selectedCell] tag];
+	int index = (int)[[sender selectedCell] tag];
 	float theValue = [[sender selectedCell] floatValue];
 	[model setLeadValue:index withValue:theValue];
 }
@@ -1049,12 +1049,12 @@
 #pragma mark ***Data Source
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	return [[model timeRate] count];
+	return (int)[[model timeRate] count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-	int count = [[model timeRate] count];
+	int count = (int)[[model timeRate] count];
 	int index = count-i-1;
 	*xValue = [[model timeRate]timeSampledAtIndex:index];
 	*yValue = [[model timeRate] valueAtIndex:index] * [model pressureScaleValue];

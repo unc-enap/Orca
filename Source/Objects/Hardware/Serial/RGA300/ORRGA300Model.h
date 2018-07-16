@@ -249,11 +249,11 @@
 - (void) stopMeasurement;
 
 - (void) addAmu;
-- (void) addAmu:(id)anAmu atIndex:(int)anIndex;
-- (void) removeAmuAtIndex:(int) anIndex;
-- (unsigned long) amuCount;
-- (id) amuAtIndex:(int)anIndex;
-- (void) replaceAmuAtIndex:(int)anIndex withAmu:(id)anObject;
+- (void) addAmu:(id)anAmu atIndex:(NSUInteger)anIndex;
+- (void) removeAmuAtIndex:(NSUInteger) anIndex;
+- (NSUInteger) amuCount;
+- (id) amuAtIndex:(NSUInteger)anIndex;
+- (void) replaceAmuAtIndex:(NSUInteger)anIndex withAmu:(id)anObject;
 
 #pragma mark •••Archival
 - (id)   initWithCoder:(NSCoder*)decoder;
@@ -262,9 +262,9 @@
 
 #pragma mark •••Scan Methods
 - (int) numberPointsInScan;
-- (int) scanValueAtIndex:(int)i;
+- (int) scanValueAtIndex:(NSUInteger)i;
 - (int) countsInAmuTableData:(int)i;
-- (int) amuTable:(int)anAmu valueAtIndex:(int)i;
+- (int) amuTable:(int)anAmu valueAtIndex:(NSUInteger)i;
 
 #pragma mark •••Constraints
 - (void) addFilamentConstraint:(NSString*)aName reason:(NSString*)aReason;

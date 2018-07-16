@@ -478,104 +478,104 @@
 - (void) accGate1StartIndexChanged:(NSNotification*)aNote
 {
     int i;
-    for(i=0;i<4;i++)[[accGate1StartIndexMatrix cellWithTag:i] setIntValue: [model accGate1StartIndex:i]];
+    for(i=0;i<4;i++)[[accGate1StartIndexMatrix cellWithTag:i] setIntegerValue: [model accGate1StartIndex:i]];
 }
 - (void) accGate1LengthChanged:(NSNotification*)aNote
 {
     int i;
     for(i=0;i<4;i++){
-        [[accGate1LengthMatrix cellWithTag:i] setIntValue: [model accGate1Length:i]];
+        [[accGate1LengthMatrix cellWithTag:i] setIntegerValue: [model accGate1Length:i]];
     }
 }
 
 - (void) accGate2StartIndexChanged:(NSNotification*)aNote
 {
     int i;
-    for(i=0;i<4;i++)[[accGate2StartIndexMatrix cellWithTag:i] setIntValue: [model accGate2StartIndex:i]];
+    for(i=0;i<4;i++)[[accGate2StartIndexMatrix cellWithTag:i] setIntegerValue: [model accGate2StartIndex:i]];
 }
 - (void) accGate2LengthChanged:(NSNotification*)aNote
 {
     int i;
     for(i=0;i<4;i++){
-        [[accGate2LengthMatrix cellWithTag:i] setIntValue: [model accGate2Length:i]];
+        [[accGate2LengthMatrix cellWithTag:i] setIntegerValue: [model accGate2Length:i]];
     }
 }
 
 - (void) accGate3StartIndexChanged:(NSNotification*)aNote
 {
     int i;
-    for(i=0;i<4;i++)[[accGate3StartIndexMatrix cellWithTag:i] setIntValue: [model accGate3StartIndex:i]];
+    for(i=0;i<4;i++)[[accGate3StartIndexMatrix cellWithTag:i] setIntegerValue: [model accGate3StartIndex:i]];
 }
 - (void) accGate3LengthChanged:(NSNotification*)aNote
 {
     int i;
     for(i=0;i<4;i++){
-        [[accGate3LengthMatrix cellWithTag:i] setIntValue: [model accGate3Length:i]];
+        [[accGate3LengthMatrix cellWithTag:i] setIntegerValue: [model accGate3Length:i]];
     }
 }
 
 - (void) accGate4StartIndexChanged:(NSNotification*)aNote
 {
     int i;
-    for(i=0;i<4;i++)[[accGate4StartIndexMatrix cellWithTag:i] setIntValue: [model accGate4StartIndex:i]];
+    for(i=0;i<4;i++)[[accGate4StartIndexMatrix cellWithTag:i] setIntegerValue: [model accGate4StartIndex:i]];
 }
 - (void) accGate4LengthChanged:(NSNotification*)aNote
 {
     int i;
     for(i=0;i<4;i++){
-        [[accGate4LengthMatrix cellWithTag:i] setIntValue: [model accGate4Length:i]];
+        [[accGate4LengthMatrix cellWithTag:i] setIntegerValue: [model accGate4Length:i]];
     }
 }
 
 - (void) accGate5StartIndexChanged:(NSNotification*)aNote
 {
     int i;
-    for(i=0;i<4;i++)[[accGate5StartIndexMatrix cellWithTag:i] setIntValue: [model accGate5StartIndex:i]];
+    for(i=0;i<4;i++)[[accGate5StartIndexMatrix cellWithTag:i] setIntegerValue: [model accGate5StartIndex:i]];
 }
 - (void) accGate5LengthChanged:(NSNotification*)aNote
 {
     int i;
     for(i=0;i<4;i++){
-        [[accGate5LengthMatrix cellWithTag:i] setIntValue: [model accGate5Length:i]];
+        [[accGate5LengthMatrix cellWithTag:i] setIntegerValue: [model accGate5Length:i]];
     }
 }
 
 - (void) accGate6StartIndexChanged:(NSNotification*)aNote
 {
     int i;
-    for(i=0;i<4;i++)[[accGate6StartIndexMatrix cellWithTag:i] setIntValue: [model accGate6StartIndex:i]];
+    for(i=0;i<4;i++)[[accGate6StartIndexMatrix cellWithTag:i] setIntegerValue: [model accGate6StartIndex:i]];
 }
 - (void) accGate6LengthChanged:(NSNotification*)aNote
 {
     int i;
     for(i=0;i<4;i++){
-        [[accGate6LengthMatrix cellWithTag:i] setIntValue: [model accGate6Length:i]];
+        [[accGate6LengthMatrix cellWithTag:i] setIntegerValue: [model accGate6Length:i]];
     }
 }
 
 - (void) accGate7StartIndexChanged:(NSNotification*)aNote
 {
     int i;
-    for(i=0;i<4;i++)[[accGate7StartIndexMatrix cellWithTag:i] setIntValue: [model accGate7StartIndex:i]];
+    for(i=0;i<4;i++)[[accGate7StartIndexMatrix cellWithTag:i] setIntegerValue: [model accGate7StartIndex:i]];
 }
 - (void) accGate7LengthChanged:(NSNotification*)aNote
 {
     int i;
     for(i=0;i<4;i++){
-        [[accGate7LengthMatrix cellWithTag:i] setIntValue: [model accGate7Length:i]];
+        [[accGate7LengthMatrix cellWithTag:i] setIntegerValue: [model accGate7Length:i]];
     }
 }
 
 - (void) accGate8StartIndexChanged:(NSNotification*)aNote
 {
     int i;
-    for(i=0;i<4;i++)[[accGate8StartIndexMatrix cellWithTag:i] setIntValue: [model accGate8StartIndex:i]];
+    for(i=0;i<4;i++)[[accGate8StartIndexMatrix cellWithTag:i] setIntegerValue: [model accGate8StartIndex:i]];
 }
 - (void) accGate8LengthChanged:(NSNotification*)aNote
 {
     int i;
     for(i=0;i<4;i++){
-        [[accGate8LengthMatrix cellWithTag:i] setIntValue: [model accGate8Length:i]];
+        [[accGate8LengthMatrix cellWithTag:i] setIntegerValue: [model accGate8Length:i]];
     }
 }
 
@@ -584,7 +584,7 @@
 {
     int i;
     for(i=0;i<4;i++){
-        [[bufferStartMatrix cellWithTag:i] setIntValue: [model bufferStart:i]];
+        [[bufferStartMatrix cellWithTag:i] setIntegerValue: [model bufferStart:i]];
     }
 }
 
@@ -592,7 +592,7 @@
 {
     int i;
     for(i=0;i<4;i++){
-        [[bufferLengthMatrix cellWithTag:i] setIntValue: [model bufferLength:i]];
+        [[bufferLengthMatrix cellWithTag:i] setIntegerValue: [model bufferLength:i]];
     }
 }
 
@@ -625,11 +625,11 @@
 {
 	if(![aNote userInfo]){
 		short i;
-		for(i=0;i<kNumSIS3320Channels;i++)[[dacValueMatrix cellWithTag:i] setIntValue:[model dacValue:i]];
+		for(i=0;i<kNumSIS3320Channels;i++)[[dacValueMatrix cellWithTag:i] setIntegerValue:[model dacValue:i]];
 	}
 	else {
 		int i = [[[aNote userInfo] objectForKey:@"Channel"] intValue];
-		[[dacValueMatrix cellWithTag:i] setIntValue:[model dacValue:i]];
+		[[dacValueMatrix cellWithTag:i] setIntegerValue:[model dacValue:i]];
 	}
 }
 
@@ -994,67 +994,67 @@
 
 - (IBAction) onlineAction:(id)sender
 {
-	if([sender intValue] != [model onlineMaskBit:[[sender selectedCell] tag]]){
+	if([sender intValue] != [model onlineMaskBit:(int)[[sender selectedCell] tag]]){
 		[[self undoManager] setActionName: @"Set Online Mask"];
-		[model setOnlineMaskBit:[[sender selectedCell] tag] withValue:[sender intValue]];
+		[model setOnlineMaskBit:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 	}
 }
 
-- (IBAction) accGate1LengthAction:(id)sender      { [model setAccGate1Length:   [[sender selectedCell] tag] withValue:[sender intValue]]; }
-- (IBAction) accGate1StartIndexAction:(id)sender    { [model setAccGate1StartIndex: [[sender selectedCell] tag] withValue:[sender intValue]]; }
-- (IBAction) accGate2LengthAction:(id)sender      { [model setAccGate2Length:   [[sender selectedCell] tag] withValue:[sender intValue]]; }
-- (IBAction) accGate2StartIndexAction:(id)sender    { [model setAccGate2StartIndex: [[sender selectedCell] tag] withValue:[sender intValue]]; }
-- (IBAction) accGate3LengthAction:(id)sender      { [model setAccGate3Length:   [[sender selectedCell] tag] withValue:[sender intValue]]; }
-- (IBAction) accGate3StartIndexAction:(id)sender    { [model setAccGate3StartIndex: [[sender selectedCell] tag] withValue:[sender intValue]]; }
-- (IBAction) accGate4LengthAction:(id)sender      { [model setAccGate4Length:   [[sender selectedCell] tag] withValue:[sender intValue]]; }
-- (IBAction) accGate4StartIndexAction:(id)sender    { [model setAccGate4StartIndex: [[sender selectedCell] tag] withValue:[sender intValue]]; }
-- (IBAction) accGate5LengthAction:(id)sender      { [model setAccGate5Length:   [[sender selectedCell] tag] withValue:[sender intValue]]; }
-- (IBAction) accGate5StartIndexAction:(id)sender    { [model setAccGate5StartIndex: [[sender selectedCell] tag] withValue:[sender intValue]]; }
-- (IBAction) accGate6LengthAction:(id)sender      { [model setAccGate6Length:   [[sender selectedCell] tag] withValue:[sender intValue]]; }
-- (IBAction) accGate6StartIndexAction:(id)sender    { [model setAccGate6StartIndex: [[sender selectedCell] tag] withValue:[sender intValue]]; }
-- (IBAction) accGate7LengthAction:(id)sender      { [model setAccGate7Length:   [[sender selectedCell] tag] withValue:[sender intValue]]; }
-- (IBAction) accGate7StartIndexAction:(id)sender    { [model setAccGate7StartIndex: [[sender selectedCell] tag] withValue:[sender intValue]]; }
-- (IBAction) accGate8LengthAction:(id)sender      { [model setAccGate8Length:   [[sender selectedCell] tag] withValue:[sender intValue]]; }
-- (IBAction) accGate8StartIndexAction:(id)sender    { [model setAccGate8StartIndex: [[sender selectedCell] tag] withValue:[sender intValue]]; }
+- (IBAction) accGate1LengthAction:(id)sender      { [model setAccGate1Length:   (int)[[sender selectedCell] tag] withValue:[sender intValue]]; }
+- (IBAction) accGate1StartIndexAction:(id)sender    { [model setAccGate1StartIndex: (int)[[sender selectedCell] tag] withValue:[sender intValue]]; }
+- (IBAction) accGate2LengthAction:(id)sender      { [model setAccGate2Length:   (int)[[sender selectedCell] tag] withValue:[sender intValue]]; }
+- (IBAction) accGate2StartIndexAction:(id)sender    { [model setAccGate2StartIndex: (int)[[sender selectedCell] tag] withValue:[sender intValue]]; }
+- (IBAction) accGate3LengthAction:(id)sender      { [model setAccGate3Length:   (int)[[sender selectedCell] tag] withValue:[sender intValue]]; }
+- (IBAction) accGate3StartIndexAction:(id)sender    { [model setAccGate3StartIndex: (int)[[sender selectedCell] tag] withValue:[sender intValue]]; }
+- (IBAction) accGate4LengthAction:(id)sender      { [model setAccGate4Length:   (int)[[sender selectedCell] tag] withValue:[sender intValue]]; }
+- (IBAction) accGate4StartIndexAction:(id)sender    { [model setAccGate4StartIndex: (int)[[sender selectedCell] tag] withValue:[sender intValue]]; }
+- (IBAction) accGate5LengthAction:(id)sender      { [model setAccGate5Length:   (int)[[sender selectedCell] tag] withValue:[sender intValue]]; }
+- (IBAction) accGate5StartIndexAction:(id)sender    { [model setAccGate5StartIndex: (int)[[sender selectedCell] tag] withValue:[sender intValue]]; }
+- (IBAction) accGate6LengthAction:(id)sender      { [model setAccGate6Length:   (int)[[sender selectedCell] tag] withValue:[sender intValue]]; }
+- (IBAction) accGate6StartIndexAction:(id)sender    { [model setAccGate6StartIndex: (int)[[sender selectedCell] tag] withValue:[sender intValue]]; }
+- (IBAction) accGate7LengthAction:(id)sender      { [model setAccGate7Length:   (int)[[sender selectedCell] tag] withValue:[sender intValue]]; }
+- (IBAction) accGate7StartIndexAction:(id)sender    { [model setAccGate7StartIndex: (int)[[sender selectedCell] tag] withValue:[sender intValue]]; }
+- (IBAction) accGate8LengthAction:(id)sender      { [model setAccGate8Length:   (int)[[sender selectedCell] tag] withValue:[sender intValue]]; }
+- (IBAction) accGate8StartIndexAction:(id)sender    { [model setAccGate8StartIndex: (int)[[sender selectedCell] tag] withValue:[sender intValue]]; }
 
 - (IBAction) bufferStartAction:(id)sender
 {
-    [model setBufferStart:[[sender selectedCell] tag] withValue:[sender intValue]];
+    [model setBufferStart:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 - (IBAction) bufferLengthAction:(id)sender
 {
-    [model setBufferLength:[[sender selectedCell] tag] withValue:[sender intValue]];
+    [model setBufferLength:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 - (IBAction) invertInputAction:(id)sender
 {
-    [model setInvertInput:[[sender selectedCell] tag] withValue:[sender intValue]];
+    [model setInvertInput:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 - (IBAction) enableErrorCorrectionAction:(id)sender
 {
-    [model setEnableErrorCorrection:[[sender selectedCell] tag] withValue:[sender intValue]];
+    [model setEnableErrorCorrection:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 - (IBAction) saveAlwaysAction:(id)sender
 {
-    [model setSaveAlways:[[sender selectedCell] tag] withValue:[sender intValue]];
+    [model setSaveAlways:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 - (IBAction) saveIfPileUpAction:(id)sender
 {
-    [model setSaveIfPileUp:[[sender selectedCell] tag] withValue:[sender intValue]];
+    [model setSaveIfPileUp:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 - (IBAction) saveFIRTriggerAction:(id)sender
 {
-    [model setSaveFIRTrigger:[[sender selectedCell] tag] withValue:[sender intValue]];
+    [model setSaveFIRTrigger:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 - (IBAction) saveFirstEventAction:(id)sender
 {
-    [model setSaveFirstEvent:[[sender selectedCell] tag] withValue:[sender intValue]];
+    [model setSaveFirstEvent:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 - (IBAction) lemoTimeStampClrEnabledAction:(id)sender
@@ -1074,13 +1074,13 @@
 
 - (IBAction) clockSourceAction:(id)sender
 {
-	[model setClockSource:[sender indexOfSelectedItem]];
+	[model setClockSource:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) dacValueAction:(id)sender
 {
     if([sender intValue] != [model dacValue:[[sender selectedCell] tag]]){
-		[model setDacValue:[[sender selectedCell] tag] withValue:[sender intValue]];
+		[model setDacValue:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 	}
 }
 
@@ -1141,17 +1141,17 @@
 
 - (IBAction) gtAction:(id)sender
 {
-	[model setGtMaskBit:[[sender selectedCell] tag] withValue:[sender intValue]];
+	[model setGtMaskBit:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 - (IBAction) triggerOutAction:(id)sender
 {
-	[model setTriggerOutMaskBit:[[sender selectedCell] tag] withValue:[sender intValue]];
+	[model setTriggerOutMaskBit:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 - (IBAction) extendedTriggerAction:(id)sender
 {
-	[model setExtendedTriggerMaskBit:[[sender selectedCell] tag] withValue:[sender intValue]];
+	[model setExtendedTriggerMaskBit:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 
@@ -1285,12 +1285,12 @@
 
 - (int) numberPointsInPlot:(id)aPlotter;
 {
-	return [[[model waveFormRateGroup]timeRate]count];
+	return (int)[[[model waveFormRateGroup]timeRate]count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 {
-	int count = [[[model waveFormRateGroup]timeRate] count];
+	int count = (int)[[[model waveFormRateGroup]timeRate] count];
 	int index = count-i-1;
 	*yValue =  [[[model waveFormRateGroup]timeRate]valueAtIndex:index];
 	*xValue =  [[[model waveFormRateGroup]timeRate]timeSampledAtIndex:index];
@@ -1310,7 +1310,7 @@
     }
     
     NSString* key = [NSString stringWithFormat: @"orca.ORSIS3320%d.selectedtab",[model slot]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 }
 

@@ -58,7 +58,7 @@
 - (void)put: (NSData *)postBody atURL:(NSString *)urlString{
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:urlString]];
     [request setValue:@"application/json" forHTTPHeaderField: @"Content-Type"];
-    [request setValue:[NSString stringWithFormat:@"%d", [postBody length]] forHTTPHeaderField:@"Content-Length"];
+    [request setValue:[NSString stringWithFormat:@"%lu", [postBody length]] forHTTPHeaderField:@"Content-Length"];
     [request setHTTPMethod:@"PUT"];
     [request setHTTPBody:postBody];
     
@@ -74,7 +74,7 @@
 - (void)post: (NSData *)postBody atURL:(NSString *)urlString{
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:urlString]];
     [request setValue:@"application/json" forHTTPHeaderField: @"Content-Type"];
-    [request setValue:[NSString stringWithFormat:@"%d", [postBody length]] forHTTPHeaderField:@"Content-Length"];
+    [request setValue:[NSString stringWithFormat:@"%lu", [postBody length]] forHTTPHeaderField:@"Content-Length"];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:postBody];
     
@@ -181,9 +181,9 @@
         [delegate performSelector:@selector(updateIOSChannelThresholds:ofChannel:) withObject: dataStr withObject:key]; 
     }
 
- 	[dataStr release], dataStr=nil;
-    [receivedData release], receivedData=nil;
-    //[connection release], connection=nil;
+    [dataStr release]; dataStr=nil;
+    [receivedData release]; receivedData=nil;
+    //[connection release]; connection=nil;
 }
 
 @end

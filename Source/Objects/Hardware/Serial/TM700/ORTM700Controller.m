@@ -420,7 +420,7 @@
 - (void) beginConstraintPanel:(NSDictionary*)constraints actionTitle:(NSString*)aTitle
 {
 	NSArray* allKeys = [constraints allKeys];
-	int n = [allKeys count];
+	int n = (int)[allKeys count];
 	[constraintTitleField setStringValue:[NSString stringWithFormat:@"Action: <%@> can not be done because there %d constraint%@ in effect. See below for more info.",
 										  aTitle,
 										  n,
@@ -456,7 +456,7 @@
 
 - (IBAction) pollTimeAction:(id)sender
 {
-	[model setPollTime:[[sender selectedItem] tag]];
+	[model setPollTime:(int)[[sender selectedItem] tag]];
 }
 
 - (IBAction) initAction:(id)sender

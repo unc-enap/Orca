@@ -694,8 +694,8 @@
         else if([[aTableColumn identifier] isEqualToString:@"Board1"])board = 1;
         else if([[aTableColumn identifier] isEqualToString:@"Board2"])board = 2;
         else board = 3;
-        [model setGain:rowIndex+(board*37) withValue:[anObject intValue]];
-        [model setGain:rowIndex+(board*37) withValue:[anObject intValue]];
+        [model setGain:(int)(rowIndex+(board*37)) withValue:[anObject intValue]];
+        [model setGain:(int)(rowIndex+(board*37)) withValue:[anObject intValue]];
 
     }
     else if(processLimitsTableView == aTableView){
@@ -727,21 +727,21 @@
 #pragma mark •••Data Source
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	return [[model timeRate:[aPlotter tag]]   count];
+	return (int)[[model timeRate:(int)[aPlotter tag]]   count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-	NSUInteger set = [aPlotter tag];
-	NSUInteger count = [[model timeRate:set] count];
-	NSUInteger index = count-i-1;
-	*yValue = [[model timeRate:set] valueAtIndex:index];
-	*xValue = [[model timeRate:set] timeSampledAtIndex:index];
+	int set = (int)[aPlotter tag];
+	NSUInteger count = (int)[[model timeRate:set] count];
+    NSUInteger index = count-i-1;
+ 	*yValue = [[model timeRate:set] valueAtIndex:(int)index];
+	*xValue = [[model timeRate:set] timeSampledAtIndex:(int)index];
 }
 
 - (IBAction) gainDisplayTypeAction:(id)sender
 {
-	[model setGainDisplayType:[[sender selectedCell] tag]];
+	[model setGainDisplayType:(int)[[sender selectedCell] tag]];
 }
 
 - (IBAction) readGainFileAction:(id)sender

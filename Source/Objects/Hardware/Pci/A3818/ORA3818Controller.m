@@ -219,7 +219,7 @@
 
 - (void) readWriteTypeChanged:(NSNotification*)aNotification
 {
-	[self updateRadioCluster:readWriteTypeMatrix setting:[model readWriteType]];
+	[self updateRadioCluster:readWriteTypeMatrix setting:(int)[model readWriteType]];
 	
 	switch([model readWriteType]){
 		case 0: default: [addressStepper setIncrement:1]; break;
@@ -294,21 +294,21 @@
 - (IBAction)readWriteTypeMatrixAction:(id)sender
 { 
     if ([model readWriteType] != [sender selectedTag]){
-        [model setReadWriteType:[sender selectedTag]];
+        [model setReadWriteType:(int)[sender selectedTag]];
     }
 }
 
 - (IBAction)ioSpaceAction:(id)sender
 {
     if ([model readWriteIOSpace] != [sender indexOfSelectedItem]) { 
-        [model setReadWriteIOSpace:[sender indexOfSelectedItem]];
+        [model setReadWriteIOSpace:(int)[sender indexOfSelectedItem]];
     }
 }
 
 - (IBAction)addressModifierAction:(id)sender
 {
     if ([model rwAddressModifier] != [sender indexOfSelectedItem]) {
-        [model setRwAddressModifier:[sender indexOfSelectedItem]];
+        [model setRwAddressModifier:(int)[sender indexOfSelectedItem]];
     }
 }
 
@@ -642,13 +642,13 @@
     unsigned char  cdata;
     
     [self endEditing];
-    int 			startAddress 	= [model rwAddress];
-	int				endAddress		= [model doRange]?startAddress + [model rangeToDo] : startAddress;
+    unsigned long 	startAddress 	= [model rwAddress];
+	unsigned long	endAddress		= [model doRange]?startAddress + [model rangeToDo] : startAddress;
     unsigned short 	addressModifier = [model rwAddressModifierValue];
     unsigned short 	addressSpace	= [model rwIOSpaceValue];
     unsigned long  	ldata			= [model writeValue];
     
-	int address = startAddress;
+	unsigned long address = startAddress;
 	if([model doRange] && [model rangeToDo]==0){
 		NSLog(@"Range == 0: nothing to do\n");
 		return;

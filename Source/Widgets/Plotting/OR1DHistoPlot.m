@@ -76,13 +76,13 @@
 		x	= [mXScale getPixAbs:minChan]-chanWidth/2.;
 		xl	= x;
 		double xValue,yValue;
-		[dataSource plotter:self index:minChan x:&xValue y:&yValue];
+		[dataSource plotter:self index:(int)minChan x:&xValue y:&yValue];
 		yl	= [mYScale getPixAbs:yValue];
 		long ix;
 		for (ix=minChan; ix<=maxChan+1;++ix) {
 			double xValue;
 			double yValue;
-			[dataSource plotter:self index:ix x:&xValue y:&yValue];
+			[dataSource plotter:self index:(int)ix x:&xValue y:&yValue];
 
 			x = [mXScale getPixAbsFast:ix log:NO integer:YES minPad:aMinPadx] - chanWidth/2.;
 			y = [mYScale getPixAbsFast:yValue log:aLog integer:aInt minPad:aMinPad];
@@ -94,7 +94,7 @@
 	
 	//draw the data 
 	int minX = MAX(0,(int)roundToLong([mXScale minValue]));
-	int maxX = MIN(roundToLong((int)[mXScale maxValue]+1),numPoints);
+	int maxX = MIN((int)roundToLong((int)[mXScale maxValue]+1),numPoints);
 	x  = [mXScale getPixAbs:minX]-chanWidth/2.;
 	xl = x;
 	double xValue,yValue;

@@ -871,8 +871,8 @@
 
 #pragma mark •••Actions
 - (IBAction) queryAllAction:(id)sender					{ [model queryAll]; }
-- (IBAction) opModeAction:(id)sender					{ [model setOpMode:						[sender indexOfSelectedItem]];	}
-- (IBAction) ionizerIonEnergyAction:(id)sender			{ [model setIonizerIonEnergy:			[sender indexOfSelectedItem]]; }
+- (IBAction) opModeAction:(id)sender					{ [model setOpMode:						(int)[sender indexOfSelectedItem]];	}
+- (IBAction) ionizerIonEnergyAction:(id)sender			{ [model setIonizerIonEnergy:			(int)[sender indexOfSelectedItem]]; }
 - (IBAction) stepsPerAmuAction:(id)sender				{ [model setStepsPerAmu:				[sender intValue]]; }
 - (IBAction) initialMassAction:(id)sender				{ [model setInitialMass:				[sender intValue]]; }
 - (IBAction) finalMassAction:(id)sender					{ [model setFinalMass:					[sender intValue]]; }
@@ -1083,7 +1083,7 @@
 - (int) numberPointsInPlot:(id)aPlot
 {
 	if([model opMode] == kRGATableMode){
-		int tag = [aPlot tag];
+		int tag = (int)[aPlot tag];
 		if(tag>=0 && tag<[model amuCount]){
 			return [model countsInAmuTableData:tag];
 		}
@@ -1098,7 +1098,7 @@
 {
 	if([model opMode] == kRGATableMode){
 		*xValue = i;
-		*yValue = [model amuTable:[aPlot tag] valueAtIndex:i];
+		*yValue = [model amuTable:(int)[aPlot tag] valueAtIndex:i];
 	}
 	else {
 		int stepsPerAmu = [model stepsPerAmu];
@@ -1168,7 +1168,7 @@
 - (void) beginConstraintPanel:(NSDictionary*)constraints actionTitle:(NSString*)aTitle
 {
 	NSArray* allKeys = [constraints allKeys];
-	int n = [allKeys count];
+	int n = (int)[allKeys count];
 	[constraintTitleField setStringValue:[NSString stringWithFormat:@"Action: <%@> can not be done because there %@ %d constraint%@ in effect. See below for more info.",
 										  aTitle,
                                           n==1?@"is":@"are",

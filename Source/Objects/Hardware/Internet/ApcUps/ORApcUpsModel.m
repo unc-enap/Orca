@@ -485,7 +485,7 @@ NSString* ORApcUpsLowLimitChanged		= @"ORApcUpsLowLimitChanged";
                         NSString* newDate = [NSString stringWithFormat:@"%@/%@/%@",[dateParts objectAtIndex:2],[dateParts objectAtIndex:0],[dateParts objectAtIndex:1]];
                         [parts replaceObjectAtIndex:0 withObject:newDate];
                         aLine = [parts componentsJoinedByString:@" "];
-                        int len = [aLine length];
+                        int len = (int)[aLine length];
                         if(len>6) aLine = [aLine substringToIndex:len-6];
                         [eventLog addObject:aLine];
                     }
@@ -870,7 +870,7 @@ NSString* ORApcUpsLowLimitChanged		= @"ORApcUpsLowLimitChanged";
 
 - (int) slotForObj:(id)anObj
 {
-    return [anObj tag];
+    return (int)[anObj tag];
 }
 
 - (int) numberSlotsNeededFor:(id)anObj

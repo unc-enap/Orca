@@ -355,7 +355,7 @@ long	vxi11_receive(CLINK *clink, char *buffer, unsigned long len, unsigned long 
  * ===================================== */
 int	vxi11_send_data_block(CLINK *clink, const char *cmd, char *buffer, unsigned long len) {
 	char	*out_buffer;
-	int	cmd_len=strlen(cmd);
+	size_t	cmd_len=strlen(cmd);
 	int	ret;
 	out_buffer= (char*)malloc(cmd_len+10+len);
 	NSLog(@"%s %08lu",cmd,len);
@@ -384,7 +384,7 @@ long	vxi11_receive_data_block(CLINK *clink, char *buffer, unsigned long len, uns
 	 * 11 (#9 + 9 digits) */
 	unsigned long	necessary_buffer_size;
 	char		*in_buffer;
-	int		ret;
+	long		ret;
 	int		ndigits;
 	unsigned long	returned_bytes;
 	int		l;
@@ -517,7 +517,7 @@ int	_vxi11_open_link(const char *inputip, CLIENT **client, VXI11_LINK **link, ch
 
 
 	/* Set link parameters */
-	link_parms.clientId	= (long) *client;
+	link_parms.clientId	= (int) *client;
 	link_parms.lockDevice	= 0;
 	link_parms.lock_timeout	= VXI11_DEFAULT_TIMEOUT;
 	link_parms.device	= device;
@@ -642,16 +642,16 @@ long _vxi11_receive(CLIENT *client, VXI11_LINK *link, char *buffer, unsigned lon
 	long	curr_pos = 0;
 	
 	read_parms.lid			= link->lid;
-	read_parms.requestSize		= len;
-	read_parms.io_timeout		= timeout;	/* in ms */
-	read_parms.lock_timeout		= timeout;	/* in ms */
+	read_parms.requestSize		= (unsigned int)len;
+	read_parms.io_timeout		= (unsigned int)timeout;	/* in ms */
+	read_parms.lock_timeout		= (unsigned int)timeout;	/* in ms */
 	read_parms.flags		= 0;
 	read_parms.termChar		= 0;
 	
 	do {
 		memset(&read_resp, 0, sizeof(read_resp));
 		
-		read_parms.requestSize = len    - curr_pos;	// Never request more total data than originally specified in len
+		read_parms.requestSize = (unsigned int)(len  - curr_pos);	// Never request more total data than originally specified in len
 #ifdef __APPLE__
 		Device_ReadResp *tmp;
 		if((tmp = device_read_1(&read_parms, client)) == NULL) {

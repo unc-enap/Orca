@@ -240,7 +240,7 @@ NSString* ORLakeShore336PollTimeChanged         = @"ORLakeShore336PollTimeChange
 		case kLakeShore336UseUSB:	return [NSString stringWithFormat:@"LakeShore336 (Serial# %@)",[usbInterface serialNumber]];
 		case kLakeShore336UseIP:	return [NSString stringWithFormat:@"LakeShore336 (%@)",[self ipAddress]];
 	}
-	return [NSString stringWithFormat:@"33220 Pulser (%d)",[self tag]];
+	return [NSString stringWithFormat:@"33220 Pulser (%ld)",[self tag]];
 }
 
 - (NSUInteger) vendorID

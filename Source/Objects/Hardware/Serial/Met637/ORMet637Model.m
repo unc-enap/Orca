@@ -634,8 +634,8 @@ NSString* ORMet637Lock = @"ORMet637Lock";
 	NSCalendar *gregorian = [[[NSCalendar alloc]  initWithCalendarIdentifier:NSGregorianCalendar] autorelease];
 #endif
 	NSDateComponents *comps = [gregorian components:unitFlags fromDate:today];
-	[self addCmdToQueue:[NSString stringWithFormat:@"D %02d/%02d/%02d",[comps month],[comps day],[comps year]-2000]]; 
-	[self addCmdToQueue:[NSString stringWithFormat:@"T %02d:%02d",[comps hour],[comps minute]]]; 
+	[self addCmdToQueue:[NSString stringWithFormat:@"D %02ld/%02ld/%02ld",[comps month],[comps day],[comps year]-2000]];
+	[self addCmdToQueue:[NSString stringWithFormat:@"T %02ld:%02ld",[comps hour],[comps minute]]];
 }
 - (void) sendClearData				{ [self addCmdToQueue:@"C\rY"]; }
 - (void) sendStart					{ [self addCmdToQueue:@"S"]; }

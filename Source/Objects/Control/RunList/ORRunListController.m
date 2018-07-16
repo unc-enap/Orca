@@ -156,7 +156,7 @@
 - (void) itemsAdded:(NSNotification*)aNote
 {
 	int index = [[[aNote userInfo] objectForKey:@"Index"] intValue];
-	index = MIN(index,[model itemCount]);
+	index = MIN(index,(int)[model itemCount]);
 	index = MAX(index,0);
 	[itemsListView reloadData];
 	NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:index];

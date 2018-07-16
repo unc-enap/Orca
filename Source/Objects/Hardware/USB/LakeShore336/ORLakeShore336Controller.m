@@ -262,15 +262,15 @@
 
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	int set = [aPlotter tag];
-    if(set>=0 && set<4) return [[[model inputs] objectAtIndex:set] numberPointsInTimeRate];
-    else if(set>=4 && set<6)return [[[model heaters] objectAtIndex:set-4] numberPointsInTimeRate];
+	int set = (int)[aPlotter tag];
+    if(set>=0 && set<4) return (int)[[[model inputs] objectAtIndex:set] numberPointsInTimeRate];
+    else if(set>=4 && set<6)return (int)[[[model heaters] objectAtIndex:set-4] numberPointsInTimeRate];
     else return 0;
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-	int set = [aPlotter tag];
+	int set = (int)[aPlotter tag];
     if(set>=0 && set<4){
         [[[model inputs] objectAtIndex:set] timeRateAtIndex:i x:xValue y:yValue];
     }
@@ -286,7 +286,7 @@
 #pragma mark •••Actions
 - (IBAction) pollTimeAction:(id)sender
 {
-	[model setPollTime:[[sender selectedItem] tag]];
+	[model setPollTime:(int)[[sender selectedItem] tag]];
 }
 
 - (IBAction) connectAction: (id) aSender
@@ -342,7 +342,7 @@
 
 - (IBAction) connectionProtocolAction:(id)sender
 {
-	[model setConnectionProtocol:[[connectionProtocolMatrix selectedCell] tag]];
+	[model setConnectionProtocol:(int)[[connectionProtocolMatrix selectedCell] tag]];
 	
 	BOOL undoWasEnabled = [[model undoManager] isUndoRegistrationEnabled];
     if(undoWasEnabled)[[model undoManager] disableUndoRegistration];

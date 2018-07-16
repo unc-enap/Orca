@@ -165,7 +165,7 @@ NSString* ORAdcRatePassThruConnection           = @"ORAdcRatePassThruConnection"
 
 - (void) adjustBufferLength
 {
-    int n = [buffer count];
+    int n = (int)[buffer count];
     NSTimeInterval tf = [[[buffer objectAtIndex:n-1] objectForKey:@"time"] timeIntervalSince1970];
     while(1) {
         NSTimeInterval dt =  tf - [[[buffer objectAtIndex:0] objectForKey:@"time"] timeIntervalSince1970];
@@ -189,7 +189,7 @@ NSString* ORAdcRatePassThruConnection           = @"ORAdcRatePassThruConnection"
     float sumY = 0;
     float sumXY = 0;
     float sumXX = 0;
-    int n = [buffer count];
+    int n = (int)[buffer count];
     NSTimeInterval t1 = [[[buffer objectAtIndex:0] objectForKey:@"time"] timeIntervalSince1970];
 
     for(id pt in buffer){
@@ -240,9 +240,9 @@ NSString* ORAdcRatePassThruConnection           = @"ORAdcRatePassThruConnection"
 {
 	[guardian eval];
     BOOL rateBad = NO;
-	if([guardian valid]){
-        if([guardian rateLimit]<0 && [guardian rate]<[guardian rateLimit])      rateBad = YES;
-        else if([guardian rateLimit]>0 && [guardian rate]>[guardian rateLimit]) rateBad = YES;
+	if([(ORAdcRateModel*)guardian valid]){
+        if([(ORAdcRateModel*)guardian rateLimit]<0 && [(ORAdcRateModel*)guardian rate]<[(ORAdcRateModel*)guardian rateLimit])      rateBad = YES;
+        else if([(ORAdcRateModel*)guardian rateLimit]>0 && [(ORAdcRateModel*)guardian rate]>[guardian rateLimit]) rateBad = YES;
     }
 	return [ORProcessResult processState:rateBad value:rateBad];
 }
@@ -250,9 +250,9 @@ NSString* ORAdcRatePassThruConnection           = @"ORAdcRatePassThruConnection"
 - (int) evaluatedState
 {
     BOOL rateBad = NO;
-	if([guardian valid]){
-        if([guardian rateLimit]<0 && [guardian rate]<[guardian rateLimit])      rateBad = NO;
-        else if([guardian rateLimit]>0 && [guardian rate]>[guardian rateLimit]) rateBad = NO;
+	if([(ORAdcRateModel*)guardian valid]){
+        if([(ORAdcRateModel*)guardian rateLimit]<0 && [(ORAdcRateModel*)guardian rate]<[(ORAdcRateModel*)guardian rateLimit])      rateBad = NO;
+        else if([(ORAdcRateModel*)guardian rateLimit]>0 && [(ORAdcRateModel*)guardian rate]>[(ORAdcRateModel*)guardian rateLimit]) rateBad = NO;
     }
 	return rateBad;
 }

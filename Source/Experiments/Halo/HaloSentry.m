@@ -1449,7 +1449,7 @@ NSString* HaloSentryToggleIntervalChanged   = @"HaloSentryToggleIntervalChanged"
     //If a connection is open, a heartbeat should arrive every 30 seconds
     //the run state of the remote machine should arrive whenever it changes
     NSArray* lines= [inString componentsSeparatedByString:@"\n"];
-    int n = [lines count];
+    int n = (int)[lines count];
     int i;    
     for(i=0;i<n;i++){
         NSString* aLine = [lines objectAtIndex:i];

@@ -107,12 +107,12 @@ enum {
         io_object_t A3818Device;
         io_connect_t dataPort;
         io_service_t dataService;
-        vm_address_t CSRRegisterAddress;
-        vm_size_t CSRRegisterLength;
-        vm_address_t mapRegisterAddress;
-        vm_size_t mapRegisterLength;
-        vm_address_t remMemRegisterAddress;
-        vm_size_t remMemRegisterLength;    
+        mach_vm_address_t CSRRegisterAddress;
+        mach_vm_size_t CSRRegisterLength;
+        mach_vm_address_t mapRegisterAddress;
+        mach_vm_size_t mapRegisterLength;
+        mach_vm_address_t remMemRegisterAddress;
+        mach_vm_size_t remMemRegisterLength;    
 		unsigned char* fVStatusReg;
         NSString*       deviceName;
         unsigned long 	rwAddress;
@@ -158,8 +158,8 @@ enum {
 - (void) setRwAddressModifier:(unsigned int)aValue;
 - (unsigned int) readWriteIOSpace;
 - (void) setReadWriteIOSpace:(unsigned int)aValue;
-- (unsigned int) readWriteType;
-- (void) setReadWriteType:(unsigned int)aValue;
+- (unsigned long) readWriteType;
+- (void) setReadWriteType:(unsigned long)aValue;
 - (unsigned short) rwAddressModifierValue;
 - (unsigned short) rwIOSpaceValue;
 

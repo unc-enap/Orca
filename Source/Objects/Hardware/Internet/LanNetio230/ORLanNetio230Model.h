@@ -30,7 +30,7 @@
 @interface ORLanNetio230Model :  OrcaObject
 {
 	NSMutableArray*	connectionHistory;
-	unsigned		ipNumberIndex;
+	NSInteger		ipNumberIndex;
 	NSString*		IPNumber;
     BOOL			isConnected;
 	NetSocket*		socket;

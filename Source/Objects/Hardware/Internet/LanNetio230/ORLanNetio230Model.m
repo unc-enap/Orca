@@ -240,7 +240,7 @@ NSString* ORLanNetio230ModelOutletNameChanged	 = @"ORLanNetio230ModelOutletNameC
 		if(![connectionHistory containsObject:IPNumber]){
 			[connectionHistory addObject:IPNumber];
 		}
-		ipNumberIndex = [connectionHistory indexOfObject:aIPNumber];
+		ipNumberIndex = (unsigned int)[connectionHistory indexOfObject:aIPNumber];
 		
 		[[NSUserDefaults standardUserDefaults] setObject:connectionHistory forKey:[NSString stringWithFormat:@"orca.%@.ConnectionHistory",[self className]]];
 		[[NSUserDefaults standardUserDefaults] setInteger:ipNumberIndex forKey:[NSString stringWithFormat:@"orca.%@.IPNumberIndex",[self className]]];

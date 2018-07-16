@@ -484,8 +484,8 @@ NSString* ORSMELLIEEmergencyStop = @"ORSMELLIEEmergencyStop";
     }
     
     // Get Calibration parameters
-    NSArray* IPW_values = [[firePars objectForKey:[NSString stringWithFormat:@"channel_%d",channel]] objectForKey:[NSString stringWithFormat:@"%@_IPW",prefix]];
-    NSArray* photon_values = [[firePars objectForKey:[NSString stringWithFormat:@"channel_%d",channel]] objectForKey:[NSString stringWithFormat:@"%@_photons",prefix]];
+    NSArray* IPW_values = [[firePars objectForKey:[NSString stringWithFormat:@"channel_%ld",channel]] objectForKey:[NSString stringWithFormat:@"%@_IPW",prefix]];
+    NSArray* photon_values = [[firePars objectForKey:[NSString stringWithFormat:@"channel_%ld",channel]] objectForKey:[NSString stringWithFormat:@"%@_photons",prefix]];
 
     ////////////
     // Find minimum calibration point. If request is below minimum, estiamate the IPW
@@ -543,8 +543,8 @@ NSString* ORSMELLIEEmergencyStop = @"ORSMELLIEEmergencyStop";
     
     //////////////
     // Get Calibration parameters
-    NSArray* IPW_values = [[[self tellieFireParameters] objectForKey:[NSString stringWithFormat:@"channel_%d",channel]] objectForKey:[NSString stringWithFormat:@"%@_IPW",prefix]];
-    NSArray* photon_values = [[[self tellieFireParameters] objectForKey:[NSString stringWithFormat:@"channel_%d",channel]] objectForKey:[NSString stringWithFormat:@"%@_photons",prefix]];
+    NSArray* IPW_values = [[[self tellieFireParameters] objectForKey:[NSString stringWithFormat:@"channel_%ld",channel]] objectForKey:[NSString stringWithFormat:@"%@_IPW",prefix]];
+    NSArray* photon_values = [[[self tellieFireParameters] objectForKey:[NSString stringWithFormat:@"channel_%ld",channel]] objectForKey:[NSString stringWithFormat:@"%@_photons",prefix]];
     
     ////////////
     // Find minimum calibration point. If request is below minimum, estiamate the IPW
@@ -619,13 +619,13 @@ NSString* ORSMELLIEEmergencyStop = @"ORSMELLIEEmergencyStop";
     /*
      Use node-to-fibre map loaded from the telliedb to find the priority fibre on a node.
      */
-    if(![[self tellieNodeMapping] objectForKey:[NSString stringWithFormat:@"panel_%d",node]]){
+    if(![[self tellieNodeMapping] objectForKey:[NSString stringWithFormat:@"panel_%ld",node]]){
         NSLogColor([NSColor redColor], @"[TELLIE]: Node map does not include a reference to node: %d",node);
         return nil;
     }
     
     // Read panel info into local dictionary
-    NSMutableDictionary* nodeInfo = [[self tellieNodeMapping] objectForKey:[NSString stringWithFormat:@"panel_%d",node]];
+    NSMutableDictionary* nodeInfo = [[self tellieNodeMapping] objectForKey:[NSString stringWithFormat:@"panel_%ld",node]];
     
     //***************************************//
     // Select appropriate fibre for this node.
@@ -677,7 +677,7 @@ NSString* ORSMELLIEEmergencyStop = @"ORSMELLIEEmergencyStop";
     }
     NSUInteger fibreIndex = [[[self tellieFibreMapping] objectForKey:@"fibres"] indexOfObject:fibre];
     NSUInteger channelInt = [[[[self tellieFibreMapping] objectForKey:@"channels"] objectAtIndex:fibreIndex] integerValue];
-    NSNumber* channel = [NSNumber numberWithInt:channelInt];
+    NSNumber* channel = [NSNumber numberWithInteger:channelInt];
     return channel;
 }
 
@@ -696,7 +696,7 @@ NSString* ORSMELLIEEmergencyStop = @"ORSMELLIEEmergencyStop";
     }
     NSUInteger fibreIndex = [[[self amellieFibreMapping] objectForKey:@"fibres"] indexOfObject:fibre];
     NSUInteger channelInt = [[[[self amellieFibreMapping] objectForKey:@"channels"] objectAtIndex:fibreIndex] integerValue];
-    NSNumber* channel = [NSNumber numberWithInt:channelInt];
+    NSNumber* channel = [NSNumber numberWithInteger:channelInt];
     return channel;
 }
 
@@ -712,9 +712,9 @@ NSString* ORSMELLIEEmergencyStop = @"ORSMELLIEEmergencyStop";
 
     NSUInteger channelIndex;
     @try{
-        channelIndex = [[[self tellieFibreMapping] objectForKey:@"channels"] indexOfObject:[NSString stringWithFormat:@"%d",channel]];
+        channelIndex = [[[self tellieFibreMapping] objectForKey:@"channels"] indexOfObject:[NSString stringWithFormat:@"%d",(int)channel]];
     }@catch(NSException* e) {
-        channelIndex = [[[self tellieFibreMapping] objectForKey:@"channels"] indexOfObject:channel];
+        channelIndex = [[[self tellieFibreMapping] objectForKey:@"channels"] indexOfObject:(int)channel];
     }
     NSString* fibre = [[[self tellieFibreMapping] objectForKey:@"fibres"] objectAtIndex:channelIndex];
     return fibre;
@@ -727,8 +727,8 @@ NSString* ORSMELLIEEmergencyStop = @"ORSMELLIEEmergencyStop";
      */
     
     //First find if primary / secondary fibres exist.
-    NSString* primaryFibre = [NSString stringWithFormat:@"FT%03dA", node];
-    NSString* secondaryFibre = [NSString stringWithFormat:@"FT%03dB", node];
+    NSString* primaryFibre = [NSString stringWithFormat:@"FT%03ldA", node];
+    NSString* secondaryFibre = [NSString stringWithFormat:@"FT%03ldB", node];
     
     if([fibres indexOfObject:primaryFibre] != NSNotFound){
         return [fibres objectAtIndex:[fibres indexOfObject:primaryFibre]];
@@ -777,7 +777,7 @@ NSString* ORSMELLIEEmergencyStop = @"ORSMELLIEEmergencyStop";
                                                    withNPhotons:photons
                                               withFireFrequency:frequency
                                                         inSlave:mode
-                                                      isAMELLIE:@YES];
+                                                      isAMELLIE:YES];
     NSString* modeString;
     if(mode == YES){
         modeString = @"Slave";
@@ -1058,7 +1058,7 @@ err:
     // If a large number of shots are requested it is useful to split the data into smaller chunks,
     // this way we get multiple pin readings.
     NSNumber* loops = [NSNumber numberWithInteger:1];
-    int totalShots = [[fireCommands objectForKey:@"number_of_shots"] integerValue];
+    int totalShots = (int)[[fireCommands objectForKey:@"number_of_shots"] integerValue];
     float fRemainder = fmod(totalShots, 5e3);
     if( totalShots > 5e3){
         if (fRemainder > 0){
@@ -1960,8 +1960,8 @@ err:{
     NSNumber* wavelengthHighEdge;
     NSNumber* intensity;
     NSNumber* gain;
-    NSNumber* rate = [NSNumber numberWithInt:[[smellieSettings objectForKey:@"trigger_frequency"] integerValue]];
-    NSNumber* nTriggers = [NSNumber numberWithInt:[[smellieSettings objectForKey:@"triggers_per_loop"] integerValue]];
+    NSNumber* rate = [NSNumber numberWithInteger:[[smellieSettings objectForKey:@"trigger_frequency"] integerValue]];
+    NSNumber* nTriggers = [NSNumber numberWithInteger:[[smellieSettings objectForKey:@"triggers_per_loop"] integerValue]];
     NSMutableArray* fireSettingsArray = [NSMutableArray arrayWithCapacity:51];
 
     //////////////
@@ -2057,9 +2057,9 @@ err:{
         @try{
             laser = [subRun objectForKey:@"laser"];
             fibre = [subRun objectForKey:@"fibre"];
-            wavelengthLowEdge = [NSNumber numberWithInt:[[subRun objectForKey:@"wavelength_low"] integerValue]];
-            wavelengthHighEdge  = [NSNumber numberWithInt:[[subRun objectForKey:@"wavelength_hi"] integerValue]];
-            intensity = [NSNumber numberWithInt:[[subRun objectForKey:@"intensity"] integerValue]];
+            wavelengthLowEdge = [NSNumber numberWithInteger:[[subRun objectForKey:@"wavelength_low"] integerValue]];
+            wavelengthHighEdge  = [NSNumber numberWithInteger:[[subRun objectForKey:@"wavelength_hi"] integerValue]];
+            intensity = [NSNumber numberWithInteger:[[subRun objectForKey:@"intensity"] integerValue]];
             gain = [NSNumber numberWithFloat:[[subRun objectForKey:@"gain"] floatValue]];
         } @catch(NSException* e) {
             NSLogColor([NSColor redColor], @"[SMELLIE]: Sub run settings could not be properly read, reason : %@.\n", [e reason]);
@@ -2375,7 +2375,7 @@ err:
     [runDocDict setObject:[aSnotModel smellieRunNameLabel] forKey:@"run_description_used"];
     [runDocDict setObject:[self stringDateFromDate:nil] forKey:@"timestamp"];
     [runDocDict setObject:[self smellieConfigVersionNo] forKey:@"configuration_version"];
-    [runDocDict setObject:[NSNumber numberWithInt:[runControl runNumber]] forKey:@"run"];
+    [runDocDict setObject:[NSNumber numberWithInteger:[runControl runNumber]] forKey:@"run"];
     [runDocDict setObject:[NSMutableArray arrayWithObjects:[NSNumber numberWithUnsignedLong:[runControl runNumber]],[NSNumber numberWithUnsignedLong:[runControl runNumber]], nil] forKey:@"run_range"];
 
     [runDocDict setObject:subRunArray forKey:@"sub_run_info"];

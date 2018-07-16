@@ -135,7 +135,7 @@
 {
 	NSIndexSet* selection = [savedSetsTableView selectedRowIndexes];
 	NSUInteger row = [selection firstIndex];
-	if(row>=0 && row < [saveSetNames count]) {
+	if(row < [saveSetNames count]) {
 		NSString* theSaveSetName = [[saveSetNames objectAtIndex:row] objectForKey:@"Name"];
 		if([theSaveSetName length]){
 			[[NSUserDefaults standardUserDefaults] setObject:theSaveSetName forKey:@"CmdOneWindowSaveSet"]; 

@@ -136,9 +136,9 @@
     int fiberEnableMask;
     //int BBv1Mask;
     int selectFiberTrig;
-	//uint64_t streamMask;
-    uint64_t streamMask;
-    uint64_t fiberDelays;
+	//unsigned long long streamMask;
+    unsigned long long streamMask;
+    unsigned long long fiberDelays;
     int fastWrite;
     unsigned long statusRegister;
     int totalTriggerNRegister;
@@ -177,8 +177,8 @@
     unsigned int wCmdArg2;
     int writeToBBMode;
     int lowLevelRegInHex;
-    uint64_t ionTriggerMask;
-    uint64_t heatTriggerMask;
+    unsigned long long ionTriggerMask;
+    unsigned long long heatTriggerMask;
     int ionToHeatDelay;
     unsigned long BB0x0ACmdMask;
     int pollBBStatusIntervall;
@@ -380,26 +380,26 @@
 - (void) setStatusRegister:(unsigned long)aStatusRegister;
 - (int) fastWrite;
 - (void) setFastWrite:(int)aFastWrite;
-- (uint64_t) fiberDelays;
-- (void) setFiberDelays:(uint64_t)aFiberDelays;
-- (uint64_t) streamMask;
+- (unsigned long long) fiberDelays;
+- (void) setFiberDelays:(unsigned long long)aFiberDelays;
+- (unsigned long long) streamMask;
 - (unsigned long) streamMask1;
 - (unsigned long) streamMask2;
 - (int) streamMaskForFiber:(int)aFiber chan:(int)aChan;
-- (void) setStreamMask:(uint64_t)aStreamMask;
+- (void) setStreamMask:(unsigned long long)aStreamMask;
 //- (void) setStreamMaskForFiber:(int)aFiber chan:(int)aChan;
 
-- (uint64_t) ionTriggerMask;
+- (unsigned long long) ionTriggerMask;
 - (unsigned long) ionTriggerMask1;
 - (unsigned long) ionTriggerMask2;
 - (int) ionTriggerMaskForFiber:(int)aFiber chan:(int)aChan;
-- (void) setIonTriggerMask:(uint64_t)aIonTriggerMask;
+- (void) setIonTriggerMask:(unsigned long long)aIonTriggerMask;
 
-- (uint64_t) heatTriggerMask;
+- (unsigned long long) heatTriggerMask;
 - (unsigned long) heatTriggerMask1;
 - (unsigned long) heatTriggerMask2;
 - (int) heatTriggerMaskForFiber:(int)aFiber chan:(int)aChan;
-- (void) setHeatTriggerMask:(uint64_t)aHeatTriggerMask;
+- (void) setHeatTriggerMask:(unsigned long long)aHeatTriggerMask;
 
 
 - (int) targetRate;
@@ -515,16 +515,16 @@
 
 #pragma mark ‚Ä¢‚Ä¢‚Ä¢HW Access
 //all can raise exceptions
-- (unsigned long) regAddress:(int)aReg channel:(int)aChannel index:(int)index;
-- (unsigned long) regAddress:(int)aReg channel:(int)aChannel;
-- (unsigned long) regAddress:(int)aReg;
+- (unsigned long) regAddress:(unsigned long)aReg channel:(int)aChannel index:(int)index;
+- (unsigned long) regAddress:(unsigned long)aReg channel:(int)aChannel;
+- (unsigned long) regAddress:(unsigned long)aReg;
 - (unsigned long) adcMemoryChannel:(int)aChannel page:(int)aPage;
-- (unsigned long) readReg:(int)aReg;
-- (unsigned long) readReg:(int)aReg channel:(int)aChannel;
-- (unsigned long) readReg:(int)aReg channel:(int)aChannel  index:(int)aIndex;
-- (void) writeReg:(int)aReg value:(unsigned long)aValue;
-- (void) writeReg:(int)aReg channel:(int)aChannel value:(unsigned long)aValue;
-- (void) readBlock:(int)aReg dataBuffer:(unsigned long*)aDataBuffer length:(unsigned long)length;
+- (unsigned long) readReg:(unsigned long)aReg;
+- (unsigned long) readReg:(unsigned long)aReg channel:(int)aChannel;
+- (unsigned long) readReg:(unsigned long)aReg channel:(int)aChannel  index:(int)aIndex;
+- (void) writeReg:(unsigned long)aReg value:(unsigned long)aValue;
+- (void) writeReg:(unsigned long)aReg channel:(int)aChannel value:(unsigned long)aValue;
+- (void) readBlock:(unsigned long)aReg dataBuffer:(unsigned long*)aDataBuffer length:(unsigned long)length;
 
 - (void) executeCommandList:(ORCommandList*)aList;
 - (id) readRegCmd:(unsigned long) aRegister channel:(short) aChannel;

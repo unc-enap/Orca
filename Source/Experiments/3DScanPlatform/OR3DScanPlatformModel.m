@@ -165,7 +165,7 @@ NSString* OR3DScanPlatformLock  = @"OR3DScanPlatformLock";
 
 - (int) slotForObj:(id)anObj
 {
-    return [anObj tag];
+    return (int)[anObj tag];
 }
 
 - (int) numberSlotsNeededFor:(id)anObj

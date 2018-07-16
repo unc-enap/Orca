@@ -69,7 +69,7 @@ NSString* ORMJDTestCryoConnectionChanged = @"ORMJDTestCryoConnectionChanged";
 {
 	ORTPG256AModel* pressureGauge = [aNote object];
 	int chan = [[[aNote userInfo] objectForKey:@"Channel"]intValue];
-	int componentTag = [pressureGauge tag];
+	int componentTag = (int)[pressureGauge tag];
 	ORVacuumDynamicLabel*  aLabel = [self regionValueObj:kRegionNegPump];
 	if([aLabel channel ] == chan && [aLabel component] == componentTag){
 		[aLabel setIsValid:[pressureGauge isValid]]; 
@@ -80,7 +80,7 @@ NSString* ORMJDTestCryoConnectionChanged = @"ORMJDTestCryoConnectionChanged";
 - (void) temperatureGaugeChanged:(NSNotification*)aNote
 {
     ORLakeShore210Model* tempGauge = [aNote object];
-    int componentTag = [tempGauge tag];
+    int componentTag = (int)[tempGauge tag];
     int chan         = [[[aNote userInfo] objectForKey:@"Channel"]intValue];
     //get the right region/channel etc...
     //cryo 1,3,..     cryo 2,4,..
@@ -92,7 +92,7 @@ NSString* ORMJDTestCryoConnectionChanged = @"ORMJDTestCryoConnectionChanged";
     int componentOffset[7]={0,0,1,1,2,2,3}; //by stc
     int channelOffset[7]  ={0,4,0,4,0,4,0}; //by stc
     
-    int tagIndex = [self tag];
+    int tagIndex = (int)[self tag];
     
     if(tagIndex<7 && chan<8){
         
@@ -388,10 +388,10 @@ NSString* ORMJDTestCryoConnectionChanged = @"ORMJDTestCryoConnectionChanged";
     for(i=0;i<numItems;i++){
         int component	= labelItems[i].component;
         if(labelItems[i].type == kVacPressureItem){
-            int channel		= labelItems[i].channel + [self tag];
+            int channel		= (int)(labelItems[i].channel + [self tag]);
             //the pressure gauge has six channels. Our pump stands start at the first pressure gauge, channel 3 and are offset from there
             if(channel>5){
-                channel   = [self tag]-3;
+                channel   = (int)([self tag]-3);
                 component+=1;
             }
             NSRect theBounds = NSMakeRect(labelItems[i].x1,labelItems[i].y1,labelItems[i].x2-labelItems[i].x1,labelItems[i].y2-labelItems[i].y1);
