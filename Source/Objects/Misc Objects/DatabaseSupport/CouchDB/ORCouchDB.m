@@ -18,8 +18,8 @@
 //-------------------------------------------------------------
 
 #import "ORCouchDB.h"
-#import <YAJL/NSObject+YAJL.h>
-#import <YAJL/YAJLDocument.h>
+//#import <YAJL/NSObject+YAJL.h>
+//#import <YAJL/YAJLDocument.h>
 #import "SynthesizeSingleton.h"
 
 @implementation ORCouchDB
@@ -337,16 +337,15 @@
         if(aBody){
             NSData* adat=nil;
             @try {
-                adat = [[aBody yajl_JSONString]
-                        dataUsingEncoding:NSASCIIStringEncoding];
+                //adat = [[aBody yajl_JSONString] dataUsingEncoding:NSASCIIStringEncoding];
+                adat = [NSJSONSerialization dataWithJSONObject:aBody options:NSJSONWritingPrettyPrinted error:nil];
             }
             @catch (NSException *exc) {
                 NSLogColor([NSColor redColor],
-                           @"ORCouchDB JSON parse failure (%@), trying to continue"
-                           " by ignoring unknown types during the parse.\n",exc);
-                adat = [[aBody yajl_JSONStringWithOptions:YAJLGenOptionsIgnoreUnknownTypes
-                                                     indentString:@""]
-                                dataUsingEncoding:NSASCIIStringEncoding];
+                           @"ORCouchDB JSON parse failure (%@)\n",exc);
+                //adat = [[aBody yajl_JSONStringWithOptions:YAJLGenOptionsIgnoreUnknownTypes
+                //                                     indentString:@""]
+                //                dataUsingEncoding:NSASCIIStringEncoding];
             }
             @finally {
                 if (adat) [request setHTTPBody:adat];
@@ -356,8 +355,8 @@
         NSData *data = [[[NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil] retain] autorelease];
         
         if (data) {
-            YAJLDocument *document = [[[YAJLDocument alloc] initWithData:data parserOptions:YAJLParserOptionsNone error:nil] autorelease];
-            result =  [document root];
+            //YAJLDocument *document = [[[YAJLDocument alloc] initWithData:data parserOptions:YAJLParserOptionsNone error:nil] autorelease];
+            result =  [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
         }
     }
     @catch(NSException* e){
@@ -398,10 +397,10 @@
         [request setHTTPMethod:@"POST"];
         [self _updateAuthentication:request];
         NSData *data = [[[NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil] retain] autorelease];	
-        YAJLDocument *document = nil;
+        //YAJLDocument *document = nil;
         if (data) {
-            document = [[[YAJLDocument alloc] initWithData:data parserOptions:YAJLParserOptionsNone error:nil] autorelease];
-            [self sendToDelegate:[document root]];
+            //document = [[[YAJLDocument alloc] initWithData:data parserOptions:YAJLParserOptionsNone error:nil] autorelease];
+            [self sendToDelegate:[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]];
         }
     }
     [thePool release];
@@ -602,15 +601,15 @@
         NSDictionary* aBody;
         if(continuous) aBody= [NSDictionary dictionaryWithObjectsAndKeys:escaped,@"source",target,@"target",[NSNumber numberWithBool:1],@"continuous",nil];
         else           aBody = [NSDictionary dictionaryWithObjectsAndKeys:escaped,@"source",target,@"target",nil];
-        NSString* s = [aBody yajl_JSONString];
-        NSData* asData = [s dataUsingEncoding:NSASCIIStringEncoding];
-        [request setHTTPBody:asData];
+        //NSString* s = [aBody yajl_JSONString];
+        //NSData* asData = [s dataUsingEncoding:NSASCIIStringEncoding];
+        [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:aBody options:NSJSONWritingPrettyPrinted error:nil]];
         NSData *data = [[[NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil] retain] autorelease];
         
         id result = nil;
         if (data) {
-            YAJLDocument *document = [[[YAJLDocument alloc] initWithData:data parserOptions:YAJLParserOptionsNone error:nil] autorelease];
-            result= [document root];
+            //YAJLDocument *document = [[[YAJLDocument alloc] initWithData:data parserOptions:YAJLParserOptionsNone error:nil] autorelease];
+            result= [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
         }
         
         [self sendToDelegate:result];
@@ -703,8 +702,8 @@
 		
 		
 		if (data) {
-			YAJLDocument *result = [[[YAJLDocument alloc] initWithData:data parserOptions:YAJLParserOptionsNone error:nil] autorelease];
-			return [result root];
+			//YAJLDocument *result = [[[YAJLDocument alloc] initWithData:data parserOptions:YAJLParserOptionsNone error:nil] autorelease];
+			return [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
 		}
 		else {
 			return [NSDictionary dictionaryWithObjectsAndKeys:
@@ -1114,8 +1113,8 @@ static void ORCouchDB_Feed_callback(CFReadStreamRef stream,
             
             // Parse the line and send to delegate:
             if (chunk) {
-                YAJLDocument *document = [[[YAJLDocument alloc] initWithData:chunk parserOptions:YAJLParserOptionsNone error:nil] autorelease];
-                [self sendToDelegate:[document root]];
+                //YAJLDocument *document = [[[YAJLDocument alloc] initWithData:chunk parserOptions:YAJLParserOptionsNone error:nil] autorelease];
+                [self sendToDelegate:[NSJSONSerialization JSONObjectWithData:chunk options:NSJSONReadingMutableContainers error:nil]];
             }
         }
         // Move the pointer

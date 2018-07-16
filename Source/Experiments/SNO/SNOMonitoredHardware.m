@@ -22,7 +22,7 @@
 #import "SNOMonitoredHardware.h"
 #import "SynthesizeSingleton.h"
 #import "SNOConnection.h"
-#import "YAJL/YAJL.h"
+//#import "YAJL/YAJL.h"
 #define TubeInRange(crate,card,channel) ((crate>=0) && (crate<kMaxSNOCrates) && (card>=0) && (card<kNumSNOCards) && (channel>=0) && (channel<kNumSNOPmts))
 #define VoltageInRange(crate,card,voltage) ((crate>=0) && (crate<kMaxSNOCrates) && (card>=0) && (card<kNumSNOCards) && (voltage>=0) && (voltage<kNumFecMonitorAdcs))
 #define xl3VoltageInRange(crate,voltage) ((crate>=0) && (crate<kMaxSNOCrates) && (voltage>=0) && (voltage<12))
@@ -67,8 +67,11 @@ NSString* morcaDBRead = @"morcaDBRead";
 
 -(void) getXL3State:(NSString *)aString
 {
-    //store XL3 data in struct 
-    NSArray *row = [[NSArray alloc] initWithArray:[[aString yajl_JSON] objectForKey:@"rows"]];
+    //store XL3 data in struct
+    NSData* sData = [aString dataUsingEncoding:NSASCIIStringEncoding];
+    NSDictionary* aDict = [NSJSONSerialization JSONObjectWithData:sData options:NSJSONReadingMutableContainers error:nil];
+    NSArray *row = [[NSArray alloc] initWithArray:[aDict objectForKey:@"rows"]];
+    //NSArray *row = [[NSArray alloc] initWithArray:[[aString yajl_JSON] objectForKey:@"rows"]];
     NSDictionary *jsonMorcaDB = [[NSDictionary alloc] initWithDictionary:[[row objectAtIndex:0] objectForKey:@"doc"]];
 
     int crate;
@@ -126,14 +129,21 @@ NSString* morcaDBRead = @"morcaDBRead";
         }
     }
     
-    [row release], row=nil;
-    [jsonMorcaDB release], jsonMorcaDB=nil;
+    [row release];
+    row=nil;
+    [jsonMorcaDB release];
+    jsonMorcaDB=nil;
 }
 
 -(void) getXL3Rates:(NSString *)aString
 {
-    //store XL3 rates in struct 
-    NSArray *row = [[NSArray alloc] initWithArray:[[aString yajl_JSON] objectForKey:@"rows"]];
+    //store XL3 rates in struct
+    NSData* sData = [aString dataUsingEncoding:NSASCIIStringEncoding];
+    NSDictionary* aDict = [NSJSONSerialization JSONObjectWithData:sData options:NSJSONReadingMutableContainers error:nil];
+    NSArray *row = [[NSArray alloc] initWithArray:[aDict objectForKey:@"rows"]];
+
+    
+    //NSArray *row = [[NSArray alloc] initWithArray:[[aString yajl_JSON] objectForKey:@"rows"]];
     NSDictionary *jsonMorcaDB = [[NSDictionary alloc] initWithDictionary:[[row objectAtIndex:0] objectForKey:@"doc"]];
     
     int crate;
@@ -143,13 +153,20 @@ NSString* morcaDBRead = @"morcaDBRead";
         if ([key isEqualToString:@"xl3_pckrt"]) SNOCrate[crate].xl3PacketRate = [[jsonMorcaDB objectForKey:key] floatValue];
     }
     
-    [row release], row=nil;
-    [jsonMorcaDB release], jsonMorcaDB=nil;
+    [row release];
+    row=nil;
+    [jsonMorcaDB release];
+    jsonMorcaDB=nil;
 }
 
 -(void) getCableDocument:(NSString *)aString
 {
-    NSArray *row = [[NSArray alloc] initWithArray:[[aString yajl_JSON] objectForKey:@"rows"]];
+    
+    NSData* sData = [aString dataUsingEncoding:NSASCIIStringEncoding];
+    NSDictionary* aDict = [NSJSONSerialization JSONObjectWithData:sData options:NSJSONReadingMutableContainers error:nil];
+    NSArray *row = [[NSArray alloc] initWithArray:[aDict objectForKey:@"rows"]];
+
+   // NSArray *row = [[NSArray alloc] initWithArray:[[aString yajl_JSON] objectForKey:@"rows"]];
     NSDictionary *jsonCableDB = [[NSDictionary alloc] initWithDictionary:[[row objectAtIndex:0] objectForKey:@"doc"]];
 	
 	//init to defaults
@@ -199,8 +216,10 @@ NSString* morcaDBRead = @"morcaDBRead";
 		}
     }
     
-    [row release], row=nil;
-    [jsonCableDB release], jsonCableDB=nil;
+    [row release];
+    row=nil;
+    [jsonCableDB release];
+    jsonCableDB=nil;
 }
 
 - (void) setCurrentValueForSelectedHardware:(float)aValue

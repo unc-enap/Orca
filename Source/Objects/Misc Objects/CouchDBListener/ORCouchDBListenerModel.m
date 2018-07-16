@@ -28,8 +28,8 @@
 #import "NSArray+Extensions.h"
 #import "NSDictionary+Extensions.h"
 #import "ORScriptRunner.h"
-#import <YAJL/NSObject+YAJL.h>
-#import <YAJL/YAJLDocument.h>
+//#import <YAJL/NSObject+YAJL.h>
+//#import <YAJL/YAJLDocument.h>
 
 #define kListDB             @"kListDB"
 #define kChangesfeed        @"kChangesfeed"
@@ -653,7 +653,10 @@ if (strcmp(@encode(atype), the_type) == 0)     \
 			@try {
 				NSMutableString* setterString	= [[[aCommand objectForKey:@"Selector"] mutableCopy] autorelease];
                 
-                NSArray* theValue = (val) ? val : [[aCommand objectForKey:@"Value"] yajl_JSON];
+                NSData* sData = [[aCommand objectForKey:@"Value"] dataUsingEncoding:NSASCIIStringEncoding];
+                NSArray* theValue = [NSJSONSerialization JSONObjectWithData:sData options:NSJSONReadingMutableContainers error:nil];
+                
+                //NSArray* theValue = (val) ? val : [[aCommand objectForKey:@"Value"] yajl_JSON];
                 if (theValue && ![theValue isKindOfClass:[NSArray class]]) {
                     [NSException raise:@"Invalid arguments"
                                 format:@"Arguments must be an array (e.g. [1, 2.3]) of arguments"];
@@ -761,7 +764,12 @@ if (strcmp(@encode(atype), the_type) == 0)         \
             if ([new_str characterAtIndex:0] != '[' && [new_str characterAtIndex:[new_str length]-1] != ']') {
                 new_str = [NSString stringWithFormat:@"[%@]",new_str];
             }
-            if (![[new_str yajl_JSON] isKindOfClass:[NSArray class]]) {
+            NSData* sData = [new_str dataUsingEncoding:NSASCIIStringEncoding];
+            NSArray* anArray = [NSJSONSerialization JSONObjectWithData:sData options:NSJSONReadingMutableContainers error:nil];
+
+    
+            if (![anArray isKindOfClass:[NSArray class]]) {
+               // if (![[new_str yajl_JSON] isKindOfClass:[NSArray class]]) {
                 [NSException raise:@"ORCouchDBListerCommand"
                             format:@"Value must be parsable array/list: (e.g. [ 1, 23.4 ] )"];
             }

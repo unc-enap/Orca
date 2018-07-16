@@ -26,7 +26,7 @@
 #import "ORRunModel.h"
 #import "OrcaObject.h"
 #import "SNOConnection.h"
-#import "YAJL/YAJL.h"
+//#import "YAJL/YAJL.h"
 #import "ORTaskSequence.h"
 #import "ORTimeRate.h"
 
@@ -181,8 +181,9 @@ NSString* totalRatePlotChanged                      = @"totalRatePlotChanged";
                             [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&connectionError]];
     
    // if (responseData!=nil){
-        NSString *jsonStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-        NSDictionary *runTypesView = [[NSDictionary alloc] initWithDictionary:[jsonStr yajl_JSON]];
+        //NSString *jsonStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+        //NSDictionary *runTypesView = [[NSDictionary alloc] initWithDictionary:[jsonStr yajl_JSON]];
+        NSDictionary* runTypesView = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:nil];
         NSArray *runTypes = [[NSArray alloc] initWithArray:[runTypesView objectForKey:@"rows"]];
 
         int numtypes;
@@ -191,7 +192,7 @@ NSString* totalRatePlotChanged                      = @"totalRatePlotChanged";
         }
             
         [runTypes release];
-        [jsonStr release];
+        //[jsonStr release];
         [runTypesView release];
   //  }
     
@@ -361,9 +362,13 @@ NSString* totalRatePlotChanged                      = @"totalRatePlotChanged";
     NSString *urlName=[[NSString alloc] initWithString:@"http://snoplus:scintillate@snotpenn01.snolab.ca:5984/slow_control/_design/hwinfo/_view/ios"];
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlName] cachePolicy: NSURLRequestReloadIgnoringCacheData timeoutInterval:1];
     NSData *responseData = [[NSData alloc] initWithData:[NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&connectionError]];
-	NSString *jsonStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-	NSDictionary *jsonServer = [[NSDictionary alloc] initWithDictionary:[jsonStr yajl_JSON]];
-	NSArray *serverRows = [[NSArray alloc] initWithArray:[jsonServer objectForKey:@"rows"]];
+	//NSString *jsonStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+	//NSDictionary *jsonServer = [[NSDictionary alloc] initWithDictionary:[jsonStr yajl_JSON]];
+	//NSArray *serverRows = [[NSArray alloc] initWithArray:[jsonServer objectForKey:@"rows"]];
+    
+    NSDictionary* jsonServer = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:nil];
+    NSArray *serverRows = [[NSArray alloc] initWithArray:[jsonServer objectForKey:@"rows"]];
+
     
     int i;
     for(i=0;i<[[jsonServer objectForKey:@"total_rows"] intValue];++i){
@@ -385,7 +390,7 @@ NSString* totalRatePlotChanged                      = @"totalRatePlotChanged";
         }
     }
     
-    [jsonStr release];
+    //[jsonStr release];
     [urlName release];
     [responseData release];
     [jsonServer release];
@@ -692,8 +697,11 @@ NSString* totalRatePlotChanged                      = @"totalRatePlotChanged";
 
 - (void) getSlowControlMap:(NSString *)aString
 {
-    NSDictionary *jsonSlowControlVariablesView = [[NSDictionary alloc] initWithDictionary:[aString yajl_JSON]];
-	NSArray *slowControlVariablesView = [[NSArray alloc] initWithArray:[jsonSlowControlVariablesView objectForKey:@"rows"]];
+    NSData* sData = [aString dataUsingEncoding:NSASCIIStringEncoding];
+    NSDictionary* jsonSlowControlVariablesView = [NSJSONSerialization JSONObjectWithData:sData options:NSJSONReadingMutableContainers error:nil];
+    //NSDictionary *jsonSlowControlVariablesView = [[NSDictionary alloc] initWithDictionary:[aString yajl_JSON]];
+
+    NSArray *slowControlVariablesView = [[NSArray alloc] initWithArray:[jsonSlowControlVariablesView objectForKey:@"rows"]];
 
 	//slowcontrolmap stores the channel->parameter map in a dict. for quick access
     if (slowControlMap){
@@ -755,18 +763,25 @@ NSString* totalRatePlotChanged                      = @"totalRatePlotChanged";
 - (void) getIOSCards:(NSString *) aString
 {
     if (iosCards) [iosCards release];
-	iosCards = [[NSArray alloc] initWithArray:[[aString yajl_JSON] objectForKey:@"rows"]];
+    NSData* sData = [aString dataUsingEncoding:NSASCIIStringEncoding];
+    NSDictionary* aDict = [NSJSONSerialization JSONObjectWithData:sData options:NSJSONReadingMutableContainers error:nil];
+	iosCards = [[NSArray alloc] initWithArray:[aDict objectForKey:@"rows"]];
 }
 
 - (void) getIOS:(NSString *) aString
 {
     if (ioServers) [ioServers release];
-    ioServers = [[NSArray alloc] initWithArray:[[aString yajl_JSON] objectForKey:@"rows"]];
+   // ioServers = [[NSArray alloc] initWithArray:[[aString yajl_JSON] objectForKey:@"rows"]];
+    NSData* sData = [aString dataUsingEncoding:NSASCIIStringEncoding];
+    NSDictionary* aDict = [NSJSONSerialization JSONObjectWithData:sData options:NSJSONReadingMutableContainers error:nil];
+    ioServers = [[NSArray alloc] initWithArray:[aDict objectForKey:@"rows"]];
 }
 
 - (void) getAllChannelValues:(NSString *) aString withKey:(NSString *)aKey
 {
-    NSDictionary *voltages = [aString yajl_JSON];
+    NSData* sData = [aString dataUsingEncoding:NSASCIIStringEncoding];
+    NSDictionary* voltages = [NSJSONSerialization JSONObjectWithData:sData options:NSJSONReadingMutableContainers error:nil];
+    //NSDictionary *voltages = [aString yajl_JSON];
  
     if (voltages != NULL) {
         int i;
@@ -811,7 +826,9 @@ NSString* totalRatePlotChanged                      = @"totalRatePlotChanged";
 
 - (void) getAllConfig:(NSString *)aString withKey:(NSString *)aKey
 {
-    NSDictionary *config= [aString yajl_JSON];
+    NSData* sData = [aString dataUsingEncoding:NSASCIIStringEncoding];
+    NSDictionary* config = [NSJSONSerialization JSONObjectWithData:sData options:NSJSONReadingMutableContainers error:nil];
+   // NSDictionary *config= [aString yajl_JSON];
     if (config != NULL) {
         int i;
         for (i=0;i<kMaxNumChannels;++i){
@@ -838,7 +855,9 @@ NSString* totalRatePlotChanged                      = @"totalRatePlotChanged";
 - (void) updateIOSChannelThresholds:(NSString *)aString ofChannel:(NSString *)aKey
 {
     //get channel document
-    NSMutableDictionary *channelDoc = [(NSMutableDictionary *)[[aString yajl_JSON] mutableCopy] autorelease];
+    NSData* sData = [aString dataUsingEncoding:NSASCIIStringEncoding];
+    NSMutableDictionary* channelDoc = [NSJSONSerialization JSONObjectWithData:sData options:NSJSONReadingMutableContainers error:nil];
+   //NSMutableDictionary *channelDoc = [(NSMutableDictionary *)[[aString yajl_JSON] mutableCopy] autorelease];
     
     //mark document as unapproved since thresholds are being updated.
     //update fields: approved -> false, 
@@ -858,8 +877,12 @@ NSString* totalRatePlotChanged                      = @"totalRatePlotChanged";
     //save document in database with same docid but as new revision; remove _id field 
     NSString *docid = [channelDoc objectForKey:@"_id"];
     [channelDoc removeObjectForKey:@"_id"];
-    NSString *jsonStr=[channelDoc yajl_JSONString];
-    NSData *postBody=[NSData dataWithData:[jsonStr dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES]];
+    
+    
+//    NSString *jsonStr=[channelDoc yajl_JSONString];
+//    NSData *postBody=[NSData dataWithData:[jsonStr dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES]];
+    
+    NSData* postBody = [NSJSONSerialization dataWithJSONObject:channelDoc options:NSJSONWritingPrettyPrinted error:nil];
     
     NSString *url = [NSString stringWithFormat:@"http://snoplus:scintillate@snotpenn01.snolab.ca:5984/slow_control/%@",docid];
     SNOConnection *connection2 = [[SNOConnection alloc] init];
@@ -882,9 +905,10 @@ NSString* totalRatePlotChanged                      = @"totalRatePlotChanged";
     NSNumber *hihithresholdValue = [NSNumber numberWithFloat:[[tableEntries objectAtIndex:channel] parameterHiHiThreshold]];	
     [channelDoc setObject:hihithresholdValue forKey:@"hihithresh"];
     
-    jsonStr=[channelDoc yajl_JSONString];
+    //jsonStr=[channelDoc yajl_JSONString];
+    //postBody=[NSData dataWithData:[jsonStr dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES]];
+    postBody = [NSJSONSerialization dataWithJSONObject:channelDoc options:NSJSONWritingPrettyPrinted error:nil];
 
-    postBody=[NSData dataWithData:[jsonStr dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES]];
     
     //post new document in database
     url = [NSString stringWithFormat:@"http://snoplus:scintillate@snotpenn01.snolab.ca:5984/slow_control/"];

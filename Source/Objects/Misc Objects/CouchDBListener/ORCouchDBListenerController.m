@@ -395,7 +395,9 @@
 
         @try {
             // See if we can parse it.
-            NSString* resultString = [returnVal yajl_JSONString];
+            //NSString* resultString = [returnVal yajl_JSONString];
+            NSData* sData = [returnVal dataUsingEncoding:NSASCIIStringEncoding];
+            NSString* resultString = [NSJSONSerialization JSONObjectWithData:sData options:NSJSONReadingMutableContainers error:nil];
             [model log:[NSString stringWithFormat:@"   received and parsed result: '%@'",resultString]];
         }
         @catch (NSException *exception) {
