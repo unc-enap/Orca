@@ -1181,7 +1181,7 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
     [self setInterruptMask:		[decoder decodeIntegerForKey:@"ORIpeFLTModelInterruptMask"]];
     [self setCoinTime:			[decoder decodeIntegerForKey:@"coinTime"]];
     [self setIntegrationTime:	[decoder decodeIntegerForKey:@"integrationTime"]];
-    [self setPage:				[decoder decodeIntegerForKey:@"ORIpeFLTModelPage"]];
+    [self setPage:				[decoder decodeIntForKey:@"ORIpeFLTModelPage"]];
     [self setIterations:		[decoder decodeIntForKey:@"ORIpeFLTModelIterations"]];
     [self setEndChan:			[decoder decodeIntForKey:@"ORIpeFLTModelEndChan"]];
     [self setStartChan:			[decoder decodeIntForKey:@"ORIpeFLTModelStartChan"]];
@@ -1243,7 +1243,7 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
     [encoder encodeInteger:interruptMask		forKey:@"ORIpeFLTModelInterruptMask"];
     [encoder encodeInteger:coinTime			forKey:@"coinTime"];
     [encoder encodeInteger:integrationTime	forKey:@"integrationTime"];
-    [encoder encodeInteger:page					forKey:@"ORIpeFLTModelPage"];
+    [encoder encodeInt:page					forKey:@"ORIpeFLTModelPage"];
     [encoder encodeInteger:iterations			forKey:@"ORIpeFLTModelIterations"];
     [encoder encodeInteger:endChan				forKey:@"ORIpeFLTModelEndChan"];
     [encoder encodeInteger:startChan			forKey:@"ORIpeFLTModelStartChan"];

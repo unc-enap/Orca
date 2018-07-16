@@ -214,7 +214,7 @@ NSString* ORXTR6Lock                            = @"ORXTR6Lock";
 		case kHPXTR6UseUSB:     return [NSString stringWithFormat:@"XTR6 %lu (Serial# %@)",[self uniqueIdNumber],[usbInterface serialNumber]];
 		case kHPXTR6UseIP:      return [NSString stringWithFormat:@"XTR6 %lu (%@)",[self uniqueIdNumber],[self ipAddress]];
 	}
-	return [NSString stringWithFormat:@"XTR6 (%d)",[self tag]];
+	return [NSString stringWithFormat:@"XTR6 (%lu)",(unsigned long)[self tag]];
 }
 
 #pragma mark ***Accessors

@@ -1357,7 +1357,7 @@
 		return [theArray objectAtIndex:n];
 	}
 	else { //run time error
-        [NSException raise:@"Array Bounds" format:@"Out of Bounds Error. Line: %d",LineNumber(0)];
+        [NSException raise:@"Array Bounds" format:@"Out of Bounds Error. Line: %ld",LineNumber(0)];
 	}
 	return nil;
 }
@@ -1534,13 +1534,13 @@
     NSInteger val1 = [NodeValue(1) unsignedLongValue];
     NSInteger val2 = [NodeValue(2) unsignedLongValue];
     if(val1 > val2) {
-        [NSException raise:@"Run Time Exception" format:@"Bit extract parameters out of order. Line: %d",LineNumber(1)];
+        [NSException raise:@"Run Time Exception" format:@"Bit extract parameters out of order. Line: %ld",LineNumber(1)];
     }
     if(val1 < 0 | val2 < 0) {
-        [NSException raise:@"Run Time Exception" format:@"Bit extract parameter is negative. Line: %d",LineNumber(1)];
+        [NSException raise:@"Run Time Exception" format:@"Bit extract parameter is negative. Line: %ld",LineNumber(1)];
     }
     if(val1 > 32 | val2 > 32) {
-        [NSException raise:@"Run Time Exception" format:@"Bit extract parameter greater than 32. Line: %d",LineNumber(1)];
+        [NSException raise:@"Run Time Exception" format:@"Bit extract parameter greater than 32. Line: %ld",LineNumber(1)];
     }
     unsigned short aShift = MIN(val1,val2);
     unsigned long aMask = 0L;
@@ -1594,7 +1594,7 @@
         }
     }
     else {
-        [NSException raise:@"Run time" format:@"Case range must be ascending. Line: %d",LineNumber(0)];
+        [NSException raise:@"Run time" format:@"Case range must be ascending. Line: %ld",LineNumber(0)];
     }
     return nil;
 }
@@ -1612,7 +1612,7 @@
         }
     }
     else {
-        [NSException raise:@"Run time" format:@"Case range must be ascending. Line: %d",LineNumber(0)];
+        [NSException raise:@"Run time" format:@"Case range must be ascending. Line: %ld",LineNumber(0)];
     }
     return nil;
 }
@@ -1751,7 +1751,7 @@
             collectionObj = [collectionObj allKeys];
         }
         else {
-            [NSException raise:@"Run Time Exception" format:@"%@ is not an array or dictionary. Line: %d",VARIABLENAME(1),LineNumber(1)];
+            [NSException raise:@"Run Time Exception" format:@"%@ is not an array or dictionary. Line: %ld",VARIABLENAME(1),LineNumber(1)];
         }
         
         int i;

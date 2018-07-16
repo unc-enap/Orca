@@ -255,7 +255,7 @@
 
 - (int)	numberPointsInPlot:(id)aPlotter
 {
-    int theTag = [aPlotter tag];
+    int theTag = (int)[aPlotter tag];
 
     if(theTag<kMaxDetectors){
         //hv plot
@@ -270,10 +270,10 @@
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-    int theTag = [aPlotter tag];
+    int theTag = (int)[aPlotter tag];
     if(theTag<kMaxDetectors){
         //hv plot
-        int count = [model numberPointsInHVPlot:theTag];
+        int count = (int)[model numberPointsInHVPlot:theTag];
         int index = count-i-1;
         [model hvPlot:theTag dataIndex:index x:xValue y:yValue];
      }
@@ -281,7 +281,7 @@
         theTag -= kMaxDetectors;
         NSUInteger count = [model numberPointsInPreAmpPlot:theTag];
         NSUInteger index = count-i-1;
-        [model preAmpPlot:theTag dataIndex:index x:xValue y:yValue];
+        [model preAmpPlot:theTag dataIndex:(int)index x:xValue y:yValue];
        
     }
 }

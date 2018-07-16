@@ -257,7 +257,7 @@
 
 - (void) baseAddressChanged:(NSNotification*)aNote
 {
-	[baseAddressField setIntValue: [model baseAddress]];
+	[baseAddressField setIntegerValue: [model baseAddress]];
 }
 
 - (void) slotChanged:(NSNotification*)aNotification
@@ -307,7 +307,7 @@
 - (void) tabView:(NSTabView*)aTabView didSelectTabViewItem:(NSTabViewItem*)item
 {
     NSString* key = [NSString stringWithFormat: @"orca.ORCaen419_%d.selectedtab",[model slot]];
-    int index = [tabView indexOfTabViewItem:item];
+    NSInteger index = [tabView indexOfTabViewItem:item];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 	
 }

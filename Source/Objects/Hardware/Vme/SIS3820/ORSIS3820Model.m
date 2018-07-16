@@ -905,7 +905,7 @@ NSString* ORSIS3820ModelShipAtRunEndOnlyChanged		 = @"ORSIS3820ModelShipAtRunEnd
 	[self setShipAtRunEndOnly:[decoder decodeBoolForKey:@"shipAtRunEndOnly"]];
 	[self setInvertLemoOut:[decoder decodeBoolForKey:@"invertLemoOut"]];
     [self setInvertLemoIn:[decoder decodeBoolForKey:@"invertLemoIn"]];
-    [self setLemoOutMode:[decoder decodeIntegerForKey:@"lemoOutMode"]];
+    [self setLemoOutMode:[decoder decodeIntForKey:@"lemoOutMode"]];
     [self setSyncWithRun:[decoder decodeBoolForKey:@"syncWithRun"]];
     [self setClearOnRunStart:[decoder decodeBoolForKey:@"clearOnRunStart"]];
     [self setEnableReferencePulser:[decoder decodeBoolForKey:@"enableReferencePulser"]];
@@ -934,7 +934,7 @@ NSString* ORSIS3820ModelShipAtRunEndOnlyChanged		 = @"ORSIS3820ModelShipAtRunEnd
 	[encoder encodeBool:shipAtRunEndOnly forKey:@"shipAtRunEndOnly"];
 	[encoder encodeBool:invertLemoOut forKey:@"invertLemoOut"];
     [encoder encodeBool:invertLemoIn forKey:@"invertLemoIn"];
-    [encoder encodeInteger:lemoOutMode forKey:@"lemoOutMode"];
+    [encoder encodeInt:lemoOutMode forKey:@"lemoOutMode"];
     [encoder encodeBool:syncWithRun forKey:@"syncWithRun"];
     [encoder encodeBool:clearOnRunStart forKey:@"clearOnRunStart"];
     [encoder encodeBool:enableReferencePulser forKey:@"enableReferencePulser"];

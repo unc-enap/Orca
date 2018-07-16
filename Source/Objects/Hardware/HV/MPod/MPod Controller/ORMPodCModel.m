@@ -380,7 +380,7 @@ NSString* ORMPodCQueueCountChanged			 = @"ORMPodCQueueCountChanged";
 {
 	NSOperationQueue* queue = [[ORSNMPQueue sharedSNMPQueue] queue];
     if (object == queue && [keyPath isEqual:@"operationCount"]) {
-		NSNumber* n = [NSNumber numberWithInt:[[[ORSNMPQueue queue] operations] count]];
+		NSNumber* n = [NSNumber numberWithInteger:[[[ORSNMPQueue queue] operations] count]];
 		[self performSelectorOnMainThread:@selector(setQueCount:) withObject:n waitUntilDone:NO];
 		if ([[queue operations] count] == 0) {
 			[self performSelectorOnMainThread:@selector(pollHardwareAfterDelay) withObject:nil waitUntilDone:NO];

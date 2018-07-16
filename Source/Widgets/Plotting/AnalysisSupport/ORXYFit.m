@@ -85,8 +85,8 @@
 			
 			NSMutableDictionary* requestInputs = [NSMutableDictionary dictionary];
 
-			[requestInputs setObject:[NSNumber numberWithInt:minChannel] forKey:@"FitLowerBound"];
-			[requestInputs setObject:[NSNumber numberWithInt:maxChannel] forKey:@"FitUpperBound"];	
+			[requestInputs setObject:[NSNumber numberWithInteger:minChannel] forKey:@"FitLowerBound"];
+			[requestInputs setObject:[NSNumber numberWithInteger:maxChannel] forKey:@"FitUpperBound"];
 			
 			NSString* 	theFitFunction = kORCARootFitShortNames[fitType];
 			

@@ -192,7 +192,7 @@
 #pragma mark ***Actions
 - (IBAction) doFitAction:(id)sender		 { [self endEditing]; [model doFit]; }
 - (IBAction) deleteFitAction:(id)sender  { [model removeFit]; }
-- (IBAction) fitTypeAction:(id)sender	 { [model setFitType:[sender indexOfSelectedItem]]; }
+- (IBAction) fitTypeAction:(id)sender	 { [model setFitType:(int)[sender indexOfSelectedItem]]; }
 - (IBAction) fitOrderAction:(id)sender   { [model setFitOrder:[sender intValue]]; }
 - (IBAction) fitFunctionAction:(id)sender{ [model setFitFunction:[sender stringValue]]; }
 

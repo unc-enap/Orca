@@ -191,7 +191,7 @@ NSString* ORCamacControllerCmdValuesChangedNotification        = @"ORCamacContro
 - (id) initWithCoder:(NSCoder*)decoder
 {
     self = [super initWithCoder:decoder];
-    [self setCmdSelection:  [decoder decodeIntegerForKey:@"ORCamacCardCmdSelection"]];
+    [self setCmdSelection:  [decoder decodeIntForKey:@"ORCamacCardCmdSelection"]];
     [self setCmdStation:    [decoder decodeIntForKey:@"ORCamacCardCmdStation"]];
     [self setCmdSubAddress: [decoder decodeIntForKey:@"ORCamacCardCmdSubAddress"]];
     [self setCmdWriteValue: [decoder decodeIntForKey:@"ORCamacCardCmdWriteValue"]];
@@ -204,7 +204,7 @@ NSString* ORCamacControllerCmdValuesChangedNotification        = @"ORCamacContro
 {
     [super encodeWithCoder:encoder];
     [[self undoManager] disableUndoRegistration];
-    [encoder encodeInteger:cmdSelection  forKey:@"ORCamacCardCmdSelection"];
+    [encoder encodeInt:cmdSelection  forKey:@"ORCamacCardCmdSelection"];
     [encoder encodeInteger:cmdStation    forKey:@"ORCamacCardCmdStation"];
     [encoder encodeInteger:cmdSubAddress forKey:@"ORCamacCardCmdSubAddress"];
     [encoder encodeInteger:cmdWriteValue forKey:@"ORCamacCardCmdWriteValue"];

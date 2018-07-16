@@ -136,7 +136,7 @@
 
 - (void) baseAddressChanged:(NSNotification*)aNote
 {
-	[baseAddressField setIntValue: [model baseAddress]];
+	[baseAddressField setIntegerValue: [model baseAddress]];
 }
 
 - (void) thresholdLockChanged:(NSNotification*)aNotification
@@ -227,7 +227,7 @@
 
 - (IBAction) inhibitAction:(id)sender
 {
-	[model setInhibitMaskBit:[[sender selectedCell] tag] withValue:[sender intValue]];
+	[model setInhibitMaskBit:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 - (IBAction) majorityThresholdAction:(id)sender

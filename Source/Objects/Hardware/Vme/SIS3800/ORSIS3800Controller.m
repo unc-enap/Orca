@@ -656,12 +656,12 @@
 }
 - (IBAction) pollTimeAction:(id)sender
 {
-	[model setPollTime:[sender indexOfSelectedItem]];
+	[model setPollTime:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) channelNameAction:(id)sender
 {
-	[model setChannel:[[sender selectedCell] tag] name:[[sender selectedCell] stringValue]];
+	[model setChannel:(int)[[sender selectedCell] tag] name:[[sender selectedCell] stringValue]];
 }
 
 

@@ -549,7 +549,7 @@
 
 - (IBAction) heartBeatIndexAction:(id)sender
 {
-	[model setHeartBeatIndex:[sender indexOfSelectedItem]];
+	[model setHeartBeatIndex:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) sbcPasswordAction:(id)sender
@@ -569,7 +569,7 @@
 
 - (IBAction) viewTypeAction:(id)sender
 {
-	[model setViewType:[sender indexOfSelectedItem]];
+	[model setViewType:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) ip1Action:(id)sender
@@ -676,7 +676,7 @@
 //SV
 - (IBAction)schedulerSetupChanged:(id)sender
 {
-    int index = [sender indexOfSelectedItem];
+    int index = (int)[sender indexOfSelectedItem];
     int seconds = 0;
     
     switch(index){
@@ -716,7 +716,7 @@
 		else return @"";
 	}
 	else if(aTableView == secondaryTableView || aTableView == secondaryValuesView){
-		return [[model segmentGroup:1] segment:rowIndex objectForKey:[aTableColumn identifier]];
+		return [[model segmentGroup:1] segment:(int)rowIndex objectForKey:[aTableColumn identifier]];
 	}
     else return [super tableView:aTableView objectValueForTableColumn:aTableColumn row:rowIndex];
 }
@@ -730,12 +730,12 @@
 		}
 	}
 	else if(aTableView == secondaryTableView){
-        aSegment = [[model segmentGroup:1] segment:rowIndex];
+        aSegment = [[model segmentGroup:1] segment:(int)rowIndex];
 		[aSegment setObject:anObject forKey:[aTableColumn identifier]];
 		[[model segmentGroup:1] configurationChanged:nil];
 	}
 	else if(aTableView == secondaryValuesView){
-		aSegment = [[model segmentGroup:1] segment:rowIndex];
+		aSegment = [[model segmentGroup:1] segment:(int)rowIndex];
 		if([[aTableColumn identifier] isEqualToString:@"threshold"]){
 			[aSegment setThreshold:anObject];
 		}

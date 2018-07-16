@@ -583,7 +583,7 @@
         [dataDictionary setObject:[NSNumber numberWithBool:YES] forKey:@"DecodedOnce"]; 
     }
     if(!scanInProgress){
-        NSString* header = [NSString stringWithFormat:@"Record %lu / %d\n",row,[[model dataRecords]count]-1];
+        NSString* header = [NSString stringWithFormat:@"Record %lu / %lu\n",row,[[model dataRecords]count]-1];
         header = [header stringByAppendingFormat:@"%@",[model dataRecordDescription:offset forKey:aKey]];
         [detailsView setString:header];
     }

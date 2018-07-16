@@ -566,7 +566,7 @@
 
 - (IBAction) lemoInModeAction:(id)sender
 {
-	[model setLemoInMode:[sender indexOfSelectedItem]];	
+	[model setLemoInMode:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) countEnableMask1Action:(id)sender
@@ -752,12 +752,12 @@
 }
 - (IBAction) pollTimeAction:(id)sender
 {
-	[model setPollTime:[sender indexOfSelectedItem]];
+	[model setPollTime:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) channelNameAction:(id)sender
 {
-	[model setChannel:[[sender selectedCell] tag] name:[[sender selectedCell] stringValue]];
+	[model setChannel:(int)[[sender selectedCell] tag] name:[[sender selectedCell] stringValue]];
 }
 
 @end

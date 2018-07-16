@@ -593,18 +593,18 @@ static NSDictionary* xl3Ops;
 
 - (void) compositeXL3RWDataChanged:(NSNotification*)aNote
 { dispatch_async(dispatch_get_main_queue(), ^{
-	[compositeXl3RWDataValueField setIntValue:[model xl3RWDataValue]];
+	[compositeXl3RWDataValueField setIntegerValue:[model xl3RWDataValue]];
 }); }
 
 - (void) compositeXl3PedestalMaskChanged:(NSNotification*)aNote
 { dispatch_async(dispatch_get_main_queue(), ^{
-	[compositeSetPedestalField setIntValue:[model xl3PedestalMask]];
+	[compositeSetPedestalField setIntegerValue:[model xl3PedestalMask]];
 }); }
 
 - (void) compositeXl3ChargeInjChanged:(NSNotification*)aNote
 { dispatch_async(dispatch_get_main_queue(), ^{
     [compositeChargeInjChargeField setIntValue:[model xl3ChargeInjCharge]];
-    [compositeChargeInjMaskField setIntValue:[model xl3ChargeInjMask]];
+    [compositeChargeInjMaskField setIntegerValue:[model xl3ChargeInjMask]];
 }); }
 
 
@@ -878,35 +878,35 @@ static NSDictionary* xl3Ops;
 { dispatch_async(dispatch_get_main_queue(), ^{
     if ([hvPowerSupplyMatrix selectedColumn] == 0) { //A
         [hvTargetValueField setFloatValue:[model hvAVoltageTargetValue] * 3000. / 4096.];
-        [hvTargetValueStepper setIntValue:[model hvAVoltageTargetValue]];
+        [hvTargetValueStepper setIntegerValue:[model hvAVoltageTargetValue]];
     }
     else {
         [hvTargetValueField setFloatValue:[model hvBVoltageTargetValue] * 3000. / 4096.];
-        [hvTargetValueStepper setIntValue:[model hvBVoltageTargetValue]];
+        [hvTargetValueStepper setIntegerValue:[model hvBVoltageTargetValue]];
     }
 }); }
 
 - (void) hvCMOSRateLimitChanged:(NSNotification *)aNote
 { dispatch_async(dispatch_get_main_queue(), ^{
     if ([hvPowerSupplyMatrix selectedColumn] == 0) { //A
-        [hvCMOSRateLimitField setIntValue:[model hvACMOSRateLimit]];
-        [hvCMOSRateLimitStepper setIntValue:[model hvACMOSRateLimit]];
+        [hvCMOSRateLimitField setIntegerValue:[model hvACMOSRateLimit]];
+        [hvCMOSRateLimitStepper setIntegerValue:[model hvACMOSRateLimit]];
     }
     else {
-        [hvCMOSRateLimitField setIntValue:[model hvBCMOSRateLimit]];
-        [hvCMOSRateLimitStepper setIntValue:[model hvBCMOSRateLimit]];
+        [hvCMOSRateLimitField setIntegerValue:[model hvBCMOSRateLimit]];
+        [hvCMOSRateLimitStepper setIntegerValue:[model hvBCMOSRateLimit]];
     }    
 }); }
 
 - (void) hvCMOSRateIgnoreChanged:(NSNotification *)aNote
 { dispatch_async(dispatch_get_main_queue(), ^{
     if ([hvPowerSupplyMatrix selectedColumn] == 0) { //A
-        [hvCMOSRateIgnoreField setIntValue:[model hvACMOSRateIgnore]];
-        [hvCMOSRateIgnoreStepper setIntValue:[model hvACMOSRateIgnore]];
+        [hvCMOSRateIgnoreField setIntegerValue:[model hvACMOSRateIgnore]];
+        [hvCMOSRateIgnoreStepper setIntegerValue:[model hvACMOSRateIgnore]];
     }
     else {
-        [hvCMOSRateIgnoreField setIntValue:[model hvBCMOSRateIgnore]];
-        [hvCMOSRateIgnoreStepper setIntValue:[model hvBCMOSRateIgnore]];
+        [hvCMOSRateIgnoreField setIntegerValue:[model hvBCMOSRateIgnore]];
+        [hvCMOSRateIgnoreStepper setIntegerValue:[model hvBCMOSRateIgnore]];
     }    
 }); }
 
@@ -1147,7 +1147,7 @@ static NSDictionary* xl3Ops;
 
 - (void) basicSelectedRegisterAction:(id)sender
 {
-	[model setSelectedRegister:[sender indexOfSelectedItem]];	
+	[model setSelectedRegister:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) basicReadAction:(id)sender
@@ -1240,12 +1240,12 @@ static NSDictionary* xl3Ops;
 
 - (IBAction) compositeXl3ModeAction:(id) sender
 {
-	[model setXl3Mode:[[sender selectedItem] tag]];
+	[model setXl3Mode:(int)[[sender selectedItem] tag]];
 }
 
 - (IBAction) compositeXl3ModeSetAction:(id) sender
 {
-	[model writeXl3Mode:[model xl3Mode] withSlotMask:[model slotMask]];
+	[model writeXl3Mode:[model xl3Mode] withSlotMask:(int)[model slotMask]];
 }
 
 - (IBAction) compositeXl3RWAddressValueAction:(id)sender
@@ -1480,7 +1480,7 @@ static NSDictionary* xl3Ops;
 - (IBAction)hvTurnOffAction:(id)sender
 {
     [[sender window] makeFirstResponder:tabView];
-    unsigned int sup = [hvPowerSupplyMatrix selectedColumn];
+    unsigned int sup = (unsigned int)[hvPowerSupplyMatrix selectedColumn];
 
     if (sup == 0 && [model hvASwitch]) {
         if ([model hvAVoltageDACSetValue] > 30) {
@@ -1511,20 +1511,20 @@ static NSDictionary* xl3Ops;
         nextTargetValue = (int) ([sender floatValue] * 4096 / 3000);
         if (nextTargetValue < 0) nextTargetValue = 0;
         if (sup == 0 && nextTargetValue > [model hvNominalVoltageA] / 3000. * 4096) {//A
-            nextTargetValue = [model hvNominalVoltageA] * 4096 / 3000;
+            nextTargetValue = (int)[model hvNominalVoltageA] * 4096 / 3000;
         }
         else if (sup == 1 && nextTargetValue > [model hvNominalVoltageB] / 3000. * 4096) {//B
-            nextTargetValue = [model hvNominalVoltageB] * 4096 / 3000;
+            nextTargetValue = (int)[model hvNominalVoltageB] * 4096 / 3000;
         }
     }
     else if (sender == hvTargetValueStepper) {
         nextTargetValue = [sender intValue];
         if (nextTargetValue < 0) nextTargetValue = 0;
         if (sup == 0 && nextTargetValue > [model hvNominalVoltageA] / 3000. * 4096) {//A
-            nextTargetValue = [model hvNominalVoltageA] * 4096 / 3000;
+            nextTargetValue = (int)[model hvNominalVoltageA] * 4096 / 3000;
         }
         else if (sup == 1 && nextTargetValue > [model hvNominalVoltageB] / 3000. * 4096) {//B
-            nextTargetValue = [model hvNominalVoltageB] * 4096 / 3000;
+            nextTargetValue = (int)[model hvNominalVoltageB] * 4096 / 3000;
         }
     }
     else {
@@ -1683,7 +1683,7 @@ static NSDictionary* xl3Ops;
 
 - (IBAction) errorTimeOutAction:(id)sender
 {
-	[[model xl3Link] setErrorTimeOut:[sender indexOfSelectedItem]];
+	[[model xl3Link] setErrorTimeOut:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) connectionAutoConnectAction:(id)sender

@@ -3693,7 +3693,7 @@ clean_up_mark:
 	[self setFilterGapFeatureIsAvailable: [decoder decodeBoolForKey:@"filterGapFeatureIsAvailable"]];
 	[self setVersionRegister:		  [decoder decodeIntegerForKey:@"versionRegister"]];
     
-    [self setFilterGap: [decoder decodeIntegerForKey:@"filterGapSetting"]];
+    [self setFilterGap: [decoder decodeIntForKey:@"filterGapSetting"]];
 	
 	/*
 	 //version control - at this time firewire is (sometimes) not available -tb- 2008-03-13
@@ -3772,7 +3772,7 @@ clean_up_mark:
     [encoder encodeBool:filterGapFeatureIsAvailable forKey:@"filterGapFeatureIsAvailable"];	
     [encoder encodeInteger:(int)versionRegister forKey:@"versionRegister"];
 	
-    [encoder encodeInteger:filterGap forKey:@"filterGapSetting"];	
+    [encoder encodeInt:filterGap forKey:@"filterGapSetting"];	
 	
 }
 

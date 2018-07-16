@@ -2501,7 +2501,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
               addressOffset:[Gretina4AFPGARegisters address:[self baseAddress] forReg:kVMEGPControl]
                        mask:0x3
                   reportKey:@"ClockSource"
-              forceFullInit:forceFullInit];
+              forceFullInit:forceFullCardInit];
 }
 
 - (void) writeClockSource

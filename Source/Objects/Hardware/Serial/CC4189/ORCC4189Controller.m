@@ -374,7 +374,7 @@
 #pragma mark •••Data Source
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	return (int)[[model timeRate:[aPlotter tag]] count];
+	return (int)[[model timeRate:(int)[aPlotter tag]] count];
 } 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {

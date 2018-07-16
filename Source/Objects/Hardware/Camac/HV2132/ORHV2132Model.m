@@ -682,9 +682,9 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
     self = [super initWithCoder:decoder];
 	
     [[self undoManager] disableUndoRegistration];
-    [self setHvValue:		[decoder decodeIntegerForKey:@"hvValue"]];
-    [self setMainFrame:		[decoder decodeIntegerForKey:@"mainFrame"]];
-    [self setChannel:		[decoder decodeIntegerForKey:@"channel"]];
+    [self setHvValue:		[decoder decodeIntForKey:@"hvValue"]];
+    [self setMainFrame:		[decoder decodeIntForKey:@"mainFrame"]];
+    [self setChannel:		[decoder decodeIntForKey:@"channel"]];
 	
     [self setConnectorName:	[decoder decodeObjectForKey:@"connectorName"]];
     [self setConnector:		[decoder decodeObjectForKey:@"connector"]];
@@ -702,9 +702,9 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInteger:hvValue			forKey:@"hvValue"];
-    [encoder encodeInteger:mainFrame		forKey:@"mainFrame"];
-    [encoder encodeInteger:channel			forKey:@"channel"];
+    [encoder encodeInt:hvValue			forKey:@"hvValue"];
+    [encoder encodeInt:mainFrame		forKey:@"mainFrame"];
+    [encoder encodeInt:channel			forKey:@"channel"];
     [encoder encodeObject:connectorName	forKey:@"connectorName"];
     [encoder encodeObject:connector		forKey:@"connector"];
     [encoder encodeObject:[self dirName] forKey:@"HVDirName"];
@@ -752,7 +752,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 - (void) setHVRecordMainFrame:(unsigned long)aMainFrame status:(BOOL)state
 {
 	//make the keys
-	NSString* mainFrameKey	= [NSString stringWithFormat:@"HVMainFrame%d",aMainFrame];
+	NSString* mainFrameKey	= [NSString stringWithFormat:@"HVMainFrame%ld",aMainFrame];
 	NSString* statusKey		= [NSString stringWithFormat:@"HVStatus"];
 	
 	if(!hvRecord)hvRecord = [[NSMutableDictionary dictionary] retain];
@@ -767,7 +767,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 
 - (int)  getHVRecordVoltageMainFrame:(unsigned long)aMainFrame channel:(int)aChannel
 {
-	NSString* mainFrameKey	= [NSString stringWithFormat:@"HVMainFrame%d",aMainFrame];
+	NSString* mainFrameKey	= [NSString stringWithFormat:@"HVMainFrame%ld",aMainFrame];
 	NSString* voltageKey	= [NSString stringWithFormat:@"HVVoltage%d",aChannel];
 	NSMutableDictionary* mainFrameDictionary = [hvRecord objectForKey:mainFrameKey];
 	return [[mainFrameDictionary objectForKey:voltageKey] intValue];
@@ -775,7 +775,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 
 - (int)  getHVRecordStatusMainFrame:(unsigned long)aMainFrame
 {
-	NSString* mainFrameKey	= [NSString stringWithFormat:@"HVMainFrame%d",aMainFrame];
+	NSString* mainFrameKey	= [NSString stringWithFormat:@"HVMainFrame%ld",aMainFrame];
 	NSString* statusKey		= [NSString stringWithFormat:@"HVStatus"];
 	NSMutableDictionary* mainFrameDictionary = [hvRecord objectForKey:mainFrameKey];
 	return [[mainFrameDictionary objectForKey:statusKey] intValue];

@@ -2122,8 +2122,8 @@ void SwapLongBlock(void* p, int32_t n)
 
 - (void) writeHardwareRegister:(unsigned long)regAddress value:(unsigned long) aValue
 {
-	uint32_t address = regAddress | WRITE_REG;
-    uint32_t value = aValue;
+	uint32_t address = (uint32_t)(regAddress | WRITE_REG);
+    uint32_t value = (uint32_t)aValue;
 
 	@try {
 		[xl3Link sendCommand:0UL toAddress:address withData:&value];
@@ -2136,7 +2136,7 @@ void SwapLongBlock(void* p, int32_t n)
 
 - (unsigned long) readHardwareRegister:(unsigned long)regAddress
 {
-	uint32_t xl3Address = regAddress | READ_REG;
+	uint32_t xl3Address = (uint32_t)(regAddress | READ_REG);
 	uint32_t aValue = 0UL;
 
 	@try {

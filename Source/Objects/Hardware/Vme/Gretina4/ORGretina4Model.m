@@ -2400,16 +2400,16 @@ static struct {
     self = [super initWithCoder:decoder];
     
     [[self undoManager] disableUndoRegistration];
-    [self setSpiConnector:			[decoder decodeObjectForKey:@"spiConnector"]];
-    [self setLinkConnector:			[decoder decodeObjectForKey:@"linkConnector"]];
-    [self setDownSample:				[decoder decodeIntegerForKey:@"downSample"]];
-    [self setHistEMultiplier:				[decoder decodeIntegerForKey:@"histEMultiplier"]];
-    [self setRegisterIndex:				[decoder decodeIntegerForKey:@"registerIndex"]];
+    [self setSpiConnector:			    [decoder decodeObjectForKey:@"spiConnector"]];
+    [self setLinkConnector:			    [decoder decodeObjectForKey:@"linkConnector"]];
+    [self setDownSample:				[decoder decodeIntForKey:@"downSample"]];
+    [self setHistEMultiplier:		    [decoder decodeIntForKey:@"histEMultiplier"]];
+    [self setRegisterIndex:				[decoder decodeIntForKey:@"registerIndex"]];
     [self setRegisterWriteValue:		[decoder decodeIntegerForKey:@"registerWriteValue"]];
     [self setSPIWriteValue:     		[decoder decodeIntegerForKey:@"spiWriteValue"]];
     [self setFpgaFilePath:				[decoder decodeObjectForKey:@"fpgaFilePath"]];
     [self setNoiseFloorIntegrationTime:	[decoder decodeFloatForKey:@"NoiseFloorIntegrationTime"]];
-    [self setNoiseFloorOffset:			[decoder decodeIntegerForKey:@"NoiseFloorOffset"]];
+    [self setNoiseFloorOffset:			[decoder decodeIntForKey:@"NoiseFloorOffset"]];
     cardInfo = [[decoder decodeObjectForKey:@"cardInfo"] retain];
     
     
@@ -2452,17 +2452,17 @@ static struct {
     [super encodeWithCoder:encoder];
     [encoder encodeObject:spiConnector				forKey:@"spiConnector"];
     [encoder encodeObject:linkConnector				forKey:@"linkConnector"];
-    [encoder encodeInteger:downSample					forKey:@"downSample"];
-    [encoder encodeInteger:histEMultiplier                           forKey:@"histEMultiplier"];
-    [encoder encodeInteger:registerIndex				forKey:@"registerIndex"];
-    [encoder encodeInteger:registerWriteValue			forKey:@"registerWriteValue"];
-    [encoder encodeInteger:spiWriteValue			    forKey:@"spiWriteValue"];
+    [encoder encodeInt:downSample			        forKey:@"downSample"];
+    [encoder encodeInt:histEMultiplier          forKey:@"histEMultiplier"];
+    [encoder encodeInt:registerIndex		    forKey:@"registerIndex"];
+    [encoder encodeInteger:registerWriteValue		forKey:@"registerWriteValue"];
+    [encoder encodeInteger:spiWriteValue			forKey:@"spiWriteValue"];
     [encoder encodeObject:fpgaFilePath				forKey:@"fpgaFilePath"];
     [encoder encodeFloat:noiseFloorIntegrationTime	forKey:@"NoiseFloorIntegrationTime"];
-    [encoder encodeInteger:noiseFloorOffset				forKey:@"NoiseFloorOffset"];
+    [encoder encodeInt:noiseFloorOffset		    forKey:@"NoiseFloorOffset"];
     [encoder encodeObject:cardInfo					forKey:@"cardInfo"];
     [encoder encodeObject:waveFormRateGroup			forKey:@"waveFormRateGroup"];
-    [encoder encodeInteger:clockSource                  forKey:@"clockSource"];
+    [encoder encodeInteger:clockSource              forKey:@"clockSource"];
 	int i;
  	for(i=0;i<kNumGretina4Channels;i++){
 		[encoder encodeInteger:enabled[i]		forKey:[@"enabled"		stringByAppendingFormat:@"%d",i]];

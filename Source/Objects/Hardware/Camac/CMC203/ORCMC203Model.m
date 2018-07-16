@@ -442,7 +442,7 @@ NSString* ORCMC203SettingsLock					= @"ORCMC203SettingsLock";
 
 - (int) histogramCount
 {
-	int totalcount = [histogramData length]/sizeof(long);
+	int totalcount = (int)[histogramData length]/sizeof(long);
 	if(totalcount>=kCMC203ReservedHistoHeaderWords)return totalcount - kCMC203ReservedHistoHeaderWords;
 	else return 0;
 }
@@ -495,7 +495,7 @@ NSString* ORCMC203SettingsLock					= @"ORCMC203SettingsLock";
     id obj;
     while(obj = [e nextObject]){
         [obj runTaskStarted:aDataPacket userInfo:userInfo];
-		[obj setVSN:[dataTakers indexOfObject:obj]];	//put into fera mode
+		[obj setVSN:(int)[dataTakers indexOfObject:obj]];	//put into fera mode
 		[obj setFeraEnable:YES];
     }
 	

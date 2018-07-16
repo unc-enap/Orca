@@ -95,7 +95,7 @@
 {
 	NSIndexSet* theSelectedSet =  [commandTable selectedRowIndexes];
 	if(theSelectedSet){
-		int rowIndex = [theSelectedSet firstIndex];
+		int rowIndex = (int)[theSelectedSet firstIndex];
 		id obj = [model commandAtIndex:rowIndex];
 		[objectField setStringValue: [obj objectForKey:@"Object"]];
 		[setSelectorField setStringValue: [obj objectForKey:@"SetSelector"]];
@@ -109,8 +109,8 @@
 {
 	NSIndexSet* theSelectedSet =  [commandTable selectedRowIndexes];
 	if(theSelectedSet){
-		int rowIndex = [theSelectedSet firstIndex];
-		[itemCountField setStringValue:[NSString stringWithFormat:@"%d of %d",rowIndex+1,[model commandCount]]];
+		int rowIndex = (int)[theSelectedSet firstIndex];
+		[itemCountField setStringValue:[NSString stringWithFormat:@"%d of %ld",rowIndex+1,[model commandCount]]];
 	}
 	else [itemCountField setStringValue:@""];
 }
@@ -121,7 +121,7 @@
 	[self endEditing];
 	NSIndexSet* theSelectedSet =  [commandTable selectedRowIndexes];
 	if(theSelectedSet){
-		int rowIndex = [theSelectedSet firstIndex];
+		int rowIndex = (int)[theSelectedSet firstIndex];
 		[model executeCommand:rowIndex];
 	}
 	[warningField setStringValue:@"Executed"];
@@ -130,7 +130,7 @@
 - (IBAction) okAllAction:(id)sender
 {
 	[self endEditing];
-	int n = [model commandCount];
+	int n = (int)[model commandCount];
 	int i;
 	for(i=0;i<n;i++){
 		[model executeCommand:i];
@@ -144,7 +144,7 @@
 	[self endEditing];
 	NSIndexSet* theSelectedSet =  [commandTable selectedRowIndexes];
 	if(theSelectedSet){
-		int rowIndex = [theSelectedSet firstIndex];
+		int rowIndex = (int)[theSelectedSet firstIndex];
 		if(![model checkSyntax:rowIndex]){
 			[warningField setStringValue:@"Problems: see status log"];
 			id cmd = [model commandAtIndex:rowIndex];
@@ -170,7 +170,7 @@
 	NSIndexSet* theSelectedSet =  [commandTable selectedRowIndexes];
 	if(theSelectedSet){
 		
-		int rowIndex = [theSelectedSet firstIndex];
+		int rowIndex = (int)[theSelectedSet firstIndex];
 		id obj = [model commandAtIndex:rowIndex];
 		
 		NSString* s;

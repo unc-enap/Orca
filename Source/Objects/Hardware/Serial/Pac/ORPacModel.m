@@ -632,7 +632,7 @@ NSString* ORPacModelVetoChanged			= @"ORPacModelVetoChanged";
 		timeRates[i] = [[ORTimeRate alloc] init];
 	}
 	for(i=0;i<148;i++){
-		[self setGain:i withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"gain%d",i]]];
+		[self setGain:i withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"gain%ld",i]]];
 	}
     
     [self setPortName:		[decoder decodeObjectForKey: @"portName"]];

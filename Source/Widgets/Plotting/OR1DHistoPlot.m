@@ -93,8 +93,8 @@
 	}
 	
 	//draw the data 
-	int minX = MAX(0,roundToLong([mXScale minValue]));
-	int maxX = MIN(roundToLong([mXScale maxValue]+1),numPoints);
+	int minX = MAX(0,(int)roundToLong([mXScale minValue]));
+	int maxX = MIN(roundToLong((int)[mXScale maxValue]+1),numPoints);
 	x  = [mXScale getPixAbs:minX]-chanWidth/2.;
 	xl = x;
 	double xValue,yValue;
@@ -107,7 +107,7 @@
 	NSBezierPath* theDataPath = [NSBezierPath bezierPath];
 	[theDataPath setLineWidth:[self lineWidth]];
 	
-	long ix;
+	int ix;
 	for (ix=minX; ix<maxX;++ix) {	
 		[dataSource plotter:self index:ix x:&xValue y:&yValue];
 		x = [mXScale getPixAbsFast:ix log:NO integer:YES minPad:aMinPadx] + chanWidth/2.;

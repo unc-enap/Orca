@@ -345,12 +345,12 @@
 
 - (void) alarmLimitChanged:(NSNotification*)aNote
 {
-	[alarmLimitTextField setIntValue: [model alarmLimit]];
+	[alarmLimitTextField setIntValue: (int)[model alarmLimit]];
 }
 
 - (void) maxRadonChanged:(NSNotification*)aNote
 {
-	[maxRadonTextField setIntValue: [model maxRadon]];
+	[maxRadonTextField setIntValue: (int)[model maxRadon]];
 }
 
 - (void) makeFileChanged:(NSNotification*)aNote
@@ -725,7 +725,7 @@
     [[self window] setContentView:totalView];
 	
     NSString* key = [NSString stringWithFormat: @"orca.ORRad7%lu.selectedtab",[model uniqueIdNumber]];
-    int index = [tabView indexOfTabViewItem:tabViewItem];
+    NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 }
 
@@ -790,27 +790,27 @@
 
 - (void) tUnitsAction:(id)sender
 {
-	[model setTUnits:[sender indexOfSelectedItem]];	
+	[model setTUnits:(int)[sender indexOfSelectedItem]];
 }
 
 - (void) rUnitsAction:(id)sender
 {
-	[model setRUnits:[sender indexOfSelectedItem]];	
+	[model setRUnits:(int)[sender indexOfSelectedItem]];
 }
 
 - (void) formatAction:(id)sender
 {
-	[model setFormatSetting:[sender indexOfSelectedItem]];	
+	[model setFormatSetting:(int)[sender indexOfSelectedItem]];
 }
 
 - (void) toneAction:(id)sender
 {
-	[model setTone:[sender indexOfSelectedItem]];	
+	[model setTone:(int)[sender indexOfSelectedItem]];
 }
 
 - (void) pumpModeAction:(id)sender
 {
-	[model setPumpMode:[sender indexOfSelectedItem]];	
+	[model setPumpMode:(int)[sender indexOfSelectedItem]];
 }
 
 - (void) thoronAction:(id)sender
@@ -835,7 +835,7 @@
 
 - (void) protocolAction:(id)sender
 {
-	[(ORRad7Model*)model setProtocol:[sender indexOfSelectedItem]];
+	[(ORRad7Model*)model setProtocol:(int)[sender indexOfSelectedItem]];
 }
 
 
@@ -915,7 +915,7 @@
 {
 	[radLinkSelectionPanel orderOut:nil];
 	[NSApp endSheet:radLinkSelectionPanel];
- 	int index = [radLinkSelectionMatrix selectedRow];
+ 	int index = (int)[radLinkSelectionMatrix selectedRow];
 	if(index==0){
 		[NSApp beginSheet:radLinkLoadPanel modalForWindow:[self window]
 			modalDelegate:self didEndSelector:NULL contextInfo:nil];
@@ -947,7 +947,7 @@
 
 - (void) getRadLinkFile
 {
-	int index = [radLinkSelectionMatrix selectedRow];
+	int index = (int)[radLinkSelectionMatrix selectedRow];
 
     NSOpenPanel *openPanel = [NSOpenPanel openPanel];
     [openPanel setCanChooseDirectories:NO];
@@ -967,7 +967,7 @@
 
 - (IBAction) pollTimeAction:(id)sender
 {
-	[model setPollTime:[[sender selectedItem] tag]];
+	[model setPollTime:(int)[[sender selectedItem] tag]];
 }
 
 - (IBAction) getStatusAction:(id)sender
@@ -1047,8 +1047,8 @@
 
 - (void) plotter:(id)aPlot index:(int)i x:(double*)xValue y:(double*)yValue
 {
-	int theTag = [aPlot tag];
-	int count = [model numPoints];
+	int theTag = (int)[aPlot tag];
+	int count = (int)[model numPoints];
 	int index = count-i-1;
 	*xValue = [model radonTime:index];
 	if(theTag == 0) *yValue = [model radonValue:index];

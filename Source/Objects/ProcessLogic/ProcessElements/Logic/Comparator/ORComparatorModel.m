@@ -21,6 +21,7 @@
 #import "ORProcessOutConnector.h"
 #import "ORProcessInConnector.h"
 #import "ORProcessNub.h"
+#import "ORComparatorModel.h"
 
 NSString* ORComparatorRangeForEqualChanged = @"ORComparatorRangeForEqualChanged";
 
@@ -172,8 +173,8 @@ NSString* ORComparatorALTBConnection = @"ORComparatorALTBConnection";
 {
 	[guardian eval];
 	BOOL abLT = NO;
-	if(![guardian abEqual]){
-		if([guardian abDifference]>0)abLT = YES;
+	if(![(ORComparatorModel*)guardian abEqual]){
+		if([(ORComparatorModel*)guardian abDifference]>0)abLT = YES;
 	}
 	return [ORProcessResult processState:abLT value:abLT];
 }
@@ -181,8 +182,8 @@ NSString* ORComparatorALTBConnection = @"ORComparatorALTBConnection";
 - (int) evaluatedState
 {
 	BOOL abLT = NO;
-	float diff = [guardian abDifference];
-	if(![guardian abEqual]){
+	float diff = [(ORComparatorModel*)guardian abDifference];
+	if(![(ORComparatorModel*)guardian abEqual]){
 		if(diff>0)abLT = YES;
 	}
 	return abLT;
@@ -195,16 +196,16 @@ NSString* ORComparatorALTBConnection = @"ORComparatorALTBConnection";
 {
 	[guardian eval];
 	BOOL abGT = NO;
-	if(![guardian abEqual]){
-		if([guardian abDifference]<0)abGT = YES;
+	if(![(ORComparatorModel*)guardian abEqual]){
+		if([(ORComparatorModel*)guardian abDifference]<0)abGT = YES;
 	}
 	return [ORProcessResult processState:abGT value:abGT];
 }
 - (int) evaluatedState
 {
 	BOOL abGT = NO;
-	float diff = [guardian abDifference];
-	if(![guardian abEqual]){
+	float diff = [(ORComparatorModel*)guardian abDifference];
+	if(![(ORComparatorModel*)guardian abEqual]){
 		if(diff<0)abGT = YES;
 	}
 	return abGT;

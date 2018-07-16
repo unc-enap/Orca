@@ -129,7 +129,7 @@
 	unsigned long bytesProcessed	= 0;
 	while(p<endPtr){
 		unsigned long firstWord		= *p;
-		if(needToSwap)firstWord		= (unsigned long)CFSwapInt32(*p);
+		if(needToSwap)firstWord		= (unsigned long)CFSwapInt32((uint32_t)*p);
 		unsigned long dataId		= ExtractDataId(firstWord);
 		unsigned long recordLength	= ExtractLength(firstWord);
 		if(p+recordLength <= endPtr){

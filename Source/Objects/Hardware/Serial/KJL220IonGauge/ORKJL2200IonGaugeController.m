@@ -430,7 +430,7 @@
 
 - (void) queCountChanged:(NSNotification*)aNotification
 {
-	[cmdQueCountField setIntValue:[model queCount]];
+	[cmdQueCountField setIntegerValue:[model queCount]];
 }
 
 #pragma mark ***Actions

@@ -154,7 +154,7 @@
                 unsigned char mini_card = mini_header >> 24 & 0xf;
                 unsigned char mini_type = mini_header >> 31;
                 
-                [dsc appendFormat:@"\n---\nmini bundle\ncard: %d\ntype: %@\nnum_longs: %u\ninfo: 0x%08x\n\n",
+                [dsc appendFormat:@"\n---\nmini bundle\ncard: %d\ntype: %@\nnum_longs: %u\ninfo: 0x%08lx\n\n",
                  mini_card, mini_type?@"pass cur":@"pmt bundles", mini_num_longs, mini_header];
                 ptr +=1;
                 
@@ -182,11 +182,11 @@
                             num_longs = 0;
                             break;
                         }
-                        unsigned int pass_cur = ptr[0];
+                        unsigned long pass_cur = ptr[0];
                         if (swapBundle) {
                             pass_cur = swapLong(pass_cur);
                         }
-                        [dsc appendFormat:@"pass_cur: %u\n", pass_cur];
+                        [dsc appendFormat:@"pass_cur: %lu\n", pass_cur];
                         num_longs -= 2;
                         ptr += 1;
                         break;

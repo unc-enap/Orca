@@ -377,7 +377,7 @@ static int chanConfigToMaskBit[kNumChanConfigBits] = {1,3,4,6,11};
 {
 	//  Set value of both text and stepper
 	[self updateStepper:writeValueStepper setting:[model writeValue]];
-	[writeValueTextField setIntValue:[model writeValue]];
+	[writeValueTextField setIntegerValue:[model writeValue]];
 }
 
 - (void) selectedRegIndexChanged:(NSNotification*) aNotification
@@ -421,7 +421,7 @@ static int chanConfigToMaskBit[kNumChanConfigBits] = {1,3,4,6,11};
 - (void) postTriggerSettingChanged:(NSNotification*)aNote
 {
 	//todo *4 in std mode *5 in packed mode
-	[postTriggerSettingTextField setIntValue:([model postTriggerSetting] * 4)];
+	[postTriggerSettingTextField setIntegerValue:([model postTriggerSetting] * 4)];
 }
 
 - (void) triggerSourceMaskChanged:(NSNotification*)aNote
@@ -477,7 +477,7 @@ static int chanConfigToMaskBit[kNumChanConfigBits] = {1,3,4,6,11};
 - (void) customSizeChanged:(NSNotification*)aNote
 {
 	//todo: *4 in std mode, *5 in packed mode
-	[customSizeTextField setIntValue:([model customSize] * 4)];
+	[customSizeTextField setIntegerValue:([model customSize] * 4)];
 }
 
 - (void) isCustomSizeChanged:(NSNotification*)aNote
@@ -504,7 +504,7 @@ static int chanConfigToMaskBit[kNumChanConfigBits] = {1,3,4,6,11};
 {
 	//  Set value of both text and stepper
 	[self updateStepper:addressStepper setting:[model baseAddress]];
-	[addressTextField setIntValue:[model baseAddress]];
+	[addressTextField setIntegerValue:[model baseAddress]];
 }
 
 - (void) thresholdChanged:(NSNotification*) aNotification
@@ -638,7 +638,7 @@ static int chanConfigToMaskBit[kNumChanConfigBits] = {1,3,4,6,11};
 
 - (void) eventSizeAction:(id)sender
 {
-	[model setEventSize:[sender indexOfSelectedItem]];	
+	[model setEventSize:(int)[sender indexOfSelectedItem]];	
 }
 
 - (IBAction) integrationAction:(id)sender

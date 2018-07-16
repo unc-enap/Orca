@@ -168,7 +168,7 @@
 - (void) itemsRemoved:(NSNotification*)aNote
 {
 	int index = [[[aNote userInfo] objectForKey:@"Index"] intValue];
-	index = MIN(index,[model itemCount]-1);
+	index = MIN(index,(int)[model itemCount]-1);
 	index = MAX(index,0);
 	[itemsListView reloadData];
 	NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:index];
@@ -193,7 +193,7 @@
 - (void) tableViewSelectionDidChange:(NSNotification *)aNotification
 {
 	if([aNotification object] == itemsListView || aNotification == nil){
-		int selectedIndex = [itemsListView selectedRow];
+		int selectedIndex = (int)[itemsListView selectedRow];
 		[removeItemButton setEnabled:selectedIndex>=0];
 	}
 }

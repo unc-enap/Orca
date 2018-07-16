@@ -297,11 +297,11 @@
 		x	= [mXScale getPixAbs:minChan];
 		xl	= x;
 		double xValue,yValue;
-		[dataSource plotter:self index:minChan x:&xValue y:&yValue];
+		[dataSource plotter:self index:(int)minChan x:&xValue y:&yValue];
 		yl	= [mYScale getPixAbs:yValue];
 		long ix;
 		for (ix=minChan; ix<=maxChan+1;++ix) {		
-			[dataSource plotter:self index:ix x:&xValue y:&yValue];
+			[dataSource plotter:self index:(int)ix x:&xValue y:&yValue];
 			x = [mXScale getPixAbsFast:ix log:NO integer:YES minPad:aMinPadx];
 			y = [mYScale getPixAbsFast:yValue log:aLog integer:aInt minPad:aMinPad];
 			[NSBezierPath fillRect:NSMakeRect(xl,1,x-xl+1,yl)];

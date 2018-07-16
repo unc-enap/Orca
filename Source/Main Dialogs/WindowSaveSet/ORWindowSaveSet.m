@@ -160,7 +160,7 @@
 - (IBAction) restoreWindowSet:(id)sender
 {
 	NSIndexSet* selection = [savedSetsTableView selectedRowIndexes];
-	int row = [selection firstIndex];
+	int row = (int)[selection firstIndex];
 	if(row>=0 && row < [saveSetNames count]) {                      
 		NSString* theSaveSetName = [[saveSetNames objectAtIndex:row] objectForKey:@"Name"];
 		[self restoreSaveSetWithName:theSaveSetName];
@@ -235,7 +235,7 @@
 - (IBAction) deleteSelected:(id)sender
 {
 	NSIndexSet* selection = [savedSetsTableView selectedRowIndexes];
-	int row = [selection firstIndex];
+	int row = (int)[selection firstIndex];
 	if(row>=0 && row < [saveSetNames count]) {                      
 		NSString* theSaveSetName = [[saveSetNames objectAtIndex:row] objectForKey:@"Name"];
 		NSString* tempFolder	 = [[ApplicationSupport sharedApplicationSupport] applicationSupportFolder:@"WindowSets"];

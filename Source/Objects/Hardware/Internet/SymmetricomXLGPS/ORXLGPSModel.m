@@ -343,7 +343,7 @@ NSString* ORXLGPSModelPpoRepeatsChanged		= @"ORXLGPSModelPpoRepeatsChanged";
 	NSDateComponents *componentsPpo = [gregorian components:(NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit)
                                                    fromDate:ppoDate];
 #endif
-	NSString* time = [NSString stringWithFormat:@"%03d:%02ld:%02d:%02d", day, [componentsPpo hour], [componentsPpo minute], [componentsPpo second]];
+	NSString* time = [NSString stringWithFormat:@"%03d:%02ld:%02ld:%02ld", day, [componentsPpo hour], [componentsPpo minute], [componentsPpo second]];
 
 	if ([self ppoRepeats]) {
 		NSRange ppoMask = {0, 12};

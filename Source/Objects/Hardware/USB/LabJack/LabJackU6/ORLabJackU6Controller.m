@@ -771,7 +771,7 @@
 
 - (IBAction) adcRangeAction:(id)sender
 {
-    [model setAdcRange:(int)[sender selectedRow] withValue:[[sender selectedCell] indexOfSelectedItem]];
+    [model setAdcRange:(int)[sender selectedRow] withValue:(int)[[sender selectedCell] indexOfSelectedItem]];
 }
 
 - (IBAction) slopeAction:(id)sender

@@ -389,7 +389,7 @@
 
 - (IBAction) cycleDurationAction:(id)sender
 {
-	[model setCycleDuration:[[sender selectedItem]tag]];	
+	[model setCycleDuration:(int)[[sender selectedItem]tag]];	
 }
 
 - (IBAction) lockAction:(id) sender
@@ -429,13 +429,13 @@
 #pragma mark •••Data Source
 - (int) numberPointsInPlot:(id)aPlotter
 {
-	return [[model timeRate:[aPlotter tag]]   count];
+	return (int)[[model timeRate:(int)[aPlotter tag]]   count];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
 {
-	int set = [aPlotter tag];
-	int count = [[model timeRate:set] count];
+	int set = (int)[aPlotter tag];
+	int count = (int)[[model timeRate:set] count];
 	int index = count-i-1;
 	*yValue = [[model timeRate:set] valueAtIndex:index];
 	*xValue = [[model timeRate:set] timeSampledAtIndex:index];

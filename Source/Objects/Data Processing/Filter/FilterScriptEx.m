@@ -705,7 +705,7 @@
 	while(1) {
 		NSRange r = NSMakeRange(r1,2);
 		BOOL delete = YES;
-		int count = [lines count];
+		int count = (int)[lines count];
 		int i;
 		BOOL done = YES;
 		for(i=count-1;i>=0;i--){

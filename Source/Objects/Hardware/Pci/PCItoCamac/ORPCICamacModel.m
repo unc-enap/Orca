@@ -716,7 +716,7 @@ static UInt32 *fVPCICamacMem;
             // write dataway
             UInt32 wnafOffset = (UInt32)(offsetNAF(n,a,f) / 4);	 // note divide by 4
             volatile UInt32 *wCC32MemBase = (UInt32 *)&fVPCICamacMem[wnafOffset];
-            UInt32 *ptrData = data;
+            UInt32 *ptrData = (UInt32 *)data;
             UInt32 ptrOffset;
             
             //The PCI-CAMAC hardware forces all NAF command writes to set
