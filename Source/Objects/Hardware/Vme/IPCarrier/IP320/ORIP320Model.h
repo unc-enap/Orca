@@ -65,7 +65,7 @@ enum {
     kAutoZero
 };
 
-struct{
+static struct{
 	float kSlope_m;
 	float kIdeal_Volt_Span;
 	float kIdeal_Zero;

@@ -43,6 +43,7 @@ NSString* HaloSentryToggleIntervalChanged   = @"HaloSentryToggleIntervalChanged"
 
 #define kRemotePort 4667
 
+
 @implementation HaloSentry
 
 #pragma mark ***Initialization

@@ -95,8 +95,8 @@
 
 @end
 
-NSString* OROrcaAboutToQuitNotice;
-NSString* OROrcaFinalQuitNotice;
+extern NSString* OROrcaAboutToQuitNotice;
+extern NSString* OROrcaFinalQuitNotice;
 
 
 @interface ORHeartBeatOp : NSOperation

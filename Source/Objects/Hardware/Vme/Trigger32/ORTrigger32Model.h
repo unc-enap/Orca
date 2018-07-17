@@ -99,7 +99,7 @@ enum {
 
 #define 	kNumTriggerChannels 		8
 
-enum {
+static enum {
     kShipEvt1ClkMask    = 1<<0,
     kShipEvt2ClkMask    = 1<<1,
     kUseSoftwareGtIdMask= 1<<2,

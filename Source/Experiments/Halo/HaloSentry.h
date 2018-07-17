@@ -23,7 +23,7 @@
 @class ORRunModel;
 @class ORPingTask;
 
-enum  eHaloSentryState {
+static enum  eHaloSentryState {
     eIdle,
     eStarting,
     eStopping,
@@ -48,7 +48,7 @@ enum  eHaloSentryState {
     ePingCrates,
 } eHaloSentryState;
 
-enum eHaloSentryType {
+static enum eHaloSentryType {
     eNeither,
     ePrimary,
     eSecondary,
@@ -56,7 +56,8 @@ enum eHaloSentryType {
     eTakeOver,
 }eHaloSentryType;
 
-enum eHaloStatus {
+
+static enum eHaloStatus {
     eOK             = 0,
     eYES            = 0,
     eRunning        = 0,

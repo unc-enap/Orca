@@ -29,6 +29,24 @@
 
 #define kTimeDelta .1
 
+enum eRunListStates {
+    kStartup,
+    kWaitForRunToStop,
+    kWaitForSubRun,
+    kReadyToStart,
+    kStartRun,
+    kStartSubRun,
+    kStartScript,
+    kWaitForScript,
+    kWaitForRunTime,
+    kStartEndScript,
+    kWaitForEndScript,
+    kRunFinished,
+    kCheckForRepeat,
+    kFinishUp,
+    kPause,
+}eRunListStates;
+
 #pragma mark •••Local Strings
 NSString* ORRunListModelTimesToRepeatChanged	= @"ORRunListModelTimesToRepeatChanged";
 NSString* ORRunListModelLastFileChanged			= @"ORRunListModelLastFileChanged";

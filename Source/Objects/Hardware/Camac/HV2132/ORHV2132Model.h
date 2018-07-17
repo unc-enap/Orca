@@ -31,7 +31,7 @@
 //#define HV2132NoHardware
 
 
-enum {
+static enum {
 	kHV2132ModifyOneVoltage					= 0,				
 	kHV2132SetValue							= 1,							
 	kHV2132ModifyAll3_3kVVoltages			= 2,		
@@ -50,7 +50,7 @@ enum {
 	kHV2132IdPodComplement					= 15					
 } hv2132Cmds;
 
-enum {
+static enum {
 	kHV2132TrueVoltage			 = 3,		
 	kHV2132HVOnOffStatus		 = 5,	
 	kHV2132DemandValue			 = 8,

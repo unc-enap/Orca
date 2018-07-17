@@ -389,7 +389,6 @@
 		4AB9E53C1DE5D955007C75E0 /* ORPQConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB9E5381DE5D955007C75E0 /* ORPQConnection.m */; };
 		4AB9E53D1DE5D955007C75E0 /* ORPQResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 4AB9E5391DE5D955007C75E0 /* ORPQResult.h */; };
 		4AB9E53E1DE5D955007C75E0 /* ORPQResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB9E53A1DE5D955007C75E0 /* ORPQResult.m */; };
-		4AB9E5401DE5D9DB007C75E0 /* libpq.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AB9E53F1DE5D9DB007C75E0 /* libpq.a */; };
 		543BF2031E5481C3003E4582 /* HVcRIO.nib in Resources */ = {isa = PBXBuildFile; fileRef = 543BF1FB1E5481C3003E4582 /* HVcRIO.nib */; };
 		543BF2041E5481C3003E4582 /* HVcRIO.tif in Resources */ = {isa = PBXBuildFile; fileRef = 543BF1FC1E5481C3003E4582 /* HVcRIO.tif */; };
 		543BF2051E5481C3003E4582 /* ORHVcRIOController.h in Headers */ = {isa = PBXBuildFile; fileRef = 543BF1FD1E5481C3003E4582 /* ORHVcRIOController.h */; };
@@ -3139,9 +3138,19 @@
 		84EA1FB120E28F810099F3DF /* RefClock.gif in Resources */ = {isa = PBXBuildFile; fileRef = 84EA1FB020E28F800099F3DF /* RefClock.gif */; };
 		84EA6CAC0C73D15B00083319 /* ORAcqirisDC440Decoders.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA6CAA0C73D15B00083319 /* ORAcqirisDC440Decoders.h */; };
 		84EA6CAD0C73D15B00083319 /* ORAcqirisDC440Decoders.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EA6CAB0C73D15B00083319 /* ORAcqirisDC440Decoders.m */; };
-		84EA913D20FE2C1500110B85 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA913C20FE2C1400110B85 /* libmysqlclient.a */; };
-		84EA913F20FE2DDA00110B85 /* client_plugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA913E20FE2DDA00110B85 /* client_plugin.h */; };
-		84EA914120FE2DFA00110B85 /* plugin_auth_common.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA914020FE2DF900110B85 /* plugin_auth_common.h */; };
+		84EA916820FE5A3700110B85 /* libmysqlclient.21.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA916720FE5A3700110B85 /* libmysqlclient.21.dylib */; };
+		84EA916A20FE5A6200110B85 /* mysql.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA916920FE5A6100110B85 /* mysql.h */; };
+		84EA916E20FE5BCC00110B85 /* binary_log_types.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA916D20FE5BCC00110B85 /* binary_log_types.h */; };
+		84EA917020FE5C5100110B85 /* my_list.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA916F20FE5C5100110B85 /* my_list.h */; };
+		84EA917220FE5C9000110B85 /* mysql_com.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA917120FE5C9000110B85 /* mysql_com.h */; };
+		84EA917420FE5CC700110B85 /* my_command.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA917320FE5CC700110B85 /* my_command.h */; };
+		84EA917A20FE5D0900110B85 /* udf_registration_types.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA917720FE5D0900110B85 /* udf_registration_types.h */; };
+		84EA917D20FE5D5800110B85 /* mysql_version.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA917C20FE5D5700110B85 /* mysql_version.h */; };
+		84EA917F20FE5D8700110B85 /* mysql_time.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA917E20FE5D8700110B85 /* mysql_time.h */; };
+		84EA918120FE5DB000110B85 /* errmsg.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA918020FE5DB000110B85 /* errmsg.h */; };
+		84EA918320FE5DDF00110B85 /* libssl.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA918220FE5DDE00110B85 /* libssl.1.0.0.dylib */; };
+		84EA918520FE5DF800110B85 /* libcrypto.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA918420FE5DF800110B85 /* libcrypto.1.0.0.dylib */; };
+		84EA918720FE5F7800110B85 /* libpq.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA918620FE5F7800110B85 /* libpq.dylib */; };
 		84EB2DDE1E32990D00C273AA /* LabJackU6.nib in Resources */ = {isa = PBXBuildFile; fileRef = 84EB2DD51E32990D00C273AA /* LabJackU6.nib */; };
 		84EB2DE11E32990D00C273AA /* ORLabJackU6Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EB2DD81E32990D00C273AA /* ORLabJackU6Controller.h */; };
 		84EB2DE21E32990D00C273AA /* ORLabJackU6Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EB2DD91E32990D00C273AA /* ORLabJackU6Controller.m */; };
@@ -3262,13 +3271,6 @@
 		84F7F3CF0AE3F1A000A5AA4C /* OrcaPrecompiledHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 84F7F3CE0AE3F1A000A5AA4C /* OrcaPrecompiledHeader.h */; };
 		84F7FA81077896B000E8A6DA /* ORColorScale.h in Headers */ = {isa = PBXBuildFile; fileRef = 84F7FA7F077896B000E8A6DA /* ORColorScale.h */; };
 		84F7FA82077896B000E8A6DA /* ORColorScale.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F7FA80077896B000E8A6DA /* ORColorScale.m */; };
-		84F7FB560AE555C600A5AA4C /* mysql.h in Headers */ = {isa = PBXBuildFile; fileRef = 84F7FB550AE555C600A5AA4C /* mysql.h */; };
-		84F7FB5E0AE5566D00A5AA4C /* mysql_version.h in Headers */ = {isa = PBXBuildFile; fileRef = 84F7FB590AE5566D00A5AA4C /* mysql_version.h */; };
-		84F7FB5F0AE5566D00A5AA4C /* mysql_time.h in Headers */ = {isa = PBXBuildFile; fileRef = 84F7FB5A0AE5566D00A5AA4C /* mysql_time.h */; };
-		84F7FB600AE5566D00A5AA4C /* typelib.h in Headers */ = {isa = PBXBuildFile; fileRef = 84F7FB5B0AE5566D00A5AA4C /* typelib.h */; };
-		84F7FB610AE5566D00A5AA4C /* my_list.h in Headers */ = {isa = PBXBuildFile; fileRef = 84F7FB5C0AE5566D00A5AA4C /* my_list.h */; };
-		84F7FB620AE5566D00A5AA4C /* mysql_com.h in Headers */ = {isa = PBXBuildFile; fileRef = 84F7FB5D0AE5566D00A5AA4C /* mysql_com.h */; };
-		84F7FB640AE5569100A5AA4C /* my_alloc.h in Headers */ = {isa = PBXBuildFile; fileRef = 84F7FB630AE5569100A5AA4C /* my_alloc.h */; };
 		84F909871638383C00E9FD24 /* Pulser33500.nib in Resources */ = {isa = PBXBuildFile; fileRef = 84F909801638383C00E9FD24 /* Pulser33500.nib */; };
 		84F909891638383C00E9FD24 /* ORPulser33500Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 84F909821638383C00E9FD24 /* ORPulser33500Controller.h */; };
 		84F9098A1638383C00E9FD24 /* ORPulser33500Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F909831638383C00E9FD24 /* ORPulser33500Controller.m */; };
@@ -4197,7 +4199,6 @@
 		4AB9E5381DE5D955007C75E0 /* ORPQConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORPQConnection.m; sourceTree = "<group>"; };
 		4AB9E5391DE5D955007C75E0 /* ORPQResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORPQResult.h; sourceTree = "<group>"; };
 		4AB9E53A1DE5D955007C75E0 /* ORPQResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORPQResult.m; sourceTree = "<group>"; };
-		4AB9E53F1DE5D9DB007C75E0 /* libpq.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpq.a; path = Libraries/libIntel/libpq.a; sourceTree = SOURCE_ROOT; };
 		543BF1FB1E5481C3003E4582 /* HVcRIO.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = HVcRIO.nib; path = HVcRIO/HVcRIO.nib; sourceTree = "<group>"; };
 		543BF1FC1E5481C3003E4582 /* HVcRIO.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = HVcRIO.tif; path = HVcRIO/HVcRIO.tif; sourceTree = "<group>"; };
 		543BF1FD1E5481C3003E4582 /* ORHVcRIOController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORHVcRIOController.h; path = HVcRIO/ORHVcRIOController.h; sourceTree = "<group>"; };
@@ -6845,9 +6846,19 @@
 		84EA1FB020E28F800099F3DF /* RefClock.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = RefClock.gif; sourceTree = "<group>"; };
 		84EA6CAA0C73D15B00083319 /* ORAcqirisDC440Decoders.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORAcqirisDC440Decoders.h; path = Source/Objects/Hardware/CompactPCI/AcqirisDC440/ORAcqirisDC440Decoders.h; sourceTree = SOURCE_ROOT; };
 		84EA6CAB0C73D15B00083319 /* ORAcqirisDC440Decoders.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = ORAcqirisDC440Decoders.m; path = Source/Objects/Hardware/CompactPCI/AcqirisDC440/ORAcqirisDC440Decoders.m; sourceTree = SOURCE_ROOT; };
-		84EA913C20FE2C1400110B85 /* libmysqlclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient.a; path = Libraries/libIntel/libmysqlclient.a; sourceTree = SOURCE_ROOT; };
-		84EA913E20FE2DDA00110B85 /* client_plugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = client_plugin.h; sourceTree = "<group>"; };
-		84EA914020FE2DF900110B85 /* plugin_auth_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = plugin_auth_common.h; sourceTree = "<group>"; };
+		84EA916720FE5A3700110B85 /* libmysqlclient.21.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libmysqlclient.21.dylib; sourceTree = "<group>"; };
+		84EA916920FE5A6100110B85 /* mysql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql.h; sourceTree = "<group>"; };
+		84EA916D20FE5BCC00110B85 /* binary_log_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = binary_log_types.h; path = "../../../../../usr/local/mysql-8.0.11-macos10.13-x86_64/include/binary_log_types.h"; sourceTree = "<group>"; };
+		84EA916F20FE5C5100110B85 /* my_list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_list.h; sourceTree = "<group>"; };
+		84EA917120FE5C9000110B85 /* mysql_com.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_com.h; sourceTree = "<group>"; };
+		84EA917320FE5CC700110B85 /* my_command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_command.h; sourceTree = "<group>"; };
+		84EA917720FE5D0900110B85 /* udf_registration_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = udf_registration_types.h; sourceTree = "<group>"; };
+		84EA917C20FE5D5700110B85 /* mysql_version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_version.h; sourceTree = "<group>"; };
+		84EA917E20FE5D8700110B85 /* mysql_time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_time.h; sourceTree = "<group>"; };
+		84EA918020FE5DB000110B85 /* errmsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = errmsg.h; sourceTree = "<group>"; };
+		84EA918220FE5DDE00110B85 /* libssl.1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libssl.1.0.0.dylib; sourceTree = "<group>"; };
+		84EA918420FE5DF800110B85 /* libcrypto.1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libcrypto.1.0.0.dylib; sourceTree = "<group>"; };
+		84EA918620FE5F7800110B85 /* libpq.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libpq.dylib; sourceTree = "<group>"; };
 		84EB2DD51E32990D00C273AA /* LabJackU6.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = LabJackU6.nib; sourceTree = "<group>"; };
 		84EB2DD81E32990D00C273AA /* ORLabJackU6Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORLabJackU6Controller.h; sourceTree = "<group>"; };
 		84EB2DD91E32990D00C273AA /* ORLabJackU6Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORLabJackU6Controller.m; sourceTree = "<group>"; };
@@ -6973,13 +6984,6 @@
 		84F7F3CE0AE3F1A000A5AA4C /* OrcaPrecompiledHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OrcaPrecompiledHeader.h; path = "Source/App Delegate/OrcaPrecompiledHeader.h"; sourceTree = SOURCE_ROOT; };
 		84F7FA7F077896B000E8A6DA /* ORColorScale.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORColorScale.h; path = "Source/Widgets/Bar Graph/ORColorScale.h"; sourceTree = SOURCE_ROOT; };
 		84F7FA80077896B000E8A6DA /* ORColorScale.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = ORColorScale.m; path = "Source/Widgets/Bar Graph/ORColorScale.m"; sourceTree = SOURCE_ROOT; };
-		84F7FB550AE555C600A5AA4C /* mysql.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mysql.h; path = Libraries/mysql.h; sourceTree = SOURCE_ROOT; };
-		84F7FB590AE5566D00A5AA4C /* mysql_version.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mysql_version.h; path = Libraries/mysql_version.h; sourceTree = SOURCE_ROOT; };
-		84F7FB5A0AE5566D00A5AA4C /* mysql_time.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mysql_time.h; path = Libraries/mysql_time.h; sourceTree = SOURCE_ROOT; };
-		84F7FB5B0AE5566D00A5AA4C /* typelib.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = typelib.h; path = Libraries/typelib.h; sourceTree = SOURCE_ROOT; };
-		84F7FB5C0AE5566D00A5AA4C /* my_list.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = my_list.h; path = Libraries/my_list.h; sourceTree = SOURCE_ROOT; };
-		84F7FB5D0AE5566D00A5AA4C /* mysql_com.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mysql_com.h; path = Libraries/mysql_com.h; sourceTree = SOURCE_ROOT; };
-		84F7FB630AE5569100A5AA4C /* my_alloc.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = my_alloc.h; path = Libraries/my_alloc.h; sourceTree = SOURCE_ROOT; };
 		84F909801638383C00E9FD24 /* Pulser33500.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = Pulser33500.nib; sourceTree = "<group>"; };
 		84F909821638383C00E9FD24 /* ORPulser33500Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORPulser33500Controller.h; path = Source/Objects/Hardware/GPIB/Pulser33500/ORPulser33500Controller.h; sourceTree = SOURCE_ROOT; };
 		84F909831638383C00E9FD24 /* ORPulser33500Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORPulser33500Controller.m; path = Source/Objects/Hardware/GPIB/Pulser33500/ORPulser33500Controller.m; sourceTree = SOURCE_ROOT; };
@@ -7318,18 +7322,20 @@
 				8434A359055B3287002D3102 /* Cocoa.framework in Frameworks */,
 				8470D01518241FEE0054F7D4 /* Accelerate.framework in Frameworks */,
 				8439D5EF05BEFF3A0077EFF2 /* Carbon.framework in Frameworks */,
+				84EA916820FE5A3700110B85 /* libmysqlclient.21.dylib in Frameworks */,
 				840F377B08F322F800FC4408 /* IOKit.framework in Frameworks */,
 				84F5E11B0A151E0B00707A0F /* OpenGL.framework in Frameworks */,
 				847599860B5FF26500123411 /* QuartzCore.framework in Frameworks */,
 				3620200E1CBD38EE0089296E /* libiconv.2.dylib in Frameworks */,
+				84EA918320FE5DDF00110B85 /* libssl.1.0.0.dylib in Frameworks */,
 				2DC1EE800F33724E00E93C75 /* WebKit.framework in Frameworks */,
 				840F5B191222C90000D49A75 /* QTKit.framework in Frameworks */,
 				84E6CD001E4247BD004D6978 /* libusb-1.0.a in Frameworks */,
-				84EA913D20FE2C1500110B85 /* libmysqlclient.a in Frameworks */,
 				8458E91515DA8A2A005C43A9 /* ScriptingBridge.framework in Frameworks */,
+				84EA918720FE5F7800110B85 /* libpq.dylib in Frameworks */,
 				8481E67917653766001AB905 /* SystemConfiguration.framework in Frameworks */,
-				4AB9E5401DE5D9DB007C75E0 /* libpq.a in Frameworks */,
 				4322E9B217830004008E78A4 /* GLUT.framework in Frameworks */,
+				84EA918520FE5DF800110B85 /* libcrypto.1.0.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7639,8 +7645,10 @@
 		2AE87BDC0D6E486900A839FC /* libUniversal */ = {
 			isa = PBXGroup;
 			children = (
-				84EA913C20FE2C1400110B85 /* libmysqlclient.a */,
-				4AB9E53F1DE5D9DB007C75E0 /* libpq.a */,
+				84EA916720FE5A3700110B85 /* libmysqlclient.21.dylib */,
+				84EA918220FE5DDE00110B85 /* libssl.1.0.0.dylib */,
+				84EA918420FE5DF800110B85 /* libcrypto.1.0.0.dylib */,
+				84EA918620FE5F7800110B85 /* libpq.dylib */,
 			);
 			path = libUniversal;
 			sourceTree = "<group>";
@@ -13999,6 +14007,14 @@
 			path = Source/Objects/Hardware/HV/NHQ226L;
 			sourceTree = SOURCE_ROOT;
 		};
+		84EA917520FE5D0900110B85 /* mysql */ = {
+			isa = PBXGroup;
+			children = (
+				84EA917720FE5D0900110B85 /* udf_registration_types.h */,
+			);
+			path = mysql;
+			sourceTree = "<group>";
+		};
 		84EB2DD41E32990D00C273AA /* LabJackU6 */ = {
 			isa = PBXGroup;
 			children = (
@@ -14264,15 +14280,15 @@
 				3620200C1CBD38EE0089296E /* libSNO+ */,
 				8475EC0414759D53003A165D /* libusb */,
 				2AE87BDC0D6E486900A839FC /* libUniversal */,
-				84F7FB550AE555C600A5AA4C /* mysql.h */,
-				84F7FB630AE5569100A5AA4C /* my_alloc.h */,
-				84F7FB590AE5566D00A5AA4C /* mysql_version.h */,
-				84F7FB5A0AE5566D00A5AA4C /* mysql_time.h */,
-				84F7FB5B0AE5566D00A5AA4C /* typelib.h */,
-				84F7FB5C0AE5566D00A5AA4C /* my_list.h */,
-				84F7FB5D0AE5566D00A5AA4C /* mysql_com.h */,
-				84EA913E20FE2DDA00110B85 /* client_plugin.h */,
-				84EA914020FE2DF900110B85 /* plugin_auth_common.h */,
+				84EA917520FE5D0900110B85 /* mysql */,
+				84EA916920FE5A6100110B85 /* mysql.h */,
+				84EA916D20FE5BCC00110B85 /* binary_log_types.h */,
+				84EA916F20FE5C5100110B85 /* my_list.h */,
+				84EA917120FE5C9000110B85 /* mysql_com.h */,
+				84EA917320FE5CC700110B85 /* my_command.h */,
+				84EA917C20FE5D5700110B85 /* mysql_version.h */,
+				84EA917E20FE5D8700110B85 /* mysql_time.h */,
+				84EA918020FE5DB000110B85 /* errmsg.h */,
 			);
 			path = Libraries;
 			sourceTree = SOURCE_ROOT;
@@ -15270,7 +15286,6 @@
 				8434A215055B3287002D3102 /* ORFileMover.h in Headers */,
 				8434A216055B3287002D3102 /* ORPCICamacCommands.h in Headers */,
 				8434A217055B3287002D3102 /* ORPCICamacController.h in Headers */,
-				84EA914120FE2DFA00110B85 /* plugin_auth_common.h in Headers */,
 				8434A219055B3287002D3102 /* ORPCICamacModel.h in Headers */,
 				8434A21A055B3287002D3102 /* NcdController.h in Headers */,
 				8434A21C055B3287002D3102 /* NcdModel.h in Headers */,
@@ -15335,6 +15350,7 @@
 				2ACEE0E40612266000CAD497 /* ThresholdCalibrationTask.h in Headers */,
 				84ABE7A319C896CE00BD8DC7 /* ORDataProcessing.h in Headers */,
 				840C7FE01955CA0000E36622 /* NSApplication+Extensions.h in Headers */,
+				84EA917D20FE5D5800110B85 /* mysql_version.h in Headers */,
 				848463AD0625D65F00128299 /* ORSmartFolder.h in Headers */,
 				84FFCAA80636D5B10069432F /* ORCaen792Controller.h in Headers */,
 				84FFCAAA0636D5B10069432F /* ORCaen792Model.h in Headers */,
@@ -15358,6 +15374,7 @@
 				4AB9E5331DE5D820007C75E0 /* postgres_ext.h in Headers */,
 				846799570694B82200DF8B2A /* NcdThresholdTask.h in Headers */,
 				84F9836D06A441CF0087FA3E /* ORGTIDGenerator.h in Headers */,
+				84EA917020FE5C5100110B85 /* my_list.h in Headers */,
 				848326E906DA614B00172F1C /* ORDualPortLAMController.h in Headers */,
 				848326EB06DA614B00172F1C /* ORDualPortLAMModel.h in Headers */,
 				842A634F0700A81C007536B6 /* ORShaperDecoders.h in Headers */,
@@ -15383,6 +15400,7 @@
 				847946D107330E5300C5E1FA /* ORPciBit3Commands.h in Headers */,
 				847946D207330E5300C5E1FA /* ORPciBit3Controller.h in Headers */,
 				8494F8D21C440E2C00A35F8B /* ORMJDDewarScaleController.h in Headers */,
+				84EA916E20FE5BCC00110B85 /* binary_log_types.h in Headers */,
 				847946D407330E5300C5E1FA /* ORPciBit3Model.h in Headers */,
 				847946D607330E5300C5E1FA /* ORPciBit3View.h in Headers */,
 				8402797207397B8700972B07 /* ORBit3Controller.h in Headers */,
@@ -15543,6 +15561,7 @@
 				840E004D0944B29000049827 /* ORProcessThread.h in Headers */,
 				84B489370944E63800DFC618 /* ORCountDownController.h in Headers */,
 				84B489390944E63800DFC618 /* ORCountDownModel.h in Headers */,
+				84EA918120FE5DB000110B85 /* errmsg.h in Headers */,
 				84B48980094506C000DFC618 /* OROneShotController.h in Headers */,
 				84B48982094506C000DFC618 /* OROneShotModel.h in Headers */,
 				84B489BB0945142300DFC618 /* ORInvertedOutputNub.h in Headers */,
@@ -15618,20 +15637,14 @@
 				84861D320ACD83F300C543D7 /* ORL4532Model.h in Headers */,
 				84861DAA0ACDA9B600C543D7 /* ORL4532Decoders.h in Headers */,
 				84F7F3CF0AE3F1A000A5AA4C /* OrcaPrecompiledHeader.h in Headers */,
-				84F7FB560AE555C600A5AA4C /* mysql.h in Headers */,
-				84F7FB5E0AE5566D00A5AA4C /* mysql_version.h in Headers */,
-				84F7FB5F0AE5566D00A5AA4C /* mysql_time.h in Headers */,
-				84F7FB600AE5566D00A5AA4C /* typelib.h in Headers */,
-				84F7FB610AE5566D00A5AA4C /* my_list.h in Headers */,
 				6B5EFA481C4D76AF00B9A80B /* ORMultiStateBox.h in Headers */,
-				84F7FB620AE5566D00A5AA4C /* mysql_com.h in Headers */,
-				84F7FB640AE5569100A5AA4C /* my_alloc.h in Headers */,
 				844BF49A0B1B85560047C9BF /* KatrinDetectorView.h in Headers */,
 				844384C80B273FB600A94E26 /* ORAdcInfoProviding.h in Headers */,
 				84E6FB230B2DDC6100CAA7C5 /* ObjectFactory.h in Headers */,
 				849B25EE0B2F34FA0007484F /* PrespectrometerController.h in Headers */,
 				842FCCC219784AAA00B89723 /* OREDSF130pModel.h in Headers */,
 				849B25F00B2F34FA0007484F /* PrespectrometerView.h in Headers */,
+				84EA917420FE5CC700110B85 /* my_command.h in Headers */,
 				849B25F20B2F34FA0007484F /* PrespectrometerModel.h in Headers */,
 				8461CB011CB2D8DB001E4044 /* ORPulseCheckModel.h in Headers */,
 				849B26D90B2F48490007484F /* ORDetectorSegment.h in Headers */,
@@ -15659,6 +15672,7 @@
 				849E7C9A0B6957BF00353D50 /* ORADU200Controller.h in Headers */,
 				849E7C9C0B6957BF00353D50 /* ORADU200Model.h in Headers */,
 				84AD4CD50BA232FF003C7ABE /* ORWindowListController.h in Headers */,
+				84EA917F20FE5D8700110B85 /* mysql_time.h in Headers */,
 				842538530BC6E006004C8065 /* ORHP6622aController.h in Headers */,
 				842538550BC6E006004C8065 /* ORHP6622aModel.h in Headers */,
 				842539FA0BCD7BFE004C8065 /* ORCARootService.h in Headers */,
@@ -15710,7 +15724,6 @@
 				84F46F490CA44255007EFADA /* ORIpeFLTDecoder.h in Headers */,
 				84F46F4B0CA44255007EFADA /* ORIpeFLTDefs.h in Headers */,
 				84F46F4C0CA44255007EFADA /* ORIpeFLTModel.h in Headers */,
-				84EA913F20FE2DDA00110B85 /* client_plugin.h in Headers */,
 				84F46F510CA44255007EFADA /* ORIpeSLTController.h in Headers */,
 				4AB9E5311DE5D820007C75E0 /* ORPQModel.h in Headers */,
 				84F46F530CA44255007EFADA /* ORIpeSLTDefs.h in Headers */,
@@ -15769,6 +15782,8 @@
 				842251360D8845390048D331 /* ORIpeV4SLTDecoder.h in Headers */,
 				842251380D8845390048D331 /* ORIpeV4SLTDefs.h in Headers */,
 				842251390D8845390048D331 /* ORIpeV4SLTModel.h in Headers */,
+				84EA917220FE5C9000110B85 /* mysql_com.h in Headers */,
+				84EA917A20FE5D0900110B85 /* udf_registration_types.h in Headers */,
 				8422513C0D8845390048D331 /* HW_Readout.h in Headers */,
 				8422513E0D8845390048D331 /* SLTv4_HW_Definitions.h in Headers */,
 				84FB4E230D92F7560055813E /* ORBugReporter.h in Headers */,
@@ -16333,6 +16348,7 @@
 				84F9098B1638383C00E9FD24 /* ORPulser33500Model.h in Headers */,
 				842BB6AA1639746300393470 /* ORPulser33500Chan.h in Headers */,
 				849951761D5CE50700A6FA40 /* ORMJDBiasWatcherController.h in Headers */,
+				84EA916A20FE5A6200110B85 /* mysql.h in Headers */,
 				842BB6C516397A2000393470 /* ORPulser33500ChanController.h in Headers */,
 				842BC974163ED4E300393470 /* ORGretina4MReadout.hh in Headers */,
 				CED38D1E165CDB6600358681 /* ANSIEscapeHelper.h in Headers */,
@@ -16468,7 +16484,6 @@
 			buildConfigurationList = 84F201BA0B6531990084F4C3 /* Build configuration list for PBXNativeTarget "Orca" */;
 			buildPhases = (
 				8434A185055B3287002D3102 /* Headers */,
-				8429B1C80B03B5140096045E /* ShellScript */,
 				CE6885F90D0CDEAD00FA4158 /* CopyFiles */,
 				EF37879012DFFE77003C814E /* Frameworks_Copy */,
 				8434A243055B3287002D3102 /* Resources */,
@@ -17511,20 +17526,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		8429B1C80B03B5140096045E /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			comments = "ranlib is needed to be run to make sure the archive ";
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cp Libraries/libUniversal/libmysqlclientRepo.a Libraries/libUniversal/libmysqlclient.a\n/usr/bin/ranlib Libraries/libUniversal/libmysqlclient.a\n";
-		};
 		8491DD760EB616630084BAD6 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -19164,6 +19165,7 @@
 					"$(PROJECT_DIR)/Libraries/libIntel",
 					"$(PROJECT_DIR)/Libraries/exodriver",
 					"$(PROJECT_DIR)/Libraries/libusb",
+					"$(PROJECT_DIR)/Libraries/libUniversal",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/Libraries/libUniversal\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/Libraries\"";
@@ -19242,6 +19244,7 @@
 					"$(PROJECT_DIR)/Libraries/libIntel",
 					"$(PROJECT_DIR)/Libraries/exodriver",
 					"$(PROJECT_DIR)/Libraries/libusb",
+					"$(PROJECT_DIR)/Libraries/libUniversal",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Libraries\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/Libraries/libUniversal\"";
@@ -19317,6 +19320,7 @@
 					"$(PROJECT_DIR)/Libraries/libIntel",
 					"$(PROJECT_DIR)/Libraries/exodriver",
 					"$(PROJECT_DIR)/Libraries/libusb",
+					"$(PROJECT_DIR)/Libraries/libUniversal",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Libraries\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/Libraries/libUniversal\"";
@@ -19436,6 +19440,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
 				SDKROOT = "";
 				STRIP_INSTALLED_PRODUCT = YES;
 			};
@@ -19480,6 +19485,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
 				SDKROOT = "";
 				STRIP_INSTALLED_PRODUCT = NO;
 			};

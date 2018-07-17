@@ -22,7 +22,7 @@
 
 #define SYSTEM_CLOCK_MHZ		40		//in MHz
 
-unsigned short Random_Set[8192];	/* Random indices used by TauFinder and BLCut */
+static unsigned short Random_Set[8192];	/* Random indices used by TauFinder and BLCut */
 
 double Tau_Finder(double Tau);
 double Tau_Fit(unsigned int* Trace, long kmin, long kmax, double dt);

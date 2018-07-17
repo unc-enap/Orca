@@ -50,7 +50,7 @@ enum {
 	kMCAMode					= 0x301
 };
 
-union {
+static union {
 	unsigned long asLong;
 	double asDouble;
 } packedDGF4LiveTime;

@@ -81,7 +81,7 @@
 // - in ORKatrinV4FLTDefs.h ipeFltHitRateDataStruct already was known from ORIpeV4FLTDefs.h
 // - in Interface Builder: File's Owner need to be changed to ORKatrinV4FLTModel (was ORIpeV4FLTModel)
 
-enum {
+static enum  {
     eInitializing,
     eSetThresholds,
     eIntegrating,
