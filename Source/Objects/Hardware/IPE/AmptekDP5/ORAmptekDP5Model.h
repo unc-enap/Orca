@@ -370,7 +370,7 @@ typedef struct{
     int slowCounter;
     int boardTemperature;
     int detectorTemperature;
-    int deviceID;
+    int deviceId;
     int FirmwareFPGAVersion;
     int serialNumber;
     
@@ -408,8 +408,8 @@ typedef struct{
 - (void) setFirmwareFPGAVersion:(int)aFirmwareFPGAVersion;
 - (int) detectorTemperature;
 - (void) setDetectorTemperature:(int)aDetectorTemperature;
-- (int) deviceID;
-- (void) setDeviceID:(int)aDeviceID;
+- (int) deviceId;
+- (void) setDeviceId:(int)aDeviceId;
 - (int) boardTemperature;
 - (void) setBoardTemperature:(int)aBoardTemperature;
 - (int) slowCounter;

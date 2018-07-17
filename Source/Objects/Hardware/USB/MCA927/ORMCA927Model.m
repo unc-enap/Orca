@@ -185,7 +185,7 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 		NSImage* i = [[NSImage alloc] initWithSize:theIconSize];
 		[i lockFocus];
 		
-        [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositeSourceOver fraction:1.0];		
+        [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];		
 		NSBezierPath* path = [NSBezierPath bezierPath];
 		[path moveToPoint:NSMakePoint(5,0)];
 		[path lineToPoint:NSMakePoint(20,20)];

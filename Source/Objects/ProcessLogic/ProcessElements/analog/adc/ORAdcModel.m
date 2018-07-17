@@ -507,7 +507,7 @@ NSString* ORSimpleInConnection   = @"ORSimpleInConnection";
 	NSSize theIconSize = [anImage size];
     NSImage* finalImage = [[NSImage alloc] initWithSize:theIconSize];
     [finalImage lockFocus];
-    [anImage drawAtPoint:NSZeroPoint fromRect:[anImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+    [anImage drawAtPoint:NSZeroPoint fromRect:[anImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
 
 	NSAttributedString* idLabel   = [self idLabelWithSize:9 color:[NSColor blackColor]];
 	NSAttributedString* iconValue = [self iconValueWithSize:9 color:[NSColor blackColor]];
@@ -618,7 +618,7 @@ NSString* ORSimpleInConnection   = @"ORSimpleInConnection";
 	
     NSImage* finalImage = [[NSImage alloc] initWithSize:theIconSize];
     [finalImage lockFocus];
-    [anImage drawAtPoint:NSZeroPoint fromRect:[anImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+    [anImage drawAtPoint:NSZeroPoint fromRect:[anImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
 	
 	float slope = (195. + 15.)/(minValue-maxValue);
 	float intercept = 195. - slope*minValue;
@@ -713,7 +713,7 @@ NSString* ORSimpleInConnection   = @"ORSimpleInConnection";
 	
     NSImage* finalImage = [[NSImage alloc] initWithSize:theIconSize];
     [finalImage lockFocus];
-    [anImage drawAtPoint:NSMakePoint(iconStart,0) fromRect:[anImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+    [anImage drawAtPoint:NSMakePoint(iconStart,0) fromRect:[anImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
 	if(!normalGradient){
 		CGFloat red   = 1.0;
 		CGFloat green = 1.0;
@@ -804,7 +804,7 @@ NSString* ORSimpleInConnection   = @"ORSimpleInConnection";
 	
     NSImage* finalImage = [[NSImage alloc] initWithSize:theIconSize];
     [finalImage lockFocus];
-    [anImage drawAtPoint:NSMakePoint(iconStart,0) fromRect:[anImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+    [anImage drawAtPoint:NSMakePoint(iconStart,0) fromRect:[anImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
 	if(iconValue){		
 		NSSize textSize = [iconValue size];
 		float x = iconStart + 10;
@@ -837,7 +837,7 @@ NSString* ORSimpleInConnection   = @"ORSimpleInConnection";
 	
     NSImage* finalImage = [[NSImage alloc] initWithSize:theIconSize];
     [finalImage lockFocus];
-    [anImage drawAtPoint:NSMakePoint(iconStart,0) fromRect:[anImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+    [anImage drawAtPoint:NSMakePoint(iconStart,0) fromRect:[anImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
 	if(!normalGradient){
 		CGFloat red   = 0.0;
 		CGFloat green = 1.0;

@@ -125,7 +125,7 @@ NSString*			ORGPIBBoardChangedNotification = @"ORGpibBoardChangedNotification";
     NSImage* aCachedImage = [NSImage imageNamed:@"GpibEnetBox"];
     NSImage* i = [[[NSImage alloc] initWithSize:[aCachedImage size]]autorelease];
     [i lockFocus];
-    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositeSourceOver fraction:1.0];    
+    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];    
     if(![self isEnabled]){
         NSBezierPath* path = [NSBezierPath bezierPath];
         [path moveToPoint:NSZeroPoint];

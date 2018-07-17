@@ -108,7 +108,7 @@
 
 	NSImage* finalImage = [[NSImage alloc] initWithSize:theIconSize];
 	[finalImage lockFocus];
-    [anImage drawAtPoint:NSMakePoint(iconStart,0) fromRect:[anImage imageRect] operation:NSCompositeSourceOver fraction:1.0];	
+    [anImage drawAtPoint:NSMakePoint(iconStart,0) fromRect:[anImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];	
 	if(idLabel){		
 		NSSize textSize = [idLabel size];
 		[idLabel drawInRect:NSMakeRect(iconStart-[idLabel size].width-1,theIconSize.height-textSize.height,textSize.width,textSize.height)];

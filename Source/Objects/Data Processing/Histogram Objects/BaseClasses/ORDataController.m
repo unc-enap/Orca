@@ -350,7 +350,7 @@ NSInteger windowSort(id w1, id w2, void *context) { return [[w2 title] compare:[
      [alert setInformativeText:@"Really Clear them? You will not be able to undo this."];
      [alert addButtonWithTitle:@"Yes/Clear Counts"];
      [alert addButtonWithTitle:@"Cancel"];
-     [alert setAlertStyle:NSWarningAlertStyle];
+     [alert setAlertStyle:NSAlertStyleWarning];
      
      [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){

@@ -157,7 +157,7 @@
     [alert setInformativeText:@"Really read the IP220 Values into this dialog. Current values will be lost!"];
     [alert addButtonWithTitle:@"Yes/Read"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){

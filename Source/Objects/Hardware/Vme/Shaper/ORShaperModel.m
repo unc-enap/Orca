@@ -184,7 +184,7 @@ NSString* ORShaperSettingsLock							= @"ORShaperSettingsLock";
     NSImage* aCachedImage = [NSImage imageNamed:@"ShaperCard"];
     NSImage* i = [[NSImage alloc] initWithSize:[aCachedImage size]];
     [i lockFocus];
-    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositeSourceOver fraction:1.0];	
+    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];	
     int chan;
     for(chan=0;chan<kNumShaperChannels;chan++){
 		NSBezierPath* circle = [NSBezierPath bezierPathWithOvalInRect:NSMakeRect(6,12+chan*12.5,7,7)];

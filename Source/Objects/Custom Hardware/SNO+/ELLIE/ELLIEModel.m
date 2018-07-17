@@ -714,7 +714,7 @@ NSString* ORSMELLIEEmergencyStop = @"ORSMELLIEEmergencyStop";
     @try{
         channelIndex = [[[self tellieFibreMapping] objectForKey:@"channels"] indexOfObject:[NSString stringWithFormat:@"%d",(int)channel]];
     }@catch(NSException* e) {
-        channelIndex = [[[self tellieFibreMapping] objectForKey:@"channels"] indexOfObject:(int)channel];
+        channelIndex = [[[self tellieFibreMapping] objectForKey:@"channels"] indexOfObject:[NSString stringWithFormat:@"%d",(int)channel]];
     }
     NSString* fibre = [[[self tellieFibreMapping] objectForKey:@"fibres"] objectAtIndex:channelIndex];
     return fibre;

@@ -460,7 +460,7 @@
     [alert setInformativeText:@"This will read the values that are in the hardware unit and put those values into the dialog.\n\nReally do this?"];
     [alert addButtonWithTitle:@"Yes/Do It"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){
@@ -552,7 +552,7 @@
     [alert setInformativeText:@"This will zero the display.\n\nReally do this?"];
     [alert addButtonWithTitle:@"YES/Do it"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){
@@ -590,7 +590,7 @@
     [alert setInformativeText:@"This will make the current value the full scale value.\n\nReally do this?"];
     [alert addButtonWithTitle:@"YES/Do it"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){

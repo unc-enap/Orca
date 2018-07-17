@@ -325,7 +325,7 @@
     [alert setInformativeText:fpdOnlyMode?@"This will re-enable veto channels to the state they were before.":@"This will disable ALL Veto channels. The current state will be saved until ORCA quits."];
     [alert addButtonWithTitle:@"Yes,Do It"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){

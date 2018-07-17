@@ -3,7 +3,7 @@
 //  Orca
 //
 //  Created by Mark Howe on Fri Oct 22, 2004.
-//  Copyright © 2002 CENPA, University of Washington. All rights reserved.
+//  Copyright ï¿½ 2002 CENPA, University of Washington. All rights reserved.
 //-----------------------------------------------------------
 //This program was prepared for the Regents of the University of 
 //Washington at the Center for Experimental Nuclear Physics and 
@@ -74,19 +74,19 @@
 		
         //do a Shadow
         [self lockFocus];
-        [shadowImage drawAtPoint:NSZeroPoint fromRect:[shadowImage imageRect] operation:NSCompositeCopy fraction:.7];
+        [shadowImage drawAtPoint:NSZeroPoint fromRect:[shadowImage imageRect] operation:NSCompositingOperationCopy fraction:.7];
         [self unlockFocus];        
         
         //set up the color mask (tint it, then composite it)
         [newColorMaskImage lockFocus];
         [aColor set];
-        NSRectFillUsingOperation(colorMaskBounds, NSCompositeSourceAtop);
+        NSRectFillUsingOperation(colorMaskBounds, NSCompositingOperationSourceAtop);
         [newColorMaskImage unlockFocus];
         [self lockFocus];
-        [newColorMaskImage drawAtPoint:NSZeroPoint fromRect:[newColorMaskImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+        [newColorMaskImage drawAtPoint:NSZeroPoint fromRect:[newColorMaskImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
         
         // setup the refraction mask
-        [refractionMaskImage drawAtPoint:NSZeroPoint fromRect:[refractionMaskImage imageRect] operation:NSCompositeSourceOver fraction:1.0];         
+        [refractionMaskImage drawAtPoint:NSZeroPoint fromRect:[refractionMaskImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];         
         [self unlockFocus];
         [newColorMaskImage release];
     }

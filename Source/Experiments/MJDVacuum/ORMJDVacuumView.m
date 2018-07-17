@@ -80,7 +80,7 @@
 - (void) keyDown:(NSEvent*)theEvent
 {
 	unsigned short keyCode = [theEvent keyCode];
-    BOOL cmdKeyDown   = ([theEvent modifierFlags] & NSCommandKeyMask)!=0;
+    BOOL cmdKeyDown   = ([theEvent modifierFlags] & NSEventModifierFlagCommand)!=0;
 	if(cmdKeyDown && keyCode == 5){ //'g'
 		[delegate toggleGrid];
 		[self setNeedsDisplay:YES];
@@ -95,7 +95,7 @@
 	
 	NSImage* stringsImage = [NSImage imageNamed:@"MJDStrings"];
 	NSPoint aPoint = NSMakePoint(615,445);
-	[stringsImage drawAtPoint:aPoint fromRect:[stringsImage imageRect] operation:NSCompositeSourceOver fraction:1.0];	
+	[stringsImage drawAtPoint:aPoint fromRect:[stringsImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];	
 	if([[delegate model] detectorsBiased]){
 		if(!biasPath){ 
 			biasPath = [[NSBezierPath bezierPath] retain];

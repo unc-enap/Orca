@@ -64,15 +64,15 @@
         [NSBezierPath setDefaultLineWidth:.5];
 
         //draw the flat top counter
-        [bugImage drawAtPoint:NSMakePoint( postRisingEdgeBugX-kBugPad/2.,b.size.height) fromRect:[bugImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+        [bugImage drawAtPoint:NSMakePoint( postRisingEdgeBugX-kBugPad/2.,b.size.height) fromRect:[bugImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
         [NSBezierPath strokeLineFromPoint:NSMakePoint(postRisingEdgeBugX,0) toPoint:NSMakePoint(postRisingEdgeBugX,b.size.height)];
         
         //draw the post rising edge counter
-        [bugImage drawAtPoint:NSMakePoint( risingEdgeBugX-kBugPad/2.,b.size.height) fromRect:[bugImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+        [bugImage drawAtPoint:NSMakePoint( risingEdgeBugX-kBugPad/2.,b.size.height) fromRect:[bugImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
         [NSBezierPath strokeLineFromPoint:NSMakePoint(risingEdgeBugX,0) toPoint:NSMakePoint(risingEdgeBugX,b.size.height)];
      
         //draw the pre rising edge counter
-        [bugImage drawAtPoint:NSMakePoint( preRisingEdgeBugX-kBugPad/2.,b.size.height) fromRect:[bugImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+        [bugImage drawAtPoint:NSMakePoint( preRisingEdgeBugX-kBugPad/2.,b.size.height) fromRect:[bugImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
         [NSBezierPath strokeLineFromPoint:NSMakePoint(preRisingEdgeBugX,0) toPoint:NSMakePoint(preRisingEdgeBugX,b.size.height)];
 
         [NSBezierPath setDefaultLineWidth:2.];
@@ -242,7 +242,7 @@
 #pragma mark ¥¥¥Archival
 - (void) mouseDown:(NSEvent*)event
 {
-    optionKeyDown = ([event modifierFlags] & NSAlternateKeyMask)!=0;
+    optionKeyDown = ([event modifierFlags] & NSEventModifierFlagOption)!=0;
 
 	[[self undoManager] disableUndoRegistration];
     NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];

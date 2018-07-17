@@ -116,28 +116,28 @@
     NSRect frame = [self bounds];
     NSRect sourceRect = NSMakeRect(0,0,[goLight size].width,[goLight size].height);
     if(state == kStoppedLight){
-        [stopLight      drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositeSourceOver fraction:1];
+        [stopLight      drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositingOperationSourceOver fraction:1];
     }
     else {
-        [offLight      drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositeSourceOver fraction:1];
+        [offLight      drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositingOperationSourceOver fraction:1];
     }
     
     if(!hideCautionLight){
         frame.origin.y += 35;
         if(state == kCautionLight){
-            [cautionLight drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositeSourceOver fraction:1];
+            [cautionLight drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositingOperationSourceOver fraction:1];
         }
         else {
-            [offLight      drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositeSourceOver fraction:1];
+            [offLight      drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositingOperationSourceOver fraction:1];
         }
     }
     
     frame.origin.y += 35;
     if(state == kGoLight){
-        [goLight drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositeSourceOver fraction:1];
+        [goLight drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositingOperationSourceOver fraction:1];
     }
     else {
-        [offLight      drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositeSourceOver fraction:1];
+        [offLight      drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositingOperationSourceOver fraction:1];
     }
 }
 

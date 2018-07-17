@@ -188,21 +188,21 @@ NSString* ORTimeRoiCurveFitChanged = @"ORTimeRoiCurveFitChanged";
 	gate1 = (int)minChannel;
 	gate2 = (int)maxChannel;
 	NSEventModifierFlags modifierKeys = [theEvent modifierFlags];
-	if((modifierKeys & NSCommandKeyMask) != NSCommandKeyMask){
+	if((modifierKeys & NSEventModifierFlagCommand) != NSEventModifierFlagCommand){
 		
 		NSPoint p = [aPlotter convertPoint:[theEvent locationInWindow] fromView:nil];
 		ORAxis* xScale = [aPlotter xScale];
 		int mouseChan = floor([xScale convertPoint:p.x]+.5);
 		startChan = mouseChan;
 		
-		if(([theEvent modifierFlags] & NSAlternateKeyMask) || (gate1 == 0 && gate2 == 0)){
+		if(([theEvent modifierFlags] & NSEventModifierFlagOption) || (gate1 == 0 && gate2 == 0)){
 			dragType = kInitialDrag;
 			gate1 = mouseChan;
 			gate2 = gate1;
 			[self setMinChannel:MIN(gate1,gate2)];
 			[self setMaxChannel:MAX(gate1,gate2)];
 		}
-		else if(!([theEvent modifierFlags] & NSCommandKeyMask)){
+		else if(!([theEvent modifierFlags] & NSEventModifierFlagCommand)){
 			if(fabs([xScale getPixAbs:startChan]-[xScale getPixAbs:[self minChannel]])<3){
 				dragType = kMinDrag;
 				gate1 = (int)[self maxChannel];
@@ -218,7 +218,7 @@ NSString* ORTimeRoiCurveFitChanged = @"ORTimeRoiCurveFitChanged";
 			}
 			else dragType = kNoDrag;
 		}
-		else if(([theEvent modifierFlags] & NSCommandKeyMask) &&
+		else if(([theEvent modifierFlags] & NSEventModifierFlagCommand) &&
 				([xScale getPixAbs:startChan]>=[xScale getPixAbs:[self minChannel]] && [xScale getPixAbs:startChan]<=[xScale getPixAbs:[self maxChannel]])){
 			dragType = kCenterDrag;
 		}

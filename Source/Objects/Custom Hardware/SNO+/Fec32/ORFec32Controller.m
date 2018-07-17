@@ -89,25 +89,25 @@
 		[[thresholds0LabelsMatrix cellAtRow:i column:0] setTextColor:[NSColor grayColor]];
 		[[thresholds1LabelsMatrix cellAtRow:i column:0] setIntValue:i+16];
 		[[thresholds1LabelsMatrix cellAtRow:i column:0] setTextColor:[NSColor grayColor]];
-		[[thresholds0Matrix cellAtRow:i column:0] setAlignment:NSRightTextAlignment];
-		[[thresholds1Matrix cellAtRow:i column:0] setAlignment:NSRightTextAlignment];
+		[[thresholds0Matrix cellAtRow:i column:0] setAlignment:NSTextAlignmentRight];
+		[[thresholds1Matrix cellAtRow:i column:0] setAlignment:NSTextAlignmentRight];
 		
 		
 		[[vb0LabelsMatrix cellAtRow:i column:0] setIntValue:i];
 		[[vb0LabelsMatrix cellAtRow:i column:0] setTextColor:[NSColor grayColor]];
 		[[vb1LabelsMatrix cellAtRow:i column:0] setIntValue:i+16];
 		[[vb1LabelsMatrix cellAtRow:i column:0] setTextColor:[NSColor grayColor]];
-		[[vb0HMatrix cellAtRow:i column:0] setAlignment:NSRightTextAlignment];
-		[[vb0LMatrix cellAtRow:i column:0] setAlignment:NSRightTextAlignment];
-		[[vb1HMatrix cellAtRow:i column:0] setAlignment:NSRightTextAlignment];
-		[[vb1LMatrix cellAtRow:i column:0] setAlignment:NSRightTextAlignment];
+		[[vb0HMatrix cellAtRow:i column:0] setAlignment:NSTextAlignmentRight];
+		[[vb0LMatrix cellAtRow:i column:0] setAlignment:NSTextAlignmentRight];
+		[[vb1HMatrix cellAtRow:i column:0] setAlignment:NSTextAlignmentRight];
+		[[vb1LMatrix cellAtRow:i column:0] setAlignment:NSTextAlignmentRight];
 		
 		[[cmosRates0LabelsMatrix cellAtRow:i column:0] setIntValue:i];
 		[[cmosRates0LabelsMatrix cellAtRow:i column:0] setTextColor:[NSColor grayColor]];
 		[[cmosRates1LabelsMatrix cellAtRow:i column:0] setIntValue:i+16];
 		[[cmosRates1LabelsMatrix cellAtRow:i column:0] setTextColor:[NSColor grayColor]];
-		[[cmosRates0Matrix cellAtRow:i column:0] setAlignment:NSRightTextAlignment];
-		[[cmosRates1Matrix cellAtRow:i column:0] setAlignment:NSRightTextAlignment];
+		[[cmosRates0Matrix cellAtRow:i column:0] setAlignment:NSTextAlignmentRight];
+		[[cmosRates1Matrix cellAtRow:i column:0] setAlignment:NSTextAlignmentRight];
 	}
     
     for(i=0;i<16;i++){
@@ -764,7 +764,7 @@
     
     NSInteger channel = [sender selectedRow]+offset;
     NSInteger col     = [sender selectedColumn];
-    BOOL cmdKeyDown = ([[NSApp currentEvent] modifierFlags] & NSCommandKeyMask) != 0;
+    BOOL cmdKeyDown = ([[NSApp currentEvent] modifierFlags] & NSEventModifierFlagCommand) != 0;
     
     if(cmdKeyDown)[[model undoManager] disableUndoRegistration];
     switch (col){

@@ -723,7 +723,7 @@
 {
     short i;
     for(i=0;i<kNumSIS3316Groups;i++){
-        [[internalGateLengthMatrix cellWithTag:i] setIntegrValue:[model internalGateLen:i]];
+        [[internalGateLengthMatrix cellWithTag:i] setIntegerValue:[model internalGateLen:i]];
     }
 }
 

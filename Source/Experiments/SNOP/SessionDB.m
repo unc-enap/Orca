@@ -171,7 +171,7 @@ sessionKey = _sessionKey;
     [alert addButtonWithTitle:@"Retry Now"];
     [alert addButtonWithTitle:@"Ignore Locking"];
     [alert setInformativeText:@"Unable to obtain exclusive lock. (Is another copy of Orca running?)\n\nWaiting to acquire lock..."];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
 
     /* A timer to check the lock every 5 seconds, and close the window/proceed if we can obtain it. */
     NSTimer* dbModalTimer = [NSTimer scheduledTimerWithTimeInterval : 5
@@ -321,7 +321,7 @@ sessionKey = _sessionKey;
     [alert addButtonWithTitle:@"Quit Orca"];
     [alert addButtonWithTitle:@"Start Anyway"];
     [alert setInformativeText:text];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
 
     /* Launch the modal. */
     [[NSRunningApplication currentApplication] activateWithOptions:NSApplicationActivateIgnoringOtherApps];

@@ -73,9 +73,9 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(VXI11HardwareFinderController);
 
 - (void) _releaseCreatedObjects
 {
-    int i;
+    NSInteger i;
     for (i=0; i<[createdObjects count]; i++) {
-        [(id)[[createdObjects objectAtIndex:i] intValue] release];
+        [[createdObjects objectAtIndex:i] release];
     }
     [self _setCreatedObjects:nil];
 }

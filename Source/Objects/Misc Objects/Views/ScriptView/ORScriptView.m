@@ -108,7 +108,7 @@
             NSEventType     eventType = [event type];
             NSTimeInterval eventTime  = [event timestamp];
             
-            if (eventType == NSLeftMouseDown) {
+            if (eventType == NSEventTypeLeftMouseDown) {
                 // This is the mouseDown of the double-click; we do not want
                 // to modify the selection here, just log the time
                 doubleDownTime = eventTime;

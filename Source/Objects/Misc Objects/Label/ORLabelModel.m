@@ -447,7 +447,7 @@ NSString* ORLabelModelFormatChanged				 = @"ORLabelModelFormatChanged";
 - (void) doCntrlClick:(NSView*)aView
 {
 	NSEvent* theCurrentEvent = [NSApp currentEvent];
-    NSEvent *event =  [NSEvent mouseEventWithType:NSLeftMouseDown
+    NSEvent *event =  [NSEvent mouseEventWithType:NSEventTypeLeftMouseDown
                                          location:[theCurrentEvent locationInWindow]
                                     modifierFlags:NSEventModifierFlagControl // 0x100
                                         timestamp:(NSTimeInterval)0

@@ -58,16 +58,16 @@
     [tabView selectTabViewItemAtIndex: index];
 	
 	
-    [[[valueTable1 tableColumnWithIdentifier:k320ChannelReadEnabled ]dataCell]setControlSize:NSSmallControlSize];
-    [[[valueTable2 tableColumnWithIdentifier:k320ChannelReadEnabled ]dataCell]setControlSize:NSSmallControlSize];
+    [[[valueTable1 tableColumnWithIdentifier:k320ChannelReadEnabled ]dataCell]setControlSize:NSControlSizeSmall];
+    [[[valueTable2 tableColumnWithIdentifier:k320ChannelReadEnabled ]dataCell]setControlSize:NSControlSizeSmall];
 	
 	
-    [[[alarmTable1 tableColumnWithIdentifier:k320ChannelAlarmEnabled ]dataCell]setControlSize:NSSmallControlSize];
-    [[[alarmTable2 tableColumnWithIdentifier:k320ChannelAlarmEnabled ]dataCell]setControlSize:NSSmallControlSize];
+    [[[alarmTable1 tableColumnWithIdentifier:k320ChannelAlarmEnabled ]dataCell]setControlSize:NSControlSizeSmall];
+    [[[alarmTable2 tableColumnWithIdentifier:k320ChannelAlarmEnabled ]dataCell]setControlSize:NSControlSizeSmall];
 	
     
-    [[[calibrationTable1 tableColumnWithIdentifier:k320ChannelGain ]dataCell]setControlSize:NSSmallControlSize];
-    [[[calibrationTable2 tableColumnWithIdentifier:k320ChannelGain ]dataCell]setControlSize:NSSmallControlSize];
+    [[[calibrationTable1 tableColumnWithIdentifier:k320ChannelGain ]dataCell]setControlSize:NSControlSizeSmall];
+    [[[calibrationTable2 tableColumnWithIdentifier:k320ChannelGain ]dataCell]setControlSize:NSControlSizeSmall];
     [[[calibrationTable1 tableColumnWithIdentifier:k320ChannelGain ]dataCell]setFont:[NSFont systemFontOfSize:10]];
     [[[calibrationTable2 tableColumnWithIdentifier:k320ChannelGain ]dataCell]setFont:[NSFont systemFontOfSize:10]];
     

@@ -720,11 +720,11 @@
 {
 	if(![aNote userInfo]){
 		short i;
-		for(i=0;i<kNumSIS3320Groups;i++)[[endAddressThresholdMatrix cellWithTag:i] setIntValue:[model endAddressThreshold:i]];
+		for(i=0;i<kNumSIS3320Groups;i++)[[endAddressThresholdMatrix cellWithTag:i] setIntegerValue:[model endAddressThreshold:i]];
 	}
 	else {
 		int i = [[[aNote userInfo] objectForKey:@"Channel"] intValue];
-		[[endAddressThresholdMatrix cellWithTag:i] setIntValue:[model endAddressThreshold:i]];
+		[[endAddressThresholdMatrix cellWithTag:i] setIntegerValue:[model endAddressThreshold:i]];
 	}
 }
 
@@ -906,7 +906,7 @@
 
 - (void) baseAddressChanged:(NSNotification*)aNote
 {
-    [addressText setIntValue: [model baseAddress]];
+    [addressText setIntegerValue: [model baseAddress]];
 }
 
 - (void) integrationChanged:(NSNotification*)aNotification
@@ -1079,14 +1079,14 @@
 
 - (IBAction) dacValueAction:(id)sender
 {
-    if([sender intValue] != [model dacValue:[[sender selectedCell] tag]]){
+    if([sender intValue] != [model dacValue:(int)[[sender selectedCell] tag]]){
 		[model setDacValue:(int)[[sender selectedCell] tag] withValue:[sender intValue]];
 	}
 }
 
 - (IBAction) triggerModeAction:(id)sender
 {
-    [model setTriggerMode:[sender selectedRow] withValue:[[sender selectedCell] indexOfSelectedItem]];
+    [model setTriggerMode:(int)[sender selectedRow] withValue:[[sender selectedCell] indexOfSelectedItem]];
 }
 
 - (IBAction) triggerGateLengthAction:(id)sender

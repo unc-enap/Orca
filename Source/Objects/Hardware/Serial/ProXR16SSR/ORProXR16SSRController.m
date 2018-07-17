@@ -258,10 +258,10 @@
 	for(i=0;i<8;i++){
 		BOOL state = stateMask & (1<<i);
 		if(state){
-			[onLight drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositeSourceOver fraction:1];
+			[onLight drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositingOperationSourceOver fraction:1];
 		}
 		else {
-			[offLight drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositeSourceOver fraction:1];
+			[offLight drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositingOperationSourceOver fraction:1];
 		}
 		frame.origin.x += 34;
 	}
@@ -287,10 +287,10 @@
 	for(i=0;i<8;i++){
 		BOOL state = stateMask & (1<<i);
 		if(state){
-			[onLight drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositeSourceOver fraction:1];
+			[onLight drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositingOperationSourceOver fraction:1];
 		}
 		else {
-			[offLight drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositeSourceOver fraction:1];
+			[offLight drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositingOperationSourceOver fraction:1];
 		}
 		frame.origin.x += 5;
 	}

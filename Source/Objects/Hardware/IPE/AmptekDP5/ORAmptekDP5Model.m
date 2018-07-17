@@ -299,7 +299,7 @@ void* receiveFromDataReplyServerThreadFunctionXXX (void* p)
     const int maxSizeOfReadbuffer=4096*2;
     char readBuffer[maxSizeOfReadbuffer];
 	
-	int retval=-1;
+	ssize_t retval=-1;
 	
 	
 	int64_t l=0;
@@ -474,7 +474,7 @@ void* receiveFromDataReplyServerThreadFunctionXXX (void* p)
                 counterStatusPacket=dataReplyThreadData->numStatusPackets[*wrIndex];
                 if((counterStatusPacket < kMaxNumUDPStatusPackets) && (retval<1500)){
                     memcpy(&(dataReplyThreadData->statusBuf[*wrIndex][counterStatusPacket]), readBuffer, retval);
-                    dataReplyThreadData->statusBufSize[*wrIndex][counterStatusPacket]=retval;
+                    dataReplyThreadData->statusBufSize[*wrIndex][counterStatusPacket]=(int)retval;
                     dataReplyThreadData->numStatusPackets[*wrIndex]++;
                 }else{
                     //the buffer is full, skip succeeding packets (show a warning?) -tb-
@@ -545,7 +545,7 @@ void* receiveFromDataReplyServerThreadFunctionXXX (void* p)
  	         		    //NSLog(@"ERROR: received packet %i at least twice!!!!!!\n", index);
                     }
                     memcpy(dataReplyThreadData->adcBuf[*wrIndex][index], readBuffer, size);//copy UDP packet with header
-                    dataReplyThreadData->adcBufSize[*wrIndex][index]=size;
+                    dataReplyThreadData->adcBufSize[*wrIndex][index]=(int)size;
                     if(debugCounter<2 && index <2){
                         NSLog(@"copy   packet with index %i num %i TS %i (size %i (%i))\n", index, adc16ptr[0],adc16ptr[1], size, dataReplyThreadData->adcBufSize[*wrIndex][index]);
                     }
@@ -698,7 +698,7 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
 //    crateUDPDataIP = @"192.168.1.100";
 //    crateUDPDataReplyPort = 12345;
 	
-    deviceID = -1;
+    deviceId = -1;
     
     minValue[0]=-128.0; maxValue[0]=128.0; lowLimit[0]=0.0; hiLimit[0]=80.0;
     minValue[1]=0.0;    maxValue[1]=300.0; lowLimit[1]=0.0; hiLimit[1]=280.0;
@@ -878,14 +878,14 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORAmptekDP5ModelDetectorTemperatureChanged object:self];
 }
 
-- (int) deviceID
+- (int) deviceId
 {
-    return deviceID;
+    return deviceId;
 }
 
-- (void) setDeviceID:(int)aDeviceID
+- (void) setDeviceId:(int)aDeviceId
 {
-    deviceID = aDeviceID;
+    deviceId = aDeviceId;
 
     [[NSNotificationCenter defaultCenter] postNotificationName:ORAmptekDP5ModelDeviceIDChanged object:self];
 }
@@ -919,7 +919,7 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
 
 - (int) commandQueueCount
 {
-    return [cmdQueue count];
+    return (int)[cmdQueue count];
 }
 
 - (ORSafeQueue*) commandQueue
@@ -990,7 +990,7 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
 - (int) commandTableCount
 {
     if(!commandTable) return 0;
-	return [commandTable count];
+	return (int)[commandTable count];
 }
 
 
@@ -1023,7 +1023,7 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
 
 - (int) setCommandTableItem:(NSString*)itemName setObject:(id)object forKey:(NSString*)key
 {
-    int retval=0, num=[commandTable count];
+    int retval=0, num=(int)[commandTable count];
     int i;
     for(i=0;i<num;i++){
         NSMutableDictionary* line = [commandTable objectAtIndex:i];
@@ -1039,7 +1039,7 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
 
 - (int) setCommandTableRow:(int)row setObject:(id)object forKey:(NSString*)key
 {
-    int num=[commandTable count];
+    int num=(int)[commandTable count];
 
     if(row >= 0 && row<num){
         NSMutableDictionary* line = [commandTable objectAtIndex:row];
@@ -1074,18 +1074,18 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
 
     NSArray *csvtable = [myString csvRows];
 	if(!csvtable) return FALSE;
-	int nlines = [csvtable count];
+	int nlines = (int)[csvtable count];
 	//if(csvtable) NSLog(@"csvtable (%i lines) >>>%@<<<\n", nlines, csvtable);//TODO: enable with debug output setting??? -tb-
 	if(nlines<=1) return FALSE;
 	
 	int indexName, indexSetpoint, indexValue, indexInit, indexComment, indexId;
 	NSArray *colnames = [csvtable objectAtIndex: 0];
-	indexName = [colnames indexOfObject: @"Name"];
-	indexSetpoint = [colnames indexOfObject: @"Setpoint"];
-	indexValue = [colnames indexOfObject: @"Value"];
-	indexInit = [colnames indexOfObject: @"Init"];
-	indexComment = [colnames indexOfObject: @"Comment"];
-	indexId = [colnames indexOfObject: @"ID"];
+	indexName = (int)[colnames indexOfObject: @"Name"];
+	indexSetpoint = (int)[colnames indexOfObject: @"Setpoint"];
+	indexValue = (int)[colnames indexOfObject: @"Value"];
+	indexInit = (int)[colnames indexOfObject: @"Init"];
+	indexComment = (int)[colnames indexOfObject: @"Comment"];
+	indexId = (int)[colnames indexOfObject: @"ID"];
 	
 	
     //DEBUG
@@ -1175,7 +1175,7 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
 {
     //DEBUG        	NSLog(@"Called: %@::%@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: debug output -tb-
         
-    int num = [commandTable count];
+    int num = (int)[commandTable count];
     //DEBUG            NSLog(@"Called %@::%@ items in list: %i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),num);//TODO: DEBUG -tb-
         
 	NSMutableString *csvtableString = [NSMutableString stringWithString: @"Name,Setpoint,Value,Init,Comment,ID\n"];
@@ -1214,7 +1214,7 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
 {
         //DEBUG        	NSLog(@"Called: %@::%@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: debug output -tb-
         
-    int num = [commandTable count];
+    int num = (int)[commandTable count];
     //DEBUG            NSLog(@"Called %@::%@ items in list: %i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),num);//TODO: DEBUG -tb-
         
 	NSMutableString *csvtableString = [NSMutableString stringWithString: @"Name,Setpoint,Value,Init,Comment,ID\n"];
@@ -2477,7 +2477,7 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
     const int maxSizeOfReadbuffer=MAXDP5PACKETLENGTH *2;//was 4096 * 2; //typically MAXDP5PACKETLENGTH=32775
     unsigned char readBuffer[maxSizeOfReadbuffer];
 
-	int retval=-1;
+	ssize_t retval=-1;
     sockaddr_fromLength = sizeof(sockaddr_from);
     //while( (retval = recvfrom(MY_UDP_SERVER_SOCKET, (char*)InBuffer,sizeof(InBuffer) , MSG_DONTWAIT,(struct sockaddr *) &servaddr, &AddrLength)) >0 ){
     //retval = recvfrom(UDP_REPLY_SERVER_SOCKET, readBuffer, maxSizeOfReadbuffer, MSG_DONTWAIT,(struct sockaddr *) &sockaddr_from, &sockaddr_fromLength);
@@ -2491,7 +2491,7 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
         if(loopCounter%1000 == 0) NSLog(@"loopCounter %i \n",loopCounter);
         retval = recvfrom(UDP_COMMAND_CLIENT_SOCKET, readBuffer, maxSizeOfReadbuffer, MSG_DONTWAIT,(struct sockaddr *) &sockaddr_from, &sockaddr_fromLength);
 	    if(retval>=0){
-	        if(DEBUG_SPECTRUM_READOUT) printf("recvfromGlobalServer retval:  %i (bytes), maxSize %i, from IP %s\n",retval,maxSizeOfReadbuffer,inet_ntoa(sockaddr_from.sin_addr));
+	        if(DEBUG_SPECTRUM_READOUT) printf("recvfromGlobalServer retval:  %ld (bytes), maxSize %i, from IP %s\n",retval,maxSizeOfReadbuffer,inet_ntoa(sockaddr_from.sin_addr));
             //DEBUG 	    NSLog(@"loopCounter %i \n",loopCounter);
 			//printf("Got UDP data from %s\n", inet_ntoa(sockaddr_from.sin_addr));
 			//NSLog(@"Got UDP data from %s\n", inet_ntoa(sockaddr_from.sin_addr));
@@ -2555,7 +2555,7 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
     if(!waitForResponse) delayTime = 0.1; //TODO: could even be 1.0 or larger ... -tb-
 	if(	[self isListeningOnServerSocket]) [self performSelector:@selector(receiveFromReplyServer) withObject:nil afterDelay: delayTime];
     
-    return retval;
+    return (int)retval;
     
     
         #if 0
@@ -2830,7 +2830,7 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
             //NSLog(@"    kRealtimeOffset: %i  degree celsius  (0x%08x)\n",var8signed,var8signed);
             
             var8signed =*( (int8_t*) (&(dp5Packet[statusOffset + kDeviceIDOffset])) );
-            [self setDeviceID: var8signed];
+            [self setDeviceId: var8signed];
             //if(DEBUG_SPECTRUM_READOUT) 
             //NSLog(@"    kDeviceIDOffset: %i     (0x%08x)\n",var8signed,var8signed);
             
@@ -2859,7 +2859,7 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
         
         //ship the packet 
         uint32_t data[8400];
-        uint32_t location = [self uniqueIdNumber];
+        uint32_t location = (uint32_t)[self uniqueIdNumber];
         uint32_t infoFlags = 0;
         uint32_t acqtime = 0;
         uint32_t realtime = 0;
@@ -2880,11 +2880,11 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
             //timing
             gettimeofday(&t,NULL);
         
-			data[0] = spectrumEventId | (length32); 
+			data[0] = (uint32_t)spectrumEventId | (length32);
 			data[1] = location;    //called "deviceID" in the ROOT file
             //data[2] = ut_time;	   //sec
-            data[2] = t.tv_sec;	   //sec
-			data[3] = t.tv_usec;   //subsec
+            data[2] = (uint32_t)t.tv_sec;	   //sec
+			data[3] = (uint32_t)t.tv_usec;   //subsec
 			data[4] = specLength;  //spectrum length
 			data[5] = hasStatus;   //additional info
 			data[6] = acqtime;	
@@ -3180,7 +3180,7 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
         NSLog(@"Called %@::%@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: DEBUG -tb-
 
 
-    int num = [commandTable count];
+    int num = (int)[commandTable count];
     //DEBUG    
         NSLog(@"Called %@::%@ items in list: %i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),num);//TODO: DEBUG -tb-
         
@@ -3210,7 +3210,7 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
     NSString *responseString = [NSString stringWithUTF8String: (char*) &(dp5Packet[6]) ];//0-terminated char string
     
     NSArray *commands = [responseString componentsSeparatedByString: @";"];
-    num = [commands count];
+    num = (int)[commands count];
     //DEBUG
         NSLog(@"Called %@::%@  response is:%@\n  commands:%@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),responseString,commands);//TODO: DEBUG -tb-
     
@@ -3238,7 +3238,7 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
         NSLog(@"%@::%@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: DEBUG -tb-
 
 
-    int num = [commandTable count];
+    int num = (int)[commandTable count];
     //DEBUG    
         NSLog(@"Called %@::%@ items in list: %i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),num);//TODO: DEBUG -tb-
         
@@ -3265,7 +3265,7 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
     //DEBUG            NSLog(@"%@::%@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: DEBUG -tb-
 
 
-    int num = [commandTable count], count=0;
+    int num = (int)[commandTable count], count=0;
     //DEBUG            NSLog(@"Called %@::%@ items in list: %i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),num);//TODO: DEBUG -tb-
         
     NSMutableString *stringCommand = [[[NSMutableString alloc] initWithCapacity:100]autorelease];
@@ -3297,7 +3297,7 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
         NSLog(@"Called %@::%@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: DEBUG -tb-
 
 
-    int num = [commandTable count];
+    int num = (int)[commandTable count];
     //DEBUG    
         NSLog(@"Called %@::%@ items in list: %i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),num);//TODO: DEBUG -tb-
         
@@ -3321,7 +3321,7 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
         NSLog(@"%@::%@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: DEBUG -tb-
 
 
-    int num = [commandTable count];
+    int num = (int)[commandTable count];
     //DEBUG    
         NSLog(@"Called %@::%@ items in list: %i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),num);//TODO: DEBUG -tb-
         
@@ -3494,7 +3494,7 @@ commands:
 	size_t length        = [aString lengthOfBytesUsingEncoding: NSASCIIStringEncoding];
 	const char* receiverIPAddr = [crateUDPCommandIP cStringUsingEncoding: NSASCIIStringEncoding];;
 
-	int retval=0;
+	ssize_t retval=0;
 	
   //	if(port==0) port = GLOBAL_UDP_CLIENT_PORT;//use default port
 	
@@ -3511,7 +3511,7 @@ commands:
     //TODO: only recommended when using a char buffer ...  ((char*)buffer)[length]=0;    fprintf(stderr, "    sendtoGlobalClient3: %s\n",buffer); //DEBUG
 	
 	retval = sendto(UDP_COMMAND_CLIENT_SOCKET, buffer, length, 0 /*flags*/, (struct sockaddr *)&UDP_COMMAND_sockaddrin_to, sockaddrin_to_len);
-    return retval;
+    return (int)retval;
 
 }
 
@@ -3531,7 +3531,7 @@ commands:
 	size_t length        = aLength;
 	const char* receiverIPAddr = [crateUDPCommandIP cStringUsingEncoding: NSASCIIStringEncoding];;
 
-	int retval=0;
+	ssize_t retval=0;
 	
   //	if(port==0) port = GLOBAL_UDP_CLIENT_PORT;//use default port
 	
@@ -3548,7 +3548,7 @@ commands:
     //TODO: only recommended when using a char buffer ...  ((char*)buffer)[length]=0;    fprintf(stderr, "    sendtoGlobalClient3: %s\n",buffer); //DEBUG
 	
 	retval = sendto(UDP_COMMAND_CLIENT_SOCKET, buffer, length, 0 /*flags*/, (struct sockaddr *)&UDP_COMMAND_sockaddrin_to, sockaddrin_to_len);
-    return retval;
+    return (int)retval;
 
 }
 
@@ -3573,7 +3573,7 @@ commands:
     buffer[4] =  0;
     buffer[5] =  0;
     char binaryCommand[4096*2];
-    int lenCmd = [aString length]/2 -1;//drop '0x'
+    int lenCmd = (int)[aString length]/2 -1;//drop '0x'
 
 	const char* cstring = [aString cStringUsingEncoding:NSASCIIStringEncoding];
 
@@ -3582,7 +3582,7 @@ commands:
     for(i=0;i<lenCmd; i++){
         buffer[2] =  cstring[(i+1)*2];
         buffer[3] =  cstring[(i+1)*2+1];
-        int val =   strtol(buffer, NULL, 0);
+        int val =   (int)strtol(buffer, NULL, 0);
         binaryCommand[i] = val;
 
         //NSLog(@"   byte %i is: %s = %i\n",i,buffer,val);
@@ -3596,7 +3596,7 @@ commands:
     	size_t length        = lenCmd;
 	const char* receiverIPAddr = [crateUDPCommandIP cStringUsingEncoding: NSASCIIStringEncoding];;
 
-	int retval=0;
+	ssize_t retval=0;
 	
   //	if(port==0) port = GLOBAL_UDP_CLIENT_PORT;//use default port
 	
@@ -3613,7 +3613,7 @@ commands:
     //TODO: only recommended when using a char buffer ...  ((char*)buffer)[length]=0;    fprintf(stderr, "    sendtoGlobalClient3: %s\n",buffer); //DEBUG
 	
 	retval = sendto(UDP_COMMAND_CLIENT_SOCKET, binaryCommand, length, 0 /*flags*/, (struct sockaddr *)&UDP_COMMAND_sockaddrin_to, sockaddrin_to_len);
-    return retval;
+    return (int)retval;
 
     
     
@@ -3688,7 +3688,7 @@ commands:
 	//size_t length        = [aString lengthOfBytesUsingEncoding: NSASCIIStringEncoding];
 	const char* receiverIPAddr = [crateUDPCommandIP cStringUsingEncoding: NSASCIIStringEncoding];;
 
-	int retval=0;
+	ssize_t retval=0;
 	
   //	if(port==0) port = GLOBAL_UDP_CLIENT_PORT;//use default port
 	
@@ -3706,7 +3706,7 @@ commands:
 	
 	//retval = sendto(UDP_COMMAND_CLIENT_SOCKET, buffer, length, 0 /*flags*/, (struct sockaddr *)&UDP_COMMAND_sockaddrin_to, sockaddrin_to_len);
 	retval = sendto(UDP_COMMAND_CLIENT_SOCKET, sendline, length, 0 /*flags*/, (struct sockaddr *)&UDP_COMMAND_sockaddrin_to, sockaddrin_to_len);
-    return retval;
+    return (int)retval;
 
 }
 
@@ -4939,14 +4939,14 @@ return ;
 	
 	[self setDropFirstSpectrum:[decoder decodeBoolForKey:@"dropFirstSpectrum"]];
 	[self setAutoReadbackSetpoint:[decoder decodeBoolForKey:@"autoReadbackSetpoint"]];
-	[self setSpectrumRequestRate:[decoder decodeIntegerForKey:@"spectrumRequestRate"]];
-	[self setSpectrumRequestType:[decoder decodeIntegerForKey:@"spectrumRequestType"]];
-	[self setNumSpectrumBins:[decoder decodeIntegerForKey:@"numSpectrumBins"]];
+	[self setSpectrumRequestRate:[decoder decodeIntForKey:@"spectrumRequestRate"]];
+	[self setSpectrumRequestType:[decoder decodeIntForKey:@"spectrumRequestType"]];
+	[self setNumSpectrumBins:[decoder decodeIntForKey:@"numSpectrumBins"]];
 	[self setTextCommand:[decoder decodeObjectForKey:@"textCommand"]];
-	[self setResetEventCounterAtRunStart:[decoder decodeIntegerForKey:@"resetEventCounterAtRunStart"]];
-	[self setLowLevelRegInHex:[decoder decodeIntegerForKey:@"lowLevelRegInHex"]];
-	[self setTakeADCChannelData:[decoder decodeIntegerForKey:@"takeADCChannelData"]];
-	[self setTakeRawUDPData:[decoder decodeIntegerForKey:@"takeRawUDPData"]];
+	[self setResetEventCounterAtRunStart:[decoder decodeIntForKey:@"resetEventCounterAtRunStart"]];
+	[self setLowLevelRegInHex:[decoder decodeIntForKey:@"lowLevelRegInHex"]];
+	[self setTakeADCChannelData:[decoder decodeIntForKey:@"takeADCChannelData"]];
+	[self setTakeRawUDPData:[decoder decodeIntForKey:@"takeRawUDPData"]];
     
 //TODO: rm   slt - - 
 #if 0
@@ -4969,10 +4969,10 @@ return ;
 	[self setCrateUDPDataIP:[decoder decodeObjectForKey:@"crateUDPDataIP"]];
 	[self setCrateUDPDataPort:[decoder decodeIntegerForKey:@"crateUDPDataPort"]];
 #endif
-	[self setSltDAQMode:[decoder decodeIntegerForKey:@"sltDAQMode"]];
+	[self setSltDAQMode:[decoder decodeIntForKey:@"sltDAQMode"]];
 	[self setCrateUDPCommand:[decoder decodeObjectForKey:@"crateUDPCommand"]];
 	[self setCrateUDPCommandIP:[decoder decodeObjectForKey:@"crateUDPCommandIP"]];
-	[self setCrateUDPCommandPort:[decoder decodeIntegerForKey:@"crateUDPCommandPort"]];
+	[self setCrateUDPCommandPort:[decoder decodeIntForKey:@"crateUDPCommandPort"]];
 	[self setSltScriptArguments:[decoder decodeObjectForKey:@"sltScriptArguments"]];
 
 
@@ -5029,20 +5029,20 @@ return ;
 	
 	[encoder encodeBool:dropFirstSpectrum forKey:@"dropFirstSpectrum"];
 	[encoder encodeBool:autoReadbackSetpoint forKey:@"autoReadbackSetpoint"];
-	[encoder encodeInteger:spectrumRequestRate forKey:@"spectrumRequestRate"];
-	[encoder encodeInteger:spectrumRequestType forKey:@"spectrumRequestType"];
-	[encoder encodeInteger:numSpectrumBins forKey:@"numSpectrumBins"];
+	[encoder encodeInt:spectrumRequestRate forKey:@"spectrumRequestRate"];
+	[encoder encodeInt:spectrumRequestType forKey:@"spectrumRequestType"];
+	[encoder encodeInt:numSpectrumBins forKey:@"numSpectrumBins"];
 	[encoder encodeObject:textCommand forKey:@"textCommand"];
-	[encoder encodeInteger:resetEventCounterAtRunStart forKey:@"resetEventCounterAtRunStart"];
-	[encoder encodeInteger:lowLevelRegInHex forKey:@"lowLevelRegInHex"];
-	[encoder encodeInteger:takeADCChannelData forKey:@"takeADCChannelData"];
-	[encoder encodeInteger:takeRawUDPData forKey:@"takeRawUDPData"];
+	[encoder encodeInt:resetEventCounterAtRunStart forKey:@"resetEventCounterAtRunStart"];
+	[encoder encodeInt:lowLevelRegInHex forKey:@"lowLevelRegInHex"];
+	[encoder encodeInt:takeADCChannelData forKey:@"takeADCChannelData"];
+	[encoder encodeInt:takeRawUDPData forKey:@"takeRawUDPData"];
 	[encoder encodeInteger:takeEventData forKey:@"takeEventData"];
 	[encoder encodeInteger:takeUDPstreamData forKey:@"takeUDPstreamData"];
-	[encoder encodeInteger:sltDAQMode forKey:@"sltDAQMode"];
+	[encoder encodeInt:sltDAQMode forKey:@"sltDAQMode"];
 	[encoder encodeObject:crateUDPCommand forKey:@"crateUDPCommand"];
 	[encoder encodeObject:crateUDPCommandIP forKey:@"crateUDPCommandIP"];
-	[encoder encodeInteger:crateUDPCommandPort forKey:@"crateUDPCommandPort"];
+	[encoder encodeInt:crateUDPCommandPort forKey:@"crateUDPCommandPort"];
 	[encoder encodeBool:secondsSetInitWithHost forKey:@"secondsSetInitWithHost"];
 	[encoder encodeObject:sltScriptArguments forKey:@"sltScriptArguments"];
 	[encoder encodeInteger:controlReg	forKey:@"controlReg"];
@@ -5678,10 +5678,10 @@ if((len % 4) != 0){
         
 return;
 
-
-    for(id obj in dataTakers){
-        [obj runIsStopping:aDataPacket userInfo:userInfo];
-    }
+//
+//    for(id obj in dataTakers){
+//        [obj runIsStopping:aDataPacket userInfo:userInfo];
+//    }
     
     //if(accessAllowedToHardwareAndSBC)//TODO: remove SLT stuff -tb-   2014 
     //	[pmcLink runIsStopping:aDataPacket userInfo:userInfo];
@@ -5693,49 +5693,49 @@ return;
         [self setIsPollingSpectrum:NO];
         
 return;
-    if(accessAllowedToHardwareAndSBC){
-    
-    
-    
-#if 0 //TODO: omit #import "ORAmptekDP5Defs.h"    
-	    [self shipSltSecondCounter: kStopRunType];
-	    unsigned long long runcount = [self getTime];
-	    [self shipSltEvent:kRunCounterType withType:kStopRunType eventCt:0 high: (runcount>>32)&0xffffffff low:(runcount)&0xffffffff ];
-#endif
-
-
-
-
-
-	}
-    
-    for(id obj in dataTakers){
-		[obj runTaskStopped:aDataPacket userInfo:userInfo];
-    }	
-
-//    if(accessAllowedToHardwareAndSBC)	//TODO: remove SLT stuff -tb-   2014 
-//    	[pmcLink runTaskStopped:aDataPacket userInfo:userInfo];
-	
-	if(pollingWasRunning) {
-		[poller runWithTarget:self selector:@selector(readAllStatus)];
-	}
-	
-    
-//TODO: rm   slt - - 
-#if 0
-    //restore socket activity (on or off)
-    if(takeUDPstreamData){
-    	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(loopCommandRequestUDPData) object:nil];
-        if(! (savedUDPSocketState & 0x1)) [self closeDataCommandSocket];
-        //if(! (savedUDPSocketState & 0x2)) [self stopListeningDataServerSocket];
-        savedUDPSocketState=0;
-    }
-#endif
-
-
-    
-	[dataTakers release];
-	dataTakers = nil;
+//    if(accessAllowedToHardwareAndSBC){
+//    
+//    
+//    
+//#if 0 //TODO: omit #import "ORAmptekDP5Defs.h"    
+//        [self shipSltSecondCounter: kStopRunType];
+//        unsigned long long runcount = [self getTime];
+//        [self shipSltEvent:kRunCounterType withType:kStopRunType eventCt:0 high: (runcount>>32)&0xffffffff low:(runcount)&0xffffffff ];
+//#endif
+//
+//
+//
+//
+//
+//    }
+//    
+//    for(id obj in dataTakers){
+//        [obj runTaskStopped:aDataPacket userInfo:userInfo];
+//    }    
+//
+////    if(accessAllowedToHardwareAndSBC)    //TODO: remove SLT stuff -tb-   2014 
+////        [pmcLink runTaskStopped:aDataPacket userInfo:userInfo];
+//    
+//    if(pollingWasRunning) {
+//        [poller runWithTarget:self selector:@selector(readAllStatus)];
+//    }
+//    
+//    
+////TODO: rm   slt - - 
+//#if 0
+//    //restore socket activity (on or off)
+//    if(takeUDPstreamData){
+//        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(loopCommandRequestUDPData) object:nil];
+//        if(! (savedUDPSocketState & 0x1)) [self closeDataCommandSocket];
+//        //if(! (savedUDPSocketState & 0x2)) [self stopListeningDataServerSocket];
+//        savedUDPSocketState=0;
+//    }
+//#endif
+//
+//
+//    
+//    [dataTakers release];
+//    dataTakers = nil;
 
 }
 
@@ -5800,7 +5800,7 @@ return YES;
 { 
 	//temp----
 	int i, j, k;
-	int sltSize = pageSize * 20;	
+	int sltSize = (int)pageSize * 20;	
 	
 	
 	// Dislay the matrix of triggered pixel and timing

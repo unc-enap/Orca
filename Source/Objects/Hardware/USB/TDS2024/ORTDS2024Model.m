@@ -149,7 +149,7 @@ NSString* ORWaveFormDataChanged            = @"ORWaveFormDataChanged";
     NSImage* i = [[NSImage alloc] initWithSize:theIconSize];
     [i lockFocus];
 
-    [aCachedImage drawAtPoint:theOffset fromRect:[aCachedImage imageRect] operation:NSCompositeSourceOver fraction:1.0];	
+    [aCachedImage drawAtPoint:theOffset fromRect:[aCachedImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];	
     if(!usbInterface || ![self getUSBController]){
         NSBezierPath* path = [NSBezierPath bezierPath];
         [path moveToPoint:NSMakePoint(20,2)];
@@ -353,7 +353,7 @@ NSString* ORWaveFormDataChanged            = @"ORWaveFormDataChanged";
                                       data: reply
                                  maxLength: 256 ];
         n = MIN(256,n);
-        reply[n] = "\n";
+        reply[n] = '\n';
         NSString* s =  [NSString stringWithCString:reply encoding:NSASCIIStringEncoding];
         long nlPos = [s rangeOfString:@"\n"].location;
         if(nlPos != NSNotFound){
@@ -372,7 +372,7 @@ NSString* ORWaveFormDataChanged            = @"ORWaveFormDataChanged";
     long n = [self writeReadFromDevice: @"WFMPre?"
                                   data: reply
                              maxLength: 256 ];
-    reply[n] = "\n";
+    reply[n] = '\n';
     NSString* s =  [NSString stringWithCString:reply encoding:NSASCIIStringEncoding];
     long nlPos = [s rangeOfString:@"\n"].location;
     if(nlPos != NSNotFound){
@@ -386,7 +386,7 @@ NSString* ORWaveFormDataChanged            = @"ORWaveFormDataChanged";
     long n = [self writeReadFromDevice: @"DAT?"
                                   data: reply
                              maxLength: 256 ];
-    reply[n] = "\n";
+    reply[n] = '\n';
     NSString* s =  [NSString stringWithCString:reply encoding:NSASCIIStringEncoding];
     long nlPos = [s rangeOfString:@"\n"].location;
     if(nlPos != NSNotFound){
@@ -400,7 +400,7 @@ NSString* ORWaveFormDataChanged            = @"ORWaveFormDataChanged";
     long n = [self writeReadFromDevice: @"*IDN?"
                                   data: reply
                              maxLength: 256 ];
-    reply[n] = "\n";
+    reply[n] = '\n';
     NSString* s =  [NSString stringWithCString:reply encoding:NSASCIIStringEncoding];
     long nlPos = [s rangeOfString:@"\n"].location;
     if(nlPos != NSNotFound){
@@ -601,7 +601,7 @@ NSString* ORWaveFormDataChanged            = @"ORWaveFormDataChanged";
             }
             long total = n1+n2+n3;
             if(total > 2500)total = 2500;
-            numPoints[chan] = total;
+            numPoints[chan] = (int)total;
         }
         @catch(NSException* e){
         }

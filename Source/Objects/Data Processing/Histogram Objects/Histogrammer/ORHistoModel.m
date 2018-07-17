@@ -107,7 +107,7 @@ static NSString *ORHistoPassThruConnection 	= @"Histogrammer PassThru Connector"
     
     NSImage* i = [[NSImage alloc] initWithSize:theIconSize];
     [i lockFocus];
-    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositeCopy fraction:1.0];
+    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositingOperationCopy fraction:1.0];
     
     if([self uniqueIdNumber]){
         NSAttributedString* n = [[NSAttributedString alloc] 

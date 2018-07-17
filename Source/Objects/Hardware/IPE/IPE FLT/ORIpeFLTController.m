@@ -821,7 +821,7 @@
     [alert setInformativeText:@"Really run threshold calibration? This will change ALL thresholds on this card."];
     [alert addButtonWithTitle:@"Yes/Do Calibrate"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){

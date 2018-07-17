@@ -260,7 +260,7 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
     NSImage* aCachedImage = [NSImage imageNamed:@"Gretina4MCard"];
     NSImage* i = [[NSImage alloc] initWithSize:[aCachedImage size]];
     [i lockFocus];
-    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
     int chan;
     float y=73;
     float dy=3;
@@ -2432,7 +2432,7 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
 					newThreshold[noiseFloorWorkingChannel] = noiseFloorTestValue + noiseFloorOffset;
 					[self setEnabled:noiseFloorWorkingChannel withValue:NO];
 					[self writeControlReg:noiseFloorWorkingChannel enabled:NO];
-					[self setTestThreshold:noiseFloorWorkingChannel withValue:[self maxTestThreshold:noiseFloorWorkingChannel]];
+					[self setTestThreshold:(short)noiseFloorWorkingChannel withValue:(int)[self maxTestThreshold:(short)noiseFloorWorkingChannel]];
 					[self writeTestThreshold:noiseFloorWorkingChannel];
 					noiseFloorState = 3;	//done with this channel
 				}
@@ -2470,7 +2470,7 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
 						break;
 					}
 				}
-                noiseFloorHigh		= [(int)self maxTestThreshold:noiseFloorWorkingChannel];
+                noiseFloorHigh		= (int)[self maxTestThreshold:(int)noiseFloorWorkingChannel];
                 noiseFloorTestValue	= noiseFloorHigh/2;              //Initial probe position
 				if(noiseFloorWorkingChannel >= startChan){
 					[self setEnabled:noiseFloorWorkingChannel withValue:YES];
@@ -3125,7 +3125,7 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
     [self setSpiConnector:              [decoder decodeObjectForKey:@"spiConnector"]];
     [self setLinkConnector:             [decoder decodeObjectForKey:@"linkConnector"]];
     [self setDownSample:				[decoder decodeIntegerForKey:@"downSample"]];
-    [self setRegisterIndex:				[decoder decodeIntegerForKey:@"registerIndex"]];
+    [self setRegisterIndex:				[decoder decodeIntForKey:@"registerIndex"]];
     [self setRegisterWriteValue:		[decoder decodeIntegerForKey:@"registerWriteValue"]];
     [self setSPIWriteValue:     		[decoder decodeIntegerForKey:@"spiWriteValue"]];
     [self setFpgaFilePath:				[decoder decodeObjectForKey:@"fpgaFilePath"]];
@@ -3164,7 +3164,7 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
 		[self setBaselineRestoreEnabled:i withValue:[decoder decodeIntegerForKey:[@"baselineRestoreEnabled" stringByAppendingFormat:@"%d",i]]];
 		[self setPZTraceEnabled:i withValue:[decoder decodeIntegerForKey:[@"pzTraceEnabled" stringByAppendingFormat:@"%d",i]]];
 		[self setTriggerMode:i	withValue:[decoder decodeIntegerForKey:[@"triggerMode"	stringByAppendingFormat:@"%d",i]]];
-		[self setLEDThreshold:i withValue:[decoder decodeIntegerForKey:[@"ledThreshold" stringByAppendingFormat:@"%d",i]]];
+		[self setLEDThreshold:i withValue:[decoder decodeIntForKey:[@"ledThreshold" stringByAppendingFormat:@"%d",i]]];
 		[self setTrapThreshold:i withValue:[decoder decodeIntegerForKey:[@"trapThreshold" stringByAppendingFormat:@"%d",i]]];
 		[self setMrpsrt:i       withValue:[decoder decodeIntegerForKey:[@"mrpsrt"       stringByAppendingFormat:@"%d",i]]];
 		[self setFtCnt:i        withValue:[decoder decodeIntegerForKey:[@"ftCnt"        stringByAppendingFormat:@"%d",i]]];
@@ -3199,7 +3199,7 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
     [encoder encodeObject:spiConnector				forKey:@"spiConnector"];
     [encoder encodeObject:linkConnector				forKey:@"linkConnector"];
     [encoder encodeInteger:downSample					forKey:@"downSample"];
-    [encoder encodeInteger:registerIndex				forKey:@"registerIndex"];
+    [encoder encodeInt:registerIndex				forKey:@"registerIndex"];
     [encoder encodeInteger:registerWriteValue			forKey:@"registerWriteValue"];
     [encoder encodeInteger:spiWriteValue			    forKey:@"spiWriteValue"];
     [encoder encodeObject:fpgaFilePath				forKey:@"fpgaFilePath"];
@@ -3222,7 +3222,7 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
 		[encoder encodeInteger:baselineRestoreEnabled[i] forKey:[@"baselineRestoreEnabled" stringByAppendingFormat:@"%d",i]];
 		[encoder encodeInteger:pzTraceEnabled[i] forKey:[@"pzTraceEnabled" stringByAppendingFormat:@"%d",i]];
 		[encoder encodeInteger:triggerMode[i]	forKey:[@"triggerMode"	stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInteger:ledThreshold[i]	forKey:[@"ledThreshold" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt:ledThreshold[i]	forKey:[@"ledThreshold" stringByAppendingFormat:@"%d",i]];
 		[encoder encodeInteger:trapThreshold[i]	forKey:[@"trapThreshold" stringByAppendingFormat:@"%d",i]];
 		[encoder encodeInteger:mrpsrt[i]        forKey:[@"mrpsrt"       stringByAppendingFormat:@"%d",i]];
 		[encoder encodeInteger:ftCnt[i]         forKey:[@"ftCnt"        stringByAppendingFormat:@"%d",i]];
@@ -3518,7 +3518,7 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
                 [self writeToAddress:0x900 aValue:kGretina4MResetMainFPGACmd];
                 [self writeToAddress:0x900 aValue:kGretina4MReloadMainFPGACmd];
                 [self setProgressStateOnMainThread:  @"Finishing$Flash Memory-->FPGA"];
-                uint32_t statusRegValue = (uint32_t)[self readFromAddress:0x904];
+                unsigned long statusRegValue = (unsigned long)[self readFromAddress:0x904];
                 while(!(statusRegValue & kGretina4MMainFPGAIsLoaded)) {
                     if(stopDownLoadingMainFPGA)return;
                     statusRegValue = [self readFromAddress:0x904];

@@ -1148,7 +1148,7 @@
 
 - (void)CheckBoxMatrixCellClicked:(NSMatrix*) checkBoxes newState:(int)state
 {
-    BOOL cmdKeyDown = ([[NSApp currentEvent] modifierFlags] & NSCommandKeyMask) != 0;
+    BOOL cmdKeyDown = ([[NSApp currentEvent] modifierFlags] & NSEventModifierFlagCommand) != 0;
     if (cmdKeyDown) {
         for (int i = 0; i < [checkBoxes numberOfRows]; i++) {
             [[checkBoxes cellAtRow:i column:0] setState: state];

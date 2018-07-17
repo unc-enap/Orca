@@ -94,10 +94,10 @@
 	
 	NSUInteger style = [[self window] styleMask];
 	if(index == 2){
-		[[self window] setStyleMask: style | NSResizableWindowMask];
+		[[self window] setStyleMask: style | NSWindowStyleMaskResizable];
 	}
 	else {
-		[[self window] setStyleMask: style & ~NSResizableWindowMask];
+		[[self window] setStyleMask: style & ~NSWindowStyleMaskResizable];
 	}
 	
 	
@@ -707,19 +707,19 @@
 	switch([tabView indexOfTabViewItem:tabViewItem]){
 		case  0: 
 			[self resizeWindowToSize:basicOpsSize];   
-			[[self window] setStyleMask: style & ~NSResizableWindowMask];
+			[[self window] setStyleMask: style & ~NSWindowStyleMaskResizable];
 			break;
 		case  1: 
 			[self resizeWindowToSize:processOpsSize];     
-			[[self window] setStyleMask: style & ~NSResizableWindowMask];
+			[[self window] setStyleMask: style & ~NSWindowStyleMaskResizable];
 			break;
 		case  2: 
 			[self resizeWindowToSize:historyOpsSize];	
-			[[self window] setStyleMask: style | NSResizableWindowMask];
+			[[self window] setStyleMask: style | NSWindowStyleMaskResizable];
 			break;
 		default: 
 			[self resizeWindowToSize:summaryOpsSize];     
-			[[self window] setStyleMask: style & ~NSResizableWindowMask];
+			[[self window] setStyleMask: style & ~NSWindowStyleMaskResizable];
 			break;
 	}
     [[self window] setContentView:totalView];
@@ -853,7 +853,7 @@
     [alert setInformativeText:@"Really replace the settings in the dialog with the current HW settings?"];
     [alert addButtonWithTitle:@"Yes/Do it NOW"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){
@@ -884,7 +884,7 @@
     [alert setInformativeText:@"Really erase ALL data?"];
     [alert addButtonWithTitle:@"Yes/Do it NOW"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){
@@ -998,7 +998,7 @@
     [alert setInformativeText:@"Really make the current settings the new user protocol?"];
     [alert addButtonWithTitle:@"Yes/Do it NOW"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){

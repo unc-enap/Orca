@@ -189,7 +189,7 @@
 		roiVisible = [dataSource plotterShouldShowRoi:self];
 	}
 	
-	if(([theEvent modifierFlags] & NSShiftKeyMask) && !([theEvent modifierFlags] & NSCommandKeyMask)){
+	if(([theEvent modifierFlags] & NSEventModifierFlagShift) && !([theEvent modifierFlags] & NSEventModifierFlagCommand)){
 		id anRoi = [self roiAtPoint:[theEvent locationInWindow]];
 		if(anRoi){
 			[self addRoi:anRoi];
@@ -197,7 +197,7 @@
 		}
 	}
 	
-	else if(([theEvent modifierFlags] & NSCommandKeyMask) && !([theEvent modifierFlags] & NSShiftKeyMask)) {		
+	else if(([theEvent modifierFlags] & NSEventModifierFlagCommand) && !([theEvent modifierFlags] & NSEventModifierFlagShift)) {		
 		[self showCrossHairsForEvent:theEvent];
 		[NSCursor hide];
 	}

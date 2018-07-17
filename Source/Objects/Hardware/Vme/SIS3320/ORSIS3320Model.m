@@ -2527,7 +2527,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
     
     [objDictionary setObject:[NSNumber numberWithLong:clockSource]				forKey:@"clockSource"];
     
-    [objDictionary setObject:[NSNumber numberWithInt:onlineMask] forKey:@"onlineMask"];
+    [objDictionary setObject:[NSNumber numberWithInteger:onlineMask] forKey:@"onlineMask"];
     [objDictionary setObject: preTriggerDelays		    forKey:@"preTriggerDelays"];
     [objDictionary setObject: triggerGateLengths		forKey:@"triggerGateLengths"];
     

@@ -55,7 +55,7 @@ NSString* ORProXR16SSRLock							= @"ORProXR16SSRLock";
 	NSSize imageSize = [aCachedImage size];
 	NSImage* i = [[NSImage alloc] initWithSize:imageSize];
 	[i lockFocus];
-    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositeSourceOver fraction:1.0];	
+    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];	
 	int relay;
 	for(relay=0;relay<8;relay++){
 		NSBezierPath* circle = [NSBezierPath bezierPathWithOvalInRect:NSMakeRect(6+relay*8, imageSize.height-15,7,7)];

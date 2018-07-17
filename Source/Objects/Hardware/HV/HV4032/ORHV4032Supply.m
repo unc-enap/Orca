@@ -489,14 +489,14 @@ static NSString *ORSupplyDacValue 	= @"ORHV4032Supply Dac Voltage";
 {	
     [[owner undoManager] disableUndoRegistration];
 	
-    [self setDacValue:[decoder decodeIntegerForKey:[ORSupplyDacValue stringByAppendingFormat:@"%ld",supply]]];
+    [self setDacValue:(int)[decoder decodeIntegerForKey:[ORSupplyDacValue stringByAppendingFormat:@"%d",supply]]];
     
     [[owner undoManager] enableUndoRegistration];
 }
 
 - (void)saveHVParams:(NSCoder*)encoder
 {
-    [encoder encodeInteger:[self dacValue] forKey:[ORSupplyDacValue stringByAppendingFormat:@"%d",supply]];
+    [encoder encodeInt:[self dacValue] forKey:[ORSupplyDacValue stringByAppendingFormat:@"%d",supply]];
 }
 
 

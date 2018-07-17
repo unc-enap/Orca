@@ -251,8 +251,8 @@ static NSString* kFLTChanKey[24] = {
             filterDiv = [aCard boxcarLength] + 1;
         }
         
-        int index   = [aCard stationNumber];
-        filter[index] = filterDiv;
+        int index   = (int)[aCard stationNumber];
+        filter[index] = (int)filterDiv;
     }
     NSArray* listOfSlts = [[(ORAppDelegate*)[NSApp delegate] document] collectObjectsOfClass:NSClassFromString(@"ORKatrinV4SLTModel")];
     BOOL minimizeDecoding = NO;

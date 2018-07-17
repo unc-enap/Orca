@@ -406,7 +406,7 @@ static NSDictionary *_sm_local_defaultSliceAttributes( unsigned int inSliceIndex
                     if ( NSIntersectsRect( drawRect, rect ) )
                     {
                         [ tempColor set ];
-                        NSRectFillUsingOperation( NSInsetRect( drawRect, 1.0, 1.0 ), NSCompositeSourceOver );
+                        NSRectFillUsingOperation( NSInsetRect( drawRect, 1.0, 1.0 ), NSCompositingOperationSourceOver );
                         [ [ NSColor blackColor ] set ];
                         NSFrameRect( drawRect );
                     }

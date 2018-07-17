@@ -39,7 +39,7 @@
 {
 	[super awakeFromNib];
 	
-    [registerAddressPopUp setAlignment:NSCenterTextAlignment];
+    [registerAddressPopUp setAlignment:NSTextAlignmentCenter];
 	
     [self populatePopup];
 	

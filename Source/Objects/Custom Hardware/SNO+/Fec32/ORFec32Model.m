@@ -1905,7 +1905,7 @@ static int              sChannelsNotChangedCount = 0;
         [alert setInformativeText:m];
         [alert addButtonWithTitle:@"Cancel"];
         [alert addButtonWithTitle:@"OK, Continue"];
-        [alert setAlertStyle:NSWarningAlertStyle];
+        [alert setAlertStyle:NSAlertStyleWarning];
         [alert beginSheetModalForWindow:[hwWizard performSelector:@selector(window)] completionHandler:^(NSModalResponse result){
             if (result == NSAlertSecondButtonReturn) {
                 sDetectorDbState = 3;

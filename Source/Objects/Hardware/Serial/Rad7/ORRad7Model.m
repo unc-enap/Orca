@@ -1703,7 +1703,7 @@ static NSString* rad7ThoronNames[kNumberRad7ThoronNames] = {
 			if([parts count]>=3)value1 = [[parts objectAtIndex:2] trimSpacesFromEnds];
 
 				if([tag isEqualToString:@"PUMP"])[self setPumpMode:[self convertPumpModeStringToIndex:value]];
-				else if([tag isEqualToString:@"MODE"])[self setMode:[self convertModeStringToIndex:value]];
+				else if([tag isEqualToString:@"MODE"])[self setOpMode:[self convertModeStringToIndex:value]];
 				else if([tag isEqualToString:@"THORON"])[self setThoron:[self convertThoronStringToIndex:value]];
 				else if([tag isEqualToString:@"RECYCLE"])[self setRecycle:[value intValue]];
 				else if([tag isEqualToString:@"CYCLE"])[self setCycleTime:[self convertCycleHours:value minutes:value1]];

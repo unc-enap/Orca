@@ -366,7 +366,7 @@
     [alert setInformativeText:@"Really Clear them? You will not be able to undo this."];
     [alert addButtonWithTitle:@"Yes/Clear It"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){

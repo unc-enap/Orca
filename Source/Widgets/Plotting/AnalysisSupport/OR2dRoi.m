@@ -166,8 +166,8 @@ NSString* OR2dRoiCurveFitChanged = @"OR2dRoiCurveFitChanged";
 #pragma mark ***Event Handling
 - (void)flagsChanged:(NSEvent *)theEvent
 {
-	cmdKeyIsDown = ([theEvent modifierFlags] & NSControlKeyMask)!=0;
-	optionKeyIsDown = ([theEvent modifierFlags] & NSAlternateKeyMask)!=0;
+	cmdKeyIsDown = ([theEvent modifierFlags] & NSEventModifierFlagControl)!=0;
+	optionKeyIsDown = ([theEvent modifierFlags] & NSEventModifierFlagOption)!=0;
 	if(cmdKeyIsDown) drawControlPoints = !drawControlPoints;	
 }
 

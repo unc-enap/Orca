@@ -64,7 +64,7 @@
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
     
-    [[[hwTableView tableColumnWithIdentifier:@"kCableCheck"]dataCell] setControlSize:NSSmallControlSize];
+    [[[hwTableView tableColumnWithIdentifier:@"kCableCheck"]dataCell] setControlSize:NSControlSizeSmall];
     
     if([model xAttributes])[[ratePlot xScale] setAttributes:[[[model xAttributes] mutableCopy] autorelease]];
     if([model yAttributes])[[ratePlot yScale] setAttributes:[[[model yAttributes] mutableCopy] autorelease]];

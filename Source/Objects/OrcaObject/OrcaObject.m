@@ -91,9 +91,9 @@ NSString* ORMiscAttributeKey		= @"ORMiscAttributeKey";
 		[highlightedImage release];
 		highlightedImage = [[NSImage alloc] initWithSize:[image size]];
 		[highlightedImage lockFocus];
-		[image drawAtPoint:NSZeroPoint fromRect:[image imageRect] operation:NSCompositeSourceOver fraction:1.0];
+		[image drawAtPoint:NSZeroPoint fromRect:[image imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
 		[[NSColor colorWithCalibratedWhite:0.0 alpha:0.5] set];
-		NSRectFillUsingOperation(sourceRect, NSCompositeSourceAtop);
+		NSRectFillUsingOperation(sourceRect, NSCompositingOperationSourceAtop);
 		[highlightedImage unlockFocus];
 	}
 	else {
@@ -484,7 +484,7 @@ NSString* ORMiscAttributeKey		= @"ORMiscAttributeKey";
 			else imageToDraw = image;
 			
 			NSRect sourceRect = NSMakeRect(0,0,[imageToDraw size].width,[imageToDraw size].height);
-			[imageToDraw drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositeSourceOver fraction:aTransparency];
+			[imageToDraw drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositingOperationSourceOver fraction:aTransparency];
             
         }
         else {
@@ -558,8 +558,8 @@ NSString* ORMiscAttributeKey		= @"ORMiscAttributeKey";
 
 - (void) flagsChanged:(NSEvent *)theEvent
 {
-    BOOL shiftKeyDown = ([[NSApp currentEvent] modifierFlags] & NSShiftKeyMask) != 0 ;
-    BOOL cmdKeyDown = ([[NSApp currentEvent] modifierFlags] & NSCommandKeyMask) != 0;
+    BOOL shiftKeyDown = ([[NSApp currentEvent] modifierFlags] & NSEventModifierFlagShift) != 0 ;
+    BOOL cmdKeyDown = ([[NSApp currentEvent] modifierFlags] & NSEventModifierFlagCommand) != 0;
     [self setEnableIconControls:shiftKeyDown && cmdKeyDown];
 }
 - (void) setEnableIconControls:(BOOL) aState
@@ -584,7 +584,7 @@ NSString* ORMiscAttributeKey		= @"ORMiscAttributeKey";
 - (void) doCntrlClick:(NSView*)aView
 {
 	NSEvent* theCurrentEvent = [NSApp currentEvent];
-    NSEvent *event =  [NSEvent mouseEventWithType:NSLeftMouseDown
+    NSEvent *event =  [NSEvent mouseEventWithType:NSEventTypeLeftMouseDown
                                          location:[theCurrentEvent locationInWindow]
                                     modifierFlags:NSEventModifierFlagControl // 0x100
                                         timestamp:(NSTimeInterval)0

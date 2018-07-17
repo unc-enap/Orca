@@ -6248,7 +6248,9 @@ clean_up_mark:
 					  data[j*4],data[j*4+1],data[j*4+2],data[j*4+3],
 					  pattern[(j*4+shift)%n],  pattern[(j*4+1+shift)%n],
 					  pattern[(j*4+2+shift)%n],pattern[(j*4+3+shift)%n]  );
-				return i; // check only for one error in every page!
+                if(i==0)return i;
+                // check only for one error in every page!
+                //(the == check prevents an XCode 9.4 warning that loop executes only once
 			}
 		}
 	}

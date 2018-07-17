@@ -411,7 +411,7 @@
     [alert setInformativeText:@"REALLY Panic all enabled parameters to zero?\nIs this really what you want?"];
     [alert addButtonWithTitle:@"Yes, Do Panic"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){

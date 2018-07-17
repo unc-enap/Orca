@@ -78,19 +78,19 @@ static NSImage *pmtImage, *colorMaskImage, *topImage;
 	NSRect imageBounds = NSMakeRect(0, 0, [anImage size].width, [anImage size].height); 
 	[anImage lockFocus];
 	[aColor set];
-	NSRectFillUsingOperation(imageBounds, NSCompositeSourceAtop);
+	NSRectFillUsingOperation(imageBounds, NSCompositingOperationSourceAtop);
 	[anImage unlockFocus];
 	
 	anImage = [[anImage copy] autorelease];        
 	[anImage lockFocus];
-    [pmtImage drawAtPoint:NSZeroPoint fromRect:[pmtImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
-    [anImage drawAtPoint:NSZeroPoint fromRect:[anImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
-    [topImage drawAtPoint:NSZeroPoint fromRect:[topImage imageRect] operation:NSCompositeSourceOver fraction:0.6];
+    [pmtImage drawAtPoint:NSZeroPoint fromRect:[pmtImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
+    [anImage drawAtPoint:NSZeroPoint fromRect:[anImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
+    [topImage drawAtPoint:NSZeroPoint fromRect:[topImage imageRect] operation:NSCompositingOperationSourceOver fraction:0.6];
 	[anImage unlockFocus];
 	
 	NSImage* newImage =     [self rotateIndividualImage: anImage angle:angle];
 	[self lockFocus];
-    [newImage drawInRect:NSMakeRect (0,0,80,80) fromRect:[newImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+    [newImage drawInRect:NSMakeRect (0,0,80,80) fromRect:[newImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
 	[self unlockFocus];
 	
 }

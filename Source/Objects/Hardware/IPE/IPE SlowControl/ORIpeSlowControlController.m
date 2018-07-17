@@ -52,8 +52,8 @@
 	[queueSetpointButton setEnabled:NO];
 	[webViewButton setTitle:@"See Web View"];
 	[treeViewButton setTitle:@"See ADEI Tree"];
-	[treeDetailsView setAlignment:NSLeftTextAlignment];
-	[itemDetailsView setAlignment:NSLeftTextAlignment];
+	[treeDetailsView setAlignment:NSTextAlignmentLeft];
+	[itemDetailsView setAlignment:NSTextAlignmentLeft];
 	
 	[[timingPlotter yAxis] setRngLimitsLow:0 withHigh:1e10 withMinRng:5];
     [[timingPlotter yAxis] setRngLow:0 withHigh:200];

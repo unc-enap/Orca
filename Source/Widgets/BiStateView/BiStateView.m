@@ -114,7 +114,7 @@
 
 - (void)drawRect:(NSRect)rect 
 {
-    [image drawAtPoint:NSZeroPoint fromRect:[image imageRect] operation:NSCompositeSourceOver fraction:1.0];
+    [image drawAtPoint:NSZeroPoint fromRect:[image imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
 }
 
 @end

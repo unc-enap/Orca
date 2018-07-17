@@ -75,7 +75,7 @@
     NSAlert *alert = [[[NSAlert alloc] init] autorelease];
     [alert setMessageText:@"Load Failed"];
     [alert setInformativeText:@"Check Internet Connection"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:nil];
 #else

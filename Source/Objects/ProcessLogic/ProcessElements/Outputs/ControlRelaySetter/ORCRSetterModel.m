@@ -81,7 +81,7 @@
     NSSize theIconSize = [aCachedImage size];
     NSImage* i = [[NSImage alloc] initWithSize:theIconSize];
     [i lockFocus];
-    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositeSourceOver fraction:1.0];        
+    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];        
     NSFont* theFont = [NSFont messageFontOfSize:9];
 	NSAttributedString* n = [[NSAttributedString alloc] 
 		initWithString:[NSString stringWithFormat:@"%d",[self bit]] 

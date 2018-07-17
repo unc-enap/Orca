@@ -490,7 +490,7 @@
     [alert setInformativeText:@"Really Clear the Non-Volatile Memory?"];
     [alert addButtonWithTitle:@"Yes, Do it NOW"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[owner window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){

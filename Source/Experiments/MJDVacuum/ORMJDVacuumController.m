@@ -462,7 +462,7 @@
         [alert setInformativeText:@"This is a dangerous operation. If you are NOT an expert -- CANCEL this operation.\n\nIf you continue, constraints will be disabled for 60 seconds."];
         [alert addButtonWithTitle:@"Cancel"];
         [alert addButtonWithTitle:@"Yes/Disable Constraints!"];
-        [alert setAlertStyle:NSWarningAlertStyle];
+        [alert setAlertStyle:NSAlertStyleWarning];
         
         [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
             if (result == NSAlertSecondButtonReturn){

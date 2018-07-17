@@ -720,7 +720,7 @@ NSString* ORFolderPercentDoneChanged                = @"ORFolderPercentDoneChang
     [alert setInformativeText:s];
     [alert addButtonWithTitle:[self queueIsRunning]?@"Stop":@"Send"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window]?[self window]:[view window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){
@@ -750,7 +750,7 @@ NSString* ORFolderPercentDoneChanged                = @"ORFolderPercentDoneChang
     [alert setInformativeText:s];
     [alert addButtonWithTitle:@"Delete"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){

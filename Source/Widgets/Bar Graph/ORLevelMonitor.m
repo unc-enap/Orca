@@ -147,13 +147,13 @@
 	if([dataSource respondsToSelector:@selector(levelMonitorLowAlarmLevel:)]){
 		lowAlarmLevel = b.origin.y + b.size.height * [dataSource levelMonitorLowAlarmLevel:self]/100.;
 	}
-	[lowLevelBugImage drawAtPoint:NSMakePoint(0, lowAlarmLevel-[lowLevelBugImage size].height/2.) fromRect:[lowLevelBugImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+	[lowLevelBugImage drawAtPoint:NSMakePoint(0, lowAlarmLevel-[lowLevelBugImage size].height/2.) fromRect:[lowLevelBugImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
 	[NSBezierPath strokeLineFromPoint:NSMakePoint(kBugPad,lowAlarmLevel) toPoint:NSMakePoint(b.size.width+kBugPad,lowAlarmLevel)];
 
 	if([dataSource respondsToSelector:@selector(levelMonitorHiAlarmLevel:)]){
 		hiAlarmLevel = b.origin.y + b.size.height * [dataSource levelMonitorHiAlarmLevel:self]/100.;
 	}
-	[hiLevelBugImage drawAtPoint:NSMakePoint(0, hiAlarmLevel-[lowLevelBugImage size].height/2.) fromRect:[hiLevelBugImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+	[hiLevelBugImage drawAtPoint:NSMakePoint(0, hiAlarmLevel-[lowLevelBugImage size].height/2.) fromRect:[hiLevelBugImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
 	[NSBezierPath strokeLineFromPoint:NSMakePoint(kBugPad,hiAlarmLevel) toPoint:NSMakePoint(b.size.width+kBugPad,hiAlarmLevel)];
 
 	if(showFillPoints){
@@ -162,14 +162,14 @@
 		if([dataSource respondsToSelector:@selector(levelMonitorLowFillPoint:)]){
 			lowFillPoint = b.origin.y + b.size.height * [dataSource levelMonitorLowFillPoint:self]/100.;
 		}
-		[lowFillPointBugImage drawAtPoint:NSMakePoint(b.size.width+kBugPad, lowFillPoint-[lowFillPointBugImage size].height/2.) fromRect:[lowFillPointBugImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+		[lowFillPointBugImage drawAtPoint:NSMakePoint(b.size.width+kBugPad, lowFillPoint-[lowFillPointBugImage size].height/2.) fromRect:[lowFillPointBugImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
 
 		[NSBezierPath strokeLineFromPoint:NSMakePoint(kBugPad,lowFillPoint) toPoint:NSMakePoint(b.size.width+kBugPad,lowFillPoint)];
 		
 		if([dataSource respondsToSelector:@selector(levelMonitorHiFillPoint:)]){
 			hiFillPoint = b.origin.y + b.size.height * [dataSource levelMonitorHiFillPoint:self]/100.;
 		}
-		[hiFillPointBugImage drawAtPoint:NSMakePoint(b.size.width+kBugPad, hiFillPoint-[hiFillPointBugImage size].height/2.) fromRect:[hiFillPointBugImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+		[hiFillPointBugImage drawAtPoint:NSMakePoint(b.size.width+kBugPad, hiFillPoint-[hiFillPointBugImage size].height/2.) fromRect:[hiFillPointBugImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
 		[NSBezierPath strokeLineFromPoint:NSMakePoint(kBugPad,hiFillPoint) toPoint:NSMakePoint(b.size.width+kBugPad,hiFillPoint)];
 	}
 	

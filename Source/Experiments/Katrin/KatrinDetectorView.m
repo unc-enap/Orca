@@ -65,7 +65,7 @@
 		NSRect destRect = NSMakeRect(25,h-imageHeight-extra-40,imageWidth+extra,imageHeight+extra);
 		NSRect srcRect = NSMakeRect(0,0,imageWidth,imageHeight);
 		
-		[theBackground drawInRect:destRect fromRect:srcRect operation:NSCompositeSourceOver fraction:1.0];
+		[theBackground drawInRect:destRect fromRect:srcRect operation:NSCompositingOperationSourceOver fraction:1.0];
 		[[NSColor blackColor] set];
 		[NSBezierPath fillRect:NSMakeRect(crateX,crateY, crateW,crateH)];
 		[[NSColor whiteColor] set];

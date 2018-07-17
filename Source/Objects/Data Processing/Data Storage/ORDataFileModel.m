@@ -121,10 +121,10 @@ static const int currentVersion = 1;           // Current version
     NSImage* aCachedImage = [NSImage imageNamed:@"DataFile"];
     NSImage* i = [[NSImage alloc] initWithSize:[aCachedImage size]];
     [i lockFocus];
-    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositeSourceOver fraction:1.0];    
+    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];    
     if([[ORGlobal sharedGlobal] runMode] == kOfflineRun && !ignoreMode){
         NSImage* aNoticeImage = [NSImage imageNamed:@"notice"];
-        [aNoticeImage drawAtPoint:NSMakePoint([i size].width/2-[aNoticeImage size].width/2 ,[i size].height/2-[aNoticeImage size].height/2)  fromRect:[aNoticeImage imageRect] operation:NSCompositeSourceOver fraction:1.0];  
+        [aNoticeImage drawAtPoint:NSMakePoint([i size].width/2-[aNoticeImage size].width/2 ,[i size].height/2-[aNoticeImage size].height/2)  fromRect:[aNoticeImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];  
     }
     [i unlockFocus];
     

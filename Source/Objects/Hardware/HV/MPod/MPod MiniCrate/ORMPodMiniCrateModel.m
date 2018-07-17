@@ -32,7 +32,7 @@
     NSImage* aCachedImage = [NSImage imageNamed:@"MPodMiniCrateSmall"];
     NSImage* i = [[NSImage alloc] initWithSize:[aCachedImage size]];
     [i lockFocus];
-    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
     if(powerOff){
         NSAttributedString* s = [[[NSAttributedString alloc] initWithString:@"No Pwr"
                                                                  attributes:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -44,7 +44,7 @@
     
     if([[self hvConstraints] count]){
         NSImage* constraintImage = [NSImage imageNamed:@"smallLock"];
-        [constraintImage drawAtPoint:NSMakePoint([[self image] size].width/2 - [constraintImage size].width/2,35) fromRect:[constraintImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+        [constraintImage drawAtPoint:NSMakePoint([[self image] size].width/2 - [constraintImage size].width/2,35) fromRect:[constraintImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
     }
     
     if([[self orcaObjects] count]){

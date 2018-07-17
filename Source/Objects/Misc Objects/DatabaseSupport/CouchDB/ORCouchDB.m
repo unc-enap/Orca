@@ -483,7 +483,8 @@
 {
     NSAutoreleasePool *thePool = [[NSAutoreleasePool alloc] init];
 	if(![self isCancelled]){
-        NSString *escaped = [database stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+       // NSString *escaped = [database stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSString *escaped = [database stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
         id result = [self send:[NSString stringWithFormat:@"%@//%@:%lu/_all_dbs",httpType, host, port]];
         if(![result containsObject:database]){
             result = [self send:[NSString stringWithFormat:@"%@//%@:%lu/%@", httpType,host, port, escaped] type:@"PUT"];
@@ -565,8 +566,9 @@
     NSAutoreleasePool *thePool = [[NSAutoreleasePool alloc] init];
 	if(![self isCancelled]){
         
-        NSString *escaped = [database stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        id result = [self send:[NSString stringWithFormat:@"%@//%@:%lu/_all_dbs", httpType,host, port]];
+       // NSString *escaped = [database stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSString *escaped = [database stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+       id result = [self send:[NSString stringWithFormat:@"%@//%@:%lu/_all_dbs", httpType,host, port]];
         if([result containsObject:database]){
             result = [self send:[NSString stringWithFormat:@"%@//%@:%lu/%@", httpType,host, port, escaped] type:@"DELETE"];
             if([response statusCode] != 200) result = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -590,8 +592,9 @@
 {
     NSAutoreleasePool *thePool = [[NSAutoreleasePool alloc] init];
 	if(![self isCancelled]){
-        NSString* escaped   = [database stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        NSString* httpString = [NSString stringWithFormat:@"%@//127.0.0.1:%lu/_replicate",httpType, port];
+       // NSString* escaped   = [database stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSString *escaped = [database stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+       NSString* httpString = [NSString stringWithFormat:@"%@//127.0.0.1:%lu/_replicate",httpType, port];
         
         NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:httpString]];
         [self _updateAuthentication:request];

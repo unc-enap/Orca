@@ -764,7 +764,7 @@
     [alert setInformativeText:@"This will read the values that are in the hardware unit and put those values into the dialog.\n\nReally do this?"];
     [alert addButtonWithTitle:@"Yes/Do It"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){

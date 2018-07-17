@@ -111,7 +111,7 @@ NSString*	ORICS8065ModelIpAddressChanged		= @"ORICS8065ModelIpAddressChanged";
     NSImage* aCachedImage = [NSImage imageNamed:@"ICS8065Box"];
     NSImage* i = [[[NSImage alloc] initWithSize:[aCachedImage size]]autorelease];
     [i lockFocus];
-    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositeSourceOver fraction:1.0];    
+    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];    
     if(![self isEnabled]){
         NSBezierPath* path = [NSBezierPath bezierPath];
         [path moveToPoint:NSZeroPoint];

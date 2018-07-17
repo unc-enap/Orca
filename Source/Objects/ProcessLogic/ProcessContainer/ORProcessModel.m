@@ -498,7 +498,7 @@ NSString* ORForceProcessPollNotification			= @"ORForceProcessPollNotification";
     NSImage* aCachedImage = [NSImage imageNamed:@"Process"];
     NSImage* i = [[NSImage alloc] initWithSize:[aCachedImage size]];
     [i lockFocus];
-    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositeSourceOver fraction:1.0];    
+    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];    
 	
     if([self uniqueIdNumber]){
         NSString* stateString = @"Idle";
@@ -569,12 +569,12 @@ NSString* ORForceProcessPollNotification			= @"ORForceProcessPollNotification";
 
     if(processRunning && inTestMode){
         NSImage* aNoticeImage = [NSImage imageNamed:@"notice"];
-        [aNoticeImage drawAtPoint:NSMakePoint(0,0)fromRect:[aNoticeImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+        [aNoticeImage drawAtPoint:NSMakePoint(0,0)fromRect:[aNoticeImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
         
     }
     if(processRunning){
         NSImage* aLockedImage = [NSImage imageNamed:@"smallLock"];
-        [aLockedImage drawAtPoint:NSMakePoint([self frame].size.width - [aLockedImage size].width,0) fromRect:[aLockedImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+        [aLockedImage drawAtPoint:NSMakePoint([self frame].size.width - [aLockedImage size].width,0) fromRect:[aLockedImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
     }
 	
 	if([self heartBeatIndex] == 0){
@@ -582,7 +582,7 @@ NSString* ORForceProcessPollNotification			= @"ORForceProcessPollNotification";
 		float x;
 		if(processRunning && inTestMode) x = 22;
 		else x = 0;
-        [noHeartbeatImage drawAtPoint:NSMakePoint(x,0) fromRect:[noHeartbeatImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+        [noHeartbeatImage drawAtPoint:NSMakePoint(x,0) fromRect:[noHeartbeatImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
 	}
 	
 

@@ -263,7 +263,7 @@ NSString* historyConnectors[4] = {
 	
     NSImage* finalImage = [[NSImage alloc] initWithSize:theIconSize];
     [finalImage lockFocus];
-    [anImage drawAtPoint:NSZeroPoint fromRect:[anImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+    [anImage drawAtPoint:NSZeroPoint fromRect:[anImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
 	[self drawPlotRepIntoRect:NSMakeRect(18,6,theIconSize.width-29,theIconSize.height-11) maxPoints:250];
 	
 	[iconLabel drawInRect:NSMakeRect(theIconSize.width - textSize.width - 2,theIconSize.height-textSize.height-3,textSize.width,textSize.height)];
@@ -296,7 +296,7 @@ NSString* historyConnectors[4] = {
 	
     NSImage* finalImage = [[NSImage alloc] initWithSize:theIconSize];
     [finalImage lockFocus];
-    [anImage drawAtPoint:NSZeroPoint fromRect:[anImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+    [anImage drawAtPoint:NSZeroPoint fromRect:[anImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
     [self drawPlotRepIntoRect:NSMakeRect(textStart,17,theIconSize.width-textStart-5,23) maxPoints:500];
 	
 	

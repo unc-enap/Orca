@@ -312,7 +312,7 @@
     NSIndexSet* theSet = [postRegulationTableView selectedRowIndexes];
     NSUInteger current_index = [theSet firstIndex];
     if(current_index != NSNotFound){
-        [model removePostRegulationPointAtIndex:current_index];
+        [model removePostRegulationPointAtIndex:(int)current_index];
     }
     [self setButtonStates];
 }
@@ -337,7 +337,7 @@
         }
         else {
             if([model showFormattedDates] &&
-               ([[aTableColumn identifier] isEqualToString:@"readBack"] && [[model setPointItem:rowIndex forKey:@"item"] isEqualToString:@"Zeitstempel"])){
+               ([[aTableColumn identifier] isEqualToString:@"readBack"] && [[model setPointItem:(int)rowIndex forKey:@"item"] isEqualToString:@"Zeitstempel"])){
                 
                 NSTimeInterval s = [[model setPointItem:(int)rowIndex forKey:@"readBack"]doubleValue] - kSecsBetween1904and1070;
                 if(s<1)return @"?";
@@ -376,7 +376,7 @@
             return  [NSNumber numberWithInt:(int)rowIndex];
         }
         else {
-            return [[model postRegulationPointAtIndex:rowIndex] objectForKey:[aTableColumn identifier]];
+            return [[model postRegulationPointAtIndex:(int)rowIndex] objectForKey:[aTableColumn identifier]];
         }
     }
     else return nil;
@@ -534,7 +534,7 @@
 }
 - (IBAction) pollTimeAction: (id) aSender
 {
-    [model setPollTime:[[aSender selectedItem]tag]];
+    [model setPollTime:(int)[[aSender selectedItem]tag]];
 }
 
 #pragma  mark ***Delegate Responsiblities

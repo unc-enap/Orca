@@ -166,7 +166,7 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 		NSImage* aCachedImage = [NSImage imageNamed:@"LabJackUE9Mux80"];
 		NSImage* i = [[NSImage alloc] initWithSize:[aCachedImage size]];
 		[i lockFocus];
-        [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositeSourceOver fraction:1.0];		
+        [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];		
 		if([[self orcaObjects] count]){
 			NSAffineTransform* transform = [NSAffineTransform transform];
 			[transform translateXBy:50 yBy:20];

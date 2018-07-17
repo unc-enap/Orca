@@ -36,7 +36,7 @@
 - (void) keyDown:(NSEvent*)theEvent
 {
 	unsigned short keyCode = [theEvent keyCode];
-    BOOL cmdKeyDown   = ([theEvent modifierFlags] & NSCommandKeyMask)!=0;
+    BOOL cmdKeyDown   = ([theEvent modifierFlags] & NSEventModifierFlagCommand)!=0;
 	if(cmdKeyDown && keyCode == 5){ //'g'
 		[delegate toggleGrid];
 		[self setNeedsDisplay:YES];

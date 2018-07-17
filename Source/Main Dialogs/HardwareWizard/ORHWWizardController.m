@@ -105,7 +105,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
     // Setup cell for add column
     NSButtonCell *buttonCell = [[[NSButtonCell alloc] init] autorelease];
     [buttonCell setBezelStyle: NSCircularBezelStyle];
-    [buttonCell setControlSize: NSSmallControlSize];
+    [buttonCell setControlSize: NSControlSizeSmall];
     [buttonCell setTarget: self];
     [buttonCell setAction: @selector(addAction:)];
     [addActionColumn setDataCell: buttonCell];
@@ -659,7 +659,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
     [alert setInformativeText:[NSString stringWithFormat:@"Really Execute This HardwareWizard Set on %i channels?",chanCount]];
     [alert addButtonWithTitle:@"Yes"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if(result == NSAlertFirstButtonReturn){
@@ -690,7 +690,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
     [alert setInformativeText:[NSString stringWithFormat:@"Really Execute This HardwareWizard Set on %i channels?",chanCount]];
     [alert addButtonWithTitle:@"Yes"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){
@@ -761,7 +761,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
     [alert setInformativeText:@"Really Clear them? You will not be able to undo to the mark points."];
     [alert addButtonWithTitle:@"Yes"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){
@@ -794,7 +794,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
     [alert setInformativeText:@"Really clear them? You will not be able to undo."];
     [alert addButtonWithTitle:@"Yes"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){
@@ -1568,7 +1568,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
     [alert setInformativeText:@"Really Restore ALL Parameters?\n(A run file will be requested, with one more chance to cancel.)"];
     [alert addButtonWithTitle:@"Yes"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){

@@ -1937,7 +1937,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     
     unsigned long subseconds;
     unsigned long seconds;
-    unsigned long subsec2;
+    //unsigned long subsec2;
     double sltTime;
     
     //event readout controlled by the SLT cpu now. ORCA reads out

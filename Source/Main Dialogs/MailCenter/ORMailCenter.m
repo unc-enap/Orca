@@ -103,7 +103,7 @@
             [alert setInformativeText:@"No Subject..."];
             [alert addButtonWithTitle:@"Send Anyway"];
             [alert addButtonWithTitle:@"Cancel"];
-            [alert setAlertStyle:NSWarningAlertStyle];
+            [alert setAlertStyle:NSAlertStyleWarning];
             
             [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
                 if (result == NSAlertFirstButtonReturn){
@@ -129,7 +129,7 @@
         [alert setMessageText:@"ORCA Mail"];
         [alert setInformativeText:@"No Destination Address Given"];
         [alert addButtonWithTitle:@"OK"];
-        [alert setAlertStyle:NSWarningAlertStyle];
+        [alert setAlertStyle:NSAlertStyleWarning];
         
         [alert beginSheetModalForWindow:[self window] completionHandler:nil];
 #else

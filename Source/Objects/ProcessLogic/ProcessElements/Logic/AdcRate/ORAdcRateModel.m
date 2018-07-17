@@ -242,7 +242,7 @@ NSString* ORAdcRatePassThruConnection           = @"ORAdcRatePassThruConnection"
     BOOL rateBad = NO;
 	if([(ORAdcRateModel*)guardian valid]){
         if([(ORAdcRateModel*)guardian rateLimit]<0 && [(ORAdcRateModel*)guardian rate]<[(ORAdcRateModel*)guardian rateLimit])      rateBad = YES;
-        else if([(ORAdcRateModel*)guardian rateLimit]>0 && [(ORAdcRateModel*)guardian rate]>[guardian rateLimit]) rateBad = YES;
+        else if([(ORAdcRateModel*)guardian rateLimit]>0 && [(ORAdcRateModel*)guardian rate]>[(ORAdcRateModel*)guardian rateLimit]) rateBad = YES;
     }
 	return [ORProcessResult processState:rateBad value:rateBad];
 }

@@ -92,17 +92,17 @@
 	//channel by channel histograms
 	[aDataSet histogram:energy - page*kPageLength 
 				numBins:kPageLength sender:self  
-			   withKeys:@"FLTv4", [NSString stringWithFormat:@"Energy (%lld - %d)",startPage,endPage], crateKey,stationKey,channelKey,nil];
+			   withKeys:@"FLTv4", [NSString stringWithFormat:@"Energy (%lu - %lu)",startPage,endPage], crateKey,stationKey,channelKey,nil];
 	
 	//accumulated card level histograms
 	[aDataSet histogram:energy - page*kPageLength 
 				numBins:kPageLength sender:self  
-			   withKeys:@"FLTv4", [NSString stringWithFormat:@"Total Card Energy (%ld - %d)",startPage,endPage], crateKey,stationKey,nil];
+			   withKeys:@"FLTv4", [NSString stringWithFormat:@"Total Card Energy (%ld - %ld)",startPage,endPage], crateKey,stationKey,nil];
 	
 	//accumulated crate level histograms
 	[aDataSet histogram:energy - page*kPageLength 
 				numBins:kPageLength sender:self  
-			   withKeys:@"FLTv4", [NSString stringWithFormat:@"Total Crate Energy (%ld - %d)",startPage,endPage], crateKey,nil];
+			   withKeys:@"FLTv4", [NSString stringWithFormat:@"Total Crate Energy (%ld - %ld)",startPage,endPage], crateKey,nil];
 
 	//get the actual object
 	if(getRatesFromDecodeStage && !skipRateCounts){
@@ -221,7 +221,7 @@
     //uint32_t eventFlags     = ptr[7];
     //uint32_t traceStart16 = ShiftAndExtract(eventFlags,8,0x7ff);//start of trace in short array
 
-	int page = energy/kPageLength;
+	int page = (int)(energy/kPageLength);
 	int startPage = page*kPageLength;
 	int endPage = (page+1)*kPageLength;
 	
@@ -347,7 +347,7 @@ startIndex=0;
     NSString* offsetStr = [NSString stringWithFormat:@"Offset16   = %ld\n", traceStart16];
     NSString* versionStr= [NSString stringWithFormat:@"RecVersion = %ld\n", ShiftAndExtract(eventFlags,0,0xf)];
     NSString* eventFlagsStr
-                        = [NSString stringWithFormat:@"Flag(a,ap) = %ld,%d\n", ShiftAndExtract(eventFlags,4,0x1),ShiftAndExtract(eventFlags,5,0x1)];
+                        = [NSString stringWithFormat:@"Flag(a,ap) = %ld,%ld\n", ShiftAndExtract(eventFlags,4,0x1),ShiftAndExtract(eventFlags,5,0x1)];
     NSString* lengthStr = [NSString stringWithFormat:@"Length     = %lu\n", length];
     
     

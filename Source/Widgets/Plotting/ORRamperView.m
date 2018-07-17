@@ -150,7 +150,7 @@
 	if(![model isRunning]){
 		[rightTargetBug drawAtPoint:NSMakePoint([self bounds].size.width - [rightTargetBug size].width,
 												 targetLineY-[rightTargetBug size].height/2.) 
-						   fromRect:[rightTargetBug imageRect] operation:NSCompositeSourceOver fraction:1.0];
+						   fromRect:[rightTargetBug imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
 
 	}
 	
@@ -213,7 +213,7 @@
 
 	float bugPadWidth = [rightTargetBug size].width;
 	float bugPadHeight = [rightTargetBug size].height+2;
-    BOOL cmdKeyDown   = ([event modifierFlags] & NSCommandKeyMask)!=0;
+    BOOL cmdKeyDown   = ([event modifierFlags] & NSEventModifierFlagCommand)!=0;
     NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];
 	NSEnumerator* e = [[model wayPoints] objectEnumerator];
 	ORWayPoint* aWayPoint;

@@ -589,7 +589,7 @@
     [alert setInformativeText:@"Really switch which machine is the one in control of the run?"];
     [alert addButtonWithTitle:@"Yes/Switch Machines"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){
@@ -624,7 +624,7 @@
     [alert setInformativeText:@"Really send the Threshods and Gains to the other machine?\nThey will be loaded into HW at start of next run."];
     [alert addButtonWithTitle:@"Yes/Update"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){

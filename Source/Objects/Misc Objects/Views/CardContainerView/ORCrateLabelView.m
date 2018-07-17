@@ -86,7 +86,7 @@
     [image drawAtPoint:NSZeroPoint
                    fromRect:NSMakeRect(0, 0, existingSize.width,
                                        existingSize.height)
-                   operation:NSCompositeSourceOver
+                   operation:NSCompositingOperationSourceOver
                    fraction:1.0];
 
     [rotatedImage unlockFocus];

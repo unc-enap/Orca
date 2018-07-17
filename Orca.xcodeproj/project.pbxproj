@@ -118,7 +118,6 @@
 		2ACEE0E30612266000CAD497 /* ThresholdCalibrationChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ACEE0DF0612266000CAD497 /* ThresholdCalibrationChannel.m */; };
 		2ACEE0E40612266000CAD497 /* ThresholdCalibrationTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 2ACEE0E00612266000CAD497 /* ThresholdCalibrationTask.h */; };
 		2ACEE0E50612266000CAD497 /* ThresholdCalibrationTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ACEE0E10612266000CAD497 /* ThresholdCalibrationTask.m */; };
-		2AE87C600D6E636700A839FC /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AE87BDD0D6E486900A839FC /* libmysqlclient.a */; };
 		2D12EDA6150FDD1300EBD8A2 /* EdelweissSLTv4_HW_Definitions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D12EDA5150FDD1300EBD8A2 /* EdelweissSLTv4_HW_Definitions.h */; };
 		2D12EDA9150FDD6200EBD8A2 /* EdelweissSLTv4_HW_Definitions.h in EdelweissSLTv4_Copy */ = {isa = PBXBuildFile; fileRef = 2D12EDA5150FDD1300EBD8A2 /* EdelweissSLTv4_HW_Definitions.h */; };
 		2D12EDCB150FE26600EBD8A2 /* HW_Readout.cc in EdelweissSLTv4_Copy */ = {isa = PBXBuildFile; fileRef = 2D12EDB1150FE02A00EBD8A2 /* HW_Readout.cc */; };
@@ -3140,6 +3139,9 @@
 		84EA1FB120E28F810099F3DF /* RefClock.gif in Resources */ = {isa = PBXBuildFile; fileRef = 84EA1FB020E28F800099F3DF /* RefClock.gif */; };
 		84EA6CAC0C73D15B00083319 /* ORAcqirisDC440Decoders.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA6CAA0C73D15B00083319 /* ORAcqirisDC440Decoders.h */; };
 		84EA6CAD0C73D15B00083319 /* ORAcqirisDC440Decoders.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EA6CAB0C73D15B00083319 /* ORAcqirisDC440Decoders.m */; };
+		84EA913D20FE2C1500110B85 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA913C20FE2C1400110B85 /* libmysqlclient.a */; };
+		84EA913F20FE2DDA00110B85 /* client_plugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA913E20FE2DDA00110B85 /* client_plugin.h */; };
+		84EA914120FE2DFA00110B85 /* plugin_auth_common.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA914020FE2DF900110B85 /* plugin_auth_common.h */; };
 		84EB2DDE1E32990D00C273AA /* LabJackU6.nib in Resources */ = {isa = PBXBuildFile; fileRef = 84EB2DD51E32990D00C273AA /* LabJackU6.nib */; };
 		84EB2DE11E32990D00C273AA /* ORLabJackU6Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EB2DD81E32990D00C273AA /* ORLabJackU6Controller.h */; };
 		84EB2DE21E32990D00C273AA /* ORLabJackU6Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EB2DD91E32990D00C273AA /* ORLabJackU6Controller.m */; };
@@ -3947,7 +3949,6 @@
 		2ACEE0DF0612266000CAD497 /* ThresholdCalibrationChannel.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ThresholdCalibrationChannel.m; sourceTree = "<group>"; };
 		2ACEE0E00612266000CAD497 /* ThresholdCalibrationTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ThresholdCalibrationTask.h; sourceTree = "<group>"; };
 		2ACEE0E10612266000CAD497 /* ThresholdCalibrationTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ThresholdCalibrationTask.m; sourceTree = "<group>"; };
-		2AE87BDD0D6E486900A839FC /* libmysqlclient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libmysqlclient.a; sourceTree = "<group>"; };
 		2D12EDA5150FDD1300EBD8A2 /* EdelweissSLTv4_HW_Definitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EdelweissSLTv4_HW_Definitions.h; path = EdelweissSLT/EdelweissSLTv4_Readout_Code/EdelweissSLTv4_HW_Definitions.h; sourceTree = "<group>"; };
 		2D12EDB1150FE02A00EBD8A2 /* HW_Readout.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HW_Readout.cc; path = EdelweissSLT/EdelweissSLTv4_Readout_Code/HW_Readout.cc; sourceTree = "<group>"; };
 		2D12EE53150FE7B400EBD8A2 /* OREdelweissSLTv4Readout.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OREdelweissSLTv4Readout.cc; path = EdelweissSLT/EdelweissSLTv4_Readout_Code/OREdelweissSLTv4Readout.cc; sourceTree = "<group>"; };
@@ -6844,6 +6845,9 @@
 		84EA1FB020E28F800099F3DF /* RefClock.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = RefClock.gif; sourceTree = "<group>"; };
 		84EA6CAA0C73D15B00083319 /* ORAcqirisDC440Decoders.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORAcqirisDC440Decoders.h; path = Source/Objects/Hardware/CompactPCI/AcqirisDC440/ORAcqirisDC440Decoders.h; sourceTree = SOURCE_ROOT; };
 		84EA6CAB0C73D15B00083319 /* ORAcqirisDC440Decoders.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = ORAcqirisDC440Decoders.m; path = Source/Objects/Hardware/CompactPCI/AcqirisDC440/ORAcqirisDC440Decoders.m; sourceTree = SOURCE_ROOT; };
+		84EA913C20FE2C1400110B85 /* libmysqlclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient.a; path = Libraries/libIntel/libmysqlclient.a; sourceTree = SOURCE_ROOT; };
+		84EA913E20FE2DDA00110B85 /* client_plugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = client_plugin.h; sourceTree = "<group>"; };
+		84EA914020FE2DF900110B85 /* plugin_auth_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = plugin_auth_common.h; sourceTree = "<group>"; };
 		84EB2DD51E32990D00C273AA /* LabJackU6.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = LabJackU6.nib; sourceTree = "<group>"; };
 		84EB2DD81E32990D00C273AA /* ORLabJackU6Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORLabJackU6Controller.h; sourceTree = "<group>"; };
 		84EB2DD91E32990D00C273AA /* ORLabJackU6Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORLabJackU6Controller.m; sourceTree = "<group>"; };
@@ -7317,11 +7321,11 @@
 				840F377B08F322F800FC4408 /* IOKit.framework in Frameworks */,
 				84F5E11B0A151E0B00707A0F /* OpenGL.framework in Frameworks */,
 				847599860B5FF26500123411 /* QuartzCore.framework in Frameworks */,
-				2AE87C600D6E636700A839FC /* libmysqlclient.a in Frameworks */,
 				3620200E1CBD38EE0089296E /* libiconv.2.dylib in Frameworks */,
 				2DC1EE800F33724E00E93C75 /* WebKit.framework in Frameworks */,
 				840F5B191222C90000D49A75 /* QTKit.framework in Frameworks */,
 				84E6CD001E4247BD004D6978 /* libusb-1.0.a in Frameworks */,
+				84EA913D20FE2C1500110B85 /* libmysqlclient.a in Frameworks */,
 				8458E91515DA8A2A005C43A9 /* ScriptingBridge.framework in Frameworks */,
 				8481E67917653766001AB905 /* SystemConfiguration.framework in Frameworks */,
 				4AB9E5401DE5D9DB007C75E0 /* libpq.a in Frameworks */,
@@ -7635,8 +7639,7 @@
 		2AE87BDC0D6E486900A839FC /* libUniversal */ = {
 			isa = PBXGroup;
 			children = (
-				2AE87BDD0D6E486900A839FC /* libmysqlclient.a */,
-				84F7FB550AE555C600A5AA4C /* mysql.h */,
+				84EA913C20FE2C1400110B85 /* libmysqlclient.a */,
 				4AB9E53F1DE5D9DB007C75E0 /* libpq.a */,
 			);
 			path = libUniversal;
@@ -14261,12 +14264,15 @@
 				3620200C1CBD38EE0089296E /* libSNO+ */,
 				8475EC0414759D53003A165D /* libusb */,
 				2AE87BDC0D6E486900A839FC /* libUniversal */,
+				84F7FB550AE555C600A5AA4C /* mysql.h */,
 				84F7FB630AE5569100A5AA4C /* my_alloc.h */,
 				84F7FB590AE5566D00A5AA4C /* mysql_version.h */,
 				84F7FB5A0AE5566D00A5AA4C /* mysql_time.h */,
 				84F7FB5B0AE5566D00A5AA4C /* typelib.h */,
 				84F7FB5C0AE5566D00A5AA4C /* my_list.h */,
 				84F7FB5D0AE5566D00A5AA4C /* mysql_com.h */,
+				84EA913E20FE2DDA00110B85 /* client_plugin.h */,
+				84EA914020FE2DF900110B85 /* plugin_auth_common.h */,
 			);
 			path = Libraries;
 			sourceTree = SOURCE_ROOT;
@@ -15264,6 +15270,7 @@
 				8434A215055B3287002D3102 /* ORFileMover.h in Headers */,
 				8434A216055B3287002D3102 /* ORPCICamacCommands.h in Headers */,
 				8434A217055B3287002D3102 /* ORPCICamacController.h in Headers */,
+				84EA914120FE2DFA00110B85 /* plugin_auth_common.h in Headers */,
 				8434A219055B3287002D3102 /* ORPCICamacModel.h in Headers */,
 				8434A21A055B3287002D3102 /* NcdController.h in Headers */,
 				8434A21C055B3287002D3102 /* NcdModel.h in Headers */,
@@ -15703,6 +15710,7 @@
 				84F46F490CA44255007EFADA /* ORIpeFLTDecoder.h in Headers */,
 				84F46F4B0CA44255007EFADA /* ORIpeFLTDefs.h in Headers */,
 				84F46F4C0CA44255007EFADA /* ORIpeFLTModel.h in Headers */,
+				84EA913F20FE2DDA00110B85 /* client_plugin.h in Headers */,
 				84F46F510CA44255007EFADA /* ORIpeSLTController.h in Headers */,
 				4AB9E5311DE5D820007C75E0 /* ORPQModel.h in Headers */,
 				84F46F530CA44255007EFADA /* ORIpeSLTDefs.h in Headers */,
@@ -19381,7 +19389,7 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LINK_WITH_STANDARD_LIBRARIES = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				SDKROOT = "";
@@ -19426,7 +19434,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = "";
 				STRIP_INSTALLED_PRODUCT = YES;
@@ -19470,7 +19478,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = "";
 				STRIP_INSTALLED_PRODUCT = NO;

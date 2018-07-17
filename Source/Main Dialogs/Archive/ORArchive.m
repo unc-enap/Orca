@@ -168,7 +168,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(Archive);
     [alert setInformativeText:@"Really do an Archive, SVN Update, Clean Build, and Restart?\n\nThis can take awhile."];
     [alert addButtonWithTitle:@"Yes/Do It"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){

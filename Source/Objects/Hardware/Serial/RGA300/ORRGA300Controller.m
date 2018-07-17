@@ -901,7 +901,7 @@
             [alert setInformativeText:@"Really turn ON Detector?"];
             [alert addButtonWithTitle:@"YES/Turn On Detector"];
             [alert addButtonWithTitle:@"Cancel"];
-            [alert setAlertStyle:NSWarningAlertStyle];
+            [alert setAlertStyle:NSAlertStyleWarning];
             
             [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
                 if (result == NSAlertFirstButtonReturn){
@@ -950,7 +950,7 @@
             [alert setInformativeText:@"Really turn ON Ionizer?"];
             [alert addButtonWithTitle:@"YES/Turn On Ionizer"];
             [alert addButtonWithTitle:@"Cancel"];
-            [alert setAlertStyle:NSWarningAlertStyle];
+            [alert setAlertStyle:NSAlertStyleWarning];
             
             [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
                 if (result == NSAlertFirstButtonReturn){
@@ -1012,7 +1012,7 @@
     [alert setInformativeText:@"Really transfer the actual HW values to the input fields of this dialog?"];
     [alert addButtonWithTitle:@"Cancel"];
     [alert addButtonWithTitle:@"Yes/Do It"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if(result == NSAlertSecondButtonReturn){

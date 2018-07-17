@@ -228,7 +228,7 @@
     [alert setInformativeText:[NSString stringWithFormat:@"Really turn MPod HV Crate Power %@?",pwr?@"OFF":@"ON" ]];
     [alert addButtonWithTitle:@"Yes/Do it NOW"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){

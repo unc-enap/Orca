@@ -632,7 +632,7 @@ NSString* ORPacModelVetoChanged			= @"ORPacModelVetoChanged";
 		timeRates[i] = [[ORTimeRate alloc] init];
 	}
 	for(i=0;i<148;i++){
-		[self setGain:i withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"gain%ld",i]]];
+		[self setGain:i withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"gain%d",i]]];
 	}
     
     [self setPortName:		[decoder decodeObjectForKey: @"portName"]];
@@ -648,7 +648,7 @@ NSString* ORPacModelVetoChanged			= @"ORPacModelVetoChanged";
     [super encodeWithCoder:encoder];
     [encoder encodeObject:processLimits     forKey:@"processLimits"];
     [encoder encodeObject:lastGainFile  forKey:@"lastGainFile"];
-    [encoder encodeInteger:gainDisplayType  forKey:@"gainDisplayType"];
+    [encoder encodeInt:gainDisplayType  forKey:@"gainDisplayType"];
     [encoder encodeBool:setAllGains		forKey:@"ORPacModelSetAllGains"];
     [encoder encodeInteger:gainChannel		forKey:@"ORPacModelGainChannel"];
     [encoder encodeBool:lcmEnabled		forKey:@"ORPacModelLcmEnabled"];
@@ -663,7 +663,7 @@ NSString* ORPacModelVetoChanged			= @"ORPacModelVetoChanged";
     [encoder encodeInteger:adcChannel       forKey:@"ORPacModelAdcChannel"];
 	int i;
 	for(i=0;i<148;i++){
-		[encoder encodeInteger:gain[i] forKey: [NSString stringWithFormat:@"gain%d",i]];
+		[encoder encodeInt:gain[i] forKey: [NSString stringWithFormat:@"gain%d",i]];
 	}
 }
 

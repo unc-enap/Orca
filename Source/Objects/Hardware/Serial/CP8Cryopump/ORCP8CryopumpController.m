@@ -84,10 +84,10 @@
 
 	NSUInteger style = [[self window] styleMask];
 	if(index == 2){
-		[[self window] setStyleMask: style | NSResizableWindowMask];
+		[[self window] setStyleMask: style | NSWindowStyleMaskResizable];
 	}
 	else {
-		[[self window] setStyleMask: style & ~NSResizableWindowMask];
+		[[self window] setStyleMask: style & ~NSWindowStyleMaskResizable];
 	}
 	
 	
@@ -431,15 +431,15 @@
 	switch([tabView indexOfTabViewItem:tabViewItem]){
 		case  0: 
 			[self resizeWindowToSize:basicOpsSize];   
-			[[self window] setStyleMask: style & ~NSResizableWindowMask];
+			[[self window] setStyleMask: style & ~NSWindowStyleMaskResizable];
 			break;
 		case  1: 
 			[self resizeWindowToSize:expertOpsSize];     
-			[[self window] setStyleMask: style & ~NSResizableWindowMask];
+			[[self window] setStyleMask: style & ~NSWindowStyleMaskResizable];
 			break;
 		default: 
 			[self resizeWindowToSize:plotSize];	
-			[[self window] setStyleMask: style | NSResizableWindowMask];
+			[[self window] setStyleMask: style | NSWindowStyleMaskResizable];
 			break;
 	}
     [[self window] setContentView:totalView];
@@ -954,7 +954,7 @@
         [alert setInformativeText:@"Really turn ON the cryopump?"];
         [alert addButtonWithTitle:@"YES/Turn ON Cryopump"];
         [alert addButtonWithTitle:@"Cancel"];
-        [alert setAlertStyle:NSWarningAlertStyle];
+        [alert setAlertStyle:NSAlertStyleWarning];
         
         [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
             if (result == NSAlertFirstButtonReturn){
@@ -1005,7 +1005,7 @@
         [alert setInformativeText:@"Really turn OFF the cryopump?"];
         [alert addButtonWithTitle:@"YES/Turn OFF Cryopump"];
         [alert addButtonWithTitle:@"Cancel"];
-        [alert setAlertStyle:NSWarningAlertStyle];
+        [alert setAlertStyle:NSAlertStyleWarning];
         
         [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
             if (result == NSAlertFirstButtonReturn){
@@ -1049,7 +1049,7 @@
         [alert setInformativeText:@"Really OPEN the purge valve?"];
         [alert addButtonWithTitle:@"YES/OPEN Purge Valve"];
         [alert addButtonWithTitle:@"Cancel"];
-        [alert setAlertStyle:NSWarningAlertStyle];
+        [alert setAlertStyle:NSAlertStyleWarning];
         
         [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
             if (result == NSAlertFirstButtonReturn){
@@ -1103,7 +1103,7 @@
     [alert setInformativeText:@"Really CLOSE the purge valve?"];
     [alert addButtonWithTitle:@"YES/CLOSE Purge Valve"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){
@@ -1146,7 +1146,7 @@
         [alert setInformativeText:@"Really OPEN the Roughing valve?"];
         [alert addButtonWithTitle:@"YES/OPEN Roughing Valve"];
         [alert addButtonWithTitle:@"Cancel"];
-        [alert setAlertStyle:NSWarningAlertStyle];
+        [alert setAlertStyle:NSAlertStyleWarning];
         
         [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
             if (result == NSAlertFirstButtonReturn){
@@ -1183,7 +1183,7 @@
     [alert setInformativeText:@"Really CLOSE the Roughing valve?"];
     [alert addButtonWithTitle:@"YES/CLOSE Roughing Valve"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){
@@ -1218,7 +1218,7 @@
     [alert setInformativeText:@"Really turn ON the Thermocouple?"];
     [alert addButtonWithTitle:@"YES/Turn ON Thermocouple"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){
@@ -1253,7 +1253,7 @@
     [alert setInformativeText:@"Really turn OFF the Thermocouple?"];
     [alert addButtonWithTitle:@"Yes/Turn OFF Thermocouple"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){

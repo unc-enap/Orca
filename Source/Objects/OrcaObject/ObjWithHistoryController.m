@@ -152,7 +152,7 @@
     [alert setInformativeText:@"Really clear history? You will not be able to undo this."];
     [alert addButtonWithTitle:@"YES/Clear History"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){

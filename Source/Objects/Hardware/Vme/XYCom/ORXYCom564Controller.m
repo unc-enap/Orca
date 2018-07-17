@@ -61,7 +61,7 @@
     [tabView selectTabViewItemAtIndex: index];   
 
 	
-    [registerAddressPopUp setAlignment:NSCenterTextAlignment];
+    [registerAddressPopUp setAlignment:NSTextAlignmentCenter];
 	
     [self populatePopups];
 	

@@ -664,7 +664,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(StatusController);
     [alert setInformativeText:@"Deletion of the history can not be undone."];
     [alert addButtonWithTitle:@"Yes, Delete It"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
 
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){

@@ -163,15 +163,15 @@
 	switch([tabView indexOfTabViewItem:tabViewItem]){
 		case  0:
 			[self resizeWindowToSize:ipConnectionSize];
-			[[self window] setStyleMask: style & ~NSResizableWindowMask];
+			[[self window] setStyleMask: style & ~NSWindowStyleMaskResizable];
 			break;
 		case  1:
 			[self resizeWindowToSize:statusSize];
-			[[self window] setStyleMask: style & ~NSResizableWindowMask];
+			[[self window] setStyleMask: style & ~NSWindowStyleMaskResizable];
 			break;
 		default:
 			[self resizeWindowToSize:processSize];
-			[[self window] setStyleMask: style | NSResizableWindowMask];
+			[[self window] setStyleMask: style | NSWindowStyleMaskResizable];
 			break;
 	}
     [[self window] setContentView:totalView];

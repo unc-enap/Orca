@@ -824,7 +824,7 @@ NSString* ORMJDPumpCartModelConnectionChanged			 = @"ORMJDPumpCartModelConnectio
         for(ORVacuumGateValve* aGateValve in [self gateValves]){
             [gvStates addObject:[NSArray arrayWithObjects:
                                  [NSNumber numberWithInteger:[aGateValve state]],
-                                 [NSNumber numberWithIntger:[aGateValve constraintCount]],
+                                 [NSNumber numberWithInteger:[aGateValve constraintCount]],
                                  nil]];
         }
         

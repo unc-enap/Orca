@@ -720,7 +720,7 @@ NSString* ORRGA300Lock								= @"ORRGA300Lock";
 
 - (id) amuAtIndex:(NSUInteger)anIndex
 {
-	if(anIndex>=0 && anIndex<[amus count])return [amus objectAtIndex:anIndex];
+	if(anIndex<[amus count])return [amus objectAtIndex:anIndex];
 	else return nil;
 }
 
@@ -731,7 +731,7 @@ NSString* ORRGA300Lock								= @"ORRGA300Lock";
 
 - (void) replaceAmuAtIndex:(NSUInteger)anIndex withAmu:(id)anObject
 {
-	if(anIndex>=0 && anIndex<[amus count]){
+	if(anIndex<[amus count]){
 		[[[self undoManager] prepareWithInvocationTarget:self] replaceAmuAtIndex:anIndex withAmu:[amus objectAtIndex:anIndex]];
 		[amus replaceObjectAtIndex:anIndex withObject:anObject];
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORRGA300ModelAmuAdded object:self];

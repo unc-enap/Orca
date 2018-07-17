@@ -791,7 +791,7 @@
         [alert setInformativeText:@"Having a unique run number is important for most experiments. If you change it you may end up with data with duplicate run numbers."];
         [alert addButtonWithTitle:@"Yes/Change It"];
         [alert addButtonWithTitle:@"Cancel"];
-        [alert setAlertStyle:NSWarningAlertStyle];
+        [alert setAlertStyle:NSAlertStyleWarning];
         
         [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
             if(result == NSAlertFirstButtonReturn){
@@ -838,7 +838,7 @@
     [alert setInformativeText:@"Having a unique run number is important for most experiments. If you change the run number folder you may end up with duplicate run numbers."];
     [alert addButtonWithTitle:@"Yes/Select New Location"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if(result == NSAlertFirstButtonReturn){

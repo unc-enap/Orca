@@ -897,7 +897,7 @@ enum {
             else				checkValue = mouseLoc.y-lowOffset;
             
             if(checkValue <= (markerPixel+5) && checkValue>=(markerPixel-5)){
-                if(modifierKeys & NSCommandKeyMask){
+                if(modifierKeys & NSEventModifierFlagCommand){
                     [markers removeObject:markerNumber];
                     if([markers count] == 0){
                         [attributes removeObjectForKey:ORAxisMarkers];
@@ -920,9 +920,9 @@ enum {
 	if(!markerBeingDragged){
 		firstDrag = YES;   
 
-		if(modifierKeys & NSCommandKeyMask)  [self markClick:mouseLoc];
+		if(modifierKeys & NSEventModifierFlagCommand)  [self markClick:mouseLoc];
 		else {
-			if(!(modifierKeys & NSControlKeyMask)) {
+			if(!(modifierKeys & NSEventModifierFlagControl)) {
 				[[NSCursor closedHandCursor] push];
 				[self setPin:[self minValue]];
 			}
@@ -934,7 +934,7 @@ enum {
 			
 			
 			/* last chance to set the cursor before a grab */
-			dragFlag = !(modifierKeys & NSControlKeyMask);
+			dragFlag = !(modifierKeys & NSEventModifierFlagControl);
 			nearPinFlag = [self nearPinPoint:mouseLoc];
 			
 			/* invert the pin if we are grabbing near the pin-point */
@@ -1172,7 +1172,7 @@ enum {
 		else           imageOffset = -imageSize.width-2;
 		p = NSMakePoint(axisPosition+imageOffset,val-imageSize.height/2+lowOffset);
 	}
-	[markerImage drawAtPoint:p fromRect:sourceRect operation:NSCompositeSourceOver fraction:.8];
+	[markerImage drawAtPoint:p fromRect:sourceRect operation:NSCompositingOperationSourceOver fraction:.8];
 }
 
 - (void) drawMarkInFrame:(NSRect)aFrame usingColor:(NSColor*)aColor
@@ -1299,11 +1299,11 @@ enum {
         }
         
         
-        if([[NSApp currentEvent] modifierFlags] & NSControlKeyMask){
+        if([[NSApp currentEvent] modifierFlags] & NSEventModifierFlagControl){
             if([self isXAxis])[self addCursorRect:aRect cursor:[NSCursor resizeLeftRightCursor]];
             else [self addCursorRect:aRect cursor:[NSCursor resizeUpDownCursor]];
         }
-        else if([[NSApp currentEvent] modifierFlags] & NSCommandKeyMask){
+        else if([[NSApp currentEvent] modifierFlags] & NSEventModifierFlagCommand){
             if(markerNumber){
                 [self addCursorRect:lowRect cursor:cursor];
                 [self addCursorRect:markerRect cursor:[NSCursor disappearingItemCursor]];

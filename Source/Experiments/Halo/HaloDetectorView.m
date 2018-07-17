@@ -55,7 +55,7 @@
             if(crate==0) yOffset = 0;
             else yOffset = [crateImage imageRect].size.height+20;
             NSRect destRect = NSMakeRect(30,yOffset,[crateImage imageRect].size.width,[crateImage imageRect].size.height);
-            [crateImage drawInRect:destRect fromRect:[crateImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+            [crateImage drawInRect:destRect fromRect:[crateImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
 
             [[NSColor blackColor]set];
             NSRect inside = NSMakeRect(kCrateInsideX,yOffset+kCrateInsideY,kCrateInsideWidth,kCrateInsideHeight);

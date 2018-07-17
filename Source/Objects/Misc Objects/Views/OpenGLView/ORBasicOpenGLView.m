@@ -194,9 +194,9 @@ ORBasicOpenGLView * gTrackingViewInfo = NULL;
 
 - (void)mouseDown:(NSEvent*)theEvent // trackball
 {
-    if ([theEvent modifierFlags] & NSControlKeyMask) // send to pan
+    if ([theEvent modifierFlags] & NSEventModifierFlagControl) // send to pan
 		[self rightMouseDown:theEvent];
-	else if ([theEvent modifierFlags] & NSAlternateKeyMask) // send to dolly
+	else if ([theEvent modifierFlags] & NSEventModifierFlagOption) // send to dolly
 		[self otherMouseDown:theEvent];
 	else {
 		NSPoint location = [self convertPoint:[theEvent locationInWindow] fromView:nil];

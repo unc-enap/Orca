@@ -506,17 +506,17 @@ NSString* fltEdelweissV4TriggerSourceNamesXXX[2][kFltNumberTriggerSources] = {
 
 - (void) deviceIDChanged:(NSNotification*)aNote
 {
-    if([model deviceID] == 0) [deviceIDTextField setStringValue: @"0 (DP5)"];
+    if([model deviceId] == 0) [deviceIDTextField setStringValue: @"0 (DP5)"];
     else
-    if([model deviceID] == 1) [deviceIDTextField setStringValue: @"1 (PX5)"];
+    if([model deviceId] == 1) [deviceIDTextField setStringValue: @"1 (PX5)"];
     else
-    if([model deviceID] == 2) [deviceIDTextField setStringValue: @"2 (DP5G)"];
+    if([model deviceId] == 2) [deviceIDTextField setStringValue: @"2 (DP5G)"];
     else
-    if([model deviceID] == 3) [deviceIDTextField setStringValue: @"3 (MCA8000D)"];
+    if([model deviceId] == 3) [deviceIDTextField setStringValue: @"3 (MCA8000D)"];
     else
-    if([model deviceID] == 4) [deviceIDTextField setStringValue: @"4 (TB5)"];
+    if([model deviceId] == 4) [deviceIDTextField setStringValue: @"4 (TB5)"];
     else
-	[deviceIDTextField setIntValue: [model deviceID]];
+	[deviceIDTextField setIntegerValue: [model deviceId]];
 }
 
 - (void) boardTemperatureChanged:(NSNotification*)aNote
@@ -1008,15 +1008,15 @@ return;
 
 - (void) nextPageDelayChanged:(NSNotification*)aNote
 {
-	[nextPageDelaySlider setIntValue:100-[model nextPageDelay]];
+	[nextPageDelaySlider setIntegerValue:100-[model nextPageDelay]];
 	[nextPageDelayField  setFloatValue:[model nextPageDelay]*102.3/100.];
 }
 
 
 - (void) pageSizeChanged:(NSNotification*)aNote
 {
-	[pageSizeField setIntValue: [model pageSize]];
-	[pageSizeStepper setIntValue: [model pageSize]];
+	[pageSizeField setIntegerValue: [model pageSize]];
+	[pageSizeStepper setIntegerValue: [model pageSize]];
 }
 
 
@@ -1185,7 +1185,7 @@ return;
 - (void) writeValueChanged:(NSNotification*) aNote
 {
 	[self updateStepper:regWriteValueStepper setting:[model writeValue]];
-    [regWriteValueTextField setIntValue:[model writeValue]];
+    [regWriteValueTextField setIntegerValue:[model writeValue]];
 }
 
 - (void) displayEventLoopChanged:(NSNotification*) aNote
@@ -1215,7 +1215,7 @@ return;
 	[[miscCntrlBitsMatrix cellWithTag:0] setIntValue:value & kCtrlInvert];
 	[[miscCntrlBitsMatrix cellWithTag:1] setIntValue:value & kCtrlLedOff];
 	[[miscCntrlBitsMatrix cellWithTag:2] setIntValue:value & kCtrlOnLine];
-	[controlRegNumFifosTextField setIntValue:(value & kCtrlNumFIFOs)>>28];
+	[controlRegNumFifosTextField setIntegerValue:(value & kCtrlNumFIFOs)>>28];
 }
 
 - (void) populatePullDown
@@ -1329,7 +1329,7 @@ return;
     //DEBUG     
            NSLog(@"Called %@::%@! index %i [sender intValue] %i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[commandTableView selectedRow],[commandTableView intValue]);//TODO: DEBUG -tb-
 NSLog(@"sender: %p, commandTableView:%p\n",sender,commandTableView);
-    int row=[commandTableView selectedRow];
+    int row=(int)[commandTableView selectedRow];
     if(row<0){
         NSLog(@"Nothing selected!\n");
         return;
@@ -1341,7 +1341,7 @@ NSLog(@"sender: %p, commandTableView:%p\n",sender,commandTableView);
 {
     //DEBUG    
         NSLog(@"Called %@::%@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: DEBUG -tb-
-    int row=[commandTableView selectedRow];
+    int row=(int)[commandTableView selectedRow];
     if(row<0){
         NSLog(@"Nothing selected!\n");
         return;
@@ -1429,7 +1429,7 @@ NSLog(@"sender: %p, commandTableView:%p\n",sender,commandTableView);
 - (void) spectrumRequestRatePUAction:(id)sender
 {
 	//[model setSpectrumRequestRate:[sender intValue]];	
-	[model setSpectrumRequestRate:[[spectrumRequestRatePU selectedItem] tag]];	
+	[model setSpectrumRequestRate:(int)[[spectrumRequestRatePU selectedItem] tag]];
 }
 
 - (void) spectrumRequestNowButtonAction:(id)sender
@@ -1440,7 +1440,7 @@ NSLog(@"sender: %p, commandTableView:%p\n",sender,commandTableView);
 
 - (void) spectrumRequestTypePUAction:(id)sender
 {
-	[model setSpectrumRequestType:[sender indexOfSelectedItem]+1];	
+	[model setSpectrumRequestType:(int)[sender indexOfSelectedItem]+1];
 }
 
 - (void) numSpectrumBinsPUAction:(id)sender
@@ -1464,7 +1464,7 @@ NSLog(@"sender: %p, commandTableView:%p\n",sender,commandTableView);
 - (void) lowLevelRegInHexPUAction:(id)sender /*lowLevelRegInHexPU*/
 {
 	//[model setLowLevelRegInHex:[sender intValue]];	
-	[model setLowLevelRegInHex:[sender indexOfSelectedItem]];	
+	[model setLowLevelRegInHex:(int)[sender indexOfSelectedItem]];
 }
 
 - (void) statusHighRegTextFieldAction:(id)sender
@@ -1566,7 +1566,7 @@ NSLog(@"sender: %p, commandTableView:%p\n",sender,commandTableView);
 
 - (IBAction) sltDAQModePUAction:(id)sender
 {
-	[model setSltDAQMode:[[sltDAQModePU selectedItem] tag]];	
+	[model setSltDAQMode:(int)[[sltDAQModePU selectedItem] tag]];
 	//[model setSltDAQMode:[[sender selectedItem] tag]];	
 }
 
@@ -2196,7 +2196,7 @@ NSLog(@"Called %@::%@!\n",NSStringFromClass([self class]),NSStringFromSelector(_
     [alert setInformativeText:@"Is this really what you want?"];
     [alert addButtonWithTitle:@"Yes, Kill Crate"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){
@@ -2315,7 +2315,7 @@ NSLog(@"This is my _killCrateDidEnd: -tb-\n");
     [alert setInformativeText:@"Really run threshold calibration for ALL FLTs?\n This will change ALL thresholds on ALL cards."];
     [alert addButtonWithTitle:@"Cancel"];
     [alert addButtonWithTitle:@"Yes, Delete It"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertSecondButtonReturn){
@@ -2378,33 +2378,33 @@ NSLog(@"This is my _killCrateDidEnd: -tb-\n");
 			NSString* theIdentifier				= [[tableColumn headerCell] stringValue];
 	        //DEBUG                  NSLog(@"%@::%@  theIdentifier:%@\n", NSStringFromClass([self class]), NSStringFromSelector(_cmd),theIdentifier);//DEBUG OUTPUT -tb-  
 			if([theIdentifier isEqual:@"Name"]){
-                NSDictionary* theRow = [model commandTableRow:row];
+                NSDictionary* theRow = [model commandTableRow:(int)row];
                 return [theRow objectForKey: @"Name"];
                 //return @"name";
 			}
 			else if([theIdentifier isEqual:@"Setpoint"]){
-                NSDictionary* theRow = [model commandTableRow:row];
+                NSDictionary* theRow = [model commandTableRow:(int)row];
                 return [theRow objectForKey: theIdentifier];
 			}
 			else if([theIdentifier isEqual:@"Value"]){
-                NSDictionary* theRow = [model commandTableRow:row];
+                NSDictionary* theRow = [model commandTableRow:(int)row];
                 return [theRow objectForKey: @"Value"];
 			}
 			else if([theIdentifier isEqual:@"Init"]){
-                NSDictionary* theRow = [model commandTableRow:row];
+                NSDictionary* theRow = [model commandTableRow:(int)row];
                 return [theRow objectForKey: @"Init"];
 			}
 			else if([theIdentifier isEqual:@"ID"]){
-                NSDictionary* theRow = [model commandTableRow:row];
+                NSDictionary* theRow = [model commandTableRow:(int)row];
                 return [theRow objectForKey: @"ID"];
 			}
 			else if([theIdentifier isEqual:@"Comment"]){
-                NSDictionary* theRow = [model commandTableRow:row];
+                NSDictionary* theRow = [model commandTableRow:(int)row];
                 return [theRow objectForKey: @"Comment"];
                 //return @"comment";
 			}
 			else if([theIdentifier isEqual:@"Test"]){
-                NSDictionary* theRow = [model commandTableRow:row];
+                NSDictionary* theRow = [model commandTableRow:(int)row];
                 return [theRow objectForKey: @"Init"];
                 //return @"comment";
 			}
@@ -2446,12 +2446,12 @@ NSLog(@"This is my _killCrateDidEnd: -tb-\n");
 #endif
             if([key isEqual:@"Test"]){
                 //[model setCommandTableRow:row setObject:object forKey:@"Init"];//-tb-: works, but this is better:
-                [model setCommandTableRow:row setObject:[NSNumber numberWithInt:[object intValue]] forKey:@"Init"];
+                [model setCommandTableRow:(int)row setObject:[NSNumber numberWithInt:[object intValue]] forKey:@"Init"];
                                 [commandTableView  reloadData];
 
                 return;
             }
-            [model setCommandTableRow:row setObject:object forKey:key];
+            [model setCommandTableRow:(int)row setObject:object forKey:key];
 		}
 		//[self tableViewSelectionDidChange:nil];
     }

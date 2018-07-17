@@ -152,7 +152,7 @@
 
 - (void) drawBackground:(NSRect)aRect
 {
-	[backgroundImage drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
+	[backgroundImage drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositingOperationSourceOver fraction:1.0];
     
 }
 
@@ -311,10 +311,10 @@
 {
     [[self window] makeFirstResponder:self];
     
-    BOOL shiftKeyDown = ([event modifierFlags] & NSShiftKeyMask)!=0;
-    BOOL cmdKeyDown   = ([event modifierFlags] & NSCommandKeyMask)!=0;
-    BOOL cntrlKeyDown = ([event modifierFlags] & NSControlKeyMask)!=0;
-    BOOL optionKeyDown = ([event modifierFlags] & NSAlternateKeyMask)!=0;
+    BOOL shiftKeyDown = ([event modifierFlags] & NSEventModifierFlagShift)!=0;
+    BOOL cmdKeyDown   = ([event modifierFlags] & NSEventModifierFlagCommand)!=0;
+    BOOL cntrlKeyDown = ([event modifierFlags] & NSEventModifierFlagControl)!=0;
+    BOOL optionKeyDown = ([event modifierFlags] & NSEventModifierFlagOption)!=0;
     BOOL shiftCmdKeyDown = cmdKeyDown & shiftKeyDown;
 	
     NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];
@@ -425,7 +425,7 @@
 	if([group isKindOfClass:NSClassFromString(@"ORContainerModel")]){
 		
 		NSEvent* theCurrentEvent = [NSApp currentEvent];
-		NSEvent *event =  [NSEvent mouseEventWithType:NSLeftMouseDown
+		NSEvent *event =  [NSEvent mouseEventWithType:NSEventModifierFlagControl
 											 location:[theCurrentEvent locationInWindow]
 										modifierFlags:NSEventModifierFlagControl // 0x100
 											timestamp:(NSTimeInterval)0
@@ -1043,7 +1043,7 @@
 
 - (void) moveSelectedObjectsUp:(NSEvent*)event
 {
-    BOOL shiftKeyDown = ([event modifierFlags] & NSShiftKeyMask)!=0;
+    BOOL shiftKeyDown = ([event modifierFlags] & NSEventModifierFlagShift)!=0;
 	float delta = shiftKeyDown?1:5;
 	[self moveSelectedObjects:NSMakePoint(0,delta)];
 }
@@ -1051,21 +1051,21 @@
 
 - (void) moveSelectedObjectsDown:(NSEvent*)event
 {
-    BOOL shiftKeyDown = ([event modifierFlags] & NSShiftKeyMask)!=0;
+    BOOL shiftKeyDown = ([event modifierFlags] & NSEventModifierFlagShift)!=0;
 	float delta = shiftKeyDown?1:5;
 	[self moveSelectedObjects:NSMakePoint(0,-delta)];
 }
 
 - (void) moveSelectedObjectsLeft:(NSEvent*)event
 {
-    BOOL shiftKeyDown = ([event modifierFlags] & NSShiftKeyMask)!=0;
+    BOOL shiftKeyDown = ([event modifierFlags] & NSEventModifierFlagShift)!=0;
 	float delta = shiftKeyDown?1:5;
 	[self moveSelectedObjects:NSMakePoint(-delta,0)];
 }
 
 - (void) moveSelectedObjectsRight:(NSEvent*)event
 {
-    BOOL shiftKeyDown = ([event modifierFlags] & NSShiftKeyMask)!=0;
+    BOOL shiftKeyDown = ([event modifierFlags] & NSEventModifierFlagShift)!=0;
 	float delta = shiftKeyDown?1:5;
 	[self moveSelectedObjects:NSMakePoint(delta,0)];
 }

@@ -122,7 +122,7 @@ NSString* ORLanNetio230ModelOutletNameChanged	 = @"ORLanNetio230ModelOutletNameC
     NSImage* aCachedImage = [NSImage imageNamed:@"LanNetio230"];
     NSImage* i = [[NSImage alloc] initWithSize:[aCachedImage size]];
     [i lockFocus];
-    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
 	
     int chan;
 	int xOffset = 0;

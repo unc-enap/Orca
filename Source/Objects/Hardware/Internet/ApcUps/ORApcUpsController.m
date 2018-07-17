@@ -382,7 +382,7 @@
         [alert setInformativeText:@"This will stop polling the UPS and allow unfetered access via the web interface. It will disable all power out alarms. It will automatically revert to normal operations in 30 minutes."];
         [alert addButtonWithTitle:@"Cancel"];
         [alert addButtonWithTitle:@"Yes, Go to Maintenance"];
-        [alert setAlertStyle:NSWarningAlertStyle];
+        [alert setAlertStyle:NSAlertStyleWarning];
         
         [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
             if (result == NSAlertSecondButtonReturn){
@@ -421,7 +421,7 @@
     [alert setInformativeText:@"This will clear the persistant history event log kept by ORCA and refresh with only the latest events recorded by the UPS. Is that really what you want to do?"];
     [alert addButtonWithTitle:@"Yes, Event Log"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){

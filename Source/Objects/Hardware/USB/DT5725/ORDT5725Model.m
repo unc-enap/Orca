@@ -244,7 +244,7 @@ static NSString* DT5725StartStopRunModeString[4] = {
 		NSImage* i = [[NSImage alloc] initWithSize:theIconSize];
 		[i lockFocus];
 		
-        [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositeSourceOver fraction:1.0];		
+        [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];		
 		NSBezierPath* path = [NSBezierPath bezierPath];
 		[path moveToPoint:NSMakePoint(15,8)];
 		[path lineToPoint:NSMakePoint(30,28)];

@@ -221,13 +221,13 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
     NSImage* i = [[NSImage alloc] initWithSize:theIconSize];
     [i lockFocus];
     if(remoteControl){
-        [netConnectIcon drawAtPoint:NSZeroPoint fromRect:[netConnectIcon imageRect] operation:NSCompositeSourceOver fraction:1.0];
+        [netConnectIcon drawAtPoint:NSZeroPoint fromRect:[netConnectIcon imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
         theOffset.x += 10;
     }
-    [aCachedImage drawAtPoint:theOffset fromRect:[aCachedImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+    [aCachedImage drawAtPoint:theOffset fromRect:[aCachedImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
     if([[ORGlobal sharedGlobal] runMode] == kOfflineRun && !_ignoreMode){
         NSImage* aNoticeImage = [NSImage imageNamed:@"notice"];
-        [aNoticeImage drawAtPoint:NSMakePoint(theOffset.x/2.+[i size].width/2-[aNoticeImage size].width/2 ,[i size].height/2-[aNoticeImage size].height/2) fromRect:[aNoticeImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+        [aNoticeImage drawAtPoint:NSMakePoint(theOffset.x/2.+[i size].width/2-[aNoticeImage size].width/2 ,[i size].height/2-[aNoticeImage size].height/2) fromRect:[aNoticeImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
     }
     
     if(enableIconControls){
@@ -236,7 +236,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
         if([self isRunning])                                theImage = [NSImage imageNamed:@"Stop"];
         else if(![[ORGlobal sharedGlobal] anyVetosInPlace]) theImage = [NSImage imageNamed:@"Play"];
         
-        [theImage drawInRect:kRunStartStopIconRect fromRect:[theImage imageRect] operation:NSCompositeSourceOver fraction:1];
+        [theImage drawInRect:kRunStartStopIconRect fromRect:[theImage imageRect] operation:NSCompositingOperationSourceOver fraction:1];
     }
 
 	

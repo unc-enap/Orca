@@ -316,7 +316,7 @@ NSString* ORContainerFeedThruChangedNotification 	 = @"ORContainerFeedThruChange
 			NSPoint aPoint = frame.origin;
 			aPoint.y = frame.origin.y + frame.size.height/2. - [imageToDraw size].height/2.;
 
-			[imageToDraw drawAtPoint:aPoint fromRect:sourceRect operation:NSCompositeSourceOver fraction:aTransparency];
+			[imageToDraw drawAtPoint:aPoint fromRect:sourceRect operation:NSCompositingOperationSourceOver fraction:aTransparency];
             
         }
 	}

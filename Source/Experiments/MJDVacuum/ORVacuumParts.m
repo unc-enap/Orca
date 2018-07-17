@@ -401,7 +401,7 @@ NSString* ORVacuumConstraintChanged = @"ORVacuumConstraintChanged";
 			NSPoint lockPoint;
 			if(controlPreference == kControlAbove)lockPoint = NSMakePoint(location.x-dx,location.y - kPipeRadius-kPipeThickness - dy);
 			else								  lockPoint = NSMakePoint(location.x-dx,location.y + kPipeRadius+kPipeThickness+5);
-            [lockImage drawAtPoint:lockPoint fromRect:[lockImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+            [lockImage drawAtPoint:lockPoint fromRect:[lockImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
             if([dataSource disableConstraints]){
                 [[NSColor redColor] set];
                 [NSBezierPath setDefaultLineWidth:2];
@@ -477,7 +477,7 @@ NSString* ORVacuumConstraintChanged = @"ORVacuumConstraintChanged";
 			NSPoint lockPoint;
 			if(controlPreference == kControlRight)lockPoint  = NSMakePoint(location.x-kPipeRadius-kPipeThickness-dx,location.y - dy);
 			else								  lockPoint = NSMakePoint(location.x+kPipeRadius+kPipeThickness+5,  location.y - dy);
-            [lockImage drawAtPoint:lockPoint fromRect:[lockImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+            [lockImage drawAtPoint:lockPoint fromRect:[lockImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
             if([dataSource disableConstraints]){
                 [[NSColor redColor] set];
                 [NSBezierPath setDefaultLineWidth:2];
@@ -826,7 +826,7 @@ NSString* ORVacuumConstraintChanged = @"ORVacuumConstraintChanged";
 		NSImage* lockImage = [[NSImage imageNamed:@"smallLock"] copy];
 		NSSize lockSize = [lockImage size];
 		NSPoint lockPoint = NSMakePoint(bounds.origin.x + bounds.size.width - lockSize.width, bounds.origin.y + bounds.size.height + 5);
-        [lockImage drawAtPoint:lockPoint fromRect:[lockImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+        [lockImage drawAtPoint:lockPoint fromRect:[lockImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
         if([dataSource disableConstraints]){
             [[NSColor redColor] set];
             [NSBezierPath setDefaultLineWidth:2];

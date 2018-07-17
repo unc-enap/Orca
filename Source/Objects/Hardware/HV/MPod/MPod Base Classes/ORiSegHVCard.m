@@ -97,11 +97,11 @@ NSString* ORiSegHVCardCustomInfoChanged         = @"ORiSegHVCardCustomInfoChange
     NSImage* aCachedImage = [NSImage imageNamed:[self imageName]];
     NSImage* i = [[NSImage alloc] initWithSize:[aCachedImage size]];
     [i lockFocus];
-    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
     
     if([self constraintsInPlace]){
         NSImage* constraintImage = [NSImage imageNamed:@"smallLock"];
-        [constraintImage drawAtPoint:NSMakePoint([i size].width/2 - [constraintImage size].width/2,[i size].height-[constraintImage size].height-15) fromRect:[constraintImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+        [constraintImage drawAtPoint:NSMakePoint([i size].width/2 - [constraintImage size].width/2,[i size].height-[constraintImage size].height-15) fromRect:[constraintImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
     }
     
     [i unlockFocus];

@@ -2464,8 +2464,8 @@
         [labelField setBezeled:NO];
         [labelField setEditable:NO];
         [labelField setDrawsBackground:NO];
-        [labelField setAlignment:NSRightTextAlignment];
-        [textField setAlignment:NSRightTextAlignment];
+        [labelField setAlignment:NSTextAlignmentRight];
+        [textField setAlignment:NSTextAlignmentRight];
                 
         [labelField setObjectValue:[NSString stringWithFormat:@"%@:",aName]];
         [textField setObjectValue:theObj];
@@ -2571,8 +2571,8 @@
         [textField setEditable:NO];
         [textField setDrawsBackground:NO];
 
-        [labelField setAlignment:NSRightTextAlignment];
-        [textField setAlignment:NSLeftTextAlignment];
+        [labelField setAlignment:NSTextAlignmentRight];
+        [textField setAlignment:NSTextAlignmentLeft];
         
         [labelField setObjectValue:[NSString stringWithFormat:@"%@:",aName]];
         [textField setObjectValue:theObj];

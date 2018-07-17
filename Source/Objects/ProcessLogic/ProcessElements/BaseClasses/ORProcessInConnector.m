@@ -50,7 +50,7 @@
 		}
 		if(imageToDraw){
 			NSRect sourceRect = NSMakeRect(0,0,[imageToDraw size].width,[imageToDraw size].height);
-			[imageToDraw drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositeSourceOver fraction:aTransparency];
+			[imageToDraw drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositingOperationSourceOver fraction:aTransparency];
 		}
 	}
 }

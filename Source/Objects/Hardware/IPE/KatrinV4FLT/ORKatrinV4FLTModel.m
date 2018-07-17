@@ -3583,12 +3583,14 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
     // Check for errors
     for (i=0;i<n;i++) {
         if (data[i]!=pattern[(i+shift)%n]) {
-            for (j=(i/4);(j<i/4+3) && (j < n/4);j++){
+            for (j=i/4;j<(i/4+3) && (j < n/4);j++){
                 NSLog(@"%04x: %04x %04x %04x %04x - %04x %04x %04x %04x \n",j*4,
                       data[j*4],data[j*4+1],data[j*4+2],data[j*4+3],
                       pattern[(j*4+shift)%n],  pattern[(j*4+1+shift)%n],
                       pattern[(j*4+2+shift)%n],pattern[(j*4+3+shift)%n]  );
-                return i; // check only for one error in every page!
+                if(i==0)return i;
+                // check only for one error in every page!
+                //(the == check prevents an XCode 9.4 warning that loop executes only once
             }
         }
     }

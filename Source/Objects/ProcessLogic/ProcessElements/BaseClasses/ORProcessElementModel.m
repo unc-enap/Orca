@@ -114,9 +114,9 @@ NSString* ORProcessElementForceUpdateNotification   = @"ORProcessElementForceUpd
 			[highlightedAltImage release];
 			highlightedAltImage = [[NSImage alloc] initWithSize:[anImage size]];
 			[highlightedAltImage lockFocus];
-            [anImage drawAtPoint:NSZeroPoint fromRect:[anImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+            [anImage drawAtPoint:NSZeroPoint fromRect:[anImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
 			[[NSColor colorWithCalibratedWhite:0.0 alpha:0.5] set];
-			NSRectFillUsingOperation(sourceRect, NSCompositeSourceAtop);
+			NSRectFillUsingOperation(sourceRect, NSCompositingOperationSourceAtop);
 			[NSBezierPath strokeRect:sourceRect];
 			[highlightedAltImage unlockFocus];
 		}
@@ -176,7 +176,7 @@ NSString* ORProcessElementForceUpdateNotification   = @"ORProcessElementForceUpd
 				else					imageToDraw = altImage;
 				
 				NSRect sourceRect = NSMakeRect(0,0,[imageToDraw size].width,[imageToDraw size].height);
-				[imageToDraw drawAtPoint:altFrame.origin fromRect:sourceRect operation:NSCompositeSourceOver fraction:aTransparency];
+				[imageToDraw drawAtPoint:altFrame.origin fromRect:sourceRect operation:NSCompositingOperationSourceOver fraction:aTransparency];
 			}
 			else {
 				//no icon so fake it with just a square

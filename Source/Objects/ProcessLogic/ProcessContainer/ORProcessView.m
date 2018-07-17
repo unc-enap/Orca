@@ -27,7 +27,7 @@
 - (void)drawRect:(NSRect)rect
 {
 	if([group useAltView]){
-		[backgroundImage drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
+		[backgroundImage drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositingOperationSourceOver fraction:1.0];
 	}
 	[self drawContents:rect];
     [mouseTask drawRect:rect];

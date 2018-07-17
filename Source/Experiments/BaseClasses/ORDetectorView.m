@@ -138,7 +138,7 @@
 	}
 	[delegate selectedSet:selectedSet segment:selectedPath];
 	if(selectedSet>=0 && selectedPath>=0 && [anEvent clickCount] >= 2){
-		if([anEvent modifierFlags] & NSCommandKeyMask){
+		if([anEvent modifierFlags] & NSEventModifierFlagCommand){
 			[delegate showDataSetForSet:selectedSet segment:selectedPath];
 		}
 		else {

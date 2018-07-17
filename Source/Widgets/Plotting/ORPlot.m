@@ -381,7 +381,7 @@
 	//tab will shift to next plot curve -- shift/tab goes backward.
 	unsigned short keyCode = [theEvent keyCode];
     if(keyCode == 48){
-        if([theEvent modifierFlags] & NSShiftKeyMask){
+        if([theEvent modifierFlags] & NSEventModifierFlagShift){
 			[self lastComponent];
 		}
         else {
@@ -394,7 +394,7 @@
 
 - (BOOL) mouseDown:(NSEvent*)theEvent
 {
-	if(([theEvent modifierFlags] & NSCommandKeyMask) && !([theEvent modifierFlags] & NSShiftKeyMask)) {		
+	if(([theEvent modifierFlags] & NSEventModifierFlagCommand) && !([theEvent modifierFlags] & NSEventModifierFlagShift)) {		
 		[NSCursor hide];
 		[self showCrossHairsForEvent:theEvent];
 	}
@@ -405,7 +405,7 @@
 {
     [[plotView window] disableCursorRects];
 	showCursorPosition	= NO;
-	if([theEvent modifierFlags] & NSCommandKeyMask) {	
+	if([theEvent modifierFlags] & NSEventModifierFlagCommand) {	
 		[self showCrossHairsForEvent:theEvent];
 	}
 }

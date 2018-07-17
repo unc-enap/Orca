@@ -339,7 +339,7 @@
         [alert setInformativeText:@"There will be NO history (only run status) kept if you deactivate this option."];
         [alert addButtonWithTitle:@"Cancel"];
         [alert addButtonWithTitle:@"Yes, Disable History"];
-        [alert setAlertStyle:NSWarningAlertStyle];
+        [alert setAlertStyle:NSAlertStyleWarning];
         
         [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
             if(result == NSAlertSecondButtonReturn){
@@ -377,7 +377,7 @@
         [alert setInformativeText:@"There will be NO values automatically put in to the database if you activate this option."];
         [alert addButtonWithTitle:@"Cancel"];
         [alert addButtonWithTitle:@"Yes, Disable Database"];
-        [alert setAlertStyle:NSWarningAlertStyle];
+        [alert setAlertStyle:NSAlertStyleWarning];
         
         [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
             if(result == NSAlertSecondButtonReturn){
@@ -440,7 +440,7 @@
     [alert setInformativeText:@"If the database already exists, this operation will do no harm."];
     [alert addButtonWithTitle:@"Yes, Create Database"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){
@@ -469,7 +469,7 @@
     [alert setInformativeText:@"If the database doesn't exist, this operation will do no harm."];
     [alert addButtonWithTitle:@"Yes, Delete Database"];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){

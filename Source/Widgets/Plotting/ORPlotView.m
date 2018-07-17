@@ -306,7 +306,7 @@
 	// Draw components in order
 	[self drawBackground];
 	if(backgroundImage){
-        [backgroundImage drawAtPoint:NSZeroPoint fromRect:[backgroundImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+        [backgroundImage drawAtPoint:NSZeroPoint fromRect:[backgroundImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
 	}
 	if([self showGrid]){
 		[NSBezierPath setDefaultLineWidth:.2];
@@ -452,7 +452,7 @@
 	else if(keyCode == 15)	[self resetScales:nil];		//'r'
 	else if(keyCode == 8)	[self centerOnPeak:nil];	//'c'
 	else if(keyCode == 48){
-		if([theEvent modifierFlags] & NSShiftKeyMask)	[self lastComponent];
+		if([theEvent modifierFlags] & NSEventModifierFlagShift)	[self lastComponent];
 		else											[self nextComponent];
 		[self orderChanged];
 	}
@@ -539,10 +539,10 @@
 - (void) flagsChanged:(NSEvent *)theEvent
 {
 	[[self topPlot] flagsChanged:theEvent];
-    shiftKeyIsDown = ([theEvent modifierFlags] & NSShiftKeyMask)!=0;
-    commandKeyIsDown = ([theEvent modifierFlags] & NSCommandKeyMask)!=0;
-    optionKeyIsDown = ([theEvent modifierFlags] & NSAlternateKeyMask)!=0;
-    controlKeyIsDown = ([theEvent modifierFlags] & NSControlKeyMask)!=0;
+    shiftKeyIsDown = ([theEvent modifierFlags] & NSEventModifierFlagShift)!=0;
+    commandKeyIsDown = ([theEvent modifierFlags] & NSEventModifierFlagCommand)!=0;
+    optionKeyIsDown = ([theEvent modifierFlags] & NSEventModifierFlagOption)!=0;
+    controlKeyIsDown = ([theEvent modifierFlags] & NSEventModifierFlagControl)!=0;
 	
     [[self window] resetCursorRects];
 	

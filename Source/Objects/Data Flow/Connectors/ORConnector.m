@@ -216,10 +216,10 @@ NSString* ORConnectionChanged = @"OR Connection Changed";
 	
 	onImage_Highlighted = [[NSImage alloc] initWithSize:[onImage size]];
 	[onImage_Highlighted lockFocus];
-	[onImage drawAtPoint:NSZeroPoint fromRect:[onImage imageRect] operation:NSCompositeCopy fraction:1.0];
+	[onImage drawAtPoint:NSZeroPoint fromRect:[onImage imageRect] operation:NSCompositingOperationCopy fraction:1.0];
 	[[NSColor colorWithCalibratedWhite:0.0 alpha:0.5] set];
 	NSRect sourceRect = NSMakeRect(0,0,[onImage size].width,[onImage size].height);
-	NSRectFillUsingOperation(sourceRect, NSCompositeSourceAtop);
+	NSRectFillUsingOperation(sourceRect, NSCompositingOperationSourceAtop);
 	[onImage_Highlighted unlockFocus];
 	
 }
@@ -237,10 +237,10 @@ NSString* ORConnectionChanged = @"OR Connection Changed";
 	
 	offImage_Highlighted = [[NSImage alloc] initWithSize:[offImage size]];
 	[offImage_Highlighted lockFocus];
-	[offImage drawAtPoint:NSZeroPoint fromRect:[offImage imageRect] operation:NSCompositeCopy fraction:1.0];
+	[offImage drawAtPoint:NSZeroPoint fromRect:[offImage imageRect] operation:NSCompositingOperationCopy fraction:1.0];
 	[[NSColor colorWithCalibratedWhite:0.0 alpha:0.5] set];
 	NSRect sourceRect = NSMakeRect(0,0,[offImage size].width,[offImage size].height);
-	NSRectFillUsingOperation(sourceRect, NSCompositeSourceAtop);
+	NSRectFillUsingOperation(sourceRect, NSCompositingOperationSourceAtop);
 	[offImage_Highlighted unlockFocus];
 	
 }
@@ -452,7 +452,7 @@ NSString* ORConnectionChanged = @"OR Connection Changed";
 	}
 	if(imageToDraw){
 		NSRect sourceRect = NSMakeRect(0,0,[imageToDraw size].width,[imageToDraw size].height);
-		[imageToDraw drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositeSourceOver fraction:aTransparency];
+		[imageToDraw drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositingOperationSourceOver fraction:aTransparency];
 	}
 }
 

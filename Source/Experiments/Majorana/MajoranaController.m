@@ -788,7 +788,7 @@
     [alert setInformativeText:@""];
     [alert addButtonWithTitle:[NSString stringWithFormat:@"YES/Turn %@ HV Checks",!currentState?@"OFF":@"ON"]];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if(result == NSAlertFirstButtonReturn){
@@ -834,7 +834,7 @@
     if(currentState)[alert addButtonWithTitle:[NSString stringWithFormat:@"YES/Resume Breakdown Checks"]];
     else            [alert addButtonWithTitle:[NSString stringWithFormat:@"YES/Skip Breakdown Checks"]];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if(result == NSAlertFirstButtonReturn){
@@ -880,7 +880,7 @@
     if(currentState)[alert addButtonWithTitle:[NSString stringWithFormat:@"YES/Enable Breakdown Panics"]];
     else            [alert addButtonWithTitle:[NSString stringWithFormat:@"YES/Ignore Breakdown Panics"]];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if(result == NSAlertFirstButtonReturn){
@@ -1000,7 +1000,7 @@
     [alert setInformativeText:@"An attempt will be made to confirm that the source is retracted, but you should manually check its position before proceeding!"];
     [alert addButtonWithTitle:[NSString stringWithFormat:@"YES/Close It"]];
     [alert addButtonWithTitle:@"Cancel"];
-    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert setAlertStyle:NSAlertStyleWarning];
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if(result == NSAlertFirstButtonReturn){

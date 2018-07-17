@@ -103,24 +103,24 @@ NSString*  ORScriptTaskOutConnector			= @"ORScriptTaskOutConnector";
     NSSize theSize = NSMakeSize(originalImageSize.width+textSize.width,[aCachedImage size].height);
     NSImage* i = [[NSImage alloc] initWithSize:theSize];
     [i lockFocus];
-    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
 	[self decorateIcon:i];
     
     
 	if([self breakChain] && [self objectConnectedTo: ORScriptTaskOutConnector]){
         NSImage* theImage = [NSImage imageNamed:@"chainBroken"];
-        [theImage drawAtPoint:NSZeroPoint fromRect:[theImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+        [theImage drawAtPoint:NSZeroPoint fromRect:[theImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
 	}	
     if([self running]){
         NSImage* theImage = [NSImage imageNamed:@"ScriptRunning"];
-        [theImage drawAtPoint:NSZeroPoint fromRect:[theImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+        [theImage drawAtPoint:NSZeroPoint fromRect:[theImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
     }
     
 	if(enableIconControls){
         NSImage* theImage;
         if([self running])theImage = [NSImage imageNamed:@"Stop"];
         else              theImage = [NSImage imageNamed:@"Play"];
-         [theImage drawInRect:NSMakeRect(3,3,25,25) fromRect:[theImage imageRect] operation:NSCompositeSourceOver fraction:1];
+         [theImage drawInRect:NSMakeRect(3,3,25,25) fromRect:[theImage imageRect] operation:NSCompositingOperationSourceOver fraction:1];
     }
     
     if([self scriptName]){

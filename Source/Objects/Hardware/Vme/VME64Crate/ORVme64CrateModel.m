@@ -37,7 +37,7 @@
     NSSize cachedImageSize = [aCachedImage size];
     NSImage* i = [[NSImage alloc] initWithSize:cachedImageSize];
     [i lockFocus];
-    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositeSourceOver fraction:1.0];
+    [aCachedImage drawAtPoint:NSZeroPoint fromRect:[aCachedImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
     if(powerOff){
         NSAttributedString* s = [[[NSAttributedString alloc] initWithString:@"No Pwr"
                                                                  attributes:[NSDictionary dictionaryWithObjectsAndKeys:
