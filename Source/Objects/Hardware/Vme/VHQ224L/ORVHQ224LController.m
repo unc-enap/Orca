@@ -481,7 +481,7 @@
 {
 	NSDecimalNumber* theChannelNumber = (NSDecimalNumber*)info;
 	int channel = [theChannelNumber intValue] ;
-	if(returnCode == NSAlertDefaultReturn){
+	if(returnCode == NSAlertFirstButtonReturn){
 		@try {
 			if(channel == 0xFFFF || channel == 0)[model panicToZero:0];
 			if(channel == 0xFFFF || channel == 1)[model panicToZero:1];

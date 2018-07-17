@@ -876,14 +876,14 @@ static NSString* ORFolderDirectoryName    = @"ORFolderDirectoryName";
 @implementation ORSmartFolder (private)
 - (void)_deleteAllSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
 {
-    if(returnCode == NSAlertDefaultReturn){
+    if(returnCode == NSAlertFirstButtonReturn){
         [self deleteAll];
     }
 }
 
 - (void)_sendAllSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
 {
-    if(returnCode == NSAlertDefaultReturn){
+    if(returnCode == NSAlertFirstButtonReturn){
         if(![self queueIsRunning])[self sendAll];
         else [self stopTheQueue];
     }

@@ -655,7 +655,7 @@
 {
 	NSDecimalNumber* theChannelNumber = (NSDecimalNumber*)info;
 	int channel = [theChannelNumber intValue] ;
-	if(returnCode == NSAlertDefaultReturn){
+	if(returnCode == NSAlertFirstButtonReturn){
 		@try {
 			int i;
 			for(i=0;i<kNumVHS4030Channels;i++){

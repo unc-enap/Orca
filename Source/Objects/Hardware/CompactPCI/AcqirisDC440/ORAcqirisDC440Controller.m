@@ -600,7 +600,7 @@
 @implementation ORAcqirisDC440Controller (private)
 - (void) _doItSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
 {
-    if(returnCode == NSAlertDefaultReturn){
+    if(returnCode == NSAlertFirstButtonReturn){
 		[model loadDialog];
 	}
 }

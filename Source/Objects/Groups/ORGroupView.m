@@ -425,7 +425,7 @@
 	if([group isKindOfClass:NSClassFromString(@"ORContainerModel")]){
 		
 		NSEvent* theCurrentEvent = [NSApp currentEvent];
-		NSEvent *event =  [NSEvent mouseEventWithType:NSEventModifierFlagControl
+		NSEvent *event =  [NSEvent mouseEventWithType:NSEventTypeLeftMouseDown
 											 location:[theCurrentEvent locationInWindow]
 										modifierFlags:NSEventModifierFlagControl // 0x100
 											timestamp:(NSTimeInterval)0

@@ -1025,14 +1025,14 @@
 
 - (void) _allRampToZeroSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(id)info
 {
-	if(returnCode == NSAlertDefaultReturn){
+	if(returnCode == NSAlertFirstButtonReturn){
 		[model rampAllToZero];
 	}
 }
 
 - (void) _panicRampSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(id)info
 {
-	if(returnCode == NSAlertDefaultReturn){
+	if(returnCode == NSAlertFirstButtonReturn){
         int aChannel = [model selectedChannel];
 		[model panic:aChannel];
         NSLog(@"Panicked MPod (%lu), Card %d Channel %d\n",[[model guardian]uniqueIdNumber],[model slot], aChannel);
@@ -1041,7 +1041,7 @@
 
 - (void) _panicAllRampSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(id)info
 {
-	if(returnCode == NSAlertDefaultReturn){
+	if(returnCode == NSAlertFirstButtonReturn){
 		[model panicAll];
         NSLog(@"Panicked All Channels MPod (%lu), Card %d\n",[[model guardian]uniqueIdNumber],[model slot]);
 
@@ -1049,20 +1049,20 @@
 }
 - (void) _syncSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(id)info
 {
-	if(returnCode == NSAlertDefaultReturn){
+	if(returnCode == NSAlertFirstButtonReturn){
 		[model syncDialog];
 	}
 }
 - (void) _allOnSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(id)info
 {
-	if(returnCode == NSAlertDefaultReturn){
+	if(returnCode == NSAlertFirstButtonReturn){
 		[model turnAllChannelsOn];
 	}
 }
 
 - (void) _allOffSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(id)info
 {
-	if(returnCode == NSAlertDefaultReturn){
+	if(returnCode == NSAlertFirstButtonReturn){
 		[model turnAllChannelsOff];
 	}
 }

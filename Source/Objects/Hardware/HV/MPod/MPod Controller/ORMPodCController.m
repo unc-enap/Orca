@@ -255,7 +255,7 @@
 @implementation ORMPodCController (private)
 - (void) _powerSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(id)info
 {
-	if(returnCode == NSAlertDefaultReturn){
+	if(returnCode == NSAlertFirstButtonReturn){
 		[model togglePower];
 	}
 }

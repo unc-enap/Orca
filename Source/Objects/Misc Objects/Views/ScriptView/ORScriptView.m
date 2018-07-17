@@ -113,7 +113,7 @@
                 // to modify the selection here, just log the time
                 doubleDownTime = eventTime;
             }
-            else if (eventType == NSLeftMouseUp) {
+            else if (eventType == NSEventTypeLeftMouseUp) {
                 // After the double-click interval since the second mouseDown,
                 // the mouseUp is no longer eligible
                 if (eventTime - doubleDownTime <= [NSEvent doubleClickInterval]){

@@ -978,7 +978,7 @@
 #if !defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
 - (void) turnOnCryoPumpDidFinish:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
 {
-	if(returnCode == NSAlertDefaultReturn)[model writeCryoPumpOn:YES];
+	if(returnCode == NSAlertFirstButtonReturn)[model writeCryoPumpOn:YES];
 }
 #endif
 
@@ -1029,7 +1029,7 @@
 #if !defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
 - (void) turnOffCryoPumpDidFinish:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
 {
-	if(returnCode == NSAlertDefaultReturn)[model writeCryoPumpOn:NO];
+	if(returnCode == NSAlertFirstButtonReturn)[model writeCryoPumpOn:NO];
 }
 #endif
 - (IBAction) openPurgeValveAction:(id)sender
@@ -1073,7 +1073,7 @@
 #if !defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
 - (void) openPurgeValveDidFinish:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
 {
-	if(returnCode == NSAlertDefaultReturn)[model writePurgeValveOpen:YES];
+	if(returnCode == NSAlertFirstButtonReturn)[model writePurgeValveOpen:YES];
 }
 #endif
 - (void) beginConstraintPanel:(NSDictionary*)constraints actionTitle:(NSString*)aTitle
@@ -1126,7 +1126,7 @@
 #if !defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
 - (void) closePurgeValveDidFinish:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
 {
-	if(returnCode == NSAlertDefaultReturn)[model writePurgeValveOpen:NO];
+	if(returnCode == NSAlertFirstButtonReturn)[model writePurgeValveOpen:NO];
 }
 #endif
 - (IBAction) openRoughingValveAction:(id)sender
@@ -1170,7 +1170,7 @@
 #if !defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
 - (void) openRoughingValveDidFinish:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
 {
-	if(returnCode == NSAlertDefaultReturn)[model writeRoughValveOpen:YES];
+	if(returnCode == NSAlertFirstButtonReturn)[model writeRoughValveOpen:YES];
 }
 #endif
 
@@ -1206,7 +1206,7 @@
 #if !defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
 - (void) closeRoughingValveDidFinish:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
 {
-	if(returnCode == NSAlertDefaultReturn)[model writeRoughValveOpen:NO];
+	if(returnCode == NSAlertFirstButtonReturn)[model writeRoughValveOpen:NO];
 }
 #endif
 - (IBAction) turnThermocoupleOnAction:(id)sender
@@ -1241,7 +1241,7 @@
 #if !defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
 - (void) turnOnThermocoupleDidFinish:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
 {
-	if(returnCode == NSAlertDefaultReturn)[model writeThermocoupleOn:YES];
+	if(returnCode == NSAlertFirstButtonReturn)[model writeThermocoupleOn:YES];
 }
 #endif
 - (IBAction) turnThermocoupleOffAction:(id)sender
@@ -1276,7 +1276,7 @@
 #if !defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
 - (void) turnOffThermocoupleDidFinish:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
 {
-	if(returnCode == NSAlertDefaultReturn)[model writeThermocoupleOn:NO];
+	if(returnCode == NSAlertFirstButtonReturn)[model writeThermocoupleOn:NO];
 }
 #endif
 

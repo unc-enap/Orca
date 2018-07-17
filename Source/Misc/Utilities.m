@@ -562,7 +562,7 @@ BOOL ORRunAlertPanel(NSString* mainMessage, NSString* msg, NSString* defaultButt
 #else
     NSString* s = [NSString stringWithFormat:msg parameters:ap];
     int choice = NSRunAlertPanel(mainMessage,@"%@",defaultButtonTitle,alternateButtonTitle,otherButtonTitle,s);
-    if(choice == NSAlertDefaultReturn) result = YES;
+    if(choice == NSAlertFirstButtonReturn) result = YES;
     else                               result = NO;
 #endif
  

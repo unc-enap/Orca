@@ -237,7 +237,7 @@
 {
     int chan  = [[userInfo objectForKey:@"chan"] intValue];
     int state = [model outletStatus:chan];
-	if(returnCode == NSAlertDefaultReturn){
+	if(returnCode == NSAlertFirstButtonReturn){
         if(state)[model turnOffOutlet:chan];
         else [model turnOnOutlet:chan];
     }

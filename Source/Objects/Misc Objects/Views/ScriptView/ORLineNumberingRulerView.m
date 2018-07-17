@@ -173,7 +173,7 @@ NSString* ORBreakpointsAction = @"ORBreakpointsAction";
 - (NSFont*) font
 {
 	if (font == nil) {
-		return [NSFont labelFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]];
+		return [NSFont labelFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeMini]];
 	}
     return font;
 }

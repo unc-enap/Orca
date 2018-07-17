@@ -875,7 +875,7 @@
 @implementation ORHVRampController (private)
 - (void) _panicRampSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
 {
-	if(returnCode == NSAlertDefaultReturn){
+	if(returnCode == NSAlertFirstButtonReturn){
         [model setStates:kHVRampPanic onlyControlled:YES];
 		[model startRamping];
 		[self updateButtons];
@@ -896,7 +896,7 @@
 
 - (void) _systemPanicRampSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
 {
-	if(returnCode == NSAlertDefaultReturn){
+	if(returnCode == NSAlertFirstButtonReturn){
         [model setStates:kHVRampPanic onlyControlled:NO];
 		[model startRamping];
 		[self updateButtons];
@@ -904,7 +904,7 @@
 }
 - (void) _syncActionSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
 {
-	if(returnCode == NSAlertDefaultReturn){
+	if(returnCode == NSAlertFirstButtonReturn){
 		[model forceDacToAdc];
 		[self updateButtons];
     }

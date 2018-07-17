@@ -1844,7 +1844,7 @@ static int              sChannelsNotChangedCount = 0;
 
 - (void) _continueHWWizard:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
 {
-    if (returnCode == NSAlertDefaultReturn) {
+    if (returnCode == NSAlertFirstButtonReturn) {
         sDetectorDbState = 0;
         NSLog(@"Hardware Wizard action cancelled.\n");
     } else {

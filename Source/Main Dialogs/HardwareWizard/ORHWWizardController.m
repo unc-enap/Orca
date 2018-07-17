@@ -1755,14 +1755,14 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
 #if !defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
 - (void) _restoreAllSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
 {
-    if(returnCode == NSAlertDefaultReturn){
+    if(returnCode == NSAlertFirstButtonReturn){
         [self performSelector:@selector(_delayedRestoreAllFileRequest) withObject:nil afterDelay:.1];
     }    
 }
      
 - (void) _doItSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
 {
-    if(returnCode == NSAlertDefaultReturn){
+    if(returnCode == NSAlertFirstButtonReturn){
         [self setUseMark:NO];
         [self makeControlStruct:nil];
         [self performSelector:@selector(_delayedExecute) withObject:nil afterDelay:.1];
@@ -1770,7 +1770,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
 }
 - (void) _doItWithMarkSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
 {
-    if(returnCode == NSAlertDefaultReturn){
+    if(returnCode == NSAlertFirstButtonReturn){
         [self setUseMark:YES];
         [self makeControlStruct:nil];
         [self performSelector:@selector(_delayedExecute) withObject:nil afterDelay:.1];
@@ -1780,7 +1780,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
 
 - (void)_clearMarksSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
 {
-    if(returnCode == NSAlertDefaultReturn){
+    if(returnCode == NSAlertFirstButtonReturn){
         [hwUndoManager clearMarks];
         [self marksChanged];
     }    
@@ -1788,7 +1788,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
 
 - (void)_clearUndoSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
 {
-    if(returnCode == NSAlertDefaultReturn){
+    if(returnCode == NSAlertFirstButtonReturn){
         [self clearUndoStacks];
     }    
 }

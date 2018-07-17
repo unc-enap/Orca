@@ -635,7 +635,7 @@
 {
 	NSDecimalNumber* theChannelNumber = (NSDecimalNumber*)info;
 	int channel = [theChannelNumber intValue] ;
-	if(returnCode == NSAlertDefaultReturn){
+	if(returnCode == NSAlertFirstButtonReturn){
 		@try {
 			if(channel == 0xFFFF || channel == 0)[model panicToZero:0];
 			if(channel == 0xFFFF || channel == 1)[model panicToZero:1];
@@ -680,7 +680,7 @@
 #if !defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
 - (void) _syncSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(id)info
 {
-	if(returnCode == NSAlertDefaultReturn){
+	if(returnCode == NSAlertFirstButtonReturn){
 		[model syncDialog];
 	}
 }

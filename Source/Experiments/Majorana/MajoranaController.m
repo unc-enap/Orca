@@ -917,7 +917,7 @@
     int module = [[userInfo objectForKey:@"module"]intValue];
     BOOL currentState= [[userInfo objectForKey:@"currentState"]intValue];
     
-	if(returnCode == NSAlertDefaultReturn){
+	if(returnCode == NSAlertFirstButtonReturn){
         if(module == 0) [model setIgnorePanicOnA:!currentState];
         else            [model setIgnorePanicOnB:!currentState];
     }
@@ -933,7 +933,7 @@
     int module = [[userInfo objectForKey:@"module"]intValue];
     BOOL currentState= [[userInfo objectForKey:@"currentState"]intValue];
     
-    if(returnCode == NSAlertDefaultReturn){
+    if(returnCode == NSAlertFirstButtonReturn){
         if(module == 0) [model setIgnoreBreakdownCheckOnA:!currentState];
         else            [model setIgnoreBreakdownCheckOnB:!currentState];
     }

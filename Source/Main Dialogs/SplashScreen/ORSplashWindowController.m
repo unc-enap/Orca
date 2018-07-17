@@ -103,7 +103,7 @@
 
 {
     if (self = [super initWithContentRect: contentRect
-                                styleMask: NSBorderlessWindowMask
+                                styleMask: NSWindowStyleMaskBorderless
                                   backing: bufferingType
                                     defer: flag])
 

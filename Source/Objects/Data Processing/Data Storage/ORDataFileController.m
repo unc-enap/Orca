@@ -159,7 +159,7 @@ enum {
 #if !defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
 - (void)_stopSendingSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
 {
-	if(returnCode == NSAlertDefaultReturn){
+	if(returnCode == NSAlertFirstButtonReturn){
 		[[model dataFolder] stopTheQueue];
 		[[model statusFolder] stopTheQueue];
 		[[model configFolder] stopTheQueue];
