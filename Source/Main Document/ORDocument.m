@@ -131,7 +131,7 @@ NSString* ORDocumentLock					= @"ORDocumentLock";
     [customRunParameters release];
 
     [[self undoManager] removeAllActions];
-	RestoreApplicationDockTileImage();
+	//RestoreApplicationDockTileImage();
     
 	[(ORAppDelegate*)[NSApp delegate] setDocument:nil];
     //[self setDbConnection:nil];
