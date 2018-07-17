@@ -29,7 +29,7 @@
 #import "OROrderedObjManager.h"
 #import "ORSelectorSequence.h"
 
-const struct {
+static const struct {
 	unsigned long Register;	//XL2
 	unsigned long Memory;	//XL2
 	NSString* IPAddress;	//XL3

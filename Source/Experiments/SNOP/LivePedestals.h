@@ -7,11 +7,6 @@
 //  Class to handle embedded pedestals
 //
 
-#ifndef Orca_LivePedestals_h
-#define Orca_LivePedestals_h
-
-#import <Foundation/Foundation.h>
-
 #define LIVEPEDS_STOPPED 0
 #define LIVEPEDS_RUNNING 1
 
@@ -55,4 +50,3 @@
 @end
 
 
-#endif

@@ -7,7 +7,6 @@
 //  Class that handles the Nhit monitor.
 //
 
-#import <Foundation/Foundation.h>
 #import <stdint.h>
 #import "ORPQModel.h"
 #import "RedisClient.h"

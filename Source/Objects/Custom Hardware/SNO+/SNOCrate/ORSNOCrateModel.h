@@ -19,10 +19,10 @@
 //-------------------------------------------------------------
 #pragma mark •••Imported Files
 #import "ORCrate.h"
-#import "Sno_Monitor_Adcs.h"
-#import "ORDataTaker.h"
-#import "VME_eCPU_Config.h"
-#import "SBC_Config.h"
+//#import "Sno_Monitor_Adcs.h"
+//#import "ORDataTaker.h"
+//#import "VME_eCPU_Config.h"
+//#import "SBC_Config.h"
 
 @interface ORSNOCrateModel : ORCrate {
 	int slot;
