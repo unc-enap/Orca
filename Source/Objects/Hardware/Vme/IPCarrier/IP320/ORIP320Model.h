@@ -65,15 +65,6 @@ enum {
     kAutoZero
 };
 
-static struct{
-	float kSlope_m;
-	float kIdeal_Volt_Span;
-	float kIdeal_Zero;
-	float kVoltCALLO;
-	short kCountCALLO;
-	float kVoltCALHI;
-	short kCountCALHI;
-} calibrationConstants[kNumGainSettings];
 
 
 @interface ORIP320Model : ORVmeIPCard <ORAdcProcessing>
@@ -98,6 +89,15 @@ static struct{
     BOOL            readOnce;
 	BOOL			calibrationLoaded;
     NSDate*			calibrationDate;
+    struct{
+        float kSlope_m;
+        float kIdeal_Volt_Span;
+        float kIdeal_Zero;
+        float kVoltCALLO;
+        short kCountCALLO;
+        float kVoltCALHI;
+        short kCountCALHI;
+    } calibrationConstants[kNumGainSettings];
 }
 
 #pragma mark ¥¥¥Accessors
