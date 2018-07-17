@@ -39,9 +39,9 @@ extern long num_lines;
 extern id functionList;
 extern int OrcaScriptparse(void);
 ORScriptRunner* theScriptRunner = nil;
-int OrcaScriptYYINPUT(char* theBuffer,int maxSize) 
+int OrcaScriptYYINPUT(char* theBuffer,unsigned long maxSize) 
 {
-	return (int)[theScriptRunner yyinputToBuffer:theBuffer withSize:maxSize];
+	return (int)[theScriptRunner yyinputToBuffer:theBuffer withSize:(int)maxSize];
 }
 //========================================================================
 

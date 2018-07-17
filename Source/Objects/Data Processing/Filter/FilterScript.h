@@ -22,7 +22,7 @@
 
 extern int FilterScriptYYINPUT(char* theBuffer,int maxSize);
 #undef YY_INPUT
-#define YY_INPUT(b,r,s) ((int)(r = FilterScriptYYINPUT(b,s)))
+#define YY_INPUT(b,r,s) (r = FilterScriptYYINPUT(b,s))
 
 typedef enum nodeEnum { typeCon, typeId, typeOpr } nodeEnum;
 
