@@ -975,21 +975,7 @@
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateForReplayMode) object:nil];
 }
 
-- (void) scaleValueHistogram
-{
 
-    [[valueHistogramsPlot xAxis] setRngLow:0 withHigh:64];
-	switch([model displayType]){
-		case kDisplayRates:		[[valueHistogramsPlot xAxis] setRngLow:0 withHigh:64]; break;
-		case kDisplayThresholds:
-		case kDisplayGains:		
-		case kDisplayTotalCounts:		
-			[valueHistogramsPlot autoScaleX:self];
-			[valueHistogramsPlot autoScaleY:self];
-		break;
-		default: break;
-	}
-}
 
 #pragma mark •••Details Interface Management
 - (void) histogramsUpdated:(NSNotification*)aNote
@@ -1169,15 +1155,17 @@
 
 - (void) scaleValueHistogram
 {
-	switch([model displayType]){
-		case kDisplayRates:			[[valueHistogramsPlot xAxis] setRngLow:0 withHigh:[model maxNumSegments]]; break;
-		case kDisplayTotalCounts:	[[valueHistogramsPlot xAxis] setRngLow:0 withHigh:[model maxNumSegments]]; break;
-		case kDisplayThresholds:
-		case kDisplayGains:		
-			[valueHistogramsPlot autoScaleX:self];
-			[valueHistogramsPlot autoScaleY:self];
-		break;
-		default: break;
-	}
+    
+    [[valueHistogramsPlot xAxis] setRngLow:0 withHigh:64];
+    switch([model displayType]){
+        case kDisplayRates:        [[valueHistogramsPlot xAxis] setRngLow:0 withHigh:64]; break;
+        case kDisplayThresholds:
+        case kDisplayGains:
+        case kDisplayTotalCounts:
+            [valueHistogramsPlot autoScaleX:self];
+            [valueHistogramsPlot autoScaleY:self];
+            break;
+        default: break;
+    }
 }
 @end

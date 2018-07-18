@@ -489,8 +489,4 @@ NSString* ORVmecpuLock = @"ORVmecpuLock";
 }
 @end
 
-@implementation ORVmecpuModel (OROrderedObjHolding)
-- (int) maxNumberOfObjects	{ return 7; }
-- (int) objWidth			{ return 48; }
-@end
 

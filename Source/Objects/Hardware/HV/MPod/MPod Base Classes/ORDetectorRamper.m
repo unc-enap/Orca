@@ -32,10 +32,6 @@ NSString* ORDetectorRamperEnabledChanged				= @"ORDetectorRamperEnabledChanged";
 NSString* ORDetectorRamperStateChanged					= @"ORDetectorRamperStateChanged";
 NSString* ORDetectorRamperRunningChanged				= @"ORDetectorRamperRunningChanged";
 
-@interface ORDetectorRamper (private)
-- (void) setRunning:(BOOL)aValue;
-- (void) setState:(int)aValue;
-@end
 
 @implementation ORDetectorRamper
 
@@ -367,25 +363,23 @@ NSString* ORDetectorRamperRunningChanged				= @"ORDetectorRamperRunningChanged";
 	}
 }
 
-@end
-
-@implementation ORDetectorRamper (private)
-
-
 - (void) setRunning:(BOOL)aValue
 {
-	running = aValue;
+    running = aValue;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORDetectorRamperRunningChanged object:delegate];
 }
 
 - (void) setState:(int)aValue
 {
-	state = aValue;
-	
-	//reset timers as needed.
-	if(state == kDetRamperStepWait)					self.lastStepWaitTime = nil;
-	else if(state == kDetRamperStepWaitForVoltage)	self.lastVoltageWaitTime = nil;
-	
+    state = aValue;
+    
+    //reset timers as needed.
+    if(state == kDetRamperStepWait)                    self.lastStepWaitTime = nil;
+    else if(state == kDetRamperStepWaitForVoltage)    self.lastVoltageWaitTime = nil;
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:ORDetectorRamperStateChanged object:delegate];
 }
 @end
+
+
+

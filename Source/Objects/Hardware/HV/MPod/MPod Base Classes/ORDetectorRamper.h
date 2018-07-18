@@ -60,6 +60,8 @@
 - (void) encodeWithCoder:(NSCoder*)encoder;
 - (NSString*) hwGoalString;
 - (void) execute;
+- (void) setRunning:(BOOL)aValue;
+- (void) setState:(int)aValue;
 
 @property (nonatomic,assign) ORiSegHVCard* delegate;
 @property (nonatomic,assign) short channel;
