@@ -69,7 +69,7 @@ typedef struct
   uint32_t hv_relay2; //!< stores the (upper) relays
 } Crate; //!< all database values for the crate
 
-Crate crate; //!< Current configuration
+extern Crate crate; //!< Current configuration
 
 #pragma pack()
 
