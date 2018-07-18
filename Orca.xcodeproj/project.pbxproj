@@ -3151,6 +3151,10 @@
 		84EA918320FE5DDF00110B85 /* libssl.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA918220FE5DDE00110B85 /* libssl.1.0.0.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
 		84EA918520FE5DF800110B85 /* libcrypto.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA918420FE5DF800110B85 /* libcrypto.1.0.0.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
 		84EA918720FE5F7800110B85 /* libpq.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA918620FE5F7800110B85 /* libpq.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
+		84EA919420FF840F00110B85 /* libmysqlclient.21.dylib in Frameworks_Copy */ = {isa = PBXBuildFile; fileRef = 84EA916720FE5A3700110B85 /* libmysqlclient.21.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		84EA919520FF840F00110B85 /* libssl.1.0.0.dylib in Frameworks_Copy */ = {isa = PBXBuildFile; fileRef = 84EA918220FE5DDE00110B85 /* libssl.1.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		84EA919620FF840F00110B85 /* libcrypto.1.0.0.dylib in Frameworks_Copy */ = {isa = PBXBuildFile; fileRef = 84EA918420FE5DF800110B85 /* libcrypto.1.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		84EA919720FF840F00110B85 /* libpq.dylib in Frameworks_Copy */ = {isa = PBXBuildFile; fileRef = 84EA918620FE5F7800110B85 /* libpq.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		84EB2DDE1E32990D00C273AA /* LabJackU6.nib in Resources */ = {isa = PBXBuildFile; fileRef = 84EB2DD51E32990D00C273AA /* LabJackU6.nib */; };
 		84EB2DE11E32990D00C273AA /* ORLabJackU6Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EB2DD81E32990D00C273AA /* ORLabJackU6Controller.h */; };
 		84EB2DE21E32990D00C273AA /* ORLabJackU6Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EB2DD91E32990D00C273AA /* ORLabJackU6Controller.m */; };
@@ -3831,6 +3835,10 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				84EA919420FF840F00110B85 /* libmysqlclient.21.dylib in Frameworks_Copy */,
+				84EA919520FF840F00110B85 /* libssl.1.0.0.dylib in Frameworks_Copy */,
+				84EA919620FF840F00110B85 /* libcrypto.1.0.0.dylib in Frameworks_Copy */,
+				84EA919720FF840F00110B85 /* libpq.dylib in Frameworks_Copy */,
 			);
 			name = Frameworks_Copy;
 			runOnlyForDeploymentPostprocessing = 0;
