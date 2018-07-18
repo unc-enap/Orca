@@ -6,7 +6,7 @@
 //
 //
 
-#import "ResistorDBViewController.h"
+//#import "ResistorDBViewController.h"
 
 @class ORCouchDB;
 
