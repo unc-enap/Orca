@@ -975,7 +975,7 @@
 {
 	id selName  = NodeValue(0);
 	id selValue = NodeValue(1);
-	return [NSString stringWithFormat:@"%@:%lu#",selName,(unsigned long)selValue];
+	return [NSString stringWithFormat:@"%@:%llu#",selName,(unsigned long long)selValue];
 }
 
 - (id) processStatements:(id) p
@@ -2021,7 +2021,7 @@
 
 - (id) extractValue:(int)index name:(NSString*)aFunctionName args:(NSArray*)valueArray
 {
-	id string = [valueArray objectAtIndex:0];
+	id string = (id)[valueArray objectAtIndex:0];
 	if([string isKindOfClass:[NSString class]]){
 		if([string hasPrefix:@"@("] && [string hasSuffix:@")"]){
 			string = [string substringFromIndex:2];

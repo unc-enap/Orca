@@ -177,21 +177,21 @@
     else if(*theArg == '@'){
         [self setArgument:&aVal atIndex:argIndex];
     }
-	else if(!strncmp(theArg,"{_NSPo",6)){
+	else if(!strncmp(theArg,"{_NSPo",6) || !strncmp(theArg,"{CGPoi",6)){
 		aVal = [aVal substringFromIndex:2];
 		aVal = [aVal substringToIndex:[aVal length]-1];
 		NSArray* xy = [aVal componentsSeparatedByString:@","];
 		NSPoint thePoint = NSMakePoint([[xy objectAtIndex:0] floatValue], [[xy objectAtIndex:1] floatValue]);
 		[self setArgument:&thePoint atIndex:argIndex];
 	}
-	else if(!strncmp(theArg,"{_NSRa",6)){
+	else if(!strncmp(theArg,"{_NSRa",6) | !strncmp(theArg,"{CGRan",6)){
 		aVal = [aVal substringFromIndex:2];
 		aVal = [aVal substringToIndex:[aVal length]-1];
 		NSArray* xy = [aVal componentsSeparatedByString:@","];
 		NSRange theRange = NSMakeRange([[xy objectAtIndex:0] floatValue], [[xy objectAtIndex:1] floatValue]);
 		[self setArgument:&theRange atIndex:argIndex];
 	}
-	else if(!strncmp(theArg,"{_NSRe",6)){
+	else if(!strncmp(theArg,"{_NSRe",6) || !strncmp(theArg,"{CGRec",6)){
 		aVal = [aVal substringFromIndex:2];
 		aVal = [aVal substringToIndex:[aVal length]-1];
 		NSArray* xy = [aVal componentsSeparatedByString:@","];
@@ -201,7 +201,7 @@
 									[[xy objectAtIndex:3] floatValue]);
 		[self setArgument:&theRect atIndex:argIndex];
 	}
-	else if(!strncmp(theArg,"{_NSSi",6)){
+	else if(!strncmp(theArg,"{_NSSi",6) || !strncmp(theArg,"{CGSiz",6)){
 		aVal = [aVal substringFromIndex:2];
 		aVal = [aVal substringToIndex:[aVal length]-1];
 		NSArray* xy = [aVal componentsSeparatedByString:@","];
@@ -264,6 +264,16 @@
         [self getReturnValue:&buffer]; 
 		returnValueAsString = [[NSNumber numberWithUnsignedLong:buffer] stringValue];
     }
+    else if(*theArg == 'q'){
+        long long buffer;
+        [self getReturnValue:&buffer];
+        returnValueAsString = [[NSNumber numberWithLongLong:buffer] stringValue];
+    }
+    else if(*theArg == 'Q'){
+        unsigned long long buffer;
+        [self getReturnValue:&buffer];
+        returnValueAsString = [[NSNumber numberWithUnsignedLongLong:buffer] stringValue];
+    }
     else if(*theArg == 'f'){
 		float buffer;
         [self getReturnValue:&buffer]; 
@@ -284,22 +294,22 @@
         [self getReturnValue:&obj]; 
 		return obj;
     }
-	else if(!strncmp(theArg,"{_NSPo",6)){
+	else if(!strncmp(theArg,"{_NSPo",6) || !strncmp(theArg,"{CGPoi",6)){
 		NSPoint thePoint;
         [self getReturnValue:&thePoint]; 
 		return [NSString stringWithFormat:@"@(%f,%f)",thePoint.x,thePoint.y];
 	}
-	else if(!strncmp(theArg,"{_NSRa",6)){
+	else if(!strncmp(theArg,"{_NSRa",6) || !strncmp(theArg,"{CGRan",6)){
 		NSRange theRange;
         [self getReturnValue:&theRange]; 
 		return [NSString stringWithFormat:@"@(%f,%f)",(float)theRange.location,(float)theRange.length];
 	}
-	else if(!strncmp(theArg,"{_NSRe",6)){
+	else if(!strncmp(theArg,"{_NSRe",6) || !strncmp(theArg,"{CGRec",6)){
 		NSRect theRect;
         [self getReturnValue:&theRect]; 
 		return [NSString stringWithFormat:@"@(%f,%f,%f,%f)",theRect.origin.x,theRect.origin.y,theRect.size.width,theRect.size.height];
 	}
-	else if(!strncmp(theArg,"{_NSSi",6)){
+	else if(!strncmp(theArg,"{_NSSi",6) || !strncmp(theArg,"{CGSiz",6)){
 		NSSize theSize;
         [self getReturnValue:&theSize]; 
 		return [NSString stringWithFormat:@"@(%f,%f)",theSize.width,theSize.height];
@@ -350,7 +360,7 @@
 		for(i=1,argI=0 ; i<=n*2 ; i+=2,argI++){
 			id str = [orderedList objectAtIndex:i];
 			NSDecimalNumber* ptrNum = [NSDecimalNumber decimalNumberWithString:str];
-			unsigned long ptr = [ptrNum unsignedLongValue];
+			unsigned long long ptr = [ptrNum unsignedLongLongValue];
 			id theVar = (id)(ptr);
 			if(![theInvocation setArgument:argI to:theVar]){
 				ok = NO;
