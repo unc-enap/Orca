@@ -3138,7 +3138,7 @@
 		84EA1FB120E28F810099F3DF /* RefClock.gif in Resources */ = {isa = PBXBuildFile; fileRef = 84EA1FB020E28F800099F3DF /* RefClock.gif */; };
 		84EA6CAC0C73D15B00083319 /* ORAcqirisDC440Decoders.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA6CAA0C73D15B00083319 /* ORAcqirisDC440Decoders.h */; };
 		84EA6CAD0C73D15B00083319 /* ORAcqirisDC440Decoders.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EA6CAB0C73D15B00083319 /* ORAcqirisDC440Decoders.m */; };
-		84EA916820FE5A3700110B85 /* libmysqlclient.21.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA916720FE5A3700110B85 /* libmysqlclient.21.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
+		84EA916820FE5A3700110B85 /* libmysqlclient.21.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA916720FE5A3700110B85 /* libmysqlclient.21.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
 		84EA916A20FE5A6200110B85 /* mysql.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA916920FE5A6100110B85 /* mysql.h */; };
 		84EA916E20FE5BCC00110B85 /* binary_log_types.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA916D20FE5BCC00110B85 /* binary_log_types.h */; };
 		84EA917020FE5C5100110B85 /* my_list.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA916F20FE5C5100110B85 /* my_list.h */; };
@@ -3148,9 +3148,9 @@
 		84EA917D20FE5D5800110B85 /* mysql_version.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA917C20FE5D5700110B85 /* mysql_version.h */; };
 		84EA917F20FE5D8700110B85 /* mysql_time.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA917E20FE5D8700110B85 /* mysql_time.h */; };
 		84EA918120FE5DB000110B85 /* errmsg.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA918020FE5DB000110B85 /* errmsg.h */; };
-		84EA918320FE5DDF00110B85 /* libssl.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA918220FE5DDE00110B85 /* libssl.1.0.0.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
-		84EA918520FE5DF800110B85 /* libcrypto.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA918420FE5DF800110B85 /* libcrypto.1.0.0.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
-		84EA918720FE5F7800110B85 /* libpq.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA918620FE5F7800110B85 /* libpq.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
+		84EA918320FE5DDF00110B85 /* libssl.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA918220FE5DDE00110B85 /* libssl.1.0.0.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
+		84EA918520FE5DF800110B85 /* libcrypto.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA918420FE5DF800110B85 /* libcrypto.1.0.0.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
+		84EA918720FE5F7800110B85 /* libpq.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA918620FE5F7800110B85 /* libpq.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
 		84EA919420FF840F00110B85 /* libmysqlclient.21.dylib in Frameworks_Copy */ = {isa = PBXBuildFile; fileRef = 84EA916720FE5A3700110B85 /* libmysqlclient.21.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		84EA919520FF840F00110B85 /* libssl.1.0.0.dylib in Frameworks_Copy */ = {isa = PBXBuildFile; fileRef = 84EA918220FE5DDE00110B85 /* libssl.1.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		84EA919620FF840F00110B85 /* libcrypto.1.0.0.dylib in Frameworks_Copy */ = {isa = PBXBuildFile; fileRef = 84EA918420FE5DF800110B85 /* libcrypto.1.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -17545,7 +17545,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ -x \"/usr/bin/svnversion\" ]; then\n   svnver=`/usr/bin/svnversion .`\nelse\n   svnver=\"-\"\nfi\n\nif [ \"$svnver\" == \"Unversioned directory\" ]; then\n   if [ -x \"/usr/bin/git\" ]; then\n      svnver=`/usr/bin/git -C $SOURCE_ROOT svn info | grep '^Revision: ' | cut -c 11-`\n   fi\nfi\n\necho \"$svnver\" > $TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/svnversion\n";
+			shellScript = "if [ -x \"/usr/bin/svnversion\" ]; then\n   svnver=`/usr/bin/svnversion .`\nelse\n   svnver=\"-\"\nfi\n\nif [ \"$svnver\" == \"Unversioned directory\" ]; then\n   if [ -x \"/usr/bin/git\" ]; then\n      svnver=`/usr/bin/git -C $SOURCE_ROOT svn info | grep '^Revision: ' | cut -c 11-`\n   fi\nfi\n\necho \"$svnver\" > $TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/svnversion\n\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n\nexport DYLIB=libcrypto.1.0.0.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change $DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libmysqlclient.21.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change @rpath/$DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libpq.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change $DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libssl.1.0.0.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change $DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
