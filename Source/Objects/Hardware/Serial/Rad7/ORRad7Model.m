@@ -651,7 +651,7 @@ static NSString* rad7ThoronNames[kNumberRad7ThoronNames] = {
 
 - (void) setOpMode:(int)aMode
 {
-    [[[self undoManager] prepareWithInvocationTarget:self] setMode:mode];
+    [[[self undoManager] prepareWithInvocationTarget:self] setOpMode:mode];
     
     mode = aMode;
 	
