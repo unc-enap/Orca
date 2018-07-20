@@ -653,7 +653,7 @@ NSString* ORHP4405AModelTraceChanged		= @"ORHP4405AModelTraceChanged";
 				}
 				break;
 					
-				case 4: //UInt16
+				case 4: //uint16_t
 				{
 					int i;
 					unsigned short* p = (unsigned short*) [theData bytes];

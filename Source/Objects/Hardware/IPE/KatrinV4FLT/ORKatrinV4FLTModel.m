@@ -2628,15 +2628,15 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 
     configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id	= kFLTv4;					//unique identifier for readout hw
-	configStruct->card_info[index].hw_mask[0] 	= (uint32_t)dataId;					//record id for energies
-	configStruct->card_info[index].hw_mask[1] 	= (uint32_t)waveFormId;				//record id for the waveforms
-	configStruct->card_info[index].hw_mask[2] 	= (uint32_t)histogramId;				//record id for the histograms
-	configStruct->card_info[index].slot			= (uint32_t)[self stationNumber];		//PMC readout (fdhwlib) uses col 0->n-1; stationNumber is from 1->n (FLT register entry SlotID too)
+	configStruct->card_info[index].hw_mask[0] 	= dataId;					//record id for energies
+	configStruct->card_info[index].hw_mask[1] 	= waveFormId;				//record id for the waveforms
+	configStruct->card_info[index].hw_mask[2] 	= histogramId;				//record id for the histograms
+	configStruct->card_info[index].slot			= [self stationNumber];		//PMC readout (fdhwlib) uses col 0->n-1; stationNumber is from 1->n (FLT register entry SlotID too)
 	configStruct->card_info[index].crate		= [self crateNumber];
-	configStruct->card_info[index].deviceSpecificData[0] = (uint32_t)[self postTriggerTime];	//needed to align the waveforms
+	configStruct->card_info[index].deviceSpecificData[0] = [self postTriggerTime];	//needed to align the waveforms
 	uint32_t eventTypeMask = 0;
 	if(readWaveforms) eventTypeMask |= kReadWaveForms;
-	configStruct->card_info[index].deviceSpecificData[1] = (uint32_t)eventTypeMask;
+	configStruct->card_info[index].deviceSpecificData[1] = eventTypeMask;
 	configStruct->card_info[index].deviceSpecificData[2] = fltRunMode;	
 	uint32_t runFlagsMask = 0;                                         //bit 16 = "first time" flag
     if(runMode == kKatrinV4Flt_EnergyDaqMode | runMode == kKatrinV4Flt_EnergyTraceDaqMode)
@@ -2647,8 +2647,8 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
         runFlagsMask |= kForceFltReadoutFlag;      
     }
     
-	configStruct->card_info[index].deviceSpecificData[3] = (uint32_t)runFlagsMask;
-	configStruct->card_info[index].deviceSpecificData[4] = (uint32_t)triggerEnabledMask;
+	configStruct->card_info[index].deviceSpecificData[3] = runFlagsMask;
+	configStruct->card_info[index].deviceSpecificData[4] = triggerEnabledMask;
     configStruct->card_info[index].deviceSpecificData[5] = runMode;			//the daqRunMode
 	if(versionCFPGA==0x1f000000){                                           //card not readable; assume simulation mode and assume KATRIN card -tb-
 		versionCFPGA=0x20010200; versionFPGA8=0x20010203;
@@ -2657,8 +2657,8 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 	if((versionCFPGA>0x20010100 && versionCFPGA<0x20010200) || (versionFPGA8>0x20010100  && versionFPGA8<0x20010103) ){
 		NSLog(@"WARNING: you are using an old firmware (version CFPGA,FPGA8:0x%8x,0x%8x). Update! (See: http://fuzzy.fzk.de/ipedaq)\n",versionCFPGA,versionFPGA8);
 	}
-	configStruct->card_info[index].deviceSpecificData[7]  = (uint32_t)versionCFPGA;               //CFPGA version 0xPDDDVVRR //P=project, D=doc revision
-	configStruct->card_info[index].deviceSpecificData[8]  = (uint32_t)versionFPGA8;               //FPGA8 version 0xPDDDVVRR //V=version, R=revision
+	configStruct->card_info[index].deviceSpecificData[7]  = versionCFPGA;               //CFPGA version 0xPDDDVVRR //P=project, D=doc revision
+	configStruct->card_info[index].deviceSpecificData[8]  = versionFPGA8;               //FPGA8 version 0xPDDDVVRR //V=version, R=revision
 	configStruct->card_info[index].deviceSpecificData[9]  = [self filterShapingLength];	//replaces filterLength -tb- 2011-04
 	configStruct->card_info[index].deviceSpecificData[10] = [self useDmaBlockRead];		//enables DMA access //TODO: - no plausibility checks yet!!! -tb- 2012-03
 	configStruct->card_info[index].deviceSpecificData[11] = [self boxcarLength];

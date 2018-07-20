@@ -52,7 +52,7 @@ BOOL ORRunAlertPanel(NSString* mainMessage, NSString* informativeMessage, NSStri
 
 #pragma mark ***private
 kern_return_t findEthernetInterfaces(io_iterator_t *matchingServices);
-kern_return_t getMACAddress(io_iterator_t intfIterator, UInt8 *MACAddress, UInt8 bufferSize);
+kern_return_t getMACAddress(io_iterator_t intfIterator, uint8 *MACAddress, uint8 bufferSize);
 
 @interface NSObject (scriptExtensions)
 - (NSString*) commonScriptMethods;

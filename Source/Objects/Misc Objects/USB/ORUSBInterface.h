@@ -44,7 +44,7 @@ typedef struct  {
 		id							callBackObject;
 		id							registeredObject;
 		IOUSBInterfaceInterface197**	interface; 
-		UInt8							transferType;
+		uint8_t							transferType;
 		unsigned char				inPipes[8];
 		unsigned char				outPipes[8];
 		unsigned char				controlPipes[8];
@@ -52,8 +52,8 @@ typedef struct  {
 		unsigned char				interruptOutPipes[8];
 		NSString*					deviceName;
 		UInt32						locationID;
-		UInt16						vendor;
-		UInt16						product;
+		uint16_t						vendor;
+		uint16_t						product;
 		io_object_t					notification;
 		NSString*				    connectionState;
 		NSString*					serialNumber;
@@ -67,8 +67,8 @@ typedef struct  {
 #pragma mark ¥¥¥Accessors
 - (id)			callBackObject;
 - (void)		setCallBackObject:(id)anObj;
-- (void)		setUsePipeType:(UInt8)aTransferType;
-- (UInt8)		usingPipeType;
+- (void)		setUsePipeType:(uint8_t)aTransferType;
+- (uint8_t)		usingPipeType;
 - (void)		writeString:(NSString*)aCommand;
 - (void)		writeUSB488Command:(NSString*)aCommand eom:(BOOL)eom;
 - (int)			readUSB488:(char*)resultData length:(uint32_t)amountRead;
@@ -79,10 +79,10 @@ typedef struct  {
 - (int)			readBytesFastNoThrow:(void*)bytes length:(uint32_t)amountToRead;
 - (void)		setRegisteredObject:(id)anObj;
 - (id)			registeredObject;
-- (UInt16)		product;
-- (void)		setProduct:(UInt16)aProduct;
-- (UInt16)		vendor;
-- (void)		setVendor:(UInt16)aVendor;
+- (uint16_t)		product;
+- (void)		setProduct:(uint16_t)aProduct;
+- (uint16_t)		vendor;
+- (void)		setVendor:(uint16_t)aVendor;
 - (UInt32)		locationID;
 - (void)		setLocationID:(UInt32)aLocationID;
 - (NSString*)	deviceName;

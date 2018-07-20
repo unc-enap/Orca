@@ -3210,12 +3210,12 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302ReadRegs]
 	else {
 		configStruct->total_cards++;
 		configStruct->card_info[index].hw_type_id				= kSIS3302; //should be unique
-		configStruct->card_info[index].hw_mask[0]				= (uint32_t)dataId;	//better be unique
-		configStruct->card_info[index].hw_mask[1]				= (uint32_t)lostDataId;	//better be unique
+		configStruct->card_info[index].hw_mask[0]				= dataId;	//better be unique
+		configStruct->card_info[index].hw_mask[1]				= lostDataId;	//better be unique
 		configStruct->card_info[index].slot						= [self slot];
 		configStruct->card_info[index].crate					= [self crateNumber];
 		configStruct->card_info[index].add_mod					= [self addressModifier];
-		configStruct->card_info[index].base_add					= (uint32_t)[self baseAddress];
+		configStruct->card_info[index].base_add					= [self baseAddress];
 		configStruct->card_info[index].deviceSpecificData[0]	= [self sampleLength:0]/2;
 		configStruct->card_info[index].deviceSpecificData[1]	= [self sampleLength:1]/2;
 		configStruct->card_info[index].deviceSpecificData[2]	= [self sampleLength:2]/2;

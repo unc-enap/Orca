@@ -54,7 +54,7 @@ NSString* ORXYCom564InterpretADCHasChanged  = @"ORXYCom564InterpretADCHasChanged
 - (void) _readAllAdcChannels;
 - (void) _setPollingSpeed:(NSTimeInterval)aTime;
 - (double) _interpretADCValue:(uint16_t)adc;
-- (uint16_t) _recenterValue:(uint16)adc;
+- (uint16_t) _recenterValue:(uint16_t)adc;
 @end
 
 @implementation ORXYCom564Model
@@ -720,12 +720,12 @@ static XyCom564RegisterInformation mIOXY564Reg[kNumberOfXyCom564Registers] = {
 
     configStruct->total_cards++;
     configStruct->card_info[index].hw_type_id	= kXyCom564; //should be unique
-    configStruct->card_info[index].hw_mask[0] 	= (uint32_t)dataId; //better be unique
+    configStruct->card_info[index].hw_mask[0] 	= dataId; //better be unique
     configStruct->card_info[index].slot			= [self slot];
     configStruct->card_info[index].crate		= [self crateNumber];
     configStruct->card_info[index].add_mod		= [self addressModifier];
-    configStruct->card_info[index].base_add		= (uint32_t)[self baseAddress];
-    configStruct->card_info[index].deviceSpecificData[0]	= (uint32_t)mIOXY564Reg[kADScan].offset; // autoreadout register
+    configStruct->card_info[index].base_add		= [self baseAddress];
+    configStruct->card_info[index].deviceSpecificData[0]	= mIOXY564Reg[kADScan].offset; // autoreadout register
     configStruct->card_info[index].deviceSpecificData[1]	= kXVME564_NumAutoScanChannelsPerGroup << ([self autoscanMode]); //numberOfChannelsToRead
     configStruct->card_info[index].deviceSpecificData[2]	= [self averageValueNumber]; // how many points to average
     configStruct->card_info[index].deviceSpecificData[3]	= !pollRunning; // When we are polling, do not ship data
@@ -1035,7 +1035,7 @@ static XyCom564RegisterInformation mIOXY564Reg[kNumberOfXyCom564Registers] = {
     return vol * volrange / adcrange; //scaling
 }
 
-- (uint16_t) _recenterValue:(uint16)raw
+- (uint16_t) _recenterValue:(uint16_t)raw
 {
     // first thing, centering so that 0x8000 is 0.
     if (raw < 0x8000) {

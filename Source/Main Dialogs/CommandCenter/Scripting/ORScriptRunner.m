@@ -35,7 +35,7 @@ NSString* ORScriptRunnerDisplayDictionaryChanged= @"ORScriptRunnerDisplayDiction
 #import "OrcaScript.tab.h"
 extern void yyreset_state(void);
 extern void OrcaScriptrestart(void);
-extern int32_t num_lines;
+extern uint32_t num_lines;
 extern id functionList;
 extern int OrcaScriptparse(void);
 ORScriptRunner* theScriptRunner = nil;
@@ -293,7 +293,7 @@ int OrcaScriptYYINPUT(char* theBuffer,uint32_t maxSize)
 		@catch(NSException* e){
 			parsedOK = NO;
 			NSLog(@"%@\n",e);
-			NSLog(@"line %d: %@\n",num_lines+1,[[theString componentsSeparatedByString:@"\n"] objectAtIndex:num_lines]);
+			NSLog(@"line %ld: %@\n",num_lines+1,[[theString componentsSeparatedByString:@"\n"] objectAtIndex:num_lines]);
 			[[NSNotificationCenter defaultCenter] postNotificationName:ORScriptRunnerParseError 
 																object:self 
 															  userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithLong:num_lines+1] forKey:@"ErrorLocation"]];

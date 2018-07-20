@@ -128,7 +128,7 @@ static void _cfsocketCallback( CFSocketRef inCFSocketRef, CFSocketCallBackType i
     return [self netsocketListeningOnPort:0];
 }
 
-+ (NetSocket*)netsocketListeningOnPort:(UInt16)inPort
++ (NetSocket*)netsocketListeningOnPort:(uint16_t)inPort
 {
     NetSocket*	netsocket;
     BOOL			success = NO;
@@ -144,7 +144,7 @@ static void _cfsocketCallback( CFSocketRef inCFSocketRef, CFSocketCallBackType i
     return ( success ? netsocket : nil );
 }
 
-+ (NetSocket*)netsocketConnectedToHost:(NSString*)inHostname port:(UInt16)inPort
++ (NetSocket*)netsocketConnectedToHost:(NSString*)inHostname port:(uint16_t)inPort
 {
     NetSocket*	netsocket;
     BOOL			success = NO;
@@ -290,12 +290,12 @@ static void _cfsocketCallback( CFSocketRef inCFSocketRef, CFSocketCallBackType i
     return [self listenOnPort:0 maxPendingConnections:5];
 }
 
-- (BOOL)listenOnPort:(UInt16)inPort
+- (BOOL)listenOnPort:(uint16_t)inPort
 {
     return [self listenOnPort:inPort maxPendingConnections:5];
 }
 
-- (BOOL)listenOnPort:(UInt16)inPort maxPendingConnections:(int)inMaxPendingConnections
+- (BOOL)listenOnPort:(uint16_t)inPort maxPendingConnections:(int)inMaxPendingConnections
 {
     CFSocketNativeHandle	nativeSocket;
     struct sockaddr_in	socketAddress;
@@ -341,12 +341,12 @@ static void _cfsocketCallback( CFSocketRef inCFSocketRef, CFSocketCallBackType i
 
 #pragma mark -
 
-- (BOOL)connectToHost:(NSString*)inHostname port:(UInt16)inPort
+- (BOOL)connectToHost:(NSString*)inHostname port:(uint16_t)inPort
 {
     return [self connectToHost:inHostname port:inPort timeout:-1.0];
 }
 
-- (BOOL)connectToHost:(NSString*)inHostname port:(UInt16)inPort timeout:(NSTimeInterval)inTimeout
+- (BOOL)connectToHost:(NSString*)inHostname port:(uint16_t)inPort timeout:(NSTimeInterval)inTimeout
 {
     struct hostent*		socketHost;
     struct sockaddr_in	socketAddress;
@@ -636,7 +636,7 @@ static void _cfsocketCallback( CFSocketRef inCFSocketRef, CFSocketCallBackType i
 	return theHostName;
 }
 
-- (UInt16)remotePort
+- (uint16_t)remotePort
 {
     CFSocketNativeHandle	nativeSocket;
     struct sockaddr_in      address;
@@ -679,7 +679,7 @@ static void _cfsocketCallback( CFSocketRef inCFSocketRef, CFSocketCallBackType i
 	return theLocalHost;
 }
 
-- (UInt16)localPort
+- (uint16_t)localPort
 {
     CFSocketNativeHandle	nativeSocket;
     struct sockaddr_in      address;

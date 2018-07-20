@@ -69,13 +69,13 @@ NSString* ORA3818Lock										= @"ORA3818Lock";
 
 - (void) _setupMapping: (uint32_t)remoteAddress
               numBytes: (uint32_t)numberBytes
-                addMod: (UInt16)addModifier
-              addSpace: (UInt16)addressSpace;
+                addMod: (uint16_t)addModifier
+              addSpace: (uint16_t)addressSpace;
 
 - (void) _setupMapping_Byte: (uint32_t)remoteAddress
                    numBytes: (uint32_t)numberBytes
-                     addMod: (UInt16)addModifier
-                   addSpace: (UInt16)addressSpace;
+                     addMod: (uint16_t)addModifier
+                   addSpace: (uint16_t)addressSpace;
 
 @end
 //-------------------------------------------------------------------------
@@ -1046,9 +1046,9 @@ typedef struct a3818_comm {
             
 			//if(*fVStatusReg & STATUS_PROBLEM)[self checkStatusWord:*fVStatusReg];
             // transfer data
-			UInt16 *pulr = (UInt16 *)( ( vmeAddress & 0x00000fff ) +
+			uint16_t *pulr = (uint16_t *)( ( vmeAddress & 0x00000fff ) +
 									  (uint32_t)remMemRegisterAddress );
-			UInt16 *pulb = (UInt16 *)readAddress;
+			uint16_t *pulb = (uint16_t *)readAddress;
 			unsigned short n = numberWords;
 			for(;n--;)*pulb++ = *pulr++;
 			if(*fVStatusReg & STATUS_PROBLEM)[self checkStatusWord:*fVStatusReg];
@@ -1086,9 +1086,9 @@ typedef struct a3818_comm {
             
 			//if(*fVStatusReg & STATUS_PROBLEM)[self checkStatusWord:*fVStatusReg];
 			// transfer data
-			UInt16 *pulr = (UInt16 *)( ( vmeAddress & 0x00000fff ) +
+			uint16_t *pulr = (uint16_t *)( ( vmeAddress & 0x00000fff ) +
 									  (uint32_t)remMemRegisterAddress );
-			UInt16 *pulb = (UInt16 *)writeAddress;
+			uint16_t *pulb = (uint16_t *)writeAddress;
 			unsigned int n = numberWords;
 			for(;n--;)*pulr++ = *pulb++;
  			if(*fVStatusReg & STATUS_PROBLEM)[self checkStatusWord:*fVStatusReg];
@@ -1268,8 +1268,8 @@ typedef struct a3818_comm {
 // setup A3818 mapping registers
 - (void) _setupMapping: (uint32_t)remoteAddress
               numBytes: (uint32_t)numberBytes
-                addMod: (UInt16)addModifier
-              addSpace: (UInt16)addressSpace
+                addMod: (uint16_t)addModifier
+              addSpace: (uint16_t)addressSpace
 {
     
     // pick up a12-a31 address bits
@@ -1297,8 +1297,8 @@ typedef struct a3818_comm {
 
 - (void) _setupMapping_Byte: (uint32_t)remoteAddress
                    numBytes: (uint32_t)numberBytes
-                     addMod: (UInt16)addModifier
-                   addSpace: (UInt16)addressSpace
+                     addMod: (uint16_t)addModifier
+                   addSpace: (uint16_t)addressSpace
 {
     
     // pick up a12-a31 address bits

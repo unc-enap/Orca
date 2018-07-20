@@ -4543,10 +4543,10 @@ for(chan=0; chan<6;chan++)
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id	= kFLTv4EW;					//unique identifier for readout hw
-	configStruct->card_info[index].hw_mask[0] 	= (uint32_t)dataId;					//record id for energies
-	configStruct->card_info[index].hw_mask[1] 	= (uint32_t)waveFormId;				//record id for the waveforms
-	configStruct->card_info[index].hw_mask[2] 	= (uint32_t)histogramId;				//record id for the histograms
-	configStruct->card_info[index].slot			= (uint32_t)[self stationNumber];		//the PMC readout uses col 0 thru n
+	configStruct->card_info[index].hw_mask[0] 	= dataId;					//record id for energies
+	configStruct->card_info[index].hw_mask[1] 	= waveFormId;				//record id for the waveforms
+	configStruct->card_info[index].hw_mask[2] 	= histogramId;				//record id for the histograms
+	configStruct->card_info[index].slot			= [self stationNumber];		//the PMC readout uses col 0 thru n
 	configStruct->card_info[index].crate		= [self crateNumber];
 //DEBUG OUTPUT: 
 	NSLog(@"    %@::%@:slot %i, crate %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd), [self stationNumber], [self crateNumber]);//TODO: DEBUG testing ...-tb-

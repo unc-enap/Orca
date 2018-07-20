@@ -29,8 +29,8 @@
 // Creation
 + (NetSocket*)netsocket;
 + (NetSocket*)netsocketListeningOnRandomPort;
-+ (NetSocket*)netsocketListeningOnPort:(UInt16)inPort;
-+ (NetSocket*)netsocketConnectedToHost:(NSString*)inHostname port:(UInt16)inPort;
++ (NetSocket*)netsocketListeningOnPort:(uint16_t)inPort;
++ (NetSocket*)netsocketConnectedToHost:(NSString*)inHostname port:(uint16_t)inPort;
 
 // Delegate
 - (id)delegate;
@@ -46,12 +46,12 @@
 
 // Listening
 - (BOOL)listenOnRandomPort;
-- (BOOL)listenOnPort:(UInt16)inPort;
-- (BOOL)listenOnPort:(UInt16)inPort maxPendingConnections:(int)inMaxPendingConnections;
+- (BOOL)listenOnPort:(uint16_t)inPort;
+- (BOOL)listenOnPort:(uint16_t)inPort maxPendingConnections:(int)inMaxPendingConnections;
 
 // Connecting
-- (BOOL)connectToHost:(NSString*)inHostname port:(UInt16)inPort;
-- (BOOL)connectToHost:(NSString*)inHostname port:(UInt16)inPort timeout:(NSTimeInterval)inTimeout;
+- (BOOL)connectToHost:(NSString*)inHostname port:(uint16_t)inPort;
+- (BOOL)connectToHost:(NSString*)inHostname port:(uint16_t)inPort timeout:(NSTimeInterval)inTimeout;
 
 // Peeking
 - (NSData*)peekData;
@@ -73,9 +73,9 @@
 
 // Properties
 - (NSString*)remoteHost;
-- (UInt16)remotePort;
+- (uint16_t)remotePort;
 - (NSString*)localHost;
-- (UInt16)localPort;
+- (uint16_t)localPort;
 - (BOOL)isConnected;
 - (BOOL)isListening;
 - (NSUInteger)incomingBufferLength;

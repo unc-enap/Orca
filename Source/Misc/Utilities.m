@@ -376,7 +376,7 @@ NSString* macAddress(void)
 	 */
 	
 	io_iterator_t	intfIterator;
-	UInt8			MACAddress[kIOEthernetAddressSize];
+	uint8			MACAddress[kIOEthernetAddressSize];
 	
 	kernResult = findEthernetInterfaces(&intfIterator);
 	NSString* theResult = @"";
@@ -406,7 +406,7 @@ NSString* macAddress(void)
 // Given an iterator across a set of Ethernet interfaces, return the MAC address of the last one.
 // If no interfaces are found the MAC address is set to an empty string.
 // In this sample the iterator should contain just the primary interface.
-kern_return_t getMACAddress(io_iterator_t intfIterator, UInt8 *MACAddress, UInt8 bufferSize)
+kern_return_t getMACAddress(io_iterator_t intfIterator, uint8 *MACAddress, uint8 bufferSize)
 {
     io_object_t		intfService;
     io_object_t		controllerService;
@@ -556,7 +556,7 @@ BOOL ORRunAlertPanel(NSString* mainMessage, NSString* msg, NSString* defaultButt
     if(defaultButtonTitle)  [alert addButtonWithTitle:defaultButtonTitle];
     if(alternateButtonTitle)[alert addButtonWithTitle:alternateButtonTitle];
     if(otherButtonTitle)    [alert addButtonWithTitle:otherButtonTitle];
-    int32_t choice = [alert runModal];
+    NSInteger choice = [alert runModal];
     if(choice == NSAlertFirstButtonReturn)  result = YES;
     else                                    result = NO;
 #else

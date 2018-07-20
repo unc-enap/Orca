@@ -820,12 +820,12 @@ NSString* ORCaen792ModelShipTimeStampChanged          = @"ORCaen792ModelShipTime
 	configStruct->card_info[index].slot 	 = [self slot];
 	configStruct->card_info[index].crate 	 = [self crateNumber];
 	configStruct->card_info[index].add_mod 	 = [self addressModifier];
-	configStruct->card_info[index].base_add  = (uint32_t)[self baseAddress];
+	configStruct->card_info[index].base_add  = [self baseAddress];
 	configStruct->card_info[index].deviceSpecificData[0] = modelType;
-	configStruct->card_info[index].deviceSpecificData[1] = (uint32_t)([self baseAddress]+reg[kStatusRegister1].addressOffset);
-	configStruct->card_info[index].deviceSpecificData[2] = (uint32_t)([self baseAddress]+reg[kStatusRegister2].addressOffset);
-	configStruct->card_info[index].deviceSpecificData[3] = (uint32_t)([self baseAddress]+reg[kOutputBuffer].addressOffset);
-    configStruct->card_info[index].deviceSpecificData[4] = (uint32_t)[self getDataBufferSize]/sizeof(int32_t);
+	configStruct->card_info[index].deviceSpecificData[1] = ([self baseAddress]+reg[kStatusRegister1].addressOffset);
+	configStruct->card_info[index].deviceSpecificData[2] = ([self baseAddress]+reg[kStatusRegister2].addressOffset);
+	configStruct->card_info[index].deviceSpecificData[3] = ([self baseAddress]+reg[kOutputBuffer].addressOffset);
+    configStruct->card_info[index].deviceSpecificData[4] = [self getDataBufferSize]/sizeof(uint32_t);
     configStruct->card_info[index].deviceSpecificData[5] = shipTimeStamp;
 	configStruct->card_info[index].num_Trigger_Indexes = 0;
 	

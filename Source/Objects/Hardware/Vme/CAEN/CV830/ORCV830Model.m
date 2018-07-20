@@ -880,17 +880,17 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id   = kCaen830; //should be unique
-	configStruct->card_info[index].hw_mask[0] 	= (uint32_t)dataId; //better be unique
+	configStruct->card_info[index].hw_mask[0] 	= dataId; //better be unique
 	configStruct->card_info[index].slot			= [self slot];
 	configStruct->card_info[index].crate		= [self crateNumber];
 	configStruct->card_info[index].add_mod		= [self addressModifier];
-	configStruct->card_info[index].base_add		= (uint32_t)[self baseAddress];
-	configStruct->card_info[index].deviceSpecificData[0] = (uint32_t)enabledMask;
-	configStruct->card_info[index].deviceSpecificData[1] = (uint32_t)[self getAddressOffset:kStatusReg];
-	configStruct->card_info[index].deviceSpecificData[2] = (uint32_t)[self getAddressOffset:kMEBEventNum];
-	configStruct->card_info[index].deviceSpecificData[3] = (uint32_t)[self getAddressOffset:kEventBuffer];
+	configStruct->card_info[index].base_add		= [self baseAddress];
+	configStruct->card_info[index].deviceSpecificData[0] = enabledMask;
+	configStruct->card_info[index].deviceSpecificData[1] = [self getAddressOffset:kStatusReg];
+	configStruct->card_info[index].deviceSpecificData[2] = [self getAddressOffset:kMEBEventNum];
+	configStruct->card_info[index].deviceSpecificData[3] = [self getAddressOffset:kEventBuffer];
 	configStruct->card_info[index].deviceSpecificData[4] = [self numEnabledChannels];
-    configStruct->card_info[index].deviceSpecificData[5] = (uint32_t)[self count0Offset];
+    configStruct->card_info[index].deviceSpecificData[5] = [self count0Offset];
     configStruct->card_info[index].deviceSpecificData[6] = resetRollOverInSBC;
     
     resetRollOverInSBC = NO; //must be reset for every run

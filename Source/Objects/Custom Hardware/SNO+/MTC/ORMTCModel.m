@@ -1115,7 +1115,7 @@ tubRegister;
     if (type < 0 || type > MTC_NUM_USED_THRESHOLDS) {
         [NSException raise:@"MTCModelError" format:@"Unknown threshold index specified. Cannot continue."];
     }
-    uint16_t threshold_in_dac_counts = (uint16)[self convertThreshold:aThreshold OfType:type fromUnits:units toUnits:MTC_RAW_UNITS];
+    uint16_t threshold_in_dac_counts = (uint16_t)[self convertThreshold:aThreshold OfType:type fromUnits:units toUnits:MTC_RAW_UNITS];
     if (mtca_thresholds[type] != threshold_in_dac_counts) {
         mtca_thresholds[type] = threshold_in_dac_counts;
         [[NSNotificationCenter defaultCenter] postNotificationName:ORMTCAThresholdChanged object:self];

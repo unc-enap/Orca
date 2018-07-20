@@ -1507,17 +1507,17 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id	= kFLTv4;					//unique identifier for readout hw
-	configStruct->card_info[index].hw_mask[0] 	= (uint32_t)dataId;					//record id for energies
-	configStruct->card_info[index].hw_mask[1] 	= (uint32_t)waveFormId;				//record id for the waveforms
-	configStruct->card_info[index].hw_mask[2] 	= (uint32_t)histogramId;				//record id for the histograms
-	configStruct->card_info[index].slot			= (uint32_t)[self stationNumber];		//the PMC readout uses col 0 thru n
-	configStruct->card_info[index].crate		= (uint32_t)[self crateNumber];
+	configStruct->card_info[index].hw_mask[0] 	= dataId;					//record id for energies
+	configStruct->card_info[index].hw_mask[1] 	= waveFormId;				//record id for the waveforms
+	configStruct->card_info[index].hw_mask[2] 	= histogramId;				//record id for the histograms
+	configStruct->card_info[index].slot			= [self stationNumber];		//the PMC readout uses col 0 thru n
+	configStruct->card_info[index].crate		= [self crateNumber];
 	
-	configStruct->card_info[index].deviceSpecificData[0] = (uint32_t)postTriggerTime;	//needed to align the waveforms
+	configStruct->card_info[index].deviceSpecificData[0] = postTriggerTime;	//needed to align the waveforms
 	
 	uint32_t eventTypeMask = 0;
 	if(readWaveforms) eventTypeMask |= kReadWaveForms;
-	configStruct->card_info[index].deviceSpecificData[1] = (uint32_t)eventTypeMask;
+	configStruct->card_info[index].deviceSpecificData[1] = eventTypeMask;
 	configStruct->card_info[index].deviceSpecificData[2] = fltRunMode;	
 	
     //"first time" flag (needed for histogram mode)
@@ -1526,11 +1526,11 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     if(runMode == kIpeFltV4_EnergyDaqMode | runMode == kIpeFltV4_EnergyTraceDaqMode)
         runFlagsMask |= kSyncFltWithSltTimerFlag;//bit 17 = "sync flt with slt timer" flag
     
-	configStruct->card_info[index].deviceSpecificData[3] = (uint32_t)runFlagsMask;
+	configStruct->card_info[index].deviceSpecificData[3] = runFlagsMask;
 //NSLog(@"RunFlags 0x%x\n",configStruct->card_info[index].deviceSpecificData[3]);
 
     //for all daq modes
-	configStruct->card_info[index].deviceSpecificData[4] = (uint32_t)triggerEnabledMask;	
+	configStruct->card_info[index].deviceSpecificData[4] = triggerEnabledMask;
     //the daq mode (should replace the flt mode)
     configStruct->card_info[index].deviceSpecificData[5] = runMode;//the daqRunMode
 

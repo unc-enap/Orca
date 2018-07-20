@@ -30,12 +30,12 @@
 	[nodeData release];
 	[super dealloc];
 }
-- (int32_t)	line
+- (uint32_t)	line
 {
 	return line;
 }
 
-- (void) setLine:(int32_t)aLine
+- (void) setLine:(uint32_t)aLine
 {
 	line = aLine;
 }

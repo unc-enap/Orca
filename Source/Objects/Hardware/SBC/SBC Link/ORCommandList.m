@@ -120,7 +120,7 @@
 - (int32_t) longValueForCmd:(int)anIndex
 {
 	if(anIndex<[commands count]){
-		return [[commands objectAtIndex:anIndex] longValue];
+		return (int32_t)[[commands objectAtIndex:anIndex] longValue];
 	}
 	else return 0;
 }

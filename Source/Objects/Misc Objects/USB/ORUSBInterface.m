@@ -61,22 +61,22 @@ NSString* ORUSBRegisteredObjectChanged	= @"ORUSBRegisteredObjectChanged";
 }
 
 #pragma mark ¥¥¥Accessors
-- (UInt16) product
+- (uint16_t) product
 {
     return product;
 }
 
-- (void) setProduct:(UInt16)aProduct
+- (void) setProduct:(uint16_t)aProduct
 {
     product = aProduct;
 }
 
-- (UInt16) vendor
+- (uint16_t) vendor
 {
     return vendor;
 }
 
-- (void) setVendor:(UInt16)aVendor
+- (void) setVendor:(uint16_t)aVendor
 {
     vendor = aVendor;
 }
@@ -147,12 +147,12 @@ NSString* ORUSBRegisteredObjectChanged	= @"ORUSBRegisteredObjectChanged";
 	callBackObject = anObj;
 }
 
-- (void) setUsePipeType:(UInt8)aTransferType
+- (void) setUsePipeType:(uint8_t)aTransferType
 {
 	transferType = aTransferType;
 }
 
-- (UInt8) usingPipeType
+- (uint8_t) usingPipeType
 {
 	return transferType;
 }
@@ -203,7 +203,7 @@ NSString* ORUSBRegisteredObjectChanged	= @"ORUSBRegisteredObjectChanged";
 
 - (void) startReadingInterruptPipe
 {
-	UInt8 pipe;
+	uint8_t pipe;
 	if(transferType == kUSBBulk)		 pipe = inPipes[0];
 	else if(transferType == kUSBInterrupt) pipe = interruptInPipes[0];
 	else pipe  = inPipes[0];
@@ -253,7 +253,7 @@ readon:
 - (void) writeString:(NSString*)aCommand
 {
 	[usbLock lock];
-	UInt8 pipe;
+	uint8_t pipe;
 	if(transferType == kUSBBulk)		 pipe = outPipes[0];
 	else if(transferType == kUSBInterrupt) pipe = interruptOutPipes[0];
 	else pipe  = outPipes[0];
@@ -317,7 +317,7 @@ readon:
 - (void) writeBytes:(void*)bytes length:(uint32_t)length pipe:(int)aPipeIndex
 {
 	[usbLock lock];
-	UInt8 pipe;
+	uint8_t pipe;
 	pipe = outPipes[aPipeIndex];
 	IOReturn kr = (*interface)->WritePipeTO(interface, pipe, bytes, length,5000,5000);
 	if(kr)	{
@@ -387,7 +387,7 @@ readon:
 	int result;
     [usbLock lock];
 	uint32_t actualRead = amountRead;
-	UInt8 pipe = inPipes[aPipeIndex];
+	uint8_t pipe = inPipes[aPipeIndex];
 	
 	IOReturn kr = (*interface)->ReadPipeTO(interface, pipe, bytes, &actualRead, 1000, 1000);
 	if(kr)	{
@@ -423,7 +423,7 @@ readon:
 	int result;
     [usbLock lock];
 	uint32_t actualRead = amountRead;
-	UInt8 pipe;
+	uint8_t pipe;
 	if(transferType == kUSBBulk)		 pipe = inPipes[0];
 	else if(transferType == kUSBInterrupt) pipe = interruptInPipes[0];
 	else pipe = inPipes[0];
@@ -458,7 +458,7 @@ readon:
 {
 	int result;
 	uint32_t actualRead = amountRead;
-	UInt8 pipe;
+	uint8_t pipe;
 	if(transferType == kUSBBulk)		 pipe = inPipes[0];
 	else if(transferType == kUSBInterrupt) pipe = interruptInPipes[0];
 	else pipe = inPipes[0];
@@ -489,7 +489,7 @@ readon:
 - (void) writeBytesOnInterruptPipe:(void*)bytes length:(uint32_t)length
 {
 	[usbLock lock];
-	UInt8 pipe;
+	uint8_t pipe;
 	if(transferType == kUSBBulk)		 pipe = outPipes[0];
 	else if(transferType == kUSBInterrupt) pipe = interruptOutPipes[0];	
     else pipe = outPipes[0];
@@ -524,7 +524,7 @@ readon:
 {
 	int result;
 	[usbLock lock];
-	UInt8 pipe;
+	uint8_t pipe;
 	pipe = inPipes[0];
 	uint32_t actualRead = amountRead;
 	IOReturn kr = (*interface)->ReadPipeTO(interface, pipe, bytes, &actualRead, 10, 10);

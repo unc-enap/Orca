@@ -820,12 +820,12 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id	= kAcqirisDC440;		//better be unique
-	configStruct->card_info[index].hw_mask[0] 	= (uint32_t)dataId;		//better be unique
-	configStruct->card_info[index].slot			= (uint32_t)[self stationNumber];
+	configStruct->card_info[index].hw_mask[0] 	= dataId;		//better be unique
+	configStruct->card_info[index].slot			= [self stationNumber];
 	configStruct->card_info[index].crate		= [self crateNumber];
-	configStruct->card_info[index].base_add		= (uint32_t)boardID;
-	configStruct->card_info[index].deviceSpecificData[0] = (uint32_t)numberSamples;
-	configStruct->card_info[index].deviceSpecificData[1] = (uint32_t)enableMask;
+	configStruct->card_info[index].base_add		= boardID;
+	configStruct->card_info[index].deviceSpecificData[0] = numberSamples;
+	configStruct->card_info[index].deviceSpecificData[1] = enableMask;
 	configStruct->card_info[index].deviceSpecificData[2] = 1; // Tells the card to auto restart
 	configStruct->card_info[index].deviceSpecificData[3] = 1; // Use the circular buffer
 	configStruct->card_info[index].num_Trigger_Indexes = 0;		//N/A
@@ -899,14 +899,14 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 			readDataPacket.cmdHeader.cmdID		 = kAcqiris_GetDataRequest;
 			readDataPacket.cmdHeader.numberBytesinPayload	 = sizeof(Acquiris_ReadDataRequest);
 			Acquiris_ReadDataRequest* p			 = (Acquiris_ReadDataRequest*)readDataPacket.payload;
-			p->boardID			= (uint32_t)boardID;
-			p->numberSamples	= (uint32_t)numberSamples;
-			p->dataID			= (uint32_t)dataId;
-			p->location			= (uint32_t)location;
+			p->boardID			= boardID;
+			p->numberSamples	= numberSamples;
+			p->dataID			= dataId;
+			p->location			= location;
 			p->enableMask		= enableMask;
 			
 			if(status != 0){
-                [NSException raise:@"Acqiris DC440 Card Error" format:@"Crate: %d Card: %u Status=%d",[self crateNumber],(uint32_t)[self stationNumber],status];
+                [NSException raise:@"Acqiris DC440 Card Error" format:@"Crate: %d Card: %u Status=%d",[self crateNumber],[self stationNumber],status];
 			}
 			firstTime = NO;
 		}

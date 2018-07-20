@@ -25,10 +25,10 @@
 {
 	int			type;
 	id			nodeData;
-	int32_t			line;
+	uint32_t			line;
 }
-- (int32_t)	line;
-- (void) setLine:(int32_t)aLine;
+- (uint32_t)	line;
+- (void) setLine:(uint32_t)aLine;
 - (int)		type;
 - (void)	setType:(int)aType;
 - (id)		nodeData;

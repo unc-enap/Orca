@@ -18,7 +18,7 @@ extern "C"{
 #endif
 
 typedef unsigned char uint8;
-typedef unsigned short uint16;
+typedef unsigned short uint16_t;
 typedef unsigned int uint32;
 
 //Structure for storing calibration constants
@@ -114,7 +114,7 @@ uint8 normalChecksum8( uint8 *b,
 //b = data packet for normal command
 //n = size of data packet
 
-uint16 extendedChecksum16( uint8 *b,
+uint16_t extendedChecksum16( uint8 *b,
                            int n);
 //Returns the Checksum16 for a extended command data packet.
 //b = data packet for extended command
@@ -205,7 +205,7 @@ int32_t getDacBinVoltCalibrated8Bit( u6CalibrationInfo *caliInfo,
 int32_t getDacBinVoltCalibrated16Bit( u6CalibrationInfo *caliInfo,
                                    int dacNumber,
                                    double analogVolt,
-                                   uint16 *bytesVolt16);
+                                   uint16_t *bytesVolt16);
 //Translates a analog output voltage value (Volts) to a binary 16 bit value
 //(calibrated) that can be sent to a U6. Call getCalibrationInfo first to set
 //up caliInfo.  Returns -1 on error, 0 on success.
@@ -237,7 +237,7 @@ int32_t getTempKCalibrated( u6CalibrationInfo *caliInfo,
 int32_t getTdacBinVoltCalibrated( u6TdacCalibrationInfo *caliInfo,
                                int dacNumber,
                                double analogVolt,
-                               uint16 *bytesVolt);
+                               uint16_t *bytesVolt);
 //Translates a voltage value (Volts) to binary analog input bytes (calibrated)
 //that can be sent to a LJTick-DAC (LJTDAC).  Call getLJTDACCalibrationInfo
 //first to set up caliInfo.  Returns -1 on error, 0 on success.
@@ -274,7 +274,7 @@ int32_t getDacBinVoltUncalibrated8Bit( int dacNumber,
 
 int32_t getDacBinVoltUncalibrated16Bit( int dacNumber,
                                      double analogVolt,
-                                     uint16 *bytesVolt16);
+                                     uint16_t *bytesVolt16);
 //Translates a DAC voltage value (Volts) to a binary 16 bit value
 //(uncalibrated) that can be sent to a U6.  Returns -1 on error, 0 on
 //success.

@@ -5980,14 +5980,14 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 		configStruct->total_cards++;
 		configStruct->card_info[index].hw_type_id				= kSIS3305; //should be unique
-		configStruct->card_info[index].hw_mask[0]				= (uint32_t)dataId;	//better be unique
+		configStruct->card_info[index].hw_mask[0]				= dataId;	//better be unique
 		configStruct->card_info[index].slot						= [self slot];
 		configStruct->card_info[index].crate					= [self crateNumber];
 		configStruct->card_info[index].add_mod					= [self addressModifier];
-		configStruct->card_info[index].base_add					= (uint32_t)[self baseAddress];
+		configStruct->card_info[index].base_add					= [self baseAddress];
         
-        configStruct->card_info[index].deviceSpecificData[0]    = (uint32_t)[self longsInSample:0];
-        configStruct->card_info[index].deviceSpecificData[1]    = (uint32_t)[self longsInSample:1];
+        configStruct->card_info[index].deviceSpecificData[0]    = [self longsInSample:0];
+        configStruct->card_info[index].deviceSpecificData[1]    = [self longsInSample:1];
         
         configStruct->card_info[index].deviceSpecificData[2]    = [self channelMode:0];
         configStruct->card_info[index].deviceSpecificData[3]    = [self channelMode:1];

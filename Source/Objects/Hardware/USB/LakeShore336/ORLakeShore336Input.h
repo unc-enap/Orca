@@ -34,7 +34,7 @@
     double          minValue;
     double          maxValue;
     ORTimeRate*		timeRate;
-    uint32_t   timeMeasured;
+    time_t          timeMeasured;
     int             sensorType;
     NSArray*        rangeStrings;
 }
@@ -62,7 +62,7 @@
 @property (assign,nonatomic) double         minValue;
 @property (assign,nonatomic) double         maxValue;
 @property (retain)           ORTimeRate*    timeRate;
-@property (assign)           uint32_t  timeMeasured;
+@property (assign)           time_t  timeMeasured;
 @property (assign,nonatomic) float          setPoint;
 @property (assign,nonatomic) int            sensorType;
 @property (retain)           NSArray*       rangeStrings;

@@ -486,7 +486,7 @@ static UInt32 *fVPCICamacMem;
             [NSException raise: OExceptionBadCamacStatus format:OExceptionBadLCRArguments];
         }
         
-        volatile UInt16 *address = (UInt16 *)&fVLCReg[regOffSet];
+        volatile uint16_t *address = (uint16_t *)&fVLCReg[regOffSet];
         *address = Swap8BitsIn16(data);
         [theLCLock unlock]; //----end critical section
     }
@@ -504,7 +504,7 @@ static UInt32 *fVPCICamacMem;
             [NSException raise: OExceptionBadCamacStatus format:OExceptionBadLCRArguments];
         }
         
-        volatile UInt16 *address = (UInt16 *)&fVLCReg[regOffSet];
+        volatile uint16_t *address = (uint16_t *)&fVLCReg[regOffSet];
         unsigned short temp = Swap8BitsIn16(*address);
         [theLCLock unlock]; //----end critical section
         return temp;
@@ -533,7 +533,7 @@ static UInt32 *fVPCICamacMem;
     if(hardwareExists){
         // read status - (n = 0, a = 0, f = 0) => offset = 0
         [theStatusLock lock];   //----begin critical section
-        volatile UInt16 *wPCICamacMemBase = (UInt16 *)&fVPCICamacMem[0];
+        volatile uint16_t *wPCICamacMemBase = (uint16_t *)&fVPCICamacMem[0];
         unsigned short theStatus = Swap8BitsIn16(*wPCICamacMemBase);
         [theStatusLock unlock];//----end critical section
         return theStatus;
@@ -570,8 +570,8 @@ static UInt32 *fVPCICamacMem;
             [theHWLock lock];   //----begin crital section
             
             // read dataway
-            UInt16 wnafOffset = (UInt16)(offsetNAF(n,a,f) / 4);	 // note divide by 4
-            volatile UInt16 *wPCICamacMemBase = (UInt16 *)&fVPCICamacMem[wnafOffset];
+            uint16_t wnafOffset = (uint16_t)(offsetNAF(n,a,f) / 4);	 // note divide by 4
+            volatile uint16_t *wPCICamacMemBase = (uint16_t *)&fVPCICamacMem[wnafOffset];
             
             //The PCI-CAMAC hardware forces all NAF command writes to set
             //the F16 bit to a 1 and all NAF command reads to set the F16
@@ -591,7 +591,7 @@ static UInt32 *fVPCICamacMem;
 				else *wPCICamacMemBase = 0;
 			}
             // get status
-			volatile UInt16* statusValue = (UInt16 *)&fVPCICamacMem[0];
+			volatile uint16_t* statusValue = (uint16_t *)&fVPCICamacMem[0];
 			theStatus = Swap8BitsIn16(*statusValue);
 			[self checkStatusReturn:theStatus station:n];
             [theHWLock unlock];     //----end crital section
@@ -627,8 +627,8 @@ static UInt32 *fVPCICamacMem;
             [theHWLock lock];   //----begin crital section
             
             // write dataway
-            UInt16 wnafOffset = (UInt16)(offsetNAF(n,a,f) / 4);	 // note divide by 4
-            volatile UInt16 *wCC32MemBase = (UInt16 *)&fVPCICamacMem[wnafOffset];
+            uint16_t wnafOffset = (uint16_t)(offsetNAF(n,a,f) / 4);	 // note divide by 4
+            volatile uint16_t *wCC32MemBase = (uint16_t *)&fVPCICamacMem[wnafOffset];
             unsigned short *ptrData = data;
             uint32_t ptrOffset;
             
@@ -649,7 +649,7 @@ static UInt32 *fVPCICamacMem;
                     ptrData++;
                 }
             }
-			volatile UInt16* statusValue = (UInt16 *)&fVPCICamacMem[0];
+			volatile uint16_t* statusValue = (uint16_t *)&fVPCICamacMem[0];
 			theStatus = Swap8BitsIn16(*statusValue);
 			[self checkStatusReturn:theStatus station:n];
 			[theHWLock unlock];   //----end crital section
@@ -686,7 +686,7 @@ static UInt32 *fVPCICamacMem;
             }
             else     *wPCICamacMemBase = Swap8Bits(*data);
 			
-			volatile UInt16* statusValue = (UInt16 *)&fVPCICamacMem[0];
+			volatile uint16_t* statusValue = (uint16_t *)&fVPCICamacMem[0];
 			theStatus = Swap8BitsIn16(*statusValue);
 			[self checkStatusReturn:theStatus station:n];
 			
@@ -736,7 +736,7 @@ static UInt32 *fVPCICamacMem;
                     ptrData++;
                 }
             }
-			volatile UInt16* statusValue = (UInt16 *)&fVPCICamacMem[0];
+			volatile uint16_t* statusValue = (uint16_t *)&fVPCICamacMem[0];
 			theStatus = Swap8BitsIn16(*statusValue);
 			[self checkStatusReturn:theStatus station:n];
 			[theHWLock unlock];   //----end crital section
@@ -867,7 +867,7 @@ static UInt32 *fVPCICamacMem;
 - (void) checkStatusErrors
 {    
     [theHWLock lock];   //----begin critical section
-    volatile UInt16 *address = (UInt16 *)&fVLCReg[kLCRIntCSROffset];
+    volatile uint16_t *address = (uint16_t *)&fVLCReg[kLCRIntCSROffset];
     unsigned short statusLCRI = Swap8BitsIn16(*address);
     if( ( statusLCRI & kInitialControlStatus ) != kInitialControlStatus ) {
         [theHWLock unlock];//----end critical section early because of exception
@@ -889,7 +889,7 @@ static UInt32 *fVPCICamacMem;
 	//unsigned short statusLCRC = [self readLCRegister:kLCDControlOffset];
     unsigned short statusLCRC = 0;
     if(hardwareExists){
-        volatile UInt16 *address = (UInt16 *)&fVLCReg[kLCDControlOffset];
+        volatile uint16_t *address = (uint16_t *)&fVLCReg[kLCDControlOffset];
         statusLCRC = Swap8BitsIn16(*address);
     }
     if( ( statusLCRC & kPowerControlStatus ) != kPowerControlStatus ) {

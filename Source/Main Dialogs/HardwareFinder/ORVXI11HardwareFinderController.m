@@ -171,7 +171,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(VXI11HardwareFinderController);
         if ([obj respondsToSelector:@selector(setIpAddress:)]) {
             [obj setIpAddress:[dev ipAddress]];
         }
-        NSNumber* num = [NSNumber numberWithLong:(uint32_t)obj];
+        NSNumber* num = [NSNumber numberWithUnsignedInteger:(NSUInteger)obj];
         [pointerArray addObject:num];
     }
     if ([pointerArray count] == 0) return NO;

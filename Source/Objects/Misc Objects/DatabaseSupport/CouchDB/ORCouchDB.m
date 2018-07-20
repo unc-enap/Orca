@@ -881,7 +881,7 @@ static void ORCouchDB_Feed_callback(CFReadStreamRef stream,
                                     ORCouchDBChangesfeedOp* delegate)
 {
     
-    UInt8 data[1024];
+    uint8_t data[1024];
     CFHTTPMessageRef aResponse;
     int32_t len;
     switch(type){

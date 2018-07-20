@@ -1229,19 +1229,19 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id				= kCaen1724; //should be unique
-	configStruct->card_info[index].hw_mask[0]				= (uint32_t)dataId; //better be unique
+	configStruct->card_info[index].hw_mask[0]				= dataId; //better be unique
 	configStruct->card_info[index].slot						= [self slot];
 	configStruct->card_info[index].crate					= [self crateNumber];
 	configStruct->card_info[index].add_mod					= [self addressModifier];
-	configStruct->card_info[index].base_add					= (uint32_t)[self baseAddress];
-	configStruct->card_info[index].deviceSpecificData[0]	= (uint32_t)reg[kEventStored].addressOffset;	//Status buffer
-    configStruct->card_info[index].deviceSpecificData[1]	= (uint32_t)reg[kEventSize].addressOffset;	// "next event size" address
-    configStruct->card_info[index].deviceSpecificData[2]	= (uint32_t)reg[kOutputBuffer].addressOffset; // fifo Address
+	configStruct->card_info[index].base_add					= [self baseAddress];
+	configStruct->card_info[index].deviceSpecificData[0]	= reg[kEventStored].addressOffset;	//Status buffer
+    configStruct->card_info[index].deviceSpecificData[1]	= reg[kEventSize].addressOffset;	// "next event size" address
+    configStruct->card_info[index].deviceSpecificData[2]	= reg[kOutputBuffer].addressOffset; // fifo Address
     configStruct->card_info[index].deviceSpecificData[3]	= 0x0C;								// fifo Address Modifier (A32 MBLT)
     configStruct->card_info[index].deviceSpecificData[4]	= 0xFFC;							// fifo Size
-    configStruct->card_info[index].deviceSpecificData[5]	= (uint32_t)location;
-    configStruct->card_info[index].deviceSpecificData[6]	= (uint32_t)reg[kVMEControl].addressOffset;	// VME Control address
-    configStruct->card_info[index].deviceSpecificData[7]	= (uint32_t)reg[kBLTEventNum].addressOffset;	// Num of BLT events address
+    configStruct->card_info[index].deviceSpecificData[5]	= location;
+    configStruct->card_info[index].deviceSpecificData[6]	= reg[kVMEControl].addressOffset;	// VME Control address
+    configStruct->card_info[index].deviceSpecificData[7]	= reg[kBLTEventNum].addressOffset;	// Num of BLT events address
     
 	uint32_t sizeOfEvent = 0; // number of uint32_t for DMA transfer
 	if (isFixedSize) {
@@ -1255,7 +1255,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 			sizeOfEvent = numChan * (1UL << 20 >> [self eventSize]) / 4 + 4; //(1MB / num of blocks)
 		//}
 	}
-	configStruct->card_info[index].deviceSpecificData[8]	= (uint32_t)sizeOfEvent;
+	configStruct->card_info[index].deviceSpecificData[8]	= sizeOfEvent;
 	configStruct->card_info[index].num_Trigger_Indexes		= 0;
 	configStruct->card_info[index].next_Card_Index 	= index+1;
 	

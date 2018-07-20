@@ -2182,9 +2182,9 @@ return;
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id	= kSLTv4;	//should be unique
-	configStruct->card_info[index].hw_mask[0] 	= (uint32_t)eventDataId;
-	configStruct->card_info[index].hw_mask[1] 	= (uint32_t)multiplicityId;
-	configStruct->card_info[index].slot			= (uint32_t)[self stationNumber];
+	configStruct->card_info[index].hw_mask[0] 	= eventDataId;
+	configStruct->card_info[index].hw_mask[1] 	= multiplicityId;
+	configStruct->card_info[index].slot			= [self stationNumber];
 	configStruct->card_info[index].crate		= [self crateNumber];
 	configStruct->card_info[index].add_mod		= 0;		//not needed for this HW
     
@@ -2194,7 +2194,7 @@ return;
 	runFlagsMask |= kFirstTimeFlag;          //bit 16 = "first time" flag
     if(secondsSetSendToFLTs)
         runFlagsMask |= kSecondsSetSendToFLTsFlag;//bit ...
-	configStruct->card_info[index].deviceSpecificData[3] = (uint32_t)runFlagsMask;
+	configStruct->card_info[index].deviceSpecificData[3] = runFlagsMask;
     //SLT specific settings END
     
 

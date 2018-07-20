@@ -4616,17 +4616,17 @@ NSString* tauTable[4] ={
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id				= kSIS3316; //should be unique
-    configStruct->card_info[index].hw_mask[0]                = (uint32_t)dataId;  //better be unique
-    configStruct->card_info[index].hw_mask[1]                = (uint32_t)histoId; //better be unique
-    configStruct->card_info[index].hw_mask[2]                = (uint32_t)statId; //better be unique
+    configStruct->card_info[index].hw_mask[0]                = dataId;  //better be unique
+    configStruct->card_info[index].hw_mask[1]                = histoId; //better be unique
+    configStruct->card_info[index].hw_mask[2]                = statId; //better be unique
 	configStruct->card_info[index].slot						= [self slot];
 	configStruct->card_info[index].crate					= [self crateNumber];
 	configStruct->card_info[index].add_mod					= [self addressModifier];
-	configStruct->card_info[index].base_add					= (uint32_t)[self baseAddress];
-    configStruct->card_info[index].deviceSpecificData[0]    = (uint32_t)[self rawDataBufferLen];
-    configStruct->card_info[index].deviceSpecificData[1]    = (uint32_t)[self headerLen];
-    configStruct->card_info[index].deviceSpecificData[2]    = (uint32_t)([self writeHitsToEventMemoryMask]<<16 | [self histogramsEnabledMask]);
-    configStruct->card_info[index].deviceSpecificData[3]    = (uint32_t)[self enabledMask];
+	configStruct->card_info[index].base_add					= [self baseAddress];
+    configStruct->card_info[index].deviceSpecificData[0]    = [self rawDataBufferLen];
+    configStruct->card_info[index].deviceSpecificData[1]    = [self headerLen];
+    configStruct->card_info[index].deviceSpecificData[2]    = [self writeHitsToEventMemoryMask]<<16 | [self histogramsEnabledMask];
+    configStruct->card_info[index].deviceSpecificData[3]    = [self enabledMask];
 	configStruct->card_info[index].num_Trigger_Indexes		= 0;
 	
 	configStruct->card_info[index].next_Card_Index 	= index+1;	

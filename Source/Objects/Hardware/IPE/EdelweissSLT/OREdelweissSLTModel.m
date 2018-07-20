@@ -4281,10 +4281,10 @@ if((len % 4) != 0){
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id	= kSLTv4EW;	//should be unique
-	configStruct->card_info[index].hw_mask[0] 	= (uint32_t)eventDataId;
-	configStruct->card_info[index].hw_mask[1] 	= (uint32_t)waveFormId;
-	configStruct->card_info[index].hw_mask[2] 	= (uint32_t)fltEventId;
-	configStruct->card_info[index].slot			= (uint32_t)[self stationNumber];
+	configStruct->card_info[index].hw_mask[0] 	= eventDataId;
+	configStruct->card_info[index].hw_mask[1] 	= waveFormId;
+	configStruct->card_info[index].hw_mask[2] 	= fltEventId;
+	configStruct->card_info[index].slot			= [self stationNumber];
 	configStruct->card_info[index].crate		= [self crateNumber];
 	configStruct->card_info[index].add_mod		= 0;		//not needed for this HW
 	
@@ -4294,7 +4294,7 @@ if((len % 4) != 0){
 	runFlagsMask |= kFirstTimeFlag;          //bit 16 = "first time" flag
     if(takeEventData)  runFlagsMask |= kTakeEventDataFlag;
     if(saveIonChanFilterOutputRecords)  runFlagsMask |= kSaveIonChanFilterOutputRecordsFlag;
-	configStruct->card_info[index].deviceSpecificData[3] = (uint32_t)runFlagsMask;
+	configStruct->card_info[index].deviceSpecificData[3] = runFlagsMask;
     
     //for handling of different firmware versions
     if(hwVersion==0) [self readHwVersion];
@@ -4304,7 +4304,7 @@ if((len % 4) != 0){
         NSLog(@"WARNING: This version is supported, but you will miss some features!\n");
         NSLog(@"WARNING: KIT-IPE\n");
     }						  
-	configStruct->card_info[index].deviceSpecificData[7] = (uint32_t)hwVersion;
+	configStruct->card_info[index].deviceSpecificData[7] = hwVersion;
 
 	configStruct->card_info[index].num_Trigger_Indexes = 1;	//Just 1 group of objects controlled by SLT
     int nextIndex = index+1;

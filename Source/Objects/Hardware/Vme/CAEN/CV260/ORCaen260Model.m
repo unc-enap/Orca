@@ -189,7 +189,7 @@ NSString* ORCaen260ModelAllScalerValuesChanged= @"ORCaen260ModelAllScalerValuesC
 
 #pragma mark ***Register - Register specific routines
 - (NSString*)     getRegisterName:(short) anIndex	{ return reg[anIndex].regName; }
-- (uint32_t) getAddressOffset:(short) anIndex	{ return(reg[anIndex].addressOffset); }
+- (uint32_t)      getAddressOffset:(short) anIndex	{ return(reg[anIndex].addressOffset); }
 - (short)		  getAccessType:(short) anIndex		{ return reg[anIndex].accessType; }
 - (short)         getAccessSize:(short) anIndex		{ return reg[anIndex].size; }
 - (BOOL)          dataReset:(short) anIndex			{ return reg[anIndex].dataReset; }
@@ -575,13 +575,13 @@ NSString* ORCaen260ModelAllScalerValuesChanged= @"ORCaen260ModelAllScalerValuesC
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id   = kCaen260; //should be unique
-	configStruct->card_info[index].hw_mask[0] 	= (uint32_t)dataId; //better be unique
+	configStruct->card_info[index].hw_mask[0] 	= dataId; //better be unique
 	configStruct->card_info[index].slot			= [self slot];
 	configStruct->card_info[index].crate		= [self crateNumber];
 	configStruct->card_info[index].add_mod		= [self addressModifier];
-	configStruct->card_info[index].base_add		= (uint32_t)[self baseAddress];
+	configStruct->card_info[index].base_add		= [self baseAddress];
 	configStruct->card_info[index].deviceSpecificData[0] = enabledMask;
-	configStruct->card_info[index].deviceSpecificData[1] = (uint32_t)[self getAddressOffset:kCounter0];
+	configStruct->card_info[index].deviceSpecificData[1] = [self getAddressOffset:kCounter0];
 	configStruct->card_info[index].deviceSpecificData[2] = [self shipOnChange];
 	configStruct->card_info[index].deviceSpecificData[3] = [self channelForTriggeredShip];
 	configStruct->card_info[index].num_Trigger_Indexes = 0;

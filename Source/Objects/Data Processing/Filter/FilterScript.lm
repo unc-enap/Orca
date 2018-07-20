@@ -4,9 +4,9 @@
 #include "FilterScript.h"
 #include "FilterScript.tab.h"
 void FilterScripterror(char *);
-void fsComment();
-void fsSingleLineComment();
-long numFilterLines = 1;
+void fsComment(void);
+void fsSingleLineComment(void);
+uint32_t numFilterLines = 1;
 extern nodeType** filterNodes;
 extern long filterNodeCount;
 extern long maxFilterNodeCount;
@@ -22,7 +22,7 @@ H			[a-fA-F0-9]
 
 
 {D}+      {
-                FilterScriptlval.iValue = atol(yytext);
+                FilterScriptlval.iValue = (uint32_t)atol(yytext);
                 return INTEGER;
             }
 
@@ -31,7 +31,7 @@ H			[a-fA-F0-9]
 						strncpy(tempString,yytext,yyleng);
 						tempString[yyleng] = '\0';
 						unsigned long n = strtoul(tempString,0,16);
-						FilterScriptlval.iValue = n;
+						FilterScriptlval.iValue = (uint32_t)n;
 						return INTEGER;
 					}
 

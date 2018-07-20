@@ -25,14 +25,14 @@
 #import <mach/mach.h>
 
 typedef struct  {
-	UInt8 bytes[6];
+	uint8 bytes[6];
 }WLHardwareAddress;
 
 typedef  struct  {
-    UInt16 vendor;
-    UInt16 variant;
-    UInt16 major;
-    UInt16 minor;
+    uint16_t vendor;
+    uint16_t variant;
+    uint16_t major;
+    uint16_t minor;
 }WLIdentity;
 
 @class ORUSBInterface;

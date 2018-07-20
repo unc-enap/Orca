@@ -52,7 +52,7 @@ void FilterScripterror(char *s);
 %}
 
 %union {
-    unsigned long iValue;       /* integer value */
+    uint32_t iValue;       /* integer value */
     char sIndex[100];           /* symbol table key */
     nodeType *nPtr;             /* node pointer */
 };

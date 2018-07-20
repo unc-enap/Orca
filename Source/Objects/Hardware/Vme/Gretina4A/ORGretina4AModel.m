@@ -3374,14 +3374,14 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 {
     configStruct->total_cards++;
     configStruct->card_info[index].hw_type_id				= kGretina4A; //should be unique
-    configStruct->card_info[index].hw_mask[0]				= (uint32_t)dataId; //better be unique
+    configStruct->card_info[index].hw_mask[0]				= dataId; //better be unique
     configStruct->card_info[index].slot						= [self slot];
     configStruct->card_info[index].crate					= [self crateNumber];
     configStruct->card_info[index].add_mod					= [self addressModifier];
-    configStruct->card_info[index].base_add					= (uint32_t)[self baseAddress];
-    configStruct->card_info[index].deviceSpecificData[0]	= (uint32_t)[Gretina4ARegisters offsetforReg:kProgrammingDone];  //fifoStateAddress
-    configStruct->card_info[index].deviceSpecificData[1]	= (uint32_t)[Gretina4ARegisters offsetforReg:kFifo]; // fifoAddress
-    configStruct->card_info[index].deviceSpecificData[2]	= (uint32_t)[Gretina4ARegisters offsetforReg:kProgrammingDone];   // fifoReset Address
+    configStruct->card_info[index].base_add					= [self baseAddress];
+    configStruct->card_info[index].deviceSpecificData[0]	= [Gretina4ARegisters offsetforReg:kProgrammingDone];  //fifoStateAddress
+    configStruct->card_info[index].deviceSpecificData[1]	= [Gretina4ARegisters offsetforReg:kFifo]; // fifoAddress
+    configStruct->card_info[index].deviceSpecificData[2]	= [Gretina4ARegisters offsetforReg:kProgrammingDone];   // fifoReset Address
     configStruct->card_info[index].deviceSpecificData[3]	= [self rawDataWindow]/2 + 1; //longs
     configStruct->card_info[index].num_Trigger_Indexes		= 0;
     

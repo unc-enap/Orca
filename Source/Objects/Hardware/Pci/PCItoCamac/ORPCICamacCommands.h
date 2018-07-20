@@ -82,7 +82,7 @@ for the use of this software.
                     | (((Swap16Bits(x) & 0xff000000) >> 8) | ((Swap16Bits(x) & 0x00ff0000) << 8)))
                     
 // N A F offset
-#define offsetNAF(N, A, F) (((UInt16)((N << 10) + (A << 6) + ((F & 0xf) << 2))))
+#define offsetNAF(N, A, F) (((uint16_t)((N << 10) + (A << 6) + ((F & 0xf) << 2))))
 
 
 // command codes

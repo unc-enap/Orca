@@ -26,7 +26,7 @@
 
 - (id) init;
 - (void) setSize: (int32_t) aSize;
-- (int32_t) count;
+- (NSUInteger) count;
 - (void) insertHVEntry: (NSDate *) aDateOfAquistion hvValue: (NSNumber*) anHVEntry;
 - (NSDictionary *) HVEntry: (int32_t) anOffset;
 

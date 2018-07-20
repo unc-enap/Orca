@@ -86,9 +86,9 @@ typedef struct MapRegisterStructUser
     UInt32 *userAddress;
     UInt32 vmeAddress;
     UInt32 numberBytes;
-    UInt16 addressModifier;
-    UInt16 addressSpace; 
-    UInt8 accessWidth;
+    uint16_t addressModifier;
+    uint16_t addressSpace; 
+    uint8_t accessWidth;
 } MapRegisterStructUser;
 
 

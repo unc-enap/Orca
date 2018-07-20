@@ -2243,11 +2243,11 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id	= kSLTv4;//TODO:    kKatrinV4SLT;	//should be unique 
-	configStruct->card_info[index].hw_mask[0] 	= (uint32_t)eventDataId;
-	configStruct->card_info[index].hw_mask[1] 	= (uint32_t)multiplicityId;
-	configStruct->card_info[index].hw_mask[2] 	= (uint32_t)eventFifoId;
-	configStruct->card_info[index].hw_mask[3] 	= (uint32_t)energyId;
-	configStruct->card_info[index].slot			= (uint32_t)[self stationNumber];
+	configStruct->card_info[index].hw_mask[0] 	= eventDataId;
+	configStruct->card_info[index].hw_mask[1] 	= multiplicityId;
+	configStruct->card_info[index].hw_mask[2] 	= eventFifoId;
+	configStruct->card_info[index].hw_mask[3] 	= energyId;
+	configStruct->card_info[index].slot			= [self stationNumber];
 	configStruct->card_info[index].crate		= [self crateNumber];
 	configStruct->card_info[index].add_mod		= 0;		//not needed for this HW
     
@@ -2255,8 +2255,8 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     uint32_t            runFlagsMask = 0;
     if (secondsSetSendToFLTs) runFlagsMask |= kSecondsSetSendToFLTsFlag;
     if (activateFltReadout)   runFlagsMask |= kActivateFltReadoutFlag;
-	configStruct->card_info[index].deviceSpecificData[3] = (uint32_t)runFlagsMask;
-	configStruct->card_info[index].deviceSpecificData[6] = (uint32_t)[self readReg: kKatrinV4SLTHWRevisionReg];
+	configStruct->card_info[index].deviceSpecificData[3] = runFlagsMask;
+	configStruct->card_info[index].deviceSpecificData[6] = [self readReg: kKatrinV4SLTHWRevisionReg];
     
     //children
 	configStruct->card_info[index].num_Trigger_Indexes = 1;

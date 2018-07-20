@@ -2376,17 +2376,17 @@ static struct {
     
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id	= kGretina; //should be unique
-	configStruct->card_info[index].hw_mask[0] 	=  (uint32_t)dataId; //better be unique
+	configStruct->card_info[index].hw_mask[0] 	=  dataId; //better be unique
 	configStruct->card_info[index].slot			= [self slot];
 	configStruct->card_info[index].crate		= [self crateNumber];
 	configStruct->card_info[index].add_mod		= [self addressModifier];
-	configStruct->card_info[index].base_add		= (uint32_t)[self baseAddress];
-	configStruct->card_info[index].deviceSpecificData[0]	= (uint32_t)([self baseAddress] + register_information[kProgrammingDone].offset); //fifoStateAddress
+	configStruct->card_info[index].base_add		= [self baseAddress];
+	configStruct->card_info[index].deviceSpecificData[0]	= ([self baseAddress] + register_information[kProgrammingDone].offset); //fifoStateAddress
     configStruct->card_info[index].deviceSpecificData[1]	= kGretina4FIFOEmpty; // fifoEmptyMask
-    configStruct->card_info[index].deviceSpecificData[2]	= (uint32_t)([self baseAddress] + 0x1000); // fifoAddress
+    configStruct->card_info[index].deviceSpecificData[2]	= ([self baseAddress] + 0x1000); // fifoAddress
     configStruct->card_info[index].deviceSpecificData[3]	= 0x0B; // fifoAM
     configStruct->card_info[index].deviceSpecificData[4]	= 0x1FFFF; // size of FIFO
-    configStruct->card_info[index].deviceSpecificData[5]	= (uint32_t)location; // crate,card,serial
+    configStruct->card_info[index].deviceSpecificData[5]	= location; // crate,card,serial
 	configStruct->card_info[index].num_Trigger_Indexes		= 0;
 	
 	configStruct->card_info[index].next_Card_Index 	= index+1;	

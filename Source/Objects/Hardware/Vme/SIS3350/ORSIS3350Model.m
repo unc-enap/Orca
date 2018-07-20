@@ -1360,13 +1360,13 @@ uint32_t rblt_data[kMaxNumberWords];
 {
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id				= kSIS3350; //should be unique
-	configStruct->card_info[index].hw_mask[0]				= (uint32_t)dataId;	//better be unique
+	configStruct->card_info[index].hw_mask[0]				= dataId;	//better be unique
 	configStruct->card_info[index].slot						= [self slot];
 	configStruct->card_info[index].crate					= [self crateNumber];
 	configStruct->card_info[index].add_mod					= addressModifier;
-	configStruct->card_info[index].base_add					= (uint32_t)baseAddress;
+	configStruct->card_info[index].base_add					= baseAddress;
     configStruct->card_info[index].deviceSpecificData[0]	= operationMode;
-    configStruct->card_info[index].deviceSpecificData[1]	= (uint32_t)[self memoryWrapLength];
+    configStruct->card_info[index].deviceSpecificData[1]	= [self memoryWrapLength];
 	configStruct->card_info[index].num_Trigger_Indexes		= 0;
 	
 	configStruct->card_info[index].next_Card_Index 	= index+1;	

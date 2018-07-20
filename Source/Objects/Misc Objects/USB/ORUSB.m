@@ -299,9 +299,9 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(USB);
     kern_return_t	kr;
     io_service_t	usbDevice;
     HRESULT			res;
-	UInt16			vendor;
-	UInt16			product;
-	UInt16			release;
+	uint16_t			vendor;
+	uint16_t			product;
+	uint16_t			release;
 	UInt32			locationID;
 	
     while ((usbDevice = IOIteratorNext(iterator))){
@@ -379,7 +379,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(USB);
 			// Save the device's name to our private data.
 			[ usbCallbackData setDeviceName:deviceNameAsString];
 						
-			UInt8 snsi;
+			uint8 snsi;
 			kr = (*deviceInterface)->USBGetSerialNumberStringIndex(deviceInterface, &snsi);
 			char serialString[128];
 			if(snsi){
@@ -402,7 +402,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(USB);
 				//NSString* s = [NSString stringWithFormat:@"0x%8x", locationID];
 				[usbCallbackData setSerialNumber:@"0"];
 				/*
-				UInt8 psi;
+				uint8 psi;
 				kr = (*deviceInterface)->USBGetProductStringIndex(deviceInterface, &psi);
 				if(psi){
 					IOUSBDevRequest   req;
@@ -517,7 +517,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(USB);
 
 -(IOReturn) _configureAnchorDevice:(IOUSBDeviceInterface182**)dev
 {
-    UInt8                               numConf;
+    uint8                               numConf;
     IOReturn                            kr;
     IOUSBConfigurationDescriptorPtr     confDesc;
 	
@@ -542,8 +542,8 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(USB);
 
 - (IOReturn) _findInterfaces:(IOUSBDeviceInterface182**)dev userInfo:(ORUSBInterface*) usbCallbackData supported:(BOOL)supported
 {
-	// UInt8                       intfClass;
-    //UInt8                       intfSubClass;
+	// uint8                       intfClass;
+    //uint8                       intfSubClass;
 	
     IOUSBFindInterfaceRequest   request;
     request.bInterfaceClass		= kIOUSBFindInterfaceDontCare;
@@ -588,7 +588,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(USB);
 			}
 		}
 		
-		UInt8 intfNumEndpoints;
+		uint8 intfNumEndpoints;
 		kr = (*intf)->GetNumEndpoints(intf, &intfNumEndpoints);
 		if (kIOReturnSuccess != kr) {
 			(void) (*intf)->USBInterfaceClose(intf);
@@ -608,14 +608,14 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(USB);
 		int interruptOutPipeCount= 0;
 		
         if(supported){
-            UInt8 pipeRef;
+            uint8 pipeRef;
             for (pipeRef = 1; pipeRef <= intfNumEndpoints; pipeRef++){
                 IOReturn    kr2;
-                UInt8       direction;
-                UInt8       number;
-                UInt8       transferType;
-                UInt16      maxPacketSize;
-                UInt8       interval;
+                uint8       direction;
+                uint8       number;
+                uint8       transferType;
+                uint16_t      maxPacketSize;
+                uint8       interval;
                 
                 kr2 = (*intf)->GetPipeProperties(intf, pipeRef, &direction, &number, &transferType, &maxPacketSize, &interval);
                 if(kIOReturnNoDevice == kr2)     NSLog(@"no Device\n");
@@ -715,8 +715,8 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(USB);
     if([someVendorIDs count] == [someProductIDs count]){
         int i;
         for(i=0;i<[someVendorIDs count];i++){
-            uint32_t aVendorID  = [[someVendorIDs objectAtIndex:i] unsignedLongValue];
-            uint32_t aProductID = [[someProductIDs objectAtIndex:i] unsignedLongValue];
+            NSInteger aVendorID  = [[someVendorIDs objectAtIndex:i] unsignedLongValue];
+            NSInteger aProductID = [[someProductIDs objectAtIndex:i] unsignedLongValue];
             [matchingInterfaces addObjectsFromArray:[self interfacesForVender:aVendorID product:aProductID]];
         }
        return  matchingInterfaces;

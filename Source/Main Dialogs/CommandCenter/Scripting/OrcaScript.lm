@@ -5,12 +5,12 @@
 #include "OrcaScript.tab.h"
 
 void OrcaScripterror(char *);
-void comment();
-void singleLineComment();
-void grabString();
-void yyreset_state();
+void comment(void);
+void singleLineComment(void);
+void grabString(void);
+void yyreset_state(void);
 char escapedCharacterInString(char c);
-long num_lines = 1;
+uint32_t num_lines = 1;
 extern NSMutableArray* nodeList;
 extern NSMutableArray* functionList;
 static NSDictionary* map_dict = nil;
@@ -44,8 +44,8 @@ E			[Ee][+-]?{D}+
 0[xX]{H}+			{
 						strncpy(OrcaScriptlval.cString,yytext,yyleng);
 						OrcaScriptlval.cString[yyleng] = '\0';
-						unsigned long n = strtoul(OrcaScriptlval.cString,0,16);
-						sprintf(OrcaScriptlval.cString,"%lu",n);
+						uint32_t n = (uint32_t)strtoul(OrcaScriptlval.cString,0,16);
+						sprintf(OrcaScriptlval.cString,"%u",n);
 						return CONSTANT;
 					}
 
