@@ -1,8 +1,0 @@
-
-The HV is not being polled. This means that automatic checking of high current conditions and other problems is not being done.
-
-Enabling polling on the HV dialog will make this alarm go away.
-
-Acknowledging this alarm will silence it. 
-
-
