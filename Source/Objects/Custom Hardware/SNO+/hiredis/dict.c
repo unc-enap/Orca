@@ -98,7 +98,7 @@ static int _dictInit(dict *ht, dictType *type, void *privDataPtr) {
 }
 
 /* Expand or create the hashtable */
-static int dictExpand(dict *ht, unsigned long size) {
+static int dictExpand(dict *ht, uint32_t size) {
     dict n; /* the new hashtable */
     unsigned long realsize = _dictNextPower(size), i;
 
