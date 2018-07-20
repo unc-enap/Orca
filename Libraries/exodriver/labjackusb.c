@@ -458,7 +458,7 @@ static bool LJUSB_isMinFirmware(HANDLE hDevice, uint32_t ProductID)
     case DIGIT_PRODUCT_ID:
         return true;
     default:
-        fprintf(stderr, "Firmware check not supported for product ID %ld\n", ProductID);
+        fprintf(stderr, "Firmware check not supported for product ID %d\n", ProductID);
         return false;
     }
 }

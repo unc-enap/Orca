@@ -906,7 +906,7 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 			p->enableMask		= enableMask;
 			
 			if(status != 0){
-                [NSException raise:@"Acqiris DC440 Card Error" format:@"Crate: %d Card: %u Status=%d",[self crateNumber],[self stationNumber],status];
+                [NSException raise:@"Acqiris DC440 Card Error" format:@"Crate: %d Card: %lu Status=%d",[self crateNumber],[self stationNumber],status];
 			}
 			firstTime = NO;
 		}

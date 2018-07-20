@@ -1937,7 +1937,7 @@ static int              sChannelsNotChangedCount = 0;
         sReadingHvdbAlert = [[[NSAlert alloc] init] autorelease];
         [sReadingHvdbAlert setMessageText:s];
         [sReadingHvdbAlert addButtonWithTitle:@"Cancel"];
-        [sReadingHvdbAlert setAlertStyle:NSInformationalAlertStyle];
+        [sReadingHvdbAlert setAlertStyle:NSAlertStyleInformational];
         [sReadingHvdbAlert beginSheetModalForWindow:[hwWizard performSelector:@selector(window)] completionHandler:^(NSModalResponse result){
             if (result == NSAlertFirstButtonReturn) {
                 // cancel any queued database operations
