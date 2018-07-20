@@ -17,7 +17,7 @@ bool ORSIS3305Card::Start()
 
     int group;
     for(group=0;group<2;group++){
-//        uint32_t sisHeaderLength = 4;  // 4 long words in the normal sis headers
+//        uint32_t sisHeaderLength = 4;  // 4 int32_t words in the normal sis headers
         
         orcaHeaderLength = 4;
         
@@ -148,7 +148,7 @@ bool ORSIS3305Card::Readout(SBC_LAM_Data* /*lam_data*/)
             uint32_t savedIndex = dataIndex;
 
             uint32_t numEventsInBuffer = numberOfWords[group]/(totalRecordLength[group]);
-            uint32_t bytesOfData = 4*(numberOfWords[group]);                                // 4 is sizeof( long ) in bytes
+            uint32_t bytesOfData = 4*(numberOfWords[group]);                                // 4 is sizeof( int32_t ) in bytes
             numberBytesToReturn = (orcaHeaderLength*4 + bytesOfData);
 
             bool wrapMode = 0;//(wrapMaskForRun & (1L<<group))!=0; // FIX: Implement wrap mode

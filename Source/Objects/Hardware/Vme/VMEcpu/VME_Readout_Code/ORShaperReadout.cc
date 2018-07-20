@@ -36,7 +36,7 @@ bool ORShaperReadout::Readout(SBC_LAM_Data* lamData)
                         data[dataIndex++] = dataId | locationMask | 
                             ((channel & 0x0000000f) << 12) | (aValue & 0x0fff);
                     } 
-					else { //long form
+					else { //int32_t form
 						int length;
 						if(shipTimeStamp)length = 4;
 						else length = 2;

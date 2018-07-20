@@ -370,14 +370,14 @@ void loadXL2Clocks(SBC_Packet* aPacket)
 
 #define FATAL_ERROR(n,message) {strncpy(errorMessage,message,80);	errorFlag = n;	goto earlyExit;}
 
-static __inline__ long long elapsed_ticks(long long t1, long long t2) {
+static __inline__ int64_t elapsed_ticks(int64_t t1, int64_t t2) {
 	return t2 - t1;
 }
 
-static __inline__ long long getticks(void) {
+static __inline__ int64_t getticks(void) {
 	unsigned a, d;
 	asm volatile("rdtsc" : "=a" (a), "=d" (d));
-	return ((long long) a) | (((long long) d) << 32);
+	return ((int64_t) a) | (((int64_t) d) << 32);
 }
 
 static double parse_cpu_freq(void) {
@@ -409,12 +409,12 @@ static double parse_cpu_freq(void) {
 	return freq;
 }
 
-void fineSleep(const unsigned long long ticks) {
-	long long tim1, tim2;
+void fineSleep(const uint64_t ticks) {
+	int64_t tim1, tim2;
 	tim1 = getticks();
 	do {
 		tim2 = getticks();
-	} while (elapsed_ticks(tim1, tim2) < (long long) ticks);
+	} while (elapsed_ticks(tim1, tim2) < (int64_t) ticks);
 }
 
 void loadXL2Xilinx(SBC_Packet* aPacket)
@@ -914,7 +914,7 @@ void firePedestalJobFixedTime(SBC_Packet* aPacket)
     if(needToSwap) SwapLongBlock(p, aPacket->cmdHeader.numberBytesinPayload/sizeof(uint32_t));
 
     uint32_t pedestal_count = p[0];
-    unsigned long long pedestal_delay = p[1] * 100ULL * nsec_to_ticks; //p[1] is the delay in [100 nsec]
+    uint64_t pedestal_delay = p[1] * 100ULL * nsec_to_ticks; //p[1] is the delay in [100 nsec]
     uint32_t csr_mask = p[2];
     uint32_t error_code = 0;
     if(error_code){} //fix a stupid compiler warning
@@ -985,7 +985,7 @@ void firePedestalsFixedTime(SBC_Packet* aPacket)
     if(needToSwap) SwapLongBlock(p, aPacket->cmdHeader.numberBytesinPayload/sizeof(uint32_t));
 
     uint32_t pedestal_count = p[0];
-    unsigned long long pedestal_delay = p[1] * 100 * nsec_to_ticks; //p[1] is the delay in [100 nsec]
+    uint64_t pedestal_delay = p[1] * 100 * nsec_to_ticks; //p[1] is the delay in [100 nsec]
     uint32_t csr_mask = p[2];
     
     uint32_t error_code = 0;

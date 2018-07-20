@@ -46,7 +46,7 @@
 static redisReply *createReplyObject(int type);
 static void *createStringObject(const redisReadTask *task, char *str, size_t len);
 static void *createArrayObject(const redisReadTask *task, int elements);
-static void *createIntegerObject(const redisReadTask *task, long long value);
+static void *createIntegerObject(const redisReadTask *task, int64_t value);
 static void *createNilObject(const redisReadTask *task);
 
 /* Default set of functions to build the reply. Keep in mind that such a
@@ -121,7 +121,7 @@ static void *createStringObject(const redisReadTask *task, char *str, size_t len
     memcpy(buf,str,len);
     buf[len] = '\0';
     r->str = buf;
-    r->len = len;
+    r->len = (int)len;
 
     if (task->parent) {
         parent = task->parent->obj;
@@ -156,7 +156,7 @@ static void *createArrayObject(const redisReadTask *task, int elements) {
     return r;
 }
 
-static void *createIntegerObject(const redisReadTask *task, long long value) {
+static void *createIntegerObject(const redisReadTask *task, int64_t value) {
     redisReply *r, *parent;
 
     r = createReplyObject(REDIS_REPLY_INTEGER);
@@ -329,21 +329,21 @@ int redisvFormatCommand(char **target, const char *format, va_list ap) {
                         goto fmt_invalid;
                     }
 
-                    /* Size: long long */
+                    /* Size: int64_t */
                     if (_p[0] == 'l' && _p[1] == 'l') {
                         _p += 2;
                         if (*_p != '\0' && strchr(intfmts,*_p) != NULL) {
-                            va_arg(ap,long long);
+                            va_arg(ap,int64_t);
                             goto fmt_valid;
                         }
                         goto fmt_invalid;
                     }
 
-                    /* Size: long */
+                    /* Size: int32_t */
                     if (_p[0] == 'l') {
                         _p += 1;
                         if (*_p != '\0' && strchr(intfmts,*_p) != NULL) {
-                            va_arg(ap,long);
+                            va_arg(ap,int32_t);
                             goto fmt_valid;
                         }
                         goto fmt_invalid;
@@ -478,7 +478,7 @@ int redisFormatSdsCommandArgv(sds *target, int argc, const char **argv,
                               const size_t *argvlen)
 {
     sds cmd;
-    unsigned long long totlen;
+    uint64_t totlen;
     int j;
     size_t len;
 
@@ -515,7 +515,7 @@ int redisFormatSdsCommandArgv(sds *target, int argc, const char **argv,
     assert(sdslen(cmd)==totlen);
 
     *target = cmd;
-    return totlen;
+    return (int)totlen;
 }
 
 void redisFreeSdsCommand(sds cmd) {
@@ -793,7 +793,7 @@ int redisEnableKeepAlive(redisContext *c) {
  * see if there is a reply available. */
 int redisBufferRead(redisContext *c) {
     char buf[1024*16];
-    int nread;
+    ssize_t nread;
 
     /* Return early when the context has seen an error. */
     if (c->err)
@@ -836,7 +836,7 @@ int redisBufferWrite(redisContext *c, int *done) {
         return REDIS_ERR;
 
     if (sdslen(c->obuf) > 0) {
-        nwritten = write(c->fd,c->obuf,sdslen(c->obuf));
+        nwritten = (int)write(c->fd,c->obuf,sdslen(c->obuf));
         if (nwritten == -1) {
             if ((errno == EAGAIN && !(c->flags & REDIS_BLOCK)) || (errno == EINTR)) {
                 /* Try again later */

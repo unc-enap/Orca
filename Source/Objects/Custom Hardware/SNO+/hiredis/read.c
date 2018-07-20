@@ -119,7 +119,7 @@ static char *readBytes(redisReader *r, unsigned int bytes) {
 /* Find pointer to \r\n. */
 static char *seekNewline(char *s, size_t len) {
     int pos = 0;
-    int _len = len-1;
+    int _len = (int)len-1;
 
     /* Position should be < len-1 because the character at "pos" should be
      * followed by a \n. Note that strchr cannot be used because it doesn't
@@ -143,10 +143,10 @@ static char *seekNewline(char *s, size_t len) {
     return NULL;
 }
 
-/* Read a long long value starting at *s, under the assumption that it will be
+/* Read a int64_t value starting at *s, under the assumption that it will be
  * terminated by \r\n. Ambiguously returns -1 for unexpected input. */
-static long long readLongLong(char *s) {
-    long long v = 0;
+static int64_t readLongLong(char *s) {
+    int64_t v = 0;
     int dec, mult = 1;
     char c;
 
@@ -179,7 +179,7 @@ static char *readLine(redisReader *r, int *_len) {
     p = r->buf+r->pos;
     s = seekNewline(p,(r->len-r->pos));
     if (s != NULL) {
-        len = s-(r->buf+r->pos);
+        len = (int)(s-(r->buf+r->pos));
         r->pos += len+2; /* skip \r\n */
         if (_len) *_len = len;
         return p;
@@ -250,8 +250,8 @@ static int processBulkItem(redisReader *r) {
     redisReadTask *cur = &(r->rstack[r->ridx]);
     void *obj = NULL;
     char *p, *s;
-    long len;
-    unsigned long bytelen;
+    int32_t len;
+    uint32_t bytelen;
     int success = 0;
 
     p = r->buf+r->pos;
@@ -303,7 +303,7 @@ static int processMultiBulkItem(redisReader *r) {
     redisReadTask *cur = &(r->rstack[r->ridx]);
     void *obj;
     char *p;
-    long elements;
+    int32_t elements;
     int root = 0;
 
     /* Set error for nested multi bulks with depth > 7 */
@@ -331,7 +331,7 @@ static int processMultiBulkItem(redisReader *r) {
             moveToNextTask(r);
         } else {
             if (r->fn && r->fn->createArray)
-                obj = r->fn->createArray(cur,elements);
+                obj = r->fn->createArray(cur,(int)elements);
             else
                 obj = (void*)REDIS_REPLY_ARRAY;
 
@@ -342,7 +342,7 @@ static int processMultiBulkItem(redisReader *r) {
 
             /* Modify task stack when there are more than 0 elements. */
             if (elements > 0) {
-                cur->elements = elements;
+                cur->elements = (int)elements;
                 cur->obj = obj;
                 r->ridx++;
                 r->rstack[r->ridx].type = -1;
@@ -510,7 +510,7 @@ int redisReaderGetReply(redisReader *r, void **reply) {
     /* Discard part of the buffer when we've consumed at least 1k, to avoid
      * doing unnecessary calls to memmove() in sds.c. */
     if (r->pos >= 1024) {
-        sdsrange(r->buf,r->pos,-1);
+        sdsrange(r->buf,(int)r->pos,-1);
         r->pos = 0;
         r->len = sdslen(r->buf);
     }

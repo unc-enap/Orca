@@ -4,7 +4,7 @@
 #include "readout_code.h"
 #include "ORCAEN830Shared.hh"
 #include <stdio.h>
-unsigned long long rollOverCount[21];
+uint64_t rollOverCount[21];
 uint32_t lastChan0Count[21];
 
 
@@ -82,7 +82,7 @@ bool ORCAEN830Readout::Readout(SBC_LAM_Data* lamData)
                                 if(aValue<lastChan0Count[GetSlot()]){
                                     rollOverCount[GetSlot()]++;
                                 }
-                                long long final = (rollOverCount[GetSlot()] << 32) | aValue;
+                                int64_t final = (rollOverCount[GetSlot()] << 32) | aValue;
                                 final += chan0Offset;
                                 lastChan0Count[GetSlot()] = aValue;
                                 data[indexForRollOver] = (final >> 32) & 0xffffffff;

@@ -556,7 +556,7 @@ void sendCommandFifo(unsigned char * buffer, int len)
 	//now write command to cmd FIFO
     Code_Commande = buffer[1];
  	//  d'abord un mot de 8 bit precede de 0 en bit 9 pour indiquer le 1er mot
-	//write_word(driver_fpga,REG_CMD, (unsigned long) Code_Commande);
+	//write_word(driver_fpga,REG_CMD, (uint32_t) Code_Commande);
 	pbus->write(CmdFIFOReg ,  Code_Commande);  //this is either 255/0xff or 240/0xf0 (commande 'W')
 
 	printf("cmd %u (%d octets) ",Code_Commande,len-2);//TODO: use debug level setting -tb-
@@ -630,7 +630,7 @@ void sendCommandFifoUnblockFiber(unsigned char * buffer, int len, int flt, int f
 	//now write command to cmd FIFO
     Code_Commande = buffer[1];
  	//  d'abord un mot de 8 bit precede de 0 en bit 9 pour indiquer le 1er mot
-	//write_word(driver_fpga,REG_CMD, (unsigned long) Code_Commande);
+	//write_word(driver_fpga,REG_CMD, (uint32_t) Code_Commande);
 	pbus->write(CmdFIFOReg ,  Code_Commande);  //this is either 255/0xff or 240/0xf0 (commande 'W')
 
 	printf("cmd %u (%d octets) ",Code_Commande,len-2);//TODO: use debug level setting -tb-
@@ -993,7 +993,7 @@ uint64_t setSLTtimerWithUTC(uint32_t flags, uint64_t utcTime, uint64_t utcTimeOf
     sltTimeLo = pbus->read(SLTTimeLowReg);
     sltTimeHi = pbus->read(SLTTimeHighReg);
     sltTime = (((uint64_t)sltTimeHi << 32) | sltTimeLo) /100000 ;
-    if(beVerbose) printf("Set SLT timer: UTC:%i  (current value  (hi: 0x%08x  lo:  0x%08x ): 0x%016lx, %lu)\n",currentSec,sltTimeHi,sltTimeLo,sltTime,sltTime); //by Bernhard to see the time in the ipe4reader output
+    if(beVerbose) printf("Set SLT timer: UTC:%i  (current value  (hi: 0x%08x  lo:  0x%08x ): 0x%016lx, %u)\n",currentSec,sltTimeHi,sltTimeLo,sltTime,sltTime); //by Bernhard to see the time in the ipe4reader output
     timeDiff=currentSec-sltTime;
     //if((timeDiff < -1) || (timeDiff >1)){
     if(timeDiff != 0){
@@ -1011,7 +1011,7 @@ uint64_t setSLTtimerWithUTC(uint32_t flags, uint64_t utcTime, uint64_t utcTimeOf
             sltTimeLo = pbus->read(SLTTimeLowReg);
             sltTimeHi = pbus->read(SLTTimeHighReg);
             sltTime = (((uint64_t)sltTimeHi << 32) | sltTimeLo) /100000 ;
-            if(beVerbose) printf("    Set SLT timer: read back (current value  (hi: 0x%08x  lo:  0x%08x ): 0x%016lx, %lu)\n",sltTimeHi,sltTimeLo,sltTime,sltTime); //by Bernhard to see the time in the ipe4reader output
+            if(beVerbose) printf("    Set SLT timer: read back (current value  (hi: 0x%08x  lo:  0x%08x ): 0x%016lx, %u)\n",sltTimeHi,sltTimeLo,sltTime,sltTime); //by Bernhard to see the time in the ipe4reader output
         }
         #if 0
         pbus->write(SLTTimeLowReg, 0);

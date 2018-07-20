@@ -181,7 +181,7 @@ int anetTcpKeepAlive(char *err, int fd)
 
 /* Set the socket receive timeout (SO_RCVTIMEO socket option) to the specified
  * number of milliseconds, or disable it if the 'ms' argument is zero. */
-int anetReceiveTimeout(char *err, int fd, long long ms) {
+int anetReceiveTimeout(char *err, int fd, int64_t ms) {
     struct timeval tv;
 
     tv.tv_sec = ms/1000;
@@ -195,7 +195,7 @@ int anetReceiveTimeout(char *err, int fd, long long ms) {
 
 /* Set the socket send timeout (SO_SNDTIMEO socket option) to the specified
  * number of milliseconds, or disable it if the 'ms' argument is zero. */
-int anetSendTimeout(char *err, int fd, long long ms) {
+int anetSendTimeout(char *err, int fd, int64_t ms) {
     struct timeval tv;
 
     tv.tv_sec = ms/1000;
@@ -231,10 +231,10 @@ int anetGenericResolve(char *err, char *host, char *ipbuf, size_t ipbuf_len,
     }
     if (info->ai_family == AF_INET) {
         struct sockaddr_in *sa = (struct sockaddr_in *)info->ai_addr;
-        inet_ntop(AF_INET, &(sa->sin_addr), ipbuf, ipbuf_len);
+        inet_ntop(AF_INET, &(sa->sin_addr), ipbuf, (socklen_t)ipbuf_len);
     } else {
         struct sockaddr_in6 *sa = (struct sockaddr_in6 *)info->ai_addr;
-        inet_ntop(AF_INET6, &(sa->sin6_addr), ipbuf, ipbuf_len);
+        inet_ntop(AF_INET6, &(sa->sin6_addr), ipbuf, (socklen_t)ipbuf_len);
     }
 
     freeaddrinfo(info);
@@ -426,12 +426,12 @@ int anetRead(int fd, char *buf, int count)
     ssize_t nread, totlen = 0;
     while(totlen != count) {
         nread = read(fd,buf,count-totlen);
-        if (nread == 0) return totlen;
+        if (nread == 0) return (int)totlen;
         if (nread == -1) return -1;
         totlen += nread;
         buf += nread;
     }
-    return totlen;
+    return (int)totlen;
 }
 
 /* Like write(2) but make sure 'count' is written before to return
@@ -441,12 +441,12 @@ int anetWrite(int fd, char *buf, int count)
     ssize_t nwritten, totlen = 0;
     while(totlen != count) {
         nwritten = write(fd,buf,count-totlen);
-        if (nwritten == 0) return totlen;
+        if (nwritten == 0) return (int)totlen;
         if (nwritten == -1) return -1;
         totlen += nwritten;
         buf += nwritten;
     }
-    return totlen;
+    return (int)totlen;
 }
 
 static int anetListen(char *err, int s, struct sockaddr *sa, socklen_t len, int backlog) {
@@ -565,11 +565,11 @@ int anetTcpAccept(char *err, int s, char *ip, size_t ip_len, int *port) {
 
     if (sa.ss_family == AF_INET) {
         struct sockaddr_in *s = (struct sockaddr_in *)&sa;
-        if (ip) inet_ntop(AF_INET,(void*)&(s->sin_addr),ip,ip_len);
+        if (ip) inet_ntop(AF_INET,(void*)&(s->sin_addr),ip,(socklen_t)ip_len);
         if (port) *port = ntohs(s->sin_port);
     } else {
         struct sockaddr_in6 *s = (struct sockaddr_in6 *)&sa;
-        if (ip) inet_ntop(AF_INET6,(void*)&(s->sin6_addr),ip,ip_len);
+        if (ip) inet_ntop(AF_INET6,(void*)&(s->sin6_addr),ip,(socklen_t)ip_len);
         if (port) *port = ntohs(s->sin6_port);
     }
     return fd;
@@ -594,11 +594,11 @@ int anetPeerToString(int fd, char *ip, size_t ip_len, int *port) {
 
     if (sa.ss_family == AF_INET) {
         struct sockaddr_in *s = (struct sockaddr_in *)&sa;
-        if (ip) inet_ntop(AF_INET,(void*)&(s->sin_addr),ip,ip_len);
+        if (ip) inet_ntop(AF_INET,(void*)&(s->sin_addr),ip,(socklen_t)ip_len);
         if (port) *port = ntohs(s->sin_port);
     } else if (sa.ss_family == AF_INET6) {
         struct sockaddr_in6 *s = (struct sockaddr_in6 *)&sa;
-        if (ip) inet_ntop(AF_INET6,(void*)&(s->sin6_addr),ip,ip_len);
+        if (ip) inet_ntop(AF_INET6,(void*)&(s->sin6_addr),ip,(socklen_t)ip_len);
         if (port) *port = ntohs(s->sin6_port);
     } else if (sa.ss_family == AF_UNIX) {
         if (ip) strncpy(ip,"/unixsocket",ip_len);
@@ -650,11 +650,11 @@ int anetSockName(int fd, char *ip, size_t ip_len, int *port) {
     }
     if (sa.ss_family == AF_INET) {
         struct sockaddr_in *s = (struct sockaddr_in *)&sa;
-        if (ip) inet_ntop(AF_INET,(void*)&(s->sin_addr),ip,ip_len);
+        if (ip) inet_ntop(AF_INET,(void*)&(s->sin_addr),ip,(socklen_t)ip_len);
         if (port) *port = ntohs(s->sin_port);
     } else {
         struct sockaddr_in6 *s = (struct sockaddr_in6 *)&sa;
-        if (ip) inet_ntop(AF_INET6,(void*)&(s->sin6_addr),ip,ip_len);
+        if (ip) inet_ntop(AF_INET6,(void*)&(s->sin6_addr),ip,(socklen_t)ip_len);
         if (port) *port = ntohs(s->sin6_port);
     }
     return 0;

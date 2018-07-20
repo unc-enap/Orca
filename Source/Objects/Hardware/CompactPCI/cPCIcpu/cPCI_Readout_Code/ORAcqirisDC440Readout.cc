@@ -95,7 +95,7 @@ bool ORAcqirisDC440Readout::Readout(SBC_LAM_Data* /*lamData*/)
                 wPtr->hitMask |= (1<<channel);                            //the hitMask is used to compute rates
                 numberShortsInSample = wfDesc.returnedSamplesPerSeg +    //actual short word count
                                        wfDesc.indexFirstPoint;
-                numberLongsInSample = (numberShortsInSample+1)/2;        //rounded to next long word boundary
+                numberLongsInSample = (numberShortsInSample+1)/2;        //rounded to next int32_t word boundary
 
                 //update the size of payload
                 fSendPacket.cmdHeader.numberBytesinPayload += 

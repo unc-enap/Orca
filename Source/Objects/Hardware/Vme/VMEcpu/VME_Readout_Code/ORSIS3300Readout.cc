@@ -84,7 +84,7 @@ bool ORSIS3300Readout::Readout(SBC_LAM_Data* lamData)
             uint32_t triggerTriggerReg = ((fCurrentBank) ? 
                 kTriggerTime2Offset : 
                 kTriggerTime1Offset) + 
-                (event*sizeof(long));
+                (event*sizeof(int32_t));
             result = VMERead(GetBaseAddress()+triggerTriggerReg,
                              GetAddressModifier(), 
                              sizeof(triggerTime),

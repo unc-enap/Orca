@@ -66,7 +66,7 @@ bool ORSIS3316Card::Readout(SBC_LAM_Data* /*lam_data*/)
         }
         
         if((acqRegValue >> 19) & 0x1) { //checks the OR of the address threshold flags
-            unsigned long bit[4] = {25,27,29,31};
+            uint32_t bit[4] = {25,27,29,31};
             SwitchBanks();
             //usleep(2); //let the banks settle. Could do a loop but this is less bus activity and faster we can take data
             for(int32_t ichan = 0;ichan<16;ichan++){

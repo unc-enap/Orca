@@ -135,7 +135,7 @@ bool ORSIS3302Card::Readout(SBC_LAM_Data* /*lam_data*/)
 	fWaitingForSomeChannels = (fChannelsToReadMask!=0);
 	
 	if(fWaitingForSomeChannels){
-		//if we wait too long, do a logic reset
+		//if we wait too int32_t, do a logic reset
 		fWaitCount++;
 		if(fWaitCount > 1000){
 			LogErrorForCard(GetSlot(),"SIS3302 0x%x Rd delay reset:  0x%02x", GetBaseAddress(),fChannelsToReadMask);

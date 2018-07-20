@@ -11,7 +11,7 @@ class ORCAEN260Readout : public ORVVmeCard
 	virtual bool Start();
     virtual bool Readout(SBC_LAM_Data*);
 	
-	unsigned long lastScalerValue;
+	uint32_t lastScalerValue;
 };
 
 #endif /* _ORCAEN260Readout_hh_*/

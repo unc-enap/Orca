@@ -280,7 +280,7 @@ bool ORMTCReadout::UpdateStatus() {
     
     int err = -1;
     if (hv_stop_ok) err = hv_stop_ok();
-    data[dataIndex++] = (long)err;
+    data[dataIndex++] = (int32_t)err;
     
     //LogError("hello...\n");
     //LogError("%i\n",err);

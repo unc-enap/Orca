@@ -143,7 +143,7 @@ void processAcquirisDC440Command(SBC_Packet* aPacket)
 			
 		break;
 		
-		//the following are 'set' commands, they all return a single long status value
+		//the following are 'set' commands, they all return a single int32_t status value
 		case kAcqiris_SetConfigVertical:
 			decodeArgs(((Acquiris_AsciiCmdStruct*)aPacket->payload)->argBuffer,argv,6);
 			status = AcqrsD1_configVertical(argl(0),argl(1),argd(2),argd(3),argl(4),argl(5));
@@ -180,7 +180,7 @@ void processAcquirisDC440Command(SBC_Packet* aPacket)
 				decodeArgs(((Acquiris_AsciiCmdStruct*)aPacket->payload)->argBuffer,argv,1);
 				ViInt32 numberSamples,numberSegments;
 				status = AcqrsD1_getMemory(argl(0),&numberSamples,&numberSegments);
-				sprintf(aString,"%ld,%ld",numberSamples,numberSegments);
+				sprintf(aString,"%d,%d",numberSamples,numberSegments);
 				sendGetResponse(aPacket,status,aString);
 			}
 		break;
@@ -202,7 +202,7 @@ void processAcquirisDC440Command(SBC_Packet* aPacket)
 				ViReal64 fullScale,offset;
 				ViInt32 coupling,bandwidth;
 				status = AcqrsD1_getVertical(argl(0),argl(1),&fullScale,&offset,&coupling,&bandwidth);
-				sprintf(aString,"%G,%G,%ld,%ld",fullScale,offset,coupling,bandwidth);
+				sprintf(aString,"%G,%G,%d,%d",fullScale,offset,coupling,bandwidth);
 				sendGetResponse(aPacket,status,aString);
 			}
 		break;
@@ -213,7 +213,7 @@ void processAcquirisDC440Command(SBC_Packet* aPacket)
 				ViInt32 coupling,slope;
 				ViReal64 level1,level2;
 				status = AcqrsD1_getTrigSource(argl(0),argl(1),&coupling,&slope,&level1,&level2);
-				sprintf(aString,"%ld,%ld,%G,%G",coupling,slope,level1,level2);
+				sprintf(aString,"%d,%d,%G,%G",coupling,slope,level1,level2);
 				sendGetResponse(aPacket,status,aString);
 			}
 		break;
@@ -224,7 +224,7 @@ void processAcquirisDC440Command(SBC_Packet* aPacket)
 				ViInt32 sourcePattern,trigClass,validatepattern,holdType;
 				ViReal64 holdValue1,holdValue2;
 				status = AcqrsD1_getTrigClass(argl(0),&trigClass,&sourcePattern,&validatepattern,&holdType,&holdValue1,&holdValue2);
-				sprintf(aString,"%ld,%ld",trigClass,sourcePattern);
+				sprintf(aString,"%d,%d",trigClass,sourcePattern);
 				sendGetResponse(aPacket,status,aString);
 			}
 		break;
@@ -235,7 +235,7 @@ void processAcquirisDC440Command(SBC_Packet* aPacket)
 				decodeArgs(((Acquiris_AsciiCmdStruct*)aPacket->payload)->argBuffer,argv,1);
 				ViInt32 numChannels;
 				status = AcqrsD1_getNbrChannels(argl(0),&numChannels);
-				sprintf(aString,"%ld",numChannels);
+				sprintf(aString,"%d",numChannels);
 				sendGetResponse(aPacket,status,aString);
 			}
 		break;
@@ -314,7 +314,7 @@ char Acquire(ViSession dev)
 		printf("AcqrsD1_acqDone %d: status: %d done: %d\n",dev, status, done);
 	}
 	if (timeoutCounter<=0){
-		printf("Timeout on %ld\n",dev);
+		printf("Timeout on %d\n",dev);
 		AcqrsD1_stopAcquisition(dev);	// Acquisition do not complete successfully
 	}
 	return done;
