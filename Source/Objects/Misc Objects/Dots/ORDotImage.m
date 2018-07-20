@@ -73,21 +73,21 @@
 		refractionMaskImage	=    [aRefractionMaskImage retain];
 		
         //do a Shadow
-        //[self lockFocus];
+        [self lockFocus];
         [shadowImage drawAtPoint:NSZeroPoint fromRect:[shadowImage imageRect] operation:NSCompositingOperationCopy fraction:.7];
-        //[self unlockFocus];
+        [self unlockFocus];
         
         //set up the color mask (tint it, then composite it)
-    //    [newColorMaskImage lockFocus];
+        [newColorMaskImage lockFocus];
         [aColor set];
         NSRectFillUsingOperation(colorMaskBounds, NSCompositingOperationSourceAtop);
-   //     [newColorMaskImage unlockFocus];
-   //     [self lockFocus];
+        [newColorMaskImage unlockFocus];
+        [self lockFocus];
         [newColorMaskImage drawAtPoint:NSZeroPoint fromRect:[newColorMaskImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
         
         // setup the refraction mask
         [refractionMaskImage drawAtPoint:NSZeroPoint fromRect:[refractionMaskImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];         
-   //     [self unlockFocus];
+        [self unlockFocus];
         [newColorMaskImage release];
     }
      
