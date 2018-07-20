@@ -913,7 +913,7 @@ NSString* ORSIS3820ModelShipAtRunEndOnlyChanged		 = @"ORSIS3820ModelShipAtRunEnd
     [self setEnable25MHzPulses:[decoder decodeBoolForKey:@"enable25MHzPulses"]];
     [self setLemoInMode:[decoder decodeIntForKey:@"lemoInMode"]];
     [self setPollTime:[decoder decodeIntForKey:@"pollTime"]];
-    [self setCountEnableMask:[decoder decodeIntforKey:@"countEnableMask"]];
+    [self setCountEnableMask:[decoder decodeIntForKey:@"countEnableMask"]];
 	int i;
 	for(i=0;i<32;i++) {
 		NSString* aName = [decoder decodeObjectForKey:[NSString stringWithFormat:@"channelName%d",i]];

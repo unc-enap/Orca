@@ -971,7 +971,7 @@ struct {
 			//if(*fVStatusReg & STATUS_PROBLEM)[self checkStatusWord:status];
 			// transfer data
 			uint32_t *pulr = (uint32_t *)( ( vmeAddress & 0x00000fff ) +
-													(uint32_t)remMemRegisterAddress );
+													remMemRegisterAddress );
 			uint32_t *pulb = (uint32_t *)readAddress;
 			unsigned int n = numberLongs;
 			for(;n--;)*pulb++ = *pulr++;
@@ -1063,7 +1063,7 @@ struct {
 			//if(*fVStatusReg & STATUS_PROBLEM)[self checkStatusWord:status];
 			// transfer data
 			uint32_t *pulr = (uint32_t *)( ( vmeAddress & 0x00000fff ) +
-													(uint32_t)remMemRegisterAddress );
+													remMemRegisterAddress );
 			uint32_t *pulb = (uint32_t *)writeAddress;
 			unsigned int n = numberLongs;
 			for(;n--;)*pulr++ = *pulb++;
@@ -1115,7 +1115,7 @@ struct {
 			//if(*fVStatusReg & STATUS_PROBLEM)[self checkStatusWord:*fVStatusReg];
 			// transfer data
 			unsigned char *pulr = (unsigned char *)( ( vmeAddress & 0x00000fff ) +
-													(uint32_t)remMemRegisterAddress );
+													remMemRegisterAddress );
 			unsigned char *pulb = (unsigned char *)readAddress;
 			unsigned int n = numberBytes;
 			for(;n--;)*pulb++ = *pulr++;
@@ -1167,7 +1167,7 @@ struct {
 			//if(*fVStatusReg & STATUS_PROBLEM)[self checkStatusWord:*fVStatusReg];
 			// transfer data
 			unsigned char *pulr = (unsigned char *)( ( vmeAddress & 0x00000fff ) +
-													(uint32_t)remMemRegisterAddress );
+													remMemRegisterAddress );
 			unsigned char *pulb = (unsigned char *)writeAddress;
 			unsigned int n = numberBytes;
 			for(;n--;)*pulr++ = *pulb++;
@@ -1216,7 +1216,7 @@ struct {
 			//if(*fVStatusReg & STATUS_PROBLEM)[self checkStatusWord:*fVStatusReg];
             // transfer data
 			uint16_t *pulr = (uint16_t *)( ( vmeAddress & 0x00000fff ) +
-									  (uint32_t)remMemRegisterAddress );
+									  remMemRegisterAddress );
 			uint16_t *pulb = (uint16_t *)readAddress;
 			unsigned short n = numberWords;
 			for(;n--;)*pulb++ = *pulr++;
@@ -1268,7 +1268,7 @@ struct {
 			//if(*fVStatusReg & STATUS_PROBLEM)[self checkStatusWord:*fVStatusReg];
 			// transfer data
 			uint16_t *pulr = (uint16_t *)( ( vmeAddress & 0x00000fff ) +
-									  (uint32_t)remMemRegisterAddress );
+									  remMemRegisterAddress );
 			uint16_t *pulb = (uint16_t *)writeAddress;
 			unsigned int n = numberWords;
 			for(;n--;)*pulr++ = *pulb++;
@@ -1976,8 +1976,8 @@ physicalBufferAddress:(uint32_t) physicalBufferAddress
 	//	volatile uint32_t *mptr = (uint32_t *)( (uint32_t)GetMappingBaseAddress() +
 	//			 (uint32_t)DMA_MAPPING_REGISTER_OFFSET );
 	
-	volatile uint32_t *mptr = (uint32_t *)( (uint32_t)mapRegisterAddress +
-													 (uint32_t)DMA_MAPPING_REGISTER_OFFSET );
+	volatile uint32_t *mptr = (uint32_t *)(mapRegisterAddress +
+													 DMA_MAPPING_REGISTER_OFFSET );
 	
 	
 	uint32_t j;

@@ -313,9 +313,7 @@ NSString* ORConnectionChanged = @"OR Connection Changed";
 - (BOOL) acceptsConnectionType:(uint32_t)aType
 {
     if([restrictedList count]){
-		NSEnumerator* e = [restrictedList objectEnumerator];
-		id n;
-		while(n = [e nextObject]){
+		for(id n in restrictedList){
 			if(aType == [n longValue])return YES;
 		}
 		return NO;
@@ -396,7 +394,6 @@ NSString* ORConnectionChanged = @"OR Connection Changed";
 		}
 		else{
 			ORRunAlertPanel(@"Illegal Connection",@"Connection refused!",nil,nil,nil);
-			//[[(ORAppDelegate*)[NSApp delegate] undoManager] undo];
 		}
     }
     else if(aConnector!=nil && aConnector != self)ORRunAlertPanel(@"Illegal Connection",@"Connection refused!",nil,nil,nil);

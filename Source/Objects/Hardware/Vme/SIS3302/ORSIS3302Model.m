@@ -3322,7 +3322,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302ReadRegs]
     [self setInternalGateEnabledMask:	[decoder decodeIntegerForKey:@"internalGateEnabledMask"]];
     [self setExternalGateEnabledMask:	[decoder decodeIntegerForKey:@"externalGateEnabledMask"]];
     [self setAdc50KTriggerEnabledMask:	[decoder decodeIntegerForKey:@"adc50KtriggerEnabledMask"]];
-	[self setGtMask:					[decoder decodeIntegerForKey:@"gtMask"]];
+	[self setGtMask:					[decoder decodeIntForKey:@"gtMask"]];
 	[self setShipEnergyWaveform:		[decoder decodeBoolForKey:@"shipEnergyWaveform"]];
 	[self setShipSummedWaveform:		[decoder decodeBoolForKey:@"shipSummedWaveform"]];
     [self setWaveFormRateGroup:			[decoder decodeObjectForKey:@"waveFormRateGroup"]];
@@ -3392,7 +3392,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302ReadRegs]
 	[encoder encodeInt:mcaNofHistoPreset		forKey:@"mcaNofHistoPreset"];
 	
 	[encoder encodeInteger:runMode					forKey:@"runMode"];
-    [encoder encodeInteger:gtMask					forKey:@"gtMask"];
+    [encoder encodeInt:gtMask					forKey:@"gtMask"];
     [encoder encodeInteger:clockSource				forKey:@"clockSource"];
 	[encoder encodeInteger:lemoInEnabledMask		forKey:@"lemoInEnabledMask"];
 	[encoder encodeInteger:energySampleStartIndex3	forKey:@"energySampleStartIndex3"];

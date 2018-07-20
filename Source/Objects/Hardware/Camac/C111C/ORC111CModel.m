@@ -45,7 +45,6 @@ NSString* ORC111CIpAddressChanged			= @"ORC111CIpAddressChanged";
 
 void IRQHandler(short crate_id, short irq_type, unsigned int irq_data,NSUInteger userInfo)
 {
-	NSLog(@"got irq\n");
 	id obj = (NSDictionary*)userInfo;
 	[obj handleIRQ:irq_type data:irq_data];
 }
