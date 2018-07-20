@@ -43,7 +43,7 @@ NSString* ORC111CConnectionChanged			= @"ORC111CConnectionChanged";
 NSString* ORC111CTimeConnectedChanged		= @"ORC111CTimeConnectedChanged";
 NSString* ORC111CIpAddressChanged			= @"ORC111CIpAddressChanged";
 
-void IRQHandler(short crate_id, short irq_type, unsigned int irq_data,uint32_t userInfo)
+void IRQHandler(short crate_id, short irq_type, unsigned int irq_data,NSUInteger userInfo)
 {
 	NSLog(@"got irq\n");
 	id obj = (NSDictionary*)userInfo;
@@ -258,7 +258,7 @@ void IRQHandler(short crate_id, short irq_type, unsigned int irq_data,uint32_t u
 				cr_info.tout_ticks = 1000; 
 				CRSET(crate_id, &cr_info);
 				[ORTimer delay:.3];
-				int res = CRIRQ(crate_id,IRQHandler,(uint32_t)(self));
+				int res = CRIRQ(crate_id,IRQHandler,(NSUInteger)(self));
 				NSLog(@"res: %d\n",res);
 			}
 		}

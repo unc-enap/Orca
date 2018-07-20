@@ -1020,7 +1020,7 @@ struct {
             
             
 			// transfer data
-			uint32_t *pulr = (uint32_t *)( ( vmeAddress & 0x00000fff ) + (uint32_t)remMemRegisterAddress );
+			uint32_t *pulr = (uint32_t *)( ( vmeAddress & 0x00000fff ) + remMemRegisterAddress );
 			uint32_t *pulb = (uint32_t *)readAddress;
 			unsigned int n = numberLongs;
 			for(;n--;)*pulb++ = *pulr++;

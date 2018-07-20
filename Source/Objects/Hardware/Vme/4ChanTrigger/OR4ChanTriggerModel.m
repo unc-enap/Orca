@@ -390,7 +390,7 @@ static NSString *OR4ChanEnableClock     = @"OR4ChanEnableClock";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeBool:shipFirstLast forKey:@"shipFirstLast"];
-    [encoder encodeIntr:lowerClock forKey:OR4ChanLowerClock];
+    [encoder encodeInt:lowerClock forKey:OR4ChanLowerClock];
     [encoder encodeInt:upperClock forKey:OR4ChanUpperClock];
     [encoder encodeObject:triggerGroups forKey:OR4ChanGroups];
     [encoder encodeObject:triggerNames forKey:OR4ChanTriggerNames];
