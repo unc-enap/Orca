@@ -155,7 +155,7 @@ NSString* ORPlotFFTShowChanged = @"ORPlotFFTShowChanged";
     fprintf( aFile, "WAVES/I/N=(%d) '%s'\nBEGIN\n",numberBins,[shortName cStringUsingEncoding:NSASCIIStringEncoding]);
     int i;
     for (i=0; i<numberBins; ++i) {
-        fprintf(aFile, "%ld\n",histogram[i]);
+        fprintf(aFile, "%d\n",histogram[i]);
     }
     fprintf(aFile, "END\n\n");
 	[dataSetLock unlock];
@@ -222,7 +222,7 @@ NSString* ORPlotFFTShowChanged = @"ORPlotFFTShowChanged";
 
 - (id)   name
 {
-    return [NSString stringWithFormat:@"%@ FFT Counts: %lu",[self key], [self totalCounts]];
+    return [NSString stringWithFormat:@"%@ FFT Counts: %u",[self key], [self totalCounts]];
 }
 
 - (BOOL) canJoinMultiPlot

@@ -161,12 +161,12 @@ NSString* ORCV977ModelWriteValueChanged         = @"ORCV977ModelWriteValueChange
     [[NSNotificationCenter defaultCenter] postNotificationName:ORCV977ModelSelectedRegIndexChanged object:self];
 }
 
-- (unsigned long) writeValue
+- (uint32_t) writeValue
 {
     return writeValue;
 }
 
-- (void) setWriteValue:(unsigned long) aValue
+- (void) setWriteValue:(uint32_t) aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setWriteValue:[self writeValue]];
     writeValue = aValue;
@@ -174,12 +174,12 @@ NSString* ORCV977ModelWriteValueChanged         = @"ORCV977ModelWriteValueChange
 }
 
 //-----Input Registers ------
-- (unsigned long)inputSet       { return inputSet; }
+- (uint32_t)inputSet       { return inputSet; }
 - (BOOL)inputSetBit:(int)bit    { return inputSet&(1<<bit); }
-- (unsigned long)inputMask      { return inputMask; }
+- (uint32_t)inputMask      { return inputMask; }
 - (BOOL)inputMaskBit:(int)bit   { return inputMask&(1<<bit); }
 
-- (void)setInputSet:(unsigned long)aValue
+- (void)setInputSet:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setInputSet:inputSet];
     inputSet = aValue;
@@ -188,13 +188,13 @@ NSString* ORCV977ModelWriteValueChanged         = @"ORCV977ModelWriteValueChange
 
 - (void) setInputSetBit:(int)bit withValue:(BOOL)aValue
 {
-	unsigned long aMask = inputSet;
+	uint32_t aMask = inputSet;
 	if(aValue)aMask |= (1<<bit);
 	else      aMask &= ~(1<<bit);
 	[self setInputSet:aMask];
 }
 
-- (void)setInputMask:(unsigned long)aValue
+- (void)setInputMask:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setInputMask:inputMask];
     inputMask = aValue;
@@ -203,19 +203,19 @@ NSString* ORCV977ModelWriteValueChanged         = @"ORCV977ModelWriteValueChange
 
 - (void) setInputMaskBit:(int)bit withValue:(BOOL)aValue
 {
-	unsigned long aMask = inputMask;
+	uint32_t aMask = inputMask;
 	if(aValue)aMask |= (1<<bit);
 	else      aMask &= ~(1<<bit);
 	[self setInputMask:aMask];
 }
 
 //-----Output Registers ------
-- (unsigned long)outputSet      { return outputSet; }
+- (uint32_t)outputSet      { return outputSet; }
 - (BOOL)outputSetBit:(int)bit   { return outputSet&(1<<bit); }
-- (unsigned long)outputMask      { return outputMask; }
+- (uint32_t)outputMask      { return outputMask; }
 - (BOOL)outputMaskBit:(int)bit   { return outputMask&(1<<bit); }
 
-- (void)setOutputSet:(unsigned long)aValue
+- (void)setOutputSet:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setOutputSet:outputSet];
     outputSet = aValue;
@@ -224,13 +224,13 @@ NSString* ORCV977ModelWriteValueChanged         = @"ORCV977ModelWriteValueChange
 
 - (void) setOutputSetBit:(int)bit withValue:(BOOL)aValue
 {
-	unsigned long aMask = outputSet;
+	uint32_t aMask = outputSet;
 	if(aValue)aMask |= (1<<bit);
 	else      aMask &= ~(1<<bit);
 	[self setOutputSet:aMask];
 }
 
-- (void)setOutputMask:(unsigned long)aValue
+- (void)setOutputMask:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setOutputMask:outputMask];
     outputMask = aValue;
@@ -239,17 +239,17 @@ NSString* ORCV977ModelWriteValueChanged         = @"ORCV977ModelWriteValueChange
 
 - (void) setOutputMaskBit:(int)bit withValue:(BOOL)aValue
 {
-	unsigned long aMask = outputMask;
+	uint32_t aMask = outputMask;
 	if(aValue)aMask |= (1<<bit);
 	else      aMask &= ~(1<<bit);
 	[self setOutputMask:aMask];
 }
 
 //-----Interrupt Mask ------
-- (unsigned long)interruptMask      { return interruptMask; }
+- (uint32_t)interruptMask      { return interruptMask; }
 - (BOOL)interruptMaskBit:(int)bit   { return interruptMask&(1<<bit); }
 
-- (void)setInterruptMask:(unsigned long)aValue
+- (void)setInterruptMask:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setInterruptMask:interruptMask];
     interruptMask = aValue;
@@ -259,7 +259,7 @@ NSString* ORCV977ModelWriteValueChanged         = @"ORCV977ModelWriteValueChange
 
 - (void) setInterruptMaskBit:(int)bit withValue:(BOOL)aValue
 {
-	unsigned long aMask = interruptMask;
+	uint32_t aMask = interruptMask;
 	if(aValue)aMask |= (1<<bit);
 	else      aMask &= ~(1<<bit);
 	[self setInterruptMask:aMask];
@@ -274,7 +274,7 @@ NSString* ORCV977ModelWriteValueChanged         = @"ORCV977ModelWriteValueChange
 
 #pragma mark ***Register - Register specific routines
 - (NSString*) getRegisterName:(short) anIndex       { return reg[anIndex].regName; }
-- (unsigned long) getAddressOffset:(short) anIndex  { return(reg[anIndex].addressOffset); }
+- (uint32_t) getAddressOffset:(short) anIndex  { return(reg[anIndex].addressOffset); }
 - (short) getAccessType:(short) anIndex             { return reg[anIndex].accessType; }
 
 #pragma mark ***Hardware Commands
@@ -428,7 +428,7 @@ NSString* ORCV977ModelWriteValueChanged         = @"ORCV977ModelWriteValueChange
 
 - (void) write
 {    
-    long theValue     = [self writeValue];
+    int32_t theValue     = [self writeValue];
     short theRegIndex = [self selectedRegIndex];
     
     @try {
@@ -467,7 +467,7 @@ NSString* ORCV977ModelWriteValueChanged         = @"ORCV977ModelWriteValueChange
 
 }
 
-- (void) write:(unsigned short) pReg sendValue:(unsigned long) pValue
+- (void) write:(unsigned short) pReg sendValue:(uint32_t) pValue
 {
     if (pReg >= [self getNumberRegisters]){
         [NSException raise:@"Illegal Register" format:@"Register index out of bounds on %@",[self identifier]];

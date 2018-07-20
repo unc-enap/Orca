@@ -28,8 +28,8 @@
 	self = [super init];
     if(aBufferSize==0)aBufferSize = 1024*100; //if passed zero, put something in....
 	bufferSize		 = (uint32_t)aBufferSize;
-	buffer			 = [[NSMutableData dataWithLength:bufferSize * sizeof(long)] retain];
-	[buffer setLength:bufferSize * sizeof(long)];
+	buffer			 = [[NSMutableData dataWithLength:bufferSize * sizeof(int32_t)] retain];
+	[buffer setLength:bufferSize * sizeof(int32_t)];
 	bufferLock		 = [[NSLock alloc] init];
 	numBlocksWritten = 0;
 	numBlocksRead	 = 0;
@@ -38,7 +38,7 @@
 	freeSpace		 = bufferSize;
 	readMark		 = 0;
 	writeMark		 = 0;
-	dataPtr			 = (unsigned long*)[buffer mutableBytes];
+	dataPtr			 = (uint32_t*)[buffer mutableBytes];
 
 	return self;
 }
@@ -78,7 +78,7 @@
 	if(freeSpace > 0){
 		//theData is released when pulled from the CB
 		NSData* theData = [[NSData dataWithBytes:someBytes length:numBytes] retain];
-		*(dataPtr+writeMark) = (unsigned long)theData;
+		*(dataPtr+writeMark) = (uint32_t)theData;
 		writeMark = (writeMark+1)%bufferSize;	//move the write mark ahead 
 		numBytesWritten += numBytes;
 		numBlocksWritten++;
@@ -95,7 +95,7 @@
 	BOOL full = NO;
 	if(freeSpace > 0){
 		[someData retain];
-		*(dataPtr+writeMark) = (unsigned long)someData;
+		*(dataPtr+writeMark) = (uint32_t)someData;
 		writeMark = (writeMark+1)%bufferSize;	//move the write mark ahead 
 		numBytesWritten += [someData length];
 		numBlocksWritten++;
@@ -167,7 +167,7 @@ static BOOL cbThreadTestPassed = YES;
 {
 	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 	NSTimeInterval t0 = [NSDate timeIntervalSinceReferenceDate];
-	long count = 0;
+	int32_t count = 0;
 	while([NSDate timeIntervalSinceReferenceDate]-t0 < 0.7) {
 		NSData* result = [self readNextBlock];
 		if(result){
@@ -192,7 +192,7 @@ static BOOL cbThreadTestPassed = YES;
 {
 	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 	NSTimeInterval t0 = [NSDate timeIntervalSinceReferenceDate];
-	long count = 0;
+	int32_t count = 0;
 	while([NSDate timeIntervalSinceReferenceDate]-t0 < 0.5){
 		if(![self writeBlock:tb length:sizeof(tb)]){
 			count++;
@@ -214,7 +214,7 @@ static BOOL cbThreadTestPassed = YES;
 	
 }
 
-+ (void) test:(long)aBufferSize
++ (void) test:(int32_t)aBufferSize
 {
 	ORSafeCircularBuffer* aBuffer = [[ORSafeCircularBuffer alloc] initWithBufferSize:aBufferSize];
 	NSData* result;
@@ -250,15 +250,15 @@ static BOOL cbThreadTestPassed = YES;
 	if(passed)NSLog(@"PASSED big readout test\n");
 	
 	
-	long startBlockCount = [aBuffer numBlocksWritten];
-	long maxCanHold = [aBuffer bufferSize];
+	int32_t startBlockCount = [aBuffer numBlocksWritten];
+	int32_t maxCanHold = [aBuffer bufferSize];
 	int i;
 	for(i=0;i<maxCanHold+3;i++){
 		[aBuffer writeBlock:testBuffer length:sizeof(testBuffer)];
 	}
 	
 	//should have overflowed
-	long numWritten = [aBuffer numBlocksWritten] - startBlockCount;
+	int32_t numWritten = [aBuffer numBlocksWritten] - startBlockCount;
 	if(numWritten == maxCanHold)NSLog(@"PASSED overflow write test\n");
 	else						NSLog(@"FAILED overflow write test\n");
 
@@ -281,7 +281,7 @@ static BOOL cbThreadTestPassed = YES;
 		}
 		else if(j<maxCanHold)NSLog(@"FAILED overflow read %d\n",j);	
 	}
-	long numRead = [aBuffer numBlocksRead] - startBlockCount;
+	int32_t numRead = [aBuffer numBlocksRead] - startBlockCount;
 	
 	if(passed && numRead == maxCanHold)NSLog(@"PASSED overflow readout test\n");
 	

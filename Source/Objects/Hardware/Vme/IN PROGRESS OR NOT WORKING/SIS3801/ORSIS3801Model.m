@@ -376,14 +376,14 @@ NSString* ORSIS3801ChannelNameChanged				 = @"ORSIS3801ChannelNameChanged";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORSIS3801ModelLemoInModeChanged object:self];
 }
 
-- (unsigned long) counts:(int)i
+- (uint32_t) counts:(int)i
 {
 	if(i>=0 && i<32)return counts[i];
 	else return 0;
 }
 
-- (unsigned long) countEnableMask { return countEnableMask; }
-- (void) setCountEnableMask:(unsigned long)aCountEnableMask
+- (uint32_t) countEnableMask { return countEnableMask; }
+- (void) setCountEnableMask:(uint32_t)aCountEnableMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setCountEnableMask:countEnableMask];
     countEnableMask = aCountEnableMask;
@@ -395,14 +395,14 @@ NSString* ORSIS3801ChannelNameChanged				 = @"ORSIS3801ChannelNameChanged";
 - (void) setCountEnabled:(short)chan withValue:(BOOL)aValue		
 { 
 	NSLog(@"setting %d to %d\n",chan,aValue);
-	unsigned long aMask = countEnableMask;
+	uint32_t aMask = countEnableMask;
 	if(aValue)aMask |= (1L<<chan);
 	else aMask &= ~(1L<<chan);
 	[self setCountEnableMask:aMask];
 }
 
-- (unsigned long) overFlowMask { return overFlowMask; }
-- (void) setOverFlowMask:(unsigned long)aMask
+- (uint32_t) overFlowMask { return overFlowMask; }
+- (void) setOverFlowMask:(uint32_t)aMask
 {
     overFlowMask = aMask;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORSIS3801ModelOverFlowMaskChanged object:self];
@@ -424,7 +424,7 @@ NSString* ORSIS3801ChannelNameChanged				 = @"ORSIS3801ChannelNameChanged";
 #pragma mark •••Hardware Access
 - (void) readModuleID:(BOOL)verbose
 {	
-	unsigned long result = 0;
+	uint32_t result = 0;
 	[[self adapter] readLongBlock:&result
                          atAddress:[self baseAddress] + kModuleIDReg
                         numToRead:1
@@ -443,7 +443,7 @@ NSString* ORSIS3801ChannelNameChanged				 = @"ORSIS3801ChannelNameChanged";
 
 - (void) readStatusRegister
 {		
-	unsigned long aMask = 0;
+	uint32_t aMask = 0;
 	[[self adapter] readLongBlock:&aMask
                          atAddress:[self baseAddress] + kControlStatus
                         numToRead:1
@@ -454,7 +454,7 @@ NSString* ORSIS3801ChannelNameChanged				 = @"ORSIS3801ChannelNameChanged";
 
 - (void) writeControlRegister
 {
-	unsigned long aMask = 0x0;
+	uint32_t aMask = 0x0;
 	aMask |= 
 	((lemoInMode & 0x3) << 2)			|  //the '1' bits set the mode bits
 	((~lemoInMode & 0x3) << 10)			|  //the '0' bits set the mode clr bits
@@ -472,7 +472,7 @@ NSString* ORSIS3801ChannelNameChanged				 = @"ORSIS3801ChannelNameChanged";
 
 - (void) setLed:(BOOL)state
 {
-	unsigned long aValue;
+	uint32_t aValue;
 	if(state)	aValue = kSwitchUserLEDOn;
 	else		aValue = kSwitchUserLEDOff;
 	
@@ -492,7 +492,7 @@ NSString* ORSIS3801ChannelNameChanged				 = @"ORSIS3801ChannelNameChanged";
 
 - (void) readCounts:(BOOL)clear
 {
-	unsigned long result = 0;
+	uint32_t result = 0;
 	[[self adapter] readLongBlock:&result
 						atAddress:[self baseAddress] + kFifoBuffer
                         numToRead:1
@@ -523,7 +523,7 @@ NSString* ORSIS3801ChannelNameChanged				 = @"ORSIS3801ChannelNameChanged";
 
 - (void) clearFifo
 {
-	unsigned long aValue;
+	uint32_t aValue;
 	[[self adapter] writeLongBlock:&aValue
 						atAddress:[self baseAddress] + kClearFIFO
 						numToWrite:1
@@ -549,7 +549,7 @@ NSString* ORSIS3801ChannelNameChanged				 = @"ORSIS3801ChannelNameChanged";
 
 - (void) enableReferencePulser:(BOOL)state
 {
-	unsigned long aValue = 0;
+	uint32_t aValue = 0;
 	[[self adapter] writeLongBlock:&aValue
 						 atAddress:[self baseAddress] + (state?kEnableReferencePulserChan1:kDisableReferencePulserChan1)
 						numToWrite:1
@@ -561,7 +561,7 @@ NSString* ORSIS3801ChannelNameChanged				 = @"ORSIS3801ChannelNameChanged";
 
 - (void) generateTestPulse
 {
-	unsigned long aValue = 0;
+	uint32_t aValue = 0;
 	[[self adapter] writeLongBlock:&aValue
 						 atAddress:[self baseAddress] + kTestPulse
 						numToWrite:1
@@ -570,8 +570,8 @@ NSString* ORSIS3801ChannelNameChanged				 = @"ORSIS3801ChannelNameChanged";
 }
 
 #pragma mark •••Data Taker
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -648,7 +648,7 @@ NSString* ORSIS3801ChannelNameChanged				 = @"ORSIS3801ChannelNameChanged";
     NSMutableDictionary* objDictionary = [super addParametersToDictionary:dictionary];
 	[objDictionary setObject:[NSNumber numberWithLong:countEnableMask] forKey:@"countEnableMask"];
 
-	unsigned long options =	
+	uint32_t options =	
 		lemoInMode				 | 
 		enable25MHzPulses<<3	 | 
 		enableInputTestMode<<4	 |
@@ -712,7 +712,7 @@ NSString* ORSIS3801ChannelNameChanged				 = @"ORSIS3801ChannelNameChanged";
 
 - (void) reset
 {
- 	unsigned long aValue = 0; //value doesn't matter 
+ 	uint32_t aValue = 0; //value doesn't matter 
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kGlobalReset
                         numToWrite:1
@@ -725,7 +725,7 @@ NSString* ORSIS3801ChannelNameChanged				 = @"ORSIS3801ChannelNameChanged";
 - (void) startCounting
 {
 	[self initBoard];
- //	unsigned long aValue = 0; //value doesn't matter 
+ //	uint32_t aValue = 0; //value doesn't matter 
  //	[[self adapter] writeLongBlock:&aValue
  //                        atAddress:[self baseAddress] + kGlobalCountEnable
  //                       numToWrite:1
@@ -737,7 +737,7 @@ NSString* ORSIS3801ChannelNameChanged				 = @"ORSIS3801ChannelNameChanged";
 
 - (void) stopCounting
 {
-//	unsigned long aValue = 0; //value doesn't matter 
+//	uint32_t aValue = 0; //value doesn't matter 
 //	[[self adapter] writeLongBlock:&aValue
 //                         atAddress:[self baseAddress] + kGlobalCountDisable
 //                       numToWrite:1
@@ -820,7 +820,7 @@ NSString* ORSIS3801ChannelNameChanged				 = @"ORSIS3801ChannelNameChanged";
 	if([[ORGlobal sharedGlobal] runInProgress]){
 		if(!shipAtRunEndOnly || endOfRun){
 			endOfRun = NO;
-			unsigned long data[kSIS3801DataLen];
+			uint32_t data[kSIS3801DataLen];
 			data[0] = dataId | kSIS3801DataLen;
 			data[1] = (([self crateNumber]&0x0000000f)<<21) | (([self slot]& 0x0000001f)<<16);
 			if(moduleID == 3820)data[1] |= 1;
@@ -843,7 +843,7 @@ NSString* ORSIS3801ChannelNameChanged				 = @"ORSIS3801ChannelNameChanged";
 				data[7+i] = counts[i];
 			}
 			[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-																object:[NSData dataWithBytes:data length:sizeof(long)*kSIS3801DataLen]];
+																object:[NSData dataWithBytes:data length:sizeof(int32_t)*kSIS3801DataLen]];
 			lastTimeMeasured = timeMeasured;
 		}
 	}

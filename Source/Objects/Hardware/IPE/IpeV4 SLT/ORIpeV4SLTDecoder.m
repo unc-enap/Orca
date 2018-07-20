@@ -53,31 +53,31 @@ counter type = kSecondsCounterType, kVetoCounterType, kDeadCounterType, kRunCoun
 **/
 //-------------------------------------------------------------
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length	= ExtractLength(*ptr);	 //get length from first word
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length	= ExtractLength(*ptr);	 //get length from first word
 	[aDataSet loadGenericData:@" " sender:self withKeys:@"v4SLT",@"Test Record",nil];
     return length; //nothing to display at this time.. just return the length
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 
 	NSString* title= @"Ipe SLTv4 Event Record\n\n";
 	++ptr;		//skip the first word (dataID and length)
     
-    NSString* crate = [NSString stringWithFormat:@"Crate      = %lu\n",(*ptr>>21) & 0xf];
-    NSString* card  = [NSString stringWithFormat:@"Station    = %lu\n",(*ptr>>16) & 0x1f];
+    NSString* crate = [NSString stringWithFormat:@"Crate      = %u\n",(*ptr>>21) & 0xf];
+    NSString* card  = [NSString stringWithFormat:@"Station    = %u\n",(*ptr>>16) & 0x1f];
 	int recordType = (*ptr) & 0xf;
 	int counterType = ((*ptr)>>4) & 0xf;
 	
 	++ptr;		//point to event counter
 	
 	if (recordType == 0) {
-		NSString* eventCounter    = [NSString stringWithFormat:@"Event     = %lu\n",*ptr++];
-		NSString* timeStampHi     = [NSString stringWithFormat:@"Time Hi   = %lu\n",*ptr++];
-		NSString* timeStampLo     = [NSString stringWithFormat:@"Time Lo   = %lu\n",*ptr];
+		NSString* eventCounter    = [NSString stringWithFormat:@"Event     = %u\n",*ptr++];
+		NSString* timeStampHi     = [NSString stringWithFormat:@"Time Hi   = %u\n",*ptr++];
+		NSString* timeStampLo     = [NSString stringWithFormat:@"Time Lo   = %u\n",*ptr];
 
 		return [NSString stringWithFormat:@"%@%@%@%@%@%@",title,crate,card,
 							eventCounter,timeStampHi,timeStampLo];               
@@ -101,8 +101,8 @@ counter type = kSecondsCounterType, kVetoCounterType, kDeadCounterType, kRunCoun
 		case kStopSubRunType:	typeString    = [NSString stringWithFormat:@"Stop SubRun Timestamp\n"]; break;
 		default:				typeString    = [NSString stringWithFormat:@"Unknown Timestamp Type\n"]; break;
 	}
-	NSString* timeStampHi     = [NSString stringWithFormat:@"Time Hi   = %lu\n",*ptr++];
-	NSString* timeStampLo     = [NSString stringWithFormat:@"Time Lo   = %lu\n",*ptr];		
+	NSString* timeStampHi     = [NSString stringWithFormat:@"Time Hi   = %u\n",*ptr++];
+	NSString* timeStampLo     = [NSString stringWithFormat:@"Time Lo   = %u\n",*ptr];		
 
 	return [NSString stringWithFormat:@"%@%@%@%@%@%@%@",title,crate,card,
 						counterString,typeString,timeStampHi,timeStampLo];               
@@ -131,11 +131,11 @@ followed by multiplicity data (20 longwords -- 1 pixel mask per card)
 //-------------------------------------------------------------
 
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
 
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length	= ExtractLength(*ptr);	 //get length from first word
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length	= ExtractLength(*ptr);	 //get length from first word
 
 	++ptr;											//crate, card,channel from second word
 	unsigned char crate		= (*ptr>>21) & 0xf;
@@ -150,12 +150,12 @@ followed by multiplicity data (20 longwords -- 1 pixel mask per card)
 				
 	// Display data, ak 12.2.08
 	++ptr;		//point to trigger data
-	unsigned long *pMult = ptr;
+	uint32_t *pMult = ptr;
 	int i, j, k;
 	//NSFont* aFont = [NSFont userFixedPitchFontOfSize:9];
-    unsigned long xyProj[20];
-	unsigned long tyProj[100];
-	unsigned long pageSize = length/20;
+    uint32_t xyProj[20];
+	uint32_t tyProj[100];
+	uint32_t pageSize = length/20;
 	
 	for (i=0;i<20;i++) xyProj[i] = 0;
 	for (k=0;k<100;k++) tyProj[k] = 0;
@@ -221,17 +221,17 @@ followed by multiplicity data (20 longwords -- 1 pixel mask per card)
 }
 
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 
     NSString* title= @"Auger FLT Waveform Record\n\n";
 	++ptr;		//skip the first word (dataID and length)
     
-    NSString* crate = [NSString stringWithFormat:@"Crate      = %lu\n",(*ptr>>21) & 0xf];
-    NSString* card  = [NSString stringWithFormat:@"Station    = %lu\n",(*ptr>>16) & 0x1f];
+    NSString* crate = [NSString stringWithFormat:@"Crate      = %u\n",(*ptr>>21) & 0xf];
+    NSString* card  = [NSString stringWithFormat:@"Station    = %u\n",(*ptr>>16) & 0x1f];
 	++ptr;		//point to next structure
 	
-	NSString* eventCount		= [NSString stringWithFormat:@"Event Count = %lu\n",*ptr];
+	NSString* eventCount		= [NSString stringWithFormat:@"Event Count = %u\n",*ptr];
 
     return [NSString stringWithFormat:@"%@%@%@%@",title,crate,card,eventCount]; 
 }

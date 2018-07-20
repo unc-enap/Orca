@@ -27,17 +27,17 @@
 
 @implementation ORSNOCrateDecoderForPMT
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-	unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length = ExtractLength(*ptr);
+	uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length = ExtractLength(*ptr);
 	return length; //must return number of bytes processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 	ptr++;
-	NSString* sGTId = [NSString stringWithFormat:@"GTId = 0x%06lx\n",
+	NSString* sGTId = [NSString stringWithFormat:@"GTId = 0x%06x\n",
 		(*ptr & 0x0000ffff) | ((ptr[2] << 4) & 0x000f0000) | ((ptr[2] >> 8) & 0x00f00000)];
 	NSString* sCrate = [NSString stringWithFormat:@"Crate = %lu\n", (*ptr >> 21) & 0x1fUL];
 	NSString* sBoard = [NSString stringWithFormat:@"Board = %lu\n", (*ptr >> 26) & 0x0fUL];

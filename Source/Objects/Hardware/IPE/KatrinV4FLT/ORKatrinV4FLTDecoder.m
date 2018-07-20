@@ -71,17 +71,17 @@
     [super dealloc];
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
 {
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length	= ExtractLength(ptr[0]);								 
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length	= ExtractLength(ptr[0]);								 
 	unsigned char crate		= ShiftAndExtract(ptr[1],21,0x0f);
 	unsigned char card		= ShiftAndExtract(ptr[1],16,0x1f);
 	unsigned char chan		= ShiftAndExtract(ptr[1], 8,0xff);
 	int boxcarLen           = ShiftAndExtract(ptr[1], 4,0x03);
 	int filterShapingLength = ShiftAndExtract(ptr[1], 0,0x0f);
-	unsigned long histoLen  = 4*4096;
-	unsigned long filterDiv = 1L << filterShapingLength;
+	uint32_t histoLen  = 4*4096;
+	uint32_t filterDiv = 1L << filterShapingLength;
 	if(filterShapingLength==0){
 		filterDiv = boxcarLen + 1;
 	}
@@ -92,8 +92,8 @@
 
 	//note the ptr[6] shares the eventID and the energy
 	//the eventID must be masked off
-    unsigned long energy = (ptr[6] & 0xfffff)/filterDiv; //keep this
-    //unsigned long energy = (ptr[6] & 0xfffff)>>8; //scale to 4096
+    uint32_t energy = (ptr[6] & 0xfffff)/filterDiv; //keep this
+    //uint32_t energy = (ptr[6] & 0xfffff)>>8; //scale to 4096
 		
 	//channel by channel histograms
 	[aDataSet histogram:energy
@@ -121,25 +121,25 @@
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"Katrin V4 FLT Energy Record\n\n";    
-    NSString* crate = [NSString stringWithFormat:@"Crate      = %lu\n",ShiftAndExtract(ptr[1],21,0xf)];
-    NSString* card  = [NSString stringWithFormat:@"Station    = %lu\n",ShiftAndExtract(ptr[1],16,0x1f)];
-    NSString* chan  = [NSString stringWithFormat:@"Channel    = %lu\n",ShiftAndExtract(ptr[1],8,0xff)];
+    NSString* crate = [NSString stringWithFormat:@"Crate      = %u\n",ShiftAndExtract(ptr[1],21,0xf)];
+    NSString* card  = [NSString stringWithFormat:@"Station    = %u\n",ShiftAndExtract(ptr[1],16,0x1f)];
+    NSString* chan  = [NSString stringWithFormat:@"Channel    = %u\n",ShiftAndExtract(ptr[1],8,0xff)];
 		
 	
 	NSDate* theDate = [NSDate dateWithTimeIntervalSinceReferenceDate:(NSTimeInterval)ptr[2]];
 	NSString* eventDate     = [NSString stringWithFormat:@"Date       = %@\n", [theDate descriptionFromTemplate:@"MM/dd/yy"]];
 	NSString* eventTime     = [NSString stringWithFormat:@"Time       = %@\n", [theDate descriptionFromTemplate:@"HH:mm:ss"]];
 	
-	NSString* seconds		= [NSString stringWithFormat:@"Seconds    = %lu\n",     ptr[2]];
-	NSString* subSec        = [NSString stringWithFormat:@"SubSeconds = %lu\n",     ptr[3]];
-	NSString* chMap	    	= [NSString stringWithFormat:@"Channelmap = 0x%06lx\n", ptr[4]];
-    NSString* nPages		= [NSString stringWithFormat:@"EventFlags = 0x%lx\n",     ptr[5]];
+	NSString* seconds		= [NSString stringWithFormat:@"Seconds    = %u\n",     ptr[2]];
+	NSString* subSec        = [NSString stringWithFormat:@"SubSeconds = %u\n",     ptr[3]];
+	NSString* chMap	    	= [NSString stringWithFormat:@"Channelmap = 0x%06x\n", ptr[4]];
+    NSString* nPages		= [NSString stringWithFormat:@"EventFlags = 0x%x\n",     ptr[5]];
 	
-	NSString* fifoEventId   = [NSString stringWithFormat:@"FifoEventId = %lu\n",     ShiftAndExtract(ptr[6],20,0xfff) ];
-	NSString* energy        = [NSString stringWithFormat:@"Energy      = %lu\n",     ShiftAndExtract(ptr[6],0,0xffff)];
+	NSString* fifoEventId   = [NSString stringWithFormat:@"FifoEventId = %u\n",     ShiftAndExtract(ptr[6],20,0xfff) ];
+	NSString* energy        = [NSString stringWithFormat:@"Energy      = %u\n",     ShiftAndExtract(ptr[6],0,0xffff)];
 
 	
     return [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@",title,crate,card,chan,
@@ -189,10 +189,10 @@
  */
 //-------------------------------------------------------------
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-	unsigned long* ptr      = (unsigned long*)someData;
-	unsigned long length	= ExtractLength(ptr[0]);
+	uint32_t* ptr      = (uint32_t*)someData;
+	uint32_t length	= ExtractLength(ptr[0]);
 	unsigned char crate		= ShiftAndExtract(ptr[1],21,0xf);
 	unsigned char card		= ShiftAndExtract(ptr[1],16,0x1f);
 	unsigned char chan		= ShiftAndExtract(ptr[1],8,0xff);
@@ -201,13 +201,13 @@
 	NSString* channelKey	= [self getChannelKey: chan];	
 	int boxcarLen           = ShiftAndExtract(ptr[1],4,0x3);
 	int filterShapingLength = ShiftAndExtract(ptr[1],0,0xf);
-	unsigned long  histoLen = 4096;//=max. ADC value for 12 bit ADC
+	uint32_t  histoLen = 4096;//=max. ADC value for 12 bit ADC
 	unsigned short filterDiv= 1L << filterShapingLength;
 	if(filterShapingLength==0){
 		filterDiv = boxcarLen + 1;
 	}
 	
-	unsigned long energy  = (ptr[6] & 0xfffff)/filterDiv;
+	uint32_t energy  = (ptr[6] & 0xfffff)/filterDiv;
 	
 	[aDataSet histogram:energy
 				numBins:histoLen sender:self  
@@ -245,41 +245,41 @@
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 
-	unsigned long length       = ExtractLength(ptr[0]);
-	unsigned long crate        = ShiftAndExtract(ptr[1],21,0x0f);
-	unsigned long card         = ShiftAndExtract(ptr[1],16,0x1f);
-	unsigned long chan         = ShiftAndExtract(ptr[1], 8,0xff);
-    unsigned long sec          = ptr[2];
-    unsigned long subsec       = ptr[3];
-    unsigned long chmap        = ptr[4];
-    unsigned long eventID      = ptr[5];
-    unsigned long fifoEventID  = ShiftAndExtract(ptr[6],20,0xfff);
-    unsigned long energy       = ShiftAndExtract(ptr[6],0,0xfffff);
-    unsigned long eventFlags   = ptr[7];
-    unsigned long traceStart16 = ShiftAndExtract(eventFlags,8,0x7ff);//start of trace in short array
+	uint32_t length       = ExtractLength(ptr[0]);
+	uint32_t crate        = ShiftAndExtract(ptr[1],21,0x0f);
+	uint32_t card         = ShiftAndExtract(ptr[1],16,0x1f);
+	uint32_t chan         = ShiftAndExtract(ptr[1], 8,0xff);
+    uint32_t sec          = ptr[2];
+    uint32_t subsec       = ptr[3];
+    uint32_t chmap        = ptr[4];
+    uint32_t eventID      = ptr[5];
+    uint32_t fifoEventID  = ShiftAndExtract(ptr[6],20,0xfff);
+    uint32_t energy       = ShiftAndExtract(ptr[6],0,0xfffff);
+    uint32_t eventFlags   = ptr[7];
+    uint32_t traceStart16 = ShiftAndExtract(eventFlags,8,0x7ff);//start of trace in short array
     
     NSString* title= @"Katrin V4 FLT Waveform Record\n\n";
     
-    NSString* crateStr       = [NSString stringWithFormat:@"Crate       = %lu\n",crate];
-    NSString* cardStr		 = [NSString stringWithFormat:@"Station     = %lu\n",card];
-    NSString* chanStr		 = [NSString stringWithFormat:@"Channel     = %lu\n",chan];
-    NSString* secStr		 = [NSString stringWithFormat:@"Sec         = %lu\n", sec];
-    NSString* subsecStr		 = [NSString stringWithFormat:@"SubSec      = %lu\n", subsec];
-    NSString* fifoEventIdStr = [NSString stringWithFormat:@"FifoEventId = %lu\n", fifoEventID];
-    NSString* energyStr		 = [NSString stringWithFormat:@"Energy      = %lu\n", energy];
-    NSString* chmapStr		 = [NSString stringWithFormat:@"ChannelMap  = 0x%lx\n", chmap];
-    NSString* eventIDStr	 = [NSString stringWithFormat:@"ReadPtr,Pg# = %lu,%lu\n", ShiftAndExtract(eventID,0,0x3ff),ShiftAndExtract(eventID,10,0x3f)];
-    NSString* offsetStr		 = [NSString stringWithFormat:@"Offset16    = %lu\n", traceStart16];
-    NSString* versionStr	 = [NSString stringWithFormat:@"RecVersion  = %lu\n", ShiftAndExtract(eventFlags,0,0xf)];
+    NSString* crateStr       = [NSString stringWithFormat:@"Crate       = %u\n",crate];
+    NSString* cardStr		 = [NSString stringWithFormat:@"Station     = %u\n",card];
+    NSString* chanStr		 = [NSString stringWithFormat:@"Channel     = %u\n",chan];
+    NSString* secStr		 = [NSString stringWithFormat:@"Sec         = %u\n", sec];
+    NSString* subsecStr		 = [NSString stringWithFormat:@"SubSec      = %u\n", subsec];
+    NSString* fifoEventIdStr = [NSString stringWithFormat:@"FifoEventId = %u\n", fifoEventID];
+    NSString* energyStr		 = [NSString stringWithFormat:@"Energy      = %u\n", energy];
+    NSString* chmapStr		 = [NSString stringWithFormat:@"ChannelMap  = 0x%x\n", chmap];
+    NSString* eventIDStr	 = [NSString stringWithFormat:@"ReadPtr,Pg# = %u,%u\n", ShiftAndExtract(eventID,0,0x3ff),ShiftAndExtract(eventID,10,0x3f)];
+    NSString* offsetStr		 = [NSString stringWithFormat:@"Offset16    = %u\n", traceStart16];
+    NSString* versionStr	 = [NSString stringWithFormat:@"RecVersion  = %u\n", ShiftAndExtract(eventFlags,0,0xf)];
     NSString* eventFlagsStr
-							 = [NSString stringWithFormat:@"Flag(a,ap)  = %lu,%lu\n", ShiftAndExtract(eventFlags,4,0x1),ShiftAndExtract(eventFlags,5,0x1)];
-    NSString* lengthStr		 = [NSString stringWithFormat:@"Length      = %lu\n", length];
+							 = [NSString stringWithFormat:@"Flag(a,ap)  = %u,%u\n", ShiftAndExtract(eventFlags,4,0x1),ShiftAndExtract(eventFlags,5,0x1)];
+    NSString* lengthStr		 = [NSString stringWithFormat:@"Length      = %u\n", length];
     
     
-    NSString* evFlagsStr     = [NSString stringWithFormat:@"EventFlags = 0x%lx\n", eventFlags ];
+    NSString* evFlagsStr     = [NSString stringWithFormat:@"EventFlags = 0x%x\n", eventFlags ];
 
     return [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@",title,crateStr,cardStr,chanStr,
                 secStr, subsecStr, fifoEventIdStr, energyStr, chmapStr, eventIDStr, offsetStr, versionStr, eventFlagsStr, lengthStr,   evFlagsStr]; 
@@ -320,22 +320,22 @@
 //-------------------------------------------------------------
 
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length	= ExtractLength(ptr[0]);
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length	= ExtractLength(ptr[0]);
 	unsigned char crate		= ShiftAndExtract(ptr[1],21,0xf);
 	unsigned char card		= ShiftAndExtract(ptr[1],16,0x1f);
 	NSString* crateKey		= [self getCrateKey: crate];
 	NSString* stationKey	= [self getStationKey: card];	
-	unsigned long seconds	= ptr[2];
-	unsigned long hitRateTotal = ptr[4];
+	uint32_t seconds	= ptr[2];
+	uint32_t hitRateTotal = ptr[4];
 	int i;
 	int n = (int)((length - 5)/2); //so far, only using the 16 bit counters.. the 32 bit counter follow
 	for(i=0;i<n;i++){
 		int chan = ShiftAndExtract(ptr[5+i],20,0xff);
 		NSString* channelKey    = [self getChannelKey:chan];
-		unsigned long hitRate   = ptr[5+i] & 0xffff;
+		uint32_t hitRate   = ptr[5+i] & 0xffff;
 		if(hitRate){
 			[aDataSet histogram:hitRate
 							   numBins:65536 
@@ -357,18 +357,18 @@
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"Katrin FLT Hit Rate Record\n\n";
-    NSString* crate = [NSString stringWithFormat:@"Crate      = %lu\n",ShiftAndExtract(ptr[1],21,0xf)];
-    NSString* card  = [NSString stringWithFormat:@"Station    = %lu\n",ShiftAndExtract(ptr[1],16,0x1f)];
+    NSString* crate = [NSString stringWithFormat:@"Crate      = %u\n",ShiftAndExtract(ptr[1],21,0xf)];
+    NSString* card  = [NSString stringWithFormat:@"Station    = %u\n",ShiftAndExtract(ptr[1],16,0x1f)];
 	
-	unsigned long length                = ExtractLength(ptr[0]);
-    unsigned long ut_time               = ptr[2];
-    unsigned long hitRateLengthSec      = ptr[3]; // ShiftAndExtract(ptr[1],0,0xffffffff);
-    unsigned long newTotal              = ptr[4];
-    unsigned long version               = ShiftAndExtract(ptr[1],0,0x1);    //bit 1 = version
-    unsigned long countHREnabledChans   = ShiftAndExtract(ptr[1],8,0x1f);   //NOC in record
+	uint32_t length                = ExtractLength(ptr[0]);
+    uint32_t ut_time               = ptr[2];
+    uint32_t hitRateLengthSec      = ptr[3]; // ShiftAndExtract(ptr[1],0,0xffffffff);
+    uint32_t newTotal              = ptr[4];
+    uint32_t version               = ShiftAndExtract(ptr[1],0,0x1);    //bit 1 = version
+    uint32_t countHREnabledChans   = ShiftAndExtract(ptr[1],8,0x1f);   //NOC in record
     if(version==1) title= @"Katrin FLT Hit Rate Record v1\n\n";
     
     NSDate* date = [NSDate dateWithTimeIntervalSince1970:ut_time];
@@ -376,31 +376,31 @@
 	int i;
     NSMutableString* hrString;
     if(version==0x1){
-	    hrString = [NSMutableString stringWithFormat:@"\nSLTsecond  = %lu\nHitrateLen = %lu\nTotal HR   = %lu\n",
+	    hrString = [NSMutableString stringWithFormat:@"\nSLTsecond  = %u\nHitrateLen = %u\nTotal HR   = %u\n",
 						  ut_time,hitRateLengthSec,newTotal];
         for(i=0; i<countHREnabledChans; i++){
-        unsigned long chan	= ShiftAndExtract(ptr[5+i],20,0xff);
-        unsigned long over	= ShiftAndExtract(ptr[5+countHREnabledChans+i],23,0x1);
-        unsigned long hitrate= ShiftAndExtract(ptr[5+countHREnabledChans+i], 0,0x7fffff);
-        unsigned long pileupcount= ShiftAndExtract(ptr[5+countHREnabledChans+i], 24,0xff);
+        uint32_t chan	= ShiftAndExtract(ptr[5+i],20,0xff);
+        uint32_t over	= ShiftAndExtract(ptr[5+countHREnabledChans+i],23,0x1);
+        uint32_t hitrate= ShiftAndExtract(ptr[5+countHREnabledChans+i], 0,0x7fffff);
+        uint32_t pileupcount= ShiftAndExtract(ptr[5+countHREnabledChans+i], 24,0xff);
             if(over)
-                [hrString appendString: [NSString stringWithFormat:@"Chan %2lu    = OVERFLOW\n", chan] ];
+                [hrString appendString: [NSString stringWithFormat:@"Chan %2u    = OVERFLOW\n", chan] ];
             else
-                [hrString appendString: [NSString stringWithFormat:@"Chan %2lu    = %lu\n", chan,hitrate] ];
+                [hrString appendString: [NSString stringWithFormat:@"Chan %2u    = %u\n", chan,hitrate] ];
             //[hrString appendString: [NSString stringWithFormat:@"PilUpCnt %2d    = %d\n", chan,  pileupcount] ];
-            [hrString appendString: [NSString stringWithFormat:    @"PilUpCnt   = %lu\n",   pileupcount] ];
+            [hrString appendString: [NSString stringWithFormat:    @"PilUpCnt   = %u\n",   pileupcount] ];
         }
         
     }
     else{
-	    hrString = [NSMutableString stringWithFormat:@"\nUTTime     = %lu\nHitrateLen = %lu\nTotal HR   = %lu\n",
+	    hrString = [NSMutableString stringWithFormat:@"\nUTTime     = %u\nHitrateLen = %u\nTotal HR   = %u\n",
 						  ut_time,hitRateLengthSec,newTotal];
         for(i=0; i<length-5; i++){
-        unsigned long chan	= ShiftAndExtract(ptr[5+i],20,0xff);
-        unsigned long over	= ShiftAndExtract(ptr[5+i],16,0x1);
-        unsigned long hitrate= ShiftAndExtract(ptr[5+i], 0,0xffff);
-            if(over) [hrString appendString: [NSString stringWithFormat:@"Chan %2lu    = OVERFLOW\n", chan] ];
-            else     [hrString appendString: [NSString stringWithFormat:@"Chan %2lu    = %lu\n", chan,hitrate] ];
+        uint32_t chan	= ShiftAndExtract(ptr[5+i],20,0xff);
+        uint32_t over	= ShiftAndExtract(ptr[5+i],16,0x1);
+        uint32_t hitrate= ShiftAndExtract(ptr[5+i], 0,0xffff);
+            if(over) [hrString appendString: [NSString stringWithFormat:@"Chan %2u    = OVERFLOW\n", chan] ];
+            else     [hrString appendString: [NSString stringWithFormat:@"Chan %2u    = %u\n", chan,hitrate] ];
         }
     }
     
@@ -465,10 +465,10 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx histogramInfo (some flags; some spare fo
 }
 
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length	= ExtractLength(*ptr);	 //get length from first word
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length	= ExtractLength(*ptr);	 //get length from first word
 
 	unsigned char crate		= (ptr[1]>>21) & 0xf;
 	unsigned char card		= (ptr[1]>>16) & 0x1f;
@@ -478,19 +478,19 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx histogramInfo (some flags; some spare fo
 	NSString* channelKey	= [self getChannelKey: chan];
     
     int filterShapingLength = ShiftAndExtract(ptr[1],0,0xf);
-	unsigned long filterLen = 1L << filterShapingLength;
-    unsigned long histoEBinSize = 1L << ptr[8];
-    unsigned long histoEOffset = ptr[9];
+	uint32_t filterLen = 1L << filterShapingLength;
+    uint32_t histoEBinSize = 1L << ptr[8];
+    uint32_t histoEOffset = ptr[9];
     
     
     // Normalize the histogram to the full ADC range from 0 .. 4095
     // Todo: Avoid comb structure when scaling up !!!
     
-    unsigned long *ptrData;
-    unsigned long normE;
-    unsigned long spacing;
-    unsigned long digiErr;
-    unsigned long low, high, edge;
+    uint32_t *ptrData;
+    uint32_t normE;
+    uint32_t spacing;
+    uint32_t digiErr;
+    uint32_t low, high, edge;
     
     ptrData = &ptr[12];
     for (int i=0;i<4095;i++) normHisto[i] = 0;
@@ -572,15 +572,15 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx histogramInfo (some flags; some spare fo
 
 
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 
     NSString* title; //= @"Katrin V4 FLT Histogram Record\n\n";
 	++ptr;		//skip the first word (dataID and length)
     
-    NSString* crate = [NSString stringWithFormat:@"Crate      = %lu\n",(*ptr>>21) & 0xf];
-    NSString* card  = [NSString stringWithFormat:@"Station    = %lu\n",(*ptr>>16) & 0x1f];
-    NSString* chan  = [NSString stringWithFormat:@"Channel    = %lu\n",(*ptr>>8) & 0xff];
+    NSString* crate = [NSString stringWithFormat:@"Crate      = %u\n",(*ptr>>21) & 0xf];
+    NSString* card  = [NSString stringWithFormat:@"Station    = %u\n",(*ptr>>16) & 0x1f];
+    NSString* chan  = [NSString stringWithFormat:@"Channel    = %u\n",(*ptr>>8) & 0xff];
 	++ptr;		//point to next structure
 
 	katrinV4HistogramDataStruct* ePtr = (katrinV4HistogramDataStruct*)ptr;			//recast to event structure

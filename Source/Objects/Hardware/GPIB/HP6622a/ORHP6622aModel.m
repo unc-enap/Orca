@@ -190,7 +190,7 @@ NSString* ORHP6622aLock							= @"ORHP6622aLock";
     if([self isConnected]){
 		char reply[32];
 		reply[0]='\0';
-		long n = [self writeReadGPIBDevice:@"ID?" data:reply maxLength:32];
+		int32_t n = [self writeReadGPIBDevice:@"ID?" data:reply maxLength:32];
 		if(n>0)reply[n-1]='\0';
 		NSLog(@"HP6622a ID = %c\n",reply);
 	}
@@ -201,7 +201,7 @@ NSString* ORHP6622aLock							= @"ORHP6622aLock";
     if([self isConnected]){
 		char reply[32];
 		reply[0]='\0';
-		long n = [self writeReadGPIBDevice:@"TEST?" data:reply maxLength:32];
+		int32_t n = [self writeReadGPIBDevice:@"TEST?" data:reply maxLength:32];
 		if(n>0)reply[n-1]='\0';
 		NSLog(@"HP6622a Self Test Response: %@\n",[self decodeErrorNumber:atoi(reply)]);
 	}
@@ -233,7 +233,7 @@ NSString* ORHP6622aLock							= @"ORHP6622aLock";
 	for(i=0;i<kHP6622aNumberSupplies;i++){
 		char reply[32];
 		reply[0]='\0';
-		long n = [self writeReadGPIBDevice:[NSString stringWithFormat:@"VOUT? %d",i+1] data:reply maxLength:32];
+		int32_t n = [self writeReadGPIBDevice:[NSString stringWithFormat:@"VOUT? %d",i+1] data:reply maxLength:32];
 		[self setActVoltage:i withValue:atof(reply)];
 		if(n>0){
 			reply[n-1]='\0';
@@ -248,7 +248,7 @@ NSString* ORHP6622aLock							= @"ORHP6622aLock";
 	for(i=0;i<kHP6622aNumberSupplies;i++){
 		char reply[32];
 		reply[0]='\0';
-		long n = [self writeReadGPIBDevice:[NSString stringWithFormat:@"IOUT? %d",i+1] data:reply maxLength:32];
+		int32_t n = [self writeReadGPIBDevice:[NSString stringWithFormat:@"IOUT? %d",i+1] data:reply maxLength:32];
 		[self setActCurrent:i withValue:atof(reply)];
 		if(n>0){
 			reply[n-1]='\0';
@@ -263,7 +263,7 @@ NSString* ORHP6622aLock							= @"ORHP6622aLock";
 	for(i=0;i<kHP6622aNumberSupplies;i++){
 		char reply[32];
 		reply[0]='\0';
-		long n = [self writeReadGPIBDevice:[NSString stringWithFormat:@"OVSET? %d",i+1] data:reply maxLength:32];
+		int32_t n = [self writeReadGPIBDevice:[NSString stringWithFormat:@"OVSET? %d",i+1] data:reply maxLength:32];
 		[self setOverVoltage:i withValue:atof(reply)];
 		if(n>0){
 			reply[n-1]='\0';
@@ -306,7 +306,7 @@ NSString* ORHP6622aLock							= @"ORHP6622aLock";
 {
     char reply[32];
     reply[0]='\0';
-    long n = [self writeReadGPIBDevice:@"ERR?" data:reply maxLength:32];
+    int32_t n = [self writeReadGPIBDevice:@"ERR?" data:reply maxLength:32];
     if(n>0)reply[n-1]='\0';
 	NSLog(@"HP6622a Response: %@\n",[self decodeErrorNumber:atoi(reply)]);
 }

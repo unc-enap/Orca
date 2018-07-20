@@ -400,12 +400,12 @@ NSString* ORManualPlotDataChanged			= @"ORManualPlotDataChanged";
 }
 
 
-- (unsigned long) numPoints
+- (uint32_t) numPoints
 {
     return [data count];
 }
 
-- (BOOL) dataSet:(int)set index:(unsigned long)index x:(double*)xValue y:(double*)yValue
+- (BOOL) dataSet:(int)set index:(uint32_t)index x:(double*)xValue y:(double*)yValue
 {
 	BOOL valid = YES;
 	[dataSetLock lock];

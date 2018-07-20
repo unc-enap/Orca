@@ -172,7 +172,7 @@
     return [colors objectAtIndex:index];
 }
 
-- (unsigned short) getFastColorIndexForValue:(unsigned long)aValue log:(BOOL)aLog integer:(BOOL)aInt minPad:(double)aMinPad
+- (unsigned short) getFastColorIndexForValue:(uint32_t)aValue log:(BOOL)aLog integer:(BOOL)aInt minPad:(double)aMinPad
 {	 
 
 	aValue = [colorAxis getPixAbsFast:aValue log:aLog integer:aInt minPad:aMinPad];
@@ -188,7 +188,7 @@
 }
 
 
-- (unsigned short) getColorIndexForValue:(unsigned long)aValue 
+- (unsigned short) getColorIndexForValue:(uint32_t)aValue 
 {	
 	aValue = [colorAxis getPixAbs:aValue];
 	if(aValue <= 0)return 0;

@@ -25,29 +25,29 @@
 
 @interface ORDataGenModel :  OrcaObject <ORDataTaker,ORAdcProcessing>
 {
-    unsigned long burstDataId;
-    unsigned long dataId1D;
-    unsigned long dataId2D;
-    unsigned long dataIdWaveform;
-	unsigned long timeSeriesId;
+    uint32_t burstDataId;
+    uint32_t dataId1D;
+    uint32_t dataId2D;
+    uint32_t dataIdWaveform;
+	uint32_t timeSeriesId;
 	BOOL first;
 	float adcValue;
 	int theta;
 	NSDate* lastTime;
 	float   timeIndex;
 	ORTimer* burstTimer;
-	unsigned long nextBurst;
+	uint32_t nextBurst;
 }
-- (unsigned long) timeSeriesId;
-- (unsigned long) burstDataId;
-- (unsigned long) dataId1D;
-- (unsigned long) dataId2D;
-- (unsigned long) dataIdWaveform;
-- (void) setTimeSeriesId: (unsigned long) aDataId;
-- (void) setBurstDataId: (unsigned long) aDataId;
-- (void) setDataId1D: (unsigned long) aDataId;
-- (void) setDataId2D: (unsigned long) aDataId;
-- (void) setDataIdWaveform: (unsigned long) aDataId;
+- (uint32_t) timeSeriesId;
+- (uint32_t) burstDataId;
+- (uint32_t) dataId1D;
+- (uint32_t) dataId2D;
+- (uint32_t) dataIdWaveform;
+- (void) setTimeSeriesId: (uint32_t) aDataId;
+- (void) setBurstDataId: (uint32_t) aDataId;
+- (void) setDataId1D: (uint32_t) aDataId;
+- (void) setDataId2D: (uint32_t) aDataId;
+- (void) setDataIdWaveform: (uint32_t) aDataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherShaper;
 

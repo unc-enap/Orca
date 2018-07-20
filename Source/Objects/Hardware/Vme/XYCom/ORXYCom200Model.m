@@ -34,7 +34,7 @@ NSString* ORXYCom200SelectedPLTChanged		= @"ORXYCom200SelectedPLTChanged";
 
 static struct {
 	NSString*	  regName;
-	unsigned long addressOffset;
+	uint32_t addressOffset;
 } mIOXY200Reg[kNumRegs]={
 {@"General Control",		0x01},
 {@"Service Request",		0x03},
@@ -146,12 +146,12 @@ NSString* mIOXY200SubModeName[4][3] = {
 	 object:self];
 }
 
-- (unsigned long) writeValue
+- (uint32_t) writeValue
 {
     return writeValue;
 }
 
-- (void) setWriteValue:(unsigned long) aValue
+- (void) setWriteValue:(uint32_t) aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setWriteValue:[self writeValue]];
     
@@ -187,7 +187,7 @@ NSString* mIOXY200SubModeName[4][3] = {
 {
 	
  	//write hw based on the dialog settings
-	long theValue			=  [self writeValue];
+	int32_t theValue			=  [self writeValue];
     short theRegIndex 		= [self selectedRegIndex];
     
     @try {
@@ -453,7 +453,7 @@ NSString* mIOXY200SubModeName[4][3] = {
     return mIOXY200Reg[anIndex].regName;
 }
 
-- (unsigned long) getAddressOffset:(short) anIndex
+- (uint32_t) getAddressOffset:(short) anIndex
 {
     return mIOXY200Reg[anIndex].addressOffset;
 }

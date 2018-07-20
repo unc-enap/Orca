@@ -75,7 +75,7 @@
  * Couple of changes, related.
  * (1) added extra check in vxi11_receive() to see if read_resp==NULL.
  * read_resp can apparently be NULL if (eg) you send an instrument a
- * query, but the instrument is so busy with something else for so long
+ * query, but the instrument is so busy with something else for so int32_t
  * that it forgets the original query. So this extra check is for that
  * situation, and vxi11_receive returns -VXI11_NULL_READ_RESP to the
  * calling function.
@@ -168,8 +168,8 @@
  *
  * int	vxi11_open_device(char *ip, CLIENT **client, VXI11_LINK **link)
  * int	vxi11_close_device(char *ip, CLIENT *client, VXI11_LINK *link)
- * int	vxi11_send(CLIENT *client, VXI11_LINK *link, char *cmd, unsigned long len)
- * long	vxi11_receive(CLIENT *client, VXI11_LINK *link, char *buffer, unsigned long len, unsigned long timeout)
+ * int	vxi11_send(CLIENT *client, VXI11_LINK *link, char *cmd, uint32_t len)
+ * int32_t	vxi11_receive(CLIENT *client, VXI11_LINK *link, char *buffer, uint32_t len, uint32_t timeout)
  *
  * Note that all 4 of these use separate client and link structures. All the
  * other functions are built on these four core functions, and the first layer
@@ -189,19 +189,19 @@
  *
  * int	vxi11_open_device(char *ip, CLINK *clink)
  * int	vxi11_close_device(char *ip, CLINK *clink)
- * int	vxi11_send(CLINK *clink, char *cmd, unsigned long len)
+ * int	vxi11_send(CLINK *clink, char *cmd, uint32_t len)
  *    --- or --- (if sending just text)
  * int	vxi11_send(CLINK *clink, char *cmd)
- * long	vxi11_receive(CLINK *clink, char *buffer, unsigned long len, unsigned long timeout)
+ * int32_t	vxi11_receive(CLINK *clink, char *buffer, uint32_t len, uint32_t timeout)
  *
  * There are then useful (to me, anyway) more specific functions built on top
  * of these:
  *
- * int	vxi11_send_data_block(CLINK *clink, char *cmd, char *buffer, unsigned long len)
- * long	vxi11_receive_data_block(CLINK *clink, char *buffer, unsigned long len, unsigned long timeout)
- * long	vxi11_send_and_receive(CLINK *clink, char *cmd, char *buf, unsigned long buf_len, unsigned long timeout)
- * long	vxi11_obtain_long_value(CLINK *clink, char *cmd, unsigned long timeout)
- * double vxi11_obtain_double_value(CLINK *clink, char *cmd, unsigned long timeout)
+ * int	vxi11_send_data_block(CLINK *clink, char *cmd, char *buffer, uint32_t len)
+ * int32_t	vxi11_receive_data_block(CLINK *clink, char *buffer, uint32_t len, uint32_t timeout)
+ * int32_t	vxi11_send_and_receive(CLINK *clink, char *cmd, char *buf, uint32_t buf_len, uint32_t timeout)
+ * int32_t	vxi11_obtain_long_value(CLINK *clink, char *cmd, uint32_t timeout)
+ * double vxi11_obtain_double_value(CLINK *clink, char *cmd, uint32_t timeout)
  *
  * (then there are some shorthand wrappers for the above without specifying
  * the timeout due to sheer laziness---explore yourself)
@@ -236,7 +236,7 @@ int	vxi11_open_device(const char *ip, CLINK *clink, char *device) {
 	int	l;
 	int	device_no=-1;
 	
-	//	NSLog(@"before doing anything, clink->link = %ld\n", clink->link);
+	//	NSLog(@"before doing anything, clink->link = %d\n", clink->link);
 	/* Have a look to see if we've already initialised an instrument with
 	 * this IP address */
 	for (l=0; l<VXI11_MAX_CLIENTS; l++){
@@ -265,8 +265,8 @@ int	vxi11_open_device(const char *ip, CLINK *clink, char *device) {
 			VXI11_LINK_COUNT[VXI11_DEVICE_NO]=1;
 			//			NSLog(@"Open function, could not find ip address %s.\n",ip);
 			//			NSLog(@"So now, VXI11_IP_ADDRESS[%d]=%s,\n",VXI11_DEVICE_NO,VXI11_IP_ADDRESS[VXI11_DEVICE_NO]);
-			//			NSLog(@"VXI11_CLIENT_ADDRESS[%d]=%ld,\n",VXI11_DEVICE_NO,VXI11_CLIENT_ADDRESS[VXI11_DEVICE_NO]);
-			//			NSLog(@"          clink->client=%ld,\n",clink->client);
+			//			NSLog(@"VXI11_CLIENT_ADDRESS[%d]=%d,\n",VXI11_DEVICE_NO,VXI11_CLIENT_ADDRESS[VXI11_DEVICE_NO]);
+			//			NSLog(@"          clink->client=%d,\n",clink->client);
 			//			NSLog(@"VXI11_LINK_COUNT[%d]=%d.\n",VXI11_DEVICE_NO,VXI11_LINK_COUNT[VXI11_DEVICE_NO]);
 			VXI11_DEVICE_NO++;
 		}
@@ -281,7 +281,7 @@ int	vxi11_open_device(const char *ip, CLINK *clink, char *device) {
 		VXI11_LINK_COUNT[device_no]++;
 		//		NSLog(@"Have just incremented VXI11_LINK_COUNT[%d], it's now %d\n",device_no,VXI11_LINK_COUNT[device_no]);
 	}
-	//	NSLog(@"after creating link, clink->link = %ld\n", clink->link);
+	//	NSLog(@"after creating link, clink->link = %d\n", clink->link);
 	return ret;
 }
 
@@ -332,7 +332,7 @@ int     vxi11_close_device(const char *ip, CLINK *clink) {
 
 /* We still need the version of the function where the length is set explicitly
  * though, for when we are sending fixed length data blocks. */
-int	vxi11_send(CLINK *clink, const char *cmd, unsigned long len) {
+int	vxi11_send(CLINK *clink, const char *cmd, uint32_t len) {
 	return _vxi11_send(clink->client, clink->link, cmd, len);
 }
 
@@ -340,7 +340,7 @@ int	vxi11_send(CLINK *clink, const char *cmd, unsigned long len) {
 /* RECEIVE FUNCTIONS *
  * ================= */
 
-long	vxi11_receive(CLINK *clink, char *buffer, unsigned long len, unsigned long timeout) {
+int32_t	vxi11_receive(CLINK *clink, char *buffer, uint32_t len, uint32_t timeout) {
 	return _vxi11_receive(clink->client, clink->link, buffer, len, timeout);
 }
 
@@ -353,14 +353,14 @@ long	vxi11_receive(CLINK *clink, char *buffer, unsigned long len, unsigned long 
 
 /* SEND FIXED LENGTH DATA BLOCK FUNCTION *
  * ===================================== */
-int	vxi11_send_data_block(CLINK *clink, const char *cmd, char *buffer, unsigned long len) {
+int	vxi11_send_data_block(CLINK *clink, const char *cmd, char *buffer, uint32_t len) {
 	char	*out_buffer;
 	size_t	cmd_len=strlen(cmd);
 	int	ret;
 	out_buffer= (char*)malloc(cmd_len+10+len);
 	NSLog(@"%s %08lu",cmd,len);
-	memcpy(out_buffer+cmd_len+10,buffer,(unsigned long) len);
-	ret = vxi11_send(clink, out_buffer, (unsigned long) (cmd_len+10+len));
+	memcpy(out_buffer+cmd_len+10,buffer,(uint32_t) len);
+	ret = vxi11_send(clink, out_buffer, (uint32_t) (cmd_len+10+len));
 	free( out_buffer);
 	return ret;
 }
@@ -379,14 +379,14 @@ int	vxi11_send_data_block(CLINK *clink, const char *cmd, char *buffer, unsigned 
  *   |\--------- number of digits that follow (in this case 8, with leading 0's)
  *   \---------- always starts with #
  */
-long	vxi11_receive_data_block(CLINK *clink, char *buffer, unsigned long len, unsigned long timeout) {
+int32_t	vxi11_receive_data_block(CLINK *clink, char *buffer, uint32_t len, uint32_t timeout) {
 	/* I'm not sure what the maximum length of this header is, I'll assume it's 
 	 * 11 (#9 + 9 digits) */
-	unsigned long	necessary_buffer_size;
+	uint32_t	necessary_buffer_size;
 	char		*in_buffer;
-	long		ret;
+	int32_t		ret;
 	int		ndigits;
-	unsigned long	returned_bytes;
+	uint32_t	returned_bytes;
 	int		l;
 	char		scan_cmd[20];
 	necessary_buffer_size=len+12;
@@ -408,12 +408,12 @@ long	vxi11_receive_data_block(CLINK *clink, char *buffer, unsigned long len, uns
 	sscanf(in_buffer,"#%1d",&ndigits);
 	/* some instruments, if there is a problem acquiring the data, return only "#0" */
 	if (ndigits > 0) {
-		/* now that we know, we can convert the next <ndigits> bytes into an unsigned long */
+		/* now that we know, we can convert the next <ndigits> bytes into an uint32_t */
 		//NSLog(@"#%%1d%%%dlu",ndigits);
 		sscanf(in_buffer,scan_cmd,&ndigits,&returned_bytes);
 		memcpy(buffer, in_buffer+(ndigits+2), returned_bytes);
 		free( in_buffer);
-		return (long) returned_bytes;
+		return (int32_t) returned_bytes;
 	}
 	else return 0;
 }
@@ -424,9 +424,9 @@ long	vxi11_receive_data_block(CLINK *clink, char *buffer, unsigned long len, uns
 
 /* This is mainly a useful function for the overloaded vxi11_obtain_value()
  * fn's, but is also handy and useful for user and library use */
-long	vxi11_send_and_receive(CLINK *clink, const char *cmd, char *buf, unsigned long buf_len, unsigned long timeout) {
+int32_t	vxi11_send_and_receive(CLINK *clink, const char *cmd, char *buf, uint32_t buf_len, uint32_t timeout) {
 	int	ret;
-	long	bytes_returned;
+	int32_t	bytes_returned;
 	do {
 		ret = vxi11_send(clink, cmd, strlen(cmd));
 		if (ret != 0) {
@@ -442,7 +442,7 @@ long	vxi11_send_and_receive(CLINK *clink, const char *cmd, char *buf, unsigned l
 		if (bytes_returned <= 0) {
 			if (bytes_returned >-VXI11_NULL_READ_RESP) {
 				NSLog(@"Error: vxi11_send_and_receive: problem reading reply.\n");
-				NSLog(@"       The function vxi11_receive returned %ld. ",bytes_returned);
+				NSLog(@"       The function vxi11_receive returned %d. ",bytes_returned);
 				return -2;
 			}
 			else NSLog(@"(Info: VXI11_NULL_READ_RESP in vxi11_send_and_receive, resending query)\n");
@@ -454,7 +454,7 @@ long	vxi11_send_and_receive(CLINK *clink, const char *cmd, char *buf, unsigned l
 
 /* FUNCTIONS TO RETURN A LONG INTEGER VALUE SENT AS RESPONSE TO A QUERY *
  * ==================================================================== */
-long	vxi11_obtain_long_value(CLINK *clink, const char *cmd, unsigned long timeout) {
+int32_t	vxi11_obtain_long_value(CLINK *clink, const char *cmd, uint32_t timeout) {
 	char	buf[50]; /* 50=arbitrary length... more than enough for one number in ascii */
 	memset(buf, 0, 50);
 	if (vxi11_send_and_receive(clink, cmd, buf, 50, timeout) != 0) {
@@ -467,7 +467,7 @@ long	vxi11_obtain_long_value(CLINK *clink, const char *cmd, unsigned long timeou
 
 /* FUNCTIONS TO RETURN A DOUBLE FLOAT VALUE SENT AS RESPONSE TO A QUERY *
  * ==================================================================== */
-double	vxi11_obtain_double_value(CLINK *clink, const char *cmd, unsigned long timeout) {
+double	vxi11_obtain_double_value(CLINK *clink, const char *cmd, uint32_t timeout) {
 	char	buf[50]; /* 50=arbitrary length... more than enough for one number in ascii */
 	double	val;
 	memset(buf, 0, 50);
@@ -579,7 +579,7 @@ int	_vxi11_close_link(const char *inputip, CLIENT *client, VXI11_LINK *link) {
 
 /* We still need the version of the function where the length is set explicitly
  * though, for when we are sending fixed length data blocks. */
-int	_vxi11_send(CLIENT *client, VXI11_LINK *link, const char *cmd, unsigned long len) {
+int	_vxi11_send(CLIENT *client, VXI11_LINK *link, const char *cmd, uint32_t len) {
 	Device_WriteParms write_parms;
 	int	bytes_left = (int)len;
 	
@@ -636,10 +636,10 @@ int	_vxi11_send(CLIENT *client, VXI11_LINK *link, const char *cmd, unsigned long
 #define RCV_CHR_BIT	0x02	// A termchr is set in flags and a character which matches termChar is transferred
 #define RCV_REQCNT_BIT	0x01	// requestSize bytes have been transferred.  This includes a request size of zero.
 
-long _vxi11_receive(CLIENT *client, VXI11_LINK *link, char *buffer, unsigned long len, unsigned long timeout) {
+int32_t _vxi11_receive(CLIENT *client, VXI11_LINK *link, char *buffer, uint32_t len, uint32_t timeout) {
 	Device_ReadParms read_parms;
 	Device_ReadResp  read_resp;
-	long	curr_pos = 0;
+	int32_t	curr_pos = 0;
 	
 	read_parms.lid			= link->lid;
 	read_parms.requestSize		= (unsigned int)len;

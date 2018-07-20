@@ -180,12 +180,12 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
 }
 #pragma mark •••Accessors
 
-- (long) count0Offset
+- (int32_t) count0Offset
 {
     return count0Offset;
 }
 
-- (void) setCount0Offset:(long)aCount0Offset
+- (void) setCount0Offset:(int32_t)aCount0Offset
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setCount0Offset:count0Offset];
     
@@ -244,12 +244,12 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
     [[NSNotificationCenter defaultCenter] postNotificationName:ORCV830ModelAcqModeChanged object:self];
 }
 
-- (unsigned long) dwellTime
+- (uint32_t) dwellTime
 {
     return dwellTime;
 }
 
-- (void) setDwellTime:(unsigned long)aDwellTime
+- (void) setDwellTime:(uint32_t)aDwellTime
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setDwellTime:dwellTime];
     dwellTime = aDwellTime;
@@ -261,7 +261,7 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
 
 #pragma mark ***Register - Register specific routines
 - (NSString*)     getRegisterName:(short) anIndex	{ return reg[anIndex].regName; }
-- (unsigned long) getAddressOffset:(short) anIndex	{ return(reg[anIndex].addressOffset); }
+- (uint32_t) getAddressOffset:(short) anIndex	{ return(reg[anIndex].addressOffset); }
 - (short)		  getAccessType:(short) anIndex		{ return reg[anIndex].accessType; }
 - (short)         getAccessSize:(short) anIndex		{ return reg[anIndex].size; }
 - (BOOL)          dataReset:(short) anIndex			{ return reg[anIndex].dataReset; }
@@ -275,7 +275,7 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
     return [NSString stringWithFormat:@"CAEN 830 (Slot %d) ",[self slot]];
 }
 
-- (unsigned long) scalerValue:(int)index
+- (uint32_t) scalerValue:(int)index
 {
 	if(index<0)return 0;
 	else if(index>kNumCV830Channels)return 0;
@@ -296,7 +296,7 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
     
 }
 
-- (void) setScalerValue:(unsigned long)aValue index:(int)index
+- (void) setScalerValue:(uint32_t)aValue index:(int)index
 {
 	if(index<0)return;
 	else if(index>kNumCV830Channels)return;
@@ -368,7 +368,7 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
 	BOOL runInProgress = [gOrcaGlobals runInProgress];
 	
 	if(runInProgress){
-		unsigned long data[36];
+		uint32_t data[36];
 		
 		data[0] = polledDataId | 36;
 		data[1] = (([self crateNumber]&0x01e)<<21) | ([self slot]& 0x0000001f)<<16;
@@ -383,18 +383,18 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
 		if(index>3){
 			//the full record goes into the data stream via a notification
 			[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-																object:[NSData dataWithBytes:data length:index*sizeof(long)]];
+																object:[NSData dataWithBytes:data length:index*sizeof(int32_t)]];
 		}
 	}
 	
 }
 
-- (unsigned long) enabledMask
+- (uint32_t) enabledMask
 {
     return enabledMask;
 }
 
-- (void) setEnabledMask:(unsigned long)aEnabledMask
+- (void) setEnabledMask:(uint32_t)aEnabledMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setEnabledMask:enabledMask];
     enabledMask = aEnabledMask;
@@ -458,7 +458,7 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
 	lastReadTime = ut_Time;
 	for(i=0;i<kNumCV830Channels;i++){
 		if(enabledMask & (0x1<<i)){
-			unsigned long aValue = 0;
+			uint32_t aValue = 0;
 			[[self adapter] readLongBlock:&aValue
 								atAddress:[self baseAddress]+[self getAddressOffset:kCounter0] + (i*0x04)
 								numToRead:1
@@ -529,7 +529,7 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
 				if(numEvents == 0)NSLog(@"No Events\n");
 				else {
 					NSLog(@"%d events in buffer. First Event:\n",numEvents);
-					unsigned long aValue;
+					uint32_t aValue;
 					[[self adapter] readLongBlock:&aValue
 										atAddress:[self baseAddress]+[self getAddressOffset:kEventBuffer]
 										numToRead:1
@@ -550,7 +550,7 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
 					for(i=0;i<1;i++){
 						int j;
 						for(j=0;j<numEntriesPerEvent;j++){
-							unsigned long aValue;
+							uint32_t aValue;
 							[[self adapter] readLongBlock:&aValue
 												atAddress:[self baseAddress]+[self getAddressOffset:kEventBuffer]
 												numToRead:1
@@ -570,7 +570,7 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
 			else NSLog(@"Nothing in Buffer\n");
 		}
 		else {
-			unsigned long 	theValue   = 0;
+			uint32_t 	theValue   = 0;
 			[self read:theRegIndex returnValue:&theValue];
 			NSLog(@"CAEN reg [%@]:0x%08lx\n", [self getRegisterName:theRegIndex], theValue);
 		}
@@ -594,7 +594,7 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
 
 - (void) writeEnabledMask
 {
-	unsigned long aValue = enabledMask;
+	uint32_t aValue = enabledMask;
     [[self adapter] writeLongBlock:&aValue
 						atAddress:[self baseAddress]+[self getAddressOffset:kChannelEnable]
 						numToWrite:1
@@ -640,7 +640,7 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
 	
 	NSLog(@"Status of %@:\n",[self fullID]);
 	if(aValue & (0x1L << 0)){
-		unsigned long n = [self getNumEvents];
+		uint32_t n = [self getNumEvents];
 		NSLog(@"Data Ready is Set. %d event%@ in the event buffer\n",n,n>1?@"s":@"");
 	}
 	else NSLog(@"No events in buffer\n");
@@ -665,7 +665,7 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
 
 - (void) writeDwellTime
 {
-	unsigned long aValue = dwellTime;
+	uint32_t aValue = dwellTime;
 	
     [[self adapter] writeLongBlock:&aValue
 						 atAddress:[self baseAddress]+[self getAddressOffset:kDwellTime]
@@ -725,14 +725,14 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
     [self setPolledDataId:[anotherObj polledDataId]];
 }
 
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
 
-- (unsigned long) polledDataId { return polledDataId; }
-- (void) setPolledDataId: (unsigned long) DataId
+- (uint32_t) polledDataId { return polledDataId; }
+- (void) setPolledDataId: (uint32_t) DataId
 {
     polledDataId = DataId;
 }
@@ -831,7 +831,7 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
                     if(dataRecord[4]<lastChan0Count){
                         chan0RollOverCount++;
                     }
-                    long long final = (chan0RollOverCount << 32) | dataRecord[4];
+                    int64_t final = (chan0RollOverCount << 32) | dataRecord[4];
                     final += count0Offset;
 
                     lastChan0Count = dataRecord[4];

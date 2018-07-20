@@ -91,7 +91,7 @@
 
 #pragma mark ***Data Source
 - (int)	numberPointsInPlot:(id)aPlotter;
-- (void) plotter:(id)aPlotter index:(unsigned long)index x:(double*)xValue y:(double*)yValue;
+- (void) plotter:(id)aPlotter index:(uint32_t)index x:(double*)xValue y:(double*)yValue;
 - (BOOL) plotter:(id)aPlotter crossHairX:(double*)xValue crossHairY:(double*)yValue;
 
 @end

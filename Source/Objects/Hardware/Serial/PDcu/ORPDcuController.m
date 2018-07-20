@@ -184,7 +184,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"DCU (%lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"DCU (%u)",[model uniqueIdNumber]]];
 }
 
 - (void) updateWindow

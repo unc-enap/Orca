@@ -33,7 +33,7 @@
 //                    ^^^^----------------channel
 //                         ^^^^ ^^^^ ^^^^-adc value
 
-//long form:
+//int32_t form:
 //------------------------------------------------------------------
 //xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 //^^^^ ^^^^ ^^^^ ^^-----------------------data id
@@ -62,10 +62,10 @@
     [super dealloc];
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long length;
-    unsigned long* ptr = (unsigned long*)someData;
+    uint32_t length;
+    uint32_t* ptr = (uint32_t*)someData;
     if(IsShortForm(*ptr))	length = 1;
     else					length= ExtractLength(ptr[0]);
     
@@ -103,10 +103,10 @@
     return length; //must return number of bytes processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)someData
+- (NSString*) dataRecordDescription:(uint32_t*)someData
 {
-    unsigned long length;
-    unsigned long* ptr = (unsigned long*)someData;
+    uint32_t length;
+    uint32_t* ptr = (uint32_t*)someData;
     if(IsShortForm(*ptr))	length = 1;
     else					length= ExtractLength(ptr[0]);
 	
@@ -121,7 +121,7 @@
     NSString* crateName = [NSString stringWithFormat:@"Crate = %d\n",crate];
     NSString* cardName  = [NSString stringWithFormat:@"Card  = %d\n",card];
     NSString* channame  = [NSString stringWithFormat:@"Chan  = %d\n",channel];
-    NSString* adc       = [NSString stringWithFormat:@"ADC   = 0x%lx\n",ptr[dataOffset]&0x00000fff];
+    NSString* adc       = [NSString stringWithFormat:@"ADC   = 0x%x\n",ptr[dataOffset]&0x00000fff];
     
 	NSString* timeString = @"No Time Stamp\n";
 	if(length==4){
@@ -130,7 +130,7 @@
         [dateFormatter setDateFormat:@"d MMM yyyy HH:mm:ss"];
         [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
         NSString *dateString = [dateFormatter stringFromDate:timeStamp];
-		timeString = [NSString stringWithFormat:@"%@ GMT\n sub-secs: %lu\n",dateString,ptr[3]];
+		timeString = [NSString stringWithFormat:@"%@ GMT\n sub-secs: %u\n",dateString,ptr[3]];
 	}
 	
     return [NSString stringWithFormat:@"%@%@%@%@%@%@",title,crateName,cardName,channame,adc,timeString];               
@@ -140,17 +140,17 @@
 @end
 
 @implementation ORShaperDecoderForScalers
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr   = (unsigned long*)someData;
-    unsigned long length;
+    uint32_t* ptr   = (uint32_t*)someData;
+    uint32_t length;
     length = ExtractLength(ptr[0]);
     
-    NSString* gtidString = [NSString stringWithFormat:@"%lu",ptr[1]];
+    NSString* gtidString = [NSString stringWithFormat:@"%u",ptr[1]];
     
     short crate = (ptr[2] & 0x1e000000)>>25;
     short card  = (ptr[2] & 0x01f00000)>>20;
-    NSString* globalScaler = [NSString stringWithFormat:@"%lu",ptr[3]];
+    NSString* globalScaler = [NSString stringWithFormat:@"%u",ptr[3]];
 	NSString* crateKey = [self getCrateKey: crate];
 	NSString* cardKey = [self getCardKey: card];
     [aDataSet loadGenericData:gtidString sender:self withKeys:@"Scalers",@"Shaper",  crateKey,cardKey,@"GTID",nil];
@@ -166,7 +166,7 @@
         NSString* cardKey = [self getCardKey: card];
         NSString* channelKey = [self getChannelKey: channel];
         
-        NSString* scaler = [NSString stringWithFormat:@"%lu",ptr[index]&0x0000ffff];
+        NSString* scaler = [NSString stringWithFormat:@"%u",ptr[index]&0x0000ffff];
         [aDataSet loadGenericData:scaler sender:self withKeys:@"Scalers",@"Shaper", crateKey,cardKey,channelKey,nil];
         index++;
 
@@ -175,22 +175,22 @@
     return length;
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
-    unsigned long length = (ptr[0] & 0x003ffff);
+    uint32_t length = (ptr[0] & 0x003ffff);
 
     NSString* title= @"Shaper Scaler Record\n\n";
     
-    NSString* gtid  = [NSString stringWithFormat:@"GTID  = %lu\n",ptr[1]];
-    NSString* crate = [NSString stringWithFormat:@"Crate = %lu\n",(ptr[2] & 0x1e000000)>>25];
-    NSString* card  = [NSString stringWithFormat:@"Card  = %lu\n",(ptr[2] & 0x01f00000)>>20];
-    NSString* global= [NSString stringWithFormat:@"Total = %lu\n",ptr[3]];
+    NSString* gtid  = [NSString stringWithFormat:@"GTID  = %u\n",ptr[1]];
+    NSString* crate = [NSString stringWithFormat:@"Crate = %u\n",(ptr[2] & 0x1e000000)>>25];
+    NSString* card  = [NSString stringWithFormat:@"Card  = %u\n",(ptr[2] & 0x01f00000)>>20];
+    NSString* global= [NSString stringWithFormat:@"Total = %u\n",ptr[3]];
     NSString* subTitle =@"\nScalers by Card,Chan\n\n";
    
     short index = 4;
     NSString* restOfString = @"";
     do {
-        restOfString = [restOfString stringByAppendingFormat:@"%2lu,%2lu  = %lu\n",(ptr[index] & 0x01f00000)>>20,(ptr[index] & 0x000f0000)>>16,ptr[index]&0x0000ffff];
+        restOfString = [restOfString stringByAppendingFormat:@"%2u,%2u  = %u\n",(ptr[index] & 0x01f00000)>>20,(ptr[index] & 0x000f0000)>>16,ptr[index]&0x0000ffff];
         index++;
     }while(index < length);
 
@@ -205,17 +205,17 @@
 //ARGGGGGG -- because of a cut/paste error some data around jan '07 gat taken with a bugus decoder name
 //temp insert this decoder so the data can be replayed.
 @implementation ORShaperDecoderFORAxisrs
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr   = (unsigned long*)someData;
-    unsigned long length;
+    uint32_t* ptr   = (uint32_t*)someData;
+    uint32_t length;
     length = ExtractLength(ptr[0]);
     
-    NSString* gtidString = [NSString stringWithFormat:@"%lu",ptr[1]];
+    NSString* gtidString = [NSString stringWithFormat:@"%u",ptr[1]];
     
     short crate = (ptr[2] & 0x1e000000)>>25;
     short card  = (ptr[2] & 0x01f00000)>>20;
-    NSString* globalScaler = [NSString stringWithFormat:@"%lu",ptr[3]];
+    NSString* globalScaler = [NSString stringWithFormat:@"%u",ptr[3]];
 	NSString* crateKey = [self getCrateKey: crate];
 	NSString* cardKey = [self getCardKey: card];
     [aDataSet loadGenericData:gtidString sender:self withKeys:@"Scalers",@"Shaper",  crateKey,cardKey,@"GTID",nil];
@@ -231,7 +231,7 @@
         NSString* cardKey = [self getCardKey: card];
         NSString* channelKey = [self getChannelKey: channel];
         
-        NSString* scaler = [NSString stringWithFormat:@"%lu",ptr[index]&0x0000ffff];
+        NSString* scaler = [NSString stringWithFormat:@"%u",ptr[index]&0x0000ffff];
         [aDataSet loadGenericData:scaler sender:self withKeys:@"Scalers",@"Shaper", crateKey,cardKey,channelKey,nil];
         index++;
 
@@ -240,22 +240,22 @@
     return length;
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
-    unsigned long length = (ptr[0] & 0x003ffff);
+    uint32_t length = (ptr[0] & 0x003ffff);
 
     NSString* title= @"Shaper Scaler Record\n\n";
     
-    NSString* gtid  = [NSString stringWithFormat:@"GTID  = %lu\n",ptr[1]];
-    NSString* crate = [NSString stringWithFormat:@"Crate = %lu\n",(ptr[2] & 0x1e000000)>>25];
-    NSString* card  = [NSString stringWithFormat:@"Card  = %lu\n",(ptr[2] & 0x01f00000)>>20];
-    NSString* global= [NSString stringWithFormat:@"Total = %lu\n",ptr[3]];
+    NSString* gtid  = [NSString stringWithFormat:@"GTID  = %u\n",ptr[1]];
+    NSString* crate = [NSString stringWithFormat:@"Crate = %u\n",(ptr[2] & 0x1e000000)>>25];
+    NSString* card  = [NSString stringWithFormat:@"Card  = %u\n",(ptr[2] & 0x01f00000)>>20];
+    NSString* global= [NSString stringWithFormat:@"Total = %u\n",ptr[3]];
     NSString* subTitle =@"\nScalers by Card,Chan\n\n";
    
     short index = 4;
     NSString* restOfString = @"";
     do {
-        restOfString = [restOfString stringByAppendingFormat:@"%2lu,%2lu  = %lu\n",(ptr[index] & 0x01f00000)>>20,(ptr[index] & 0x000f0000)>>16,ptr[index]&0x0000ffff];
+        restOfString = [restOfString stringByAppendingFormat:@"%2u,%2u  = %u\n",(ptr[index] & 0x01f00000)>>20,(ptr[index] & 0x000f0000)>>16,ptr[index]&0x0000ffff];
         index++;
     }while(index < length);
 

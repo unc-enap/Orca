@@ -41,8 +41,8 @@
 - (BOOL) checkConnection;
 - (NSString *) quoteObject:(id) theObject;
 - (ORSqlResult*) queryString:(NSString *) query;
-- (unsigned long long) affectedRows;
-- (unsigned long long) insertId;
+- (uint64_t) affectedRows;
+- (uint64_t) insertId;
 - (ORSqlResult *)listDBs;
 - (ORSqlResult*) listTables;
 - (ORSqlResult*) listTablesFromDB:(NSString *) dbName;
@@ -54,7 +54,7 @@
 - (ORSqlResult*) listProcesses;
 - (BOOL)createDBWithName:(NSString *)dbName;
 //- (BOOL)dropDBWithName:(NSString *)dbName;
-- (BOOL) killProcess:(unsigned long) pid;
+- (BOOL) killProcess:(uint32_t) pid;
 @end
 
 //a thin wrapper around NSOperationQueue to make a shared queue for Sql access

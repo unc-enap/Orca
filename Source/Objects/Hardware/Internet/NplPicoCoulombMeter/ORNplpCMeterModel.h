@@ -37,7 +37,7 @@
     NSString* ipAddress;
     BOOL isConnected;
 	NetSocket* socket;
-    unsigned long dataId;
+    uint32_t dataId;
 	NSMutableData* meterData;
 	int frameError;
 	ORQueue* dataStack[kNplpCNumChannels];
@@ -62,8 +62,8 @@
 - (void) setIsConnected:(BOOL)aFlag;
 - (NSString*) ipAddress;
 - (void) setIpAddress:(NSString*)aIpAddress;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) aDataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) aDataId;
 - (void) appendMeterData:(NSData*)someData;
 - (BOOL) validateMeterData;
 - (void) averageMeterData;

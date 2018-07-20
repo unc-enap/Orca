@@ -1053,7 +1053,7 @@ static void _cfsocketCallback( CFSocketRef inCFSocketRef, CFSocketCallBackType i
 			[mDelegate netsocketDataSent:self length:amountSent];
         }
     }
-    unsigned long len = [mOutgoingBuffer length];
+    uint32_t len = [mOutgoingBuffer length];
     if((mBufferStatus!=mOldBufferStatus) || (len != mOldAmountInBuffer)){
         if( [mDelegate respondsToSelector:@selector( netsocket:status: )] ){
             [mDelegate netsocket:self status:mBufferStatus];

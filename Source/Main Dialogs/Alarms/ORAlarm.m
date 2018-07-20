@@ -260,7 +260,7 @@ NSString* severityName[kNumAlarmSeverityTypes] = {
     [dateFormatter setTimeZone:gmt];
     NSString*   lastTimeStamp       = [dateFormatter stringFromDate:timePosted];
     NSDate*     gmtTime             = [dateFormatter dateFromString:lastTimeStamp];
-    unsigned long secondsSince1970  = [gmtTime timeIntervalSince1970];
+    uint32_t secondsSince1970  = [gmtTime timeIntervalSince1970];
     [dateFormatter release];
 
     

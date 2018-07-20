@@ -26,19 +26,19 @@
         [[ORCommandCenter sharedCommandCenter] handleCommand:[socket readString:NSASCIIStringEncoding amount:inAmount] fromClient:self];
     }
 }
-- (void) setAmountBlocked:(unsigned long long)numBytes
+- (void) setAmountBlocked:(uint64_t)numBytes
 {
     amountBlocked += numBytes;
 }
 
-- (unsigned long long)amountBlocked
+- (uint64_t)amountBlocked
 {
     return amountBlocked;
 }
 
 - (float)percentBlocked
 {
-    unsigned long long sent = [self totalSent];
+    uint64_t sent = [self totalSent];
     if((sent+amountBlocked)!=0)return (float)(100 - 100*sent/(double)(sent + amountBlocked));
     else return 0;
 }

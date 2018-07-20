@@ -94,7 +94,7 @@
 - (void)	 setDwellArray:(NSArray *)aDeltaArray;
 
 #pragma mark ¥¥¥hardware access
-- (long) motorPosition;
+- (int32_t) motorPosition;
 - (BOOL) motorRunning;
 - (BOOL) motorAtEndPosition;
 - (BOOL) motorAtStartPosition;
@@ -127,7 +127,7 @@
 
 @interface MotorStartSweepState  : MotorSweepState {} @end
 @interface MotorDwellSweepState  : MotorSweepState {ORTimer* dwellTimer;} @end
-@interface MotorAdvancingSweepState  : MotorSweepState {long count;} @end
+@interface MotorAdvancingSweepState  : MotorSweepState {int32_t count;} @end
 @interface MotorStepDoneState  : MotorSweepState {} @end
 @interface MotorEndSweepState    : MotorSweepState {} @end
 @interface MotorMovingToStartSweepState    : MotorSweepState {} @end

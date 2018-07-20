@@ -186,7 +186,7 @@
 {
 	[patternInhibitField setIntValue:[model patternInhibit]];		
 	short i;
-	unsigned long theMask = [model patternInhibit];
+	uint32_t theMask = [model patternInhibit];
 	for(i=0;i<16;i++){
 		[[inhibitMaskMatrix cellWithTag:i] setIntValue:(theMask&(1<<i))!=0];
 	}

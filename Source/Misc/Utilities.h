@@ -28,7 +28,7 @@
 
 #import <IOKit/IOKitLib.h>
 
-long 	convertTimeCharToLong( char* aTime );
+int32_t 	convertTimeCharToLong( char* aTime );
 void	convertTimeLongToChar( time_t aTime, char *pTime );
 id		ORKeyFromId(id anObj);
 int		random_range(int lowest_number, int highest_number);
@@ -39,7 +39,7 @@ NSString* methodsInCommonSection(id anObj);
 NSString* listMethods(Class aClass);
 NSString* listMethodWithOptions(Class aClass,BOOL verbose,BOOL includeSuperClass);
 NSString* listMethodWithExtendedOptions(Class aClass,BOOL verbose,BOOL includeSuperClass,BOOL sort);
-NSString* hexToString(unsigned long aHexValue);
+NSString* hexToString(uint32_t aHexValue);
 const char* decodeType(const char* aType);
 NSString* macAddress(void);
 NSString* computerName(void);

@@ -230,7 +230,7 @@ NSString* ORSIS3305ModelRegisterWriteValueChanged = @"ORSIS3305ModelRegisterWrit
 #pragma mark - Static Declarations
 //offsets from the base address
 typedef struct {
-	unsigned long offset;
+	uint32_t offset;
 	NSString* name;
     BOOL canRead;
     BOOL canWrite;
@@ -513,7 +513,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 - (float) getTemperature
 {
-    unsigned long value = [self readTemperature:NO];
+    uint32_t value = [self readTemperature:NO];
     float temp = tempRawToC(value&0x3FF);
     
     return temp;
@@ -540,12 +540,12 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     [[NSNotificationCenter defaultCenter] postNotificationName:ORSIS3305ModelRegisterIndexChanged object:self];
 }
 
-- (unsigned long) registerWriteValue
+- (uint32_t) registerWriteValue
 {
     return registerWriteValue;
 }
 
-- (void) setRegisterWriteValue:(unsigned long)aWriteValue
+- (void) setRegisterWriteValue:(uint32_t)aWriteValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setRegisterWriteValue:registerWriteValue];
     registerWriteValue = aWriteValue;
@@ -1325,12 +1325,12 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 ////    return (gtMask & (1L<<bit)) != 0;
 //}
 
-- (unsigned long) sampleStartAddress:(unsigned short)group
+- (uint32_t) sampleStartAddress:(unsigned short)group
 {
     return sampleStartAddress[group];
 }
 
-- (void) setSampleStartAddress:(unsigned short)group toValue:(unsigned long)value
+- (void) setSampleStartAddress:(unsigned short)group toValue:(uint32_t)value
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setSampleStartAddress:group toValue:[self sampleStartAddress:group]];
     
@@ -1341,11 +1341,11 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 
 
-- (unsigned long) sampleLength:(short)group {
+- (uint32_t) sampleLength:(short)group {
     return [[sampleLengths objectAtIndex:group] unsignedLongValue];
 }
 
-- (void) setSampleLength:(short)group withValue:(unsigned long)aValue
+- (void) setSampleLength:(short)group withValue:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setSampleLength:group withValue:[self sampleLength:group]];
 
@@ -1416,11 +1416,11 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 }
 
 
-- (unsigned long) adcOffset:(unsigned short)chan{
+- (uint32_t) adcOffset:(unsigned short)chan{
     return adcOffset[chan];
 }
 
-- (void) setAdcOffset:(unsigned short)chan toValue:(unsigned long)value
+- (void) setAdcOffset:(unsigned short)chan toValue:(uint32_t)value
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setAdcOffset:chan toValue:adcOffset[chan]];
     
@@ -1432,11 +1432,11 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 }
 
-- (unsigned long) adcGain:(unsigned short)chan{
+- (uint32_t) adcGain:(unsigned short)chan{
     return adcGain[chan];
 }
 
-- (void) setAdcGain:(unsigned short)chan toValue:(unsigned long)value
+- (void) setAdcGain:(unsigned short)chan toValue:(uint32_t)value
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setAdcGain:chan toValue:adcGain[chan]];
     
@@ -1448,11 +1448,11 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     
 }
 
-- (unsigned long) adcPhase:(unsigned short)chan{
+- (uint32_t) adcPhase:(unsigned short)chan{
     return adcPhase[chan];
 }
 
-- (void) setAdcPhase:(unsigned short)chan toValue:(unsigned long)value
+- (void) setAdcPhase:(unsigned short)chan toValue:(uint32_t)value
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setAdcPhase:chan toValue:adcPhase[chan]];
     
@@ -1777,7 +1777,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     [waveFormRateGroup setIntegrationTime:newIntegrationTime];
 }
 
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
 {
 	if(groupTag == 0){
 		if(counterTag>=0 && counterTag<kNumSIS3305Channels){
@@ -1931,7 +1931,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
    
 }
 
-- (unsigned long) endAddressThreshold:(short)aGroup  
+- (uint32_t) endAddressThreshold:(short)aGroup  
 {
     /*
         The end address threshold indicates when a group has reached the end od one of its memory banks and has stopped sampling. I have no idea why you should ever write to it.
@@ -1942,7 +1942,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 	return [[endAddressThresholds objectAtIndex:aGroup] intValue]; 
 }
 
-- (void) setEndAddressThreshold:(short)aGroup withValue:(unsigned long)aValue 
+- (void) setEndAddressThreshold:(short)aGroup withValue:(uint32_t)aValue 
 {
 	[[[self undoManager] prepareWithInvocationTarget:self] setEndAddressThreshold:aGroup withValue:[self endAddressThreshold:aGroup]];
 	[endAddressThresholds replaceObjectAtIndex:aGroup withObject:[NSNumber numberWithInteger:aValue]];
@@ -1978,8 +1978,8 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 //			eventLengthLongWords = eventLengthLongWords + numRawDataLongWords  ;  
 //			eventLengthLongWords = eventLengthLongWords + numEnergyValues  ;   
 //			
-//			unsigned long maxEvents = (0x200000 / eventLengthLongWords)/2;
-//			//unsigned long maxEvents = 1;
+//			uint32_t maxEvents = (0x200000 / eventLengthLongWords)/2;
+//			//uint32_t maxEvents = 1;
 //			[self setEndAddressThreshold:group withValue:maxEvents*eventLengthLongWords];
 //			// Check the sample indices
 //			// Don't call setEnergy* from in here!  Cause stack overflow...
@@ -2030,11 +2030,11 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 #pragma mark Setup for register R/W in dialog
 
-- (unsigned long) readRegister:(unsigned int)index
+- (uint32_t) readRegister:(unsigned int)index
 {
     if (index >= kNumSIS3305ReadRegs) return -1;
     if (![self canReadRegister:index]) return -1;
-    unsigned long theValue = 0;
+    uint32_t theValue = 0;
     [[self adapter] readLongBlock:&theValue
                         atAddress:[self baseAddress] + register_information[index].offset
                         numToRead:1
@@ -2043,7 +2043,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return theValue;
 }
 
-- (void) writeRegister:(unsigned int)index withValue:(unsigned long)value
+- (void) writeRegister:(unsigned int)index withValue:(uint32_t)value
 {
     if (index >= kNumSIS3305ReadRegs) return;
     if (![self canWriteRegister:index]) return;
@@ -2054,7 +2054,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
                      usingAddSpace:0x01];
 }
 
-- (void) writeToAddress:(unsigned long)anAddress aValue:(unsigned long)aValue
+- (void) writeToAddress:(uint32_t)anAddress aValue:(uint32_t)aValue
 {
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + anAddress
@@ -2064,9 +2064,9 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     
 }
 
-- (unsigned long) readFromAddress:(unsigned long)anAddress
+- (uint32_t) readFromAddress:(uint32_t)anAddress
 {
-    unsigned long value = 0;
+    uint32_t value = 0;
     [[self adapter] readLongBlock:&value
                         atAddress:[self baseAddress] + anAddress
                         numToRead:1
@@ -2097,7 +2097,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
      The CSRMask puts a negative as a positive in the top 16 of the word,
      or keeps a positive in the bottom 16.
      */
-    unsigned long value = 0;
+    uint32_t value = 0;
     
     value |= CSRMask([self ledApplicationMode],                         3);
     value |= CSRMask([self enableExternalLEMODirectVetoIn],             4);
@@ -2125,7 +2125,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 - (void) writeLed1:(BOOL)state
 {
     state = state << 0;
-    unsigned long aValue = CSRMask(state,kSISLed1);
+    uint32_t aValue = CSRMask(state,kSISLed1);
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kSIS3305ControlStatus
                         numToWrite:1
@@ -2135,8 +2135,8 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 - (void) writeLed:(short)ledNum to:(BOOL)state
 {
-    unsigned long addr = 0;
-    unsigned long value = 0;
+    uint32_t addr = 0;
+    uint32_t value = 0;
     
     switch (ledNum) {
         case 1:
@@ -2173,7 +2173,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     //          U3 - indicates that data sampling logic is enabled
     
     BOOL state = ledApplicationMode;
-    unsigned long aValue = CSRMask(state,0x8);     // NEED to check if this makes sense and works...
+    uint32_t aValue = CSRMask(state,0x8);     // NEED to check if this makes sense and works...
     
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kSIS3305ControlStatus
@@ -2188,13 +2188,13 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 - (void) readModuleID:(BOOL)verbose
 {	
-	unsigned long result = 0;
+	uint32_t result = 0;
 	[[self adapter] readLongBlock:&result
 						atAddress:[self baseAddress] + kSIS3305ModID
                         numToRead:1
 					   withAddMod:[self addressModifier]
 					usingAddSpace:0x01];
-	unsigned long moduleID = result >> 16;
+	uint32_t moduleID = result >> 16;
 	unsigned short majorRev = (result >> 8) & 0xff;
 	unsigned short minorRev = result & 0xff;
 	NSString* s = [NSString stringWithFormat:@"%x.%x",majorRev,minorRev];
@@ -2206,11 +2206,11 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     [[NSNotificationCenter defaultCenter] postNotificationName:ORSIS3305IDChanged object:self];
 }
 
-- (unsigned long) readInterruptConfig:(BOOL)verbose
+- (uint32_t) readInterruptConfig:(BOOL)verbose
 {
     // Interrupt config register is at 0x8, and is read/write D32
     
-    unsigned long value;
+    uint32_t value;
     
     [[self adapter] readLongBlock:&value
                         atAddress:[self baseAddress] + kSIS3305IrqConfig
@@ -2227,7 +2227,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 }
 
-- (void) writeInterruptConfig:(unsigned long)value
+- (void) writeInterruptConfig:(uint32_t)value
 {
     // Interrupt config register is at 0x8, and is read/write D32
     
@@ -2239,11 +2239,11 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return;
 }
 
-- (unsigned long) readInterruptControl:(BOOL)verbose
+- (uint32_t) readInterruptControl:(BOOL)verbose
 {
     // Interrupt control register is at 0xC, and is read/write D32
     
-    unsigned long value;
+    uint32_t value;
     
     [[self adapter] readLongBlock:&value
                         atAddress:[self baseAddress] + kSIS3305IrqControl
@@ -2260,7 +2260,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 }
 
 
-- (void) writeInterruptControl:(unsigned long)value
+- (void) writeInterruptControl:(uint32_t)value
 {
     // Interrupt control register is at 0xC, and is read/write D32
 
@@ -2274,14 +2274,14 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 #pragma mark -- Acquisition control regs
 
-- (unsigned long) readAcquisitionControl:(BOOL)verbose
+- (uint32_t) readAcquisitionControl:(BOOL)verbose
 {
     // Acquisition control register is at 0x10, and is read/write
     // This register sets up most od the config for the digitization process
     // It is set up in a J/K fashion for writing
     
     
-    unsigned long aValue = 0;
+    uint32_t aValue = 0;
     
     [[self adapter] readLongBlock:&aValue
                         atAddress:[self baseAddress] + kSIS3305AcquisitionControl
@@ -2355,7 +2355,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
      
      */
     
-    unsigned long aMask = 0x0;
+    uint32_t aMask = 0x0;
     
     aMask |= ((clockSource & 0x1)<< 12);
     aMask |= ((TDCMeasurementEnabled & 0x1) << 4);
@@ -2371,7 +2371,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 }
 
 
-- (void) writeClockSource:(unsigned long)aState
+- (void) writeClockSource:(uint32_t)aState
 {
     /*
      
@@ -2394,12 +2394,12 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 #pragma mark -- More regs
 
-- (unsigned long) readVetoLength:(BOOL)verbose
+- (uint32_t) readVetoLength:(BOOL)verbose
 {
     // Register 0x14 R/W
     // Defines a veto length, which is used if the external LEMO veto Delay/Length logis is enabled in the control reg
     
-    unsigned long value = 0;
+    uint32_t value = 0;
     
     [[self adapter] readLongBlock:&value
                         atAddress:[self baseAddress] + kSIS3305VetoLength
@@ -2413,16 +2413,16 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return value;
 }
 
-- (void) writeVetoLength:(unsigned long)timeInNS
+- (void) writeVetoLength:(uint32_t)timeInNS
 {
     // Register 0x14 R/W
     // Defines a veto length, which is used if the external LEMO veto Delay/Length logis is enabled in the control reg
     // probably the amount of time between veto signal and a trigger that would prevent trigger from causing readout
     // time is: (reg value + 1)*20 in nanoseconds
     //      so the minumum veto time is 20 ns
-    // FIX: may exceed unsigned long if being silly here
+    // FIX: may exceed uint32_t if being silly here
     
-    unsigned long value = (timeInNS/20)-1;
+    uint32_t value = (timeInNS/20)-1;
     
     [[self adapter] writeLongBlock:&value
                          atAddress:[self baseAddress] + kSIS3305VetoLength
@@ -2432,13 +2432,13 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     
 }
 
-- (unsigned long) readVetoDelay:(BOOL)verbose
+- (uint32_t) readVetoDelay:(BOOL)verbose
 {
     // Register 0x18 R/W
     // Defines a veto delay, which is used if the external LEMO veto Delay/Length logis is enabled in the control reg
     // presumably this is the amount of time after receiving the LEMO signal when the VETO actually occurs
     
-    unsigned long value = 0;
+    uint32_t value = 0;
     
     [[self adapter] readLongBlock:&value
                         atAddress:[self baseAddress] + kSIS3305VetoDelayLength
@@ -2452,13 +2452,13 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return value;
 }
 
-- (void) writeVetoDelay:(unsigned long)timeInNS
+- (void) writeVetoDelay:(uint32_t)timeInNS
 {
     // Register 0x18 R/W
     // Defines a veto delay, which is used if the external LEMO veto Delay/Length logis is enabled in the control reg
     // presumably this is the amount of time after receiving the LEMO signal when the VETO actually occurs
     
-    unsigned long value = (timeInNS/20)-1;
+    uint32_t value = (timeInNS/20)-1;
     
     [[self adapter] writeLongBlock:&value
                          atAddress:[self baseAddress] + kSIS3305VetoDelayLength
@@ -2470,13 +2470,13 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 
 
-- (unsigned long) EEPROMControlwithCommand:(short)command andAddress:(short)addr andData:(unsigned int)data
+- (uint32_t) EEPROMControlwithCommand:(short)command andAddress:(short)addr andData:(unsigned int)data
 {
     // Register 0x28 R/W
     // Accesses the 2kBit onboard EEPROM (128 words * 16 bits)
     
-    unsigned long writeValue = 0;       // full register to write
-    unsigned long readValue = 0;        // returned value
+    uint32_t writeValue = 0;       // full register to write
+    uint32_t readValue = 0;        // returned value
     writeValue = (data>>0) | (addr>>16) | (command>>24);
 
     
@@ -2523,15 +2523,15 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return readValue;
 }
 
-- (unsigned long) onewireControlwithCommand:(short)command andData:(unsigned int)data
+- (uint32_t) onewireControlwithCommand:(short)command andData:(unsigned int)data
 {
     // at 0x2C R/w D32
     // FIX: Not really sure what to do with this, since it seems like it should take a 5 bit address, but
     // there isn't one.
     // I will minimally implement this... writes the command and data provided, then returns whatever is read out
     
-    unsigned long writeValue = 0;
-    unsigned long readValue = 0;
+    uint32_t writeValue = 0;
+    uint32_t readValue = 0;
     
     writeValue = data | command<<8;
     
@@ -2551,13 +2551,13 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return readValue;
 }
 
-- (unsigned long) readBroadcastSetup:(bool)verbose
+- (uint32_t) readBroadcastSetup:(bool)verbose
 {
     // at 0x30
     // FIX: since I haven't implemented the write method for this register, we can't setup broadcast yet...
-    unsigned long value;
+    uint32_t value;
     BOOL bEnabled,bMaster;
-    unsigned long bAddr;
+    uint32_t bAddr;
     
     [[self adapter] readLongBlock:&value
                         atAddress:[self baseAddress] + kSIS3305CbltBroadcastSetup
@@ -2579,11 +2579,11 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return value;
 }
 
-- (unsigned long) readLEMOTriggerOutSelect
+- (uint32_t) readLEMOTriggerOutSelect
 {
     // 0x40
     // writing to this register picks which items will be OR-ed together to appear on the LEMO trigger out
-    unsigned long value;
+    uint32_t value;
     
     [[self adapter] readLongBlock:&value
                         atAddress:[self baseAddress] + kSIS3305TriggerOutSelectReg
@@ -2594,7 +2594,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 }
 
 
-- (void) writeLEMOTriggerOutSelect:(unsigned long)value
+- (void) writeLEMOTriggerOutSelect:(uint32_t)value
 {
     // 0x40
     // writing to this register picks which items will be OR-ed together to appear on the LEMO trigger out
@@ -2609,7 +2609,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 - (void) writeLEMOTriggerOutSelect
 {
-    unsigned long writeValue = 0;
+    uint32_t writeValue = 0;
     unsigned short chan;
     
     for (chan = 0; chan<kNumSIS3305Channels; chan++) {
@@ -2632,14 +2632,14 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 }
 
 
-- (unsigned long) readExternalTriggerCounter
+- (uint32_t) readExternalTriggerCounter
 {
     // at 0x4C, Read only D32
     
     // A 32-bit counter which will be cleared if "Sample Logic or TDC Measurement logic" is disabled
     // It is incremented with ech External trigger IN signal IF the Sample Logic AND TDC Measurement Logic are enabled
     
-    unsigned long value;
+    uint32_t value;
     
     [[self adapter] readLongBlock:&value
                         atAddress:[self baseAddress] + kSIS3305ExternalTriggerCounter
@@ -2652,12 +2652,12 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 #pragma mark --- TDC Regs
 
-- (unsigned long) readTDCWrite:(BOOL)verbose
+- (uint32_t) readTDCWrite:(BOOL)verbose
 {
     
     // Despite the confusing name, there is a TDC Write reg 0x50, which can be read. This returns that value
  
-    unsigned long value;
+    uint32_t value;
     
     [[self adapter] readLongBlock:&value
                         atAddress:[self baseAddress] + kSIS3305TDCWriteCmdReg
@@ -2678,11 +2678,11 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return value;
 }
 
-- (void) writeTDCWriteWithData:(unsigned long)data atAddress:(unsigned short)addr
+- (void) writeTDCWriteWithData:(uint32_t)data atAddress:(unsigned short)addr
 {
     // Despite the confusing name, there is a TDC Write reg 0x50, which can be read. This returns that value
 
-    unsigned long writeValue = 0;
+    uint32_t writeValue = 0;
 
     writeValue = data | addr<<28;
     
@@ -2697,12 +2697,12 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 
 
-- (unsigned long) readTDCRead:(BOOL)verbose
+- (uint32_t) readTDCRead:(BOOL)verbose
 {
     
     // Despite the confusing name, there is a TDC Read reg 0x54, which can be read. This returns that value
     
-    unsigned long value;
+    uint32_t value;
     
     [[self adapter] readLongBlock:&value
                         atAddress:[self baseAddress] + kSIS3305TDCWriteCmdReg
@@ -2729,7 +2729,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     // This writes the address to read
     
     
-    unsigned long writeValue = 0;
+    uint32_t writeValue = 0;
     
     writeValue = addr<<28;
     
@@ -2741,7 +2741,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return;
 }
 
-- (unsigned long) readTDCStartStopEnable:(BOOL)verbose
+- (uint32_t) readTDCStartStopEnable:(BOOL)verbose
 {
     // reads 0x58, the TDC Start/Stop Enable Register
     // Only 3 bits to write or read
@@ -2749,7 +2749,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     // Bit 1: TDC Stop1 Enable
     // Bit 2: TCD Stop2 Enable
     
-    unsigned long value;
+    uint32_t value;
     
     [[self adapter] readLongBlock:&value
                         atAddress:[self baseAddress] + kSIS3305TDCStartStopEnableReg
@@ -2767,7 +2767,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return value;
 }
 
-- (void) writeTDCStartStopEnable:(unsigned long)value
+- (void) writeTDCStartStopEnable:(uint32_t)value
 {
     // TDC Start/Stop Enable register 0x58
     // Only 3 bits to write or read
@@ -2794,7 +2794,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     // TCK is generated on each write
     // This register will probably not be used, since it may just be easier to plug in directly and use the JTAG port
     
-    unsigned long value = 0;
+    uint32_t value = 0;
     
     value = tdi | 2*tms;
     
@@ -2806,13 +2806,13 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return;
 }
 
-- (unsigned long) readXilinxJTAGDataIn
+- (uint32_t) readXilinxJTAGDataIn
 {
     
     // Also at 0x60, but read-only D32
     // Bit 31 contains the most recent TDO, and each TCK the value shifts right one (to 30, etc) as a shift reg
     
-    unsigned long value;
+    uint32_t value;
     
     [[self adapter] readLongBlock:&value
                     atAddress:[self baseAddress] + kSIS3305XilinxJTAGDataIn
@@ -2828,14 +2828,14 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 
 
-- (unsigned long) readTemperature:(BOOL)verbose
+- (uint32_t) readTemperature:(BOOL)verbose
 {
     // This digitizer has a temperature sensor onboard which can disable ADCs at a given threshold
     // This is read at 0x70 R/W D32
     
     // Note that the number returned is NOT the temperature, but the whole register
     
-    unsigned long value = 0;
+    uint32_t value = 0;
     
     
     [[self adapter] readLongBlock:&value
@@ -2865,10 +2865,10 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 }
 
-- (void) writeTemperatureThreshold:(unsigned long)thresh
+- (void) writeTemperatureThreshold:(uint32_t)thresh
 {
     
-    unsigned long value = 0;
+    uint32_t value = 0;
     
     value = (thresh << 16) | (temperatureSupervisorEnable<<31);
     
@@ -2882,11 +2882,11 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 #pragma mark ADC Serial Interface Control
 
-- (unsigned long) readADCSerialInterface:(BOOL)verbose
+- (uint32_t) readADCSerialInterface:(BOOL)verbose
 {
     // reads out the ADC SPI at 0x74
     
-    unsigned long value;
+    uint32_t value;
     
     [[self adapter] readLongBlock: &value
                         atAddress: [self baseAddress] + kSIS3305ADCSerialInterfaceReg
@@ -2905,29 +2905,29 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return value;
 }
 
-- (unsigned long) readADCSerialInterfaceOnADC:(char)adcSelect fromAddress:(unsigned long)addr
+- (uint32_t) readADCSerialInterfaceOnADC:(char)adcSelect fromAddress:(uint32_t)addr
 {
     // Reading from the Serial Interface is a 2 step process:
     //      1: Write to the interface with the address you're interested in
     //      2: Read back from the register
     
-    unsigned long writeValue = 0;
+    uint32_t writeValue = 0;
     writeValue = (addr << 16) | (adcSelect << 24);
     
     [self writeToAddress:kSIS3305ADCSerialInterfaceReg aValue:writeValue];
     [self waitUntilADCSerialInterfaceNotBusy];
     
-    unsigned long value = [self readFromAddress:kSIS3305ADCSerialInterfaceReg];
+    uint32_t value = [self readFromAddress:kSIS3305ADCSerialInterfaceReg];
     
     return value;
 }
 
-- (void) writeADCSerialInterface:(unsigned long)data onADC:(char)adcSelect toAddress:(unsigned long)addr viaSPI:(char)spi
+- (void) writeADCSerialInterface:(uint32_t)data onADC:(char)adcSelect toAddress:(uint32_t)addr viaSPI:(char)spi
 {
     // write to the ADC SPI on 0x74
     // used for talking directly to the ADC chip to setup bandwidth, channel mode (1.25/2.5/5 gsps)
     
-    unsigned long writeValue = 0;
+    uint32_t writeValue = 0;
     unsigned short write = 1;
     writeValue = data | (addr << 16) | (write << 23) | (adcSelect << 24) | (spi << 31);
  
@@ -2941,7 +2941,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return;
 }
 
-- (void) writeADCSerialInterface:(unsigned long)data onADC:(char)adcSelect toAddress:(unsigned long)addr
+- (void) writeADCSerialInterface:(uint32_t)data onADC:(char)adcSelect toAddress:(uint32_t)addr
 {
     [self writeADCSerialInterface:data onADC:adcSelect toAddress:addr viaSPI:NO];
 }
@@ -2968,7 +2968,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
      */
 }
 
-- (unsigned long) readADCChipID
+- (uint32_t) readADCChipID
 {
     /*
         Uses the SPI protocol of the ADC to read out the ADC Chip ID. 
@@ -2985,12 +2985,12 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
             3:0     ADC 0: Version number
      */
     
-    unsigned long readValue = 0;
-    unsigned long writeValue = 0;
+    uint32_t readValue = 0;
+    uint32_t writeValue = 0;
     BOOL logicBusy = YES;
     
-    unsigned long addr, adc;
-    unsigned long RWcmd; // Read/write command (0 = read, 1 = write)
+    uint32_t addr, adc;
+    uint32_t RWcmd; // Read/write command (0 = read, 1 = write)
     
     unsigned int readCount = 0;
     unsigned int maxPolls = 100;
@@ -3029,7 +3029,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 }
 
 
-- (unsigned long) readADCControlReg:(bool)verbose
+- (uint32_t) readADCControlReg:(bool)verbose
 {
     /*
      Uses the SPI protocol of the ADC to read out the ADC Chip Configuration.
@@ -3049,12 +3049,12 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
      
      */
     
-    unsigned long readValue = 0;
-    unsigned long writeValue = 0;
+    uint32_t readValue = 0;
+    uint32_t writeValue = 0;
     BOOL logicBusy = YES;
     
-    unsigned long addr, adc;
-    unsigned long RWcmd; // Read/write command (0 = read, 1 = write)
+    uint32_t addr, adc;
+    uint32_t RWcmd; // Read/write command (0 = read, 1 = write)
     
     unsigned int readCount = 0;
     unsigned int maxPolls = 100;
@@ -3227,8 +3227,8 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
      3:0    ADC Mode
      */
     
-    unsigned long writeData = 0;
-    unsigned long addr, adc;
+    uint32_t writeData = 0;
+    uint32_t addr, adc;
     
     [self writeADCSerialChannelSelect:0xF];   // resets us to not having any channel selected
 
@@ -3265,9 +3265,9 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
  
     // `chan` here is the actual channel, not the ADC channel
     
-    unsigned long writeData = 0;
+    uint32_t writeData = 0;
     
-    unsigned long addr, adc, adcChan;
+    uint32_t addr, adc, adcChan;
     
     BOOL resetFlag = NO;
     
@@ -3303,10 +3303,10 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 }
 
 
-- (unsigned long) readADCSerialChannelSelect:(unsigned short)adc
+- (uint32_t) readADCSerialChannelSelect:(unsigned short)adc
 {
-    unsigned long addr;
-    unsigned long readValue;
+    uint32_t addr;
+    uint32_t readValue;
     
     if (adc >= kNumSIS3305Groups) {
         NSLog(@"Invalid ADC specified for readADCChannelSelect.... Returning.\n");
@@ -3321,12 +3321,12 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 
 
-- (unsigned long) readADCOffset:(unsigned short)chan
+- (uint32_t) readADCOffset:(unsigned short)chan
 {
     // this reads from 0x21 of the ADC, the "Offset Register", a read only reg
     unsigned short adcChan,adc;
-    unsigned long readValue = 0;
-    unsigned long addr;
+    uint32_t readValue = 0;
+    uint32_t addr;
     
     adcChan = chan%4;       // the relative channel on each ADC
     adc = (chan-adcChan)/4;     // the adc the channel is on
@@ -3341,11 +3341,11 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 - (void) writeADCOffsets
 {
-    //unsigned long writeValue = 0;
-    unsigned long writeData = 0;
+    //uint32_t writeValue = 0;
+    uint32_t writeData = 0;
     
-    unsigned long addr, adc;
-    unsigned long RWcmd;        // Read/write command (0 = read, 1 = write)
+    uint32_t addr, adc;
+    uint32_t RWcmd;        // Read/write command (0 = read, 1 = write)
     
     unsigned short adcChan,chan;
 
@@ -3368,12 +3368,12 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     [self writeADCSerialChannelSelect:0xF]; // reset to `no channel selected`
 }
 
-- (unsigned long) readADCGain:(unsigned short)chan
+- (uint32_t) readADCGain:(unsigned short)chan
 {
     // this reads from 0x23 of the ADC, the "Offset Register", a read only reg
     unsigned short adcChan,adc;
-    unsigned long readValue = 0;
-    unsigned long addr;
+    uint32_t readValue = 0;
+    uint32_t addr;
     
     adcChan = chan%4;       // the relative channel on each ADC
     adc = (chan-adcChan)/4;     // the adc the channel is on
@@ -3386,8 +3386,8 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 - (void) writeADCGains
 {
-    unsigned long writeData = 0;
-    unsigned long gainExtAddr, gainIntAddr, chanSelectAddr, calAddr;
+    uint32_t writeData = 0;
+    uint32_t gainExtAddr, gainIntAddr, chanSelectAddr, calAddr;
     unsigned short adc,chan;
     
     gainExtAddr = 0x22;    // External Gain register
@@ -3453,12 +3453,12 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 }
 
 
-- (unsigned long) readADCPhase:(unsigned short)chan
+- (uint32_t) readADCPhase:(unsigned short)chan
 {
     // this reads from 0x25 of the ADC, the "Phase Register", a read only reg
     unsigned short adcChan,adc;
-    unsigned long readValue = 0;
-    unsigned long addr;
+    uint32_t readValue = 0;
+    uint32_t addr;
 
     adcChan = chan%4;       // the relative channel on each ADC
     adc = (chan-adcChan)/4;     // the adc the channel is on
@@ -3471,8 +3471,8 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 - (void) writeADCPhase
 {
-    unsigned long writeData = 0;
-    unsigned long addr, adc;
+    uint32_t writeData = 0;
+    uint32_t addr, adc;
     unsigned short adcChan,chan;
     
     
@@ -3494,7 +3494,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     [self writeADCSerialChannelSelect:0xF]; // reset to `no channel selected`
 }
 
-- (unsigned long) readADCCalibrationMailbox:(unsigned short)adc
+- (uint32_t) readADCCalibrationMailbox:(unsigned short)adc
 {
     return [self readADCSerialInterfaceOnADC:adc fromAddress:0x11];
 }
@@ -3504,9 +3504,9 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     // checking this is just a way of introducing some delay
     // there's nothing I can do except reset the chip if it gets stuck high...
     
-    unsigned long value;
-    unsigned long numReads = 0;
-    unsigned long maxReads = 1000;
+    uint32_t value;
+    uint32_t numReads = 0;
+    uint32_t maxReads = 1000;
     do{
         value = [self readADCCalibrationMailbox:adc];
         numReads++;
@@ -3564,10 +3564,10 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
      0xA8 = b 1010 1000
      */
     
-    unsigned long writeData = 0;    // 16 bit value written to ADC chip
+    uint32_t writeData = 0;    // 16 bit value written to ADC chip
     
-    unsigned long addr;         // address in ADC chip
-    unsigned long RWcmd;        // Read/write command (0 = read, 1 = write)
+    uint32_t addr;         // address in ADC chip
+    uint32_t RWcmd;        // Read/write command (0 = read, 1 = write)
     
     
     addr = 0x10;    // calibration control reg
@@ -3599,7 +3599,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 - (BOOL) checkADCSerialInterfaceBusy
 {
     BOOL busy;
-    unsigned long readValue = 0;
+    uint32_t readValue = 0;
     
     readValue = [self readFromAddress:kSIS3305ADCSerialInterfaceReg];
     
@@ -3613,7 +3613,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     [self waitUntilADCSerialInterfaceNotBusy:100];
 }
 
-- (unsigned long) waitUntilADCSerialInterfaceNotBusy:(unsigned long)maxReads
+- (uint32_t) waitUntilADCSerialInterfaceNotBusy:(uint32_t)maxReads
 {
     unsigned int numReads = 0;
     BOOL busy;
@@ -3631,9 +3631,9 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 }
 
 
-- (unsigned long) validateSerialADCCalibrationOnChannel:(unsigned short)chan
+- (uint32_t) validateSerialADCCalibrationOnChannel:(unsigned short)chan
 {
-    unsigned long error = 0;
+    uint32_t error = 0;
     
     if([self readADCGain:chan] != [self adcGain:chan])
     {
@@ -3659,11 +3659,11 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return error;
 }
 
-- (unsigned long) validateSerialADCCalibration
+- (uint32_t) validateSerialADCCalibration
 {
     // here I put in some error checking to make sure that the values "stick" and are actually written
     unsigned short chan;
-    unsigned long error = 0;
+    uint32_t error = 0;
     for (chan=0; chan<8; chan++) {
         if([self readADCGain:chan] != [self adcGain:chan])
         {
@@ -3693,7 +3693,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 #pragma mark end ADC Serial control
 
 
-- (void) writeDataTransferControlRegister:(short)group withCommand:(short)command withAddress:(unsigned long)value
+- (void) writeDataTransferControlRegister:(short)group withCommand:(short)command withAddress:(uint32_t)value
 {
     // commands:
     //      00      reset transfer FSM
@@ -3706,7 +3706,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
         return;
     }
     
-    unsigned long addr = 0;
+    uint32_t addr = 0;
     
     switch (group) {
         case 0:
@@ -3721,7 +3721,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     }
     
     if (group>=0 && group <kNumSIS3305Groups) {
-        unsigned long writeValue = command<<30;
+        uint32_t writeValue = command<<30;
         writeValue |= value;
         
         [[self adapter] writeLongBlock:&writeValue
@@ -3732,10 +3732,10 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     }
 }
 
-- (unsigned long) readDataTransferControlRegister:(short)group
+- (uint32_t) readDataTransferControlRegister:(short)group
 {
-    unsigned long addr = 0;
-    unsigned long data = 0;
+    uint32_t addr = 0;
+    uint32_t data = 0;
     
     switch (group) {
         case 0:
@@ -3760,13 +3760,13 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return data;
 }
 
-- (unsigned long) readDataTransferStatusRegister:(short)group
+- (uint32_t) readDataTransferStatusRegister:(short)group
 {
     // Read data transfer status of each ADC on 0xC8 and 0xCC Read-only D32
     // this should be checked to know how full the FIFO is, and if the Data is ready or still being transfered
     
-    unsigned long addr = 0;
-    unsigned long data = 0;
+    uint32_t addr = 0;
+    uint32_t data = 0;
     
     switch (group) {
         case 0:
@@ -3792,11 +3792,11 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 }
 
 
-- (unsigned long) readAuroraProtocolStatus
+- (uint32_t) readAuroraProtocolStatus
 {
     // no idea what this is, but it probably won't be used
     
-    unsigned long value = 0;
+    uint32_t value = 0;
     [[self adapter] readLongBlock:&value
                         atAddress:[self baseAddress] + kSIS3305VmeFpgaAuroraProtStatus
                         numToRead:1
@@ -3806,7 +3806,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return value;
 }
 
-- (void) writeAuroraProtocolStatus:(unsigned long)value
+- (void) writeAuroraProtocolStatus:(uint32_t)value
 {
     // no idea what this is, but it probably won't be used
 
@@ -3819,9 +3819,9 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return;
 }
 
-- (unsigned long) readAuroraDataStatus
+- (uint32_t) readAuroraDataStatus
 {
-    unsigned long value = 0;
+    uint32_t value = 0;
     [[self adapter] readLongBlock:&value
                         atAddress:[self baseAddress] + kSIS3305VmeFpgaAuroraDataStatus
                         numToRead:1
@@ -3830,7 +3830,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     
     return value;
 }
-- (void) writeAuroraDataStatus:(unsigned long)value
+- (void) writeAuroraDataStatus:(uint32_t)value
 {
     [[self adapter] writeLongBlock:&value
                          atAddress:[self baseAddress] + kSIS3305VmeFpgaAuroraDataStatus
@@ -3845,7 +3845,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 #pragma mark -- Key Addresses
 - (void) reset
 {
-    unsigned long aValue = 0; //value doesn't matter
+    uint32_t aValue = 0; //value doesn't matter
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kSIS3305KeyReset
                         numToWrite:1
@@ -3857,7 +3857,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 - (void) armSampleLogic
 {
-    unsigned long aValue = 0;
+    uint32_t aValue = 0;
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kSIS3305KeyArmSampleLogic
                         numToWrite:1
@@ -3869,7 +3869,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 - (void) disarmSampleLogic
 {
-    unsigned long aValue = 0;
+    uint32_t aValue = 0;
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kSIS3305KeyDisarmSampleLogic
                         numToWrite:1
@@ -3882,7 +3882,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 - (void) forceTrigger
 {
-    unsigned long aValue = 0;
+    uint32_t aValue = 0;
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kSIS3305KeyTrigger
                         numToWrite:1
@@ -3896,7 +3896,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 - (void) enableSampleLogic
 {
-    unsigned long aValue = 0xAAAA;
+    uint32_t aValue = 0xAAAA;
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kSIS3305KeyEnableSampleLogic
                         numToWrite:1
@@ -3909,7 +3909,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 - (void) setVeto
 {
-    unsigned long aValue = 0xAAAA;
+    uint32_t aValue = 0xAAAA;
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kSIS3305KeySetVeto
                         numToWrite:1
@@ -3921,7 +3921,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 - (void) clearVeto
 {
-    unsigned long aValue = 0xAAAA;
+    uint32_t aValue = 0xAAAA;
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kSIS3305KeyClrVeto
                         numToWrite:1
@@ -3941,7 +3941,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
      The ADC out clock signals restart after [the TDR + pipeline delay + some programmed number of
      input clock cycles (set via SPI in the SYNCH reg)].
      */
-    unsigned long aValue = 0;
+    uint32_t aValue = 0;
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kSIS3305ADCSynchPulse
                         numToWrite:1
@@ -3957,7 +3957,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
      Resets the ADC-FPGA logic (including the DDR2 memory controller).
      Used for test purposes only, and probably should never be used.
      */
-    unsigned long aValue = 0xAAAA;
+    uint32_t aValue = 0xAAAA;
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kSIS3305ADCFpgaReset
                         numToWrite:1
@@ -3972,7 +3972,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     /*
      Generates a pulse on the external trigger out (if it is enabled in the LEMO trigger out select register, bit 15).
      */
-    unsigned long aValue = 0xAAAA;
+    uint32_t aValue = 0xAAAA;
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kSIS3305ADCExternalTriggerOutPulse
                         numToWrite:1
@@ -3983,20 +3983,20 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 #pragma mark -- more regs
 
-- (unsigned long) getEventConfigOffsets:(int)group
+- (uint32_t) getEventConfigOffsets:(int)group
 {
     switch (group) {
         case 0: return kSIS3305EventConfigADC14;
         case 1: return kSIS3305EventConfigADC58;
     }
-    return (unsigned long) -1;
+    return (uint32_t) -1;
 }
 
-- (unsigned long) readEventConfigurationOfGroup:(short)group
+- (uint32_t) readEventConfigurationOfGroup:(short)group
 {
 
-    unsigned long addr = 0;
-    unsigned long value;
+    uint32_t addr = 0;
+    uint32_t value;
     
     switch (group) {
         case 0:         addr = kSIS3305EventConfigADC14;
@@ -4049,7 +4049,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     
 //    ORCommandList* aList = [ORCommandList commandList];
     for(i=0;i<kNumSIS3305Groups;i++){
-        unsigned long aValueMask = 0x0;
+        uint32_t aValueMask = 0x0;
         
         aValueMask |= (eventSavingMode[i]               & 0x7)      << 0;
         // bit 3: unused
@@ -4099,14 +4099,14 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 
 
-- (unsigned long) readSampleStartAddressOfGroup:(short)group
+- (uint32_t) readSampleStartAddressOfGroup:(short)group
 {
     // This returns the sample start address
     // The contents of the sample memory start address register is assigned as "memory data storage address"
     // with the KEY ARM command or with the KEY ENABLE command
     // So, when you arm or enable, this register will contain the address of the memory data.
     
-    unsigned long addr, value;
+    uint32_t addr, value;
     
     // select the correct group address
     switch (group) {
@@ -4134,9 +4134,9 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return value;
 }
 
-- (void) writeSampleStartAddressOfGroup:(short)group toValue:(unsigned long)value
+- (void) writeSampleStartAddressOfGroup:(short)group toValue:(uint32_t)value
 {
-    unsigned long addr;
+    uint32_t addr;
     
     if (value != (value&0xFFFFFF) )
     {
@@ -4175,7 +4175,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 }
 
 
-- (unsigned long) readSampleLength:(short) group
+- (uint32_t) readSampleLength:(short) group
 {
     // 0x2008 or 0x3008
     // The value of this register indicates the size of the sample. You must know the event saving mode to know how to interpret this
@@ -4188,9 +4188,9 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     // the actual number of 128 bit blocks is (the sample/extended block length + 1)
     // The number of samples in this block depends on the rate
     
-    unsigned long addr = 0;
-    unsigned long value = 0;
-    unsigned long length = 0;
+    uint32_t addr = 0;
+    uint32_t value = 0;
+    uint32_t length = 0;
     unsigned short mode;        // event saving mode
     
     // select the correct group's address
@@ -4222,7 +4222,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 }
 
 
-- (void) writeSampleLengthOfGroup:(short)group toValue:(unsigned long)value
+- (void) writeSampleLengthOfGroup:(short)group toValue:(uint32_t)value
 {
     // 0x2008 or 0x3008
     // The value of this register indicates the size of the sample. You must know the event saving mode to know how to interpret this
@@ -4236,7 +4236,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     // The number of samples in this block depends on the rate (see manual)
     
     
-    unsigned long addr = 0;
+    uint32_t addr = 0;
     unsigned short mode = [self eventSavingMode:group];
 
     switch (group) {
@@ -4283,7 +4283,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     }
 }
 
-- (unsigned long) readSamplePretriggerLengthOfGroup:(short)group
+- (uint32_t) readSamplePretriggerLengthOfGroup:(short)group
 {
     // Direct Memory Stop Pretrigger Block Length Registers (0x200C, 0x300C)
     // The value read here tells us how many sample blocks are in each event, when in Direct Memory Stop (Wrap) mode (mode 7)
@@ -4291,7 +4291,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     // Only valid if (eventSavingMode == 7)
     // Max value is 23:0 bits
     
-    unsigned long value,addr;
+    uint32_t value,addr;
     
     // select the correct group's address
     switch (group) {
@@ -4313,14 +4313,14 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return value&0xFFFFFF;  // F^6 = 23:0
 }
 
-- (void) writeSamplePretriggerLengthOfGroup:(short)group toValue:(unsigned long)value
+- (void) writeSamplePretriggerLengthOfGroup:(short)group toValue:(uint32_t)value
 {
     // Direct Memory Stop Pretrigger Block Length Registers (0x200C, 0x300C)
     // The value read here tells us how many sample blocks are in each event, when in Direct Memory Stop (Wrap) mode (mode 7)
     // Each block is 128 bits, 4 x 32-bit, 12 samples
     // Only valid if (eventSavingMode == 7)
     // Max value is 23:0 bits
-    unsigned long addr;
+    uint32_t addr;
     
     // select the correct group's address
     switch (group) {
@@ -4348,7 +4348,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return;
 }
 
-- (unsigned long) getRingbufferPretriggerDelayOffset:(int) aChannel
+- (uint32_t) getRingbufferPretriggerDelayOffset:(int) aChannel
 {
     // FIX: I don't think this should be used anywhere and can be deleted - actually, not true... reconsidering...
     switch (aChannel) {
@@ -4369,15 +4369,15 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return 2;
 }
 
-- (unsigned long) readRingbufferPretriggerDelayOnChannel:(short)chan
+- (uint32_t) readRingbufferPretriggerDelayOnChannel:(short)chan
 {
     // Ringbuffer Pretrigger Delay readout (0x2010, 0x2014, 0x3010, 0x3014)
     // Gives the "delay" of the pretrigger delay
     // The actual number of delayed samples will depend on the sample rate used.
     // the returned value does not convert by the sample rate, it is the "raw" value
     
-    unsigned long value = 0;
-    unsigned long delay = 0;
+    uint32_t value = 0;
+    uint32_t delay = 0;
 
     
     [[self adapter] readLongBlock:&value
@@ -4394,14 +4394,14 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return delay;       // raw value, not converted to take into account the rate
 }
 
-//- (void) writeRingbufferPretriggerDelayOnChannel:(unsigned short)chan toValue:(unsigned long)value
+//- (void) writeRingbufferPretriggerDelayOnChannel:(unsigned short)chan toValue:(uint32_t)value
 //{
 //    // to handle this, we need to know all of the values ahead of time (so we don't write 0 to the chan shared in the same reg)
 //    // to do this, we will pull from an object ringbufferPreDelay[chan]
 //    // FIX: this method needs no inputs....
 //    
 //    
-//    unsigned long addr, writeValue, topVal, bottomVal;
+//    uint32_t addr, writeValue, topVal, bottomVal;
 //    unsigned short topChan, bottomChan;
 //    
 //    addr = [self getRingbufferPretriggerDelayOffset:chan];
@@ -4441,9 +4441,9 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 - (void) writeRingbufferPretriggerDelays
 {
 //    unsigned short chan;
-//    unsigned long delayValue;
-    unsigned long writeValue[4];
-    unsigned long addr;
+//    uint32_t delayValue;
+    uint32_t writeValue[4];
+    uint32_t addr;
 
 //    for (chan = 0; chan<kNumSIS3305Channels; chan++) {
 //        delayValue = [self preTriggerDelay:chan];
@@ -4465,14 +4465,14 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 }
 
 
-- (unsigned long) readMaxNumOfEventsInGroup:(short)group
+- (uint32_t) readMaxNumOfEventsInGroup:(short)group
 {
     // (0x2018, 0x3018)
     // Gives the maximum Number of Events in each group
     
-    unsigned long value = 0;
-    unsigned long addr = 0;
-    unsigned long events = 0;
+    uint32_t value = 0;
+    uint32_t addr = 0;
+    uint32_t events = 0;
     
     switch (group) {
         case 0:
@@ -4506,8 +4506,8 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     
     // FIX: The default for this should be set to 0, probably (maybe).
     
-    unsigned long writeValue = 0;
-    unsigned long addr = 0;
+    uint32_t writeValue = 0;
+    uint32_t addr = 0;
  
     if (maxValue > 0xFFFF)
         maxValue = 0xFFFF;
@@ -4537,22 +4537,22 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 
 
-- (unsigned long) getEndAddressThresholdRegOffsets:(int)group
+- (uint32_t) getEndAddressThresholdRegOffsets:(int)group
 {
     switch (group) {
         case 0: return 	 kSIS3305EndAddressThresholdADC14;
         case 1: return 	 kSIS3305EndAddressThresholdADC58;
     }
-    return (unsigned long) -1;
+    return (uint32_t) -1;
 }
 
 
-- (unsigned long) readEndAddressThresholdOfGroup:(short)group
+- (uint32_t) readEndAddressThresholdOfGroup:(short)group
 {
     // End Address Threshold Registers (0x201C and 0x301C)
     // There's one end address threshold per group
     
-    unsigned long value;
+    uint32_t value;
     
     [[self adapter] readLongBlock:&value
                         atAddress:[self baseAddress] + [self getEndAddressThresholdRegOffsets:group]
@@ -4578,7 +4578,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     [self writeEndAddressThresholdOfGroup:group toValue:[self endAddressThreshold:group]];
 }
 
-- (void) writeEndAddressThresholdOfGroup:(short)group toValue:(unsigned long)value
+- (void) writeEndAddressThresholdOfGroup:(short)group toValue:(uint32_t)value
 {
     if(group>=0 && group<kNumSIS3305Groups){
 
@@ -4592,7 +4592,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 
 
-- (unsigned long) getGTThresholdRegOffsets:(int) channel
+- (uint32_t) getGTThresholdRegOffsets:(int) channel
 {
     //    "Greater than"-threshold registers
     switch (channel) {
@@ -4605,10 +4605,10 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
         case 6: return 	kSIS3305TriggerGateGTThresholdsADC7;
         case 7: return 	kSIS3305TriggerGateGTThresholdsADC8;
     }
-    return (unsigned long) -1;
+    return (uint32_t) -1;
 }
 
-- (unsigned long) getLTThresholdRegOffsets:(int) channel
+- (uint32_t) getLTThresholdRegOffsets:(int) channel
 {
     //  "Less than"-threshold registers
     switch (channel) {
@@ -4621,14 +4621,14 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
         case 6: return 	kSIS3305TriggerGateLTThresholdsADC7;
         case 7: return 	kSIS3305TriggerGateLTThresholdsADC8;
     }
-    return (unsigned long) -1;
+    return (uint32_t) -1;
 }
 
 
 
-- (unsigned long) readLTThresholdOnChannel:(short)chan
+- (uint32_t) readLTThresholdOnChannel:(short)chan
 {
-    unsigned long aValue;
+    uint32_t aValue;
     [[self adapter] readLongBlock: &aValue
                         atAddress: [self baseAddress] + [self getLTThresholdRegOffsets:chan]
                         numToRead: 1
@@ -4643,7 +4643,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 - (void) readLTThresholds:(BOOL)verbose
 {
     int i;
-    unsigned long aValue;
+    uint32_t aValue;
     
     if(verbose) NSLog(@"Reading LT Thresholds:\n");
     
@@ -4664,9 +4664,9 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     }
 }
 
-- (unsigned long) readGTThresholdOnChannel:(short)chan
+- (uint32_t) readGTThresholdOnChannel:(short)chan
 {
-    unsigned long aValue;
+    uint32_t aValue;
     [[self adapter] readLongBlock: &aValue
                         atAddress: [self baseAddress] + [self getGTThresholdRegOffsets:chan]
                         numToRead: 1
@@ -4679,7 +4679,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 - (void) readGTThresholds:(BOOL)verbose
 {
     int i;
-    unsigned long aValue;
+    uint32_t aValue;
     
     if(verbose) NSLog(@"Reading GT Thresholds:\n");
     
@@ -4721,10 +4721,10 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 {
 //    ORCommandList* aList = [ORCommandList commandList];
     int i;
-    unsigned long thresholdMask;
-    unsigned long onThresh;
-    unsigned long offThresh;
-    unsigned long LTEnabled;
+    uint32_t thresholdMask;
+    uint32_t onThresh;
+    uint32_t offThresh;
+    uint32_t LTEnabled;
     for(i = 0; i < kNumSIS3305Channels; i++)
     {
         
@@ -4748,7 +4748,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 - (void) writeGTThresholds
 {
     int i;
-    unsigned long thresholdMask;
+    uint32_t thresholdMask;
     for(i = 0; i < kNumSIS3305Channels; i++)
     {
         
@@ -4765,7 +4765,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     }
 }
 
-- (unsigned long) getSamplingStatusAddressForGroup:(short)group
+- (uint32_t) getSamplingStatusAddressForGroup:(short)group
 {
     switch (group) {
         case 0:
@@ -4778,9 +4778,9 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     }
 }
 
-- (unsigned long) readSamplingStatusForGroup:(short)group
+- (uint32_t) readSamplingStatusForGroup:(short)group
 {
-    unsigned long value = 0;
+    uint32_t value = 0;
 
     [[self adapter] readLongBlock: &value
                         atAddress: [self baseAddress] + [self getSamplingStatusAddressForGroup:group]
@@ -4792,12 +4792,12 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 
 
-- (unsigned long) readActualSampleAddress:(short)group
+- (uint32_t) readActualSampleAddress:(short)group
 {
     // Reads the address of the sample in group `group`
     
-    unsigned long addr;
-    unsigned long value;
+    uint32_t addr;
+    uint32_t value;
     
     switch (group) {
         case 0:
@@ -4824,12 +4824,12 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 }
 
 
-- (unsigned long) readDirectMemoryEventCounterOfGroup:(short)group
+- (uint32_t) readDirectMemoryEventCounterOfGroup:(short)group
 {
     // Reads the counter of group `group`
     
-    unsigned long addr;
-    unsigned long value;
+    uint32_t addr;
+    uint32_t value;
     
     switch (group) {
         case 0:
@@ -4856,12 +4856,12 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 }
 
 
-- (unsigned long) readDirectMemoryActualEventStartAddressOfGroup:(short)group
+- (uint32_t) readDirectMemoryActualEventStartAddressOfGroup:(short)group
 {
     // Reads the counter of group `group`
     
-    unsigned long addr;
-    unsigned long value;
+    uint32_t addr;
+    uint32_t value;
     
     switch (group) {
         case 0:
@@ -4888,13 +4888,13 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 }
 
 
-- (unsigned long) readActualSampleValueOfChannel:(short)chan
+- (uint32_t) readActualSampleValueOfChannel:(short)chan
 {
     // Reads the sample value from the ADC on-the-fly.
     // Not sure what this is used for.
     
-    unsigned long addr;
-    unsigned long value, topValue, bottomValue;
+    uint32_t addr;
+    uint32_t value, topValue, bottomValue;
     
     if (    chan == 0 || chan == 1)
         addr = kSIS3305ActualSampleValueADC12;
@@ -4927,7 +4927,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return 0;
 }
 
-- (unsigned long) getIndividualChannelSelectSeVetoAddressOfGroup:(unsigned short)group
+- (uint32_t) getIndividualChannelSelectSeVetoAddressOfGroup:(unsigned short)group
 {
     if (    group == 0 )
         return kSIS3305IndividualSelectSetVetoADC14;
@@ -4939,9 +4939,9 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     }
 }
 
-- (unsigned long) readIndividualChannelSelectSetVetoOfGroup:(unsigned short)group
+- (uint32_t) readIndividualChannelSelectSetVetoOfGroup:(unsigned short)group
 {
-    unsigned long value;
+    uint32_t value;
 
     
     [[self adapter] readLongBlock:&value
@@ -4952,7 +4952,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return value;
 }
 
-- (void) writeIndividualChannelSelectSetVetoOfGroup:(unsigned short)group withValue:(unsigned long)value
+- (void) writeIndividualChannelSelectSetVetoOfGroup:(unsigned short)group withValue:(uint32_t)value
 {
 
     [[self adapter] writeLongBlock:&value
@@ -4962,19 +4962,19 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
                      usingAddSpace:0x01];
 }
 
-- (unsigned long) getADCTapDelayOffsets:(int)group
+- (uint32_t) getADCTapDelayOffsets:(int)group
 {
     switch (group) {
         case 0: return kSIS3305ADCInputTapDelayADC14;
         case 1: return kSIS3305ADCInputTapDelayADC58;
         default: return 0;
     }
-    return (unsigned long) -1;
+    return (uint32_t) -1;
 }
 
-- (unsigned long) readADCInputTapDelayOfGroup:(unsigned short)group
+- (uint32_t) readADCInputTapDelayOfGroup:(unsigned short)group
 {
-    unsigned long value;
+    uint32_t value;
     
     [[self adapter] readLongBlock:&value
                         atAddress:[self baseAddress] + [self getADCTapDelayOffsets:group]
@@ -4984,7 +4984,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return value;
 }
 
-- (void) writeADCInputTapDelayOfGroup:(unsigned short)group toValue:(unsigned long)value
+- (void) writeADCInputTapDelayOfGroup:(unsigned short)group toValue:(uint32_t)value
 {
     [[self adapter] writeLongBlock:&value
                          atAddress:[self baseAddress] + [self getADCTapDelayOffsets:group]
@@ -5012,7 +5012,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
      */
     
     ORCommandList* aList = [ORCommandList commandList];
-    unsigned long aValueMask = 0;
+    uint32_t aValueMask = 0;
     
     short group = 0;
     short channel = 0;
@@ -5044,7 +5044,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     
 }
 
-- (unsigned long) getFIFOAddressOfGroup:(unsigned short)group
+- (uint32_t) getFIFOAddressOfGroup:(unsigned short)group
 {
     switch (group) {
         case 0:
@@ -5104,7 +5104,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     //	[self readHighThresholds:YES];
     [self readAcquisitionControl:YES];
     
-    unsigned long eventConfig = 0;
+    uint32_t eventConfig = 0;
     [[self adapter] readLongBlock:&eventConfig
                         atAddress:[self baseAddress] + kSIS3305EventConfigADC14
                         numToRead:1
@@ -5112,7 +5112,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
                     usingAddSpace:0x01];
     NSLog(@"EventConfig: 0x%08x\n",eventConfig);
     
-    //	unsigned long pretrigger = 0;
+    //	uint32_t pretrigger = 0;
     //	[[self adapter] readLongBlock:&pretrigger
     //						atAddress:[self baseAddress] + kSIS3305PreTriggerDelayTriggerGateLengthAdc14
     //						numToRead:1
@@ -5123,7 +5123,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     
 
     
-    unsigned long actualNextSampleAddress1 = 0;
+    uint32_t actualNextSampleAddress1 = 0;
     [[self adapter] readLongBlock:&actualNextSampleAddress1
                         atAddress:[self baseAddress] + kSIS3305ActualSampleAddressADC14
                         numToRead:1
@@ -5132,7 +5132,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     
     NSLog(@"actualNextSampleAddress1: 0x%08x\n",actualNextSampleAddress1);
     
-    unsigned long actualNextSampleAddress2 = 0;
+    uint32_t actualNextSampleAddress2 = 0;
     [[self adapter] readLongBlock:&actualNextSampleAddress2
                         atAddress:[self baseAddress] + kSIS3305ActualSampleAddressADC58
                         numToRead:1
@@ -5194,7 +5194,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 - (BOOL) isEvent
 {
-	unsigned long data_rd = 0;
+	uint32_t data_rd = 0;
 	[[self adapter] readLongBlock:&data_rd
 						atAddress:[self baseAddress] + kSIS3305AcquisitionControl
 						numToRead:1
@@ -5223,7 +5223,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 //    if(shipSummedWaveform) summary = [summary stringByAppendingString:@" + Summed Raw Trace"];
 //    summary = [summary stringByAppendingString:@"\n"];
     
-    summary = [summary stringByAppendingFormat:@"Traces 0:%ld  1:%ld \n", 3*[self longsInSample:0],3*[self longsInSample:1]];
+    summary = [summary stringByAppendingFormat:@"Traces 0:%d  1:%d \n", 3*[self longsInSample:0],3*[self longsInSample:1]];
     
 //    if(shipSummedWaveform) summary = [summary stringByAppendingFormat:@"Summed Raw Trace: 510 values\n"];
     return summary;
@@ -5232,7 +5232,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 - (void) writeHistogramParams
 {
-    //	unsigned long aValue =   kSIS3305McaEnable2468 | kSIS3305McaEnable1357 | ((mcaPileupEnabled << 3) + mcaHistoSize);
+    //	uint32_t aValue =   kSIS3305McaEnable2468 | kSIS3305McaEnable1357 | ((mcaPileupEnabled << 3) + mcaHistoSize);
     //	[[self adapter] writeLongBlock:&aValue
     //						 atAddress:[self baseAddress] + kSIS3305McaHistogramParamAllAdc
     //						numToWrite:1
@@ -5243,8 +5243,8 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 #pragma mark - Data Taker
 
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -5400,7 +5400,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     }
 }
 
-- (unsigned long) longsInSample:(unsigned short)group
+- (uint32_t) longsInSample:(unsigned short)group
 {
     // the number of longs in a sample will depend on the event saving mode and the rate of digitization
     // (as well as obviously the sample size)
@@ -5408,10 +5408,10 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
     // Sample length is number of 128-bit (4-word) blocks minus 1.
     // Higher sample rates interlace between 
-    unsigned long value;
-    unsigned long multiplier;
+    uint32_t value;
+    uint32_t multiplier;
     
-    unsigned long sampleLength = [self sampleLength:group];     // number of 128-bit blocks minus 1
+    uint32_t sampleLength = [self sampleLength:group];     // number of 128-bit blocks minus 1
     unsigned short rate = [self digitizationRate:group];
     // 'rate' carries a value of one of the following:
     //      0: 1.25 Ghz
@@ -5755,7 +5755,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
-	//reading events from the mac is very, very slow. If the buffer is filling up, it can take a long time to readout all events.
+	//reading events from the mac is very, very slow. If the buffer is filling up, it can take a int32_t time to readout all events.
 	//Because of this we limit the number of events from any one buffer read. The SBC should be used if possible.
     @try {
         if(firstTime){
@@ -5786,7 +5786,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
             }
             */
             
-            unsigned long ac        = [self readAcquisitionControl:NO];
+            uint32_t ac        = [self readAcquisitionControl:NO];
             BOOL endAddThreshFlag   = ((ac>>19)&0x1)?YES:NO;
             if (endAddThreshFlag == NO) return;
             
@@ -5802,12 +5802,12 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
             [self writeDataTransferControlRegister:1 withCommand:2 withAddress:0];  // read command
 
 
-            unsigned long adcBufferLength = 0x10000000; // 256 MLWorte ; 1G Mbyte MByte (from sis3305_global.h:440)
+            uint32_t adcBufferLength = 0x10000000; // 256 MLWorte ; 1G Mbyte MByte (from sis3305_global.h:440)
             
             unsigned short gr;
             for (gr =0; gr<2; gr++) {
-                unsigned long numberOfWords     = [self readActualSampleAddress:gr] * 16;        // 1 block == 64 bytes == 16 Lwords
-                unsigned long numberBytesToRead = numberOfWords * 4;
+                uint32_t numberOfWords     = [self readActualSampleAddress:gr] * 16;        // 1 block == 64 bytes == 16 Lwords
+                uint32_t numberBytesToRead = numberOfWords * 4;
                 
                 // we can only readout at max one full buffer at once
                 if (numberOfWords > adcBufferLength) {
@@ -5817,20 +5817,20 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
                 if(numberBytesToRead > 0){ // if there is data to read out, we'll compute handy things and read it out
                     BOOL wrapMode = (wrapMaskForRun & (1L<<gr))!=0;
 
-                    unsigned long sisHeaderLength   = 4;  // 4 long words in the normal sis headers
-                    unsigned long orcaHeaderLength  = 4;   // 3 words in the Orca header
-                    unsigned long dataRecordLength  = sisHeaderLength  + [self longsInSample:gr]; //just the data length in longs
+                    uint32_t sisHeaderLength   = 4;  // 4 int32_t words in the normal sis headers
+                    uint32_t orcaHeaderLength  = 4;   // 3 words in the Orca header
+                    uint32_t dataRecordLength  = sisHeaderLength  + [self longsInSample:gr]; //just the data length in longs
                     
-                    unsigned long maxBytesForSBC = 1024*1024*1; //2 MB max SBC packet size, we limit to 1 here for safety
-                    unsigned long actualBytesToBeRead = (numberBytesToRead%64) + numberBytesToRead;
-                    unsigned short numEventsInBuffer = actualBytesToBeRead/(dataRecordLength*sizeof(unsigned long));
-                    unsigned long bytesOfData = sizeof(unsigned long)*(numEventsInBuffer*dataRecordLength);
+                    uint32_t maxBytesForSBC = 1024*1024*1; //2 MB max SBC packet size, we limit to 1 here for safety
+                    uint32_t actualBytesToBeRead = (numberBytesToRead%64) + numberBytesToRead;
+                    unsigned short numEventsInBuffer = actualBytesToBeRead/(dataRecordLength*sizeof(uint32_t));
+                    uint32_t bytesOfData = sizeof(uint32_t)*(numEventsInBuffer*dataRecordLength);
                     
-                    unsigned long bufferAddLongs = (orcaHeaderLength + bytesOfData/4); //(numEventsInBuffer*dataRecordLength)); // num longs to add to the data stream
+                    uint32_t bufferAddLongs = (orcaHeaderLength + bytesOfData/4); //(numEventsInBuffer*dataRecordLength)); // num longs to add to the data stream
 
-//                    unsigned long maxReadBuffer = 1024*1024*1; // limit it to 1 MB (actually can take 2)
+//                    uint32_t maxReadBuffer = 1024*1024*1; // limit it to 1 MB (actually can take 2)
                     
-                    unsigned long dataRecord[bufferAddLongs+8];
+                    uint32_t dataRecord[bufferAddLongs+8];
                     
                     // here we start filling the data record:
                     
@@ -5849,9 +5849,9 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
                     dataRecord[3] = (numEventsInBuffer & 0xFFFF) |    // number of events expected in the event
                                     ((0 & 0xFFFF) << 16);  //
                     
-                    unsigned long bytesLeftToRead = actualBytesToBeRead;
-                    unsigned long bytesToReadNow;
-                    unsigned long currentIndex = 4;
+                    uint32_t bytesLeftToRead = actualBytesToBeRead;
+                    uint32_t bytesToReadNow;
+                    uint32_t currentIndex = 4;
                     unsigned short eventCount = 0;
                     while (bytesLeftToRead > 0)
                     {
@@ -5907,7 +5907,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 	isRunning = NO;
 	
 //	if(runMode == kMcaRunMode){
-//		unsigned long mcaLength;
+//		uint32_t mcaLength;
 //		switch (mcaHistoSize) {
 //			case 0:  mcaLength = 1024; break;
 //			case 1:  mcaLength = 2048; break;
@@ -5915,14 +5915,14 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 //			case 3:  mcaLength = 8192; break;
 //			default: mcaLength = 2048; break;
 //		}
-//		unsigned long pageOffset = 0x0;
+//		uint32_t pageOffset = 0x0;
 //		if(mcaScanBank2Flag) pageOffset = 8 * 0x1024 * 0x1024;
 		
 //		int channel;
 //		for(channel=0;channel<kNumSIS3305Channels;channel++){
 //			if(gtMask & (1<<channel)){
-////				NSMutableData* mcaData = [NSMutableData dataWithLength:(mcaLength + 2)*sizeof(long)];
-//				unsigned long* mcaBytes = (unsigned long*)[mcaData bytes];
+////				NSMutableData* mcaData = [NSMutableData dataWithLength:(mcaLength + 2)*sizeof(int32_t)];
+//				uint32_t* mcaBytes = (uint32_t*)[mcaData bytes];
 //				mcaBytes[0] = mcaId | (mcaLength+2);
 //				mcaBytes[1] =	(([self crateNumber]&0x0000000f)<<21) | 
 //								(([self slot] & 0x0000001f)<<16)      |
@@ -5942,7 +5942,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
 //	if(runMode == kMcaRunMode){	
-//		unsigned long aValue = 0;
+//		uint32_t aValue = 0;
 //		[[self adapter] writeLongBlock:&aValue
 //							 atAddress:[self baseAddress] + kSIS3305KeyMcaMultiScanDisable
 //							numToWrite:1
@@ -6018,7 +6018,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 //- (void) resetSamplingLogic
 //{
-// 	unsigned long aValue = 0; //value doesn't matter 
+// 	uint32_t aValue = 0; //value doesn't matter 
 //	[[self adapter] writeLongBlock:&aValue
 //                         atAddress:[self baseAddress] + kSIS3305KeySampleLogicReset
 //                        numToWrite:1
@@ -6034,7 +6034,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     return YES;
 }
 
-- (unsigned long) waveFormCount:(int)aChannel
+- (uint32_t) waveFormCount:(int)aChannel
 {
     return waveFormCount[aChannel];
 }
@@ -6326,7 +6326,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 //	 userInfo: nil];
 //}
 //for adcProvidingProtocol... but not used for now
-- (unsigned long) eventCount:(int)channel
+- (uint32_t) eventCount:(int)channel
 {
 	return 0;
 }
@@ -6335,7 +6335,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 }
 
 // for adcProvidingProtocol, unused for now
-- (unsigned long) thresholdForDisplay:(unsigned short) aChan
+- (uint32_t) thresholdForDisplay:(unsigned short) aChan
 {
 	return [self GTThresholdOn:aChan];
 }
@@ -6390,8 +6390,8 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 //	
 //	int i;
 //	for (i=0;i<kNumSIS3305Channels;i++) {
-//		unsigned long data =  [self dacOffset:i];
-//		unsigned long addr = [self baseAddress] + kSIS3305DacData  ;
+//		uint32_t data =  [self dacOffset:i];
+//		uint32_t addr = [self baseAddress] + kSIS3305DacData  ;
 //		
 //		// Set the Data in the DAC Register
 //		[[self adapter] writeLongBlock:&data

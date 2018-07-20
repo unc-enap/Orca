@@ -593,7 +593,7 @@
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"Fec32 (%d,%lu)",[[model guardian] crateNumber],[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"Fec32 (%d,%u)",(int)[[model guardian] crateNumber],(unsigned)[model stationNumber]]];
 	[fecNumberField setIntegerValue:[model stationNumber]];
 	[crateNumberField setIntValue:[[model guardian] crateNumber]];
 	[pmtView setNeedsDisplay:YES];
@@ -654,7 +654,7 @@
 - (IBAction) onlineMaskAction:(id)sender
 {
 	NSInteger tag = [[sender selectedCell] tag];
-	unsigned long mask = [model onlineMask];
+	uint32_t mask = [model onlineMask];
 	mask ^= (1L<<tag);
 	[model setOnlineMask:mask];
 }

@@ -60,11 +60,11 @@ NSString* ORRateAverageChangedNotification 	= @"ORRateAverageChangedNotification
 	lastAverageTime=[newLastAverageTime retain];
 }
 
-- (unsigned long) sampleTime
+- (uint32_t) sampleTime
 {
 	return sampleTime;
 }
-- (void) setSampleTime:(unsigned long)newSampleTime
+- (void) setSampleTime:(uint32_t)newSampleTime
 {
 	sampleTime=newSampleTime;
 }

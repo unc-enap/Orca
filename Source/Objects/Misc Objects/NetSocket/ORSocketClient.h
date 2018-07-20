@@ -25,8 +25,8 @@
     id				delegate;
     NetSocket*		socket;
     NSDate*			timeConnected;
-    unsigned long	amountInBuffer;
-    unsigned long long	totalSent;
+    uint32_t	amountInBuffer;
+    uint64_t	totalSent;
     int             socketStatus;
 }
 
@@ -37,19 +37,19 @@
 - (void) setDelegate:(id)newDelegate;
 - (NSString*) name;
 - (void) setName:(NSString*)newName;
-- (unsigned long long) totalSent;
-- (void) setTotalSent:(unsigned long long)aTotalSent;
+- (uint64_t) totalSent;
+- (void) setTotalSent:(uint64_t)aTotalSent;
 - (NetSocket*) socket;
 - (NSDate*) timeConnected;
 - (void) setTimeConnected:(NSDate*)newTimeConnected;
-- (unsigned long) amountInBuffer; 
-- (void) setAmountInBuffer:(unsigned long)anAmountInBuffer; 
+- (uint32_t) amountInBuffer; 
+- (void) setAmountInBuffer:(uint32_t)anAmountInBuffer; 
 - (void) writeData:(NSData*)inData;
 - (void) netsocketDisconnected:(NetSocket*)insocket;
-- (void) netsocketDataInOutgoingBuffer:(NetSocket*)insocket length:(unsigned long)length;
+- (void) netsocketDataInOutgoingBuffer:(NetSocket*)insocket length:(uint32_t)length;
 - (BOOL) isConnected;
 - (void) clearCounts;
-- (void) netsocketDataSent:(NetSocket*)insocket length:(unsigned long)length;
+- (void) netsocketDataSent:(NetSocket*)insocket length:(uint32_t)length;
 - (int) socketStatus;
 @end
 

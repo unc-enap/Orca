@@ -33,7 +33,7 @@
 @interface OReCPU147Model : ORVmeIOCard <ORDataTaker> {
 	@private
 	NSString* fileName;
-	unsigned long codeLength;
+	uint32_t codeLength;
 	ORCircularBufferReader* circularBufferReader;
 	ORReadOutList* readOutGroup;
 	
@@ -46,7 +46,7 @@
 	eCPUDualPortControl		dualPortControl;
 
 	unsigned short  missedHeartBeat;
-	unsigned long   oldHeartBeat;
+	uint32_t   oldHeartBeat;
 	BOOL            isRunning;
 	ORAlarm*        eCpuDeadAlarm;
 	ORAlarm*        eCpuNoStartAlarm;
@@ -59,7 +59,7 @@
 - (void) setLastQueUpdate:(NSDate*)aDate;
 - (NSString*) fileName;
 - (void) setFileName:(NSString*)aFile;
-- (unsigned long)codeLength;
+- (uint32_t)codeLength;
 - (ORCircularBufferReader*) circularBufferReader;
 - (void) setCircularBufferReader:(ORCircularBufferReader*)cb;
 - (ORReadOutList*) readOutGroup;
@@ -74,7 +74,7 @@
 
 //- (void) setCommunicationBlock:(eCPU_MAC_DualPortComm)newCommunicationBlock;
 
-- (void) getQueMinValue:(unsigned long*)aMinValue maxValue:(unsigned long*)aMaxValue head:(unsigned long*)aHeadValue tail:(unsigned long*)aTailValue;
+- (void) getQueMinValue:(uint32_t*)aMinValue maxValue:(uint32_t*)aMaxValue head:(uint32_t*)aHeadValue tail:(uint32_t*)aTailValue;
 
 #pragma mark •••Notifications
 - (void)vmePowerFailed:(NSNotification*)aNote;
@@ -87,7 +87,7 @@
 - (void) downloadWithRetryAndStart;
 - (void) load_HW_Config;
 
-- (NSData*) dumpCodeFrom:(unsigned long)startAddress length:(unsigned long)numBytes;
+- (NSData*) dumpCodeFrom:(uint32_t)startAddress length:(uint32_t)numBytes;
 - (void) verifyCode;
 
 #pragma mark •••DataTaker

@@ -83,8 +83,8 @@
 @end
 
 @interface NSObject (ORDataController_Cat)
-- (unsigned long)  numberBins;
-- (long) value:(unsigned long)aChan;
+- (uint32_t)  numberBins;
+- (int32_t) value:(uint32_t)aChan;
 @end
  
 

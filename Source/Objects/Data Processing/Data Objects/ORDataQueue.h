@@ -29,16 +29,16 @@
 		NSMutableArray*  	 cacheArray;			//data records that are to be cached for later inclusion into data
 		BOOL				 dataInCache;
 		NSMutableData*		 frameBuffer;			//accumulator for data
-		unsigned long		 frameIndex;
+		uint32_t		 frameIndex;
 		NSRecursiveLock*     theDataLock;
-		unsigned long		 reserveIndex;
-        unsigned long        reservePool[kMaxReservedPoolSize];
-        unsigned long        lastFrameBufferSize;
+		uint32_t		 reserveIndex;
+        uint32_t        reservePool[kMaxReservedPoolSize];
+        uint32_t        lastFrameBufferSize;
 		BOOL				 dataAvailable;
 
         BOOL            addedData;
-		long			frameCounter;
-		long			oldFrameCounter;
+		int32_t			frameCounter;
+		int32_t			oldFrameCounter;
 		BOOL			needToSwap;
 }
 
@@ -57,17 +57,17 @@
 - (void) setCacheArray:(NSMutableArray*)newCacheArray;
 
 #pragma mark •••Data Addition
-- (unsigned long) frameIndex;
-- (void) replaceReservedDataInFrameBufferAtIndex:(unsigned long)index withLongs:(unsigned long*)data length:(unsigned long)length;
-- (unsigned long) addLongsToFrameBuffer:(unsigned long*)someData length:(unsigned long)length;
-- (unsigned long*) getBlockForAddingLongs:(unsigned long)length;
-- (unsigned long)reserveSpaceInFrameBuffer:(unsigned long)length;
+- (uint32_t) frameIndex;
+- (void) replaceReservedDataInFrameBufferAtIndex:(uint32_t)index withLongs:(uint32_t*)data length:(uint32_t)length;
+- (uint32_t) addLongsToFrameBuffer:(uint32_t*)someData length:(uint32_t)length;
+- (uint32_t*) getBlockForAddingLongs:(uint32_t)length;
+- (uint32_t)reserveSpaceInFrameBuffer:(uint32_t)length;
 - (void) removeReservedLongsFromFrameBuffer:(NSRange)aRange;
 - (void) addFrameBuffer:(BOOL)forceAdd;
 - (void) addData:(NSData*)someData;
 - (void) addDataFromArray:(NSArray*)aDataArray;
 - (void) addCachedData;
-- (unsigned long) dataCount;
+- (uint32_t) dataCount;
 - (void) addDataToCach:(NSData*)someData;
 - (void) addArrayToCache:(NSArray*)aDataArray;
 - (void) clearData;

@@ -815,7 +815,7 @@ enum {
 // ----------------------------------------------------------
 // - displayOptionMask:
 // ----------------------------------------------------------
-- (unsigned long) displayOptionMask
+- (uint32_t) displayOptionMask
 {
     return displayOptionMask;
 }
@@ -823,7 +823,7 @@ enum {
 // ----------------------------------------------------------
 // - setDisplayOptionMask:
 // ----------------------------------------------------------
-- (void) setDisplayOptionMask: (unsigned long) aDisplayOptionMask
+- (void) setDisplayOptionMask: (uint32_t) aDisplayOptionMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setDisplayOptionMask:displayOptionMask];
     displayOptionMask = aDisplayOptionMask;
@@ -835,7 +835,7 @@ enum {
 
 - (void) setDisplayOption:(short)optionTag state:(BOOL)aState
 {
-    unsigned long aMask = displayOptionMask;
+    uint32_t aMask = displayOptionMask;
     if(aState){
         aMask |= (1L<<optionTag);
     }
@@ -975,55 +975,55 @@ static NSString *ORNcdMuxFullEfficiencyThresholds = @"ORNcdMuxFullEfficiencyThre
 }
 
 
-- (unsigned long) pulserDataId { return pulserDataId; }
-- (void) setPulserDataId: (unsigned long) PulserDataId
+- (uint32_t) pulserDataId { return pulserDataId; }
+- (void) setPulserDataId: (uint32_t) PulserDataId
 {
     pulserDataId = PulserDataId;
 }
 
 
-- (unsigned long) logAmpDataId { return logAmpDataId; }
-- (void) setLogAmpDataId: (unsigned long) LogAmpDataId
+- (uint32_t) logAmpDataId { return logAmpDataId; }
+- (void) setLogAmpDataId: (uint32_t) LogAmpDataId
 {
     logAmpDataId = LogAmpDataId;
 }
 
 
-- (unsigned long) linearityDataId { return linearityDataId; }
-- (void) setLinearityDataId: (unsigned long) LinearityDataId
+- (uint32_t) linearityDataId { return linearityDataId; }
+- (void) setLinearityDataId: (uint32_t) LinearityDataId
 {
     linearityDataId = LinearityDataId;
 }
 
 
-- (unsigned long) thresholdDataId { return thresholdDataId; }
-- (void) setThresholdDataId: (unsigned long) ThresholdDataId
+- (uint32_t) thresholdDataId { return thresholdDataId; }
+- (void) setThresholdDataId: (uint32_t) ThresholdDataId
 {
     thresholdDataId = ThresholdDataId;
 }
 
-- (unsigned long) cableCheckDataId { return cableCheckDataId; }
-- (void) setCableCheckDataId: (unsigned long) aCableCheckDataId
+- (uint32_t) cableCheckDataId { return cableCheckDataId; }
+- (void) setCableCheckDataId: (uint32_t) aCableCheckDataId
 {
     cableCheckDataId = aCableCheckDataId;
 }
 
 
-- (unsigned long) stepPDSDataId { return stepPDSDataId; }
-- (void) setStepPDSDataId: (unsigned long) StepPDSDataId
+- (uint32_t) stepPDSDataId { return stepPDSDataId; }
+- (void) setStepPDSDataId: (uint32_t) StepPDSDataId
 {
     stepPDSDataId = StepPDSDataId;
 }
 
 
-- (void)setSourceMask:(unsigned long)aMask
+- (void)setSourceMask:(uint32_t)aMask
 {
     sourceMask = aMask;
 }
 
 - (void) runAboutToStart:(NSNotification*)aNote
 {
-    unsigned long runTypeMask = [[[aNote userInfo] objectForKey:@"RunType"] longValue];
+    uint32_t runTypeMask = [[[aNote userInfo] objectForKey:@"RunType"] longValue];
     //note that the source is placed in this object magically by SHaRC at the start of run.
     //note that the runType masks are shifted by one compared to SHaRC because
     //ORCA reserves bit 0 for its own maintenance run type.
@@ -1322,11 +1322,11 @@ static NSString *ORNcdMuxFullEfficiencyThresholds = @"ORNcdMuxFullEfficiencyThre
         @try {
             
             union packed {
-                unsigned long longValue;
+                uint32_t longValue;
                 float floatValue;
             }packed;
             
-            unsigned long data[kNcdPulserRecordSize];
+            uint32_t data[kNcdPulserRecordSize];
             data[0] = pulserDataId | (kNcdPulserRecordSize & 0x3ffff);
             data[1] = [[[triggerCards objectAtIndex:0]crate] requestGTID];
             data[2] = [thePulser selectedWaveform];
@@ -1341,7 +1341,7 @@ static NSString *ORNcdMuxFullEfficiencyThresholds = @"ORNcdMuxFullEfficiencyThre
             data[5] = packed.longValue;
             
             [[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-                                                                object:[NSData dataWithBytes:data length:sizeof(long)*kNcdPulserRecordSize]];
+                                                                object:[NSData dataWithBytes:data length:sizeof(int32_t)*kNcdPulserRecordSize]];
             
         }
 		@catch(NSException* localException) {
@@ -1354,7 +1354,7 @@ static NSString *ORNcdMuxFullEfficiencyThresholds = @"ORNcdMuxFullEfficiencyThre
 
 - (void) shipTaskRecord:(id)aTask running:(BOOL)aState
 {
-    unsigned long taskId = 0;
+    uint32_t taskId = 0;
     if(aTask == ncdLogAmpTask)taskId = logAmpDataId;
     else if(aTask == ncdLinearityTask)taskId = linearityDataId;
     else if(aTask == ncdThresholdTask)taskId = thresholdDataId;
@@ -1373,13 +1373,13 @@ static NSString *ORNcdMuxFullEfficiencyThresholds = @"ORNcdMuxFullEfficiencyThre
         if([triggerCards count]){
             @try {
                 
-                unsigned long data[3];
+                uint32_t data[3];
                 data[0] = taskId | 3; //size is two plus header 
                 data[1] = [[[triggerCards objectAtIndex:0]crate] requestGTID];
                 data[2] = aState;
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-                                                                    object:[NSData dataWithBytes:data length:sizeof(long)*3]];
+                                                                    object:[NSData dataWithBytes:data length:sizeof(int32_t)*3]];
                 
 			}
 			@catch(NSException* localException) {

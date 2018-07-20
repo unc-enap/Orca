@@ -67,12 +67,12 @@
 }
 
 #pragma mark •••Accessors
-- (void) setBaseAddress:(unsigned long) anAddress
+- (void) setBaseAddress:(uint32_t) anAddress
 {
 	baseAddress = anAddress;	
 }
 
-- (unsigned long) baseAddress
+- (uint32_t) baseAddress
 {
 	return baseAddress;
 }
@@ -97,21 +97,21 @@
 	return addressSpace;	
 }
 
-- (void) setSentinelRetryTotal:(unsigned long)value
+- (void) setSentinelRetryTotal:(uint32_t)value
 {
 	sentinelRetryTotal = value;
 }
 
-- (unsigned long)sentinelRetryTotal
+- (uint32_t)sentinelRetryTotal
 {
 	return sentinelRetryTotal;
 }
 
 
-- (void) getQueHead:(unsigned long*)aHeadValue tail:(unsigned long*)aTailValue
+- (void) getQueHead:(uint32_t*)aHeadValue tail:(uint32_t*)aTailValue
 {
-	*aHeadValue = (unsigned long)headValue;
-	*aTailValue = (unsigned long)tailValue;
+	*aHeadValue = (uint32_t)headValue;
+	*aTailValue = (uint32_t)tailValue;
 }
 
 - (void)setAdapter:(id)anAdapter;
@@ -125,9 +125,9 @@
 {
 	SCBHeader theControlBlockHeader;
 	@try {
-		[adapter readLongBlock:(unsigned long*)&theControlBlockHeader
+		[adapter readLongBlock:(uint32_t*)&theControlBlockHeader
 					 atAddress:baseAddress
-					 numToRead:sizeof(SCBHeader)/sizeof(unsigned long)
+					 numToRead:sizeof(SCBHeader)/sizeof(uint32_t)
 					withAddMod:addressModifier
 				 usingAddSpace:addressSpace];
 		
@@ -145,7 +145,7 @@
 	return theControlBlockHeader;
 }
 
-- (unsigned long) getNumberOfBlocksInBuffer
+- (uint32_t) getNumberOfBlocksInBuffer
 {
 	SCBHeader theControlBlockHeader = [self readControlBlockHeader];
 	if( (theControlBlockHeader.writeSentinel & 0x00ffffff) == CB_SENTINEL){
@@ -154,7 +154,7 @@
 	else return 0;
 }
 
-- (unsigned long) getBlocksWritten
+- (uint32_t) getBlocksWritten
 {
 	SCBHeader theControlBlockHeader = [self readControlBlockHeader];
 	if( (theControlBlockHeader.writeSentinel & 0x00ffffff) == CB_SENTINEL){
@@ -163,7 +163,7 @@
 	else return 0;
 }
 
-- (unsigned long) getBlocksRead
+- (uint32_t) getBlocksRead
 {
 	SCBHeader theControlBlockHeader = [self readControlBlockHeader];
 	if( (theControlBlockHeader.writeSentinel & 0x00ffffff) == CB_SENTINEL){
@@ -172,7 +172,7 @@
 	else return 0;
 }
 
-- (unsigned long) getBytesWritten
+- (uint32_t) getBytesWritten
 {
 	SCBHeader theControlBlockHeader = [self readControlBlockHeader];
 	if( (theControlBlockHeader.writeSentinel & 0x00ffffff) == CB_SENTINEL){
@@ -181,7 +181,7 @@
 	else return 0;
 }
 
-- (unsigned long) getBytesRead
+- (uint32_t) getBytesRead
 {
 	SCBHeader theControlBlockHeader = [self readControlBlockHeader];
 	if( (theControlBlockHeader.writeSentinel & 0x00ffffff) == CB_SENTINEL){
@@ -207,7 +207,7 @@
 	return sentinelOK;
 }
 
-- (void) writeLongBlock:(unsigned long) anAddress blocks:(unsigned long) aNumberOfBlocks atPtr:(unsigned long*) aWritePtr
+- (void) writeLongBlock:(uint32_t) anAddress blocks:(uint32_t) aNumberOfBlocks atPtr:(uint32_t*) aWritePtr
 {
 	[adapter writeLongBlock:aWritePtr
 				  atAddress:anAddress
@@ -216,7 +216,7 @@
 			  usingAddSpace:addressSpace];
 }
 
-- (void) writeLong:(unsigned long) anAddress value:(unsigned long) aValue
+- (void) writeLong:(uint32_t) anAddress value:(uint32_t) aValue
 {
 	[adapter writeLongBlock:&aValue
 				  atAddress:anAddress
@@ -225,7 +225,7 @@
 			  usingAddSpace:addressSpace];
 }
 
-- (void) readLongBlock:(unsigned long) anAddress blocks:(unsigned long) aNumberOfBlocks atPtr:(unsigned long*)aReadPtr
+- (void) readLongBlock:(uint32_t) anAddress blocks:(uint32_t) aNumberOfBlocks atPtr:(uint32_t*)aReadPtr
 {
 	[adapter readLongBlock:aReadPtr
 				 atAddress:anAddress
@@ -234,7 +234,7 @@
 			 usingAddSpace:addressSpace];
 }
 
-- (void) readLong:(unsigned long) anAddress atPtr:(unsigned long*) aValue
+- (void) readLong:(uint32_t) anAddress atPtr:(uint32_t*) aValue
 {
 	[adapter readLongBlock:aValue
 				 atAddress:anAddress

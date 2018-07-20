@@ -326,7 +326,7 @@
 - (void) updateRegisterDescription:(short) aRegisterIndex
 {
     [registerOffsetField setStringValue:
-	 [NSString stringWithFormat:@"0x%04lx",[model getAddressOffset:aRegisterIndex] + (0x40 * [model selectedPLT])]];
+	 [NSString stringWithFormat:@"0x%04x",[model getAddressOffset:aRegisterIndex] + (0x40 * [model selectedPLT])]];
 	
     [regNameField setStringValue:[model getRegisterName:aRegisterIndex]];
 	

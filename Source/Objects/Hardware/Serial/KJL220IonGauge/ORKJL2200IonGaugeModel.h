@@ -35,8 +35,8 @@
         NSString*       portName;
         BOOL            portWasOpen;
         ORSerialPort*   serialPort;
-        unsigned long	dataId;
-		unsigned long	timeMeasured;
+        uint32_t	dataId;
+		uint32_t	timeMeasured;
 		int				pollTime;
         NSMutableString*       buffer;
 		BOOL			shipPressure;
@@ -102,13 +102,13 @@
 - (NSString*) portName;
 - (void) setPortName:(NSString*)aPortName;
 - (void) openPort:(BOOL)state;
-- (unsigned long) timeMeasured;
+- (uint32_t) timeMeasured;
 
 #pragma mark ***Data Records
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (NSDictionary*) dataRecordDescription;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherKJL2200IonGauge;
 

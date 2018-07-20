@@ -376,7 +376,7 @@ void* receiveFromDataReplyServerThreadFunction (void* p)
                 if(header->identifiant == 0x0000ffff){//this is a synchro status packet: first packet is a TypeIpeCrateStatusBlock
                     TypeIpeCrateStatusBlock *crateStatusBlock=(TypeIpeCrateStatusBlock *)ptr;
 				    NSLog(@"  IPE crate status block:     PPS %i (0x%08x)\n",crateStatusBlock->PPS_count,crateStatusBlock->PPS_count);
-				    NSLog(@"                              SLT time: %llu \n",((((unsigned long long) crateStatusBlock->SLTTimeHigh) << 32) | crateStatusBlock->SLTTimeLow) );
+				    NSLog(@"                              SLT time: %llu \n",((((uint64_t) crateStatusBlock->SLTTimeHigh) << 32) | crateStatusBlock->SLTTimeLow) );
 				    NSLog(@"      OperaStatus1 0x%08x (d0: %i)\n",crateStatusBlock->OperaStatus1,crateStatusBlock->OperaStatus1 & 0xfff);
 				    NSLog(@"      size_bytes: %i \n",crateStatusBlock->size_bytes);
 				    NSLog(@"      version: %i \n",crateStatusBlock->version);
@@ -618,8 +618,8 @@ NSString* OREdelweissSLTModelDisplayEventLoopChanged	= @"OREdelweissSLTModelDisp
 NSString* OREdelweissSLTV4cpuLock							= @"OREdelweissSLTV4cpuLock";
 
 @interface OREdelweissSLTModel (private)
-- (unsigned long) read:(unsigned long) address;
-- (void) write:(unsigned long) address value:(unsigned long) aValue;
+- (uint32_t) read:(uint32_t) address;
+- (void) write:(uint32_t) address value:(uint32_t) aValue;
 @end
 
 @implementation OREdelweissSLTModel
@@ -816,23 +816,23 @@ NSString* OREdelweissSLTV4cpuLock							= @"OREdelweissSLTV4cpuLock";
     [[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissSLTModelLowLevelRegInHexChanged object:self];
 }
 
-- (unsigned long) statusHighReg
+- (uint32_t) statusHighReg
 {
     return statusHighReg;
 }
 
-- (void) setStatusHighReg:(unsigned long)aStatusRegHigh
+- (void) setStatusHighReg:(uint32_t)aStatusRegHigh
 {
     statusHighReg = aStatusRegHigh;
     [[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissSLTModelStatusRegHighChanged object:self];
 }
 
-- (unsigned long) statusLowReg
+- (uint32_t) statusLowReg
 {
     return statusLowReg;
 }
 
-- (void) setStatusLowReg:(unsigned long)aStatusRegLow
+- (void) setStatusLowReg:(uint32_t)aStatusRegLow
 {
     statusLowReg = aStatusRegLow;
     [[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissSLTModelStatusRegLowChanged object:self];
@@ -1094,23 +1094,23 @@ NSString* OREdelweissSLTV4cpuLock							= @"OREdelweissSLTV4cpuLock";
     [[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissSLTModelCrateUDPDataPortChanged object:self];
 }
 
-- (unsigned long) eventFifoStatusReg
+- (uint32_t) eventFifoStatusReg
 {
     return eventFifoStatusReg;
 }
 
-- (void) setEventFifoStatusReg:(unsigned long)aEventFifoStatusReg
+- (void) setEventFifoStatusReg:(uint32_t)aEventFifoStatusReg
 {
     eventFifoStatusReg = aEventFifoStatusReg;
     [[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissSLTModelEventFifoStatusRegChanged object:self];
 }
 
-- (unsigned long) pixelBusEnableReg
+- (uint32_t) pixelBusEnableReg
 {
     return pixelBusEnableReg;
 }
 
-- (void) setPixelBusEnableReg:(unsigned long)aPixelBusEnableReg
+- (void) setPixelBusEnableReg:(uint32_t)aPixelBusEnableReg
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setPixelBusEnableReg:pixelBusEnableReg];
     pixelBusEnableReg = aPixelBusEnableReg;
@@ -1223,12 +1223,12 @@ NSString* OREdelweissSLTV4cpuLock							= @"OREdelweissSLTV4cpuLock";
 	//NSLog(@"%@::%@  is %@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),sltScriptArguments);//TODO: debug -tb-
 }
 
-- (unsigned long long) clockTime //TODO: rename to 'time' ? -tb-
+- (uint64_t) clockTime //TODO: rename to 'time' ? -tb-
 {
     return clockTime;
 }
 
-- (void) setClockTime:(unsigned long long)aClockTime
+- (void) setClockTime:(uint64_t)aClockTime
 {
     clockTime = aClockTime;
  	//NSLog(@"   %@::%@:   clockTime: 0x%016qx from aClockTime: 0x%016qx   \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),clockTime , aClockTime);//TODO: DEBUG testing ...-tb-
@@ -1236,35 +1236,35 @@ NSString* OREdelweissSLTV4cpuLock							= @"OREdelweissSLTV4cpuLock";
 }
 
 
-- (unsigned long) statusReg
+- (uint32_t) statusReg
 {
     return statusReg;
 }
 
-- (void) setStatusReg:(unsigned long)aStatusReg
+- (void) setStatusReg:(uint32_t)aStatusReg
 {
     statusReg = aStatusReg;
     [[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissSLTModelStatusRegChanged object:self];
 }
 
-- (unsigned long) controlReg
+- (uint32_t) controlReg
 {
     return controlReg;
 }
 
-- (void) setControlReg:(unsigned long)aControlReg
+- (void) setControlReg:(uint32_t)aControlReg
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setControlReg:controlReg];
     controlReg = aControlReg;
     [[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissSLTModelControlRegChanged object:self];
 }
 
-- (unsigned long) projectVersion  { return (hwVersion & kRevisionProject)>>28;}
-- (unsigned long) documentVersion { return (hwVersion & kDocRevision)>>16;}
-- (unsigned long) implementation  { return hwVersion & kImplemention;}
-- (unsigned long) hwVersion       { return hwVersion ;}//=SLT FPGA version/revision
+- (uint32_t) projectVersion  { return (hwVersion & kRevisionProject)>>28;}
+- (uint32_t) documentVersion { return (hwVersion & kDocRevision)>>16;}
+- (uint32_t) implementation  { return hwVersion & kImplemention;}
+- (uint32_t) hwVersion       { return hwVersion ;}//=SLT FPGA version/revision
 
-- (void) setHwVersion:(unsigned long) aVersion
+- (void) setHwVersion:(uint32_t) aVersion
 {
 	hwVersion = aVersion;
     [[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissSLTModelHwVersionChanged object:self];	
@@ -1376,12 +1376,12 @@ NSString* OREdelweissSLTV4cpuLock							= @"OREdelweissSLTV4cpuLock";
     [[NSNotificationCenter defaultCenter] postNotificationName:OREdelweissSLTModelPatternFilePathChanged object:self];
 }
 
-- (unsigned long) nextPageDelay
+- (uint32_t) nextPageDelay
 {
 	return nextPageDelay;
 }
 
-- (void) setNextPageDelay:(unsigned long)aDelay
+- (void) setNextPageDelay:(uint32_t)aDelay
 {	
 	if(aDelay>102400) aDelay = 102400;
 	
@@ -1393,12 +1393,12 @@ NSString* OREdelweissSLTV4cpuLock							= @"OREdelweissSLTV4cpuLock";
 	
 }
 
-- (unsigned long) interruptMask
+- (uint32_t) interruptMask
 {
     return interruptMask;
 }
 
-- (void) setInterruptMask:(unsigned long)aInterruptMask
+- (void) setInterruptMask:(uint32_t)aInterruptMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setInterruptMask:interruptMask];
     interruptMask = aInterruptMask;
@@ -1466,7 +1466,7 @@ NSString* OREdelweissSLTV4cpuLock							= @"OREdelweissSLTV4cpuLock";
     return regV4[anIndex].regName;
 }
 
-- (unsigned long) getAddress: (short) anIndex
+- (uint32_t) getAddress: (short) anIndex
 {
     return( regV4[anIndex].addressOffset>>2);
 }
@@ -1492,12 +1492,12 @@ NSString* OREdelweissSLTV4cpuLock							= @"OREdelweissSLTV4cpuLock";
 	 object:self];
 }
 
-- (unsigned long) writeValue
+- (uint32_t) writeValue
 {
     return writeValue;
 }
 
-- (void) setWriteValue:(unsigned long) aValue
+- (void) setWriteValue:(uint32_t) aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setWriteValue:[self writeValue]];
     
@@ -1537,12 +1537,12 @@ NSString* OREdelweissSLTV4cpuLock							= @"OREdelweissSLTV4cpuLock";
 	
 }
 
-- (unsigned long) pageSize
+- (uint32_t) pageSize
 {
 	return pageSize;
 }
 
-- (void) setPageSize: (unsigned long) aPageSize
+- (void) setPageSize: (uint32_t) aPageSize
 {
 	
 	[[[self undoManager] prepareWithInvocationTarget:self] setPageSize:pageSize];
@@ -2462,7 +2462,7 @@ for(l=0;l<2500;l++){
 
 #pragma mark ***HW Access
 
-- (int)           chargeBBWithFile:(char*)data numBytes:(unsigned long) numBytes
+- (int)           chargeBBWithFile:(char*)data numBytes:(uint32_t) numBytes
 {
 
 
@@ -2470,9 +2470,9 @@ for(l=0;l<2500;l++){
     NSLog(@"%@::%@ \n", NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: DEBUG testing ...-tb-
 
 
-   long buf32[1024+2]; //cannot exceed size of cmd FIFO
+   int32_t buf32[1024+2]; //cannot exceed size of cmd FIFO
    //uint32_t buf32[257]; //cannot exceed size of cmd FIFO
-   unsigned long num32ToSend = (numBytes+3)/4 + 1;//round up if not multiple of 4; add 1 for first word containing numBytes
+   uint32_t num32ToSend = (numBytes+3)/4 + 1;//round up if not multiple of 4; add 1 for first word containing numBytes
    if(numBytes>1024+2) return -1;
    buf32[0]=numBytes;
    char* buf=(char*)&buf32[1];
@@ -2513,11 +2513,11 @@ for(l=0;l<2500;l++){
 	
 	NSLog(@"Charge BB FPGA\n");
 	
-	unsigned long numLongs		= ceil([theData length]/4.0); //round up to long word boundary
+	uint32_t numLongs		= ceil([theData length]/4.0); //round up to int32_t word boundary
 	SBC_Packet aPacket;
 	aPacket.cmdHeader.destination			= kPMC;//kSBC_Command;//kSBC_Process;
 	aPacket.cmdHeader.cmdID					= kEdelweissSLTchargeBB;
-	aPacket.cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(EdelweissSLTchargeBBStruct) + numLongs*sizeof(long));
+	aPacket.cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(EdelweissSLTchargeBBStruct) + numLongs*sizeof(int32_t));
 	
 	EdelweissSLTchargeBBStruct* payloadPtr	= (EdelweissSLTchargeBBStruct*)aPacket.payload;
 	payloadPtr->fileSize					= (uint32_t)[theData length];
@@ -2531,7 +2531,7 @@ for(l=0;l<2500;l++){
 		//launch the load job. The response will be a job status record
 		[pmcLink send:&aPacket receive:&aPacket];
 		SBC_JobStatusStruct *responsePtr = (SBC_JobStatusStruct*)aPacket.payload;
-		long running = responsePtr->running;
+		int32_t running = responsePtr->running;
 		if(running){
 			NSLog(@"BB charge in progress on the SBC on the IPE crate.\n");
 			[pmcLink monitorJobFor:self statusSelector:@selector(chargeBBStatus:)];
@@ -2593,11 +2593,11 @@ for(l=0;l<2500;l++){
 	
 	NSLog(@"Charge FIC FPGA\n");
 	
-	unsigned long numLongs		= ceil([theData length]/4.0); //round up to long word boundary
+	uint32_t numLongs		= ceil([theData length]/4.0); //round up to int32_t word boundary
 	SBC_Packet aPacket;
 	aPacket.cmdHeader.destination			= kPMC;//kSBC_Command;//kSBC_Process;
 	aPacket.cmdHeader.cmdID					= kEdelweissSLTchargeFIC;
-	aPacket.cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(EdelweissSLTchargeBBStruct) + numLongs*sizeof(long));
+	aPacket.cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(EdelweissSLTchargeBBStruct) + numLongs*sizeof(int32_t));
 	
 	EdelweissSLTchargeBBStruct* payloadPtr	= (EdelweissSLTchargeBBStruct*)aPacket.payload;
 	payloadPtr->fileSize					= (uint32_t)[theData length];
@@ -2611,7 +2611,7 @@ for(l=0;l<2500;l++){
 		//launch the load job. The response will be a job status record
 		[pmcLink send:&aPacket receive:&aPacket];
 		SBC_JobStatusStruct *responsePtr = (SBC_JobStatusStruct*)aPacket.payload;
-		long running = responsePtr->running;
+		int32_t running = responsePtr->running;
 		if(running){
 			NSLog(@"FIC charge in progress on the SBC on the IPE crate.\n");
 			[pmcLink monitorJobFor:self statusSelector:@selector(chargeFICStatus:)];
@@ -2660,7 +2660,7 @@ for(l=0;l<2500;l++){
 	SBC_Packet aPacket;
 	aPacket.cmdHeader.destination			= kSBC_Process;//kSBC_Command;//kSBC_Process;
 	aPacket.cmdHeader.cmdID					= kSBC_KillJob;
-	aPacket.cmdHeader.numberBytesinPayload	= 0;//sizeof(EdelweissSLTchargeBBStruct) + numLongs*sizeof(long);
+	aPacket.cmdHeader.numberBytesinPayload	= 0;//sizeof(EdelweissSLTchargeBBStruct) + numLongs*sizeof(int32_t);
 
 	@try {
 		//launch the load job. The response will be a job status record
@@ -2690,7 +2690,7 @@ for(l=0;l<2500;l++){
     NSLog(@"%@::%@ \n", NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: DEBUG testing ...-tb-
 
 
-   long buf32[257]; //cannot exceed size of cmd FIFO
+   int32_t buf32[257]; //cannot exceed size of cmd FIFO
    //uint32_t buf32[257]; //cannot exceed size of cmd FIFO
    int num32ToSend = (numBytes+3)/4 + 1;//round up if not multiple of 4; add 1 for first word containing numBytes
    if(numBytes>1024) return -1;
@@ -2743,8 +2743,8 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 		[scanner scanInt:&amplitude];
 		int i=0;
 		int j=0;
-		unsigned long time[256];
-		unsigned long mask[20][256];
+		uint32_t time[256];
+		uint32_t mask[20][256];
 		int len = 0;
 		BOOL status;
 		while(1){
@@ -2835,49 +2835,49 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 }
 */
 
-- (void) writeReg:(int)index value:(unsigned long)aValue
+- (void) writeReg:(int)index value:(uint32_t)aValue
 {
 	[self write: [self getAddress:index] value:aValue];
 }
 
-- (void) writeReg:(int)index  forFifo:(int)fifoIndex value:(unsigned long)aValue
+- (void) writeReg:(int)index  forFifo:(int)fifoIndex value:(uint32_t)aValue
 {
 	[self write: ([self getAddress:index]|(fifoIndex << 14)) value:aValue];
 }
 
-- (void)		  rawWriteReg:(unsigned long) address  value:(unsigned long)aValue
+- (void)		  rawWriteReg:(uint32_t) address  value:(uint32_t)aValue
 //TODO: FOR TESTING AND DEBUGGING ONLY -tb-
 {
     [self write: address value: aValue];
 }
 
-- (unsigned long) rawReadReg:(unsigned long) address
+- (uint32_t) rawReadReg:(uint32_t) address
 //TODO: FOR TESTING AND DEBUGGING ONLY -tb-
 {
 	return [self read: address];
 
 }
 
-- (unsigned long) readReg:(int) index
+- (uint32_t) readReg:(int) index
 {
 	return [self read: [self getAddress:index]];
 
 }
 
-- (unsigned long) readReg:(int) index forFifo:(int)fifoIndex;
+- (uint32_t) readReg:(int) index forFifo:(int)fifoIndex;
 {
 	return [ self read: ([self getAddress:index] | (fifoIndex << 14)) ];
 
 }
 
-- (id) writeHardwareRegisterCmd:(unsigned long) regAddress value:(unsigned long) aValue
+- (id) writeHardwareRegisterCmd:(uint32_t) regAddress value:(uint32_t) aValue
 {
 	return [ORPMCReadWriteCommand writeLongBlock:&aValue
 									   atAddress:regAddress
 									  numToWrite:1];
 }
 
-- (id) readHardwareRegisterCmd:(unsigned long) regAddress
+- (id) readHardwareRegisterCmd:(uint32_t) regAddress
 {
 	return [ORPMCReadWriteCommand readLongBlockAtAddress:regAddress
 									  numToRead:1];
@@ -2899,9 +2899,9 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 
 
 
-- (unsigned long) readControlReg
+- (uint32_t) readControlReg
 {
-	unsigned long data = [self readReg:kEWSltV4ControlReg];
+	uint32_t data = [self readReg:kEWSltV4ControlReg];
     [self setControlReg: data];
 	return data;
 }
@@ -2914,7 +2914,7 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 
 - (void) printControlReg
 {
-	unsigned long data = [self readControlReg];
+	uint32_t data = [self readControlReg];
 	NSFont* aFont = [NSFont userFixedPitchFontOfSize:10];
 	NSLogFont(aFont,@"----Control Register %@ is 0x%08x ----\n",[self fullID],data);
 	NSLogFont(aFont,@"OnLine  : 0x%02x\n",(data & kCtrlOnLine) >> 14);
@@ -2924,25 +2924,25 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 }
 
 
-- (unsigned long) readStatusReg
+- (uint32_t) readStatusReg
 {
-	unsigned long data = [self readReg:kEWSltV4StatusReg];
+	uint32_t data = [self readReg:kEWSltV4StatusReg];
 //DEBUG OUTPUT:  	NSLog(@"   %@::%@: kEWSltV4StatusReg: 0x%08x \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),data);//TODO: DEBUG testing ...-tb-
 	[self setStatusReg:data];
 	return data;
 }
 
-- (unsigned long) readStatusLowReg
+- (uint32_t) readStatusLowReg
 {
-	unsigned long data = [self readReg:kEWSltV4StatusLowReg];
+	uint32_t data = [self readReg:kEWSltV4StatusLowReg];
 //DEBUG OUTPUT:  	NSLog(@"   %@::%@: kEWSltV4StatusReg: 0x%08x \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),data);//TODO: DEBUG testing ...-tb-
 	[self setStatusLowReg:data];
 	return data;
 }
 
-- (unsigned long) readStatusHighReg
+- (uint32_t) readStatusHighReg
 {
-	unsigned long data = [self readReg:kEWSltV4StatusHighReg];
+	uint32_t data = [self readReg:kEWSltV4StatusHighReg];
 //DEBUG OUTPUT:  	NSLog(@"   %@::%@: kEWSltV4StatusReg: 0x%08x \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),data);//TODO: DEBUG testing ...-tb-
 	[self setStatusHighReg:data];
 	return data;
@@ -2951,7 +2951,7 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 
 - (void) printStatusReg
 {
-	unsigned long data = [self readStatusReg];
+	uint32_t data = [self readStatusReg];
 	NSFont* aFont = [NSFont userFixedPitchFontOfSize:10];
 	NSLogFont(aFont,@"----Status Register %@ is 0x%08x ----\n",[self fullID],data);
 	NSLogFont(aFont,@"IRQ           : 0x%02x\n",ExtractValue(data,kEWStatusIrq,31));
@@ -2964,8 +2964,8 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 //DEBUG OUTPUT:
   	NSLog(@"   %@::%@: UNDER CONSTRUCTION \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: DEBUG testing ...-tb-
 
-	unsigned long low = [self readStatusLowReg];
-	unsigned long high = [self readStatusHighReg];
+	uint32_t low = [self readStatusLowReg];
+	uint32_t high = [self readStatusHighReg];
 	NSFont* aFont = [NSFont userFixedPitchFontOfSize:10];
 	NSLogFont(aFont,@"----Status Low Register %@ is 0x%08x ----\n",[self fullID],low);
 	NSLogFont(aFont,@"FifoReq0..7 Requ.: 0x%04x\n",ExtractValue(low,0xffff,0));
@@ -2996,7 +2996,7 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 
 - (void) readPixelBusEnableReg
 {
-    unsigned long val;
+    uint32_t val;
 	val = [self readReg:kEWSltV4PixelBusEnableReg];
 	[self setPixelBusEnableReg:val];	
 }
@@ -3010,9 +3010,9 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 
 
 
-- (long) getSBCCodeVersion
+- (int32_t) getSBCCodeVersion
 {
-	long theVersion = 0;
+	int32_t theVersion = 0;
 	if(![pmcLink isConnected]){
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];
 	}
@@ -3024,9 +3024,9 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 	return theVersion;
 }
 
-- (long) getFdhwlibVersion
+- (int32_t) getFdhwlibVersion
 {
-	long theVersion = 0;
+	int32_t theVersion = 0;
 	if(![pmcLink isConnected]){
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];
 	}
@@ -3036,9 +3036,9 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 	return theVersion;
 }
 
-- (long) getSltPciDriverVersion
+- (int32_t) getSltPciDriverVersion
 {
-	long theVersion = 0;
+	int32_t theVersion = 0;
 	if(![pmcLink isConnected]){
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];
 	}
@@ -3048,9 +3048,9 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 	return theVersion;
 }
 
-- (long) getPresentFLTsMap
+- (int32_t) getPresentFLTsMap
 {
-	/*uint32_t*/ long theMap = 0;
+	/*uint32_t*/ int32_t theMap = 0;
 	if(![pmcLink isConnected]){
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];
 	}
@@ -3061,7 +3061,7 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 }
 
 //TODO: remove this, never usd -tb-
-- (void) readEventStatus:(unsigned long*)eventStatusBuffer
+- (void) readEventStatus:(uint32_t*)eventStatusBuffer
 {
 	if(![pmcLink isConnected]){
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];
@@ -3078,13 +3078,13 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 }
 
 
-- (unsigned long long) readBoardID
+- (uint64_t) readBoardID
 {
-	unsigned long low = [self readReg:kEWSltV4BoardIDLoReg];
-	unsigned long hi  = [self readReg:kEWSltV4BoardIDHiReg];
+	uint32_t low = [self readReg:kEWSltV4BoardIDLoReg];
+	uint32_t hi  = [self readReg:kEWSltV4BoardIDHiReg];
 	BOOL crc =(hi & 0x80000000)==0x80000000;
 	if(crc){
-		return (unsigned long long)(hi & 0xffff)<<32 | low;
+		return (uint64_t)(hi & 0xffff)<<32 | low;
 	}
 	else return 0;
 }
@@ -3119,7 +3119,7 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 
 - (void) printInterrupt:(int)regIndex
 {
-	unsigned long data = [self readReg:regIndex];
+	uint32_t data = [self readReg:regIndex];
 	NSFont* aFont = [NSFont userFixedPitchFontOfSize:10];
 	if(!data)NSLogFont(aFont,@"Interrupt Mask is Clear (No interrupts %@)\n",regIndex==kSltV4InterruptRequestReg?@"Requested":@"Enabled");
 	else {
@@ -3130,9 +3130,9 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 #endif
 
 
-- (unsigned long) readHwVersion
+- (uint32_t) readHwVersion
 {
-	unsigned long value;
+	uint32_t value;
 	@try {
 		[self setHwVersion:[self readReg: kEWSltV4RevisionReg]];	
 	}
@@ -3142,21 +3142,21 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 }
 
 
-- (unsigned long) readTimeLow
+- (uint32_t) readTimeLow
 {
 	return [self readReg:kEWSltV4TimeLowReg];
 }
 
-- (unsigned long) readTimeHigh
+- (uint32_t) readTimeHigh
 {
 	return [self readReg:kEWSltV4TimeHighReg];
 }
 
-- (unsigned long long) getTime
+- (uint64_t) getTime
 {
-	unsigned long th = [self readTimeHigh]; 
-	unsigned long tl = [self readTimeLow]; 
-	[self setClockTime: (((unsigned long long) th) << 32) | tl];
+	uint32_t th = [self readTimeHigh]; 
+	uint32_t tl = [self readTimeLow]; 
+	[self setClockTime: (((uint64_t) th) << 32) | tl];
 //DEBUG OUTPUT: 	NSLog(@"   %@::%@: tl: 0x%08x,  th: 0x%08x  clockTime: 0x%016qx  (%li)\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),tl,th,clockTime,clockTime);//TODO: DEBUG testing ...-tb-
 	return clockTime;
 }
@@ -3196,10 +3196,10 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 //	triggerSource = 0x1; //sw trigger only
 //	inhibitSource = 0x3; 
 //	[self writePageManagerReset];
-	//unsigned long long p1 = ((unsigned long long)[self readReg:kPageStatusHigh]<<32) | [self readReg:kPageStatusLow];
+	//uint64_t p1 = ((uint64_t)[self readReg:kPageStatusHigh]<<32) | [self readReg:kPageStatusLow];
 	//[self writeReg:kSltSwRelInhibit value:0];
 	//int i = 0;
-	//unsigned long lTmp;
+	//uint32_t lTmp;
     //do {
 	//	lTmp = [self readReg:kSltStatusReg];
 		//NSLog(@"waiting for inhibit %x i=%d\n", lTmp, i);
@@ -3212,7 +3212,7 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 		//[NSException raise:@"SLT error" format:@"Release inhibit failed"];
 	//}
 /*	
-	unsigned long long p2  = ((unsigned long long)[self readReg:kPageStatusHigh]<<32) | [self readReg:kPageStatusLow];
+	uint64_t p2  = ((uint64_t)[self readReg:kPageStatusHigh]<<32) | [self readReg:kPageStatusLow];
 	if(p1 == p2) NSLog (@"No software trigger\n");
 	[self writeReg:kSltSwSetInhibit value:0];
  */
@@ -3462,14 +3462,14 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
     return dataDictionary;
 }
 
-- (unsigned long) fltEventId	     { return fltEventId; }
-- (void) setFltEventId: (unsigned long) aDataId    { fltEventId = aDataId; }
-- (unsigned long) eventDataId        { return eventDataId; }
-- (unsigned long) multiplicityId	 { return multiplicityId; }
-- (unsigned long) waveFormId	     { return waveFormId; }
-- (void) setEventDataId: (unsigned long) aDataId    { eventDataId = aDataId; }
-- (void) setMultiplicityId: (unsigned long) aDataId { multiplicityId = aDataId; }
-- (void) setWaveFormId: (unsigned long) aDataId { waveFormId = aDataId; }
+- (uint32_t) fltEventId	     { return fltEventId; }
+- (void) setFltEventId: (uint32_t) aDataId    { fltEventId = aDataId; }
+- (uint32_t) eventDataId        { return eventDataId; }
+- (uint32_t) multiplicityId	 { return multiplicityId; }
+- (uint32_t) waveFormId	     { return waveFormId; }
+- (void) setEventDataId: (uint32_t) aDataId    { eventDataId = aDataId; }
+- (void) setMultiplicityId: (uint32_t) aDataId { multiplicityId = aDataId; }
+- (void) setWaveFormId: (uint32_t) aDataId { waveFormId = aDataId; }
 
 - (void) setDataIds:(id)assigner
 {
@@ -3669,9 +3669,9 @@ NSLog(@"     %@::%@: takeUDPstreamData: savedUDPSocketState is %i \n",NSStringFr
                                 uint32_t locationWord = 0;//			  = (([self crateNumber]&0x0f)<<21) | ([self stationNumber]& 0x0000001f)<<16;
                                 uint32_t headerData = 0; 
                                 uint16_t dataWord16 = 0; 
-                        	unsigned long totalLength = (9 + waveformLength32);	// longs (1 page=1024 shorts [16 bit] are stored in 512 longs [32 bit])
-							NSMutableData* theADCTraceData = [NSMutableData dataWithCapacity:totalLength*sizeof(long)];
-							unsigned long header = waveFormId | totalLength;
+                        	uint32_t totalLength = (9 + waveformLength32);	// longs (1 page=1024 shorts [16 bit] are stored in 512 longs [32 bit])
+							NSMutableData* theADCTraceData = [NSMutableData dataWithCapacity:totalLength*sizeof(int32_t)];
+							uint32_t header = waveFormId | totalLength;
 							
 							[theADCTraceData appendBytes:&header length:4];				           //ORCA header word
 							[theADCTraceData appendBytes:&locationWord length:4];		           //which crate, which card info
@@ -3859,12 +3859,12 @@ if(NA==0) NA=6;//TODO: dirty workaround, if 0 channels are transmitted -tb-
                             NSLog(@"    channel %i, trace %i has missing samples (%i out of 100000) \n",chan,(int)i,(int)dataReplyThreadData.adcTraceBufCount[*rdIndex][chan]);
 
                         }
-                        unsigned long totalLength = (9 + traceLength/2);	// header (uint32_t) + traceLength shorts (16 bit)
-                        unsigned long header = waveFormId | totalLength;
+                        uint32_t totalLength = (9 + traceLength/2);	// header (uint32_t) + traceLength shorts (16 bit)
+                        uint32_t header = waveFormId | totalLength;
                         t=0;
                         for(i=0; i<numTraces; i++){//default is: ship numTraces=10 packets with traceLength=10000 sample points
 
-                            NSMutableData* theADCTraceData = [NSMutableData dataWithCapacity:totalLength*sizeof(long)];
+                            NSMutableData* theADCTraceData = [NSMutableData dataWithCapacity:totalLength*sizeof(int32_t)];
                             [theADCTraceData appendBytes:&header length:4];				           //ORCA header word
  						    locationWord = (chan&0xff)<<8; 
 							[theADCTraceData appendBytes:&locationWord length:4];		           //which crate, which card info
@@ -3917,7 +3917,7 @@ if(NA==0) NA=6;//TODO: dirty workaround, if 0 channels are transmitted -tb-
 		//TODO: -tb- [self writeClrCnt];
         if(accessAllowedToHardwareAndSBC){
 
-		    unsigned long long runcount = [self getTime];
+		    uint64_t runcount = [self getTime];
 		    [self shipSltEvent:kRunCounterType withType:kStartRunType eventCt:0 high: (runcount>>32)&0xffffffff low:(runcount)&0xffffffff ];
 
 		    [self shipSltSecondCounter: kStartRunType];
@@ -3963,9 +3963,9 @@ if((len % 4) != 0){
 
 
 
-                        	unsigned long totalLength = (9 + waveformLength32);	// longs (1 page=1024 shorts [16 bit] are stored in 512 longs [32 bit])
-							NSMutableData* theADCTraceData = [NSMutableData dataWithCapacity:totalLength*sizeof(long)];
-							unsigned long header = waveFormId | totalLength;
+                        	uint32_t totalLength = (9 + waveformLength32);	// longs (1 page=1024 shorts [16 bit] are stored in 512 longs [32 bit])
+							NSMutableData* theADCTraceData = [NSMutableData dataWithCapacity:totalLength*sizeof(int32_t)];
+							uint32_t header = waveFormId | totalLength;
 							
 							[theADCTraceData appendBytes:&header length:4];				           //ORCA header word
 							[theADCTraceData appendBytes:&locationWord length:4];		           //which crate, which card info
@@ -4018,7 +4018,7 @@ if((len % 4) != 0){
 {
     if(accessAllowedToHardwareAndSBC){
 	    [self shipSltSecondCounter: kStopRunType];
-	    unsigned long long runcount = [self getTime];
+	    uint64_t runcount = [self getTime];
 	    [self shipSltEvent:kRunCounterType withType:kStopRunType eventCt:0 high: (runcount>>32)&0xffffffff low:(runcount)&0xffffffff ];
 	}
     
@@ -4052,36 +4052,36 @@ if((len % 4) != 0){
 - (void) shipSltSecondCounter:(unsigned char)aType
 {
 	//aType = 1 start run, =2 stop run, = 3 start subrun, =4 stop subrun, see #defines in OREdelweissSLTDefs.h -tb-
-	unsigned long tl = [self readTimeLow]; 
-	unsigned long th = [self readTimeHigh]; 
+	uint32_t tl = [self readTimeLow]; 
+	uint32_t th = [self readTimeHigh]; 
 
 	
 
 	[self shipSltEvent:kSecondsCounterType withType:aType eventCt:0 high:th low:tl ];
 	#if 0
-	unsigned long location = (([self crateNumber]&0xf)<<21) | ([self stationNumber]& 0x0000001f)<<16;
-	unsigned long data[5];
+	uint32_t location = (([self crateNumber]&0xf)<<21) | ([self stationNumber]& 0x0000001f)<<16;
+	uint32_t data[5];
 			data[0] = eventDataId | 5; 
 			data[1] = location | (aType & 0xf);
 			data[2] = 0;	
 			data[3] = th;	
 			data[4] = tl;
 			[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-																object:[NSData dataWithBytes:data length:sizeof(long)*(5)]];
+																object:[NSData dataWithBytes:data length:sizeof(int32_t)*(5)]];
 	#endif
 }
 
-- (void) shipSltEvent:(unsigned char)aCounterType withType:(unsigned char)aType eventCt:(unsigned long)c high:(unsigned long)h low:(unsigned long)l
+- (void) shipSltEvent:(unsigned char)aCounterType withType:(unsigned char)aType eventCt:(uint32_t)c high:(uint32_t)h low:(uint32_t)l
 {
-	unsigned long location = (([self crateNumber]&0xf)<<21) | ([self stationNumber]& 0x0000001f)<<16;
-	unsigned long data[5];
+	uint32_t location = (([self crateNumber]&0xf)<<21) | ([self stationNumber]& 0x0000001f)<<16;
+	uint32_t data[5];
 			data[0] = eventDataId | 5; 
 			data[1] = location | ((aCounterType & 0xf)<<4) | (aType & 0xf);
 			data[2] = c;	
 			data[3] = h;	
 			data[4] = l;
 			[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-																object:[NSData dataWithBytes:data length:sizeof(long)*(5)]];
+																object:[NSData dataWithBytes:data length:sizeof(int32_t)*(5)]];
 }
 
 
@@ -4090,7 +4090,7 @@ if((len % 4) != 0){
 	return [pmcLink doneTakingData];
 }
 
-- (unsigned long) calcProjection:(unsigned long *)pMult  xyProj:(unsigned long *)xyProj  tyProj:(unsigned long *)tyProj
+- (uint32_t) calcProjection:(uint32_t *)pMult  xyProj:(uint32_t *)xyProj  tyProj:(uint32_t *)tyProj
 { 
 	//temp----
 	int i, j, k;
@@ -4099,8 +4099,8 @@ if((len % 4) != 0){
 	
 	// Dislay the matrix of triggered pixel and timing
 	// The xy-Projection is needed to readout only the triggered pixel!!!
-	//unsigned long xyProj[20];
-	//unsigned long tyProj[100];
+	//uint32_t xyProj[20];
+	//uint32_t tyProj[100];
 	for (i=0;i<20;i++) xyProj[i] = 0;
 	for (k=0;k<100;k++) tyProj[k] = 0;
 	for (k=0;k<sltSize;k++){
@@ -4162,25 +4162,25 @@ if((len % 4) != 0){
 {
 	
 	//read page start address
-	unsigned long lTimeL     = [self read: SLT_REG_ADDRESS(kSltLastTriggerTimeStamp) + aPageIndex];
+	uint32_t lTimeL     = [self read: SLT_REG_ADDRESS(kSltLastTriggerTimeStamp) + aPageIndex];
 	int iPageStart = (((lTimeL >> 10) & 0x7fe)  + 20) % 2000;
 	
-	unsigned long timeStampH = [self read: SLT_REG_ADDRESS(kSltPageTimeStamp) + 2*aPageIndex];
-	unsigned long timeStampL = [self read: SLT_REG_ADDRESS(kSltPageTimeStamp) + 2*aPageIndex+1];
+	uint32_t timeStampH = [self read: SLT_REG_ADDRESS(kSltPageTimeStamp) + 2*aPageIndex];
+	uint32_t timeStampL = [self read: SLT_REG_ADDRESS(kSltPageTimeStamp) + 2*aPageIndex+1];
 	
 	NSFont* aFont = [NSFont userFixedPitchFontOfSize:9];
 	NSLogFont(aFont,@"Reading event from page %d, start=%d:  %ds %dx100us\n", 
 			  aPageIndex+1, iPageStart, timeStampH, (timeStampL >> 11) & 0x3fff);
 	
 	//readout the SLT pixel trigger data
-	unsigned long buffer[2000];
-	unsigned long sltMemoryAddress = (SLTID << 24) | aPageIndex<<11;
-	[self readBlock:sltMemoryAddress dataBuffer:(unsigned long*)buffer length:20*100 increment:1];
-	unsigned long reorderBuffer[2000];
+	uint32_t buffer[2000];
+	uint32_t sltMemoryAddress = (SLTID << 24) | aPageIndex<<11;
+	[self readBlock:sltMemoryAddress dataBuffer:(uint32_t*)buffer length:20*100 increment:1];
+	uint32_t reorderBuffer[2000];
 	// Re-organize trigger data to get it in a continous data stream
-	unsigned long *pMult = reorderBuffer;
-	memcpy( pMult, buffer + iPageStart, (2000 - iPageStart)*sizeof(unsigned long));  
-	memcpy( pMult + 2000 - iPageStart, buffer, iPageStart*sizeof(unsigned long));  
+	uint32_t *pMult = reorderBuffer;
+	memcpy( pMult, buffer + iPageStart, (2000 - iPageStart)*sizeof(uint32_t));  
+	memcpy( pMult + 2000 - iPageStart, buffer, iPageStart*sizeof(uint32_t));  
 	
 	int i;
 	int j;	
@@ -4188,8 +4188,8 @@ if((len % 4) != 0){
 	
 	// Dislay the matrix of triggered pixel and timing
 	// The xy-Projection is needed to readout only the triggered pixel!!!
-	unsigned long xyProj[20];
-	unsigned long tyProj[100];
+	uint32_t xyProj[20];
+	uint32_t tyProj[100];
 	for (i=0;i<20;i++) xyProj[i] = 0;
 	for (k=0;k<100;k++) tyProj[k] = 0;
 	for (k=0;k<2000;k++){
@@ -4290,7 +4290,7 @@ if((len % 4) != 0){
 	
 	configStruct->card_info[index].deviceSpecificData[0] = partOfRunFLTMask;	
     
-	unsigned long runFlagsMask = 0;
+	uint32_t runFlagsMask = 0;
 	runFlagsMask |= kFirstTimeFlag;          //bit 16 = "first time" flag
     if(takeEventData)  runFlagsMask |= kTakeEventDataFlag;
     if(saveIonChanFilterOutputRecords)  runFlagsMask |= kSaveIonChanFilterOutputRecordsFlag;
@@ -4328,19 +4328,19 @@ if((len % 4) != 0){
 @end
 
 @implementation OREdelweissSLTModel (private)
-- (unsigned long) read:(unsigned long) address
+- (uint32_t) read:(uint32_t) address
 {
 	if(![pmcLink isConnected]){
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];
 	}
-	unsigned long theData;
+	uint32_t theData;
 	[pmcLink readLongBlockPmc:&theData
 					  atAddress:address
 					  numToRead: 1];
 	return theData;
 }
 
-- (void) write:(unsigned long) address value:(unsigned long) aValue
+- (void) write:(uint32_t) address value:(uint32_t) aValue
 {
 	if(![pmcLink isConnected]){
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];
@@ -4351,10 +4351,10 @@ if((len % 4) != 0){
 }
 
 
-- (void) readBlock:(unsigned long)  address 
-		dataBuffer:(unsigned long*) aDataBuffer
-			length:(unsigned long)  length 
-		 increment:(unsigned long)  incr
+- (void) readBlock:(uint32_t)  address 
+		dataBuffer:(uint32_t*) aDataBuffer
+			length:(uint32_t)  length 
+		 increment:(uint32_t)  incr
 {
     //DEBUG   NSLog(@"%@::%@: UNDER CONSTRUCTION! \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: DEBUG testing ...-tb-
 	if(![pmcLink isConnected]){

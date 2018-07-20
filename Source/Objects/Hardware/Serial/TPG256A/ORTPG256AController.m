@@ -72,7 +72,7 @@
     processLimitSize = NSMakeSize(425,295);
     plotSize		 = NSMakeSize(425,295);
 	
-    NSString* key = [NSString stringWithFormat: @"orca.ORTPG256A%lu.selectedtab",[model uniqueIdNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORTPG256A%u.selectedtab",[model uniqueIdNumber]];
     NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
@@ -165,7 +165,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"TPG256A (Unit %lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"TPG256A (Unit %u)",[model uniqueIdNumber]]];
 }
 
 - (void) updateWindow
@@ -208,7 +208,7 @@
 	
     [[self window] setContentView:totalView];
 	
-    NSString* key = [NSString stringWithFormat: @"orca.ORTPG256A%lu.selectedtab",[model uniqueIdNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORTPG256A%u.selectedtab",[model uniqueIdNumber]];
     NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 }
@@ -420,7 +420,7 @@
 				return [self pressureValuesForIndex:(int)rowIndex];
 			}
 			else if([[aTableColumn identifier] isEqualToString:@"time"]){
-				unsigned long theTime = [model timeMeasured:(int)rowIndex];
+				uint32_t theTime = [model timeMeasured:(int)rowIndex];
 				NSDate* theDate;
 				if(theTime){
 					theDate = [NSDate dateWithTimeIntervalSince1970:theTime];

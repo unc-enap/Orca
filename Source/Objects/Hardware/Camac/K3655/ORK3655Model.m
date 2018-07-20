@@ -306,7 +306,7 @@ NSString* ORK3655Chan							= @"ORK3655Chan";
 
 	}
 @catch(NSException* localException) {
-		NSLogError(@"Init Error",@"K3655",[NSString stringWithFormat:@"Station %ld",[self stationNumber]],nil);
+		NSLogError(@"Init Error",@"K3655",[NSString stringWithFormat:@"Station %d",(int)[self stationNumber]],nil);
         [localException raise];
 }
 

@@ -33,7 +33,7 @@
 
 #pragma mark ***Helpers
 - (void) logLin;
-- (long) maxValueChannelinXRangeFrom:(long)minChannel to:(long)maxChannel;
+- (int32_t) maxValueChannelinXRangeFrom:(int32_t)minChannel to:(int32_t)maxChannel;
 - (void) keyDown:(NSEvent*)theEvent;
 - (void) shiftRoiUp;
 - (void) shiftRoiDown;

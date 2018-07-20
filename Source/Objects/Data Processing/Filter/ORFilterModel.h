@@ -43,9 +43,9 @@
 {
 @private
 	
-	unsigned long dataId1D;
-	unsigned long dataId2D;
-	unsigned long dataIdStrip;
+	uint32_t dataId1D;
+	uint32_t dataId2D;
+	uint32_t dataIdStrip;
 	
 	NSString*			lastFile;
 	NSString*			script;
@@ -61,12 +61,12 @@
 	BOOL				firstTime;
 	ORDecoder*			currentDecoder;
 	ORQueue*			stacks[kNumFilterStacks];
-	unsigned long		processingTimeHist[kFilterTimeHistoSize];
+	uint32_t		processingTimeHist[kFilterTimeHistoSize];
 	NSLock*				timerLock;
 	BOOL				timerEnabled;
 	ORTimer*			mainTimer;
 	ORTimer*			runTimer;
-	unsigned long		lastRunTimeValue;
+	uint32_t		lastRunTimeValue;
 	NSTimeInterval		lastOutputUpdateTimeRef;
 	NSString*			pluginPath;
 	BOOL				pluginValid;
@@ -80,11 +80,11 @@
     ORFilterSymbolTable* symbolTable;
     //-----------------------------
     //we take over the node pointers
-    long mStartFilterNodeCount;
+    int32_t mStartFilterNodeCount;
     nodeType** mStartFilterNodes;
-    long mFilterNodeCount;
+    int32_t mFilterNodeCount;
     nodeType** mFilterNodes;
-    long mFinishFilterNodeCount;
+    int32_t mFinishFilterNodeCount;
     nodeType** mFinishFilterNodes;
     //-----------------------------
 
@@ -110,7 +110,7 @@
 - (NSString*) scriptName;
 - (void) setScriptName:(NSString*)aString;
 - (BOOL) parsedOK;
-- (unsigned long) processingTimeHist:(int)index;
+- (uint32_t) processingTimeHist:(int)index;
 - (void) clearTimeHistogram;
 - (BOOL) timerEnabled;
 - (void) setTimerEnabled:(int)aState;
@@ -122,12 +122,12 @@
 - (void) removeInputValue:(NSUInteger)i;
 
 #pragma mark •••Data Handling
-- (unsigned long) dataId1D;
-- (void) setDataId1D: (unsigned long) aDataId;
-- (unsigned long) dataId2D;
-- (void) setDataId2D: (unsigned long) aDataId;
-- (unsigned long) dataIdStrip;
-- (void) setDataIdStrip: (unsigned long) aDataId;
+- (uint32_t) dataId1D;
+- (void) setDataId1D: (uint32_t) aDataId;
+- (uint32_t) dataId2D;
+- (void) setDataId2D: (uint32_t) aDataId;
+- (uint32_t) dataIdStrip;
+- (void) setDataIdStrip: (uint32_t) aDataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherObj;
 - (NSDictionary*) dataRecordDescription;
@@ -151,23 +151,23 @@
 - (BOOL) filterPluginIsValid:(Class) filterClass;
 - (void) reloadPlugin;
 - (void) loadPlugin;
-- (BOOL) record:(unsigned long*)aRecordPtr isEqualTo:(unsigned long)aValue;
-- (unsigned long) extractRecordID:(unsigned long)aValue;
-- (unsigned long) extractRecordLen:(unsigned long)aValue;
-- (unsigned long) extractValue:(unsigned long)aValue mask:(unsigned long)aMask thenShift:(unsigned long)shift;
-- (void) shipRecord:(unsigned long*)p length:(long)length;
-- (void) checkStackIndex:(unsigned long) i;
-- (void) checkStack:(unsigned long)index ptr:(unsigned long) ptr;
-- (void) pushOntoStack:(unsigned long)i ptrCheck:(unsigned long)ptrCheck record:(unsigned long*)p;
-- (unsigned long*) popFromStack:(unsigned long)i;
-- (unsigned long*) popFromStackBottom:(unsigned long)i;
-- (void) shipStack:(unsigned long)i;
-- (void) dumpStack:(unsigned long)i;
-- (long) stackCount:(unsigned long)i;
-- (void) histo1D:(int)i value:(unsigned long)aValue;
-- (void) histo2D:(int)i x:(unsigned long)x y:(unsigned long)y;
-- (void) stripChart:(int)i time:(unsigned long)x value:(unsigned long)y;
-- (void) setOutput:(int)index withValue:(unsigned long)aValue;
+- (BOOL) record:(uint32_t*)aRecordPtr isEqualTo:(uint32_t)aValue;
+- (uint32_t) extractRecordID:(uint32_t)aValue;
+- (uint32_t) extractRecordLen:(uint32_t)aValue;
+- (uint32_t) extractValue:(uint32_t)aValue mask:(uint32_t)aMask thenShift:(uint32_t)shift;
+- (void) shipRecord:(uint32_t*)p length:(int32_t)length;
+- (void) checkStackIndex:(uint32_t) i;
+- (void) checkStack:(uint32_t)index ptr:(uint32_t) ptr;
+- (void) pushOntoStack:(uint32_t)i ptrCheck:(uint32_t)ptrCheck record:(uint32_t*)p;
+- (uint32_t*) popFromStack:(uint32_t)i;
+- (uint32_t*) popFromStackBottom:(uint32_t)i;
+- (void) shipStack:(uint32_t)i;
+- (void) dumpStack:(uint32_t)i;
+- (int32_t) stackCount:(uint32_t)i;
+- (void) histo1D:(int)i value:(uint32_t)aValue;
+- (void) histo2D:(int)i x:(uint32_t)x y:(uint32_t)y;
+- (void) stripChart:(int)i time:(uint32_t)x value:(uint32_t)y;
+- (void) setOutput:(int)index withValue:(uint32_t)aValue;
 - (void) resetDisplays;
 - (void) scheduledUpdate;
 - (void) refreshInputs;
@@ -204,20 +204,20 @@ extern NSString* ORFilterUpdateTiming;
 
 @interface ORFilterDecoderFor1D : ORBaseDecoder
 {}
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)ptr;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)ptr;
 @end
 
 @interface ORFilterDecoderFor2D : ORBaseDecoder
 {}
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)ptr;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)ptr;
 @end
 
 @interface ORFilterDecoderForStrip : ORBaseDecoder
 {}
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)ptr;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)ptr;
 @end
 
 @interface NSObject (Filter)

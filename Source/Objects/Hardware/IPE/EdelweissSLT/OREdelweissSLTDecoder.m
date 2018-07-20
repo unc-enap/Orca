@@ -53,31 +53,31 @@ counter type = kSecondsCounterType, kVetoCounterType, kDeadCounterType, kRunCoun
 **/
 //-------------------------------------------------------------
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length	= ExtractLength(*ptr);	 //get length from first word
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length	= ExtractLength(*ptr);	 //get length from first word
 	[aDataSet loadGenericData:@" " sender:self withKeys:@"v4SLT",@"Test Record",nil];
     return length; //nothing to display at this time.. just return the length
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 
 	NSString* title= @"Ipe SLTv4 Event Record\n\n";
 	++ptr;		//skip the first word (dataID and length)
     
-    NSString* crate = [NSString stringWithFormat:@"Crate      = %lu\n",(*ptr>>21) & 0xf];
-    NSString* card  = [NSString stringWithFormat:@"Station    = %lu\n",(*ptr>>16) & 0x1f];
+    NSString* crate = [NSString stringWithFormat:@"Crate      = %u\n",(*ptr>>21) & 0xf];
+    NSString* card  = [NSString stringWithFormat:@"Station    = %u\n",(*ptr>>16) & 0x1f];
 	int recordType = (*ptr) & 0xf;
 	int counterType = ((*ptr)>>4) & 0xf;
 	
 	++ptr;		//point to event counter
 	
 	if (recordType == 0) {
-		NSString* eventCounter    = [NSString stringWithFormat:@"Event     = %lu\n",*ptr++];
-		NSString* timeStampHi     = [NSString stringWithFormat:@"Time Hi   = %lu\n",*ptr++];
-		NSString* timeStampLo     = [NSString stringWithFormat:@"Time Lo   = %lu\n",*ptr];		
+		NSString* eventCounter    = [NSString stringWithFormat:@"Event     = %u\n",*ptr++];
+		NSString* timeStampHi     = [NSString stringWithFormat:@"Time Hi   = %u\n",*ptr++];
+		NSString* timeStampLo     = [NSString stringWithFormat:@"Time Lo   = %u\n",*ptr];		
 
 		return [NSString stringWithFormat:@"%@%@%@%@%@%@",title,crate,card,
 							eventCounter,timeStampHi,timeStampLo];               
@@ -101,8 +101,8 @@ counter type = kSecondsCounterType, kVetoCounterType, kDeadCounterType, kRunCoun
 		case kStopSubRunType:	typeString    = [NSString stringWithFormat:@"Stop SubRun Timestamp\n"]; break;
 		default:				typeString    = [NSString stringWithFormat:@"Unknown Timestamp Type\n"]; break;
 	}
-	NSString* timeStampHi     = [NSString stringWithFormat:@"Time Hi   = %lu\n",*ptr++];
-	NSString* timeStampLo     = [NSString stringWithFormat:@"Time Lo   = %lu\n",*ptr];		
+	NSString* timeStampHi     = [NSString stringWithFormat:@"Time Hi   = %u\n",*ptr++];
+	NSString* timeStampLo     = [NSString stringWithFormat:@"Time Lo   = %u\n",*ptr];		
 
 	return [NSString stringWithFormat:@"%@%@%@%@%@%@%@",title,crate,card,
 						counterString,typeString,timeStampHi,timeStampLo];               
@@ -131,11 +131,11 @@ followed by multiplicity data (20 longwords -- 1 pixel mask per card)
 //-------------------------------------------------------------
 
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
 
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length	= ExtractLength(*ptr);	 //get length from first word
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length	= ExtractLength(*ptr);	 //get length from first word
 
 	++ptr;											//crate, card,channel from second word
 	unsigned char crate		= (*ptr>>21) & 0xf;
@@ -150,12 +150,12 @@ followed by multiplicity data (20 longwords -- 1 pixel mask per card)
 				
 	// Display data, ak 12.2.08
 	++ptr;		//point to trigger data
-	unsigned long *pMult = ptr;
+	uint32_t *pMult = ptr;
 	int i, j, k;
 	//NSFont* aFont = [NSFont userFixedPitchFontOfSize:9];
-    unsigned long xyProj[20];
-	unsigned long tyProj[100];
-	unsigned long pageSize = length/20;
+    uint32_t xyProj[20];
+	uint32_t tyProj[100];
+	uint32_t pageSize = length/20;
 	
 	for (i=0;i<20;i++) xyProj[i] = 0;
 	for (k=0;k<100;k++) tyProj[k] = 0;
@@ -221,17 +221,17 @@ followed by multiplicity data (20 longwords -- 1 pixel mask per card)
 }
 
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 
     NSString* title= @"Auger FLT Waveform Record\n\n";
 	++ptr;		//skip the first word (dataID and length)
     
-    NSString* crate = [NSString stringWithFormat:@"Crate      = %lu\n",(*ptr>>21) & 0xf];
-    NSString* card  = [NSString stringWithFormat:@"Station    = %lu\n",(*ptr>>16) & 0x1f];
+    NSString* crate = [NSString stringWithFormat:@"Crate      = %u\n",(*ptr>>21) & 0xf];
+    NSString* card  = [NSString stringWithFormat:@"Station    = %u\n",(*ptr>>16) & 0x1f];
 	++ptr;		//point to next structure
 	
-	NSString* eventCount		= [NSString stringWithFormat:@"Event Count = %lu\n",*ptr];
+	NSString* eventCount		= [NSString stringWithFormat:@"Event Count = %u\n",*ptr];
 
     return [NSString stringWithFormat:@"%@%@%@%@",title,crate,card,eventCount]; 
 }
@@ -299,11 +299,11 @@ followed by multiplicity data (20 longwords -- 1 pixel mask per card)
 }
 
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
 
-	unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length	= ExtractLength(ptr[0]);
+	uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length	= ExtractLength(ptr[0]);
 	unsigned char crate		= ShiftAndExtract(ptr[1],21,0xf);
 	unsigned char card		= ShiftAndExtract(ptr[1],16,0x1f);
 	unsigned char fiber		= ShiftAndExtract(ptr[1],12,0xf);
@@ -316,11 +316,11 @@ followed by multiplicity data (20 longwords -- 1 pixel mask per card)
 	NSString* channelKey	= [self getChannelKey: chan];	
 	NSString* trigChannelKey	= [self getChannelKey: trigChan];	
 	NSString* totalChannelKey	= [self getChannelKey: totalChan];	
-	unsigned long startIndex= ShiftAndExtract(ptr[7],8,0x7ff);
+	uint32_t startIndex= ShiftAndExtract(ptr[7],8,0x7ff);
 
 	//channel by channel histograms
-	//unsigned long energy = ptr[6];
-    unsigned long eventFlags     = ptr[7];
+	//uint32_t energy = ptr[6];
+    uint32_t eventFlags     = ptr[7];
     //uint32_t traceStart16 = ShiftAndExtract(eventFlags,8,0x7ff);//start of trace in short array
     
 #define kPageLength (64*1024)
@@ -352,15 +352,15 @@ followed by multiplicity data (20 longwords -- 1 pixel mask per card)
 	
 	
 	// Set up the waveform
-	NSData* waveFormdata = [NSData dataWithBytes:someData length:length*sizeof(long)];
+	NSData* waveFormdata = [NSData dataWithBytes:someData length:length*sizeof(int32_t)];
 	
 	#if 0
 	//-----------------------------------------------
 	//temp.. to lock the waveform to the highest value
 	int n = [waveFormdata length]/sizeof(short) - 20;
-	unsigned long maxValue = 0;
+	uint32_t maxValue = 0;
 	startIndex = 0;
-	unsigned long i;
+	uint32_t i;
 	unsigned short* p = (unsigned short*)[waveFormdata bytes];
 	for(i=20;i<n;i++){
 		unsigned short theValue = p[i] & 0xfff;
@@ -382,7 +382,7 @@ startIndex=0;
 
 if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
 	[aDataSet loadWaveform: waveFormdata					//pass in the whole data set
-					offset: 9*sizeof(long)					// Offset in bytes (past header words)
+					offset: 9*sizeof(int32_t)					// Offset in bytes (past header words)
 				  unitSize: sizeof(short)					// unit size in bytes
 				startIndex:	startIndex					// first Point Index (past the header offset!!!)
 					  mask:	0xFFFF							// when displayed all values will be masked with this value
@@ -390,7 +390,7 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
 				  withKeys: @"IPE-SLT-EW", @"UDP-Raw",crateKey,stationKey,fiberKey,channelKey,nil];
 }else if(eventFlags4bit == 0x2){//FLT event
 	[aDataSet loadWaveform: waveFormdata					//pass in the whole data set
-					offset: 9*sizeof(long)					// Offset in bytes (past header words)
+					offset: 9*sizeof(int32_t)					// Offset in bytes (past header words)
 				  unitSize: sizeof(short)					// unit size in bytes
 				startIndex:	startIndex					// first Point Index (past the header offset!!!)
 					  mask:	0xFFFF							// when displayed all values will be masked with this value
@@ -401,7 +401,7 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
 				 // withKeys: @"IPE-SLT", @"ADCChannels",crateKey,stationKey,fiberKey,channelKey,nil];
 }else{
 	[aDataSet loadWaveform: waveFormdata					//pass in the whole data set
-					offset: 9*sizeof(long)					// Offset in bytes (past header words)
+					offset: 9*sizeof(int32_t)					// Offset in bytes (past header words)
 				  unitSize: sizeof(short)					// unit size in bytes
 				startIndex:	startIndex					// first Point Index (past the header offset!!!)
 					  mask:	0xFFFF							// when displayed all values will be masked with this value
@@ -436,7 +436,7 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
 
     #if 0 //this was the KATRIN setting -tb-
 	[aDataSet loadWaveform: waveFormdata					//pass in the whole data set
-					offset: 9*sizeof(long)					// Offset in bytes (past header words)
+					offset: 9*sizeof(int32_t)					// Offset in bytes (past header words)
 				  unitSize: sizeof(short)					// unit size in bytes
 				startIndex:	startIndex					// first Point Index (past the header offset!!!)
 					  mask:	0x0FFF							// when displayed all values will be masked with this value
@@ -472,21 +472,21 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 
-	unsigned long length	= ExtractLength(ptr[0]);
+	uint32_t length	= ExtractLength(ptr[0]);
 	//unsigned char crate		= ShiftAndExtract(ptr[1],21,0xf);
 	//unsigned char card		= ShiftAndExtract(ptr[1],16,0x1f);
 	//unsigned char chan		= ShiftAndExtract(ptr[1],8,0xff);
-    unsigned long sec            = ptr[2];
-    unsigned long subsec         = ptr[3]; // ShiftAndExtract(ptr[1],0,0xffffffff);
-    unsigned long chmap          = ptr[4];
-    unsigned long eventID        = ptr[5];
-    unsigned long numfifo        = ptr[6];
-    unsigned long energy         = ptr[6] & 0x00ffffff;
-    unsigned long eventFlags     = ptr[7];
-    unsigned long traceStart16 = ShiftAndExtract(eventFlags,8,0x7ff);//start of trace in short array
+    uint32_t sec            = ptr[2];
+    uint32_t subsec         = ptr[3]; // ShiftAndExtract(ptr[1],0,0xffffffff);
+    uint32_t chmap          = ptr[4];
+    uint32_t eventID        = ptr[5];
+    uint32_t numfifo        = ptr[6];
+    uint32_t energy         = ptr[6] & 0x00ffffff;
+    uint32_t eventFlags     = ptr[7];
+    uint32_t traceStart16 = ShiftAndExtract(eventFlags,8,0x7ff);//start of trace in short array
 
     uint32_t eventFlags4bit     = eventFlags & 0xf;
     
@@ -494,32 +494,32 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
 
 	++ptr;		//skip the first word (dataID and length)
     
-    NSString* crate     = [NSString stringWithFormat:@"Crate      = %lu\n",(*ptr>>21) & 0xf];
-    NSString* card      = [NSString stringWithFormat:@"Station    = %lu\n",(*ptr>>16) & 0x1f];
-    NSString* fiber     = [NSString stringWithFormat:@"Fiber      = %lu\n",(*ptr>>12) & 0xf];
-    NSString* chan      = [NSString stringWithFormat:@"Channel    = %lu\n",(*ptr>>8) & 0xf];
+    NSString* crate     = [NSString stringWithFormat:@"Crate      = %u\n",(*ptr>>21) & 0xf];
+    NSString* card      = [NSString stringWithFormat:@"Station    = %u\n",(*ptr>>16) & 0x1f];
+    NSString* fiber     = [NSString stringWithFormat:@"Fiber      = %u\n",(*ptr>>12) & 0xf];
+    NSString* chan      = [NSString stringWithFormat:@"Channel    = %u\n",(*ptr>>8) & 0xf];
     NSString* secStr    = 0;//[NSString stringWithFormat:@"Sec        = %d\n", sec];
     NSString* subsecStr = 0;//[NSString stringWithFormat:@"SubSec     = %d\n", subsec];
     NSString* energyStr = 0;//[NSString stringWithFormat:@"NumFIFO     = %d\n", numfifo];
     if(eventFlags4bit == 0x2){//FLT event
-        secStr    = [NSString stringWithFormat:@"Time 0..31 = 0x%08lx\n", sec];
-        subsecStr = [NSString stringWithFormat:@"Time32..47 = 0x%08lx\n", subsec];
-        energyStr = [NSString stringWithFormat:@"Energy     = 0x%08lx\n", energy];
+        secStr    = [NSString stringWithFormat:@"Time 0..31 = 0x%08x\n", sec];
+        subsecStr = [NSString stringWithFormat:@"Time32..47 = 0x%08x\n", subsec];
+        energyStr = [NSString stringWithFormat:@"Energy     = 0x%08x\n", energy];
     }else{
-        secStr    = [NSString stringWithFormat:@"Sec        = %ld\n", sec];
-        subsecStr = [NSString stringWithFormat:@"SubSec     = %ld\n", subsec];
-        energyStr = [NSString stringWithFormat:@"NumFIFO     = %ld\n", numfifo];
+        secStr    = [NSString stringWithFormat:@"Sec        = %d\n", sec];
+        subsecStr = [NSString stringWithFormat:@"SubSec     = %d\n", subsec];
+        energyStr = [NSString stringWithFormat:@"NumFIFO     = %d\n", numfifo];
     }
-    NSString* chmapStr  = [NSString stringWithFormat:@"ChannelMap = 0x%lx\n", chmap];
-    NSString* eventIDStr= [NSString stringWithFormat:@"ReadPtr,Pg#= %ld,%ld\n", ShiftAndExtract(eventID,0,0x3ff),ShiftAndExtract(eventID,10,0x3f)];
-    NSString* offsetStr = [NSString stringWithFormat:@"Offset16   = %ld\n", traceStart16];
-    NSString* versionStr= [NSString stringWithFormat:@"RecVersion = %ld\n", ShiftAndExtract(eventFlags,0,0xf)];
+    NSString* chmapStr  = [NSString stringWithFormat:@"ChannelMap = 0x%x\n", chmap];
+    NSString* eventIDStr= [NSString stringWithFormat:@"ReadPtr,Pg#= %d,%d\n", ShiftAndExtract(eventID,0,0x3ff),ShiftAndExtract(eventID,10,0x3f)];
+    NSString* offsetStr = [NSString stringWithFormat:@"Offset16   = %d\n", traceStart16];
+    NSString* versionStr= [NSString stringWithFormat:@"RecVersion = %d\n", ShiftAndExtract(eventFlags,0,0xf)];
     NSString* eventFlagsStr
-                        = [NSString stringWithFormat:@"Flag(a,ap) = %ld,%ld\n", ShiftAndExtract(eventFlags,4,0x1),ShiftAndExtract(eventFlags,5,0x1)];
-    NSString* lengthStr = [NSString stringWithFormat:@"Length     = %lu\n", length];
+                        = [NSString stringWithFormat:@"Flag(a,ap) = %d,%d\n", ShiftAndExtract(eventFlags,4,0x1),ShiftAndExtract(eventFlags,5,0x1)];
+    NSString* lengthStr = [NSString stringWithFormat:@"Length     = %u\n", length];
     
     
-    NSString* evFlagsStr= [NSString stringWithFormat:@"EventFlags = 0x%lx\n", eventFlags ];
+    NSString* evFlagsStr= [NSString stringWithFormat:@"EventFlags = 0x%x\n", eventFlags ];
 
     return [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@",title,crate,card,fiber,chan,  
                 secStr, subsecStr, energyStr, chmapStr, eventIDStr, offsetStr, versionStr, eventFlagsStr, lengthStr,   evFlagsStr]; 
@@ -589,11 +589,11 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
 }
 
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
 
-	unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length	= ExtractLength(ptr[0]);
+	uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length	= ExtractLength(ptr[0]);
 	unsigned char crate		= ShiftAndExtract(ptr[1],21,0xf);
 	unsigned char card		= ShiftAndExtract(ptr[1],16,0x1f);
 	//unsigned char fiber		= ShiftAndExtract(ptr[1],12,0xf);
@@ -606,14 +606,14 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
 	//NSString* channelKey	= [self getChannelKey: chan];
 	NSString* trigChannelKey	= [self getChannelKey: trigChan];	
 	//NSString* totalChannelKey	= [self getChannelKey: totalChan];
-	//unsigned long startIndex= ShiftAndExtract(ptr[7],8,0x7ff);
-	unsigned long startIndex  = 0;
-	unsigned long triggerAddr = ShiftAndExtract(ptr[6],0,0xfff);
+	//uint32_t startIndex= ShiftAndExtract(ptr[7],8,0x7ff);
+	uint32_t startIndex  = 0;
+	uint32_t triggerAddr = ShiftAndExtract(ptr[6],0,0xfff);
    // uint32_t eventFifo4       = ptr[6]; //f4
 
 	//channel by channel histograms
-	//unsigned long energy = ptr[6];
-    unsigned long eventFlags     = ptr[7];
+	//uint32_t energy = ptr[6];
+    uint32_t eventFlags     = ptr[7];
     //uint32_t traceStart16 = ShiftAndExtract(eventFlags,8,0x7ff);//start of trace in short array
     
 #define kPageLength (64*1024)
@@ -645,15 +645,15 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
 	
 	
 	// Set up the waveform
-	NSData* waveFormdata = [NSData dataWithBytes:someData length:length*sizeof(long)];
+	NSData* waveFormdata = [NSData dataWithBytes:someData length:length*sizeof(int32_t)];
 	
 	#if 0
 	//-----------------------------------------------
 	//temp.. to lock the waveform to the highest value
 	int n = [waveFormdata length]/sizeof(short) - 20;
-	unsigned long maxValue = 0;
+	uint32_t maxValue = 0;
 	startIndex = 0;
-	unsigned long i;
+	uint32_t i;
 	unsigned short* p = (unsigned short*)[waveFormdata bytes];
 	for(i=20;i<n;i++){
 		unsigned short theValue = p[i] & 0xfff;
@@ -679,7 +679,7 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
     if(trigChan<18 || trigChan>29){//slow channel or filter output
         startIndex=0;
 	    [aDataSet loadWaveform: waveFormdata					//pass in the whole data set
-					offset: 9*sizeof(long)					// Offset in bytes (past header words)
+					offset: 9*sizeof(int32_t)					// Offset in bytes (past header words)
 				  unitSize: sizeof(short)					// unit size in bytes
 				startIndex:	startIndex					// first Point Index (past the header offset!!!)
 					  mask:	0  // 0xFFFF // when displayed all values will be masked with this value //only necessary if some bits need to be masked out -tb-
@@ -694,7 +694,7 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
         }
 
 		[aDataSet loadWaveform: waveFormdata					//pass in the whole data set
-					offset: 9*sizeof(long)					// Offset in bytes (past header words)
+					offset: 9*sizeof(int32_t)					// Offset in bytes (past header words)
 				  unitSize: sizeof(short)					// unit size in bytes
 				startIndex:	startIndex					// first Point Index (past the header offset!!!)
 					  mask:	0  // 0xFFFF // when displayed all values will be masked with this value //only necessary if some bits need to be masked out -tb-
@@ -706,7 +706,7 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
     
     #if 0 //old call  -  the specialBits waveform seems to be buggy (in plots, "Unsigned" check has no effect ...) -tb-
 	[aDataSet loadWaveform: waveFormdata					//pass in the whole data set
-					offset: 9*sizeof(long)					// Offset in bytes (past header words)
+					offset: 9*sizeof(int32_t)					// Offset in bytes (past header words)
 				  unitSize: sizeof(short)					// unit size in bytes
 				startIndex:	startIndex					// first Point Index (past the header offset!!!)
 					  mask:	0xFFFF							// when displayed all values will be masked with this value
@@ -723,7 +723,7 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
 eventFlags4bit=0x2;//TODO: fake FLT event -tb- remove it ...
 if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
 	[aDataSet loadWaveform: waveFormdata					//pass in the whole data set
-					offset: 9*sizeof(long)					// Offset in bytes (past header words)
+					offset: 9*sizeof(int32_t)					// Offset in bytes (past header words)
 				  unitSize: sizeof(short)					// unit size in bytes
 				startIndex:	startIndex					// first Point Index (past the header offset!!!)
 					  mask:	0xFFFF							// when displayed all values will be masked with this value
@@ -734,7 +734,7 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
 }else if((eventFlags4bit == 0x2)){//FLT event
     if(1 || trigChan<30){
 	[aDataSet loadWaveform: waveFormdata					//pass in the whole data set
-					offset: 9*sizeof(long)					// Offset in bytes (past header words)
+					offset: 9*sizeof(int32_t)					// Offset in bytes (past header words)
 				  unitSize: sizeof(short)					// unit size in bytes
 				startIndex:	startIndex					// first Point Index (past the header offset!!!)
 					  mask:	0  // 0xFFFF // when displayed all values will be masked with this value //only necessary if some bits need to be masked out -tb-
@@ -745,7 +745,7 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
     }
     #if 0 //old call  -  the specialBits waveform seems to be buggy (in plots, "Unsigned" check has no effect ...) -tb-
 	[aDataSet loadWaveform: waveFormdata					//pass in the whole data set
-					offset: 9*sizeof(long)					// Offset in bytes (past header words)
+					offset: 9*sizeof(int32_t)					// Offset in bytes (past header words)
 				  unitSize: sizeof(short)					// unit size in bytes
 				startIndex:	startIndex					// first Point Index (past the header offset!!!)
 					  mask:	0xFFFF							// when displayed all values will be masked with this value
@@ -758,7 +758,7 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
 
 }else{
 	[aDataSet loadWaveform: waveFormdata					//pass in the whole data set
-					offset: 9*sizeof(long)					// Offset in bytes (past header words)
+					offset: 9*sizeof(int32_t)					// Offset in bytes (past header words)
 				  unitSize: sizeof(short)					// unit size in bytes
 				startIndex:	startIndex					// first Point Index (past the header offset!!!)
 					  mask:	0xFFFF							// when displayed all values will be masked with this value
@@ -798,7 +798,7 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
 
     #if 0 //this was the KATRIN setting -tb-
 	[aDataSet loadWaveform: waveFormdata					//pass in the whole data set
-					offset: 9*sizeof(long)					// Offset in bytes (past header words)
+					offset: 9*sizeof(int32_t)					// Offset in bytes (past header words)
 				  unitSize: sizeof(short)					// unit size in bytes
 				startIndex:	startIndex					// first Point Index (past the header offset!!!)
 					  mask:	0x0FFF							// when displayed all values will be masked with this value
@@ -834,26 +834,26 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 
-	unsigned long length	= ExtractLength(ptr[0]);
+	uint32_t length	= ExtractLength(ptr[0]);
 	//unsigned char crate		= ShiftAndExtract(ptr[1],21,0xf);
 	//unsigned char card		= ShiftAndExtract(ptr[1],16,0x1f);
 	//unsigned char chan		= ShiftAndExtract(ptr[1],8,0xff);
-	unsigned long int trigChan	= ShiftAndExtract(ptr[1],8,0xff);
-    unsigned long sec            = ptr[2]; //f0
-    unsigned long subsec         = ptr[3]; //f1   // ShiftAndExtract(ptr[1],0,0xffffffff);
-    unsigned long timelo         = ptr[2];
-    unsigned long timehi         = ptr[3]; // ShiftAndExtract(ptr[1],0,0xffffffff);
-    unsigned long timestamp=timelo | ((timehi & 0xffff)<<32);
-    unsigned long chmap          = ptr[4]; //f2
-    unsigned long energy         = ptr[5] & 0x00ffffff;  //f3
-  //  unsigned long eventID        = ptr[6];
-    unsigned long eventFifo4       = ptr[6]; //f4
-//    unsigned long numfifo        = ptr[6];
-    unsigned long eventFlags     = ptr[7];
-    unsigned long spareWord      = ptr[8];
+	uint32_t trigChan	    = ShiftAndExtract(ptr[1],8,0xff);
+    uint32_t sec            = ptr[2]; //f0
+    uint32_t subsec         = ptr[3]; //f1   // ShiftAndExtract(ptr[1],0,0xffffffff);
+    uint32_t timelo         = ptr[2];
+    uint32_t timehi         = ptr[3]; // ShiftAndExtract(ptr[1],0,0xffffffff);
+    uint32_t timestamp=timelo | ((timehi & 0xffff)<<32);
+    uint32_t chmap          = ptr[4]; //f2
+    uint32_t energy         = ptr[5] & 0x00ffffff;  //f3
+  //  uint32_t eventID        = ptr[6];
+    uint32_t eventFifo4       = ptr[6]; //f4
+//    uint32_t numfifo        = ptr[6];
+    uint32_t eventFlags     = ptr[7];
+    uint32_t spareWord      = ptr[8];
     //uint32_t traceStart16 = ShiftAndExtract(eventFlags,8,0x7ff);//start of trace in short array
     uint32_t traceStart16 = ShiftAndExtract(ptr[6],0,0xfff);//start of trace in short array
 
@@ -863,32 +863,32 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
 
 	++ptr;		//skip the first word (dataID and length)
     
-    NSString* crate     = [NSString stringWithFormat:@"Crate      = %lu\n",(*ptr>>21) & 0xf];
-    NSString* card      = [NSString stringWithFormat:@"Station    = %lu\n",(*ptr>>16) & 0x1f];
-    //NSString* fiber     = [NSString stringWithFormat:@"Fiber      = %lu\n",(*ptr>>12) & 0xf];
-    //NSString* chan      = [NSString stringWithFormat:@"Channel    = %lu\n",(*ptr>>8) & 0xf];
-    NSString* chan      = [NSString stringWithFormat:@"Channel    = %lu\n",trigChan];
+    NSString* crate     = [NSString stringWithFormat:@"Crate      = %u\n",(*ptr>>21) & 0xf];
+    NSString* card      = [NSString stringWithFormat:@"Station    = %u\n",(*ptr>>16) & 0x1f];
+    //NSString* fiber     = [NSString stringWithFormat:@"Fiber      = %u\n",(*ptr>>12) & 0xf];
+    //NSString* chan      = [NSString stringWithFormat:@"Channel    = %u\n",(*ptr>>8) & 0xf];
+    NSString* chan      = [NSString stringWithFormat:@"Channel    = %u\n",trigChan];
     NSString* timeStr    = 0; 
     NSString* secStr    = 0;//[NSString stringWithFormat:@"Sec        = %d\n", sec];
     NSString* subsecStr = 0;//[NSString stringWithFormat:@"SubSec     = %d\n", subsec];
     NSString* energyStr = 0;//[NSString stringWithFormat:@"NumFIFO     = %d\n", numfifo];
     if(eventFlags4bit == 0x2){//FLT event
     }
-        secStr    = [NSString stringWithFormat:@"Time 0..31 = 0x%08lx\n", sec];
-        subsecStr = [NSString stringWithFormat:@"Time32..47 = 0x%08lx\n", subsec];
-        timeStr   = [NSString stringWithFormat:@"Timestamp  = %lu\n", timestamp];
-        energyStr = [NSString stringWithFormat:@"Energy     = 0x%08lx\n", energy];
-    NSString* chmapStr  = [NSString stringWithFormat:@"ChannelMap = 0x%lx\n", chmap];
-    NSString* eventIDStr= [NSString stringWithFormat:@"Pg#,offset= %ld,%ld\n", ShiftAndExtract(eventFifo4,12,0xf),ShiftAndExtract(eventFifo4,0,0xfff)];
+        secStr    = [NSString stringWithFormat:@"Time 0..31 = 0x%08x\n", sec];
+        subsecStr = [NSString stringWithFormat:@"Time32..47 = 0x%08x\n", subsec];
+        timeStr   = [NSString stringWithFormat:@"Timestamp  = %u\n", timestamp];
+        energyStr = [NSString stringWithFormat:@"Energy     = 0x%08x\n", energy];
+    NSString* chmapStr  = [NSString stringWithFormat:@"ChannelMap = 0x%x\n", chmap];
+    NSString* eventIDStr= [NSString stringWithFormat:@"Pg#,offset= %d,%d\n", ShiftAndExtract(eventFifo4,12,0xf),ShiftAndExtract(eventFifo4,0,0xfff)];
     NSString* offsetStr = [NSString stringWithFormat:@"Offset16   = %d\n", traceStart16];
-    NSString* versionStr= [NSString stringWithFormat:@"RecVersion = %ld\n", ShiftAndExtract(eventFlags,0,0xf)];
+    NSString* versionStr= [NSString stringWithFormat:@"RecVersion = %d\n", ShiftAndExtract(eventFlags,0,0xf)];
     NSString* eventFlagsStr
-                        = [NSString stringWithFormat:@"Flag(a,ap) = %ld,%ld\n", ShiftAndExtract(eventFlags,4,0x1),ShiftAndExtract(eventFlags,5,0x1)];
-    NSString* lengthStr = [NSString stringWithFormat:@"Length     = %lu\n", length];
+                        = [NSString stringWithFormat:@"Flag(a,ap) = %d,%d\n", ShiftAndExtract(eventFlags,4,0x1),ShiftAndExtract(eventFlags,5,0x1)];
+    NSString* lengthStr = [NSString stringWithFormat:@"Length     = %u\n", length];
     
     
-    NSString* evFlagsStr= [NSString stringWithFormat:@"EventFlags = 0x%lx\n", eventFlags ];
-    NSString* spareStr= [NSString stringWithFormat:@"spare      = 0x%lx\n", spareWord ];
+    NSString* evFlagsStr= [NSString stringWithFormat:@"EventFlags = 0x%x\n", eventFlags ];
+    NSString* spareStr= [NSString stringWithFormat:@"spare      = 0x%x\n", spareWord ];
 
     return [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@",title,crate,card,chan,  
                 secStr, subsecStr, timeStr, energyStr, chmapStr, eventIDStr, offsetStr, versionStr, eventFlagsStr, lengthStr,   evFlagsStr, spareStr]; 

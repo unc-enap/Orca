@@ -148,14 +148,14 @@
 }
 
 
-- (unsigned long)patternMaskForArray:(int)arrayIndex
+- (uint32_t)patternMaskForArray:(int)arrayIndex
 {
     return [[patternArray objectAtIndex:arrayIndex] longValue];
 }
 
-- (void) setPatternMaskForArray:(int)arrayIndex to:(unsigned long)aValue
+- (void) setPatternMaskForArray:(int)arrayIndex to:(uint32_t)aValue
 {
-    long currentValue = [self patternMaskForArray:arrayIndex];
+    int32_t currentValue = [self patternMaskForArray:arrayIndex];
     [[[self undoManager] prepareWithInvocationTarget:self] setPatternMaskForArray:arrayIndex to:currentValue];
 	
     [patternArray replaceObjectAtIndex:arrayIndex withObject:[NSNumber numberWithLong:aValue]];
@@ -260,7 +260,7 @@
     [self updateButtons];    
 }
 
-- (void) setEnabledinMatrix:(NSMatrix*)aMatrix usingMask:(unsigned long)aMask
+- (void) setEnabledinMatrix:(NSMatrix*)aMatrix usingMask:(uint32_t)aMask
 {
     short bit;
     for(bit=0;bit< [aMatrix numberOfColumns];bit++){
@@ -275,7 +275,7 @@
     NSEnumerator* e = [patternMatrixArray objectEnumerator];
     int i=0;
     while(patternMatrixObj = [e nextObject]){
-        unsigned long patternMask = [[patternArray objectAtIndex:i] longValue];
+        uint32_t patternMask = [[patternArray objectAtIndex:i] longValue];
         short bit;
         for(bit=0;bit< [patternMatrixObj numberOfColumns];bit++){
             [[patternMatrixObj cellWithTag:bit] setState:(patternMask&(1L<<bit)) > 0L];
@@ -310,7 +310,7 @@
 
 - (void) setAllEnabled:(NSMatrix*)sender to:(BOOL)state
 {
-    unsigned long aMask = 0; 
+    uint32_t aMask = 0; 
     if(state){
         int bit;
         for(bit=0;bit< [sender numberOfColumns];bit++){
@@ -329,7 +329,7 @@
 
 - (IBAction) patternAction:(id)sender
 {
-    unsigned long aMask = 0; 
+    uint32_t aMask = 0; 
     int bit;
     for(bit=0;bit< [sender numberOfColumns];bit++){
         if([[sender cellWithTag:bit] state]){

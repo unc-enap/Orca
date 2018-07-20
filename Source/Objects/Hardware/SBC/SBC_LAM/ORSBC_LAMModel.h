@@ -34,7 +34,7 @@
 	ORReadOutList*  readoutGroup;
     NSMutableArray* variableNames;
 	NSArray*		dataTakers;       //cache of data takers.
-	unsigned long  cachedNumberOfDataTakers;
+	uint32_t  cachedNumberOfDataTakers;
 }
 
 #pragma mark ***Initialization

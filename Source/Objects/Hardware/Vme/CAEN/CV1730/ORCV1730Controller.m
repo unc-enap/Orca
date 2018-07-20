@@ -555,7 +555,7 @@
 - (void) triggerSourceMaskChanged:(NSNotification*)aNote
 {
 	int i;
-	unsigned long mask = [model triggerSourceMask];
+	uint32_t mask = [model triggerSourceMask];
 	for(i=0;i<16;i++){
 		[[chanTriggerMatrix cellWithTag:i] setIntValue:(mask & (1L << i)) !=0];
 	}
@@ -566,7 +566,7 @@
 - (void) triggerOutMaskChanged:(NSNotification*)aNote
 {
 	int i;
-	unsigned long mask = [model triggerOutMask];
+	uint32_t mask = [model triggerOutMask];
 	for(i=0;i<16;i++){
 		[[chanTriggerOutMatrix cellWithTag:i] setIntValue:(mask & (1L << i)) !=0];
 	}
@@ -930,7 +930,7 @@
 - (IBAction) triggerSourceMaskAction:(id)sender
 {
 	int i;
-	unsigned long mask = 0;
+	uint32_t mask = 0;
 	for(i=0;i<8;i++){
 		if([[chanTriggerMatrix cellWithTag:i] intValue]) mask |= (1L << i);
 	}
@@ -942,7 +942,7 @@
 - (IBAction) triggerOutMaskAction:(id)sender
 {
 	int i;
-	unsigned long mask = 0;
+	uint32_t mask = 0;
 	for(i=0;i<8;i++){
 		if([[chanTriggerOutMatrix cellWithTag:i] intValue]) mask |= (1L << i);
 	}
@@ -958,7 +958,7 @@
 
 - (IBAction) fpIOControlAction:(id)sender
 {
-	unsigned long mask = 0;
+	uint32_t mask = 0;
     mask |= [[fpIOTrgInMatrix           selectedCell] tag] << 0;
     mask |= [[fpIOTrgOutMatrix          selectedCell] tag] << 1;
     mask |= [[fpIOLVDS0Matrix           selectedCell] tag] << 2;
@@ -1103,7 +1103,7 @@
     };
 	
     [registerOffsetTextField setStringValue:
-	 [NSString stringWithFormat:@"0x%04lx",
+	 [NSString stringWithFormat:@"0x%04x",
 	  [model getAddressOffset:aRegisterIndex]]];
 	
     [registerReadWriteTextField setStringValue:types[[model getAccessType:aRegisterIndex]]];

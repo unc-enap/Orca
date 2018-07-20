@@ -398,12 +398,12 @@ NSString* ORIpeSimulationPendingRequestsChanged	= @"ORIpeSimulationPendingReques
     [self setChannelDataId:     [anotherObject channelDataId]];
 }
 
-- (unsigned long) channelDataId
+- (uint32_t) channelDataId
 {
     return channelDataId;
 }
 
-- (void) setChannelDataId:(unsigned long) aValue
+- (void) setChannelDataId:(uint32_t) aValue
 {
     channelDataId = aValue;
 }
@@ -937,7 +937,7 @@ NSString* ORIpeSimulationPendingRequestsChanged	= @"ORIpeSimulationPendingReques
 
 - (NSString*) processingTitle
 {
-    return [NSString stringWithFormat: @"%@-%lu",IPE_SIMULATION_SHORT_NAME,[self uniqueIdNumber]];
+    return [NSString stringWithFormat: @"%@-%u",IPE_SIMULATION_SHORT_NAME,[self uniqueIdNumber]];
 }
 
 
@@ -1049,7 +1049,7 @@ NSString* ORIpeSimulationPendingRequestsChanged	= @"ORIpeSimulationPendingReques
 #pragma mark ‚Ä¢‚Ä¢‚Ä¢ID Helpers (see OrcaObject)
 - (NSString*) identifier
 {
-    return [NSString stringWithFormat: @"%@-%lu",IPE_SIMULATION_SHORT_NAME,[self uniqueIdNumber]];
+    return [NSString stringWithFormat: @"%@-%u",IPE_SIMULATION_SHORT_NAME,[self uniqueIdNumber]];
 }
 
 #pragma mark ‚Ä¢‚Ä¢‚Ä¢Methods Useful For Scripting
@@ -1288,7 +1288,7 @@ NSString* ORIpeSimulationPendingRequestsChanged	= @"ORIpeSimulationPendingReques
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORIpeSimulationModelHistogramChanged object:self];
 }
 
-- (long) dataTimeHist:(int)index
+- (int32_t) dataTimeHist:(int)index
 {
 	if(index<kResponseTimeHistogramSize)return histogram[index];
 	else return 0;
@@ -1498,7 +1498,7 @@ NSString* ORIpeSimulationPendingRequestsChanged	= @"ORIpeSimulationPendingReques
 {
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}dataUnion;
 	
 	if([pollingLookUp count]){
@@ -1518,10 +1518,10 @@ NSString* ORIpeSimulationPendingRequestsChanged	= @"ORIpeSimulationPendingReques
                 if(channelNumber ==-1) channelNumber = 0xff;//removed channels have channelNumber -1
                 
 				NSTimeInterval theTimeStamp =  [self timeFromADEIDate:[itemDictionary objectForKey:@"Date"]];//TODO: controls have no "Date" -tb-
-				unsigned long seconds	 = (unsigned long)theTimeStamp;	  //seconds since 1970
-				unsigned long subseconds = (theTimeStamp - seconds)*1000; //milliseconds
+				uint32_t seconds	 = (uint32_t)theTimeStamp;	  //seconds since 1970
+				uint32_t subseconds = (theTimeStamp - seconds)*1000; //milliseconds
 				
-				unsigned long data[7];
+				uint32_t data[7];
 				data[0] = channelDataId | 7;
 				data[1] = (([self uniqueIdNumber]&0xf) << 21) | (channelNumber&0xff);
 							
@@ -1532,7 +1532,7 @@ NSString* ORIpeSimulationPendingRequestsChanged	= @"ORIpeSimulationPendingReques
 				data[5] = 0; //spare
 				data[6] = 0; //spare
 				
-				[theData appendBytes:data length:7*sizeof(unsigned long)];
+				[theData appendBytes:data length:7*sizeof(uint32_t)];
 			}
 			[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification object:theData];
 		}

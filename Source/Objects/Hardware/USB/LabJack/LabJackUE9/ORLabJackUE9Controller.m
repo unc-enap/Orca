@@ -144,7 +144,7 @@
     timersSize		= NSMakeSize(570,580);
     mux80Size		= NSMakeSize(400,440);
 	
-    NSString* key = [NSString stringWithFormat: @"orca.ORLabJackUE9%lu.selectedtab",[model uniqueIdNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORLabJackUE9%u.selectedtab",[model uniqueIdNumber]];
     NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
@@ -427,7 +427,7 @@
 
 - (void) adcEnabledChanged:(NSNotification*)aNote
 {
-	unsigned long aMask = [model adcEnabledMask:0];
+	uint32_t aMask = [model adcEnabledMask:0];
 	int i;
 	for(i=0;i<14;i++){
 		[[adcEnabledMatrix cellWithTag:i] setIntValue:aMask& (1<<i)];
@@ -447,7 +447,7 @@
 {
 	int i;
 	for(i=0;i<kUE9NumTimers;i++){
-		[[timerResultMatrix cellWithTag:i] setStringValue:[NSString stringWithFormat:@"%lu",[model timerResult:i]]];
+		[[timerResultMatrix cellWithTag:i] setStringValue:[NSString stringWithFormat:@"%u",[model timerResult:i]]];
 	}
 }
 
@@ -458,7 +458,7 @@
 
 - (void) counterEnableMaskChanged:(NSNotification*)aNote
 {
-	unsigned long aMask = [model counterEnableMask];
+	uint32_t aMask = [model counterEnableMask];
 	[[counterEnableMatrix cellWithTag:0] setIntValue: (aMask & (1L<<0))!=0];
 	[[counterEnableMatrix cellWithTag:1] setIntValue: (aMask & (1L<<1))!=0];
 	[self updateButtons];
@@ -467,7 +467,7 @@
 
 - (void) timerEnableMaskChanged:(NSNotification*)aNote
 {
-	unsigned long aMask = [model timerEnableMask];
+	uint32_t aMask = [model timerEnableMask];
 	int i;
 	for(i=0;i<kUE9NumTimers;i++){
 		[[timerEnableMaskMatrix cellWithTag:i] setIntValue: (aMask & (1L<<i))!=0];
@@ -505,7 +505,7 @@
 	}
     [[self window] setContentView:totalView];
 
-    NSString* key = [NSString stringWithFormat: @"orca.ORLabJackUE9%lu.selectedtab",[model uniqueIdNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORLabJackUE9%u.selectedtab",[model uniqueIdNumber]];
     NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
     
@@ -656,7 +656,7 @@
 
 - (void) setDoEnabledState
 {
-	unsigned long aMask = [model doDirection];
+	uint32_t aMask = [model doDirection];
 	int i;
 	for(i=0;i<kUE9NumIO;i++){
 		[[doValueOutMatrix cellWithTag:i] setTransparent: (aMask & (1L<<i))!=0];

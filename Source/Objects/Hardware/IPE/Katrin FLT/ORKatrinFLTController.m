@@ -828,8 +828,8 @@
 - (void) slotChanged:(NSNotification*)aNotification
 {
 	// Set title of FLT configuration window, ak 15.6.07
-	[[self window] setTitle:[NSString stringWithFormat:@"Katrin FLT Card (Slot %lu)",[model stationNumber]]];
-	[fltNumberField setStringValue:[NSString stringWithFormat:@"FLT%lu",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"Katrin FLT Card (Slot %u)",(int)[model stationNumber]]];
+	[fltNumberField setStringValue:[NSString stringWithFormat:@"FLT%u",(int)[model stationNumber]]];
     //added a field with the number at the left border for better visibility -tb-
     
     //reread the firmware version -tb-
@@ -1118,7 +1118,7 @@
     }
     [[self window] setContentView:totalView];
 	
-    NSString* key = [NSString stringWithFormat: @"orca.ORKatrinFLT%lu.selectedtab",[model stationNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORKatrinFLT%u.selectedtab",(int)[model stationNumber]];
     NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
     
@@ -1383,42 +1383,42 @@
 
 - (IBAction) readRegisterAdressButtonAction:(id)sender
 {
-    unsigned long adress = [model registerAdressWithName:[model readWriteRegisterName] forChan:[model readWriteRegisterChan]];
+    uint32_t adress = [model registerAdressWithName:[model readWriteRegisterName] forChan:[model readWriteRegisterChan]];
     NSLog(@"Address for Register %@ for chan/group %i is %i (0x%08x)\n",
 		  [model readWriteRegisterName],[model readWriteRegisterChan],adress,adress);
 }
 
 - (IBAction) readRegisterButtonAction:(id)sender
 {
-    unsigned long val = [model readRegisterWithName:[model readWriteRegisterName] forChan:[model readWriteRegisterChan]];
-    //unsigned long adress = [model registerAdressWithName:[model readWriteRegisterName] forChan:[model readWriteRegisterChan]];
+    uint32_t val = [model readRegisterWithName:[model readWriteRegisterName] forChan:[model readWriteRegisterChan]];
+    //uint32_t adress = [model registerAdressWithName:[model readWriteRegisterName] forChan:[model readWriteRegisterChan]];
     NSLog(@"Value of Register  %@ for chan/group %i is %i (0x%08x)\n",
 		  [model readWriteRegisterName],[model readWriteRegisterChan],val,val);
 }
 
 - (IBAction) writeRegisterButtonAction:(id)sender
 {
-	unsigned long val;//   =	[readWriteRegisterField integerValue];
+	uint32_t val;//   =	[readWriteRegisterField integerValue];
     //NSString *s=[NSString stringWithString: [readWriteRegisterField stringValue] ];
     //NSLog(@"String is %@\n",s);
-    unsigned long  val2 = [[NSString stringWithString: [readWriteRegisterField stringValue] ] longLongValue];
+    uint32_t  val2 = [[NSString stringWithString: [readWriteRegisterField stringValue] ] longLongValue];
     val=val2;
     NSLog(@"LongLong  is %Lu\n",val2);
     int aChan = [model readWriteRegisterChan];
-    NSLog(@"Write to Register: >%@< for chan/group %i  value %lu\n",[model readWriteRegisterName],aChan,val);
+    NSLog(@"Write to Register: >%@< for chan/group %i  value %u\n",[model readWriteRegisterName],aChan,val);
     [model writeRegisterWithName: [model readWriteRegisterName] forChan:aChan value: val];
 }
 
 - (IBAction) readRegisterWithAdressButtonAction:(id)sender
 {
 	int adr   =	[readWriteRegisterAdressField intValue];
-    unsigned long val = [model read: adr];
+    uint32_t val = [model read: adr];
     NSLog(@"Value of Register  %i  is %i (0x%08x)\n",adr,val,val);
 }
 
 - (IBAction) writeRegisterWithAdressButtonAction:(id)sender
 {
-    unsigned long  val = [[NSString stringWithString: [readWriteRegisterField stringValue] ] longLongValue];
+    uint32_t  val = [[NSString stringWithString: [readWriteRegisterField stringValue] ] longLongValue];
 	int adr   =	[readWriteRegisterAdressField intValue];
     NSLog(@"writeRegisterWithAdressButtonAction: write adr: %i  val %i\n",adr,val);
     [model write: adr   value: val];
@@ -1484,7 +1484,7 @@
 - (IBAction) readTimeAction: (id) sender
 {
 	@try {
-		unsigned long timeLoaded = [model readTime];
+		uint32_t timeLoaded = [model readTime];
 		NSLog(@"FLT %d time:%d = %@\n",[model stationNumber],timeLoaded,[NSDate dateWithTimeIntervalSinceReferenceDate:(NSTimeInterval)timeLoaded]);
 	}
 	@catch(NSException* localException) {
@@ -1564,7 +1564,7 @@
 
 - (IBAction) tModeAction: (id) sender
 {
-	unsigned long pattern = 0;
+	uint32_t pattern = 0;
 	int i;
 	for(i=0;i<2;i++){
 		BOOL state = [[tModeMatrix cellWithTag:i] state];
@@ -1628,8 +1628,8 @@
 {
     //TODO: CATCH EXCEPTIONS -tb-
     
-    unsigned long tRec = [model readTRec];
-    NSLog(@"This is  readTRecButtonAction: tRec = %lu\n",tRec);
+    uint32_t tRec = [model readTRec];
+    NSLog(@"This is  readTRecButtonAction: tRec = %u\n",tRec);
     [tRecField setIntegerValue:tRec ];
 }
 

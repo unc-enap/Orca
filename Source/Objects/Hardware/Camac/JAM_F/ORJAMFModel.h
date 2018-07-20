@@ -55,7 +55,7 @@
 		int pollingState;
 		int scanLimit;
 		BOOL scanEnabled;
-		unsigned long   dataId;
+		uint32_t   dataId;
 		BOOL shipRecords;
 }
 
@@ -64,8 +64,8 @@
 - (void) dealloc;
         
 #pragma mark •••Accessors
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (BOOL) shipRecords;
 - (void) setShipRecords:(BOOL)aShipRecords;
 - (BOOL) scanEnabled;

@@ -54,11 +54,11 @@
     NSAutoreleasePool* thePool = [[NSAutoreleasePool alloc] init];
 	if(currentDecoder){
         @try {
-            long long dataSizeLimit = 2.0e9;
+            int64_t dataSizeLimit = 2.0e9;
             NSLog(@"Data Explorer: Opening %@\n",filePath);
             NSError*      attributesError;
             NSDictionary* fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:filePath error:&attributesError];
-            long long     fileSize       = [[fileAttributes objectForKey:NSFileSize] longLongValue];
+            int64_t     fileSize       = [[fileAttributes objectForKey:NSFileSize] longLongValue];
             NSFileHandle* fh = [NSFileHandle fileHandleForReadingAtPath:filePath];
             if(fileSize < dataSizeLimit){
                 fileAsData = [[fh readDataToEndOfFile] retain];
@@ -99,11 +99,11 @@
 	@try {
 		array = [NSMutableArray arrayWithCapacity:1024*1000];
 		NSNumber* aKey;
-		long length = [fileAsData length]/sizeof(long);
-		unsigned long decodedLength;
-		unsigned long* dPtr = (unsigned long*)[fileAsData bytes];
-		unsigned long* start = dPtr;
-		unsigned long* end = start + [fileAsData length]/4;
+		int32_t length = [fileAsData length]/sizeof(int32_t);
+		uint32_t decodedLength;
+		uint32_t* dPtr = (uint32_t*)[fileAsData bytes];
+		uint32_t* start = dPtr;
+		uint32_t* end = start + [fileAsData length]/4;
 		if([delegate respondsToSelector:@selector(setTotalLength:)]){
 			[delegate setTotalLength:length];
 		}
@@ -115,8 +115,8 @@
 			
 			id anObj = nil;
 			//get length from the first word.
-			unsigned long val = *dPtr;
-			if(needToSwap)val = (unsigned long)CFSwapInt32((uint32_t)val); //if data is from old PPC file, must swap.
+			uint32_t val = *dPtr;
+			if(needToSwap)val = (uint32_t)CFSwapInt32((uint32_t)val); //if data is from old PPC file, must swap.
 			aKey		  = [NSNumber  numberWithLong:ExtractDataId(val)];
 			decodedLength = ExtractLength(val);
 			anObj		  = [[currentDecoder objectLookup] objectForKey:aKey];
@@ -135,7 +135,7 @@
 						sname = [sname stringByAppendingString:@"Control"];
 					}
                     else {
-                        sname = [NSString stringWithFormat:@"unKnown(0x%x %lu)",[aKey intValue],decodedLength];
+                        sname = [NSString stringWithFormat:@"unKnown(0x%x %u)",[aKey intValue],decodedLength];
                     }
 					[nameCatalog setObject:sname forKey:aKey]; 
 					shortName = sname;
@@ -152,7 +152,7 @@
 						break;
 					}
 					else {
-						unsigned long offset = dPtr - start;
+						uint32_t offset = dPtr - start;
 						[array addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:
 										  [NSNumber numberWithLong:decodedLength],@"Length",
 										  shortName,@"Name",
@@ -187,37 +187,37 @@
 	return array;
 }
 
-- (void) decodeOneRecordAtOffset:(unsigned long)anOffset intoDataSet:(ORDataSet*)aDataSet forKey:(NSNumber*)aKey
+- (void) decodeOneRecordAtOffset:(uint32_t)anOffset intoDataSet:(ORDataSet*)aDataSet forKey:(NSNumber*)aKey
 {
-    unsigned long* dPtr = ((unsigned long*)[fileAsData bytes]) + anOffset;
+    uint32_t* dPtr = ((uint32_t*)[fileAsData bytes]) + anOffset;
     if(!dPtr)return;
 	[currentDecoder decode:dPtr length:ExtractLength(*dPtr) intoDataSet:aDataSet];
 }
 
-- (void) byteSwapOneRecordAtOffset:(unsigned long)anOffset forKey:(NSNumber*)aKey
+- (void) byteSwapOneRecordAtOffset:(uint32_t)anOffset forKey:(NSNumber*)aKey
 {
 	if(needToSwap){
-		unsigned long* dPtr = ((unsigned long*)[fileAsData bytes]) + anOffset;
+		uint32_t* dPtr = ((uint32_t*)[fileAsData bytes]) + anOffset;
 		if(!dPtr)return;
 		[[[currentDecoder objectLookup] objectForKey:aKey] swapData:dPtr];	
 	}
 }
 
-- (NSString*) dataRecordDescription:(unsigned long)anOffset forKey:(NSNumber*)aKey
+- (NSString*) dataRecordDescription:(uint32_t)anOffset forKey:(NSNumber*)aKey
 {	
-    unsigned long* dataPtr = ((unsigned long*)[fileAsData bytes]) + anOffset;
+    uint32_t* dataPtr = ((uint32_t*)[fileAsData bytes]) + anOffset;
 	id anObj = [[currentDecoder objectLookup] objectForKey:aKey];
 	if(anObj)return [anObj dataRecordDescription:dataPtr];
     else if([aKey intValue]==0)return @"Header";
 	else return @"Not In DataDescription";
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     return @"?"; //place holder for compiler warning
 }
 
-- (NSString*) nameForDataID:(long)anID
+- (NSString*) nameForDataID:(int32_t)anID
 {	
 	NSNumber* aKey	= [NSNumber  numberWithLong:anID];
 	NSString* shortName		= [nameCatalog objectForKey:aKey];

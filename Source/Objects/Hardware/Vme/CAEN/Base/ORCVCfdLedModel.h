@@ -22,7 +22,7 @@
 
 typedef struct RegisterNamesStruct {
 	NSString*       regName;
-	unsigned long 	addressOffset;
+	uint32_t 	addressOffset;
 } CVCfcLedRegNamesStruct; 
 
 // Class definition
@@ -72,15 +72,15 @@ typedef struct RegisterNamesStruct {
 
 #pragma mark ***subclass responsibility
 - (unsigned short) numberOfRegisters;
-- (unsigned long) regOffset:(int)index;
-- (unsigned long) threshold0Offset;
-- (unsigned long) outputWidth0_7Offset;
-- (unsigned long) outputWidth8_15Offset; 
-- (unsigned long) testPulseOffset; 
-- (unsigned long) patternInibitOffset; 
-- (unsigned long) majorityThresholdOffset; 
-- (unsigned long) moduleTypeOffset; 
-- (unsigned long) versionOffset; 
+- (uint32_t) regOffset:(int)index;
+- (uint32_t) threshold0Offset;
+- (uint32_t) outputWidth0_7Offset;
+- (uint32_t) outputWidth8_15Offset; 
+- (uint32_t) testPulseOffset; 
+- (uint32_t) patternInibitOffset; 
+- (uint32_t) majorityThresholdOffset; 
+- (uint32_t) moduleTypeOffset; 
+- (uint32_t) versionOffset; 
 
 #pragma mark ***Archival
 - (id)   initWithCoder:(NSCoder*)decoder;

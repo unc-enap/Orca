@@ -49,7 +49,7 @@
 	devices = aDeviceDict;
 }
 
-- (ORFireWireInterface*) getFireWireInterface:(unsigned long)aVendorID
+- (ORFireWireInterface*) getFireWireInterface:(uint32_t)aVendorID
 {
 	//io_object_t service = [[[devices objectForKey:[NSNumber numberWithLong:aVendorID]] objectAtIndex:0] longValue];
 	//if(!service){
@@ -62,7 +62,7 @@
 }
 
 #pragma mark ¥¥¥HW access
-- (void) getDevicesWithVenderID:(unsigned long)aVendorID
+- (void) getDevicesWithVenderID:(uint32_t)aVendorID
 {    
 	mach_port_t				masterDevicePort = 0;	// Master port
 	io_iterator_t			enumerator		 = 0;	// Enumerator of matching kFWDevType devices
@@ -85,7 +85,7 @@
 		if ( matchDictionary == nil ) {
 			// No matching dictionary -- fatal error
 			NSLog(@"Unable to obtain I/O matching dictionary\n" );
-			[NSException raise:@"IOKit Matching Error" format:@"Unable to match firewire device vendorID %lu",aVendorID];
+			[NSException raise:@"IOKit Matching Error" format:@"Unable to match firewire device vendorID %u",aVendorID];
 		}
 		
 		// Get a registry enumerator for all matching kFWDevType devices
@@ -94,7 +94,7 @@
 		if ( result != kIOReturnSuccess ) {
 			// Can't get registry enumerator -- fatal error
 			NSLog(@"Unable to obtain matching I/O services for FireWire Device\n" );
-			[NSException raise:@"IOKit Matching Services Error" format:@"Unable to obtain matching I/O services for vendorID %lu",aVendorID];
+			[NSException raise:@"IOKit Matching Services Error" format:@"Unable to obtain matching I/O services for vendorID %u",aVendorID];
 		}
 		
 		// Create a list of the matched devices

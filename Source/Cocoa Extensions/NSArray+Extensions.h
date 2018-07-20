@@ -24,16 +24,16 @@
 - (NSData *)dataWithLineEndingType:(LineEndingType)lineEndingType;
 - (id) objectForKeyArray:(NSMutableArray*)anArray;
 - (void) prettyPrint:(NSString*)aTitle;
-+ (NSArray*) arrayFromLongCArray   : (long*)          cArray size:(int)num;
-+ (NSArray*) arrayFromULongCArray  : (unsigned long*) cArray size:(int)num;
++ (NSArray*) arrayFromLongCArray   : (int32_t*)          cArray size:(int)num;
++ (NSArray*) arrayFromULongCArray  : (uint32_t*) cArray size:(int)num;
 + (NSArray*) arrayFromShortCArray  : (short*)         cArray size:(int)num;
 + (NSArray*) arrayFromUShortCArray : (unsigned short*)cArray size:(int)num;
 + (NSArray*) arrayFromCharCArray   : (char*)          cArray size:(int)num;
 + (NSArray*) arrayFromUCharCArray  : (unsigned char*) cArray size:(int)num;
 + (NSArray*) arrayFromBoolCArray   : (BOOL*)          cArray size:(int)num;
 
-- (void) loadLongCArray   : (long*)          cArray size:(int)num;
-- (void) loadULongCArray  : (unsigned long*) cArray size:(int)num;
+- (void) loadLongCArray   : (int32_t*)          cArray size:(int)num;
+- (void) loadULongCArray  : (uint32_t*) cArray size:(int)num;
 - (void) loadShortCArray  : (short*)         cArray size:(int)num;
 - (void) loadUShortCArray : (unsigned short*)cArray size:(int)num;
 - (void) loadCharCArray   : (char*)          cArray size:(int)num;

@@ -60,8 +60,8 @@
 - (NSTimer *) rampTimer;
 - (BOOL) hasBeenPolled;
 - (id) getHVController;
-- (void) setMainFrameID:(unsigned long)anIdNumber;
-- (unsigned long) mainFrameID;
+- (void) setMainFrameID:(uint32_t)anIdNumber;
+- (uint32_t) mainFrameID;
 
 #pragma mark ¥¥¥Hardware Access
 - (void) turnHVOn:(BOOL)aState;
@@ -115,10 +115,10 @@
 
 @interface NSObject (HV4032Model)
 - (void) readPowerState;
-- (void) setHV:(BOOL)state mainFrame:(unsigned long)aMainFrame;
-- (void) readStatus:(int*) aValue failedMask:(unsigned short*)failed mainFrame:(unsigned long) aMainFrame;
-- (void) readVoltage:(int*) aValue mainFrame:(unsigned long) aMainFrame channel:(int) aChannel;
-- (void) setVoltage:(int) aValue mainFrame:(unsigned long) aMainFrame channel:(int) aChannel;
+- (void) setHV:(BOOL)state mainFrame:(uint32_t)aMainFrame;
+- (void) readStatus:(int*) aValue failedMask:(unsigned short*)failed mainFrame:(uint32_t) aMainFrame;
+- (void) readVoltage:(int*) aValue mainFrame:(uint32_t) aMainFrame channel:(int) aChannel;
+- (void) setVoltage:(int) aValue mainFrame:(uint32_t) aMainFrame channel:(int) aChannel;
 
 @end
 

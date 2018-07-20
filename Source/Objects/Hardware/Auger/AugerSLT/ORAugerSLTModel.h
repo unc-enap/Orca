@@ -97,7 +97,7 @@ enum {
 
 		// Register information
 		unsigned short  selectedRegIndex;
-		unsigned long   writeValue;
+		uint32_t   writeValue;
 
 		//multiplicity trigger
 		unsigned short nHit;
@@ -132,13 +132,13 @@ enum {
 - (void) setPulserAmp:(float)aPulserAmp;
 - (short) getNumberRegisters;			
 - (NSString*) getRegisterName: (short) anIndex;
-- (unsigned long) getAddressOffset: (short) anIndex;
+- (uint32_t) getAddressOffset: (short) anIndex;
 - (short) getAccessType: (short) anIndex;
 
 - (unsigned short) 	selectedRegIndex;
 - (void)		setSelectedRegIndex: (unsigned short) anIndex;
-- (unsigned long) 	writeValue;
-- (void)		setWriteValue: (unsigned long) anIndex;
+- (uint32_t) 	writeValue;
+- (void)		setWriteValue: (uint32_t) anIndex;
 
 //status reg assess
 - (BOOL) suspendClock;
@@ -188,15 +188,15 @@ enum {
 //note that most of these method can raise 
 //exceptions either directly or indirectly
 - (void)		  checkPresence;
-- (unsigned long) readControlReg;
+- (uint32_t) readControlReg;
 - (void)		  writeControlReg;
-- (unsigned long) readStatusReg;
+- (uint32_t) readStatusReg;
 - (void)		  writeStatusReg;
-- (void)		  writeReg:(unsigned short)index value:(unsigned long)aValue;
-- (unsigned long) readReg:(unsigned short) index;
+- (void)		  writeReg:(unsigned short)index value:(uint32_t)aValue;
+- (uint32_t) readReg:(unsigned short) index;
 - (float)		  readVersion;
-- (unsigned long long) readDeadTime;
-- (unsigned long long) readVetoTime;
+- (uint64_t) readDeadTime;
+- (uint64_t) readVetoTime;
 - (void)		reset;
 - (void)		hw_reset;
 - (void)		hw_config;

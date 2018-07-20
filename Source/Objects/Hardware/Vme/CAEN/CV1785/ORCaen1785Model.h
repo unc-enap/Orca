@@ -79,33 +79,33 @@ enum {
 @interface ORCaen1785Model : ORVmeIOCard <ORDataTaker,ORHWWizard,ORHWRamping>
 {
 	ORRateGroup*	adcRateGroup;
-	unsigned long 	adcCount[kCV1785NumberChannels];
+	uint32_t 	adcCount[kCV1785NumberChannels];
 	BOOL			isRunning;
     unsigned short  lowThresholds[kCV1785NumberChannels];
     unsigned short  highThresholds[kCV1785NumberChannels];
 	unsigned short   onlineMask;
 	unsigned short  selectedRegIndex;
     unsigned short  selectedChannel;
-    unsigned long   writeValue;
+    uint32_t   writeValue;
 
-	unsigned long dataId;
+	uint32_t dataId;
 	ORReadOutList*  trigger1Group;
 	NSArray*	dataTakers1;       //cache of data takers.
 
 	//cached values for speed.
-	unsigned long statusAddress;
-	unsigned long dataBufferAddress;
-	unsigned long location;
+	uint32_t statusAddress;
+	uint32_t dataBufferAddress;
+	uint32_t location;
 }
 
 #pragma mark ***Accessors
 - (id) init;
 
 #pragma mark ***Accessors
-- (unsigned long)	lowThreshold:(unsigned short) aChnl;
-- (void)			setLowThreshold:(unsigned short) aChnl withValue:(unsigned long) aValue;
-- (unsigned long)	highThreshold:(unsigned short) aChnl;
-- (void)			setHighThreshold:(unsigned short) aChnl withValue:(unsigned long) aValue;
+- (uint32_t)	lowThreshold:(unsigned short) aChnl;
+- (void)			setLowThreshold:(unsigned short) aChnl withValue:(uint32_t) aValue;
+- (uint32_t)	highThreshold:(unsigned short) aChnl;
+- (void)			setHighThreshold:(unsigned short) aChnl withValue:(uint32_t) aValue;
 - (unsigned short)onlineMask;
 - (void)			setOnlineMask:(unsigned short)anOnlineMask;
 - (BOOL)			onlineMaskBit:(int)bit;
@@ -117,8 +117,8 @@ enum {
 - (void)			setSelectedRegIndex: (unsigned short) anIndex;
 - (unsigned short) 	selectedChannel;
 - (void)			setSelectedChannel: (unsigned short) anIndex;
-- (unsigned long) 	writeValue;
-- (void)			setWriteValue: (unsigned long) anIndex;
+- (uint32_t) 	writeValue;
+- (void)			setWriteValue: (uint32_t) anIndex;
 
 #pragma mark ***Register - General routines
 - (void) writeThresholds;
@@ -130,14 +130,14 @@ enum {
 - (int) lowThresholdOffset:(unsigned short)aChan;
 - (int) highThresholdOffset:(unsigned short)aChan;
 - (short) getNumberRegisters;
-- (unsigned long) getBufferOffset;
+- (uint32_t) getBufferOffset;
 - (unsigned short) getDataBufferSize;
 - (short) getStatusRegisterIndex:(short) aRegister;
 - (short) getOutputBufferIndex;
 
 #pragma mark ***Register - Register specific routines
 - (NSString*) getRegisterName:(short) anIndex;
-- (unsigned long) getAddressOffset:(short) anIndex;
+- (uint32_t) getAddressOffset:(short) anIndex;
 - (short) getAccessType:(short) anIndex;
 - (short) getAccessSize:(short) anIndex;
 - (BOOL) dataReset:(short) anIndex;
@@ -153,8 +153,8 @@ enum {
 - (int)  load_HW_Config_Structure:(SBC_crate_config*)configStruct index:(int)index;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherObj;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (NSDictionary*) dataRecordDescription;
 - (void) appendEventDictionary:(NSMutableDictionary*)anEventDictionary topLevel:(NSMutableDictionary*)topLevel;
 - (void) reset;
@@ -162,10 +162,10 @@ enum {
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runTaskStopped:(ORDataPacket*) aDataPacket userInfo:(NSDictionary*)userInfo;
 - (BOOL) bumpRateFromDecodeStage:(short)channel;
-- (unsigned long) adcCount:(int)aChannel;
+- (uint32_t) adcCount:(int)aChannel;
 - (void) startRates;
 - (void) clearAdcCounts;
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag;
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag;
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary;
 - (NSString*) identifier;
 - (ORReadOutList*) trigger1Group;

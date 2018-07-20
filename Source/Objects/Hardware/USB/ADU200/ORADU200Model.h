@@ -41,8 +41,8 @@
     int pollTime;
 
 	//bit processing variables
-	unsigned long processInputValue;  //snapshot of the inputs at start of process cycle
-	unsigned long processOutputValue; //outputs to be written at end of process cycle
+	uint32_t processInputValue;  //snapshot of the inputs at start of process cycle
+	uint32_t processOutputValue; //outputs to be written at end of process cycle
 }
 
 - (id) getUSBController;

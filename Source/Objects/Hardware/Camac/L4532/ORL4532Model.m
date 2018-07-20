@@ -100,12 +100,12 @@ NSString* ORL4532ModelTriggerNamesChanged	  = @"ORL4532ModelTriggerNamesChanged"
 	return [triggerNames objectAtIndex:index];
 }
 
-- (unsigned long) delayEnableMask
+- (uint32_t) delayEnableMask
 {
     return delayEnableMask;
 }
 
-- (void) setDelayEnableMask:(unsigned long)anEnableMask
+- (void) setDelayEnableMask:(uint32_t)anEnableMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setDelayEnableMask:delayEnableMask];
 	
@@ -145,7 +145,7 @@ NSString* ORL4532ModelTriggerNamesChanged	  = @"ORL4532ModelTriggerNamesChanged"
 
 - (void) setDelayEnabledMaskBit:(int)bit withValue:(BOOL)aValue
 {
-	unsigned long aMask = delayEnableMask;
+	uint32_t aMask = delayEnableMask;
 	if(aValue)aMask |= (1L<<bit);
 	else aMask &= ~(1L<<bit);
 	[self setDelayEnableMask:aMask];
@@ -194,40 +194,40 @@ NSString* ORL4532ModelTriggerNamesChanged	  = @"ORL4532ModelTriggerNamesChanged"
 }
 
 
-- (unsigned long) triggerId { return triggerId; }
-- (void) setTriggerId: (unsigned long) aTriggerId
+- (uint32_t) triggerId { return triggerId; }
+- (void) setTriggerId: (uint32_t) aTriggerId
 {
     triggerId = aTriggerId;
 }
 
-- (unsigned long) channelTriggerId { return channelTriggerId; }
-- (void) setChannelTriggerId: (unsigned long) aChannelTriggerId
+- (uint32_t) channelTriggerId { return channelTriggerId; }
+- (void) setChannelTriggerId: (uint32_t) aChannelTriggerId
 {
     channelTriggerId = aChannelTriggerId;
 }
 
 #pragma mark ¥¥¥Hardware functions
-- (unsigned long) readInputPattern
+- (uint32_t) readInputPattern
 {
 	unsigned short bits1_16 = 0;
 	unsigned short bits17_32 = 0;
 	[[self adapter] camacShortNAF:[self stationNumber] a:0 f:0 data:&bits1_16];
 	if(numberTriggers>16)[[self adapter] camacShortNAF:[self stationNumber] a:1 f:0 data:&bits17_32];
-	unsigned long bits17_32L = bits17_32;
+	uint32_t bits17_32L = bits17_32;
 	return (bits17_32L<<16) | bits1_16;
 }
 
 - (unsigned short) readStatusRegister
 {
-	unsigned long theRawValue;
+	uint32_t theRawValue;
 	[[self adapter] camacLongNAF:[self stationNumber] a:0 f:1 data:&theRawValue];
 	return theRawValue;
 }
 
-- (unsigned long) readInputPatternClearMemoryAndLAM
+- (uint32_t) readInputPatternClearMemoryAndLAM
 {
-	unsigned long bits1_16 = 0;
-	unsigned long bits17_32 = 0;
+	uint32_t bits1_16 = 0;
+	uint32_t bits17_32 = 0;
 	[[self adapter] camacLongNAF:[self stationNumber] a:0 f:2 data:&bits1_16];
 	[[self adapter] camacLongNAF:[self stationNumber] a:1 f:2 data:&bits17_32];
 	bits1_16 &= 0xffff;
@@ -237,20 +237,20 @@ NSString* ORL4532ModelTriggerNamesChanged	  = @"ORL4532ModelTriggerNamesChanged"
 
 - (BOOL) testLAM
 {
-	unsigned long dummy;
+	uint32_t dummy;
 	unsigned short result = [[self adapter] camacLongNAF:[self stationNumber] a:0 f:8 data:&dummy];
 	return isQbitSet(result);
 }
 
 - (void) clearMemoryAndLAM
 {
-	unsigned long dummy;
+	uint32_t dummy;
 	[[self adapter] camacLongNAF:[self stationNumber] a:0 f:9 data:&dummy];
 }
 
 - (BOOL) testAndClearLAM
 {
-	unsigned long dummy;
+	uint32_t dummy;
 	unsigned short result = [[self adapter] camacLongNAF:[self stationNumber] a:0 f:10 data:&dummy];
 	return isQbitSet(result);
 }
@@ -451,15 +451,15 @@ NSString* ORL4532ModelTriggerNamesChanged	  = @"ORL4532ModelTriggerNamesChanged"
 			unsigned short bits17_32 = 0;
 			[controller camacShortNAF:cachedStation a:0 f:0 data:&bits1_16];
 			if(numberTriggers>16)[controller camacShortNAF:cachedStation a:1 f:0 data:&bits17_32];
-			unsigned long bits17_32L = bits17_32;
-			unsigned long inputMask =  (bits17_32L<<16) | bits1_16;
+			uint32_t bits17_32L = bits17_32;
+			uint32_t inputMask =  (bits17_32L<<16) | bits1_16;
 			
 			if(inputMask & triggerMask){
 				eventCounter++;
 				//grab the event time as reference from Jan 1, 2004.
 				theTimeRef.asTimeInterval = [NSDate timeIntervalSinceReferenceDate];
 				int triggerRecordLength = includeTiming?5:3;
-				unsigned long triggerRecord[5];
+				uint32_t triggerRecord[5];
 				triggerRecord[0] = triggerId | triggerRecordLength;
 				triggerRecord[1] = eventCounter;
 				triggerRecord[2] = unChangingDataPart;
@@ -475,7 +475,7 @@ NSString* ORL4532ModelTriggerNamesChanged	  = @"ORL4532ModelTriggerNamesChanged"
 				int i;
 				for(i=0;i<numberTriggers;i++){
 					if(inputMask & (0x1L<<i)){
-						unsigned long channelRecord[3];
+						uint32_t channelRecord[3];
 						channelRecord[0] = channelTriggerId | 3;
 						channelRecord[1] = unChangingDataPart;
 						channelRecord[2] = inputMask & (0x1L<<i);

@@ -127,7 +127,7 @@
 
 - (void) writeToMonitor: (NSNotification*) aNotification
 {
-    unsigned long maxTextSize = 100000;
+    uint32_t maxTextSize = 100000;
 	@try {
 		NSString* command = [[aNotification userInfo] objectForKey: ORGpib1Monitor];
 		[monitorView replaceCharactersInRange:NSMakeRange([[monitorView textStorage] length], 0) withString:command];
@@ -167,8 +167,8 @@
 - (IBAction) query: (id) aSender
 {
     char	data[2048];
-    long	returnLen;
-    long	maxLength = sizeof( data ) - 1;
+    int32_t	returnLen;
+    int32_t	maxLength = sizeof( data ) - 1;
     
     @try {
 		[self endEditing];
@@ -197,7 +197,7 @@
 - (IBAction) read: (id) aSender
 {
     char	data[10*1048];
-    long	returnLen;
+    int32_t	returnLen;
     
     @try {
         returnLen = [[self model] readFromDevice: [primaryAddressPU indexOfSelectedItem]

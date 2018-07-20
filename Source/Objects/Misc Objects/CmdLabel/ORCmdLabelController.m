@@ -110,7 +110,7 @@
 	NSIndexSet* theSelectedSet =  [commandTable selectedRowIndexes];
 	if(theSelectedSet){
 		int rowIndex = (int)[theSelectedSet firstIndex];
-		[itemCountField setStringValue:[NSString stringWithFormat:@"%d of %ld",rowIndex+1,[model commandCount]]];
+		[itemCountField setStringValue:[NSString stringWithFormat:@"%d of %d",rowIndex+1,(int)[model commandCount]]];
 	}
 	else [itemCountField setStringValue:@""];
 }

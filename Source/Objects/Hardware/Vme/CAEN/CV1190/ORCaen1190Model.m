@@ -300,9 +300,9 @@ NSString* ORCaen1190RateGroupChangedNotification    = @"ORCaen1190RateGroupChang
 - (void) makeMainController { [self linkToController:@"ORCaen1190Controller"]; }
 
 
-- (unsigned long)	enabledMask:(int) n { return enabledMask[n]; }
+- (uint32_t)	enabledMask:(int) n { return enabledMask[n]; }
 
-- (void) setEnabledMask:(int)n withValue:(unsigned long)aMask
+- (void) setEnabledMask:(int)n withValue:(uint32_t)aMask
 {
 	[[[self undoManager] prepareWithInvocationTarget:self] setEnabledMask:n withValue:enabledMask[n]];
     enabledMask[n] = aMask;
@@ -315,13 +315,13 @@ NSString* ORCaen1190RateGroupChangedNotification    = @"ORCaen1190RateGroupChang
 
 #pragma mark ***Register - General routines
 - (short)          getNumberRegisters	{ return kNumRegisters; }
-- (unsigned long)  getBufferOffset		{ return reg[kOutputBuffer].addressOffset; }
+- (uint32_t)  getBufferOffset		{ return reg[kOutputBuffer].addressOffset; }
 - (unsigned short) getDataBufferSize	{ return kADCOutputBufferSize; }
 - (short)          getOutputBufferIndex	{ return(kOutputBuffer); }
 
 #pragma mark ***Register - Register specific routines
 - (NSString*)     getRegisterName:(short) anIndex	{ return reg[anIndex].regName; }
-- (unsigned long) getAddressOffset:(short) anIndex	{ return(reg[anIndex].addressOffset); }
+- (uint32_t) getAddressOffset:(short) anIndex	{ return(reg[anIndex].addressOffset); }
 - (short)		  getAccessType:(short) anIndex		{ return reg[anIndex].accessType; }
 - (short)         getAccessSize:(short) anIndex		{ return reg[anIndex].size; }
 - (BOOL)          dataReset:(short) anIndex			{ return reg[anIndex].dataReset; }
@@ -426,7 +426,7 @@ NSString* ORCaen1190RateGroupChangedNotification    = @"ORCaen1190RateGroupChang
 }
 
 #pragma mark •••Rates
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
 {
 	if(groupTag == 0){
 		if(counterTag>=0 && counterTag<128){
@@ -445,7 +445,7 @@ NSString* ORCaen1190RateGroupChangedNotification    = @"ORCaen1190RateGroupChang
     return YES;
 }
 
-- (unsigned long) tdcCount:(int)aChannel
+- (uint32_t) tdcCount:(int)aChannel
 {
     return tdcCount[aChannel];
 }
@@ -492,10 +492,10 @@ NSString* ORCaen1190RateGroupChangedNotification    = @"ORCaen1190RateGroupChang
     // first add our description to the data description
     [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:NSStringFromClass([self class])]; 
     
-    //make buffer for data with extra room for our 2 long word header.
-    dataBuffer   = (unsigned long*)malloc([self getDataBufferSize]+2*sizeof(unsigned long));
+    //make buffer for data with extra room for our 2 int32_t word header.
+    dataBuffer   = (uint32_t*)malloc([self getDataBufferSize]+2*sizeof(uint32_t));
     controller   = [self adapter]; //cache for speed
-	long detectiontype = [self edgeDetection];
+	int32_t detectiontype = [self edgeDetection];
 	locationWord = (detectiontype << 25) | (([self crateNumber] & 0x0000000f)<<21) | (([self slot] & 0x0000001f)<<16);
 	
 	[self flushBuffer];
@@ -527,7 +527,7 @@ NSString* ORCaen1190RateGroupChangedNotification    = @"ORCaen1190RateGroupChang
 		
 		if(dataIsReady){
 			//this seq could be improved by reading all the words in the fifo, then computing the total number of words in the buffer and reading them all
-			unsigned long eventFIFO;
+			uint32_t eventFIFO;
 			[controller readLongBlock:&eventFIFO
 							atAddress:baseAddress + reg[kEventFIFO].addressOffset
 							numToRead:1

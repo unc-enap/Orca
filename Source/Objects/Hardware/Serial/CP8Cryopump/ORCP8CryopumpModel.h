@@ -25,10 +25,10 @@
 @interface ORCP8CryopumpModel : ORSerialPortWithQueueModel <ORBitProcessing>
 {
     @private
-        unsigned long		dataId;
+        uint32_t		dataId;
 	
 		float				temperature;
-		unsigned long		timeMeasured;
+		uint32_t		timeMeasured;
 		int					pollTime;
         NSMutableString*    buffer;
 		BOOL				shipTemperatures;
@@ -179,14 +179,14 @@
 - (int)		pollTime;
 - (void)	setPollTime:(int)aPollTime;
 - (float) temperature;
-- (unsigned long) timeMeasured;
+- (uint32_t) timeMeasured;
 - (NSString*) auxStatusString:(int)aChannel;
 
 #pragma mark •••Data Records
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (NSDictionary*) dataRecordDescription;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherCP8Cryopump;
 - (void) shipTemperatureValues;

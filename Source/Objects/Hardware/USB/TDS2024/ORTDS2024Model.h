@@ -65,7 +65,7 @@
 #pragma mark •••Cmd Handling
 - (void) interfaceAdded:(NSNotification*)aNote;
 - (void) interfaceRemoved:(NSNotification*)aNote;
-- (long) readFromDevice: (char*) aData maxLength: (unsigned long) aMaxLength;
+- (int32_t) readFromDevice: (char*) aData maxLength: (uint32_t) aMaxLength;
 - (void) writeToDevice: (NSString*) aCommand;
 - (void) writeCommand:(NSString*)aCmd;
 
@@ -75,7 +75,7 @@
 - (void) getCurves;
 - (void) readDataInfo;
 - (int) numPoints:(int)index;
-- (long) dataSet:(int)index valueAtChannel:(int)x;
+- (int32_t) dataSet:(int)index valueAtChannel:(int)x;
 - (void) curvesThreadFinished:(NSDictionary*)userInfo;
 
 #pragma mark ***Archival

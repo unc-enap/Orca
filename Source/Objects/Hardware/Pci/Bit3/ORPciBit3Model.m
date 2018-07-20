@@ -120,13 +120,13 @@ struct {
                      withDataPort:(io_connect_t) dataPort;
 - (kern_return_t) _closeUserClient:(io_connect_t) dataPort;
 
-- (void) _setupMapping: (unsigned long)remoteAddress
-              numBytes: (unsigned long)numberBytes
+- (void) _setupMapping: (uint32_t)remoteAddress
+              numBytes: (uint32_t)numberBytes
                 addMod: (UInt16)addModifier
               addSpace: (UInt16)addressSpace;
 
-- (void) _setupMapping_Byte: (unsigned long)remoteAddress
-                   numBytes: (unsigned long)numberBytes
+- (void) _setupMapping_Byte: (uint32_t)remoteAddress
+                   numBytes: (uint32_t)numberBytes
                      addMod: (UInt16)addModifier
                    addSpace: (UInt16)addressSpace;
 
@@ -391,12 +391,12 @@ struct {
     
 }
 
-- (unsigned long) rwAddress
+- (uint32_t) rwAddress
 {
     return rwAddress;
 }
 
-- (void) setRwAddress:(unsigned long)aValue
+- (void) setRwAddress:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setRwAddress:[self rwAddress]];
     rwAddress = aValue;
@@ -406,12 +406,12 @@ struct {
     
 }
 
-- (unsigned long) writeValue
+- (uint32_t) writeValue
 {
     return writeValue;
 }
 
-- (void) setWriteValue:(unsigned long)aValue
+- (void) setWriteValue:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setWriteValue:[self writeValue]];
     writeValue = aValue;
@@ -953,8 +953,8 @@ struct {
 
 
 // read a int (32 bit values) block from vme
-- (void) readLongBlock:(unsigned long *) readAddress
-             atAddress:(unsigned long) vmeAddress
+- (void) readLongBlock:(uint32_t *) readAddress
+             atAddress:(uint32_t) vmeAddress
              numToRead:(unsigned int) numberLongs
             withAddMod:(unsigned short) addModifier
          usingAddSpace:(unsigned short) addressSpace
@@ -970,9 +970,9 @@ struct {
             
 			//if(*fVStatusReg & STATUS_PROBLEM)[self checkStatusWord:status];
 			// transfer data
-			unsigned long *pulr = (unsigned long *)( ( vmeAddress & 0x00000fff ) +
-													(unsigned long)remMemRegisterAddress );
-			unsigned long *pulb = (unsigned long *)readAddress;
+			uint32_t *pulr = (uint32_t *)( ( vmeAddress & 0x00000fff ) +
+													(uint32_t)remMemRegisterAddress );
+			uint32_t *pulb = (uint32_t *)readAddress;
 			unsigned int n = numberLongs;
 			for(;n--;)*pulb++ = *pulr++;
  			if(*fVStatusReg & STATUS_PROBLEM)[self checkStatusWord:*fVStatusReg];
@@ -1004,8 +1004,8 @@ struct {
 }
 
 //a special read for reading fifos that reads one address multiple times
-- (void) readLong:(unsigned long *) readAddress
-		atAddress:(unsigned long) vmeAddress
+- (void) readLong:(uint32_t *) readAddress
+		atAddress:(uint32_t) vmeAddress
 	  timesToRead:(unsigned int) numberLongs
 	   withAddMod:(unsigned short) addModifier
 	usingAddSpace:(unsigned short) addressSpace
@@ -1020,8 +1020,8 @@ struct {
             
             
 			// transfer data
-			unsigned long *pulr = (unsigned long *)( ( vmeAddress & 0x00000fff ) + (unsigned long)remMemRegisterAddress );
-			unsigned long *pulb = (unsigned long *)readAddress;
+			uint32_t *pulr = (uint32_t *)( ( vmeAddress & 0x00000fff ) + (uint32_t)remMemRegisterAddress );
+			uint32_t *pulb = (uint32_t *)readAddress;
 			unsigned int n = numberLongs;
 			for(;n--;)*pulb++ = *pulr++;
 			
@@ -1045,8 +1045,8 @@ struct {
 
 
 // write a int (32 bit values) block to vme
-- (void) writeLongBlock:(unsigned long *) writeAddress
-              atAddress:(unsigned long) vmeAddress
+- (void) writeLongBlock:(uint32_t *) writeAddress
+              atAddress:(uint32_t) vmeAddress
              numToWrite:(unsigned int) numberLongs
              withAddMod:(unsigned short) addModifier
           usingAddSpace:(unsigned short) addressSpace
@@ -1062,9 +1062,9 @@ struct {
             
 			//if(*fVStatusReg & STATUS_PROBLEM)[self checkStatusWord:status];
 			// transfer data
-			unsigned long *pulr = (unsigned long *)( ( vmeAddress & 0x00000fff ) +
-													(unsigned long)remMemRegisterAddress );
-			unsigned long *pulb = (unsigned long *)writeAddress;
+			uint32_t *pulr = (uint32_t *)( ( vmeAddress & 0x00000fff ) +
+													(uint32_t)remMemRegisterAddress );
+			uint32_t *pulb = (uint32_t *)writeAddress;
 			unsigned int n = numberLongs;
 			for(;n--;)*pulr++ = *pulb++;
 			if(*fVStatusReg & STATUS_PROBLEM)[self checkStatusWord:*fVStatusReg];
@@ -1099,7 +1099,7 @@ struct {
 
 // read a byte block from vme
 - (void) readByteBlock:(unsigned char *) readAddress
-             atAddress:(unsigned long) vmeAddress
+             atAddress:(uint32_t) vmeAddress
              numToRead:(unsigned int) numberBytes
             withAddMod:(unsigned short) addModifier
          usingAddSpace:(unsigned short) addressSpace
@@ -1115,7 +1115,7 @@ struct {
 			//if(*fVStatusReg & STATUS_PROBLEM)[self checkStatusWord:*fVStatusReg];
 			// transfer data
 			unsigned char *pulr = (unsigned char *)( ( vmeAddress & 0x00000fff ) +
-													(unsigned long)remMemRegisterAddress );
+													(uint32_t)remMemRegisterAddress );
 			unsigned char *pulb = (unsigned char *)readAddress;
 			unsigned int n = numberBytes;
 			for(;n--;)*pulb++ = *pulr++;
@@ -1151,7 +1151,7 @@ struct {
 
 // write a byte block to vme
 - (void) writeByteBlock:(unsigned char *) writeAddress
-              atAddress:(unsigned long) vmeAddress
+              atAddress:(uint32_t) vmeAddress
              numToWrite:(unsigned int) numberBytes
              withAddMod:(unsigned short) addModifier
           usingAddSpace:(unsigned short) addressSpace
@@ -1167,7 +1167,7 @@ struct {
 			//if(*fVStatusReg & STATUS_PROBLEM)[self checkStatusWord:*fVStatusReg];
 			// transfer data
 			unsigned char *pulr = (unsigned char *)( ( vmeAddress & 0x00000fff ) +
-													(unsigned long)remMemRegisterAddress );
+													(uint32_t)remMemRegisterAddress );
 			unsigned char *pulb = (unsigned char *)writeAddress;
 			unsigned int n = numberBytes;
 			for(;n--;)*pulr++ = *pulb++;
@@ -1200,7 +1200,7 @@ struct {
 
 // read a word (16 bits) block from vme
 -  (void) readWordBlock:(unsigned short *) readAddress
-              atAddress:(unsigned long) vmeAddress
+              atAddress:(uint32_t) vmeAddress
               numToRead:(unsigned int) numberWords
              withAddMod:(unsigned short) addModifier
           usingAddSpace:(unsigned short) addressSpace
@@ -1216,7 +1216,7 @@ struct {
 			//if(*fVStatusReg & STATUS_PROBLEM)[self checkStatusWord:*fVStatusReg];
             // transfer data
 			UInt16 *pulr = (UInt16 *)( ( vmeAddress & 0x00000fff ) +
-									  (unsigned long)remMemRegisterAddress );
+									  (uint32_t)remMemRegisterAddress );
 			UInt16 *pulb = (UInt16 *)readAddress;
 			unsigned short n = numberWords;
 			for(;n--;)*pulb++ = *pulr++;
@@ -1251,7 +1251,7 @@ struct {
 
 // write a word (16  bits) block to vme
 -  (void) writeWordBlock:(unsigned short *) writeAddress
-               atAddress:(unsigned long) vmeAddress
+               atAddress:(uint32_t) vmeAddress
               numToWrite:(unsigned int) numberWords
               withAddMod:(unsigned short) addModifier
            usingAddSpace:(unsigned short) addressSpace
@@ -1268,7 +1268,7 @@ struct {
 			//if(*fVStatusReg & STATUS_PROBLEM)[self checkStatusWord:*fVStatusReg];
 			// transfer data
 			UInt16 *pulr = (UInt16 *)( ( vmeAddress & 0x00000fff ) +
-									  (unsigned long)remMemRegisterAddress );
+									  (uint32_t)remMemRegisterAddress );
 			UInt16 *pulb = (UInt16 *)writeAddress;
 			unsigned int n = numberWords;
 			for(;n--;)*pulr++ = *pulb++;
@@ -1477,24 +1477,24 @@ struct {
 }
 
 // setup Bit3 mapping registers
-- (void) _setupMapping: (unsigned long)remoteAddress
-              numBytes: (unsigned long)numberBytes
+- (void) _setupMapping: (uint32_t)remoteAddress
+              numBytes: (uint32_t)numberBytes
                 addMod: (UInt16)addModifier
               addSpace: (UInt16)addressSpace
 {
     
     // pick up a12-a31 address bits
-    unsigned long mapValue = ((remoteAddress & 0xfffff000)
+    uint32_t mapValue = ((remoteAddress & 0xfffff000)
 							  | ((addModifier << 6) & 0x00000fc0)  // add address modifier bits
 							  | ((addressSpace << 4) & 0x00000030) // add function code bits
 							  | 0x00000002)	// add swapping bit - byte swap for non-byte data enable
 	& 0xfffffffe;	// clear map register invalid bit at d0 - enable PCI to VME access
     
-	volatile unsigned long* mptr = (unsigned long *)(mapRegisterAddress);
-	unsigned long n = numberBytes + ( remoteAddress & 0x00000fff );
-	unsigned long j;
+	volatile uint32_t* mptr = (uint32_t *)(mapRegisterAddress);
+	uint32_t n = numberBytes + ( remoteAddress & 0x00000fff );
+	uint32_t j;
     for( j = 0L; j < n ; j += 0x00001000 ) {
-		unsigned long swmap = Swap8Bits(mapValue);
+		uint32_t swmap = Swap8Bits(mapValue);
         *mptr = swmap;
 		//MAH Nov 2004. found that on faster machines, the mapping register does not have time
 		//to settle. Add a check to verify that the value is what we set it to and if not
@@ -1506,14 +1506,14 @@ struct {
     };
 }
 
-- (void) _setupMapping_Byte: (unsigned long)remoteAddress
-                   numBytes: (unsigned long)numberBytes
+- (void) _setupMapping_Byte: (uint32_t)remoteAddress
+                   numBytes: (uint32_t)numberBytes
                      addMod: (UInt16)addModifier
                    addSpace: (UInt16)addressSpace
 {
     
     // pick up a12-a31 address bits
-    unsigned long mapValue = ((remoteAddress & 0xfffff000)
+    uint32_t mapValue = ((remoteAddress & 0xfffff000)
 							  | ((addModifier << 6) & 0x00000fc0) // add address modifier bits
 							  | ((addressSpace << 4) & 0x00000030)// add function code bits
 							  | 0x00000008)	// add swapping bit - byte swap for byte data enable
@@ -1521,11 +1521,11 @@ struct {
     
     // put map value in proper mapping register(s) - note byte swapping to
     // change mac big endian value to little endian for pci
-    volatile unsigned long* mptr = (unsigned long *)(mapRegisterAddress);
-	unsigned long n = numberBytes + ( remoteAddress & 0x00000fff );
-	unsigned long j;
+    volatile uint32_t* mptr = (uint32_t *)(mapRegisterAddress);
+	uint32_t n = numberBytes + ( remoteAddress & 0x00000fff );
+	uint32_t j;
     for( j = 0L; j < n ; j += 0x00001000 ) {
-		unsigned long swmap = Swap8Bits(mapValue);
+		uint32_t swmap = Swap8Bits(mapValue);
         *mptr = swmap;
 		//MAH Nov 2004. found that on faster machines, the mapping register does not have time
 		//to settle. Add a check to verify that the value is what we set it to and if not
@@ -1538,14 +1538,14 @@ struct {
 }
 
 #pragma mark ¥¥¥DMA
-// ReadVMELongBlockDMA - read a block of long values from VME Bus with DMA
+// ReadVMELongBlockDMA - read a block of int32_t values from VME Bus with DMA
 // NOTE - existence of hardware must be established before using this method
 // NOTE - the buffer (readAddress) used for the dma read must be locked contiguous
-//			physical memory and must allow this function to reserve 4 bytes (1 long)
+//			physical memory and must allow this function to reserve 4 bytes (1 int32_t)
 //			at the beginning of the buffer for dma flags
-// NOTE - the VME address (vmeAddress) must be long word aligned
-- (void) readLongBlock:(unsigned long *) readAddress
-			 atAddress:(unsigned long) vmeAddress
+// NOTE - the VME address (vmeAddress) must be int32_t word aligned
+- (void) readLongBlock:(uint32_t *) readAddress
+			 atAddress:(uint32_t) vmeAddress
 			 numToRead:(unsigned int) numberLongs
 		 usingAddSpace:(unsigned short) addressSpace
 		  useBlockMode:(bool) useBlockMode
@@ -1553,24 +1553,24 @@ struct {
 	// setup parameters
 	Boolean enableByteSwap = TRUE;
 	Boolean enableWordSwap = FALSE;
-	unsigned long address = vmeAddress;
-	unsigned long transfers = numberLongs;
+	uint32_t address = vmeAddress;
+	uint32_t transfers = numberLongs;
 	unsigned short space = addressSpace;
-	//unsigned long bytes = 4L * transfers;
+	//uint32_t bytes = 4L * transfers;
 	
 	// setup and clear dma buffer flag area
-	unsigned long *dmaBuffer = readAddress;
-	unsigned long *pucb = dmaBuffer;
-	unsigned long j;
+	uint32_t *dmaBuffer = readAddress;
+	uint32_t *pucb = dmaBuffer;
+	uint32_t j;
 	for(j = 0L; j < 4L; j++ ) *pucb++ = 0x00000000;
 	
-	// reserve 4 bytes (1 long) at beginning of dma buffer for flags
-	unsigned long *dmaFlags = dmaBuffer;
+	// reserve 4 bytes (1 int32_t) at beginning of dma buffer for flags
+	uint32_t *dmaFlags = dmaBuffer;
 	dmaBuffer += 4L;
-	unsigned long physicalAddress = (unsigned long)dmaBuffer;
+	uint32_t physicalAddress = (uint32_t)dmaBuffer;
 	
 	// start dma
-	*dmaFlags = (unsigned long)0x00000000L;
+	*dmaFlags = (uint32_t)0x00000000L;
 	[self  startDma: address 
 physicalBufferAddress: physicalAddress
 	numberTransfers: transfers 
@@ -1588,7 +1588,7 @@ physicalBufferAddress: physicalAddress
 		// need to put a reasonable delay here to prevent slowdown
 		// by repeated check for dma complete
         
-		long elapsedTime = [timer microsecondsSinceStart];
+		int32_t elapsedTime = [timer microsecondsSinceStart];
 		if( elapsedTime < 100L ) {
 			continue;
 		}
@@ -1598,9 +1598,9 @@ physicalBufferAddress: physicalAddress
 		
 	} while( ![self checkDmaComplete:dmaFlags] );
     [timer release];
-	//unsigned long endTime = TickCount();
-	//StatusPrintf("Time For %ld Byte Reads = %ld Ticks",bytes,
-	//		(unsigned long)(endTime - startTime));
+	//uint32_t endTime = TickCount();
+	//StatusPrintf("Time For %d Byte Reads = %d Ticks",bytes,
+	//		(uint32_t)(endTime - startTime));
 	//StatusPrintf("DmaFlags = 0x%08x",*dmaFlags); 
 	
 	// check for errors	
@@ -1612,14 +1612,14 @@ physicalBufferAddress: physicalAddress
 
 
 
-// WriteVMELongBlockDMA - write a block of long values from PCI Bus with DMA
+// WriteVMELongBlockDMA - write a block of int32_t values from PCI Bus with DMA
 // NOTE - existence of hardware must be established before using this method
 // NOTE - the buffer (writeAddress) used for the dma write must be locked contiguous
-//			physical memory and must allow this function to reserve 4 bytes (1 long)
+//			physical memory and must allow this function to reserve 4 bytes (1 int32_t)
 //			at the beginning of the buffer for dma flags
-// NOTE - the VME address (vmeAddress) must be long word aligned
-- (void) writeLongBlock:(unsigned long *) writeAddress
-			  atAddress:(unsigned long) vmeAddress
+// NOTE - the VME address (vmeAddress) must be int32_t word aligned
+- (void) writeLongBlock:(uint32_t *) writeAddress
+			  atAddress:(uint32_t) vmeAddress
 			 numToWrite:(unsigned int) numberLongs
 		  usingAddSpace:(unsigned short) addressSpace
 		   useBlockMode:(bool) useBlockMode
@@ -1627,26 +1627,26 @@ physicalBufferAddress: physicalAddress
 	// setup parameters
 	Boolean enableByteSwap = TRUE;
 	Boolean enableWordSwap = FALSE;
-	unsigned long address = vmeAddress;
-	unsigned long transfers = numberLongs;
+	uint32_t address = vmeAddress;
+	uint32_t transfers = numberLongs;
 	unsigned short space = addressSpace;
-	//unsigned long bytes = 4L * transfers;
+	//uint32_t bytes = 4L * transfers;
 	
 	// setup and clear dma buffer flag area
-	unsigned long *dmaBuffer = writeAddress;
-	unsigned long *pucb = dmaBuffer;
-	unsigned long j;
+	uint32_t *dmaBuffer = writeAddress;
+	uint32_t *pucb = dmaBuffer;
+	uint32_t j;
 	for(j = 0L; j < 4L; j++ ) {
 		*pucb++ = 0x00000000;
 	}
 	
-	// reserve 4 bytes (1 long) at beginning of dma buffer for flags
-	unsigned long *dmaFlags = dmaBuffer;
+	// reserve 4 bytes (1 int32_t) at beginning of dma buffer for flags
+	uint32_t *dmaFlags = dmaBuffer;
 	dmaBuffer += 4L;
-	unsigned long physicalAddress = (unsigned long)dmaBuffer;
+	uint32_t physicalAddress = (uint32_t)dmaBuffer;
 	
 	// start dma
-	*dmaFlags = (unsigned long)0x00000000L;
+	*dmaFlags = (uint32_t)0x00000000L;
 	
 	[self startDma: address 
 physicalBufferAddress: physicalAddress
@@ -1666,7 +1666,7 @@ physicalBufferAddress: physicalAddress
 		
 		// need to put a reasonable delay here to prevent slowdown
 		// by repeated check for dma complete
-		long elapsedTime = [timer microsecondsSinceStart];
+		int32_t elapsedTime = [timer microsecondsSinceStart];
 		if( elapsedTime < 10L ) {
 			continue;
 		}
@@ -1676,9 +1676,9 @@ physicalBufferAddress: physicalAddress
 		
 	} while( ![self checkDmaComplete:dmaFlags]);
     [timer release];
-	//unsigned long endTime = TickCount();
-	//StatusPrintf("Time For %ld Byte Reads = %ld Ticks",bytes,
-	//		(unsigned long)(endTime - startTime));
+	//uint32_t endTime = TickCount();
+	//StatusPrintf("Time For %d Byte Reads = %d Ticks",bytes,
+	//		(uint32_t)(endTime - startTime));
 	//StatusPrintf("DmaFlags = 0x%08x",*dmaFlags); 
 	
 	// check for errors	
@@ -1736,7 +1736,7 @@ physicalBufferAddress: physicalAddress
 	return errorStatus;
 }
 
-- (bool) checkDmaComplete:(unsigned long*) checkFlag;
+- (bool) checkDmaComplete:(uint32_t*) checkFlag;
 {
 	
 	// check for dma complete
@@ -1770,9 +1770,9 @@ physicalBufferAddress: physicalAddress
 
 // theDirection = 'R' for VME to PCI DMAs
 // theDirection = 'W' for PCI to VME DMAs
-- (void) startDma:(unsigned long) vmeAddress 
-physicalBufferAddress:(unsigned long) physicalBufferAddress
-  numberTransfers:(unsigned long) numberTransfers 
+- (void) startDma:(uint32_t) vmeAddress 
+physicalBufferAddress:(uint32_t) physicalBufferAddress
+  numberTransfers:(uint32_t) numberTransfers 
 	 addressSpace:(unsigned short) addressSpace
    enableByteSwap:(bool) enableByteSwap 
    enableWordSwap:(bool) enableWordSwap
@@ -1780,7 +1780,7 @@ physicalBufferAddress:(unsigned long) physicalBufferAddress
 		direction:(char) theDirection;
 {
 	// seup dma map registers(s)
-	unsigned long bytes = 4L * numberTransfers;
+	uint32_t bytes = 4L * numberTransfers;
 	[self setupMappingDMA: physicalBufferAddress
 			  numberBytes: bytes
 		   enableByteSwap: enableByteSwap 
@@ -1827,7 +1827,7 @@ physicalBufferAddress:(unsigned long) physicalBufferAddress
 	//	StatusPrintf("DMA Remote DMA Remainder Count Register = 0x%02x",uc); //debug
 	
 	// load remote dma address reg (32 bits)
-	unsigned long ul = (unsigned long)vmeAddress;
+	uint32_t ul = (uint32_t)vmeAddress;
 	*(cptr + PCIVME_DMA_REMOTE_VME_ADDRESS_0_7_OFFSET) =
 	(unsigned char)( ul & 0x000000ff );
 	*(cptr + PCIVME_DMA_REMOTE_VME_ADDRESS_8_15_OFFSET) =
@@ -1945,51 +1945,51 @@ physicalBufferAddress:(unsigned long) physicalBufferAddress
 
 
 
-- (void) setupMappingDMA:(unsigned long) remoteAddress
-			 numberBytes:(unsigned long) numberBytes
+- (void) setupMappingDMA:(uint32_t) remoteAddress
+			 numberBytes:(uint32_t) numberBytes
 		  enableByteSwap:(bool) enableByteSwap 
 		  enableWordSwap:(bool) enableWordSwap;
 {
 	
 	// pick up a12-a31 address bits
-	unsigned long mapValue = remoteAddress & (unsigned long)0xfffff000;
+	uint32_t mapValue = remoteAddress & (uint32_t)0xfffff000;
 	
 	// add byte swap on non-byte data bit
 	if( enableByteSwap ) {
 		
 		// add swapping bit for byte swap for non-byte data enable
-		mapValue |= (unsigned long)0x00000002;
+		mapValue |= (uint32_t)0x00000002;
 	} 
 	
 	// add word swap bit
 	if( enableWordSwap ) {
 		
 		// add swapping bit for word swap
-		mapValue |= (unsigned long)0x00000004;
+		mapValue |= (uint32_t)0x00000004;
 	} 
 	
 	// clear map register invalid bit at d0 - enable PCI to VME access
-	mapValue &= (unsigned long)0xfffffffe;
+	mapValue &= (uint32_t)0xfffffffe;
 	//StatusPrintf("Starting Map Value = 0x%08lx",mapValue);
 	
 	// put map value in proper mapping register(s)
-	//	volatile unsigned long *mptr = (unsigned long *)( (unsigned long)GetMappingBaseAddress() +
-	//			 (unsigned long)DMA_MAPPING_REGISTER_OFFSET );
+	//	volatile uint32_t *mptr = (uint32_t *)( (uint32_t)GetMappingBaseAddress() +
+	//			 (uint32_t)DMA_MAPPING_REGISTER_OFFSET );
 	
-	volatile unsigned long *mptr = (unsigned long *)( (unsigned long)mapRegisterAddress +
-													 (unsigned long)DMA_MAPPING_REGISTER_OFFSET );
+	volatile uint32_t *mptr = (uint32_t *)( (uint32_t)mapRegisterAddress +
+													 (uint32_t)DMA_MAPPING_REGISTER_OFFSET );
 	
 	
-	unsigned long j;
+	uint32_t j;
 	for( j = 0L; j < numberBytes + ( remoteAddress & 0x00000fff );
-		j += (unsigned long)0x00001000 ) {
+		j += (uint32_t)0x00001000 ) {
 		
-		unsigned long swappedMapValue = Swap8Bits(mapValue);
-		//StatusPrintf("j = %ld,MapRegPtr = 0x%08x, MapValue = 0x%08x,SwappedMapValue = 0x%08x",j,
-		//	(unsigned long)mptr,(unsigned long)mapValue,(unsigned long)swappedMapValue);
+		uint32_t swappedMapValue = Swap8Bits(mapValue);
+		//StatusPrintf("j = %d,MapRegPtr = 0x%08x, MapValue = 0x%08x,SwappedMapValue = 0x%08x",j,
+		//	(uint32_t)mptr,(uint32_t)mapValue,(uint32_t)swappedMapValue);
 		
 		*mptr++ = swappedMapValue;
-		mapValue += (unsigned long)0x00001000;
+		mapValue += (uint32_t)0x00001000;
 	}
 }
 
@@ -2000,7 +2000,7 @@ physicalBufferAddress:(unsigned long) physicalBufferAddress
 	while(aCmd = [e nextObject]){
 		unsigned char*	byteData;
 		unsigned short* wordData;
-		unsigned long*	longData;
+		uint32_t*	longData;
 		@try {
 			//writes
 			if([aCmd opType] == kWriteOp){
@@ -2021,8 +2021,8 @@ physicalBufferAddress:(unsigned long) physicalBufferAddress
 								  withAddMod:[aCmd addressModifier] 
 							   usingAddSpace:[aCmd addressSpace]];
 						break;
-					case 4:		//long block
-						longData = (unsigned long*)[[aCmd data] bytes];
+					case 4:		//int32_t block
+						longData = (uint32_t*)[[aCmd data] bytes];
 						[self writeLongBlock:longData 
 								   atAddress:[aCmd vmeAddress] 
 								  numToWrite:[aCmd numberItems] 
@@ -2050,8 +2050,8 @@ physicalBufferAddress:(unsigned long) physicalBufferAddress
 								 withAddMod:[aCmd addressModifier] 
 							  usingAddSpace:[aCmd addressSpace]];
 						break;
-					case 4:		//long block
-						longData = (unsigned long*)[aCmd bytes];
+					case 4:		//int32_t block
+						longData = (uint32_t*)[aCmd bytes];
 						[self readLongBlock:longData 
 								  atAddress:[aCmd vmeAddress] 
 								  numToRead:[aCmd numberItems] 
@@ -2073,7 +2073,7 @@ physicalBufferAddress:(unsigned long) physicalBufferAddress
 
 
 #pragma mark ¥¥¥Rates
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
 {
     if(groupTag == 0){
         if(counterTag>=0 && counterTag<kNumRetryIndexes){

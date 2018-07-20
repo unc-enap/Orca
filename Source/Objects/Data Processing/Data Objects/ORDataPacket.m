@@ -63,22 +63,22 @@
 
 
 #pragma mark •••Accessors
-- (void) setRunNumber:(unsigned long)aRunNumber
+- (void) setRunNumber:(uint32_t)aRunNumber
 {
     runNumber = aRunNumber;
 }
 
-- (unsigned long)runNumber
+- (uint32_t)runNumber
 {
     return runNumber;
 }
 
-- (void) setSubRunNumber:(unsigned long)aSubRunNumber
+- (void) setSubRunNumber:(uint32_t)aSubRunNumber
 {
     subRunNumber = aSubRunNumber;
 }
 
-- (unsigned long)subRunNumber
+- (uint32_t)subRunNumber
 {
     return subRunNumber;
 }
@@ -234,37 +234,37 @@
 
 //------------------------------------------------------------------------------
 //data addition methods
-- (unsigned long) frameIndex
+- (uint32_t) frameIndex
 {
 	return frameIndex;
 }
-- (void) replaceReservedDataInFrameBufferAtIndex:(unsigned long)index withLongs:(unsigned long*)data length:(unsigned long)length
+- (void) replaceReservedDataInFrameBufferAtIndex:(uint32_t)index withLongs:(uint32_t*)data length:(uint32_t)length
 {
 	[theDataLock lock];   //-----begin critical section
 	if(frameBuffer && index<reserveIndex){
-		memcpy(((unsigned long*)[frameBuffer bytes])+reservePool[index],data,length*sizeof(long));
+		memcpy(((uint32_t*)[frameBuffer bytes])+reservePool[index],data,length*sizeof(int32_t));
 		addedData = YES;
 	}
 	[theDataLock unlock];   //-----end critical section
 }
 
 
-- (unsigned long) addLongsToFrameBuffer:(unsigned long*)someData length:(unsigned long)length
+- (uint32_t) addLongsToFrameBuffer:(uint32_t*)someData length:(uint32_t)length
 {
 	[theDataLock lock];   //-----begin critical section
 	if(someData!=0){
-        if (frameBuffer && (frameIndex + length) * sizeof(long) >= kMaxFrameBufferSize) {
+        if (frameBuffer && (frameIndex + length) * sizeof(int32_t) >= kMaxFrameBufferSize) {
             [self addFrameBuffer:YES];
         }
 		if(!frameBuffer){
 			[self setFrameBuffer:[NSMutableData dataWithLength:MAX(kMinFrameBufferSize,lastFrameBufferSize)]];
 		}
-		if((frameIndex+length)*sizeof(long)>=[frameBuffer length]){
-			[frameBuffer increaseLengthBy:(length*sizeof(long))+kMinFrameBufferSize];
+		if((frameIndex+length)*sizeof(int32_t)>=[frameBuffer length]){
+			[frameBuffer increaseLengthBy:(length*sizeof(int32_t))+kMinFrameBufferSize];
 			lastFrameBufferSize = [frameBuffer length];
 		}
 		if(frameBuffer){
-			memcpy(((unsigned long*)[frameBuffer bytes])+frameIndex,someData,length*sizeof(long));
+			memcpy(((uint32_t*)[frameBuffer bytes])+frameIndex,someData,length*sizeof(int32_t));
 			frameIndex += length;
 			addedData = YES;
 		}
@@ -273,28 +273,28 @@
 	return  frameIndex;
 }
 
-- (unsigned long*) getBlockForAddingLongs:(unsigned long)length
+- (uint32_t*) getBlockForAddingLongs:(uint32_t)length
 {
 	[theDataLock lock];   //-----begin critical section
-    if (frameBuffer && (frameIndex + length) * sizeof(long) >= kMaxFrameBufferSize) {
+    if (frameBuffer && (frameIndex + length) * sizeof(int32_t) >= kMaxFrameBufferSize) {
         [self addFrameBuffer:YES];
     }
     if(!frameBuffer){
 		[self setFrameBuffer:[NSMutableData dataWithLength:MAX(kMinFrameBufferSize,lastFrameBufferSize)]];
 	}
-	unsigned long oldFrameIndex = frameIndex;
+	uint32_t oldFrameIndex = frameIndex;
 	frameIndex += length;
-	if([frameBuffer length]<frameIndex*sizeof(long)){
-		unsigned long deltaLength = (length*sizeof(long))+kMinFrameBufferSize;
+	if([frameBuffer length]<frameIndex*sizeof(int32_t)){
+		uint32_t deltaLength = (length*sizeof(int32_t))+kMinFrameBufferSize;
 		[frameBuffer increaseLengthBy:deltaLength];
         lastFrameBufferSize = [frameBuffer length];  
 	}
-	unsigned long* ptr = (unsigned long*)[frameBuffer bytes];
+	uint32_t* ptr = (uint32_t*)[frameBuffer bytes];
 	[theDataLock unlock];   //-----end critical section
 	return &ptr[oldFrameIndex];
 }
 
-- (unsigned long)reserveSpaceInFrameBuffer:(unsigned long)length
+- (uint32_t)reserveSpaceInFrameBuffer:(uint32_t)length
 {
 	[theDataLock lock];   //-----begin critical section
     if(!frameBuffer){
@@ -302,12 +302,12 @@
 	}
 	
     reservePool[reserveIndex] = frameIndex;
-	unsigned long oldIndex = reserveIndex;
+	uint32_t oldIndex = reserveIndex;
     reserveIndex++;
 	
 	frameIndex += length;
-	if([frameBuffer length]<=frameIndex*sizeof(long)){
-		[frameBuffer increaseLengthBy:(length*sizeof(long))+kMinFrameBufferSize];
+	if([frameBuffer length]<=frameIndex*sizeof(int32_t)){
+		[frameBuffer increaseLengthBy:(length*sizeof(int32_t))+kMinFrameBufferSize];
         lastFrameBufferSize = [frameBuffer length];        
 	}
 	[theDataLock unlock];   //-----end critical section
@@ -318,12 +318,12 @@
 {
 	[theDataLock lock];   //-----begin critical section
 	if(frameBuffer){
-        unsigned long actualReservedLocation = reservePool[aRange.location];
-        unsigned long* ptr = (unsigned long*)[frameBuffer bytes];
-        memmove(&ptr[actualReservedLocation],&ptr[actualReservedLocation+aRange.length],(frameIndex-actualReservedLocation-aRange.length)*sizeof(long));
+        uint32_t actualReservedLocation = reservePool[aRange.location];
+        uint32_t* ptr = (uint32_t*)[frameBuffer bytes];
+        memmove(&ptr[actualReservedLocation],&ptr[actualReservedLocation+aRange.length],(frameIndex-actualReservedLocation-aRange.length)*sizeof(int32_t));
         frameIndex -= aRange.length;
         
-        unsigned long i;
+        uint32_t i;
         reservePool[aRange.location] = -1;
         for(i=aRange.location+1;i<reserveIndex;i++){
             reservePool[i] -= aRange.length;
@@ -337,8 +337,8 @@
 	[theDataLock lock];   //-----begin critical section
 	if(frameBuffer && (forceAdd || (oldFrameCounter!=frameCounter) || dataAvailable || dataInCache)){
 		oldFrameCounter = frameCounter;
-		[frameBuffer setLength:(frameIndex*sizeof(long))];
-        lastFrameBufferSize = (lastFrameBufferSize + frameIndex*sizeof(long) + kMinFrameBufferSize) / 2;
+		[frameBuffer setLength:(frameIndex*sizeof(int32_t))];
+        lastFrameBufferSize = (lastFrameBufferSize + frameIndex*sizeof(int32_t) + kMinFrameBufferSize) / 2;
 		
 		//[self addData:frameBuffer];
 		if(!dataArray)[self setDataArray:[NSMutableArray arrayWithCapacity:kMinCapacity]];
@@ -391,9 +391,9 @@
 	}
 }
 
-- (unsigned long) dataCount
+- (uint32_t) dataCount
 {
-	unsigned long theCount = 0;
+	uint32_t theCount = 0;
 	if([theDataLock tryLock]){  //-----begin critical section
 		theCount = [dataArray count];
 		[theDataLock unlock];   //-----end critical section

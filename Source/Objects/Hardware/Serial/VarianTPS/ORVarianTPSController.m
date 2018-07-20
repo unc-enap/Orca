@@ -156,7 +156,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"Varian TPS (%lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"Varian TPS (%u)",[model uniqueIdNumber]]];
 }
 
 - (void) updateWindow

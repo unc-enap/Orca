@@ -64,7 +64,7 @@
 - (unsigned int)maxThreshold;
 - (void) setMaxThreshold:(unsigned int)aValue;
 
-- (void) start:(int)numChannels enabledMask:(unsigned long)enabledMask 
+- (void) start:(int)numChannels enabledMask:(uint32_t)enabledMask 
      rateGroup:(ORRateGroup*)aRateGroup tag:(int)aTag;
 - (void) abort;
 - (void) stop;

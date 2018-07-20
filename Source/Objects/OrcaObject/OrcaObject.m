@@ -332,7 +332,7 @@ NSString* ORMiscAttributeKey		= @"ORMiscAttributeKey";
 
 - (NSString*) fullID
 {
-    return [NSString stringWithFormat:@"%@,%lu",NSStringFromClass([self class]),[self uniqueIdNumber]];
+    return [NSString stringWithFormat:@"%@,%u",NSStringFromClass([self class]),[self uniqueIdNumber]];
 }
 
 - (void) askForUniqueIDNumber
@@ -340,7 +340,7 @@ NSString* ORMiscAttributeKey		= @"ORMiscAttributeKey";
     [[self document] assignUniqueIDNumber:self];
 }
 
-- (void) setUniqueIdNumber:(unsigned long)anIdNumber
+- (void) setUniqueIdNumber:(uint32_t)anIdNumber
 {
     uniqueIdNumber = anIdNumber;
     
@@ -348,7 +348,7 @@ NSString* ORMiscAttributeKey		= @"ORMiscAttributeKey";
          postNotificationName:ORIDChangedNotification
                        object:self];
 }
-- (unsigned long) uniqueIdNumber
+- (uint32_t) uniqueIdNumber
 {
     return uniqueIdNumber;
 }
@@ -968,8 +968,8 @@ static NSString* OROrcaObjectUniqueIDNumber = @"OROrcaObjectUniqueIDNumber";
     [[NSNotificationCenter defaultCenter] postNotificationOnMainThread:aNote waitUntilDone:YES];
 }
 
-- (unsigned long) processID{return 0;}
-- (void) setProcessID:(unsigned long)aValue
+- (uint32_t) processID{return 0;}
+- (void) setProcessID:(uint32_t)aValue
 {
     //subclasses should override
 }

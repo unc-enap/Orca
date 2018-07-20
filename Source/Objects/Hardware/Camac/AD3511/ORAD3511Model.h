@@ -29,14 +29,14 @@
 
 @interface ORAD3511Model : ORCamacIOCard <ORDataTaker> {
     @private
-        unsigned long dataId;
+        uint32_t dataId;
 		unsigned short gain;
 		unsigned short storageOffset;
 		BOOL enabled;
 		BOOL firstTime;
 		
        //place to cache some stuff for alittle more speed.
-        unsigned long 	crateAndStationId;
+        uint32_t 	crateAndStationId;
         unsigned short cachedStation;
     BOOL includeTiming;
 }
@@ -54,8 +54,8 @@
 - (void) setStorageOffset:(unsigned short)aStorageOffset;
 - (unsigned short) gain;
 - (void) setGain:(unsigned short)aGain;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) postWarning:(NSString*)aMessage;
 
 #pragma mark ¥¥¥Hardware Test functions

@@ -221,12 +221,12 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 }
 
 #pragma mark ***Accessors
-- (long) sbcCodeVersion
+- (int32_t) sbcCodeVersion
 {
 	return sbcCodeVersion;
 }
 
-- (void) setSbcCodeVersion:(long)aVersion
+- (void) setSbcCodeVersion:(int32_t)aVersion
 {
     sbcCodeVersion = aVersion;
     [[NSNotificationCenter defaultCenter] postNotificationName:SBC_CodeVersionChanged object:self];
@@ -282,19 +282,19 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
         [self send:aPacket receive:aPacket];
         SBC_time_struct* theTimeStruct = (SBC_time_struct*)(aPacket->payload);
         
-        unsigned long theSBCTime    = theTimeStruct->unixTime;
+        uint32_t theSBCTime    = theTimeStruct->unixTime;
         NSDate*       theSBCDate    = [NSDate dateWithTimeIntervalSince1970:theTimeStruct->unixTime];
         
-        unsigned long theMacTime    = (unsigned long)[[NSDate date] timeIntervalSince1970];
+        uint32_t theMacTime    = (uint32_t)[[NSDate date] timeIntervalSince1970];
         NSDate*       theMacDate    = [NSDate date];
 
         timeSkew = theSBCTime - theMacTime;
         timeSkewValid = YES;
         if(aVerbose){
             NSLog(@"SBC %@ Time Check\n",[delegate fullID]);
-            NSLog(@"SBC Time: [%lu] %@\n",theSBCTime,[theSBCDate stdDescription]);
-            NSLog(@"Mac Time: [%lu] %@\n",theMacTime,[theMacDate stdDescription]);
-            NSLog(@"SBC - Mac: %ld seconds\n",timeSkew);
+            NSLog(@"SBC Time: [%u] %@\n",theSBCTime,[theSBCDate stdDescription]);
+            NSLog(@"Mac Time: [%u] %@\n",theMacTime,[theMacDate stdDescription]);
+            NSLog(@"SBC - Mac: %d seconds\n",timeSkew);
         }
     }
     @catch (NSException* e){
@@ -305,7 +305,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
     [[NSNotificationCenter defaultCenter] postNotificationName:SBC_LinkTimeSkewChanged object:self];
 }
 
-- (long) timeSkew       { return timeSkew;      }
+- (int32_t) timeSkew       { return timeSkew;      }
 - (BOOL) timeSkewValid  { return timeSkewValid; }
 
 - (void) setSBCTime:(NSString*)rootPwd
@@ -324,7 +324,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
                                     NSCalendarUnitYear
                                         fromDate:[NSDate date]];
 
-    NSString* yearPart = [NSString stringWithFormat:@"%02ld%02ld%02ld%02ld%ld.%02ld",[c month],[c day],[c hour],[c minute],[c year],[c second]];
+    NSString* yearPart = [NSString stringWithFormat:@"%02d%02d%02d%02d%d.%02d",(int)[c month],(int)[c day],(int)[c hour],(int)[c minute],(int)[c year],(int)[c second]];
     
     [aSequence addTask:[resourcePath stringByAppendingPathComponent:@"loginScript"]
                  arguments:[NSArray arrayWithObjects:@"root",pwd,IPNumber,@"date",yearPart,nil]];
@@ -626,12 +626,12 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 	return runInfo;
 }
 
-- (unsigned long) writeValue
+- (uint32_t) writeValue
 {
     return writeValue;
 }
 
-- (void) setWriteValue:(unsigned long)aWriteValue
+- (void) setWriteValue:(uint32_t)aWriteValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setWriteValue:writeValue];
     
@@ -640,12 +640,12 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
     [[NSNotificationCenter defaultCenter] postNotificationName:SBC_LinkWriteValueChanged object:self];
 }
 
-- (unsigned long) writeAddress
+- (uint32_t) writeAddress
 {
     return writeAddress;
 }
 
-- (void) setWriteAddress:(unsigned long)aAddress
+- (void) setWriteAddress:(uint32_t)aAddress
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setWriteAddress:writeAddress];
     
@@ -1125,12 +1125,12 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 }
 
 
-- (unsigned long) totalErrorCount
+- (uint32_t) totalErrorCount
 {
     return runInfo.err_count + runInfo.busErrorCount;
 }
 
-- (unsigned long) throttle
+- (uint32_t) throttle
 {
 	return throttle;
 }
@@ -1449,7 +1449,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
         NSLog(@"SBC,%d,%d polling at fastest rate\n",[delegate crateNumber],[delegate slot]);
     }
     else {
-        NSLog(@"SBC,%d,%d polling at ~%luHz\n",[delegate crateNumber],[delegate slot],optionBlock.option[0]);
+        NSLog(@"SBC,%d,%d polling at ~%uHz\n",[delegate crateNumber],[delegate slot],optionBlock.option[0]);
     }
     
     optionBlock.option[0]	= 0;//reset the option block
@@ -1501,7 +1501,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 	}
 }
 
-- (void) setPollingDelay:(unsigned long)numMicroseconds
+- (void) setPollingDelay:(uint32_t)numMicroseconds
 {
 	SBC_CmdOptionStruct optionBlock;
 	int i;
@@ -1533,7 +1533,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 	}
 }
 
-- (void) sendCommand:(unsigned long)aCmd withOptions:(SBC_CmdOptionStruct*)optionBlock expectResponse:(BOOL)askForResponse
+- (void) sendCommand:(uint32_t)aCmd withOptions:(SBC_CmdOptionStruct*)optionBlock expectResponse:(BOOL)askForResponse
 {
 	id pw = [[SBCPacketWrapper alloc] init];
 	SBC_Packet* aPacket = [pw sbcPacket];
@@ -1568,9 +1568,9 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 	
 }
 
-- (void) writeLongBlock:(long*) buffer
-			  atAddress:(unsigned long) anAddress
-			 numToWrite:(unsigned long)  numberLongs
+- (void) writeLongBlock:(int32_t*) buffer
+			  atAddress:(uint32_t) anAddress
+			 numToWrite:(uint32_t)  numberLongs
 {
     id pw = [[SBCPacketWrapper alloc] init];    
 	@try {
@@ -1578,13 +1578,13 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 		SBC_Packet* aPacket = [pw sbcPacket];
 		aPacket->cmdHeader.destination			= kSBC_Process;
 		aPacket->cmdHeader.cmdID				= kSBC_WriteBlock;
-		aPacket->cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(SBC_WriteBlockStruct) + numberLongs*sizeof(long));
+		aPacket->cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(SBC_WriteBlockStruct) + numberLongs*sizeof(int32_t));
 		
 		SBC_WriteBlockStruct* writeBlockPtr = (SBC_WriteBlockStruct*)aPacket->payload;
 		writeBlockPtr->address		= (uint32_t)anAddress;
 		writeBlockPtr->numLongs		= (uint32_t)numberLongs;
 		writeBlockPtr++;
-		memcpy(writeBlockPtr,buffer,numberLongs*sizeof(long));
+		memcpy(writeBlockPtr,buffer,numberLongs*sizeof(int32_t));
 		
 		[self write:socketfd buffer:aPacket];
 		[socketLock unlock]; //end critical section
@@ -1598,9 +1598,9 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 }
 
 
-- (void) readLongBlock:(long*) buffer
-			 atAddress:(unsigned long) anAddress
-			 numToRead:(unsigned long) numberLongs
+- (void) readLongBlock:(int32_t*) buffer
+			 atAddress:(uint32_t) anAddress
+			 numToRead:(uint32_t) numberLongs
 {
     id pw = [[SBCPacketWrapper alloc] init];    
 	@try {
@@ -1621,7 +1621,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 		SBC_ReadBlockStruct* rp = (SBC_ReadBlockStruct*)aPacket->payload;
 		int numLongs = rp->numLongs;
 		rp++;
-		long* dp = (long*)rp;
+		int32_t* dp = (int32_t*)rp;
 		int i;
 		for(i=0;i<numLongs;i++){
 			buffer[i] = dp[i];
@@ -1638,8 +1638,8 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 
 
 - (void) _readBlock:(void *) buffer
-          atAddress:(unsigned long) aVmeAddress
-           numBytes:(unsigned long) numberBytes
+          atAddress:(uint32_t) aVmeAddress
+           numBytes:(uint32_t) numberBytes
          withAddMod:(unsigned short) anAddressModifier
       usingAddSpace:(unsigned short) anAddressSpace
        withUnitSize:(unsigned short) unitSize
@@ -1682,8 +1682,8 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 }
 
 - (void) readByteBlock:(unsigned char *) buffer
-			 atAddress:(unsigned long) aVmeAddress
-			 numToRead:(unsigned long) numberBytes
+			 atAddress:(uint32_t) aVmeAddress
+			 numToRead:(uint32_t) numberBytes
 			withAddMod:(unsigned short) anAddressModifier
 		 usingAddSpace:(unsigned short) anAddressSpace;
 {
@@ -1696,8 +1696,8 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 }
 
 - (void) readWordBlock:(unsigned short *) buffer
-			 atAddress:(unsigned long) aVmeAddress
-			 numToRead:(unsigned long) numberWords
+			 atAddress:(uint32_t) aVmeAddress
+			 numToRead:(uint32_t) numberWords
 			withAddMod:(unsigned short) anAddressModifier
 		 usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -1709,9 +1709,9 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
         withUnitSize:2];
 }
 
-- (void) readLongBlock:(unsigned long *) buffer
-			 atAddress:(unsigned long) aVmeAddress
-			 numToRead:(unsigned long) numberLongs
+- (void) readLongBlock:(uint32_t *) buffer
+			 atAddress:(uint32_t) aVmeAddress
+			 numToRead:(uint32_t) numberLongs
 			withAddMod:(unsigned short) anAddressModifier
 		 usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -1725,8 +1725,8 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 
 
 - (void) _writeBlock:(void *) buffer
-           atAddress:(unsigned long) aVmeAddress
-            numBytes:(unsigned long) numberBytes
+           atAddress:(uint32_t) aVmeAddress
+            numBytes:(uint32_t) numberBytes
           withAddMod:(unsigned short) anAddressModifier
        usingAddSpace:(unsigned short) anAddressSpace
         withUnitSize:(unsigned short) unitSize
@@ -1768,8 +1768,8 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 
 }
 - (void) writeByteBlock:(unsigned char *) buffer
-			  atAddress:(unsigned long) aVmeAddress
-			 numToWrite:(unsigned long) numberBytes
+			  atAddress:(uint32_t) aVmeAddress
+			 numToWrite:(uint32_t) numberBytes
 			 withAddMod:(unsigned short) anAddressModifier
 		  usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -1783,8 +1783,8 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 
 
 - (void) writeWordBlock:(unsigned short *) buffer
-			  atAddress:(unsigned long) aVmeAddress
-			 numToWrite:(unsigned long) numberWords
+			  atAddress:(uint32_t) aVmeAddress
+			 numToWrite:(uint32_t) numberWords
 			 withAddMod:(unsigned short) anAddressModifier
 		  usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -1796,9 +1796,9 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
          withUnitSize:2];
 }
 
-- (void) writeLongBlock:(unsigned long *) buffer
-			  atAddress:(unsigned long) aVmeAddress
-			 numToWrite:(unsigned long) numberLongs
+- (void) writeLongBlock:(uint32_t *) buffer
+			  atAddress:(uint32_t) aVmeAddress
+			 numToWrite:(uint32_t) numberLongs
 			 withAddMod:(unsigned short) anAddressModifier
 		  usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -1963,8 +1963,8 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 		aPacket->cmdHeader.numberBytesinPayload = 0;
 		[self send:aPacket receive:aPacket];
 		
-		unsigned long* rp = (unsigned long*)aPacket->payload;
-		long numLongs = aPacket->cmdHeader.numberBytesinPayload/sizeof(long);
+		uint32_t* rp = (uint32_t*)aPacket->payload;
+		int32_t numLongs = aPacket->cmdHeader.numberBytesinPayload/sizeof(int32_t);
 		if(numLongs>0){
 			[aDataPacket addLongsToFrameBuffer:rp length:numLongs];
 		}
@@ -1999,7 +1999,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 	[self getRunInfoBlock];
 
 	if(lastAmountInBuffer != runInfo.amountInBuffer){
-		//as long as the amount in the buffer is changing, we'll ask for more time.
+		//as int32_t as the amount in the buffer is changing, we'll ask for more time.
 		[[NSNotificationCenter defaultCenter] postNotificationName: ORNeedMoreTimeToStopRun object:self];
 		lastAmountInBuffer = runInfo.amountInBuffer;
 	}
@@ -2030,9 +2030,9 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 
 - (void) reportErrorsByCard
 {
-    unsigned long busErrorCount = 0;
-    unsigned long errorCount    = 0;
-    unsigned long messageCount  = 0;
+    uint32_t busErrorCount = 0;
+    uint32_t errorCount    = 0;
+    uint32_t messageCount  = 0;
     int slot;
     for(slot=0;slot<MAX_CARDS;slot++){
         busErrorCount     += errorInfo.card[slot].busErrorCount;
@@ -2081,7 +2081,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 }
 
 #pragma mark ***DataSource
-- (void) getQueMinValue:(unsigned long*)aMinValue maxValue:(unsigned long*)aMaxValue head:(unsigned long*)aHeadValue tail:(unsigned long*)aTailValue
+- (void) getQueMinValue:(uint32_t*)aMinValue maxValue:(uint32_t*)aMaxValue head:(uint32_t*)aHeadValue tail:(uint32_t*)aTailValue
 {
 	*aMinValue  = 0;
 	*aMaxValue  = runInfo.bufferSize;
@@ -2278,12 +2278,12 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 	return cbTestCount;
 }
 
-- (long) totalRecordsChecked
+- (int32_t) totalRecordsChecked
 {
 	return totalRecordsChecked;
 }
 
-- (long) totalErrors
+- (int32_t) totalErrors
 {
 	return totalErrors;
 }
@@ -2351,7 +2351,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 }
 
 
-- (void) throwError:(int)anError address:(unsigned long)anAddress
+- (void) throwError:(int)anError address:(uint32_t)anAddress
 {
 	NSString* baseString = [NSString stringWithFormat:@"Address Exception. "];
 	NSString* details;
@@ -2614,7 +2614,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 	// wait until timeout or data received
     int selectionResult = 0;
     ssize_t bytesWritten = 0;
-	uint32_t numBytesToSend = sizeof(long)   +
+	uint32_t numBytesToSend = sizeof(int32_t)   +
         sizeof(SBC_CommandHeader)       +
         kSBC_MaxMessageSizeBytes        +
         aPacket->cmdHeader.numberBytesinPayload;
@@ -2697,7 +2697,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 {
 	ssize_t n;
     int  selectionResult = 0;
-	long numBytesToGet = 0;
+	int32_t numBytesToGet = 0;
 	time_t t1 = time(0);
 	do {
 		n = recv(aSocket, &numBytesToGet, sizeof(numBytesToGet), 0);
@@ -2723,7 +2723,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 	else if (n<0) {
 		[NSException raise:@"Socket Error" format:@"Error: %s",strerror(errno)];
     } 
-	else if (n < sizeof(long)) {
+	else if (n < sizeof(int32_t)) {
         /* We didn't get the whole word.  This probably will never happen. */
         ssize_t numToGet = sizeof(numBytesToGet) - n;
         char* ptrToNumBytesToGet = ((char*)&numBytesToGet) + n;
@@ -2941,14 +2941,14 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 	totalMeasurements++;
 	[timer release];
 	
-	unsigned long* rp = (unsigned long*)aPacket->payload;
-	long numLongs = aPacket->cmdHeader.numberBytesinPayload/sizeof(long);
-	unsigned long* endPt = rp + numLongs;
+	uint32_t* rp = (uint32_t*)aPacket->payload;
+	int32_t numLongs = aPacket->cmdHeader.numberBytesinPayload/sizeof(int32_t);
+	uint32_t* endPt = rp + numLongs;
 	
 	
 	while(rp<endPt){
-		unsigned long n = *rp++;
-		long i;
+		uint32_t n = *rp++;
+		int32_t i;
 		for(i=1;i<n;i++){
 			if(*rp++ != i)totalErrors++;
 		}
@@ -3020,9 +3020,9 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 	}
 }
 
-- (void) writeGeneral:(long*) buffer
-			  operation:(unsigned long) anOperationID
-			 numToWrite:(unsigned long)  numberLongs
+- (void) writeGeneral:(int32_t*) buffer
+			  operation:(uint32_t) anOperationID
+			 numToWrite:(uint32_t)  numberLongs
 {
     id pw = [[SBCPacketWrapper alloc] init];
 	@try {
@@ -3030,13 +3030,13 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 		SBC_Packet* aPacket = [pw sbcPacket];
 		aPacket->cmdHeader.destination			= kSBC_Process;
 		aPacket->cmdHeader.cmdID					= kSBC_GeneralWrite;
-		aPacket->cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(SBC_WriteBlockStruct) + numberLongs*sizeof(long));
+		aPacket->cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(SBC_WriteBlockStruct) + numberLongs*sizeof(int32_t));
 		
 		SBC_WriteBlockStruct* dataPtr = (SBC_WriteBlockStruct*)aPacket->payload;
 		dataPtr->address		= (uint32_t)anOperationID;
 		dataPtr->numLongs		= (uint32_t)numberLongs;
 		dataPtr++;
-		memcpy(dataPtr,buffer,numberLongs*sizeof(long));
+		memcpy(dataPtr,buffer,numberLongs*sizeof(int32_t));
 		
 		[self write:socketfd buffer:aPacket];
         [self read:socketfd buffer:aPacket]; //read the response
@@ -3044,7 +3044,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 		SBC_ReadBlockStruct* rp = (SBC_ReadBlockStruct*)aPacket->payload;
 		int numLongs = rp->numLongs;
 		rp++;
-		long* dp = (long*)rp;
+		int32_t* dp = (int32_t*)rp;
 		int i;
 		for(i=0;i<numLongs;i++){
 			buffer[i] = dp[i];
@@ -3062,9 +3062,9 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 }
 
 
-- (void) readGeneral:(long*) buffer
-		   operation:(unsigned long) anOperationID
-		   numToRead:(unsigned long) numberLongs
+- (void) readGeneral:(int32_t*) buffer
+		   operation:(uint32_t) anOperationID
+		   numToRead:(uint32_t) numberLongs
 {
     id pw = [[SBCPacketWrapper alloc] init];    
 	@try {
@@ -3085,7 +3085,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 		SBC_ReadBlockStruct* rp = (SBC_ReadBlockStruct*)aPacket->payload;
 		int numLongs = rp->numLongs;
 		rp++;
-		long* dp = (long*)rp;
+		int32_t* dp = (int32_t*)rp;
 		int i;
 		for(i=0;i<numLongs;i++){
 			buffer[i] = dp[i];
@@ -3106,9 +3106,9 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
     NSMutableArray* cardErrorCounts     = [NSMutableArray arrayWithCapacity:MAX_CARDS];
     NSMutableArray* cardBusErrorCounts  = [NSMutableArray arrayWithCapacity:MAX_CARDS];
     NSMutableArray* cardMessageCounts   = [NSMutableArray arrayWithCapacity:MAX_CARDS];
-    unsigned long cardErrorCount        = 0;
-    unsigned long cardBusErrorCount     = 0;
-    unsigned long cardMessageCount      = 0;
+    uint32_t cardErrorCount        = 0;
+    uint32_t cardBusErrorCount     = 0;
+    uint32_t cardMessageCount      = 0;
     int i;
     for(i=0;i<MAX_CARDS;i++){
         [cardErrorCounts    addObject:[NSNumber numberWithUnsignedLong:errorInfo.card[i].errorCount]];
@@ -3184,8 +3184,8 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 	[super dealloc];
 }
 - (NSString*) message {return message;}
-- (long) running	 { return status.running; }
-- (long) finalStatus { return status.finalStatus; }
-- (long) progress	 { return status.progress; }
+- (int32_t) running	 { return status.running; }
+- (int32_t) finalStatus { return status.finalStatus; }
+- (int32_t) progress	 { return status.progress; }
 
 @end

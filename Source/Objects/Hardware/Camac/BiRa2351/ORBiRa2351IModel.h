@@ -32,7 +32,7 @@
 		NSString* lastRead;
 		
 		//bit processing variables
-		unsigned long processInputValue;  //snapshot of the inputs at start of process cycle
+		uint32_t processInputValue;  //snapshot of the inputs at start of process cycle
 }
 
 #pragma mark ¥¥¥Initialization

@@ -239,8 +239,8 @@
     unsigned int written;
     NSDate *nextNotificationDate;
     BOOL notificationSent = NO;
-    long speed;
-    long estimatedTime;
+    int32_t speed;
+    int32_t estimatedTime;
     BOOL error = NO;
     
     

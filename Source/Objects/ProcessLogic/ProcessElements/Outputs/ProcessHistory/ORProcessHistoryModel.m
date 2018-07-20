@@ -254,7 +254,7 @@ NSString* historyConnectors[4] = {
 	
 	NSFont* theFont = [NSFont messageFontOfSize:9];
 	NSAttributedString* iconLabel =  [[[NSAttributedString alloc] 
-											initWithString:[NSString stringWithFormat:@"%lu",[self processID]]
+											initWithString:[NSString stringWithFormat:@"%u",[self processID]]
 											attributes:[NSDictionary dictionaryWithObjectsAndKeys:theFont,NSFontAttributeName,[NSColor blackColor],NSForegroundColorAttributeName,nil]]autorelease];
 	NSSize textSize = [iconLabel size];
 	NSImage* anImage = [NSImage imageNamed:@"ProcessHistory"];
@@ -285,7 +285,7 @@ NSString* historyConnectors[4] = {
 	}
 	else {
 		iconLabel =  [[[NSAttributedString alloc] 
-					   initWithString:[NSString stringWithFormat:@"History %lu",[self processID]] 
+					   initWithString:[NSString stringWithFormat:@"History %u",[self processID]] 
 					   attributes:[NSDictionary dictionaryWithObjectsAndKeys:theFont,NSFontAttributeName,[NSColor blackColor],NSForegroundColorAttributeName,nil]]autorelease];
 	}
 	NSSize textSize = [iconLabel size];

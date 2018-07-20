@@ -57,7 +57,7 @@ typedef  struct  {
 #pragma mark ¥¥¥accessors
 - (void) registerForUSBNotifications:(id)anObj;
 
-- (NSString*) keyForVendorID:(unsigned long)aVendorID productID:(NSUInteger) aProductID;
+- (NSString*) keyForVendorID:(uint32_t)aVendorID productID:(NSUInteger) aProductID;
 
 #pragma mark ¥¥¥HW access
 - (void) startMatching;
@@ -71,7 +71,7 @@ typedef  struct  {
 - (IOReturn) _findInterfaces:(IOUSBDeviceInterface182**)dev userInfo:(ORUSBInterface*) usbCallbackData supported:(BOOL)supported;
 
 
-- (ORUSBInterface*) getUSBInterface:(unsigned long)aVendorID productID:(NSUInteger) aProductID;
+- (ORUSBInterface*) getUSBInterface:(uint32_t)aVendorID productID:(NSUInteger) aProductID;
 - (NSArray*) interfacesForVender:(NSUInteger) aVenderID product:(NSUInteger) aProductID;
 - (NSArray*) interfacesForVenders:(NSArray*)someVendorIDs products:(NSArray*)someProductIDs;
 - (NSUInteger) deviceCount;
@@ -80,7 +80,7 @@ typedef  struct  {
 - (id) deviceAtIndex:(NSUInteger)index;
 - (void) releaseInterfaceFor:(id)obj;
 - (void) claimInterfaceWithSerialNumber:(NSString*)serialNumber for:(id)obj;
-- (void) claimInterfaceWithVendor:(unsigned long)aVendorID product:(NSUInteger) aProductID for:(id)obj;
+- (void) claimInterfaceWithVendor:(uint32_t)aVendorID product:(NSUInteger) aProductID for:(id)obj;
 - (ORUSBInterface*) getUSBInterfaceWithSerialNumber:(NSString*)aSerialNumber;
 - (void) removeAllObjects;
 - (void) objectsAdded:(NSArray*)newObjects;

@@ -46,15 +46,15 @@
     BOOL passed;
     ORShaperModel* currentShaper;
     int currentShaperChannel;
-    unsigned long startingShaperCounts;
+    uint32_t startingShaperCounts;
     
     NcdMuxBoxModel* currentMux;
     int currentMuxChannel;
-    unsigned long startingMuxCounts;
+    uint32_t startingMuxCounts;
 
     NSArray* currentScopes;
     int currentScopeChannel;
-    unsigned long startingScopeCounts;
+    uint32_t startingScopeCounts;
 
     unsigned short oldMuxThreshold;
     unsigned short muxThreshold;

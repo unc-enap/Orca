@@ -50,9 +50,9 @@
     BOOL            loopForever;
     int             pollTime;
     BOOL            shipValues;
-	unsigned long	dataId;
-	unsigned long   timeMeasured;
-    unsigned long   adcEnabledMask;
+	uint32_t	dataId;
+	uint32_t   timeMeasured;
+    uint32_t   adcEnabledMask;
     ORTimeRate*		adcHistory[kMJDPreAmpAdcChannels];
     ORTimeRate*		leakageCurrentHistory[kMJDPreAmpLeakageCurrentChannels];
     ORRunningAverageGroup* baselineRunningAverages;
@@ -70,7 +70,7 @@
     
     //error counting
     BOOL            supplyOutOfBounds[4]; //only count if this goes from low to high
-    unsigned long   supplyErrors[4];
+    uint32_t   supplyErrors[4];
 }
 
 - (void) setUpArrays;
@@ -104,8 +104,8 @@
 - (void) baselineSpikeChanged:(NSNotification*)aNote;
 - (void)  setBaselineRunningAverages:(ORRunningAverageGroup*)newRunningAverageGroup;
 
-- (unsigned long) adcEnabledMask;
-- (void) setAdcEnabledMask:(unsigned long)aAdcEnabledMask;
+- (uint32_t) adcEnabledMask;
+- (void) setAdcEnabledMask:(uint32_t)aAdcEnabledMask;
 - (BOOL) shipValues;
 - (void) setShipValues:(BOOL)aShipValues;
 - (void) pollRequestIsFinished;
@@ -120,7 +120,7 @@
 - (void) setPulseCount:(unsigned short)aPulseCount;
 - (BOOL) enabled:(int)index;
 - (void) setEnabled:(int)index value:(BOOL)aEnabled;
-- (unsigned long) timeMeasured;
+- (uint32_t) timeMeasured;
 
 - (BOOL) attenuated:(int)index;
 - (void) setAttenuated:(int)index value:(BOOL)aAttenuated;
@@ -136,18 +136,18 @@
 - (void) setAmplitudes:(NSMutableArray*)anArray;
 - (NSMutableArray*) amplitudes;
 - (void) setDacs:(NSMutableArray*)anArray;
-- (unsigned long) dac:(unsigned short) aChan;
-- (void) setDac:(unsigned short) aChan withValue:(unsigned long) aValue;
-- (unsigned long) amplitude:(int) aChan;
-- (void) setAmplitude:(int) aChan withValue:(unsigned long) aValue;
+- (uint32_t) dac:(unsigned short) aChan;
+- (void) setDac:(unsigned short) aChan withValue:(uint32_t) aValue;
+- (uint32_t) amplitude:(int) aChan;
+- (void) setAmplitude:(int) aChan withValue:(uint32_t) aValue;
 - (BOOL) doNotUseHWMap;
 - (void) setDoNotUseHWMap:(BOOL)aDoNotUseHWMap;
 
 #pragma mark ¥¥¥Data Records
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (NSDictionary*) dataRecordDescription;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherObject;
 - (void) shipRecords;
@@ -165,7 +165,7 @@
 - (void) readAllAdcs;
 - (void) readAllAdcs:(BOOL)verbose;
 - (void) pollValues;
-- (unsigned long) writeAuxIOSPI:(unsigned long)aValue;
+- (uint32_t) writeAuxIOSPI:(uint32_t)aValue;
 - (int) connectedGretinaCrate;
 - (int) connectedGretinaSlot;
 
@@ -211,10 +211,10 @@ extern NSString* ORMJDPreAmpModelFirmwareRevChanged;
 extern NSString* ORMJDPreAmpModelRateSpiked;
 
 @interface NSObject (ORMJDPreAmpModel)
-- (unsigned long) writeAuxIOSPI:(unsigned long)spiData;
+- (uint32_t) writeAuxIOSPI:(uint32_t)spiData;
 - (id) adapter;
 - (id) sbcLink;
-- (unsigned long) baseAddress;
+- (uint32_t) baseAddress;
 - (void) send:(SBC_Packet*)aSendPacket receive:(SBC_Packet*)aReceivePacket;
 @end
 

@@ -71,8 +71,8 @@ NSString* OR1dFitFunctionChanged = @"OR1dFitFunctionChanged";
 
 - (id) dataSource					{ return dataSource; }
 
-- (long) minChannel					{ return minChannel; }
-- (long) maxChannel					{ return maxChannel; }
+- (int32_t) minChannel					{ return minChannel; }
+- (int32_t) maxChannel					{ return maxChannel; }
 - (BOOL) fitValid					{ return fitValid; }
 - (int) fitType						{ return fitType; }
 - (int) fitOrder					{ return fitOrder; }
@@ -88,14 +88,14 @@ NSString* OR1dFitFunctionChanged = @"OR1dFitFunctionChanged";
 - (BOOL) serviceAvailable			{ return serviceAvailable;}
 
 
-- (void) setMinChannel:(long)aChannel 
+- (void) setMinChannel:(int32_t)aChannel 
 { 
 	minChannel = aChannel; 
 	[[NSNotificationCenter defaultCenter] postNotificationName:OR1dFitChanged object:self];
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORPlotViewRedrawEvent object:self];
 }
 
-- (void) setMaxChannel:(long)aChannel 
+- (void) setMaxChannel:(int32_t)aChannel 
 { 
 	maxChannel = aChannel; 
 	[[NSNotificationCenter defaultCenter] postNotificationName:OR1dFitChanged object:self];
@@ -196,16 +196,16 @@ NSString* OR1dFitFunctionChanged = @"OR1dFitFunctionChanged";
 		
 		NSBezierPath* theDataPath = [NSBezierPath bezierPath];
 		[theDataPath setLineWidth:.5];
-		long numPoints = (long)[fit count];
-		long minX		= MAX(0,MAX([self minChannel],[mXScale minValue]));
-		long maxX		= MIN(numPoints,MIN(roundToLong([mXScale maxValue]),[self maxChannel]));
+		int32_t numPoints = (int32_t)[fit count];
+		int32_t minX		= MAX(0,MAX([self minChannel],[mXScale minValue]));
+		int32_t maxX		= MIN(numPoints,MIN(roundToLong([mXScale maxValue]),[self maxChannel]));
 		float rawValue  = 0;
 		if(minX<[fit count]) rawValue	= [[fit objectAtIndex:minX] floatValue];
 		float y			= [mYScale getPixAbs:rawValue];
 		float x			= [mXScale getPixAbs:minX];
 		
 		[theDataPath moveToPoint:NSMakePoint(x,y)];			
-		long    ix;
+		int32_t    ix;
 		for (ix=minX; ix<maxX;++ix) {
 			if(ix >= [fit count]-1)break;
 			rawValue = [[fit objectAtIndex:ix] floatValue];
@@ -247,12 +247,12 @@ NSString* OR1dFitFunctionChanged = @"OR1dFitFunctionChanged";
 		//get the data for the fit
 		NSMutableArray* dataArray = [NSMutableArray array];
 		int numPoints = [dataSource numberPointsInPlot:aPlot];
-		long maxChan = MIN([self maxChannel],numPoints-1);
-		long minChan = MAX([self minChannel],0);
+		int32_t maxChan = MIN([self maxChannel],numPoints-1);
+		int32_t minChan = MAX([self minChannel],0);
 		if((maxChan - minChan) > 1024){
 			maxChan = minChan + 1024;
 		}
-		long ix;
+		int32_t ix;
 		for (ix=minChan; ix<maxChan;++ix) {		
 			double xValue,yValue;
 			[dataSource plotter:aPlot index:(int)ix x:&xValue y:&yValue];

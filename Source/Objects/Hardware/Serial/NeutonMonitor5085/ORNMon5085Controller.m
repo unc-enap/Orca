@@ -167,7 +167,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"NMon5085 (%lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"NMon5085 (%u)",[model uniqueIdNumber]]];
 }
 
 - (void) updateWindow

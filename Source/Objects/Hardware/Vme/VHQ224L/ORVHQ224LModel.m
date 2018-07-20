@@ -31,7 +31,7 @@
 
 #pragma mark •••Static Declarations
 //offsets from the base address (kDefaultBaseAddress)
-static unsigned long register_offsets[kNumberOfVHQ224LSRegisters] = {
+static uint32_t register_offsets[kNumberOfVHQ224LSRegisters] = {
 	0x00,	//kStatusRegister1		[0] 	
 	0x04,	//kSetVoltageA			[1] 	
 	0x08,	//kSetVoltageB			[2] 	
@@ -279,8 +279,8 @@ NSString* ORVHQ224LMaxCurrentChanged		= @"ORVHQ224LMaxCurrentChanged";
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORVHQ224LRampRateChanged object:self userInfo: nil];
 }
 
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -615,14 +615,14 @@ NSString* ORVHQ224LMaxCurrentChanged		= @"ORVHQ224LMaxCurrentChanged";
 		time(&ut_Time);
 		//struct tm* theTimeGMTAsStruct = gmtime(&theTime);
 		
-		unsigned long data[11];
+		uint32_t data[11];
 		data[0] = dataId | 11;
 		data[1] = [self uniqueIdNumber]&0xfff;
 		data[2] = ut_Time;
 		
 		union {
 			float asFloat;
-			unsigned long asLong;
+			uint32_t asLong;
 		}theData;
 		int index = 3;
 		int i;
@@ -638,7 +638,7 @@ NSString* ORVHQ224LMaxCurrentChanged		= @"ORVHQ224LMaxCurrentChanged";
 		}
 		
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-															object:[NSData dataWithBytes:data length:sizeof(long)*11]];
+															object:[NSData dataWithBytes:data length:sizeof(int32_t)*11]];
 	}	
 	statusChanged = NO;
 }

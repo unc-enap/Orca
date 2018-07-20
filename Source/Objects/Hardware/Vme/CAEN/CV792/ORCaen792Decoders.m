@@ -47,11 +47,11 @@
 	[actualCards release];
     [super dealloc];
 }
-- (unsigned long) decodeData:(void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*) aDataSet
+- (uint32_t) decodeData:(void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*) aDataSet
 {
     short i;
-    long* ptr   = (long*) aSomeData;
-	long length = ExtractLength(ptr[0]);
+    int32_t* ptr   = (int32_t*) aSomeData;
+	int32_t length = ExtractLength(ptr[0]);
     int crate   = ShiftAndExtract(ptr[1],21,0xf);
     int card    = ShiftAndExtract(ptr[1],16,0x1f);
     BOOL timeStampsIncluded = ShiftAndExtract(ptr[1],0,0x1);
@@ -97,14 +97,14 @@
     return length;
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
-	long length = ExtractLength(ptr[0]);
+	int32_t length = ExtractLength(ptr[0]);
     NSString* title= @"CAEN792 QDC Record\n\n";
 	
-    NSString* len	=[NSString stringWithFormat: @"# QDC = %lu\n",length-2];
-    NSString* crate = [NSString stringWithFormat:@"Crate = %lu\n",(ptr[1] >> 21)&0x0000000f];
-    NSString* card  = [NSString stringWithFormat:@"Card  = %lu\n",(ptr[1] >> 16)&0x0000001f];    
+    NSString* len	=[NSString stringWithFormat: @"# QDC = %u\n",length-2];
+    NSString* crate = [NSString stringWithFormat:@"Crate = %u\n",(ptr[1] >> 21)&0x0000000f];
+    NSString* card  = [NSString stringWithFormat:@"Card  = %u\n",(ptr[1] >> 16)&0x0000001f];    
     BOOL timeStampsIncluded = ptr[1]&0x1;
     
     int dataStartIndex;
@@ -124,14 +124,14 @@
         }
     }
     if(timeStampsIncluded){
-        NSString* seconds         = [NSString stringWithFormat:@"Seconds      = %lu\n",ptr[2]];
-        NSString* microseconds    = [NSString stringWithFormat:@"Microseconds = %lu\n",ptr[3]];
+        NSString* seconds         = [NSString stringWithFormat:@"Seconds      = %u\n",ptr[2]];
+        NSString* microseconds    = [NSString stringWithFormat:@"Microseconds = %u\n",ptr[3]];
         return [NSString stringWithFormat:@"%@%@%@%@%@%@%@",title,len,crate,card,seconds,microseconds,restOfString];
     }
     else return [NSString stringWithFormat:@"%@%@%@%@%@",title,len,crate,card,restOfString];
 }
 
-- (unsigned short) channel: (unsigned long) pDataValue
+- (unsigned short) channel: (uint32_t) pDataValue
 {
     return	ShiftAndExtract(pDataValue,16,0x1F);
 }
@@ -147,7 +147,7 @@
 
 @implementation ORCAEN792NDecoderForQdc
 
-- (unsigned short) channel: (unsigned long) pDataValue
+- (unsigned short) channel: (uint32_t) pDataValue
 {
     return	ShiftAndExtract(pDataValue,17,0xF);
 }

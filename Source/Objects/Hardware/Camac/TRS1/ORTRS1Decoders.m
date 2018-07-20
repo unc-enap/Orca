@@ -39,10 +39,10 @@
     [super dealloc];
 }
 
-- (unsigned long) decodeData:(void*)aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr   = (unsigned long*)aSomeData;
-	unsigned long length = ExtractLength(*ptr);
+    uint32_t* ptr   = (uint32_t*)aSomeData;
+	uint32_t length = ExtractLength(*ptr);
 
 	ptr++; //point to the location word
     
@@ -51,11 +51,11 @@
 	NSString* crateKey	= [self getCrateKey: crate];
 	NSString* cardKey	= [self getStationKey: card];
 
-    NSData* tmpData = [ NSData dataWithBytes: (char*) aSomeData length: length*sizeof(long) ];
+    NSData* tmpData = [ NSData dataWithBytes: (char*) aSomeData length: length*sizeof(int32_t) ];
 
     // Set up the waveform
     [ aDataSet loadWaveform: tmpData		//pass in the whole data set
-                    offset: 3*sizeof(long)	//offset to the start of actual data (bytes!)
+                    offset: 3*sizeof(int32_t)	//offset to the start of actual data (bytes!)
 				  unitSize: 1				//unit size in bytes
                     sender: self 
 				  withKeys:	crateKey,
@@ -64,14 +64,14 @@
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 	ptr++;
     
     NSString* title= @"8818 Digitizer Record\n\n";
     
-    NSString* crate = [NSString stringWithFormat:@"Crate    = %lu\n",(*ptr&0x01e00000)>>21];
-    NSString* card  = [NSString stringWithFormat:@"Station  = %lu\n",(*ptr&0x001f0000)>>16];
+    NSString* crate = [NSString stringWithFormat:@"Crate    = %u\n",(*ptr&0x01e00000)>>21];
+    NSString* card  = [NSString stringWithFormat:@"Station  = %u\n",(*ptr&0x001f0000)>>16];
     return [NSString stringWithFormat:@"%@%@%@",title,crate,card];               
 }
 

@@ -28,11 +28,11 @@
         NSString*       portName;
         BOOL            portWasOpen;
         ORSerialPort*   serialPort;
-        unsigned long	dataId;
+        uint32_t	dataId;
 		NSString*		lastRequest;
 		NSMutableArray* cmdQueue;
 		float		    temperature;
-		unsigned long	timeMeasured;
+		uint32_t	timeMeasured;
 		int				pollTime;
         NSMutableString*       buffer;
 		BOOL			shipTemperature;
@@ -63,14 +63,14 @@
 - (void) setLastRequest:(NSString*)aRequest;
 - (void) openPort:(BOOL)state;
 - (float) temperature;
-- (unsigned long) timeMeasured;
+- (uint32_t) timeMeasured;
 - (void) setTemperature:(float)aValue;
 
 #pragma mark ***Data Records
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (NSDictionary*) dataRecordDescription;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherCTITemp;
 

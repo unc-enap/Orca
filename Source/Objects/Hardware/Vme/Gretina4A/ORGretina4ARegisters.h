@@ -168,10 +168,10 @@ enum {
 - (BOOL)          regIsWriteable: (unsigned short) anIndex;
 - (NSString*)     registerName:   (unsigned short) anIndex;
 - (short)         accessType:     (unsigned short) anIndex;
-- (unsigned long) address:(unsigned long)baseAddress forReg:(unsigned short)anIndex;
-- (unsigned long) address:(unsigned long)baseAddress forReg:(unsigned short)anIndex chan:(unsigned short)aChannel;
-- (unsigned long) offsetforReg:(unsigned short)anIndex;
-- (unsigned long) offsetforReg:(unsigned short)anIndex chan:(unsigned short)aChannel;
+- (uint32_t) address:(uint32_t)baseAddress forReg:(unsigned short)anIndex;
+- (uint32_t) address:(uint32_t)baseAddress forReg:(unsigned short)anIndex chan:(unsigned short)aChannel;
+- (uint32_t) offsetforReg:(unsigned short)anIndex;
+- (uint32_t) offsetforReg:(unsigned short)anIndex chan:(unsigned short)aChannel;
 - (void)          checkChannel:(unsigned short)aChannel;
 - (void)          checkIndex:(unsigned short)anIndex;
 @end
@@ -192,8 +192,8 @@ enum {
 - (BOOL)          regIsWriteable: (unsigned short) anIndex;
 - (NSString*)     registerName:   (unsigned short) anIndex;
 - (short)         accessType:     (unsigned short) anIndex;
-- (unsigned long) offsetforReg:(unsigned short)anIndex;
-- (unsigned long) address:(unsigned long)baseAddress forReg:(unsigned short)anIndex;
+- (uint32_t) offsetforReg:(unsigned short)anIndex;
+- (uint32_t) address:(uint32_t)baseAddress forReg:(unsigned short)anIndex;
 - (void)          checkIndex:(unsigned short)anIndex;
 
 @end

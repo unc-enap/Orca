@@ -30,7 +30,7 @@
 - (id) command:(int)index;
 - (void) SBCPacket:(SBC_Packet*)blockPacket;
 - (void) extractData:(SBC_Packet*) aPacket;
-- (long) longValueForCmd:(int)anIndex;
+- (int32_t) longValueForCmd:(int)anIndex;
 - (short) shortValueForCmd:(int)anIndex;
 - (NSData*) dataForCmd:(int)anIndex;
 @end

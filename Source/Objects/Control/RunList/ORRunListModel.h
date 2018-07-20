@@ -74,7 +74,7 @@
 - (void) removeItemAtIndex:(NSInteger) anIndex;
 - (void) addItem:(id)anItem atIndex:(NSInteger)anIndex;
 - (id) itemAtIndex:(NSInteger)anIndex;
-- (unsigned long) itemCount;
+- (uint32_t) itemCount;
 - (TimedWorker*) timedWorker;
 - (NSString*) runStateName;
 

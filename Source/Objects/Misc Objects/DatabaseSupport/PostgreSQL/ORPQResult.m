@@ -52,7 +52,7 @@ enum {
     return self;    
 }
 
-- (unsigned long long) numOfRows
+- (uint64_t) numOfRows
 {
     if (mResult) {
         return mNumOfRows = PQntuples(mResult);
@@ -445,7 +445,7 @@ enum {
         NSMutableString		*theString = [NSMutableString stringWithCapacity:0];
         int			i, j;
 
-        [theString appendFormat:@"ORPQResult: (%ld fields)\n",(long)mNumOfFields];
+        [theString appendFormat:@"ORPQResult: (%d fields)\n",(int32_t)mNumOfFields];
         [self fetchFieldsName];
         for (i=0; i<(mNumOfFields-1); i++) {
             [theString appendFormat:@"%@\t", [mNames objectAtIndex:i]];

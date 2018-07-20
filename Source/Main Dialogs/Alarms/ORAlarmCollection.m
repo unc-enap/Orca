@@ -194,7 +194,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmCollection);
 {
 //  crashes sometimes..... Don't know why... try ensuring it's only executed on main thread
     if ([NSThread isMainThread]) {
-        if([alarms count]) [[NSApp dockTile] setBadgeLabel: [NSString stringWithFormat:@"%ld",[alarms count]]];
+        if([alarms count]) [[NSApp dockTile] setBadgeLabel: [NSString stringWithFormat:@"%d",(int)[alarms count]]];
         else			   [[NSApp dockTile] setBadgeLabel: nil];
     }
 }
@@ -309,7 +309,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmCollection);
     [[NSNotificationCenter defaultCenter] postNotificationName:ORAlarmCollectionReloadAddressList object:self];
 }
 
-- (void) addAddress:(NSString*)anAddress severityMask:(unsigned long)aMask
+- (void) addAddress:(NSString*)anAddress severityMask:(uint32_t)aMask
 {
     if(!eMailList) [self setEMailList:[NSMutableArray array]];
     id newAddress = [[[ORAlarmEMailDestination alloc] init] autorelease];
@@ -412,7 +412,7 @@ NSString* ORAlarmAddressChanged			  = @"ORAlarmAddressChanged";
 	return (severityMask & (0x1L<<aType)) != 0;
 }
 
-- (void) setSeverityMask:(unsigned long)aMask
+- (void) setSeverityMask:(uint32_t)aMask
 {
     [[[(ORAppDelegate*)[NSApp delegate] undoManager] prepareWithInvocationTarget:self] setSeverityMask:severityMask];
 
@@ -421,7 +421,7 @@ NSString* ORAlarmAddressChanged			  = @"ORAlarmAddressChanged";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORAlarmSeveritySelectionChanged object:self];
 }
 
-- (unsigned long) severityMask
+- (uint32_t) severityMask
 {
 	return severityMask;
 }

@@ -40,7 +40,7 @@
 #pragma mark ***Hardware - General
 - (short)	oscScopeId;
 - (bool) 	oscBusy;
-- (long)	oscGetDateTime;
+- (int32_t)	oscGetDateTime;
 - (void)	oscSetDateTime: (time_t) aTime;
 - (void)	oscLockPanel: (bool) aFlag;
 - (void)	oscResetOscilloscope;
@@ -99,7 +99,7 @@
 - (void) 	runTaskStopped: (ORDataPacket*) aDataPacket userInfo:(NSDictionary*)userInfo;
 
 #pragma mark ***Specialty routines.
-- (void) 	osc220ConvertTime: (unsigned long long*) a10MHzTime timeToConvert: (char*) aCharTime;
+- (void) 	osc220ConvertTime: (uint64_t*) a10MHzTime timeToConvert: (char*) aCharTime;
 
 @end
 

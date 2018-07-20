@@ -71,7 +71,7 @@ enum {
 
 typedef struct  {
 	NSString*       regName;
-    unsigned long 	addressOffset;
+    uint32_t 	addressOffset;
     short			accessType;
     bool			hwReset;
     bool			softwareReset;
@@ -91,7 +91,7 @@ enum {
 
 typedef struct  {
 	NSString*       regName;
-	unsigned long 	addressOffset;
+	uint32_t 	addressOffset;
 	short			accessType;
     unsigned short  numBits;
 } DT5720ControllerRegisterNamesStruct;
@@ -110,7 +110,7 @@ typedef struct  {
 	ORUSBInterface* usbInterface;
  	ORAlarm*		noUSBAlarm;
     NSString*		serialNumber;
-	unsigned long   dataId;
+	uint32_t   dataId;
     unsigned short  zsThresholds[kNumDT5720Channels];
     unsigned short	numOverUnderZsThreshold[kNumDT5720Channels];
     unsigned short  thresholds[kNumDT5720Channels];
@@ -131,18 +131,18 @@ typedef struct  {
     BOOL            fpSoftwareTrigEnabled;
     BOOL            gpoEnabled;
     int             ttlEnabled;
-    unsigned long   triggerSourceMask;
+    uint32_t   triggerSourceMask;
 
     
 	unsigned short	dac[kNumDT5720Channels];
 	unsigned short	numOverUnderThreshold[kNumDT5720Channels];
     BOOL			countAllTriggers;
     unsigned short  coincidenceLevel;
-	unsigned long   triggerOutMask;
-    unsigned long	postTriggerSetting;
+	uint32_t   triggerOutMask;
+    uint32_t	postTriggerSetting;
     unsigned short	enabledMask;
 	ORRateGroup*	waveFormRateGroup;
-	unsigned long 	waveFormCount[kNumDT5720Channels];
+	uint32_t 	waveFormCount[kNumDT5720Channels];
     int				bufferState;
     int				lastBufferState;
 	ORAlarm*        bufferFullAlarm;
@@ -151,14 +151,14 @@ typedef struct  {
     
     unsigned short  selectedRegIndex;
     unsigned short  selectedChannel;
-    unsigned long   selectedRegValue;
+    uint32_t   selectedRegValue;
 
 	//data taking, some are cached and only valid during running
 	unsigned int    statusReg;
-	unsigned long   location;
-	unsigned long	eventSizeReg;
-	unsigned long	dataReg;
-    unsigned long   totalBytesTransfered;
+	uint32_t   location;
+	uint32_t	eventSizeReg;
+	uint32_t	dataReg;
+    uint32_t   totalBytesTransfered;
     float           totalByteRate;
     NSDate*         lastTimeByteTotalChecked;
     BOOL            firstTime;
@@ -236,23 +236,23 @@ typedef struct  {
 - (void)            setExternalTrigEnabled:(BOOL)aExternalTrigEnabled;
 - (unsigned short)	coincidenceLevel;
 - (void)			setCoincidenceLevel:(unsigned short)aCoincidenceLevel;
-- (unsigned long)	triggerSourceMask;
-- (void)			setTriggerSourceMask:(unsigned long)aTriggerSourceMask;
+- (uint32_t)	triggerSourceMask;
+- (void)			setTriggerSourceMask:(uint32_t)aTriggerSourceMask;
 //------------------------------
 - (BOOL)            fpSoftwareTrigEnabled;
 - (void)            setFpSoftwareTrigEnabled:(BOOL)aFpSoftwareTrigEnabled;
 - (BOOL)            fpExternalTrigEnabled;
 - (void)            setFpExternalTrigEnabled:(BOOL)aFpExternalTrigEnabled;
-- (unsigned long)	triggerOutMask;
-- (void)			setTriggerOutMask:(unsigned long)aTriggerOutMask;
+- (uint32_t)	triggerOutMask;
+- (void)			setTriggerOutMask:(uint32_t)aTriggerOutMask;
 //------------------------------
 - (BOOL)            gpoEnabled;
 - (void)            setGpoEnabled:(BOOL)aGpoEnabled;
 - (int)             ttlEnabled;
 - (void)            setTtlEnabled:(int)aTtlEnabled;
 //------------------------------
-- (unsigned long)	postTriggerSetting;
-- (void)			setPostTriggerSetting:(unsigned long)aPostTriggerSetting;
+- (uint32_t)	postTriggerSetting;
+- (void)			setPostTriggerSetting:(uint32_t)aPostTriggerSetting;
 //------------------------------
 - (unsigned short)	enabledMask;
 - (void)			setEnabledMask:(unsigned short)aEnabledMask;
@@ -272,8 +272,8 @@ typedef struct  {
 - (void)			read;
 - (void)			write;
 - (void)			report;
-- (void)			read:(unsigned short) pReg returnValue:(unsigned long*) pValue;
-- (void)			write:(unsigned short) pReg sendValue:(unsigned long) pValue;
+- (void)			read:(unsigned short) pReg returnValue:(uint32_t*) pValue;
+- (void)			write:(unsigned short) pReg sendValue:(uint32_t) pValue;
 - (short)			getNumberRegisters;
 
 
@@ -309,20 +309,20 @@ typedef struct  {
 #pragma mark ***Register - Register specific routines
 - (unsigned short) 	selectedChannel;
 - (void)			setSelectedChannel: (unsigned short) anIndex;
-- (unsigned long) 	selectedRegValue;
-- (void)			setSelectedRegValue: (unsigned long) anIndex;
+- (uint32_t) 	selectedRegValue;
+- (void)			setSelectedRegValue: (uint32_t) anIndex;
 - (unsigned short)  selectedRegIndex;
 - (void)            setSelectedRegIndex:(unsigned short) anIndex;
 - (NSString*) 		getRegisterName: (short) anIndex;
-- (unsigned long) 	getAddressOffset: (short) anIndex;
+- (uint32_t) 	getAddressOffset: (short) anIndex;
 - (short)			getAccessType: (short) anIndex;
 - (BOOL)			dataReset: (short) anIndex;
 - (BOOL)			swReset: (short) anIndex;
 - (BOOL)			hwReset: (short) anIndex;
 
 #pragma mark •••DataTaker
-- (unsigned long)	dataId;
-- (void)			setDataId: (unsigned long) DataId;
+- (uint32_t)	dataId;
+- (void)			setDataId: (uint32_t) DataId;
 - (void)			setDataIds:(id)assigner;
 - (void)			syncDataIdsWith:(id)anotherShaper;
 - (NSDictionary*)	dataRecordDescription;
@@ -335,18 +335,18 @@ typedef struct  {
 #pragma mark ***Helpers
 - (float)			convertDacToVolts:(unsigned short)aDacValue;
 - (unsigned short)	convertVoltsToDac:(float)aVoltage;
-- (void) addCurrentState:(NSMutableDictionary*)dictionary cArray:(long*)anArray forKey:(NSString*)aKey;
+- (void) addCurrentState:(NSMutableDictionary*)dictionary cArray:(int32_t*)anArray forKey:(NSString*)aKey;
 
 #pragma mark ***Archival
 - (id)   initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
 
 #pragma mark ***HW Read/Write API
-- (int)     writeLongBlock:(unsigned long*) writeValue atAddress:(unsigned long) vmeAddress;
-- (int)     readLongBlock:(unsigned long*)  readValue atAddress:(unsigned long) vmeAddress;
-- (void)    writeChan:(unsigned short)chan reg:(unsigned short) pReg sendValue:(unsigned long) pValue;
-- (void)    readChan:(unsigned short)chan reg:(unsigned short) pReg returnValue:(unsigned long*) pValue;
-- (int) readFifo:(char*)destBuff numBytesToRead:(unsigned long)    numBytes;
+- (int)     writeLongBlock:(uint32_t*) writeValue atAddress:(uint32_t) vmeAddress;
+- (int)     readLongBlock:(uint32_t*)  readValue atAddress:(uint32_t) vmeAddress;
+- (void)    writeChan:(unsigned short)chan reg:(unsigned short) pReg sendValue:(uint32_t) pValue;
+- (void)    readChan:(unsigned short)chan reg:(unsigned short) pReg returnValue:(uint32_t*) pValue;
+- (int) readFifo:(char*)destBuff numBytesToRead:(uint32_t)    numBytes;
 
 
 @end

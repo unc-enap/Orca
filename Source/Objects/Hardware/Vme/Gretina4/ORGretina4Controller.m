@@ -749,7 +749,7 @@
 		[fifoState setStringValue:@"--"];
 	}
 	else {
-		unsigned long val = [model fifoState];
+		uint32_t val = [model fifoState];
 		if((val & kGretina4FIFOAllFull)!=0) {
 			[fifoState setTextColor:[NSColor redColor]];
 			[fifoState setStringValue:@"Full"];
@@ -1053,7 +1053,7 @@
 - (IBAction) readRegisterAction:(id)sender
 {
 	[self endEditing];
-	unsigned long aValue = 0;
+	uint32_t aValue = 0;
 	unsigned int index = [model registerIndex];
 	if (index < kNumberOfGretina4Registers) {
 		aValue = [model readRegister:index];
@@ -1070,7 +1070,7 @@
 - (IBAction) writeRegisterAction:(id)sender
 {
 	[self endEditing];
-	unsigned long aValue = [model registerWriteValue];
+	uint32_t aValue = [model registerWriteValue];
 	unsigned int index = [model registerIndex];
 	if (index < kNumberOfGretina4Registers) {
 		[model writeRegister:index withValue:aValue];
@@ -1094,8 +1094,8 @@
 - (IBAction) writeSPIAction:(id)sender
 {
 	[self endEditing];
-	unsigned long aValue = [model spiWriteValue];
-	unsigned long readback = [model writeAuxIOSPI:aValue];
+	uint32_t aValue = [model spiWriteValue];
+	uint32_t readback = [model writeAuxIOSPI:aValue];
 	NSLog(@"Gretina4(%d,%d) writeSPI(%u) readback: (0x%0x)\n",[model crateNumber],[model slot], aValue, readback);
 }
 
@@ -1225,7 +1225,7 @@
         NSLog(@"Gretina BoardID (slot %d): [0x%x] ID = 0x%x\n",[model slot],[model baseAddress],[model readBoardID]);
         int chan;
         for(chan = 0;chan<kNumGretina4Channels;chan++){
-            unsigned long value = [model readControlReg:chan];
+            uint32_t value = [model readControlReg:chan];
             NSLogFont([NSFont fontWithName:@"Monaco" size:10],@"chan: %d Enabled: %@ Debug: %@  PileUp: %@ CFD: %@ Pole-zero: %@ Polarity: 0x%02x TriggerMode: 0x%02x\n",
                       chan, 
                       (value&0x1)?@"[YES]":@"[ NO]",		//enabled

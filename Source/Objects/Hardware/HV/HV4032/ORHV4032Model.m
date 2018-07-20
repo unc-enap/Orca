@@ -199,7 +199,7 @@ NSString* HV4032Lock					= @"HV4032Lock";
     NSAttributedString* n;
 	NSString* s;
 	if([self mainFrameID]== 0xffffffff) s = @"--";
-	else s = [NSString stringWithFormat:@"%lu",[self mainFrameID]];
+	else s = [NSString stringWithFormat:@"%u",[self mainFrameID]];
 	n = [[NSAttributedString alloc] 
 		 initWithString:s
 		 attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont labelFontOfSize:10],NSFontAttributeName,
@@ -252,14 +252,14 @@ NSString* HV4032Lock					= @"HV4032Lock";
 	[self performSelector:@selector(setUpImage) withObject:nil afterDelay:0];
 }
 
-- (void) setMainFrameID:(unsigned long)anIdNumber
+- (void) setMainFrameID:(uint32_t)anIdNumber
 {
 	[self setUniqueIdNumber:anIdNumber];
 	[[self objectConnectedTo: ORHV4032ConnectorOut] setMainFrameID:anIdNumber+1];
 	[self performSelector:@selector(setUpImage) withObject:nil afterDelay:0];
 }
 
-- (unsigned long) mainFrameID
+- (uint32_t) mainFrameID
 {
 	return [self uniqueIdNumber];
 }
@@ -525,7 +525,7 @@ NSString* HV4032Lock					= @"HV4032Lock";
 		[NSObject cancelPreviousPerformRequestsWithTarget:self];
     	NSLog(@"HV NOT being Polled.\n");
 		if(!hvNoPollingAlarm){
-			NSString* theName = [NSString stringWithFormat:@"HV4032-%lu Polling Off",[self mainFrameID]];
+			NSString* theName = [NSString stringWithFormat:@"HV4032-%u Polling Off",[self mainFrameID]];
 			hvNoPollingAlarm = [[ORAlarm alloc] initWithName:theName severity:1];
 			[hvNoPollingAlarm setSticky:YES];
 			[hvNoPollingAlarm setHelpStringFromFile:@"HVNotPollingHelp"];

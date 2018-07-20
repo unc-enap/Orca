@@ -22,7 +22,7 @@
 
 @interface ORFileReader : ORDecoderOperation {
 	NSMutableData* dataToProcess;
-	unsigned long runDataID;
+	uint32_t runDataID;
 	NSMutableArray* dataArray;
 	NSMutableDictionary* runInfo;
 	BOOL runEnded;
@@ -31,8 +31,8 @@
 - (id)   initWithPath:(NSString*)aPath delegate:(id)aDelegate;
 - (void) dealloc;
 - (void) processData;
-- (void) processRunRecord:(unsigned long*)p;
-- (void) loadRunInfo:(unsigned long*)p;
+- (void) processRunRecord:(uint32_t*)p;
+- (void) loadRunInfo:(uint32_t*)p;
 - (void) shipCurrentHeader;
 
 @end

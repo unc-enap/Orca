@@ -20,35 +20,35 @@
 
 @interface ORMjdFileReader : ORDecoderOperation {
 	NSMutableData* dataToProcess;
-    unsigned long runDataID;
-    unsigned long gretina4ID;
-    unsigned long gretina4MID;
-    unsigned long gretina4AID;
-    unsigned long v830ID;
-    unsigned long v792ID;
+    uint32_t runDataID;
+    uint32_t gretina4ID;
+    uint32_t gretina4MID;
+    uint32_t gretina4AID;
+    uint32_t v830ID;
+    uint32_t v792ID;
     
 	NSMutableDictionary* runInfo;
 	BOOL runEnded;
     
-    unsigned long gretinaOutOfOrderCount;
-    unsigned long gretinaEventsCount;
-    unsigned long badGretinaHeaderCount;
-    unsigned long badScalerCount;
-    unsigned long totalScalerCount;
-    unsigned long totalQdcCount;
-    unsigned long long lastTimeStamp[20][10];
+    uint32_t gretinaOutOfOrderCount;
+    uint32_t gretinaEventsCount;
+    uint32_t badGretinaHeaderCount;
+    uint32_t badScalerCount;
+    uint32_t totalScalerCount;
+    uint32_t totalQdcCount;
+    uint64_t lastTimeStamp[20][10];
 }
 
 - (id)   initWithPath:(NSString*)aPath delegate:(id)aDelegate;
 - (void) dealloc;
 - (void) processData;
-- (void) processRunRecord:(unsigned long*)p;
-- (void) processGretina4Record:(unsigned long*)p;
-- (void) processGretina4MRecord:(unsigned long*)p;
-- (void) processGretina4ARecord:(unsigned long*)p;
-- (void) processQDCRecord:(unsigned long*)p;
-- (void) processScalerRecord:(unsigned long*)p;
-- (void) loadRunInfo:(unsigned long*)p;
+- (void) processRunRecord:(uint32_t*)p;
+- (void) processGretina4Record:(uint32_t*)p;
+- (void) processGretina4MRecord:(uint32_t*)p;
+- (void) processGretina4ARecord:(uint32_t*)p;
+- (void) processQDCRecord:(uint32_t*)p;
+- (void) processScalerRecord:(uint32_t*)p;
+- (void) loadRunInfo:(uint32_t*)p;
 
 @end
 

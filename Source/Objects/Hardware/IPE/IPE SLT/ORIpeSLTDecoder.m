@@ -43,28 +43,28 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx timeStamp Lo
 **/
 //-------------------------------------------------------------
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length	= ExtractLength(*ptr);	 //get length from first word
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length	= ExtractLength(*ptr);	 //get length from first word
 
     return length; //nothing to display at this time.. just return the length
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 
 	NSString* title= @"Ipe SLT Event Record\n\n";
 	++ptr;		//skip the first word (dataID and length)
     
-    NSString* crate = [NSString stringWithFormat:@"Crate      = %lu\n",(*ptr>>21) & 0xf];
-    NSString* card  = [NSString stringWithFormat:@"Station    = %lu\n",(*ptr>>16) & 0x1f];
+    NSString* crate = [NSString stringWithFormat:@"Crate      = %u\n",(*ptr>>21) & 0xf];
+    NSString* card  = [NSString stringWithFormat:@"Station    = %u\n",(*ptr>>16) & 0x1f];
 
 	++ptr;		//point to event counter
 	
-	NSString* eventCounter    = [NSString stringWithFormat:@"EventCount = %lu\n",*ptr++];
-	NSString* timeStampHi     = [NSString stringWithFormat:@"Time Hi   = %lu\n",*ptr++];
-	NSString* timeStampLo     = [NSString stringWithFormat:@"Time Lo   = %lu\n",*ptr];		
+	NSString* eventCounter    = [NSString stringWithFormat:@"EventCount = %u\n",*ptr++];
+	NSString* timeStampHi     = [NSString stringWithFormat:@"Time Hi   = %u\n",*ptr++];
+	NSString* timeStampLo     = [NSString stringWithFormat:@"Time Lo   = %u\n",*ptr];		
 
     return [NSString stringWithFormat:@"%@%@%@%@%@%@",title,crate,card,
 	                    eventCounter,timeStampHi,timeStampLo];               
@@ -94,11 +94,11 @@ followed by multiplicity data (20 longwords -- 1 pixel mask per card)
 //-------------------------------------------------------------
 
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
 
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length	= ExtractLength(*ptr);	 //get length from first word
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length	= ExtractLength(*ptr);	 //get length from first word
 
 	++ptr;											//crate, card,channel from second word
 	unsigned char crate		= (*ptr>>21) & 0xf;
@@ -107,18 +107,18 @@ followed by multiplicity data (20 longwords -- 1 pixel mask per card)
 	NSString* stationKey	= [self getStationKey: card];	
 		
 	++ptr;		//point to event count
-	NSString* eventCount = [NSString stringWithFormat:@"%lu",*ptr];
+	NSString* eventCount = [NSString stringWithFormat:@"%u",*ptr];
 	[aDataSet loadGenericData:eventCount sender:self withKeys:@"SLT",@"EventCount", crateKey,stationKey,nil];
 					
 				
 	// Display data, ak 12.2.08
 	++ptr;		//point to trigger data
-	unsigned long *pMult = ptr;
+	uint32_t *pMult = ptr;
 	int i, j, k;
 	//NSFont* aFont = [NSFont userFixedPitchFontOfSize:9];
-    unsigned long xyProj[20];
-	unsigned long tyProj[100];
-	unsigned long pageSize = length/20;
+    uint32_t xyProj[20];
+	uint32_t tyProj[100];
+	uint32_t pageSize = length/20;
 	
 	for (i=0;i<20;i++) xyProj[i] = 0;
 	for (k=0;k<100;k++) tyProj[k] = 0;
@@ -188,17 +188,17 @@ followed by multiplicity data (20 longwords -- 1 pixel mask per card)
 }
 
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 
     NSString* title= @"Auger FLT Waveform Record\n\n";
 	++ptr;		//skip the first word (dataID and length)
     
-    NSString* crate = [NSString stringWithFormat:@"Crate      = %lu\n",(*ptr>>21) & 0xf];
-    NSString* card  = [NSString stringWithFormat:@"Station    = %lu\n",(*ptr>>16) & 0x1f];
+    NSString* crate = [NSString stringWithFormat:@"Crate      = %u\n",(*ptr>>21) & 0xf];
+    NSString* card  = [NSString stringWithFormat:@"Station    = %u\n",(*ptr>>16) & 0x1f];
 	++ptr;		//point to next structure
 	
-	NSString* eventCount		= [NSString stringWithFormat:@"Event Count = %lu\n",*ptr];
+	NSString* eventCount		= [NSString stringWithFormat:@"Event Count = %u\n",*ptr];
 
     return [NSString stringWithFormat:@"%@%@%@%@",title,crate,card,eventCount]; 
 }

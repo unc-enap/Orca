@@ -251,24 +251,24 @@ uint8_t verbose = 0;
     doRange = aDoRange;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORSIS3150DoRangeChanged object:self];
 }
-- (unsigned long) rwAddress
+- (uint32_t) rwAddress
 {
     return rwAddress;
 }
 
-- (void) setRwAddress:(unsigned long)aValue
+- (void) setRwAddress:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setRwAddress:[self rwAddress]];
     rwAddress = aValue;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORSIS3150RWAddressChanged object:self];
 }
 
-- (unsigned long) writeValue
+- (uint32_t) writeValue
 {
     return writeValue;
 }
 
-- (void) setWriteValue:(unsigned long)aValue
+- (void) setWriteValue:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setWriteValue:[self writeValue]];
     writeValue = aValue;
@@ -457,18 +457,18 @@ uint8_t verbose = 0;
 {
 }
 
--(void) readLongBlock:(unsigned long *) readAddress
-			atAddress:(unsigned long) vmeAddress
-			numToRead:(unsigned long) numberLongs
+-(void) readLongBlock:(uint32_t *) readAddress
+			atAddress:(uint32_t) vmeAddress
+			numToRead:(uint32_t) numberLongs
 		   withAddMod:(unsigned short) anAddressModifier
 					   usingAddSpace:(unsigned short) anAddressSpace
 {
 	NSLog(@"readLongBlock\n");
 }
 
--(void) writeLongBlock:(unsigned long *) writeAddress
-			 atAddress:(unsigned long) vmeAddress
-			numToWrite:(unsigned long) numberLongs
+-(void) writeLongBlock:(uint32_t *) writeAddress
+			 atAddress:(uint32_t) vmeAddress
+			numToWrite:(uint32_t) numberLongs
 			withAddMod:(unsigned short) anAddressModifier
 						   usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -476,9 +476,9 @@ uint8_t verbose = 0;
 	
 }
 
--(void) readLong:(unsigned long *) readAddress
-	   atAddress:(unsigned long) vmeAddress
-	 timesToRead:(unsigned long) numberLongs
+-(void) readLong:(uint32_t *) readAddress
+	   atAddress:(uint32_t) vmeAddress
+	 timesToRead:(uint32_t) numberLongs
 	  withAddMod:(unsigned short) anAddressModifier
    usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -486,8 +486,8 @@ uint8_t verbose = 0;
 }
 
 -(void) readByteBlock:(unsigned char *) readAddress
-			atAddress:(unsigned long) vmeAddress
-			numToRead:(unsigned long) numberBytes
+			atAddress:(uint32_t) vmeAddress
+			numToRead:(uint32_t) numberBytes
 		   withAddMod:(unsigned short) anAddressModifier
 					   usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -496,8 +496,8 @@ uint8_t verbose = 0;
 }
 
 -(void) writeByteBlock:(unsigned char *) writeAddress
-			 atAddress:(unsigned long) vmeAddress
-			numToWrite:(unsigned long) numberBytes
+			 atAddress:(uint32_t) vmeAddress
+			numToWrite:(uint32_t) numberBytes
 			withAddMod:(unsigned short) anAddressModifier
 						   usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -506,8 +506,8 @@ uint8_t verbose = 0;
 
 
 -(void) readWordBlock:(unsigned short *) data
-			atAddress:(unsigned long) vmeAddress
-			numToRead:(unsigned long) numberWords
+			atAddress:(uint32_t) vmeAddress
+			numToRead:(uint32_t) numberWords
 		   withAddMod:(unsigned short) anAddressModifier
 					   usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -564,7 +564,7 @@ uint8_t verbose = 0;
 	//}
 	
 	nBytes = return_code;
-	//unsigned long got_nof_bytes = (unsigned long) (nBytes )  ;
+	//uint32_t got_nof_bytes = (uint32_t) (nBytes )  ;
 	
 	//if(nBytes != req_nof_bytes) {
 	//	return_code = sis3150usb_error_code_usb_read_length_error; 
@@ -581,8 +581,8 @@ uint8_t verbose = 0;
 }
 
 -(void) writeWordBlock:(unsigned short *) writeAddress
-			 atAddress:(unsigned long) vmeAddress
-			numToWrite:(unsigned long) numberWords
+			 atAddress:(uint32_t) vmeAddress
+			numToWrite:(uint32_t) numberWords
 			withAddMod:(unsigned short) anAddressModifier
 						   usingAddSpace:(unsigned short) anAddressSpace
 {
@@ -675,7 +675,7 @@ uint8_t verbose = 0;
 /*  Autor:      R. Fox                                                     */
 /* date:        14.04.2006  (coding begins)                                */
 /* last modification:    20.07.2010  (TH)                                  */
-/*     - in sis3150_vmebus_write: change long to ULONG                     */
+/*     - in sis3150_vmebus_write: change int32_t to ULONG                     */
 /*                                                                         */
 /*                                                                         */
 /*-------------------------------------------------------------------------*/
@@ -795,9 +795,9 @@ initUSB()
  Parameters:
  device      - usb_dev_handle* open on the usb controller.
  outpacket   - Request packet in host byte order.
- outbytes    - bytes in output packet (should be divisible by sizeof(long)
+ outbytes    - bytes in output packet (should be divisible by sizeof(int32_t)
  inpacket    - Space for reply packet.
- inbytes     - bytes for reply packet.(should be divisible by sizeof(long)
+ inbytes     - bytes for reply packet.(should be divisible by sizeof(int32_t)
  
  Returns:
  -1   Write failed, errno has the reason.
@@ -1675,7 +1675,7 @@ static int sis3150_vmebus_write(HANDLE hDevice, ULONG addr, ULONG vme_am, ULONG 
 	unsigned int  i;
 	
 	char cSize, cFifoMode;
-	//long* long_cUsbBuf_ptr;
+	//int32_t* long_cUsbBuf_ptr;
 	ULONG* long_cUsbBuf_ptr;
 	
 	

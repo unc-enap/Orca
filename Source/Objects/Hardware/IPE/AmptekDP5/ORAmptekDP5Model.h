@@ -205,20 +205,20 @@ typedef struct{
 @interface ORAmptekDP5Model : ORAuxHw /*OrcaObject*/ <ORDataTaker,ORAdcProcessing>  //added ORAdcProcessing 2016-02-11 -tb-
 {
 	@private
-		unsigned long	hwVersion;
+		uint32_t	hwVersion;
 		NSString*		patternFilePath;
-//TODO: rm   slt 		unsigned long	interruptMask;
-		unsigned long	nextPageDelay;
+//TODO: rm   slt 		uint32_t	interruptMask;
+		uint32_t	nextPageDelay;
 		float			pulserAmp;
 		float			pulserDelay;
 		unsigned short  selectedRegIndex;
-		unsigned long   writeValue;
-		unsigned long	eventDataId;//TODO: remove or change -tb-
-		unsigned long	multiplicityId;//TODO: remove -tb-
-		unsigned long	spectrumEventId;
-		unsigned long	waveFormId;
-		unsigned long	fltEventId;
-		unsigned long   eventCounter;
+		uint32_t   writeValue;
+		uint32_t	eventDataId;//TODO: remove or change -tb-
+		uint32_t	multiplicityId;//TODO: remove -tb-
+		uint32_t	spectrumEventId;
+		uint32_t	waveFormId;
+		uint32_t	fltEventId;
+		uint32_t   eventCounter;
 		int				actualPageIndex;
         TimedWorker*    poller;
 		BOOL			pollingWasRunning;
@@ -230,20 +230,20 @@ typedef struct{
 
 		BOOL            displayTrigger;    //< Display pixel and timing view of trigger data
 		BOOL            displayEventLoop;  //< Display the event loop parameter
-		unsigned long   lastDisplaySec;
-		unsigned long   lastDisplayCounter;
+		uint32_t   lastDisplaySec;
+		uint32_t   lastDisplayCounter;
 		double          lastDisplayRate;
 		
-		unsigned long   lastSimSec;
-		unsigned long   pageSize; //< Length of the ADC data (0..100us)
+		uint32_t   lastSimSec;
+		uint32_t   pageSize; //< Length of the ADC data (0..100us)
 
 		// PMC_Link*		pmcLink;  //TODO: remove SLT stuff -tb-   2014 
         
-		unsigned long controlReg;
-        unsigned long statusReg;//deprecated 2013-06 -tb-
-//TODO: rm   slt - -         unsigned long statusLowReg; //was statusRegLow
-//TODO: rm   slt - -         unsigned long statusHighReg;//was statusRegHigh
-		unsigned long long clockTime;
+		uint32_t controlReg;
+        uint32_t statusReg;//deprecated 2013-06 -tb-
+//TODO: rm   slt - -         uint32_t statusLowReg; //was statusRegLow
+//TODO: rm   slt - -         uint32_t statusHighReg;//was statusRegHigh
+		uint64_t clockTime;
 		
         NSString* sltScriptArguments;
         BOOL secondsSetInitWithHost;
@@ -285,8 +285,8 @@ typedef struct{
         
         #if 0
     int selectedFifoIndex;
-    unsigned long pixelBusEnableReg;
-    unsigned long eventFifoStatusReg;
+    uint32_t pixelBusEnableReg;
+    uint32_t eventFifoStatusReg;
 	#endif
 	
 	//UDP Data Packet tab
@@ -482,10 +482,10 @@ typedef struct{
 - (int) lowLevelRegInHex;
 - (void) setLowLevelRegInHex:(int)aLowLevelRegInHex;
 
-//TODO: rm   slt - - - (unsigned long) statusHighReg;
-//TODO: rm   slt - - - (void) setStatusHighReg:(unsigned long)aStatusRegHigh;
-//TODO: rm   slt - - - (unsigned long) statusLowReg;
-//TODO: rm   slt - - - (void) setStatusLowReg:(unsigned long)aStatusRegLow;
+//TODO: rm   slt - - - (uint32_t) statusHighReg;
+//TODO: rm   slt - - - (void) setStatusHighReg:(uint32_t)aStatusRegHigh;
+//TODO: rm   slt - - - (uint32_t) statusLowReg;
+//TODO: rm   slt - - - (void) setStatusLowReg:(uint32_t)aStatusRegLow;
 
 
 - (int) takeADCChannelData;
@@ -547,10 +547,10 @@ typedef struct{
 
 
 #if 0
-- (unsigned long) eventFifoStatusReg;
-- (void) setEventFifoStatusReg:(unsigned long)aEventFifoStatusReg;
-- (unsigned long) pixelBusEnableReg;
-- (void) setPixelBusEnableReg:(unsigned long)aPixelBusEnableReg;
+- (uint32_t) eventFifoStatusReg;
+- (void) setEventFifoStatusReg:(uint32_t)aEventFifoStatusReg;
+- (uint32_t) pixelBusEnableReg;
+- (void) setPixelBusEnableReg:(uint32_t)aPixelBusEnableReg;
 - (int) selectedFifoIndex;
 - (void) setSelectedFifoIndex:(int)aSelectedFifoIndex;
 #endif
@@ -577,49 +577,49 @@ typedef struct{
 - (void) setSecondsSetInitWithHost:(BOOL)aSecondsSetInitWithHost;
 - (NSString*) sltScriptArguments;
 - (void) setSltScriptArguments:(NSString*)aSltScriptArguments;
-- (unsigned long long) clockTime;
-- (void) setClockTime:(unsigned long long)aClockTime;
+- (uint64_t) clockTime;
+- (void) setClockTime:(uint64_t)aClockTime;
 
-- (unsigned long) statusReg;
-- (void) setStatusReg:(unsigned long)aStatusReg;
-- (unsigned long) controlReg;
-- (void) setControlReg:(unsigned long)aControlReg;
+- (uint32_t) statusReg;
+- (void) setStatusReg:(uint32_t)aStatusReg;
+- (uint32_t) controlReg;
+- (void) setControlReg:(uint32_t)aControlReg;
 
-- (unsigned long) projectVersion;
-- (unsigned long) documentVersion;
-- (unsigned long) implementation;
-- (unsigned long) hwVersion;//=SLT FPGA version/revision
-- (void) setHwVersion:(unsigned long) aVersion;
+- (uint32_t) projectVersion;
+- (uint32_t) documentVersion;
+- (uint32_t) implementation;
+- (uint32_t) hwVersion;//=SLT FPGA version/revision
+- (void) setHwVersion:(uint32_t) aVersion;
 
 - (NSString*) patternFilePath;
 - (void) setPatternFilePath:(NSString*)aPatternFilePath;
 
-- (unsigned long) nextPageDelay;
-- (void) setNextPageDelay:(unsigned long)aDelay;
-//TODO: rm   slt - (unsigned long) interruptMask;
-//TODO: rm   slt - (void) setInterruptMask:(unsigned long)aInterruptMask;
+- (uint32_t) nextPageDelay;
+- (void) setNextPageDelay:(uint32_t)aDelay;
+//TODO: rm   slt - (uint32_t) interruptMask;
+//TODO: rm   slt - (void) setInterruptMask:(uint32_t)aInterruptMask;
 - (float) pulserDelay;
 - (void) setPulserDelay:(float)aPulserDelay;
 - (float) pulserAmp;
 - (void) setPulserAmp:(float)aPulserAmp;
 - (short) getNumberRegisters;			
 - (NSString*) getRegisterName: (short) anIndex;
-- (unsigned long) getAddress: (short) anIndex;
-//- (unsigned long) getAddressOffset: (short) anIndex;
+- (uint32_t) getAddress: (short) anIndex;
+//- (uint32_t) getAddressOffset: (short) anIndex;
 - (short) getAccessType: (short) anIndex;
 
 - (unsigned short) 	selectedRegIndex;
 - (void)		setSelectedRegIndex: (unsigned short) anIndex;
-- (unsigned long) 	writeValue;
-- (void)		setWriteValue: (unsigned long) anIndex;
+- (uint32_t) 	writeValue;
+- (void)		setWriteValue: (uint32_t) anIndex;
 //- (void) loadPatternFile;
 
 - (BOOL) displayTrigger; //< Staus of dispaly of trigger information
 - (void) setDisplayTrigger:(BOOL) aState; 
 - (BOOL) displayEventLoop; //< Status of display of event loop performance information
 - (void) setDisplayEventLoop:(BOOL) aState;
-- (unsigned long) pageSize; //< Length of the ADC data (0..100us)
-- (void) setPageSize: (unsigned long) pageSize;   
+- (uint32_t) pageSize; //< Length of the ADC data (0..100us)
+- (void) setPageSize: (uint32_t) pageSize;   
 
 
 #pragma mark ***Polling
@@ -710,12 +710,12 @@ typedef struct{
 
 - (void)		  readAllStatus;
 - (void)		  checkPresence;
-//TODO: rm   slt - -- (unsigned long) readControlReg;
+//TODO: rm   slt - -- (uint32_t) readControlReg;
 //TODO: rm   slt - -- (void)		  writeControlReg;
 //TODO: rm   slt - -- (void)		  printControlReg;
-//TODO: rm   slt - - - (unsigned long) readStatusReg;
-//TODO: rm   slt - - - (unsigned long) readStatusLowReg;
-//TODO: rm   slt - - - (unsigned long) readStatusHighReg;
+//TODO: rm   slt - - - (uint32_t) readStatusReg;
+//TODO: rm   slt - - - (uint32_t) readStatusLowReg;
+//TODO: rm   slt - - - (uint32_t) readStatusHighReg;
 //TODO: rm   slt - - - (void)		  printStatusReg;
 //TODO: rm   slt - - - (void)          printStatusLowHighReg;
 
@@ -726,7 +726,7 @@ typedef struct{
 - (void)		writeSltReset;
 - (void)		writeFltReset;
 - (void)		writeEvRes;
-- (unsigned long long) readBoardID;
+- (uint64_t) readBoardID;
 //TODO: rm   slt - - - (void) readEventFifoStatusReg;
 
 #if 0 //deprecated 2013-06 -tb-
@@ -741,18 +741,18 @@ typedef struct{
 
 //- (void)		  dumpTriggerRAM:(int)aPageIndex;
 
-- (void)		  writeReg:(int)index value:(unsigned long)aValue;
-- (void)          writeReg:(int)index  forFifo:(int)fifoIndex value:(unsigned long)aValue;
-- (void)		  rawWriteReg:(unsigned long) address  value:(unsigned long)aValue;//TODO: FOR TESTING AND DEBUGGING ONLY -tb-
-- (unsigned long) rawReadReg:(unsigned long) address; //TODO: FOR TESTING AND DEBUGGING ONLY -tb-
-- (unsigned long) readReg:(int) index;
-- (unsigned long) readReg:(int) index forFifo:(int)fifoIndex;
-- (id) writeHardwareRegisterCmd:(unsigned long)regAddress value:(unsigned long) aValue;
-- (id) readHardwareRegisterCmd:(unsigned long)regAddress;
-- (unsigned long) readHwVersion;
-- (unsigned long) readTimeLow;
-- (unsigned long) readTimeHigh;
-- (unsigned long long) getTime;
+- (void)		  writeReg:(int)index value:(uint32_t)aValue;
+- (void)          writeReg:(int)index  forFifo:(int)fifoIndex value:(uint32_t)aValue;
+- (void)		  rawWriteReg:(uint32_t) address  value:(uint32_t)aValue;//TODO: FOR TESTING AND DEBUGGING ONLY -tb-
+- (uint32_t) rawReadReg:(uint32_t) address; //TODO: FOR TESTING AND DEBUGGING ONLY -tb-
+- (uint32_t) readReg:(int) index;
+- (uint32_t) readReg:(int) index forFifo:(int)fifoIndex;
+- (id) writeHardwareRegisterCmd:(uint32_t)regAddress value:(uint32_t) aValue;
+- (id) readHardwareRegisterCmd:(uint32_t)regAddress;
+- (uint32_t) readHwVersion;
+- (uint32_t) readTimeLow;
+- (uint32_t) readTimeHigh;
+- (uint64_t) getTime;
 
 - (void)		reset;
 - (void)		hw_config;
@@ -761,25 +761,25 @@ typedef struct{
 //- (void)		loadPulserValues;
 //- (void)		swTrigger;
 - (void)		initBoard;
-- (long)		getSBCCodeVersion;
-- (long)		getFdhwlibVersion;
-- (long)		getSltPciDriverVersion;
-- (long)		getPresentFLTsMap;
+- (int32_t)		getSBCCodeVersion;
+- (int32_t)		getFdhwlibVersion;
+- (int32_t)		getSltPciDriverVersion;
+- (int32_t)		getPresentFLTsMap;
 
 #pragma mark *** Archival
 - (id)   initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
 
-- (unsigned long) spectrumEventId;
-- (void) setSpectrumEventId: (unsigned long) DataId;
-- (unsigned long) fltEventId;
-- (void) setFltEventId: (unsigned long) DataId;
-- (unsigned long) waveFormId;
-- (void) setWaveFormId: (unsigned long) DataId;
-- (unsigned long) eventDataId;
-- (void) setEventDataId: (unsigned long) DataId;
-- (unsigned long) multiplicityId;
-- (void) setMultiplicityId: (unsigned long) DataId;
+- (uint32_t) spectrumEventId;
+- (void) setSpectrumEventId: (uint32_t) DataId;
+- (uint32_t) fltEventId;
+- (void) setFltEventId: (uint32_t) DataId;
+- (uint32_t) waveFormId;
+- (void) setWaveFormId: (uint32_t) DataId;
+- (uint32_t) eventDataId;
+- (void) setEventDataId: (uint32_t) DataId;
+- (uint32_t) multiplicityId;
+- (void) setMultiplicityId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherCard;
 
@@ -823,12 +823,12 @@ typedef struct{
 - (BOOL) doneTakingData;
 
 - (void) shipSltSecondCounter:(unsigned char)aType;
-- (void) shipSltEvent:(unsigned char)aCounterType withType:(unsigned char)aType eventCt:(unsigned long)c high:(unsigned long)h low:(unsigned long)l;
+- (void) shipSltEvent:(unsigned char)aCounterType withType:(unsigned char)aType eventCt:(uint32_t)c high:(uint32_t)h low:(uint32_t)l;
 
 - (ORReadOutList*)	readOutGroup;
 - (void)			setReadOutGroup:(ORReadOutList*)newReadOutGroup;
 - (NSMutableArray*) children;
-- (unsigned long) calcProjection:(unsigned long *)pMult  xyProj:(unsigned long *)xyProj  tyProj:(unsigned long *)tyProj;
+- (uint32_t) calcProjection:(uint32_t *)pMult  xyProj:(uint32_t *)xyProj  tyProj:(uint32_t *)tyProj;
 
 #pragma mark ‚Äö√Ñ¬¢‚Äö√Ñ¬¢‚Äö√Ñ¬¢SBC_Linking Protocol
 - (NSString*) driverScriptName;

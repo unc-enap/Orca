@@ -55,7 +55,7 @@
 - (BOOL) running;
 - (void) setMovie:(QTMovie*)aMovie;
 - (QTMovie*)movie;
-- (unsigned long) calculatedFileSizeBytes;
+- (uint32_t) calculatedFileSizeBytes;
 
 #pragma mark ***Polling
 - (int) updateInterval;

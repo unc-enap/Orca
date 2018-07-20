@@ -90,7 +90,7 @@ typedef enum eKatrinV4FLTRegEnum {
 - (NSString*)     registerName: (short) anIndex;
 - (short) addressOffset: (short) anIndex;
 - (short)         accessType: (short) anIndex;
-- (unsigned long) addressForStation:(int)aStation registerIndex:(int)aReg chan:(int)aChannel;
-- (unsigned long) addressForStation:(int)aStation registerIndex:(int)aReg;
+- (uint32_t) addressForStation:(int)aStation registerIndex:(int)aReg chan:(int)aChannel;
+- (uint32_t) addressForStation:(int)aStation registerIndex:(int)aReg;
 
 @end

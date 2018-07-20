@@ -48,18 +48,18 @@
 
 @implementation ORMCA927SpectraDecoder
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr	 = (unsigned long*)someData;
-    unsigned long length = ExtractLength(*ptr);
+    uint32_t* ptr	 = (uint32_t*)someData;
+    uint32_t length = ExtractLength(*ptr);
 	ptr++; //location info
 	int zdt		 = (*ptr>>13)&0x1;
 	int channel	 = (*ptr>>12)&0x1;
 	int device	 = *ptr&0xFFF;
 	NSString* channelKey = [self getChannelKey: channel];
 
-	NSMutableData* tmpData = [NSMutableData dataWithLength:(length-10)*sizeof(long)];
-	unsigned long* lPtr = (unsigned long*)[tmpData bytes];
+	NSMutableData* tmpData = [NSMutableData dataWithLength:(length-10)*sizeof(int32_t)];
+	uint32_t* lPtr = (uint32_t*)[tmpData bytes];
 	int i;
 	//skip the spares
 	ptr+=8;
@@ -80,21 +80,21 @@
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {    
     NSString* title= @"MCA927 Spectra Record\n\n";
-    unsigned long spectrumLength = ExtractLength(*ptr) - 10;
+    uint32_t spectrumLength = ExtractLength(*ptr) - 10;
 	
     ptr++; //point at location;
-    unsigned long zdt      = (*ptr>>13) & 0x1;
-    unsigned long channel  = (*ptr>>12) & 0x1;
-    unsigned long objectID = (*ptr) & 0xfff;
+    uint32_t zdt      = (*ptr>>13) & 0x1;
+    uint32_t channel  = (*ptr>>12) & 0x1;
+    uint32_t objectID = (*ptr) & 0xfff;
     ptr++; //point at liveTime
 	float liveTime = *ptr * 0.02; //in seconds
     ptr++; //point at realTime
 	float realTime = *ptr * 0.02; //in seconds
 	
-    return [NSString stringWithFormat:@"%@\nMCA927 (%lu)\ntype: %@\nChannel: %lu\nLiveTime: %.2f\nRealTime: %.2f\n\nSpectum Length: %lu",title,objectID,zdt?@"ZDT":@"Normal",channel,liveTime,realTime,spectrumLength];               
+    return [NSString stringWithFormat:@"%@\nMCA927 (%u)\ntype: %@\nChannel: %u\nLiveTime: %.2f\nRealTime: %.2f\n\nSpectum Length: %u",title,objectID,zdt?@"ZDT":@"Normal",channel,liveTime,realTime,spectrumLength];               
 }
 
 

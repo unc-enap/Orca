@@ -737,7 +737,7 @@
 
 - (void) lemoToMaskChanged:(NSNotification*)aNote
 {
-    unsigned long aMask = [model lemoToMask];
+    uint32_t aMask = [model lemoToMask];
     int i;
     for(i=0;i<32; i++){
         [[lemoToMaskMatrix cellWithTag:i] setIntValue: (aMask & (0x1UL<<i))!=0];
@@ -746,7 +746,7 @@
 
 - (void) lemoUoMaskChanged:(NSNotification*)aNote
 {
-    unsigned long aMask = [model lemoUoMask];
+    uint32_t aMask = [model lemoUoMask];
     int i;
     for(i=0;i<32; i++){
         [[lemoUoMaskMatrix cellWithTag:i] setIntValue: (aMask & (0x1UL<<i))!=0];
@@ -755,7 +755,7 @@
 
 - (void) lemoCoMaskChanged:(NSNotification*)aNote
 {
-    unsigned long aMask = [model lemoCoMask];
+    uint32_t aMask = [model lemoCoMask];
     int i;
     for(i=0;i<32; i++){
         [[lemoCoMaskMatrix cellWithTag:i] setIntValue: (aMask & (0x1<<i))!=0];
@@ -804,7 +804,7 @@
 - (void) eventConfigChanged:(NSNotification*)aNote
 {
     short i;
-    unsigned long aMask = [model eventConfigMask];
+    uint32_t aMask = [model eventConfigMask];
     for(i=0;i<8;i++){
         [[eventConfigMatrix cellWithTag:i] setState:aMask & (0x1<<i)];
     }
@@ -1415,7 +1415,7 @@
 - (void) acquisitionControlChanged:(NSNotification*)aNote  //bools and possibly more changed like this
 {
     short i;
-    unsigned long aMask = [model acquisitionControlMask];
+    uint32_t aMask = [model acquisitionControlMask];
     for(i=0;i<16;i++){
         [[acquisitionControlMatrix cellWithTag:i] setState:(aMask&(0x1<<i))!=0];
     }
@@ -1423,7 +1423,7 @@
 
 - (void) nimControlStatusChanged:(NSNotification*)aNote
 {
-    unsigned long aMask = [model nimControlStatusMask];
+    uint32_t aMask = [model nimControlStatusMask];
     short i;
     for(i=0;i<14;i++){
         [[nimControlStatusMatrix cellWithTag:i] setState:(aMask& (0x1<<i))!=0];
@@ -1595,7 +1595,7 @@
     [energyOffsetMatrix         setEnabled:!lockedOrRunningMaintenance];
     [energyDividerMatrix        setEnabled:!lockedOrRunningMaintenance];
 
-    long formatMask = [model formatMask];
+    int32_t formatMask = [model formatMask];
     BOOL enable1_6 = (formatMask>>0) & 0x1;
     BOOL enable7_8 = (formatMask>>1) & 0x1;
     [accGate1LenMatrix      setEnabled: enable1_6];
@@ -1771,7 +1771,7 @@
 
 - (IBAction) lemoToMaskAction:(id)sender
 {
-    unsigned long aMask = [model lemoToMask];
+    uint32_t aMask = [model lemoToMask];
     int tag    = (int)[[sender selectedCell] tag];
     int aValue = [sender intValue];
     if(aValue==0)aMask &= ~(0x1<<tag);
@@ -1782,7 +1782,7 @@
 
 - (IBAction) lemoUoMaskAction:(id)sender
 {
-    unsigned long aMask = [model lemoUoMask];
+    uint32_t aMask = [model lemoUoMask];
     int tag    = (int)[[sender selectedCell] tag];
     int aValue = [sender intValue];
     if(aValue==0)aMask &= ~(0x1<<tag);
@@ -1793,7 +1793,7 @@
 
 - (IBAction) lemoCoMaskAction:(id)sender
 {
-    unsigned long aMask = [model lemoCoMask];
+    uint32_t aMask = [model lemoCoMask];
     int tag    = (int)[[sender selectedCell] tag];
     int aValue = [[sender selectedCell] intValue];
     if(aValue==0)aMask &= ~(0x1<<tag);
@@ -1804,7 +1804,7 @@
 
 - (IBAction) acquisitionControlAction:(id)sender
 {
-    unsigned long aMask = [model acquisitionControlMask];
+    uint32_t aMask = [model acquisitionControlMask];
     int tag =(int)[[sender selectedCell] tag];
     int aValue = [sender intValue];
     if(aValue==0)aMask &= ~(0x1<<tag);

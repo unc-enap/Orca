@@ -35,11 +35,11 @@ NSString* ORScriptRunnerDisplayDictionaryChanged= @"ORScriptRunnerDisplayDiction
 #import "OrcaScript.tab.h"
 extern void yyreset_state(void);
 extern void OrcaScriptrestart(void);
-extern long num_lines;
+extern int32_t num_lines;
 extern id functionList;
 extern int OrcaScriptparse(void);
 ORScriptRunner* theScriptRunner = nil;
-int OrcaScriptYYINPUT(char* theBuffer,unsigned long maxSize) 
+int OrcaScriptYYINPUT(char* theBuffer,uint32_t maxSize) 
 {
 	return (int)[theScriptRunner yyinputToBuffer:theBuffer withSize:(int)maxSize];
 }
@@ -190,7 +190,7 @@ int OrcaScriptYYINPUT(char* theBuffer,unsigned long maxSize)
 	step = YES;
 }
 
-- (long) lastLine
+- (int32_t) lastLine
 {
 	return lastLine;
 }
@@ -331,7 +331,7 @@ int OrcaScriptYYINPUT(char* theBuffer,unsigned long maxSize)
 
 	@catch(NSException* e) { 
 		parsedOK = NO;
-		long lineCount = num_lines;
+		int32_t lineCount = num_lines;
 		if([e userInfo]){
 			NSLog(@"Caught Exception %@: %@\n",[e name],[e reason]);
 			lineCount = [[[e userInfo] objectForKey:@"LineNum"] intValue];
@@ -451,10 +451,10 @@ int OrcaScriptYYINPUT(char* theBuffer,unsigned long maxSize)
 
 
 #pragma mark ¥¥¥Yacc Input
--(unsigned long)yyinputToBuffer:(char* )theBuffer withSize:(int)maxSize
+-(uint32_t)yyinputToBuffer:(char* )theBuffer withSize:(int)maxSize
 {
-	unsigned long theNumberOfBytesRemaining = ([expressionAsData length] - yaccInputPosition);
-	unsigned long theCopySize = maxSize < theNumberOfBytesRemaining ? maxSize : theNumberOfBytesRemaining;
+	uint32_t theNumberOfBytesRemaining = ([expressionAsData length] - yaccInputPosition);
+	uint32_t theCopySize = maxSize < theNumberOfBytesRemaining ? maxSize : theNumberOfBytesRemaining;
 	[expressionAsData getBytes:theBuffer range:NSMakeRange(yaccInputPosition,theCopySize)];  
 	yaccInputPosition = yaccInputPosition + theCopySize;
 	return theCopySize;
@@ -472,7 +472,7 @@ int OrcaScriptYYINPUT(char* theBuffer,unsigned long maxSize)
 														object:self];
 }
 //called from the NodeEvaluator from the eval thread
-- (void) checkBreakpoint:(unsigned long) lineNumber functionLevel:(int)functionLevel
+- (void) checkBreakpoint:(uint32_t) lineNumber functionLevel:(int)functionLevel
 {
 	if([self debugging]){
 		if((lineNumber>0) && (lineNumber != lastLine)){
@@ -572,9 +572,9 @@ int OrcaScriptYYINPUT(char* theBuffer,unsigned long maxSize)
 				break;
 			}
 			else {
-                long theLine = [[aNode nodeData] line];
+                int32_t theLine = [[aNode nodeData] line];
 				NSLogColor([NSColor redColor],
-                           @"Script will exit because of exception (at line %lu): \n%@\n",theLine,localException);
+                           @"Script will exit because of exception (at line %u): \n%@\n",theLine,localException);
 				failed = YES;
                 [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORScriptRunnerParseError
                                                                     object:self

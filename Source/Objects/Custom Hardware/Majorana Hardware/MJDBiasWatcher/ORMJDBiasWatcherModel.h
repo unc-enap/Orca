@@ -56,14 +56,14 @@
 - (int) numberDetectors;
 - (void) objectsChanged:(NSNotification*)aNote;
 
-- (unsigned long) numberPointsInHVPlot:(int)index;
-- (unsigned long) numberPointsInHvPlot:(ORiSegHVCard*)anHVCard channel:(int)aChan;
+- (uint32_t) numberPointsInHVPlot:(int)index;
+- (uint32_t) numberPointsInHvPlot:(ORiSegHVCard*)anHVCard channel:(int)aChan;
 - (int) hvChannel:(int)index;
 - (ORiSegHVCard*) hvObj:(int)index;
 - (void) hvPlot:(int)index dataIndex:(int)dataIndex x:(double*)xValue y:(double*)yValue;
 
-- (unsigned long) numberPointsInPreAmpPlot:(int)index;
-- (unsigned long) numberPointsInPreAmpPlot:(ORMJDPreAmpModel*)aPreAmpCard channel:(int)aChan;
+- (uint32_t) numberPointsInPreAmpPlot:(int)index;
+- (uint32_t) numberPointsInPreAmpPlot:(ORMJDPreAmpModel*)aPreAmpCard channel:(int)aChan;
 - (int) preAmpChannel:(int)index;
 - (ORMJDPreAmpModel*) preAmpObj:(int)index;
 - (int) preAmpChannel:(int)index;

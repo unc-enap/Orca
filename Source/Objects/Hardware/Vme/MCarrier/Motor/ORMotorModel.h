@@ -61,16 +61,16 @@ enum {
         float patternDwellTime;
         int patternNumSweeps;
         int patternType;
-        unsigned long optionMask;
+        uint32_t optionMask;
 		
         //non-persistant
         BOOL motorRunning;
         BOOL homeDetected;
-        long motorPosition;
+        int32_t motorPosition;
         ORAlarm*    breakPointAlarm;
         id motorWorker;
 
-        unsigned long dataId;
+        uint32_t dataId;
 }
 
 #pragma mark ¥¥¥Initialization
@@ -101,14 +101,14 @@ enum {
 - (void) setPatternNumSweeps:(int)count;
 - (int)  patternType;
 - (void) setPatternType:(int)aType;
-- (unsigned long)  optionMask;
-- (void) setOptionMask:(unsigned long)aMask;
+- (uint32_t)  optionMask;
+- (void) setOptionMask:(uint32_t)aMask;
 - (void) setOption:(int)anOption;
 - (void) clearOption:(int)anOption;
 - (BOOL) optionSet:(int)anOption;
 - (void) setHomeDetected:(BOOL)flag;
 - (void) setMotorRunning:(BOOL)flag;
-- (void) setMotorPosition:(long)aValue;
+- (void) setMotorPosition:(int32_t)aValue;
 - (int)  holdCurrent;
 - (void) setHoldCurrent:(int)aHoldCurrent;
 - (int)  stepMode;
@@ -143,15 +143,15 @@ enum {
 
 #pragma mark ¥¥¥Hardware Access
 - (BOOL) motorRunning;
-- (long) motorPosition;
+- (int32_t) motorPosition;
 - (BOOL) homeDetected;
 - (void) incMotor;
 - (void) decMotor;
-- (void) moveMotor:(id)aMotor amount:(long)amount;
-- (void) moveMotor:(id)aMotor to:(long)aPosition;
+- (void) moveMotor:(id)aMotor amount:(int32_t)amount;
+- (void) moveMotor:(id)aMotor to:(int32_t)aPosition;
 - (void)  readHome;
 - (void) seekHome;
-- (long) readMotor;
+- (int32_t) readMotor;
 - (void) startMotor;
 - (void) stopMotor;
 - (void) loadStepMode;
@@ -166,8 +166,8 @@ enum {
 #pragma mark ¥¥¥RunControl Ops
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (NSDictionary*) dataRecordDescription;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherM361;
 
@@ -190,18 +190,18 @@ enum {
 
 @interface NSObject (ORMotorModel)
 - (void) loadBreakPoint:(int)amount absolute:(BOOL)useAbs motor:(id)aMotor;
-- (void) loadStepCount:(long)amount motor:(id)aMotor;
+- (void) loadStepCount:(int32_t)amount motor:(id)aMotor;
 - (void) readMotor:(id)aMotor;
 - (BOOL) isMotorMoving:(id)aMotor;
-- (void) moveMotor:(id)aMotor amount:(long)amount;
-- (void) moveMotor:(id)aMotor to:(long)amount;
-- (void) seekHome:(long)amount motor:(id)aMotor;
+- (void) moveMotor:(id)aMotor amount:(int32_t)amount;
+- (void) moveMotor:(id)aMotor to:(int32_t)amount;
+- (void) seekHome:(int32_t)amount motor:(id)aMotor;
 - (void) readHome:(id)aMotor;
 - (void) stopMotor:(id)aMotor;
 - (void) startMotor:(id)aMotor;
-- (void) loadHoldCurrent:(long)amount motor:(id)aMotor;
+- (void) loadHoldCurrent:(int32_t)amount motor:(id)aMotor;
 - (void) loadStepMode:(int)mode motor:(id)aMotor;
-- (void) setMotorPosition:(long)aValue;
+- (void) setMotorPosition:(int32_t)aValue;
 - (void) shipMotorState:(id)aWorker index:(int)index;
 - (void) setMotorRunning:(BOOL)flag;
 - (void) motorStarted;

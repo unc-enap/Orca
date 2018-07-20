@@ -27,12 +27,12 @@
 @interface OROscDecoder : ORBaseDecoder 
 {
 }
-- (unsigned long) decodeData: (void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet: (ORDataSet*) aDataSet;
-- (unsigned long) decodeGtId: (void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet: (ORDataSet*) aDataSet;
-- (unsigned long) decodeClock: (void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet: (ORDataSet*) aDataSet;
+- (uint32_t) decodeData: (void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet: (ORDataSet*) aDataSet;
+- (uint32_t) decodeGtId: (void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet: (ORDataSet*) aDataSet;
+- (uint32_t) decodeClock: (void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet: (ORDataSet*) aDataSet;
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr;
-- (NSString*) dataGtIdDescription:(unsigned long*)ptr;
-- (NSString*) dataClockDescription:(unsigned long*)ptr;
+- (NSString*) dataRecordDescription:(uint32_t*)ptr;
+- (NSString*) dataGtIdDescription:(uint32_t*)ptr;
+- (NSString*) dataClockDescription:(uint32_t*)ptr;
 
 @end

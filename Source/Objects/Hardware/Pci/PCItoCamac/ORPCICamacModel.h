@@ -150,7 +150,7 @@ enum {
 - (void)            writeLCRegister:(unsigned short)regOffSet data:(unsigned short) data;
 - (unsigned short)  readLCRegister: (unsigned short) regOffSet;
 
-- (unsigned long)   readLEDs;
+- (uint32_t)   readLEDs;
 - (unsigned short)  camacStatus;		// get status
 - (void)            checkCratePower;	// check crate power
 - (void)            checkStatusErrors;	// check controller status
@@ -171,7 +171,7 @@ enum {
 									a:(unsigned short)a 
 									f:(unsigned short)f
 								 data:(unsigned short*) data 
-							   length:(unsigned long) numWords;
+							   length:(uint32_t) numWords;
 
 - (unsigned short)  camacLongNAF:(unsigned short)n 
 							   a:(unsigned short) a 
@@ -179,13 +179,13 @@ enum {
 - (unsigned short)  camacLongNAF:(unsigned short)n 
 							   a:(unsigned short) a 
 							   f:(unsigned short) f
-							data:(unsigned long*) data;
+							data:(uint32_t*) data;
 
 - (unsigned short) camacLongNAFBlock:(unsigned short)n 
 									a:(unsigned short)a 
 									f:(unsigned short)f
-								 data:(unsigned long*) data 
-							   length:(unsigned long) numWords;
+								 data:(uint32_t*) data 
+							   length:(uint32_t) numWords;
 
 - (void) delay:(float)delayValue;
 - (void) printConfigurationData;

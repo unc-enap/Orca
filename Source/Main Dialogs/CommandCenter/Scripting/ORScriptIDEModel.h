@@ -25,8 +25,8 @@
 
 @interface ORScriptIDEModel : OrcaObject
 {
-	unsigned long		    dataId;
-	unsigned long			recordDataId;
+	uint32_t		    dataId;
+	uint32_t			recordDataId;
 	NSString*				script;
 	ORScriptRunner*			scriptRunner;
 	NSString*				scriptName;
@@ -147,17 +147,17 @@
 - (void) postCouchDBRecordToHistory:(NSDictionary*)aRecord;
 
 #pragma mark ***Data ID
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) aDataId;
-- (unsigned long) recordDataId;
-- (void) setRecordDataId: (unsigned long) aDataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) aDataId;
+- (uint32_t) recordDataId;
+- (void) setRecordDataId: (uint32_t) aDataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherObj;
 - (NSDictionary*) dataRecordDescription;
 - (void) shipTaskRecord:(id)aTask running:(BOOL)aState;
-- (void) shipDataRecord:(id)someData tag:(unsigned long)anID;
+- (void) shipDataRecord:(id)someData tag:(uint32_t)anID;
 - (int) scriptType;
-- (unsigned long) currentTime;
+- (uint32_t) currentTime;
 
 @end
 
@@ -181,13 +181,13 @@ extern NSString* ORScriptIDEModelGlobalsChanged;
 
 @interface ORScriptDecoderForState : ORBaseDecoder
 {}
-- (unsigned long) decodeData:(void*)someData  fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)ptr;
+- (uint32_t) decodeData:(void*)someData  fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)ptr;
 @end
 
 @interface ORScriptDecoderForRecord : ORBaseDecoder
 {}
-- (unsigned long) decodeData:(void*)someData  fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)ptr;
+- (uint32_t) decodeData:(void*)someData  fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)ptr;
 @end
 

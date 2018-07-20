@@ -91,10 +91,10 @@
 
 @implementation ORCaen1190DecoderForTdc
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr   = (unsigned long*)someData;
-	unsigned long length = ExtractLength(*ptr);
+    uint32_t* ptr   = (uint32_t*)someData;
+	uint32_t length = ExtractLength(*ptr);
 	
     ptr++; //point to the location info
 	unsigned char crate			= (*ptr&0x01e00000)>>21;
@@ -106,7 +106,7 @@
 			short chan = (ptr[i]>>19) & 0x7f;
 			BOOL  type = (ptr[i]>>26) & 0x1;
 
-			unsigned long tdcValue;
+			uint32_t tdcValue;
 			tdcValue = ptr[i] & 0x7ffff;
 			if(edgeDection == 0 && type == 0)tdcValue = tdcValue & 0xfff;
 			tdcValue = tdcValue>>4; //prescale to 32K
@@ -121,12 +121,12 @@
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"Caen1190 TDC Record\n\n";
 	ptr++;
-    NSString* crate = [NSString stringWithFormat:@"Crate = %lu\n",(*ptr&0x01e00000)>>21];
-    NSString* card  = [NSString stringWithFormat:@"Card  = %lu\n",(*ptr&0x001f0000)>>16];
+    NSString* crate = [NSString stringWithFormat:@"Crate = %u\n",(*ptr&0x01e00000)>>21];
+    NSString* card  = [NSString stringWithFormat:@"Card  = %u\n",(*ptr&0x001f0000)>>16];
 	    
     return [NSString stringWithFormat:@"%@%@%@",title,crate,card];               
 }

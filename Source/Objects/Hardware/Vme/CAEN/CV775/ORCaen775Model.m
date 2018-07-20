@@ -130,12 +130,12 @@ static RegisterNamesStruct reg[kNumRegisters] = {
     [[NSNotificationCenter defaultCenter] postNotificationName:ORCaen775ModelModelTypeChanged object:self];
 }
 
-- (unsigned long)onlineMask {
+- (uint32_t)onlineMask {
 	
     return onlineMask;
 }
 
-- (void)setOnlineMask:(unsigned long)anOnlineMask 
+- (void)setOnlineMask:(uint32_t)anOnlineMask 
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setOnlineMask:[self onlineMask]];
     onlineMask = anOnlineMask;	    
@@ -149,7 +149,7 @@ static RegisterNamesStruct reg[kNumRegisters] = {
 
 - (void) setOnlineMaskBit:(int)bit withValue:(BOOL)aValue
 {
-	unsigned long aMask = onlineMask;
+	uint32_t aMask = onlineMask;
 	if(aValue)aMask |= (1<<bit);
 	else      aMask &= ~(1<<bit);
 	[self setOnlineMask:aMask];
@@ -181,7 +181,7 @@ static RegisterNamesStruct reg[kNumRegisters] = {
 	return kNumRegisters;
 }
 
-- (unsigned long) getBufferOffset
+- (uint32_t) getBufferOffset
 {
 	return reg[kOutputBuffer].addressOffset;
 }
@@ -197,7 +197,7 @@ static RegisterNamesStruct reg[kNumRegisters] = {
 	else							  return 16;
 }
 
-- (unsigned long) getThresholdOffset:(int)aChan
+- (uint32_t) getThresholdOffset:(int)aChan
 {
 	if(modelType==kModel775)return reg[kThresholds].addressOffset + (aChan * 2);
 	else					return reg[kThresholds].addressOffset + (aChan * 4);
@@ -230,7 +230,7 @@ static RegisterNamesStruct reg[kNumRegisters] = {
 	return reg[anIndex].regName;
 }
 
-- (unsigned long) getAddressOffset: (short) anIndex
+- (uint32_t) getAddressOffset: (short) anIndex
 {
     return( reg[anIndex].addressOffset );
 }
@@ -345,8 +345,8 @@ static RegisterNamesStruct reg[kNumRegisters] = {
     [self setDataIdN:[anotherObj dataIdN]];
 }
 
-- (unsigned long) dataIdN { return dataIdN; }
-- (void) setDataIdN: (unsigned long) DataId
+- (uint32_t) dataIdN { return dataIdN; }
+- (void) setDataIdN: (uint32_t) DataId
 {
     dataIdN = DataId;
 }
@@ -413,13 +413,13 @@ static RegisterNamesStruct reg[kNumRegisters] = {
         
         // Get some values from the status register using the decoder.
         BOOL dataIsReady 		= [dataDecoder isDataReady:theStatus1];
-        unsigned long bufferAddress = [self baseAddress] + [self getBufferOffset];
+        uint32_t bufferAddress = [self baseAddress] + [self getBufferOffset];
         
         // Read the buffer.
         if (dataIsReady) {
 			
 			//OK, at least one data value is ready
-			unsigned long dataValue;
+			uint32_t dataValue;
 			[controller readLongBlock:&dataValue
 							atAddress:bufferAddress
 							numToRead:1
@@ -433,7 +433,7 @@ static RegisterNamesStruct reg[kNumRegisters] = {
 				int numMemorizedChannels = ShiftAndExtract(dataValue,8,0x3f);
 				int i;
 				if((numMemorizedChannels>0)){
-					unsigned long dataRecord[0xffff];
+					uint32_t dataRecord[0xffff];
 					//we fill in dataRecord[0] below once we know the final size
 					dataRecord[1] = location;
 					int index = 2;
@@ -504,7 +504,7 @@ static RegisterNamesStruct reg[kNumRegisters] = {
 	configStruct->card_info[index].deviceSpecificData[0] = (int32_t)reg[kStatusRegister1].addressOffset;
 	configStruct->card_info[index].deviceSpecificData[1] = (int32_t)reg[kOutputBuffer].addressOffset;
 	configStruct->card_info[index].deviceSpecificData[2] = (int32_t)reg[kStatusRegister2].addressOffset;
-	configStruct->card_info[index].deviceSpecificData[3] = (int32_t)[self getDataBufferSize]/sizeof(long);
+	configStruct->card_info[index].deviceSpecificData[3] = (int32_t)[self getDataBufferSize]/sizeof(int32_t);
 	configStruct->card_info[index].num_Trigger_Indexes = 0;
 	
 	configStruct->card_info[index].next_Card_Index 	= index+1;	

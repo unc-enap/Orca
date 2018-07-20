@@ -71,7 +71,7 @@
 
 #pragma mark ***Support
 - (void)    changeIbstaStatus: (int) aStatus;
-- (void)    changeStatusSummary: (int) aStatus error: (int) anError count: (long) aCount;
+- (void)    changeStatusSummary: (int) aStatus error: (int) anError count: (int32_t) aCount;
 - (void)    populatePullDowns;
 - (void)    setTestButtonsEnabled: (BOOL) aValue;
 - (void)    testLockChanged: (NSNotification*) aNotification;

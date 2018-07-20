@@ -42,7 +42,7 @@
 - (void) setAdapter:(id)anAdapter;
 - (id) controllerCard;
 - (void) doNoPowerAlert:(NSException*)exception action:(NSString*)message;
-- (unsigned long) requestGTID;
+- (uint32_t) requestGTID;
 - (NSString*) adapterArchiveKey;
 - (void) positionConnector:(ORConnector*)aConnector forCard:(id)aCard;
 - (BOOL) showLabels;
@@ -91,7 +91,7 @@
 @end
 
 @interface NSObject (ORCrateModel)
-- (unsigned long) requestRemoteGTID;
+- (uint32_t) requestRemoteGTID;
 @end
 
 extern NSString* ORCrateAdapterChangedNotification;

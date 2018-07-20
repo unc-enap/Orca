@@ -25,42 +25,42 @@ for the use of this software.
 #define kDelayOp 2
 
 @interface ORPMCReadWriteCommand : NSObject {
-	long			milliSecondDelay;
+	int32_t			milliSecondDelay;
 	int				opType;				//read/write
-	unsigned long	numberItems;
-	unsigned long	pmcAddress;			//hw Address
+	uint32_t	numberItems;
+	uint32_t	pmcAddress;			//hw Address
 	int				returnCode;			//should be 1 for success, 0 for failure
 	NSMutableData*	data;			//if read theData == returned data, if write theData = writeData
 }
-+ (id) delayCmd:(unsigned long) milliSeconds;
++ (id) delayCmd:(uint32_t) milliSeconds;
 	
-+ (id) writeLongBlock:(unsigned long *) writeAddress
-			atAddress:(unsigned long) pmcAddress
-		   numToWrite:(unsigned long) numberLongs;
++ (id) writeLongBlock:(uint32_t *) writeAddress
+			atAddress:(uint32_t) pmcAddress
+		   numToWrite:(uint32_t) numberLongs;
 
-+ (id) readLongBlockAtAddress:(unsigned long) pmcAddress
-					numToRead:(unsigned long) numberLongs;
++ (id) readLongBlockAtAddress:(uint32_t) pmcAddress
+					numToRead:(uint32_t) numberLongs;
 
-- (id) initWithMilliSecondDelay:(unsigned long) aMilliSecondDelay;
+- (id) initWithMilliSecondDelay:(uint32_t) aMilliSecondDelay;
 	
 - (id) initWithOp: (int) aOpType
-	   dataAdress: (unsigned long*) dataAddress
-	   pmcAddress: (unsigned long) pmcAddress
-	  numberItems: (unsigned long) aNumberItems;
+	   dataAdress: (uint32_t*) dataAddress
+	   pmcAddress: (uint32_t) pmcAddress
+	  numberItems: (uint32_t) aNumberItems;
 
-- (unsigned long) milliSecondDelay;
+- (uint32_t) milliSecondDelay;
 - (int)	opType;
-- (unsigned long) numberItems;
+- (uint32_t) numberItems;
 - (int)	returnCode;
 - (void) setReturnCode:(int)aCode;
-- (unsigned long)	pmcAddress;
+- (uint32_t)	pmcAddress;
 - (unsigned char*) bytes;
 - (NSMutableData*)	data;
 
 - (void) SBCPacket:(SBC_Packet*)aPacket;
 - (void) extractData:(SBC_Packet*) aPacket;
 - (void) throwError:(int)anError;
-- (long) longValue;
+- (int32_t) longValue;
 
 @end
 

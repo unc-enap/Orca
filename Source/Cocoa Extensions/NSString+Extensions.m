@@ -179,7 +179,7 @@
 
 + (NSString*) stringWithUSBDesc:(char*)desc
 {
-    unsigned long   stringLength = desc[0] - 2;  // makes it neater
+    uint32_t   stringLength = desc[0] - 2;  // makes it neater
     char* p = (&desc[2]);	// Just the Unicode words (i.e., no size byte or descriptor type byte)
 	char* p1 = p;
 	char* p2 = p;

@@ -321,12 +321,12 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
     [[NSNotificationCenter defaultCenter] postNotificationName:ORAcqirisDC440SampleIntervalChanged object:self];
 }
 
-- (unsigned long) numberSamples
+- (uint32_t) numberSamples
 {
     return numberSamples;
 }
 
-- (void) setNumberSamples:(unsigned long)aNumberSamples
+- (void) setNumberSamples:(uint32_t)aNumberSamples
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setNumberSamples:numberSamples];
     
@@ -335,8 +335,8 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
     [[NSNotificationCenter defaultCenter] postNotificationName:ORAcqirisDC440NumberSamplesChanged object:self];
 }
 
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -349,24 +349,24 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 	NSLog(@"Acqiris DC440 %d %d assigned boardID %d\n",[self stationNumber],[self baseAddress], boardID);
 }
 
-- (unsigned long) boardID
+- (uint32_t) boardID
 {
 	return boardID;
 }
 
-- (unsigned long) probe:(BOOL) verbose
+- (uint32_t) probe:(BOOL) verbose
 {
 	Acquiris_GetCmdStatusStruct response = [self doGetXXXCommand:kAcqiris_GetSerialNumbers cmdArgs:nil];
 	if(response.status == 0){
 		NSArray* args = [[NSString stringWithCString:response.responseBuffer encoding:NSASCIIStringEncoding] componentsSeparatedByString:@","];
-		unsigned long n = [args count]/3;
+		uint32_t n = [args count]/3;
 		if(verbose){
 			NSLog(@"found %d DC440 card%@ Serial #%@:\n",n,n>1?@"s.":@".",n>1?@"s are":@" is");
 		}
 		int i;
 		for(i=0;i<n;i++){
 			NSString* name = [args objectAtIndex:(i*3)+2];
-			unsigned long serialNumber = [[args objectAtIndex:(i*3)+1] intValue];
+			uint32_t serialNumber = [[args objectAtIndex:(i*3)+1] intValue];
 			if(serialNumber == [self baseAddress]){
 				boardID = [[args objectAtIndex:(i*3)] intValue];
 				if(verbose){
@@ -387,73 +387,73 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 	}
 }
 
-- (unsigned long) startAcquisition
+- (uint32_t) startAcquisition
 {
-	return [self doCommand:kAcqiris_StartRun cmdArgs:[NSString stringWithFormat:@"%lu",boardID]];
+	return [self doCommand:kAcqiris_StartRun cmdArgs:[NSString stringWithFormat:@"%u",boardID]];
 }
 
-- (unsigned long) stopAcquisition
+- (uint32_t) stopAcquisition
 {
-	return [self doCommand:kAcqiris_StopRun cmdArgs:[NSString stringWithFormat:@"%lu",boardID]];
+	return [self doCommand:kAcqiris_StopRun cmdArgs:[NSString stringWithFormat:@"%u",boardID]];
 }
 
 - (BOOL) dataAvailable
 {
-	return [self doCommand:kAcqiris_DataAvailable cmdArgs:[NSString stringWithFormat:@"%lu",boardID]];
+	return [self doCommand:kAcqiris_DataAvailable cmdArgs:[NSString stringWithFormat:@"%u",boardID]];
 }
 
-- (unsigned long) setConfigureMemory
+- (uint32_t) setConfigureMemory
 {
-	NSString* args = [NSString stringWithFormat:@"%lu,%ld,1",boardID,numberSamples];
-	long status =  [self doSetXXXCommand:kAcqiris_SetConfigMemory cmdArgs:args];
+	NSString* args = [NSString stringWithFormat:@"%u,%d,1",boardID,numberSamples];
+	int32_t status =  [self doSetXXXCommand:kAcqiris_SetConfigMemory cmdArgs:args];
 	if(status)NSLog(@"config Memory status: %@\n",[self decodeError:status]);
 	return status;
 }
 
-- (unsigned long) setConfigureVertical:(int)chan
+- (uint32_t) setConfigureVertical:(int)chan
 {
 	
-	NSString* args = [NSString stringWithFormat:@"%lu,%d,%G,%G,%d,0",boardID,chan,DC440_fullscale[fullScale],verticalOffset,coupling];
-	long status = [self doSetXXXCommand:kAcqiris_SetConfigVertical cmdArgs:args];
+	NSString* args = [NSString stringWithFormat:@"%u,%d,%G,%G,%d,0",boardID,chan,DC440_fullscale[fullScale],verticalOffset,coupling];
+	int32_t status = [self doSetXXXCommand:kAcqiris_SetConfigVertical cmdArgs:args];
 	if(status)NSLog(@"config Vertical status (%d): %@\n",chan,[self decodeError:status]);
 	return status;
 }
 
-- (unsigned long) setConfigureHorizontal
+- (uint32_t) setConfigureHorizontal
 {
-	NSString* args = [NSString stringWithFormat:@"%lu,%G,%G",boardID,sampleInterval/1000000.0,delayTime/1000000.0];
-	long status = [self doSetXXXCommand:kAcqiris_SetConfigHorizontal cmdArgs:args];
+	NSString* args = [NSString stringWithFormat:@"%u,%G,%G",boardID,sampleInterval/1000000.0,delayTime/1000000.0];
+	int32_t status = [self doSetXXXCommand:kAcqiris_SetConfigHorizontal cmdArgs:args];
 	if(status)NSLog(@"config Horizontal status: %@\n",[self decodeError:status]);
 	return status;
 }
 
-- (unsigned long) setConfigureTrigClass
+- (uint32_t) setConfigureTrigClass
 {
-	unsigned long sourcePattern = 0x00000000;
+	uint32_t sourcePattern = 0x00000000;
 	switch(triggerSource){
 		case 0: sourcePattern = 0x80000000; break;
 		case 1: sourcePattern = 0x00000001; break;
 		case 2: sourcePattern = 0x00000002; break;
 	}
-	NSString* args = [NSString stringWithFormat:@"%lu,0,%ld,0,0,0,0",boardID,sourcePattern];
-	long status = [self doSetXXXCommand:kAcqiris_SetConfigTrigClass cmdArgs:args];
+	NSString* args = [NSString stringWithFormat:@"%u,0,%d,0,0,0,0",boardID,sourcePattern];
+	int32_t status = [self doSetXXXCommand:kAcqiris_SetConfigTrigClass cmdArgs:args];
 	if(status)NSLog(@"config Trig Class status: %@\n",[self decodeError:status]);
 	return status;
 }
 
-- (unsigned long) setConfigureTrigSource
+- (uint32_t) setConfigureTrigSource
 {
-	long trig;
+	int32_t trig;
 	if(triggerSource==0)trig = -1;
 	else trig = triggerSource;
 	
-	NSString* args = [NSString stringWithFormat:@"%lu,%ld,%d,%d,%G,%G",boardID,trig,triggerCoupling,triggerSlope,[self triggerLevel:0],[self triggerLevel:1]];
-	long status = [self doSetXXXCommand:kAcqiris_SetConfigTrigSource cmdArgs:args];
+	NSString* args = [NSString stringWithFormat:@"%u,%d,%d,%d,%G,%G",boardID,trig,triggerCoupling,triggerSlope,[self triggerLevel:0],[self triggerLevel:1]];
+	int32_t status = [self doSetXXXCommand:kAcqiris_SetConfigTrigSource cmdArgs:args];
 	if(status)NSLog(@"config Trig Source status: %@\n",[self decodeError:status]);
 	return status;
 }
 
-- (id) decodeError:(long)status
+- (id) decodeError:(int32_t)status
 {
 	switch(status){
 		case 1073368576: return @"Value Adapted";
@@ -462,9 +462,9 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 	return @"Programming Error if you get here";
 }
 
-- (unsigned long) getHorizontal
+- (uint32_t) getHorizontal
 {
-	NSString* args = [NSString stringWithFormat:@"%lu",boardID];
+	NSString* args = [NSString stringWithFormat:@"%u",boardID];
 	Acquiris_GetCmdStatusStruct response = [self doGetXXXCommand:kAcqiris_GetHorizontal cmdArgs:args];
 	if(response.status == 0){
 		NSArray* args = [[NSString stringWithCString:response.responseBuffer encoding:NSASCIIStringEncoding] componentsSeparatedByString:@","];
@@ -476,12 +476,12 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 	return response.status;
 }
 
-- (unsigned long) getVertical
+- (uint32_t) getVertical
 {
-	long trig;
+	int32_t trig;
 	if(triggerSource==0)trig = -1;
 	else trig = triggerSource;
-	NSString* args = [NSString stringWithFormat:@"%lu,%ld",boardID,trig];
+	NSString* args = [NSString stringWithFormat:@"%u,%d",boardID,trig];
 	Acquiris_GetCmdStatusStruct response = [self doGetXXXCommand:kAcqiris_GetVertical cmdArgs:args];
 	if(response.status == 0){
 		NSArray* args = [[NSString stringWithCString:response.responseBuffer encoding:NSASCIIStringEncoding] componentsSeparatedByString:@","];
@@ -495,9 +495,9 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 	return response.status;
 }
 
-- (unsigned long) getMemory
+- (uint32_t) getMemory
 {
-	NSString* args = [NSString stringWithFormat:@"%lu",boardID];
+	NSString* args = [NSString stringWithFormat:@"%u",boardID];
 	Acquiris_GetCmdStatusStruct response = [self doGetXXXCommand:kAcqiris_GetMemory cmdArgs:args];
 	if(response.status == 0){
 		NSArray* args = [[NSString stringWithCString:response.responseBuffer encoding:NSASCIIStringEncoding] componentsSeparatedByString:@","];
@@ -508,20 +508,20 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 	return response.status;
 }
 
-- (unsigned long) getNumberChannels
+- (uint32_t) getNumberChannels
 {
-	NSString* args = [NSString stringWithFormat:@"%lu",boardID];
+	NSString* args = [NSString stringWithFormat:@"%u",boardID];
 	Acquiris_GetCmdStatusStruct response = [self doGetXXXCommand:kAcqiris_GetNbrChannels cmdArgs:args];
 	NSLog(@"get NbrChannels status:%d --- %s\n",response.status,response.responseBuffer);
 	return response.status;
 }
 
-- (unsigned long) getTriggerSource
+- (uint32_t) getTriggerSource
 {
-	long trig;
+	int32_t trig;
 	if(triggerSource==0)trig = -1;
 	else trig = triggerSource;
-	NSString* args = [NSString stringWithFormat:@"%lu,%ld",boardID,trig];
+	NSString* args = [NSString stringWithFormat:@"%u,%d",boardID,trig];
 	Acquiris_GetCmdStatusStruct response = [self doGetXXXCommand:kAcqiris_GetTrigSource cmdArgs:args];
 	if(response.status == 0){
 		NSArray* args = [[NSString stringWithCString:response.responseBuffer encoding:NSASCIIStringEncoding] componentsSeparatedByString:@","];
@@ -535,9 +535,9 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 	return response.status;
 }
 
-- (unsigned long) getTriggerClass
+- (uint32_t) getTriggerClass
 {
-	NSString* args = [NSString stringWithFormat:@"%lu",boardID];
+	NSString* args = [NSString stringWithFormat:@"%u",boardID];
 	Acquiris_GetCmdStatusStruct response = [self doGetXXXCommand:kAcqiris_GetTrigClass cmdArgs:args];
 	if(response.status == 0){
 		NSArray* args = [[NSString stringWithCString:response.responseBuffer encoding:NSASCIIStringEncoding] componentsSeparatedByString:@","];
@@ -563,12 +563,12 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 	[self reportTriggerClass];
 }
 
-- (unsigned long) reportTriggerSource
+- (uint32_t) reportTriggerSource
 {
-	long trig;
+	int32_t trig;
 	if(triggerSource==0)trig = -1;
 	else trig = triggerSource;
-	NSString* args = [NSString stringWithFormat:@"%lu,%ld",boardID,trig];
+	NSString* args = [NSString stringWithFormat:@"%u,%d",boardID,trig];
 	Acquiris_GetCmdStatusStruct response = [self doGetXXXCommand:kAcqiris_GetTrigSource cmdArgs:args];
 	if(response.status == 0){
 		NSArray* args = [[NSString stringWithCString:response.responseBuffer encoding:NSASCIIStringEncoding] componentsSeparatedByString:@","];
@@ -581,16 +581,16 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 	return response.status;
 }
 
-- (unsigned long) reportTriggerClass
+- (uint32_t) reportTriggerClass
 {
-	NSString* args = [NSString stringWithFormat:@"%lu",boardID];
+	NSString* args = [NSString stringWithFormat:@"%u",boardID];
 	Acquiris_GetCmdStatusStruct response = [self doGetXXXCommand:kAcqiris_GetTrigClass cmdArgs:args];
 	if(response.status == 0){
 		NSArray* args = [[NSString stringWithCString:response.responseBuffer encoding:NSASCIIStringEncoding] componentsSeparatedByString:@","];
 		NSLog(@"--Trigger Class--\n");
 		if([[args objectAtIndex:0] intValue])NSLog(@"TV Trigger\n");
 		else NSLog(@"Edge Trigger\n");
-		unsigned long trig = [[args objectAtIndex:1] intValue];
+		uint32_t trig = [[args objectAtIndex:1] intValue];
 		if(trig & 0x1)      NSLog(@"Channel 1\n");
 		else if(trig & 0x2) NSLog(@"Channel 2\n");
 		else if(trig & 0x80000000) NSLog(@"External\n");
@@ -599,9 +599,9 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 }
 
 
-- (unsigned long) reportHorizontal
+- (uint32_t) reportHorizontal
 {
-	NSString* args = [NSString stringWithFormat:@"%lu",boardID];
+	NSString* args = [NSString stringWithFormat:@"%u",boardID];
 	Acquiris_GetCmdStatusStruct response = [self doGetXXXCommand:kAcqiris_GetHorizontal cmdArgs:args];
 	if(response.status == 0){
 		NSArray* args = [[NSString stringWithCString:response.responseBuffer encoding:NSASCIIStringEncoding] componentsSeparatedByString:@","];
@@ -612,12 +612,12 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 	return response.status;
 }
 
-- (unsigned long) reportVertical
+- (uint32_t) reportVertical
 {
-	long trig;
+	int32_t trig;
 	if(triggerSource==0)trig = -1;
 	else trig = triggerSource;
-	NSString* args = [NSString stringWithFormat:@"%lu,%ld",boardID,trig];
+	NSString* args = [NSString stringWithFormat:@"%u,%d",boardID,trig];
 	Acquiris_GetCmdStatusStruct response = [self doGetXXXCommand:kAcqiris_GetVertical cmdArgs:args];
 	if(response.status == 0){
 		NSArray* args = [[NSString stringWithCString:response.responseBuffer encoding:NSASCIIStringEncoding] componentsSeparatedByString:@","];
@@ -629,9 +629,9 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 	return response.status;
 }
 
-- (unsigned long) reportMemory
+- (uint32_t) reportMemory
 {
-	NSString* args = [NSString stringWithFormat:@"%lu",boardID];
+	NSString* args = [NSString stringWithFormat:@"%u",boardID];
 	Acquiris_GetCmdStatusStruct response = [self doGetXXXCommand:kAcqiris_GetMemory cmdArgs:args];
 	if(response.status == 0){
 		NSArray* args = [[NSString stringWithCString:response.responseBuffer encoding:NSASCIIStringEncoding] componentsSeparatedByString:@","];
@@ -671,12 +671,12 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 	
 	[[self adapter] send:&aPacket receive:&aPacket];
 	Acquiris_WaveformResponseStruct* wPtr = (Acquiris_WaveformResponseStruct*)aPacket.payload;
-	long numRecords = wPtr->numWaveformStructsToFollow;
+	int32_t numRecords = wPtr->numWaveformStructsToFollow;
 	
 	Acquiris_OrcaWaveformStruct* recordPtr = (Acquiris_OrcaWaveformStruct*)(wPtr+1);
 	int j;
 	for(j=0;j<numRecords;j++){
-		long recordLen = ExtractLength(recordPtr->orcaHeader);
+		int32_t recordLen = ExtractLength(recordPtr->orcaHeader);
 		short channel = (recordPtr->location & 0x0000ff00) >> 8;
 		if(channel<0 || channel>=2) break;
 		
@@ -691,7 +691,7 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 			tempBuffer[channel][i] = dataPtr[start+i];
 		}
 		//move the recordPtr to the next record
-		recordPtr = (Acquiris_OrcaWaveformStruct*)((long*)(recordPtr) + recordLen); //point to next recordStart
+		recordPtr = (Acquiris_OrcaWaveformStruct*)((int32_t*)(recordPtr) + recordLen); //point to next recordStart
 	}
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORAcqirisDC440DataChanged object:self];
@@ -706,7 +706,7 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 }
 
 
-- (Acquiris_GetCmdStatusStruct) doGetXXXCommand:(unsigned long)aCmdNumber cmdArgs:(NSString*)args
+- (Acquiris_GetCmdStatusStruct) doGetXXXCommand:(uint32_t)aCmdNumber cmdArgs:(NSString*)args
 {
 	Acquiris_GetCmdStatusStruct response;
 	SBC_Packet aPacket;
@@ -726,9 +726,9 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 	return response;
 }
 
-- (long) doSetXXXCommand:(unsigned long)aCmdNumber cmdArgs:(NSString*)args
+- (int32_t) doSetXXXCommand:(uint32_t)aCmdNumber cmdArgs:(NSString*)args
 {
-	long status = 0;
+	int32_t status = 0;
 	SBC_Packet aPacket;
 	aPacket.cmdHeader.destination	= kAcqirisDC440;
 	aPacket.cmdHeader.cmdID			= (uint32_t)aCmdNumber;
@@ -746,9 +746,9 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 	return status;
 }
 
-- (long) doCommand:(unsigned long)aCmdNumber cmdArgs:(NSString*)args
+- (int32_t) doCommand:(uint32_t)aCmdNumber cmdArgs:(NSString*)args
 {
-	long status = 0;
+	int32_t status = 0;
 	SBC_Packet aPacket;
 	aPacket.cmdHeader.destination	= kAcqirisDC440;
 	aPacket.cmdHeader.cmdID			= (uint32_t)aCmdNumber;
@@ -879,12 +879,12 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 				[[self adapter] send:&readDataPacket receive:&returnPacket];
 				
 				Acquiris_WaveformResponseStruct* wPtr = (Acquiris_WaveformResponseStruct*)returnPacket.payload;
-				long hitMask = wPtr->hitMask;
+				int32_t hitMask = wPtr->hitMask;
 				if(hitMask & 0x1)	sampleCount[0]++;
 				if(hitMask & 0x2)	sampleCount[1]++;
 				wPtr++;
-				unsigned long* dp = (unsigned long*)wPtr;
-				unsigned long totalDataLength = (returnPacket.cmdHeader.numberBytesinPayload - sizeof(Acquiris_WaveformResponseStruct))/sizeof(long);
+				uint32_t* dp = (uint32_t*)wPtr;
+				uint32_t totalDataLength = (returnPacket.cmdHeader.numberBytesinPayload - sizeof(Acquiris_WaveformResponseStruct))/sizeof(int32_t);
 				if(totalDataLength){
 					[aDataPacket addLongsToFrameBuffer:dp length:totalDataLength];			
 				}
@@ -892,7 +892,7 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 		}
 		else {
 			isRunning = YES;
-			unsigned long status = [self startAcquisition];
+			uint32_t status = [self startAcquisition];
 			
 			//cache a data structure
 			readDataPacket.cmdHeader.destination = kAcqirisDC440;
@@ -906,7 +906,7 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 			p->enableMask		= enableMask;
 			
 			if(status != 0){
-                [NSException raise:@"Acqiris DC440 Card Error" format:@"Crate: %d Card: %lu Status=%ld",[self crateNumber],(unsigned long)[self stationNumber],status];
+                [NSException raise:@"Acqiris DC440 Card Error" format:@"Crate: %d Card: %u Status=%d",[self crateNumber],(uint32_t)[self stationNumber],status];
 			}
 			firstTime = NO;
 		}
@@ -940,7 +940,7 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
     return YES;
 }
 
-- (unsigned long) sampleCount:(int)aChannel
+- (uint32_t) sampleCount:(int)aChannel
 {
     return sampleCount[aChannel];
 }
@@ -959,7 +959,7 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
     }
 }
 
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
 {
 	if(groupTag == 0){
 		if(counterTag>=0 && counterTag<2){

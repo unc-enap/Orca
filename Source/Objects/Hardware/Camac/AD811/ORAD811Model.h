@@ -31,12 +31,12 @@
 @interface ORAD811Model : ORCamacIOCard <ORDataTaker> {
     @private
 		BOOL includeTiming;
-        unsigned long dataId;
+        uint32_t dataId;
         unsigned short onlineMask;
         BOOL suppressZeros;
 		
         //place to cache some stuff for alittle more speed.
-        unsigned long 	unChangingDataPart;
+        uint32_t 	unChangingDataPart;
         unsigned short cachedStation;
         short onlineChannelCount;
         short onlineList[8];
@@ -50,8 +50,8 @@
 #pragma mark ¥¥¥Accessors
 - (BOOL) includeTiming;
 - (void) setIncludeTiming:(BOOL)aIncludeTiming;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (unsigned char)   onlineMask;
 - (void)	    setOnlineMask:(unsigned char)anOnlineMask;
 - (BOOL)	    onlineMaskBit:(int)bit;

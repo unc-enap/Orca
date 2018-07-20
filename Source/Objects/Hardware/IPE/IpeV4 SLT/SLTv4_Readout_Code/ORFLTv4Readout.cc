@@ -32,7 +32,7 @@ bool ORFLTv4Readout::Readout(SBC_LAM_Data* lamData)
 #define kNumV4FLTADCPageSize16 2048
 #define kNumV4FLTADCPageSize32 1024
 	static uint32_t adctrace32[kNumV4FLTs][kNumV4FLTChannels][kNumV4FLTADCPageSize32];//shall I use a 4th index for the page number? -tb-
-	//if sizeof(long unsigned int) != sizeof(uint32_t) we will come into troubles (64-bit-machines?) ... -tb-
+	//if sizeof(int32_t unsigned int) != sizeof(uint32_t) we will come into troubles (64-bit-machines?) ... -tb-
 	static uint32_t FIFO1[kNumV4FLTs];
 	static uint32_t FIFO2[kNumV4FLTs];
 	static uint32_t FIFO3[kNumV4FLTs][kNumV4FLTChannels];
@@ -432,7 +432,7 @@ bool ORFLTv4Readout::Readout(SBC_LAM_Data* lamData)
 				
 					//set page manager to automatic mode
 					//srack->theSlt->pageSelect->write(0x100 | 3); //TODO: this flips the two parts of the histogram - FPGA bug? -tb-
-					srack->theSlt->pageSelect->write((long unsigned int)0x0);
+					srack->theSlt->pageSelect->write((int32_t unsigned int)0x0);
                     //reset histogram time counters (=histRecTime=refresh time -tb-) //TODO: unfortunately there is no such command for the histogramming -tb- 2010-07-28
                     //TODO: srack->theFlt[col]->command->resetPointers->write(1);
                     //clear histogram (probably not really necessary with "automatic clear" -tb-) 
@@ -446,7 +446,7 @@ bool ORFLTv4Readout::Readout(SBC_LAM_Data* lamData)
                 }
                 else{//check timing
                     //pagenr=srack->theFlt[col]->histNofMeas->read() & 0x3f;
-                    //srack->theFlt[col]->periphStatus->readBlock((long unsigned int*)pStatus);//TODO: fdhwlib will change to uint32_t in the future -tb-
+                    //srack->theFlt[col]->periphStatus->readBlock((int32_t unsigned int*)pStatus);//TODO: fdhwlib will change to uint32_t in the future -tb-
                     //pageAB = (pStatus[0] & 0x10) >> 4;
                     oldpageAB = GetDeviceSpecificData()[3]; //
                     //pageAB = (srack->theFlt[col]->periphStatus->read(0) & 0x10) >> 4;
@@ -461,7 +461,7 @@ bool ORFLTv4Readout::Readout(SBC_LAM_Data* lamData)
                         //read data
                         uint32_t chan=0;
                         uint32_t readoutSec;
-                        unsigned long totalLength;
+                        uint32_t totalLength;
                         uint32_t last,first;
                         uint32_t fpgaHistogramID;
                         static uint32_t shipHistogramBuffer32[2048];
@@ -494,7 +494,7 @@ bool ORFLTv4Readout::Readout(SBC_LAM_Data* lamData)
 								}
 								else{
 									//read histogram block
-									srack->theFlt[col]->histogramData->readBlockAutoInc(chan,  (long unsigned int*)shipHistogramBuffer32, 0, 2048);
+									srack->theFlt[col]->histogramData->readBlockAutoInc(chan,  (int32_t unsigned int*)shipHistogramBuffer32, 0, 2048);
 									theEventData.firstBin  = 0;//histogramDataFirstBin[chan];//read in readHistogramDataForChan ... [self readFirstBinForChan: chan];
 									theEventData.lastBin   = 2047;//histogramDataLastBin[chan]; //                "                ... [self readLastBinForChan:  chan];
 									theEventData.histogramLength =2048;
@@ -760,8 +760,8 @@ bool ORFLTv4Readout::Readout(SBC_LAM_Data* lamData)
 								//read the raw trace
 								if(useDmaBlockRead){
 								    //DMA: readBlock
-								    //srack->theFlt[col]->ramData->readBlock(eventchan,(long unsigned int*)adctrace32[col][eventchan],1024); //memcopy w/o libPCIDMA
-								    srack->theFlt[col]->ramData->readBlock(eventchan,(long unsigned int*)adctrace32[col][eventchan],1024); //DMA with libPCIDMA, memcopy without
+								    //srack->theFlt[col]->ramData->readBlock(eventchan,(int32_t unsigned int*)adctrace32[col][eventchan],1024); //memcopy w/o libPCIDMA
+								    srack->theFlt[col]->ramData->readBlock(eventchan,(int32_t unsigned int*)adctrace32[col][eventchan],1024); //DMA with libPCIDMA, memcopy without
 								}else{
 								    //single access mode
 								    //read raw trace (use two loops as otherwise the FLT maybe has not yet written 'postTrigTIme' traces ... then we would read old data - see Elog XXX Florian)
@@ -794,9 +794,9 @@ bool ORFLTv4Readout::Readout(SBC_LAM_Data* lamData)
 								//DMA: readBlock
 								#pragma message Using DMA mode!
 								;
-								//srack->theFlt[col]->ramData->readBlock(eventchan,(long unsigned int*)adctrace32[col][eventchan],1024); //memcopy w/o libPCIDMA
-								srack->theFlt[col]->ramData->readBlock(eventchan,(long unsigned int*)adctrace32[col][eventchan],1024); //DMA with libPCIDMA
-								//srack->theFlt[col]->histogramData->readBlock(eventchan,(long unsigned int*)adctrace32[col][eventchan],1024); //PCI burst  w/o libPCIDMA
+								//srack->theFlt[col]->ramData->readBlock(eventchan,(int32_t unsigned int*)adctrace32[col][eventchan],1024); //memcopy w/o libPCIDMA
+								srack->theFlt[col]->ramData->readBlock(eventchan,(int32_t unsigned int*)adctrace32[col][eventchan],1024); //DMA with libPCIDMA
+								//srack->theFlt[col]->histogramData->readBlock(eventchan,(int32_t unsigned int*)adctrace32[col][eventchan],1024); //PCI burst  w/o libPCIDMA
 								#endif
 								/* old version; 2010-10-gap-in-trace-bug: PMC was reading too fast, so data was read faster than FLT could write -tb-
 								for(adccount=0; adccount<1024;adccount++){
@@ -982,8 +982,8 @@ bool ORFLTv4Readout::Readout(SBC_LAM_Data* lamData)
 								//read the raw trace
 								if(useDmaBlockRead){
 								    //DMA: readBlock
-								    //srack->theFlt[col]->ramData->readBlock(eventchan,(long unsigned int*)adctrace32[col][eventchan],1024); //memcopy w/o libPCIDMA
-								    srack->theFlt[col]->ramData->readBlock(eventchan,(long unsigned int*)adctrace32[col][eventchan],1024); //DMA with libPCIDMA, memcopy without
+								    //srack->theFlt[col]->ramData->readBlock(eventchan,(int32_t unsigned int*)adctrace32[col][eventchan],1024); //memcopy w/o libPCIDMA
+								    srack->theFlt[col]->ramData->readBlock(eventchan,(int32_t unsigned int*)adctrace32[col][eventchan],1024); //DMA with libPCIDMA, memcopy without
 								}else{
 								    //single access mode
 								    //read raw trace (use two loops as otherwise the FLT maybe has not yet written 'postTrigTIme' traces ... then we would read old data - see Elog XXX Florian)
@@ -1016,9 +1016,9 @@ bool ORFLTv4Readout::Readout(SBC_LAM_Data* lamData)
 								//DMA: readBlock
 								#pragma message Using DMA mode!
 								;
-								//srack->theFlt[col]->ramData->readBlock(eventchan,(long unsigned int*)adctrace32[col][eventchan],1024); //memcopy w/o libPCIDMA
-								srack->theFlt[col]->ramData->readBlock(eventchan,(long unsigned int*)adctrace32[col][eventchan],1024); //DMA with libPCIDMA
-								//srack->theFlt[col]->histogramData->readBlock(eventchan,(long unsigned int*)adctrace32[col][eventchan],1024); //PCI burst  w/o libPCIDMA
+								//srack->theFlt[col]->ramData->readBlock(eventchan,(int32_t unsigned int*)adctrace32[col][eventchan],1024); //memcopy w/o libPCIDMA
+								srack->theFlt[col]->ramData->readBlock(eventchan,(int32_t unsigned int*)adctrace32[col][eventchan],1024); //DMA with libPCIDMA
+								//srack->theFlt[col]->histogramData->readBlock(eventchan,(int32_t unsigned int*)adctrace32[col][eventchan],1024); //PCI burst  w/o libPCIDMA
 								#endif
 								/* old version; 2010-10-gap-in-trace-bug: PMC was reading too fast, so data was read faster than FLT could write -tb-
 								for(adccount=0; adccount<1024;adccount++){
@@ -1326,7 +1326,7 @@ fprintf(stdout,"4x - readpr:%i, writeptr:%i\n",readptrx,writeptrx);fflush(stdout
 				
 					//set page manager to automatic mode
 					//srack->theSlt->pageSelect->write(0x100 | 3); //TODO: this flips the two parts of the histogram - FPGA bug? -tb-
-					srack->theSlt->pageSelect->write((long unsigned int)0x0);
+					srack->theSlt->pageSelect->write((int32_t unsigned int)0x0);
                     //reset histogram time counters (=histRecTime=refresh time -tb-) //TODO: unfortunately there is no such command for the histogramming -tb- 2010-07-28
                     //TODO: srack->theFlt[col]->command->resetPointers->write(1);
                     //clear histogram (probably not really necessary with "automatic clear" -tb-) 
@@ -1340,7 +1340,7 @@ fprintf(stdout,"4x - readpr:%i, writeptr:%i\n",readptrx,writeptrx);fflush(stdout
                 }
                 else{//check timing
                     //pagenr=srack->theFlt[col]->histNofMeas->read() & 0x3f;
-                    //srack->theFlt[col]->periphStatus->readBlock((long unsigned int*)pStatus);//TODO: fdhwlib will change to uint32_t in the future -tb-
+                    //srack->theFlt[col]->periphStatus->readBlock((int32_t unsigned int*)pStatus);//TODO: fdhwlib will change to uint32_t in the future -tb-
                     //pageAB = (pStatus[0] & 0x10) >> 4;
                     oldpageAB = GetDeviceSpecificData()[3]; //
                     //pageAB = (srack->theFlt[col]->periphStatus->read(0) & 0x10) >> 4;
@@ -1355,7 +1355,7 @@ fprintf(stdout,"4x - readpr:%i, writeptr:%i\n",readptrx,writeptrx);fflush(stdout
                         //read data
                         uint32_t chan=0;
                         uint32_t readoutSec;
-                        unsigned long totalLength;
+                        uint32_t totalLength;
                         uint32_t last,first;
                         uint32_t fpgaHistogramID;
                         static uint32_t shipHistogramBuffer32[2048];
@@ -1388,7 +1388,7 @@ fprintf(stdout,"4x - readpr:%i, writeptr:%i\n",readptrx,writeptrx);fflush(stdout
 								}
 								else{
 									//read histogram block
-									srack->theFlt[col]->histogramData->readBlockAutoInc(chan,  (long unsigned int*)shipHistogramBuffer32, 0, 2048);
+									srack->theFlt[col]->histogramData->readBlockAutoInc(chan,  (int32_t unsigned int*)shipHistogramBuffer32, 0, 2048);
 									theEventData.firstBin  = 0;//histogramDataFirstBin[chan];//read in readHistogramDataForChan ... [self readFirstBinForChan: chan];
 									theEventData.lastBin   = 2047;//histogramDataLastBin[chan]; //                "                ... [self readLastBinForChan:  chan];
 									theEventData.histogramLength =2048;
@@ -1652,8 +1652,8 @@ TODO                            */
 								//read the raw trace
 								if(useDmaBlockRead){
 								    //DMA: readBlock
-								    //srack->theFlt[col]->ramData->readBlock(eventchan,(long unsigned int*)adctrace32[col][eventchan],1024); //memcopy w/o libPCIDMA
-								    srack->theFlt[col]->ramData->readBlock(eventchan,(long unsigned int*)adctrace32[col][eventchan],1024); //DMA with libPCIDMA, memcopy without
+								    //srack->theFlt[col]->ramData->readBlock(eventchan,(int32_t unsigned int*)adctrace32[col][eventchan],1024); //memcopy w/o libPCIDMA
+								    srack->theFlt[col]->ramData->readBlock(eventchan,(int32_t unsigned int*)adctrace32[col][eventchan],1024); //DMA with libPCIDMA, memcopy without
 								}else{
 								    //single access mode
 								    //read raw trace (use two loops as otherwise the FLT maybe has not yet written 'postTrigTIme' traces ... then we would read old data - see Elog XXX Florian)
@@ -1686,9 +1686,9 @@ TODO                            */
 								//DMA: readBlock
 								#pragma message Using DMA mode!
 								;
-								//srack->theFlt[col]->ramData->readBlock(eventchan,(long unsigned int*)adctrace32[col][eventchan],1024); //memcopy w/o libPCIDMA
-								srack->theFlt[col]->ramData->readBlock(eventchan,(long unsigned int*)adctrace32[col][eventchan],1024); //DMA with libPCIDMA
-								//srack->theFlt[col]->histogramData->readBlock(eventchan,(long unsigned int*)adctrace32[col][eventchan],1024); //PCI burst  w/o libPCIDMA
+								//srack->theFlt[col]->ramData->readBlock(eventchan,(int32_t unsigned int*)adctrace32[col][eventchan],1024); //memcopy w/o libPCIDMA
+								srack->theFlt[col]->ramData->readBlock(eventchan,(int32_t unsigned int*)adctrace32[col][eventchan],1024); //DMA with libPCIDMA
+								//srack->theFlt[col]->histogramData->readBlock(eventchan,(int32_t unsigned int*)adctrace32[col][eventchan],1024); //PCI burst  w/o libPCIDMA
 								#endif
 								/* old version; 2010-10-gap-in-trace-bug: PMC was reading too fast, so data was read faster than FLT could write -tb-
 								for(adccount=0; adccount<1024;adccount++){
@@ -1876,8 +1876,8 @@ TODO                                */
 								//read the raw trace
 								if(useDmaBlockRead){
 								    //DMA: readBlock
-								    //srack->theFlt[col]->ramData->readBlock(eventchan,(long unsigned int*)adctrace32[col][eventchan],1024); //memcopy w/o libPCIDMA
-								    srack->theFlt[col]->ramData->readBlock(eventchan,(long unsigned int*)adctrace32[col][eventchan],1024); //DMA with libPCIDMA, memcopy without
+								    //srack->theFlt[col]->ramData->readBlock(eventchan,(int32_t unsigned int*)adctrace32[col][eventchan],1024); //memcopy w/o libPCIDMA
+								    srack->theFlt[col]->ramData->readBlock(eventchan,(int32_t unsigned int*)adctrace32[col][eventchan],1024); //DMA with libPCIDMA, memcopy without
 								}else{
 								    //single access mode
 								    //read raw trace (use two loops as otherwise the FLT maybe has not yet written 'postTrigTIme' traces ... then we would read old data - see Elog XXX Florian)
@@ -1910,9 +1910,9 @@ TODO                                */
 								//DMA: readBlock
 								#pragma message Using DMA mode!
 								;
-								//srack->theFlt[col]->ramData->readBlock(eventchan,(long unsigned int*)adctrace32[col][eventchan],1024); //memcopy w/o libPCIDMA
-								srack->theFlt[col]->ramData->readBlock(eventchan,(long unsigned int*)adctrace32[col][eventchan],1024); //DMA with libPCIDMA
-								//srack->theFlt[col]->histogramData->readBlock(eventchan,(long unsigned int*)adctrace32[col][eventchan],1024); //PCI burst  w/o libPCIDMA
+								//srack->theFlt[col]->ramData->readBlock(eventchan,(int32_t unsigned int*)adctrace32[col][eventchan],1024); //memcopy w/o libPCIDMA
+								srack->theFlt[col]->ramData->readBlock(eventchan,(int32_t unsigned int*)adctrace32[col][eventchan],1024); //DMA with libPCIDMA
+								//srack->theFlt[col]->histogramData->readBlock(eventchan,(int32_t unsigned int*)adctrace32[col][eventchan],1024); //PCI burst  w/o libPCIDMA
 								#endif
 								/* old version; 2010-10-gap-in-trace-bug: PMC was reading too fast, so data was read faster than FLT could write -tb-
 								for(adccount=0; adccount<1024;adccount++){
@@ -2226,7 +2226,7 @@ fprintf(stdout,"4x - readpr:%i, writeptr:%i\n",readptrx,writeptrx);fflush(stdout
                                 //Auger Registers Removed for Bipolar Filter Upgrade 2013 -tb-
                                 /*      they were actually never used for KATRIN, but will result in Pbus timeouts -tb-
 TODO                                */
-					            srack->theSlt->pageSelect->write((long unsigned int)0x0);
+					            srack->theSlt->pageSelect->write((int32_t unsigned int)0x0);
                     //reset histogram time counters (=histRecTime=refresh time -tb-) //TODO: unfortunately there is no such command for the histogramming -tb- 2010-07-28
                     //TODO: srack->theFlt[col]->command->resetPointers->write(1);
                     //clear histogram (probably not really necessary with "automatic clear" -tb-) 
@@ -2240,7 +2240,7 @@ TODO                                */
                 }
                 else{//check timing
                     //pagenr=srack->theFlt[col]->histNofMeas->read() & 0x3f;
-                    //srack->theFlt[col]->periphStatus->readBlock((long unsigned int*)pStatus);//TODO: fdhwlib will change to uint32_t in the future -tb-
+                    //srack->theFlt[col]->periphStatus->readBlock((int32_t unsigned int*)pStatus);//TODO: fdhwlib will change to uint32_t in the future -tb-
                     //pageAB = (pStatus[0] & 0x10) >> 4;
                     oldpageAB = GetDeviceSpecificData()[3]; //
                     //pageAB = (srack->theFlt[col]->periphStatus->read(0) & 0x10) >> 4;
@@ -2255,7 +2255,7 @@ TODO                                */
                         //read data
                         uint32_t chan=0;
                         uint32_t readoutSec;
-                        unsigned long totalLength;
+                        uint32_t totalLength;
                         uint32_t last,first;
                         uint32_t fpgaHistogramID;
                         static uint32_t shipHistogramBuffer32[2048];
@@ -2288,7 +2288,7 @@ TODO                                */
 								}
 								else{
 									//read histogram block
-									srack->theFlt[col]->histogramData->readBlockAutoInc(chan,  (long unsigned int*)shipHistogramBuffer32, 0, 2048);
+									srack->theFlt[col]->histogramData->readBlockAutoInc(chan,  (int32_t unsigned int*)shipHistogramBuffer32, 0, 2048);
 									theEventData.firstBin  = 0;//histogramDataFirstBin[chan];//read in readHistogramDataForChan ... [self readFirstBinForChan: chan];
 									theEventData.lastBin   = 2047;//histogramDataLastBin[chan]; //                "                ... [self readLastBinForChan:  chan];
 									theEventData.histogramLength =2048;
@@ -2376,7 +2376,7 @@ bool ORFLTv4Readout::Stop()
 		//data to ship
 		uint32_t chan=0;
 		uint32_t readoutSec;
-		unsigned long totalLength=kMaxHistoLength;
+		uint32_t totalLength=kMaxHistoLength;
 		//uint32_t last=kMaxHistoLength-1,first=0;
 		//uint32_t fpgaHistogramID;
 		uint32_t histoBinWidth = 0;
@@ -2489,8 +2489,8 @@ bool ORFLTv4Readout::Readout(SBC_LAM_Data* lamData)
     static int currentUSec=0;
     static int lastSec=0;
     static int lastUSec=0;
-    //static long int counter=0;
-    static long int secCounter=0;
+    //static int32_t int counter=0;
+    static int32_t int secCounter=0;
 	static uint32_t writeSimEventMask = 0; //one bit per FLT (flags 'write simulated event' next time) -tb-
     
     struct timeval t;//    struct timezone tz; is obsolete ... -tb-
@@ -2503,7 +2503,7 @@ bool ORFLTv4Readout::Readout(SBC_LAM_Data* lamData)
     
     if(diffTime >1.0){
         secCounter++;
-        printf("PrPMC (FLTv4 simulation mode) sec %ld: 1 sec is over ...\n",secCounter);
+        printf("PrPMC (FLTv4 simulation mode) sec %d: 1 sec is over ...\n",secCounter);
         fflush(stdout);
         //remember for next call
         lastSec      = currentSec; 

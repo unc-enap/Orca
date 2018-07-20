@@ -37,8 +37,8 @@
 	BOOL            historyUpdateScheduled;
     BOOL            keepHistory;
 	//cache
-	unsigned long   runNumber;
-	unsigned long   subRunNumber;
+	uint32_t   runNumber;
+	uint32_t   subRunNumber;
     BOOL            replicationRunning;
 	NSDictionary*   docList;
     BOOL            wasReplicationRunning;

@@ -34,10 +34,10 @@
     NSDate*              launchTime;
     NSTimeInterval       upTime;
     NSOperationQueue*    opQueue;
-    unsigned long        totalMemory;
-    unsigned long        freeMemory;
-    unsigned long        pageSize;
-    unsigned long        orcaMemory;
+    uint32_t        totalMemory;
+    uint32_t        freeMemory;
+    uint32_t        pageSize;
+    uint32_t        orcaMemory;
 }
 
 #pragma mark ***Initialization

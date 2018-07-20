@@ -63,39 +63,39 @@ NSString* ORWaveformUseUnsignedChanged   = @"ORWaveformUseUnsignedChanged";
 	unitSize = aUnitSize;
 }
 
-- (unsigned long) dataOffset
+- (uint32_t) dataOffset
 {
 	return dataOffset;
 }
 
-- (void) setDataOffset:(unsigned long)newOffset
+- (void) setDataOffset:(uint32_t)newOffset
 {
 	dataOffset=newOffset;
 }
 
--(unsigned long) numberBins
+-(uint32_t) numberBins
 {
     if(waveform){
 		[dataSetLock lock];
-		unsigned long temp;
+		uint32_t temp;
 		if(unitSize == 0)unitSize = 1;
-		temp =  ([waveform length] - dataOffset)/unitSize;
+		temp =  (uint32_t)(([waveform length] - dataOffset)/unitSize);
 		[dataSetLock unlock];
 		return temp;
 	}
     else return 64*1024;
 }
 
--(long) value:(unsigned long)aChan
+-(int32_t) value:(uint32_t)aChan
 {
   return [self value:aChan callerLockedMe:false];
 }
 
--(long) value:(unsigned long)aChan callerLockedMe:(BOOL)callerLockedMe
+-(int32_t) value:(uint32_t)aChan callerLockedMe:(BOOL)callerLockedMe
 {
     double tempVal = 0;
     [self manyValues:NSMakeRange(aChan,1) to:&tempVal stride:1 callerLockedMe:callerLockedMe];
-    return (long)tempVal;
+    return (int32_t)tempVal;
 }
 
 -(NSUInteger) manyValues:(NSRange)overRange to:(double*)output stride:(NSUInteger)stride callerLockedMe:(BOOL)callerLockedMe
@@ -130,7 +130,7 @@ if (cptr != 0) {                                            \
     switch(unitSize){
         MANYVALUERANGE(char)
         MANYVALUERANGE(short)
-        MANYVALUERANGE(long)
+        MANYVALUERANGE(int)
         default: break;
     }
 	if(!callerLockedMe) [dataSetLock unlock];
@@ -172,7 +172,7 @@ if (cptr != 0) {                                            \
 #pragma mark ¥¥¥Data Source Methods
 - (id) name
 {
-    return [NSString stringWithFormat:@"%@ Waveform  Counts: %lu",[self key], [self totalCounts]];
+    return [NSString stringWithFormat:@"%@ Waveform  Counts: %u",[self key], [self totalCounts]];
 }
 
 - (int)	numberOfPointsInPlot:(id)aPlotter dataSet:(int)set
@@ -180,7 +180,7 @@ if (cptr != 0) {                                            \
     return (int)[self numberBins];
 }
 
-- (unsigned long) startingByteOffset:(id)aPlotter  dataSet:(int)set
+- (uint32_t) startingByteOffset:(id)aPlotter  dataSet:(int)set
 {
 	return dataOffset;
 }
@@ -233,7 +233,7 @@ static NSString *ORWaveformUnitSize 	= @"Waveform Data Unit Size";
 {
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
-    [self setDataOffset:[decoder decodeIntegerForKey:ORWaveformDataOffset]];
+    [self setDataOffset:(int32_t)[decoder decodeIntegerForKey:ORWaveformDataOffset]];
     [self setUnitSize:[decoder decodeIntForKey:ORWaveformUnitSize]];
     [self setUseUnsignedValues:[decoder decodeBoolForKey:@"UseUnsignedValues"]];
 	rois = [[decoder decodeObjectForKey:@"rois"] retain];
@@ -290,11 +290,11 @@ static NSString *ORWaveformUnitSize 	= @"Waveform Data Unit Size";
 }
 
 //subclasses will override these
-- (unsigned long) mask
+- (uint32_t) mask
 {
 	return 0;
 }
-- (unsigned long) specialBitMask
+- (uint32_t) specialBitMask
 {
 	return 0;
 }

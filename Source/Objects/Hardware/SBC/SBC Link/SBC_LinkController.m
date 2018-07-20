@@ -394,7 +394,7 @@
 - (void) timeSkewChanged:(NSNotification*)aNote
 {
     if([[model sbcLink] timeSkewValid]){
-        [timeSkewField setStringValue:[NSString stringWithFormat:@"%ld Secs",[[model sbcLink] timeSkew]]];
+        [timeSkewField setStringValue:[NSString stringWithFormat:@"%d Secs",[[model sbcLink] timeSkew]]];
     }
     else {
         [timeSkewField setStringValue:@"Not Checked"];
@@ -403,7 +403,7 @@
 
 - (void) codeVersionChanged:(NSNotification*)aNote
 {
-	long theVersion = [[model sbcLink] sbcCodeVersion];
+	int32_t theVersion = [[model sbcLink] sbcCodeVersion];
 	if(theVersion)	[codeVersionField setIntegerValue:theVersion];
 	else			[codeVersionField setObjectValue:@"?"];
 }
@@ -423,7 +423,7 @@
 - (void) payloadSizeChanged:(NSNotification*)aNote
 {
 	[plotter setNeedsDisplay:YES];
-	long size = [[model sbcLink] payloadSize]/1000;
+	int32_t size = [[model sbcLink] payloadSize]/1000;
 	[payloadSizeSlider setIntegerValue:size];
 	[payloadSizeField setIntegerValue:size];
 	if(size<25)[payloadSizeField setTextColor:[NSColor colorWithCalibratedRed:.6 green:0 blue:0 alpha:1.0]];
@@ -646,7 +646,7 @@
 	NSString* theInfoString       = @"";
 	int i,num;
 	
-	unsigned long aMinValue,aMaxValue,aWriteMark,aReadMark;
+	uint32_t aMinValue,aMaxValue,aWriteMark,aReadMark;
 	[[model sbcLink] getQueMinValue:&aMinValue maxValue:&aMaxValue head:&aWriteMark tail:&aReadMark];
 	NSString* runState = @"?";
 	if((theRunInfo.statusBits & kSBC_RunningMask)){
@@ -659,7 +659,7 @@
 		case 0:
 			theInfoString =                                        [NSString stringWithFormat: @"Connected     : %@\t\t# Records   : %d\n",[[model sbcLink] isConnected]?@"YES":@"NO ",theRunInfo.recordsTransfered];
 			theInfoString = [theInfoString stringByAppendingString:[NSString stringWithFormat: @"Config loaded : %@\t\tWrap Arounds: %d\n",(theRunInfo.statusBits & kSBC_ConfigLoadedMask) ? @"YES":@"NO ",theRunInfo.wrapArounds]];
-			theInfoString = [theInfoString stringByAppendingString:[NSString stringWithFormat: @"Running       : %@\t\tThrottle    : %lu\n",runState,[[model sbcLink] throttle]]];
+			theInfoString = [theInfoString stringByAppendingString:[NSString stringWithFormat: @"Running       : %@\t\tThrottle    : %u\n",runState,[[model sbcLink] throttle]]];
             if(theRunInfo.pollingRate==0){
                 theInfoString = [theInfoString stringByAppendingString:[NSString stringWithFormat: @"Cycles * 10K  : %-9u Polling     : Fastest\n",theRunInfo.readCycles/10000]];
             }
@@ -668,8 +668,8 @@
             }
 			theInfoString = [theInfoString stringByAppendingString:[NSString stringWithFormat: @"Lost Bytes    : %u\n",theRunInfo.lostByteCount]];
 			
-			theInfoString = [theInfoString stringByAppendingString:[NSString stringWithFormat: @"CB Write Mark : %-9lu Bus Errors  : %d\n",aWriteMark,theRunInfo.busErrorCount]];
-			theInfoString = [theInfoString stringByAppendingString:[NSString stringWithFormat: @"CB Read Mark  : %-9lu Err Count   : %d\n",aReadMark,theRunInfo.err_count]];
+			theInfoString = [theInfoString stringByAppendingString:[NSString stringWithFormat: @"CB Write Mark : %-9u Bus Errors  : %d\n",aWriteMark,theRunInfo.busErrorCount]];
+			theInfoString = [theInfoString stringByAppendingString:[NSString stringWithFormat: @"CB Read Mark  : %-9u Err Count   : %d\n",aReadMark,theRunInfo.err_count]];
 			theInfoString = [theInfoString stringByAppendingString:[NSString stringWithFormat: @"In Buffer Now : %-9d Msg Count   : %d",theRunInfo.amountInBuffer,theRunInfo.msg_count]];
 		break;
 			
@@ -694,7 +694,7 @@
 				if([jobStatus running]){
 					theInfoString =                                        [NSString stringWithFormat: @"Current Job Status\n-----------------------\n"];
 					theInfoString = [theInfoString stringByAppendingString:[NSString stringWithFormat: @"Running  : %@\n", [jobStatus running]?@"Running":@"Done" ]];
-					theInfoString = [theInfoString stringByAppendingString:[NSString stringWithFormat: @"Progress : %lu%%\n",[jobStatus progress]]];
+					theInfoString = [theInfoString stringByAppendingString:[NSString stringWithFormat: @"Progress : %u%%\n",[jobStatus progress]]];
 				}
 				else {
 					theInfoString =                                        [NSString stringWithFormat: @"Last Job Status\n-----------------------\n"];
@@ -732,7 +732,7 @@
 	}
 }
 
-- (void) getQueMinValue:(unsigned long*)aMinValue maxValue:(unsigned long*)aMaxValue head:(unsigned long*)aHeadValue tail:(unsigned long*)aTailValue
+- (void) getQueMinValue:(uint32_t*)aMinValue maxValue:(uint32_t*)aMaxValue head:(uint32_t*)aHeadValue tail:(uint32_t*)aTailValue
 {
 	[[model sbcLink]  getQueMinValue:aMinValue maxValue:aMaxValue head:aHeadValue tail:aTailValue];
 	
@@ -987,15 +987,15 @@
     unsigned short sdata;
     unsigned char  cdata;
 	[self endEditing];
-	long value = [[model sbcLink] writeValue];
-	unsigned long address = 0;
+	int32_t value = [[model sbcLink] writeValue];
+	uint32_t address = 0;
     @try {
 		if([model isKindOfClass:[ORVmeAdapter class]]){
-			unsigned long 			startAddress 	= [[model sbcLink] writeAddress];
-			unsigned long				endAddress		= [[model sbcLink] doRange]?startAddress + [[model sbcLink] range]*[addressStepper increment] : startAddress;
+			uint32_t 			startAddress 	= [[model sbcLink] writeAddress];
+			uint32_t				endAddress		= [[model sbcLink] doRange]?startAddress + [[model sbcLink] range]*[addressStepper increment] : startAddress;
 			unsigned short 	addressModifier = [[model sbcLink] addressModifier];
 			unsigned short 	addressSpace	= 1;  //[[model sbcLink] rwIOSpaceValue];
-			unsigned long  	ldata			= [[model sbcLink] writeValue];
+			uint32_t  	ldata			= [[model sbcLink] writeValue];
 			
 			address = startAddress;
 			if([[model sbcLink] doRange] && [[model sbcLink] range]==0){
@@ -1025,7 +1025,7 @@
 						ldata = sdata;
 						break;
 						
-					case 2: //long
+					case 2: //int32_t
 						[[model sbcLink] writeLongBlock:&ldata
 											  atAddress:address
 											 numToWrite:1
@@ -1056,15 +1056,15 @@
 
 - (IBAction) readAction:(id)sender
 {
-    unsigned long ldata;
+    uint32_t ldata;
     unsigned short sdata;
     unsigned char  cdata;
 	[self endEditing];
-	unsigned long address = 0;
+	uint32_t address = 0;
 	@try {
 		if([model isKindOfClass:[ORVmeAdapter class]]){
-			unsigned long 	startAddress 	= [[model sbcLink] writeAddress];
-			unsigned long	endAddress		= [[model sbcLink] doRange]?startAddress + [[model sbcLink] range]*[addressStepper increment] : startAddress;
+			uint32_t 	startAddress 	= [[model sbcLink] writeAddress];
+			uint32_t	endAddress		= [[model sbcLink] doRange]?startAddress + [[model sbcLink] range]*[addressStepper increment] : startAddress;
 			unsigned short 	addressModifier = [[model sbcLink] addressModifier];
 			unsigned short 	addressSpace	= 1;  //[model rwIOSpaceValue];
 			
@@ -1095,7 +1095,7 @@
 						
 						break;
 						
-					case 2: //long
+					case 2: //int32_t
 						[[model sbcLink] readLongBlock:&ldata
 											 atAddress:address
 											 numToRead:1
@@ -1109,7 +1109,7 @@
 			}while(address<endAddress);
 		}
 		else {
-			long result;
+			int32_t result;
 			address = [[model sbcLink] writeAddress];
 			[[model sbcLink] readLongBlock:&result
 								 atAddress:address
@@ -1192,7 +1192,7 @@
 
 - (IBAction) getSbcCodeVersion:(id)sender
 {
-	long theVersion = [model getSBCCodeVersion];
+	int32_t theVersion = [model getSBCCodeVersion];
 	[[model sbcLink] setSbcCodeVersion:theVersion];
 }
 
@@ -1219,7 +1219,7 @@
 	else		 return 1000;
 }
    
-- (void) plotter:(id)aPlotter index:(unsigned long)index x:(double*)xValue y:(double*)yValue
+- (void) plotter:(id)aPlotter index:(uint32_t)index x:(double*)xValue y:(double*)yValue
 {
 	int tag = (int)[aPlotter tag];
     if(tag == 0){

@@ -28,11 +28,11 @@
 // Header information from T220D oscilloscope.
 struct T220Header
 {
-    long			nrPts;   			// Number of points in waveform
+    int32_t			nrPts;   			// Number of points in waveform
     float			yOff;				// Vertical position of the waveform.
     float			yMult;				// Vertical scale factor in yUnit/data point value.
     float			xIncr;				// Time sampling interval.
-    long			ptOff;				// Trigger point in waveform
+    int32_t			ptOff;				// Trigger point in waveform
     char			xUnit[ 20 ];		// Time units.
     char			yUnit[ 20 ];		// Vertical units.
 };
@@ -44,11 +44,11 @@ struct T220Header
     NSMutableData*		mGtid;						// Pointer to gtid data.
     NSMutableData*		mData;						// Pointer to actual waveform data
     NSMutableData*		mTime;						// Pointer to time packet.
-    long				mMaxSizeWaveform;			// Size of mData
-    long				mActualSizeWaveform;		// Actual size of waveform stored in mData.
+    int32_t				mMaxSizeWaveform;			// Size of mData
+    int32_t				mActualSizeWaveform;		// Actual size of waveform stored in mData.
     short				mAddress;					// GPIB Primary address.
     short				mChannel;					// The channel number.
-    unsigned long long  timeInSecs;
+    uint64_t  timeInSecs;
 }
 
 #pragma mark ***Initialization
@@ -56,18 +56,18 @@ struct T220Header
 - (void)			dealloc;
 
 #pragma mark ***Accessors
-- (unsigned long long) timeInSecs;
-- (void) setTimeInSecs:(unsigned long long)aTime;
-- (long) 			actualWaveformSize;
-- (void)			setActualWaveformSize: (unsigned long) aWaveformSize;
-- (long)			maxWaveformSize;
+- (uint64_t) timeInSecs;
+- (void) setTimeInSecs:(uint64_t)aTime;
+- (int32_t) 			actualWaveformSize;
+- (void)			setActualWaveformSize: (uint32_t) aWaveformSize;
+- (int32_t)			maxWaveformSize;
 - (NSMutableData*)	rawData;
 - (NSMutableData*)	timeData;
 - (char*)			rawHeader;
 
 #pragma mark ***Data Routines
 //- (void)			clearAcquisition;
-- (void)			setGtid: (unsigned long) aGtid;
+- (void)			setGtid: (uint32_t) aGtid;
 - (char*)			createDataStorage;
 - (void) 			setDataPacketData: (ORDataPacket*) aDataPacket timeData: (NSData*) aTimeData
                                                                 includeGTID: (BOOL) aFlag;

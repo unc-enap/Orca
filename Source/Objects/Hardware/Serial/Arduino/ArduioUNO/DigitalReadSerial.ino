@@ -164,8 +164,8 @@ void scanInputsForChange()
 
 boolean         lastPinState[14];
 boolean         pinState[14];
-unsigned long   lastDebounceTime[14];
-unsigned long   debounceDelay = 50;
+uint32_t   lastDebounceTime[14];
+uint32_t   debounceDelay = 50;
 
 boolean debouncedDigitalRead(int aPin)
 {

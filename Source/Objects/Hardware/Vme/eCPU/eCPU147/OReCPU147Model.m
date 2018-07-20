@@ -178,7 +178,7 @@ const struct {
 	
 }
 
-- (unsigned long)codeLength
+- (uint32_t)codeLength
 {
 	return codeLength;
 }
@@ -348,7 +348,7 @@ const struct {
 		int i;
 		for(i=0;i<6;i++){
 			//try to stop the eCPU, try multiple times if needed until the heartbeat stops.
-			unsigned long heartBeat;
+			uint32_t heartBeat;
 			unsigned short ival = STOP_FLAG;
 			[[self adapter] writeWordBlock:&ival
                                  atAddress:USER_STOP_CODE_FLAG
@@ -357,7 +357,7 @@ const struct {
                              usingAddSpace:kAccessRemoteRAM];
             
 			[NSThread sleepUntilDate:[[NSDate date] dateByAddingTimeInterval:.1]];
-			[[self adapter] readLongBlock:(unsigned long*)&communicationBlock
+			[[self adapter] readLongBlock:(uint32_t*)&communicationBlock
                                 atAddress:MAC_DPM(COMM_ADDRESS_START)
                                 numToRead:sizeof(eCPU_MAC_DualPortComm)/4
                                withAddMod:0x09
@@ -367,7 +367,7 @@ const struct {
 			
 			[NSThread sleepUntilDate:[[NSDate date] dateByAddingTimeInterval:.1]];
 			
-			[[self adapter] readLongBlock:(unsigned long*)&communicationBlock
+			[[self adapter] readLongBlock:(uint32_t*)&communicationBlock
                                 atAddress:MAC_DPM(COMM_ADDRESS_START)
                                 numToRead:sizeof(eCPU_MAC_DualPortComm)/4
                                withAddMod:0x09
@@ -440,8 +440,8 @@ const struct {
 	@try {
 		
 		NSData *theCodeData = [self codeAsData];
-		codeLength = *((unsigned long*)[theCodeData bytes] + 0x100/4);
-		unsigned char* code_start_ptr = (unsigned char*)[theCodeData bytes] + 0x100 + sizeof(unsigned long);
+		codeLength = *((uint32_t*)[theCodeData bytes] + 0x100/4);
+		unsigned char* code_start_ptr = (unsigned char*)[theCodeData bytes] + 0x100 + sizeof(uint32_t);
         
 		// stop any user code currently running
 		unsigned short ival = STOP_FLAG;
@@ -468,7 +468,7 @@ const struct {
 		
 		NSLog(@"Downloading <%@> code Length: %d into eCPU.\n",[self fileName],codeLength);
         
-		unsigned long i;
+		uint32_t i;
 		for(i=0;i<codeLength;i++){
 			[[self adapter] writeByteBlock:(unsigned char*)(code_start_ptr+i)
                                  atAddress:(USER_CODE_ADDRESS+i)
@@ -477,7 +477,7 @@ const struct {
                              usingAddSpace:kAccessRemoteRAM];
 		}
 		NSLog(@"checking code\n");
-		unsigned long errors = 0;
+		uint32_t errors = 0;
 		for(i=0;i<codeLength;i++){
 			unsigned char val;
 			[[self adapter] readByteBlock:&val
@@ -518,7 +518,7 @@ const struct {
 	return theCodeAsData;
 }
 
-- (NSData*) dumpCodeFrom:(unsigned long)startAddress length:(unsigned long)numBytes
+- (NSData*) dumpCodeFrom:(uint32_t)startAddress length:(uint32_t)numBytes
 {
     int i;
     NSMutableData* buffer = [NSMutableData dataWithCapacity:4096];
@@ -537,11 +537,11 @@ const struct {
 - (void) verifyCode
 {
 	NSData *theCodeData = [self codeAsData];
-	codeLength = *((unsigned long*)[theCodeData bytes] + 0x100/4);
-	unsigned char* code_start_ptr = (unsigned char*)[theCodeData bytes] + 0x100 + sizeof(unsigned long);
+	codeLength = *((uint32_t*)[theCodeData bytes] + 0x100/4);
+	unsigned char* code_start_ptr = (unsigned char*)[theCodeData bytes] + 0x100 + sizeof(uint32_t);
     
 	NSLog(@"checking code\n");
-	unsigned long errors = 0;
+	uint32_t errors = 0;
 	short i;
 	for(i=0;i<codeLength;i++){
 		unsigned char val;
@@ -609,15 +609,15 @@ const struct {
 	memset(&communicationBlock,0,sizeof(eCPU_MAC_DualPortComm));
 	memset(&dualPortControl,0,sizeof(eCPUDualPortControl));
 	
-    [[self adapter] writeLongBlock:(unsigned long*)&communicationBlock
+    [[self adapter] writeLongBlock:(uint32_t*)&communicationBlock
                          atAddress:MAC_DPM(COMM_ADDRESS_START)
                         numToWrite:sizeof(eCPU_MAC_DualPortComm)/4
                         withAddMod:0x09
                      usingAddSpace:kAccessRemoteDRAM];
 	
-	[[self adapter] writeLongBlock:(unsigned long*)&dualPortControl
+	[[self adapter] writeLongBlock:(uint32_t*)&dualPortControl
                          atAddress:MAC_DPM(CONTROL_ADDRESS_START)
-                        numToWrite:sizeof(eCPUDualPortControl)/sizeof(long)
+                        numToWrite:sizeof(eCPUDualPortControl)/sizeof(int32_t)
                         withAddMod:0x09
                      usingAddSpace:kAccessRemoteDRAM];
 	
@@ -721,9 +721,9 @@ const struct {
 	}
     
     
-	[[self adapter] writeLongBlock:(unsigned long*)&configStruct
+	[[self adapter] writeLongBlock:(uint32_t*)&configStruct
                          atAddress:MAC_DPM(CHW_CONFIG_START)
-                        numToWrite:sizeof(VME_crate_config)/sizeof(long)
+                        numToWrite:sizeof(VME_crate_config)/sizeof(int32_t)
                         withAddMod:0x09
                      usingAddSpace:kAccessRemoteDRAM];
 }
@@ -762,7 +762,7 @@ static NSString *OReCPUReadOutGroup1		= @"OReCPU ReadOut Group 1";
 	[[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(update) object:nil];
     
 	@try {
-		[[self adapter] readLongBlock:(unsigned long*)&communicationBlock
+		[[self adapter] readLongBlock:(uint32_t*)&communicationBlock
                             atAddress:MAC_DPM(COMM_ADDRESS_START)
                             numToRead:sizeof(eCPU_MAC_DualPortComm)/4
                            withAddMod:0x09
@@ -823,9 +823,9 @@ static NSString *OReCPUReadOutGroup1		= @"OReCPU ReadOut Group 1";
 
 - (void) readDualPortControl
 {
-	[[self adapter] readLongBlock:(unsigned long*)&dualPortControl
+	[[self adapter] readLongBlock:(uint32_t*)&dualPortControl
                         atAddress:MAC_DPM(CONTROL_ADDRESS_START)
-                        numToRead:sizeof(eCPUDualPortControl)/sizeof(long)
+                        numToRead:sizeof(eCPUDualPortControl)/sizeof(int32_t)
                        withAddMod:0x09
                     usingAddSpace:kAccessRemoteDRAM];
 	
@@ -833,16 +833,16 @@ static NSString *OReCPUReadOutGroup1		= @"OReCPU ReadOut Group 1";
 
 - (void) writeDualPortControl
 {
-	[[self adapter] writeLongBlock:(unsigned long*)&dualPortControl
+	[[self adapter] writeLongBlock:(uint32_t*)&dualPortControl
                          atAddress:MAC_DPM(CONTROL_ADDRESS_START)
-                        numToWrite:sizeof(eCPUDualPortControl)/sizeof(long)
+                        numToWrite:sizeof(eCPUDualPortControl)/sizeof(int32_t)
                         withAddMod:0x09
                      usingAddSpace:kAccessRemoteDRAM];
 	
 }
 
 
-- (void) getQueMinValue:(unsigned long*)aMinValue maxValue:(unsigned long*)aMaxValue head:(unsigned long*)aHeadValue tail:(unsigned long*)aTailValue
+- (void) getQueMinValue:(uint32_t*)aMinValue maxValue:(uint32_t*)aMaxValue head:(uint32_t*)aHeadValue tail:(uint32_t*)aTailValue
 {
 	unsigned char offsetToFirstCBWord = sizeof(SCBHeader)-sizeof(tCBWord);
 	*aMinValue = MAC_DPM(DATA_CIRC_BUF_START)+offsetToFirstCBWord;
@@ -898,12 +898,12 @@ static NSString *OReCPUReadOutGroup1		= @"OReCPU ReadOut Group 1";
 		case 0: if(communicationBlock.msg_parm0[an_Index]!=0){
             [aString appendFormat:@" [%@]",[[[NSString alloc] initWithBytes:&communicationBlock.msg_parm0[an_Index] length:4 encoding:NSASCIIStringEncoding]autorelease]];
         }
-		else [aString appendFormat:@" [%lu]",communicationBlock.msg_parm0[an_Index]];
+		else [aString appendFormat:@" [%u]",communicationBlock.msg_parm0[an_Index]];
             break;
-		case 1: [aString appendFormat:@" [%lu]",communicationBlock.msg_parm1[an_Index]];break;
-		case 2: [aString appendFormat:@" [%lu]",communicationBlock.msg_parm2[an_Index]];break;
-		case 3: [aString appendFormat:@" [%lu]",communicationBlock.msg_parm3[an_Index]];break;
-		case 4: [aString appendFormat:@" [0x%lx]",communicationBlock.msg_parm4[an_Index]];break;
+		case 1: [aString appendFormat:@" [%u]",communicationBlock.msg_parm1[an_Index]];break;
+		case 2: [aString appendFormat:@" [%u]",communicationBlock.msg_parm2[an_Index]];break;
+		case 3: [aString appendFormat:@" [%u]",communicationBlock.msg_parm3[an_Index]];break;
+		case 4: [aString appendFormat:@" [0x%x]",communicationBlock.msg_parm4[an_Index]];break;
 		default: return;
 	}
 }
@@ -914,12 +914,12 @@ static NSString *OReCPUReadOutGroup1		= @"OReCPU ReadOut Group 1";
 		case 0: if(communicationBlock.er_parm0[an_Index]!=0){
             [aString appendFormat:@" [%@]",[[[NSString alloc] initWithBytes:&communicationBlock.er_parm0[an_Index] length:4 encoding:NSASCIIStringEncoding]autorelease]];
         }
-		else [aString appendFormat:@" [%lu]",communicationBlock.er_parm0[an_Index]];
+		else [aString appendFormat:@" [%u]",communicationBlock.er_parm0[an_Index]];
             break;
-		case 1: [aString appendFormat:@" [%lu]",communicationBlock.er_parm1[an_Index]];break;
-		case 2: [aString appendFormat:@" [%lu]",communicationBlock.er_parm2[an_Index]];break;
-		case 3: [aString appendFormat:@" [%lu]",communicationBlock.er_parm3[an_Index]];break;
-		case 4: [aString appendFormat:@" [0x%lx]",communicationBlock.er_parm4[an_Index]];break;
+		case 1: [aString appendFormat:@" [%u]",communicationBlock.er_parm1[an_Index]];break;
+		case 2: [aString appendFormat:@" [%u]",communicationBlock.er_parm2[an_Index]];break;
+		case 3: [aString appendFormat:@" [%u]",communicationBlock.er_parm3[an_Index]];break;
+		case 4: [aString appendFormat:@" [0x%x]",communicationBlock.er_parm4[an_Index]];break;
 		default: return;
 	}
 }

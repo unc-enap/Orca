@@ -117,14 +117,14 @@ static enum {
 {
     @private
 	//values that can be loaded to hw
-	unsigned long   gtIdValue;
-	unsigned long   lowerTimeValue;
-	unsigned long   upperTimeValue;
-	unsigned long   testRegisterValue;
-    unsigned long   clockDataId;
-    unsigned long   gtid1DataId;
-    unsigned long   gtid2DataId;
-    unsigned long   liveTimeDataId;
+	uint32_t   gtIdValue;
+	uint32_t   lowerTimeValue;
+	uint32_t   upperTimeValue;
+	uint32_t   testRegisterValue;
+    uint32_t   clockDataId;
+    uint32_t   gtid1DataId;
+    uint32_t   gtid2DataId;
+    uint32_t   liveTimeDataId;
 		
 	//hw initialization conditions
 	BOOL		trigger2EventInputEnable;
@@ -135,14 +135,14 @@ static enum {
 	ORReadOutList*  trigger2Group;	
 	NSArray*	dataTakers1;       //cache of data takers.
 	NSArray*	dataTakers2;       //cache of data takers.
-	unsigned long   gtErrorCount;
+	uint32_t   gtErrorCount;
 	int				mSamPrescale;
 	
 	//used privately in the data taking process
-	unsigned long eventPlaceHolder1;
-	unsigned long eventPlaceHolder2;
-	unsigned long timePlaceHolder1;
-	unsigned long timePlaceHolder2;
+	uint32_t eventPlaceHolder1;
+	uint32_t eventPlaceHolder2;
+	uint32_t timePlaceHolder1;
+	uint32_t timePlaceHolder2;
 	ORTimer*	timer;
 	
 	//run conditions
@@ -167,17 +167,17 @@ static enum {
 
     BOOL        isRunning;
     BOOL        liveTimeCalcRunning;
-    long long   total_live;
-    long long   trig1_live;
-    long long   trig2_live;
-    long long   scope_live;
+    int64_t   total_live;
+    int64_t   trig1_live;
+    int64_t   trig2_live;
+    int64_t   scope_live;
 
-    long long   last_total_live;
-    long long   last_trig1_live;
-    long long   last_trig2_live;
-    long long   last_scope_live;
-	long		noDataCount;  
-	long		totalDataCount;
+    int64_t   last_total_live;
+    int64_t   last_trig1_live;
+    int64_t   last_trig2_live;
+    int64_t   last_scope_live;
+	int32_t		noDataCount;  
+	int32_t		totalDataCount;
     BOOL		restartClkAtRunStart;
 }
 
@@ -187,25 +187,25 @@ static enum {
 - (BOOL) isRunning;
 - (int) mSamPrescale;
 - (void) setMSamPrescale:(int)aValue;
-- (unsigned long)testRegisterValue;
-- (void)setTestRegisterValue:(unsigned long)aTestRegisterValue;
-- (unsigned long) gtIdValue;
-- (void) setGtIdValue:(unsigned long)newGtidValue;
-- (unsigned long)lowerTimeValue;
-- (void)setLowerTimeValue:(unsigned long)aLowerTimeValue;
-- (unsigned long)upperTimeValue;
-- (void)setUpperTimeValue:(unsigned long)anUpperTimeValue;
-- (unsigned long) clockDataId;
-- (void) setClockDataId: (unsigned long) ClockDataId;
-- (unsigned long) gtid1DataId;
-- (void) setGtid1DataId: (unsigned long) GtidDataId;
-- (unsigned long) gtid2DataId;
-- (void) setGtid2DataId: (unsigned long) GtidDataId;
-- (unsigned long) liveTimeDataId;
-- (void) setLiveTimeDataId: (unsigned long) aLiveTimeDataId;
+- (uint32_t)testRegisterValue;
+- (void)setTestRegisterValue:(uint32_t)aTestRegisterValue;
+- (uint32_t) gtIdValue;
+- (void) setGtIdValue:(uint32_t)newGtidValue;
+- (uint32_t)lowerTimeValue;
+- (void)setLowerTimeValue:(uint32_t)aLowerTimeValue;
+- (uint32_t)upperTimeValue;
+- (void)setUpperTimeValue:(uint32_t)anUpperTimeValue;
+- (uint32_t) clockDataId;
+- (void) setClockDataId: (uint32_t) ClockDataId;
+- (uint32_t) gtid1DataId;
+- (void) setGtid1DataId: (uint32_t) GtidDataId;
+- (uint32_t) gtid2DataId;
+- (void) setGtid2DataId: (uint32_t) GtidDataId;
+- (uint32_t) liveTimeDataId;
+- (void) setLiveTimeDataId: (uint32_t) aLiveTimeDataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherObj;
-- (unsigned long) optionMask;
+- (uint32_t) optionMask;
 - (BOOL) liveTimeCalcRunning;
 - (void) setLiveTimeCalcRunning: (BOOL) flag;
 
@@ -218,8 +218,8 @@ static enum {
 - (BOOL) shipEvt2Clk;
 - (void) setShipEvt1Clk:(BOOL)state;
 - (void) setShipEvt2Clk:(BOOL)state;
-- (unsigned long) gtErrorCount;
-- (void) setGtErrorCount:(unsigned long)count;
+- (uint32_t) gtErrorCount;
+- (void) setGtErrorCount:(uint32_t)count;
 - (BOOL) trigger2EventInputEnable;
 - (void) setTrigger2EventInputEnable:(BOOL)state;
 - (BOOL) trigger2BusyEnabled;
@@ -247,18 +247,18 @@ static enum {
 - (void) setTrigger2Name: (NSString *) aTrigger2Name;
 
 #pragma mark ***HW Access Read commands
-- (unsigned long) 	readBoardID;
-- (unsigned long) 	readStatus;  
-- (unsigned long) 	readTrigger1GTID; 
-- (unsigned long) 	readTrigger2GTID; 
-- (unsigned long)   readLowerTrigger2Time;
-- (unsigned long)   readUpperTrigger2Time;
-- (unsigned long)   readLowerTrigger1Time;
-- (unsigned long)   readUpperTrigger1Time;
-- (unsigned long)   readTestRegister;
-- (unsigned long)   readSoftGTIDRegister;
+- (uint32_t) 	readBoardID;
+- (uint32_t) 	readStatus;  
+- (uint32_t) 	readTrigger1GTID; 
+- (uint32_t) 	readTrigger2GTID; 
+- (uint32_t)   readLowerTrigger2Time;
+- (uint32_t)   readUpperTrigger2Time;
+- (uint32_t)   readLowerTrigger1Time;
+- (uint32_t)   readUpperTrigger1Time;
+- (uint32_t)   readTestRegister;
+- (uint32_t)   readSoftGTIDRegister;
 - (void)            readLiveTimeCounters;
-- (unsigned long)   readAuxGTIDReg;
+- (uint32_t)   readAuxGTIDReg;
 
 #pragma mark ***HW Access Write commands
 - (void) reset;  
@@ -281,10 +281,10 @@ static enum {
 - (void) syncClear24;
 - (void) enableGTOrEnable:(unsigned short)aValue;
 - (void) clearMSAM;
-- (void) loadTestRegister:(unsigned long)aValue;
-- (void) loadGTID:(unsigned long)  aVal;
-- (void) loadLowerTimerCounter:(unsigned long)  aVal;
-- (void) loadUpperTimerCounter:(unsigned long)  aVal;
+- (void) loadTestRegister:(uint32_t)aValue;
+- (void) loadGTID:(uint32_t)  aVal;
+- (void) loadLowerTimerCounter:(uint32_t)  aVal;
+- (void) loadUpperTimerCounter:(uint32_t)  aVal;
 - (void) enableLiveTime:(BOOL)enable;
 - (void) resetLiveTime;
 - (void) latchLiveTime;
@@ -292,8 +292,8 @@ static enum {
 - (void) shipLiveTimeRecords:(short)start;
 - (void) shipLiveTimeMidRun;
 
-- (unsigned long) getGtId1;
-- (unsigned long) getGtId2;
+- (uint32_t) getGtId1;
+- (uint32_t) getGtId2;
 
 - (void) initBoard;
 - (void) initBoardPart1;
@@ -327,7 +327,7 @@ static enum {
 - (void) loadReadOutList:(NSFileHandle*)aFile;
 
 #pragma mark ¥¥¥GTID Generator
-- (unsigned long)  requestGTID;
+- (uint32_t)  requestGTID;
 
 #pragma mark ¥¥¥Archival
 - (id)   initWithCoder:(NSCoder*)decoder;

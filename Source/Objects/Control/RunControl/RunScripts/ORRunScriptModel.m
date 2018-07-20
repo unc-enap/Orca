@@ -89,7 +89,7 @@ NSString* ORRunScriptSlotChangedNotification = @"ORRunScriptSlotChangedNotificat
 }
 
 
-- (void) setUniqueIdNumber:(unsigned long)anIdNumber
+- (void) setUniqueIdNumber:(uint32_t)anIdNumber
 {
 	[super setUniqueIdNumber:anIdNumber];
 	[self setUpImage];

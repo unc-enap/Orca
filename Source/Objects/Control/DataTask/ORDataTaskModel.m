@@ -194,11 +194,11 @@ NSString* ORDataTaskModelTimerEnableChanged			= @"ORDataTaskModelTimerEnableChan
     [readOutList removeOrcaObject:anObject];
 }
 
-- (unsigned long)cycleRate
+- (uint32_t)cycleRate
 {
 	return cycleRate;
 }
-- (void) setCycleRate:(unsigned long)aRate
+- (void) setCycleRate:(uint32_t)aRate
 {
 	cycleRate = cycleCount;
 	cycleCount = 0;
@@ -210,7 +210,7 @@ NSString* ORDataTaskModelTimerEnableChanged			= @"ORDataTaskModelTimerEnableChan
 // ===========================================================
 // - queueCount:
 // ===========================================================
-- (unsigned long)queueCount
+- (uint32_t)queueCount
 {
     return queueCount;
 }
@@ -218,7 +218,7 @@ NSString* ORDataTaskModelTimerEnableChanged			= @"ORDataTaskModelTimerEnableChan
 // ===========================================================
 // - setQueueCount:
 // ===========================================================
-- (void)setQueueCount:(unsigned long)aQueueCount
+- (void)setQueueCount:(uint32_t)aQueueCount
 {
     queueCount = aQueueCount;
     
@@ -228,7 +228,7 @@ NSString* ORDataTaskModelTimerEnableChanged			= @"ORDataTaskModelTimerEnableChan
     
 }
 
-- (unsigned long) queueMaxSize
+- (uint32_t) queueMaxSize
 {
     return kMaxQueueSize;
 }
@@ -244,19 +244,19 @@ NSString* ORDataTaskModelTimerEnableChanged			= @"ORDataTaskModelTimerEnableChan
     lastFile = [aLastFile copy];
 }
 
-- (unsigned long) dataTimeHist:(int)index
+- (uint32_t) dataTimeHist:(int)index
 {
     return dataTimeHist[index];
 }
-- (unsigned long) processingTimeHist:(int)index
+- (uint32_t) processingTimeHist:(int)index
 {
     return processingTimeHist[index];
 }
 
 - (void) clearTimeHistogram
 {
-    memset(processingTimeHist,0,kTimeHistoSize*sizeof(unsigned long));
-    memset(dataTimeHist,0,kTimeHistoSize*sizeof(unsigned long));
+    memset(processingTimeHist,0,kTimeHistoSize*sizeof(uint32_t));
+    memset(dataTimeHist,0,kTimeHistoSize*sizeof(uint32_t));
 }
 
 - (BOOL) timerEnabled
@@ -432,7 +432,7 @@ NSString* ORDataTaskModelTimerEnableChanged			= @"ORDataTaskModelTimerEnableChan
 	
 	if(enableTimer){
 		[timerLock lock];	//start critical section
-		long delta = [dataTimer microseconds];
+		int32_t delta = [dataTimer microseconds];
 		if(timeScaler==0)timeScaler=1;
 		if((delta/timeScaler) < kTimeHistoSize)dataTimeHist[(int)delta/timeScaler]++;
 		else dataTimeHist[kTimeHistoSize-1]++;
@@ -681,7 +681,7 @@ static NSString *ORDataTaskTimeScaler		= @"ORDataTaskTimeScaler";
 	BOOL singleProcessor = [[ORGlobal sharedGlobal]cpuCount] == 1;
     do {
 		NSAutoreleasePool *pool = [[NSAutoreleasePool allocWithZone:nil] init];
- 		unsigned long qc = [transferQueue count];
+ 		uint32_t qc = [transferQueue count];
 		if(qc){
 			queueCount = qc;
 			

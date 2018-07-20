@@ -20,14 +20,14 @@
 
 #define		kMaxLongTicks	100
 
-long roundToLong(double x);
+int32_t roundToLong(double x);
 
 @interface ORAxis : NSView <NSCoding>
 {
 	IBOutlet NSView*	    viewToScale;
     BOOL                    ownViewToScale;
 	int						gridCount;
-	float					gridArray[kMaxLongTicks];	// array for storing long tick locations
+	float					gridArray[kMaxLongTicks];	// array for storing int32_t tick locations
 	int						lowOffset;					// pixel position of scale start
 	int						highOffset;					// pixel position of scale end
 	NSMutableDictionary*    attributes;
@@ -159,10 +159,10 @@ long roundToLong(double x);
 - (BOOL) dragInProgress;
 - (void)  rangingDonePostChange;				// end drag procedure
 
-- (long) axisMinLimit;
-- (void) setAxisMinLimit:(long)aValue;
-- (long) axisMaxLimit;
-- (void) setAxisMaxLimit:(long)aValue;
+- (int32_t) axisMinLimit;
+- (void) setAxisMinLimit:(int32_t)aValue;
+- (int32_t) axisMaxLimit;
+- (void) setAxisMaxLimit:(int32_t)aValue;
 - (NSString*) markerLabel:(NSNumber*)markerNumber;
 
 - (IBAction) setLogScale:(id)sender;

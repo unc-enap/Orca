@@ -49,19 +49,19 @@
 - (unsigned short) camacLongNAF:(unsigned short) n 
 								a:(unsigned short) a 
 								f:(unsigned short) f
-							 data:(unsigned long*) data;
+							 data:(uint32_t*) data;
 
 - (unsigned short) camacShortNAFBlock:(unsigned short)n 
 									a:(unsigned short)a 
 									f:(unsigned short)f
 								 data:(unsigned short*) data 
-							   length:(unsigned long) numWords;
+							   length:(uint32_t) numWords;
 
 - (unsigned short) camacLongNAFBlock:(unsigned short)n 
 									a:(unsigned short)a 
 									f:(unsigned short)f
-								 data:(unsigned long*) data 
-							   length:(unsigned long) numWords;
+								 data:(uint32_t*) data 
+							   length:(uint32_t) numWords;
 
 
 @end

@@ -115,8 +115,8 @@ struct {
 
 #pragma mark •••Accessors
 
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -398,7 +398,7 @@ struct {
 {
 	@synchronized(self){
 		if(enabledMask & (0x1L<<aChan)){
-			unsigned long theRawValue;
+			uint32_t theRawValue;
 			[[self adapter] camacLongNAF:[self stationNumber] a:aChan f:0 data:&theRawValue];
 			float theValue = [self convertRawAdcToVolts:theRawValue  chan:aChan];
 			[self setAdcValue:aChan withValue:theValue];
@@ -544,7 +544,7 @@ struct {
 
 - (NSString*) processingTitle
 {
-    return [NSString stringWithFormat:@"%d,%lu,JAM-F",[self crateNumber],[self  stationNumber]];
+    return [NSString stringWithFormat:@"%d,%u,JAM-F",(int)[self crateNumber],(int)[self  stationNumber]];
 }
 
 - (double) convertedValue:(int)channel
@@ -671,7 +671,7 @@ struct {
 -(void) shipValues
 {
 	if([gOrcaGlobals runInProgress]){
-		unsigned long data[32];
+		uint32_t data[32];
 		
 		data[1] = (([self crateNumber]&0x01e)<<21) | (([self stationNumber]& 0x0000001f)<<16);
 		
@@ -693,7 +693,7 @@ struct {
 		
 		if(index>3){
 			[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-																object:[NSData dataWithBytes:data length:index*sizeof(long)]];
+																object:[NSData dataWithBytes:data length:index*sizeof(int32_t)]];
 		}
 	}
 }

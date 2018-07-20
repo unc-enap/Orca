@@ -279,7 +279,7 @@ NSString* ORRaidMonitorLock                     = @"ORRaidMonitorLock";
         [resultDict release];
         resultDict = nil;
         if(!noConnectionAlarm){
-            NSString* alarmName = [NSString stringWithFormat:@"No RAID%ld Status Data",[self uniqueIdNumber]];
+            NSString* alarmName = [NSString stringWithFormat:@"No RAID%d Status Data",[self uniqueIdNumber]];
             noConnectionAlarm = [[ORAlarm alloc] initWithName:alarmName severity:kDataFlowAlarm];
             [noConnectionAlarm setSticky:YES];
             [noConnectionAlarm setHelpString:@"Could not retrieve status from RAID drive."];
@@ -373,7 +373,7 @@ NSString* ORRaidMonitorLock                     = @"ORRaidMonitorLock";
     NSTimeInterval dt = -[[resultDict objectForKey:@"scriptRanNSDate"] timeIntervalSinceNow];
     if(fabs(dt)>60*60){
         if(!scriptNotRunningAlarm){
-            NSString* alarmName = [NSString stringWithFormat:@"RAID%ld Status Script NOT Running",[self uniqueIdNumber]];
+            NSString* alarmName = [NSString stringWithFormat:@"RAID%d Status Script NOT Running",[self uniqueIdNumber]];
             scriptNotRunningAlarm = [[ORAlarm alloc] initWithName:alarmName severity:kDataFlowAlarm];
             [scriptNotRunningAlarm setSticky:YES];
             [scriptNotRunningAlarm setHelpString:@"Check the status script on the RAID system. It has not reported status more than an hour."];
@@ -389,7 +389,7 @@ NSString* ORRaidMonitorLock                     = @"ORRaidMonitorLock";
     float usedPercent = [[homeDisk objectForKey:@"Used_percent"]floatValue];
     if(usedPercent>=90){
         if(!diskFullAlarm){
-            NSString* alarmName = [NSString stringWithFormat:@"RAID%ld > 90%% Used",[self uniqueIdNumber]];
+            NSString* alarmName = [NSString stringWithFormat:@"RAID%d > 90%% Used",[self uniqueIdNumber]];
             diskFullAlarm = [[ORAlarm alloc] initWithName:alarmName severity:kDataFlowAlarm];
             [diskFullAlarm setSticky:YES];
             [diskFullAlarm setHelpString:@"Clear space from the RAID drive."];
@@ -408,7 +408,7 @@ NSString* ORRaidMonitorLock                     = @"ORRaidMonitorLock";
     
     if( (criticalCount>1) || (failedCount>1) || (degradedCount>1)){
         if(!badDiskAlarm){
-            NSString* alarmName = [NSString stringWithFormat:@"RAID%ld Disk Problems",[self uniqueIdNumber]];
+            NSString* alarmName = [NSString stringWithFormat:@"RAID%d Disk Problems",[self uniqueIdNumber]];
             badDiskAlarm = [[ORAlarm alloc] initWithName:alarmName severity:kDataFlowAlarm];
             [badDiskAlarm setSticky:YES];
             [badDiskAlarm setHelpString:@"The RAID system has one or more degraded, critical, or failed drives. Replace them with a spare."];

@@ -28,16 +28,16 @@
 {
 	@protected
         id	controller; //use to cache the controller for abit more speed. use with care!
-        unsigned long	exceptionCount;
-		unsigned long   baseAddress;
+        uint32_t	exceptionCount;
+		uint32_t   baseAddress;
 }
 - (id)              adapter;
-- (unsigned long)   exceptionCount;
+- (uint32_t)   exceptionCount;
 - (void)			incExceptionCount;
 - (void)			clearExceptionCount;
 - (void)            checkCratePower;
-- (void)			setBaseAddress:(unsigned long) address;
-- (unsigned long)	baseAddress;
+- (void)			setBaseAddress:(uint32_t) address;
+- (uint32_t)	baseAddress;
 
 @end
 

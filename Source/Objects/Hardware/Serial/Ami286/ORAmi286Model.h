@@ -32,7 +32,7 @@
     NSString*       portName;
     BOOL            portWasOpen;
     ORSerialPort*   serialPort;
-    unsigned long	dataId;
+    uint32_t	dataId;
     NSString*		lastRequest;
     NSMutableArray* cmdQueue;
     int				pollTime;
@@ -46,7 +46,7 @@
     float		    lowAlarmLevel[4];
     float		    hiFillPoint[4];
     float		    lowFillPoint[4];
-    unsigned long	timeMeasured[4];
+    uint32_t	timeMeasured[4];
     int				alarmStatus[4];
     NSDate*         lastChange[4];
     NSTimer*		expiredTimer[4];
@@ -61,7 +61,7 @@
     NSLock*			eMailLock;
     BOOL			sendOnValveChange;
     BOOL			sendOnExpired;
-    long			expiredTime;
+    int32_t			expiredTime;
     BOOL			sendOnAlarm;
     BOOL			ignoreSend;
     BOOL			sendIsScheduled;
@@ -80,8 +80,8 @@
 #pragma mark •••Accessors
 - (BOOL) sendOnAlarm;
 - (void) setSendOnAlarm:(BOOL)aSendOnAlarm;
-- (long) expiredTime;
-- (void) setExpiredTime:(long)aExpiredTime;
+- (int32_t) expiredTime;
+- (void) setExpiredTime:(int32_t)aExpiredTime;
 - (BOOL) sendOnExpired;
 - (void) setSendOnExpired:(BOOL)aSendOnExpired;
 - (BOOL) sendOnValveChange;
@@ -109,7 +109,7 @@
 - (NSString*) lastRequest;
 - (void) setLastRequest:(NSString*)aRequest;
 - (void) openPort:(BOOL)state;
-- (unsigned long) timeMeasured:(int)index;
+- (uint32_t) timeMeasured:(int)index;
 - (void) setLevel:(int)index value:(float)aValue;
 - (float) level:(int)index;
 - (void) setFillStatus:(int)index value:(int)aValue;
@@ -137,8 +137,8 @@
 #pragma mark •••Data Records
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (NSDictionary*) dataRecordDescription;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherAmi286;
 

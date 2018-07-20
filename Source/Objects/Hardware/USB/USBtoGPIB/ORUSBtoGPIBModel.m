@@ -242,10 +242,10 @@ NSString* ORUSBtoGPIBUSBOutConnection			= @"ORUSBtoGPIBUSBOutConnection";
     }
 }
 
-- (long) writeReadDevice: (short) aPrimaryAddress command: (NSString*) aCommand data: (char*) aData
-               maxLength: (long) aMaxLength
+- (int32_t) writeReadDevice: (short) aPrimaryAddress command: (NSString*) aCommand data: (char*) aData
+               maxLength: (int32_t) aMaxLength
 {
-    long retVal = 0;
+    int32_t retVal = 0;
     @try {
         
         [theHWLock lock];   //-----begin critical section
@@ -287,7 +287,7 @@ NSString* ORUSBtoGPIBUSBOutConnection			= @"ORUSBtoGPIBUSBOutConnection";
     }
 }
 
-- (long) readFromDevice: (short) aPrimaryAddress data: (char*) aData maxLength: (long) aMaxLength
+- (int32_t) readFromDevice: (short) aPrimaryAddress data: (char*) aData maxLength: (int32_t) aMaxLength
 {
 	ssize_t result = 0;
 	if(!fd)return result;
@@ -481,7 +481,7 @@ NSString* ORUSBtoGPIBUSBOutConnection			= @"ORUSBtoGPIBUSBOutConnection";
 			}
 			else {
 				char reply[1024];
-				long n = [self writeReadDevice:gpibAddress command:command data:reply maxLength:1024];
+				int32_t n = [self writeReadDevice:gpibAddress command:command data:reply maxLength:1024];
 				if(n && [[NSString stringWithCString:reply encoding:NSASCIIStringEncoding] rangeOfString:@"No error"].location == NSNotFound){
 					NSLog(@"%s\n",reply);
 				}

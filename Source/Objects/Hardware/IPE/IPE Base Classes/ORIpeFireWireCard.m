@@ -222,7 +222,7 @@ NSString* ORIpePBusSimChanged		= @"ORIpePBusSimChanged";
 	}
 }
 
-- (unsigned long) read:(unsigned long) address
+- (uint32_t) read:(uint32_t) address
 {
 	if([fireWireInterface serviceAlive]) return [fireWireInterface read_raw:address];
 	else {
@@ -236,7 +236,7 @@ NSString* ORIpePBusSimChanged		= @"ORIpePBusSimChanged";
 }
 
 
-- (void) read:(unsigned long long) address data:(unsigned long*)theData size:(UInt32)len;
+- (void) read:(uint64_t) address data:(uint32_t*)theData size:(UInt32)len;
 { 
 	if([fireWireInterface serviceAlive]) {
 	    [fireWireInterface read_raw:address data:theData size:len];
@@ -248,7 +248,7 @@ NSString* ORIpePBusSimChanged		= @"ORIpePBusSimChanged";
 		}
 		else {
 			int i;
-			for (i=0;i<len/sizeof(unsigned long);i++){
+			for (i=0;i<len/sizeof(uint32_t);i++){
 				theData[i] = ((2*i+1) << 16) + (2*i);
 			}
 			//NSLog(@"Simulated data: %08x %08x %08x\n", theData[0], theData[1], theData[2]);
@@ -258,7 +258,7 @@ NSString* ORIpePBusSimChanged		= @"ORIpePBusSimChanged";
 }
 
 
-- (void) write:(unsigned long) address value:(unsigned long) aValue
+- (void) write:(uint32_t) address value:(uint32_t) aValue
 {
 	if([fireWireInterface serviceAlive])[fireWireInterface write_raw:address value:aValue];
 	else if(!pBusSim){
@@ -268,13 +268,13 @@ NSString* ORIpePBusSimChanged		= @"ORIpePBusSimChanged";
 }
 
 
-- (void) writeBitsAtAddress:(unsigned long)address 
-					  value:(unsigned long)dataWord 
-					   mask:(unsigned long)aMask 
+- (void) writeBitsAtAddress:(uint32_t)address 
+					  value:(uint32_t)dataWord 
+					   mask:(uint32_t)aMask 
 					shifted:(int)shiftAmount
 {
 	if([fireWireInterface serviceAlive]){
-		unsigned long buffer = [fireWireInterface read_raw:address];
+		uint32_t buffer = [fireWireInterface read_raw:address];
 		buffer =(buffer & ~(aMask<<shiftAmount) ) | (dataWord << shiftAmount);
 		[fireWireInterface write_raw:address value:buffer];
 	}
@@ -284,11 +284,11 @@ NSString* ORIpePBusSimChanged		= @"ORIpePBusSimChanged";
 	}
 }
 
-- (void) setBitsLowAtAddress:(unsigned long)address 
-						mask:(unsigned long)aMask
+- (void) setBitsLowAtAddress:(uint32_t)address 
+						mask:(uint32_t)aMask
 {
 	if([fireWireInterface serviceAlive]){
-		unsigned long buffer = [fireWireInterface read_raw:address];
+		uint32_t buffer = [fireWireInterface read_raw:address];
 		buffer = (buffer & ~aMask );
 		[fireWireInterface write_raw:address value:buffer];
 	}
@@ -298,11 +298,11 @@ NSString* ORIpePBusSimChanged		= @"ORIpePBusSimChanged";
 	}
 }
 
-- (void) setBitsHighAtAddress:(unsigned long)address 
-						 mask:(unsigned long)aMask
+- (void) setBitsHighAtAddress:(uint32_t)address 
+						 mask:(uint32_t)aMask
 {
 	if([fireWireInterface serviceAlive]){
-		unsigned long buffer = [fireWireInterface read_raw:address];
+		uint32_t buffer = [fireWireInterface read_raw:address];
 		buffer = (buffer | aMask );
 		[fireWireInterface write_raw:address value:buffer];
 	}
@@ -312,12 +312,12 @@ NSString* ORIpePBusSimChanged		= @"ORIpePBusSimChanged";
 	}
 }
 
-- (void) readRegisterBlock:(unsigned long)  anAddress 
-				dataBuffer:(unsigned long*) aDataBuffer
-					length:(unsigned long)  length 
-				 increment:(unsigned long)  incr
-			   numberSlots:(unsigned long)  nSlots 
-			 slotIncrement:(unsigned long)  incrSlots
+- (void) readRegisterBlock:(uint32_t)  anAddress 
+				dataBuffer:(uint32_t*) aDataBuffer
+					length:(uint32_t)  length 
+				 increment:(uint32_t)  incr
+			   numberSlots:(uint32_t)  nSlots 
+			 slotIncrement:(uint32_t)  incrSlots
 {
 	if([fireWireInterface serviceAlive]){
 		int i,j;
@@ -334,10 +334,10 @@ NSString* ORIpePBusSimChanged		= @"ORIpePBusSimChanged";
 	}
 }
 
-- (void) readBlock:(unsigned long)  anAddress 
-		dataBuffer:(unsigned long*) aDataBuffer
-			length:(unsigned long)  length 
-		 increment:(unsigned long)  incr
+- (void) readBlock:(uint32_t)  anAddress 
+		dataBuffer:(uint32_t*) aDataBuffer
+			length:(uint32_t)  length 
+		 increment:(uint32_t)  incr
 {
 	if([fireWireInterface serviceAlive]){
 		int i;
@@ -351,10 +351,10 @@ NSString* ORIpePBusSimChanged		= @"ORIpePBusSimChanged";
 	}
 }
 
-- (void) writeBlock:(unsigned long)  anAddress 
-		 dataBuffer:(unsigned long*) aDataBuffer
-			 length:(unsigned long)  length 
-		  increment:(unsigned long)  incr
+- (void) writeBlock:(uint32_t)  anAddress 
+		 dataBuffer:(uint32_t*) aDataBuffer
+			 length:(uint32_t)  length 
+		  increment:(uint32_t)  incr
 {
 	if([fireWireInterface serviceAlive]){
 		int i;
@@ -369,10 +369,10 @@ NSString* ORIpePBusSimChanged		= @"ORIpePBusSimChanged";
 	
 }
 
-- (void) clearBlock:(unsigned long)  anAddress 
-			pattern:(unsigned long) aPattern
-			 length:(unsigned long)  length 
-		  increment:(unsigned long)  incr
+- (void) clearBlock:(uint32_t)  anAddress 
+			pattern:(uint32_t) aPattern
+			 length:(uint32_t)  length 
+		  increment:(uint32_t)  incr
 {
 	if([fireWireInterface serviceAlive]){
 		int i;

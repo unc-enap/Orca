@@ -62,12 +62,12 @@
     NSString*			portName;
     BOOL				portWasOpen;
     ORSerialPort*		serialPort;
-    unsigned long		dataId;
+    uint32_t		dataId;
     NSData*				lastRequest;
     ORSafeQueue*		cmdQueue;
     NSMutableString*    buffer;
     unsigned short		adc[8];
-    unsigned long		timeMeasured[8];
+    uint32_t		timeMeasured[8];
     ORTimeRate*			timeRates[8];
     NSMutableData*		inComingData;
     int					module;
@@ -83,7 +83,7 @@
     BOOL				logToFile;
     NSString*			logFile;
     NSMutableArray*		logBuffer;
-    unsigned long		readCount;
+    uint32_t		readCount;
     int					gainDisplayType;
     NSString*			lastGainFile;
     BOOL                readOnce;
@@ -150,7 +150,7 @@
 - (void) setLastRequest:(NSData*)aRequest;
 - (void) openPort:(BOOL)state;
 - (unsigned short) adc:(int)index;
-- (unsigned long) timeMeasured:(int)index;
+- (uint32_t) timeMeasured:(int)index;
 - (void) setAdc:(int)index value:(unsigned short)aValue;
 - (float) lcmVoltage;
 - (float) adcVoltage:(int)index;
@@ -166,8 +166,8 @@
 #pragma mark •••Data Records
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (NSDictionary*) dataRecordDescription;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherPac;
 - (void) writeGain;

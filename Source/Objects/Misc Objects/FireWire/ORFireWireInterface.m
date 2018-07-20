@@ -276,18 +276,18 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 }
 
 // bus transactions
-- (void) write_raw:(unsigned long long)address value:(unsigned long *)theData size:(UInt32)len
+- (void) write_raw:(uint64_t)address value:(uint32_t *)theData size:(UInt32)len
 { 
 	FWAddress ioaddr;
 	ioaddr.addressHi = address >> 32;
 	ioaddr.addressLo = address & 0xffffffff;  // ak 16.10.07
-	//NSLog(@"write_raw(addr=%llx, hi=%lx, lo=%lx\n", address, ioaddr.addressHi, ioaddr.addressLo);
+	//NSLog(@"write_raw(addr=%llx, hi=%x, lo=%x\n", address, ioaddr.addressHi, ioaddr.addressLo);
 	
     // Convert to net byte order
 	// ak 16.10.07 
 	int i;
-    unsigned long netData[len];
-    for (i=0; i<len/sizeof(unsigned long); i++)
+    uint32_t netData[len];
+    for (i=0; i<len/sizeof(uint32_t); i++)
 		netData[i] = htonl(theData[i]);
 	
 	[fwLock lock];
@@ -304,13 +304,13 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 	[fwLock unlock];
 }
 
-- (unsigned long) read_raw:(unsigned long long) address;
+- (uint32_t) read_raw:(uint64_t) address;
 { 
-	unsigned long value = 0;
+	uint32_t value = 0;
 	FWAddress ioaddr; 
 	ioaddr.addressHi = address >> 32;
 	ioaddr.addressLo = address & 0xffffffff;  // ak 16.10.07
-	//NSLog(@"read_raw(addr=%llx, hi=%lx, lo=%lx\n", address, ioaddr.addressHi, ioaddr.addressLo);
+	//NSLog(@"read_raw(addr=%llx, hi=%x, lo=%x\n", address, ioaddr.addressHi, ioaddr.addressLo);
 	
 	[fwLock lock];	
 	if(mDevice && serviceAlive && isOpen){
@@ -331,15 +331,15 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 	return value;
 }
 
-- (void) write_raw:(unsigned long long)address value:(unsigned long)aValue
+- (void) write_raw:(uint64_t)address value:(uint32_t)aValue
 { 
 	FWAddress ioaddr;
 	ioaddr.addressHi = address >> 32;
 	ioaddr.addressLo = address & 0xffffffff;  // ak 16.10.07
-	//NSLog(@"read_raw(addr=%llx, hi=%lx, lo=%lx\n", address, ioaddr.addressHi, ioaddr.addressLo);
+	//NSLog(@"read_raw(addr=%llx, hi=%x, lo=%x\n", address, ioaddr.addressHi, ioaddr.addressLo);
 	
     // Convert to net byte order
-    unsigned long netValue;
+    uint32_t netValue;
     netValue = htonl(aValue); // ak 16.10.07
 	
 	[fwLock lock];
@@ -356,12 +356,12 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 	[fwLock unlock];
 }
 
-- (void) read_raw:(unsigned long long) address data:(unsigned long*)theData size:(UInt32)len;
+- (void) read_raw:(uint64_t) address data:(uint32_t*)theData size:(UInt32)len;
 { 
 	FWAddress ioaddr;
 	ioaddr.addressHi = address >> 32;
 	ioaddr.addressLo = address & 0xffffffff;  // ak 16.10.07
-	//NSLog(@"read_raw(addr=%llx, hi=%lx, lo=%lx\n", address, ioaddr.addressHi, ioaddr.addressLo);
+	//NSLog(@"read_raw(addr=%llx, hi=%x, lo=%x\n", address, ioaddr.addressHi, ioaddr.addressLo);
 	
 	[fwLock lock];
 	if(mDevice && serviceAlive && isOpen){
@@ -378,7 +378,7 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
     // Convert network to host byte order
 	// ak 16.10.07 
 	int i;
-    for (i=0; i<len/sizeof(unsigned long); i++)
+    for (i=0; i<len/sizeof(uint32_t); i++)
 		theData[i] = ntohl(theData[i]);
 	
 	
@@ -450,7 +450,7 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 	[fwLock unlock];
 }
 
-- (void) getLocalNodeIDWithGeneration:(unsigned long) checkGeneration
+- (void) getLocalNodeIDWithGeneration:(uint32_t) checkGeneration
 						  localNodeID:(unsigned short*) localNodeID								
 { 
 	[fwLock lock];
@@ -466,7 +466,7 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 	[fwLock unlock];
 }
 
-- (void) getRemoteNodeID:(unsigned long) checkGeneration
+- (void) getRemoteNodeID:(uint32_t) checkGeneration
 			remoteNodeID:(unsigned short*) remoteNodeID								
 { 
 	[fwLock lock];
@@ -481,7 +481,7 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 	[fwLock unlock];
 }
 
-- (void) getSpeedToNode:(unsigned long) checkGeneration
+- (void) getSpeedToNode:(uint32_t) checkGeneration
 				  speed:(IOFWSpeed*) speed	
 { 
 	[fwLock lock];
@@ -497,8 +497,8 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 	[fwLock unlock];
 }
 
-- (void) getSpeedBetweenNodes:(unsigned long) checkGeneration
-					srcNodeId:(unsigned long) srcNodeID
+- (void) getSpeedBetweenNodes:(uint32_t) checkGeneration
+					srcNodeId:(uint32_t) srcNodeID
 				   destNodeID:(unsigned short) destNodeID
 						speed:(IOFWSpeed*) speed					
 {
@@ -524,7 +524,7 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 {
 	FWAddress				currentAddress ;
 	UInt32			readValue ;
-	unsigned long			size ;
+	uint32_t			size ;
 	
 	NSLog(@"Config ROM for device = %x, service = %x\n", mDevice, [self service]);
 	
@@ -554,7 +554,7 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 	}
 	
 	
-	long long guid = 0;
+	int64_t guid = 0;
 	currentAddress.addressHi = 0xffff;
 	currentAddress.addressLo = 0xf000040c;
 	@try {
@@ -566,7 +566,7 @@ NSString* ORFireWireInterfaceIsOpenChanged = @"ORFireWireInterfaceIsOpenChanged"
 			[NSException raise:@"ORFireWireInterface" format:@"Read Error"];
 		}
 		currentAddress.addressLo = 0xf0000410;
-		guid |= (long long) readValue<<32;
+		guid |= (int64_t) readValue<<32;
 		error = (**mDevice).Read(mDevice, (**mDevice).GetDevice(mDevice), &currentAddress, &readValue, &len, NO, 0);    
 		readValue = ntohl(readValue);
 		if(error!=kIOReturnSuccess){

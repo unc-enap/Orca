@@ -42,30 +42,30 @@
 	float  intercept[kNumU6AdcChannels];
 	NSString* channelName[kNumU6AdcChannels];   //adc names
 	NSString* channelUnit[kNumU6AdcChannels];   //adc names
-	unsigned long timeMeasured;
+	uint32_t timeMeasured;
     NSString* doName[kNumU6IOChannels];
 	unsigned short adcDiff;
-	unsigned long doDirection;
-	unsigned long doValueOut;
-	unsigned long doValueIn;
+	uint32_t doDirection;
+	uint32_t doValueOut;
+	uint32_t doValueIn;
     unsigned short aOut0;
     unsigned short aOut1;
 	BOOL	led;
     BOOL    counterEnabled[2];
 	BOOL	doResetOfCounter[2];
-    unsigned long long counter[2];
+    uint64_t counter[2];
     BOOL digitalOutputEnabled;
     int pollTime;
-	unsigned long	dataId;
+	uint32_t	dataId;
     BOOL shipData;
     BOOL readOnce;
 	NSTimeInterval lastTime;
 	NSOperationQueue* queue;
 	
 	//bit processing variables
-	unsigned long processInputValue;  //snapshot of the inputs at start of process cycle
-	unsigned long processOutputValue; //outputs to be written at end of process cycle
-	unsigned long processOutputMask;  //controlls which bits are written
+	uint32_t processInputValue;  //snapshot of the inputs at start of process cycle
+	uint32_t processOutputValue; //outputs to be written at end of process cycle
+	uint32_t processOutputMask;  //controlls which bits are written
     BOOL involvedInProcess;
     HANDLE          deviceHandle;
     int   deviceSerialNumber;
@@ -99,8 +99,8 @@
 - (void) setShipData:(BOOL)aShipData;
 - (int) pollTime;
 - (void) setPollTime:(int)aPollTime;
-- (unsigned long long) counter:(int)i;
-- (void) setCounter:(int)i withValue:(unsigned long long)aCounter;
+- (uint64_t) counter:(int)i;
+- (void) setCounter:(int)i withValue:(uint64_t)aCounter;
 - (NSString*) channelName:(int)i;
 - (void) setChannel:(int)i name:(NSString*)aName;
 - (NSString*) channelUnit:(int)i;
@@ -129,24 +129,24 @@
 - (void) setAdcDiff:(unsigned short)aMask;
 - (void) setAdcDiffBit:(int)bit withValue:(BOOL)aValue;
 
-- (unsigned long) doDirection;
-- (void) setDoDirection:(unsigned long)aMask;
+- (uint32_t) doDirection;
+- (void) setDoDirection:(uint32_t)aMask;
 - (void) setDoDirectionBit:(int)bit withValue:(BOOL)aValue;
 
-- (unsigned long) doValueOut;
-- (void) setDoValueOut:(unsigned long)aMask;
+- (uint32_t) doValueOut;
+- (void) setDoValueOut:(uint32_t)aMask;
 - (void) setDoValueOutBit:(int)bit withValue:(BOOL)aValue;
 
-- (unsigned long) doValueIn;
-- (void) setDoValueIn:(unsigned long)aMask;
+- (uint32_t) doValueIn;
+- (void) setDoValueIn:(uint32_t)aMask;
 - (void) setDoValueInBit:(int)bit withValue:(BOOL)aValue;
 - (NSString*) doInString:(int)bit;
 - (NSColor*) doInColor:(int)i;
 
-- (unsigned long) timeMeasured;
+- (uint32_t) timeMeasured;
 
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherLakeShore210;
 - (void) readSerialNumbers;

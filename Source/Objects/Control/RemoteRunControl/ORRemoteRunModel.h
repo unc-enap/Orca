@@ -25,7 +25,7 @@
 
 @interface ORRemoteRunModel :  ORDataChainObject {
     @private
-        unsigned long 	runNumber;
+        uint32_t 	runNumber;
 		int subRunNumber;
 
         NSString* startTime;
@@ -41,7 +41,7 @@
 
         int         runningState;
         NSString*   remoteHost;
-        unsigned long remotePort;
+        uint32_t remotePort;
         NetSocket*  socket;
         BOOL        connectAtStart;
         BOOL        autoReconnect;
@@ -79,12 +79,12 @@
 - (void) setConnectAtStart:(BOOL)aConnectAtStart;
 - (NetSocket*) socket;
 - (void) setSocket:(NetSocket*)aSocket;
-- (unsigned long) remotePort;
-- (void) setRemotePort:(unsigned long)aRemotePort;
+- (uint32_t) remotePort;
+- (void) setRemotePort:(uint32_t)aRemotePort;
 - (NSString*) remoteHost;
 - (void) setRemoteHost:(NSString*)aRemoteHost;
-- (unsigned long)   runNumber;
-- (void)	    setRunNumber:(unsigned long)aRunNumber;
+- (uint32_t)   runNumber;
+- (void)	    setRunNumber:(uint32_t)aRunNumber;
 - (NSString*) startTime;
 - (void)	setStartTime:(NSString*) aDate;
 - (NSTimeInterval)  elapsedTime;

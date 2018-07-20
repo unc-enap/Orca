@@ -39,15 +39,15 @@
     [super dealloc];
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long length;
-    unsigned long* ptr = (unsigned long*)someData;
+    uint32_t length;
+    uint32_t* ptr = (uint32_t*)someData;
     if(IsShortForm(*ptr)) {
     	NSLog(@"L2301 Card Warning: should not get short form; quitting...");
         return 1;
     }
-    else  {       //oh, we have been assign the long form--skip to the next long word for the data
+    else  {       //oh, we have been assign the int32_t form--skip to the next int32_t word for the data
         length = ExtractLength(*ptr);
         ptr++;
     }
@@ -57,7 +57,7 @@
     NSString* crateKey = [self getCrateKey: crate];
     NSString* cardKey = [self getStationKey: card];
 	
-    unsigned long headerSize = 2;
+    uint32_t headerSize = 2;
     bool hasTiming = (*ptr&0x02000000);
     if(hasTiming) {
 		ptr += 2;
@@ -69,37 +69,37 @@
     }
     if(length == headerSize) return length;
     	
-    unsigned long nBins = length-headerSize;
+    uint32_t nBins = length-headerSize;
     unsigned int iBin;
     for(iBin = 0; iBin < nBins; iBin++) {
         ptr++;
-		unsigned long  bin = (*ptr&0xffff0000) >> 16;
-		unsigned long  value = *ptr&0x0000ffff;
+		uint32_t  bin = (*ptr&0xffff0000) >> 16;
+		uint32_t  value = *ptr&0x0000ffff;
 		[aDataSet histogramWW:bin weight:value numBins:1024 sender:self withKeys:@"L2301", crateKey,cardKey,nil,nil];
     }
 	
     return length; //must return number of bytes processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
-    unsigned long length = ExtractLength(*ptr);
+    uint32_t length = ExtractLength(*ptr);
     if(!IsShortForm(*ptr)){
-        ptr++; //now p[0] is the word with the location (short -or- long form
+        ptr++; //now p[0] is the word with the location (short -or- int32_t form
     }
 	
-    NSString* crate = [NSString stringWithFormat:@"Crate    = %lu\n",(ptr[0]&0x01e00000)>>21];
-    NSString* card  = [NSString stringWithFormat:@"Station  = %lu\n",(ptr[0]&0x001f0000)>>16];
+    NSString* crate = [NSString stringWithFormat:@"Crate    = %u\n",(ptr[0]&0x01e00000)>>21];
+    NSString* card  = [NSString stringWithFormat:@"Station  = %u\n",(ptr[0]&0x001f0000)>>16];
 	
-    unsigned long headerSize = 2;
+    uint32_t headerSize = 2;
     bool hasTiming = (*ptr&0x02000000);
     if(hasTiming) {
 		ptr += 2;
 		headerSize = 4;
     }
 	
-    unsigned long nBins = length-headerSize;
-    NSString* nBinsStr = [NSString stringWithFormat:@"NBins    = %lu\n", nBins];
+    uint32_t nBins = length-headerSize;
+    NSString* nBinsStr = [NSString stringWithFormat:@"NBins    = %u\n", nBins];
 	
     unsigned int counts = 0;
     unsigned int iBin;
@@ -117,7 +117,7 @@
         ptr -= (nBins+2);
     	union {
     	    NSTimeInterval asTimeInterval;
-    	    unsigned long asLongs[2];
+    	    uint32_t asLongs[2];
     	} theTimeRef;
     	theTimeRef.asLongs[1] = ptr[1];
     	theTimeRef.asLongs[0] = ptr[2];

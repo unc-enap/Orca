@@ -215,7 +215,7 @@
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"L2551 Scaler (Station %ld)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"L2551 Scaler (Station %d)",(int)[model stationNumber]]];
 }
 
 - (void) shipScalersChanged:(NSNotification*)aNotification

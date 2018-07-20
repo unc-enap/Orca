@@ -763,7 +763,7 @@ static NSString* KatrinDbConnector		= @"KatrinDbConnector";
 {
 	NSString* s;
  	@synchronized(self){
-		s= [NSString stringWithFormat:@"Katrin,%lu",[self uniqueIdNumber]];
+		s= [NSString stringWithFormat:@"Katrin,%u",[self uniqueIdNumber]];
 	}
 	return s;
 }

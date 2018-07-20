@@ -41,7 +41,7 @@ enum {
     kDefFontSize	= 12,		    // default point size for text
     kShortTickLength	= 1,		    // length of short tick
     kMediumTickLength   = 2,		    // length of medium tick
-    kLongTickLength     = 3		    // length of long tick
+    kLongTickLength     = 3		    // length of int32_t tick
 };
 NSString* kDefFont = @"Helvetica";
 /*
@@ -757,12 +757,12 @@ enum {
     else return label;
 }
 
-- (long) axisMinLimit
+- (int32_t) axisMinLimit
 {
-	return (long)[self minLimit];
+	return (int32_t)[self minLimit];
 }
 
-- (void) setAxisMinLimit:(long)aValue
+- (void) setAxisMinLimit:(int32_t)aValue
 {
 	double dv = (double)aValue;
 	[self setMinLimit:dv];
@@ -771,11 +771,11 @@ enum {
  	[self setNeedsDisplay:YES];
 }
 
-- (long) axisMaxLimit
+- (int32_t) axisMaxLimit
 {
-	return (long)[self maxLimit];
+	return (int32_t)[self maxLimit];
 }
-- (void) setAxisMaxLimit:(long)aValue
+- (void) setAxisMaxLimit:(int32_t)aValue
 {
 	double dv = (double)aValue;
 	[self setMaxLimit:dv];
@@ -1725,7 +1725,7 @@ enum {
 	}    
 	
 	[theAxis moveToPoint:NSMakePoint(ticStartX,ticStartY)];
-	[theAxis lineToPoint:NSMakePoint(longTicEndX,longTicEndY)];				// draw long tick
+	[theAxis lineToPoint:NSMakePoint(longTicEndX,longTicEndY)];				// draw int32_t tick
 	if (gridCount<kMaxLongTicks) gridArray[gridCount++] =0;
             
 	NSString* axisNumberString = @"0";
@@ -1774,7 +1774,7 @@ enum {
 			[theAxis moveToPoint:NSMakePoint(ticStartX,ticStartY)];
 			if ((!(n%label_sep)) || (n==2 && label_sep==5)) {
 				if (!n) n = 1;
-				[theAxis lineToPoint:NSMakePoint(longTicEndX,longTicEndY)];	// draw long tick
+				[theAxis lineToPoint:NSMakePoint(longTicEndX,longTicEndY)];	// draw int32_t tick
 				if (gridCount<kMaxLongTicks){
 					gridArray[gridCount++] = gridPosition;
 				}
@@ -2027,7 +2027,7 @@ enum {
 			++i;
 		}
 		else {
-			[theAxis lineToPoint:NSMakePoint(longTicEndX,longTicEndY)];				// draw long tick
+			[theAxis lineToPoint:NSMakePoint(longTicEndX,longTicEndY)];				// draw int32_t tick
 			if (gridCount<kMaxLongTicks) {
 				gridArray[gridCount++] = gridPosition;
 			}
@@ -2146,9 +2146,9 @@ enum {
 @end //private
 
 
-long roundToLong(double x)
+int32_t roundToLong(double x)
 {
-    return(x>0 ? (long)(x+0.5) : (long)(x-0.499999999999));
+    return(x>0 ? (int32_t)(x+0.5) : (int32_t)(x-0.499999999999));
 }
 
 

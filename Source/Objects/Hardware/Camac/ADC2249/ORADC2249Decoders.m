@@ -50,7 +50,7 @@ short form:
                          ^^^^ ^^^^ ^^^^-data
 
 
-long form:
+int32_t form:
 0xxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  ^^^ ^^^^ ^^^^ ^^-----------------------data id
                  ^^ ^^^^ ^^^^ ^^^^ ^^^^-length in longs
@@ -69,14 +69,14 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 ^^^^ ^^^^ ^^^^ ^^^^ ^^^^ ^^^^ ^^^^ ^^^^-reference date (high part of double)
 */
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long length;
-    unsigned long* ptr = (unsigned long*)someData;
+    uint32_t length;
+    uint32_t* ptr = (uint32_t*)someData;
     if(IsShortForm(*ptr)){
         length = 1;
     }
-    else  {       //oh, we have been assign the long form--skip to the next long word for the data
+    else  {       //oh, we have been assign the int32_t form--skip to the next int32_t word for the data
 		length = ExtractLength(*ptr);
         ptr++;
     }
@@ -86,32 +86,32 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 	NSString* crateKey = [self getCrateKey: crate];
 	NSString* cardKey = [self getStationKey: card];
 	NSString* channelKey = [self getChannelKey: channel];
-    unsigned long  value = *ptr&0x00000fff;
+    uint32_t  value = *ptr&0x00000fff;
 	
     [aDataSet histogram:value numBins:2048 sender:self  withKeys:@"ADC2249", crateKey,cardKey,channelKey,nil];
     
     return length; //must return number of bytes processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
-	unsigned long length = ExtractLength(*ptr);
+	uint32_t length = ExtractLength(*ptr);
     if(!IsShortForm(*ptr)){
         ptr++; //point to the data
     }
     
     NSString* title= @"ADC2249 ADC Record\n\n";
     
-    NSString* crate = [NSString stringWithFormat:@"Crate    = %lu\n", (ptr[0]&0x01e00000)>>21];
-    NSString* card  = [NSString stringWithFormat:@"Station  = %lu\n", (ptr[0]&0x001f0000)>>16];
-    NSString* chan  = [NSString stringWithFormat:@"Chan     = %lu\n", (ptr[0]&0x0000f000)>>12];
-    NSString* adc   = [NSString stringWithFormat:@"ADC      = 0x%lx\n",ptr[0]&0x00000fff];
+    NSString* crate = [NSString stringWithFormat:@"Crate    = %u\n", (ptr[0]&0x01e00000)>>21];
+    NSString* card  = [NSString stringWithFormat:@"Station  = %u\n", (ptr[0]&0x001f0000)>>16];
+    NSString* chan  = [NSString stringWithFormat:@"Chan     = %u\n", (ptr[0]&0x0000f000)>>12];
+    NSString* adc   = [NSString stringWithFormat:@"ADC      = 0x%x\n",ptr[0]&0x00000fff];
 	NSDate* theTime = nil;
 	
 	if(length ==4){
 		union {
 			NSTimeInterval asTimeInterval;
-			unsigned long asLongs[2];
+			uint32_t asLongs[2];
 		}theTimeRef;
 		theTimeRef.asLongs[1] = ptr[1];
 		theTimeRef.asLongs[0] = ptr[2];

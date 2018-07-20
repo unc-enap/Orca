@@ -105,23 +105,23 @@
 
 #pragma mark •••Hardware Access
 - (BOOL) adapterIsSBC;
-- (unsigned long) xl2RegAddress:(unsigned long)aRegOffset;
-- (void) selectCards:(unsigned long) selectBits;
+- (uint32_t) xl2RegAddress:(uint32_t)aRegOffset;
+- (void) selectCards:(uint32_t) selectBits;
 - (void) deselectCards;
 - (void) select:(ORSNOCard*) aCard;
-- (void) writeToXL2Register:(unsigned long) aRegister value:(unsigned long) aValue;
-- (unsigned long) readFromXL2Register:(unsigned long) aRegister;
-- (void) writeHardwareRegister:(unsigned long) anAddress value:(unsigned long) aValue;
-- (unsigned long) readHardwareRegister:(unsigned long) regAddress;
-- (unsigned long) readHardwareMemory:(unsigned long) memAddress;
+- (void) writeToXL2Register:(uint32_t) aRegister value:(uint32_t) aValue;
+- (uint32_t) readFromXL2Register:(uint32_t) aRegister;
+- (void) writeHardwareRegister:(uint32_t) anAddress value:(uint32_t) aValue;
+- (uint32_t) readHardwareRegister:(uint32_t) regAddress;
+- (uint32_t) readHardwareMemory:(uint32_t) memAddress;
 - (void) reset;
 - (void) loadTheClocks;
-- (void) loadTheXilinx:(unsigned long) selectBits;
+- (void) loadTheXilinx:(uint32_t) selectBits;
 
-- (id) writeHardwareRegisterCmd:(unsigned long) aRegister value:(unsigned long) aBitPattern;
-- (id) readHardwareRegisterCmd:(unsigned long) regAddress;
+- (id) writeHardwareRegisterCmd:(uint32_t) aRegister value:(uint32_t) aBitPattern;
+- (id) readHardwareRegisterCmd:(uint32_t) regAddress;
 - (void) executeCommandList:(ORCommandList*)aList;
-- (id) delayCmd:(unsigned long) milliSeconds;
+- (id) delayCmd:(uint32_t) milliSeconds;
 
 @end
 

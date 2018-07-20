@@ -37,7 +37,7 @@
     double       timeWindow;
     unsigned short       nHit;
     unsigned short       minimumEnergyAllowed;
-    unsigned long        shaperID;
+    uint32_t        shaperID;
     int runtype;
     int runnum;
     NSMutableArray* runbits;
@@ -76,8 +76,8 @@
     NSMutableArray* Nsecs;
     NSMutableArray* Nmics;
 
-    long int removedSec;
-    long int removedMic;
+    int32_t removedSec;
+    int32_t removedMic;
     int numBurstChan;
     double durSec; //The number of seconds the burst takes to finish
     double rSec; //reduced number of seconds corresponding to most of the counts
@@ -112,9 +112,9 @@
     NSMutableDictionary* runUserInfo;
     unsigned short       burstCount;
     NSString*            burstString;
-    unsigned long         dataId;
+    uint32_t         dataId;
 }
-//unsigned long long facto(unsigned long long num); recusive one does not work any more
+//uint64_t facto(uint64_t num); recusive one does not work any more
 
 - (id)   init;
 - (void) dealloc;
@@ -145,8 +145,8 @@
 #pragma mark ***Data Records
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (NSDictionary*) dataRecordDescription;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherVXM;
 

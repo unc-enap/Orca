@@ -40,7 +40,7 @@
 #pragma mark ¥¥¥Data Management
 - (void) clear;
 - (ORTimeSeries*) timeSeries;
-- (void) addValue:(float)aValue atTime:(unsigned long)aTime;
+- (void) addValue:(float)aValue atTime:(uint32_t)aTime;
 - (int)	count;
 
 #pragma mark ¥¥¥Writing Data

@@ -103,7 +103,7 @@
     processLimitsSize	= NSMakeSize(470,515);
     trendSize           = NSMakeSize(555,515);
     
-    NSString* key = [NSString stringWithFormat: @"orca.Pac%lu.selectedtab",[model uniqueIdNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.Pac%u.selectedtab",[model uniqueIdNumber]];
     NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
@@ -253,7 +253,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"Power and Control (Unit %lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"Power and Control (Unit %u)",[model uniqueIdNumber]]];
 }
 
 - (void) updateWindow
@@ -493,7 +493,7 @@
 - (void) loadLcmTimeValues
 {
 	[[adcMatrix cellWithTag:0] setFloatValue:[model convertedLcm]];
-	unsigned long t = [model lcmTimeMeasured];
+	uint32_t t = [model lcmTimeMeasured];
 	if(t){
 		NSDate* theDate = [NSDate dateWithTimeIntervalSince1970:t];
 		[[timeMatrix cellWithTag:0] setObjectValue:[theDate descriptionFromTemplate:@"MM/dd HH:mm:SS"]];
@@ -518,7 +518,7 @@
 - (void) loadAdcTimeValuesForIndex:(int)index
 {
 	[[adcMatrix cellWithTag:index+1] setFloatValue:[model convertedAdc:index]];
-	unsigned long t = [model timeMeasured:index];
+	uint32_t t = [model timeMeasured:index];
 	if(t){
 		NSDate* theDate = [NSDate dateWithTimeIntervalSince1970:t];
 		[[timeMatrix cellWithTag:index+1] setObjectValue:[theDate stdDescription]];
@@ -849,7 +849,7 @@
     }
     
     NSInteger index = [tabView indexOfTabViewItem:item];
-    [[NSUserDefaults standardUserDefaults] setInteger:index forKey:[NSString stringWithFormat:@"orca.Pac%lu.selectedtab",[model uniqueIdNumber]]];
+    [[NSUserDefaults standardUserDefaults] setInteger:index forKey:[NSString stringWithFormat:@"orca.Pac%u.selectedtab",[model uniqueIdNumber]]];
     [[self window] setContentView:totalView];
 }
 

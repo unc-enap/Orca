@@ -60,8 +60,8 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
 
 #pragma mark ¥¥¥Private Implementation
 @interface ORTrigger32Model (private)
-- (void) _readOutChildren:(NSArray*)children dataPacket:(ORDataPacket*)aDataPacket  useParams:(BOOL)useParams withGTID:(unsigned long)gtid isMSAMEvent:(BOOL)isMSAMEvent;
-- (void) getTimeData:(unsigned long*)data statusReg:(unsigned short)statusReg  trigger: (short)trigger;
+- (void) _readOutChildren:(NSArray*)children dataPacket:(ORDataPacket*)aDataPacket  useParams:(BOOL)useParams withGTID:(uint32_t)gtid isMSAMEvent:(BOOL)isMSAMEvent;
+- (void) getTimeData:(uint32_t*)data statusReg:(unsigned short)statusReg  trigger: (short)trigger;
 - (void) _calculateLiveTime;
 @end
 
@@ -169,27 +169,27 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
 	 object:self];
 }
 
-- (unsigned long) clockDataId { return clockDataId; }
-- (void) setClockDataId: (unsigned long) aClockDataId
+- (uint32_t) clockDataId { return clockDataId; }
+- (void) setClockDataId: (uint32_t) aClockDataId
 {
     clockDataId = aClockDataId;
 }
 
 
-- (unsigned long) gtid1DataId { return gtid1DataId; }
-- (void) setGtid1DataId: (unsigned long) aGtidDataId
+- (uint32_t) gtid1DataId { return gtid1DataId; }
+- (void) setGtid1DataId: (uint32_t) aGtidDataId
 {
     gtid1DataId = aGtidDataId;
 }
 
-- (unsigned long) gtid2DataId { return gtid2DataId; }
-- (void) setGtid2DataId: (unsigned long) aGtidDataId
+- (uint32_t) gtid2DataId { return gtid2DataId; }
+- (void) setGtid2DataId: (uint32_t) aGtidDataId
 {
     gtid2DataId = aGtidDataId;
 }
 
-- (unsigned long) liveTimeDataId { return liveTimeDataId; }
-- (void) setLiveTimeDataId: (unsigned long) aLiveTimeDataId
+- (uint32_t) liveTimeDataId { return liveTimeDataId; }
+- (void) setLiveTimeDataId: (uint32_t) aLiveTimeDataId
 {
     liveTimeDataId = aLiveTimeDataId;
 }
@@ -228,12 +228,12 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
     
 }
 
-- (unsigned long)testRegisterValue
+- (uint32_t)testRegisterValue
 {
     return testRegisterValue;
 }
 
-- (void)setTestRegisterValue:(unsigned long)aTestRegisterValue
+- (void)setTestRegisterValue:(uint32_t)aTestRegisterValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setTestRegisterValue:aTestRegisterValue];
     testRegisterValue = aTestRegisterValue;
@@ -241,12 +241,12 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
                                                         object:self];
 }
 
-- (unsigned long) gtIdValue
+- (uint32_t) gtIdValue
 {
     return gtIdValue;
 }
 
-- (void) setGtIdValue:(unsigned long)newGtIdValue
+- (void) setGtIdValue:(uint32_t)newGtIdValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setGtIdValue:gtIdValue];
     gtIdValue=newGtIdValue;
@@ -254,12 +254,12 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
                                                         object:self];
 }
 
-- (unsigned long)lowerTimeValue
+- (uint32_t)lowerTimeValue
 {
     return lowerTimeValue;
 }
 
-- (void)setLowerTimeValue:(unsigned long)aLowerTimeValue
+- (void)setLowerTimeValue:(uint32_t)aLowerTimeValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setLowerTimeValue:lowerTimeValue];
     lowerTimeValue = aLowerTimeValue;
@@ -267,12 +267,12 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
                                                         object:self];
 }
 
-- (unsigned long)upperTimeValue
+- (uint32_t)upperTimeValue
 {
     return upperTimeValue;
 }
 
-- (void)setUpperTimeValue:(unsigned long)anUpperTimeValue
+- (void)setUpperTimeValue:(uint32_t)anUpperTimeValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setUpperTimeValue:upperTimeValue];
     upperTimeValue = anUpperTimeValue;
@@ -352,11 +352,11 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
                                                         object:self];
 }
 
-- (unsigned long) gtErrorCount
+- (uint32_t) gtErrorCount
 {
     return gtErrorCount;
 }
-- (void) setGtErrorCount:(unsigned long)count
+- (void) setGtErrorCount:(uint32_t)count
 {
     gtErrorCount = count;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORTrigger32GtErrorCountChangedNotification
@@ -526,9 +526,9 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
 }
 
 #pragma mark ***HW Access Read commands
-- (unsigned long) 	readBoardID;
+- (uint32_t) 	readBoardID;
 {
-    unsigned long val = 0;
+    uint32_t val = 0;
     [[self adapter] readLongBlock:&val
                         atAddress:baseAddress+kReadBoardID
                         numToRead:1
@@ -537,9 +537,9 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
     return val;
 }
 
-- (unsigned long) 	readStatus
+- (uint32_t) 	readStatus
 {
-    unsigned long val = 0;
+    uint32_t val = 0;
     [[self adapter] readLongBlock:&val
                         atAddress:baseAddress+kReadStatusReg
                         numToRead:1
@@ -551,9 +551,9 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
     return val;
 }
 
-- (unsigned long) readTrigger2GTID
+- (uint32_t) readTrigger2GTID
 {
-    unsigned long val = 0;
+    uint32_t val = 0;
     [[self adapter] readLongBlock:&val
                         atAddress:baseAddress+kReadTrigger2GTID
                         numToRead:1
@@ -562,9 +562,9 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
     return val;
 }
 
-- (unsigned long)  readTrigger1GTID
+- (uint32_t)  readTrigger1GTID
 {
-    unsigned long val = 0;
+    uint32_t val = 0;
     [[self adapter] readLongBlock:&val
                         atAddress:baseAddress+kReadTrigger1GTID
                         numToRead:1
@@ -573,9 +573,9 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
     return val;
 }
 
-- (unsigned long)  readLowerTrigger2Time
+- (uint32_t)  readLowerTrigger2Time
 {
-    unsigned long val = 0;
+    uint32_t val = 0;
     [[self adapter] readLongBlock:&val
                         atAddress:baseAddress+kReadLowerTrigger2TimeReg
                         numToRead:1
@@ -584,9 +584,9 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
     return val;
 }
 
-- (unsigned long)  readUpperTrigger2Time
+- (uint32_t)  readUpperTrigger2Time
 {
-    unsigned long val = 0;
+    uint32_t val = 0;
     [[self adapter] readLongBlock:&val
                         atAddress:baseAddress+kReadUpperTrigger2TimeReg
                         numToRead:1
@@ -596,9 +596,9 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
 }
 
 
-- (unsigned long)  readLowerTrigger1Time
+- (uint32_t)  readLowerTrigger1Time
 {
-    unsigned long val = 0;
+    uint32_t val = 0;
     [[self adapter] readLongBlock:&val
                         atAddress:baseAddress+kReadLowerTrigger1TimeReg
                         numToRead:1
@@ -607,9 +607,9 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
     return val;
 }
 
-- (unsigned long)  readUpperTrigger1Time
+- (uint32_t)  readUpperTrigger1Time
 {
-    unsigned long val = 0;
+    uint32_t val = 0;
     [[self adapter] readLongBlock:&val
                         atAddress:baseAddress+kReadUpperTrigger1TimeReg
                         numToRead:1
@@ -618,9 +618,9 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
     return val;
 }
 
-- (unsigned long)  readTestRegister
+- (uint32_t)  readTestRegister
 {
-    unsigned long val = 0;
+    uint32_t val = 0;
     [[self adapter] readLongBlock:&val
                         atAddress:baseAddress+kReadTestReg
                         numToRead:1
@@ -629,9 +629,9 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
     return val;
 }
 
-- (unsigned long)  readAuxGTIDReg
+- (uint32_t)  readAuxGTIDReg
 {
-    unsigned long val = 0;
+    uint32_t val = 0;
     [[self adapter] readLongBlock:&val
                         atAddress:baseAddress+kAuxGTIDReg
                         numToRead:1
@@ -640,13 +640,13 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
     return val&0x00ffffff;
 }
 
-- (unsigned long)  readSoftGTIDRegister
+- (uint32_t)  readSoftGTIDRegister
 {
     if(useNoHardware || useSoftwareGtId){
 		return [self readAuxGTIDReg];
 	}
 	
-    unsigned long val = 0;
+    uint32_t val = 0;
     [[self adapter] readLongBlock:&val
                         atAddress:baseAddress+kReadSoftGTIDReg
                         numToRead:1
@@ -799,8 +799,8 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
 {
     [self latchLiveTime];
     
-    unsigned long lower;
-    unsigned long upper;
+    uint32_t lower;
+    uint32_t upper;
     
     [[self adapter] readLongBlock:&upper
                         atAddress:baseAddress+kUpperLiveTimeReg
@@ -814,7 +814,7 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
                        withAddMod:addressModifier
                     usingAddSpace:0x01];
     
-    total_live = ((long long)upper&0x00000000000000ff)<<32 | lower;
+    total_live = ((int64_t)upper&0x00000000000000ff)<<32 | lower;
     
     [[self adapter] readLongBlock:&lower
                         atAddress:baseAddress+kTrigger1LiveTimeReg
@@ -822,7 +822,7 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
                        withAddMod:addressModifier
                     usingAddSpace:0x01];
     
-    trig1_live = ((long long)upper&0x000000000000ff00)<<24 | lower;
+    trig1_live = ((int64_t)upper&0x000000000000ff00)<<24 | lower;
     
     
     
@@ -832,7 +832,7 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
                        withAddMod:addressModifier
                     usingAddSpace:0x01];
     
-    trig2_live = ((long long)upper&0x0000000000ff0000)<<16 | lower;
+    trig2_live = ((int64_t)upper&0x0000000000ff0000)<<16 | lower;
     
     [[self adapter] readLongBlock:&lower
                         atAddress:baseAddress+kScopeLiveTimeReg
@@ -840,7 +840,7 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
                        withAddMod:addressModifier
                     usingAddSpace:0x01];
     
-    scope_live = ((long long)upper&0x00000000ff000000)<<8 | lower;
+    scope_live = ((int64_t)upper&0x00000000ff000000)<<8 | lower;
     
     
 }
@@ -1027,7 +1027,7 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
                      usingAddSpace:0x01];
 }
 
-- (void) loadTestRegister:(unsigned long)aValue
+- (void) loadTestRegister:(uint32_t)aValue
 {
     [[self adapter] writeLongBlock:&aValue
                          atAddress:baseAddress+kLoadTestRegister
@@ -1036,7 +1036,7 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
                      usingAddSpace:0x01];
 }
 
-- (void) loadGTID:(unsigned long)  aVal
+- (void) loadGTID:(uint32_t)  aVal
 {
     [[self adapter] writeLongBlock:&aVal
                          atAddress:baseAddress+kLoadGTIDCounter
@@ -1045,7 +1045,7 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
                      usingAddSpace:0x01];
 }
 
-- (void) loadLowerTimerCounter:(unsigned long)  aVal
+- (void) loadLowerTimerCounter:(uint32_t)  aVal
 {
     [[self adapter] writeLongBlock:&aVal
                          atAddress:baseAddress+kLoadLowerTimeCounter
@@ -1054,7 +1054,7 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
                      usingAddSpace:0x01];
 }
 
-- (void) loadUpperTimerCounter:(unsigned long)  aVal
+- (void) loadUpperTimerCounter:(uint32_t)  aVal
 {
     [[self adapter] writeLongBlock:&aVal
                          atAddress:baseAddress+kLoadUpperTimeCounter
@@ -1064,13 +1064,13 @@ NSString* ORTrigger32LiveTimeCalcRunningChangedNotification     = @"ORTrigger32L
 }
 
 
-- (unsigned long) getGtId1
+- (uint32_t) getGtId1
 {
     if(useNoHardware || useSoftwareGtId)  return [self readAuxGTIDReg];
     else return [self readTrigger1GTID];
 }
 
-- (unsigned long) getGtId2
+- (uint32_t) getGtId2
 {
     if(useNoHardware || useSoftwareGtId)  return [self readAuxGTIDReg];
     else return [self readTrigger2GTID];
@@ -1250,7 +1250,7 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
 #pragma mark ¥¥¥Board ID Decoders
 -(NSString*) boardIdString
 {
-    unsigned long aBoardId  = [self readBoardID];
+    uint32_t aBoardId  = [self readBoardID];
     unsigned short id       = [self decodeBoardId:aBoardId];
     unsigned short type     = [self decodeBoardType:aBoardId];
     unsigned short rev      = [self decodeBoardRev:aBoardId];
@@ -1288,9 +1288,9 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
     }
 }
 
-- (unsigned long) optionMask
+- (uint32_t) optionMask
 {
-    unsigned long optionMask = 0L;
+    uint32_t optionMask = 0L;
     if(shipEvt1Clk)     optionMask |= kShipEvt1ClkMask;
     if(shipEvt2Clk)     optionMask |= kShipEvt2ClkMask;
     if(useSoftwareGtId) optionMask |= kUseSoftwareGtIdMask;
@@ -1405,9 +1405,9 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
 
 
 //----------------Clock Word------------------------------------
-// two long words
+// two int32_t words
 // word #1:
-// 0000 0000 0000 0000 0000 0000 0000 0000   32 bit unsigned long
+// 0000 0000 0000 0000 0000 0000 0000 0000   32 bit uint32_t
 // ^^^^ ^------------------------------------ kTrigTimeRecordType             [bits 26-31]
 //       ^----------------------------------- spare
 //        ^^--------------------------------- latch register ID (0-4)         [bits 24-25]
@@ -1418,7 +1418,7 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
 //--------------------------------------------------------------
 
 //-------------------GTID record--------------------------------
-// 0000 0000 0000 0000 0000 0000 0000 0000   32 bit unsigned long
+// 0000 0000 0000 0000 0000 0000 0000 0000   32 bit uint32_t
 // ^^^^ ^------------------------------------ kGTIDRecordType                 [bits 27-31]
 //       ^----------------------------------- sync clear err                  [bits 26]
 //        ^^--------------------------------- spare                           [bits 24-25]
@@ -1490,8 +1490,8 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
     
-    unsigned long gtid = 0;
-    unsigned long len;
+    uint32_t gtid = 0;
+    uint32_t len;
     NSString* errorLocation = @"";
     
     unsigned short statusReg;
@@ -1524,7 +1524,7 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
 			BOOL removePlaceHolders = NO;
 			
 			if(!(statusReg & kValidTrigger1GTClockMask)){
-				long deltaTime = [timer microseconds]*1000;
+				int32_t deltaTime = [timer microseconds]*1000;
 				if(deltaTime < 1500){
 					//there should have been a gtid bit set.
 					//try to read it again after a delay of up to 1.5 microseconds
@@ -1554,7 +1554,7 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
 				}
 				else {
 					//pack the gtid and create an NSData object for it.
-                    unsigned long data[2];
+                    uint32_t data[2];
                     if(IsShortForm(gtid1DataId)){
                         len = 1;
                         data[0] = gtid1DataId | (0x01<<24) | (0x00ffffff&gtid);
@@ -1568,7 +1568,7 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
 					[aDataPacket addLongsToFrameBuffer:data length:len];
 					if(shipEvt1Clk){
 						//ship the clock if the ship bit is set.
-						unsigned long data[3];
+						uint32_t data[3];
 						[self getTimeData:data  statusReg:statusReg trigger:1];
 						[aDataPacket addLongsToFrameBuffer:data length:3];
 					}
@@ -1581,7 +1581,7 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
 			}
 			
 			//keep track if data is taken if in the useSoftware GtId mode.
-			unsigned long lastFrameIndex = 0;
+			uint32_t lastFrameIndex = 0;
 			if(useSoftwareGtId || useNoHardware){
 				lastFrameIndex = [aDataPacket frameIndex];
 			}
@@ -1591,7 +1591,7 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
 				errorLocation = @"Reading Trigger M_SAM";
 				unsigned short reReadStat = statusReg;
 				if((reReadStat & kValidTrigger1GTClockMask) && !(reReadStat & kMSamEventMask)){
-					long deltaTime = [timer microseconds];
+					int32_t deltaTime = [timer microseconds];
 					if(deltaTime < 15){
 						struct timespec ts;
 						ts.tv_sec = 0;
@@ -1613,7 +1613,7 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
 			
 			if(useSoftwareGtId || useNoHardware){
 				if([aDataPacket frameIndex]>lastFrameIndex){
-                    unsigned long data[2];
+                    uint32_t data[2];
                     if(IsShortForm(gtid1DataId)){
                         len = 1;
                         data[0] = gtid1DataId | (0x01<<24) | (0x00ffffff&gtid);
@@ -1625,7 +1625,7 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
                     }
 					[aDataPacket replaceReservedDataInFrameBufferAtIndex:eventPlaceHolder1 withLongs:data length:len];
 					if(shipEvt1Clk){
-						unsigned long data[3];
+						uint32_t data[3];
 						[self getTimeData:data  statusReg:statusReg  trigger:1];
 						[aDataPacket replaceReservedDataInFrameBufferAtIndex:timePlaceHolder1 withLongs:data length:3];						
 					}
@@ -1673,13 +1673,13 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
 			
 			//go out and read all the data takers scheduled to be read out with a trigger 2 event.
 			//also we keep track if any data was actually taken
-			unsigned long lastFrameIndex = [aDataPacket frameIndex];
+			uint32_t lastFrameIndex = [aDataPacket frameIndex];
 			errorLocation = @"Reading Event2 Children";
 			[self _readOutChildren:dataTakers2 dataPacket:aDataPacket useParams:NO withGTID:0  isMSAMEvent:0]; //don't know the gtid so pass 0
 			BOOL dataWasTaken = [aDataPacket frameIndex]>lastFrameIndex;
 			
 			if(!(statusReg & kValidTrigger2GTClockMask)){
-				long deltaTime = [timer microseconds]*1000;
+				int32_t deltaTime = [timer microseconds]*1000;
 				if(deltaTime < 1500){
 					//there should have been a gtid bit set.
 					//try to read it again after a delay of up to 1.5 microseconds
@@ -1705,7 +1705,7 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
 						}
 					}
 					//OK there was some data so pack the gtid.
-					unsigned long data[2];
+					uint32_t data[2];
                     if(IsShortForm(gtid2DataId)){
                         len = 1;                        
                         data[0] = gtid2DataId | (0x01<<25) | (0x00ffffff&gtid);
@@ -1717,7 +1717,7 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
                     }
 					[aDataPacket replaceReservedDataInFrameBufferAtIndex:eventPlaceHolder2 withLongs:data length:len];
 					if(shipEvt2Clk){
-						unsigned long data[3];
+						uint32_t data[3];
 						[self getTimeData:data  statusReg:statusReg trigger:2];
 						[aDataPacket replaceReservedDataInFrameBufferAtIndex:timePlaceHolder2 withLongs:data length:3];
 					}
@@ -1783,7 +1783,7 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
 	NSLog(@"Trigger32Model total noData Count since last ORCA start: %d\n", totalDataCount);
 }
 
-- (unsigned long)  requestGTID
+- (uint32_t)  requestGTID
 {
     [self requestSoftGTID];
     return [self readSoftGTIDRegister];
@@ -1966,7 +1966,7 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
 
 
 #pragma mark ¥¥¥Private Methods
-- (void) _readOutChildren:(NSArray*)children dataPacket:(ORDataPacket*)aDataPacket useParams:(BOOL)useParams withGTID:(unsigned long)gtid isMSAMEvent:(BOOL)isMSAMEvent
+- (void) _readOutChildren:(NSArray*)children dataPacket:(ORDataPacket*)aDataPacket useParams:(BOOL)useParams withGTID:(uint32_t)gtid isMSAMEvent:(BOOL)isMSAMEvent
 {
 	NSMutableDictionary* params = nil;
 	if(useParams){
@@ -1984,7 +1984,7 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
 }
 
 
-- (void) getTimeData:(unsigned long*)data statusReg:(unsigned short)statusReg  trigger: (short)trigger
+- (void) getTimeData:(uint32_t*)data statusReg:(unsigned short)statusReg  trigger: (short)trigger
 {    
     if(clockEnabled){
 		if(trigger == 1){
@@ -2002,14 +2002,14 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
 		//grab the event time from the mac
 		struct timeval timeValue;
 		struct timezone timeZone;
-		unsigned long long doeTime  ;
+		uint64_t doeTime  ;
 		gettimeofday(&timeValue,&timeZone);
 		doeTime = timeValue.tv_sec;
 		doeTime = doeTime * 10000000 + timeValue.tv_usec*10;
 		
         data[0] = clockDataId | 3;
-        data[1] = (unsigned long)(doeTime>>32);
-        data[2] = (unsigned long)(doeTime&0x00000000ffffffff);\
+        data[1] = (uint32_t)(doeTime>>32);
+        data[2] = (uint32_t)(doeTime&0x00000000ffffffff);\
 		if(trigger == 1)data[1] |= (1<<24);
         else data[1] |= (1<<25);
     }
@@ -2027,14 +2027,14 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
     if(!liveTimeEnabled)return;
     
 	@try {
-        unsigned long gtid = [[self crate] requestGTID];
+        uint32_t gtid = [[self crate] requestGTID];
 		[self latchLiveTime];
         
-		unsigned long totalLiveTime;
-		unsigned long upperLiveTime;
-		unsigned long trig1LiveTime;
-		unsigned long trig2LiveTime;
-		unsigned long scopeLiveTime;
+		uint32_t totalLiveTime;
+		uint32_t upperLiveTime;
+		uint32_t trig1LiveTime;
+		uint32_t trig2LiveTime;
+		uint32_t scopeLiveTime;
         
 		[[self adapter] readLongBlock:&upperLiveTime
                             atAddress:baseAddress+kUpperLiveTimeReg
@@ -2070,10 +2070,10 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
                         usingAddSpace:0x01];
         
         
-		unsigned long liveTimeData[8];
+		uint32_t liveTimeData[8];
         
         
-		unsigned long location = (start&0x3)<<16 | ([self crateNumber]&0x0000000f)<<8 | ([self slot]& 0x0000001f);
+		uint32_t location = (start&0x3)<<16 | ([self crateNumber]&0x0000000f)<<8 | ([self slot]& 0x0000001f);
         
 		liveTimeData[0] = liveTimeDataId | 8;
 		liveTimeData[1] = gtid;
@@ -2085,7 +2085,7 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
 		liveTimeData[7] = scopeLiveTime;
         
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-                                                            object:[NSData dataWithBytes:liveTimeData length:8*sizeof(long)]];
+                                                            object:[NSData dataWithBytes:liveTimeData length:8*sizeof(int32_t)]];
 	}
 	@catch(NSException* localException) {
 	}
@@ -2095,10 +2095,10 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
 {
     [self readLiveTimeCounters];
     
-    long long total_diff = total_live-last_total_live;
-    long long trig1_diff = trig1_live-last_trig1_live;
-    long long trig2_diff = trig2_live-last_trig2_live;
-    long long scope_diff = scope_live-last_scope_live;
+    int64_t total_diff = total_live-last_total_live;
+    int64_t trig1_diff = trig1_live-last_trig1_live;
+    int64_t trig2_diff = trig2_live-last_trig2_live;
+    int64_t scope_diff = scope_live-last_scope_live;
     //check for rollover
     if(total_diff<0)total_diff = 0xffffffffffffffffLL - (last_total_live - total_live);
     if(trig1_diff<0)trig1_diff = 0xffffffffffffffffLL - (last_trig1_live - trig1_live);

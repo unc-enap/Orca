@@ -446,7 +446,7 @@
 - (IBAction) readLamMaskAction:(id)sender
 {
     unsigned short statusCC32 = 0;
-    unsigned long maskValue;
+    uint32_t maskValue;
     @try {
         [model checkCratePower];
         statusCC32 = [model readLAMMask:&maskValue];
@@ -465,7 +465,7 @@
 - (IBAction) readLamStationsAction:(id)sender
 {
     unsigned short statusCC32 = 0;
-    unsigned long value;
+    uint32_t value;
     @try {
         [model checkCratePower];
         statusCC32 = [model readLAMStations:&value];

@@ -34,7 +34,7 @@
 @private
     NSMutableString* buffer;
     NSMutableArray*	motors;
-    unsigned long	dataId;
+    uint32_t	dataId;
     NSMutableArray* motorToQueryStack;
     NSMutableArray* cmdList;
     BOOL			displayRaw;
@@ -100,8 +100,8 @@
 #pragma mark ***Data Records
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (NSDictionary*) dataRecordDescription;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherVXM;
 - (void) shipMotorState:(id)aMotor;

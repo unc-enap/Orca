@@ -82,8 +82,8 @@ enum {
 {
     @private
 	
-    unsigned long dataId;
-    unsigned long scalerDataId;
+    uint32_t dataId;
+    uint32_t scalerDataId;
 
 	NSMutableArray* thresholds;
 	NSMutableArray* thresholdAdcs;
@@ -95,20 +95,20 @@ enum {
 	unsigned char   scalerMask;
 	unsigned char   onlineMask;
 	
-	unsigned long	scanStart;
-	unsigned long	scanDelta;
+	uint32_t	scanStart;
+	uint32_t	scanDelta;
 	unsigned short	scanNumber;
 	
 	ORRateGroup*	adcRateGroup;
-	unsigned long 	adcCount[kNumShaperChannels];
-	unsigned long   eventCount[kNumShaperChannels];
+	uint32_t 	adcCount[kNumShaperChannels];
+	uint32_t   eventCount[kNumShaperChannels];
 	ORRateGroup*	scalerRateGroup;
 	unsigned short 	scalerCount[kNumShaperChannels];
 		
 	BOOL isRunning;
 	
 	//place to cache some stuff for alittle more speed.
-	unsigned long 	slotMask;
+	uint32_t 	slotMask;
     
 	short savedThresholds[kNumShaperChannels];
     BOOL shipTimeStamp;
@@ -143,10 +143,10 @@ enum {
 - (BOOL)	    onlineMaskBit:(int)bit;
 - (void)	    setOnlineMaskBit:(int)bit withValue:(BOOL)aValue;
 
-- (unsigned long)   scanStart;
-- (void)	    setScanStart:(unsigned long)value;
-- (unsigned long)   scanDelta;
-- (void)	    setScanDelta:(unsigned long)value;
+- (uint32_t)   scanStart;
+- (void)	    setScanStart:(uint32_t)value;
+- (uint32_t)   scanDelta;
+- (void)	    setScanDelta:(uint32_t)value;
 - (unsigned short)  scanNumber;
 - (void)	    setScanNumber:(unsigned short)value;
 - (ORRateGroup*)    adcRateGroup;
@@ -154,10 +154,10 @@ enum {
 - (ORRateGroup*)    scalerRateGroup;
 - (void)	    setScalerRateGroup:(ORRateGroup*)newScalerRateGroup;
 
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
-- (unsigned long) scalerDataId;
-- (void) setScalerDataId: (unsigned long) ScalerDataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
+- (uint32_t) scalerDataId;
+- (void) setScalerDataId: (uint32_t) ScalerDataId;
 
 
 - (BOOL) displayRaw;
@@ -199,7 +199,7 @@ enum {
 - (unsigned short) threshold:(unsigned short) aChan;
 - (unsigned short) thresholdAdc:(unsigned short) aChan;
 - (unsigned short) gain:(unsigned short) aChan;
-- (unsigned long) adcCount:(int)aChannel;
+- (uint32_t) adcCount:(int)aChannel;
 - (void)		clearAdcCounts;
 
 - (void) writeFastClear:(unsigned char) aVal;
@@ -248,7 +248,7 @@ enum {
 - (void) shipScalerRecords;
 
 #pragma mark ¥¥¥Rate
-- (unsigned long) getCounter:(int)tag forGroup:(int)groupTag;
+- (uint32_t) getCounter:(int)tag forGroup:(int)groupTag;
 - (id) rateObject:(int)channel;
 
 #pragma mark ¥¥¥Specialized storage methods

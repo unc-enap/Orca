@@ -211,44 +211,44 @@ enum {
 @interface ORSIS3316Model : ORVmeIOCard <ORDataTaker,ORHWWizard,AutoTesting>
 {
   @private
-    unsigned long   dataId;
-    unsigned long   histoId;
-    unsigned long   statId;
-    long            enabledMask;
-    long            formatMask;
-    long            histogramsEnabledMask;
-    long			pileupEnabledMask;
-    long            acquisitionControlMask;
-    long            nimControlStatusMask;
-    long            clrHistogramsWithTSMask;
-    long            writeHitsToEventMemoryMask;
-    long			heSuppressTriggerMask;
-    unsigned long   cfdControlBits[kNumSIS3316Channels];
-    unsigned long   threshold[kNumSIS3316Channels];
-    unsigned long   riseTime[kNumSIS3316Channels];
-    unsigned long   gapTime[kNumSIS3316Channels];
-    unsigned long   tauFactor[kNumSIS3316Channels];
-    unsigned long   extraFilterBits[kNumSIS3316Channels];
-    unsigned long   tauTableBits[kNumSIS3316Channels];
-    unsigned long   heTrigThreshold[kNumSIS3316Channels];
-    unsigned long   endAddress[kNumSIS3316Groups];
+    uint32_t   dataId;
+    uint32_t   histoId;
+    uint32_t   statId;
+    int32_t            enabledMask;
+    int32_t            formatMask;
+    int32_t            histogramsEnabledMask;
+    int32_t			pileupEnabledMask;
+    int32_t            acquisitionControlMask;
+    int32_t            nimControlStatusMask;
+    int32_t            clrHistogramsWithTSMask;
+    int32_t            writeHitsToEventMemoryMask;
+    int32_t			heSuppressTriggerMask;
+    uint32_t   cfdControlBits[kNumSIS3316Channels];
+    uint32_t   threshold[kNumSIS3316Channels];
+    uint32_t   riseTime[kNumSIS3316Channels];
+    uint32_t   gapTime[kNumSIS3316Channels];
+    uint32_t   tauFactor[kNumSIS3316Channels];
+    uint32_t   extraFilterBits[kNumSIS3316Channels];
+    uint32_t   tauTableBits[kNumSIS3316Channels];
+    uint32_t   heTrigThreshold[kNumSIS3316Channels];
+    uint32_t   endAddress[kNumSIS3316Groups];
     unsigned short  intTrigOutPulseBit[kNumSIS3316Channels];
     unsigned short  triggerDelay[kNumSIS3316Channels];
     unsigned short  dacOffsets[kNumSIS3316Groups];
-    long            trigBothEdgesMask;
-    long            intHeTrigOutPulseMask;
+    int32_t            trigBothEdgesMask;
+    int32_t            intHeTrigOutPulseMask;
 //    unsigned short  hsDiv;
 //    unsigned short  n1Div;
     
     
-    unsigned long   eventConfigMask;
+    uint32_t   eventConfigMask;
     BOOL            extendedEventConfigBit;
-    unsigned long   endAddressSuppressionMask;
+    uint32_t   endAddressSuppressionMask;
     unsigned short  activeTrigGateWindowLen[kNumSIS3316Groups];
     unsigned short  preTriggerDelay[kNumSIS3316Groups];
     
-    unsigned long   rawDataBufferLen;
-    unsigned long   rawDataBufferStart;
+    uint32_t   rawDataBufferLen;
+    uint32_t   rawDataBufferStart;
     unsigned short  energyDivider[kNumSIS3316Channels];
     unsigned short  energyOffset[kNumSIS3316Channels];
 
@@ -270,20 +270,20 @@ enum {
     unsigned short  accGate8Start[kNumSIS3316Groups];
     
     BOOL            enableSum[kNumSIS3316Groups];
-    unsigned long   thresholdSum[kNumSIS3316Groups];
-    unsigned long   heTrigThresholdSum[kNumSIS3316Groups];
-    unsigned long   riseTimeSum[kNumSIS3316Groups];
-    unsigned long   gapTimeSum[kNumSIS3316Groups];
-    unsigned long   cfdControlBitsSum[kNumSIS3316Groups];
-    unsigned long   pileUpWindowLength;
-    unsigned long   rePileUpWindowLength;
+    uint32_t   thresholdSum[kNumSIS3316Groups];
+    uint32_t   heTrigThresholdSum[kNumSIS3316Groups];
+    uint32_t   riseTimeSum[kNumSIS3316Groups];
+    uint32_t   gapTimeSum[kNumSIS3316Groups];
+    uint32_t   cfdControlBitsSum[kNumSIS3316Groups];
+    uint32_t   pileUpWindowLength;
+    uint32_t   rePileUpWindowLength;
 
     int             currentBank;
     int             previousBank;
 	BOOL			isRunning;
  	
 	unsigned short	moduleID;
-    unsigned long   clockSource;
+    uint32_t   clockSource;
     unsigned short  gain;
     unsigned short  termination;
     int             sharing; //clock sharing
@@ -300,9 +300,9 @@ enum {
 	//clocks and delays (Acquisition control reg)
 	
 	ORRateGroup*	waveFormRateGroup;
-	unsigned long 	waveFormCount[kNumSIS3316Channels];
+	uint32_t 	waveFormCount[kNumSIS3316Channels];
 
-	unsigned long   location; //cach to speed takedata
+	uint32_t   location; //cach to speed takedata
 	id              theController;       //cach to speed takedata
     unsigned short  waitingOnChannelMask;
     unsigned short  groupDataTransferedMask;
@@ -314,13 +314,13 @@ enum {
     float           temperature;
     unsigned short  mHzType;
     unsigned short  serialNumber;
-    unsigned long   lemoCoMask;
-    unsigned long   lemoUoMask;
-    unsigned long   lemoToMask;
-    unsigned long   internalGateLen[kNumSIS3316Groups];       //6.24
-    unsigned long   internalCoinGateLen[kNumSIS3316Groups];   //6.24
-    unsigned long   mawBufferLength[kNumSIS3316Channels];
-    unsigned long   mawPretrigDelay[kNumSIS3316Channels];
+    uint32_t   lemoCoMask;
+    uint32_t   lemoUoMask;
+    uint32_t   lemoToMask;
+    uint32_t   internalGateLen[kNumSIS3316Groups];       //6.24
+    uint32_t   internalCoinGateLen[kNumSIS3316Groups];   //6.24
+    uint32_t   mawBufferLength[kNumSIS3316Channels];
+    uint32_t   mawPretrigDelay[kNumSIS3316Channels];
     unsigned char   freqSI570_calibrated_value_125MHz[6]; // new 20.11.2013
     unsigned char   freqPreset62_5MHz[6];
     unsigned char   freqPreset125MHz[6];
@@ -330,8 +330,8 @@ enum {
     BOOL            clocksProgrammed;
     
     //data buffer if Mac is taking data
-    unsigned long*  dataRecord[kNumSIS3316Channels];
-    unsigned long*  histoRecord[kNumSIS3316Channels];
+    uint32_t*  dataRecord[kNumSIS3316Channels];
+    uint32_t*  histoRecord[kNumSIS3316Channels];
     ORTimer*        timer;;
 
 }
@@ -367,92 +367,92 @@ enum {
 - (void) dumpFPGAStatus1;
 - (void) dumpFPGAStatus2;
 
-- (unsigned long) eventConfigMask;
-- (void) setEventConfigMask:(unsigned long)aMask;
+- (uint32_t) eventConfigMask;
+- (void) setEventConfigMask:(uint32_t)aMask;
 - (void) setEventConfigBit:(unsigned short)bit withValue:(BOOL)aValue;
 
 - (BOOL) extendedEventConfigBit;
 - (void) setExtendedEventConfigBit:(BOOL)aValue;
 
-- (unsigned long) endAddressSuppressionMask;
-- (void) setEndAddressSuppressionMask:(unsigned long)aMask;
+- (uint32_t) endAddressSuppressionMask;
+- (void) setEndAddressSuppressionMask:(uint32_t)aMask;
 - (void) setEndAddressSuppressionBit:(unsigned short)aGroup withValue:(BOOL)aValue;
 
-- (long) enabledMask;
-- (void) setEnabledMask:(unsigned long)aMask;
+- (int32_t) enabledMask;
+- (void) setEnabledMask:(uint32_t)aMask;
 - (BOOL) enabled:(unsigned short)chan;
 - (void) setEnabledBit:(unsigned short)chan withValue:(BOOL)aValue;
 
-- (long) formatMask;
+- (int32_t) formatMask;
 - (BOOL) formatBit:(unsigned short)bit;
-- (void) setFormatMask:(unsigned long)aMask;
+- (void) setFormatMask:(uint32_t)aMask;
 - (void) setFormatBit:(unsigned short)bit withValue:(BOOL)aValue;
 - (short) headerLen;
 
 
 ///////
-- (long) acquisitionControlMask;
-- (void) setAcquisitionControlMask:(unsigned long)aMask;
+- (int32_t) acquisitionControlMask;
+- (void) setAcquisitionControlMask:(uint32_t)aMask;
 //////
-- (long) nimControlStatusMask;
-- (void) setNIMControlStatusMask:(unsigned long)aMask;
-- (void) setNIMControlStatusBit:(unsigned long)aChan withValue:(BOOL)aValue;
+- (int32_t) nimControlStatusMask;
+- (void) setNIMControlStatusMask:(uint32_t)aMask;
+- (void) setNIMControlStatusBit:(uint32_t)aChan withValue:(BOOL)aValue;
 //////
-- (long) histogramsEnabledMask;
-- (void) setHistogramsEnabledMask:(unsigned long)aMask;
+- (int32_t) histogramsEnabledMask;
+- (void) setHistogramsEnabledMask:(uint32_t)aMask;
 - (BOOL) histogramsEnabled:(unsigned short)chan;
 - (void) setHistogramsEnabled:(unsigned short)chan withValue:(BOOL)aValue;
 
-- (long) pileupEnabledMask;
-- (void) setPileupEnabledMask:(unsigned long)aMask;
+- (int32_t) pileupEnabledMask;
+- (void) setPileupEnabledMask:(uint32_t)aMask;
 - (BOOL) pileupEnabled:(unsigned short)chan;
 - (void) setPileupEnabled:(unsigned short)chan withValue:(BOOL)aValue;
 
-- (long) clrHistogramsWithTSMask;
-- (void) setClrHistogramsWithTSMask:(unsigned long)aMask;
+- (int32_t) clrHistogramsWithTSMask;
+- (void) setClrHistogramsWithTSMask:(uint32_t)aMask;
 - (BOOL) clrHistogramsWithTS:(unsigned short)chan;
 - (void) setClrHistogramsWithTS:(unsigned short)chan withValue:(BOOL)aValue;
 
-- (long) writeHitsToEventMemoryMask;
-- (void) setWriteHitsToEventMemoryMask:(unsigned long)aMask;
+- (int32_t) writeHitsToEventMemoryMask;
+- (void) setWriteHitsToEventMemoryMask:(uint32_t)aMask;
 - (BOOL) writeHitsToEventMemory:(unsigned short)chan;
 - (void) setWriteHitsToEventMemory:(unsigned short)chan withValue:(BOOL)aValue;
 ///////
 - (void) setTriggerDelay:(unsigned short)aChan withValue: (unsigned short)aValue;
 - (unsigned short) triggerDelay: (unsigned short)aChan;
 
-- (long) heSuppressTriggerMask;
-- (void) setHeSuppressTriggerMask:(unsigned long)aMask;
+- (int32_t) heSuppressTriggerMask;
+- (void) setHeSuppressTriggerMask:(uint32_t)aMask;
 - (BOOL) heSuppressTriggerBit:(unsigned short)chan;
 - (void) setHeSuppressTriggerBit:(unsigned short)chan withValue:(BOOL)aValue;
 
-- (void) setEndAddress:(unsigned short)aGroup withValue: (unsigned long)aValue;
-- (unsigned long) endAddress: (unsigned short)aGroup;
+- (void) setEndAddress:(unsigned short)aGroup withValue: (uint32_t)aValue;
+- (uint32_t) endAddress: (unsigned short)aGroup;
 
-- (void) setThreshold:(unsigned short)chan withValue:(long)aValue;
-- (long) threshold:(unsigned short)chan;
+- (void) setThreshold:(unsigned short)chan withValue:(int32_t)aValue;
+- (int32_t) threshold:(unsigned short)chan;
 
 - (unsigned short) cfdControlBits:(unsigned short)aChan;
 - (void) setCfdControlBits:(unsigned short)aChan withValue:(unsigned short)aValue;
 
-- (unsigned long)   pileUpWindowLength;
-- (void) setPileUpWindow:(unsigned long)aValue;
-- (unsigned long)   rePileUpWindowLength;
-- (void) setRePileUpWindow:(unsigned long)aValue;
+- (uint32_t)   pileUpWindowLength;
+- (void) setPileUpWindow:(uint32_t)aValue;
+- (uint32_t)   rePileUpWindowLength;
+- (void) setRePileUpWindow:(uint32_t)aValue;
 - (void) writePileUpRegisters;
 
 
 - (BOOL) enableSum:(unsigned short)aGroup;
 - (void) setEnableSum:(unsigned short)aGroup withValue:(BOOL)aValue;
 
-- (unsigned long) riseTimeSum:(unsigned short)aGroup;
+- (uint32_t) riseTimeSum:(unsigned short)aGroup;
 - (void)          setRiseTimeSum:(unsigned short)aGroup withValue:(unsigned short)aValue;
 
-- (unsigned long) gapTimeSum:(unsigned short)aGroup;
+- (uint32_t) gapTimeSum:(unsigned short)aGroup;
 - (void)          setGapTimeSum:(unsigned short)aGroup withValue:(unsigned short)aValue;
 
-- (void) setThresholdSum:(unsigned short)aGroup withValue: (unsigned long)aValue;
-- (unsigned long) thresholdSum: (unsigned short)aGroup;
+- (void) setThresholdSum:(unsigned short)aGroup withValue: (uint32_t)aValue;
+- (uint32_t) thresholdSum: (unsigned short)aGroup;
 
 - (unsigned short) dacOffset:(unsigned short)aGroup;
 - (void) setDacOffset:(unsigned short)aGroup withValue:(int)aValue;
@@ -460,14 +460,14 @@ enum {
 - (unsigned short) cfdControlBitsSum:(unsigned short)aChan;
 - (void) setCfdControlBitsSum:(unsigned short)aChan withValue:(unsigned short)aValue;
 
-- (long)clockSource;
-- (void) setClockSource:(long)aValue;
+- (int32_t)clockSource;
+- (void) setClockSource:(int32_t)aValue;
 
-- (long)extraFilterBits:(unsigned short)aChan;
-- (void) setExtraFilterBits:(unsigned short)aChan withValue:(long)aValue;
+- (int32_t)extraFilterBits:(unsigned short)aChan;
+- (void) setExtraFilterBits:(unsigned short)aChan withValue:(int32_t)aValue;
 
-- (long)tauTableBits:(unsigned short)aChan;
-- (void) setTauTableBits:(unsigned short)aChan withValue:(long)aValue;
+- (int32_t)tauTableBits:(unsigned short)aChan;
+- (void) setTauTableBits:(unsigned short)aChan withValue:(int32_t)aValue;
 
 - (unsigned short) energyDivider:(unsigned short)aChan;
 - (void) setEnergyDivider:(unsigned short)aChan withValue:(unsigned short)aValue;
@@ -484,19 +484,19 @@ enum {
 - (void) setRiseTime:(unsigned short)chan withValue:(unsigned short)aValue;
 - (unsigned short) riseTime:(unsigned short)chan;
 
-- (void) setHeTrigThreshold:(unsigned short)chan withValue:(unsigned long)aValue;
-- (unsigned long) heTrigThresholdSum:(unsigned short)aGroup;
+- (void) setHeTrigThreshold:(unsigned short)chan withValue:(uint32_t)aValue;
+- (uint32_t) heTrigThresholdSum:(unsigned short)aGroup;
 
-- (void) setHeTrigThresholdSum:(unsigned short)aGroup withValue:(unsigned long)aValue;
-- (unsigned long) heTrigThreshold:(unsigned short)chan;
+- (void) setHeTrigThresholdSum:(unsigned short)aGroup withValue:(uint32_t)aValue;
+- (uint32_t) heTrigThreshold:(unsigned short)chan;
 
-- (long) trigBothEdgesMask;
-- (void) setTrigBothEdgesMask:(unsigned long)aMask;
+- (int32_t) trigBothEdgesMask;
+- (void) setTrigBothEdgesMask:(uint32_t)aMask;
 - (BOOL) trigBothEdgesBit:(unsigned short)chan;
 - (void) setTrigBothEdgesBit:(unsigned short)chan withValue:(BOOL)aValue;
 
-- (long) intHeTrigOutPulseMask;
-- (void) setIntHeTrigOutPulseMask:(unsigned long)aMask;
+- (int32_t) intHeTrigOutPulseMask;
+- (void) setIntHeTrigOutPulseMask:(uint32_t)aMask;
 - (BOOL) intHeTrigOutPulseBit:(unsigned short)chan;
 - (void) setIntHeTrigOutPulseBit:(unsigned short)chan withValue:(BOOL)aValue;
 
@@ -504,16 +504,16 @@ enum {
 - (void)           setIntTrigOutPulseBit:(unsigned short)aChan withValue:(unsigned short)aValue;
 
 - (unsigned short) activeTrigGateWindowLen:(unsigned short)group;
-- (void)           setActiveTrigGateWindowLen:(unsigned short)group withValue:(unsigned long)aValue;
+- (void)           setActiveTrigGateWindowLen:(unsigned short)group withValue:(uint32_t)aValue;
 
 - (unsigned short)  preTriggerDelay:(unsigned short)group;
 - (void)            setPreTriggerDelay:(unsigned short)group withValue:(unsigned short)aValue;
 
-- (unsigned long)  rawDataBufferLen;
-- (void)            setRawDataBufferLen:(unsigned long)aValue;
+- (uint32_t)  rawDataBufferLen;
+- (void)            setRawDataBufferLen:(uint32_t)aValue;
 
-- (unsigned long)  rawDataBufferStart;
-- (void)           setRawDataBufferStart:(unsigned long)aValue;
+- (uint32_t)  rawDataBufferStart;
+- (void)           setRawDataBufferStart:(uint32_t)aValue;
 
 - (unsigned short)  accGate1Start:(unsigned short)aGroup;
 - (void)            setAccGate1Start:(unsigned short)group withValue:(unsigned short)aValue;
@@ -564,18 +564,18 @@ enum {
 - (void)            setAccGate8Len:(unsigned short)group withValue:(unsigned short)aValue;
 
 
-- (unsigned long)   lemoCoMask;
-- (void)            setLemoCoMask:(unsigned long)aMask;
-- (unsigned long)   lemoUoMask;
-- (void)            setLemoUoMask:(unsigned long)aMask;
-- (unsigned long)   lemoToMask;
-- (void)             setLemoToMask:(unsigned long)aMask;
+- (uint32_t)   lemoCoMask;
+- (void)            setLemoCoMask:(uint32_t)aMask;
+- (uint32_t)   lemoUoMask;
+- (void)            setLemoUoMask:(uint32_t)aMask;
+- (uint32_t)   lemoToMask;
+- (void)             setLemoToMask:(uint32_t)aMask;
 
-- (unsigned long) internalGateLen:(unsigned short)aGroup;
-- (void) setInternalGateLen:(unsigned short)aGroup withValue:(unsigned long)aValue;
+- (uint32_t) internalGateLen:(unsigned short)aGroup;
+- (void) setInternalGateLen:(unsigned short)aGroup withValue:(uint32_t)aValue;
 
-- (unsigned long) internalCoinGateLen:(unsigned short)aGroup;
-- (void) setInternalCoinGateLen:(unsigned short)aGroup withValue:(unsigned long)aValue;
+- (uint32_t) internalCoinGateLen:(unsigned short)aGroup;
+- (void) setInternalCoinGateLen:(unsigned short)aGroup withValue:(uint32_t)aValue;
 
 - (void) initParams;
 
@@ -589,17 +589,17 @@ enum {
 - (unsigned short) serialNumber;
 
 #pragma mark •••Hardware Access
-- (void) writeLong:(unsigned long)aValue toAddress:(unsigned long)anAddress;
-- (unsigned long) readLongFromAddress:(unsigned long)anAddress;
+- (void) writeLong:(uint32_t)aValue toAddress:(uint32_t)anAddress;
+- (uint32_t) readLongFromAddress:(uint32_t)anAddress;
 
 //Comments denote section of the manual 
-- (unsigned long) singleRegister:           (unsigned long)aRegisterIndex;
-- (unsigned long) groupRegister:            (unsigned long)aRegisterIndex  group:(int)aGroup;
-- (unsigned long) channelRegister:          (unsigned long)aRegisterIndex channel:(int)aChannel;
-- (unsigned long) channelRegisterVersionTwo:(unsigned long)aRegisterIndex channel:(int)aChannel;
-- (unsigned long) accumulatorRegisters:     (unsigned long)aRegisterIndex channel:(int)aChannel;
-- (unsigned long)readControlStatusReg;          //6.1
-- (void) writeControlStatusReg:             (unsigned long)aValue;
+- (uint32_t) singleRegister:           (uint32_t)aRegisterIndex;
+- (uint32_t) groupRegister:            (uint32_t)aRegisterIndex  group:(int)aGroup;
+- (uint32_t) channelRegister:          (uint32_t)aRegisterIndex channel:(int)aChannel;
+- (uint32_t) channelRegisterVersionTwo:(uint32_t)aRegisterIndex channel:(int)aChannel;
+- (uint32_t) accumulatorRegisters:     (uint32_t)aRegisterIndex channel:(int)aChannel;
+- (uint32_t)readControlStatusReg;          //6.1
+- (void) writeControlStatusReg:             (uint32_t)aValue;
 - (void) setLed:(BOOL)state;                    //6.1'
 - (void) readModuleID:(BOOL)verbose;            //6.2
 - (void) readHWVersion:(BOOL)verbose;           //6.7
@@ -613,7 +613,7 @@ enum {
 - (void) readNIMControlStatus:(BOOL)verbose;
 - (void) writeAcquisitionRegister;              //6.21
 - (void) dumpAdcOffsetReadback;                 //6.9
-- (unsigned long) readAcquisitionRegister:(BOOL)verbose;
+- (uint32_t) readAcquisitionRegister:(BOOL)verbose;
 - (BOOL) sampleLogicIsBusy;                     //6.21      //pg 119 and on
 - (void) writeEventConfig;                      //6.12 (section 2)
 - (void) dumpEventConfiguration;
@@ -629,10 +629,10 @@ enum {
 - (void) dumpAveConfig;                         //6.20
 - (void) dumpDataFormatConfig;                  //6.21
 - (void) dumpMawBufferConfig;               //6.22
-- (unsigned long) mawBufferLength:(unsigned short)aGroup;
-- (void) setMawBufferLength:(unsigned short)aGroup withValue:(unsigned long)aValue;
-- (unsigned long) mawPretrigDelay:(unsigned short)aGroup;
-- (void) setMawPretrigDelay:(unsigned short)aGroup withValue:(unsigned long)aValue;
+- (uint32_t) mawBufferLength:(unsigned short)aGroup;
+- (void) setMawBufferLength:(unsigned short)aGroup withValue:(uint32_t)aValue;
+- (uint32_t) mawPretrigDelay:(unsigned short)aGroup;
+- (void) setMawPretrigDelay:(unsigned short)aGroup withValue:(uint32_t)aValue;
 - (void) readTimeStamp:(BOOL) verbose;
 
 - (void) dumpInternalTriggerDelayConfig;        //6.23
@@ -658,16 +658,16 @@ enum {
 - (void) writePreTriggerDelays;                 //6.19 (section 2)
 - (void) readPreTriggerDelays:(BOOL)verbose;
 - (void) writeDataFormat;                       //6.21 (section 2)
-- (unsigned long) readTrigCoinLUControl:(BOOL)verbose; //6.22
-- (unsigned long) readTrigCoinLUAddress:(BOOL)verbose; //6.23
-- (unsigned long) readTrigCoinLUData:(BOOL)verbose;  //6.24
-- (unsigned long) readLemoOutCOSelect:(BOOL)verbose;  //6.25
-- (unsigned long) readLemoOutTOSelect:(BOOL)verbose; //6.26
-- (unsigned long) readLemoOutUOSelect:(BOOL)verbose; //6.27
-- (unsigned long) readIntTrigFeedBackSelect:(BOOL)verbose;//6.28
-- (unsigned long) readVmeFpgaAdcDataLinkStatus:(BOOL)verbose;//6.1
-- (unsigned long) readPrescalerOutPulseDivider:(BOOL)verbose;//6.3
-- (unsigned long) readPrescalerOutPulseLength:(BOOL)verbose; //6.4
+- (uint32_t) readTrigCoinLUControl:(BOOL)verbose; //6.22
+- (uint32_t) readTrigCoinLUAddress:(BOOL)verbose; //6.23
+- (uint32_t) readTrigCoinLUData:(BOOL)verbose;  //6.24
+- (uint32_t) readLemoOutCOSelect:(BOOL)verbose;  //6.25
+- (uint32_t) readLemoOutTOSelect:(BOOL)verbose; //6.26
+- (uint32_t) readLemoOutUOSelect:(BOOL)verbose; //6.27
+- (uint32_t) readIntTrigFeedBackSelect:(BOOL)verbose;//6.28
+- (uint32_t) readVmeFpgaAdcDataLinkStatus:(BOOL)verbose;//6.1
+- (uint32_t) readPrescalerOutPulseDivider:(BOOL)verbose;//6.3
+- (uint32_t) readPrescalerOutPulseLength:(BOOL)verbose; //6.4
 - (void) dumpGainTerminationControl;//6.7
 - (void) dumpInternalTriggerCounters;//6.5
 - (void) dumpFPGADataTransferStatus; //6:30
@@ -685,9 +685,9 @@ enum {
 - (void) writeDacRegisters;
 - (void) clearPPSLatchBit;                      //6.39
 
-- (unsigned long) eventNumberGroup:(int)group bank:(int) bank;
-- (unsigned long) eventTriggerGroup:(int)group bank:(int) bank; 
-- (unsigned long) readTriggerTime:(int)bank index:(int)index;
+- (uint32_t) eventNumberGroup:(int)group bank:(int) bank;
+- (uint32_t) eventTriggerGroup:(int)group bank:(int) bank; 
+- (uint32_t) readTriggerTime:(int)bank index:(int)index;
 
 
 - (void) clearTimeStamp;
@@ -703,7 +703,7 @@ enum {
 //- (void) si570ReadDivider:(int) osc data:(unsigned char*)data;
 
 //some test functions
-- (unsigned long) readTriggerEventBank:(int)bank index:(int)index;
+- (uint32_t) readTriggerEventBank:(int)bank index:(int)index;
 - (void) readAddressCounts;
 
 - (void) poll_on_adc_dac_offset_busy;
@@ -713,23 +713,23 @@ enum {
 - (void) writeGainTerminationValues;
 - (void) dumpChan0;
 #pragma mark •••Data Taker
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
-- (unsigned long) histoId;
-- (void) setHistoId: (unsigned long) DataId;
-- (unsigned long) statId;
-- (void) setStatId: (unsigned long) DataId;
+- (uint32_t) histoId;
+- (void) setHistoId: (uint32_t) DataId;
+- (uint32_t) statId;
+- (void) setStatId: (uint32_t) DataId;
 - (void) syncDataIdsWith:(id)anotherShaper;
 - (NSDictionary*) dataRecordDescription;
 - (void) reset;
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
-- (unsigned long) waveFormCount:(int)aChannel;
+- (uint32_t) waveFormCount:(int)aChannel;
 - (void)   startRates;
 - (void) clearWaveFormCounts;
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag;
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag;
 - (int) load_HW_Config_Structure:(SBC_crate_config*)configStruct index:(int)index;
 
 

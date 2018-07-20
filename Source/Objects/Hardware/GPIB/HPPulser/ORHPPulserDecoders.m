@@ -25,24 +25,24 @@
 #import "ORDataTypeAssigner.h"
 
 @implementation ORHPPulserDecoderForPulserSettings
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long value = *((unsigned long*)someData);
+    uint32_t value = *((uint32_t*)someData);
     //for now, just return the length
     return ExtractLength(value);
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     union packed {
-        unsigned long longValue;
+        uint32_t longValue;
         float floatValue;
     }packed;
 
 
     NSString* title= @"HP Pulser Record\n\n";
     
-    NSString* waveForm  = [NSString stringWithFormat:@"Waveform    = %lu\n",ptr[1]];
+    NSString* waveForm  = [NSString stringWithFormat:@"Waveform    = %u\n",ptr[1]];
     packed.longValue = ptr[2];
     NSString* voltage = [NSString stringWithFormat:  @"Voltage     = %.2f\n",packed.floatValue];
     packed.longValue = ptr[3];

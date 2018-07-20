@@ -33,14 +33,14 @@
         NetSocket*          socket;
         BOOL                wasConnected;
   
-        unsigned long		dataId;
+        uint32_t		dataId;
 		NSString*			lastRequest;
 		ORSafeQueue*		cmdQueue;
 		NSMutableString*    buffer;
     
         //unsigned short		adc[8];
         double      		adc[8];//changed to double -tb-
-		unsigned long		timeMeasured[8];
+		uint32_t		timeMeasured[8];
 		ORTimeRate*			timeRates[8];
         int					gain[148];
         int					gainReadBack[148];
@@ -49,7 +49,7 @@
 		BOOL				logToFile;
 		NSString*			logFile;
 		NSMutableArray*		logBuffer;
-		unsigned long		readCount;
+		uint32_t		readCount;
 		int					gainDisplayType;
 		NSString*			lastGainFile;
         BOOL                readOnce;
@@ -113,7 +113,7 @@
 - (NSString*) lastRequest;
 - (void) setLastRequest:(NSString*)aRequest;
 - (double) adc:(int)index;
-- (unsigned long) timeMeasured:(int)index;
+- (uint32_t) timeMeasured:(int)index;
 - (void) setAdc:(int)index value:(double)aValue;
 - (float) lcmVoltage;
 - (double) adcVoltage:(int)index;
@@ -131,8 +131,8 @@
 #pragma mark •••Data Records
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (NSDictionary*) dataRecordDescription;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherPacFP;
 - (void) writeLogBufferToFile;

@@ -93,7 +93,7 @@
 
 - (void) runTypeChanged:(NSNotification *)notification
 {
-    unsigned long runType = [model runType];
+    uint32_t runType = [model runType];
     int i;
     for(i=0;i<32;i++){
         [[runTypeMatrix cellWithTag:i] setState:(runType &(1L<<i))!=0];
@@ -186,7 +186,7 @@
 
 - (IBAction) runTypeAction:(id)sender
 {
-    unsigned long aMask = 0;
+    uint32_t aMask = 0;
     int i;
     for(i=0;i<32;i++){
         if([[runTypeMatrix cellWithTag:i] intValue])aMask |= (1<<i);

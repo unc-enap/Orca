@@ -39,15 +39,15 @@
 
 @interface ORCaen965DecoderForQdc : ORVmeCardDecoder {
 }
-- (unsigned long) decodeData:(void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*) aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)ptr;
+- (uint32_t) decodeData:(void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*) aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)ptr;
 - (void) printData: (NSString*) pName data:(void*) theData;
-- (unsigned short) 	channel: (unsigned long) pDataValue;
-- (unsigned short) rg: (unsigned long) pDataValue;
+- (unsigned short) 	channel: (uint32_t) pDataValue;
+- (unsigned short) rg: (uint32_t) pDataValue;
 @end
 
 @interface ORCaen965ADecoderForQdc : ORCaen965DecoderForQdc {
 }
-- (unsigned short) 	channel: (unsigned long) pDataValue;
-- (unsigned short) rg: (unsigned long) pDataValue;
+- (unsigned short) 	channel: (uint32_t) pDataValue;
+- (unsigned short) rg: (uint32_t) pDataValue;
 @end

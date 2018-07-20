@@ -28,17 +28,17 @@
 @interface ORIP408Model :  ORVmeIPCard <ORBitProcessing>
 {
 	@private
-		unsigned long writeMask;
-		unsigned long readMask;
-		unsigned long writeValue;
-		unsigned long readValue;
+		uint32_t writeMask;
+		uint32_t readMask;
+		uint32_t writeValue;
+		uint32_t readValue;
         NSLock* hwLock;
 		id	cachedController; //for a little more speed
 
 		//bit processing variables
-		unsigned long processInputValue;  //snapshot of the inputs at start of process cycle
-		unsigned long processOutputValue; //outputs to be written at end of process cycle
-		unsigned long processOutputMask;  //controlls which bits are written
+		uint32_t processInputValue;  //snapshot of the inputs at start of process cycle
+		uint32_t processOutputValue; //outputs to be written at end of process cycle
+		uint32_t processOutputMask;  //controlls which bits are written
 }
 
 #pragma mark ¥¥¥Initialization
@@ -47,18 +47,18 @@
 - (void) runStopping:(NSNotification*)aNote;
 
 #pragma mark ¥¥¥Accessors
-- (unsigned long) writeMask;
-- (void) setWriteMask:(unsigned long)aMask;
-- (unsigned long) writeValue;
-- (void) setWriteValue:(unsigned long)aValue;
-- (unsigned long) readMask;
-- (void) setReadMask:(unsigned long)aMask;
-- (unsigned long) readValue;
-- (void) setReadValue:(unsigned long)aValue;
+- (uint32_t) writeMask;
+- (void) setWriteMask:(uint32_t)aMask;
+- (uint32_t) writeValue;
+- (void) setWriteValue:(uint32_t)aValue;
+- (uint32_t) readMask;
+- (void) setReadMask:(uint32_t)aMask;
+- (uint32_t) readValue;
+- (void) setReadValue:(uint32_t)aValue;
 
 #pragma mark ¥¥¥Hardware Access
-- (unsigned long) getInputWithMask:(unsigned long) aChannelMask;
-- (void) setOutputWithMask:(unsigned long) aChannelMask value:(unsigned long) aMaskValue;
+- (uint32_t) getInputWithMask:(uint32_t) aChannelMask;
+- (void) setOutputWithMask:(uint32_t) aChannelMask value:(uint32_t) aMaskValue;
 
 #pragma mark ¥¥¥Bit Processing Protocol
 - (void) startProcessCycle;

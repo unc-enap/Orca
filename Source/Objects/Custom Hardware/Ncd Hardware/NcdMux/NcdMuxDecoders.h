@@ -27,15 +27,15 @@
 
 @interface NcdMuxDecoderForMux : ORBaseDecoder {
 }
-- (unsigned long) decodeData:(void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*) aDataSet;
+- (uint32_t) decodeData:(void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*) aDataSet;
 - (NSString*) getMuxBoxKey:(unsigned short)aMuxBox;
-- (NSString*) dataRecordDescription:(unsigned long*)ptr;
+- (NSString*) dataRecordDescription:(uint32_t*)ptr;
 @end
 
 
 @interface NcdMuxDecoderForMuxEventReg : ORBaseDecoder {
 }
-- (unsigned long) decodeData:(void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*) aDataSet;
+- (uint32_t) decodeData:(void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*) aDataSet;
 - (NSString*) getMuxBoxKey:(unsigned short)aMuxBox;
-- (NSString*) dataRecordDescription:(unsigned long*)ptr;
+- (NSString*) dataRecordDescription:(uint32_t*)ptr;
 @end

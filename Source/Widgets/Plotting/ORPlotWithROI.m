@@ -135,8 +135,8 @@
 - (void) moveRoiToCenter
 {
 	ORAxis* mXScale = [plotView xScale];
-	long numberVisibleChannels  = [mXScale maxValue] - [mXScale minValue] +1;
-	long centerChannel			= [mXScale minValue] + numberVisibleChannels/2;
+	int32_t numberVisibleChannels  = [mXScale maxValue] - [mXScale minValue] +1;
+	int32_t centerChannel			= [mXScale minValue] + numberVisibleChannels/2;
 	[roi setMinChannel:centerChannel - numberVisibleChannels*.1];
 	[roi setMaxChannel:centerChannel + numberVisibleChannels*.1];
 }
@@ -173,11 +173,11 @@
 - (id) roiAtPoint:(NSPoint)aPoint
 {
 	NSPoint plotPoint = [self convertFromWindowToPlot:aPoint];
-	long mouseChannel  = plotPoint.x;
+	int32_t mouseChannel  = plotPoint.x;
 	ORAxis* mXScale = [plotView xScale];
 	
-	long aMinChannel = MAX([mXScale minLimit],mouseChannel-3);
-	long aMaxChannel = MIN([mXScale maxLimit],mouseChannel+3);
+	int32_t aMinChannel = MAX([mXScale minLimit],mouseChannel-3);
+	int32_t aMaxChannel = MIN([mXScale maxLimit],mouseChannel+3);
 	return [[[OR1dRoi alloc] initWithMin:aMinChannel max:aMaxChannel] autorelease];
 }
 
@@ -288,8 +288,8 @@
 		
 		[roi analyzeData];
 		
-		long minChan = MAX(0,[roi minChannel]);
-		long maxChan = MIN([roi maxChannel],numPoints-1);
+		int32_t minChan = MAX(0,[roi minChannel]);
+		int32_t maxChan = MIN([roi maxChannel],numPoints-1);
 		NSColor* fillColor = [[self lineColor] highlightWithLevel:.7];
 		fillColor = [fillColor colorWithAlphaComponent:.3];
 		[fillColor set];
@@ -299,7 +299,7 @@
 		double xValue,yValue;
 		[dataSource plotter:self index:(int)minChan x:&xValue y:&yValue];
 		yl	= [mYScale getPixAbs:yValue];
-		long ix;
+		int32_t ix;
 		for (ix=minChan; ix<=maxChan+1;++ix) {		
 			[dataSource plotter:self index:(int)ix x:&xValue y:&yValue];
 			x = [mXScale getPixAbsFast:ix log:NO integer:YES minPad:aMinPadx];
@@ -314,8 +314,8 @@
 	
 	//draw the roi bounds
 	if(roi && roiVisible){
-		long minChan = MAX(0,[roi minChannel]);
-		long maxChan = MIN([roi maxChannel],[mXScale maxLimit]);
+		int32_t minChan = MAX(0,[roi minChannel]);
+		int32_t maxChan = MIN([roi maxChannel],[mXScale maxLimit]);
 		
 		[[NSColor blackColor] set];
 		[NSBezierPath setDefaultLineWidth:.5];

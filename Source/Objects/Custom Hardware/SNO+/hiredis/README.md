@@ -103,7 +103,7 @@ was received:
 
 * **`REDIS_REPLY_INTEGER`**:
     * The command replied with an integer. The integer value can be accessed using the
-      `reply->integer` field of type `long long`.
+      `reply->integer` field of type `int64_t`.
 
 * **`REDIS_REPLY_NIL`**:
     * The command replied with a **nil** object. There is no data to access.

@@ -99,42 +99,42 @@ NSString* ORSIS3350ModelIDChanged				= @"ORSIS3350ModelIDChanged";
 #define kAcqStatusArmedFlag	        			0x00010000
 #define kMaxAdcBufferLength						0x10000
 
-static unsigned long thresholdRegOffsets[4]={
+static uint32_t thresholdRegOffsets[4]={
 	0x02000034,
 	0x0200003C,
 	0x03000034,
 	0x0300003C
 };
 
-static unsigned long addressThresholdRegOffsets[4]={
+static uint32_t addressThresholdRegOffsets[4]={
 	0x02000028,
 	0x03000028,
 	0x02000028,
 	0x03000028
 };
 
-static unsigned long triggerPulseRegOffsets[4]={
+static uint32_t triggerPulseRegOffsets[4]={
 	0x02000030,
 	0x02000038,
 	0x03000030,
 	0x03000038
 };
 
-static unsigned long actualSampleAddressOffsets[4]={
+static uint32_t actualSampleAddressOffsets[4]={
 	0x02000010,
 	0x02000014,
 	0x03000010,
 	0x03000014
 };
 
-static unsigned long adcOffsets[4]={
+static uint32_t adcOffsets[4]={
 	0x04000000,
 	0x05000000,
 	0x06000000,
 	0x07000000
 };
 
-static unsigned long adcGainOffsets[4]={
+static uint32_t adcGainOffsets[4]={
 	0x02000048,
 	0x0200004C,
 	0x03000048,
@@ -145,15 +145,15 @@ static unsigned long adcGainOffsets[4]={
 #define kMaxPageSampleLength 0x800000    // 8 MSample / 16 MByte	  
 #define kMaxSampleLength	 0x8000000	 // 128 MSample / 256 MByte
 
-unsigned long rblt_data[kMaxNumberWords];
+uint32_t rblt_data[kMaxNumberWords];
 
 @interface ORSIS3350Model (private)
 - (void) takeDataType1:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo reorder:(BOOL)reorder;
 - (void) takeDataType2:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo reorder:(BOOL)reorder;
 - (void) readAndShip:(ORDataPacket*)aDataPacket
 			 channel: (int) aChannel 
-  sampleStartAddress:(unsigned long) aBufferSampleStartAddress 
-	sampleEndAddress:(unsigned long) aBufferSampleEndAddress
+  sampleStartAddress:(uint32_t) aBufferSampleStartAddress 
+	sampleEndAddress:(uint32_t) aBufferSampleEndAddress
 			 reOrder:(BOOL)reOrder;
 - (NSData*) reOrderOneEvent:(NSData*)theSourceData;
 @end
@@ -228,12 +228,12 @@ unsigned long rblt_data[kMaxNumberWords];
 	[self setMemoryWrapLength:2048];
 }
 
-- (long) memoryWrapLength
+- (int32_t) memoryWrapLength
 {
     return memoryWrapLength;
 }
 
-- (void) setMemoryWrapLength:(long)aMemoryWrapLength
+- (void) setMemoryWrapLength:(int32_t)aMemoryWrapLength
 {
 	if(aMemoryWrapLength<0)aMemoryWrapLength=0;
 	else if(aMemoryWrapLength>0xffffff)aMemoryWrapLength = 0xffffff;
@@ -314,12 +314,12 @@ unsigned long rblt_data[kMaxNumberWords];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORSIS3350ModelGateSyncLimitLengthChanged object:self];
 }
 
-- (long) maxNumEvents
+- (int32_t) maxNumEvents
 {
     return maxNumEvents;
 }
 
-- (void) setMaxNumEvents:(long)aMaxNumEvents
+- (void) setMaxNumEvents:(int32_t)aMaxNumEvents
 {
 	if(aMaxNumEvents<0)aMaxNumEvents=0;
 	else if(aMaxNumEvents>kMaxNumEvents)aMaxNumEvents = kMaxNumEvents;
@@ -357,24 +357,24 @@ unsigned long rblt_data[kMaxNumberWords];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORSIS3350ModelFreqMChanged object:self];
 }
 
-- (long) memoryStartModeLength
+- (int32_t) memoryStartModeLength
 {
     return memoryStartModeLength;
 }
 
-- (void) setMemoryStartModeLength:(long)aMemoryStartModeLength
+- (void) setMemoryStartModeLength:(int32_t)aMemoryStartModeLength
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setMemoryStartModeLength:memoryStartModeLength];
     memoryStartModeLength = aMemoryStartModeLength;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORSIS3350ModelMemoryStartModeLengthChanged object:self];
 }
 
-- (long) memoryTriggerDelay
+- (int32_t) memoryTriggerDelay
 {
     return memoryTriggerDelay;
 }
 
-- (void) setMemoryTriggerDelay:(long)aMemoryTriggerDelay
+- (void) setMemoryTriggerDelay:(int32_t)aMemoryTriggerDelay
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setMemoryTriggerDelay:memoryTriggerDelay];
     memoryTriggerDelay = aMemoryTriggerDelay;
@@ -499,7 +499,7 @@ unsigned long rblt_data[kMaxNumberWords];
 }
 
 #pragma mark •••Rates
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
 {
 	if(groupTag == 0){
 		if(counterTag>=0 && counterTag<kNumSIS3350Channels){
@@ -520,7 +520,7 @@ unsigned long rblt_data[kMaxNumberWords];
 	return [[triggerModes objectAtIndex:chan] intValue]; 
 }
 
-- (void) setTriggerMode:(short)aChan withValue:(long)aValue	
+- (void) setTriggerMode:(short)aChan withValue:(int32_t)aValue	
 { 
 	if(!triggerModes){
 		triggerModes = [[NSMutableArray arrayWithCapacity:kNumSIS3350Channels] retain];
@@ -535,7 +535,7 @@ unsigned long rblt_data[kMaxNumberWords];
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORSIS3350ModelTriggerModeChanged object:self userInfo:userInfo];	
 }
 
-- (long) gain:(int)aChan
+- (int32_t) gain:(int)aChan
 {
 	if(!gains){
 		gains = [[NSMutableArray arrayWithCapacity:kNumSIS3350Channels] retain];
@@ -545,7 +545,7 @@ unsigned long rblt_data[kMaxNumberWords];
     return [[gains objectAtIndex:aChan] intValue];
 }
 
-- (void) setGain:(int)aChan withValue:(long)aValue 
+- (void) setGain:(int)aChan withValue:(int32_t)aValue 
 { 
 	if(!gains){
 		gains = [[NSMutableArray arrayWithCapacity:kNumSIS3350Channels] retain];
@@ -560,7 +560,7 @@ unsigned long rblt_data[kMaxNumberWords];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORSIS3350ModelGainChanged object:self userInfo:userInfo];
 }
 
-- (long) dacValue:(int)aChan
+- (int32_t) dacValue:(int)aChan
 {
 	if(!dacValues){
 		dacValues = [[NSMutableArray arrayWithCapacity:kNumSIS3350Channels] retain];
@@ -570,7 +570,7 @@ unsigned long rblt_data[kMaxNumberWords];
     return [[dacValues objectAtIndex:aChan] intValue];
 }
 
-- (void) setDacValue:(int)aChan withValue:(long)aValue 
+- (void) setDacValue:(int)aChan withValue:(int32_t)aValue 
 { 
 	if(!dacValues){
 		dacValues = [[NSMutableArray arrayWithCapacity:kNumSIS3350Channels] retain];
@@ -706,7 +706,7 @@ unsigned long rblt_data[kMaxNumberWords];
 #pragma mark •••Hardware Access
 - (void) readModuleID:(BOOL)verbose
 {	
-	unsigned long result = 0;
+	uint32_t result = 0;
 	[[self adapter] readLongBlock:&result
                          atAddress:baseAddress + kModuleIDReg
                         numToRead:1
@@ -722,7 +722,7 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (float) readTemperature:(BOOL)verbose
 {	
-	unsigned long result = 0;
+	uint32_t result = 0;
 	[[self adapter] readLongBlock:&result
 						atAddress:baseAddress + kTemperatureRegister
                         numToRead:1
@@ -759,7 +759,7 @@ unsigned long rblt_data[kMaxNumberWords];
 - (void) writeControlStatusRegister
 {
 	// The register is set up as a J/K flip/flop -- 1 bit to set a function and 1 bit to disable.	
-	unsigned long aMask = 0x0;
+	uint32_t aMask = 0x0;
 	
 	aMask |= (invertLemo & 0x1)<<4;  //Invert Lemo trigger input
 	aMask |= (ledOn		 & 0x1);
@@ -776,7 +776,7 @@ unsigned long rblt_data[kMaxNumberWords];
 - (void) writeAcquisitionRegister
 {
 	// The register is set up as a J/K flip/flop -- 1 bit to set a function and 1 bit to disable.	
-	unsigned long aMask = 0x0;
+	uint32_t aMask = 0x0;
 	
 	aMask |= (operationMode & 0x7);
 	aMask |= (multiEvent    & 0x1)<<5;  //Multi-Event Mode
@@ -798,7 +798,7 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) writeFreqSynthRegister
 {
-	unsigned long aMask = 0x0;
+	uint32_t aMask = 0x0;
 	aMask |= (freqM & 0x1FF);
 	aMask |= (freqN & 0x3) << 9;  
 	
@@ -809,9 +809,9 @@ unsigned long rblt_data[kMaxNumberWords];
                      usingAddSpace:0x01];
 }
 
-- (unsigned long) readAcqRegister
+- (uint32_t) readAcqRegister
 {
-	unsigned long aValue;
+	uint32_t aValue;
 	[[self adapter] readLongBlock:&aValue
                          atAddress:baseAddress + kAcquisitionControlReg
                         numToRead:1
@@ -820,9 +820,9 @@ unsigned long rblt_data[kMaxNumberWords];
 	return aValue;
 }
 
-- (unsigned long) readEventCounter
+- (uint32_t) readEventCounter
 {
-	unsigned long aValue;
+	uint32_t aValue;
 	[[self adapter] readLongBlock:&aValue
 						atAddress:baseAddress + kEventCounterReg
                         numToRead:1
@@ -832,7 +832,7 @@ unsigned long rblt_data[kMaxNumberWords];
 }
 
 
-- (void) writeAdcMemoryPage:(unsigned long)aPage
+- (void) writeAdcMemoryPage:(uint32_t)aPage
 {
 	[[self adapter] writeLongBlock:&aPage
 						 atAddress:baseAddress + kAdcMemoryPageRegister
@@ -846,7 +846,7 @@ unsigned long rblt_data[kMaxNumberWords];
 {
 	int i;
 	for(i=0;i<kNumSIS3350Channels;i++){
-		unsigned long aGain = [self gain:i];
+		uint32_t aGain = [self gain:i];
 		[[self adapter] writeLongBlock:&aGain
 							 atAddress:baseAddress + adcGainOffsets[i]
 							numToWrite:1
@@ -857,12 +857,12 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) writeDacOffsets
 {
-	unsigned long data, addr;
-	unsigned long max_timeout, timeout_cnt;
+	uint32_t data, addr;
+	uint32_t max_timeout, timeout_cnt;
 	int i;
 	for(i=0;i<kNumSIS3350Channels;i++){
-		unsigned long dac_select_no = i%2;
-		unsigned long module_dac_control_status_addr = baseAddress + (i<=1 ? kADC12DacControlStatus : kADC34DacControlStatus);
+		uint32_t dac_select_no = i%2;
+		uint32_t module_dac_control_status_addr = baseAddress + (i<=1 ? kADC12DacControlStatus : kADC34DacControlStatus);
 		data =  [self dacValue:i];
 		addr = module_dac_control_status_addr + 4; // DAC_DATA
 		[[self adapter] writeLongBlock:&data
@@ -921,7 +921,7 @@ unsigned long rblt_data[kMaxNumberWords];
 	}
 }
 
-- (void) writeSampleStartAddress:(unsigned long)aValue
+- (void) writeSampleStartAddress:(uint32_t)aValue
 {
 	[[self adapter] writeLongBlock:&aValue
 						 atAddress:baseAddress + kSampleStartAddressAll
@@ -930,7 +930,7 @@ unsigned long rblt_data[kMaxNumberWords];
 					 usingAddSpace:0x01];
 }
 
-- (void) writeValue:(unsigned long)aValue offset:(long)anOffset
+- (void) writeValue:(uint32_t)aValue offset:(int32_t)anOffset
 {
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:baseAddress + anOffset
@@ -941,7 +941,7 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) writeRingBufferParams
 {
-	unsigned long aValue = ringBufferLen;
+	uint32_t aValue = ringBufferLen;
 	[[self adapter] writeLongBlock:&aValue
 						 atAddress:baseAddress + kRingbufferLengthRegisterAll
 						numToWrite:1
@@ -962,8 +962,8 @@ unsigned long rblt_data[kMaxNumberWords];
 	
 	int i;
 	for(i=0;i<kNumSIS3350Channels;i++){
-		unsigned long aMask = 0x0;
-		unsigned long triggerModeMask = 0x0;
+		uint32_t aMask = 0x0;
+		uint32_t triggerModeMask = 0x0;
 		int triggerMode = [[triggerModes objectAtIndex:i]intValue];
 		if      (triggerMode == 0) {  triggerModeMask = 0; }
 		else if (triggerMode == 1) {  triggerModeMask = kTriggerEnabled; }
@@ -982,7 +982,7 @@ unsigned long rblt_data[kMaxNumberWords];
 	}
 	
 	for(i = 0; i < 4; i++) {
-		unsigned long thresValue = (([[thresholdOffs objectAtIndex:i] longValue] & 0xfff) << 16) | ([[thresholds objectAtIndex:i] longValue] &0xfff);
+		uint32_t thresValue = (([[thresholdOffs objectAtIndex:i] longValue] & 0xfff) << 16) | ([[thresholds objectAtIndex:i] longValue] &0xfff);
 		[[self adapter] writeLongBlock:&thresValue
 							 atAddress:baseAddress + thresholdRegOffsets[i]
 							numToWrite:1
@@ -993,9 +993,9 @@ unsigned long rblt_data[kMaxNumberWords];
 	
 }
 
-- (unsigned long) readAcquisitionRegister
+- (uint32_t) readAcquisitionRegister
 {
-	unsigned long aValue = 0x0;
+	uint32_t aValue = 0x0;
 	[[self adapter] readLongBlock:&aValue
                          atAddress:baseAddress + kAcquisitionControlReg
                         numToRead:1
@@ -1013,14 +1013,14 @@ unsigned long rblt_data[kMaxNumberWords];
 	NSLogFont(font,@"Chan Thresholds   Thresholds  Threshold\n");
 	int i;
 	for(i =0; i < 4; i++) {
-		unsigned long aThreshold;
+		uint32_t aThreshold;
 		[[self adapter] readLongBlock: &aThreshold
 							atAddress: baseAddress + thresholdRegOffsets[i]
 							numToRead: 1
 						   withAddMod: addressModifier
 						usingAddSpace: 0x01];
 		
-		unsigned long aEndThreshold;
+		uint32_t aEndThreshold;
 		[[self adapter] readLongBlock: &aEndThreshold
 							atAddress: baseAddress + addressThresholdRegOffsets[i]
 							numToRead: 1
@@ -1033,7 +1033,7 @@ unsigned long rblt_data[kMaxNumberWords];
 	NSLogFont(font,@"-------------------------------------------\n");
 	NSLogFont(font,@"Chan   Trigger   PulseLen  SumGap  PeakTime\n");
 	for(i =0; i < 4; i++) {
-		unsigned long aValue;
+		uint32_t aValue;
 		[[self adapter] readLongBlock: &aValue
 							atAddress: baseAddress + triggerPulseRegOffsets[i]
 							numToRead: 1
@@ -1044,7 +1044,7 @@ unsigned long rblt_data[kMaxNumberWords];
 	}
 	
 	NSLogFont(font,@"-------------------------------------------\n");
-	unsigned long aValue = [self readAcqRegister];
+	uint32_t aValue = [self readAcqRegister];
 	NSLogFont(font,@"Status Mode      : %@\n",[self operationModeName:aValue & 0x7]);
 	NSLogFont(font,@"Clock Source     : %@\n",[self clockSourceName:(aValue>>12 & 0x3)]);
 	NSLogFont(font,@"MultiEvent       : %@\n",((aValue>>5) & 0x1)   ? @"YES":@"NO");
@@ -1052,9 +1052,9 @@ unsigned long rblt_data[kMaxNumberWords];
 }
 
 #pragma mark •••Data Taker
-- (unsigned long) dataId { return dataId; }
+- (uint32_t) dataId { return dataId; }
 
-- (void) setDataId: (unsigned long) DataId
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -1376,7 +1376,7 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) reset
 {
-	unsigned long aValue = 1;
+	uint32_t aValue = 1;
 	[[self adapter] writeLongBlock: &aValue
 						atAddress: baseAddress + kResetRegister
 						numToWrite: 1
@@ -1387,7 +1387,7 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) armSamplingLogic
 {
-	unsigned long aValue = 1;
+	uint32_t aValue = 1;
 	[[self adapter] writeLongBlock: &aValue
 						atAddress: baseAddress + kArmSamplingLogicRegister
 						numToWrite: 1
@@ -1398,7 +1398,7 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) disarmSamplingLogic
 {
-	unsigned long aValue = 1;
+	uint32_t aValue = 1;
 	[[self adapter] writeLongBlock: &aValue
 						atAddress: baseAddress + kDisarmSamplingLogicRegister
 						numToWrite: 1
@@ -1409,7 +1409,7 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) fireTrigger
 {
-	unsigned long aValue = 1;
+	uint32_t aValue = 1;
 	[[self adapter] writeLongBlock: &aValue
 						atAddress: baseAddress + kVMETriggerRegister
 						numToWrite: 1
@@ -1420,7 +1420,7 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) clearTimeStamps;
 {
-	unsigned long aValue = 1;
+	uint32_t aValue = 1;
 	[[self adapter] writeLongBlock: &aValue
 						atAddress: baseAddress + kTimeStampClearRegister
 						numToWrite: 1
@@ -1438,7 +1438,7 @@ unsigned long rblt_data[kMaxNumberWords];
     return YES;
 }
 
-- (unsigned long) waveFormCount:(int)aChannel
+- (uint32_t) waveFormCount:(int)aChannel
 {
     return waveFormCount[aChannel];
 }
@@ -1610,12 +1610,12 @@ unsigned long rblt_data[kMaxNumberWords];
 @implementation ORSIS3350Model (private)
 - (void) takeDataType1:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo reorder:(BOOL)reorder
 {
-	unsigned long status = [self readAcqRegister];
+	uint32_t status = [self readAcqRegister];
 	if((status & kAcqStatusArmedFlag) != kAcqStatusArmedFlag){
 		int i;
 		for(i=0;i<kNumSIS3350Channels;i++){
 			
-			unsigned long stop_next_sample_addr = 0;
+			uint32_t stop_next_sample_addr = 0;
 			[[self adapter] readLongBlock:&stop_next_sample_addr
 								atAddress:baseAddress + actualSampleAddressOffsets[i]
 								numToRead:1
@@ -1630,8 +1630,8 @@ unsigned long rblt_data[kMaxNumberWords];
 				if(multiEvent)n = (int)[self readEventCounter];
 				if(n>0){
 					int event;
-					unsigned long start = 0;
-					unsigned long eventSize = stop_next_sample_addr/n;
+					uint32_t start = 0;
+					uint32_t eventSize = stop_next_sample_addr/n;
 					for(event=0;event<n;event++){
 						[self readAndShip:aDataPacket channel:i sampleStartAddress:start sampleEndAddress:start+eventSize reOrder:reorder];
 						start += eventSize;
@@ -1645,12 +1645,12 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) takeDataType2:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo reorder:(BOOL)reorder
 {
-	unsigned long status = [self readAcqRegister];
+	uint32_t status = [self readAcqRegister];
 	if((status & kAcqStatusEndAddressFlag) == kAcqStatusEndAddressFlag){
 		[self disarmSamplingLogic];
 		int i;
 		for(i=0;i<kNumSIS3350Channels;i++){
-			unsigned long stop_next_sample_addr;
+			uint32_t stop_next_sample_addr;
 			[[self adapter] readLongBlock:&stop_next_sample_addr
 								atAddress:baseAddress + actualSampleAddressOffsets[i]
 								numToRead:1
@@ -1670,14 +1670,14 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) readAndShip:(ORDataPacket*)aDataPacket
 			 channel:(int) aChannel 
-  sampleStartAddress:(unsigned long) aBufferSampleStartAddress 
-	sampleEndAddress:(unsigned long) aBufferSampleEndLength
+  sampleStartAddress:(uint32_t) aBufferSampleStartAddress 
+	sampleEndAddress:(uint32_t) aBufferSampleEndLength
 			 reOrder:(BOOL)reOrder
 {
 	
-	unsigned long numLongWords = (aBufferSampleEndLength - aBufferSampleStartAddress)/2;
+	uint32_t numLongWords = (aBufferSampleEndLength - aBufferSampleStartAddress)/2;
 	NSMutableData* theData = [NSMutableData dataWithLength:numLongWords*4 + 4 + 4]; //data + ORCA header
-	unsigned long* dataPtr = (unsigned long*)[theData bytes];
+	uint32_t* dataPtr = (uint32_t*)[theData bytes];
 	dataPtr[0] = dataId | numLongWords + 2;
 	dataPtr[1] = location | aChannel;
 		
@@ -1702,28 +1702,28 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (NSData*) reOrderOneEvent:(NSData*)theOriginalData
 {
-	unsigned long i;
-	unsigned long  wrap_length	= [self memoryWrapLength];
-	unsigned long* inDataPtr    = (unsigned long*)[theOriginalData bytes];
-	unsigned long  dataLength   = [theOriginalData length];
+	uint32_t i;
+	uint32_t  wrap_length	= [self memoryWrapLength];
+	uint32_t* inDataPtr    = (uint32_t*)[theOriginalData bytes];
+	uint32_t  dataLength   = [theOriginalData length];
 	
 	NSMutableData* theRearrangedData = [NSMutableData dataWithLength:dataLength];
-	unsigned long* outDataPtr		 = (unsigned long*)[theRearrangedData bytes];
+	uint32_t* outDataPtr		 = (uint32_t*)[theRearrangedData bytes];
 	
-	unsigned long lword_length     = 0;
-	unsigned long lword_stop_index = 0;
-	unsigned long lword_wrap_index = 0;
+	uint32_t lword_length     = 0;
+	uint32_t lword_stop_index = 0;
+	uint32_t lword_wrap_index = 0;
 	
-	unsigned long wrapped	   = 0;
-	unsigned long stopDelayCounter=0;
+	uint32_t wrapped	   = 0;
+	uint32_t stopDelayCounter=0;
 	
-	unsigned long event_sample_length = wrap_length;
+	uint32_t event_sample_length = wrap_length;
 	
 	if (dataLength != 0) {
 		outDataPtr[0] = inDataPtr[0]; //copy ORCA header
 		outDataPtr[1] = inDataPtr[1]; //copy ORCA header
 		
-		unsigned long index = 2;
+		uint32_t index = 2;
 		
 		outDataPtr[index] = inDataPtr[index];	// copy Timestamp	
 		outDataPtr[index+1] = inDataPtr[index+1];	// copy Timestamp	    
@@ -1731,7 +1731,7 @@ unsigned long rblt_data[kMaxNumberWords];
 		wrapped			 =   ((inDataPtr[4]  & 0x08000000) >> 27); 
 		stopDelayCounter =   ((inDataPtr[4]  & 0x03000000) >> 24); 
 		
-		unsigned long stopAddress =   ((inDataPtr[index+2]  & 0x7) << 24)  
+		uint32_t stopAddress =   ((inDataPtr[index+2]  & 0x7) << 24)  
 									+ ((inDataPtr[index+3]  & 0xfff0000 ) >> 4) 
 									+  (inDataPtr[index+3]  & 0xfff);
 		

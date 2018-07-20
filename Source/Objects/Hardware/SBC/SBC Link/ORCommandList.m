@@ -107,7 +107,7 @@
 
 - (void) extractData:(SBC_Packet*) aPacket
 {
-	unsigned long totalBytesToProcess = aPacket->cmdHeader.numberBytesinPayload;
+	uint32_t totalBytesToProcess = aPacket->cmdHeader.numberBytesinPayload;
 	char* dataToProcess = (char*) aPacket->payload;
 	for(id aCmd in commands){
 		SBC_Packet* packetToProcess = (SBC_Packet*)dataToProcess;
@@ -117,7 +117,7 @@
 		if(totalBytesToProcess<=0)break; //we should drop out after all cmds processed, but just in case
 	}
 }
-- (long) longValueForCmd:(int)anIndex
+- (int32_t) longValueForCmd:(int)anIndex
 {
 	if(anIndex<[commands count]){
 		return [[commands objectAtIndex:anIndex] longValue];

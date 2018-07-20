@@ -144,7 +144,7 @@
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"AD3512 (Station %ld)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"AD3512 (Station %d)",(int)[model stationNumber]]];
 }
 
 - (void) enabledChanged:(NSNotification*)aNotification

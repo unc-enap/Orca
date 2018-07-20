@@ -32,7 +32,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"Lan-NetIO-230 %lu",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"Lan-NetIO-230 %u",[model uniqueIdNumber]]];
 }
 
 - (void) registerNotificationObservers

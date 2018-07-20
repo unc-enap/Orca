@@ -62,7 +62,7 @@ NSString*  ORGretinaTriggerTimeStampChanged             = @"ORGretinaTriggerTime
 
 @interface ORGretinaTriggerModel (private)
 - (void) programFlashBuffer:(NSData*)theData;
-- (void) programFlashBufferBlock:(NSData*)theData address:(unsigned long)address numberBytes:(unsigned long)numberBytesToWrite;
+- (void) programFlashBufferBlock:(NSData*)theData address:(uint32_t)address numberBytes:(uint32_t)numberBytesToWrite;
 - (void) blockEraseFlash;
 - (void) programFlashBuffer:(NSData*)theData;
 - (BOOL) verifyFlashBuffer:(NSData*)theData;
@@ -82,7 +82,7 @@ NSString*  ORGretinaTriggerTimeStampChanged             = @"ORGretinaTriggerTime
 #pragma mark •••Static Declarations
 
 typedef struct {
-	unsigned long offset; //from the base address
+	uint32_t offset; //from the base address
 	NSString* name;
 	BOOL accessType;
 	BOOL hwType;
@@ -543,7 +543,7 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(pollLock) object:nil];
         BOOL doInit = [[[aNote userInfo] objectForKey:@"doinit"] boolValue];
         if(doInit){
-            unsigned long aValue = [self readRegister:kMiscCtl1];
+            uint32_t aValue = [self readRegister:kMiscCtl1];
             [self writeRegister:kMiscCtl1 withValue:aValue |= (0x1<<6)]; //set the Imp Syn
             [self setMiscCtl1Reg:       [self readRegister:kMiscCtl1]];  //display it
         }
@@ -569,7 +569,7 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
     //When this bit is set, the timestamp counter is held reset with value of zero
     //Since there is just a couple of operations here and we want to be fast just
     //send the commands without going thru a state machine.
-    unsigned long aValue = [self readRegister:kMiscCtl1];
+    uint32_t aValue = [self readRegister:kMiscCtl1];
     [self writeRegister:kMiscCtl1 withValue:aValue |= (0x1<<6)];//set imp sync to hold clocks in reset
     [self resetScalerTimeStamps];
     [self writeRegister:kMiscCtl1 withValue:aValue &= ~(0x1<<6)];//release imp sync
@@ -664,9 +664,9 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
 
 #pragma mark ***Accessors
 
-- (unsigned long long) timeStamp
+- (uint64_t) timeStamp
 {
-    return ((long long)timeStampA)<<24 | ((long long)timeStampB)<<16 | timeStampB;
+    return ((int64_t)timeStampA)<<24 | ((int64_t)timeStampB)<<16 | timeStampB;
 }
 
 - (unsigned short) numTimesToRetry
@@ -919,7 +919,7 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
 	return register_information[index].name;
 }
 
-- (unsigned long) registerOffsetAt:(unsigned int)index
+- (uint32_t) registerOffsetAt:(unsigned int)index
 {
 	if (index >= kNumberOfGretinaTriggerRegisters) return 0;
 	return register_information[index].offset;
@@ -1925,7 +1925,7 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
 }
 
 
-- (unsigned long) baseAddress
+- (uint32_t) baseAddress
 {
 	return (([self slot]+1)&0x1f)<<20;
 }
@@ -1951,7 +1951,7 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
 					usingAddSpace:0x01];
     return theValue;
 }
-- (void) writeToAddress:(unsigned long)anAddress aValue:(unsigned short)aValue
+- (void) writeToAddress:(uint32_t)anAddress aValue:(unsigned short)aValue
 {
     [[self adapter] writeWordBlock:&aValue
                          atAddress:[self baseAddress] + anAddress
@@ -1960,7 +1960,7 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
 					 usingAddSpace:0x01];
     
 }
-- (unsigned short) readFromAddress:(unsigned long)anAddress
+- (unsigned short) readFromAddress:(uint32_t)anAddress
 {
     unsigned short value = 0;
     [[self adapter] readWordBlock:&value
@@ -2063,8 +2063,8 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
     }
 }
 #pragma mark •••Data Records
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -2115,7 +2115,7 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
             timeStampB = [self readRegister:kTimeStampB];
             timeStampC = [self readRegister:kTimeStampC];
             
-            unsigned long data[5];
+            uint32_t data[5];
             data[0] = dataId | 5;                       //Data Id
             data[1] =   locked      << 4   |            //locked
                         linkWasLost << 5   |            //link was lost
@@ -2127,7 +2127,7 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
             
             [[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification
                                                                 object:[NSData dataWithBytes:data
-                                                                length:sizeof(long)*5]];
+                                                                length:sizeof(int32_t)*5]];
         }
 	}
 }
@@ -2239,21 +2239,21 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
 	/* We only erase the blocks currently used in the GretinaTrigger specification. */
     [self writeToAddress:0x910 aValue:kGretinaTriggerFlashEnableWrite]; //Enable programming
 	[self setFpgaDownProgress:0.];
-    unsigned long count = 0;
-    unsigned long end = (kGretinaTriggerFlashBlocks / 4) * kGretinaTriggerFlashBlockSize;
-    unsigned long addr;
+    uint32_t count = 0;
+    uint32_t end = (kGretinaTriggerFlashBlocks / 4) * kGretinaTriggerFlashBlockSize;
+    uint32_t addr;
     [self setProgressStateOnMainThread:  @"Block Erase"];
     for (addr = 0; addr < end; addr += kGretinaTriggerFlashBlockSize) {
         
 		if(stopDownLoadingMainFPGA)return;
 		@try {
-            [self setFirmwareStatusString:       [NSString stringWithFormat:@"%lu of %d Blocks Erased",count,kGretinaTriggerFlashBufferBytes]];
+            [self setFirmwareStatusString:       [NSString stringWithFormat:@"%u of %d Blocks Erased",count,kGretinaTriggerFlashBufferBytes]];
  			[self setFpgaDownProgress: 100. * (count+1)/(float)kGretinaTriggerUsedFlashBlocks];
             
             [self writeToAddress:0x980 aValue:addr];
             [self writeToAddress:0x98C aValue:kGretinaTriggerFlashBlockEraseCmd];
             [self writeToAddress:0x98C aValue:kGretinaTriggerFlashConfirmCmd];
-            unsigned long stat = [self readFromAddress:0x904];
+            uint32_t stat = [self readFromAddress:0x904];
             while (stat & kFlashBusy) {
                 if(stopDownLoadingMainFPGA)break;
                 stat = [self readFromAddress:0x904];
@@ -2272,18 +2272,18 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
 
 - (void) programFlashBuffer:(NSData*)theData
 {
-    unsigned long totalSize = [theData length];
+    uint32_t totalSize = [theData length];
     
     [self setProgressStateOnMainThread:@"Programming"];
-    [self setFirmwareStatusString: [NSString stringWithFormat:@"FPGA File Size %lu KB",totalSize/1000]];
+    [self setFirmwareStatusString: [NSString stringWithFormat:@"FPGA File Size %u KB",totalSize/1000]];
     [self setFpgaDownProgress:0.];
     
     [self writeToAddress:0x980 aValue:0x00];
     [self writeToAddress:0x98C aValue:kGretinaTriggerFlashReadArrayCmd];
     
-    unsigned long address = 0x0;
+    uint32_t address = 0x0;
     while (address < totalSize ) {
-        unsigned long numberBytesToWrite;
+        uint32_t numberBytesToWrite;
         if(totalSize-address >= kGretinaTriggerFlashBufferBytes){
             numberBytesToWrite = kGretinaTriggerFlashBufferBytes; //whole block
         }
@@ -2297,7 +2297,7 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
         if(stopDownLoadingMainFPGA)break;
         
         
-        [self setFirmwareStatusString: [NSString stringWithFormat:@"Flashed: %lu/%lu KB",address/1000,totalSize/1000]];
+        [self setFirmwareStatusString: [NSString stringWithFormat:@"Flashed: %u/%u KB",address/1000,totalSize/1000]];
         
         [self setFpgaDownProgress:100. * address/(float)totalSize];
         
@@ -2313,13 +2313,13 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
     [self setProgressStateOnMainThread:@"Programming"];
 }
 
-- (void) programFlashBufferBlock:(NSData*)theData address:(unsigned long)anAddress numberBytes:(unsigned long)aNumber
+- (void) programFlashBufferBlock:(NSData*)theData address:(uint32_t)anAddress numberBytes:(uint32_t)aNumber
 {
     //issue the set-up command at the starting address
     [self writeToAddress:0x980 aValue:anAddress];
     [self writeToAddress:0x98C aValue:kGretinaTriggerFlashWriteCmd];
     unsigned char* theDataBytes = (unsigned char*)[theData bytes];
-    unsigned long statusRegValue;
+    uint32_t statusRegValue;
 	while(1) {
         if(stopDownLoadingMainFPGA)return;
 		
@@ -2342,7 +2342,7 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
     /* Load the words into the bufferToWrite */
 	unsigned short i;
 	for ( i=0; i<aNumber; i+=4 ) {
-        unsigned long* lPtr = (unsigned long*)&theDataBytes[anAddress+i];
+        uint32_t* lPtr = (uint32_t*)&theDataBytes[anAddress+i];
         [self writeToAddress:0x984 aValue:lPtr[0]];
 	}
 	
@@ -2359,36 +2359,36 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
 
 - (BOOL) verifyFlashBuffer:(NSData*)theData
 {
-    unsigned long totalSize = [theData length];
+    uint32_t totalSize = [theData length];
     unsigned char* theDataBytes = (unsigned char*)[theData bytes];
     
     [self setProgressStateOnMainThread:@"Verifying"];
-    [self setFirmwareStatusString: [NSString stringWithFormat:@"FPGA File Size %lu KB",totalSize/1000]];
+    [self setFirmwareStatusString: [NSString stringWithFormat:@"FPGA File Size %u KB",totalSize/1000]];
     [self setFpgaDownProgress:0.];
     
     /* First reset to make sure it is read mode. */
     [self writeToAddress:0x980 aValue:0x0];
     [self writeToAddress:0x98C aValue:kGretinaTriggerFlashReadArrayCmd];
     
-    unsigned long errorCount =   0;
-    unsigned long address    =   0;
-    unsigned long valueToCompare;
+    uint32_t errorCount =   0;
+    uint32_t address    =   0;
+    uint32_t valueToCompare;
     
     while ( address < totalSize ) {
         unsigned short valueToRead = [self readFromAddress:0x984];
         
         /* Now compare to file*/
         if ( address + 3 < totalSize) {
-            unsigned long* ptr = (unsigned long*)&theDataBytes[address];
+            uint32_t* ptr = (uint32_t*)&theDataBytes[address];
             valueToCompare = ptr[0];
         }
         else {
             //less than four bytes left
-            unsigned long numBytes = totalSize - address - 1;
+            uint32_t numBytes = totalSize - address - 1;
             valueToCompare = 0;
             unsigned short i;
             for ( i=0;i<numBytes;i++) {
-                valueToCompare += (((unsigned long)theDataBytes[address]) << i*8) & (0xFF << i*8);
+                valueToCompare += (((uint32_t)theDataBytes[address]) << i*8) & (0xFF << i*8);
             }
         }
         if ( valueToRead != valueToCompare ) {
@@ -2398,7 +2398,7 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
             errorCount++;
         }
         
-        [self setFirmwareStatusString: [NSString stringWithFormat:@"Verified: %lu/%lu KB Errors: %lu",address/1000,totalSize/1000,errorCount]];
+        [self setFirmwareStatusString: [NSString stringWithFormat:@"Verified: %u/%u KB Errors: %u",address/1000,totalSize/1000,errorCount]];
         [self setFpgaDownProgress:100. * address/(float)totalSize];
         
         address += 4;
@@ -2473,7 +2473,7 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
 
 - (BOOL) controllerIsSBC
 {
-    //long removeReturn;
+    //int32_t removeReturn;
     //return NO; //<<----- temp for testing
     if([[self adapter] isKindOfClass:NSClassFromString(@"ORVmecpuModel")])return YES;
     else return NO;

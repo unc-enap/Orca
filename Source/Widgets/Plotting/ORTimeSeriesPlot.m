@@ -40,11 +40,11 @@
 - (id) roiAtPoint:(NSPoint)aPoint
 {
 	NSPoint plotPoint = [self convertFromWindowToPlot:aPoint];
-	long mouseChannel  = plotPoint.x;
+	int32_t mouseChannel  = plotPoint.x;
 	ORAxis* mXScale = [plotView xScale];
 	
-	long aMinChannel = MAX([mXScale minLimit],mouseChannel-3);
-	long aMaxChannel = MIN([mXScale maxLimit],mouseChannel+3);
+	int32_t aMinChannel = MAX([mXScale minLimit],mouseChannel-3);
+	int32_t aMaxChannel = MIN([mXScale maxLimit],mouseChannel+3);
 	return [[[ORTimeRoi alloc] initWithMin:aMinChannel max:aMaxChannel] autorelease];
 }
 
@@ -90,8 +90,8 @@
 		
 		[roi analyzeData];
 		
-		long minChan = MAX(0,[roi minChannel]);
-		long maxChan = MIN([roi maxChannel],numPoints-1);
+		int32_t minChan = MAX(0,[roi minChannel]);
+		int32_t maxChan = MIN([roi maxChannel],numPoints-1);
 		NSColor* fillColor = [[self lineColor] highlightWithLevel:.7];
 		fillColor = [fillColor colorWithAlphaComponent:.3];
 		[fillColor set];
@@ -101,7 +101,7 @@
 		double xValue,yValue;
 		[dataSource plotter:self index:(int)minChan x:&xValue y:&yValue];
 		yl	= [mYScale getPixAbs:yValue];
-		long ix;
+		int32_t ix;
 		for (ix=minChan; ix<=maxChan+1;++ix) {
 			if(ix > numPoints)break;
 			double xValue;
@@ -132,8 +132,8 @@
 	
 	//draw the roi bounds
 	if(roi && roiVisible){
-		long minChan = MAX(0,[roi minChannel]);
-		long maxChan = MIN([roi maxChannel],[mXScale maxLimit]);
+		int32_t minChan = MAX(0,[roi minChannel]);
+		int32_t maxChan = MIN([roi maxChannel],[mXScale maxLimit]);
 		
 		[[NSColor blackColor] set];
 		[NSBezierPath setDefaultLineWidth:.5];

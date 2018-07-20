@@ -836,7 +836,7 @@
 	return 0;
 }
 
-- (unsigned long)  	secondsPerUnit:(id) aPlotter
+- (uint32_t)  	secondsPerUnit:(id) aPlotter
 {
 	return [[[model waveFormRateGroup]timeRate]sampleTime];
 }

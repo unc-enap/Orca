@@ -164,7 +164,7 @@ NSString* ORModBusLock						= @"ORModBusLock";
 	}
 }
 
-- (unsigned long) timeMeasured
+- (uint32_t) timeMeasured
 {
 	return timeMeasured;
 }

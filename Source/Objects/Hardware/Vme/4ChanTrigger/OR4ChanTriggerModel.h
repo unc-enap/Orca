@@ -64,13 +64,13 @@ enum {
 @interface OR4ChanTriggerModel :  ORVmeIOCard <ORDataTaker>
 {
     @private
-        unsigned long   clockDataId;    
-        unsigned long lowerClock;
-        unsigned long upperClock;
+        uint32_t   clockDataId;    
+        uint32_t lowerClock;
+        uint32_t upperClock;
         int shipClockMask;
         NSMutableArray* triggerGroups;
         NSMutableArray* triggerNames;
-        unsigned long errorCount;
+        uint32_t errorCount;
         BOOL enableClock;
 		BOOL shipFirstLast;
 		BOOL gotFirstClk[4];
@@ -81,10 +81,10 @@ enum {
 #pragma mark ¥¥¥Accessors
 - (BOOL) shipFirstLast;
 - (void) setShipFirstLast:(BOOL)aShipFirstLast;
-- (unsigned long) lowerClock;
-- (void) setLowerClock:(unsigned long)newGtidLower;
-- (unsigned long) upperClock;
-- (void) setUpperClock:(unsigned long)newGtidUpper;
+- (uint32_t) lowerClock;
+- (void) setLowerClock:(uint32_t)newGtidLower;
+- (uint32_t) upperClock;
+- (void) setUpperClock:(uint32_t)newGtidUpper;
 
 - (NSArray*) triggerGroups;
 - (void) setTriggerGroups:(NSMutableArray*)anArray;
@@ -97,15 +97,15 @@ enum {
 - (BOOL) enableClock;
 - (void) setEnableClock: (BOOL) flag;
 
-- (unsigned long) errorCount;
-- (void) setErrorCount:(unsigned long)count;
+- (uint32_t) errorCount;
+- (void) setErrorCount:(uint32_t)count;
 
 - (void) setTriggerNames:(NSMutableArray*)anArray;
 - (NSString *) triggerName:(int)index;
 - (void) setTriggerName:(NSString *)aTriggerName index:(int)index;
 
-- (unsigned long) clockDataId;
-- (void) setClockDataId: (unsigned long) ClockDataId;
+- (uint32_t) clockDataId;
+- (void) setClockDataId: (uint32_t) ClockDataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherObj;
 
@@ -114,14 +114,14 @@ enum {
 - (void) softLatch;
 - (void) writeEnableClock:(BOOL)state;
 - (void) resetClock;  
-- (void) loadLowerClock:(unsigned long)aValue;  
-- (void) loadUpperClock:(unsigned long)aValue;  
+- (void) loadLowerClock:(uint32_t)aValue;  
+- (void) loadUpperClock:(uint32_t)aValue;  
 
 - (unsigned short) 	readBoardID;
 - (unsigned short) 	readStatus;  
 
-- (unsigned long) readLowerClock:(int)index;
-- (unsigned long) readUpperClock:(int)index;
+- (uint32_t) readLowerClock:(int)index;
+- (uint32_t) readUpperClock:(int)index;
 
 - (NSString*) 		boardIdString;
 - (unsigned short) 	decodeBoardId:(unsigned short) aValue;

@@ -447,7 +447,7 @@
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"JADCL (Station %ld)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"JADCL (Station %d)",(int)[model stationNumber]]];
 }
 
 #pragma mark ¥¥¥Actions

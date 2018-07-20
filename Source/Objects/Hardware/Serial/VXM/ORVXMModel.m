@@ -140,13 +140,13 @@ NSString* ORVXMLock							= @"ORVXMLock";
 		time_t	ut_time;
 		time(&ut_time);
         
-		unsigned long data[5];
+		uint32_t data[5];
 		data[0] = dataId | 5;
 		data[1] = ut_time;
 		data[2] = ([aMotor motorId]<<16) | ([self uniqueIdNumber]&0x0000fffff);
 		//encode the position
 		union {
-			long asLong;
+			int32_t asLong;
 			float asFloat;
 		}thePosition;
         
@@ -157,7 +157,7 @@ NSString* ORVXMLock							= @"ORVXMLock";
 		data[4] = thePosition.asLong;
 		
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification
-															object:[NSData dataWithBytes:data length:sizeof(long)*5]];
+															object:[NSData dataWithBytes:data length:sizeof(int32_t)*5]];
 	}
 }
 
@@ -723,8 +723,8 @@ NSString* ORVXMLock							= @"ORVXMLock";
 }
 
 #pragma mark ***Data Records
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -994,7 +994,7 @@ NSString* ORVXMLock							= @"ORVXMLock";
 }
 - (void) delayedRunStop
 {
-	id s = [NSString stringWithFormat:@"VXM %lu Finished Pattern",[self uniqueIdNumber]];
+	id s = [NSString stringWithFormat:@"VXM %u Finished Pattern",[self uniqueIdNumber]];
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORRequestRunStop object:self userInfo:s];
 }
 

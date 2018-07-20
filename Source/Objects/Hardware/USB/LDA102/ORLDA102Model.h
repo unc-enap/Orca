@@ -82,11 +82,11 @@
 - (void) checkUSBAlarm;
 
 #pragma mark ***HW Access
-- (void) writeCommand:(unsigned char)cmdWord count:(unsigned char)count value:(unsigned long)aValue;
+- (void) writeCommand:(unsigned char)cmdWord count:(unsigned char)count value:(uint32_t)aValue;
 - (void) loadAttenuation;
 - (void) startRamp;
 - (void) stopRamp;
-- (void) packData:(unsigned char*)data withLong:(unsigned long)aValue;
+- (void) packData:(unsigned char*)data withLong:(uint32_t)aValue;
 
 #pragma mark ***Thread methods
 - (void) startReadThread;

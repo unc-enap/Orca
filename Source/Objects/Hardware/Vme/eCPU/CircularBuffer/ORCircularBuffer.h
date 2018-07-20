@@ -73,45 +73,45 @@
 //#define __DEBUG_CBUFFER__
 
 @interface ORCircularBuffer : NSObject <NSCoding>{
-	unsigned long 	baseAddress;
+	uint32_t 	baseAddress;
 	unsigned short 	addressModifier;
 	unsigned short  addressSpace;
-	unsigned long   sentinelRetryTotal;
+	uint32_t   sentinelRetryTotal;
 	id				adapter;
 
-	unsigned long	queueSize;
+	uint32_t	queueSize;
 	tCBWord headValue;
 	tCBWord	tailValue;
 	
 }
 
 #pragma mark •••Accessors
-- (void) 			setBaseAddress:(unsigned long) anAddress;
-- (unsigned long) 	baseAddress;
+- (void) 			setBaseAddress:(uint32_t) anAddress;
+- (uint32_t) 	baseAddress;
 - (void)			setAddressModifier:(unsigned short)anAddressModifier;
 - (unsigned short)  addressModifier;
 - (void)			setAddressSpace:(unsigned short)anAddressSpace;
 - (unsigned short)  addressSpace;
-- (void) 			setSentinelRetryTotal:(unsigned long)value;
-- (unsigned long)	sentinelRetryTotal;
+- (void) 			setSentinelRetryTotal:(uint32_t)value;
+- (uint32_t)	sentinelRetryTotal;
 - (void)			setAdapter:(id)anAdapter;
 
 #pragma mark •••Hardware Access
 - (SCBHeader) readControlBlockHeader;
-- (unsigned long) getNumberOfBlocksInBuffer;
-- (unsigned long) getBlocksWritten;
-- (unsigned long) getBlocksRead;
-- (unsigned long) getBytesWritten;
+- (uint32_t) getNumberOfBlocksInBuffer;
+- (uint32_t) getBlocksWritten;
+- (uint32_t) getBlocksRead;
+- (uint32_t) getBytesWritten;
 
--(unsigned long) getBytesRead;
+-(uint32_t) getBytesRead;
 - (BOOL) sentinelValid;
 
-- (void) writeLongBlock:(unsigned long) anAddress blocks:(unsigned long) aNumberOfBlocks atPtr:(unsigned long*) aReadPtr;
+- (void) writeLongBlock:(uint32_t) anAddress blocks:(uint32_t) aNumberOfBlocks atPtr:(uint32_t*) aReadPtr;
 
-- (void) writeLong:(unsigned long) anAddress value:(unsigned long) aValue;
-- (void) readLongBlock:(unsigned long) anAddress blocks:(unsigned long) aNumberOfBlocks atPtr:(unsigned long*)aWritePtr;
-- (void) readLong:(unsigned long) anAddress atPtr:(unsigned long*) aValue;
+- (void) writeLong:(uint32_t) anAddress value:(uint32_t) aValue;
+- (void) readLongBlock:(uint32_t) anAddress blocks:(uint32_t) aNumberOfBlocks atPtr:(uint32_t*)aWritePtr;
+- (void) readLong:(uint32_t) anAddress atPtr:(uint32_t*) aValue;
 
-- (void) getQueHead:(unsigned long*)aHeadValue tail:(unsigned long*)aTailValue;
+- (void) getQueHead:(uint32_t*)aHeadValue tail:(uint32_t*)aTailValue;
 
 @end

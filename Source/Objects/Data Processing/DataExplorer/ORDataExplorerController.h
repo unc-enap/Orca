@@ -43,7 +43,7 @@
         IBOutlet NSTextField*		multiCatalogWarningField;
 		
         BOOL                        scheduledToUpdate;
-        long                        currentSearchIndex;
+        int32_t                        currentSearchIndex;
         BOOL                        stopScan;
         BOOL                        scanInProgress;
 
@@ -92,7 +92,7 @@
 - (void) dataChanged:(NSNotification*)note;
 - (void) updateButtons;
 - (void) doUpdate;
-- (void) process:(unsigned long)row;
+- (void) process:(uint32_t)row;
 
 
 #pragma mark ¥¥¥Data Source Methods

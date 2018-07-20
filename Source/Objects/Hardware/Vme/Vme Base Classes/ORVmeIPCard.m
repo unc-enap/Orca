@@ -63,7 +63,7 @@
 	return NSClassFromString(@"ORIPCarrierModel");
 }
 
-- (unsigned long) baseAddress
+- (uint32_t) baseAddress
 {
     return [guardian baseAddress]+ [self slotConv] * 0x100;
 }

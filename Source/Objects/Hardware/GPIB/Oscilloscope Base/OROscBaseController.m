@@ -417,9 +417,9 @@
 //--------------------------------------------------------------------------------
 - (void) oscHorizRecordLengthChanged: (NSNotification*) aNotification
 {
-	long value = [model waveformLength ];
+	int32_t value = [model waveformLength ];
 	if(value == 0)value = 500;
-	[mRecordLength selectItemWithTitle:[NSString stringWithFormat:@"%ld",value]];
+	[mRecordLength selectItemWithTitle:[NSString stringWithFormat:@"%d",value]];
 }
 
 //--------------------------------------------------------------------------------
@@ -834,7 +834,7 @@
 //--------------------------------------------------------------------------------
 - (IBAction) horizRecordLengthAction: (id) aSender
 {
-    long	value = 1000;
+    int32_t	value = 1000;
     
     [[self undoManager] setActionName: @"Set Record Length" ]; // set name of undo
     

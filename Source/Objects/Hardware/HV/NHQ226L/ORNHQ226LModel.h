@@ -81,7 +81,7 @@ typedef enum eNHQ226LRampingState {
 		NSMutableData*		inComingData;
 		NSMutableString*    buffer;		
 		int pollTime;
-		unsigned long dataId;
+		uint32_t dataId;
 		float voltage[2];
 		float actVoltage[2];
 		float actCurrent[2];
@@ -120,8 +120,8 @@ typedef enum eNHQ226LRampingState {
 - (float) maxVoltage:(unsigned short) aChan;
 - (void)  setMaxVoltage:(unsigned short) aChan withValue:(float) aValue;
 - (NSString*) status2String:(unsigned short)aChan;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 
 #pragma mark •••Serial Port
 - (ORSerialPort*) serialPort;

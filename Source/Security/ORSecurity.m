@@ -117,7 +117,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(Security);
     return [self isLocked:aLockName] || [gOrcaGlobals runInProgress]; 
 }
 
-- (BOOL) runInProgressButNotType:(unsigned long)aMask orIsLocked:(NSString*)aLockName;
+- (BOOL) runInProgressButNotType:(uint32_t)aMask orIsLocked:(NSString*)aLockName;
 {
     if([self isLocked:aLockName])return YES;
     else if([gOrcaGlobals runInProgress]){
@@ -136,17 +136,17 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(Security);
     }
 }
 
-- (unsigned long)superUnlockMask;
+- (uint32_t)superUnlockMask;
 {
     return superUnlockMask;
 }
 
-- (void) addSuperUnlockMask:(unsigned long)aMask forObject:(id)anObj
+- (void) addSuperUnlockMask:(uint32_t)aMask forObject:(id)anObj
 {
     if(anObj){
         if(!superUnlockMaskRequests)superUnlockMaskRequests = [[NSMutableDictionary dictionary]retain];
         NSNumber* theMask = [NSNumber numberWithUnsignedLong:aMask];
-        NSNumber* aKey = [NSNumber numberWithUnsignedLong:(unsigned long)anObj];
+        NSNumber* aKey = [NSNumber numberWithUnsignedLong:(uint32_t)anObj];
         [superUnlockMaskRequests setObject:theMask forKey:aKey];
         [self _formSuperUnlockMask];
     }
@@ -155,7 +155,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(Security);
 - (void) removeSuperUnlockMaskForObject:(id)anObj
 {
     if(anObj){
-        NSNumber* aKey = [NSNumber numberWithUnsignedLong:(unsigned long)anObj];
+        NSNumber* aKey = [NSNumber numberWithUnsignedLong:(uint32_t)anObj];
         [superUnlockMaskRequests removeObjectForKey:aKey];
         [self _formSuperUnlockMask];
     }
@@ -168,7 +168,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(Security);
 {
     superUnlockMask = 0;
     for(id aKey in superUnlockMaskRequests){
-        unsigned long aMask = [[superUnlockMaskRequests objectForKey:aKey] unsignedLongValue];
+        uint32_t aMask = [[superUnlockMaskRequests objectForKey:aKey] unsignedLongValue];
         superUnlockMask |= aMask;
     }
 }

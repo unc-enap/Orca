@@ -39,6 +39,6 @@
 - (void) setDevices:(NSMutableDictionary*)aDeviceDict;
 
 #pragma mark ¥¥¥HW access
-- (ORFireWireInterface*) getFireWireInterface:(unsigned long)aVendorID;
-- (void) getDevicesWithVenderID:(unsigned long)aVendorID;
+- (ORFireWireInterface*) getFireWireInterface:(uint32_t)aVendorID;
+- (void) getDevicesWithVenderID:(uint32_t)aVendorID;
 @end

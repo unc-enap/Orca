@@ -39,10 +39,10 @@
     [super dealloc];
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length = ExtractLength(ptr[0]);
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length = ExtractLength(ptr[0]);
     
 	unsigned char crate   = (ptr[1]>>16)&0xf;
 	unsigned char card    = ptr[1] & 0x001f;
@@ -52,8 +52,8 @@
         NSString* crateKey = [self getCrateKey: crate];
         NSString* cardKey = [self getStationKey: card];
         NSString* channelKey = [self getChannelKey: channel];
-        unsigned long scalerValue = ptr[2+i]&0x00ffffff;
-        NSString* scaler = [NSString stringWithFormat:@"%lu",scalerValue];
+        uint32_t scalerValue = ptr[2+i]&0x00ffffff;
+        NSString* scaler = [NSString stringWithFormat:@"%u",scalerValue];
         [aDataSet loadGenericData:scaler sender:self withKeys:@"Scalers",@"LS2551", crateKey,cardKey,channelKey,nil];
         [aDataSet loadScalerSum:scalerValue sender:self withKeys:@"Scaler Sums",@"LS2551", crateKey,cardKey,channelKey,nil];
 	}
@@ -61,20 +61,20 @@
     return length; //must return number of bytes processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)someData
+- (NSString*) dataRecordDescription:(uint32_t*)someData
 {
     
     NSString* title= @"L2551 Scaler Sum\n\n";
 
-    unsigned long* ptr = (unsigned long*)someData;
+    uint32_t* ptr = (uint32_t*)someData;
     
-	NSString* crate = [NSString stringWithFormat:@"Crate    = %lu\n",(ptr[1]>>16)&0xf];
-    NSString* card  = [NSString stringWithFormat:@"Station  = %lu\n",ptr[1] & 0x001f];
+	NSString* crate = [NSString stringWithFormat:@"Crate    = %u\n",(ptr[1]>>16)&0xf];
+    NSString* card  = [NSString stringWithFormat:@"Station  = %u\n",ptr[1] & 0x001f];
     NSString* totalString = [NSString stringWithFormat:@"%@%@%@\nScaler Sum\n",title,crate,card];
     ptr+=2;
     int i;
     for(i=0;i<12;i++){
-        totalString = [totalString stringByAppendingFormat:@"%2lu: %10lu\n",(ptr[i]>>28) & 0xf,ptr[i]&0x00ffffff];
+        totalString = [totalString stringByAppendingFormat:@"%2lu: %10u\n",(ptr[i]>>28) & 0xf,ptr[i]&0x00ffffff];
     }
     
     return totalString;               

@@ -54,9 +54,9 @@ enum {
 		
 		//cached values for use while running only
 		BOOL usingShortForm;
-		unsigned long statusAddress;
-		unsigned long fifoAddress;
-		unsigned long location;
+		uint32_t statusAddress;
+		uint32_t fifoAddress;
+		uint32_t location;
  
 }
 
@@ -71,8 +71,8 @@ enum {
 - (void) setSuppressZeros:(BOOL)aSuppressZeros;
 - (unsigned short) enabledMask;
 - (void) setEnabledMask:(unsigned short)aEnabledMask;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherCaen265;
 

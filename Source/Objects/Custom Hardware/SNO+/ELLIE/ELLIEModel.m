@@ -466,7 +466,7 @@ NSString* ORSMELLIEEmergencyStop = @"ORSMELLIEEmergencyStop";
     // Run photon intensity check
     bool safety_check = [self photonIntensityCheck:photons atFrequency:frequency];
     if(safety_check == NO){
-        NSLogColor([NSColor redColor], @"[TELLIE]: The requested number of photons (%lu), is not detector safe at %lu Hz. This setting will not be run.\n", photons, frequency);
+        NSLogColor([NSColor redColor], @"[TELLIE]: The requested number of photons (%u), is not detector safe at %u Hz. This setting will not be run.\n", photons, frequency);
         return [NSNumber numberWithInt:-1];
     }
     
@@ -484,8 +484,8 @@ NSString* ORSMELLIEEmergencyStop = @"ORSMELLIEEmergencyStop";
     }
     
     // Get Calibration parameters
-    NSArray* IPW_values = [[firePars objectForKey:[NSString stringWithFormat:@"channel_%ld",channel]] objectForKey:[NSString stringWithFormat:@"%@_IPW",prefix]];
-    NSArray* photon_values = [[firePars objectForKey:[NSString stringWithFormat:@"channel_%ld",channel]] objectForKey:[NSString stringWithFormat:@"%@_photons",prefix]];
+    NSArray* IPW_values = [[firePars objectForKey:[NSString stringWithFormat:@"channel_%d",(int)channel]] objectForKey:[NSString stringWithFormat:@"%@_IPW",prefix]];
+    NSArray* photon_values = [[firePars objectForKey:[NSString stringWithFormat:@"channel_%d",(int)channel]] objectForKey:[NSString stringWithFormat:@"%@_photons",prefix]];
 
     ////////////
     // Find minimum calibration point. If request is below minimum, estiamate the IPW
@@ -493,7 +493,7 @@ NSString* ORSMELLIEEmergencyStop = @"ORSMELLIEEmergencyStop";
     float min_photons = [[photon_values valueForKeyPath:@"@min.self"] floatValue];
     int min_x = [[IPW_values objectAtIndex:[photon_values indexOfObject:[photon_values valueForKeyPath:@"@min.self"]]] intValue];
     if(photons < min_photons){
-        NSLog(@"[TELLIE]: Calibration curve for channel %lu does not go as low as %lu photons\n", channel, photons);
+        NSLog(@"[TELLIE]: Calibration curve for channel %u does not go as low as %u photons\n", channel, photons);
         NSLog(@"[TELLIE]: Using a linear interpolation of -5ph/IPW from min_photons = %.1f to estimate requested %d photon settings\n",min_photons,photons);
         float intercept = min_photons - (-5.*min_x);
         float floatPulseWidth = (photons - intercept)/(-5.);
@@ -543,8 +543,8 @@ NSString* ORSMELLIEEmergencyStop = @"ORSMELLIEEmergencyStop";
     
     //////////////
     // Get Calibration parameters
-    NSArray* IPW_values = [[[self tellieFireParameters] objectForKey:[NSString stringWithFormat:@"channel_%ld",channel]] objectForKey:[NSString stringWithFormat:@"%@_IPW",prefix]];
-    NSArray* photon_values = [[[self tellieFireParameters] objectForKey:[NSString stringWithFormat:@"channel_%ld",channel]] objectForKey:[NSString stringWithFormat:@"%@_photons",prefix]];
+    NSArray* IPW_values = [[[self tellieFireParameters] objectForKey:[NSString stringWithFormat:@"channel_%d",channel]] objectForKey:[NSString stringWithFormat:@"%@_IPW",prefix]];
+    NSArray* photon_values = [[[self tellieFireParameters] objectForKey:[NSString stringWithFormat:@"channel_%d",channel]] objectForKey:[NSString stringWithFormat:@"%@_photons",prefix]];
     
     ////////////
     // Find minimum calibration point. If request is below minimum, estiamate the IPW
@@ -619,13 +619,13 @@ NSString* ORSMELLIEEmergencyStop = @"ORSMELLIEEmergencyStop";
     /*
      Use node-to-fibre map loaded from the telliedb to find the priority fibre on a node.
      */
-    if(![[self tellieNodeMapping] objectForKey:[NSString stringWithFormat:@"panel_%ld",node]]){
+    if(![[self tellieNodeMapping] objectForKey:[NSString stringWithFormat:@"panel_%d",node]]){
         NSLogColor([NSColor redColor], @"[TELLIE]: Node map does not include a reference to node: %d",node);
         return nil;
     }
     
     // Read panel info into local dictionary
-    NSMutableDictionary* nodeInfo = [[self tellieNodeMapping] objectForKey:[NSString stringWithFormat:@"panel_%ld",node]];
+    NSMutableDictionary* nodeInfo = [[self tellieNodeMapping] objectForKey:[NSString stringWithFormat:@"panel_%d",node]];
     
     //***************************************//
     // Select appropriate fibre for this node.
@@ -1049,7 +1049,7 @@ err:
 
     BOOL safety_check = [self photonIntensityCheck:[photonOutput integerValue] atFrequency:rate];
     if(safety_check == NO){
-        NSLogColor([NSColor redColor], @"%@: The requested number of photons (%lu), is not detector safe at %f Hz. This setting will not be run.\n",  prefix, [photonOutput integerValue], rate);
+        NSLogColor([NSColor redColor], @"%@: The requested number of photons (%u), is not detector safe at %f Hz. This setting will not be run.\n",  prefix, [photonOutput integerValue], rate);
         goto err;
     }
 
@@ -1219,7 +1219,7 @@ err:
         }
         //////////////////
         // Poll tellie for a pin reading. Give the sequence a 3s grace period to finish
-        // long for some reason
+        // int32_t for some reason
         float pollTimeOut = (1./rate)*[noShots floatValue] + 3.;
         NSArray* pinReading = nil;
         @try{

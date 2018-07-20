@@ -74,30 +74,30 @@ struct L950Header
 	char	mTemplateName[ 16 ];				// Template name
 	short	mCommType;							// Data Type  enum CommType
 	short	mCommOrder;							// Byte order enum CommOrder
-	long	mWaveDescriptor;					// length in bytes of this header
-	long	mUserText;							// Length in bytes of userText
-	long	mResDesc1;							// ?
-	long	mTrigTimeArray;						// Length in bytes of TRIGTIME array
-	long	mRisTimeArray;						// Length in bytes of RIS_TIME array.
-	long	mResArray1;							// Not used
-	long	mWaveArray1;						// Length in bytes of actual data
-	long	mWaveArray2;						// Not used
-	long	mResArray2;							// Not used
-	long	mResArray3;							// Not used
+	int32_t	mWaveDescriptor;					// length in bytes of this header
+	int32_t	mUserText;							// Length in bytes of userText
+	int32_t	mResDesc1;							// ?
+	int32_t	mTrigTimeArray;						// Length in bytes of TRIGTIME array
+	int32_t	mRisTimeArray;						// Length in bytes of RIS_TIME array.
+	int32_t	mResArray1;							// Not used
+	int32_t	mWaveArray1;						// Length in bytes of actual data
+	int32_t	mWaveArray2;						// Not used
+	int32_t	mResArray2;							// Not used
+	int32_t	mResArray3;							// Not used
 	char	mInstrumentName[ 16 ];				// Name of instrument
-	long	mInstrumentNumber;					// Number of instrument
+	int32_t	mInstrumentNumber;					// Number of instrument
 	char	mTraceLabel[ 16 ];					// Identifies the waveform
 	short	mReserved1;							// Not used
 	short	mReserved2;							// Not used
-	long	mWaveArrayCount;					// No points in the data array.
-	long	mPntsPerScreen;						// nominal no. of data points on screen.
-	long	mFirstValidPnt;						// count of no. pts to skip before first good point.
-	long	mLastValidPnt;						// index of last good data point.
-	long	mFirstPoint;						// For input indicates the offset relative to beginning of trace buffer.
-	long	mSparsingFactor;					// Sparsing of transmitted data block.
-	long	SegmentIndex;						// Index of transmitted index.
-	long	mSubarrayCount;						// Acquired segment count.
-	long	mSweepsPerAcq;						// Number of sweeps acquired when averaging.
+	int32_t	mWaveArrayCount;					// No points in the data array.
+	int32_t	mPntsPerScreen;						// nominal no. of data points on screen.
+	int32_t	mFirstValidPnt;						// count of no. pts to skip before first good point.
+	int32_t	mLastValidPnt;						// index of last good data point.
+	int32_t	mFirstPoint;						// For input indicates the offset relative to beginning of trace buffer.
+	int32_t	mSparsingFactor;					// Sparsing of transmitted data block.
+	int32_t	SegmentIndex;						// Index of transmitted index.
+	int32_t	mSubarrayCount;						// Acquired segment count.
+	int32_t	mSweepsPerAcq;						// Number of sweeps acquired when averaging.
 	short	mPointsPerPair;						// Not used.
 	short   mPairOffset;						// Not used.
 	float	mVerticalGain;						// Vertical gain. val = verticalGain * data - verticalOffset
@@ -132,11 +132,11 @@ struct L950Header
 
 struct L950ShortHeader
 {
-    long			nrPts;   			// Number of points in waveform
+    int32_t			nrPts;   			// Number of points in waveform
     float			yOff;				// Vertical position of the waveform.
     float			yMult;				// Vertical scale factor in yUnit/data point value.
     float			xIncr;				// Time sampling interval.
-    long			ptOff;				// Trigger point in waveform
+    int32_t			ptOff;				// Trigger point in waveform
     char			xUnit[ 20 ];		// Time units.
     char			yUnit[ 20 ];		// Vertical units.
 };
@@ -150,12 +150,12 @@ struct L950ShortHeader
 	NSMutableData*			mGtid;					// Pointer to gtid data.
 	NSMutableData*			mData;					// Pointer to actual waveform data.
 	NSMutableData*			mTime;					// Pointer to time packet.
-	long					mMaxSizeWaveform;		// Size of mData
-	long					mActualSizeWaveform;	// Actual size of waveform stored in mData.
-	unsigned long			mHeaderBaseGtidInfo[2];	// Record number for GTID record.
-	unsigned long			mHeaderBaseInfo[2];		// The header non changing info attached to 
+	int32_t					mMaxSizeWaveform;		// Size of mData
+	int32_t					mActualSizeWaveform;	// Actual size of waveform stored in mData.
+	uint32_t			mHeaderBaseGtidInfo[2];	// Record number for GTID record.
+	uint32_t			mHeaderBaseInfo[2];		// The header non changing info attached to 
 												//   each waveform.
-	unsigned long			mHeaderBaseTimeInfo;	// The header non changing info attached to
+	uint32_t			mHeaderBaseTimeInfo;	// The header non changing info attached to
 												//	 each time record.
 	short					mAddress;				// GPIB primary address.
 	short					mChannel;				// The channel number.
@@ -166,15 +166,15 @@ struct L950ShortHeader
 - (void)			dealloc;
 
 #pragma mark ***Accessors
-- (long)			actualWaveformSize;
-- (void)			setActualWaveformSize: (unsigned long) aWaveformSize;
-- (long)			maxWaveformSize;
+- (int32_t)			actualWaveformSize;
+- (void)			setActualWaveformSize: (uint32_t) aWaveformSize;
+- (int32_t)			maxWaveformSize;
 - (NSMutableData*)  rawData;
 - (NSMutableData*)	timeData;
 - (char*)			rawHeader;
 
 #pragma mark ***Data Routines
-- (void)			setGtid: (unsigned long) aGtid;
+- (void)			setGtid: (uint32_t) aGtid;
 - (char*)			createDataStorage;
 - (char*)			createTimeStorage;
 - (void)			setDataPacketData: (ORDataPacket*) aDataPacket timeData: (NSData*) aTimeData

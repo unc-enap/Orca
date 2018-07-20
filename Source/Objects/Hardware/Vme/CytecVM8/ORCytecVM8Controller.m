@@ -110,7 +110,7 @@
 
 - (void) writeValueChanged:(NSNotification*)aNotification
 {
-	unsigned long value = [model writeValue];
+	uint32_t value = [model writeValue];
 	short i;
     for(i=0;i<32;i++){
         [[writeBitMatrix cellAtRow:0 column:31 - i] setIntegerValue:(value & (1L<<i))];
@@ -188,7 +188,7 @@
 
 - (IBAction) writeValueBitAction:(id)sender
 {
-    unsigned long value = [model writeValue];
+    uint32_t value = [model writeValue];
     int bit      = (int)[[sender selectedCell] tag];
     int bitValue = [sender intValue];
     

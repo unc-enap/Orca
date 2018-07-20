@@ -27,7 +27,7 @@ const unsigned short kDefaultAddressModifier = 0x39;
     
     // Initialization internal variables.
     mErrorCount 		= 0;
-    memset( mEventCounter, 0, sizeof(unsigned long) * 32 );
+    memset( mEventCounter, 0, sizeof(uint32_t) * 32 );
     
     return self;
 }
@@ -38,19 +38,19 @@ const unsigned short kDefaultAddressModifier = 0x39;
 // Method:	errorCount
 // Purpose: Return the number of errors.
 //--------------------------------------------------------------------------------
-- (unsigned long) errorCount { return( mErrorCount ); }
+- (uint32_t) errorCount { return( mErrorCount ); }
 
 //--------------------------------------------------------------------------------
 // Method:	getTotalEventCount
 // Purpose: Return total number of errors.
 //--------------------------------------------------------------------------------
-- (unsigned long) getTotalEventCount { return mTotalEventCounter; }
+- (uint32_t) getTotalEventCount { return mTotalEventCounter; }
 
 //--------------------------------------------------------------------------------
 // Method:	getEventCount
 // Purpose: Return current number of events read in.
 //--------------------------------------------------------------------------------
-- (unsigned long)  getEventCount: (unsigned short) pIndex
+- (uint32_t)  getEventCount: (unsigned short) pIndex
 {
     if( pIndex < 32 )
     return mEventCounter[pIndex];
@@ -131,11 +131,11 @@ const unsigned short kDefaultAddressModifier = 0x39;
 * \note	1) Caller is assumed to have allocated enough space for the read.
 */
 //--------------------------------------------------------------------------------
-- (OSErr) readOutputBuffer: (unsigned long *) pOutputBuffer withSize: (unsigned short *) pBufferSize
+- (OSErr) readOutputBuffer: (uint32_t *) pOutputBuffer withSize: (unsigned short *) pBufferSize
 {
     OSErr theError = noErr;
     
-    unsigned long* dp = pOutputBuffer;
+    uint32_t* dp = pOutputBuffer;
     unsigned short totalLongCount = 0;
     unsigned short totalEventCount = 0;
     
@@ -156,7 +156,7 @@ const unsigned short kDefaultAddressModifier = 0x39;
         // Determine size of buffer in longs.  Make sure that we do not overflow the pOutputBuffer array.
         short longsToRead = (*pBufferSize > [self getDataBufferSize]
         ? [self getDataBufferSize] : *pBufferSize )
-        /sizeof( unsigned long );
+        /sizeof( uint32_t );
         *pBufferSize = 0;
         
         //first read the status resisters to see if there is anything to read.
@@ -197,7 +197,7 @@ const unsigned short kDefaultAddressModifier = 0x39;
                 
                 // Update buffer
                 if ( isHeader || isValidDatum || endOfBlock ) {
-                    *pBufferSize = (++totalLongCount) * sizeof( unsigned long );
+                    *pBufferSize = (++totalLongCount) * sizeof( uint32_t );
                     if ( isValidDatum ) {
                         ++mTotalEventCounter;
                         unsigned short chan = [mDecoder Channel: *dp];
@@ -262,13 +262,13 @@ const unsigned short kDefaultAddressModifier = 0x39;
 //--------------------------------------------------------------------------------
 - (short) 			accessSize: (short) i 			{ return 0; }
 - (short) 			accessType: (short) i 			{ return 0; }
-- (unsigned long) 	getAddressOffset: (short) i 	{ return 0; }
-- (unsigned long) 	getBufferOffset 				{ return 0; }
+- (uint32_t) 	getAddressOffset: (short) i 	{ return 0; }
+- (uint32_t) 	getBufferOffset 				{ return 0; }
 - (unsigned short) 	getDataBufferSize 				{ return 0; }
 - (short)  			getNumberRegisters 				{ return 0; }
 - (unsigned short) 	getStatus1RegOffset 			{ return 0; }
 - (unsigned short) 	getStatus2RegOffset 			{ return 0; }
-- (unsigned long) 	getThresholdOffset 				{ return 0; }
+- (uint32_t) 	getThresholdOffset 				{ return 0; }
 
 
 @end

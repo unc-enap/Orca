@@ -95,7 +95,7 @@ int rem;
 	return hashval % kMaxNumHashKeys;
 }
 */
-- (BOOL) setData:(long)data forKey:(const char*) key
+- (BOOL) setData:(int32_t)data forKey:(const char*) key
 {
 	hashTable *newhash;
 	hashTable *curhash;
@@ -134,7 +134,7 @@ int rem;
 	return NO;
 }
 
-- (BOOL) getData:(long*)data forKey:(const char*)key
+- (BOOL) getData:(int32_t*)data forKey:(const char*)key
 {
 	hashTable* curhash;
 	

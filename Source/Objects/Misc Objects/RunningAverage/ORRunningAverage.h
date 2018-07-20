@@ -60,7 +60,7 @@
 
 
 @interface NSObject (ORRunningAverage_Catagory)
-- (unsigned long) getRate:(int)tag forGroup:(int)aGroupTag;
+- (uint32_t) getRate:(int)tag forGroup:(int)aGroupTag;
 @end
 
 @interface ORRunningAveSpike : NSObject

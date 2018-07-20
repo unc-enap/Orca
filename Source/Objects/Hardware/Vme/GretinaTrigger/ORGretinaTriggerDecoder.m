@@ -44,16 +44,16 @@
 
 @implementation ORGretinaTriggerDecoder
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-	unsigned long* p = (unsigned long*)someData;
-    unsigned long length = ExtractLength(p[0]);
+	uint32_t* p = (uint32_t*)someData;
+    uint32_t length = ExtractLength(p[0]);
     //just record it in the data monitor
     [aDataSet loadGenericData:@" " sender:self withKeys:@"Master Trigger",nil];
 	return length;
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr
 {
     NSString* title= @"Master Trigger\n\n";
     NSString* theString =  [NSString stringWithFormat:@"%@\n",title];               
@@ -66,7 +66,7 @@
     NSDate* date = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)dataPtr[2]];
     
     theString = [theString stringByAppendingFormat:@"Date: %@\n",[date stdDescription]];
-    theString = [theString stringByAppendingFormat:@"TimeStamp: %lld\n",(unsigned long long)dataPtr[3]<<32 | dataPtr[4]];
+    theString = [theString stringByAppendingFormat:@"TimeStamp: %lld\n",(uint64_t)dataPtr[3]<<32 | dataPtr[4]];
     
     theString = [theString stringByAppendingFormat:@"Locked:   %@\n",locked   ? @"YES":@"NO"];
     theString = [theString stringByAppendingFormat:@"LockLost: %@\n",lockLost ? @"YES":@"NO"];

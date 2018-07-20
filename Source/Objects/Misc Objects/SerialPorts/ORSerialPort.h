@@ -96,8 +96,8 @@
 - (NSDictionary*) getOptions;                           // will open the port to get options if neccessary
 - (void) setOptions:(NSDictionary *)options;             
 
-- (long) getSpeed;
-- (void) setSpeed:(long)speed;
+- (int32_t) getSpeed;
+- (void) setSpeed:(int32_t)speed;
 
 - (int) getDataBits;
 - (void) setDataBits:(int)bits;                          // 5 to 8 (5 may not work)

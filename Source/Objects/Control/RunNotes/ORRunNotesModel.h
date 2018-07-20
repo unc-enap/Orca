@@ -46,7 +46,7 @@
 - (void) setIgnoreValues:(BOOL)aIgnoreValues;
 - (void) removeItemAtIndex:(NSInteger) anIndex;
 - (id) itemAtIndex:(NSInteger)anIndex;
-- (unsigned long) itemCount;
+- (uint32_t) itemCount;
 - (NSString*) comments;
 - (void) setComments:(NSString*)aString;
 - (void) setCommentsNoNote:(NSString*)aString;

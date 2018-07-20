@@ -124,7 +124,7 @@ NSString* ORCVCfdLedModelThresholdLock				= @"ORCVCfdLedModelThresholdLock";
 
 - (void) setInhibitMaskBit:(int)bit withValue:(BOOL)aValue
 {
-	unsigned long aMask = patternInhibit;
+	uint32_t aMask = patternInhibit;
 	if(aValue)aMask |= (1<<bit);
 	else      aMask &= ~(1<<bit);
 	[self setPatternInhibit:aMask];
@@ -200,49 +200,49 @@ NSString* ORCVCfdLedModelThresholdLock				= @"ORCVCfdLedModelThresholdLock";
 	//subclasses must override
 	return 0;
 }
-- (unsigned long) regOffset:(int)index
+- (uint32_t) regOffset:(int)index
 {
 	NSAssert(NO, @"RegOffset in ORCVCfdLedModel must be subclassed\n");
 	return 0;
 }
 
-- (unsigned long) threshold0Offset 
+- (uint32_t) threshold0Offset 
 { 
 	NSAssert(NO, @"threshold0Offset in ORCVCfdLedModel must be subclassed\n");
 	return 0;
 }
 
-- (unsigned long) outputWidth0_7Offset 
+- (uint32_t) outputWidth0_7Offset 
 { 
 	NSAssert(NO, @"outputWidth0_7Offset in ORCVCfdLedModel must be subclassed\n");
 	return 0;
 }
-- (unsigned long) outputWidth8_15Offset 
+- (uint32_t) outputWidth8_15Offset 
 { 
 	NSAssert(NO, @"outputWidth8_15Offset in ORCVCfdLedModel must be subclassed\n");
 	return 0;
 }
-- (unsigned long) testPulseOffset 
+- (uint32_t) testPulseOffset 
 { 
 	NSAssert(NO, @"testPulseOffset in ORCVCfdLedModel must be subclassed\n");
 	return 0;
 }
-- (unsigned long) patternInibitOffset 
+- (uint32_t) patternInibitOffset 
 { 
 	NSAssert(NO, @"patternInibitOffset in ORCVCfdLedModel must be subclassed\n");
 	return 0;
 }
-- (unsigned long) majorityThresholdOffset 
+- (uint32_t) majorityThresholdOffset 
 { 
 	NSAssert(NO, @"majorityThresholdOffset in ORCVCfdLedModel must be subclassed\n");
 	return 0;
 }
-- (unsigned long) moduleTypeOffset 
+- (uint32_t) moduleTypeOffset 
 { 
 	NSAssert(NO, @"moduleTypeOffset in ORCVCfdLedModel must be subclassed\n");
 	return 0;
 }
-- (unsigned long) versionOffset 
+- (uint32_t) versionOffset 
 { 
 	NSAssert(NO, @"moduleTypeOffset in ORCVCfdLedModel must be subclassed\n");
 	return 0;

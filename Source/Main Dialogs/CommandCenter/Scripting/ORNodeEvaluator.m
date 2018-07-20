@@ -783,7 +783,7 @@
 		case LOGFILE:		return [self openLogFile:p];
 		case kAppend:		return [[NSString stringWithFormat:@"%@",NodeValue(0)] stringByAppendingString:[@" " stringByAppendingFormat:@"%@",NodeValue(1)]];
 		case kTightAppend:	return [[NSString stringWithFormat:@"%@",NodeValue(0)] stringByAppendingString:[NSString stringWithFormat:@"%@",NodeValue(1)]];
-		case HEX:			return [NSString stringWithFormat:@"0x%lx",(unsigned long)[NodeValue(0) unsignedLongValue]];
+		case HEX:			return [NSString stringWithFormat:@"0x%x",(uint32_t)[NodeValue(0) unsignedLongValue]];
 		case MAKEPOINT:		return [NSString stringWithFormat:@"@(%@,%@)",NodeValue(0),NodeValue(1)];
 		case MAKERECT:		return [NSString stringWithFormat:@"@(%@,%@,%@,%@)",NodeValue(0),NodeValue(1),NodeValue(2),NodeValue(3)];
 		case MAKESIZE:		return [NSString stringWithFormat:@"@(%@,%@)",NodeValue(0),NodeValue(1)];
@@ -940,7 +940,7 @@
 
 - (id) doAssign:(id)p op:(int)opr
 {
-	long value = [NodeValue(0) longValue];
+	int32_t value = [NodeValue(0) longValue];
 	switch(opr){
 		case LEFT_ASSIGN:  value <<= [NodeValue(1) longValue]; break;
 		case RIGHT_ASSIGN: value >>= [NodeValue(1) longValue]; break;
@@ -975,7 +975,7 @@
 {
 	id selName  = NodeValue(0);
 	id selValue = NodeValue(1);
-	return [NSString stringWithFormat:@"%@:%llu#",selName,(unsigned long long)selValue];
+	return [NSString stringWithFormat:@"%@:%llu#",selName,(uint64_t)selValue];
 }
 
 - (id) processStatements:(id) p
@@ -1315,7 +1315,7 @@
 
 - (id) defineArray:(id) p
 {
-	long n = [NodeValue(1) longValue];
+	int32_t n = [NodeValue(1) longValue];
 	NSMutableArray* theArray = [NSMutableArray arrayWithCapacity:n];
 	//fill it with zeros;
 	int i;
@@ -1326,7 +1326,7 @@
 
 - (id) arrayList:(id) p
 {
-	long n = [NodeValue(1) longValue];
+	int32_t n = [NodeValue(1) longValue];
 	NSMutableArray* argObject = [[[NSMutableArray alloc] initWithCapacity:100] autorelease];
 	id result = NodeValueWithContainer(2,argObject);
 	if([argObject count] == 0 && result!=nil)[argObject addObject:result];
@@ -1357,7 +1357,7 @@
 		return [theArray objectAtIndex:n];
 	}
 	else { //run time error
-        [NSException raise:@"Array Bounds" format:@"Out of Bounds Error. Line: %ld",LineNumber(0)];
+        [NSException raise:@"Array Bounds" format:@"Out of Bounds Error. Line: %d",LineNumber(0)];
 	}
 	return nil;
 }
@@ -1530,20 +1530,20 @@
 
 - (id) bitExtract:(id) p
 {
-    unsigned long theValue = [NodeValue(0) unsignedLongValue];
+    uint32_t theValue = [NodeValue(0) unsignedLongValue];
     NSInteger val1 = [NodeValue(1) unsignedLongValue];
     NSInteger val2 = [NodeValue(2) unsignedLongValue];
     if(val1 > val2) {
-        [NSException raise:@"Run Time Exception" format:@"Bit extract parameters out of order. Line: %ld",LineNumber(1)];
+        [NSException raise:@"Run Time Exception" format:@"Bit extract parameters out of order. Line: %d",LineNumber(1)];
     }
     if(val1 < 0 | val2 < 0) {
-        [NSException raise:@"Run Time Exception" format:@"Bit extract parameter is negative. Line: %ld",LineNumber(1)];
+        [NSException raise:@"Run Time Exception" format:@"Bit extract parameter is negative. Line: %d",LineNumber(1)];
     }
     if(val1 > 32 | val2 > 32) {
-        [NSException raise:@"Run Time Exception" format:@"Bit extract parameter greater than 32. Line: %ld",LineNumber(1)];
+        [NSException raise:@"Run Time Exception" format:@"Bit extract parameter greater than 32. Line: %d",LineNumber(1)];
     }
     unsigned short aShift = MIN(val1,val2);
-    unsigned long aMask = 0L;
+    uint32_t aMask = 0L;
     NSInteger numBits = labs(val2 - val1)+1;
     int i;
     for(i=0;i<numBits;i++){
@@ -1594,7 +1594,7 @@
         }
     }
     else {
-        [NSException raise:@"Run time" format:@"Case range must be ascending. Line: %ld",LineNumber(0)];
+        [NSException raise:@"Run time" format:@"Case range must be ascending. Line: %d",LineNumber(0)];
     }
     return nil;
 }
@@ -1612,7 +1612,7 @@
         }
     }
     else {
-        [NSException raise:@"Run time" format:@"Case range must be ascending. Line: %ld",LineNumber(0)];
+        [NSException raise:@"Run time" format:@"Case range must be ascending. Line: %d",LineNumber(0)];
     }
     return nil;
 }
@@ -1751,7 +1751,7 @@
             collectionObj = [collectionObj allKeys];
         }
         else {
-            [NSException raise:@"Run Time Exception" format:@"%@ is not an array or dictionary. Line: %ld",VARIABLENAME(1),LineNumber(1)];
+            [NSException raise:@"Run Time Exception" format:@"%@ is not an array or dictionary. Line: %d",VARIABLENAME(1),LineNumber(1)];
         }
         
         int i;
@@ -1934,9 +1934,9 @@
 
 - (id) genRandom:(id) p
 {
-    long minValue = [NodeValue(0) longValue];
-    long maxValue = [NodeValue(1) longValue];
-	long result =  (rand() % ((maxValue +1) - minValue)) + minValue;
+    int32_t minValue = [NodeValue(0) longValue];
+    int32_t maxValue = [NodeValue(1) longValue];
+	int32_t result =  (rand() % ((maxValue +1) - minValue)) + minValue;
     return [NSDecimalNumber numberWithLong:result];
 }
 
@@ -2297,7 +2297,7 @@
 - (id) initWithCall:(void*)afunc name:(NSString*)aFuncName obj:(id)anObj numArgs:(int)n 
 {
 	self = [super init];
-	funcPtr = (unsigned long*)afunc;
+	funcPtr = (uint32_t*)afunc;
 	funcName = [aFuncName copy];
 	numArgs = n;
 	anObject = anObj;

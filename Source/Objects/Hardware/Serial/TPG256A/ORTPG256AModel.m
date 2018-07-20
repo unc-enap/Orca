@@ -155,13 +155,13 @@ NSString* ORTPG256ALock = @"ORTPG256ALock";
 	if(shipPressures) {
 		if([[ORGlobal sharedGlobal] runInProgress]){
 			
-			unsigned long data[kTPG256ARecordLength];
+			uint32_t data[kTPG256ARecordLength];
 			data[0] = dataId | kTPG256ARecordLength;
 			data[1] = [self uniqueIdNumber]&0xfff;
 			
 			union {
 				float asFloat;
-				unsigned long asLong;
+				uint32_t asLong;
 			}theData;
 			int index = 2;
 			int i;
@@ -174,7 +174,7 @@ NSString* ORTPG256ALock = @"ORTPG256ALock";
 				index++;
 			}
 			[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-																object:[NSData dataWithBytes:data length:sizeof(long)*kTPG256ARecordLength]];
+																object:[NSData dataWithBytes:data length:sizeof(int32_t)*kTPG256ARecordLength]];
 		}
 	}
 }
@@ -278,7 +278,7 @@ NSString* ORTPG256ALock = @"ORTPG256ALock";
 	else return 0.0;
 }
 
-- (unsigned long) timeMeasured:(int)index
+- (uint32_t) timeMeasured:(int)index
 {
 	if(index>=0 && index<6)return timeMeasured[index];
 	else return 0;
@@ -442,8 +442,8 @@ NSString* ORTPG256ALock = @"ORTPG256ALock";
 }
 
 #pragma mark •••Data Records
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -487,7 +487,7 @@ NSString* ORTPG256ALock = @"ORTPG256ALock";
 {
 	NSString* s;
  	@synchronized(self){
-		s= [NSString stringWithFormat:@"TPG256A,%lu",[self uniqueIdNumber]];
+		s= [NSString stringWithFormat:@"TPG256A,%u",[self uniqueIdNumber]];
 	}
 	return s;
 }

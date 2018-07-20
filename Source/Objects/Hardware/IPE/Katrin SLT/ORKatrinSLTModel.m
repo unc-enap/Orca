@@ -123,7 +123,7 @@
 - (int) waitForSecondStrobeOfFLT:(ORKatrinFLTModel *)flt;
 {
     if(!flt) return -1;
-    unsigned long i,lastSec,sec;
+    uint32_t i,lastSec,sec;
     lastSec=[flt readTime];
     for(i=0;i<10000;i++){
         sec = [flt readTime];
@@ -144,8 +144,8 @@
     //
     struct timeval t;//    struct timezone tz; is obsolete ... -tb-
     //timing
-        long currentSec;
-        long currentUSec;
+        int32_t currentSec;
+        int32_t currentUSec;
     gettimeofday(&t,NULL);
     currentSec = t.tv_sec;  
     currentUSec = t.tv_usec;  
@@ -448,8 +448,8 @@
 		struct timezone tz;	
 			
 			
-		unsigned long long lPageStatus;
-		lPageStatus = ((unsigned long long)[self readReg:kPageStatusHigh]<<32) | [self readReg:kPageStatusLow];
+		uint64_t lPageStatus;
+		lPageStatus = ((uint64_t)[self readReg:kPageStatusHigh]<<32) | [self readReg:kPageStatusLow];
 
 		// Siumartion events everey second?!
 		if (usingPBusSimulation){
@@ -473,19 +473,19 @@
 			eventCounter++;
 			
 			//read page start address
-			unsigned long lTimeL     = [self read: SLT_REG_ADDRESS(kSLTLastTriggerTimeStamp) + actualPageIndex];
+			uint32_t lTimeL     = [self read: SLT_REG_ADDRESS(kSLTLastTriggerTimeStamp) + actualPageIndex];
 			int iPageStart = (((lTimeL >> 10) & 0x7fe)  + 20) %2000;
 			
-			unsigned long timeStampH = [self read: SLT_REG_ADDRESS(kSLTPageTimeStamp) + 2*actualPageIndex];
-			unsigned long timeStampL = [self read: SLT_REG_ADDRESS(kSLTPageTimeStamp) + 2*actualPageIndex+1];
+			uint32_t timeStampH = [self read: SLT_REG_ADDRESS(kSLTPageTimeStamp) + 2*actualPageIndex];
+			uint32_t timeStampL = [self read: SLT_REG_ADDRESS(kSLTPageTimeStamp) + 2*actualPageIndex+1];
 			//
 			//			NSLog(@"Reading event from page %d, start=%d:  %ds %dx100us\n", 
 			//			         actualPageIndex+1, iPageStart, timeStampH, (timeStampL >> 11) & 0x3fff);
 			
 			//readout the SLT pixel trigger data
 			int i;
-			unsigned long buffer[2000];
-			unsigned long sltMemoryAddress = (SLTID << 24) | actualPageIndex<<11;
+			uint32_t buffer[2000];
+			uint32_t sltMemoryAddress = (SLTID << 24) | actualPageIndex<<11;
 			// Split the reading of the memory in blocks according to the maximal block size
 			// supported by the firewire driver	
 			// TODO: Read only the relevant trigger data for smaller page sizes!
@@ -494,13 +494,13 @@
 			int sltSize = 2000; // Allways read the full trigger memory
 			int nBlocks = sltSize / blockSize;
 			for (i=0;i<nBlocks;i++)
-			  [self read:sltMemoryAddress+i*blockSize data:buffer+i*blockSize size:blockSize*sizeof(unsigned long)];
+			  [self read:sltMemoryAddress+i*blockSize data:buffer+i*blockSize size:blockSize*sizeof(uint32_t)];
 			
 			//for(i=0;i<2000;i++) buffer[i]=0; // only Test
 
             // Check result from block readout - Testing only
-			//unsigned long buffer2[2000];
-            //[self readBlock:sltMemoryAddress dataBuffer:(unsigned long*)buffer2 length:2000 increment:1];
+			//uint32_t buffer2[2000];
+            //[self readBlock:sltMemoryAddress dataBuffer:(uint32_t*)buffer2 length:2000 increment:1];
 			//for(i=0;i<2000;i++) if (buffer[i]!=buffer2[i]) {
 			//  NSLog(@"Error reading Slt Memory\n"); 
 			//  break;
@@ -508,18 +508,18 @@
 			
 		    // Re-organize trigger data to get it in a continous data stream
 			// There is no automatic address wrapping like in the Flts available...
-			unsigned long reorderBuffer[2000];
-			unsigned long *pMult = reorderBuffer;
-			memcpy( pMult, buffer + iPageStart, (2000 - iPageStart)*sizeof(unsigned long));  
-			memcpy( pMult + 2000 - iPageStart, buffer, iPageStart*sizeof(unsigned long));  
+			uint32_t reorderBuffer[2000];
+			uint32_t *pMult = reorderBuffer;
+			memcpy( pMult, buffer + iPageStart, (2000 - iPageStart)*sizeof(uint32_t));  
+			memcpy( pMult + 2000 - iPageStart, buffer, iPageStart*sizeof(uint32_t));  
 			
 			int nTriggered = 0;
-		    unsigned long xyProj[20];
-			unsigned long tyProj[100];
+		    uint32_t xyProj[20];
+			uint32_t tyProj[100];
 			nTriggered = [self calcProjection:pMult xyProj:xyProj tyProj:tyProj];
 
 			//ship the start of event record
-			unsigned long eventData[5];
+			uint32_t eventData[5];
 			eventData[0] = eventDataId | 5;	
 			eventData[1] = (([self crateNumber]&0x0f)<<21) | ([self stationNumber]& 0x0000001f)<<16;
 			eventData[2] = eventCounter;
@@ -528,7 +528,7 @@
 			[aDataPacket addLongsToFrameBuffer:eventData length:5];	//ship the event record
 
 			//ship the pixel multiplicity data for all 20 cards (last two of 22 not used)
-			unsigned long multiplicityRecord[3 + 20];
+			uint32_t multiplicityRecord[3 + 20];
 			multiplicityRecord[0] = multiplicityId | 20 + 3;	
 			multiplicityRecord[1] = (([self crateNumber]&0x0f)<<21) | ([self stationNumber]& 0x0000001f)<<16; 
 			multiplicityRecord[2] = eventCounter;
@@ -550,7 +550,7 @@
 				nil];
 			id obj;
 			while(obj = [e nextObject]){			    
-				unsigned long pixelList;
+				uint32_t pixelList;
 				if(readAll)	pixelList = 0x3fffff;
 				else		pixelList = xyProj[[obj slot] - 1];
 				//NSLog(@"Datataker in slot %d, pixelList %06x\n", [obj slot], pixelList);
@@ -575,7 +575,7 @@
 					int nEv = eventCounter - lastDisplayCounter;
 					double rate = 0.1 * nEv / (t0.tv_sec-lastDisplaySec) + 0.9 * lastDisplayRate;
 					
-					unsigned long tRead = (t1.tv_sec - t0.tv_sec) * 1000000 + (t1.tv_usec - t0.tv_usec);
+					uint32_t tRead = (t1.tv_sec - t0.tv_sec) * 1000000 + (t1.tv_usec - t0.tv_usec);
 					if (t0.tv_sec%20 == 0) {
 					    NSLogFont(aFont, @"%64s  | %16s\n", "Last event", "Interval summary"); 
 						NSLogFont(aFont, @"%4s %14s %4s %14s %4s %4s %14s  |  %4s %10s\n", 

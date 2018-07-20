@@ -183,7 +183,7 @@ NSString* ORADVME1314WriteValueChangedNotification		= @"ADVME1314 WriteValue Cha
     ADVME1314ChannelDat currentState = [self readHardwareState];
     int chanBlock;   
     NSFont* font = [NSFont fontWithName:@"Monaco" size:11];    
-    NSLogFont(font,@"ADVME 1314 Output, BoardID: 0x%lx, Crate: %d, Slot: %d\n",boardID,[self crateNumber],[self slot]);
+    NSLogFont(font,@"ADVME 1314 Output, BoardID: 0x%x, Crate: %d, Slot: %d\n",boardID,[self crateNumber],[self slot]);
     NSLogFont(font,@"  Mask State:\n");
     for (chanBlock=0; chanBlock<kADVME1314Number32ChannelSets; chanBlock++) {    
         NSLogFont(font,@"  [0x%8x]: \n",writeMask.channelDat[chanBlock]);

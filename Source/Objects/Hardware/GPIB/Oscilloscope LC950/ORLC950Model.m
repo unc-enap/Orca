@@ -132,11 +132,11 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 //--------------------------------------------------------------------------------
 - (bool) oscBusy
 {
-	long	inr;
+	int32_t	inr;
     char	theDataOsc[ 8 ];
 	
     // Write the command.
-    long lengthReturn = [ mController writeReadDevice: mPrimaryAddress 
+    int32_t lengthReturn = [ mController writeReadDevice: mPrimaryAddress 
 											  command: @"INR?"
 												 data: theDataOsc
 											maxLength: 6 ];
@@ -173,10 +173,10 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
  *				second = 0 to 59
  */
 //--------------------------------------------------------------------------------
-- (long) oscGetDateTime
+- (int32_t) oscGetDateTime
 {
-	long		returnLength = 0;
-    long		timeLong = 0;
+	int32_t		returnLength = 0;
+    int32_t		timeLong = 0;
 	//	NSString*	dateStr;
 	//	NSString*  	timeStr;
 	//	NSString*	dateTime;
@@ -422,7 +422,7 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 {
 	//    NSString*	impedanceValue;
     NSString*	couplingValue;
-	long		returnLength;
+	int32_t		returnLength;
 	
 	if ( [ self checkChnlNum: aChnl ] ){
 		
@@ -498,7 +498,7 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 //--------------------------------------------------------------------------------
 - (void) oscGetChnlPos: (short) aChnl
 {
-    long	returnLength;
+    int32_t	returnLength;
     
 	if ( [ self checkChnlNum: aChnl ] )
 	{
@@ -538,7 +538,7 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 //--------------------------------------------------------------------------------
 - (void) oscGetChnlScale: (short) aChnl
 {
-    long	returnLength = 0;
+    int32_t	returnLength = 0;
     
 	if ( [ self checkChnlNum: aChnl ] )
 	{
@@ -575,7 +575,7 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 //-----------------------------------------------------------------------------
 - (void) oscGetHorizontalPos
 {
-	long	returnLength;
+	int32_t	returnLength;
 	
     returnLength = [ self writeReadGPIBDevice: @"TRIG_DELAY?" 
                                          data: mReturnData
@@ -604,7 +604,7 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 //-----------------------------------------------------------------------------
 - (void) oscGetHorizontalScale
 {
-	long	returnLength;
+	int32_t	returnLength;
 	
     returnLength = [ self writeReadGPIBDevice: @"TIME_DIV?" 
                                          data: mReturnData
@@ -644,7 +644,7 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 {
 	NSString*   waveformParams;
 	NSString*   recordLengthStr;
-    long		returnLength;
+    int32_t		returnLength;
 	
     returnLength = [ self writeReadGPIBDevice: @"WAVEFORM_SETUP?"
                                          data: mReturnData
@@ -677,21 +677,21 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 {
 	//	float captureInt;
 	//	float memoryUsed;
-	long waveformLength;
+	int32_t waveformLength;
 	waveformLength = [ self waveformLength ];
 	//	captureInt = 10 * [ self horizontalScale ];
 	//	memoryUsed = captureInt / 1.25e-10 + 0.5;
 	//	printf( "Rec size 1 %f\n", memoryUsed );
 	//	if ( memoryUsed > ORLCMaxRecSize ) memoryUsed = ORLCMaxRecSize;
 	//	printf( "Rec size 2 %f\n", memoryUsed );
-	//	long sparsing = memoryUsed / [ self waveformLength ];
-	long sparsing = 1;
+	//	int32_t sparsing = memoryUsed / [ self waveformLength ];
+	int32_t sparsing = 1;
 	
 	
 	NSLog(@"Record length: %d Sparsing factor: %d  scale factor: %e\n", waveformLength, sparsing, [ self horizontalScale ] );
-	[ self writeToGPIBDevice: [ NSString stringWithFormat: @"WAVEFORM_SETUP NP,%ld,SP,%ld", waveformLength, sparsing ]];
+	[ self writeToGPIBDevice: [ NSString stringWithFormat: @"WAVEFORM_SETUP NP,%d,SP,%d", waveformLength, sparsing ]];
 	//if ( waveformLength == 15000 ) waveformLength = 25000;	
-	[ self writeToGPIBDevice: [ NSString stringWithFormat: @"MEMORY_SIZE %ld", waveformLength ] ];
+	[ self writeToGPIBDevice: [ NSString stringWithFormat: @"MEMORY_SIZE %d", waveformLength ] ];
 }
 
 #pragma mark ***Hardware - Trigger
@@ -705,7 +705,7 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 - (void)	oscGetTriggerCoupling
 {
     NSString*	couplingValue;
-	long		returnLength = 0;
+	int32_t		returnLength = 0;
 	
 	// Get coupling value.
 	returnLength = [ self writeReadGPIBDevice: @"TRIG_COUPLING?"
@@ -790,7 +790,7 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 //-----------------------------------------------------------------------------
 - (void)	oscGetTriggerLevel
 {
-	long	returnLength = 0;
+	int32_t	returnLength = 0;
 	
 	// Determine the trigger source.
 	NSString* source = [ self triggerSourceAsString ];
@@ -834,7 +834,7 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 - (void)	oscGetTriggerMode
 {
     NSString*	triggerMode;
-	long		returnLength = 0;
+	int32_t		returnLength = 0;
 	
 	// Get trigger mode.
 	returnLength = [ self writeReadGPIBDevice: @"TRIG_MODE?"
@@ -909,7 +909,7 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 //-----------------------------------------------------------------------------
 - (void) oscGetTriggerPos
 {
-    long		returnLength = 0;
+    int32_t		returnLength = 0;
     
 	// Get value
 	//    returnLength = [ self writeReadGPIBDevice: @"HORIZONTAL:TRIGGER:POSITION?"
@@ -949,7 +949,7 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 - (void) oscGetTriggerSlopeIsPos
 {
     NSString*	slope;
-    long		returnLength = 0;
+    int32_t		returnLength = 0;
 	
 	// Get trigger source    
 	NSString* source = [ self triggerSourceAsString ];
@@ -1006,7 +1006,7 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 - (void)	oscGetTriggerSource
 {
     NSString*	triggerSource;
-	long		returnLength = 0;
+	int32_t		returnLength = 0;
 	
 	// Get trigger source.
 	returnLength = [ self writeReadGPIBDevice: @"TRIG_SELECT?"
@@ -1151,7 +1151,7 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 	static L950IDefHeaderStruct	headerInfo;
 	char						*theHeader;
 	//	size_t						theLength;
-	long						numBytes;
+	int32_t						numBytes;
 	short						i;
 	
     @try {
@@ -1207,8 +1207,8 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 	char*							theData;			// Temporary pointer to data storage location.
 	static struct L950IDefHeader	headerInfo;
 	int								i;
-	long							numBytes;
-	//	long							j, l;
+	int32_t							numBytes;
+	//	int32_t							j, l;
 	
     @try {
         if( [ self isConnected ] )
@@ -1269,7 +1269,7 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 //--------------------------------------------------------------------------------
 - (void) oscGetWaveformTime: (unsigned short) aMask
 {
-    unsigned long long	timeInSecs;
+    uint64_t	timeInSecs;
 	char				*theTimeData;				// Temporary pointer to data storage location.
 	char				timeRaw[ 64 ];
 	bool				fNoTime = true;
@@ -1300,7 +1300,7 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 	
 	// Convert the time
     [ self osc950ConvertTime: &timeInSecs timeToConvert: &timeRaw[ 0 ] ];
-    memcpy( theTimeData, &timeInSecs, 2*sizeof(long) );
+    memcpy( theTimeData, &timeInSecs, 2*sizeof(int32_t) );
 }
 
 
@@ -1381,7 +1381,7 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
     [ self writeToGPIBDevice: @"COMM_FORMAT DEF9,BYTE,BIN" ]; // DEF9 - include 9 byte record stating size of following data.
 	// Byte data
 	// Binary encoding.
-    [ self writeToGPIBDevice: [ NSString stringWithFormat: @"WAVEFORM_SETUP NP,%ld", mWaveformLength ]];  // Waveform size
+    [ self writeToGPIBDevice: [ NSString stringWithFormat: @"WAVEFORM_SETUP NP,%d", mWaveformLength ]];  // Waveform size
     [ self oscSetAcqMode: kSingleWaveform ];  // Set to single waveform acquisition.
 }
 
@@ -1775,22 +1775,22 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 /*!\method  osc950ConvertTime  
  * \brief	Convert the LeCroy time to an equivalent 10MHz clock starting at
  *			1/1/1970.
- * \param	a10MHzTime			- long long that stores 10 MHz time.
+ * \param	a10MHzTime			- int64_t that stores 10 MHz time.
  * \param	aCharTime			- Tektronix time.
  * \note	Time is returned as follows:
  *				"TRIGGER_TIME       : Date = MAY 27, 2004, Time = 11:22:25.1401"
  */
 //--------------------------------------------------------------------------------
-- (void) osc950ConvertTime: (unsigned long long*) a10MHzTime timeToConvert: (char*) aCharTime
+- (void) osc950ConvertTime: (uint64_t*) a10MHzTime timeToConvert: (char*) aCharTime
 {
     const char*					stdMonths[] = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", 
 	"OCT", "NOV", "DEC" };
     struct tm					unixTime;
 	//    struct tm*					tmpStruct;
-    unsigned long				baseTime;
-	unsigned long long			fracSecs;
-    const unsigned long long	mult = 10000000;
-	const unsigned long long	mult1 = 1000;
+    uint32_t				baseTime;
+	uint64_t			fracSecs;
+    const uint64_t	mult = 10000000;
+	const uint64_t	mult1 = 1000;
 	//    char*						dateString;
 	short						i;
 	
@@ -1849,7 +1849,7 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 	[ scanner scanInt: &fracSecsInt ];
 	
 	// convert fractions seconds to MHz.
-	fracSecs = ( unsigned long long )(fracSecsInt * mult1);
+	fracSecs = ( uint64_t )(fracSecsInt * mult1);
 	
 	//	printf( "Fraction: %d\n", fracSecsInt );	
 	//	printf( "Year: %d, mon: %d, day %d\n", unixTime.tm_year, unixTime.tm_mon, unixTime.tm_mday );
@@ -1860,7 +1860,7 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 	// local time and then does conversion to gmtime    
 	
 	// Convert to 10 Mhz Clock
-    *a10MHzTime = (unsigned long long)baseTime * mult + fracSecs;
+    *a10MHzTime = (uint64_t)baseTime * mult + fracSecs;
 	//	printf( "LC950 - converted: %lld\n", *a10MHzTime );	
 }
 @end
@@ -1870,22 +1870,22 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 @end
 
 @implementation ORLC950DecoderForScopeGTID
-- (unsigned long) decodeData: (void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet: (ORDataSet*) aDataSet
+- (uint32_t) decodeData: (void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet: (ORDataSet*) aDataSet
 {
     return [self decodeGtId:aSomeData fromDecoder:aDecoder intoDataSet:aDataSet];
 } 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     return [self dataGtIdDescription:ptr];
 }
 @end
 
 @implementation ORLC950DecoderForScopeTime
-- (unsigned long) decodeData: (void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet: (ORDataSet*) aDataSet
+- (uint32_t) decodeData: (void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet: (ORDataSet*) aDataSet
 {
     return [self decodeClock:aSomeData fromDecoder:aDecoder intoDataSet:aDataSet];
 } 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     return [self dataClockDescription:ptr];
 }

@@ -110,7 +110,7 @@
 
 #pragma mark NSURLConnection Delegate Methods
 //NSURLConnection Delegate methods - For asynchronous requests.
-// Implementing the async stuff was taking too long so never fully implemented
+// Implementing the async stuff was taking too int32_t so never fully implemented
 // this option in the command function.
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
@@ -149,7 +149,7 @@
     // Check the error var
     NSLog(@"Error with xmlrpc client request");
     NSLog(@"Domain: %@\n", error.domain);
-    NSLog(@"Error Code: %ld\n", (long)error.code);
+    NSLog(@"Error Code: %d\n", (int32_t)error.code);
     NSLog(@"Description: %@\n", [error localizedDescription]);
     NSLog(@"Reason: %@\n", [error localizedFailureReason]);
 }

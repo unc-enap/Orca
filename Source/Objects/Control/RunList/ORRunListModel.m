@@ -259,7 +259,7 @@ static NSString* ORRunListDataOut1	= @"ORRunListDataOut1";
 	else return nil;
 }
 
-- (unsigned long) itemCount
+- (uint32_t) itemCount
 {
 	return [items count];
 }

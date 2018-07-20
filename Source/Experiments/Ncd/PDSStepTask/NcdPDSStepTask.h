@@ -52,10 +52,10 @@
 
 #pragma mark ¥¥¥Accessors
 - (NSMutableArray*) patternArray;
-- (unsigned long)patternMaskForArray:(int)arrayIndex;
+- (uint32_t)patternMaskForArray:(int)arrayIndex;
 - (void) setPatternArray:(NSMutableArray*)aPatternArray;
-- (unsigned long)patternMaskForArray:(int)arrayIndex;
-- (void) setPatternMaskForArray:(int)arrayIndex to:(unsigned long)aValue;
+- (uint32_t)patternMaskForArray:(int)arrayIndex;
+- (void) setPatternMaskForArray:(int)arrayIndex to:(uint32_t)aValue;
 - (int) numberEnabledChannels;
 - (void) loadMaskForChannelIndex:(int) index;
 - (NSArray*) patternMatrixArray;
@@ -74,7 +74,7 @@
 - (void) registerNotificationObservers;
 - (void) updateView;
 - (void) patternChanged:(NSNotification*)aNotification;
-- (void) setEnabledinMatrix:(NSMatrix*)aMatrix usingMask:(unsigned long)aMask;
+- (void) setEnabledinMatrix:(NSMatrix*)aMatrix usingMask:(uint32_t)aMask;
 - (void) distributionPatternChanged:(NSNotification*)aNotification;
 - (void) tubeMapChanged:(NSNotification*)aNotification;
 

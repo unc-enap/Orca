@@ -91,7 +91,7 @@ ORSIS3302_IMPLEMENT_NOTIFY(CardInited);
 #pragma mark •••Static Declarations
 //offsets from the base address
 typedef struct {
-	unsigned long offset;
+	uint32_t offset;
 	NSString* name;
 } SIS3302GammaRegisterInformation;
 
@@ -312,7 +312,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
     [waveFormRateGroup setIntegrationTime:newIntegrationTime];
 }
 
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
 {
 	if(groupTag == 0){
 		if(counterTag>=0 && counterTag<kNumSIS3302Channels){
@@ -351,7 +351,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 
 - (short) gtMask { return gtMask; }
 - (BOOL) gt:(short)chan	 { return (gtMask & (1<<chan)) != 0; }
-- (void) setGtMask:(long)aMask	
+- (void) setGtMask:(int32_t)aMask	
 { 
 	[[[self undoManager] prepareWithInvocationTarget:self] setGtMask:gtMask];
 	gtMask = aMask;
@@ -487,7 +487,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
     if(group>=4)return 0; 
     return (stopAtEventLengthMask & (1 << group)) != 0; 
 }
-- (void) setStopEventAtLength:(long)aMask	
+- (void) setStopEventAtLength:(int32_t)aMask	
 { 
 	[[[self undoManager] prepareWithInvocationTarget:self] setStopEventAtLength:stopAtEventLengthMask];
 	stopAtEventLengthMask = aMask;
@@ -506,7 +506,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
     if(group>=4)return 0; 
     return (enablePageWrapMask & (1 << group)) != 0; 
 }
-- (void) setPageWrap:(long)aMask	
+- (void) setPageWrap:(int32_t)aMask	
 { 
 	[[[self undoManager] prepareWithInvocationTarget:self] setPageWrap:enablePageWrapMask];
 	enablePageWrapMask = aMask;
@@ -539,7 +539,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
     if(group>=4)return 0; 
     return ((enableTestDataMask & (1 << group)) != 0); 
 }
-- (void) setEnableTestData:(long)aMask
+- (void) setEnableTestData:(int32_t)aMask
 { 
 	[[[self undoManager] prepareWithInvocationTarget:self] setEnableTestData:enableTestDataMask];
 	enableTestDataMask = aMask;
@@ -640,7 +640,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 	
 #pragma mark •••Reg Declarations
 
-- (unsigned long) getPreTriggerDelayOffset:(int) aGroup 
+- (uint32_t) getPreTriggerDelayOffset:(int) aGroup 
 {
     switch (aGroup) {
         case 0: return kSIS3302GenericPreTriggerDelayAdc12;
@@ -648,10 +648,10 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
         case 2: return kSIS3302GenericPreTriggerDelayAdc56;
         case 3: return kSIS3302GenericPreTriggerDelayAdc78;
     }
-    return (unsigned long)-1;
+    return (uint32_t)-1;
 }
 
-- (unsigned long) getADCBufferRegisterOffset:(int) channel 
+- (uint32_t) getADCBufferRegisterOffset:(int) channel 
 {
     switch (channel) {
         case 0: return kSIS3302Adc1Offset;
@@ -663,10 +663,10 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
         case 6: return kSIS3302Adc7Offset;
         case 7: return kSIS3302Adc8Offset;
     }
-    return (unsigned long) -1;
+    return (uint32_t) -1;
 }
 
-- (unsigned long) getThresholdRegOffsets:(int) channel 
+- (uint32_t) getThresholdRegOffsets:(int) channel 
 {
     switch (channel) {
         case 0: return 	kSIS3302TriggerThresholdAdc1;
@@ -678,10 +678,10 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 		case 6: return 	kSIS3302TriggerThresholdAdc7;
 		case 7: return 	kSIS3302TriggerThresholdAdc8;
     }
-    return (unsigned long) -1;
+    return (uint32_t) -1;
 }
 
-- (unsigned long) getTriggerSetupRegOffsets:(int) channel 
+- (uint32_t) getTriggerSetupRegOffsets:(int) channel 
 {
     switch (channel) {
 		case 0: return 	kSIS3302TriggerSetupAdc1;
@@ -693,10 +693,10 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 		case 6: return 	kSIS3302TriggerSetupAdc7;
 		case 7: return 	kSIS3302TriggerSetupAdc8;
     }
-    return (unsigned long) -1;
+    return (uint32_t) -1;
 }
 
-- (unsigned long) getEventDirectoryForChannel:(int) channel 
+- (uint32_t) getEventDirectoryForChannel:(int) channel 
 {
     switch (channel) {
 		case 0: return 	kSIS3302GenericEventDirectoryAdc1;
@@ -708,10 +708,10 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 		case 6: return 	kSIS3302GenericEventDirectoryAdc7;
 		case 7: return 	kSIS3302GenericEventDirectoryAdc8;
     }
-    return (unsigned long) -1;
+    return (uint32_t) -1;
 }
 
-- (unsigned long) getNextSampleAddressForChannel:(int) channel 
+- (uint32_t) getNextSampleAddressForChannel:(int) channel 
 {
     switch (channel) {
 		case 0: return 	kSIS3302ActualSampleAddressAdc1;
@@ -723,10 +723,10 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 		case 6: return 	kSIS3302ActualSampleAddressAdc7;
 		case 7: return 	kSIS3302ActualSampleAddressAdc8;
     }
-    return (unsigned long) -1;
+    return (uint32_t) -1;
 }
 
-- (unsigned long) getEventConfigOffsets:(int)group
+- (uint32_t) getEventConfigOffsets:(int)group
 {
 	switch (group) {
 		case 0: return kSIS3302EventConfigAdc12;
@@ -734,10 +734,10 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 		case 2: return kSIS3302EventConfigAdc56;
 		case 3: return kSIS3302EventConfigAdc78;
 	}
-	return (unsigned long) -1;	 
+	return (uint32_t) -1;	 
 }
 
-- (unsigned long) getEventLengthOffsets:(int)group
+- (uint32_t) getEventLengthOffsets:(int)group
 {
 	switch (group) {
 		case 0: return kSIS3302GenericSampleLengthAdc12;
@@ -745,10 +745,10 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 		case 2: return kSIS3302GenericSampleLengthAdc56;
 		case 3: return kSIS3302GenericSampleLengthAdc78;
 	}
-	return (unsigned long) -1;	 
+	return (uint32_t) -1;	 
 }
 
-- (unsigned long) getSampleStartOffsets:(int)group
+- (uint32_t) getSampleStartOffsets:(int)group
 {
 	switch (group) {
 		case 0: return kSIS3302GenericSampleStartAdc12;
@@ -756,10 +756,10 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 		case 2: return kSIS3302GenericSampleStartAdc56;
 		case 3: return kSIS3302GenericSampleStartAdc78;
 	}
-	return (unsigned long) -1;	 
+	return (uint32_t) -1;	 
 }
 
-- (unsigned long) getAdcInputModeOffsets:(int)group
+- (uint32_t) getAdcInputModeOffsets:(int)group
 {
 	switch (group) {
 		case 0: return kSIS3302GenericAdcInputModeAdc12;
@@ -767,10 +767,10 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 		case 2: return kSIS3302GenericAdcInputModeAdc56;
 		case 3: return kSIS3302GenericAdcInputModeAdc78;
 	}
-	return (unsigned long) -1;	 
+	return (uint32_t) -1;	 
 }
 
-- (unsigned long) getAdcMemory:(int)channel
+- (uint32_t) getAdcMemory:(int)channel
 {
     switch (channel) {			
 		case 0: return 	kSIS3302Adc1Offset;
@@ -782,19 +782,19 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 		case 6: return 	kSIS3302Adc7Offset;
 		case 7: return 	kSIS3302Adc8Offset;
  	}
-	return (unsigned long) -1;	 
+	return (uint32_t) -1;	 
 }
 
 #pragma mark •••Hardware Access
 - (void) readModuleID:(BOOL)verbose
 {	
-	unsigned long result = 0;
+	uint32_t result = 0;
 	[[self adapter] readLongBlock:&result
 						atAddress:[self baseAddress] + kSIS3302ModID
                         numToRead:1
 					   withAddMod:[self addressModifier]
 					usingAddSpace:0x01];
-	unsigned long moduleID = result >> 16;
+	uint32_t moduleID = result >> 16;
 	unsigned short majorRev = (result >> 8) & 0xff;
 	unsigned short minorRev = result & 0xff;
 	NSString* s = [NSString stringWithFormat:@"%x.%x",majorRev,minorRev];
@@ -808,7 +808,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 
 - (void) setLed:(BOOL)state
 {
-	unsigned long aValue = CSRMask(state,kSISLed);
+	uint32_t aValue = CSRMask(state,kSISLed);
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kSIS3302ControlStatus
                         numToWrite:1
@@ -818,7 +818,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 
 - (void) clearTimeStamp
 {
-	unsigned long aValue = 0;
+	uint32_t aValue = 0;
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kSIS3302GenericKeyTimestampClear
                         numToWrite:1
@@ -828,7 +828,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 
 - (void) forceTrigger
 {
-    unsigned long aValue = 0;
+    uint32_t aValue = 0;
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kSIS3302GenericKeyArmSampleLogic
                         numToWrite:1
@@ -841,9 +841,9 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
                      usingAddSpace:0x01];    
 }
 
-- (unsigned long) acqReg
+- (uint32_t) acqReg
 {
- 	unsigned long aValue = 0;
+ 	uint32_t aValue = 0;
 	[[self adapter] readLongBlock:&aValue
 						atAddress:[self baseAddress] + kSIS3302AcquisitionControl
                         numToRead:1
@@ -858,7 +858,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 	if(verbose) NSLog(@"Reading Thresholds:\n");
 	
 	for(i =0; i < kNumSIS3302Channels; i++) {
-		unsigned long aValue;
+		uint32_t aValue;
 		[[self adapter] readLongBlock: &aValue
 							atAddress: [self baseAddress] + [self getThresholdRegOffsets:i]
 							numToRead: 1
@@ -910,7 +910,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 {
 	[self readThresholds:YES];
 	
-	unsigned long EventConfig = 0;
+	uint32_t EventConfig = 0;
 	[[self adapter] readLongBlock:&EventConfig
 						atAddress:[self baseAddress] +kSIS3302EventConfigAdc12
 						numToRead:1
@@ -918,7 +918,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 					usingAddSpace:0x01];	
 	NSLog(@"EventConfig: 0x%08x\n",EventConfig);
 	
-	unsigned long pretrigger = 0;
+	uint32_t pretrigger = 0;
 	[[self adapter] readLongBlock:&pretrigger
 						atAddress:[self baseAddress] + kSIS3302GenericPreTriggerDelayAdc12
 						numToRead:1
@@ -927,7 +927,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 	
 	NSLog(@"pretrigger: 0x%08x\n",pretrigger);
 	
-	unsigned long sampleLength1 = 0;
+	uint32_t sampleLength1 = 0;
 	[[self adapter] readLongBlock:&sampleLength1
 						atAddress:[self baseAddress] + kSIS3302GenericSampleLengthAdc12
 						numToRead:1
@@ -936,7 +936,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 	
 	NSLog(@"Sample length: 0x%08x\n",sampleLength1);
 	
-	unsigned long sampleStart = 0;
+	uint32_t sampleStart = 0;
 	[[self adapter] readLongBlock:&sampleStart
 						atAddress:[self baseAddress] + kSIS3302GenericSampleStartAdc12
 						numToRead:1
@@ -945,7 +945,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 	
 	NSLog(@"Sample start: 0x%08x\n",sampleStart);
 	
-	unsigned long prevNextSampleAddress1 = 0;
+	uint32_t prevNextSampleAddress1 = 0;
 	[[self adapter] readLongBlock:&prevNextSampleAddress1
 						atAddress:[self baseAddress] + kSIS3302ActualSampleAddressAdc1
 						numToRead:1
@@ -954,7 +954,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 	
 	NSLog(@"prevNextSampleAddress1: 0x%08x\n",prevNextSampleAddress1);
 	
-	unsigned long prevNextSampleAddress2 = 0;
+	uint32_t prevNextSampleAddress2 = 0;
 	[[self adapter] readLongBlock:&prevNextSampleAddress2
 						atAddress:[self baseAddress] + kSIS3302ActualSampleAddressAdc2
 						numToRead:1
@@ -963,7 +963,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 	
 	NSLog(@"prevNextSampleAddress2: 0x%08x\n",prevNextSampleAddress2);
 	
-	unsigned long triggerSetup1 = 0;
+	uint32_t triggerSetup1 = 0;
 	[[self adapter] readLongBlock:&triggerSetup1
 						atAddress:[self baseAddress] + kSIS3302TriggerSetupAdc1
 						numToRead:1
@@ -972,7 +972,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 	
 	NSLog(@"triggerSetup1: 0x%08x\n",triggerSetup1);
 	
-	unsigned long triggerSetup2 = 0;
+	uint32_t triggerSetup2 = 0;
 	[[self adapter] readLongBlock:&triggerSetup2
 						atAddress:[self baseAddress] + kSIS3302TriggerSetupAdc2
 						numToRead:1
@@ -1001,14 +1001,14 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 }
 
 #pragma mark •••Data Taker
-- (unsigned long) lostDataId { return lostDataId; }
-- (void) setLostDataId: (unsigned long) anId
+- (uint32_t) lostDataId { return lostDataId; }
+- (void) setLostDataId: (uint32_t) anId
 {
     lostDataId = anId;
 }
 
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -1183,14 +1183,14 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
-	//reading events from the mac is very, very slow. If the buffer is filling up, it can take a long time to readout all events.
+	//reading events from the mac is very, very slow. If the buffer is filling up, it can take a int32_t time to readout all events.
 	//Because of this we limit the number of events from any one buffer read. The SBC should be used if possible.
     const unsigned totalPageSize = 0x800000;
     const unsigned totalPageNumberMask = totalPageSize - 1;
     const unsigned maxSubWaveformLength = kMaxSIS3302SingleMaxRecord - 4;
     @try {
-        unsigned long check;
-        unsigned long checkTwo;
+        uint32_t check;
+        uint32_t checkTwo;
         [theController readLongBlock:&check
                             atAddress:[self baseAddress] + kSIS3302AcquisitionControl
                             numToRead:1
@@ -1233,8 +1233,8 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
             if (check == 0) continue;
             needsReset = YES;
 
-            unsigned long pageNumberTag = 0;
-            unsigned long readLongs = 0;
+            uint32_t pageNumberTag = 0;
+            uint32_t readLongs = 0;
             unsigned int readAtAddress = 0;
             unsigned int longsToRead = (unsigned int)(check/2);
             for (;readLongs < longsToRead;readLongs += maxSubWaveformLength) {
@@ -1244,14 +1244,14 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
                 unsigned int tempToRead = nextToRead;
                 unsigned int ptrOffset = 0;
                 while (tempToRead > 0) {
-                    unsigned long pageNumber = (readAtAddress >> 23) & 0x7;
+                    uint32_t pageNumber = (readAtAddress >> 23) & 0x7;
                     [theController writeLongBlock:&pageNumber
                                         atAddress:[self baseAddress] + kSIS3302AdcMemoryPageRegister
                                         numToWrite:1
                                        withAddMod:addressModifier
                                     usingAddSpace:0x01];  
                     unsigned int bytesToRead = (4*tempToRead & totalPageNumberMask);
-                    unsigned long addrToRead = [self baseAddress] + [self getAdcMemory:chan] + (readAtAddress & totalPageNumberMask);
+                    uint32_t addrToRead = [self baseAddress] + [self getAdcMemory:chan] + (readAtAddress & totalPageNumberMask);
                     if (((bytesToRead + (readAtAddress & totalPageNumberMask)) > totalPageNumberMask)) {
                         bytesToRead = totalPageNumberMask - (readAtAddress & totalPageNumberMask) + 1;
                     }
@@ -1330,7 +1330,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 
 - (void) reset
 {
- 	unsigned long aValue = 0; //value doesn't matter 
+ 	uint32_t aValue = 0; //value doesn't matter 
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kSIS3302KeyReset
                         numToWrite:1
@@ -1343,7 +1343,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
     // First turn off autostart if it's on
     [self writeAcquisitionRegister:YES];
     
- 	unsigned long aValue = 0; //value doesn't matter 
+ 	uint32_t aValue = 0; //value doesn't matter 
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kSIS3302KeyDisarm
                         numToWrite:1
@@ -1373,7 +1373,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
     return YES;
 }
 
-- (unsigned long) waveFormCount:(int)aChannel
+- (uint32_t) waveFormCount:(int)aChannel
 {
     return waveFormCount[aChannel];
 }
@@ -1555,14 +1555,14 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 	 userInfo: nil];
 }
 //for adcProvidingProtocol... but not used for now
-- (unsigned long) eventCount:(int)channel
+- (uint32_t) eventCount:(int)channel
 {
 	return 0;
 }
 - (void) clearEventCounts
 {
 }
-- (unsigned long) thresholdForDisplay:(unsigned short) aChan
+- (uint32_t) thresholdForDisplay:(unsigned short) aChan
 {
 	return [self threshold:aChan];
 }
@@ -1610,8 +1610,8 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 	
 	int i;
 	for (i=0;i<kNumSIS3302Channels;i++) {
-		unsigned long data =  [self dacOffset:i];
-		unsigned long addr = [self baseAddress] + kSIS3302DacData  ;
+		uint32_t data =  [self dacOffset:i];
+		uint32_t addr = [self baseAddress] + kSIS3302DacData  ;
 		
 		// Set the Data in the DAC Register
 		[[self adapter] writeLongBlock:&data
@@ -1684,7 +1684,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 
 - (void) writeDelaysAndMaxEvents
 {
-    unsigned long aMask = [self startDelay] & 0xFFFFFF;
+    uint32_t aMask = [self startDelay] & 0xFFFFFF;
 	[[self adapter] writeLongBlock:&aMask
                          atAddress:[self baseAddress] + kSIS3302GenericStartDelay
                         numToWrite:1
@@ -1708,7 +1708,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 - (void) writeAcquisitionRegister:(BOOL)forceAutostartOff
 {
 	// The register is set up as a J/K flip/flop -- 1 bit to set a function and 1 bit to disable.	
-	unsigned long aMask = 0x0;
+	uint32_t aMask = 0x0;
 	aMask |= ((clockSource & 0x7)<< 12);
 	
     aMask |= [self lemoTimestampEnabled] << 9;
@@ -1739,7 +1739,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 {   
 	ORCommandList* aList = [ORCommandList commandList];
 	int i;
-	unsigned long thresholdMask;
+	uint32_t thresholdMask;
 	for(i = 0; i < kNumSIS3302Channels; i++) {
 		thresholdMask  = (![self useTrapTrigger:i]) << 26;
 		if([self gt:i])	thresholdMask |= (1<<25);
@@ -1763,7 +1763,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 	int i;
 	ORCommandList* aList = [ORCommandList commandList];
 	for(i=0;i<kNumSIS3302Channels/2;i++){
-		unsigned long aValueMask = 0x0;
+		uint32_t aValueMask = 0x0;
 		aValueMask =  ([self averagingType:i] << 12)    |
         ([self stopEventAtLength:i] << 5) | 
         ([self pageWrap:i] << 4)          | 
@@ -1776,7 +1776,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 	}
 	//extended length
 	for(i=0;i<kNumSIS3302Channels/2;i++){
-		unsigned long aValueMask = (([self sampleLength:i]-4) & 0xFFFFFFC);
+		uint32_t aValueMask = (([self sampleLength:i]-4) & 0xFFFFFFC);
 		[aList addCommand: [ORVmeReadWriteCommand writeLongBlock: &aValueMask
 													   atAddress: [self baseAddress] + [self getEventLengthOffsets:i]
 													  numToWrite: 1
@@ -1785,7 +1785,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 	}
     // write sample start
 	for(i=0;i<kNumSIS3302Channels/2;i++){
-		unsigned long aValueMask = 0;
+		uint32_t aValueMask = 0;
 		[aList addCommand: [ORVmeReadWriteCommand writeLongBlock: &aValueMask
 													   atAddress: [self baseAddress] + [self getSampleStartOffsets:i]
 													  numToWrite: 1
@@ -1801,7 +1801,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 	int i;
 	ORCommandList* aList = [ORCommandList commandList];    
     for(i=0;i<kNumSIS3302Channels/2;i++){
-		unsigned long aValueMask = ([self testDataType:i] << 17) | 
+		uint32_t aValueMask = ([self testDataType:i] << 17) | 
         ([self enableTestData:i] << 16);
 		[aList addCommand: [ORVmeReadWriteCommand writeLongBlock: &aValueMask
 													   atAddress: [self baseAddress] + [self getAdcInputModeOffsets:i]
@@ -1817,7 +1817,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 	int i;
 	for(i=0;i<kNumSIS3302Channels/2;i++) {
         
-		unsigned long aValue = [self preTriggerDelay:i] & 0xFFF;
+		uint32_t aValue = [self preTriggerDelay:i] & 0xFFF;
 		[[self adapter] writeLongBlock:&aValue
 							 atAddress:[self baseAddress] + [self getPreTriggerDelayOffset:i]
 							numToWrite:1
@@ -1830,7 +1830,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 {
 	int i;
 	for(i = 0; i < kNumSIS3302Channels; i++) {
-		unsigned long aTriggerMask = 
+		uint32_t aTriggerMask = 
 		(([self pulseLength:i] & 0xffL) << 16) | 
 		(([self sumG:i]        & 0x1fL) <<  8) | 
 		([self peakingTime:i] & 0x1fL);
@@ -1846,7 +1846,7 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 
 - (void) writePageRegister:(int) aPage 
 {	
-	unsigned long aValue = aPage & 0xf;
+	uint32_t aValue = aPage & 0xf;
 	[[self adapter] writeLongBlock:&aValue
 						 atAddress:[self baseAddress] + kSIS3302AdcMemoryPageRegister
 						numToWrite:1

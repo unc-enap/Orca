@@ -71,10 +71,10 @@ Raw data points continue until the Data length is used up....
     [super dealloc];
 }
 
-- (unsigned long) decodeData:(void*)someData fromDataPacket:(ORDataPacket*)aDataPacket intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDataPacket:(ORDataPacket*)aDataPacket intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length = ExtractLength(*ptr);
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length = ExtractLength(*ptr);
 	ptr++; //point to location info
     int crate = (*ptr&0x01e00000)>>21;
     int card  = (*ptr&0x001f0000)>>16;
@@ -93,7 +93,7 @@ Raw data points continue until the Data length is used up....
 	NSLog(@"0x%08x 0x%08x 0x%08x\n",led3,led2,led1);
 */	
 	ptr += 2; //point to Energy low word
-	unsigned long energy = *ptr >> 16;
+	uint32_t energy = *ptr >> 16;
 	ptr++;	  //point to Energy second word
 	energy += (*ptr & 0x0000007f) << 16;
 	
@@ -113,7 +113,7 @@ Raw data points continue until the Data length is used up....
 	
 	//note:  there is something wrong here. The package length should be in longs but the
 	//packet is always half empty.   
-	[tmpData setLength:packetLength*sizeof(long)];
+	[tmpData setLength:packetLength*sizeof(int32_t)];
 	unsigned short* dPtr = (unsigned short*)[tmpData bytes];
 	int i;
 	int wordCount = 0;
@@ -153,7 +153,7 @@ Raw data points continue until the Data length is used up....
     return length; //must return number of longs
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 	ptr++;
 
@@ -164,7 +164,7 @@ Raw data points continue until the Data length is used up....
 	ptr++;
     NSString* chan  = [NSString stringWithFormat:@"Chan  = %d\n",*ptr&0x7];
 	ptr+=2;
-	unsigned long energy = *ptr >> 16;
+	uint32_t energy = *ptr >> 16;
 	ptr++;	  //point to Energy second word
 	energy += (*ptr & 0x0000007f) << 16;
 	

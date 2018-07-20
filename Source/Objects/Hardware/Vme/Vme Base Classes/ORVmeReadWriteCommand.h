@@ -25,51 +25,51 @@ for the use of this software.
 #define kDelayOp 2
 
 @interface ORVmeReadWriteCommand : NSObject {
-	long			milliSecondDelay;
+	int32_t			milliSecondDelay;
 	int				opType;				//read/write
 	int				addressModifier;	//vme address modifier
 	int				addressSpace;		//vme address space
 	int				itemSize;
 	int				numberItems;
-	unsigned long	vmeAddress;			//hw Address
+	uint32_t	vmeAddress;			//hw Address
 	int				returnCode;			//should be 1 for success, 0 for failure
 	NSMutableData*	data;			//if read theData == returned data, if write theData = writeData
 }
-+ (id) delayCmd:(unsigned long) milliSeconds;
++ (id) delayCmd:(uint32_t) milliSeconds;
 	
-+ (id) writeLongBlock:(unsigned long*) writeAddress
-			atAddress:(unsigned long) vmeAddress
++ (id) writeLongBlock:(uint32_t*) writeAddress
+			atAddress:(uint32_t) vmeAddress
 		   numToWrite:(unsigned int) numberLongs
 		   withAddMod:(unsigned short) anAddressModifier
 		usingAddSpace:(unsigned short) anAddressSpace;
 
-+ (id) readLongBlockAtAddress:(unsigned long) vmeAddress
++ (id) readLongBlockAtAddress:(uint32_t) vmeAddress
 				   numToRead:(unsigned int) numberLongs
 				   withAddMod:(unsigned short) anAddressModifier
 				usingAddSpace:(unsigned short) anAddressSpace;
 
-+ (id) writeShortBlock:(unsigned long*) writeAddress
-			atAddress:(unsigned long)  vmeAddress
++ (id) writeShortBlock:(uint32_t*) writeAddress
+			atAddress:(uint32_t)  vmeAddress
 		   numToWrite:(unsigned int)   numberShorts
 		   withAddMod:(unsigned short) anAddressModifier
 		usingAddSpace:(unsigned short) anAddressSpace;
 
-+ (id) readShortBlockAtAddress:(unsigned long) vmeAddress
++ (id) readShortBlockAtAddress:(uint32_t) vmeAddress
 					 numToRead:(unsigned int) numberShorts
 					withAddMod:(unsigned short) anAddressModifier
 				 usingAddSpace:(unsigned short) anAddressSpace;
 
-- (id) initWithMilliSecondDelay:(unsigned long) aMilliSecondDelay;
+- (id) initWithMilliSecondDelay:(uint32_t) aMilliSecondDelay;
 	
 - (id) initWithOp: (int) aOpType
-	   dataAdress: (unsigned long*) dataAddress
-	   vmeAddress: (unsigned long) vmeAddress
+	   dataAdress: (uint32_t*) dataAddress
+	   vmeAddress: (uint32_t) vmeAddress
 	  numberItems: (unsigned int) aNumberItems
 		 itemSize: (unsigned int) anItemSize
 	   withAddMod: (unsigned short) anAddressModifier
 	usingAddSpace: (unsigned short) anAddressSpace;
 
-- (unsigned long) milliSecondDelay;
+- (uint32_t) milliSecondDelay;
 - (int)	opType;
 - (int)	addressModifier;
 - (int)	addressSpace;
@@ -77,14 +77,14 @@ for the use of this software.
 - (int) itemSize;
 - (int)	returnCode;
 - (void) setReturnCode:(int)aCode;
-- (unsigned long)	vmeAddress;
+- (uint32_t)	vmeAddress;
 - (unsigned char*) bytes;
 - (NSMutableData*)	data;
 
 - (void) SBCPacket:(SBC_Packet*)aPacket;
 - (void) extractData:(SBC_Packet*) aPacket;
 - (void) throwError:(int)anError;
-- (long) longValue;
+- (int32_t) longValue;
 - (short) shortValue;
 
 @end

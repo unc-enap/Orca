@@ -32,10 +32,10 @@
 @interface ORFFT : NSObject {
     id				dataSource;
 	BOOL			serviceAvailable;
-	long				maxChannel;
-	long				minChannel;
-	long				fftOption;
-	long             fftWindow;
+	int32_t				maxChannel;
+	int32_t				minChannel;
+	int32_t				fftOption;
+	int32_t             fftWindow;
 
 }
 
@@ -47,14 +47,14 @@
 - (void)	setDataSource:(id)ds;
 - (id)		dataSource ;
 - (BOOL) serviceAvailable;
-- (long) minChannel;
-- (void) setMinChannel:(long)aChannel;
-- (long) maxChannel;
-- (void) setMaxChannel:(long)aChannel;
-- (long) fftOption;
-- (void) setFftOption:(long)aValue;
-- (long) fftWindow;
-- (void) setFftWindow:(long)aValue;
+- (int32_t) minChannel;
+- (void) setMinChannel:(int32_t)aChannel;
+- (int32_t) maxChannel;
+- (void) setMaxChannel:(int32_t)aChannel;
+- (int32_t) fftOption;
+- (void) setFftOption:(int32_t)aValue;
+- (int32_t) fftWindow;
+- (void) setFftWindow:(int32_t)aValue;
 
 #pragma mark ***FFT Handling
 - (void) doFFT;

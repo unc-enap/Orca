@@ -48,11 +48,11 @@
 }
 
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
 	
-	unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length = ExtractLength(*ptr);
+	uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length = ExtractLength(*ptr);
         	
 	int crate	= ShiftAndExtract(ptr[1],21,0xf);
 	int card	= ShiftAndExtract(ptr[1],16,0x1f);
@@ -83,23 +83,23 @@
     }
     //-----------------------------------------------------------
     
-	unsigned long startIndex = 2;
+	uint32_t startIndex = 2;
     do {
-        unsigned long indexToDataSize = startIndex+9; //point to the word holding the record size
-        unsigned long indexToData = startIndex + 10;
+        uint32_t indexToDataSize = startIndex+9; //point to the word holding the record size
+        uint32_t indexToData = startIndex + 10;
         
-        unsigned long numberOfSamples   = 0; 
-        unsigned long headerCheck       = (ptr[ indexToDataSize] & 0xffff0000) >> 16;
+        uint32_t numberOfSamples   = 0; 
+        uint32_t headerCheck       = (ptr[ indexToDataSize] & 0xffff0000) >> 16;
         
         if( headerCheck == 0xdada )      numberOfSamples = ptr[indexToDataSize] & 0xffff;   //health header, with samples
         else if( headerCheck == 0xeded ) numberOfSamples = 0;                               //just the header, no samples
         else                             break;                                             //this is bad... don't do any processing
         
-        unsigned long recordSizeInLongs = ceil((float)numberOfSamples/2);
+        uint32_t recordSizeInLongs = ceil((float)numberOfSamples/2);
         if(recordSizeInLongs){
-                NSMutableData* tmpData = [NSMutableData dataWithBytes:someData length:recordSizeInLongs*sizeof(long)];
+                NSMutableData* tmpData = [NSMutableData dataWithBytes:someData length:recordSizeInLongs*sizeof(int32_t)];
                 unsigned short* dp = (unsigned short*)[tmpData bytes];
-                unsigned long i;
+                uint32_t i;
                 for( i = indexToData; i < indexToData + recordSizeInLongs; i++ ){
                     *dp++ = ptr[i] & 0xffff;
                     *dp++ = (ptr[i]>>16) & 0xffff;
@@ -114,29 +114,29 @@
                  getRatesFromDecodeStage = [obj bumpRateFromDecodeStage:channel];
             }
         }
-        startIndex += recordSizeInLongs + 10; //header is 10 long words
+        startIndex += recordSizeInLongs + 10; //header is 10 int32_t words
         
     }while(startIndex<length);
 
     return length; //must return number of longs
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title    = @"SIS3320 Waveform Record\n\n";
-    NSString* crate    = [NSString stringWithFormat: @"Crate      = %ld\n",ShiftAndExtract(ptr[1],21,0xf)];
-    NSString* card     = [NSString stringWithFormat: @"Card       = %ld\n",ShiftAndExtract(ptr[1],16,0x1f)];
-    NSString* channel  = [NSString stringWithFormat: @"Channel    = %ld\n",ShiftAndExtract(ptr[1],0,0xf)];
-    NSString* timehigh  = [NSString stringWithFormat:@"Time(High) = %ld\n",ShiftAndExtract(ptr[2],16,0xffff)];
-    NSString* timelow  = [NSString stringWithFormat: @"Time(Low)  = %ld\n",ShiftAndExtract(ptr[3],0,0xffffffff)];
-    NSString* accum1  = [NSString stringWithFormat:  @"Accum Sum Gate1  = %ld\n",ShiftAndExtract(ptr[4],0,0xfffff)];
-    NSString* accum2  = [NSString stringWithFormat:  @"Accum Sum Gate2  = %ld\n",ShiftAndExtract(ptr[5],0,0xfffff)];
-    NSString* accum3  = [NSString stringWithFormat:  @"Accum Sum Gate3  = %ld\n",ShiftAndExtract(ptr[6],0,0xfffff)];
-    NSString* accum4  = [NSString stringWithFormat:  @"Accum Sum Gate4  = %ld\n",ShiftAndExtract(ptr[7],0,0xfffff)];
-    NSString* accum5  = [NSString stringWithFormat:  @"Accum Sum Gate5  = %ld\n",ShiftAndExtract(ptr[8],0,0xfffff)];
-    NSString* accum6  = [NSString stringWithFormat:  @"Accum Sum Gate6  = %ld\n",ShiftAndExtract(ptr[8],16,0xffff)];
-    NSString* accum7  = [NSString stringWithFormat:  @"Accum Sum Gate7  = %ld\n",ShiftAndExtract(ptr[9],0,0xffff)];
-    NSString* accum8  = [NSString stringWithFormat:  @"Accum Sum Gate8  = %ld\n",ShiftAndExtract(ptr[9],16,0xffff)];
+    NSString* crate    = [NSString stringWithFormat: @"Crate      = %d\n",ShiftAndExtract(ptr[1],21,0xf)];
+    NSString* card     = [NSString stringWithFormat: @"Card       = %d\n",ShiftAndExtract(ptr[1],16,0x1f)];
+    NSString* channel  = [NSString stringWithFormat: @"Channel    = %d\n",ShiftAndExtract(ptr[1],0,0xf)];
+    NSString* timehigh  = [NSString stringWithFormat:@"Time(High) = %d\n",ShiftAndExtract(ptr[2],16,0xffff)];
+    NSString* timelow  = [NSString stringWithFormat: @"Time(Low)  = %d\n",ShiftAndExtract(ptr[3],0,0xffffffff)];
+    NSString* accum1  = [NSString stringWithFormat:  @"Accum Sum Gate1  = %d\n",ShiftAndExtract(ptr[4],0,0xfffff)];
+    NSString* accum2  = [NSString stringWithFormat:  @"Accum Sum Gate2  = %d\n",ShiftAndExtract(ptr[5],0,0xfffff)];
+    NSString* accum3  = [NSString stringWithFormat:  @"Accum Sum Gate3  = %d\n",ShiftAndExtract(ptr[6],0,0xfffff)];
+    NSString* accum4  = [NSString stringWithFormat:  @"Accum Sum Gate4  = %d\n",ShiftAndExtract(ptr[7],0,0xfffff)];
+    NSString* accum5  = [NSString stringWithFormat:  @"Accum Sum Gate5  = %d\n",ShiftAndExtract(ptr[8],0,0xfffff)];
+    NSString* accum6  = [NSString stringWithFormat:  @"Accum Sum Gate6  = %d\n",ShiftAndExtract(ptr[8],16,0xffff)];
+    NSString* accum7  = [NSString stringWithFormat:  @"Accum Sum Gate7  = %d\n",ShiftAndExtract(ptr[9],0,0xffff)];
+    NSString* accum8  = [NSString stringWithFormat:  @"Accum Sum Gate8  = %d\n",ShiftAndExtract(ptr[9],16,0xffff)];
     return [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@%@",title,crate,card,channel,timehigh,timelow,accum1,accum2,accum3,accum4,accum5,accum6,accum7,accum8];
 }
 

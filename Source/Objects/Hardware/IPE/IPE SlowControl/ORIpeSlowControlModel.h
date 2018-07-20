@@ -380,7 +380,7 @@
                                         //this represents the contents of the list view (subset of requestCache) -tb-
 	
 	NSMutableDictionary* pendingRequests;	//itemKeys in this are requests that have not come back
-	long histogram[kResponseTimeHistogramSize];
+	int32_t histogram[kResponseTimeHistogramSize];
     int timeOutCount;
     int totalRequestCount;
     BOOL shipRecords;
@@ -480,7 +480,7 @@
 
 #pragma mark •••Statistics
 - (void) histogram:(int)milliSecs;
-- (long) dataTimeHist:(int)index;
+- (int32_t) dataTimeHist:(int)index;
 
 #pragma mark •••Archival
 - (id) initWithCoder:(NSCoder*)decoder;

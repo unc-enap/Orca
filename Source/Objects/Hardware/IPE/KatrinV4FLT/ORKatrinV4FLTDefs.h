@@ -98,21 +98,21 @@
 
 #if 0 //is already in ORIpeV4FLTDefs.h -tb-
 typedef struct {
-	unsigned long channelMap; // 8bit channel + 24 channelMap
-	unsigned long threshold;   
-	unsigned long hitrate;
+	uint32_t channelMap; // 8bit channel + 24 channelMap
+	uint32_t threshold;   
+	uint32_t hitrate;
 } ipeFltHitRateDataStruct;
 #endif
 
 #if 0
 typedef struct { // -tb- 2008-02-27
-	long readoutSec;
-	long recordingTimeSec;  //! this holds the refresh time -tb-
-	long firstBin;
-	long lastBin;
-	long histogramLength; //don't use unsigned! - it may become negative, at least temporaryly -tb-
-    long maxHistogramLength;
-    long binSize;
-    long offsetEMin;
+	int32_t readoutSec;
+	int32_t recordingTimeSec;  //! this holds the refresh time -tb-
+	int32_t firstBin;
+	int32_t lastBin;
+	int32_t histogramLength; //don't use unsigned! - it may become negative, at least temporaryly -tb-
+    int32_t maxHistogramLength;
+    int32_t binSize;
+    int32_t offsetEMin;
 } ipcFltV4HistogramDataStruct;
 #endif

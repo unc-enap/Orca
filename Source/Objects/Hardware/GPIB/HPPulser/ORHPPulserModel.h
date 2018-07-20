@@ -57,8 +57,8 @@ typedef struct HPPulserCustomWaveformStruct {
 	BOOL			enableRandom;
 	float			minTime;
 	float			maxTime;
-	unsigned long	randomCount;
-	unsigned long   pulserDataId;
+	uint32_t	randomCount;
+	uint32_t   pulserDataId;
 	int				savedTriggerSource;
     BOOL			lockGUI;
     BOOL			negativePulse;
@@ -181,10 +181,10 @@ typedef struct HPPulserCustomWaveformStruct {
 - (void) setMinTime:(float)aNewMinTime;
 - (float) maxTime;
 - (void) setMaxTime:(float)aNewMaxTime;
-- (unsigned long) randomCount;
-- (void) setRandomCount:(unsigned long)aNewRandomCount;
-- (unsigned long)   pulserDataId;
-- (void)   setPulserDataId:(unsigned long)aValue;
+- (uint32_t) randomCount;
+- (void) setRandomCount:(uint32_t)aNewRandomCount;
+- (uint32_t)   pulserDataId;
+- (void)   setPulserDataId:(uint32_t)aValue;
 - (id)  dialogLock;
 - (unsigned int) maxNumberOfWaveformPoints;
 

@@ -58,7 +58,7 @@
 		//get the data for the fit
 		NSMutableArray* dataArray = [NSMutableArray array];
 		int numPoints = [dataSource numberPointsInPlot:aPlot];
-		long maxChan = MIN([self maxChannel],numPoints-1);
+		int32_t maxChan = MIN([self maxChannel],numPoints-1);
 		int ix;
 		for (ix=0; ix<=maxChan;++ix) {	
 			double x,y;

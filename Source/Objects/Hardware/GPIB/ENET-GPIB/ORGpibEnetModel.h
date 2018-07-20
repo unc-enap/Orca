@@ -57,7 +57,7 @@
 - (void) 	setBoardIndex: (short) anIndex;
 - (int) 	ibsta;
 - (int)		iberr;
-- (long)	ibcntl;
+- (int32_t)	ibcntl;
 - (NSMutableString*)	errorMsg;
 
 #pragma mark ***Commands
@@ -67,11 +67,11 @@
 - (void) 	deactivateAddress: (short) aPrimaryAddress;
 - (void) 	resetDevice: (short) aPrimaryAddress;
 - (void) 	setupDevice: (short) aPrimaryAddress secondaryAddress: (short) aSecondaryAddress;
-- (long) 	readFromDevice: (short) aPrimaryAddress data: (char*) aData 
-                                               maxLength: (long) aMaxLength;
+- (int32_t) 	readFromDevice: (short) aPrimaryAddress data: (char*) aData 
+                                               maxLength: (int32_t) aMaxLength;
 - (void) 	writeToDevice: (short) aPrimaryAddress command: (NSString*) aCommand;
-- (long) 	writeReadDevice: (short) aPrimaryAddress command: (NSString*) aCommand data: (char*) aData
-                                                   maxLength: (long) aMaxLength;
+- (int32_t) 	writeReadDevice: (short) aPrimaryAddress command: (NSString*) aCommand data: (char*) aData
+                                                   maxLength: (int32_t) aMaxLength;
 
 - (void) 	enableEOT:(short)aPrimaryAddress state: (BOOL) state;
 - (void) 	wait: (short) aPrimaryAddress mask: (short) aWaitMask;

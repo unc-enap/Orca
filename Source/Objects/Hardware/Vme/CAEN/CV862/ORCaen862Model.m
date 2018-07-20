@@ -134,7 +134,7 @@ static RegisterNamesStruct reg[kNumRegisters] = {
     return kNumRegisters;
 }
 
-- (unsigned long) getBufferOffset
+- (uint32_t) getBufferOffset
 {
     return reg[kOutputBuffer].addressOffset;
 }
@@ -144,7 +144,7 @@ static RegisterNamesStruct reg[kNumRegisters] = {
     return k862OutputBufferSize;
 }
 
-- (unsigned long) getThresholdOffset
+- (uint32_t) getThresholdOffset
 {
     return reg[kThresholds].addressOffset;
 }
@@ -292,7 +292,7 @@ static RegisterNamesStruct reg[kNumRegisters] = {
 {
     return reg[anIndex].regName;
 }
-- (unsigned long) getAddressOffset:(short) anIndex
+- (uint32_t) getAddressOffset:(short) anIndex
 {
     return(reg[anIndex].addressOffset);
 }

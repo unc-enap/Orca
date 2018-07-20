@@ -223,7 +223,7 @@
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"CMC203 (Station %lu)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"CMC203 (Station %u)",(int)[model stationNumber]]];
 }
 
 - (void) totalRateChanged:(NSNotification*)aNotification

@@ -190,7 +190,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"LakeShore 210 (Unit %lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"LakeShore 210 (Unit %u)",[model uniqueIdNumber]]];
 }
 
 - (void) highLimitChanged:(NSNotification*)aNote
@@ -305,7 +305,7 @@
 - (void) loadTempTimeValuesForIndex:(int)index
 {
 	[[tempMatrix cellWithTag:index] setFloatValue:[model temp:index]];
-	unsigned long t = [model timeMeasured:index];
+	uint32_t t = [model timeMeasured:index];
 	if(t){
 		NSDate* theDate = [NSDate dateWithTimeIntervalSince1970:t];
 		[[timeMatrix cellWithTag:index] setObjectValue:[theDate stdDescription]];

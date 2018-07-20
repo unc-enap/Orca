@@ -130,7 +130,7 @@
 - (void) setModel:(id)aModel
 {
     [super setModel:aModel];
-    [[self window] setTitle:[NSString stringWithFormat:@"Web Raker %lu",[model uniqueIdNumber]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"Web Raker %u",[model uniqueIdNumber]]];
 }
 - (void) updateWindow
 {
@@ -233,7 +233,7 @@
         
         //do the plot set up here since we didn't know the number of plots until now
         
-        long plotCountDiff = [model numDataItems] - [plotter0 numberOfPlots];
+        int32_t plotCountDiff = [model numDataItems] - [plotter0 numberOfPlots];
         if(plotCountDiff != 0){
         [plotter0 removeAllPlots];
             NSColor* theColors[10] =
@@ -334,7 +334,7 @@
     }
     else if(aTableView == dataTableView){
         if([[aTableColumn identifier] isEqualToString:@"time"]){
-            unsigned long t = [[[model dataAtIndex:rowIndex] objectForKey:[aTableColumn identifier]] intValue];
+            uint32_t t = [[[model dataAtIndex:rowIndex] objectForKey:[aTableColumn identifier]] intValue];
             return [[NSDate dateWithTimeIntervalSince1970:t] stdDescription];
         }
         else return [[model dataAtIndex:rowIndex] objectForKey:[aTableColumn identifier]];

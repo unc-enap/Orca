@@ -442,9 +442,9 @@ NSString* UVkWrite = @"W";
 		// LD command handles all channels at once so unit identifier is Sx followed by parameter followed
 		// by values for all 12 channels.
 		if ( aLoadAllValues == YES )
-			aCommand = [NSString stringWithFormat: @"LD S%ld %@", [self stationNumber], param];
+			aCommand = [NSString stringWithFormat: @"LD S%d %@", (int)[self stationNumber], param];
 		else
-			aCommand = [NSString stringWithFormat: @"LD S%ld.%d %@", [self stationNumber], aCurChnl, param];
+			aCommand = [NSString stringWithFormat: @"LD S%d.%d %@", (int)[self stationNumber], aCurChnl, param];
 	}
 			
 	if ( [[aDictParamObj objectForKey: UVkType] isEqualTo: UVkINT] )
@@ -547,7 +547,7 @@ NSString* UVkWrite = @"W";
 	return( [mCircularBuffers objectAtIndex: aChnl] );
 }
 
-- (long) circularBufferSize: (int) aChnl
+- (int32_t) circularBufferSize: (int) aChnl
 {
 	return( mPoints );
 }
@@ -906,7 +906,7 @@ NSString* UVkWrite = @"W";
 			case eHVUTripForHVError:
 				statusStr = @"Trip HV for volt. error";
 				if (!mHVValueLmtsAlarm) {
-                    mHVValueLmtsAlarm = [[ORAlarm alloc] initWithName: [NSString stringWithFormat: @"HV out of limits for slot: %ld channel: %d", [self stationNumber], aCurChnl] severity: kHardwareAlarm];
+                    mHVValueLmtsAlarm = [[ORAlarm alloc] initWithName: [NSString stringWithFormat: @"HV out of limits for slot: %d channel: %d", (int)[self stationNumber], aCurChnl] severity: kHardwareAlarm];
 					[mHVValueLmtsAlarm setSticky: YES];		
 				}
 				[mHVValueLmtsAlarm setAcknowledged: NO];
@@ -1087,10 +1087,10 @@ NSString* UVkWrite = @"W";
 	if(meterData){
 	
 		unsigned int numBytes = [meterData length];
-		if(numBytes%4 == 0) {											//OK, we know we got a integer number of long words
+		if(numBytes%4 == 0) {											//OK, we know we got a integer number of int32_t words
 			if([self validateMeterData]){
-				unsigned long data[1003];									//max buffer size is 1000 data words + ORCA header
-				unsigned int numLongsToShip = numBytes/sizeof(long);		//convert size to longs
+				uint32_t data[1003];									//max buffer size is 1000 data words + ORCA header
+				unsigned int numLongsToShip = numBytes/sizeof(int32_t);		//convert size to longs
 				numLongsToShip = numLongsToShip<1000?numLongsToShip:1000;	//don't exceed the data array
 				data[0] = dataId | (3 + numLongsToShip);					//first word is ORCA id and size
 				data[1] =  [self uniqueIdNumber]&0xf;						//second word is device number
@@ -1102,7 +1102,7 @@ NSString* UVkWrite = @"W";
 				time_t ut_time = mktime(theTimeGMTAsStruct);
 				data[2] = ut_time;											//third word is seconds since 1970 (UT)
 				
-				unsigned long* p = (unsigned long*)[meterData bytes];
+				uint32_t* p = (uint32_t*)[meterData bytes];
 				
 				int i;
 				for(i=0;i<numLongsToShip;i++){
@@ -1114,19 +1114,19 @@ NSString* UVkWrite = @"W";
 				
 				[self averageMeterData];
 				
-				if(numLongsToShip*sizeof(long) == numBytes){
+				if(numLongsToShip*sizeof(int32_t) == numBytes){
 					//OK, shipped it all
 					[meterData release];
 					meterData = nil;
 				}
 				else {
 					//only part of the record was shipped, zero the part that was and keep the part that wasn't
-					[meterData replaceBytesInRange:NSMakeRange(0,numLongsToShip*sizeof(long)) withBytes:nil length:0];
+					[meterData replaceBytesInRange:NSMakeRange(0,numLongsToShip*sizeof(int32_t)) withBytes:nil length:0];
 				}
 				
 				if([gOrcaGlobals runInProgress] && numBytes>0){
 					[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-																object:[NSData dataWithBytes:data length:(3+numLongsToShip)*sizeof(long)]];
+																object:[NSData dataWithBytes:data length:(3+numLongsToShip)*sizeof(int32_t)]];
 				}
 				[self setReceiveCount: receiveCount + numLongsToShip];
 			}

@@ -53,7 +53,7 @@
 - (id)   personAtIndex:      (int)anIndex;
 - (void) personTakingNewRole:(id)aPerson;
 - (void) startContactProcess;
-- (unsigned long) onCallListCount;
+- (uint32_t) onCallListCount;
 - (OROnCallPerson*) primaryPerson;
 - (OROnCallPerson*) secondaryPerson;
 - (OROnCallPerson*) tertiaryPerson;

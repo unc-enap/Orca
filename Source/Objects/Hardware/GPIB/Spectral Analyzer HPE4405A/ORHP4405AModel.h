@@ -23,7 +23,7 @@
 	
 	NSMutableArray* trace1;
 	
-	unsigned long dataId;
+	uint32_t dataId;
 	BOOL  measurementInProgress;
 	float centerFreq;
     float startFreq;
@@ -70,8 +70,8 @@
 - (void) dealloc;
 - (void) setUpImage;
 - (void) makeMainController;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anOtherObj;
 
@@ -154,7 +154,7 @@
 - (void)			loadFormat;
 - (void)			loadUnits;
 - (void)			setTime;
-- (unsigned long)	getPowerOnTime;
+- (uint32_t)	getPowerOnTime;
 - (void)			loadTriggerSettings;
 - (void)			loadFreqSettings;
 - (void)			loadRFBurstSettings;

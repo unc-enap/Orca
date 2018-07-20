@@ -354,15 +354,15 @@
 - (void) debuggerStateChanged:(NSNotification*)aNote
 {
 	int debuggerState = [[model scriptRunner] debuggerState];
-	long line = [[model scriptRunner] lastLine];
+	int32_t line = [[model scriptRunner] lastLine];
 	NSString* functionName = [[[model scriptRunner] eval] functionName];
 	if(debuggerState == kDebuggerPaused) {
-		[debugStatusField setStringValue:[NSString stringWithFormat:@"<%@()> Stopped on Line: %ld",functionName,line]];
+		[debugStatusField setStringValue:[NSString stringWithFormat:@"<%@()> Stopped on Line: %d",functionName,line]];
 		[pauseButton setImage:[NSImage imageNamed:@"Continue"]];
 		[stepButton setEnabled:YES];
 		[stepInButton setEnabled:YES];
 		[stepOutButton setEnabled:YES];
-		unsigned long line = [[model scriptRunner] lastLine]-1;
+		uint32_t line = [[model scriptRunner] lastLine]-1;
 		[scriptView selectLine:line];
 	}
 	else if(debuggerState == kDebuggerRunning) {

@@ -55,7 +55,7 @@
     statusSize          = NSMakeSize(270,240);
     processSize         = NSMakeSize(315,240);
 	
-	NSString* key = [NSString stringWithFormat: @"orca.ORNplpCMeter%lu.selectedtab",[model uniqueIdNumber]];
+	NSString* key = [NSString stringWithFormat: @"orca.ORNplpCMeter%u.selectedtab",[model uniqueIdNumber]];
     NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
 	if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
 	[tabView selectTabViewItemAtIndex: index];
@@ -176,7 +176,7 @@
 	}
     [[self window] setContentView:totalView];
 	
-	NSString* key = [NSString stringWithFormat: @"orca.ORNplpCMeter%lu.selectedtab",[model uniqueIdNumber]];
+	NSString* key = [NSString stringWithFormat: @"orca.ORNplpCMeter%u.selectedtab",[model uniqueIdNumber]];
     NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 }

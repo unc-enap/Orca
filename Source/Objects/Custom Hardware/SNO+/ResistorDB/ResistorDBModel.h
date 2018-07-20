@@ -37,7 +37,7 @@
 - (void) updateResistorDb:(NSMutableDictionary*)aResistorDocDic;
 - (void) addNeweResistorDoc:(NSMutableDictionary*)aResistorDocDic;
 - (void) checkIfDocumentExists:(int)aCrate withCard:(int)aCard withChannel:(int)aChannel withRunRange:(NSMutableArray*)aRunRange;
-- (unsigned long) getCurrentRunNumber;
+- (uint32_t) getCurrentRunNumber;
 
 @end
 

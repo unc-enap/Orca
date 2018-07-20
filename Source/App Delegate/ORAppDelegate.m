@@ -248,8 +248,8 @@ NSString* OROrcaFinalQuitNotice      = @"OROrcaFinalQuitNotice";
 	[queue cancelAllOperations];
     if([[[NSUserDefaults standardUserDefaults] objectForKey:ORPrefHeartBeatEnabled] intValue]){
         NSString* finalPath = [[[NSUserDefaults standardUserDefaults] objectForKey:ORPrefHeartBeatPath] stringByAppendingPathComponent:@"Heartbeat"];
-        unsigned long now = (unsigned long)[[NSDate date] timeIntervalSince1970];
-        NSString* contents = [NSString stringWithFormat:@"Quit:%lu",now];
+        uint32_t now = (uint32_t)[[NSDate date] timeIntervalSince1970];
+        NSString* contents = [NSString stringWithFormat:@"Quit:%u",now];
         [contents writeToFile:finalPath atomically:YES encoding:NSASCIIStringEncoding error:nil];
     }
 
@@ -734,7 +734,7 @@ NSString* OROrcaFinalQuitNotice      = @"OROrcaFinalQuitNotice";
 
 
 @implementation ORHeartBeatOp
-- (id) init:(unsigned long)aCount
+- (id) init:(uint32_t)aCount
 {
 	self = [super init];
 	heartbeatCount = aCount;
@@ -747,8 +747,8 @@ NSString* OROrcaFinalQuitNotice      = @"OROrcaFinalQuitNotice";
 	@try {
 		if([[[NSUserDefaults standardUserDefaults] objectForKey:ORPrefHeartBeatEnabled] intValue]){
 			NSString* finalPath = [[[NSUserDefaults standardUserDefaults] objectForKey:ORPrefHeartBeatPath] stringByAppendingPathComponent:@"Heartbeat"]; 
-			unsigned long now = (unsigned long)[[NSDate date]timeIntervalSince1970];
-			NSString* contents = [NSString stringWithFormat:@"Time:%lu\nNext:%lu",now,now+kHeartbeatPeriod];
+			uint32_t now = (uint32_t)[[NSDate date]timeIntervalSince1970];
+			NSString* contents = [NSString stringWithFormat:@"Time:%u\nNext:%u",now,now+kHeartbeatPeriod];
 			[contents writeToFile:finalPath atomically:YES encoding:NSASCIIStringEncoding error:nil];
         }
 

@@ -25,11 +25,11 @@
 
 @implementation ORVXMDecoderForPosition
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
+    uint32_t* ptr = (uint32_t*)someData;
 	union {
-        long theLong;
+        int32_t theLong;
         float theFloat;
     }data;
 	
@@ -37,20 +37,20 @@
 	float theSteps = data.theFloat;
 	
     NSString* valueString = [NSString stringWithFormat:@"%.0f",theSteps];
-	NSString* objKey      = [NSString stringWithFormat:@"Unit %lu",ptr[2]&0xFFFF];
-	NSString* chanKey     = [NSString stringWithFormat:@"Channel %lu",ptr[2] >> 16];
+	NSString* objKey      = [NSString stringWithFormat:@"Unit %u",ptr[2]&0xFFFF];
+	NSString* chanKey     = [NSString stringWithFormat:@"Channel %u",ptr[2] >> 16];
 	[aDataSet loadGenericData:valueString sender:self withKeys:@"VXM",@"Steps",objKey,chanKey,nil];
 	
-     return ExtractLength(*((unsigned long*)someData));
+     return ExtractLength(*((uint32_t*)someData));
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr
 {
     NSString* title= @"Motor Position Record\n\n";
 
-	NSString* motor   = [NSString stringWithFormat:@"Motor  = %lu\n",(dataPtr[2]>>16) & 0x7];
+	NSString* motor   = [NSString stringWithFormat:@"Motor  = %u\n",(dataPtr[2]>>16) & 0x7];
     union {
-        long theLong;
+        int32_t theLong;
         float theFloat;
     }data;
     data.theLong = dataPtr[3];

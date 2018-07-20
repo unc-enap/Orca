@@ -291,7 +291,7 @@ NSString* ORForceProcessPollNotification			= @"ORForceProcessPollNotification";
 {
 	if(![objToGetID respondsToSelector:@selector(processID)])return;
 	if(![objToGetID processID]){
-		unsigned long anId = 1;
+		uint32_t anId = 1;
 		do {
 			BOOL idAlreadyUsed = NO;
 			for(OrcaObject* anObj in [self orcaObjects]){
@@ -349,7 +349,7 @@ NSString* ORForceProcessPollNotification			= @"ORForceProcessPollNotification";
 - (NSString*) elementName
 {
 	if([shortName length])return [self shortName];
-	else return [NSString stringWithFormat:@"Process %lu",[self uniqueIdNumber]];
+	else return [NSString stringWithFormat:@"Process %u",[self uniqueIdNumber]];
 }
 
 
@@ -470,7 +470,7 @@ NSString* ORForceProcessPollNotification			= @"ORForceProcessPollNotification";
 {
 	if(inTestMode){
 		if(!testModeAlarm){
-			testModeAlarm = [[ORAlarm alloc] initWithName:[NSString stringWithFormat:@"Process %lu in TestMode",[self uniqueIdNumber]] severity:kInformationAlarm];
+			testModeAlarm = [[ORAlarm alloc] initWithName:[NSString stringWithFormat:@"Process %u in TestMode",[self uniqueIdNumber]] severity:kInformationAlarm];
 			[testModeAlarm setHelpString:@"The Process is in test mode. This means that hardware will NOT be touched. Input relays can be switched by a Cmd-Click"];
 
 		}
@@ -508,7 +508,7 @@ NSString* ORForceProcessPollNotification			= @"ORForceProcessPollNotification";
         }
 				
         NSAttributedString* n = [[NSAttributedString alloc] 
-                                initWithString:[NSString stringWithFormat:@"%lu %@",[self uniqueIdNumber],stateString] 
+                                initWithString:[NSString stringWithFormat:@"%u %@",[self uniqueIdNumber],stateString] 
                                     attributes:[NSDictionary dictionaryWithObject:[NSFont labelFontOfSize:12] forKey:NSFontAttributeName]];
         
         [n drawInRect:NSMakeRect(10,[i size].height-18,[i size].width-20,16)];
@@ -670,7 +670,7 @@ NSString* ORForceProcessPollNotification			= @"ORForceProcessPollNotification";
 - (void) incrementProcessRunNumber
 {
     NSUserDefaults* defaults 	= [NSUserDefaults standardUserDefaults];
-    NSString* aKey = [NSString stringWithFormat:@"Process%luRunNumber",[self uniqueIdNumber]];
+    NSString* aKey = [NSString stringWithFormat:@"Process%uRunNumber",[self uniqueIdNumber]];
     int n = [[defaults objectForKey:aKey] intValue];
     [defaults setObject:[NSNumber numberWithInt:n+1] forKey:aKey];
     [defaults synchronize];
@@ -680,7 +680,7 @@ NSString* ORForceProcessPollNotification			= @"ORForceProcessPollNotification";
 - (int) processRunNumber
 {
     NSUserDefaults* defaults 	= [NSUserDefaults standardUserDefaults];
-    NSString* aKey = [NSString stringWithFormat:@"Process%luRunNumber",[self uniqueIdNumber]];
+    NSString* aKey = [NSString stringWithFormat:@"Process%uRunNumber",[self uniqueIdNumber]];
     return [[defaults  objectForKey:aKey] intValue];
 }
 
@@ -715,7 +715,7 @@ NSString* ORForceProcessPollNotification			= @"ORForceProcessPollNotification";
 		   [aGuardian isMemberOfClass:NSClassFromString(@"ORContainerModel")];
 }
 
-- (void) setUniqueIdNumber :(unsigned long)aNumber
+- (void) setUniqueIdNumber :(uint32_t)aNumber
 {
     [super setUniqueIdNumber:aNumber];
     [self setUpImage];

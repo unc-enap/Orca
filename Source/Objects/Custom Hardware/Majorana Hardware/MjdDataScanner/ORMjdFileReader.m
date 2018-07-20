@@ -66,8 +66,8 @@
             }
 
             NSDictionary *fattrs = [[NSFileManager defaultManager] attributesOfItemAtPath:filePath error:nil];
-            long long totalSize = [[fattrs objectForKey:NSFileSize] longLongValue];
-            long long totalProcessed = 0;
+            int64_t totalSize = [[fattrs objectForKey:NSFileSize] longLongValue];
+            int64_t totalProcessed = 0;
             while([dataToProcess length]!=0) {
                 NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
                 if([delegate respondsToSelector:@selector(cancelAndStop)]){
@@ -116,13 +116,13 @@
 
 - (void) processData
 {
-	unsigned long* p			= (unsigned long*)[dataToProcess bytes];
-	unsigned long* endPtr		= p + [dataToProcess length]/sizeof(long);
-	unsigned long bytesProcessed	= 0;
+	uint32_t* p			= (uint32_t*)[dataToProcess bytes];
+	uint32_t* endPtr		= p + [dataToProcess length]/sizeof(int32_t);
+	uint32_t bytesProcessed	= 0;
 	while(p<endPtr){
-		unsigned long firstWord		= *p;
-		unsigned long dataId		= ExtractDataId(firstWord);
-		unsigned long recordLength	= ExtractLength(firstWord);
+		uint32_t firstWord		= *p;
+		uint32_t dataId		= ExtractDataId(firstWord);
+		uint32_t recordLength	= ExtractLength(firstWord);
 		if(p+recordLength <= endPtr){
 			if(dataId == 0x0){
                 //this is the header
@@ -157,7 +157,7 @@
             }
 
 			p += recordLength;
-			bytesProcessed += recordLength*sizeof(long);
+			bytesProcessed += recordLength*sizeof(int32_t);
 			if(p>=endPtr)break;
 		}
 		else break;
@@ -165,9 +165,9 @@
 	[dataToProcess replaceBytesInRange:NSMakeRange( 0, bytesProcessed ) withBytes:NULL length:0];
 }
 
-- (void) processRunRecord:(unsigned long*)p
+- (void) processRunRecord:(uint32_t*)p
 {
-	unsigned long theDataWord = *(p+1);
+	uint32_t theDataWord = *(p+1);
 
 	if((theDataWord & 0x8)){
 	}
@@ -226,26 +226,26 @@
 
 #define ExtractLength(x) (IsShortForm(x) ? 1 : ((x) & ~kLongFormDataIdMask))
 
-- (void) processGretina4Record:(unsigned long*)dataRecord
+- (void) processGretina4Record:(uint32_t*)dataRecord
 {
  }
 
-- (void) processGretina4MRecord:(unsigned long*)dataRecord
+- (void) processGretina4MRecord:(uint32_t*)dataRecord
 {
     //first word is the dataID and Record Length
-    unsigned long recordLength = ExtractLength(dataRecord[0]);
-    unsigned long numEvents = (recordLength-2)/1024;  //records can have more than one event
+    uint32_t recordLength = ExtractLength(dataRecord[0]);
+    uint32_t numEvents = (recordLength-2)/1024;  //records can have more than one event
     
     //next is the location
     int crate     = (dataRecord[1]>>21) & 0xf;
     int card      = (dataRecord[1]>>16) & 0x1f;
     
-    unsigned long* ptr = &dataRecord[2];
+    uint32_t* ptr = &dataRecord[2];
     
     int i;
-    unsigned long* dataPtr = ptr;
+    uint32_t* dataPtr = ptr;
     for(i=0;i<numEvents;i++){
-        unsigned long* header = dataPtr;
+        uint32_t* header = dataPtr;
         
         if(header[0] == 0xAAAAAAAA){
             int channel	= header[1] & 0xF; //extract the channel
@@ -253,11 +253,11 @@
             else {
                 //extract the energy.
                 //energy is in 2's complement. if top bit is set, we have to convert
-                //unsigned long energy = ((header[4] & 0x000001ff) << 16) | (header[3] >> 16);
+                //uint32_t energy = ((header[4] & 0x000001ff) << 16) | (header[3] >> 16);
                 //if (energy & 0x1000000) energy = (~energy & 0x1ffffff) + 1;
                 
-                unsigned long long ledTimeStamp = ((unsigned long long)(header[3]&0xFFFF)<<32) | header[2];
-               // unsigned long long cfdTimeStamp = ((unsigned long long)(header[4]&0xFFFF)>>16) | ((unsigned long long)header[2]<<32);
+                uint64_t ledTimeStamp = ((uint64_t)(header[3]&0xFFFF)<<32) | header[2];
+               // uint64_t cfdTimeStamp = ((uint64_t)(header[4]&0xFFFF)>>16) | ((uint64_t)header[2]<<32);
                 
                 if(card<20 && channel<10){
                     if(ledTimeStamp>lastTimeStamp[card][channel]){
@@ -283,14 +283,14 @@
     }
 }
 
-- (void) processGretina4ARecord:(unsigned long*)p
+- (void) processGretina4ARecord:(uint32_t*)p
 {
 }
-- (void) processQDCRecord:(unsigned long*)dataRecord
+- (void) processQDCRecord:(uint32_t*)dataRecord
 {
     totalQdcCount++;
 }
-- (void) processScalerRecord:(unsigned long*)dataRecord
+- (void) processScalerRecord:(uint32_t*)dataRecord
 {
     /* Event Record
      xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
@@ -314,7 +314,7 @@
     //for MJD, only one  event is readout at a time. And the only one we care about is chan 0. Check that it is enabled.
     if(dataRecord[3] & 0x1){
         //get the Chan 0 roll over and combine with chan 0 to get the time stamp
-        unsigned long long timeStamp = ((unsigned long long)dataRecord[2]<<32) | dataRecord[5];
+        uint64_t timeStamp = ((uint64_t)dataRecord[2]<<32) | dataRecord[5];
         //NSLog(@"scaler timestamp: 0x%016llx\n",timeStamp);
         if(timeStamp == 0xffffffffffffffff)badScalerCount++;
         totalScalerCount++;
@@ -322,7 +322,7 @@
 }
 
 
-- (void) loadRunInfo:(unsigned long*)dataRecord
+- (void) loadRunInfo:(uint32_t*)dataRecord
 {
 	//pack up some info about the run.
 	[runInfo release];

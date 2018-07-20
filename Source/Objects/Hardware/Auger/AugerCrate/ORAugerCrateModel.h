@@ -37,7 +37,7 @@
 
 #pragma mark ¥¥¥Notifications
 - (void) registerNotificationObservers;
-- (id) getFireWireInterface:(unsigned long)aVenderID;
+- (id) getFireWireInterface:(uint32_t)aVenderID;
 - (void) adapterChanged:(NSNotification*)aNote;
 
 @end

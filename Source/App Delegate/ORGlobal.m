@@ -209,7 +209,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(Global);
 					}
 
 					if(runType & ~eMaintenanceRunType){
-						rs = [rs stringByAppendingFormat:@" Mask: 0x%lX",runType & ~eMaintenanceRunType];
+						rs = [rs stringByAppendingFormat:@" Mask: 0x%X",runType & ~eMaintenanceRunType];
 					}
 				}
             }
@@ -295,11 +295,11 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(Global);
 	[[(ORAppDelegate*)[NSApp delegate] document] setStatusText:testInProgress?@"Testing":@""];
 }
 
-- (unsigned long)runType {
+- (uint32_t)runType {
     
     return runType;
 }
-- (void)setRunType:(unsigned long)aRunType {
+- (void)setRunType:(uint32_t)aRunType {
     runType = aRunType;
 }
 

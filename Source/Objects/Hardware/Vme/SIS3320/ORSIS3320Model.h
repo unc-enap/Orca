@@ -36,7 +36,7 @@
 @interface ORSIS3320Model : ORVmeIOCard <ORDataTaker,ORHWWizard,ORHWRamping,AutoTesting>
 {
   @private
-	unsigned long   dataId;
+	uint32_t   dataId;
 	BOOL			isRunning;
 	BOOL			ledOn;
 	unsigned short	moduleID;
@@ -56,24 +56,24 @@
     BOOL            enableErrorCorrection[2];
     BOOL            invertInput[2];
     
-    unsigned long   bufferLength[4];
-    unsigned long   bufferStart[4];
-    unsigned long   accGate1StartIndex[4];
-    unsigned long   accGate1Length[4];
-    unsigned long   accGate2StartIndex[4];
-    unsigned long   accGate2Length[4];
-    unsigned long   accGate3StartIndex[4];
-    unsigned long   accGate3Length[4];
-    unsigned long   accGate4StartIndex[4];
-    unsigned long   accGate4Length[4];
-    unsigned long   accGate5StartIndex[4];
-    unsigned long   accGate5Length[4];
-    unsigned long   accGate6StartIndex[4];
-    unsigned long   accGate6Length[4];
-    unsigned long   accGate7StartIndex[4];
-    unsigned long   accGate7Length[4];
-    unsigned long   accGate8StartIndex[4];
-    unsigned long   accGate8Length[4];
+    uint32_t   bufferLength[4];
+    uint32_t   bufferStart[4];
+    uint32_t   accGate1StartIndex[4];
+    uint32_t   accGate1Length[4];
+    uint32_t   accGate2StartIndex[4];
+    uint32_t   accGate2Length[4];
+    uint32_t   accGate3StartIndex[4];
+    uint32_t   accGate3Length[4];
+    uint32_t   accGate4StartIndex[4];
+    uint32_t   accGate4Length[4];
+    uint32_t   accGate5StartIndex[4];
+    uint32_t   accGate5Length[4];
+    uint32_t   accGate6StartIndex[4];
+    uint32_t   accGate6Length[4];
+    uint32_t   accGate7StartIndex[4];
+    uint32_t   accGate7Length[4];
+    uint32_t   accGate8StartIndex[4];
+    uint32_t   accGate8Length[4];
   
  	unsigned char   gtMask;
  	unsigned char   triggerOutMask;
@@ -89,11 +89,11 @@
 	NSMutableArray* thresholds;
 
 	ORRateGroup*	waveFormRateGroup;
-	unsigned long 	waveFormCount[kNumSIS3320Channels];
-    unsigned long	onlineMask;
+	uint32_t 	waveFormCount[kNumSIS3320Channels];
+    uint32_t	onlineMask;
     ORAlarm*        dataRateAlarm;
 	//cached when taking data from Mac
-	unsigned long	location;
+	uint32_t	location;
 	id				theController;
  }
 
@@ -111,45 +111,45 @@
 - (void)	    setOnlineMask:(unsigned char)anOnlineMask;
 - (BOOL)	    onlineMaskBit:(int)bit;
 - (void)	    setOnlineMaskBit:(int)bit withValue:(BOOL)aValue;
-- (unsigned long) accGate1Length:(int)anIndex;
-- (void) setAccGate1Length:(int)anIndex withValue:(unsigned long)aValue;
-- (unsigned long) accGate2Length:(int)anIndex;
-- (void) setAccGate2Length:(int)anIndex withValue:(unsigned long)aValue;
-- (unsigned long) accGate3Length:(int)anIndex;
-- (void) setAccGate3Length:(int)anIndex withValue:(unsigned long)aValue;
-- (unsigned long) accGate4Length:(int)anIndex;
-- (void) setAccGate4Length:(int)anIndex withValue:(unsigned long)aValue;
-- (unsigned long) accGate5Length:(int)anIndex;
-- (void) setAccGate5Length:(int)anIndex withValue:(unsigned long)aValue;
-- (unsigned long) accGate6Length:(int)anIndex;
-- (void) setAccGate6Length:(int)anIndex withValue:(unsigned long)aValue;
-- (unsigned long) accGate7Length:(int)anIndex;
-- (void) setAccGate7Length:(int)anIndex withValue:(unsigned long)aValue;
-- (unsigned long) accGate8Length:(int)anIndex;
-- (void) setAccGate8Length:(int)anIndex withValue:(unsigned long)aValue;
+- (uint32_t) accGate1Length:(int)anIndex;
+- (void) setAccGate1Length:(int)anIndex withValue:(uint32_t)aValue;
+- (uint32_t) accGate2Length:(int)anIndex;
+- (void) setAccGate2Length:(int)anIndex withValue:(uint32_t)aValue;
+- (uint32_t) accGate3Length:(int)anIndex;
+- (void) setAccGate3Length:(int)anIndex withValue:(uint32_t)aValue;
+- (uint32_t) accGate4Length:(int)anIndex;
+- (void) setAccGate4Length:(int)anIndex withValue:(uint32_t)aValue;
+- (uint32_t) accGate5Length:(int)anIndex;
+- (void) setAccGate5Length:(int)anIndex withValue:(uint32_t)aValue;
+- (uint32_t) accGate6Length:(int)anIndex;
+- (void) setAccGate6Length:(int)anIndex withValue:(uint32_t)aValue;
+- (uint32_t) accGate7Length:(int)anIndex;
+- (void) setAccGate7Length:(int)anIndex withValue:(uint32_t)aValue;
+- (uint32_t) accGate8Length:(int)anIndex;
+- (void) setAccGate8Length:(int)anIndex withValue:(uint32_t)aValue;
 
-- (unsigned long) accGate1StartIndex:(int)anIndex;
-- (void) setAccGate1StartIndex:(int)anIndex withValue:(unsigned long)aValue;
-- (unsigned long) accGate2StartIndex:(int)anIndex;
-- (void) setAccGate2StartIndex:(int)anIndex withValue:(unsigned long)aValue;
-- (unsigned long) accGate3StartIndex:(int)anIndex;
-- (void) setAccGate3StartIndex:(int)anIndex withValue:(unsigned long)aValue;
-- (unsigned long) accGate4StartIndex:(int)anIndex;
-- (void) setAccGate4StartIndex:(int)anIndex withValue:(unsigned long)aValue;
-- (unsigned long) accGate5StartIndex:(int)anIndex;
-- (void) setAccGate5StartIndex:(int)anIndex withValue:(unsigned long)aValue;
-- (unsigned long) accGate6StartIndex:(int)anIndex;
-- (void) setAccGate6StartIndex:(int)anIndex withValue:(unsigned long)aValue;
-- (unsigned long) accGate7StartIndex:(int)anIndex;
-- (void) setAccGate7StartIndex:(int)anIndex withValue:(unsigned long)aValue;
-- (unsigned long) accGate8StartIndex:(int)anIndex;
-- (void) setAccGate8StartIndex:(int)anIndex withValue:(unsigned long)aValue;
+- (uint32_t) accGate1StartIndex:(int)anIndex;
+- (void) setAccGate1StartIndex:(int)anIndex withValue:(uint32_t)aValue;
+- (uint32_t) accGate2StartIndex:(int)anIndex;
+- (void) setAccGate2StartIndex:(int)anIndex withValue:(uint32_t)aValue;
+- (uint32_t) accGate3StartIndex:(int)anIndex;
+- (void) setAccGate3StartIndex:(int)anIndex withValue:(uint32_t)aValue;
+- (uint32_t) accGate4StartIndex:(int)anIndex;
+- (void) setAccGate4StartIndex:(int)anIndex withValue:(uint32_t)aValue;
+- (uint32_t) accGate5StartIndex:(int)anIndex;
+- (void) setAccGate5StartIndex:(int)anIndex withValue:(uint32_t)aValue;
+- (uint32_t) accGate6StartIndex:(int)anIndex;
+- (void) setAccGate6StartIndex:(int)anIndex withValue:(uint32_t)aValue;
+- (uint32_t) accGate7StartIndex:(int)anIndex;
+- (void) setAccGate7StartIndex:(int)anIndex withValue:(uint32_t)aValue;
+- (uint32_t) accGate8StartIndex:(int)anIndex;
+- (void) setAccGate8StartIndex:(int)anIndex withValue:(uint32_t)aValue;
 
 
-- (unsigned long) bufferStart:(int)aGroup;
-- (void) setBufferStart:(int)aGroup withValue:(unsigned long)aValue;
-- (unsigned long) bufferLength:(int)aGroup;
-- (void) setBufferLength:(int)aGroup withValue:(unsigned long)aValue;
+- (uint32_t) bufferStart:(int)aGroup;
+- (void) setBufferStart:(int)aGroup withValue:(uint32_t)aValue;
+- (uint32_t) bufferLength:(int)aGroup;
+- (void) setBufferLength:(int)aGroup withValue:(uint32_t)aValue;
 - (unsigned short) moduleID;
 - (NSString*) firmwareVersion;
 - (BOOL) lemoTimeStampClrEnabled;
@@ -161,8 +161,8 @@
 - (int) clockSource;
 - (void) setClockSource:(int)aClockSource;
 - (NSString*) clockSourceName:(int)aValue;
-- (long) dacValue:(int)aChan;
-- (void) setDacValue:(int)aChan withValue:(long)aValue ;
+- (int32_t) dacValue:(int)aChan;
+- (void) setDacValue:(int)aChan withValue:(int32_t)aValue ;
 - (unsigned char) triggerMode:(int)aGroup;
 - (void) setTriggerMode:(int)aGroup withValue:(unsigned char)aValue;
 - (BOOL) saveAlways:(int)aGroup;
@@ -189,8 +189,8 @@
 - (void) setPeakingTime:(short)aChan withValue:(int)aValue;
 - (int) threshold:(short)aChan;
 - (void) setThreshold:(short)aChan withValue:(int)aValue ;
-- (unsigned long) endAddressThreshold:(short)aGroup;
-- (void) setEndAddressThreshold:(short)aGroup withValue:(unsigned long)aValue;
+- (uint32_t) endAddressThreshold:(short)aGroup;
+- (void) setEndAddressThreshold:(short)aGroup withValue:(uint32_t)aValue;
 
 - (void) setDefaults;
 - (unsigned char) gtMask;
@@ -214,7 +214,7 @@
 - (void) executeCommandList:(ORCommandList*) aList;
 
 #pragma mark •••Rates
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag;
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag;
 
 #pragma mark •••Hardware Access
 - (void) reset;
@@ -230,34 +230,34 @@
 - (void) writeControlStatusRegister;
 - (void) readModuleID:(BOOL)verbose;
 - (void) writeAcquisitionRegister;
-- (unsigned long) readAcqRegister;
-- (void) writeAdcMemoryPage:(unsigned long)aPage;
-- (unsigned long) readAdcMemoryPage;
+- (uint32_t) readAcqRegister;
+- (void) writeAdcMemoryPage:(uint32_t)aPage;
+- (uint32_t) readAdcMemoryPage;
 - (void) writeDacOffsets;
 - (void) writeEventConfiguration;
-- (unsigned long) readEventConfigRegister;
+- (uint32_t) readEventConfigRegister;
 - (void) writePreTriggerDelayAndTriggerGateDelay;
 - (void) writeRawDataBufferConfiguration;
-- (unsigned long) readPreviousAdcAddress:(int)aChannel;
-- (unsigned long) readNextAdcAddress:(int)aChannel;
+- (uint32_t) readPreviousAdcAddress:(int)aChannel;
+- (uint32_t) readNextAdcAddress:(int)aChannel;
 
-- (unsigned long) nextSampleAddress:(int)aChannel;
-- (unsigned long) actualSampleValue:(int)aGroup;
+- (uint32_t) nextSampleAddress:(int)aChannel;
+- (uint32_t) actualSampleValue:(int)aGroup;
 - (void) writeTriggerSetupRegisters;
 - (void) writeTriggerSetupRegister:(int)aChannel;
 - (void) writeThresholds;
 - (void) writeThreshold:(int)aChannel;
 - (void) writeEndAddressThresholds;
 - (void) writeEndAddressThreshold:(int)aGroup;
-- (void) writeValue:(unsigned long)aValue offset:(long)anOffset;
+- (void) writeValue:(uint32_t)aValue offset:(int32_t)anOffset;
 - (void) writeAccumulators;
 - (void) printReport;
 - (void) regDump;
-- (unsigned long) readActualAdcSample:(int)aGroup;
+- (uint32_t) readActualAdcSample:(int)aGroup;
 
 #pragma mark •••Data Taker
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherCard;
 - (NSDictionary*) dataRecordDescription;
@@ -280,7 +280,7 @@
 - (BOOL) bumpRateFromDecodeStage:(short)channel nDecodedEvents:(int)bumpNumber;
 
 
-- (unsigned long) waveFormCount:(int)aChannel;
+- (uint32_t) waveFormCount:(int)aChannel;
 -(void) startRates;
 - (void) clearWaveFormCounts;
 

@@ -28,10 +28,10 @@
 {
 	@protected
         id	controller; //use to cache the controller for abit more speed. use with care!
-        unsigned long	exceptionCount;
+        uint32_t	exceptionCount;
 }
 - (id)              adapter;
-- (unsigned long)   exceptionCount;
+- (uint32_t)   exceptionCount;
 - (void)			incExceptionCount;
 - (void)			clearExceptionCount;
 - (void)            checkCratePower;

@@ -32,10 +32,10 @@ static const float kDeg2Rad = 3.1415927 / 180.;
 float gRadiusTrackball;
 float gStartPtTrackball[3];
 float gEndPtTrackball[3];
-long gXCenterTrackball = 0, gYCenterTrackball = 0;
+int32_t gXCenterTrackball = 0, gYCenterTrackball = 0;
 
 // mouse positon and view size as inputs
-void startTrackball (long x, long y, long originX, long originY, long width, long height)
+void startTrackball (int32_t x, int32_t y, int32_t originX, int32_t originY, int32_t width, int32_t height)
 {
     float xxyy;
     float nx, ny;
@@ -77,7 +77,7 @@ void startTrackball (long x, long y, long originX, long originY, long width, lon
 }
 
 // update to new mouse position, output rotation angle
-void rollToTrackball (long x, long y, float rot [4]) // rot is output rotation angle
+void rollToTrackball (int32_t x, int32_t y, float rot [4]) // rot is output rotation angle
 {
     float xxyy;
     float cosAng, sinAng;

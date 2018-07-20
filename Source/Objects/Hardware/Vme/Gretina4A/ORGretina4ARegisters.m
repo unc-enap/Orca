@@ -20,7 +20,7 @@
 #import "ORGretina4ARegisters.h"
 
 typedef struct gretina4ARegNamesStruct {
-    unsigned long   offset;
+    uint32_t   offset;
     NSString*       regName;
     short           accessType;
     unsigned short  enumCheckValue;
@@ -161,26 +161,26 @@ static gretina4ARegNamesStruct reg4A[kNumberOfGretina4ARegisters] = {
     return reg4A[anIndex].accessType;
 }
 
-- (unsigned long) offsetforReg:(unsigned short)anIndex chan:(unsigned short)aChannel
+- (uint32_t) offsetforReg:(unsigned short)anIndex chan:(unsigned short)aChannel
 {
     [self checkIndex:  anIndex]; //will throw if out of bounds
     [self checkChannel:aChannel]; //will throw if out of bounds
     return reg4A[anIndex].offset + (4 * aChannel);
 }
 
-- (unsigned long) offsetforReg:(unsigned short)anIndex
+- (uint32_t) offsetforReg:(unsigned short)anIndex
 {
     [self checkIndex:anIndex]; //will throw if out of bounds
     return reg4A[anIndex].offset;
 }
 
-- (unsigned long) address:(unsigned long)baseAddress forReg:(unsigned short)anIndex
+- (uint32_t) address:(uint32_t)baseAddress forReg:(unsigned short)anIndex
 {
     [self checkIndex:anIndex]; //will throw if out of bounds
     return baseAddress+ reg4A[anIndex].offset;
 }
 
-- (unsigned long) address:(unsigned long)baseAddress forReg:(unsigned short)anIndex chan:(unsigned short)aChannel
+- (uint32_t) address:(uint32_t)baseAddress forReg:(unsigned short)anIndex chan:(unsigned short)aChannel
 {
     [self checkIndex:  anIndex]; //will throw if out of bounds
     [self checkChannel:aChannel]; //will throw if out of bounds
@@ -286,13 +286,13 @@ static gretina4ARegNamesStruct fpga_reg4A[kNumberOfFPGARegisters] = {
     return fpga_reg4A[anIndex].accessType;
 }
 
-- (unsigned long) offsetforReg:(unsigned short)anIndex
+- (uint32_t) offsetforReg:(unsigned short)anIndex
 {
     [self checkIndex:anIndex]; //will throw if out of bounds
     return fpga_reg4A[anIndex].offset;
 }
 
-- (unsigned long) address:(unsigned long)baseAddress forReg:(unsigned short)anIndex
+- (uint32_t) address:(uint32_t)baseAddress forReg:(unsigned short)anIndex
 {
     [self checkIndex:anIndex]; //will throw if out of bounds
     return baseAddress+ fpga_reg4A[anIndex].offset;

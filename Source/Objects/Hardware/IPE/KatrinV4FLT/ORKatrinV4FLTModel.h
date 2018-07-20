@@ -109,25 +109,25 @@ static enum  {
     int useDmaBlockRead;
     int boxcarLength;
     int hitRateMode;
-    unsigned long long  lostEvents;
-    unsigned long long  lostEventsTr;
+    uint64_t  lostEvents;
+    uint64_t  lostEventsTr;
 
-    unsigned long   oldTriggerEnabledMask; //!< mask to temporarially store the enabled mask for later reuse.
+    uint32_t   oldTriggerEnabledMask; //!< mask to temporarially store the enabled mask for later reuse.
     unsigned short lastHitRateLength;
     BOOL isBetweenSubruns;//temp variable used for shipping sum histograms -tb-
     int useBipolarEnergy;
-    unsigned long bipolarEnergyThreshTest;
+    uint32_t bipolarEnergyThreshTest;
     int skipFltEventReadout;
     BOOL forceFLTReadout;  //new for bipolar firmware (SLT readout is now recommended) 2016-07 -tb-
     int energyOffset;
-    unsigned long inhibitDuringLastHitrateReading;
-    unsigned long runStatusDuringLastHitrateReading;
-    unsigned long lastSltSecondCounter;
-    unsigned long nHitrateCount;
+    uint32_t inhibitDuringLastHitrateReading;
+    uint32_t runStatusDuringLastHitrateReading;
+    uint32_t lastSltSecondCounter;
+    uint32_t nHitrateCount;
     BOOL initializing;
 
-    unsigned long lastHistReset; //< indicates if the histogramm parameter have been changed
-    unsigned long   oldHitRateMask;
+    uint32_t lastHistReset; //< indicates if the histogramm parameter have been changed
+    uint32_t   oldHitRateMask;
     unsigned short  oldHitRateLength;
     int             oldHitRateMode;
     float lowerThresholdBound[kNumV4FLTChannels];
@@ -164,8 +164,8 @@ static enum  {
 - (void) setForceFLTReadout:(BOOL)aForceFLTReadout;
 - (int) skipFltEventReadout;
 - (void) setSkipFltEventReadout:(int)aSkipFltEventReadout;
-- (unsigned long) bipolarEnergyThreshTest;
-- (void) setBipolarEnergyThreshTest:(unsigned long)aBipolarEnergyThreshTest;
+- (uint32_t) bipolarEnergyThreshTest;
+- (void) setBipolarEnergyThreshTest:(uint32_t)aBipolarEnergyThreshTest;
 - (int) useBipolarEnergy;
 - (void) setUseBipolarEnergy:(int)aUseBipolarEnergy;
 - (int) useSLTtime;
@@ -212,51 +212,51 @@ static enum  {
 - (void) setFilterShapingLength:(int)aFilterShapingLength;
 - (int) gapLength;
 - (void) setGapLength:(int)aGapLength;
-- (unsigned long) postTriggerTime;
-- (void) setPostTriggerTime:(unsigned long)aPostTriggerTime;
+- (uint32_t) postTriggerTime;
+- (void) setPostTriggerTime:(uint32_t)aPostTriggerTime;
 - (int) fifoBehaviour;
 - (void) setFifoBehaviour:(int)aFifoBehaviour;
 - (int) analogOffset;
 - (void) setAnalogOffset:(int)aAnalogOffset;
 - (BOOL) ledOff;
 - (void) setLedOff:(BOOL)aledOff;
-- (unsigned long) interruptMask;
-- (void) setInterruptMask:(unsigned long)aInterruptMask;
+- (uint32_t) interruptMask;
+- (void) setInterruptMask:(uint32_t)aInterruptMask;
 - (unsigned short) hitRateLength;
 - (void) setHitRateLength:(unsigned short)aHitRateLength;
 - (BOOL) noiseFloorRunning;
 - (void) findNoiseFloors;
 - (NSString*) noiseFloorStateString;
 
-- (unsigned long) histNofMeas;
-- (void) setHistNofMeas:(unsigned long)aHistNofMeas;
-- (unsigned long) histMeasTime;
-- (void) setHistMeasTime:(unsigned long)aHistMeasTime;
-- (unsigned long) histRecTime;
-- (void) setHistRecTime:(unsigned long)aHistRecTime;
-- (unsigned long) histLastEntry;
-- (void) setHistLastEntry:(unsigned long)aHistLastEntry;
-- (unsigned long) histFirstEntry;
-- (void) setHistFirstEntry:(unsigned long)aHistFirstEntry;
+- (uint32_t) histNofMeas;
+- (void) setHistNofMeas:(uint32_t)aHistNofMeas;
+- (uint32_t) histMeasTime;
+- (void) setHistMeasTime:(uint32_t)aHistMeasTime;
+- (uint32_t) histRecTime;
+- (void) setHistRecTime:(uint32_t)aHistRecTime;
+- (uint32_t) histLastEntry;
+- (void) setHistLastEntry:(uint32_t)aHistLastEntry;
+- (uint32_t) histFirstEntry;
+- (void) setHistFirstEntry:(uint32_t)aHistFirstEntry;
 - (int) histClrMode;
 - (void) setHistClrMode:(int)aHistClrMode;
 - (int) histMode;
 - (void) setHistMode:(int)aHistMode;
-- (unsigned long) histEBin;
-- (void) setHistEBin:(unsigned long)aHistEBin;
-- (unsigned long) histEMin;
-- (void) setHistEMin:(unsigned long)aHistEMin;
-- (unsigned long) getLastHistReset;
+- (uint32_t) histEBin;
+- (void) setHistEBin:(uint32_t)aHistEBin;
+- (uint32_t) histEMin;
+- (void) setHistEMin:(uint32_t)aHistEMin;
+- (uint32_t) getLastHistReset;
 
 
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long)aDataId;
-- (unsigned long) waveFormId;
-- (void) setWaveFormId: (unsigned long) aWaveFormId;
-- (unsigned long) hitRateId;
-- (void) setHitRateId: (unsigned long)aHitRateId;
-- (unsigned long) histogramId;
-- (void) setHistogramId: (unsigned long)aHistogramId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t)aDataId;
+- (uint32_t) waveFormId;
+- (void) setWaveFormId: (uint32_t) aWaveFormId;
+- (uint32_t) hitRateId;
+- (void) setHitRateId: (uint32_t)aHitRateId;
+- (uint32_t) histogramId;
+- (void) setHistogramId: (uint32_t)aHistogramId;
 - (int) hitRateMode;
 - (void) setHitRateMode:(int)aMode;
 - (void) stopReadingHitRates;
@@ -268,8 +268,8 @@ static enum  {
 
 - (NSMutableArray*) gains;
 - (NSMutableArray*) thresholds;
-- (unsigned long) triggerEnabledMask;
-- (void) setTriggerEnabledMask:(unsigned long)aMask;
+- (uint32_t) triggerEnabledMask;
+- (void) setTriggerEnabledMask:(uint32_t)aMask;
 - (void) setGains:(NSMutableArray*)aGains;
 - (void) setThresholds:(NSMutableArray*)aThresholds;
 - (void) disableAllTriggers;
@@ -298,15 +298,15 @@ static enum  {
 
 - (ORTimeRate*) totalRate;
 - (void) setTotalRate:(ORTimeRate*)newTimeRate;
-- (unsigned long long) lostEvents;
-- (void) setLostEvents:(unsigned long long)aCounter;
-- (unsigned long long) lostEventsTr;
-//- (void) setLostTrEvents:(unsigned long long)aCounter;
+- (uint64_t) lostEvents;
+- (void) setLostEvents:(uint64_t)aCounter;
+- (uint64_t) lostEventsTr;
+//- (void) setLostTrEvents:(uint64_t)aCounter;
 
 - (unsigned short) selectedRegIndex;
 - (void) setSelectedRegIndex:(unsigned short) anIndex;
-- (unsigned long) writeValue;
-- (void) setWriteValue:(unsigned long) aValue;
+- (uint32_t) writeValue;
+- (void) setWriteValue:(uint32_t) aValue;
 - (unsigned short) selectedChannelValue;
 - (void) setSelectedChannelValue:(unsigned short) aValue;
 - (int) restrictIntValue:(int)aValue min:(int)aMinValue max:(int)aMaxValue;
@@ -322,28 +322,28 @@ static enum  {
 #pragma mark •••HW Access
 //all can raise exceptions
 - (int) accessTypeOfReg:(int)aReg;
-- (unsigned long) regAddress:(int)aReg channel:(int)aChannel;
-- (unsigned long) regAddress:(int)aReg;
-- (unsigned long) adcMemoryChannel:(int)aChannel page:(int)aPage;
-- (unsigned long) readReg:(short)aReg;
-- (unsigned long) readReg:(short)aReg channel:(int)aChannel;
-- (void) writeReg:(short)aReg value:(unsigned long)aValue;
-- (void) writeReg:(short)aReg channel:(int)aChannel value:(unsigned long)aValue;
+- (uint32_t) regAddress:(int)aReg channel:(int)aChannel;
+- (uint32_t) regAddress:(int)aReg;
+- (uint32_t) adcMemoryChannel:(int)aChannel page:(int)aPage;
+- (uint32_t) readReg:(short)aReg;
+- (uint32_t) readReg:(short)aReg channel:(int)aChannel;
+- (void) writeReg:(short)aReg value:(uint32_t)aValue;
+- (void) writeReg:(short)aReg channel:(int)aChannel value:(uint32_t)aValue;
 
 - (void) executeCommandList:(ORCommandList*)aList;
 - (id) readRegCmd:(short) aRegister channel:(short) aChannel;
-- (id) writeRegCmd:(short) aRegister channel:(short) aChannel value:(unsigned long)aValue;
+- (id) writeRegCmd:(short) aRegister channel:(short) aChannel value:(uint32_t)aValue;
 - (id) readRegCmd:(short) aRegister;
-- (id) writeRegCmd:(short) aRegister value:(unsigned long)aValue;
+- (id) writeRegCmd:(short) aRegister value:(uint32_t)aValue;
 
-- (unsigned long)  readSeconds;
-- (void)  writeSeconds:(unsigned long)aValue;
+- (uint32_t)  readSeconds;
+- (void)  writeSeconds:(uint32_t)aValue;
 - (void) setTimeToMacClock;
 
-- (unsigned long) readVersion;
-- (unsigned long) readpVersion;
-- (unsigned long) readBoardIDLow;
-- (unsigned long) readBoardIDHigh;
+- (uint32_t) readVersion;
+- (uint32_t) readpVersion;
+- (uint32_t) readBoardIDLow;
+- (uint32_t) readBoardIDHigh;
 - (int)			  readSlot;
 
 - (int)		readMode;
@@ -353,15 +353,15 @@ static enum  {
 - (void) initBoard;
 - (void) writeHitRateMask;
 - (void) writeInterruptMask;
-- (unsigned long) hitRateEnabledMask;
-- (void) setHitRateEnabledMask:(unsigned long)aMask;
+- (uint32_t) hitRateEnabledMask;
+- (void) setHitRateEnabledMask:(uint32_t)aMask;
 - (void) readHitRates;
 - (void) readHistogrammingStatus;
-- (void) writeTestPattern:(unsigned long*)mask length:(int)len;
-- (void) writeNextPattern:(unsigned long)aValue;
-- (unsigned long) readStatus;
-- (unsigned long) readControl;
-- (unsigned long) readHitRateMask;
+- (void) writeTestPattern:(uint32_t*)mask length:(int)len;
+- (void) writeNextPattern:(uint32_t)aValue;
+- (uint32_t) readStatus;
+- (uint32_t) readControl;
+- (uint32_t) readHitRateMask;
 - (void) writeControl;
 - (void) writeControlWithFltRunMode:(int)aMode;
 - (void) writeControlWithStandbyMode;
@@ -374,35 +374,35 @@ static enum  {
 - (void) resetHistogramMode;
 - (BOOL) waitOnBusyFlag;
 
-- (void) writeThreshold:(int)i value:(unsigned long)aValue;
+- (void) writeThreshold:(int)i value:(uint32_t)aValue;
 - (unsigned int) readThreshold:(int)i;
 - (void) writeGain:(int)i value:(unsigned short)aValue;
 - (unsigned short) readGain:(int)i;
 - (void) writeTriggerControl;
 - (BOOL) partOfEvent:(short)chan;
 - (NSUInteger) stationNumber;
-- (unsigned long) eventMask;
-- (void) eventMask:(unsigned long)aMask;
+- (uint32_t) eventMask;
+- (void) eventMask:(uint32_t)aMask;
 - (NSString*) boardTypeName:(int)aType;
 - (NSString*) fifoStatusString:(int)aType;
 - (unsigned char) fifoFlags:(short)aChan;
 - (void) setFifoFlags:(short)aChan withValue:(unsigned char)aChan;
 - (NSString*) fifoFlagString:(short)aChan;
 
-- (unsigned long) readMemoryChan:(int)chan page:(int)aPage;
+- (uint32_t) readMemoryChan:(int)chan page:(int)aPage;
 - (void) readMemoryChan:(int)aChan page:(int)aPage pageBuffer:(unsigned short*)aPageBuffer;
 - (void) clear:(int)aChan page:(int)aPage value:(unsigned short)aValue;
 
-- (unsigned long) eventCount:(int)aChannel;
+- (uint32_t) eventCount:(int)aChannel;
 - (void)		  clearEventCounts;
 - (BOOL) bumpRateFromDecodeStage:(short)channel;
 - (BOOL) setFromDecodeStage:(short)aChan fifoFlags:(unsigned char)flags;
 
 - (NSString*) getRegisterName: (short) anIndex;
 - (short) getAccessType: (short) anIndex;
-- (unsigned long) getAddressOffset: (short) anIndex;
+- (uint32_t) getAddressOffset: (short) anIndex;
 
-- (unsigned long long ) readLostEventsTr;
+- (uint64_t ) readLostEventsTr;
 
 //for sync of HW histogramming with sub-runs
 - (BOOL) setFromDecodeStageReceivedHistoForChan:(short)aChan;
@@ -429,7 +429,7 @@ static enum  {
 
 
 - (void) testReadHisto;
-- (BOOL) checkForDifferencesInName:(NSString*)aName orcaValue:(unsigned long)orcaValue hwValue:(unsigned long)hwValue;
+- (BOOL) checkForDifferencesInName:(NSString*)aName orcaValue:(uint32_t)orcaValue hwValue:(uint32_t)hwValue;
 - (BOOL) compareRegisters:(BOOL)verbose;
 - (BOOL) compareThresholdsAndGains:(BOOL)verbose;
 - (BOOL) compareHitRateMask:(BOOL)verbose;

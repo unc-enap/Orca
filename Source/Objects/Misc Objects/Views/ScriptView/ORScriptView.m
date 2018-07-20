@@ -217,15 +217,15 @@
 	[self setSelectedRange: NSMakeRange(0,0)];
 }
 
-- (void) selectLine:(unsigned long)aLine
+- (void) selectLine:(uint32_t)aLine
 {
 	NSString* originalText = [[self textStorage] string];
 	NSArray* lines = [originalText componentsSeparatedByString:@"\n"];
-	long selectionStart = 0;
-	long selectionLen = [[lines objectAtIndex:aLine] length];
+	int32_t selectionStart = 0;
+	int32_t selectionLen = [[lines objectAtIndex:aLine] length];
 	int i;
 	for(i=0;i<aLine;i++){
-		long lineLen = [[lines objectAtIndex:i] length];
+		int32_t lineLen = [[lines objectAtIndex:i] length];
 		selectionStart+=lineLen+1;
 	}
 	NSRange selectionRange = NSMakeRange(selectionStart,selectionLen);
@@ -651,7 +651,7 @@
 - (NSRange)  textView: (NSTextView*)textView willChangeSelectionFromCharacterRange: (NSRange)oldSelectedCharRange
 	 toCharacterRange:(NSRange)newSelectedCharRange
 {
-	[status setStringValue: [NSString stringWithFormat: @"Selected char %lu to %lu",
+	[status setStringValue: [NSString stringWithFormat: @"Selected char %u to %u",
 							 newSelectedCharRange.location +1,
 							 newSelectedCharRange.location +newSelectedCharRange.length]];
 	
@@ -703,7 +703,7 @@
 		BOOL						vIsEndChar = NO;
 		BOOL						justExtit = NO;
 		while( ![vScanner isAtEnd] ){
-			unsigned long		vStartOffs,vEndOffs;
+			uint32_t		vStartOffs,vEndOffs;
 			vIsEndChar = NO;
 			
 			// Look for start of string:
@@ -714,7 +714,7 @@
 			}
 			while( !vIsEndChar && ![vScanner isAtEnd] )	{  // Loop until we find end-of-string marker or our text to color is finished:
 				[vScanner scanUpToString: endCh intoString: nil];
-				unsigned long x = [vScanner scanLocation] -1;
+				uint32_t x = [vScanner scanLocation] -1;
 				
 				if( [[s string] characterAtIndex: x] != '\\' )	// Backslash before the end marker? That means ignore the end marker.
 					vIsEndChar = YES;	// A real one! Terminate loop.

@@ -35,7 +35,7 @@ NSString* ORTimeRoiCurveFitChanged = @"ORTimeRoiCurveFitChanged";
 @implementation ORTimeRoi
 
 #pragma mark ***Initialization
-- (id) initWithMin:(long)aMin max:(long)aMax
+- (id) initWithMin:(int32_t)aMin max:(int32_t)aMax
 {
 	self = [super init];
 	[self setMaxChannel:aMax];
@@ -80,30 +80,30 @@ NSString* ORTimeRoiCurveFitChanged = @"ORTimeRoiCurveFitChanged";
 	else return label;
 }
 
-- (long) minChannel
+- (int32_t) minChannel
 {
     return minChannel;
 }
 
-- (void) setDefaultMin:(long)aMinChannel max:(long)aMaxChannel
+- (void) setDefaultMin:(int32_t)aMinChannel max:(int32_t)aMaxChannel
 {
 	[self setMinChannel:aMinChannel];
 	[self setMaxChannel:aMaxChannel];
 }
 
-- (void) setMinChannel:(long)aChannel
+- (void) setMinChannel:(int32_t)aChannel
 {
 	minChannel = aChannel;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORTimeRoiMinChanged object:self];
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORPlotViewRedrawEvent object:self];
 }
 
-- (long) maxChannel
+- (int32_t) maxChannel
 {
     return maxChannel;
 }
 
-- (void) setMaxChannel:(long)aChannel
+- (void) setMaxChannel:(int32_t)aChannel
 {
 	maxChannel = aChannel;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORTimeRoiMaxChanged object:self];
@@ -130,13 +130,13 @@ NSString* ORTimeRoiCurveFitChanged = @"ORTimeRoiCurveFitChanged";
 	[dataSource plotter:aPlot index:0 x:&startingTime y:&yDummy];
 
 	double sumY				 = 0.0;
-	long startTimeOffset	 = [self minChannel];
-	long endTimeOffset		 = [self maxChannel];
+	int32_t startTimeOffset	 = [self minChannel];
+	int32_t endTimeOffset		 = [self maxChannel];
 	NSTimeInterval startTime = startingTime - startTimeOffset;
 	NSTimeInterval endTime	 = startingTime - endTimeOffset;
-	long numPts				 = labs(endTimeOffset-startTimeOffset);
+	int32_t numPts				 = labs(endTimeOffset-startTimeOffset);
 											  
-	long count = 0;
+	int32_t count = 0;
 	double minY = 9.9E99;
 	double maxY = -9.9E99;
 	if(numPts){

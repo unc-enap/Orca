@@ -79,12 +79,12 @@
     int				daqRunMode;		//!< Run modes: 0 = Energy+Trace, 1 = Energy, 2 = Hitrate, 3 = Threshold Scan, 4=Test
     NSMutableArray* thresholds;     //!< Array to keep the threshold of all 22 channel
     NSMutableArray* gains;			//!< Array to keep the gains.
-    unsigned long	dataId;         //!< Id used to identify energy data set (daq run mode)
-	unsigned long	waveFormId;		//!< Id used to identify energy+trace data set (daq debug mode)
-	unsigned long   hitRateId;		//!< Id used to identify the data from the hitrate data set (daq hitrate mode)
-	unsigned long   thresholdScanId;		//!< Id used to identify the data from the threshold scan (daq measure mode)
-	unsigned long   histogramId;		//!< Id used to identify the data from the hardware histogram (daq histogram mode)
-	unsigned long   vetoId;		        //!< Id used to identify the data from the veto mode (daq veto mode)
+    uint32_t	dataId;         //!< Id used to identify energy data set (daq run mode)
+	uint32_t	waveFormId;		//!< Id used to identify energy+trace data set (daq debug mode)
+	uint32_t   hitRateId;		//!< Id used to identify the data from the hitrate data set (daq hitrate mode)
+	uint32_t   thresholdScanId;		//!< Id used to identify the data from the threshold scan (daq measure mode)
+	uint32_t   histogramId;		//!< Id used to identify the data from the hardware histogram (daq histogram mode)
+	uint32_t   vetoId;		        //!< Id used to identify the data from the veto mode (daq veto mode)
     NSMutableArray* triggersEnabled;	//!< Array to keep the activated channel for the trigger
     NSMutableArray* shapingTimes;		//!< Length of the triangular filter
 	NSMutableArray* hitRatesEnabled;	//!< Array to store the activated trigger rate measurement
@@ -100,30 +100,30 @@
 	// Parameters for event triggered readout mode
     BOOL			broadcastTime;
 	BOOL			firstTime;		//!< Event loop: Flag to identify the first readout loop for initialization purpose
-	unsigned long   nextEventPage;	//!< Event loop: Address of the last event in the hardware page buffer
-	unsigned long   lastEventId;	//!< Event  loop: Id of the last event. Used to search for missing events in run mode
+	uint32_t   nextEventPage;	//!< Event loop: Address of the last event in the hardware page buffer
+	uint32_t   lastEventId;	//!< Event  loop: Id of the last event. Used to search for missing events in run mode
 	int				generateTrigger;	//!< Event  loop: Flag to generate a software trigger in the next readout loop cycle
-	unsigned long	nLoops;			//!< Event  loop: Number of cycles
-	unsigned long	nEvents;		//!< Event loop: Number of recorded events
-	unsigned long	nSkippedEvents;	//!< Event loop: Number of skipped events
-	unsigned long	nMissingEvents;	//!< Event  loop: 
+	uint32_t	nLoops;			//!< Event  loop: Number of cycles
+	uint32_t	nEvents;		//!< Event loop: Number of recorded events
+	uint32_t	nSkippedEvents;	//!< Event loop: Number of skipped events
+	uint32_t	nMissingEvents;	//!< Event  loop: 
 	BOOL            overflowDetected;	//!< Event  loop: Flag to indicate an event buffer overflow in the current run
 	int             overflowDetectedCounter;	//!< @see #overflowDetected; counts the  event buffer overflows
 	float           nBuffer;		//!< Event loop: Number of pages in the hardware event buffer 
-    unsigned long   resetSec;		//!< Event loop: Time stamp of the last reset..  
-	unsigned long   resetSubSec;	//!< Event loop: Time stmp of the last reset
+    uint32_t   resetSec;		//!< Event loop: Time stamp of the last reset..  
+	uint32_t   resetSubSec;	//!< Event loop: Time stmp of the last reset
 	bool			useResetTimestamp; //!< Event loop: Flag to indicate that the current hardwarde version supports reset time stamps
 
 	// Parameters for periodic readout mode
-	unsigned long	lastSec;		//!< Periodic readout: Buffer for the last second in periodically readout mode
-	unsigned long	activeChMap;	//!< Periodic readout: List of active channels 
-	unsigned long	actualThreshold[22];//!< Periodic readout: Actually threshold during threshold scan
-	unsigned long	savedThreshold[22];	//!< Periodic readout: Original threshold saved from current configuration 
-	unsigned long	lastThreshold[22];	//!< Periodic readout: Last threshold during threshold scan
+	uint32_t	lastSec;		//!< Periodic readout: Buffer for the last second in periodically readout mode
+	uint32_t	activeChMap;	//!< Periodic readout: List of active channels 
+	uint32_t	actualThreshold[22];//!< Periodic readout: Actually threshold during threshold scan
+	uint32_t	savedThreshold[22];	//!< Periodic readout: Original threshold saved from current configuration 
+	uint32_t	lastThreshold[22];	//!< Periodic readout: Last threshold during threshold scan
 	int				stepThreshold[22];	//!< Periodic readout: Threshold increment for scan (1, 10, 100, 1000)
-	unsigned long	maxHitrate[22];		//!< Periodic readout: Maxmal hitrate at the beginning of the scan
-	unsigned long	lastHitrate[22];	//!< Periodic readout: Trigger rate of the last sample
-	unsigned long	nNoChanges[22];		//!< Periodic readout: Number of samples with no changes in the hitrate. Used to control the threshol increments.
+	uint32_t	maxHitrate[22];		//!< Periodic readout: Maxmal hitrate at the beginning of the scan
+	uint32_t	lastHitrate[22];	//!< Periodic readout: Trigger rate of the last sample
+	uint32_t	nNoChanges[22];		//!< Periodic readout: Number of samples with no changes in the hitrate. Used to control the threshol increments.
 	
 	id				sltmodel;
 	
@@ -171,8 +171,8 @@
     int histoPreToggleSec;             //!<  time (sec) of last pre toggle cycle.
     int histoPreToggleUSec;            //!<  time (usec) of last pre toggle cycle.
     double lastDiffTime;               //!<used for timing of histogramming
-    long lastDelayTime;               //!<used for timing: number of 0.1 (0delayTime) seconds since histoStartTimeSec/USec
-    long currentDelayTime;               //!<used for timing: number of 0.1 (0delayTime) seconds since histoStartTimeSec/USec
+    int32_t lastDelayTime;               //!<used for timing: number of 0.1 (0delayTime) seconds since histoStartTimeSec/USec
+    int32_t currentDelayTime;               //!<used for timing: number of 0.1 (0delayTime) seconds since histoStartTimeSec/USec
     int histoLastActivePage;         //!<  number (0/1) of last active memory page
     
     BOOL histoCalibrationIsRunning;  //!< Used for calibration run and normal run - TRUE if intentionally  running
@@ -194,10 +194,10 @@
     NSString *readWriteRegisterName; //!< The register name currently selected in the low-level tab -tb-
     
 	//place to cache some values so they don't have to be calculated every time thru the run loop.
-	unsigned long	statusAddress;
-	unsigned long	triggerMemAddress;
-	unsigned long	memoryAddress;
-	unsigned long	locationWord;
+	uint32_t	statusAddress;
+	uint32_t	triggerMemAddress;
+	uint32_t	memoryAddress;
+	uint32_t	locationWord;
 	BOOL			usingPBusSimulation;
 	/** Reference to the Slt board for hardware access */
 	ORIpeFireWireCard* fireWireCard; 
@@ -208,7 +208,7 @@
     BOOL dataAquisitionIsRestarting;//!< hardware flag
 
     //Parameters for the FPGA configuration: version, revision, application ID ("features")
-    unsigned long versionRegister;//!< The raw 32-bit version register content
+    uint32_t versionRegister;//!< The raw 32-bit version register content
     BOOL versionRegisterIsUptodate;
     BOOL stdFeatureIsAvailable;
     BOOL vetoFeatureIsAvailable;
@@ -232,8 +232,8 @@
 
 #pragma mark ¥¥¥Accessors
 - (void) showVersionRevision;
-- (unsigned long) versionRegister;//!< The raw 32-bit version register content
-- (void) setVersionRegister:(unsigned long)aValue;
+- (uint32_t) versionRegister;//!< The raw 32-bit version register content
+- (void) setVersionRegister:(uint32_t)aValue;
 - (int) versionRegApplicationID;
 - (int) versionRegHWVersionHex;
 /** Since version 3 we have the version register. 
@@ -272,18 +272,18 @@
 - (void) setBroadcastTime:(BOOL)aBroadcastTime;
 - (unsigned short) hitRateLength;
 - (void) setHitRateLength:(unsigned short)aHitRateLength;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
-- (unsigned long) waveFormId;
-- (void) setWaveFormId: (unsigned long) aWaveFormId;
-- (unsigned long) hitRateId;
-- (void) setHitRateId: (unsigned long) aHitRateId;
-- (unsigned long) thresholdScanId;
-- (void) setThresholdScanId: (unsigned long) athresholdScanId;
-- (unsigned long) histogramId;
-- (void) setHistogramId: (unsigned long) aValue;
-- (unsigned long) vetoId;
-- (void) setVetoId: (unsigned long) aValue;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
+- (uint32_t) waveFormId;
+- (void) setWaveFormId: (uint32_t) aWaveFormId;
+- (uint32_t) hitRateId;
+- (void) setHitRateId: (uint32_t) aHitRateId;
+- (uint32_t) thresholdScanId;
+- (void) setThresholdScanId: (uint32_t) athresholdScanId;
+- (uint32_t) histogramId;
+- (void) setHistogramId: (uint32_t) aValue;
+- (uint32_t) vetoId;
+- (void) setVetoId: (uint32_t) aValue;
 
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherCard;
@@ -349,7 +349,7 @@
 
 - (void)	checkPresence;
 - (int)		readVersion;
-- (unsigned long)		readVersionRevision;
+- (uint32_t)		readVersionRevision;
 - (void)	initVersionRevision;
 - (int)		readFPGAVersion:(int) fpga;
 - (int)		readCardId;
@@ -357,8 +357,8 @@
 - (BOOL)	readIsOverflow;
 - (int)		readMode;
 - (void)	writeMode:(int) value;
-- (unsigned long)  getReadPointer;
-- (unsigned long)  getWritePointer;
+- (uint32_t)  getReadPointer;
+- (uint32_t)  getWritePointer;
 - (void)  reset;
 
 /** Generate a software trigger. In order to distribute it to all Flts
@@ -370,16 +370,16 @@
 - (BOOL) isInRunMode;
 - (BOOL) isInTestMode;
 - (BOOL) isInDebugMode;
-- (void) loadTime:(unsigned long)aTime;
-- (unsigned long) readTime;
-- (unsigned long) readTimeSubSec;
+- (void) loadTime:(uint32_t)aTime;
+- (uint32_t) readTime;
+- (uint32_t) readTimeSubSec;
 - (void) writeHitRateMask;
 - (NSMutableArray*) hitRatesEnabled;
 - (void) setHitRatesEnabled:(NSMutableArray*)anArray;
 - (void) readHitRates;
 
-- (unsigned long) readControlStatus;
-- (void) writeControlStatus:(unsigned long)aValue;
+- (uint32_t) readControlStatus;
+- (void) writeControlStatus:(uint32_t)aValue;
 - (void) printStatusReg;
 - (void) writeThreshold:(int)i value:(unsigned short)aValue;
 - (unsigned short) readThreshold:(int)i;
@@ -395,7 +395,7 @@
 
 - (unsigned short) readTriggerControl:(int)fpga;
 - (void) writeMemoryChan:(int)chan page:(int)aPage value:(unsigned short)aValue;
-- (unsigned long) readMemoryChan:(int)chan page:(int)aPage;
+- (uint32_t) readMemoryChan:(int)chan page:(int)aPage;
 - (void) readMemoryChan:(int)aChan page:(int)aPage pageBuffer:(unsigned short*)aPageBuffer;
 - (void) broadcast:(int)aPage dataBuffer:(unsigned short*)aDataBuffer;
 - (void) clear:(int)aChan page:(int)aPage value:(unsigned short)aValue;
@@ -451,16 +451,16 @@
 - (void) addHistogramData: (int)index forChan:(int)aChan value:(int) aValue;
 - (void) clearHistogramDataForChan:(int)aChan;
 #pragma mark ¥¥¥Hardware Histogramming HW Access
-- (unsigned long) readEMin;
-- (unsigned long) readEMinForChan:(int)aChan;
+- (uint32_t) readEMin;
+- (uint32_t) readEMinForChan:(int)aChan;
 - (void) writeEMin:(int)EMin;
 - (void) writeEMin:(int)EMin forChan:(int)aChan;
-- (unsigned long) readEMax;
-- (unsigned long) readEMaxForChan:(int)aChan;
+- (uint32_t) readEMax;
+- (uint32_t) readEMaxForChan:(int)aChan;
 - (void) writeEMax:(int)EMax;
 - (void) writeEMax:(int)EMax forChan:(int)aChan;
-- (unsigned long) readTRun;
-- (unsigned long) readTRunForChan:(int)aChan; 
+- (uint32_t) readTRun;
+- (uint32_t) readTRunForChan:(int)aChan; 
 - (void) writeTRun:(int)TRun;
 - (void) writeTRun:(int)TRun  forChan:(int)aChan; 
 - (void) writeStartHistogram:(unsigned int)aHistoBinWidth;
@@ -471,10 +471,10 @@
 - (void) writeStartHistogramForChan:(int)aChan withClear:(BOOL)clear;
 - (void) writeHistogramSettingsForChan:(int)aChan mode:(unsigned int)aMode binWidth:(unsigned int)aHistoBinWidth;
 //new since histogramming ver. 3.x -tb- <<<<<<<<
-- (unsigned long) readTRec;
-- (unsigned long) readTRecForChan:(int)aChan; 
-- (unsigned long) readFirstBinForChan:(int)aChan;
-- (unsigned long) readLastBinForChan:(int)aPixel;
+- (uint32_t) readTRec;
+- (uint32_t) readTRecForChan:(int)aChan; 
+- (uint32_t) readFirstBinForChan:(int)aChan;
+- (uint32_t) readLastBinForChan:(int)aPixel;
 
 - (int) getHistoBinOfEnergy:(double) energy withOffsetEMin:(int) emin binSize:(int) bs;
 - (int) getHistoEnergyOfBin:(int) bin  withOffsetEMin:(int) emin binSize:(int) bs;
@@ -491,11 +491,11 @@
 - (int)  readCurrentHistogramPageNum;
 - (void) clearCurrentHistogramPageForChan:(unsigned int)aChan;
 - (BOOL) histogrammingIsActiveForChan:(unsigned int)aChan;
-- (unsigned long) readHistogramControlRegisterOfPixel:(unsigned int)aPixel;//TODO: rename to ...ForChan -tb-
-- (void) writeHistogramControlRegisterForSlot:(int)aSlot chan:(int)aChan value:(unsigned long)aValue;
-- (void) writeHistogramControlRegisterOfPixel:(unsigned int)aPixel value:(unsigned long)aValue;
-- (unsigned long) readHistogramSettingsRegisterOfPixel:(unsigned int)aPixel;
-- (void) writeHistogramSettingsRegisterOfPixel:(unsigned int)aPixel value:(unsigned long)aValue;
+- (uint32_t) readHistogramControlRegisterOfPixel:(unsigned int)aPixel;//TODO: rename to ...ForChan -tb-
+- (void) writeHistogramControlRegisterForSlot:(int)aSlot chan:(int)aChan value:(uint32_t)aValue;
+- (void) writeHistogramControlRegisterOfPixel:(unsigned int)aPixel value:(uint32_t)aValue;
+- (uint32_t) readHistogramSettingsRegisterOfPixel:(unsigned int)aPixel;
+- (void) writeHistogramSettingsRegisterOfPixel:(unsigned int)aPixel value:(uint32_t)aValue;
 
 - (void) setHistoLastPageToggleSec:(int) sec usec:(int) usec;
 - (void) setHistoStartWaitingForPageToggle:(BOOL) aValue;
@@ -506,14 +506,14 @@
 - (int)  readVetoState;
 - (void) readVetoDataFrom:(int)fromIndex to:(int)toIndex;
 #pragma mark ¥¥¥Low-level Register Access
-//- (unsigned long) getRegisterAdress:(NSString*)aRegisterName withChan:(int)aChan;
+//- (uint32_t) getRegisterAdress:(NSString*)aRegisterName withChan:(int)aChan;
  -(int) readWriteRegisterChan;
 -(void) setReadWriteRegisterChan:(int)aChan;
 -(NSString *) readWriteRegisterName;
 -(void) setReadWriteRegisterName:(NSString *)aName;
-- (unsigned long) registerAdressWithName:(NSString *)aName  forChan:(int)aChan;
-- (unsigned long) readRegisterWithName:(NSString *)aName  forChan:(int)aChan;
-- (unsigned long) writeRegisterWithName:(NSString *)aName  forChan:(int)aChan value:(unsigned long) aValue;
+- (uint32_t) registerAdressWithName:(NSString *)aName  forChan:(int)aChan;
+- (uint32_t) readRegisterWithName:(NSString *)aName  forChan:(int)aChan;
+- (uint32_t) writeRegisterWithName:(NSString *)aName  forChan:(int)aChan value:(uint32_t) aValue;
 
 #pragma mark ¥¥¥Archival
 - (id) initWithCoder:(NSCoder*)decoder;

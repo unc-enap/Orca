@@ -724,7 +724,7 @@ NSString* ORApcUpsLowLimitChanged		= @"ORApcUpsLowLimitChanged";
 {
 	NSString* s;
  	@synchronized(self){
-		s= [NSString stringWithFormat:@"ApcUps,%lu",[self uniqueIdNumber]];
+		s= [NSString stringWithFormat:@"ApcUps,%u",[self uniqueIdNumber]];
 	}
 	return s;
 }

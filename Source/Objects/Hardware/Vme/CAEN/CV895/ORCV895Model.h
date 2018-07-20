@@ -51,6 +51,6 @@ enum {
 {
 }
 - (unsigned short) numberOfRegisters;
-- (unsigned long) regOffset:(int)index;
+- (uint32_t) regOffset:(int)index;
 
 @end

@@ -247,7 +247,7 @@
 - (void) overFlowMaskChanged:(NSNotification*)aNote
 {
 	NSColor* red = [NSColor colorWithCalibratedRed:.8 green:0 blue:0 alpha:1];
-	unsigned long aMask = [model overFlowMask];
+	uint32_t aMask = [model overFlowMask];
 	int i;
 	for(i=0;i<16;i++){
 		if(aMask & (0x00000001<<i))	[[countMatrix0 cellWithTag:i] setTextColor:red];
@@ -387,7 +387,7 @@
 - (void) countEnableMaskChanged:(NSNotification*)aNote
 {
 	short i;
-	unsigned long theMask = [model countEnableMask];
+	uint32_t theMask = [model countEnableMask];
 
 	for(i=0;i<32;i++){
 		BOOL bitSet = (theMask&(1L<<i))>0;
@@ -400,12 +400,12 @@
 	short i;	
 	if([model showDeadTime]){
 		int refChan = [model deadTimeRefChannel];
-		unsigned long refCounts = [model counts:refChan];
+		uint32_t refCounts = [model counts:refChan];
 		for(i=0;i<16;i++){
 			if(i == refChan) [[countMatrix0  cellWithTag:i] setStringValue: @"Reference"];
 			else {
 				if(refCounts){
-					unsigned long theCounts = [model counts:i];
+					uint32_t theCounts = [model counts:i];
 					double liveTime = 100.0 *(theCounts/(double)refCounts);
 					[[countMatrix0  cellWithTag:i] setStringValue:[NSString stringWithFormat:@"%.6f",liveTime]];
 				}
@@ -417,7 +417,7 @@
 			if(i == refChan) [[countMatrix1  cellWithTag:i] setStringValue: @"Reference"];
 			else {
 				if(refCounts){
-					unsigned long theCounts = [model counts:i];
+					uint32_t theCounts = [model counts:i];
 					double liveTime = 100.0 *(theCounts/(double)refCounts);
 					[[countMatrix1  cellWithTag:i] setStringValue:[NSString stringWithFormat:@"%.6f",liveTime]];
 				}
@@ -516,7 +516,7 @@
 
 - (IBAction) enableAllInGroup:(id)sender
 {
-	unsigned long aMask = [model countEnableMask];
+	uint32_t aMask = [model countEnableMask];
 	switch ([sender tag]) {
 		case 0: aMask |= 0x0000ffff; break;
 		case 1: aMask |= 0xffff0000; break;
@@ -526,7 +526,7 @@
 
 - (IBAction) disableAllInGroup:(id)sender
 {
-	unsigned long aMask = [model countEnableMask];
+	uint32_t aMask = [model countEnableMask];
 	switch ([sender tag]) {
 		case 0: aMask &= ~0x0000ffff; break;
 		case 1: aMask &= ~0xffff0000; break;

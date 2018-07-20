@@ -29,7 +29,7 @@
 -(id)command:(NSString *)fmt withArgs:(NSArray *)args;
 
 //NSURLConnection Delegate methods - For asynchronous requests.
-// Implementing the async stuff was taking too long so never fully implemented
+// Implementing the async stuff was taking too int32_t so never fully implemented
 // this option in the command function.
 -(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response;
 -(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data;

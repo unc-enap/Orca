@@ -79,9 +79,9 @@
 
 #pragma mark •••Data Source Methods
 - (void) processResponse:(NSDictionary*)aResponse;
-- (unsigned long) numPoints;
+- (uint32_t) numPoints;
 - (NSMutableArray*) rois:(int)index;
-- (BOOL) dataSet:(int)set index:(unsigned long)index x:(double*)xValue y:(double*)yValue;
+- (BOOL) dataSet:(int)set index:(uint32_t)index x:(double*)xValue y:(double*)yValue;
 @end
 
 extern NSString* ORManualPlotModelCommentChanged;

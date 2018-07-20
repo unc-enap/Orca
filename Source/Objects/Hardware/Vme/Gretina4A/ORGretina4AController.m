@@ -60,13 +60,13 @@
 	[registerIndexPU setAutoenablesItems:NO];
 	int i;
 	for (i=0;i<kNumberOfGretina4ARegisters;i++) {
-        NSString* s = [NSString stringWithFormat:@"(0x%04lx) %@",[Gretina4ARegisters offsetforReg:i], [Gretina4ARegisters registerName:i]];
+        NSString* s = [NSString stringWithFormat:@"(0x%04x) %@",[Gretina4ARegisters offsetforReg:i], [Gretina4ARegisters registerName:i]];
 		[registerIndexPU insertItemWithTitle:s	atIndex:i];
 		[[registerIndexPU itemAtIndex:i] setEnabled:YES];
 	}
 	// And now the FPGA registers
     for (i=0;i<kNumberOfFPGARegisters;i++) {
-        NSString* s = [NSString stringWithFormat:@"(0x%04lx) %@",[Gretina4AFPGARegisters offsetforReg:i], [Gretina4AFPGARegisters registerName:i]];
+        NSString* s = [NSString stringWithFormat:@"(0x%04x) %@",[Gretina4AFPGARegisters offsetforReg:i], [Gretina4AFPGARegisters registerName:i]];
 
 		[registerIndexPU insertItemWithTitle:s	atIndex:(i+kNumberOfGretina4ARegisters)];
 	}
@@ -1293,9 +1293,9 @@
 
 - (IBAction) extDiscrSrcAction:(id)sender
 {
-    unsigned long regValue = [model extDiscriminatorSrc];
+    uint32_t regValue = [model extDiscriminatorSrc];
     unsigned short chan    = [sender selectedRow];
-    unsigned long value   = [[sender selectedCell] indexOfSelectedItem];
+    uint32_t value   = [[sender selectedCell] indexOfSelectedItem];
     regValue &= ~(0x00000007<<(chan*3));
     regValue |= ((value&0x7)<<(chan*3));
     [model setExtDiscriminatorSrc:regValue];
@@ -1303,9 +1303,9 @@
 
 - (IBAction) extDiscrModeAction:(id)sender
 {
-    unsigned long regValue = [model extDiscriminatorMode];
+    uint32_t regValue = [model extDiscriminatorMode];
     unsigned short chan    = [sender selectedRow];
-    unsigned long value   = [[sender selectedCell] indexOfSelectedItem];
+    uint32_t value   = [[sender selectedCell] indexOfSelectedItem];
     regValue &= ~(0x00000003<<(chan*2));
     regValue |= ((value&0x3)<<(chan*2));
     [model setExtDiscriminatorMode:regValue];
@@ -1536,10 +1536,10 @@
 - (IBAction) readRegisterAction:(id)sender
 {
 	[self endEditing];
-	unsigned long aValue = 0;
+	uint32_t aValue = 0;
 	unsigned int index = [model registerIndex];
 	if (index < kNumberOfGretina4ARegisters) {
-        unsigned long address   = [Gretina4ARegisters offsetforReg:index];
+        uint32_t address   = [Gretina4ARegisters offsetforReg:index];
         NSString* chanString;
         if([Gretina4ARegisters hasChannels:index]){
             int chan = (int)[model selectedChannel];
@@ -1561,11 +1561,11 @@
 - (IBAction) writeRegisterAction:(id)sender
 {
 	[self endEditing];
-	unsigned long aValue    = [model registerWriteValue];
+	uint32_t aValue    = [model registerWriteValue];
 	unsigned int index      = [model registerIndex];
     
 	if (index < kNumberOfGretina4ARegisters) {
-        unsigned long address   = [Gretina4ARegisters offsetforReg:index];
+        uint32_t address   = [Gretina4ARegisters offsetforReg:index];
         NSString* chanString;
         if([Gretina4ARegisters hasChannels:index]){
             int chan = (int)[model selectedChannel];
@@ -1600,8 +1600,8 @@
 - (IBAction) writeSPIAction:(id)sender
 {
 	[self endEditing];
-	unsigned long aValue = [model spiWriteValue];
-	unsigned long readback = [model writeAuxIOSPI:aValue];
+	uint32_t aValue = [model spiWriteValue];
+	uint32_t readback = [model writeAuxIOSPI:aValue];
 	NSLog(@"Gretina4A(%d,%d) writeSPI(%u) readback: (0x%0x)\n",[model crateNumber],[model slot], aValue, readback);
 }
 
@@ -1663,14 +1663,14 @@
 
 - (IBAction) readLiveTimeStamp:(id)sender
 {
-    unsigned long long ts = [model readLiveTimeStamp];
+    uint64_t ts = [model readLiveTimeStamp];
     NSLog(@"Gretina4A (Slot %d <%p>) Live Timestamp: 0x%llx\n",[model slot],[model baseAddress],ts);
 
 }
 
 - (IBAction) readLatTimeStamp:(id)sender
 {
-    unsigned long long ts = [model readLatTimeStamp];
+    uint64_t ts = [model readLatTimeStamp];
     NSLog(@"Gretina4A (Slot %d <%p>) Lat Timestamp: 0x%llx\n",[model slot],[model baseAddress],ts);
     
 }
@@ -1762,7 +1762,7 @@
 
 - (IBAction) readVmeAuxStatus:(id)sender
 {
-    unsigned long status = [model readVmeAuxStatus];
+    uint32_t status = [model readVmeAuxStatus];
     NSLog(@"Gretina4A %d Aux VME Status: 0x%08x\n",[model slot],status);
     NSLog(@"Power: %@\n",       ((status>>0)&01)?@"FAULT":@"OK");
     NSLog(@"Over Volt: %@\n",   ((status>>1)&01)?@"FAULT":@"OK");

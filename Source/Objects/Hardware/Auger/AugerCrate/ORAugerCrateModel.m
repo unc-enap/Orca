@@ -140,7 +140,7 @@ static NSString* ORAugerCrateFireWireOut 	= @"ORAugerCrateFireWireOut";
 	}
 }
 
-- (id) getFireWireInterface:(unsigned long)aVenderID
+- (id) getFireWireInterface:(uint32_t)aVenderID
 {
 	id connectedObj = [self objectConnectedTo:ORAugerCrateFireWireIn];
 	return [ connectedObj getFireWireInterface:aVenderID];

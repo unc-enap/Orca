@@ -27,7 +27,7 @@
 @interface ORPDcuModel : ORSerialPortModel
 {
     @private
-        unsigned long	dataId;
+        uint32_t	dataId;
 		NSString*		lastRequest;
 		ORSafeQueue*	cmdQueue;
 		NSMutableData*	inComingData;
@@ -94,8 +94,8 @@
 #pragma mark •••Data Records
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (NSDictionary*) dataRecordDescription;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherPDcu;
 

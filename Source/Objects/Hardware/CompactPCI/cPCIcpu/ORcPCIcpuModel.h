@@ -44,7 +44,7 @@
 - (ORReadOutList*)	readOutGroup;
 - (void)			setReadOutGroup:(ORReadOutList*)newReadOutGroup;
 - (NSMutableArray*) children;
-- (long) getSBCCodeVersion;
+- (int32_t) getSBCCodeVersion;
 
 #pragma mark ¥¥¥DataTaker
 - (void) load_HW_Config;

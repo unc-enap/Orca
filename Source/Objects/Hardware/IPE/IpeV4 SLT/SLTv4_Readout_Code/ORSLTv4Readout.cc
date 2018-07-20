@@ -58,8 +58,8 @@ bool ORSLTv4Readout::Readout(SBC_LAM_Data* lamData)
     static int currentUSec=0;
     static int lastSec=0;
     static int lastUSec=0;
-    //static long int counter=0;
-    static long int secCounter=0;
+    //static int32_t int counter=0;
+    static int32_t int secCounter=0;
     
     struct timeval t;//    struct timezone tz; is obsolete ... -tb-
     //timing
@@ -71,7 +71,7 @@ bool ORSLTv4Readout::Readout(SBC_LAM_Data* lamData)
     
     if(diffTime >1.0){
         secCounter++;
-        printf("PrPMC (SLTv4 simulation mode) sec %ld: 1 sec is over ...\n",secCounter);
+        printf("PrPMC (SLTv4 simulation mode) sec %d: 1 sec is over ...\n",secCounter);
         fflush(stdout);
         //remember for next call
         lastSec      = currentSec; 

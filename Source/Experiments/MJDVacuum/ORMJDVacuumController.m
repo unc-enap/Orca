@@ -48,7 +48,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"MJD Vacuum (Cryostat %lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"MJD Vacuum (Cryostat %u)",[model uniqueIdNumber]]];
 }
 
 #pragma mark •••Notifications
@@ -335,7 +335,7 @@
 			modalDelegate:self didEndSelector:NULL contextInfo:nil];
 	}
 	else {
-		unsigned long changesVetoed = ([model vetoMask] & (0x1>>gateValveTag)) != 0;
+		uint32_t changesVetoed = ([model vetoMask] & (0x1>>gateValveTag)) != 0;
 		if(gv){
 			NSString* statusString = [NSString stringWithFormat:@"%@  current state: %@",[gv label],currentValveState==kGVOpen?@"OPEN":(currentValveState==kGVClosed?@"CLOSED":@"UnKnown")];
 			[gvControlValveState setStringValue:statusString];

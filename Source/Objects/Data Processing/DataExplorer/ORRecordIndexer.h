@@ -24,7 +24,7 @@
 @interface ORRecordIndexer : ORDecoderOperation {
 	NSMutableData* dataToProcess;
 	NSMutableArray* dataArray;
-	long long fileOffset;
+	int64_t fileOffset;
 	NSMutableDictionary* nameCatalog;
 	NSMutableArray* array;
 	NSData* fileAsData;
@@ -32,12 +32,12 @@
 
 - (id)   initWithPath:(NSString*)aPath delegate:(id)aDelegate;
 - (void) dealloc;
-- (NSString*) nameForDataID:(long)anID;
+- (NSString*) nameForDataID:(int32_t)anID;
 - (NSArray*) decodeDataIntoArray;
-- (void) decodeOneRecordAtOffset:(unsigned long)anOffset intoDataSet:(ORDataSet*)aDataSet forKey:(NSNumber*)aKey;
-- (void) byteSwapOneRecordAtOffset:(unsigned long)anOffset forKey:(NSNumber*)aKey;
-- (NSString*) dataRecordDescription:(unsigned long)anOffset forKey:(NSNumber*)aKey;
-- (NSString*) dataRecordDescription:(unsigned long*)ptr;
+- (void) decodeOneRecordAtOffset:(uint32_t)anOffset intoDataSet:(ORDataSet*)aDataSet forKey:(NSNumber*)aKey;
+- (void) byteSwapOneRecordAtOffset:(uint32_t)anOffset forKey:(NSNumber*)aKey;
+- (NSString*) dataRecordDescription:(uint32_t)anOffset forKey:(NSNumber*)aKey;
+- (NSString*) dataRecordDescription:(uint32_t*)ptr;
 @end
 
 @interface NSObject (ORFileReader)

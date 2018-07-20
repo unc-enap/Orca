@@ -46,30 +46,30 @@
 }
 - (id)   initWithDelegate:(id)aDelegate;
 - (void) setSymbolTable:(ORFilterSymbolTable*)aTable;
-- (unsigned long*) ptr:(const char*)aKey;
-- (unsigned long) value:(const char*)aKey;
+- (uint32_t*) ptr:(const char*)aKey;
+- (uint32_t) value:(const char*)aKey;
 
 - (void) start;
-- (void) filter:(unsigned long*) currentRecordPtr length:(unsigned long)aLen;
+- (void) filter:(uint32_t*) currentRecordPtr length:(uint32_t)aLen;
 - (void) finish;
 
 @end
 
 @interface NSObject (FilterBaseClass)
-- (BOOL) record:(unsigned long*)aRecordPtr isEqualTo:(unsigned long)aValue;
-- (unsigned long) extractRecordID:(unsigned long)aValue;
-- (unsigned long) extractRecordLen:(unsigned long)aValue;
-- (unsigned long) extractValue:(unsigned long)aValue mask:(unsigned long)aMask thenShift:(unsigned long)shift;
-- (void) shipRecord:(unsigned long*)p length:(long)length;
-- (void) pushOntoStack:(int)i record:(unsigned long*)p;
-- (unsigned long*) popFromStack:(int)i;
-- (unsigned long*) popFromStackBottom:(int)i;
+- (BOOL) record:(uint32_t*)aRecordPtr isEqualTo:(uint32_t)aValue;
+- (uint32_t) extractRecordID:(uint32_t)aValue;
+- (uint32_t) extractRecordLen:(uint32_t)aValue;
+- (uint32_t) extractValue:(uint32_t)aValue mask:(uint32_t)aMask thenShift:(uint32_t)shift;
+- (void) shipRecord:(uint32_t*)p length:(int32_t)length;
+- (void) pushOntoStack:(int)i record:(uint32_t*)p;
+- (uint32_t*) popFromStack:(int)i;
+- (uint32_t*) popFromStackBottom:(int)i;
 - (void) shipStack:(int)i;
-- (long) stackCount:(int)i;
+- (int32_t) stackCount:(int)i;
 - (void) dumpStack:(int)i;
-- (void) histo1D:(int)i value:(unsigned long)aValue;
-- (void) histo2D:(int)i x:(unsigned long)x y:(unsigned long)y;
-- (void) stripChart:(int)i time:(unsigned long)aTimeIndex value:(unsigned long)aValue;
-- (void) setOutput:(int)index withValue:(unsigned long)aValue;
+- (void) histo1D:(int)i value:(uint32_t)aValue;
+- (void) histo2D:(int)i x:(uint32_t)x y:(uint32_t)y;
+- (void) stripChart:(int)i time:(uint32_t)aTimeIndex value:(uint32_t)aValue;
+- (void) setOutput:(int)index withValue:(uint32_t)aValue;
 - (void) resetDisplays;
 @end

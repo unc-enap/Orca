@@ -73,14 +73,14 @@ static CVCfcLedRegNamesStruct CV895Reg[kNum895Registers] = {
 }
 
 #pragma mark ***Accessors
-- (unsigned long) threshold0Offset			{ return [self regOffset:kThreshold0]; }
-- (unsigned long) outputWidth0_7Offset		{ return [self regOffset:kOutputWidt0_7]; }
-- (unsigned long) outputWidth8_15Offset		{ return [self regOffset:kOutputWidth8_15]; }
-- (unsigned long) testPulseOffset			{ return [self regOffset:kTestPulse]; }
-- (unsigned long) patternInibitOffset		{ return [self regOffset:kPatternInhibit]; }
-- (unsigned long) majorityThresholdOffset	{ return [self regOffset:kMajorityThreshold]; } 
-- (unsigned long) moduleTypeOffset			{ return [self regOffset:kModuleType]; }
-- (unsigned long) versionOffset				{ return [self regOffset:kVersion]; }
+- (uint32_t) threshold0Offset			{ return [self regOffset:kThreshold0]; }
+- (uint32_t) outputWidth0_7Offset		{ return [self regOffset:kOutputWidt0_7]; }
+- (uint32_t) outputWidth8_15Offset		{ return [self regOffset:kOutputWidth8_15]; }
+- (uint32_t) testPulseOffset			{ return [self regOffset:kTestPulse]; }
+- (uint32_t) patternInibitOffset		{ return [self regOffset:kPatternInhibit]; }
+- (uint32_t) majorityThresholdOffset	{ return [self regOffset:kMajorityThreshold]; } 
+- (uint32_t) moduleTypeOffset			{ return [self regOffset:kModuleType]; }
+- (uint32_t) versionOffset				{ return [self regOffset:kVersion]; }
 
 - (void) setUpImage
 {
@@ -107,7 +107,7 @@ static CVCfcLedRegNamesStruct CV895Reg[kNum895Registers] = {
 	return kNum895Registers;
 }
 
-- (unsigned long) regOffset:(int)index
+- (uint32_t) regOffset:(int)index
 {
 	if(index >=0 && index<kNum895Registers){
 		return CV895Reg[index].addressOffset;

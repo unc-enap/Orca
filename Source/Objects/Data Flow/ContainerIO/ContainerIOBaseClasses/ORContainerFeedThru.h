@@ -30,7 +30,7 @@
     int			 lineType;
     NSColor*	 lineColor;
 	NSMutableArray* cachedProcessors;
-	unsigned long cachedProcessorsCount;
+	uint32_t cachedProcessorsCount;
 
 	//this connectors we make, but do not display.
 	//so we keep a separate list.

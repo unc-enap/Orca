@@ -249,7 +249,7 @@ NSString* ORSIS3320ModelEndAddressThresholdChanged		= @"ORSIS3320ModelEndAddress
 
 
 typedef struct {
-	unsigned long offset;
+	uint32_t offset;
 	NSString* name;
 } SIS3320RegisterInformation;
 
@@ -331,77 +331,77 @@ static SIS3320RegisterInformation register_information[kNumSIS3320ReadRegs] = {
 
 //some arrays of address offsets for convenience
 
-unsigned long accumGate1Address[kNumSIS3320Groups]= {
+uint32_t accumGate1Address[kNumSIS3320Groups]= {
     kAccumGate1Adc12,
     kAccumGate1Adc34,
     kAccumGate1Adc56,
     kAccumGate1Adc78
 };
-unsigned long accumGate2Address[kNumSIS3320Groups]= {
+uint32_t accumGate2Address[kNumSIS3320Groups]= {
     kAccumGate2Adc12,
     kAccumGate2Adc34,
     kAccumGate2Adc56,
     kAccumGate2Adc78
 };
-unsigned long accumGate3Address[kNumSIS3320Groups]= {
+uint32_t accumGate3Address[kNumSIS3320Groups]= {
     kAccumGate3Adc12,
     kAccumGate3Adc34,
     kAccumGate3Adc56,
     kAccumGate3Adc78
 };
-unsigned long accumGate4Address[kNumSIS3320Groups]= {
+uint32_t accumGate4Address[kNumSIS3320Groups]= {
     kAccumGate4Adc12,
     kAccumGate4Adc34,
     kAccumGate4Adc56,
     kAccumGate4Adc78
 };
-unsigned long accumGate5Address[kNumSIS3320Groups]= {
+uint32_t accumGate5Address[kNumSIS3320Groups]= {
     kAccumGate5Adc12,
     kAccumGate5Adc34,
     kAccumGate5Adc56,
     kAccumGate5Adc78
 };
-unsigned long accumGate6Address[kNumSIS3320Groups]= {
+uint32_t accumGate6Address[kNumSIS3320Groups]= {
     kAccumGate6Adc12,
     kAccumGate6Adc34,
     kAccumGate6Adc56,
     kAccumGate6Adc78
 };
-unsigned long accumGate7Address[kNumSIS3320Groups]= {
+uint32_t accumGate7Address[kNumSIS3320Groups]= {
     kAccumGate7Adc12,
     kAccumGate7Adc34,
     kAccumGate7Adc56,
     kAccumGate7Adc78
 };
-unsigned long accumGate8Address[kNumSIS3320Groups]= {
+uint32_t accumGate8Address[kNumSIS3320Groups]= {
     kAccumGate8Adc12,
     kAccumGate8Adc34,
     kAccumGate8Adc56,
     kAccumGate8Adc78
 };
 
-unsigned long preTriggerDelayTriggerGateLengthAddress[kNumSIS3320Groups]={
+uint32_t preTriggerDelayTriggerGateLengthAddress[kNumSIS3320Groups]={
 	kPreTriggerDelayTriggerGateLength12,
 	kPreTriggerDelayTriggerGateLength34,
 	kPreTriggerDelayTriggerGateLength56,
 	kPreTriggerDelayTriggerGateLength78
 };
 
-unsigned long endAddressThresholdAddress[kNumSIS3320Groups]={
+uint32_t endAddressThresholdAddress[kNumSIS3320Groups]={
 	kEndAddressThreshold12,
 	kEndAddressThreshold34,
 	kEndAddressThreshold56,
 	kEndAddressThreshold78
 };
 
-unsigned long rawDataBufferConfigurationAddress[kNumSIS3320Groups]={
+uint32_t rawDataBufferConfigurationAddress[kNumSIS3320Groups]={
     kRawDataBufferConfig12,
 	kRawDataBufferConfig34,
 	kRawDataBufferConfig56,
 	kRawDataBufferConfig78
 };
 
-unsigned long previousBankSampleAdcAddress[kNumSIS3320Channels]={
+uint32_t previousBankSampleAdcAddress[kNumSIS3320Channels]={
 	kPreviousBankSampleAdc1,
 	kPreviousBankSampleAdc2,
 	kPreviousBankSampleAdc3,
@@ -413,7 +413,7 @@ unsigned long previousBankSampleAdcAddress[kNumSIS3320Channels]={
 };
 
 
-unsigned long nextSampleAddress[kNumSIS3320Channels]={
+uint32_t nextSampleAddress[kNumSIS3320Channels]={
 	kNextSampleAddressAdc1,
 	kNextSampleAddressAdc2,
 	kNextSampleAddressAdc3,
@@ -424,7 +424,7 @@ unsigned long nextSampleAddress[kNumSIS3320Channels]={
 	kNextSampleAddressAdc8
 };
 
-unsigned long adcMemoryPage[kNumSIS3320Channels] = {
+uint32_t adcMemoryPage[kNumSIS3320Channels] = {
 	kAdc1MemoryPage,
 	kAdc2MemoryPage,
 	kAdc3MemoryPage,
@@ -435,14 +435,14 @@ unsigned long adcMemoryPage[kNumSIS3320Channels] = {
 	kAdc8MemoryPage
 };
 
-unsigned long actualSampleAddress[kNumSIS3320Groups]={
+uint32_t actualSampleAddress[kNumSIS3320Groups]={
 	kActualSampleValueAdc12,
 	kActualSampleValueAdc34,
 	kActualSampleValueAdc56,
 	kActualSampleValueAdc78
 };
 
-unsigned long triggerSetupAddress[kNumSIS3320Channels]={
+uint32_t triggerSetupAddress[kNumSIS3320Channels]={
 	kAdc1TriggerSetupReg,
 	kAdc2TriggerSetupReg,
 	kAdc3TriggerSetupReg,
@@ -453,7 +453,7 @@ unsigned long triggerSetupAddress[kNumSIS3320Channels]={
 	kAdc8TriggerSetupReg
 };
 
-unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
+uint32_t triggerThresholdAddress[kNumSIS3320Channels]={
 	kAdc1TriggerThresholdReg,
 	kAdc2TriggerThresholdReg,
 	kAdc3TriggerThresholdReg,
@@ -557,13 +557,13 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 	[self setOnlineMask:aMask];
 }
 
-- (unsigned long) bufferStart:(int)aGroup
+- (uint32_t) bufferStart:(int)aGroup
 {
     if(aGroup>=0 && aGroup<kNumSIS3320Groups) return bufferStart[aGroup];
     else return 0;
 }
 
-- (void) setBufferStart:(int)aGroup withValue:(unsigned long)aBufferStart
+- (void) setBufferStart:(int)aGroup withValue:(uint32_t)aBufferStart
 {
     if(aGroup>=0 && aGroup<kNumSIS3320Groups){
         aBufferStart &= 0x3fe; //bit zero is always zero
@@ -581,13 +581,13 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 // --- for ADC12, this address is 0x0200000C for ADC34, it is 0x0280000C, then 30.., 38..
 // --- these registers contain buffer sample lengths and buffer start offsets
 
-- (unsigned long) bufferLength:(int)aGroup
+- (uint32_t) bufferLength:(int)aGroup
 {
     if(aGroup>=0 && aGroup<kNumSIS3320Groups) return bufferLength[aGroup];
     else return 0;
 }
 
-- (void) setBufferLength:(int)aGroup withValue:(unsigned long)aBufferLength
+- (void) setBufferLength:(int)aGroup withValue:(uint32_t)aBufferLength
 {
     if(aBufferLength>1022)aBufferLength= 1022;
     [[[self undoManager] prepareWithInvocationTarget:self] setBufferLength:aGroup withValue:bufferLength[aGroup]];
@@ -671,7 +671,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 	}
 }
 
-- (long) dacValue:(int)aChan
+- (int32_t) dacValue:(int)aChan
 {
 	if(!dacValues){
 		dacValues = [[NSMutableArray arrayWithCapacity:kNumSIS3320Channels] retain];
@@ -681,7 +681,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
     return [[dacValues objectAtIndex:aChan] intValue];
 }
 
-- (void) setDacValue:(int)aChan withValue:(long)aValue
+- (void) setDacValue:(int)aChan withValue:(int32_t)aValue
 {
 	if(!dacValues){
 		dacValues = [[NSMutableArray arrayWithCapacity:kNumSIS3320Channels] retain];
@@ -841,13 +841,13 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 }
 
 
-- (unsigned long) endAddressThreshold:(short)aGroup
+- (uint32_t) endAddressThreshold:(short)aGroup
 {
     if(aGroup>=0 && aGroup<kNumSIS3320Groups)return [[endAddressThresholds objectAtIndex:aGroup]intValue];
     else return 0;
 }
 
-- (void) setEndAddressThreshold:(short)aGroup withValue:(unsigned long)aValue
+- (void) setEndAddressThreshold:(short)aGroup withValue:(uint32_t)aValue
 {
     if(aGroup>=0 && aGroup<kNumSIS3320Groups){
         [[[self undoManager] prepareWithInvocationTarget:self] setEndAddressThreshold:aGroup withValue:[self endAddressThreshold:aGroup]];
@@ -987,7 +987,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 
 - (void) setGtMaskBit:(int)bit withValue:(BOOL)aValue
 {
-	unsigned long aMask = gtMask;
+	uint32_t aMask = gtMask;
 	if(aValue)aMask |= (1<<bit);
 	else      aMask &= ~(1<<bit);
 	[self setGtMask:aMask];
@@ -1012,7 +1012,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 
 - (void) setTriggerOutMaskBit:(int)bit withValue:(BOOL)aValue
 {
-	unsigned long aMask = triggerOutMask;
+	uint32_t aMask = triggerOutMask;
 	if(aValue)aMask |= (1<<bit);
 	else      aMask &= ~(1<<bit);
 	[self setTriggerOutMask:aMask];
@@ -1037,7 +1037,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 
 - (void) setExtendedTriggerMaskBit:(int)bit withValue:(BOOL)aValue
 {
-	unsigned long aMask = extendedTriggerMask;
+	uint32_t aMask = extendedTriggerMask;
 	if(aValue)aMask |= (1<<bit);
 	else      aMask &= ~(1<<bit);
 	[self setExtendedTriggerMask:aMask];
@@ -1046,13 +1046,13 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 
 //-----------------------------------------------------------------
 //Accum Gate 1
-- (unsigned long) accGate1Length:(int)anIndex
+- (uint32_t) accGate1Length:(int)anIndex
 {
     if(anIndex>=0 && anIndex<8)return accGate1Length[anIndex];
     else return 0;
 }
 
-- (void) setAccGate1Length:(int)anIndex withValue:(unsigned long)aValue
+- (void) setAccGate1Length:(int)anIndex withValue:(uint32_t)aValue
 {
     if(anIndex>=0 && anIndex<8){
         aValue &= 0x1ff;
@@ -1062,13 +1062,13 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
     }
 }
 
-- (unsigned long) accGate1StartIndex:(int)anIndex
+- (uint32_t) accGate1StartIndex:(int)anIndex
 {
     if(anIndex>=0 && anIndex<8)return accGate1StartIndex[anIndex];
     else return 0;
 }
 
-- (void) setAccGate1StartIndex:(int)anIndex withValue:(unsigned long)aValue
+- (void) setAccGate1StartIndex:(int)anIndex withValue:(uint32_t)aValue
 {
     if(anIndex>=0 && anIndex<8){
         aValue &= 0x3ff;
@@ -1079,13 +1079,13 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 }
 //-----------------------------------------------------------------
 //Accum Gate 2
-- (unsigned long) accGate2Length:(int)anIndex
+- (uint32_t) accGate2Length:(int)anIndex
 {
     if(anIndex>=0 && anIndex<8)return accGate2Length[anIndex];
     else return 0;
 }
 
-- (void) setAccGate2Length:(int)anIndex withValue:(unsigned long)aValue
+- (void) setAccGate2Length:(int)anIndex withValue:(uint32_t)aValue
 {
     if(anIndex>=0 && anIndex<8){
         aValue &= 0x1ff;
@@ -1095,13 +1095,13 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
     }
 }
 
-- (unsigned long) accGate2StartIndex:(int)anIndex
+- (uint32_t) accGate2StartIndex:(int)anIndex
 {
     if(anIndex>=0 && anIndex<8)return accGate2StartIndex[anIndex];
     else return 0;
 }
 
-- (void) setAccGate2StartIndex:(int)anIndex withValue:(unsigned long)aValue
+- (void) setAccGate2StartIndex:(int)anIndex withValue:(uint32_t)aValue
 {
     if(anIndex>=0 && anIndex<8){
         aValue &= 0x3ff;
@@ -1113,13 +1113,13 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 
 //-----------------------------------------------------------------
 //Accum Gate 3
-- (unsigned long) accGate3Length:(int)anIndex
+- (uint32_t) accGate3Length:(int)anIndex
 {
     if(anIndex>=0 && anIndex<8)return accGate3Length[anIndex];
     else return 0;
 }
 
-- (void) setAccGate3Length:(int)anIndex withValue:(unsigned long)aValue
+- (void) setAccGate3Length:(int)anIndex withValue:(uint32_t)aValue
 {
     if(anIndex>=0 && anIndex<8){
         aValue &= 0x1ff;
@@ -1129,13 +1129,13 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
     }
 }
 
-- (unsigned long) accGate3StartIndex:(int)anIndex
+- (uint32_t) accGate3StartIndex:(int)anIndex
 {
     if(anIndex>=0 && anIndex<8)return accGate3StartIndex[anIndex];
     else return 0;
 }
 
-- (void) setAccGate3StartIndex:(int)anIndex withValue:(unsigned long)aValue
+- (void) setAccGate3StartIndex:(int)anIndex withValue:(uint32_t)aValue
 {
     if(anIndex>=0 && anIndex<8){
         aValue &= 0x3ff;
@@ -1146,13 +1146,13 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 }
 //-----------------------------------------------------------------
 //Accum Gate 4
-- (unsigned long) accGate4Length:(int)anIndex
+- (uint32_t) accGate4Length:(int)anIndex
 {
     if(anIndex>=0 && anIndex<8)return accGate4Length[anIndex];
     else return 0;
 }
 
-- (void) setAccGate4Length:(int)anIndex withValue:(unsigned long)aValue
+- (void) setAccGate4Length:(int)anIndex withValue:(uint32_t)aValue
 {
     if(anIndex>=0 && anIndex<8){
         aValue &= 0x1ff;
@@ -1162,13 +1162,13 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
     }
 }
 
-- (unsigned long) accGate4StartIndex:(int)anIndex
+- (uint32_t) accGate4StartIndex:(int)anIndex
 {
     if(anIndex>=0 && anIndex<8)return accGate4StartIndex[anIndex];
     else return 0;
 }
 
-- (void) setAccGate4StartIndex:(int)anIndex withValue:(unsigned long)aValue
+- (void) setAccGate4StartIndex:(int)anIndex withValue:(uint32_t)aValue
 {
     if(anIndex>=0 && anIndex<8){
         aValue &= 0x3ff;
@@ -1179,13 +1179,13 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 }
 //-----------------------------------------------------------------
 //Accum Gate 5
-- (unsigned long) accGate5Length:(int)anIndex
+- (uint32_t) accGate5Length:(int)anIndex
 {
     if(anIndex>=0 && anIndex<8)return accGate5Length[anIndex];
     else return 0;
 }
 
-- (void) setAccGate5Length:(int)anIndex withValue:(unsigned long)aValue
+- (void) setAccGate5Length:(int)anIndex withValue:(uint32_t)aValue
 {
     if(anIndex>=0 && anIndex<8){
         aValue &= 0xf;
@@ -1195,13 +1195,13 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
     }
 }
 
-- (unsigned long) accGate5StartIndex:(int)anIndex
+- (uint32_t) accGate5StartIndex:(int)anIndex
 {
     if(anIndex>=0 && anIndex<8)return accGate5StartIndex[anIndex];
     else return 0;
 }
 
-- (void) setAccGate5StartIndex:(int)anIndex withValue:(unsigned long)aValue
+- (void) setAccGate5StartIndex:(int)anIndex withValue:(uint32_t)aValue
 {
     if(anIndex>=0 && anIndex<8){
         aValue &= 0x3ff;
@@ -1212,13 +1212,13 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 }
 //-----------------------------------------------------------------
 //Accum Gate 6
-- (unsigned long) accGate6Length:(int)anIndex
+- (uint32_t) accGate6Length:(int)anIndex
 {
     if(anIndex>=0 && anIndex<8)return accGate6Length[anIndex];
     else return 0;
 }
 
-- (void) setAccGate6Length:(int)anIndex withValue:(unsigned long)aValue
+- (void) setAccGate6Length:(int)anIndex withValue:(uint32_t)aValue
 {
     if(anIndex>=0 && anIndex<8){
         aValue &= 0xf;
@@ -1228,13 +1228,13 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
     }
 }
 
-- (unsigned long) accGate6StartIndex:(int)anIndex
+- (uint32_t) accGate6StartIndex:(int)anIndex
 {
     if(anIndex>=0 && anIndex<8)return accGate6StartIndex[anIndex];
     else return 0;
 }
 
-- (void) setAccGate6StartIndex:(int)anIndex withValue:(unsigned long)aValue
+- (void) setAccGate6StartIndex:(int)anIndex withValue:(uint32_t)aValue
 {
     if(anIndex>=0 && anIndex<8){
         aValue &= 0x3ff;
@@ -1245,13 +1245,13 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 }
 //-----------------------------------------------------------------
 //Accum Gate 7
-- (unsigned long) accGate7Length:(int)anIndex
+- (uint32_t) accGate7Length:(int)anIndex
 {
     if(anIndex>=0 && anIndex<8)return accGate7Length[anIndex];
     else return 0;
 }
 
-- (void) setAccGate7Length:(int)anIndex withValue:(unsigned long)aValue
+- (void) setAccGate7Length:(int)anIndex withValue:(uint32_t)aValue
 {
     if(anIndex>=0 && anIndex<8){
         aValue &= 0xf;
@@ -1261,13 +1261,13 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
     }
 }
 
-- (unsigned long) accGate7StartIndex:(int)anIndex
+- (uint32_t) accGate7StartIndex:(int)anIndex
 {
     if(anIndex>=0 && anIndex<8)return accGate7StartIndex[anIndex];
     else return 0;
 }
 
-- (void) setAccGate7StartIndex:(int)anIndex withValue:(unsigned long)aValue
+- (void) setAccGate7StartIndex:(int)anIndex withValue:(uint32_t)aValue
 {
     if(anIndex>=0 && anIndex<8){
         aValue &= 0x3ff;
@@ -1278,13 +1278,13 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 }
 //-----------------------------------------------------------------
 //Accum Gate 8
-- (unsigned long) accGate8Length:(int)anIndex
+- (uint32_t) accGate8Length:(int)anIndex
 {
     if(anIndex>=0 && anIndex<8)return accGate8Length[anIndex];
     else return 0;
 }
 
-- (void) setAccGate8Length:(int)anIndex withValue:(unsigned long)aValue
+- (void) setAccGate8Length:(int)anIndex withValue:(uint32_t)aValue
 {
     if(anIndex>=0 && anIndex<8){
         aValue &= 0xf;
@@ -1294,13 +1294,13 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
     }
 }
 
-- (unsigned long) accGate8StartIndex:(int)anIndex
+- (uint32_t) accGate8StartIndex:(int)anIndex
 {
     if(anIndex>=0 && anIndex<8)return accGate8StartIndex[anIndex];
     else return 0;
 }
 
-- (void) setAccGate8StartIndex:(int)anIndex withValue:(unsigned long)aValue
+- (void) setAccGate8StartIndex:(int)anIndex withValue:(uint32_t)aValue
 {
     if(anIndex>=0 && anIndex<8){
         aValue &= 0x3ff;
@@ -1314,7 +1314,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 
 
 #pragma mark •••Rates
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
 {
 	if(groupTag == 0){
 		if(counterTag>=0 && counterTag<kNumSIS3320Channels){
@@ -1354,7 +1354,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 #pragma mark •••Hardware Access
 - (void) reset
 {
-	unsigned long aValue = 1;
+	uint32_t aValue = 1;
 	[[self adapter] writeLongBlock: &aValue
 						 atAddress: baseAddress + kResetRegister
 						numToWrite: 1
@@ -1365,7 +1365,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 
 - (void) disarmSamplingLogic
 {
-	unsigned long aValue = 1;
+	uint32_t aValue = 1;
 	[[self adapter] writeLongBlock: &aValue
 						 atAddress: baseAddress + kDisarmSamplingLogic
 						numToWrite: 1
@@ -1376,7 +1376,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 
 - (void) trigger
 {
-	unsigned long aValue = 1;
+	uint32_t aValue = 1;
 	[[self adapter] writeLongBlock: &aValue
 						 atAddress: baseAddress + kVMETrigger
 						numToWrite: 1
@@ -1387,7 +1387,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 
 - (void) clearTimeStamp
 {
-	unsigned long aValue = 1;
+	uint32_t aValue = 1;
 	[[self adapter] writeLongBlock: &aValue
 						 atAddress: baseAddress + kTimeStampClear
 						numToWrite: 1
@@ -1398,7 +1398,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 
 - (void) armBank1
 {
-	unsigned long aValue = 1;
+	uint32_t aValue = 1;
 	[[self adapter] writeLongBlock: &aValue
 						 atAddress: baseAddress + kDisarmAndArmBank1
 						numToWrite: 1
@@ -1410,7 +1410,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 
 - (void) armBank2
 {
-	unsigned long aValue = 1;
+	uint32_t aValue = 1;
 	[[self adapter] writeLongBlock: &aValue
 						 atAddress: baseAddress + kDisarmAndArmBank2
 						numToWrite: 1
@@ -1439,7 +1439,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 {
 	// The register is set up as a J/K flip/flop -- 1 bit to set a function and 1 bit to disable.
 	//nothing to do here yet except control the led, which we turn on during running
-	unsigned long aMask = (ledOn & 0x1);
+	uint32_t aMask = (ledOn & 0x1);
 	aMask = ((~aMask & 0x0000ffff)<<16) | aMask;    //put the inverse in the top bits
 	[[self adapter] writeLongBlock:&aMask
                          atAddress:baseAddress + kControlStatus
@@ -1450,7 +1450,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 
 - (void) readModuleID:(BOOL)verbose
 {
-	unsigned long result = 0;
+	uint32_t result = 0;
 	[[self adapter] readLongBlock:&result
 						atAddress:[self baseAddress] + kModuleIDReg
                         numToRead:1
@@ -1469,9 +1469,9 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 
 - (void) testRead
 {
-    unsigned long theValue1 = 0;
-    unsigned long theValue2 = 0;
-    unsigned long theValue3 = 0;
+    uint32_t theValue1 = 0;
+    uint32_t theValue2 = 0;
+    uint32_t theValue3 = 0;
     
     id myAdapter = [self adapter];
     [myAdapter readLongBlock:&theValue1
@@ -1496,9 +1496,9 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 }
 - (void) testReadWithHV
 {
-    unsigned long theValue1 = 0;
-    unsigned long theValue2 = 0;
-    unsigned long theValue3 = 0;
+    uint32_t theValue1 = 0;
+    uint32_t theValue2 = 0;
+    uint32_t theValue3 = 0;
     
     id myAdapter = [self adapter];
     [myAdapter readLongBlock:&theValue1
@@ -1537,7 +1537,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 - (void) writeEndAddressThreshold:(int)aGroup
 {
 	if(aGroup>=0 && aGroup<kNumSIS3320Groups){
-		unsigned long aValue;
+		uint32_t aValue;
         
         if( onlineMask & ( 0x1 << (2*aGroup) ) || onlineMask & ( 0x1 << (2*aGroup + 1) ) )
             aValue = [self endAddressThreshold:aGroup];
@@ -1555,7 +1555,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 - (void) writeAcquisitionRegister
 {
 	// The register is set up as a J/K flip/flop -- 1 bit to set a function and 1 bit 16 bits higher to disable.
-	unsigned long aMask = (clockSource & 0x7) << kAcqClockBitOffset;
+	uint32_t aMask = (clockSource & 0x7) << kAcqClockBitOffset;
 	
 	if(internalTriggerEnabled)	aMask |= kInternalTriggerBit;
 	if(lemoTriggerEnabled)      aMask |= kEnableLemoTriggerBit;
@@ -1570,9 +1570,9 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
                      usingAddSpace:0x01];
 }
 
-- (unsigned long) readAcqRegister
+- (uint32_t) readAcqRegister
 {
-	unsigned long aValue = 0x0;
+	uint32_t aValue = 0x0;
 	[[self adapter] readLongBlock:&aValue
 						atAddress:baseAddress + kAcquisitionControlReg
                         numToRead:1
@@ -1582,7 +1582,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 }
 
 
-- (void) writeAdcMemoryPage:(unsigned long)aPage
+- (void) writeAdcMemoryPage:(uint32_t)aPage
 {
 	[[self adapter] writeLongBlock:&aPage
 						 atAddress:baseAddress + kAdcMemoryPageReg
@@ -1591,9 +1591,9 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 					 usingAddSpace:0x01];
 }
 
-- (unsigned long) readAdcMemoryPage
+- (uint32_t) readAdcMemoryPage
 {
-	unsigned long aValue = 0;
+	uint32_t aValue = 0;
 	[[self adapter] readLongBlock:&aValue
                         atAddress:baseAddress + kAdcMemoryPageReg
 						numToRead:1
@@ -1602,9 +1602,9 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 	return aValue;
 }
 
-- (unsigned long) readActualAdcSample:(int)aGroup
+- (uint32_t) readActualAdcSample:(int)aGroup
 {
-	unsigned long aValue = 0;
+	uint32_t aValue = 0;
 	[[self adapter] readLongBlock:&aValue
                         atAddress:baseAddress + actualSampleAddress[aGroup]
 						numToRead:1
@@ -1613,9 +1613,9 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 	return aValue;
 }
 
-- (unsigned long) readPreviousAdcAddress:(int)aChannel
+- (uint32_t) readPreviousAdcAddress:(int)aChannel
 {
-	unsigned long aValue = 0;
+	uint32_t aValue = 0;
 	[[self adapter] readLongBlock:&aValue
                         atAddress:baseAddress + previousBankSampleAdcAddress[aChannel]
 						numToRead:1
@@ -1624,15 +1624,15 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 	return ( aValue & 0x3ffffc ) >> 1; // divide by two to deal with offset
 }
 
-- (unsigned long) readNextAdcAddress:(int)aChannel
+- (uint32_t) readNextAdcAddress:(int)aChannel
 {
-	unsigned long aValue = 0;
+	uint32_t aValue = 0;
 	[[self adapter] readLongBlock:&aValue
                         atAddress:baseAddress + nextSampleAddress[aChannel]
 						numToRead:1
                        withAddMod:addressModifier
                     usingAddSpace:0x01];
-	return (aValue & 0x3ffffc) >>1; //divide by two to address offset from head of memory (in long words).
+	return (aValue & 0x3ffffc) >>1; //divide by two to address offset from head of memory (in int32_t words).
 }
 
 
@@ -1647,8 +1647,8 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
     
     unsigned int disabledChanOffset = 0xBB8; // 3000. change if needed.
     
-	unsigned long dataWord;
-	unsigned long max_timeout, timeout_cnt;
+	uint32_t dataWord;
+	uint32_t max_timeout, timeout_cnt;
 	
 	int i;
 	for (i=0;i<kNumSIS3320Channels;i++) {
@@ -1718,7 +1718,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 {
     
     
-	unsigned long aMask = ((triggerMode[0] & 0x3)<<2) | ((triggerMode[1] & 0x3)<<10);
+	uint32_t aMask = ((triggerMode[0] & 0x3)<<2) | ((triggerMode[1] & 0x3)<<10);
 	if(invertInput[0])             aMask |= kInvertInputMask0;
 	if(enableErrorCorrection[0])   aMask |= kErrorCorrectionMask0;
 	if(saveFirstEvent[0])          aMask |= kSaveDataFirstEvent0;
@@ -1740,10 +1740,10 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
                      usingAddSpace:0x01];
 }
 
-- (unsigned long) readEventConfigRegister
+- (uint32_t) readEventConfigRegister
 {
 	//all have to be the same so just read group1
-	unsigned long aValue = 0x0;
+	uint32_t aValue = 0x0;
 	[[self adapter] readLongBlock:&aValue
                         atAddress:baseAddress + kEventConfigAdc12
                         numToRead:1
@@ -1760,7 +1760,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 		int preTrigDelay = [self preTriggerDelay:i];
 		int gateLen      = [self triggerGateLength:i]-1;
 		
-		unsigned long aValue = ((preTrigDelay&0x3ff)<<16) | (gateLen&0x3ff);
+		uint32_t aValue = ((preTrigDelay&0x3ff)<<16) | (gateLen&0x3ff);
 		[[self adapter] writeLongBlock:&aValue
 							 atAddress:[self baseAddress] +preTriggerDelayTriggerGateLengthAddress[i]
 							numToWrite:1
@@ -1793,7 +1793,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
         // enforces max length of 1022 (9/27/13)
         sampleLength &= 0x3FE;
         
-		unsigned long aValue = ((sampleLength&0x3ff)<<16) | (sampleStart&0x3ff);
+		uint32_t aValue = ((sampleLength&0x3ff)<<16) | (sampleStart&0x3ff);
 		[[self adapter] writeLongBlock:&aValue
 							 atAddress:[self baseAddress] + rawDataBufferConfigurationAddress[i]
 							numToWrite:1
@@ -1802,9 +1802,9 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 	}
 }
 
-- (unsigned long) nextSampleAddress:(int)aChannel
+- (uint32_t) nextSampleAddress:(int)aChannel
 {
-	unsigned long aValue = 0;
+	uint32_t aValue = 0;
 	[[self adapter] readLongBlock:&aValue
 						atAddress:baseAddress + nextSampleAddress[aChannel]
 						numToRead:1
@@ -1814,9 +1814,9 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 	
 }
 
-- (unsigned long) actualSampleValue:(int)aGroup
+- (uint32_t) actualSampleValue:(int)aGroup
 {
-	unsigned long aValue = 0;
+	uint32_t aValue = 0;
 	[[self adapter] readLongBlock:&aValue
 						atAddress:baseAddress + actualSampleAddress[aGroup]
 						numToRead:1
@@ -1836,7 +1836,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 
 - (void) writeTriggerSetupRegister:(int)aChannel
 {
-	unsigned long aMask = 0x0;
+	uint32_t aMask = 0x0;
 	aMask |= ([self trigPulseLen:aChannel] & 0x3F) << 16;
 	aMask |= ([self sumG:aChannel]         & 0x1F) <<  8;
 	aMask |= ([self peakingTime:aChannel]  & 0x1F) <<  0;
@@ -1859,10 +1859,10 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 // modified 8/28/13 to write appropriate, predefined values to disabled channels
 - (void) writeThreshold:(int)aChannel
 {
-	unsigned long theThresholdValue =  ([self threshold:aChannel]+0x10000) & 0x1ffff;
-	unsigned long gt                = (gtMask >> aChannel) & 0x1;
-	unsigned long disableTrigOut    = !(triggerOutMask >> aChannel) & 0x1;
-	unsigned long extendedTrigMode  = (extendedTriggerMask >> aChannel) & 0x1;
+	uint32_t theThresholdValue =  ([self threshold:aChannel]+0x10000) & 0x1ffff;
+	uint32_t gt                = (gtMask >> aChannel) & 0x1;
+	uint32_t disableTrigOut    = !(triggerOutMask >> aChannel) & 0x1;
+	uint32_t extendedTrigMode  = (extendedTriggerMask >> aChannel) & 0x1;
     
     if( !(onlineMask & ( 0x1 << aChannel )) ) {
         theThresholdValue = 0x1FFFF;
@@ -1872,7 +1872,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
         
     }
     
-	unsigned long writeValue =	(extendedTrigMode << 24) |
+	uint32_t writeValue =	(extendedTrigMode << 24) |
     (gt << 25)               |
     (disableTrigOut << 26)          |
     theThresholdValue ;
@@ -1893,7 +1893,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
     // --- this is 9 bits, so appropriate mask is 0x1ff
     // for accumulators 5-8, bits 16-19 define length
     // --- in this case, mask should be 0xff
-    unsigned long aValue;
+    uint32_t aValue;
     int i;
     for(i=0;i<kNumSIS3320Groups;i++){
         //acc 1
@@ -1967,7 +1967,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 
 - (void) writePageRegister:(int)aPage
 {
-	unsigned long aValue = aPage;
+	uint32_t aValue = aPage;
 	[[self adapter] writeLongBlock:&aValue
 						 atAddress:baseAddress + kAdcMemoryPageReg
 						numToWrite:1
@@ -1978,7 +1978,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 
 
 
-- (void) writeValue:(unsigned long)aValue offset:(long)anOffset
+- (void) writeValue:(uint32_t)aValue offset:(int32_t)anOffset
 {
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:baseAddress + anOffset
@@ -2044,7 +2044,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
     
     aList = [ORCommandList commandList];
     for(i=0;i<kNumSIS3320Channels;i++){
-		unsigned long aValue = [aList longValueForCmd:i];
+		uint32_t aValue = [aList longValueForCmd:i];
 		NSString* trigOut	= ((aValue>>26)&0x1) ? @" NO":@"YES";
 		NSString* gt		= ((aValue>>25)&0x1) ? @" GT":@" LT";
 		NSString* extended  = ((aValue>>24)&0x1) ? @"YES":@" NO";
@@ -2064,19 +2064,19 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
     [self executeCommandList:aList];
     
     for(i=0;i<kNumSIS3320Channels;i++){
-		unsigned long aValue = [aList longValueForCmd:i];
+		uint32_t aValue = [aList longValueForCmd:i];
 		NSLogFont(font,@" %2d   %8d    %4d     %4d\n",i, (aValue>>16)&0x3f,(aValue>>8)&0x1f,aValue&0x1f);
 	}
 	
 	NSLogFont(font,@"-------------------------------------------\n");
-	unsigned long aValue = [self readAcqRegister];
+	uint32_t aValue = [self readAcqRegister];
 	NSLogFont(font,@"Clock Source     : %@\n",[self clockSourceName:(aValue>>12 & 0x7)]);
 }
 
 #pragma mark •••Data Taker
-- (unsigned long) dataId { return dataId; }
+- (uint32_t) dataId { return dataId; }
 
-- (void) setDataId: (unsigned long) DataId
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -2240,7 +2240,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 	//[self reset];
 	[self initBoard];
 	[self armBank1];
-    unsigned long status = [self readAcqRegister] & 0xc0000;
+    uint32_t status = [self readAcqRegister] & 0xc0000;
     NSLog(@"status word: 0x%0x\n",status);
     
 	isRunning		= NO;
@@ -2250,7 +2250,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 {
     @try {
 		isRunning		= YES;
-		unsigned long status = [self readAcqRegister];
+		uint32_t status = [self readAcqRegister];
 		if(!dataRateAlarm && ((status & kEndAddressThresholdFlag) == kEndAddressThresholdFlag)){
             
             if(bank1Armed)  [self armBank2];
@@ -2262,10 +2262,10 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
                 
                 if( !(onlineMask & ( 0x1 << i )) ) continue;
                 
-                unsigned long endSampleAddressPrevBank = [self readPreviousAdcAddress:i];
+                uint32_t endSampleAddressPrevBank = [self readPreviousAdcAddress:i];
                 
                 if( endSampleAddressPrevBank != 0 ) {
-                    unsigned long numLongsToRead = endSampleAddressPrevBank;
+                    uint32_t numLongsToRead = endSampleAddressPrevBank;
                     if(numLongsToRead+2 > 0x3FFFF){ //can't have a record larger than the max ORCA record size.
                         if(!dataRateAlarm){
                             dataRateAlarm = [[ORAlarm alloc] initWithName:@"SIS3320 Rate Too High" severity:kHardwareAlarm];
@@ -2275,7 +2275,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
                         [dataRateAlarm postAlarm];
                         break;
                     }
-                    unsigned long data[ numLongsToRead + 2 ]; //max length plus Orca header
+                    uint32_t data[ numLongsToRead + 2 ]; //max length plus Orca header
                     // --- in theory, this should perhaps be .. 8 MB, if size is fixed
                     // --- NOTE THIS NOW WILL HOLD MORE THAN A SINGLE EVENT
                     
@@ -2365,7 +2365,7 @@ unsigned long triggerThresholdAddress[kNumSIS3320Channels]={
 }
 
 
-- (unsigned long) waveFormCount:(int)aChannel
+- (uint32_t) waveFormCount:(int)aChannel
 {
     return waveFormCount[aChannel];
 }

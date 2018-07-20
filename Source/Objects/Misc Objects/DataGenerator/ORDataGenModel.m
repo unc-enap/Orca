@@ -49,32 +49,32 @@
 {
     NSLog(@"The Data Generator has no settable parameters and hence no dialog. Just put it into a readout list to make some test data\n");
 }
-- (unsigned long) timeSeriesId { return timeSeriesId; }
-- (void) setTimeSeriesId: (unsigned long) aDataId
+- (uint32_t) timeSeriesId { return timeSeriesId; }
+- (void) setTimeSeriesId: (uint32_t) aDataId
 {
     timeSeriesId = aDataId;
 }
 
-- (unsigned long) burstDataId { return burstDataId; }
-- (void) setBurstDataId: (unsigned long) aDataId
+- (uint32_t) burstDataId { return burstDataId; }
+- (void) setBurstDataId: (uint32_t) aDataId
 {
     burstDataId = aDataId;
 }
 
-- (unsigned long) dataId1D { return dataId1D; }
-- (void) setDataId1D: (unsigned long) aDataId
+- (uint32_t) dataId1D { return dataId1D; }
+- (void) setDataId1D: (uint32_t) aDataId
 {
     dataId1D = aDataId;
 }
 
-- (unsigned long) dataId2D { return dataId2D; }
-- (void) setDataId2D: (unsigned long) aDataId
+- (uint32_t) dataId2D { return dataId2D; }
+- (void) setDataId2D: (uint32_t) aDataId
 {
     dataId2D = aDataId;
 }
 
-- (unsigned long) dataIdWaveform { return dataIdWaveform; }
-- (void) setDataIdWaveform: (unsigned long) aDataId
+- (uint32_t) dataIdWaveform { return dataIdWaveform; }
+- (void) setDataIdWaveform: (uint32_t) aDataId
 {
     dataIdWaveform = aDataId;
 }
@@ -170,10 +170,10 @@
 		short card = 0;
         short chan = 0;
 		int i;
-		unsigned long burstCount = random_range(1,10);
+		uint32_t burstCount = random_range(1,10);
 		for(i=0;i<burstCount;i++){
-			unsigned long aValue = ((random()%500 + random()%500 + random()%500+ random()%500)/4);
-			unsigned long data[3];
+			uint32_t aValue = ((random()%500 + random()%500 + random()%500+ random()%500)/4);
+			uint32_t data[3];
 			data[0] = burstDataId | 3;
 			data[1] = (card<<16) | (chan << 12) | (aValue & 0x0fff);
 			data[2] = [burstTimer microseconds];			 
@@ -195,15 +195,15 @@
 	
 			 time_t	ut_Time;
 			 time(&ut_Time);
-			 unsigned long timeMeasured = ut_Time;
+			 uint32_t timeMeasured = ut_Time;
 			 
-			 unsigned long data[4];
+			 uint32_t data[4];
 			 data[0] = timeSeriesId | 4;
 			 data[1] = [self uniqueIdNumber]&0xfff;
 			 
 			 union {
 				 float asFloat;
-				 unsigned long asLong;
+				 uint32_t asLong;
 			 }theData;
 			 theData.asFloat = theValue;
 			 data[2] = theData.asLong;			 
@@ -215,9 +215,9 @@
 		 
         short card = random()%2;
         short chan = random()%8;
-        unsigned long aValue = (100*chan) + ((random()%500 + random()%500 + random()%500+ random()%500)/4);
+        uint32_t aValue = (100*chan) + ((random()%500 + random()%500 + random()%500+ random()%500)/4);
         if(card==0 && chan ==0)aValue = 100;
-        unsigned long data[3];
+        uint32_t data[3];
         data[0] = dataId1D | 2;
         data[1] = (card<<16) | (chan << 12) | (aValue & 0x0fff);
         [aDataPacket addLongsToFrameBuffer:data length:2];
@@ -231,7 +231,7 @@
     }
 	if(random()%500 > 498 ){
 		 
-		unsigned long data[2050];
+		uint32_t data[2050];
         data[0] = dataIdWaveform | (2048+2);
         data[1] = 0; //card 0, chan 0
 		int i;
@@ -243,7 +243,7 @@
 		int toggle = 0;
 		for(i=2;i<2050;i++){
 			count++;
-			data[i] = (50+(long)(a*sinf(radians) + b*sinf(2*radians))) & 0x0fffffff;
+			data[i] = (50+(int32_t)(a*sinf(radians) + b*sinf(2*radians))) & 0x0fffffff;
 			if(i<512)data[i]  |= 0x10000000;
 			if(i<1024)data[i] |= 0x20000000;
 			if(i<1563)data[i] |= 0x40000000;
@@ -261,7 +261,7 @@
 		radians = 0;
 		delta = 2*3.141592/360.;
 		for(i=2;i<2050;i++){
-			data[i] = 50+(long)(a*sinf(4*radians));
+			data[i] = 50+(int32_t)(a*sinf(4*radians));
 			radians += delta;
 		}
         [aDataPacket addLongsToFrameBuffer:data length:2050];
@@ -326,7 +326,7 @@
 
 - (NSString*) identifier
 {
-    return [NSString stringWithFormat:@"Test Data %lu",[self uniqueIdNumber]];
+    return [NSString stringWithFormat:@"Test Data %u",[self uniqueIdNumber]];
 }
 
 - (NSString*) processingTitle

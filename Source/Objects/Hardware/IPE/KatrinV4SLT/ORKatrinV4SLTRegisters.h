@@ -86,7 +86,7 @@ typedef enum eKatriV4SLTEnum {
 - (int)           numRegisters;
 - (NSString*)     registerName: (short) anIndex;
 - (short)         accessType:   (short) anIndex;
-- (unsigned long) address:      (short) anIndex;
+- (uint32_t) address:      (short) anIndex;
 - (BOOL)          isWritable:   (short) anIndex;
 - (BOOL)          isReadable:   (short) anIndex;
 @end

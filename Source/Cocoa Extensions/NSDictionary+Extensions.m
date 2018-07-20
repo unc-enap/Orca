@@ -93,11 +93,11 @@
 	return data;
 }
 
-- (unsigned long) uLongForKey:(NSString*)aKey
+- (uint32_t) uLongForKey:(NSString*)aKey
 {
 	return [[self objectForKey:aKey] unsignedLongValue];
 }
-- (long) longForKey:(NSString*)aKey
+- (int32_t) longForKey:(NSString*)aKey
 {
 	return [[self objectForKey:aKey] unsignedLongValue];
 }

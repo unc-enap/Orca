@@ -6,10 +6,10 @@
 void FilterScripterror(char *);
 void fsComment(void);
 void fsSingleLineComment(void);
-long numFilterLines = 1;
+int32_t numFilterLines = 1;
 extern nodeType** filterNodes;
-extern long filterNodeCount;
-extern long maxFilterNodeCount;
+extern int32_t filterNodeCount;
+extern int32_t maxFilterNodeCount;
 extern void freeNode(nodeType *p);
 
 %}
@@ -30,7 +30,7 @@ H			[a-fA-F0-9]
 						char tempString[64];
 						strncpy(tempString,yytext,yyleng);
 						tempString[yyleng] = '\0';
-						unsigned long n = strtoul(tempString,0,16);
+						uint32_t n = strtoul(tempString,0,16);
 						FilterScriptlval.iValue = n;
 						return INTEGER;
 					}

@@ -68,7 +68,7 @@ bool ORSIS3350Readout::Readout(SBC_LAM_Data* lamData)
             
         for(uint16_t i=0;i<kNumberOfChannels;i++){
             if(stop_next_sample_addr[i] != 0){
-                unsigned long numLongWords = stop_next_sample_addr[i]/2;
+                uint32_t numLongWords = stop_next_sample_addr[i]/2;
                 uint32_t startIndex = dataIndex;
                 
                 ensureDataCanHold(numLongWords + 2); //check for required array space  
@@ -114,22 +114,22 @@ bool ORSIS3350Readout::Readout(SBC_LAM_Data* lamData)
 
 void ORSIS3350Readout::ReOrderOneSIS3350Event(int32_t* inDataPtr, uint32_t dataLength, uint32_t wrapLength)
 {
-    unsigned long i;
+    uint32_t i;
     int32_t* outDataPtr = new int32_t[dataLength];
-    unsigned long lword_length     = 0;
-    unsigned long lword_stop_index = 0;
-    unsigned long lword_wrap_index = 0;
+    uint32_t lword_length     = 0;
+    uint32_t lword_stop_index = 0;
+    uint32_t lword_wrap_index = 0;
     
-    unsigned long wrapped       = 0;
-    unsigned long stopDelayCounter=0;
+    uint32_t wrapped       = 0;
+    uint32_t stopDelayCounter=0;
     
-    unsigned long event_sample_length = wrapLength;
+    uint32_t event_sample_length = wrapLength;
     
     if (dataLength != 0) {
         outDataPtr[0] = inDataPtr[0]; //copy ORCA header
         outDataPtr[1] = inDataPtr[1]; //copy ORCA header
         
-        unsigned long index = 2;
+        uint32_t index = 2;
         
         outDataPtr[index]   = inDataPtr[index];        // copy Timestamp    
         outDataPtr[index+1] = inDataPtr[index+1];    // copy Timestamp        
@@ -137,7 +137,7 @@ void ORSIS3350Readout::ReOrderOneSIS3350Event(int32_t* inDataPtr, uint32_t dataL
         wrapped             =   ((inDataPtr[4]  & 0x08000000) >> 27); 
         stopDelayCounter =   ((inDataPtr[4]  & 0x03000000) >> 24); 
         
-        unsigned long stopAddress =   ((inDataPtr[index+2]  & 0x7) << 24)  
+        uint32_t stopAddress =   ((inDataPtr[index+2]  & 0x7) << 24)  
                                     + ((inDataPtr[index+3]  & 0xfff0000 ) >> 4) 
                                     +  (inDataPtr[index+3]  & 0xfff);
         

@@ -62,7 +62,7 @@ enum {
   @private
 	int selectedPLT;
 	unsigned short  selectedRegIndex;
-    unsigned long   writeValue;
+    uint32_t   writeValue;
 	NSArray*		chips;
 }
 #pragma mark ***Initialization
@@ -81,8 +81,8 @@ enum {
 - (ORPISlashTChip*) chip:(int)anIndex;
 - (unsigned short) 	selectedRegIndex;
 - (void)			setSelectedRegIndex: (unsigned short) anIndex;
-- (unsigned long) 	writeValue;
-- (void)			setWriteValue: (unsigned long) anIndex;
+- (uint32_t) 	writeValue;
+- (void)			setWriteValue: (uint32_t) anIndex;
 
 #pragma mark •••Hardware Access
 - (void) read;
@@ -114,7 +114,7 @@ enum {
 #pragma mark ***Register - Register specific routines
 - (short)			getNumberRegisters;
 - (NSString*) 		getRegisterName: (short) anIndex;
-- (unsigned long) 	getAddressOffset: (short) anIndex;
+- (uint32_t) 	getAddressOffset: (short) anIndex;
 
 #pragma mark •••Archival
 - (id)initWithCoder:(NSCoder*)decoder;

@@ -25,12 +25,12 @@
 @interface ORMks660BModel : ORSerialPortWithQueueModel <ORAdcProcessing>
 {
     @private
-        unsigned long		dataId;
+        uint32_t		dataId;
 		float				pressure;
 		int					lowSetPoint[2];
 		int					highSetPoint[2];
 	
-		unsigned long		timeMeasured;
+		uint32_t		timeMeasured;
 		int					pollTime;
         NSMutableString*    buffer;
 		BOOL				shipPressures;
@@ -79,7 +79,7 @@
 - (int)  pollTime;
 - (void) setPollTime:(int)aPollTime;
 - (float) pressure;
-- (unsigned long) timeMeasured;
+- (uint32_t) timeMeasured;
 - (void) setPressure:(float)aValue;
 - (int) lowSetPoint:(int)index;
 - (int) highSetPoint:(int)index;
@@ -89,8 +89,8 @@
 #pragma mark •••Data Records
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (NSDictionary*) dataRecordDescription;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherMks660B;
 - (void) shipPressureValues;

@@ -616,7 +616,7 @@ err:
         return;
     }
 
-    /* Set the timeout to twice how long we expect it to take. */
+    /* Set the timeout to twice how int32_t we expect it to take. */
     int timeout = numPulses*2/pulserRate;
 
     /* To compute the time we use time(NULL) which returns the number of

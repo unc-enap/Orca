@@ -106,16 +106,16 @@ enum {
 
 #pragma mark ***Register - General routines
 - (short)			getNumberRegisters;
-- (unsigned long) 	getBufferOffset;
+- (uint32_t) 	getBufferOffset;
 - (unsigned short) 	getDataBufferSize;
-- (unsigned long) 	getThresholdOffset;
+- (uint32_t) 	getThresholdOffset;
 - (short)			getStatusRegisterIndex: (short) aRegister;
 - (short)			getThresholdIndex;
 - (short)			getOutputBufferIndex;
 
 #pragma mark ***Register - Register specific routines
 - (NSString*) 		getRegisterName: (short) anIndex;
-- (unsigned long) 	getAddressOffset: (short) anIndex;
+- (uint32_t) 	getAddressOffset: (short) anIndex;
 - (short)			getAccessType: (short) anIndex;
 - (short)			getAccessSize: (short) anIndex;
 - (BOOL)			dataReset: (short) anIndex;

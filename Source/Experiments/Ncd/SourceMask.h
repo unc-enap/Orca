@@ -24,14 +24,14 @@
 @interface SourceMask : NSObject <NSCoding>
 {
     NSString *title;
-    unsigned long value;
+    uint32_t value;
 }
 
 + (NSArray *)allSourceMasks;
-+ (id)sourceMaskWithTitle:(NSString *)aTitle andValue:(unsigned long)aValue;
-+ (SourceMask *)sourceMaskForValue:(unsigned long)theValue;
-- (unsigned long)value;
-- (void)setValue:(unsigned long)aValue;
++ (id)sourceMaskWithTitle:(NSString *)aTitle andValue:(uint32_t)aValue;
++ (SourceMask *)sourceMaskForValue:(uint32_t)theValue;
+- (uint32_t)value;
+- (void)setValue:(uint32_t)aValue;
 - (NSString *)title;
 - (void)setTitle:(NSString *)aTitle;
 

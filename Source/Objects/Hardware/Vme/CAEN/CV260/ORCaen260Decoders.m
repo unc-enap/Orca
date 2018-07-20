@@ -43,9 +43,9 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  counter 15
 
 @implementation ORCaen260DecoderForScaler
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
+    uint32_t* ptr = (uint32_t*)someData;
 	ptr++; //point to the location word
 	unsigned char crate   = (*ptr&0x01e00000)>>21;
 	unsigned char card   = (*ptr& 0x001f0000)>>16;
@@ -56,7 +56,7 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  counter 15
 	ptr++;	//first data word
 	int i;
 	for(i=0;i<kNumCaen260Channels;i++){
-		NSString* valueString = [NSString stringWithFormat:@"%lu",*ptr];
+		NSString* valueString = [NSString stringWithFormat:@"%u",*ptr];
 		NSString* channelKey = [self getChannelKey:i];
 
 		[aDataSet loadGenericData:valueString sender:self withKeys:@"Scalers",@"V260",  crateKey,cardKey,channelKey,nil];
@@ -65,20 +65,20 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  counter 15
     return 19; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"Caen260 Scaler Record\n\n";
 	ptr++; //point to location
-    NSString* crate = [NSString stringWithFormat:@"Crate = %lu\n",(*ptr&0x01e00000)>>21];
-    NSString* card  = [NSString stringWithFormat:@"Card  = %lu\n",(*ptr&0x001f0000)>>16];
-    NSString* mask  = [NSString stringWithFormat:@"Mask  = 0x%lx\n",(*ptr)&0xffff];
+    NSString* crate = [NSString stringWithFormat:@"Crate = %u\n",(*ptr&0x01e00000)>>21];
+    NSString* card  = [NSString stringWithFormat:@"Card  = %u\n",(*ptr&0x001f0000)>>16];
+    NSString* mask  = [NSString stringWithFormat:@"Mask  = 0x%x\n",(*ptr)&0xffff];
 	ptr++; //point to time
 	NSDate* date = [NSDate dateWithTimeIntervalSince1970:*ptr];
 	ptr++; //first data word	
 	int i;
 	NSString* s = [NSString stringWithFormat:@"%@%@%@%@%@",title,crate,card,mask,[date descriptionFromTemplate:@"MM/dd/yy H:mm:ss z\n"]];
 	for(i=0;i<kNumCaen260Channels;i++){
-		s = [s stringByAppendingFormat:@"%d:%lu\n",i,*ptr];
+		s = [s stringByAppendingFormat:@"%d:%u\n",i,*ptr];
 		ptr++;
 	}
 	

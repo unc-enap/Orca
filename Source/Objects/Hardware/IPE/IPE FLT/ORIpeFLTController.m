@@ -63,7 +63,7 @@
 	
     blankView = [[NSView alloc] init];
     
-    NSString* key = [NSString stringWithFormat: @"orca.ORIpeFLT%lu.selectedtab",[model stationNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORIpeFLT%u.selectedtab",(int)[model stationNumber]];
     NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
@@ -471,7 +471,7 @@
 - (void) slotChanged:(NSNotification*)aNotification
 {
 	// Set title of FLT configuration window, ak 15.6.07
-	[[self window] setTitle:[NSString stringWithFormat:@"IPE-DAQ-V3 FLT Card (Slot %lu)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"IPE-DAQ-V3 FLT Card (Slot %u)",(int)[model stationNumber]]];
 }
 
 - (void) gainArrayChanged:(NSNotification*)aNotification
@@ -564,7 +564,7 @@
     }
     [[self window] setContentView:totalView];
 	
-    NSString* key = [NSString stringWithFormat: @"orca.ORIpeFLT%lu.selectedtab",[model stationNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORIpeFLT%u.selectedtab",(int)[model stationNumber]];
     NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
     

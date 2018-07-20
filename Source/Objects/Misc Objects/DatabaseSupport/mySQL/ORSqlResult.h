@@ -39,9 +39,9 @@ typedef enum {
 - (id) initWithResPtr:(MYSQL_RES*) mySQLResPtr;
 - (id) init;
 - (void) dealloc;
-- (unsigned long long) numOfRows;
+- (uint64_t) numOfRows;
 - (unsigned int) numOfFields;
-- (void) dataSeek:(unsigned long long) row;
+- (void) dataSeek:(uint64_t) row;
 - (id) fetchRowAsType:(MCPReturnType) aType;
 - (NSArray *) fetchRowAsArray;
 - (NSDictionary *) fetchRowAsDictionary;

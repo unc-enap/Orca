@@ -37,8 +37,8 @@ enum {
 
 @interface ORTimeRoi : NSObject {
     id			dataSource;
-	long		minChannel;
-	long		maxChannel;
+	int32_t		minChannel;
+	int32_t		maxChannel;
 	double		average;
 	double		minValue;
 	double		maxValue;
@@ -52,7 +52,7 @@ enum {
 }
 
 #pragma mark ***Initialization
-- (id) initWithMin:(long)aMin max:(long)aMax;
+- (id) initWithMin:(int32_t)aMin max:(int32_t)aMax;
 - (void) dealloc;
 
 #pragma mark ***Accessors
@@ -60,11 +60,11 @@ enum {
 - (void)	setLabel:(NSString*)aLabel;
 - (NSString*) label;
 - (id)		dataSource ;
-- (long)	minChannel;
-- (void)	setMinChannel:(long)aChannel;
-- (long)	maxChannel;
-- (void)	setMaxChannel:(long)aChannel;
-- (void)	setDefaultMin:(long)aMinChannel max:(long)aMaxChannel;
+- (int32_t)	minChannel;
+- (void)	setMinChannel:(int32_t)aChannel;
+- (int32_t)	maxChannel;
+- (void)	setMaxChannel:(int32_t)aChannel;
+- (void)	setDefaultMin:(int32_t)aMinChannel max:(int32_t)aMaxChannel;
 - (double)	average;	
 - (double)	standardDeviation;	
 - (double)   minValue;	

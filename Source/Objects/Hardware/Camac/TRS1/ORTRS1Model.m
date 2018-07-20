@@ -37,7 +37,7 @@
 #define DEFAULT_DATA_SIZE           8192L
 #define DEFAULT_CONTROL_REGISTER	0x0000
 #define DEFAULT_OFFSET_REGISTER		0
-#define RecodeSizeInLongs (3*sizeof(long) + (expectedNumberDataBytes + sizeof(long))/sizeof(long))
+#define RecodeSizeInLongs (3*sizeof(int32_t) + (expectedNumberDataBytes + sizeof(int32_t))/sizeof(int32_t))
 
 
 NSString* ORTRS1ModelOffsetRegisterChanged = @"ORTRS1ModelOffsetRegisterChanged";
@@ -252,8 +252,8 @@ NSString* ORTRS1ModelControlRegisterChanged = @"ORTRS1ModelControlRegisterChange
 	[[self adapter] camacShortNAF:[self stationNumber]+1 a:0 f:10];
 }
 
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -312,7 +312,7 @@ NSString* ORTRS1ModelControlRegisterChanged = @"ORTRS1ModelControlRegisterChange
 	expectedNumberDataBytes = 8L * 1024L * (((controlRegister >> 8) & 0xff) + 1);
 	
 	
-    dataBuffer = (unsigned long*)malloc(RecodeSizeInLongs * sizeof(unsigned long));
+    dataBuffer = (uint32_t*)malloc(RecodeSizeInLongs * sizeof(uint32_t));
 	firstTime = YES;
 }
 

@@ -34,11 +34,11 @@ endRunNumber = _endRunNumber;
     [self setImage:[NSImage imageNamed:@"resistor"]];
 }
 
-- (unsigned long) getCurrentRunNumber
+- (uint32_t) getCurrentRunNumber
 {
     NSArray* runObjects = [[self document] collectObjectsOfClass:NSClassFromString(@"ORRunModel")];
     ORRunModel* rc = [runObjects objectAtIndex:0];
-    unsigned long current_run_number;
+    uint32_t current_run_number;
     current_run_number = [rc runNumber];
     return current_run_number;
 }
@@ -102,7 +102,7 @@ endRunNumber = _endRunNumber;
     //loop through the couchDb response to see pick out the crate and slot for this channel
     //BAD CODE: this assumes these arrive in groups of 32 ordered sets 
     int counter = 0;
-    unsigned long aPmtMask = 0;
+    uint32_t aPmtMask = 0;
     for(id key in [couchDbQueryResponse objectForKey:@"rows"]){
         
         //NSMutableDictionary *printString = [key mutableCopy];
@@ -122,7 +122,7 @@ endRunNumber = _endRunNumber;
         counter++;
         if(counter == 32){
             //post the pmtMask for a specific card
-            NSLog(@"%lu\n",aPmtMask);
+            NSLog(@"%u\n",aPmtMask);
             
             //loop through all the Fec32 and pick the card for this crate/card
             int iFec32card;

@@ -263,7 +263,7 @@ error:
 	[optionsDictionary removeAllObjects];
 	[optionsDictionary setObject:[self name]
 												forKey:ORSerialOptionServiceName];
-	[optionsDictionary setObject:[NSString stringWithFormat:@"%ld", [self getSpeed]]
+	[optionsDictionary setObject:[NSString stringWithFormat:@"%d", [self getSpeed]]
 												forKey:ORSerialOptionSpeed];
 	[optionsDictionary setObject:[NSString stringWithFormat:@"%d", [self getDataBits]]
 												forKey:ORSerialOptionDataBits];
@@ -345,12 +345,12 @@ error:
 }
 
 
--(long)getSpeed
+-(int32_t)getSpeed
 {
 	return cfgetospeed(options);	// we should support cfgetispeed too
 }
 
--(void)setSpeed:(long)speed
+-(void)setSpeed:(int32_t)speed
 {
 	cfsetospeed(options, speed);
 	cfsetispeed(options, 0);		// same as output speed

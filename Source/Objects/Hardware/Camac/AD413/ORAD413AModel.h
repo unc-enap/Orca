@@ -45,7 +45,7 @@ enum {
 
 @interface ORAD413AModel : ORCamacIOCard <ORDataTaker,ORFeraReadout> {
     @private
-        unsigned long dataId;
+        uint32_t dataId;
         unsigned short onlineMask;
 		NSMutableArray* discriminators;
         
@@ -62,7 +62,7 @@ enum {
 	
 		BOOL  checkLAM;;
 		//place to cache some stuff for alittle more speed.
-		unsigned long 	unChangingDataPart;
+		uint32_t 	unChangingDataPart;
 		unsigned short cachedStation;
 		BOOL oldZeroSuppressionMode;
 }
@@ -72,8 +72,8 @@ enum {
 - (void) dealloc;
         
 #pragma mark ¥¥¥Accessors
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (NSMutableArray *) discriminators;
 - (void) setDiscriminators: (NSMutableArray *) anArray;
 
@@ -125,7 +125,7 @@ enum {
 #pragma mark ¥¥¥FERA
 - (void) setVSN:(int)aVSN;
 - (void) setFeraEnable:(BOOL)aState;
-- (void) shipFeraData:(ORDataPacket*)aDataPacket data:(unsigned long)data;
+- (void) shipFeraData:(ORDataPacket*)aDataPacket data:(uint32_t)data;
 - (int) maxNumChannels;
 
 #pragma mark ¥¥¥Archival

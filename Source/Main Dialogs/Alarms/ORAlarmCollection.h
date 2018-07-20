@@ -67,7 +67,7 @@
 - (NSUInteger) eMailCount;
 - (void) decodeEMailList:(NSCoder*) aDecoder;
 - (void) encodeEMailList:(NSCoder*) anEncoder;
-- (void) addAddress:(NSString*)anAddress severityMask:(unsigned long)aMask;
+- (void) addAddress:(NSString*)anAddress severityMask:(uint32_t)aMask;
 - (void) addAddress;
 - (void) addAddress:(id)anAddress atIndex:(NSUInteger)anIndex;
 - (void) removeAddressAtIndex:(NSUInteger) anIndex;
@@ -86,7 +86,7 @@ extern NSString* ORAlarmCollectionReloadAddressList;
 @interface ORAlarmEMailDestination : NSObject
 {
 	NSString* mailAddress;
-	unsigned long severityMask;
+	uint32_t severityMask;
 	NSMutableArray* alarms;
 	BOOL			eMailThreadRunning;
 	NSLock*			eMailLock;
@@ -98,8 +98,8 @@ extern NSString* ORAlarmCollectionReloadAddressList;
 - (void) setMailAddress:(NSString*)anAddress;
 - (NSString*) mailAddress;
 - (BOOL) wantsAlarmSeverity:(AlarmSeverityTypes)aType;
-- (void) setSeverityMask:(unsigned long)aMask;
-- (unsigned long) severityMask;
+- (void) setSeverityMask:(uint32_t)aMask;
+- (uint32_t) severityMask;
 - (NSMutableArray*) alarms;
 - (void) setAlarms:(NSMutableArray*)someAlarms;
 - (id)initWithCoder:(NSCoder*)decoder;

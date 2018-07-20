@@ -57,43 +57,43 @@
 	
 }
 
-- (unsigned long) dataId
+- (uint32_t) dataId
 {
     return dataId;
 }
-- (void) setDataId: (unsigned long) aDataId
+- (void) setDataId: (uint32_t) aDataId
 {
     dataId = aDataId;
 }
 
--(void)setNumberBins:(unsigned long)aNumberBins
+-(void)setNumberBins:(uint32_t)aNumberBins
 {
 	[dataSetLock lock];
     [histogram release];
     numberBins = aNumberBins;
-    histogram = [[NSMutableData dataWithLength:numberBins*sizeof(unsigned long)] retain];
+    histogram = [[NSMutableData dataWithLength:numberBins*sizeof(uint32_t)] retain];
 	[dataSetLock unlock];
 }
 
--(unsigned long) numberBins
+-(uint32_t) numberBins
 {
     return numberBins;
 }
 
--(unsigned long) overFlow
+-(uint32_t) overFlow
 {
     return overFlow;
 }
 
 
--(unsigned long)value:(unsigned long)aChan
+-(uint32_t)value:(uint32_t)aChan
 {
-    unsigned long theValue;
+    uint32_t theValue;
 	[dataSetLock lock];
 	
-	unsigned long* histogramPtr;
-	if([self paused])histogramPtr = (unsigned long*)[pausedHistogram bytes];
-	else             histogramPtr = (unsigned long*)[histogram bytes];;
+	uint32_t* histogramPtr;
+	if([self paused])histogramPtr = (uint32_t*)[pausedHistogram bytes];
+	else             histogramPtr = (uint32_t*)[histogram bytes];;
 	
 	if(aChan<numberBins)theValue = histogramPtr[aChan];
 	else theValue = 0;
@@ -107,7 +107,7 @@
 {
 	[dataSetLock lock];
     [histogram release];
-    histogram = [[NSMutableData dataWithLength:numberBins*sizeof(unsigned long)] retain];
+    histogram = [[NSMutableData dataWithLength:numberBins*sizeof(uint32_t)] retain];
     overFlow = 0;
     [self setTotalCounts:0];
 	[dataSetLock unlock];
@@ -117,12 +117,12 @@
 - (void) writeDataToFile:(FILE*)aFile
 {
 	[dataSetLock lock];
-    fprintf( aFile, "WAVES/I/N=(%ld) '%s'\nBEGIN\n",numberBins,[shortName cStringUsingEncoding:NSASCIIStringEncoding]);
-    unsigned long* histogramPtr = (unsigned long*)[histogram bytes];
-    unsigned long n = [histogram length]/sizeof(unsigned long);
+    fprintf( aFile, "WAVES/I/N=(%d) '%s'\nBEGIN\n",numberBins,[shortName cStringUsingEncoding:NSASCIIStringEncoding]);
+    uint32_t* histogramPtr = (uint32_t*)[histogram bytes];
+    uint32_t n = [histogram length]/sizeof(uint32_t);
     int i;
     for (i=0; i<n; ++i) {
-        fprintf(aFile, "%ld\n",histogramPtr[i]);
+        fprintf(aFile, "%d\n",histogramPtr[i]);
     }
     fprintf(aFile, "END\n\n");
 	[dataSetLock unlock];
@@ -173,17 +173,17 @@
 
 - (id)   name
 {
-    return [NSString stringWithFormat:@"%@ 1D Histogram Events: %lu",[self key], [self totalCounts]];
+    return [NSString stringWithFormat:@"%@ 1D Histogram Events: %u",[self key], [self totalCounts]];
 }
 
 
-- (void) histogram:(unsigned long)aValue
+- (void) histogram:(uint32_t)aValue
 {
     if(!histogram){
         [self setNumberBins:4096];
     }
 	[dataSetLock lock];
-    unsigned long* histogramPtr = (unsigned long*)[histogram bytes];
+    uint32_t* histogramPtr = (uint32_t*)[histogram bytes];
 	if(histogramPtr){
 		if(aValue>=numberBins){
 			++overFlow;
@@ -199,13 +199,13 @@
 }
 
 // ak, 6.8.07
-- (void) histogramWW:(unsigned long)aValue weight:(unsigned long)aWeight
+- (void) histogramWW:(uint32_t)aValue weight:(uint32_t)aWeight
 {
     if(!histogram){
         [self setNumberBins:4096];
     }
 	[dataSetLock lock];
-    unsigned long* histogramPtr = (unsigned long*)[histogram bytes];
+    uint32_t* histogramPtr = (uint32_t*)[histogram bytes];
 	if(histogramPtr){
 		if(aValue>=numberBins){
 			overFlow += aWeight;
@@ -220,33 +220,33 @@
 
 }
 
-- (NSString*) getnonZeroDataAsStringWithStart:(unsigned long*)start end:(unsigned long*)end
+- (NSString*) getnonZeroDataAsStringWithStart:(uint32_t*)start end:(uint32_t*)end
 {
 	NSData* pd = [self getNonZeroRawDataWithStart:start end:end];
-	unsigned long* plotData = (unsigned long*)[pd bytes];
-	unsigned long n = [pd length]/4;
+	uint32_t* plotData = (uint32_t*)[pd bytes];
+	uint32_t n = [pd length]/4;
 	int i;
 	NSMutableString* s = [NSMutableString stringWithCapacity:n*64];
 	for(i=0;i<n;i++){
-		[s appendFormat:@"%lu,",plotData[i]];
+		[s appendFormat:@"%u,",plotData[i]];
 	}
 	if([s length]>0)[s deleteCharactersInRange:NSMakeRange([s length]-1,1)];
 	return s;
 }
 
-- (NSData*) getNonZeroRawDataWithStart:(unsigned long*)start end:(unsigned long*)end
+- (NSData*) getNonZeroRawDataWithStart:(uint32_t*)start end:(uint32_t*)end
 {
 	[dataSetLock lock];
 	NSData* theData = nil;
     NSData* tempHistoryRef = [histogram retain];
-    unsigned long* histogramPtr = (unsigned long*)[tempHistoryRef bytes];
+    uint32_t* histogramPtr = (uint32_t*)[tempHistoryRef bytes];
 	if(histogramPtr){
 		BOOL atLeastOne = NO;
-		unsigned long n = [self numberBins];
-		unsigned long theFirstOne = 0;
-		unsigned long theLastOne = n-1;
+		uint32_t n = [self numberBins];
+		uint32_t theFirstOne = 0;
+		uint32_t theLastOne = n-1;
 		if(n>0){
-			unsigned long i;
+			uint32_t i;
 			for(i=0;i<n;i++){
 				if(histogramPtr[i]!=0){
 					theFirstOne = i;
@@ -264,13 +264,13 @@
 		if(atLeastOne){
 			*start = theFirstOne;
 			*end = theLastOne;
-			theData =  [NSData dataWithBytes:&histogramPtr[theFirstOne] length:(theLastOne-theFirstOne+1)*sizeof(long)];
+			theData =  [NSData dataWithBytes:&histogramPtr[theFirstOne] length:(theLastOne-theFirstOne+1)*sizeof(int32_t)];
 		}
 		else {
 			*start = 0;
 			*end = 1;
-			unsigned long zero = 0;
-			theData =  [NSData dataWithBytes:&zero length:1*sizeof(long)];
+			uint32_t zero = 0;
+			theData =  [NSData dataWithBytes:&zero length:1*sizeof(int32_t)];
 
 		}
 	}
@@ -285,19 +285,19 @@
 	[dataSetLock lock];
     [histogram release];
     histogram = [[NSMutableData dataWithData:someData] retain];
-    numberBins = [histogram length]/sizeof(unsigned long);
+    numberBins = [histogram length]/sizeof(uint32_t);
 	[dataSetLock unlock];
 	[self incrementTotalCounts];	
 }
 
-- (void) mergeHistogram:(unsigned long*)ptr numValues:(unsigned long)numBins
+- (void) mergeHistogram:(uint32_t*)ptr numValues:(uint32_t)numBins
 {
     if(!histogram || numberBins != numBins){
         [self setNumberBins:numBins];
     }
 	[dataSetLock lock];
     int i;
-    unsigned long* histogramPtr = (unsigned long*)[histogram bytes];
+    uint32_t* histogramPtr = (uint32_t*)[histogram bytes];
 	if(histogramPtr){
 		for(i=0;i<numBins;i++){
 			histogramPtr[i] += ptr[i];
@@ -309,9 +309,9 @@
 
 
 //!For merging energy histograms -tb-
-- (void) mergeEnergyHistogram:(unsigned long*)ptr numBins:(unsigned long)numBins maxBins:(unsigned long)maxBins
-                                                 firstBin:(unsigned long)firstBin   stepSize:(unsigned long)stepSize 
-                                                   counts:(unsigned long)counts
+- (void) mergeEnergyHistogram:(uint32_t*)ptr numBins:(uint32_t)numBins maxBins:(uint32_t)maxBins
+                                                 firstBin:(uint32_t)firstBin   stepSize:(uint32_t)stepSize 
+                                                   counts:(uint32_t)counts
 
 {
     if(!histogram || numberBins != maxBins){
@@ -319,8 +319,8 @@
     }
 	[dataSetLock lock];
 	if(histogram){
-        unsigned long* histogramPtr = (unsigned long*)[histogram bytes];
-		unsigned long i,index;
+        uint32_t* histogramPtr = (uint32_t*)[histogram bytes];
+		uint32_t i,index;
 		for( (index=firstBin,i=0); i<numBins; (index+=stepSize,i++) ){
 			if(index>=numberBins){
 				overFlow += ptr[i];
@@ -339,7 +339,7 @@
 - (void) packageData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo keys:(NSMutableArray*)aKeyArray
 {
     NSMutableData* dataToShip = [NSMutableData data];
-    unsigned long dataWord;
+    uint32_t dataWord;
     
     //first the id
     dataWord = dataId; //note we don't know the length yet--we'll fill it in later
@@ -350,13 +350,13 @@
 	if(allKeys && ![allKeys hasPrefix:@"Final"]){
 		allKeys = [@"Final/" stringByAppendingString:allKeys];
 		const char* p = [allKeys UTF8String];
-		unsigned long allKeysLengthWithTerminator = strlen(p)+1;
-		unsigned long paddedKeyLength = 4*((unsigned long)(allKeysLengthWithTerminator+4)/4);
-		unsigned long paddedKeyLengthLong = paddedKeyLength/4;
+		uint32_t allKeysLengthWithTerminator = strlen(p)+1;
+		uint32_t paddedKeyLength = 4*((uint32_t)(allKeysLengthWithTerminator+4)/4);
+		uint32_t paddedKeyLengthLong = paddedKeyLength/4;
 		[dataToShip appendBytes:&paddedKeyLengthLong length:4];
 		[dataToShip appendBytes:p length:allKeysLengthWithTerminator];
 
-		//pad to the long word boundary
+		//pad to the int32_t word boundary
 		int i;
 		for(i=0;i< paddedKeyLength-allKeysLengthWithTerminator;i++){
 			char null = '\0';
@@ -367,8 +367,8 @@
         [dataToShip appendData:histogram];
 		
 		//go back and fill in the total length
-		unsigned long *ptr = (unsigned long*)[dataToShip bytes];
-		unsigned long totalLength = [dataToShip length]/4; //num of longs
+		uint32_t *ptr = (uint32_t*)[dataToShip bytes];
+		uint32_t totalLength = [dataToShip length]/4; //num of longs
 		*ptr |= (kLongFormLengthMask & totalLength);
 		[aDataPacket addData:dataToShip];
 	}

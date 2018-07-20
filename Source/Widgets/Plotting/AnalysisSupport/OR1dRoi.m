@@ -33,7 +33,7 @@ NSString* OR1dRoiCurveFitChanged = @"OR1dRoiCurveFitChanged";
 @implementation OR1dRoi
 
 #pragma mark ***Initialization
-- (id) initWithMin:(long)aMin max:(long)aMax
+- (id) initWithMin:(int32_t)aMin max:(int32_t)aMax
 {
 	self = [super init];
 	[self setMaxChannel:aMax];
@@ -109,28 +109,28 @@ NSString* OR1dRoiCurveFitChanged = @"OR1dRoiCurveFitChanged";
 	fft = aFFT;
 }
 
-- (long) minChannel
+- (int32_t) minChannel
 {
     return minChannel;
 }
-- (void) setDefaultMin:(long)aMinChannel max:(long)aMaxChannel
+- (void) setDefaultMin:(int32_t)aMinChannel max:(int32_t)aMaxChannel
 {
 	[self setMinChannel:aMinChannel];
 	[self setMaxChannel:aMaxChannel];
 }
-- (void) setMinChannel:(long)aChannel
+- (void) setMinChannel:(int32_t)aChannel
 {
 	minChannel = aChannel;
     [[NSNotificationCenter defaultCenter] postNotificationName:OR1dRoiMinChanged object:self];
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORPlotViewRedrawEvent object:self];
 }
 
-- (long) maxChannel
+- (int32_t) maxChannel
 {
     return maxChannel;
 }
 
-- (void) setMaxChannel:(long)aChannel
+- (void) setMaxChannel:(int32_t)aChannel
 {
 	maxChannel = aChannel;
     [[NSNotificationCenter defaultCenter] postNotificationName:OR1dRoiMaxChanged object:self];
@@ -186,10 +186,10 @@ NSString* OR1dRoiCurveFitChanged = @"OR1dRoiCurveFitChanged";
 	double maxX		= 0;
 	double minY		= 3.402e+38;
 	double maxY		= -3.402e+38;
-	long xStart		= [self minChannel];
-	long xEnd		= [self maxChannel];
+	int32_t xStart		= [self minChannel];
+	int32_t xEnd		= [self maxChannel];
 	
-	long x = xStart;
+	int32_t x = xStart;
 	do {
 		double xDummy,y;
 		[dataSource plotter:aPlot index:(int)x x:&xDummy y:&y];

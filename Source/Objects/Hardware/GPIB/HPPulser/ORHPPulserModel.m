@@ -294,11 +294,11 @@ static HPPulserCustomWaveformStruct waveformData[kNumWaveforms] = {
 	 postNotificationName:ORHPPulserMaxTimeChangedNotification 
 	 object: self ];
 }
-- (unsigned long) randomCount
+- (uint32_t) randomCount
 {
 	return randomCount;
 }
-- (void) setRandomCount:(unsigned long)aNewRandomCount
+- (void) setRandomCount:(uint32_t)aNewRandomCount
 {
 	randomCount = aNewRandomCount;
     
@@ -487,8 +487,8 @@ static HPPulserCustomWaveformStruct waveformData[kNumWaveforms] = {
     fileName = [newFileName copy];
 }
 
-- (unsigned long)   pulserDataId {return pulserDataId;}
-- (void)   setPulserDataId:(unsigned long)aValue
+- (uint32_t)   pulserDataId {return pulserDataId;}
+- (void)   setPulserDataId:(uint32_t)aValue
 {
     pulserDataId = aValue;
 }
@@ -633,12 +633,12 @@ static HPPulserCustomWaveformStruct waveformData[kNumWaveforms] = {
 {
     if([self isConnected]){
         char  reply[256];
-        long n = [self writeReadGPIBDevice: @"*IDN?"
+        int32_t n = [self writeReadGPIBDevice: @"*IDN?"
                                       data: reply
                                  maxLength: 256 ];
         reply[n] = '\n';
         NSString* s =  [NSString stringWithCString:reply encoding:NSASCIIStringEncoding];
-        long nlPos = [s rangeOfString:@"\n"].location;
+        int32_t nlPos = [s rangeOfString:@"\n"].location;
         if(nlPos != NSNotFound){
             s = [s substringWithRange:NSMakeRange(0,nlPos)];
         }
@@ -836,7 +836,7 @@ static HPPulserCustomWaveformStruct waveformData[kNumWaveforms] = {
 {
 	return;   //stopped asking for response because of device time-outs and errors. MAH 12/18/09
 //    char reply[1024];
-//    long n = [self writeReadGPIBDevice:@"SYST:ERR?" data:reply maxLength:1024];
+//    int32_t n = [self writeReadGPIBDevice:@"SYST:ERR?" data:reply maxLength:1024];
 //    if(n && [[NSString stringWithCString:reply encoding:NSASCIIStringEncoding] rangeOfString:@"No error"].location == NSNotFound){
 //        NSLog(@"%s\n",reply);
 //    }
@@ -879,7 +879,7 @@ static HPPulserCustomWaveformStruct waveformData[kNumWaveforms] = {
 {
     //get list of waveforms already in pulser
     char reply[1024];
-    long n = [self writeReadGPIBDevice:@"Data:CAT?" data:reply maxLength:1024];
+    int32_t n = [self writeReadGPIBDevice:@"Data:CAT?" data:reply maxLength:1024];
     if(n>0)reply[n-1]='\0';
     NSString* replyString = [[[NSString stringWithCString:reply encoding:NSASCIIStringEncoding] componentsSeparatedByString:@"\""] componentsJoinedByString:@""];
     replyString = [replyString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];

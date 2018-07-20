@@ -105,7 +105,7 @@ NSString* ORScriptPathChanged					= @"ORScriptPathChanged";
     if([self uniqueIdNumber]){
         NSFont* theFont = [NSFont messageFontOfSize:8];
         NSAttributedString*n = [[NSAttributedString alloc] 
-								initWithString:[NSString stringWithFormat:@"%lu",[self uniqueIdNumber]] 
+								initWithString:[NSString stringWithFormat:@"%u",[self uniqueIdNumber]] 
 								attributes:[NSDictionary dictionaryWithObject:theFont forKey:NSFontAttributeName]];
         
         NSSize textSize = [n size];

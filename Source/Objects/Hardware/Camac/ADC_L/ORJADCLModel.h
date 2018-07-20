@@ -92,8 +92,8 @@
 - (float) convertRawLimitToVolts:(unsigned short)rawValue;
 - (unsigned short) convertVoltsToRawLimit:(float)volts;
 - (float) convertRawAdcToVolts:(unsigned short)rawValue;
-- (BOOL) adcTooLow:(unsigned long) aRawValue;
-- (BOOL) adcTooHigh:(unsigned long) aRawValue;
+- (BOOL) adcTooLow:(uint32_t) aRawValue;
+- (BOOL) adcTooHigh:(uint32_t) aRawValue;
 - (void) postNotification:(NSNotification*)aNote;
 
 #pragma mark ¥¥¥Archival

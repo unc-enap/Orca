@@ -101,15 +101,15 @@ typedef	struct	CLINK CLINK;
  * should probably be using. They all use the CLINK structure. */
 int	vxi11_open_device(const char *ip, CLINK *clink, char *device);
 int	vxi11_close_device(const char *ip, CLINK *clink);
-int	vxi11_send(CLINK *clink, const char *cmd, unsigned long len);
-long	vxi11_receive(CLINK *clink, char *buffer, unsigned long len, unsigned long timeout);
+int	vxi11_send(CLINK *clink, const char *cmd, uint32_t len);
+int32_t	vxi11_receive(CLINK *clink, char *buffer, uint32_t len, uint32_t timeout);
 
 /* Utility functions, that use send() and receive(). Use these too. */
-int	vxi11_send_data_block(CLINK *clink, const char *cmd, char *buffer, unsigned long len);
-long	vxi11_receive_data_block(CLINK *clink, char *buffer, unsigned long len, unsigned long timeout);
-long	vxi11_send_and_receive(CLINK *clink, const char *cmd, char *buf, unsigned long buf_len, unsigned long timeout);
-long	vxi11_obtain_long_value(CLINK *clink, const char *cmd, unsigned long timeout);
-double	vxi11_obtain_double_value(CLINK *clink, const char *cmd, unsigned long timeout);
+int	vxi11_send_data_block(CLINK *clink, const char *cmd, char *buffer, uint32_t len);
+int32_t	vxi11_receive_data_block(CLINK *clink, char *buffer, uint32_t len, uint32_t timeout);
+int32_t	vxi11_send_and_receive(CLINK *clink, const char *cmd, char *buf, uint32_t buf_len, uint32_t timeout);
+int32_t	vxi11_obtain_long_value(CLINK *clink, const char *cmd, uint32_t timeout);
+double	vxi11_obtain_double_value(CLINK *clink, const char *cmd, uint32_t timeout);
 
 /* When I first wrote this library I used separate client and links. I've
  * retained the original functions and just written clink wrappers for them
@@ -119,7 +119,7 @@ int	_vxi11_open_device(const char *ip, CLIENT **client, VXI11_LINK **link, char 
 int	_vxi11_open_link(const char *ip, CLIENT **client, VXI11_LINK **link, char *device);
 int	_vxi11_close_device(const char *ip, CLIENT *client, VXI11_LINK *link);
 int	_vxi11_close_link(const char *ip, CLIENT *client, VXI11_LINK *link);
-int	_vxi11_send(CLIENT *client, VXI11_LINK *link, const char *cmd, unsigned long len);
-long	_vxi11_receive(CLIENT *client, VXI11_LINK *link, char *buffer, unsigned long len, unsigned long timeout);
+int	_vxi11_send(CLIENT *client, VXI11_LINK *link, const char *cmd, uint32_t len);
+int32_t	_vxi11_receive(CLIENT *client, VXI11_LINK *link, char *buffer, uint32_t len, uint32_t timeout);
 
 #endif

@@ -179,7 +179,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 	return bufferState;
 }
 
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
 {
 	if(groupTag == 0){
 		if(counterTag>=0 && counterTag<16){
@@ -246,12 +246,12 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
     [[NSNotificationCenter defaultCenter] postNotificationName:ORCV1730SelectedChannelChanged object:self];
 }
 
-- (unsigned long) writeValue
+- (uint32_t) writeValue
 {
     return writeValue;
 }
 
-- (void) setWriteValue:(unsigned long) aValue
+- (void) setWriteValue:(uint32_t) aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setWriteValue:[self writeValue]];
     
@@ -274,12 +274,12 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
     [[NSNotificationCenter defaultCenter] postNotificationName:ORCV1730ModelEnabledMaskChanged object:self];
 }
 
-- (unsigned long) postTriggerSetting
+- (uint32_t) postTriggerSetting
 {
     return postTriggerSetting;
 }
 
-- (void) setPostTriggerSetting:(unsigned long)aPostTriggerSetting
+- (void) setPostTriggerSetting:(uint32_t)aPostTriggerSetting
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setPostTriggerSetting:postTriggerSetting];
     
@@ -288,12 +288,12 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
     [[NSNotificationCenter defaultCenter] postNotificationName:ORCV1730ModelPostTriggerSettingChanged object:self];
 }
 
-- (unsigned long) triggerSourceMask
+- (uint32_t) triggerSourceMask
 {
     return triggerSourceMask;
 }
 
-- (void) setTriggerSourceMask:(unsigned long)aTriggerSourceMask
+- (void) setTriggerSourceMask:(uint32_t)aTriggerSourceMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setTriggerSourceMask:triggerSourceMask];
     
@@ -302,12 +302,12 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
     [[NSNotificationCenter defaultCenter] postNotificationName:ORCV1730ModelTriggerSourceMaskChanged object:self];
 }
 
-- (unsigned long) triggerOutMask
+- (uint32_t) triggerOutMask
 {
 	return triggerOutMask;
 }
 
-- (void) setTriggerOutMask:(unsigned long)aTriggerOutMask
+- (void) setTriggerOutMask:(uint32_t)aTriggerOutMask
 {
 	[[[self undoManager] prepareWithInvocationTarget:self] setTriggerOutMask:triggerOutMask];
 	
@@ -332,12 +332,12 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 }
 
 
-- (unsigned long) frontPanelControlMask
+- (uint32_t) frontPanelControlMask
 {
 	return frontPanelControlMask;
 }
 
-- (void) setFrontPanelControlMask:(unsigned long)aFrontPanelControlMask
+- (void) setFrontPanelControlMask:(uint32_t)aFrontPanelControlMask
 {
 	[[[self undoManager] prepareWithInvocationTarget:self] setFrontPanelControlMask:aFrontPanelControlMask];
 	
@@ -431,12 +431,12 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
     [[NSNotificationCenter defaultCenter] postNotificationName:ORCV1730ModelChannelConfigMaskChanged object:self];
 }
 
-- (unsigned long) numberBLTEventsToReadout
+- (uint32_t) numberBLTEventsToReadout
 {
     return numberBLTEventsToReadout; 
 }
 
-- (void) setNumberBLTEventsToReadout:(unsigned long) numBLTEvents
+- (void) setNumberBLTEventsToReadout:(uint32_t) numBLTEvents
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setNumberBLTEventsToReadout:numberBLTEventsToReadout];
     
@@ -469,7 +469,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
     return reg[anIndex].regName;
 }
 
-- (unsigned long) getAddressOffset:(short) anIndex
+- (uint32_t) getAddressOffset:(short) anIndex
 {
     return reg[anIndex].addressOffset;
 }
@@ -595,7 +595,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 
 
 
-- (void) readChan:(unsigned short)chan reg:(unsigned short) pReg returnValue:(unsigned long*) pValue
+- (void) readChan:(unsigned short)chan reg:(unsigned short) pReg returnValue:(uint32_t*) pValue
 {
     // Make sure that register is valid
     if (pReg >= [self getNumberRegisters]) {
@@ -617,9 +617,9 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
     
 }
 
-- (void) writeChan:(unsigned short)chan reg:(unsigned short) pReg sendValue:(unsigned long) pValue
+- (void) writeChan:(unsigned short)chan reg:(unsigned short) pReg sendValue:(uint32_t) pValue
 {
-	unsigned long theValue = pValue;
+	uint32_t theValue = pValue;
     // Check that register is a valid register.
     if (pReg >= [self getNumberRegisters]){
         [NSException raise:@"Illegal Register" format:@"Register index out of bounds on %@",[self identifier]];
@@ -649,7 +649,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
     return thresholds[aChnl];
 }
 
-- (void) setThreshold:(unsigned short) aChnl withValue:(unsigned long) aValue
+- (void) setThreshold:(unsigned short) aChnl withValue:(uint32_t) aValue
 {
     if(aValue>0x3FFF)aValue=0x3FFF;
     [[[self undoManager] prepareWithInvocationTarget:self] setThreshold:aChnl withValue:[self threshold:aChnl]];
@@ -669,7 +669,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
     return selfTriggerLogic[aChnl];
 }
 
-- (void) setSelfTriggerLogic:(unsigned short) aChnl withValue:(unsigned long) aValue
+- (void) setSelfTriggerLogic:(unsigned short) aChnl withValue:(uint32_t) aValue
 {
     if(aValue>0x3)aValue=0x3;
     [[[self undoManager] prepareWithInvocationTarget:self] setSelfTriggerLogic:aChnl withValue:[self selfTriggerLogic:aChnl]];
@@ -690,7 +690,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 	short		start;
     short		end;
     short		i;   
-    unsigned long 	theValue = 0;
+    uint32_t 	theValue = 0;
     short theChannelIndex	 = [self selectedChannel];
     short theRegIndex		 = [self selectedRegIndex];
     
@@ -735,7 +735,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
     short	end;
     short	i;
 	
-    long theValue			= [self writeValue];
+    int32_t theValue			= [self writeValue];
     short theChannelIndex	= [self selectedChannel];
     short theRegIndex 		= [self selectedRegIndex];
     
@@ -775,7 +775,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 }
 
 
-- (void) read:(unsigned short) pReg returnValue:(unsigned long*) pValue
+- (void) read:(unsigned short) pReg returnValue:(uint32_t*) pValue
 {
     // Make sure that register is valid
     if (pReg >= [self getNumberRegisters]) {
@@ -797,7 +797,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
     
 }
 
-- (void) write:(unsigned short) pReg sendValue:(unsigned long) pValue
+- (void) write:(unsigned short) pReg sendValue:(uint32_t) pValue
 {
     // Check that register is a valid register.
     if (pReg >= [self getNumberRegisters]){
@@ -826,7 +826,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 
 - (void) writeThreshold:(unsigned short) pChan
 {
-    unsigned long 	threshold = [self threshold:pChan];
+    uint32_t 	threshold = [self threshold:pChan];
     
     [[self adapter] writeLongBlock:&threshold
                          atAddress:[self baseAddress] + reg[kThresholds].addressOffset + (pChan * 0x100)
@@ -845,7 +845,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 
 - (void) writeSelfTriggerLogic:(unsigned short)aChnl
 {
-    unsigned long 	aValue = (([self pulseType:aChnl] & 0x1) << 2) |
+    uint32_t 	aValue = (([self pulseType:aChnl] & 0x1) << 2) |
                               ([self selfTriggerLogic:aChnl/2] & 0x3);
     
     [[self adapter] writeLongBlock:&aValue
@@ -867,7 +867,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 - (void) writeDac:(unsigned short) pChan
 {
     //from manual: Warning: check that the SPI Bus Busy flag in the status reg is set to 0
-    unsigned long statusValue = 0;
+    uint32_t statusValue = 0;
     [[self adapter] readLongBlock:&statusValue
                          atAddress:[self baseAddress] + reg[kChannelStatus].addressOffset + (pChan * 0x100)
                         numToRead:1
@@ -876,7 +876,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
     
     if((statusValue & 0x4) != 0x4){
         
-        unsigned long 	aValue = [self dac:pChan];
+        uint32_t 	aValue = [self dac:pChan];
         
         [[self adapter] writeLongBlock:&aValue
                              atAddress:[self baseAddress] +     reg[kDacs].addressOffset + (pChan * 0x100)
@@ -896,7 +896,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 
 - (void) writeGain:(unsigned short) pChan
 {
-    unsigned long 	aValue = [self gain:pChan];
+    uint32_t 	aValue = [self gain:pChan];
     
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] +     reg[kGain].addressOffset + (pChan * 0x100)
@@ -915,7 +915,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 
 - (void) writePulseWidth:(unsigned short) pChan
 {
-    unsigned long 	aValue = [self pulseWidth:pChan];
+    uint32_t 	aValue = [self pulseWidth:pChan];
     
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] +     reg[kPulseWidth].addressOffset + (pChan * 0x100)
@@ -939,7 +939,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 
 - (void) writeChannelConfiguration
 {
-    unsigned long mask = 0x0;
+    uint32_t mask = 0x0;
     //some bits must be set or cleared
     mask |= (0x1<<4);   //bit 4 must be 1
 
@@ -961,7 +961,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
     //NLOC = NS/10;
     
     //don't support custom sizes
-	unsigned long aValue = 0UL;
+	uint32_t aValue = 0UL;
     
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + reg[kCustomSize].addressOffset
@@ -972,7 +972,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 
 - (void) report
 {
-	unsigned long enabled, threshold, status, dacValue,triggerSrc;
+	uint32_t enabled, threshold, status, dacValue,triggerSrc;
 	[self read:kChanEnableMask  returnValue:&enabled];
 	[self read:kTrigSrcEnblMask returnValue:&triggerSrc];
 	int chan;
@@ -999,9 +999,9 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 	}
 	NSLogFont([NSFont fontWithName:@"Monaco" size:10],@"-----------------------------------------------------------\n");
 	
-	unsigned long aValue;
+	uint32_t aValue;
 	[self read:kBufferOrganization returnValue:&aValue];
-	NSLogFont([NSFont fontWithName:@"Monaco" size:10],@"# Buffer Blocks : %d\n",(long)powf(2.,(float)aValue));
+	NSLogFont([NSFont fontWithName:@"Monaco" size:10],@"# Buffer Blocks : %d\n",(int32_t)powf(2.,(float)aValue));
 	
 	NSLogFont([NSFont fontWithName:@"Monaco" size:10],@"Software Trigger: %@\n",triggerSrc&0x80000000?@"Enabled":@"Disabled");
 	NSLogFont([NSFont fontWithName:@"Monaco" size:10],@"External Trigger: %@\n",triggerSrc&0x40000000?@"Enabled":@"Disabled");
@@ -1063,7 +1063,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 
 - (void) softwareReset
 {
-	unsigned long aValue = 0;
+	uint32_t aValue = 0;
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + reg[kSWReset].addressOffset
                         numToWrite:1
@@ -1074,7 +1074,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 
 - (void) clearAllMemory
 {
-	unsigned long aValue = 0;
+	uint32_t aValue = 0;
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + reg[kSWClear].addressOffset
                         numToWrite:1
@@ -1085,7 +1085,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 
 - (void) writeTriggerSource
 {
-	unsigned long aValue = ((coincidenceLevel  & 0x7) << 24) |
+	uint32_t aValue = ((coincidenceLevel  & 0x7) << 24) |
                            ((coincidenceWindow & 0xf) << 20) |
                             (triggerSourceMask & 0xc00000ff); //software and ext trigger are encode in the top
 	[[self adapter] writeLongBlock:&aValue
@@ -1098,7 +1098,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 
 - (void) writeTriggerOut
 {
-    unsigned long aValue =  (triggerOutMask & 0xffff)         |
+    uint32_t aValue =  (triggerOutMask & 0xffff)         |
                             ((triggerOutLogic & 0x3) << 29)   |
                             ((majorityLevel & 0x7)   << 8);
  
@@ -1111,7 +1111,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 
 - (void) writeFrontPanelControl
 {
-    unsigned long aValue = (frontPanelControlMask & 0xffffffff);
+    uint32_t aValue = (frontPanelControlMask & 0xffffffff);
 
 	[[self adapter] writeLongBlock:&aValue
 			     atAddress:[self baseAddress] + reg[kFPIOControl].addressOffset
@@ -1122,7 +1122,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 
 - (void) readFrontPanelControl
 {
-	unsigned long aValue = 0;
+	uint32_t aValue = 0;
 	[[self adapter] readLongBlock:&aValue
 			     atAddress:[self baseAddress] + reg[kFPIOControl].addressOffset
 			    numToRead:1
@@ -1135,7 +1135,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 
 - (void) writeBufferOrganization
 {
-	unsigned long aValue = eventSize;//(unsigned long)pow(2.,(float)eventSize);	
+	uint32_t aValue = eventSize;//(uint32_t)pow(2.,(float)eventSize);	
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + reg[kBufferOrganization].addressOffset
                         numToWrite:1
@@ -1145,7 +1145,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 
 - (void) writeChannelEnabledMask
 {
-	unsigned long aValue = enabledMask;
+	uint32_t aValue = enabledMask;
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + reg[kChanEnableMask].addressOffset
                         numToWrite:1
@@ -1156,9 +1156,9 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 
 - (void) writePostTriggerSetting
 {
-    long setting = (postTriggerSetting-kPostTriggerLatency)/8;
+    int32_t setting = (postTriggerSetting-kPostTriggerLatency)/8;
     if(setting<0)setting=0;
-    unsigned long aValue = setting;
+    uint32_t aValue = setting;
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + reg[kPostTrigSetting].addressOffset
                         numToWrite:1
@@ -1174,7 +1174,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 
 - (void) writeAcquistionControl:(BOOL)start
 {
-	unsigned long aValue = (countAllTriggers<<3) | (start<<2) | (acquisitionMode&0x3);
+	uint32_t aValue = (countAllTriggers<<3) | (start<<2) | (acquisitionMode&0x3);
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + reg[kAcqControl].addressOffset
                         numToWrite:1
@@ -1186,8 +1186,8 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 - (void) writeNumberBLTEvents:(BOOL)enable
 {
     //we must start in a safe mode with 1 event, the numberBLTEvents is passed to SBC
-    //unsigned long aValue = (enable) ? numberBLTEventsToReadout : 0;
-    unsigned long aValue = (enable) ? 1 : 0;
+    //uint32_t aValue = (enable) ? numberBLTEventsToReadout : 0;
+    uint32_t aValue = (enable) ? 1 : 0;
     
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + reg[kBLTEventNum].addressOffset
@@ -1198,7 +1198,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 
 - (void) writeEnableBerr:(BOOL)enable
 {
-    unsigned long aValue;
+    uint32_t aValue;
 
 	//we set both bit4: BERR and bit5: ALIGN64 for MBLT64 to work correctly with SBC
     if (enable)aValue = 0x30;
@@ -1244,8 +1244,8 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 }
 
 #pragma mark ***DataTaker
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -1324,7 +1324,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 {
 	@try {
-		unsigned long status;
+		uint32_t status;
 		isRunning = YES; 
 		
 		[controller readLongBlock:&status
@@ -1337,7 +1337,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
         
 		if(status & kEventReadyMask){
 			//OK, at least one event is ready
-			unsigned long theEventSize;
+			uint32_t theEventSize;
 			[controller readLongBlock:&theEventSize
 					atAddress:eventSizeReg
 					numToRead:1
@@ -1346,9 +1346,9 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 			
 			if ( theEventSize == 0 ) return;
 
-			NSMutableData* theData = [NSMutableData dataWithCapacity:2+theEventSize*sizeof(long)];
-			[theData setLength:(2+theEventSize)*sizeof(long)];
-			unsigned long* p = (unsigned long*)[theData bytes];
+			NSMutableData* theData = [NSMutableData dataWithCapacity:2+theEventSize*sizeof(int32_t)];
+			[theData setLength:(2+theEventSize)*sizeof(int32_t)];
+			uint32_t* p = (uint32_t*)[theData bytes];
 			*p++ = dataId | (2 + theEventSize);
 			*p++ = location; 
 

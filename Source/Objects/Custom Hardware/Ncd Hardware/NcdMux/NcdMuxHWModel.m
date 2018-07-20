@@ -28,16 +28,16 @@
 @interface NcdMuxHWModel (private)
 - (BOOL) waitForCSBLow;
 - (BOOL) waitForCSBLow;
-- (mux_result) sendCmd:(unsigned long) anOutputWord;
-- (unsigned long) invertValue: (unsigned long) anOutputWord;
-- (unsigned long) insertMuxAddress:(unsigned long)aMuxAddress into:(unsigned long) anOutputWord;
-- (unsigned long) insertCommand: (unsigned long)aCommand into:(unsigned long) anOutputWord;
-- (unsigned long) insertBusStrobe:(BOOL)aState into:(unsigned long) anOutputWord;
-- (unsigned long) insertScopeTrigger:(char)aScopeTriggerSelection into:(unsigned long)anOutputWord;
-- (unsigned long) insertChannel:(unsigned short)theChannel into:(unsigned long) anOutputWord;
-- (unsigned long) insertData:(unsigned short) theData into:(unsigned long) anOutputWord;
-- (unsigned long) insertControlPadInto:(unsigned long) anOutputWord;
-- (void) resetBusStrobeInWord:(unsigned long) anOutputWord;
+- (mux_result) sendCmd:(uint32_t) anOutputWord;
+- (uint32_t) invertValue: (uint32_t) anOutputWord;
+- (uint32_t) insertMuxAddress:(uint32_t)aMuxAddress into:(uint32_t) anOutputWord;
+- (uint32_t) insertCommand: (uint32_t)aCommand into:(uint32_t) anOutputWord;
+- (uint32_t) insertBusStrobe:(BOOL)aState into:(uint32_t) anOutputWord;
+- (uint32_t) insertScopeTrigger:(char)aScopeTriggerSelection into:(uint32_t)anOutputWord;
+- (uint32_t) insertChannel:(unsigned short)theChannel into:(uint32_t) anOutputWord;
+- (uint32_t) insertData:(unsigned short) theData into:(uint32_t) anOutputWord;
+- (uint32_t) insertControlPadInto:(uint32_t) anOutputWord;
+- (void) resetBusStrobeInWord:(uint32_t) anOutputWord;
 - (mux_result) readReturnCode;
 - (BOOL) delayRead;
 - (void) initAdcReadDelay;
@@ -99,7 +99,7 @@
 	mux_result theResult;
     @synchronized(self){
 		//Build the command word
-		unsigned long anOutputWord = [self insertMuxAddress:muxBox into:0L];
+		uint32_t anOutputWord = [self insertMuxAddress:muxBox into:0L];
 		anOutputWord = [self insertCommand:kWriteChannelCmd into:anOutputWord];
 		anOutputWord = [self insertChannel:aChannel into:anOutputWord];
 		
@@ -117,7 +117,7 @@
     @synchronized(self){
 		theResult = [self writeChannel:aChannel mux:muxBox];
 		if(theResult==kCarWritten){
-			unsigned long anOutputWord = 0L;
+			uint32_t anOutputWord = 0L;
 			anOutputWord = [self insertCommand:kWriteDacCmd into:anOutputWord];
 			anOutputWord = [self insertData:aValue into:anOutputWord];
 			
@@ -141,13 +141,13 @@
 	@synchronized(self){
 		theResult = [self writeChannel:aChannel mux:muxBox];
 		if(theResult==kCarWritten){
-			unsigned long anOutputWord = [self insertCommand:kReadAdcCmd into:0L];
+			uint32_t anOutputWord = [self insertCommand:kReadAdcCmd into:0L];
 			
 			theResult = [self sendCmd:anOutputWord];
 			
 			if(theResult == kAdcToDr){
 				ORIP408Model* the408 = [connectorTo408 connectedObject];
-				unsigned long value = [the408 getInputWithMask:kControlPad];
+				uint32_t value = [the408 getInputWithMask:kControlPad];
 				*theDrValue = (unsigned short)((kDataRegisterMask & value) >> kOutReadDRShift);
 			}
 			[self resetBusStrobeInWord:anOutputWord];
@@ -168,13 +168,13 @@
 		theResult = [self writeChannel:aChannel mux:muxBox];
 		
 		if(theResult==kCarWritten){
-			unsigned long anOutputWord = [self insertCommand:kReadAdcCmd into:0L];
+			uint32_t anOutputWord = [self insertCommand:kReadAdcCmd into:0L];
 			
 			theResult = [self sendCmd:anOutputWord];
 			
 			if(theResult == kAdcToDr){
 				ORIP408Model* the408 = [connectorTo408 connectedObject];
-				unsigned long value = [the408 getInputWithMask:kControlPad];
+				uint32_t value = [the408 getInputWithMask:kControlPad];
 				*theDrValue = (kAdcMask & value) >> kOutReadDRShift;
 			}
 			[self resetBusStrobeInWord:anOutputWord];
@@ -193,7 +193,7 @@
     
 	mux_result theResult;
     @synchronized(self){
-		unsigned long anOutputWord = [self insertMuxAddress:muxBox into:0L];
+		uint32_t anOutputWord = [self insertMuxAddress:muxBox into:0L];
 		anOutputWord = [self insertCommand:kStatusQueryCmd into:anOutputWord];
 		
 		theResult = [self sendCmd:anOutputWord];
@@ -217,7 +217,7 @@
 	mux_result theResult;
 	@synchronized(self){
 		
-		unsigned long anOutputWord = 0L;
+		uint32_t anOutputWord = 0L;
 		anOutputWord = [self insertCommand:kArmRearmCmd into:anOutputWord];
 		anOutputWord = [self insertScopeTrigger:0 into:anOutputWord];
 		
@@ -234,7 +234,7 @@
 	mux_result theResult;
 	@synchronized(self){
 		
-		unsigned long anOutputWord = 0L;
+		uint32_t anOutputWord = 0L;
 		anOutputWord = [self insertCommand:kArmRearmCmd into:anOutputWord];
 		anOutputWord = [self insertScopeTrigger:[self scopeSelection] into:anOutputWord];
 		
@@ -252,7 +252,7 @@
  	@synchronized(self){
 		
 		// Build the command word
-		unsigned long anOutputWord = 0L;
+		uint32_t anOutputWord = 0L;
 		anOutputWord = [self insertCommand:kReadEventCmd into:anOutputWord];
 		
 		theResult = [self sendCmd:anOutputWord];
@@ -275,7 +275,7 @@
 	mux_result theResult;
 	@synchronized(self){
 		
-		unsigned long anOutputWord = 0L;
+		uint32_t anOutputWord = 0L;
 		anOutputWord = [self insertMuxAddress:muxBox into:anOutputWord];
 		anOutputWord = [self insertCommand:kReadSelMuxCmd into:anOutputWord];
 		
@@ -299,7 +299,7 @@
     
 	mux_result theResult;
 	@synchronized(self){
-		unsigned long anOutputWord = 0L;
+		uint32_t anOutputWord = 0L;
 		anOutputWord = [self insertCommand:kResetCmd into:anOutputWord];
 		
 		theResult = [self sendCmd:anOutputWord];
@@ -354,9 +354,9 @@
     }
     
     // Build the command word
-    unsigned long anOutputWord = 0L;
+    uint32_t anOutputWord = 0L;
     
-    unsigned long aMask = [self readRelayMask];
+    uint32_t aMask = [self readRelayMask];
     NSEnumerator* e = [someSupplies objectEnumerator];
     id aSupply;
     while(aSupply = [e nextObject]){
@@ -485,18 +485,18 @@
     return result;
 }
 
-- (unsigned long) readRelayMask
+- (uint32_t) readRelayMask
 {
     // Build the command word
     
-    unsigned long mask = 0L;
-    unsigned long anOutputWord = 0L;
+    uint32_t mask = 0L;
+    uint32_t anOutputWord = 0L;
     anOutputWord = [self insertCommand:kReadHVRelaysCmd into:anOutputWord];
     
     mux_result theResult = [self sendCmd:anOutputWord];
     
     if(theResult == kHVRelaysToDr){
-        unsigned long theData;
+        uint32_t theData;
         
         
         ORIP408Model* the408 = [connectorTo408 connectedObject];
@@ -596,7 +596,7 @@ static NSString *NcdMuxdelayAdcRead 		= @"NcdMuxdelayAdcRead";
     }
 }
 
-- (mux_result) sendCmd:(unsigned long) anOutputWord
+- (mux_result) sendCmd:(uint32_t) anOutputWord
 {
 	mux_result theResult = 0;
 	[sendLock lock];
@@ -635,7 +635,7 @@ static NSString *NcdMuxdelayAdcRead 		= @"NcdMuxdelayAdcRead";
 	return theResult;
 }
 
-- (void) resetBusStrobeInWord:(unsigned long) anOutputWord
+- (void) resetBusStrobeInWord:(uint32_t) anOutputWord
 {
     ORIP408Model* the408 = [connectorTo408 connectedObject];
     anOutputWord = [self insertBusStrobe:0 into:anOutputWord];			//lower the strobe
@@ -643,49 +643,49 @@ static NSString *NcdMuxdelayAdcRead 		= @"NcdMuxdelayAdcRead";
 }
 
 #pragma mark •••Low Level Access
-- (unsigned long) invertValue: (unsigned long) anOutputWord
+- (uint32_t) invertValue: (uint32_t) anOutputWord
 {
     return ~anOutputWord;
 }
 
-- (unsigned long) insertMuxAddress:(unsigned long)aMuxAddress into:(unsigned long) anOutputWord
+- (uint32_t) insertMuxAddress:(uint32_t)aMuxAddress into:(uint32_t) anOutputWord
 {
-    anOutputWord |= ((unsigned long)aMuxAddress << kMuxSelBitsShift) & kMuxSelBitsMask;
+    anOutputWord |= ((uint32_t)aMuxAddress << kMuxSelBitsShift) & kMuxSelBitsMask;
     return anOutputWord;
 }
 
-- (unsigned long) insertCommand: (unsigned long)aCommand into:(unsigned long) anOutputWord
+- (uint32_t) insertCommand: (uint32_t)aCommand into:(uint32_t) anOutputWord
 {
-    anOutputWord |= ((unsigned long)aCommand << kCmdShift) & kCmdMask;
+    anOutputWord |= ((uint32_t)aCommand << kCmdShift) & kCmdMask;
     return anOutputWord;
 }
 
-- (unsigned long) insertBusStrobe:(BOOL)aState into:(unsigned long) anOutputWord
+- (uint32_t) insertBusStrobe:(BOOL)aState into:(uint32_t) anOutputWord
 {
     if(aState)anOutputWord |= kBusStrobeBitMask;
     else anOutputWord &= ~kBusStrobeBitMask;
     return anOutputWord;
 }
 
-- (unsigned long) insertScopeTrigger:(char)aScopeTriggerSelection into:(unsigned long)anOutputWord
+- (uint32_t) insertScopeTrigger:(char)aScopeTriggerSelection into:(uint32_t)anOutputWord
 {
     return [self insertData:aScopeTriggerSelection into:anOutputWord];
 }
 
-- (unsigned long) insertChannel:(unsigned short)theChannel into:(unsigned long) anOutputWord
+- (uint32_t) insertChannel:(unsigned short)theChannel into:(uint32_t) anOutputWord
 {
-    anOutputWord |= ((unsigned long)theChannel << kChannelShift) & kChannelMask;
+    anOutputWord |= ((uint32_t)theChannel << kChannelShift) & kChannelMask;
     return anOutputWord;
 }
 
-- (unsigned long) insertData:(unsigned short) theData into:(unsigned long) anOutputWord
+- (uint32_t) insertData:(unsigned short) theData into:(uint32_t) anOutputWord
 {
-    anOutputWord |= ((unsigned long)theData << kOutDataShift) & kOutDataMask;
+    anOutputWord |= ((uint32_t)theData << kOutDataShift) & kOutDataMask;
     return anOutputWord;
     
 }
 
-- (unsigned long) insertControlPadInto:(unsigned long) anOutputWord
+- (uint32_t) insertControlPadInto:(uint32_t) anOutputWord
 {
     anOutputWord |=  kControlPad;
     return anOutputWord;

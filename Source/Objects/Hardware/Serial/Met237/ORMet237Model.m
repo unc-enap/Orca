@@ -137,7 +137,7 @@ NSString* ORMet237Lock = @"ORMet237Lock";
     
 	if((missedCycleCount >= 3) && (countingMode == kMet237Counting)){
 		if(!missingCyclesAlarm){
-			NSString* s = [NSString stringWithFormat:@"Met637 (Unit %lu) Missing Cycles",[self uniqueIdNumber]];
+			NSString* s = [NSString stringWithFormat:@"Met637 (Unit %u) Missing Cycles",[self uniqueIdNumber]];
 			missingCyclesAlarm = [[ORAlarm alloc] initWithName:s severity:kHardwareAlarm];
 			[missingCyclesAlarm setSticky:YES];
             [missingCyclesAlarm setHelpString:@"The particle counter is not reporting counts at the end of its cycle. ORCA tried to kick start it at least three times.\n\nThis alarm will not go away until the problem is cleared. Acknowledging the alarm will silence it."];
@@ -342,7 +342,7 @@ NSString* ORMet237Lock = @"ORMet237Lock";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORMet237ModelMeasurementDateChanged object:self];
 }
 
-- (unsigned long) timeMeasured
+- (uint32_t) timeMeasured
 {
 	return timeMeasured;
 }
@@ -516,7 +516,7 @@ NSString* ORMet237Lock = @"ORMet237Lock";
 {
 	NSString* s;
  	@synchronized(self){
-		s= [NSString stringWithFormat:@"Met237,%lu",[self uniqueIdNumber]];
+		s= [NSString stringWithFormat:@"Met237,%u",[self uniqueIdNumber]];
 	}
 	return s;
 }

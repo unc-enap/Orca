@@ -165,11 +165,11 @@ NSString* ORDataPipeTypeChangedNotification = @"ORDataPipeTypeChangedNotificatio
 
 #pragma mark •••Accessors
 
-- (unsigned long)	runType
+- (uint32_t)	runType
 {
     return runType;
 }
-- (void) setRunType:(unsigned long)aMask
+- (void) setRunType:(uint32_t)aMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setRunType:runType];
     runType = aMask;
@@ -190,7 +190,7 @@ NSString* ORDataPipeTypeChangedNotification = @"ORDataPipeTypeChangedNotificatio
    return runInProgress;
 }
 
-- (long) numberBytesSent
+- (int32_t) numberBytesSent
 {
     return numberBytesSent;
 }
@@ -276,7 +276,7 @@ NSString* ORDataPipeTypeChangedNotification = @"ORDataPipeTypeChangedNotificatio
 
 - (void) runTaskStarted:(NSDictionary*)userInfo
 {
-    unsigned long runModelRunType = [runModel runType];
+    uint32_t runModelRunType = [runModel runType];
     validRunType = !(runModelRunType & runType);
     [self setUpImage];
 

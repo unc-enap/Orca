@@ -29,7 +29,7 @@
 // Constants
 const float	 kDefaultChnlPos	=	0.0;
 const float	 kDefaultChnlScale	=	1.0;
-const long	 kDefaultPulseLength = 5000;
+const int32_t	 kDefaultPulseLength = 5000;
 const float	 kDefaultHorizScale = 1.0e-6;
 const float	 kDefaultHorizPos = 0.5;
 
@@ -127,11 +127,11 @@ NSString*	OROscChnl								= @"Osc Chnl";
 //--------------------------------------------------------------------------------
 /*!\method  scopeType  
 * \brief	Returns the scope type.
-* \return	The scope type as unsigned long.  Might be up to 4 character text.
+* \return	The scope type as uint32_t.  Might be up to 4 character text.
 * \note	
 */
 //--------------------------------------------------------------------------------
-- (unsigned long) scopeType
+- (uint32_t) scopeType
 {
     return( mScopeType );
 }
@@ -139,11 +139,11 @@ NSString*	OROscChnl								= @"Osc Chnl";
 //--------------------------------------------------------------------------------
 /*!\method  scopeVersion  
 * \brief	Returns the scope version.
-* \return	The scope version as unsigned long.  Might be character text.
+* \return	The scope version as uint32_t.  Might be character text.
 * \note	
 */
 //--------------------------------------------------------------------------------
-- (unsigned long) scopeVersion
+- (uint32_t) scopeVersion
 {
     return( mScopeVersion );
 }
@@ -431,7 +431,7 @@ NSString*	OROscChnl								= @"Osc Chnl";
 * \note	
 */
 //--------------------------------------------------------------------------------
-- (long) waveformLength
+- (int32_t) waveformLength
 {
     return mWaveformLength;
 }
@@ -443,7 +443,7 @@ NSString*	OROscChnl								= @"Osc Chnl";
 * \note	
 */
 //--------------------------------------------------------------------------------
-- (void) setWaveformLength: (long) aWaveformLength
+- (void) setWaveformLength: (int32_t) aWaveformLength
 {
 	// Set the undo manager action.  The label has already been set by the controller calling this method.
     [[[ self undoManager ] prepareWithInvocationTarget: self ]
@@ -750,22 +750,22 @@ NSString*	OROscChnl								= @"Osc Chnl";
     [ self setDoFullInit: savedstate ];
 }
 
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
 
 
-- (unsigned long) gtidDataId { return gtidDataId; }
-- (void) setGtidDataId: (unsigned long) GtidDataId
+- (uint32_t) gtidDataId { return gtidDataId; }
+- (void) setGtidDataId: (uint32_t) GtidDataId
 {
     gtidDataId = GtidDataId;
 }
 
 
-- (unsigned long) clockDataId { return clockDataId; }
-- (void) setClockDataId: (unsigned long) ClockDataId
+- (uint32_t) clockDataId { return clockDataId; }
+- (void) setClockDataId: (uint32_t) ClockDataId
 {
     clockDataId = ClockDataId; 
 }
@@ -920,7 +920,7 @@ NSString*	OROscChnl								= @"Osc Chnl";
 	
 	// [ self oscSetScreenDisplay: true ];			// Display message box.
     //[ self oscLockPanel: true ];			// Lock front panel of oscilloscope.
-    //[ self oscSetQueryFormat: kLongLabel ];		// Set label format to long.
+    //[ self oscSetQueryFormat: kLongLabel ];		// Set label format to int32_t.
     //[ self oscSendTextMessage: aStartMsg ];		// Writes start message
     //[ self clearStatusReg ];				// Resets GPIB device status registers
     if(mDoFullInit){
@@ -1020,7 +1020,7 @@ NSString*	OROscChnl								= @"Osc Chnl";
     eventCount[aChannel]++;
 }
 
-- (unsigned long) eventCount:(int)aChannel
+- (uint32_t) eventCount:(int)aChannel
 {
     return eventCount[aChannel];
 }
@@ -1256,8 +1256,8 @@ static NSString*	OROscTriggerSource		= @"ORTriggerSource";
 #pragma mark ***Abstract - General;
 - (short)	oscScopeId { return( -1 ); }
 - (bool) 	oscBusy { return true; }
-- (long)	oscGetDateTime { return( 0 ); }
-- (void)	oscSetDateTime: (long) aTime {}
+- (int32_t)	oscGetDateTime { return( 0 ); }
+- (void)	oscSetDateTime: (int32_t) aTime {}
 - (void)	oscLockPanel: (bool) aFlag {}
 - (void)	oscResetOscilloscope {}
 - (void)	oscSendTextMessage: (NSString*) aMessage {}

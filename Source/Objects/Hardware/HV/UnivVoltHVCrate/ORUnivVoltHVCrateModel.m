@@ -823,7 +823,7 @@ NSString* HVkErrorMsg = @"ErrorMsg";
 	char		returnBufferString[ 257 ];
 	char		returnCodeArray[ NUMcCODENUM + 1  ];
 //	char		displayArray[ 2 ];
-	unsigned long			lengthOfReturn = 0;
+	uint32_t			lengthOfReturn = 0;
 	int			i;
 	int			responseIndex;
 	int			j;

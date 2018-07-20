@@ -60,10 +60,10 @@
     [classList release];
 }
 
-- (unsigned long) assignDataIds:(BOOL)wantsShort
+- (uint32_t) assignDataIds:(BOOL)wantsShort
 {
     //a short device type is of the form 1xxx xx00 0000 0000 0000 0000 0000 0000  Note that the top bit is ALWAYS set
-    //a long device type is of the form  0xxx xxxx xxxx xx00 0000 0000 0000 0000  Note that the top bit is ALWAYS clear
+    //a int32_t device type is of the form  0xxx xxxx xxxx xx00 0000 0000 0000 0000  Note that the top bit is ALWAYS clear
     if(wantsShort && shortDeviceType<0x3f){ //11 1111 = 63
         return shortDeviceType++ << 26;
     }
@@ -77,7 +77,7 @@
     }
 }
 
-- (unsigned long) reservedDataId:(NSString*)aClassName
+- (uint32_t) reservedDataId:(NSString*)aClassName
 {
 	//reserved ids -- if you add to this list, don't forget to change the limit in the code above
 	//ORCARootService -> 0x1fff

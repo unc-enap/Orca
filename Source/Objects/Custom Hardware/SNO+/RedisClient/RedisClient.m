@@ -13,10 +13,10 @@
 
 @synthesize port, host;
 
-- (void) setTimeout: (long) _timeout
+- (void) setTimeout: (int32_t) _timeout
 {
     /*
-     Timeout should be specified in ms using a long unsigned integer
+     Timeout should be specified in ms using a int32_t unsigned integer
     */
     @synchronized(self) {
         timeout = _timeout;
@@ -36,7 +36,7 @@
     [super dealloc];
 }
 
-- (long) timeout
+- (int32_t) timeout
 {
     return timeout;
 }
@@ -179,7 +179,7 @@
     freeReplyObject(r);
 }
 
-- (long long) intCommand: (const char *) fmt, ... 
+- (int64_t) intCommand: (const char *) fmt, ... 
 {
     va_list ap;
     va_start(ap,fmt);
@@ -193,7 +193,7 @@
         [excep raise];
     }
 
-    long long responseVal = r->integer;
+    int64_t responseVal = r->integer;
     freeReplyObject(r);
     return responseVal;
 }

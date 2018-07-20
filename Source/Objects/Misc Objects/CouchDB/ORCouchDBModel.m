@@ -703,7 +703,7 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
                     [dateFormatter setTimeZone:gmt];
                     NSString *lastTimeStamp = [dateFormatter stringFromDate:localDate];
                     NSDate* gmtTime = [dateFormatter dateFromString:lastTimeStamp];
-                    unsigned long secondsSince1970 = [gmtTime timeIntervalSince1970];
+                    uint32_t secondsSince1970 = [gmtTime timeIntervalSince1970];
                     [dateFormatter release];
                     
                     if(![lastTimeStamp length]) lastTimeStamp = @"0";
@@ -781,7 +781,7 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
                 [dateFormatter setTimeZone:gmt];
                 NSString *lastTimeStamp = [dateFormatter stringFromDate:[NSDate date]];
                 NSDate* gmtTime = [dateFormatter dateFromString:lastTimeStamp];
-                unsigned long secondsSince1970 = [gmtTime timeIntervalSince1970];
+                uint32_t secondsSince1970 = [gmtTime timeIntervalSince1970];
                 [dateFormatter release];
                 
                 
@@ -860,7 +860,7 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
                 [dateFormatter setTimeZone:gmt];
                 NSString *lastTimeStamp = [dateFormatter stringFromDate:localDate];
                 NSDate* gmtTime = [dateFormatter dateFromString:lastTimeStamp];
-                unsigned long secondsSince1970 = [gmtTime timeIntervalSince1970];
+                uint32_t secondsSince1970 = [gmtTime timeIntervalSince1970];
                 [dateFormatter release];
                 
                 
@@ -899,7 +899,7 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
     [dateFormatter setTimeZone:gmt];
     NSString* lastTimeStamp = [dateFormatter stringFromDate:localDate];
     NSDate* gmtTime = [dateFormatter dateFromString:lastTimeStamp];
-    unsigned long secondsSince1970 = [gmtTime timeIntervalSince1970];
+    uint32_t secondsSince1970 = [gmtTime timeIntervalSince1970];
     [dateFormatter release];
     
     NSMutableDictionary* eventInfo = [NSMutableDictionary dictionaryWithDictionary:aDocument];
@@ -1119,7 +1119,7 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
         }
         if(replicationCheckCount >= 10){
             if(!replicationAlarm){
-                NSString* s = [NSString stringWithFormat:@"CouchDB (%lu)",[self uniqueIdNumber]];
+                NSString* s = [NSString stringWithFormat:@"CouchDB (%u)",[self uniqueIdNumber]];
                 replicationAlarm = [[ORAlarm alloc] initWithName:s severity:kImportantAlarm];
                 [replicationAlarm setSticky:YES];
                 [replicationAlarm setHelpString:@"CouchDB replication has failed.\nORCA has tried repeatedly and has been unable to restart it. Intervention is required. Contact your database manager.\n\nThis alarm will not go away until the problem is cleared. Acknowledging the alarm will silence it."];
@@ -1186,11 +1186,11 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
 {
     NSDictionary* info = [aNote userInfo];
     if([[info objectForKey:@"kRunMode"] intValue]==0){
-        unsigned long runNumberLocal     = [[info objectForKey:@"kRunNumber"] unsignedLongValue];
-        unsigned long subRunNumberLocal  = [[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
+        uint32_t runNumberLocal     = [[info objectForKey:@"kRunNumber"] unsignedLongValue];
+        uint32_t subRunNumberLocal  = [[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
         NSString* comment;
-        if(subRunNumberLocal==0) comment = [NSString stringWithFormat:@"Run %lu Started",runNumberLocal];
-        else                     comment = [NSString stringWithFormat:@"Run %lu.%lu Started",runNumberLocal,subRunNumberLocal];
+        if(subRunNumberLocal==0) comment = [NSString stringWithFormat:@"Run %u Started",runNumberLocal];
+        else                     comment = [NSString stringWithFormat:@"Run %u.%u Started",runNumberLocal,subRunNumberLocal];
         
         NSDictionary* doc = [NSDictionary dictionaryWithObjectsAndKeys:
                              [NSNumber numberWithUnsignedLong:runNumberLocal]   , @"RunNumber",
@@ -1210,12 +1210,12 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
 {
     NSDictionary* info = [aNote userInfo];
     if([[info objectForKey:@"kRunMode"] intValue]==0){
-        unsigned long runNumberLocal     = [[info objectForKey:@"kRunNumber"] unsignedLongValue];
-        unsigned long subRunNumberLocal  = [[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
+        uint32_t runNumberLocal     = [[info objectForKey:@"kRunNumber"] unsignedLongValue];
+        uint32_t subRunNumberLocal  = [[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
         float elapsedTimeLocal   = [[info objectForKey:@"kElapsedTime"]floatValue];
         NSString* comment;
-        if(subRunNumberLocal==0) comment = [NSString stringWithFormat:@"Run %lu Stopped",runNumberLocal];
-        else                     comment = [NSString stringWithFormat:@"Run %lu.%lu Stopped",runNumberLocal,subRunNumberLocal];
+        if(subRunNumberLocal==0) comment = [NSString stringWithFormat:@"Run %u Stopped",runNumberLocal];
+        else                     comment = [NSString stringWithFormat:@"Run %u.%u Stopped",runNumberLocal,subRunNumberLocal];
         
         
         NSDictionary* doc = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -1298,7 +1298,7 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
         [dateFormatter setTimeZone:gmt];
         NSString*   lastTimeStamp       = [dateFormatter stringFromDate:[NSDate date]];
         NSDate*     gmtTime             = [dateFormatter dateFromString:lastTimeStamp];
-        unsigned long secondsSince1970  = [gmtTime timeIntervalSince1970];
+        uint32_t secondsSince1970  = [gmtTime timeIntervalSince1970];
         [dateFormatter release];
         
         NSString* anId = [anObj fullID];
@@ -1418,7 +1418,7 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
         [dateFormatter setTimeZone:gmt];
         NSString*   lastTimeStamp       = [dateFormatter stringFromDate:[NSDate date]];
         NSDate*     gmtTime             = [dateFormatter dateFromString:lastTimeStamp];
-        unsigned long secondsSince1970  = [gmtTime timeIntervalSince1970];
+        uint32_t secondsSince1970  = [gmtTime timeIntervalSince1970];
         [dateFormatter release];
         
         NSString* anId = [anObj fullID];
@@ -1541,7 +1541,7 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
                 NSMutableArray* dataSetNames = [NSMutableArray array];
                 for(id aMonitor in dataMonitors){
                     NSArray* objs1d = [[aMonitor  collectObjectsOfClass:[OR1DHisto class]] retain];
-                    NSString* baseMonitorName = [NSString stringWithFormat:@"Monitor%lu",[aMonitor uniqueIdNumber]];
+                    NSString* baseMonitorName = [NSString stringWithFormat:@"Monitor%u",[aMonitor uniqueIdNumber]];
                     @try {
                         
                         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -1551,11 +1551,11 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
                         [dateFormatter setTimeZone:gmt];
                         NSString*   lastTimeStamp       = [dateFormatter stringFromDate:[NSDate date]];
                         NSDate*     gmtTime             = [dateFormatter dateFromString:lastTimeStamp];
-                        unsigned long secondsSince1970  = [gmtTime timeIntervalSince1970];
+                        uint32_t secondsSince1970  = [gmtTime timeIntervalSince1970];
                         [dateFormatter release];
 
                         for(OR1DHisto* aDataSet in objs1d){
-                            unsigned long start,end;
+                            uint32_t start,end;
                             NSString* s = [aDataSet getnonZeroDataAsStringWithStart:&start end:&end];
                             NSString* dataSetName = [baseMonitorName stringByAppendingFormat:@",%@",[aDataSet fullName]];
                             NSDictionary* dataInfo = [NSDictionary dictionaryWithObjectsAndKeys:

@@ -26,10 +26,10 @@
 
 @implementation ORDGF4cDecoderForWaveform
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr   = (unsigned long*)someData;
-	unsigned long length = ExtractLength(*ptr);
+    uint32_t* ptr   = (uint32_t*)someData;
+	uint32_t length = ExtractLength(*ptr);
 
 	ptr++;
 	unsigned char crate   = (*ptr>>21) & 0x01e;
@@ -40,7 +40,7 @@
 	NSString* cardKey = [self getStationKey: card];
 	NSString* channelKey = [self getChannelKey: channel];
 	ptr++;	
-    NSData* tmpData = [ NSData dataWithBytes: (char*)ptr length: length*sizeof(long) ];
+    NSData* tmpData = [ NSData dataWithBytes: (char*)ptr length: length*sizeof(int32_t) ];
     [aDataSet loadWaveform:tmpData 
 					offset:0 //bytes!
 				  unitSize:4 //unit size in bytes!
@@ -50,7 +50,7 @@
     return length; //must return number of bytes processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     
     NSString* title= @"DGF4c Waveform\n\n";
@@ -70,9 +70,9 @@
 
 @implementation ORDGF4cDecoderForEvent
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long*	recordPtr = (unsigned long*)someData;
+    uint32_t*	recordPtr = (uint32_t*)someData;
 	
 	//--------------------------------------
 	//ORCA header part (all longs)
@@ -80,7 +80,7 @@
 	// 1: location
 	//--------------------------------------
 	
-	unsigned long length = ExtractLength(recordPtr[0]);
+	uint32_t length = ExtractLength(recordPtr[0]);
 	
 	unsigned char crate  = (recordPtr[1]>>21) & 0x01e;
 	unsigned char card   = (recordPtr[1]>>16) & 0x001f;
@@ -93,13 +93,13 @@
 	unsigned short* dataPtr = (unsigned short*)&recordPtr[2];	//recast to short
 	unsigned short* endDataPtr;
 	
-	unsigned long totalWords = length*2 - 4;					//don't count the ORCA header
+	uint32_t totalWords = length*2 - 4;					//don't count the ORCA header
 	unsigned short* bufferHeader = dataPtr;						//set up the bufferHeader block
 	unsigned short bufNData		 = bufferHeader[0];				//number of words in the buffer
 	endDataPtr = dataPtr + bufNData;
 	
 	//make sure that there's an event and check the length, if problem flush the rest
-	if((long)(totalWords-bufNData)<0 || bufNData<=kBufferHeaderLength)return length; 
+	if((int32_t)(totalWords-bufNData)<0 || bufNData<=kBufferHeaderLength)return length; 
 	
 	unsigned short task	 = bufferHeader[2]; //run task that generated this buffer, needed to determine chanheader length
 	task	 &= 0x0fff;						//take off the top bit to get the true 
@@ -142,7 +142,7 @@
 					
 					unsigned short* chanHeader	= dataPtr;			//set up for the channel header decode
 					unsigned short chanNData	= chanHeader[0];	//number of words in the channel header (may include waveforms)
-					long energy					= chanHeader[energyIndex];
+					int32_t energy					= chanHeader[energyIndex];
 					
 					[aDataSet histogram:energy numBins:65535 sender:self  withKeys:@"ORDGF4c", @"Events",crateKey,cardKey,[self getChannelKey:chan],nil];
 					
@@ -177,12 +177,12 @@
 	return length;
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     
     NSString* title= @"DGF4c Event\n\n";
 
-    unsigned long*	recordPtr = (unsigned long*)ptr;
+    uint32_t*	recordPtr = (uint32_t*)ptr;
 	
 	//--------------------------------------
 	//ORCA header part (all longs)
@@ -190,7 +190,7 @@
 	// 1: location
 	//--------------------------------------
 
-	unsigned long length = ExtractLength(recordPtr[0]);
+	uint32_t length = ExtractLength(recordPtr[0]);
 
 	unsigned char crate  = (recordPtr[1]>>21) & 0x01e;
 	unsigned char card   = (recordPtr[1]>>16) & 0x001f;
@@ -205,13 +205,13 @@
 		unsigned short* dataPtr = (unsigned short*)&recordPtr[2];	//recast to short
 		unsigned short* endDataPtr;
 		
-		unsigned long totalWords = length*2 - 4;					//don't count the ORCA header
+		uint32_t totalWords = length*2 - 4;					//don't count the ORCA header
 		unsigned short* bufferHeader = dataPtr;						//set up the bufferHeader block
 		unsigned short bufNData		 = bufferHeader[0];				//number of words in the buffer
 		endDataPtr = dataPtr + bufNData;
 		
 		//make sure that there's an event and check the length, if problem flush the rest
-		if((long)(totalWords-bufNData)<0 || bufNData<=kBufferHeaderLength)return [resultString stringByAppendingString:@"bad record length\n"]; 
+		if((int32_t)(totalWords-bufNData)<0 || bufNData<=kBufferHeaderLength)return [resultString stringByAppendingString:@"bad record length\n"]; 
 		
 		unsigned short task	 = bufferHeader[2]; //run task that generated this buffer, needed to determine chanheader length
 		task	 &= 0x0fff;						//take off the top bit to get the true 
@@ -275,10 +275,10 @@
 
 @implementation ORDGF4cDecoderForLiveTime
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
 
-    unsigned long*	recordPtr = (unsigned long*)someData;
+    uint32_t*	recordPtr = (uint32_t*)someData;
 	
 	//version 0 -- wrong: truncated the livetimes
 	//--------------------------------------
@@ -286,15 +286,15 @@
 	// 0: dataID and length  //length == 13
 	// 1: spare (for now)
 	// 2: location
-	// 3: realTime (double packed as long)
-	// 4: runTime (double packed as long)
-	// 5: chan 0 liveTime (double packed as long)
+	// 3: realTime (double packed as int32_t)
+	// 4: runTime (double packed as int32_t)
+	// 5: chan 0 liveTime (double packed as int32_t)
 	// 6: chan 0 numEvents 
-	// 7: chan 1 liveTime (double packed as long)
+	// 7: chan 1 liveTime (double packed as int32_t)
 	// 8: chan 1 numEvents 
-	// 9: chan 2 liveTime (double packed as long)
+	// 9: chan 2 liveTime (double packed as int32_t)
 	// 10: chan 2 numEvents 
-	// 11: chan 3 liveTime (double packed as long)
+	// 11: chan 3 liveTime (double packed as int32_t)
 	// 12: chan 4 numEvents 
 	//--------------------------------------
 
@@ -323,7 +323,7 @@
 	//--------------------------------------
 
 
-	unsigned long length = ExtractLength(recordPtr[0]);
+	uint32_t length = ExtractLength(recordPtr[0]);
 	
 	//recordPtr[1] reserved for future gtid
 
@@ -351,17 +351,17 @@
 		for(chan=0;chan<4;chan++){
 			//unpack the LiveTime and format a string to display holding the livetime and the number of events
 			packedDGF4LiveTime.asLong = recordPtr[index++];
-			NSString* result = [NSString stringWithFormat:@"%.4f #Events: %lu",packedDGF4LiveTime.asDouble,recordPtr[index++]];
+			NSString* result = [NSString stringWithFormat:@"%.4f #Events: %u",packedDGF4LiveTime.asDouble,recordPtr[index++]];
 			[aDataSet loadGenericData:result sender:self withKeys:@"ORDGF4c",@"Livetime",crateKey,cardKey, [self getChannelKey: chan],nil];
 			
 		}
 	}
 	else {
 		//unpack the RealTime
-		unsigned long rta = recordPtr[index++];
-		unsigned long bc  = recordPtr[index++];
-		unsigned long rtb = bc>>16;
-		unsigned long rtc = bc&0x0000ffff;
+		uint32_t rta = recordPtr[index++];
+		uint32_t bc  = recordPtr[index++];
+		uint32_t rtb = bc>>16;
+		uint32_t rtc = bc&0x0000ffff;
 		double dValue = (rta*pow(65536.0,2.0)+rtb*65536.0+rtc)*1.0e-6/40.;
 		NSString* valueString = [NSString stringWithFormat:@"%.4f",dValue];
 		[aDataSet loadGenericData:valueString sender:self withKeys:@"ORDGF4c",@"RealTime",crateKey,cardKey,nil];
@@ -383,7 +383,7 @@
 			rtb = bc>>16;
 			rtc = bc&0x0000ffff;
 			double dValue = (rta*pow(65536.0,2.0)+rtb*65536.0+rtc)*1.0e-6/40.;
-			NSString* result = [NSString stringWithFormat:@"%.4f #Events: %lu",dValue,recordPtr[index++]];
+			NSString* result = [NSString stringWithFormat:@"%.4f #Events: %u",dValue,recordPtr[index++]];
 			[aDataSet loadGenericData:result sender:self withKeys:@"ORDGF4c",@"Livetime",crateKey,cardKey, [self getChannelKey: chan],nil];
 			
 		}
@@ -394,12 +394,12 @@
 	return length;
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr
 {
     NSString* title= @"DGF4c Event\n\n";
 
-    unsigned long*	recordPtr = (unsigned long*)dataPtr;
-	unsigned long length = ExtractLength(recordPtr[0]);
+    uint32_t*	recordPtr = (uint32_t*)dataPtr;
+	uint32_t length = ExtractLength(recordPtr[0]);
 
 	//version 0 -- wrong: truncated the livetimes
 	//--------------------------------------
@@ -407,15 +407,15 @@
 	// 0: dataID and length  //length == 13
 	// 1: spare (for now)
 	// 2: location
-	// 3: realTime (double packed as long)
-	// 4: runTime (double packed as long)
-	// 5: chan 0 liveTime (double packed as long)
+	// 3: realTime (double packed as int32_t)
+	// 4: runTime (double packed as int32_t)
+	// 5: chan 0 liveTime (double packed as int32_t)
 	// 6: chan 0 numEvents 
-	// 7: chan 1 liveTime (double packed as long)
+	// 7: chan 1 liveTime (double packed as int32_t)
 	// 8: chan 1 numEvents 
-	// 9: chan 2 liveTime (double packed as long)
+	// 9: chan 2 liveTime (double packed as int32_t)
 	// 10: chan 2 numEvents 
-	// 11: chan 3 liveTime (double packed as long)
+	// 11: chan 3 liveTime (double packed as int32_t)
 	// 12: chan 4 numEvents 
 	//--------------------------------------
 
@@ -473,16 +473,16 @@
 			resultString = [resultString stringByAppendingString:[NSString stringWithFormat:@"%@ LiveTime : %.4f\n",[self getChannelKey: chan],packedDGF4LiveTime.asDouble]];
 			
 			//unpack the numEvents for this channel
-			unsigned long numEvents = recordPtr[index++];
-			resultString = [resultString stringByAppendingString:[NSString stringWithFormat:@"%@ numEvents: %lu\n",[self getChannelKey: chan],numEvents]];
+			uint32_t numEvents = recordPtr[index++];
+			resultString = [resultString stringByAppendingString:[NSString stringWithFormat:@"%@ numEvents: %u\n",[self getChannelKey: chan],numEvents]];
 		}
 	}
 	else {
 		//unpack the realTime
-		unsigned long rta = recordPtr[index++];
-		unsigned long bc  = recordPtr[index++];
-		unsigned long rtb = bc>>16;
-		unsigned long rtc = bc&0x0000ffff;
+		uint32_t rta = recordPtr[index++];
+		uint32_t bc  = recordPtr[index++];
+		uint32_t rtb = bc>>16;
+		uint32_t rtc = bc&0x0000ffff;
 		resultString = [resultString stringByAppendingString:[NSString stringWithFormat:@"RealTime: %.4f\n",(rta*pow(65536.0,2.0)+rtb*65536.0+rtc)*1.0e-6/40.]];
 
 		//unpack the runTime
@@ -503,8 +503,8 @@
 			resultString = [resultString stringByAppendingString:[NSString stringWithFormat:@"%@ LiveTime : %.4f\n",[self getChannelKey: chan],(rta*pow(65536.0,2.0)+rtb*65536.0+rtc)*1.0e-6/40.]];
 			
 			//unpack the numEvents for this channel
-			unsigned long numEvents = recordPtr[index++];
-			resultString = [resultString stringByAppendingString:[NSString stringWithFormat:@"%@ numEvents: %lu\n",[self getChannelKey: chan],numEvents]];
+			uint32_t numEvents = recordPtr[index++];
+			resultString = [resultString stringByAppendingString:[NSString stringWithFormat:@"%@ numEvents: %u\n",[self getChannelKey: chan],numEvents]];
 		}
 	}
 	return resultString;

@@ -409,10 +409,10 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
     // Sets two 8 bit shift register that are daisy chained together such that they
     // act like a single 16 bit register.
     // The first of these registers controls the length of time between when a GT arrives and when DGT is sent
-    // The seconds controls how long the LO window is.
+    // The seconds controls how int32_t the LO window is.
     // The chips that create these delays are the DS1023-200 and DS1023-500, see their data sheet for details
     // See TUBii schematic page 13A for more info
-    NSString* const command = [NSString stringWithFormat:@"SetGTDelays %ld %ld",aLOMask,aDGTMask];
+    NSString* const command = [NSString stringWithFormat:@"SetGTDelays %d %d",aLOMask,aDGTMask];
     [self sendOkCmd:command];
     currentModelState.DGT_Bits = aDGTMask;
     currentModelState.LO_Bits = aLOMask;
@@ -474,7 +474,7 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
     // Sets which trigger inputs are capable causing TUBii to issue a Raw Trigger
     // This function is handled entierly within the MicroZed processing logic.
     
-    NSString * const command = [NSString stringWithFormat:@"SetTriggerMask %ld %ld",_syncTrigMask,_asyncTrigMask];
+    NSString * const command = [NSString stringWithFormat:@"SetTriggerMask %d %d",(int)_syncTrigMask,(int)_asyncTrigMask];
     [self sendOkCmd:command];
     currentModelState.syncTrigMask = (uint32_t)_syncTrigMask;
     currentModelState.asyncTrigMask = (uint32_t)_asyncTrigMask;
@@ -496,11 +496,11 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
     return [self sendIntCmd:@"GetAsyncTriggerMask"];
 }
 - (void) setSmellieDelay:(NSUInteger)_smellieDelay {
-    // This specifies (in nanoseconds) how long the MicroZed should delay a pulse that
+    // This specifies (in nanoseconds) how int32_t the MicroZed should delay a pulse that
     // is put into TUBii's SMELLIE Delay In port. After that delay the signal is then sent back out
     // at TUBii's SMELLIE Delay Out port. Additionally the MicroZed registers the input signal as a trigger
     // after that delay.
-    NSString* const command = [NSString stringWithFormat:@"SetSmellieDelay %ld",_smellieDelay];
+    NSString* const command = [NSString stringWithFormat:@"SetSmellieDelay %d",(int)_smellieDelay];
     [self sendOkCmd:command];
     currentModelState.smellieDelay = _smellieDelay;
     [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName: ORTubiiSettingsChangedNotification object:self];
@@ -510,11 +510,11 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
     return [self sendIntCmd:@"GetSmellieDelay"];
 }
 - (void) setTellieDelay:(NSUInteger)_tellieDelay {
-    // This specifies (in nanoseconds) how long the MicroZed should delay a pulse that
+    // This specifies (in nanoseconds) how int32_t the MicroZed should delay a pulse that
     // is put into TUBii's TELLIE Delay In port. After that delay the signal is then sent back out
     // at TUBii's TELLIE Delay Out port. Additionally the MicroZed registers the input signal as a trigger
     // after that delay.
-    NSString * const command = [NSString stringWithFormat:@"SetTellieDelay %ld",_tellieDelay];
+    NSString * const command = [NSString stringWithFormat:@"SetTellieDelay %d",(int)_tellieDelay];
     [self sendOkCmd:command];
     currentModelState.tellieDelay = _tellieDelay;
     [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName: ORTubiiSettingsChangedNotification object:self];
@@ -524,7 +524,7 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
     return [self sendIntCmd:@"GetTellieDelay"];
 }
 - (void) setGenericDelay:(NSUInteger)_genericDelay {
-    // This specifies how long a pulse fed into TUBii's Generic Delay in port in
+    // This specifies how int32_t a pulse fed into TUBii's Generic Delay in port in
     // should be delayed before it appears on TUBii's Generic Delay Out port
     // The arguement should be in nano-seconds.
     // It's not currently supported in the TUBiiServer but the hardware supports a a coarse and a fine delay
@@ -534,7 +534,7 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
     //
     // As of the time of writing this it is not possible to trigger on this input.
     // /See TUBii Schematics 8C for more information
-    NSString * const command = [NSString stringWithFormat:@"SetGenericDelay %ld",_genericDelay];
+    NSString * const command = [NSString stringWithFormat:@"SetGenericDelay %d",(int)_genericDelay];
     [self sendOkCmd:command];
     currentModelState.genericDelay = _genericDelay;
     [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName: ORTubiiSettingsChangedNotification object:self];
@@ -547,7 +547,7 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
     // Sets which trigger inputs are capable of incrementing the count
     // for the scaler/counter on TUBii's front panel
     // This is handled entierly within the MicroZed/TUBiiServer
-    NSString * const command = [NSString stringWithFormat:@"SetCounterMask %ld",_counterMask];
+    NSString * const command = [NSString stringWithFormat:@"SetCounterMask %d",(int)_counterMask];
     [self sendOkCmd:command];
     currentModelState.counterMask = (uint32_t)_counterMask;
     [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName: ORTubiiSettingsChangedNotification object:self];
@@ -616,7 +616,7 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
     // The arguement for this must be the bits that are to be loaded into the DAC on TUBii
     // To convert a threshold value to bits use the convinience function MTCAMimic_VoltsToBits
     // Or skip the middle man and use the function setMTCAMimic_ThresholdInVolts
-    NSString * const command = [NSString stringWithFormat:@"SetDACThreshold %lu",_MTCAMimic1_ThresholdInBits];
+    NSString * const command = [NSString stringWithFormat:@"SetDACThreshold %u",(int)_MTCAMimic1_ThresholdInBits];
     [self sendOkCmd:command];
     currentModelState.MTCAMimic1_ThresholdInBits = _MTCAMimic1_ThresholdInBits;
     [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName: ORTubiiSettingsChangedNotification object:self];
@@ -656,7 +656,7 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
 }
 - (void) setSpeakerMask:(NSUInteger)_speakerMask{
     // Sets the mask for which trigger inputs should driver the speaker/aux jack on TUBii
-    NSString * const command = [NSString stringWithFormat:@"SetSpeakerMask %ld",_speakerMask];
+    NSString * const command = [NSString stringWithFormat:@"SetSpeakerMask %d",_speakerMask];
     [self sendOkCmd:command];
     currentModelState.speakerMask = (uint32_t)_speakerMask;
     [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName: ORTubiiSettingsChangedNotification object:self];
@@ -954,7 +954,7 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
         
         [NSThread sleepForTimeInterval:0.5];
 
-        // This is a very long running thread need to relase the pool every so often
+        // This is a very int32_t running thread need to relase the pool every so often
         if(counter == 1000){
             [pool release];
             pool = [[NSAutoreleasePool alloc] init];

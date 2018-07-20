@@ -31,12 +31,12 @@ NSString* chan4TriggerEventName[4] = {
 };
 
 @implementation OR4ChanTriggerDecoderFor100MHzClock
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long *ptr	 = (unsigned long*)someData;
-    unsigned long length = ExtractLength(*ptr);
+    uint32_t *ptr	 = (uint32_t*)someData;
+    uint32_t length = ExtractLength(*ptr);
     ptr++;
-    unsigned long value = *ptr;
+    uint32_t value = *ptr;
     int index = (value >> 24) & 0x7;
     if(index < 4){
         [aDataSet loadGenericData:@" " sender:self withKeys:@"Four Chan Latched Clock",chan4TriggerEventName[index],nil];
@@ -44,11 +44,11 @@ NSString* chan4TriggerEventName[4] = {
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"Trigger Clock Record\n\n";
     ptr++;
-    unsigned long upperClock = *ptr & 0x00ffffff;
+    uint32_t upperClock = *ptr & 0x00ffffff;
     int index = (*ptr >> 24) & 0x7;
     NSString* name;
     if(index<4){
@@ -57,10 +57,10 @@ NSString* chan4TriggerEventName[4] = {
     else {
         name = [NSString stringWithFormat:@"Out of bounds index: %d\n",index];
     }
-    NSString* upper = [NSString stringWithFormat:@"Upper Clock: %lu\n",upperClock];
+    NSString* upper = [NSString stringWithFormat:@"Upper Clock: %u\n",upperClock];
 
     ptr++;
-    NSString* lower = [NSString stringWithFormat:@"Lower Clock: %lu\n",*ptr];
+    NSString* lower = [NSString stringWithFormat:@"Lower Clock: %u\n",*ptr];
 
     return [NSString stringWithFormat:@"%@%@%@%@",title,name,upper,lower];               
 }

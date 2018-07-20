@@ -104,29 +104,29 @@ enum {
 {
     @private
 		BOOL			pollRunning;
-        unsigned long	enabledMask;
-		unsigned long	scalerValue[kNumCV830Channels];
+        uint32_t	enabledMask;
+		uint32_t	scalerValue[kNumCV830Channels];
 		NSTimeInterval	pollingState;
 		BOOL			shipRecords;
 		time_t			lastReadTime;
 		BOOL			scheduledForUpdate;
-		unsigned long	dwellTime;
+		uint32_t	dwellTime;
 		short			acqMode;
 		BOOL			testMode;
 		BOOL			clearMeb;
 		BOOL			autoReset;
-		unsigned long	polledDataId;
-		unsigned long	dataRecord[38];
+		uint32_t	polledDataId;
+		uint32_t	dataRecord[38];
 		ORReadOutList*	readOutGroup;
         BOOL            remoteInit;
-        long            count0Offset;
+        int32_t            count0Offset;
         BOOL            resetRollOverInSBC;
     
 		//some cached variabled
 		NSArray* dataTakers;	//cache of data takers.
-		unsigned long numEnabledChannels;
-        unsigned long    lastChan0Count;
-        unsigned long long    chan0RollOverCount;
+		uint32_t numEnabledChannels;
+        uint32_t    lastChan0Count;
+        uint64_t    chan0RollOverCount;
 }
 
 #pragma mark •••Initialization
@@ -136,8 +136,8 @@ enum {
 - (void) makeMainController;
 
 #pragma mark •••Accessors
-- (long) count0Offset;
-- (void) setCount0Offset:(long)aCount0Offset;
+- (int32_t) count0Offset;
+- (void) setCount0Offset:(int32_t)aCount0Offset;
 - (BOOL) autoReset;
 - (void) setAutoReset:(BOOL)aAutoReset;
 - (BOOL) clearMeb;
@@ -146,14 +146,14 @@ enum {
 - (void) setTestMode:(BOOL)aTestMode;
 - (short) acqMode;
 - (void) setAcqMode:(short)aAcqMode;
-- (unsigned long) dwellTime;
-- (void) setDwellTime:(unsigned long)aDwellTime;
+- (uint32_t) dwellTime;
+- (void) setDwellTime:(uint32_t)aDwellTime;
 - (BOOL) shipRecords;
 - (void) setShipRecords:(BOOL)aShipRecords;
-- (unsigned long) scalerValue:(int)index;
-- (void) setScalerValue:(unsigned long)aValue index:(int)index;
-- (unsigned long) enabledMask;
-- (void) setEnabledMask:(unsigned long)aEnabledMask;
+- (uint32_t) scalerValue:(int)index;
+- (void) setScalerValue:(uint32_t)aValue index:(int)index;
+- (uint32_t) enabledMask;
+- (void) setEnabledMask:(uint32_t)aEnabledMask;
 - (void) setPollingState:(NSTimeInterval)aState;
 - (NSTimeInterval) pollingState;
 - (void) registerNotificationObservers;
@@ -176,8 +176,8 @@ enum {
 - (void) remoteResetCounters;
 
 #pragma mark •••Data Header
-- (unsigned long) polledDataId;
-- (void) setPolledDataId: (unsigned long) DataId;
+- (uint32_t) polledDataId;
+- (void) setPolledDataId: (uint32_t) DataId;
 - (NSDictionary*) dataRecordDescription;
 
 #pragma mark ***DataTaker
@@ -185,8 +185,8 @@ enum {
 - (int)  load_HW_Config_Structure:(SBC_crate_config*)configStruct index:(int)index;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherObj;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) reset;
 - (void) runTaskStarted:(ORDataPacket*) aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;

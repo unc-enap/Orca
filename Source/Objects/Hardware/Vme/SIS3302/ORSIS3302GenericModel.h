@@ -95,8 +95,8 @@ typedef enum {
 	//clocks and delays (Acquistion control reg)
 	int	 clockSource;
 	
-	unsigned long   lostDataId;
-	unsigned long   dataId;
+	uint32_t   lostDataId;
+	uint32_t   dataId;
 
 	short			gtMask;
 	short           useTrapTriggerMask;
@@ -127,13 +127,13 @@ typedef enum {
     BOOL autostartModeEnabled;    
 	
 	ORRateGroup*	waveFormRateGroup;
-	unsigned long 	waveFormCount[kNumSIS3302Channels];
+	uint32_t 	waveFormCount[kNumSIS3302Channels];
 
-	unsigned long location;
+	uint32_t location;
 	id theController;
-	long count;
+	int32_t count;
 
-	unsigned long  dataRecord[kMaxSIS3302SingleMaxRecord];
+	uint32_t  dataRecord[kMaxSIS3302SingleMaxRecord];
 	
     float			firmwareVersion;
 }
@@ -148,15 +148,15 @@ typedef enum {
 - (float) firmwareVersion;
 - (void) setFirmwareVersion:(float)aFirmwareVersion;
 
-- (unsigned long) getThresholdRegOffsets:(int) channel;
-- (unsigned long) getTriggerSetupRegOffsets:(int) channel; 
+- (uint32_t) getThresholdRegOffsets:(int) channel;
+- (uint32_t) getTriggerSetupRegOffsets:(int) channel; 
 
-- (unsigned long) getEventConfigOffsets:(int)group;
-- (unsigned long) getEventLengthOffsets:(int)group;
-- (unsigned long) getSampleStartOffsets:(int)group;
-- (unsigned long) getAdcInputModeOffsets:(int)group;
-- (unsigned long) getEventDirectoryForChannel:(int) channel; 
-- (unsigned long) getNextSampleAddressForChannel:(int) channel;
+- (uint32_t) getEventConfigOffsets:(int)group;
+- (uint32_t) getEventLengthOffsets:(int)group;
+- (uint32_t) getSampleStartOffsets:(int)group;
+- (uint32_t) getAdcInputModeOffsets:(int)group;
+- (uint32_t) getEventDirectoryForChannel:(int) channel; 
+- (uint32_t) getNextSampleAddressForChannel:(int) channel;
 
 - (void) setDefaults;
 
@@ -165,7 +165,7 @@ typedef enum {
 
 // Trigger
 - (short) gtMask;
-- (void) setGtMask:(long)aMask;
+- (void) setGtMask:(int32_t)aMask;
 - (BOOL) gt:(short)chan;
 - (void) setGtBit:(short)chan withValue:(BOOL)aValue;
 
@@ -236,23 +236,23 @@ typedef enum {
 - (void) clearTimeStamp;
 - (void) forceTrigger;
 
-- (unsigned long) acqReg;
+- (uint32_t) acqReg;
 
 #pragma mark •••Data Taker
-- (unsigned long) lostDataId;
-- (void) setLostDataId: (unsigned long) anId;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) lostDataId;
+- (void) setLostDataId: (uint32_t) anId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherShaper;
 - (NSDictionary*) dataRecordDescription;
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
-- (unsigned long) waveFormCount:(int)aChannel;
+- (uint32_t) waveFormCount:(int)aChannel;
 - (void)   startRates;
 - (void) clearWaveFormCounts;
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag;
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag;
 - (int) load_HW_Config_Structure:(SBC_crate_config*)configStruct index:(int)index;
 
 #pragma mark •••HW Wizard

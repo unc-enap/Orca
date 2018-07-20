@@ -31,9 +31,9 @@
     NSArray*                sortedArray;
     NSString*               key;		//crate x, card y, etc...
     id                      data;		//data will be nil unless this is a leaf node.	
-    unsigned long			totalCounts;
+    uint32_t			totalCounts;
 	//NSLock*					dataSetLock;
-	unsigned long					runNumber;
+	uint32_t					runNumber;
     float                   minX,maxX,minY,maxY;
 }
 
@@ -59,8 +59,8 @@
 
 - (id) findObjectWithFullID:(NSString*)aFullID;
 - (NSArray*) collectObjectsOfClass:(Class)aClass;
-- (unsigned long) runNumber;
-- (void) setRunNumber:(unsigned long)aRunNumber;
+- (uint32_t) runNumber;
+- (void) setRunNumber:(uint32_t)aRunNumber;
 - (id) objectForKeyArray:(NSMutableArray*)anArray;
 - (ORDataSet*) dataSetWithName:(NSString*)aName;
 - (void) setKey:(NSString*)aKey;
@@ -69,11 +69,11 @@
 - (NSString*) shortName;
 - (NSUInteger) count;
 - (NSEnumerator*) objectEnumerator;
-- (unsigned long) totalCounts;
-- (void) setTotalCounts:(unsigned long) newCount;
+- (uint32_t) totalCounts;
+- (void) setTotalCounts:(uint32_t) newCount;
 - (void) incrementTotalCounts;
-- (void) incrementTotalCountsBy:(unsigned long) aValue;
-- (unsigned long) recountTotal;
+- (void) incrementTotalCountsBy:(uint32_t) aValue;
+- (uint32_t) recountTotal;
 - (id) 	 data;
 - (void) setData:(id)someData;
 - (void) clear;
@@ -96,27 +96,27 @@
 
 #pragma mark •••Data Insertion
 - (void) incrementCount:(NSString*)firstArg,...;
-- (void) loadHistogram:(unsigned long*)ptr numBins:(unsigned long)numBins withKeyArray:(NSArray*)keyArray;
-- (void) loadHistogram2D:(unsigned long*)ptr numBins:(unsigned long)numBins withKeyArray:(NSArray*)keyArray;
-- (void) histogram:(unsigned long)aValue numBins:(unsigned long)numBins sender:(id)obj  withKeys:(NSString*)key,...;
-- (void) histogramWW:(unsigned long)aValue weight:(unsigned long)aWeight numBins:(unsigned long)numBins sender:(id)obj  withKeys:(NSString*)key,...;
-- (void) mergeHistogram:(unsigned long*)ptr numBins:(unsigned long)numBins withKeyArray:(NSArray*)keyArray;
-- (void) mergeEnergyHistogram:(unsigned long*)ptr numBins:(unsigned long)numBins   maxBins:(unsigned long)maxBins  firstBin:(unsigned long)firstBin  stepSize:(unsigned long)stepSize   counts:(unsigned long)counts withKeys:(NSString*)firstArg,...;
-- (void) histogram2DX:(unsigned long)xValue y:(unsigned long)yValue size:(unsigned short)numBins  sender:(id)obj  withKeys:(NSString*)firstArg,...;
-- (void) loadData2DX:(unsigned long)xValue y:(unsigned long)yValue z:(unsigned long)zValue size:(unsigned short)numBins sender:(id)obj  withKeys:(NSString*)firstArg,...;
-- (void) sumData2DX:(unsigned long)xValue y:(unsigned long)yValue z:(unsigned long)zValue size:(unsigned short)numBins sender:(id)obj  withKeys:(NSString*)firstArg,...;
+- (void) loadHistogram:(uint32_t*)ptr numBins:(uint32_t)numBins withKeyArray:(NSArray*)keyArray;
+- (void) loadHistogram2D:(uint32_t*)ptr numBins:(uint32_t)numBins withKeyArray:(NSArray*)keyArray;
+- (void) histogram:(uint32_t)aValue numBins:(uint32_t)numBins sender:(id)obj  withKeys:(NSString*)key,...;
+- (void) histogramWW:(uint32_t)aValue weight:(uint32_t)aWeight numBins:(uint32_t)numBins sender:(id)obj  withKeys:(NSString*)key,...;
+- (void) mergeHistogram:(uint32_t*)ptr numBins:(uint32_t)numBins withKeyArray:(NSArray*)keyArray;
+- (void) mergeEnergyHistogram:(uint32_t*)ptr numBins:(uint32_t)numBins   maxBins:(uint32_t)maxBins  firstBin:(uint32_t)firstBin  stepSize:(uint32_t)stepSize   counts:(uint32_t)counts withKeys:(NSString*)firstArg,...;
+- (void) histogram2DX:(uint32_t)xValue y:(uint32_t)yValue size:(unsigned short)numBins  sender:(id)obj  withKeys:(NSString*)firstArg,...;
+- (void) loadData2DX:(uint32_t)xValue y:(uint32_t)yValue z:(uint32_t)zValue size:(unsigned short)numBins sender:(id)obj  withKeys:(NSString*)firstArg,...;
+- (void) sumData2DX:(uint32_t)xValue y:(uint32_t)yValue z:(uint32_t)zValue size:(unsigned short)numBins sender:(id)obj  withKeys:(NSString*)firstArg,...;
 - (void) clearDataUpdate:(BOOL)update withKeys:(NSString*)firstArg,...;
-- (void) loadWaveform:(NSData*)aWaveForm offset:(unsigned long)anOffset unitSize:(int)unitSize sender:(id)obj  withKeys:(NSString*)keyArg,...;
-- (void) loadWaveform:(NSData*)aWaveForm offset:(unsigned long)anOffset unitSize:(int)aUnitSize mask:(unsigned long)aMask sender:(id)obj  withKeys:(NSString*)firstArg,...;
-- (void) loadWaveform:(NSData*)aWaveForm offset:(unsigned long)anOffset unitSize:(int)aUnitSize startIndex:(unsigned long)aStartIndex scaleOffset:(long)aDataOffset mask:(unsigned long)aMask specialBits:(unsigned long)aSpecialMask bitNames:(NSArray*)bitNames sender:(id)obj withKeys:(NSString*)firstArg,...;
-- (void) loadWaveform:(NSData*)aWaveForm offset:(unsigned long)anOffset unitSize:(int)aUnitSize startIndex:(unsigned long)aStartIndex mask:(unsigned long)aMask sender:(id)obj  withKeys:(NSString*)firstArg,...;
-- (void) loadWaveform:(NSData*)aWaveForm offset:(unsigned long)anOffset unitSize:(int)aUnitSize startIndex:(unsigned long)aStartIndex mask:(unsigned long)aMask specialBits:(unsigned long)aSpecialMask bitNames:(NSArray*)someNames sender:(id)obj  withKeys:(NSString*)firstArg,...;
+- (void) loadWaveform:(NSData*)aWaveForm offset:(uint32_t)anOffset unitSize:(int)unitSize sender:(id)obj  withKeys:(NSString*)keyArg,...;
+- (void) loadWaveform:(NSData*)aWaveForm offset:(uint32_t)anOffset unitSize:(int)aUnitSize mask:(uint32_t)aMask sender:(id)obj  withKeys:(NSString*)firstArg,...;
+- (void) loadWaveform:(NSData*)aWaveForm offset:(uint32_t)anOffset unitSize:(int)aUnitSize startIndex:(uint32_t)aStartIndex scaleOffset:(int32_t)aDataOffset mask:(uint32_t)aMask specialBits:(uint32_t)aSpecialMask bitNames:(NSArray*)bitNames sender:(id)obj withKeys:(NSString*)firstArg,...;
+- (void) loadWaveform:(NSData*)aWaveForm offset:(uint32_t)anOffset unitSize:(int)aUnitSize startIndex:(uint32_t)aStartIndex mask:(uint32_t)aMask sender:(id)obj  withKeys:(NSString*)firstArg,...;
+- (void) loadWaveform:(NSData*)aWaveForm offset:(uint32_t)anOffset unitSize:(int)aUnitSize startIndex:(uint32_t)aStartIndex mask:(uint32_t)aMask specialBits:(uint32_t)aSpecialMask bitNames:(NSArray*)someNames sender:(id)obj  withKeys:(NSString*)firstArg,...;
 - (void) loadFFTReal:(NSArray*)realArray imaginary:(NSArray*)imaginaryArray withKeyArray:(NSArray*)keyArray;
 - (void) loadGenericData:(NSString*)aString sender:(id)obj withKeys:(NSString*)topLevel,...;
 - (void) loadGenericData:(NSString*)aString sender:(id)obj usingKeyArray:(NSArray*)myArgs;
-- (void) loadScalerSum:(unsigned long)aValue sender:(id)obj withKeys:(NSString*)firstArg,...;
+- (void) loadScalerSum:(uint32_t)aValue sender:(id)obj withKeys:(NSString*)firstArg,...;
 - (void) loadFFTReal:(NSArray*)realArray imaginary:(NSArray*)imaginaryArray withKeyArray:(NSArray*)keyArray;
-- (void) loadTimeSeries:(float)aValue atTime:(unsigned long)aTime sender:(id)obj withKeys:(NSString*)firstArg,...;
+- (void) loadTimeSeries:(float)aValue atTime:(uint32_t)aTime sender:(id)obj withKeys:(NSString*)firstArg,...;
 - (void) loadSpectrum:(NSData*)aSpectrum  sender:(id)obj  withKeys:(NSString*)firstArg,...;
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (NSArray*) collectObjectsRespondingTo:(SEL)aSelector;

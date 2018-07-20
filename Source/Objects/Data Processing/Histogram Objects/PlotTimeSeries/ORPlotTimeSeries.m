@@ -43,7 +43,7 @@ NSString* ORPlotTimeSeriesShowChanged = @"ORPlotTimeSeriesShowChanged";
 
 
 #pragma mark ¥¥¥Accessors
-- (void) addValue:(float)aValue atTime:(unsigned long)aTime
+- (void) addValue:(float)aValue atTime:(uint32_t)aTime
 {
     if(!timeSeries){
         timeSeries = [[ORTimeSeries alloc] init];
@@ -87,7 +87,7 @@ NSString* ORPlotTimeSeriesShowChanged = @"ORPlotTimeSeriesShowChanged";
     fprintf( aFile, "WAVES/I/N=(%d) '%s'\nBEGIN\n",numberBins,[shortName cStringUsingEncoding:NSASCIIStringEncoding]);
     int i;
     for (i=0; i<numberBins; ++i) {
-        fprintf(aFile, "%ld\n",histogram[i]);
+        fprintf(aFile, "%d\n",histogram[i]);
     }
     fprintf(aFile, "END\n\n");
 	[dataSetLock unlock];
@@ -103,7 +103,7 @@ NSString* ORPlotTimeSeriesShowChanged = @"ORPlotTimeSeriesShowChanged";
 
 - (id)   name
 {
-    return [NSString stringWithFormat:@"%@ Counts: %lu",[self key], [self totalCounts]];
+    return [NSString stringWithFormat:@"%@ Counts: %u",[self key], [self totalCounts]];
 }
 
 - (BOOL) canJoinMultiPlot

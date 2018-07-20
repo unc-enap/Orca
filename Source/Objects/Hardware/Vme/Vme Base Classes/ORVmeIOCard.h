@@ -33,43 +33,43 @@
 {
 	@protected
 	id                   controller; //use to cache the controller for abit more speed. use with care!
-    unsigned long        baseAddress;
+    uint32_t        baseAddress;
     unsigned short       addressModifier;
-    unsigned long        exceptionCount;
+    uint32_t        exceptionCount;
     BOOL                 diagnosticsEnabled;
     NSMutableDictionary* diagnosticReport;
     NSMutableDictionary* oldUserValueDictionary;
 }
 
 #pragma mark ¥¥¥Accessors
-- (void) 			setBaseAddress:(unsigned long) anAddress;
-- (unsigned long) 	baseAddress;
+- (void) 			setBaseAddress:(uint32_t) anAddress;
+- (uint32_t) 	baseAddress;
 - (BOOL)            diagnosticsEnabled;
 - (void)            setDiagnosticsEnabled:(BOOL)aState;
 - (void)			setAddressModifier:(unsigned short)anAddressModifier;
 - (unsigned short)  addressModifier;
 - (id)				adapter;
-- (unsigned long)   exceptionCount;
+- (uint32_t)   exceptionCount;
 - (void)			incExceptionCount;
 - (void)			clearExceptionCount;
 - (NSRange)			memoryFootprint;
 - (BOOL)			memoryConflictsWith:(NSRange)aRange;
 
-- (void)            writeAndCheckLong:(unsigned long)aValue
-                        addressOffset:(unsigned long)anOffset
-                                 mask:(unsigned long)aMask
+- (void)            writeAndCheckLong:(uint32_t)aValue
+                        addressOffset:(uint32_t)anOffset
+                                 mask:(uint32_t)aMask
                             reportKey:(NSString*)aKey
                         forceFullInit:(BOOL) forceFullInit;
 
-- (void)            writeAndCheckLong:(unsigned long)aValue
-                        addressOffset:(unsigned long)anOffset
-                                 mask:(unsigned long)aMask
+- (void)            writeAndCheckLong:(uint32_t)aValue
+                        addressOffset:(uint32_t)anOffset
+                                 mask:(uint32_t)aMask
                             reportKey:(NSString*)aKey;
 
-- (BOOL) longValueChanged:(unsigned long)aValue valueKey:(NSString*)aKey;
+- (BOOL) longValueChanged:(uint32_t)aValue valueKey:(NSString*)aKey;
 - (void) clearOldUserValues;
 
-- (void) verifyValue:(unsigned long)val1 matches:(unsigned long)val2 reportKey:aKey;
+- (void) verifyValue:(uint32_t)val1 matches:(uint32_t)val2 reportKey:aKey;
 - (void) clearDiagnosticsReport;
 - (void) briefDiagnosticsReport;
 - (void) printDiagnosticsReport;

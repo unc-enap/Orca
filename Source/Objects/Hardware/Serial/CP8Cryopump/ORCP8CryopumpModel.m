@@ -147,13 +147,13 @@ NSString* ORCP8CryopumpConstraintsDisabledChanged    = @"ORCP8CryopumpConstraint
 {
     if([[ORGlobal sharedGlobal] runInProgress]){
 		
-		unsigned long data[6];
+		uint32_t data[6];
 		data[0] = dataId | 6;
 		data[1] = ([self uniqueIdNumber]&0xfff);
 		
 		union {
 			float asFloat;
-			unsigned long asLong;
+			uint32_t asLong;
 		}theData;
 		
 		int index = 2;
@@ -164,7 +164,7 @@ NSString* ORCP8CryopumpConstraintsDisabledChanged    = @"ORCP8CryopumpConstraint
 			data[index] = timeMeasured;
 			index++;
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-															object:[NSData dataWithBytes:data length:sizeof(long)*6]];
+															object:[NSData dataWithBytes:data length:sizeof(int32_t)*6]];
 	}
 }
 
@@ -726,7 +726,7 @@ NSString* ORCP8CryopumpConstraintsDisabledChanged    = @"ORCP8CryopumpConstraint
 	return temperature;
 }
 
-- (unsigned long) timeMeasured
+- (uint32_t) timeMeasured
 {
 	return timeMeasured;
 }
@@ -1062,8 +1062,8 @@ NSString* ORCP8CryopumpConstraintsDisabledChanged    = @"ORCP8CryopumpConstraint
 }
 
 #pragma mark •••Data Records
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -1154,7 +1154,7 @@ NSString* ORCP8CryopumpConstraintsDisabledChanged    = @"ORCP8CryopumpConstraint
 {
 	NSString* s;
  	@synchronized(self){
-		s= [NSString stringWithFormat:@"CP8,%lu",[self uniqueIdNumber]];
+		s= [NSString stringWithFormat:@"CP8,%u",[self uniqueIdNumber]];
 	}
 	return s;
 }

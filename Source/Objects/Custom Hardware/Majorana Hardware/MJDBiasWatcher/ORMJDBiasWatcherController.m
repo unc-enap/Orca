@@ -133,7 +133,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"MJD Bias Watcher (Unit %lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"MJD Bias Watcher (Unit %u)",[model uniqueIdNumber]]];
 }
 
 - (void) updateWindow

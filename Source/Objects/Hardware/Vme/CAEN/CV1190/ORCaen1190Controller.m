@@ -135,7 +135,7 @@
 - (void) enabledMaskChanged:(NSNotification*)aNote
 {
 	int i;
-	unsigned long aMask = [model enabledMask:[model paramGroup]];
+	uint32_t aMask = [model enabledMask:[model paramGroup]];
 	for(i=0;i<32;i++){
 		[[enabledMatrix0  cellWithTag:i] setIntValue:aMask&(1<<i)];
 	}
@@ -194,7 +194,7 @@
 
 - (IBAction) enabledMatrixAction:(id)sender
 {
-	unsigned long aMask = 0;
+	uint32_t aMask = 0;
 	int i;
 	for(i=0;i<32;i++){
 		if([[enabledMatrix0 cellWithTag:i] intValue])aMask |= (1<<i);

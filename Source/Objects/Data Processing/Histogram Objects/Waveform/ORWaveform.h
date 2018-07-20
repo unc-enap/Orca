@@ -25,7 +25,7 @@
 
 @interface ORWaveform : ORDataSetModel<ORFastPlotDataSourceMethods>  {
     NSData*				waveform;
-    unsigned long		dataOffset;
+    uint32_t		dataOffset;
 	int					unitSize;
 	BOOL				useUnsignedValues;
 	NSMutableArray*		rois;
@@ -34,11 +34,11 @@
 #pragma mark ¥¥¥Accessors 
 - (int)	 unitSize;
 - (void) setUnitSize:(int)aUnitSize;
-- (unsigned long) dataOffset;
-- (void) setDataOffset:(unsigned long)newOffset;
-- (unsigned long)  numberBins;
-- (long) value:(unsigned long)channel;
-- (long) value:(unsigned long)channel callerLockedMe:(BOOL)callerLockedMe;
+- (uint32_t) dataOffset;
+- (void) setDataOffset:(uint32_t)newOffset;
+- (uint32_t)  numberBins;
+- (int32_t) value:(uint32_t)channel;
+- (int32_t) value:(uint32_t)channel callerLockedMe:(BOOL)callerLockedMe;
 -(NSUInteger) manyValues:(NSRange)overRange to:(double*)output stride:(NSUInteger)stride callerLockedMe:(BOOL)callerLockedMe;
 - (void) setWaveform:(NSData*)aWaveform;
 - (BOOL) useUnsignedValues;
@@ -52,7 +52,7 @@
 
 #pragma mark ¥¥¥Data Source Methods
 - (id)   name;
-- (unsigned long) startingByteOffset:(id)aPlotter  dataSet:(int)set;
+- (uint32_t) startingByteOffset:(id)aPlotter  dataSet:(int)set;
 - (unsigned short) unitSize:(id)aPlotter  dataSet:(int)set;
 - (NSMutableArray*) rois;
 - (int) numberPointsInPlot:(id)aPlot;
@@ -60,8 +60,8 @@
 - (NSUInteger) plotter:(id)aPlot indexRange:(NSRange)aRange stride:(NSUInteger)stride x:(NSMutableData*)x y:(NSMutableData*)y;
 
 //subclasses will override these
-- (unsigned long) mask;
-- (unsigned long) specialBitMask;
+- (uint32_t) mask;
+- (uint32_t) specialBitMask;
 
 @end
 

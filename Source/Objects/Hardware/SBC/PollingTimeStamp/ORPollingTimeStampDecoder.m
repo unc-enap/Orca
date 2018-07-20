@@ -34,19 +34,19 @@
 @implementation ORPollingTimeStampDecoder
 
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;    
+    uint32_t* ptr = (uint32_t*)someData;    
     return ExtractLength(ptr[0]); //must return number of bytes processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)someData
+- (NSString*) dataRecordDescription:(uint32_t*)someData
 {
-    unsigned long* ptr   = (unsigned long*)someData;
+    uint32_t* ptr   = (uint32_t*)someData;
 	
     NSString* title         = @"PollingTimeStamp Record\n\n";
-    NSString* seconds       = [NSString stringWithFormat:@"Seconds     : %lu\n",ptr[1]];
-    NSString* microseconds  = [NSString stringWithFormat:@"Microseconds: %lu\n",ptr[2]];
+    NSString* seconds       = [NSString stringWithFormat:@"Seconds     : %u\n",ptr[1]];
+    NSString* microseconds  = [NSString stringWithFormat:@"Microseconds: %u\n",ptr[2]];
 
 	
     return [NSString stringWithFormat:@"%@%@%@",title,seconds,microseconds];

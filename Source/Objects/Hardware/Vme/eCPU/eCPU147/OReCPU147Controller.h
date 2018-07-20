@@ -80,7 +80,7 @@
 - (IBAction) verifyCodeAction:(id)sender;
 - (IBAction) incDebugLevelAction:(id)sender;
 
-- (void) getQueMinValue:(unsigned long*)aMinValue maxValue:(unsigned long*)aMaxValue head:(unsigned long*)aHeadValue tail:(unsigned long*)aTailValue;
+- (void) getQueMinValue:(uint32_t*)aMinValue maxValue:(uint32_t*)aMaxValue head:(uint32_t*)aHeadValue tail:(uint32_t*)aTailValue;
 
 
 @end

@@ -141,10 +141,10 @@
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
 	if([[tableColumn identifier] isEqualToString:@"Value"]){
-		return [NSNumber numberWithInteger:[model value:row]];
+        return [NSNumber numberWithInteger:[model value:row]];
 	}
     else if([[tableColumn identifier] isEqualToString:@"Hex"]){
-		return [NSString stringWithFormat:@"0x%lx",[model value:row]];
+		return [NSString stringWithFormat:@"0x%x",[model value:row]];
 	}
 
 	else return [NSNumber numberWithInteger:row];
@@ -332,7 +332,7 @@
 		return [NSNumber numberWithInteger:[model value:row]];
 	}
     else if([[tableColumn identifier] isEqualToString:@"Hex"]){
-		return [NSString stringWithFormat:@"0x%lx",[model value:row]];
+		return [NSString stringWithFormat:@"0x%x",[model value:row]];
 	}
 
 	else return [NSNumber numberWithInteger:row];

@@ -38,10 +38,10 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 //  until we get the read back functionality to work use the following methods to
 //  fake readback by storing the hw values in a dictionary
 //-------------------------------------------------------------------------------
-- (void) setHVRecordMainFrame:(unsigned long)aMainFrame channel:(int)aChannel voltage:(int)aValue;
-- (void) setHVRecordMainFrame:(unsigned long)aMainFrame status:(BOOL)state;
-- (int)  getHVRecordVoltageMainFrame:(unsigned long)aMainFrame channel:(int)aChannel;
-- (int)  getHVRecordStatusMainFrame:(unsigned long)aMainFrame;
+- (void) setHVRecordMainFrame:(uint32_t)aMainFrame channel:(int)aChannel voltage:(int)aValue;
+- (void) setHVRecordMainFrame:(uint32_t)aMainFrame status:(BOOL)state;
+- (int)  getHVRecordVoltageMainFrame:(uint32_t)aMainFrame channel:(int)aChannel;
+- (int)  getHVRecordStatusMainFrame:(uint32_t)aMainFrame;
 @end
 
 
@@ -327,12 +327,12 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 		unsigned short status = [[self adapter] camacShortNAF:[self stationNumber] a:0 f:2 data:&value];
 		if(!isQbitSet(status))break;
 		if(count++ > 100){
-			[NSException raise:@"FIFO clear Error" format:@"Unable to clear FIFO on HV2132 %ld",[self stationNumber]];
+			[NSException raise:@"FIFO clear Error" format:@"Unable to clear FIFO on HV2132 %d",(int)[self stationNumber]];
 		}
 	}
 }
 
-- (void) setVoltage:(int) aValue mainFrame:(unsigned long) aMainFrame channel:(int) aChannel
+- (void) setVoltage:(int) aValue mainFrame:(uint32_t) aMainFrame channel:(int) aChannel
 {
 	@try {
 		
@@ -368,7 +368,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 	}
 }
 
-- (void) readVoltage:(int*) aValue mainFrame:(unsigned long) aMainFrame channel:(int) aChannel
+- (void) readVoltage:(int*) aValue mainFrame:(uint32_t) aMainFrame channel:(int) aChannel
 {
 	@try {
 		[commLock lock];
@@ -399,7 +399,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 	}
 }
 
-- (void) readAllVoltages:(int*)aValues mainFrame:(unsigned long) aMainFrame
+- (void) readAllVoltages:(int*)aValues mainFrame:(uint32_t) aMainFrame
 {
 	@try {
 		[commLock lock];
@@ -436,7 +436,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 	}
 }
 
-- (void) readTarget:(int*) aValue mainFrame:(unsigned long) aMainFrame channel:(int) aChannel
+- (void) readTarget:(int*) aValue mainFrame:(uint32_t) aMainFrame channel:(int) aChannel
 {
 	@try {
 		[commLock lock];
@@ -449,7 +449,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 		//response should be T8
 		[self readData:&dataWord numWords:1];
 		if(((dataWord & 0xf) != 8) || (((dataWord>>4) & 0x3f) != aMainFrame)){
-			[NSException raise:@"HV cmd Error" format:@"HV2132 %ld bad reponse: read Target",[self stationNumber]];
+			[NSException raise:@"HV cmd Error" format:@"HV2132 %d bad reponse: read Target",(int)[self stationNumber]];
 		}
 		else *aValue = dataWord>>4;
 		[commLock unlock];
@@ -461,7 +461,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 	}
 }
 
-- (void) readAllTargets:(int*)aValues mainFrame:(unsigned long) aMainFrame
+- (void) readAllTargets:(int*)aValues mainFrame:(uint32_t) aMainFrame
 {
 	@try {
 		[commLock lock];
@@ -480,7 +480,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 				aValues[i] = values[i]>>4;
 			}
 			else {
-				[NSException raise:@"HV cmd Error" format:@"HV2132 %ld bad reponse: read Target",[self stationNumber]];
+				[NSException raise:@"HV cmd Error" format:@"HV2132 %d bad reponse: read Target",(int)[self stationNumber]];
 			}
 		}
 		[commLock unlock];
@@ -492,7 +492,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 	}
 }
 
-- (void) readStatus:(int*) aValue failedMask:(unsigned short*)failed mainFrame:(unsigned long) aMainFrame
+- (void) readStatus:(int*) aValue failedMask:(unsigned short*)failed mainFrame:(uint32_t) aMainFrame
 {
 	@try {
 		[commLock lock];
@@ -541,7 +541,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 	}
 }
 
-- (void) readPodComplement:(unsigned short*) typeMask mainFrame:(unsigned long) aMainFrame
+- (void) readPodComplement:(unsigned short*) typeMask mainFrame:(uint32_t) aMainFrame
 {
 	@try {
 		[commLock lock];
@@ -554,7 +554,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 		//response should be P10
 		[self readData:typeMask numWords:1];
 		if(((*typeMask & 0xf) != 10) || (((*typeMask>>4) & 0x3f) != aMainFrame)){
-			[NSException raise:@"HV cmd Error" format:@"HV2132 %ld bad reponse: read Target",[self stationNumber]];
+			[NSException raise:@"HV cmd Error" format:@"HV2132 %d bad reponse: read Target",(int)[self stationNumber]];
 		}
 		else *typeMask = *typeMask>>4;
 		//1 for 7KV and 0 3.3KV Bit2^7 is pod 0 Bit0 is pod 0
@@ -568,7 +568,7 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 }
 
 
-- (void) setHV:(BOOL)state mainFrame:(unsigned long)aMainFrame
+- (void) setHV:(BOOL)state mainFrame:(uint32_t)aMainFrame
 {
 	@try {
 		[commLock lock];
@@ -603,13 +603,13 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 	
 	unsigned short statusWord = [[self adapter] camacShortNAF:[self stationNumber] a:0 f:16 data:&aCmd];
 	if(!isQbitSet(statusWord)){
-		[NSException raise:@"HV cmd Error" format:@"HV2132 %ld refused cmd: %@",[self stationNumber],aLabel];
+		[NSException raise:@"HV cmd Error" format:@"HV2132 %d refused cmd: %@",(int)[self stationNumber],aLabel];
 	}
 	else [ORTimer delay:.8];
 #	endif
 }
 
-- (void) setEnableResponse:(BOOL)state mainFrame:(unsigned long)aMainFrame
+- (void) setEnableResponse:(BOOL)state mainFrame:(uint32_t)aMainFrame
 {
 	//send S-M-11 cmd (enable/disable response)
 	unsigned short dataWord = ((state&0x1)<<10) | ((aMainFrame&0x3f)<<4) | 11;
@@ -645,13 +645,13 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 				if(isQbitSet(statusWord)){
 					//check for errors
 					if(data[wordCount] & 15){
-						[NSException raise:@"HV reponse Error" format:@"HV2132 %ld Transmission error in response",[self stationNumber]];
+						[NSException raise:@"HV reponse Error" format:@"HV2132 %d Transmission error in response",(int)[self stationNumber]];
 					}
 					else if(data[wordCount] & 12){
-						[NSException raise:@"HV reponse Error" format:@"HV2132 %ld Parity error in response",[self stationNumber]];
+						[NSException raise:@"HV reponse Error" format:@"HV2132 %d Parity error in response",(int)[self stationNumber]];
 					}
 					else if(data[wordCount] & 13){
-						[NSException raise:@"HV reponse Error" format:@"HV2132 %ld Overwrite error in response",[self stationNumber]];
+						[NSException raise:@"HV reponse Error" format:@"HV2132 %d Overwrite error in response",(int)[self stationNumber]];
 					}
 					wordCount++;
 				}
@@ -660,17 +660,17 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 			//clear LAM2
 			[[self adapter] camacShortNAF:[self stationNumber] a:0 f:10];
 			if(wordCount > num){
-				[NSException raise:@"HV reponse Error" format:@"HV2132 %ld Incorrect word count in response",[self stationNumber]];
+				[NSException raise:@"HV reponse Error" format:@"HV2132 %d Incorrect word count in response",(int)[self stationNumber]];
 			}
 			break;
 		}
 	}
 	if(timeOut){
 		NSLog(@"HV2132 %d TimeOut\n",[self stationNumber]);
-		[NSException raise:@"HV cmd TimeOut" format:@"HV2132 %ld Cmd TimeOut",[self stationNumber]];
+		[NSException raise:@"HV cmd TimeOut" format:@"HV2132 %d Cmd TimeOut",(int)[self stationNumber]];
 	}
 	else if(wordCount != num){
-		[NSException raise:@"HV reponse Error" format:@"HV2132 %ld Incorrect word count in response",[self stationNumber]];
+		[NSException raise:@"HV reponse Error" format:@"HV2132 %d Incorrect word count in response",(int)[self stationNumber]];
 	}
 	
 }
@@ -729,10 +729,10 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 //  until we get the read back functionality to work use the following methods to
 //  fake readback by storing the hw values in a dictionary
 //-------------------------------------------------------------------------------
-- (void) setHVRecordMainFrame:(unsigned long)aMainFrame channel:(int)aChannel voltage:(int)aValue
+- (void) setHVRecordMainFrame:(uint32_t)aMainFrame channel:(int)aChannel voltage:(int)aValue
 {
 	//make the keys
-	NSString* mainFrameKey	= [NSString stringWithFormat:@"HVMainFrame%ld",aMainFrame];
+	NSString* mainFrameKey	= [NSString stringWithFormat:@"HVMainFrame%d",aMainFrame];
 	NSString* timeKey		= [NSString stringWithFormat:@"SetTime%d",aChannel];
 	NSString* voltageKey	= [NSString stringWithFormat:@"HVVoltage%d",aChannel];
 	
@@ -749,10 +749,10 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 	
 }
 
-- (void) setHVRecordMainFrame:(unsigned long)aMainFrame status:(BOOL)state
+- (void) setHVRecordMainFrame:(uint32_t)aMainFrame status:(BOOL)state
 {
 	//make the keys
-	NSString* mainFrameKey	= [NSString stringWithFormat:@"HVMainFrame%ld",aMainFrame];
+	NSString* mainFrameKey	= [NSString stringWithFormat:@"HVMainFrame%d",aMainFrame];
 	NSString* statusKey		= [NSString stringWithFormat:@"HVStatus"];
 	
 	if(!hvRecord)hvRecord = [[NSMutableDictionary dictionary] retain];
@@ -765,17 +765,17 @@ NSString* ORHV2132OnOffChanged					= @"ORHV2132OnOffChanged";
 	[mainFrameDictionary setObject:[NSNumber numberWithBool:state] forKey:statusKey]; 
 }
 
-- (int)  getHVRecordVoltageMainFrame:(unsigned long)aMainFrame channel:(int)aChannel
+- (int)  getHVRecordVoltageMainFrame:(uint32_t)aMainFrame channel:(int)aChannel
 {
-	NSString* mainFrameKey	= [NSString stringWithFormat:@"HVMainFrame%ld",aMainFrame];
+	NSString* mainFrameKey	= [NSString stringWithFormat:@"HVMainFrame%d",aMainFrame];
 	NSString* voltageKey	= [NSString stringWithFormat:@"HVVoltage%d",aChannel];
 	NSMutableDictionary* mainFrameDictionary = [hvRecord objectForKey:mainFrameKey];
 	return [[mainFrameDictionary objectForKey:voltageKey] intValue];
 }
 
-- (int)  getHVRecordStatusMainFrame:(unsigned long)aMainFrame
+- (int)  getHVRecordStatusMainFrame:(uint32_t)aMainFrame
 {
-	NSString* mainFrameKey	= [NSString stringWithFormat:@"HVMainFrame%ld",aMainFrame];
+	NSString* mainFrameKey	= [NSString stringWithFormat:@"HVMainFrame%d",aMainFrame];
 	NSString* statusKey		= [NSString stringWithFormat:@"HVStatus"];
 	NSMutableDictionary* mainFrameDictionary = [hvRecord objectForKey:mainFrameKey];
 	return [[mainFrameDictionary objectForKey:statusKey] intValue];

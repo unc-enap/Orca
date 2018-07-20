@@ -180,7 +180,7 @@ static int redisSetTcpNoDelay(redisContext *c) {
 
 static int redisContextWaitReady(redisContext *c, const struct timeval *timeout) {
     struct pollfd   wfd[1];
-    long msec;
+    int32_t msec;
 
     msec          = -1;
     wfd[0].fd     = c->fd;
@@ -202,7 +202,7 @@ static int redisContextWaitReady(redisContext *c, const struct timeval *timeout)
     }
 
     if (errno == EINPROGRESS) {
-        long res;
+        int32_t res;
 
         if ((res = poll(wfd, 1, (int)msec)) == -1) {
             __redisSetErrorFromErrno(c, REDIS_ERR_IO, "poll(2)");

@@ -61,10 +61,10 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
     [super dealloc];
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr   = (unsigned long*)someData;
-	unsigned long length = ExtractLength(*ptr);
+    uint32_t* ptr   = (uint32_t*)someData;
+	uint32_t length = ExtractLength(*ptr);
 
 	ptr++;
     
@@ -84,7 +84,7 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 	int i;
 	for(i=0;i<length-dataOffset;i++){
 		ptr++;
-		unsigned long  value = *ptr;
+		uint32_t  value = *ptr;
 		[aDataSet histogram:value numBins:8192 sender:self  withKeys:@"AD3511", crateKey,cardKey,@"ADC",nil];
 
 
@@ -92,24 +92,24 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
-	unsigned long length = ExtractLength(*ptr);
+	uint32_t length = ExtractLength(*ptr);
 	ptr++;
     
     NSString* title= @"AD3511 ADC Record\n\n";
     
-    NSString* crate = [NSString stringWithFormat:@"Crate    = %lu\n",(*ptr&0x01e00000)>>21];
-    NSString* card  = [NSString stringWithFormat:@"Station  = %lu\n",(*ptr&0x001f0000)>>16];
+    NSString* crate = [NSString stringWithFormat:@"Crate    = %u\n",(*ptr&0x01e00000)>>21];
+    NSString* card  = [NSString stringWithFormat:@"Station  = %u\n",(*ptr&0x001f0000)>>16];
 
 	BOOL timingIncluded = (*ptr&0x02000000)>>25;
 	BOOL dataOffset;
-	NSMutableString* adcValues = [NSMutableString stringWithFormat:@"buffer size: %lu\n",timingIncluded?length-4:length-2];
+	NSMutableString* adcValues = [NSMutableString stringWithFormat:@"buffer size: %u\n",timingIncluded?length-4:length-2];
 	if(timingIncluded)	{
 		dataOffset = 4;
 		union {
 			NSTimeInterval asTimeInterval;
-			unsigned long asLongs[2];
+			uint32_t asLongs[2];
 		}theTimeRef;
 		ptr++;
 		theTimeRef.asLongs[1] = *ptr;
@@ -128,7 +128,7 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 	int i;
 	for(i=0;i<length-dataOffset;i++){
 		ptr++;
-		[adcValues appendFormat:@"%d: %lu\n",i,*ptr];
+		[adcValues appendFormat:@"%d: %u\n",i,*ptr];
 	}
     return [NSString stringWithFormat:@"%@%@%@%@",title,crate,card,adcValues];               
 }

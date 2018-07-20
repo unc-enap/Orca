@@ -55,13 +55,13 @@ enum {
 }
 
 - (unsigned short) numberOfRegisters;
-- (unsigned long) threshold0Offset;
-- (unsigned long) outputWidth0_7Offset;
-- (unsigned long) outputWidth8_15Offset; 
-- (unsigned long) testPulseOffset; 
-- (unsigned long) patternInibitOffset; 
-- (unsigned long) moduleTypeOffset; 
-- (unsigned long) versionOffset; 
+- (uint32_t) threshold0Offset;
+- (uint32_t) outputWidth0_7Offset;
+- (uint32_t) outputWidth8_15Offset; 
+- (uint32_t) testPulseOffset; 
+- (uint32_t) patternInibitOffset; 
+- (uint32_t) moduleTypeOffset; 
+- (uint32_t) versionOffset; 
 
 - (unsigned short) deadTime0_7;
 - (void) setDeadTime0_7:(unsigned short)aDeadTime0_7;

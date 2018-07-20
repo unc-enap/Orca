@@ -111,8 +111,8 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 - (void) decodeSingleAdcRead:(NSData*) theData;
 - (void) decodeReadAllValues:(NSData*) theData;
 - (void) decodeTimerCounter:(NSData*) theData;
-- (long) convert:(unsigned long)rawAdc gainBip:(unsigned short)bipGain result:(float*)voltage;
-- (long) convert:(float) analogVoltage chan:(int) DACNumber result:(unsigned short*)rawDacValue;
+- (int32_t) convert:(uint32_t)rawAdc gainBip:(unsigned short)bipGain result:(float*)voltage;
+- (int32_t) convert:(float) analogVoltage chan:(int) DACNumber result:(unsigned short*)rawDacValue;
 - (unsigned char) gainBipWord:(int)channelPair;
 @end
 
@@ -244,7 +244,7 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 }
 - (void) setCounterEnableBit:(int)bit value:(BOOL)aValue
 {
-	unsigned long aMask = counterEnableMask;
+	uint32_t aMask = counterEnableMask;
 	if(aValue)aMask |= (1<<bit);
 	else aMask &= ~(1<<bit);
 	[self setCounterEnableMask:aMask];
@@ -260,13 +260,13 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 	else return 0;
 }
 
-- (unsigned long) adcEnabledMask:(int)aGroup
+- (uint32_t) adcEnabledMask:(int)aGroup
 {
 	if(aGroup>=0 && aGroup<3) return adcEnabledMask[aGroup];
 	else return 0;
 }
 
-- (void) setAdcEnabled:(int)aGroup mask:(unsigned long)anEnableMask
+- (void) setAdcEnabled:(int)aGroup mask:(uint32_t)anEnableMask
 {
 	if(aGroup>=0 && aGroup<3){
 		[[[self undoManager] prepareWithInvocationTarget:self] setAdcEnabled:aGroup mask:adcEnabledMask[aGroup]];
@@ -279,7 +279,7 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 {
 	int group = bit/32;
 	if(group<3){
-		unsigned long aMask = adcEnabledMask[group];
+		uint32_t aMask = adcEnabledMask[group];
 		int subBit = bit%32;
 		if(aValue) aMask  |= (1<<subBit);
 		else	   aMask &= ~(1<<subBit);
@@ -301,7 +301,7 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 
 - (void) setTimerEnableBit:(int)bit value:(BOOL)aValue
 {
-	unsigned long aMask = timerEnableMask;
+	uint32_t aMask = timerEnableMask;
 	if(aValue)aMask |= (1<<bit);
 	else aMask &= ~(1<<bit);
 	[self setTimerEnableMask:aMask];
@@ -671,25 +671,25 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
     [[NSNotificationCenter defaultCenter] postNotificationName:ORLabJackUE9DigitalOutputEnabledChanged object:self];
 }
 
-- (unsigned long) counter:(int)i
+- (uint32_t) counter:(int)i
 {
 	if(i>=0 && i<2)return counter[i];
 	else return 0;
 }
 
-- (void) setCounter:(int)i value:(unsigned long)aValue
+- (void) setCounter:(int)i value:(uint32_t)aValue
 {
 	if(i>=0 && i<2){
 		counter[i] = aValue;
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORLabJackUE9CounterChanged object:self];
 	}
 }
-- (unsigned long) timerResult:(int)i
+- (uint32_t) timerResult:(int)i
 {
 	if(i>=0 && i<6)return timerResult[i];
 	else return 0;
 }
-- (void) setTimerResult:(int)i value:(unsigned long)aValue
+- (void) setTimerResult:(int)i value:(uint32_t)aValue
 {
 	if(i>=0 && i<6){
 		timerResult[i] = aValue;
@@ -697,13 +697,13 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 	}
 }
 
-- (unsigned long) timer:(int)i
+- (uint32_t) timer:(int)i
 {
 	if(i>=0 && i<6)return timer[i];
 	else return 0;
 }
 
-- (void) setTimer:(int)i value:(unsigned long)aValue
+- (void) setTimer:(int)i value:(uint32_t)aValue
 {
 	if(i>=0 && i<6){
 		[[[self undoManager] prepareWithInvocationTarget:self] setTimer:i value:timer[i]];
@@ -860,12 +860,12 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 		}	
 	}
 }
-- (unsigned long) doDirection
+- (uint32_t) doDirection
 {
     return doDirection;
 }
 
-- (void) setDoDirection:(unsigned long)aMask
+- (void) setDoDirection:(uint32_t)aMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setDoDirection:doDirection];
     doDirection = aMask;
@@ -875,7 +875,7 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 
 - (void) setDoDirectionBit:(int)bit value:(BOOL)aValue
 {
-	unsigned long aMask = doDirection;
+	uint32_t aMask = doDirection;
 	if(aValue)aMask |= (1<<bit);
 	else aMask &= ~(1<<bit);
 	[self setDoDirection:aMask];
@@ -884,12 +884,12 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 }
 
 
-- (unsigned long) doValueOut
+- (uint32_t) doValueOut
 {
     return doValueOut;
 }
 
-- (void) setDoValueOut:(unsigned long)aMask
+- (void) setDoValueOut:(uint32_t)aMask
 {
 	@synchronized(self){
 		[[[self undoManager] prepareWithInvocationTarget:self] setDoValueOut:doValueOut];
@@ -905,7 +905,7 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 
 - (void) setDoValueOutBit:(int)bit value:(BOOL)aValue
 {
-	unsigned long aMask = doValueOut;
+	uint32_t aMask = doValueOut;
 	if(aValue)aMask |= (1<<bit);
 	else aMask &= ~(1<<bit);
 	[self setDoValueOut:aMask];
@@ -926,7 +926,7 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
     return doValueIn;
 }
 
-- (void) setDoValueIn:(unsigned long)aMask
+- (void) setDoValueIn:(uint32_t)aMask
 {
 	@synchronized(self){
 		doValueIn = aMask;
@@ -956,8 +956,8 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 }
 
 #pragma mark ***Data Records
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -992,7 +992,7 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
     return dataDictionary;
 }
 
-- (unsigned long) timeMeasured
+- (uint32_t) timeMeasured
 {
 	return timeMeasured;
 }
@@ -1002,14 +1002,14 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 {
     if([[ORGlobal sharedGlobal] runInProgress]){
 		
-		unsigned long data[kLabJackUE9DataSize];
+		uint32_t data[kLabJackUE9DataSize];
 		data[0] = dataId | kLabJackUE9DataSize;
 		data[1] = ([self uniqueIdNumber] & 0x0000ffff);
 		data[2] = timeMeasured;
 	
 		union {
 			float asFloat;
-			unsigned long asLong;
+			uint32_t asLong;
 		} theData;
 		
 		int index = 3;
@@ -1035,7 +1035,7 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 		data[index++] = 0;
 		
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-															object:[NSData dataWithBytes:data length:sizeof(long)*kLabJackUE9DataSize]];
+															object:[NSData dataWithBytes:data length:sizeof(int32_t)*kLabJackUE9DataSize]];
 	}
 }
 #pragma mark •••Bit Processing Protocol
@@ -1079,7 +1079,7 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 {
 	readOnce = NO;
 	//don't use the setter so the undo manager is bypassed
-	unsigned long newOutputValue = processOutputMask & processOutputValue & 0xFFFFFF;
+	uint32_t newOutputValue = processOutputMask & processOutputValue & 0xFFFFFF;
 	doValueOut |= newOutputValue;
 }
 
@@ -1097,7 +1097,7 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 
 - (NSString*) identifier
 {
-    return [NSString stringWithFormat:@"LJUE9,%lu",[self uniqueIdNumber]];
+    return [NSString stringWithFormat:@"LJUE9,%u",[self uniqueIdNumber]];
 }
 
 - (NSString*) processingTitle
@@ -1396,7 +1396,7 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 	sendBuff[3] = (unsigned char)0x00;  //extended command number
 	
 	//the FIO, EIO, CIO and MIO directions and states
-	unsigned long dirMask = ~doDirection; //*** backward from the U12. We invert here to be consistent
+	uint32_t dirMask = ~doDirection; //*** backward from the U12. We invert here to be consistent
 	sendBuff[6]  = (unsigned char)0xFF;					 //FIOMask
 	sendBuff[7]  = (unsigned char)(dirMask & 0xFF);		 //FIODir
 	sendBuff[8]  = (unsigned char)(doValueOut & 0xFF);	 //FIOState
@@ -1790,12 +1790,12 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 
 - (double) bufferToDouble:(unsigned char*)buffer index:(int) startIndex 
 { 
-    unsigned long resultDec = 0;
-	unsigned long resultWh = 0;
+    uint32_t resultDec = 0;
+	uint32_t resultWh = 0;
     int i;
     for( i = 0; i < 4; i++ ){
-        resultDec += (unsigned long)buffer[startIndex + i] * pow(2, (i*8));
-        resultWh += (unsigned long)buffer[startIndex + i + 4] * pow(2, (i*8));
+        resultDec += (uint32_t)buffer[startIndex + i] * pow(2, (i*8));
+        resultWh += (uint32_t)buffer[startIndex + i + 4] * pow(2, (i*8));
     }
 	
     return ( (double)((int)resultWh) + (double)(resultDec)/4294967296.0 );
@@ -1832,7 +1832,7 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 - (void) decodeSingleAdcRead:(NSData*)theData
 {
 	unsigned char* recBuff = (unsigned char*)[theData bytes];
-	unsigned long rawAdc = recBuff[5] + recBuff[6] * 256;
+	uint32_t rawAdc = recBuff[5] + recBuff[6] * 256;
 	float voltage;
 	if([self convert:rawAdc gainBip:recBuff[4] result:&voltage]==0){
 		int adcIndex = [self adcIndexFromMuxIndex:recBuff[3]];
@@ -1846,25 +1846,25 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 {
 	int i;
 	unsigned char* recBuff = (unsigned char*)[theData bytes];
-	unsigned long enabledMask = recBuff[7];
+	uint32_t enabledMask = recBuff[7];
 	for( i = 0; i < kUE9NumTimers; i++ ){
-		unsigned long value = 0 ;
+		uint32_t value = 0 ;
 		if(enabledMask & (0x1<<i)){
-			value =	 (unsigned long)recBuff[8 + 4*i]      | 
-			((unsigned long)recBuff[9 + 4*i]<<8)  | 
-			((unsigned long)recBuff[10 + 4*i]<<16) | 
-			((unsigned long)recBuff[11 + 4*i]<<24);
+			value =	 (uint32_t)recBuff[8 + 4*i]      | 
+			((uint32_t)recBuff[9 + 4*i]<<8)  | 
+			((uint32_t)recBuff[10 + 4*i]<<16) | 
+			((uint32_t)recBuff[11 + 4*i]<<24);
 		}
 		[self setTimerResult:i value:value];
     }
 
 	for( i = 0; i < 2; i++ ){
-		unsigned long value = 0;
+		uint32_t value = 0;
 		if(enabledMask & (0x40<<i)){
-			value =	 (unsigned long)recBuff[32 + 4*i]      | 
-					((unsigned long)recBuff[33 + 4*i]<<8)  | 
-					((unsigned long)recBuff[34 + 4*i]<<16) | 
-					((unsigned long)recBuff[35 + 4*i]<<24);
+			value =	 (uint32_t)recBuff[32 + 4*i]      | 
+					((uint32_t)recBuff[33 + 4*i]<<8)  | 
+					((uint32_t)recBuff[34 + 4*i]<<16) | 
+					((uint32_t)recBuff[35 + 4*i]<<24);
 		}
         [self setCounter:i value:value];
     }
@@ -1879,13 +1879,13 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 		return;
 	}
 	
-	unsigned long dirMask = (recBuff[6] | (recBuff[8] << 8) | ((recBuff[10]&0xf) << 16));
+	uint32_t dirMask = (recBuff[6] | (recBuff[8] << 8) | ((recBuff[10]&0xf) << 16));
 	[self setDoValueIn: ~dirMask & (recBuff[7] | (recBuff[9] << 8) | ((recBuff[11]&0xf) << 16))];
 	
 	if([[self orcaObjects] count]==0){
 		float voltage;
 		for(i = 0; i < 14; i++){
-			unsigned long rawAdc = recBuff[12 + 2*i] + recBuff[13 + 2*i] * 256;
+			uint32_t rawAdc = recBuff[12 + 2*i] + recBuff[13 + 2*i] * 256;
 			
 			//getting analog voltage
 			unsigned short gainBip = 0x00;
@@ -1954,7 +1954,7 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 		break;
 	}
 }
-- (long) convert:(float) analogVoltage chan:(int) DACNumber result:(unsigned short*)rawDacValue
+- (int32_t) convert:(float) analogVoltage chan:(int) DACNumber result:(unsigned short*)rawDacValue
 {
 	float internalSlope;
 	float internalOffset;
@@ -1986,7 +1986,7 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 	return 0;
 }
 
-- (long) convert:(unsigned long)rawAdc gainBip:(unsigned short)gainBip result:(float*)analogVoltage
+- (int32_t) convert:(uint32_t)rawAdc gainBip:(unsigned short)gainBip result:(float*)analogVoltage
 {
 	float internalSlope;
 	float internalOffset;

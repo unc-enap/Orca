@@ -41,10 +41,10 @@
 - (int)  slot;
 
 #pragma mark •••Accessors
-- (unsigned long) memoryBaseAddress;
-- (unsigned long) registerBaseAddress;
+- (uint32_t) memoryBaseAddress;
+- (uint32_t) registerBaseAddress;
 - (NSString*) iPAddress;
-- (unsigned long) portNumber;
+- (uint32_t) portNumber;
 
 #pragma mark •••Notifications
 - (void) registerNotificationObservers;

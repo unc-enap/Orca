@@ -164,7 +164,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 	return bufferState;
 }
 
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
 {
 	if(groupTag == 0){
 		if(counterTag>=0 && counterTag<8){
@@ -243,12 +243,12 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 	 object:self];
 }
 
-- (unsigned long) writeValue
+- (uint32_t) writeValue
 {
     return writeValue;
 }
 
-- (void) setWriteValue:(unsigned long) aValue
+- (void) setWriteValue:(uint32_t) aValue
 {
     // Set the undo manager action.  The label has already been set by the controller calling this method.
     [[[self undoManager] prepareWithInvocationTarget:self] setWriteValue:[self writeValue]];
@@ -276,12 +276,12 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
     [[NSNotificationCenter defaultCenter] postNotificationName:ORCaen1724ModelEnabledMaskChanged object:self];
 }
 
-- (unsigned long) postTriggerSetting
+- (uint32_t) postTriggerSetting
 {
     return postTriggerSetting;
 }
 
-- (void) setPostTriggerSetting:(unsigned long)aPostTriggerSetting
+- (void) setPostTriggerSetting:(uint32_t)aPostTriggerSetting
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setPostTriggerSetting:postTriggerSetting];
     
@@ -290,12 +290,12 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
     [[NSNotificationCenter defaultCenter] postNotificationName:ORCaen1724ModelPostTriggerSettingChanged object:self];
 }
 
-- (unsigned long) triggerSourceMask
+- (uint32_t) triggerSourceMask
 {
     return triggerSourceMask;
 }
 
-- (void) setTriggerSourceMask:(unsigned long)aTriggerSourceMask
+- (void) setTriggerSourceMask:(uint32_t)aTriggerSourceMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setTriggerSourceMask:triggerSourceMask];
     
@@ -346,12 +346,12 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
     [[NSNotificationCenter defaultCenter] postNotificationName:ORCaen1724ModelCountAllTriggersChanged object:self];
 }
 
-- (unsigned long) customSize
+- (uint32_t) customSize
 {
     return customSize;
 }
 
-- (void) setCustomSize:(unsigned long)aCustomSize
+- (void) setCustomSize:(uint32_t)aCustomSize
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setCustomSize:customSize];
     
@@ -397,12 +397,12 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
     [[NSNotificationCenter defaultCenter] postNotificationName:ORCaen1724ModelChannelConfigMaskChanged object:self];
 }
 
-- (unsigned long) numberBLTEventsToReadout
+- (uint32_t) numberBLTEventsToReadout
 {
     return numberBLTEventsToReadout; 
 }
 
-- (void) setNumberBLTEventsToReadout:(unsigned long) numBLTEvents
+- (void) setNumberBLTEventsToReadout:(uint32_t) numBLTEvents
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setNumberBLTEventsToReadout:numberBLTEventsToReadout];
     
@@ -435,7 +435,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
     return reg[anIndex].regName;
 }
 
-- (unsigned long) getAddressOffset:(short) anIndex
+- (uint32_t) getAddressOffset:(short) anIndex
 {
     return reg[anIndex].addressOffset;
 }
@@ -513,7 +513,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 
 
 
-- (void) readChan:(unsigned short)chan reg:(unsigned short) pReg returnValue:(unsigned long*) pValue
+- (void) readChan:(unsigned short)chan reg:(unsigned short) pReg returnValue:(uint32_t*) pValue
 {
     // Make sure that register is valid
     if (pReg >= [self getNumberRegisters]) {
@@ -535,9 +535,9 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
     
 }
 
-- (void) writeChan:(unsigned short)chan reg:(unsigned short) pReg sendValue:(unsigned long) pValue
+- (void) writeChan:(unsigned short)chan reg:(unsigned short) pReg sendValue:(uint32_t) pValue
 {
-	unsigned long theValue = pValue;
+	uint32_t theValue = pValue;
     // Check that register is a valid register.
     if (pReg >= [self getNumberRegisters]){
         [NSException raise:@"Illegal Register" format:@"Register index out of bounds on %@",[self identifier]];
@@ -567,7 +567,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
     return thresholds[aChnl];
 }
 
-- (void) setThreshold:(unsigned short) aChnl withValue:(unsigned long) aValue
+- (void) setThreshold:(unsigned short) aChnl withValue:(uint32_t) aValue
 {
     if(aValue>16384)aValue = 16384; //14 bit.
 	
@@ -593,7 +593,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 	short		start;
     short		end;
     short		i;   
-    unsigned long 	theValue = 0;
+    uint32_t 	theValue = 0;
     short theChannelIndex	 = [self selectedChannel];
     short theRegIndex		 = [self selectedRegIndex];
     
@@ -638,7 +638,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
     short	end;
     short	i;
 	
-    long theValue			=  [self writeValue];
+    int32_t theValue			=  [self writeValue];
     short theChannelIndex	= [self selectedChannel];
     short theRegIndex 		= [self selectedRegIndex];
     
@@ -678,7 +678,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 }
 
 
-- (void) read:(unsigned short) pReg returnValue:(unsigned long*) pValue
+- (void) read:(unsigned short) pReg returnValue:(uint32_t*) pValue
 {
     // Make sure that register is valid
     if (pReg >= [self getNumberRegisters]) {
@@ -700,7 +700,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
     
 }
 
-- (void) write:(unsigned short) pReg sendValue:(unsigned long) pValue
+- (void) write:(unsigned short) pReg sendValue:(uint32_t) pValue
 {
     // Check that register is a valid register.
     if (pReg >= [self getNumberRegisters]){
@@ -729,7 +729,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 
 - (void) writeThreshold:(unsigned short) pChan
 {
-    unsigned long 	threshold = [self threshold:pChan];
+    uint32_t 	threshold = [self threshold:pChan];
     
     [[self adapter] writeLongBlock:&threshold
                          atAddress:[self baseAddress] + reg[kThresholds].addressOffset + (pChan * 0x100)
@@ -742,7 +742,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 {
 	int i;
 	for(i=0;i<8;i++){
-		unsigned long aValue = overUnderThreshold[i];
+		uint32_t aValue = overUnderThreshold[i];
 		[[self adapter] writeLongBlock:&aValue
 							 atAddress:[self baseAddress] + reg[kNumOUThreshold].addressOffset + (i * 0x100)
 							numToWrite:1
@@ -755,7 +755,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 {
 	int i;
 	for(i=0;i<8;i++){
-		unsigned long value;
+		uint32_t value;
 		[[self adapter] readLongBlock:&value
 							atAddress:[self baseAddress] + reg[kNumOUThreshold].addressOffset + (i * 0x100)
 							numToRead:1
@@ -774,7 +774,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 
 - (void) writeDac:(unsigned short) pChan
 {
-    unsigned long 	aValue = [self dac:pChan];
+    uint32_t 	aValue = [self dac:pChan];
     
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + reg[kDacs].addressOffset + (pChan * 0x100)
@@ -785,7 +785,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 
 - (void) generateSoftwareTrigger
 {
-	unsigned long dummy = 0;
+	uint32_t dummy = 0;
     [[self adapter] writeLongBlock:&dummy
                          atAddress:[self baseAddress] + reg[kSWTrigger].addressOffset
                         numToWrite:1
@@ -795,7 +795,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 
 - (void) writeChannelConfiguration
 {
-	unsigned long mask = [self channelConfigMask];
+	uint32_t mask = [self channelConfigMask];
 	[[self adapter] writeLongBlock:&mask
                          atAddress:[self baseAddress] + reg[kChanConfig].addressOffset
                         numToWrite:1
@@ -805,7 +805,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 
 - (void) writeCustomSize
 {
-	unsigned long aValue = [self customSize];
+	uint32_t aValue = [self customSize];
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + reg[kCustomSize].addressOffset
                         numToWrite:1
@@ -815,7 +815,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 
 - (void) report
 {
-	unsigned long enabled, threshold, numOU, status, bufferOccupancy, dacValue,triggerSrc;
+	uint32_t enabled, threshold, numOU, status, bufferOccupancy, dacValue,triggerSrc;
 	[self read:kChanEnableMask returnValue:&enabled];
 	[self read:kTrigSrcEnblMask returnValue:&triggerSrc];
 	int chan;
@@ -843,9 +843,9 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 	}
 	NSLogFont([NSFont fontWithName:@"Monaco" size:10],@"-----------------------------------------------------------\n");
 	
-	unsigned long aValue;
+	uint32_t aValue;
 	[self read:kBufferOrganization returnValue:&aValue];
-	NSLogFont([NSFont fontWithName:@"Monaco" size:10],@"# Buffer Blocks : %d\n",(long)powf(2.,(float)aValue));
+	NSLogFont([NSFont fontWithName:@"Monaco" size:10],@"# Buffer Blocks : %d\n",(int32_t)powf(2.,(float)aValue));
 	
 	NSLogFont([NSFont fontWithName:@"Monaco" size:10],@"Software Trigger: %@\n",triggerSrc&0x80000000?@"Enabled":@"Disabled");
 	NSLogFont([NSFont fontWithName:@"Monaco" size:10],@"External Trigger: %@\n",triggerSrc&0x40000000?@"Enabled":@"Disabled");
@@ -910,7 +910,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 
 - (void) softwareReset
 {
-	unsigned long aValue = 0;
+	uint32_t aValue = 0;
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + reg[kSWReset].addressOffset
                         numToWrite:1
@@ -921,7 +921,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 
 - (void) clearAllMemory
 {
-	unsigned long aValue = 0;
+	uint32_t aValue = 0;
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + reg[kSWClear].addressOffset
                         numToWrite:1
@@ -932,7 +932,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 
 - (void) writeTriggerCount
 {
-	unsigned long aValue = ((coincidenceLevel&0x7)<<24) | (triggerSourceMask & 0xffffffff);
+	uint32_t aValue = ((coincidenceLevel&0x7)<<24) | (triggerSourceMask & 0xffffffff);
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + reg[kTrigSrcEnblMask].addressOffset
                         numToWrite:1
@@ -943,7 +943,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 
 - (void) writeTriggerSource
 {
-	unsigned long aValue = ((coincidenceLevel&0x7)<<24) | (triggerSourceMask & 0xffffffff);
+	uint32_t aValue = ((coincidenceLevel&0x7)<<24) | (triggerSourceMask & 0xffffffff);
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + reg[kTrigSrcEnblMask].addressOffset
                         numToWrite:1
@@ -954,7 +954,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 
 - (void) writeBufferOrganization
 {
-	unsigned long aValue = eventSize;//(unsigned long)pow(2.,(float)eventSize);	
+	uint32_t aValue = eventSize;//(uint32_t)pow(2.,(float)eventSize);	
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + reg[kBufferOrganization].addressOffset
                         numToWrite:1
@@ -964,7 +964,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 
 - (void) writeChannelEnabledMask
 {
-	unsigned long aValue = enabledMask;
+	uint32_t aValue = enabledMask;
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + reg[kChanEnableMask].addressOffset
                         numToWrite:1
@@ -985,7 +985,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 
 - (void) writeAcquistionControl:(BOOL)start
 {
-	unsigned long aValue = (countAllTriggers<<3) | (start<<2) | (acquisitionMode&0x3);
+	uint32_t aValue = (countAllTriggers<<3) | (start<<2) | (acquisitionMode&0x3);
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + reg[kAcqControl].addressOffset
                         numToWrite:1
@@ -996,7 +996,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 
 - (void) writeNumberBLTEvents:(BOOL)enable
 {
-    unsigned long aValue = (enable) ? numberBLTEventsToReadout : 0;
+    uint32_t aValue = (enable) ? numberBLTEventsToReadout : 0;
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + reg[kBLTEventNum].addressOffset
                         numToWrite:1
@@ -1006,7 +1006,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 
 - (void) writeEnableBerr:(BOOL)enable
 {
-	unsigned long aValue;
+	uint32_t aValue;
 	[[self adapter] readLongBlock:&aValue
 			    atAddress:[self baseAddress] + reg[kVMEControl].addressOffset
                             numToRead:1
@@ -1059,8 +1059,8 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 }
 
 #pragma mark ***DataTaker
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -1139,7 +1139,7 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 {
 	@try {
-		unsigned long status;
+		uint32_t status;
 		isRunning = YES; 
 		
 		[controller readLongBlock:&status
@@ -1151,14 +1151,14 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 		if(status & kEventReadyMask){
 			//OK, at least one event is ready
 			
-			unsigned long theFirst;
+			uint32_t theFirst;
 			[controller readLongBlock:&theFirst
 					atAddress:dataReg
 					numToRead:1
 				       withAddMod:addressModifier 
 				    usingAddSpace:0x01]; //we set it to not increment the address.
 			
-			unsigned long theEventSize;
+			uint32_t theEventSize;
 			//the event size is reported incorrectly by CAEN 1724
 			//the first event is OK, all the others are 0 size
 			//extract the event size from the first word as suggested in the user guide
@@ -1173,9 +1173,9 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 			theEventSize = theFirst&0x0FFFFFFF;
 			
             if ( theEventSize == 0 ) return;
-			NSMutableData* theData = [NSMutableData dataWithCapacity:2+theEventSize*sizeof(long)];
-			[theData setLength:(2+theEventSize)*sizeof(long)];
-			unsigned long* p = (unsigned long*)[theData bytes];
+			NSMutableData* theData = [NSMutableData dataWithCapacity:2+theEventSize*sizeof(int32_t)];
+			[theData setLength:(2+theEventSize)*sizeof(int32_t)];
+			uint32_t* p = (uint32_t*)[theData bytes];
 			*p++ = dataId | (2 + theEventSize);
 			*p++ = location;
 
@@ -1243,10 +1243,10 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
     configStruct->card_info[index].deviceSpecificData[6]	= (uint32_t)reg[kVMEControl].addressOffset;	// VME Control address
     configStruct->card_info[index].deviceSpecificData[7]	= (uint32_t)reg[kBLTEventNum].addressOffset;	// Num of BLT events address
     
-	unsigned long sizeOfEvent = 0; // number of uint32_t for DMA transfer
+	uint32_t sizeOfEvent = 0; // number of uint32_t for DMA transfer
 	if (isFixedSize) {
-		unsigned long numChan = 0;
-		unsigned long chanMask = [self enabledMask];
+		uint32_t numChan = 0;
+		uint32_t chanMask = [self enabledMask];
 		for (; chanMask; numChan++) chanMask &= chanMask - 1;
 		//if (isCustomSize) {
 		//	sizeOfEvent = numChan * customSize * 2 + 4;

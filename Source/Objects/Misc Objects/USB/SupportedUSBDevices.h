@@ -24,8 +24,8 @@
 #define kNumberSupportedDevices 15
 
 static struct supportedUSbDevices {
-	unsigned long vendorID;
-	unsigned long productID;
+	uint32_t vendorID;
+	uint32_t productID;
 	NSString*	  modelName;
 } supportedUSBDevice[kNumberSupportedDevices] = {
 	{ 0x0957,	0x0407,	@"ORPulser332220Model"	},

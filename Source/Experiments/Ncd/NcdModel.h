@@ -41,15 +41,15 @@
         NSDictionary*       yAttributes;
 
 
-        unsigned long displayOptionMask;
+        uint32_t displayOptionMask;
 
-        unsigned long pulserDataId;
-        unsigned long logAmpDataId;
-        unsigned long linearityDataId;
-        unsigned long thresholdDataId;
-        unsigned long stepPDSDataId;
-        unsigned long cableCheckDataId;
-		unsigned long pulseChannelsDataId;
+        uint32_t pulserDataId;
+        uint32_t logAmpDataId;
+        uint32_t linearityDataId;
+        uint32_t thresholdDataId;
+        uint32_t stepPDSDataId;
+        uint32_t cableCheckDataId;
+		uint32_t pulseChannelsDataId;
 		
         //task stuff
         NcdPDSStepTask* ncdPDSStepTask;
@@ -72,7 +72,7 @@
         ORAlarm*    noDispatcherAlarm;
         ORAlarm*    builderNotConnectedAlarm;
 
-        unsigned long sourceMask;
+        uint32_t sourceMask;
         BOOL        muxMementosExist;
         NSMutableArray* altMuxThresholds;
 		NSMutableArray* fullEfficiencyMuxThresholds;
@@ -120,13 +120,13 @@
 - (void) setColorBarAttributes:(NSMutableDictionary*)newColorBarAttributes;
 - (NcdDetector*) detector;
 - (void) collectRates;
-- (unsigned long) displayOptionMask;
-- (void) setDisplayOptionMask: (unsigned long) aDisplayOptionMask;
+- (uint32_t) displayOptionMask;
+- (void) setDisplayOptionMask: (uint32_t) aDisplayOptionMask;
 - (void) setDisplayOption:(short)optionTag state:(BOOL)aState;
 - (BOOL) displayOptionState:(int)optionTag;
 - (BOOL) drawTubeLabel;
 - (void) standAloneMode:(BOOL)state;
-- (unsigned long) pulserDataId;
+- (uint32_t) pulserDataId;
 - (NSDate *) captureDate;
 - (void) setCaptureDate: (NSDate *) aCaptureDate;
 
@@ -144,19 +144,19 @@
 - (void) setHardwareCheckFailed;
 
 
-- (void) setPulserDataId: (unsigned long)aPulserDataId;
-- (unsigned long) logAmpDataId;
-- (void) setLogAmpDataId: (unsigned long) aLogAmpDataId;
-- (unsigned long) linearityDataId;
-- (void) setLinearityDataId: (unsigned long) aLinearityDataId;
-- (unsigned long) thresholdDataId;
-- (void) setThresholdDataId: (unsigned long) aThresholdDataId;
-- (unsigned long) cableCheckDataId;
-- (void) setCableCheckDataId: (unsigned long) aCableCheckDataId;
-- (unsigned long) stepPDSDataId;
-- (void) setStepPDSDataId: (unsigned long) aStepPDSDataId;
+- (void) setPulserDataId: (uint32_t)aPulserDataId;
+- (uint32_t) logAmpDataId;
+- (void) setLogAmpDataId: (uint32_t) aLogAmpDataId;
+- (uint32_t) linearityDataId;
+- (void) setLinearityDataId: (uint32_t) aLinearityDataId;
+- (uint32_t) thresholdDataId;
+- (void) setThresholdDataId: (uint32_t) aThresholdDataId;
+- (uint32_t) cableCheckDataId;
+- (void) setCableCheckDataId: (uint32_t) aCableCheckDataId;
+- (uint32_t) stepPDSDataId;
+- (void) setStepPDSDataId: (uint32_t) aStepPDSDataId;
 
-- (void)setSourceMask:(unsigned long)aMask;
+- (void)setSourceMask:(uint32_t)aMask;
 
 - (NSMutableDictionary*) captureState;
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)aDictionary;

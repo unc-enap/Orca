@@ -82,14 +82,14 @@ enum {
 @interface ORCaen775Model : ORCaenCardModel <ORDataTaker,ORHWWizard,ORHWRamping>
 {
     int modelType;
-	unsigned long   onlineMask;
+	uint32_t   onlineMask;
 	//cached values for speed.
-	unsigned long statusAddress;
-	unsigned long dataBufferAddress;
-	unsigned long location;
-	unsigned long dataIdN;
+	uint32_t statusAddress;
+	uint32_t dataBufferAddress;
+	uint32_t location;
+	uint32_t dataIdN;
     BOOL commonStopMode;
-    unsigned long fullScaleRange;
+    uint32_t fullScaleRange;
 }
 
 
@@ -100,18 +100,18 @@ enum {
 - (void) setCommonStopMode:(BOOL)aCommonStopMode;
 - (int) modelType;
 - (void) setModelType:(int)aModelType;
-- (unsigned long)onlineMask;
-- (void)			setOnlineMask:(unsigned long)anOnlineMask;
+- (uint32_t)onlineMask;
+- (void)			setOnlineMask:(uint32_t)anOnlineMask;
 - (BOOL)			onlineMaskBit:(int)bit;
 - (void)			setOnlineMaskBit:(int)bit withValue:(BOOL)aValue;
-- (unsigned long) dataIdN;
-- (void) setDataIdN: (unsigned long) DataId;
+- (uint32_t) dataIdN;
+- (void) setDataIdN: (uint32_t) DataId;
 
 #pragma mark ¥¥¥Register - General routines
 - (short) 			getNumberRegisters;
-- (unsigned long) 	getBufferOffset;
+- (uint32_t) 	getBufferOffset;
 - (unsigned short) 	getDataBufferSize;
-- (unsigned long) 	getThresholdOffset:(int)aChan;
+- (uint32_t) 	getThresholdOffset:(int)aChan;
 - (short) 			getStatusRegisterIndex: (short) aRegister;
 - (short)			getThresholdIndex;
 - (short)			getOutputBufferIndex;
@@ -121,7 +121,7 @@ enum {
 - (void)			writeFullScaleRange:(unsigned short)aValue;
 - (unsigned short)   readFullScaleRange;
 - (NSString*) 		getRegisterName: (short) anIndex;
-- (unsigned long) 	getAddressOffset: (short) anIndex;
+- (uint32_t) 	getAddressOffset: (short) anIndex;
 - (short)  			getAccessType: (short) anIndex;
 - (short)  			getAccessSize: (short) anIndex;
 - (BOOL)  			dataReset: (short) anIndex;

@@ -119,7 +119,7 @@ NSString* ORSIS3320ModelTriggerModeMaskChanged			= @"ORSIS3320ModelTriggerModeMa
 
 #define kMaxNumEvents	0x000fffff
 
-static unsigned long adcOffset[8] = { //read
+static uint32_t adcOffset[8] = { //read
 	0x04000000,	  
 	0x04800000,	  
 	0x05000000,	  
@@ -130,7 +130,7 @@ static unsigned long adcOffset[8] = { //read
 	0x07800000,	
 };
 
-static unsigned long triggerSetupRegOffsets[48] = { //read/write
+static uint32_t triggerSetupRegOffsets[48] = { //read/write
 	0x02000030,
 	0x02000038,
 	0x02800030,
@@ -142,7 +142,7 @@ static unsigned long triggerSetupRegOffsets[48] = { //read/write
 };
 
 
-static unsigned long triggerFlagClearCounter[8] = { //read/write
+static uint32_t triggerFlagClearCounter[8] = { //read/write
 	0x0200002C,
 	0x0200002C,
 	0x0280002C,
@@ -153,7 +153,7 @@ static unsigned long triggerFlagClearCounter[8] = { //read/write
 	0x0380002C
 };
 
-static unsigned long triggerThresholdRegOffsets[8] = { //read/write
+static uint32_t triggerThresholdRegOffsets[8] = { //read/write
 	0x02000034,
 	0x0200003C,
 	0x02800034,
@@ -164,7 +164,7 @@ static unsigned long triggerThresholdRegOffsets[8] = { //read/write
 	0x0380003C
 };
 
-static unsigned long eventDirectoryRegOffsets[8] = { //read
+static uint32_t eventDirectoryRegOffsets[8] = { //read
 	0x02010000,
 	0x02018000,
 	0x02810000,
@@ -183,13 +183,13 @@ static unsigned long eventDirectoryRegOffsets[8] = { //read
 #define kMaxSampleLength	 0x8000000	 // 128 MSample / 256 MByte
 #define kAcqStatusArmedFlag	 0x00010000
 
-unsigned long rblt_data[kMaxNumberWords];
+uint32_t rblt_data[kMaxNumberWords];
 
 @interface ORSIS3320Model (private)
 - (void) readAndShip:(ORDataPacket*)aDataPacket
 			 channel: (int) aChannel 
-  sampleStartAddress:(unsigned long) aBufferSampleStartAddress 
-	sampleEndAddress:(unsigned long) aBufferSampleEndAddress
+  sampleStartAddress:(uint32_t) aBufferSampleStartAddress 
+	sampleEndAddress:(uint32_t) aBufferSampleEndAddress
 			 reOrder:(BOOL)reOrder;
 - (NSData*) reOrderOneEvent:(NSData*)theSourceData;
 - (void) readAdcChannel:(ORDataPacket*)aDataPacket channel:(int)adc_channel;
@@ -345,24 +345,24 @@ unsigned long rblt_data[kMaxNumberWords];
 	return 0;
 }
 
-- (unsigned long) stopDelay
+- (uint32_t) stopDelay
 {
     return stopDelay;
 }
 
-- (void) setStopDelay:(unsigned long)aStopDelay
+- (void) setStopDelay:(uint32_t)aStopDelay
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setStopDelay:stopDelay];
     stopDelay = aStopDelay;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORSIS3320ModelStopDelayChanged object:self];
 }
 
-- (unsigned long) startDelay
+- (uint32_t) startDelay
 {
     return startDelay;
 }
 
-- (void) setStartDelay:(unsigned long)aStartDelay
+- (void) setStartDelay:(uint32_t)aStartDelay
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setStartDelay:startDelay];
     startDelay = aStartDelay;
@@ -438,7 +438,7 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) setTriggerModeMaskBit:(int)bit withValue:(BOOL)aValue
 {
-	unsigned long aMask = triggerModeMask;
+	uint32_t aMask = triggerModeMask;
 	if(aValue)aMask |= (1<<bit);
 	else      aMask &= ~(1<<bit);
 	[self setTriggerModeMask:aMask];
@@ -463,7 +463,7 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) setGtMaskBit:(int)bit withValue:(BOOL)aValue
 {
-	unsigned long aMask = gtMask;
+	uint32_t aMask = gtMask;
 	if(aValue)aMask |= (1<<bit);
 	else      aMask &= ~(1<<bit);
 	[self setGtMask:aMask];
@@ -488,18 +488,18 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) setLtMaskBit:(int)bit withValue:(BOOL)aValue
 {
-	unsigned long aMask = ltMask;
+	uint32_t aMask = ltMask;
 	if(aValue)aMask |= (1<<bit);
 	else      aMask &= ~(1<<bit);
 	[self setLtMask:aMask];
 }
 
-- (long) maxNumEvents
+- (int32_t) maxNumEvents
 {
     return maxNumEvents;
 }
 
-- (void) setMaxNumEvents:(long)aMaxNumEvents
+- (void) setMaxNumEvents:(int32_t)aMaxNumEvents
 {
 	if(aMaxNumEvents<0)aMaxNumEvents=0;
 	else if(aMaxNumEvents>kMaxNumEvents)aMaxNumEvents = kMaxNumEvents;
@@ -579,7 +579,7 @@ unsigned long rblt_data[kMaxNumberWords];
 }
 
 #pragma mark •••Rates
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
 {
 	if(groupTag == 0){
 		if(counterTag>=0 && counterTag<kNumSIS3320Channels){
@@ -591,7 +591,7 @@ unsigned long rblt_data[kMaxNumberWords];
 }
 
 
-- (long) dacValue:(int)aChan
+- (int32_t) dacValue:(int)aChan
 {
 	if(!dacValues){
 		dacValues = [[NSMutableArray arrayWithCapacity:kNumSIS3320Channels] retain];
@@ -601,7 +601,7 @@ unsigned long rblt_data[kMaxNumberWords];
     return [[dacValues objectAtIndex:aChan] intValue];
 }
 
-- (void) setDacValue:(int)aChan withValue:(long)aValue 
+- (void) setDacValue:(int)aChan withValue:(int32_t)aValue 
 { 
 	if(!dacValues){
 		dacValues = [[NSMutableArray arrayWithCapacity:kNumSIS3320Channels] retain];
@@ -711,7 +711,7 @@ unsigned long rblt_data[kMaxNumberWords];
 #pragma mark •••Hardware Access
 - (void) readModuleID:(BOOL)verbose
 {	
-	unsigned long result = 0;
+	uint32_t result = 0;
 	[[self adapter] readLongBlock:&result
                          atAddress:baseAddress + kModuleIDReg
                         numToRead:1
@@ -748,7 +748,7 @@ unsigned long rblt_data[kMaxNumberWords];
 - (void) writeGainControlRegister
 {
 	// The register is set up as a J/K flip/flop -- 1 bit to set a function and 1 bit to disable.	
-	unsigned long aValue = 0x0;
+	uint32_t aValue = 0x0;
 	
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:baseAddress + kGainRegister
@@ -760,7 +760,7 @@ unsigned long rblt_data[kMaxNumberWords];
 - (void) writeControlStatusRegister
 {
 	// The register is set up as a J/K flip/flop -- 1 bit to set a function and 1 bit to disable.	
-	unsigned long aMask = 0x0;
+	uint32_t aMask = 0x0;
 	
 	aMask |= (ledOn		 & 0x1);
 	//put the inverse in the top bits to turn off everything else
@@ -775,7 +775,7 @@ unsigned long rblt_data[kMaxNumberWords];
 - (void) writeAcquisitionRegister
 {
 	// The register is set up as a J/K flip/flop -- 1 bit to set a function and 1 bit to disable.	
-	unsigned long aMask = 0x0;
+	uint32_t aMask = 0x0;
 	switch(clockSource){
 		case 0: aMask = kSetClockTo200MHz;				break;
 		case 1: aMask = kSetClockTo100MHz;				break;
@@ -809,7 +809,7 @@ unsigned long rblt_data[kMaxNumberWords];
 {
 	int i;
 	for(i=0;i<8;i++){
-		unsigned long testValue = 0x55 | (1L<<16);
+		uint32_t testValue = 0x55 | (1L<<16);
 		[[self adapter] writeLongBlock:&testValue
 							 atAddress:baseAddress + kAdcInputModeAll
 							numToWrite:1
@@ -820,7 +820,7 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) writeEventConfigRegister
 {
-	unsigned long aMask = pageWrapSize & 0xf;
+	uint32_t aMask = pageWrapSize & 0xf;
 	if(enablePageWrap)		   aMask |= kEnablePageWrapMode;
 	if(enableSampleLenStop)    aMask |= kEnableSampleLenStopMode;
 	if(enableUserInAccumGate)  aMask |= kEnableUserInAccumGateMode;
@@ -833,9 +833,9 @@ unsigned long rblt_data[kMaxNumberWords];
                      usingAddSpace:0x01];
 }
 
-- (unsigned long) readAcqRegister
+- (uint32_t) readAcqRegister
 {
-	unsigned long aValue;
+	uint32_t aValue;
 	[[self adapter] readLongBlock:&aValue
                          atAddress:baseAddress + kAcquisitionControlReg
                         numToRead:1
@@ -844,9 +844,9 @@ unsigned long rblt_data[kMaxNumberWords];
 	return aValue;
 }
 
-- (unsigned long) readEventCounter
+- (uint32_t) readEventCounter
 {
-	unsigned long aValue;
+	uint32_t aValue;
 	[[self adapter] readLongBlock:&aValue
 						atAddress:baseAddress + kEventCounterReg
                         numToRead:1
@@ -855,7 +855,7 @@ unsigned long rblt_data[kMaxNumberWords];
 	return aValue;
 }
 
-- (void) writeAdcMemoryPage:(unsigned long)aPage
+- (void) writeAdcMemoryPage:(uint32_t)aPage
 {
 	[[self adapter] writeLongBlock:&aPage
 						 atAddress:baseAddress + kAdcMemoryPageReg
@@ -864,7 +864,7 @@ unsigned long rblt_data[kMaxNumberWords];
 					 usingAddSpace:0x01];
 }
 
-- (void) writeStartDelay:(unsigned long)aValue
+- (void) writeStartDelay:(uint32_t)aValue
 {
 	[[self adapter] writeLongBlock:&aValue
 						 atAddress:baseAddress + kExternStartDelayReg
@@ -873,7 +873,7 @@ unsigned long rblt_data[kMaxNumberWords];
 					 usingAddSpace:0x01];
 }
 
-- (void) writeStopDelay:(unsigned long)aValue
+- (void) writeStopDelay:(uint32_t)aValue
 {
 	[[self adapter] writeLongBlock:&aValue
 						 atAddress:baseAddress + kExternStopDelayReg
@@ -885,7 +885,7 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) writeTriggerClearCounter
 {
-	unsigned long aValue = [self pageSize];
+	uint32_t aValue = [self pageSize];
 	int i;
 	for(i=0;i<8;i++){
 		[[self adapter] writeLongBlock:&aValue
@@ -898,8 +898,8 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) writeDacOffsets
 {
-	unsigned long dataWord;
-	unsigned long max_timeout, timeout_cnt;
+	uint32_t dataWord;
+	uint32_t max_timeout, timeout_cnt;
 	
 	int i;
 	for (i=0;i<8;i++) {	
@@ -958,7 +958,7 @@ unsigned long rblt_data[kMaxNumberWords];
 	}
 }
 
-- (void) writeSampleStartAddress:(unsigned long)aValue
+- (void) writeSampleStartAddress:(uint32_t)aValue
 {
 	[[self adapter] writeLongBlock:&aValue
 						 atAddress:baseAddress + kSampleStartAddressAll
@@ -967,7 +967,7 @@ unsigned long rblt_data[kMaxNumberWords];
 					 usingAddSpace:0x01];
 }
 
-- (void) writeValue:(unsigned long)aValue offset:(long)anOffset
+- (void) writeValue:(uint32_t)aValue offset:(int32_t)anOffset
 {
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:baseAddress + anOffset
@@ -981,7 +981,7 @@ unsigned long rblt_data[kMaxNumberWords];
 	
 	int i;
 	for(i=0;i<kNumSIS3320Channels;i++){
-		unsigned long aMask = 0x0;
+		uint32_t aMask = 0x0;
 		aMask |= ([self trigPulseLen:i] & 0xFF) << 16;
 		aMask |= ([self sumG:i]         & 0x1F) <<  8;
 		aMask |= ([self peakingTime:i]  & 0x1F) <<  0;
@@ -993,8 +993,8 @@ unsigned long rblt_data[kMaxNumberWords];
 	}
 	
 	for(i = 0; i < kNumSIS3320Channels; i++) {
-		unsigned long theThresholdValue =  [self threshold:i];
-		unsigned long writeValue =	((triggerModeMask	& (1L<<i)) << 26) | 
+		uint32_t theThresholdValue =  [self threshold:i];
+		uint32_t writeValue =	((triggerModeMask	& (1L<<i)) << 26) | 
 									((gtMask			& (1L<<i)) << 25) | 
 									((ltMask			& (1L<<i)) << 24) | 
 									(theThresholdValue  & 0xffff) ;
@@ -1009,9 +1009,9 @@ unsigned long rblt_data[kMaxNumberWords];
 	
 }
 
-- (unsigned long) readAcquisitionRegister
+- (uint32_t) readAcquisitionRegister
 {
-	unsigned long aValue = 0x0;
+	uint32_t aValue = 0x0;
 	[[self adapter] readLongBlock:&aValue
                          atAddress:baseAddress + kAcquisitionControlReg
                         numToRead:1
@@ -1028,7 +1028,7 @@ unsigned long rblt_data[kMaxNumberWords];
 	NSLogFont(font,@"Chan Thresholds \n");
 	int i;
 	for(i =0; i < 8; i++) {
-		unsigned long aThreshold;
+		uint32_t aThreshold;
 		[[self adapter] readLongBlock: &aThreshold
 							atAddress: baseAddress + triggerThresholdRegOffsets[i]
 							numToRead: 1
@@ -1042,7 +1042,7 @@ unsigned long rblt_data[kMaxNumberWords];
 	NSLogFont(font,@"-------------------------------------------\n");
 	NSLogFont(font,@"Chan   Trigger   PulseLen  SumGap  PeakTime\n");
 	for(i =0; i < 4; i++) {
-		unsigned long aValue;
+		uint32_t aValue;
 		[[self adapter] readLongBlock: &aValue
 							atAddress: baseAddress + triggerSetupRegOffsets[i]
 							numToRead: 1
@@ -1053,16 +1053,16 @@ unsigned long rblt_data[kMaxNumberWords];
 	}
 	
 	NSLogFont(font,@"-------------------------------------------\n");
-	unsigned long aValue = [self readAcqRegister];
+	uint32_t aValue = [self readAcqRegister];
 	NSLogFont(font,@"Clock Source     : %@\n",[self clockSourceName:(aValue>>12 & 0x7)]);
 	NSLogFont(font,@"MultiEvent       : %@\n",((aValue>>5) & 0x1)   ? @"YES":@"NO");
 	NSLogFont(font,@"Internal Triggers: %@\n",((aValue>>6) & 0x1) ? @"Enabled":@"Disabled");
 }
 
 #pragma mark •••Data Taker
-- (unsigned long) dataId { return dataId; }
+- (uint32_t) dataId { return dataId; }
 
-- (void) setDataId: (unsigned long) DataId
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -1228,13 +1228,13 @@ unsigned long rblt_data[kMaxNumberWords];
 {
     @try {	
 		isRunning		= YES;
-		unsigned long status = [self readAcqRegister];
+		uint32_t status = [self readAcqRegister];
 		if((status & kAcqStatusArmedFlag) != kAcqStatusArmedFlag){
 			int i;
 			
 		//for(i=0;i<kNumSIS3320Channels;i++){
 			for(i=0;i<4;i++){
-				unsigned long nextSampleAddress = [self readEventDir:i];
+				uint32_t nextSampleAddress = [self readEventDir:i];
 				BOOL trig = (nextSampleAddress >> 28) & 0x1;
 				if(trig){
 					nextSampleAddress &= 0x1FFFFFc;
@@ -1282,7 +1282,7 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) reset
 {
-	unsigned long aValue = 1;
+	uint32_t aValue = 1;
 	[[self adapter] writeLongBlock: &aValue
 						atAddress: baseAddress + kResetRegister
 						numToWrite: 1
@@ -1293,7 +1293,7 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) armSamplingLogic
 {
-	unsigned long aValue = 1;
+	uint32_t aValue = 1;
 	[[self adapter] writeLongBlock: &aValue
 						atAddress: baseAddress + kArmSamplingLogic
 						numToWrite: 1
@@ -1304,7 +1304,7 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) disarmSamplingLogic
 {
-	unsigned long aValue = 1;
+	uint32_t aValue = 1;
 	[[self adapter] writeLongBlock: &aValue
 						atAddress: baseAddress + kDisarmSamplingLogic
 						numToWrite: 1
@@ -1315,7 +1315,7 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) startSampling
 {
-	unsigned long aValue = 1;
+	uint32_t aValue = 1;
 	[[self adapter] writeLongBlock: &aValue
 						 atAddress: baseAddress + kVMEStartSampling
 						numToWrite: 1
@@ -1326,7 +1326,7 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) stopSampling
 {
-	unsigned long aValue = 1;
+	uint32_t aValue = 1;
 	[[self adapter] writeLongBlock: &aValue
 						 atAddress: baseAddress + kVMEStopSampling
 						numToWrite: 1
@@ -1337,7 +1337,7 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) resetDDR2MemoryLogic:(id)sender
 {
-	unsigned long aValue = 1;
+	uint32_t aValue = 1;
 	[[self adapter] writeLongBlock: &aValue
 						 atAddress: baseAddress + kResetDDR2MemoryLogic
 						numToWrite: 1
@@ -1346,9 +1346,9 @@ unsigned long rblt_data[kMaxNumberWords];
 	
 }
 
-- (unsigned long) readEventDir:(int)aChannel
+- (uint32_t) readEventDir:(int)aChannel
 {
-	unsigned long aValue = 0;
+	uint32_t aValue = 0;
 	int i;
 	for(i=0;i<10;i++){
 	[[self adapter] readLongBlock: &aValue
@@ -1369,7 +1369,7 @@ unsigned long rblt_data[kMaxNumberWords];
     return YES;
 }
 
-- (unsigned long) waveFormCount:(int)aChannel
+- (uint32_t) waveFormCount:(int)aChannel
 {
     return waveFormCount[aChannel];
 }
@@ -1504,12 +1504,12 @@ unsigned long rblt_data[kMaxNumberWords];
 //- (void) takeDataType1:(ORDataPacket*)aDataPacket userInfo:(id)userInfo reorder:(BOOL)reorder
 //{
 	/*
-	unsigned long status = [self readAcqRegister];
+	uint32_t status = [self readAcqRegister];
 	if((status & kAcqStatusArmedFlag) != kAcqStatusArmedFlag){
 		int i;
 		for(i=0;i<kNumSIS3320Channels;i++){
 			
-			unsigned long stop_next_sample_addr = 0;
+			uint32_t stop_next_sample_addr = 0;
 			[[self adapter] readLongBlock:&stop_next_sample_addr
 								atAddress:baseAddress + actualSampleAddressOffsets[i]
 								numToRead:1
@@ -1524,8 +1524,8 @@ unsigned long rblt_data[kMaxNumberWords];
 				if(multiEvent)n = [self readEventCounter];
 				if(n>0){
 					int event;
-					unsigned long start = 0;
-					unsigned long eventSize = stop_next_sample_addr/n;
+					uint32_t start = 0;
+					uint32_t eventSize = stop_next_sample_addr/n;
 					for(event=0;event<n;event++){
 						[self readAndShip:aDataPacket channel:i sampleStartAddress:start sampleEndAddress:start+eventSize reOrder:reorder];
 						start += eventSize;
@@ -1540,15 +1540,15 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (void) readAndShip:(ORDataPacket*)aDataPacket
 			 channel:(int) aChannel 
-  sampleStartAddress:(unsigned long) aBufferSampleStartAddress 
-	sampleEndAddress:(unsigned long) aBufferSampleEndLength
+  sampleStartAddress:(uint32_t) aBufferSampleStartAddress 
+	sampleEndAddress:(uint32_t) aBufferSampleEndLength
 			 reOrder:(BOOL)reOrder
 {
 	/*
 	
-	unsigned long numLongWords = (aBufferSampleEndLength - aBufferSampleStartAddress)/2;
+	uint32_t numLongWords = (aBufferSampleEndLength - aBufferSampleStartAddress)/2;
 	NSMutableData* theData = [NSMutableData dataWithLength:numLongWords*4 + 4 + 4]; //data + ORCA header
-	unsigned long* dataPtr = (unsigned long*)[theData bytes];
+	uint32_t* dataPtr = (uint32_t*)[theData bytes];
 	dataPtr[0] = dataId | numLongWords + 2;
 	dataPtr[1] = location | aChannel;
 	
@@ -1574,28 +1574,28 @@ unsigned long rblt_data[kMaxNumberWords];
 
 - (NSData*) reOrderOneEvent:(NSData*)theOriginalData
 {/*
-	unsigned long i;
-	unsigned long  wrap_length	= [self memoryWrapLength];
-	unsigned long* inDataPtr    = (unsigned long*)[theOriginalData bytes];
-	unsigned long  dataLength   = [theOriginalData length];
+	uint32_t i;
+	uint32_t  wrap_length	= [self memoryWrapLength];
+	uint32_t* inDataPtr    = (uint32_t*)[theOriginalData bytes];
+	uint32_t  dataLength   = [theOriginalData length];
 	
 	NSMutableData* theRearrangedData = [NSMutableData dataWithLength:dataLength];
-	unsigned long* outDataPtr		 = (unsigned long*)[theRearrangedData bytes];
+	uint32_t* outDataPtr		 = (uint32_t*)[theRearrangedData bytes];
 	
-	unsigned long lword_length     = 0;
-	unsigned long lword_stop_index = 0;
-	unsigned long lword_wrap_index = 0;
+	uint32_t lword_length     = 0;
+	uint32_t lword_stop_index = 0;
+	uint32_t lword_wrap_index = 0;
 	
-	unsigned long wrapped	   = 0;
-	unsigned long stopDelayCounter=0;
+	uint32_t wrapped	   = 0;
+	uint32_t stopDelayCounter=0;
 	
-	unsigned long event_sample_length = wrap_length;
+	uint32_t event_sample_length = wrap_length;
 	
 	if (dataLength != 0) {
 		outDataPtr[0] = inDataPtr[0]; //copy ORCA header
 		outDataPtr[1] = inDataPtr[1]; //copy ORCA header
 		
-		unsigned long index = 2;
+		uint32_t index = 2;
 		
 		outDataPtr[index] = inDataPtr[index];	// copy Timestamp	
 		outDataPtr[index+1] = inDataPtr[index+1];	// copy Timestamp	    
@@ -1603,7 +1603,7 @@ unsigned long rblt_data[kMaxNumberWords];
 		wrapped			 =   ((inDataPtr[4]  & 0x08000000) >> 27); 
 		stopDelayCounter =   ((inDataPtr[4]  & 0x03000000) >> 24); 
 		
-		unsigned long stopAddress =   ((inDataPtr[index+2]  & 0x7) << 24)  
+		uint32_t stopAddress =   ((inDataPtr[index+2]  & 0x7) << 24)  
 									+ ((inDataPtr[index+3]  & 0xfff0000 ) >> 4) 
 									+  (inDataPtr[index+3]  & 0xfff);
 		
@@ -1657,8 +1657,8 @@ unsigned long rblt_data[kMaxNumberWords];
 - (void) readAdcChannel:(ORDataPacket*)aDataPacket channel:(int)adc_channel
 {	
 	
-	unsigned long event_sample_start_addr = sampleStartAddress; //temp....
-	unsigned long event_sample_length = [self sampleLength];
+	uint32_t event_sample_start_addr = sampleStartAddress; //temp....
+	uint32_t event_sample_length = [self sampleLength];
 	
 	// 64KSample   0x10000			
 	// 256KSample  0x40000
@@ -1667,20 +1667,20 @@ unsigned long rblt_data[kMaxNumberWords];
 	
 	// 32 MSample   0x2000000; VME Byte Address offset  0x80 00000
 		
-	unsigned long max_page_sample_length  = 0x10000 ;
-	unsigned long page_sample_length_mask = max_page_sample_length - 1 ;
+	uint32_t max_page_sample_length  = 0x10000 ;
+	uint32_t page_sample_length_mask = max_page_sample_length - 1 ;
 	
-	unsigned long next_event_sample_start_addr =  (event_sample_start_addr &  0x01fffffc);	// max 32 MSample
-	unsigned long rest_event_sample_length     =  (event_sample_length & 0x03fffffc);		// max 32 MSample
+	uint32_t next_event_sample_start_addr =  (event_sample_start_addr &  0x01fffffc);	// max 32 MSample
+	uint32_t rest_event_sample_length     =  (event_sample_length & 0x03fffffc);		// max 32 MSample
 	if (rest_event_sample_length  >= 0x2000000) {
 		rest_event_sample_length =  0x2000000;
 	}     
 	
 	//do {
-		unsigned long sub_event_sample_addr  =  (next_event_sample_start_addr & page_sample_length_mask) ;
-		unsigned long sub_max_page_sample_length =  max_page_sample_length - sub_event_sample_addr ;
+		uint32_t sub_event_sample_addr  =  (next_event_sample_start_addr & page_sample_length_mask) ;
+		uint32_t sub_max_page_sample_length =  max_page_sample_length - sub_event_sample_addr ;
 		
-		unsigned long sub_event_sample_length ;
+		uint32_t sub_event_sample_length ;
 	
 		if (rest_event_sample_length >= sub_max_page_sample_length) {
 			sub_event_sample_length = sub_max_page_sample_length  ;
@@ -1689,20 +1689,20 @@ unsigned long rblt_data[kMaxNumberWords];
 			sub_event_sample_length = rest_event_sample_length  ; // - sub_event_sample_addr
 		}
 		
-		//unsigned long sub_page_addr_offset    =  (next_event_sample_start_addr >> 22) & 0x7 ;
+		//uint32_t sub_page_addr_offset    =  (next_event_sample_start_addr >> 22) & 0x7 ;
 		
 		
-		unsigned long dma_request_nof_lwords     =  (sub_event_sample_length) / 2  ; // Lwords
-		//unsigned long dma_adc_addr_offset_bytes  =  (sub_event_sample_addr) * 2    ; // Bytes		
+		uint32_t dma_request_nof_lwords     =  (sub_event_sample_length) / 2  ; // Lwords
+		//uint32_t dma_adc_addr_offset_bytes  =  (sub_event_sample_addr) * 2    ; // Bytes		
 		
 		// set page
 		//[self writeAdcMemoryPage:sub_page_addr_offset];
 		
 		// read		
-	unsigned long addr			 = [self baseAddress] + adcOffset[adc_channel];// + dma_adc_addr_offset_bytes;
-		unsigned long req_nof_lwords = dma_request_nof_lwords ;
+	uint32_t addr			 = [self baseAddress] + adcOffset[adc_channel];// + dma_adc_addr_offset_bytes;
+		uint32_t req_nof_lwords = dma_request_nof_lwords ;
 		
-		if(!data) data = (unsigned long*)malloc((3+req_nof_lwords)*sizeof(long));
+		if(!data) data = (uint32_t*)malloc((3+req_nof_lwords)*sizeof(int32_t));
 		data[0] =   dataId | (3+req_nof_lwords);
 		data[1] =   (([self crateNumber]&0x0000000f)<<21) | 
 					(([self slot] & 0x0000001f)<<16)      |

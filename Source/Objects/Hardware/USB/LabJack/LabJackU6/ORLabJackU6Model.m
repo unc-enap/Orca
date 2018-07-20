@@ -395,7 +395,7 @@ NSString* ORLabJackU6CounterEnabledChanged      = @"ORLabJackU6CounterEnabledCha
     [[NSNotificationCenter defaultCenter] postNotificationName:ORLabJackU6DigitalOutputEnabledChanged object:self];
 }
 
-- (unsigned long long) counter:(int)i
+- (uint64_t) counter:(int)i
 {
     if(i>=0 && i<2){
         return counter[i];
@@ -403,7 +403,7 @@ NSString* ORLabJackU6CounterEnabledChanged      = @"ORLabJackU6CounterEnabledCha
     else return 0;
 }
 
-- (void) setCounter:(int)i withValue:(unsigned long long)aValue
+- (void) setCounter:(int)i withValue:(uint64_t)aValue
 {
     if(i>=0 && i<2){
         counter[i] = aValue;
@@ -557,12 +557,12 @@ NSString* ORLabJackU6CounterEnabledChanged      = @"ORLabJackU6CounterEnabledCha
 	[self setAdcDiff:aMask];
 }
 
-- (unsigned long) doDirection
+- (uint32_t) doDirection
 {
     return doDirection;
 }
 
-- (void) setDoDirection:(unsigned long)aMask
+- (void) setDoDirection:(uint32_t)aMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setDoDirection:doDirection];
     doDirection = aMask;
@@ -580,12 +580,12 @@ NSString* ORLabJackU6CounterEnabledChanged      = @"ORLabJackU6CounterEnabledCha
 	//[self postAdcInfoProvidingValueChanged];
 }
 
-- (unsigned long) doValueOut
+- (uint32_t) doValueOut
 {
     return doValueOut;
 }
 
-- (void) setDoValueOut:(unsigned long)aMask
+- (void) setDoValueOut:(uint32_t)aMask
 {
 	@synchronized(self){
 		[[[self undoManager] prepareWithInvocationTarget:self] setDoValueOut:doValueOut];
@@ -596,7 +596,7 @@ NSString* ORLabJackU6CounterEnabledChanged      = @"ORLabJackU6CounterEnabledCha
 
 - (void) setDoValueOutBit:(int)bit withValue:(BOOL)aValue
 {
-	unsigned long aMask = doValueOut;
+	uint32_t aMask = doValueOut;
 	if(aValue)aMask |= (1<<bit);
 	else aMask &= ~(1<<bit);
 	[self setDoValueOut:aMask];
@@ -612,12 +612,12 @@ NSString* ORLabJackU6CounterEnabledChanged      = @"ORLabJackU6CounterEnabledCha
 	else						 return [NSColor blackColor];
 }
 
-- (unsigned long) doValueIn
+- (uint32_t) doValueIn
 {
     return doValueIn;
 }
 
-- (void) setDoValueIn:(unsigned long)aMask
+- (void) setDoValueIn:(uint32_t)aMask
 {
 	@synchronized(self){
 		doValueIn = aMask;
@@ -667,7 +667,7 @@ NSString* ORLabJackU6CounterEnabledChanged      = @"ORLabJackU6CounterEnabledCha
     HANDLE h =  openU6Connection(deviceSerialNumber);
     if(h){
         [self setDeviceHandle:h];
-        long error = getCalibrationInfo(deviceHandle, &caliInfo);
+        int32_t error = getCalibrationInfo(deviceHandle, &caliInfo);
         
         [self setUpCounters];
         
@@ -700,8 +700,8 @@ NSString* ORLabJackU6CounterEnabledChanged      = @"ORLabJackU6CounterEnabledCha
 }
 
 #pragma mark ***Data Records
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -736,7 +736,7 @@ NSString* ORLabJackU6CounterEnabledChanged      = @"ORLabJackU6CounterEnabledCha
     return dataDictionary;
 }
 
-- (unsigned long) timeMeasured
+- (uint32_t) timeMeasured
 {
 	return timeMeasured;
 }
@@ -745,13 +745,13 @@ NSString* ORLabJackU6CounterEnabledChanged      = @"ORLabJackU6CounterEnabledCha
 {
     if([[ORGlobal sharedGlobal] runInProgress]){
 		
-		unsigned long data[kLabJackU6DataSize];
+		uint32_t data[kLabJackU6DataSize];
 		data[0] = dataId | kLabJackU6DataSize;
 		data[1] = ((adcDiff & 0x7f) << 16) | ([self uniqueIdNumber] & 0x0000fffff);
 		
 		union {
 			float asFloat;
-			unsigned long asLong;
+			uint32_t asLong;
 		} theData;
 		
 		int index = 2;
@@ -761,10 +761,10 @@ NSString* ORLabJackU6CounterEnabledChanged      = @"ORLabJackU6CounterEnabledCha
 			data[index] = theData.asLong;
 			index++;
 		}
-        data[index++] = (long)(counter[0]         & 0x00000000ffffffff);
-        data[index++] = (long)((counter[0] >> 32) & 0x00000000ffffffff);
-        data[index++] = (long)(counter[1]         & 0x00000000ffffffff);
-        data[index++] = (long)((counter[1] >> 32) & 0x00000000ffffffff);
+        data[index++] = (int32_t)(counter[0]         & 0x00000000ffffffff);
+        data[index++] = (int32_t)((counter[0] >> 32) & 0x00000000ffffffff);
+        data[index++] = (int32_t)(counter[1]         & 0x00000000ffffffff);
+        data[index++] = (int32_t)((counter[1] >> 32) & 0x00000000ffffffff);
 		data[index++] = (doDirection & 0xFFFFF);
 		data[index++] = (doValueOut  & 0xFFFFF);
 		data[index++] = (doValueIn   & 0xFFFFF);
@@ -774,7 +774,7 @@ NSString* ORLabJackU6CounterEnabledChanged      = @"ORLabJackU6CounterEnabledCha
 		data[index++] = 0;
 		
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-															object:[NSData dataWithBytes:data length:sizeof(long)*kLabJackU6DataSize]];
+															object:[NSData dataWithBytes:data length:sizeof(int32_t)*kLabJackU6DataSize]];
 	}
 }
 #pragma mark •••Bit Processing Protocol
@@ -834,7 +834,7 @@ NSString* ORLabJackU6CounterEnabledChanged      = @"ORLabJackU6CounterEnabledCha
 
 - (NSString*) identifier
 {
-    return [NSString stringWithFormat:@"LabJackU6,%lu",[self uniqueIdNumber]];
+    return [NSString stringWithFormat:@"LabJackU6,%u",[self uniqueIdNumber]];
 }
 
 - (NSString*) processingTitle
@@ -1010,11 +1010,11 @@ NSString* ORLabJackU6CounterEnabledChanged      = @"ORLabJackU6CounterEnabledCha
 
 - (void) setUpCounters
 {
-    long aEnableTimers[4] = {0,0,0,0}; //not supporting timers at this time
-    long aTimerModes[4]   = {0,0,0,0}; //not supporting timers at this time
+    int32_t aEnableTimers[4] = {0,0,0,0}; //not supporting timers at this time
+    int32_t aTimerModes[4]   = {0,0,0,0}; //not supporting timers at this time
     double aTimerValues[4]  = {0,0,0,0};
-    long aEnableCounters[2] = {counterEnabled[0],counterEnabled[1]};
-    long error = eTCConfig(deviceHandle,
+    int32_t aEnableCounters[2] = {counterEnabled[0],counterEnabled[1]};
+    int32_t error = eTCConfig(deviceHandle,
                           aEnableTimers,
                           aEnableCounters,
                           0,
@@ -1032,13 +1032,13 @@ NSString* ORLabJackU6CounterEnabledChanged      = @"ORLabJackU6CounterEnabledCha
 - (void) readCounters
 {
     if(counterEnabled[0] || counterEnabled[1]){
-        long aReadTimers[4]       = {0,0,0,0}; //don't support timers at this time
-        long aUpdateResetTimers[4]= {0,0,0,0}; //don't support timers at this time
-        long aReadCounters[2]      = {counterEnabled[0],counterEnabled[1]};
-        long aResetCounters[2]    = {doResetOfCounter[0],doResetOfCounter[1]};
+        int32_t aReadTimers[4]       = {0,0,0,0}; //don't support timers at this time
+        int32_t aUpdateResetTimers[4]= {0,0,0,0}; //don't support timers at this time
+        int32_t aReadCounters[2]      = {counterEnabled[0],counterEnabled[1]};
+        int32_t aResetCounters[2]    = {doResetOfCounter[0],doResetOfCounter[1]};
         double aTimerValues[4];
         double aCounterValues[2];
-        long error =  eTCValues( deviceHandle,
+        int32_t error =  eTCValues( deviceHandle,
                    aReadTimers,
                    aUpdateResetTimers,
                    aReadCounters,
@@ -1051,8 +1051,8 @@ NSString* ORLabJackU6CounterEnabledChanged      = @"ORLabJackU6CounterEnabledCha
         doResetOfCounter[0] = NO;
         doResetOfCounter[1] = NO;
         if(error == 0){
-            [self setCounter:0 withValue:(long long)aCounterValues[0]];
-            [self setCounter:1 withValue:(long long)aCounterValues[1]];
+            [self setCounter:0 withValue:(int64_t)aCounterValues[0]];
+            [self setCounter:1 withValue:(int64_t)aCounterValues[1]];
         }
     }
 }
@@ -1103,7 +1103,7 @@ NSString* ORLabJackU6CounterEnabledChanged      = @"ORLabJackU6CounterEnabledCha
         short doValueInStart = doValueIn;
         for(i=0;i<kNumU6IOChannels;i++){
             if((doDirection>>i)&1){
-                long result = 0;
+                int32_t result = 0;
                 eDI(deviceHandle,i,&result);
                 if(result)doValueIn |= (1<<i);
                 else doValueIn &= ~(1<<i);

@@ -361,7 +361,7 @@ static NSString *ORMotorLinkInConnection = @"ORMotorLinkInConnection";
     return homeDetected;
 }
 
-- (long) motorPosition
+- (int32_t) motorPosition
 {
     return motorPosition;
 }
@@ -592,12 +592,12 @@ static NSString *ORMotorLinkInConnection = @"ORMotorLinkInConnection";
 	 object:self];
 }
 
-- (unsigned long)  optionMask
+- (uint32_t)  optionMask
 {
     return optionMask;
 }
 
-- (void) setOptionMask:(unsigned long)aMask 
+- (void) setOptionMask:(uint32_t)aMask 
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setOptionMask:optionMask];
     optionMask = aMask;
@@ -609,14 +609,14 @@ static NSString *ORMotorLinkInConnection = @"ORMotorLinkInConnection";
 
 - (void) setOption:(int)anOption 
 {
-    long aMask = optionMask;
+    int32_t aMask = optionMask;
     aMask |= (0x1L<<anOption);
     [self setOptionMask:aMask];
 }
 
 - (void) clearOption:(int)anOption 
 {
-    long aMask = optionMask;
+    int32_t aMask = optionMask;
     aMask &= ~(0x1L<<anOption);
     [self setOptionMask:aMask];
 }
@@ -648,7 +648,7 @@ static NSString *ORMotorLinkInConnection = @"ORMotorLinkInConnection";
 }
 
 
-- (long) readMotor
+- (int32_t) readMotor
 {
     [[self motorController] readMotor:self];
     return motorPosition;
@@ -670,12 +670,12 @@ static NSString *ORMotorLinkInConnection = @"ORMotorLinkInConnection";
     
 }
 
-- (void) moveMotor:(id)aMotor amount:(long)amount
+- (void) moveMotor:(id)aMotor amount:(int32_t)amount
 {
     [[self motorController]  moveMotor:self amount:amount];
 }
 
-- (void) moveMotor:(id)aMotor to:(long)aPosition
+- (void) moveMotor:(id)aMotor to:(int32_t)aPosition
 {
     [[self motorController]  moveMotor:self to:aPosition];
 }
@@ -787,8 +787,8 @@ static NSString *ORMotorLinkInConnection = @"ORMotorLinkInConnection";
 }
 
 #pragma mark ¥¥¥RunControl Ops
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -958,7 +958,7 @@ static NSString *ORMotorLinkInConnection = @"ORMotorLinkInConnection";
             //struct tm* theTimeGMTAsStruct = gmtime(&theTime);
             //time_t ut_time = mktime(theTimeGMTAsStruct);
             
-            unsigned long data[4];
+            uint32_t data[4];
             data[0] = dataId | 4;
             data[1] = ut_time;
             data[2] = ([[self motorController] crateNumber]&0x0000000f) << 28 | 
@@ -970,7 +970,7 @@ static NSString *ORMotorLinkInConnection = @"ORMotorLinkInConnection";
             data[3] = [self motorPosition];
             
             [[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-                                                                object:[NSData dataWithBytes:data length:sizeof(long)*4]];
+                                                                object:[NSData dataWithBytes:data length:sizeof(int32_t)*4]];
         }
     }
 }
@@ -1012,7 +1012,7 @@ static NSString *ORMotorLinkInConnection = @"ORMotorLinkInConnection";
 	 object:self];
 }
 
-- (void) setMotorPosition:(long)aValue 
+- (void) setMotorPosition:(int32_t)aValue 
 {
     //not undoable
     motorPosition = aValue;

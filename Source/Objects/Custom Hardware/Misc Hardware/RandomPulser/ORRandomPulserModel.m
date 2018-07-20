@@ -195,7 +195,7 @@ NSString* ORRandomPulserSettingsLock						= @"ORRandomPulserSettingsLock";
 {
     ORIP408Model* the408 = [self objectConnectedTo:ORRandomPulser408Connector];
     //build the output word...
-    unsigned long dataWord = (negPulserState&0x1)<<25   |
+    uint32_t dataWord = (negPulserState&0x1)<<25   |
         (ttlPulserState&0x1)<<24    | 
         (pulserAmp&0xff)<<16		| 
         (pulserRate&0xfff); 
@@ -206,7 +206,7 @@ NSString* ORRandomPulserSettingsLock						= @"ORRandomPulserSettingsLock";
 - (void) readHardware
 {
     ORIP408Model* the408 = [self objectConnectedTo:ORRandomPulser408Connector];
-    unsigned long dataWord = ~[the408 getInputWithMask:0xffffffff];
+    uint32_t dataWord = ~[the408 getInputWithMask:0xffffffff];
     //decode the data word
 	[self setNegPulserState:(dataWord>>25)&0x1];
 	[self setTtlPulserState:(dataWord>>24)&0x1];

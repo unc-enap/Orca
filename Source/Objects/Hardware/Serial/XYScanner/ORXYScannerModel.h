@@ -57,9 +57,9 @@ enum {
         NSPoint         delta;
         float           dwellTime;
         int             patternType;
-        unsigned long   optionMask;
+        uint32_t   optionMask;
 
-        unsigned long dataId;
+        uint32_t dataId;
         BOOL            moving;
 
         BOOL            firstPosition;
@@ -81,8 +81,8 @@ enum {
 - (void) setCmdList:(NSMutableArray*)aCmdList;
 - (BOOL) moving;
 - (void) setMoving:(BOOL)aMoving;
-- (unsigned long) optionMask;
-- (void) setOptionMask:(unsigned long)aOptionMask;
+- (uint32_t) optionMask;
+- (void) setOptionMask:(uint32_t)aOptionMask;
 - (void) setOption:(int)anOption; 
 - (void) clearOption:(int)anOption; 
 - (BOOL) optionSet:(int)anOption;
@@ -124,8 +124,8 @@ enum {
 #pragma mark ***Data Records
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (NSDictionary*) dataRecordDescription;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherXYScanner;
 

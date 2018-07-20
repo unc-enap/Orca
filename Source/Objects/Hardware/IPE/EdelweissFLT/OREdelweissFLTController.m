@@ -71,7 +71,7 @@
 	[rateTextFields setFormatter:rateFormatter];
     blankView = [[NSView alloc] init];
     
-    NSString* key = [NSString stringWithFormat: @"orca.OREdelweissFLT%lu.selectedtab",[model stationNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.OREdelweissFLT%u.selectedtab",(int)[model stationNumber]];
     NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
@@ -619,7 +619,7 @@
 - (void) ficCardTriggerCmdChanged:(NSNotification*)aNote
 {
     int fiber = [model fiberSelectForBBAccess];
-    unsigned long val = [model ficCardTriggerCmdForFiber:fiber];
+    uint32_t val = [model ficCardTriggerCmdForFiber:fiber];
 	[ficCardTriggerCmdTextField setIntegerValue: val];
     //sub elements
 	[ficCardTriggerCmdDelayTextField setIntegerValue: val & 0xfff];
@@ -632,7 +632,7 @@
 - (void) ficCardADC23CtrlRegChanged:(NSNotification*)aNote
 {
     int fiber = [model fiberSelectForBBAccess];
-    unsigned long reg = [model ficCardADC23CtrlRegForFiber:fiber];
+    uint32_t reg = [model ficCardADC23CtrlRegForFiber:fiber];
 	[ficCardADC23CtrlRegTextField setIntegerValue: reg];
     
     uint32_t val = 0;
@@ -657,7 +657,7 @@
 - (void) ficCardADC01CtrlRegChanged:(NSNotification*)aNote
 {
     int fiber = [model fiberSelectForBBAccess];
-    unsigned long reg = [model ficCardADC01CtrlRegForFiber:fiber];
+    uint32_t reg = [model ficCardADC01CtrlRegForFiber:fiber];
 	[ficCardADC01CtrlRegTextField setIntegerValue: reg];
     
     uint32_t val = 0;
@@ -684,7 +684,7 @@
 - (void) ficCardCtrlReg2Changed:(NSNotification*)aNote
 {
     int fiber = [model fiberSelectForBBAccess];
-    unsigned long reg2 = [model ficCardCtrlReg2ForFiber:fiber];
+    uint32_t reg2 = [model ficCardCtrlReg2ForFiber:fiber];
 	[ficCardCtrlReg2TextField setIntegerValue: reg2];
     char reg2ch = [model ficCardCtrlReg2ForFiber:fiber];
 	[ficCardCtrlReg2AddrOffsTextField setIntegerValue: reg2ch];
@@ -701,7 +701,7 @@
 - (void) ficCardCtrlReg1Changed:(NSNotification*)aNote
 {
     int fiber = [model fiberSelectForBBAccess];
-    unsigned long val = [model ficCardCtrlReg1ForFiber:fiber];
+    uint32_t val = [model ficCardCtrlReg1ForFiber:fiber];
 	[ficCardCtrlReg1TextField setIntegerValue: val];
     //sub elements
 	[ficCardCtrlReg1BlockLenTextField setIntegerValue: val & 0xfff];
@@ -1130,7 +1130,7 @@
 {
 	//[fiberOutMask<custom> setIntegerValue: [model fiberOutMask]];
 	int i;
-    unsigned long fiberOutMask = [model fiberOutMask];
+    uint32_t fiberOutMask = [model fiberOutMask];
         //DEBUG OUTPUT: 	        NSLog(@"%@::%@: UNDER CONSTRUCTION! fiberOutMask  %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),fiberOutMask);//TODO : DEBUG testing ...-tb-
 	for(i=0;i<6;i++){
 		[[fiberOutMaskMatrix cellWithTag:i] setIntegerValue: (fiberOutMask&(0x1<<i)) ];
@@ -1214,7 +1214,7 @@
 //DEBUG OUTPUT:  	NSLog(@"%@::%@: UNDER CONSTRUCTION! 0x%016qx 0x%032qx 0x%016llx \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[model streamMask],[model streamMask],[model streamMask]);//TODO: DEBUG testing ...-tb-
 
 	//[model setStreamMask:[sender intValue]];	
-	unsigned long chan, fib;
+	uint32_t chan, fib;
     //uint64_t val=[model streamMask];
 	for(fib=0;fib<6;fib++){
 		//debug NSString *s = [NSString stringWithFormat:@"fib %llu:",fib];
@@ -1245,7 +1245,7 @@
 	//[streamMaskTextField setStringValue: [NSString stringWithFormat:@"0x1234000012340000"]];
 //DEBUG OUTPUT:  	NSLog(@"%@::%@: UNDER CONSTRUCTION! 0x%016qx 0x%032qx 0x%016llx \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[model streamMask],[model streamMask],[model streamMask]);//TODO: DEBUG testing ...-tb-
     int chan;
-	unsigned long  fib;
+	uint32_t  fib;
     //uint64_t val=[model streamMask];
 	for(fib=0;fib<6;fib++){
 		//debug NSString *s = [NSString stringWithFormat:@"fib %llu:",fib];
@@ -1273,7 +1273,7 @@
 {
 	//[ionTriggerMaskTextField setIntegerValue: [model ionTriggerMask]];
 	[ionTriggerMaskTextField setStringValue: [NSString stringWithFormat:@"0x%016qx",[model ionTriggerMask]]];
-	unsigned long chan, fib;
+	uint32_t chan, fib;
 	for(fib=0;fib<6;fib++){
 		//debug NSString *s = [NSString stringWithFormat:@"fib %llu:",fib];
 	    for(chan=0;chan<6;chan++){
@@ -1808,8 +1808,8 @@
 {
     //DEBUG 	NSLog(@"%@::%@ \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: DEBUG testing ...-tb-
 	// Set title of FLT configuration window 
-	[[self window] setTitle:[NSString stringWithFormat:@"IPE-DAQ-V4 EDELWEISS FLT Card (Slot %d, FLT# %lu)",[model slot]+1,[model stationNumber]]];
-    [fltSlotNumTextField setStringValue: [NSString stringWithFormat:@"FLT# %lu",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"IPE-DAQ-V4 EDELWEISS FLT Card (Slot %d, FLT# %u)",(int)[model slot]+1,(int)[model stationNumber]]];
+    [fltSlotNumTextField setStringValue: [NSString stringWithFormat:@"FLT# %u",(int)[model stationNumber]]];
 	//[fltSlotNumMatrix setSe];
     //[[fltSlotNumMatrix cellWithTag:[model stationNumber]] setIntegerValue:1];
 	short chan;//'chan' is slot number -tb-
@@ -1952,7 +1952,7 @@
     }
     [[self window] setContentView:totalView];
 	
-    NSString* key = [NSString stringWithFormat: @"orca.OREdelweissFLT%lu.selectedtab",[model stationNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.OREdelweissFLT%u.selectedtab",(int)[model stationNumber]];
     NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
     
@@ -2055,12 +2055,12 @@
 {
     int fiber = [model fiberSelectForBBAccess];
     
-    unsigned long mask  = kEWFlt_FICADC0Ctrl_Mode_Mask;
-    unsigned long shift = kEWFlt_FICADC0Ctrl_Mode_Shift;
+    uint32_t mask  = kEWFlt_FICADC0Ctrl_Mode_Mask;
+    uint32_t shift = kEWFlt_FICADC0Ctrl_Mode_Shift;
     
     int val = (int)[sender indexOfSelectedItem] & mask;
-    unsigned long negmask = ~(mask << shift);
-    unsigned long reg = [model ficCardADC01CtrlRegForFiber:fiber];
+    uint32_t negmask = ~(mask << shift);
+    uint32_t reg = [model ficCardADC01CtrlRegForFiber:fiber];
     reg = (reg & negmask) | (val << shift);
 
 	[model setFicCardADC01CtrlReg:reg forFiber:fiber];	
@@ -2070,12 +2070,12 @@
 {
     int fiber = [model fiberSelectForBBAccess];
     
-    unsigned long mask  = kEWFlt_FICADC1Ctrl_Mode_Mask;
-    unsigned long shift = kEWFlt_FICADC1Ctrl_Mode_Shift;
+    uint32_t mask  = kEWFlt_FICADC1Ctrl_Mode_Mask;
+    uint32_t shift = kEWFlt_FICADC1Ctrl_Mode_Shift;
     
-    unsigned long val = [sender indexOfSelectedItem] & mask;
-    unsigned long negmask = ~(mask << shift);
-    unsigned long reg = [model ficCardADC01CtrlRegForFiber:fiber];
+    uint32_t val = [sender indexOfSelectedItem] & mask;
+    uint32_t negmask = ~(mask << shift);
+    uint32_t reg = [model ficCardADC01CtrlRegForFiber:fiber];
     reg = (reg & negmask) | (val << shift);
 
 	[model setFicCardADC01CtrlReg:reg forFiber:fiber];	
@@ -2091,8 +2091,8 @@
     uint32_t shift = kEWFlt_FICADC0Ctrl_Mode_Shift;
     
     int val = [sender indexOfSelectedItem] & mask;
-    unsigned long negmask = ~(mask << shift);
-    unsigned long reg = [model ficCardADC23CtrlRegForFiber:fiber];
+    uint32_t negmask = ~(mask << shift);
+    uint32_t reg = [model ficCardADC23CtrlRegForFiber:fiber];
     reg = (reg & negmask) | (val << shift);
 
 	[model setFicCardADC23CtrlReg:reg forFiber:fiber];	
@@ -2102,12 +2102,12 @@
 {
     int fiber = [model fiberSelectForBBAccess];
     
-    unsigned long mask  = kEWFlt_FICADC1Ctrl_Mode_Mask;
-    unsigned long shift = kEWFlt_FICADC1Ctrl_Mode_Shift;
+    uint32_t mask  = kEWFlt_FICADC1Ctrl_Mode_Mask;
+    uint32_t shift = kEWFlt_FICADC1Ctrl_Mode_Shift;
     
     int val = (int)[sender indexOfSelectedItem] & mask;
-    unsigned long negmask = ~(mask << shift);
-    unsigned long reg = [model ficCardADC23CtrlRegForFiber:fiber];
+    uint32_t negmask = ~(mask << shift);
+    uint32_t reg = [model ficCardADC23CtrlRegForFiber:fiber];
     reg = (reg & negmask) | (val << shift);
 
 	[model setFicCardADC23CtrlReg:reg forFiber:fiber];	
@@ -2128,8 +2128,8 @@
     NSInteger col = [sender selectedColumn];
     int val = [[sender selectedCell] intValue] & 0x1;
     NSInteger shift = col;
-    unsigned long reg = 0;
-    unsigned long negmask = 0;
+    uint32_t reg = 0;
+    uint32_t negmask = 0;
     
         //DEBUG OUTPUT:    NSLog(@"%@::%@: row: %i   col: %i  val: %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd), row, col, val);//TODO : DEBUG testing ...-tb-
     
@@ -2169,8 +2169,8 @@
 - (void) ficCardCtrlReg2GapCBAction:(id)sender
 {
     int fiber = [model fiberSelectForBBAccess];
-    unsigned long mask = ~(kEWFlt_FICCtrl2_gap_Mask << kEWFlt_FICCtrl2_gap_Shift);
-    unsigned long reg = [model ficCardCtrlReg2ForFiber:fiber];
+    uint32_t mask = ~(kEWFlt_FICCtrl2_gap_Mask << kEWFlt_FICCtrl2_gap_Shift);
+    uint32_t reg = [model ficCardCtrlReg2ForFiber:fiber];
     reg = (reg & mask) | (([sender intValue] & kEWFlt_FICCtrl2_gap_Mask) << kEWFlt_FICCtrl2_gap_Shift);
 	[model setFicCardCtrlReg2:reg forFiber:fiber];	
 }
@@ -2178,8 +2178,8 @@
 - (void) ficCardCtrlReg2SyncResCBAction:(id)sender
 {
     int fiber = [model fiberSelectForBBAccess];
-    unsigned long mask = ~(kEWFlt_FICCtrl2_SyncRes_Mask << kEWFlt_FICCtrl2_SyncRes_Shift);
-    unsigned long reg = [model ficCardCtrlReg2ForFiber:fiber];
+    uint32_t mask = ~(kEWFlt_FICCtrl2_SyncRes_Mask << kEWFlt_FICCtrl2_SyncRes_Shift);
+    uint32_t reg = [model ficCardCtrlReg2ForFiber:fiber];
     reg = (reg & mask) | (([sender intValue] & kEWFlt_FICCtrl2_SyncRes_Mask) << kEWFlt_FICCtrl2_SyncRes_Shift);
 	[model setFicCardCtrlReg2:reg forFiber:fiber];	
 }
@@ -2195,8 +2195,8 @@
 
 
     int fiber = [model fiberSelectForBBAccess];
-    unsigned long mask = ~(kEWFlt_FICCtrl2_SendCh_Mask << kEWFlt_FICCtrl2_SendCh_Shift);
-    unsigned long reg = [model ficCardCtrlReg2ForFiber:fiber];
+    uint32_t mask = ~(kEWFlt_FICCtrl2_SendCh_Mask << kEWFlt_FICCtrl2_SendCh_Shift);
+    uint32_t reg = [model ficCardCtrlReg2ForFiber:fiber];
     reg = (reg & mask) | ((val & kEWFlt_FICCtrl2_SendCh_Mask) << kEWFlt_FICCtrl2_SendCh_Shift);
 	[model setFicCardCtrlReg2:reg forFiber:fiber];	
 }
@@ -2288,7 +2288,7 @@
     int fiber = [model fiberSelectForBBAccess];
     int idBB=[model idBBforBBAccessForFiber:fiber];
     if([model useBroadcastIdforBBAccess]) idBB=0xff;
-    unsigned long val = [model ficCardCtrlReg1ForFiber:fiber];
+    uint32_t val = [model ficCardCtrlReg1ForFiber:fiber];
     [model sendWCommandIdBB:idBB  cmd:0x71 arg1: ((val>>8) & 0xff)  arg2:(val & 0xff)];
 }
 
@@ -2299,7 +2299,7 @@
     int fiber = [model fiberSelectForBBAccess];
     int idBB=[model idBBforBBAccessForFiber:fiber];
     if([model useBroadcastIdforBBAccess]) idBB=0xff;
-    unsigned long val = [model ficCardCtrlReg2ForFiber:fiber];
+    uint32_t val = [model ficCardCtrlReg2ForFiber:fiber];
     [model sendWCommandIdBB:idBB  cmd:0x72 arg1: ((val>>8) & 0xff)  arg2:(val & 0xff)];
 }
 
@@ -2310,7 +2310,7 @@
     int fiber = [model fiberSelectForBBAccess];
     int idBB=[model idBBforBBAccessForFiber:fiber];
     if([model useBroadcastIdforBBAccess]) idBB=0xff;
-    unsigned long val = [model ficCardADC01CtrlRegForFiber:fiber];
+    uint32_t val = [model ficCardADC01CtrlRegForFiber:fiber];
     [model sendWCommandIdBB:idBB  cmd:0x73 arg1: ((val>>8) & 0xff)  arg2:(val & 0xff)];
 }
 
@@ -2321,7 +2321,7 @@
     int fiber = [model fiberSelectForBBAccess];
     int idBB=[model idBBforBBAccessForFiber:fiber];
     if([model useBroadcastIdforBBAccess]) idBB=0xff;
-    unsigned long val = [model ficCardADC23CtrlRegForFiber:fiber];
+    uint32_t val = [model ficCardADC23CtrlRegForFiber:fiber];
     [model sendWCommandIdBB:idBB  cmd:0x74 arg1: ((val>>8) & 0xff)  arg2:(val & 0xff)];
 }
 
@@ -2332,7 +2332,7 @@
     int fiber = [model fiberSelectForBBAccess];
     int idBB=[model idBBforBBAccessForFiber:fiber];
     if([model useBroadcastIdforBBAccess]) idBB=0xff;
-    unsigned long val = [model ficCardTriggerCmdForFiber:fiber];
+    uint32_t val = [model ficCardTriggerCmdForFiber:fiber];
     [model sendWCommandIdBB:idBB  cmd:0x70 arg1: ((val>>8) & 0xff)  arg2:(val & 0xff)];
 }
 
@@ -2982,7 +2982,7 @@
  	NSLog(@"%@::%@ \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: DEBUG testing ...-tb-
 
 
-	unsigned long controlReg = 0; //TODO: use try ... catch ... ? -tb-
+	uint32_t controlReg = 0; //TODO: use try ... catch ... ? -tb-
 	[self endEditing];
 	@try {
 	    controlReg = [model  readControl]; //TODO: use try ... catch ... ? -tb-
@@ -3967,7 +3967,7 @@
 {
 	int index = [model selectedRegIndex]; 
 	@try {
-		unsigned long value;
+		uint32_t value;
         if(([model getAccessType:index] & kIpeRegNeedsChannel)){
             int chan = [model selectedChannelValue];
 		    value = [model readReg:index channel: chan ];
@@ -3990,7 +3990,7 @@
 	[self endEditing];
 	int index = (int)[registerPopUp indexOfSelectedItem];
 	@try {
-		unsigned long val = [model writeValue];
+		uint32_t val = [model writeValue];
         if(([model getAccessType:index] & kIpeRegNeedsChannel)){
             int chan = [model selectedChannelValue];
      		[model writeReg:index  channel: chan value: val];//TODO: allow hex values, e.g. 0x23 -tb-

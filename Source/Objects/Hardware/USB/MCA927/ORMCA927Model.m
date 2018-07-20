@@ -93,7 +93,7 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 - (void) sendLowSpeedCommand:(int)cmd;
 - (NSData*) fpgaFileData;
 - (void) pollStatus;
-- (void) addCurrentState:(NSMutableDictionary*)dictionary cArray:(unsigned long*)anArray forKey:(NSString*)aKey;
+- (void) addCurrentState:(NSMutableDictionary*)dictionary cArray:(uint32_t*)anArray forKey:(NSString*)aKey;
 - (void) addCurrentState:(NSMutableDictionary*)dictionary boolArray:(BOOL*)anArray forKey:(NSString*)aKey;
 - (void) ship:(ORDataPacket*)aDataPacket spectra:(int)index;
 @end
@@ -279,13 +279,13 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 	}
 }
 
-- (unsigned long) runOptions:(int)index
+- (uint32_t) runOptions:(int)index
 {
 	if(index>=0 && index<2) return runOptions[index];
 	else return 0;
 }
 
-- (void) setRunOptions:(int)index withValue:(unsigned long)optionMask
+- (void) setRunOptions:(int)index withValue:(uint32_t)optionMask
 {
 	if(index>=0 && index<2){
 		[[[self undoManager] prepareWithInvocationTarget:self] setRunOptions:index withValue:runOptions[index]];
@@ -307,13 +307,13 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
     [[NSNotificationCenter defaultCenter] postNotificationName:ORMCA927ModelSelectedChannelChanged object:self];
 }
 
-- (unsigned long) upperDiscriminator:(int)index
+- (uint32_t) upperDiscriminator:(int)index
 {
 	if(index>=0 && index<2) return upperDiscriminator[index];
 	else return 0;
 }
 
-- (void) setUpperDiscriminator:(int)index withValue:(unsigned long)aValue
+- (void) setUpperDiscriminator:(int)index withValue:(uint32_t)aValue
 {
 	if(index>=0 && index<2){
 		if(aValue>0x3fff)aValue = 0x3fff;
@@ -323,13 +323,13 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 	}
 }
 
-- (unsigned long) lowerDiscriminator:(int)index
+- (uint32_t) lowerDiscriminator:(int)index
 {
 	if(index>=0 && index<2) return lowerDiscriminator[index];
 	else return 0;
 }
 
-- (void) setLowerDiscriminator:(int)index withValue:(unsigned long)aValue
+- (void) setLowerDiscriminator:(int)index withValue:(uint32_t)aValue
 {
 	if(index>=0 && index<2){
 		if(aValue>0x3fff)aValue = 0x3fff;
@@ -338,13 +338,13 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORMCA927ModelLowerDiscriminatorChanged object:self];
 	}
 }
-- (unsigned long) zdtMode:(int)index
+- (uint32_t) zdtMode:(int)index
 {
 	if(index>=0 && index<2) return zdtMode[index];
 	else return 0;
 }
 
-- (void) setZdtMode:(int)index withValue:(unsigned long)aValue
+- (void) setZdtMode:(int)index withValue:(uint32_t)aValue
 {
 	if(index>=0 && index<2){
 		if(aValue>0x3fff)aValue = 0x3fff;
@@ -354,13 +354,13 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 	}
 }
 
-- (unsigned long) rtPreset:(int)index
+- (uint32_t) rtPreset:(int)index
 {
 	if(index>=0 && index<2) return rtPreset[index];
 	else return 0;
 }
 
-- (void) setRtPreset:(int)index withValue:(unsigned long)aValue
+- (void) setRtPreset:(int)index withValue:(uint32_t)aValue
 {
 	if(index>=0 && index<2){
 		[[[self undoManager] prepareWithInvocationTarget:self] setRtPreset:index withValue:rtPreset[index]];
@@ -369,13 +369,13 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 	}
 }
 
-- (unsigned long) roiPreset:(int)index
+- (uint32_t) roiPreset:(int)index
 {
 	if(index>=0 && index<2) return roiPreset[index];
 	else return 0;
 }
 
-- (void) setRoiPreset:(int)index withValue:(unsigned long)aValue
+- (void) setRoiPreset:(int)index withValue:(uint32_t)aValue
 {
 	if(index>=0 && index<2){
 		[[[self undoManager] prepareWithInvocationTarget:self] setRoiPreset:index withValue:roiPreset[index]];
@@ -384,13 +384,13 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 	}
 }
 
-- (unsigned long) roiPeakPreset:(int)index
+- (uint32_t) roiPeakPreset:(int)index
 {
 	if(index>=0 && index<2) return roiPeakPreset[index];
 	else return 0;
 }
 
-- (void) setRoiPeakPreset:(int)index withValue:(unsigned long)aValue
+- (void) setRoiPeakPreset:(int)index withValue:(uint32_t)aValue
 {
 	if(index>=0 && index<2){
 		[[[self undoManager] prepareWithInvocationTarget:self] setRoiPeakPreset:index withValue:roiPeakPreset[index]];
@@ -399,13 +399,13 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 	}
 }
 
-- (unsigned long) realTime:(int)index
+- (uint32_t) realTime:(int)index
 {
 	if(index>=0 && index<2) return realTime[index];
 	else return 0;
 }
 
-- (void) setRealTime:(int)index withValue:(unsigned long)aValue
+- (void) setRealTime:(int)index withValue:(uint32_t)aValue
 {
 	if(index>=0 && index<2){
 		[[[self undoManager] prepareWithInvocationTarget:self] setRealTime:index withValue:realTime[index]];
@@ -413,13 +413,13 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORMCA927ModelRealTimeChanged object:self];
 	}
 }
-- (unsigned long) realTimeStatus:(int)index
+- (uint32_t) realTimeStatus:(int)index
 {
 	if(index>=0 && index<2) return realTimeStatus[index];
 	else return 0;
 }
 
-- (void) setRealTimeStatus:(int)index withValue:(unsigned long)aValue
+- (void) setRealTimeStatus:(int)index withValue:(uint32_t)aValue
 {
 	if(index>=0 && index<2){
 		realTimeStatus[index] = aValue;
@@ -427,13 +427,13 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 	}
 }
 
-- (unsigned long) convGain:(int)index
+- (uint32_t) convGain:(int)index
 {
 	if(index>=0 && index<2) return convGain[index];
 	else return 0;
 }
 
-- (void) setConvGain:(int)index withValue:(unsigned long)aValue
+- (void) setConvGain:(int)index withValue:(uint32_t)aValue
 {
 	if(index>=0 && index<2){
 		[[[self undoManager] prepareWithInvocationTarget:self] setConvGain:index withValue:convGain[index]];
@@ -441,13 +441,13 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORMCA927ModelConvGainChanged object:self];
 	}
 }
-- (unsigned long) liveTime:(int)index
+- (uint32_t) liveTime:(int)index
 {
    if(index>=0 && index<2) return liveTime[index];
    else return 0;
 }
 
-- (void) setLiveTime:(int)index withValue:(unsigned long)aValue
+- (void) setLiveTime:(int)index withValue:(uint32_t)aValue
 {
 	if(index>=0 && index<2){
 		[[[self undoManager] prepareWithInvocationTarget:self] setLiveTime:index withValue:liveTime[index]];
@@ -456,13 +456,13 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 	}
 }
 
-- (unsigned long) liveTimeStatus:(int)index
+- (uint32_t) liveTimeStatus:(int)index
 {
 	if(index>=0 && index<2) return liveTimeStatus[index];
 	else return 0;
 }
 
-- (void) setLiveTimeStatus:(int)index withValue:(unsigned long)aValue
+- (void) setLiveTimeStatus:(int)index withValue:(uint32_t)aValue
 {
 	if(index>=0 && index<2){
 		liveTimeStatus[index] = aValue;
@@ -484,13 +484,13 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 	}
 }
 
-- (unsigned long) ltPreset:(int)index
+- (uint32_t) ltPreset:(int)index
 {
    if(index>=0 && index<2) return ltPreset[index];
    else return 0;
 }
 
-- (void) setLtPreset:(int)index withValue:(unsigned long)aLtPreset
+- (void) setLtPreset:(int)index withValue:(uint32_t)aLtPreset
 {
 	if(index>=0 && index<2){
 		[[[self undoManager] prepareWithInvocationTarget:self] setLtPreset:index withValue:ltPreset[index]];
@@ -499,13 +499,13 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 	}
 }
 
-- (unsigned long) controlReg:(int)index
+- (uint32_t) controlReg:(int)index
 {
 	if(index>=0 && index<2)return controlReg[index];
 	else return 0;
 }
 
-- (void) setControlReg:(int)index withValue:(unsigned long)aValue
+- (void) setControlReg:(int)index withValue:(uint32_t)aValue
 {
 	if(index>=0 && index<2){
 		[[[self undoManager] prepareWithInvocationTarget:self] setControlReg:index withValue:controlReg[index]];
@@ -514,13 +514,13 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 	}
 }
 
-- (unsigned long) presetCtrlReg:(int)index
+- (uint32_t) presetCtrlReg:(int)index
 {
 	if(index>=0 && index<2)return presetCtrlReg[index];
 	else return 0;
 }
 
-- (void) setPresetCtrlReg:(int)index withValue:(unsigned long)aValue
+- (void) setPresetCtrlReg:(int)index withValue:(uint32_t)aValue
 {
 	if(index>=0 && index<2){
 		[[[self undoManager] prepareWithInvocationTarget:self] setPresetCtrlReg:index withValue:presetCtrlReg[index]];
@@ -689,7 +689,7 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 			[self clearSpectrum:index];
 			[self clearZDT:index];
 		}
-		unsigned long mask;
+		uint32_t mask;
 		mask = controlReg[index];
 		mask |= 0x1;
 		[self writeReg:kCtlReg adc:index value:mask];
@@ -706,7 +706,7 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 
 		[self writeReg:kStopAcq adc:index value:0x1];
 		[self writeReg:kStopAcq adc:index value:0x0];
-		unsigned long mask;
+		uint32_t mask;
 		mask = controlReg[index];
 		mask &= ~0x1;
 		[self writeReg:kCtlReg adc:index value:mask];
@@ -745,29 +745,29 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 
 - (void) clearSpectrum:(int)index
 {
-	unsigned long aCommand[0x3fff+2];
+	uint32_t aCommand[0x3fff+2];
 	aCommand[0] =  (index==0?0x04000000:0x04008000);
 	aCommand[1] = 0x3fff;	//number to write
 	int i;
 	for(i=0;i<0x3fff;i++){
 		aCommand[2+i] = 0;	//value
 	}
-	[usbInterface writeBytes:aCommand  length:(0x3fff+2)*sizeof(long) pipe:1];
-	long dummy;
+	[usbInterface writeBytes:aCommand  length:(0x3fff+2)*sizeof(int32_t) pipe:1];
+	int32_t dummy;
 	[usbInterface readBytes:&dummy length:4 pipe:1];
 }
 
 - (void) clearZDT:(int)index
 {
-	unsigned long aCommand[0x3fff+2];
+	uint32_t aCommand[0x3fff+2];
 	aCommand[0] =  (index==0?0x04004000:0x0400C000);
 	aCommand[1] = 0x3fff;	//number to write
 	int i;
 	for(i=0;i<0x3fff;i++){
 		aCommand[2+i] = 0;	//value
 	}
-	[usbInterface writeBytes:aCommand  length:(0x3fff+2)*sizeof(long) pipe:1];
-	long dummy;
+	[usbInterface writeBytes:aCommand  length:(0x3fff+2)*sizeof(int32_t) pipe:1];
+	int32_t dummy;
 	[usbInterface readBytes:&dummy length:4 pipe:1];
 }
 
@@ -776,15 +776,15 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 {
 	if(!dataSet)dataSet = [[ORDataSet alloc]initWithKey:@"System" guardian:nil];
 
-	unsigned long aCommand[2];
+	uint32_t aCommand[2];
 	int n = [self numChannels:index];
 	
 	aCommand[0] =  index==0?kReadSpectrum0Cmd:kReadSpectrum1Cmd;
 	aCommand[1] = n;	//number to read back
-	[usbInterface writeBytes:aCommand  length:2*sizeof(long) pipe:1];
-	[usbInterface readBytes:&spectrum[index] length:n*sizeof(long)+1 pipe:1];
+	[usbInterface writeBytes:aCommand  length:2*sizeof(int32_t) pipe:1];
+	[usbInterface readBytes:&spectrum[index] length:n*sizeof(int32_t)+1 pipe:1];
 
-	[dataSet loadSpectrum:[NSMutableData dataWithBytes:&spectrum[index] length:n*sizeof(long)] 
+	[dataSet loadSpectrum:[NSMutableData dataWithBytes:&spectrum[index] length:n*sizeof(int32_t)] 
 					sender:self  
 				  withKeys:@"Spectra",[NSString stringWithFormat:@"Channel%d",index],nil];
 	
@@ -794,15 +794,15 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 {
 	if(!dataSet)dataSet = [[ORDataSet alloc]initWithKey:@"System" guardian:nil];
 	
-	unsigned long aCommand[2];
+	uint32_t aCommand[2];
 	int n = [self numChannels:index];
 	
 	aCommand[0] =  index==0?kReadZDT0Cmd:kReadZDT1Cmd;
 	aCommand[1] = n;	//number to read back
-	[usbInterface writeBytes:aCommand  length:2*sizeof(long) pipe:1];
-	[usbInterface readBytes:&spectrum[index+2] length:n*sizeof(long)+1 pipe:1];
+	[usbInterface writeBytes:aCommand  length:2*sizeof(int32_t) pipe:1];
+	[usbInterface readBytes:&spectrum[index+2] length:n*sizeof(int32_t)+1 pipe:1];
 	
-	[dataSet loadSpectrum:[NSMutableData dataWithBytes:&spectrum[index+2] length:n*sizeof(long)] 
+	[dataSet loadSpectrum:[NSMutableData dataWithBytes:&spectrum[index+2] length:n*sizeof(int32_t)] 
 				   sender:self  
 				 withKeys:@"ZDT",[NSString stringWithFormat:@"Channel%d",index],nil];
 	
@@ -887,14 +887,14 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 	[s appendFormat:@"$DATA:\n%d %d\n",index,n-1];
 	int i;
 	for(i=0;i<n;i++){
-		[s appendFormat:@"%lu\n",spectrum[index][i]];
+		[s appendFormat:@"%u\n",spectrum[index][i]];
 	}
-	[s appendFormat:@"$ROI:\n%lu\n%lu\n",roiPeakPreset[index], roiPreset[index]];
-	[s appendFormat:@"$PRESETS:\nLive Time\n%lu\n%lu\n",liveTime[index],realTime[index]];
+	[s appendFormat:@"$ROI:\n%u\n%u\n",roiPeakPreset[index], roiPreset[index]];
+	[s appendFormat:@"$PRESETS:\nLive Time\n%u\n%u\n",liveTime[index],realTime[index]];
 	[s writeToFile:aFilePath atomically:NO encoding:NSASCIIStringEncoding error:nil];
 }
 
-- (unsigned long) spectrum:(int)index valueAtChannel:(int)x
+- (uint32_t) spectrum:(int)index valueAtChannel:(int)x
 {
 	return spectrum[index][x];
 }
@@ -911,10 +911,10 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 - (void) report:(BOOL)verbose
 {	
 	NSFont* aFont = [NSFont fontWithName:@"Monaco" size:12];
-	unsigned long aValue0 = [self readReg:kCtlReg adc:0];
-	unsigned long aValue1 = [self readReg:kCtlReg adc:1];
-	unsigned long presetCtrl0 = [self readReg:kPresetCtl adc:0];
-	unsigned long presetCtrl1 = [self readReg:kPresetCtl adc:1];
+	uint32_t aValue0 = [self readReg:kCtlReg adc:0];
+	uint32_t aValue1 = [self readReg:kCtlReg adc:1];
+	uint32_t presetCtrl0 = [self readReg:kPresetCtl adc:0];
+	uint32_t presetCtrl1 = [self readReg:kPresetCtl adc:1];
 	if(verbose){
 		NSLog(@"MCA 927 values\n");	
 		NSLogFont(aFont,@"------------------------------------------------------\n");
@@ -1015,7 +1015,7 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 		unsigned char aCommand[4] = {0x5,0x0,0x2,0x0};
 		unsigned char packet[kChunkSize+4]; 
 		NSData* fpgaFileData = [self fpgaFileData];
-		long len = [fpgaFileData length];
+		int32_t len = [fpgaFileData length];
 		if(len){
 			unsigned char* p = (unsigned char*)[fpgaFileData bytes];
 			do {
@@ -1074,32 +1074,32 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 }
 
 //high speed USB interface
-- (void) writeReg:(int)aReg adc:(int)adcIndex value:(unsigned long)aValue
+- (void) writeReg:(int)aReg adc:(int)adcIndex value:(uint32_t)aValue
 {
-	unsigned long aCommand[3];
+	uint32_t aCommand[3];
 	aCommand[0] =  kWriteRegCmd | (reg[aReg].addressOffset + (adcIndex==0?0:0x20));
 	aCommand[1] = 0x1;						//number of data words
 	aCommand[2] = aValue;
-	[usbInterface writeBytes:aCommand  length:3*sizeof(long) pipe:1];
+	[usbInterface writeBytes:aCommand  length:3*sizeof(int32_t) pipe:1];
 	//all commands have response. read it.
 	unsigned char aResponse[512];
 	[usbInterface readBytes:aResponse length:512 pipe:1];
 }
 
-- (unsigned long) readReg:(int)aReg adc:(int)adcIndex
+- (uint32_t) readReg:(int)aReg adc:(int)adcIndex
 {
-	unsigned long aCommand[3];
+	uint32_t aCommand[3];
 	aCommand[0] =  kReadRegCmd | (reg[aReg].addressOffset + (adcIndex==0?0:0x20));
 	aCommand[1] = 0x1;	//number to read back
-	[usbInterface writeBytes:aCommand  length:2*sizeof(long) pipe:1];
-	unsigned long aResponse;
+	[usbInterface writeBytes:aCommand  length:2*sizeof(int32_t) pipe:1];
+	uint32_t aResponse;
 	[usbInterface readBytes:&aResponse length:4 pipe:1];
 	return aResponse;
 }
 
 - (NSString*) identifier
 {
-	return [NSString stringWithFormat:@"MCA927 %lu",[self uniqueIdNumber]];
+	return [NSString stringWithFormat:@"MCA927 %u",[self uniqueIdNumber]];
 }
 
 #pragma mark ***Archival
@@ -1185,8 +1185,8 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 }
 
 #pragma mark •••Data Taker
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -1285,8 +1285,8 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 	
 	int numLongsInSpectrum = [self numChannels:index];
 	int numLongsInHeader = 10;
-	NSMutableData* dataBlock = [NSMutableData dataWithLength: (numLongsInSpectrum + numLongsInHeader)*sizeof(long)];
-	unsigned long* data = (unsigned long*)[dataBlock bytes];
+	NSMutableData* dataBlock = [NSMutableData dataWithLength: (numLongsInSpectrum + numLongsInHeader)*sizeof(int32_t)];
+	uint32_t* data = (uint32_t*)[dataBlock bytes];
 	data[0] = dataId | (numLongsInSpectrum + numLongsInHeader);
 	data[1] = (zdt<<13) | (chan<<12) | ([self uniqueIdNumber]&0xfff);
 	data[2] = [self liveTimeStatus:index];
@@ -1297,7 +1297,7 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 	data[7] = 0; //spare
 	data[8] = 0; //spare
 	data[9] = 0; //spare
-	memcpy(&data[10],spectrum[index],numLongsInSpectrum * sizeof(long));
+	memcpy(&data[10],spectrum[index],numLongsInSpectrum * sizeof(int32_t));
 
 	[aDataPacket addLongsToFrameBuffer:data length:numLongsInSpectrum + numLongsInHeader];
 	
@@ -1356,7 +1356,7 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(pollStatus) object:nil];
 	[self setRunningStatus:0 withValue:([self readReg:kAcqStatus adc:0]&kStartMask)];
 	[self setRunningStatus:1 withValue:([self readReg:kAcqStatus adc:1]&kStartMask)];
-	unsigned long isRunning = [self runningStatus:0] || [self runningStatus:1];
+	uint32_t isRunning = [self runningStatus:0] || [self runningStatus:1];
 		
 	int i;
 	for(i=0;i<2;i++){
@@ -1389,7 +1389,7 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 	
 }
 
-- (void) addCurrentState:(NSMutableDictionary*)dictionary cArray:(unsigned long*)anArray forKey:(NSString*)aKey
+- (void) addCurrentState:(NSMutableDictionary*)dictionary cArray:(uint32_t*)anArray forKey:(NSString*)aKey
 {
 	NSMutableArray* ar = [NSMutableArray array];
 	int i;

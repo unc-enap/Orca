@@ -42,7 +42,7 @@ bool ORSLTv4Readout::Readout(SBC_LAM_Data* lamData)
     
     
 	//static uint32_t adctrace32[kNumV4FLTs][kNumV4FLTChannels][kNumV4FLTADCPageSize32];//shall I use a 4th index for the page number? -tb-
-	//if sizeof(long unsigned int) != sizeof(uint32_t) we will come into troubles (64-bit-machines?) ... -tb-
+	//if sizeof(int32_t unsigned int) != sizeof(uint32_t) we will come into troubles (64-bit-machines?) ... -tb-
 	static uint32_t FIFO1[kMaxNumFLTs][kMaxNumPages];
 	static uint32_t FIFO2[kMaxNumFLTs][kMaxNumPages];
 	static uint32_t FIFO3[kMaxNumFLTs][kMaxNumPages];
@@ -254,7 +254,7 @@ pbus->write(FLTReadPageNumReg(flt+1),tmpNumPage);
 
                                 uint32_t address=  FLTRAMDataReg(flt+1, chan)  ;
                                 //ensure to wait until FLT has written the trace ...
-                                pbus->readBlock(address, (unsigned long *) readbuffer32, waveformLength);//read 2048 (was 2048; is now 4096) word32s
+                                pbus->readBlock(address, (uint32_t *) readbuffer32, waveformLength);//read 2048 (was 2048; is now 4096) word32s
                     printf("    Ship ADC data for FLT#%i (idx %i), Channel (%i) , read page length %i (%i)\n",flt+1,flt, chan,waveformLength,currentPageLength32);
                                 //rearrange (could do it later, copiing into ring buffer ...)
                                 triggerAddr =  eventFifo4 & 0xfff;
@@ -401,7 +401,7 @@ pbus->write(FLTReadPageNumReg(flt+1),numPage);
 								
 
                                 uint32_t address=  FLTRAMDataReg(flt+1, chan)  ;
-                                pbus->readBlock(address, (unsigned long *) readbuffer32, waveformLength);//read 2048 word32s
+                                pbus->readBlock(address, (uint32_t *) readbuffer32, waveformLength);//read 2048 word32s
                                 {   int i;
                                     for(i=0; i<waveformLength; i++){
                                         shipbuffer16[i]=(uint16_t)((uint32_t)(readbuffer32[i] & 0xffff));
@@ -512,8 +512,8 @@ bool ORSLTv4Readout::Readout(SBC_LAM_Data* lamData)
     static int currentUSec=0;
     static int lastSec=0;
     static int lastUSec=0;
-    //static long int counter=0;
-    static long int secCounter=0;
+    //static int32_t int counter=0;
+    static int32_t int secCounter=0;
     
     struct timeval t;//    struct timezone tz; is obsolete ... -tb-
     //timing
@@ -525,7 +525,7 @@ bool ORSLTv4Readout::Readout(SBC_LAM_Data* lamData)
     
     if(diffTime >1.0){
         secCounter++;
-        printf("PrPMC (SLTv4 simulation mode) sec %ld: 1 sec is over ...\n",secCounter);
+        printf("PrPMC (SLTv4 simulation mode) sec %d: 1 sec is over ...\n",secCounter);
         fflush(stdout);
         //remember for next call
         lastSec      = currentSec; 
@@ -555,7 +555,7 @@ bool ORSLTv4Readout::Readout(SBC_LAM_Data* lamData)
     leaf_index = GetNextTriggerIndex()[0];
     while(leaf_index >= 0) {
         leaf_index = readout_card(leaf_index,lamData);
-        //printf("PrPMC (SLTv4 simulation mode) leaf_index %ld  ...\n",leaf_index);
+        //printf("PrPMC (SLTv4 simulation mode) leaf_index %d  ...\n",leaf_index);
         //fflush(stdout);
     }
     

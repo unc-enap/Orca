@@ -160,7 +160,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 @interface ORGretina4AModel (private)
 //firmware loading
 - (void) programFlashBuffer:(NSData*)theData;
-- (void) programFlashBufferBlock:(NSData*)theData address:(unsigned long)address numberBytes:(unsigned long)numberBytesToWrite;
+- (void) programFlashBufferBlock:(NSData*)theData address:(uint32_t)address numberBytes:(uint32_t)numberBytesToWrite;
 - (void) blockEraseFlash;
 - (void) programFlashBuffer:(NSData*)theData;
 - (BOOL) verifyFlashBuffer:(NSData*)theData;
@@ -360,7 +360,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     [super disconnect];
 }
 
-- (unsigned long) baseAddress   { return (([self slot]+1)&0x1f)<<20; }
+- (uint32_t) baseAddress   { return (([self slot]+1)&0x1f)<<20; }
 
 - (ORConnector*)  linkConnector { return linkConnector; }
 - (void) setLinkConnector:(ORConnector*)aConnector
@@ -387,8 +387,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     [[NSNotificationCenter defaultCenter] postNotificationName:ORGretina4ADoHwCheckChanged object:self];
 }
 
-- (unsigned long) spiWriteValue { return spiWriteValue; }
-- (void) setSPIWriteValue:(unsigned long)aWriteValue
+- (uint32_t) spiWriteValue { return spiWriteValue; }
+- (void) setSPIWriteValue:(uint32_t)aWriteValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setSPIWriteValue:spiWriteValue];
     spiWriteValue = aWriteValue;
@@ -403,15 +403,15 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     [[NSNotificationCenter defaultCenter] postNotificationName:ORGretina4ARegisterIndexChanged object:self];
 }
 
-- (unsigned long) registerWriteValue { return registerWriteValue; }
-- (void) setRegisterWriteValue:(unsigned long)aWriteValue
+- (uint32_t) registerWriteValue { return registerWriteValue; }
+- (void) setRegisterWriteValue:(uint32_t)aWriteValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setRegisterWriteValue:registerWriteValue];
     registerWriteValue = aWriteValue;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORGretina4ARegisterWriteValueChanged object:self];
 }
 
-- (unsigned long) selectedChannel { return selectedChannel;}
+- (uint32_t) selectedChannel { return selectedChannel;}
 - (void) setSelectedChannel:(unsigned short)aChannel
 {
     if(aChannel >= kNumGretina4AChannels) aChannel = kNumGretina4AChannels - 1;
@@ -420,12 +420,12 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     [[NSNotificationCenter defaultCenter] postNotificationName:ORGretina4ASelectedChannelChanged object:self];
 }
 
-- (unsigned long) readRegister:(unsigned int)index channel:(int)aChannel
+- (uint32_t) readRegister:(unsigned int)index channel:(int)aChannel
 {
     if (index >= kNumberOfGretina4ARegisters) return -1;
     if (![Gretina4ARegisters regIsReadable:index]) return -1;
-    unsigned long theValue = 0;
-    unsigned long theAddress = [Gretina4ARegisters address:[self baseAddress] forReg:index];
+    uint32_t theValue = 0;
+    uint32_t theAddress = [Gretina4ARegisters address:[self baseAddress] forReg:index];
     if([Gretina4ARegisters hasChannels:index]){
         theAddress += aChannel*0x04;
     }
@@ -438,11 +438,11 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     return theValue;
 }
 
-- (unsigned long) readRegister:(unsigned int)index
+- (uint32_t) readRegister:(unsigned int)index
 {
     if (index >= kNumberOfGretina4ARegisters) return -1;
     if (![Gretina4ARegisters regIsReadable:index]) return -1;
-    unsigned long theValue = 0;
+    uint32_t theValue = 0;
     [[self adapter] readLongBlock:&theValue
                         atAddress:[Gretina4ARegisters address:[self baseAddress] forReg:index]
                         numToRead:1
@@ -451,7 +451,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     return theValue;
 }
 
-- (void) writeRegister:(unsigned int)index withValue:(unsigned long)value
+- (void) writeRegister:(unsigned int)index withValue:(uint32_t)value
 {
     if (index >= kNumberOfGretina4ARegisters) return;
     if (![Gretina4ARegisters regIsWriteable:index]) return;
@@ -462,7 +462,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
                      usingAddSpace:0x01];
 }
 
-- (void) writeToAddress:(unsigned long)anAddress aValue:(unsigned long)aValue
+- (void) writeToAddress:(uint32_t)anAddress aValue:(uint32_t)aValue
 {
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + anAddress
@@ -472,9 +472,9 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     
 }
 
-- (unsigned long) readFromAddress:(unsigned long)anAddress
+- (uint32_t) readFromAddress:(uint32_t)anAddress
 {
-    unsigned long value = 0;
+    uint32_t value = 0;
     [[self adapter] readLongBlock:&value
                         atAddress:[self baseAddress] + anAddress
                         numToRead:1
@@ -483,11 +483,11 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     return value;
 }
 
-- (unsigned long) readFPGARegister:(unsigned int)index;
+- (uint32_t) readFPGARegister:(unsigned int)index;
 {
     if (index >= kNumberOfFPGARegisters) return -1;
     if (![Gretina4AFPGARegisters regIsReadable:index]) return -1;
-    unsigned long theValue = 0;
+    uint32_t theValue = 0;
     [[self adapter] readLongBlock:&theValue
                         atAddress:[Gretina4AFPGARegisters address:[self baseAddress] forReg:index]
                         numToRead:1
@@ -496,7 +496,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     return theValue;
 }
 
-- (void) writeFPGARegister:(unsigned int)index withValue:(unsigned long)value
+- (void) writeFPGARegister:(unsigned int)index withValue:(uint32_t)value
 {
     if (index >= kNumberOfFPGARegisters) return;
     if (![Gretina4AFPGARegisters regIsWriteable:index]) return;
@@ -529,7 +529,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     
     int i;
     for(i=0;i<kNumberOfGretina4ARegisters;i++){
-        unsigned long theValue = [self readRegister:i  channel:(int)[self selectedChannel]];
+        uint32_t theValue = [self readRegister:i  channel:(int)[self selectedChannel]];
         if(snapShot[i] != theValue){
             NSLogFont(aFont,@"0x%04x 0x%08x != 0x%08x %@\n",[Gretina4ARegisters offsetforReg:i],snapShot[i],theValue,[Gretina4ARegisters registerName:i]);
             
@@ -537,7 +537,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     }
     
     for(i=0;i<kNumberOfFPGARegisters;i++){
-        unsigned long theValue = [self readFPGARegister:i];
+        uint32_t theValue = [self readFPGARegister:i];
         if(fpgaSnapShot[i] != theValue){
             NSLogFont(aFont,@"0x%04x 0x%08x != 0x%08x %@\n",[Gretina4AFPGARegisters offsetforReg:i],fpgaSnapShot[i],theValue,[Gretina4AFPGARegisters registerName:i]);
             
@@ -553,7 +553,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     NSLog(@"Register Values for Channel #%d\n",[self selectedChannel]);
     int i;
     for(i=0;i<kNumberOfGretina4ARegisters;i++){
-        unsigned long theValue = [self readRegister:i channel:(int)[self selectedChannel]];
+        uint32_t theValue = [self readRegister:i channel:(int)[self selectedChannel]];
         NSLogFont(aFont,@"0x%04x 0x%08x %10lu %@\n",[Gretina4ARegisters offsetforReg:i],theValue,theValue,[Gretina4ARegisters registerName:i]);
         snapShot[i] = theValue;
         if(i == kBoardId)           [self dumpBoardIdDetails:theValue];
@@ -570,7 +570,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     NSLog(@"------------------------------------------------\n");
     
     for(i=0;i<kNumberOfFPGARegisters;i++){
-        unsigned long theValue = [self readFPGARegister:i];
+        uint32_t theValue = [self readFPGARegister:i];
         NSLogFont(aFont,@"0x%04x 0x%08x %@\n",[Gretina4AFPGARegisters offsetforReg:i],theValue,[Gretina4AFPGARegisters registerName:i]);
         
         fpgaSnapShot[i] = theValue;
@@ -579,20 +579,20 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (void) dumpCounters
 {
-    NSLog(@"Dropped Event Count: %lu\n",[self readRegister:kDroppedEventCount]);
-    NSLog(@"Accept Event Count: %lu\n",[self readRegister:kAcceptedEventCount]);
-    NSLog(@"AHit Couynt: %lu\n",[self readRegister:kAhitCount]);
-    NSLog(@"Disc Count: %lu\n",[self readRegister:kDiscCount]);
-    NSLog(@"TS ErrorCount: %lu\n",[self readRegister:kTSErrorCount]);
+    NSLog(@"Dropped Event Count: %u\n",[self readRegister:kDroppedEventCount]);
+    NSLog(@"Accept Event Count: %u\n",[self readRegister:kAcceptedEventCount]);
+    NSLog(@"AHit Couynt: %u\n",[self readRegister:kAhitCount]);
+    NSLog(@"Disc Count: %u\n",[self readRegister:kDiscCount]);
+    NSLog(@"TS ErrorCount: %u\n",[self readRegister:kTSErrorCount]);
 }
 
-- (void) dumpBoardIdDetails:(unsigned long)aValue
+- (void) dumpBoardIdDetails:(uint32_t)aValue
 {
     NSFont* aFont = [NSFont fontWithName:@"Monaco" size:10.0];
     NSLogFont(aFont,@"Firmware: 0x%08x Geo_addr: 0x%08x\n",aValue>>16,(aValue>>4)&0x1F);
 }
 
-- (void) dumpProgrammingDoneDetails:(unsigned long)aValue
+- (void) dumpProgrammingDoneDetails:(uint32_t)aValue
 {
     NSFont* aFont = [NSFont fontWithName:@"Monaco" size:10.0];
     NSLogFont(aFont,@"     Master FIFO Reset: %@\n", ((aValue>>27)&0x1)?@"Reset":@"Run");
@@ -606,7 +606,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     NSLogFont(aFont,@"     fifo depth       : %d\n",  (aValue>> 0)&0xfffff);
 }
 
-- (void) dumpHardwareStatusDetails:(unsigned long)aValue
+- (void) dumpHardwareStatusDetails:(uint32_t)aValue
 {
     NSFont* aFont = [NSFont fontWithName:@"Monaco" size:10.0];
     NSLogFont(aFont,@"     fbus_thottle          : %d\n",  (aValue>>0)&0x1);
@@ -627,7 +627,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     NSLogFont(aFont,@"     adc_dcm_clk_stopped   : %@\n", ((aValue>>31)&0x1)?@"ClkStop":@"0");
 }
 
-- (void) dumpExternalDiscSrcDetails:(unsigned long)aValue
+- (void) dumpExternalDiscSrcDetails:(uint32_t)aValue
 {
     NSFont* aFont = [NSFont fontWithName:@"Monaco" size:10.0];
     NSString* name[8] = {
@@ -644,7 +644,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     NSLogFont(aFont,@"     %d: %@\n",i,name[index]);
 }
 
-- (void) dumpChannelControlDetails:(unsigned long)aValue
+- (void) dumpChannelControlDetails:(uint32_t)aValue
 {
     NSFont* aFont = [NSFont fontWithName:@"Monaco" size:10.0];
     NSString* trigPolarity[4] = {
@@ -669,14 +669,14 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 
-- (void) dumpHoldoffControlDetails:(unsigned long)aValue
+- (void) dumpHoldoffControlDetails:(uint32_t)aValue
 {
     NSFont* aFont = [NSFont fontWithName:@"Monaco" size:10.0];
     NSLogFont(aFont,@"     Holdoff Time     : %d\n", (aValue>>0) & 0x1ff);
     NSLogFont(aFont,@"     Peak Sensitivity : %d\n", (aValue>>9) & 0x7);
     NSLogFont(aFont,@"     Auto Mode        : %@\n", ((aValue>>12)& 0x1)?@"Enabled" : @"Disabled");
 }
-- (void) dumpBaselineDelayDetails:(unsigned long)aValue
+- (void) dumpBaselineDelayDetails:(uint32_t)aValue
 {
     NSFont* aFont = [NSFont fontWithName:@"Monaco" size:10.0];
     NSLogFont(aFont,@"     Delay          : %d\n", (aValue>>0) & 0xf);
@@ -684,7 +684,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     NSLogFont(aFont,@"     Status         : %d\n", ((aValue>>(12+[self selectedChannel]))& 0x1));
 }
 
-- (void) dumpExtDiscModeDetails:(unsigned long)aValue
+- (void) dumpExtDiscModeDetails:(uint32_t)aValue
 {
     NSFont* aFont = [NSFont fontWithName:@"Monaco" size:10.0];
     NSString* descSel[4] = {
@@ -708,7 +708,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     NSLogFont(aFont,@"     Ext Dixc TS Sel : %@\n", descTsSel[(aValue>>27)&0x7]);
 }
 
-- (void) dumpMasterStatusDetails:(unsigned long)aValue
+- (void) dumpMasterStatusDetails:(uint32_t)aValue
 {
     NSFont* aFont = [NSFont fontWithName:@"Monaco" size:10.0];
     int  i = (int)[self selectedChannel];
@@ -801,7 +801,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 {
     int chan;
     for(chan=0;chan<kNumGretina4AChannels;chan++){
-        unsigned long old = [self readLongFromReg:kChannelControl channel:chan];
+        uint32_t old = [self readLongFromReg:kChannelControl channel:chan];
         //toggle the reset bit
         old |= (0x1<<27);
         [self writeLong:old toReg:kChannelControl channel:chan];
@@ -1042,7 +1042,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     }
 }
 
-- (unsigned long) getCounter:(short)counterTag forGroup:(short)groupTag
+- (uint32_t) getCounter:(short)counterTag forGroup:(short)groupTag
 {
     if(groupTag == 0){
         if(counterTag>=0 && counterTag<kNumGretina4AChannels){
@@ -1111,8 +1111,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------- Address = 0x0008  Bit Field = 32..0 ---------------
-- (unsigned long) extDiscriminatorSrc { return extDiscriminatorSrc ;}
-- (void)  setExtDiscriminatorSrc:(unsigned long)aValue
+- (uint32_t) extDiscriminatorSrc { return extDiscriminatorSrc ;}
+- (void)  setExtDiscriminatorSrc:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setExtDiscriminatorSrc:extDiscriminatorSrc];
     extDiscriminatorSrc = aValue;
@@ -1120,16 +1120,16 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------- Address = 0x0020  Bit Field = 31 ---------------
-- (unsigned long) hardwareStatus { return hardwareStatus; }
-- (void)          setHardwareStatus:(unsigned long)aValue
+- (uint32_t) hardwareStatus { return hardwareStatus; }
+- (void)          setHardwareStatus:(uint32_t)aValue
 {
     hardwareStatus = aValue & 0xfff;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORGretina4AHardwareStatusChanged object:self];
 }
 
 //------------------- Address = 0x0024  Bit Field = 11..0 ---------------
-- (unsigned long) userPackageData { return userPackageData; }
-- (void) setUserPackageData:(unsigned long)aValue
+- (uint32_t) userPackageData { return userPackageData; }
+- (void) setUserPackageData:(uint32_t)aValue
 {
     if(aValue>0xFFF)aValue = 0xFFF;
     [[[self undoManager] prepareWithInvocationTarget:self] setUserPackageData:userPackageData];
@@ -1537,8 +1537,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------- Address = 0x040C  ---------------
-- (unsigned long) channelPulsedControl { return channelPulsedControl; }
-- (void) setChannelPulsedControl:(unsigned long)aValue
+- (uint32_t) channelPulsedControl { return channelPulsedControl; }
+- (void) setChannelPulsedControl:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setChannelPulsedControl:channelPulsedControl];
     channelPulsedControl = aValue;
@@ -1546,8 +1546,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------- Address = 0x0410  ---------------
-- (unsigned long) diagMuxControl { return diagMuxControl; }
-- (void) setDiagMuxControl:(unsigned long)aValue
+- (uint32_t) diagMuxControl { return diagMuxControl; }
+- (void) setDiagMuxControl:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setDiagMuxControl:diagMuxControl];
     diagMuxControl = aValue;
@@ -1623,8 +1623,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------- Address = 0x0420 ---------------
-- (unsigned long)   extDiscriminatorMode { return extDiscriminatorMode; }
-- (void)    setExtDiscriminatorMode:(unsigned long)aValue
+- (uint32_t)   extDiscriminatorMode { return extDiscriminatorMode; }
+- (void)    setExtDiscriminatorMode:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setExtDiscriminatorMode:extDiscriminatorMode];
     extDiscriminatorMode = aValue;
@@ -1642,8 +1642,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------- Address = 0x0424  Bit Field = 3..0 ---------------
-- (unsigned long) rj45SpareIoMuxSel { return rj45SpareIoMuxSel; }
-- (void) setRj45SpareIoMuxSel:(unsigned long)aValue
+- (uint32_t) rj45SpareIoMuxSel { return rj45SpareIoMuxSel; }
+- (void) setRj45SpareIoMuxSel:(uint32_t)aValue
 {
     if(aValue>0xF)aValue = 0xF;
     [[[self undoManager] prepareWithInvocationTarget:self] setRj45SpareIoMuxSel:rj45SpareIoMuxSel];
@@ -1661,8 +1661,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------- Address = 0x0428 ---------------
-- (unsigned long) ledStatus { return ledStatus; }
-- (void) setLedStatus:(unsigned long)aValue
+- (uint32_t) ledStatus { return ledStatus; }
+- (void) setLedStatus:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setLedStatus:ledStatus];
     ledStatus = aValue;
@@ -1744,8 +1744,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------- Address = 0x0508  Bit Field = N/A ---------------
-- (unsigned long) phaseErrorCount { return phaseErrorCount; }
-- (void) setPhaseErrorCount:(unsigned long)aValue
+- (uint32_t) phaseErrorCount { return phaseErrorCount; }
+- (void) setPhaseErrorCount:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setPhaseErrorCount:phaseErrorCount];
     phaseErrorCount = aValue & 0xffff;
@@ -1753,8 +1753,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------- Address = 0x050C  Bit Field = 15..0 ---------------
-- (unsigned long) phaseStatus { return phaseStatus; }
-- (void) setPhaseStatus:(unsigned long)aValue
+- (uint32_t) phaseStatus { return phaseStatus; }
+- (void) setPhaseStatus:(uint32_t)aValue
 {
     if(aValue > 0xFFFF)aValue = 0xFFFF;
     [[[self undoManager] prepareWithInvocationTarget:self] setPhaseStatus:phaseStatus];
@@ -1763,8 +1763,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------- Address = 0x051C  Bit Field = N/A ---------------
-- (unsigned long) serdesPhaseValue { return serdesPhaseValue; }
-- (void) setSerdesPhaseValue:(unsigned long)aValue
+- (uint32_t) serdesPhaseValue { return serdesPhaseValue; }
+- (void) setSerdesPhaseValue:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setSerdesPhaseValue:serdesPhaseValue];
     serdesPhaseValue = aValue;
@@ -1772,16 +1772,16 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------- Address = 0x0600  Bit Field = 15..12  ---------------
-- (unsigned long) codeRevision { return codeRevision; }
-- (void) setCodeRevision:(unsigned long)aValue
+- (uint32_t) codeRevision { return codeRevision; }
+- (void) setCodeRevision:(uint32_t)aValue
 {
     codeRevision = aValue;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORGretina4ACodeRevisionChanged object:self];
 }
 
 //------------------- Address = 0x0604  Bit Field = 31..0 ---------------
-- (unsigned long) codeDate { return codeDate; }
-- (void) setCodeDate:(unsigned long)aValue
+- (uint32_t) codeDate { return codeDate; }
+- (void) setCodeDate:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setCodeDate:codeDate];
     codeDate = aValue;
@@ -1789,8 +1789,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------- Address = 0x0608  Bit Field = N/A ---------------
-- (unsigned long) tSErrCntCtrl { return tSErrCntCtrl;}
-- (void) setTSErrCntCtrl:(unsigned long)aValue
+- (uint32_t) tSErrCntCtrl { return tSErrCntCtrl;}
+- (void) setTSErrCntCtrl:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setTSErrCntCtrl:tSErrCntCtrl];
     tSErrCntCtrl = aValue;
@@ -1798,8 +1798,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------- Address = 0x060C  Bit Field = N/A ---------------
-- (unsigned long) tSErrorCount { return tSErrorCount; }
-- (void) setTSErrorCount:(unsigned long)aValue
+- (uint32_t) tSErrorCount { return tSErrorCount; }
+- (void) setTSErrorCount:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setTSErrorCount:tSErrorCount];
     tSErrorCount = aValue;
@@ -1807,7 +1807,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------- Address = 0x0700  Bit Field = 31..0 ---------------
-- (unsigned long) droppedEventCount:(unsigned short)chan
+- (uint32_t) droppedEventCount:(unsigned short)chan
 {
     if(chan < kNumGretina4AChannels)return droppedEventCount[chan];
     else return 0;
@@ -1815,7 +1815,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 
 //------------------- Address = 0x0740  Bit Field = 31..0 ---------------
-- (unsigned long) acceptedEventCount:(unsigned short)chan
+- (uint32_t) acceptedEventCount:(unsigned short)chan
 {
     if(chan<kNumGretina4AChannels )return acceptedEventCount[chan];
     else return 0;
@@ -1823,14 +1823,14 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 
 //------------------- Address = 0x0780  Bit Field = 31..0 ---------------
-- (unsigned long) aHitCount:(unsigned short)chan
+- (uint32_t) aHitCount:(unsigned short)chan
 {
     if(chan<kNumGretina4AChannels )return aHitCounter[chan];
     else return 0;
 }
 
 //------------------- Address = 0x07C0  Bit Field = 31..0 ---------------
-- (unsigned long) discCount:(unsigned short)chan
+- (uint32_t) discCount:(unsigned short)chan
 {
     if(chan < kNumGretina4AChannels )return discriminatorCount[chan];
     else return 0;
@@ -1838,8 +1838,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 
 //------------------- Address = 0x0800  Bit Field = 31..0 ---------------
-- (unsigned long) auxIoRead { return auxIoRead; }
-- (void) setAuxIoRead:(unsigned long)aValue
+- (uint32_t) auxIoRead { return auxIoRead; }
+- (void) setAuxIoRead:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setAuxIoRead:auxIoRead];
     auxIoRead = aValue;
@@ -1847,8 +1847,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------- Address = 0x0804  Bit Field = 31..0 ---------------
-- (unsigned long) auxIoWrite { return auxIoWrite; }
-- (void) setAuxIoWrite:(unsigned long)aValue
+- (uint32_t) auxIoWrite { return auxIoWrite; }
+- (void) setAuxIoWrite:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setAuxIoWrite:auxIoWrite];
     auxIoWrite = aValue;
@@ -1856,8 +1856,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------- Address = 0x0808  Bit Field = 31..0 ---------------
-- (unsigned long) auxIoConfig { return auxIoConfig; }
-- (void) setAuxIoConfig:(unsigned long)aValue
+- (uint32_t) auxIoConfig { return auxIoConfig; }
+- (void) setAuxIoConfig:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setAuxIoConfig:auxIoConfig];
     auxIoConfig = aValue;
@@ -1865,8 +1865,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------- Address = 0x0848  Bit Field = 2..3 ---------------
-- (unsigned long) sdPem { return sdPem; }
-- (void) setSdPem:(unsigned long)aValue
+- (uint32_t) sdPem { return sdPem; }
+- (void) setSdPem:(uint32_t)aValue
 {
     if(aValue > 0x0)aValue = 0x0;
     [[[self undoManager] prepareWithInvocationTarget:self] setSdPem:sdPem];
@@ -1892,8 +1892,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------- Address = 0x0908  Bit Field = 0 ---------------
-- (unsigned long) vmeStatus { return vmeStatus; }
-- (void) setVmeStatus:(unsigned long)aValue
+- (uint32_t) vmeStatus { return vmeStatus; }
+- (void) setVmeStatus:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setVmeStatus:vmeStatus];
     vmeStatus = aValue;
@@ -1928,8 +1928,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------- Address = 0X0920  Bit Field = 15..0 ---------------
-- (unsigned long) serialNum { return serialNum; }
-- (void) setSerialNum:(unsigned long)aValue
+- (uint32_t) serialNum { return serialNum; }
+- (void) setSerialNum:(uint32_t)aValue
 {
     if(aValue > 0xFFFF)aValue = 0xFFFF;
     serialNum = aValue;
@@ -1937,8 +1937,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------- Address = 0X0920  Bit Field = 23..16 ---------------
-- (unsigned long) boardRevNum { return boardRevNum; }
-- (void) setBoardRevNum:(unsigned long)aValue
+- (uint32_t) boardRevNum { return boardRevNum; }
+- (void) setBoardRevNum:(uint32_t)aValue
 {
     if(aValue > 0xFF)aValue = 0xFF;
     boardRevNum = aValue;
@@ -1946,8 +1946,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------- Address = 0X0920  Bit Field = 31..24 ---------------
-- (unsigned long) vhdlVerNum { return vhdlVerNum; }
-- (void) setVhdlVerNum:(unsigned long)aValue
+- (uint32_t) vhdlVerNum { return vhdlVerNum; }
+- (void) setVhdlVerNum:(uint32_t)aValue
 {
     if(aValue > 0xFF)aValue = 0xFF;
     [[[self undoManager] prepareWithInvocationTarget:self] setVhdlVerNum:vhdlVerNum];
@@ -1959,7 +1959,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 #pragma mark - Hardware Access
 //=============================================================================
 //------------------------- low level calls------------------------------------
-- (void) writeLong:(unsigned long)aValue toReg:(int)aReg
+- (void) writeLong:(uint32_t)aValue toReg:(int)aReg
 {
     [[self adapter] writeLongBlock:&aValue
                          atAddress: [Gretina4ARegisters address:[self baseAddress] forReg:aReg]
@@ -1968,7 +1968,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
                      usingAddSpace:0x01];
 }
 
-- (void) writeLong:(unsigned long)aValue toReg:(int)aReg channel:(int)aChan
+- (void) writeLong:(uint32_t)aValue toReg:(int)aReg channel:(int)aChan
 {
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[Gretina4ARegisters address:[self baseAddress] forReg:aReg chan:aChan]
@@ -1977,9 +1977,9 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
                      usingAddSpace:0x01];
 }
 
-- (unsigned long) readLongFromReg:(int)aReg
+- (uint32_t) readLongFromReg:(int)aReg
 {
-    unsigned long aValue = 0;
+    uint32_t aValue = 0;
     [[self adapter] readLongBlock:&aValue
                         atAddress:[Gretina4ARegisters address:[self baseAddress] forReg:aReg]
                         numToRead:1
@@ -1988,9 +1988,9 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     return aValue;
 }
 
-- (unsigned long) readLongFromReg:(int)aReg channel:(int)aChan
+- (uint32_t) readLongFromReg:(int)aReg channel:(int)aChan
 {
-    unsigned long aValue = 0;
+    uint32_t aValue = 0;
     [[self adapter] readLongBlock:&aValue
                         atAddress:[Gretina4ARegisters address:[self baseAddress] forReg:aReg chan:aChan]
                         numToRead:1
@@ -2008,7 +2008,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 - (BOOL) checkFirmwareVersion:(BOOL)verbose
 {
     //find out the Main FPGA version
-    unsigned long mainVersion = ([self readLongFromReg:kBoardId] & 0xFFFF0000) >> 16;
+    uint32_t mainVersion = ([self readLongFromReg:kBoardId] & 0xFFFF0000) >> 16;
     if(verbose)NSLog(@"Main FGPA version: 0x%x \n", mainVersion);
     
     if (mainVersion < kCurrentFirmwareVersion){
@@ -2020,7 +2020,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (BOOL) fifoIsEmpty
 {
-    unsigned long val = [self readLongFromReg:kProgrammingDone];
+    uint32_t val = [self readLongFromReg:kProgrammingDone];
     return ((val>>20) & 0x3)==0x3; //both bits are high if FIFO is empty
 }
 
@@ -2033,7 +2033,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 - (void) resetFIFO
 {
 
-    unsigned long val = (0x1<<27); //all other bits are read-only.
+    uint32_t val = (0x1<<27); //all other bits are read-only.
     [self writeLong:val toReg:kProgrammingDone];
     [self writeLong:0   toReg:kProgrammingDone];
     
@@ -2043,10 +2043,10 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------------- Ext Discrim Src Reg------------------------------------
-- (unsigned long) readExtDiscriminatorSrc { return [self readLongFromReg:kExternalDiscSrc] & 0x1fffffff; }
+- (uint32_t) readExtDiscriminatorSrc { return [self readLongFromReg:kExternalDiscSrc] & 0x1fffffff; }
 - (void) writeExtDiscriminatorSrc
 {
-    unsigned long theValue = (extDiscriminatorSrc & 0x3fffffff);
+    uint32_t theValue = (extDiscriminatorSrc & 0x3fffffff);
     [self writeAndCheckLong:theValue
               addressOffset:[Gretina4ARegisters offsetforReg:kExternalDiscSrc]
                        mask:0x3fffffff
@@ -2055,14 +2055,14 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------------- kHardwareStatus Reg------------------------------------
-- (unsigned long) readHardwareStatus
+- (uint32_t) readHardwareStatus
 {
     [self setHardwareStatus: [self readLongFromReg:kHardwareStatus]];
     return hardwareStatus;
 }
 
 //------------------------- kUserPackage Reg------------------------------------
-- (unsigned long) readUserPackageData { return [self readLongFromReg:kUserPackageData] & 0xFFFF; }
+- (uint32_t) readUserPackageData { return [self readLongFromReg:kUserPackageData] & 0xFFFF; }
 - (void) writeUserPackageData
 {
     [self writeAndCheckLong:(userPackageData & 0xFFFF)
@@ -2073,7 +2073,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------------- kWindowCompMin Reg------------------------------------
-- (unsigned long) readWindowCompMin { return [self readLongFromReg:kWindowCompMin] & 0xFFFF; }
+- (uint32_t) readWindowCompMin { return [self readLongFromReg:kWindowCompMin] & 0xFFFF; }
 - (void) writeWindowCompMin
 {
     [self writeAndCheckLong:(windowCompMin & 0xFFFF)
@@ -2084,7 +2084,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------------- kWindowCompMax Reg------------------------------------
-- (unsigned long) readWindowCompMax { return [self readLongFromReg:kWindowCompMax] & 0xFFFF; }
+- (uint32_t) readWindowCompMax { return [self readLongFromReg:kWindowCompMax] & 0xFFFF; }
 - (void) writeWindowCompMax
 {
     [self writeAndCheckLong:(windowCompMax & 0xFFFF)
@@ -2095,7 +2095,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     
 }
 //-------------------------kChannelControl----------------------------------------
-- (unsigned long) readControlReg:(unsigned short)channel { return [self readLongFromReg:kChannelControl]; }
+- (uint32_t) readControlReg:(unsigned short)channel { return [self readLongFromReg:kChannelControl]; }
 
 - (void) writeControlReg:(unsigned short)chan enabled:(BOOL)forceEnable
 {
@@ -2107,7 +2107,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     if(forceEnable)	startStop = enabled[chan];
     else			startStop = NO;
 
-    unsigned long theValue =
+    uint32_t theValue =
     (startStop                        << 0)  |
     (!pileupMode[chan]                << 2)  |
     ((triggerPolarity[chan]  & 0x3)   << 10) |
@@ -2131,7 +2131,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 
 //-------------------------kLedThreshold Reg----------------------------------------
-- (unsigned long) readLedThreshold:(unsigned short)channel
+- (uint32_t) readLedThreshold:(unsigned short)channel
 {
     if(channel<kNumGretina4AChannels){
         return [self readLongFromReg:kLedThreshold channel:channel];
@@ -2141,7 +2141,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (void) writeLedThreshold:(unsigned short)aChan
 {
-    unsigned long theValue =  ledThreshold[aChan] & 0x3fff;
+    uint32_t theValue =  ledThreshold[aChan] & 0x3fff;
     [self writeAndCheckLong:theValue
               addressOffset:[Gretina4ARegisters offsetforReg:kLedThreshold chan:aChan]
                        mask:0x03fff
@@ -2151,7 +2151,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //-------------------------kRawDataLength Reg----------------------------------------
-- (unsigned long) readRawDataLength:(unsigned short)aChan
+- (uint32_t) readRawDataLength:(unsigned short)aChan
 {
     return [self readLongFromReg:kRawDataLength channel:aChan];
 }
@@ -2159,7 +2159,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 - (void) writeRawDataLength:(unsigned short)channel
 {
     //***NOTE that we only write same value to all channels
-    unsigned long theValue = (rawDataLength & 0x000003ff);
+    uint32_t theValue = (rawDataLength & 0x000003ff);
     [self writeAndCheckLong:theValue
               addressOffset:[Gretina4ARegisters offsetforReg:kRawDataLength chan:channel]
                        mask:0x000003ff
@@ -2169,7 +2169,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //-------------------------kRawDataWindow Reg----------------------------------------
-- (unsigned long) readRawDataWindow:(unsigned short)aChan
+- (uint32_t) readRawDataWindow:(unsigned short)aChan
 {
     return [self readLongFromReg:kRawDataWindow channel:aChan];
 }
@@ -2177,7 +2177,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 - (void) writeRawDataWindow:(unsigned short)aChan
 {
     //***NOTE that we write same value to all
-    unsigned long theValue = (rawDataWindow & 0x000007fc);
+    uint32_t theValue = (rawDataWindow & 0x000007fc);
     [self writeAndCheckLong:theValue
               addressOffset:[Gretina4ARegisters offsetforReg:kRawDataWindow chan:aChan]
                        mask:0x000007fc
@@ -2188,14 +2188,14 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 
 //-------------------------kDWindow Reg----------------------------------------
-- (unsigned long) readDWindow:(unsigned short)aChan
+- (uint32_t) readDWindow:(unsigned short)aChan
 {
     return [self readLongFromReg:kDWindow channel:aChan];
  }
 
 - (void) writeDWindow:(unsigned short)aChan
 {
-    unsigned long theValue = (dWindow[aChan] & 0x0000007F);
+    uint32_t theValue = (dWindow[aChan] & 0x0000007F);
     [self writeAndCheckLong:theValue
               addressOffset:[Gretina4ARegisters offsetforReg:kDWindow chan:aChan]
                        mask:0x0000007F
@@ -2204,14 +2204,14 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //-------------------------kKWindow Reg----------------------------------------
-- (unsigned long) readKWindow:(unsigned short)aChan
+- (uint32_t) readKWindow:(unsigned short)aChan
 {
     return [self readLongFromReg:kKWindow channel:aChan];
 }
 
 - (void) writeKWindow:(unsigned short)aChan
 {
-    unsigned long theValue = (kWindow[aChan] & 0x0000007F);
+    uint32_t theValue = (kWindow[aChan] & 0x0000007F);
     [self writeAndCheckLong:theValue
               addressOffset:[Gretina4ARegisters offsetforReg:kKWindow chan:aChan]
                        mask:0x0000007F
@@ -2220,7 +2220,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 }
 //-------------------------kMWindow Reg----------------------------------------
-- (unsigned long) readMWindow:(unsigned short)aChan
+- (uint32_t) readMWindow:(unsigned short)aChan
 {
     if(aChan < kNumGretina4AChannels){
         return [self readLongFromReg:kMWindow channel:aChan];
@@ -2230,7 +2230,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (void) writeMWindow:(unsigned short)aChan
 {
-    unsigned long theValue = (mWindow[aChan] & 0x0000003FF);
+    uint32_t theValue = (mWindow[aChan] & 0x0000003FF);
     [self writeAndCheckLong:theValue
               addressOffset:[Gretina4ARegisters offsetforReg:kMWindow chan:aChan]
                        mask:0x0000003FF
@@ -2241,14 +2241,14 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 
 //-------------------------kD3Window Reg----------------------------------------
-- (unsigned long)readD3Window:(unsigned short)aChan
+- (uint32_t)readD3Window:(unsigned short)aChan
 {
     return [self readLongFromReg:kD3Window channel:aChan];
 }
 
 - (void) writeD3Window:(unsigned short)aChan
 {
-        unsigned long theValue = (d3Window[aChan] & 0x0000007F);
+        uint32_t theValue = (d3Window[aChan] & 0x0000007F);
     [self writeAndCheckLong:theValue
               addressOffset:[Gretina4ARegisters offsetforReg:kD3Window chan:aChan]
                        mask:0x0000007F
@@ -2257,13 +2257,13 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //-------------------------kDiscWidth Reg----------------------------------------
-- (unsigned long) readDiscWidth:(unsigned short)aChan
+- (uint32_t) readDiscWidth:(unsigned short)aChan
 {
     return [self readLongFromReg:kDiscWidth channel:aChan];
 }
 - (void) writeDiscWidth:(unsigned short)aChan
 {
-    unsigned long theValue = (discWidth[aChan] & 0x0000001F);
+    uint32_t theValue = (discWidth[aChan] & 0x0000001F);
     [self writeAndCheckLong:theValue
               addressOffset:[Gretina4ARegisters offsetforReg:kDiscWidth chan:aChan]
                        mask:0x0000001F
@@ -2272,14 +2272,14 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //-------------------------kBaselineStart Reg----------------------------------------
-- (unsigned long) readBaselineStart:(unsigned short)aChan
+- (uint32_t) readBaselineStart:(unsigned short)aChan
 {
     return [self readLongFromReg:kBaselineStart channel:aChan];
 }
 
 - (void) writeBaselineStart:(unsigned short)aChan
 {
-    unsigned long theValue = (baselineStart[aChan] & 0x00003FFF);
+    uint32_t theValue = (baselineStart[aChan] & 0x00003FFF);
     [self writeAndCheckLong:theValue
               addressOffset:[Gretina4ARegisters offsetforReg:kBaselineStart chan:aChan]
                        mask:0x00003FFF
@@ -2288,14 +2288,14 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //-------------------------kP1Window Reg----------------------------------------
-- (unsigned long) readP1Window:(unsigned short)aChan
+- (uint32_t) readP1Window:(unsigned short)aChan
 {
     return [self readLongFromReg:kP1Window channel:aChan];
 }
 
 - (void) writeP1Window:(unsigned short)aChan
 {
-    unsigned long theValue = (p1Window[aChan] & 0x0000000F);
+    uint32_t theValue = (p1Window[aChan] & 0x0000000F);
     [self writeAndCheckLong:theValue
               addressOffset:[Gretina4ARegisters offsetforReg:kP1Window chan:aChan]
                        mask:0x0000000F
@@ -2304,14 +2304,14 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //-------------------------kP2Window Reg----------------------------------------
-- (unsigned long) readP2Window
+- (uint32_t) readP2Window
 {
     return [self readLongFromReg:kP2Window];
 }
 
 - (void) writeP2Window
 {
-    unsigned long theValue = (p2Window & 0x0000003ff);
+    uint32_t theValue = (p2Window & 0x0000003ff);
     [self writeAndCheckLong:theValue
               addressOffset:[Gretina4ARegisters offsetforReg:kP2Window]
                        mask:0x0000003ff
@@ -2322,7 +2322,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 //-------------------------kChannelPulsedControl Reg----------------------------------------
 - (void) loadBaselines
 {
-    unsigned long theValue = 0x4;
+    uint32_t theValue = 0x4;
     
     [self writeAndCheckLong:theValue
               addressOffset:[Gretina4ARegisters offsetforReg:kChannelPulsedControl]
@@ -2334,7 +2334,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 - (void) loadDelays
 {
-    unsigned long theValue = 0x1;
+    uint32_t theValue = 0x1;
     
     [self writeAndCheckLong:theValue
               addressOffset:[Gretina4ARegisters offsetforReg:kChannelPulsedControl]
@@ -2346,14 +2346,14 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //-------------------------kBaselineDelay Reg----------------------------------------
-- (unsigned long) readBaselineDelay
+- (uint32_t) readBaselineDelay
 {
     return [self readLongFromReg:kBaselineDelay];
 }
 
 - (void) writeBaselineDelay
 {
-    unsigned long theValue = (baselineDelay & 0x00003fff);
+    uint32_t theValue = (baselineDelay & 0x00003fff);
     [self writeAndCheckLong:theValue
               addressOffset:[Gretina4ARegisters offsetforReg:kBaselineDelay]
                        mask:0x00003fff
@@ -2362,10 +2362,10 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //------------------------- Ext Discrim Mode Reg------------------------------------
-- (unsigned long) readExtDiscriminatorMode { return [self readLongFromReg:kExternalDiscMode] & 0xfffff; }
+- (uint32_t) readExtDiscriminatorMode { return [self readLongFromReg:kExternalDiscMode] & 0xfffff; }
 - (void) writeExtDiscriminatorMode
 {
-    unsigned long theValue = (extDiscriminatorMode & 0xfffff);
+    uint32_t theValue = (extDiscriminatorMode & 0xfffff);
     [self writeAndCheckLong:theValue
               addressOffset:[Gretina4ARegisters offsetforReg:kExternalDiscMode]
                        mask:0xfffff
@@ -2375,14 +2375,14 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 
 //-------------------------kHoldoffControl Reg----------------------------------------
-- (unsigned long) readHoldoffControl
+- (uint32_t) readHoldoffControl
 {
     return [self readLongFromReg:kHoldoffControl];
 }
 
 - (void) writeHoldoffControl
 {
-    unsigned long theValue = ((holdOffTime     & 0x1FF) << 0) |
+    uint32_t theValue = ((holdOffTime     & 0x1FF) << 0) |
                              ((peakSensitivity & 0x007) << 9)  |
                              ((autoMode        & 0x001) << 12);
     [self writeAndCheckLong:theValue
@@ -2392,14 +2392,14 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
               forceFullInit:forceFullCardInit];
 }
 //-------------------------kDownSampleHoldoff Reg----------------------------------------
-- (unsigned long) readDownSampleHoldOffTime
+- (uint32_t) readDownSampleHoldOffTime
 {
     return [self readLongFromReg:kDownSampleHoldOffTime];
 }
 
 - (void) writeDownSampleHoldOffTime
 {
-    unsigned long theValue = downSampleHoldOffTime;
+    uint32_t theValue = downSampleHoldOffTime;
     [self writeAndCheckLong:theValue
               addressOffset:[Gretina4ARegisters offsetforReg:kDownSampleHoldOffTime]
                        mask:0x00003FF
@@ -2408,22 +2408,22 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //-------------------------Timestamp Regs----------------------------------------
-- (unsigned long long) readLatTimeStamp
+- (uint64_t) readLatTimeStamp
 {
-    unsigned long      ts1 =  [self readLongFromReg:kLatTimestampLsb];
-    unsigned long long ts2 =  [self readLongFromReg:kLatTimestampMsb];
+    uint32_t      ts1 =  [self readLongFromReg:kLatTimestampLsb];
+    uint64_t ts2 =  [self readLongFromReg:kLatTimestampMsb];
     return (ts2<<32) | ts1;
 }
 
-- (unsigned long long) readLiveTimeStamp
+- (uint64_t) readLiveTimeStamp
 {
-    unsigned long      ts1 =  [self readLongFromReg:kLiveTimestampLsb];
-    unsigned long long ts2 =  [self readLongFromReg:kLiveTimestampMsb];
+    uint32_t      ts1 =  [self readLongFromReg:kLiveTimestampLsb];
+    uint64_t ts2 =  [self readLongFromReg:kLiveTimestampMsb];
     return (ts2<<32) | ts1;
 }
 
 //-------------------------kVetoGateWidth Reg----------------------------------------
-- (unsigned long) readVetoGateWidth
+- (uint32_t) readVetoGateWidth
 {
     return [self readLongFromReg:kVetoGateWidth] & 0x00003fff;
 }
@@ -2440,8 +2440,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 //-------------------------kMasterLogicStatus Reg----------------------------------------
 - (void) writeMasterLogic:(BOOL)enable
 {
-    unsigned long oldValue = 0x00020011;
-    unsigned long newValue;
+    uint32_t oldValue = 0x00020011;
+    uint32_t newValue;
     if(enable) newValue = oldValue |  0x1;
     else       newValue = oldValue & ~0x1;
     [self writeAndCheckLong:newValue
@@ -2452,14 +2452,14 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 //-------------------------kTriggerConfig Reg----------------------------------------
-- (unsigned long) readTriggerConfig
+- (uint32_t) readTriggerConfig
 {
     return [self readLongFromReg:kTriggerConfig];
 }
 
 - (void) writeTriggerConfig
 {
-    unsigned long theValue = (triggerConfig & 0x00000003);
+    uint32_t theValue = (triggerConfig & 0x00000003);
     [self writeAndCheckLong:theValue
               addressOffset:[Gretina4ARegisters offsetforReg:kTriggerConfig]
                        mask:0x00000003
@@ -2470,7 +2470,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 //-------------------------kCodeRevision Reg----------------------------------------
 - (void) readCodeRevision
 {
-    unsigned long codeVersion = [self readLongFromReg:kCodeRevision];
+    uint32_t codeVersion = [self readLongFromReg:kCodeRevision];
     NSLog(@"Gretina4A %d code revisions:\n",[self slot]);
     NSLog(@"PCB : 0x%X \n",         (codeVersion >> 12) & 0xf);
     NSLog(@"FW Type: 0x%X \n",      (codeVersion >> 8)& 0xf);
@@ -2482,7 +2482,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 - (void) readFPGAVersions
 {
     //find out the VME FPGA version
-    unsigned long vmeVersion = [self readFPGARegister:kVMEFPGAVersionStatus];
+    uint32_t vmeVersion = [self readFPGARegister:kVMEFPGAVersionStatus];
     NSLog(@"Gretina4A %d FPGA version:\n",[self slot]);
     NSLog(@"VME FPGA serial number: 0x%X \n",  ((vmeVersion >> 0) & 0xFFFF));
     NSLog(@"BOARD Revision number: 0x%X \n",   ((vmeVersion >>16) & 0xFF));
@@ -2494,7 +2494,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 {
     return [self readFPGARegister:kVMEGPControl] & 0x3;
 }
-- (void) writeClockSource: (unsigned long) clocksource
+- (void) writeClockSource: (uint32_t) clocksource
 {
     if(clocksource == 0)return; ////temp..... Clock source might be set by the Trigger Card init code.
     [self writeAndCheckLong:clocksource
@@ -2509,7 +2509,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     [self writeClockSource:clockSource];
 }
 //-------------------------kAuxStatus Reg----------------------------------------
-- (unsigned long) readVmeAuxStatus
+- (uint32_t) readVmeAuxStatus
 {
     return [self readFPGARegister:kAuxStatus];
 }
@@ -2530,7 +2530,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (void) resetMainFPGA
 {
-    unsigned long theValue = 0x10;
+    uint32_t theValue = 0x10;
     [[self adapter] writeLongBlock:&theValue
                          atAddress: [Gretina4AFPGARegisters address:[self baseAddress] forReg:kMainFPGAControl]
                         numToWrite:1
@@ -2683,7 +2683,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (BOOL) checkExtDiscriminatorSrc:(BOOL)verbose
 {
-    unsigned long aValue = [self readRegister:kExternalDiscSrc]& 0x3fffffff;
+    uint32_t aValue = [self readRegister:kExternalDiscSrc]& 0x3fffffff;
     if(aValue == extDiscriminatorSrc)return YES;
     else {
         if(verbose)NSLog(@"extDiscriminatorSrc mismatch: 0x%x != 0x%x\n",aValue,extDiscriminatorSrc);
@@ -2692,7 +2692,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 - (BOOL) checkExtDiscriminatorMode:(BOOL)verbose
 {
-    unsigned long aValue = [self readRegister:kExternalDiscMode]& 0xfffff;
+    uint32_t aValue = [self readRegister:kExternalDiscMode]& 0xfffff;
     if(aValue == extDiscriminatorMode)return YES;
     else {
         if(verbose)NSLog(@"extDiscriminatorMode mismatch: 0x%x != 0x%x\n",aValue,extDiscriminatorMode);
@@ -2702,7 +2702,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (BOOL) checkWindowCompMin:(BOOL)verbose
 {
-    unsigned long aValue = [self readRegister:kWindowCompMin] & 0xFFFF;
+    uint32_t aValue = [self readRegister:kWindowCompMin] & 0xFFFF;
     if(aValue == windowCompMin)return YES;
     else {
         if(verbose)NSLog(@"windowCompMin mismatch: 0x%x != 0x%x\n",aValue,windowCompMin);
@@ -2712,7 +2712,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (BOOL) checkWindowCompMax:(BOOL)verbose
 {
-    unsigned long aValue = [self readRegister:kWindowCompMax] & 0xFFFF;
+    uint32_t aValue = [self readRegister:kWindowCompMax] & 0xFFFF;
     if(aValue == windowCompMax)return YES;
     else {
         if(verbose)NSLog(@"windowCompMax mismatch: 0x%x != 0x%x\n",aValue,windowCompMax);
@@ -2722,7 +2722,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (BOOL) checkP2Window:(BOOL)verbose
 {
-    unsigned long aValue = [self readRegister:kP2Window] & 0x3ff;
+    uint32_t aValue = [self readRegister:kP2Window] & 0x3ff;
     if(aValue == p2Window)return YES;
     else {
         if(verbose)NSLog(@"p2Window mismatch: 0x%x != 0x%x\n",aValue,p2Window);
@@ -2732,7 +2732,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (BOOL) checkDownSampleHoldOffTime:(BOOL)verbose
 {
-    unsigned long aValue = [self readRegister:kDownSampleHoldOffTime] & 0x3ff;
+    uint32_t aValue = [self readRegister:kDownSampleHoldOffTime] & 0x3ff;
     if(aValue == downSampleHoldOffTime)return YES;
     else {
         if(verbose)NSLog(@"down sample holdoff time mismatch: 0x%x != 0x%x\n",aValue,downSampleHoldOffTime);
@@ -2742,8 +2742,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (BOOL) checkHoldoffControl:(BOOL)verbose
 {
-    unsigned long aValue = [self readRegister:kHoldoffControl];
-    unsigned long theValue = ((holdOffTime     & 0x1FF) << 0) |
+    uint32_t aValue = [self readRegister:kHoldoffControl];
+    uint32_t theValue = ((holdOffTime     & 0x1FF) << 0) |
                              ((peakSensitivity & 0x007) << 9)  |
                              ((autoMode        & 0x001) << 12);
 
@@ -2758,7 +2758,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (BOOL) checkDiscWidth:(int)aChan verbose:(BOOL)verbose
 {
-    unsigned long aValue = [self readRegister:kDiscWidth channel:aChan] & 0x0000001F;
+    uint32_t aValue = [self readRegister:kDiscWidth channel:aChan] & 0x0000001F;
     
     if(aValue == discWidth[aChan])return YES;
     else {
@@ -2768,7 +2768,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 - (BOOL) checkP1Window:(int)aChan verbose:(BOOL)verbose
 {
-    unsigned long aValue = [self readRegister:kP1Window channel:aChan] & 0x0000000F;
+    uint32_t aValue = [self readRegister:kP1Window channel:aChan] & 0x0000000F;
     
     if(aValue == p1Window[aChan])return YES;
     else {
@@ -2780,7 +2780,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (BOOL) checkDWindow:(int)aChan verbose:(BOOL)verbose
 {
-    unsigned long aValue = [self readRegister:kDWindow channel:aChan] & 0x0000007F;
+    uint32_t aValue = [self readRegister:kDWindow channel:aChan] & 0x0000007F;
     
     if(aValue == dWindow[aChan])return YES;
     else {
@@ -2791,7 +2791,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (BOOL) checkKWindow:(int)aChan verbose:(BOOL)verbose
 {
-    unsigned long aValue = [self readRegister:kKWindow channel:aChan] & 0x0000007F;
+    uint32_t aValue = [self readRegister:kKWindow channel:aChan] & 0x0000007F;
     
     if(aValue == kWindow[aChan])return YES;
     else {
@@ -2802,7 +2802,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
                
 - (BOOL) checkMWindow:(int)aChan verbose:(BOOL)verbose
 {
-    unsigned long aValue = [self readRegister:kMWindow channel:aChan] & 0x0000003FF;
+    uint32_t aValue = [self readRegister:kMWindow channel:aChan] & 0x0000003FF;
     
     if(aValue == mWindow[aChan])return YES;
     else {
@@ -2813,7 +2813,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
                
 - (BOOL) checkD3Window:(int)aChan verbose:(BOOL)verbose
 {
-    unsigned long aValue = [self readRegister:kD3Window channel:aChan] & 0x0000007F;
+    uint32_t aValue = [self readRegister:kD3Window channel:aChan] & 0x0000007F;
     
     if(aValue == d3Window[aChan])return YES;
     else {
@@ -2824,7 +2824,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     
 - (BOOL) checkLedThreshold:(int)aChan verbose:(BOOL)verbose
 {
-    unsigned long aValue = [self readRegister:kLedThreshold channel:aChan] & 0x3fff;
+    uint32_t aValue = [self readRegister:kLedThreshold channel:aChan] & 0x3fff;
     
     if(aValue == ledThreshold[aChan])return YES;
     else {
@@ -2835,7 +2835,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (BOOL) checkRawDataWindow:(int)aChan verbose:(BOOL)verbose
 {
-    unsigned long aValue = [self readRegister:kRawDataWindow channel:aChan] & 0x7fc;
+    uint32_t aValue = [self readRegister:kRawDataWindow channel:aChan] & 0x7fc;
     
     if(aValue == rawDataWindow)return YES;
     else {
@@ -2846,7 +2846,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (BOOL) checkRawDataLength:(int)aChan verbose:(BOOL)verbose
 {
-    unsigned long aValue = [self readRegister:kRawDataLength channel:aChan] & 0x3fe;
+    uint32_t aValue = [self readRegister:kRawDataLength channel:aChan] & 0x3fe;
     
     if(aValue == rawDataLength)return YES;
     else {
@@ -2857,7 +2857,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (BOOL) checkBaselineStart:(int)aChan verbose:(BOOL)verbose
 {
-    unsigned long aValue = [self readRegister:kBaselineStart channel:aChan] & 0x3fff;
+    uint32_t aValue = [self readRegister:kBaselineStart channel:aChan] & 0x3fff;
     
     if(aValue == baselineStart[aChan])return YES;
     else {
@@ -2868,7 +2868,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (BOOL) checkBaselineDelay:(BOOL)verbose
 {
-    unsigned long aValue = 0 ;
+    uint32_t aValue = 0 ;
     [[self adapter] readLongBlock:&aValue
                         atAddress:[Gretina4ARegisters offsetforReg:kBaselineDelay]
                         numToRead:1
@@ -2883,7 +2883,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (BOOL) checkVetoGateWidth:(BOOL)verbose
 {
-    unsigned long aValue = 0 ;
+    uint32_t aValue = 0 ;
     [[self adapter] readLongBlock:&aValue
                         atAddress:[Gretina4ARegisters offsetforReg:kVetoGateWidth]
                         numToRead:1
@@ -2898,7 +2898,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (BOOL) checkTriggerConfig:(BOOL)verbose
 {
-    unsigned long aValue = 0 ;
+    uint32_t aValue = 0 ;
     [[self adapter] readLongBlock:&aValue
                         atAddress:[Gretina4ARegisters offsetforReg:kTriggerConfig]
                         numToRead:1
@@ -3020,8 +3020,8 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 
 #pragma mark - Data Taker
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -3245,7 +3245,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     @try {
         if(![self fifoIsEmpty]){
             short orcaHeaderLen = 2;
-            unsigned long dataLength = [self rawDataWindow]/2 + 1;
+            uint32_t dataLength = [self rawDataWindow]/2 + 1;
             dataBuffer[0] = dataId | (orcaHeaderLen + dataLength); //length + 2 longs + orca header
             dataBuffer[1] = location;
             
@@ -3643,15 +3643,15 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 }
 
 #pragma mark - SPI Interface
-- (unsigned long) writeAuxIOSPI:(unsigned long)spiData
+- (uint32_t) writeAuxIOSPI:(uint32_t)spiData
 {
     /*
      // Set AuxIO to mode 3 and set bits 0-3 to OUT (bit 0 is under FPGA control)
      [self writeRegister:kAuxIOConfig withValue:0x3025];
      // Read kAuxIOWrite to preserve bit 0, and zero bits used in SPI protocol
-     unsigned long spiBase = [self readRegister:kAuxIOWrite] & ~(kSPIData | kSPIClock | kSPIChipSelect);
-     unsigned long value;
-     unsigned long readBack = 0;
+     uint32_t spiBase = [self readRegister:kAuxIOWrite] & ~(kSPIData | kSPIClock | kSPIChipSelect);
+     uint32_t value;
+     uint32_t readBack = 0;
      
      // set kSPIChipSelect to signify that we are starting
      [self writeRegister:kAuxIOWrite withValue:(kSPIChipSelect | kSPIClock | kSPIData)];
@@ -3678,9 +3678,9 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 #pragma mark - AdcProviding Protocol
 - (BOOL)          onlineMaskBit:(int)bit                     { return [self enabled:bit];        }
 - (BOOL)          partOfEvent:(unsigned short)aChannel       { return NO;                        }
-- (unsigned long) waveFormCount:(short)aChannel              { return waveFormCount[aChannel];   }
-- (unsigned long) eventCount:(int)aChannel                   { return waveFormCount[aChannel];   }
-- (unsigned long) thresholdForDisplay:(unsigned short) aChan { return [self ledThreshold:aChan]; }
+- (uint32_t) waveFormCount:(short)aChannel              { return waveFormCount[aChannel];   }
+- (uint32_t) eventCount:(int)aChannel                   { return waveFormCount[aChannel];   }
+- (uint32_t) thresholdForDisplay:(unsigned short) aChan { return [self ledThreshold:aChan]; }
 - (unsigned short)gainForDisplay:(unsigned short) aChan      { return 0; }
 
 - (void) clearEventCounts
@@ -3747,7 +3747,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
                 [self writeToAddress:0x900 aValue:kGretina4AResetMainFPGACmd];
                 [self writeToAddress:0x900 aValue:kGretina4AReloadMainFPGACmd];
                 [self setProgressStateOnMainThread:  @"Finishing$Flash Memory-->FPGA"];
-                unsigned long statusRegValue = [self readFromAddress:0x904];
+                uint32_t statusRegValue = [self readFromAddress:0x904];
                 while(!(statusRegValue & kGretina4AMainFPGAIsLoaded)) {
                     if(stopDownLoadingMainFPGA)return;
                     statusRegValue = [self readFromAddress:0x904];
@@ -3776,21 +3776,21 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     /* We only erase the blocks currently used in the Gretina4A specification. */
     [self writeToAddress:0x910 aValue:kGretina4AFlashEnableWrite]; //Enable programming
     [self setFpgaDownProgress:0.];
-    unsigned long count = 0;
-    unsigned long end = (kGretina4AFlashBlocks / 4) * kGretina4AFlashBlockSize;
-    unsigned long addr;
+    uint32_t count = 0;
+    uint32_t end = (kGretina4AFlashBlocks / 4) * kGretina4AFlashBlockSize;
+    uint32_t addr;
     [self setProgressStateOnMainThread:  @"Block Erase"];
     for (addr = 0; addr < end; addr += kGretina4AFlashBlockSize) {
         
         if(stopDownLoadingMainFPGA)return;
         @try {
-            [self setFirmwareStatusString:       [NSString stringWithFormat:@"%lu of %d Blocks Erased",count,kGretina4AFlashBufferBytes]];
+            [self setFirmwareStatusString:       [NSString stringWithFormat:@"%u of %d Blocks Erased",count,kGretina4AFlashBufferBytes]];
             [self setFpgaDownProgress: 100. * (count+1)/(float)kGretina4AUsedFlashBlocks];
             
             [self writeToAddress:0x980 aValue:addr];
             [self writeToAddress:0x98C aValue:kGretina4AFlashBlockEraseCmd];
             [self writeToAddress:0x98C aValue:kGretina4AFlashConfirmCmd];
-            unsigned long stat = [self readFromAddress:0x904];
+            uint32_t stat = [self readFromAddress:0x904];
             while (stat & kFlashBusy) {
                 if(stopDownLoadingMainFPGA)break;
                 stat = [self readFromAddress:0x904];
@@ -3809,18 +3809,18 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (void) programFlashBuffer:(NSData*)theData
 {
-    unsigned long totalSize = [theData length];
+    uint32_t totalSize = [theData length];
     
     [self setProgressStateOnMainThread:@"Programming"];
-    [self setFirmwareStatusString: [NSString stringWithFormat:@"FPGA File Size %lu KB",totalSize/1000]];
+    [self setFirmwareStatusString: [NSString stringWithFormat:@"FPGA File Size %u KB",totalSize/1000]];
     [self setFpgaDownProgress:0.];
     
     [self writeToAddress:0x980 aValue:0x00];
     [self writeToAddress:0x98C aValue:kGretina4AFlashReadArrayCmd];
     
-    unsigned long address = 0x0;
+    uint32_t address = 0x0;
     while (address < totalSize ) {
-        unsigned long numberBytesToWrite;
+        uint32_t numberBytesToWrite;
         if(totalSize-address >= kGretina4AFlashBufferBytes){
             numberBytesToWrite = kGretina4AFlashBufferBytes; //whole block
         }
@@ -3834,7 +3834,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
         if(stopDownLoadingMainFPGA)break;
         
         
-        [self setFirmwareStatusString: [NSString stringWithFormat:@"Flashed: %lu/%lu KB",address/1000,totalSize/1000]];
+        [self setFirmwareStatusString: [NSString stringWithFormat:@"Flashed: %u/%u KB",address/1000,totalSize/1000]];
         
         [self setFpgaDownProgress:100. * address/(float)totalSize];
         
@@ -3850,18 +3850,18 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     [self setProgressStateOnMainThread:@"Programming"];
 }
 
-- (void) programFlashBufferBlock:(NSData*)theData address:(unsigned long)anAddress numberBytes:(unsigned long)aNumber
+- (void) programFlashBufferBlock:(NSData*)theData address:(uint32_t)anAddress numberBytes:(uint32_t)aNumber
 {
     //issue the set-up command at the starting address
     [self writeToAddress:0x980 aValue:anAddress];
     [self writeToAddress:0x98C aValue:kGretina4AFlashWriteCmd];
     unsigned char* theDataBytes = (unsigned char*)[theData bytes];
-    unsigned long statusRegValue;
+    uint32_t statusRegValue;
     while(1) {
         if(stopDownLoadingMainFPGA)return;
         
         // Checking status to make sure that flash is ready
-        unsigned long statusRegValue = [self readFromAddress:0x904];
+        uint32_t statusRegValue = [self readFromAddress:0x904];
         
         if ( (statusRegValue & kFlashBusy)  == kFlashBusy ) {
             //not ready, so re-issue the set-up command
@@ -3872,14 +3872,14 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     }
     
     //Set the word count. Max is 0xF.
-    unsigned long valueToWrite = (aNumber/2) - 1;
+    uint32_t valueToWrite = (aNumber/2) - 1;
     [self writeToAddress:0x98C aValue:valueToWrite];
     
     // Loading all the words in
     /* Load the words into the bufferToWrite */
-    unsigned long i;
+    uint32_t i;
     for ( i=0; i<aNumber; i+=4 ) {
-        unsigned long* lPtr = (unsigned long*)&theDataBytes[anAddress+i];
+        uint32_t* lPtr = (uint32_t*)&theDataBytes[anAddress+i];
         [self writeToAddress:0x984 aValue:lPtr[0]];
     }
     
@@ -3896,36 +3896,36 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (BOOL) verifyFlashBuffer:(NSData*)theData
 {
-    unsigned long totalSize = [theData length];
+    uint32_t totalSize = [theData length];
     unsigned char* theDataBytes = (unsigned char*)[theData bytes];
     
     [self setProgressStateOnMainThread:@"Verifying"];
-    [self setFirmwareStatusString: [NSString stringWithFormat:@"FPGA File Size %lu KB",totalSize/1000]];
+    [self setFirmwareStatusString: [NSString stringWithFormat:@"FPGA File Size %u KB",totalSize/1000]];
     [self setFpgaDownProgress:0.];
     
     /* First reset to make sure it is read mode. */
     [self writeToAddress:0x980 aValue:0x0];
     [self writeToAddress:0x98C aValue:kGretina4AFlashReadArrayCmd];
     
-    unsigned long errorCount =   0;
-    unsigned long address    =   0;
-    unsigned long valueToCompare;
+    uint32_t errorCount =   0;
+    uint32_t address    =   0;
+    uint32_t valueToCompare;
     
     while ( address < totalSize ) {
-        unsigned long valueToRead = [self readFromAddress:0x984];
+        uint32_t valueToRead = [self readFromAddress:0x984];
         
         /* Now compare to file*/
         if ( address + 3 < totalSize) {
-            unsigned long* ptr = (unsigned long*)&theDataBytes[address];
+            uint32_t* ptr = (uint32_t*)&theDataBytes[address];
             valueToCompare = ptr[0];
         }
         else {
             //less than four bytes left
-            unsigned long numBytes = totalSize - address - 1;
+            uint32_t numBytes = totalSize - address - 1;
             valueToCompare = 0;
-            unsigned long i;
+            uint32_t i;
             for ( i=0;i<numBytes;i++) {
-                valueToCompare += (((unsigned long)theDataBytes[address]) << i*8) & (0xFF << i*8);
+                valueToCompare += (((uint32_t)theDataBytes[address]) << i*8) & (0xFF << i*8);
             }
         }
         if ( valueToRead != valueToCompare ) {
@@ -3935,7 +3935,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
             errorCount++;
         }
         
-        [self setFirmwareStatusString: [NSString stringWithFormat:@"Verified: %lu/%lu KB Errors: %lu",address/1000,totalSize/1000,errorCount]];
+        [self setFirmwareStatusString: [NSString stringWithFormat:@"Verified: %u/%u KB Errors: %u",address/1000,totalSize/1000,errorCount]];
         [self setFpgaDownProgress:100. * address/(float)totalSize];
         
         address += 4;
@@ -3962,7 +3962,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
     [self writeToAddress:0x900 aValue:0x10];
     [self writeToAddress:0x900 aValue:0x20];
     
-    unsigned long statusRegValue=[self readFromAddress:0x904];
+    uint32_t statusRegValue=[self readFromAddress:0x904];
     
     while(!(statusRegValue & kGretina4AMainFPGAIsLoaded)) {
         if(stopDownLoadingMainFPGA)return;
@@ -4016,7 +4016,7 @@ NSString* ORGretina4AAcceptedEventCountChanged          = @"ORGretina4AAcceptedE
 
 - (BOOL) controllerIsSBC
 {
-    //long removeReturn;
+    //int32_t removeReturn;
     //return NO; //<<----- temp for testing
     if([[self adapter] isKindOfClass:NSClassFromString(@"ORVmecpuModel")])return YES;
     else return NO;

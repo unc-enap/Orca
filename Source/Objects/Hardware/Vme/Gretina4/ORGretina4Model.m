@@ -79,7 +79,7 @@ NSString* ORGretina4LockChanged                 = @"ORGretina4LockChanged";
 @interface ORGretina4Model (private)
 - (void) blockEraseFlash;
 - (void) programFlashBuffer:(NSData*)theData;
-- (void) programFlashBufferBlock:(NSData*)theData address:(unsigned long)anAddress numberBytes:(unsigned long)aNumber;
+- (void) programFlashBufferBlock:(NSData*)theData address:(uint32_t)anAddress numberBytes:(uint32_t)aNumber;
 - (BOOL) verifyFlashBuffer:(NSData*)theData;
 - (void) reloadMainFPGAFromFlash;
 - (void) setProgressStateOnMainThread:(NSString*)aState;
@@ -96,7 +96,7 @@ NSString* ORGretina4LockChanged                 = @"ORGretina4LockChanged";
 #pragma mark ¥¥¥Static Declarations
 //offsets from the base address
 typedef struct {
-	unsigned long offset;
+	uint32_t offset;
 	NSString* name;
 	BOOL canRead;
 	BOOL canWrite;
@@ -210,7 +210,7 @@ enum {
 static struct {
     NSString*	name;
     NSString*	units;
-    unsigned long	regOffset;
+    uint32_t	regOffset;
     unsigned short	mask; 
     unsigned short	initialValue;
     float		ratio; //conversion constants
@@ -476,25 +476,25 @@ static struct {
     [[NSNotificationCenter defaultCenter] postNotificationName:ORGretina4ModelRegisterIndexChanged object:self];
 }
 
-- (unsigned long) registerWriteValue
+- (uint32_t) registerWriteValue
 {
     return registerWriteValue;
 }
 
-- (void) setRegisterWriteValue:(unsigned long)aWriteValue
+- (void) setRegisterWriteValue:(uint32_t)aWriteValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setRegisterWriteValue:registerWriteValue];
     registerWriteValue = aWriteValue;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORGretina4ModelRegisterWriteValueChanged object:self];
 }
 
-- (unsigned long) spiWriteValue
+- (uint32_t) spiWriteValue
 {
     return spiWriteValue;
 }
 
 
-- (void) setSPIWriteValue:(unsigned long)aWriteValue
+- (void) setSPIWriteValue:(uint32_t)aWriteValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setSPIWriteValue:spiWriteValue];
     spiWriteValue = aWriteValue;
@@ -524,11 +524,11 @@ static struct {
 	return fpga_register_information[index].offset;
 }
 
-- (unsigned long) readRegister:(unsigned int)index
+- (uint32_t) readRegister:(unsigned int)index
 {
 	if (index >= kNumberOfGretina4Registers) return -1;
 	if (![self canReadRegister:index]) return -1;
-	unsigned long theValue = 0;
+	uint32_t theValue = 0;
     [[self adapter] readLongBlock:&theValue
                         atAddress:[self baseAddress] + register_information[index].offset
                         numToRead:1
@@ -537,7 +537,7 @@ static struct {
     return theValue;
 }
 
-- (void) writeRegister:(unsigned int)index withValue:(unsigned long)value
+- (void) writeRegister:(unsigned int)index withValue:(uint32_t)value
 {
 	if (index >= kNumberOfGretina4Registers) return;
 	if (![self canWriteRegister:index]) return;
@@ -566,11 +566,11 @@ static struct {
 	return register_information[index].displayOnMainGretinaPage;
 }
 
-- (unsigned long) readFPGARegister:(unsigned int)index;
+- (uint32_t) readFPGARegister:(unsigned int)index;
 {
 	if (index >= kNumberOfFPGARegisters) return -1;
 	if (![self canReadFPGARegister:index]) return -1;
-	unsigned long theValue = 0;
+	uint32_t theValue = 0;
     [[self adapter] readLongBlock:&theValue
                         atAddress:[self baseAddress] + fpga_register_information[index].offset
                         numToRead:1
@@ -579,7 +579,7 @@ static struct {
     return theValue;
 }
 
-- (void) writeFPGARegister:(unsigned int)index withValue:(unsigned long)value
+- (void) writeFPGARegister:(unsigned int)index withValue:(uint32_t)value
 {
 	if (index >= kNumberOfFPGARegisters) return;
 	if (![self canWriteFPGARegister:index]) return;
@@ -674,7 +674,7 @@ static struct {
     [[NSNotificationCenter defaultCenter] postNotificationName:ORGretina4ModelNoiseFloorIntegrationTimeChanged object:self];
 }
 
-- (unsigned long) fifoState
+- (uint32_t) fifoState
 {
     return fifoState;
 }
@@ -827,7 +827,7 @@ static struct {
 }
 
 #pragma mark ¥¥¥Rates
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
 {
 	if(groupTag == 0){
 		if(counterTag>=0 && counterTag<kNumGretina4Channels){
@@ -1056,14 +1056,14 @@ static struct {
 }  
 
 #pragma mark ¥¥¥Hardware Access
-- (unsigned long) baseAddress
+- (uint32_t) baseAddress
 {
 	return (([self slot]+1)&0x1f)<<20;
 }
 
 - (short) readBoardID
 {
-    unsigned long theValue = 0;
+    uint32_t theValue = 0;
     [[self adapter] readLongBlock:&theValue
                         atAddress:[self baseAddress] + register_information[kBoardID].offset
                         numToRead:1
@@ -1100,7 +1100,7 @@ static struct {
 
 - (void) resetSingleFIFO
 {
-    unsigned long val = 0;
+    uint32_t val = 0;
     [[self adapter] readLongBlock:&val
                         atAddress:[self baseAddress] + register_information[kProgrammingDone].offset
                         numToRead:1
@@ -1126,7 +1126,7 @@ static struct {
 }
 - (BOOL) fifoIsEmpty
 {
-    unsigned long val = 0;
+    uint32_t val = 0;
     [[self adapter] readLongBlock:&val
                         atAddress:[self baseAddress] + register_information[kProgrammingDone].offset
                         numToRead:1
@@ -1142,7 +1142,7 @@ static struct {
 {
     if(clockSource == 0)return; ////temp..... Clock source might be set by the Trigger Card init code.
 	//clock select.  0 = SerDes, 1 = ref, 2 = SerDes, 3 = Ext
-	unsigned long theValue = clockSource;
+	uint32_t theValue = clockSource;
     [[self adapter] writeLongBlock:&theValue
 						 atAddress:[self baseAddress] + fpga_register_information[kVMEGPControl].offset
                         numToWrite:1
@@ -1245,7 +1245,7 @@ static struct {
 
 - (void) resetMainFPGA
 {
-	unsigned long theValue = 0x10;
+	uint32_t theValue = 0x10;
 	[[self adapter] writeLongBlock:&theValue
 						 atAddress:[self baseAddress] + fpga_register_information[kMainFPGAControl].offset
                         numToWrite:1
@@ -1283,7 +1283,7 @@ static struct {
 - (void) initBoard:(BOOL)doEnableChannels
 {
 	//find out the Main FPGA version
-	unsigned long mainVersion = 0x00;
+	uint32_t mainVersion = 0x00;
 	[[self adapter] readLongBlock:&mainVersion
 						atAddress:[self baseAddress] + register_information[kBoardID].offset
                         numToRead:1
@@ -1311,7 +1311,7 @@ static struct {
 	}
 	
 	//find out the VME FPGA version
-	unsigned long vmeVersion = 0x00;
+	uint32_t vmeVersion = 0x00;
 	[[self adapter] readLongBlock:&vmeVersion
 						 atAddress:[self baseAddress] + fpga_register_information[kVMEFPGAVersionStatus].offset
                         numToRead:1
@@ -1325,7 +1325,7 @@ static struct {
     //write the card level params
 	int i;
 	for(i=0;i<kNumGretina4CardParams;i++){
-		unsigned long theValue = [[cardInfo objectAtIndex:i] longValue];
+		uint32_t theValue = [[cardInfo objectAtIndex:i] longValue];
 		[[self adapter] writeLongBlock:&theValue
 							atAddress:[self baseAddress] + cardConstants[i].regOffset
 							numToWrite:1
@@ -1358,9 +1358,9 @@ static struct {
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORGretina4CardInited object:self];
 }
 
-- (unsigned long) readControlReg:(int)channel
+- (uint32_t) readControlReg:(int)channel
 {
-    unsigned long theValue = 0 ;
+    uint32_t theValue = 0 ;
     [[self adapter] readLongBlock:&theValue
                         atAddress:[self baseAddress] + register_information[kControlStatus].offset + 4*channel
                         numToRead:1
@@ -1380,14 +1380,14 @@ static struct {
     if(forceEnable)	startStop= enabled[chan];
     else			startStop = NO;
 
-    unsigned long theValue = (pzTraceEnabled[chan] << 14) | (poleZeroEnabled[chan] << 13) | (cfdEnabled[chan] << 12) | (polarity[chan] << 10) 
+    uint32_t theValue = (pzTraceEnabled[chan] << 14) | (poleZeroEnabled[chan] << 13) | (cfdEnabled[chan] << 12) | (polarity[chan] << 10) 
 	| ((triggerMode[chan] & 0x3) << 3) | (pileUp[chan] << 2) | (debug[chan] << 1) | startStop;
     [[self adapter] writeLongBlock:&theValue
                          atAddress:[self baseAddress] + register_information[kControlStatus].offset + 4*chan
                         numToWrite:1
                         withAddMod:[self addressModifier]
                      usingAddSpace:0x01];
-    unsigned long readBackValue = [self readControlReg:chan];
+    uint32_t readBackValue = [self readControlReg:chan];
     if((readBackValue & 0xC1F) != (theValue & 0xC1F)){
         NSLogColor([NSColor redColor],@"Channel %d status reg readback != writeValue (0x%x != 0x%x)\n",chan,readBackValue & 0xC1F,theValue & 0xC1F);
     }
@@ -1395,7 +1395,7 @@ static struct {
 
 - (void) writeLEDThreshold:(int)channel
 {    
-    unsigned long theValue = ((poleZeroMult[channel]) << 20) | (ledThreshold[channel] & 0x1FFFF);
+    uint32_t theValue = ((poleZeroMult[channel]) << 20) | (ledThreshold[channel] & 0x1FFFF);
     [[self adapter] writeLongBlock:&theValue
                          atAddress:[self baseAddress] + register_information[kLEDThreshold].offset + 4*channel
                         numToWrite:1
@@ -1412,7 +1412,7 @@ static struct {
 
 - (void) writeCFDParameters:(int)channel
 {    
-    unsigned long theValue = ((cfdDelay[channel] & 0x3F) << 7) | ((cfdFraction[channel] & 0x3) << 5) | (cfdThreshold[channel]);
+    uint32_t theValue = ((cfdDelay[channel] & 0x3F) << 7) | ((cfdFraction[channel] & 0x3) << 5) | (cfdThreshold[channel]);
     [[self adapter] writeLongBlock:&theValue
                          atAddress:[self baseAddress] + register_information[kCFDParameters].offset + 4*channel
                         numToWrite:1
@@ -1423,7 +1423,7 @@ static struct {
 
 - (void) writeRawDataSlidingLength:(int)channel
 {    
-    unsigned long theValue = (unsigned long)dataDelay[channel];
+    uint32_t theValue = (uint32_t)dataDelay[channel];
     [[self adapter] writeLongBlock:&theValue
                          atAddress:[self baseAddress] + register_information[kRawDataSlidingLength].offset + 4*channel
                         numToWrite:1
@@ -1434,7 +1434,7 @@ static struct {
 
 - (void) writeRawDataWindowLength:(int)channel
 {    
-	unsigned long aValue = dataLength[channel];
+	uint32_t aValue = dataLength[channel];
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + register_information[kRawDataWindowLength].offset + 4*channel
                         numToWrite:1
@@ -1446,7 +1446,7 @@ static struct {
 
 - (unsigned short) readFifoState
 {
-    unsigned long theValue = 0 ;
+    uint32_t theValue = 0 ;
     [[self adapter] readLongBlock:&theValue
                         atAddress:[self baseAddress] + register_information[kProgrammingDone].offset
                         numToRead:1
@@ -1462,7 +1462,7 @@ static struct {
 
 - (void) writeDownSample
 {
-    unsigned long theValue = (downSample << 28);
+    uint32_t theValue = (downSample << 28);
     [[self adapter] writeLongBlock:&theValue
                         atAddress:[self baseAddress] + register_information[kProgrammingDone].offset
                         numToWrite:1
@@ -1472,7 +1472,7 @@ static struct {
 
 - (int) readCardInfo:(int) index
 {
-    unsigned long theValue = 0;
+    uint32_t theValue = 0;
     [[self adapter] readLongBlock:&theValue
                         atAddress:[self baseAddress] + cardConstants[index].regOffset
                         numToRead:1
@@ -1493,9 +1493,9 @@ static struct {
 
 - (int) readIntegrationTime { return [self readCardInfo:kIntegrationTimeIndex]; }
 
-- (unsigned long) readDownSample
+- (uint32_t) readDownSample
 {
-    unsigned long theValue = 0 ;
+    uint32_t theValue = 0 ;
     [[self adapter] readLongBlock:&theValue
                         atAddress:[self baseAddress] + register_information[kProgrammingDone].offset
                         numToRead:1
@@ -1514,7 +1514,7 @@ static struct {
     fifoStateAddress  = [self baseAddress] + register_information[kProgrammingDone].offset;
     fifoAddress       = [self baseAddress] + 0x1000;
 	theController     = [self adapter];
-	unsigned long  dataDump[0xffff];
+	uint32_t  dataDump[0xffff];
 	BOOL errorFound		  = NO;
 	//NSDate* startDate = [NSDate date];
 
@@ -1535,7 +1535,7 @@ static struct {
 			[NSException raise:@"Gretina Card Could not clear FIFO" format:@"%@ unable to clear FIFO -- could be a serious hw problem.",[self fullID]];
 		}
 		
-		unsigned long val = 0;
+		uint32_t val = 0;
 		//read the fifo state
 		[theController readLongBlock:&val
 						   atAddress:fifoStateAddress
@@ -1544,7 +1544,7 @@ static struct {
 					   usingAddSpace:0x01];
 		if((val & kGretina4FIFOEmpty) == 0){
 			//read the first longword which should be the packet separator:
-			unsigned long theValue;
+			uint32_t theValue;
 			[theController readLongBlock:&theValue 
 							   atAddress:fifoAddress 
 							   numToRead:1 
@@ -1611,7 +1611,7 @@ static struct {
     /* Somehow the FIFO got corrupted and is no longer aligned along event boundaries.           *
      * This function will read through to the next boundary and read out the next full event,    *
      * leaving the FIFO aligned along an event.  The function returns the number of events lost. */
-    unsigned long val;
+    uint32_t val;
     //read the fifo state, sanity check to make sure there is actually another event.
     NSDate* timeStarted = [NSDate date];
     while(1){
@@ -1632,7 +1632,7 @@ static struct {
         } else {
             /* We need to continue reading until finding the packet separator */
             //read the first longword which should be the packet separator:
-            unsigned long theValue;
+            uint32_t theValue;
             [theController readLongBlock:&theValue 
                                atAddress:fifoAddress 
                                numToRead:1 
@@ -1646,8 +1646,8 @@ static struct {
                                    numToRead:1 
                                   withAddMod:[self addressModifier] 
                                usingAddSpace:0x01];
-                unsigned long numberLeftToRead = ((theValue & kGretina4NumberWordsMask)>>16)-1;
-                unsigned long* dataDump = malloc(sizeof(unsigned long)*numberLeftToRead);
+                uint32_t numberLeftToRead = ((theValue & kGretina4NumberWordsMask)>>16)-1;
+                uint32_t* dataDump = malloc(sizeof(uint32_t)*numberLeftToRead);
                 [theController readLongBlock:dataDump 
 								   atAddress:fifoAddress 
 								   numToRead:  numberLeftToRead //number longs left to read
@@ -1680,7 +1680,7 @@ static struct {
 	[[self undoManager] disableUndoRegistration];
 	
     @try {
-		unsigned long val;
+		uint32_t val;
 		
 		switch(noiseFloorState){
 			case 0: //init
@@ -1861,7 +1861,7 @@ static struct {
 - (void) readFPGAVersions
 {
     //find out the VME FPGA version
-	unsigned long vmeVersion = 0x00;
+	uint32_t vmeVersion = 0x00;
 	[[self adapter] readLongBlock:&vmeVersion
                         atAddress:[self baseAddress] + fpga_register_information[kVMEFPGAVersionStatus].offset
                         numToRead:1
@@ -1879,7 +1879,7 @@ static struct {
 - (BOOL) checkFirmwareVersion:(BOOL)verbose
 {
 	//find out the Main FPGA version
-	unsigned long mainVersion = 0x00;
+	uint32_t mainVersion = 0x00;
 	[[self adapter] readLongBlock:&mainVersion
 						atAddress:[self baseAddress] + register_information[kBoardID].offset
                         numToRead:1
@@ -1896,7 +1896,7 @@ static struct {
     else return YES;
 }
 
-- (void) writeToAddress:(unsigned long)anAddress aValue:(unsigned long)aValue
+- (void) writeToAddress:(uint32_t)anAddress aValue:(uint32_t)aValue
 {
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + anAddress
@@ -1905,9 +1905,9 @@ static struct {
 					 usingAddSpace:0x01];
     
 }
-- (unsigned long) readFromAddress:(unsigned long)anAddress
+- (uint32_t) readFromAddress:(uint32_t)anAddress
 {
-    unsigned long value = 0;
+    uint32_t value = 0;
     [[self adapter] readLongBlock:&value
                         atAddress:[self baseAddress] + anAddress
                         numToRead:1
@@ -1949,8 +1949,8 @@ static struct {
 
 
 #pragma mark ¥¥¥Data Taker
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -2190,7 +2190,7 @@ static struct {
     }
     [self clearFIFO];
     fifoLostEvents = 0;
-    dataBuffer = (unsigned long*)malloc(0xffff * sizeof(unsigned long));
+    dataBuffer = (uint32_t*)malloc(0xffff * sizeof(uint32_t));
     [self startRates];
     
     [self initBoard:true];
@@ -2208,7 +2208,7 @@ static struct {
     isRunning = YES;
     NSString* errorLocation = @"";
     @try {
-        unsigned long val;
+        uint32_t val;
         //read the fifo state
         [theController readLongBlock:&val
                            atAddress:fifoStateAddress
@@ -2217,12 +2217,12 @@ static struct {
                        usingAddSpace:0x01];
         fifoState = val;			
         if((val & kGretina4FIFOEmpty) == 0){
-            unsigned long numLongs = 0;
+            uint32_t numLongs = 0;
             dataBuffer[numLongs++] = dataId | 0; //we'll fill in the length later
             dataBuffer[numLongs++] = location;
             
             //read the first longword which should be the packet separator:
-            unsigned long theValue;
+            uint32_t theValue;
             [theController readLongBlock:&theValue 
                                atAddress:fifoAddress 
                                numToRead:1 
@@ -2242,7 +2242,7 @@ static struct {
                 
                 ++waveFormCount[theValue & 0x7];  //grab the channel and inc the count
                 
-                unsigned long numLongsLeft  = ((theValue & kGretina4NumberWordsMask)>>16)-1;
+                uint32_t numLongsLeft  = ((theValue & kGretina4NumberWordsMask)>>16)-1;
                 
                 [theController readLong:&dataBuffer[numLongs] 
                               atAddress:fifoAddress 
@@ -2250,7 +2250,7 @@ static struct {
                              withAddMod:[self addressModifier] 
                           usingAddSpace:0x01];
 				
-                long totalNumLongs = (numLongs + numLongsLeft);
+                int32_t totalNumLongs = (numLongs + numLongsLeft);
                 dataBuffer[0] |= totalNumLongs; //see, we did fill it in...
                 [aDataPacket addLongsToFrameBuffer:dataBuffer length:totalNumLongs];
             } else {
@@ -2344,7 +2344,7 @@ static struct {
     return YES;
 }
 
-- (unsigned long) waveFormCount:(int)aChannel
+- (uint32_t) waveFormCount:(int)aChannel
 {
     return waveFormCount[aChannel];
 }
@@ -2540,14 +2540,14 @@ static struct {
 
 
 #pragma mark ¥¥¥SPI Interface
-- (unsigned long) writeAuxIOSPI:(unsigned long)spiData
+- (uint32_t) writeAuxIOSPI:(uint32_t)spiData
 {
     // Set AuxIO to mode 3 and set bits 0-3 to OUT (bit 0 is under FPGA control)
     [self writeRegister:kAuxIOConfig withValue:0x3025];
     // Read kAuxIOWrite to preserve bit 0, and zero bits used in SPI protocol
-    unsigned long spiBase = [self readRegister:kAuxIOWrite] & ~(kSPIData | kSPIClock | kSPIChipSelect); 
-    unsigned long value;
-    unsigned long readBack = 0;
+    uint32_t spiBase = [self readRegister:kAuxIOWrite] & ~(kSPIData | kSPIClock | kSPIChipSelect); 
+    uint32_t value;
+    uint32_t readBack = 0;
 	
     // set kSPIChipSelect to signify that we are starting
     [self writeRegister:kAuxIOWrite withValue:(kSPIChipSelect | kSPIClock | kSPIData)];
@@ -2570,7 +2570,7 @@ static struct {
 }
 - (BOOL) controllerIsSBC
 {
-    //long removeReturn;
+    //int32_t removeReturn;
     //return NO; //<<----- temp for testing
     if([[self adapter] isKindOfClass:NSClassFromString(@"ORVmecpuModel")])return YES;
     else return NO;
@@ -2585,7 +2585,7 @@ static struct {
     }
 }
 
-- (unsigned long) thresholdForDisplay:(unsigned short) aChan
+- (uint32_t) thresholdForDisplay:(unsigned short) aChan
 {
     return [self ledThreshold:aChan];
 }
@@ -2606,7 +2606,7 @@ static struct {
     return NO;
 }
 
-- (unsigned long) eventCount:(int)aChannel
+- (uint32_t) eventCount:(int)aChannel
 {
     return waveFormCount[aChannel];
 }
@@ -2672,7 +2672,7 @@ static struct {
                 [self writeToAddress:0x900 aValue:kGretina4ResetMainFPGACmd];
                 [self writeToAddress:0x900 aValue:kGretina4ReloadMainFPGACmd];
                 [self setProgressStateOnMainThread:  @"Finishing$Flash Memory-->FPGA"];
-                unsigned long statusRegValue = [self readFromAddress:0x904];
+                uint32_t statusRegValue = [self readFromAddress:0x904];
                 while(!(statusRegValue & kGretina4MainFPGAIsLoaded)) {
                     if(stopDownLoadingMainFPGA)return;
                     statusRegValue = [self readFromAddress:0x904];
@@ -2701,21 +2701,21 @@ static struct {
 	/* We only erase the blocks currently used in the Gretina4M specification. */
     [self writeToAddress:0x910 aValue:kGretina4FlashEnableWrite]; //Enable programming
 	[self setFpgaDownProgress:0.];
-    unsigned long count = 0;
-    unsigned long end = (kGretina4FlashBlocks / 4) * kGretina4FlashBlockSize;
-    unsigned long addr;
+    uint32_t count = 0;
+    uint32_t end = (kGretina4FlashBlocks / 4) * kGretina4FlashBlockSize;
+    uint32_t addr;
     [self setProgressStateOnMainThread:  @"Block Erase"];
     for (addr = 0; addr < end; addr += kGretina4FlashBlockSize) {
         
 		if(stopDownLoadingMainFPGA)return;
 		@try {
-            [self setFirmwareStatusString:       [NSString stringWithFormat:@"%lu of %d Blocks Erased",count,kGretina4FlashBufferBytes]];
+            [self setFirmwareStatusString:       [NSString stringWithFormat:@"%u of %d Blocks Erased",count,kGretina4FlashBufferBytes]];
  			[self setFpgaDownProgress: 100. * (count+1)/(float)kGretina4UsedFlashBlocks];
             
             [self writeToAddress:0x980 aValue:addr];
             [self writeToAddress:0x98C aValue:kGretina4FlashBlockEraseCmd];
             [self writeToAddress:0x98C aValue:kGretina4FlashConfirmCmd];
-            unsigned long stat = [self readFromAddress:0x904];
+            uint32_t stat = [self readFromAddress:0x904];
             while (stat & kFlashBusy) {
                 if(stopDownLoadingMainFPGA)break;
                 stat = [self readFromAddress:0x904];
@@ -2734,18 +2734,18 @@ static struct {
 
 - (void) programFlashBuffer:(NSData*)theData
 {
-    unsigned long totalSize = [theData length];
+    uint32_t totalSize = [theData length];
     
     [self setProgressStateOnMainThread:@"Programming"];
-    [self setFirmwareStatusString: [NSString stringWithFormat:@"FPGA File Size %lu KB",totalSize/1000]];
+    [self setFirmwareStatusString: [NSString stringWithFormat:@"FPGA File Size %u KB",totalSize/1000]];
     [self setFpgaDownProgress:0.];
     
     [self writeToAddress:0x980 aValue:0x00];
     [self writeToAddress:0x98C aValue:kGretina4FlashReadArrayCmd];
     
-    unsigned long address = 0x0;
+    uint32_t address = 0x0;
     while (address < totalSize ) {
-        unsigned long numberBytesToWrite;
+        uint32_t numberBytesToWrite;
         if(totalSize-address >= kGretina4FlashBufferBytes){
             numberBytesToWrite = kGretina4FlashBufferBytes; //whole block
         }
@@ -2759,7 +2759,7 @@ static struct {
         if(stopDownLoadingMainFPGA)break;
         
         
-        [self setFirmwareStatusString: [NSString stringWithFormat:@"Flashed: %lu/%lu KB",address/1000,totalSize/1000]];
+        [self setFirmwareStatusString: [NSString stringWithFormat:@"Flashed: %u/%u KB",address/1000,totalSize/1000]];
         
         [self setFpgaDownProgress:100. * address/(float)totalSize];
         
@@ -2775,18 +2775,18 @@ static struct {
     [self setProgressStateOnMainThread:@"Programming"];
 }
 
-- (void) programFlashBufferBlock:(NSData*)theData address:(unsigned long)anAddress numberBytes:(unsigned long)aNumber
+- (void) programFlashBufferBlock:(NSData*)theData address:(uint32_t)anAddress numberBytes:(uint32_t)aNumber
 {
     //issue the set-up command at the starting address
     [self writeToAddress:0x980 aValue:anAddress];
     [self writeToAddress:0x98C aValue:kGretina4FlashWriteCmd];
     unsigned char* theDataBytes = (unsigned char*)[theData bytes];
-    unsigned long statusRegValue;
+    uint32_t statusRegValue;
 	while(1) {
         if(stopDownLoadingMainFPGA)return;
 		
 		// Checking status to make sure that flash is ready
-        unsigned long statusRegValue = [self readFromAddress:0x904];
+        uint32_t statusRegValue = [self readFromAddress:0x904];
 		
 		if ( (statusRegValue & kFlashBusy)  == kFlashBusy ) {
             //not ready, so re-issue the set-up command
@@ -2797,14 +2797,14 @@ static struct {
 	}
     
 	//Set the word count. Max is 0xF.
-	unsigned long valueToWrite = (aNumber/2) - 1;
+	uint32_t valueToWrite = (aNumber/2) - 1;
     [self writeToAddress:0x98C aValue:valueToWrite];
 	
 	// Loading all the words in
     /* Load the words into the bufferToWrite */
-	unsigned long i;
+	uint32_t i;
 	for ( i=0; i<aNumber; i+=4 ) {
-        unsigned long* lPtr = (unsigned long*)&theDataBytes[anAddress+i];
+        uint32_t* lPtr = (uint32_t*)&theDataBytes[anAddress+i];
         [self writeToAddress:0x984 aValue:lPtr[0]];
 	}
 	
@@ -2821,36 +2821,36 @@ static struct {
 
 - (BOOL) verifyFlashBuffer:(NSData*)theData
 {
-    unsigned long totalSize = [theData length];
+    uint32_t totalSize = [theData length];
     unsigned char* theDataBytes = (unsigned char*)[theData bytes];
     
     [self setProgressStateOnMainThread:@"Verifying"];
-    [self setFirmwareStatusString: [NSString stringWithFormat:@"FPGA File Size %lu KB",totalSize/1000]];
+    [self setFirmwareStatusString: [NSString stringWithFormat:@"FPGA File Size %u KB",totalSize/1000]];
     [self setFpgaDownProgress:0.];
     
     /* First reset to make sure it is read mode. */
     [self writeToAddress:0x980 aValue:0x0];
     [self writeToAddress:0x98C aValue:kGretina4FlashReadArrayCmd];
     
-    unsigned long errorCount =   0;
-    unsigned long address    =   0;
-    unsigned long valueToCompare;
+    uint32_t errorCount =   0;
+    uint32_t address    =   0;
+    uint32_t valueToCompare;
     
     while ( address < totalSize ) {
-        unsigned long valueToRead = [self readFromAddress:0x984];
+        uint32_t valueToRead = [self readFromAddress:0x984];
         
         /* Now compare to file*/
         if ( address + 3 < totalSize) {
-            unsigned long* ptr = (unsigned long*)&theDataBytes[address];
+            uint32_t* ptr = (uint32_t*)&theDataBytes[address];
             valueToCompare = ptr[0];
         }
         else {
             //less than four bytes left
-            unsigned long numBytes = totalSize - address - 1;
+            uint32_t numBytes = totalSize - address - 1;
             valueToCompare = 0;
-            unsigned long i;
+            uint32_t i;
             for ( i=0;i<numBytes;i++) {
-                valueToCompare += (((unsigned long)theDataBytes[address]) << i*8) & (0xFF << i*8);
+                valueToCompare += (((uint32_t)theDataBytes[address]) << i*8) & (0xFF << i*8);
             }
         }
         if ( valueToRead != valueToCompare ) {
@@ -2860,7 +2860,7 @@ static struct {
             errorCount++;
         }
         
-        [self setFirmwareStatusString: [NSString stringWithFormat:@"Verified: %lu/%lu KB Errors: %lu",address/1000,totalSize/1000,errorCount]];
+        [self setFirmwareStatusString: [NSString stringWithFormat:@"Verified: %u/%u KB Errors: %u",address/1000,totalSize/1000,errorCount]];
         [self setFpgaDownProgress:100. * address/(float)totalSize];
         
         address += 4;
@@ -2884,7 +2884,7 @@ static struct {
     [self writeToAddress:0x900 aValue:kGretina4ResetMainFPGACmd];
     [self writeToAddress:0x900 aValue:kGretina4ReloadMainFPGACmd];
 	
-    unsigned long statusRegValue=[self readFromAddress:0x904];
+    uint32_t statusRegValue=[self readFromAddress:0x904];
     
     while(!(statusRegValue & kGretina4MainFPGAIsLoaded)) {
         if(stopDownLoadingMainFPGA)return;

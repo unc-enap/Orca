@@ -78,7 +78,7 @@
     ioSize			= NSMakeSize(630,665);
     setupSize		= NSMakeSize(630,665);
     
-    NSString* key = [NSString stringWithFormat: @"orca.ORLabJac%ld.selectedtab",[model uniqueIdNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORLabJac%d.selectedtab",[model uniqueIdNumber]];
     NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
@@ -300,7 +300,7 @@
     }
     [[self window] setContentView:totalView];
 	
-    NSString* key = [NSString stringWithFormat: @"orca.ORLabJac%ld.selectedtab",[model uniqueIdNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORLabJac%d.selectedtab",[model uniqueIdNumber]];
     NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
     
@@ -519,7 +519,7 @@
 - (void) doDirectionChanged:(NSNotification*)aNotification
 {
     //i/o on the connector
-	unsigned long value = [model doDirection];
+	uint32_t value = [model doDirection];
 	short i;
 	for(i=0;i<kNumU6IOChannels;i++){
 		[[doDirectionMatrix cellWithTag:i] setState:(value & (1L<<i))>0];
@@ -530,7 +530,7 @@
 
 - (void) doValueOutChanged:(NSNotification*)aNotification
 {
-	unsigned long value = [model doValueOut];
+	uint32_t value = [model doValueOut];
 	short i;
 	for(i=0;i<kNumU6IOChannels;i++){
 		[[doValueOutMatrix cellWithTag:i] setState:(value & (1L<<i))>0];

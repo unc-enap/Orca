@@ -55,7 +55,7 @@ extern NSString* ORObjArrayPtrPBType;
         //internal flags
         BOOL		aWake;
         NSUInteger   tag; //used by subclasses for identification
-        unsigned long uniqueIdNumber;
+        uint32_t uniqueIdNumber;
 }
 
 #pragma mark ¥¥¥Inialization
@@ -107,8 +107,8 @@ extern NSString* ORObjArrayPtrPBType;
 - (BOOL)        solitaryObject;
 - (BOOL)		solitaryInViewObject;
 - (void)        askForUniqueIDNumber;
-- (void)        setUniqueIdNumber:(unsigned long)anIdNumber;
-- (unsigned long) uniqueIdNumber;
+- (void)        setUniqueIdNumber:(uint32_t)anIdNumber;
+- (uint32_t) uniqueIdNumber;
 - (BOOL)        selectionAllowed;
 - (int) compareStringTo:(id)anElement usingKey:(NSString*)aKey;
 - (BOOL) isObjectInConnectionChain:(id)anObject;
@@ -196,8 +196,8 @@ extern NSString* ORObjArrayPtrPBType;
 - (void) addRunWaitFor:(id)anObject reason:(NSString*)aReason;
 - (void) releaseRunWaitFor:(id)anObject;
 
-- (unsigned long) processID;
-- (void) setProcessID:(unsigned long)aValue;
+- (uint32_t) processID;
+- (void) setProcessID:(uint32_t)aValue;
 
 @end
 

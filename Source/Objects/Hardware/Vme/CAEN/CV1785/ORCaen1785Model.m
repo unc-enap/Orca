@@ -150,23 +150,23 @@ NSString* ORCaen1785WriteValueChanged			= @"ORCaen1785WriteValueChanged";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORCaen1785SelectedChannelChanged object:self];
 }
 
-- (unsigned long) writeValue
+- (uint32_t) writeValue
 {
     return writeValue;
 }
 
-- (void) setWriteValue:(unsigned long) aValue
+- (void) setWriteValue:(uint32_t) aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setWriteValue:[self writeValue]];
     writeValue = aValue;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORCaen1785WriteValueChanged object:self];
 }
-- (unsigned long) lowThreshold:(unsigned short) aChnl
+- (uint32_t) lowThreshold:(unsigned short) aChnl
 {
     return lowThresholds[aChnl];
 }
 
-- (void) setLowThreshold:(unsigned short) aChnl withValue:(unsigned long) aValue
+- (void) setLowThreshold:(unsigned short) aChnl withValue:(uint32_t) aValue
 {
 	if(aValue>0xff)aValue = 0xff;
     [[[self undoManager] prepareWithInvocationTarget:self] setLowThreshold:aChnl withValue:[self lowThreshold:aChnl]];
@@ -176,12 +176,12 @@ NSString* ORCaen1785WriteValueChanged			= @"ORCaen1785WriteValueChanged";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORCaen1785LowThresholdChanged object:self userInfo:userInfo];
 }
 
-- (unsigned long) highThreshold:(unsigned short) aChnl
+- (uint32_t) highThreshold:(unsigned short) aChnl
 {
     return highThresholds[aChnl];
 }
 
-- (void) setHighThreshold:(unsigned short) aChnl withValue:(unsigned long) aValue
+- (void) setHighThreshold:(unsigned short) aChnl withValue:(uint32_t) aValue
 {
 	if(aValue>0xff)aValue = 0xff;
     [[[self undoManager] prepareWithInvocationTarget:self] setHighThreshold:aChnl withValue:[self highThreshold:aChnl]];
@@ -280,7 +280,7 @@ NSString* ORCaen1785WriteValueChanged			= @"ORCaen1785WriteValueChanged";
 			
             if([[tempDataPacket dataArray]count]){
 				NSData* theData = [[tempDataPacket dataArray] objectAtIndex:0];
-				unsigned long* someData = (unsigned long*)[theData bytes];
+				uint32_t* someData = (uint32_t*)[theData bytes];
                 ORCaen1785DecoderForAdc* aDecoder = [[ORCaen1785DecoderForAdc alloc] init];
                 [aDecoder printData:@"CAEN 1785" data:someData];
                 [aDecoder release];
@@ -306,7 +306,7 @@ NSString* ORCaen1785WriteValueChanged			= @"ORCaen1785WriteValueChanged";
 - (void) write
 {
     // Get the value - Already validated by stepper.
-    unsigned long theValue =  [self writeValue];
+    uint32_t theValue =  [self writeValue];
     // Get register and channel from dialog box.
     short theChannelIndex	= [self selectedChannel];
     short theRegIndex 		= [self selectedRegIndex];
@@ -392,13 +392,13 @@ NSString* ORCaen1785WriteValueChanged			= @"ORCaen1785WriteValueChanged";
 		*((unsigned short*)pValue) = aValue;
 	}
 	else {
-		unsigned long aValue;
+		uint32_t aValue;
 		[[self adapter] readLongBlock:&aValue
 							atAddress:[self baseAddress] + [self getAddressOffset:pReg]
 							numToRead:1
 						   withAddMod:[self addressModifier]
 						usingAddSpace:0x01];
-		*((unsigned long*)pValue) = aValue;
+		*((uint32_t*)pValue) = aValue;
 	}
 }
 
@@ -484,7 +484,7 @@ NSString* ORCaen1785WriteValueChanged			= @"ORCaen1785WriteValueChanged";
     return kNumRegisters;
 }
 
-- (unsigned long) getBufferOffset
+- (uint32_t) getBufferOffset
 {
     return reg[kOutputBuffer].addressOffset;
 
@@ -511,7 +511,7 @@ NSString* ORCaen1785WriteValueChanged			= @"ORCaen1785WriteValueChanged";
 {
     return reg[anIndex].regName;
 }
-- (unsigned long) getAddressOffset:(short) anIndex
+- (uint32_t) getAddressOffset:(short) anIndex
 {
     return(reg[anIndex].addressOffset);
 }
@@ -586,8 +586,8 @@ NSString* ORCaen1785WriteValueChanged			= @"ORCaen1785WriteValueChanged";
     [self setDataId:[anotherObj dataId]];
 }
 
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -672,7 +672,7 @@ NSString* ORCaen1785WriteValueChanged			= @"ORCaen1785WriteValueChanged";
 		
 		if(statusValue & 0x1){
 			//OK, at least one data value is ready
-			unsigned long dataValue;
+			uint32_t dataValue;
 			[controller readLongBlock:&dataValue
 							atAddress:dataBufferAddress
 							numToRead:1
@@ -686,7 +686,7 @@ NSString* ORCaen1785WriteValueChanged			= @"ORCaen1785WriteValueChanged";
 				int numMemorizedChannels = ShiftAndExtract(dataValue,8,0x3f);
 				int i;
 				if((numMemorizedChannels>0)){
-					unsigned long dataRecord[0xffff];
+					uint32_t dataRecord[0xffff];
 					//we fill in dataRecord[0] below once we know the final size
 					dataRecord[1] = location;
 					int index = 2;
@@ -734,7 +734,7 @@ NSString* ORCaen1785WriteValueChanged			= @"ORCaen1785WriteValueChanged";
 				//flush the buffer, read until not valid datum
 				int i;
 				for(i=0;i<0x07FC;i++) {
-					unsigned long dataValue;
+					uint32_t dataValue;
 					[controller readLongBlock:&dataValue
 									atAddress:dataBufferAddress
 									numToRead:1
@@ -839,7 +839,7 @@ NSString* ORCaen1785WriteValueChanged			= @"ORCaen1785WriteValueChanged";
     return YES;
 }
 
-- (unsigned long) adcCount:(int)aChannel
+- (uint32_t) adcCount:(int)aChannel
 {
     return adcCount[aChannel];
 }
@@ -858,7 +858,7 @@ NSString* ORCaen1785WriteValueChanged			= @"ORCaen1785WriteValueChanged";
     }
 }
 
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
 {
 	if(groupTag == 0){
 		if(counterTag>=0 && counterTag<kCV1785NumberChannels){

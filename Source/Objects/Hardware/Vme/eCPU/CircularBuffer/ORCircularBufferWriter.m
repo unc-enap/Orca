@@ -26,12 +26,12 @@
 @implementation ORCircularBufferWriter
 
 #pragma mark •••Accessors
-- (void) setMaximumMemorySize:(unsigned long) aSize
+- (void) setMaximumMemorySize:(uint32_t) aSize
 {
 	maximumMemorySize = aSize;
 }
 
-- (unsigned long) maximumMemorySize
+- (uint32_t) maximumMemorySize
 {
 	return maximumMemorySize;
 }
@@ -40,7 +40,7 @@
 {
 	SCBHeader theControlBlockHeader = [self readControlBlockHeader];;
 	theControlBlockHeader.writeSentinel &= 0xff000000;
-	[self writeLong:[self baseAddress]+0x24 value:(unsigned long)theControlBlockHeader.writeSentinel];
+	[self writeLong:[self baseAddress]+0x24 value:(uint32_t)theControlBlockHeader.writeSentinel];
 	theControlBlockHeader.tCBWordSize = sizeof( tCBWord );
 	theControlBlockHeader.cbNumWords = (maximumMemorySize - sizeof(SCBHeader))/sizeof(tCBWord);
 	theControlBlockHeader.qHead = (tCBWord *)([self baseAddress] + sizeof( SCBHeader ) - sizeof( tCBWord ));
@@ -52,7 +52,7 @@
 	theControlBlockHeader.bytesRead = 0L;
 	[self writeControlBlockHeader:theControlBlockHeader];
 				// Tail is only written at initialization by the writer - so use a special case
-	[self writeLong:[self baseAddress]+0x18 value:(unsigned long)theControlBlockHeader.qTail];
+	[self writeLong:[self baseAddress]+0x18 value:(uint32_t)theControlBlockHeader.qTail];
 	[self writeLong:[self baseAddress]+0x1C value:theControlBlockHeader.blocksRead];
 	[self writeLong:[self baseAddress]+0x20 value:theControlBlockHeader.bytesRead];
 				// the sentinel is only restored after all loads are complete - so use a special case
@@ -67,7 +67,7 @@
 {
 		[self writeLong:[self baseAddress]+0x00 value:aControlBlockHeader.tCBWordSize];
 		[self writeLong:[self baseAddress]+0x04 value:aControlBlockHeader.cbNumWords];
-		[self writeLong:[self baseAddress]+0x08 value:(unsigned long)aControlBlockHeader.qHead];
+		[self writeLong:[self baseAddress]+0x08 value:(uint32_t)aControlBlockHeader.qHead];
 		[self writeLong:[self baseAddress]+0x0C value:aControlBlockHeader.blocksLostToFullBuffer];
 		[self writeLong:[self baseAddress]+0x10 value:aControlBlockHeader.blocksWritten];
 		[self writeLong:[self baseAddress]+0x14 value:aControlBlockHeader.bytesWritten];
@@ -76,21 +76,21 @@
 - (tCBWord) addBlock:(tCBWord*)aBlockOfMemory size:(tCBWord) aLongWordsInBlock
 {
 		SCBHeader theControlBlockHeader = [self readControlBlockHeader];
-		unsigned long theQueueSize = theControlBlockHeader.cbNumWords;
-		unsigned long theWordsToAdd = (unsigned long)aLongWordsInBlock + 1;
+		uint32_t theQueueSize = theControlBlockHeader.cbNumWords;
+		uint32_t theWordsToAdd = (uint32_t)aLongWordsInBlock + 1;
 		// Do nothing if sentinel does not exist
 		if( (theControlBlockHeader.writeSentinel & 0x00ffffff) != CB_SENTINEL) return CB_SENTINEL_INVALID;
 		// Calculate the space remaining in the queue
-		unsigned long theQHeadAddress = (unsigned long)theControlBlockHeader.qHead;
-		unsigned long theQTailAddress = (unsigned long)theControlBlockHeader.qTail;
+		uint32_t theQHeadAddress = (uint32_t)theControlBlockHeader.qHead;
+		uint32_t theQTailAddress = (uint32_t)theControlBlockHeader.qTail;
 		if(theControlBlockHeader.writeSentinel != theControlBlockHeader.readSentinel)
 			theQTailAddress = [self baseAddress] + sizeof( SCBHeader ) - sizeof( tCBWord );
-		unsigned long theSpaceRemainingInWords;
+		uint32_t theSpaceRemainingInWords;
 		if( theQHeadAddress >= theQTailAddress ) {
-			theSpaceRemainingInWords = theQueueSize - (theQHeadAddress - theQTailAddress)/sizeof(unsigned long);
+			theSpaceRemainingInWords = theQueueSize - (theQHeadAddress - theQTailAddress)/sizeof(uint32_t);
 		}
 		else {
-			theSpaceRemainingInWords = (theQTailAddress - theQHeadAddress)/sizeof(unsigned long);
+			theSpaceRemainingInWords = (theQTailAddress - theQHeadAddress)/sizeof(uint32_t);
 		}
 		if( theWordsToAdd >= theSpaceRemainingInWords ) {
 			theControlBlockHeader.blocksLostToFullBuffer++;
@@ -99,20 +99,20 @@
 		}
 		// Write the length of the block to the start of the queue
 		[self writeLong:theQHeadAddress value:theWordsToAdd];
-		theQHeadAddress += sizeof(unsigned long);
+		theQHeadAddress += sizeof(uint32_t);
 		// Now write the block to vme check to see if this will wrap around the buffer
-		if( (theQHeadAddress + aLongWordsInBlock*sizeof(unsigned long)) < ([self baseAddress] + sizeof(unsigned long)*theQueueSize + sizeof(SCBHeader) - sizeof( unsigned long)) ) {
+		if( (theQHeadAddress + aLongWordsInBlock*sizeof(uint32_t)) < ([self baseAddress] + sizeof(uint32_t)*theQueueSize + sizeof(SCBHeader) - sizeof( uint32_t)) ) {
 			[self writeLongBlock:theQHeadAddress blocks:aLongWordsInBlock atPtr:aBlockOfMemory];
-			theQHeadAddress += aLongWordsInBlock*sizeof(unsigned long);
+			theQHeadAddress += aLongWordsInBlock*sizeof(uint32_t);
 		}
 		else {
-			unsigned long theNumberOfLongWordsToWrite = ([self baseAddress] + sizeof(SCBHeader) - sizeof(unsigned long) + sizeof(unsigned long)*theQueueSize - theQHeadAddress)/sizeof(unsigned long);
+			uint32_t theNumberOfLongWordsToWrite = ([self baseAddress] + sizeof(SCBHeader) - sizeof(uint32_t) + sizeof(uint32_t)*theQueueSize - theQHeadAddress)/sizeof(uint32_t);
 			//		if( theNumberOfLongWordsToWrite != 0 ) theNumberOfLongWordsToWrite--;	// EGW code never writes to the last block so neither will I !!!
 			[self writeLongBlock:theQHeadAddress blocks:theNumberOfLongWordsToWrite atPtr:aBlockOfMemory];
 			theQHeadAddress = [self baseAddress] + sizeof( SCBHeader ) - sizeof( tCBWord );
 			[self writeLongBlock:theQHeadAddress blocks:aLongWordsInBlock - theNumberOfLongWordsToWrite
 							  atPtr:aBlockOfMemory+theNumberOfLongWordsToWrite];
-			theQHeadAddress += (aLongWordsInBlock - theNumberOfLongWordsToWrite)*sizeof(unsigned long);
+			theQHeadAddress += (aLongWordsInBlock - theNumberOfLongWordsToWrite)*sizeof(uint32_t);
 		}
 		// update the header
 		theControlBlockHeader.qHead = (tCBWord *)theQHeadAddress;
@@ -126,7 +126,7 @@
 
 - (tCBWord) addByteBlock:( char *)inDataP size:(short) dataSize
 {
-	unsigned long wordsToAdd = dataSize;
+	uint32_t wordsToAdd = dataSize;
 	tCBWord bytesAdded;
 	wordsToAdd /= sizeof(tCBWord);
 	wordsToAdd += (dataSize % sizeof(tCBWord)) ? 1 : 0;

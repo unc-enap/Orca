@@ -205,8 +205,8 @@ NSString* ORIpeV4SLTModelDisplayEventLoopChanged	= @"ORIpeV4SLTModelDisplayEvent
 NSString* ORSLTV4cpuLock							= @"ORSLTV4cpuLock";
 
 @interface ORIpeV4SLTModel (private)
-- (unsigned long) read:(unsigned long) address;
-- (void) write:(unsigned long) address value:(unsigned long) aValue;
+- (uint32_t) read:(uint32_t) address;
+- (void) write:(uint32_t) address value:(uint32_t) aValue;
 @end
 
 @implementation ORIpeV4SLTModel
@@ -406,48 +406,48 @@ NSString* ORSLTV4cpuLock							= @"ORSLTV4cpuLock";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORIpeV4SLTModelCountersEnabledChanged object:self];
 }
 
-- (unsigned long) clockTime
+- (uint32_t) clockTime
 {
     return clockTime;
 }
 
-- (void) setClockTime:(unsigned long)aClockTime
+- (void) setClockTime:(uint32_t)aClockTime
 {
     clockTime = aClockTime;
 
     [[NSNotificationCenter defaultCenter] postNotificationName:ORIpeV4SLTModelClockTimeChanged object:self];
 }
 
-- (unsigned long long) runTime
+- (uint64_t) runTime
 {
     return runTime;
 }
 
-- (void) setRunTime:(unsigned long long)aRunTime
+- (void) setRunTime:(uint64_t)aRunTime
 {
     runTime = aRunTime;
 
     [[NSNotificationCenter defaultCenter] postNotificationName:ORIpeV4SLTModelRunTimeChanged object:self];
 }
 
-- (unsigned long long) vetoTime
+- (uint64_t) vetoTime
 {
     return vetoTime;
 }
 
-- (void) setVetoTime:(unsigned long long)aVetoTime
+- (void) setVetoTime:(uint64_t)aVetoTime
 {
     vetoTime = aVetoTime;
 
     [[NSNotificationCenter defaultCenter] postNotificationName:ORIpeV4SLTModelVetoTimeChanged object:self];
 }
 
-- (unsigned long long) deadTime
+- (uint64_t) deadTime
 {
     return deadTime;
 }
 
-- (void) setDeadTime:(unsigned long long)aDeadTime
+- (void) setDeadTime:(uint64_t)aDeadTime
 {
     deadTime = aDeadTime;
 
@@ -455,53 +455,53 @@ NSString* ORSLTV4cpuLock							= @"ORSLTV4cpuLock";
 }
 
 
-- (unsigned long) secondsSet
+- (uint32_t) secondsSet
 {
     return secondsSet;
 }
 
-- (void) setSecondsSet:(unsigned long)aSecondsSet
+- (void) setSecondsSet:(uint32_t)aSecondsSet
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setSecondsSet:secondsSet];
     secondsSet = aSecondsSet;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORIpeV4SLTModelSecondsSetChanged object:self];
 }
 
-- (unsigned long) statusReg
+- (uint32_t) statusReg
 {
     return statusReg;
 }
 
-- (void) setStatusReg:(unsigned long)aStatusReg
+- (void) setStatusReg:(uint32_t)aStatusReg
 {
     statusReg = aStatusReg;
 
     [[NSNotificationCenter defaultCenter] postNotificationName:ORIpeV4SLTModelStatusRegChanged object:self];
 }
 
-- (unsigned long) controlReg
+- (uint32_t) controlReg
 {
     return controlReg;
 }
 
-- (void) setControlReg:(unsigned long)aControlReg
+- (void) setControlReg:(uint32_t)aControlReg
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setControlReg:controlReg];
     controlReg = aControlReg;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORIpeV4SLTModelControlRegChanged object:self];
 }
 
-- (unsigned long) projectVersion  { return (hwVersion & kRevisionProject)>>28;}
-- (unsigned long) documentVersion { return (hwVersion & kDocRevision)>>16;}
-- (unsigned long) implementation  { return hwVersion & kImplemention;}
+- (uint32_t) projectVersion  { return (hwVersion & kRevisionProject)>>28;}
+- (uint32_t) documentVersion { return (hwVersion & kDocRevision)>>16;}
+- (uint32_t) implementation  { return hwVersion & kImplemention;}
 
-- (void) setHwVersion:(unsigned long) aVersion
+- (void) setHwVersion:(uint32_t) aVersion
 {
 	hwVersion = aVersion;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORIpeV4SLTModelHwVersionChanged object:self];	
 }
 
-- (void) writePageSelect:(unsigned long)aPageNum		{ [self writeReg:kSltV4PageSelectReg value:aPageNum]; }
+- (void) writePageSelect:(uint32_t)aPageNum		{ [self writeReg:kSltV4PageSelectReg value:aPageNum]; }
 - (void) writeSetInhibit		{ [self writeReg:kSltV4CommandReg value:kCmdSetInh]; }
 - (void) writeClrInhibit		{ [self writeReg:kSltV4CommandReg value:kCmdClrInh]; }
 - (void) writeTpStart			{ [self writeReg:kSltV4CommandReg value:kCmdTpStart];   }
@@ -678,12 +678,12 @@ NSString* ORSLTV4cpuLock							= @"ORSLTV4cpuLock";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORIpeV4SLTModelPatternFilePathChanged object:self];
 }
 
-- (unsigned long) nextPageDelay
+- (uint32_t) nextPageDelay
 {
 	return nextPageDelay;
 }
 
-- (void) setNextPageDelay:(unsigned long)aDelay
+- (void) setNextPageDelay:(uint32_t)aDelay
 {	
 	if(aDelay>102400) aDelay = 102400;
 	
@@ -695,12 +695,12 @@ NSString* ORSLTV4cpuLock							= @"ORSLTV4cpuLock";
 	
 }
 
-- (unsigned long) interruptMask
+- (uint32_t) interruptMask
 {
     return interruptMask;
 }
 
-- (void) setInterruptMask:(unsigned long)aInterruptMask
+- (void) setInterruptMask:(uint32_t)aInterruptMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setInterruptMask:interruptMask];
     interruptMask = aInterruptMask;
@@ -768,7 +768,7 @@ NSString* ORSLTV4cpuLock							= @"ORSLTV4cpuLock";
     return regSLTV4[anIndex].regName;
 }
 
-- (unsigned long) getAddress: (short) anIndex
+- (uint32_t) getAddress: (short) anIndex
 {
     return( regSLTV4[anIndex].addressOffset>>2);
 }
@@ -794,12 +794,12 @@ NSString* ORSLTV4cpuLock							= @"ORSLTV4cpuLock";
 	 object:self];
 }
 
-- (unsigned long) writeValue
+- (uint32_t) writeValue
 {
     return writeValue;
 }
 
-- (void) setWriteValue:(unsigned long) aValue
+- (void) setWriteValue:(uint32_t) aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setWriteValue:[self writeValue]];
     
@@ -839,12 +839,12 @@ NSString* ORSLTV4cpuLock							= @"ORSLTV4cpuLock";
 	
 }
 
-- (unsigned long) pageSize
+- (uint32_t) pageSize
 {
 	return pageSize;
 }
 
-- (void) setPageSize: (unsigned long) aPageSize
+- (void) setPageSize: (uint32_t) aPageSize
 {
 	
 	[[[self undoManager] prepareWithInvocationTarget:self] setPageSize:pageSize];
@@ -1007,8 +1007,8 @@ NSLog(@"  arguments: %@ \n" , arguments);
 		[scanner scanInt:&amplitude];
 		int i=0;
 		int j=0;
-		unsigned long time[256];
-		unsigned long mask[20][256];
+		uint32_t time[256];
+		uint32_t mask[20][256];
 		int len = 0;
 		BOOL status;
 		while(1){
@@ -1099,38 +1099,38 @@ NSLog(@"  arguments: %@ \n" , arguments);
 }
 */
 
-- (void) writeReg:(short)index value:(unsigned long)aValue
+- (void) writeReg:(short)index value:(uint32_t)aValue
 {
 	[self write: [self getAddress:index] value:aValue];
 }
 
-- (void)		  rawWriteReg:(unsigned long) address  value:(unsigned long)aValue
+- (void)		  rawWriteReg:(uint32_t) address  value:(uint32_t)aValue
 //TODO: FOR TESTING AND DEBUGGING ONLY -tb-
 {
     [self write: address value: aValue];
 }
 
-- (unsigned long) rawReadReg:(unsigned long) address
+- (uint32_t) rawReadReg:(uint32_t) address
 //TODO: FOR TESTING AND DEBUGGING ONLY -tb-
 {
 	return [self read: address];
 
 }
 
-- (unsigned long) readReg:(short) index
+- (uint32_t) readReg:(short) index
 {
 	return [self read: [self getAddress:index]];
 
 }
 
-- (id) writeHardwareRegisterCmd:(unsigned long) regAddress value:(unsigned long) aValue
+- (id) writeHardwareRegisterCmd:(uint32_t) regAddress value:(uint32_t) aValue
 {
 	return [ORPMCReadWriteCommand writeLongBlock:&aValue
 									   atAddress:regAddress
 									  numToWrite:1];
 }
 
-- (id) readHardwareRegisterCmd:(unsigned long) regAddress
+- (id) readHardwareRegisterCmd:(uint32_t) regAddress
 {
 	return [ORPMCReadWriteCommand readLongBlockAtAddress:regAddress
 									  numToRead:1];
@@ -1153,22 +1153,22 @@ NSLog(@"  arguments: %@ \n" , arguments);
 	[self getSeconds];
 }
 
-- (unsigned long) readPageSelectReg
+- (uint32_t) readPageSelectReg
 {
-	unsigned long data = [self readReg:kSltV4PageSelectReg];
+	uint32_t data = [self readReg:kSltV4PageSelectReg];
 	return data;
 }
 
-- (unsigned long) readStatusReg
+- (uint32_t) readStatusReg
 {
-	unsigned long data = [self readReg:kSltV4StatusReg];
+	uint32_t data = [self readReg:kSltV4StatusReg];
 	[self setStatusReg:data];
 	return data;
 }
 
 - (void) printStatusReg
 {
-	unsigned long data = [self readStatusReg];
+	uint32_t data = [self readStatusReg];
 	NSFont* aFont = [NSFont userFixedPitchFontOfSize:10];
 	NSLogFont(aFont,@"----Status Register %@ ----\n",[self fullID]);
 	NSLogFont(aFont,@"WatchDogError : %@\n",IsBitSet(data,kStatusWDog)?@"YES":@"NO");
@@ -1180,9 +1180,9 @@ NSLog(@"  arguments: %@ \n" , arguments);
 	NSLogFont(aFont,@"FanError      : %@\n",IsBitSet(data,kStatusFanErr)?@"YES":@"NO");
 }
 
-- (long) getSBCCodeVersion
+- (int32_t) getSBCCodeVersion
 {
-	long theVersion = 0;
+	int32_t theVersion = 0;
 	if(![pmcLink isConnected]){
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];
 	}
@@ -1194,9 +1194,9 @@ NSLog(@"  arguments: %@ \n" , arguments);
 	return theVersion;
 }
 
-- (long) getFdhwlibVersion
+- (int32_t) getFdhwlibVersion
 {
-	long theVersion = 0;
+	int32_t theVersion = 0;
 	if(![pmcLink isConnected]){
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];
 	}
@@ -1206,9 +1206,9 @@ NSLog(@"  arguments: %@ \n" , arguments);
 	return theVersion;
 }
 
-- (long) getSltPciDriverVersion
+- (int32_t) getSltPciDriverVersion
 {
-	long theVersion = 0;
+	int32_t theVersion = 0;
 	if(![pmcLink isConnected]){
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];
 	}
@@ -1218,9 +1218,9 @@ NSLog(@"  arguments: %@ \n" , arguments);
 	return theVersion;
 }
 
-- (long) getSltkGetIsLinkedWithPCIDMALib  //TODO: write a all purpose method for generalRead!!! -tb-
+- (int32_t) getSltkGetIsLinkedWithPCIDMALib  //TODO: write a all purpose method for generalRead!!! -tb-
 {
-	long theVersion = 0;
+	int32_t theVersion = 0;
 	if(![pmcLink isConnected]){
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];
 	}
@@ -1241,16 +1241,16 @@ NSLog(@"  arguments: %@ \n" , arguments);
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];
 	}
 	else {
-		[pmcLink writeGeneral:(long*)&args operation:kSetHostTimeToFLTsAndSLT numToWrite:2];
+		[pmcLink writeGeneral:(int32_t*)&args operation:kSetHostTimeToFLTsAndSLT numToWrite:2];
 		//[pmcLink writeGeneral:&args operation:kSetHostTimeToFLTsAndSLT numToWrite:2];
             //WARNING:
             //this produced a compiler warning; I did NOT remove it to not forget that we expect uint32_t on the SBCs
-            //in Orca, sizeof(long) is 4 byte; SBCs may be 64 bit machines -> sizeof(long) is 8 byte!  -tb- 2012-12
+            //in Orca, sizeof(int32_t) is 4 byte; SBCs may be 64 bit machines -> sizeof(int32_t) is 8 byte!  -tb- 2012-12
 	}
 }
 
 
-- (void) readEventStatus:(unsigned long*)eventStatusBuffer
+- (void) readEventStatus:(uint32_t*)eventStatusBuffer
 {
 	if(![pmcLink isConnected]){
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];
@@ -1261,25 +1261,25 @@ NSLog(@"  arguments: %@ \n" , arguments);
 	
 }
 
-- (unsigned long long) readBoardID
+- (uint64_t) readBoardID
 {
-	unsigned long low = [self readReg:kSltV4BoardIDLoReg];
-	unsigned long hi  = [self readReg:kSltV4BoardIDHiReg];
+	uint32_t low = [self readReg:kSltV4BoardIDLoReg];
+	uint32_t hi  = [self readReg:kSltV4BoardIDHiReg];
 	BOOL crc =(hi & 0x80000000)==0x80000000;
 	if(crc){
-		return (unsigned long long)(hi & 0xffff)<<32 | low;
+		return (uint64_t)(hi & 0xffff)<<32 | low;
 	}
 	else return 0;
 }
 
-- (unsigned long) readControlReg
+- (uint32_t) readControlReg
 {
 	return [self readReg:kSltV4ControlReg];
 }
 
 - (void) printControlReg
 {
-	unsigned long data = [self readControlReg];
+	uint32_t data = [self readControlReg];
 	NSFont* aFont = [NSFont userFixedPitchFontOfSize:10];
 	NSLogFont(aFont,@"----Control Register %@ ----\n",[self fullID]);
 	NSLogFont(aFont,@"Trigger Enable : 0x%02x\n",data & kCtrlTrgEnMask);
@@ -1319,7 +1319,7 @@ return;
 //    }
 //
 //    // add option to set system time of PrPMC/crate computer? -tb- DONE.
-//    unsigned long secSetpoint = secondsSet;
+//    uint32_t secSetpoint = secondsSet;
 //    if(secondsSetInitWithHost){
 //        struct timeval t;//    call with struct timezone tz; is obsolete ... -tb-
 //        gettimeofday(&t,NULL);
@@ -1381,7 +1381,7 @@ return;
 
 - (void) printInterrupt:(int)regIndex
 {
-	unsigned long data = [self readReg:regIndex];
+	uint32_t data = [self readReg:regIndex];
 	NSFont* aFont = [NSFont userFixedPitchFontOfSize:10];
 	if(!data)NSLogFont(aFont,@"Interrupt Mask is Clear (No interrupts %@)\n",regIndex==kSltV4InterruptReguestReg?@"Requested":@"Enabled");
 	else {
@@ -1407,9 +1407,9 @@ return;
 	}
 }
 
-- (unsigned long) readHwVersion
+- (uint32_t) readHwVersion
 {
-	unsigned long value=0;
+	uint32_t value=0;
 	@try {
         value = [self readReg: kSltV4HWRevisionReg];
 		[self setHwVersion: value];	
@@ -1419,43 +1419,43 @@ return;
 	return value;
 }
 
-- (unsigned long long) readDeadTime
+- (uint64_t) readDeadTime
 {
-	unsigned long low  = [self readReg:kSltV4DeadTimeCounterLoReg];
-	unsigned long high = [self readReg:kSltV4DeadTimeCounterHiReg];
-	[self setDeadTime:((unsigned long long)high << 32) | low];
+	uint32_t low  = [self readReg:kSltV4DeadTimeCounterLoReg];
+	uint32_t high = [self readReg:kSltV4DeadTimeCounterHiReg];
+	[self setDeadTime:((uint64_t)high << 32) | low];
 	return deadTime;
 }
 
-- (unsigned long long) readVetoTime
+- (uint64_t) readVetoTime
 {
-	unsigned long low  = [self readReg:kSltV4VetoCounterLoReg];
-	unsigned long high = [self readReg:kSltV4VetoCounterHiReg];
-	[self setVetoTime:((unsigned long long)high << 32) | low];
+	uint32_t low  = [self readReg:kSltV4VetoCounterLoReg];
+	uint32_t high = [self readReg:kSltV4VetoCounterHiReg];
+	[self setVetoTime:((uint64_t)high << 32) | low];
 	return vetoTime;
 }
 
-- (unsigned long long) readRunTime
+- (uint64_t) readRunTime
 {
-	unsigned long long low  = [self readReg:kSltV4RunCounterLoReg];
-	unsigned long long high = [self readReg:kSltV4RunCounterHiReg];
-	unsigned long long theTime = ((unsigned long long)high << 32) | low;
+	uint64_t low  = [self readReg:kSltV4RunCounterLoReg];
+	uint64_t high = [self readReg:kSltV4RunCounterHiReg];
+	uint64_t theTime = ((uint64_t)high << 32) | low;
 	//NSLog(@"runtime lo %llx high %llx   ---   time %llx  %llu\n",low,high, theTime, theTime);
 	[self setRunTime:theTime];
 	return theTime;
 }
 
-- (unsigned long) readSecondsCounter
+- (uint32_t) readSecondsCounter
 {
 	return [self readReg:kSltV4SecondCounterReg];
 }
 
-- (unsigned long) readSubSecondsCounter
+- (uint32_t) readSubSecondsCounter
 {
 	return [self readReg:kSltV4SubSecondCounterReg];
 }
 
-- (unsigned long) getSeconds
+- (uint32_t) getSeconds
 {
 	[self readSubSecondsCounter]; //must read the sub seconds to load the seconds register
 	[self setClockTime: [self readSecondsCounter]];
@@ -1492,10 +1492,10 @@ return;
 //	triggerSource = 0x1; //sw trigger only
 //	inhibitSource = 0x3; 
 //	[self writePageManagerReset];
-	//unsigned long long p1 = ((unsigned long long)[self readReg:kPageStatusHigh]<<32) | [self readReg:kPageStatusLow];
+	//uint64_t p1 = ((uint64_t)[self readReg:kPageStatusHigh]<<32) | [self readReg:kPageStatusLow];
 	//[self writeReg:kSltSwRelInhibit value:0];
 	//int i = 0;
-	//unsigned long lTmp;
+	//uint32_t lTmp;
     //do {
 	//	lTmp = [self readReg:kSltStatusReg];
 		//NSLog(@"waiting for inhibit %x i=%d\n", lTmp, i);
@@ -1508,7 +1508,7 @@ return;
 		//[NSException raise:@"SLT error" format:@"Release inhibit failed"];
 	//}
 /*	
-	unsigned long long p2  = ((unsigned long long)[self readReg:kPageStatusHigh]<<32) | [self readReg:kPageStatusLow];
+	uint64_t p2  = ((uint64_t)[self readReg:kPageStatusHigh]<<32) | [self readReg:kPageStatusLow];
 	if(p1 == p2) NSLog (@"No software trigger\n");
 	[self writeReg:kSltSwSetInhibit value:0];
  */
@@ -1687,10 +1687,10 @@ return;
     return dataDictionary;
 }
 
-- (unsigned long) eventDataId        { return eventDataId; }
-- (unsigned long) multiplicityId	 { return multiplicityId; }
-- (void) setEventDataId: (unsigned long) aDataId    { eventDataId = aDataId; }
-- (void) setMultiplicityId: (unsigned long) aDataId { multiplicityId = aDataId; }
+- (uint32_t) eventDataId        { return eventDataId; }
+- (uint32_t) multiplicityId	 { return multiplicityId; }
+- (void) setEventDataId: (uint32_t) aDataId    { eventDataId = aDataId; }
+- (void) setMultiplicityId: (uint32_t) aDataId { multiplicityId = aDataId; }
 
 - (void) setDataIds:(id)assigner
 {
@@ -1717,7 +1717,7 @@ return;
     //this is accessing the hardware and might fail
 	@try {
 	    [objDictionary setObject:[NSNumber numberWithUnsignedLong:[self readHwVersion]]		forKey:@"FPGAVersion"];
-	    [objDictionary setObject:[NSString stringWithFormat:@"0x%08lx",[self readHwVersion]]		forKey:@"FPGAVersionString"];
+	    [objDictionary setObject:[NSString stringWithFormat:@"0x%08x",[self readHwVersion]]		forKey:@"FPGAVersionString"];
 	    [objDictionary setObject:[NSNumber numberWithLong:[self getSBCCodeVersion]]		forKey:@"SBCCodeVersion"];
 	    [objDictionary setObject:[NSNumber numberWithLong:[self getSltPciDriverVersion]]		forKey:@"SLTDriverVersion"];
 	    [objDictionary setObject:[NSNumber numberWithLong:[self getSltkGetIsLinkedWithPCIDMALib]]		forKey:@"LinkedWithDMALib"];
@@ -1813,7 +1813,7 @@ return;
     //if there are FLTs in non-histogramming mode, the filter will start after next 1PPs - wait for it ... -tb-
     if(countNonHistoMode && [[userInfo objectForKey:@"doinit"]intValue]){
         //wait for next second strobe/1PPs
-		unsigned long i,subsec0, subsec1 = 0;
+		uint32_t i,subsec0, subsec1 = 0;
 		subsec0 = [self readSubSecondsCounter];
         for(i=0; i<1000; i++){
 		    subsec1 = [self readSubSecondsCounter];
@@ -1875,7 +1875,7 @@ return;
         
         //DEBUG         [self dumpSltSecondCounter:@"SLT-takeData-vor RelInhibit:"];
         
-		unsigned long long runcount = [self readRunTime];
+		uint64_t runcount = [self readRunTime];
 		[self shipSltEvent:kRunCounterType withType:kStartRunType eventCt:0 high: (runcount>>32)&0xffffffff low:(runcount)&0xffffffff ];
 		[self writeClrInhibit]; //TODO: maybe move to readout loop to avoid dead time -tb-
 
@@ -1910,7 +1910,7 @@ return;
 
 	[self writeSetInhibit]; //TODO: maybe move to readout loop to avoid dead time -tb-
 	[self shipSltSecondCounter: kStopRunType];
-	unsigned long long runcount = [self readRunTime];
+	uint64_t runcount = [self readRunTime];
 	[self shipSltEvent:kRunCounterType withType:kStopRunType eventCt:0 high: (runcount>>32)&0xffffffff low:(runcount)&0xffffffff ];
 	
     //TODO: set a run control 'wait', if we record the hitrate counter -> wait for final hitrate event (... in change state notification callback ...) -tb-
@@ -1935,8 +1935,8 @@ return;
 
 - (void) dumpSltSecondCounter:(NSString*)text
 {
-	unsigned long subseconds = [self readSubSecondsCounter];
-	unsigned long seconds = [self readSecondsCounter];
+	uint32_t subseconds = [self readSubSecondsCounter];
+	uint32_t seconds = [self readSecondsCounter];
     if(text)
         NSLog(@"%@::%@   %@   sec:%i  subsec:%i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),text,seconds,subseconds);//DEBUG -tb-
     else
@@ -1948,41 +1948,41 @@ return;
 - (void) shipSltSecondCounter:(unsigned char)aType
 {
 	//aType = 1 start run, =2 stop run, = 3 start subrun, =4 stop subrun, see #defines in ORIpeV4SLTDefs.h -tb-
-	unsigned long subseconds = [self readSubSecondsCounter];
-	unsigned long seconds = [self readSecondsCounter];
+	uint32_t subseconds = [self readSubSecondsCounter];
+	uint32_t seconds = [self readSecondsCounter];
 	
 
 	[self shipSltEvent:kSecondsCounterType withType:aType eventCt:0 high:seconds low:subseconds ];
 	#if 0
-	unsigned long location = (([self crateNumber]&0xf)<<21) | ([self stationNumber]& 0x0000001f)<<16;
-	unsigned long data[5];
+	uint32_t location = (([self crateNumber]&0xf)<<21) | ([self stationNumber]& 0x0000001f)<<16;
+	uint32_t data[5];
 			data[0] = eventDataId | 5; 
 			data[1] = location | (aType & 0xf);
 			data[2] = 0;	
 			data[3] = seconds;	
 			data[4] = subseconds;
 			[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-																object:[NSData dataWithBytes:data length:sizeof(long)*(5)]];
+																object:[NSData dataWithBytes:data length:sizeof(int32_t)*(5)]];
 	#endif
 }
 
 - (void) shipSltRunCounter:(unsigned char)aType
 {
-		unsigned long long runcount = [self readRunTime];
+		uint64_t runcount = [self readRunTime];
 		[self shipSltEvent:kRunCounterType withType:aType eventCt:0 high: (runcount>>32)&0xffffffff low:(runcount)&0xffffffff ];
 }
 
-- (void) shipSltEvent:(unsigned char)aCounterType withType:(unsigned char)aType eventCt:(unsigned long)c high:(unsigned long)h low:(unsigned long)l
+- (void) shipSltEvent:(unsigned char)aCounterType withType:(unsigned char)aType eventCt:(uint32_t)c high:(uint32_t)h low:(uint32_t)l
 {
-	unsigned long location = (([self crateNumber]&0xf)<<21) | ([self stationNumber]& 0x0000001f)<<16;
-	unsigned long data[5];
+	uint32_t location = (([self crateNumber]&0xf)<<21) | ([self stationNumber]& 0x0000001f)<<16;
+	uint32_t data[5];
 			data[0] = eventDataId | 5; 
 			data[1] = location | ((aCounterType & 0xf)<<4) | (aType & 0xf);
 			data[2] = c;	
 			data[3] = h;	
 			data[4] = l;
 			[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-																object:[NSData dataWithBytes:data length:sizeof(long)*(5)]];
+																object:[NSData dataWithBytes:data length:sizeof(int32_t)*(5)]];
 }
 
 
@@ -1991,17 +1991,17 @@ return;
 	return [pmcLink doneTakingData];
 }
 
-- (unsigned long) calcProjection:(unsigned long *)pMult  xyProj:(unsigned long *)xyProj  tyProj:(unsigned long *)tyProj
+- (uint32_t) calcProjection:(uint32_t *)pMult  xyProj:(uint32_t *)xyProj  tyProj:(uint32_t *)tyProj
 { 
 	//temp----
 	int i, j, k;
-	unsigned long sltSize = pageSize * 20;
+	uint32_t sltSize = pageSize * 20;
 	
 	
 	// Dislay the matrix of triggered pixel and timing
 	// The xy-Projection is needed to readout only the triggered pixel!!!
-	//unsigned long xyProj[20];
-	//unsigned long tyProj[100];
+	//uint32_t xyProj[20];
+	//uint32_t tyProj[100];
 	for (i=0;i<20;i++) xyProj[i] = 0;
 	for (k=0;k<100;k++) tyProj[k] = 0;
 	for (k=0;k<sltSize;k++){
@@ -2063,25 +2063,25 @@ return;
 {
 	
 	//read page start address
-	unsigned long lTimeL     = [self read: SLT_REG_ADDRESS(kSltLastTriggerTimeStamp) + aPageIndex];
+	uint32_t lTimeL     = [self read: SLT_REG_ADDRESS(kSltLastTriggerTimeStamp) + aPageIndex];
 	int iPageStart = (((lTimeL >> 10) & 0x7fe)  + 20) % 2000;
 	
-	unsigned long timeStampH = [self read: SLT_REG_ADDRESS(kSltPageTimeStamp) + 2*aPageIndex];
-	unsigned long timeStampL = [self read: SLT_REG_ADDRESS(kSltPageTimeStamp) + 2*aPageIndex+1];
+	uint32_t timeStampH = [self read: SLT_REG_ADDRESS(kSltPageTimeStamp) + 2*aPageIndex];
+	uint32_t timeStampL = [self read: SLT_REG_ADDRESS(kSltPageTimeStamp) + 2*aPageIndex+1];
 	
 	NSFont* aFont = [NSFont userFixedPitchFontOfSize:9];
 	NSLogFont(aFont,@"Reading event from page %d, start=%d:  %ds %dx100us\n", 
 			  aPageIndex+1, iPageStart, timeStampH, (timeStampL >> 11) & 0x3fff);
 	
 	//readout the SLT pixel trigger data
-	unsigned long buffer[2000];
-	unsigned long sltMemoryAddress = (SLTID << 24) | aPageIndex<<11;
-	[self readBlock:sltMemoryAddress dataBuffer:(unsigned long*)buffer length:20*100 increment:1];
-	unsigned long reorderBuffer[2000];
+	uint32_t buffer[2000];
+	uint32_t sltMemoryAddress = (SLTID << 24) | aPageIndex<<11;
+	[self readBlock:sltMemoryAddress dataBuffer:(uint32_t*)buffer length:20*100 increment:1];
+	uint32_t reorderBuffer[2000];
 	// Re-organize trigger data to get it in a continous data stream
-	unsigned long *pMult = reorderBuffer;
-	memcpy( pMult, buffer + iPageStart, (2000 - iPageStart)*sizeof(unsigned long));  
-	memcpy( pMult + 2000 - iPageStart, buffer, iPageStart*sizeof(unsigned long));  
+	uint32_t *pMult = reorderBuffer;
+	memcpy( pMult, buffer + iPageStart, (2000 - iPageStart)*sizeof(uint32_t));  
+	memcpy( pMult + 2000 - iPageStart, buffer, iPageStart*sizeof(uint32_t));  
 	
 	int i;
 	int j;	
@@ -2089,8 +2089,8 @@ return;
 	
 	// Dislay the matrix of triggered pixel and timing
 	// The xy-Projection is needed to readout only the triggered pixel!!!
-	unsigned long xyProj[20];
-	unsigned long tyProj[100];
+	uint32_t xyProj[20];
+	uint32_t tyProj[100];
 	for (i=0;i<20;i++) xyProj[i] = 0;
 	for (k=0;k<100;k++) tyProj[k] = 0;
 	for (k=0;k<2000;k++){
@@ -2190,7 +2190,7 @@ return;
     
     //SLT specific settings BEGIN
     //"first time" flag (needed for histogram mode)
-	unsigned long runFlagsMask = 0;
+	uint32_t runFlagsMask = 0;
 	runFlagsMask |= kFirstTimeFlag;          //bit 16 = "first time" flag
     if(secondsSetSendToFLTs)
         runFlagsMask |= kSecondsSetSendToFLTsFlag;//bit ...
@@ -2222,19 +2222,19 @@ return;
 @end
 
 @implementation ORIpeV4SLTModel (private)
-- (unsigned long) read:(unsigned long) address
+- (uint32_t) read:(uint32_t) address
 {
 	if(![pmcLink isConnected]){
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];
 	}
-	unsigned long theData;
+	uint32_t theData;
 	[pmcLink readLongBlockPmc:&theData
 					  atAddress:address
 					  numToRead: 1];
 	return theData;
 }
 
-- (void) write:(unsigned long) address value:(unsigned long) aValue
+- (void) write:(uint32_t) address value:(uint32_t) aValue
 {
 	if(![pmcLink isConnected]){
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];

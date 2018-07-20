@@ -35,13 +35,13 @@
 	int				pollTime;
 	BOOL			isRunning;
  	unsigned short	moduleID;
-	unsigned long   dataId;
-	unsigned long	counts[32];
+	uint32_t   dataId;
+	uint32_t	counts[32];
 	NSString*		channelName[32];
-	unsigned long   timeMeasured;
-	unsigned long   lastTimeMeasured;
-    unsigned long	countEnableMask;
-    unsigned long	overFlowMask;
+	uint32_t   timeMeasured;
+	uint32_t   lastTimeMeasured;
+    uint32_t	countEnableMask;
+    uint32_t	overFlowMask;
 	
     int lemoInMode;
     BOOL enable25MHzPulses;
@@ -87,13 +87,13 @@
 - (void) setEnable25MHzPulses:(BOOL)aEnable25MHzPulses;
 - (int) lemoInMode;
 - (void) setLemoInMode:(int)aLemoInMode;
-- (unsigned long) counts:(int)i;
-- (unsigned long) countEnableMask;
-- (void) setCountEnableMask:(unsigned long)aCountEnableMask;
+- (uint32_t) counts:(int)i;
+- (uint32_t) countEnableMask;
+- (void) setCountEnableMask:(uint32_t)aCountEnableMask;
 - (BOOL) countEnabled:(short)chan;
 - (void) setCountEnabled:(short)chan withValue:(BOOL)aValue;	
-- (unsigned long) overFlowMask;
-- (void) setOverFlowMask:(unsigned long)aMask;
+- (uint32_t) overFlowMask;
+- (void) setOverFlowMask:(uint32_t)aMask;
 - (void) dumpCounts;
 
 
@@ -116,8 +116,8 @@
 - (void) timeToPoll;
 
 #pragma mark •••Data Taker
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherShaper;
 - (NSDictionary*) dataRecordDescription;

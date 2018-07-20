@@ -234,7 +234,7 @@
     NSCalendar *calendar = [[[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian] autorelease];
     [calendar setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
     NSDateComponents *dateComponents = [calendar components:components fromDate:date];
-    NSString *buffer = [NSString stringWithFormat:@"%.4ld%.2d%.2dT%.2d:%.2ld:%.2ld%@", (long)[dateComponents year], (int)[dateComponents month], (int)[dateComponents day], (int)[dateComponents hour], (long)[dateComponents minute], (long)[dateComponents second], @"Z", nil];
+    NSString *buffer = [NSString stringWithFormat:@"%.4d%.2d%.2dT%.2d:%.2d:%.2d%@", (int32_t)[dateComponents year], (int)[dateComponents month], (int)[dateComponents day], (int)[dateComponents hour], (int32_t)[dateComponents minute], (int32_t)[dateComponents second], @"Z", nil];
     
     [self valueTag:@"dateTime.iso8601" value:buffer];
 }

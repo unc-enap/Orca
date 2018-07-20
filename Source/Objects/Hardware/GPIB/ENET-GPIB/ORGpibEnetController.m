@@ -117,7 +117,7 @@
 //--------------------------------------------------------------------------------
 - (void) writeToMonitor: (NSNotification*) aNotification
 {
-    unsigned long maxTextSize = 100000;
+    uint32_t maxTextSize = 100000;
 	@try {
 		NSString* command = [[ aNotification userInfo ] objectForKey: ORGpibMonitor ];
 		[monitorView replaceCharactersInRange:NSMakeRange([[monitorView textStorage] length], 0) withString:command];
@@ -149,8 +149,8 @@
 - (IBAction) query: (id) aSender
 {
     char	data[2048];
-    long	returnLen;
-    long	maxLength = sizeof( data ) - 1;
+    int32_t	returnLen;
+    int32_t	maxLength = sizeof( data ) - 1;
     
     @try {
         returnLen =  [[ self model ] writeReadDevice:[ mPrimaryAddress indexOfSelectedItem ] 
@@ -178,7 +178,7 @@
 - (IBAction) read: (id) aSender
 {
     char	data[ 2048 ];
-    long	returnLen;
+    int32_t	returnLen;
     
     @try {
         returnLen = [[ self model ] readFromDevice: [ mPrimaryAddress indexOfSelectedItem ]
@@ -347,11 +347,11 @@
     }    
 }
 
-- (void) changeStatusSummary:(int) aStatus error:(int) anError count:(long) aCount
+- (void) changeStatusSummary:(int) aStatus error:(int) anError count:(int32_t) aCount
 {
     [mibsta setStringValue:[NSString stringWithFormat:@"%#0x", aStatus]];
     [miberr setStringValue: [NSString stringWithFormat:@"%#0x", anError]];
-    [mibcntl setStringValue:[NSString stringWithFormat:@"%ld", aCount]];
+    [mibcntl setStringValue:[NSString stringWithFormat:@"%d", aCount]];
 }
 
 

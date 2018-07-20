@@ -320,9 +320,9 @@
 		else [aDictionary setObject:[NSNumber numberWithFloat:[s floatValue]] forKey:@"Value"];
 	}
 }
-- (unsigned long) convertBitString:(NSString*)s
+- (uint32_t) convertBitString:(NSString*)s
 {
-	unsigned long finalReversedValue = 0;
+	uint32_t finalReversedValue = 0;
 	NSUInteger n = [s length];
 	NSInteger i;
 	for(i=n-1 ; i>=0 ; i--){
@@ -331,7 +331,7 @@
 		[scanner scanHexInt:&unreversedHexByte];
 		int j;
 		//flip the bits
-		unsigned long reversedHexByte = 0;
+		uint32_t reversedHexByte = 0;
 		for(j=0;j<4;j++){
 			if(unreversedHexByte & 0x1) reversedHexByte |= (0x8>>j);
 			unreversedHexByte >>= 1;

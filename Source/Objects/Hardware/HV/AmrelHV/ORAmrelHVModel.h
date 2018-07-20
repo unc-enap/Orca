@@ -31,7 +31,7 @@
 
 @interface ORAmrelHVModel : OrcaObject
 {
-	unsigned long		dataValidMask[2];
+	uint32_t		dataValidMask[2];
 	NSString*			portName;
 	BOOL				portWasOpen;
 	ORSerialPort*		serialPort;
@@ -39,7 +39,7 @@
 	NSMutableArray*		cmdQueue;
 	NSMutableData*		inComingData;
 	NSMutableString*    buffer;
-	unsigned long		dataId;
+	uint32_t		dataId;
 	int					pollTime;
     BOOL				outputState[2];
 	float				voltage[2];
@@ -86,8 +86,8 @@
 - (float) maxCurrent:(unsigned short) aChan;
 - (void) setMaxCurrent:(unsigned short) aChan withValue:(float) aCurrent;
 
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherSupply;
 

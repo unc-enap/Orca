@@ -141,7 +141,7 @@ NSString* ORBiRa2351IModelLastReadChanged		= @"ORBiRa2351IModelLastReadChanged";
 - (void) readInputRegister:(BOOL)verbose
 {
 	@synchronized(self){
-		unsigned long theRawValue;
+		uint32_t theRawValue;
 		[[self adapter] camacLongNAF:[self stationNumber] a:0 f:2 data:&theRawValue];
 		[self setInputRegister:theRawValue];
 		if(verbose)NSLog(@"BiRa 2351 (station %d) Input Reg: 0x%03x\n",[self stationNumber],inputRegister);
@@ -204,7 +204,7 @@ NSString* ORBiRa2351IModelLastReadChanged		= @"ORBiRa2351IModelLastReadChanged";
 
 - (NSString*) processingTitle
 {
-    return [NSString stringWithFormat:@"%d,%ld,%@",[self crateNumber],[self  stationNumber],[self identifier]];
+    return [NSString stringWithFormat:@"%d,%d,%@",(int)[self crateNumber],(int)[self  stationNumber],[self identifier]];
 }
 
 @end

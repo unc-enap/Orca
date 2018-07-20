@@ -792,10 +792,10 @@ NSString* ExperimentModelCustomColor2Changed             = @"ExperimentModelCust
 {
 	NSMutableData* theData;
 	int numSegments = [self numberSegmentsInGroup:aSet];
-	theData = [NSMutableData dataWithLength:numSegments*sizeof(long)];
+	theData = [NSMutableData dataWithLength:numSegments*sizeof(int32_t)];
 	ORSegmentGroup* segmentGroup = [self segmentGroup:aSet];
 	int i;
-	unsigned long* p = (unsigned long*)[theData bytes];
+	uint32_t* p = (uint32_t*)[theData bytes];
 	for(i = 0;i<numSegments;i++){
 		p[i] = [segmentGroup getThreshold:i];
 	}
@@ -857,10 +857,10 @@ NSString* ExperimentModelCustomColor2Changed             = @"ExperimentModelCust
 {
 	NSMutableData* theData;
 	int numSegments = [self numberSegmentsInGroup:aSet];
-	theData = [NSMutableData dataWithLength:numSegments*sizeof(long)];
+	theData = [NSMutableData dataWithLength:numSegments*sizeof(int32_t)];
 	ORSegmentGroup* segmentGroup = [self segmentGroup:aSet];
 	int i;
-	unsigned long* p = (unsigned long*)[theData bytes];
+	uint32_t* p = (uint32_t*)[theData bytes];
 	for(i = 0;i<numSegments;i++){
 		p[i] = [segmentGroup getGain:i];
 	}
@@ -884,7 +884,7 @@ NSString* ExperimentModelCustomColor2Changed             = @"ExperimentModelCust
 {
 	NSMutableData* theData;
 	int numSegments = [self numberSegmentsInGroup:aSet];
-	theData = [NSMutableData dataWithLength:numSegments*sizeof(long)];
+	theData = [NSMutableData dataWithLength:numSegments*sizeof(int32_t)];
 	ORSegmentGroup* segmentGroup = [self segmentGroup:aSet];
 	int i;
 	float* p = (float*)[theData bytes];
@@ -910,10 +910,10 @@ NSString* ExperimentModelCustomColor2Changed             = @"ExperimentModelCust
 {
 	NSMutableData* theData;
 	int numSegments = [self numberSegmentsInGroup:aSet];
-	theData = [NSMutableData dataWithLength:numSegments*sizeof(long)];
+	theData = [NSMutableData dataWithLength:numSegments*sizeof(int32_t)];
 	ORSegmentGroup* segmentGroup = [self segmentGroup:aSet];
 	int i;
-	unsigned long* p = (unsigned long*)[theData bytes];
+	uint32_t* p = (uint32_t*)[theData bytes];
 	for(i = 0;i<numSegments;i++){
 		p[i] = [segmentGroup getTotalCounts:i];
 	}

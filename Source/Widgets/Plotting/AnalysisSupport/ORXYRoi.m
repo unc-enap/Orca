@@ -54,9 +54,9 @@
 	float maxX		= 0;
 	float minY		= 3.402e+38;
 	float maxY		= -3.402e+38;
-	long xStart		= [self minChannel];
-	long xEnd		= [self maxChannel];
-	long totalNum	= xEnd - xStart+1;
+	int32_t xStart		= [self minChannel];
+	int32_t xEnd		= [self maxChannel];
+	int32_t totalNum	= xEnd - xStart+1;
 	
 	int i;
 	for(i=0;i<numPoints;i++){

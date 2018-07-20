@@ -32,7 +32,7 @@
 
 #pragma mark •••Static Declarations
 //offsets from the base address (kDefaultBaseAddress)
-static unsigned long register_offsets[kNumberOfV265Registers] = {
+static uint32_t register_offsets[kNumberOfV265Registers] = {
 0x00,		// [0]  kStatusControl
 0x02,		// [1]	kClear
 0x04,		// [2]  kDAC
@@ -118,9 +118,9 @@ NSString* ORCaen265SettingsLock			= @"ORCaen265SettingsLock";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORCaen265ModelEnabledMaskChanged object:self];
 }
 
-- (unsigned long) dataId { return dataId; }
+- (uint32_t) dataId { return dataId; }
 
-- (void) setDataId: (unsigned long) DataId
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -273,12 +273,12 @@ NSString* ORCaen265SettingsLock			= @"ORCaen265SettingsLock";
 			if(enabledMask & (1L<<chan)){
 				if(!(suppressZeros && (dataValue & 0xfff)==0)){
 					if(usingShortForm){
-						unsigned long dataWord = dataId | location | (dataValue & 0x7fff);
+						uint32_t dataWord = dataId | location | (dataValue & 0x7fff);
 						[aDataPacket addLongsToFrameBuffer:&dataWord length:1];
 					}
 					else {
-						//unlikely we have been assigned the long form, but just in case....
-						unsigned long dataRecord[2];
+						//unlikely we have been assigned the int32_t form, but just in case....
+						uint32_t dataRecord[2];
 						dataRecord[0] = dataId | 2;
 						dataRecord[1] = location | (dataValue & 0x7fff);
 						[aDataPacket addLongsToFrameBuffer:dataRecord length:2];

@@ -20,7 +20,7 @@
 
 typedef struct KatrinV4SLTRegisterNamesStruct {
     NSString*       regName;
-    unsigned long 	addressOffset;
+    uint32_t 	addressOffset;
     int				length;
     short			accessType;
     eKatriV4SLTEnum enumCheckValue;
@@ -132,7 +132,7 @@ static KatrinV4SLTRegisterNamesStruct regV4SLT[kKatrinV4SLTNumRegs] = {
     else                                          return NO;
 }
 
-- (unsigned long) address: (short) anIndex
+- (uint32_t) address: (short) anIndex
 {
     if(anIndex>=0 && anIndex<kKatrinV4SLTNumRegs) return (regV4SLT[anIndex].addressOffset>>2);
     else                                          return 0x0;

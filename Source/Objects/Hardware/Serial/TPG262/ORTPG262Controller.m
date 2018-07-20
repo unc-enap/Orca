@@ -135,7 +135,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"TPG262 (Unit %lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"TPG262 (Unit %u)",[model uniqueIdNumber]]];
 }
 
 - (void) updateWindow
@@ -228,7 +228,7 @@
 		NSString* pressureAsString = [NSString stringWithFormat:@"%.2E",[model pressure:index]];
 		[[pressureMatrix cellWithTag:index] setStringValue:pressureAsString];
 		[[pressure1Matrix cellWithTag:index] setStringValue:pressureAsString];
-		unsigned long t = [model timeMeasured:index];
+		uint32_t t = [model timeMeasured:index];
 		NSDate* theDate;
 		if(t){
 			theDate = [NSDate dateWithTimeIntervalSince1970:t];

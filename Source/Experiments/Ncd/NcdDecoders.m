@@ -26,24 +26,24 @@
 
 @implementation NcdDecoderForPulserSettings
 
-- (unsigned long) decodeData:(void*)someData  fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData  fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long value = *((unsigned long*)someData);
+    uint32_t value = *((uint32_t*)someData);
     return ExtractLength(value);
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     union packed {
-        unsigned long longValue;
+        uint32_t longValue;
         float floatValue;
     }packed;
 
 
     NSString* title= @"HP Pulser Record\n\n";
     
-    NSString* gtid  = [NSString stringWithFormat:    @"GTID        = %lu\n",ptr[1]];
-    NSString* waveForm  = [NSString stringWithFormat:@"Waveform    = %lu\n",ptr[2]];
+    NSString* gtid  = [NSString stringWithFormat:    @"GTID        = %u\n",ptr[1]];
+    NSString* waveForm  = [NSString stringWithFormat:@"Waveform    = %u\n",ptr[2]];
     packed.longValue = ptr[3];
     NSString* voltage = [NSString stringWithFormat:  @"Voltage     = %.2f\n",packed.floatValue];
     packed.longValue = ptr[4];
@@ -59,16 +59,16 @@
 
 @implementation NcdDecoderForLogAmpTask
 
-- (unsigned long) decodeData:(void*)someData  fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData  fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long value = *((unsigned long*)someData);
+    uint32_t value = *((uint32_t*)someData);
     return ExtractLength(value);
 }
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"NCD LogAmp Task\n\n";
     
-    NSString* gtid  = [NSString stringWithFormat:    @"GTID  = %lu\n",ptr[1]];
+    NSString* gtid  = [NSString stringWithFormat:    @"GTID  = %u\n",ptr[1]];
     NSString* state = [NSString stringWithFormat:    @"State = %@\n",ptr[2]?@"Started":@"Stopped"];
 
     return [NSString stringWithFormat:@"%@%@%@",title,gtid,state];               
@@ -77,17 +77,17 @@
 
 @implementation NcdDecoderForLinearityTask
 
-- (unsigned long) decodeData:(void*)someData  fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData  fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long value = *((unsigned long*)someData);
+    uint32_t value = *((uint32_t*)someData);
     return ExtractLength(value);
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"NCD Linearity Task\n\n";
     
-    NSString* gtid  = [NSString stringWithFormat:    @"GTID  = %lu\n",ptr[1]];
+    NSString* gtid  = [NSString stringWithFormat:    @"GTID  = %u\n",ptr[1]];
     NSString* state = [NSString stringWithFormat:    @"State = %@\n",ptr[2]?@"Started":@"Stopped"];
 
     return [NSString stringWithFormat:@"%@%@%@",title,gtid,state];               
@@ -98,16 +98,16 @@
 
 @implementation NcdDecoderForThresholdTask
 
-- (unsigned long) decodeData:(void*)someData  fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData  fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long value = *((unsigned long*)someData);
+    uint32_t value = *((uint32_t*)someData);
     return ExtractLength(value);
 }
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"NCD Threshold Task\n\n";
     
-    NSString* gtid  = [NSString stringWithFormat:    @"GTID  = %lu\n",ptr[1]];
+    NSString* gtid  = [NSString stringWithFormat:    @"GTID  = %u\n",ptr[1]];
     NSString* state = [NSString stringWithFormat:    @"State = %@\n",ptr[2]?@"Started":@"Stopped"];
 
     return [NSString stringWithFormat:@"%@%@%@",title,gtid,state];               
@@ -116,16 +116,16 @@
 
 @implementation NcdDecoderForCableCheckTask
 
-- (unsigned long) decodeData:(void*)someData  fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData  fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long value = *((unsigned long*)someData);
+    uint32_t value = *((uint32_t*)someData);
     return ExtractLength(value);
 }
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"NCD CableCheck Task\n\n";
     
-    NSString* gtid  = [NSString stringWithFormat:    @"GTID  = %lu\n",ptr[1]];
+    NSString* gtid  = [NSString stringWithFormat:    @"GTID  = %u\n",ptr[1]];
     NSString* state = [NSString stringWithFormat:    @"State = %@\n",ptr[2]?@"Started":@"Stopped"];
 
     return [NSString stringWithFormat:@"%@%@%@",title,gtid,state];               
@@ -134,16 +134,16 @@
 
 @implementation NcdDecoderForStepPDSTask
 
-- (unsigned long) decodeData:(void*)someData  fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData  fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long value = *((unsigned long*)someData);
+    uint32_t value = *((uint32_t*)someData);
     return ExtractLength(value);
 }
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"NCD StepPDS Task\n\n";
     
-    NSString* gtid  = [NSString stringWithFormat:    @"GTID  = %lu\n",ptr[1]];
+    NSString* gtid  = [NSString stringWithFormat:    @"GTID  = %u\n",ptr[1]];
     NSString* state = [NSString stringWithFormat:    @"State = %@\n",ptr[2]?@"Started":@"Stopped"];
 
     return [NSString stringWithFormat:@"%@%@%@",title,gtid,state];               
@@ -152,15 +152,15 @@
 
 @implementation NcdDecoderForPulseChannelsTask
 
-- (unsigned long) decodeData:(void*)someData  fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData  fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    return ExtractLength(*((unsigned long*)someData));
+    return ExtractLength(*((uint32_t*)someData));
 }
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"NCD Pulse Channels Task\n\n";
     
-    NSString* gtid  = [NSString stringWithFormat:    @"GTID  = %lu\n",ptr[1]];
+    NSString* gtid  = [NSString stringWithFormat:    @"GTID  = %u\n",ptr[1]];
     NSString* state = [NSString stringWithFormat:    @"State = %@\n",ptr[2]?@"Started":@"Stopped"];
 
     return [NSString stringWithFormat:@"%@%@%@",title,gtid,state];               

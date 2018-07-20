@@ -203,7 +203,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(VXI11HardwareFinder);
 #if (defined __LP64__) && (defined __APPLE__)
     unsigned int port;
 #else
-    unsigned long port;
+    uint32_t port;
 #endif
 
     struct sockaddr_in baddr, raddr; /* broadcast and response addresses */
@@ -361,7 +361,7 @@ done_broad:
         const char* an_addr = inet_ntop(AF_INET, &(addr->sin_addr), str, INET_ADDRSTRLEN);
         CLINK vxi_link;
         if ( vxi11_open_device(an_addr, &vxi_link, "inst0") < 0 ) continue;        
-        long found = vxi11_send_and_receive(&vxi_link, "*IDN?", rcv, MAXSIZE, 10);
+        int32_t found = vxi11_send_and_receive(&vxi_link, "*IDN?", rcv, MAXSIZE, 10);
         if (found > 0) {
             if (found == MAXSIZE - 1) found--;
             rcv[found] = '\0';

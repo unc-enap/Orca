@@ -40,7 +40,7 @@ typedef enum hveStatus hveStatus;
 	NSMutableArray*			mCommands;			//Crate commands for HV Unit
 	NSMutableArray*			mCircularBuffers;	// Array holding circular buffers of data one for each channel.  Used for
 												// plotting.
-	long					mPoints;			// number of points in each channel-data circular buffer.
+	int32_t					mPoints;			// number of points in each channel-data circular buffer.
 	NSNumber*				mPollTimeMins; 
 	NSNumber*				mPlotterPoints;		// number of points in histogram displays.
 	ORAlarm*				mHVValueLmtsAlarm;	// If set have exceeded MVDZ window around demand voltage
@@ -76,7 +76,7 @@ typedef enum hveStatus hveStatus;
 - (NSMutableArray*) channelArray;
 - (void) setChannelArray:(NSMutableArray*)anArray;
 - (ORCircularBufferUV*) circularBuffer: (int) aChnl;
-- (long) circularBufferSize: (int) aChnl;
+- (int32_t) circularBufferSize: (int) aChnl;
 - (NSMutableDictionary*) channelDictionary: (int) aCurrentChnl;
 - (void)  setChannelEnabled: (int) anEnabled chnl: (int) aCurrentChnl;
 - (int)   chnlEnabled: (int) aCurrentChnl;

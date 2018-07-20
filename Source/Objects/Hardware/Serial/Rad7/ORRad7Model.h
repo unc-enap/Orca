@@ -121,7 +121,7 @@ enum {
 	BOOL            portWasOpen;
 	ORSerialPort*   serialPort;
 	ORSafeQueue* cmdQueue;
-	unsigned long	timeMeasured;
+	uint32_t	timeMeasured;
 	int				pollTime;
 	NSMutableString* buffer;
 	int				protocol;
@@ -146,8 +146,8 @@ enum {
 	NSString*		stopRunFilePath;
 	BOOL			tempVerbose;
 	BOOL			runEnded;
-	unsigned long	maxRadon;
-	unsigned long	alarmLimit;
+	uint32_t	maxRadon;
+	uint32_t	alarmLimit;
 	BOOL			gotAtLeastOneRH;
 	float			humidityAlarm;
 	float			pumpCurrentAlarm;
@@ -190,10 +190,10 @@ enum {
 - (void) setPumpCurrentAlarm:(float)aPumpCurrentAlarm;
 - (float) humidityAlarm;
 - (void) setHumidityAlarm:(float)aHumidityAlarm;
-- (unsigned long) alarmLimit;
-- (void) setAlarmLimit:(unsigned long)aAlarmLimit;
-- (unsigned long) maxRadon;
-- (void) setMaxRadon:(unsigned long)aMaxRadon;
+- (uint32_t) alarmLimit;
+- (void) setAlarmLimit:(uint32_t)aAlarmLimit;
+- (uint32_t) maxRadon;
+- (void) setMaxRadon:(uint32_t)aMaxRadon;
 - (BOOL) makeFile;
 - (void) setMakeFile:(BOOL)aMakeFile;
 - (BOOL) verbose;
@@ -238,7 +238,7 @@ enum {
 - (NSString*) portName;
 - (void) setPortName:(NSString*)aPortName;
 - (void) openPort:(BOOL)state;
-- (unsigned long) timeMeasured;
+- (uint32_t) timeMeasured;
 - (NSDictionary*) statusDictionary;
 - (id) statusForKey:(id)aKey;
 

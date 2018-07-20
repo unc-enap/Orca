@@ -23,11 +23,11 @@
 #import "ORCircularBuffer.h"
 
 @interface ORCircularBufferWriter : ORCircularBuffer {
-	unsigned long maximumMemorySize;
+	uint32_t maximumMemorySize;
 }
 #pragma mark •••Accessors
-- (void) 			setMaximumMemorySize:(unsigned long) aSize;
-- (unsigned long) 	maximumMemorySize;
+- (void) 			setMaximumMemorySize:(uint32_t) aSize;
+- (uint32_t) 	maximumMemorySize;
 
 - (void) 	initializeCircularBuffer;
 - (void) 	writeControlBlockHeader:(SCBHeader)aControlBlockHeader;

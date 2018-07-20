@@ -236,12 +236,12 @@ NSString* ORLabJackMaxValueChanged				= @"ORLabJackMaxValueChanged";
 
 #pragma mark ***Accessors
 
-- (unsigned long) deviceSerialNumber
+- (uint32_t) deviceSerialNumber
 {
     return deviceSerialNumber;
 }
 
-- (void) setDeviceSerialNumber:(unsigned long)aDeviceSerialNumber
+- (void) setDeviceSerialNumber:(uint32_t)aDeviceSerialNumber
 {
     deviceSerialNumber = aDeviceSerialNumber;
 
@@ -459,12 +459,12 @@ NSString* ORLabJackMaxValueChanged				= @"ORLabJackMaxValueChanged";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORLabJackDigitalOutputEnabledChanged object:self];
 }
 
-- (unsigned long) counter
+- (uint32_t) counter
 {
     return counter;
 }
 
-- (void) setCounter:(unsigned long)aCounter
+- (void) setCounter:(uint32_t)aCounter
 {
     counter = aCounter;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORLabJackCounterChanged object:self];
@@ -933,8 +933,8 @@ NSString* ORLabJackMaxValueChanged				= @"ORLabJackMaxValueChanged";
 }
 
 #pragma mark ***Data Records
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -969,7 +969,7 @@ NSString* ORLabJackMaxValueChanged				= @"ORLabJackMaxValueChanged";
     return dataDictionary;
 }
 
-- (unsigned long) timeMeasured
+- (uint32_t) timeMeasured
 {
 	return timeMeasured;
 }
@@ -979,13 +979,13 @@ NSString* ORLabJackMaxValueChanged				= @"ORLabJackMaxValueChanged";
 {
     if([[ORGlobal sharedGlobal] runInProgress]){
 		
-		unsigned long data[kLabJackDataSize];
+		uint32_t data[kLabJackDataSize];
 		data[0] = dataId | kLabJackDataSize;
 		data[1] = ((adcDiff & 0xf) << 16) | ([self uniqueIdNumber] & 0x0000fffff);
 		
 		union {
 			float asFloat;
-			unsigned long asLong;
+			uint32_t asLong;
 		} theData;
 		
 		int index = 2;
@@ -1005,7 +1005,7 @@ NSString* ORLabJackMaxValueChanged				= @"ORLabJackMaxValueChanged";
 		data[index++] = 0;
 		
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-															object:[NSData dataWithBytes:data length:sizeof(long)*kLabJackDataSize]];
+															object:[NSData dataWithBytes:data length:sizeof(int32_t)*kLabJackDataSize]];
 	}
 }
 #pragma mark •••Bit Processing Protocol
@@ -1066,7 +1066,7 @@ NSString* ORLabJackMaxValueChanged				= @"ORLabJackMaxValueChanged";
 
 - (NSString*) identifier
 {
-    return [NSString stringWithFormat:@"LabJack,%lu",[self uniqueIdNumber]];
+    return [NSString stringWithFormat:@"LabJack,%u",[self uniqueIdNumber]];
 }
 
 - (NSString*) processingTitle
@@ -1336,7 +1336,7 @@ NSString* ORLabJackMaxValueChanged				= @"ORLabJackMaxValueChanged";
                     if(shipData) [self shipIOData];
                 }
                 else if((data0 & 0x50) == 0x50){
-                    unsigned long n = (data1<<1) + (data2<<8) + (data3<<4) + data4;
+                    uint32_t n = (data1<<1) + (data2<<8) + (data3<<4) + data4;
                     [self setDeviceSerialNumber:n];
                 }
             });

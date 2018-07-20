@@ -287,7 +287,7 @@
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"FecDaughterCard (%d,%lu,%d)",[[[model guardian] guardian] crateNumber],[[model guardian] stationNumber],[model slot]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"FecDaughterCard (%d,%u,%d)",(int)[[[model guardian] guardian] crateNumber],(unsigned)[[model guardian] stationNumber],(int)[model slot]]];
 	[dcNumberField setIntValue:[model slot]];
 	[fecNumberField setIntegerValue:[[model guardian] stationNumber]];
 	[crateNumberField setIntegerValue:[[[model guardian] guardian] crateNumber]];

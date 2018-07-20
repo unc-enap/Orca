@@ -34,7 +34,7 @@
 * \method	initStructs
  * \brief	Initializes the static structures used by this class.
  * \note	The data consists of three components:
- *			1) A single long as header.  We overwrite the Geo portion with our record identifier.
+ *			1) A single int32_t as header.  We overwrite the Geo portion with our record identifier.
  *			2) The data word - One for each channel of device that fired.
  *			3) The end of block - Contains the number of this event.
  * \note	Two status registers are used to determine the status of the device
@@ -75,49 +75,49 @@
 }
 
 #pragma mark ***General routines for any data word
-- (BOOL) isHeader: (unsigned long) pDataValue
+- (BOOL) isHeader: (uint32_t) pDataValue
 {
     return( [self decodeValueOutput: pDataValue ofType: kCaen_WordType] == kCaen_Header );
 }
 
-- (BOOL) isEndOfBlock: (unsigned long) pDataValue
+- (BOOL) isEndOfBlock: (uint32_t) pDataValue
 {
     return( [self decodeValueOutput: pDataValue ofType: kCaen_WordType] == kCaen_EndOfBlock );
 }
 
-- (BOOL) isValidDatum: (unsigned long) pDataValue
+- (BOOL) isValidDatum: (uint32_t) pDataValue
 {
     return( [self decodeValueOutput: pDataValue ofType: kCaen_WordType] == kCaen_ValidDatum );
 }
 
-- (BOOL) isNotValidDatum: (unsigned long) pDataValue
+- (BOOL) isNotValidDatum: (uint32_t) pDataValue
 {
     return( [self decodeValueOutput: pDataValue ofType: kCaen_WordType] == kCaen_NotValidDatum );
 }
 
-- (unsigned short) geoAddress: (unsigned long) pDataValue
+- (unsigned short) geoAddress: (uint32_t) pDataValue
 {
     return [self decodeValueOutput: pDataValue ofType: kCaen_GeoAddress];
 }
 
 #pragma mark ***Header decoders
-- (unsigned short) crate: (unsigned long) pHeader
+- (unsigned short) crate: (uint32_t) pHeader
 {
     return [self decodeValueOutput: pHeader ofType: kCaen_Crate];
 }
 
-- (unsigned short) numMemorizedChannels: (unsigned long) pHeader
+- (unsigned short) numMemorizedChannels: (uint32_t) pHeader
 {
     return [self decodeValueOutput: pHeader ofType: kCaen_ChanCount];
 }
 
 #pragma mark ***Data word decoders
-- (unsigned short) channel: (unsigned long) pDataValue
+- (unsigned short) channel: (uint32_t) pDataValue
 {
     return( [self decodeValueOutput: pDataValue ofType: kCaen_ChanNumber] );
 }
 
-- (unsigned long) adcValue: (unsigned long) pDataValue
+- (uint32_t) adcValue: (uint32_t) pDataValue
 {
     return( [self decodeValueOutput: pDataValue ofType: kCaen_Data] );
 }
@@ -153,19 +153,19 @@
     return val;
 }
 
-- (unsigned long) decodeValueOutput: (unsigned long) pOutputValue
+- (uint32_t) decodeValueOutput: (uint32_t) pOutputValue
                              ofType: (unsigned short) pType
 {
-    unsigned long val =  ( pOutputValue & mCaenOutputFormats[pType].mask ) >> mCaenOutputFormats[pType].shift;
+    uint32_t val =  ( pOutputValue & mCaenOutputFormats[pType].mask ) >> mCaenOutputFormats[pType].shift;
     return val;
 }
 
 - (void) printData: (NSString*) pName data:(void*) theData
 {
     short i;
-    long* ptr = (long*)theData;
+    int32_t* ptr = (int32_t*)theData;
     
-	long length = ExtractLength(*ptr);
+	int32_t length = ExtractLength(*ptr);
 	++ptr; //point to the header word with the crate and channel info
 	NSString* crateKey = [self getCrateKey:(*ptr >> 21)&0x0000000f];
 	NSString* cardKey  = [self getCardKey: (*ptr >> 16)&0x0000001f];
@@ -178,23 +178,23 @@
         for( i = 0; i < length; i++ ){
             if( [self isHeader: ptr[i]] ){
                 NSLog( @"--%@ Header\n", pName );
-                NSLog( @"Geo Address  : 0x%lx\n", [self decodeValueOutput: ptr[i] ofType: kCaen_GeoAddress] );
-                NSLog( @"Crate        : 0x%lx\n", [self decodeValueOutput: ptr[i] ofType: kCaen_Crate] );
-                NSLog( @"Num Chans    : 0x%lx\n", [self decodeValueOutput: ptr[i] ofType: kCaen_ChanCount] );
+                NSLog( @"Geo Address  : 0x%x\n", [self decodeValueOutput: ptr[i] ofType: kCaen_GeoAddress] );
+                NSLog( @"Crate        : 0x%x\n", [self decodeValueOutput: ptr[i] ofType: kCaen_Crate] );
+                NSLog( @"Num Chans    : 0x%x\n", [self decodeValueOutput: ptr[i] ofType: kCaen_ChanCount] );
             }
             else if( [self isValidDatum: ptr[i]] ){
                 NSLog( @"--Data Block\n");
-                NSLog( @"Geo Address  : 0x%lx\n", [self decodeValueOutput: ptr[i] ofType: kCaen_GeoAddress] );
-                NSLog( @"Channel      : 0x%lx  (un:%ld ov:%ld)\n", [self channel: ptr[i]],
+                NSLog( @"Geo Address  : 0x%x\n", [self decodeValueOutput: ptr[i] ofType: kCaen_GeoAddress] );
+                NSLog( @"Channel      : 0x%x  (un:%d ov:%d)\n", [self channel: ptr[i]],
                        [self decodeValueOutput: ptr[i] 
                                         ofType: kCaen_UnderThreshold],
                        [self decodeValueOutput: ptr[i] 
                                         ofType: kCaen_Overflow] );
-                NSLog( @"Adc Value    : 0x%lx\n", [self adcValue: ptr[i]] );
+                NSLog( @"Adc Value    : 0x%x\n", [self adcValue: ptr[i]] );
             }
             else if( [self isEndOfBlock: ptr[i]] ){
-                NSLog( @"Geo Address  : 0x%lx\n", [self decodeValueOutput: ptr[i] ofType: kCaen_GeoAddress] );
-                NSLog( @"Event Counter: 0x%lx\n", [self decodeValueOutput: ptr[i] ofType: kCaen_EventCounter] );
+                NSLog( @"Geo Address  : 0x%x\n", [self decodeValueOutput: ptr[i] ofType: kCaen_GeoAddress] );
+                NSLog( @"Event Counter: 0x%x\n", [self decodeValueOutput: ptr[i] ofType: kCaen_EventCounter] );
                 NSLog( @"--End of Block");
             }
             else if( [self isNotValidDatum: ptr[i]] ){
@@ -205,11 +205,11 @@
     }
 }
 
-- (unsigned long) decodeData:(void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*) aDataSet
+- (uint32_t) decodeData:(void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*) aDataSet
 {
     short i;
-    long* ptr = (long*) aSomeData;
-    long length;
+    int32_t* ptr = (int32_t*) aSomeData;
+    int32_t length;
     NSString* crateKey;
     NSString* cardKey;
 	length = *ptr & 0x3ffff;
@@ -241,19 +241,19 @@
     return length;
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
-    unsigned long length = (ptr[0] & 0x003ffff);
+    uint32_t length = (ptr[0] & 0x003ffff);
 
     NSString* title= [NSString stringWithFormat:@"%@ Record\n\n",[self identifier]];
     
-    NSString* len =[NSString stringWithFormat:   @"Record Length = %lu\n",length-2];
-    NSString* crate = [NSString stringWithFormat:@"Crate = %lu\n",(ptr[1] >> 21)&0x0000000f];
-    NSString* card  = [NSString stringWithFormat:@"Card  = %lu\n",(ptr[1] >> 16)&0x0000001f];
+    NSString* len =[NSString stringWithFormat:   @"Record Length = %u\n",length-2];
+    NSString* crate = [NSString stringWithFormat:@"Crate = %u\n",(ptr[1] >> 21)&0x0000000f];
+    NSString* card  = [NSString stringWithFormat:@"Card  = %u\n",(ptr[1] >> 16)&0x0000001f];
     NSString* timeStamp = @"No Timestamp\n";
     int firstDataIndex = 2;
     if(ptr[1] & 0x1){
-        timeStamp  = [NSString stringWithFormat:@"TimeStamp = %lu.%lu\n",ptr[2],ptr[3]];
+        timeStamp  = [NSString stringWithFormat:@"TimeStamp = %u.%u\n",ptr[2],ptr[3]];
         firstDataIndex = 4;
     }
     
@@ -262,7 +262,7 @@
     int i;
     for( i = firstDataIndex; i < length; i++ ){
          if( [self isValidDatum: ptr[i]] ){
-            restOfString = [restOfString stringByAppendingFormat:@"Chan  = %d  Value = %ld\n",[self channel: ptr[i]],[self adcValue: ptr[i]]];
+            restOfString = [restOfString stringByAppendingFormat:@"Chan  = %d  Value = %d\n",[self channel: ptr[i]],[self adcValue: ptr[i]]];
         }
     }
 

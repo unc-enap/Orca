@@ -203,7 +203,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"ArduinoUNO (%lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"ArduinoUNO (%u)",[model uniqueIdNumber]]];
 }
 
 

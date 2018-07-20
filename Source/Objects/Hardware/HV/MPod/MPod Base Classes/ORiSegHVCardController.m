@@ -344,8 +344,8 @@
 	int numberOnChannels = [model numberChannelsOn];
 	[channelCountField setIntValue:numberOnChannels];
 	[self outputStatusChanged:aNote];
-	unsigned long events = [model failureEvents:selectedChannel];
-    unsigned long moduleEvents = [model moduleFailureEvents];
+	uint32_t events = [model failureEvents:selectedChannel];
+    uint32_t moduleEvents = [model moduleFailureEvents];
 	int state  = [model channel:selectedChannel readParamAsInt:@"outputSwitch"];
 	[temperatureField setIntValue:[model channel:0 readParamAsInt:@"outputMeasurementTemperature"]];
 
@@ -477,7 +477,7 @@
 		}
 		
 		int numberOnChannels			= [model numberChannelsOn];
-		unsigned long channelStateMask	= [model channelStateMask];
+		uint32_t channelStateMask	= [model channelStateMask];
 		int numChannelsRamping			= [model numberChannelsRamping];
 		int numChannelsAboveZero		= [model numberChannelsWithNonZeroVoltage];
 		int numChannelsNonZeroHwGoal	= [model numberChannelsWithNonZeroHwGoal];
@@ -751,7 +751,7 @@
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){
             [model panic:chan];
-            NSLog(@"Panicked MPod (%lu), Card %d Channel %d\n",[[model guardian]uniqueIdNumber],[model slot], chan);
+            NSLog(@"Panicked MPod (%u), Card %d Channel %d\n",[[model guardian]uniqueIdNumber],[model slot], chan);
         }
     }];
 #else
@@ -931,7 +931,7 @@
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn){
             [model panicAll];
-            NSLog(@"Panicked All Channels MPod (%lu), Card %d\n",[[model guardian]uniqueIdNumber],[model slot]);
+            NSLog(@"Panicked All Channels MPod (%u), Card %d\n",[[model guardian]uniqueIdNumber],[model slot]);
        }
     }];
 #else
@@ -1035,7 +1035,7 @@
 	if(returnCode == NSAlertFirstButtonReturn){
         int aChannel = [model selectedChannel];
 		[model panic:aChannel];
-        NSLog(@"Panicked MPod (%lu), Card %d Channel %d\n",[[model guardian]uniqueIdNumber],[model slot], aChannel);
+        NSLog(@"Panicked MPod (%u), Card %d Channel %d\n",[[model guardian]uniqueIdNumber],[model slot], aChannel);
 	}
 }
 
@@ -1043,7 +1043,7 @@
 {
 	if(returnCode == NSAlertFirstButtonReturn){
 		[model panicAll];
-        NSLog(@"Panicked All Channels MPod (%lu), Card %d\n",[[model guardian]uniqueIdNumber],[model slot]);
+        NSLog(@"Panicked All Channels MPod (%u), Card %d\n",[[model guardian]uniqueIdNumber],[model slot]);
 
 	}
 }

@@ -23,14 +23,14 @@
 @interface FilterScriptEx : NSObject
 {
     unsigned short  switchLevel;
-    long			switchValue[512];
+    int32_t			switchValue[512];
     ORFilterSymbolTable* symbolTable;
 }
 - (id) init;
 - (void) setSymbolTable:(ORFilterSymbolTable*)aTable;
-- (void) startFilterScript: (nodeType**)someNodes nodeCount:(long)nodeCount delegate:(id) delegate;
-- (void) finishFilterScript:(nodeType**)someNodes nodeCount:(long)nodeCount delegate:(id) delegate;
-- (void) runFilterNodes:    (nodeType**)someNodes nodeCount:(long)nodeCount delegate:(id) delegate;
+- (void) startFilterScript: (nodeType**)someNodes nodeCount:(int32_t)nodeCount delegate:(id) delegate;
+- (void) finishFilterScript:(nodeType**)someNodes nodeCount:(int32_t)nodeCount delegate:(id) delegate;
+- (void) runFilterNodes:    (nodeType**)someNodes nodeCount:(int32_t)nodeCount delegate:(id) delegate;
 - (void) doSwitch:(nodeType*)p      delegate:(id)delegate;
 - (void) doCase:(nodeType*)p        delegate:(id)delegate;
 - (void) doDefault:(nodeType*)p     delegate:(id)delegate;
@@ -39,7 +39,7 @@
 - (void) forLoop:(nodeType*)p       delegate:(id)delegate;
 - (void) defineArray:(nodeType*)p   delegate:(id)delegate;
 - (void) freeArray:(nodeType*)p     delegate:(id)delegate;
-- (unsigned long*) loadArray:(unsigned long*)ptr nodeType:(nodeType*)p;
+- (uint32_t*) loadArray:(uint32_t*)ptr nodeType:(nodeType*)p;
 - (void) arrayList:(nodeType*)p delegate:(id) delegate;
 - (filterData) ex:(nodeType*)p delegate:(id) delegate;
 - (id) finalPass:(id) string;

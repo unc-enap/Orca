@@ -52,10 +52,10 @@
     unsigned short  postTriggerTime;
     unsigned short  udpFrameSize;
     ORTimeRate*     totalRate;
-    unsigned long   dataId;
+    uint32_t   dataId;
     BOOL            enabled[kNumTristanFLTChannels];
-    unsigned long   threshold[kNumTristanFLTChannels];
-    unsigned long   eventCount[kNumTristanFLTChannels];
+    uint32_t   threshold[kNumTristanFLTChannels];
+    uint32_t   eventCount[kNumTristanFLTChannels];
     ORUDPConnection*    client;
     NSString*       hostName;
     NSUInteger             port;
@@ -90,8 +90,8 @@
 - (void) setUdpFrameSize:(unsigned short)aValue;
 -(BOOL) enabled:(unsigned short) aChan;
 -(void) setEnabled:(unsigned short) aChan withValue:(BOOL) aState;
-- (unsigned long) threshold:(unsigned short)aChan;
--(void) setThreshold:(unsigned short) aChan withValue:(unsigned long) aValue;
+- (uint32_t) threshold:(unsigned short)aChan;
+-(void) setThreshold:(unsigned short) aChan withValue:(uint32_t) aValue;
 - (void) setTotalRate:(ORTimeRate*)newTimeRate;
 - (void) setToDefaults;
 - (void) initBoard;
@@ -110,8 +110,8 @@
 - (void) startClient;
 
 #pragma mark ***Data Taking
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) aDataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) aDataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherCard;
 - (NSDictionary*) dataRecordDescription;

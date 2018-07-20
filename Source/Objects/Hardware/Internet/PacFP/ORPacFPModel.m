@@ -789,8 +789,8 @@ NSString* ORPacFPLock						= @"ORPacFPLock";
 
 
 #pragma mark •••Data Records
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -826,7 +826,7 @@ NSString* ORPacFPLock						= @"ORPacFPLock";
 }
 
 
-- (unsigned long) timeMeasured:(int)index
+- (uint32_t) timeMeasured:(int)index
 {
 	if(index<0)return 0;
 	else if(index>=8)return 0;
@@ -939,7 +939,7 @@ NSString* ORPacFPLock						= @"ORPacFPLock";
 {
 	NSString* s;
  	@synchronized(self){
-		s= [NSString stringWithFormat:@"PacFP,%lu",[self uniqueIdNumber]];
+		s= [NSString stringWithFormat:@"PacFP,%u",[self uniqueIdNumber]];
 	}
 	return s;
 }
@@ -1151,7 +1151,7 @@ NSString* ORPacFPLock						= @"ORPacFPLock";
 {
     if([[ORGlobal sharedGlobal] runInProgress]){
 		
-		unsigned long data[18];
+		uint32_t data[18];
 		data[0] = dataId | 18;
 		data[1] = ([self uniqueIdNumber]&0xfff);
 		
@@ -1162,7 +1162,7 @@ NSString* ORPacFPLock						= @"ORPacFPLock";
 			data[index++] = adc[i];
 		}
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification
-															object:[NSData dataWithBytes:data length:sizeof(long)*18]];
+															object:[NSData dataWithBytes:data length:sizeof(int32_t)*18]];
 	}
 }
 
@@ -1170,7 +1170,7 @@ NSString* ORPacFPLock						= @"ORPacFPLock";
 {
 	NSString*   outputString = nil;
 	if(logToFile) {
-		outputString = [NSString stringWithFormat:@"%lu ",timeMeasured[0]];
+		outputString = [NSString stringWithFormat:@"%u ",timeMeasured[0]];
 		short chan;
 		for(chan=0;chan<8;chan++){
 			outputString = [outputString stringByAppendingFormat:@"%.2f ",[self convertedAdc:chan]];

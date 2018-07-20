@@ -42,15 +42,15 @@
 
 @implementation ORHVcRIODecoderForAdc
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-	unsigned long *dataPtr  = (unsigned long*)someData;
+	uint32_t *dataPtr  = (uint32_t*)someData;
     int objId               = dataPtr[1] & 0xfffff;
-    unsigned long timeStamp = dataPtr[2];
-    unsigned long dataIndex = dataPtr[3];
+    uint32_t timeStamp = dataPtr[2];
+    uint32_t dataIndex = dataPtr[3];
     union {
         double asDouble;
-        unsigned long asLong[2];
+        uint32_t asLong[2];
     } theData;
     theData.asLong[0] = dataPtr[4];
     theData.asLong[1] = dataPtr[5];
@@ -81,7 +81,7 @@
 	return ExtractLength(dataPtr[0]);
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr
 {
     NSString* title= @"HVcRIO\n\n";
     NSString* theString =  [NSString stringWithFormat:@"%@\n",title];               
@@ -89,10 +89,10 @@
 	theString = [theString stringByAppendingFormat:@"Unit %d\n",ident];
     NSDate* date = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)dataPtr[2]];
     int objId               = dataPtr[1] & 0xfffff;
-    unsigned long dataIndex = dataPtr[3];
+    uint32_t dataIndex = dataPtr[3];
     union {
         double asDouble;
-        unsigned long asLong[2];
+        uint32_t asLong[2];
     } theData;
     theData.asLong[0] = dataPtr[4];
     theData.asLong[1] = dataPtr[5];

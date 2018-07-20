@@ -249,16 +249,16 @@ static NSString* rad7ThoronNames[kNumberRad7ThoronNames] = {
         if(!buffer)buffer = [[NSMutableString string] retain];
         [buffer appendString:theString]; //accumulate into the buffer
         
-        [self chunkPrecheck:buffer]; //some of the responses are very long. Check for the special cases
+        [self chunkPrecheck:buffer]; //some of the responses are very int32_t. Check for the special cases
         
         if(gettingData){
-            [self setStatusString:[NSString stringWithFormat:@"Received: %ld bytes",[buffer length]]];
+            [self setStatusString:[NSString stringWithFormat:@"Received: %d bytes",(int)[buffer length]]];
         }
         else if(radLinkLoading && !rebooting){
-            [self setStatusString:[NSString stringWithFormat:@"Loaded: %ld/%d bytes",[buffer length],radLinkSize]];
+            [self setStatusString:[NSString stringWithFormat:@"Loaded: %d/%d bytes",(int)[buffer length],radLinkSize]];
         }
         else if(gettingReview){
-            [self setStatusString:[NSString stringWithFormat:@"Getting Data: %ld bytes (Takes a while -- Be patient)",[buffer length]]];
+            [self setStatusString:[NSString stringWithFormat:@"Getting Data: %d bytes (Takes a while -- Be patient)",(int)[buffer length]]];
         }
        
         NSUInteger eofLocation = [buffer rangeOfString:@"\r\n>"].location;
@@ -379,12 +379,12 @@ static NSString* rad7ThoronNames[kNumberRad7ThoronNames] = {
     [[NSNotificationCenter defaultCenter] postNotificationName:ORRad7ModelHumidityAlarmChanged object:self];
 }
 
-- (unsigned long) maxRadon
+- (uint32_t) maxRadon
 {
     return maxRadon;
 }
 
-- (void) setMaxRadon:(unsigned long)aMaxRadon
+- (void) setMaxRadon:(uint32_t)aMaxRadon
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setMaxRadon:maxRadon];
     
@@ -393,12 +393,12 @@ static NSString* rad7ThoronNames[kNumberRad7ThoronNames] = {
     [[NSNotificationCenter defaultCenter] postNotificationName:ORRad7ModelMaxRadonChanged object:self];
 }
 
-- (unsigned long) alarmLimit
+- (uint32_t) alarmLimit
 {
     return alarmLimit;
 }
 
-- (void) setAlarmLimit:(unsigned long)aAlarmLimit
+- (void) setAlarmLimit:(uint32_t)aAlarmLimit
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setAlarmLimit:alarmLimit];
     
@@ -727,7 +727,7 @@ static NSString* rad7ThoronNames[kNumberRad7ThoronNames] = {
 	}
 }
 
-- (unsigned long) timeMeasured
+- (uint32_t) timeMeasured
 {
 	return timeMeasured;
 }
@@ -1057,7 +1057,7 @@ static NSString* rad7ThoronNames[kNumberRad7ThoronNames] = {
 - (void) loadDialogFromHardware
 {
     [self addCmdToQueue:@"SETUP REVIEW"];
-    NSLog(@"Getting settings from Rad7.... Takes a long time... Be Patient.\n");
+    NSLog(@"Getting settings from Rad7.... Takes a int32_t time... Be Patient.\n");
 }
 
 - (void) initHardware
@@ -1142,7 +1142,7 @@ static NSString* rad7ThoronNames[kNumberRad7ThoronNames] = {
 {
 	NSString* s;
  	@synchronized(self){
-		s= [NSString stringWithFormat:@"Rad7,%lu",[self uniqueIdNumber]];
+		s= [NSString stringWithFormat:@"Rad7,%u",[self uniqueIdNumber]];
 	}
 	return s;
 }
@@ -1334,7 +1334,7 @@ static NSString* rad7ThoronNames[kNumberRad7ThoronNames] = {
             tempVerbose = NO;
             [self flushAllCommands];
             
-            NSLogError(@"",@"Comm Error",@"Rad7",[NSString stringWithFormat:@"unit %lu",[self uniqueIdNumber]],nil);
+            NSLogError(@"",@"Comm Error",@"Rad7",[NSString stringWithFormat:@"unit %u",[self uniqueIdNumber]],nil);
 
             id runStateString = [statusDictionary objectForKey:kRad7RunStatus];
             
@@ -1410,7 +1410,7 @@ static NSString* rad7ThoronNames[kNumberRad7ThoronNames] = {
 			[self setDataPointArray:[NSMutableArray array]];
 			if(makeFile){
 				[stopRunFilePath release];
-				stopRunFilePath = [NSString stringWithFormat:@"~/Desktop/Rad7/Rad7_%lu_%@",[self uniqueIdNumber],[NSDate date]];
+				stopRunFilePath = [NSString stringWithFormat:@"~/Desktop/Rad7/Rad7_%u_%@",[self uniqueIdNumber],[NSDate date]];
 				stopRunFilePath = [stopRunFilePath stringByExpandingTildeInPath];
 				stopRunFilePath = [stopRunFilePath stringByReplacingOccurrencesOfString:@" " withString:@"_"];
 				stopRunFilePath = [stopRunFilePath stringByReplacingOccurrencesOfString:@"-" withString:@"_"];

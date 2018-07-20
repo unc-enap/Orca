@@ -30,7 +30,7 @@
 
 #pragma mark ¥¥¥Accessors
 - (int) slotConv;
-- (unsigned long) baseAddress;
+- (uint32_t) baseAddress;
 - (void) setSlot:(unsigned short)aSlot;
 - (void) calcBaseAddress;
 @end

@@ -116,7 +116,7 @@ NSString* ORAugerCardExceptionCountChanged		= @"ORAugerCardExceptionCountChanged
 	return [self stationNumber];
 }
 
-- (unsigned long)   exceptionCount
+- (uint32_t)   exceptionCount
 {
     return exceptionCount;
 }
@@ -147,37 +147,37 @@ NSString* ORAugerCardExceptionCountChanged		= @"ORAugerCardExceptionCountChanged
 }
 
 #pragma mark ¥¥¥HW Access
-- (unsigned long) read:(unsigned long) address
+- (uint32_t) read:(uint32_t) address
 {
 	return [[[self crate] adapter] read:address];
 }
 
-- (void) write:(unsigned long)address value:(unsigned long)aValue
+- (void) write:(uint32_t)address value:(uint32_t)aValue
 {
 	[[[self crate] adapter] write:address value:aValue];
 }
 
-- (void) writeBitsAtAddress:(unsigned long)anAddress value:(unsigned long)dataWord mask:(unsigned long)aMask shifted:(int)shiftAmount
+- (void) writeBitsAtAddress:(uint32_t)anAddress value:(uint32_t)dataWord mask:(uint32_t)aMask shifted:(int)shiftAmount
 {
 	[[[self crate] adapter] writeBitsAtAddress:anAddress value:dataWord mask:aMask shifted:shiftAmount];
 }
 
-- (void) setBitsLowAtAddress:(unsigned long)anAddress mask:(unsigned long)aMask
+- (void) setBitsLowAtAddress:(uint32_t)anAddress mask:(uint32_t)aMask
 {
 	[[[self crate] adapter]  setBitsLowAtAddress:anAddress mask:aMask];
 }
 
-- (void) setBitsHighAtAddress:(unsigned long)anAddress mask:(unsigned long)aMask
+- (void) setBitsHighAtAddress:(uint32_t)anAddress mask:(uint32_t)aMask
 {
 	[[[self crate] adapter]  setBitsHighAtAddress:anAddress mask:aMask];
 }
 
-- (void) readRegisterBlock:(unsigned long)  anAddress 
-				dataBuffer:(unsigned long*) aDataBuffer
-					length:(unsigned long)  length 
-				 increment:(unsigned long)  incr
-			   numberSlots:(unsigned long)  nSlots 
-			 slotIncrement:(unsigned long)  incrSlots
+- (void) readRegisterBlock:(uint32_t)  anAddress 
+				dataBuffer:(uint32_t*) aDataBuffer
+					length:(uint32_t)  length 
+				 increment:(uint32_t)  incr
+			   numberSlots:(uint32_t)  nSlots 
+			 slotIncrement:(uint32_t)  incrSlots
  {
 	[[[self crate] adapter]  readRegisterBlock: anAddress 
 									dataBuffer: aDataBuffer
@@ -187,10 +187,10 @@ NSString* ORAugerCardExceptionCountChanged		= @"ORAugerCardExceptionCountChanged
 								 slotIncrement:  incrSlots];
  }
 
-- (void) readBlock:(unsigned long)  anAddress 
-		dataBuffer:(unsigned long*) aDataBuffer
-			length:(unsigned long)  length 
-		 increment:(unsigned long)  incr
+- (void) readBlock:(uint32_t)  anAddress 
+		dataBuffer:(uint32_t*) aDataBuffer
+			length:(uint32_t)  length 
+		 increment:(uint32_t)  incr
 {
 	[[[self crate] adapter]  readBlock: anAddress 
 									dataBuffer: aDataBuffer
@@ -199,10 +199,10 @@ NSString* ORAugerCardExceptionCountChanged		= @"ORAugerCardExceptionCountChanged
  }
 
 
-- (void) writeBlock:(unsigned long)  anAddress 
-		 dataBuffer:(unsigned long*) aDataBuffer
-			 length:(unsigned long)  length 
-		  increment:(unsigned long)  incr
+- (void) writeBlock:(uint32_t)  anAddress 
+		 dataBuffer:(uint32_t*) aDataBuffer
+			 length:(uint32_t)  length 
+		  increment:(uint32_t)  incr
 {
 	[[[self crate] adapter]  writeBlock: anAddress 
 							 dataBuffer: aDataBuffer
@@ -210,10 +210,10 @@ NSString* ORAugerCardExceptionCountChanged		= @"ORAugerCardExceptionCountChanged
 							  increment:  incr];
 }
 
-- (void) clearBlock:(unsigned long)  anAddress 
-			pattern:(unsigned long) aPattern
-			 length:(unsigned long)  length 
-		  increment:(unsigned long)  incr
+- (void) clearBlock:(uint32_t)  anAddress 
+			pattern:(uint32_t) aPattern
+			 length:(uint32_t)  length 
+		  increment:(uint32_t)  incr
 {
 	[[[self crate] adapter]  clearBlock: anAddress 
 								pattern: aPattern

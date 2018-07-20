@@ -112,8 +112,8 @@ static Caen419Registers reg[kNumRegisters] = {
     [self setDataId:[anotherObj dataId]];
 }
 
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -123,7 +123,7 @@ static Caen419Registers reg[kNumRegisters] = {
 	return reg[anIndex].regName;
 }
 
-- (unsigned long) getAddressOffset: (short) anIndex
+- (uint32_t) getAddressOffset: (short) anIndex
 {
     return( reg[anIndex].addressOffset );
 }
@@ -201,12 +201,12 @@ static Caen419Registers reg[kNumRegisters] = {
     [[NSNotificationCenter defaultCenter] postNotificationName:ORCaen419ModelRiseTimeProtectionChanged object:self  userInfo:userInfo];
 }
 
-- (unsigned long) lowThreshold:(unsigned short) aChnl
+- (uint32_t) lowThreshold:(unsigned short) aChnl
 {
     return lowThresholds[aChnl];
 }
 
-- (void) setLowThreshold:(unsigned short) aChnl withValue:(unsigned long) aValue
+- (void) setLowThreshold:(unsigned short) aChnl withValue:(uint32_t) aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setLowThreshold:aChnl withValue:[self lowThreshold:aChnl]];
     lowThresholds[aChnl] = aValue;
@@ -215,12 +215,12 @@ static Caen419Registers reg[kNumRegisters] = {
     [[NSNotificationCenter defaultCenter] postNotificationName:ORCaen419LowThresholdChanged object:self userInfo:userInfo];
 }
 
-- (unsigned long) highThreshold:(unsigned short) aChnl
+- (uint32_t) highThreshold:(unsigned short) aChnl
 {
     return highThresholds[aChnl];
 }
 
-- (void) setHighThreshold:(unsigned short) aChnl withValue:(unsigned long) aValue
+- (void) setHighThreshold:(unsigned short) aChnl withValue:(uint32_t) aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setHighThreshold:aChnl withValue:[self highThreshold:aChnl]];
     highThresholds[aChnl] = aValue;
@@ -242,12 +242,12 @@ static Caen419Registers reg[kNumRegisters] = {
     [[NSNotificationCenter defaultCenter] postNotificationName:ORCaen419ModelLinearGateModeChanged object:self];
 }
 
-- (unsigned long) auxAddress
+- (uint32_t) auxAddress
 {
     return auxAddress;
 }
 
-- (void) setAuxAddress:(unsigned long)aAuxAddress
+- (void) setAuxAddress:(uint32_t)aAuxAddress
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setAuxAddress:auxAddress];
     auxAddress = aAuxAddress;
@@ -486,11 +486,11 @@ static Caen419Registers reg[kNumRegisters] = {
 								usingAddSpace:0x01];
 				
 				if(IsShortForm(dataId)){
-					unsigned long data = dataId | slotMask | ((channel & 0x0000000f) << 12) | (theValue & 0x0fff);
+					uint32_t data = dataId | slotMask | ((channel & 0x0000000f) << 12) | (theValue & 0x0fff);
 					[aDataPacket addLongsToFrameBuffer:&data length:1];
 				}
 				else {
-					unsigned long data[2];
+					uint32_t data[2];
 					data[0] = dataId | 2;
 					data[1] =  slotMask | ((channel & 0x0000000f) << 12) | (theValue & 0x0fff);
 					[aDataPacket addLongsToFrameBuffer:data length:2];
@@ -541,7 +541,7 @@ static Caen419Registers reg[kNumRegisters] = {
     return YES;
 }
 
-- (unsigned long) adcCount:(int)aChannel
+- (uint32_t) adcCount:(int)aChannel
 {
     return adcCount[aChannel];
 }
@@ -560,7 +560,7 @@ static Caen419Registers reg[kNumRegisters] = {
     }
 }
 
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
 {
 	if(groupTag == 0){
 		if(counterTag>=0 && counterTag<kCV419NumberChannels){

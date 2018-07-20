@@ -59,7 +59,7 @@
 
 @interface ORIpeSimulationModel : OrcaObject <ORAdcProcessing>
 {
-    unsigned long    channelDataId;
+    uint32_t    channelDataId;
  	NSString*		 IPNumber;
 	NSMutableArray*	 connectionHistory;
 	NSInteger 		 ipNumberIndex;
@@ -81,7 +81,7 @@
                                         //this represents the contents of the list view (subset of requestCache) -tb-
 	
 	NSMutableDictionary* pendingRequests;	//itemKeys in this are requests that have not come back
-	long histogram[kResponseTimeHistogramSize];
+	int32_t histogram[kResponseTimeHistogramSize];
     int timeOutCount;
     int totalRequestCount;
     BOOL shipRecords;
@@ -103,8 +103,8 @@
 #pragma mark ‚Ä¢‚Ä¢‚Ä¢Data Records
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherCard;
-- (unsigned long) channelDataId;
-- (void) setChannelDataId:(unsigned long) aValue;
+- (uint32_t) channelDataId;
+- (void) setChannelDataId:(uint32_t) aValue;
 
 #pragma mark ***Accessors
 - (NSString*) fieldlineImageFileName;
@@ -178,7 +178,7 @@
 
 #pragma mark ‚Ä¢‚Ä¢‚Ä¢Statistics
 - (void) histogram:(int)milliSecs;
-- (long) dataTimeHist:(int)index;
+- (int32_t) dataTimeHist:(int)index;
 
 #pragma mark ‚Ä¢‚Ä¢‚Ä¢Archival
 - (id) initWithCoder:(NSCoder*)decoder;

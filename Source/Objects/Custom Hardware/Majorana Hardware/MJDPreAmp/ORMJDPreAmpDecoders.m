@@ -54,18 +54,18 @@ static NSString* kMJDPreAmpUnit[21] = {
     else return [NSString stringWithFormat:@"PreAmp %d",aUnit];			
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-	unsigned long *dataPtr = (unsigned long*)someData;
+	uint32_t *dataPtr = (uint32_t*)someData;
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theValue;
 	int ident = dataPtr[1] & 0xfff;
 	int i;
 	int index = 4;
 	for(i=0;i<kMJDPreAmpAdcChannels;i++){
-		unsigned long theTime;
+		uint32_t theTime;
 		theTime = dataPtr[2];
 		theValue.asLong = dataPtr[index]; //encoded as float, use union to convert
 		
@@ -81,7 +81,7 @@ static NSString* kMJDPreAmpUnit[21] = {
 	return ExtractLength(dataPtr[0]);
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr
 {
     NSString* title= @"MJD PreAmp\n\n";
     NSString* theString =  [NSString stringWithFormat:@"%@\n",title];               
@@ -89,13 +89,13 @@ static NSString* kMJDPreAmpUnit[21] = {
 	theString = [theString stringByAppendingFormat:@"%@\n",[self getPreAmpKey:ident]];
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theData;
 		
 	NSDate* date1 = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)dataPtr[2]];
     theString = [theString stringByAppendingFormat:@"TimeStamp: %@\n",[date1 stdDescription]];
 
-	unsigned long enabledMask = dataPtr[3];
+	uint32_t enabledMask = dataPtr[3];
 	int index = 4;
 	int i;
 	for(i=0;i<kMJDPreAmpAdcChannels;i++){

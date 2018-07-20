@@ -72,26 +72,26 @@ enum {
   * TODO: Again test in simulation mode...
   */
 typedef struct {
-	unsigned long sec;
-	unsigned long subSec;
-	unsigned long channelMap; // 8bit channel + 24 channelMap
+	uint32_t sec;
+	uint32_t subSec;
+	uint32_t channelMap; // 8bit channel + 24 channelMap
 	                          // <--actually redundant like to remove. MAH 7/20/07
-	unsigned long eventID;    // 16bit number of pages in buffer + 16bit eventId
-	unsigned long energy;
+	uint32_t eventID;    // 16bit number of pages in buffer + 16bit eventId
+	uint32_t energy;
 } eventData;
 
 
 typedef struct {
 	// Added reset time stamp, ak 2.7.07
-	unsigned long resetSec;
-	unsigned long resetSubSec;
+	uint32_t resetSec;
+	uint32_t resetSubSec;
 } debugData;
 
 
 typedef struct {
-	unsigned long channelMap; // 8bit channel + 24 channelMap
-	unsigned long threshold;   
-	unsigned long hitrate;
+	uint32_t channelMap; // 8bit channel + 24 channelMap
+	uint32_t threshold;   
+	uint32_t hitrate;
 } hitRateData;
 
 

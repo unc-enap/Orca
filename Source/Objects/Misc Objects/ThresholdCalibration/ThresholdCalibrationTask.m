@@ -111,7 +111,7 @@
 	maxThreshold = aValue;
 }
 
-- (void) start:(int)num enabledMask:(unsigned long)enabledMask rateGroup:(ORRateGroup*)aRateGroup tag:(int)aTag
+- (void) start:(int)num enabledMask:(uint32_t)enabledMask rateGroup:(ORRateGroup*)aRateGroup tag:(int)aTag
 { 
     numChannels = num;
 	

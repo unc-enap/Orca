@@ -60,7 +60,7 @@
 - (void) stopped:(NSNotification *)aNote;
 - (void) processingFile:(NSNotification *)aNote;
 - (void) headerChanged:(NSNotification*)aNote;
-- (void) setSelectionDate:(long)aValue;
+- (void) setSelectionDate:(int32_t)aValue;
 - (void) findSelectedRunByDate;
 - (void) setRunBoundaryTimes;
 - (void) tableViewSelectionDidChange:(NSNotification *)aNote;
@@ -88,9 +88,9 @@
 #pragma mark •••Data Source Methods
 - (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex;
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView;
-- (unsigned long) minRunStartTime;
-- (unsigned long) maxRunEndTime;
-- (long) numberRuns;
+- (uint32_t) minRunStartTime;
+- (uint32_t) maxRunEndTime;
+- (int32_t) numberRuns;
 - (id) run:(int)index objectForKey:(id)aKey;
 - (void) copyHeader:(ORHeaderItem*)anItem toPasteBoard:(NSPasteboard*)pboard;
 - (NSSlider*) selectionDateSlider;
@@ -112,9 +112,9 @@
 @end
 
 @interface NSObject (RunTimeView)
-- (unsigned long) minRunStartTime;
-- (unsigned long) maxRunEndTime;
+- (uint32_t) minRunStartTime;
+- (uint32_t) maxRunEndTime;
 - (int) selectedRunIndex;
-- (long) numberRuns;
+- (int32_t) numberRuns;
 - (id) run:(int)index objectForKey:(id)aKey;
 @end

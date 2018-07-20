@@ -34,7 +34,7 @@
         int             modeTime;
         float           radValue;
         NSString*       units;
-        unsigned long   timeMeasured;
+        uint32_t   timeMeasured;
         NSDate*         dateMeasured;
         ORTimeRate*		timeRate;
         BOOL			isLog;
@@ -75,7 +75,7 @@
 - (NSDate*) dateMeasured;
 - (BOOL)    isRunning;
 - (void)    setIsRunning:(BOOL)aValue;
-- (unsigned long) timeMeasured;
+- (uint32_t) timeMeasured;
 - (NSString*) units;
 - (void)    setUnits:(NSString*)aUnits;
 - (float)   radValue;

@@ -189,7 +189,7 @@ NSString* ORCaen260ModelAllScalerValuesChanged= @"ORCaen260ModelAllScalerValuesC
 
 #pragma mark ***Register - Register specific routines
 - (NSString*)     getRegisterName:(short) anIndex	{ return reg[anIndex].regName; }
-- (unsigned long) getAddressOffset:(short) anIndex	{ return(reg[anIndex].addressOffset); }
+- (uint32_t) getAddressOffset:(short) anIndex	{ return(reg[anIndex].addressOffset); }
 - (short)		  getAccessType:(short) anIndex		{ return reg[anIndex].accessType; }
 - (short)         getAccessSize:(short) anIndex		{ return reg[anIndex].size; }
 - (BOOL)          dataReset:(short) anIndex			{ return reg[anIndex].dataReset; }
@@ -203,7 +203,7 @@ NSString* ORCaen260ModelAllScalerValuesChanged= @"ORCaen260ModelAllScalerValuesC
     return [NSString stringWithFormat:@"CAEN 260 (Slot %d) ",[self slot]];
 }
 
-- (unsigned long) scalerValue:(int)index
+- (uint32_t) scalerValue:(int)index
 {
 	if(index<0)return 0;
 	else if(index>kNumCaen260Channels)return 0;
@@ -224,7 +224,7 @@ NSString* ORCaen260ModelAllScalerValuesChanged= @"ORCaen260ModelAllScalerValuesC
     
 }
 
-- (void) setScalerValue:(unsigned long)aValue index:(int)index
+- (void) setScalerValue:(uint32_t)aValue index:(int)index
 {
 	if(index<0)return;
 	else if(index>kNumCaen260Channels)return;
@@ -306,7 +306,7 @@ NSString* ORCaen260ModelAllScalerValuesChanged= @"ORCaen260ModelAllScalerValuesC
 	BOOL runInProgress = [gOrcaGlobals runInProgress];
 	
 	if(runInProgress){
-		unsigned long data[19];
+		uint32_t data[19];
 		
 		data[0] = dataId | 19;
 		data[1] = (([self crateNumber]&0x01e)<<21) | ([self slot]& 0x0000001f)<<16  | (enabledMask & 0x0000ffff);
@@ -321,7 +321,7 @@ NSString* ORCaen260ModelAllScalerValuesChanged= @"ORCaen260ModelAllScalerValuesC
 		if(index>3){
 			//the full record goes into the data stream via a notification
 			[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-																object:[NSData dataWithBytes:data length:index*sizeof(long)]];
+																object:[NSData dataWithBytes:data length:index*sizeof(int32_t)]];
 		}
 	}
 	
@@ -484,7 +484,7 @@ NSString* ORCaen260ModelAllScalerValuesChanged= @"ORCaen260ModelAllScalerValuesC
 	lastReadTime = ut_Time;
 	for(i=0;i<kNumCaen260Channels;i++){
 		if(enabledMask & (0x1<<i)){
-			unsigned long aValue = 0;
+			uint32_t aValue = 0;
 			[[self adapter] readLongBlock:&aValue
 								atAddress:[self baseAddress]+[self getAddressOffset:kCounter0] + (i*0x04)
 								numToRead:1
@@ -508,8 +508,8 @@ NSString* ORCaen260ModelAllScalerValuesChanged= @"ORCaen260ModelAllScalerValuesC
     [self setDataId:[anotherObj dataId]];
 }
 
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }

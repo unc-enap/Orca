@@ -28,14 +28,14 @@
 @class ORScalerSumController;
 
 @interface ORScalerSum : ORDataSetModel  {
-    unsigned long 	scalerSum;
-    unsigned long 	scalerValue;
+    uint32_t 	scalerSum;
+    uint32_t 	scalerValue;
 	NSLock*			dataLock;
 }
 
 #pragma mark ¥¥¥Accessors 
 - (NSString*)name;
-- (void) loadScalerValue:(unsigned long)newScaler;
+- (void) loadScalerValue:(uint32_t)newScaler;
 
 #pragma mark ¥¥¥Data Management
 - (void) clear;

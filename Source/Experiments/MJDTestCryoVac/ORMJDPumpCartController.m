@@ -73,7 +73,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"MJD Vacuum (Cryostat %lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"MJD Vacuum (Cryostat %u)",[model uniqueIdNumber]]];
 }
 
 #pragma mark •••Notifications

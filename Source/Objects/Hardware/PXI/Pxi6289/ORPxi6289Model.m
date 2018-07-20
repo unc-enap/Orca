@@ -37,7 +37,7 @@ NSString* ORPxi6289ModelThresholdChanged		= @"ORPxi6289ModelThresholdChanged";
 
 #pragma mark •••Static Declarations
 //offsets from the base address
-static unsigned long register_offsets[kNumberOfPxi6289Registers] = {
+static uint32_t register_offsets[kNumberOfPxi6289Registers] = {
 	0x00, //[0] board ID
 	0xff, //[1] Threshold <<<==== fix
 };
@@ -98,7 +98,7 @@ static unsigned long register_offsets[kNumberOfPxi6289Registers] = {
     return [waveFormRateGroup rateObject:channel];
 }
 
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
 {
 	if(groupTag == 0){
 		if(counterTag>=0 && counterTag<kNumPxi6289Channels){
@@ -163,9 +163,9 @@ static unsigned long register_offsets[kNumberOfPxi6289Registers] = {
 }
 
 #pragma mark •••Data Taker
-- (unsigned long) dataId { return dataId; }
+- (uint32_t) dataId { return dataId; }
 
-- (void) setDataId: (unsigned long) DataId
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -260,7 +260,7 @@ static unsigned long register_offsets[kNumberOfPxi6289Registers] = {
     location        = (([self crateNumber]&0x0000000f)<<21) | (([self slot]& 0x0000001f)<<16);
     controller		= [self adapter];
     
-    dataBuffer = (unsigned long*)malloc(0xffff * sizeof(unsigned long));
+    dataBuffer = (uint32_t*)malloc(0xffff * sizeof(uint32_t));
     [self startRates];
     [self initBoard];
 }
@@ -288,18 +288,18 @@ static unsigned long register_offsets[kNumberOfPxi6289Registers] = {
 			int channel;
 			for(channel=0;channel<kNumPxi6289Channels;channel++){
 				if(enabled[channel]){
-					unsigned long numLongs = 0;
+					uint32_t numLongs = 0;
 					dataBuffer[numLongs++] = dataId | 0; //we'll fill in the length later
 					dataBuffer[numLongs++] = location | (channel << 8);
 					dataBuffer[numLongs++] = 512; //number of longs in waveform
 					
 					//read the waveform and stuff into dataBuffer. This code is just for testing the decoder chain.
-					//we pack two shorts into a long. The actual digitizer data will be different.
+					//we pack two shorts into a int32_t. The actual digitizer data will be different.
 					int i;
 					int j = 0;
 					for(i=0;i<1024;i++){
-						dataBuffer[numLongs] = (unsigned long)(j*2) & 0xffff;
-						dataBuffer[numLongs] |= ((unsigned long)(j*2+1) & 0xffff)<<16;
+						dataBuffer[numLongs] = (uint32_t)(j*2) & 0xffff;
+						dataBuffer[numLongs] |= ((uint32_t)(j*2+1) & 0xffff)<<16;
 						numLongs++;
 						j+=2;
 						if(j>256)j=0;
@@ -339,7 +339,7 @@ static unsigned long register_offsets[kNumberOfPxi6289Registers] = {
     return YES;
 }
 
-- (unsigned long) waveFormCount:(int)aChannel
+- (uint32_t) waveFormCount:(int)aChannel
 {
     return waveFormCount[aChannel];
 }

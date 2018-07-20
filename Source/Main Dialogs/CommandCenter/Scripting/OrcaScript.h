@@ -1,4 +1,4 @@
-extern int OrcaScriptYYINPUT(char* theBuffer,unsigned long maxSize);
+extern int OrcaScriptYYINPUT(char* theBuffer,uint32_t maxSize);
 #undef YY_INPUT
 #define YY_INPUT(b,r,s) (r = OrcaScriptYYINPUT(b,s))
 

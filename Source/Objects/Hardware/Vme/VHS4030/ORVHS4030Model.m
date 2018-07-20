@@ -31,7 +31,7 @@
 
 #pragma mark •••Static Declarations
 //offsets from the base address (kDefaultBaseAddress)
-static unsigned long vhs4030ModuleRegOffsets[kNumberOfVHS4030Registers] = {
+static uint32_t vhs4030ModuleRegOffsets[kNumberOfVHS4030Registers] = {
 	0x00,	//kModuleStatus				[0] 	
 	0x02,	//kModuleControl			[1] 	
 	0x04,	//kModuleEventStatus		[2] 	
@@ -58,14 +58,14 @@ static unsigned long vhs4030ModuleRegOffsets[kNumberOfVHS4030Registers] = {
 	0xF0,	//kChannel4StartOffset		[23]
 };
 
-static unsigned long vhs4030ChannelStartOffsets[4] = {
+static uint32_t vhs4030ChannelStartOffsets[4] = {
 	0x60,
 	0x90,
 	0xC0,
 	0xF0,
 };
 
-static unsigned long vhs4030ChannelRegOffsets[kNumberOfVHS4030ChannelRegisters] = {
+static uint32_t vhs4030ChannelRegOffsets[kNumberOfVHS4030ChannelRegisters] = {
 	0x00,	//kChannelStatus,
 	0x02,	//kChannelControl,
 	0x04,	//kChannelEventStatus,
@@ -527,8 +527,8 @@ NSString* ORVHS4030VoltageBoundsChanged				= @"ORVHS4030VoltageBoundsChanged";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORVHS4030VoltageBoundsChanged object:self userInfo: userInfo];
 }
 
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -866,7 +866,7 @@ NSString* ORVHS4030VoltageBoundsChanged				= @"ORVHS4030VoltageBoundsChanged";
 {
 	unsigned short aValue[2];
 	union {
-		unsigned long l;
+		uint32_t l;
 		float f;
 	} d;
 	d.f = aFloatValue;
@@ -884,7 +884,7 @@ NSString* ORVHS4030VoltageBoundsChanged				= @"ORVHS4030VoltageBoundsChanged";
 	if(aChannel>kNumVHS4030Channels)return;
 	unsigned short aValue[2];
 	union {
-		unsigned long l;
+		uint32_t l;
 		float f;
 	} d;
 	
@@ -1134,14 +1134,14 @@ NSString* ORVHS4030VoltageBoundsChanged				= @"ORVHS4030VoltageBoundsChanged";
 		time(&ut_Time);
 		//struct tm* theTimeGMTAsStruct = gmtime(&theTime);
 		
-		unsigned long data[kVHS403DataRecordLength];
+		uint32_t data[kVHS403DataRecordLength];
 		data[0] = dataId | kVHS403DataRecordLength;
 		data[1] = [self uniqueIdNumber]&0xfff;
 		data[2] = ut_Time;
 		
 		union {
 			float asFloat;
-			unsigned long asLong;
+			uint32_t asLong;
 		}theData;
 		int index = 3;
 		int i;
@@ -1157,7 +1157,7 @@ NSString* ORVHS4030VoltageBoundsChanged				= @"ORVHS4030VoltageBoundsChanged";
 		}
 		
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-															object:[NSData dataWithBytes:data length:sizeof(long)*kVHS403DataRecordLength]];
+															object:[NSData dataWithBytes:data length:sizeof(int32_t)*kVHS403DataRecordLength]];
 	}	
 	statusChanged = NO;
 }
@@ -1166,9 +1166,9 @@ NSString* ORVHS4030VoltageBoundsChanged				= @"ORVHS4030VoltageBoundsChanged";
 @implementation ORVHS4030Model (private)
 - (float) convertTwoShortsToFloat:(unsigned short*)aValue;
 {
-	unsigned long theLongValue = (((long)aValue[0]<<16) | aValue[1]);
+	uint32_t theLongValue = (((int32_t)aValue[0]<<16) | aValue[1]);
 	union {
-		unsigned long l;
+		uint32_t l;
 		float f;
 	} d;
 	d.l = theLongValue;

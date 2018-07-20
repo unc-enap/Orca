@@ -51,10 +51,10 @@
 
 @implementation ORSIS3801DecoderForCounts
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr    = (unsigned long*)someData; 
-	unsigned long  length = ExtractLength(ptr[0]);
+    uint32_t* ptr    = (uint32_t*)someData; 
+	uint32_t  length = ExtractLength(ptr[0]);
 
 	short crate    = ShiftAndExtract(ptr[1],21,0xf);
 	short card     = ShiftAndExtract(ptr[1],16,0x1f);
@@ -73,7 +73,7 @@
 	return length; //must return number of longs
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 	NSString* s = @"";
 	s = [s stringByAppendingString: @"SIS3801 Scaler Record\n\n"];

@@ -40,11 +40,11 @@
 	//clocks and delays (Acquistion control reg)
 	int	 clockSource;
 	
-	unsigned long   lostDataId;
-	unsigned long   dataId;
-	unsigned long   mcaId;
+	uint32_t   lostDataId;
+	uint32_t   dataId;
+	uint32_t   mcaId;
 	
-	unsigned long   mcaStatusResults[kNumMcaStatusRequests];
+	uint32_t   mcaStatusResults[kNumMcaStatusRequests];
 	short			internalTriggerEnabledMask; 
 	short			externalTriggerEnabledMask;
 	short			extendedThresholdEnabledMask;
@@ -80,13 +80,13 @@
 	NSMutableArray* endAddressThresholds;
 	
 	ORRateGroup*	waveFormRateGroup;
-	unsigned long 	waveFormCount[kNumSIS3302Channels];
+	uint32_t 	waveFormCount[kNumSIS3302Channels];
 
-	unsigned long location;
+	uint32_t location;
 	short wrapMaskForRun;
 	id theController;
 	int currentBank;
-	long count;
+	int32_t count;
     short lemoOutMode;
     short lemoInMode;
 	BOOL bankOneArmed;
@@ -103,19 +103,19 @@
     unsigned short lemoInEnabledMask;
     BOOL internalExternalTriggersOred;
 	
-	unsigned long* dataRecord[4];
-	unsigned long  dataRecordlength[4];
+	uint32_t* dataRecord[4];
+	uint32_t  dataRecordlength[4];
 	
 	//calculated values
-	unsigned long numEnergyValues;
-	unsigned long numRawDataLongWords;
-	unsigned long rawDataIndex;
-	unsigned long eventLengthLongWords;
-    unsigned long mcaNofHistoPreset;
+	uint32_t numEnergyValues;
+	uint32_t numRawDataLongWords;
+	uint32_t rawDataIndex;
+	uint32_t eventLengthLongWords;
+    uint32_t mcaNofHistoPreset;
     BOOL			mcaLNESetup;
-    unsigned long	mcaPrescaleFactor;
+    uint32_t	mcaPrescaleFactor;
     BOOL			mcaAutoClear;
-    unsigned long	mcaNofScansPreset;
+    uint32_t	mcaNofScansPreset;
     int				mcaHistoSize;
     BOOL			mcaPileupEnabled;
     BOOL			mcaScanBank2Flag;
@@ -127,8 +127,8 @@
     BOOL			shipTimeRecordAlso;
     float			firmwareVersion;
 	time_t			lastBankSwitchTime;
-	unsigned long	waitCount;
-	unsigned long	channelsToReadMask;
+	uint32_t	waitCount;
+	uint32_t	channelsToReadMask;
     BOOL pulseMode;
 }
 
@@ -152,23 +152,23 @@
 - (void) setMcaEnergyMultiplier:(int)aMcaEnergyMultiplier;
 - (int) mcaEnergyDivider;
 - (void) setMcaEnergyDivider:(int)aMcaEnergyDivider;
-- (unsigned long) mcaStatusResult:(int)index;
+- (uint32_t) mcaStatusResult:(int)index;
 - (int) mcaMode;
 - (void) setMcaMode:(int)aMcaMode;
 - (BOOL) mcaPileupEnabled;
 - (void) setMcaPileupEnabled:(BOOL)aMcaPileupEnabled;
 - (int) mcaHistoSize;
 - (void) setMcaHistoSize:(int)aMcaHistoSize;
-- (unsigned long) mcaNofScansPreset;
-- (void) setMcaNofScansPreset:(unsigned long)aMcaNofScansPreset;
+- (uint32_t) mcaNofScansPreset;
+- (void) setMcaNofScansPreset:(uint32_t)aMcaNofScansPreset;
 - (BOOL) mcaAutoClear;
 - (void) setMcaAutoClear:(BOOL)aMcaAutoClear;
-- (unsigned long) mcaPrescaleFactor;
-- (void) setMcaPrescaleFactor:(unsigned long)aMcaPrescaleFactor;
+- (uint32_t) mcaPrescaleFactor;
+- (void) setMcaPrescaleFactor:(uint32_t)aMcaPrescaleFactor;
 - (BOOL) mcaLNESetup;
 - (void) setMcaLNESetup:(BOOL)aMcaLNESetup;
-- (unsigned long) mcaNofHistoPreset;
-- (void) setMcaNofHistoPreset:(unsigned long)aMcaNofHistoPreset;
+- (uint32_t) mcaNofHistoPreset;
+- (void) setMcaNofHistoPreset:(uint32_t)aMcaNofHistoPreset;
 - (BOOL) internalExternalTriggersOred;
 - (void) setInternalExternalTriggersOred:(BOOL)aInternalExternalTriggersOred;
 - (unsigned short) lemoInEnabledMask;
@@ -177,8 +177,8 @@
 - (void) setLemoInEnabled:(unsigned short)aBit withValue:(BOOL)aState;
 - (int)  runMode;
 - (void) setRunMode:(int)aRunMode;
-- (unsigned long) endAddressThreshold:(short)aGroup; 
-- (void) setEndAddressThreshold:(short)aGroup withValue:(unsigned long)aValue;
+- (uint32_t) endAddressThreshold:(short)aGroup; 
+- (void) setEndAddressThreshold:(short)aGroup withValue:(uint32_t)aValue;
 - (int) energyTauFactor:(short)aChannel;
 - (void) setEnergyTauFactor:(short)aChannel withValue:(int)aValue;
 - (int)  energySampleStartIndex3;
@@ -195,22 +195,22 @@
 - (void) setEnergyGapTime:(short)aGroup withValue:(int)aValue;
 - (int) energyPeakingTime:(short)aGroup;
 - (void) setEnergyPeakingTime:(short)aGroup withValue:(int)aValue;
-- (unsigned long) getThresholdRegOffsets:(int) channel;
-- (unsigned long) getExtendedThresholdRegOffsets:(int) channel;
-- (unsigned long) getTriggerSetupRegOffsets:(int) channel; 
-- (unsigned long) getTriggerExtSetupRegOffsets:(int)channel;
-- (unsigned long) getSampleAddress:(int)channel;
-- (unsigned long) getAdcMemory:(int)channel;
-- (unsigned long) getEventConfigOffsets:(int)group;
-- (unsigned long) getEnergyGateLengthOffsets:(int)group;
-- (unsigned long) getExtendedEventConfigOffsets:(int)group;
-- (unsigned long) getEndThresholdRegOffsets:(int)group;
-- (unsigned long) getRawDataBufferConfigOffsets:(int)group;
-- (unsigned long) getEnergyTauFactorOffset:(int) channel;
-- (unsigned long) getEnergySetupGPOffset:(int)group;
-- (unsigned long) getPreTriggerDelayTriggerGateLengthOffset:(int) aGroup; 
-- (unsigned long) getBufferControlOffset:(int) aGroup; 
-- (unsigned long) getPreviousBankSampleRegister:(int)channel;
+- (uint32_t) getThresholdRegOffsets:(int) channel;
+- (uint32_t) getExtendedThresholdRegOffsets:(int) channel;
+- (uint32_t) getTriggerSetupRegOffsets:(int) channel; 
+- (uint32_t) getTriggerExtSetupRegOffsets:(int)channel;
+- (uint32_t) getSampleAddress:(int)channel;
+- (uint32_t) getAdcMemory:(int)channel;
+- (uint32_t) getEventConfigOffsets:(int)group;
+- (uint32_t) getEnergyGateLengthOffsets:(int)group;
+- (uint32_t) getExtendedEventConfigOffsets:(int)group;
+- (uint32_t) getEndThresholdRegOffsets:(int)group;
+- (uint32_t) getRawDataBufferConfigOffsets:(int)group;
+- (uint32_t) getEnergyTauFactorOffset:(int) channel;
+- (uint32_t) getEnergySetupGPOffset:(int)group;
+- (uint32_t) getPreTriggerDelayTriggerGateLengthOffset:(int) aGroup; 
+- (uint32_t) getBufferControlOffset:(int) aGroup; 
+- (uint32_t) getPreviousBankSampleRegister:(int)channel;
 
 - (int) energyGateLength:(short)aGroup;
 - (void) setEnergyGateLength:(short)aGroup withValue:(int)aEnergyGateLength;
@@ -296,7 +296,7 @@
 - (NSString*) energyBufferAssignment;
 
 - (short) gtMask;
-- (void) setGtMask:(long)aMask;
+- (void) setGtMask:(int32_t)aMask;
 - (BOOL) gt:(short)chan;
 - (void) setGtBit:(short)chan withValue:(BOOL)aValue;
 - (short) internalTriggerDelay:(short)chan;
@@ -383,31 +383,31 @@
 
 - (void) executeCommandList:(ORCommandList*) aList;
 
-- (unsigned long) acqReg;
-- (unsigned long) getPreviousBankSampleRegisterOffset:(int) channel;
-- (unsigned long) getADCBufferRegisterOffset:(int) channel;
+- (uint32_t) acqReg;
+- (uint32_t) getPreviousBankSampleRegisterOffset:(int) channel;
+- (uint32_t) getADCBufferRegisterOffset:(int) channel;
 - (void) disarmAndArmBank:(int) bank;
 - (void) disarmAndArmNextBank;
 - (void) forceTrigger;
 - (NSString*) runSummary;
 
 #pragma mark •••Data Taker
-- (unsigned long) lostDataId;
-- (void) setLostDataId: (unsigned long) anId;
-- (unsigned long) mcaId;
-- (void) setMcaId: (unsigned long) anId;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) lostDataId;
+- (void) setLostDataId: (uint32_t) anId;
+- (uint32_t) mcaId;
+- (void) setMcaId: (uint32_t) anId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherShaper;
 - (NSDictionary*) dataRecordDescription;
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
-- (unsigned long) waveFormCount:(int)aChannel;
+- (uint32_t) waveFormCount:(int)aChannel;
 - (void)   startRates;
 - (void) clearWaveFormCounts;
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag;
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag;
 - (int) load_HW_Config_Structure:(SBC_crate_config*)configStruct index:(int)index;
 - (BOOL) isEvent;
 - (void) setUpPageReg;

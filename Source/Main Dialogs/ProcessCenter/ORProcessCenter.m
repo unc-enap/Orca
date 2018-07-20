@@ -313,7 +313,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(ProcessCenter);
     NSString *key = [self sortColumn];
     NSArray *a = [processView tableColumns];
     NSTableColumn *column = [processView tableColumnWithIdentifier:key];
-    unsigned long i = [a count];
+    uint32_t i = [a count];
     
     while (i-- > 0) [processView setIndicatorImage:nil inTableColumn:[a objectAtIndex:i]];
     

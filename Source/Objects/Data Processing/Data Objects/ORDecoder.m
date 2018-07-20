@@ -78,9 +78,9 @@
 {
 	if(fp && [self legalDataFile:fp]){
 		NSData* newData = [fp readDataOfLength:kAmountToRead];
-		unsigned long* p = (unsigned long*)[newData bytes];
+		uint32_t* p = (uint32_t*)[newData bytes];
 		p++;	 //point to header length
-		unsigned long headerLength = *p; //bytes
+		uint32_t headerLength = *p; //bytes
 		if(needToSwap)	headerLength = CFSwapInt32((uint32_t)headerLength);			
 		p++;	 //point to header itself
 		NSString* theHeaderAsString = [[NSString alloc] initWithBytes:p length:headerLength encoding:NSASCIIStringEncoding];
@@ -101,7 +101,7 @@
 	[fileHeader release];
 	fileHeader = [aHeader retain];
 	[self generateObjectLookup];
-	unsigned long headerLength = [[self headerAsData] length]; 
+	uint32_t headerLength = [[self headerAsData] length]; 
 	[fileHeader setObject:[NSNumber numberWithLong:headerLength] forKey:@"Header Length"];
 
 }
@@ -194,16 +194,16 @@
 
 - (void) decode:(NSData*)someData intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long length = [someData length]/sizeof(long);
+    uint32_t length = [someData length]/sizeof(int32_t);
     if(length){
-        unsigned long* dPtr = (unsigned long*)[someData bytes];
+        uint32_t* dPtr = (uint32_t*)[someData bytes];
         if(dPtr!=0)[self decode:dPtr length:length intoDataSet:aDataSet];
     }
 }
 
-- (void) decode:(unsigned long*)dPtr length:(long)length intoDataSet:(ORDataSet*)aDataSet
+- (void) decode:(uint32_t*)dPtr length:(int32_t)length intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long keyMaskValue;
+    uint32_t keyMaskValue;
     do {
         if(!dPtr)break;
 		
@@ -221,7 +221,7 @@
 			}
 			fastLookupCache[keyMaskValue>>18] = anObj;
 		}
-        unsigned long numLong;
+        uint32_t numLong;
         if(!anObj){
 			//no decoder defined for this object
 			numLong = ExtractLength(*dPtr); //new form--just skip it by getting the length from the header.
@@ -249,22 +249,22 @@
     } while( length>0 );
 }
 
-- (void) byteSwapData:(unsigned long*)dPtr forKey:(NSNumber*)aKey
+- (void) byteSwapData:(uint32_t*)dPtr forKey:(NSNumber*)aKey
 {
 	if(!dPtr)return;
 	[[objectLookup objectForKey:aKey] swapData:dPtr];	
 }
 
--(unsigned long)decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+-(uint32_t)decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
 	//only get here if the data is a data header
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long val = *ptr;
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t val = *ptr;
 	
-	unsigned long theDataId = ExtractDataId(val);
+	uint32_t theDataId = ExtractDataId(val);
 	
 	if(theDataId == 0x0) {		//great, this is easy... it's the new form
-		unsigned long theLength = ExtractLength(val);
+		uint32_t theLength = ExtractLength(val);
 		[aDataSet loadGenericData:@" " sender:self withKeys:@"Header",nil];
 		
 		return theLength;
@@ -275,7 +275,7 @@
 	}
 }
 
-- (void) byteSwapOneRecord:(unsigned long*)dPtr forKey:(NSNumber*)aKey
+- (void) byteSwapOneRecord:(uint32_t*)dPtr forKey:(NSNumber*)aKey
 {
 		if(!dPtr)return;
 		[[objectLookup objectForKey:aKey] swapData:dPtr];	
@@ -290,10 +290,10 @@
 
 - (BOOL) legalData:(NSData*)someData
 {
-	unsigned long* p = (unsigned long*)[someData bytes];
+	uint32_t* p = (uint32_t*)[someData bytes];
     if(!p)return NO;
 	needToSwap = NO;
-	unsigned long theDataId;
+	uint32_t theDataId;
 	if((*p & 0xffff0000) == 0x3C3F0000){
 		//old style header with no orca header info, just starts "<?xm" which is 0x3c3f
 		//ascii does need to be swapped so it's not clear if this was written on a big endian mac or a little endian mac
@@ -328,10 +328,10 @@
 }
 
 
-- (void) loadHeader:(unsigned long*)p
+- (void) loadHeader:(uint32_t*)p
 {
 	p++;	 //point to header length
-	unsigned long headerLength = *p; //bytes
+	uint32_t headerLength = *p; //bytes
 	if(needToSwap)	headerLength = CFSwapInt32((uint32_t)headerLength);
 	p++;	 //point to header itself
 	NSString* theHeader = [[NSString alloc] initWithBytes:p length:headerLength encoding:NSASCIIStringEncoding];
@@ -356,17 +356,17 @@
         return nil;
     }
     NSData* dataBlock = [NSData dataWithContentsOfFile:tempName];
-	unsigned long headerLength        = [dataBlock length];											//in bytes
-	unsigned long lengthWhenPadded    = sizeof(long)*(round(.5 + headerLength/(float)sizeof(long)));					//in bytes
-	unsigned long padSize             = lengthWhenPadded - headerLength;							//in bytes
-	unsigned long totalLength		  = 2 + (lengthWhenPadded/4);									//in longs
-	unsigned long theHeaderWord = 0 | (0x1ffff & totalLength);										//compose the header word
-	NSMutableData* data = [NSMutableData dataWithBytes:&theHeaderWord length:sizeof(long)];			//add the header word
-	[data appendBytes:&headerLength length:sizeof(long)];											//add the header len in bytes
+	uint32_t headerLength        = [dataBlock length];											//in bytes
+	uint32_t lengthWhenPadded    = sizeof(int32_t)*(round(.5 + headerLength/(float)sizeof(int32_t)));					//in bytes
+	uint32_t padSize             = lengthWhenPadded - headerLength;							//in bytes
+	uint32_t totalLength		  = 2 + (lengthWhenPadded/4);									//in longs
+	uint32_t theHeaderWord = 0 | (0x1ffff & totalLength);										//compose the header word
+	NSMutableData* data = [NSMutableData dataWithBytes:&theHeaderWord length:sizeof(int32_t)];			//add the header word
+	[data appendBytes:&headerLength length:sizeof(int32_t)];											//add the header len in bytes
 	
 	[data appendData:dataBlock];
 	
-	//pad to nearest long word
+	//pad to nearest int32_t word
 	unsigned char padByte = 0;
 	int i;
 	for(i=0;i<padSize;i++){

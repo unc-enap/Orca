@@ -31,7 +31,7 @@ typedef struct  {
 		unsigned char bTag;
 		unsigned char bTagInverse;
 		unsigned char reserved1;
-		unsigned long transferLength;
+		uint32_t transferLength;
 		unsigned char eom; //bit 0 = 1 if last byte is end of message
 		unsigned char reserved2;
 		unsigned char reserved3;

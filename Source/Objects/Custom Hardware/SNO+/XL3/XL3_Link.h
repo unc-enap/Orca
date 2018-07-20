@@ -43,7 +43,7 @@ typedef enum eXL3_ConnectStates {
 	BOOL		needToSwap;         //Whether byte order needs swapping to communicate with the XL3
 	NSString*	IPNumber;
 	NSString*	crateName;
-	unsigned long	portNumber;
+	uint32_t	portNumber;
     BOOL        autoConnect;
     BOOL		isConnected;
 	int		connectState;
@@ -51,9 +51,9 @@ typedef enum eXL3_ConnectStates {
 	NSDate*	timeConnected;
 	NSMutableArray*	cmdArray;       //Array of cmd packet responses received from XL3 but not yet dispatched to requesters
 	uint16_t numPackets;
-	unsigned long long num_dat_packets;
+	uint64_t num_dat_packets;
 	XL3Packet	aMultiCmdPacket;
-    unsigned long _fifoBundle[16];  //an array to enter data stream
+    uint32_t _fifoBundle[16];  //an array to enter data stream
 }
 
 @property (assign,nonatomic) BOOL isConnected;
@@ -82,13 +82,13 @@ typedef enum eXL3_ConnectStates {
 - (void) setTimeConnected:(NSDate*)newTimeConnected;
 - (NSString*) IPNumber;
 - (void) setIPNumber:(NSString*)aIPNumber;
-- (unsigned long)  portNumber;
-- (void) setPortNumber:(unsigned long)aPortNumber;
+- (uint32_t)  portNumber;
+- (void) setPortNumber:(uint32_t)aPortNumber;
 - (NSString*) crateName;
 - (void) setCrateName:(NSString*)aCrateName;
 
 - (void) newMultiCmd;
-- (void) addMultiCmdToAddress:(long)anAddress withValue:(long)aValue;
+- (void) addMultiCmdToAddress:(int32_t)anAddress withValue:(int32_t)aValue;
 - (XL3Packet*) executeMultiCmd;
 - (BOOL) multiCmdFailed;
 

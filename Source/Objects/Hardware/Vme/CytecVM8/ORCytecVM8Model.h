@@ -25,7 +25,7 @@
 @interface ORCytecVM8Model :  ORVmeIOCard
 {
 	@private
-        unsigned long writeValue;
+        uint32_t writeValue;
         unsigned short boardId;
         unsigned short deviceType;
         BOOL formC;
@@ -34,24 +34,24 @@
 
 
 #pragma mark •••Accessors
-- (unsigned long) writeValue;
-- (void) setWriteValue:(unsigned long)aValue;
+- (uint32_t) writeValue;
+- (void) setWriteValue:(uint32_t)aValue;
 - (unsigned short) boardId;
 - (unsigned short) deviceType;
 - (BOOL) formC;
 - (void) setFormC:(BOOL)aFlag;
 
 #pragma mark •••Hardware Access
-- (unsigned long) readRelays;
-- (unsigned long) readFormC;
+- (uint32_t) readRelays;
+- (uint32_t) readFormC;
 - (unsigned short) readBoardId;
 - (unsigned short) readDeviceType;
 - (void) writeFormC:(BOOL)aValue;
-- (unsigned long) read0_7;
-- (unsigned long) read8_15;
-- (unsigned long) read16_23;
-- (unsigned long) read24_31;
-- (void) writeRelays:(unsigned long) aChannelMask;
+- (uint32_t) read0_7;
+- (uint32_t) read8_15;
+- (uint32_t) read16_23;
+- (uint32_t) read24_31;
+- (void) writeRelays:(uint32_t) aChannelMask;
 - (void) syncWithHardware;
 - (void) reset;
 - (void) dump;

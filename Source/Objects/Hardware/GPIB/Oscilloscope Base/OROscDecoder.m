@@ -27,14 +27,14 @@
 
 @implementation OROscDecoder
 
-- (unsigned long) decodeData: (void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet: (ORDataSet*) aDataSet
+- (uint32_t) decodeData: (void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet: (ORDataSet*) aDataSet
 {
-    unsigned long* dataPtr;
-    long offset;
+    uint32_t* dataPtr;
+    int32_t offset;
     
-    dataPtr = (unsigned long*) aSomeData; 
+    dataPtr = (uint32_t*) aSomeData; 
     
-	long length 	= ExtractLength(*dataPtr);
+	int32_t length 	= ExtractLength(*dataPtr);
 	
 	dataPtr++;
 	offset = 8;   //bytes!
@@ -43,7 +43,7 @@
     short scope 	= ( *dataPtr >> 23 ) & 0xf;
     short channel 	= ( *dataPtr >> 19 ) & 0xf;
 
-    NSData* tmpData = [ NSData dataWithBytes: (char*) aSomeData length: length*sizeof(long) ];
+    NSData* tmpData = [ NSData dataWithBytes: (char*) aSomeData length: length*sizeof(int32_t) ];
 
             
     // Set up the waveform
@@ -58,9 +58,9 @@
     return length ; 
 }
 
-- (unsigned long) decodeGtId: (void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet: (ORDataSet*) aDataSet
+- (uint32_t) decodeGtId: (void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet: (ORDataSet*) aDataSet
 {
-    unsigned long* ptr = (unsigned long*)aSomeData;
+    uint32_t* ptr = (uint32_t*)aSomeData;
     if(IsShortForm(*ptr)){
         return 1;
     }
@@ -69,31 +69,31 @@
     }
 }
 
-- (unsigned long) decodeClock: (void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet: (ORDataSet*) aDataSet
+- (uint32_t) decodeClock: (void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet: (ORDataSet*) aDataSet
 {
     return 3;
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"Scope Data Record\n\n";
 
-    NSString* scope = [NSString stringWithFormat:@"Scope = %lu (GPIB Address)\n",( ptr[1] >> 23 ) & 0xf];
-    NSString* chan  = [NSString stringWithFormat:@"Chan  = %lu\n",( ptr[1] >> 19 ) & 0xf];
-    NSString* length = [NSString stringWithFormat:@"%lu bytes of data follow\n",(ptr[0] & 0x3ffff)*sizeof(long)-8];
+    NSString* scope = [NSString stringWithFormat:@"Scope = %u (GPIB Address)\n",( ptr[1] >> 23 ) & 0xf];
+    NSString* chan  = [NSString stringWithFormat:@"Chan  = %u\n",( ptr[1] >> 19 ) & 0xf];
+    NSString* length = [NSString stringWithFormat:@"%lu bytes of data follow\n",(ptr[0] & 0x3ffff)*sizeof(int32_t)-8];
 
     return [NSString stringWithFormat:@"%@%@%@%@",title,scope,chan,length];
 }
 
-- (NSString*) dataGtIdDescription:(unsigned long*)ptr
+- (NSString*) dataGtIdDescription:(uint32_t*)ptr
 {
     NSString* title= @"Scope GTID Record\n\n";
     if(!IsShortForm(*ptr))ptr++;
-    NSString* gtid = [NSString stringWithFormat:@"GTID = %lu\n", *ptr & 0x003fffff];
+    NSString* gtid = [NSString stringWithFormat:@"GTID = %u\n", *ptr & 0x003fffff];
     return [NSString stringWithFormat:@"%@%@",title,gtid];
 }
 
-- (NSString*) dataClockDescription:(unsigned long*)ptr
+- (NSString*) dataClockDescription:(uint32_t*)ptr
 {
     NSString* title= @"Scope Clock Record\n\n";
     return [NSString stringWithFormat:@"%@Not Decoded",title];

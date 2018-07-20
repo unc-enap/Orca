@@ -150,15 +150,15 @@ static NSString *ORDualPortLAMVariables       = @"ORDualPortLAMVariables";
 	memset(&eCpuLAMStruct,0,sizeof(EcpuWriteLAMStruct));
 	memset(&macLAMStruct,0,sizeof(MacWriteLAMStruct));
 	
-	[guardian writeLongBlock:(unsigned long*)&eCpuLAMStruct
+	[guardian writeLongBlock:(uint32_t*)&eCpuLAMStruct
 				   atAddress:MAC_DPM(ECPU_WRITE_LAM_START) + sizeof(EcpuWriteLAMStruct)*[self slot]
-				  numToWrite:sizeof(EcpuWriteLAMStruct)/sizeof(long)
+				  numToWrite:sizeof(EcpuWriteLAMStruct)/sizeof(int32_t)
 				  withAddMod:0x09
 			   usingAddSpace:0x03]; //kAccessRemoteDRAM
     
-	[guardian writeLongBlock:(unsigned long*)&macLAMStruct
+	[guardian writeLongBlock:(uint32_t*)&macLAMStruct
 				   atAddress:MAC_DPM(MAC_WRITE_LAM_START) + sizeof(MacWriteLAMStruct)*[self slot]
-				  numToWrite:sizeof(MacWriteLAMStruct)/sizeof(long)
+				  numToWrite:sizeof(MacWriteLAMStruct)/sizeof(int32_t)
 				  withAddMod:0x09
 			   usingAddSpace:0x03]; //kAccessRemoteDRAM
     
@@ -196,16 +196,16 @@ static NSString *ORDualPortLAMVariables       = @"ORDualPortLAMVariables";
     MacWriteLAMStruct macLAMStruct;
     @try {
 		errorLocation = @"DualPort LAM (W)";
-        [guardian readLongBlock:(unsigned long*)&eCpuLAMStruct
+        [guardian readLongBlock:(uint32_t*)&eCpuLAMStruct
 					  atAddress:MAC_DPM(ECPU_WRITE_LAM_START) + sizeof(EcpuWriteLAMStruct)*[self slot]
-					  numToRead:sizeof(EcpuWriteLAMStruct)/sizeof(long)
+					  numToRead:sizeof(EcpuWriteLAMStruct)/sizeof(int32_t)
 					 withAddMod:0x09
 				  usingAddSpace:0x03]; //kAccessRemoteDRAM
         
 		errorLocation = @"DualPort LAM (R)";
-        [guardian readLongBlock:(unsigned long*)&macLAMStruct
+        [guardian readLongBlock:(uint32_t*)&macLAMStruct
 					  atAddress:MAC_DPM(MAC_WRITE_LAM_START) + sizeof(MacWriteLAMStruct)*[self slot]
-					  numToRead:sizeof(MacWriteLAMStruct)/sizeof(long)
+					  numToRead:sizeof(MacWriteLAMStruct)/sizeof(int32_t)
 					 withAddMod:0x09
 				  usingAddSpace:0x03]; //kAccessRemoteDRAM
         
@@ -228,9 +228,9 @@ static NSString *ORDualPortLAMVariables       = @"ORDualPortLAMVariables";
             macLAMStruct.lamAcknowledged_counter = eCpuLAMStruct.lamFired_counter;
 			
 			errorLocation = @"Clearing LAM";
-            [guardian writeLongBlock:(unsigned long*)&macLAMStruct
+            [guardian writeLongBlock:(uint32_t*)&macLAMStruct
 						   atAddress:MAC_DPM(MAC_WRITE_LAM_START) + sizeof(MacWriteLAMStruct)*[self slot]
-						  numToWrite:sizeof(MacWriteLAMStruct)/sizeof(long)
+						  numToWrite:sizeof(MacWriteLAMStruct)/sizeof(int32_t)
 						  withAddMod:0x09
 					   usingAddSpace:0x03]; //kAccessRemoteDRAM
             

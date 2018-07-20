@@ -332,8 +332,8 @@ NSString* ORProcessElementForceUpdateNotification   = @"ORProcessElementForceUpd
 }
 
 #pragma mark ¥¥¥Accessors
-- (unsigned long) processID { return processID;}
-- (void) setProcessID:(unsigned long)aValue
+- (uint32_t) processID { return processID;}
+- (void) setProcessID:(uint32_t)aValue
 {
 	processID = aValue;
 }
@@ -344,7 +344,7 @@ NSString* ORProcessElementForceUpdateNotification   = @"ORProcessElementForceUpd
 
 - (NSString*) description:(NSString*)prefix
 {
-    return [NSString stringWithFormat:@"%@%@ %lu",prefix,[self elementName],[self uniqueIdNumber]];
+    return [NSString stringWithFormat:@"%@%@ %u",prefix,[self elementName],[self uniqueIdNumber]];
 }
 
 - (NSString*)comment
@@ -364,7 +364,7 @@ NSString* ORProcessElementForceUpdateNotification   = @"ORProcessElementForceUpd
                               object:self];
 }
 
-- (void) setUniqueIdNumber :(unsigned long)aNumber
+- (void) setUniqueIdNumber :(uint32_t)aNumber
 {
     [super setUniqueIdNumber:aNumber];
     [self postStateChange]; //force redraw
@@ -460,7 +460,7 @@ NSString* ORProcessElementForceUpdateNotification   = @"ORProcessElementForceUpd
 	if([self uniqueIdNumber]){
 		NSFont* theFont = [NSFont messageFontOfSize:theSize];
 		return [[[NSAttributedString alloc] 
-				 initWithString:[NSString stringWithFormat:@"%lu",[self processID]] 
+				 initWithString:[NSString stringWithFormat:@"%u",[self processID]] 
 				 attributes:[NSDictionary dictionaryWithObjectsAndKeys:theFont,NSFontAttributeName,textColor,NSForegroundColorAttributeName,nil]]autorelease];
 	}
 	else return nil;

@@ -74,9 +74,9 @@
 #define SELECT_ALL_CHANNELS ( 0x1F <<16) // ak, 7.10.07
 
 typedef struct {
-	unsigned long channelMap; // 8bit channel + 24 channelMap
-	unsigned long threshold;   
-	unsigned long hitrate;
+	uint32_t channelMap; // 8bit channel + 24 channelMap
+	uint32_t threshold;   
+	uint32_t hitrate;
 } ipeFltHitRateDataStruct;
 
 

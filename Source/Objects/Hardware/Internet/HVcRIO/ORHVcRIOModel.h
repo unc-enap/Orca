@@ -53,7 +53,7 @@
         NSMutableString*    stringBuffer;
         BOOL                showFormattedDates;
         int                 pollTime;
-        unsigned long       dataId;
+        uint32_t       dataId;
 }
 
 #pragma mark ***Initialization
@@ -110,7 +110,7 @@
 - (void) removePostRegulationPointAtIndex:(int)anIndex;
 - (void) removeAllPostRegulationPoints;
 - (void) setPostRegulationArray:(NSMutableArray*)anArray;
-- (unsigned long) numPostRegulationPoints;
+- (uint32_t) numPostRegulationPoints;
 - (id) postRegulationPointAtIndex:(int)anIndex;
 - (NSString*)measuredValueName:(NSUInteger)anIndex;
 
@@ -135,8 +135,8 @@
 - (void)   setPowerSupplyOffset:(int)anIndex withValue:(double)aValue;
 - (void)   setVesselVoltageSetPoint:(int)anIndex withValue:(double)aValue;
 
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherLakeShore210;
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;

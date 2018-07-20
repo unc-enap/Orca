@@ -847,7 +847,7 @@
         NSMutableArray* pointerArray = [NSMutableArray array];
         id obj;
         while(obj = [e nextObject]){
-            [pointerArray addObject:[NSNumber numberWithLong:(unsigned long)obj]];
+            [pointerArray addObject:[NSNumber numberWithLong:(uint32_t)obj]];
         }
         
         NSMutableData *itemData = [NSMutableData data];

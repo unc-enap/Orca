@@ -32,6 +32,6 @@
 
 #pragma mark ¥¥¥Accessors
 - (int) slotConv;
-- (unsigned long) baseAddress;
+- (uint32_t) baseAddress;
 
 @end

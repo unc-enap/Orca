@@ -566,7 +566,7 @@
 	
     [registerOffsetTextField setStringValue:
 	 [NSString stringWithFormat:@"0x%04lx",
-	  [model getAddressOffset:aRegisterIndex]]];
+	  (unsigned long)[model getAddressOffset:aRegisterIndex]]];
 	
     [registerReadWriteTextField setStringValue:types[[model getAccessType:aRegisterIndex]]];
     [regNameField setStringValue:[model getRegisterName:aRegisterIndex]];

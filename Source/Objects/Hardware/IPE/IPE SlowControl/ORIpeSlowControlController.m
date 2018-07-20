@@ -302,7 +302,7 @@
 
 - (void) setWindowTitle
 {
-	[[self window] setTitle: [NSString stringWithFormat:@"IPE-ADEI Slow Control - %lu",[model uniqueIdNumber]]];
+	[[self window] setTitle: [NSString stringWithFormat:@"IPE-ADEI Slow Control - %u",[model uniqueIdNumber]]];
 }
 
 

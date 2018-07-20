@@ -170,11 +170,11 @@ NSString* ORRemoteRunLock                    = @"ORRemoteRunLock";
     [socket setDelegate:self];
 }
 
-- (unsigned long) remotePort
+- (uint32_t) remotePort
 {
     return remotePort;
 }
-- (void) setRemotePort:(unsigned long)aRemotePort
+- (void) setRemotePort:(uint32_t)aRemotePort
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setRemotePort:remotePort];
     
@@ -201,12 +201,12 @@ NSString* ORRemoteRunLock                    = @"ORRemoteRunLock";
                       object:self];
 }
 
--(unsigned long)runNumber
+-(uint32_t)runNumber
 {
     return runNumber;
 }
 
--(void)setRunNumber:(unsigned long)aRunNumber
+-(void)setRunNumber:(uint32_t)aRunNumber
 {
     runNumber = aRunNumber;
     

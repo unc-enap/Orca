@@ -41,7 +41,7 @@ enum {
 
 typedef struct V977NamesStruct {
 	NSString*       regName;
-	unsigned long 	addressOffset;
+	uint32_t 	addressOffset;
 	short           accessType;
 } V977NamesStruct;
 
@@ -49,12 +49,12 @@ typedef struct V977NamesStruct {
 {
     unsigned short  selectedRegIndex;
     unsigned short  selectedChannel;
-    unsigned long   writeValue;
-	unsigned long   inputSet;
-	unsigned long   inputMask;
-	unsigned long   outputSet;
-	unsigned long   outputMask;
-	unsigned long   interruptMask;
+    uint32_t   writeValue;
+	uint32_t   inputSet;
+	uint32_t   inputMask;
+	uint32_t   outputSet;
+	uint32_t   outputMask;
+	uint32_t   interruptMask;
     BOOL            patternBit;
     BOOL            gateMaskBit;
     BOOL            orMaskBit;
@@ -70,28 +70,28 @@ typedef struct V977NamesStruct {
 - (void)            setGateMaskBit:(BOOL)aGateMaskBit;
 - (BOOL)            patternBit;
 - (void)            setPatternBit:(BOOL)aPatternBit;
-- (unsigned long)   inputSet;
-- (void)			setInputSet:(unsigned long)aValue;
+- (uint32_t)   inputSet;
+- (void)			setInputSet:(uint32_t)aValue;
 - (BOOL)			inputSetBit:(int)bit;
 - (void)			setInputSetBit:(int)bit withValue:(BOOL)aValue;
 
-- (unsigned long)   inputMask;
-- (void)			setInputMask:(unsigned long)aValue;
+- (uint32_t)   inputMask;
+- (void)			setInputMask:(uint32_t)aValue;
 - (BOOL)			inputMaskBit:(int)bit;
 - (void)			setInputMaskBit:(int)bit withValue:(BOOL)aValue;
 
-- (unsigned long)   outputSet;
-- (void)			setOutputSet:(unsigned long)aValue;
+- (uint32_t)   outputSet;
+- (void)			setOutputSet:(uint32_t)aValue;
 - (BOOL)			outputSetBit:(int)bit;
 - (void)			setOutputSetBit:(int)bit withValue:(BOOL)aValue;
 
-- (unsigned long)   outputMask;
-- (void)			setOutputMask:(unsigned long)aValue;
+- (uint32_t)   outputMask;
+- (void)			setOutputMask:(uint32_t)aValue;
 - (BOOL)			outputMaskBit:(int)bit;
 - (void)			setOutputMaskBit:(int)bit withValue:(BOOL)aValue;
 
-- (unsigned long)   interruptMask;
-- (void)			setInterruptMask:(unsigned long)aValue;
+- (uint32_t)   interruptMask;
+- (void)			setInterruptMask:(uint32_t)aValue;
 - (BOOL)			interruptMaskBit:(int)bit;
 - (void)			setInterruptMaskBit:(int)bit withValue:(BOOL)aValue;
 
@@ -100,7 +100,7 @@ typedef struct V977NamesStruct {
 - (void)    read;
 - (void)    write;
 - (void)    read: (unsigned short) pReg returnValue: (void*) pValue;
-- (void)    write: (unsigned short) pReg sendValue: (unsigned long) pValue;
+- (void)    write: (unsigned short) pReg sendValue: (uint32_t) pValue;
 - (void)    clearOutputRegister;
 - (void)    clearSingleHitRegister;
 - (void)    clearMultiHitRegister;
@@ -119,7 +119,7 @@ typedef struct V977NamesStruct {
 
 #pragma mark ***Register - Register specific routines
 - (NSString*) 		getRegisterName: (short) anIndex;
-- (unsigned long) 	getAddressOffset: (short) anIndex;
+- (uint32_t) 	getAddressOffset: (short) anIndex;
 
 #pragma mark ***Archival
 - (id)   initWithCoder:(NSCoder*)decoder;

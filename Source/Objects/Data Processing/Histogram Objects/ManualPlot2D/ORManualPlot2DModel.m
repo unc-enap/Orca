@@ -63,7 +63,7 @@ NSString* ORManualPlot2DModelPlotTitleChanged	= @"ORManualPlot2DModelPlotTitleCh
 {
 	[dataSetLock lock];
     [histogram release];
-    histogram = [[NSMutableData dataWithLength:numberBinsPerSide*numberBinsPerSide*sizeof(long)]retain];
+    histogram = [[NSMutableData dataWithLength:numberBinsPerSide*numberBinsPerSide*sizeof(int32_t)]retain];
     maxX = numberBinsPerSide-1;
     minX = 0;
     maxY = numberBinsPerSide-1;
@@ -86,18 +86,18 @@ NSString* ORManualPlot2DModelPlotTitleChanged	= @"ORManualPlot2DModelPlotTitleCh
     numberBinsPerSide = bins;
     
     [histogram release];
-    histogram = [[NSMutableData dataWithLength:numberBinsPerSide*numberBinsPerSide*sizeof(long)]retain];
+    histogram = [[NSMutableData dataWithLength:numberBinsPerSide*numberBinsPerSide*sizeof(int32_t)]retain];
     
 	[dataSetLock unlock];
     [self clear];
 }
 
-- (unsigned long)valueAtX:(unsigned short)aXBin y:(unsigned short)aYBin
+- (uint32_t)valueAtX:(unsigned short)aXBin y:(unsigned short)aYBin
 {
-	unsigned long theResult = 0;
+	uint32_t theResult = 0;
 	if(aXBin<numberBinsPerSide && aYBin<numberBinsPerSide){
 		[dataSetLock lock];
-        unsigned long* histogramPtr = (unsigned long*)[histogram bytes];
+        uint32_t* histogramPtr = (uint32_t*)[histogram bytes];
         if(histogramPtr){
             aXBin = aXBin % numberBinsPerSide;   // Error Check Our x Value
             aYBin = aYBin % numberBinsPerSide;   // Error Check Our y Value
@@ -108,9 +108,9 @@ NSString* ORManualPlot2DModelPlotTitleChanged	= @"ORManualPlot2DModelPlotTitleCh
 	return theResult;
 }
 
-- (void) setBinAtX:(int)aXBin y:(int)aYBin to:(unsigned long)aValue;
+- (void) setBinAtX:(int)aXBin y:(int)aYBin to:(uint32_t)aValue;
 {
-    unsigned long* histogramPtr = (unsigned long*)[histogram bytes];
+    uint32_t* histogramPtr = (uint32_t*)[histogram bytes];
 	if(histogramPtr && aXBin<numberBinsPerSide && aYBin<numberBinsPerSide){
 		[dataSetLock lock];	
 		histogramPtr[aXBin + aYBin*numberBinsPerSide] = aValue;
@@ -119,9 +119,9 @@ NSString* ORManualPlot2DModelPlotTitleChanged	= @"ORManualPlot2DModelPlotTitleCh
 	}
 }
 
-- (void) incrementBinAtX:(int)aXBin y:(int)aYBin by:(unsigned long)incValue;
+- (void) incrementBinAtX:(int)aXBin y:(int)aYBin by:(uint32_t)incValue;
 {
-    unsigned long* histogramPtr = (unsigned long*)[histogram bytes];
+    uint32_t* histogramPtr = (uint32_t*)[histogram bytes];
 	if(histogramPtr && aXBin<numberBinsPerSide && aYBin<numberBinsPerSide){
 		[dataSetLock lock];	
 		histogramPtr[aXBin + aYBin*numberBinsPerSide]+=incValue;
@@ -253,8 +253,8 @@ NSString* ORManualPlot2DModelPlotTitleChanged	= @"ORManualPlot2DModelPlotTitleCh
 							  @"numberBinsPerSide",
 							  @"setNumberBinsPerSide:(unsigned short)",
 							  @"valueAtX:(unsigned short) y:(unsigned short)",
-							  @"setBinAtX:(int) y:(int) to:(unsigned long)",
-							  @"incrementBinAtX:(int) y:(int) by:(unsigned long)",
+							  @"setBinAtX:(int) y:(int) to:(uint32_t)",
+							  @"incrementBinAtX:(int) y:(int) by:(uint32_t)",
 							  @"setXTitle:(NSString*)",
 							  @"setYTitle:(NSString*)",
 							  @"setPlotTitle:(NSString*)",

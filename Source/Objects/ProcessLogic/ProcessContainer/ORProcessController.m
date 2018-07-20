@@ -51,7 +51,7 @@ NSInteger sortDnFunction(id element1,id element2, void* context){return [element
 {
     [super awakeFromNib];
     
-    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey:[NSString stringWithFormat:@"orca.Process%lu.selectedtab",[model uniqueIdNumber]]];
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey:[NSString stringWithFormat:@"orca.Process%u.selectedtab",[model uniqueIdNumber]]];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];	
     [tableView setDoubleAction:@selector(doubleClick:)];
@@ -353,7 +353,7 @@ NSInteger sortDnFunction(id element1,id element2, void* context){return [element
         }
     }
     
-    long selectedIndex = [emailListTable selectedRow];
+    int32_t selectedIndex = [emailListTable selectedRow];
 
     [emailListTable      setHidden:  aDiffMasterExists];
 	[addAddressButton    setEnabled:!aDiffMasterExists];
@@ -377,7 +377,7 @@ NSInteger sortDnFunction(id element1,id element2, void* context){return [element
         
         NSIndexSet* theSelectedSet =  [tableView selectedRowIndexes];
         if(theSelectedSet){
-            long rowIndex = [theSelectedSet firstIndex];
+            int32_t rowIndex = [theSelectedSet firstIndex];
             id item = [[model orcaObjects]objectAtIndex:rowIndex];
             theDetails = [NSString stringWithFormat:@"%@",[item description:@""]];
         }
@@ -562,7 +562,7 @@ NSInteger sortDnFunction(id element1,id element2, void* context){return [element
 - (void) tabView:(NSTabView*)aTabView didSelectTabViewItem:(NSTabViewItem*)item
 {
     NSInteger index = [tabView indexOfTabViewItem:item];
-    [[NSUserDefaults standardUserDefaults] setInteger:index forKey:[NSString stringWithFormat:@"orca.Process%lu.selectedtab",[model uniqueIdNumber]]];
+    [[NSUserDefaults standardUserDefaults] setInteger:index forKey:[NSString stringWithFormat:@"orca.Process%u.selectedtab",[model uniqueIdNumber]]];
 }
 
 - (void) tableViewSelectionDidChange:(NSNotification *)aNotification
@@ -598,7 +598,7 @@ NSInteger sortDnFunction(id element1,id element2, void* context){return [element
     NSString *key = [self sortColumn];
     NSArray *a = [tableView tableColumns];
     NSTableColumn *column = [tableView tableColumnWithIdentifier:key];
-    unsigned long i = [a count];
+    uint32_t i = [a count];
     
     while (i-- > 0) [tableView setIndicatorImage:nil inTableColumn:[a objectAtIndex:i]];
     

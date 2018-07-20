@@ -41,18 +41,18 @@ static NSString* kMotionNodeTraceType[3] = {
 
 @implementation ORMotionNodeDecoderForXYZTrace
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr	 = (unsigned long*)someData;
-    unsigned long length = ExtractLength(*ptr);
+    uint32_t* ptr	 = (uint32_t*)someData;
+    uint32_t length = ExtractLength(*ptr);
 	ptr++; //location info
     int type   = (*ptr>>16) & 0x3;
 	int device = *ptr&0xFFF;
 	ptr++; //time
 	ptr++; //start of data
 
-	NSMutableData* tmpData = [NSMutableData dataWithLength:(length-3)*sizeof(long)];
-	long* lPtr = (long*)[tmpData bytes];
+	NSMutableData* tmpData = [NSMutableData dataWithLength:(length-3)*sizeof(int32_t)];
+	int32_t* lPtr = (int32_t*)[tmpData bytes];
 	
 	int i;
 	for(i=0;i<length-3;i++){
@@ -61,14 +61,14 @@ static NSString* kMotionNodeTraceType[3] = {
 	
     [aDataSet loadWaveform:tmpData 
 					offset:0 //bytes!
-				  unitSize:sizeof(long) //unit size in bytes!
+				  unitSize:sizeof(int32_t) //unit size in bytes!
 					sender:self  
 				  withKeys:@"MotionNode",[NSString stringWithFormat:@"Device %2d",device], [self getChannelKey:type],nil];
 	
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {    
     NSString* title= @"MotionNode Accel Record\n\n";
 	

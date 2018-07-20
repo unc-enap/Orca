@@ -427,7 +427,7 @@ int chanConfigToMaskBit[kNumChanConfigBits] = {1,3,4,6,11};
 - (void) triggerSourceMaskChanged:(NSNotification*)aNote
 {
 	int i;
-	unsigned long mask = [model triggerSourceMask];
+	uint32_t mask = [model triggerSourceMask];
 	for(i=0;i<8;i++){
 		[[chanTriggerMatrix cellWithTag:i] setIntValue:(mask & (1L << i)) !=0];
 	}
@@ -438,7 +438,7 @@ int chanConfigToMaskBit[kNumChanConfigBits] = {1,3,4,6,11};
 - (void) triggerOutMaskChanged:(NSNotification*)aNote
 {
 	int i;
-	unsigned long mask = [model triggerOutMask];
+	uint32_t mask = [model triggerOutMask];
 	for(i=0;i<8;i++){
 		[[chanTriggerOutMatrix cellWithTag:i] setIntValue:(mask & (1L << i)) !=0];
 	}
@@ -774,7 +774,7 @@ int chanConfigToMaskBit[kNumChanConfigBits] = {1,3,4,6,11};
 - (IBAction) triggerSourceMaskAction:(id)sender
 {
 	int i;
-	unsigned long mask = 0;
+	uint32_t mask = 0;
 	for(i=0;i<8;i++){
 		if([[chanTriggerMatrix cellWithTag:i] intValue]) mask |= (1L << i);
 	}
@@ -786,7 +786,7 @@ int chanConfigToMaskBit[kNumChanConfigBits] = {1,3,4,6,11};
 - (IBAction) triggerOutMaskAction:(id)sender
 {
 	int i;
-	unsigned long mask = 0;
+	uint32_t mask = 0;
 	for(i=0;i<8;i++){
 		if([[chanTriggerOutMatrix cellWithTag:i] intValue]) mask |= (1L << i);
 	}
@@ -798,7 +798,7 @@ int chanConfigToMaskBit[kNumChanConfigBits] = {1,3,4,6,11};
 - (IBAction) fpIOControlAction:(id)sender
 {
 	
-	unsigned long mask = 0;
+	uint32_t mask = 0;
 	mask |= [[fpIOModeMatrix selectedCell] tag] << 6;
 	mask |= [[fpIOPatternLatchMatrix selectedCell] tag] << 9;
 	mask |= [[fpIOTrgInMatrix selectedCell] tag];
@@ -963,7 +963,7 @@ int chanConfigToMaskBit[kNumChanConfigBits] = {1,3,4,6,11};
     };
 	
     [registerOffsetTextField setStringValue:
-	 [NSString stringWithFormat:@"0x%04lx",
+	 [NSString stringWithFormat:@"0x%04x",
 	  [model getAddressOffset:aRegisterIndex]]];
 	
     [registerReadWriteTextField setStringValue:types[[model getAccessType:aRegisterIndex]]];

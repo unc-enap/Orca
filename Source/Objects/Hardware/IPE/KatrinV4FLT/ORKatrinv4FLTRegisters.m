@@ -20,7 +20,7 @@
 
 typedef struct katrinV4FLTRegNamesStruct {
     NSString*       regName;
-    unsigned long 	addressOffset;
+    uint32_t 	addressOffset;
     short			accessType;
     eKatrinV4FLTRegEnum enumCheckValue;
 } katrinv4FLTRegNamesStruct;
@@ -129,7 +129,7 @@ static katrinv4FLTRegNamesStruct regKatrinV4FLT[kFLTV4NumRegs] = {
     else                            return 0x0;
 }
 
-- (unsigned long) addressForStation:(int)aStation registerIndex:(int)anIndex chan:(int)aChannel
+- (uint32_t) addressForStation:(int)aStation registerIndex:(int)anIndex chan:(int)aChannel
 {
     if([self indexInRange:anIndex]){
         return (aStation << 17) | (aChannel << 12) | (regKatrinV4FLT[anIndex].addressOffset>>2);
@@ -137,7 +137,7 @@ static katrinv4FLTRegNamesStruct regKatrinV4FLT[kFLTV4NumRegs] = {
     else return 0x0;
 }
 
-- (unsigned long) addressForStation:(int)aStation registerIndex:(int)anIndex
+- (uint32_t) addressForStation:(int)aStation registerIndex:(int)anIndex
 {
     if([self indexInRange:anIndex]){
         return (aStation << 17) | (regKatrinV4FLT[anIndex].addressOffset>>2);

@@ -5,7 +5,7 @@ struct htab {
 	struct htab* child;
 	struct htab* parent;
 	char key[kMaxHashKeyLen];
-	long data;
+	int32_t data;
 };
 
 typedef struct htab hashTable;
@@ -16,8 +16,8 @@ typedef struct htab hashTable;
 }
 
 - (unsigned int) hash:(const char *)aKey;
-- (BOOL) setData:(long)data forKey:(const char*) key;
-- (BOOL) getData:(long*)data forKey:(const char*)key;
+- (BOOL) setData:(int32_t)data forKey:(const char*) key;
+- (BOOL) getData:(int32_t*)data forKey:(const char*)key;
 - (BOOL) removeKey:(const char *)aKey;
 - (hashTable*) findHash:(const char*)aKey;
 

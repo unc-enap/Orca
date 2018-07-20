@@ -30,7 +30,7 @@
 		int				pollTime;
         NSMutableString* buffer;
 		ORTimeRate*		timeRates;
-		unsigned long	timeMeasured;
+		uint32_t	timeMeasured;
 		NSMutableArray* sensors;
 		int				response;
 		int				lastRegister;
@@ -61,7 +61,7 @@
 - (NSString*) portName;
 - (void) setPortName:(NSString*)aPortName;
 - (void) openPort:(BOOL)state;
-- (unsigned long) timeMeasured;
+- (uint32_t) timeMeasured;
 - (NSMutableArray*) sensors;
 - (void) setSensors:(NSMutableArray*)someSensors;
 - (void) addSensor:(id)aSensor;

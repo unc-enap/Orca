@@ -32,7 +32,7 @@
 		NSRect 		altBounds;
 		NSPoint 	altOffset;
 		BOOL		useAltView;
-		unsigned long processID;
+		uint32_t processID;
 	@private
         int         state;
         NSString*   comment;
@@ -47,8 +47,8 @@
 - (BOOL) canBeInAltView;
 
 #pragma mark ¥¥¥Accessors
-- (unsigned long) processID;
-- (void) setProcessID:(unsigned long)aValue;
+- (uint32_t) processID;
+- (void) setProcessID:(uint32_t)aValue;
 - (NSImage*) altImage;
 - (BOOL) useAltView;
 - (void) setUseAltView:(BOOL)aState;

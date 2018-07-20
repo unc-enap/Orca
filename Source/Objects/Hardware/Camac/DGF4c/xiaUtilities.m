@@ -33,10 +33,10 @@
  *																*
  ****************************************************************/
 
-double Tau_Fit(unsigned int* Trace, long kmin, long kmax, double dt){
+double Tau_Fit(unsigned int* Trace, int32_t kmin, int32_t kmax, double dt){
 
 	double mutop,mubot,valbot,eps,dmu,mumid,valmid;
-	 long count;
+	 int32_t count;
 
 	eps=1e-3;
 	mutop=10e6; /* begin the search at tau=100ns (=1/10e6) */
@@ -80,9 +80,9 @@ double Tau_Fit(unsigned int* Trace, long kmin, long kmax, double dt){
  *																*
  ****************************************************************/
 
-double Phi_Value(unsigned int* ydat,double qq, long kmin, long kmax){
+double Phi_Value(unsigned int* ydat,double qq, int32_t kmin, int32_t kmax){
 
-	long ndat,k;
+	int32_t ndat,k;
 	double s0,s1,s2,qp;
 	double A,B,Fk,F2k,Dk,Ek,val;
   
@@ -120,9 +120,9 @@ double Phi_Value(unsigned int* ydat,double qq, long kmin, long kmax){
  *																*
  ****************************************************************/
 
-double Thresh_Finder(unsigned int* Trace, double Tau, double* FF, double* FF2, long FL, long FG,unsigned short Xwait){
+double Thresh_Finder(unsigned int* Trace, double Tau, double* FF, double* FF2, int32_t FL, int32_t FG,unsigned short Xwait){
 
-	long ndat,kmin,k,ndev,n,m;
+	int32_t ndat,kmin,k,ndev,n,m;
 	double dt,xx,c0,sum0,sum1,deviation,threshold;
 
 	ndev=8;
@@ -205,17 +205,17 @@ double Thresh_Finder(unsigned int* Trace, double Tau, double* FF, double* FF2, l
 }
 
 
-long RandomSwap() {
+int32_t RandomSwap() {
 	
-	long rshift,Ncards;
-	long k,MixLevel,imin,imax;
+	int32_t rshift,Ncards;
+	int32_t k,MixLevel,imin,imax;
 	unsigned short a;
 
 	for(k=0; k<8192; k++)
 		Random_Set[k]=(unsigned short)k;
 
 	Ncards=8192;
-	rshift= (long)(log((double)(0xffffffff/8192))/log(2.0));
+	rshift= (int32_t)(log((double)(0xffffffff/8192))/log(2.0));
 	MixLevel=5;
 	
 	for(k=0;k<MixLevel*Ncards;k+=1) {
@@ -230,11 +230,11 @@ long RandomSwap() {
 	return(0);
 }
 
-long linefit (double* data, double* coeff)
+int32_t linefit (double* data, double* coeff)
 {
 
-	unsigned long i;
-	unsigned long ndata;
+	uint32_t i;
+	uint32_t ndata;
 
 	double sxx, sx, sy, syx;
 
@@ -244,7 +244,7 @@ long linefit (double* data, double* coeff)
 	syx   = 0.;
 	ndata = 0;
 
-	for(i = (unsigned long) coeff[0]; i < (unsigned long) coeff[1]; i++){
+	for(i = (uint32_t) coeff[0]; i < (uint32_t) coeff[1]; i++){
 
 		if(data[i] <= 0){
 			continue;

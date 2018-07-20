@@ -161,24 +161,24 @@ enum {
 
 - (BOOL) isMotorMoving:(id)aMotor;
 - (void)  readHome:(id)aMotor;
-- (void) seekHome:(long)amount motor:(id)aMotor;
+- (void) seekHome:(int32_t)amount motor:(id)aMotor;
 - (void) readMotor:(id)aMotor;
 - (void) startMotor:(id)aMotor;
 - (void) stopMotor:(id)aMotor;
 - (void) loadStepMode:(int)mode motor:(id)aMotor;
-- (void) loadHoldCurrent:(long)amount motor:(id)aMotor;
-- (void) loadStepCount:(long)amount motor:(id)aMotor;
+- (void) loadHoldCurrent:(int32_t)amount motor:(id)aMotor;
+- (void) loadStepCount:(int32_t)amount motor:(id)aMotor;
 - (void) loadBreakPoint:(int)amount absolute:(BOOL)useAbs motor:(id)aMotor;
-- (void) moveMotor:(id)aMotor amount:(long)amount;
-- (void) moveMotor:(id)aMotor to:(long)position;
+- (void) moveMotor:(id)aMotor amount:(int32_t)amount;
+- (void) moveMotor:(id)aMotor to:(int32_t)position;
 - (void) status;
 
 - (void) executeMotorCmd:(unsigned short) theCommand 
                    motor:(id)aMotor
-                riseFreq:(unsigned long) theRiseFreq 
-               driveFreq:(unsigned long) theDriveFreq
-            acceleration:(unsigned long) theAcceleration
-                   steps:(long)thePosition;
+                riseFreq:(uint32_t) theRiseFreq 
+               driveFreq:(uint32_t) theDriveFreq
+            acceleration:(uint32_t) theAcceleration
+                   steps:(int32_t)thePosition;
 
 - (void) resetIRQ:(id)aMotor;
 - (unsigned short) readIRQ;

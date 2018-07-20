@@ -117,7 +117,7 @@
     historyOpsSize	= NSMakeSize(422,480);
     summaryOpsSize	= NSMakeSize(400,270);
 	
-	NSString* key = [NSString stringWithFormat: @"orca.ORRad7%lu.selectedtab",[model uniqueIdNumber]];
+	NSString* key = [NSString stringWithFormat: @"orca.ORRad7%u.selectedtab",[model uniqueIdNumber]];
     NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
 	if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
 	[tabView selectTabViewItemAtIndex: index];
@@ -137,7 +137,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"Met637 (Unit %lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"Met637 (Unit %u)",[model uniqueIdNumber]]];
 }
 - (BOOL) portLocked
 {
@@ -591,7 +591,7 @@
 	}
     [[self window] setContentView:totalView];
 	
-    NSString* key = [NSString stringWithFormat: @"orca.ORMet637%lu.selectedtab",[model uniqueIdNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORMet637%u.selectedtab",[model uniqueIdNumber]];
     NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 }

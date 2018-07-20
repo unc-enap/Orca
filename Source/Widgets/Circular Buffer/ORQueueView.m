@@ -126,10 +126,10 @@
 
 	float oldLineWidth = [NSBezierPath defaultLineWidth];
 	NSRect b = [self bounds];
-	unsigned long aMinValue;	
-	unsigned long aMaxValue;
-	unsigned long aHeadValue;
-	unsigned long aTailValue;
+	uint32_t aMinValue;	
+	uint32_t aMaxValue;
+	uint32_t aHeadValue;
+	uint32_t aTailValue;
 	
 	[dataSource getQueMinValue:&aMinValue maxValue:&aMaxValue head:&aHeadValue tail:&aTailValue];
 	
@@ -171,10 +171,10 @@
 {
 	float oldLineWidth = [NSBezierPath defaultLineWidth];
 	NSRect b = [self bounds];
-    unsigned long aMinValue;	
-	unsigned long aMaxValue;
-	unsigned long aHeadValue;
-	unsigned long aTailValue;
+    uint32_t aMinValue;	
+	uint32_t aMaxValue;
+	uint32_t aHeadValue;
+	uint32_t aTailValue;
 	
 	[dataSource getQueMinValue:&aMinValue maxValue:&aMaxValue head:&aHeadValue tail:&aTailValue];
 	

@@ -50,7 +50,7 @@ NSString* ORVmeDiagnosticsEnabledChanged             = @"ORVmeDiagnosticsEnabled
     return addressModifier;
 }
 
-- (void) setBaseAddress:(unsigned long) address
+- (void) setBaseAddress:(uint32_t) address
 {
 	[[[self undoManager] prepareWithInvocationTarget:self] setBaseAddress:[self baseAddress]];
     baseAddress = address;
@@ -61,7 +61,7 @@ NSString* ORVmeDiagnosticsEnabledChanged             = @"ORVmeDiagnosticsEnabled
     
 }
 
-- (unsigned long) baseAddress
+- (uint32_t) baseAddress
 {
     return baseAddress;
 }
@@ -69,7 +69,7 @@ NSString* ORVmeDiagnosticsEnabledChanged             = @"ORVmeDiagnosticsEnabled
 - (NSRange)	memoryFootprint
 {
 	//subclasses should overide to provide an accurate memory range
-	return NSMakeRange(baseAddress,1*sizeof(long));
+	return NSMakeRange(baseAddress,1*sizeof(int32_t));
 }
 
 - (BOOL) memoryConflictsWith:(NSRange)aRange
@@ -85,7 +85,7 @@ NSString* ORVmeDiagnosticsEnabledChanged             = @"ORVmeDiagnosticsEnabled
 	return nil;
 }
 
-- (unsigned long)   exceptionCount
+- (uint32_t)   exceptionCount
 {
     return exceptionCount;
 }
@@ -143,23 +143,23 @@ static NSString *ORVmeCardAddressModifier 	= @"vme Address Modifier";
 }
 
 
-- (void) writeAndCheckLong:(unsigned long)aValue
-             addressOffset:(unsigned long)anOffset
-                      mask:(unsigned long)aMask
+- (void) writeAndCheckLong:(uint32_t)aValue
+             addressOffset:(uint32_t)anOffset
+                      mask:(uint32_t)aMask
                  reportKey:(NSString*)aKey
 {
     return [self writeAndCheckLong:aValue addressOffset:anOffset mask:aMask reportKey:aKey forceFullInit:NO];
 }
 
-- (void) writeAndCheckLong:(unsigned long)aValue
-             addressOffset:(unsigned long)anOffset
-                      mask:(unsigned long)aMask
+- (void) writeAndCheckLong:(uint32_t)aValue
+             addressOffset:(uint32_t)anOffset
+                      mask:(uint32_t)aMask
                  reportKey:(NSString*)aKey
              forceFullInit:(BOOL) forceFullInit
 {
     BOOL valueChanged = [self longValueChanged:aValue valueKey:aKey];
     if( valueChanged || forceFullInit){
-        unsigned long writeValue = aValue & aMask;
+        uint32_t writeValue = aValue & aMask;
         [[self adapter] writeLongBlock: &writeValue
                              atAddress: [self baseAddress] + anOffset
                             numToWrite: 1
@@ -169,7 +169,7 @@ static NSString *ORVmeCardAddressModifier 	= @"vme Address Modifier";
         if(diagnosticsEnabled){
             NSLog(@"%@ wrote: %d (0x%08x) to 0x%x (%@) \n",[self fullID],aValue,aValue,anOffset,aKey);
 
-            unsigned long readBackValue = 0;
+            uint32_t readBackValue = 0;
             [[self adapter] readLongBlock: &readBackValue
                                 atAddress: [self baseAddress] + anOffset
                                numToRead: 1
@@ -189,7 +189,7 @@ static NSString *ORVmeCardAddressModifier 	= @"vme Address Modifier";
     oldUserValueDictionary=nil;
 }
 
-- (BOOL) longValueChanged:(unsigned long)aValue valueKey:(NSString*)aKey
+- (BOOL) longValueChanged:(uint32_t)aValue valueKey:(NSString*)aKey
 {
     if(!oldUserValueDictionary)oldUserValueDictionary = [[NSMutableDictionary dictionary] retain];
     
@@ -212,15 +212,15 @@ static NSString *ORVmeCardAddressModifier 	= @"vme Address Modifier";
     }
 }
 
-- (void) verifyValue:(unsigned long)val1 matches:(unsigned long)val2 reportKey:aKey
+- (void) verifyValue:(uint32_t)val1 matches:(uint32_t)val2 reportKey:aKey
 {
     if(val1 != val2){
         if(!diagnosticReport)diagnosticReport = [[NSMutableDictionary dictionary] retain];
-        NSString* errorString = [NSString stringWithFormat:@"0x%08lx != 0x%08lx",val1,val2];
+        NSString* errorString = [NSString stringWithFormat:@"0x%08x != 0x%08x",val1,val2];
         //there may be an existing error record for this key, if so we add to it, otherwise we make a new one
         NSMutableDictionary* aRecord = [diagnosticReport objectForKey:aKey];
         if(!aRecord)aRecord = [NSMutableDictionary dictionary];
-        unsigned long errorCount = [[aRecord objectForKey:@"ErrorCount"]unsignedLongValue];
+        uint32_t errorCount = [[aRecord objectForKey:@"ErrorCount"]unsignedLongValue];
         errorCount++;
         [aRecord setObject:[NSNumber numberWithUnsignedLong:errorCount] forKey:@"ErrorCount"];
         [aRecord setObject:errorString forKey:@"LastErrorString"];

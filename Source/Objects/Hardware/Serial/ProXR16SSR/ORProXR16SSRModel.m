@@ -268,7 +268,7 @@ NSString* ORProXR16SSRLock							= @"ORProXR16SSRLock";
 {
 	NSString* s;
  	@synchronized(self){
-		s= [NSString stringWithFormat:@"ProXR16,%lu",[self uniqueIdNumber]];
+		s= [NSString stringWithFormat:@"ProXR16,%u",[self uniqueIdNumber]];
 	}
 	return s;
 }

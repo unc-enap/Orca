@@ -466,7 +466,7 @@
             [[[firstColumn dataCell] formatter] setMaximumFractionDigits:3];
             while ([aTableView numberOfColumns] < nChannel) {
                 NSTableColumn* newColumn = [[NSTableColumn alloc]
-                                            initWithIdentifier:[NSString stringWithFormat:@"%ld",[aTableView numberOfColumns]]];
+                                            initWithIdentifier:[NSString stringWithFormat:@"%d",(int)[aTableView numberOfColumns]]];
                 [newColumn setWidth:[firstColumn width]];
                 [newColumn setDataCell:[firstColumn dataCell]];
                 [[newColumn headerCell] setStringValue:[newColumn identifier]];
@@ -488,7 +488,7 @@
             [[[firstColumn dataCell] formatter] setMaximumFractionDigits:3];
             while ([aTableView numberOfColumns] < nCoil) {
                 NSTableColumn* newColumn = [[NSTableColumn alloc]
-                                            initWithIdentifier:[NSString stringWithFormat:@"%ld",[aTableView numberOfColumns]]];
+                                            initWithIdentifier:[NSString stringWithFormat:@"%d",(int)[aTableView numberOfColumns]]];
                 [newColumn setWidth:[firstColumn width]];
                 [newColumn setDataCell:[firstColumn dataCell]];
                 [[newColumn headerCell] setStringValue:[newColumn identifier]];

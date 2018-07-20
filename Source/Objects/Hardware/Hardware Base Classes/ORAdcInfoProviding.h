@@ -28,14 +28,14 @@
 
 @protocol ORAdcInfoProviding
 
-- (unsigned long) thresholdForDisplay:(unsigned short) aChan;
+- (uint32_t) thresholdForDisplay:(unsigned short) aChan;
 - (unsigned short) gainForDisplay:(unsigned short) aChan;
 - (BOOL) onlineMaskBit:(int)bit;
 - (void) makeMainController;
 - (void) initBoard;
 - (void) postAdcInfoProvidingValueChanged;
 - (BOOL) partOfEvent:(unsigned short) aChan;
-- (unsigned long) eventCount:(int)channel;
+- (uint32_t) eventCount:(int)channel;
 - (void) clearEventCounts;
 @end
 

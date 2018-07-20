@@ -266,8 +266,8 @@ NSString* ORNHQ226LModelTimeout				= @"ORNHQ226LModelTimeout";
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORNHQ226LRampRateChanged object:self userInfo: nil];
 }
 
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -517,14 +517,14 @@ return NO; /////////ToDo
 		time(&ut_Time);
 		//struct tm* theTimeGMTAsStruct = gmtime(&theTime);
 		
-		unsigned long data[11];
+		uint32_t data[11];
 		data[0] = dataId | 11;
 		data[1] = [self uniqueIdNumber]&0xfff;
 		data[2] = ut_Time;
 		
 		union {
 			float asFloat;
-			unsigned long asLong;
+			uint32_t asLong;
 		}theData;
 		int index = 3;
 		int i;
@@ -540,7 +540,7 @@ return NO; /////////ToDo
 		}
 		
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-															object:[NSData dataWithBytes:data length:sizeof(long)*11]];
+															object:[NSData dataWithBytes:data length:sizeof(int32_t)*11]];
 	}	
 	statusChanged = NO;
 }

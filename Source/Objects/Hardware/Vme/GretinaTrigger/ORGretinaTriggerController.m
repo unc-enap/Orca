@@ -52,7 +52,7 @@
 	[registerIndexPU setAutoenablesItems:NO];
 	int i;
 	for (i=0;i<kNumberOfGretinaTriggerRegisters;i++) {
-        NSString* itemName = [NSString stringWithFormat:@"(0x%04lx) %@",[model registerOffsetAt:i],[model registerNameAt:i]];
+        NSString* itemName = [NSString stringWithFormat:@"(0x%04x) %@",[model registerOffsetAt:i],[model registerNameAt:i]];
 		[registerIndexPU insertItemWithTitle:itemName	atIndex:i];
 	}
     
@@ -514,7 +514,7 @@
 - (IBAction) readRegisterAction:(id)sender
 {
 	[self endEditing];
-	unsigned long aValue = 0;
+	uint32_t aValue = 0;
 	unsigned int index = [model registerIndex];
 	if (index < kNumberOfGretinaTriggerRegisters) {
 		aValue = [model readRegister:index];
@@ -558,9 +558,9 @@
 {
     [self endEditing];
     @try {
-        unsigned long rev = [model readCodeRevision];
+        uint32_t rev = [model readCodeRevision];
         NSLog(@"Gretina Trigger Code Revision (slot %d): 0x%x\n",[model slot],rev);
-        unsigned long date = [model readCodeDate];
+        uint32_t date = [model readCodeDate];
         NSLog(@"Gretina Trigger Code Date (slot %d): 0x%x\n",[model slot],date);
         [model readDisplayRegs];
     }

@@ -5,10 +5,10 @@
 #define kFilterPtrType  1
 
 typedef struct  {
-	long type;
+	int32_t type;
 	union {
-		unsigned long lValue;
-		unsigned long* pValue;
+		uint32_t lValue;
+		uint32_t* pValue;
 	}val;
 }filterData;
 

@@ -25,13 +25,13 @@
 
 
 @implementation ORTriggerDecoderFor100MHzClockRecord
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long *ptr = (unsigned long*)someData;
-    unsigned long length;
+    uint32_t *ptr = (uint32_t*)someData;
+    uint32_t length;
 	ptr++;
 	length = 3;
-    unsigned long value = *ptr;
+    uint32_t value = *ptr;
     if((value >> 24) & kEvent1Mask){
         [aDataSet loadGenericData:@" " sender:self withKeys:@"Latched Clock",@"Evnt1 Clk",nil];
     }
@@ -41,7 +41,7 @@
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"Trigger Clock Record\n\n";
     return [NSString stringWithFormat:@"%@Decoder Not Implemented.\n",title];
@@ -52,21 +52,21 @@
 
 
 @implementation ORTriggerDecoderForGTIDRecord
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
 
-    unsigned long* ptr = (unsigned long*)someData;
-    unsigned long length;
+    uint32_t* ptr = (uint32_t*)someData;
+    uint32_t length;
     
     if(IsShortForm(*ptr)){
-        length = sizeof(long);
+        length = sizeof(int32_t);
     }
     else {
-        ptr++; //long version
-        length = 2*sizeof(long);
+        ptr++; //int32_t version
+        length = 2*sizeof(int32_t);
     }
     
-    NSString* valueString = [NSString stringWithFormat:@"%lu",*ptr&0x00ffffff];
+    NSString* valueString = [NSString stringWithFormat:@"%u",*ptr&0x00ffffff];
     if(((*ptr>>24)&0x3)==1){
         [aDataSet loadGenericData:valueString sender:self  withKeys:@"Latched Clock",@"GTID1",nil];
     }
@@ -78,14 +78,14 @@
     return length; //must return number of longs processed.
     
 }
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"Trigger GTID Record\n\n";
     if(!IsShortForm(*ptr)){
-        ptr++; //long version
+        ptr++; //int32_t version
     }
     NSString* trigger = [NSString stringWithFormat:@"Trigger = %d\n",(*ptr>>24)&0x1 ? 1 : 2];
-    NSString* gtid    = [NSString stringWithFormat:@"GTID    = %lu\n",*ptr&0x00ffffff];
+    NSString* gtid    = [NSString stringWithFormat:@"GTID    = %u\n",*ptr&0x00ffffff];
 
     return [NSString stringWithFormat:@"%@%@%@",title,trigger,gtid];
 }

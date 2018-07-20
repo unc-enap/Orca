@@ -65,7 +65,7 @@
 	[self setObject:[NSNumber numberWithInt:[theCard histEMultiplier]] forNestedKey:crateKey,cardKey,kHistEMultiplierKey,nil];
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
 
 	if(![self cacheSetUp]){
@@ -73,8 +73,8 @@
 		[self cacheCardLevelObject:kHistEMultiplierKey fromHeader:[aDecoder fileHeader]];
 	}
 	
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length = ExtractLength(*ptr);
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length = ExtractLength(*ptr);
 	ptr++; //point to location info
     int crate = (*ptr&0x01e00000)>>21;
     int card  = (*ptr&0x001f0000)>>16;
@@ -83,7 +83,7 @@
 	int channel		 = *ptr&0xF;
 	int packetLength = ((*ptr & kGretina4NumberWordsMask) >>16) - kGretina4HeaderLengthLongs;
 	ptr += 2; //point to Energy low word
-	unsigned long energy = *ptr >> 16;
+	uint32_t energy = *ptr >> 16;
 	ptr++;	  //point to Energy second word
 	energy += (*ptr & 0x000001ff) << 16;
 	
@@ -110,7 +110,7 @@
 		
 		//note:  there is something wrong here. The package length should be in longs but the
 		//packet is always half empty.   
-		[tmpData setLength:packetLength*sizeof(long)];
+		[tmpData setLength:packetLength*sizeof(int32_t)];
 		unsigned short* dPtr = (unsigned short*)[tmpData bytes];
 		int i;
 		int wordCount = 0;
@@ -149,23 +149,23 @@
     return length; //must return number of longs
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"Gretina4 Waveform Record\n\n";
     
-    NSString* crate = [NSString stringWithFormat:@"Crate = %lu\n",(ptr[1]&0x01e00000)>>21];
-    NSString* card  = [NSString stringWithFormat:@"Card  = %lu\n",(ptr[1]&0x001f0000)>>16];
-    NSString* chan  = [NSString stringWithFormat:@"Chan  = %lu\n",ptr[2]&0x7];
+    NSString* crate = [NSString stringWithFormat:@"Crate = %u\n",(ptr[1]&0x01e00000)>>21];
+    NSString* card  = [NSString stringWithFormat:@"Card  = %u\n",(ptr[1]&0x001f0000)>>16];
+    NSString* chan  = [NSString stringWithFormat:@"Chan  = %u\n",ptr[2]&0x7];
     
-    unsigned long long timeStamp = ((unsigned long long)(ptr[4]&0xffff) << 32) + ptr[3];
+    uint64_t timeStamp = ((uint64_t)(ptr[4]&0xffff) << 32) + ptr[3];
     NSString* timeStampString = [NSString stringWithFormat:@"Time: %lld\n",timeStamp];
 
-	unsigned long energy = ptr[4] >> 16;
+	uint32_t energy = ptr[4] >> 16;
 	energy += (ptr[5] & 0x0000001ff) << 16;
 	
 	// energy is in 2's complement, taking abs value if necessary
 	if (energy & 0x1000000) energy = (~energy & 0x1ffffff) + 1;
-	NSString* energyStr  = [NSString stringWithFormat:@"Energy  = %lu\n",energy/50]; //mah 10/21 added the /50 to be consistent with histogramed value
+	NSString* energyStr  = [NSString stringWithFormat:@"Energy  = %u\n",energy/50]; //mah 10/21 added the /50 to be consistent with histogramed value
     return [NSString stringWithFormat:@"%@%@%@%@%@%@",title,crate,card,chan,timeStampString,energyStr];
 }
 

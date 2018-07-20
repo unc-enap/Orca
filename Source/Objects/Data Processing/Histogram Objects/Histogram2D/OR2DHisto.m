@@ -70,27 +70,27 @@
 	[dataSetLock lock];
     numberBinsPerSide = bins;
     [histogram release];
-    histogram = [[NSMutableData dataWithLength:numberBinsPerSide*numberBinsPerSide*sizeof(unsigned long)]retain];
+    histogram = [[NSMutableData dataWithLength:numberBinsPerSide*numberBinsPerSide*sizeof(uint32_t)]retain];
 	[dataSetLock unlock];
     [self clear];
 }
 
-- (unsigned long)valueX:(unsigned short)aXBin y:(unsigned short)aYBin
+- (uint32_t)valueX:(unsigned short)aXBin y:(unsigned short)aYBin
 {
-	unsigned long theResult = 0;
+	uint32_t theResult = 0;
 	[dataSetLock lock];
     aXBin = aXBin % numberBinsPerSide;   // Error Check Our x Value
     aYBin = aYBin % numberBinsPerSide;   // Error Check Our y Value
-    unsigned long* histogramPtr = (unsigned long*)[histogram bytes];
+    uint32_t* histogramPtr = (uint32_t*)[histogram bytes];
     if(histogramPtr) theResult =  histogramPtr[aXBin + aYBin*numberBinsPerSide];
 	[dataSetLock unlock];
 	return theResult;
 }
-- (unsigned long) dataId
+- (uint32_t) dataId
 {
     return dataId;
 }
-- (void) setDataId: (unsigned long) aDataId
+- (void) setDataId: (uint32_t) aDataId
 {
     dataId = aDataId;
 }
@@ -129,7 +129,7 @@
 - (void) packageData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo keys:(NSMutableArray*)aKeyArray
 {
     NSMutableData* dataToShip = [NSMutableData data];
-    unsigned long dataWord;
+    uint32_t dataWord;
     
     //first the id
     dataWord = dataId; //note we don't know the length yet--we'll fill it in later
@@ -140,13 +140,13 @@
 	if(allKeys && ![allKeys hasPrefix:@"Final"]){
 		allKeys = [@"Final/" stringByAppendingString:allKeys];
 		const char* p = [allKeys UTF8String];
-		unsigned long allKeysLengthWithTerminator = strlen(p)+1;
-		unsigned long paddedKeyLength = 4*((unsigned long)(allKeysLengthWithTerminator+4)/4);
-		unsigned long paddedKeyLengthLong = paddedKeyLength/4;
+		uint32_t allKeysLengthWithTerminator = strlen(p)+1;
+		uint32_t paddedKeyLength = 4*((uint32_t)(allKeysLengthWithTerminator+4)/4);
+		uint32_t paddedKeyLengthLong = paddedKeyLength/4;
 		[dataToShip appendBytes:&paddedKeyLengthLong length:4];
 		[dataToShip appendBytes:p length:allKeysLengthWithTerminator];
 
-		//pad to the long word boundary
+		//pad to the int32_t word boundary
 		int i;
 		for(i=0;i< paddedKeyLength-allKeysLengthWithTerminator;i++){
 			char null = '\0';
@@ -154,14 +154,14 @@
 		}
 		
 		[dataSetLock lock];
-		unsigned long theSize = numberBinsPerSide*numberBinsPerSide;
+		uint32_t theSize = numberBinsPerSide*numberBinsPerSide;
 		[dataToShip appendBytes:&theSize length:4];            //length of the histogram
         [dataToShip appendData:histogram];
 		[dataSetLock unlock];
 		
 		//go back and fill in the total length
-		unsigned long *ptr = (unsigned long*)[dataToShip bytes];
-		unsigned long totalLength = [dataToShip length]/4; //num of longs
+		uint32_t *ptr = (uint32_t*)[dataToShip bytes];
+		uint32_t totalLength = [dataToShip length]/4; //num of longs
 		*ptr |= (kLongFormLengthMask & totalLength);
 		[aDataPacket addData:dataToShip];
 	}
@@ -171,7 +171,7 @@
 {
 	[dataSetLock lock];
     [histogram release];
-    histogram = [[NSMutableData dataWithLength:numberBinsPerSide*numberBinsPerSide*sizeof(unsigned long)]retain];
+    histogram = [[NSMutableData dataWithLength:numberBinsPerSide*numberBinsPerSide*sizeof(uint32_t)]retain];
     
     minX = numberBinsPerSide;
     maxX = 0;
@@ -189,7 +189,7 @@
 /*    fprintf( aFile, "WAVES/I/N=(%d) '%s'\nBEGIN\n",numberBins,[shortName cStringUsingEncoding:NSASCIIStringEncoding]);
     int i;
     for (i=0; i<numberBins; ++i) {
-        fprintf(aFile, "%ld\n",histogram[i]);
+        fprintf(aFile, "%d\n",histogram[i]);
     }
     fprintf(aFile, "END\n\n");
 */
@@ -214,16 +214,16 @@
 
 - (id)   name
 {
-    return [NSString stringWithFormat:@"%@ 2D Histogram Events: %lu",key, [self totalCounts]];
+    return [NSString stringWithFormat:@"%@ 2D Histogram Events: %u",key, [self totalCounts]];
 }
 
-- (void) mergeHistogram:(unsigned long*)ptr numValues:(unsigned long)num
+- (void) mergeHistogram:(uint32_t*)ptr numValues:(uint32_t)num
 {
     if(!histogram || (numberBinsPerSide*numberBinsPerSide) != num){
         [self setNumberBinsPerSide:(unsigned short)pow((double)num,.5)];
     }
 	[dataSetLock lock];
-    unsigned long* hitogramPtr = (unsigned long*)[histogram bytes];
+    uint32_t* hitogramPtr = (uint32_t*)[histogram bytes];
 	if(hitogramPtr){
 		int i;
 		for(i=0;i<num;i++){
@@ -243,14 +243,14 @@
     [self incrementTotalCounts];
 }
 
-- (void) load:(unsigned long*)ptr numValues:(unsigned long)num
+- (void) load:(uint32_t*)ptr numValues:(uint32_t)num
 {
     if(!histogram || (numberBinsPerSide*numberBinsPerSide) != num){
         [self setNumberBinsPerSide:(unsigned short)pow((double)num,.5)];
     }
 	if(histogram){
 		[dataSetLock lock];
-        unsigned long* histogramPtr = (unsigned long*)[histogram bytes];
+        uint32_t* histogramPtr = (uint32_t*)[histogram bytes];
 		int i;
 		for(i=0;i<num;i++){
 			histogramPtr[i] = ptr[i];
@@ -280,7 +280,7 @@
     if(aYValue >= numberBinsPerSide) aYValue = numberBinsPerSide-1;
     //aXValue = aXValue % numberBinsPerSide;   // Error Check Our x Value
     //aYValue = aYValue % numberBinsPerSide;   // Error Check Our y Value
-    unsigned long* histogramPtr = (unsigned long*)[histogram bytes];
+    uint32_t* histogramPtr = (uint32_t*)[histogram bytes];
 	if(histogramPtr){
 		++histogramPtr[aXValue+aYValue*numberBinsPerSide];
 	}
@@ -302,7 +302,7 @@
     if(aYValue >= numberBinsPerSide) aYValue = numberBinsPerSide-1;
     //aXValue = aXValue % numberBinsPerSide;   // Error Check Our x Value
     //aYValue = aYValue % numberBinsPerSide;   // Error Check Our y Value
-    unsigned long* histogramPtr = (unsigned long*)[histogram bytes];
+    uint32_t* histogramPtr = (uint32_t*)[histogram bytes];
     if(histogramPtr){
 		histogramPtr[aXValue+aYValue*numberBinsPerSide] = aZValue;
 	}
@@ -318,7 +318,7 @@
 
 - (void) sumX:(unsigned short)aXValue y:(unsigned short)aYValue z:(unsigned short)aZValue
 {
-    unsigned long* histogramPtr = (unsigned long*)[histogram bytes];
+    uint32_t* histogramPtr = (uint32_t*)[histogram bytes];
     if(!histogramPtr){
         [self setNumberBinsPerSide:512]; //default
     }

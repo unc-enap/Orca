@@ -1050,7 +1050,7 @@ NSString* ORIpeSlowControlSetpointRequestQueueChanged	= @"ORIpeSlowControlSetpoi
 
 - (NSString*) processingTitle
 {
-    return [NSString stringWithFormat: @"%@-%lu",IPE_SLOW_CONTROL_SHORT_NAME,[self uniqueIdNumber]];
+    return [NSString stringWithFormat: @"%@-%u",IPE_SLOW_CONTROL_SHORT_NAME,[self uniqueIdNumber]];
 }
 
 
@@ -1163,7 +1163,7 @@ NSString* ORIpeSlowControlSetpointRequestQueueChanged	= @"ORIpeSlowControlSetpoi
 #pragma mark •••ID Helpers (see OrcaObject)
 - (NSString*) identifier
 {
-    return [NSString stringWithFormat: @"%@-%lu",IPE_SLOW_CONTROL_SHORT_NAME,[self uniqueIdNumber]];
+    return [NSString stringWithFormat: @"%@-%u",IPE_SLOW_CONTROL_SHORT_NAME,[self uniqueIdNumber]];
 }
 
 #pragma mark •••Methods Useful For Scripting
@@ -1945,7 +1945,7 @@ enum {
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORIpeSlowControlModelHistogramChanged object:self];
 }
 
-- (long) dataTimeHist:(int)index
+- (int32_t) dataTimeHist:(int)index
 {
 	if(index<kResponseTimeHistogramSize)return histogram[index];
 	else return 0;
@@ -2258,7 +2258,7 @@ enum {
 {
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}dataUnion;
 	
 	if([pollingLookUp count]){
@@ -2278,10 +2278,10 @@ enum {
                 if(channelNumber ==-1) channelNumber = 0xff;//removed channels have channelNumber -1
                 
 				NSTimeInterval theTimeStamp =  [self timeFromADEIDate:[itemDictionary objectForKey:@"Date"]];//TODO: controls have no "Date" -tb-
-				unsigned long seconds	 = (unsigned long)theTimeStamp;	  //seconds since 1970
-				unsigned long subseconds = (theTimeStamp - seconds)*1000; //milliseconds
+				uint32_t seconds	 = (uint32_t)theTimeStamp;	  //seconds since 1970
+				uint32_t subseconds = (theTimeStamp - seconds)*1000; //milliseconds
 				
-				unsigned long data[7];
+				uint32_t data[7];
 				data[0] = channelDataId | 7;
 				data[1] = (([self uniqueIdNumber]&0xf) << 21) | (channelNumber&0xff);
 							
@@ -2292,7 +2292,7 @@ enum {
 				data[5] = 0; //spare
 				data[6] = 0; //spare
 				
-				[theData appendBytes:data length:7*sizeof(unsigned long)];
+				[theData appendBytes:data length:7*sizeof(uint32_t)];
 			}
 			[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification object:theData];
 		}

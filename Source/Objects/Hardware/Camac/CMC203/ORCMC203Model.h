@@ -42,19 +42,19 @@
 @interface ORCMC203Model : ORCamacIOCard <ORDataTaker,ORHWWizard>
 {
     @private
-		unsigned long histoDataId;
-		long histogramStart;
-		long histogramLength;
+		uint32_t histoDataId;
+		int32_t histogramStart;
+		int32_t histogramLength;
 		int	 wordSize;
 		int	 histogramMode;
 		int	 adcBits;
 		BOOL readingHistogram;
 		BOOL operationMode;
 		ORRateGroup*	fifoRateGroup;
-		unsigned long 	fifoCount;
+		uint32_t 	fifoCount;
 		BOOL isRunning;
 		NSMutableData* histogramData;
-		unsigned long histoMask;
+		uint32_t histoMask;
 		ORReadOutList*	readOutGroup;
 		NSArray*		dataTakers;			//cache of data takers.
 		unsigned short  savedHeader;
@@ -73,26 +73,26 @@
 - (void) setHistogramMode:(int)aHistogramMode;
 - (int)  wordSize;
 - (void) setWordSize:(int)aWordSize;
-- (long) histogramLength;
-- (void) setHistogramLength:(long)aHistogramLength;
-- (long) histogramStart;
-- (void) setHistogramStart:(long)aHistogramStart;
+- (int32_t) histogramLength;
+- (void) setHistogramLength:(int32_t)aHistogramLength;
+- (int32_t) histogramStart;
+- (void) setHistogramStart:(int32_t)aHistogramStart;
 - (ORRateGroup*)    fifoRateGroup;
 - (void)	    setFifoRateGroup:(ORRateGroup*)newFifoRateGroup;
 
-- (unsigned long) histoDataId;
-- (void) setHistoDataId: (unsigned long) aDataId;
+- (uint32_t) histoDataId;
+- (void) setHistoDataId: (uint32_t) aDataId;
 - (int) histogramCount;
-- (unsigned long) histoDataValueAtIndex:(int)index;
+- (uint32_t) histoDataValueAtIndex:(int)index;
 - (ORReadOutList*) readOutGroup;
 - (void) setReadOutGroup:(ORReadOutList*)newReadOutGroup;
 
 #pragma mark •••Rates
 - (BOOL) bumpRateFromDecodeStage;
-- (unsigned long) fifoCount;
+- (uint32_t) fifoCount;
 - (void) startRates;
 - (void) clearFifoCounts;
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag;
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag;
 
 #pragma mark •••HW Wizard
 - (NSArray*) wizardSelections;

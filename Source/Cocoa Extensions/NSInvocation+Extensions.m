@@ -130,11 +130,11 @@
         [self setArgument:&c atIndex:argIndex];
     }
     else if(*theArg == 'l'){
-        long c = (long)[aVal intValue];
+        int32_t c = (int32_t)[aVal intValue];
         [self setArgument:&c atIndex:argIndex];
     }
     else if(*theArg == 'q'){
-        long long c = [aVal longLongValue];
+        int64_t c = [aVal longLongValue];
         [self setArgument:&c atIndex:argIndex];
     }
     else if(*theArg == 'C'){
@@ -150,11 +150,11 @@
         [self setArgument:&c atIndex:argIndex];
     }
     else if(*theArg == 'L'){
-        unsigned long c = [aVal unsignedLongValue];
+        uint32_t c = [aVal unsignedLongValue];
         [self setArgument:&c atIndex:argIndex];
     }
     else if(*theArg == 'Q'){
-        unsigned long long c = [aVal unsignedLongLongValue];
+        uint64_t c = [aVal unsignedLongLongValue];
         [self setArgument:&c atIndex:argIndex];
     }
     else if(*theArg == 'f'){
@@ -240,7 +240,7 @@
 		returnValueAsString = [[NSNumber numberWithShort:buffer] stringValue];
     }
     else if(*theArg == 'l'){
-		long buffer;
+		int32_t buffer;
         [self getReturnValue:&buffer]; 
 		returnValueAsString = [[NSNumber numberWithLong:buffer] stringValue];
     }
@@ -260,17 +260,17 @@
 		returnValueAsString = [[NSNumber numberWithUnsignedShort:buffer] stringValue];
     }
     else if(*theArg == 'L'){
-		unsigned long buffer;
+		uint32_t buffer;
         [self getReturnValue:&buffer]; 
 		returnValueAsString = [[NSNumber numberWithUnsignedLong:buffer] stringValue];
     }
     else if(*theArg == 'q'){
-        long long buffer;
+        int64_t buffer;
         [self getReturnValue:&buffer];
         returnValueAsString = [[NSNumber numberWithLongLong:buffer] stringValue];
     }
     else if(*theArg == 'Q'){
-        unsigned long long buffer;
+        uint64_t buffer;
         [self getReturnValue:&buffer];
         returnValueAsString = [[NSNumber numberWithUnsignedLongLong:buffer] stringValue];
     }
@@ -360,7 +360,7 @@
 		for(i=1,argI=0 ; i<=n*2 ; i+=2,argI++){
 			id str = [orderedList objectAtIndex:i];
 			NSDecimalNumber* ptrNum = [NSDecimalNumber decimalNumberWithString:str];
-			unsigned long long ptr = [ptrNum unsignedLongLongValue];
+			uint64_t ptr = [ptrNum unsignedLongLongValue];
 			id theVar = (id)(ptr);
 			if(![theInvocation setArgument:argI to:theVar]){
 				ok = NO;

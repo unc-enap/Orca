@@ -177,7 +177,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"AMI 286 (Unit %lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"AMI 286 (Unit %u)",[model uniqueIdNumber]]];
 }
 
 - (void) updateWindow
@@ -351,7 +351,7 @@
 	[[levelMatrix cellWithTag:index] setStringValue:levelAsString];
 	[[level1Matrix cellWithTag:index] setStringValue:levelAsString];
 	
-	unsigned long t = [model timeMeasured:index];
+	uint32_t t = [model timeMeasured:index];
 	NSDate* theDate;
 	if(t){
 		theDate = [NSDate dateWithTimeIntervalSince1970:t];

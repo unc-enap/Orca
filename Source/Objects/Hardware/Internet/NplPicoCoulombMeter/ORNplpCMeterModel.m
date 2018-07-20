@@ -213,12 +213,12 @@ NSString* ORNplpCMeterLowLimitChanged		= @"ORNplpCMeterLowLimitChanged";
 }
 
 #pragma mark •••Data Records
-- (unsigned long) dataId
+- (uint32_t) dataId
 {
 	return dataId;
 }
 
-- (void) setDataId: (unsigned long) aDataId
+- (void) setDataId: (uint32_t) aDataId
 {
 	dataId = aDataId;
 }
@@ -256,10 +256,10 @@ NSString* ORNplpCMeterLowLimitChanged		= @"ORNplpCMeterLowLimitChanged";
 {
 	
 	int numBytes =(int)[meterData length];
-	if((numBytes>23) /*&& (numBytes%4 == 0)*/) {											//OK, we know we got a integer number of long words
+	if((numBytes>23) /*&& (numBytes%4 == 0)*/) {											//OK, we know we got a integer number of int32_t words
 		if([self validateMeterData]){
-			unsigned long data[1003];									//max buffer size is 1000 data words + ORCA header
-			unsigned int numLongsToShip = numBytes/sizeof(long);		//convert size to longs
+			uint32_t data[1003];									//max buffer size is 1000 data words + ORCA header
+			unsigned int numLongsToShip = numBytes/sizeof(int32_t);		//convert size to longs
 			numLongsToShip = numLongsToShip<1000?numLongsToShip:1000;	//don't exceed the data array
 			data[0] = dataId | (3 + numLongsToShip);					//first word is ORCA id and size
 			data[1] =  [self uniqueIdNumber]&0xf;						//second word is device number
@@ -271,22 +271,22 @@ NSString* ORNplpCMeterLowLimitChanged		= @"ORNplpCMeterLowLimitChanged";
 			//time_t ut_time = mktime(theTimeGMTAsStruct);
 			data[2] = ut_time;											//third word is seconds since 1970 (UT)
 			
-			unsigned long* p = (unsigned long*)[meterData bytes];
+			uint32_t* p = (uint32_t*)[meterData bytes];
 			
 			int i;
 			for(i=0;i<numLongsToShip;i++){
-				p[i] = (unsigned long)CFSwapInt32BigToHost((uint32_t)p[i]);
+				p[i] = (uint32_t)CFSwapInt32BigToHost((uint32_t)p[i]);
 				data[3+i] = p[i];
 				int chan = (p[i] & 0x00600000) >> 21;
 				if(chan < kNplpCNumChannels) [dataStack[chan] enqueue: [NSNumber numberWithLong:p[i] & 0x000fffff]];
 			}
 			
 			[self averageMeterData];
-			[meterData replaceBytesInRange:NSMakeRange(0,numLongsToShip*sizeof(long)) withBytes:nil length:0];
+			[meterData replaceBytesInRange:NSMakeRange(0,numLongsToShip*sizeof(int32_t)) withBytes:nil length:0];
 			
 			if([gOrcaGlobals runInProgress] && numBytes>0){
 				[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-																	object:[NSData dataWithBytes:data length:(3+numLongsToShip)*sizeof(long)]];
+																	object:[NSData dataWithBytes:data length:(3+numLongsToShip)*sizeof(int32_t)]];
 			}
 			[self setReceiveCount: receiveCount + 1];
 		}
@@ -343,7 +343,7 @@ NSString* ORNplpCMeterLowLimitChanged		= @"ORNplpCMeterLowLimitChanged";
 		if(count){
 			NSEnumerator* e = [dataStack[chan] objectEnumerator];
 			NSNumber* aValue;
-			long sum = 0;
+			int32_t sum = 0;
 			while(aValue = [e nextObject]){
 				sum += [aValue longValue];
 			}
@@ -360,8 +360,8 @@ NSString* ORNplpCMeterLowLimitChanged		= @"ORNplpCMeterLowLimitChanged";
 
 - (BOOL) validateMeterData
 {
-	unsigned long* p = (unsigned long*)[meterData bytes];
-	unsigned long len = [meterData length]/4;
+	uint32_t* p = (uint32_t*)[meterData bytes];
+	uint32_t len = [meterData length]/4;
 	int i;
 	short lastCount = 0;
 	short count;
@@ -504,7 +504,7 @@ NSString* ORNplpCMeterLowLimitChanged		= @"ORNplpCMeterLowLimitChanged";
 {
 	NSString* s;
  	@synchronized(self){
-		s= [NSString stringWithFormat:@"pCMeter,%lu",[self uniqueIdNumber]];
+		s= [NSString stringWithFormat:@"pCMeter,%u",[self uniqueIdNumber]];
 	}
 	return s;
 }

@@ -45,20 +45,20 @@
     [super dealloc];
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long index  = 0;
-    unsigned long* ptr   = (unsigned long*)someData;
-    unsigned long length = (ptr[0] & 0x0fffffff);
+    uint32_t index  = 0;
+    uint32_t* ptr   = (uint32_t*)someData;
+    uint32_t length = (ptr[0] & 0x0fffffff);
     index++; //1
     
     int unitNumber       = (ptr[1]>>16 & 0xf);
     NSString* unitKey    = [NSString stringWithFormat:@"Unit %2d",unitNumber];
     index += 2; //3
 
-    unsigned long eventLength = length-2;
+    uint32_t eventLength = length-2;
     while (eventLength > 4) { //make sure at least the CAEN header is there
-        unsigned long channelMask = ptr[index] & 0xff;
+        uint32_t channelMask = ptr[index] & 0xff;
         index += 3; //6 - start of data
         
         short numChans = 0;
@@ -77,7 +77,7 @@
         }
         
         eventLength -= 4;
-        unsigned long eventSize = eventLength/numChans;
+        uint32_t eventSize = eventLength/numChans;
         
         for (int j=0; j<numChans; j++) {
             int wordCount = 0;
@@ -119,21 +119,21 @@
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
-    unsigned long length = (ptr[0] & 0x0fffffff);
+    uint32_t length = (ptr[0] & 0x0fffffff);
     NSMutableString* dsc = [NSMutableString string];
     
     if(length > 6) { //make sure we have at least the CAEN header
-        NSString* recordLen           = [NSString stringWithFormat:@"Event size = %lu\n",           ptr[0] & 0x0fffffff];
+        NSString* recordLen           = [NSString stringWithFormat:@"Event size = %u\n",           ptr[0] & 0x0fffffff];
         NSString* boardFail           = [NSString stringWithFormat:@"Board fail = %@\n",            (ptr[1]>>26)&0x1?@YES:@NO];
         NSString* softTrig            = [NSString stringWithFormat:@"Software Trigger = %@\n",      (ptr[1]>>18)&0x1?@YES:@NO];
         NSString* extTrig             = [NSString stringWithFormat:@"External Trigger = %@\n",      (ptr[1]>>17)&0x1?@YES:@NO];
-        NSString* selfTrig            = [NSString stringWithFormat:@"Self Trigger = pair %lu\n",    (ptr[1]>>8)&0xf];
-        NSString* ETTT                = [NSString stringWithFormat:@"ETTT = %lu\n",                 (ptr[1]>>8)&0xffff];
-        NSString* sChannelMask        = [NSString stringWithFormat:@"Channel mask = 0x%02lx\n",     ptr[1] & 0xff];
-        NSString* eventCounter        = [NSString stringWithFormat:@"Event counter = 0x%06lx\n",    ptr[2] & 0xffffff];
-        NSString* timeTag             = [NSString stringWithFormat:@"Time tag = 0x%08lx\n\n",       ptr[3]];
+        NSString* selfTrig            = [NSString stringWithFormat:@"Self Trigger = pair %u\n",    (ptr[1]>>8)&0xf];
+        NSString* ETTT                = [NSString stringWithFormat:@"ETTT = %u\n",                 (ptr[1]>>8)&0xffff];
+        NSString* sChannelMask        = [NSString stringWithFormat:@"Channel mask = 0x%02x\n",     ptr[1] & 0xff];
+        NSString* eventCounter        = [NSString stringWithFormat:@"Event counter = 0x%06x\n",    ptr[2] & 0xffffff];
+        NSString* timeTag             = [NSString stringWithFormat:@"Time tag = 0x%08x\n\n",       ptr[3]];
         
         [dsc appendFormat:@"%@%@%@%@%@%@%@%@%@", recordLen, boardFail, softTrig, extTrig, selfTrig, ETTT, sChannelMask, eventCounter, timeTag];
     }

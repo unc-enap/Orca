@@ -386,7 +386,7 @@
 - (void) triggerModeMaskChanged:(NSNotification*)aNotification
 {
 	short i;
-	unsigned long theMask = [model triggerModeMask];
+	uint32_t theMask = [model triggerModeMask];
 	for(i=0;i<8;i++){
 		[[triggerModeMatrix cellWithTag:i] setIntValue:(theMask&(1<<i))!=0];
 	}
@@ -396,7 +396,7 @@
 - (void) gtMaskChanged:(NSNotification*)aNotification
 {
 	short i;
-	unsigned long theMask = [model gtMask];
+	uint32_t theMask = [model gtMask];
 	for(i=0;i<8;i++){
 		[[gtMatrix cellWithTag:i] setIntValue:(theMask&(1<<i))!=0];
 	}
@@ -405,7 +405,7 @@
 - (void) ltMaskChanged:(NSNotification*)aNotification
 {
 	short i;
-	unsigned long theMask = [model ltMask];
+	uint32_t theMask = [model ltMask];
 	for(i=0;i<8;i++){
 		[[ltMatrix cellWithTag:i] setIntValue:(theMask&(1<<i))!=0];
 	}

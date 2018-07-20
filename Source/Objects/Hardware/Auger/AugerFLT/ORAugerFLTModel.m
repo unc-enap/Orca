@@ -327,21 +327,21 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
     [[NSNotificationCenter defaultCenter] postNotificationName:ORAugerFLTModelTriggersEnabledChanged object:self];
 }
 
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
 
-- (unsigned long) waveFormId { return waveFormId; }
-- (void) setWaveFormId: (unsigned long) aWaveFormId
+- (uint32_t) waveFormId { return waveFormId; }
+- (void) setWaveFormId: (uint32_t) aWaveFormId
 {
     waveFormId = aWaveFormId;
 }
 
 
-- (unsigned long) hitRateId { return hitRateId; }
-- (void) setHitRateId: (unsigned long) aHitRateId
+- (uint32_t) hitRateId { return hitRateId; }
+- (void) setHitRateId: (uint32_t) aHitRateId
 {
     hitRateId = aHitRateId;
 }
@@ -644,59 +644,59 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 
 - (int)  readVersion
 {	
-	unsigned long data = [self readControlStatus];
+	uint32_t data = [self readControlStatus];
 	return (data >> FLT_CNTRL_VERSION) & FLT_CNTRL_VERSION_Mask; // 3bit
 }
 
 -(int) readFPGAVersion:(int) fpga
 {
-	unsigned long data = [self readTriggerControl:fpga];
+	uint32_t data = [self readTriggerControl:fpga];
 	return((data >> 14) & 0x3); // 2bit
 }
 
 
 - (int)  readCardId
 {
- 	unsigned long data = [self readControlStatus];
+ 	uint32_t data = [self readControlStatus];
 	return (data >> FLT_CNTRL_CardID) & FLT_CNTRL_CardID_Mask; // 5bit
 }
 
 - (BOOL)  readHasData
 {
- 	unsigned long data = [self readControlStatus];
+ 	uint32_t data = [self readControlStatus];
 	return ((data >> FLT_CNTRL_BufState) & 0x3 == 0x1);
 }
 
 - (BOOL)  readIsOverflow
 {
- 	unsigned long data = [self readControlStatus];
+ 	uint32_t data = [self readControlStatus];
 	return ((data >> FLT_CNTRL_BufState) & 0x3 == 0x3);
 }
 
 
 - (int)  readMode
 {
-	unsigned long data = [self readControlStatus];
+	uint32_t data = [self readControlStatus];
 	[self setFltRunMode: (data >> FLT_CNTRL_Mode) & FLT_CNTRL_Mode_Mask]; // 4bit
 	return fltRunMode;
 }
 
 - (void)  writeMode:(int) aValue
 {
-	//unsigned long buffer = [self readControlStatus];
+	//uint32_t buffer = [self readControlStatus];
 	//buffer =(buffer & ~(FLT_CNTRL_Mode_Mask<<FLT_CNTRL_Mode) ) | (aValue << FLT_CNTRL_Mode);
 	[self writeControlStatus:(aValue&FLT_CNTRL_Mode_Mask) << FLT_CNTRL_Mode];
 }
 
-- (unsigned long)  getReadPointer
+- (uint32_t)  getReadPointer
 {
-	unsigned long data = [self readControlStatus];
+	uint32_t data = [self readControlStatus];
 	return data & 0x1ff; // 9bit
 }
 
-- (unsigned long)  getWritePointer
+- (uint32_t)  getWritePointer
 {
-	unsigned long data = [self readControlStatus];
+	uint32_t data = [self readControlStatus];
 	return (data >> 11) & 0x1ff; // 9bit
 }
 
@@ -704,14 +704,14 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 - (void)  reset
 {
 	//reset the W/R pointers
-	unsigned long buffer = (fltRunMode << FLT_CNTRL_Mode) | 0x1;
+	uint32_t buffer = (fltRunMode << FLT_CNTRL_Mode) | 0x1;
 	[self writeControlStatus:buffer];
 }
 
 
 - (void)  trigger
 {
-    //unsigned long addr;
+    //uint32_t addr;
 	
 	NSLogMono(@"Generating software trigger\n" );		
 
@@ -743,19 +743,19 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 	[self writeHitRateMask];			//set the hit rate masks
 }
 
-- (unsigned long) readControlStatus
+- (uint32_t) readControlStatus
 {
 	return  [self read: ([self slot] << 24) ];
 }
 
-- (void) writeControlStatus:(unsigned long)aValue
+- (void) writeControlStatus:(uint32_t)aValue
 {
 	[self write: ([self slot] << 24) value:aValue];
 }
 
 - (void) printStatusReg
 {
-	unsigned long status = [self readControlStatus];
+	uint32_t status = [self readControlStatus];
 	NSLogMono(@"FLT %d status Reg: 0x%08x\n",[self stationNumber],status);
 	NSLogMono(@"Revision: %d\n",(status>>FLT_CNTRL_VERSION) & FLT_CNTRL_VERSION_Mask);
 	NSLogMono(@"SlotID  : %d\n",(status>>FLT_CNTRL_CardID) & FLT_CNTRL_CardID_Mask);
@@ -809,7 +809,7 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 
 - (void) clear:(int)aChan page:(int)aPage value:(unsigned short)aValue
 {
-	unsigned long aPattern;
+	uint32_t aPattern;
 
 	aPattern =  aValue;
 	aPattern = ( aPattern << 16 ) + aValue;
@@ -827,7 +827,7 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 	// While emulating the block transfer by a loop of single transfers
 	// it is nec. to increment the address pointer by 2
 	[self writeBlock:([self slot] << 24) | (kFLTAdcDataCode << FLT_ADDRSP) | (FLT_CHADDR_ALL << FLT_CHADDR)	| (aPage << FLT_PAGENR) 
-		  dataBuffer:(unsigned long*) aDataBuffer
+		  dataBuffer:(uint32_t*) aDataBuffer
 			  length:FLT_PAGE_SIZE / 2
 		   increment:2];
 }
@@ -840,7 +840,7 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 - (void) writeMemoryChan:(int)aChan page:(int)aPage pageBuffer:(unsigned short*)aPageBuffer
 {
 		[self writeBlock: ([self slot] << 24) | (kFLTAdcDataCode << FLT_ADDRSP) | (aChan << FLT_CHADDR)	| (aPage << FLT_PAGENR) 
-			 dataBuffer: (unsigned long*)aPageBuffer
+			 dataBuffer: (uint32_t*)aPageBuffer
 				 length: FLT_PAGE_SIZE/2
 			  increment: 2];
 }
@@ -849,19 +849,19 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 {
 
 		[self readBlock: ([self slot] << 24) |(kFLTAdcDataCode << FLT_ADDRSP) | (aChan << FLT_CHADDR) | (aPage << FLT_PAGENR) 
-			 dataBuffer: (unsigned long*)aPageBuffer
+			 dataBuffer: (uint32_t*)aPageBuffer
 				 length: FLT_PAGE_SIZE/2
 			  increment: 2];
 }
 
-- (unsigned long) readMemoryChan:(int)aChan page:(int)aPage
+- (uint32_t) readMemoryChan:(int)aChan page:(int)aPage
 {
 	return [self read:([self slot] << 24) | (kFLTAdcDataCode << FLT_ADDRSP) | (aChan << FLT_CHADDR) | (aPage << FLT_PAGENR)];
 }
 
 - (void) writeHitRateMask
 {
-	unsigned long hitRateEnabledMask = 0;
+	uint32_t hitRateEnabledMask = 0;
 	int chan;
 	for(chan = 0;chan<kNumFLTChannels;chan++){
 		if([[hitRatesEnabled objectAtIndex:chan] intValue]){
@@ -886,7 +886,7 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 
 - (void) writeTriggerControl
 {
-	unsigned long aValue = 0;
+	uint32_t aValue = 0;
 	int fpga;
 	for(fpga=0;fpga<4;fpga++){
 		aValue = [[shapingTimes objectAtIndex:fpga] intValue] & 0x7;	//fold in the shaping time
@@ -900,7 +900,7 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 		}
 		
 		[self write:([self slot] << 24) | (kFLTTriggerControlCode << FLT_ADDRSP) | (trigChanConvFLT[fpga][0]<<FLT_CHADDR)  value:aValue];
-		unsigned long checkValue = [self read:([self slot] << 24) | (kFLTTriggerControlCode << FLT_ADDRSP) | (trigChanConvFLT[fpga][0]<<FLT_CHADDR)];
+		uint32_t checkValue = [self read:([self slot] << 24) | (kFLTTriggerControlCode << FLT_ADDRSP) | (trigChanConvFLT[fpga][0]<<FLT_CHADDR)];
 			
 		aValue	   &= 0x3f07;
 		checkValue &= 0x3f07;
@@ -917,13 +917,13 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 
 - (void) disableTrigger
 {
-	unsigned long aValue = 0;
+	uint32_t aValue = 0;
 	int fpga;
 	for(fpga=0;fpga<4;fpga++){
 		aValue = [[shapingTimes objectAtIndex:fpga] intValue] & 0x7;	//fold in the shaping time
 		
 		[self write:([self slot] << 24) | (kFLTTriggerControlCode << FLT_ADDRSP) | (trigChanConvFLT[fpga][0]<<FLT_CHADDR)  value:aValue];
-		//unsigned long checkValue = [self read:([self slot] << 24) | (kFLTTriggerControlCode << FLT_ADDRSP) | (trigChanConvFLT[fpga][0]<<FLT_CHADDR)];
+		//uint32_t checkValue = [self read:([self slot] << 24) | (kFLTTriggerControlCode << FLT_ADDRSP) | (trigChanConvFLT[fpga][0]<<FLT_CHADDR)];
 		//	
 		//aValue	   &= 0x3f07;
 		//checkValue &= 0x3f07;
@@ -939,29 +939,29 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 	return [self read:([self slot] << 24) | (kFLTTriggerControlCode << FLT_ADDRSP) | (trigChanConvFLT[fpga][0]<<FLT_CHADDR)];
 }
 
-- (void) loadTime:(unsigned long)aTime
+- (void) loadTime:(uint32_t)aTime
 {
-	unsigned long addr = ([self slot] << 24) | (kFLTTimeCounterCode << FLT_ADDRSP) ;
+	uint32_t addr = ([self slot] << 24) | (kFLTTimeCounterCode << FLT_ADDRSP) ;
 	if(broadcastTime){
 		addr |= SELECT_ALL_SLOTS;
 	}
 	[self write:addr value:aTime];
 }
 
-- (unsigned long) readTime
+- (uint32_t) readTime
 {
     if (usingPBusSimulation){
-      return( (unsigned long)[NSDate timeIntervalSinceReferenceDate]);
+      return( (uint32_t)[NSDate timeIntervalSinceReferenceDate]);
     } 
 	else {
 	  return [self read:([self slot] << 24) | (kFLTTimeCounterCode << FLT_ADDRSP)];
     }	
 }
 
-- (unsigned long) readTimeSubSec
+- (uint32_t) readTimeSubSec
 {
-   unsigned long addr;
-   unsigned long raw;
+   uint32_t addr;
+   uint32_t raw;
    
    
    // TODO: Use Slt implementation [firewirecard readSubSecond]
@@ -977,7 +977,7 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 - (void) readHitRates
 {
 	NS_DURING
-		unsigned long aValue;
+		uint32_t aValue;
 		float measurementAge;
 		
 		BOOL oneChanged = NO;
@@ -1048,11 +1048,11 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 	NSDate* then = [NSDate date];
 	while(1){
 		NSDate* now = [NSDate date];
-		unsigned long delta = [now timeIntervalSinceDate:then];	
+		uint32_t delta = [now timeIntervalSinceDate:then];	
 		if(delta >= 1){
-			unsigned long timeToLoad = (unsigned long)[NSDate timeIntervalSinceReferenceDate];
+			uint32_t timeToLoad = (uint32_t)[NSDate timeIntervalSinceReferenceDate];
 			[self loadTime:timeToLoad];
-			unsigned long timeLoaded = [self readTime];
+			uint32_t timeLoaded = [self readTime];
 			NSLog(@"loaded FLT %d with time:%@\n",[self stationNumber],[NSDate dateWithTimeIntervalSinceReferenceDate:(NSTimeInterval)timeLoaded]);
 			if(timeToLoad == timeLoaded) NSLog(@"time read back OK\n");
 			else						 NSLogColor([NSColor redColor],@"readBack mismatch. Time load FAILED.\n");
@@ -1333,7 +1333,7 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 	}
 
 	//cache some addresses for speed in the dataTaking loop.
-	unsigned long theSlotPart = [self slot]<<24;
+	uint32_t theSlotPart = [self slot]<<24;
 	statusAddress			  = theSlotPart;
 	triggerMemAddress		  = theSlotPart | (kFLTTriggerDataCode << FLT_ADDRSP); 
 	memoryAddress			  = theSlotPart | (kFLTAdcDataCode << FLT_ADDRSP); 
@@ -1417,7 +1417,7 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 			*/			
 			
 			int i;
-			unsigned long addr =  (21 << 24) | (0x1 << 18) | 0x0105; // Set pages free
+			uint32_t addr =  (21 << 24) | (0x1 << 18) | 0x0105; // Set pages free
 			for (i=0;i<63;i++) [self write:addr value:i];
 			
 			addr =  (21 << 24) | (0x1 << 18) | 0x0f12; // Slt Generate Software Trigger
@@ -1446,7 +1446,7 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 		lastSec = [self readTime] + 1;  
 		
 		// Start dead time counting	
-		unsigned long addr =  (21 << 24) | (0x1 << 18) | 0x0f11; // ResetDeadTimeCounters
+		uint32_t addr =  (21 << 24) | (0x1 << 18) | 0x0f11; // ResetDeadTimeCounters
 		[self write:addr value:0];			
 		
 		// Release inhibit when DAq has started!
@@ -1467,7 +1467,7 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 {
 	nLoops++;
 	
-	unsigned long statusWord = [fireWireCard read:statusAddress];		//is there any data?
+	uint32_t statusWord = [fireWireCard read:statusAddress];		//is there any data?
 	
 	// Determine the pages to be read
 	// The eventlop (this class) stores the next page to be read in the
@@ -1493,8 +1493,8 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 	// The energy value have to be read one by one. 
 	// (Denis was not able to store all the data in the same place)
 	// ak, 20.7.07
-	unsigned long dataBuffer[2048];
-	unsigned long *data;
+	uint32_t dataBuffer[2048];
+	uint32_t *data;
 	
 	int nPages = (512 + page1 - page0) %512;			
 	//NSLogMono(@"Trigger - Pages: %d (%d...%d)\n", nPages, page0, page1);
@@ -1511,9 +1511,9 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 			nPages = (512 + page1 - page0) %512; // Recalculate
 		}	
 		
-		unsigned long pageAddress = triggerMemAddress + (page0<<2);				
+		uint32_t pageAddress = triggerMemAddress + (page0<<2);				
 		data = dataBuffer;
-		[fireWireCard read:pageAddress data:data size:nPages*4*sizeof(long)];
+		[fireWireCard read:pageAddress data:data size:nPages*4*sizeof(int32_t)];
 	
 		while(page0 != page1){
 			debugData theDebugEvent;
@@ -1527,7 +1527,7 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 			nextEventPage = page0; // Store the page pointer for the next readout call
 			
 			//read the event from the trigger memory and format into an event structure
-			unsigned long channelMap = (data[0] >> 10)  & 0x3fffff;
+			uint32_t channelMap = (data[0] >> 10)  & 0x3fffff;
 			eventData theEvent;
 			theEvent.channelMap = channelMap;
 			int eventId = data[0] & 0x3ff;
@@ -1553,12 +1553,12 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 
 						/*					   
 						// Check for readout error - read again the event data
-						unsigned long pageAddress = triggerMemAddress + (actualPage<<2);
-						unsigned long data = [fireWireCard read:pageAddress + 0];					   
-						//unsigned long subSec	= ([fireWireCard read:pageAddress + 1]) & 0xffffff;
-						//unsigned long sec = [fireWireCard read:pageAddress + 2];	
-						unsigned long channelMap = (data >> 10)  & 0x3fffff;
-						unsigned long eventId = data & 0x3ff;
+						uint32_t pageAddress = triggerMemAddress + (actualPage<<2);
+						uint32_t data = [fireWireCard read:pageAddress + 0];					   
+						//uint32_t subSec	= ([fireWireCard read:pageAddress + 1]) & 0xffffff;
+						//uint32_t sec = [fireWireCard read:pageAddress + 2];	
+						uint32_t channelMap = (data >> 10)  & 0x3fffff;
+						uint32_t eventId = data & 0x3ff;
 						diffId = (1024 + eventId - lastEventId) % 1024; 
 						
 						// Debug output for readout error analysis
@@ -1572,7 +1572,7 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 			
 			// Check for buffer overflow
 			// 
-			unsigned long bufState =  (statusWord >> FLT_CNTRL_BufState) & 0x3;
+			uint32_t bufState =  (statusWord >> FLT_CNTRL_BufState) & 0x3;
 			//NSLogMono(@"Buffer state :  %x\n", bufState);
 			if(bufState == 0x3) overflowDetected = true;
 						
@@ -1584,7 +1584,7 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 			
 			if(channelMap){
 				int aChan;
-				long readAddress = 0; 
+				int32_t readAddress = 0; 
 				for(aChan=0;aChan<kNumFLTChannels;aChan++){
 					if( (1L<<aChan) & channelMap){
 						
@@ -1607,7 +1607,7 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 						if(fltRunMode == FLT_DEBUG_MODE){
 							// Read the reset time
 							if (useResetTimestamp){
-								unsigned long addr = statusAddress | (kFLTTimeCounterCode << FLT_ADDRSP) | 1;
+								uint32_t addr = statusAddress | (kFLTTimeCounterCode << FLT_ADDRSP) | 1;
 								resetSec    = [fireWireCard read:addr ];
 								addr = addr + 1;
 								resetSubSec = [fireWireCard read:addr ];
@@ -1618,7 +1618,7 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 								// Check if the data is continuous
 								// Recording time
 								// t_ev - t_reset > readoutPages * 1024 * 100ns										
-								long recTime = (theEvent.sec - theDebugEvent.resetSec) * 10000000 +
+								int32_t recTime = (theEvent.sec - theDebugEvent.resetSec) * 10000000 +
 									(theEvent.subSec - theDebugEvent.resetSubSec);		// 100ns bins
 								if (recTime < 1024 * 	readoutPages) {
 									NSLogMono(@"Event %d: The reording time is short than readout windows\n", nEvents);
@@ -1642,9 +1642,9 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 #endif
 						
 						if((fltRunMode == FLT_RUN_MODE)){
-							unsigned long totalLength = 2 + (sizeof(eventData)/sizeof(long));
-							NSMutableData* theEnergyData = [NSMutableData dataWithCapacity:totalLength*sizeof(long)];
-							unsigned long header = dataId | totalLength;	//total event size + the two ORCA header words (in longs!).
+							uint32_t totalLength = 2 + (sizeof(eventData)/sizeof(int32_t));
+							NSMutableData* theEnergyData = [NSMutableData dataWithCapacity:totalLength*sizeof(int32_t)];
+							uint32_t header = dataId | totalLength;	//total event size + the two ORCA header words (in longs!).
 							
 							[theEnergyData appendBytes:&header length:4];							//ORCA header word
 							[theEnergyData appendBytes:&locationWord length:4];						//which crate, which card info
@@ -1656,11 +1656,11 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 						// ak, 15.6.07												
 						else if(fltRunMode == FLT_DEBUG_MODE){
 							
-							unsigned long totalLength = (2 + (sizeof(eventData)/sizeof(long)) 
-														 + (sizeof(debugData)/sizeof(long))
+							uint32_t totalLength = (2 + (sizeof(eventData)/sizeof(int32_t)) 
+														 + (sizeof(debugData)/sizeof(int32_t))
 														 + readoutPages*512);	// longs
-							NSMutableData* theWaveFormData = [NSMutableData dataWithCapacity:totalLength*sizeof(long)];
-							unsigned long header = waveFormId | totalLength;
+							NSMutableData* theWaveFormData = [NSMutableData dataWithCapacity:totalLength*sizeof(int32_t)];
+							uint32_t header = waveFormId | totalLength;
 							
 							[theWaveFormData appendBytes:&header length:4];				           //ORCA header word
 							[theWaveFormData appendBytes:&locationWord length:4];		           //which crate, which card info
@@ -1673,13 +1673,13 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 							}
 							
 							// Use block read mode.
-							// With every 32bit (long word) two 12bit ADC values are transmitted
+							// With every 32bit (int32_t word) two 12bit ADC values are transmitted
 							// ak 19.6.07
-							[theWaveFormData setLength:totalLength*sizeof(long)]; //we're going to dump directly into the NSData object so
+							[theWaveFormData setLength:totalLength*sizeof(int32_t)]; //we're going to dump directly into the NSData object so
 																				  //we have to set the total size first. (Note: different than 'Capacity')
 							int j;
-							unsigned long buf[512];
-							unsigned long addr =  (startBin & 0xffff);
+							uint32_t buf[512];
+							uint32_t addr =  (startBin & 0xffff);
 							// TODO: 2 or 4 ??? ak, 21.9.07
 							//short* waveFormPtr = ((short*)[theWaveFormData bytes]) + (2*sizeof(short))
 							short* waveFormPtr = ((short*)[theWaveFormData bytes]) + (4*sizeof(short))
@@ -1690,7 +1690,7 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 							for (j=0;j<readoutPages;j++){
 								
 								readAddress =  memoryAddress | (aChan << FLT_CHADDR) | addr;
-								[fireWireCard read:readAddress data:buf size:512*sizeof(long)];						
+								[fireWireCard read:readAddress data:buf size:512*sizeof(int32_t)];						
 								
 								// The order of the shorts has to be switched (endianess)
 								int i;
@@ -1751,11 +1751,11 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 	// Sweep through the threshold values and record the trigger rates
 	// 24.7.07 ak
 	
-	unsigned long hitrate[22];
+	uint32_t hitrate[22];
 	bool saveData;
 	
 	// Wait for the second strobe
-	unsigned long sec = [self readTime];
+	uint32_t sec = [self readTime];
 	if (sec > lastSec) {
 		lastSec = sec; // Store the  actual second counter
 		
@@ -1843,9 +1843,9 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 					locationWord &= 0xffff0000;
 					locationWord |= (i&0xff)<<8; // New: There is a place for the channel in the header?!
 					
-					unsigned long totalLength = 2 + (sizeof(hitRateData)/sizeof(long));
-					NSMutableData* theHitRateData = [NSMutableData dataWithCapacity:totalLength*sizeof(long)];
-					unsigned long header = hitRateId | totalLength;	//total event size + the two ORCA header words (in longs!).
+					uint32_t totalLength = 2 + (sizeof(hitRateData)/sizeof(int32_t));
+					NSMutableData* theHitRateData = [NSMutableData dataWithCapacity:totalLength*sizeof(int32_t)];
+					uint32_t header = hitRateId | totalLength;	//total event size + the two ORCA header words (in longs!).
 					
 					[theHitRateData appendBytes:&header length:4];		//ORCA header word
 					[theHitRateData appendBytes:&locationWord length:4];	//which crate, which card info
@@ -2203,7 +2203,7 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 	NS_DURING
 		[self enterTestMode];
 		BOOL passed = YES;
-		unsigned long patterns[4] = {0x1010,0x0101,0x1111,0x0000};
+		uint32_t patterns[4] = {0x1010,0x0101,0x1111,0x0000};
 		int i,patternIndex;
 		for(patternIndex=0;patternIndex<4;patternIndex++){
 			for(i=0;i<FLT_PAGE_SIZE;i++)pat1[i] = patterns[patternIndex];
@@ -2243,7 +2243,7 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 
 	NS_DURING
 		[self enterTestMode];
-		unsigned long pattern = 0x1010;
+		uint32_t pattern = 0x1010;
 		int i,chan;
 		int thePage = 15; //test page
 		BOOL passed = YES;
@@ -2281,7 +2281,7 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 
 	NS_DURING
 		[self enterTestMode];
-		unsigned long aPattern[4] = {0x3fff,0x0,0x2aaa,0x1555};
+		uint32_t aPattern[4] = {0x3fff,0x0,0x2aaa,0x1555};
 		int chan;
 		BOOL passed = YES;
 		int testIndex;
@@ -2302,7 +2302,7 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 			}
 		}
 		if(passed){		
-			unsigned long gainPattern[4] = {0xff,0x0,0xaa,0x55};
+			uint32_t gainPattern[4] = {0xff,0x0,0xaa,0x55};
 
 			//now gains
 			for(testIndex = 0;testIndex<4;testIndex++){
@@ -2388,13 +2388,13 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 	
 	NS_DURING
 		//cache some addresses.
-		unsigned long theSlotPart = [self slot]<<24;
+		uint32_t theSlotPart = [self slot]<<24;
 		statusAddress		= theSlotPart;
 		triggerMemAddress	= theSlotPart | (kFLTTriggerDataCode << FLT_ADDRSP); 
 		memoryAddress		= theSlotPart | (kFLTAdcDataCode << FLT_ADDRSP); 
 		
 		//clear the pointers, put in run mode
-		unsigned long aValue = (fltRunMode<<20) | 0x1;
+		uint32_t aValue = (fltRunMode<<20) | 0x1;
 		[self writeControlStatus:aValue];
 		[ORTimer delay:1];
 		//put into test mode
@@ -2413,7 +2413,7 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 		
 		
 		NSLogMono(@"FLT %d\n",[self stationNumber]);
-		unsigned long statusWord = [self readControlStatus];	
+		uint32_t statusWord = [self readControlStatus];	
 		//there is some data, so get the read and write pointers
 		int page0 = statusWord & 0x1ff;	//read page
 		page0 = (page0 + 1) % 512;				
@@ -2423,18 +2423,18 @@ static NSString* fltTestName[kNumAugerFLTTests]= {
 
 			NSLogMono(@"---Event Data---\n");
 		
-			unsigned long pageAddress = triggerMemAddress + (page0<<2);	
+			uint32_t pageAddress = triggerMemAddress + (page0<<2);	
 					
 			//read the event from the trigger memory and format into an event structure
 			eventData theEvent;
-			unsigned long data	= [self read:pageAddress | 0x0];
-			unsigned long channelMap = (data >> 10)  & 0x3fffff;
+			uint32_t data	= [self read:pageAddress | 0x0];
+			uint32_t channelMap = (data >> 10)  & 0x3fffff;
 			theEvent.eventID	= data & 0x3fff;
 			theEvent.subSec		= [self read:pageAddress | 0x1];
 			theEvent.sec		= [self read:pageAddress | 0x2];
 
 			//the event energy address is computed from the subSec part of the trigger data
-			unsigned long energyAddress = memoryAddress | (theEvent.subSec % 65536);
+			uint32_t energyAddress = memoryAddress | (theEvent.subSec % 65536);
 			if (energyAddress % 2 == 0 ) {  // even address
 				theEvent.energy	= [self read:energyAddress] & 0x7fff;			//15bits??
 			}

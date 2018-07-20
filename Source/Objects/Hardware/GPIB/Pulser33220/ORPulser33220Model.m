@@ -226,7 +226,7 @@ NSString* ORPulser33220ModelUSBInterfaceChanged = @"ORPulser33220ModelUSBInterfa
 		case kHPPulserUseUSB:	return [NSString stringWithFormat:@"33220 Pulser (Serial# %@)",[usbInterface serialNumber]];
 		case kHPPulserUseIP:	return [NSString stringWithFormat:@"33220 Pulser (%@)",[self ipAddress]];
 	}
-	return [NSString stringWithFormat:@"33220 Pulser (%ld)",[self tag]];
+	return [NSString stringWithFormat:@"33220 Pulser (%d)",(int)[self tag]];
 }
 
 - (NSUInteger) vendorID
@@ -682,7 +682,7 @@ NSString* ORPulser33220ModelUSBInterfaceChanged = @"ORPulser33220ModelUSBInterfa
 }
 
 #pragma mark ***Comm methods
-- (long) readFromGPIBDevice: (char*) aData maxLength: (long) aMaxLength
+- (int32_t) readFromGPIBDevice: (char*) aData maxLength: (int32_t) aMaxLength
 {
 	switch(connectionProtocol){
 		case kHPPulserUseGPIB: return [super readFromGPIBDevice:aData maxLength:aMaxLength];

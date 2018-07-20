@@ -26,9 +26,9 @@
 
 #pragma mark •••Accessors
 
-- (void) readLongBlockPmc:(unsigned long *) buffer
-				 atAddress:(unsigned long) aPmcAddress
-				 numToRead:(unsigned long) numberLongs
+- (void) readLongBlockPmc:(uint32_t *) buffer
+				 atAddress:(uint32_t) aPmcAddress
+				 numToRead:(uint32_t) numberLongs
 {
 	@try {
 		[socketLock lock]; //begin critical section
@@ -51,7 +51,7 @@
 			int num = rp->numItems;
 			
 			rp++;
-			memcpy(buffer,rp,num*sizeof(long));
+			memcpy(buffer,rp,num*sizeof(int32_t));
 		}
 		else [self throwError:rp->errorCode address:aPmcAddress];
 		[socketLock unlock]; //end critical section
@@ -64,9 +64,9 @@
 
 
 
-- (void) writeLongBlockPmc:(unsigned long *) buffer
-				  atAddress:(unsigned long) aPmcAddress
-				 numToWrite:(unsigned long) numberLongs
+- (void) writeLongBlockPmc:(uint32_t *) buffer
+				  atAddress:(uint32_t) aPmcAddress
+				 numToWrite:(uint32_t) numberLongs
 {
 	
 	@try {
@@ -75,13 +75,13 @@
 		SBC_Packet aPacket;
 		aPacket.cmdHeader.destination			= kSBC_Process;
 		aPacket.cmdHeader.cmdID					= kSBC_WriteBlock;
-		aPacket.cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(SBC_IPEv4WriteBlockStruct) + numberLongs*sizeof(long));   //TODO: this was SBC_VmeWriteBlockStruct (instead of SBC_IPEv4WriteBlockStruct), is that correct? -tb-
+		aPacket.cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(SBC_IPEv4WriteBlockStruct) + numberLongs*sizeof(int32_t));   //TODO: this was SBC_VmeWriteBlockStruct (instead of SBC_IPEv4WriteBlockStruct), is that correct? -tb-
 		
 		SBC_IPEv4WriteBlockStruct* writeBlockPtr = (SBC_IPEv4WriteBlockStruct*)aPacket.payload;
 		writeBlockPtr->address			= (uint32_t)aPmcAddress;
 		writeBlockPtr->numItems			= (uint32_t)numberLongs;
 		writeBlockPtr++;				//point to the payload
-		memcpy(writeBlockPtr,buffer,numberLongs*sizeof(long));
+		memcpy(writeBlockPtr,buffer,numberLongs*sizeof(int32_t));
 		
 		//Do NOT call the combo send:receive method here... we have the locks already in place
 		[self write:socketfd buffer:&aPacket];	//write the packet

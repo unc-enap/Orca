@@ -370,7 +370,7 @@ NSString* ORWebRakerMaxValueChanged        = @"ORWebRakerMaxValueChanged";
 {
 	NSString* s;
  	@synchronized(self){
-		s= [NSString stringWithFormat:@"WebRaker,%lu",[self uniqueIdNumber]];
+		s= [NSString stringWithFormat:@"WebRaker,%u",[self uniqueIdNumber]];
 	}
 	return s;
 }

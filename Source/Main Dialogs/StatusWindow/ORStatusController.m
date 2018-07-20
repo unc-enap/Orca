@@ -84,7 +84,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(StatusController);
 	[self loadAlarmHistory];
 	
     if(alarmLogSize > 2*1000*1000){
-        NSLogColor([NSColor redColor],@"The Alarm Log is getting big (%luMB). Please consider clearing it. Otherwise ORCA will take a long time starting\n",alarmLogSize/(1000*1000));
+        NSLogColor([NSColor redColor],@"The Alarm Log is getting big (%uMB). Please consider clearing it. Otherwise ORCA will take a int32_t time starting\n",alarmLogSize/(1000*1000));
     }
     
 	NSString* s = [NSString stringWithFormat:@"%@ ORCA started",[[NSDate date] stdDescription]]; //don't change this string
@@ -272,7 +272,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(StatusController);
 
         //get the current date
         NSDate* now = [NSDate date];
-        NSString* theFileName = [NSString stringWithFormat:@"StatusLog_%04ld_%02ld_%02ld",(long)[now yearOfCommonEra],(long)[now monthOfYear],(long)[now dayOfMonth]];
+        NSString* theFileName = [NSString stringWithFormat:@"StatusLog_%04d_%02d_%02d",(int32_t)[now yearOfCommonEra],(int32_t)[now monthOfYear],(int32_t)[now dayOfMonth]];
         aPath = [aPath stringByAppendingPathComponent:theFileName];
         BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:aPath];
         NSString* contents = [[ORStatusController sharedStatusController] contents];
@@ -289,12 +289,12 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(StatusController);
     }
 }
 
-- (NSString*) contentsTail:(unsigned long)aDuration
+- (NSString*) contentsTail:(uint32_t)aDuration
 {
 	return [self contentsTail:aDuration includeDurationHeader:YES];
 }
 
-- (NSString*) contentsTail:(unsigned long)aDuration includeDurationHeader:(BOOL)header
+- (NSString*) contentsTail:(uint32_t)aDuration includeDurationHeader:(BOOL)header
 {
 	NSString* tailContents	= @"";
 	BOOL	  valid			= NO;
@@ -339,7 +339,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(StatusController);
     }
 	
 	if(valid){
-		if(header)return [NSString stringWithFormat:@"Last %lu seconds of ORCA Status log\n\n%@",aDuration,tailContents];
+		if(header)return [NSString stringWithFormat:@"Last %u seconds of ORCA Status log\n\n%@",aDuration,tailContents];
 		else return tailContents;
 	}
 	else return nil;
@@ -483,7 +483,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(StatusController);
 	NSArray* runControlObjects = [[(ORAppDelegate*)[NSApp delegate] document] collectObjectsOfClass:NSClassFromString(@"ORRunModel")];
 	NSString* theRun;
 	if([runControlObjects count]){
-		theRun = [NSString stringWithFormat:@"Run Number %lu",[[runControlObjects objectAtIndex:0] runNumber]];
+		theRun = [NSString stringWithFormat:@"Run Number %u",[[runControlObjects objectAtIndex:0] runNumber]];
 	}
 	else {
 		theRun = @"No Run Control Obj";

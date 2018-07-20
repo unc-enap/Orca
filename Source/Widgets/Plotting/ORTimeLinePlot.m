@@ -97,8 +97,8 @@
 	}	
 	if(roi && roiVisible){
 		[roi analyzeData];
-		long minChan = MAX(0,[roi minChannel]);
-		long maxChan = MIN([roi maxChannel],[mXScale maxLimit]);
+		int32_t minChan = MAX(0,[roi minChannel]);
+		int32_t maxChan = MIN([roi maxChannel],[mXScale maxLimit]);
 		float x1 = [mXScale getPixAbsFast:minChan log:NO integer:YES minPad:aMinPadx];
 		float x2 = [mXScale getPixAbsFast:maxChan log:NO integer:YES minPad:aMinPadx];
 		

@@ -50,7 +50,7 @@
 #pragma mark ***Hardware - General
 - (short)	oscScopeId;
 - (bool) 	oscBusy;
-- (long)	oscGetDateTime;
+- (int32_t)	oscGetDateTime;
 - (void)	oscSetDateTime: (time_t) aTime;
 - (void)	oscLockPanel: (bool) aFlag;
 - (void)	oscResetOscilloscope;
@@ -114,7 +114,7 @@
 
 #pragma mark ***Specialty routines.
 - (NSString*) 	triggerSourceAsString;
-- (void)	osc950ConvertTime: (unsigned long long*) a10MhzTime timeToConvert: (char*) aCharTime;
+- (void)	osc950ConvertTime: (uint64_t*) a10MhzTime timeToConvert: (char*) aCharTime;
 
 /*- 
 - 

@@ -71,7 +71,7 @@ NSString* ORCrateModelLockMovementChanged   = @"ORCrateModelLockMovementChanged"
 	[aConnector release];
 }
 
-- (void) setUniqueIdNumber:(unsigned long)anIdNumber
+- (void) setUniqueIdNumber:(uint32_t)anIdNumber
 {
 	[super setUniqueIdNumber:anIdNumber];
 	[self setCrateNumber:(int)anIdNumber-1];
@@ -291,9 +291,9 @@ NSString* ORCrateModelLockMovementChanged   = @"ORCrateModelLockMovementChanged"
 	[aCard positionConnector:aConnector];
 }
 
-- (unsigned long) requestGTID
+- (uint32_t) requestGTID
 {
-    unsigned long aGTID = 0;
+    uint32_t aGTID = 0;
     NSArray* gtidGenerators = [self collectObjectsConformingTo:@protocol(ORGTIDGenerator)];
     if([gtidGenerators count]){
         id gtidGenerator = [gtidGenerators objectAtIndex:0];

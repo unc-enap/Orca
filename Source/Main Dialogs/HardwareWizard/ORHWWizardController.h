@@ -202,14 +202,14 @@ extern NSString* ORHWWizActionFinalNotification;
 
 @interface ORHWWizObj : NSObject
 {
-    unsigned long wizMask;
+    uint32_t wizMask;
     id<ORHWWizard> target;
 }
 + (id) hwWizObject:(id<ORHWWizard>)obj;
 - (id) initWithTarget:(id<ORHWWizard>)obj;
 - (id) target;
-- (unsigned long) wizMask;
-- (void) setWizMask:(unsigned long)aMask;
+- (uint32_t) wizMask;
+- (void) setWizMask:(uint32_t)aMask;
 - (int) numberOfChannels;
 
 

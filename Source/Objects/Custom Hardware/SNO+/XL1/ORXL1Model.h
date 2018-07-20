@@ -79,12 +79,12 @@
 - (void) encodeWithCoder:(NSCoder*)encoder;
 
 #pragma mark •••Hardware Access
-- (void) writeHardwareRegister:(unsigned long) regAddress value:(unsigned long) aValue;
-- (unsigned long) readHardwareRegister:(unsigned long) regAddress;
-- (id) writeHardwareRegisterCmd:(unsigned long) regAddress value:(unsigned long) aValue;
-- (id) readHardwareRegisterCmd:(unsigned long) regAddress;
+- (void) writeHardwareRegister:(uint32_t) regAddress value:(uint32_t) aValue;
+- (uint32_t) readHardwareRegister:(uint32_t) regAddress;
+- (id) writeHardwareRegisterCmd:(uint32_t) regAddress value:(uint32_t) aValue;
+- (id) readHardwareRegisterCmd:(uint32_t) regAddress;
 - (void) executeCommandList:(ORCommandList*)aList;
-- (id) delayCmd:(unsigned long) milliSeconds;
+- (id) delayCmd:(uint32_t) milliSeconds;
 
 @end
 

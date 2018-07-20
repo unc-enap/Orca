@@ -542,7 +542,7 @@ static NSString* ORPQModelInConnector 	= @"ORPQModelInConnector";
     if ([self isCancelled]) return nil;
     ORPQDetectorDB *detDB = [[[ORPQDetectorDB alloc] init] autorelease];
     if (theResult) {
-        unsigned long long numRows = [theResult numOfRows];
+        uint64_t numRows = [theResult numOfRows];
         unsigned int numCols = [theResult numOfFields];
         if (numCols != 4) {
             NSLog(@"Expected %d columns from PMT HV database, but got %d\n", 4, numCols);
@@ -552,9 +552,9 @@ static NSString* ORPQModelInConnector 	= @"ORPQModelInConnector";
         for (int i=0; i<numRows; ++i) {
             int64_t val = [theResult getInt64atRow:i column:3];
             if (val == kPQBadValue) continue;
-            unsigned long crate   = [theResult getInt64atRow:i column:0];
-            unsigned long card    = [theResult getInt64atRow:i column:1];
-            unsigned long channel = [theResult getInt64atRow:i column:2];
+            uint32_t crate   = [theResult getInt64atRow:i column:0];
+            uint32_t card    = [theResult getInt64atRow:i column:1];
+            uint32_t channel = [theResult getInt64atRow:i column:2];
             if (crate < kSnoCrates && card < kSnoCardsPerCrate && channel < kSnoChannelsPerCard) {
                 PQ_FEC *pqFEC = [detDB getPmthv:(int)card crate:(int)crate];
                 pqFEC->valid[kFEC_hvDisabled] |= (1 << channel);
@@ -578,7 +578,7 @@ static NSString* ORPQModelInConnector 	= @"ORPQModelInConnector";
     }
     if ([self isCancelled]) return nil;
     if (theResult) {
-        unsigned long long numRows = [theResult numOfRows];
+        uint64_t numRows = [theResult numOfRows];
         unsigned int  numCols = [theResult numOfFields];
         if (numCols != kFEC_numDbColumns) {
             NSLog(@"Expected %d columns from detector database, but got %d\n", kFEC_numDbColumns, numCols);
@@ -586,8 +586,8 @@ static NSString* ORPQModelInConnector 	= @"ORPQModelInConnector";
         }
         detDB->fecLoaded = (int)numRows;
         for (int i=0; i<numRows; ++i) {
-            unsigned long crate = [theResult getInt64atRow:i column:0];
-            unsigned long card  = [theResult getInt64atRow:i column:1];
+            uint32_t crate = [theResult getInt64atRow:i column:0];
+            uint32_t card  = [theResult getInt64atRow:i column:1];
             if (crate >= kSnoCrates || card >= kSnoCardsPerCrate) continue;
             PQ_FEC *pqFEC = [detDB getFEC:(int)card crate:(int)crate];
             // set flag indicating that the card exists in the current detector state
@@ -716,7 +716,7 @@ static NSString* ORPQModelInConnector 	= @"ORPQModelInConnector";
     }
     if ([self isCancelled]) return nil;
     if (theResult) {
-        unsigned long long numRows = [theResult numOfRows];
+        uint64_t numRows = [theResult numOfRows];
         unsigned int       numCols = [theResult numOfFields];
         if (numCols != kCrate_numDbColumns) {
             NSLog(@"Expected %d columns from crate database, but got %d\n", kCrate_numDbColumns, numCols);
@@ -785,7 +785,7 @@ static NSString* ORPQModelInConnector 	= @"ORPQModelInConnector";
     }
     if ([self isCancelled]) return nil;
     if (theResult) {
-        unsigned long long  numRows = [theResult numOfRows];
+        uint64_t  numRows = [theResult numOfRows];
         unsigned int numCols = [theResult numOfFields];
         if (numCols != kMTC_numDbColumns) {
             NSLog(@"Expected %d columns from MTC database, but got %d\n", kMTC_numDbColumns, numCols);
@@ -867,7 +867,7 @@ static NSString* ORPQModelInConnector 	= @"ORPQModelInConnector";
     }
     if ([self isCancelled]) return nil;
     if (theResult) {
-        unsigned long long numRows = [theResult numOfRows];
+        uint64_t numRows = [theResult numOfRows];
         unsigned int numCols = [theResult numOfFields];
         if (numCols != kCAEN_numDbColumns) {
             NSLog(@"Expected %d columns from CAEN database, but got %d\n", kCAEN_numDbColumns, numCols);
@@ -940,7 +940,7 @@ static NSString* ORPQModelInConnector 	= @"ORPQModelInConnector";
     }
     if ([self isCancelled]) return nil;
     if (theResult) {
-        unsigned long long numRows = [theResult numOfRows];
+        uint64_t numRows = [theResult numOfRows];
         unsigned int numCols = [theResult numOfFields];
         if (numRows != 1 || numCols != 3) {
             NSLogColor([NSColor redColor], @"Error getting run state from database\n");
@@ -972,7 +972,7 @@ static NSString* ORPQModelInConnector 	= @"ORPQModelInConnector";
     }
     if ([self isCancelled]) return nil;
     if (theResult) {
-        unsigned long long numRows = [theResult numOfRows];
+        uint64_t numRows = [theResult numOfRows];
         unsigned int  numCols = [theResult numOfFields];
         if (numRows != 1 || numCols != 1) {
             NSLogColor([NSColor redColor], @"Error getting run number from database\n");

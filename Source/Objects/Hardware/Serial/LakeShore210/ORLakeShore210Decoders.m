@@ -55,12 +55,12 @@ static NSString* kLakeShoreTempUnit[3] = {
     else return [NSString stringWithFormat:@"Unit %d",aUnit];			
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-	unsigned long *dataPtr = (unsigned long*)someData;
+	uint32_t *dataPtr = (uint32_t*)someData;
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theTemp;
 	
 	int i;
@@ -81,15 +81,15 @@ static NSString* kLakeShoreTempUnit[3] = {
 	return ExtractLength(dataPtr[0]);
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr
 {
     NSString* title= @"Lake Shore 218 TempRecord\n\n";
     NSString* theString =  [NSString stringWithFormat:@"%@\n",title];               
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theData;
-	theString = [theString stringByAppendingFormat:@"HW ID = %lu\n",dataPtr[1] & 0x0000ffff];
+	theString = [theString stringByAppendingFormat:@"HW ID = %u\n",dataPtr[1] & 0x0000ffff];
 	theString = [theString stringByAppendingFormat:@"Units = %@\n",kLakeShoreTempUnit[((dataPtr[1]>>16) & 0x3)]];
 	int i;
 	int index = 2;

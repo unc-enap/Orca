@@ -32,8 +32,8 @@
 
 @interface ORAcqirisDC440Model : ORcPCIIOCard <ORDataTaker,ORHWWizard>
 {	
-    unsigned long	dataId;
-	unsigned long	numberSamples;
+    uint32_t	dataId;
+	uint32_t	numberSamples;
 	double			delayTime;
 	double			sampleInterval;
     int				fullScale;
@@ -43,16 +43,16 @@
     int				triggerCoupling;
     NSMutableArray*		triggerLevels;
     int				triggerSlope;
-	unsigned long	boardID;
+	uint32_t	boardID;
 	int				lengthBuffer[2];
 	short			tempBuffer[2][20000];
 	BOOL			firstTime;
 	ORRateGroup*	sampleRateGroup;
-	unsigned long 	sampleCount[2];
+	uint32_t 	sampleCount[2];
 	BOOL			isRunning;
 	BOOL			samplingWaveforms;
 	//some cache space
-	unsigned long   location;
+	uint32_t   location;
 	SBC_Packet readDataPacket;
 	SBC_Packet returnPacket;
     BOOL readContinously;
@@ -91,18 +91,18 @@
 - (double) sampleInterval;
 - (void) setSampleInterval:(double)aSampleInterval;
 - (double) sampleInterval;
-- (unsigned long) numberSamples;
-- (void) setNumberSamples:(unsigned long)aNumberSamples;
-- (unsigned long) probe:(BOOL) verbose;
+- (uint32_t) numberSamples;
+- (void) setNumberSamples:(uint32_t)aNumberSamples;
+- (uint32_t) probe:(BOOL) verbose;
 - (void) assignBoardID;
-- (unsigned long) boardID;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) boardID;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (BOOL) samplingWaveforms;
 - (void) setSamplingWaveforms:(BOOL)state;
 
 #pragma mark ¥¥¥Rate
-- (unsigned long) getCounter:(int)tag forGroup:(int)groupTag;
+- (uint32_t) getCounter:(int)tag forGroup:(int)groupTag;
 - (id) rateObject:(int)channel;
 - (ORRateGroup*)    sampleRateGroup;
 - (void)			setSampleRateGroup:(ORRateGroup*)newSampleRateGroup;
@@ -113,30 +113,30 @@
 - (void) initBoard;
 - (void) loadDialog;
 
-- (unsigned long) setConfigureHorizontal;
-- (unsigned long) setConfigureVertical:(int)chan;
-- (unsigned long) setConfigureTrigSource;
-- (unsigned long) setConfigureMemory;
-- (unsigned long) setConfigureTrigClass;
-- (unsigned long) getHorizontal;
-- (unsigned long) getVertical;
-- (unsigned long) getMemory;
-- (unsigned long) getNumberChannels;
-- (unsigned long) getTriggerSource;
+- (uint32_t) setConfigureHorizontal;
+- (uint32_t) setConfigureVertical:(int)chan;
+- (uint32_t) setConfigureTrigSource;
+- (uint32_t) setConfigureMemory;
+- (uint32_t) setConfigureTrigClass;
+- (uint32_t) getHorizontal;
+- (uint32_t) getVertical;
+- (uint32_t) getMemory;
+- (uint32_t) getNumberChannels;
+- (uint32_t) getTriggerSource;
 - (void)		  getOneWaveform;
 - (void)		  getOneWaveform:(BOOL)state;
-- (unsigned long) getTriggerClass;
+- (uint32_t) getTriggerClass;
 - (void) reportAll;
-- (unsigned long) reportTriggerSource;
-- (unsigned long) reportHorizontal;
-- (unsigned long) reportVertical;
-- (unsigned long) reportMemory;
-- (unsigned long) reportTriggerClass;
-- (id) decodeError:(long)status;
+- (uint32_t) reportTriggerSource;
+- (uint32_t) reportHorizontal;
+- (uint32_t) reportVertical;
+- (uint32_t) reportMemory;
+- (uint32_t) reportTriggerClass;
+- (id) decodeError:(int32_t)status;
 
-- (Acquiris_GetCmdStatusStruct) doGetXXXCommand:(unsigned long)aCmdNumber cmdArgs:(NSString*)args;
-- (long) doSetXXXCommand:(unsigned long)aCmdNumber cmdArgs:(NSString*)args;
-- (long) doCommand:(unsigned long)aCmdNumber cmdArgs:(NSString*)args;
+- (Acquiris_GetCmdStatusStruct) doGetXXXCommand:(uint32_t)aCmdNumber cmdArgs:(NSString*)args;
+- (int32_t) doSetXXXCommand:(uint32_t)aCmdNumber cmdArgs:(NSString*)args;
+- (int32_t) doCommand:(uint32_t)aCmdNumber cmdArgs:(NSString*)args;
 
 - (int) lengthBuffer:(int)set;
 - (float) buffer:(int)x set:(int)i;

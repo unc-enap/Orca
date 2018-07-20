@@ -70,7 +70,7 @@ NSString* ORIpeCardExceptionCountChanged		= @"ORIpeCardExceptionCountChanged";
 {
 	if(!registers)registers = [[NSMutableArray array] retain];
 	if(index > [registers count]){
-		unsigned long i;
+		uint32_t i;
 		for(i=[registers count];i<index;i++){
 			[registers addObject:[NSNull null]];
 		}
@@ -103,7 +103,7 @@ NSString* ORIpeCardExceptionCountChanged		= @"ORIpeCardExceptionCountChanged";
 }
 - (NSString*) fullID
 {
-    return [NSString stringWithFormat:@"%@,%d,%ld",NSStringFromClass([self class]),[self crateNumber], [self stationNumber]];
+    return [NSString stringWithFormat:@"%@,%d,%d",NSStringFromClass([self class]),(int)[self crateNumber], (int)[self stationNumber]];
 }
 
 - (NSString*) cardSlotChangedNotification
@@ -113,7 +113,7 @@ NSString* ORIpeCardExceptionCountChanged		= @"ORIpeCardExceptionCountChanged";
 
 - (NSString*) identifier
 {
-    return [NSString stringWithFormat:@"station %ld",[self stationNumber]];
+    return [NSString stringWithFormat:@"station %d",(int)[self stationNumber]];
 }
 
 - (NSUInteger) stationNumber
@@ -125,7 +125,7 @@ NSString* ORIpeCardExceptionCountChanged		= @"ORIpeCardExceptionCountChanged";
 	return (int)[self stationNumber];
 }
 
-- (unsigned long)   exceptionCount
+- (uint32_t)   exceptionCount
 {
     return exceptionCount;
 }
@@ -156,37 +156,37 @@ NSString* ORIpeCardExceptionCountChanged		= @"ORIpeCardExceptionCountChanged";
 }
 
 #pragma mark ¥¥¥HW Access
-- (unsigned long) read:(unsigned long) address
+- (uint32_t) read:(uint32_t) address
 {
 	return [[[self crate] adapter] read:address];
 }
 
-- (void) write:(unsigned long)address value:(unsigned long)aValue
+- (void) write:(uint32_t)address value:(uint32_t)aValue
 {
 	[[[self crate] adapter] write:address value:aValue];
 }
 
-- (void) writeBitsAtAddress:(unsigned long)anAddress value:(unsigned long)dataWord mask:(unsigned long)aMask shifted:(int)shiftAmount
+- (void) writeBitsAtAddress:(uint32_t)anAddress value:(uint32_t)dataWord mask:(uint32_t)aMask shifted:(int)shiftAmount
 {
 	[[[self crate] adapter] writeBitsAtAddress:anAddress value:dataWord mask:aMask shifted:shiftAmount];
 }
 
-- (void) setBitsLowAtAddress:(unsigned long)anAddress mask:(unsigned long)aMask
+- (void) setBitsLowAtAddress:(uint32_t)anAddress mask:(uint32_t)aMask
 {
 	[[[self crate] adapter]  setBitsLowAtAddress:anAddress mask:aMask];
 }
 
-- (void) setBitsHighAtAddress:(unsigned long)anAddress mask:(unsigned long)aMask
+- (void) setBitsHighAtAddress:(uint32_t)anAddress mask:(uint32_t)aMask
 {
 	[[[self crate] adapter]  setBitsHighAtAddress:anAddress mask:aMask];
 }
 
-- (void) readRegisterBlock:(unsigned long)  anAddress 
-				dataBuffer:(unsigned long*) aDataBuffer
-					length:(unsigned long)  length 
-				 increment:(unsigned long)  incr
-			   numberSlots:(unsigned long)  nSlots 
-			 slotIncrement:(unsigned long)  incrSlots
+- (void) readRegisterBlock:(uint32_t)  anAddress 
+				dataBuffer:(uint32_t*) aDataBuffer
+					length:(uint32_t)  length 
+				 increment:(uint32_t)  incr
+			   numberSlots:(uint32_t)  nSlots 
+			 slotIncrement:(uint32_t)  incrSlots
  {
 	[[[self crate] adapter]  readRegisterBlock: anAddress 
 									dataBuffer: aDataBuffer
@@ -196,10 +196,10 @@ NSString* ORIpeCardExceptionCountChanged		= @"ORIpeCardExceptionCountChanged";
 								 slotIncrement:  incrSlots];
  }
 
-- (void) readBlock:(unsigned long)  anAddress 
-		dataBuffer:(unsigned long*) aDataBuffer
-			length:(unsigned long)  length 
-		 increment:(unsigned long)  incr
+- (void) readBlock:(uint32_t)  anAddress 
+		dataBuffer:(uint32_t*) aDataBuffer
+			length:(uint32_t)  length 
+		 increment:(uint32_t)  incr
 {
 	[[[self crate] adapter]  readBlock: anAddress 
 									dataBuffer: aDataBuffer
@@ -208,10 +208,10 @@ NSString* ORIpeCardExceptionCountChanged		= @"ORIpeCardExceptionCountChanged";
  }
 
 
-- (void) writeBlock:(unsigned long)  anAddress 
-		 dataBuffer:(unsigned long*) aDataBuffer
-			 length:(unsigned long)  length 
-		  increment:(unsigned long)  incr
+- (void) writeBlock:(uint32_t)  anAddress 
+		 dataBuffer:(uint32_t*) aDataBuffer
+			 length:(uint32_t)  length 
+		  increment:(uint32_t)  incr
 {
 	[[[self crate] adapter]  writeBlock: anAddress 
 							 dataBuffer: aDataBuffer
@@ -219,10 +219,10 @@ NSString* ORIpeCardExceptionCountChanged		= @"ORIpeCardExceptionCountChanged";
 							  increment:  incr];
 }
 
-- (void) clearBlock:(unsigned long)  anAddress 
-			pattern:(unsigned long) aPattern
-			 length:(unsigned long)  length 
-		  increment:(unsigned long)  incr
+- (void) clearBlock:(uint32_t)  anAddress 
+			pattern:(uint32_t) aPattern
+			 length:(uint32_t)  length 
+		  increment:(uint32_t)  incr
 {
 	[[[self crate] adapter]  clearBlock: anAddress 
 								pattern: aPattern

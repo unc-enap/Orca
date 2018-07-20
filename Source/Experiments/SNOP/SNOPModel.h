@@ -76,13 +76,13 @@ BOOL isNotRunningOrIsInMaintenance(void);
     ORPingTask*	_debugDBPingTask;
     
     struct {
-        unsigned long coarseDelay;
-        unsigned long fineDelay;
-        unsigned long chargePulseAmp;
-        unsigned long pedestalWidth;
-        unsigned long calType; // pattern ID (1 to 4) + 10 * (1 ped, 2 tslope, 3 qslope)
-        unsigned long stepNumber;
-        unsigned long nTSlopePoints;
+        uint32_t coarseDelay;
+        uint32_t fineDelay;
+        uint32_t chargePulseAmp;
+        uint32_t pedestalWidth;
+        uint32_t calType; // pattern ID (1 to 4) + 10 * (1 ped, 2 tslope, 3 qslope)
+        uint32_t stepNumber;
+        uint32_t nTSlopePoints;
     } _epedStruct;
     
     NSDictionary* _runDocument;
@@ -145,8 +145,8 @@ BOOL isNotRunningOrIsInMaintenance(void);
 
     @private
         //Run type word
-        unsigned long runTypeWord;
-        unsigned long lastRunTypeWord;
+        uint32_t runTypeWord;
+        uint32_t lastRunTypeWord;
         NSString* lastRunTypeWordHex;
         ECARun* anECARun;
         LivePedestals* livePeds;
@@ -259,12 +259,12 @@ BOOL isNotRunningOrIsInMaintenance(void);
 
 - (void) enableGlobalSecurity;
 
-- (void) updateEPEDStructWithCoarseDelay: (unsigned long) coarseDelay
-                               fineDelay: (unsigned long) fineDelay
-                          chargePulseAmp: (unsigned long) chargePulseAmp
-                           pedestalWidth: (unsigned long) pedestalWidth
-                                 calType: (unsigned long) calType;
-- (void) updateEPEDStructWithStepNumber: (unsigned long) stepNumber;
+- (void) updateEPEDStructWithCoarseDelay: (uint32_t) coarseDelay
+                               fineDelay: (uint32_t) fineDelay
+                          chargePulseAmp: (uint32_t) chargePulseAmp
+                           pedestalWidth: (uint32_t) pedestalWidth
+                                 calType: (uint32_t) calType;
+- (void) updateEPEDStructWithStepNumber: (uint32_t) stepNumber;
 - (void) shipSubRunRecord;
 - (void) shipEPEDRecord;
 - (void) stillWaitingForBuffers;
@@ -295,10 +295,10 @@ BOOL isNotRunningOrIsInMaintenance(void);
 - (NSTimeInterval) nhitMonitorTimeInterval;
 - (void) setNhitMonitorTimeInterval: (NSTimeInterval) interval;
 
-- (unsigned long) runTypeWord;
-- (void) setRunTypeWord:(unsigned long)aMask;
-- (unsigned long) lastRunTypeWord;
-- (void) setLastRunTypeWord:(unsigned long)aMask;
+- (uint32_t) runTypeWord;
+- (void) setRunTypeWord:(uint32_t)aMask;
+- (uint32_t) lastRunTypeWord;
+- (void) setLastRunTypeWord:(uint32_t)aMask;
 - (NSString*) lastRunTypeWordHex;
 - (void) setLastRunTypeWordHex:(NSString*)aValue;
 - (NSMutableDictionary*) standardRunCollection;

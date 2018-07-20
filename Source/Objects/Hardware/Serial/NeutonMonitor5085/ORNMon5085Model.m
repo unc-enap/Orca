@@ -213,7 +213,7 @@ NSString* ORNMon5085IsLogChanged                  = @"ORNMon5085IsLogChanged";
 	return timeRate;
 }
 
-- (unsigned long) timeMeasured
+- (uint32_t) timeMeasured
 {
     return timeMeasured;
 }
@@ -630,7 +630,7 @@ NSString* ORNMon5085IsLogChanged                  = @"ORNMon5085IsLogChanged";
 #define kDefaultMaxRecordFile @"~/Desktop/NMonMaxValueRecord"
     
     NSFileManager* fm = [NSFileManager defaultManager];
-    NSString* filePath = [NSString stringWithFormat:@"%@%ld.txt",kDefaultMaxRecordFile,[self uniqueIdNumber]];
+    NSString* filePath = [NSString stringWithFormat:@"%@%d.txt",kDefaultMaxRecordFile,[self uniqueIdNumber]];
     filePath = [filePath stringByExpandingTildeInPath];
     if(![fm fileExistsAtPath:filePath]){
         [fm createFileAtPath:filePath contents:nil attributes:nil];
@@ -643,7 +643,7 @@ NSString* ORNMon5085IsLogChanged                  = @"ORNMon5085IsLogChanged";
 
     
     NSFileHandle* fp = [NSFileHandle fileHandleForUpdatingAtPath:filePath];
-    NSString* stringToAdd = [NSString stringWithFormat:@"%@,%lu,%3.3f\n",dateString,(unsigned long)[dateOfMaxRadValue timeIntervalSince1970],maxRadValue];
+    NSString* stringToAdd = [NSString stringWithFormat:@"%@,%u,%3.3f\n",dateString,(uint32_t)[dateOfMaxRadValue timeIntervalSince1970],maxRadValue];
     [fp seekToEndOfFile];
     NSData* theData = [stringToAdd dataUsingEncoding:NSASCIIStringEncoding]; 
     [fp writeData:theData];
@@ -655,7 +655,7 @@ NSString* ORNMon5085IsLogChanged                  = @"ORNMon5085IsLogChanged";
 #define kDefaultNonZeroRecordFile @"~/Desktop/NMonNonZeroRecord"
     
     NSFileManager* fm = [NSFileManager defaultManager];
-    NSString* filePath = [NSString stringWithFormat:@"%@%ld.txt",kDefaultNonZeroRecordFile,[self uniqueIdNumber]];
+    NSString* filePath = [NSString stringWithFormat:@"%@%d.txt",kDefaultNonZeroRecordFile,[self uniqueIdNumber]];
     filePath = [filePath stringByExpandingTildeInPath];
     if(![fm fileExistsAtPath:filePath]){
         [fm createFileAtPath:filePath contents:nil attributes:nil];
@@ -667,7 +667,7 @@ NSString* ORNMon5085IsLogChanged                  = @"ORNMon5085IsLogChanged";
     [dateFormatter release];
     
     NSFileHandle* fp = [NSFileHandle fileHandleForUpdatingAtPath:filePath];
-    NSString* stringToAdd = [NSString stringWithFormat:@"%@,%lu,%3.3f\n",dateString,(unsigned long)[now timeIntervalSince1970],radValue];
+    NSString* stringToAdd = [NSString stringWithFormat:@"%@,%u,%3.3f\n",dateString,(uint32_t)[now timeIntervalSince1970],radValue];
     [fp seekToEndOfFile];
     NSData* theData = [stringToAdd dataUsingEncoding:NSASCIIStringEncoding];
     [fp writeData:theData];

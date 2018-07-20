@@ -29,7 +29,7 @@
 
 @interface ORPlotWithROI : ORPlot {
 	id	roi;
-	long dragStartChannel;
+	int32_t dragStartChannel;
 	BOOL roiDragInProgress;
 	int dragPart;
 }

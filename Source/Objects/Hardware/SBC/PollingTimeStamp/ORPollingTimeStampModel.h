@@ -28,12 +28,12 @@
 @interface ORPollingTimeStampModel :  OrcaObject <ORDataTaker>
 {
     @private
-    unsigned long dataId;
+    uint32_t dataId;
 }
 
 - (void) setDataIds:(id)assigner;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 
 
 #pragma mark •••DataTaker

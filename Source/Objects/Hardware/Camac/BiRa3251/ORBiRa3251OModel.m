@@ -89,7 +89,7 @@ NSString* ORBiRa3251OModelOutputRegisterChanged = @"ORBiRa3251OModelOutputRegist
 {
 	@synchronized(self){
 		if(verbose)NSLog(@"output mask for BiRa 3251 Output (station %d)\n",[self stationNumber]);
-		unsigned long theRawValue = outputRegister;
+		uint32_t theRawValue = outputRegister;
 		[[self adapter] camacLongNAF:[self stationNumber] a:0 f:16 data:&theRawValue];
 	}
 }
@@ -148,7 +148,7 @@ NSString* ORBiRa3251OModelOutputRegisterChanged = @"ORBiRa3251OModelOutputRegist
 
 - (NSString*) processingTitle
 {
-    return [NSString stringWithFormat:@"%d,%ld,%@",[self crateNumber],[self  stationNumber],[self identifier]];
+    return [NSString stringWithFormat:@"%d,%d,%@",(int)[self crateNumber],(int)[self  stationNumber],[self identifier]];
 }
 - (BOOL) processValue:(int)channel;
 {

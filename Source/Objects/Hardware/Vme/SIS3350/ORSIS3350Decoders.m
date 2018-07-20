@@ -48,11 +48,11 @@
 }
 
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
 	
-	unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length = ExtractLength(*ptr);
+	uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length = ExtractLength(*ptr);
 	
 	ptr++; //point to location
 	int crate	= (*ptr&0x01e00000)>>21;
@@ -67,7 +67,7 @@
 	ptr++; //point to the start of data
 	ptr += 4; //skip the time stamps and info
 	
-	NSMutableData* tmpData = [NSMutableData dataWithBytes:someData length:(length-6)*sizeof(long)];
+	NSMutableData* tmpData = [NSMutableData dataWithBytes:someData length:(length-6)*sizeof(int32_t)];
 	unsigned short* dp = (unsigned short*)[tmpData bytes];
 	int i;
 	for(i=0;i<length-6;i++){
@@ -104,13 +104,13 @@
     return length; //must return number of longs
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 	ptr++;
     NSString* title    = @"SIS3350 Waveform Record\n\n";
-    NSString* crate    = [NSString stringWithFormat:@"Crate = %lu\n",(*ptr&0x01e00000)>>21];
-    NSString* card     = [NSString stringWithFormat:@"Card  = %lu\n",(*ptr&0x001f0000)>>16];
-    NSString* channel  = [NSString stringWithFormat:@"Channel  = %lu\n",*ptr&0x0000000f];
+    NSString* crate    = [NSString stringWithFormat:@"Crate = %u\n",(*ptr&0x01e00000)>>21];
+    NSString* card     = [NSString stringWithFormat:@"Card  = %u\n",(*ptr&0x001f0000)>>16];
+    NSString* channel  = [NSString stringWithFormat:@"Channel  = %u\n",*ptr&0x0000000f];
     return [NSString stringWithFormat:@"%@%@%@%@",title,crate,card,channel];               
 }
 

@@ -29,16 +29,16 @@
 
 @interface ORDataGenDecoderForBurstData : ORBaseDecoder
 {}
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)ptr;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)ptr;
 @end
 
 @interface ORDataGenDecoderForTestData1D : ORBaseDecoder
 {}
 - (NSString*) getChannelKey:(unsigned short)aChan;
 - (NSString*) getCardKey:(unsigned short)aCard;
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)ptr;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)ptr;
 @end
 
 @interface ORDataGenDecoderForTestData2D : ORBaseDecoder
@@ -47,22 +47,22 @@
 }
 - (NSString*) getChannelKey:(unsigned short)aChan;
 - (NSString*) getCardKey:(unsigned short)aCard;
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)ptr;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)ptr;
 @end
 
 @interface ORDataGenDecoderForTestDataWaveform : ORBaseDecoder
 {}
 - (NSString*) getChannelKey:(unsigned short)aChan;
 - (NSString*) getCardKey:(unsigned short)aCard;
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)ptr;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)ptr;
 @end
 
 @interface ORDataGenDecoderForTimeSeries : ORBaseDecoder
 {}
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr;
 @end
 
 

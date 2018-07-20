@@ -285,13 +285,13 @@
 {
 	BOOL waitForResponse;
 	BOOL dataExpected;
-	unsigned long expectedDataLength;
+	uint32_t expectedDataLength;
 	NSString* cmd;
 }
 
 @property (nonatomic,assign) BOOL waitForResponse;
 @property (nonatomic,assign) BOOL dataExpected;
-@property (nonatomic,assign) unsigned long expectedDataLength;
+@property (nonatomic,assign) uint32_t expectedDataLength;
 @property (nonatomic,copy) NSString* cmd;
 @end
 

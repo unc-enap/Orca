@@ -1123,7 +1123,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
             while(wizObject = [objectEnum nextObject]){
                 if([wizObject respondsToSelector:@selector(numberOfChannels)]){
                     int chan;
-                    unsigned long mask = [wizObject wizMask];
+                    uint32_t mask = [wizObject wizMask];
                     BOOL atLeastOneChan = NO;
                     for(chan=0;chan<[wizObject numberOfChannels];chan++){
                         if(mask & (1<<chan)){
@@ -1179,8 +1179,8 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
 
 - (void) setUpMasks:(NSNotification*)aNote
 {
-    long i;
-    unsigned long       mask;
+    int32_t i;
+    uint32_t       mask;
     eSelectionLogic	selectionLogic;
     eSelectionLevel	selectionLevel;
     eSelectionAction 	selectionAction;
@@ -1212,7 +1212,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
             firstObject = false;
         }
         /* get the search edit value */
-        long searchValue = [selectionController selectionValue];
+        int32_t searchValue = [selectionController selectionValue];
         /* initialize channel mask */
         mask = 0;
         
@@ -1241,7 +1241,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
         
         /* setup hardware parameters for searches independent of container and object level */
         int     count, shift = 0;
-        unsigned long mask1 = 0;
+        uint32_t mask1 = 0;
         switch (selectionLevel) {
             case kChannelLevel:
                 count = kMaxChannels;
@@ -1350,7 +1350,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
                         }
                         
                         /* finally, combine this mask with the current mask for this FEC */
-                        unsigned long theFinalMask = [wizObject wizMask];
+                        uint32_t theFinalMask = [wizObject wizMask];
                         switch (selectionLogic) {
                             case kSearchLogic_And:
                                 /* combine the channel masks with a logical AND and save in array */
@@ -1632,7 +1632,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
 				if(numberOfSettableArguments <= 1){
 					if([paramObj useValue] || [paramObj oncePerCard]){
 						//no channels to deal with, just do the action
-						unsigned long chanMask = [wizObject wizMask];
+						uint32_t chanMask = [wizObject wizMask];
 						if(chanMask & 0xffffffff){									
 							
 							[self doAction:actionSelection 
@@ -1646,7 +1646,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
 							//loop over the channels, doing the action for each channel in the mask.
 						int chan;
 						int numChan = [wizObject numberOfChannels];
-						unsigned long chanMask = [wizObject wizMask];
+						uint32_t chanMask = [wizObject wizMask];
 						for(chan=0;chan<numChan;chan++){
 							if(chanMask & (1<<chan)){									
 								[self doAction:actionSelection 
@@ -1672,7 +1672,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
 						//loop over the channels, doing the action for each channel in the mask.
 						int chan;
 						int numChan = [wizObject numberOfChannels];
-						unsigned long chanMask = [wizObject wizMask];
+						uint32_t chanMask = [wizObject wizMask];
 						for(chan=0;chan<numChan;chan++){
 							if(chanMask & (1<<chan)){									
 								[self doAction:actionSelection 
@@ -1814,12 +1814,12 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(HWWizardController);
 {
     return target;
 }
-- (unsigned long) wizMask
+- (uint32_t) wizMask
 {
     return wizMask;
 }
 
-- (void) setWizMask:(unsigned long )aMask
+- (void) setWizMask:(uint32_t )aMask
 {
     wizMask = aMask;
 }

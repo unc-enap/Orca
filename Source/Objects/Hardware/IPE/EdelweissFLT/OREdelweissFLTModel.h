@@ -68,15 +68,15 @@
     //int				fltRunMode;		replaced by flt ModeFlags -tb-
     NSMutableArray* thresholds;     //!< Array to keep the threshold of all 18 (==kNumEWFLTHeatIonChannels) channels
     NSMutableArray* triggerParameter;     //!< Array to keep the trigger parameters (heat+ion) - currently used for save/load only -tb-
-    unsigned long        triggerPar[kNumEWFLTHeatIonChannels];//!< Array to keep the trigger parameters (heat+ion)
-	unsigned long	hitRateEnabledMask;	//!< mask to store the activated trigger rate measurement
+    uint32_t        triggerPar[kNumEWFLTHeatIonChannels];//!< Array to keep the trigger parameters (heat+ion)
+	uint32_t	hitRateEnabledMask;	//!< mask to store the activated trigger rate measurement
     NSMutableArray* gains;			//!< Aarry to keep the gains
-    unsigned long	dataId;         //!< Id used to identify energy data set (run mode)
-	unsigned long	waveFormId;		//!< Id used to identify energy+trace data set (debug mode)
-	unsigned long	hitRateId;
-	unsigned long	histogramId;
+    uint32_t	dataId;         //!< Id used to identify energy data set (run mode)
+	uint32_t	waveFormId;		//!< Id used to identify energy+trace data set (debug mode)
+	uint32_t	hitRateId;
+	uint32_t	histogramId;
 	unsigned short	hitRateLength;		//!< Sampling time of the hitrate measurement (hitrate period, 8 bit, 2**hitRateLength seconds)
-	unsigned long		hitRateReg[kNumEWFLTHeatIonChannels];	//!< Actual value of the trigger rate/hitrate  register
+	uint32_t		hitRateReg[kNumEWFLTHeatIonChannels];	//!< Actual value of the trigger rate/hitrate  register
 	float			hitRate[kNumEWFLTHeatIonChannels];	//!< Actual value of the trigger rate measurement
 	BOOL			hitRateOverFlow[kNumEWFLTHeatIonChannels];	//!< Overflow of hardware trigger rate register
 	float			hitRateTotal;	//!< Sum trigger rate of all channels 
@@ -85,9 +85,9 @@
 	
 	ORTimeRate*		totalRate;
     int				analogOffset;
-	unsigned long   statisticOffset; //!< Offset guess used with by the hardware statistical evaluation
-	unsigned long   statisticN;		 //!< Number of samples used for statistical evaluation
-	unsigned long   eventMask;		 //!<Bits set for last channels hit.
+	uint32_t   statisticOffset; //!< Offset guess used with by the hardware statistical evaluation
+	uint32_t   statisticN;		 //!< Number of samples used for statistical evaluation
+	uint32_t   eventMask;		 //!<Bits set for last channels hit.
 	
 	//testing
 	NSMutableArray* testStatusArray;
@@ -98,15 +98,15 @@
 	int savedLed;
 	BOOL usingPBusSimulation;
     BOOL ledOff;
-    unsigned long interruptMask;
+    uint32_t interruptMask;
 	    
 	// Register information (low level tab)
     unsigned short  selectedRegIndex;
-    unsigned long   writeValue;
-    unsigned long   selectedChannelValue;
+    uint32_t   writeValue;
+    uint32_t   selectedChannelValue;
     // fields for event readout
     int fifoBehaviour;
-    unsigned long postTriggerTime;
+    uint32_t postTriggerTime;
     int gapLength;
     int filterLength;  //for ORKatrinV4FLTModel we use filterShapingLength from 2011-04/Orca:svnrev5050 on -tb- 
     BOOL storeDataInRam;
@@ -121,39 +121,39 @@
 	int noiseFloorState;
 	int noiseFloorOffset;
     int targetRate;
-	long noiseFloorLow[kNumEWFLTHeatIonChannels];
-	long noiseFloorHigh[kNumEWFLTHeatIonChannels];
-	long noiseFloorTestValue[kNumEWFLTHeatIonChannels];
+	int32_t noiseFloorLow[kNumEWFLTHeatIonChannels];
+	int32_t noiseFloorHigh[kNumEWFLTHeatIonChannels];
+	int32_t noiseFloorTestValue[kNumEWFLTHeatIonChannels];
 	BOOL oldEnabled[kNumEWFLTHeatIonChannels];
-	long oldThreshold[kNumEWFLTHeatIonChannels];
-	long newThreshold[kNumEWFLTHeatIonChannels];
+	int32_t oldThreshold[kNumEWFLTHeatIonChannels];
+	int32_t newThreshold[kNumEWFLTHeatIonChannels];
 	
-	unsigned long eventCount[kNumEWFLTHeatIonChannels];
+	uint32_t eventCount[kNumEWFLTHeatIonChannels];
 	
     //EDELWEISS vars
-    int fltModeFlags; //TODO: unused, using "unsigned long controlRegister"
-    //int tpix; //TODO: unused, using "unsigned long controlRegister"
+    int fltModeFlags; //TODO: unused, using "uint32_t controlRegister"
+    //int tpix; //TODO: unused, using "uint32_t controlRegister"
     int fiberEnableMask;
     //int BBv1Mask;
     int selectFiberTrig;
-	//unsigned long long streamMask;
-    unsigned long long streamMask;
-    unsigned long long fiberDelays;
+	//uint64_t streamMask;
+    uint64_t streamMask;
+    uint64_t fiberDelays;
     int fastWrite;
-    unsigned long statusRegister;
+    uint32_t statusRegister;
     int totalTriggerNRegister;
-    unsigned long controlRegister;
+    uint32_t controlRegister;
     int repeatSWTriggerMode;
     double repeatSWTriggerDelay;
     int swTriggerIsRepeating;
-    unsigned long fiberOutMask;
+    uint32_t fiberOutMask;
     int fiberSelectForBBStatusBits;
     int testVariable;
-    unsigned long CFPGAVersion;
+    uint32_t CFPGAVersion;
     
     
-    unsigned long statusBitsBB[kNumEWFLTFibers][kNumBBStatusBufferLength32];//default: [6][30]
-    unsigned long oldStatusBitsBB[kNumEWFLTFibers][kNumBBStatusBufferLength32];//I store the old set of the status bits
+    uint32_t statusBitsBB[kNumEWFLTFibers][kNumBBStatusBufferLength32];//default: [6][30]
+    uint32_t oldStatusBitsBB[kNumEWFLTFibers][kNumBBStatusBufferLength32];//I store the old set of the status bits
     NSMutableData* statusBitsBBData;//used for  writing 'statusBitsBB' to file
     int relaisStatesBB; //remove it
     int fiberSelectForBBAccess;
@@ -177,10 +177,10 @@
     unsigned int wCmdArg2;
     int writeToBBMode;
     int lowLevelRegInHex;
-    unsigned long long ionTriggerMask;
-    unsigned long long heatTriggerMask;
+    uint64_t ionTriggerMask;
+    uint64_t heatTriggerMask;
     int ionToHeatDelay;
-    unsigned long BB0x0ACmdMask;
+    uint32_t BB0x0ACmdMask;
     int pollBBStatusIntervall;
     
     NSString* chargeBBFile;
@@ -190,11 +190,11 @@
     int progressOfChargeFIC;
     NSString* chargeFICFile;
     
-    unsigned long ficCardCtrlReg1[kNumEWFLTFibers];
-    unsigned long ficCardCtrlReg2[kNumEWFLTFibers];
-    unsigned long ficCardADC01CtrlReg[kNumEWFLTFibers];
-    unsigned long ficCardADC23CtrlReg[kNumEWFLTFibers];
-    unsigned long ficCardTriggerCmd[kNumEWFLTFibers];
+    uint32_t ficCardCtrlReg1[kNumEWFLTFibers];
+    uint32_t ficCardCtrlReg2[kNumEWFLTFibers];
+    uint32_t ficCardADC01CtrlReg[kNumEWFLTFibers];
+    uint32_t ficCardADC23CtrlReg[kNumEWFLTFibers];
+    uint32_t ficCardTriggerCmd[kNumEWFLTFibers];
     int hitrateLimitHeat;
     int hitrateLimitIon;
     BOOL saveIonChanFilterOutputRecords;//unused
@@ -225,17 +225,17 @@
 - (void) setChargeFICFile:(NSString*)aChargeFICFile;
 - (int) progressOfChargeFIC;
 - (void) setProgressOfChargeFIC:(int)aProgressOfChargeFIC;
-- (unsigned long) ficCardTriggerCmdForFiber:(int)aFiber;
-- (void) setFicCardTriggerCmd:(unsigned long)aFicCardTriggerCmd forFiber:(int)aFiber;
-- (unsigned long) ficCardADC23CtrlRegForFiber:(int)aFiber;
-- (void) setFicCardADC23CtrlReg:(unsigned long)aFicCardADC23CtrlReg forFiber:(int)aFiber;
-- (unsigned long) ficCardADC01CtrlRegForFiber:(int)aFiber;
-- (void) setFicCardADC01CtrlReg:(unsigned long)aFicCardADC01CtrlReg forFiber:(int)aFiber;
-- (unsigned long) ficCardCtrlReg2ForFiber:(int)aFiber;
-- (void) setFicCardCtrlReg2:(unsigned long)aFicCardCtrlReg2 forFiber:(int)aFiber;
-- (void) setFicCardCtrlReg2AddrOffs:(unsigned long)aOffset  forFiber:(int)aFiber;
-- (unsigned long) ficCardCtrlReg1ForFiber:(int)aFiber;
-- (void) setFicCardCtrlReg1:(unsigned long)aFicCardCtrlReg1 forFiber:(int)aFiber;
+- (uint32_t) ficCardTriggerCmdForFiber:(int)aFiber;
+- (void) setFicCardTriggerCmd:(uint32_t)aFicCardTriggerCmd forFiber:(int)aFiber;
+- (uint32_t) ficCardADC23CtrlRegForFiber:(int)aFiber;
+- (void) setFicCardADC23CtrlReg:(uint32_t)aFicCardADC23CtrlReg forFiber:(int)aFiber;
+- (uint32_t) ficCardADC01CtrlRegForFiber:(int)aFiber;
+- (void) setFicCardADC01CtrlReg:(uint32_t)aFicCardADC01CtrlReg forFiber:(int)aFiber;
+- (uint32_t) ficCardCtrlReg2ForFiber:(int)aFiber;
+- (void) setFicCardCtrlReg2:(uint32_t)aFicCardCtrlReg2 forFiber:(int)aFiber;
+- (void) setFicCardCtrlReg2AddrOffs:(uint32_t)aOffset  forFiber:(int)aFiber;
+- (uint32_t) ficCardCtrlReg1ForFiber:(int)aFiber;
+- (void) setFicCardCtrlReg1:(uint32_t)aFicCardCtrlReg1 forFiber:(int)aFiber;
 - (int) pollBBStatusIntervall;
 - (void) setPollBBStatusIntervall:(int)aPollBBStatusIntervall;
 - (int) progressOfChargeBB;
@@ -243,8 +243,8 @@
 - (NSString*) chargeBBFileForFiber:(int) aFiber;
 - (void) setChargeBBFile:(NSString*)aChargeBBFileForFiber forFiber:(int) aFiber;
   - (int) chargeBBWithDataFromFile:(NSString*)aFilename;
-- (unsigned long) BB0x0ACmdMask;
-- (void) setBB0x0ACmdMask:(unsigned long)aBB0x0ACmdMask;
+- (uint32_t) BB0x0ACmdMask;
+- (void) setBB0x0ACmdMask:(uint32_t)aBB0x0ACmdMask;
 - (NSString*) chargeBBFile;
 - (void) setChargeBBFile:(NSString*)aChargeBBFile;
 - (int) ionToHeatDelay;
@@ -331,8 +331,8 @@
 - (double) temperatureBBforBBAccessForFiber:(int)aFiber;
 
 //BB status bit buffer
-- (unsigned long) statusBB32forFiber:(int)aFiber atIndex:(int)aIndex;
-- (void) setStatusBB32forFiber:(int)aFiber atIndex:(int)aIndex to:(unsigned long)aValue;
+- (uint32_t) statusBB32forFiber:(int)aFiber atIndex:(int)aIndex;
+- (void) setStatusBB32forFiber:(int)aFiber atIndex:(int)aIndex to:(uint32_t)aValue;
 - (uint16_t) statusBB16forFiber:(int)aFiber atIndex:(int)aIndex;
 - (void) setStatusBB16forFiber:(int)aFiber atIndex:(int)aIndex to:(uint16_t)aValue;
 - (uint16_t) statusBB16forFiber:(int)aFiber atOffset:(int) off index:(int)aIndex mask:(uint16_t) mask shift:(int) shift;
@@ -341,21 +341,21 @@
 
 - (int) fiberSelectForBBStatusBits;//
 - (void) setFiberSelectForBBStatusBits:(int)aFiberSelectForBBStatusBits;
-- (unsigned long) fiberOutMask;
-- (void) setFiberOutMask:(unsigned long)aFiberOutMask;
+- (uint32_t) fiberOutMask;
+- (void) setFiberOutMask:(uint32_t)aFiberOutMask;
 - (int) swTriggerIsRepeating;
 - (void) setSwTriggerIsRepeating:(int)aSwTriggerIsRepeating;
 - (int) repeatSWTriggerMode;
 - (void) setRepeatSWTriggerMode:(int)aRepeatSWTriggerMode;
 - (double) repeatSWTriggerDelay;
 - (void) setRepeatSWTriggerDelay:(double)aRepeatSWTriggerDelay;
-- (unsigned long) controlRegister;
-- (void) setControlRegister:(unsigned long)aControlRegister;
+- (uint32_t) controlRegister;
+- (void) setControlRegister:(uint32_t)aControlRegister;
 - (int) statusLatency;//obsolete 2014 -tb-
 - (void) setStatusLatency:(int)aValue;//obsolete 2014 -tb-
 - (int) vetoFlag;
 - (void) setVetoFlag:(int)aValue;
-- (unsigned long) selectFiberTrig;//obsolete 2014 -tb-
+- (uint32_t) selectFiberTrig;//obsolete 2014 -tb-
 - (void) setSelectFiberTrig:(int)aSelectFiberTrig;//obsolete 2014 -tb-
 - (int) BBv1Mask;
 - (BOOL) BBv1MaskForChan:(int)i;
@@ -376,30 +376,30 @@
 
 - (int) totalTriggerNRegister;
 - (void) setTotalTriggerNRegister:(int)aTotalTriggerNRegister;
-- (unsigned long) statusRegister;
-- (void) setStatusRegister:(unsigned long)aStatusRegister;
+- (uint32_t) statusRegister;
+- (void) setStatusRegister:(uint32_t)aStatusRegister;
 - (int) fastWrite;
 - (void) setFastWrite:(int)aFastWrite;
-- (unsigned long long) fiberDelays;
-- (void) setFiberDelays:(unsigned long long)aFiberDelays;
-- (unsigned long long) streamMask;
-- (unsigned long) streamMask1;
-- (unsigned long) streamMask2;
+- (uint64_t) fiberDelays;
+- (void) setFiberDelays:(uint64_t)aFiberDelays;
+- (uint64_t) streamMask;
+- (uint32_t) streamMask1;
+- (uint32_t) streamMask2;
 - (int) streamMaskForFiber:(int)aFiber chan:(int)aChan;
-- (void) setStreamMask:(unsigned long long)aStreamMask;
+- (void) setStreamMask:(uint64_t)aStreamMask;
 //- (void) setStreamMaskForFiber:(int)aFiber chan:(int)aChan;
 
-- (unsigned long long) ionTriggerMask;
-- (unsigned long) ionTriggerMask1;
-- (unsigned long) ionTriggerMask2;
+- (uint64_t) ionTriggerMask;
+- (uint32_t) ionTriggerMask1;
+- (uint32_t) ionTriggerMask2;
 - (int) ionTriggerMaskForFiber:(int)aFiber chan:(int)aChan;
-- (void) setIonTriggerMask:(unsigned long long)aIonTriggerMask;
+- (void) setIonTriggerMask:(uint64_t)aIonTriggerMask;
 
-- (unsigned long long) heatTriggerMask;
-- (unsigned long) heatTriggerMask1;
-- (unsigned long) heatTriggerMask2;
+- (uint64_t) heatTriggerMask;
+- (uint32_t) heatTriggerMask1;
+- (uint32_t) heatTriggerMask2;
 - (int) heatTriggerMaskForFiber:(int)aFiber chan:(int)aChan;
-- (void) setHeatTriggerMask:(unsigned long long)aHeatTriggerMask;
+- (void) setHeatTriggerMask:(uint64_t)aHeatTriggerMask;
 
 
 - (int) targetRate;
@@ -413,16 +413,16 @@
 - (void) setFilterLength:(int)aFilterLength;
 - (int) gapLength;//TODO: obsolete - remove it -tb- 2013-06
 - (void) setGapLength:(int)aGapLength;//TODO: obsolete - remove it -tb- 2013-06
-- (unsigned long) postTriggerTime;
-- (void) setPostTriggerTime:(unsigned long)aPostTriggerTime;
+- (uint32_t) postTriggerTime;
+- (void) setPostTriggerTime:(uint32_t)aPostTriggerTime;
 - (int) fifoBehaviour;
 - (void) setFifoBehaviour:(int)aFifoBehaviour;
 - (int) analogOffset;
 - (void) setAnalogOffset:(int)aAnalogOffset;
 - (BOOL) ledOff;
 - (void) setLedOff:(BOOL)aledOff;
-- (unsigned long) interruptMask;
-- (void) setInterruptMask:(unsigned long)aInterruptMask;
+- (uint32_t) interruptMask;
+- (void) setInterruptMask:(uint32_t)aInterruptMask;
 - (unsigned short) hitRateLength;
 - (void) setHitRateLength:(unsigned short)aHitRateLength;
 - (BOOL) noiseFloorRunning;
@@ -432,14 +432,14 @@
 - (NSString*) noiseFloorStateString;
 
 
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long)aDataId;
-- (unsigned long) waveFormId;
-- (void) setWaveFormId: (unsigned long) aWaveFormId;
-- (unsigned long) hitRateId;
-- (void) setHitRateId: (unsigned long)aHitRateId;
-- (unsigned long) histogramId;
-- (void) setHistogramId: (unsigned long)aHistogramId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t)aDataId;
+- (uint32_t) waveFormId;
+- (void) setWaveFormId: (uint32_t) aWaveFormId;
+- (uint32_t) hitRateId;
+- (void) setHitRateId: (uint32_t)aHitRateId;
+- (uint32_t) histogramId;
+- (void) setHistogramId: (uint32_t)aHistogramId;
 
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherCard;
@@ -449,8 +449,8 @@
 - (NSMutableArray*) triggerParameter;
 - (void) setTriggerParameter:(NSMutableArray*)aTriggerParameter;
 
-- (unsigned long) hitRateEnabledMask;
-- (void) setHitRateEnabledMask:(unsigned long)aMask;
+- (uint32_t) hitRateEnabledMask;
+- (void) setHitRateEnabledMask:(uint32_t)aMask;
 - (void) setHitRateEnabled:(unsigned short) aChan withValue:(BOOL) aState;
 - (BOOL) hitRateEnabled:(unsigned short) aChan;
 
@@ -462,12 +462,12 @@
 - (void) writeTriggerParameters;
 - (void) writeTriggerParametersDisableAll;
 - (void) dumpTriggerParameters;
-- (void) setTriggerPar:(unsigned short)chan  withValue:(unsigned long) val;
-- (unsigned long) triggerPar:(unsigned short)chan;
+- (void) setTriggerPar:(unsigned short)chan  withValue:(uint32_t) val;
+- (uint32_t) triggerPar:(unsigned short)chan;
 
-- (unsigned long)threshold:(unsigned short) aChan;
+- (uint32_t)threshold:(unsigned short) aChan;
 - (unsigned short)gain:(unsigned short) aChan;
-- (void) setThreshold:(unsigned short) aChan withValue:(unsigned long) aThreshold;
+- (void) setThreshold:(unsigned short) aChan withValue:(uint32_t) aThreshold;
 - (void) setGain:(unsigned short) aChan withValue:(unsigned short) aGain;
 - (BOOL) triggerEnabled:(unsigned short) aChan;
 - (void) setTriggerEnabled:(unsigned short) aChan withValue:(BOOL) aState;
@@ -499,13 +499,13 @@
 - (void) setTotalRate:(ORTimeRate*)newTimeRate;
 
 - (NSString*) getRegisterName: (short) anIndex;
-- (unsigned long) getAddressOffset: (short) anIndex;
+- (uint32_t) getAddressOffset: (short) anIndex;
 - (short) getAccessType: (short) anIndex;
 
 - (unsigned short) selectedRegIndex;
 - (void) setSelectedRegIndex:(unsigned short) anIndex;
-- (unsigned long) writeValue;
-- (void) setWriteValue:(unsigned long) aValue;
+- (uint32_t) writeValue;
+- (void) setWriteValue:(uint32_t) aValue;
 - (unsigned short) selectedChannelValue;
 - (void) setSelectedChannelValue:(unsigned short) aValue;
 - (int) restrictIntValue:(int)aValue min:(int)aMinValue max:(int)aMaxValue;
@@ -515,26 +515,26 @@
 
 #pragma mark ‚Ä¢‚Ä¢‚Ä¢HW Access
 //all can raise exceptions
-- (unsigned long) regAddress:(unsigned long)aReg channel:(int)aChannel index:(int)index;
-- (unsigned long) regAddress:(unsigned long)aReg channel:(int)aChannel;
-- (unsigned long) regAddress:(unsigned long)aReg;
-- (unsigned long) adcMemoryChannel:(int)aChannel page:(int)aPage;
-- (unsigned long) readReg:(unsigned long)aReg;
-- (unsigned long) readReg:(unsigned long)aReg channel:(int)aChannel;
-- (unsigned long) readReg:(unsigned long)aReg channel:(int)aChannel  index:(int)aIndex;
-- (void) writeReg:(unsigned long)aReg value:(unsigned long)aValue;
-- (void) writeReg:(unsigned long)aReg channel:(int)aChannel value:(unsigned long)aValue;
-- (void) readBlock:(unsigned long)aReg dataBuffer:(unsigned long*)aDataBuffer length:(unsigned long)length;
+- (uint32_t) regAddress:(uint32_t)aReg channel:(int)aChannel index:(int)index;
+- (uint32_t) regAddress:(uint32_t)aReg channel:(int)aChannel;
+- (uint32_t) regAddress:(uint32_t)aReg;
+- (uint32_t) adcMemoryChannel:(int)aChannel page:(int)aPage;
+- (uint32_t) readReg:(uint32_t)aReg;
+- (uint32_t) readReg:(uint32_t)aReg channel:(int)aChannel;
+- (uint32_t) readReg:(uint32_t)aReg channel:(int)aChannel  index:(int)aIndex;
+- (void) writeReg:(uint32_t)aReg value:(uint32_t)aValue;
+- (void) writeReg:(uint32_t)aReg channel:(int)aChannel value:(uint32_t)aValue;
+- (void) readBlock:(uint32_t)aReg dataBuffer:(uint32_t*)aDataBuffer length:(uint32_t)length;
 
 - (void) executeCommandList:(ORCommandList*)aList;
-- (id) readRegCmd:(unsigned long) aRegister channel:(short) aChannel;
-- (id) writeRegCmd:(unsigned long) aRegister channel:(short) aChannel value:(unsigned long)aValue;
-- (id) readRegCmd:(unsigned long) aRegister;
-- (id) writeRegCmd:(unsigned long) aRegister value:(unsigned long)aValue;
+- (id) readRegCmd:(uint32_t) aRegister channel:(short) aChannel;
+- (id) writeRegCmd:(uint32_t) aRegister channel:(short) aChannel value:(uint32_t)aValue;
+- (id) readRegCmd:(uint32_t) aRegister;
+- (id) writeRegCmd:(uint32_t) aRegister value:(uint32_t)aValue;
 
-- (unsigned long) readVersion;
+- (uint32_t) readVersion;
 
-- (unsigned long) readFiberOutMask;
+- (uint32_t) readFiberOutMask;
 - (void) writeFiberOutMask;
 
 - (int)		readMode;
@@ -546,13 +546,13 @@
 - (void) writeInterruptMask;
 - (void) pollBBStatus;
 - (void) readHitRates;
-- (void) writeTestPattern:(unsigned long*)mask length:(int)len;
+- (void) writeTestPattern:(uint32_t*)mask length:(int)len;
 - (void) rewindTestPattern;
-- (void) writeNextPattern:(unsigned long)aValue;
-- (unsigned long) readStatus;
-- (unsigned long) readControl;
+- (void) writeNextPattern:(uint32_t)aValue;
+- (uint32_t) readStatus;
+- (uint32_t) readControl;
 - (void) writeRunControl;
-- (unsigned long) readTotalTriggerNRegister;
+- (uint32_t) readTotalTriggerNRegister;
 - (void) writeControl;
 - (void) writeStreamMask;
 - (void) readStreamMask;
@@ -562,8 +562,8 @@
 - (void) readHeatTriggerMask;
 - (void) writePostTriggerTimeAndIonToHeatDelay;
 - (void) readPostTriggerTimeAndIonToHeatDelay;
-- (void) writeTriggerPar:(int)i value:(unsigned long)aValue;
-- (unsigned long) readTriggerPar:(int)i;
+- (void) writeTriggerPar:(int)i value:(uint32_t)aValue;
+- (uint32_t) readTriggerPar:(int)i;
 
 - (void) writeFiberDelays;
 - (void) readFiberDelays;
@@ -596,11 +596,11 @@
 - (void) writeThresholds;
 - (void) readThresholds;
 - (void) writeThreshold:(int)i value:(unsigned int)aValue;
-- (unsigned long) readThreshold:(int)i;
+- (uint32_t) readThreshold:(int)i;
 - (void) writeTriggerControl;
 - (BOOL) partOfEvent:(short)chan;
-- (unsigned long) eventMask;
-- (void) eventMask:(unsigned long)aMask;
+- (uint32_t) eventMask;
+- (void) eventMask:(uint32_t)aMask;
 - (NSString*) boardTypeName:(int)aType;
 - (NSString*) fifoStatusString:(int)aType;
 
@@ -611,11 +611,11 @@
 /** Get statistics of a single channel */
 - (void) getStatistics:(int)aChannel mean:(double *)aMean  var:(double *)aVar; // ak, 7.10.07
 
-- (unsigned long) readMemoryChan:(int)chan page:(int)aPage;
+- (uint32_t) readMemoryChan:(int)chan page:(int)aPage;
 - (void) readMemoryChan:(int)aChan page:(int)aPage pageBuffer:(unsigned short*)aPageBuffer;
 - (void) clear:(int)aChan page:(int)aPage value:(unsigned short)aValue;
 
-- (unsigned long) eventCount:(int)aChannel;
+- (uint32_t) eventCount:(int)aChannel;
 - (void)		  clearEventCounts;
 - (BOOL) bumpRateFromDecodeStage:(short)channel;
 

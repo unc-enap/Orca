@@ -400,7 +400,7 @@
 	return (int)[model numPoints];
 }
 
-- (BOOL) plotter:(id)aPlotter index:(unsigned long)index x:(double*)xValue y:(double*)yValue
+- (BOOL) plotter:(id)aPlotter index:(uint32_t)index x:(double*)xValue y:(double*)yValue
 {
 	return [model dataSet:(int)[aPlotter tag] index:index x:xValue y:yValue];
 }

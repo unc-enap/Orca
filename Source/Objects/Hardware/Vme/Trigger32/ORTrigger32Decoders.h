@@ -28,8 +28,8 @@
 
 @interface ORTrigger32DecoderFor100MHzClockRecord : ORVmeCardDecoder 
 {}
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)ptr;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)ptr;
 @end
 
 @interface ORTrigger32DecoderFor10MHzClockRecord : ORTrigger32DecoderFor100MHzClockRecord 
@@ -38,8 +38,8 @@
 
 @interface ORTrigger32DecoderForGTIDRecord : ORVmeCardDecoder 
 {}
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)ptr;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)ptr;
 @end
 
 @interface ORTrigger32DecoderForGTID1Record : ORTrigger32DecoderForGTIDRecord 
@@ -51,16 +51,16 @@
 
 @interface ORTrigger32DecoderForLiveTime : ORVmeCardDecoder
 {
-    long long   total_live;
-    long long   trig1_live;
-    long long   trig2_live;
-    long long   scope_live;
+    int64_t   total_live;
+    int64_t   trig1_live;
+    int64_t   trig2_live;
+    int64_t   scope_live;
 
-    long long   last_total_live;
-    long long   last_trig1_live;
-    long long   last_trig2_live;
-    long long   last_scope_live;
+    int64_t   last_total_live;
+    int64_t   last_trig1_live;
+    int64_t   last_trig2_live;
+    int64_t   last_scope_live;
 }
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)ptr;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)ptr;
 @end

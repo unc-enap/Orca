@@ -34,9 +34,9 @@
 
 #pragma mark ***Accessors
 - (void)			setNumberBinsPerSide:(unsigned short)bins;
-- (unsigned long)	valueAtX:(unsigned short)aXBin y:(unsigned short)aYBin;
-- (void)			setBinAtX:(int)anX y:(int)aY to:(unsigned long)aValue;
-- (void)			incrementBinAtX:(int)aXBin y:(int)aYBin by:(unsigned long)aValue;
+- (uint32_t)	valueAtX:(unsigned short)aXBin y:(unsigned short)aYBin;
+- (void)			setBinAtX:(int)anX y:(int)aY to:(uint32_t)aValue;
+- (void)			incrementBinAtX:(int)aXBin y:(int)aYBin by:(uint32_t)aValue;
 - (NSString*)		xTitle;
 - (void)			setXTitle:(NSString*)aString;
 - (NSString*)		yTitle;

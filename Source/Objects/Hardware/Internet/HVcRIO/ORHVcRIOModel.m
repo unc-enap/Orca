@@ -1064,7 +1064,7 @@ static NSString* itemsToShip[kNumToShip*2] = {
 - (NSString*) measuredValueName:(NSUInteger)anIndex
 {
     [self checkShipValueDictionary];
-    NSString* aKey = [NSString stringWithFormat:@"%ld",anIndex];
+    NSString* aKey = [NSString stringWithFormat:@"%d",(int)anIndex];
     NSString* aName = [shipValueDictionary objectForKey:aKey];
     if(aName){
         return aName;
@@ -1074,7 +1074,7 @@ static NSString* itemsToShip[kNumToShip*2] = {
         NSString* part2 = [[measuredValues objectAtIndex:anIndex] objectForKey:@"data"];
         return [part1 stringByAppendingFormat:@" %@",part2];
     }
-    return [NSString stringWithFormat:@"Index %ld",anIndex];
+    return [NSString stringWithFormat:@"Index %d",(int)anIndex];
 }
 
 - (NSUInteger) numMeasuredValues
@@ -1328,8 +1328,8 @@ static NSString* itemsToShip[kNumToShip*2] = {
     [self processNextCommandFromQueue];
 }
 #pragma mark ***Data Records
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -1385,13 +1385,13 @@ static NSString* itemsToShip[kNumToShip*2] = {
 
     time_t    ut_Time;
     time(&ut_Time);
-    unsigned long  timeMeasured = ut_Time;
+    uint32_t  timeMeasured = ut_Time;
 
     for(NSString* aKey in shipValueDictionary){
         int j = [aKey intValue];
         if(j<[measuredValues count]){
             if([[ORGlobal sharedGlobal] runInProgress]){
-                unsigned long record[kHVcRIORecordSize];
+                uint32_t record[kHVcRIORecordSize];
                 record[0] = dataId | kHVcRIORecordSize;
                 record[1] = ([self uniqueIdNumber] & 0x0000fffff);
                 record[2] = timeMeasured;
@@ -1399,7 +1399,7 @@ static NSString* itemsToShip[kNumToShip*2] = {
 
                 union {
                     double asDouble;
-                    unsigned long asLong[2];
+                    uint32_t asLong[2];
                 } theData;
                 NSString* s = [[measuredValues objectAtIndex:j]objectForKey:@"value"];
                 double aValue = [s doubleValue];
@@ -1411,7 +1411,7 @@ static NSString* itemsToShip[kNumToShip*2] = {
                 record[8] = 0;
 
                 [[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification
-                                                                    object:[NSData dataWithBytes:record length:sizeof(long)*kHVcRIORecordSize]];
+                                                                    object:[NSData dataWithBytes:record length:sizeof(int32_t)*kHVcRIORecordSize]];
             }
         }
     }
@@ -1700,7 +1700,7 @@ static NSString* itemsToShip[kNumToShip*2] = {
     }
 }
 
-- (unsigned long) numPostRegulationPoints { return [postRegulationArray count]; }
+- (uint32_t) numPostRegulationPoints { return [postRegulationArray count]; }
 - (id) postRegulationPointAtIndex:(int)anIndex
 {
     if(anIndex>=0 && anIndex<[postRegulationArray count])return [postRegulationArray objectAtIndex:anIndex];

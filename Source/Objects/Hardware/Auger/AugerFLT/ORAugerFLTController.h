@@ -161,6 +161,6 @@
 #pragma mark ¥¥¥Plot DataSource
 - (int)		numberOfPointsInPlot:(id)aPlotter dataSet:(int)set;
 - (float)  	plotter:(id) aPlotter dataSet:(int)set dataValue:(int) x ;
-- (unsigned long)  	secondsPerUnit:(id) aPlotter;
+- (uint32_t)  	secondsPerUnit:(id) aPlotter;
 
 @end

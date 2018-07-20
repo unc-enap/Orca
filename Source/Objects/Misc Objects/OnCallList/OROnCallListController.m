@@ -180,7 +180,7 @@
 
 - (void) personRemoved:(NSNotification*)aNote
 {
-	long index = [[[aNote userInfo] objectForKey:@"Index"] intValue];
+	int32_t index = [[[aNote userInfo] objectForKey:@"Index"] intValue];
     index = MIN(index,[model onCallListCount]-1);
 	index = MAX(index,0);
 	[onCallListView reloadData];
@@ -206,7 +206,7 @@
 - (void) tableViewSelectionDidChange:(NSNotification *)aNotification
 {
 	if([aNotification object] == onCallListView || aNotification == nil){
-		long selectedIndex = [onCallListView selectedRow];
+		int32_t selectedIndex = [onCallListView selectedRow];
 		[removePersonButton setEnabled:selectedIndex>=0];
 	}
 }

@@ -36,7 +36,7 @@
         NSMutableArray*  thresholdAdcs;
         
         ORRateGroup*	rateGroup;
-        unsigned long 	rateCount[kNumMuxChannels];
+        uint32_t 	rateCount[kNumMuxChannels];
         
         NSMutableDictionary* rateAttributes;
         NSMutableDictionary* totalRateAttributes;
@@ -76,7 +76,7 @@
 - (void)                 setTimeRateXAttributes:(NSMutableDictionary*)newTimeRateXAttributes;
 - (NSMutableDictionary*) timeRateYAttributes;
 - (void)                 setTimeRateYAttributes:(NSMutableDictionary*)newTimeRateYAttributes;
-- (unsigned long)        rateCount:(unsigned short)index;
+- (uint32_t)        rateCount:(unsigned short)index;
 - (unsigned short)       busNumber;
 - (void)                 setBusNumber:(unsigned short)newBusNumber;
 - (int)			 scopeChan;
@@ -114,7 +114,7 @@
 - (void)	  startRates;
 - (void)	  stopRates;
 - (void)	  incChanCounts:(unsigned short)chanMask;
-- (unsigned long) getCounter:(int)tag forGroup:(int)groupTag;
+- (uint32_t) getCounter:(int)tag forGroup:(int)groupTag;
 
 #pragma mark ¥¥¥Testing
 - (unsigned short)dacValue;

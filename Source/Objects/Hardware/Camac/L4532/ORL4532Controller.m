@@ -106,7 +106,7 @@
 - (void) delayEnableMaskChanged:(NSNotification*)aNote
 {
 	short i;
-	unsigned long theMask = [model delayEnableMask];
+	uint32_t theMask = [model delayEnableMask];
 	for(i=0;i<16;i++){
 		BOOL bitSet = (theMask&(1L<<i))>0;
 		[[delayEnableMask0_15 cellWithTag:i] setState:bitSet];
@@ -139,7 +139,7 @@
 - (void) checkDelaysInUseMessage
 {
 	int i;
-	unsigned long inUseMask = 0L;
+	uint32_t inUseMask = 0L;
 	for(i=0 ; i<[model numberTriggers] ; i++){
 		inUseMask |= (1L<<i);
 	}
@@ -228,7 +228,7 @@
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"L4532 (Station %ld)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"L4532 (Station %d)",(int)[model stationNumber]]];
 }
 
 #pragma mark ¥¥¥Actions
@@ -276,7 +276,7 @@
 {
     @try {
         [model checkCratePower];
-        unsigned long pattern = [model readInputPattern];
+        uint32_t pattern = [model readInputPattern];
 		NSLog(@"L4532 (Station %d) Input Pattern = 0x%08x\n",[model stationNumber],pattern);		
     }
 	@catch(NSException* localException) {
@@ -288,7 +288,7 @@
 {
     @try {
         [model checkCratePower];
-        unsigned long pattern = [model readInputPatternClearMemoryAndLAM];
+        uint32_t pattern = [model readInputPatternClearMemoryAndLAM];
 		NSLog(@"L4532 (Station %d) Input Pattern = 0x%08x\n",[model stationNumber],pattern);		
     }
 	@catch(NSException* localException) {

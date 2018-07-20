@@ -45,7 +45,7 @@
 	float intercept[8];
 	NSString* channelName[8];   //adc names
 	NSString* channelUnit[8];   //adc names
-	unsigned long timeMeasured;
+	uint32_t timeMeasured;
 	NSString* doName[16];		//the D connector on the side
 	NSString* ioName[4];		//on top
 	unsigned short adcDiff;
@@ -59,26 +59,26 @@
     unsigned short aOut1;
 	BOOL	led;
 	BOOL	doResetOfCounter;
-    unsigned long counter;
+    uint32_t counter;
     BOOL digitalOutputEnabled;
     int pollTime;
-	unsigned long	dataId;
+	uint32_t	dataId;
     BOOL shipData;
     BOOL readOnce;
 	NSTimeInterval lastTime;
 	NSOperationQueue* queue;
 	
 	//bit processing variables
-	unsigned long processInputValue;  //snapshot of the inputs at start of process cycle
-	unsigned long processOutputValue; //outputs to be written at end of process cycle
-	unsigned long processOutputMask;  //controlls which bits are written
+	uint32_t processInputValue;  //snapshot of the inputs at start of process cycle
+	uint32_t processOutputValue; //outputs to be written at end of process cycle
+	uint32_t processOutputMask;  //controlls which bits are written
     BOOL involvedInProcess;
-    unsigned long deviceSerialNumber;
+    uint32_t deviceSerialNumber;
 }
 
 #pragma mark ***Accessors
-- (unsigned long) deviceSerialNumber;
-- (void) setDeviceSerialNumber:(unsigned long)aDeviceSerialNumber;
+- (uint32_t) deviceSerialNumber;
+- (void) setDeviceSerialNumber:(uint32_t)aDeviceSerialNumber;
 - (BOOL) involvedInProcess;
 - (void) setInvolvedInProcess:(BOOL)aInvolvedInProcess;
 - (void) setAOut0Voltage:(float)aValue;
@@ -93,8 +93,8 @@
 - (void) setPollTime:(int)aPollTime;
 - (BOOL) digitalOutputEnabled;
 - (void) setDigitalOutputEnabled:(BOOL)aDigitalOutputEnabled;
-- (unsigned long) counter;
-- (void) setCounter:(unsigned long)aCounter;
+- (uint32_t) counter;
+- (void) setCounter:(uint32_t)aCounter;
 - (NSString*) channelName:(int)i;
 - (void) setChannel:(int)i name:(NSString*)aName;
 - (NSString*) channelUnit:(int)i;
@@ -151,10 +151,10 @@
 - (void) setIoValueInBit:(int)bit withValue:(BOOL)aValue;
 - (NSString*) ioInString:(int)bit;
 - (NSColor*) ioInColor:(int)i;
-- (unsigned long) timeMeasured;
+- (uint32_t) timeMeasured;
 
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherLakeShore210;
 - (void) readSerialNumber;

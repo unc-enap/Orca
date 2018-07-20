@@ -34,12 +34,12 @@ enum EADC2249ModelConsts { kRegisterNumberADC2249 = 12 };
 	@private
 		BOOL  checkLAM;
 		BOOL includeTiming;
-        unsigned long dataId;
+        uint32_t dataId;
         unsigned short onlineMask;
         BOOL suppressZeros;
 	
         //place to cache some stuff for alittle more speed.
-        unsigned long 	unChangingDataPart;
+        uint32_t 	unChangingDataPart;
         unsigned short cachedStation;
         short onlineChannelCount;
 		short onlineList[kRegisterNumberADC2249]; 
@@ -52,8 +52,8 @@ enum EADC2249ModelConsts { kRegisterNumberADC2249 = 12 };
 #pragma mark ¥¥¥Accessors
 - (BOOL) includeTiming;
 - (void) setIncludeTiming:(BOOL)aIncludeTiming;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (unsigned short)   onlineMask;
 - (void)	    setOnlineMask:(unsigned short)anOnlineMask;
 - (BOOL)	    onlineMaskBit:(int)bit;

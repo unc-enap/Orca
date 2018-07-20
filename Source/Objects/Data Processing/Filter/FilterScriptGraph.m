@@ -46,7 +46,7 @@ id exNode(nodeType *p, int aLevel, BOOL lastChild)
 	NSMutableString* line = nil;
 	
     switch(p->type) {
-        case typeCon: line = [NSMutableString stringWithFormat:@"c(%ld)", p->con.value]; break;
+        case typeCon: line = [NSMutableString stringWithFormat:@"c(%d)", p->con.value]; break;
         case typeId:  line = [NSMutableString stringWithFormat:@"(%s)", p->ident.key]; break;
         case typeOpr:
             switch(p->opr.oper){

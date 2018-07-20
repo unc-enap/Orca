@@ -30,24 +30,24 @@
 
 @interface ORL4532Model : ORCamacIOCard <ORDataTaker> {	
 @private
-	unsigned long   triggerId;
-	unsigned long   channelTriggerId;
-	unsigned long   eventCounter;
+	uint32_t   triggerId;
+	uint32_t   channelTriggerId;
+	uint32_t   eventCounter;
 	ORReadOutList*  triggerGroup[32];
 	BOOL			includeTiming;
 	
 	NSArray*		dataTakers[32];       //cache of data takers.
-	unsigned long 	unChangingDataPart;
+	uint32_t 	unChangingDataPart;
 	unsigned short  cachedStation;
-	unsigned long   triggerMask;
+	uint32_t   triggerMask;
 	int				numberTriggers;
 	
 	NSMutableArray*	delays;
-	unsigned long	delayEnableMask;
+	uint32_t	delayEnableMask;
 	NSMutableArray*	triggerNames;
 	union {
 		NSTimeInterval asTimeInterval;
-		unsigned long asLongs[2];
+		uint32_t asLongs[2];
 	}theTimeRef;
 	
 }
@@ -59,8 +59,8 @@
 - (NSArray*) triggerNames;
 - (void) setTriggerNames:(NSMutableArray*)aTriggerNames;
 - (NSString*) triggerName:(int)index;
-- (unsigned long) delayEnableMask;
-- (void) setDelayEnableMask:(unsigned long)anEnableMask;
+- (uint32_t) delayEnableMask;
+- (void) setDelayEnableMask:(uint32_t)anEnableMask;
 - (NSArray*) delays;
 - (void) setDelays:(NSMutableArray*)aDelays;
 - (void) setTrigger:(int)index withName:(NSString*)aName;	
@@ -73,19 +73,19 @@
 - (void) setNumberTriggers:(int)aNumberTriggers;
 - (BOOL) includeTiming;
 - (void) setIncludeTiming:(BOOL)aIncludeTiming;
-- (unsigned long) triggerId;
-- (void) setTriggerId: (unsigned long) aTriggerId;
-- (unsigned long) channelTriggerId;
-- (void) setChannelTriggerId: (unsigned long) aChannelTriggerId;
+- (uint32_t) triggerId;
+- (void) setTriggerId: (uint32_t) aTriggerId;
+- (uint32_t) channelTriggerId;
+- (void) setChannelTriggerId: (uint32_t) aChannelTriggerId;
 
 - (ORReadOutList*) triggerGroup:(int)index;
 - (void) setTrigger:(int)index group:(ORReadOutList*)newTriggerGroup;
 - (NSMutableArray*) children;
 
 #pragma mark ¥¥¥Hardware functions
-- (unsigned long)	readInputPattern;
+- (uint32_t)	readInputPattern;
 - (unsigned short)	readStatusRegister;
-- (unsigned long)	readInputPatternClearMemoryAndLAM;
+- (uint32_t)	readInputPatternClearMemoryAndLAM;
 - (BOOL)			testLAM;
 - (void)			clearMemoryAndLAM;
 - (BOOL)			testAndClearLAM;

@@ -336,7 +336,7 @@ ORBasicOpenGLView * gTrackingViewInfo = NULL;
 // called after context is created
 - (void) prepareOpenGL
 {
-    long swapInt = 1;
+    int32_t swapInt = 1;
     
     [[self openGLContext] setValues:(const GLint*)&swapInt forParameter:NSOpenGLCPSwapInterval]; // set to vbl sync
     

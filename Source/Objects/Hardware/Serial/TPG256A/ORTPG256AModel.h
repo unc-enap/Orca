@@ -36,9 +36,9 @@
 @interface ORTPG256AModel : ORSerialPortWithQueueModel <ORAdcProcessing>
 {
     @private
-        unsigned long	dataId;
+        uint32_t	dataId;
 		float		    pressure[6];
-		unsigned long	timeMeasured[6];
+		uint32_t	timeMeasured[6];
 		ORTimeRate*		timeRates[6];
 		double			lowLimit[6];
 		double			lowAlarm[6];
@@ -74,7 +74,7 @@
 - (int)  pollTime;
 - (void) setPollTime:(int)aPollTime;
 - (float) pressure:(int)index;
-- (unsigned long) timeMeasured:(int)index;
+- (uint32_t) timeMeasured:(int)index;
 - (void) setPressure:(int)index value:(float)aValue;
 - (double) lowLimit:(int)aChan;
 - (void) setLowLimit:(int)aChan value:(double)aValue;
@@ -88,8 +88,8 @@
 #pragma mark •••Data Records
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (NSDictionary*) dataRecordDescription;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherTPG256A;
 - (void) shipPressureValues;

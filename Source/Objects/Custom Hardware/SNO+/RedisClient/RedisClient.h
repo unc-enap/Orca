@@ -13,21 +13,21 @@
     NSString *host;
     redisContext *context;
     int port;
-    long timeout;
+    int32_t timeout;
 }
 @property (nonatomic) int port;
 @property (nonatomic,copy) NSString *host;
-@property (nonatomic) long timeout;
+@property (nonatomic) int32_t timeout;
 
 - (id) init;
 - (id) initWithHostName: (NSString*) _host withPort: (int) _port;
-- (long) timeout;
-- (void) setTimeout: (long) _timeout;
+- (int32_t) timeout;
+- (void) setTimeout: (int32_t) _timeout;
 - (void) connect;
 - (void) disconnect;
 - (void) reconnect;
 - (redisReply*) vcommand: (const char*) fmt args:(va_list) args;
 - (redisReply*) command: (const char *) fmt, ...;
 - (void) okCommand: (const char *) fmt, ...;
-- (long long) intCommand: (const char *) fmt, ...;
+- (int64_t) intCommand: (const char *) fmt, ...;
 @end

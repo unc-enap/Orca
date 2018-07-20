@@ -465,9 +465,9 @@
 	@try {
         int i;
         for(i=0;i<5;i++){
-            unsigned long long upper = [model readUpperClock:i];
-            unsigned long long lower = [model readLowerClock:i];
-            unsigned long long theValue = (upper<<32) | lower;
+            uint64_t upper = [model readUpperClock:i];
+            uint64_t lower = [model readLowerClock:i];
+            uint64_t theValue = (upper<<32) | lower;
             NSLog(@"Clock Reg%d: %lld\n",i,theValue);
         }
     }

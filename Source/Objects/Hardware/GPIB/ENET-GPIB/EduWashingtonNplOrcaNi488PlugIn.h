@@ -193,7 +193,7 @@
 
 - (int) ibsta;
 - (int) iberr;
-- (long) ibcntl;
+- (int32_t) ibcntl;
 
 - (int) ibfind:(char*) udname;
 - (int) ibbna:(int) ud udname:(char*) udname;
@@ -203,11 +203,11 @@
 - (int) ibask:(int) ud option:(int) option  v:(int*) v;
 - (int) ibcac:(int) ud v:(int) v;
 - (int) ibclr:(int) ud;
-- (int) ibcmd:(int) ud buf:(void*) buf  cnt:(long) cnt;
-- (int) ibcmda:(int) ud buf:(void*) buf  cnt:(long) cnt;
+- (int) ibcmd:(int) ud buf:(void*) buf  cnt:(int32_t) cnt;
+- (int) ibcmda:(int) ud buf:(void*) buf  cnt:(int32_t) cnt;
 - (int) ibconfig:(int) ud option:(int) option  v:(int) v;
 - (int) ibdev:(int) boardID  pad:(int) pad  sad:(int) sad  tmo:(int) tmo  eot:(int) eot  eos:(int) eos;
-- (int) ibdiag:(int) ud buf:(void*) buf  cnt:(long) cnt;
+- (int) ibdiag:(int) ud buf:(void*) buf  cnt:(int32_t) cnt;
 - (int) ibdma:(int) ud v:(int) v;
 - (int) ibexpert:(int) ud option:(int) option  Input:(void*) Input  Output:(void*) Output;
 - (int) ibeos:(int) ud v:(int) v;
@@ -221,10 +221,10 @@
 - (int) ibonl:(int) ud v:(int) v;
 - (int) ibpad:(int) ud v:(int) v;
 - (int) ibpct:(int) ud;
-- (int) ibpoke:(int) ud option:(long) option  v:(long) v;
+- (int) ibpoke:(int) ud option:(int32_t) option  v:(int32_t) v;
 - (int) ibppc:(int) ud v:(int) v;
-- (int) ibrd:(int) ud buf:(void*) buf  cnt:(long) cnt;
-- (int) ibrda:(int) ud buf:(void*) buf  cnt:(long) cnt;
+- (int) ibrd:(int) ud buf:(void*) buf  cnt:(int32_t) cnt;
+- (int) ibrda:(int) ud buf:(void*) buf  cnt:(int32_t) cnt;
 - (int) ibrpp:(int) ud ppr:(char*) ppr;
 - (int) ibrsc:(int) ud v:(int) v;
 - (int) ibrsp:(int) ud spr:(char*) spr;
@@ -236,8 +236,8 @@
 - (int) ibtmo:(int) ud v:(int) v;
 - (int) ibtrg:(int) ud;
 - (int) ibwait:(int) ud mask:(int) mask;
-- (int) ibwrt:(int) ud buf:(void*) buf  cnt:(long) cnt;
-- (int) ibwrta:(int) ud buf:(void*) buf  cnt:(long) cnt;
+- (int) ibwrt:(int) ud buf:(void*) buf  cnt:(int32_t) cnt;
+- (int) ibwrta:(int) ud buf:(void*) buf  cnt:(int32_t) cnt;
 
 
 // GPIB-ENET only functions to support locking across machines
@@ -251,7 +251,7 @@
 - (int)   ThreadIbsta;
 - (int)   ThreadIberr;
 - (int)   ThreadIbcnt;
-- (long)  ThreadIbcntl;
+- (int32_t)  ThreadIbcntl;
 
 
 /**************************************************************************/

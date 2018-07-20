@@ -90,12 +90,12 @@ if double word format
 //--------------------------------------------------------------------
 
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
+    uint32_t* ptr = (uint32_t*)someData;
  
     //word 0 -- the dataID and the total length in longs
-    unsigned long length = ExtractLength(ptr[0]); //get the length
+    uint32_t length = ExtractLength(ptr[0]); //get the length
 	//word 1 -- crate, card, and number of datawords following
 	unsigned char version = (ptr[1]>>25) & 0x1;
 	unsigned char crate  = (ptr[1]>>21) & 0xf;
@@ -157,16 +157,16 @@ if double word format
     return length; //must return number of bytes processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)someData
+- (NSString*) dataRecordDescription:(uint32_t*)someData
 {
     
     NSMutableString* totalString = [NSMutableString stringWithCapacity:1024];
     [totalString appendString:@"TDC3377 TDC\n\n"]; 
 
-    unsigned long* ptr = (unsigned long*)someData;
+    uint32_t* ptr = (uint32_t*)someData;
     
-	[totalString appendString:[NSString stringWithFormat:@"Crate    = %lu\n",(ptr[1]>>21) & 0xf]];
-    [totalString appendString:[NSString stringWithFormat:@"Station  = %lu\n",(ptr[1]>>16) & 0x1f]];
+	[totalString appendString:[NSString stringWithFormat:@"Crate    = %u\n",(ptr[1]>>21) & 0xf]];
+    [totalString appendString:[NSString stringWithFormat:@"Station  = %u\n",(ptr[1]>>16) & 0x1f]];
 	unsigned char version = (ptr[1]>>25) & 0x1;
  
     //word 0 -- the dataID and the total length in longs
@@ -177,7 +177,7 @@ if double word format
 	if(version == 1){
 		union {
 			NSTimeInterval asTimeInterval;
-			unsigned long asLongs[2];
+			uint32_t asLongs[2];
 		}theTimeRef;
 		theTimeRef.asLongs[1] = ptr[2];
 		theTimeRef.asLongs[0] = ptr[3];

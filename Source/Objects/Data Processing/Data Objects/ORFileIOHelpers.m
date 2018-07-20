@@ -38,7 +38,7 @@ NSMutableString* getNextString(NSFileHandle* fp)
 
 NSString* peek_ahead(NSFileHandle* fp)
 {
-    unsigned long long pos = [fp offsetInFile];
+    uint64_t pos = [fp offsetInFile];
     NSString* peekString = getNextString(fp);
     [fp seekToFileOffset:pos];
     return peekString;

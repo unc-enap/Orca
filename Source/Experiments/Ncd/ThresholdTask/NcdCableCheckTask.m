@@ -636,7 +636,7 @@ static NSString* NcdCableCheckMuxVerbose  = @"NcdCableCheckMuxVerbose";
     NSArray* allShapers = [[[NSApp delegate] document] collectObjectsOfClass:NSClassFromString(@"ORShaperModel")];
     int slot    = [[currentTube objectForKey:@"kAdcSlot"] intValue];    
     int channel = [[currentTube objectForKey:@"kAdcChannel"] intValue];
-    unsigned long address = strtol([[currentTube objectForKey:@"kAdcHWAddress"] cString],0,16);;
+    uint32_t address = strtol([[currentTube objectForKey:@"kAdcHWAddress"] cString],0,16);;
     NSEnumerator* e = [allShapers objectEnumerator];
     ORShaperModel* shaper;
     while(shaper = [e nextObject]){
@@ -795,7 +795,7 @@ static NSString* NcdCableCheckMuxVerbose  = @"NcdCableCheckMuxVerbose";
 - (void) checkCurrentScope
 {
     if([currentScopes count]!=0){
-        unsigned long currentScopeCounts = 0;
+        uint32_t currentScopeCounts = 0;
         NSEnumerator* e = [currentScopes objectEnumerator];
         OROscBaseModel* aScope;
         currentScopeCounts = 0;

@@ -73,16 +73,16 @@ static NSString* kLabJackUE9Unit[8] = {
     else return [NSString stringWithFormat:@"Unit %d",aUnit];			
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-	unsigned long *dataPtr = (unsigned long*)someData;
+	uint32_t *dataPtr = (uint32_t*)someData;
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theAdcValue;
 	
 	int i;
-	unsigned long theTime = dataPtr[2];
+	uint32_t theTime = dataPtr[2];
 	int index = 3;
 	for(i=0;i<84;i++){
 		theAdcValue.asLong = dataPtr[index];									//encoded as float, use union to convert
@@ -98,15 +98,15 @@ static NSString* kLabJackUE9Unit[8] = {
 	return ExtractLength(dataPtr[0]);
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr
 {
     NSString* title= @"LabJackUE9 DataRecord\n\n";
     NSString* theString =  [NSString stringWithFormat:@"%@\n",title];               
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theAdcValue;
-	theString = [theString stringByAppendingFormat:@"HW ID = %lu\n",dataPtr[1] & 0x0000ffff];
+	theString = [theString stringByAppendingFormat:@"HW ID = %u\n",dataPtr[1] & 0x0000ffff];
 	
 	NSDate* date = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)dataPtr[2]];
 	theString = [theString stringByAppendingFormat:@"%@\n",date];
@@ -118,18 +118,18 @@ static NSString* kLabJackUE9Unit[8] = {
 		theString = [theString stringByAppendingFormat:@"%d: %.3f\n",i,theAdcValue.asFloat];
 		index++;
 	}
-	theString = [theString stringByAppendingFormat:@"Counter1 = 0x%08lx\n",dataPtr[index++]];
-	theString = [theString stringByAppendingFormat:@"Counter2 = 0x%08lx\n",dataPtr[index++]];
-	theString = [theString stringByAppendingFormat:@"Timer1 = 0x%08lx\n",dataPtr[index++]];
-	theString = [theString stringByAppendingFormat:@"Timer2 = 0x%08lx\n",dataPtr[index++]];
-	theString = [theString stringByAppendingFormat:@"Timer3 = 0x%08lx\n",dataPtr[index++]];
-	theString = [theString stringByAppendingFormat:@"Timer4 = 0x%08lx\n",dataPtr[index++]];
-	theString = [theString stringByAppendingFormat:@"Timer5 = 0x%08lx\n",dataPtr[index++]];
-	theString = [theString stringByAppendingFormat:@"Timer6 = 0x%08lx\n",dataPtr[index++]];
-	theString = [theString stringByAppendingFormat:@"Counter2 = 0x%08lx\n",dataPtr[index++]];
-	theString = [theString stringByAppendingFormat:@"I/O Dir = 0x%08lx\n",dataPtr[index++] & 0x000fffff];
-	theString = [theString stringByAppendingFormat:@"I/O Out = 0x%08lx\n",dataPtr[index++] & 0x000fffff];
-	theString = [theString stringByAppendingFormat:@"I/O In  = 0x%08lx\n",dataPtr[index++] & 0x000fffff];
+	theString = [theString stringByAppendingFormat:@"Counter1 = 0x%08x\n",dataPtr[index++]];
+	theString = [theString stringByAppendingFormat:@"Counter2 = 0x%08x\n",dataPtr[index++]];
+	theString = [theString stringByAppendingFormat:@"Timer1 = 0x%08x\n",dataPtr[index++]];
+	theString = [theString stringByAppendingFormat:@"Timer2 = 0x%08x\n",dataPtr[index++]];
+	theString = [theString stringByAppendingFormat:@"Timer3 = 0x%08x\n",dataPtr[index++]];
+	theString = [theString stringByAppendingFormat:@"Timer4 = 0x%08x\n",dataPtr[index++]];
+	theString = [theString stringByAppendingFormat:@"Timer5 = 0x%08x\n",dataPtr[index++]];
+	theString = [theString stringByAppendingFormat:@"Timer6 = 0x%08x\n",dataPtr[index++]];
+	theString = [theString stringByAppendingFormat:@"Counter2 = 0x%08x\n",dataPtr[index++]];
+	theString = [theString stringByAppendingFormat:@"I/O Dir = 0x%08x\n",dataPtr[index++] & 0x000fffff];
+	theString = [theString stringByAppendingFormat:@"I/O Out = 0x%08x\n",dataPtr[index++] & 0x000fffff];
+	theString = [theString stringByAppendingFormat:@"I/O In  = 0x%08x\n",dataPtr[index++] & 0x000fffff];
 	
 	
 	return theString;

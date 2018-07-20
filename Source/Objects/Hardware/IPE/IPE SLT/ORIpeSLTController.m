@@ -247,7 +247,7 @@ NSString* fltTriggerSourceNames[2][kFltNumberTriggerSources] = {
 
 - (void) interruptMaskChanged:(NSNotification*)aNote
 {
-	unsigned long aMaskValue = [model interruptMask];
+	uint32_t aMaskValue = [model interruptMask];
 	int i;
 	for(i=0;i<9;i++){
 		if(aMaskValue & (1L<<i))[[interruptMaskMatrix cellWithTag:i] setIntValue:1];
@@ -443,9 +443,9 @@ NSString* fltTriggerSourceNames[2][kFltNumberTriggerSources] = {
 {
 	if(!xImage)xImage = [[NSImage imageNamed:@"exMark"] retain];
 	if(!yImage)yImage = [[NSImage imageNamed:@"checkMark"] retain];
-	unsigned long lowWord = [model pageStatusLow];
-	unsigned long highWord = [model pageStatusHigh];
-	unsigned long theWord;
+	uint32_t lowWord = [model pageStatusLow];
+	uint32_t highWord = [model pageStatusHigh];
+	uint32_t theWord;
 	int i;
 	for(i=0;i<64;i++){
 		NSCell* aCell = [[pageStatusMatrix cells] objectAtIndex:i];
@@ -484,7 +484,7 @@ NSString* fltTriggerSourceNames[2][kFltNumberTriggerSources] = {
 	
 	int i;
 	for(i=0;i<kFltNumberTriggerSources;i++){
-		unsigned long aTriggerMask = [model triggerSource];
+		uint32_t aTriggerMask = [model triggerSource];
 		if(aTriggerMask & (1L<<i)) [[triggerSrcMatrix cellWithTag:i] setIntValue:1];
 		else [[triggerSrcMatrix cellWithTag:i] setIntValue:0];
 	}
@@ -567,7 +567,7 @@ NSString* fltTriggerSourceNames[2][kFltNumberTriggerSources] = {
 
 - (IBAction) interruptMaskAction:(id)sender
 {
-	unsigned long aMaskValue = 0;
+	uint32_t aMaskValue = 0;
 	int i;
 	for(i=0;i<9;i++){
 		if([[interruptMaskMatrix cellWithTag:i] intValue]) aMaskValue |= (1L<<i);
@@ -701,7 +701,7 @@ NSString* fltTriggerSourceNames[2][kFltNumberTriggerSources] = {
 {
 	int index = (int)[registerPopUp indexOfSelectedItem];
 	@try {
-		unsigned long value = [model readReg:index];
+		uint32_t value = [model readReg:index];
 		NSLog(@"SLT reg: %@ value: 0x%x\n",[model getRegisterName:index],value);
 	}
 	@catch(NSException* localException) {
@@ -831,7 +831,7 @@ NSString* fltTriggerSourceNames[2][kFltNumberTriggerSources] = {
 
 - (IBAction) triggerSourceAction:(id)sender
 {
-	unsigned long aTriggerMask = 0;
+	uint32_t aTriggerMask = 0;
 	int i;
 	for(i=0;i<kFltNumberTriggerSources;i++){
 		if([[triggerSrcMatrix cellWithTag:i] intValue]) aTriggerMask |= (1L<<i);

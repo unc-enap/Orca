@@ -44,7 +44,7 @@
 	BOOL			isRunning;
 	BOOL			ledOn;
 	unsigned short	moduleID;
-	unsigned long   dataId;
+	uint32_t   dataId;
 	NSMutableArray*	triggerModes;
 	NSMutableArray* gains;
 	NSMutableArray* dacValues;
@@ -55,25 +55,25 @@
 	NSMutableArray* peakingTimes;
 	
 	ORRateGroup*	waveFormRateGroup;
-	unsigned long 	waveFormCount[kNumSIS3350Channels];
+	uint32_t 	waveFormCount[kNumSIS3350Channels];
     int				operationMode;
     int				clockSource;
     int				triggerMask;
     BOOL			multiEvent;
     BOOL			invertLemo;
-    long			memoryTriggerDelay;
-    long			memoryStartModeLength;
+    int32_t			memoryTriggerDelay;
+    int32_t			memoryStartModeLength;
     int				freqM;
     int				freqN;
-    long			maxNumEvents;
+    int32_t			maxNumEvents;
     int				gateSyncLimitLength;
     int				gateSyncExtendLength;
     int				ringBufferLen;
     int				ringBufferPreDelay;
     int				endAddressThreshold;
-    long			memoryWrapLength;
+    int32_t			memoryWrapLength;
 
-	unsigned long	location;
+	uint32_t	location;
 	id				theController;
 	int				runningOperationMode;
 }
@@ -85,8 +85,8 @@
 - (void) setDefaults;
 
 #pragma mark ***Accessors
-- (long) memoryWrapLength;
-- (void) setMemoryWrapLength:(long)aMemoryWrapLength;
+- (int32_t) memoryWrapLength;
+- (void) setMemoryWrapLength:(int32_t)aMemoryWrapLength;
 - (int) endAddressThreshold;
 - (void) setEndAddressThreshold:(int)aEndAddressThreshold;
 - (int) ringBufferPreDelay;
@@ -97,16 +97,16 @@
 - (void) setGateSyncExtendLength:(int)aGateSyncExtendLength;
 - (int) gateSyncLimitLength;
 - (void) setGateSyncLimitLength:(int)aGateSyncLimitLength;
-- (long) maxNumEvents;
-- (void) setMaxNumEvents:(long)aMaxNumEvents;
+- (int32_t) maxNumEvents;
+- (void) setMaxNumEvents:(int32_t)aMaxNumEvents;
 - (int) freqN;
 - (void) setFreqN:(int)aFreqN;;
 - (int) freqM;
 - (void) setFreqM:(int)aFreqM;;
-- (long) memoryStartModeLength;
-- (void) setMemoryStartModeLength:(long)aMemoryStartModeLength;
-- (long) memoryTriggerDelay;
-- (void) setMemoryTriggerDelay:(long)aMemoryTriggerDelay;
+- (int32_t) memoryStartModeLength;
+- (void) setMemoryStartModeLength:(int32_t)aMemoryStartModeLength;
+- (int32_t) memoryTriggerDelay;
+- (void) setMemoryTriggerDelay:(int32_t)aMemoryTriggerDelay;
 - (BOOL) invertLemo;
 - (void) setInvertLemo:(BOOL)aInvertLemo;
 - (BOOL) multiEvent;
@@ -123,12 +123,12 @@
 
 
 - (int) triggerMode:(short)chan;
-- (void) setTriggerMode:(short)channel withValue:(long)aValue;
+- (void) setTriggerMode:(short)channel withValue:(int32_t)aValue;
 
-- (long) gain:(int)aChannel;
-- (void) setGain:(int)aChannel withValue:(long)aValue;
-- (long) dacValue:(int)aChannel;
-- (void) setDacValue:(int)aChannel withValue:(long)aValue;
+- (int32_t) gain:(int)aChannel;
+- (void) setGain:(int)aChannel withValue:(int32_t)aValue;
+- (int32_t) dacValue:(int)aChannel;
+- (void) setDacValue:(int)aChannel withValue:(int32_t)aValue;
 
 - (void) setThresholdOff:(short)chan withValue:(int)aValue;
 - (int) thresholdOff:(short)chan;
@@ -150,13 +150,13 @@
 #pragma mark •••Hardware Access
 - (void) printReport;
 - (void) initBoard;
-- (unsigned long) readEventCounter;
+- (uint32_t) readEventCounter;
 - (void) readModuleID:(BOOL)verbose;
 - (float) readTemperature:(BOOL)verbose;
 - (void) writeAcquisitionRegister;
-- (unsigned long) readAcquisitionRegister;
+- (uint32_t) readAcquisitionRegister;
 - (void) writeControlStatusRegister;
-- (void) writeValue:(unsigned long)aValue offset:(long)anOffset;
+- (void) writeValue:(uint32_t)aValue offset:(int32_t)anOffset;
 - (void) writeFreqSynthRegister;
 - (void) writeTriggerSetupRegisters;
 - (void) armSamplingLogic;
@@ -164,26 +164,26 @@
 - (void) fireTrigger;
 - (void) clearTimeStamps;
 - (void) writeRingBufferParams;
-- (unsigned long) readAcqRegister;
-- (void) writeAdcMemoryPage:(unsigned long)aPage;
-- (void) writeSampleStartAddress:(unsigned long)aValue;
+- (uint32_t) readAcqRegister;
+- (void) writeAdcMemoryPage:(uint32_t)aPage;
+- (void) writeSampleStartAddress:(uint32_t)aValue;
 - (void) clearTimeStamps;
 - (void) writeGains;
 - (void) writeDacOffsets;
 
 #pragma mark •••Data Taker
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherShaper;
 - (NSDictionary*) dataRecordDescription;
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
-- (unsigned long) waveFormCount:(int)aChannel;
+- (uint32_t) waveFormCount:(int)aChannel;
 - (void)   startRates;
 - (void) clearWaveFormCounts;
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag;
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag;
 - (int) load_HW_Config_Structure:(SBC_crate_config*)configStruct index:(int)index;
 
 #pragma mark •••HW Wizard

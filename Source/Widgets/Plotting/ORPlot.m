@@ -431,14 +431,14 @@
 }
 
 #pragma mark ***Scaling
-- (long) maxValueChannelinXRangeFrom:(long)minChannel to:(long)maxChannel;
+- (int32_t) maxValueChannelinXRangeFrom:(int32_t)minChannel to:(int32_t)maxChannel;
 {
 	int n  = [dataSource numberPointsInPlot:self];
 	if(n!=0){
 		double maxX = 0;
 		double maxY = -9E9;
 		
-		 long i;
+		 int32_t i;
 		 for (i=minChannel; i<maxChannel; ++i) {
 			 double xValue,yValue;
 			 [dataSource plotter:self index:(int)i x:&xValue y:&yValue];
@@ -551,12 +551,12 @@
 	return YES;
 }
 
-- (long) numberPoints
+- (int32_t) numberPoints
 {
 	return [dataSource numberPointsInPlot:self];
 }
 
-- (NSString*) valueAsStringAtPoint:(long)i
+- (NSString*) valueAsStringAtPoint:(int32_t)i
 {		
 	double xValue,yValue;
 	[dataSource plotter:self index:(int)i x:&xValue y:&yValue];

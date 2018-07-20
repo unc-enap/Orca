@@ -81,16 +81,16 @@
 	BOOL started;
     unsigned short globalMode;
     unsigned short delays;
-    unsigned long userLEDSelector;
-    unsigned long userNIMSelector;
-    unsigned long userDeviceSelector;
-    unsigned long scalerReadout;
-    unsigned long delayAndGateA;
-    unsigned long delayAndGateB;
-    unsigned long delayAndGateExt;
-    unsigned long scalerA;
-    unsigned long scalerB;
-    unsigned long LAMMaskValue;
+    uint32_t userLEDSelector;
+    uint32_t userNIMSelector;
+    uint32_t userDeviceSelector;
+    uint32_t scalerReadout;
+    uint32_t delayAndGateA;
+    uint32_t delayAndGateB;
+    uint32_t delayAndGateExt;
+    uint32_t scalerA;
+    uint32_t scalerB;
+    uint32_t LAMMaskValue;
     unsigned short usbTransferSetup;
     short nValue;
     short aValue;
@@ -136,26 +136,26 @@
 - (void) setNValue:(short)aNValue;
 - (unsigned short) usbTransferSetup;
 - (void) setUsbTransferSetup:(unsigned short)aUsbTransferSetup;
-- (unsigned long) LAMMaskValue;
-- (void) setLAMMaskValue:(unsigned long)aLAMMask;
-- (unsigned long) scalerB;
-- (void) setScalerB:(unsigned long)aScalerB;
-- (unsigned long) scalerA;
-- (void) setScalerA:(unsigned long)aScalerA;
-- (unsigned long) delayAndGateExt;
-- (void) setDelayAndGateExt:(unsigned long)aDelayAndGateExt;
-- (unsigned long) delayAndGateB;
-- (void) setDelayAndGateB:(unsigned long)aDelayAndGateB;
-- (unsigned long) delayAndGateA;
-- (void) setDelayAndGateA:(unsigned long)aDelayAndGateA;
-- (unsigned long) scalerReadout;
-- (void) setScalerReadout:(unsigned long)aScalerReadout;
-- (unsigned long) userDeviceSelector;
-- (void) setUserDeviceSelector:(unsigned long)aUserDeviceSelector;
-- (unsigned long) userNIMSelector;
-- (void) setUserNIMSelector:(unsigned long)aUserNIMSelector;
-- (unsigned long) userLEDSelector;
-- (void) setUserLEDSelector:(unsigned long)aUserLEDSelector;
+- (uint32_t) LAMMaskValue;
+- (void) setLAMMaskValue:(uint32_t)aLAMMask;
+- (uint32_t) scalerB;
+- (void) setScalerB:(uint32_t)aScalerB;
+- (uint32_t) scalerA;
+- (void) setScalerA:(uint32_t)aScalerA;
+- (uint32_t) delayAndGateExt;
+- (void) setDelayAndGateExt:(uint32_t)aDelayAndGateExt;
+- (uint32_t) delayAndGateB;
+- (void) setDelayAndGateB:(uint32_t)aDelayAndGateB;
+- (uint32_t) delayAndGateA;
+- (void) setDelayAndGateA:(uint32_t)aDelayAndGateA;
+- (uint32_t) scalerReadout;
+- (void) setScalerReadout:(uint32_t)aScalerReadout;
+- (uint32_t) userDeviceSelector;
+- (void) setUserDeviceSelector:(uint32_t)aUserDeviceSelector;
+- (uint32_t) userNIMSelector;
+- (void) setUserNIMSelector:(uint32_t)aUserNIMSelector;
+- (uint32_t) userLEDSelector;
+- (void) setUserLEDSelector:(uint32_t)aUserLEDSelector;
 - (unsigned short) delays;
 - (void) setDelays:(unsigned short)aDelays;
 - (unsigned short) globalMode;
@@ -187,28 +187,28 @@
 - (unsigned short)  camacLongNAF:(unsigned short) n 
 							   a:(unsigned short) a 
 							   f:(unsigned short) f
-							data:(unsigned long*) data;
+							data:(uint32_t*) data;
 
 
 - (unsigned short)  camacShortNAFBlock:(unsigned short) n 
 									 a:(unsigned short) a 
 									 f:(unsigned short) f
 								  data:(unsigned short*) data
-                                length:(unsigned long)   numWords;
+                                length:(uint32_t)   numWords;
 
 - (unsigned short)  camacLongNAFBlock:(unsigned short) n 
 									 a:(unsigned short) a 
 									 f:(unsigned short) f
-								  data:(unsigned long*) data
-                                length:(unsigned long)    numWords;
+								  data:(uint32_t*) data
+                                length:(uint32_t)    numWords;
 
 - (void) checkStatus:(unsigned short)x station:(unsigned short)n;
 - (int) flush;
-- (unsigned long) readReg:(int) ireg;
-- (int) writeReg:(int) ireg value:(unsigned long) value;
+- (uint32_t) readReg:(int) ireg;
+- (int) writeReg:(int) ireg value:(uint32_t) value;
 - (int) reset;
 - (void) getStatus;
-- (int) sendNAF:(int)n a:(int) a f:(int) f d24:(BOOL) d24 data:(unsigned long*) data;
+- (int) sendNAF:(int)n a:(int) a f:(int) f d24:(BOOL) d24 data:(uint32_t*) data;
 - (BOOL) writeStackData:(short*) intbuf;
 - (int) readStackData:(short*) intbuf;
 - (int) executeStack:(short*) intbuf;

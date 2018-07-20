@@ -47,8 +47,8 @@ NSString* ORIP408ReadMaskChangedNotification 		= @"IP408 ReadMask Changed Notifi
 NSString* ORIP408ReadValueChangedNotification		= @"IP408 ReadValue Changed Notification";
 
 @interface ORIP408Model (private)
-- (unsigned char) read408Register:(unsigned long) aRegister;
-- (void) write408Register:(unsigned long) aRegister value:(unsigned char) aValue;
+- (unsigned char) read408Register:(uint32_t) aRegister;
+- (void) write408Register:(uint32_t) aRegister value:(unsigned char) aValue;
 @end
 
 
@@ -147,12 +147,12 @@ NSString* ORIP408ReadValueChangedNotification		= @"IP408 ReadValue Changed Notif
 #pragma mark ¥¥¥Accessors
 
 
-- (unsigned long) writeMask
+- (uint32_t) writeMask
 {
     return writeMask;
 }
 
-- (void) setWriteMask:(unsigned long)aMask
+- (void) setWriteMask:(uint32_t)aMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setWriteMask:[self writeMask]];
     
@@ -163,12 +163,12 @@ NSString* ORIP408ReadValueChangedNotification		= @"IP408 ReadValue Changed Notif
 	 object:self];
 }
 
-- (unsigned long) writeValue
+- (uint32_t) writeValue
 {
     return writeValue;
 }
 
-- (void) setWriteValue:(unsigned long)aValue
+- (void) setWriteValue:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setWriteValue:[self writeValue]];
     writeValue = aValue;
@@ -177,12 +177,12 @@ NSString* ORIP408ReadValueChangedNotification		= @"IP408 ReadValue Changed Notif
 	 object:self];
 }
 
-- (unsigned long) readMask
+- (uint32_t) readMask
 {
     return readMask;
 }
 
-- (void) setReadMask:(unsigned long)aMask
+- (void) setReadMask:(uint32_t)aMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setReadMask:[self readMask]];
     
@@ -194,12 +194,12 @@ NSString* ORIP408ReadValueChangedNotification		= @"IP408 ReadValue Changed Notif
 }
 
 
-- (unsigned long) readValue
+- (uint32_t) readValue
 {
     return readValue;
 }
 
-- (void) setReadValue:(unsigned long)aValue
+- (void) setReadValue:(uint32_t)aValue
 {
     
     readValue = aValue;
@@ -211,21 +211,21 @@ NSString* ORIP408ReadValueChangedNotification		= @"IP408 ReadValue Changed Notif
 
 
 #pragma mark ¥¥¥Hardware Access
-- (unsigned long) getInputWithMask:(unsigned long) aChannelMask
+- (uint32_t) getInputWithMask:(uint32_t) aChannelMask
 {
-    unsigned long aReturnValue = 0L;
+    uint32_t aReturnValue = 0L;
     unsigned short theChannels;
     [hwLock lock];
     @try {
         for(theChannels=0; theChannels<32; theChannels+=8 ) {
             if(aChannelMask & (0x000000ff<<theChannels)){
-                unsigned long theRegister;
+                uint32_t theRegister;
                 if( theChannels < 8 ) theRegister = kIP408DigitalInputA7_0;
                 else if( theChannels < 16 ) theRegister = kIP408DigitalInputA15_8;
                 else if( theChannels < 24 ) theRegister = kIP408DigitalInputB23_16;
                 else theRegister = kIP408DigitalInputB31_24;
                 if( aChannelMask & (0xff << theChannels)) {
-                    unsigned long theResult = [self read408Register:theRegister];
+                    uint32_t theResult = [self read408Register:theRegister];
                     aReturnValue |= (theResult << theChannels);
                 }
             }
@@ -240,20 +240,20 @@ NSString* ORIP408ReadValueChangedNotification		= @"IP408 ReadValue Changed Notif
 }
 
 
-- (void) setOutputWithMask:(unsigned long) aChannelMask value:(unsigned long) aMaskValue
+- (void) setOutputWithMask:(uint32_t) aChannelMask value:(uint32_t) aMaskValue
 {
     [hwLock lock];
     @try {
 		unsigned short theChannels;
 		for( theChannels=0; theChannels<32; theChannels+=8 ) {
 			if(aChannelMask & (0x000000ff<<theChannels)){
-				unsigned long theRegister;
+				uint32_t theRegister;
 				if( theChannels < 8 ) theRegister = kIP408DigitalOutputA7_0;
 				else if( theChannels < 16 ) theRegister = kIP408DigitalOutputA15_8;
 				else if( theChannels < 24 ) theRegister = kIP408DigitalOutputB23_16;
 				else theRegister = kIP408DigitalOutputB31_24;
 				if( aChannelMask & (0xff << theChannels)) {
-					unsigned long theResult = [self read408Register:theRegister];
+					uint32_t theResult = [self read408Register:theRegister];
 					theResult &= ~(unsigned char)((aChannelMask>>theChannels) & 0xff);
 					theResult |= (unsigned char)(((aChannelMask & aMaskValue)>>theChannels) & 0xff);
 					[self write408Register:theRegister value:theResult];
@@ -344,7 +344,7 @@ static NSString *ORIP408ReadMask 		= @"IP408 ReadMask";
 
 @implementation ORIP408Model (private)
 /* read IP408 register */
--(unsigned char) read408Register:(unsigned long) aRegister
+-(unsigned char) read408Register:(uint32_t) aRegister
 {
     unsigned char aValue = 0;
 	id theController;
@@ -359,7 +359,7 @@ static NSString *ORIP408ReadMask 		= @"IP408 ReadMask";
     return aValue;
 }
 
-- (void) write408Register:(unsigned long) aRegister value:(unsigned char) aValue
+- (void) write408Register:(uint32_t) aRegister value:(unsigned char) aValue
 {
     /* setup address for read operation */
 	id theController;

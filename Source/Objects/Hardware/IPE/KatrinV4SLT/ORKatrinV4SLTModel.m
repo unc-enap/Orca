@@ -79,8 +79,8 @@ NSString* ORKatrinV4SLTModelMinimizeDecodingChanged         = @"ORKatrinV4SLTMod
 NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpuLock";
 
 @interface ORKatrinV4SLTModel (private)
-- (unsigned long) read:(unsigned long) address;
-- (void) write:(unsigned long) address value:(unsigned long) aValue;
+- (uint32_t) read:(uint32_t) address;
+- (void) write:(uint32_t) address value:(uint32_t) aValue;
 @end
 
 @implementation ORKatrinV4SLTModel
@@ -206,7 +206,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 {
     if([aNote object] == [self guardian]){
         NSArray* allCards = [[self guardian] children];
-        unsigned long aMask = 0x0;
+        uint32_t aMask = 0x0;
         for(id aCard in allCards){
             if(![[aCard className] isEqualToString:[self className]]){
                 // Energy mode requires pixel bus
@@ -230,17 +230,17 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 {
     //SW Inhibit enabled
     //Run enabled
-    unsigned long defaultMask = (1L<<kCtrlInhEnShift) | kCtrlRunMask;
+    uint32_t defaultMask = (1L<<kCtrlInhEnShift) | kCtrlRunMask;
     [self setControlReg:defaultMask];
 }
 
 
 - (void) runIsAboutToChangeState:(NSNotification*)aNote
 {
-    unsigned long subseconds;
-    unsigned long seconds;
-    unsigned long subsec2;
-    //unsigned long status;
+    uint32_t subseconds;
+    uint32_t seconds;
+    uint32_t subsec2;
+    //uint32_t status;
 
     int state = [[[aNote userInfo] objectForKey:@"State"] intValue];
     BOOL isSubRun = [[[aNote userInfo] objectForKey:@"StartingSubRun"] boolValue];
@@ -326,12 +326,12 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     minimizeDecoding = aState;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4SLTModelMinimizeDecodingChanged object:self];
 }
-- (unsigned long) pixelBusEnableReg
+- (uint32_t) pixelBusEnableReg
 {
     return pixelBusEnableReg;
 }
 
-- (void) setPixelBusEnableReg:(unsigned long)aPixelBusEnableReg
+- (void) setPixelBusEnableReg:(uint32_t)aPixelBusEnableReg
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setPixelBusEnableReg:pixelBusEnableReg];
     pixelBusEnableReg = aPixelBusEnableReg;
@@ -342,14 +342,14 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 
 - (void) enablePixelBus:(int)aStationNumber
 {
-    unsigned long pixelBus = [self pixelBusEnableReg];
+    uint32_t pixelBus = [self pixelBusEnableReg];
     pixelBus = pixelBus | (0x1 << (aStationNumber -1));
     [self setPixelBusEnableReg: pixelBus];
 }
 
 - (void) disablePixelBus:(int)aStationNumber
 {
-    unsigned long pixelBus = [self pixelBusEnableReg];
+    uint32_t pixelBus = [self pixelBusEnableReg];
     pixelBus = pixelBus & ( 0xfffff ^ (0x1 << (aStationNumber -1)));
     [self setPixelBusEnableReg: pixelBus];
 }
@@ -418,24 +418,24 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4SLTModelCountersEnabledChanged object:self];
 }
 
-- (unsigned long) clockTime
+- (uint32_t) clockTime
 {
     return clockTime;
 }
 
-- (void) setClockTime:(unsigned long)aClockTime
+- (void) setClockTime:(uint32_t)aClockTime
 {
     clockTime = aClockTime;
 
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4SLTModelClockTimeChanged object:self];
 }
 
-- (unsigned long long) runTime
+- (uint64_t) runTime
 {
     return runTime;
 }
 
-- (void) setRunTime:(unsigned long long)aRunTime
+- (void) setRunTime:(uint64_t)aRunTime
 {
     runTime = aRunTime;
     if([NSThread isMainThread]){
@@ -443,84 +443,84 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     }
 }
 
-- (unsigned long long) vetoTime
+- (uint64_t) vetoTime
 {
     return vetoTime;
 }
 
-- (void) setVetoTime:(unsigned long long)aVetoTime
+- (void) setVetoTime:(uint64_t)aVetoTime
 {
     vetoTime = aVetoTime;
 
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4SLTModelVetoTimeChanged object:self];
 }
 
-- (unsigned long long) deadTime
+- (uint64_t) deadTime
 {
     return deadTime;
 }
 
-- (void) setDeadTime:(unsigned long long)aDeadTime
+- (void) setDeadTime:(uint64_t)aDeadTime
 {
     deadTime = aDeadTime;
 
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4SLTModelDeadTimeChanged object:self];
 }
 
-- (unsigned long long) lostEvents
+- (uint64_t) lostEvents
 {
     return lostEvents;
 
 }
 
-- (void) setLostEvents:(unsigned long long)aValue
+- (void) setLostEvents:(uint64_t)aValue
 {
     lostEvents = aValue;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4SLTModelLostEventsChanged object:self];
 }
 
-- (unsigned long long) lostFltEvents
+- (uint64_t) lostFltEvents
 {
     return lostFltEvents;
     
 }
 
-- (void) setLostFltEvents:(unsigned long long)aValue
+- (void) setLostFltEvents:(uint64_t)aValue
 {
     lostFltEvents = aValue;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4SLTModelLostFltEventsChanged object:self];
 }
 
-- (unsigned long long) lostFltEventsTr
+- (uint64_t) lostFltEventsTr
 {
     return lostFltEventsTr;
     
 }
 
-- (void) setLostFltEventsTr:(unsigned long long)aValue
+- (void) setLostFltEventsTr:(uint64_t)aValue
 {
     lostFltEventsTr = aValue;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4SLTModelLostFltEventsTrChanged object:self];
 }
 
-- (unsigned long) secondsSet
+- (uint32_t) secondsSet
 {
     return secondsSet;
 }
 
-- (void) setSecondsSet:(unsigned long)aSecondsSet
+- (void) setSecondsSet:(uint32_t)aSecondsSet
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setSecondsSet:secondsSet];
     secondsSet = aSecondsSet;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4SLTModelSecondsSetChanged object:self];
 }
 
-- (unsigned long) statusReg
+- (uint32_t) statusReg
 {
     return statusReg;
 }
 
-- (void) setStatusReg:(unsigned long)aStatusReg
+- (void) setStatusReg:(uint32_t)aStatusReg
 {
     statusReg = aStatusReg;
 
@@ -528,7 +528,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     [self checkPPSStatus];
 }
 
-- (unsigned long) controlReg
+- (uint32_t) controlReg
 {
     return controlReg;
 }
@@ -579,7 +579,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     // This would spoil the readout performance
     
     NSArray* allCards = [[self guardian] children];
-    unsigned long aMask = 0x0;
+    uint32_t aMask = 0x0;
     for(id aCard in allCards){
         if(![[aCard className] isEqualToString:[self className]]){
             int n = (int)[aCard stationNumber]-1;
@@ -624,7 +624,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     }
 }
 
-- (void) setControlReg:(unsigned long)aControlReg
+- (void) setControlReg:(uint32_t)aControlReg
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setControlReg:controlReg];
     controlReg = aControlReg;
@@ -636,11 +636,11 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     
 }
 
-- (unsigned long) projectVersion  { return (hwVersion & kRevisionProject)>>28;}
-- (unsigned long) documentVersion { return (hwVersion & kDocRevision)>>16;}
-- (unsigned long) implementation  { return hwVersion & kImplemention;}
+- (uint32_t) projectVersion  { return (hwVersion & kRevisionProject)>>28;}
+- (uint32_t) documentVersion { return (hwVersion & kDocRevision)>>16;}
+- (uint32_t) implementation  { return hwVersion & kImplemention;}
 
-- (void) setHwVersion:(unsigned long) aVersion
+- (void) setHwVersion:(uint32_t) aVersion
 {
 	hwVersion = aVersion;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4SLTModelHwVersionChanged object:self];	
@@ -725,12 +725,12 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4SLTModelPatternFilePathChanged object:self];
 }
 
-- (unsigned long) interruptMask
+- (uint32_t) interruptMask
 {
     return interruptMask;
 }
 
-- (void) setInterruptMask:(unsigned long)aInterruptMask
+- (void) setInterruptMask:(uint32_t)aInterruptMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setInterruptMask:interruptMask];
     interruptMask = aInterruptMask;
@@ -798,7 +798,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     return [katrinV4SLTRegisters registerName:anIndex];
 }
 
-- (unsigned long) getAddress: (short) anIndex
+- (uint32_t) getAddress: (short) anIndex
 {
     return [katrinV4SLTRegisters address:anIndex];
 }
@@ -824,12 +824,12 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 	 object:self];
 }
 
-- (unsigned long) writeValue
+- (uint32_t) writeValue
 {
     return writeValue;
 }
 
-- (void) setWriteValue:(unsigned long) aValue
+- (void) setWriteValue:(uint32_t) aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setWriteValue:[self writeValue]];
     
@@ -977,8 +977,8 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 		[scanner scanInt:&amplitude];
 		int i=0;
 		int j=0;
-		unsigned long time[256];
-		unsigned long mask[20][256];
+		uint32_t time[256];
+		uint32_t mask[20][256];
 		int len = 0;
 		BOOL status;
 		while(1){
@@ -1069,38 +1069,38 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 }
 */
 
-- (void) writeReg:(int)index value:(unsigned long)aValue
+- (void) writeReg:(int)index value:(uint32_t)aValue
 {
 	[self write: [self getAddress:index] value:aValue];
 }
 
-- (void)		  rawWriteReg:(unsigned long) address  value:(unsigned long)aValue
+- (void)		  rawWriteReg:(uint32_t) address  value:(uint32_t)aValue
 //TODO: FOR TESTING AND DEBUGGING ONLY -tb-
 {
     [self write: address value: aValue];
 }
 
-- (unsigned long) rawReadReg:(unsigned long) address
+- (uint32_t) rawReadReg:(uint32_t) address
 //TODO: FOR TESTING AND DEBUGGING ONLY -tb-
 {
 	return [self read: address];
 
 }
 
-- (unsigned long) readReg:(int) index
+- (uint32_t) readReg:(int) index
 {
 	return [self read: [self getAddress:index]];
 
 }
 
-- (id) writeHardwareRegisterCmd:(unsigned long) regAddress value:(unsigned long) aValue
+- (id) writeHardwareRegisterCmd:(uint32_t) regAddress value:(uint32_t) aValue
 {
 	return [ORPMCReadWriteCommand writeLongBlock:&aValue
 									   atAddress:regAddress
 									  numToWrite:1];
 }
 
-- (id) readHardwareRegisterCmd:(unsigned long) regAddress
+- (id) readHardwareRegisterCmd:(uint32_t) regAddress
 {
 	return [ORPMCReadWriteCommand readLongBlockAtAddress:regAddress
 									  numToRead:1];
@@ -1135,16 +1135,16 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 }
 
 
-- (unsigned long) readStatusReg
+- (uint32_t) readStatusReg
 {
-	unsigned long data = [self readReg:kKatrinV4SLTStatusReg];
+	uint32_t data = [self readReg:kKatrinV4SLTStatusReg];
 	[self setStatusReg:data];
 	return data;
 }
 
 - (void) printStatusReg
 {
-	unsigned long data = [self readStatusReg];
+	uint32_t data = [self readStatusReg];
 	NSFont* aFont = [NSFont userFixedPitchFontOfSize:10];
 	NSLogFont(aFont,@"----Status Register %@ ----\n",[self fullID]);
 	NSLogFont(aFont,@"WatchDogError : %@\n",IsBitSet(data,kStatusWDog)?@"YES":@"NO");
@@ -1156,9 +1156,9 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 	NSLogFont(aFont,@"FanError      : %@\n",IsBitSet(data,kStatusFanErr)?@"YES":@"NO");
 }
 
-- (long) getSBCCodeVersion
+- (int32_t) getSBCCodeVersion
 {
-	long theVersion = 0;
+	int32_t theVersion = 0;
 	if(![pmcLink isConnected]){
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];
 	}
@@ -1170,9 +1170,9 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 	return theVersion;
 }
 
-- (long) getFdhwlibVersion
+- (int32_t) getFdhwlibVersion
 {
-	long theVersion = 0;
+	int32_t theVersion = 0;
 	if(![pmcLink isConnected]){
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];
 	}
@@ -1182,9 +1182,9 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 	return theVersion;
 }
 
-- (long) getSltPciDriverVersion
+- (int32_t) getSltPciDriverVersion
 {
-	long theVersion = 0;
+	int32_t theVersion = 0;
 	if(![pmcLink isConnected]){
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];
 	}
@@ -1194,9 +1194,9 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 	return theVersion;
 }
 
-- (long) getSltkGetIsLinkedWithPCIDMALib  //TODO: write a all purpose method for generalRead!!! -tb-
+- (int32_t) getSltkGetIsLinkedWithPCIDMALib  //TODO: write a all purpose method for generalRead!!! -tb-
 {
-	long theVersion = 0;
+	int32_t theVersion = 0;
 	if(![pmcLink isConnected]){
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];
 	}
@@ -1208,7 +1208,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 
 - (void) setHostTimeToFLTsAndSLT
 {
-    unsigned long args[2];
+    uint32_t args[2];
 	args[0] = 0; //flags
         if(secondsSetInitWithHost)  args[0] |= kSecondsSetInitWithHostFlag;
         if(secondsSetSendToFLTs)    args[0] |= kSecondsSetSendToFLTsFlag;
@@ -1217,29 +1217,29 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];
 	}
 	else {
-		[pmcLink writeGeneral:(long*)&args operation:kSetHostTimeToFLTsAndSLT numToWrite:2];
+		[pmcLink writeGeneral:(int32_t*)&args operation:kSetHostTimeToFLTsAndSLT numToWrite:2];
 	}
 }
 
-- (unsigned long long) readBoardID
+- (uint64_t) readBoardID
 {
-	unsigned long low = [self readReg:kKatrinV4SLTBoardIDLoReg];
-	unsigned long hi  = [self readReg:kKatrinV4SLTBoardIDHiReg];
+	uint32_t low = [self readReg:kKatrinV4SLTBoardIDLoReg];
+	uint32_t hi  = [self readReg:kKatrinV4SLTBoardIDHiReg];
 	BOOL crc =(hi & 0x80000000)==0x80000000;
 	if(crc){
-		return (unsigned long long)(hi & 0xffff)<<32 | low;
+		return (uint64_t)(hi & 0xffff)<<32 | low;
 	}
 	else return 0;
 }
 
-- (unsigned long) readControlReg
+- (uint32_t) readControlReg
 {
 	return [self readReg:kKatrinV4SLTControlReg];
 }
 
 - (void) printControlReg
 {
-	unsigned long data = [self readControlReg];
+	uint32_t data = [self readControlReg];
 	NSFont* aFont = [NSFont userFixedPitchFontOfSize:10];
 	NSLogFont(aFont,@"----Control Register %@ ----\n",[self fullID]);
 	NSLogFont(aFont,@"Trigger Enable : 0x%02x\n",data & kCtrlTrgEnMask);
@@ -1260,7 +1260,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 
 - (void) writeControlRegRunFlagOn:(BOOL) aState
 {
-    unsigned long controlRegValue = [self readControlReg];
+    uint32_t controlRegValue = [self readControlReg];
     if(aState) controlRegValue |= kCtrlRunMask;
     else       controlRegValue &= ~kCtrlRunMask;
 	[self writeReg:kKatrinV4SLTControlReg value:controlRegValue];
@@ -1275,7 +1275,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 
 - (void) readPixelBusEnableReg
 {
-    unsigned long val;
+    uint32_t val;
 	val = [self readReg:kKatrinV4SLTPixelBusEnableReg];
 	[self setPixelBusEnableReg:val];	
 }
@@ -1284,35 +1284,35 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 //for test purposes: read a single event from event FIFO -tb-
 - (void) readSLTEventFifoSingleEvent
 {
-    unsigned long mode = [self readReg:kKatrinV4SLTFIFOModeReg];
+    uint32_t mode = [self readReg:kKatrinV4SLTFIFOModeReg];
     NSLog(@"FIFO entries: %i events (words: %i) (reg 0x%08x) \n",(mode & 0x3fffff) / 6, mode & 0x3fffff, mode);//DEBUG -tb-
     if(mode & 0x3fffff){
-    	unsigned long f1 = [self readReg:kKatrinV4SLTDataFIFOReg];
-	    unsigned long f2 = [self readReg:kKatrinV4SLTDataFIFOReg];
-	    unsigned long f3 = [self readReg:kKatrinV4SLTDataFIFOReg];
-        unsigned long f4 = [self readReg:kKatrinV4SLTDataFIFOReg];
-        unsigned long f5 = [self readReg:kKatrinV4SLTDataFIFOReg];
-        unsigned long f6 = [self readReg:kKatrinV4SLTDataFIFOReg];
+    	uint32_t f1 = [self readReg:kKatrinV4SLTDataFIFOReg];
+	    uint32_t f2 = [self readReg:kKatrinV4SLTDataFIFOReg];
+	    uint32_t f3 = [self readReg:kKatrinV4SLTDataFIFOReg];
+        uint32_t f4 = [self readReg:kKatrinV4SLTDataFIFOReg];
+        uint32_t f5 = [self readReg:kKatrinV4SLTDataFIFOReg];
+        uint32_t f6 = [self readReg:kKatrinV4SLTDataFIFOReg];
     
         NSLog(@"FIFO entry: 0x%08x, 0x%08x, 0x%08x, 0x%08x   \n",f1,f2,f3,f4,f5,f6 );//DEBUG -tb-
         
-        unsigned long p       = (f1 >> 28) & 0x1;
-        unsigned long subsec  = f1  & 0x1ffffff;
-        unsigned long sec     = f2;
-        unsigned long flt     = (f3 >> 24) & 0x1f;
-        unsigned long chan    = (f3 >> 19) & 0x1f;
-        unsigned long multiplicity  = (f3 >> 14) & 0x1f;
-        unsigned long evID    = f3 & 0x7ff;
-        unsigned long tPeak  = f4  & 0x1ff;
-        unsigned long aPeak  = f4  & 0x1ff;
-        unsigned long tValley  = f5  & 0xfff;
-        unsigned long aValley  = f4  & 0xfff;
+        uint32_t p       = (f1 >> 28) & 0x1;
+        uint32_t subsec  = f1  & 0x1ffffff;
+        uint32_t sec     = f2;
+        uint32_t flt     = (f3 >> 24) & 0x1f;
+        uint32_t chan    = (f3 >> 19) & 0x1f;
+        uint32_t multiplicity  = (f3 >> 14) & 0x1f;
+        uint32_t evID    = f3 & 0x7ff;
+        uint32_t tPeak  = f4  & 0x1ff;
+        uint32_t aPeak  = f4  & 0x1ff;
+        uint32_t tValley  = f5  & 0xfff;
+        uint32_t aValley  = f4  & 0xfff;
 
-        unsigned long energy  = f6  & 0xfffff;
+        uint32_t energy  = f6  & 0xfffff;
         
-        NSLog(@"FIFO entry:  flt:    %lu  chan: %lu    energy: %lu    sec: %lu    subsec: %lu\n",flt,chan,energy,sec,subsec );
-        NSLog(@"FIFO entry:  multi.: %lu   p: %lu    evID: %lu\n",multiplicity,p,evID );
-        NSLog(@"FIFO entry:  tPeak:  %lu  tValley: %lu    aPeak: %lu    aValley: %lu\n",tPeak,tValley,aPeak,aValley );
+        NSLog(@"FIFO entry:  flt:    %u  chan: %u    energy: %u    sec: %u    subsec: %u\n",flt,chan,energy,sec,subsec );
+        NSLog(@"FIFO entry:  multi.: %u   p: %u    evID: %u\n",multiplicity,p,evID );
+        NSLog(@"FIFO entry:  tPeak:  %u  tValley: %u    aPeak: %u    aValley: %u\n",tPeak,tValley,aPeak,aValley );
         NSLog(@"-------------------------------------------------------------\n" );
 
     }
@@ -1352,7 +1352,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 
 - (void) printInterrupt:(int)regIndex
 {
-	unsigned long data = [self readReg:regIndex];
+	uint32_t data = [self readReg:regIndex];
 	NSFont* aFont = [NSFont userFixedPitchFontOfSize:10];
 	if(!data)NSLogFont(aFont,@"Interrupt Mask is Clear (No interrupts %@)\n",regIndex==kKatrinV4SLTInterruptReguestReg?@"Requested":@"Enabled");
 	else {
@@ -1378,9 +1378,9 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 	}
 }
 
-- (unsigned long) readHwVersion
+- (uint32_t) readHwVersion
 {
-	unsigned long value=0;
+	uint32_t value=0;
 	@try {
         value = [self readReg: kKatrinV4SLTHWRevisionReg];
 		[self setHwVersion: value];	
@@ -1389,17 +1389,17 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 	}
 	return value;
 }
-- (unsigned long long) readLostEvents
+- (uint64_t) readLostEvents
 {
-    unsigned long high = [self readReg:kKatrinV4SLTLostEventsCountHiReg];
-    unsigned long low  = [self readReg:kKatrinV4SLTLostEventsCountLoReg];
-    [self setLostEvents:((unsigned long long)high << 32) | low];
+    uint32_t high = [self readReg:kKatrinV4SLTLostEventsCountHiReg];
+    uint32_t low  = [self readReg:kKatrinV4SLTLostEventsCountLoReg];
+    [self setLostEvents:((uint64_t)high << 32) | low];
     return lostEvents;
 }
 
-- (unsigned long long) readLostFltEvents
+- (uint64_t) readLostFltEvents
 {
-    unsigned long long sum = 0;
+    uint64_t sum = 0;
     for(id flt in dataTakers){
         sum += [flt readLostEvents];
     }
@@ -1408,9 +1408,9 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     return(sum);
 }
 
-- (unsigned long long) readLostFltEventsTr
+- (uint64_t) readLostFltEventsTr
 {
-    unsigned long long sum = 0;
+    uint64_t sum = 0;
     for(id flt in dataTakers){
         sum += [flt readLostEventsTr];
     }
@@ -1419,27 +1419,27 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     return(sum);
 }
 
-- (unsigned long long) readDeadTime
+- (uint64_t) readDeadTime
 {
-	unsigned long low  = [self readReg:kKatrinV4SLTDeadTimeCounterLoReg];
-	unsigned long high = [self readReg:kKatrinV4SLTDeadTimeCounterHiReg];
-	[self setDeadTime:((unsigned long long)high << 32) | low];
+	uint32_t low  = [self readReg:kKatrinV4SLTDeadTimeCounterLoReg];
+	uint32_t high = [self readReg:kKatrinV4SLTDeadTimeCounterHiReg];
+	[self setDeadTime:((uint64_t)high << 32) | low];
 	return deadTime;
 }
 
-- (unsigned long long) readVetoTime
+- (uint64_t) readVetoTime
 {
-	unsigned long low  = [self readReg:kKatrinV4SLTVetoCounterLoReg];
-	unsigned long high = [self readReg:kKatrinV4SLTVetoCounterHiReg];
-	[self setVetoTime:((unsigned long long)high << 32) | low];
+	uint32_t low  = [self readReg:kKatrinV4SLTVetoCounterLoReg];
+	uint32_t high = [self readReg:kKatrinV4SLTVetoCounterHiReg];
+	[self setVetoTime:((uint64_t)high << 32) | low];
 	return vetoTime;
 }
 
-- (unsigned long long) readRunTime
+- (uint64_t) readRunTime
 {
-	unsigned long long low  = [self readReg:kKatrinV4SLTRunCounterLoReg];
-	unsigned long long high = [self readReg:kKatrinV4SLTRunCounterHiReg];
-	unsigned long long theTime = ((unsigned long long)high << 32) | low;
+	uint64_t low  = [self readReg:kKatrinV4SLTRunCounterLoReg];
+	uint64_t high = [self readReg:kKatrinV4SLTRunCounterHiReg];
+	uint64_t theTime = ((uint64_t)high << 32) | low;
 	[self setRunTime:theTime];
 	return theTime;
 }
@@ -1453,37 +1453,37 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 - (double) readTime
 {
     double time; // in secs
-    unsigned long subsec = [self readSubSecondsCounter];
-    unsigned long sec = [self readSecondsCounter];
+    uint32_t subsec = [self readSubSecondsCounter];
+    uint32_t sec = [self readSecondsCounter];
     
     time = sec + ((double) ((subsec  >> 11) & 0x3fff)) / 10000;
 
     return (time);
 }
 
-- (unsigned long) readSecondsCounter
+- (uint32_t) readSecondsCounter
 {
 	return [self readReg:kKatrinV4SLTSecondCounterReg];
 }
 
-- (unsigned long) readSubSecondsCounter
+- (uint32_t) readSubSecondsCounter
 {
 	return [self readReg:kKatrinV4SLTSubSecondCounterReg];
 }
 
-- (unsigned long) getSeconds
+- (uint32_t) getSeconds
 {
 	[self readSubSecondsCounter]; //must read the sub seconds to load the seconds register
 	[self setClockTime: [self readSecondsCounter]];
 	return clockTime;
 }
 
-- (unsigned long) getRunStartSecond
+- (uint32_t) getRunStartSecond
 {
     return runStartSec;
 }
 
-- (unsigned long) getRunEndSecond
+- (uint32_t) getRunEndSecond
 {
     return sltSecondRunStop;
 }
@@ -1519,10 +1519,10 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 //	triggerSource = 0x1; //sw trigger only
 //	inhibitSource = 0x3; 
 //	[self writePageManagerReset];
-	//unsigned long long p1 = ((unsigned long long)[self readReg:kPageStatusHigh]<<32) | [self readReg:kPageStatusLow];
+	//uint64_t p1 = ((uint64_t)[self readReg:kPageStatusHigh]<<32) | [self readReg:kPageStatusLow];
 	//[self writeReg:kSltSwRelInhibit value:0];
 	//int i = 0;
-	//unsigned long lTmp;
+	//uint32_t lTmp;
     //do {
 	//	lTmp = [self readReg:kSltStatusReg];
 		//NSLog(@"waiting for inhibit %x i=%d\n", lTmp, i);
@@ -1535,7 +1535,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 		//[NSException raise:@"SLT error" format:@"Release inhibit failed"];
 	//}
 /*	
-	unsigned long long p2  = ((unsigned long long)[self readReg:kPageStatusHigh]<<32) | [self readReg:kPageStatusLow];
+	uint64_t p2  = ((uint64_t)[self readReg:kPageStatusHigh]<<32) | [self readReg:kPageStatusLow];
 	if(p1 == p2) NSLog (@"No software trigger\n");
 	[self writeReg:kSltSwSetInhibit value:0];
  */
@@ -1734,14 +1734,14 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     return dataDictionary;
 }
 
-- (unsigned long) eventDataId                       { return eventDataId; }
-- (unsigned long) multiplicityId                    { return multiplicityId; }
-- (unsigned long) eventFifoId                       { return eventFifoId; }
-- (unsigned long) energyId                          { return energyId; }
-- (void) setEventDataId:    (unsigned long) aDataId { eventDataId = aDataId; }
-- (void) setMultiplicityId: (unsigned long) aDataId { multiplicityId = aDataId; }
-- (void) setEventFifoId:    (unsigned long) aDataId { eventFifoId = aDataId; }
-- (void) setEnergyId:       (unsigned long) aDataId { energyId = aDataId; }
+- (uint32_t) eventDataId                       { return eventDataId; }
+- (uint32_t) multiplicityId                    { return multiplicityId; }
+- (uint32_t) eventFifoId                       { return eventFifoId; }
+- (uint32_t) energyId                          { return energyId; }
+- (void) setEventDataId:    (uint32_t) aDataId { eventDataId = aDataId; }
+- (void) setMultiplicityId: (uint32_t) aDataId { multiplicityId = aDataId; }
+- (void) setEventFifoId:    (uint32_t) aDataId { eventFifoId = aDataId; }
+- (void) setEnergyId:       (uint32_t) aDataId { energyId = aDataId; }
 
 - (void) setDataIds:(id)assigner
 {
@@ -1772,7 +1772,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     //this is accessing the hardware and might fail
 	@try {
 	    [objDictionary setObject:[NSNumber numberWithUnsignedLong:[self readHwVersion]]           forKey:@"FPGAVersion"];
-	    [objDictionary setObject:[NSString stringWithFormat:@"0x%08lx",[self readHwVersion]]      forKey:@"FPGAVersionString"];
+	    [objDictionary setObject:[NSString stringWithFormat:@"0x%08x",[self readHwVersion]]      forKey:@"FPGAVersionString"];
 	    [objDictionary setObject:[NSNumber numberWithLong:[self getSBCCodeVersion]]               forKey:@"SBCCodeVersion"];
 	    [objDictionary setObject:[NSNumber numberWithLong:[self getSltPciDriverVersion]]          forKey:@"SLTDriverVersion"];
 	    [objDictionary setObject:[NSNumber numberWithLong:[self getSltkGetIsLinkedWithPCIDMALib]] forKey:@"LinkedWithDMALib"];
@@ -1786,9 +1786,9 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 #pragma mark •••Data Taker
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
-    unsigned long sltsubsecreg;
-    unsigned long sltsec;
-    unsigned long sltsubsec2;
+    uint32_t sltsubsecreg;
+    uint32_t sltsec;
+    uint32_t sltsubsec2;
     double sltTime;
     
     waitForSubRunStart = false;
@@ -1832,7 +1832,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     [self writeSetInhibit];
 
     // Wait for inhibit; changes state with the next second strobe
-    unsigned long lStatus;
+    uint32_t lStatus;
     int i = 0;
     do {
         lStatus = [self readStatusReg];
@@ -1887,7 +1887,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 	[self load_HW_Config];
 	[pmcLink runTaskStarted:aDataPacket userInfo:userInfo];//method of SBC_Link.m: init alarm handling; send kSBC_StartRun to SBC/PrPMC -tb-
 
-    unsigned long long runcount = [self readRunTime];
+    uint64_t runcount = [self readRunTime];
     [self shipSltEvent:kRunCounterType withType:kStartRunType eventCt:0 high: (runcount>>32)&0xffffffff low:(runcount)&0xffffffff ];
     
     // Check finally, if the inhibit soiurce has been deactivated during config upload
@@ -1935,9 +1935,9 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
     
-    unsigned long subseconds;
-    unsigned long seconds;
-    //unsigned long subsec2;
+    uint32_t subseconds;
+    uint32_t seconds;
+    //uint32_t subsec2;
     double sltTime;
     
     //event readout controlled by the SLT cpu now. ORCA reads out
@@ -2008,9 +2008,9 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 
 - (void) runIsStopping:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
-    unsigned long sltsubsecreg;
-    unsigned long sltsec;
-    unsigned long sltsubsec2;
+    uint32_t sltsubsecreg;
+    uint32_t sltsec;
+    uint32_t sltsubsec2;
     
     @try {
         sltsubsecreg  = [self readReg:kKatrinV4SLTSubSecondCounterReg];
@@ -2029,7 +2029,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 
 - (BOOL) doneTakingData
 {
-    unsigned long lStatus;
+    uint32_t lStatus;
     double sltTime;
     
     lStatus = [self readStatusReg];
@@ -2067,9 +2067,9 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
-    unsigned long sltsubsecreg;
-    unsigned long sltsec;
-    unsigned long sltsubsec2;
+    uint32_t sltsubsecreg;
+    uint32_t sltsec;
+    uint32_t sltsubsec2;
     
     for(id obj in dataTakers){
 		[obj runTaskStopped:aDataPacket userInfo:userInfo];
@@ -2083,7 +2083,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     // Ship run counter
     [self shipSltEvent:kSecondsCounterType withType:kStopRunType eventCt:0 high:sltSecondRunStop low:0 ];
     
-    unsigned long long runcount = [self readRunTime];
+    uint64_t runcount = [self readRunTime];
     [self shipSltEvent:kRunCounterType withType:kStopRunType eventCt:0 high: (runcount>>32)&0xffffffff low:(runcount)&0xffffffff ];
     
     // LShip lost event counters
@@ -2125,13 +2125,13 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 
 - (void) dumpSltSecondCounter:(NSString*)text
 {
-	unsigned long subseconds = [self readSubSecondsCounter];
-	unsigned long seconds = [self readSecondsCounter];
+	uint32_t subseconds = [self readSubSecondsCounter];
+	uint32_t seconds = [self readSecondsCounter];
     if(text) NSLog(@"%@::%@   %@   sec:%i  subsec:%i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),text,seconds,subseconds);//DEBUG -tb-
     else     NSLog(@"%@::%@    sec:%i  subsec:%i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),seconds,subseconds);//DEBUG -tb-
 }
 
-- (void) shipSecondCounter:(unsigned char)aType sec: (unsigned long ) seconds 
+- (void) shipSecondCounter:(unsigned char)aType sec: (uint32_t ) seconds 
 {
    // const char *sType[] = {"", "run start", "run stop", "subrun start", "subrun stop"};
 
@@ -2144,9 +2144,9 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 	//aType = 1 start run, =2 stop run, = 3 start subrun, =4 stop subrun, see #defines in ORKatrinV4SLTDefs.h -tb-
     const char *sType[] = {"", "run start", "run stop", "subrun start", "subrun stop"};
     
-	unsigned long subseconds = [self readSubSecondsCounter];
-	unsigned long seconds = [self readSecondsCounter];
-    unsigned long subsec2 = (subseconds >> 11) & 0x3fff;
+	uint32_t subseconds = [self readSubSecondsCounter];
+	uint32_t seconds = [self readSecondsCounter];
+    uint32_t subsec2 = (subseconds >> 11) & 0x3fff;
     NSLog(@"SLT %i.%03i - shipped second counter %s at %i\n", seconds, subsec2/10, sType[aType%5], seconds);
 
     
@@ -2160,21 +2160,21 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 
 - (void) shipSltRunCounter:(unsigned char)aType
 {
-		unsigned long long runcount = [self readRunTime];
+		uint64_t runcount = [self readRunTime];
 		[self shipSltEvent:kRunCounterType withType:aType eventCt:0 high: (runcount>>32)&0xffffffff low:(runcount)&0xffffffff ];
 }
 
-- (void) shipSltEvent:(unsigned char)aCounterType withType:(unsigned char)aType eventCt:(unsigned long)c high:(unsigned long)h low:(unsigned long)l
+- (void) shipSltEvent:(unsigned char)aCounterType withType:(unsigned char)aType eventCt:(uint32_t)c high:(uint32_t)h low:(uint32_t)l
 {
-	unsigned long location = (([self crateNumber]&0xf)<<21) | ([self stationNumber]& 0x0000001f)<<16;
-	unsigned long data[5];
+	uint32_t location = (([self crateNumber]&0xf)<<21) | ([self stationNumber]& 0x0000001f)<<16;
+	uint32_t data[5];
 			data[0] = eventDataId | 5; 
 			data[1] = location | ((aCounterType & 0xf)<<4) | (aType & 0xf);
 			data[2] = c;	
 			data[3] = h;	
 			data[4] = l;
 			[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-																object:[NSData dataWithBytes:data length:sizeof(long)*(5)]];
+																object:[NSData dataWithBytes:data length:sizeof(int32_t)*(5)]];
 }
 
 - (void) saveReadOutList:(NSFileHandle*)aFile
@@ -2252,7 +2252,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 	configStruct->card_info[index].add_mod		= 0;		//not needed for this HW
     
     //"first time" flag (needed for histogram mode)
-    unsigned long            runFlagsMask = 0;
+    uint32_t            runFlagsMask = 0;
     if (secondsSetSendToFLTs) runFlagsMask |= kSecondsSetSendToFLTsFlag;
     if (activateFltReadout)   runFlagsMask |= kActivateFltReadoutFlag;
 	configStruct->card_info[index].deviceSpecificData[3] = (uint32_t)runFlagsMask;
@@ -2282,19 +2282,19 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 @end
 
 @implementation ORKatrinV4SLTModel (private)
-- (unsigned long) read:(unsigned long) address
+- (uint32_t) read:(uint32_t) address
 {
 	if(![pmcLink isConnected]){
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];
 	}
-	unsigned long theData;
+	uint32_t theData;
 	[pmcLink readLongBlockPmc:&theData
 					  atAddress:address
 					  numToRead: 1];
 	return theData;
 }
 
-- (void) write:(unsigned long) address value:(unsigned long) aValue
+- (void) write:(uint32_t) address value:(uint32_t) aValue
 {
 	if(![pmcLink isConnected]){
 		[NSException raise:@"Not Connected" format:@"Socket not connected."];

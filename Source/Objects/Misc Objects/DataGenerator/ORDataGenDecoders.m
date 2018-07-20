@@ -54,9 +54,9 @@ static NSString* kCardKey[8] = {
     else return [NSString stringWithFormat:@"Card %d",aCard];			
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
+    uint32_t* ptr = (uint32_t*)someData;
 	unsigned short card  = ShiftAndExtract(ptr[1],16,0xf);
 	unsigned short chan  = ShiftAndExtract(ptr[1],12,0xf);
 	unsigned short value = ShiftAndExtract(ptr[1],0,0xfff);
@@ -69,13 +69,13 @@ static NSString* kCardKey[8] = {
     return ExtractLength(ptr[0]); //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"Data Gen Record\n\n";
     
-    NSString* value  = [NSString stringWithFormat:@"Value = %lu\n",ShiftAndExtract(ptr[1],0,0xfff)];
-    NSString* card  = [NSString stringWithFormat: @"Card  = %lu\n",ShiftAndExtract(ptr[1],16,0xf)];
-    NSString* chan  = [NSString stringWithFormat: @"Chan  = %lu\n",ShiftAndExtract(ptr[1],12,0xf)];    
+    NSString* value  = [NSString stringWithFormat:@"Value = %u\n",ShiftAndExtract(ptr[1],0,0xfff)];
+    NSString* card  = [NSString stringWithFormat: @"Card  = %u\n",ShiftAndExtract(ptr[1],16,0xf)];
+    NSString* chan  = [NSString stringWithFormat: @"Chan  = %u\n",ShiftAndExtract(ptr[1],12,0xf)];    
 
     return [NSString stringWithFormat:@"%@%@%@%@",title,value,card,chan];               
 }
@@ -97,10 +97,10 @@ static NSString* kCardKey[8] = {
     else return [NSString stringWithFormat:@"Card %d",aCard];			
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-    unsigned long length = 3;
+    uint32_t* ptr = (uint32_t*)someData;
+    uint32_t length = 3;
 
 	[aDataSet histogram2DX:ShiftAndExtract(ptr[1],0,0xfff) y:ShiftAndExtract(ptr[2],0,0xfff) size:256  sender:self  withKeys:@"DataGen2D",
 	 kCardKey[ShiftAndExtract(ptr[1],16,0xf)],
@@ -129,14 +129,14 @@ static NSString* kCardKey[8] = {
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"Data Gen Record (2D)\n\n";
  
-	NSString* valueX  = [NSString stringWithFormat:@"ValueX = %lu\n",ShiftAndExtract(ptr[1],0,0xfff)];
-    NSString* valueY  = [NSString stringWithFormat:@"ValueY = %lu\n",ShiftAndExtract(ptr[2],0,0xfff)];
-    NSString* card    = [NSString stringWithFormat: @"Card  = %lu\n",ShiftAndExtract(ptr[1],16,0xf)];
-    NSString* chan    = [NSString stringWithFormat: @"Chan  = %lu\n",ShiftAndExtract(ptr[1],12,0xf)];    
+	NSString* valueX  = [NSString stringWithFormat:@"ValueX = %u\n",ShiftAndExtract(ptr[1],0,0xfff)];
+    NSString* valueY  = [NSString stringWithFormat:@"ValueY = %u\n",ShiftAndExtract(ptr[2],0,0xfff)];
+    NSString* card    = [NSString stringWithFormat: @"Card  = %u\n",ShiftAndExtract(ptr[1],16,0xf)];
+    NSString* chan    = [NSString stringWithFormat: @"Chan  = %u\n",ShiftAndExtract(ptr[1],12,0xf)];    
 
     return [NSString stringWithFormat:@"%@%@%@%@%@",title,valueX,valueY,card,chan];               
 }
@@ -159,14 +159,14 @@ static NSString* kCardKey[8] = {
     else return [NSString stringWithFormat:@"Card %d",aCard];			
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-    unsigned long length = ExtractLength(*ptr);
-	NSData* data = [NSData dataWithBytes:&ptr[2] length:(length-2)*sizeof(long)];
+    uint32_t* ptr = (uint32_t*)someData;
+    uint32_t length = ExtractLength(*ptr);
+	NSData* data = [NSData dataWithBytes:&ptr[2] length:(length-2)*sizeof(int32_t)];
     [aDataSet loadWaveform:data 
 					offset:0 
-				  unitSize:sizeof(long) 
+				  unitSize:sizeof(int32_t) 
 				startIndex:0 
 					  mask:0x0fffffff 
 			   specialBits:0xf0000000
@@ -180,12 +180,12 @@ static NSString* kCardKey[8] = {
 	return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"Data Gen Record (Waveform)\n\n";
     
-    NSString* card  = [NSString stringWithFormat: @"Card  = %lu\n",ShiftAndExtract(ptr[1],16,0xf)];
-    NSString* chan  = [NSString stringWithFormat: @"Chan  = %lu\n",ShiftAndExtract(ptr[1],12,0xf)];    
+    NSString* card  = [NSString stringWithFormat: @"Card  = %u\n",ShiftAndExtract(ptr[1],16,0xf)];
+    NSString* chan  = [NSString stringWithFormat: @"Chan  = %u\n",ShiftAndExtract(ptr[1],12,0xf)];    
 
     return [NSString stringWithFormat:@"%@%@%@",title,card,chan];               
 }
@@ -193,12 +193,12 @@ static NSString* kCardKey[8] = {
 @end
 
 @implementation ORDataGenDecoderForTimeSeries
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-	unsigned long *dataPtr = (unsigned long*)someData;
+	uint32_t *dataPtr = (uint32_t*)someData;
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theTemp;
 	theTemp.asLong = dataPtr[2];									//encoded as float, use union to convert
 	[aDataSet loadTimeSeries:theTemp.asFloat										
@@ -210,13 +210,13 @@ static NSString* kCardKey[8] = {
 	return ExtractLength(dataPtr[0]);
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr
 {
     NSString* title= @"DataGen\n\n";
     NSString* theString =  [NSString stringWithFormat:@"%@\n",title];               
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theData;
 	
 	theData.asLong = dataPtr[2];
@@ -230,15 +230,15 @@ static NSString* kCardKey[8] = {
 @end
 
 @implementation ORDataGenDecoderForBurstData
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-	unsigned long *dataPtr = (unsigned long*)someData;
+	uint32_t *dataPtr = (uint32_t*)someData;
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theTemp;
 	theTemp.asLong = dataPtr[2];									//encoded as float, use union to convert
-    unsigned long* ptr = (unsigned long*)someData;
+    uint32_t* ptr = (uint32_t*)someData;
 	unsigned short card  = ShiftAndExtract(ptr[1],16,0xf);
 	unsigned short chan  = ShiftAndExtract(ptr[1],12,0xf);
 	unsigned short value = ShiftAndExtract(ptr[1],0,0xfff);
@@ -250,7 +250,7 @@ static NSString* kCardKey[8] = {
 	return ExtractLength(dataPtr[0]);
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr
 {
     NSString* title		= @"DataGenBurst\n\n";
     NSString* theString =  [NSString stringWithFormat:@"%@\n",title];               
@@ -261,7 +261,7 @@ static NSString* kCardKey[8] = {
 	
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theData;
 	
 	theData.asLong = dataPtr[2];

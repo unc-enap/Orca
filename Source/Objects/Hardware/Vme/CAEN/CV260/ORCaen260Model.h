@@ -71,7 +71,7 @@ enum {
     @private
 		BOOL			pollRunning;
         unsigned short	enabledMask;
-		unsigned long	scalerValue[kNumCaen260Channels];
+		uint32_t	scalerValue[kNumCaen260Channels];
 		NSTimeInterval	pollingState;
 		BOOL			shipRecords;
 		time_t			lastReadTime;
@@ -80,7 +80,7 @@ enum {
 		BOOL			scheduledForUpdate;
 		BOOL			shipOnChange;
 		int				channelForTriggeredShip;
-		unsigned long	lastScalerValue;
+		uint32_t	lastScalerValue;
 }
 
 #pragma mark •••Initialization
@@ -98,8 +98,8 @@ enum {
 - (void) setAutoInhibit:(BOOL)aAutoInhibit;
 - (BOOL) shipRecords;
 - (void) setShipRecords:(BOOL)aShipRecords;
-- (unsigned long) scalerValue:(int)index;
-- (void) setScalerValue:(unsigned long)aValue index:(int)index;
+- (uint32_t) scalerValue:(int)index;
+- (void) setScalerValue:(uint32_t)aValue index:(int)index;
 - (unsigned short) enabledMask;
 - (void) setEnabledMask:(unsigned short)aEnabledMask;
 - (void) setPollingState:(NSTimeInterval)aState;
@@ -124,8 +124,8 @@ enum {
 - (int)  load_HW_Config_Structure:(SBC_crate_config*)configStruct index:(int)index;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherObj;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) appendEventDictionary:(NSMutableDictionary*)anEventDictionary topLevel:(NSMutableDictionary*)topLevel;
 - (void) reset;
 - (void) runTaskStarted:(ORDataPacket*) aDataPacket userInfo:(NSDictionary*)userInfo;

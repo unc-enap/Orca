@@ -47,9 +47,9 @@
 }
 
 - (void) addMemorySection:(NSString*)aName 
-			  baseAddress:(unsigned long)anAddress 
+			  baseAddress:(uint32_t)anAddress 
 		   startingOffset:(int)anOffset 
-			  sizeInBytes:(unsigned long)aSize
+			  sizeInBytes:(uint32_t)aSize
 {
 	if(!elements)elements = [[NSMutableArray array] retain];
 	[elements addObject:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -74,7 +74,7 @@
 	return [[elements objectAtIndex:index] objectForKey:@"name"];
 }
 
-- (unsigned long)  baseAddress:(int)index
+- (uint32_t)  baseAddress:(int)index
 {
 	return [[[elements objectAtIndex:index] objectForKey:@"baseAddress"] longValue];
 }
@@ -84,7 +84,7 @@
 	return [[[elements objectAtIndex:index] objectForKey:@"offset"] intValue];
 }
 
-- (unsigned long)  sizeInBytes:(int)index
+- (uint32_t)  sizeInBytes:(int)index
 {
 	return [[[elements objectAtIndex:index] objectForKey:@"size"] longValue];
 }

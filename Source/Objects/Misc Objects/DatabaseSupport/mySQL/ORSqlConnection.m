@@ -223,9 +223,9 @@
     return theResult ;
 }
 
-- (unsigned long long) affectedRows
+- (uint64_t) affectedRows
 {
-	unsigned long long num = 0;
+	uint64_t num = 0;
 	@synchronized(self){
 		if (mConnection) {
 			num = mysql_affected_rows(mConnection);
@@ -235,12 +235,12 @@
 }
 
 
-- (unsigned long long) insertId
+- (uint64_t) insertId
 /*"
  If the last query was an insert in a table having a autoindex column, returns the id (autoindexed field) of the last row inserted.
  "*/
 {
-	unsigned long long num = 0;
+	uint64_t num = 0;
 	@synchronized(self){
 		if (mConnection) {
 			num = mysql_insert_id(mConnection);
@@ -386,7 +386,7 @@
  }
  */
 
-- (BOOL) killProcess:(unsigned long) pid
+- (BOOL) killProcess:(uint32_t) pid
 {	
     int theErrorCode = 0; 
 	@synchronized(self){
@@ -412,7 +412,7 @@
     
     if ([theString length]==0) return @"";
     
-    unsigned long theLength = strlen(theCStringBuffer);
+    uint32_t theLength = strlen(theCStringBuffer);
     char* theCEscBuffer = (char *)calloc(sizeof(char),(theLength * 2) + 1);
     mysql_real_escape_string(mConnection, theCEscBuffer, theCStringBuffer, theLength);
     NSString*  theReturn = [NSString stringWithCString:theCEscBuffer encoding:NSISOLatin1StringEncoding];

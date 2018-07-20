@@ -54,31 +54,31 @@ static NSString* kIPSlotKey[4] = {
 	else return [NSString stringWithFormat:@"IP %2d",aSlot];		
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr	 = (unsigned long*)someData;
-    unsigned long length = ExtractLength(*ptr);
+    uint32_t* ptr	 = (uint32_t*)someData;
+    uint32_t length = ExtractLength(*ptr);
 	//we don't do anything with these values (at least for now)
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"IP408 Value Record\n\n";
 
 	ptr++;
-    NSString* crate			= [NSString stringWithFormat:@"Crate = %lu\n",(*ptr&0x01e00000)>>21];
-    NSString* card			= [NSString stringWithFormat:@"Card  = %lu\n",(*ptr&0x001f0000)>>16];
+    NSString* crate			= [NSString stringWithFormat:@"Crate = %u\n",(*ptr&0x01e00000)>>21];
+    NSString* card			= [NSString stringWithFormat:@"Card  = %u\n",(*ptr&0x001f0000)>>16];
 	NSString* ipSlotKey		= [NSString stringWithFormat:@"IP    = %@\n",[self getSlotKey:*ptr&0x0000000f]];
 
 	ptr++;
 	NSDate* date = [NSDate dateWithTimeIntervalSince1970:*ptr];
 
     NSString* s = [NSString stringWithFormat:@"%@%@%@%@%@",title,crate,card,ipSlotKey,[date descriptionFromTemplate:@"MM/dd/yy HH:mm:ss z\n"]];
-	ptr++;  s = [s stringByAppendingFormat:@"WriteMask : 0x%08lX\n",*ptr];
-	ptr++;  s = [s stringByAppendingFormat:@"ReadMask  : 0x%08lX\n",*ptr];
-	ptr++;  s = [s stringByAppendingFormat:@"WriteValue: 0x%08lX\n",*ptr];
-	ptr++;  s = [s stringByAppendingFormat:@"ReadValue : 0x%08lX\n",*ptr];
+	ptr++;  s = [s stringByAppendingFormat:@"WriteMask : 0x%08X\n",*ptr];
+	ptr++;  s = [s stringByAppendingFormat:@"ReadMask  : 0x%08X\n",*ptr];
+	ptr++;  s = [s stringByAppendingFormat:@"WriteValue: 0x%08X\n",*ptr];
+	ptr++;  s = [s stringByAppendingFormat:@"ReadValue : 0x%08X\n",*ptr];
 
     return s;               
 }

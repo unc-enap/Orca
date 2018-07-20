@@ -44,7 +44,7 @@
 #ifdef __LP64__                                                          
 typedef int Device_Link;                                                 
 #else                                                                    
-typedef long Device_Link;                                                
+typedef int32_t Device_Link;                                                
 #endif                                                                   
 
 #ifdef __cplusplus
@@ -74,7 +74,7 @@ bool_t xdr_Device_AddrFamily();
 #ifdef __LP64__                                                          
 typedef int Device_Flags;                                                
 #else                                                                    
-typedef long Device_Flags;                                               
+typedef int32_t Device_Flags;                                               
 #endif                                                                   
 
 #ifdef __cplusplus
@@ -90,7 +90,7 @@ bool_t xdr_Device_Flags();
 #ifdef __LP64__                                                          
 typedef int Device_ErrorCode;                                            
 #else                                                                    
-typedef long Device_ErrorCode;                                           
+typedef int32_t Device_ErrorCode;                                           
 #endif                                                                   
 
 #ifdef __cplusplus
@@ -120,7 +120,7 @@ struct Create_LinkParms {
 #ifdef __LP64__                                                          
 	int clientId;                                                                
 #else                                                                    
-	long clientId;                                                               
+	int32_t clientId;                                                               
 #endif                                                                   
 
 	bool_t lockDevice;
@@ -259,7 +259,7 @@ struct Device_ReadResp {
 #ifdef __LP64__                                                          
 	int reason;                                                                
 #else                                                                    
-	long reason;                                                               
+	int32_t reason;                                                               
 #endif                                                                   
 
 	struct {
@@ -420,7 +420,7 @@ struct Device_DocmdParms {
 #ifdef __LP64__                                                          
 	int cmd;                                                                
 #else                                                                    
-	long cmd;                                                               
+	int32_t cmd;                                                               
 #endif                                                                   
 
 	bool_t network_order;
@@ -428,7 +428,7 @@ struct Device_DocmdParms {
 #ifdef __LP64__                                                          
 	int datasize;                                                                
 #else                                                                    
-	long datasize;                                                               
+	int32_t datasize;                                                               
 #endif                                                                   
 
 	struct {

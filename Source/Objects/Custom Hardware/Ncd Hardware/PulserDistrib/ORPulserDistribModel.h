@@ -29,7 +29,7 @@
         NSMutableArray* patternArray;
         NSMutableArray* packedArray;
         BOOL disableForPulser;
-        unsigned long dataId;
+        uint32_t dataId;
 		BOOL noisyEnvBroadcastEnabled;
 }
 
@@ -41,8 +41,8 @@
 - (void) setNoisyEnvBroadcastEnabled:(BOOL)aNoisyEnvBroadcastEnabled;
 - (NSMutableArray*) patternArray;
 - (void) setPatternArray:(NSMutableArray*)newPatternArray;
-- (unsigned long)patternMaskForArray:(int)arrayIndex;
-- (void) setPatternMaskForArray:(int)arrayIndex to:(unsigned long)aValue;
+- (uint32_t)patternMaskForArray:(int)arrayIndex;
+- (void) setPatternMaskForArray:(int)arrayIndex to:(uint32_t)aValue;
 - (BOOL) disableForPulser;
 - (void) setDisableForPulser: (BOOL) flag;
 
@@ -50,8 +50,8 @@
 #pragma mark ¥¥¥Data Record
 - (NSDictionary*) dataRecordDescription;
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherShaper;
 - (void) shipPDSRecord:(NSArray*)aPatternArray;
@@ -76,8 +76,8 @@
 
 @interface ORPulserDistribDecoderForPDS : ORBaseDecoder
 {}
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr;
 @end
 
 

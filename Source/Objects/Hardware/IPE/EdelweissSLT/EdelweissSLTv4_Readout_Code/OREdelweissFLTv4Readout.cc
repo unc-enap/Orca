@@ -67,27 +67,27 @@ extern int (*sendChargeBBStatusFunctionPtr)(uint32_t prog_status,int numFifo); /
 
 
 	
-inline unsigned long FIFOStatusReg(int numFIFO){
+inline uint32_t FIFOStatusReg(int numFIFO){
     return FIFO0StatusReg | ((numFIFO & 0xf) <<14);  //PCI adress would be <<16, but we use Pbus adress -tb-
 }
 
-inline unsigned long FIFOModeReg(int numFIFO){
+inline uint32_t FIFOModeReg(int numFIFO){
     return FIFO0ModeReg | ((numFIFO & 0xf) <<14);  //PCI adress would be <<16, but we use Pbus adress -tb-
 }
 
-inline unsigned long FIFOAddr(int numFIFO){
+inline uint32_t FIFOAddr(int numFIFO){
     return FIFO0Addr | ((numFIFO & 0xf) <<14);  //PCI adress would be <<16, but we use Pbus adress -tb-
 }
 
-inline unsigned long PAEOffsetReg(int numFIFO){
+inline uint32_t PAEOffsetReg(int numFIFO){
     return BB0PAEOffsetReg | ((numFIFO & 0xf) <<14);  //PCI adress would be <<16, but we use Pbus adress -tb-
 }
 
-inline unsigned long PAFOffsetReg(int numFIFO){
+inline uint32_t PAFOffsetReg(int numFIFO){
     return BB0PAFOffsetReg | ((numFIFO & 0xf) <<14);  //PCI adress would be <<16, but we use Pbus adress -tb-
 }
 
-inline unsigned long BBcsrReg(int numFIFO){
+inline uint32_t BBcsrReg(int numFIFO){
     return BB0csrReg | ((numFIFO & 0xf) <<14);  //PCI adress would be <<16, but we use Pbus adress -tb-
 }
 
@@ -123,64 +123,64 @@ inline unsigned long BBcsrReg(int numFIFO){
 
 	//TODO: 0x3f or 0x1f?????????????
 
-inline unsigned long FLTStatusReg(int numFLT){
+inline uint32_t FLTStatusReg(int numFLT){
     return FLTStatusRegBase | ((numFLT & 0x3f) <<17);  //PCI adress would be <<16, but we use Pbus adress -tb-
 }
 
-inline unsigned long FLTControlReg(int numFLT){
+inline uint32_t FLTControlReg(int numFLT){
     return FLTControlRegBase | ((numFLT & 0x3f) <<17);  
 }
 
-inline unsigned long FLTCommandReg(int numFLT){
+inline uint32_t FLTCommandReg(int numFLT){
     return FLTCommandRegBase | ((numFLT & 0x3f) <<17);  
 }
 
-inline unsigned long FLTVersionReg(int numFLT){
+inline uint32_t FLTVersionReg(int numFLT){
     return FLTVersionRegBase | ((numFLT & 0x3f) <<17);  
 }
 
-inline unsigned long FLTFiberOutMaskReg(int numFLT){
+inline uint32_t FLTFiberOutMaskReg(int numFLT){
     return FLTFiberOutMaskRegBase | ((numFLT & 0x3f) <<17);  
 }
 
-inline unsigned long FLTFiberSet_1Reg(int numFLT){
+inline uint32_t FLTFiberSet_1Reg(int numFLT){
     return FLTFiberSet_1RegBase | ((numFLT & 0x3f) <<17);  
 }
 
-inline unsigned long FLTFiberSet_2Reg(int numFLT){
+inline uint32_t FLTFiberSet_2Reg(int numFLT){
     return FLTFiberSet_2RegBase | ((numFLT & 0x3f) <<17);  
 }
 
-inline unsigned long FLTStreamMask_1Reg(int numFLT){
+inline uint32_t FLTStreamMask_1Reg(int numFLT){
     return FLTStreamMask_1RegBase | ((numFLT & 0x3f) <<17);  
 }
 
-inline unsigned long FLTStreamMask_2Reg(int numFLT){
+inline uint32_t FLTStreamMask_2Reg(int numFLT){
     return FLTStreamMask_2RegBase | ((numFLT & 0x3f) <<17);  
 }
 
-inline unsigned long FLTTriggerMask_1Reg(int numFLT){
+inline uint32_t FLTTriggerMask_1Reg(int numFLT){
     return FLTTriggerMask_1RegBase | ((numFLT & 0x3f) <<17);  
 }
 
-inline unsigned long FLTTriggerMask_2Reg(int numFLT){
+inline uint32_t FLTTriggerMask_2Reg(int numFLT){
     return FLTTriggerMask_2RegBase | ((numFLT & 0x3f) <<17);  
 }
 
-inline unsigned long FLTAccessTestReg(int numFLT){
+inline uint32_t FLTAccessTestReg(int numFLT){
     return FLTAccessTestRegBase | ((numFLT & 0x3f) <<17); 
 }
 
-inline unsigned long FLTBBStatusReg(int numFLT, int numChan){
+inline uint32_t FLTBBStatusReg(int numFLT, int numChan){
     return FLTBBStatusRegBase | ((numFLT & 0x3f) <<17) | ((numChan & 0x1f) <<12); 
 }
 
-inline unsigned long FLTTotalTriggerNReg(int numFLT){
+inline uint32_t FLTTotalTriggerNReg(int numFLT){
     return FLTTotalTriggerNRegBase | ((numFLT & 0x3f) <<17);  
 }
 
 
-inline unsigned long FLTRAMDataReg(int numFLT, int numChan){
+inline uint32_t FLTRAMDataReg(int numFLT, int numChan){
     return FLTRAMDataRegBase | ((numFLT & 0x3f) <<17) | ((numChan & 0x1f) <<12); 
 }
 
@@ -222,7 +222,7 @@ bool ORFLTv4Readout::Readout(SBC_LAM_Data* lamData)
 #define kNumV4FLTADCPageSize16 2048
 #define kNumV4FLTADCPageSize32 1024
 	static uint32_t adctrace32[kNumV4FLTs][kNumV4FLTChannels][kNumV4FLTADCPageSize32];//shall I use a 4th index for the page number? -tb-
-	//if sizeof(long unsigned int) != sizeof(uint32_t) we will come into troubles (64-bit-machines?) ... -tb-
+	//if sizeof(int32_t unsigned int) != sizeof(uint32_t) we will come into troubles (64-bit-machines?) ... -tb-
 	static uint32_t FIFO1[kNumV4FLTs];
 	static uint32_t FIFO2[kNumV4FLTs];
 	static uint32_t FIFO3[kNumV4FLTs][kNumV4FLTChannels];
@@ -381,7 +381,7 @@ return true;
 								//read raw trace
                                 uint32_t adccount, trigSlot;
 #if 1
-                                pbus->readBlock(FLTRAMDataReg(currFlt+1,chan),(unsigned long*)waveformBuffer32,waveformLength);
+                                pbus->readBlock(FLTRAMDataReg(currFlt+1,chan),(uint32_t*)waveformBuffer32,waveformLength);
                                 
                                 #if 0 //this was a workaround ...
 								for(adccount=0; adccount<waveformLength;adccount++){ //kNumV4FLTADCPageSize32 is 1024; waveformLength is 2048
@@ -483,7 +483,7 @@ bool ORFLTv4Readout::Stop()
 		//data to ship
 		uint32_t chan=0;
 		uint32_t readoutSec;
-		unsigned long totalLength=kMaxHistoLength;
+		uint32_t totalLength=kMaxHistoLength;
 		uint32_t last=kMaxHistoLength-1,first=0;
 		uint32_t fpgaHistogramID;
 		uint32_t histoBinWidth = 0;
@@ -516,7 +516,7 @@ bool ORFLTv4Readout::Stop()
 				theEventData.histogramLength =2048;
 				
 				//ship data record
-				totalLength = 2 + (sizeof(katrinV4HistogramDataStruct)/sizeof(long)) + theEventData.histogramLength;// 2 = header + locationWord
+				totalLength = 2 + (sizeof(katrinV4HistogramDataStruct)/sizeof(int32_t)) + theEventData.histogramLength;// 2 = header + locationWord
 				ensureDataCanHold(totalLength); 
 				data[dataIndex++] = histogramId | totalLength;    
 				data[dataIndex++] = location | chan<<8;
@@ -598,8 +598,8 @@ bool ORFLTv4Readout::Readout(SBC_LAM_Data* lamData)
     static int currentUSec=0;
     static int lastSec=0;
     static int lastUSec=0;
-    //static long int counter=0;
-    static long int secCounter=0;
+    //static int32_t int counter=0;
+    static int32_t int secCounter=0;
 	static uint32_t writeSimEventMask = 0; //one bit per FLT (flags 'write simulated event' next time) -tb-
     
     struct timeval t;//    struct timezone tz; is obsolete ... -tb-
@@ -612,7 +612,7 @@ bool ORFLTv4Readout::Readout(SBC_LAM_Data* lamData)
     
     if(diffTime >1.0){
         secCounter++;
-        printf("PrPMC (FLTv4 simulation mode) sec %ld: 1 sec is over ...\n",secCounter);
+        printf("PrPMC (FLTv4 simulation mode) sec %d: 1 sec is over ...\n",secCounter);
         fflush(stdout);
         //remember for next call
         lastSec      = currentSec; 

@@ -74,12 +74,12 @@ NSString* ORCytectVM8FormCChanged       = @"ORCytectVM8FormCChanged";
 }
 
 #pragma mark •••Accessors
-- (unsigned long) writeValue
+- (uint32_t) writeValue
 {
     return writeValue;
 }
 
-- (void) setWriteValue:(unsigned long)aValue
+- (void) setWriteValue:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setWriteValue:writeValue];
     writeValue = aValue;
@@ -143,15 +143,15 @@ NSString* ORCytectVM8FormCChanged       = @"ORCytectVM8FormCChanged";
 {
     [self writeValue:aValue toOffset:6];
 }
-- (unsigned long) readFormC
+- (uint32_t) readFormC
 {
     unsigned short temp = [self readAtOffset:6];
      return ~temp & 0x1;
 }
 
-- (unsigned long) readRelays
+- (uint32_t) readRelays
 {
-    unsigned long value = 0x0;
+    uint32_t value = 0x0;
     
     value =  [self read0_7];
     value |= [self read8_15]<<8;
@@ -161,23 +161,23 @@ NSString* ORCytectVM8FormCChanged       = @"ORCytectVM8FormCChanged";
     return ~value;
 }
 
-- (unsigned long) read0_7
+- (uint32_t) read0_7
 {
     return [self readAtOffset:8] & 0xFF;
 }
 
-- (unsigned long) read8_15
+- (uint32_t) read8_15
 {
     return [self readAtOffset:10] & 0xFF;
 }
 
-- (unsigned long) read16_23
+- (uint32_t) read16_23
 {
     return [self readAtOffset:12] & 0xFF;
 
 }
 
-- (unsigned long) read24_31
+- (uint32_t) read24_31
 {
     return [self readAtOffset:14] & 0xFF;
 }
@@ -197,7 +197,7 @@ NSString* ORCytectVM8FormCChanged       = @"ORCytectVM8FormCChanged";
     NSLog(@"HW State of %@\n",[self fullID]);
     NSLog(@"form_C state: 0x%0x: \n" ,[self readFormC]);
 
-    unsigned long states = [self readRelays];
+    uint32_t states = [self readRelays];
     NSLog(@"relay states: 0x%08x: \n",states);
     NSFont* font = [NSFont fontWithName:@"Monaco" size:11];
     int i,j;
@@ -211,7 +211,7 @@ NSString* ORCytectVM8FormCChanged       = @"ORCytectVM8FormCChanged";
     }
 }
 
-- (void) writeRelays:(unsigned long) aValueMask
+- (void) writeRelays:(uint32_t) aValueMask
 {
     [hwLock lock];
     @try {
@@ -232,7 +232,7 @@ NSString* ORCytectVM8FormCChanged       = @"ORCytectVM8FormCChanged";
 
 - (void) closeRelay:(int) aRelay
 {
-    unsigned long currentState = ~[self readRelays] | (0x1 << aRelay);
+    uint32_t currentState = ~[self readRelays] | (0x1 << aRelay);
     [self writeRelays:currentState];
 }
 

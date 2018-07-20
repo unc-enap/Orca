@@ -270,7 +270,7 @@ NSString* ORRunNotesItemChanged				 = @"ORRunNotesItemChanged";
 	else return nil;
 }
 
-- (unsigned long) itemCount
+- (uint32_t) itemCount
 {
 	return [items count];
 }

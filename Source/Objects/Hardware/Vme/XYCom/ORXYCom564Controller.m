@@ -493,7 +493,7 @@
 
 - (void) updateRegisterDescription:(short) aRegisterIndex
 {
-    [registerOffsetField setStringValue:[NSString stringWithFormat:@"0x%04lx",[model getAddressOffset:aRegisterIndex]]];
+    [registerOffsetField setStringValue:[NSString stringWithFormat:@"0x%04x",[model getAddressOffset:aRegisterIndex]]];
 	
     [regNameField setStringValue:[model getRegisterName:aRegisterIndex]];
 	
@@ -512,7 +512,7 @@
     NSInteger chan = [[aTableView tableColumns] indexOfObject:aTableColumn]/2;
     chan = rowIndex + chan*[self numberOfRowsInTableView:aTableView];  
 	if([[aTableColumn identifier] hasPrefix:kXVME564ChannelKey]){
-        return [NSString stringWithFormat:@"%lu",(unsigned long)chan];
+        return [NSString stringWithFormat:@"%u",(uint32_t)chan];
 	} else {
         return [self stringOfADCValue:[model convertedValue:(int)chan] withFormat:[model interpretADC]];
     }

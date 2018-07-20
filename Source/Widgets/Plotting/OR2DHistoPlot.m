@@ -79,7 +79,7 @@
 	BOOL aLog       = [[colorScale colorAxis] isLog];
 	BOOL aInt       = [[colorScale colorAxis] integer];
 	double aMinPad  = [[colorScale colorAxis] minPad];
-	unsigned long* dataPtr = (unsigned long*)[data bytes];
+	uint32_t* dataPtr = (uint32_t*)[data bytes];
 	int iy;
     for (iy=minY; iy<=maxY;++iy) {
         
@@ -89,7 +89,7 @@
 			float x = [mXScale getPixAbs:(float)ix-.5];
             
             /* Get the data value for this point and increment to next point */
-            unsigned long z = dataPtr[ix + iy*numBinsPerSide];
+            uint32_t z = dataPtr[ix + iy*numBinsPerSide];
             if(z){
                 int colorIndex = [colorScale getFastColorIndexForValue:z log:aLog integer:aInt minPad:aMinPad];
 				if(colorIndex<0)colorIndex = 0;
@@ -105,7 +105,7 @@
 		}
     }	
     //flush rectsplotView
-    long i;
+    int32_t i;
     for(i=0;i<kNumColors;i++){
         if(rectCount[i]){
             [[colorScale getColorForIndex:i] set];
@@ -143,16 +143,16 @@
 		float x = MAX(0,cursorPosition.x);
 		float y = MAX(0,cursorPosition.y);
 		
-		unsigned long z = 0;
+		uint32_t z = 0;
 		unsigned short dataXMin,dataXMax,dataYMin,dataYMax;
 		[dataSource plotter:self xMin:&dataXMin xMax:&dataXMax yMin:&dataYMin yMax:&dataYMax];
 		unsigned short numBinsPerSide;
 		NSData* data = [dataSource plotter:self numberBinsPerSide:&numBinsPerSide];
-        unsigned long* dataPtr = (unsigned long*)[data bytes];
+        uint32_t* dataPtr = (uint32_t*)[data bytes];
 		if(x>=dataXMin && x<=dataXMax && y>=dataYMin && y<=dataYMax){
 			z = dataPtr[(int)x + (int)y*numBinsPerSide];
 		}
-		NSString* cursorPositionString = [NSString stringWithFormat:@"x:%3.0f y:%3.0f z:%lu",x,y,z];
+		NSString* cursorPositionString = [NSString stringWithFormat:@"x:%3.0f y:%3.0f z:%u",x,y,z];
 		s = [[NSAttributedString alloc] initWithString:cursorPositionString attributes:attrsDictionary];
 		labelSize = [s size];
 		[s drawAtPoint:NSMakePoint(width - labelSize.width - 10,height-labelSize.height-5)];
@@ -214,14 +214,14 @@
 	*aXMax = (unsigned short)maxX;
 }
 
-- (long) maxValueChannelinXRangeFrom:(long)minChannel to:(long)maxChannel;
+- (int32_t) maxValueChannelinXRangeFrom:(int32_t)minChannel to:(int32_t)maxChannel;
 {
     double maxValue = -9E99;
 	double maxXChannel = 0;
 	unsigned short dataXMin,dataXMax,dataYMin,dataYMax;
     unsigned short numberBinsPerSide;
 	NSData* data = [dataSource plotter:self numberBinsPerSide:&numberBinsPerSide];
-    unsigned long* dataPtr = (unsigned long*)[data bytes];
+    uint32_t* dataPtr = (uint32_t*)[data bytes];
 	[dataSource plotter:self xMin:&dataXMin xMax:&dataXMax yMin:&dataYMin yMax:&dataYMax];
 	unsigned short val = 0;
     int x,y;
@@ -244,7 +244,7 @@
     unsigned short numberBinsPerSide;
 	unsigned short dataXMin,dataXMax,dataYMin,dataYMax;
 	NSData* data = [dataSource plotter:self numberBinsPerSide:&numberBinsPerSide];
-    unsigned long* dataPtr = (unsigned long*)[data bytes];
+    uint32_t* dataPtr = (uint32_t*)[data bytes];
 	[dataSource plotter:self xMin:&dataXMin xMax:&dataXMax yMin:&dataYMin yMax:&dataYMax];
 	unsigned short val = 0;
 	for (y=dataYMin; y<dataYMax;++y) {	
@@ -258,23 +258,23 @@
 
 - (void) logLin  { [[plotView zScale] setLog:![[plotView zScale] isLog]]; }
 
-- (long) numberPoints
+- (int32_t) numberPoints
 {
 	unsigned short dataXMin,dataXMax,dataYMin,dataYMax;
 	[dataSource plotter:self xMin:&dataXMin xMax:&dataXMax yMin:&dataYMin yMax:&dataYMax];
 	return dataYMax-dataYMin;
 }
 
-- (NSString*) valueAsStringAtPoint:(long)y
+- (NSString*) valueAsStringAtPoint:(int32_t)y
 {		
     unsigned short numberBinsPerSide = 256; //default
     int x;
 	unsigned short dataXMin,dataXMax,dataYMin,dataYMax;
 	NSData* data = [dataSource plotter:self numberBinsPerSide:&numberBinsPerSide];
-    unsigned long* dataPtr = (unsigned long*)[data bytes];
+    uint32_t* dataPtr = (uint32_t*)[data bytes];
 	[dataSource plotter:self xMin:&dataXMin xMax:&dataXMax yMin:&dataYMin yMax:&dataYMax];
 	y +=  dataYMin;
-	NSMutableString* s = [NSMutableString stringWithFormat:@"%ld ",y];
+	NSMutableString* s = [NSMutableString stringWithFormat:@"%d ",y];
 	unsigned short val = 0;
 	for (x=dataXMin; x<dataXMax;++x) {	
 		val = dataPtr[x+y*numberBinsPerSide];
@@ -357,8 +357,8 @@
 {
 	ORAxis* mXScale = [plotView xScale];
 	ORAxis* mYScale = [plotView yScale];
-	long centerX = [mXScale minValue] + ([mXScale maxValue] - [mXScale minValue] +1)/2;
-	long centerY = [mYScale minValue] + ([mYScale maxValue] - [mYScale minValue] +1)/2;
+	int32_t centerX = [mXScale minValue] + ([mXScale maxValue] - [mXScale minValue] +1)/2;
+	int32_t centerY = [mYScale minValue] + ([mYScale maxValue] - [mYScale minValue] +1)/2;
 	[(OR2dRoi*)roi centerOnX:centerX y:centerY];
 	[plotView setNeedsDisplay:YES];
 }

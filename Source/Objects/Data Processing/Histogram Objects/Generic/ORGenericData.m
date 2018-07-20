@@ -57,7 +57,7 @@
 	[dataLock lock];
 	NSString* temp = [[genericData retain] autorelease];
 	[dataLock unlock];
-    return [NSString stringWithFormat:@"%@ %@ Counts: %lu",key, temp, [self totalCounts]];
+    return [NSString stringWithFormat:@"%@ %@ Counts: %u",key, temp, [self totalCounts]];
 }
 
 

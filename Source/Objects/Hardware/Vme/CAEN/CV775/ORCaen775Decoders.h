@@ -22,10 +22,10 @@
 
 @interface ORCAEN775DecoderForTdc : ORCaenDataDecoder {
 }
-- (unsigned short) 	channel: (unsigned long) pDataValue;
+- (unsigned short) 	channel: (uint32_t) pDataValue;
 @end
 
 @interface ORCAEN775NDecoderForTdc : ORCaenDataDecoder {
 }
-- (unsigned short) 	channel: (unsigned long) pDataValue;
+- (unsigned short) 	channel: (uint32_t) pDataValue;
 @end

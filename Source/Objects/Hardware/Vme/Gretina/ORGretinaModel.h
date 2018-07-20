@@ -67,8 +67,8 @@ enum GretinaFIFOStates {
 @interface ORGretinaModel : ORVmeIOCard <ORDataTaker,ORHWWizard,ORHWRamping>
 {
   @private
-	unsigned long   dataId;
-	unsigned long*  dataBuffer;
+	uint32_t   dataId;
+	uint32_t*  dataBuffer;
 
 	NSMutableArray* cardInfo;
     short			enabled[kNumGretinaChannels];
@@ -84,7 +84,7 @@ enum GretinaFIFOStates {
     short			dataLength[kNumGretinaChannels];
 	
 	ORRateGroup*	waveFormRateGroup;
-	unsigned long 	waveFormCount[kNumGretinaChannels];
+	uint32_t 	waveFormCount[kNumGretinaChannels];
 	BOOL isRunning;
 
     int fifoState;
@@ -92,10 +92,10 @@ enum GretinaFIFOStates {
 	int				fifoEmptyCount;
 
 	//cach to speed takedata
-	unsigned long location;
+	uint32_t location;
 	id theController;
-	unsigned long fifoAddress;
-	unsigned long fifoStateAddress;
+	uint32_t fifoAddress;
+	uint32_t fifoStateAddress;
 
 	BOOL oldEnabled[kNumGretinaChannels];
 	unsigned short oldLEDThreshold[kNumGretinaChannels];
@@ -194,26 +194,26 @@ enum GretinaFIFOStates {
 - (void) writeRawDataSlidingLength:(int)channel;
 - (void) writeRawDataWindowLength:(int)channel;
 - (unsigned short) readFifoState;
-- (unsigned long) readFIFO:(unsigned long)offset;
-- (void) writeFIFO:(unsigned long)index value:(unsigned long)aValue;
+- (uint32_t) readFIFO:(uint32_t)offset;
+- (void) writeFIFO:(uint32_t)index value:(uint32_t)aValue;
 - (int) clearFIFO;
 - (void) findNoiseFloors;
 - (void) stepNoiseFloor;
 - (BOOL) noiseFloorRunning;
 
 #pragma mark ¥¥¥Data Taker
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherShaper;
 - (NSDictionary*) dataRecordDescription;
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(id)userInfo;
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(id)userInfo;
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(id)userInfo;
-- (unsigned long) waveFormCount:(int)aChannel;
+- (uint32_t) waveFormCount:(int)aChannel;
 - (void)   startRates;
 - (void) clearWaveFormCounts;
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag;
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag;
 - (void) checkFifoAlarm;
 - (int) load_HW_Config_Structure:(SBC_crate_config*)configStruct index:(int)index;
 

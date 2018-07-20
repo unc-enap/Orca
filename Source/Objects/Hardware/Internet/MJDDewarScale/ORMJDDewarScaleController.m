@@ -257,7 +257,7 @@
 - (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
  if(aTableView == processTableView){
-        if([[aTableColumn identifier] isEqualToString:@"Name"]) return [NSString stringWithFormat:@"Dewar %ld",rowIndex];
+        if([[aTableColumn identifier] isEqualToString:@"Name"]) return [NSString stringWithFormat:@"Dewar %d",(int)rowIndex];
         else if([[aTableColumn identifier] isEqualToString:@"Channel"]) return [NSNumber numberWithInteger:rowIndex];
         else if([[aTableColumn identifier] isEqualToString:@"LowLimit"]) return [NSNumber numberWithFloat:[model lowLimit:(int)rowIndex]];
         else if([[aTableColumn identifier] isEqualToString:@"HiLimit"]) return [NSNumber numberWithFloat:[model hiLimit:(int)rowIndex]];

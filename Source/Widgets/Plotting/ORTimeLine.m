@@ -25,7 +25,7 @@
 enum {
     SHORT_TICK		= 1,				// length of short tick
     MED_TICK		= 2,				// length of medium tick
-    LONG_TICK		= 3				// length of long tick
+    LONG_TICK		= 3				// length of int32_t tick
 };
 
 /*
@@ -80,7 +80,7 @@ static char	symbols[]	= "fpnum\0kMG";		// symbols for exponents
 	NSAssert([NSThread mainThread],@"ORTimeLine drawing from non-gui thread");
     short		i, x, y;			// general variables
     double		val;				// true value of scale units
-    long		ival;				// integer mantissa of scale units
+    int32_t		ival;				// integer mantissa of scale units
     short		sep;				// mantissa of label separation
     short		power;				// exponent of label separation
     short		ticks;				// number of ticks per label
@@ -185,7 +185,7 @@ static char	symbols[]	= "fpnum\0kMG";		// symbols for exponents
                 if ((nthTick % 4) == 0) {
 					NSString* axisNumberString;
                     [theAxisColoredTicks moveToPoint:NSMakePoint(x,y)];
-                    [theAxisColoredTicks lineToPoint:NSMakePoint(x,y-LONG_TICK)];			// draw long tick
+                    [theAxisColoredTicks lineToPoint:NSMakePoint(x,y-LONG_TICK)];			// draw int32_t tick
 
 					if(suffix == 'k')ival *= 1000;
 					else if(suffix == 'M') ival *= 1000000;
@@ -205,7 +205,7 @@ static char	symbols[]	= "fpnum\0kMG";		// symbols for exponents
 					[axisNumberString drawAtPoint:NSMakePoint(x+YLDX+dateOffset - axisNumberSize.width/2,y-YLDY-axisNumberSize.height) withAttributes:labelAttributes];
                     
 				} 
-				else [theAxis lineToPoint:NSMakePoint(x,y-LONG_TICK)];			// draw long tick
+				else [theAxis lineToPoint:NSMakePoint(x,y-LONG_TICK)];			// draw int32_t tick
 
                 if (gridCount<kMaxLongTicks) {
                     gridArray[gridCount++] = x-lowOffset;

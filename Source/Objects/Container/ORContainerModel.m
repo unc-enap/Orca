@@ -66,7 +66,7 @@ NSString* ORContainerBackgroundImageChangedNotification = @"ORContainerBackgroun
 	
 	if([self uniqueIdNumber]){
         NSAttributedString* n = [[NSAttributedString alloc] 
-                                initWithString:[NSString stringWithFormat:@"%lu",[self uniqueIdNumber]] 
+                                initWithString:[NSString stringWithFormat:@"%u",[self uniqueIdNumber]] 
                                     attributes:[NSDictionary dictionaryWithObject:[NSFont labelFontOfSize:14] forKey:NSFontAttributeName]];
         
         [n drawInRect:NSMakeRect(10,[i size].height-18,[i size].width-20,16)];

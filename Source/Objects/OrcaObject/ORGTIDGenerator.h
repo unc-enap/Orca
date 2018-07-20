@@ -22,9 +22,9 @@
 
 
 @protocol ORGTIDGenerator
-- (unsigned long) requestGTID;
+- (uint32_t) requestGTID;
 @end
 
 @interface NSObject (ORGTIDGenerator)
-- (unsigned long) requestGTID;
+- (uint32_t) requestGTID;
 @end

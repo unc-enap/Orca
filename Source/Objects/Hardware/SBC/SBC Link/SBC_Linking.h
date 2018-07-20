@@ -25,5 +25,5 @@
 - (NSString*) cpuName;
 - (NSString*) driverScriptName;
 - (NSString*) driverScriptInfo;
-- (long) getSBCCodeVersion;
+- (int32_t) getSBCCodeVersion;
 @end

@@ -74,7 +74,7 @@ enum { //Assume all kept register implementations need reworking
 
 typedef struct  {
 	NSString*       regName;
-    unsigned long 	addressOffset;
+    uint32_t 	addressOffset;
     short			accessType;
     bool			hwReset;
     bool			softwareReset;
@@ -88,7 +88,7 @@ typedef struct  {
 
 typedef struct  {
 	NSString*       regName;
-	unsigned long 	addressOffset;
+	uint32_t 	addressOffset;
 	short			accessType;
     unsigned short  numBits;
 } DT5725ControllerRegisterNamesStruct;
@@ -116,12 +116,12 @@ typedef struct  {
     BOOL            trigOverlapEnabled;
     BOOL            testPatternEnabled;
     BOOL            trigOnUnderThreshold;
-    unsigned long	eventSize;
-    unsigned long   buffCode;
-    unsigned long   triggerSourceMask;
+    uint32_t	eventSize;
+    uint32_t   buffCode;
+    uint32_t   triggerSourceMask;
     BOOL            softwareTrigEnabled;
     BOOL            externalTrigEnabled;
-    unsigned long	postTriggerSetting;
+    uint32_t	postTriggerSetting;
     unsigned short	enabledMask;
 
     //Advanced Controls
@@ -134,7 +134,7 @@ typedef struct  {
     BOOL            clockSource;
     unsigned short  coincidenceWindow;
     unsigned short  coincidenceLevel;
-	unsigned long   triggerOutMask;
+	uint32_t   triggerOutMask;
     unsigned short  triggerOutLogic;
     unsigned short  trigOutCoincidenceLevel;
     BOOL            extTrigOutEnabled;
@@ -150,11 +150,11 @@ typedef struct  {
     unsigned short  fpHeaderPattern;
     BOOL            fanSpeedMode;
     unsigned short  almostFullLevel;
-    unsigned long   runDelay;
+    uint32_t   runDelay;
     
     //-------------------------------------
 	ORRateGroup*	waveFormRateGroup;
-	unsigned long 	waveFormCount[kNumDT5725Channels];
+	uint32_t 	waveFormCount[kNumDT5725Channels];
     int				bufferState;
     int				lastBufferState;
 	ORAlarm*        bufferFullAlarm;
@@ -163,15 +163,15 @@ typedef struct  {
     
     unsigned short  selectedRegIndex;
     unsigned short  selectedChannel;
-    unsigned long   selectedRegValue;
+    uint32_t   selectedRegValue;
 
 	//data taking, some are cached and only valid during running
-    unsigned long   dataId;
+    uint32_t   dataId;
 	unsigned int    statusReg;
-	unsigned long   location;
-	unsigned long	eventSizeReg;
-	unsigned long	dataReg;
-    unsigned long   totalBytesTransfered;
+	uint32_t   location;
+	uint32_t	eventSizeReg;
+	uint32_t	dataReg;
+    uint32_t   totalBytesTransfered;
     float           totalByteRate;
     NSDate*         lastTimeByteTotalChecked;
     BOOL            firstTime;
@@ -225,8 +225,8 @@ typedef struct  {
 - (BOOL)            trigOverlapEnabled;
 - (void)            setTrigOverlapEnabled:(BOOL)aTrigOverlapEnabled;
 //------------------------------
-- (unsigned long)   eventSize;
-- (void)			setEventSize:(unsigned long)aEventSize;
+- (uint32_t)   eventSize;
+- (void)			setEventSize:(uint32_t)aEventSize;
 //------------------------------
 - (BOOL)            clockSource;
 - (void)            setClockSource:(BOOL)aClockSource;
@@ -245,22 +245,22 @@ typedef struct  {
 - (void)            setCoincidenceWindow:(unsigned short)aCoincidenceWindow;
 - (unsigned short)	coincidenceLevel;
 - (void)			setCoincidenceLevel:(unsigned short)aCoincidenceLevel;
-- (unsigned long)	triggerSourceMask;
-- (void)			setTriggerSourceMask:(unsigned long)aTriggerSourceMask;
+- (uint32_t)	triggerSourceMask;
+- (void)			setTriggerSourceMask:(uint32_t)aTriggerSourceMask;
 //------------------------------
 - (BOOL)            swTrigOutEnabled;
 - (void)            setSwTrigOutEnabled:(BOOL)aSwTrigOutEnabled;
 - (BOOL)            extTrigOutEnabled;
 - (void)            setExtTrigOutEnabled:(BOOL)aExtTrigOutEnabled;
-- (unsigned long)	triggerOutMask;
-- (void)			setTriggerOutMask:(unsigned long)aTriggerOutMask;
+- (uint32_t)	triggerOutMask;
+- (void)			setTriggerOutMask:(uint32_t)aTriggerOutMask;
 - (unsigned short)  triggerOutLogic;
 - (void)            setTriggerOutLogic:(unsigned short)aTriggerOutLogic;
 - (unsigned short)  trigOutCoincidenceLevel;
 - (void)            setTrigOutCoincidenceLevel:(unsigned short)aTrigOutCoincidenceLevel;
 //------------------------------
-- (unsigned long)	postTriggerSetting;
-- (void)			setPostTriggerSetting:(unsigned long)aPostTriggerSetting;
+- (uint32_t)	postTriggerSetting;
+- (void)			setPostTriggerSetting:(uint32_t)aPostTriggerSetting;
 //------------------------------
 - (BOOL)            fpLogicType;
 - (void)            setFpLogicType:(BOOL)aFpLogicType;
@@ -290,8 +290,8 @@ typedef struct  {
 - (unsigned short)  almostFullLevel;
 - (void)            setAlmostFullLevel:(unsigned short)anAlmostFullLevel;
 //------------------------------
-- (unsigned long)   runDelay;
-- (void)            setRunDelay:(unsigned long)aRunDelay;
+- (uint32_t)   runDelay;
+- (void)            setRunDelay:(uint32_t)aRunDelay;
 //------------------------------
 
 - (int)				bufferState;
@@ -308,8 +308,8 @@ typedef struct  {
 - (void)			read;
 - (void)			write;
 - (void)			report;
-- (void)			read:(unsigned short) pReg returnValue:(unsigned long*) pValue;
-- (void)			write:(unsigned short) pReg sendValue:(unsigned long) pValue;
+- (void)			read:(unsigned short) pReg returnValue:(uint32_t*) pValue;
+- (void)			write:(unsigned short) pReg sendValue:(uint32_t) pValue;
 - (short)			getNumberRegisters;
 
 
@@ -350,20 +350,20 @@ typedef struct  {
 #pragma mark ***Register - Register specific routines
 - (unsigned short) 	selectedChannel;
 - (void)			setSelectedChannel: (unsigned short) anIndex;
-- (unsigned long) 	selectedRegValue;
-- (void)			setSelectedRegValue: (unsigned long) anIndex;
+- (uint32_t) 	selectedRegValue;
+- (void)			setSelectedRegValue: (uint32_t) anIndex;
 - (unsigned short)  selectedRegIndex;
 - (void)            setSelectedRegIndex:(unsigned short) anIndex;
 - (NSString*) 		getRegisterName: (short) anIndex;
-- (unsigned long) 	getAddressOffset: (short) anIndex;
+- (uint32_t) 	getAddressOffset: (short) anIndex;
 - (short)			getAccessType: (short) anIndex;
 - (BOOL)			dataReset: (short) anIndex;
 - (BOOL)			swReset: (short) anIndex;
 - (BOOL)			hwReset: (short) anIndex;
 
 #pragma mark •••DataTaker
-- (unsigned long)	dataId;
-- (void)			setDataId: (unsigned long) DataId;
+- (uint32_t)	dataId;
+- (void)			setDataId: (uint32_t) DataId;
 - (void)			setDataIds:(id)assigner;
 - (void)			syncDataIdsWith:(id)anotherShaper;
 - (NSDictionary*)	dataRecordDescription;
@@ -376,7 +376,7 @@ typedef struct  {
 #pragma mark ***Helpers
 - (float)			convertDacToVolts:(unsigned short)aDacValue dynamicRange:(BOOL)dynamicRange;
 - (unsigned short)	convertVoltsToDac:(float)aVoltage dynamicRange:(BOOL)dynamicRange;
-- (void)            addCurrentState:(NSMutableDictionary*)dictionary longArray:(long*)anArray forKey:(NSString*)aKey;
+- (void)            addCurrentState:(NSMutableDictionary*)dictionary longArray:(int32_t*)anArray forKey:(NSString*)aKey;
 - (void)            addCurrentState:(NSMutableDictionary*)dictionary uShortArray:(unsigned short*)anArray forKey:(NSString*)aKey;
 
 #pragma mark ***Archival
@@ -384,10 +384,10 @@ typedef struct  {
 - (void) encodeWithCoder:(NSCoder*)encoder;
 
 #pragma mark ***HW Read/Write API
-- (int)     writeLongBlock:(unsigned long*) writeValue atAddress:(unsigned long) vmeAddress;
-- (int)     readLongBlock:(unsigned long*)  readValue atAddress:(unsigned long) vmeAddress;
-- (void)    writeChan:(unsigned short)chan reg:(unsigned short) pReg sendValue:(unsigned long) pValue;
-- (void)    readChan:(unsigned short)chan reg:(unsigned short) pReg returnValue:(unsigned long*) pValue;
+- (int)     writeLongBlock:(uint32_t*) writeValue atAddress:(uint32_t) vmeAddress;
+- (int)     readLongBlock:(uint32_t*)  readValue atAddress:(uint32_t) vmeAddress;
+- (void)    writeChan:(unsigned short)chan reg:(unsigned short) pReg sendValue:(uint32_t) pValue;
+- (void)    readChan:(unsigned short)chan reg:(unsigned short) pReg returnValue:(uint32_t*) pValue;
 - (int)     readFifo:(char*)destBuff numBytesToRead:(int)    numBytes;
 
 

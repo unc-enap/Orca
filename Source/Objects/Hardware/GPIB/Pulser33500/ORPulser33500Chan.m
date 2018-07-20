@@ -647,7 +647,7 @@ static Pulser33500CustomWaveformStruct waveformData[kNumWaveforms] = {
 	else {
 		//get list of waveforms already in pulser
 		char reply[1024];
-		long n = [pulser writeReadDevice:[NSString stringWithFormat:@"SOUR%d:Data:CAT?",channel] data:reply maxLength:1024];
+		int32_t n = [pulser writeReadDevice:[NSString stringWithFormat:@"SOUR%d:Data:CAT?",channel] data:reply maxLength:1024];
 		if(n>0)reply[n-1]='\0';
 		NSString* replyString = [[[NSString stringWithCString:reply encoding:NSASCIIStringEncoding] componentsSeparatedByString:@"\""] componentsJoinedByString:@""];
 		replyString = [replyString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];

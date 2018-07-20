@@ -627,7 +627,7 @@ NSString* ORRGA300Lock								= @"ORRGA300Lock";
 		if(!inComingData)inComingData = [[NSMutableData data] retain];
 		[inComingData appendData:[[note userInfo] objectForKey:@"data"]];
 		if([(ORRGA300Cmd*)lastRequest dataExpected]){
-			unsigned long expectedDataLength = [(ORRGA300Cmd*)lastRequest expectedDataLength];
+			uint32_t expectedDataLength = [(ORRGA300Cmd*)lastRequest expectedDataLength];
 			if(currentActivity == kRGATableScan){
 				if([inComingData length] >= expectedDataLength){
 					//set data
@@ -1130,7 +1130,7 @@ NSString* ORRGA300Lock								= @"ORRGA300Lock";
 		[self setScanProgress:0];
 		NSUInteger anAmu = [[amus objectAtIndex:currentAmuIndex] intValue];
 		if(anAmu<modelNumber){
-			[self addCmdToQueue:[NSString stringWithFormat:@"MR%ld",anAmu]];
+			[self addCmdToQueue:[NSString stringWithFormat:@"MR%d",(int)anAmu]];
 		}
 		else {
 			NSLog(@"RGA: AMU in table (entry %d:%d) <0 or >%@\n",modelNumber,currentAmuIndex, [amus objectAtIndex:currentAmuIndex]);

@@ -274,7 +274,7 @@
 - (void) onlineMaskChanged:(NSNotification*)aNotification
 {
 	short i;
-	unsigned long theMask = [model onlineMask];
+	uint32_t theMask = [model onlineMask];
 	for(i=0;i<16;i++){
 		[[onlineMaskMatrixA cellWithTag:i] setIntValue:(theMask&(1<<i))!=0];
 		[[onlineMaskMatrixB cellWithTag:i+16] setIntValue:(theMask&(1<<(i+16)))!=0];

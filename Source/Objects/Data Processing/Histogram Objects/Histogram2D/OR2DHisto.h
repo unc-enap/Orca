@@ -28,7 +28,7 @@
 @class OR2DHistoController;
 
 @interface OR2DHisto : ORDataSetModel  {
-    unsigned long       dataId;
+    uint32_t       dataId;
     unsigned short      numberBinsPerSide;
     unsigned short      minX,maxX,minY,maxY;
     NSMutableData*     histogram; //actually a 2D array stuffed into a 1D
@@ -37,11 +37,11 @@
 
 
 #pragma mark ¥¥¥Accessors
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (unsigned short) numberBinsPerSide;
 - (void) setNumberBinsPerSide:(unsigned short)bins;
-- (unsigned long)valueX:(unsigned short)aXBin y:(unsigned short)aYBin;
+- (uint32_t)valueX:(unsigned short)aXBin y:(unsigned short)aYBin;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherShaper;
 - (NSMutableArray*) rois;
@@ -50,8 +50,8 @@
 - (NSDictionary*) dataRecordDescription;
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) packageData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo keys:(NSMutableArray*)aKeyArray;
-- (void) mergeHistogram:(unsigned long*)ptr numValues:(unsigned long)numBins;
-- (void) load:(unsigned long*)ptr numValues:(unsigned long)num;
+- (void) mergeHistogram:(uint32_t*)ptr numValues:(uint32_t)numBins;
+- (void) load:(uint32_t*)ptr numValues:(uint32_t)num;
 - (void) histogramX:(unsigned short)aXValue y:(unsigned short)aYValue;
 - (void) loadX:(unsigned short)aXValue y:(unsigned short)aYValue z:(unsigned short)aZValue;
 - (void) sumX:(unsigned short)aXValue y:(unsigned short)aYValue z:(unsigned short)aZValue;

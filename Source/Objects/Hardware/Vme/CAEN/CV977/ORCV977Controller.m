@@ -218,7 +218,7 @@
 - (void) inputSetChanged:(NSNotification*)aNotification
 {
 	short i;
-	unsigned long theMask = [model inputSet];
+	uint32_t theMask = [model inputSet];
 	for(i=0;i<16;i++){
 		[[inputSetMatrix cellWithTag:i] setIntValue:(theMask&(1<<i))!=0];
 	}
@@ -228,7 +228,7 @@
 - (void) inputMaskChanged:(NSNotification*)aNotification
 {
 	short i;
-	unsigned long theMask = [model inputMask];
+	uint32_t theMask = [model inputMask];
 	for(i=0;i<16;i++){
 		[[inputMaskMatrix cellWithTag:i] setIntValue:(theMask&(1<<i))!=0];
 	}
@@ -238,7 +238,7 @@
 - (void) outputSetChanged:(NSNotification*)aNotification
 {
 	short i;
-	unsigned long theMask = [model outputSet];
+	uint32_t theMask = [model outputSet];
 	for(i=0;i<16;i++){
 		[[outputSetMatrix cellWithTag:i] setIntValue:(theMask&(1<<i))!=0];
 	}
@@ -248,7 +248,7 @@
 - (void) outputMaskChanged:(NSNotification*)aNotification
 {
 	short i;
-	unsigned long theMask = [model outputMask];
+	uint32_t theMask = [model outputMask];
 	for(i=0;i<16;i++){
 		[[outputMaskMatrix cellWithTag:i] setIntValue:(theMask&(1<<i))!=0];
 	}
@@ -258,7 +258,7 @@
 - (void) interruptMaskChanged:(NSNotification*)aNotification
 {
 	short i;
-	unsigned long theMask = [model interruptMask];
+	uint32_t theMask = [model interruptMask];
 	for(i=0;i<16;i++){
 		[[interruptMaskMatrix cellWithTag:i] setIntValue:(theMask&(1<<i))!=0];
 	}
@@ -490,7 +490,7 @@
     };
 	
     [registerOffsetTextField setStringValue:
-	 [NSString stringWithFormat:@"0x%04lx",
+	 [NSString stringWithFormat:@"0x%04x",
 	  [model getAddressOffset:aRegisterIndex]]];
 	
     [registerReadWriteTextField setStringValue:types[[model getAccessType:aRegisterIndex]]];

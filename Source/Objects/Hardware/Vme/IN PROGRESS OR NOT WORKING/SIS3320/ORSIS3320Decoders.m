@@ -48,11 +48,11 @@
 }
 
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
 	
-	unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length = ExtractLength(*ptr);
+	uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length = ExtractLength(*ptr);
 	
 	int crate	= ShiftAndExtract(ptr[1],21,0xf);
 	int card	= ShiftAndExtract(ptr[1],16,0x1f);
@@ -62,7 +62,7 @@
 	NSString* cardKey		= [self getCardKey: card];
 	NSString* channelKey	= [self getChannelKey: channel];
 		
-	NSMutableData* tmpData = [NSMutableData dataWithBytes:someData length:(length-3)*sizeof(long)];
+	NSMutableData* tmpData = [NSMutableData dataWithBytes:someData length:(length-3)*sizeof(int32_t)];
 	unsigned short* dp = (unsigned short*)[tmpData bytes];
 	int i;
 	for(i=3;i<length-3;i++){
@@ -96,7 +96,7 @@
     return length; //must return number of longs
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title    = @"SIS3320 Waveform Record\n\n";
     NSString* crate    = [NSString stringWithFormat:@"Crate = %d\n",ShiftAndExtract(ptr[1],21,0xf)];

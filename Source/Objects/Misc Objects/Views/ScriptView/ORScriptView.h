@@ -60,7 +60,7 @@
 
 - (void)	 goToLine: (int)lineNum;
 - (void)	 unselectAll;
-- (void)	 selectLine:(unsigned long)aLine;
+- (void)	 selectLine:(uint32_t)aLine;
 
 - (NSString*) syntaxDefinitionFilename;
 - (void) setSyntaxDefinitionFilename:(NSString*)aFileName;

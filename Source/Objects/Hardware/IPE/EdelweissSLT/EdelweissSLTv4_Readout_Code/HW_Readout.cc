@@ -733,7 +733,7 @@ void doWriteBlock(SBC_Packet* aPacket,uint8_t reply)
     //HW access:
     try{
         if (numItems == 1)  pbus->write(startAddress, *lptr);
-        else                pbus->writeBlock(startAddress, (unsigned long *) lptr, numItems);
+        else                pbus->writeBlock(startAddress, (uint32_t *) lptr, numItems);
     }catch(PbusError &e){
         perr = 1;
     }
@@ -797,7 +797,7 @@ void doReadBlock(SBC_Packet* aPacket,uint8_t reply)
 		    *lPtr = pbus->read(startAddress);
 			//            printf("read from 0x%x, value is %i (0x%x)\n",startAddress, *lPtr,*lPtr);//TODO: debugging
 		}
-        else                pbus->readBlock(startAddress, (unsigned long *) lPtr, numItems);
+        else                pbus->readBlock(startAddress, (uint32_t *) lPtr, numItems);
     }catch(PbusError &e){
         perr = 1;
     }

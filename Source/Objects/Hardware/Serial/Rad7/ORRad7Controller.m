@@ -87,7 +87,7 @@
     processOpsSize	= NSMakeSize(410,205);
     historyOpsSize	= NSMakeSize(435,280);
     summaryOpsSize	= NSMakeSize(400,230);
-	NSString* key = [NSString stringWithFormat: @"orca.ORRad7%lu.selectedtab",[model uniqueIdNumber]];
+	NSString* key = [NSString stringWithFormat: @"orca.ORRad7%u.selectedtab",[model uniqueIdNumber]];
     NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
 	if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
 	[tabView selectTabViewItemAtIndex: index];
@@ -107,7 +107,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"Rad7 (Unit %lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"Rad7 (Unit %u)",[model uniqueIdNumber]]];
 }
 
 #pragma mark ***Notifications
@@ -724,7 +724,7 @@
 	}
     [[self window] setContentView:totalView];
 	
-    NSString* key = [NSString stringWithFormat: @"orca.ORRad7%lu.selectedtab",[model uniqueIdNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORRad7%u.selectedtab",[model uniqueIdNumber]];
     NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 }

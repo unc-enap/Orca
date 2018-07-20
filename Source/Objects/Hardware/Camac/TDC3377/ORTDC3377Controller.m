@@ -244,7 +244,7 @@
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"TDC3377 (Station %ld)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"TDC3377 (Station %d)",(int)[model stationNumber]]];
 }
 
 - (void) runModeChanged:(NSNotification*)aNotification

@@ -22,14 +22,14 @@
 
 #if 0
 #ifdef  __INT_MAX__
-#if __INT_MAX__ == 2147483647			// on est dans une machine ou les entiers int  font deja 32 bit (systeme 10.6 par exemple)  il ne faut pas prendre les long
+#if __INT_MAX__ == 2147483647			// on est dans une machine ou les entiers int  font deja 32 bit (systeme 10.6 par exemple)  il ne faut pas prendre les int32_t
 #define	 int4	int
 #else
-#define	 int4	long
+#define	 int4	int32_t
 #endif
 
 #else		//  ifndef   __INT_MAX__    comme par exemple dans la carte opera
-#define	 int4	long
+#define	 int4	int32_t
 #endif
 #endif
 
@@ -151,7 +151,7 @@ Structure_trame_udp;
 
 //	 mots derives pouvant etre utilises directement
 #define	_temps_seconde(pd_fort,pd_faible)	(((((pd_fort%125)<<25) + (pd_faible>>5)) /125 + ((pd_fort/125)<<25))/25)
-#define	_temps_double(pd_fort,pd_faible)	( (long double)(65536. * 16384.) * (long double)pd_fort + (long double)pd_faible ) / (long double)100000.
+#define	_temps_double(pd_fort,pd_faible)	( (int32_t double)(65536. * 16384.) * (int32_t double)pd_fort + (int32_t double)pd_faible ) / (int32_t double)100000.
 #define _nb_mots_lecture_v1(masque_BB)		((masque_BB)&7)
 #define _nb_mots_lecture_v2(masque_BB)		(((masque_BB)>>3)&7)
 #define _nb_mots_lecture(masque_BB)		(((masque_BB)&7) + (((masque_BB)>>3)&7)?((masque_BB)&7) + (((masque_BB)>>3)&7):1)

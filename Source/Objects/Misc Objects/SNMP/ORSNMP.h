@@ -43,7 +43,7 @@
 - (void) parseParamTypeAndValue:(NSString*)s intoDictionary:(NSMutableDictionary*)aDictionary;
 - (void) parseParamValue:(NSString*)s intoDictionary:(NSMutableDictionary*)aDictionary;
 - (void) parseNumberWithUnits:(NSString*)s intoDictionary:(NSMutableDictionary*)aDictionary;
-- (unsigned long) convertBitString:(NSString*)s;
+- (uint32_t) convertBitString:(NSString*)s;
 
 @end
 

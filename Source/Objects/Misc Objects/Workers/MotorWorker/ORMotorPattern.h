@@ -81,10 +81,10 @@ enum {
 - (void) finishedStep;
 
 #pragma mark ¥¥¥hardware access
-- (long) readMotor;
+- (int32_t) readMotor;
 - (BOOL) motorRunning;
-- (void) moveMotor:(id)aMotor amount:(long)amount;
-- (void) moveMotor:(id)aMotor to:(long)amount;
+- (void) moveMotor:(id)aMotor amount:(int32_t)amount;
+- (void) moveMotor:(id)aMotor to:(int32_t)amount;
 
 #pragma mark ¥¥¥State Actions
 - (void) shipMotorState:(id)aWorker;

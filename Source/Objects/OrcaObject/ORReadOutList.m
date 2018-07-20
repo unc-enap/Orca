@@ -455,7 +455,7 @@ static NSString *ORReadOutList_Identifier 	= @"ORReadOutList_Identifier";
 
 - (void) saveUsingFile:(NSFileHandle*)aFile
 {
-    [aFile writeData:[[NSString stringWithFormat:@"%ld <%@> items\n",[children count],identifier] dataUsingEncoding:NSASCIIStringEncoding]];
+    [aFile writeData:[[NSString stringWithFormat:@"%d <%@> items\n",(int)[children count],identifier] dataUsingEncoding:NSASCIIStringEncoding]];
     [aFile writeData:[@"" dataUsingEncoding:NSASCIIStringEncoding]];
     
     NSEnumerator* e = [children objectEnumerator];

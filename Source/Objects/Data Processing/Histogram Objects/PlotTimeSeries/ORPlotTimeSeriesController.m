@@ -72,7 +72,7 @@
 - (float)  plotter:(id) aPlotter dataValue:(int)i
 {
 	ORTimeSeries* ts = [model timeSeries];
-	unsigned long theTime;
+	uint32_t theTime;
 	double y;
 	[ts index:i time:&theTime value:&y];
 	return y;
@@ -80,7 +80,7 @@
 
 - (void)  plotter:(id) aPlotter index:(int)i x:(double*)x y:(double*)y
 {
-	unsigned long theTime;
+	uint32_t theTime;
 	[[model timeSeries] index:i time:&theTime value:y];
 	*x = (double)theTime;
 }

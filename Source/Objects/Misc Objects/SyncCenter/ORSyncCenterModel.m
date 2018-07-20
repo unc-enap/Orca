@@ -395,7 +395,7 @@ NSString* ORSyncCommanderStateChanged     = @"ORSyncCommanderStateChanged";
             else {
                 [cmdList addObject:@"[ORAlarmCollection removeAllAddresses];"];
                 for(ORAlarmEMailDestination* anEntry in self.alarmList){
-                    NSString* aCmd = [NSString stringWithFormat:@"[ORAlarmCollection addAddress:\"%@\" severityMask:%lu];",[anEntry mailAddress],[anEntry severityMask]];
+                    NSString* aCmd = [NSString stringWithFormat:@"[ORAlarmCollection addAddress:\"%@\" severityMask:%u];",[anEntry mailAddress],[anEntry severityMask]];
                     [cmdList addObject:aCmd];
                 }
                 [cmdList addObject:[NSString stringWithFormat:@"[ORAlarmCollection setEmailEnabled:%d];",[[ORAlarmCollection sharedAlarmCollection] emailEnabled]]];

@@ -45,10 +45,10 @@
     ORConnector* linkConnector; //we won't draw this connector but need a reference to it
     
     //registerValues
-    unsigned long extDiscriminatorSrc;
-    unsigned long extDiscriminatorMode;
-    unsigned long hardwareStatus;
-    unsigned long userPackageData;
+    uint32_t extDiscriminatorSrc;
+    uint32_t extDiscriminatorMode;
+    uint32_t hardwareStatus;
+    uint32_t userPackageData;
     unsigned short windowCompMin;
     unsigned short windowCompMax;
     //control reg bits
@@ -63,10 +63,10 @@
     BOOL  pileupWaveformOnlyMode[kNumGretina4AChannels];
     short ledThreshold[kNumGretina4AChannels];
     //counters
-    unsigned long aHitCounter[kNumGretina4AChannels];
-    unsigned long droppedEventCount[kNumGretina4AChannels];
-    unsigned long acceptedEventCount[kNumGretina4AChannels];
-    unsigned long discriminatorCount[kNumGretina4AChannels];
+    uint32_t aHitCounter[kNumGretina4AChannels];
+    uint32_t droppedEventCount[kNumGretina4AChannels];
+    uint32_t acceptedEventCount[kNumGretina4AChannels];
+    uint32_t discriminatorCount[kNumGretina4AChannels];
     
     //firmware loading
     NSThread*	fpgaProgrammingThread;
@@ -80,36 +80,36 @@
     //low-level registers and diagnostics
     NSOperationQueue*	fileQueue;
     unsigned short      selectedChannel;
-    unsigned long       registerWriteValue;
+    uint32_t       registerWriteValue;
     int                 registerIndex;
-    unsigned long       spiWriteValue;
+    uint32_t       spiWriteValue;
     ORFileMoverOp*      fpgaFileMover;
 	BOOL                isRunning;
     NSString*           firmwareStatusString;
     BOOL                locked;
-    unsigned long       snapShot[kNumberOfGretina4ARegisters];
-    unsigned long       fpgaSnapShot[kNumberOfFPGARegisters];
+    uint32_t       snapShot[kNumberOfGretina4ARegisters];
+    uint32_t       fpgaSnapShot[kNumberOfFPGARegisters];
     
     //rates
     ORRateGroup*    waveFormRateGroup;
-    unsigned long   waveFormCount[kNumGretina4AChannels];
+    uint32_t   waveFormCount[kNumGretina4AChannels];
     ORRunningAverageGroup* rateRunningAverages; //initialized in initWithCoder, start by runstart
 
     //clock sync
     int             initializationState;
     
     //data taker
-    unsigned long   dataId;
-    unsigned long   dataBuffer[kG4MDataPacketSize];
-    unsigned long   location;           //cache value
+    uint32_t   dataId;
+    uint32_t   dataBuffer[kG4MDataPacketSize];
+    uint32_t   location;           //cache value
     id              theController;      //cache value
-    unsigned long   fifoAddress;        //cache value
-    unsigned long   fifoStateAddress;   //cache value
+    uint32_t   fifoAddress;        //cache value
+    uint32_t   fifoStateAddress;   //cache value
     int             fifoState;
     int				fifoEmptyCount;
     int             fifoResetCount;
     ORAlarm*        fifoFullAlarm;
-    unsigned long   serialNumber;
+    uint32_t   serialNumber;
     
     //hardware params
     BOOL			forceFullInit[kNumGretina4AChannels];
@@ -125,15 +125,15 @@
     short           discWidth[kNumGretina4AChannels];
     short           baselineStart[kNumGretina4AChannels];
     short           p1Window[kNumGretina4AChannels];
-    unsigned long   p2Window;
+    uint32_t   p2Window;
     short           dacChannelSelect;
     short           dacAttenuation;
     
     unsigned short baselineDelay;
     unsigned short trackingSpeed;
     unsigned short baselineStatus;
-    unsigned long  channelPulsedControl;
-    unsigned long  diagMuxControl;
+    uint32_t  channelPulsedControl;
+    uint32_t  diagMuxControl;
     
 
     unsigned short  downSampleHoldOffTime;
@@ -145,33 +145,33 @@
     unsigned short  diagChannelEventSel;
     unsigned short  vetoGateWidth;
     
-    unsigned long   rj45SpareIoMuxSel;
+    uint32_t   rj45SpareIoMuxSel;
     BOOL            rj45SpareIoDir;
-    unsigned long   ledStatus;
+    uint32_t   ledStatus;
     BOOL            diagIsync;
     BOOL            serdesSmLostLock;
     BOOL            overflowFlagChan[kNumGretina4AChannels];
     unsigned short  triggerConfig;
-    unsigned long   phaseErrorCount;
-    unsigned long   phaseStatus;
-    unsigned long   serdesPhaseValue;
-    unsigned long   codeRevision;
-    unsigned long   codeDate;
-    unsigned long   tSErrCntCtrl;
-    unsigned long   tSErrorCount;
-    unsigned long   auxIoRead;
-    unsigned long   auxIoWrite;
-    unsigned long   auxIoConfig;
-    unsigned long   sdPem;
+    uint32_t   phaseErrorCount;
+    uint32_t   phaseStatus;
+    uint32_t   serdesPhaseValue;
+    uint32_t   codeRevision;
+    uint32_t   codeDate;
+    uint32_t   tSErrCntCtrl;
+    uint32_t   tSErrorCount;
+    uint32_t   auxIoRead;
+    uint32_t   auxIoWrite;
+    uint32_t   auxIoConfig;
+    uint32_t   sdPem;
     BOOL            sdSmLostLockFlag;
     BOOL            configMainFpga;
-    unsigned long   vmeStatus;
+    uint32_t   vmeStatus;
     BOOL            clkSelect0;
     BOOL            clkSelect1;
     BOOL            flashMode;
-    unsigned long   serialNum;
-    unsigned long   boardRevNum;
-    unsigned long   vhdlVerNum;
+    uint32_t   serialNum;
+    uint32_t   boardRevNum;
+    uint32_t   vhdlVerNum;
     BOOL            firstTime;
     BOOL            doHwCheck;
     short           clockSource;
@@ -196,7 +196,7 @@
 - (void) guardianRemovingDisplayOfConnectors:(id)aGuardian;
 - (void) guardianAssumingDisplayOfConnectors:(id)aGuardian;
 - (void) disconnect;
-- (unsigned long)   baseAddress;
+- (uint32_t)   baseAddress;
 - (ORConnector*)    linkConnector;
 - (void)            setLinkConnector:(ORConnector*)aConnector;
 - (ORConnector*)    spiConnector;
@@ -204,21 +204,21 @@
 - (void)            openPreampDialog;
 
 #pragma mark ***Access Methods for Low-Level Access
-- (unsigned long)   spiWriteValue;
-- (void)            setSPIWriteValue:(unsigned long)aWriteValue;
+- (uint32_t)   spiWriteValue;
+- (void)            setSPIWriteValue:(uint32_t)aWriteValue;
 - (short)           registerIndex;
 - (void)            setRegisterIndex:(int)aRegisterIndex;
-- (unsigned long)   registerWriteValue;
-- (void)            setRegisterWriteValue:(unsigned long)aWriteValue;
-- (unsigned long)   selectedChannel;
+- (uint32_t)   registerWriteValue;
+- (void)            setRegisterWriteValue:(uint32_t)aWriteValue;
+- (uint32_t)   selectedChannel;
 - (void)            setSelectedChannel:(unsigned short)aChannel;
-- (unsigned long)   readRegister:(unsigned int)index channel:(int)aChannel;
-- (unsigned long)   readRegister:(unsigned int)index;
-- (void)            writeRegister:(unsigned int)index withValue:(unsigned long)value;
-- (void)            writeToAddress:(unsigned long)anAddress aValue:(unsigned long)aValue;
-- (unsigned long)   readFromAddress:(unsigned long)anAddress;
-- (unsigned long)   readFPGARegister:(unsigned int)index;
-- (void)            writeFPGARegister:(unsigned int)index withValue:(unsigned long)value;
+- (uint32_t)   readRegister:(unsigned int)index channel:(int)aChannel;
+- (uint32_t)   readRegister:(unsigned int)index;
+- (void)            writeRegister:(unsigned int)index withValue:(uint32_t)value;
+- (void)            writeToAddress:(uint32_t)anAddress aValue:(uint32_t)aValue;
+- (uint32_t)   readFromAddress:(uint32_t)anAddress;
+- (uint32_t)   readFPGARegister:(unsigned int)index;
+- (void)            writeFPGARegister:(unsigned int)index withValue:(uint32_t)value;
 - (void)            snapShotRegisters;
 - (void)            compareToSnapShot;
 - (void)            dumpAllRegisters;
@@ -244,7 +244,7 @@
 - (void)          setWaveFormRateGroup:(ORRateGroup*)newRateGroup;
 - (id)            rateObject:(short)channel;
 - (void)          setRateIntegrationTime:(double)newIntegrationTime;
-- (unsigned long) getCounter:(short)counterTag forGroup:(short)groupTag;
+- (uint32_t) getCounter:(short)counterTag forGroup:(short)groupTag;
 
 #pragma mark - Initialization
 - (BOOL) forceFullCardInit;
@@ -257,14 +257,14 @@
 #pragma mark - Persistant Register Values
 - (void)            loadCardDefaults;
 - (void)            loadChannelDefaults:(unsigned short) aChan;
-- (unsigned long)   extDiscriminatorSrc;
-- (void)            setExtDiscriminatorSrc:(unsigned long)aValue;
-- (unsigned long)   extDiscriminatorMode;
-- (void)            setExtDiscriminatorMode:(unsigned long)aValue;
-- (unsigned long)   hardwareStatus;
-- (void)            setHardwareStatus:      (unsigned long)aValue;
-- (unsigned long)   userPackageData;
-- (void)            setUserPackageData:     (unsigned long)aValue;
+- (uint32_t)   extDiscriminatorSrc;
+- (void)            setExtDiscriminatorSrc:(uint32_t)aValue;
+- (uint32_t)   extDiscriminatorMode;
+- (void)            setExtDiscriminatorMode:(uint32_t)aValue;
+- (uint32_t)   hardwareStatus;
+- (void)            setHardwareStatus:      (uint32_t)aValue;
+- (uint32_t)   userPackageData;
+- (void)            setUserPackageData:     (uint32_t)aValue;
 - (unsigned short)  windowCompMin;
 - (void)            setWindowCompMin:       (unsigned short)aValue;
 - (unsigned short)  windowCompMax;
@@ -316,10 +316,10 @@
 - (void)            setDacChannelSelect:    (unsigned short)aValue;
 - (short)           dacAttenuation;
 - (void)            setDacAttenuation:      (unsigned short)aValue;
-- (unsigned long)   channelPulsedControl;
-- (void)            setChannelPulsedControl:(unsigned long)aValue;
-- (unsigned long)   diagMuxControl;
-- (void)            setDiagMuxControl:      (unsigned long)aValue;
+- (uint32_t)   channelPulsedControl;
+- (void)            setChannelPulsedControl:(uint32_t)aValue;
+- (uint32_t)   diagMuxControl;
+- (void)            setDiagMuxControl:      (uint32_t)aValue;
 - (BOOL)            downSamplePauseEnable;
 - (void)            setDownSamplePauseEnable:(BOOL)aFlag;
 - (unsigned short)  downSampleHoldOffTime;
@@ -336,20 +336,20 @@
 - (void)            setTrackingSpeed:       (unsigned short)aValue;
 - (unsigned short)  baselineStatus;
 - (void)            setBaselineStatus:      (unsigned short)aValue;
-- (unsigned long)   extDiscriminatorMode;
-- (void)            setExtDiscriminatorMode:(unsigned long)aValue;
+- (uint32_t)   extDiscriminatorMode;
+- (void)            setExtDiscriminatorMode:(uint32_t)aValue;
 - (unsigned short)  diagInput;
 - (void)            setDiagInput:           (unsigned short)aValue;
 - (unsigned short)  vetoGateWidth;
 - (void)            setVetoGateWidth:       (unsigned short)aValue;
 - (unsigned short)   diagChannelEventSel;
 - (void)            setDiagChannelEventSel: (unsigned short)aValue;
-- (unsigned long)   rj45SpareIoMuxSel;
-- (void)            setRj45SpareIoMuxSel:   (unsigned long)aValue;
+- (uint32_t)   rj45SpareIoMuxSel;
+- (void)            setRj45SpareIoMuxSel:   (uint32_t)aValue;
 - (BOOL)            rj45SpareIoDir;
 - (void)            setRj45SpareIoDir:      (BOOL)aValue;
-- (unsigned long)   ledStatus;
-- (void)            setLedStatus:           (unsigned long)aValue;
+- (uint32_t)   ledStatus;
+- (void)            setLedStatus:           (uint32_t)aValue;
 - (BOOL)            diagIsync;
 - (void)            setDiagIsync:           (BOOL)aValue;
 - (BOOL)            serdesSmLostLock;
@@ -358,58 +358,58 @@
 - (void)            setOverflowFlagChan:    (unsigned short)chan withValue:(BOOL)aValue;
 - (unsigned short)  triggerConfig;
 - (void)            setTriggerConfig:       (unsigned short)aValue;
-- (unsigned long)   phaseErrorCount;
-- (void)            setPhaseErrorCount:     (unsigned long)aValue;
-- (unsigned long)   phaseStatus;
-- (void)            setPhaseStatus:         (unsigned long)aValue;
-- (unsigned long)   serdesPhaseValue;
-- (void)            setSerdesPhaseValue:    (unsigned long)aValue;
-- (unsigned long)   codeRevision;
-- (void)            setCodeRevision:        (unsigned long)aValue;
-- (unsigned long)   codeDate;
-- (void)            setCodeDate:            (unsigned long)aValue;
-- (unsigned long)   tSErrCntCtrl;
-- (void)            setTSErrCntCtrl:        (unsigned long)aValue;
-- (unsigned long)   tSErrorCount;
-- (void)            setTSErrorCount:        (unsigned long)aValue;
-- (unsigned long)   droppedEventCount:      (unsigned short)chan;
-- (unsigned long)   acceptedEventCount:     (unsigned short)chan;
-- (unsigned long)   aHitCount:              (unsigned short)chan;
-- (unsigned long)   discCount:              (unsigned short)chan;
-- (unsigned long)   auxIoRead;
-- (void)            setAuxIoRead:           (unsigned long)aValue;
-- (unsigned long)   auxIoWrite;
-- (void)            setAuxIoWrite:          (unsigned long)aValue;
-- (unsigned long)   auxIoConfig;
-- (void)            setAuxIoConfig:         (unsigned long)aValue;
-- (unsigned long)   sdPem;
-- (void)            setSdPem:               (unsigned long)aValue;
+- (uint32_t)   phaseErrorCount;
+- (void)            setPhaseErrorCount:     (uint32_t)aValue;
+- (uint32_t)   phaseStatus;
+- (void)            setPhaseStatus:         (uint32_t)aValue;
+- (uint32_t)   serdesPhaseValue;
+- (void)            setSerdesPhaseValue:    (uint32_t)aValue;
+- (uint32_t)   codeRevision;
+- (void)            setCodeRevision:        (uint32_t)aValue;
+- (uint32_t)   codeDate;
+- (void)            setCodeDate:            (uint32_t)aValue;
+- (uint32_t)   tSErrCntCtrl;
+- (void)            setTSErrCntCtrl:        (uint32_t)aValue;
+- (uint32_t)   tSErrorCount;
+- (void)            setTSErrorCount:        (uint32_t)aValue;
+- (uint32_t)   droppedEventCount:      (unsigned short)chan;
+- (uint32_t)   acceptedEventCount:     (unsigned short)chan;
+- (uint32_t)   aHitCount:              (unsigned short)chan;
+- (uint32_t)   discCount:              (unsigned short)chan;
+- (uint32_t)   auxIoRead;
+- (void)            setAuxIoRead:           (uint32_t)aValue;
+- (uint32_t)   auxIoWrite;
+- (void)            setAuxIoWrite:          (uint32_t)aValue;
+- (uint32_t)   auxIoConfig;
+- (void)            setAuxIoConfig:         (uint32_t)aValue;
+- (uint32_t)   sdPem;
+- (void)            setSdPem:               (uint32_t)aValue;
 - (BOOL)            sdSmLostLockFlag;
 - (void)            setSdSmLostLockFlag:    (BOOL)aValue;
 - (BOOL)            configMainFpga;
 - (void)            setConfigMainFpga:      (BOOL)aValue;
-- (unsigned long)   vmeStatus;
-- (void)            setVmeStatus:           (unsigned long)aValue;
+- (uint32_t)   vmeStatus;
+- (void)            setVmeStatus:           (uint32_t)aValue;
 - (BOOL)            clkSelect0;
 - (void)            setClkSelect0:          (BOOL)aValue;
 - (BOOL)            clkSelect1;
 - (void)            setClkSelect1:          (BOOL)aValue;
 - (BOOL)            flashMode;
 - (void)            setFlashMode:           (BOOL)aValue;
-- (unsigned long)   serialNum;
-- (void)            setSerialNum:           (unsigned long)aValue;
-- (unsigned long)   boardRevNum;
-- (void)            setBoardRevNum:         (unsigned long)aValue;
-- (unsigned long)   vhdlVerNum;
-- (void)            setVhdlVerNum:          (unsigned long)aValue;
+- (uint32_t)   serialNum;
+- (void)            setSerialNum:           (uint32_t)aValue;
+- (uint32_t)   boardRevNum;
+- (void)            setBoardRevNum:         (uint32_t)aValue;
+- (uint32_t)   vhdlVerNum;
+- (void)            setVhdlVerNum:          (uint32_t)aValue;
 - (short)           clockSource;
 - (void)            setClockSource:(short)aClockSource;
 
 #pragma mark - Hardware Access
-- (void)            writeLong:          (unsigned long)aValue toReg:(int)aReg;
-- (void)            writeLong:          (unsigned long)aValue toReg:(int)aReg channel:(int)aChan;
-- (unsigned long)   readLongFromReg:    (int)aReg;
-- (unsigned long)   readLongFromReg:    (int)aReg channel:(int)aChan;
+- (void)            writeLong:          (uint32_t)aValue toReg:(int)aReg;
+- (void)            writeLong:          (uint32_t)aValue toReg:(int)aReg channel:(int)aChan;
+- (uint32_t)   readLongFromReg:    (int)aReg;
+- (uint32_t)   readLongFromReg:    (int)aReg channel:(int)aChan;
 - (short)           readBoardIDReg;
 - (BOOL)            checkFirmwareVersion;
 - (BOOL)            checkFirmwareVersion:(BOOL)verbose;
@@ -417,59 +417,59 @@
 - (void)            resetSingleFIFO;
 - (void)            resetFIFO;
 - (void)            writeThresholds;
-- (unsigned long)   readExtDiscriminatorSrc;
+- (uint32_t)   readExtDiscriminatorSrc;
 - (void)            writeExtDiscriminatorSrc;
-- (unsigned long)   readExtDiscriminatorMode;
+- (uint32_t)   readExtDiscriminatorMode;
 - (void)            writeExtDiscriminatorMode;
-- (unsigned long)   readHardwareStatus;
-- (unsigned long)   readUserPackageData;
+- (uint32_t)   readHardwareStatus;
+- (uint32_t)   readUserPackageData;
 - (void)            writeUserPackageData;
-- (unsigned long)   readWindowCompMin;
+- (uint32_t)   readWindowCompMin;
 - (void)            writeWindowCompMin;
-- (unsigned long)   readWindowCompMax;
+- (uint32_t)   readWindowCompMax;
 - (void)            writeWindowCompMax;
 - (void)            clearCounters;
-- (unsigned long)   readControlReg:     (unsigned short)channel;
+- (uint32_t)   readControlReg:     (unsigned short)channel;
 - (void)            writeControlReg:    (unsigned short)chan enabled:(BOOL)forceEnable;
-- (unsigned long)   readLedThreshold:   (unsigned short)channel;
+- (uint32_t)   readLedThreshold:   (unsigned short)channel;
 - (void)            writeLedThreshold:  (unsigned short)channel;
-- (unsigned long)   readRawDataLength:  (unsigned short)channel;
+- (uint32_t)   readRawDataLength:  (unsigned short)channel;
 - (void)            writeRawDataLength: (unsigned short)channel;
-- (unsigned long)   readRawDataWindow:  (unsigned short)channel;
+- (uint32_t)   readRawDataWindow:  (unsigned short)channel;
 - (void)            writeRawDataWindow: (unsigned short)channel;
-- (unsigned long)   readDWindow:        (unsigned short)channel;
+- (uint32_t)   readDWindow:        (unsigned short)channel;
 - (void)            writeDWindow:       (unsigned short)channel;
-- (unsigned long)   readKWindow:        (unsigned short)channel;
+- (uint32_t)   readKWindow:        (unsigned short)channel;
 - (void)            writeKWindow:       (unsigned short)channel;
-- (unsigned long)   readMWindow:        (unsigned short)channel;
+- (uint32_t)   readMWindow:        (unsigned short)channel;
 - (void)            writeMWindow:       (unsigned short)channel;
-- (unsigned long)   readD3Window:       (unsigned short)channel;
+- (uint32_t)   readD3Window:       (unsigned short)channel;
 - (void)            writeD3Window:      (unsigned short)channel;
-- (unsigned long)   readDiscWidth:      (unsigned short)channel;
+- (uint32_t)   readDiscWidth:      (unsigned short)channel;
 - (void)            writeDiscWidth:     (unsigned short)channel;
-- (unsigned long)   readBaselineStart:  (unsigned short)channel;
+- (uint32_t)   readBaselineStart:  (unsigned short)channel;
 - (void)            writeBaselineStart: (unsigned short)channel;
-- (unsigned long)   readP1Window:        (unsigned short)channel;
+- (uint32_t)   readP1Window:        (unsigned short)channel;
 - (void)            writeP1Window:       (unsigned short)channel;
-- (unsigned long)   readP2Window;
+- (uint32_t)   readP2Window;
 - (void)            writeP2Window;
 - (void)            loadBaselines;
 - (void)            loadDelays;
-- (unsigned long)   readBaselineDelay;
+- (uint32_t)   readBaselineDelay;
 - (void)            writeBaselineDelay;
-- (unsigned long)   readDownSampleHoldOffTime;
+- (uint32_t)   readDownSampleHoldOffTime;
 - (void)            writeDownSampleHoldOffTime;
-- (unsigned long)   readHoldoffControl;
+- (uint32_t)   readHoldoffControl;
 - (void)            writeHoldoffControl;
-- (unsigned long long) readLiveTimeStamp;
-- (unsigned long long) readLatTimeStamp;
-- (unsigned long)   readVetoGateWidth;
+- (uint64_t) readLiveTimeStamp;
+- (uint64_t) readLatTimeStamp;
+- (uint32_t)   readVetoGateWidth;
 - (void)            writeVetoGateWidth;
 - (void)            writeMasterLogic:(BOOL)enable;
-- (unsigned long)   readTriggerConfig;
+- (uint32_t)   readTriggerConfig;
 - (void)            writeTriggerConfig;
 - (void)            readFPGAVersions;
-- (unsigned long)   readVmeAuxStatus;
+- (uint32_t)   readVmeAuxStatus;
 - (void)            readCodeRevision;
 - (void)            readaHitCounts;
 - (void)            readDroppedEventCounts;
@@ -477,22 +477,22 @@
 - (void)            readDiscriminatorCounts;
 - (void)            clearCounters;
 - (short)           readClockSource;
-- (void)            writeClockSource: (unsigned long) clocksource;
+- (void)            writeClockSource: (uint32_t) clocksource;
 - (void)            writeClockSource;
 - (void)            resetBoard;
 - (void)            resetMainFPGA;
 - (void)            initBoard;
 - (void)            initBoard:(BOOL)doChannelEnable;
 - (void)            dumpCounters;
-- (void)            dumpBoardIdDetails:         (unsigned long)aValue;
-- (void)            dumpProgrammingDoneDetails: (unsigned long)aValue;
-- (void)            dumpHardwareStatusDetails:  (unsigned long)aValue;
-- (void)            dumpExternalDiscSrcDetails: (unsigned long)aValue;
-- (void)            dumpChannelControlDetails:  (unsigned long)aValue;
-- (void)            dumpHoldoffControlDetails:  (unsigned long)aValue;
-- (void)            dumpBaselineDelayDetails:   (unsigned long)aValue;
-- (void)            dumpExtDiscModeDetails:     (unsigned long)aValue;
-- (void)            dumpMasterStatusDetails:    (unsigned long)aValue;
+- (void)            dumpBoardIdDetails:         (uint32_t)aValue;
+- (void)            dumpProgrammingDoneDetails: (uint32_t)aValue;
+- (void)            dumpHardwareStatusDetails:  (uint32_t)aValue;
+- (void)            dumpExternalDiscSrcDetails: (uint32_t)aValue;
+- (void)            dumpChannelControlDetails:  (uint32_t)aValue;
+- (void)            dumpHoldoffControlDetails:  (uint32_t)aValue;
+- (void)            dumpBaselineDelayDetails:   (uint32_t)aValue;
+- (void)            dumpExtDiscModeDetails:     (uint32_t)aValue;
+- (void)            dumpMasterStatusDetails:    (uint32_t)aValue;
 
 - (void)            setForceFullInitCard:(BOOL)aValue;
 - (void)            setLedThreshold:(unsigned short)chan withValue:(unsigned short)aValue;
@@ -511,8 +511,8 @@
 - (NSString*)       serDesStateName;
 
 #pragma mark - Data Taker
-- (unsigned long)   dataId;
-- (void)            setDataId:      (unsigned long) DataId;
+- (uint32_t)   dataId;
+- (void)            setDataId:      (uint32_t) DataId;
 - (void)            setDataIds:     (id)assigner;
 - (void)            syncDataIdsWith:(id)anotherCard;
 - (NSDictionary*)   dataRecordDescription;
@@ -571,14 +571,14 @@
 - (BOOL) checkBaselineStart:(int)aChan verbose:(BOOL)verbose;
 
 #pragma mark - SPI Interface
-- (unsigned long) writeAuxIOSPI:(unsigned long)spiData;
+- (uint32_t) writeAuxIOSPI:(uint32_t)spiData;
 
 #pragma mark - AdcProviding Protocol
 - (BOOL)            onlineMaskBit:(int)bit;
 - (BOOL)            partOfEvent:(unsigned short)aChannel;
-- (unsigned long)   waveFormCount:(short)aChannel;
-- (unsigned long)   eventCount:(int)aChannel;
-- (unsigned long)   thresholdForDisplay:(unsigned short) aChan;
+- (uint32_t)   waveFormCount:(short)aChannel;
+- (uint32_t)   eventCount:(int)aChannel;
+- (uint32_t)   thresholdForDisplay:(unsigned short) aChan;
 - (unsigned short)  gainForDisplay:(unsigned short) aChan;
 - (void)            clearEventCounts;
 - (void)            postAdcInfoProvidingValueChanged;

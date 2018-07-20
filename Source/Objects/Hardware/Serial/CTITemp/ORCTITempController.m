@@ -69,7 +69,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"CTI Temperature (Unit %lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"CTI Temperature (Unit %u)",[model uniqueIdNumber]]];
 }
 
 #pragma mark ***Notifications
@@ -193,7 +193,7 @@
 - (void) tempChanged:(NSNotification*)aNote
 {
 	[tempField setFloatValue:[model temperature]];
-	unsigned long t = [model timeMeasured];
+	uint32_t t = [model timeMeasured];
 	NSDate* theDate;
 	if(t){
 		theDate = [NSDate dateWithTimeIntervalSince1970:t];

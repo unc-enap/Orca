@@ -28,7 +28,7 @@
 #import "SNOCmds.h"
 #import "SBC_Link.h"
 
-unsigned long xl2_register_offsets[] =
+uint32_t xl2_register_offsets[] =
 {	
 0,				// [ 0]  Select Register
 4,				// [ 1]  Data Available Register
@@ -47,14 +47,14 @@ unsigned long xl2_register_offsets[] =
 
 @interface ORXL2Model (SBC)
 - (void) loadClocksUsingSBC:(NSData*)theData;
-- (void) loadXilinixUsingSBC:(NSData*)theData selectBits:(unsigned long) selectBits;
+- (void) loadXilinixUsingSBC:(NSData*)theData selectBits:(uint32_t) selectBits;
 - (void) xilinxLoadStatus:(ORSBCLinkJobStatus*) jobStatus;
 @end
 
 @interface ORXL2Model (LocalAdapter)
 - (void) loadClocksUsingLocalAdapter:(NSData*)theData;
-- (void) loadXilinixUsingLocalAdapter:(NSData*)theData selectBits:(unsigned long) selectBits;
-- (BOOL) checkXlinixLoadOK:(unsigned long) aSelectionMask;
+- (void) loadXilinixUsingLocalAdapter:(NSData*)theData selectBits:(uint32_t) selectBits;
+- (BOOL) checkXlinixLoadOK:(uint32_t) aSelectionMask;
 @end
 
 @implementation ORXL2Model
@@ -177,7 +177,7 @@ unsigned long xl2_register_offsets[] =
 
 - (NSString*) identifier
 {
-    return [NSString stringWithFormat:@"card %lu",[self stationNumber]];
+    return [NSString stringWithFormat:@"card %u",(int)[self stationNumber]];
 }
 
 - (NSComparisonResult)	slotCompare:(id)otherCard
@@ -286,7 +286,7 @@ unsigned long xl2_register_offsets[] =
 }
 
 #pragma mark •••Hardware Access
-- (void) selectCards:(unsigned long) selectBits
+- (void) selectCards:(uint32_t) selectBits
 {
 	[self writeToXL2Register:XL2_SELECT_REG value: selectBits]; // select the cards by writing to the XL2 REG 0 
 }
@@ -298,34 +298,34 @@ unsigned long xl2_register_offsets[] =
 
 - (void) select:(ORSNOCard*) aCard
 {
-	unsigned long selectBits;
+	uint32_t selectBits;
 	if(aCard == self)	selectBits = XL2_SELECT_XL2;
 	else				selectBits = (1L<<[aCard stationNumber]);
 	//NSLog(@"selectBits for card in slot %d: 0x%x\n", [aCard slot], selectBits);
 	[self selectCards:selectBits];
 }
 
-- (void) writeToXL2Register:(unsigned long) aRegister value:(unsigned long) aValue
+- (void) writeToXL2Register:(uint32_t) aRegister value:(uint32_t) aValue
 {
 	//NSLog(@"writexl2 value: 0x%x to 0x%x\n", aValue, [self xl2RegAddress:aRegister]);
 	if (aRegister > XL2_MASK_REG) {   //Higer registers require that bit 17 be set in the XL2 select register
-		unsigned long readValue = [self xl2RegAddress:XL2_SELECT_REG];
+		uint32_t readValue = [self xl2RegAddress:XL2_SELECT_REG];
 		if(~0x00020000UL & readValue) NSLog(@"in readFromXL2Register: changing selection mask!");
 		[[self xl1] writeHardwareRegister:[self xl2RegAddress:XL2_SELECT_REG] value:0x20000];
 	}
 	[[self xl1] writeHardwareRegister:[self xl2RegAddress:aRegister] value:aValue]; 		//Now write the value	
 }
 
-- (unsigned long) xl2RegAddress:(unsigned long)aRegOffset
+- (uint32_t) xl2RegAddress:(uint32_t)aRegOffset
 {
 	return [[self guardian] registerBaseAddress] + xl2_register_offsets[aRegOffset];
 }
 
 // read bit pattern from specified register on XL2
-- (unsigned long) readFromXL2Register:(unsigned long) aRegister
+- (uint32_t) readFromXL2Register:(uint32_t) aRegister
 {
 	if (aRegister > XL2_MASK_REG){   //Higer registers require that bit 17 be set in the XL2 select register
-		unsigned long readValue = [self xl2RegAddress:XL2_SELECT_REG];
+		uint32_t readValue = [self xl2RegAddress:XL2_SELECT_REG];
 		if(~0x00020000UL & readValue) NSLog(@"in readFromXL2Register: changing selection mask!");
 		[self writeHardwareRegister:[self xl2RegAddress:XL2_SELECT_REG] value:0x20000];
 	}
@@ -335,19 +335,19 @@ unsigned long xl2_register_offsets[] =
 }
 
 //call thrus for the Fec hardware access
-- (void) writeHardwareRegister:(unsigned long) anAddress value:(unsigned long) aValue
+- (void) writeHardwareRegister:(uint32_t) anAddress value:(uint32_t) aValue
 {
 	[[self xl1] writeHardwareRegister:anAddress value:aValue];
 }
 
-- (unsigned long) readHardwareRegister:(unsigned long) regAddress
+- (uint32_t) readHardwareRegister:(uint32_t) regAddress
 {
 	return [[self xl1] readHardwareRegister:regAddress];
 }
 
-- (unsigned long) readHardwareMemory:(unsigned long) memAddress
+- (uint32_t) readHardwareMemory:(uint32_t) memAddress
 {
-	unsigned long aValue=0;
+	uint32_t aValue=0;
 	[[[self xl1] adapter] readLongBlock:&aValue
 			    atAddress:memAddress
 			    numToRead:1
@@ -358,17 +358,17 @@ unsigned long xl2_register_offsets[] =
 }
 
 
-- (id) writeHardwareRegisterCmd:(unsigned long) aRegister value:(unsigned long) aBitPattern
+- (id) writeHardwareRegisterCmd:(uint32_t) aRegister value:(uint32_t) aBitPattern
 {
 	return [[self xl1] writeHardwareRegisterCmd:aRegister value:aBitPattern];		
 }
 
-- (id) readHardwareRegisterCmd:(unsigned long) regAddress
+- (id) readHardwareRegisterCmd:(uint32_t) regAddress
 {
 	return [[self xl1] readHardwareRegisterCmd:regAddress];
 }
 
-- (id) delayCmd:(unsigned long) milliSeconds
+- (id) delayCmd:(uint32_t) milliSeconds
 {
 	return [[self xl1] delayCmd:milliSeconds]; 		
 }
@@ -383,7 +383,7 @@ unsigned long xl2_register_offsets[] =
 {
 	@try {
 		[self deselectCards];
-		unsigned long readValue = [self readFromXL2Register: XL2_CONTROL_STATUS_REG];
+		uint32_t readValue = [self readFromXL2Register: XL2_CONTROL_STATUS_REG];
 		if (readValue & XL2_CONTROL_DONE_PROG) {
 			NSLog(@"XilinX code found in the crate, keeping it.\n");
 			[self writeToXL2Register:XL2_CONTROL_STATUS_REG value: XL2_CONTROL_DONE_PROG]; 
@@ -419,7 +419,7 @@ unsigned long xl2_register_offsets[] =
 	else			[self loadClocksUsingLocalAdapter:theData];
 }
 
-- (void) loadTheXilinx:(unsigned long) selectBits
+- (void) loadTheXilinx:(uint32_t) selectBits
 {
 	NSData* theData = [[self xl1] xilinxFileData];	// load the entire content of the file
 	if([self adapterIsSBC])	[self loadXilinixUsingSBC:theData selectBits:selectBits];
@@ -434,12 +434,12 @@ unsigned long xl2_register_offsets[] =
 	
 	NSLog(@"Sending Clock file\n");
 	
-	long errorCode = 0;
-	unsigned long numLongs		= ceil([theData length]/4.0); //round up to long word boundary
+	int32_t errorCode = 0;
+	uint32_t numLongs		= ceil([theData length]/4.0); //round up to int32_t word boundary
 	SBC_Packet aPacket;
 	aPacket.cmdHeader.destination			= kSNO;
 	aPacket.cmdHeader.cmdID					= kSNOXL2LoadClocks;
-	aPacket.cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(SNOXL2_ClockLoadStruct) + numLongs*sizeof(long));
+	aPacket.cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(SNOXL2_ClockLoadStruct) + numLongs*sizeof(int32_t));
 	
 	SNOXL2_ClockLoadStruct* payloadPtr		= (SNOXL2_ClockLoadStruct*)aPacket.payload;
 	payloadPtr->addressModifier				= [self addressModifier];
@@ -470,16 +470,16 @@ unsigned long xl2_register_offsets[] =
 	}
 }
 
-- (void) loadXilinixUsingSBC:(NSData*)theData selectBits:(unsigned long) selectBits
+- (void) loadXilinixUsingSBC:(NSData*)theData selectBits:(uint32_t) selectBits
 {
 	
 	NSLog(@"Sending Xilinx file\n");
 	
-	unsigned long numLongs		= ceil([theData length]/4.0); //round up to long word boundary
+	uint32_t numLongs		= ceil([theData length]/4.0); //round up to int32_t word boundary
 	SBC_Packet aPacket;
 	aPacket.cmdHeader.destination			= kSNO;
 	aPacket.cmdHeader.cmdID					= kSNOXL2LoadXilinx;
-	aPacket.cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(SNOXL2_XilinixLoadStruct) + numLongs*sizeof(long));
+	aPacket.cmdHeader.numberBytesinPayload	= (uint32_t)(sizeof(SNOXL2_XilinixLoadStruct) + numLongs*sizeof(int32_t));
 	
 	SNOXL2_XilinixLoadStruct* payloadPtr	= (SNOXL2_XilinixLoadStruct*)aPacket.payload;
 	payloadPtr->addressModifier				= [self addressModifier];
@@ -507,7 +507,7 @@ unsigned long xl2_register_offsets[] =
 		//launch the load job. The response will be a job status record
 		[[self sbcLink] send:&aPacket receive:&aPacket];
 		SBC_JobStatusStruct *responsePtr = (SBC_JobStatusStruct*)aPacket.payload;
-		long running = responsePtr->running;
+		int32_t running = responsePtr->running;
 		if(running){
 			NSLog(@"Xinlinx load in progress on the SBC.\n");
 			[[self sbcLink] monitorJobFor:self statusSelector:@selector(xilinxLoadStatus:)];
@@ -537,7 +537,7 @@ unsigned long xl2_register_offsets[] =
 {
 	//-------------- variables -----------------
 	short 	theOffset = 0;	
-	unsigned long writeValue;
+	uint32_t writeValue;
 	//------------------------------------------
 	BOOL selectOK = NO;
 	@try {
@@ -606,7 +606,7 @@ unsigned long xl2_register_offsets[] =
 }
 
 
-- (void) loadXilinixUsingLocalAdapter:(NSData*)theData selectBits:(unsigned long) selectBits
+- (void) loadXilinixUsingLocalAdapter:(NSData*)theData selectBits:(uint32_t) selectBits
 {
 	
 	//--------------------------- The file format as of 4/17/96 -------------------------------------
@@ -622,9 +622,9 @@ unsigned long xl2_register_offsets[] =
 	//
 	//----------------------------------------------------------------------------------------------
 	
-	unsigned long bitCount		= 0UL;
-	unsigned long writeValue	= 0UL;
-	unsigned long mc_SelectBits	= 0;						
+	uint32_t bitCount		= 0UL;
+	uint32_t writeValue	= 0UL;
+	uint32_t mc_SelectBits	= 0;						
 	Boolean firstPass			= TRUE;
 	BOOL selectOK = NO;
 	
@@ -633,8 +633,8 @@ unsigned long xl2_register_offsets[] =
 		// Load the data from the Xilinx File
 		NSData* theData = [[self xl1] xilinxFileData];	// load the entire content of the file
 		char*   charData = (char*)[theData bytes];
-		unsigned long length = [theData length];
-		unsigned long index = length; 
+		uint32_t length = [theData length];
+		uint32_t index = length; 
 		
 		// select the mother cards in the SNO Crate
 		//int card_index;
@@ -684,8 +684,8 @@ unsigned long xl2_register_offsets[] =
 		
 		[ORTimer delay:.200];   // doubled MAH 01/18/00
 		
-		//unsigned long theDelay = theConfigDB->getXiLinxLoadDelay(its_SC_Number); 
-		unsigned long theDelay = 40000; //nSec
+		//uint32_t theDelay = theConfigDB->getXiLinxLoadDelay(its_SC_Number); 
+		uint32_t theDelay = 40000; //nSec
 		int i;
 		for (i = 1;i < index;i++){
 			
@@ -767,7 +767,7 @@ unsigned long xl2_register_offsets[] =
 	
 }
 
-- (BOOL) checkXlinixLoadOK:(unsigned long) aSelectionMask
+- (BOOL) checkXlinixLoadOK:(uint32_t) aSelectionMask
 {
 	[self writeToXL2Register:XL2_CONTROL_STATUS_REG value:XL2_CONTROL_DONE_PROG];
 	[self selectCards:aSelectionMask];
@@ -776,7 +776,7 @@ unsigned long xl2_register_offsets[] =
 	// More Changes, PW, RGV
 	// check to see if the Xilinx was loaded properly 
 	// read the bit 8, this should be high if the Xilinx was loaded
-	unsigned long readValue = [self readFromXL2Register:XL2_CONTROL_STATUS_REG];
+	uint32_t readValue = [self readFromXL2Register:XL2_CONTROL_STATUS_REG];
 	
 	if (!(readValue & XL2_CONTROL_DONE_PROG)){	
 		[ORTimer delay:.1];

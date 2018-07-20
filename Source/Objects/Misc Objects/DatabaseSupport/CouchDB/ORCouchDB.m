@@ -377,7 +377,7 @@
 }
 - (NSString*) revision:(NSString*)anID
 {
-	NSString *httpString = [NSString stringWithFormat:@"%@//%@:%lu/%@/%@", httpType,host, port, database, anID];
+	NSString *httpString = [NSString stringWithFormat:@"%@//%@:%u/%@/%@", httpType,host, (int)port, database, anID];
 	id result = [self send:httpString];
 	return [result objectForKey:@"_rev"];
 }
@@ -391,7 +391,7 @@
 {	
     NSAutoreleasePool *thePool = [[NSAutoreleasePool alloc] init];
 	if(![self isCancelled]){
-        NSString* httpString = [NSString stringWithFormat:@"%@//%@:%lu/%@/_compact", httpType,host, port,database];
+        NSString* httpString = [NSString stringWithFormat:@"%@//%@:%u/%@/_compact", httpType,host, (int)port,database];
         NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:httpString]];
         [request setAllHTTPHeaderFields:[NSDictionary dictionaryWithObject:@"application/json" forKey:@"Content-Type"]];
         [request setHTTPMethod:@"POST"];
@@ -412,7 +412,7 @@
 {
     NSAutoreleasePool *thePool = [[NSAutoreleasePool alloc] init];
 	if(![self isCancelled]){
-        id result = [self send:[NSString stringWithFormat:@"%@//%@:%lu/_all_dbs", httpType,host, port]];
+        id result = [self send:[NSString stringWithFormat:@"%@//%@:%u/_all_dbs", httpType,host, port]];
         for(id name in result){
             NSLog([NSString stringWithFormat:@"%@\n",name]);
         }
@@ -428,7 +428,7 @@
 {
     NSAutoreleasePool *thePool = [[NSAutoreleasePool alloc] init];
 	if(![self isCancelled]){
-        id result = [self send:[NSString stringWithFormat:@"%@//%@:%lu/%@/_all_docs", httpType,host, port,database]];
+        id result = [self send:[NSString stringWithFormat:@"%@//%@:%u/%@/_all_docs", httpType,host, port,database]];
         [self sendToDelegate:result];
     }
     [thePool release];
@@ -440,7 +440,7 @@
 {
     NSAutoreleasePool *thePool = [[NSAutoreleasePool alloc] init];
 	if(![self isCancelled]){
-        id result = [self send:[NSString stringWithFormat:@"%@//%@:%lu/_active_tasks", httpType,host, port]];
+        id result = [self send:[NSString stringWithFormat:@"%@//%@:%u/_active_tasks", httpType,host, port]];
         [self sendToDelegate:result];
     }
     [thePool release];
@@ -451,7 +451,7 @@
 {
     NSAutoreleasePool *thePool = [[NSAutoreleasePool alloc] init];
 	if(![self isCancelled]){
-        id result = [self send:[NSString stringWithFormat:@"%@//%@:%lu", httpType,host, port]];
+        id result = [self send:[NSString stringWithFormat:@"%@//%@:%u", httpType,host, port]];
         [self sendToDelegate:result];
     }
     [thePool release];
@@ -464,7 +464,7 @@
 {
     NSAutoreleasePool *thePool = [[NSAutoreleasePool alloc] init];
 	if(![self isCancelled]){
-        id result = [self send:[NSString stringWithFormat:@"%@//%@:%lu/%@/", httpType,host, port,database]];
+        id result = [self send:[NSString stringWithFormat:@"%@//%@:%u/%@/", httpType,host, port,database]];
         [self sendToDelegate:result];
     }
     [thePool release];
@@ -485,13 +485,13 @@
 	if(![self isCancelled]){
        // NSString *escaped = [database stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         NSString *escaped = [database stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-        id result = [self send:[NSString stringWithFormat:@"%@//%@:%lu/_all_dbs",httpType, host, port]];
+        id result = [self send:[NSString stringWithFormat:@"%@//%@:%u/_all_dbs",httpType, host, port]];
         if(![result containsObject:database]){
-            result = [self send:[NSString stringWithFormat:@"%@//%@:%lu/%@", httpType,host, port, escaped] type:@"PUT"];
+            result = [self send:[NSString stringWithFormat:@"%@//%@:%u/%@", httpType,host, port, escaped] type:@"PUT"];
             if([response statusCode] != 201)  result = [NSDictionary dictionaryWithObjectsAndKeys:
                                                        [NSString stringWithFormat:@"[%@] creation FAILED",database],
                                                        @"Message",
-                                                       [NSString stringWithFormat:@"Error Code: %ld",[response statusCode]],
+                                                       [NSString stringWithFormat:@"Error Code: %d",[response statusCode]],
                                                        @"Reason",
                                                        nil];
             else {
@@ -516,7 +516,7 @@
                         [[[allMaps objectForKey:mapName] objectForKey:@"views"] setObject:aNewView forKey:aViewKey];
                      }
                      for(id aMapName in allMaps){
-                        NSString *httpString = [NSString stringWithFormat:@"%@//%@:%lu/%@/_design/%@", httpType,host, port, database, aMapName];
+                        NSString *httpString = [NSString stringWithFormat:@"%@//%@:%u/%@/_design/%@", httpType,host, port, database, aMapName];
                         /*id result = */[self send:httpString type:@"PUT" body:[allMaps objectForKey:aMapName]];
                      }
                 }
@@ -549,7 +549,7 @@
 {
     NSAutoreleasePool *thePool = [[NSAutoreleasePool alloc] init];
 	if(![self isCancelled]){
-        NSString* httpString = [NSString stringWithFormat:@"%@//%@:%lu/%@/_design/default",httpType,host, port, database];
+        NSString* httpString = [NSString stringWithFormat:@"%@//%@:%u/%@/_design/default",httpType,host, port, database];
         NSDictionary* doc = [NSDictionary dictionaryWithObject:updateHandler forKey:@"replaceDoc"];
         NSDictionary* aDict = [NSDictionary dictionaryWithObject:doc forKey:@"updates"];
         id result = [self send:httpString type:@"PUT" body:aDict];
@@ -568,13 +568,13 @@
         
        // NSString *escaped = [database stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         NSString *escaped = [database stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-       id result = [self send:[NSString stringWithFormat:@"%@//%@:%lu/_all_dbs", httpType,host, port]];
+       id result = [self send:[NSString stringWithFormat:@"%@//%@:%u/_all_dbs", httpType,host, port]];
         if([result containsObject:database]){
-            result = [self send:[NSString stringWithFormat:@"%@//%@:%lu/%@", httpType,host, port, escaped] type:@"DELETE"];
+            result = [self send:[NSString stringWithFormat:@"%@//%@:%u/%@", httpType,host, port, escaped] type:@"DELETE"];
             if([response statusCode] != 200) result = [NSDictionary dictionaryWithObjectsAndKeys:
                                                        [NSString stringWithFormat:@"[%@] deletion FAILED",database],
                                                        @"Message",
-                                                       [NSString stringWithFormat:@"Error Code: %ld",[response statusCode]],
+                                                       [NSString stringWithFormat:@"Error Code: %d",[response statusCode]],
                                                        @"Reason",
                                                        nil];
         }
@@ -594,13 +594,13 @@
 	if(![self isCancelled]){
        // NSString* escaped   = [database stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         NSString *escaped = [database stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-       NSString* httpString = [NSString stringWithFormat:@"%@//127.0.0.1:%lu/_replicate",httpType, port];
+       NSString* httpString = [NSString stringWithFormat:@"%@//127.0.0.1:%u/_replicate",httpType, port];
         
         NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:httpString]];
         [self _updateAuthentication:request];
         [request setHTTPMethod:@"POST"];
         [request setAllHTTPHeaderFields:[NSDictionary dictionaryWithObject:@"application/json" forKey:@"Content-Type"]];
-        NSString* target = [NSString stringWithFormat:@"%@//%@:%ld/%@",httpType,host,port,escaped];
+        NSString* target = [NSString stringWithFormat:@"%@//%@:%d/%@",httpType,host,port,escaped];
         NSDictionary* aBody;
         if(continuous) aBody= [NSDictionary dictionaryWithObjectsAndKeys:escaped,@"source",target,@"target",[NSNumber numberWithBool:1],@"continuous",nil];
         else           aBody = [NSDictionary dictionaryWithObjectsAndKeys:escaped,@"source",target,@"target",nil];
@@ -665,11 +665,11 @@
         NSString* action;
         if(documentId){
             action = @"PUT";
-            httpString = [NSString stringWithFormat:@"%@//%@:%lu/%@/%@", httpType,host, port, database, documentId];
+            httpString = [NSString stringWithFormat:@"%@//%@:%u/%@/%@", httpType,host, port, database, documentId];
         }
         else {
             action = @"POST";
-            httpString = [NSString stringWithFormat:@"%@//%@:%lu/%@", httpType,host, port, database];
+            httpString = [NSString stringWithFormat:@"%@//%@:%u/%@", httpType,host, port, database];
         }
         id result = [self send:httpString type:action body:document];
         if(!result){
@@ -694,7 +694,7 @@
 {
 	NSString* rev = [self revision:documentId];
 	if(rev){
-		NSString *httpString = [NSString stringWithFormat:@"%@//%@:%lu/%@/%@", httpType,host, port, database, documentId];
+		NSString *httpString = [NSString stringWithFormat:@"%@//%@:%u/%@/%@", httpType,host, port, database, documentId];
 		httpString = [httpString stringByAppendingFormat:@"/%@?rev=%@",attachmentName,rev];
 		NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:httpString]];
         [self _updateAuthentication:request];
@@ -728,7 +728,7 @@
     NSAutoreleasePool *thePool = [[NSAutoreleasePool alloc] init];
 	if(![self isCancelled]){
         if([delegate respondsToSelector:@selector(usingUpdateHandler)] && [delegate usingUpdateHandler]){
-            NSString *httpString = [NSString stringWithFormat:@"%@//%@:%lu/%@/_design/default/_update/replaceDoc/%@", httpType,host, port, database, documentId];
+            NSString *httpString = [NSString stringWithFormat:@"%@//%@:%u/%@/_design/default/_update/replaceDoc/%@", httpType,host, port, database, documentId];
             id theDoc = document;
             if(documentId && ![[document objectForKey:@"_id"] isEqualToString:documentId]){
                 NSMutableDictionary* mDict = [NSMutableDictionary dictionaryWithDictionary:document];
@@ -745,7 +745,7 @@
         }
         else {
             //check for an existing document
-            NSString *httpString = [NSString stringWithFormat:@"%@//%@:%lu/%@/%@", httpType,host, port, database, documentId];
+            NSString *httpString = [NSString stringWithFormat:@"%@//%@:%u/%@/%@", httpType,host, port, database, documentId];
             id result = [self send:httpString];
             if(!result){
                 result = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -789,7 +789,7 @@
     NSAutoreleasePool *thePool = [[NSAutoreleasePool alloc] init];
 	if(![self isCancelled]){
         //check for an existing document
-        NSString *httpString = [NSString stringWithFormat:@"%@//%@:%lu/%@/%@",httpType, host, port, database, documentId];
+        NSString *httpString = [NSString stringWithFormat:@"%@//%@:%u/%@/%@",httpType, host, port, database, documentId];
         id result = [self send:httpString];
         if(!result){
             result = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -837,7 +837,7 @@
     NSAutoreleasePool *thePool = [[NSAutoreleasePool alloc] init];
     if(![self isCancelled]){
         //check for an existing document
-        NSString *httpString = [NSString stringWithFormat:@"%@//%@:%lu/%@/%@",httpType, host, port, database, documentId];
+        NSString *httpString = [NSString stringWithFormat:@"%@//%@:%u/%@/%@",httpType, host, port, database, documentId];
         id result = [self send:httpString];
         id rev = [result objectForKey:@"_rev"];
         if(rev){
@@ -867,7 +867,7 @@
     NSAutoreleasePool *thePool = [[NSAutoreleasePool alloc] init];
     if(![self isCancelled]){
         NSString* escaped = [documentId stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        NSString *httpString = [NSString stringWithFormat:@"%@//%@:%lu/%@/%@", httpType,host, port, database, escaped];
+        NSString *httpString = [NSString stringWithFormat:@"%@//%@:%u/%@/%@", httpType,host, port, database, escaped];
         id result = [self send:httpString];
         [self sendToDelegate:result];
     }
@@ -883,7 +883,7 @@ static void ORCouchDB_Feed_callback(CFReadStreamRef stream,
     
     UInt8 data[1024];
     CFHTTPMessageRef aResponse;
-    long len;
+    int32_t len;
     switch(type){
         case kCFStreamEventHasBytesAvailable:
             if([delegate isWaitingForResponse]){
@@ -936,12 +936,12 @@ static void ORCouchDB_Feed_callback(CFReadStreamRef stream,
     }
     
     // get the current last_seq so we only receive changes from now on. if we want the complete history, set last_seq to 0
-    NSString *httpString = [NSString stringWithFormat:@"%@//%@:%lu/%@/_changes",httpType,host,port,database];
+    NSString *httpString = [NSString stringWithFormat:@"%@//%@:%u/%@/_changes",httpType,host,port,database];
     NSNumber* last_seq = [[self send:httpString] objectForKey:@"last_seq"];
     
     if (heartbeat==0) heartbeat=(NSUInteger) 5000;
     
-    NSString *options=[NSString stringWithFormat:@"?heartbeat=%lu&feed=continuous&since=%@", heartbeat, last_seq];
+    NSString *options=[NSString stringWithFormat:@"?heartbeat=%u&feed=continuous&since=%@", heartbeat, last_seq];
     if (filter) {
         options = [options stringByAppendingString:[NSString stringWithFormat:@"&filter=%@", filter]];
     }
@@ -1017,11 +1017,11 @@ static void ORCouchDB_Feed_callback(CFReadStreamRef stream,
 -(void) _performPolling
 {
 	if([self isCancelled])return;
-	id result = [self send:[NSString stringWithFormat:@"%@//%@:%lu/%@/_changes", httpType,host, port,database]];
+	id result = [self send:[NSString stringWithFormat:@"%@//%@:%u/%@/_changes", httpType,host, port,database]];
     NSNumber* last_seq=[result objectForKey:@"last_seq"];
     
     while (![self isCancelled]) {
-        id result=[self send:[NSString stringWithFormat:@"%@//%@:%lu/%@/_changes?since=%@", httpType,host, port,database,last_seq]];
+        id result=[self send:[NSString stringWithFormat:@"%@//%@:%u/%@/_changes?since=%@", httpType,host, port,database,last_seq]];
         last_seq=[result objectForKey:@"last_seq"];
         
         NSArray* query_results=[result objectForKey:@"results"];

@@ -23,7 +23,7 @@
     NSString*		key;
     NSString*		fullName;
     NSString*		shortName;
-    unsigned long   totalCounts;
+    uint32_t   totalCounts;
     
     BOOL			scheduledForUpdate;
 	NSLock*			dataSetLock;
@@ -48,8 +48,8 @@
 - (NSString*) fullName;
 - (NSString*) shortName;
 - (NSString*)name;
-- (unsigned long) totalCounts;
-- (void) setTotalCounts:(unsigned long)aNewTotalCounts;
+- (uint32_t) totalCounts;
+- (void) setTotalCounts:(uint32_t)aNewTotalCounts;
 - (void) incrementTotalCounts;
 - (void) postUpdateOnMainThread;
 - (void) scheduleUpdateOnMainThread;
@@ -78,7 +78,7 @@
 @interface NSObject (ORDatasSetModel_Cat)
 - (void)  clear;
 - (void)  runTaskStopped;
-- (long)  runNumber;
+- (int32_t)  runNumber;
 @end
 
 

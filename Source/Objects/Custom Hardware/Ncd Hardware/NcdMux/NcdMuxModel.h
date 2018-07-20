@@ -45,15 +45,15 @@
         NcdDetector*	detector;	
 
         //errors 
-        unsigned long 	eventReadError;
-        unsigned long 	armError;
+        uint32_t 	eventReadError;
+        uint32_t 	armError;
         int				badCount;
         
         BOOL		timingEvent[2];
         NSTimeInterval	timeOfLastScopeEvent[2];
 
-        unsigned long muxEventDataId;
-        unsigned long muxDataId;
+        uint32_t muxEventDataId;
+        uint32_t muxDataId;
         NSLock* muxLock;
 
 }
@@ -79,12 +79,12 @@
 - (NSMutableArray*) children;
 - (NcdDetector*) detector;
 - (void) setDetector:(NcdDetector*)newDetector;
-- (unsigned long) eventReadError;
-- (unsigned long) armError;
-- (unsigned long) muxEventDataId;
-- (void) setMuxEventDataId: (unsigned long) MuxEventDataId;
-- (unsigned long) muxDataId;
-- (void) setMuxDataId: (unsigned long) MuxDataId;
+- (uint32_t) eventReadError;
+- (uint32_t) armError;
+- (uint32_t) muxEventDataId;
+- (void) setMuxEventDataId: (uint32_t) MuxEventDataId;
+- (uint32_t) muxDataId;
+- (void) setMuxDataId: (uint32_t) MuxDataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherMux;
 
@@ -92,8 +92,8 @@
 - (void) turnOnSupplies:(NSArray*)someSupplies state:(BOOL)aState;
 - (void) writeDac:(int)aValue supply:(id)aSupply;
 - (void) readCurrent:(id)aSupply;
-- (unsigned long) readRelayMask;
-- (unsigned long) lowPowerOn;
+- (uint32_t) readRelayMask;
+- (uint32_t) lowPowerOn;
 - (void) readAdc:(id)aSupply;
 - (void) readDac:(id)aSupply;
 - (void) reArm;

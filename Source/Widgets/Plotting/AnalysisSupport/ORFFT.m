@@ -52,29 +52,29 @@ NSString* ORFFTOptionChanged = @"ORFFTOptionChanged";
 
 - (id) dataSource					{ return dataSource; }
 
-- (long) minChannel					{ return minChannel; }
-- (long) maxChannel					{ return maxChannel; }
+- (int32_t) minChannel					{ return minChannel; }
+- (int32_t) maxChannel					{ return maxChannel; }
 - (BOOL) serviceAvailable			{ return serviceAvailable;}
-- (long) fftOption					{ return fftOption;}
-- (long) fftWindow					{ return fftWindow;}
+- (int32_t) fftOption					{ return fftOption;}
+- (int32_t) fftWindow					{ return fftWindow;}
 
-- (void) setMinChannel:(long)aChannel 
+- (void) setMinChannel:(int32_t)aChannel 
 { 
 	minChannel = aChannel; 
 }
 
-- (void) setMaxChannel:(long)aChannel 
+- (void) setMaxChannel:(int32_t)aChannel 
 { 
 	maxChannel = aChannel; 
 }
 
-- (void) setFftWindow:(long)aValue
+- (void) setFftWindow:(int32_t)aValue
 { 
 	fftWindow = aValue; 
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORFFTWindowChanged object:self];
 }
 
-- (void) setFftOption:(long)aValue
+- (void) setFftOption:(int32_t)aValue
 {
 	fftOption = aValue; 
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORFFTOptionChanged object:self];
@@ -91,9 +91,9 @@ NSString* ORFFTOptionChanged = @"ORFFTOptionChanged";
 	BOOL roiVisible = [dataSource plotterShouldShowRoi:aPlot];
 	if(roiVisible){
 		NSMutableArray* dataArray = [NSMutableArray array];
-		long minChan = [roi minChannel];
-		long maxChan = [roi maxChannel];
-		long ix;
+		int32_t minChan = [roi minChannel];
+		int32_t maxChan = [roi maxChannel];
+		int32_t ix;
 		for (ix=minChan; ix<maxChan-1;++ix) {		
 			double xValue,yValue;
 			[dataSource plotter:aPlot index:(int)ix x:&xValue y:&yValue];
@@ -108,7 +108,7 @@ NSString* ORFFTOptionChanged = @"ORFFTOptionChanged";
 			NSMutableDictionary* requestInputs = [NSMutableDictionary dictionary];
 			[requestInputs setObject:dataArray forKey:@"Waveform"];
 			NSString* fftOptionString = kORCARootFFTNames[fftOption];
-			long i = fftWindow;
+			int32_t i = fftWindow;
 			if(i>0){
 				fftOptionString = [fftOptionString stringByAppendingString:@","];
 				fftOptionString = [fftOptionString stringByAppendingString:kORCARootFFTWindowOptions[i]];

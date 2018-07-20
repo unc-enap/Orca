@@ -54,13 +54,13 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  actual Current encoded as a float (chan
 
 @implementation OREHS8260pDecoderForHV
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
+    uint32_t* ptr = (uint32_t*)someData;
     return  ExtractLength(ptr[0]);; //must return number of longs
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* theString =  @"EHS8260p HV\n\n";               
 	int crate	= ShiftAndExtract(ptr[1],20,0xF);
@@ -72,7 +72,7 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  actual Current encoded as a float (chan
 	theString = [theString stringByAppendingFormat:@"%@\n",[date stdDescription]];
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theData;
 	theString = [theString stringByAppendingFormat:@"--------------------------\n"];
 	int theChan;

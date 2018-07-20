@@ -46,9 +46,9 @@
     float   temperature;
     
     
-    unsigned long   registerWriteValue;
+    uint32_t   registerWriteValue;
     int             registerIndex;
-    unsigned long   spiWriteValue;
+    uint32_t   spiWriteValue;
     
     
     // event config bits
@@ -66,9 +66,9 @@
     unsigned short  channelMode[kNumSIS3305Groups];
     unsigned short  bandwidth[kNumSIS3305Groups];
     unsigned short  testMode[kNumSIS3305Groups];
-    unsigned long   adcOffset[kNumSIS3305Channels];
-    unsigned long   adcGain[kNumSIS3305Channels];
-    unsigned long   adcPhase[kNumSIS3305Channels];
+    uint32_t   adcOffset[kNumSIS3305Channels];
+    uint32_t   adcGain[kNumSIS3305Channels];
+    uint32_t   adcPhase[kNumSIS3305Channels];
     
     short			internalTriggerEnabledMask;
     short			externalTriggerEnabledMask;
@@ -107,12 +107,12 @@
     
     // temp and temp supervisor
     BOOL   temperatureSupervisorEnable;
-    unsigned long   tempThreshRaw;
+    uint32_t   tempThreshRaw;
     float           tempThreshConverted;
 	
-    unsigned long   ringbufferPreDelay[kNumSIS3305Channels];    // ringbuffer pretrigger delays
+    uint32_t   ringbufferPreDelay[kNumSIS3305Channels];    // ringbuffer pretrigger delays
     
-	unsigned long   dataId;
+	uint32_t   dataId;
 	
 
 
@@ -154,13 +154,13 @@
 	NSMutableArray* endAddressThresholds;
 	
 	ORRateGroup*	waveFormRateGroup;
-	unsigned long 	waveFormCount[kNumSIS3305Channels];
+	uint32_t 	waveFormCount[kNumSIS3305Channels];
 
-	unsigned long location;
+	uint32_t location;
 	short wrapMaskForRun;
 	id theController;
 //	int currentBank;
-	long count;
+	int32_t count;
     short lemoOutMode;
     short lemoInMode;
 //	BOOL bankOneArmed;
@@ -178,18 +178,18 @@
     BOOL internalExternalTriggersOred;
 		
 	//calculated values
-	unsigned long numEnergyValues;
-	unsigned long numRawDataLongWords;
-	unsigned long rawDataIndex;
-	unsigned long eventLengthLongWords[kNumSIS3305Groups];
+	uint32_t numEnergyValues;
+	uint32_t numRawDataLongWords;
+	uint32_t rawDataIndex;
+	uint32_t eventLengthLongWords[kNumSIS3305Groups];
     
     
-    unsigned long sampleStartAddress[kNumSIS3305Groups];
-//    unsigned long mcaNofHistoPreset;
+    uint32_t sampleStartAddress[kNumSIS3305Groups];
+//    uint32_t mcaNofHistoPreset;
 //    BOOL			mcaLNESetup;
-//    unsigned long	mcaPrescaleFactor;
+//    uint32_t	mcaPrescaleFactor;
 //    BOOL			mcaAutoClear;
-//    unsigned long	mcaNofScansPreset;
+//    uint32_t	mcaNofScansPreset;
 //    int				mcaHistoSize;
 //    BOOL			mcaPileupEnabled;
 //    BOOL			mcaScanBank2Flag;
@@ -201,8 +201,8 @@
     BOOL			shipTimeRecordAlso;
     float			firmwareVersion;
 //	time_t			lastBankSwitchTime;
-	unsigned long	waitCount;
-	unsigned long	channelsToReadMask;
+	uint32_t	waitCount;
+	uint32_t	channelsToReadMask;
     BOOL pulseMode;
     
     
@@ -288,19 +288,19 @@
 - (void) setLemoInEnabled:(unsigned short)aBit withValue:(BOOL)aState;
 - (int)  runMode;
 - (void) setRunMode:(int)aRunMode;
-- (unsigned long) endAddressThreshold:(short)aGroup; 
-- (void) setEndAddressThreshold:(short)aGroup withValue:(unsigned long)aValue;
+- (uint32_t) endAddressThreshold:(short)aGroup; 
+- (void) setEndAddressThreshold:(short)aGroup withValue:(uint32_t)aValue;
 
 
-- (unsigned long) getGTThresholdRegOffsets:(int) channel;
-- (unsigned long) getLTThresholdRegOffsets:(int) channel;
+- (uint32_t) getGTThresholdRegOffsets:(int) channel;
+- (uint32_t) getLTThresholdRegOffsets:(int) channel;
 
-- (unsigned long) getEndAddressThresholdRegOffsets:(int)group;
+- (uint32_t) getEndAddressThresholdRegOffsets:(int)group;
 
 
 
-- (unsigned long) sampleLength:(short)group;
-- (void) setSampleLength:(short)group withValue:(unsigned long)aValue;
+- (uint32_t) sampleLength:(short)group;
+- (void) setSampleLength:(short)group withValue:(uint32_t)aValue;
 
 - (int)  triggerGateLength:(short)group;
 - (void) setTriggerGateLength:(short)group withValue:(int)aTriggerGateLength;
@@ -342,8 +342,8 @@
 // register R/W accessors
 - (short) registerIndex;
 - (void) setRegisterIndex:(int)aRegisterIndex;
-- (unsigned long) registerWriteValue;
-- (void) setRegisterWriteValue:(unsigned long)aWriteValue;
+- (uint32_t) registerWriteValue;
+- (void) setRegisterWriteValue:(uint32_t)aWriteValue;
 - (NSString*) registerNameAt:(unsigned int)index;
 - (unsigned short) registerOffsetAt:(unsigned int)index;
 
@@ -376,12 +376,12 @@
 - (unsigned short) testMode:(unsigned short)group;
 - (void) setTestMode:(unsigned short)group withValue:(unsigned short)value;
 
-- (unsigned long) adcOffset:(unsigned short)chan;
-- (void) setAdcOffset:(unsigned short)chan toValue:(unsigned long)value;
-- (unsigned long) adcGain:(unsigned short)chan;
-- (void) setAdcGain:(unsigned short)chan toValue:(unsigned long)value;
-- (unsigned long) adcPhase:(unsigned short)chan;
-- (void) setAdcPhase:(unsigned short)chan toValue:(unsigned long)value;
+- (uint32_t) adcOffset:(unsigned short)chan;
+- (void) setAdcOffset:(unsigned short)chan toValue:(uint32_t)value;
+- (uint32_t) adcGain:(unsigned short)chan;
+- (void) setAdcGain:(unsigned short)chan toValue:(uint32_t)value;
+- (uint32_t) adcPhase:(unsigned short)chan;
+- (void) setAdcPhase:(unsigned short)chan toValue:(uint32_t)value;
 
 
 
@@ -419,8 +419,8 @@
 
 //- (short) ltMask;
 //- (short) gtMask;
-//- (void) setLtMask:(long)aMask;
-//- (void) setGtMask:(long)aMask;
+//- (void) setLtMask:(int32_t)aMask;
+//- (void) setGtMask:(int32_t)aMask;
 //- (BOOL) lt:(short)chan;
 //- (BOOL) gt:(short)chan;
 //- (void) setLtBit:(short)chan withValue:(BOOL)aValue;
@@ -535,7 +535,7 @@
 
 
 - (unsigned short) digitizationRate:(unsigned short) group;
-- (unsigned long) longsInSample:(unsigned short)group;
+- (uint32_t) longsInSample:(unsigned short)group;
 
 //- (void) calculateSampleValues;
 
@@ -549,10 +549,10 @@
 
 #pragma mark - Hardware Access
 
-- (unsigned long) readRegister:(unsigned int)index;
-- (void) writeRegister:(unsigned int)index withValue:(unsigned long)value;
-- (void) writeToAddress:(unsigned long)anAddress aValue:(unsigned long)aValue;
-- (unsigned long) readFromAddress:(unsigned long)anAddress;
+- (uint32_t) readRegister:(unsigned int)index;
+- (void) writeRegister:(unsigned int)index withValue:(uint32_t)value;
+- (void) writeToAddress:(uint32_t)anAddress aValue:(uint32_t)aValue;
+- (uint32_t) readFromAddress:(uint32_t)anAddress;
 - (BOOL) canReadRegister:(unsigned int)index;
 - (BOOL) canWriteRegister:(unsigned int)index;
 
@@ -564,76 +564,76 @@
 - (void) writeLedApplicationMode;
 
 - (void) readModuleID:(BOOL)verbose;
-- (unsigned long) readInterruptConfig:(BOOL)verbose;
-- (void) writeInterruptConfig:(unsigned long)value;
-- (unsigned long) readInterruptControl:(BOOL)verbose;
-- (void) writeInterruptControl:(unsigned long)value;
+- (uint32_t) readInterruptConfig:(BOOL)verbose;
+- (void) writeInterruptConfig:(uint32_t)value;
+- (uint32_t) readInterruptControl:(BOOL)verbose;
+- (void) writeInterruptControl:(uint32_t)value;
 
 // acquisition control methods
-- (unsigned long) readAcquisitionControl:(BOOL)verbose;
+- (uint32_t) readAcquisitionControl:(BOOL)verbose;
 - (void) writeAcquisitionControl;
-- (void) writeClockSource:(unsigned long)aState;
+- (void) writeClockSource:(uint32_t)aState;
 
-- (unsigned long) readVetoLength:(BOOL)verbose;
-- (void) writeVetoLength:(unsigned long)timeInNS;
-- (unsigned long) readVetoDelay:(BOOL)verbose;
-- (void) writeVetoDelay:(unsigned long)timeInNS;
+- (uint32_t) readVetoLength:(BOOL)verbose;
+- (void) writeVetoLength:(uint32_t)timeInNS;
+- (uint32_t) readVetoDelay:(BOOL)verbose;
+- (void) writeVetoDelay:(uint32_t)timeInNS;
 
-- (unsigned long) EEPROMControlwithCommand:(short)command andAddress:(short)addr andData:(unsigned int)data;
-- (unsigned long) onewireControlwithCommand:(short)command andData:(unsigned int)data;
+- (uint32_t) EEPROMControlwithCommand:(short)command andAddress:(short)addr andData:(unsigned int)data;
+- (uint32_t) onewireControlwithCommand:(short)command andData:(unsigned int)data;
 
-- (unsigned long) readBroadcastSetup:(bool)verbose;
-- (unsigned long) readLEMOTriggerOutSelect;
-- (void) writeLEMOTriggerOutSelect:(unsigned long)value;
+- (uint32_t) readBroadcastSetup:(bool)verbose;
+- (uint32_t) readLEMOTriggerOutSelect;
+- (void) writeLEMOTriggerOutSelect:(uint32_t)value;
 - (void) writeLEMOTriggerOutSelect;
-- (unsigned long) readExternalTriggerCounter;
+- (uint32_t) readExternalTriggerCounter;
 
 #pragma mark --- TDC Regs
 
-- (unsigned long) readTDCWrite:(BOOL)verbose;
-- (void) writeTDCWriteWithData:(unsigned long)data atAddress:(unsigned short)addr;
-- (unsigned long) readTDCRead:(BOOL)verbose;
+- (uint32_t) readTDCWrite:(BOOL)verbose;
+- (void) writeTDCWriteWithData:(uint32_t)data atAddress:(unsigned short)addr;
+- (uint32_t) readTDCRead:(BOOL)verbose;
 - (void) writeTDCReadatAddress:(unsigned short)addr;
-- (unsigned long) readTDCStartStopEnable:(BOOL)verbose;
-- (void) writeTDCStartStopEnable:(unsigned long)value;
+- (uint32_t) readTDCStartStopEnable:(BOOL)verbose;
+- (void) writeTDCStartStopEnable:(uint32_t)value;
 - (void) writeXilinxJTAGTestWithTDI:(char)tdi andTMS:(char)tms;
-- (unsigned long) readXilinxJTAGDataIn;
+- (uint32_t) readXilinxJTAGDataIn;
 
 #pragma mark -- Other regs
 
-- (unsigned long) readTemperature:(BOOL)verbose;
-- (void) writeTemperatureThreshold:(unsigned long)thresh;
+- (uint32_t) readTemperature:(BOOL)verbose;
+- (void) writeTemperatureThreshold:(uint32_t)thresh;
 
 
 
-- (unsigned long) readADCSerialInterface:(BOOL)verbose;
-- (unsigned long) readADCSerialInterfaceOnADC:(char)adcSelect fromAddress:(unsigned long)addr;
-- (void) writeADCSerialInterface:(unsigned long)data onADC:(char)adcSelect toAddress:(unsigned long)addr viaSPI:(char)spiOn;
-- (void) writeADCSerialInterface:(unsigned long)data onADC:(char)adcSelect toAddress:(unsigned long)addr;
+- (uint32_t) readADCSerialInterface:(BOOL)verbose;
+- (uint32_t) readADCSerialInterfaceOnADC:(char)adcSelect fromAddress:(uint32_t)addr;
+- (void) writeADCSerialInterface:(uint32_t)data onADC:(char)adcSelect toAddress:(uint32_t)addr viaSPI:(char)spiOn;
+- (void) writeADCSerialInterface:(uint32_t)data onADC:(char)adcSelect toAddress:(uint32_t)addr;
 - (void) writeADCSerialInterface;
-- (unsigned long) readADCChipID;
-- (unsigned long) readADCControlReg:(bool)verbose;
+- (uint32_t) readADCChipID;
+- (uint32_t) readADCControlReg:(bool)verbose;
 - (void) writeADCSerialChannelSelect:(unsigned short)cardChan;
-- (unsigned long) readADCSerialChannelSelect:(unsigned short)adc;
+- (uint32_t) readADCSerialChannelSelect:(unsigned short)adc;
 
-- (unsigned long) readADCOffset:(unsigned short)chan;
+- (uint32_t) readADCOffset:(unsigned short)chan;
 - (void) writeADCOffsets;
-- (unsigned long) readADCGain:(unsigned short)chan;
+- (uint32_t) readADCGain:(unsigned short)chan;
 - (void) writeADCGains;
-- (unsigned long) readADCPhase:(unsigned short)chan;
+- (uint32_t) readADCPhase:(unsigned short)chan;
 - (void) writeADCPhase;
 
-- (unsigned long) readADCCalibrationMailbox:(unsigned short)adc;
+- (uint32_t) readADCCalibrationMailbox:(unsigned short)adc;
 - (BOOL) checkADCCalibrationMailboxReady:(unsigned short)adc;
 - (void) applyADCGainCalibration:(unsigned short)chan;
 
 
 - (void) applyADCCalibration:(unsigned short)adc;
 - (BOOL) checkADCSerialInterfaceBusy;
-- (unsigned long) waitUntilADCSerialInterfaceNotBusy:(unsigned long)maxReads;
+- (uint32_t) waitUntilADCSerialInterfaceNotBusy:(uint32_t)maxReads;
 - (void) waitUntilADCSerialInterfaceNotBusy;
-- (unsigned long) validateSerialADCCalibration;
-- (unsigned long) validateSerialADCCalibrationOnChannel:(unsigned short)chan;
+- (uint32_t) validateSerialADCCalibration;
+- (uint32_t) validateSerialADCCalibrationOnChannel:(unsigned short)chan;
 
 
 
@@ -641,15 +641,15 @@
 
 
 
-- (unsigned long) readDataTransferControlRegister:(short)group;
-- (void) writeDataTransferControlRegister:(short)group withCommand:(short)command withAddress:(unsigned long)value;
+- (uint32_t) readDataTransferControlRegister:(short)group;
+- (void) writeDataTransferControlRegister:(short)group withCommand:(short)command withAddress:(uint32_t)value;
 
-- (unsigned long) readDataTransferStatusRegister:(short)group;
+- (uint32_t) readDataTransferStatusRegister:(short)group;
 
-- (unsigned long) readAuroraProtocolStatus;
-- (void) writeAuroraProtocolStatus:(unsigned long)value;
-- (unsigned long) readAuroraDataStatus;
-- (void) writeAuroraDataStatus:(unsigned long)value;
+- (uint32_t) readAuroraProtocolStatus;
+- (void) writeAuroraProtocolStatus:(uint32_t)value;
+- (uint32_t) readAuroraDataStatus;
+- (void) writeAuroraDataStatus:(uint32_t)value;
 
 #pragma mark -- Key Addresses
 - (void) reset;
@@ -663,46 +663,46 @@
 - (void) ADCFPGAReset;
 - (void) pulseExternalTriggerOut;
 
-- (unsigned long) getEventConfigOffsets:(int)group;
-- (unsigned long) readEventConfigurationOfGroup:(short)group;
+- (uint32_t) getEventConfigOffsets:(int)group;
+- (uint32_t) readEventConfigurationOfGroup:(short)group;
 - (void) writeEventConfiguration;
 
-- (unsigned long) readSampleStartAddressOfGroup:(short)group;
-- (void) writeSampleStartAddressOfGroup:(short)group toValue:(unsigned long)value;
+- (uint32_t) readSampleStartAddressOfGroup:(short)group;
+- (void) writeSampleStartAddressOfGroup:(short)group toValue:(uint32_t)value;
 
-- (unsigned long) readSampleLength:(short) group;
+- (uint32_t) readSampleLength:(short) group;
 
-- (unsigned long) readActualSampleAddress:(short)group;
-- (void) writeSampleLengthOfGroup:(short)group toValue:(unsigned long)value;
+- (uint32_t) readActualSampleAddress:(short)group;
+- (void) writeSampleLengthOfGroup:(short)group toValue:(uint32_t)value;
 - (void) writeSampleLengths;
-- (unsigned long) readSamplePretriggerLengthOfGroup:(short)group;
-- (void) writeSamplePretriggerLengthOfGroup:(short)group toValue:(unsigned long)value;
-- (unsigned long) readRingbufferPretriggerDelayOnChannel:(short)chan;
-//- (void) writeRingbufferPretriggerDelayOnChannel:(unsigned short)chan toValue:(unsigned long)value;
+- (uint32_t) readSamplePretriggerLengthOfGroup:(short)group;
+- (void) writeSamplePretriggerLengthOfGroup:(short)group toValue:(uint32_t)value;
+- (uint32_t) readRingbufferPretriggerDelayOnChannel:(short)chan;
+//- (void) writeRingbufferPretriggerDelayOnChannel:(unsigned short)chan toValue:(uint32_t)value;
 - (void) writeRingbufferPretriggerDelays;
 
-- (unsigned long) readMaxNumOfEventsInGroup:(short)group;
+- (uint32_t) readMaxNumOfEventsInGroup:(short)group;
 - (void) writeMaxNumOfEventsInGroup:(short)group toValue:(unsigned int)maxValue;
 
-- (unsigned long) getEndAddressThresholdRegOffsets:(int)group;
-- (unsigned long) readEndAddressThresholdOfGroup:(short)group;
+- (uint32_t) getEndAddressThresholdRegOffsets:(int)group;
+- (uint32_t) readEndAddressThresholdOfGroup:(short)group;
 - (void) writeEndAddressThresholds;
 - (void) writeEndAddressThresholdOfGroup:(int)aGroup;
-- (void) writeEndAddressThresholdOfGroup:(short)group toValue:(unsigned long)value;
+- (void) writeEndAddressThresholdOfGroup:(short)group toValue:(uint32_t)value;
 
 
-- (unsigned long) readLTThresholdOnChannel:(short)chan;
+- (uint32_t) readLTThresholdOnChannel:(short)chan;
 - (void) readLTThresholds:(BOOL)verbose;
-- (unsigned long) readGTThresholdOnChannel:(short)chan;
+- (uint32_t) readGTThresholdOnChannel:(short)chan;
 - (void) readGTThresholds:(BOOL)verbose;
 - (void) readThresholds:(BOOL)verbose;
 - (void) writeThresholds;
 - (void) writeLTThresholds;
 - (void) writeGTThresholds;
 
-- (unsigned long) getSamplingStatusAddressForGroup:(short)group;
-- (unsigned long) readSamplingStatusForGroup:(short)group;
-- (unsigned long) readActualSampleAddress:(short)group;
+- (uint32_t) getSamplingStatusAddressForGroup:(short)group;
+- (uint32_t) readSamplingStatusForGroup:(short)group;
+- (uint32_t) readActualSampleAddress:(short)group;
 
 
 
@@ -721,12 +721,12 @@
 
 
 
-- (unsigned long) readEndAddressThresholdOfGroup:(short)group;
+- (uint32_t) readEndAddressThresholdOfGroup:(short)group;
 
 
 
 
-//- (unsigned long) getSampleStartAddress:(short)group;
+//- (uint32_t) getSampleStartAddress:(short)group;
 
 - (void) briefReport;
 - (void) regDump;
@@ -737,33 +737,33 @@
 //- (void) clearTimeStamp;
 - (void) writeTapDelays;
 
-- (unsigned long) getFIFOAddressOfGroup:(unsigned short)group;
+- (uint32_t) getFIFOAddressOfGroup:(unsigned short)group;
 
 
 
 #pragma mark other
 - (void) executeCommandList:(ORCommandList*) aList;
 
-//- (unsigned long) acqReg;
-- (unsigned long) getADCTapDelayOffsets:(int)group;
+//- (uint32_t) acqReg;
+- (uint32_t) getADCTapDelayOffsets:(int)group;
 
 //- (void) disarmAndArmBank:(int) bank;
 //- (void) disarmAndArmNextBank;
 - (NSString*) runSummary;
 
 #pragma mark --- Data Taker
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherShaper;
 - (NSDictionary*) dataRecordDescription;
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
-- (unsigned long) waveFormCount:(int)aChannel;
+- (uint32_t) waveFormCount:(int)aChannel;
 - (void)   startRates;
 - (void) clearWaveFormCounts;
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag;
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag;
 - (int) load_HW_Config_Structure:(SBC_crate_config*)configStruct index:(int)index;
 - (BOOL) isEvent;
 

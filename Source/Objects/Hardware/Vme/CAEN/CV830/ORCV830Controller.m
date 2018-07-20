@@ -303,7 +303,7 @@
 - (IBAction) enabledMaskAction:(id)sender
 {
 	int i;
-	unsigned long aMask = 0;
+	uint32_t aMask = 0;
 	for(i=0;i<kNumCV830Channels;i++){
 		int state = [[enabledMaskMatrix cellWithTag:i] intValue];
 		if(state)aMask |= (0x1L<<i);

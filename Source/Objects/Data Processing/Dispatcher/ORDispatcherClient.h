@@ -20,11 +20,11 @@
 
 @interface ORDispatcherClient : ORSocketClient 
 {
-    unsigned long long amountBlocked;
+    uint64_t amountBlocked;
 }
 - (void)netsocket:(NetSocket*)insocket dataAvailable:(NSUInteger)inAmount;
-- (void) setAmountBlocked:(unsigned long long)numBytes;
-- (unsigned long long)amountBlocked;
+- (void) setAmountBlocked:(uint64_t)numBytes;
+- (uint64_t)amountBlocked;
 - (float)percentBlocked;
 - (float)percentBlocked;
 @end

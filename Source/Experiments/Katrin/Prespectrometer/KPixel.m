@@ -238,7 +238,7 @@ static short cube_faces [6][4] = {
     float xpixelSize = w/4.-8;
     float ypixelSize = h/4.-8;
     NSPoint position = [self position];
-	long f, i;
+	int32_t f, i;
 	
 	float z = -[[rateColorBar colorAxis] getPixAbs:shaperRate]/2;
 	if(z < -aRect.size.height/2)z = -aRect.size.height/2;

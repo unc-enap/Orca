@@ -31,7 +31,7 @@ void NSLogMono(NSString *msg, ...); // ak, 21.9.07
 
 typedef struct AugerRegisterNamesStruct {
 	NSString*       regName;
-	unsigned long 	addressOffset;
+	uint32_t 	addressOffset;
 	int				length;
 	short			accessType;
 } AugerRegisterNamesStruct; 
@@ -39,7 +39,7 @@ typedef struct AugerRegisterNamesStruct {
 
 @interface ORAugerCard : ORCard {
     NSMutableArray* registers;
-	unsigned long   exceptionCount;
+	uint32_t   exceptionCount;
     BOOL		    present;
 }
 
@@ -55,7 +55,7 @@ typedef struct AugerRegisterNamesStruct {
 - (NSString*) cardSlotChangedNotification;
 - (NSString*) identifier;
 - (int) stationNumber;
-- (unsigned long)   exceptionCount;
+- (uint32_t)   exceptionCount;
 - (void)clearExceptionCount;
 - (void)incExceptionCount;
 - (int) displayedSlotNumber;
@@ -68,44 +68,44 @@ typedef struct AugerRegisterNamesStruct {
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary;
 
 #pragma mark ¥¥¥HW Access
-- (unsigned long) read:(unsigned long) address;
+- (uint32_t) read:(uint32_t) address;
 
-- (void)		  write:(unsigned long)address 
-						 value:(unsigned long)aValue;
+- (void)		  write:(uint32_t)address 
+						 value:(uint32_t)aValue;
 						
-- (void) writeBitsAtAddress:(unsigned long)anAddress 
-					   value:(unsigned long)dataWord
-					   mask:(unsigned long)aMask 
+- (void) writeBitsAtAddress:(uint32_t)anAddress 
+					   value:(uint32_t)dataWord
+					   mask:(uint32_t)aMask 
 					shifted:(int)shiftAmount;
 
-- (void) setBitsLowAtAddress:(unsigned long)anAddress 
-						mask:(unsigned long)aMask;
+- (void) setBitsLowAtAddress:(uint32_t)anAddress 
+						mask:(uint32_t)aMask;
 						
-- (void) setBitsHighAtAddress:(unsigned long)anAddress 
-						 mask:(unsigned long)aMask;
+- (void) setBitsHighAtAddress:(uint32_t)anAddress 
+						 mask:(uint32_t)aMask;
 
-- (void) readRegisterBlock:(unsigned long)  anAddress 
-				dataBuffer:(unsigned long*) aDataBuffer
-					length:(unsigned long)  length 
-				 increment:(unsigned long)  incr
-			   numberSlots:(unsigned long)  nSlots 
-			 slotIncrement:(unsigned long)  incrSlots;
+- (void) readRegisterBlock:(uint32_t)  anAddress 
+				dataBuffer:(uint32_t*) aDataBuffer
+					length:(uint32_t)  length 
+				 increment:(uint32_t)  incr
+			   numberSlots:(uint32_t)  nSlots 
+			 slotIncrement:(uint32_t)  incrSlots;
 
 
-- (void) readBlock:(unsigned long)  anAddress 
-		dataBuffer:(unsigned long*) aDataBuffer
-			length:(unsigned long)  length 
-		 increment:(unsigned long)  incr;
+- (void) readBlock:(uint32_t)  anAddress 
+		dataBuffer:(uint32_t*) aDataBuffer
+			length:(uint32_t)  length 
+		 increment:(uint32_t)  incr;
 
-- (void) writeBlock:(unsigned long)  anAddress 
-		 dataBuffer:(unsigned long*) aDataBuffer
-			 length:(unsigned long)  length 
-		  increment:(unsigned long)  incr;
+- (void) writeBlock:(uint32_t)  anAddress 
+		 dataBuffer:(uint32_t*) aDataBuffer
+			 length:(uint32_t)  length 
+		  increment:(uint32_t)  incr;
 
-- (void) clearBlock:(unsigned long)  anAddress 
-			pattern:(unsigned long) aPattern
-			 length:(unsigned long)  length 
-		  increment:(unsigned long)  incr;
+- (void) clearBlock:(uint32_t)  anAddress 
+			pattern:(uint32_t) aPattern
+			 length:(uint32_t)  length 
+		  increment:(uint32_t)  incr;
 
 
 @end

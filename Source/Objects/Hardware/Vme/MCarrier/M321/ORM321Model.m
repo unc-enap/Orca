@@ -317,7 +317,7 @@ NSString* ORM321FourPhaseChangedNotification		= @"ORM321FourPhaseChangedNotifica
 }
 
 
-- (void) loadStepCount:(long)amount motor:(id)aMotor
+- (void) loadStepCount:(int32_t)amount motor:(id)aMotor
 {
     @try {
         [hwLock lock];
@@ -342,7 +342,7 @@ NSString* ORM321FourPhaseChangedNotification		= @"ORM321FourPhaseChangedNotifica
         m321Cmd theCmd;
         theCmd.cmd =  ([aMotor tag] ? kM361_GetPosB : kM361_GetPosA);
         [self sendCmd:&theCmd result:&theCmd numInArgs:0 numOutArgs:2];
-        [aMotor setMotorPosition: (unsigned long)theCmd.paramList[0]<<16 | theCmd.paramList[1]];
+        [aMotor setMotorPosition: (uint32_t)theCmd.paramList[0]<<16 | theCmd.paramList[1]];
         [hwLock unlock];
     }
 	@catch(NSException* localException) {
@@ -356,7 +356,7 @@ NSString* ORM321FourPhaseChangedNotification		= @"ORM321FourPhaseChangedNotifica
     return !([self readIRQ] & ([aMotor tag]==kMotorA ? kM361_IrqTrajA : kM361_IrqTrajB));
 }
 
-- (void) moveMotor:(id)aMotor amount:(long)amount;
+- (void) moveMotor:(id)aMotor amount:(int32_t)amount;
 {
     unsigned short theCommand = ([aMotor tag] ? kM361_ProfileRelB : kM361_ProfileRelA);
     [self executeMotorCmd:theCommand
@@ -367,7 +367,7 @@ NSString* ORM321FourPhaseChangedNotification		= @"ORM321FourPhaseChangedNotifica
                     steps:amount];
 }
 
-- (void) moveMotor:(id)aMotor to:(long)aPosition
+- (void) moveMotor:(id)aMotor to:(int32_t)aPosition
 {
     unsigned short theCommand = ([aMotor tag] ? kM361_ProfileAbsB : kM361_ProfileAbsA);
     [self executeMotorCmd:theCommand
@@ -379,7 +379,7 @@ NSString* ORM321FourPhaseChangedNotification		= @"ORM321FourPhaseChangedNotifica
 }
 
 
-- (void) seekHome:(long)amount motor:(id)aMotor;
+- (void) seekHome:(int32_t)amount motor:(id)aMotor;
 {
     if(amount==0)return;
     
@@ -393,19 +393,19 @@ NSString* ORM321FourPhaseChangedNotification		= @"ORM321FourPhaseChangedNotifica
         m321Cmd theCmd;
         theCmd.cmd  = ([aMotor tag] ? kM361_SeekHomeB : kM361_SeekHomeA);
         
-        unsigned long riseFreq = [aMotor riseFreq];
+        uint32_t riseFreq = [aMotor riseFreq];
         theCmd.paramList[0] = (riseFreq & 0xFFFF0000) >> 16; //MSB part
         theCmd.paramList[1] = riseFreq & 0x0000FFFF; //LSB part
         
-        unsigned long driveFreq = [aMotor driveFreq];
+        uint32_t driveFreq = [aMotor driveFreq];
         theCmd.paramList[2] = (driveFreq & 0xFFFF0000) >> 16; //MSB part
         theCmd.paramList[3] = driveFreq & 0x0000FFFF; //LSB part
         
-        unsigned long acceleration = [aMotor acceleration];
+        uint32_t acceleration = [aMotor acceleration];
         theCmd.paramList[4] = (acceleration & 0xFFFF0000) >> 16; //MSB part
         theCmd.paramList[5] = acceleration & 0x0000FFFF; //LSB part
         
-        long seekAmount = [aMotor seekAmount];
+        int32_t seekAmount = [aMotor seekAmount];
         theCmd.paramList[6] = (seekAmount & 0xFFFF0000) >> 16; //MSB part
         theCmd.paramList[7] = seekAmount & 0x0000FFFF; //LSB part
         
@@ -484,13 +484,13 @@ NSString* ORM321FourPhaseChangedNotification		= @"ORM321FourPhaseChangedNotifica
 
 - (void) executeMotorCmd:(unsigned short) theCommand 
                    motor:(id)aMotor
-                riseFreq:(unsigned long) theRiseFreq 
-               driveFreq:(unsigned long) theDriveFreq
-            acceleration:(unsigned long) theAcceleration
-                   steps:(long)thePosition
+                riseFreq:(uint32_t) theRiseFreq 
+               driveFreq:(uint32_t) theDriveFreq
+            acceleration:(uint32_t) theAcceleration
+                   steps:(int32_t)thePosition
 {
     
-    unsigned long ulValue;
+    uint32_t ulValue;
     m321Cmd theCmd;
     theCmd.cmd = theCommand;
     
@@ -529,7 +529,7 @@ NSString* ORM321FourPhaseChangedNotification		= @"ORM321FourPhaseChangedNotifica
     }
 }
 
-- (void) loadHoldCurrent:(long)amount motor:(id)aMotor;
+- (void) loadHoldCurrent:(int32_t)amount motor:(id)aMotor;
 {
     @try {
         [hwLock lock];

@@ -84,12 +84,12 @@ NSString* ORL2301AllowOverflowChangedNotification   = @"ORL2301AllowOverflowChan
     [[NSNotificationCenter defaultCenter] postNotificationName:ORL2301ModelIncludeTimingChanged object:self];
 }
 
-- (unsigned long) dataId 
+- (uint32_t) dataId 
 { 
     return dataId; 
 }
 
-- (void) setDataId: (unsigned long) DataId
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -247,7 +247,7 @@ NSString* ORL2301AllowOverflowChangedNotification   = @"ORL2301AllowOverflowChan
 	
     union {
         NSTimeInterval asTimeInterval;
-        unsigned long asLongs[2];
+        uint32_t asLongs[2];
     } theTimeRef;
 	
     @try {
@@ -275,7 +275,7 @@ NSString* ORL2301AllowOverflowChangedNotification   = @"ORL2301AllowOverflowChan
             if(!suppressZeros || newCounts > 0) {
                 // initialize the data record; dataBuffer[0] is set at the end
                 if(len == 0) {
-                    long includeTimingMask = 0;
+                    int32_t includeTimingMask = 0;
                     len = 2;
                     if(includeTiming){
                         theTimeRef.asTimeInterval = [NSDate timeIntervalSinceReferenceDate];
@@ -324,7 +324,7 @@ NSString* ORL2301AllowOverflowChangedNotification   = @"ORL2301AllowOverflowChan
 - (void) clearQVT
 {   
     //[[self adapter] camacShortNAF:[self stationNumber] a:0 f:9];
-    unsigned long iBin;
+    uint32_t iBin;
     for(iBin = 0; iBin < kNBins; iBin++) [self writeQVT:0 atBin:iBin];
     memset(cachedCounts, 0, kNBins*sizeof(unsigned short));
 }
@@ -368,7 +368,7 @@ NSString* ORL2301AllowOverflowChangedNotification   = @"ORL2301AllowOverflowChan
 
 - (unsigned short) readStatusRegister
 {
-    unsigned long theRawValue;
+    uint32_t theRawValue;
     [[self adapter] camacLongNAF:[self stationNumber] a:0 f:1 data:&theRawValue];
     return theRawValue;
 }

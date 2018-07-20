@@ -1775,7 +1775,7 @@
                                     <subviews>
                                         <textField verticalHuggingPriority="750" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="bES-kQ-hog">
                                             <rect key="frame" x="28" y="517" width="96" height="22"/>
-                                            <string key="toolTip">Specify how long after a global trigger the Delayed Global Trigger (DGT) signal should be generated. Logically this value should always be less than Lockout.</string>
+                                            <string key="toolTip">Specify how int32_t after a global trigger the Delayed Global Trigger (DGT) signal should be generated. Logically this value should always be less than Lockout.</string>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="HFA-VX-OXw">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1796,7 +1796,7 @@
                                         </textField>
                                         <textField verticalHuggingPriority="750" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="02V-nh-qDt">
                                             <rect key="frame" x="28" y="562" width="96" height="22"/>
-                                            <string key="toolTip">Specify the length desired for Lockout, effectively controling how long a trigger window is. This control only changes the TUBii Lockout, so if the MTCD generates Lockout changing this value will do nothing.</string>
+                                            <string key="toolTip">Specify the length desired for Lockout, effectively controling how int32_t a trigger window is. This control only changes the TUBii Lockout, so if the MTCD generates Lockout changing this value will do nothing.</string>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="96" id="x59-Ml-9fx"/>
                                             </constraints>
@@ -1858,7 +1858,7 @@
                                         </textField>
                                         <slider verticalHuggingPriority="750" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="zq5-Yh-wDu">
                                             <rect key="frame" x="135" y="560" width="308" height="24"/>
-                                            <string key="toolTip">Specify the length desired for Lockout, effectively controling how long a trigger window is. This control only changes the TUBii Lockout, so if the MTCD generates Lockout changing this value will do nothing.</string>
+                                            <string key="toolTip">Specify the length desired for Lockout, effectively controling how int32_t a trigger window is. This control only changes the TUBii Lockout, so if the MTCD generates Lockout changing this value will do nothing.</string>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="304" id="w4v-xq-wap"/>
                                             </constraints>

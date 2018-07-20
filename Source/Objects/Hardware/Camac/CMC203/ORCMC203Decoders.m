@@ -53,10 +53,10 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 //--------------------------------------------------------------------
 
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-    unsigned long length = ExtractLength(*ptr); //get the length
+    uint32_t* ptr = (uint32_t*)someData;
+    uint32_t length = ExtractLength(*ptr); //get the length
 
 	ptr++;
 	unsigned char crate  = (*ptr>>21) & 0xf;
@@ -67,26 +67,26 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 	//ptr++; //point ms count
 	//ptr++; //point to data
 	[aDataSet loadWaveform:someData 
-					offset:2*sizeof(long)	//bytes!
-				  unitSize:sizeof(long)		//unit size in bytes!
+					offset:2*sizeof(int32_t)	//bytes!
+				  unitSize:sizeof(int32_t)		//unit size in bytes!
 					sender:self  
 				  withKeys:@"MC203", @"Histogram",crateKey,cardKey,nil];
 	
     return length; //must return number of bytes processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)someData
+- (NSString*) dataRecordDescription:(uint32_t*)someData
 {
     NSMutableString* totalString = [NSMutableString stringWithCapacity:1024];
     [totalString appendString:@"CMC203 Histogram\n\n"]; 
 
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length = ExtractLength(ptr[0]) - kCMC203ReservedHistoHeaderWords; //get the length
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length = ExtractLength(ptr[0]) - kCMC203ReservedHistoHeaderWords; //get the length
    
-	[totalString appendString:[NSString stringWithFormat:@"Crate    = %lu\n",(ptr[1]>>21) & 0xf]];
-    [totalString appendString:[NSString stringWithFormat:@"Station  = %lu\n",(ptr[1]>>16) & 0x1f]];
-    [totalString appendString:[NSString stringWithFormat:@"Total Count  = %lu %lu\n",ptr[3],ptr[2]]];
-    [totalString appendString:[NSString stringWithFormat:@"Histogram Length = %lu\n",length]]; 
+	[totalString appendString:[NSString stringWithFormat:@"Crate    = %u\n",(ptr[1]>>21) & 0xf]];
+    [totalString appendString:[NSString stringWithFormat:@"Station  = %u\n",(ptr[1]>>16) & 0x1f]];
+    [totalString appendString:[NSString stringWithFormat:@"Total Count  = %u %u\n",ptr[3],ptr[2]]];
+    [totalString appendString:[NSString stringWithFormat:@"Histogram Length = %u\n",length]]; 
 	
     return totalString;               
 }
@@ -120,10 +120,10 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 //--------------------------------------------------------------------
 
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-    unsigned long length = ExtractLength(*ptr); //get the length
+    uint32_t* ptr = (uint32_t*)someData;
+    uint32_t length = ExtractLength(*ptr); //get the length
 	
 	ptr++;
 	unsigned char crate  = (*ptr>>21) & 0xf;
@@ -159,17 +159,17 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
     return length; //must return number of bytes processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)someData
+- (NSString*) dataRecordDescription:(uint32_t*)someData
 {
     NSMutableString* totalString = [NSMutableString stringWithCapacity:1024];
     [totalString appendString:@"CMC203 Histogram\n\n"]; 
 	
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length = ExtractLength(ptr[0]) - kCMC203ReservedFifoHeaderWords; //get the length
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length = ExtractLength(ptr[0]) - kCMC203ReservedFifoHeaderWords; //get the length
 	
-	[totalString appendString:[NSString stringWithFormat:@"Crate    = %lu\n",(ptr[1]>>21) & 0xf]];
-    [totalString appendString:[NSString stringWithFormat:@"Station  = %lu\n",(ptr[1]>>16) & 0x1f]];
-    [totalString appendString:[NSString stringWithFormat:@"Record Length  = %lu\n",length]]; 
+	[totalString appendString:[NSString stringWithFormat:@"Crate    = %u\n",(ptr[1]>>21) & 0xf]];
+    [totalString appendString:[NSString stringWithFormat:@"Station  = %u\n",(ptr[1]>>16) & 0x1f]];
+    [totalString appendString:[NSString stringWithFormat:@"Record Length  = %u\n",length]]; 
 	
     return totalString;               
 }

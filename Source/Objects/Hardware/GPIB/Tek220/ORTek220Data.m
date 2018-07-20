@@ -57,17 +57,17 @@
 }
 
 #pragma mark ***Accessors
-- (long) actualWaveformSize
+- (int32_t) actualWaveformSize
 {
     return( mActualSizeWaveform );
 }
 
-- (void) setActualWaveformSize: (unsigned long) aWaveformSize
+- (void) setActualWaveformSize: (uint32_t) aWaveformSize
 {
     mActualSizeWaveform = aWaveformSize;
 }
 
-- (long) maxWaveformSize
+- (int32_t) maxWaveformSize
 {
     return mMaxSizeWaveform;
 }
@@ -95,13 +95,13 @@
 //    mAcquire = false;
 //}
 
-- (void) setGtid: (unsigned long) aGtid
+- (void) setGtid: (uint32_t) aGtid
 {
     
-    unsigned long dataWord[2];
+    uint32_t dataWord[2];
 
     // Create the new data storage area.
-    unsigned long len;
+    uint32_t len;
     if(IsShortForm([mModel gtidDataId])){
         len = 1;
         // Place header in first word of data storage along with gtid
@@ -114,7 +114,7 @@
     }
     
     [ mGtid release ];
-    mGtid = [[ NSMutableData allocWithZone: NULL ] initWithBytes:dataWord length: len*sizeof(long) ];
+    mGtid = [[ NSMutableData allocWithZone: NULL ] initWithBytes:dataWord length: len*sizeof(int32_t) ];
     
 }
 
@@ -144,12 +144,12 @@
     return( dataLoc ); 
 }
 
-- (unsigned long long) timeInSecs
+- (uint64_t) timeInSecs
 {
     return timeInSecs;
 }
 
-- (void) setTimeInSecs:(unsigned long long)aTime
+- (void) setTimeInSecs:(uint64_t)aTime
 {
     timeInSecs = aTime;
 }
@@ -161,8 +161,8 @@
     
     // Place header in first word of data storage.
 
-    unsigned long		mHeaderBaseInfo[2];
-    mHeaderBaseInfo[0] = [ mModel dataId ] | ([mData length]/sizeof(long) & kLongFormLengthMask);
+    uint32_t		mHeaderBaseInfo[2];
+    mHeaderBaseInfo[0] = [ mModel dataId ] | ([mData length]/sizeof(int32_t) & kLongFormLengthMask);
     mHeaderBaseInfo[1] = ([ mModel primaryAddress ] & 0xF ) << 23 | (mChannel & 0xF ) << 19;
 
     if(mData){
@@ -179,15 +179,15 @@
 
 - (NSData*) timePacketData: (ORDataPacket*) aDataPacket channel: (unsigned short) aChannel
 {
-    unsigned long 	dataWord[3];
-    unsigned long   len = 3;
+    uint32_t 	dataWord[3];
+    uint32_t   len = 3;
 
     // Place header in first word of data storage along with data.
     dataWord[0] = [ mModel clockDataId] | len;
     dataWord[1] =  ((aChannel & 0x7 ) << 24) | (timeInSecs & 0x00ffffff00000000LL)>>32;
     dataWord[2] = timeInSecs & 0x00000000ffffffffLL;
     [mTime release];
-    mTime = [[NSMutableData allocWithZone:nil] initWithBytes:dataWord length:len*sizeof(long)];
+    mTime = [[NSMutableData allocWithZone:nil] initWithBytes:dataWord length:len*sizeof(int32_t)];
     
 	return mTime;
 }
@@ -204,8 +204,8 @@
    if ( mHeaderChar[0] != '\0' ){
 		
 		// Get data from raw header and place in variables that are understandable.
-		//06/09/03 MAH changed the %d's to %ld's to get rid of two compiler warnings.
-        sscanf( mHeaderChar, "%ld;%e;%e;%e;%ld;%[^;];%s", 
+		//06/09/03 MAH changed the %d's to %d's to get rid of two compiler warnings.
+        sscanf( mHeaderChar, "%d;%e;%e;%e;%d;%[^;];%s", 
              &( mHeader.nrPts ),
              &( mHeader.yOff ),
              &( mHeader.yMult ),

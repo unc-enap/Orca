@@ -34,8 +34,8 @@
     id				dataSource;
 	BOOL			serviceAvailable;
 	NSArray*		fit;
-	long			maxChannel;
-	long			minChannel;
+	int32_t			maxChannel;
+	int32_t			minChannel;
 	int				fitType;
 	int				fitOrder;
 	NSString*		fitString;
@@ -56,10 +56,10 @@
 - (id)		dataSource ;
 - (BOOL) serviceAvailable;
 - (BOOL)	  fitExists;
-- (long) minChannel;
-- (void) setMinChannel:(long)aChannel;
-- (long) maxChannel;
-- (void) setMaxChannel:(long)aChannel;
+- (int32_t) minChannel;
+- (void) setMinChannel:(int32_t)aChannel;
+- (int32_t) maxChannel;
+- (void) setMaxChannel:(int32_t)aChannel;
 - (int) fitType;
 - (void) setFitType:(int)aValue;
 - (int) fitOrder;

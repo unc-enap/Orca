@@ -262,7 +262,7 @@
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"K3655 Timing Gen (Station %ld)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"K3655 Timing Gen (Station %d)",(int)[model stationNumber]]];
 }
 
 

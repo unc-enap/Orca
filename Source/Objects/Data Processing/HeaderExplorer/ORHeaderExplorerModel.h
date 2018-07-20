@@ -40,12 +40,12 @@
         ORDataPacket*   fileAsDataPacket;
 
         BOOL			reading;
-        unsigned long   currentFileIndex;
+        uint32_t   currentFileIndex;
 		
 		NSMutableArray* runArray;
-		unsigned long	minRunStartTime;
-		unsigned long	maxRunEndTime;
-		long			selectionDate;
+		uint32_t	minRunStartTime;
+		uint32_t	maxRunEndTime;
+		int32_t			selectionDate;
 		int				selectedRunIndex;
 		int				selectedFileIndex;
 
@@ -74,10 +74,10 @@
 - (int) selectedFileIndex;
 - (void) setSelectedFileIndex:(int)anIndex;
 - (void) setSelectedRunIndex:(int)anIndex;
-- (long)  selectionDate;
-- (void) setSelectionDate:(long)aValue;
+- (int32_t)  selectionDate;
+- (void) setSelectionDate:(int32_t)aValue;
 - (NSDictionary*) runDictionaryForIndex:(int)index;
-- (unsigned long)   total;
+- (uint32_t)   total;
 - (NSString*)   fileToProcess;
 - (void)        setFileToProcess:(NSString*)newFileToProcess;
 - (NSArray*) filesToProcess;
@@ -91,9 +91,9 @@
 - (void) setLastListPath: (NSString *) aSetLastListPath;
 - (NSString *) lastFilePath;
 - (void) setLastFilePath: (NSString *) aSetLastListPath;
-- (unsigned long)	minRunStartTime;
-- (unsigned long)	maxRunEndTime;
-- (BOOL) fileHasBeenProcessed:(unsigned long)anIndex;
+- (uint32_t)	minRunStartTime;
+- (uint32_t)	maxRunEndTime;
+- (BOOL) fileHasBeenProcessed:(uint32_t)anIndex;
 
 #pragma mark •••Data Handling
 - (void) stopProcessing;
@@ -107,12 +107,12 @@
 - (void) assembleDataForPlotting;
 - (void) assembleDataForPlotting:(int)keyNumber;
 - (void)logHeader:(NSDictionary*)aHeader
-		 runStart:(unsigned long)aRunStart 
-		   runEnd:(unsigned long)aRunEnd 
-		runNumber:(unsigned long)aRunNumber 
-		useSubRun:(unsigned long)aUseSubRun
-	 subRunNumber:(unsigned long)aSubRunNumber
-		 fileSize:(unsigned long)aFileSize
+		 runStart:(uint32_t)aRunStart 
+		   runEnd:(uint32_t)aRunEnd 
+		runNumber:(uint32_t)aRunNumber 
+		useSubRun:(uint32_t)aUseSubRun
+	 subRunNumber:(uint32_t)aSubRunNumber
+		 fileSize:(uint32_t)aFileSize
 		 fileName:(NSString*)aFilePath;
 - (int) indexOfFile:(NSString*)aFilePath;
 

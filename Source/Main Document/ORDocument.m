@@ -214,7 +214,7 @@ NSString* ORDocumentLock					= @"ORDocumentLock";
 {
     if(![objToGetID uniqueIdNumber]){
         NSArray* objects = [self collectObjectsOfClass:[objToGetID class]];
-        unsigned long anId = 1;
+        uint32_t anId = 1;
         do {
             BOOL idAlreadyUsed = NO;
             for(id anObj in objects){

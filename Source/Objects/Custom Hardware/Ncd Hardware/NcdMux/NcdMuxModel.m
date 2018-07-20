@@ -215,12 +215,12 @@ NSString* NcdMuxErrorCountChangedNotification 		= @"NcdMuxErrorCountChangedNotif
     detector=[newDetector retain];
 }
 
-- (unsigned long) eventReadError
+- (uint32_t) eventReadError
 {
     return eventReadError;
 }
 
-- (unsigned long) armError
+- (uint32_t) armError
 {
     return armError;
 }
@@ -278,12 +278,12 @@ NSString* NcdMuxErrorCountChangedNotification 		= @"NcdMuxErrorCountChangedNotif
     [hvHw readCurrent:aSupply];
 }
 
-- (unsigned long) readRelayMask
+- (uint32_t) readRelayMask
 {
     return [hvHw readRelayMask];
 }
 
-- (unsigned long) lowPowerOn
+- (uint32_t) lowPowerOn
 {
     return [hvHw lowPowerOn];
 }
@@ -294,15 +294,15 @@ NSString* NcdMuxErrorCountChangedNotification 		= @"NcdMuxErrorCountChangedNotif
     [hvHw resetAdcs];
 }
 
-- (unsigned long) muxEventDataId { return muxEventDataId; }
-- (void) setMuxEventDataId: (unsigned long) MuxEventDataId
+- (uint32_t) muxEventDataId { return muxEventDataId; }
+- (void) setMuxEventDataId: (uint32_t) MuxEventDataId
 {
     muxEventDataId = MuxEventDataId;
 }
 
 
-- (unsigned long) muxDataId { return muxDataId; }
-- (void) setMuxDataId: (unsigned long) MuxDataId
+- (uint32_t) muxDataId { return muxDataId; }
+- (void) setMuxDataId: (uint32_t) MuxDataId
 {
     muxDataId = MuxDataId;
 }
@@ -438,13 +438,13 @@ NSString* NcdMuxErrorCountChangedNotification 		= @"NcdMuxErrorCountChangedNotif
 
 
 //----------mux global record-----------------------------------
-// 0000 0000 0000 0000 0000 0000 0000 0000   32 bit unsigned long
+// 0000 0000 0000 0000 0000 0000 0000 0000   32 bit uint32_t
 // ^^^^-^------------------------------------ kMuxGType (device type)
 //                     ^^^^ ^^^^ ^^^^ ^^^^--- global event register
 //--------------------------------------------------------------
 
 //----------mux event record-----------------------------------
-// 0000 0000 0000 0000 0000 0000 0000 0000   32 bit unsigned long
+// 0000 0000 0000 0000 0000 0000 0000 0000   32 bit uint32_t
 // ^^^^-^------------------------------------ kMuxType (device type + 1)
 //       ^----------------------------------- spare
 //        ^^ ^------------------------------- muxbox
@@ -475,9 +475,9 @@ NSString* NcdMuxErrorCountChangedNotification 		= @"NcdMuxErrorCountChangedNotif
 		errorLocation = @"reading Event Register";
 		if ([muxBoxHw getEventRegister:&aHitDR] == kEventHeaderToDr) {
 			if (aHitDR & kDataByteMask){
-				unsigned long dataWord[2];
+				uint32_t dataWord[2];
 				//pack the mux global event reg using the first device type
-                unsigned long len;
+                uint32_t len;
                 if(IsShortForm(muxEventDataId)){
                     dataWord[0] = muxEventDataId | aHitDR;
                     len = 1;
@@ -489,7 +489,7 @@ NSString* NcdMuxErrorCountChangedNotification 		= @"NcdMuxErrorCountChangedNotif
                 }
                 [aDataPacket addLongsToFrameBuffer:dataWord length:len];
 				//ok, a box has fired, now see which channels fired. use the second device type
-				unsigned long scopeBitsMask = (aHitDR & 0x00003f00)<<9;
+				uint32_t scopeBitsMask = (aHitDR & 0x00003f00)<<9;
 				short bus;
 				for (bus=0; bus<8; bus++){
 					if (aHitDR & (1<<bus)) {
@@ -705,7 +705,7 @@ NSString* NcdMuxErrorCountChangedNotification 		= @"NcdMuxErrorCountChangedNotif
 			if (aHitDR & kDataByteMask){
 				NSLog(@"hit reg: 0x%0x\n",(aHitDR & 0x0000ffff));
 				//ok, a box has fired, now see which channels fired. use the second device type
-				unsigned long scopeBitsMask = (aHitDR & 0x00003f00)<<9;
+				uint32_t scopeBitsMask = (aHitDR & 0x00003f00)<<9;
 				short box;
 				for (box=0; box<8; box++){
 					if (aHitDR & (1<<box)) {

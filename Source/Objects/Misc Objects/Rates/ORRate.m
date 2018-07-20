@@ -127,7 +127,7 @@ NSString* ORRateValue 				= @"ORRateValue";
 - (void) calcRate:(id)obj
 {
 
-	unsigned long currentCount = [obj getCounter:tag forGroup:groupTag];
+	uint32_t currentCount = [obj getCounter:tag forGroup:groupTag];
 	if(lastTime == nil){
 		[self setRate:0];
 		lastCount = currentCount;

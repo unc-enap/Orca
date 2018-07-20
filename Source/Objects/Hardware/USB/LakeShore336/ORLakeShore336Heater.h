@@ -32,7 +32,7 @@
     double          minValue;
     double          maxValue;
     ORTimeRate*		timeRate;
-    unsigned long   timeMeasured;
+    uint32_t   timeMeasured;
     BOOL            userMaxCurrentEnabled;
     int             type;
     int             opMode;
@@ -77,7 +77,7 @@
 @property (assign,nonatomic) unsigned short dValue;
 
 @property (retain)           ORTimeRate*    timeRate;
-@property (assign)           unsigned long  timeMeasured;
+@property (assign)           uint32_t  timeMeasured;
 
 @end
 

@@ -253,7 +253,7 @@ for (id obj in listOfADCs) [obj x];               \
 {
     // Reads current ADC values, creating a list of channels (128 for each ADC)
 
-    unsigned long sizeOfArray = 0;
+    uint32_t sizeOfArray = 0;
     for (id obj in listOfADCs) {
         sizeOfArray += [obj numberOfChannels];
     }

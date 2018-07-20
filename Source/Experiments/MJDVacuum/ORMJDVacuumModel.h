@@ -132,7 +132,7 @@
 	NSMutableArray*		 parts;
 	BOOL				 showGrid;
 	NSMutableArray*		 adcMapArray;
-    unsigned long		 vetoMask;
+    uint32_t		 vetoMask;
 	BOOL				 involvedInProcess;
 	BOOL				 constraintCheckScheduled;
     BOOL				 detectorsBiased;
@@ -173,8 +173,8 @@
 - (void) setNoHvInfo;
 - (void) clearNoHvInfo;
 
-- (unsigned long) vetoMask;
-- (void) setVetoMask:(unsigned long)aVetoMask;
+- (uint32_t) vetoMask;
+- (void) setVetoMask:(uint32_t)aVetoMask;
 - (void) setUpImage;
 - (void) makeMainController;
 - (NSArray*) parts;

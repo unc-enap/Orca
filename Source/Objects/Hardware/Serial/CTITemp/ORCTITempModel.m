@@ -138,13 +138,13 @@ NSString* ORCTITempLock = @"ORCTITempLock";
 {
     if([[ORGlobal sharedGlobal] runInProgress]){
 		
-		unsigned long data[4];
+		uint32_t data[4];
 		data[0] = dataId | 4;
 		data[1] = ([self uniqueIdNumber]&0x0000fffff);
 		
 		union {
 			float asFloat;
-			unsigned long asLong;
+			uint32_t asLong;
 		}theData;
 		
 		int index = 2;
@@ -154,7 +154,7 @@ NSString* ORCTITempLock = @"ORCTITempLock";
 		data[index] = timeMeasured;
 		
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-															object:[NSData dataWithBytes:data length:sizeof(long)*4]];
+															object:[NSData dataWithBytes:data length:sizeof(int32_t)*4]];
 	}
 }
 
@@ -204,7 +204,7 @@ NSString* ORCTITempLock = @"ORCTITempLock";
 	return temperature;
 }
 
-- (unsigned long) timeMeasured
+- (uint32_t) timeMeasured
 {
 	return timeMeasured;
 }
@@ -355,8 +355,8 @@ NSString* ORCTITempLock = @"ORCTITempLock";
 }
 
 #pragma mark ***Data Records
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }

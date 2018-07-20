@@ -102,7 +102,7 @@
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"BiRa2351I (Station %lu)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"BiRa2351I (Station %u)",(int)[model stationNumber]]];
 }
 
 #pragma mark ¥¥¥Actions

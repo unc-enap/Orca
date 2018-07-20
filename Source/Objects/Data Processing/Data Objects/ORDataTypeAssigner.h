@@ -35,13 +35,13 @@
 #define ExtractLength(x) (IsShortForm(x) ? 1 : ((x) & ~kLongFormDataIdMask))
 
 @interface ORDataTypeAssigner : NSObject {
-    unsigned long shortDeviceType;
-    unsigned long longDeviceType;  
+    uint32_t shortDeviceType;
+    uint32_t longDeviceType;  
 }
 - (void) reset;
 - (void) assignDataIds;
-- (unsigned long) assignDataIds:(BOOL)wantsShort;
-- (unsigned long) reservedDataId:(NSString*)aClassName;
+- (uint32_t) assignDataIds:(BOOL)wantsShort;
+- (uint32_t) reservedDataId:(NSString*)aClassName;
 @end
 
 @interface NSObject (ORDataTypeAssigner)

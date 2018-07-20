@@ -151,7 +151,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
     char	theDataOsc[ 5 ];
 	
     // Write the command.
-    long lengthReturn = [ mController writeReadDevice: mPrimaryAddress 
+    int32_t lengthReturn = [ mController writeReadDevice: mPrimaryAddress 
 											  command: @"BUSY?"
 												 data: theDataOsc
 											maxLength: 5 ];
@@ -177,10 +177,10 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
  * \note		
  */
 //--------------------------------------------------------------------------------
-- (long) oscGetDateTime
+- (int32_t) oscGetDateTime
 {
-	long		returnLength = 0;
-    long		timeLong = 0;
+	int32_t		returnLength = 0;
+    int32_t		timeLong = 0;
 	NSString*	dateStr = nil;
 	NSString*  	timeStr =nil;
 	NSString*	dateTime;
@@ -218,7 +218,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 			}
 		}
 		
-		// Convert date time to long.
+		// Convert date time to int32_t.
 		dateTime = [ dateStr stringByAppendingString: @" "];
         dateTime = [ dateTime stringByAppendingString: timeStr ];
         
@@ -381,7 +381,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 //--------------------------------------------------------------------------------
 - (void) oscGetChnlAcquire: (short) aChnl
 {
-    long		returnLength;		// Length of string returned by oscilloscope.
+    int32_t		returnLength;		// Length of string returned by oscilloscope.
     
 	// Make sure that channel is valid
 	if ( [ self checkChnlNum: aChnl ] )
@@ -439,7 +439,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 {
     NSString*	impedanceValue;
     NSString*	couplingValue;
-	long		returnLength = 0;
+	int32_t		returnLength = 0;
 	
 	if ( [ self checkChnlNum: aChnl ] )
 	{
@@ -530,7 +530,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 //--------------------------------------------------------------------------------
 - (void) oscGetChnlPos: (short) aChnl
 {
-    long	returnLength = 0;
+    int32_t	returnLength = 0;
     
 	if ( [ self checkChnlNum: aChnl ] )
 	{
@@ -570,7 +570,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 //--------------------------------------------------------------------------------
 - (void) oscGetChnlScale: (short) aChnl
 {
-    long	returnLength = 0;
+    int32_t	returnLength = 0;
     
 	if ( [ self checkChnlNum: aChnl ] )
 	{
@@ -610,7 +610,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 //-----------------------------------------------------------------------------
 - (void) osc754GetHorizontalFastframeSetup
 {
-	long	returnLength;
+	int32_t	returnLength;
     
     if ( mID == ORTEKc754D )
     {
@@ -653,16 +653,16 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
     if ( mID == ORTEKc754D )
     {
 		// Set the frame count.
-        [ self writeToGPIBDevice: [ NSString stringWithFormat: @"HORIZONTAL:FASTFRAME:COUNT %ld", 
+        [ self writeToGPIBDevice: [ NSString stringWithFormat: @"HORIZONTAL:FASTFRAME:COUNT %d", 
 								   mFastframeCount ]];
 		
 		// Set the reference frame.
-        [ self writeToGPIBDevice: [ NSString stringWithFormat: @"HORIZONTAL:FASTFRAME:REF %ld", 
+        [ self writeToGPIBDevice: [ NSString stringWithFormat: @"HORIZONTAL:FASTFRAME:REF %d", 
 								   mFastframeRef ]];
 		
 		// Set the length of each frame.
         mFastframeRecLength = mWaveformLength / mFastframeCount;
-        [ self writeToGPIBDevice: [ NSString stringWithFormat: @"HORIZONTAL:FASTFRAME:LENGTH %ld",
+        [ self writeToGPIBDevice: [ NSString stringWithFormat: @"HORIZONTAL:FASTFRAME:LENGTH %d",
 								   mFastframeRecLength ]];
     }
 }
@@ -677,7 +677,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 //-----------------------------------------------------------------------------
 - (void) osc754GetHorizontalFastframeState
 {
-	long	returnLength;
+	int32_t	returnLength;
     
     if ( mID == ORTEKc754D )
     {
@@ -743,7 +743,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 //-----------------------------------------------------------------------------
 - (void) oscGetHorizontalPos
 {
-	long	returnLength;
+	int32_t	returnLength;
 	
     returnLength = [ self writeReadGPIBDevice: @"HORIZONTAL:POSITION?" 
                                          data: mReturnData
@@ -772,7 +772,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 //-----------------------------------------------------------------------------
 - (void) oscGetHorizontalScale
 {
-	long	returnLength;
+	int32_t	returnLength;
 	
     returnLength = [ self writeReadGPIBDevice: @"HORIZONTAL:SCALE?" 
                                          data: mReturnData
@@ -802,7 +802,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 //-----------------------------------------------------------------------------
 - (void) oscGetWaveformRecordLength
 {
-    long		returnLength;
+    int32_t		returnLength;
     
     returnLength = [ self writeReadGPIBDevice: @"HORIZONTAL:RECORDLENGTH?"
                                          data: mReturnData
@@ -821,7 +821,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 //--------------------------------------------------------------------------------
 - (void) oscSetWaveformRecordLength
 {
-	[ self writeToGPIBDevice: [ NSString stringWithFormat: @"HORIZONTAL:RECORDLENGTH %ld", [ self waveformLength ]]];
+	[ self writeToGPIBDevice: [ NSString stringWithFormat: @"HORIZONTAL:RECORDLENGTH %d", [ self waveformLength ]]];
 }
 
 
@@ -836,7 +836,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 - (void)	oscGetTriggerCoupling
 {
     NSString*	couplingValue;
-	long		returnLength = 0;
+	int32_t		returnLength = 0;
 	
 	// Get coupling value.
 	returnLength = [ self writeReadGPIBDevice: @"TRIGGER:MAIN:EDGE:COUPLING?"
@@ -921,7 +921,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 //-----------------------------------------------------------------------------
 - (void)	oscGetTriggerLevel
 {
-	long	returnLength = 0;
+	int32_t	returnLength = 0;
 	
 	// Get trigger level.
 	returnLength = [ self writeReadGPIBDevice: @"TRIGGER:MAIN:LEVEL?"
@@ -956,7 +956,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 - (void)	oscGetTriggerMode
 {
     NSString*	triggerMode;
-	long		returnLength = 0;
+	int32_t		returnLength = 0;
 	
 	// Get trigger mode.
 	returnLength = [ self writeReadGPIBDevice: @"TRIGGER:MAIN:Mode?"
@@ -1015,7 +1015,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 //-----------------------------------------------------------------------------
 - (void) oscGetTriggerPos
 {
-    long		returnLength = 0;
+    int32_t		returnLength = 0;
     
 	// Get value
     returnLength = [ self writeReadGPIBDevice: @"HORIZONTAL:TRIGGER:POSITION?"
@@ -1050,7 +1050,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 - (void) oscGetTriggerSlopeIsPos
 {
     NSString*	slope;
-    long		returnLength = 0;
+    int32_t		returnLength = 0;
     
 	// Get trigger slope.
 	returnLength = [ self writeReadGPIBDevice: @"TRIGGER:MAIN:EDGE:SLOPE?" 
@@ -1100,7 +1100,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 - (void)	oscGetTriggerSource
 {
     NSString*	triggerSource;
-	long		returnLength = 0;
+	int32_t		returnLength = 0;
 	
 	// Get trigger source.
 	returnLength = [ self writeReadGPIBDevice: @"TRIGGER:MAIN:EDGE:SOURCE?"
@@ -1290,7 +1290,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 	char			*theData;			// Temporary pointer to data storage location.
 	char			theHeaderInfo[ 8 ];					
 	int				i;
-	long			numOfDataPoints;
+	int32_t			numOfDataPoints;
 	unsigned short  acqMask;
 	
     @try {
@@ -1359,7 +1359,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 //--------------------------------------------------------------------------------
 - (void) oscGetWaveformTime: (unsigned short) aMask
 {
-    unsigned long long	timeInSecs;
+    uint64_t	timeInSecs;
 	char				theTimeStr[ 128 ];			// Temporary storage for time stamp.
     bool				fNoTime = true;
     
@@ -1394,11 +1394,11 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
         time_t tmpTime = timeValue.tv_sec;
         timeAsStruct = gmtime( &tmpTime );
         
-        long milliSecs = timeValue.tv_usec / 1000;
-        //long microSecs = timeValue.tv_usec - 1000 * milliSecs;
+        int32_t milliSecs = timeValue.tv_usec / 1000;
+        //int32_t microSecs = timeValue.tv_usec - 1000 * milliSecs;
         
 		// Construct time in format needed by remainder of program.        
-        timeString = [ NSString stringWithFormat: @"%d %s %d %d:%d:%d.%%03d%03ld 000",
+        timeString = [ NSString stringWithFormat: @"%d %s %d %d:%d:%d.%%03d%03d 000",
 					  timeAsStruct->tm_mday, month[ timeAsStruct->tm_mon ], timeAsStruct->tm_year + 1900, 
 					  timeAsStruct->tm_hour, timeAsStruct->tm_min, timeAsStruct->tm_sec,
 					  milliSecs ];
@@ -1486,7 +1486,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
     [ self writeToGPIBDevice: @"DATA:WID 1"];			// Byte data
     [ self writeToGPIBDevice: @"DATA:ENCDG RIBINARY"];	// Binary data
     [ self writeToGPIBDevice: @"DATA:START 1"];			// Data starts at chnl 1.	
-    [ self writeToGPIBDevice: [ NSString stringWithFormat: @"DATA:STOP %ld", mWaveformLength ]];  // Waveform size
+    [ self writeToGPIBDevice: [ NSString stringWithFormat: @"DATA:STOP %d", mWaveformLength ]];  // Waveform size
     [ self oscSetAcqMode: kSingleWaveform ];  // Set to single waveform acquisition.
 }
 
@@ -1891,20 +1891,20 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 /*!\method  osc754ConvertTime  
  * \brief	Convert the tektronix character string time a 10 MHz clock based
  *			time using 1/1/1970 as the start date.
- * \param	a10MHzTime			- long long that stores 10 MHz time.
+ * \param	a10MHzTime			- int64_t that stores 10 MHz time.
  * \param	aCharTime			- Tektronix time.
  * \note	
  */
 //--------------------------------------------------------------------------------
-- (void) osc754ConvertTime: (unsigned long long*) a10MHzTime timeToConvert: (char*) aCharTime
+- (void) osc754ConvertTime: (uint64_t*) a10MHzTime timeToConvert: (char*) aCharTime
 {
     struct tm					unixTime;
 	//    struct tm*					tmpStruct;
     const char*					stdMonths[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", 
 	"Oct", "Nov", "Dec" };
     time_t						baseTime;
-    unsigned long				fracSecs = 0;
-    const unsigned long long	mult = 10000000;
+    uint32_t				fracSecs = 0;
+    const uint64_t	mult = 10000000;
     short						iStart = -1;
     short						i;
     bool						f_Found = false;
@@ -1987,7 +1987,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 		fracSecs += atoi( datePiece ) / 100; 
 	
 	// Convert to 10 Mhz Clock
-    *a10MHzTime = (unsigned long long)baseTime * mult + fracSecs;
+    *a10MHzTime = (uint64_t)baseTime * mult + fracSecs;
 	//  printf( "T754 - converted: %lld\n", *a10MHzTime );	
 	
 }
@@ -1998,12 +1998,12 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 @end
 
 @implementation ORTek754DDecoderForScopeGTID
-- (unsigned long) decodeData: (void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet: (ORDataSet*) aDataSet
+- (uint32_t) decodeData: (void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet: (ORDataSet*) aDataSet
 {
     return [self decodeGtId:aSomeData fromDecoder:aDecoder intoDataSet:aDataSet];
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     return [self dataGtIdDescription:ptr];
 }
@@ -2011,11 +2011,11 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
 @end
 
 @implementation ORTek754DDecoderForScopeTime
-- (unsigned long) decodeData: (void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet: (ORDataSet*) aDataSet
+- (uint32_t) decodeData: (void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet: (ORDataSet*) aDataSet
 {
     return [self decodeClock:aSomeData fromDecoder:aDecoder intoDataSet:aDataSet];
 } 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     return [self dataClockDescription:ptr];
 }

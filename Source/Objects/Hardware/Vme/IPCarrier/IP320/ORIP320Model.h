@@ -74,9 +74,9 @@ enum {
     NSTimeInterval	pollingState;
     BOOL            hasBeenPolled;
 	NSLock*			hwLock;
-    unsigned long   dataId;
-    unsigned long   convertedDataId;
-	unsigned long	readCount;
+    uint32_t   dataId;
+    uint32_t   convertedDataId;
+	uint32_t	readCount;
     BOOL			displayRaw;
 	int				opMode;
 	BOOL			pollRunning;
@@ -135,8 +135,8 @@ enum {
 - (BOOL) hasBeenPolled;
 - (void)			setOpMode:(int)aMode;
 - (int)				opMode;
-- (unsigned long)  getRegisterAddress:(short) aRegister;
-- (unsigned long)  getAddressOffset:(short) anIndex;
+- (uint32_t)  getRegisterAddress:(short) aRegister;
+- (uint32_t)  getAddressOffset:(short) anIndex;
 - (NSString*)      getRegisterName:(short) anIndex;
 - (short)          getNumRegisters;
 - (void)           loadConstants:(unsigned short)aChannel;
@@ -145,12 +145,12 @@ enum {
 - (void)		   enablePollAll:(BOOL)state;
 - (void)		   enableAlarmAll:(BOOL)state;
 - (void)		   postNotification:(NSNotification*)aNote;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
-- (unsigned long) convertedDataId;
-- (void) setConvertedDataId: (unsigned long) DataId;
-- (unsigned long) lowMask;
-- (unsigned long) highMask;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
+- (uint32_t) convertedDataId;
+- (void) setConvertedDataId: (uint32_t) DataId;
+- (uint32_t) lowMask;
+- (uint32_t) highMask;
 
 #pragma mark ¥¥¥Adc Processing Protocol
 - (void)processIsStarting;

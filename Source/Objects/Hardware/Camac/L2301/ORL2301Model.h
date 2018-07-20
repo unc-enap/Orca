@@ -39,18 +39,18 @@ enum L2301Constants {
 @interface ORL2301Model : ORCamacIOCard <ORDataTaker> {
 @private
 	BOOL includeTiming;
-	unsigned long dataId;
+	uint32_t dataId;
 	
 	BOOL suppressZeros;
 	BOOL allowOverflow;
 	
 	// place to cache some stuff for alittle more speed.
-	unsigned long 	unChangingDataPart;
+	uint32_t 	unChangingDataPart;
 	unsigned short cachedStation;
 	
 	// used during data taking
 	unsigned short cachedCounts[kNBins];
-	unsigned long dataBuffer[kMaxDataLen];
+	uint32_t dataBuffer[kMaxDataLen];
     
     NSDate *lastDataTS;
 }
@@ -63,8 +63,8 @@ enum L2301Constants {
 #pragma mark ¥¥¥Accessors
 - (BOOL) includeTiming;
 - (void) setIncludeTiming:(BOOL)aIncludeTiming;
-- (unsigned long) dataId;
-- (void) setDataId:(unsigned long)DataId;
+- (uint32_t) dataId;
+- (void) setDataId:(uint32_t)DataId;
 - (BOOL) suppressZeros;
 - (void) setSuppressZeros:(BOOL)aFlag;
 - (BOOL) allowOverflow;

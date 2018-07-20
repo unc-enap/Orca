@@ -39,12 +39,12 @@ NSString* ORCameraModelMovieChanged				= @"ORCameraModelMovieChanged";
    didOutputVideoFrame:(CVImageBufferRef)videoFrame 
 	  withSampleBuffer:(QTSampleBuffer *)sampleBuffer 
 		fromConnection:(QTCaptureConnection *)connection;
-- (unsigned long) saveIntervalInSeconds;
-- (long) keepFileIntervalInSeconds;
+- (uint32_t) saveIntervalInSeconds;
+- (int32_t) keepFileIntervalInSeconds;
 - (int) updateIntervalSeconds;
 - (void) saveMovieToHistory;
 - (void) cleanupHistory;
-- (void) cleanupThread:(long)keepTime;
+- (void) cleanupThread:(int32_t)keepTime;
 - (void) addFrame;
 @end
 
@@ -335,7 +335,7 @@ NSString* ORCameraModelMovieChanged				= @"ORCameraModelMovieChanged";
     return nil;
 }
 
-- (unsigned long) calculatedFileSizeBytes
+- (uint32_t) calculatedFileSizeBytes
 {
 	float freq;
 	if([self updateIntervalSeconds]) freq = 1/(float)[self updateIntervalSeconds];
@@ -352,7 +352,7 @@ NSString* ORCameraModelMovieChanged				= @"ORCameraModelMovieChanged";
 @end
 
 @implementation ORCameraModel (private)
-- (unsigned long) saveIntervalInSeconds
+- (uint32_t) saveIntervalInSeconds
 {
 	switch(saveFileInterval){
 		case 0: return 30 * 60;
@@ -362,7 +362,7 @@ NSString* ORCameraModelMovieChanged				= @"ORCameraModelMovieChanged";
 	return 30*60;
 }
 
-- (long) keepFileIntervalInSeconds
+- (int32_t) keepFileIntervalInSeconds
 {
 	switch(keepFileInterval){
 		case 0: return -1; //forever
@@ -562,7 +562,7 @@ NSString* ORCameraModelMovieChanged				= @"ORCameraModelMovieChanged";
 	}
 }
 
-- (void) cleanupThread:(long)keepTime
+- (void) cleanupThread:(int32_t)keepTime
 {
 	NSAutoreleasePool* thePool = [[NSAutoreleasePool alloc] init];
 	@try {

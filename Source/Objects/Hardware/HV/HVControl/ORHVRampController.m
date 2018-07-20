@@ -77,7 +77,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"HV Ramper (%lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"HV Ramper (%u)",[model uniqueIdNumber]]];
 }
 
 - (void) dealloc

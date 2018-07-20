@@ -164,7 +164,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmController);
 			[addressField setStringValue:[addressObj mailAddress]];
 			
 			int i;
-			unsigned long aMask = [addressObj severityMask];
+			uint32_t aMask = [addressObj severityMask];
 			for(i=0;i<kNumAlarmSeverityTypes;i++){
 				[[severityMatrix cellWithTag:i] setState:(aMask & (0x1L<<i))!=0];
 			}
@@ -273,7 +273,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmController);
 	if(selectedIndex>=0) {
 		id addressObj = [[self alarmCollection] addressAtIndex:selectedIndex];
 		int i;
-		unsigned long aMask = 0L;
+		uint32_t aMask = 0L;
 		for(i=0;i<kNumAlarmSeverityTypes;i++){
 			if([[severityMatrix cellWithTag:i] state] == NSOnState){
 				aMask |= (0x1L<<i);
@@ -318,7 +318,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmController);
 		id addressObj = [[self alarmCollection] addressAtIndex:selectedIndex];
 		if([aNotification object] == addressObj){
 			int i;
-			unsigned long aMask = [addressObj severityMask];
+			uint32_t aMask = [addressObj severityMask];
 			for(i=0;i<kNumAlarmSeverityTypes;i++){
 				[[severityMatrix cellWithTag:i] setState:(aMask & (0x1L<<i))!=0];
 			}

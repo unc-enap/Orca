@@ -59,7 +59,7 @@ NSDate* MCPYear0000;
     return self;    
 }
 
-- (unsigned long long) numOfRows
+- (uint64_t) numOfRows
 {
     if (mResult) {
         return mysql_num_rows(mResult);
@@ -75,9 +75,9 @@ NSDate* MCPYear0000;
     return mNumOfFields = 0;
 }
 
-- (void) dataSeek:(unsigned long long) row
+- (void) dataSeek:(uint64_t) row
 {
-    unsigned long long	theRow = row;
+    uint64_t	theRow = row;
     theRow = (theRow < [self numOfRows])? theRow : ([self numOfRows]-1);
     mysql_data_seek(mResult,theRow);
     return;
@@ -86,7 +86,7 @@ NSDate* MCPYear0000;
 - (id) fetchRowAsType:(MCPReturnType) aType
 {
     MYSQL_ROW		theRow;
-    unsigned long*	theLengths;
+    uint32_t*	theLengths;
     MYSQL_FIELD*	theField;
     int				i;
     id				theReturn;
@@ -310,7 +310,7 @@ NSDate* MCPYear0000;
                 theType = @"short";
                 break;
             case FIELD_TYPE_LONG:
-                theType = @"long";
+                theType = @"int32_t";
                 break;
             case FIELD_TYPE_INT24:
                 theType = @"int24";
@@ -549,7 +549,7 @@ NSDate* MCPYear0000;
         NSArray			*theRow;
         MYSQL_ROW_OFFSET	thePosition;
 
-        [theString appendFormat:@"ORSqlResult: (dim %ld x %ld)\n",(long)mNumOfFields, (long)[self numOfRows]];
+        [theString appendFormat:@"ORSqlResult: (dim %d x %d)\n",(int32_t)mNumOfFields, (int32_t)[self numOfRows]];
         [self fetchFieldsName];
         for (i=0; i<(mNumOfFields-1); i++) {
             [theString appendFormat:@"%@\t", [mNames objectAtIndex:i]];

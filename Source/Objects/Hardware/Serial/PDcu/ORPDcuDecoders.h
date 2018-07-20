@@ -27,6 +27,6 @@
 
 @interface ORPDcuDecoderForAdc : ORBaseDecoder {
 }
-- (unsigned long) decodeData:(void*)someData fromDataPDcuket:(ORDataPacket*)aDataPDcuket intoDataSet:(ORDataSet*)aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr;
+- (uint32_t) decodeData:(void*)someData fromDataPDcuket:(ORDataPacket*)aDataPDcuket intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr;
 @end

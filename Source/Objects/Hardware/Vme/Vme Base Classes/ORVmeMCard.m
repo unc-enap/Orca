@@ -52,7 +52,7 @@
 }
 
 
-- (unsigned long) baseAddress
+- (uint32_t) baseAddress
 {
     return [[self guardian] baseAddress]+ [self slot] * 0x200;
 }

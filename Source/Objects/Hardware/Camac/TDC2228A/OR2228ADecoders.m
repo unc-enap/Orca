@@ -38,14 +38,14 @@
     [super dealloc];
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long length;
-    unsigned long* ptr = (unsigned long*)someData;
+    uint32_t length;
+    uint32_t* ptr = (uint32_t*)someData;
     if(IsShortForm(*ptr)){
         length = 1;
     }
-    else  {       //oh, we have been assign the long form--skip to the next long word for the data
+    else  {       //oh, we have been assign the int32_t form--skip to the next int32_t word for the data
         ptr++;
         length = 2;
     }
@@ -56,7 +56,7 @@
 	NSString* crateKey = [self getCrateKey: crate];
 	NSString* cardKey = [self getStationKey: card];
 	NSString* channelKey = [self getChannelKey: channel];
-    unsigned long  value = *ptr&0xfff;
+    uint32_t  value = *ptr&0xfff;
 	
     [aDataSet histogram:value numBins:4096 sender:self  withKeys:@"2228A", crateKey,cardKey,channelKey,nil];
 
@@ -64,7 +64,7 @@
     return length; //must return number of bytes processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     if(!IsShortForm(*ptr)){
         ptr++;
@@ -72,10 +72,10 @@
     
     NSString* title= @"2228A TDC Record\n\n";
     
-    NSString* crate = [NSString stringWithFormat:@"Crate    = %lu\n",(*ptr>>21)&0xf];
-    NSString* card  = [NSString stringWithFormat:@"Station  = %lu\n",(*ptr>>16)& 0x1f];
-    NSString* chan  = [NSString stringWithFormat:@"Chan     = %lu\n",(*ptr>>12)&0xf];
-    NSString* tdc   = [NSString stringWithFormat:@"TDC      = 0x%lx\n",*ptr&0xfff];
+    NSString* crate = [NSString stringWithFormat:@"Crate    = %u\n",(*ptr>>21)&0xf];
+    NSString* card  = [NSString stringWithFormat:@"Station  = %u\n",(*ptr>>16)& 0x1f];
+    NSString* chan  = [NSString stringWithFormat:@"Chan     = %u\n",(*ptr>>12)&0xf];
+    NSString* tdc   = [NSString stringWithFormat:@"TDC      = 0x%x\n",*ptr&0xfff];
     NSString* time  = [NSString stringWithFormat:@"         (%.3f ns)\n",(*ptr&0xfff)*100./2047.]; //100ns full scale.
     
     return [NSString stringWithFormat:@"%@%@%@%@%@%@",title,crate,card,chan,tdc,time];               

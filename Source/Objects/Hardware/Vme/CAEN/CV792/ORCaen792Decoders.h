@@ -26,11 +26,11 @@
     NSMutableDictionary* actualCards;
 }
 - (NSString*) dataKey;
-- (unsigned short) 	channel: (unsigned long) pDataValue;
+- (unsigned short) 	channel: (uint32_t) pDataValue;
 @end
 
 @interface ORCAEN792NDecoderForQdc : ORCAEN792DecoderForQdc {
 }
 - (NSString*) dataKey;
-- (unsigned short) 	channel: (unsigned long) pDataValue;
+- (unsigned short) 	channel: (uint32_t) pDataValue;
 @end

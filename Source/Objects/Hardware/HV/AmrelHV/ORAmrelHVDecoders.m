@@ -40,13 +40,13 @@
 
 @implementation ORAmrelHVDecoderForHVStatus
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-	unsigned long value = *((unsigned long*)someData);
+	uint32_t value = *((uint32_t*)someData);
     return ExtractLength(value);	
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr
 {
     NSString* theString =  @"AmrelHV HV Controller\n\n";               
 	int ident = dataPtr[1] & 0xfff;
@@ -58,7 +58,7 @@
 	theString = [theString stringByAppendingFormat:@"%@\n",[date stdDescription]];
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theData;
 	
 	theString = [theString stringByAppendingFormat:@"--------------------------\n"];

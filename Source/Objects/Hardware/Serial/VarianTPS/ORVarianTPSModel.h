@@ -27,7 +27,7 @@
 @interface ORVarianTPSModel : ORSerialPortModel
 {
     @private
-        unsigned long	dataId;
+        uint32_t	dataId;
 		NSData*			lastRequest;
 		ORSafeQueue*	cmdQueue;
 		NSMutableData*	inComingData;
@@ -37,7 +37,7 @@
 		int				pollTime;
 		float			motorCurrent;
 		float			pressure;
-		unsigned long	timeMeasured;
+		uint32_t	timeMeasured;
 
 		float			pressureScaleValue;
 		BOOL			stationPower;
@@ -77,8 +77,8 @@
 #pragma mark •••Data Records
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (NSDictionary*) dataRecordDescription;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherVarianTPS;
 - (void) shipPressure;

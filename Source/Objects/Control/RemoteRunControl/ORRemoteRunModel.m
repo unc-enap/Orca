@@ -235,11 +235,11 @@ NSString* ORRemoteRunShutDownScriptNameChanged = @"ORRemoteRunShutDownScriptName
     [socket setDelegate:self];
 }
 
-- (unsigned long) remotePort
+- (uint32_t) remotePort
 {
     return remotePort;
 }
-- (void) setRemotePort:(unsigned long)aRemotePort
+- (void) setRemotePort:(uint32_t)aRemotePort
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setRemotePort:remotePort];
     
@@ -266,12 +266,12 @@ NSString* ORRemoteRunShutDownScriptNameChanged = @"ORRemoteRunShutDownScriptName
 	 object:self];
 }
 
--(unsigned long)runNumber
+-(uint32_t)runNumber
 {
     return runNumber;
 }
 
--(void)setRunNumber:(unsigned long)aRunNumber
+-(void)setRunNumber:(uint32_t)aRunNumber
 {
     runNumber = aRunNumber;
     
@@ -477,10 +477,10 @@ NSString* ORRemoteRunShutDownScriptNameChanged = @"ORRemoteRunShutDownScriptName
 {
 	NSString* rn;
 	if([self subRunNumber] > 0){
-		rn = [NSString stringWithFormat:@"%lu.%d",[self runNumber],[self subRunNumber]];
+		rn = [NSString stringWithFormat:@"%u.%d",[self runNumber],[self subRunNumber]];
 	}
 	else {
-		rn = [NSString stringWithFormat:@"%lu",[self runNumber]];
+		rn = [NSString stringWithFormat:@"%u",[self runNumber]];
 	}
 	return rn;
 }

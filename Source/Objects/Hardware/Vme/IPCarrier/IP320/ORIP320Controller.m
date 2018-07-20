@@ -84,7 +84,7 @@
 	
     [outlineView setDoubleAction:@selector(doubleClick:)];
     [multiPlotView setDoubleAction:@selector(doubleClickMultiPlot:)];
-	[splitView loadLayoutWithName:[NSString stringWithFormat:@"IP320-%lu",[model uniqueIdNumber]]];
+	[splitView loadLayoutWithName:[NSString stringWithFormat:@"IP320-%u",[model uniqueIdNumber]]];
 	[plotGroupButton setEnabled:NO];    
 	
     [super awakeFromNib];

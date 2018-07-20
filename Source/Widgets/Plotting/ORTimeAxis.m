@@ -24,7 +24,7 @@
 enum {
     SHORT_TICK		= 1,				// length of short tick
     MED_TICK		= 2,				// length of medium tick
-    LONG_TICK		= 3				// length of long tick
+    LONG_TICK		= 3				// length of int32_t tick
 };
 
 /*
@@ -62,7 +62,7 @@ static char	symbols[]	= "fpnum\0kMG";		// symbols for exponents
    
     short		i, x, y;			// general variables
     double		val;				// true value of scale units
-    long		ival;				// integer mantissa of scale units
+    int32_t		ival;				// integer mantissa of scale units
     short		sep;				// mantissa of label separation
     short		power;				// exponent of label separation
     short		ticks;				// number of ticks per label
@@ -170,7 +170,7 @@ static char	symbols[]	= "fpnum\0kMG";		// symbols for exponents
 					NSString* axisNumberString = nil;
 					int dateOffset = -20;
                     [theAxisColoredTicks moveToPoint:NSMakePoint(x,y)];
-                    [theAxisColoredTicks lineToPoint:NSMakePoint(x,y-LONG_TICK)];			// draw long tick
+                    [theAxisColoredTicks lineToPoint:NSMakePoint(x,y-LONG_TICK)];			// draw int32_t tick
 
 					if (!ival) {
 						axisNumberString = @"Newest";
@@ -188,7 +188,7 @@ static char	symbols[]	= "fpnum\0kMG";		// symbols for exponents
 					[axisNumberString drawAtPoint:NSMakePoint(x+YLDX+dateOffset - axisNumberSize.width/2,y-YLDY-axisNumberSize.height) withAttributes:labelAttributes];
                     
 				} 
-				else [theAxis lineToPoint:NSMakePoint(x,y-LONG_TICK)];			// draw long tick
+				else [theAxis lineToPoint:NSMakePoint(x,y-LONG_TICK)];			// draw int32_t tick
 
                 if (gridCount<kMaxLongTicks) {
                     gridArray[gridCount++] = x-lowOffset;

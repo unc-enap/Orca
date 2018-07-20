@@ -35,12 +35,12 @@
 //-----------------------------------------------------------------------------------------------
 @implementation ORCP8CryopumpDecoderForTemperatures
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-	unsigned long *dataPtr = (unsigned long*)someData;
+	uint32_t *dataPtr = (uint32_t*)someData;
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theTemperature;
 	int ident = dataPtr[1] & 0xfff;
 	theTemperature.asLong = dataPtr[2];		//encoded as float, use union to convert
@@ -61,14 +61,14 @@
 	return ExtractLength(dataPtr[0]);
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr
 {
     NSString* title= @"CP8Cryopump Controller\n\n";
  	int ident = dataPtr[1] & 0xfff;
 	NSString* theString =  [NSString stringWithFormat:@"%@ %d\n",title,ident];               
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theData;
 	
     NSDate* date = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)dataPtr[4]];

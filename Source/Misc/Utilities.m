@@ -70,14 +70,14 @@ NSString* launchPath(void)
 
 //-----------------------------------------------------------------------------
 /*!\func	convertTimeCharToLong
- * \brief	Converts a date/time string in standard format to a long.
+ * \brief	Converts a date/time string in standard format to a int32_t.
  * \param	aTime			- Pointer to char holding time as characters
  * \note 	Long is assumed to use time_t format. aTime is assumed to be in the format
  *          yyyy/mm/dd hh:mm:ss given mm: 1-12, dd: 1-31, and hh as 0-24.
  *  		asTime has to be 20 chars wide.
  */
 //-----------------------------------------------------------------------------
-long 	convertTimeCharToLong( char* aTime )
+int32_t 	convertTimeCharToLong( char* aTime )
 {
 // set the tm structure using the character format
     NSString*	timeStr;
@@ -130,7 +130,7 @@ void convertTimeLongToChar( time_t anTime, char *asTime )
 //-----------------------------------------------------------------------------
 id		ORKeyFromId(id anObj)
 {
-	return [NSNumber numberWithLong:(long)anObj];
+	return [NSNumber numberWithLong:(int32_t)anObj];
 }
 
 int random_range(int lowest_number, int highest_number)
@@ -296,9 +296,9 @@ NSString* methodsInCommonSection(id anObj)
 }
 
 
-NSString* hexToString(unsigned long aHexValue)
+NSString* hexToString(uint32_t aHexValue)
 {
-	return [NSString stringWithFormat:@"%lx",aHexValue];
+	return [NSString stringWithFormat:@"%x",aHexValue];
 }
 
 const char* decodeType(const char* aType)
@@ -307,13 +307,13 @@ const char* decodeType(const char* aType)
 	else if(!strcmp(aType,"c"))return "char";
 	else if(!strcmp(aType,"i"))return "int";
 	else if(!strcmp(aType,"s"))return "short";
-	else if(!strcmp(aType,"l"))return "long";
-	else if(!strcmp(aType,"q"))return "long long";
+	else if(!strcmp(aType,"l"))return "int32_t";
+	else if(!strcmp(aType,"q"))return "int64_t";
 	else if(!strcmp(aType,"C"))return "unsigned char";
 	else if(!strcmp(aType,"I"))return "unsigned int";
 	else if(!strcmp(aType,"S"))return "unsigned short";
-	else if(!strcmp(aType,"L"))return "unsigned long";
-	else if(!strcmp(aType,"Q"))return "unsigned long long";
+	else if(!strcmp(aType,"L"))return "uint32_t";
+	else if(!strcmp(aType,"Q"))return "uint64_t";
 	else if(!strcmp(aType,"f"))return "float";
 	else if(!strcmp(aType,"d"))return "double";
 	else if(!strcmp(aType,"B"))return "bool";
@@ -556,7 +556,7 @@ BOOL ORRunAlertPanel(NSString* mainMessage, NSString* msg, NSString* defaultButt
     if(defaultButtonTitle)  [alert addButtonWithTitle:defaultButtonTitle];
     if(alternateButtonTitle)[alert addButtonWithTitle:alternateButtonTitle];
     if(otherButtonTitle)    [alert addButtonWithTitle:otherButtonTitle];
-    long choice = [alert runModal];
+    int32_t choice = [alert runModal];
     if(choice == NSAlertFirstButtonReturn)  result = YES;
     else                                    result = NO;
 #else

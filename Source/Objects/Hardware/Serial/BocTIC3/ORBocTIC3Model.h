@@ -30,11 +30,11 @@
         NSString*       portName;
         BOOL            portWasOpen;
         ORSerialPort*   serialPort;
-        unsigned long	dataId;
+        uint32_t	dataId;
 		NSString*		lastRequest;
 		NSMutableArray* cmdQueue;
 		float		    pressure[3];
-		unsigned long	timeMeasured[3];
+		uint32_t	timeMeasured[3];
 		int				pollTime;
         NSMutableString*       buffer;
 		BOOL			shipPressures;
@@ -70,15 +70,15 @@
 - (void) setLastRequest:(NSString*)aRequest;
 - (void) openPort:(BOOL)state;
 - (float) pressure:(int)index;
-- (unsigned long) timeMeasured:(int)index;
+- (uint32_t) timeMeasured:(int)index;
 - (void) setPressure:(int)index value:(float)aValue;
 
 
 #pragma mark ¥¥¥Data Records
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (NSDictionary*) dataRecordDescription;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherBocTIC3;
 

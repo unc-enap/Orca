@@ -188,7 +188,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"MKS660B (Unit %lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"MKS660B (Unit %u)",[model uniqueIdNumber]]];
 }
 
 - (void) updateWindow
@@ -325,7 +325,7 @@
 	NSString* format = [NSString stringWithFormat:@"%%.%df",4 - [model decimalPtPosition]];
 	NSString* theValue = [NSString stringWithFormat:format,[model pressure]];
 	[pressureField setStringValue:theValue];
-	unsigned long t = [model timeMeasured];
+	uint32_t t = [model timeMeasured];
 	NSDate* theDate;
 	if(t){
 		theDate = [NSDate dateWithTimeIntervalSince1970:t];

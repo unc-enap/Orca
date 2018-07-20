@@ -47,7 +47,7 @@ typedef struct RegisterNamesStruct {
 	bool		dataReset;
 	bool		softwareReset;
 	bool		hwReset;
-	unsigned long 	addressOffset;
+	uint32_t 	addressOffset;
 	short		accessType;
 	short		size;
 } RegisterNamesStruct; 
@@ -57,39 +57,39 @@ typedef struct RegisterNamesStruct {
 // Class declaration.
 @interface ORCaenCardModel : ORVmeIOCard  {
 // Error handling
-    unsigned long   	errorCount;
-    unsigned long       totalEventCounter;
-    unsigned long       eventCounter[ 32 ];
+    uint32_t   	errorCount;
+    uint32_t       totalEventCounter;
+    uint32_t       eventCounter[ 32 ];
     
 // Register information
     unsigned short  selectedRegIndex;
     unsigned short  selectedChannel;
-    unsigned long   writeValue;
+    uint32_t   writeValue;
     
 // Threshold information
     unsigned short  thresholds[ 32 ];
-    unsigned long dataId;
+    uint32_t dataId;
     ORCaenDataDecoder* dataDecoder;
 
 //data buffer
-    unsigned long* dataBuffer;
+    uint32_t* dataBuffer;
 }
 				
 #pragma mark ***Initialization
 #pragma mark ***Accessors
-- (unsigned long) 	errorCount;
-- (unsigned long)	getTotalEventCount;
-- (unsigned long) 	getEventCount: (unsigned short) i;
+- (uint32_t) 	errorCount;
+- (uint32_t)	getTotalEventCount;
+- (uint32_t) 	getEventCount: (unsigned short) i;
 - (unsigned short) 	selectedRegIndex;
 - (void)		setSelectedRegIndex: (unsigned short) anIndex;
 - (unsigned short) 	selectedChannel;
 - (void)		setSelectedChannel: (unsigned short) anIndex;
-- (unsigned long) 	writeValue;
-- (void)		setWriteValue: (unsigned long) anIndex;
+- (uint32_t) 	writeValue;
+- (void)		setWriteValue: (uint32_t) anIndex;
 - (unsigned short)	threshold: (unsigned short) anIndex;
 - (void)		setThreshold: (unsigned short ) anIndex threshold: (unsigned short) aValue;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherObj;
 
@@ -97,7 +97,7 @@ typedef struct RegisterNamesStruct {
 - (void)		read;
 - (void)		write;
 - (void)		read: (unsigned short) pReg returnValue: (void*) pValue;
-- (void)		write: (unsigned short) pReg sendValue: (unsigned long) pValue;
+- (void)		write: (unsigned short) pReg sendValue: (uint32_t) pValue;
 
 - (void)		readThresholds;
 - (void)		writeThresholds;
@@ -114,8 +114,8 @@ typedef struct RegisterNamesStruct {
 // Methods that subclasses should define.
 #pragma mark ¥¥¥Register - General routines
 - (short)		getNumberRegisters;
-- (unsigned long) 	getBufferOffset;
-- (unsigned long) 	getThresholdOffset;
+- (uint32_t) 	getBufferOffset;
+- (uint32_t) 	getThresholdOffset;
 - (unsigned short) 	getDataBufferSize;
 - (short)		getStatusRegisterIndex: (short) aRegister;
 - (short)		getThresholdIndex;
@@ -124,14 +124,14 @@ typedef struct RegisterNamesStruct {
 
 #pragma mark ***Register - Register specific routines
 - (NSString*) 		getRegisterName: (short) anIndex;
-- (unsigned long) 	getAddressOffset: (short) anIndex;
+- (uint32_t) 	getAddressOffset: (short) anIndex;
 - (short)		getAccessType: (short) anIndex;
 - (short)		getAccessSize: (short) anIndex;
 - (BOOL)		dataReset: (short) anIndex;
 - (BOOL)		swReset: (short) anIndex;
 - (BOOL)		hwReset: (short) anIndex;
 #pragma mark ***Misc routines
-- (unsigned long*)	getDataBuffer;
+- (uint32_t*)	getDataBuffer;
 - (void) flushBuffer;
 
 #pragma mark ¥¥¥DataTaker

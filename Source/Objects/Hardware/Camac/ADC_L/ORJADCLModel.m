@@ -303,12 +303,12 @@ struct {
 }
 
 #pragma mark ¥¥¥Hardware Test functions
-- (BOOL) adcTooLow:(unsigned long) aRawValue
+- (BOOL) adcTooLow:(uint32_t) aRawValue
 {
 	return (aRawValue & 0x10000)>0;
 }
 
-- (BOOL) adcTooHigh:(unsigned long) aRawValue
+- (BOOL) adcTooHigh:(uint32_t) aRawValue
 {
 	return (aRawValue & 0x20000)>0;
 }
@@ -342,7 +342,7 @@ struct {
 {
 	@synchronized(self){
 		if(enabledMask & (0x1L<<aChan)){
-			unsigned long theRawValue;
+			uint32_t theRawValue;
 			[[self adapter] camacLongNAF:[self stationNumber] a:aChan f:0 data:&theRawValue];
 			BOOL tooLow = [self adcTooLow:theRawValue];
 			BOOL tooHigh = [self adcTooHigh:theRawValue];
@@ -500,7 +500,7 @@ struct {
 
 - (NSString*) processingTitle
 {
-    return [NSString stringWithFormat:@"%d,%lu,JADC-L",[self crateNumber],[self  stationNumber]];
+    return [NSString stringWithFormat:@"%d,%u,JADC-L",(int)[self crateNumber],(int)[self  stationNumber]];
 }
 
 - (double) convertedValue:(int)channel

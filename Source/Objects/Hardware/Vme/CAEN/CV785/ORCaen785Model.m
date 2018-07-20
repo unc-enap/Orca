@@ -116,12 +116,12 @@ static RegisterNamesStruct reg[kNumRegisters] = {
     [[NSNotificationCenter defaultCenter] postNotificationName:ORCaen785ModelModelTypeChanged object:self];
 }
 
-- (unsigned long)onlineMask {
+- (uint32_t)onlineMask {
 	
     return onlineMask;
 }
 
-- (void)setOnlineMask:(unsigned long)anOnlineMask 
+- (void)setOnlineMask:(uint32_t)anOnlineMask 
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setOnlineMask:[self onlineMask]];
     onlineMask = anOnlineMask;	    
@@ -135,7 +135,7 @@ static RegisterNamesStruct reg[kNumRegisters] = {
 
 - (void) setOnlineMaskBit:(int)bit withValue:(BOOL)aValue
 {
-	unsigned long aMask = onlineMask;
+	uint32_t aMask = onlineMask;
 	if(aValue)aMask |= (1<<bit);
 	else      aMask &= ~(1<<bit);
 	[self setOnlineMask:aMask];
@@ -146,7 +146,7 @@ static RegisterNamesStruct reg[kNumRegisters] = {
     return kNumRegisters;
 }
 
-- (unsigned long) getBufferOffset
+- (uint32_t) getBufferOffset
 {
     return reg[kOutputBuffer].addressOffset;
 }
@@ -162,7 +162,7 @@ static RegisterNamesStruct reg[kNumRegisters] = {
     return kADCOutputBufferSize;
 }
 
-- (unsigned long) 	getThresholdOffset:(int)aChan;
+- (uint32_t) 	getThresholdOffset:(int)aChan;
 {
 	if(modelType==kModel785)return reg[kThresholds].addressOffset + (aChan * 2);
 	else					return reg[kThresholds].addressOffset + (aChan * 4);
@@ -191,7 +191,7 @@ static RegisterNamesStruct reg[kNumRegisters] = {
     return reg[anIndex].regName;
 }
 
-- (unsigned long) getAddressOffset:(short) anIndex
+- (uint32_t) getAddressOffset:(short) anIndex
 {
     return(reg[anIndex].addressOffset);
 }
@@ -274,9 +274,9 @@ static RegisterNamesStruct reg[kNumRegisters] = {
 - (void) flushBuffer
 {
 	//return; //temp.......
-    short n = [self getDataBufferSize]/sizeof(long);
+    short n = [self getDataBufferSize]/sizeof(int32_t);
     int i;
-    unsigned long dataValue;
+    uint32_t dataValue;
     for(i=0;i<n;i++){
         [[self adapter] readLongBlock:&dataValue
                             atAddress:[self baseAddress] + [self getBufferOffset]
@@ -299,8 +299,8 @@ static RegisterNamesStruct reg[kNumRegisters] = {
     [self setDataIdN:[anotherObj dataIdN]];
 }
 
-- (unsigned long) dataIdN { return dataIdN; }
-- (void) setDataIdN: (unsigned long) aDataId
+- (uint32_t) dataIdN { return dataIdN; }
+- (void) setDataIdN: (uint32_t) aDataId
 {
     dataIdN = aDataId;
 }
@@ -335,13 +335,13 @@ static RegisterNamesStruct reg[kNumRegisters] = {
         BOOL bufferIsNotBusy 	= ![dataDecoder isBusy:theStatus1];
         BOOL dataIsReady 		= [dataDecoder isDataReady:theStatus1];
         BOOL bufferIsFull 		= [dataDecoder isBufferFull:theStatus2];
-        unsigned long bufferAddress = [self baseAddress] + [self getBufferOffset];
+        uint32_t bufferAddress = [self baseAddress] + [self getBufferOffset];
         
         // Read the buffer.
         if ((bufferIsNotBusy && dataIsReady) || bufferIsFull) {
           
 			//OK, at least one data value is ready
-			unsigned long dataValue;
+			uint32_t dataValue;
 			[controller readLongBlock:&dataValue
 							atAddress:bufferAddress
 							numToRead:1
@@ -355,7 +355,7 @@ static RegisterNamesStruct reg[kNumRegisters] = {
 				int numMemorizedChannels = ShiftAndExtract(dataValue,8,0x3f);
 				int i;
 				if((numMemorizedChannels>0)){
-					unsigned long dataRecord[0xffff];
+					uint32_t dataRecord[0xffff];
 					//we fill in dataRecord[0] below once we know the final size
 					dataRecord[1] = location;
 					int index = 2;
@@ -442,7 +442,7 @@ static RegisterNamesStruct reg[kNumRegisters] = {
 	configStruct->card_info[index].base_add		= (uint32_t)[self baseAddress];
 	configStruct->card_info[index].deviceSpecificData[0] = (uint32_t)[self getAddressOffset:[self getStatusRegisterIndex:1]];
 	configStruct->card_info[index].deviceSpecificData[1] = (uint32_t)[self getAddressOffset:[self getStatusRegisterIndex:2]];
-	configStruct->card_info[index].deviceSpecificData[2] = (uint32_t)[self getDataBufferSize]/sizeof(long);
+	configStruct->card_info[index].deviceSpecificData[2] = (uint32_t)[self getDataBufferSize]/sizeof(int32_t);
 	configStruct->card_info[index].deviceSpecificData[3] = (uint32_t)[self getBufferOffset];
 	configStruct->card_info[index].num_Trigger_Indexes = 0;
 	configStruct->card_info[index].next_Card_Index 	= index+1;	

@@ -286,7 +286,7 @@ readon:
 			paddedLength = unpaddedLength;
 		}
 		
-		if(paddedLength%4!=0)NSLog(@"USB command NOT padded to long word size\n");
+		if(paddedLength%4!=0)NSLog(@"USB command NOT padded to int32_t word size\n");
 		memset(buffer,0,paddedLength);
 		
 		hp = (USB488Header*)buffer;
@@ -352,7 +352,7 @@ readon:
 	@try {
 		char buffer[amountRead];
 		USB488Header* hp = (USB488Header*)buffer;
-		//unsigned long len = amountRead;
+		//uint32_t len = amountRead;
 		memset(buffer,0,amountRead);
 		hp->messageID = 0x02;
 		hp->bTag = tag;

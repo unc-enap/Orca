@@ -29,7 +29,7 @@
 //--------------------^^^^---------------- Channel number
 //-------------------------^^^^ ^^^^ ^^^^- adc value
 //
-//ADC record long form:
+//ADC record int32_t form:
 //xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 //^^^^ ^^^^ ^^^^ ^^----------------------- ID (from header)
 //-----------------^^ ^^^^ ^^^^ ^^^^ ^^^^- length (always 2 longs)
@@ -44,6 +44,6 @@
 		BOOL getRatesFromDecodeStage;
 		NSMutableDictionary* actual419s;
 }
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr;
 @end

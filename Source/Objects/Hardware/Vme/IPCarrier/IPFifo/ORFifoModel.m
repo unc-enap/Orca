@@ -141,7 +141,7 @@ static short register_offset[] = { 0x01,0x03,0x04,0x09 };
     
     
     // setup address for read operation
-    unsigned long address = [self baseAddress] + [self slotConv]*0x100 + (unsigned int)register_offset[xregister];
+    uint32_t address = [self baseAddress] + [self slotConv]*0x100 + (unsigned int)register_offset[xregister];
     
     
     // read Fifo
@@ -174,7 +174,7 @@ static short register_offset[] = { 0x01,0x03,0x04,0x09 };
     [[self adapter] checkStatusErrors];
     
     // setup address for write operation
-    unsigned long address = [self baseAddress] + [self slotConv]*0x100 + register_offset[xregister];
+    uint32_t address = [self baseAddress] + [self slotConv]*0x100 + register_offset[xregister];
     
     // write Fifo
     if( xregister == FIFO_DATA_REGISTER ) {
@@ -215,7 +215,7 @@ static short register_offset[] = { 0x01,0x03,0x04,0x09 };
     // check for crate power
     [[self adapter] checkStatusErrors];
     
-    unsigned long address = [self baseAddress] + [self slotConv]*0x100 + register_offset[FIFO_DATA_REGISTER];
+    uint32_t address = [self baseAddress] + [self slotConv]*0x100 + register_offset[FIFO_DATA_REGISTER];
     
     // read Fifo
     // NOTE: ReadVMEWordBlock does not work to Fifo Data register - perhaps a
@@ -245,7 +245,7 @@ static short register_offset[] = { 0x01,0x03,0x04,0x09 };
     
     
     // setup address for write Fifo operation
-    unsigned long address = [self baseAddress] + [self slotConv]*0x100 + register_offset[FIFO_DATA_REGISTER];
+    uint32_t address = [self baseAddress] + [self slotConv]*0x100 + register_offset[FIFO_DATA_REGISTER];
     
     // write Fifo
     // NOTE: WriteVMEWordBlock does not work to Fifo Data register - perhaps a
@@ -399,7 +399,7 @@ static short register_offset[] = { 0x01,0x03,0x04,0x09 };
         }
         
         // load FIFO with data words
-        [self loadFifo:testBufferIn withLength:(unsigned long)FIFO_TEST_DATA_SIZE];
+        [self loadFifo:testBufferIn withLength:(uint32_t)FIFO_TEST_DATA_SIZE];
         
         // delay .02 seconds for slow Fifo response
         //t0 = [NSDate timeIntervalSinceReferenceDate];
@@ -414,7 +414,7 @@ static short register_offset[] = { 0x01,0x03,0x04,0x09 };
         }
         
         // unload Fifo
-        [self unloadFifo:testBufferOut withLength:(unsigned long)FIFO_TEST_DATA_SIZE];
+        [self unloadFifo:testBufferOut withLength:(uint32_t)FIFO_TEST_DATA_SIZE];
         
         // delay .05 seconds for slow FIFO response
         //t0 = [NSDate timeIntervalSinceReferenceDate];

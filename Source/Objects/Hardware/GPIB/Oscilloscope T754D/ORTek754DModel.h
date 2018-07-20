@@ -41,11 +41,11 @@
 @interface ORTek754DModel : OROscBaseModel {
     @private
 	ORTek754DData*		mDataObj[ kMaxOscChnls ];       // Pointers channel data.
-	long			mFastframeCount;					// Number of wavelengths in fastframe.
-	long			mFastframeRef;						// The reference frame.
+	int32_t			mFastframeCount;					// Number of wavelengths in fastframe.
+	int32_t			mFastframeRef;						// The reference frame.
 	bool			mFastframeState;					// 1 - Fastframe is on.
 	bool			mFastframeTimestampState;			// 1 - Fastframe timestamp is on.
-	long			mFastframeRecLength;				// Fastframe record length - must be
+	int32_t			mFastframeRecLength;				// Fastframe record length - must be
 														//   mFastframeCount * mFastframeRecLength   
 														//    = mWaveformLength
 	unsigned short  mChannelMask;						// Mask of channels being acquired.
@@ -60,7 +60,7 @@
 #pragma mark ***Hardware - General
 - (short)	oscScopeId;
 - (bool) 	oscBusy;
-- (long)	oscGetDateTime;
+- (int32_t)	oscGetDateTime;
 - (void)	oscSetDateTime: (time_t) aTime;
 - (void)	oscLockPanel: (bool) aFlag;
 - (void)	oscResetOscilloscope;
@@ -127,7 +127,7 @@
 - (void) 	runTaskStopped: (ORDataPacket*) aDataPacket userInfo:(NSDictionary*)userInfo;
 
 #pragma mark ***Specialty routines.
-- (void) 	osc754ConvertTime: (unsigned long long*) a10MHzTime timeToConvert: (char*) aCharTime;
+- (void) 	osc754ConvertTime: (uint64_t*) a10MHzTime timeToConvert: (char*) aCharTime;
 
 /*- 
 - 

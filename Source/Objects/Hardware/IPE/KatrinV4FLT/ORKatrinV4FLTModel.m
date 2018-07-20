@@ -358,12 +358,12 @@ static NSString* fltTestName[kNumKatrinV4FLTTests]= {
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4FLTModelSkipFltEventReadoutChanged object:self];
 }
 
-- (unsigned long) bipolarEnergyThreshTest
+- (uint32_t) bipolarEnergyThreshTest
 {
     return bipolarEnergyThreshTest;
 }
 
-- (void) setBipolarEnergyThreshTest:(unsigned long)aBipolarEnergyThreshTest
+- (void) setBipolarEnergyThreshTest:(uint32_t)aBipolarEnergyThreshTest
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setBipolarEnergyThreshTest:bipolarEnergyThreshTest];
     bipolarEnergyThreshTest = aBipolarEnergyThreshTest;
@@ -425,7 +425,7 @@ static NSString* fltTestName[kNumKatrinV4FLTTests]= {
         [self setFloatThreshold:chan withValue:currentThreshold*ratio];
     }
     
-    long currentOffset = [self energyOffset];
+    int32_t currentOffset = [self energyOffset];
     [self setEnergyOffset:currentOffset*ratio];
     
     // There is no histogramming option in veto mode; so left out here
@@ -834,15 +834,15 @@ static double table[32]={
 
 - (BOOL) noiseFloorRunning { return noiseFloorRunning; }
 
-- (unsigned long) histLastEntry { return histLastEntry; }
-- (void) setHistLastEntry:(unsigned long)aHistLastEntry
+- (uint32_t) histLastEntry { return histLastEntry; }
+- (void) setHistLastEntry:(uint32_t)aHistLastEntry
 {
     histLastEntry = aHistLastEntry;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4FLTModelHistLastEntryChanged object:self];
 }
 
-- (unsigned long) histFirstEntry { return histFirstEntry; }
-- (void) setHistFirstEntry:(unsigned long)aHistFirstEntry
+- (uint32_t) histFirstEntry { return histFirstEntry; }
+- (void) setHistFirstEntry:(uint32_t)aHistFirstEntry
 {
     histFirstEntry = aHistFirstEntry;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4FLTModelHistFirstEntryChanged object:self];
@@ -864,8 +864,8 @@ static double table[32]={
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4FLTModelHistModeChanged object:self];
 }
 
-- (unsigned long) histEBin { return histEBin; }
-- (void) setHistEBin:(unsigned long)aHistEBin
+- (uint32_t) histEBin { return histEBin; }
+- (void) setHistEBin:(uint32_t)aHistEBin
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setHistEBin:histEBin];
     histEBin = aHistEBin;
@@ -875,8 +875,8 @@ static double table[32]={
     [self setHistEMax: -1];
 }
 
-- (unsigned long) histEMin { return histEMin;}
-- (void) setHistEMin:(unsigned long)aHistEMin
+- (uint32_t) histEMin { return histEMin;}
+- (void) setHistEMin:(uint32_t)aHistEMin
 {
 	[[[self undoManager] prepareWithInvocationTarget:self] setHistEMin:histEMin];
 	histEMin = aHistEMin;
@@ -887,8 +887,8 @@ static double table[32]={
 }
 
 //! This is number of cycles (internal FLT counter)
-- (unsigned long) histNofMeas { return histNofMeas; }
-- (void) setHistNofMeas:(unsigned long)aHistNofMeas
+- (uint32_t) histNofMeas { return histNofMeas; }
+- (void) setHistNofMeas:(uint32_t)aHistNofMeas
 {
     //[[[self undoManager] prepareWithInvocationTarget:self] setHistNofMeas:histNofMeas];
     histNofMeas = aHistNofMeas;
@@ -896,8 +896,8 @@ static double table[32]={
 }
 
 //! This is the time after which a intermediate histogram will be read out - in the GUI called "Refresh time".
-- (unsigned long) histMeasTime { return histMeasTime; }
-- (void) setHistMeasTime:(unsigned long)aHistMeasTime
+- (uint32_t) histMeasTime { return histMeasTime; }
+- (void) setHistMeasTime:(uint32_t)aHistMeasTime
 {
 	if(aHistMeasTime<1){
 		NSLog(@"%@:: Warning: tried to set refresh time to %i (minimum is 1)\n",NSStringFromClass([self class]),aHistMeasTime);
@@ -908,8 +908,8 @@ static double table[32]={
 }
 
 //! This timer counts from 0 to histMeasTime-1.
-- (unsigned long) histRecTime { return histRecTime; }
-- (void) setHistRecTime:(unsigned long)aHistRecTime
+- (uint32_t) histRecTime { return histRecTime; }
+- (void) setHistRecTime:(uint32_t)aHistRecTime
 {
     //[[[self undoManager] prepareWithInvocationTarget:self] setHistRecTime:histRecTime];
     histRecTime = aHistRecTime;
@@ -987,7 +987,7 @@ static double table[32]={
         [self setFloatThreshold:chan withValue:currentThreshold*ratio];
     }
     
-    long currentOffset = [self energyOffset];
+    int32_t currentOffset = [self energyOffset];
     [self setEnergyOffset:currentOffset*ratio];
     
     //----------------------------------------------
@@ -1014,8 +1014,8 @@ static double table[32]={
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4FLTModelGapLengthChanged object:self];
 }
 
-- (unsigned long) postTriggerTime { return postTriggerTime & 0x0007ff; }
-- (void) setPostTriggerTime:(unsigned long)aPostTriggerTime
+- (uint32_t) postTriggerTime { return postTriggerTime & 0x0007ff; }
+- (void) setPostTriggerTime:(uint32_t)aPostTriggerTime
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setPostTriggerTime:postTriggerTime];
     postTriggerTime = (int)[self restrictIntValue:(int)aPostTriggerTime min:6 max:0x0007ff];//min 6 is found 'experimental' -tb-
@@ -1030,8 +1030,8 @@ static double table[32]={
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4FLTModelFifoBehaviourChanged object:self];
 }
 
-- (unsigned long) eventMask { return eventMask; }
-- (void) eventMask:(unsigned long)aMask
+- (uint32_t) eventMask { return eventMask; }
+- (void) eventMask:(uint32_t)aMask
 {
 	eventMask = aMask;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4FLTModelEventMaskChanged object:self];
@@ -1053,8 +1053,8 @@ static double table[32]={
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4FLTModelLedOffChanged object:self];
 }
 
-- (unsigned long) interruptMask { return interruptMask; }
-- (void) setInterruptMask:(unsigned long)aInterruptMask
+- (uint32_t) interruptMask { return interruptMask; }
+- (void) setInterruptMask:(uint32_t)aInterruptMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setInterruptMask:interruptMask];
     interruptMask = aInterruptMask;
@@ -1076,16 +1076,16 @@ static double table[32]={
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4FLTModelHitRateLengthChanged object:self];
 }
 
-- (unsigned long) triggerEnabledMask { return triggerEnabledMask; } 
-- (void) setTriggerEnabledMask:(unsigned long)aMask
+- (uint32_t) triggerEnabledMask { return triggerEnabledMask; } 
+- (void) setTriggerEnabledMask:(uint32_t)aMask
 {
  	[[[self undoManager] prepareWithInvocationTarget:self] setTriggerEnabledMask:triggerEnabledMask];
 	triggerEnabledMask = aMask;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4FLTModelTriggerEnabledMaskChanged object:self];
 }
 
-- (unsigned long) hitRateEnabledMask { return hitRateEnabledMask; }
-- (void) setHitRateEnabledMask:(unsigned long)aMask
+- (uint32_t) hitRateEnabledMask { return hitRateEnabledMask; }
+- (void) setHitRateEnabledMask:(uint32_t)aMask
 {
 	[[[self undoManager] prepareWithInvocationTarget:self] setHitRateEnabledMask:hitRateEnabledMask];
     hitRateEnabledMask = aMask;
@@ -1191,7 +1191,7 @@ static double table[32]={
 	[self postAdcInfoProvidingValueChanged];
 }
 
-- (unsigned long) thresholdForDisplay:(unsigned short) aChan
+- (uint32_t) thresholdForDisplay:(unsigned short) aChan
 {
     return [[thresholds objectAtIndex:aChan] floatValue] / [self filterLengthInBins];
 }
@@ -1277,24 +1277,24 @@ static double table[32]={
 	else return NO;
 }
 
-- (unsigned long long) lostEvents
+- (uint64_t) lostEvents
 {
     return lostEvents;
     
 }
-- (void) setLostEvents:(unsigned long long)aValue
+- (void) setLostEvents:(uint64_t)aValue
 {
     lostEvents = aValue;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4FLTModelLostEventsChanged object:self];
     
 }
 
-- (unsigned long long) lostEventsTr
+- (uint64_t) lostEventsTr
 {
     return lostEventsTr;
     
 }
-- (void) setLostEventsTr:(unsigned long long)aValue
+- (void) setLostEventsTr:(uint64_t)aValue
 {
     lostEventsTr = aValue;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4FLTModelLostEventsTrChanged object:self];
@@ -1319,8 +1319,8 @@ static double table[32]={
     [[NSNotificationCenter defaultCenter]	 postNotificationName:ORKatrinV4FLTSelectedRegIndexChanged	 object:self];
 }
 
-- (unsigned long) writeValue { return writeValue; }
-- (void) setWriteValue:(unsigned long) aValue
+- (uint32_t) writeValue { return writeValue; }
+- (void) setWriteValue:(uint32_t) aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setWriteValue:[self writeValue]];
     writeValue = aValue;
@@ -1383,14 +1383,14 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 	[[[self crate] adapter] rawWriteReg: SLTTPTimingRam+i value: 0x0];    i++;
 		
 	//reset FLT TP pointer kFLTV4CommandReg
-	unsigned long anAddress = [self regAddress: kFLTV4CommandReg];
-	unsigned long rstTp     = 0x10; //bit 4
+	uint32_t anAddress = [self regAddress: kFLTV4CommandReg];
+	uint32_t rstTp     = 0x10; //bit 4
 	[[[self crate] adapter] rawWriteReg: anAddress value: rstTp];
 	NSLog(@"Wrote: flt command reg (0x%x): 0x%x  \n",anAddress,rstTp);
     
 	//write FLT test pattern ram
 	anAddress = [self regAddress: kFLTV4TestPatternReg];
-	unsigned long fltpattern = 0xffffff;
+	uint32_t fltpattern = 0xffffff;
 	
 	[[[self crate] adapter] rawWriteReg: anAddress   value: 0x0];
 	[[[self crate] adapter] rawWriteReg: anAddress+1 value: fltpattern];
@@ -1399,7 +1399,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 	[[[self crate] adapter] rawWriteReg: anAddress+4 value: 0x0];
 	
 	//set SLT control register
-	unsigned long control=	[[[self crate] adapter] rawReadReg: SLTControlReg ];
+	uint32_t control=	[[[self crate] adapter] rawReadReg: SLTControlReg ];
 	NSLog(@"control reg: 0x%x   ",control);
 	control = control & ~(0x7<<11);
 	NSLog(@"  -  after reset: control reg: 0x%x  \n",control);
@@ -1410,7 +1410,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 	
 	//set FLT control register flag
 	anAddress = [self regAddress: kFLTV4ControlReg];
-	unsigned long fltcontrol=	[[[self crate] adapter] rawReadReg: anAddress ];
+	uint32_t fltcontrol=	[[[self crate] adapter] rawReadReg: anAddress ];
 	NSLog(@"flt control reg: 0x%x   ",fltcontrol);
 	fltcontrol = fltcontrol | (0x10);//bit 4
 	[[[self crate] adapter] rawWriteReg: anAddress value: fltcontrol];
@@ -1422,8 +1422,8 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
         NSLog(@"   fireTPButton: Called %@::%@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//DEBUG -tb-
 		
 	//reset FLT TP pointer kFLTV4CommandReg
-	unsigned long fltaddress = [self regAddress: kFLTV4CommandReg];
-	unsigned long rstTp = 0x10; //bit 4
+	uint32_t fltaddress = [self regAddress: kFLTV4CommandReg];
+	uint32_t rstTp = 0x10; //bit 4
 	NSLog(@"flt kFLTV4CommandReg reg: 0x%x   ",fltaddress);
 	[[[self crate] adapter] rawWriteReg: fltaddress value: rstTp];
 	NSLog(@"  - wrote: flt command reg: 0x%x  \n",rstTp);
@@ -1439,15 +1439,15 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 {
     NSLog(@"   resetTPButton: Called %@::%@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//DEBUG -tb-
 	//[self releaseRunWait]; 
-	unsigned long control=	[[[self crate] adapter] rawReadReg: SLTControlReg ];
+	uint32_t control=	[[[self crate] adapter] rawReadReg: SLTControlReg ];
 	NSLog(@"control reg: 0x%x   ",control);
 	control = control & ~(0x7<<11);
 	NSLog(@"  -  after reset: control reg: 0x%x  \n",control);
 	[[[self crate] adapter] rawWriteReg: SLTControlReg value: control];
 
 	//reset FLT control register flag
-	unsigned long fltaddress = [self regAddress: kFLTV4ControlReg];
-	unsigned long fltcontrol=	[[[self crate] adapter] rawReadReg: fltaddress ];
+	uint32_t fltaddress = [self regAddress: kFLTV4ControlReg];
+	uint32_t fltcontrol=	[[[self crate] adapter] rawReadReg: fltaddress ];
 	NSLog(@"flt control reg: 0x%x   ",fltcontrol);
 	fltcontrol = fltcontrol & ~(0x10);//bit 4 to 0
 	[[[self crate] adapter] rawWriteReg: fltaddress value: fltcontrol];
@@ -1455,15 +1455,15 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 }
 
 #pragma mark •••HW Access
-- (unsigned long) readBoardIDLow
+- (uint32_t) readBoardIDLow
 {
-	unsigned long value = [self readReg:kFLTV4BoardIDLsbReg];
+	uint32_t value = [self readReg:kFLTV4BoardIDLsbReg];
 	return value;
 }
 
-- (unsigned long) readBoardIDHigh
+- (uint32_t) readBoardIDHigh
 {
-	unsigned long value = [self readReg:kFLTV4BoardIDMsbReg];
+	uint32_t value = [self readReg:kFLTV4BoardIDMsbReg];
 	return value;
 }
 
@@ -1472,22 +1472,22 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 	return ([self readReg:kFLTV4BoardIDMsbReg]>>24) & 0x1F;
 }
 
-- (unsigned long)  readVersion
+- (uint32_t)  readVersion
 {	
 	return [self readReg: kFLTV4VersionReg];
 }
 
-- (unsigned long)  readpVersion
+- (uint32_t)  readpVersion
 {	
 	return [self readReg: kFLTV4pVersionReg];
 }
 
-- (unsigned long)  readSeconds
+- (uint32_t)  readSeconds
 {	
 	return [self readReg: kFLTV4SecondCounterReg];
 }
 
-- (void)  writeSeconds:(unsigned long)aValue
+- (void)  writeSeconds:(uint32_t)aValue
 {	
 	return [self writeReg: kFLTV4SecondCounterReg value:aValue];
 }
@@ -1495,7 +1495,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 - (void) setTimeToMacClock //TODO: for the database UTC should be used -tb-
 {
 	NSTimeInterval theTimeSince1970 = [NSDate timeIntervalSinceReferenceDate];
-	[self writeSeconds:(unsigned long)theTimeSince1970];
+	[self writeSeconds:(uint32_t)theTimeSince1970];
 }
 
 - (int) readMode
@@ -1508,14 +1508,14 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
     BOOL gainChanged = NO;
     int i;
     for(i=0;i<kNumV4FLTChannels;i++){
-        unsigned long newThres;
+        uint32_t newThres;
         if( !(triggerEnabledMask & (0x1<<i)) )  newThres = 0xFFFFF;
         else                                    newThres = [self threshold:i];
-        unsigned long hw = [self readThreshold:i];
+        uint32_t hw = [self readThreshold:i];
         if( hw != newThres){
             [self writeThreshold:i value:newThres];
         }
-        unsigned long newGain = [self gain:i];
+        uint32_t newGain = [self gain:i];
         if([self readGain:i] != newGain){
             [self writeGain:i value:newGain];
             gainChanged = YES;
@@ -1527,7 +1527,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 
 - (BOOL) waitOnBusyFlag
 {
-    unsigned long statusReg;
+    uint32_t statusReg;
     NSTimeInterval dt;
     NSDate* start = [NSDate date];
     do {
@@ -1579,21 +1579,21 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
     [self writeControl];                //come out of standby mode
 }
 
-- (unsigned long) readStatus
+- (uint32_t) readStatus
 {
 	return [self readReg: kFLTV4StatusReg ];
 }
 
-- (unsigned long) readControl
+- (uint32_t) readControl
 {
 	return [self readReg: kFLTV4ControlReg];
 }
 
 - (void) writeRunControl:(BOOL)startSampling
 {
-    unsigned long hwValue = [self readReg:kFLTV4RunControlReg];
+    uint32_t hwValue = [self readReg:kFLTV4RunControlReg];
     
-	unsigned long aValue = 
+	uint32_t aValue = 
 	(((boxcarLength)        & 0x7)<<28)	|		//boxcarLength is the register value and the popup item tag. extended to 3 bits in 2016, needed to be shifted to bit 28
     (((poleZeroCorrection)  & 0xf)<<24) |		//poleZeroCorrection is stored as the popup index -- NEW since 2011-06-09 -tb-
 	(((filterShapingLength) & 0x3f)<<8)	|		//filterShapingLength is the register value and the popup item tag -tb-
@@ -1603,7 +1603,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 	((startSampling & 0x1)<<1)          |		// start ADC sampling
 	 (startSampling & 0x1);                     // store data in QDRII RAM
     
-    unsigned long aMask =   (0x7<<28) |
+    uint32_t aMask =   (0x7<<28) |
                             (0xf<<24) |
                             (0x3f<<8) |
                             (0xf<<4)  |
@@ -1630,7 +1630,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
   */
 - (void) writeControlWithFltRunMode:(int)aMode
 {
-	unsigned long aValue =  ((aMode         & 0xf)<<16)    |
+	uint32_t aValue =  ((aMode         & 0xf)<<16)    |
                             ((fifoLength    & 0x1)<<25)    |
                             ((fifoBehaviour & 0x1)<<24)    |
                             ((ledOff        & 0x1)<<1 );
@@ -1647,7 +1647,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 - (void) writeHistogramControl
 {
     bool needUpdate = false;
-    unsigned long settings;
+    uint32_t settings;
     
     // Check if update is necessary
     if ([self readReg:kFLTV4HistMeasTimeReg] != histMeasTime) needUpdate = true;
@@ -1695,22 +1695,22 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
     
 }
 
-- (unsigned long) getLastHistReset
+- (uint32_t) getLastHistReset
 {
     return (lastHistReset);
 }
 
-- (unsigned long) regAddress:(int)aReg channel:(int)aChannel
+- (uint32_t) regAddress:(int)aReg channel:(int)aChannel
 {
     return [katrinV4FLTRegisters addressForStation:(int)[self stationNumber] registerIndex:aReg chan:aChannel];
 }
 
-- (unsigned long) regAddress:(int)aReg
+- (uint32_t) regAddress:(int)aReg
 {
     return [katrinV4FLTRegisters addressForStation:(int)[self stationNumber] registerIndex:aReg ];
 }
 
-- (unsigned long) adcMemoryChannel:(int)aChannel page:(int)aPage
+- (uint32_t) adcMemoryChannel:(int)aChannel page:(int)aPage
 {
 	//TODO:  replace by V4 code -tb-
     //adc access now is very different from v3 -tb-
@@ -1723,27 +1723,27 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
     return [katrinV4FLTRegisters accessType:aReg];
 }
 
-- (unsigned long) readReg:(short)aReg
+- (uint32_t) readReg:(short)aReg
 {
     return [self read: [self regAddress:aReg]];
 }
 
-- (unsigned long) readReg:(short)aReg channel:(int)aChannel
+- (uint32_t) readReg:(short)aReg channel:(int)aChannel
 {
 	return [self read:[self regAddress:aReg channel:aChannel]];
 }
 
-- (void) writeReg:(short)aReg value:(unsigned long)aValue
+- (void) writeReg:(short)aReg value:(uint32_t)aValue
 {
 	[self write:[self regAddress:aReg] value:aValue];
 }
 
-- (void) writeReg:(short)aReg channel:(int)aChannel value:(unsigned long)aValue
+- (void) writeReg:(short)aReg channel:(int)aChannel value:(uint32_t)aValue
 {
 	[self write:[self regAddress:aReg channel:aChannel] value:aValue];
 }
 
-- (void) writeThreshold:(int)i value:(unsigned long)aValue
+- (void) writeThreshold:(int)i value:(uint32_t)aValue
 {
 	aValue &= 0xfffff;
 	[self writeReg: kFLTV4ThresholdReg channel:i value:aValue];
@@ -1765,7 +1765,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 	return [self readReg:kFLTV4GainReg channel:i] & 0xfff;
 }
 
-- (void) writeTestPattern:(unsigned long*)mask length:(int)len
+- (void) writeTestPattern:(uint32_t*)mask length:(int)len
 {
 	[self writeNextPattern:0];
 	int i;
@@ -1775,7 +1775,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 	}
 }
 
-- (void) writeNextPattern:(unsigned long)aValue
+- (void) writeNextPattern:(uint32_t)aValue
 {
 #if (0)
     //TODO: obsolete (v3) -tb-
@@ -1785,7 +1785,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 
 - (void) clear:(int)aChan page:(int)aPage value:(unsigned short)aValue
 {
-	unsigned long aPattern;
+	uint32_t aPattern;
 	
 	aPattern =  aValue;
 	aPattern = ( aPattern << 16 ) + aValue;
@@ -1801,7 +1801,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 - (void) writeMemoryChan:(int)aChan page:(int)aPage pageBuffer:(unsigned short*)aPageBuffer
 {
 	[self writeBlock: [self adcMemoryChannel:aChan page:aPage] 
-		  dataBuffer: (unsigned long*)aPageBuffer
+		  dataBuffer: (uint32_t*)aPageBuffer
 			  length: kIpeFlt_Page_Size/2
 		   increment: 2];
 }
@@ -1810,12 +1810,12 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 {
 	
 	[self readBlock: [self adcMemoryChannel:aChan page:aPage]
-		 dataBuffer: (unsigned long*)aPageBuffer
+		 dataBuffer: (uint32_t*)aPageBuffer
 			 length: kIpeFlt_Page_Size/2
 		  increment: 2];
 }
 
-- (unsigned long) readMemoryChan:(int)aChan page:(int)aPage
+- (uint32_t) readMemoryChan:(int)aChan page:(int)aPage
 {
 	return [self read:[self adcMemoryChannel:aChan page:aPage]];
 }
@@ -1827,7 +1827,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
     }
 }
 
-- (unsigned long) readHitRateMask
+- (uint32_t) readHitRateMask
 {
 	return [self readReg:kFLTV4HrMeasEnableReg] & 0xffffff;
 }
@@ -1876,7 +1876,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
     //0,1 test pattern
     //1,0 always 0
     //1,1 always 1
-    unsigned long hwValue = [self readReg:kFLTV4PixelSettings1Reg] & 0xFFFFFF;
+    uint32_t hwValue = [self readReg:kFLTV4PixelSettings1Reg] & 0xFFFFFF;
     if(hwValue!=0)[self writeReg:kFLTV4PixelSettings1Reg value:0];
     uint32_t mask = (~triggerEnabledMask) & 0xffffff;
     hwValue = [self readReg:kFLTV4PixelSettings2Reg] & 0xFFFFFF;
@@ -1885,12 +1885,12 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 
 - (void) readHitRates
 {
-    unsigned long sltSec;
-    unsigned long sltSubSec;
-    unsigned long sltSubSec2;
+    uint32_t sltSec;
+    uint32_t sltSubSec;
+    uint32_t sltSubSec2;
     
-    unsigned long runStatus;
-    unsigned long sltRunEndSec;
+    uint32_t runStatus;
+    uint32_t sltRunEndSec;
     
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(readHitRates) object:nil];
@@ -1920,14 +1920,14 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
                     }
                 }
 
-                unsigned long location = (([self crateNumber]&0xf)<<21) | ([self stationNumber]& 0x0000001f)<<16;
-                unsigned long data[5 + kNumV4FLTChannels + kNumV4FLTChannels];//2013-04-24 changed to ship full 32 bit counter; data format changed! see decoder -tb-
+                uint32_t location = (([self crateNumber]&0xf)<<21) | ([self stationNumber]& 0x0000001f)<<16;
+                uint32_t data[5 + kNumV4FLTChannels + kNumV4FLTChannels];//2013-04-24 changed to ship full 32 bit counter; data format changed! see decoder -tb-
                 
                 //get the hitrates
                 SBC_Packet aPacket;
                 aPacket.cmdHeader.destination    = kKATRIN;
                 aPacket.cmdHeader.cmdID          = kKATRINReadHitRates;
-                aPacket.cmdHeader.numberBytesinPayload    = (kNumV4FLTChannels + 5)*sizeof(long);
+                aPacket.cmdHeader.numberBytesinPayload    = (kNumV4FLTChannels + 5)*sizeof(int32_t);
                 
                 katrinV4_HitRateStructure* p = (katrinV4_HitRateStructure*) aPacket.payload;
                 p->station      = (uint32_t)[self stationNumber];
@@ -1944,7 +1944,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
                     sltSubSec   = p->subSeconds;
                     sltSubSec2  = (sltSubSec >> 11) & 0x3fff;
 
-                    unsigned long statusReg   = p->status;
+                    uint32_t statusReg   = p->status;
                     
 
                     float   newTotal  = 0;
@@ -1952,12 +1952,12 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
                     int     chan;
                     for(chan=0;chan<kNumV4FLTChannels;chan++){
                         if(hitRateEnabledMask & (1L<<chan)){
-                            unsigned long aValue32 = p->hitRates[chan];
+                            uint32_t aValue32 = p->hitRates[chan];
                             //BOOL overflow = (aValue >> 31) & 0x1;
-                            unsigned long overflow              = 0;//2013-04-24 for legacy data we 'simulate' a 16 bit counter -> simulate a 16 bit overflow flag -tb-
+                            uint32_t overflow              = 0;//2013-04-24 for legacy data we 'simulate' a 16 bit counter -> simulate a 16 bit overflow flag -tb-
                             if(aValue32 & 0xffff0000) overflow  = 0x1;//2013-04-24 for legacy data we 'simulate' a 16 bit counter -> simulate a 16 bit overflow flag -tb-
-                            unsigned long overflow32            = (aValue32 >>23) & 0x1;//2013-04-24 for legacy data we 'simulate' a 16 bit counter -> simulate a 16 bit overflow flag -tb-
-                            unsigned long aValue16              = aValue32 & 0xffff;
+                            uint32_t overflow32            = (aValue32 >>23) & 0x1;//2013-04-24 for legacy data we 'simulate' a 16 bit counter -> simulate a 16 bit overflow flag -tb-
+                            uint32_t aValue16              = aValue32 & 0xffff;
                             aValue32                            = aValue32 & 0x7fffff;
                             
                             data[dataIndex + 5]                 = ((chan&0xff)<<20) | ((overflow&0x1)<<16) | aValue16;    // The 16 bit values
@@ -1993,9 +1993,9 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
                     //
                     // Ship the data, if during the last second inhibit was released and run was active
                     //
-                    unsigned long inhibit = statusReg & kStatusInh;
+                    uint32_t inhibit = statusReg & kStatusInh;
                     runStatus = [gOrcaGlobals runInProgress];
-                    unsigned long sltRunStartSec = [slt getRunStartSecond];
+                    uint32_t sltRunStartSec = [slt getRunStartSecond];
                     sltRunEndSec = [slt getRunEndSecond];
                     
                     
@@ -2010,7 +2010,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
                         data[4] = newTotal;
                         
                         [[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification
-                                                                            object:[NSData dataWithBytes:data length:sizeof(long)*(dataIndex + 5 + countHREnabledChans)]];
+                                                                            object:[NSData dataWithBytes:data length:sizeof(int32_t)*(dataIndex + 5 + countHREnabledChans)]];
                         
                         if (sltSec -1 == sltRunStartSec ) {
                             nHitrateCount = 1;
@@ -2071,28 +2071,28 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
     }
 }
 
-- (unsigned long long) readLostEvents
+- (uint64_t) readLostEvents
 {
-    unsigned long low;
-    unsigned long high;
+    uint32_t low;
+    uint32_t high;
     
     low = [self readReg:kFLTV4FIFOLostCounterLsbReg];
     high  = [self readReg:kFLTV4FIFOLostCounterMsbReg];
-    [self setLostEvents:((unsigned long long)high << 32) | low];
+    [self setLostEvents:((uint64_t)high << 32) | low];
 
     //NSLog(@"LostEvents FIFO overflow %i (lsb %i msb %i)\n", lostEvents, low, high);
     
     return lostEvents;
 }
 
-- (unsigned long long) readLostEventsTr
+- (uint64_t) readLostEventsTr
 {
-    unsigned long low;
-    unsigned long high;
+    uint32_t low;
+    uint32_t high;
     
     low = [self readReg:kFLTV4FIFOLostCounterTrLsbReg];
     high  = [self readReg:kFLTV4FIFOLostCounterTrMsbReg];
-    [self setLostEventsTr:((unsigned long long)high << 32) | low];
+    [self setLostEventsTr:((uint64_t)high << 32) | low];
     
     //NSLog(@"LostEvents FPGA-FPGA transmission %i (lsb %i msb %i)\n", lostEventsTr, low, high);
     
@@ -2116,7 +2116,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 
 - (id) readRegCmd:(short) aRegister channel:(short) aChannel
 {
-	unsigned long theAddress = [self regAddress:aRegister channel:aChannel];
+	uint32_t theAddress = [self regAddress:aRegister channel:aChannel];
 	return [[[self crate] adapter] readHardwareRegisterCmd:theAddress];		
 }
 
@@ -2125,13 +2125,13 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 	return [[[self crate] adapter] readHardwareRegisterCmd:[self regAddress:aRegister]];		
 }
 
-- (id) writeRegCmd:(short) aRegister channel:(short) aChannel value:(unsigned long)aValue
+- (id) writeRegCmd:(short) aRegister channel:(short) aChannel value:(uint32_t)aValue
 {
-	unsigned long theAddress = [self regAddress:aRegister channel:aChannel];
+	uint32_t theAddress = [self regAddress:aRegister channel:aChannel];
 	return [[[self crate] adapter] writeHardwareRegisterCmd:theAddress value:aValue];		
 }
 
-- (id) writeRegCmd:(short) aRegister value:(unsigned long)aValue
+- (id) writeRegCmd:(short) aRegister value:(uint32_t)aValue
 {
 	return [[[self crate] adapter] writeHardwareRegisterCmd:[self regAddress:aRegister] value:aValue];
 }
@@ -2144,9 +2144,9 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(readHistogrammingStatus) object:nil];
 
     int histoUpdateRate = 1; // sec
-    unsigned long recTime = [self readReg:kFLTV4HistRecTimeReg];
-    unsigned long histoID = [self readReg:kFLTV4HistNumMeasReg];
-    unsigned long pageAB  = ([self readReg:kFLTV4StatusReg] >>28) & 0x1;
+    uint32_t recTime = [self readReg:kFLTV4HistRecTimeReg];
+    uint32_t histoID = [self readReg:kFLTV4HistNumMeasReg];
+    uint32_t pageAB  = ([self readReg:kFLTV4StatusReg] >>28) & 0x1;
     
     //DEBUG OUTPUT - NSLog(@"HistoStatus: recTime: %i  histoID: %i, pageAB: %i \n",recTime,histoID, pageAB);
     [self setHistRecTime: recTime];
@@ -2224,26 +2224,26 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 }
 
 #pragma mark Data Taking
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) aDataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) aDataId
 {
     dataId = aDataId;
 }
 
-- (unsigned long) waveFormId { return waveFormId; }
-- (void) setWaveFormId: (unsigned long) aWaveFormId
+- (uint32_t) waveFormId { return waveFormId; }
+- (void) setWaveFormId: (uint32_t) aWaveFormId
 {
     waveFormId = aWaveFormId;
 }
 
-- (unsigned long) hitRateId { return hitRateId; }
-- (void) setHitRateId: (unsigned long) aDataId
+- (uint32_t) hitRateId { return hitRateId; }
+- (void) setHitRateId: (uint32_t) aDataId
 {
     hitRateId = aDataId;
 }
 
-- (unsigned long) histogramId { return histogramId; }
-- (void) setHistogramId: (unsigned long) aDataId
+- (uint32_t) histogramId { return histogramId; }
+- (void) setHistogramId: (uint32_t) aDataId
 {
     histogramId = aDataId;
 }
@@ -2406,14 +2406,14 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
     if(!shipSumHistogram) return;
 
     
-    unsigned long* ptr = (unsigned long*)someData;
+    uint32_t* ptr = (uint32_t*)someData;
 
 	unsigned char chan = (ptr[1]>>8) & 0xff;
     
 	katrinV4FltFullHistogramDataStruct* ePtr = (katrinV4FltFullHistogramDataStruct*) &ptr[2];
     
     uint32_t* histoData = ePtr->h;
-    //ptr + (sizeof(katrinV4FltHistogramDataStruct)/sizeof(long));// points now to the histogram data -tb-
+    //ptr + (sizeof(katrinV4FltHistogramDataStruct)/sizeof(int32_t));// points now to the histogram data -tb-
    	int isSumHistogram = ePtr->histogramInfo & 0x2; //the bit1 marks the Sum Histograms
 
     
@@ -2515,7 +2515,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 }
 
 
-- (unsigned long) eventCount:(int)aChannel
+- (uint32_t) eventCount:(int)aChannel
 {
     return eventCount[aChannel];
 }
@@ -2623,8 +2623,8 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 #pragma mark •••SBC readout control structure... Till, fill out as needed
 - (int) load_HW_Config_Structure:(SBC_crate_config*)configStruct index:(int)index
 {
-    unsigned long versionCFPGA = [self readVersion];
-    unsigned long versionFPGA8 = [self readpVersion];
+    uint32_t versionCFPGA = [self readVersion];
+    uint32_t versionFPGA8 = [self readpVersion];
 
     configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id	= kFLTv4;					//unique identifier for readout hw
@@ -2634,11 +2634,11 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 	configStruct->card_info[index].slot			= (uint32_t)[self stationNumber];		//PMC readout (fdhwlib) uses col 0->n-1; stationNumber is from 1->n (FLT register entry SlotID too)
 	configStruct->card_info[index].crate		= [self crateNumber];
 	configStruct->card_info[index].deviceSpecificData[0] = (uint32_t)[self postTriggerTime];	//needed to align the waveforms
-	unsigned long eventTypeMask = 0;
+	uint32_t eventTypeMask = 0;
 	if(readWaveforms) eventTypeMask |= kReadWaveForms;
 	configStruct->card_info[index].deviceSpecificData[1] = (uint32_t)eventTypeMask;
 	configStruct->card_info[index].deviceSpecificData[2] = fltRunMode;	
-	unsigned long runFlagsMask = 0;                                         //bit 16 = "first time" flag
+	uint32_t runFlagsMask = 0;                                         //bit 16 = "first time" flag
     if(runMode == kKatrinV4Flt_EnergyDaqMode | runMode == kKatrinV4Flt_EnergyTraceDaqMode)
         runFlagsMask |= kSyncFltWithSltTimerFlag;                           //bit 17 = "sync flt with slt timer" flag
     if(shipSumHistogram == 1) runFlagsMask |= kShipSumHistogramFlag;//bit 18 = "ship sum histogram" flag   //2013-06 added (!syncWithRunControl) - if syncWithRunControl is set, this 'facility' will produce sum histograms (using the decoder) -tb-
@@ -2868,11 +2868,11 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 #pragma mark •••Reporting
 - (void) testReadHisto
 {
-	unsigned long hControl = [self readReg:kFLTV4HistgrSettingsReg];
-	unsigned long pStatusA = [self readReg:kFLTV4pStatusAReg];
-	unsigned long pStatusB = [self readReg:kFLTV4pStatusBReg];
-	unsigned long pStatusC = [self readReg:kFLTV4pStatusCReg];
-	unsigned long f3	   = [self readReg:kFLTV4HistNumMeasReg];
+	uint32_t hControl = [self readReg:kFLTV4HistgrSettingsReg];
+	uint32_t pStatusA = [self readReg:kFLTV4pStatusAReg];
+	uint32_t pStatusB = [self readReg:kFLTV4pStatusBReg];
+	uint32_t pStatusC = [self readReg:kFLTV4pStatusCReg];
+	uint32_t f3	   = [self readReg:kFLTV4HistNumMeasReg];
 	NSLog(@"EMin: 0x%08x\n",  hControl & 0x7FFFF);
 	NSLog(@"EBin: 0x%08x\n",  (hControl>>20) & 0xF);
 	NSLog(@"HM: %d\n",  (hControl>>28) & 0x1);
@@ -2887,9 +2887,9 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 	
 	int i;
 	for(i=0;i<kNumV4FLTChannels;i++){
-		unsigned long firstLast = [self readReg:kFLTV4HistLastFirstReg channel:i];
-		unsigned long first = firstLast & 0xffff;
-		unsigned long last = (firstLast >>16) & 0xffff;
+		uint32_t firstLast = [self readReg:kFLTV4HistLastFirstReg channel:i];
+		uint32_t first = firstLast & 0xffff;
+		uint32_t last = (firstLast >>16) & 0xffff;
 		NSLog(@"%d: 0x%08x 0x%08x\n",i,first, last);
 	}
 
@@ -2898,31 +2898,31 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 
 - (void) printEventFIFOs
 {
-	unsigned long status = [self readReg: kFLTV4StatusReg];
+	uint32_t status = [self readReg: kFLTV4StatusReg];
 	int fifoStatus = (status>>24) & 0xf;
 	if(fifoStatus != 0x03){
 		
 		NSLog(@"fifoStatus: 0x%0x\n",(status>>24)&0xf);
 		
-		unsigned long aValue = [self readReg: kFLTV4EventFifoStatusReg];
+		uint32_t aValue = [self readReg: kFLTV4EventFifoStatusReg];
 		NSLog(@"aValue: 0x%0x\n", aValue);
 		NSLog(@"Read: %d\n", (aValue>>16)&0x3ff);
 		NSLog(@"Write: %d\n", (aValue>>0)&0x3ff);
 		
-		unsigned long eventFifo1 = [self readReg: kFLTV4EventFifo1Reg];
-		unsigned long channelMap = (eventFifo1>>10)&0xfffff;
+		uint32_t eventFifo1 = [self readReg: kFLTV4EventFifo1Reg];
+		uint32_t channelMap = (eventFifo1>>10)&0xfffff;
 		NSLog(@"Channel Map: 0x%0x\n",channelMap);
 		
-		unsigned long eventFifo2 = [self readReg: kFLTV4EventFifo2Reg];
-		unsigned long sec =  ((eventFifo1&0x3ff)<<5) | ((eventFifo2>>27)&0x1f);
+		uint32_t eventFifo2 = [self readReg: kFLTV4EventFifo2Reg];
+		uint32_t sec =  ((eventFifo1&0x3ff)<<5) | ((eventFifo2>>27)&0x1f);
 		NSLog(@"sec: %d %d\n",((eventFifo2>>27)&0x1f),eventFifo1&0x3ff);
 		NSLog(@"Time: %d\n",sec);
 		
 		int i;
 		for(i=0;i<kNumV4FLTChannels;i++){
 			if(channelMap & (1<<i)){
-				unsigned long eventFifo3 = [self readReg: kFLTV4EventFifo3Reg channel:i];
-				unsigned long energy     = [self readReg: kFLTV4EventFifo4Reg channel:i];
+				uint32_t eventFifo3 = [self readReg: kFLTV4EventFifo3Reg channel:i];
+				uint32_t energy     = [self readReg: kFLTV4EventFifo4Reg channel:i];
 				NSLog(@"channel: %d page: %d energy: %d\n\n",i, eventFifo3 & 0x3f, energy);
 			}
 		}
@@ -2933,9 +2933,9 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 
 - (void) printPStatusRegs
 {
-	unsigned long pAData = [self readReg:kFLTV4pStatusAReg];
-	unsigned long pBData = [self readReg:kFLTV4pStatusBReg];
-	unsigned long pCData = [self readReg:kFLTV4pStatusCReg];
+	uint32_t pAData = [self readReg:kFLTV4pStatusAReg];
+	uint32_t pBData = [self readReg:kFLTV4pStatusBReg];
+	uint32_t pCData = [self readReg:kFLTV4pStatusCReg];
     int width = 38;
     NSLogStartTable([NSString stringWithFormat:@"%@ PStatus",[self fullID]], width);
 	NSLogMono(@" PStatus |   A    |    B   |   C\n");
@@ -2991,7 +2991,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 
 - (void) printVersions
 {
-	unsigned long data;
+	uint32_t data;
     //uint32_t versionCFPGA;
     //uint32_t versionFPGA8;
 	data = [self readVersion];
@@ -3022,7 +3022,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 
 	//print fdhwlib and readout code versions
 	ORIpeV4SLTModel* slt = [[self crate] adapter];
-	long fdhwlibVersion = [slt getFdhwlibVersion];
+	int32_t fdhwlibVersion = [slt getFdhwlibVersion];
 	int ver=(fdhwlibVersion>>16) & 0xff,maj =(fdhwlibVersion>>8) & 0xff,min = fdhwlibVersion & 0xff;
 	//NSLogMono(@"%@ fdhwlib Library version: 0x%08x / %i.%i.%i\n",[self fullID], fdhwlibVersion,ver,maj,min);
 	NSLogMono(@"SBC PrPMC running with fdhwlib version: %i.%i.%i (0x%08x)\n",ver,maj,min, fdhwlibVersion);
@@ -3031,9 +3031,9 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 
 - (void) printStatusReg
 {
-	unsigned long status = [self readStatus];
+	uint32_t status = [self readStatus];
     int width = 74;
-    NSLogStartTable([NSString stringWithFormat:@"%@ Status Reg (address:0x%08lx): 0x%08lx\n", [self fullID],[self regAddress:kFLTV4StatusReg],status],width);
+    NSLogStartTable([NSString stringWithFormat:@"%@ Status Reg (address:0x%08lx): 0x%08x\n", [self fullID],[self regAddress:kFLTV4StatusReg],status],width);
 	NSLogMono(@"Power            | %@\n",	((status>>0) & 0x1) ? @"FAILED":@"OK");
 	NSLogMono(@"PLL1             | %@\n",	((status>>1) & 0x1) ? @"UNLOCKED":@"OK");
 	NSLogMono(@"PLL2             | %@\n",	((status>>2) & 0x1) ? @"UNLOCKED":@"OK");
@@ -3056,7 +3056,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
     NSLogDivider(@"-", width);
 	NSLogMono(@"chan |  Trigger |  HitRate | Gain | Threshold\n");
 	NSLogDivider(@"-",width);
-	unsigned long aHitRateMask = [self readHitRateMask];
+	uint32_t aHitRateMask = [self readHitRateMask];
 
 	//grab all the thresholds and gains using one command packet
 	int i;
@@ -3119,7 +3119,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
     return [[ORKatrinV4FLTRegisters sharedRegSet] registerName:anIndex];
 }
 
-- (unsigned long) getAddressOffset: (short) anIndex
+- (uint32_t) getAddressOffset: (short) anIndex
 {
     return [[ORKatrinV4FLTRegisters sharedRegSet] addressOffset:anIndex];
 }
@@ -3182,7 +3182,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
         if( triggerEnabledMask & (0x1<<i) ){
 
             differencesExist |= [self checkForDifferencesInName:[NSString stringWithFormat:@"Threshold:%d",i]
-                                                      orcaValue:(unsigned long)[self threshold:i]
+                                                      orcaValue:(uint32_t)[self threshold:i]
                                                         hwValue:[self readThreshold:i]];
             differencesExist |= [self checkForDifferencesInName:[NSString stringWithFormat:@"Gain:%d",i]
                                                       orcaValue:[self gain:i]
@@ -3197,7 +3197,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 
 - (BOOL) compareControlReg:(BOOL)verbose
 {
-    unsigned long regValue = [self readReg:kFLTV4ControlReg] & 0x00300F00;
+    uint32_t regValue = [self readReg:kFLTV4ControlReg] & 0x00300F00;
     //int hwMode          = (regValue>>16) & 0xf;
     int hwFifoLength    = (regValue>>25) & 0x1;
     int hwFifoBehaviour = (regValue>>24) & 0x1;
@@ -3243,7 +3243,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 
 - (BOOL) compareHitRateMask:(BOOL)verbose
 {
-    unsigned long aMask = [self readHitRateMask];
+    uint32_t aMask = [self readHitRateMask];
     BOOL differencesExist = NO;
 
     if( ![self checkForDifferencesInName:@"HitRateEnabled" orcaValue:[self hitRateEnabledMask] hwValue:aMask]){
@@ -3256,7 +3256,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 
 - (BOOL) compareFilter:(BOOL)verbose
 {
-    unsigned long regValue = [self readReg:kFLTV4RunControlReg];
+    uint32_t regValue = [self readReg:kFLTV4RunControlReg];
     int hwBoxCarLength1      = (regValue>>28) & 0x7;
     int hwPoleZeroCorrection = (regValue>>24) & 0xf;
     int hwFilterShapingLength= (regValue>>8)  & 0xf;
@@ -3274,7 +3274,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
     return(differencesExist);
 }
 
-- (BOOL) checkForDifferencesInName:(NSString*)aName orcaValue:(unsigned long)orcaValue hwValue:(unsigned long)hwValue
+- (BOOL) checkForDifferencesInName:(NSString*)aName orcaValue:(uint32_t)orcaValue hwValue:(uint32_t)hwValue
 {
     if(hwValue != orcaValue){
         NSLogMono( @"%@ : %@: ORCA:0x%08X != HW:0x%08X\n",[self fullID],[aName rightJustified:20],orcaValue,hwValue);
@@ -3437,7 +3437,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 	
 	@try {
 		[self enterTestMode];
-		unsigned long aPattern[4] = {0x3fff,0x0,0x2aaa,0x1555};
+		uint32_t aPattern[4] = {0x3fff,0x0,0x2aaa,0x1555};
 		int chan;
 		BOOL passed = YES;
 		int testIndex;
@@ -3458,7 +3458,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 			}
 		}
 		if(passed){		
-			unsigned long gainPattern[4] = {0xfff,0x0,0xaaa,0x555};
+			uint32_t gainPattern[4] = {0xfff,0x0,0xaaa,0x555};
 			
 			//now gains
 			for(testIndex = 0;testIndex<4;testIndex++){
@@ -3479,7 +3479,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 			}
 		}
 		if(passed){	
-			unsigned long offsetPattern[4] = {0xfff,0x0,0xaaa,0x555};
+			uint32_t offsetPattern[4] = {0xfff,0x0,0xaaa,0x555};
 			for(testIndex = 0;testIndex<4;testIndex++){
 				unsigned short thePattern = offsetPattern[testIndex];
 				[self writeReg:kFLTV4AnalogOffsetReg value:thePattern];
@@ -3522,11 +3522,11 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 		int numPatterns = 4;
 		int j;
 		for(j=0;j<numLoops;j++){
-			unsigned long aPattern[4] = {0xfffffff,0x00000000,0xaaaaaaaa,0x55555555};
+			uint32_t aPattern[4] = {0xfffffff,0x00000000,0xaaaaaaaa,0x55555555};
 			int i;
 			for(i=0;i<numPatterns;i++){
 				[self writeReg:kFLTV4AccessTestReg value:aPattern[i]];
-				unsigned long aValue = [self readReg:kFLTV4AccessTestReg];
+				uint32_t aValue = [self readReg:kFLTV4AccessTestReg];
 				if(aValue!=aPattern[i]){
 					NSLog(@"Error: Comm Check (pattern: 0x%0x!=0x%0x) FLT %d does not work\n",aPattern,aValue,[self stationNumber]);
 					passed = NO;				
@@ -3608,7 +3608,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 	[[self undoManager] disableUndoRegistration];
 	int i;
     float           maxThreshold     = kThresholdFinderStart * [self filterLengthInBins];
-    unsigned long   newHitMask       = 0x0;
+    uint32_t   newHitMask       = 0x0;
     BOOL            progress         = NO;
     float           updateSpeed      = 0.8; // 0 no progress ... 1 maximum speed
     id slt = [[self crate] adapter];
@@ -3801,7 +3801,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 	//if([self readMode] != kKatrinV4FLT_Test_Mode){
 	if(1){//TODO: test mode has changed for V4 -tb-
 		NSLogColor([NSColor redColor],@"Could not put FLT %d into test mode\n",[self stationNumber]);
-		[NSException raise:@"Ram Test Failed" format:@"Could not put FLT %lu into test mode\n",[self stationNumber]];
+		[NSException raise:@"Ram Test Failed" format:@"Could not put FLT %u into test mode\n",(int)[self stationNumber]];
 	}
 }
 

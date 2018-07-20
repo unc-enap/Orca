@@ -280,14 +280,14 @@
 
 - (void) delayAndGateExtChanged:(NSNotification*)aNote
 {
-	unsigned long regValue = [model delayAndGateExt];
+	uint32_t regValue = [model delayAndGateExt];
 	[dggADelayCoarseTextField setIntValue: regValue & 0x0000ffff];
 	[dggBDelayCoarseTextField setIntValue: (regValue>>16) & 0x0000ffff];
 }
 
 - (void) delayAndGateAChanged:(NSNotification*)aNote
 {
-	unsigned long regValue = [model delayAndGateA];
+	uint32_t regValue = [model delayAndGateA];
 	[dggADelayFineTextField setIntValue: regValue & 0x0000ffff];
 	[dggAGateTextField setIntValue: (regValue>>16) & 0x0000ffff];
 	
@@ -295,7 +295,7 @@
 
 - (void) delayAndGateBChanged:(NSNotification*)aNote
 {
-	unsigned long regValue = [model delayAndGateB];
+	uint32_t regValue = [model delayAndGateB];
 	[dggBDelayFineTextField setIntValue: regValue & 0x0000ffff];
 	[dggBGateTextField setIntValue: (regValue>>16) & 0x0000ffff];
 }
@@ -304,7 +304,7 @@
 
 - (void) userNIMSelectorChanged:(NSNotification*)aNote
 {
-	unsigned long regValue = [model userNIMSelector];
+	uint32_t regValue = [model userNIMSelector];
 	[[userNIMLatchInvertMatrix cellWithTag:0] setState:regValue & (0x1<<kNIM01LatchBit)];
 	[[userNIMLatchInvertMatrix cellWithTag:1] setState:regValue & (0x1<<kNIM02LatchBit)];
 	[[userNIMLatchInvertMatrix cellWithTag:2] setState:regValue & (0x1<<kNIM03LatchBit)];
@@ -320,7 +320,7 @@
 
 - (void) userLEDSelectorChanged:(NSNotification*)aNote
 {
-	unsigned long regValue = [model userLEDSelector];
+	uint32_t regValue = [model userLEDSelector];
 	[[userLEDLatchInvertMatrix cellWithTag:0] setState:regValue & (0x1<<kRedLEDLatchBit)];
 	[[userLEDLatchInvertMatrix cellWithTag:1] setState:regValue & (0x1<<kGreenLEDLatchBit)];
 	[[userLEDLatchInvertMatrix cellWithTag:2] setState:regValue & (0x1<<kYellowLEDLatchBit)];
@@ -336,7 +336,7 @@
 
 - (void) userDeviceSelectorChanged:(NSNotification*)aNote
 {
-	unsigned long regValue = [model userDeviceSelector];
+	uint32_t regValue = [model userDeviceSelector];
 	[[scalerEnableMatrix cellWithTag:0] setState:regValue & (0x1<<kSclr_AEnableBit)];	
 	[[scalerEnableMatrix cellWithTag:1] setState:regValue & (0x1<<kSclr_BEnableBit)];	
 	[[scalerResetMatrix cellWithTag:0] setState:regValue & (0x1<<kSclr_AResetBit)];	
@@ -351,7 +351,7 @@
 
 - (void) scalerReadoutChanged:(NSNotification*)aNote
 {
-	unsigned long regValue = [model scalerReadout];
+	uint32_t regValue = [model scalerReadout];
 	[timeIntervalField setIntValue: (regValue>>kScalerTimeIntervalBit) & 0x0000ffff];
 	[numSepEventsField setIntValue: (regValue>>kScaleNumSepEventsBit) & 0x0000ffff];
 	
@@ -366,7 +366,7 @@
 
 - (void) globalModeChanged:(NSNotification*)aNote
 {
-	unsigned long regValue = [model globalMode];
+	uint32_t regValue = [model globalMode];
 	[bufferSizePopup  selectItemAtIndex:(regValue >> kBuffSizeOptBit) & 0xf];	
 }
 
@@ -454,24 +454,24 @@
 
 - (IBAction) dggExtAction:(id)sender
 {
-	unsigned long regValue = [model delayAndGateExt];
+	uint32_t regValue = [model delayAndGateExt];
 	if([sender tag] == 0){
 		regValue &= ~0x0000ffff;
 		regValue |= ([sender intValue] & 0x0000ffff);
 	}
 	else if([sender tag] == 1){
 		regValue &= ~(0x0000ffff << 16);
-		regValue |= ((long)[sender intValue] & 0x0000ffffL) << 16;
+		regValue |= ((int32_t)[sender intValue] & 0x0000ffffL) << 16;
 	}
 	[model setDelayAndGateExt:regValue];
 }
 
 - (IBAction) dggAAction:(id)sender
 {
-	unsigned long regValue = [model delayAndGateA];
+	uint32_t regValue = [model delayAndGateA];
 	if([sender tag] == 0){ //gate length
 		regValue &= ~(0x0000ffff << 16);
-		regValue |= ((long)[sender intValue] & 0x0000ffffL) << 16;
+		regValue |= ((int32_t)[sender intValue] & 0x0000ffffL) << 16;
 	}
 	else if([sender tag] == 1){ //fine
 		regValue &= ~0x0000ffff;
@@ -483,10 +483,10 @@
 
 - (IBAction) dggBAction:(id)sender
 {
-	unsigned long regValue = [model delayAndGateB];
+	uint32_t regValue = [model delayAndGateB];
 	if([sender tag] == 0){ //gate length
 		regValue &= ~(0x0000ffff << 16);
-		regValue |= ((long)[sender intValue] & 0x0000ffffL) << 16;
+		regValue |= ((int32_t)[sender intValue] & 0x0000ffffL) << 16;
 	}
 	else if([sender tag] == 1){ //fine
 		regValue &= ~0x0000ffff;
@@ -497,7 +497,7 @@
 
 - (IBAction) userLEDInvertLatchAction:(id)sender
 {
-	unsigned long regValue = [model userLEDSelector];
+	uint32_t regValue = [model userLEDSelector];
 	BOOL state = [[sender selectedCell] state];
 	switch([[sender selectedCell] tag]){
 		case 0: regValue &= ~(0x1L<<kRedLEDLatchBit);     if(state)regValue |= (0x1L<<kRedLEDLatchBit);     break;
@@ -512,7 +512,7 @@
 
 - (IBAction) userLEDCodeAction:(id)sender
 {
-	unsigned long regValue = [model userLEDSelector];
+	uint32_t regValue = [model userLEDSelector];
 	char code = [sender indexOfSelectedItem];
 	switch([sender tag]){
 		case 0: regValue &= ~(0x7L<<kRedLEDCodeBit);     regValue |= (code<<kRedLEDCodeBit);     break;
@@ -524,7 +524,7 @@
 
 - (IBAction) userNIMInvertLatchAction:(id)sender
 {
-	unsigned long regValue = [model userNIMSelector];
+	uint32_t regValue = [model userNIMSelector];
 	BOOL state = [[sender selectedCell] state];
 	switch([[sender selectedCell] tag]){
 		case 0: regValue &= ~(0x1L<<kNIM01LatchBit);	if(state)regValue |= (0x1L<<kNIM01LatchBit);	break;
@@ -540,7 +540,7 @@
 
 - (IBAction) userNIMCodeAction:(id)sender
 {
-	unsigned long regValue = [model userNIMSelector];
+	uint32_t regValue = [model userNIMSelector];
 	char code = ([sender indexOfSelectedItem] & 0x7);
 	switch([sender tag]){
 		case 0: regValue &= ~(0x7L<<kNIM01CodeBit);  regValue |= (code<<kNIM01CodeBit);  break;
@@ -568,7 +568,7 @@
 
 - (IBAction) scalerAndDggAction:(id)sender
 {
-	unsigned long regValue = [model userDeviceSelector];
+	uint32_t regValue = [model userDeviceSelector];
 	char code = ([sender indexOfSelectedItem] & 0x7);
 	switch([sender tag]){
 		case 0: regValue &= ~(0x7L<<kSclr_AModeBit); regValue |= (code<<kSclr_AModeBit); break;
@@ -581,7 +581,7 @@
 
 - (IBAction) scalerEnableAction:(id)sender
 {
-	unsigned long regValue = [model userDeviceSelector];
+	uint32_t regValue = [model userDeviceSelector];
 	BOOL state = [[sender selectedCell] state];
 	switch([[sender selectedCell] tag]){
 		case 0: regValue &= ~(0x1L<<kSclr_AEnableBit);   if(state)regValue |= (0x1L<<kSclr_AEnableBit);   break;
@@ -592,7 +592,7 @@
 
 - (IBAction) scalerResetAction:(id)sender
 {
-	unsigned long regValue = [model userDeviceSelector];
+	uint32_t regValue = [model userDeviceSelector];
 	BOOL state = [[sender selectedCell] state];
 	switch([[sender selectedCell] tag]){
 		case 0: regValue &= ~(0x1L<<kSclr_AResetBit);   if(state)regValue |= (0x1L<<kSclr_AResetBit);   break;
@@ -605,7 +605,7 @@
 {
 	int theValue = [sender intValue];
 	if(theValue>255)theValue = 255;
-	unsigned long regValue = [model scalerReadout];
+	uint32_t regValue = [model scalerReadout];
 	regValue &= ~(0x0000ffff<<kScalerTimeIntervalBit);
 	regValue |= ((theValue & 0x0000ffff) << kScalerTimeIntervalBit);
 	[model setScalerReadout:regValue];	
@@ -613,7 +613,7 @@
 
 - (IBAction) numSepEventsAction:(id)sender
 {
-	unsigned long regValue = [model scalerReadout];
+	uint32_t regValue = [model scalerReadout];
 	regValue &= ~(0xff << kScaleNumSepEventsBit);
 	regValue |= (([sender intValue] & 0x0000ffff) << kScaleNumSepEventsBit);
 	[model setScalerReadout:regValue];	
@@ -638,7 +638,7 @@
 
 - (void) bufferSizeAction:(id)sender
 {
-	unsigned long regValue = [model globalMode];
+	uint32_t regValue = [model globalMode];
 	regValue &= ~(0xf << kBuffSizeOptBit);
 	regValue |= [bufferSizePopup indexOfSelectedItem];
 	[model setGlobalMode:regValue];	

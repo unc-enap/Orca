@@ -78,29 +78,29 @@
 
     //basic ops
     int                     selectedRegister;
-    unsigned long			memoryOffset;
-    unsigned long			writeValue;
+    uint32_t			memoryOffset;
+    uint32_t			writeValue;
     short					repeatOpCount;
     unsigned short			repeatDelay;
     int						useMemory;
-    unsigned long			workingCount;
+    uint32_t			workingCount;
     BOOL				doReadOp;
     BOOL				autoIncrement;
     BOOL				basicOpsRunning;
     BOOL				isPulserFixedRate;
-    unsigned long			fixedPulserRateCount;
+    uint32_t			fixedPulserRateCount;
     float				fixedPulserRateDelay;
     BOOL _isPedestalEnabledInCSR;
     BOOL _pulserEnabled;
     
     //MTCA+ crate masks
-    unsigned long _mtcaN100Mask;
-    unsigned long _mtcaN20Mask;
-    unsigned long _mtcaEHIMask;
-    unsigned long _mtcaELOMask;
-    unsigned long _mtcaOELOMask;
-    unsigned long _mtcaOEHIMask;
-    unsigned long _mtcaOWLNMask;
+    uint32_t _mtcaN100Mask;
+    uint32_t _mtcaN20Mask;
+    uint32_t _mtcaEHIMask;
+    uint32_t _mtcaELOMask;
+    uint32_t _mtcaOELOMask;
+    uint32_t _mtcaOEHIMask;
+    uint32_t _mtcaOWLNMask;
 
     int tubRegister;
 
@@ -123,16 +123,16 @@
 @property (nonatomic,assign) uint32_t pedCrateMask;
 
 @property (nonatomic,assign) BOOL isPulserFixedRate;
-@property (nonatomic,assign) unsigned long fixedPulserRateCount;
+@property (nonatomic,assign) uint32_t fixedPulserRateCount;
 @property (nonatomic,assign) float fixedPulserRateDelay;
 
-@property (nonatomic,assign) unsigned long mtcaN100Mask;
-@property (nonatomic,assign) unsigned long mtcaN20Mask;
-@property (nonatomic,assign) unsigned long mtcaEHIMask;
-@property (nonatomic,assign) unsigned long mtcaELOMask;
-@property (nonatomic,assign) unsigned long mtcaOELOMask;
-@property (nonatomic,assign) unsigned long mtcaOEHIMask;
-@property (nonatomic,assign) unsigned long mtcaOWLNMask;
+@property (nonatomic,assign) uint32_t mtcaN100Mask;
+@property (nonatomic,assign) uint32_t mtcaN20Mask;
+@property (nonatomic,assign) uint32_t mtcaEHIMask;
+@property (nonatomic,assign) uint32_t mtcaELOMask;
+@property (nonatomic,assign) uint32_t mtcaOELOMask;
+@property (nonatomic,assign) uint32_t mtcaOEHIMask;
+@property (nonatomic,assign) uint32_t mtcaOWLNMask;
 @property (nonatomic,assign) BOOL isPedestalEnabledInCSR;
 @property (nonatomic,assign) BOOL pulserEnabled;
 
@@ -176,15 +176,15 @@
 - (void) setRepeatDelay:(unsigned short)aRepeatDelay;
 - (short) repeatOpCount;
 - (void) setRepeatOpCount:(short)aRepeatCount;
-- (unsigned long) writeValue;
-- (void) setWriteValue:(unsigned long)aWriteValue;
-- (unsigned long) memoryOffset;
-- (void) setMemoryOffset:(unsigned long)aMemoryOffset;
+- (uint32_t) writeValue;
+- (void) setWriteValue:(uint32_t)aWriteValue;
+- (uint32_t) memoryOffset;
+- (void) setMemoryOffset:(uint32_t)aMemoryOffset;
 - (int) selectedRegister;
 - (void) setSelectedRegister:(int)aSelectedRegister;
-- (unsigned long) memBaseAddress;
-- (unsigned long) memAddressModifier;
-- (unsigned long) baseAddress;
+- (uint32_t) memBaseAddress;
+- (uint32_t) memAddressModifier;
+- (uint32_t) baseAddress;
 
 - (float) getThresholdOfType:(int) type inUnits:(int) units;
 - (void) setThresholdOfType:(int) type fromUnits: (int) units toValue:(float) aThreshold;
@@ -223,10 +223,10 @@
 - (BOOL) adapterIsSBC;
 - (short) getNumberRegisters;
 - (NSString*) getRegisterName:(short) anIndex;
-- (unsigned long) read:(int)aReg;
-- (void) write:(int)aReg value:(unsigned long)aValue;
-- (void) setBits:(int)aReg mask:(unsigned long)aMask;
-- (void) clrBits:(int)aReg mask:(unsigned long)aMask;
+- (uint32_t) read:(int)aReg;
+- (void) write:(int)aReg value:(uint32_t)aValue;
+- (void) setBits:(int)aReg mask:(uint32_t)aMask;
+- (void) clrBits:(int)aReg mask:(uint32_t)aMask;
 - (void) sendMTC_SoftGt;
 - (void) sendMTC_SoftGt:(BOOL) setGTMask;
 - (void) initializeMtc;
@@ -235,8 +235,8 @@
 - (void) clearGlobalTriggerWordMask;
 - (void) setGlobalTriggerWordMask;
 - (uint32_t) getGTMaskFromHardware;
-- (void) setSingleGTWordMask:(unsigned long) gtWordMask;
-- (void) clearSingleGTWordMask:(unsigned long) gtWordMask;
+- (void) setSingleGTWordMask:(uint32_t) gtWordMask;
+- (void) clearSingleGTWordMask:(uint32_t) gtWordMask;
 - (void) clearPedestalCrateMask;
 - (void) clearGTCrateMask;
 - (uint32_t) getGTCrateMaskFromHardware;
@@ -244,7 +244,7 @@
 - (void) loadGTCrateMaskToHardware;
 - (void) clearTheControlRegister;
 - (void) resetTheMemory;
-- (void) setTheGTCounter:(unsigned long) theGTCounterValue;
+- (void) setTheGTCounter:(uint32_t) theGTCounterValue;
 - (void) zeroTheGTCounter;
 - (void) setThe10MHzCounter:(uint64_t) newValue;
 - (void) loadPrescaleValueToHardware;
@@ -263,7 +263,7 @@
 - (void) basicMTCPedestalGTrigSetup;
 - (void) fireMTCPedestalsFixedTime;
 - (void) stopMTCPedestalsFixedTime;
-- (void) firePedestals:(unsigned long) count withRate:(float) rate;
+- (void) firePedestals:(uint32_t) count withRate:(float) rate;
 - (void) basicMTCReset;
 - (void) validateMTCADAC:(uint16_t) dac_value;
 - (void) loadTheMTCADacs;
@@ -275,7 +275,7 @@
 - (void) mtcatResetAll;
 - (void) mtcatLoadCrateMasks;
 - (void) mtcatClearCrateMasks;
-- (void) mtcatLoadCrateMask:(unsigned long) mask toMtcat:(unsigned char) mtcat;
+- (void) mtcatLoadCrateMask:(uint32_t) mask toMtcat:(unsigned char) mtcat;
 
 #pragma mark •••BasicOps
 - (void) readBasicOps;

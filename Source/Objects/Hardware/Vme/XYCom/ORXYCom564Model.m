@@ -61,7 +61,7 @@ NSString* ORXYCom564InterpretADCHasChanged  = @"ORXYCom564InterpretADCHasChanged
 
 #pragma mark •••Static Declarations
 typedef struct {
-	unsigned long offset;
+	uint32_t offset;
 	NSString* name;
 } XyCom564RegisterInformation;
 
@@ -123,11 +123,11 @@ static XyCom564RegisterInformation mIOXY564Reg[kNumberOfXyCom564Registers] = {
     [self linkToController:@"ORXYCom564Controller"];
 }
 #pragma mark ***Accessors
-- (unsigned long) dataId 
+- (uint32_t) dataId 
 {
     return dataId;
 }
-- (void) setDataId: (unsigned long) DataId
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -336,7 +336,7 @@ static XyCom564RegisterInformation mIOXY564Reg[kNumberOfXyCom564Registers] = {
     return mIOXY564Reg[anIndex].name;
 }
 
-- (unsigned long) getAddressOffset:(EXyCom564Registers) anIndex
+- (uint32_t) getAddressOffset:(EXyCom564Registers) anIndex
 {
     return mIOXY564Reg[anIndex].offset;
 }
@@ -938,7 +938,7 @@ static XyCom564RegisterInformation mIOXY564Reg[kNumberOfXyCom564Registers] = {
 	if(!runInProgress) return;
     int channelsToRead =kXVME564_NumAutoScanChannelsPerGroup << ([self autoscanMode]);
     int headernumber = 4;
-    unsigned long data[headernumber+channelsToRead];
+    uint32_t data[headernumber+channelsToRead];
     
     data[1] = (([self crateNumber]&0x01e)<<21) |  (([self slot]&0x1f) << 16);
     

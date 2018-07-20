@@ -502,12 +502,12 @@ static NSString *ORReplayFileConnection 		= @"Replay File Input Connector";
 }
 
 
-- (unsigned long)dataFileSize
+- (uint32_t)dataFileSize
 {
 	return dataFileSize;
 }
 
-- (void) setDataFileSize:(unsigned long)aNumber
+- (void) setDataFileSize:(uint32_t)aNumber
 {
 	dataFileSize = aNumber;
 	

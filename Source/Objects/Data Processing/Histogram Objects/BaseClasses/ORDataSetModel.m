@@ -191,17 +191,17 @@ NSString* ORDataSetCalibrationChanged		= @"ORDataSetCalibrationChanged";
 
 - (NSString*) runNumberString
 {
-	long runNumber = [dataSet runNumber];
-	if(runNumber > 0) return [NSString stringWithFormat:@"Run %lu",runNumber];
+	int32_t runNumber = [dataSet runNumber];
+	if(runNumber > 0) return [NSString stringWithFormat:@"Run %u",runNumber];
 	else return @"";
 }
 
--(unsigned long) totalCounts
+-(uint32_t) totalCounts
 {
 	return totalCounts;
 }
 
-- (void) setTotalCounts:(unsigned long) aNewCount
+- (void) setTotalCounts:(uint32_t) aNewCount
 {
     if(aNewCount!=totalCounts){
         totalCounts = aNewCount;

@@ -37,7 +37,7 @@
 
 - (void) setCrateTitle
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"SNO crate %lu",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"SNO crate %u",[model uniqueIdNumber]]];
 }
 
 #pragma mark •••Notifications

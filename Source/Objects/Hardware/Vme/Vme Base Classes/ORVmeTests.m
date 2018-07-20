@@ -29,16 +29,16 @@
 #define kWriteOnly 2
 
 @implementation ORVmeReadWriteTest
-+ (id) test:(unsigned long) anOffset length:(unsigned long)aLength wordSize:(short)aWordSize validMask:(unsigned long)aValidMask name:(NSString*)aName
++ (id) test:(uint32_t) anOffset length:(uint32_t)aLength wordSize:(short)aWordSize validMask:(uint32_t)aValidMask name:(NSString*)aName
 {
 	return [[[ORVmeReadWriteTest alloc] initWith:anOffset length:aLength wordSize:aWordSize validMask:aValidMask name:aName] autorelease];
 }
-+ (id) test:(unsigned long) anOffset wordSize:(short)aWordSize validMask:(unsigned long)aValidMask name:(NSString*)aName
++ (id) test:(uint32_t) anOffset wordSize:(short)aWordSize validMask:(uint32_t)aValidMask name:(NSString*)aName
 {
 	return [[[ORVmeReadWriteTest alloc] initWith:anOffset length:1 wordSize:aWordSize validMask:aValidMask name:aName] autorelease];
 }
 
-- (id) initWith:(unsigned long) anOffset length:(unsigned long)aLength wordSize:(short)aWordSize validMask:(unsigned long)aValidMask name:(NSString*)aName
+- (id) initWith:(uint32_t) anOffset length:(uint32_t)aLength wordSize:(short)aWordSize validMask:(uint32_t)aValidMask name:(NSString*)aName
 {
 	self = [super initWithName:aName];
 	type = kReadWrite;
@@ -57,7 +57,7 @@
 - (void) runTest:(id)anObj
 {
 #define kNumPatterns 4
-	unsigned long patterns[kNumPatterns]={
+	uint32_t patterns[kNumPatterns]={
 		0x55555555,
 		0xAAAAAAAA,
 		0x00000000,
@@ -66,7 +66,7 @@
 	int errorCount = 0;
 	@try {
 		int i;
-		unsigned long  theAddress  = [anObj baseAddress] + theOffset;
+		uint32_t  theAddress  = [anObj baseAddress] + theOffset;
 		unsigned short theModifier = [anObj addressModifier];
 		id theController = [anObj adapter];
 		
@@ -76,8 +76,8 @@
 			//load up the write values -- we use the same write value for all write addresses
 			int index;
 			for(index=0;index<length;index++){
-				if(wordSize == sizeof(long)){
-					unsigned long* longPtr = (unsigned long*)[writeData bytes];
+				if(wordSize == sizeof(int32_t)){
+					uint32_t* longPtr = (uint32_t*)[writeData bytes];
 					longPtr[index] = patterns[i] & validMask;
 				}
 				else if(wordSize == sizeof(short)){
@@ -91,9 +91,9 @@
 			}
 			
 			if([[ORAutoTester sharedAutoTester] stopTests])break;
-			if(wordSize == sizeof(long)){
-				unsigned long* longWritePtr = (unsigned long*)[writeData bytes];
-				unsigned long* longReadPtr  = (unsigned long*)[readData bytes];
+			if(wordSize == sizeof(int32_t)){
+				uint32_t* longWritePtr = (uint32_t*)[writeData bytes];
+				uint32_t* longReadPtr  = (uint32_t*)[readData bytes];
 				if(type == kReadWrite || type == kWriteOnly) [theController writeLongBlock:longWritePtr atAddress:theAddress numToWrite:length withAddMod:theModifier usingAddSpace:0x01];
 				if(type == kReadWrite || type == kReadOnly)  [theController readLongBlock:longReadPtr   atAddress:theAddress numToRead:length  withAddMod:theModifier usingAddSpace:0x01];
 			}
@@ -113,11 +113,11 @@
 			if(type == kReadWrite) {
 				int i;
 				for(i=0;i<length;i++){
-					unsigned long theReadValue  = 0;
-					unsigned long theWriteValue = 0;
-					if(wordSize == sizeof(long)){
-						unsigned long* longReadPtr = (unsigned long*)[readData bytes];
-						unsigned long* longWritePtr = (unsigned long*)[writeData bytes];
+					uint32_t theReadValue  = 0;
+					uint32_t theWriteValue = 0;
+					if(wordSize == sizeof(int32_t)){
+						uint32_t* longReadPtr = (uint32_t*)[readData bytes];
+						uint32_t* longWritePtr = (uint32_t*)[writeData bytes];
 						theReadValue = longReadPtr[i];
 						theWriteValue = longWritePtr[i];
 					}
@@ -136,7 +136,7 @@
 					if((theWriteValue&validMask) != (theReadValue&validMask)) {
 						errorCount++;
 						if(errorCount<4){
-							[self addFailureLog:[NSString stringWithFormat:@"R/W Error: 0x%08lx: 0x%0lx != 0x%0lx (Mask = 0x%08lx)",[anObj baseAddress] + theOffset,theWriteValue&validMask,theReadValue&validMask,validMask]];
+							[self addFailureLog:[NSString stringWithFormat:@"R/W Error: 0x%08x: 0x%0x != 0x%0x (Mask = 0x%08x)",[anObj baseAddress] + theOffset,theWriteValue&validMask,theReadValue&validMask,validMask]];
 						}
 					}
 				}
@@ -150,22 +150,22 @@
 	}
 	@catch(NSException* e){
 		errorCount++;
-		[self addFailureLog:[NSString stringWithFormat:@"Exception: 0x%08lx\n",[anObj baseAddress] + theOffset]];
+		[self addFailureLog:[NSString stringWithFormat:@"Exception: 0x%08x\n",[anObj baseAddress] + theOffset]];
 	}
 }
 @end
 
 @implementation ORVmeReadOnlyTest
-+ (id) test:(unsigned long) anOffset length:(unsigned long)aLength wordSize:(short)aWordSize name:(NSString*)aName
++ (id) test:(uint32_t) anOffset length:(uint32_t)aLength wordSize:(short)aWordSize name:(NSString*)aName
 {
 	return [[[ORVmeReadOnlyTest alloc] initWith:anOffset length:aLength wordSize:aWordSize name:aName] autorelease];
 }
 
-+ (id) test:(unsigned long) anOffset wordSize:(short)aWordSize name:(NSString*)aName
++ (id) test:(uint32_t) anOffset wordSize:(short)aWordSize name:(NSString*)aName
 {
 	return [[[ORVmeReadOnlyTest alloc] initWith:anOffset length:1 wordSize:aWordSize name:aName] autorelease];
 }
-- (id) initWith:(unsigned long) anOffset length:(unsigned long)aLength wordSize:(short)aWordSize name:(NSString*)aName
+- (id) initWith:(uint32_t) anOffset length:(uint32_t)aLength wordSize:(short)aWordSize name:(NSString*)aName
 {
 	self = [super initWith:anOffset length:aLength wordSize:aWordSize validMask:0xFFFFFFFF name:aName];
 	type = kReadOnly;
@@ -175,11 +175,11 @@
 @end
 
 @implementation ORVmeWriteOnlyTest
-+ (id) test:(unsigned long) anOffset  wordSize:(short)aWordSize name:(NSString*)aName
++ (id) test:(uint32_t) anOffset  wordSize:(short)aWordSize name:(NSString*)aName
 {
 	return [[[ORVmeWriteOnlyTest alloc] initWith:anOffset length:1 wordSize:aWordSize name:aName] autorelease];
 }
-- (id) initWith:(unsigned long) anOffset length:(unsigned long)aLength wordSize:(short)aWordSize  name:(NSString*)aName
+- (id) initWith:(uint32_t) anOffset length:(uint32_t)aLength wordSize:(short)aWordSize  name:(NSString*)aName
 {
 	self = [super initWith:anOffset length:aLength wordSize:aWordSize validMask:0xFFFFFFFF name:aName];
 	type = kWriteOnly;

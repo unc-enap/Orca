@@ -26,15 +26,15 @@
 
 	@protected
 	id	controller; //use to cache the controller for abit more speed. use with care!
-    unsigned long 	baseAddress;
-    unsigned long	exceptionCount;
+    uint32_t 	baseAddress;
+    uint32_t	exceptionCount;
 }
 
 #pragma mark ¥¥¥Accessors
-- (void) 			setBaseAddress:(unsigned long) anAddress;
-- (unsigned long) 	baseAddress;
+- (void) 			setBaseAddress:(uint32_t) anAddress;
+- (uint32_t) 	baseAddress;
 - (id)				adapter;
-- (unsigned long)   exceptionCount;
+- (uint32_t)   exceptionCount;
 - (void)			incExceptionCount;
 - (void)			clearExceptionCount;
 - (NSRange)			memoryFootprint;

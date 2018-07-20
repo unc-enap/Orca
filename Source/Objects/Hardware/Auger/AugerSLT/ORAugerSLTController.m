@@ -428,7 +428,7 @@
 {
 	int index = [registerPopUp indexOfSelectedItem];
 	NS_DURING
-		unsigned long value = [model readReg:index];
+		uint32_t value = [model readReg:index];
 		NSLog(@"SLT reg: %@ value: 0x%x\n",[model getRegisterName:index],value);
 	NS_HANDLER
 		NSLog(@"Exception reading SLT reg: %@\n",[model getRegisterName:index]);

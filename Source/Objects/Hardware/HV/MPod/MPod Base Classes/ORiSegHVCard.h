@@ -77,8 +77,8 @@ enum{
 @interface ORiSegHVCard : ORMPodCard <ORHWWizard>
 {
   @protected
-    unsigned long	exceptionCount;
-	unsigned long   dataId;
+    uint32_t	exceptionCount;
+	uint32_t   dataId;
     short			hwGoal[16];		//value to send to hw
     short			target[16];		//input by user
     float			riseRate;
@@ -112,7 +112,7 @@ enum{
 
 #pragma mark ***Accessors
 - (id)				adapter;
-- (unsigned long)   exceptionCount;
+- (uint32_t)   exceptionCount;
 - (void)			incExceptionCount;
 - (void)			clearExceptionCount;
 - (NSString*) settingsLock;
@@ -147,14 +147,14 @@ enum{
 - (void)	commitTargetToHwGoal:(short)channel;
 - (NSString*) channelState:(short)channel;
 - (int)		numberChannelsOn;
-- (unsigned long) channelStateMask;
+- (uint32_t) channelStateMask;
 - (int)		numberChannelsRamping;
 - (int)		numberChannelsWithNonZeroVoltage;
 - (int)		numberChannelsWithNonZeroHwGoal;
 - (BOOL)	channelIsRamping:(short)chan;
-- (unsigned long) failureEvents:(short)channel;
-- (unsigned long) failureEvents;
-- (unsigned long) moduleFailureEvents;
+- (uint32_t) failureEvents:(short)channel;
+- (uint32_t) failureEvents;
+- (uint32_t) moduleFailureEvents;
 - (BOOL) channelInBounds:(short)aChan;
 - (BOOL) isOn:(short)aChannel;
 - (BOOL) hvOnAnyChannel;
@@ -170,8 +170,8 @@ enum{
 - (void) setDoNotPostSafetyLoopAlarm:(BOOL)aState;
 
 #pragma mark ¥¥¥Data Records
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherShaper;
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;

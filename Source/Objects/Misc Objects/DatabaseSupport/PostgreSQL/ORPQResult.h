@@ -26,7 +26,7 @@ typedef enum {
 - (id) initWithResPtr:(PGresult *) PQResPtr;
 - (id) init;
 - (void) dealloc;
-- (unsigned long long) numOfRows;
+- (uint64_t) numOfRows;
 - (unsigned int) numOfFields;
 - (id) fetchRowAsType:(MCPReturnType) aType;
 - (id) fetchRowAsType:(MCPReturnType) aType row:(int)aRow;

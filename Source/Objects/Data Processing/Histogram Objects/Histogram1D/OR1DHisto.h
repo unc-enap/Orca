@@ -28,9 +28,9 @@
 @class OR1DHistoController;
 
 @interface OR1DHisto : ORDataSetModel  {
-    unsigned long dataId;
-    unsigned long 	overFlow;
-    unsigned long 	numberBins;
+    uint32_t dataId;
+    uint32_t 	overFlow;
+    uint32_t 	numberBins;
     NSMutableData* 	histogram;
     NSData*         pausedHistogram;
 	NSMutableArray* rois;
@@ -39,24 +39,24 @@
 
 #pragma mark ¥¥¥Accessors
 - (void) processResponse:(NSDictionary*)aResponse;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
-- (void)setNumberBins:(unsigned long)aNumberBins;
-- (unsigned long) numberBins;
-- (unsigned long)value:(unsigned long)aBin;
-- (unsigned long) overFlow;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
+- (void)setNumberBins:(uint32_t)aNumberBins;
+- (uint32_t) numberBins;
+- (uint32_t)value:(uint32_t)aBin;
+- (uint32_t) overFlow;
 - (NSMutableArray*) rois;
-- (NSData*) getNonZeroRawDataWithStart:(unsigned long*)start end:(unsigned long*)end;
-- (NSString*) getnonZeroDataAsStringWithStart:(unsigned long*)start end:(unsigned long*)end;
+- (NSData*) getNonZeroRawDataWithStart:(uint32_t*)start end:(uint32_t*)end;
+- (NSString*) getnonZeroDataAsStringWithStart:(uint32_t*)start end:(uint32_t*)end;
 
 #pragma mark ¥¥¥Data Management
-- (void) histogram:(unsigned long)aValue;
-- (void) histogramWW:(unsigned long)aValue weight:(unsigned long) weight; // ak 6.8.07
+- (void) histogram:(uint32_t)aValue;
+- (void) histogramWW:(uint32_t)aValue weight:(uint32_t) weight; // ak 6.8.07
 - (void) loadData:(NSData*)someData;
-- (void) mergeHistogram:(unsigned long*)ptr numValues:(unsigned long)numBins;
-- (void) mergeEnergyHistogram:(unsigned long*)ptr numBins:(unsigned long)numBins maxBins:(unsigned long)maxBins
-                                                 firstBin:(unsigned long)firstBin   stepSize:(unsigned long)stepSize 
-                                                   counts:(unsigned long)counts;
+- (void) mergeHistogram:(uint32_t*)ptr numValues:(uint32_t)numBins;
+- (void) mergeEnergyHistogram:(uint32_t*)ptr numBins:(uint32_t)numBins maxBins:(uint32_t)maxBins
+                                                 firstBin:(uint32_t)firstBin   stepSize:(uint32_t)stepSize 
+                                                   counts:(uint32_t)counts;
 - (void) clear;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherShaper;

@@ -445,7 +445,7 @@ NSString* ORAugerSLTWriteValueChanged			= @"ORAugerSLTWriteValueChanged";
 	return reg[anIndex].regName;
 }
 
-- (unsigned long) getAddressOffset: (short) anIndex
+- (uint32_t) getAddressOffset: (short) anIndex
 {
     return( reg[anIndex].addressOffset );
 }
@@ -471,12 +471,12 @@ NSString* ORAugerSLTWriteValueChanged			= @"ORAugerSLTWriteValueChanged";
                       object:self];
 }
 
-- (unsigned long) writeValue
+- (uint32_t) writeValue
 {
     return writeValue;
 }
 
-- (void) setWriteValue:(unsigned long) aValue
+- (void) setWriteValue:(uint32_t) aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setWriteValue:[self writeValue]];
     
@@ -763,20 +763,20 @@ NSString* ORAugerSLTWriteValueChanged			= @"ORAugerSLTWriteValueChanged";
 	NS_ENDHANDLER
 }
 
-- (void) writeReg:(unsigned short)index value:(unsigned long)aValue
+- (void) writeReg:(unsigned short)index value:(uint32_t)aValue
 {
 	[self write:SLT_REG_ADDRESS(index) value:aValue];
 }
 
-- (unsigned long) readReg:(unsigned short) index
+- (uint32_t) readReg:(unsigned short) index
 {
 	return [self read:SLT_REG_ADDRESS(index)];
 }
 
 
-- (unsigned long) readStatusReg
+- (uint32_t) readStatusReg
 {
-	unsigned long data = 0;
+	uint32_t data = 0;
 
 	data = [self read:SLT_REG_ADDRESS(kSLTStatusReg)];
 
@@ -796,7 +796,7 @@ NSString* ORAugerSLTWriteValueChanged			= @"ORAugerSLTWriteValueChanged";
 
 - (void) writeStatusReg
 {
-	unsigned long data = 0;
+	uint32_t data = 0;
 	data |= veto			 << SLT_VETO;
 	data |= extInhibit		 << SLT_EXTINHIBIT;
 	data |= nopgInhibit		 << SLT_NOPGINHIBIT;
@@ -810,9 +810,9 @@ NSString* ORAugerSLTWriteValueChanged			= @"ORAugerSLTWriteValueChanged";
 	[self write:SLT_REG_ADDRESS(kSLTStatusReg) value:data];
 }
 
-- (unsigned long) readControlReg
+- (uint32_t) readControlReg
 {
-	unsigned long data;
+	uint32_t data;
 
 	data = [self read:SLT_REG_ADDRESS(kSLTControlReg)];
 
@@ -836,7 +836,7 @@ NSString* ORAugerSLTWriteValueChanged			= @"ORAugerSLTWriteValueChanged";
 
 - (void) writeControlReg
 {
-	unsigned long data = 0;
+	uint32_t data = 0;
 	data |= (ledInhibit   & SLT_UPPERLED_MASK)   << SLT_UPPERLED;
 	data |= (ledVeto   & SLT_LOWERLED_MASK)   << SLT_LOWERLED;
 	data |= (triggerSource   & SLT_TRIGGER_MASK)   << SLT_TRIGGER_LOW;
@@ -862,18 +862,18 @@ NSString* ORAugerSLTWriteValueChanged			= @"ORAugerSLTWriteValueChanged";
 	return fpgaVersion;
 }
 
-- (unsigned long long) readDeadTime
+- (uint64_t) readDeadTime
 {
-	unsigned long low  = [self read:SLT_REG_ADDRESS(kSLTDeadTimeLow)];
-	unsigned long high = [self read:SLT_REG_ADDRESS(kSLTDeadTimeHigh)];
-	return ((unsigned long long)high << 32) | low;
+	uint32_t low  = [self read:SLT_REG_ADDRESS(kSLTDeadTimeLow)];
+	uint32_t high = [self read:SLT_REG_ADDRESS(kSLTDeadTimeHigh)];
+	return ((uint64_t)high << 32) | low;
 }
 
-- (unsigned long long) readVetoTime
+- (uint64_t) readVetoTime
 {
-	unsigned long low  = [self read:SLT_REG_ADDRESS(kSLTVetoTimeLow)];
-	unsigned long high = [self read:SLT_REG_ADDRESS(kSLTVetoTimeHigh)];
-	return ((unsigned long long)high << 32) | low;
+	uint32_t low  = [self read:SLT_REG_ADDRESS(kSLTVetoTimeLow)];
+	uint32_t high = [self read:SLT_REG_ADDRESS(kSLTVetoTimeHigh)];
+	return ((uint64_t)high << 32) | low;
 }
 
 - (void) reset

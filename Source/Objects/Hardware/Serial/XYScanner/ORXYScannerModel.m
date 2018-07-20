@@ -175,14 +175,14 @@ NSString* ORXYScannerLock = @"ORXYScannerLock";
             //struct tm* theTimeGMTAsStruct = gmtime(&theTime);
             //time_t ut_time = mktime(theTimeGMTAsStruct);
             
-            unsigned long data[5];
+            uint32_t data[5];
             data[0] = dataId | 5;
             data[1] = ut_time;
             data[2] = (running?1:0)<<16 | ([self uniqueIdNumber]&0x0000fffff);
             
             //encode the position 
             union {
-                long asLong;
+                int32_t asLong;
                 float asFloat;
             }thePosition;
             thePosition.asFloat = [self xyPosition].x;
@@ -192,7 +192,7 @@ NSString* ORXYScannerLock = @"ORXYScannerLock";
             data[4] = thePosition.asLong;
             
             [[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-                                                                object:[NSData dataWithBytes:data length:sizeof(long)*5]];
+                                                                object:[NSData dataWithBytes:data length:sizeof(int32_t)*5]];
         }
     }
 }
@@ -240,12 +240,12 @@ NSString* ORXYScannerLock = @"ORXYScannerLock";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORXYScannerModelPatternChanged object:self];
 }
 
-- (unsigned long) optionMask
+- (uint32_t) optionMask
 {
     return optionMask;
 }
 
-- (void) setOptionMask:(unsigned long)aOptionMask
+- (void) setOptionMask:(uint32_t)aOptionMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setOptionMask:optionMask];
     
@@ -255,14 +255,14 @@ NSString* ORXYScannerLock = @"ORXYScannerLock";
 }
 - (void) setOption:(int)anOption 
 {
-    long aMask = optionMask;
+    int32_t aMask = optionMask;
     aMask |= (0x1L<<anOption);
     [self setOptionMask:aMask];
 }
 
 - (void) clearOption:(int)anOption 
 {
-    long aMask = optionMask;
+    int32_t aMask = optionMask;
     aMask &= ~(0x1L<<anOption);
     [self setOptionMask:aMask];
 }
@@ -633,8 +633,8 @@ NSString* ORXYScannerLock = @"ORXYScannerLock";
 
 
 #pragma mark ***Data Records
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -691,7 +691,7 @@ NSString* ORXYScannerLock = @"ORXYScannerLock";
             }
             else {
                 //couldn't open port...stop the run.
-                NSString* reason = [NSString stringWithFormat:@"XYScanner %lu port could not be opened",[self  uniqueIdNumber]];
+                NSString* reason = [NSString stringWithFormat:@"XYScanner %u port could not be opened",[self  uniqueIdNumber]];
                 
                 [[NSNotificationCenter defaultCenter]
                     postNotificationName:ORRequestRunHalt
@@ -759,7 +759,7 @@ NSString* ORXYScannerLock = @"ORXYScannerLock";
         [self performSelector:@selector(continuePattern) withObject:nil afterDelay:.1];
     }
     else {
-        NSString* reason = [NSString stringWithFormat:@"XYScanner %lu is synced to run but has no valid commands",[self  uniqueIdNumber]];
+        NSString* reason = [NSString stringWithFormat:@"XYScanner %u is synced to run but has no valid commands",[self  uniqueIdNumber]];
 
         [[NSNotificationCenter defaultCenter]
             postNotificationName:ORRequestRunHalt
@@ -796,7 +796,7 @@ NSString* ORXYScannerLock = @"ORXYScannerLock";
                 }
                 else {
                     if([self optionSet:kXYStopRunOption]){
-                            NSString* reason = [NSString stringWithFormat:@"XYScanner %lu port finished pattern",[self  uniqueIdNumber]];
+                            NSString* reason = [NSString stringWithFormat:@"XYScanner %u port finished pattern",[self  uniqueIdNumber]];
                             
                             [[NSNotificationCenter defaultCenter]
                                 postNotificationName:ORRequestRunHalt

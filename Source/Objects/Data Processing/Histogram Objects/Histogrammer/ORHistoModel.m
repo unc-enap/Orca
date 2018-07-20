@@ -111,7 +111,7 @@ static NSString *ORHistoPassThruConnection 	= @"Histogrammer PassThru Connector"
     
     if([self uniqueIdNumber]){
         NSAttributedString* n = [[NSAttributedString alloc] 
-                                initWithString:[NSString stringWithFormat:@"%lu",[self uniqueIdNumber]]
+                                initWithString:[NSString stringWithFormat:@"%u",[self uniqueIdNumber]]
                                     attributes:[NSDictionary dictionaryWithObject:[NSFont labelFontOfSize:12] forKey:NSFontAttributeName]];
         
         [n drawInRect:NSMakeRect(3,[i size].height-17,[i size].width-20,16)];
@@ -424,7 +424,7 @@ static NSString *ORHistoPassThruConnection 	= @"Histogrammer PassThru Connector"
         [self setDataSet:[[[ORDataSet alloc]initWithKey:@"System" guardian:nil] autorelease] ];
     }
 	  
-	long runNumber = -1;
+	int32_t runNumber = -1;
 	if(userInfo){
 		runNumber = [[userInfo objectForKey:kRunNumber] intValue];
 	}

@@ -66,8 +66,8 @@ NSString* ORFec32ModelAdcVoltageStatusChanged		= @"ORFec32ModelAdcVoltageStatusC
 NSString* ORFec32ModelAdcVoltageStatusOfCardChanged	= @"ORFec32ModelAdcVoltageStatusOfCardChanged";
 
 // mask for crates that need updating after Hardware Wizard action
-static unsigned long crateInitMask; // crates that need to be initialized
-static unsigned long cratePedMask;  // crates that need their pedestals set
+static uint32_t crateInitMask; // crates that need to be initialized
+static uint32_t cratePedMask;  // crates that need their pedestals set
 
 static int              sDetectorDbState = 0; // (0=not loaded, 1=loading, 2=loaded (or not), 3=stale (or none))
 static ORPQDetectorDB*  sDetectorDbData = nil;
@@ -93,16 +93,16 @@ static int              sChannelsNotChangedCount = 0;
 
 @interface ORFec32Model (XL2)
 -(BOOL) readVoltagesUsingXL2;
--(short) readVoltageValue:(unsigned long) aMask;
--(BOOL) readCMOSCountsUsingXL2:(BOOL)calcRates channelMask:(unsigned long) aChannelMask;
+-(short) readVoltageValue:(uint32_t) aMask;
+-(BOOL) readCMOSCountsUsingXL2:(BOOL)calcRates channelMask:(uint32_t) aChannelMask;
 @end
 
 @interface ORFec32Model (XL3)
 - (uint32_t) relayChannelMask;
 -(BOOL) parseVoltagesUsingXL3:(VMonResults*)result;
 -(BOOL) readVoltagesUsingXL3;
--(void) readCMOSCountsUsingXL3:(unsigned long)aChannelMask;
--(void) readCMOSRatesUsingXL3:(unsigned long)aChannelMask;
+-(void) readCMOSCountsUsingXL3:(uint32_t)aChannelMask;
+-(void) readCMOSRatesUsingXL3:(uint32_t)aChannelMask;
 @end
 
 @implementation ORFec32Model
@@ -144,7 +144,7 @@ static int              sChannelsNotChangedCount = 0;
 
 - (NSString*) identifier
 {
-    return [NSString stringWithFormat:@"Fec32 (%d,%lu)",[self crateNumber],[self stationNumber]];
+    return [NSString stringWithFormat:@"Fec32 (%d,%u)",(int)[self crateNumber],(int)[self stationNumber]];
 }
 
 - (NSComparisonResult)	slotCompare:(id)otherCard
@@ -154,12 +154,12 @@ static int              sChannelsNotChangedCount = 0;
 
 #pragma mark ***Accessors
 
-- (long) cmosRate:(short)index
+- (int32_t) cmosRate:(short)index
 {
     return cmosRate[index];
 }
 
-- (void) setCmosRate:(short)index withValue:(long)aCmosRate
+- (void) setCmosRate:(short)index withValue:(int32_t)aCmosRate
 {
     cmosRate[index] = aCmosRate;
 
@@ -273,12 +273,12 @@ static int              sChannelsNotChangedCount = 0;
 	else return NO;
 }
 
-- (unsigned long) pedEnabledMask
+- (uint32_t) pedEnabledMask
 {
 	return pedEnabledMask;
 }
 
-- (void) setPedEnabledMask:(unsigned long) aMask
+- (void) setPedEnabledMask:(uint32_t) aMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setPedEnabledMask:pedEnabledMask];
     pedEnabledMask = aMask;
@@ -296,12 +296,12 @@ static int              sChannelsNotChangedCount = 0;
 }
 
 #pragma mark Sequencer enable/disable methods
-- (unsigned long) seqDisabledMask
+- (uint32_t) seqDisabledMask
 {
 	return seqDisabledMask;
 }
 
-- (void) setSeqDisabledMask:(unsigned long) aMask
+- (void) setSeqDisabledMask:(uint32_t) aMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setSeqDisabledMask:seqDisabledMask];
     seqDisabledMask = aMask;
@@ -315,7 +315,7 @@ static int              sChannelsNotChangedCount = 0;
 
 - (void) setSeq:(short)chan enabled:(short)state
 {
-    unsigned long aMask = seqDisabledMask;
+    uint32_t aMask = seqDisabledMask;
     if(state) aMask &= ~(1<<chan);
     else      aMask |= (1<<chan);
     [self setSeqDisabledMask:aMask];
@@ -326,12 +326,12 @@ static int              sChannelsNotChangedCount = 0;
     return (seqDisabledMask & (1<<chan))!=0;
 }
 
-- (unsigned long) seqPendingDisabledMask
+- (uint32_t) seqPendingDisabledMask
 {
     return seqPendingDisabledMask;
 }
 
-- (void) setSeqPendingDisabledMask:(unsigned long) aMask
+- (void) setSeqPendingDisabledMask:(uint32_t) aMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setSeqPendingDisabledMask:seqPendingDisabledMask];
     seqPendingDisabledMask = aMask;
@@ -350,26 +350,26 @@ static int              sChannelsNotChangedCount = 0;
 
 - (void) togglePendingSeq:(short)chan
 {
-    unsigned long aMask = seqPendingDisabledMask;
+    uint32_t aMask = seqPendingDisabledMask;
     aMask ^= (1<<chan);
     [self setSeqPendingDisabledMask:aMask];
 }
 
 - (void) makeAllSeqPendingStatesSameAs:(short)chan
 {
-    unsigned long newMask;
+    uint32_t newMask;
     if((seqPendingDisabledMask & (1<<chan))==0) newMask = 0x00000000;
     else                                        newMask = 0xFFFFFFFF;
     [self setSeqPendingDisabledMask:newMask];
 }
 
 #pragma mark Trigger 20ns enable/disable methods
-- (unsigned long) trigger20nsDisabledMask
+- (uint32_t) trigger20nsDisabledMask
 {
     return trigger20nsDisabledMask;
 }
 
-- (void) setTrigger20nsDisabledMask:(unsigned long) aMask
+- (void) setTrigger20nsDisabledMask:(uint32_t) aMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setTrigger20nsDisabledMask:trigger20nsDisabledMask];
     trigger20nsDisabledMask = aMask;
@@ -388,7 +388,7 @@ static int              sChannelsNotChangedCount = 0;
 
 - (void) setTrigger20ns:(short) chan disabled:(short)state
 {
-    unsigned long aMask = trigger20nsDisabledMask;
+    uint32_t aMask = trigger20nsDisabledMask;
     if(state) aMask |= (1<<chan);
     else      aMask &= ~(1<<chan);
     [self setTrigger20nsDisabledMask:aMask];
@@ -396,18 +396,18 @@ static int              sChannelsNotChangedCount = 0;
 
 - (void) setTrigger20ns:(short) chan enabled:(short)state
 {
-    unsigned long aMask = trigger20nsDisabledMask;
+    uint32_t aMask = trigger20nsDisabledMask;
     if(state) aMask &= ~(1<<chan);
     else      aMask |= (1<<chan);
     [self setTrigger20nsDisabledMask:aMask];
 }
 
-- (unsigned long) trigger20nsPendingDisabledMask
+- (uint32_t) trigger20nsPendingDisabledMask
 {
     return trigger20nsPendingDisabledMask;
 }
 
-- (void) setTrigger20nsPendingDisabledMask:(unsigned long) aMask
+- (void) setTrigger20nsPendingDisabledMask:(uint32_t) aMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setTrigger20nsPendingDisabledMask:trigger20nsPendingDisabledMask];
     trigger20nsPendingDisabledMask = aMask;
@@ -426,26 +426,26 @@ static int              sChannelsNotChangedCount = 0;
 
 - (void) togglePendingTrigger20ns:(short)chan
 {
-    unsigned long aMask = trigger20nsPendingDisabledMask;
+    uint32_t aMask = trigger20nsPendingDisabledMask;
     aMask ^= (1<<chan);
     [self setTrigger20nsPendingDisabledMask:aMask];
 }
 
 - (void) makeAll20nsPendingStatesSameAs:(short)chan
 {
-    unsigned long newMask;
+    uint32_t newMask;
     if((trigger20nsPendingDisabledMask & (1<<chan))==0) newMask = 0x00000000;
     else                                                newMask = 0xFFFFFFFF;
     [self setTrigger20nsPendingDisabledMask:newMask];
 }
 
 #pragma mark Trigger 100ns enable/disable methods
-- (unsigned long) trigger100nsDisabledMask
+- (uint32_t) trigger100nsDisabledMask
 {
     return trigger100nsDisabledMask;
 }
 
-- (void) setTrigger100nsDisabledMask:(unsigned long) aMask
+- (void) setTrigger100nsDisabledMask:(uint32_t) aMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setTrigger100nsDisabledMask:trigger100nsDisabledMask];
     trigger100nsDisabledMask = aMask;
@@ -464,7 +464,7 @@ static int              sChannelsNotChangedCount = 0;
 
 - (void) setTrigger100ns:(short) chan disabled:(short)state
 {
-    unsigned long aMask = trigger100nsDisabledMask;
+    uint32_t aMask = trigger100nsDisabledMask;
     if(state) aMask |= (1<<chan);
     else      aMask &= ~(1<<chan);
     [self setTrigger100nsDisabledMask:aMask];
@@ -472,18 +472,18 @@ static int              sChannelsNotChangedCount = 0;
 
 - (void) setTrigger100ns:(short) chan enabled:(short)state
 {
-    unsigned long aMask = trigger100nsDisabledMask;
+    uint32_t aMask = trigger100nsDisabledMask;
     if(state) aMask &= ~(1<<chan);
     else      aMask |= (1<<chan);
     [self setTrigger100nsDisabledMask:aMask];
 }
 
-- (unsigned long) trigger100nsPendingDisabledMask
+- (uint32_t) trigger100nsPendingDisabledMask
 {
     return trigger100nsPendingDisabledMask;
 }
 
-- (void) setTrigger100nsPendingDisabledMask:(unsigned long) aMask
+- (void) setTrigger100nsPendingDisabledMask:(uint32_t) aMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setTrigger100nsPendingDisabledMask:trigger100nsPendingDisabledMask];
     trigger100nsPendingDisabledMask = aMask;
@@ -501,24 +501,24 @@ static int              sChannelsNotChangedCount = 0;
 
 - (void) togglePendingTrigger100ns:(short)chan
 {
-    unsigned long aMask = trigger100nsPendingDisabledMask;
+    uint32_t aMask = trigger100nsPendingDisabledMask;
     aMask ^= (1<<chan);
     [self setTrigger100nsPendingDisabledMask:aMask];
 }
 - (void) makeAll100nsPendingStatesSameAs:(short)chan
 {
-    unsigned long newMask;
+    uint32_t newMask;
     if((trigger100nsPendingDisabledMask & (1<<chan))==0) newMask = 0x00000000;
     else                                                 newMask = 0xFFFFFFFF;
     [self setTrigger100nsPendingDisabledMask:newMask];
 }
 #pragma mark CMOS enable/disable methods
-- (unsigned long) cmosReadDisabledMask
+- (uint32_t) cmosReadDisabledMask
 {
     return cmosReadDisabledMask;
 }
 
-- (void) setCmosReadDisabledMask:(unsigned long) aMask
+- (void) setCmosReadDisabledMask:(uint32_t) aMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setCmosReadDisabledMask:cmosReadDisabledMask];
     cmosReadDisabledMask = aMask;
@@ -537,7 +537,7 @@ static int              sChannelsNotChangedCount = 0;
 
 - (void) setCmosRead:(short) chan disabled:(short)state
 {
-    unsigned long aMask = cmosReadDisabledMask;
+    uint32_t aMask = cmosReadDisabledMask;
     if(state) cmosReadDisabledMask |= (1<<chan);
     else      cmosReadDisabledMask &= ~(1<<chan);
     [self setCmosReadDisabledMask:aMask];
@@ -545,18 +545,18 @@ static int              sChannelsNotChangedCount = 0;
 
 - (void) setCmosRead:(short) chan enabled:(short)state
 {
-    unsigned long aMask = cmosReadDisabledMask;
+    uint32_t aMask = cmosReadDisabledMask;
     if(state) aMask &= ~(1<<chan);
     else      aMask |= (1<<chan);
     [self setCmosReadDisabledMask:aMask];
 }
 
-- (unsigned long) cmosReadPendingDisabledMask
+- (uint32_t) cmosReadPendingDisabledMask
 {
     return cmosReadPendingDisabledMask;
 }
 
-- (void) setCmosReadPendingDisabledMask:(unsigned long) aMask
+- (void) setCmosReadPendingDisabledMask:(uint32_t) aMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setCmosReadPendingDisabledMask:cmosReadPendingDisabledMask];
     cmosReadPendingDisabledMask = aMask;
@@ -574,14 +574,14 @@ static int              sChannelsNotChangedCount = 0;
 
 - (void) togglePendingCmosRead:(short)chan
 {
-    unsigned long aMask = cmosReadPendingDisabledMask;
+    uint32_t aMask = cmosReadPendingDisabledMask;
     aMask ^= (1<<chan);
     [self setCmosReadPendingDisabledMask:aMask];
 }
 
 - (void) makeAllCmosPendingStatesSameAs:(short)chan
 {
-    unsigned long newMask;
+    uint32_t newMask;
     if((cmosReadPendingDisabledMask & (1<<chan))==0) newMask = 0x00000000;
     else                                             newMask = 0xFFFFFFFF;
     [self setCmosReadPendingDisabledMask:newMask];
@@ -609,7 +609,7 @@ static int              sChannelsNotChangedCount = 0;
     [[self undoManager] enableUndoRegistration];
 }
 
-- (unsigned long) boardIDAsInt
+- (uint32_t) boardIDAsInt
 {
     return strtoul([[self boardID] UTF8String], NULL, 16);
 }
@@ -687,13 +687,13 @@ static int              sChannelsNotChangedCount = 0;
     }
 }
 
-- (unsigned long) onlineMask
+- (uint32_t) onlineMask
 {
 	return onlineMask;
 }
 
 // set online mask and init the crate registers
-- (void) setOnlineMask:(unsigned long) aMask
+- (void) setOnlineMask:(uint32_t) aMask
 {
     [self setOnlineMaskNoInit:aMask];
     [[[self guardian] adapter] loadHardware];
@@ -701,7 +701,7 @@ static int              sChannelsNotChangedCount = 0;
 }
 
 // set online mask but don't do a crate init
-- (void) setOnlineMaskNoInit:(unsigned long) aMask
+- (void) setOnlineMaskNoInit:(uint32_t) aMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setOnlineMask:onlineMask];
     onlineMask = aMask;
@@ -1131,64 +1131,64 @@ static int              sChannelsNotChangedCount = 0;
 	[[self xl2] executeCommandList:aList];		
 }
 
-- (unsigned long) fec32RegAddress:(unsigned long)aRegOffset
+- (uint32_t) fec32RegAddress:(uint32_t)aRegOffset
 {
 	return [[self guardian] registerBaseAddress] + aRegOffset;
 }
 
-- (id) writeToFec32RegisterCmd:(unsigned long) aRegister value:(unsigned long) aBitPattern
+- (id) writeToFec32RegisterCmd:(uint32_t) aRegister value:(uint32_t) aBitPattern
 {
-	unsigned long theAddress = [self fec32RegAddress:aRegister];
+	uint32_t theAddress = [self fec32RegAddress:aRegister];
 	return [[self xl2] writeHardwareRegisterCmd:theAddress value:aBitPattern];		
 }
 
-- (id) readFromFec32RegisterCmd:(unsigned long) aRegister
+- (id) readFromFec32RegisterCmd:(uint32_t) aRegister
 {
-	unsigned long theAddress = [self fec32RegAddress:aRegister];
+	uint32_t theAddress = [self fec32RegAddress:aRegister];
 	return [[self xl2] readHardwareRegisterCmd:theAddress]; 		
 }
 
-- (id) delayCmd:(unsigned long) milliSeconds
+- (id) delayCmd:(uint32_t) milliSeconds
 {
 	return [[self xl2] delayCmd:milliSeconds]; 		
 }
 								
-- (void) writeToFec32Register:(unsigned long) aRegister value:(unsigned long) aBitPattern
+- (void) writeToFec32Register:(uint32_t) aRegister value:(uint32_t) aBitPattern
 {
-	unsigned long theAddress = [self fec32RegAddress:aRegister];
+	uint32_t theAddress = [self fec32RegAddress:aRegister];
 	[[self xl2] writeHardwareRegister:theAddress value:aBitPattern];		
 }
 
-- (unsigned long) readFromFec32Register:(unsigned long) aRegister
+- (uint32_t) readFromFec32Register:(uint32_t) aRegister
 {
-	unsigned long theAddress = [self fec32RegAddress:aRegister];
+	uint32_t theAddress = [self fec32RegAddress:aRegister];
 	return [[self xl2] readHardwareRegister:theAddress]; 		
 }
-- (unsigned long) readFromFec32Register:(unsigned long) aRegister offset:(unsigned long)anO
+- (uint32_t) readFromFec32Register:(uint32_t) aRegister offset:(uint32_t)anO
 {
-	unsigned long theAddress = [self fec32RegAddress:aRegister];
+	uint32_t theAddress = [self fec32RegAddress:aRegister];
 	return [[self xl2] readHardwareRegister:theAddress]; 		
 }
-- (void) setFec32RegisterBits:(unsigned long) aRegister bitMask:(unsigned long) bits_to_set
+- (void) setFec32RegisterBits:(uint32_t) aRegister bitMask:(uint32_t) bits_to_set
 {
 	//set some bits in a register without destroying other bits
-	unsigned long old_value = [self readFromFec32Register:aRegister];
-	unsigned long new_value = (old_value & ~bits_to_set) | bits_to_set;
+	uint32_t old_value = [self readFromFec32Register:aRegister];
+	uint32_t new_value = (old_value & ~bits_to_set) | bits_to_set;
 	[self writeToFec32Register:aRegister value:new_value]; 		
 }
 
-- (void) clearFec32RegisterBits:(unsigned long) aRegister bitMask:(unsigned long) bits_to_clear
+- (void) clearFec32RegisterBits:(uint32_t) aRegister bitMask:(uint32_t) bits_to_clear
 {
 	//Clear some bits in a register without destroying other bits
-	unsigned long old_value = [self readFromFec32Register:aRegister];
-	unsigned long new_value = (old_value & ~bits_to_clear);
+	uint32_t old_value = [self readFromFec32Register:aRegister];
+	uint32_t new_value = (old_value & ~bits_to_clear);
 	[self writeToFec32Register:aRegister value:new_value]; 		
 }
 
 
-- (void) boardIDOperation:(unsigned long)theDataValue boardSelectValue:(unsigned long) boardSelectVal beginIndex:(short) beginIndex
+- (void) boardIDOperation:(uint32_t)theDataValue boardSelectValue:(uint32_t) boardSelectVal beginIndex:(short) beginIndex
 {
-	unsigned long writeValue = 0UL;
+	uint32_t writeValue = 0UL;
 	// load and clock in the instruction code
 
 	
@@ -1276,11 +1276,11 @@ static int              sChannelsNotChangedCount = 0;
 {
 	@try {	
 		[[self xl2] select:self];
-		unsigned long theOldCSRValue = [self readFromFec32Register:FEC32_GENERAL_CS_REG];
+		uint32_t theOldCSRValue = [self readFromFec32Register:FEC32_GENERAL_CS_REG];
 		// create new crate number in proper bit positions
-		unsigned long crateNumber = (unsigned long) ( ( [self crateNumber] << FEC32_CSR_CRATE_BITSIFT ) & FEC32_CSR_CRATE_ADD );
+		uint32_t crateNumber = (uint32_t) ( ( [self crateNumber] << FEC32_CSR_CRATE_BITSIFT ) & FEC32_CSR_CRATE_ADD );
 		// clear old crate number, then mask in new.
-		unsigned long theNewCSRValue = crateNumber | (theOldCSRValue & ~FEC32_CSR_CRATE_ADD);
+		uint32_t theNewCSRValue = crateNumber | (theOldCSRValue & ~FEC32_CSR_CRATE_ADD);
 		[self writeToFec32Register:FEC32_GENERAL_CS_REG value:theNewCSRValue];
 		[[self xl2] deselectCards];
 	}
@@ -1344,7 +1344,7 @@ static int              sChannelsNotChangedCount = 0;
 		[[self xl2] select:self];
 		selected = YES;
 		//Reset the fifo 
-		unsigned long theSequencerDisableMask = 0;
+		uint32_t theSequencerDisableMask = 0;
 		//set the specified offline channels to max threshold
 		short chan;
 		for(chan=0;chan<32;chan++){
@@ -1461,7 +1461,7 @@ static int              sChannelsNotChangedCount = 0;
 		[self writeToFec32Register:FEC32_CMOS_CHIP_DISABLE_REG value:seqDisabledMask];
 		
 		//MAH 7/2/98
-		unsigned long value = [self readFromFec32Register:FEC32_CMOS_LGISEL_SET_REG];
+		uint32_t value = [self readFromFec32Register:FEC32_CMOS_LGISEL_SET_REG];
 		if(qllEnabled)	value |= 0x00000001;
 		else			value &= 0xfffffffe;	// JR 1999/06/04 Changed from 0xfffffff7
 		[self writeToFec32Register:FEC32_CMOS_LGISEL_SET_REG value:value];
@@ -1489,7 +1489,7 @@ static int              sChannelsNotChangedCount = 0;
 		selected = YES;
 		
 		ORCommandList* aList = [ORCommandList commandList];
-		unsigned long word;
+		uint32_t word;
 		//shift in the channel selection first 5 bits
 		short aBit;
 		for(aBit=4; aBit >=0 ; aBit--) {
@@ -1591,7 +1591,7 @@ static int              sChannelsNotChangedCount = 0;
 //PH 03/09/98. Read the CMOS totals counter and calculate rates if calcRates is true
 // otherwise sets rates to zero.  a negative rate indicates a CMOS or VME read error.
 // returns true if rates were calculated
-- (BOOL) readCMOSCounts:(BOOL)calcRates channelMask:(unsigned long) aChannelMask
+- (BOOL) readCMOSCounts:(BOOL)calcRates channelMask:(uint32_t) aChannelMask
 {
     
     if (calcRates) {
@@ -1607,11 +1607,11 @@ static int              sChannelsNotChangedCount = 0;
 
 //XL3 reads the counts for half the crate and pushes them here
 //returns YES if the cmos rates were updated
-- (BOOL) processCMOSCounts:(unsigned long*)rates calcRates:(BOOL)aCalcRates withChannelMask:(unsigned long) aChannelMask
+- (BOOL) processCMOSCounts:(uint32_t*)rates calcRates:(BOOL)aCalcRates withChannelMask:(uint32_t) aChannelMask
 {
     
-    long		   	theRate = kCMOSRateUnmeasured;
-	unsigned long  	theCount;
+    int32_t		   	theRate = kCMOSRateUnmeasured;
+	uint32_t  	theCount;
 	
 	NSDate* thisTime = [[NSDate alloc] init];
 	NSTimeInterval timeDiff = [thisTime timeIntervalSinceDate:cmosCountTimeStamp];
@@ -1631,7 +1631,7 @@ static int              sChannelsNotChangedCount = 0;
     [thisTime release];
     thisTime = nil;
 	
-	//unsigned long theOnlineMask = [self onlineMask];
+	//uint32_t theOnlineMask = [self onlineMask];
     //add disabled channels
     unsigned char ch;
     for (ch=0; ch<32; ch++) {
@@ -1656,21 +1656,21 @@ static int              sChannelsNotChangedCount = 0;
     return calcRates;
 }
 
-- (unsigned long) channelsWithCMOSRateHigherThan:(unsigned long)cmosRateLimit
+- (uint32_t) channelsWithCMOSRateHigherThan:(uint32_t)cmosRateLimit
 {
     //todo: add a goodforcmosrate mask on top
     unsigned char ch;
-    unsigned long count = 0;
+    uint32_t count = 0;
     for (ch=0; ch<32; ch++) {
         if (cmosRate[ch] > cmosRateLimit) count++;
     }
     return count;
 }
 
-- (unsigned long) channelsWithErrorCMOSRate
+- (uint32_t) channelsWithErrorCMOSRate
 {
     unsigned char ch;
-    unsigned long count = 0;
+    uint32_t count = 0;
     for (ch=0; ch<32; ch++) {
         if (cmosRate[ch] < 0) count++;
     }
@@ -1891,7 +1891,7 @@ static int              sChannelsNotChangedCount = 0;
     } else if (sDetectorDbData) {
         NSLog(@"Error reloading detector database\n");
         s = [NSString stringWithFormat:@"Error reloading detector database!\n\nContinue with stale data?"];
-        m = [NSString stringWithFormat:@"This should be OK as long as the detector has not changed"];
+        m = [NSString stringWithFormat:@"This should be OK as int32_t as the detector has not changed"];
         w = [NSString stringWithFormat:@"Running Hardware Wizard with stale database!\n"];
     } else {
         s = [NSString stringWithFormat:@"Error loading detector database!\n\nContinue anyway?"];
@@ -1982,9 +1982,9 @@ static int              sChannelsNotChangedCount = 0;
     // (note: we do this even if the database is stale)
     PQ_FEC *fec = [sDetectorDbData getPmthv:(int)[self stationNumber] crate:[self crateNumber]];
     if (fec) {
-        unsigned long notChanged = 0;
+        uint32_t notChanged = 0;
         // sequencer must be disabled on channels with HV disabled
-        unsigned long wanted = seqDisabledMask;
+        uint32_t wanted = seqDisabledMask;
         seqDisabledMask |= (seqDisabledMask ^ startSeqDisabledMask) & fec->hvDisabled;
         notChanged |= (wanted ^ seqDisabledMask);
         // pedestals must be disabled on channels with HV disabled
@@ -2012,32 +2012,32 @@ static int              sChannelsNotChangedCount = 0;
     }
     // go ahead and "officially" change the masks, sending the appropriate notifications
     if (seqDisabledMask != startSeqDisabledMask) {
-        unsigned long mask = seqDisabledMask;
+        uint32_t mask = seqDisabledMask;
         seqDisabledMask = startSeqDisabledMask;
         [self setSeqDisabledMask: mask];
         cardChangedFlag = true;
     }
     if (pedEnabledMask != startPedEnabledMask) {
-        unsigned long mask = pedEnabledMask;
+        uint32_t mask = pedEnabledMask;
         pedEnabledMask = startPedEnabledMask;
         [self setPedEnabledMask: mask];
         // pedestals are set differently, not by a crate init, so handle these separately
         cratePedMask |= (1UL << [self crateNumber]);
     }
     if (trigger20nsDisabledMask != startTrigger20nsDisabledMask) {
-        unsigned long mask = trigger20nsDisabledMask;
+        uint32_t mask = trigger20nsDisabledMask;
         trigger20nsDisabledMask = startTrigger20nsDisabledMask;
         [self setTrigger20nsDisabledMask: mask];
         cardChangedFlag = true;
     }
     if (trigger100nsDisabledMask != startTrigger100nsDisabledMask) {
-        unsigned long mask = trigger100nsDisabledMask;
+        uint32_t mask = trigger100nsDisabledMask;
         trigger100nsDisabledMask = startTrigger100nsDisabledMask;
         [self setTrigger100nsDisabledMask: mask];
         cardChangedFlag = true;
     }
     if (onlineMask != startOnlineMask) {
-        unsigned long mask = onlineMask;
+        uint32_t mask = onlineMask;
         onlineMask = startOnlineMask;
         [self setOnlineMaskNoInit: mask];
         cardChangedFlag = true;
@@ -2155,7 +2155,7 @@ static int              sChannelsNotChangedCount = 0;
 		[[self xl2] select:self];
 		
 		short channel_index;
-		unsigned long registerAddress=0;
+		uint32_t registerAddress=0;
 		unsigned short whichChannels=0;
 		for( channel_index = 0; channel_index < 2; channel_index++){
 			
@@ -2219,13 +2219,13 @@ static int              sChannelsNotChangedCount = 0;
 			
 			int theChannel;
 			for (theChannel=0; theChannel<16; ++theChannel) {		// verify each of the 16 channels that we just loaded
-				unsigned long actualShiftReg;
+				uint32_t actualShiftReg;
 				short retry_read;
 				for (retry_read=0; retry_read<kMaxCmosReadAttempts; ++retry_read) {
 					actualShiftReg = [self readFromFec32Register:FEC32_CMOS_SHIFT_REG_OFFSET + 32*(theChannel+16*channel_index)];	// read back the CMOS shift register
 					if( !(actualShiftReg & 0x80000000) ) break;		//done if busy bit not set. Otherwise: busy, so try to read again
 				}
-				unsigned long expectedShiftReg = ((cmosShiftRegisterValue[theChannel].cmos_shift_item[TAC_TRIM1]   & 0x0fUL) << 20) |
+				uint32_t expectedShiftReg = ((cmosShiftRegisterValue[theChannel].cmos_shift_item[TAC_TRIM1]   & 0x0fUL) << 20) |
 				((cmosShiftRegisterValue[theChannel].cmos_shift_item[TAC_TRIM0]   & 0x0fUL) << 16) |
 				((cmosShiftRegisterValue[theChannel].cmos_shift_item[NS100_DELAY] & 0x3fUL) << 10) |
 				((cmosShiftRegisterValue[theChannel].cmos_shift_item[NS20_MASK]   & 0x01UL) <<  9) |
@@ -2245,7 +2245,7 @@ static int              sChannelsNotChangedCount = 0;
 					// verification error after maximum number of retries
 					NSLog(@"Error verifying CMOS Shift Register for Crate %d, Card %d, Channel %d:\n",
 						  [self crateNumber], [self stationNumber], theChannel + 16 * channel_index);
-					unsigned long badBits = (actualShiftReg ^ expectedShiftReg);
+					uint32_t badBits = (actualShiftReg ^ expectedShiftReg);
 					if (actualShiftReg == 0UL) {
 						NSLog(@"  - all shift register bits read back as zero\n");
 					} 
@@ -2285,7 +2285,7 @@ static int              sChannelsNotChangedCount = 0;
 	// bit_mask_start : the number of bits to peel off from cmosRegItem
 	for(bit_mask = bit_mask_start; bit_mask >= 0; bit_mask--){
 		
-		unsigned long writeValue = 0UL;
+		uint32_t writeValue = 0UL;
 		short channel_index;
 		for(channel_index = 0; channel_index < 16; channel_index++){
 			if ( cmosShiftRegisterValue[channel_index].cmos_shift_item[cmosRegItem] & (1UL << bit_mask) ) {
@@ -2314,7 +2314,7 @@ static int              sChannelsNotChangedCount = 0;
 	// bit_mask_start : the number of bits to peel off from cmosRegItem
 	for(bit_mask = bit_mask_start; bit_mask >= 0; bit_mask--){
 		
-		unsigned long writeValue = 0UL;
+		uint32_t writeValue = 0UL;
 		short channel_index;
 		for(channel_index = 0; channel_index < 16; channel_index++){
 			if ( cmosShiftRegisterValue[channel_index].cmos_shift_item[cmosRegItem] & (1UL << bit_mask) ) {
@@ -2389,11 +2389,11 @@ static int              sChannelsNotChangedCount = 0;
 - (void) loadAllDacsUsingSBC
 {
 	//-------------- variables -----------------
-	unsigned long	i,j,k;								
+	uint32_t	i,j,k;								
 	short			theIndex;
 	const short		numChannels = 8;
-	unsigned long	writeValue  = 0;
-	unsigned long	dacValues[8][17];
+	uint32_t	writeValue  = 0;
+	uint32_t	dacValues[8][17];
 	//------------------------------------------
 	
 	NSLog(@"Setting all DACs for FEC32 (%d,%d)....\n", [self crateNumber],[self stationNumber]);
@@ -2488,7 +2488,7 @@ static int              sChannelsNotChangedCount = 0;
 						if ( (cIndex - 7)%2 == 0)	{
 							theIndex = ( (cIndex - 7) / 2 );
 							
-							unsigned long theGain;
+							uint32_t theGain;
 							if (rIndex/4)	theGain = 1;
 							else			theGain = 0;
 							dacValues[rIndex][cIndex]	= [dc[theIndex] vb:rIndex%4    egain:theGain];
@@ -2551,10 +2551,10 @@ static int              sChannelsNotChangedCount = 0;
 - (NSString*) performBoardIDReadUsingSBC:(short) boardIndex
 {
 	unsigned short 	dataValue = 0;
-	unsigned long	writeValue = 0UL;
-	unsigned long	theRegister = BOARD_ID_REG_NUMBER;
+	uint32_t	writeValue = 0UL;
+	uint32_t	theRegister = BOARD_ID_REG_NUMBER;
 	// first select the board (XL2 must already be selected)
-	unsigned long boardSelectVal = 0;
+	uint32_t boardSelectVal = 0;
 	boardSelectVal |= (1UL << boardIndex);
 	
 	ORCommandList* aList = [ORCommandList commandList];		//start a command list.
@@ -2565,7 +2565,7 @@ static int              sChannelsNotChangedCount = 0;
 	// load and clock in the first 9 bits instruction code and register address
 	//[self boardIDOperation:(BOARD_ID_READ | theRegister) boardSelectValue:boardSelectVal beginIndex: 8];
 	//moved here so we could combine all the commands into one list for speed.
-	unsigned long theDataValue = (BOARD_ID_READ | theRegister);
+	uint32_t theDataValue = (BOARD_ID_READ | theRegister);
 	short index;
 	for (index = 8; index >= 0; index--){
 		if ( theDataValue & (1U << index) ) writeValue = (boardSelectVal | BOARD_ID_DI);
@@ -2594,7 +2594,7 @@ static int              sChannelsNotChangedCount = 0;
 	
 	//OK, assemble the result
 	for (index = 15; index >= 0; index--){
-		long readValue = [aList longValueForCmd:cmdRef[index]];
+		int32_t readValue = [aList longValueForCmd:cmdRef[index]];
 		if ( readValue & BOARD_ID_DO)dataValue |= (1U << index);
 	}
 	
@@ -2607,11 +2607,11 @@ static int              sChannelsNotChangedCount = 0;
 - (void) loadAllDacsUsingLocalAdapter
 {
 	//-------------- variables -----------------
-	unsigned long	i,j,k;								
+	uint32_t	i,j,k;								
 	short			theIndex;
 	const short		numChannels = 8;
-	unsigned long	writeValue  = 0;
-	unsigned long	dacValues[8][17];
+	uint32_t	writeValue  = 0;
+	uint32_t	dacValues[8][17];
 	//------------------------------------------
 	
 	NSLog(@"Setting all DACs for FEC32 (%d,%d)....\n", [self crateNumber],[self stationNumber]);
@@ -2693,7 +2693,7 @@ static int              sChannelsNotChangedCount = 0;
 						if ( (cIndex - 7)%2 == 0)	{
 							theIndex = ( (cIndex - 7) / 2 );
 							
-							unsigned long theGain;
+							uint32_t theGain;
 							if (rIndex/4)	theGain = 1;
 							else			theGain = 0;
 							dacValues[rIndex][cIndex]	= [dc[theIndex] vb:rIndex%4    egain:theGain];
@@ -2752,10 +2752,10 @@ static int              sChannelsNotChangedCount = 0;
 - (NSString*) performBoardIDReadUsingLocalAdapter:(short) boardIndex
 {
 	unsigned short 	dataValue = 0;
-	unsigned long	writeValue = 0UL;
-	unsigned long	theRegister = BOARD_ID_REG_NUMBER;
+	uint32_t	writeValue = 0UL;
+	uint32_t	theRegister = BOARD_ID_REG_NUMBER;
 	// first select the board (XL2 must already be selected)
-	unsigned long boardSelectVal = 0;
+	uint32_t boardSelectVal = 0;
 	boardSelectVal |= (1UL << boardIndex);
 	
 	[self writeToFec32Register:FEC32_BOARD_ID_REG value:boardSelectVal];
@@ -2764,7 +2764,7 @@ static int              sChannelsNotChangedCount = 0;
 	// load and clock in the first 9 bits instruction code and register address
 	//[self boardIDOperation:(BOARD_ID_READ | theRegister) boardSelectValue:boardSelectVal beginIndex: 8];
 	//moved here so we could combine all the commands into one list for speed.
-	unsigned long theDataValue = (BOARD_ID_READ | theRegister);
+	uint32_t theDataValue = (BOARD_ID_READ | theRegister);
 	short index;
 	for (index = 8; index >= 0; index--){
 		if (theDataValue & (1U << index))	writeValue = (boardSelectVal | BOARD_ID_DI);
@@ -2777,7 +2777,7 @@ static int              sChannelsNotChangedCount = 0;
 	// now read the data value; 17 reads, the last data bit is a dummy bit
 	writeValue = boardSelectVal;
 	
-	unsigned long cmdRef[16];
+	uint32_t cmdRef[16];
 	for (index = 15; index >= 0; index--){
 		[self writeToFec32Register:FEC32_BOARD_ID_REG value:writeValue];
 		[self writeToFec32Register:FEC32_BOARD_ID_REG value:(writeValue | BOARD_ID_SK)];	// now clock in value
@@ -2791,7 +2791,7 @@ static int              sChannelsNotChangedCount = 0;
 		
 	//OK, assemble the result
 	for (index = 15; index >= 0; index--){
-		long readValue = cmdRef[index];
+		int32_t readValue = cmdRef[index];
 		if (readValue & BOARD_ID_DO) dataValue |= (1U << index);
 	}
 	
@@ -2847,7 +2847,7 @@ static int              sChannelsNotChangedCount = 0;
 
 const short kVoltageADCMaximumAttempts = 10;
 
--(short) readVoltageValue:(unsigned long) aMask
+-(short) readVoltageValue:(uint32_t) aMask
 {
 	short theValue = -1;
 	
@@ -2867,7 +2867,7 @@ const short kVoltageADCMaximumAttempts = 10;
 		[self executeCommandList:aList];
         
 		//pull out the result
-		unsigned long adcReadValue = [aList longValueForCmd:adcValueCmdIndex];
+		uint32_t adcReadValue = [aList longValueForCmd:adcValueCmdIndex];
 		if(adcReadValue & 0x100UL){
 			theValue = adcReadValue & 0x000000ff; //keep only the lowest 8 bits.
 		}
@@ -2877,11 +2877,11 @@ const short kVoltageADCMaximumAttempts = 10;
 	return theValue;
 }
 
-- (BOOL) readCMOSCountsUsingXL2:(BOOL)calcRates channelMask:(unsigned long) aChannelMask
+- (BOOL) readCMOSCountsUsingXL2:(BOOL)calcRates channelMask:(uint32_t) aChannelMask
 {
-	long		   	theRate = kCMOSRateUnmeasured;
-	long		   	maxRate = kCMOSRateUnmeasured;
-	unsigned long  	theCount;
+	int32_t		   	theRate = kCMOSRateUnmeasured;
+	int32_t		   	maxRate = kCMOSRateUnmeasured;
+	uint32_t  	theCount;
 	unsigned short 	channel;
 	unsigned short	maxRateChannel = 0;
 	
@@ -2902,7 +2902,7 @@ const short kVoltageADCMaximumAttempts = 10;
     [thisTime release];
     thisTime = nil;
 	
-	//unsigned long theOnlineMask = [self onlineMask];
+	//uint32_t theOnlineMask = [self onlineMask];
 	
 	BOOL selected = NO;
 	@try {	
@@ -2910,7 +2910,7 @@ const short kVoltageADCMaximumAttempts = 10;
 		selected = YES;
 		
 		ORCommandList* aList = [ORCommandList commandList];
-		unsigned long resultIndex[32];
+		uint32_t resultIndex[32];
 		for (channel=0; channel<32; ++channel) {
 			if(aChannelMask & (1UL<<channel) && ![self cmosReadDisabled:channel]){
 				resultIndex[channel] = [aList addCommand:[self readFromFec32RegisterCmd:FEC32_CMOS_TOTALS_COUNTER_OFFSET+32*channel]];
@@ -3021,7 +3021,7 @@ const short kVoltageADCMaximumAttempts = 10;
     return statusChanged;
 }
 
--(void) readCMOSCountsUsingXL3:(unsigned long)aChannelMask
+-(void) readCMOSCountsUsingXL3:(uint32_t)aChannelMask
 {
     CheckTotalCountArgs args;
     CheckTotalCountResults results;
@@ -3044,7 +3044,7 @@ const short kVoltageADCMaximumAttempts = 10;
     }
 }
 
--(void) readCMOSRatesUsingXL3:(unsigned long)aChannelMask
+-(void) readCMOSRatesUsingXL3:(uint32_t)aChannelMask
 {
     CrateNoiseRateArgs args;
     CrateNoiseRateResults results;

@@ -23,41 +23,41 @@
 #import "ORWaveform.h"
 
 @interface ORMaskedWaveform : ORWaveform  {
-    unsigned long   mask;
+    uint32_t   mask;
 }
 
 #pragma mark ¥¥¥Accessors 
-- (void) setMask:(unsigned long)aMask;
-- (unsigned long) mask;
--(long) unMaskedValue:(unsigned short)aChan;
+- (void) setMask:(uint32_t)aMask;
+- (uint32_t) mask;
+-(int32_t) unMaskedValue:(unsigned short)aChan;
 @end
 
 @interface ORMaskedIndexedWaveform : ORMaskedWaveform  {
-    unsigned long   startIndex;
+    uint32_t   startIndex;
 }
 
 #pragma mark ¥¥¥Accessors 
-- (void) setStartIndex:(unsigned long)anIndex;
-- (unsigned long) startIndex;
+- (void) setStartIndex:(uint32_t)anIndex;
+- (uint32_t) startIndex;
 @end
 
 @interface ORMaskedIndexedWaveformWithSpecialBits : ORMaskedIndexedWaveform  {
-    unsigned long   specialBitMask;
+    uint32_t   specialBitMask;
 	int numBits;
-	unsigned long firstBitMask;
+	uint32_t firstBitMask;
 	NSArray* bitNames;
-    long scaleOffset;
+    int32_t scaleOffset;
 }
 
 #pragma mark ¥¥¥Accessors 
 - (void) setBitNames:(NSArray*)someNames;
 - (NSArray*) bitNames;
-- (void) setSpecialBitMask:(unsigned long)aMask;
-- (unsigned long) specialBitMask;
-- (void) setScaleOffset:(long)aValue;
-- (long) scaleOffset;
+- (void) setSpecialBitMask:(uint32_t)aMask;
+- (uint32_t) specialBitMask;
+- (void) setScaleOffset:(int32_t)aValue;
+- (int32_t) scaleOffset;
 - (int) numBits;
-- (unsigned long) firstBitMask;
+- (uint32_t) firstBitMask;
 @end
 
 

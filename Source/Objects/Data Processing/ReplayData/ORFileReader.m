@@ -70,8 +70,8 @@
             dataArray = [[NSMutableArray arrayWithCapacity:1024*1024] retain];
 
             NSDictionary *fattrs = [[NSFileManager defaultManager] attributesOfItemAtPath:filePath error:nil];
-            long long totalSize = [[fattrs objectForKey:NSFileSize] longLongValue];
-            long long totalProcessed = 0;
+            int64_t totalSize = [[fattrs objectForKey:NSFileSize] longLongValue];
+            int64_t totalProcessed = 0;
             while([dataToProcess length]!=0) {
                 NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
                 if([delegate respondsToSelector:@selector(cancelAndStop)]){
@@ -124,14 +124,14 @@
 
 - (void) processData
 {
-	unsigned long* p			= (unsigned long*)[dataToProcess bytes];
-	unsigned long* endPtr		= p + [dataToProcess length]/sizeof(long);
-	unsigned long bytesProcessed	= 0;
+	uint32_t* p			= (uint32_t*)[dataToProcess bytes];
+	uint32_t* endPtr		= p + [dataToProcess length]/sizeof(int32_t);
+	uint32_t bytesProcessed	= 0;
 	while(p<endPtr){
-		unsigned long firstWord		= *p;
-		if(needToSwap)firstWord		= (unsigned long)CFSwapInt32((uint32_t)*p);
-		unsigned long dataId		= ExtractDataId(firstWord);
-		unsigned long recordLength	= ExtractLength(firstWord);
+		uint32_t firstWord		= *p;
+		if(needToSwap)firstWord		= (uint32_t)CFSwapInt32((uint32_t)*p);
+		uint32_t dataId		= ExtractDataId(firstWord);
+		uint32_t recordLength	= ExtractLength(firstWord);
 		if(p+recordLength <= endPtr){
 			if(needToSwap){
 				[currentDecoder byteSwapData:p forKey:[NSNumber numberWithLong:dataId]];
@@ -144,7 +144,7 @@
 			else if(dataId == runDataID){
 				[self processRunRecord:p];
 			}
-			NSData* theDataRecord = [[NSData alloc] initWithBytes:p length:recordLength*sizeof(long)];
+			NSData* theDataRecord = [[NSData alloc] initWithBytes:p length:recordLength*sizeof(int32_t)];
 			[dataArray addObject:theDataRecord];
 			[theDataRecord release];
 			if(runEnded || [dataArray count] > 10){
@@ -155,7 +155,7 @@
 				}
 			}
 			p += recordLength;
-			bytesProcessed += recordLength*sizeof(long);
+			bytesProcessed += recordLength*sizeof(int32_t);
 			if(p>=endPtr)break;
 		}
 		else break;
@@ -163,9 +163,9 @@
 	[dataToProcess replaceBytesInRange:NSMakeRange( 0, bytesProcessed ) withBytes:NULL length:0];
 }
 
-- (void) processRunRecord:(unsigned long*)p
+- (void) processRunRecord:(uint32_t*)p
 {
-	unsigned long theDataWord = *(p+1);
+	uint32_t theDataWord = *(p+1);
 
 	if((theDataWord & 0x8)){
 		//heart beat
@@ -187,7 +187,7 @@
 	}
 }
 
-- (void) loadRunInfo:(unsigned long*)p
+- (void) loadRunInfo:(uint32_t*)p
 {
 	//pack up some info about the run.
 	[runInfo release];

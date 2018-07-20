@@ -37,7 +37,7 @@
 	int				crate_id;
 	CRATE_INFO		cr_info;
     short			stationToTest;
-    unsigned long	transactionsPerSecondHistogram[kMaxNumberC111CTransactionsPerSecond];
+    uint32_t	transactionsPerSecondHistogram[kMaxNumberC111CTransactionsPerSecond];
     BOOL			trackTransactions;
 	ORTimer*		transactionTimer;
 	ORCmdHistory*   cmdHistory;
@@ -81,20 +81,20 @@
 - (unsigned short)  camacLongNAF:(unsigned short) n 
 							   a:(unsigned short) a 
 							   f:(unsigned short) f
-							data:(unsigned long*) data;
+							data:(uint32_t*) data;
 
 
 - (unsigned short)  camacShortNAFBlock:(unsigned short) n 
 									 a:(unsigned short) a 
 									 f:(unsigned short) f
 								  data:(unsigned short*) data
-                                length:(unsigned long) numWords;
+                                length:(uint32_t) numWords;
 
 - (unsigned short)  camacLongNAFBlock:(unsigned short) n 
 									 a:(unsigned short) a 
 									 f:(unsigned short) f
-								  data:(unsigned long*) data
-                                length:(unsigned long) numWords;
+								  data:(uint32_t*) data
+                                length:(uint32_t) numWords;
 
 - (void) sendCmd:(NSString*)aCmd verbose:(BOOL)verbose;
 - (void) handleIRQ:(short)irq_type data:(unsigned int)irq_data;

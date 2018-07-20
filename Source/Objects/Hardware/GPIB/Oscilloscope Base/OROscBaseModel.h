@@ -98,8 +98,8 @@ typedef struct Channels {
 @interface OROscBaseModel : ORGpibDeviceModel <ORDataTaker>
 {
 // Current Osc settings
-    unsigned long		mScopeType;
-    unsigned long		mScopeVersion;
+    uint32_t		mScopeType;
+    uint32_t		mScopeVersion;
     float			mHorizPos;
     float			mHorizScale;
     float			mTriggerLevel;
@@ -107,23 +107,23 @@ typedef struct Channels {
     short			mTriggerMode;
     float			mTriggerPos;
     short			mTriggerSource;
-//    long			mActualWaveformLength;
-    long			mWaveformLength;
+//    int32_t			mActualWaveformLength;
+    int32_t			mWaveformLength;
     bool			mTriggerSlopeIsPos;
     struct	Channels	mChannels[ kMaxOscChnls ];
     
 // Support variables
-    unsigned long		firstEvent;
+    uint32_t		firstEvent;
     char			mReturnData[ kMaxGPIBReturn + 1 ];
     bool			mRunInProgress;
     bool			mModelReflectsHardware;
         
     BOOL			mDataThreadRunning;
     BOOL			mDoFullInit;
-    unsigned long   dataId;
-    unsigned long   gtidDataId;
-    unsigned long   clockDataId;
-    unsigned long   eventCount[kMaxOscChnls];
+    uint32_t   dataId;
+    uint32_t   gtidDataId;
+    uint32_t   clockDataId;
+    uint32_t   eventCount[kMaxOscChnls];
     
     //locks used to do thread communication
     NSConditionLock*		_cancelled;
@@ -132,8 +132,8 @@ typedef struct Channels {
 }
 
 #pragma mark ***Initialization
-- (unsigned long) scopeType;
-- (unsigned long) scopeVersion;
+- (uint32_t) scopeType;
+- (uint32_t) scopeVersion;
 
 #pragma mark ***Accessors
 - (int)     numberChannels;
@@ -150,8 +150,8 @@ typedef struct Channels {
 - (void)	setHorizontalPos: (float) aHorizontalPos;
 - (float)	horizontalScale;
 - (void)	setHorizontalScale: (float) aHorizontalScale;
-- (long)	waveformLength;
-- (void)	setWaveformLength: (long) aWaveformLength;
+- (int32_t)	waveformLength;
+- (void)	setWaveformLength: (int32_t) aWaveformLength;
 
 - (short)	triggerCoupling;
 - (void)	setTriggerCoupling: (short) aTriggerCoupling;
@@ -169,16 +169,16 @@ typedef struct Channels {
 - (void) 	setModelReflectsHardware: (bool) aState;
 - (BOOL)	doFullInit;
 - (void)	setDoFullInit:(BOOL)aState;
-- (unsigned long)   dataId;
-- (void)            setDataId: (unsigned long) DataId;
-- (unsigned long)   gtidDataId;
-- (void)            setGtidDataId: (unsigned long) GtidDataId;
-- (unsigned long)   clockDataId;
-- (void)            setClockDataId: (unsigned long) ClockDataId;
+- (uint32_t)   dataId;
+- (void)            setDataId: (uint32_t) DataId;
+- (uint32_t)   gtidDataId;
+- (void)            setGtidDataId: (uint32_t) GtidDataId;
+- (uint32_t)   clockDataId;
+- (void)            setClockDataId: (uint32_t) ClockDataId;
 - (void)    setDataIds:(id)assigner;
 - (void)    syncDataIdsWith:(id)anotherShaper;
 - (void) incEventCount:(int)aChannel;
-- (unsigned long) eventCount:(int)aChannel;
+- (uint32_t) eventCount:(int)aChannel;
 - (void)	takeDataTask:(NSDictionary*)userInfo;
 
 #pragma mark ***Commands
@@ -193,8 +193,8 @@ typedef struct Channels {
 #pragma mark ***Abstract Methods - General
 - (short)   oscScopeId;
 - (bool) 	oscBusy;
-- (long)	oscGetDateTime;
-- (void)	oscSetDateTime: (long) aTime;
+- (int32_t)	oscGetDateTime;
+- (void)	oscSetDateTime: (int32_t) aTime;
 - (void)	oscLockPanel: (bool) aFlag;
 - (void)	oscResetOscilloscope;
 - (void)	oscSendTextMessage: (NSString*) aMessage;

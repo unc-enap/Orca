@@ -201,7 +201,7 @@ resistorDocDic = _resistorDocDic;
         reasonString = [updateReasonBox stringValue];   //update from the reason string 
     }
     
-    unsigned long currentRunNumber;
+    uint32_t currentRunNumber;
     currentRunNumber = [model getCurrentRunNumber];
 
     

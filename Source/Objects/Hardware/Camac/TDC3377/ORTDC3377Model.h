@@ -31,11 +31,11 @@
 @interface ORTDC3377Model : ORCamacIOCard <ORDataTaker,ORHWWizard,ORHWRamping>
 {
     @private
-        unsigned long   dataId;
+        uint32_t   dataId;
         BOOL            firstTime;
         
         //place to cache some stuff for alittle more speed.
-        unsigned long 	unChangingDataPart;
+        uint32_t 	unChangingDataPart;
         unsigned short cachedStation;
 		int controlMode;
 		unsigned short controlReg0;
@@ -134,8 +134,8 @@
 - (void) setControlReg0:(unsigned short)aControlReg0;
 - (int) controlMode;
 - (void) setControlMode:(int)aControlMode;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 
 #pragma mark ¥¥¥HW Wizard
 - (NSArray*) wizardSelections;

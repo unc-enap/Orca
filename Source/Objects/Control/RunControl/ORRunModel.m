@@ -284,10 +284,10 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
 {
 	NSString* rn;
 	if([self subRunNumber] > 0){
-		rn = [NSString stringWithFormat:@"%lu.%d",[self runNumber],[self subRunNumber]];
+		rn = [NSString stringWithFormat:@"%u.%d",[self runNumber],[self subRunNumber]];
 	}
 	else {
-		rn = [NSString stringWithFormat:@"%lu",[self runNumber]];
+		rn = [NSString stringWithFormat:@"%u",[self runNumber]];
 	}
 	return rn;
 }
@@ -415,7 +415,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
     runTypeNames = aRunTypeNames;
 }
 
-- (unsigned long)getCurrentRunNumber
+- (uint32_t)getCurrentRunNumber
 {
     if(!remoteControl || remoteInterface){
         NSString* fullFileName = [[[self dirName]stringByExpandingTildeInPath] stringByAppendingPathComponent:@"RunNumber"];
@@ -426,12 +426,12 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
     return runNumber;
 }
 
-- (unsigned long)runNumber
+- (uint32_t)runNumber
 {
     return runNumber;
 }
 
-- (void) setRunNumber:(unsigned long)aRunNumber
+- (void) setRunNumber:(uint32_t)aRunNumber
 {
     runNumber = aRunNumber;
     
@@ -445,7 +445,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
             else NSLog(@"Could NOT create <%@>\n",fullFileName);
         }
         NSFileHandle* file = [NSFileHandle fileHandleForWritingAtPath:fullFileName];
-        NSString* s = [NSString stringWithFormat:@"%lu",runNumber];
+        NSString* s = [NSString stringWithFormat:@"%u",runNumber];
         
         [file writeData:[NSData dataWithBytes:[s cStringUsingEncoding:NSASCIIStringEncoding] length:[s length]+1]];
         [file closeFile];
@@ -689,27 +689,27 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
     return dirName;
 }
 
-- (unsigned long)	runType
+- (uint32_t)	runType
 {
     return runType;
 }
 
 - (void) setMaintenanceRuns:(BOOL)aState
 {
-	unsigned long aMask = [self runType];
+	uint32_t aMask = [self runType];
 	if(aState)aMask |= eMaintenanceRunType;
 	else      aMask &= ~eMaintenanceRunType;
 	[self setRunType:aMask];
 }
 
-- (void) setRunType:(unsigned long)aMask
+- (void) setRunType:(uint32_t)aMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setRunType:runType];
     runType = aMask;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORRunTypeChangedNotification object: self];
 }
 
-- (void) setRunTypeAndModifySavedRunType:(unsigned long)aMask
+- (void) setRunTypeAndModifySavedRunType:(uint32_t)aMask
 {
     //find which bits user set or cleared
     int i;
@@ -781,7 +781,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
 }
 
 
-- (unsigned long)  exceptionCount
+- (uint32_t)  exceptionCount
 {
     return exceptionCount;
 }
@@ -943,8 +943,8 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
     [self setDataId:[anotherObj dataId]];
 }
 
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -1003,7 +1003,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
     else [self startRun:!quickStart];
 }
 
-- (void) remoteStartRun:(unsigned long)aRunNumber
+- (void) remoteStartRun:(uint32_t)aRunNumber
 {
 	if([[self document] isDocumentEdited])return;
 	
@@ -1028,7 +1028,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
     }
 }
 
-- (void) remoteRestartRun:(unsigned long)aRunNumber
+- (void) remoteRestartRun:(uint32_t)aRunNumber
 {
 	[self setRemoteInterface:NO];
     if(aRunNumber==0xffffffff){
@@ -1098,13 +1098,13 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
     //struct tm* theTimeGMTAsStruct = gmtime(&theTime);
     //time_t ut_time = mktime(theTimeGMTAsStruct);
     
-    unsigned long data[4];
+    uint32_t data[4];
     data[0] = dataId | 4;
     data[1] = 0x10 | ([self subRunNumber]&0xffff)<<16;
     data[2] = lastRunNumberShipped;
     data[3] = ut_time;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-                                                        object:[NSData dataWithBytes:data length:4*sizeof(long)]];
+                                                        object:[NSData dataWithBytes:data length:4*sizeof(int32_t)]];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:ORRunBetweenSubRunsNotification
                                                         object: self
@@ -1164,13 +1164,13 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
     NSData* headerAsData = [ORDecoder convertHeaderToData:[[self dataPacket] fileHeader]];
     NSMutableData* dataToBeInserted = [NSMutableData dataWithData:headerAsData];
     
-    unsigned long data[4];
+    uint32_t data[4];
     data[0] = dataId | 4;
     data[1] = 0x20 | ([self subRunNumber]&0xffff)<<16;
     data[2] = lastRunNumberShipped;
     data[3] = ut_time;
     
-    [dataToBeInserted appendData:[NSMutableData dataWithBytes:data length:4*sizeof(long)]];
+    [dataToBeInserted appendData:[NSMutableData dataWithBytes:data length:4*sizeof(int32_t)]];
     
     [dataPacket addData:dataToBeInserted];
     
@@ -1364,7 +1364,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
         [self setRunningState:eRunStopped];
         
 		if(!runFailedAlarm){
-			runFailedAlarm = [[ORAlarm alloc] initWithName:[NSString stringWithFormat:@"Run %lu did NOT start",[self runNumber]] severity:kRunInhibitorAlarm];
+			runFailedAlarm = [[ORAlarm alloc] initWithName:[NSString stringWithFormat:@"Run %u did NOT start",[self runNumber]] severity:kRunInhibitorAlarm];
 			[runFailedAlarm setSticky:YES];
 		}
 		[runFailedAlarm setAcknowledged:NO];
@@ -1602,7 +1602,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
     time_t ut_time;
     time(&ut_time);    
 	
-	unsigned long data[4];
+	uint32_t data[4];
 	data[0] = dataId | 4;
 	data[1] =  0;
 	if(_wasQuickStart)data[1] |= 0x2;
@@ -1630,7 +1630,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
     [[self undoManager] enableUndoRegistration];
 
     
-    if(![self offlineRun])  NSLog(@"Run %lu stopped.\n",[self runNumber]);
+    if(![self offlineRun])  NSLog(@"Run %u stopped.\n",[self runNumber]);
     else                    NSLog(@"Offline Run stopped.\n");
 
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlushLogsNotification
@@ -1649,7 +1649,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
 
 - (void) sendHeartBeat:(NSTimer*)aTimer
 {
-    unsigned long dataHeartBeat[4];
+    uint32_t dataHeartBeat[4];
     
     dataHeartBeat[0] = dataId | 4; 
     dataHeartBeat[1] =         0x8; //fourth bit is the heart beat bit
@@ -1661,7 +1661,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
     dataHeartBeat[3] = ut_time;
     
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-														object:[NSData dataWithBytes:dataHeartBeat length:4*sizeof(long)]];
+														object:[NSData dataWithBytes:dataHeartBeat length:4*sizeof(int32_t)]];
 	
 }
 
@@ -1800,8 +1800,8 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
 	NSLog(@"---------------------------------------\n");
     
     if([[ORGlobal sharedGlobal] runMode] == kNormalRun){
-        if(!forceFullInit)NSLog(@"Run %lu started(%@).\n",[self runNumber],doInit?@"cold start":@"quick start");
-		else NSLog(@"Run %lu started(%@).\n",[self runNumber],@"Full Init because of Pwr Failure");
+        if(!forceFullInit)NSLog(@"Run %u started(%@).\n",[self runNumber],doInit?@"cold start":@"quick start");
+		else NSLog(@"Run %u started(%@).\n",[self runNumber],@"Full Init because of Pwr Failure");
     }
     else {
         NSLog(@"Offline Run started(%@).\n",doInit?@"cold start":@"quick start");
@@ -1818,7 +1818,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
 	NSData* headerAsData = [ORDecoder convertHeaderToData:[[self dataPacket] fileHeader]];
  	[dataPacket addData:[NSMutableData dataWithData:headerAsData]];
  
-    unsigned long data[4];
+    uint32_t data[4];
     
     data[0] = dataId | 4;
     data[1] = 0x01   | 0x20; //start of run and first sub run
@@ -1835,7 +1835,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
     data[2] = [self runNumber];
     data[3] = ut_time;
 
-	[dataPacket addData:[NSMutableData dataWithBytes:data length:4*sizeof(long)]];
+	[dataPacket addData:[NSMutableData dataWithBytes:data length:4*sizeof(int32_t)]];
     
     lastRunNumberShipped	= data[2];
 	
@@ -2086,7 +2086,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
 		NSLogColor([NSColor redColor],@"====================================\n");
 		[self haltRun];
 		if(!runStoppedByVetoAlarm){
-			runStoppedByVetoAlarm = [[ORAlarm alloc] initWithName:[NSString stringWithFormat:@"Run %lu Halted by Veto",[self runNumber]] severity:kRunInhibitorAlarm];
+			runStoppedByVetoAlarm = [[ORAlarm alloc] initWithName:[NSString stringWithFormat:@"Run %u Halted by Veto",[self runNumber]] severity:kRunInhibitorAlarm];
 			[runStoppedByVetoAlarm setSticky:NO];
 			[runStoppedByVetoAlarm setHelpString:@"Run stopped by Veto system. See status log for details."];
 		}
@@ -2153,7 +2153,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
 	if([self isRunning]){
 		[self haltRun];
 		if(!runFailedAlarm){
-			runFailedAlarm = [[ORAlarm alloc] initWithName:[NSString stringWithFormat:@"Run %lu did NOT start",[self runNumber]] severity:kRunInhibitorAlarm];
+			runFailedAlarm = [[ORAlarm alloc] initWithName:[NSString stringWithFormat:@"Run %u did NOT start",[self runNumber]] severity:kRunInhibitorAlarm];
 			[runFailedAlarm setSticky:YES];
             [runFailedAlarm setHelpStringFromFile:@"RunFailedHelp"];
             
@@ -2183,7 +2183,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
 							 [NSNumber numberWithUnsignedLong:[self elapsedRunTime]],	@"elapsedTime",
 							 [NSNumber numberWithUnsignedLong:[self elapsedSubRunTime]],@"elapsedSubRunTime",
 							 [NSNumber numberWithUnsignedLong:[self elapsedBetweenSubRunTime]],@"elapsedBetweenSubRunTime",
-							 [NSNumber numberWithUnsignedLong:(unsigned long)[self timeToGo]],			@"timeToGo",
+							 [NSNumber numberWithUnsignedLong:(uint32_t)[self timeToGo]],			@"timeToGo",
 							 [NSNumber numberWithBool:[self quickStart]],				@"quickStart",
 							 [NSNumber numberWithBool:[self repeatRun]],				@"repeatRun",
 							 [NSNumber numberWithBool:[self offlineRun]],				@"offlineRun",
@@ -2409,7 +2409,7 @@ static NSString *ORRunTypeNames 	= @"ORRunTypeNames";
 		@"timeLimit",
 		@"setRepeatRun:(BOOL)",
 		@"setTimedRun:(BOOL)",
-		@"setRunType:(unsigned long)",
+		@"setRunType:(uint32_t)",
 		@"setTimeLimit:(NSTimeInterval)",
 		nil];
 	
@@ -2556,10 +2556,10 @@ static NSString *ORRunTypeNames 	= @"ORRunTypeNames";
 
 
 @implementation ORRunDecoderForRun
-- (unsigned long)decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t)decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-	unsigned long* p = (unsigned long*)someData;
-	unsigned long length =  ExtractLength(p[0]); //must return number of longs processed.
+	uint32_t* p = (uint32_t*)someData;
+	uint32_t length =  ExtractLength(p[0]); //must return number of longs processed.
     if(p[1] & 0x8){ //heart beat
         [aDataSet loadGenericData:@" " sender:self withKeys:@"Run Control",@"Heartbeat",nil];
 	}
@@ -2581,11 +2581,11 @@ static NSString *ORRunTypeNames 	= @"ORRunTypeNames";
 	return length;
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr
 {
     NSString* runState;
     NSString* thirdWordKey;
-	unsigned long subRunNumber = 0;
+	uint32_t subRunNumber = 0;
     NSString* init = @"";
     NSString* title= @"Run Control Record\n\n";
 	BOOL showSubRun = NO;
@@ -2616,9 +2616,9 @@ static NSString *ORRunTypeNames 	= @"ORRunTypeNames";
 	subRunNumber = dataPtr[1]>>16;
 
     NSString* remote     = [NSString stringWithFormat:@"Remote     = %@\n",(dataPtr[1] & 0x4)?@"YES":@"NO"];
-    NSString* thirdWord  = [NSString stringWithFormat:@"%@%lu",thirdWordKey,dataPtr[2]];
+    NSString* thirdWord  = [NSString stringWithFormat:@"%@%u",thirdWordKey,dataPtr[2]];
 	if(showSubRun){
-		thirdWord = [thirdWord stringByAppendingFormat:@".%ld",subRunNumber];
+		thirdWord = [thirdWord stringByAppendingFormat:@".%d",subRunNumber];
 	}
 	thirdWord = [thirdWord stringByAppendingString:@"\n"];
 

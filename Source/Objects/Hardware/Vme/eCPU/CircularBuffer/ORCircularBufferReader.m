@@ -36,9 +36,9 @@
 	SCBHeader theControlBlockHeader;
 	memset(&theControlBlockHeader,0,sizeof(SCBHeader));		
 	@try {
-		[adapter writeLongBlock:(unsigned long*)&theControlBlockHeader
+		[adapter writeLongBlock:(uint32_t*)&theControlBlockHeader
 					  atAddress:baseAddress
-					 numToWrite:sizeof(SCBHeader)/sizeof(unsigned long)
+					 numToWrite:sizeof(SCBHeader)/sizeof(uint32_t)
 					 withAddMod:addressModifier
 				  usingAddSpace:addressSpace];
 		
@@ -115,7 +115,7 @@
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
 	SCBHeader theControlBlockHeader = [self readControlBlockHeader];
-	long numBlocks = theControlBlockHeader.blocksWritten - theControlBlockHeader.blocksRead;
+	int32_t numBlocks = theControlBlockHeader.blocksWritten - theControlBlockHeader.blocksRead;
 	if(numBlocks){
 		NSLog(@"Flushing %d block%@from CB\n",numBlocks,numBlocks>1?@"s ":@" ");
 		[self getDataFromCB:aDataPacket userInfo:userInfo];
@@ -135,14 +135,14 @@
 		tCBWord s1;
 		[self readLong:readPtr atPtr:&s1];
 		if(s1 && s1 < (DATA_CIRC_BUF_SIZE_BYTE - sizeof( SCBHeader ) + sizeof( tCBWord))){
-			unsigned long* ptr = [aDataPacket getBlockForAddingLongs:s1-1];	//first block is the CB header, it	
+			uint32_t* ptr = [aDataPacket getBlockForAddingLongs:s1-1];	//first block is the CB header, it	
 			[self readBlockUsing:&theControlBlockHeader into:ptr size:s1];   //will be skipped.
 		}
 		else {
 			//retry
 			[self readLong:readPtr atPtr:&s1];
 			if(s1 && s1 < (DATA_CIRC_BUF_SIZE_BYTE - sizeof( SCBHeader ) + sizeof( tCBWord))){
-				unsigned long* ptr = [aDataPacket getBlockForAddingLongs:s1-1];	//first block is the CB header, it	
+				uint32_t* ptr = [aDataPacket getBlockForAddingLongs:s1-1];	//first block is the CB header, it	
 				[self readBlockUsing:&theControlBlockHeader into:ptr size:s1];   //will be skipped.
 			}
 			else {

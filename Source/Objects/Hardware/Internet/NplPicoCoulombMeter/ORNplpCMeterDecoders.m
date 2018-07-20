@@ -42,12 +42,12 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 */
 
 @implementation ORNplpCMeterDecoder
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr	 = (unsigned long*)someData;
-    unsigned long length = ExtractLength(*ptr);
+    uint32_t* ptr	 = (uint32_t*)someData;
+    uint32_t length = ExtractLength(*ptr);
 	ptr++; //point to unique id 
-	NSString* deviceId  = [NSString stringWithFormat:@"device%2lu",*ptr&0x0000000f];
+	NSString* deviceId  = [NSString stringWithFormat:@"device%2u",*ptr&0x0000000f];
 	ptr++; //point to time 
 	int i;
 
@@ -59,13 +59,13 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
-    unsigned long length = ExtractLength(*ptr);
+    uint32_t length = ExtractLength(*ptr);
     NSString* title= @"NplpCMeter Record\n\n";
 
 	ptr++;
-	NSString* deviceId  = [NSString stringWithFormat:@"device%2lu\n",*ptr&0x0000000f];
+	NSString* deviceId  = [NSString stringWithFormat:@"device%2u\n",*ptr&0x0000000f];
 
 	ptr++;
 	NSDate* date = [NSDate dateWithTimeIntervalSince1970:*ptr];
@@ -75,7 +75,7 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 	int i;
 	for(i=0;i<n;i++){
 		ptr++;
-		valueString   = [valueString stringByAppendingFormat:@"Value(%02lu) = %0.6f\n",(*ptr&0x00f00000)>>20, (12. * (*ptr&0x000fffff))/1048576.];
+		valueString   = [valueString stringByAppendingFormat:@"Value(%02u) = %0.6f\n",(*ptr&0x00f00000)>>20, (12. * (*ptr&0x000fffff))/1048576.];
     }
     return [NSString stringWithFormat:@"%@%@%@%@",title,deviceId,[date descriptionFromTemplate:@"MM/dd/yy HH:mm:SSS z\n"],valueString];
 }

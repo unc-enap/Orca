@@ -118,12 +118,12 @@ NSString* OR4ChanSpecialLock				= @"OR4ChanSpecialLock";
     [[NSNotificationCenter defaultCenter] postNotificationName:OR4ChanTriggerModelShipFirstLastChanged object:self];
 }
 
-- (unsigned long) lowerClock
+- (uint32_t) lowerClock
 {
     return lowerClock;
 }
 
-- (void) setLowerClock:(unsigned long)aValue
+- (void) setLowerClock:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setLowerClock:lowerClock];
     
@@ -134,12 +134,12 @@ NSString* OR4ChanSpecialLock				= @"OR4ChanSpecialLock";
 }
 
 
-- (unsigned long) upperClock
+- (uint32_t) upperClock
 {
     return upperClock;
 }
 
-- (void) setUpperClock:(unsigned long)aValue
+- (void) setUpperClock:(uint32_t)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setUpperClock:upperClock];
     
@@ -182,11 +182,11 @@ NSString* OR4ChanSpecialLock				= @"OR4ChanSpecialLock";
                                                       userInfo: [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:index] forKey:@"Channel"]];                                                      
 }
 
-- (unsigned long) errorCount
+- (uint32_t) errorCount
 {
     return errorCount;
 }
-- (void) setErrorCount:(unsigned long)count
+- (void) setErrorCount:(uint32_t)count
 {
     errorCount = count;
     [[NSNotificationCenter defaultCenter] postNotificationName:OR4ChanErrorCountChangedNotification
@@ -240,7 +240,7 @@ NSString* OR4ChanSpecialLock				= @"OR4ChanSpecialLock";
 #pragma mark ¥¥¥Hardware Access
 - (unsigned short) 	readBoardID;
 {
-    unsigned long val = 0;
+    uint32_t val = 0;
     [[self adapter] readLongBlock:&val
                         atAddress:[self baseAddress]+kBoardIdReg
                         numToRead:1
@@ -251,7 +251,7 @@ NSString* OR4ChanSpecialLock				= @"OR4ChanSpecialLock";
 
 - (unsigned short) 	readStatus
 {
-    unsigned long val = 0;
+    uint32_t val = 0;
     [[self adapter] readLongBlock:&val
                         atAddress:[self baseAddress]+kStatusReg
                         numToRead:1
@@ -302,10 +302,10 @@ NSString* OR4ChanSpecialLock				= @"OR4ChanSpecialLock";
 }
 
 
-- (unsigned long) readLowerClock:(int)index;
+- (uint32_t) readLowerClock:(int)index;
 {
     int regOffsetList[] = {kReg0LowerReg,kReg1LowerReg,kReg2LowerReg,kReg3LowerReg,kReg4LowerReg};
-    unsigned long val = 0;
+    uint32_t val = 0;
     [[self adapter] readLongBlock:&val
                         atAddress:[self baseAddress]+regOffsetList[index]
                         numToRead:1
@@ -314,10 +314,10 @@ NSString* OR4ChanSpecialLock				= @"OR4ChanSpecialLock";
     return val;
 }
 
-- (unsigned long) readUpperClock:(int)index;
+- (uint32_t) readUpperClock:(int)index;
 {
     int regOffsetList[] = {kReg0UpperReg,kReg1UpperReg,kReg2UpperReg,kReg3UpperReg,kReg4UpperReg};
-    unsigned long val = 0;
+    uint32_t val = 0;
     [[self adapter] readLongBlock:&val
                         atAddress:[self baseAddress]+regOffsetList[index]
                         numToRead:1
@@ -328,7 +328,7 @@ NSString* OR4ChanSpecialLock				= @"OR4ChanSpecialLock";
 
 
 
-- (void) loadLowerClock:(unsigned long)aValue
+- (void) loadLowerClock:(uint32_t)aValue
 {
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress]+kLoadLowerClkReg
@@ -337,7 +337,7 @@ NSString* OR4ChanSpecialLock				= @"OR4ChanSpecialLock";
                      usingAddSpace:0x01];
 }
 
-- (void) loadUpperClock:(unsigned long)aValue
+- (void) loadUpperClock:(uint32_t)aValue
 {
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress]+kLoadUpperClkReg
@@ -447,8 +447,8 @@ static NSString *OR4ChanEnableClock     = @"OR4ChanEnableClock";
     }
 }
 
-- (unsigned long) clockDataId { return clockDataId; }
-- (void) setClockDataId: (unsigned long) aClockDataId
+- (uint32_t) clockDataId { return clockDataId; }
+- (void) setClockDataId: (uint32_t) aClockDataId
 {
     clockDataId = aClockDataId;
 }
@@ -556,7 +556,7 @@ static NSString *OR4ChanEnableClock     = @"OR4ChanEnableClock";
 
 
 //----------------Clock Word------------------------------------
-// three long words
+// three int32_t words
 // word #1:
 // 0000 0000 0000 0000 0000 0000 0000 0000   
 // ^^^^ ^^^^ ^^^^ ^^------------------------- record id
@@ -581,7 +581,7 @@ static NSString *OR4ChanEnableClock     = @"OR4ChanEnableClock";
 		//software latch at status bit 1. that's why the i+1 stuff below, because we never
 		//ship the software clock. 
         errorLocation = @"Reading Status Reg";
-        unsigned long statusReg;
+        uint32_t statusReg;
 		[controller readLongBlock:&statusReg
                         atAddress:baseAddress+kStatusReg
                         numToRead:1
@@ -592,18 +592,18 @@ static NSString *OR4ChanEnableClock     = @"OR4ChanEnableClock";
             int i;
             for(i=0;i<4;i++){
                 if(statusReg & (0x1<<(i+1))){
-					unsigned long eventPlaceHolder = 0;
+					uint32_t eventPlaceHolder = 0;
 					BOOL ship = shipClockMask & (0x1<<(i+1)) || (shipFirstLast && !gotFirstClk[i]);
 					if(ship)eventPlaceHolder = [aDataPacket reserveSpaceInFrameBuffer:3];
                     [self _readOutChildren:[dataTakers objectAtIndex:i] dataPacket:aDataPacket];
 					
                     //must read the clock to reset the status bit.
                     //status bit is reset when the lower reg is read.
-                    unsigned long upper = [self readUpperClock:i+1];
-                    unsigned long lower = [self readLowerClock:i+1];
+                    uint32_t upper = [self readUpperClock:i+1];
+                    uint32_t lower = [self readLowerClock:i+1];
                     if(ship){
   						gotFirstClk[i] = YES;
-						unsigned long data[3];
+						uint32_t data[3];
                         data[0] = clockDataId | 3;                          //id and length
                         data[1] = ((i&0x7)<<24) | (0x00ffffff&upper);   //index and upper clock
                         data[2] = lower;                               //lower clock
@@ -625,9 +625,9 @@ static NSString *OR4ChanEnableClock     = @"OR4ChanEnableClock";
 	if(shipFirstLast){
 		int i;
 		for(i=0;i<4;i++){
-			unsigned long upper = [self readUpperClock:i+1];
-			unsigned long lower = [self readLowerClock:i+1];
-			unsigned long data[3];
+			uint32_t upper = [self readUpperClock:i+1];
+			uint32_t lower = [self readLowerClock:i+1];
+			uint32_t data[3];
 			data[0] = clockDataId | 3;                     //id and length
 			data[1] = ((i&0x7)<<24) | (0x00ffffff&upper);  //index and upper clock
 			data[2] = lower;                               //lower clock

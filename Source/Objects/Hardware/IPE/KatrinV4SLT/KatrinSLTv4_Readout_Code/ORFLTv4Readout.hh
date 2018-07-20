@@ -43,7 +43,7 @@ class ORFLTv4Readout : public ORVCard
     // Helper variables for histogram mode
     
     /** Get the number of total counts in a histogram */
-    unsigned long long Counts(uint32_t *histogram);
+    uint64_t Counts(uint32_t *histogram);
     
     enum EORFLTv4Consts {
         kFifoEmpty          = 0x01,

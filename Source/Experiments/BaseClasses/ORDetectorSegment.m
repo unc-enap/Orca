@@ -141,7 +141,7 @@ NSString* KSegmentChangedNotification	  =	@"KSegmentChangedNotification";
     return channelIndex;
 }
 
-- (unsigned long) threshold
+- (uint32_t) threshold
 {
 	int channel = [[params objectForKey:mapKey(channelIndex)] intValue];
 	if(channel>=0) return [hardwareCard thresholdForDisplay:channel];
@@ -463,12 +463,12 @@ NSString* KSegmentChangedNotification	  =	@"KSegmentChangedNotification";
 
 - (id) description
 {		
-	NSString* string = [NSString stringWithFormat:@"         Segment: %ld\n",[self segmentNumber]];
+	NSString* string = [NSString stringWithFormat:@"         Segment: %d\n",(int)[self segmentNumber]];
 	NSString* theModel = [(NSObject*)hardwareCard className];
 	if([theModel hasPrefix:@"OR"]) theModel   = [theModel substringFromIndex:2];
 	if([theModel hasSuffix:@"Model"])theModel = [theModel substringToIndex:[theModel length]-[@"Model"length]];
 	string = [string stringByAppendingFormat:     @"       Adc Class: %@\n",theModel];
-	string = [string stringByAppendingFormat:     @"       Threshold: %lu\n",[self threshold]];
+	string = [string stringByAppendingFormat:     @"       Threshold: %u\n",[self threshold]];
 	for(id aKey in params){
 		const char *theKeyAsCString = [[aKey substringFromIndex:1] cStringUsingEncoding:NSASCIIStringEncoding];
 		NSString* p = [NSString stringWithFormat:   @"%17s: %@\n",theKeyAsCString,[params objectForKey:aKey]];

@@ -210,11 +210,11 @@ NSString* ORXTR6Lock                            = @"ORXTR6Lock";
 - (NSString*) title 
 {
 	switch (connectionProtocol){
-		case kHPXTR6UseRS232:	return [NSString stringWithFormat:@"XTR6 %lu",[self uniqueIdNumber]];
-		case kHPXTR6UseUSB:     return [NSString stringWithFormat:@"XTR6 %lu (Serial# %@)",[self uniqueIdNumber],[usbInterface serialNumber]];
-		case kHPXTR6UseIP:      return [NSString stringWithFormat:@"XTR6 %lu (%@)",[self uniqueIdNumber],[self ipAddress]];
+		case kHPXTR6UseRS232:	return [NSString stringWithFormat:@"XTR6 %u",[self uniqueIdNumber]];
+		case kHPXTR6UseUSB:     return [NSString stringWithFormat:@"XTR6 %u (Serial# %@)",[self uniqueIdNumber],[usbInterface serialNumber]];
+		case kHPXTR6UseIP:      return [NSString stringWithFormat:@"XTR6 %u (%@)",[self uniqueIdNumber],[self ipAddress]];
 	}
-	return [NSString stringWithFormat:@"XTR6 (%lu)",(unsigned long)[self tag]];
+	return [NSString stringWithFormat:@"XTR6 (%u)",(uint32_t)[self tag]];
 }
 
 #pragma mark ***Accessors

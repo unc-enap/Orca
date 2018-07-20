@@ -157,8 +157,8 @@ NSString* ORAD3511WarningPosted						= @"ORAD3511WarningPosted";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORAD3511GainChanged object:self];
 }
 
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -229,7 +229,7 @@ NSString* ORAD3511WarningPosted						= @"ORAD3511WarningPosted";
 			//test the LAM
 			union {
 				NSTimeInterval asTimeInterval;
-				unsigned long asLongs[2];
+				uint32_t asLongs[2];
 			}theTimeRef;
 			
 			unsigned short dummy;
@@ -248,7 +248,7 @@ NSString* ORAD3511WarningPosted						= @"ORAD3511WarningPosted";
 					dataOffset = 2;
 				}
 				
-				unsigned long dataBuffer[512+dataOffset];
+				uint32_t dataBuffer[512+dataOffset];
 				do {
 					//read a word from the buffer
 					[controller camacShortNAF:cachedStation a:0 f:2 data:&adcValue];

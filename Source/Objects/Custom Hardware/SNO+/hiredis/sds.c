@@ -296,9 +296,9 @@ sds sdscpy(sds s, const char *t) {
  * The function returns the length of the null-terminated string
  * representation stored at 's'. */
 #define SDS_LLSTR_SIZE 21
-int sdsll2str(char *s, long long value) {
+int sdsll2str(char *s, int64_t value) {
     char *p, aux;
-    unsigned long long v;
+    uint64_t v;
     int l;
 
     /* Generate the string representation, this method produces
@@ -327,8 +327,8 @@ int sdsll2str(char *s, long long value) {
     return l;
 }
 
-/* Identical sdsll2str(), but for unsigned long long type. */
-int sdsull2str(char *s, unsigned long long v) {
+/* Identical sdsll2str(), but for uint64_t type. */
+int sdsull2str(char *s, uint64_t v) {
     char *p, aux;
     size_t l;
 
@@ -416,9 +416,9 @@ sds sdscatprintf(sds s, const char *fmt, ...) {
  * %s - C String
  * %S - SDS string
  * %i - signed int
- * %I - 64 bit signed integer (long long, int64_t)
+ * %I - 64 bit signed integer (int64_t, int64_t)
  * %u - unsigned int
- * %U - 64 bit unsigned integer (unsigned long long, uint64_t)
+ * %U - 64 bit unsigned integer (uint64_t, uint64_t)
  * %T - A size_t variable.
  * %% - Verbatim "%" character.
  */
@@ -435,8 +435,8 @@ sds sdscatfmt(sds s, char const *fmt, ...) {
     while(*f) {
         char next, *str;
         int l;
-        long long num;
-        unsigned long long unum;
+        int64_t num;
+        uint64_t unum;
 
         /* Make sure there is always space for at least 1 char. */
         if (sh->free == 0) {
@@ -467,7 +467,7 @@ sds sdscatfmt(sds s, char const *fmt, ...) {
                 if (next == 'i')
                     num = va_arg(ap,int);
                 else
-                    num = va_arg(ap,long long);
+                    num = va_arg(ap,int64_t);
                 {
                     char buf[SDS_LLSTR_SIZE];
                     l = sdsll2str(buf,num);
@@ -487,9 +487,9 @@ sds sdscatfmt(sds s, char const *fmt, ...) {
                 if (next == 'u')
                     unum = va_arg(ap,unsigned int);
                 else if(next == 'U')
-                    unum = va_arg(ap,unsigned long long);
+                    unum = va_arg(ap,uint64_t);
                 else
-                    unum = (unsigned long long)va_arg(ap,size_t);
+                    unum = (uint64_t)va_arg(ap,size_t);
                 {
                     char buf[SDS_LLSTR_SIZE];
                     l = sdsull2str(buf,unum);
@@ -712,13 +712,13 @@ void sdsfreesplitres(sds *tokens, int count) {
     free(tokens);
 }
 
-/* Create an sds string from a long long value. It is much faster than:
+/* Create an sds string from a int64_t value. It is much faster than:
  *
  * sdscatprintf(sdsempty(),"%lld\n", value);
  */
-sds sdsfromlonglong(long long value) {
+sds sdsfromlonglong(int64_t value) {
     char buf[32], *p;
-    unsigned long long v;
+    uint64_t v;
 
     v = (value < 0) ? -value : value;
     p = buf+31; /* point to the last character */

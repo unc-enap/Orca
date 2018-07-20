@@ -40,7 +40,7 @@
 	[super awakeFromNib];
 	
 	// Set title of crate window, ak 15.6.07
-    [[self window] setTitle:[NSString stringWithFormat:@"IPE-DAQ-V3 Crate %lu",[model uniqueIdNumber]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"IPE-DAQ-V3 Crate %u",[model uniqueIdNumber]]];
 
 }
 

@@ -49,12 +49,12 @@ static NSString* kBocTicUnit[2] = {
     else return [NSString stringWithFormat:@"Gauge %d",aUnit];			
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-	unsigned long *dataPtr = (unsigned long*)someData;
+	uint32_t *dataPtr = (uint32_t*)someData;
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theTemp;
 	int ident = dataPtr[1] & 0xfff;
 	int i;
@@ -74,7 +74,7 @@ static NSString* kBocTicUnit[2] = {
 	return ExtractLength(dataPtr[0]);
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr
 {
     NSString* title= @"BOC TIC Controller\n\n";
     NSString* theString =  [NSString stringWithFormat:@"%@\n",title];               
@@ -82,7 +82,7 @@ static NSString* kBocTicUnit[2] = {
 	theString = [theString stringByAppendingFormat:@"Unit %d\n",ident];
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theData;
 	int i;
 	int index = 2;

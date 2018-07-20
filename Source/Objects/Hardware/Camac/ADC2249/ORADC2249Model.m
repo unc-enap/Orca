@@ -84,8 +84,8 @@ NSString* ORADC2249SuppressZerosChangedNotification  = @"ORADC2249SuppressZerosC
     [[NSNotificationCenter defaultCenter] postNotificationName:ORADC2249ModelIncludeTimingChanged object:self];
 }
 
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -163,7 +163,7 @@ NSString* ORADC2249SuppressZerosChangedNotification  = @"ORADC2249SuppressZerosC
 	int len = 1;						//default to the short form
 	if(includeTiming)len = 4;			//including timing adds two timing words
 	else {
-		if(IsLongForm(dataId))len = 2;	//not timing, long form = 2 words total
+		if(IsLongForm(dataId))len = 2;	//not timing, int32_t form = 2 words total
 	}
     NSDictionary* aDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
         @"ORADC2249DecoderForAdc",          @"decoder",
@@ -223,7 +223,7 @@ NSString* ORADC2249SuppressZerosChangedNotification  = @"ORADC2249SuppressZerosC
 	
 	union {
 		NSTimeInterval asTimeInterval;
-		unsigned long asLongs[2];
+		uint32_t asLongs[2];
 	}theTimeRef;
 	
     @try {
@@ -246,13 +246,13 @@ NSString* ORADC2249SuppressZerosChangedNotification  = @"ORADC2249SuppressZerosC
                     [controller camacShortNAF:cachedStation a:onlineList[i] f:2 data:&adcValue];
 					if(!(suppressZeros && adcValue==0)){
 						if(IsShortForm(dataId)){
-							unsigned long data = dataId | unChangingDataPart | (onlineList[i]&0xf)<<12 | (adcValue & 0xfff);
+							uint32_t data = dataId | unChangingDataPart | (onlineList[i]&0xf)<<12 | (adcValue & 0xfff);
 							[aDataPacket addLongsToFrameBuffer:&data length:1];
 						}
 						else {
-							unsigned long data[4];
+							uint32_t data[4];
 							int len = 2;			//default to no timing info
-							long includeTimingMask = 0;
+							int32_t includeTimingMask = 0;
 							if(includeTiming){
 								len = 4;
 								includeTimingMask = 1L<<25;

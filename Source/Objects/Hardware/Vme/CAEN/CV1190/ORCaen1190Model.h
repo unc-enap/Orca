@@ -62,7 +62,7 @@ enum {
 @interface ORCaen1190Model : ORCaenCardModel <ORDataTaker,ORHWWizard,ORHWRamping>
 {
 	ORTimer*		aTimer;
-	unsigned long	enabledMask[4];
+	uint32_t	enabledMask[4];
     int				paramGroup;
     int				acqMode;
     int				windowWidth;
@@ -75,10 +75,10 @@ enum {
     int				leadingTimeResolution;
     int				leadingWidthResolution;
     int				deadTime;
-	unsigned long 	tdcCount[128];
+	uint32_t 	tdcCount[128];
 	ORRateGroup*	tdcRateGroup;
 	BOOL			isRunning;
-	unsigned long   locationWord;
+	uint32_t   locationWord;
 }
 
 #pragma mark ***Accessors
@@ -112,11 +112,11 @@ enum {
 
 #pragma mark ***Register - General routines
 - (short)			getNumberRegisters;
-- (unsigned long) 	getBufferOffset;
+- (uint32_t) 	getBufferOffset;
 - (unsigned short) 	getDataBufferSize;
 - (short)			getOutputBufferIndex;
-- (unsigned long)	enabledMask:(int) n;
-- (void)			setEnabledMask:(int)n withValue:(unsigned long)aMask;
+- (uint32_t)	enabledMask:(int) n;
+- (void)			setEnabledMask:(int)n withValue:(uint32_t)aMask;
 
 #pragma mark ***HW Access
 - (void) loadEnableMasks;
@@ -136,7 +136,7 @@ enum {
 
 #pragma mark ***Register - Register specific routines
 - (NSString*) 		getRegisterName: (short) anIndex;
-- (unsigned long) 	getAddressOffset: (short) anIndex;
+- (uint32_t) 	getAddressOffset: (short) anIndex;
 - (short)			getAccessType: (short) anIndex;
 - (short)			getAccessSize: (short) anIndex;
 - (BOOL)			dataReset: (short) anIndex;
@@ -149,9 +149,9 @@ enum {
 - (void) runTaskStopped:(ORDataPacket*) aDataPacket userInfo:(NSDictionary*)userInfo;
 
 #pragma mark •••Rates
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag;
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag;
 - (BOOL) bumpRateFromDecodeStage:(short)channel;
-- (unsigned long) tdcCount:(int)aChannel;
+- (uint32_t) tdcCount:(int)aChannel;
 - (void) startRates;
 - (void) clearTdcCounts;
 

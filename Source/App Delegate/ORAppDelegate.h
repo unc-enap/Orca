@@ -36,7 +36,7 @@
 	NSString* ethernetHardwareAddress;
 	BOOL configLoadedOK;
 	NSOperationQueue* queue;
-	unsigned long heartbeatCount;
+	uint32_t heartbeatCount;
 	BOOL delayTermination;
 }
 
@@ -101,9 +101,9 @@ extern NSString* OROrcaFinalQuitNotice;
 
 @interface ORHeartBeatOp : NSOperation
 {
-	unsigned long heartbeatCount;
+	uint32_t heartbeatCount;
 }
-- (id) init:(unsigned long)aCount;
+- (id) init:(uint32_t)aCount;
 - (void) main;
 @end
 

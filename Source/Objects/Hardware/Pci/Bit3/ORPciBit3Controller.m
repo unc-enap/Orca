@@ -459,16 +459,16 @@
     unsigned int numberLongs;
     unsigned short addressModifier;
     unsigned short addressSpace;
-    unsigned long data;
+    uint32_t data;
     unsigned int i;
-    unsigned long dataBlockIn[64];
+    uint32_t dataBlockIn[64];
     unsigned int numberWords;
     unsigned short dataBlockWordOut[64];
     unsigned short dataBlockWordIn[64];
     unsigned int numberBytes;
     unsigned char dataBlockByteOut[64];
     unsigned char dataBlockByteIn[64];
-    unsigned long dataBlockOut[64];
+    uint32_t dataBlockOut[64];
     
     NSString* progressString = @"";
     
@@ -688,17 +688,17 @@
 
 -(IBAction)read:(id)sender
 {
-    unsigned long ldata;
+    uint32_t ldata;
     unsigned short sdata;
     unsigned char cdata;
     
     [self endEditing];
-    unsigned long 	startAddress 	= [model rwAddress];
-	unsigned long	endAddress		= [model doRange]?startAddress + [model rangeToDo]*[addressStepper increment] : startAddress;
+    uint32_t 	startAddress 	= [model rwAddress];
+	uint32_t	endAddress		= [model doRange]?startAddress + [model rangeToDo]*[addressStepper increment] : startAddress;
     unsigned short 	addressModifier = [model rwAddressModifierValue];
     unsigned short 	addressSpace	= [model rwIOSpaceValue];
 	
-	unsigned long address = startAddress;
+	uint32_t address = startAddress;
 	if([model doRange] && [model rangeToDo]==0){
 		NSLog(@"Range == 0: nothing to do\n");
 		return;
@@ -726,7 +726,7 @@
 					
 					break;
 					
-				case 2: //long
+				case 2: //int32_t
 					[model readLongBlock:&ldata
 							   atAddress:address
 							   numToRead:1
@@ -752,13 +752,13 @@
     unsigned char  cdata;
     
     [self endEditing];
-    unsigned long   startAddress 	= [model rwAddress];
-	unsigned long	endAddress		= [model doRange]?startAddress + [model rangeToDo] : startAddress;
+    uint32_t   startAddress 	= [model rwAddress];
+	uint32_t	endAddress		= [model doRange]?startAddress + [model rangeToDo] : startAddress;
     unsigned short 	addressModifier = [model rwAddressModifierValue];
     unsigned short 	addressSpace	= [model rwIOSpaceValue];
-    unsigned long  	ldata			= [model writeValue];
+    uint32_t  	ldata			= [model writeValue];
     
-	unsigned long address = startAddress;
+	uint32_t address = startAddress;
 	if([model doRange] && [model rangeToDo]==0){
 		NSLog(@"Range == 0: nothing to do\n");
 		return;
@@ -787,7 +787,7 @@
 					ldata = sdata;
 					break;
 					
-				case 2: //long
+				case 2: //int32_t
 					[model writeLongBlock:&ldata
 								atAddress:address
 							   numToWrite:1

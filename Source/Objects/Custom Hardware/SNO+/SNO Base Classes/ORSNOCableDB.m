@@ -72,7 +72,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(SNOCableDB);
 				}
 			}
 		}
-		long lineCount = 0;
+		int32_t lineCount = 0;
 		NSArray* lines = [contents componentsSeparatedByString:@"\r"];
 		NSString* firstLine = [lines objectAtIndex:lineCount];
 		NSScanner* scanner = [NSScanner scannerWithString:firstLine];
@@ -144,7 +144,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(SNOCableDB);
 				
 			}
 			else {
-				[NSException raise:@"Unable to Process Cable DB" format:@"Bad line: %ld",lineCount-1];
+				[NSException raise:@"Unable to Process Cable DB" format:@"Bad line: %d",lineCount-1];
 			}
 			
 		}

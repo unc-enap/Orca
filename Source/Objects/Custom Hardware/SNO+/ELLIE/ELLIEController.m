@@ -259,7 +259,7 @@
             continue;
         } else {
             NSUInteger num = [[self extractNumberFromText:key] integerValue];
-            [panels addObject:[NSString stringWithFormat:@"%ld",num]];
+            [panels addObject:[NSString stringWithFormat:@"%d",(int)num]];
         }
     }
     // Once we get a note saying mapping is loaded, fill the push button

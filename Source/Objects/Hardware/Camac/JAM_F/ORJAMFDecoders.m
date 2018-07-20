@@ -44,10 +44,10 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx- adc word n
 --------------------^^^^-^^^^-^^^^-^^^^- raw adc number
 */
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr	 = (unsigned long*)someData;
-    unsigned long length = ExtractLength(*ptr);
+    uint32_t* ptr	 = (uint32_t*)someData;
+    uint32_t length = ExtractLength(*ptr);
 	ptr++;
 	unsigned char crate  = (*ptr&0x01e00000)>>21;
 	unsigned char card   = (*ptr& 0x001f0000)>>16;
@@ -59,14 +59,14 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx- adc word n
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
-    unsigned long length = ExtractLength(*ptr);
+    uint32_t length = ExtractLength(*ptr);
     NSString* title= @"JAMF ADC Record\n\n";
 
 	ptr++;
-    NSString* crate			= [NSString stringWithFormat:@"Crate = %lu\n",(*ptr&0x01e00000)>>21];
-    NSString* card			= [NSString stringWithFormat:@"Station  = %lu\n",(*ptr&0x001f0000)>>16];
+    NSString* crate			= [NSString stringWithFormat:@"Crate = %u\n",(*ptr&0x01e00000)>>21];
+    NSString* card			= [NSString stringWithFormat:@"Station  = %u\n",(*ptr&0x001f0000)>>16];
 
 	ptr++;
 	NSDate* date = [NSDate dateWithTimeIntervalSince1970:*ptr];
@@ -76,7 +76,7 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx- adc word n
 	int i;
 	for(i=0;i<n;i++){
 		ptr++;
-		adcString   = [adcString stringByAppendingFormat:@"ADC(%02lu) = 0x%lx\n",(*ptr>>16)&0x000000ff, *ptr&0x00000fff];
+		adcString   = [adcString stringByAppendingFormat:@"ADC(%02u) = 0x%x\n",(*ptr>>16)&0x000000ff, *ptr&0x00000fff];
     }
     return [NSString stringWithFormat:@"%@%@%@%@%@",title,crate,card,[date descriptionFromTemplate:@"MM/dd/yy HH:mm:ss z\n"],adcString];
 }

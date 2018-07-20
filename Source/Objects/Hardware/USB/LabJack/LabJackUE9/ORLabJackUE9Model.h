@@ -59,22 +59,22 @@
 	NSString*         channelName[kUE9NumAdcs];   //adc names
 	NSString*         channelUnit[kUE9NumAdcs];   //adc names
 	NSString*         doName[kUE9NumIO];		//the D connector on the side
-	unsigned long     timeMeasured;
-	unsigned long     doDirection;
-	unsigned long     doValueOut;
-	unsigned long     doValueIn;
+	uint32_t     timeMeasured;
+	uint32_t     doDirection;
+	uint32_t     doValueOut;
+	uint32_t     doValueIn;
     unsigned short    aOut0;
     unsigned short    aOut1;
-    unsigned long     adcEnabledMask[3];
-    unsigned long     counter[2];
-    unsigned long     timer[kUE9NumTimers];
-    unsigned long     timerResult[kUE9NumTimers];
+    uint32_t     adcEnabledMask[3];
+    uint32_t     counter[2];
+    uint32_t     timer[kUE9NumTimers];
+    uint32_t     timerResult[kUE9NumTimers];
     BOOL              digitalOutputEnabled;
     int               pollTime;
-	unsigned long	  dataId;
+	uint32_t	  dataId;
     BOOL              shipData;
 	NSTimeInterval    lastTime;
-    unsigned long     timerOption[kUE9NumTimers];
+    uint32_t     timerOption[kUE9NumTimers];
     unsigned short    timerEnableMask;
     unsigned short    counterEnableMask;
     int               clockSelection;
@@ -101,9 +101,9 @@
     
 	//bit processing variables
     BOOL            readOnce;
-	unsigned long   processInputValue;  //snapshot of the inputs at start of process cycle
-	unsigned long   processOutputValue; //outputs to be written at end of process cycle
-	unsigned long   processOutputMask;  //controlls which bits are written
+	uint32_t   processInputValue;  //snapshot of the inputs at start of process cycle
+	uint32_t   processOutputValue; //outputs to be written at end of process cycle
+	uint32_t   processOutputMask;  //controlls which bits are written
     BOOL            involvedInProcess;
     BOOL			wasConnected;
 }
@@ -137,12 +137,12 @@
 - (void) setPollTime:(int)aPollTime;
 - (BOOL) digitalOutputEnabled;
 - (void) setDigitalOutputEnabled:(BOOL)aDigitalOutputEnabled;
-- (unsigned long) counter:(int)i;
-- (void) setCounter:(int)i value:(unsigned long)aValue;
-- (unsigned long) timer:(int)i;
-- (unsigned long) timerResult:(int)i;
-- (void) setTimerResult:(int)i value:(unsigned long)aValue;
-- (void) setTimer:(int)i value:(unsigned long)aValue;
+- (uint32_t) counter:(int)i;
+- (void) setCounter:(int)i value:(uint32_t)aValue;
+- (uint32_t) timer:(int)i;
+- (uint32_t) timerResult:(int)i;
+- (void) setTimerResult:(int)i value:(uint32_t)aValue;
+- (void) setTimer:(int)i value:(uint32_t)aValue;
 - (NSString*) channelName:(int)i;
 - (void) setChannel:(int)i name:(NSString*)aName;
 - (NSString*) channelUnit:(int)i;
@@ -168,32 +168,32 @@
 - (float) maxValue:(int)i;
 - (void)  setMaxValue:(int)i value:(float)aValue;
 
-- (unsigned long) doDirection;
-- (void) setDoDirection:(unsigned long)aMask;
+- (uint32_t) doDirection;
+- (void) setDoDirection:(uint32_t)aMask;
 - (void) setDoDirectionBit:(int)bit value:(BOOL)aValue;
 
-- (unsigned long) doValueOut;
-- (void) setDoValueOut:(unsigned long)aMask;
+- (uint32_t) doValueOut;
+- (void) setDoValueOut:(uint32_t)aMask;
 - (void) setDoValueOutBit:(int)bit value:(BOOL)aValue;
 - (void) setOutputBit:(int)bit value:(BOOL) aValue;
 
 - (unsigned short) doValueIn;
-- (void) setDoValueIn:(unsigned long)aMask;
+- (void) setDoValueIn:(uint32_t)aMask;
 - (void) setDoValueInBit:(int)bit value:(BOOL)aValue;
 - (NSString*) doInString:(int)bit;
 - (NSColor*) doInColor:(int)i;
 
-- (unsigned long) adcEnabledMask:(int)aGroup;
+- (uint32_t) adcEnabledMask:(int)aGroup;
 - (BOOL) adcEnabled:(int)adcChan;
-- (void) setAdcEnabled:(int)aGroup mask:(unsigned long)anEnableMask;
+- (void) setAdcEnabled:(int)aGroup mask:(uint32_t)anEnableMask;
 - (void) setAdcEnabled:(int)bit value:(BOOL)aValue;
 - (int) muxIndexFromAdcIndex:(int)adcIndex;
 - (int) adcIndexFromMuxIndex:(int)muxIndex;
 
-- (unsigned long) timeMeasured;
+- (uint32_t) timeMeasured;
 
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherLakeShore210;
 

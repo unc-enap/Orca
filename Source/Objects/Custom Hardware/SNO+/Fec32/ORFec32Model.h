@@ -185,31 +185,31 @@ typedef struct Fec32CmosShiftReg{
 	unsigned char	hVRef;		//HVREF for high voltage
     NSString*		comments;
     BOOL			showVolts;	
-	unsigned long   onlineMask;
-    unsigned long   pedEnabledMask;
+	uint32_t   onlineMask;
+    uint32_t   pedEnabledMask;
     
-	unsigned long   seqDisabledMask;
-    unsigned long   trigger20nsDisabledMask;
-    unsigned long   trigger100nsDisabledMask;
-    unsigned long	cmosReadDisabledMask;
+	uint32_t   seqDisabledMask;
+    uint32_t   trigger20nsDisabledMask;
+    uint32_t   trigger100nsDisabledMask;
+    uint32_t	cmosReadDisabledMask;
 
-    unsigned long   lastSeqDisabledMask;
-    unsigned long   lastTrigger100nsDisabledMask;
-    unsigned long   lastTrigger20nsDisabledMask;
-    unsigned long   lastCmosReadDisabledMask;
+    uint32_t   lastSeqDisabledMask;
+    uint32_t   lastTrigger100nsDisabledMask;
+    uint32_t   lastTrigger20nsDisabledMask;
+    uint32_t   lastCmosReadDisabledMask;
 
-    unsigned long   seqPendingDisabledMask;
-    unsigned long   trigger20nsPendingDisabledMask;
-    unsigned long   trigger100nsPendingDisabledMask;
-    unsigned long	cmosReadPendingDisabledMask;
+    uint32_t   seqPendingDisabledMask;
+    uint32_t   trigger20nsPendingDisabledMask;
+    uint32_t   trigger100nsPendingDisabledMask;
+    uint32_t	cmosReadPendingDisabledMask;
 
     
-	unsigned long   dirtyMask;
-	unsigned long   thresholdToMax;
+	uint32_t   dirtyMask;
+	uint32_t   thresholdToMax;
     float			baseCurrent[32];
 	NSDate*			cmosCountTimeStamp;
-	unsigned long	cmosCount[32];
-    long			cmosRate[32];
+	uint32_t	cmosCount[32];
+    int32_t			cmosRate[32];
 	BOOL			qllEnabled;
 	BOOL			dcPresent[4];
 	ORFecDaughterCardModel* dc[4]; //cache the dc's
@@ -223,11 +223,11 @@ typedef struct Fec32CmosShiftReg{
     int variableDisplay;
 
     // variables used during Hardware Wizard actions
-    unsigned long   startSeqDisabledMask;
-    unsigned long   startPedEnabledMask;
-    unsigned long   startTrigger20nsDisabledMask;
-    unsigned long   startTrigger100nsDisabledMask;
-    unsigned long   startOnlineMask;
+    uint32_t   startSeqDisabledMask;
+    uint32_t   startPedEnabledMask;
+    uint32_t   startTrigger20nsDisabledMask;
+    uint32_t   startTrigger100nsDisabledMask;
+    uint32_t   startOnlineMask;
     BOOL            cardChangedFlag;
     NSObject*       hwWizard;
 }
@@ -236,10 +236,10 @@ typedef struct Fec32CmosShiftReg{
 - (void) makeMainController;
 
 #pragma mark •••Accessors
-- (unsigned long) boardIDAsInt;
+- (uint32_t) boardIDAsInt;
 - (NSUInteger)             stationNumber;
-- (long)			cmosRate:(short)index;
-- (void)			setCmosRate:(short)index withValue:(long)aCmosRate;
+- (int32_t)			cmosRate:(short)index;
+- (void)			setCmosRate:(short)index withValue:(int32_t)aCmosRate;
 - (id)				xl1;
 - (id)				xl2;
 - (BOOL)			dcPresent:(unsigned short)index;
@@ -248,18 +248,18 @@ typedef struct Fec32CmosShiftReg{
 - (void)			setBaseCurrent:(short)idex withValue:(float)aBaseCurrent;
 - (int)				variableDisplay;
 - (void)			setVariableDisplay:(int)aVariableDisplay;
-- (unsigned long)	pedEnabledMask;
-- (void)			setPedEnabledMask:(unsigned long) aMask;
+- (uint32_t)	pedEnabledMask;
+- (void)			setPedEnabledMask:(uint32_t) aMask;
 - (void)            setPed:(short)chan enabled:(short)state;
 - (BOOL)            pedEnabled:(short)chan;
-- (unsigned long)	onlineMask;
-- (void)			setOnlineMask:(unsigned long) aMask;
-- (void)			setOnlineMaskNoInit:(unsigned long) aMask;
+- (uint32_t)	onlineMask;
+- (void)			setOnlineMask:(uint32_t) aMask;
+- (void)			setOnlineMaskNoInit:(uint32_t) aMask;
 - (BOOL)            getOnline:(short)chan;
 - (void)            setOnline:(short)chan enabled:(short)state;
 
-- (unsigned long)	seqDisabledMask;
-- (void)			setSeqDisabledMask:(unsigned long) aMask;
+- (uint32_t)	seqDisabledMask;
+- (void)			setSeqDisabledMask:(uint32_t) aMask;
 - (void)			setSeq:(short)chan enabled:(short)state;
 - (BOOL)			seqDisabled:(short)chan;
 - (BOOL)			seqEnabled:(short)chan;
@@ -268,8 +268,8 @@ typedef struct Fec32CmosShiftReg{
 - (void)            togglePendingSeq:(short)chan;
 - (void)            makeAllSeqPendingStatesSameAs:(short)chan;
 
-- (unsigned long)	trigger20nsDisabledMask;
-- (void)			setTrigger20nsDisabledMask:(unsigned long) aMask;
+- (uint32_t)	trigger20nsDisabledMask;
+- (void)			setTrigger20nsDisabledMask:(uint32_t) aMask;
 - (void)            setTrigger20ns:(short)chan enabled:(short)state;
 - (void)			setTrigger20ns:(short) chan disabled:(short)state;
 - (BOOL)			trigger20nsEnabled:(short)chan;
@@ -279,8 +279,8 @@ typedef struct Fec32CmosShiftReg{
 - (BOOL)			trigger20nsPendingDisabled:(short)chan;
 - (void)            makeAll20nsPendingStatesSameAs:(short)chan;
 
-- (unsigned long)	trigger100nsDisabledMask;
-- (void)			setTrigger100nsDisabledMask:(unsigned long) aMask;
+- (uint32_t)	trigger100nsDisabledMask;
+- (void)			setTrigger100nsDisabledMask:(uint32_t) aMask;
 - (void)            setTrigger100ns:(short)chan enabled:(short)state;
 - (void)			setTrigger100ns:(short) chan disabled:(short)state;
 - (BOOL)			trigger100nsEnabled:(short)chan;
@@ -290,8 +290,8 @@ typedef struct Fec32CmosShiftReg{
 - (BOOL)			trigger100nsPendingDisabled:(short)chan;
 - (void)            makeAll100nsPendingStatesSameAs:(short)chan;
 
-- (unsigned long)	cmosReadDisabledMask;
-- (void)			setCmosReadDisabledMask:(unsigned long) aMask;
+- (uint32_t)	cmosReadDisabledMask;
+- (void)			setCmosReadDisabledMask:(uint32_t) aMask;
 - (void)            setCmosRead:(short)chan enabled:(short)state;
 - (void)			setCmosRead:(short) chan disabled:(short)state;
 - (BOOL)			cmosReadEnabled:(short)chan;
@@ -360,16 +360,16 @@ typedef struct Fec32CmosShiftReg{
 - (void)encodeWithCoder:(NSCoder*)encoder;
 
 #pragma mark •••Hardware Access
-- (unsigned long) fec32RegAddress:(unsigned long)aRegOffset;
+- (uint32_t) fec32RegAddress:(uint32_t)aRegOffset;
 - (NSString*) performBoardIDRead:(short) boardIndex;
-- (void) writeToFec32Register:(unsigned long) aRegister value:(unsigned long) aBitPattern;
-- (void) setFec32RegisterBits:(unsigned long) aRegister bitMask:(unsigned long) bits_to_set;
-- (void) clearFec32RegisterBits:(unsigned long) aRegister bitMask:(unsigned long) bits_to_clear;
+- (void) writeToFec32Register:(uint32_t) aRegister value:(uint32_t) aBitPattern;
+- (void) setFec32RegisterBits:(uint32_t) aRegister bitMask:(uint32_t) bits_to_set;
+- (void) clearFec32RegisterBits:(uint32_t) aRegister bitMask:(uint32_t) bits_to_clear;
 - (void) readVoltages;
 - (void) parseVoltages:(VMonResults*)result;
-- (unsigned long) readFromFec32Register:(unsigned long) Register;
+- (uint32_t) readFromFec32Register:(uint32_t) Register;
 - (void) readBoardIds;
-- (void) boardIDOperation:(unsigned long)theDataValue boardSelectValue:(unsigned long) boardSelectVal beginIndex:(short) beginIndex;
+- (void) boardIDOperation:(uint32_t)theDataValue boardSelectValue:(uint32_t) boardSelectVal beginIndex:(short) beginIndex;
 - (void) autoInit;
 - (void) initTheCard:(BOOL) flgAutoInit;
 - (void) fullResetOfCard;
@@ -381,19 +381,19 @@ typedef struct Fec32CmosShiftReg{
 - (void) performPMTSetup:(BOOL) aTriggersDisabled;
 - (void) scan:(SEL)aResumeSelectorInGuardian; 
 - (void) scanWorkingSlot;
-- (BOOL) readCMOSCounts:(BOOL)calcRates channelMask:(unsigned long) aChannelMask;
-- (BOOL) processCMOSCounts:(unsigned long*)rates calcRates:(BOOL)aCalcRates withChannelMask:(unsigned long) aChannelMask;
-- (unsigned long) channelsWithCMOSRateHigherThan:(unsigned long)cmosRateLimit;
-- (unsigned long) channelsWithErrorCMOSRate;
+- (BOOL) readCMOSCounts:(BOOL)calcRates channelMask:(uint32_t) aChannelMask;
+- (BOOL) processCMOSCounts:(uint32_t*)rates calcRates:(BOOL)aCalcRates withChannelMask:(uint32_t) aChannelMask;
+- (uint32_t) channelsWithCMOSRateHigherThan:(uint32_t)cmosRateLimit;
+- (uint32_t) channelsWithErrorCMOSRate;
 
 //Added by Christopher Jones
 -(NSMutableDictionary*) pullFecForOrcaDB;
 
 #pragma mark •••Hw Access Helpers
-- (id) writeToFec32RegisterCmd:(unsigned long) aRegister value:(unsigned long) aBitPattern;
-- (id) readFromFec32RegisterCmd:(unsigned long) aRegister;
+- (id) writeToFec32RegisterCmd:(uint32_t) aRegister value:(uint32_t) aBitPattern;
+- (id) readFromFec32RegisterCmd:(uint32_t) aRegister;
 - (void) executeCommandList:(ORCommandList*)aList;
-- (id) delayCmd:(unsigned long) milliSeconds;
+- (id) delayCmd:(uint32_t) milliSeconds;
 
 #pragma mark •••OROrderedObjHolding Protocal
 - (int) maxNumberOfObjects;
@@ -436,6 +436,6 @@ extern NSString* ORFecLock;
 
 
 @interface NSObject (ORFec32Model)
-- (void) writeHardwareRegister:(unsigned long) anAddress value:(unsigned long) aValue;
-- (unsigned long) readHardwareRegister:(unsigned long) regAddress;
+- (void) writeHardwareRegister:(uint32_t) anAddress value:(uint32_t) aValue;
+- (uint32_t) readHardwareRegister:(uint32_t) regAddress;
 @end

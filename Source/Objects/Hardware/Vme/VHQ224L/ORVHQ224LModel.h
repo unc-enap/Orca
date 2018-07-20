@@ -80,7 +80,7 @@ typedef enum eVHQ224LRampingState {
 {
     @private
 		int pollTime;
-		unsigned long dataId;
+		uint32_t dataId;
 		float voltage[2];
 		float actVoltage[2];
 		float actCurrent[2];
@@ -115,8 +115,8 @@ typedef enum eVHQ224LRampingState {
 - (float) maxCurrent:(unsigned short) aChan;
 - (void)  setMaxCurrent:(unsigned short) aChan withValue:(float) aCurrent;
 
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 
 #pragma mark •••HW Access
 - (void) initBoard;

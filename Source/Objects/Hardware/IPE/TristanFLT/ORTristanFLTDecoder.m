@@ -73,10 +73,10 @@ static NSString* kStationKey[32] = {
     
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
 {
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length	= ExtractLength(ptr[0]);								 
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length	= ExtractLength(ptr[0]);								 
 	unsigned char crate		= ShiftAndExtract(ptr[1],21,0x0f);
 	unsigned char card		= ShiftAndExtract(ptr[1],16,0x1f);
     
@@ -128,12 +128,12 @@ static NSString* kStationKey[32] = {
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"TristanFLT Trace Record\n\n";
-    NSString* crate = [NSString stringWithFormat:@"Crate      = %lu\n",ShiftAndExtract(ptr[1],21,0xf)];
-    NSString* card  = [NSString stringWithFormat:@"Station    = %lu\n",ShiftAndExtract(ptr[1],16,0x1f)];
-    NSString* chan  = [NSString stringWithFormat:@"Channel    = %lu\n",ShiftAndExtract(ptr[1],8,0xff)];
+    NSString* crate = [NSString stringWithFormat:@"Crate      = %u\n",ShiftAndExtract(ptr[1],21,0xf)];
+    NSString* card  = [NSString stringWithFormat:@"Station    = %u\n",ShiftAndExtract(ptr[1],16,0x1f)];
+    NSString* chan  = [NSString stringWithFormat:@"Channel    = %u\n",ShiftAndExtract(ptr[1],8,0xff)];
 		
     return [NSString stringWithFormat:@"%@%@%@%@",title,crate,card,chan];
     	

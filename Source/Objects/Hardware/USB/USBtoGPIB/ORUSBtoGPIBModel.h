@@ -50,9 +50,9 @@
 - (void) setupDevice: (short) aPrimaryAddress secondaryAddress: (short) aSecondaryAddress;
 - (void) selectDevice:(short) aPrimaryAddress;
 - (void) writeToDevice: (short) aPrimaryAddress command: (NSString*) aCommand;
-- (long) readFromDevice: (short) aPrimaryAddress data: (char*) aData maxLength: (long) aMaxLength;
-- (long) writeReadDevice: (short) aPrimaryAddress command: (NSString*) aCommand data: (char*) aData
-               maxLength: (long) aMaxLength;
+- (int32_t) readFromDevice: (short) aPrimaryAddress data: (char*) aData maxLength: (int32_t) aMaxLength;
+- (int32_t) writeReadDevice: (short) aPrimaryAddress command: (NSString*) aCommand data: (char*) aData
+               maxLength: (int32_t) aMaxLength;
 
 - (NSString*) command;
 - (void) setCommand:(NSString*)aCommand;

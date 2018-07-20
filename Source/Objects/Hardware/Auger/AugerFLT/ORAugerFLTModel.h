@@ -78,9 +78,9 @@
     int				fltRunMode;		//!< Run modes: 0 = debug, 1 = run, 2 = measure, 3=test
     NSMutableArray* thresholds;     //!< Array to keep the threshold of all 22 channel
     NSMutableArray* gains;			//!< Aarry to keep the 
-    unsigned long	dataId;         //!< Id used to identify energy data set (run mode)
-	unsigned long	waveFormId;		//!< Id used to identify energy+trace data set (debug mode)
-	unsigned long   hitRateId;		//!< Id used to identify the data from the threshold scan (measure mode)
+    uint32_t	dataId;         //!< Id used to identify energy data set (run mode)
+	uint32_t	waveFormId;		//!< Id used to identify energy+trace data set (debug mode)
+	uint32_t   hitRateId;		//!< Id used to identify the data from the threshold scan (measure mode)
     NSMutableArray* triggersEnabled;	//!< Array to keep the activated channel for the trigger
     NSMutableArray* shapingTimes;		//!< Length of the triangular filter
 	NSMutableArray* hitRatesEnabled;	//!< Array to store the activated trigger rate measurement
@@ -94,29 +94,29 @@
 	// Parameters for event triggered readout mode
     BOOL			broadcastTime;
 	BOOL			firstTime;		//!< Event loop: Flag to identify the first readout loop for initialization purpose
-	unsigned long   nextEventPage;	//!< Event loop: Address of the last event in the hardware page buffer
-	unsigned long   lastEventId;	//!< Event  loop: Id of the last event. Used to search for missing events in run mode
+	uint32_t   nextEventPage;	//!< Event loop: Address of the last event in the hardware page buffer
+	uint32_t   lastEventId;	//!< Event  loop: Id of the last event. Used to search for missing events in run mode
 	int				generateTrigger;	//!< Event  loop: Flag to generate a software trigger in the next readout loop cycle
-	unsigned long	nLoops;			//!< Event  loop: Number of cycles
-	unsigned long	nEvents;		//!< Event loop: Number of recorded events
-	unsigned long	nSkippedEvents;	//!< Event loop: Number of skipped events
-	unsigned long	nMissingEvents;	//!< Event  loop: 
+	uint32_t	nLoops;			//!< Event  loop: Number of cycles
+	uint32_t	nEvents;		//!< Event loop: Number of recorded events
+	uint32_t	nSkippedEvents;	//!< Event loop: Number of skipped events
+	uint32_t	nMissingEvents;	//!< Event  loop: 
 	BOOL            overflowDetected;	//!< Event  loop: Flag to indicate an event buffer overflow in the current run
 	float           nBuffer;		//!< Event loop: Number of pages in the hardware event buffer 
-    unsigned long   resetSec;		//!< Event loop: Time stamp of the last reset..  
-	unsigned long   resetSubSec;	//!< Event loop: Time stmp of the last reset
+    uint32_t   resetSec;		//!< Event loop: Time stamp of the last reset..  
+	uint32_t   resetSubSec;	//!< Event loop: Time stmp of the last reset
 	bool			useResetTimestamp; //!< Event loop: Flag to indicate that the current hardwarde version supports reset time stamps
 
 	// Parameters for periodic readout mode
-	unsigned long	lastSec;		//!< Periodic readout: Buffer for the last second in preriodically readout mode
-	unsigned long	activeChMap;	//!< Periodic readout: List of active channels 
-	unsigned long	actualThreshold[22];//!< Periodic readout: Actually threshold during threshold scan
-	unsigned long	savedThreshold[22];	//!< Periodic readout: Original threshold saved from current configuration 
-	unsigned long	lastThreshold[22];	//!< Periodic readout: Last threshold during threshold scan
+	uint32_t	lastSec;		//!< Periodic readout: Buffer for the last second in preriodically readout mode
+	uint32_t	activeChMap;	//!< Periodic readout: List of active channels 
+	uint32_t	actualThreshold[22];//!< Periodic readout: Actually threshold during threshold scan
+	uint32_t	savedThreshold[22];	//!< Periodic readout: Original threshold saved from current configuration 
+	uint32_t	lastThreshold[22];	//!< Periodic readout: Last threshold during threshold scan
 	int				stepThreshold[22];	//!< Periodic readout: Threshold increment for scan (1, 10, 100, 1000)
-	unsigned long	maxHitrate[22];		//!< Periodic readout: Maxmal hitrate at the beginning of the scan
-	unsigned long	lastHitrate[22];	//!< Periodic readout: Trigger rate of the last sample
-	unsigned long	nNoChanges[22];		//!< Periodic readout: Number of samples with no changes in the hitrate. Used to control the threshol increments.
+	uint32_t	maxHitrate[22];		//!< Periodic readout: Maxmal hitrate at the beginning of the scan
+	uint32_t	lastHitrate[22];	//!< Periodic readout: Trigger rate of the last sample
+	uint32_t	nNoChanges[22];		//!< Periodic readout: Number of samples with no changes in the hitrate. Used to control the threshol increments.
 	
 	
 	id				sltmodel;
@@ -139,10 +139,10 @@
     BOOL checkWaveFormEnabled;
 	
 	//place to cache some values so they don't have to be calculated every time thru the run loop.
-	unsigned long	statusAddress;
-	unsigned long	triggerMemAddress;
-	unsigned long	memoryAddress;
-	unsigned long	locationWord;
+	uint32_t	statusAddress;
+	uint32_t	triggerMemAddress;
+	uint32_t	memoryAddress;
+	uint32_t	locationWord;
 	BOOL			usingPBusSimulation;
 	/** Reference to the Slt board for hardware access */
 	ORAugerFireWireCard* fireWireCard; 
@@ -173,12 +173,12 @@
 - (void) setBroadcastTime:(BOOL)aBroadcastTime;
 - (unsigned short) hitRateLength;
 - (void) setHitRateLength:(unsigned short)aHitRateLength;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
-- (unsigned long) waveFormId;
-- (void) setWaveFormId: (unsigned long) aWaveFormId;
-- (unsigned long) hitRateId;
-- (void) setHitRateId: (unsigned long) aHitRateId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
+- (uint32_t) waveFormId;
+- (void) setWaveFormId: (uint32_t) aWaveFormId;
+- (uint32_t) hitRateId;
+- (void) setHitRateId: (uint32_t) aHitRateId;
 
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherCard;
@@ -234,8 +234,8 @@
 - (BOOL)	readIsOverflow;
 - (int)		readMode;
 - (void)	writeMode:(int) value;
-- (unsigned long)  getReadPointer;
-- (unsigned long)  getWritePointer;
+- (uint32_t)  getReadPointer;
+- (uint32_t)  getWritePointer;
 - (void)  reset;
 
 /** Generate a software trigger. In order to distribute it to all Flts
@@ -247,16 +247,16 @@
 - (BOOL) isInRunMode;
 - (BOOL) isInTestMode;
 - (BOOL) isInDebugMode;
-- (void) loadTime:(unsigned long)aTime;
-- (unsigned long) readTime;
-- (unsigned long) readTimeSubSec;
+- (void) loadTime:(uint32_t)aTime;
+- (uint32_t) readTime;
+- (uint32_t) readTimeSubSec;
 - (void) writeHitRateMask;
 - (NSMutableArray*) hitRatesEnabled;
 - (void) setHitRatesEnabled:(NSMutableArray*)anArray;
 - (void) readHitRates;
 
-- (unsigned long) readControlStatus;
-- (void) writeControlStatus:(unsigned long)aValue;
+- (uint32_t) readControlStatus;
+- (void) writeControlStatus:(uint32_t)aValue;
 - (void) printStatusReg;
 - (void) writeThreshold:(int)i value:(unsigned short)aValue;
 - (unsigned short) readThreshold:(int)i;
@@ -272,7 +272,7 @@
 
 - (unsigned short) readTriggerControl:(int)fpga;
 - (void) writeMemoryChan:(int)chan page:(int)aPage value:(unsigned short)aValue;
-- (unsigned long) readMemoryChan:(int)chan page:(int)aPage;
+- (uint32_t) readMemoryChan:(int)chan page:(int)aPage;
 - (void) readMemoryChan:(int)aChan page:(int)aPage pageBuffer:(unsigned short*)aPageBuffer;
 - (void) broadcast:(int)aPage dataBuffer:(unsigned short*)aDataBuffer;
 - (void) clear:(int)aChan page:(int)aPage value:(unsigned short)aValue;

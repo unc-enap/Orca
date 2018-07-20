@@ -35,7 +35,7 @@
 
 - (void) setCrateTitle
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"PXI crate %lu",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"PXI crate %u",[model uniqueIdNumber]]];
 }
 
 #pragma mark ¥¥¥Accessors

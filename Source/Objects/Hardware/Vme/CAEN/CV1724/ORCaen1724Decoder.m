@@ -49,10 +49,10 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
     [super dealloc];
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length = ExtractLength(*ptr);
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length = ExtractLength(*ptr);
 
 	ptr++; //point to location
 	int crate = (*ptr&0x01e00000)>>21;
@@ -61,10 +61,10 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 	NSString* cardKey	= [self getCardKey:  card];
 	
 	ptr++; //point to start of event
-	unsigned long eventSize = *ptr & 0x0fffffff;
+	uint32_t eventSize = *ptr & 0x0fffffff;
     if ( eventSize != length - 2 ) return length;
 	ptr++; //point to 2nd word of event
-	unsigned long channelMask = *ptr & 0x000000ff;
+	uint32_t channelMask = *ptr & 0x000000ff;
 	//NSLog(@"Channel Mask: %d Len: %d Size: %d\n",channelMask,length,eventSize);
 	ptr++; //point to 3rd word of event
 	ptr++; //point to 4th word of event
@@ -138,9 +138,9 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
-	//unsigned long length = ExtractLength(*ptr);
+	//uint32_t length = ExtractLength(*ptr);
 	//a single trigger event expected
 	
 	ptr += 2;
@@ -151,7 +151,7 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 	NSString* lvioPattern = [NSString stringWithFormat:@"LVIO Pattern = 0x%04lx\n", (ptr[1] >> 8) & 0xffffUL];
 	NSString* sChannelMask = [NSString stringWithFormat:@"Channel mask = 0x%02lx\n", ptr[1] & 0xffUL];
 	NSString* eventCounter = [NSString stringWithFormat:@"Event counter = 0x%06lx\n", ptr[2] & 0xffffffUL];
-	NSString* timeTag = [NSString stringWithFormat:@"Time tag = 0x%08lx\n", ptr[3]];
+	NSString* timeTag = [NSString stringWithFormat:@"Time tag = 0x%08x\n", ptr[3]];
 	
 	[dsc appendFormat:@"%@%@%@%@%@%@", eventSize, isZeroLengthEncoded, lvioPattern, sChannelMask, eventCounter, timeTag];
 	return dsc;               

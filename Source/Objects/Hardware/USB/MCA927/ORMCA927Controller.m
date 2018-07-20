@@ -284,7 +284,7 @@
 {
 	int i;
 	for(i=0;i<2;i++){
-		unsigned long optionsMask = [model runOptions:i];
+		uint32_t optionsMask = [model runOptions:i];
 		[[runOptionsMatrix cellAtRow:0 column:i] setIntValue: (optionsMask&kChannelEnabledMask) != 0];
 		[[runOptionsMatrix cellAtRow:1 column:i] setIntValue: (optionsMask&kChannelAutoStopMask) != 0];
 	}
@@ -312,7 +312,7 @@
 
 - (void) zdtModeChanged:(NSNotification*)aNote
 {
-	unsigned long zdtMode = [model zdtMode:[model selectedChannel]];
+	uint32_t zdtMode = [model zdtMode:[model selectedChannel]];
 	[zdtSpeedPU selectItemWithTag:zdtMode & kZDTSpeedMask];
 	[[zdtModeMatrix cellWithTag:0] setIntValue: (zdtMode & kEnableZDTMask)!=0];
 	[[zdtModeMatrix cellWithTag:1] setIntValue: (zdtMode & kZDTModeMask)!=0];
@@ -416,7 +416,7 @@
 #pragma mark •••Notifications
 - (void) controlRegChanged:(NSNotification*)aNote
 {
-	unsigned long mask = [model controlReg:[model selectedChannel]];
+	uint32_t mask = [model controlReg:[model selectedChannel]];
 	int i;
 	for(i=0;i<32;i++){
 		BOOL bitSet = (mask&(1<<i))>0;
@@ -429,7 +429,7 @@
 - (void) presetCtrlRegChanged:(NSNotification*)aNote
 {
 
-	unsigned long mask = [model presetCtrlReg:[model selectedChannel]];
+	uint32_t mask = [model presetCtrlReg:[model selectedChannel]];
 	int i;
 	for(i=0;i<32;i++){
 		BOOL bitSet = (mask&(1<<i))>0;
@@ -529,7 +529,7 @@
 - (IBAction) runOptionsAction:(id)sender
 {
 	int i;
-	unsigned long optionsMask[2] = {0,0};
+	uint32_t optionsMask[2] = {0,0};
 	for(i=0;i<2;i++){
 		if([[runOptionsMatrix cellAtRow:0 column:i] intValue]) optionsMask[i] |= kChannelEnabledMask;
 		if([[runOptionsMatrix cellAtRow:1 column:i] intValue]) optionsMask[i] |= kChannelAutoStopMask;
@@ -743,7 +743,7 @@
 
 - (IBAction) zdtModeAction:(id)sender
 {
-	unsigned long aValue = [model zdtMode:[model selectedChannel]];
+	uint32_t aValue = [model zdtMode:[model selectedChannel]];
 	aValue &= ~kZDTMask;
 	if([[sender cellWithTag:0] intValue]) aValue |= kEnableZDTMask;
 	if([[sender cellWithTag:1] intValue]) aValue |= kZDTModeMask;
@@ -752,7 +752,7 @@
 	 
  - (IBAction) zdtSpeedAction:(id)sender
 {
-	unsigned long aValue = [model zdtMode:[model selectedChannel]];
+	uint32_t aValue = [model zdtMode:[model selectedChannel]];
 	aValue &= ~kZDTSpeedMask;
 	aValue |= [[sender selectedItem] tag];
 	[model setZdtMode:[model selectedChannel] withValue:aValue];	
@@ -796,7 +796,7 @@
 
 - (IBAction) controlRegAction:(id)sender
 {
-	unsigned long mask = [model controlReg:[model selectedChannel]];
+	uint32_t mask = [model controlReg:[model selectedChannel]];
 	mask &= 0x00000001; //clear all but start bit
 	NSInteger rows,columns;
 	[sender getNumberOfRows:&rows columns:&columns];
@@ -813,7 +813,7 @@
 
 - (IBAction) presetCtrlRegAction:(id)sender
 {
-	unsigned long mask = 0;
+	uint32_t mask = 0;
 	NSInteger rows,columns;
 	[sender getNumberOfRows:&rows columns:&columns];
 	int i;

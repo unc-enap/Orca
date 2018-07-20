@@ -80,8 +80,8 @@ enum {
 };
 
 struct ipeReg {
-	unsigned long address;
-	unsigned long space;
+	uint32_t address;
+	uint32_t space;
 }ipeReg[kNumFLTChannels] = {
 {0x0L, 0x0L},	//kFLTControlReg
 {0x1L, 0x0L},	//kFLTPixelStatus1Reg
@@ -161,12 +161,12 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 
 #pragma mark ¥¥¥Accessors
 
-- (unsigned long) dataMask
+- (uint32_t) dataMask
 {
     return dataMask;
 }
 
-- (void) setDataMask:(unsigned long)aDataMask
+- (void) setDataMask:(uint32_t)aDataMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setDataMask:dataMask];
     
@@ -180,12 +180,12 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 	return (eventMask & (1L<<chan)) != 0;
 }
 
-- (unsigned long) eventMask
+- (uint32_t) eventMask
 {
 	return eventMask;
 }
 
-- (void) eventMask:(unsigned long)aMask
+- (void) eventMask:(uint32_t)aMask
 {
 	eventMask = aMask;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORIpeFLTModelEventMaskChanged object:self];
@@ -220,12 +220,12 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 }
 
 
-- (unsigned long) coinTime
+- (uint32_t) coinTime
 {
 	return coinTime;
 }
 
-- (void) setCoinTime:(unsigned long)aValue
+- (void) setCoinTime:(uint32_t)aValue
 {
 	if(aValue<4)aValue=4;
 	if(aValue>515)aValue=515;
@@ -236,12 +236,12 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
     [[NSNotificationCenter defaultCenter] postNotificationName:ORIpeFLTModelCoinTimeChanged object:self];
 }
 
-- (unsigned long) integrationTime
+- (uint32_t) integrationTime
 {
 	return integrationTime;
 }
 
-- (void) setIntegrationTime:(unsigned long)aValue
+- (void) setIntegrationTime:(uint32_t)aValue
 {
 	if(aValue<1)aValue=1;
 	if(aValue>16)aValue=16;
@@ -253,12 +253,12 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 }
 
 
-- (unsigned long) interruptMask
+- (uint32_t) interruptMask
 {
     return interruptMask;
 }
 
-- (void) setInterruptMask:(unsigned long)aInterruptMask
+- (void) setInterruptMask:(uint32_t)aInterruptMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setInterruptMask:interruptMask];
     
@@ -371,14 +371,14 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
     [[NSNotificationCenter defaultCenter] postNotificationName:ORIpeFLTModelTriggersEnabledChanged object:self];
 }
 
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
 
-- (unsigned long) waveFormId { return waveFormId; }
-- (void) setWaveFormId: (unsigned long) aWaveFormId
+- (uint32_t) waveFormId { return waveFormId; }
+- (void) setWaveFormId: (uint32_t) aWaveFormId
 {
     waveFormId = aWaveFormId;
 }
@@ -657,10 +657,10 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 	
 	// Get the integration time
 	// ADC * T_int = Threshold
-	unsigned long status = [self readReg: kFLTPeriphStatusReg];	
+	uint32_t status = [self readReg: kFLTPeriphStatusReg];	
 	int t_Int = (status>>20) & 0xf; // default: 10
 	
-	unsigned long hitRateEnabledMask = 0x0;
+	uint32_t hitRateEnabledMask = 0x0;
 	int chan;
 	for(chan = 0;chan<kNumFLTChannels;chan++){
 		if([[hitRatesEnabled objectAtIndex:chan] intValue]){
@@ -710,13 +710,13 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 
 - (int)  readVersion
 {	
-	unsigned long data = [self readControlStatus];
+	uint32_t data = [self readControlStatus];
 	return (data >> kIpeFlt_Cntl_Version_Shift) & kIpeFlt_Cntl_Version_Mask;
 }
 
 - (int)  readCardId
 {
- 	unsigned long data = [self readControlStatus];
+ 	uint32_t data = [self readControlStatus];
 	int realSlot =  1+(data >> kIpeFlt_Cntl_CardID_Shift) & kIpeFlt_Cntl_CardID_Mask;
 	if(realSlot != [self stationNumber]){
 		NSLogError(@"IPE Crate %d configuration has FLT %d in the wrong slot! (Should be slot %d)\n",[self crateNumber], [self stationNumber], realSlot); 
@@ -727,7 +727,7 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 
 - (int)  readMode
 {
-	unsigned long data = [self readControlStatus];
+	uint32_t data = [self readControlStatus];
 	[self setFltRunMode: (data >> kIpeFlt_Cntl_Mode_Shift) & kIpeFlt_Cntl_Mode_Mask];
 	return fltRunMode;
 }
@@ -743,14 +743,14 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 
 - (void) enableStatistics
 {
-    unsigned long aValue;
+    uint32_t aValue;
 	bool enabled = true;
-	unsigned long adc_guess = 150;			// This are parameter that work with the standard Auger-type boards
-	unsigned long n = 65000;				// There is not really a need to make them variable. ak 7.10.07
+	uint32_t adc_guess = 150;			// This are parameter that work with the standard Auger-type boards
+	uint32_t n = 65000;				// There is not really a need to make them variable. ak 7.10.07
 	
-    aValue =     (  ( (unsigned long) (enabled  &   0x1) ) << 31)
-	| (  ( (unsigned long) (adc_guess   & 0x3ff) ) << 16)
-	|    ( (unsigned long) ( (n-1)  & 0xffff) ) ; // 16 bit !
+    aValue =     (  ( (uint32_t) (enabled  &   0x1) ) << 31)
+	| (  ( (uint32_t) (adc_guess   & 0x3ff) ) << 16)
+	|    ( (uint32_t) ( (n-1)  & 0xffff) ) ; // 16 bit !
 	
 	// Broadcast to all channel	(pseudo channel 0x1f)     
 	[self writeReg:kFLTStaticSetReg channel:0x1f value:aValue]; 
@@ -763,9 +763,9 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 
 - (void) getStatistics:(int)aChannel mean:(double *)aMean  var:(double *)aVar 
 {
-    unsigned long data;
-	signed long sum;
-    unsigned long sumSq;
+    uint32_t data;
+	int32_t sum;
+    uint32_t sumSq;
 	
     // Read Statistic parameter
     data = [self  readReg:kFLTStaticSetReg channel:aChannel];
@@ -809,16 +809,16 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 	[self writeReg:kFLTDisOnCntrlReg value:0];
 }
 
-- (unsigned long) readControlStatus
+- (uint32_t) readControlStatus
 {
-	unsigned long value =   [self readReg: kFLTControlReg ];
+	uint32_t value =   [self readReg: kFLTControlReg ];
 	[self setLedOff: ((value & kIpeFlt_Cntl_LedOff_Mask) >> kIpeFlt_Cntl_LedOff_Shift)];
 	return value;
 }
 
 - (void) writeControlStatus
 {
-	unsigned long aValue =	(interruptMask  & kIpeFlt_Cntl_InterruptMask_Mask) << kIpeFlt_Cntl_InterruptMask_Shift  |
+	uint32_t aValue =	(interruptMask  & kIpeFlt_Cntl_InterruptMask_Mask) << kIpeFlt_Cntl_InterruptMask_Shift  |
 	(ledOff			& kIpeFlt_Cntl_LedOff_Mask)		   << kIpeFlt_Cntl_LedOff_Shift			| 
 	(hitRateLength  & kIpeFlt_Cntl_HitRateLength_Mask) << kIpeFlt_Cntl_HitRateLength_Shift  |
 	(fltRunMode		& kIpeFlt_Cntl_Mode_Mask)		   << kIpeFlt_Cntl_Mode_Shift;
@@ -830,7 +830,7 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 {
 	int fpga;
 	for(fpga=0;fpga<4;fpga++){
-		unsigned long aValue = (!fltRunMode &kIpeFlt_Periph_Mode_Mask) << kIpeFlt_Periph_Mode_Shift |
+		uint32_t aValue = (!fltRunMode &kIpeFlt_Periph_Mode_Mask) << kIpeFlt_Periph_Mode_Shift |
 		(coinTime & kIpeFlt_Periph_CoinTme_Mask) << kIpeFlt_Periph_CoinTme_Shift |    
 		(0 & kIpeFlt_Periph_LedOff_Mask) <<kIpeFlt_Periph_LedOff_Shift |
 		(1 & kIpeFlt_Periph_ThresDelta_Mask) <<kIpeFlt_Periph_ThresDelta_Shift |
@@ -842,7 +842,7 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 
 - (void) printPixelRegs
 {
-	unsigned long aValue;
+	uint32_t aValue;
 	int j;
 	
 	NSFont* aFont = [NSFont userFixedPitchFontOfSize:10];
@@ -879,7 +879,7 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 
 - (void) printStatusReg
 {
-	unsigned long status = [self readControlStatus];
+	uint32_t status = [self readControlStatus];
 	NSFont* aFont = [NSFont userFixedPitchFontOfSize:10];
 	NSLogFont(aFont,@"FLT %d status Reg (address:0x%08x): 0x%08x\n", [self stationNumber],[self regAddress:kFLTControlReg],status);
 	NSLogFont(aFont,@"SlotID         : %d\n",1+(status>>kIpeFlt_Cntl_CardID_Shift) & kIpeFlt_Cntl_CardID_Mask);
@@ -903,7 +903,7 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 - (void) printPeriphStatusReg
 {
 	NSFont* aFont = [NSFont userFixedPitchFontOfSize:10];
-	unsigned long status = [self readReg: kFLTPeriphStatusReg];
+	uint32_t status = [self readReg: kFLTPeriphStatusReg];
 	NSLogFont(aFont,@"FLT %d PeriphStatus Reg (address:0x%08x): 0x%08x\n", [self stationNumber],[self regAddress:kFLTPeriphStatusReg],status);
 	NSLogFont(aFont,@"Version         : %d\n",(status>>28) & 0xf);
 	NSLogFont(aFont,@"Bits in BoxCar  : %d\n",(status>>24) & 0xf);
@@ -927,37 +927,37 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 	}
 }
 
-- (unsigned long) regAddress:(int)aReg channel:(int)aChannel
+- (uint32_t) regAddress:(int)aReg channel:(int)aChannel
 {
 	return ([self slot] << 24) | (ipeReg[aReg].space << kIpeFlt_AddressSpace) | ((aChannel&0x01f)<<kIpeFlt_ChannelAddress) | ipeReg[aReg].address;
 }
 
-- (unsigned long) regAddress:(int)aReg
+- (uint32_t) regAddress:(int)aReg
 {
 	return ([self slot] << 24) | (ipeReg[aReg].space << kIpeFlt_AddressSpace)  | ipeReg[aReg].address;
 }
 
-- (unsigned long) adcMemoryChannel:(int)aChannel page:(int)aPage
+- (uint32_t) adcMemoryChannel:(int)aChannel page:(int)aPage
 {
 	return ([self slot] << 24) | (0x2 << kIpeFlt_AddressSpace) | (aChannel << kIpeFlt_ChannelAddress)	| (aPage << kIpeFlt_PageNumber);
 }
 
-- (unsigned long) readReg:(int)aReg
+- (uint32_t) readReg:(int)aReg
 {
 	return [self read:[self regAddress:aReg]];
 }
 
-- (unsigned long) readReg:(int)aReg channel:(int)aChannel
+- (uint32_t) readReg:(int)aReg channel:(int)aChannel
 {
 	return [self read:[self regAddress:aReg channel:aChannel]];
 }
 
-- (void) writeReg:(int)aReg value:(unsigned long)aValue
+- (void) writeReg:(int)aReg value:(uint32_t)aValue
 {
 	[self write:[self regAddress:aReg] value:aValue];
 }
 
-- (void) writeReg:(int)aReg channel:(int)aChannel value:(unsigned long)aValue
+- (void) writeReg:(int)aReg channel:(int)aChannel value:(uint32_t)aValue
 {
 	[self write:[self regAddress:aReg channel:aChannel] value:aValue];
 }
@@ -980,7 +980,7 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 	[self writeReg:kFLTGainReg channel:i value:(255-aValue)]; 
 }
 
-- (void) writeTestPattern:(unsigned long*)mask length:(int)len
+- (void) writeTestPattern:(uint32_t*)mask length:(int)len
 {
 	[self rewindTestPattern];
 	[self writeNextPattern:0];
@@ -997,14 +997,14 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 	[self writeReg:kFLTTestPulsMemReg value: kIpeFlt_TP_Control | kIpeFlt_TestPattern_Reset];
 }
 
-- (void) writeNextPattern:(unsigned long)aValue
+- (void) writeNextPattern:(uint32_t)aValue
 {
 	[self writeReg:kFLTTestPulsMemReg value:aValue];
 }
 
 - (void) clear:(int)aChan page:(int)aPage value:(unsigned short)aValue
 {
-	unsigned long aPattern;
+	uint32_t aPattern;
 	
 	aPattern =  aValue;
 	aPattern = ( aPattern << 16 ) + aValue;
@@ -1020,7 +1020,7 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 - (void) writeMemoryChan:(int)aChan page:(int)aPage pageBuffer:(unsigned short*)aPageBuffer
 {
 	[self writeBlock: [self adcMemoryChannel:aChan page:aPage] 
-		  dataBuffer: (unsigned long*)aPageBuffer
+		  dataBuffer: (uint32_t*)aPageBuffer
 			  length: kIpeFlt_Page_Size/2
 		   increment: 2];
 }
@@ -1029,19 +1029,19 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 {
 	
 	[self readBlock: [self adcMemoryChannel:aChan page:aPage]
-		 dataBuffer: (unsigned long*)aPageBuffer
+		 dataBuffer: (uint32_t*)aPageBuffer
 			 length: kIpeFlt_Page_Size/2
 		  increment: 2];
 }
 
-- (unsigned long) readMemoryChan:(int)aChan page:(int)aPage
+- (uint32_t) readMemoryChan:(int)aChan page:(int)aPage
 {
 	return [self read:[self adcMemoryChannel:aChan page:aPage]];
 }
 
 - (void) writeHitRateMask
 {
-	unsigned long hitRateEnabledMask = 0x0;
+	uint32_t hitRateEnabledMask = 0x0;
 	int chan;
 	for(chan = 0;chan<kNumFLTChannels;chan++){
 		if([[hitRatesEnabled objectAtIndex:chan] intValue]){
@@ -1065,7 +1065,7 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 
 - (void) writeTriggerControl
 {
-	unsigned long pixelStatus1Mask = 0x0;
+	uint32_t pixelStatus1Mask = 0x0;
 	int chan;
 	for(chan = 0;chan<kNumFLTChannels;chan++){
 		if(![[triggersEnabled objectAtIndex:chan] intValue]){ // ak 5.10.07
@@ -1080,12 +1080,12 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 
 - (void) disableTrigger
 {
-	unsigned long aValue = 0x555; //all triggers off
+	uint32_t aValue = 0x555; //all triggers off
 	int fpga;
 	for(fpga=0;fpga<4;fpga++){
 		
 		[self writeReg:kFLTChannelOnOffReg channel:trigChanConvFLT[fpga][0]  value:aValue];
-		unsigned long checkValue = [self readReg:kFLTChannelOnOffReg channel:trigChanConvFLT[fpga][0]];
+		uint32_t checkValue = [self readReg:kFLTChannelOnOffReg channel:trigChanConvFLT[fpga][0]];
 		
 		aValue	   &= 0xfff;
 		checkValue &= 0xfff;
@@ -1107,7 +1107,7 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(readHitRates) object:nil];
 	
 	@try {
-		unsigned long aValue;
+		uint32_t aValue;
 		BOOL overflow;
 		float measurementAge;
 		
@@ -1348,7 +1348,7 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 	readoutPages = 1;
 	
 	//cache some addresses for speed in the dataTaking loop.
-	unsigned long theSlotPart = [self slot]<<24;
+	uint32_t theSlotPart = [self slot]<<24;
 	statusAddress			  = theSlotPart;
 	memoryAddress			  = theSlotPart | (ipeReg[kFLTAdcMemory].space << kIpeFlt_AddressSpace); 
 	fireWireCard			  = [[self crate] adapter];
@@ -1370,8 +1370,8 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 		//retrieve the parameters
 		int fltPageStart = [[userInfo objectForKey:@"page"] intValue];
 		int lStart		 = [[userInfo objectForKey:@"lStart"] intValue];
-		unsigned long pixelList = [[userInfo objectForKey:@"pixelList"] intValue]; // ak, 5.10.2007
-		unsigned long fltSize = pageSize * 5; // Size in long words
+		uint32_t pixelList = [[userInfo objectForKey:@"pixelList"] intValue]; // ak, 5.10.2007
+		uint32_t fltSize = pageSize * 5; // Size in int32_t words
 		
 		//int eventCounter = [[userInfo objectForKey:@"eventCounter"] intValue];
 		[self eventMask:pixelList];	
@@ -1386,30 +1386,30 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 				locationWord &= 0xffff0000;
 				locationWord |= (aChan&0xff)<<8;
 				
-				unsigned long totalLength = (2 + readoutPages * fltSize);	// longs
-				//unsigned long totalLength = (2 + 500);	// longs
-				NSMutableData* theWaveFormData = [NSMutableData dataWithCapacity:totalLength*sizeof(long)];
-				unsigned long header = waveFormId | totalLength;
+				uint32_t totalLength = (2 + readoutPages * fltSize);	// longs
+				//uint32_t totalLength = (2 + 500);	// longs
+				NSMutableData* theWaveFormData = [NSMutableData dataWithCapacity:totalLength*sizeof(int32_t)];
+				uint32_t header = waveFormId | totalLength;
 				
 				[theWaveFormData appendBytes:&header length:4];				           //ORCA header word¶
 				[theWaveFormData appendBytes:&locationWord length:4];		           //which crate, which card info
 				
-				[theWaveFormData setLength:totalLength*sizeof(long)]; //we're going to dump directly into the NSData object so
+				[theWaveFormData setLength:totalLength*sizeof(int32_t)]; //we're going to dump directly into the NSData object so
 				//we have to set the total size first. (Note: different than 'Capacity')
 				
 				
 				short* waveFormPtr = ((short*)[theWaveFormData bytes]) + (4*sizeof(short)); //point to start of waveform
-				unsigned long* wPtr = (unsigned long*)waveFormPtr;
+				uint32_t* wPtr = (uint32_t*)waveFormPtr;
 				
 				int i;
 				int j;
-				long addr =  memoryAddress | (aChan << kIpeFlt_ChannelAddress) | (fltPageStart<<10) | lStart; // ak, 5.10.07
-				unsigned long finalDataMask = dataMask;
+				int32_t addr =  memoryAddress | (aChan << kIpeFlt_ChannelAddress) | (fltPageStart<<10) | lStart; // ak, 5.10.07
+				uint32_t finalDataMask = dataMask;
 				if(finalDataMask==0)finalDataMask = 0x0fff;
 				for (j=0;j<readoutPages;j++){
 					
 					// Use block read mode.
-					// With every 32bit (long word) two 12bit ADC values are transmitted
+					// With every 32bit (int32_t word) two 12bit ADC values are transmitted
 					// documentation says 1000 data words followed by 24 words not used
 					[fireWireCard read:addr
                                   data:wPtr
@@ -1535,14 +1535,14 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
     else return nil;
 }
 //for adcProvidingProtocol... but not used for now
-- (unsigned long) eventCount:(int)channel
+- (uint32_t) eventCount:(int)channel
 {
 	return 0;
 }
 - (void) clearEventCounts
 {
 }
-- (unsigned long) thresholdForDisplay:(unsigned short) aChan
+- (uint32_t) thresholdForDisplay:(unsigned short) aChan
 {
 	return [self threshold:aChan];
 }
@@ -1746,7 +1746,7 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 	
 	@try {
 		[self enterTestMode];
-		unsigned long aPattern[4] = {0x3fff,0x0,0x2aaa,0x1555};
+		uint32_t aPattern[4] = {0x3fff,0x0,0x2aaa,0x1555};
 		int chan;
 		BOOL passed = YES;
 		int testIndex;
@@ -1767,7 +1767,7 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 			}
 		}
 		if(passed){		
-			unsigned long gainPattern[4] = {0xff,0x0,0xaa,0x55};
+			uint32_t gainPattern[4] = {0xff,0x0,0xaa,0x55};
 			
 			//now gains
 			for(testIndex = 0;testIndex<4;testIndex++){
@@ -1898,8 +1898,8 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 			[ORTimer delay:.1];
 		}
 		[slt readPageStatus];
-		unsigned long lowStatus = [slt pageStatusLow];
-		unsigned long highStatus = [slt pageStatusHigh];
+		uint32_t lowStatus = [slt pageStatusLow];
+		uint32_t highStatus = [slt pageStatusHigh];
 		if(lowStatus | highStatus){
 			NSLog(@"---Event Data---\n");
 			int sum = 0;

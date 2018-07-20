@@ -21,14 +21,14 @@
 - (unsigned) highValue;
 
 - (void) addMemorySection:(NSString*)aName 
-			  baseAddress:(unsigned long)anAddress 
+			  baseAddress:(uint32_t)anAddress 
 		   startingOffset:(int)offset 
-			  sizeInBytes:(unsigned long)aSize;
+			  sizeInBytes:(uint32_t)aSize;
 
 - (unsigned) count;
 - (NSString*) name:(unsigned)index;
-- (unsigned long)  baseAddress:(int)index;
+- (uint32_t)  baseAddress:(int)index;
 - (int)  offset:(int)index;
-- (unsigned long)  sizeInBytes:(int)index;
+- (uint32_t)  sizeInBytes:(int)index;
 
 @end

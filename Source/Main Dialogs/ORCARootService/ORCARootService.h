@@ -37,9 +37,9 @@
     NetSocket*		socket;
 	BOOL			isConnected;
     NSDate*         timeConnected;
-    unsigned long	amountInBuffer;
-    unsigned long	totalSent;
-	unsigned long	dataId;
+    uint32_t	amountInBuffer;
+    uint32_t	totalSent;
+	uint32_t	dataId;
 	int				requestTag;
 	NSMutableDictionary* waitingObjects;
 	NSMutableData*	dataBuffer;
@@ -72,20 +72,20 @@
 - (void) setSocket:(NetSocket*)aSocket;
 - (NSString*) name;
 - (void) setName:(NSString*)newName;
-- (unsigned long long) totalSent;
-- (void) setTotalSent:(unsigned long long)aTotalSent;
+- (uint64_t) totalSent;
+- (void) setTotalSent:(uint64_t)aTotalSent;
 - (NSDate*) timeConnected;
 - (void) setTimeConnected:(NSDate*)newTimeConnected;
-- (unsigned long) amountInBuffer; 
-- (void) setAmountInBuffer:(unsigned long)anAmountInBuffer; 
+- (uint32_t) amountInBuffer; 
+- (void) setAmountInBuffer:(uint32_t)anAmountInBuffer; 
 - (void) writeData:(NSData*)inData;
 - (void) connectSocket:(BOOL)state;
 - (BOOL) isConnected;
 - (void) setIsConnected:(BOOL)aNewIsConnected;
 - (void) broadcastConnectionStatus;
 - (void) clearCounts;
-- (void) setDataId: (unsigned long) aDataId;
-- (unsigned long) dataId;
+- (void) setDataId: (uint32_t) aDataId;
+- (uint32_t) dataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherObj;
 - (NSDictionary*) dataRecordDescription;
@@ -98,8 +98,8 @@
 
 #pragma mark ¥¥¥Delegate Methods
 - (void) netsocketDisconnected:(NetSocket*)insocket;
-- (void) netsocketDataInOutgoingBuffer:(NetSocket*)insocket length:(unsigned long)length;
-- (void) netsocketDataSent:(NetSocket*)insocket length:(unsigned long)length;
+- (void) netsocketDataInOutgoingBuffer:(NetSocket*)insocket length:(uint32_t)length;
+- (void) netsocketDataSent:(NetSocket*)insocket length:(uint32_t)length;
 @end
 
 extern NSString* ORCARootServicePortChanged;

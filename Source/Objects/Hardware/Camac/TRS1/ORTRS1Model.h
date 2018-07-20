@@ -34,15 +34,15 @@
 
 @interface ORTRS1Model : ORCamacIOCard <ORDataTaker> {
     @private
-        unsigned long	dataId;
+        uint32_t	dataId;
         unsigned short	controlRegister;
         unsigned char	offsetRegister;
 		BOOL			firstTime;
 		int				expectedNumberDataBytes;
-		unsigned long*  dataBuffer;
+		uint32_t*  dataBuffer;
 		
 		//place to cache some stuff for alittle more speed.
-        unsigned long 	crateAndStationId;
+        uint32_t 	crateAndStationId;
         unsigned short cachedStation;
 }
 

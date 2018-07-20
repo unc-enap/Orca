@@ -17,18 +17,18 @@
 
 @interface ORCircularBufferUV : NSObject {
 	NSMutableArray*		mStorageArray;
-	long				mSize;
-	long				mHeadIndex;
-	long				mTailIndex;
+	int32_t				mSize;
+	int32_t				mHeadIndex;
+	int32_t				mTailIndex;
 	Boolean				mFWrapped;
 	
 }
 
 - (id) init;
-- (void) setSize: (long) aSize;
-- (long) count;
+- (void) setSize: (int32_t) aSize;
+- (int32_t) count;
 - (void) insertHVEntry: (NSDate *) aDateOfAquistion hvValue: (NSNumber*) anHVEntry;
-- (NSDictionary *) HVEntry: (long) anOffset;
+- (NSDictionary *) HVEntry: (int32_t) anOffset;
 
 @end
 

@@ -151,7 +151,7 @@ enum {
 		unsigned short channelEventStatus[kNumVHSC040nChannels];
 	
 		int pollTime;
-		unsigned long dataId;
+		uint32_t dataId;
 		BOOL timeOutError;
 		BOOL statusChanged; 
 		BOOL pollingError;
@@ -225,8 +225,8 @@ enum {
 - (float) currentBounds:(unsigned short) aChan;
 - (void)  setCurrentBounds:(unsigned short) aChan withValue:(float) aCurrent;
 
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 
 #pragma mark •••HW Access
 - (void) readModuleInfo;

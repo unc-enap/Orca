@@ -571,7 +571,7 @@
 
 - (void) runTypeChanged:(NSNotification *)notification
 {
-	unsigned long runType = [model runType];
+	uint32_t runType = [model runType];
 	int i;
 	for(i=0;i<32;i++){
 		[[runTypeMatrix cellWithTag:i] setState:(runType &(1UL<<i))!=0];
@@ -920,7 +920,7 @@
 {
     short i     = [[sender selectedCell] tag];
     BOOL state  = [(NSButton*)[sender selectedCell] state];
-    unsigned long currentRunMask = [model runType];
+    uint32_t currentRunMask = [model runType];
     if(state) currentRunMask |= (1L<<i);
     else      currentRunMask &= ~(1L<<i);
     

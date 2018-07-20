@@ -46,11 +46,11 @@ followed by waveform data (n x 1024 16-bit words)
 //-------------------------------------------------------------
 
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
 
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length	= ExtractLength(*ptr);	 //get length from first word
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length	= ExtractLength(*ptr);	 //get length from first word
 
 	++ptr;											//crate, card,channel from second word
 	unsigned char crate		= (*ptr>>21) & 0xf;
@@ -61,10 +61,10 @@ followed by waveform data (n x 1024 16-bit words)
 	NSString* channelKey	= [self getChannelKey: chan];
 			
 	// Set up the waveform
-	NSData* waveFormdata = [NSData dataWithBytes:someData length:length*sizeof(long)];
+	NSData* waveFormdata = [NSData dataWithBytes:someData length:length*sizeof(int32_t)];
 
 	[aDataSet loadWaveform: waveFormdata					//pass in the whole data set
-					offset: 2*sizeof(long)					// Offset in bytes (2 header words)
+					offset: 2*sizeof(int32_t)					// Offset in bytes (2 header words)
 				  unitSize: sizeof(short)					// unit size in bytes
 				startIndex:	0							// first Point Index (past the header offset!!!)
 					  mask:	0x0FFF							// when displayed all values will be masked with this value
@@ -78,15 +78,15 @@ followed by waveform data (n x 1024 16-bit words)
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 
     NSString* title= @"Ipe FLT Waveform Record\n\n";
 	++ptr;		//skip the first word (dataID and length)
     
-    NSString* crate = [NSString stringWithFormat:@"Crate      = %lu\n",(*ptr>>21) & 0xf];
-    NSString* card  = [NSString stringWithFormat:@"Station    = %lu\n",(*ptr>>16) & 0x1f];
-    NSString* chan  = [NSString stringWithFormat:@"Channel    = %lu\n",(*ptr>>8) & 0xff];
+    NSString* crate = [NSString stringWithFormat:@"Crate      = %u\n",(*ptr>>21) & 0xf];
+    NSString* card  = [NSString stringWithFormat:@"Station    = %u\n",(*ptr>>16) & 0x1f];
+    NSString* chan  = [NSString stringWithFormat:@"Channel    = %u\n",(*ptr>>8) & 0xff];
 
     return [NSString stringWithFormat:@"%@%@%@%@",title,crate,card,chan]; 
 }

@@ -29,7 +29,7 @@
 	unsigned short remotePort;
 	NSString* remoteHost;
 	BOOL isConnected;
-	unsigned long byteCount;
+	uint32_t byteCount;
 	NetSocket* socket;
 
     BOOL threadRunning;
@@ -39,7 +39,7 @@
 	BOOL connectAtStart;
 	BOOL firstTime;
 	BOOL needToSwap;
-	unsigned long runDataID;
+	uint32_t runDataID;
 	ORDecoder* currentDecoder;
 	NSMutableDictionary* runInfo;
 	NSMutableArray* dataArray;
@@ -71,9 +71,9 @@
 - (void) setRemoteHost:(NSString*)aNewRemoteHost;
 - (BOOL) isConnected;
 - (void) setIsConnected:(BOOL)aNewIsConnected;
-- (unsigned long) byteCount;
-- (void) setByteCount:(unsigned long)aNewByteCount;
-- (void) incByteCount:(unsigned long)anAmount;
+- (uint32_t) byteCount;
+- (void) setByteCount:(uint32_t)aNewByteCount;
+- (void) incByteCount:(uint32_t)anAmount;
 - (void) clearByteCount;
 - (void) connectSocket:(BOOL)state;
 

@@ -251,13 +251,13 @@ if (strcmp(@encode(atype), the_type) == 0)     \
     HANDLE_NUMBER_TYPE(Float, float)
     HANDLE_NUMBER_TYPE(Char, char)
     HANDLE_NUMBER_TYPE(Int, int)
-    HANDLE_NUMBER_TYPE(Long, long)
-    HANDLE_NUMBER_TYPE(LongLong, long long)
+    HANDLE_NUMBER_TYPE(Long, int32_t)
+    HANDLE_NUMBER_TYPE(LongLong, int64_t)
     HANDLE_NUMBER_TYPE(Short, short)
     HANDLE_NUMBER_TYPE(UnsignedChar, unsigned char)
     HANDLE_NUMBER_TYPE(UnsignedInt, unsigned int)
-    HANDLE_NUMBER_TYPE(UnsignedLong, unsigned long)
-    HANDLE_NUMBER_TYPE(UnsignedLongLong, unsigned long long)
+    HANDLE_NUMBER_TYPE(UnsignedLong, uint32_t)
+    HANDLE_NUMBER_TYPE(UnsignedLongLong, uint64_t)
     HANDLE_NUMBER_TYPE(UnsignedShort, unsigned short)
     return [NSNull null];
 }
@@ -672,7 +672,7 @@ if (strcmp(@encode(atype), the_type) == 0)     \
 				int i;
                 if ((n-2) != [theValue count]) {
                     [NSException raise:@"ORCouchDBListenerInvalidArguments"
-                                format:@"Invalid argument number: (%ld) seen, (%i) needed",[theValue count],(n-2)];
+                                format:@"Invalid argument number: (%d) seen, (%i) needed",(int)[theValue count],(n-2)];
                 }
 				for(i=2;i<n;i++){
                     id o = [theValue objectAtIndex:i-2];
@@ -695,13 +695,13 @@ if (strcmp(@encode(atype), the_type) == 0)         \
                         HANDLE_NUMBER_ARG(float, float)
                         HANDLE_NUMBER_ARG(int, int)
                         HANDLE_NUMBER_ARG(double, double)
-                        HANDLE_NUMBER_ARG(long, long)
-                        HANDLE_NUMBER_ARG(longLong, long long)
+                        HANDLE_NUMBER_ARG(int32_t, int32_t)
+                        HANDLE_NUMBER_ARG(longLong, int64_t)
                         HANDLE_NUMBER_ARG(short, short)
                         HANDLE_NUMBER_ARG(unsignedChar, unsigned char)
                         HANDLE_NUMBER_ARG(unsignedInt, unsigned int)
-                        HANDLE_NUMBER_ARG(unsignedLong, unsigned long)
-                        HANDLE_NUMBER_ARG(unsignedLongLong, unsigned long)
+                        HANDLE_NUMBER_ARG(unsignedLong, uint32_t)
+                        HANDLE_NUMBER_ARG(unsignedLongLong, uint32_t)
                         HANDLE_NUMBER_ARG(unsignedShort, unsigned short)
                         [NSException raise:@"ORCouchDBListenerInvalidArguments"
                                     format:@"Found invalid requested number type as argument(%s)?!",the_type];

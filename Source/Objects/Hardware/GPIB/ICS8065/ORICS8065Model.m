@@ -366,12 +366,12 @@ NSString*	ORICS8065ModelIpAddressChanged		= @"ORICS8065ModelIpAddressChanged";
     
 }
 
-- (long) readFromDevice: (short) aPrimaryAddress data: (char*) data maxLength: (long) aMaxLength
+- (int32_t) readFromDevice: (short) aPrimaryAddress data: (char*) data maxLength: (int32_t) aMaxLength
 {
 	
     if ( ! [self isEnabled] || !rpcClient) return 0;
     
-	long nReadBytes = 0;
+	int32_t nReadBytes = 0;
     @try {
         // Make sure that device is initialized.
         [theHWLock lock];   //-----begin critical section
@@ -419,7 +419,7 @@ NSString*	ORICS8065ModelIpAddressChanged		= @"ORICS8065ModelIpAddressChanged";
 		if ( mMonitorRead ) {
 			NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];	
 			NSString* dataStr = [[NSString alloc] initWithBytes: data length: nReadBytes encoding: NSASCIIStringEncoding];
-			[userInfo setObject: [NSString stringWithFormat: @"Read - Address: %d length: %ld data: %@\n", 
+			[userInfo setObject: [NSString stringWithFormat: @"Read - Address: %d length: %d data: %@\n", 
 								  aPrimaryAddress, nReadBytes, dataStr] 
 						 forKey: ORGpib1Monitor]; 
 			
@@ -500,10 +500,10 @@ NSString*	ORICS8065ModelIpAddressChanged		= @"ORICS8065ModelIpAddressChanged";
 }
 
 
-- (long) writeReadDevice: (short) aPrimaryAddress command: (NSString*) aCommand data: (char*) aData
-               maxLength: (long) aMaxLength
+- (int32_t) writeReadDevice: (short) aPrimaryAddress command: (NSString*) aCommand data: (char*) aData
+               maxLength: (int32_t) aMaxLength
 {
-    long retVal = 0;
+    int32_t retVal = 0;
     if ( ! [self isEnabled]) return -1;
     @try {
         

@@ -153,7 +153,7 @@
     }
 }
 
-- (void) setBaseAddress:(unsigned long)anAddress
+- (void) setBaseAddress:(uint32_t)anAddress
 {
 	[super setBaseAddress:anAddress];
 	[[self orcaObjects] makeObjectsPerformSelector:@selector(calcBaseAddress)];

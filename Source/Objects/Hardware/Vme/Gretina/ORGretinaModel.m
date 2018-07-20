@@ -53,7 +53,7 @@ NSString* ORGretinaModelDataLengthChanged		= @"ORGretinaModelDataLengthChanged";
 @implementation ORGretinaModel
 #pragma mark ¥¥¥Static Declarations
 //offsets from the base address
-static unsigned long register_offsets[kNumberOfGretinaRegisters] = {
+static uint32_t register_offsets[kNumberOfGretinaRegisters] = {
 0x00, //[0] board ID
 0x02, //[1] Programming done
 0x04, //[2] External Window
@@ -83,7 +83,7 @@ enum {
 static struct {
     NSString*	name;
     NSString*	units;
-    unsigned long	regOffset;
+    uint32_t	regOffset;
     unsigned short	mask; 
     short		initialValue;
     float		ratio; //conversion constants
@@ -268,7 +268,7 @@ static struct {
 }
 
 #pragma mark ¥¥¥Rates
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
 {
 	if(groupTag == 0){
 		if(counterTag>=0 && counterTag<kNumGretinaChannels){
@@ -552,9 +552,9 @@ static struct {
     else						return kSome;
 }
 
-- (unsigned long) readFIFO:(unsigned long)index
+- (uint32_t) readFIFO:(uint32_t)index
 {
-    unsigned long theValue = 0 ;
+    uint32_t theValue = 0 ;
     [[self adapter] readLongBlock:&theValue
                         atAddress:[self baseAddress]*0x100 + (4*index)
                         numToRead:1
@@ -563,7 +563,7 @@ static struct {
     return theValue;
 }
 
-- (void) writeFIFO:(unsigned long)index value:(unsigned long)aValue
+- (void) writeFIFO:(uint32_t)index value:(uint32_t)aValue
 {
     [[self adapter] writeLongBlock:&aValue
                          atAddress:([self baseAddress]*0x100) + (4*index)
@@ -580,7 +580,7 @@ static struct {
     fifoAddress       = [self baseAddress]*0x100;
 	//theController     = [[self crate] controllerCard];
 	theController     = [self adapter];
-	unsigned long  dataDump[kGretinaFIFOAllFull];
+	uint32_t  dataDump[kGretinaFIFOAllFull];
 	BOOL error		  = NO;
     while(1){
 		unsigned short val;
@@ -592,7 +592,7 @@ static struct {
 					   usingAddSpace:0x01];
 		if((val & kGretinaFIFOEmpty) != 0){
 			//read the first longword which should be the packet separator: 0xAAAAAAAA
-			unsigned long theValue;
+			uint32_t theValue;
 			[theController readLongBlock:&theValue 
 							   atAddress:fifoAddress 
 							   numToRead:1
@@ -622,7 +622,7 @@ static struct {
 		else break;
 		
 		if([[NSDate date] timeIntervalSinceDate:startDate] > 10){
-            NSLog(@"That took a long time but seems to have been successful (slot %d)\n",[self slot]);
+            NSLog(@"That took a int32_t time but seems to have been successful (slot %d)\n",[self slot]);
 			//error = YES;
 			break;
 		}
@@ -783,8 +783,8 @@ static struct {
 
 
 #pragma mark ¥¥¥Data Taker
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -990,7 +990,7 @@ static struct {
         [self writeControlReg:i enabled:NO];
     }
     [self clearFIFO];
-    dataBuffer = (unsigned long*)malloc(0xffff * sizeof(long));
+    dataBuffer = (uint32_t*)malloc(0xffff * sizeof(int32_t));
     [self startRates];
 	
     [self initBoard];
@@ -1016,12 +1016,12 @@ static struct {
 					   usingAddSpace:0x01];
 		fifoState = val;			
 		if((val & kGretinaFIFOEmpty) != 0){
-			unsigned long numLongs = 0;
+			uint32_t numLongs = 0;
 			dataBuffer[numLongs++] = dataId | 0; //we'll fill in the length later
 			dataBuffer[numLongs++] = location;
 			
 			//read the first longword which should be the packet separator: 0xAAAAAAAA
-			unsigned long theValue;
+			uint32_t theValue;
 			[theController readLongBlock:&theValue 
 							   atAddress:fifoAddress 
 							   numToRead:1 
@@ -1041,7 +1041,7 @@ static struct {
 				
 				++waveFormCount[theValue & 0x7];  //grab the channel and inc the count
 				
-				unsigned long numLongsLeft  = ((theValue & 0xffff0000)>>16)-1;
+				uint32_t numLongsLeft  = ((theValue & 0xffff0000)>>16)-1;
 				
 				[theController readLong:&dataBuffer[numLongs] 
 							  atAddress:fifoAddress 
@@ -1049,7 +1049,7 @@ static struct {
 							 withAddMod:0x39 
 						  usingAddSpace:0x01];
 				
-				long totalNumLongs = (numLongs + numLongsLeft);
+				int32_t totalNumLongs = (numLongs + numLongsLeft);
 				dataBuffer[0] |= totalNumLongs; //see, we did fill it in...
 				[aDataPacket addLongsToFrameBuffer:dataBuffer length:totalNumLongs];
 			}
@@ -1159,7 +1159,7 @@ static struct {
     return YES;
 }
 
-- (unsigned long) waveFormCount:(int)aChannel
+- (uint32_t) waveFormCount:(int)aChannel
 {
     return waveFormCount[aChannel];
 }

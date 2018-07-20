@@ -37,13 +37,13 @@
 @protocol ORFeraReadout
 - (void) setVSN:(int)aVSN;
 - (void) setFeraEnable:(BOOL)aState;
-- (void) shipFeraData:(ORDataPacket*)aDataPacket data:(unsigned long)data;
+- (void) shipFeraData:(ORDataPacket*)aDataPacket data:(uint32_t)data;
 - (int) maxNumChannels;
 @end
 
 /*
 @interface NSObject (ORDataTaker)
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (BOOL) dataAvailable;
 - (BOOL) isRunning;

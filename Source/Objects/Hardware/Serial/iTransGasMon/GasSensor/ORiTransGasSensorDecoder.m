@@ -41,14 +41,14 @@
 
 @implementation ORiTrasGasSensorDecoderForValue
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-	unsigned long* dataPtr = (unsigned long*)someData;
+	uint32_t* dataPtr = (uint32_t*)someData;
 	int ident = ShiftAndExtract(dataPtr[1],0,0xfff);
 	int channel = ShiftAndExtract(dataPtr[1],16,0xfff);
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theData;
 	theData.asLong = dataPtr[3];
 	
@@ -63,7 +63,7 @@
 	return ExtractLength(dataPtr[0]);
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr
 {
     NSString* title= @"iTrans Gas Sensor\n\n";
     NSString* theString =  [NSString stringWithFormat:@"%@\n",title];               
@@ -75,7 +75,7 @@
 	
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theData;
 	theData.asLong = dataPtr[3];
 	theString = [theString stringByAppendingFormat:@"Gas Reading %d: %.2E %@\n",channel,theData.asFloat,[date stdDescription]];

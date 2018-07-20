@@ -245,7 +245,7 @@ static NSString* MuxBoxToControllerConnect      = @"Ncd Mux Box to Mux Controlle
 	 object:self];
 }
 
-- (unsigned long) rateCount:(unsigned short)index
+- (uint32_t) rateCount:(unsigned short)index
 {
     if(index<kNumMuxChannels)return rateCount[index];
     else return 0;
@@ -620,8 +620,8 @@ static NSString* MuxBoxToControllerConnect      = @"Ncd Mux Box to Mux Controlle
 -(void) runMuxBitTest
 {
     unsigned char aValue;
-    long aChanHighBitStruct[8];  	//number of times incorrect when a 1 is written to the bit
-    long aChanLowBitStruct[8];  	//number of times incorrect when a 0 is written to the bit
+    int32_t aChanHighBitStruct[8];  	//number of times incorrect when a 1 is written to the bit
+    int32_t aChanLowBitStruct[8];  	//number of times incorrect when a 0 is written to the bit
     short i,thebit,numTests;
     bool anError = false;
     unsigned short kMaxTests = 50;
@@ -636,8 +636,8 @@ static NSString* MuxBoxToControllerConnect      = @"Ncd Mux Box to Mux Controlle
     [oldValues addObjectsFromArray:thresholdDacs];
     
     for(i=0;i<kNumMuxChannels;i++){
-        memset(aChanHighBitStruct,0,sizeof(long)*8);
-        memset(aChanLowBitStruct,0,sizeof(long)*8);
+        memset(aChanHighBitStruct,0,sizeof(int32_t)*8);
+        memset(aChanLowBitStruct,0,sizeof(int32_t)*8);
         NSLog(@"Testing channel:%d\n",i);
         for(thebit=0;thebit<8;thebit++){
             for(numTests=0;numTests<kMaxTests;numTests++){
@@ -909,7 +909,7 @@ static NSString* ORMuxBoxBusNumber          = @"ORMuxBoxBusNumber";
 }
 
 #pragma mark ¥¥¥Rates
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
 {
     if(groupTag == 0){
         if(counterTag>=0 && counterTag<kNumMuxChannels){

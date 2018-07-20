@@ -42,10 +42,10 @@ Raw data points continue until the Data length is used up....
 
 @implementation ORPxi6289DecoderForWaveform
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length = ExtractLength(ptr[0]);
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length = ExtractLength(ptr[0]);
 	int crate	= ShiftAndExtract(ptr[1],21,0xf);
 	int card	= ShiftAndExtract(ptr[1],16,0x1f);
 	int channel = ShiftAndExtract(ptr[1],8,0xff);
@@ -56,8 +56,8 @@ Raw data points continue until the Data length is used up....
 	
 	int dataLength = ptr[2] & 0x0000ffff; //datalength in longs
 		
-    NSMutableData* tmpData = [NSMutableData dataWithCapacity:dataLength*sizeof(long)]; 	   
-	[tmpData setLength:dataLength*sizeof(long)];
+    NSMutableData* tmpData = [NSMutableData dataWithCapacity:dataLength*sizeof(int32_t)]; 	   
+	[tmpData setLength:dataLength*sizeof(int32_t)];
 	unsigned short* dPtr = (unsigned short*)[tmpData bytes];
 	int i;
 	int wordCount = 0;
@@ -76,14 +76,14 @@ Raw data points continue until the Data length is used up....
     return length; //must return number of longs
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 	
     NSString* title= @"Pxi6289 Waveform Record\n\n";
     
-    NSString* crate = [NSString stringWithFormat:@"Crate = %lu\n",ShiftAndExtract(ptr[1],21,0xf)];
-    NSString* card  = [NSString stringWithFormat:@"Card  = %lu\n",ShiftAndExtract(ptr[1],16,0x1f)];
-    NSString* chan  = [NSString stringWithFormat:@"Chan  = %lu\n",ShiftAndExtract(ptr[1],8,0xff)];
+    NSString* crate = [NSString stringWithFormat:@"Crate = %u\n",ShiftAndExtract(ptr[1],21,0xf)];
+    NSString* card  = [NSString stringWithFormat:@"Card  = %u\n",ShiftAndExtract(ptr[1],16,0x1f)];
+    NSString* chan  = [NSString stringWithFormat:@"Chan  = %u\n",ShiftAndExtract(ptr[1],8,0xff)];
 	
     return [NSString stringWithFormat:@"%@%@%@%@",title,crate,card,chan];               
 }

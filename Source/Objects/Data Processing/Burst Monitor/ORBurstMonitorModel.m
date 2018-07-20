@@ -393,7 +393,7 @@ NSDate* burstStart = NULL;
 //    }
 //    return p;
 //}
-double facto(unsigned long long num)
+double facto(uint64_t num)
 {
     if (num == 0) {
         return 1;
@@ -425,12 +425,12 @@ double facto(unsigned long long num)
     //each block of data is an array of NSData objects, each potentially containing many records
     for(id data in dataArray){
         [data retain];
-        long totalLen = [data length]/sizeof(long);
+        int32_t totalLen = [data length]/sizeof(int32_t);
         if(totalLen>0){
-            unsigned long* ptr = (unsigned long*)[data bytes];
+            uint32_t* ptr = (uint32_t*)[data bytes];
             while(totalLen>0){
-                unsigned long dataID = ExtractDataId(ptr[0]);
-                long recordLen       = ExtractLength(ptr[0]);
+                uint32_t dataID = ExtractDataId(ptr[0]);
+                int32_t recordLen       = ExtractLength(ptr[0]);
                 
                 if(recordLen > totalLen){
                     NSLog(@"Bad Record Length\n");
@@ -494,15 +494,15 @@ double facto(unsigned long long num)
                 if (dataID == shaperID || burstForce==1) {
                     if (recordLen>1 || burstForce==1) {
                         //extract the card's info
-                        unsigned long firstword = ShiftAndExtract(ptr[0], 0, 0xffffffff);
+                        uint32_t firstword = ShiftAndExtract(ptr[0], 0, 0xffffffff);
                         
                         unsigned short crateNum = ShiftAndExtract(ptr[1],21,0xf);
                         unsigned short cardNum  = ShiftAndExtract(ptr[1],16,0x1f);
                         unsigned short chanNum  = ShiftAndExtract(ptr[1],12,0xf);
                         unsigned short energy   = ShiftAndExtract(ptr[1], 0,0xfff);
                         
-                        unsigned long secondsSinceEpoch = ShiftAndExtract(ptr[2], 0, 0xffffffff);
-                        unsigned long microseconds = ShiftAndExtract(ptr[3], 0, 0xffffffff);
+                        uint32_t secondsSinceEpoch = ShiftAndExtract(ptr[2], 0, 0xffffffff);
+                        uint32_t microseconds = ShiftAndExtract(ptr[3], 0, 0xffffffff);
                         //cbmod check facto power //fixme // 171! == inf //1-erf(x/sqrt(2))
                         //int jj;
                         //double testnum;
@@ -540,7 +540,7 @@ double facto(unsigned long long num)
                                 
                                 //get the right queue for this record and insert the record
                                 int     queueIndex      = [[queueMap objectForKey:aShaperKey] intValue];
-                                NSData* theShaperRecord = [NSData dataWithBytes:ptr length:recordLen*sizeof(long)]; //couldnt put humpdy together again //CBDO re the count
+                                NSData* theShaperRecord = [NSData dataWithBytes:ptr length:recordLen*sizeof(int32_t)]; //couldnt put humpdy together again //CBDO re the count
                                 
                                 ORBurstData* burstData = [[ORBurstData alloc] init];
                                 burstData.datePosted = now; //DAQ at LU has a different time zone than the data records do.  It might be best not to mix DAQ time and SBC time in the monitor.
@@ -629,7 +629,7 @@ double facto(unsigned long long num)
                                                     lString = [lString stringByPaddingToLength:10 withString:@" " startingAtIndex:0];               //lenth 10
                                                     lString = [lString stringByAppendingString:[NSString stringWithFormat:@"t=%lf, ",countTime]];   //lenth 21
                                                     lString = [lString stringByAppendingString:[NSString stringWithFormat:@"t-tB=%lf,  ",(countTime-firstTime)]];
-                                                    lString = [lString stringByPaddingToLength:47 withString:@" " startingAtIndex:0];               //lenth 16 if <100sec long
+                                                    lString = [lString stringByPaddingToLength:47 withString:@" " startingAtIndex:0];               //lenth 16 if <100sec int32_t
                                                     lString = [lString stringByAppendingString:[NSString stringWithFormat:@"adc=%i, ",[[Badcs objectAtIndex:iter] intValue]]];
                                                     lString = [lString stringByPaddingToLength:57 withString:@" " startingAtIndex:0];               //lenth 10
                                                     lString = [lString stringByAppendingString:[NSString stringWithFormat:@"chan=%i-%i, ",[[Bcards objectAtIndex:iter] intValue], [[Bchans objectAtIndex:iter] intValue]]];
@@ -705,9 +705,9 @@ double facto(unsigned long long num)
                                                 double peakExpect = peakP*(peakN+lowN);
                                                 for(n=0; n<(peakN + lowN + 1); n++)
                                                 {
-                                                    //unsigned long long nfac = facto(n);
-                                                    //unsigned long long neutfac = facto(peakN+lowN);
-                                                    //unsigned long long allfac = facto(peakN+lowN-n);
+                                                    //uint64_t nfac = facto(n);
+                                                    //uint64_t neutfac = facto(peakN+lowN);
+                                                    //uint64_t allfac = facto(peakN+lowN-n);
                                                     //int nummy = peakN+lowN-n;
                                                     //NSLog(@"n!, (peak+low-n)!, nummy!, denom is %i, %i, %i, %i \n", facto(n), facto(peakN + lowN - n), facto(nummy), (facto(n)*facto(peakN + lowN - n)));
                                                     //double partP = ( facto(peakN + lowN)/(facto(n)*facto(nummy)) )*pow(peakP,n)*pow((1-peakP),(peakN + lowN - n));
@@ -1223,10 +1223,10 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
 }
 
 #pragma mark ***Data Records
-- (unsigned long) dataId
+- (uint32_t) dataId
 {
     return dataId;   }
-- (void) setDataId: (unsigned long) DataId  { dataId = DataId; }
+- (void) setDataId: (uint32_t) DataId  { dataId = DataId; }
 - (void) setDataIds:(id)assigner            { dataId  = [assigner assignDataIds:kLongForm]; }
 - (void) syncDataIdsWith:(id)anotherVXM     { [self setDataId:[anotherVXM dataId]]; }
 
@@ -1386,7 +1386,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
             NSLog(@"Level reduced to 1 (possible)\n");
         }
         NSInteger signif = (multInBurst*0.5)+3; //cbmod current background and best (round) fit with likelyhood as of dec 2016 with logaritmic rounding
-        burstcommand = [burstcommand stringByAppendingFormat:@"cd snews/coinccode/ ; ./ctestgcli %li %li 0 %li %li 9", (long)dateint, timeint, level, signif];  //maybe add nanoseconds? 9 is halo
+        burstcommand = [burstcommand stringByAppendingFormat:@"cd snews/coinccode/ ; ./ctestgcli %i %i 0 %i %i 9", (int32_t)dateint, timeint, level, signif];  //maybe add nanoseconds? 9 is halo
         NSLog(@"burstcommand witha a space on each side: | %@ |\n", burstcommand);
         NSTask* Cping;
         Cping =[[NSTask alloc] init];
@@ -1512,7 +1512,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
         int i     = [[queueMap  objectForKey:aKey]intValue];
         id aQueue = [queueArray objectAtIndex:i];
         NSUInteger count = [aQueue count];
-        theContent = [theContent stringByAppendingFormat:@"Channel: %@ Number Events: %ld %@\n",aKey,[aQueue count],count>=1?@" <---":@""];
+        theContent = [theContent stringByAppendingFormat:@"Channel: %@ Number Events: %d %@\n",aKey,[aQueue count],count>=1?@" <---":@""];
     }
     if(novaState == 3 && [[runbits objectAtIndex:6] intValue]){  //if supernova candidate
         [emailList insertObject:@"halo_snews_burst@snolab.ca"  atIndex:0]; //add halo full, HALO_full@snolab.ca
@@ -1631,7 +1631,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
     //ship the burst data record
     //use a union to encode the duration
     union {
-        long asLong;
+        int32_t asLong;
         float asFloat;
     }LongFloatUnion;
     
@@ -1640,7 +1640,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
     time(&ut_time);
     
     
-    unsigned long data[kBurstRecordLength];
+    uint32_t data[kBurstRecordLength];
     data[0] = dataId | kBurstRecordLength;
     data[1] = burstCount;
     data[2] = numSecTillBurst;
@@ -1661,7 +1661,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
     data[11] = ut_time;
 
     //pass the record on to the next object
-    [theBurstMonitoredObject processData:[NSArray arrayWithObject:[NSData dataWithBytes:data length:sizeof(long)*kBurstRecordLength]] decoder:theDecoder];
+    [theBurstMonitoredObject processData:[NSArray arrayWithObject:[NSData dataWithBytes:data length:sizeof(int32_t)*kBurstRecordLength]] decoder:theDecoder];
     
     NSMutableArray* anArrayOfData = [NSMutableArray array];
     //ORBurstData* someData = [[[ORBurstData alloc] init] autorelease]; //<<<<MAH. added the autorelease to prevent memory leak below. //was separate, test
@@ -1673,7 +1673,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
     int multbit = MIN(multInBurst,4000);
     //novastate alread int from 0 to 4
     dursecond = MIN(dursecond,250);
-    unsigned long burststats[4];
+    uint32_t burststats[4];
     burststats[0]=[[Bwords objectAtIndex:0] longValue];
     burststats[1]=burstbit+(multbit << 8)+(novaState << 20) + (dursecond << 24); // adc 3 digets, channel, card
     burststats[2]=durmicro;
@@ -1721,8 +1721,8 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
         ORBurstData* someData = [[[ORBurstData alloc] init] autorelease]; //<<<<MAH. added the autorelease to prevent memory leak below. //was separate, test
         //someData.epSec=[[Bsecs objectAtIndex:l] longValue]; //crashes from bad access, but seems unneccesary //fixme?
         //someData.epMic=[[Bmics objectAtIndex:l] longValue];
-       // unsigned long* testsec[4]; <<--this is not being used as a pointer. removed MAH 09/16/14
-        unsigned long testsec[4];
+       // uint32_t* testsec[4]; <<--this is not being used as a pointer. removed MAH 09/16/14
+        uint32_t testsec[4];
         testsec[0]=[[Bwords objectAtIndex:l] longValue];
         testsec[1]=[[Badcs objectAtIndex:l] longValue]+(4096*[[Bchans objectAtIndex:l] longValue])+(65536*[[Bcards objectAtIndex:l] longValue]); // adc 3 digets, channel, card
         testsec[2]=[[Bsecs objectAtIndex:l] longValue];

@@ -93,16 +93,16 @@ enum {
 		NSString*		patternFilePath;
 
 		//page status
-		unsigned long pageStatusLow;
-		unsigned long pageStatusHigh;
-		unsigned long actualPage;
-		unsigned long nextPage;
+		uint32_t pageStatusLow;
+		uint32_t pageStatusHigh;
+		uint32_t actualPage;
+		uint32_t nextPage;
 
 		//interrupts
-		unsigned long interruptMask;
+		uint32_t interruptMask;
 
 		//time management
-		unsigned long nextPageDelay;
+		uint32_t nextPageDelay;
 
 		//pulser generation
 		float pulserAmp;
@@ -110,16 +110,16 @@ enum {
 
 		// Register information
 		unsigned short  selectedRegIndex;
-		unsigned long   writeValue;
+		uint32_t   writeValue;
 
 		//multiplicity trigger
 		unsigned short nHit;
 		unsigned short nHitThreshold;
 		BOOL		   readAll;
 		
-		unsigned long	eventDataId;
-		unsigned long	multiplicityId;
-		unsigned long   eventCounter;
+		uint32_t	eventDataId;
+		uint32_t	multiplicityId;
+		uint32_t   eventCounter;
 		
 		float fpgaVersion;
 		int actualPageIndex;
@@ -131,14 +131,14 @@ enum {
 		// ak, 9.12.07
 		BOOL            displayTrigger;    //< Display pixel and timing view of trigger data
 		BOOL            displayEventLoop;  //< Display the event loop parameter
-		unsigned long   lastDisplaySec;
-		unsigned long   lastDisplayCounter;
+		uint32_t   lastDisplaySec;
+		uint32_t   lastDisplayCounter;
 		double          lastDisplayRate;
 		
 		
     	BOOL usingPBusSimulation;
-		unsigned long   lastSimSec;
-		unsigned long   pageSize; //< Length of the ADC data (0..100us)
+		uint32_t   lastSimSec;
+		uint32_t   pageSize; //< Length of the ADC data (0..100us)
 		
 }
 
@@ -160,18 +160,18 @@ enum {
 - (NSString*) patternFilePath;
 - (void) setPatternFilePath:(NSString*)aPatternFilePath;
 
-- (unsigned long) pageStatusLow;
-- (void) setPageStatusLow:(unsigned long)loPart 
-					 high:(unsigned long)hiPart 
-				   actual:(unsigned long)p0 
-					 next:(unsigned long)p1;
-- (unsigned long) pageStatusHigh;
-- (unsigned long) actualPage;
-- (unsigned long) nextPage;
-- (unsigned long) nextPageDelay;
-- (void) setNextPageDelay:(unsigned long)aDelay;
-- (unsigned long) interruptMask;
-- (void) setInterruptMask:(unsigned long)aInterruptMask;
+- (uint32_t) pageStatusLow;
+- (void) setPageStatusLow:(uint32_t)loPart 
+					 high:(uint32_t)hiPart 
+				   actual:(uint32_t)p0 
+					 next:(uint32_t)p1;
+- (uint32_t) pageStatusHigh;
+- (uint32_t) actualPage;
+- (uint32_t) nextPage;
+- (uint32_t) nextPageDelay;
+- (void) setNextPageDelay:(uint32_t)aDelay;
+- (uint32_t) interruptMask;
+- (void) setInterruptMask:(uint32_t)aInterruptMask;
 - (float) fpgaVersion;
 - (void) setFpgaVersion:(float)aFpgaVersion;
 - (unsigned short) nHitThreshold;
@@ -184,13 +184,13 @@ enum {
 - (void) setPulserAmp:(float)aPulserAmp;
 - (short) getNumberRegisters;			
 - (NSString*) getRegisterName: (short) anIndex;
-- (unsigned long) getAddressOffset: (short) anIndex;
+- (uint32_t) getAddressOffset: (short) anIndex;
 - (short) getAccessType: (short) anIndex;
 
 - (unsigned short) 	selectedRegIndex;
 - (void)		setSelectedRegIndex: (unsigned short) anIndex;
-- (unsigned long) 	writeValue;
-- (void)		setWriteValue: (unsigned long) anIndex;
+- (uint32_t) 	writeValue;
+- (void)		setWriteValue: (uint32_t) anIndex;
 - (BOOL)	readAll;
 - (void)    setReadAll:(BOOL)aState;
 - (void) loadPatternFile;
@@ -199,8 +199,8 @@ enum {
 - (void) setDisplayTrigger:(BOOL) aState; 
 - (BOOL) displayEventLoop; //< Status of display of event loop performance information
 - (void) setDisplayEventLoop:(BOOL) aState;
-- (unsigned long) pageSize; //< Length of the ADC data (0..100us)
-- (void) setPageSize: (unsigned long) pageSize;   
+- (uint32_t) pageSize; //< Length of the ADC data (0..100us)
+- (void) setPageSize: (uint32_t) pageSize;   
  
 //status reg assess
 - (BOOL) inhibit;
@@ -246,10 +246,10 @@ enum {
 //exceptions either directly or indirectly
 - (void)		  readAllStatus;
 - (void)		  checkPresence;
-- (unsigned long) readControlReg;
+- (uint32_t) readControlReg;
 - (void)		  writeControlReg;
 - (void)		  printControlReg;
-- (unsigned long) readStatusReg;
+- (uint32_t) readStatusReg;
 - (void)		  printStatusReg;
 - (void)		  writeNextPageDelay;
 - (void)		  writeStatusReg;
@@ -260,11 +260,11 @@ enum {
 - (void)		  releaseAllPages;
 - (void)		  dumpTriggerRAM:(int)aPageIndex;
 
-- (void)		  writeReg:(unsigned short)index value:(unsigned long)aValue;
-- (unsigned long) readReg:(unsigned short) index;
+- (void)		  writeReg:(unsigned short)index value:(uint32_t)aValue;
+- (uint32_t) readReg:(unsigned short) index;
 - (float)		  readVersion;
-- (unsigned long long) readDeadTime;
-- (unsigned long long) readVetoTime;
+- (uint64_t) readDeadTime;
+- (uint64_t) readVetoTime;
 - (void)		reset;
 - (void)		hw_config;
 - (void)		hw_reset;
@@ -278,10 +278,10 @@ enum {
 - (id)   initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
 
-- (unsigned long) eventDataId;
-- (void) setEventDataId: (unsigned long) DataId;
-- (unsigned long) multiplicityId;
-- (void) setMultiplicityId: (unsigned long) DataId;
+- (uint32_t) eventDataId;
+- (void) setEventDataId: (uint32_t) DataId;
+- (uint32_t) multiplicityId;
+- (void) setMultiplicityId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherCard;
 
@@ -294,7 +294,7 @@ enum {
 - (ORReadOutList*)	readOutGroup;
 - (void)			setReadOutGroup:(ORReadOutList*)newReadOutGroup;
 - (NSMutableArray*) children;
-- (unsigned long) calcProjection:(unsigned long *)pMult  xyProj:(unsigned long *)xyProj  tyProj:(unsigned long *)tyProj;
+- (uint32_t) calcProjection:(uint32_t *)pMult  xyProj:(uint32_t *)xyProj  tyProj:(uint32_t *)tyProj;
 
 @end
 

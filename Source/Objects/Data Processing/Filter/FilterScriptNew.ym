@@ -17,7 +17,7 @@ int yylex(void);
 NSMutableDictionary* functionList = nil;
 NSMutableArray* nodeList = nil;
 extern void FilterScripterror(char *);
-extern long num_lines;
+extern int32_t num_lines;
 %}
 
 %union {

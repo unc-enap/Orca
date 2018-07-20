@@ -72,24 +72,24 @@
     int				fltRunMode;		//!< Run modes: 0=standby, 1=standard, 2=histogram, 3=test
     NSMutableArray* thresholds;     //!< Array to keep the threshold of all 24 channel
     NSMutableArray* gains;			//!< Aarry to keep the gains
-    unsigned long	triggerEnabledMask;	//!< mask to keep the activated channel for the trigger
-	unsigned long	hitRateEnabledMask;	//!< mask to store the activated trigger rate measurement
-    unsigned long	dataId;         //!< Id used to identify energy data set (run mode)
-	unsigned long	waveFormId;		//!< Id used to identify energy+trace data set (debug mode)
-	unsigned long	hitRateId;
-	unsigned long	histogramId;
+    uint32_t	triggerEnabledMask;	//!< mask to keep the activated channel for the trigger
+	uint32_t	hitRateEnabledMask;	//!< mask to store the activated trigger rate measurement
+    uint32_t	dataId;         //!< Id used to identify energy data set (run mode)
+	uint32_t	waveFormId;		//!< Id used to identify energy+trace data set (debug mode)
+	uint32_t	hitRateId;
+	uint32_t	histogramId;
 	unsigned short	hitRateLength;		//!< Sampling time of the hitrate measurement (1..32 seconds)
 	float			hitRate[kNumV4FLTChannels];	//!< Actual value of the trigger rate measurement
-	unsigned long	hitRateOverFlow[kNumV4FLTChannels];	//!< Overflow of hardware trigger rate register
+	uint32_t	hitRateOverFlow[kNumV4FLTChannels];	//!< Overflow of hardware trigger rate register
 	float			hitRateTotal;	//!< Sum trigger rate of all channels 
 	
 	BOOL			firstTime;		//!< Event loop: Flag to identify the first readout loop for initialization purpose
 	
 	ORTimeRate*		totalRate;
     int				analogOffset;
-	unsigned long   statisticOffset; //!< Offset guess used with by the hardware statistical evaluation
-	unsigned long   statisticN;		 //!< Number of samples used for statistical evaluation
-	unsigned long   eventMask;		 //!<Bits set for last channels hit.
+	uint32_t   statisticOffset; //!< Offset guess used with by the hardware statistical evaluation
+	uint32_t   statisticN;		 //!< Number of samples used for statistical evaluation
+	uint32_t   eventMask;		 //!<Bits set for last channels hit.
 	
 	//testing
 	NSMutableArray* testStatusArray;
@@ -100,15 +100,15 @@
 	int savedLed;
 	BOOL usingPBusSimulation;
     BOOL ledOff;
-    unsigned long interruptMask;
+    uint32_t interruptMask;
 	    
 	// Register information (low level tab)
     unsigned short  selectedRegIndex;
-    unsigned long   writeValue;
-    unsigned long   selectedChannelValue;
+    uint32_t   writeValue;
+    uint32_t   selectedChannelValue;
     // fields for event readout
     int fifoBehaviour;
-    unsigned long postTriggerTime;
+    uint32_t postTriggerTime;
     int gapLength;
     int filterLength;  //for ORKatrinV4FLTModel we use filterShapingLength from 2011-04/Orca:svnrev5050 on -tb- 
     BOOL storeDataInRam;
@@ -117,30 +117,30 @@
     int runMode;        //!< This is the daqRunMode (not the fltRunMode on the hardware).
     
     // fields for histogram readout
-    unsigned long histRecTime;  //!<the histogram refresh time
-    unsigned long histMeasTime; //!<the per-cycle second counter
-    unsigned long histNofMeas;  //!<number of histo measurement cycles (0..63)
-    unsigned long histEMin;     //!< the energy offset of the histogram
-    unsigned long histEBin;     //!<the bin size setting (histBinWidth = 2^histEBin)
+    uint32_t histRecTime;  //!<the histogram refresh time
+    uint32_t histMeasTime; //!<the per-cycle second counter
+    uint32_t histNofMeas;  //!<number of histo measurement cycles (0..63)
+    uint32_t histEMin;     //!< the energy offset of the histogram
+    uint32_t histEBin;     //!<the bin size setting (histBinWidth = 2^histEBin)
     int histEMax;
     int histMode;
     int histClrMode;
-    unsigned long histFirstEntry;
-    unsigned long histLastEntry;
+    uint32_t histFirstEntry;
+    uint32_t histLastEntry;
     int histPageAB;
 	
 	BOOL noiseFloorRunning;
 	int noiseFloorState;
 	int noiseFloorOffset;
     int targetRate;
-	long noiseFloorLow[kNumV4FLTChannels];
-	long noiseFloorHigh[kNumV4FLTChannels];
-	long noiseFloorTestValue[kNumV4FLTChannels];
+	int32_t noiseFloorLow[kNumV4FLTChannels];
+	int32_t noiseFloorHigh[kNumV4FLTChannels];
+	int32_t noiseFloorTestValue[kNumV4FLTChannels];
 	BOOL oldEnabled[kNumV4FLTChannels];
-	long oldThreshold[kNumV4FLTChannels];
-	long newThreshold[kNumV4FLTChannels];
+	int32_t oldThreshold[kNumV4FLTChannels];
+	int32_t newThreshold[kNumV4FLTChannels];
 	
-	unsigned long eventCount[kNumV4FLTChannels];
+	uint32_t eventCount[kNumV4FLTChannels];
 }
 
 #pragma mark •••Initialization
@@ -168,16 +168,16 @@
 - (void) setFilterLength:(int)aFilterLength;
 - (int) gapLength;
 - (void) setGapLength:(int)aGapLength;
-- (unsigned long) postTriggerTime;
-- (void) setPostTriggerTime:(unsigned long)aPostTriggerTime;
+- (uint32_t) postTriggerTime;
+- (void) setPostTriggerTime:(uint32_t)aPostTriggerTime;
 - (int) fifoBehaviour;
 - (void) setFifoBehaviour:(int)aFifoBehaviour;
 - (int) analogOffset;
 - (void) setAnalogOffset:(int)aAnalogOffset;
 - (BOOL) ledOff;
 - (void) setLedOff:(BOOL)aledOff;
-- (unsigned long) interruptMask;
-- (void) setInterruptMask:(unsigned long)aInterruptMask;
+- (uint32_t) interruptMask;
+- (void) setInterruptMask:(uint32_t)aInterruptMask;
 - (unsigned short) hitRateLength;
 - (void) setHitRateLength:(unsigned short)aHitRateLength;
 - (BOOL) noiseFloorRunning;
@@ -186,41 +186,41 @@
 - (void) findNoiseFloors;
 - (NSString*) noiseFloorStateString;
 
-- (unsigned long) histNofMeas;
-- (void) setHistNofMeas:(unsigned long)aHistNofMeas;
-- (unsigned long) histMeasTime;
-- (void) setHistMeasTime:(unsigned long)aHistMeasTime;
-- (unsigned long) histRecTime;
-- (void) setHistRecTime:(unsigned long)aHistRecTime;
-- (unsigned long) histLastEntry;
-- (void) setHistLastEntry:(unsigned long)aHistLastEntry;
-- (unsigned long) histFirstEntry;
-- (void) setHistFirstEntry:(unsigned long)aHistFirstEntry;
+- (uint32_t) histNofMeas;
+- (void) setHistNofMeas:(uint32_t)aHistNofMeas;
+- (uint32_t) histMeasTime;
+- (void) setHistMeasTime:(uint32_t)aHistMeasTime;
+- (uint32_t) histRecTime;
+- (void) setHistRecTime:(uint32_t)aHistRecTime;
+- (uint32_t) histLastEntry;
+- (void) setHistLastEntry:(uint32_t)aHistLastEntry;
+- (uint32_t) histFirstEntry;
+- (void) setHistFirstEntry:(uint32_t)aHistFirstEntry;
 - (int) histClrMode;
 - (void) setHistClrMode:(int)aHistClrMode;
 - (int) histMode;
 - (void) setHistMode:(int)aHistMode;
-- (unsigned long) histEBin;
-- (void) setHistEBin:(unsigned long)aHistEBin;
-- (unsigned long) histEMin;
-- (void) setHistEMin:(unsigned long)aHistEMin;
+- (uint32_t) histEBin;
+- (void) setHistEBin:(uint32_t)aHistEBin;
+- (uint32_t) histEMin;
+- (void) setHistEMin:(uint32_t)aHistEMin;
 
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long)aDataId;
-- (unsigned long) waveFormId;
-- (void) setWaveFormId: (unsigned long) aWaveFormId;
-- (unsigned long) hitRateId;
-- (void) setHitRateId: (unsigned long)aHitRateId;
-- (unsigned long) histogramId;
-- (void) setHistogramId: (unsigned long)aHistogramId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t)aDataId;
+- (uint32_t) waveFormId;
+- (void) setWaveFormId: (uint32_t) aWaveFormId;
+- (uint32_t) hitRateId;
+- (void) setHitRateId: (uint32_t)aHitRateId;
+- (uint32_t) histogramId;
+- (void) setHistogramId: (uint32_t)aHistogramId;
 
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherCard;
 
 - (NSMutableArray*) gains;
 - (NSMutableArray*) thresholds;
-- (unsigned long) triggerEnabledMask;
-- (void) setTriggerEnabledMask:(unsigned long)aMask;
+- (uint32_t) triggerEnabledMask;
+- (void) setTriggerEnabledMask:(uint32_t)aMask;
 - (void) setGains:(NSMutableArray*)aGains;
 - (void) setThresholds:(NSMutableArray*)aThresholds;
 - (void) disableAllTriggers;
@@ -228,10 +228,10 @@
 - (BOOL) hitRateEnabled:(unsigned short) aChan;
 - (void) setHitRateEnabled:(unsigned short) aChan withValue:(BOOL) aState;
 
-- (unsigned long)threshold:(unsigned short) aChan;
+- (uint32_t)threshold:(unsigned short) aChan;
 - (unsigned short)gain:(unsigned short) aChan;
 - (BOOL) triggerEnabled:(unsigned short) aChan;
-- (void) setThreshold:(unsigned short) aChan withValue:(unsigned long) aThreshold;
+- (void) setThreshold:(unsigned short) aChan withValue:(uint32_t) aThreshold;
 - (void) setGain:(unsigned short) aChan withValue:(unsigned short) aGain;
 - (void) setTriggerEnabled:(unsigned short) aChan withValue:(BOOL) aState;
 
@@ -249,13 +249,13 @@
 - (void) setTotalRate:(ORTimeRate*)newTimeRate;
 
 - (NSString*) getRegisterName: (short) anIndex;
-- (unsigned long) getAddressOffset: (short) anIndex;
+- (uint32_t) getAddressOffset: (short) anIndex;
 - (short) getAccessType: (short) anIndex;
 
 - (unsigned short) selectedRegIndex;
 - (void) setSelectedRegIndex:(unsigned short) anIndex;
-- (unsigned long) writeValue;
-- (void) setWriteValue:(unsigned long) aValue;
+- (uint32_t) writeValue;
+- (void) setWriteValue:(uint32_t) aValue;
 - (unsigned short) selectedChannelValue;
 - (void) setSelectedChannelValue:(unsigned short) aValue;
 - (int) restrictIntValue:(int)aValue min:(int)aMinValue max:(int)aMaxValue;
@@ -264,28 +264,28 @@
 
 #pragma mark •••HW Access
 //all can raise exceptions
-- (unsigned long) regAddress:(short)aReg channel:(int)aChannel;
-- (unsigned long) regAddress:(short)aReg;
-- (unsigned long) adcMemoryChannel:(short)aChannel page:(int)aPage;
-- (unsigned long) readReg:(short)aReg;
-- (unsigned long) readReg:(short)aReg channel:(int)aChannel;
-- (void) writeReg:(short)aReg value:(unsigned long)aValue;
-- (void) writeReg:(short)aReg channel:(int)aChannel value:(unsigned long)aValue;
+- (uint32_t) regAddress:(short)aReg channel:(int)aChannel;
+- (uint32_t) regAddress:(short)aReg;
+- (uint32_t) adcMemoryChannel:(short)aChannel page:(int)aPage;
+- (uint32_t) readReg:(short)aReg;
+- (uint32_t) readReg:(short)aReg channel:(int)aChannel;
+- (void) writeReg:(short)aReg value:(uint32_t)aValue;
+- (void) writeReg:(short)aReg channel:(int)aChannel value:(uint32_t)aValue;
 
 - (void) executeCommandList:(ORCommandList*)aList;
 - (id) readRegCmd:(short) aRegister channel:(short) aChannel;
-- (id) writeRegCmd:(short) aRegister channel:(short) aChannel value:(unsigned long)aValue;
+- (id) writeRegCmd:(short) aRegister channel:(short) aChannel value:(uint32_t)aValue;
 - (id) readRegCmd:(short) aRegister;
-- (id) writeRegCmd:(short) aRegister value:(unsigned long)aValue;
+- (id) writeRegCmd:(short) aRegister value:(uint32_t)aValue;
 
-- (unsigned long)  readSeconds;
-- (void)  writeSeconds:(unsigned long)aValue;
+- (uint32_t)  readSeconds;
+- (void)  writeSeconds:(uint32_t)aValue;
 - (void) setTimeToMacClock;
 
-- (unsigned long) readVersion;
-- (unsigned long) readpVersion;
-- (unsigned long) readBoardIDLow;
-- (unsigned long) readBoardIDHigh;
+- (uint32_t) readVersion;
+- (uint32_t) readpVersion;
+- (uint32_t) readBoardIDLow;
+- (uint32_t) readBoardIDHigh;
 - (int)			  readSlot;
 
 - (int)		readMode;
@@ -294,16 +294,16 @@
 - (void) initBoard;
 - (void) writeHitRateMask;
 - (void) writeInterruptMask;
-- (unsigned long) hitRateEnabledMask;
-- (void) setHitRateEnabledMask:(unsigned long)aMask;
+- (uint32_t) hitRateEnabledMask;
+- (void) setHitRateEnabledMask:(uint32_t)aMask;
 - (void) readHitRates;
 - (void) readHistogrammingStatus;
-- (void) writeTestPattern:(unsigned long*)mask length:(int)len;
+- (void) writeTestPattern:(uint32_t*)mask length:(int)len;
 - (void) rewindTestPattern;
-- (void) writeNextPattern:(unsigned long)aValue;
-- (unsigned long) readStatus;
-- (unsigned long) readControl;
-- (unsigned long) readHitRateMask;
+- (void) writeNextPattern:(uint32_t)aValue;
+- (uint32_t) readStatus;
+- (uint32_t) readControl;
+- (uint32_t) readHitRateMask;
 - (void) writeControl;
 - (void) printStatusReg;
 - (void) printPStatusRegs;
@@ -320,8 +320,8 @@
 - (unsigned short) readGain:(int)i;
 - (void) writeTriggerControl;
 - (BOOL) partOfEvent:(short)chan;
-- (unsigned long) eventMask;
-- (void) eventMask:(unsigned long)aMask;
+- (uint32_t) eventMask;
+- (void) eventMask:(uint32_t)aMask;
 - (NSString*) boardTypeName:(int)aType;
 - (NSString*) fifoStatusString:(int)aType;
 
@@ -332,11 +332,11 @@
 /** Get statistics of a single channel */
 - (void) getStatistics:(int)aChannel mean:(double *)aMean  var:(double *)aVar; // ak, 7.10.07
 
-- (unsigned long) readMemoryChan:(int)chan page:(int)aPage;
+- (uint32_t) readMemoryChan:(int)chan page:(int)aPage;
 - (void) readMemoryChan:(int)aChan page:(int)aPage pageBuffer:(unsigned short*)aPageBuffer;
 - (void) clear:(int)aChan page:(int)aPage value:(unsigned short)aValue;
 
-- (unsigned long) eventCount:(int)aChannel;
+- (uint32_t) eventCount:(int)aChannel;
 - (void)		  clearEventCounts;
 - (BOOL) bumpRateFromDecodeStage:(short)channel;
 

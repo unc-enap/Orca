@@ -254,7 +254,7 @@ Turns out this approach of building the new string and inserting it at the appro
 
 	    // The following loop can execute an unlimited number of times, and it could have autorelease activity.
 	    // To keep things under control, we use a pool, but to be a bit efficient, instead of emptying everytime through
-	    // the loop, we do it every so often. We can only do this as long as autoreleased items are not supposed to
+	    // the loop, we do it every so often. We can only do this as int32_t as autoreleased items are not supposed to
 	    // survive between the invocations of the pool!
 
     	    pool = [[NSAutoreleasePool alloc] init];

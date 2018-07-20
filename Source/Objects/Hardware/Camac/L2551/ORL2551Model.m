@@ -165,8 +165,8 @@ NSString* ORL2551PollWhenRunningChangedNotification = @"ORL2551PollWhenRunningCh
 {
 	return @"L2551";
 }
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -217,7 +217,7 @@ NSString* ORL2551PollWhenRunningChangedNotification = @"ORL2551PollWhenRunningCh
 	 object:self];    
 }
 
-- (void) setScalerCount:(unsigned short)chan value:(unsigned long)aValue
+- (void) setScalerCount:(unsigned short)chan value:(uint32_t)aValue
 {
 	NSAssert(chan < 12,@"setScalerCount index out of range");
     if(aValue != scalerCount[chan]){
@@ -229,7 +229,7 @@ NSString* ORL2551PollWhenRunningChangedNotification = @"ORL2551PollWhenRunningCh
     }
 }
 
-- (unsigned long) scalerCount:(unsigned short)chan
+- (uint32_t) scalerCount:(unsigned short)chan
 {
 	NSAssert(chan < 12,@"scalerCount index out of range");
     return scalerCount[chan];
@@ -346,7 +346,7 @@ NSString* ORL2551PollWhenRunningChangedNotification = @"ORL2551PollWhenRunningCh
 
 - (void) shipScalerRecords 
 {  
-    unsigned long data[14];
+    uint32_t data[14];
     int i;
     data[0] = dataId | 14;  //id and size
     data[1] = ([self crateNumber]&0xf)<<16 | ([self stationNumber]& 0x0000001f); //crate and card
@@ -354,7 +354,7 @@ NSString* ORL2551PollWhenRunningChangedNotification = @"ORL2551PollWhenRunningCh
         data[2+i] = ((i&0xf)<<28) | (scalerCount[i]&0x00ffffff);
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-                                                        object:[NSData dataWithBytes:data length:sizeof(long)*14]];
+                                                        object:[NSData dataWithBytes:data length:sizeof(int32_t)*14]];
 }
 
 - (void) readAllScalers
@@ -364,7 +364,7 @@ NSString* ORL2551PollWhenRunningChangedNotification = @"ORL2551PollWhenRunningCh
             int i;
             for(i=0;i<12;i++){
                 if([self onlineMaskBit:i]){
-                    unsigned long theValue;
+                    uint32_t theValue;
                     unsigned short theStatus = [[self adapter] camacLongNAF:[self stationNumber] a:i f:0 data:&theValue];
                     [self decodeStatus:theStatus];
                     if(cmdAccepted){
@@ -445,7 +445,7 @@ NSString* ORL2551PollWhenRunningChangedNotification = @"ORL2551PollWhenRunningCh
 - (void) readReset
 {
     [self readAllScalers];
-    unsigned long theValue;
+    uint32_t theValue;
 
     [[self adapter] camacLongNAF:[self stationNumber] a:11 f:2 data:&theValue]; //force reset
 }

@@ -553,11 +553,11 @@
 {
     NSArray* matrices = @[mtcaN100Matrix, mtcaN20Matrix, mtcaEHIMatrix, mtcaELOMatrix,
                           mtcaOWLNMatrix,mtcaOEHIMatrix,mtcaOELOMatrix];
-    unsigned long masks[7] = {[model mtcaN100Mask],[model mtcaN20Mask],[model mtcaEHIMask],
+    uint32_t masks[7] = {[model mtcaN100Mask],[model mtcaN20Mask],[model mtcaEHIMask],
                             [model mtcaELOMask],[model mtcaOWLNMask],[model mtcaOEHIMask],
                             [model mtcaOELOMask]};
     for (int matrix_index = 0; matrix_index < [matrices count]; matrix_index++) {
-        unsigned long maskValue = masks[matrix_index];
+        uint32_t maskValue = masks[matrix_index];
         NSMatrix* thisMatrix = matrices[matrix_index];
         for (int i = 0; i < [thisMatrix numberOfRows]; i++) {
             NSCell* thisCell = [thisMatrix cellAtRow:i column:0];
@@ -705,7 +705,7 @@
 
 - (IBAction) standardSetPedestalsCount:(id) sender
 {
-	unsigned long aValue = [sender intValue];
+	uint32_t aValue = [sender intValue];
 	if (aValue < 1) aValue = 1;
 	if (aValue > 10000) aValue = 10000;
 	[model setFixedPulserRateCount:aValue];

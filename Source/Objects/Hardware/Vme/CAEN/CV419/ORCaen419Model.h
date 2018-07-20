@@ -47,7 +47,7 @@ enum {
 };
 typedef struct Caen419Registers {
 	NSString*       regName;
-	unsigned long 	addressOffset;
+	uint32_t 	addressOffset;
 } Caen419Registers; 
 
 #define kCV419NumberChannels 4
@@ -59,14 +59,14 @@ typedef struct Caen419Registers {
     unsigned short  highThresholds[kCV419NumberChannels];
     unsigned short linearGateMode[kCV419NumberChannels];
     short riseTimeProtection[kCV419NumberChannels];
-    unsigned long dataId;
-    unsigned long auxAddress;
+    uint32_t dataId;
+    uint32_t auxAddress;
     short resetMask;
     short enabledMask;
-	unsigned long slotMask;
+	uint32_t slotMask;
 	BOOL isRunning;
 	ORRateGroup*	adcRateGroup;
-	unsigned long 	adcCount[kCV419NumberChannels];
+	uint32_t 	adcCount[kCV419NumberChannels];
 }
 
 #pragma mark ***Accessors
@@ -83,10 +83,10 @@ typedef struct Caen419Registers {
 - (void) setRiseTimeProtection:(short)chan withValue:(short)aRiseTimeProtection;
 - (short) linearGateMode:(short)chan;
 - (void) setLinearGateMode:(short)chan withValue:(short)aLinearGateMode;
-- (unsigned long) auxAddress;
-- (void) setAuxAddress:(unsigned long)aAuxAddress;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) auxAddress;
+- (void) setAuxAddress:(uint32_t)aAuxAddress;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherObj;
 - (void) startRates;
@@ -94,12 +94,12 @@ typedef struct Caen419Registers {
 - (ORRateGroup*)    adcRateGroup;
 - (void)	    setAdcRateGroup:(ORRateGroup*)newAdcRateGroup;
 
-- (unsigned long)	lowThreshold: (unsigned short) anIndex;
-- (void) setLowThreshold:(unsigned short) aChnl withValue:(unsigned long) aValue;
-- (unsigned long)	highThreshold: (unsigned short) anIndex;
-- (void) setHighThreshold:(unsigned short) aChnl withValue:(unsigned long) aValue;
+- (uint32_t)	lowThreshold: (unsigned short) anIndex;
+- (void) setLowThreshold:(unsigned short) aChnl withValue:(uint32_t) aValue;
+- (uint32_t)	highThreshold: (unsigned short) anIndex;
+- (void) setHighThreshold:(unsigned short) aChnl withValue:(uint32_t) aValue;
 - (NSString*) 		getRegisterName: (short) anIndex;
-- (unsigned long) 	getAddressOffset: (short) anIndex;
+- (uint32_t) 	getAddressOffset: (short) anIndex;
 
 #pragma mark ***Support Hardware Functions
 - (int) lowThresholdOffset:(unsigned short)aChan;
@@ -119,8 +119,8 @@ typedef struct Caen419Registers {
 
 #pragma mark •••Rates
 - (void)		clearAdcCounts;
-- (unsigned long) adcCount:(int)aChannel;
-- (unsigned long) getCounter:(int)tag forGroup:(int)groupTag;
+- (uint32_t) adcCount:(int)aChannel;
+- (uint32_t) getCounter:(int)tag forGroup:(int)groupTag;
 - (id) rateObject:(int)channel;
 - (void) setIntegrationTime:(double)newIntegrationTime;
 

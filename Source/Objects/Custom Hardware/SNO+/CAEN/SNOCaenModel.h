@@ -29,7 +29,7 @@ typedef struct  {
 	bool			dataReset;
 	bool			softwareReset;
 	bool			hwReset;
-	unsigned long 	addressOffset;
+	uint32_t 	addressOffset;
 	short			accessType;
 } Caen1720RegisterNamesStruct; 
 
@@ -98,40 +98,40 @@ enum {
 // Class definition
 @interface SNOCaenModel : ORVmeIOCard <ORHWWizard>
 {
-	unsigned long   dataId;
+	uint32_t   dataId;
 	unsigned short  selectedRegIndex;
     unsigned short  selectedChannel;
-    unsigned long   writeValue;
+    uint32_t   writeValue;
 	unsigned short  thresholds[8];
 	unsigned short	dac[8];
 	unsigned short	overUnderThreshold[8];
     unsigned short	channelConfigMask;
-    unsigned long	customSize;
+    uint32_t	customSize;
 	BOOL		isCustomSize;
 	BOOL		isFixedSize;
     BOOL			countAllTriggers;
     unsigned short	acquisitionMode;
     unsigned short  coincidenceLevel;
-    unsigned long   triggerSourceMask;
-	unsigned long   triggerOutMask;
-	unsigned long   frontPanelControlMask;
-    unsigned long	postTriggerSetting;
+    uint32_t   triggerSourceMask;
+	uint32_t   triggerOutMask;
+	uint32_t   frontPanelControlMask;
+    uint32_t	postTriggerSetting;
     unsigned short	enabledMask;
 	ORRateGroup*	waveFormRateGroup;
-	unsigned long 	waveFormCount[8];
+	uint32_t 	waveFormCount[8];
     int				bufferState;
 	ORAlarm*        bufferFullAlarm;
 	int				bufferEmptyCount;
 	BOOL			isRunning;
     int				eventSize;
-    unsigned long   numberBLTEventsToReadout;
+    uint32_t   numberBLTEventsToReadout;
     BOOL            continuousMode;
 	
 	//cached variables, valid only during running
 	unsigned int    statusReg;
-	unsigned long   location;
-	unsigned long	eventSizeReg;
-	unsigned long	dataReg;
+	uint32_t   location;
+	uint32_t	eventSizeReg;
+	uint32_t	dataReg;
 
     RedisClient *mtc_server;
 }
@@ -159,18 +159,18 @@ enum {
 - (void)			setSelectedRegIndex: (unsigned short) anIndex;
 - (unsigned short) 	selectedChannel;
 - (void)			setSelectedChannel: (unsigned short) anIndex;
-- (unsigned long) 	writeValue;
-- (void)			setWriteValue: (unsigned long) anIndex;
+- (uint32_t) 	writeValue;
+- (void)			setWriteValue: (uint32_t) anIndex;
 - (unsigned short)	enabledMask;
 - (void)			setEnabledMask:(unsigned short)aEnabledMask;
-- (unsigned long)	postTriggerSetting;
-- (void)			setPostTriggerSetting:(unsigned long)aPostTriggerSetting;
-- (unsigned long)	triggerSourceMask;
-- (void)			setTriggerSourceMask:(unsigned long)aTriggerSourceMask;
-- (unsigned long)	triggerOutMask;
-- (void)			setTriggerOutMask:(unsigned long)aTriggerOutMask;
-- (unsigned long)	frontPanelControlMask;
-- (void)			setFrontPanelControlMask:(unsigned long)aFrontPanelControlMask;
+- (uint32_t)	postTriggerSetting;
+- (void)			setPostTriggerSetting:(uint32_t)aPostTriggerSetting;
+- (uint32_t)	triggerSourceMask;
+- (void)			setTriggerSourceMask:(uint32_t)aTriggerSourceMask;
+- (uint32_t)	triggerOutMask;
+- (void)			setTriggerOutMask:(uint32_t)aTriggerOutMask;
+- (uint32_t)	frontPanelControlMask;
+- (void)			setFrontPanelControlMask:(uint32_t)aFrontPanelControlMask;
 - (unsigned short)	coincidenceLevel;
 - (void)			setCoincidenceLevel:(unsigned short)aCoincidenceLevel;
 - (unsigned short)	acquisitionMode;
@@ -181,23 +181,23 @@ enum {
 - (void)		setIsCustomSize:(BOOL)aIsCustomSize;
 - (BOOL)		isFixedSize;
 - (void)		setIsFixedSize:(BOOL)aIsFixedSize;
-- (unsigned long)	customSize;
-- (void)			setCustomSize:(unsigned long)aCustomSize;
+- (uint32_t)	customSize;
+- (void)			setCustomSize:(uint32_t)aCustomSize;
 - (unsigned short)	channelConfigMask;
 - (void)			setChannelConfigMask:(unsigned short)aChannelConfigMask;
 - (unsigned short)	dac:(unsigned short) aChnl;
 - (void)			setDac:(unsigned short) aChnl withValue:(unsigned short) aValue;
 - (unsigned short)	overUnderThreshold:(unsigned short) aChnl;
 - (void)			setOverUnderThreshold:(unsigned short) aChnl withValue:(unsigned short) aValue;
-- (unsigned long)	numberBLTEventsToReadout;
-- (void)			setNumberBLTEventsToReadout:(unsigned long)aNumberOfBLTEvents;
+- (uint32_t)	numberBLTEventsToReadout;
+- (void)			setNumberBLTEventsToReadout:(uint32_t)aNumberOfBLTEvents;
 
 #pragma mark ***Register - General routines
 - (void)			read;
 - (void)			write;
 - (void)			report;
-- (void)			read:(unsigned short) pReg returnValue:(unsigned long*) pValue;
-- (void)			write:(unsigned short) pReg sendValue:(unsigned long) pValue;
+- (void)			read:(unsigned short) pReg returnValue:(uint32_t*) pValue;
+- (void)			write:(unsigned short) pReg sendValue:(uint32_t) pValue;
 - (short)			getNumberRegisters;
 - (void)			generateSoftwareTrigger;
 - (void)			softwareReset;
@@ -224,16 +224,16 @@ enum {
 - (unsigned short) selectedRegIndex;
 - (void) setSelectedRegIndex:(unsigned short) anIndex;
 - (NSString*) 		getRegisterName: (short) anIndex;
-- (unsigned long) 	getAddressOffset: (short) anIndex;
+- (uint32_t) 	getAddressOffset: (short) anIndex;
 - (short)			getAccessType: (short) anIndex;
 - (BOOL)			dataReset: (short) anIndex;
 - (BOOL)			swReset: (short) anIndex;
 - (BOOL)			hwReset: (short) anIndex;
 - (void)			writeThresholds;
 - (unsigned short)	threshold:(unsigned short) aChnl;
-- (void)			setThreshold:(unsigned short) aChnl withValue:(unsigned long) aValue;
-- (void)			writeChan:(unsigned short)chan reg:(unsigned short) pReg sendValue:(unsigned long) pValue;
-- (void)			readChan:(unsigned short)chan reg:(unsigned short) pReg returnValue:(unsigned long*) pValue;
+- (void)			setThreshold:(unsigned short) aChnl withValue:(uint32_t) aValue;
+- (void)			writeChan:(unsigned short)chan reg:(unsigned short) pReg sendValue:(uint32_t) pValue;
+- (void)			readChan:(unsigned short)chan reg:(unsigned short) pReg returnValue:(uint32_t*) pValue;
 - (void)			writeDacs;
 - (void)			writeDac:(unsigned short) pChan;
 - (float)			convertDacToVolts:(unsigned short)aDacValue;

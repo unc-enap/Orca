@@ -768,7 +768,7 @@ snopGreenColor;
     [self endEditing];
 
     /* Action when the user clicks on the Start or Restart Button. */
-    unsigned long dbruntypeword = 0;
+    uint32_t dbruntypeword = 0;
 
     /* If we are not going to maintenance we shouldn't be polling */
     NSMutableDictionary* runSettings = [[[model standardRunCollection] objectForKey:[model standardRunType]] objectForKey:[model standardRunVersion]];
@@ -935,7 +935,7 @@ snopGreenColor;
 {
     short bit = [sender selectedRow];
     BOOL state  = [(NSButton*)[sender selectedCell] state];
-    unsigned long currentRunMask = [model nhitMonitorRunType];
+    uint32_t currentRunMask = [model nhitMonitorRunType];
     if (state) {
         currentRunMask |= (1L << bit);
     } else {
@@ -948,7 +948,7 @@ snopGreenColor;
 {
     short bit = [sender selectedRow];
     BOOL state  = [(NSButton*)[sender selectedCell] state];
-    unsigned long currentCrateMask = [model nhitMonitorCrateMask];
+    uint32_t currentCrateMask = [model nhitMonitorCrateMask];
     if (state) {
         currentCrateMask |= (1L << bit);
     } else {
@@ -1013,7 +1013,7 @@ snopGreenColor;
         NSArray* xl3s = [[(ORAppDelegate*)[NSApp delegate] document] collectObjectsOfClass:NSClassFromString(@"ORXL3Model")];
         
         // bit wise mask of xl3s
-        unsigned long xl3Mask = 0x7ffff;
+        uint32_t xl3Mask = 0x7ffff;
         
         //loop through all xl3 instances in Orca
         for (id xl3 in xl3s) {
@@ -1651,7 +1651,7 @@ snopGreenColor;
 
     /////////////////////////
     // If this call is from a button press push an acknowledgement
-    // to the logs. Seeing as SMELLIE takes so long to shut down, it
+    // to the logs. Seeing as SMELLIE takes so int32_t to shut down, it
     // is important to let the user know whats going on.
     if(![sender isKindOfClass:[NSNotification class]]){
         NSLog(@"#############################################\n");
@@ -2131,7 +2131,7 @@ snopGreenColor;
 {
     short bit = [sender selectedRow];
     BOOL state  = [(NSButton*)[sender selectedCell] state];
-    unsigned long currentRunMask = [model runTypeWord];
+    uint32_t currentRunMask = [model runTypeWord];
     if(state) currentRunMask |= (1L<<bit);
     else      currentRunMask &= ~(1L<<bit);
     //Unset bits for the mutually exclusive part so that it's impossible to mess up with it
@@ -2727,7 +2727,7 @@ snopGreenColor;
 {
 
     if ([[aNote name] isEqualTo:ORRunTypeChangedNotification]) {
-        unsigned long currentRunWord = [runControl runType];
+        uint32_t currentRunWord = [runControl runType];
         [model setRunTypeWord:currentRunWord];
     }
 
@@ -2790,7 +2790,7 @@ snopGreenColor;
     }
 
     //Get run type word first
-    unsigned long dbruntypeword = [[runSettings valueForKey:@"run_type_word"] unsignedLongValue];
+    uint32_t dbruntypeword = [[runSettings valueForKey:@"run_type_word"] unsignedLongValue];
 
     //If in DIAGNOSTIC run: display null threshold values
     if(dbruntypeword & kDiagnosticRun){

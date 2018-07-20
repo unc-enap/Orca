@@ -83,7 +83,7 @@ NSString* ORDBLock = @"ORDBLock";
 }
 - (NSString*) identifier
 {
-    return [NSString stringWithFormat:@"DC (%d,%lu,%lu)",[[guardian guardian ] crateNumber],[guardian stationNumber],[self stationNumber]];
+    return [NSString stringWithFormat:@"DC (%d,%u,%u)",(int)[[guardian guardian ] crateNumber],(unsigned)[guardian stationNumber],(unsigned)[self stationNumber]];
 }
 #pragma mark •••Accessors
 - (int) globalCardNumber

@@ -81,7 +81,7 @@
  * \note	
  */
 //--------------------------------------------------------------------------------
-- (long) actualWaveformSize
+- (int32_t) actualWaveformSize
 {
     return( mActualSizeWaveform );
 }
@@ -92,7 +92,7 @@
  * \note	
  */
 //--------------------------------------------------------------------------------
-- (void) setActualWaveformSize: (unsigned long) aWaveformSize
+- (void) setActualWaveformSize: (uint32_t) aWaveformSize
 {
     mActualSizeWaveform = aWaveformSize;
 }
@@ -104,7 +104,7 @@
  * \note	
  */
 //--------------------------------------------------------------------------------
-- (long) maxWaveformSize
+- (int32_t) maxWaveformSize
 {
     return( mMaxSizeWaveform );
 }
@@ -152,10 +152,10 @@
  *			storage.
  */
 //--------------------------------------------------------------------------------
-- (void) setGtid: (unsigned long) aGtid
+- (void) setGtid: (uint32_t) aGtid
 {
     // Create the new data storage area.
-    unsigned long len;
+    uint32_t len;
     if(IsShortForm(mHeaderBaseGtidInfo[0])){
         len = 1;
         // Place header in first word of data storage along with gtid
@@ -169,7 +169,7 @@
     }
     // Release the last storage area used for the last event.
     [ mGtid release ];
-    mGtid = [[ NSMutableData allocWithZone: NULL ] initWithBytes:mHeaderBaseGtidInfo length:len*sizeof(long) ];
+    mGtid = [[ NSMutableData allocWithZone: NULL ] initWithBytes:mHeaderBaseGtidInfo length:len*sizeof(int32_t) ];
 }
 
 //--------------------------------------------------------------------------------
@@ -202,7 +202,7 @@
 /*!\method 	createTimeStorage
  * \brief	Creates the time storage and returns it to the user.
  * \return	Pointer to time memory location.
- * \note	This routine allocates enough space for a long long.  The
+ * \note	This routine allocates enough space for a int64_t.  The
  *			data is acquired as a string which is converted prior to being
  *			stored as standard UNIX time.
  * \note	Using a 10 MHz clock the time will never exceed
@@ -219,10 +219,10 @@
     mTime = nil;
 
 // Create the new data storage area.
-    mTime = [[ NSMutableData allocWithZone: NULL ] initWithCapacity: 3*sizeof(long) ];
+    mTime = [[ NSMutableData allocWithZone: NULL ] initWithCapacity: 3*sizeof(int32_t) ];
                                                 // Since data is added outside of this class
                                                  //  have to set data length here.
-    [ mTime setLength: 3*sizeof(long) ];
+    [ mTime setLength: 3*sizeof(int32_t) ];
     timeLoc = [ mTime mutableBytes ];
     
     return( timeLoc ); 
@@ -240,7 +240,7 @@
     NSArray*		arrayWithObjects;
     
     // add length to first word of header
-    mHeaderBaseInfo[0] |= [mData length]/sizeof(long) & 0x0003FFFF;
+    mHeaderBaseInfo[0] |= [mData length]/sizeof(int32_t) & 0x0003FFFF;
     if(mData){
         memcpy( [ mData mutableBytes ], &mHeaderBaseInfo, 8 );
     
@@ -262,9 +262,9 @@
 //--------------------------------------------------------------------------------
 - (NSData*) timePacketData: (ORDataPacket*) aDataPacket channel: (unsigned short) aChannel
 {
-    unsigned long 	headerInfo[3];
-    unsigned long*	firstWord;
-    unsigned long len;
+    uint32_t 	headerInfo[3];
+    uint32_t*	firstWord;
+    uint32_t len;
 // Get the time information.
     firstWord = [ mTime mutableBytes ];
 
@@ -274,7 +274,7 @@
 	headerInfo[1] =  ( ( aChannel & 0x7 ) << 24 ) | *firstWord;
 	headerInfo[2] = *(firstWord+1);
 // Copy back to mutable array.
-    memcpy( [ mTime mutableBytes ], headerInfo, len*sizeof(long) );
+    memcpy( [ mTime mutableBytes ], headerInfo, len*sizeof(int32_t) );
     
 	return mTime;
 }

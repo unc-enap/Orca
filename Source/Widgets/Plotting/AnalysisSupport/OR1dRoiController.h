@@ -21,8 +21,8 @@
 
 
 @interface NSObject (OR1dRoiControllerDataSource)
-- (long)	minChannel;
-- (long)	maxChannel;
+- (int32_t)	minChannel;
+- (int32_t)	maxChannel;
 - (double)	average;	
 - (double)	centroid;	
 - (double)	sigma;	

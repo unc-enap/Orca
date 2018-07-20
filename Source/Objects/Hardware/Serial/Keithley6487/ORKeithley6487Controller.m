@@ -188,7 +188,7 @@
 - (void) currentChanged:(NSNotification*)aNote
 {
 	[currentField setFloatValue:[model current]];
-	unsigned long t = [model timeMeasured];
+	uint32_t t = [model timeMeasured];
 	if(t){
 		NSDate* theDate = [NSDate dateWithTimeIntervalSince1970:t];
 		[timeField setObjectValue:theDate];

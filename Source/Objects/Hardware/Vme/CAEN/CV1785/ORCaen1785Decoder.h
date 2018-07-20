@@ -39,8 +39,8 @@
 
 @interface ORCaen1785DecoderForAdc : ORVmeCardDecoder {
 }
-- (unsigned long) decodeData:(void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*) aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)ptr;
+- (uint32_t) decodeData:(void*) aSomeData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*) aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)ptr;
 - (void) printData: (NSString*) pName data:(void*) theData;
 
 @end

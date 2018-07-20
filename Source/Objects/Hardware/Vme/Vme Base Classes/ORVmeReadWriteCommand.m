@@ -21,13 +21,13 @@
 #import "ORVmeReadWriteCommand.h"
 
 @implementation ORVmeReadWriteCommand
-+ (id) delayCmd:(unsigned long)aMilliSeconds
++ (id) delayCmd:(uint32_t)aMilliSeconds
 {
 	return [[[ORVmeReadWriteCommand alloc] initWithMilliSecondDelay: kDelayOp] autorelease];
 }
 
-+ (id) writeLongBlock:(unsigned long *) writeAddress
-			 atAddress:(unsigned long) vmeAddress
++ (id) writeLongBlock:(uint32_t *) writeAddress
+			 atAddress:(uint32_t) vmeAddress
 			numToWrite:(unsigned int) numberLongs
 			withAddMod:(unsigned short) anAddressModifier
 		 usingAddSpace:(unsigned short) anAddressSpace
@@ -36,13 +36,13 @@
 										   dataAdress: writeAddress
 										   vmeAddress: vmeAddress
 										  numberItems: numberLongs
-											 itemSize: sizeof(long)
+											 itemSize: sizeof(int32_t)
 										   withAddMod: anAddressModifier
 										usingAddSpace: anAddressSpace] autorelease];
 	
 }
 
-+ (id) readLongBlockAtAddress:(unsigned long) vmeAddress
++ (id) readLongBlockAtAddress:(uint32_t) vmeAddress
 		   numToRead:(unsigned int) numberLongs
 		   withAddMod:(unsigned short) anAddressModifier
 		usingAddSpace:(unsigned short) anAddressSpace
@@ -51,14 +51,14 @@
 										   dataAdress: 0		
 										   vmeAddress: vmeAddress
 										  numberItems: numberLongs
-											 itemSize: sizeof(long)
+											 itemSize: sizeof(int32_t)
 										   withAddMod: anAddressModifier
 										usingAddSpace: anAddressSpace] autorelease];
 	
 }
 
-+ (id) writeShortBlock:(unsigned long *) writeAddress
-			atAddress:(unsigned long) vmeAddress
++ (id) writeShortBlock:(uint32_t *) writeAddress
+			atAddress:(uint32_t) vmeAddress
 		   numToWrite:(unsigned int) numberShorts
 		   withAddMod:(unsigned short) anAddressModifier
 		usingAddSpace:(unsigned short) anAddressSpace
@@ -73,7 +73,7 @@
 	
 }
 
-+ (id) readShortBlockAtAddress:(unsigned long) vmeAddress
++ (id) readShortBlockAtAddress:(uint32_t) vmeAddress
 					numToRead:(unsigned int) numberShorts
 				   withAddMod:(unsigned short) anAddressModifier
 				usingAddSpace:(unsigned short) anAddressSpace
@@ -89,7 +89,7 @@
 }
 
 
-- (id) initWithMilliSecondDelay:(unsigned long) aMilliSecondDelay
+- (id) initWithMilliSecondDelay:(uint32_t) aMilliSecondDelay
 {
 	self			= [super init];
 	opType			= kDelayOp;
@@ -98,8 +98,8 @@
 }
 
 - (id) initWithOp: (int) anOpType
-	   dataAdress: (unsigned long*) dataAddress
-	   vmeAddress: (unsigned long) aVmeAddress
+	   dataAdress: (uint32_t*) dataAddress
+	   vmeAddress: (uint32_t) aVmeAddress
 	  numberItems: (unsigned int) aNumberItems
 		 itemSize: (unsigned int) anItemSize
 	   withAddMod: (unsigned short) anAddressModifier
@@ -112,7 +112,7 @@
 	itemSize		= anItemSize;
 	addressSpace	= anAddressSpace;
 	addressModifier = anAddressModifier;
-	unsigned long numBytes		= itemSize*numberItems;
+	uint32_t numBytes		= itemSize*numberItems;
 	if(dataAddress)	data = [[NSMutableData dataWithBytes:dataAddress length:numBytes] retain];
 	else			data = [[NSMutableData dataWithLength:numBytes] retain];
 	
@@ -125,13 +125,13 @@
 	[super dealloc];
 }
 
-- (unsigned long) milliSecondDelay { return milliSecondDelay;}
+- (uint32_t) milliSecondDelay { return milliSecondDelay;}
 - (int)	opType				 { return opType; }
 - (int) numberItems			 { return numberItems; }
 - (int) itemSize			 { return itemSize; }
 - (int)	addressModifier		 { return addressModifier; }
 - (int)	addressSpace		 { return addressSpace; }
-- (unsigned long) vmeAddress { return vmeAddress; }
+- (uint32_t) vmeAddress { return vmeAddress; }
 - (int) returnCode			 { return returnCode; }
 - (void) setReturnCode:(int)aCode {  returnCode = aCode; }
 - (NSMutableData*) data		 { return data; }
@@ -176,7 +176,7 @@
 		delayStructPtr->milliSecondDelay			= (uint32_t)milliSecondDelay;
 	}
 	else validOp = NO;
-	if(validOp) aPacket->numBytes = sizeof(unsigned long) + sizeof(SBC_CommandHeader) + kSBC_MaxMessageSizeBytes + aPacket->cmdHeader.numberBytesinPayload;
+	if(validOp) aPacket->numBytes = sizeof(uint32_t) + sizeof(SBC_CommandHeader) + kSBC_MaxMessageSizeBytes + aPacket->cmdHeader.numberBytesinPayload;
 }
 
 - (void) extractData:(SBC_Packet*) aPacket
@@ -217,9 +217,9 @@
 	[NSException raise: @"SBC/VME access Error" format:@"%@:%@",baseString,details];
 }
 
-- (long) longValue
+- (int32_t) longValue
 {
-	long* p = (long*)[data bytes];
+	int32_t* p = (int32_t*)[data bytes];
 	return p[0];
 }
 

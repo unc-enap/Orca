@@ -36,7 +36,7 @@
 {
     @private
 		BOOL             delay;
-		unsigned long	 timeMeasured;
+		uint32_t	 timeMeasured;
         NSMutableString* buffer;
 		NSString*	measurementDate;
 		float		size1;
@@ -110,7 +110,7 @@
 - (void) setSize1:(float)aSize1;
 - (NSString*) measurementDate;
 - (void) setMeasurementDate:(NSString*)aMeasurementDate;
-- (unsigned long) timeMeasured;
+- (uint32_t) timeMeasured;
 - (NSString*) countingModeString;
 - (BOOL) dataForChannelValid:(int)aChannel;
 - (void) setMissedCycleCount:(int)aValue;

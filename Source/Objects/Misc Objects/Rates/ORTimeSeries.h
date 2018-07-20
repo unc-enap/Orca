@@ -24,18 +24,18 @@
 #define kTimeSeriesBufferSize 4096
 
 @interface ORTimeSeries : NSObject {
-	unsigned long   time[kTimeSeriesBufferSize]; //seconds since 1/1/1970 (gmt)
+	uint32_t   time[kTimeSeriesBufferSize]; //seconds since 1/1/1970 (gmt)
 	float			value[kTimeSeriesBufferSize];
 	int writeIndex;
 	int readIndex;
 	int lastWriteIndex;
 }
 
-- (unsigned long) startTime;
+- (uint32_t) startTime;
 - (NSUInteger) count;
-- (void) addValue:(float)aValue atTime:(unsigned long)aTime;
-- (void) index:(NSUInteger)index time:(unsigned long*)theTime value:(double*)y;
-- (unsigned long) timeAtIndex:(NSUInteger)index;
+- (void) addValue:(float)aValue atTime:(uint32_t)aTime;
+- (void) index:(NSUInteger)index time:(uint32_t*)theTime value:(double*)y;
+- (uint32_t) timeAtIndex:(NSUInteger)index;
 - (float) valueAtIndex:(NSUInteger)index;
 @end
 

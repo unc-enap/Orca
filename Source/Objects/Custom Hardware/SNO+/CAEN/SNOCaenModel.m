@@ -306,7 +306,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 	return bufferState;
 }
 
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
 {
 	if(groupTag == 0){
 		if(counterTag>=0 && counterTag<8){
@@ -385,12 +385,12 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 	 object:self];
 }
 
-- (unsigned long) writeValue
+- (uint32_t) writeValue
 {
     return writeValue;
 }
 
-- (void) setWriteValue:(unsigned long) aValue
+- (void) setWriteValue:(uint32_t) aValue
 {
     // Set the undo manager action.  The label has already been set by the controller calling this method.
     [[[self undoManager] prepareWithInvocationTarget:self] setWriteValue:[self writeValue]];
@@ -418,12 +418,12 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
     [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:SNOCaenModelEnabledMaskChanged object:self];
 }
 
-- (unsigned long) postTriggerSetting
+- (uint32_t) postTriggerSetting
 {
     return postTriggerSetting;
 }
 
-- (void) setPostTriggerSetting:(unsigned long)aPostTriggerSetting
+- (void) setPostTriggerSetting:(uint32_t)aPostTriggerSetting
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setPostTriggerSetting:postTriggerSetting];
     
@@ -432,12 +432,12 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
     [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:SNOCaenModelPostTriggerSettingChanged object:self];
 }
 
-- (unsigned long) triggerSourceMask
+- (uint32_t) triggerSourceMask
 {
     return triggerSourceMask;
 }
 
-- (void) setTriggerSourceMask:(unsigned long)aTriggerSourceMask
+- (void) setTriggerSourceMask:(uint32_t)aTriggerSourceMask
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setTriggerSourceMask:triggerSourceMask];
     
@@ -446,12 +446,12 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
     [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:SNOCaenModelTriggerSourceMaskChanged object:self];
 }
 
-- (unsigned long) triggerOutMask
+- (uint32_t) triggerOutMask
 {
 	return triggerOutMask;
 }
 
-- (void) setTriggerOutMask:(unsigned long)aTriggerOutMask
+- (void) setTriggerOutMask:(uint32_t)aTriggerOutMask
 {
 	[[[self undoManager] prepareWithInvocationTarget:self] setTriggerOutMask:triggerOutMask];
 	
@@ -461,12 +461,12 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 	[[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:SNOCaenModelTriggerOutMaskChanged object:self];
 }
 
-- (unsigned long) frontPanelControlMask
+- (uint32_t) frontPanelControlMask
 {
 	return frontPanelControlMask;
 }
 
-- (void) setFrontPanelControlMask:(unsigned long)aFrontPanelControlMask
+- (void) setFrontPanelControlMask:(uint32_t)aFrontPanelControlMask
 {
 	[[[self undoManager] prepareWithInvocationTarget:self] setFrontPanelControlMask:aFrontPanelControlMask];
 	
@@ -517,12 +517,12 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
     [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:SNOCaenModelCountAllTriggersChanged object:self];
 }
 
-- (unsigned long) customSize
+- (uint32_t) customSize
 {
     return customSize;
 }
 
-- (void) setCustomSize:(unsigned long)aCustomSize
+- (void) setCustomSize:(uint32_t)aCustomSize
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setCustomSize:customSize];
     
@@ -579,12 +579,12 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
     [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:SNOCaenModelChannelConfigMaskChanged object:self];
 }
 
-- (unsigned long) numberBLTEventsToReadout
+- (uint32_t) numberBLTEventsToReadout
 {
     return numberBLTEventsToReadout; 
 }
 
-- (void) setNumberBLTEventsToReadout:(unsigned long) numBLTEvents
+- (void) setNumberBLTEventsToReadout:(uint32_t) numBLTEvents
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setNumberBLTEventsToReadout:numberBLTEventsToReadout];
     
@@ -630,7 +630,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
     return reg[anIndex].regName;
 }
 
-- (unsigned long) getAddressOffset:(short) anIndex
+- (uint32_t) getAddressOffset:(short) anIndex
 {
     return reg[anIndex].addressOffset;
 }
@@ -702,7 +702,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 
 }
 
-- (void) readChan:(unsigned short)chan reg:(unsigned short) pReg returnValue:(unsigned long*) pValue
+- (void) readChan:(unsigned short)chan reg:(unsigned short) pReg returnValue:(uint32_t*) pValue
 {
     // Make sure that register is valid
     if (pReg >= [self getNumberRegisters]) {
@@ -719,7 +719,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
     *pValue = [mtc_server intCommand:"caen_read %d", [self getAddressOffset:pReg] + chan*0x100];
 }
 
-- (void) writeChan:(unsigned short)chan reg:(unsigned short) pReg sendValue:(unsigned long) pValue
+- (void) writeChan:(unsigned short)chan reg:(unsigned short) pReg sendValue:(uint32_t) pValue
 {
     // Check that register is a valid register.
     if (pReg >= [self getNumberRegisters]){
@@ -745,7 +745,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
     return thresholds[aChnl];
 }
 
-- (void) setThreshold:(unsigned short) aChnl withValue:(unsigned long) aValue
+- (void) setThreshold:(unsigned short) aChnl withValue:(uint32_t) aValue
 {
     
     // Set the undo manager action.  The label has already been set by the controller calling this method.
@@ -768,7 +768,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 	short		start;
     short		end;
     short		i;   
-    unsigned long 	theValue = 0;
+    uint32_t 	theValue = 0;
     short theChannelIndex	 = [self selectedChannel];
     short theRegIndex		 = [self selectedRegIndex];
     
@@ -813,7 +813,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
     short	end;
     short	i;
 	
-    long theValue			=  [self writeValue];
+    int32_t theValue			=  [self writeValue];
     short theChannelIndex	= [self selectedChannel];
     short theRegIndex 		= [self selectedRegIndex];
     
@@ -853,7 +853,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 }
 
 
-- (void) read:(unsigned short) pReg returnValue:(unsigned long*) pValue
+- (void) read:(unsigned short) pReg returnValue:(uint32_t*) pValue
 {
     // Make sure that register is valid
     if (pReg >= [self getNumberRegisters]) {
@@ -870,7 +870,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
     *pValue = [mtc_server intCommand:"caen_read %d", [self getAddressOffset:pReg]];
 }
 
-- (void) write:(unsigned short) pReg sendValue:(unsigned long) pValue
+- (void) write:(unsigned short) pReg sendValue:(uint32_t) pValue
 {
     // Check that register is a valid register.
     if (pReg >= [self getNumberRegisters]){
@@ -894,7 +894,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 
 - (void) writeThreshold:(unsigned short) pChan
 {
-    unsigned long 	threshold = [self threshold:pChan];
+    uint32_t 	threshold = [self threshold:pChan];
     
     [mtc_server okCommand:"caen_write %d %d", reg[kThresholds].addressOffset + (pChan*0x100), threshold];
 }
@@ -903,7 +903,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 {
 	int i;
 	for(i=0;i<8;i++){
-		unsigned long aValue = overUnderThreshold[i];
+		uint32_t aValue = overUnderThreshold[i];
         [mtc_server okCommand:"caen_write %d %d", reg[kNumOUThreshold].addressOffset + (i*0x100), aValue];
 	}
 }
@@ -912,7 +912,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 {
 	int i;
 	for(i=0;i<8;i++){
-		unsigned long value = [mtc_server intCommand:"caen_read %d", reg[kNumOUThreshold].addressOffset + (i*0x100)];
+		uint32_t value = [mtc_server intCommand:"caen_read %d", reg[kNumOUThreshold].addressOffset + (i*0x100)];
         [self setOverUnderThreshold:i withValue:value];
 	}
 }
@@ -927,7 +927,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 
 - (void) writeDac:(unsigned short) pChan
 {
-    unsigned long 	aValue = [self dac:pChan];
+    uint32_t 	aValue = [self dac:pChan];
     
     [mtc_server okCommand:"caen_write %d %d", reg[kDacs].addressOffset + (pChan*0x100), aValue];
 }
@@ -939,19 +939,19 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 
 - (void) writeChannelConfiguration
 {
-	unsigned long mask = [self channelConfigMask];
+	uint32_t mask = [self channelConfigMask];
     [self write:kChanConfig sendValue:mask];
 }
 
 - (void) writeCustomSize
 {
-	unsigned long aValue = [self isCustomSize]?[self customSize]:0UL;
+	uint32_t aValue = [self isCustomSize]?[self customSize]:0UL;
     [self write:kCustomSize sendValue:aValue];
 }
 
 - (void) report
 {
-	unsigned long enabled, threshold, numOU, status, bufferOccupancy, dacValue,triggerSrc;
+	uint32_t enabled, threshold, numOU, status, bufferOccupancy, dacValue,triggerSrc;
 	[self read:kChanEnableMask returnValue:&enabled];
 	[self read:kTrigSrcEnblMask returnValue:&triggerSrc];
 	int chan;
@@ -979,9 +979,9 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 	}
 	NSLogFont([NSFont fontWithName:@"Monaco" size:10],@"-----------------------------------------------------------\n");
 	
-	unsigned long aValue;
+	uint32_t aValue;
 	[self read:kBufferOrganization returnValue:&aValue];
-	NSLogFont([NSFont fontWithName:@"Monaco" size:10],@"# Buffer Blocks : %d\n",(long)powf(2.,(float)aValue));
+	NSLogFont([NSFont fontWithName:@"Monaco" size:10],@"# Buffer Blocks : %d\n",(int32_t)powf(2.,(float)aValue));
 	
 	NSLogFont([NSFont fontWithName:@"Monaco" size:10],@"Software Trigger: %@\n",triggerSrc&0x80000000?@"Enabled":@"Disabled");
 	NSLogFont([NSFont fontWithName:@"Monaco" size:10],@"External Trigger: %@\n",triggerSrc&0x40000000?@"Enabled":@"Disabled");
@@ -1061,14 +1061,14 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 
 - (void) writeTriggerCount
 {
-	unsigned long aValue = ((coincidenceLevel&0x7)<<24) | (triggerSourceMask & 0xffffffff);
+	uint32_t aValue = ((coincidenceLevel&0x7)<<24) | (triggerSourceMask & 0xffffffff);
     [self write:kTrigSrcEnblMask sendValue:aValue];
 }
 
 
 - (void) writeTriggerSource
 {
-	unsigned long aValue = ((coincidenceLevel&0x7)<<24) | (triggerSourceMask & 0xffffffff);
+	uint32_t aValue = ((coincidenceLevel&0x7)<<24) | (triggerSourceMask & 0xffffffff);
     [self write:kTrigSrcEnblMask sendValue:aValue];
 }
 
@@ -1084,7 +1084,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 
 - (void) readFrontPanelControl
 {
-	unsigned long aValue;
+	uint32_t aValue;
     [self read:kFPIOControl returnValue:&aValue];
 	
 	[self setFrontPanelControlMask:aValue];
@@ -1108,15 +1108,15 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 
 - (void) writeAcquisitionControl:(BOOL)start
 {
-	unsigned long aValue = (countAllTriggers<<3) | (start<<2) | (acquisitionMode&0x3);
+	uint32_t aValue = (countAllTriggers<<3) | (start<<2) | (acquisitionMode&0x3);
     [self write:kAcqControl sendValue:aValue];
 }
 
 - (void) writeNumberBLTEvents:(BOOL)enable
 {
     //we must start in a safe mode with 1 event, the numberBLTEvents is passed to SBC
-    //unsigned long aValue = (enable) ? numberBLTEventsToReadout : 0;
-    unsigned long aValue = (enable) ? 1 : 0;
+    //uint32_t aValue = (enable) ? numberBLTEventsToReadout : 0;
+    uint32_t aValue = (enable) ? 1 : 0;
 
     [self write:kBLTEventNum sendValue:aValue];
 }
@@ -1127,7 +1127,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
      * mapped to 4kB of address space, however there is an undocumented bit in
      * the vme control register which, if enabled, extends this space to ~16MB.
      * */
-    unsigned long aValue;
+    uint32_t aValue;
     [self read:kVMEControl returnValue:&aValue];
 
     if (enable) {
@@ -1141,7 +1141,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 
 - (void) writeEnableBerr:(BOOL)enable
 {
-    unsigned long aValue;
+    uint32_t aValue;
     [self read:kVMEControl returnValue:&aValue];
 
 	//we set both bit4: BERR and bit5: ALIGN64 for MBLT64 to work correctly with SBC

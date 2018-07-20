@@ -43,13 +43,13 @@
 
 @implementation ORNHQ226LDecoderForHVStatus
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-	unsigned long value = *((unsigned long*)someData);
+	uint32_t value = *((uint32_t*)someData);
     return ExtractLength(value);	
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr
 {
     NSString* theString =  @"NHQ226L HV Controller\n\n";               
 	int ident = dataPtr[1] & 0xfff;
@@ -59,7 +59,7 @@
     theString = [theString stringByAppendingFormat:@"%@\n",date];
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theData;
 	
 	theString = [theString stringByAppendingFormat:@"--------------------------\n"];
@@ -72,7 +72,7 @@
 	
 	theString = [theString stringByAppendingFormat:@"--------------------------\n"];
 	theString = [theString stringByAppendingFormat:@"Channel 1\n"];
-	theString = [theString stringByAppendingFormat:@"Status Words 0x%02lx 0x%02lx\n",dataPtr[7],dataPtr[8]];
+	theString = [theString stringByAppendingFormat:@"Status Words 0x%02x 0x%02x\n",dataPtr[7],dataPtr[8]];
 	theData.asLong = dataPtr[9]; //act Voltage 1
 	theString = [theString stringByAppendingFormat:@"Act Voltage: %.1f\n",theData.asFloat];
 	theData.asLong = dataPtr[10]; //act Current 1

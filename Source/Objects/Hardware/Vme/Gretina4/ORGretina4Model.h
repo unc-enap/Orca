@@ -196,8 +196,8 @@ enum Gretina4FIFOStates {
 {
   @private
 	NSThread*		fpgaProgrammingThread;
-	unsigned long   dataId;
-	unsigned long*  dataBuffer;
+	uint32_t   dataId;
+	uint32_t*  dataBuffer;
 
 	NSMutableArray* cardInfo;
     short			enabled[kNumGretina4Channels];
@@ -220,19 +220,19 @@ enum Gretina4FIFOStates {
     short           clockSource;
 
 	ORRateGroup*	waveFormRateGroup;
-	unsigned long 	waveFormCount[kNumGretina4Channels];
+	uint32_t 	waveFormCount[kNumGretina4Channels];
 	BOOL			isRunning;
 
-    unsigned long  fifoState;
+    uint32_t  fifoState;
 	ORAlarm*        fifoFullAlarm;
 	int				fifoEmptyCount;
     int             fifoLostEvents;
 
 	//cache to speed takedata
-	unsigned long location;
+	uint32_t location;
 	id theController;
-	unsigned long fifoAddress;
-	unsigned long fifoStateAddress;
+	uint32_t fifoAddress;
+	uint32_t fifoStateAddress;
 
 	BOOL oldEnabled[kNumGretina4Channels];
 	int oldLEDThreshold[kNumGretina4Channels];
@@ -254,9 +254,9 @@ enum Gretina4FIFOStates {
     int fpgaDownProgress;
 	NSLock* progressLock;
 	
-    unsigned long registerWriteValue;
+    uint32_t registerWriteValue;
     int registerIndex;
-    unsigned long spiWriteValue;
+    uint32_t spiWriteValue;
 	
 	ORConnector*  spiConnector; //we won't draw this connector so we have to keep a reference to it
 	ORConnector*  linkConnector; //we won't draw this connector so we have to keep a reference to it
@@ -268,7 +268,7 @@ enum Gretina4FIFOStates {
     //------------------internal use only
     NSOperationQueue*	fileQueue;
     int                 initializationState;
-    unsigned long       serialNumber;
+    uint32_t       serialNumber;
 }
 
 - (id) init;
@@ -292,10 +292,10 @@ enum Gretina4FIFOStates {
 - (void) setHistEMultiplier:(int)aHistEMultiplier;
 - (int) registerIndex;
 - (void) setRegisterIndex:(int)aRegisterIndex;
-- (unsigned long) registerWriteValue;
-- (void) setRegisterWriteValue:(unsigned long)aWriteValue;
-- (unsigned long) spiWriteValue;
-- (void) setSPIWriteValue:(unsigned long)aWriteValue;
+- (uint32_t) registerWriteValue;
+- (void) setRegisterWriteValue:(uint32_t)aWriteValue;
+- (uint32_t) spiWriteValue;
+- (void) setSPIWriteValue:(uint32_t)aWriteValue;
 - (BOOL) downLoadMainFPGAInProgress;
 - (void) setDownLoadMainFPGAInProgress:(BOOL)aState;
 - (int) fpgaDownProgress;
@@ -305,7 +305,7 @@ enum Gretina4FIFOStates {
 - (void) setFpgaFilePath:(NSString*)aFpgaFilePath;
 - (float) noiseFloorIntegrationTime;
 - (void) setNoiseFloorIntegrationTime:(float)aNoiseFloorIntegrationTime;
-- (unsigned long) fifoState;
+- (uint32_t) fifoState;
 - (void) setFifoState:(int)aFifoState;
 - (int) noiseFloorOffset;
 - (void) setNoiseFloorOffset:(int)aNoiseFloorOffset;
@@ -320,13 +320,13 @@ enum Gretina4FIFOStates {
 - (unsigned short) registerOffsetAt:(unsigned int)index;
 - (NSString*) fpgaRegisterNameAt:(unsigned int)index;
 - (unsigned short) fpgaRegisterOffsetAt:(unsigned int)index;
-- (unsigned long) readRegister:(unsigned int)index;
-- (void) writeRegister:(unsigned int)index withValue:(unsigned long)value;
+- (uint32_t) readRegister:(unsigned int)index;
+- (void) writeRegister:(unsigned int)index withValue:(uint32_t)value;
 - (BOOL) canReadRegister:(unsigned int)index;
 - (BOOL) canWriteRegister:(unsigned int)index;
 - (BOOL) displayRegisterOnMainPage:(unsigned int)index;
-- (unsigned long) readFPGARegister:(unsigned int)index;
-- (void) writeFPGARegister:(unsigned int)index withValue:(unsigned long)value;
+- (uint32_t) readFPGARegister:(unsigned int)index;
+- (void) writeFPGARegister:(unsigned int)index withValue:(uint32_t)value;
 - (BOOL) canReadFPGARegister:(unsigned int)index;
 - (BOOL) canWriteFPGARegister:(unsigned int)index;
 - (BOOL) displayFPGARegisterOnMainPage:(unsigned int)index;
@@ -415,7 +415,7 @@ enum Gretina4FIFOStates {
 - (void) setClockSource:(short)aClockMux;
 - (void) resetMainFPGA;
 - (void) initBoard:(BOOL)doEnableChannels;
-- (unsigned long) readControlReg:(int)channel;
+- (uint32_t) readControlReg:(int)channel;
 - (void) writeControlReg:(int)channel enabled:(BOOL)enabled;
 - (void) writeLEDThreshold:(int)channel;
 - (void) writeCFDParameters:(int)channel;
@@ -436,7 +436,7 @@ enum Gretina4FIFOStates {
 - (int) readExtTrigLength;
 - (int) readCollectionTime;
 - (int) readIntegrationTime;
-- (unsigned long) readDownSample;
+- (uint32_t) readDownSample;
 - (BOOL) controllerIsSBC;
 - (void) copyFirmwareFileToSBC:(NSString*)firmwarePath;
 - (void) writeClockSource;
@@ -447,15 +447,15 @@ enum Gretina4FIFOStates {
 - (void) stopDownLoadingMainFPGA;
 - (NSString*) firmwareStatusString;
 - (void) flashFpgaStatus:(ORSBCLinkJobStatus*) jobStatus;
-- (void) writeToAddress:(unsigned long)anAddress aValue:(unsigned long)aValue;
-- (unsigned long) readFromAddress:(unsigned long)anAddress;
+- (void) writeToAddress:(uint32_t)anAddress aValue:(uint32_t)aValue;
+- (uint32_t) readFromAddress:(uint32_t)anAddress;
 - (void) readFPGAVersions;
 - (BOOL) checkFirmwareVersion;
 - (BOOL) checkFirmwareVersion:(BOOL)verbose;
 
 #pragma mark ¥¥¥Data Taker
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherShaper;
 - (NSDictionary*) dataRecordDescription;
@@ -463,10 +463,10 @@ enum Gretina4FIFOStates {
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runIsStopping:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
-- (unsigned long) waveFormCount:(int)aChannel;
+- (uint32_t) waveFormCount:(int)aChannel;
 - (void)   startRates;
 - (void) clearWaveFormCounts;
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag;
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag;
 - (void) checkFifoAlarm;
 - (int) load_HW_Config_Structure:(SBC_crate_config*)configStruct index:(int)index;
 - (BOOL) bumpRateFromDecodeStage:(short)channel;
@@ -487,15 +487,15 @@ enum Gretina4FIFOStates {
 - (NSArray*) autoTests;
 
 #pragma mark ¥¥¥SPI Interface
-- (unsigned long) writeAuxIOSPI:(unsigned long)spiData;
+- (uint32_t) writeAuxIOSPI:(uint32_t)spiData;
 
 #pragma mark ***AdcProviding Protocol
 - (void) initBoard;
-- (unsigned long) thresholdForDisplay:(unsigned short) aChan;
+- (uint32_t) thresholdForDisplay:(unsigned short) aChan;
 - (unsigned short) gainForDisplay:(unsigned short) aChan;
 - (BOOL) onlineMaskBit:(int)bit;
 - (BOOL) partOfEvent:(unsigned short)aChannel;
-- (unsigned long) eventCount:(int)aChannel;
+- (uint32_t) eventCount:(int)aChannel;
 - (void) clearEventCounts;
 - (void) postAdcInfoProvidingValueChanged;
 

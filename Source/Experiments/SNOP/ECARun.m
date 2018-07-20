@@ -118,7 +118,7 @@ NSString* ORECARunFinishedNotification = @"ORECARunFinishedNotification";
         goto err;
     }
     ORRunModel *aRunModel = [objs objectAtIndex:0];
-    unsigned long runTypeWord = [aRunModel runType];
+    uint32_t runTypeWord = [aRunModel runType];
     //Load hardcoded values if requested
     if([[aSNOPModel standardRunVersion] isEqualToString:@"ECA_PDST_STANDARD"]){
         //Pedestal run
@@ -386,9 +386,9 @@ err:
 
     NSLog(@"Starting ECA Pedestal Run... \n");
 
-    unsigned long coarse_delay = [anMTCModel coarseDelay];
-    unsigned long fine_delay = [anMTCModel fineDelay];
-    unsigned long pedestal_width = [anMTCModel pedestalWidth];
+    uint32_t coarse_delay = [anMTCModel coarseDelay];
+    uint32_t fine_delay = [anMTCModel fineDelay];
+    uint32_t pedestal_width = [anMTCModel pedestalWidth];
 
     //EPED headers
     [aSNOPModel updateEPEDStructWithCoarseDelay:coarse_delay fineDelay:fine_delay chargePulseAmp:0x0 pedestalWidth:pedestal_width calType:10 + (ECA_pattern+1)];
@@ -460,9 +460,9 @@ err:
 
     NSLog(@"Starting ECA TSlope Run... \n");
 
-    unsigned long coarse_delay = [anMTCModel coarseDelay];
-    unsigned long fine_delay = [anMTCModel fineDelay];
-    unsigned long pedestal_width = [anMTCModel pedestalWidth];
+    uint32_t coarse_delay = [anMTCModel coarseDelay];
+    uint32_t fine_delay = [anMTCModel fineDelay];
+    uint32_t pedestal_width = [anMTCModel pedestalWidth];
 
     //Get time delays
     const int tslope_nsteps = 50; //CHANGE TO 50 BEFORE COMMISSIONING
@@ -509,8 +509,8 @@ err:
 
                 [aSNOPModel updateEPEDStructWithStepNumber:step];
 
-                unsigned long current_coarse_delay = [[tslope_delays_coarse objectAtIndex:ipoint] unsignedLongValue];
-                unsigned long current_fine_delay = [[tslope_delays_fine objectAtIndex:ipoint] unsignedLongValue];
+                uint32_t current_coarse_delay = [[tslope_delays_coarse objectAtIndex:ipoint] unsignedLongValue];
+                uint32_t current_fine_delay = [[tslope_delays_fine objectAtIndex:ipoint] unsignedLongValue];
 
                 [self setECA_currentPoint:ipoint+1];
 

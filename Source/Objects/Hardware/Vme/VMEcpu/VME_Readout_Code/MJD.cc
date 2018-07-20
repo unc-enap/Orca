@@ -549,7 +549,7 @@ uint8_t verifyFlashBuffer(uint8_t* theData, uint32_t totalSize)
 			valueToCompare = 0;
 			uint32_t i;
 			for ( i=0;i<numBytes;i++) {
-				valueToCompare += (((unsigned long)theData[address]) << i*8) & (0xFF << i*8);
+				valueToCompare += (((uint32_t)theData[address]) << i*8) & (0xFF << i*8);
 			}
 		}
 		if ( valueToRead != valueToCompare ) {

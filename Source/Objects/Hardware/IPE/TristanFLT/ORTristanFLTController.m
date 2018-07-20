@@ -57,7 +57,7 @@
 	[rateTextFields setFormatter:rateFormatter];
     blankView = [[NSView alloc] init];
     
-    NSString* key = [NSString stringWithFormat: @"orca.ORTristanFLT%ld.selectedtab",[model stationNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORTristanFLT%d.selectedtab",(int)[model stationNumber]];
     NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
@@ -245,8 +245,8 @@
 - (void) slotChanged:(NSNotification*)aNotification
 {
     // for FLTv4 'slot' goes from 0-9, 11-20 (SLTv4 has slot 10)
-    [[self window] setTitle:[NSString stringWithFormat:@"TristanFLT Card (Slot %d, TristanFLT# %ld)",[model slot]+1,(unsigned long)[model stationNumber]]];
-    [slotNumField setStringValue: [NSString stringWithFormat:@"# %ld",(unsigned long)[model stationNumber]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"TristanFLT Card (Slot %d, TristanFLT# %d)",[model slot]+1,(uint32_t)[model stationNumber]]];
+    [slotNumField setStringValue: [NSString stringWithFormat:@"# %d",(uint32_t)[model stationNumber]]];
 }
 
 - (void) totalRateChanged:(NSNotification*)aNote
@@ -355,7 +355,7 @@
     }
     [[self window] setContentView:totalView];
 	
-    NSString* key = [NSString stringWithFormat: @"orca.ORTristanFLT%ld.selectedtab",[model stationNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORTristanFLT%d.selectedtab",(int)[model stationNumber]];
     NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
     

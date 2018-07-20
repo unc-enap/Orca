@@ -33,7 +33,7 @@
 
 @interface ORRunModel :  ORDataChainObjectWithGroup <ORBitProcessing>{
     @private
-        unsigned long 	runNumber;
+        uint32_t 	runNumber;
 
         NSDate* startTime;
 		NSDate* subRunStartTime;
@@ -53,17 +53,17 @@
 		NSMutableDictionary* runInfo;
         BOOL            ignoreRepeat;
         BOOL            ignoreSelectedScript;
-        unsigned long	runType;
-        unsigned long	savedRunType;
-        unsigned long	userSetRunTypes;
-        unsigned long	userClearedRunTypes;
+        uint32_t	runType;
+        uint32_t	savedRunType;
+        uint32_t	userSetRunTypes;
+        uint32_t	userClearedRunTypes;
         BOOL            remoteControl;
-        unsigned long   dataId;
+        uint32_t   dataId;
        
         NSString*		definitionsFilePath;
         NSString* 		dirName;
         id              client;
-        unsigned long	exceptionCount;
+        uint32_t	exceptionCount;
 
         BOOL			forceFullInit;
 		BOOL			_forceRestart;
@@ -71,10 +71,10 @@
 		BOOL			_wasQuickStart;
 		BOOL			_nextRunWillQuickStart;
 		BOOL			_ignoreRunTimeout;
-		unsigned long	_currentRun;
+		uint32_t	_currentRun;
         int				runningState;
         ORDataTypeAssigner* dataTypeAssigner;
-		unsigned long lastRunNumberShipped;
+		uint32_t lastRunNumberShipped;
         NSMutableArray* runTypeNames;
         BOOL        remoteInterface;
 		BOOL		runPaused;
@@ -137,9 +137,9 @@
 - (void) setRemoteInterface:(BOOL)aRemoteInterface;
 - (NSArray*) runTypeNames;
 - (void) setRunTypeNames:(NSMutableArray*)aRunTypeNames;
-- (unsigned long)   getCurrentRunNumber; //file access
-- (unsigned long)   runNumber;
-- (void)	    setRunNumber:(unsigned long)aRunNumber;
+- (uint32_t)   getCurrentRunNumber; //file access
+- (uint32_t)   runNumber;
+- (void)	    setRunNumber:(uint32_t)aRunNumber;
 - (NSString*) startTimeAsString;
 - (NSDate*) subRunStartTime;
 - (void)	setSubRunStartTime:(NSDate*) aDate;
@@ -167,12 +167,12 @@
 - (void)	setDataPacket:(ORDataPacket*)aDataPacket;
 - (void)	setDirName:(NSString*)aFileName;
 - (NSString*)   dirName;
-- (unsigned long)exceptionCount;
+- (uint32_t)exceptionCount;
 - (void)	incExceptionCount;
 - (void)	clearExceptionCount;
-- (unsigned long)runType;
-- (void)	setRunType:(unsigned long)aMask;
-- (void)    setRunTypeAndModifySavedRunType:(unsigned long)aMask;
+- (uint32_t)runType;
+- (void)	setRunType:(uint32_t)aMask;
+- (void)    setRunTypeAndModifySavedRunType:(uint32_t)aMask;
 - (void)    restoreSavedRunType;
 - (BOOL)	remoteControl;
 - (void)	setRemoteControl:(BOOL)aState;
@@ -189,8 +189,8 @@
 - (void)	setDefinitionsFilePath:(NSString *)aDefinitionsFilePath;
 - (ORDataTypeAssigner *) dataTypeAssigner;
 - (void) setDataTypeAssigner: (ORDataTypeAssigner *) DataTypeAssigner;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setOfflineRun:(BOOL)flag;
 - (BOOL) offlineRun;
 - (void) setMaintenanceRuns:(BOOL)aState;
@@ -198,8 +198,8 @@
 - (void) setIgnoreRepeat:(BOOL)aFlag; //SV
 
 #pragma mark ¥¥¥Run Modifiers
-- (void) remoteStartRun:(unsigned long)aRunNumber;
-- (void) remoteRestartRun:(unsigned long)aRunNumber;
+- (void) remoteStartRun:(uint32_t)aRunNumber;
+- (void) remoteRestartRun:(uint32_t)aRunNumber;
 - (void) remoteHaltRun;
 - (void) remoteStopRun:(BOOL)nextRunState;
 - (void) forceHalt;
@@ -297,8 +297,8 @@
 
 @interface ORRunDecoderForRun : ORBaseDecoder
 {}
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr;
 @end
 
 @interface NSObject (SpecialDataTakingFinishUp)

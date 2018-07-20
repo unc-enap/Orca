@@ -25,7 +25,7 @@
 
 -(NSString*) stringForObjectValue:(id)obj
 {
-    return [NSString stringWithFormat:@"0x%lX", (unsigned long)[obj integerValue]];
+    return [NSString stringWithFormat:@"0x%X", (uint32_t)[obj integerValue]];
 }
 
 -(BOOL) getObjectValue:(id *)obj forString:(NSString*)string errorDescription:(NSString **)error

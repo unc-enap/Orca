@@ -83,7 +83,7 @@ typedef enum {
 @interface ORXYCom564Model : ORVmeIOCard <ORDataTaker, ORAdcProcessing>
 {
     @protected
-    unsigned long          dataId;
+    uint32_t          dataId;
     EXyCom564OperationMode operationMode;
     EXyCom564AutoscanMode  autoscanMode;
     EInterpretXy564ADC     interpretADC;
@@ -110,8 +110,8 @@ typedef enum {
 - (void) makeMainController;
 
 #pragma mark ***Accessors
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (EXyCom564ReadoutMode)    readoutMode;
 - (void)                    setReadoutMode:(EXyCom564ReadoutMode) aMode;
 - (EXyCom564OperationMode) 	operationMode;
@@ -163,7 +163,7 @@ typedef enum {
 - (short)			getNumberAutoscanModes;
 - (short)			getNumberGainModes;
 - (NSString*) 		getRegisterName:(EXyCom564Registers) anIndex;
-- (unsigned long) 	getAddressOffset: (EXyCom564Registers) anIndex;
+- (uint32_t) 	getAddressOffset: (EXyCom564Registers) anIndex;
 - (NSString*) 		getOperationModeName: (EXyCom564OperationMode) anIndex;
 - (NSString*) 		getAutoscanModeName: (EXyCom564AutoscanMode) aMode;
 - (NSString*) 		getChannelGainName: (EXyCom564ChannelGain) aMode;

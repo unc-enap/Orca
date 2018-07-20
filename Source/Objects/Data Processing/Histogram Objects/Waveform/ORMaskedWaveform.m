@@ -24,23 +24,23 @@
 
 #pragma mark ¥¥¥Accessors
 
-- (unsigned long) mask
+- (uint32_t) mask
 {
 	return mask;
 }
 
-- (void) setMask:(unsigned long)aMask
+- (void) setMask:(uint32_t)aMask
 {
 	mask=aMask;
 }
 
--(long) value:(unsigned long)aChan
+-(int32_t) value:(uint32_t)aChan
 {
 	if(!mask)return [super value:aChan];
 	return [super value:aChan] & mask;
 }
 
--(long) unMaskedValue:(unsigned short)aChan
+-(int32_t) unMaskedValue:(unsigned short)aChan
 {
 	return [super value:aChan];
 }
@@ -67,17 +67,17 @@
 
 #pragma mark ¥¥¥Accessors
 
-- (void) setStartIndex:(unsigned long)anIndex
+- (void) setStartIndex:(uint32_t)anIndex
 {
 	startIndex = anIndex;
 }
 
-- (unsigned long) startIndex
+- (uint32_t) startIndex
 {
 	return startIndex;
 }
 
--(long) value:(unsigned long)aChan
+-(int32_t) value:(uint32_t)aChan
 {
 	aChan = (aChan + startIndex)%[self numberBins];;
 	if(!mask)return [super value:aChan];
@@ -113,12 +113,12 @@
 }
 
 #pragma mark ¥¥¥Accessors
-- (void) setScaleOffset:(long)aValue
+- (void) setScaleOffset:(int32_t)aValue
 {
     scaleOffset = aValue;
 }
 
-- (long) scaleOffset
+- (int32_t) scaleOffset
 {
     return scaleOffset;
 }
@@ -135,7 +135,7 @@
 	return bitNames;
 }
 
-- (void) setSpecialBitMask:(unsigned long)aMask
+- (void) setSpecialBitMask:(uint32_t)aMask
 {
 	specialBitMask=aMask;
 	numBits = 0;
@@ -149,7 +149,7 @@
 	}
 }
 
-- (unsigned long) specialBitMask
+- (uint32_t) specialBitMask
 {
 	return specialBitMask;
 }
@@ -159,12 +159,12 @@
 	return numBits;
 }
 
-- (unsigned long) firstBitMask
+- (uint32_t) firstBitMask
 {
 	return firstBitMask;
 }
 
--(long) value:(unsigned long)aChan
+-(int32_t) value:(uint32_t)aChan
 {
 	aChan = (aChan + startIndex)%[self numberBins];
     return [self unMaskedValue:aChan];

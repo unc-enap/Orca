@@ -40,10 +40,10 @@ static NSString* kIPSlotKey[4] = {
 	else return [NSString stringWithFormat:@"IP %2d",aSlot];		
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr	 = (unsigned long*)someData;
-    unsigned long length = ExtractLength(*ptr);
+    uint32_t* ptr	 = (uint32_t*)someData;
+    uint32_t length = ExtractLength(*ptr);
 	ptr++;
 	unsigned char crate  = (*ptr&0x01e00000)>>21;
 	unsigned char card   = (*ptr& 0x001f0000)>>16;
@@ -53,14 +53,14 @@ static NSString* kIPSlotKey[4] = {
 	NSString* ipSlotKey  = [self getSlotKey:ipSlot];
 	
 	ptr++; //point to time
-	unsigned long theTime = *ptr;
+	uint32_t theTime = *ptr;
 
 	int n = (int)(length - 3);
 	int i;
 	for(i=0;i<n;i++){
 		ptr++;	//channel
 		int chan   = (*ptr>>16) & 0x000000ff;
-		long rawValue = (*ptr & 0x00000fff);
+		int32_t rawValue = (*ptr & 0x00000fff);
 		[aDataSet loadTimeSeries:rawValue atTime:theTime sender:self withKeys:@"IP320",@"Raw",
 															crateKey,
 															cardKey,
@@ -73,14 +73,14 @@ static NSString* kIPSlotKey[4] = {
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
-    unsigned long length = ExtractLength(*ptr);
+    uint32_t length = ExtractLength(*ptr);
     NSString* title= @"IP320 ADC Record\n\n";
 
 	ptr++;
-    NSString* crate			= [NSString stringWithFormat:@"Crate = %lu\n",(*ptr&0x01e00000)>>21];
-    NSString* card			= [NSString stringWithFormat:@"Card  = %lu\n",(*ptr&0x001f0000)>>16];
+    NSString* crate			= [NSString stringWithFormat:@"Crate = %u\n",(*ptr&0x01e00000)>>21];
+    NSString* card			= [NSString stringWithFormat:@"Card  = %u\n",(*ptr&0x001f0000)>>16];
 	NSString* ipSlotKey		= [NSString stringWithFormat:@"IP    = %@\n",[self getSlotKey:*ptr&0x0000000f]];
 
 	ptr++;
@@ -91,7 +91,7 @@ static NSString* kIPSlotKey[4] = {
 	int i;
 	for(i=0;i<n;i++){
 		ptr++;
-		adcString   = [adcString stringByAppendingFormat:@"ADC(%02lu) = 0x%lx\n",(*ptr>>16)&0x000000ff, *ptr&0x00000fff];
+		adcString   = [adcString stringByAppendingFormat:@"ADC(%02u) = 0x%x\n",(*ptr>>16)&0x000000ff, *ptr&0x00000fff];
     }
 
     return [NSString stringWithFormat:@"%@%@%@%@%@%@",title,crate,card,ipSlotKey,[date descriptionFromTemplate:@"MM/dd/yy HH:mm:ss z\n"],adcString];
@@ -111,10 +111,10 @@ static NSString* kIPSlotKey[4] = {
 	else return [NSString stringWithFormat:@"IP %2d",aSlot];		
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr	 = (unsigned long*)someData;
-    unsigned long length = ExtractLength(*ptr);
+    uint32_t* ptr	 = (uint32_t*)someData;
+    uint32_t length = ExtractLength(*ptr);
 	ptr++;
 	unsigned char crate  = (*ptr&0x01e00000)>>21;
 	unsigned char card   = (*ptr& 0x001f0000)>>16;
@@ -123,21 +123,21 @@ static NSString* kIPSlotKey[4] = {
 	NSString* cardKey	 = [self getCardKey: card];
 	NSString* ipSlotKey  = [self getSlotKey:ipSlot];
 	ptr++; //point to time
-	unsigned long theTime = *ptr;
+	uint32_t theTime = *ptr;
 	//[aDataSet loadGenericData:@" " sender:self withKeys:@"IP320",crateKey,cardKey,ipSlotKey,nil];
 
 	int n = ((int)length - 3)/2;
 	
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theValue;
 		
 	int i;
 	for(i=0;i<n;i++){
 		ptr++;	//channel
 		int chan   = (int)*ptr;
-		ptr++;	//value (encoded as long)
+		ptr++;	//value (encoded as int32_t)
 		theValue.asLong = *ptr;
 		[aDataSet loadTimeSeries:theValue.asFloat atTime:theTime sender:self withKeys:@"IP320",@"Value",
 															crateKey,
@@ -153,14 +153,14 @@ static NSString* kIPSlotKey[4] = {
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
-    unsigned long length = ExtractLength(*ptr);
+    uint32_t length = ExtractLength(*ptr);
     NSString* title= @"IP320 Converted Value\n\n";
 
 	ptr++;
-    NSString* crate			= [NSString stringWithFormat:@"Crate = %lu\n",(*ptr&0x01e00000)>>21];
-    NSString* card			= [NSString stringWithFormat:@"Card  = %lu\n",(*ptr&0x001f0000)>>16];
+    NSString* crate			= [NSString stringWithFormat:@"Crate = %u\n",(*ptr&0x01e00000)>>21];
+    NSString* card			= [NSString stringWithFormat:@"Card  = %u\n",(*ptr&0x001f0000)>>16];
 	NSString* ipSlotKey		= [NSString stringWithFormat:@"IP    = %@\n",[self getSlotKey:*ptr&0x0000000f]];
 
 	ptr++;
@@ -171,14 +171,14 @@ static NSString* kIPSlotKey[4] = {
 	
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theValue;
 	
 	int i;
 	for(i=0;i<n;i++){
 		ptr++;	//channel
 		int chan   = (int)*ptr;
-		ptr++;	//value (encoded as long)
+		ptr++;	//value (encoded as int32_t)
 		theValue.asLong = *ptr;
 		[adcString stringByAppendingFormat:@"ADC(%02d) = %.4f\n",chan, theValue.asFloat];
     }

@@ -124,7 +124,7 @@ NSString* ORSIS3300ModelIDChanged				= @"ORSIS3300ModelIDChanged";
 @implementation ORSIS3300Model
 
 #pragma mark •••Static Declarations
-static unsigned long thresholdRegOffsets[4]={
+static uint32_t thresholdRegOffsets[4]={
 	0x00200004,
 	0x00280004,
 	0x00300004,
@@ -132,28 +132,28 @@ static unsigned long thresholdRegOffsets[4]={
 };
 
 
-static unsigned long bankMemory[4][2]={
+static uint32_t bankMemory[4][2]={
 {0x00400000,0x00600000},
 {0x00480000,0x00680000},
 {0x00500000,0x00700000},
 {0x00580000,0x00780000},
 };
 
-static unsigned long eventCountOffset[4][2]={ //group,bank
+static uint32_t eventCountOffset[4][2]={ //group,bank
 {0x00200010,0x00200014},
 {0x00280010,0x00280014},
 {0x00300010,0x00300014},
 {0x00380010,0x00380014},
 };
 
-static unsigned long eventDirOffset[4][2]={ //group,bank
+static uint32_t eventDirOffset[4][2]={ //group,bank
 {0x00201000,0x00202000},
 {0x00281000,0x00282000},
 {0x00301000,0x00302000},
 {0x00381000,0x00382000},
 };
 
-static unsigned long addressCounterOffset[4][2]={ //group,bank
+static uint32_t addressCounterOffset[4][2]={ //group,bank
 {0x00200008,0x0020000C},
 {0x00280008,0x0028000C},
 {0x00300008,0x0030000C},
@@ -574,7 +574,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 }
 
 #pragma mark •••Rates
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
 {
 	if(groupTag == 0){
 		if(counterTag>=0 && counterTag<kNumSIS3300Channels){
@@ -585,7 +585,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 	else return 0;
 }
 
-- (long) enabledMask
+- (int32_t) enabledMask
 {
 	return enabledMask;
 }
@@ -595,7 +595,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 	return enabledMask & (1<<chan); 
 }
 
-- (void) setEnabledMask:(long)aMask	
+- (void) setEnabledMask:(int32_t)aMask	
 { 
 	[[[self undoManager] prepareWithInvocationTarget:self] setEnabledMask:enabledMask];
 	enabledMask = aMask;
@@ -610,7 +610,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 	[self setEnabledMask:aMask];
 }
 
-- (long) ltGtMask
+- (int32_t) ltGtMask
 {
 	return ltGtMask;
 }
@@ -620,7 +620,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 	return ltGtMask & (1<<chan); 
 }
 
-- (void) setLtGtMask:(long)aMask	
+- (void) setLtGtMask:(int32_t)aMask	
 { 
 	[[[self undoManager] prepareWithInvocationTarget:self] setLtGtMask:ltGtMask];
 	ltGtMask = aMask;
@@ -673,7 +673,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 #pragma mark •••Hardware Access
 - (void) readModuleID:(BOOL)verbose
 {	
-	unsigned long result = 0;
+	uint32_t result = 0;
 	[[self adapter] readLongBlock:&result
                          atAddress:[self baseAddress] + kModuleIDReg
                         numToRead:1
@@ -690,7 +690,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 - (void) writeControlStatusRegister
 {		
 	//The register is set up as a J/K flip/flop -- 1 bit to set a function and 1 bit to disable.
-	unsigned long aMask = 0x0;	
+	uint32_t aMask = 0x0;	
 	if(enableTriggerOutput)		aMask |= kSISEnableTriggerOutput;
 	if(invertTrigger)			aMask |= kSISInvertTrigger;
 	if(activateTriggerOnArmed)	aMask |= kSISTriggerOnArmedAndStarted;
@@ -711,7 +711,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 - (void) writeAcquistionRegister
 {
 	// The register is set up as a J/K flip/flop -- 1 bit to set a function and 1 bit to disable.	
-	unsigned long aMask = 0x0;
+	uint32_t aMask = 0x0;
 	if(bankSwitchMode)			aMask |= kSISBankSwitch;
 	if(autoStart)				aMask |= kSISAutostart;
 	if(multiEventMode)			aMask |= kSISMultiEvent;
@@ -738,7 +738,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 {
 	//enable/disable autostop at end of page
 	//set pagesize
-	unsigned long aMask = 0x0;
+	uint32_t aMask = 0x0;
 	aMask					  |= pageSize;
 	if(pageWrap)		aMask |= kSISWrapMask;
 	if(randomClock)		aMask |= kSISRandomClock;		//This must be set in both Acq Control and Event Config Registers
@@ -752,7 +752,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 
 - (void) writeStartDelay
 {
-	unsigned long aValue = startDelay;
+	uint32_t aValue = startDelay;
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kStartDelay
                         numToWrite:1
@@ -762,7 +762,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 
 - (void) writeStopDelay
 {
-	unsigned long aValue = stopDelay;
+	uint32_t aValue = stopDelay;
 	
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kStopDelay
@@ -773,7 +773,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 
 - (void) setLed:(BOOL)state
 {
-	unsigned long aValue = CSRMask(state,kSISLed);
+	uint32_t aValue = CSRMask(state,kSISLed);
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kControlStatus
                         numToWrite:1
@@ -783,7 +783,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 
 - (void) enableUserOut:(BOOL)state
 {
-	unsigned long aValue = CSRMask(state,kSISUserOutput);
+	uint32_t aValue = CSRMask(state,kSISUserOutput);
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kControlStatus
                         numToWrite:1
@@ -797,7 +797,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 	int m = 0xffff/2;
 	int p = 0xffff/2;
 	BOOL enabled = YES;
-	unsigned long aValue = (enabled<<24) | (p < 16) | (n < 8) | m;
+	uint32_t aValue = (enabled<<24) | (p < 16) | (n < 8) | m;
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kTriggerSetupReg
                         numToWrite:1
@@ -805,7 +805,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
                      usingAddSpace:0x01];
 }
 
-- (void) writeTriggerClearValue:(unsigned long)aValue
+- (void) writeTriggerClearValue:(uint32_t)aValue
 {
 
 	[[self adapter] writeLongBlock:&aValue
@@ -815,7 +815,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
                      usingAddSpace:0x01];
 }
 
-- (void) setMaxNumberEvents:(unsigned long)aValue
+- (void) setMaxNumberEvents:(uint32_t)aValue
 {
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kMaxNumberEventsReg
@@ -827,7 +827,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 
 - (void) startSampling
 {
-	unsigned long aValue = 0x0;
+	uint32_t aValue = 0x0;
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kStartSampling
                         numToWrite:1
@@ -837,7 +837,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 
 - (void) stopSampling
 {
-	unsigned long aValue = 0x0;
+	uint32_t aValue = 0x0;
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kStopSampling
                         numToWrite:1
@@ -847,7 +847,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 
 - (void) startBankSwitching
 {
-	unsigned long aValue = 0x0;
+	uint32_t aValue = 0x0;
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kStartAutoBankSwitch
                         numToWrite:1
@@ -857,7 +857,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 
 - (void) stopBankSwitching
 {
-	unsigned long aValue = 0x0;
+	uint32_t aValue = 0x0;
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kStopAutoBankSwitch
                         numToWrite:1
@@ -867,7 +867,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 
 - (void) clearBankFullFlag:(int)whichFlag
 {
-	unsigned long aValue = 0x0;
+	uint32_t aValue = 0x0;
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + (whichFlag?kClearBank2FullFlag:kClearBank1FullFlag)
                         numToWrite:1
@@ -875,10 +875,10 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
                      usingAddSpace:0x01];
 }
 
-- (unsigned long) eventNumberGroup:(int)group bank:(int) bank
+- (uint32_t) eventNumberGroup:(int)group bank:(int) bank
 {
 	//Note, here banks are 0,1,2,3 NOT 1,2,3,4
-	unsigned long eventNumber = 0x0;   
+	uint32_t eventNumber = 0x0;   
 	[[self adapter] readLongBlock:&eventNumber
 						atAddress:[self baseAddress] + eventCountOffset[group][bank]
                         numToRead:1
@@ -889,10 +889,10 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 	return eventNumber;
 }
 
-- (unsigned long) eventTriggerGroup:(int)group bank:(int) bank
+- (uint32_t) eventTriggerGroup:(int)group bank:(int) bank
 {
 	//Note, here banks are 0,1,2,3 NOT 1,2,3,4
-	unsigned long triggerWord = 0x0;   
+	uint32_t triggerWord = 0x0;   
 	[[self adapter] readLongBlock:&triggerWord
 						atAddress:[self baseAddress] + eventDirOffset[group][bank]
                         numToRead:1
@@ -903,11 +903,11 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 	return triggerWord;
 }
 
-- (unsigned long) dataWord:(int)chan index:(int)index
+- (uint32_t) dataWord:(int)chan index:(int)index
 {
 	if([self enabled:chan]){	
-		unsigned long dataMask = ((moduleID==0x3300)?0xfff:0x3fff);
-		unsigned long theValue = dataWord[chan/2][index];
+		uint32_t dataMask = ((moduleID==0x3300)?0xfff:0x3fff);
+		uint32_t theValue = dataWord[chan/2][index];
 		if((chan%2)==0)	return (theValue>>16) & dataMask; 
 		else			return theValue & dataMask; 
 	}
@@ -916,8 +916,8 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 
 - (void) readAddressCounts
 {
-	unsigned long aValue;   
-	unsigned long aValue1; 
+	uint32_t aValue;   
+	uint32_t aValue1; 
 	int i;
 	for(i=0;i<4;i++){
 		[[self adapter] readLongBlock:&aValue
@@ -934,9 +934,9 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 	}
 }
 
-- (unsigned long) acqReg
+- (uint32_t) acqReg
 {
- 	unsigned long aValue = 0;
+ 	uint32_t aValue = 0;
 	[[self adapter] readLongBlock:&aValue
 						atAddress:[self baseAddress] + kAcquisitionControlReg
                         numToRead:1
@@ -945,9 +945,9 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 	return aValue;
 }
 
-- (unsigned long) configReg
+- (uint32_t) configReg
 {
- 	unsigned long aValue = 0;
+ 	uint32_t aValue = 0;
 	[[self adapter] readLongBlock:&aValue
 						atAddress:[self baseAddress] + kControlStatus
                         numToRead:1
@@ -958,7 +958,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 
 - (void) disArm:(int)bank
 {
- 	unsigned long aValue = ACQMask(FALSE,bank?kSISSampleBank2:kSISSampleBank1);
+ 	uint32_t aValue = ACQMask(FALSE,bank?kSISSampleBank2:kSISSampleBank1);
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kAcquisitionControlReg
                         numToWrite:1
@@ -968,7 +968,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 
 - (void) arm:(int)bank
 {
- 	unsigned long aValue = ACQMask(TRUE , bank?kSISSampleBank2:kSISSampleBank1);
+ 	uint32_t aValue = ACQMask(TRUE , bank?kSISSampleBank2:kSISSampleBank1);
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kAcquisitionControlReg
                         numToWrite:1
@@ -978,25 +978,25 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 
 - (BOOL) bankIsFull:(int)bank
 {
-	unsigned long aValue=0;
+	uint32_t aValue=0;
 	[[self adapter] readLongBlock:&aValue
                          atAddress:[self baseAddress] + kAcquisitionControlReg
                         numToRead:1
                         withAddMod:[self addressModifier]
                      usingAddSpace:0x01];
-	unsigned long mask = (bank?kSISBank2ClockStatus : kSISBank1ClockStatus);
+	uint32_t mask = (bank?kSISBank2ClockStatus : kSISBank1ClockStatus);
 	return (aValue & mask) == 0;
 }
 
 - (BOOL) bankIsBusy:(int)bank
 {
-	unsigned long aValue=0;
+	uint32_t aValue=0;
 	[[self adapter] readLongBlock:&aValue
 						atAddress:[self baseAddress] + kAcquisitionControlReg
                         numToRead:1
 					   withAddMod:[self addressModifier]
 					usingAddSpace:0x01];
-	unsigned long mask = (bank?kSISBank2BusyStatus : kSISBank1BusyStatus);
+	uint32_t mask = (bank?kSISBank2BusyStatus : kSISBank1BusyStatus);
 	return (aValue & mask) != 0;
 }
 
@@ -1007,11 +1007,11 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 	int i;
 	if(verbose) NSLog(@"Writing Thresholds:\n");
 	if(!moduleID)[self readModuleID:NO];
-	unsigned long thresholdMask = ((moduleID==0x3300)?0xfff:0x3fff);
+	uint32_t thresholdMask = ((moduleID==0x3300)?0xfff:0x3fff);
 	for(i = 0; i < 4; i++) {
-		//the thresholds are packed even/odd into one long word with the Less/Greater Than bits
+		//the thresholds are packed even/odd into one int32_t word with the Less/Greater Than bits
 		//ADC 0,2,4,6
-		unsigned long even_thresh = [self threshold:tchan];
+		uint32_t even_thresh = [self threshold:tchan];
 		if(enabledMask & (0x1L<<i*2)){
 			if([self ltGt:tchan]) even_thresh |= kSISTHRLt;
 		}
@@ -1021,7 +1021,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 		if(verbose) NSLog(@"%d: 0x%04x %@\n",tchan, even_thresh & ~kSISTHRLt, (even_thresh & kSISTHRLt)?@"(LE)":@"");
 		tchan++;
 		
-		unsigned long odd_thresh = [self threshold:tchan];
+		uint32_t odd_thresh = [self threshold:tchan];
 		if(enabledMask & (0x2L<<i*2)){
 			if([self ltGt:tchan]) odd_thresh |= kSISTHRLt;
 		}
@@ -1031,7 +1031,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 		if(verbose) NSLog(@"%d: 0x%04x %@\n",tchan, odd_thresh & ~kSISTHRLt, (odd_thresh & kSISTHRLt)?@"(LE)":@"");
 		tchan++;
 		
-		unsigned long aValue = (even_thresh << kSISTHRChannelShift) | odd_thresh;
+		uint32_t aValue = (even_thresh << kSISTHRChannelShift) | odd_thresh;
 		
 		[[self adapter] writeLongBlock:&aValue
 							 atAddress:[self baseAddress] + thresholdRegOffsets[i]
@@ -1048,7 +1048,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 	if(verbose) NSLog(@"Reading Thresholds:\n");
 	for(i =0; i < 4; i++) {
 		
-		unsigned long aValue;
+		uint32_t aValue;
 		[[self adapter] readLongBlock: &aValue
 							atAddress: [self baseAddress] + thresholdRegOffsets[i]
 							numToRead: 1
@@ -1064,11 +1064,11 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 	}
 }
 
-- (unsigned long) readTriggerTime:(int)bank index:(int)index
+- (uint32_t) readTriggerTime:(int)bank index:(int)index
 {   		
-	unsigned long aValue;
+	uint32_t aValue;
 	[[self adapter] readLongBlock: &aValue
-						atAddress: [self baseAddress] + (bank?kTriggerTime2Offset:kTriggerTime1Offset) + index*sizeof(long)
+						atAddress: [self baseAddress] + (bank?kTriggerTime2Offset:kTriggerTime1Offset) + index*sizeof(int32_t)
 						numToRead: 1
 					   withAddMod: [self addressModifier]
 					usingAddSpace: 0x01];
@@ -1076,11 +1076,11 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 	return aValue;
 }
 
-- (unsigned long) readTriggerEventBank:(int)bank index:(int)index
+- (uint32_t) readTriggerEventBank:(int)bank index:(int)index
 {   		
-	unsigned long aValue;
+	uint32_t aValue;
 	[[self adapter] readLongBlock: &aValue
-						atAddress: [self baseAddress] + (bank?kTriggerEvent2DirOffset:kTriggerEvent1DirOffset) + index*sizeof(long)
+						atAddress: [self baseAddress] + (bank?kTriggerEvent2DirOffset:kTriggerEvent1DirOffset) + index*sizeof(int32_t)
 						numToRead: 1
 					   withAddMod: [self addressModifier]
 					usingAddSpace: 0x01];
@@ -1091,7 +1091,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 - (BOOL) isBusy
 {
 	
-	unsigned long aValue = 0;
+	uint32_t aValue = 0;
 	[[self adapter] readLongBlock: &aValue
 						atAddress: [self baseAddress] + kAcquisitionControlReg
 						numToRead: 1
@@ -1117,18 +1117,18 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 
 - (void) testMemory
 {
-	long i;
+	int32_t i;
 	for(i=0;i<1024;i++){
-		unsigned long aValue = i;
+		uint32_t aValue = i;
 		[[self adapter] writeLongBlock: &aValue
 							atAddress: [self baseAddress] + 0x00400000+i*4
 							numToWrite: 1
 						   withAddMod: [self addressModifier]
 						usingAddSpace: 0x01];
 	}
-	long errorCount =0;
+	int32_t errorCount =0;
 	for(i=0;i<1024;i++){
-		unsigned long aValue;
+		uint32_t aValue;
 		[[self adapter] readLongBlock: &aValue
 							atAddress: [self baseAddress] + 0x00400000+i*4
 							numToRead: 1
@@ -1161,14 +1161,14 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 	if(!timeout){
 		int numEvents= (int)[self eventNumberGroup:0 bank:0];
 		NSLog(@"Number Events: %d\n",numEvents);
-		unsigned long triggerEventDir;
+		uint32_t triggerEventDir;
 		triggerEventDir = [self readTriggerEventBank:0 index:0];
 
 		BOOL wrapped = ((triggerEventDir&0x80000) !=0);
-		unsigned long startOffset = triggerEventDir & 0x1ffff;
+		uint32_t startOffset = triggerEventDir & 0x1ffff;
 		NSLog(@"address counter0:0x%0x wrapped: %d\n",startOffset,wrapped);
 		[self readAddressCounts];
-		unsigned long nLongsToRead = [self numberOfSamples] - startOffset;
+		uint32_t nLongsToRead = [self numberOfSamples] - startOffset;
 		int i;
 		for(i=0;i<4;i++){
 			if([self enabled:i*2] || [self enabled:i*2+1]){
@@ -1204,8 +1204,8 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 }
 
 #pragma mark •••Data Taker
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -1384,12 +1384,12 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 			int numEvents = (int)[self eventNumberGroup:0 bank:bankToUse];
 			int event,group;
 			for(event=0;event<numEvents;event++){
-				unsigned long triggerEventDir = [self readTriggerEventBank:bankToUse index:event];
-				unsigned long startOffset = triggerEventDir&0x1ffff & ([self numberOfSamples]-1);
-				unsigned long triggerTime = [self readTriggerTime:bankToUse index:event];
+				uint32_t triggerEventDir = [self readTriggerEventBank:bankToUse index:event];
+				uint32_t startOffset = triggerEventDir&0x1ffff & ([self numberOfSamples]-1);
+				uint32_t triggerTime = [self readTriggerTime:bankToUse index:event];
 				
 				for(group=0;group<4;group++){
-					unsigned long channelMask = triggerEventDir & (0xC0000000 >> (group*2));
+					uint32_t channelMask = triggerEventDir & (0xC0000000 >> (group*2));
 					if(channelMask==0)continue;
 					
 					if(triggerEventDir & (0x80000000 >> (group*2)))		++waveFormCount[(group*2)];
@@ -1397,11 +1397,11 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 					
 					
 					//only read the channels that have trigger info
-					unsigned long numLongs = 0;
-					unsigned long totalNumLongs = [self numberOfSamples] + 4;
+					uint32_t numLongs = 0;
+					uint32_t totalNumLongs = [self numberOfSamples] + 4;
 					
-					NSMutableData* d = [NSMutableData dataWithLength:totalNumLongs*sizeof(long)];
-					unsigned long* dataBuffer = (unsigned long*)[d bytes];
+					NSMutableData* d = [NSMutableData dataWithLength:totalNumLongs*sizeof(int32_t)];
+					uint32_t* dataBuffer = (uint32_t*)[d bytes];
 					dataBuffer[numLongs++] = dataId | totalNumLongs;
 					dataBuffer[numLongs++] = location | ((moduleID==0x3301) ? 1:0);
 
@@ -1410,7 +1410,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 					
 
 					// The first read is from startOffset -> nPagesize.
-					unsigned long nLongsToRead = [self numberOfSamples] - startOffset;	
+					uint32_t nLongsToRead = [self numberOfSamples] - startOffset;	
 					if(nLongsToRead>0){
 						[[self adapter] readLongBlock: &dataBuffer[numLongs]
 											atAddress: [self baseAddress] + bankMemory[group][bankToUse] + 4*startOffset
@@ -1477,7 +1477,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
 
 - (void) reset
 {
- 	unsigned long aValue = 0; //value doesn't matter 
+ 	uint32_t aValue = 0; //value doesn't matter 
 	[[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kGeneralReset
                         numToWrite:1
@@ -1494,7 +1494,7 @@ static unsigned long addressCounterOffset[4][2]={ //group,bank
     return YES;
 }
 
-- (unsigned long) waveFormCount:(int)aChannel
+- (uint32_t) waveFormCount:(int)aChannel
 {
     return waveFormCount[aChannel];
 }

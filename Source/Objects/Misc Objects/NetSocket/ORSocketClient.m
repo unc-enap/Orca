@@ -71,12 +71,12 @@
 	}
 }
 
-- (unsigned long long)totalSent
+- (uint64_t)totalSent
 {
     return totalSent;
 }
 
-- (void)setTotalSent:(unsigned long long)aTotalSent
+- (void)setTotalSent:(uint64_t)aTotalSent
 {
     totalSent = aTotalSent;
     if([delegate respondsToSelector:@selector(clientDataChanged:)]){
@@ -103,13 +103,13 @@
 	}
 }
 
-- (unsigned long)amountInBuffer 
+- (uint32_t)amountInBuffer 
 {
     return amountInBuffer;
 }
 
 
-- (void)setAmountInBuffer:(unsigned long)anAmountInBuffer 
+- (void)setAmountInBuffer:(uint32_t)anAmountInBuffer 
 {
     amountInBuffer = anAmountInBuffer;
     if([delegate respondsToSelector:@selector(clientDataChanged:)]){
@@ -139,7 +139,7 @@
 }
 
 
-- (void) netsocketDataInOutgoingBuffer:(NetSocket*)insocket length:(unsigned long)length
+- (void) netsocketDataInOutgoingBuffer:(NetSocket*)insocket length:(uint32_t)length
 {
     [self setAmountInBuffer:length];
 }
@@ -162,7 +162,7 @@
     [self setAmountInBuffer:0];
 }
 
-- (void)netsocketDataSent:(NetSocket*)insocket length:(unsigned long)length
+- (void)netsocketDataSent:(NetSocket*)insocket length:(uint32_t)length
 {
     [self setTotalSent:[self totalSent]+length];
 }

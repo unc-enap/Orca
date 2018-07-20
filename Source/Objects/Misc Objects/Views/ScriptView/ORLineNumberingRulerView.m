@@ -272,11 +272,11 @@ NSString* ORBreakpointsAction = @"ORBreakpointsAction";
 		NSRange nullRange = NSMakeRange(NSNotFound, 0);
 		NSLayoutManager* layoutManager = [view layoutManager];
 		NSTextContainer* container = [view textContainer];
-		unsigned long count = [lines count];
-		unsigned long line;
+		uint32_t count = [lines count];
+		uint32_t line;
 		for (line = 0; line < count; line++){
-			unsigned long index = [[lines objectAtIndex:line] unsignedIntValue];
-			unsigned long rectCount;
+			uint32_t index = [[lines objectAtIndex:line] unsignedIntValue];
+			uint32_t rectCount;
 			NSRectArray rects = [layoutManager rectArrayForCharacterRange:NSMakeRange(index, 0)
 											 withinSelectedCharacterRange:nullRange
 														  inTextContainer:container
@@ -376,10 +376,10 @@ NSString* ORBreakpointsAction = @"ORBreakpointsAction";
 
 - (CGFloat) requiredThickness
 {    
-    long lineCount = [[self lineIndices] count];
-    long digits    = (NSUInteger)log10(lineCount) + 1;
+    int32_t lineCount = [[self lineIndices] count];
+    int32_t digits    = (NSUInteger)log10(lineCount) + 1;
 	NSMutableString* sampleString = [NSMutableString string];
-	long i;
+	int32_t i;
     for (i = 0; i < digits; i++) {
         // Use "8" since it is one of the fatter numbers. Anything but "1"
         // will probably be ok here. I could be pedantic and actually find the fattest
@@ -462,7 +462,7 @@ NSString* ORBreakpointsAction = @"ORBreakpointsAction";
 						}
                     }
                     // Line numbers are internally stored starting at 0
-                    NSString* labelText = [NSString stringWithFormat:@"%ld", line + 1];
+                    NSString* labelText = [NSString stringWithFormat:@"%lu", line + 1];
                     
                     NSSize stringSize = [labelText sizeWithAttributes:textAttributes];
 					

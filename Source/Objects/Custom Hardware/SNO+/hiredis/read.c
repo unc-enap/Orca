@@ -143,10 +143,10 @@ static char *seekNewline(char *s, size_t len) {
     return NULL;
 }
 
-/* Read a long long value starting at *s, under the assumption that it will be
+/* Read a int64_t value starting at *s, under the assumption that it will be
  * terminated by \r\n. Ambiguously returns -1 for unexpected input. */
-static long long readLongLong(char *s) {
-    long long v = 0;
+static int64_t readLongLong(char *s) {
+    int64_t v = 0;
     int dec, mult = 1;
     char c;
 
@@ -250,8 +250,8 @@ static int processBulkItem(redisReader *r) {
     redisReadTask *cur = &(r->rstack[r->ridx]);
     void *obj = NULL;
     char *p, *s;
-    long len;
-    unsigned long bytelen;
+    int32_t len;
+    uint32_t bytelen;
     int success = 0;
 
     p = r->buf+r->pos;
@@ -303,7 +303,7 @@ static int processMultiBulkItem(redisReader *r) {
     redisReadTask *cur = &(r->rstack[r->ridx]);
     void *obj;
     char *p;
-    long elements;
+    int32_t elements;
     int root = 0;
 
     /* Set error for nested multi bulks with depth > 7 */

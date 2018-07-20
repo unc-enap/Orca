@@ -49,7 +49,7 @@
     rampOpsSize		= NSMakeSize(570,750);
     blankView		= [[NSView alloc] init];
 	
-    NSString* key = [NSString stringWithFormat: @"orca.ORZup%lu.selectedtab",[model uniqueIdNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORZup%u.selectedtab",[model uniqueIdNumber]];
     NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
@@ -296,7 +296,7 @@
     }
     [[self window] setContentView:totalView];
             
-    NSString* key = [NSString stringWithFormat: @"orca.ORZup%lu.selectedtab",[model uniqueIdNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORZup%u.selectedtab",[model uniqueIdNumber]];
     NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
     

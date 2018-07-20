@@ -105,7 +105,7 @@ NSString* ORSPDTRelayOutOffConnection  = @"ORSPDTRelayOutOffConnection";
 - (id) eval
 {
 	[guardian eval];
-	long theState = [guardian state];
+	int32_t theState = [guardian state];
 	if(![guardian objectConnectedTo:ORInputElementInConnection])[self setEvaluatedState: !theState];
 	else {
 		if(theState) [self setEvaluatedState:0];

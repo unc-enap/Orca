@@ -335,7 +335,7 @@
     [super awakeFromNib];
 
     
-    NSString* key = [NSString stringWithFormat: @"orca.%@%lu.selectedtab",[model className],[model uniqueIdNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.%@%u.selectedtab",[model className],[model uniqueIdNumber]];
     NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
@@ -689,7 +689,7 @@
 - (void) triggerSourceEnableMaskChanged:(NSNotification*)aNote
 {
     int i;
-    unsigned long mask = [model triggerSourceMask];
+    uint32_t mask = [model triggerSourceMask];
     for(i=0;i<kNumDT5720Channels;i++){
         [[triggerSourceEnableMaskMatrix cellWithTag:i] setIntValue:(mask & (1L << i)) !=0];
     }
@@ -698,7 +698,7 @@
 - (void) triggerOutMaskChanged:(NSNotification*)aNote
 {
     int i;
-    unsigned long mask = [model triggerOutMask];
+    uint32_t mask = [model triggerOutMask];
     for(i=0;i<kNumDT5720Channels;i++){
         [[triggerOutMatrix cellWithTag:i] setIntValue:(mask & (1L << i)) !=0];
     }
@@ -1038,7 +1038,7 @@
 - (IBAction) triggerSourceEnableMaskAction:(id)sender
 {
     int i;
-    unsigned long mask = 0;
+    uint32_t mask = 0;
     for(i=0;i<kNumDT5720Channels;i++){
         if([[triggerSourceEnableMaskMatrix cellWithTag:i] intValue]) mask |= (1L << i);
     }
@@ -1050,7 +1050,7 @@
 - (IBAction) triggerOutMaskAction:(id)sender
 {
     int i;
-    unsigned long mask = 0;
+    uint32_t mask = 0;
     for(i=0;i<kNumDT5720Channels;i++){
         if([[triggerOutMatrix cellWithTag:i] intValue]) mask |= (1L << i);
     }
@@ -1238,7 +1238,7 @@
     };
 	
     [registerOffsetTextField setStringValue:
-	 [NSString stringWithFormat:@"0x%04lx",
+	 [NSString stringWithFormat:@"0x%04x",
 	  [model getAddressOffset:aRegisterIndex]]];
 	
     [registerReadWriteTextField setStringValue:types[[model getAccessType:aRegisterIndex]]];
@@ -1267,7 +1267,7 @@
 		[[self window] setContentView:tabView];
     }
 	
-    NSString* key = [NSString stringWithFormat: @"orca.%@%lu.selectedtab",[model className],[model uniqueIdNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.%@%u.selectedtab",[model className],[model uniqueIdNumber]];
     NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 	
@@ -1275,7 +1275,7 @@
 
 #pragma mark •••Data Source
 
-- (void) getQueMinValue:(unsigned long*)aMinValue maxValue:(unsigned long*)aMaxValue head:(unsigned long*)aHeadValue tail:(unsigned long*)aTailValue
+- (void) getQueMinValue:(uint32_t*)aMinValue maxValue:(uint32_t*)aMaxValue head:(uint32_t*)aHeadValue tail:(uint32_t*)aTailValue
 {
     [model getQueMinValue:aMinValue maxValue:aMaxValue head:aHeadValue tail:aTailValue];
     

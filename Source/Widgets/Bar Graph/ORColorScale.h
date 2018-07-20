@@ -51,8 +51,8 @@
 - (NSMutableArray*) colors;
 - (void) setColors:(NSMutableArray*)newColors;
 - (NSColor*) getColorForValue:(float)aValue;
-- (unsigned short) getFastColorIndexForValue:(unsigned long)aValue log:(BOOL)aLog integer:(BOOL)aInt minPad:(double)aMinPad;
-- (unsigned short) getColorIndexForValue:(unsigned long)aValue;
+- (unsigned short) getFastColorIndexForValue:(uint32_t)aValue log:(BOOL)aLog integer:(BOOL)aInt minPad:(double)aMinPad;
+- (unsigned short) getColorIndexForValue:(uint32_t)aValue;
 - (NSColor*) getColorForIndex:(unsigned short)index;
 
 - (BOOL) useRainBow;

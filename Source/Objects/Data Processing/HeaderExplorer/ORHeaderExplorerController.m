@@ -48,7 +48,7 @@
 
 - (void) awakeFromNib
 {		
-    NSString* key = [NSString stringWithFormat: @"orca.ORHeaderExplorer%lu.selectedtab",[model uniqueIdNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORHeaderExplorer%u.selectedtab",[model uniqueIdNumber]];
     NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
@@ -475,8 +475,8 @@
 }
 - (void) setRunBoundaryTimes
 {
-	unsigned long absStart = [model minRunStartTime];
-	unsigned long absEnd   = [model maxRunEndTime];
+	uint32_t absStart = [model minRunStartTime];
+	uint32_t absEnd   = [model maxRunEndTime];
 	if(absStart>0 && absEnd>0){
 		NSDate* d = [NSDate dateWithTimeIntervalSince1970:absStart];
 		[runStartField setObjectValue:[d stdDescription]];
@@ -491,7 +491,7 @@
 	if(theFileName)[progressField setStringValue:[NSString stringWithFormat:@"Reading:%@",[theFileName stringByAbbreviatingWithTildeInPath]]];
 	else [progressField setStringValue:@""];
 
-	//unsigned long total = [model total];
+	//uint32_t total = [model total];
     //if(total>0)[progressIndicatorBottom setDoubleValue:100. - (100.*[model numberLeft]/(double)total)];
 }
 
@@ -507,9 +507,9 @@
 	//if(!sliderDrag)
 		[selectionDateSlider setIntValue:[selectionDateSlider maxValue] - [model selectionDate]];
 	
-	unsigned long absStart		= [model minRunStartTime];
-	unsigned long absEnd		= [model maxRunEndTime];
-	unsigned long selectionDate	= absStart + ((absEnd - absStart) * [model selectionDate]/[selectionDateSlider maxValue]);
+	uint32_t absStart		= [model minRunStartTime];
+	uint32_t absEnd		= [model maxRunEndTime];
+	uint32_t selectionDate	= absStart + ((absEnd - absStart) * [model selectionDate]/[selectionDateSlider maxValue]);
 	if(absStart && absEnd){
 		NSDate* d = [NSDate dateWithTimeIntervalSince1970:selectionDate];
 		[selectionDateField setObjectValue:[d description]];
@@ -524,8 +524,8 @@
 
 - (void) runSelectionChanged:(NSNotification*)aNote
 {
-	unsigned long absStart		= [model minRunStartTime];
-	unsigned long absEnd		= [model maxRunEndTime];
+	uint32_t absStart		= [model minRunStartTime];
+	uint32_t absEnd		= [model maxRunEndTime];
 	if(absStart>0 && absEnd>0 && [model selectedRunIndex]>=0){
 		NSDictionary* runDictionary = [model runDictionaryForIndex:[model selectedRunIndex]];
 		if(runDictionary && [model selectedRunIndex]>=0){
@@ -633,7 +633,7 @@
         else if([[tableColumn identifier] isEqualToString:@"Value"]){
             if(item==0){
                 return [[[NSAttributedString alloc] 
-                        initWithString:[NSString stringWithFormat:@"%ld key/value pairs",(unsigned long)[[model header] count]]
+                        initWithString:[NSString stringWithFormat:@"%d key/value pairs",(uint32_t)[[model header] count]]
                             attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSColor grayColor],NSForegroundColorAttributeName,nil]]autorelease];
             }
             else {
@@ -643,7 +643,7 @@
 					}
 					else {
 						return [[[NSAttributedString alloc] 
-							initWithString:[NSString stringWithFormat:@"%ld key/value pairs",(unsigned long)[item count]]
+							initWithString:[NSString stringWithFormat:@"%d key/value pairs",(uint32_t)[item count]]
 								attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSColor grayColor],NSForegroundColorAttributeName,nil]] autorelease];            
 					}
 				}
@@ -666,7 +666,7 @@
 	}
 	else if(aTableView == searchKeyTableView){
 		if([[model searchKeys] count]){
-			if([[aTableColumn identifier] isEqualToString:@"index"])return [NSString stringWithFormat:@"%ld",rowIndex];
+			if([[aTableColumn identifier] isEqualToString:@"index"])return [NSString stringWithFormat:@"%d",(int)rowIndex];
 			else return [[model searchKeys] objectAtIndex:rowIndex];
 		}
 	}
@@ -759,12 +759,12 @@
 			int i = (int)[fileListView selectedRow];
 			[model setSelectedFileIndex:i];
 			[model selectFirstRunForFileIndex:i];
-			unsigned long absStart = [model minRunStartTime];
-			unsigned long absEnd   = [model maxRunEndTime];
+			uint32_t absStart = [model minRunStartTime];
+			uint32_t absEnd   = [model maxRunEndTime];
 			
-			unsigned long start = [[model run:i objectForKey:@"RunStart"] unsignedLongValue];
-			unsigned long end   = [[model run:i objectForKey:@"RunEnd"] unsignedLongValue];
-			unsigned long mid = start + (end-start)/2.;
+			uint32_t start = [[model run:i objectForKey:@"RunStart"] unsignedLongValue];
+			uint32_t end   = [[model run:i objectForKey:@"RunEnd"] unsignedLongValue];
+			uint32_t mid = start + (end-start)/2.;
 			if(absEnd-absStart !=0){
 				[model setSelectionDate:1000*(mid - absStart)/(absEnd-absStart)];
 			}
@@ -794,20 +794,20 @@
 
 - (void)tabView:(NSTabView *)aTabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem
 {
-    NSString* key = [NSString stringWithFormat: @"orca.ORHeaderExplorer%lu.selectedtab",[model uniqueIdNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORHeaderExplorer%u.selectedtab",[model uniqueIdNumber]];
     NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 	
 }
 
 #pragma mark •••Data Source
-- (unsigned long) minRunStartTime {return [model minRunStartTime];}
-- (unsigned long) maxRunEndTime	  {return [model maxRunEndTime];}
-- (long) numberRuns {return [model numberRuns];}
+- (uint32_t) minRunStartTime {return [model minRunStartTime];}
+- (uint32_t) maxRunEndTime	  {return [model maxRunEndTime];}
+- (int32_t) numberRuns {return [model numberRuns];}
 - (id) run:(int)index objectForKey:(id)aKey { return [model run:index objectForKey:aKey]; }
 - (int) selectedRunIndex { return [model selectedRunIndex]; }
 
-- (void) setSelectionDate:(long)aValue { [model setSelectionDate:aValue]; }
+- (void) setSelectionDate:(int32_t)aValue { [model setSelectionDate:aValue]; }
 - (void) findSelectedRunByDate { [model findSelectedRunByDate]; }
 - (NSSlider*) selectionDateSlider
 {
@@ -914,15 +914,15 @@
 	[[NSColor blackColor] set];
 	[NSBezierPath strokeRect:[self bounds]];
 		
-	unsigned long absStart = [dataSource minRunStartTime];
-	unsigned long absEnd   = [dataSource maxRunEndTime];
-	long n = [dataSource numberRuns];
-	long selectedRunIndex = [dataSource selectedRunIndex];
+	uint32_t absStart = [dataSource minRunStartTime];
+	uint32_t absEnd   = [dataSource maxRunEndTime];
+	int32_t n = [dataSource numberRuns];
+	int32_t selectedRunIndex = [dataSource selectedRunIndex];
 	int i;
 	for(i=0;i<n;i++){
 	
-		unsigned long start = [[dataSource run:i objectForKey:@"RunStart"] unsignedLongValue];
-		unsigned long end   = [[dataSource run:i objectForKey:@"RunEnd"] unsignedLongValue];
+		uint32_t start = [[dataSource run:i objectForKey:@"RunStart"] unsignedLongValue];
+		uint32_t end   = [[dataSource run:i objectForKey:@"RunEnd"] unsignedLongValue];
 
 		if(start && end){
 			float h = [self bounds].size.height;
@@ -944,7 +944,7 @@
 - (void) mouseDown:(NSEvent*)anEvent
 {
     NSPoint mouseLoc =  [self convertPoint:[anEvent locationInWindow] fromView:nil];
-	unsigned long selectedPoint = (mouseLoc.y/[self bounds].size.height)*1000.;
+	uint32_t selectedPoint = (mouseLoc.y/[self bounds].size.height)*1000.;
 	[dataSource setSelectionDate:selectedPoint];
 	[dataSource findSelectedRunByDate];
 	if([anEvent clickCount] >= 2){

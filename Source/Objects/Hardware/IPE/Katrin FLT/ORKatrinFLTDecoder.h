@@ -31,8 +31,8 @@
 @interface ORKatrinFLTDecoderForEnergy : ORIpeCardDecoder {
 }
 // Documentation in m-file
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr;
 @end
 
 
@@ -42,8 +42,8 @@
 @interface ORKatrinFLTDecoderForWaveForm : ORIpeCardDecoder {
 }
 // Documentation in m-file
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr;
 @end
 
 
@@ -53,8 +53,8 @@
 @interface ORKatrinFLTDecoderForHitRate : ORIpeCardDecoder {
 }
 // Documentation in m-file
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr;
 @end
 
 
@@ -64,12 +64,12 @@
   * This objects are generated in Flt measure mode.
   */
 @interface ORKatrinFLTDecoderForThresholdScan : ORIpeCardDecoder {
-  unsigned long lastEnergy[22];		//!< Energy of the last sample. Used to calculate the difference per sample
-  unsigned long lastHitrate[22];		//!< Trigger rate of the last sample. Used to calculate the difference per sample
+  uint32_t lastEnergy[22];		//!< Energy of the last sample. Used to calculate the difference per sample
+  uint32_t lastHitrate[22];		//!< Trigger rate of the last sample. Used to calculate the difference per sample
 }
 // Documentation in m-file
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr;
 @end
 
 
@@ -81,8 +81,8 @@
 @interface ORKatrinFLTDecoderForHistogram : ORIpeCardDecoder {
 }
 // Documentation in m-file
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr;
 @end
 
 

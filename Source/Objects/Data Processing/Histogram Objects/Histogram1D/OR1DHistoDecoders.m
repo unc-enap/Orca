@@ -26,20 +26,20 @@
 
 @implementation OR1DHistoDecoder
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr	 = (unsigned long*)someData;
-    unsigned long length = ExtractLength(*ptr);
+    uint32_t* ptr	 = (uint32_t*)someData;
+    uint32_t length = ExtractLength(*ptr);
 
     ptr++; //point at the key length
-    unsigned long keyLength = *ptr;
+    uint32_t keyLength = *ptr;
     
     ptr++; //point at the keys
     
     NSString* allKeys  = [NSString stringWithUTF8String:(const char*)ptr];
     NSArray*  keyArray = [allKeys componentsSeparatedByString:@"/"];
     ptr += keyLength; //point at the data length
-    unsigned long numBins = *ptr;
+    uint32_t numBins = *ptr;
     ptr++; //point at the histogram data
 	
    [aDataSet loadHistogram:ptr numBins:numBins withKeyArray:keyArray];
@@ -47,18 +47,18 @@
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {    
     NSString* title= @"1D Histogram Record\n\n";
 
     ptr++; //point at key block length;
-    unsigned long keyLength = *ptr;
+    uint32_t keyLength = *ptr;
     ptr++;
     NSString* allKeys = [NSString stringWithUTF8String:(const char*)ptr];
     allKeys = [[allKeys componentsSeparatedByString:@"/"] componentsJoinedByString:@"\n"];
     ptr+=keyLength; //point at the histo length
     
-    NSString* length = [NSString stringWithFormat:@"\nLength    = %lu\n",*ptr];
+    NSString* length = [NSString stringWithFormat:@"\nLength    = %u\n",*ptr];
     
     return [NSString stringWithFormat:@"%@%@%@",title,allKeys,length];               
 }

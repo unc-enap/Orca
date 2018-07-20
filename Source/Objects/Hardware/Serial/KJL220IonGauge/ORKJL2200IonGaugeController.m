@@ -68,7 +68,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"KJL2200 (%lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"KJL2200 (%u)",[model uniqueIdNumber]]];
 }
 
 #pragma mark ***Notifications
@@ -339,7 +339,7 @@
 		[pressureField setStringValue:@"OFF"];
 		[smallPressureField setStringValue:@"OFF"];
 	}
-	unsigned long t = [model timeMeasured];
+	uint32_t t = [model timeMeasured];
 	NSDate* theDate;
 	if(t){
 		theDate = [NSDate dateWithTimeIntervalSince1970:t];

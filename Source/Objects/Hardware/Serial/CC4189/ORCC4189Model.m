@@ -120,10 +120,10 @@ NSString* ORCC4189Lock = @"ORCC4189Lock";
 		
 		union {
 			float asFloat;
-			unsigned long asLong;
+			uint32_t asLong;
 		}theData;
 		
-		unsigned long data[5];
+		uint32_t data[5];
 		data[0] = dataId | 4;
 		data[1] =  ([self uniqueIdNumber]&0x0000fffff);
 		
@@ -136,7 +136,7 @@ NSString* ORCC4189Lock = @"ORCC4189Lock";
 		data[4] = timeMeasured;
 		
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-															object:[NSData dataWithBytes:data length:sizeof(long)*4]];
+															object:[NSData dataWithBytes:data length:sizeof(int32_t)*4]];
 	}
 }
 
@@ -217,7 +217,7 @@ NSString* ORCC4189Lock = @"ORCC4189Lock";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORCC4189ModelShipValuesChanged object:self];
 }
 
-- (unsigned long) timeMeasured
+- (uint32_t) timeMeasured
 {
 	return timeMeasured;
 }
@@ -305,8 +305,8 @@ NSString* ORCC4189Lock = @"ORCC4189Lock";
 }
 
 #pragma mark ***Data Records
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -421,7 +421,7 @@ NSString* ORCC4189Lock = @"ORCC4189Lock";
 
 - (NSString*) identifier
 {
-    return [NSString stringWithFormat:@"CC4189 %lu",[self uniqueIdNumber]];
+    return [NSString stringWithFormat:@"CC4189 %u",[self uniqueIdNumber]];
 }
 
 - (void) postCouchDBRecord

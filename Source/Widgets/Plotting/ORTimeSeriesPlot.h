@@ -20,7 +20,7 @@
 #import "ORPlotWithROI.h"
 
 @interface NSObject (ORORTimeSeriesPlotDataSourceMethods)
-- (void) plotter:(id)aPlot index:(int)index time:(unsigned long*)xValue y:(float*)yValue;
+- (void) plotter:(id)aPlot index:(int)index time:(uint32_t*)xValue y:(float*)yValue;
 - (NSTimeInterval) plotterStartTime:(id)aPlot;
 @end
 

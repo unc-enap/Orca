@@ -21,7 +21,7 @@
 
 #import "SMPieChartView.h"
 
-// Set this to one to turn on a timer that NSLogs how long it takes to draw all the slices on a chart.
+// Set this to one to turn on a timer that NSLogs how int32_t it takes to draw all the slices on a chart.
 #define	SMPIE_TIMER					0
 
 typedef struct
@@ -343,7 +343,7 @@ static NSDictionary *_sm_local_defaultSliceAttributes( unsigned int inSliceIndex
 
 #if defined( SMPIE_TIMER ) && ( SMPIE_TIMER == 1 )
             timeInterval = [ timer timeIntervalSinceNow ];
-            NSLog( @"drawing all slices took this long: %g", timeInterval );
+            NSLog( @"drawing all slices took this int32_t: %g", timeInterval );
 #endif
         } // end have to draw our slices.
         else

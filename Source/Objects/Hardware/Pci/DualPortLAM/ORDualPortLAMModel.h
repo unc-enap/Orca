@@ -32,7 +32,7 @@
     NSMutableArray* variableNames;
 	NSArray*		dataTakers1;       //cache of data takers.
 	BOOL			started;
-	unsigned long  cachedNumberOfDataTakers;
+	uint32_t  cachedNumberOfDataTakers;
 }
 
 #pragma mark ***Initialization

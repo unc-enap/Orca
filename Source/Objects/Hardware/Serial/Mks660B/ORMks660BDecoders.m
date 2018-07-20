@@ -36,12 +36,12 @@
 //-----------------------------------------------------------------------------------------------
 @implementation ORMks660BDecoderForPressure
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-	unsigned long *dataPtr = (unsigned long*)someData;
+	uint32_t *dataPtr = (uint32_t*)someData;
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}thePressure;
 	int ident = dataPtr[1] & 0xfff;
 	thePressure.asLong = dataPtr[2];									//encoded as float, use union to convert
@@ -55,7 +55,7 @@
 	return ExtractLength(dataPtr[0]);
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr
 {
     NSString* title= @"Mks660B Controller\n\n";
     NSString* theString =  [NSString stringWithFormat:@"%@\n",title];               
@@ -66,12 +66,12 @@
 	
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theData;
     theData.asLong = dataPtr[2];
 	
 	
-    theString = [theString stringByAppendingFormat:@"Gauge %d: %lu %@\n",ident,dataPtr[2],date];
+    theString = [theString stringByAppendingFormat:@"Gauge %d: %u %@\n",ident,dataPtr[2],date];
 	return theString;
 }
 @end

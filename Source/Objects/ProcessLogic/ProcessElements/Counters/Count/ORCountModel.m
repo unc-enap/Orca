@@ -96,7 +96,7 @@ NSString* ORCountInputConnection				= @"ORCountInputConnection";
     if([self uniqueIdNumber]){
         theFont = [NSFont messageFontOfSize:8];
         n = [[NSAttributedString alloc] 
-            initWithString:[NSString stringWithFormat:@"%lu",[self uniqueIdNumber]] 
+            initWithString:[NSString stringWithFormat:@"%u",[self uniqueIdNumber]] 
                 attributes:[NSDictionary dictionaryWithObject:theFont forKey:NSFontAttributeName]];
         
         NSSize textSize = [n size];

@@ -1009,9 +1009,9 @@ err:
 {
     ORRunModel *run = [aNote object];
 
-    unsigned long run_type = [run runType];
-    unsigned long run_number = [run runNumber];
-    unsigned long source_mask = 0; /* needs to come from the MANIP system */
+    uint32_t run_type = [run runType];
+    uint32_t run_number = [run runNumber];
+    uint32_t source_mask = 0; /* needs to come from the MANIP system */
 
     @try {
         /* send the run_start command to the MTC server which will send the
@@ -1270,11 +1270,11 @@ err:
 }
 
 // orca script helper (will come from DB)
-- (void) updateEPEDStructWithCoarseDelay: (unsigned long) coarseDelay
-                               fineDelay: (unsigned long) fineDelay
-                          chargePulseAmp: (unsigned long) chargePulseAmp
-                           pedestalWidth: (unsigned long) pedestalWidth
-                                 calType: (unsigned long) calType
+- (void) updateEPEDStructWithCoarseDelay: (uint32_t) coarseDelay
+                               fineDelay: (uint32_t) fineDelay
+                          chargePulseAmp: (uint32_t) chargePulseAmp
+                           pedestalWidth: (uint32_t) pedestalWidth
+                                 calType: (uint32_t) calType
 {
     _epedStruct.coarseDelay = coarseDelay; // nsec
     _epedStruct.fineDelay = fineDelay; // psec
@@ -1283,12 +1283,12 @@ err:
     _epedStruct.calType = calType; // ECA_Type * 10 + ECA_Pattern
 }
 
-- (void) updateEPEDStructWithStepNumber: (unsigned long) stepNumber
+- (void) updateEPEDStructWithStepNumber: (uint32_t) stepNumber
 {
     _epedStruct.stepNumber = stepNumber;
 }
 
-- (void) updateEPEDStructWithNSlopePoint: (unsigned long) nTSlopePoints
+- (void) updateEPEDStructWithNSlopePoint: (uint32_t) nTSlopePoints
 {
     _epedStruct.nTSlopePoints = nTSlopePoints;
 }
@@ -1331,12 +1331,12 @@ err:
     }
 }
 
-- (void) shipEPEDStructWithCoarseDelay: (unsigned long) coarseDelay
-                             fineDelay: (unsigned long) fineDelay
-                        chargePulseAmp: (unsigned long) chargePulseAmp
-                         pedestalWidth: (unsigned long) pedestalWidth
-                               calType: (unsigned long) calType
-                            stepNumber: (unsigned long) stepNumber
+- (void) shipEPEDStructWithCoarseDelay: (uint32_t) coarseDelay
+                             fineDelay: (uint32_t) fineDelay
+                        chargePulseAmp: (uint32_t) chargePulseAmp
+                         pedestalWidth: (uint32_t) pedestalWidth
+                               calType: (uint32_t) calType
+                            stepNumber: (uint32_t) stepNumber
 {
     if ([[ORGlobal sharedGlobal] runInProgress]) {
         @try {
@@ -2394,23 +2394,23 @@ static NSComparisonResult compareXL3s(ORXL3Model *xl3_1, ORXL3Model *xl3_2, void
     [[NSNotificationCenter defaultCenter] postNotificationName: @"AmellieRunFilesLoaded" object:nil];
 }
 
-- (unsigned long) runTypeWord
+- (uint32_t) runTypeWord
 {
     return runTypeWord;
 }
 
-- (void) setRunTypeWord:(unsigned long)aValue
+- (void) setRunTypeWord:(uint32_t)aValue
 {
     runTypeWord = aValue;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORSNOPRunTypeWordChangedNotification object: self];
 }
 
-- (unsigned long) lastRunTypeWord
+- (uint32_t) lastRunTypeWord
 {
     return lastRunTypeWord;
 }
 
-- (void) setLastRunTypeWord:(unsigned long)aValue
+- (void) setLastRunTypeWord:(uint32_t)aValue
 {
     lastRunTypeWord = aValue;
 }
@@ -2757,8 +2757,8 @@ err:
     //Load values
     @try {
         //Load run type word
-        unsigned long nextruntypeword = [[runSettings valueForKey:@"run_type_word"] unsignedLongValue];
-        unsigned long currentruntypeword = [runControlModel runType];
+        uint32_t nextruntypeword = [[runSettings valueForKey:@"run_type_word"] unsignedLongValue];
+        uint32_t currentruntypeword = [runControlModel runType];
         //Do not touch the data quality bits
         currentruntypeword &= 0xFFE00000;
         nextruntypeword |= currentruntypeword;
@@ -2857,7 +2857,7 @@ err:
     NSNumber *date = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
     [detectorSettings setObject:date forKey:@"time_stamp"];
     // Do not touch the data quality bits
-    unsigned long currentRunTypeWord = [runControlModel runType];
+    uint32_t currentRunTypeWord = [runControlModel runType];
     currentRunTypeWord &= ~0xFFE00000;
     [detectorSettings setObject:[NSNumber numberWithUnsignedLong:currentRunTypeWord] forKey:@"run_type_word"];
 

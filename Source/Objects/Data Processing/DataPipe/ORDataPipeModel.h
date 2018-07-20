@@ -39,10 +39,10 @@
     pid_t           readerPid;
     NSString*       pipeName;
     BOOL            readerIsRunning;
-    long            numberBytesSent;
+    int32_t            numberBytesSent;
     float           sendRate;
     ORRunModel*     runModel;
-    unsigned long	runType;
+    uint32_t	runType;
   
 }
 #pragma mark •••Init Stuff
@@ -56,12 +56,12 @@
 - (NSString*) pipeName;
 - (void) setPipeName:(NSString*)aName;
 - (float) sendRate;
-- (long) numberBytesSent;
+- (int32_t) numberBytesSent;
 - (BOOL) readerIsRunning;
 - (BOOL) runInProgress;
 - (ORRunModel*)runModel;
-- (unsigned long)runType;
-- (void)	setRunType:(unsigned long)aMask;
+- (uint32_t)runType;
+- (void)	setRunType:(uint32_t)aMask;
 - (BOOL) validRunType;
 
 #pragma mark •••Notifications

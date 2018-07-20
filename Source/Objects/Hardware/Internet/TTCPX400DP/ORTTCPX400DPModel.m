@@ -892,10 +892,10 @@ ORTTCPX_READ_IMPLEMENT(GetSTB, int)
     [readConditionLock lock];
     
     // First add the write command
-    [dataQueue addObject:[NSArray arrayWithObjects:[NSNumber numberWithUnsignedLong:(unsigned long)theCmd],cmdStr,@"",[NSNumber numberWithUnsignedInt:output],nil]];
+    [dataQueue addObject:[NSArray arrayWithObjects:[NSNumber numberWithUnsignedLong:(uint32_t)theCmd],cmdStr,@"",[NSNumber numberWithUnsignedInt:output],nil]];
     // If there's a read command, add it as well.
     if (selName != nil) {
-        [dataQueue addObject:[NSArray arrayWithObjects:[NSNumber numberWithUnsignedLong:(unsigned long)theCmd],@"",selName,[NSNumber numberWithUnsignedInt:output],nil]];
+        [dataQueue addObject:[NSArray arrayWithObjects:[NSNumber numberWithUnsignedLong:(uint32_t)theCmd],@"",selName,[NSNumber numberWithUnsignedInt:output],nil]];
     }
     // We only call the next write command if we are not doing any processing.
     BOOL callProcessing = !isProcessingCommands;
@@ -1115,7 +1115,7 @@ ORTTCPX_READ_IMPLEMENT(GetSTB, int)
     struct ORTTCPX400DPCmdInfo* theCmd = &gORTTCPXCmds[cmd];
     if (theCmd->responds) {
         if (selName == nil){
-            unsigned long numberOfOutputs = [[theCmd->responseFormat componentsSeparatedByString:@"%"] count] - 1;
+            uint32_t numberOfOutputs = [[theCmd->responseFormat componentsSeparatedByString:@"%"] count] - 1;
             switch (numberOfOutputs) {
                 case 1:
                     selName = NSStringFromSelector(@selector(_processGeneralReadback:));

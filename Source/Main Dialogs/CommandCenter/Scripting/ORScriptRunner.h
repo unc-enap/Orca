@@ -32,7 +32,7 @@
 @private
 	id					 finishTarget;
 	SEL					 finishSelector;
-	unsigned long    	 yaccInputPosition;
+	uint32_t    	 yaccInputPosition;
 	BOOL				 stopThread;
 	BOOL				 running;
 	BOOL				 parsedOK;
@@ -44,8 +44,8 @@
 	id					inputValue;
 	BOOL				exitNow;
 	BOOL				scriptExists;
-	unsigned long		lastLine;
-	unsigned long       lastFunctionLevel;
+	uint32_t		lastLine;
+	uint32_t       lastFunctionLevel;
 	BOOL				step;
 	BOOL				scriptShouldPause;
 	int					debuggerState;
@@ -87,11 +87,11 @@
 - (NSUInteger) symbolTableCount;
 - (id) symbolNameForIndex:(int)i;
 - (id) symbolValueForIndex:(int)i;
-- (long) lastLine;
+- (int32_t) lastLine;
 - (int) debuggerState;
 - (void) setDebuggerState:(int)aState;
 - (void) setBreakpoints:(NSMutableIndexSet*)aSet;
-- (void) checkBreakpoint:(unsigned long) lineNumber functionLevel:(int)functionLevel;
+- (void) checkBreakpoint:(uint32_t) lineNumber functionLevel:(int)functionLevel;
 - (BOOL) debugging;
 - (void) setDebugging:(BOOL)aState;
 - (int) debugMode;
@@ -110,7 +110,7 @@
 - (void)	printAll;
 
 #pragma mark ¥¥¥Yacc Input
-- (unsigned long)		 yyinputToBuffer:(char* )theBuffer withSize:(int)maxSize;
+- (uint32_t)		 yyinputToBuffer:(char* )theBuffer withSize:(int)maxSize;
 
 @end
 

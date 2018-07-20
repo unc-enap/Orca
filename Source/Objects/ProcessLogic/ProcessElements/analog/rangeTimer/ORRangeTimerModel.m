@@ -277,7 +277,7 @@ NSString* ORRangeTimerModelOKConnection     = @"ORRangeTimerModelOKConnection";
 						theContent = [theContent stringByAppendingFormat:@"The dead band time is: %d seconds.\n\n",deadband];
 						
 						theContent = [theContent stringByAppendingFormat:@"+++++++++++++++++++++++++++++++++++++++++++++++++++++\n"];						
-						theContent = [theContent stringByAppendingFormat:@"This message generated from %@ %lu\n",[self className],[self uniqueIdNumber]];
+						theContent = [theContent stringByAppendingFormat:@"This message generated from %@ %u\n",[self className],[self uniqueIdNumber]];
 						theContent = [theContent stringByAppendingFormat:@"+++++++++++++++++++++++++++++++++++++++++++++++++++++\n"];						
 						NSDictionary* item;
 						NSEnumerator* e = [eMailList objectEnumerator];
@@ -355,7 +355,7 @@ NSString* ORRangeTimerModelOKConnection     = @"ORRangeTimerModelOKConnection";
     if([self uniqueIdNumber]){
         theFont = [NSFont messageFontOfSize:9];
         n = [[NSAttributedString alloc] 
-            initWithString:[NSString stringWithFormat:@"%lu",[self uniqueIdNumber]] 
+            initWithString:[NSString stringWithFormat:@"%u",[self uniqueIdNumber]] 
                 attributes:[NSDictionary dictionaryWithObject:theFont forKey:NSFontAttributeName]];
         
         NSSize textSize = [n size];

@@ -40,14 +40,14 @@
     [super dealloc];
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long length;
-    unsigned long* ptr = (unsigned long*)someData;
+    uint32_t length;
+    uint32_t* ptr = (uint32_t*)someData;
     if(IsShortForm(*ptr)){
         length = 1;
     }
-    else  {       //oh, we have been assign the long form--skip to the next long word for the data
+    else  {       //oh, we have been assign the int32_t form--skip to the next int32_t word for the data
         ptr++;
         length = 2;
     }
@@ -84,7 +84,7 @@
     return length; //must return number of bytes processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     if(!IsShortForm(*ptr)){
         ptr++;
@@ -92,10 +92,10 @@
 
     NSString* title= @"CV419 ADC Record\n\n";
     
-    NSString* crate = [NSString stringWithFormat:@"Crate = %lu\n",(*ptr&0x01e00000)>>21];
-    NSString* card  = [NSString stringWithFormat:@"Card  = %lu\n",(*ptr&0x001f0000)>>16];
-    NSString* chan  = [NSString stringWithFormat:@"Chan  = %lu\n",(*ptr&0x0000f000)>>12];
-    NSString* adc   = [NSString stringWithFormat:@"ADC   = 0x%lx\n",*ptr&0x00000fff];
+    NSString* crate = [NSString stringWithFormat:@"Crate = %u\n",(*ptr&0x01e00000)>>21];
+    NSString* card  = [NSString stringWithFormat:@"Card  = %u\n",(*ptr&0x001f0000)>>16];
+    NSString* chan  = [NSString stringWithFormat:@"Chan  = %u\n",(*ptr&0x0000f000)>>12];
+    NSString* adc   = [NSString stringWithFormat:@"ADC   = 0x%x\n",*ptr&0x00000fff];
     
     return [NSString stringWithFormat:@"%@%@%@%@%@",title,crate,card,chan,adc];               
 }

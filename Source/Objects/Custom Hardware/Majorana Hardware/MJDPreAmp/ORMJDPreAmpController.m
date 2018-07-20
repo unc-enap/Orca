@@ -218,7 +218,7 @@
 
 - (void) setWindowTitle
 {
-    [[self window] setTitle:[NSString stringWithFormat:@"Preamp %lu (Rev %d) -> %@",[model uniqueIdNumber],[model boardRev]+1,[model connectedObjectName]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"Preamp %u (Rev %d) -> %@",[model uniqueIdNumber],[model boardRev]+1,[model connectedObjectName]]];
 }
 
 #pragma mark ¥¥¥Notifications

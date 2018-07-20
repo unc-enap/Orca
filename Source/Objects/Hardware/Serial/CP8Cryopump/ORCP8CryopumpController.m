@@ -77,7 +77,7 @@
     expertOpsSize	= NSMakeSize(490,660);
     plotSize		= NSMakeSize(610,545);
 	
-    NSString* key = [NSString stringWithFormat: @"orca.ORCryoPump%lu.selectedtab",[model uniqueIdNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORCryoPump%u.selectedtab",[model uniqueIdNumber]];
     NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
@@ -366,7 +366,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"CP-8 (Unit %lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"CP-8 (Unit %u)",[model uniqueIdNumber]]];
 }
 
 - (void) updateWindow
@@ -444,7 +444,7 @@
 	}
     [[self window] setContentView:totalView];
 	
-    NSString* key = [NSString stringWithFormat: @"orca.ORCryoPump%lu.selectedtab",[model uniqueIdNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORCryoPump%u.selectedtab",[model uniqueIdNumber]];
     NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 }
@@ -745,7 +745,7 @@
 - (void) firstStageTempChanged:(NSNotification*)aNote
 {
 	[firstStageTempField setFloatValue: [model firstStageTemp]];
-	unsigned long t = [model timeMeasured];
+	uint32_t t = [model timeMeasured];
 	NSDate* theDate;
 	if(t){
 		theDate = [NSDate dateWithTimeIntervalSince1970:t];
@@ -1080,9 +1080,9 @@
 {
 	NSArray* allKeys = [constraints allKeys];
 	NSUInteger n = [allKeys count];
-	[constraintTitleField setStringValue:[NSString stringWithFormat:@"Action: <%@> can not be done because there %ld constraint%@ in effect. See below for more info.",
+	[constraintTitleField setStringValue:[NSString stringWithFormat:@"Action: <%@> can not be done because there %d constraint%@ in effect. See below for more info.",
 										  aTitle,
-										  n,
+										  (int)n,
 										  n==1?@"":@"s"]];
 	NSMutableString* s = [NSMutableString string];
 	for(id aKey in allKeys){

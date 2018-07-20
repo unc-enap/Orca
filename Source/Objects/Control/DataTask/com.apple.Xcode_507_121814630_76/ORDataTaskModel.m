@@ -171,7 +171,7 @@ NSString* ORDataTaskListLock		= @"ORDataTaskListLock";
 // ===========================================================
 // - queueCount:
 // ===========================================================
-- (unsigned long)queueCount
+- (uint32_t)queueCount
 {
     return queueCount;
 }
@@ -179,7 +179,7 @@ NSString* ORDataTaskListLock		= @"ORDataTaskListLock";
 // ===========================================================
 // - setQueueCount:
 // ===========================================================
-- (void)setQueueCount:(unsigned long)aQueueCount
+- (void)setQueueCount:(uint32_t)aQueueCount
 {
     queueCount = aQueueCount;
     
@@ -210,7 +210,7 @@ NSString* ORDataTaskListLock		= @"ORDataTaskListLock";
 }
 
 
-- (unsigned long) queueMaxSize
+- (uint32_t) queueMaxSize
 {
     return kMaxQueueSize;
 }
@@ -226,19 +226,19 @@ NSString* ORDataTaskListLock		= @"ORDataTaskListLock";
     lastFile = [aLastFile copy];
 }
 
-- (unsigned long) dataTimeHist:(int)index
+- (uint32_t) dataTimeHist:(int)index
 {
     return dataTimeHist[index];
 }
-- (unsigned long) processingTimeHist:(int)index
+- (uint32_t) processingTimeHist:(int)index
 {
     return processingTimeHist[index];
 }
 
 - (void) clearTimeHistogram
 {
-    memset(processingTimeHist,0,kTimeHistoSize*sizeof(unsigned long));
-    memset(dataTimeHist,0,kTimeHistoSize*sizeof(unsigned long));
+    memset(processingTimeHist,0,kTimeHistoSize*sizeof(uint32_t));
+    memset(dataTimeHist,0,kTimeHistoSize*sizeof(uint32_t));
 }
 
 - (void) setEnableTimer:(int)aState

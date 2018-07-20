@@ -25,10 +25,10 @@
 {
 	int			type;
 	id			nodeData;
-	long			line;
+	int32_t			line;
 }
-- (long)	line;
-- (void) setLine:(long)aLine;
+- (int32_t)	line;
+- (void) setLine:(int32_t)aLine;
 - (int)		type;
 - (void)	setType:(int)aType;
 - (id)		nodeData;
@@ -39,11 +39,11 @@
 {
     int				operatorTag;                   /* operator */
 	NSMutableArray* operands;
-	long			line;
+	int32_t			line;
 }
 
-- (long)	line;
-- (void) setLine:(long)aLine;
+- (int32_t)	line;
+- (void) setLine:(int32_t)aLine;
 - (int)				operatorTag;
 - (void)			setOperatorTag:(int)anOperator;
 - (NSMutableArray*) operands;

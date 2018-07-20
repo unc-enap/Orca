@@ -513,14 +513,14 @@ static UInt32 *fVPCICamacMem;
 }
 
 
-- (unsigned long)  readLEDs
+- (uint32_t)  readLEDs
 {
     if(hardwareExists){
         [theHWLock lock];   //----begin critical section
 		UInt32 lnafOffset = (UInt32)(offsetNAF(29,0,0) / 4);	// note divide by 4
 		volatile UInt32 *lPCICamacMemBase = (UInt32 *)&fVPCICamacMem[lnafOffset];
 		
-		unsigned long led = Swap8Bits(*lPCICamacMemBase);
+		uint32_t led = Swap8Bits(*lPCICamacMemBase);
         [theHWLock unlock];   //----end critical section
 		return led;
 	}
@@ -610,7 +610,7 @@ static UInt32 *fVPCICamacMem;
 							   a:(unsigned short) a 
 							   f:(unsigned short) f
 {
-	unsigned long dummy = 0;
+	uint32_t dummy = 0;
 	return [self camacLongNAF:n a:a f:f data:&dummy];
 }
 
@@ -619,7 +619,7 @@ static UInt32 *fVPCICamacMem;
 									a:(unsigned short)a 
 									f:(unsigned short)f
 								 data:(unsigned short*) data 
-							   length:(unsigned long) numWords;
+							   length:(uint32_t) numWords;
 {
     unsigned short theStatus = 0;
     if(hardwareExists && data!=nil){
@@ -630,7 +630,7 @@ static UInt32 *fVPCICamacMem;
             UInt16 wnafOffset = (UInt16)(offsetNAF(n,a,f) / 4);	 // note divide by 4
             volatile UInt16 *wCC32MemBase = (UInt16 *)&fVPCICamacMem[wnafOffset];
             unsigned short *ptrData = data;
-            unsigned long ptrOffset;
+            uint32_t ptrOffset;
             
             //The PCI-CAMAC hardware forces all NAF command writes to set
             //the F16 bit to a 1 and all NAF command reads to set the F16
@@ -665,7 +665,7 @@ static UInt32 *fVPCICamacMem;
 - (unsigned short)  camacLongNAF:(unsigned short) n 
 							   a:(unsigned short) a 
 							   f:(unsigned short) f
-							data:(unsigned long*) data
+							data:(uint32_t*) data
 {
     unsigned short theStatus = 0;
     if(hardwareExists){
@@ -673,7 +673,7 @@ static UInt32 *fVPCICamacMem;
             [theHWLock lock];   //---begin critical section
             // read dataway
             UInt32 lnafOffset = (UInt32)(offsetNAF(n,a,f) / 4);	 // note divide by 4
-            volatile unsigned long *wPCICamacMemBase = (unsigned long *)&fVPCICamacMem[lnafOffset];
+            volatile uint32_t *wPCICamacMemBase = (uint32_t *)&fVPCICamacMem[lnafOffset];
             
             //The PCI-CAMAC hardware forces all NAF command writes to set
             //the F16 bit to a 1 and all NAF command reads to set the F16
@@ -681,7 +681,7 @@ static UInt32 *fVPCICamacMem;
             //be used with CAMAC bus read accesses and all F values from
             //F16 through F31 MUST be used with CAMAC bus write accesses.
 			if(f < 16){
-                unsigned long temp = *wPCICamacMemBase;
+                uint32_t temp = *wPCICamacMemBase;
                 if(data)*data = Swap8Bits(temp);
             }
             else     *wPCICamacMemBase = Swap8Bits(*data);
@@ -705,8 +705,8 @@ static UInt32 *fVPCICamacMem;
 - (unsigned short) camacLongNAFBlock:(unsigned short)n 
 								   a:(unsigned short)a 
 								   f:(unsigned short)f
-								data:(unsigned long*) data 
-							  length:(unsigned long) numWords
+								data:(uint32_t*) data 
+							  length:(uint32_t) numWords
 {
     unsigned short theStatus = 0;
     if(hardwareExists && data!=nil){

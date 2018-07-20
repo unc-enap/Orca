@@ -48,7 +48,7 @@
 
 	int			 lineType;
 	int 		 connectorImageType;
-	unsigned long 		 connectorType;
+	uint32_t 		 connectorType;
 	int 		 ioType;
 	int 		 identifer;
     NSColor*     onColor;
@@ -105,12 +105,12 @@
 
 - (int)			connectorImageType;
 - (void) 		setConnectorImageType:(int) type;
-- (unsigned long) connectorType;
-- (void) 		setConnectorType:(unsigned long) type;
-- (void)		addRestrictedConnectionType:(unsigned long)type;
+- (uint32_t) connectorType;
+- (void) 		setConnectorType:(uint32_t) type;
+- (void)		addRestrictedConnectionType:(uint32_t)type;
 - (NSRect)      lineBounds;
-- (BOOL)		acceptsIoType:(unsigned long)aType;
-- (BOOL)		acceptsIoType:(unsigned long)aType;
+- (BOOL)		acceptsIoType:(uint32_t)aType;
+- (BOOL)		acceptsIoType:(uint32_t)aType;
 
 #pragma mark ¥¥¥Undoable Actions
 - (void) 		setConnection: (ORConnector*)aConnection;

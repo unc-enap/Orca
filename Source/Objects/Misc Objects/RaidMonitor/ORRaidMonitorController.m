@@ -32,7 +32,7 @@
 - (void) setModel:(id)aModel
 {
     [super setModel:aModel];
-    [[self window] setTitle: [NSString stringWithFormat:@"RAID %lu",[model uniqueIdNumber]]];
+    [[self window] setTitle: [NSString stringWithFormat:@"RAID %u",[model uniqueIdNumber]]];
 }
 
 #pragma mark •••Notifications

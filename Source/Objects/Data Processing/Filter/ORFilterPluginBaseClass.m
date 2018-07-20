@@ -36,7 +36,7 @@
 	[super dealloc];
 }
 
-- (unsigned long*) ptr:(const char*)aKey
+- (uint32_t*) ptr:(const char*)aKey
 {
 	filterData data;
 	[symTable getData:&data forKey:aKey];
@@ -45,7 +45,7 @@
 
 
 
-- (unsigned long) value:(const char*)aKey
+- (uint32_t) value:(const char*)aKey
 {
 	filterData data;
 	[symTable getData:&data forKey:aKey];
@@ -63,7 +63,7 @@
 {
 	//subclass will need to override
 }
-- (void) filter:(unsigned long*) currentRecordPtr length:(unsigned long)aLen
+- (void) filter:(uint32_t*) currentRecordPtr length:(uint32_t)aLen
 {
 	//subclass will need to override
 }

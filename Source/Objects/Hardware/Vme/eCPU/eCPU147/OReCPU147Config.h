@@ -49,7 +49,7 @@
 
 // user flag area (in user data area) address definitions ( as viewed from vme cpu and bit 3 bus master ) */
 #define	USER_STOP_CODE_FLAG		(USER_DATA_ADDRESS + 0L)	/* flag(short) to stop user code execution */
-#define	USER_DATA_OLD_VECT		(USER_DATA_ADDRESS + 2L)	/* address(long) of saved interrupt vector */
+#define	USER_DATA_OLD_VECT		(USER_DATA_ADDRESS + 2L)	/* address(int32_t) of saved interrupt vector */
 #define	USER_DATA_OLD_STATUS		(USER_DATA_ADDRESS + 6L)	/* value(short) of saved status register */
 #define	USER_START_CODE_FLAG		(USER_DATA_ADDRESS + 8L)	/* flag(short) to verify start of user code execution */
 #define	USER_HARDWARE_EXIST_FLAG	(USER_DATA_ADDRESS + 10L)	/* flag(short) to verify existance of vme hardware */
@@ -57,17 +57,17 @@
 #define	USER_OS_CMD					(USER_DATA_ADDRESS + 14L)	/* value(short) of os command */
 #define	USER_OS_CMD_RESPONSE		(USER_DATA_ADDRESS + 16L)	/* value(short) of os command response */
 #define	USER_LANCE_CMD				(USER_DATA_ADDRESS + 18L)	/* value(short) of lance command */
-#define	USER_LANCE_CMD_RESPONSE		(USER_DATA_ADDRESS + 20L)	/* value(long) of lance command response */
+#define	USER_LANCE_CMD_RESPONSE		(USER_DATA_ADDRESS + 20L)	/* value(int32_t) of lance command response */
 #define	USER_LANCE_CMD_DATA			(USER_DATA_ADDRESS + 24L)	/* data(14 bytes) for lance command */
 #define USER_MAC_ETHERNET_ADDRESS	(USER_DATA_ADDRESS + 38L)	/* hardware mac ethernet address(6 bytes) */
 #define USER_MAC_IP_ADDRESS			(USER_DATA_ADDRESS + 44L)	/* hardware mac ip address(4 bytes) */
 #define USER_VME_ETHERNET_ADDRESS	(USER_DATA_ADDRESS + 48L)	/* hardware vme ethernet address(6 bytes) */
 #define USER_VME_IP_ADDRESS			(USER_DATA_ADDRESS + 54L)	/* hardware vme ip address(4 bytes) */
-#define USER_WATCHDOG_FLAG_ADDRESS	(USER_DATA_ADDRESS + 58L)	/* flag(long) to verify cpu task is running */
+#define USER_WATCHDOG_FLAG_ADDRESS	(USER_DATA_ADDRESS + 58L)	/* flag(int32_t) to verify cpu task is running */
 #define USER_UNUSED1				(USER_DATA_ADDRESS + 62L)   	/* unused bytes */
 #define USER_SUSPEND_DONE_FLAG		(USER_DATA_ADDRESS + 64L)	/* flag(short) to stop suspend operation */
 #define USER_UNUSED2				(USER_DATA_ADDRESS + 66L)   	/* unused bytes */
-#define USER_INTERNAL_HEARTBEAT		(USER_DATA_ADDRESS + 68L)	/* value(long) of suspended heartbeat */
+#define USER_INTERNAL_HEARTBEAT		(USER_DATA_ADDRESS + 68L)	/* value(int32_t) of suspended heartbeat */
 #define USER_RESERVED				(USER_DATA_ADDRESS + 72L)	/* reserved up to USER_CODE_ADDRESS */
 			
 // user flag values 
@@ -114,12 +114,12 @@
 //					Current size is 40 bytes out of 128 bytes
 typedef struct {
 
-	unsigned long ro_control_rqst;		// readout and pause control request flag
-	unsigned long ro_mod_rqst;			// readout modification control request flag
-	unsigned long ecpu_dbg_level;		// eCPU debug level message flag
-	unsigned long run_start_time;		// start time of this run in Mac time_t
-	unsigned long disable_eCPU_delay;	// disable the eCPU pause routine
-	unsigned long disable_CB_updates;	// disable the writing of CB header and block/bytes written flags
+	uint32_t ro_control_rqst;		// readout and pause control request flag
+	uint32_t ro_mod_rqst;			// readout modification control request flag
+	uint32_t ecpu_dbg_level;		// eCPU debug level message flag
+	uint32_t run_start_time;		// start time of this run in Mac time_t
+	uint32_t disable_eCPU_delay;	// disable the eCPU pause routine
+	uint32_t disable_CB_updates;	// disable the writing of CB header and block/bytes written flags
 
 } eCPUDualPortControl;
 
@@ -127,50 +127,50 @@ typedef struct {
 
 typedef struct  {
 
-	unsigned long sentinel_value;			// sentinel_value = 0x55378008 for good DPM
-	unsigned long version;                  // code version i.e. '1.0a'
-	unsigned long ecpu_status;				// eCPU status
-	unsigned long heartbeat;				// eCPU heartbeat counter
-	unsigned long data_words_transferred;	// amount of data in words transferred last control loop
-	unsigned long control_loop_delay;		// control loop delay (ms)
-	unsigned long ro_mod_ack_cnt;			// readout modification control acknowledge counter
+	uint32_t sentinel_value;			// sentinel_value = 0x55378008 for good DPM
+	uint32_t version;                  // code version i.e. '1.0a'
+	uint32_t ecpu_status;				// eCPU status
+	uint32_t heartbeat;				// eCPU heartbeat counter
+	uint32_t data_words_transferred;	// amount of data in words transferred last control loop
+	uint32_t control_loop_delay;		// control loop delay (ms)
+	uint32_t ro_mod_ack_cnt;			// readout modification control acknowledge counter
 	
 
-	unsigned long tot_err_cnt;				// eCPU total error counter
-	unsigned long err_buf_cnt;				// eCPU error array index
-	unsigned long msg_buf_cnt;				// eCPU error array index
-	unsigned long data_head_ptr;			// data CB head pointer
-	unsigned long data_tail_ptr;			// data CB tail pointer
+	uint32_t tot_err_cnt;				// eCPU total error counter
+	uint32_t err_buf_cnt;				// eCPU error array index
+	uint32_t msg_buf_cnt;				// eCPU error array index
+	uint32_t data_head_ptr;			// data CB head pointer
+	uint32_t data_tail_ptr;			// data CB tail pointer
 
-	unsigned long CB_err_dpm_buf_full_cnt;	// CB full error counter
+	uint32_t CB_err_dpm_buf_full_cnt;	// CB full error counter
  
-	unsigned long rd_error_cnt[HW_MAX_COUNT];
-	unsigned long loop_cnt[HW_MAX_COUNT];			// number of Clock loops in hw readout
-	unsigned long total_rate_cnt[HW_MAX_COUNT];		// number of Clock loops in hw readout
+	uint32_t rd_error_cnt[HW_MAX_COUNT];
+	uint32_t loop_cnt[HW_MAX_COUNT];			// number of Clock loops in hw readout
+	uint32_t total_rate_cnt[HW_MAX_COUNT];		// number of Clock loops in hw readout
 
-	unsigned long error_value[DPM_MON_BUF_SIZE];	// eCPU recent errors array
-	unsigned long er_parm0[DPM_MON_BUF_SIZE];	// eCPU error associated parameter
-	unsigned long er_parm1[DPM_MON_BUF_SIZE];	// eCPU error associated parameter
-	unsigned long er_parm2[DPM_MON_BUF_SIZE];	// eCPU error associated parameter
-	unsigned long er_parm3[DPM_MON_BUF_SIZE];	// eCPU error associated parameter
-	unsigned long er_parm4[DPM_MON_BUF_SIZE];	// eCPU error associated parameter
-	unsigned long msg_value[DPM_MON_BUF_SIZE];	// eCPU msg array
-	unsigned long msg_parm0[DPM_MON_BUF_SIZE];	// eCPU msg associated parameter
-	unsigned long msg_parm1[DPM_MON_BUF_SIZE];	// eCPU msg associated parameter
-	unsigned long msg_parm2[DPM_MON_BUF_SIZE];	// eCPU msg associated parameter
-	unsigned long msg_parm3[DPM_MON_BUF_SIZE];	// eCPU msg associated parameter
-	unsigned long msg_parm4[DPM_MON_BUF_SIZE];	// eCPU msg associated parameter
+	uint32_t error_value[DPM_MON_BUF_SIZE];	// eCPU recent errors array
+	uint32_t er_parm0[DPM_MON_BUF_SIZE];	// eCPU error associated parameter
+	uint32_t er_parm1[DPM_MON_BUF_SIZE];	// eCPU error associated parameter
+	uint32_t er_parm2[DPM_MON_BUF_SIZE];	// eCPU error associated parameter
+	uint32_t er_parm3[DPM_MON_BUF_SIZE];	// eCPU error associated parameter
+	uint32_t er_parm4[DPM_MON_BUF_SIZE];	// eCPU error associated parameter
+	uint32_t msg_value[DPM_MON_BUF_SIZE];	// eCPU msg array
+	uint32_t msg_parm0[DPM_MON_BUF_SIZE];	// eCPU msg associated parameter
+	uint32_t msg_parm1[DPM_MON_BUF_SIZE];	// eCPU msg associated parameter
+	uint32_t msg_parm2[DPM_MON_BUF_SIZE];	// eCPU msg associated parameter
+	uint32_t msg_parm3[DPM_MON_BUF_SIZE];	// eCPU msg associated parameter
+	uint32_t msg_parm4[DPM_MON_BUF_SIZE];	// eCPU msg associated parameter
 }eCPU_MAC_DualPortComm;
 
 typedef struct {
-    unsigned long  lamFired_counter;
-    unsigned long  numberUserInfoWords;
-    unsigned long  userInfoWord[10];
-    unsigned long  numberDataWords;
-    unsigned long  formatedDataWord[10];
+    uint32_t  lamFired_counter;
+    uint32_t  numberUserInfoWords;
+    uint32_t  userInfoWord[10];
+    uint32_t  numberDataWords;
+    uint32_t  formatedDataWord[10];
 } EcpuWriteLAMStruct;
 
 typedef struct {
-    unsigned long  lamAcknowledged_counter;  
+    uint32_t  lamAcknowledged_counter;  
 } MacWriteLAMStruct;
 

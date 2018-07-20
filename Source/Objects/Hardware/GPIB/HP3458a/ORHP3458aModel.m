@@ -234,7 +234,7 @@ HP3458aNamesStruct aciNames[aciCount] = {
     if([self isConnected]){
 		char reply[32];
 		reply[0]='\0';
-		long n = [self writeReadGPIBDevice:@"ID?" data:reply maxLength:32];
+		int32_t n = [self writeReadGPIBDevice:@"ID?" data:reply maxLength:32];
 		if(n>0){			
 			NSLog(@"HP3458a ID = %@\n",[self trucateToCR:reply]);
 		}
@@ -254,7 +254,7 @@ HP3458aNamesStruct aciNames[aciCount] = {
     if([self isConnected]){
 		char reply[32];
 		reply[0]='\0';
-		long n = [self writeReadGPIBDevice:@"TEST?" data:reply maxLength:32];
+		int32_t n = [self writeReadGPIBDevice:@"TEST?" data:reply maxLength:32];
 		if(n>0){
 			NSLog(@"HP3458a Self Test Response: = %@\n",[self trucateToCR:reply]);
 		}
@@ -289,7 +289,7 @@ HP3458aNamesStruct aciNames[aciCount] = {
 {
     char reply[32];
     reply[0]='\0';
-    long n = [self writeReadGPIBDevice:@"ERR?" data:reply maxLength:32];
+    int32_t n = [self writeReadGPIBDevice:@"ERR?" data:reply maxLength:32];
     if(n>0)reply[n-1]='\0';
 	//NSLog(@"HP3458a Response: %@\n",[self decodeErrorNumber:atoi(reply)]);
 }

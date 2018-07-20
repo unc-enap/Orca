@@ -1458,7 +1458,7 @@ NSString* HaloSentryToggleIntervalChanged   = @"HaloSentryToggleIntervalChanged"
         if(firstColonRange.location != NSNotFound){
             NSString* key = [aLine substringToIndex:firstColonRange.location];
             id value      = [aLine substringFromIndex:firstColonRange.location+1];
-            long ival = (long)[value doubleValue];
+            int32_t ival = (int32_t)[value doubleValue];
             if([key isEqualToString:@"runStatus"] || [key isEqualToString:@"runningState"]){
                 if(ival==eRunStopped)   [self setRemoteRunInProgress:eNO];
                 else                    [self setRemoteRunInProgress:eYES];
@@ -1544,7 +1544,7 @@ NSString* HaloSentryToggleIntervalChanged   = @"HaloSentryToggleIntervalChanged"
 
 - (void) updateRemoteMachine
 {
-    //[self sendCmd:[NSString stringWithFormat:@"[RunControl setRunNumber:%lu];",[runControl runNumber]]];
+    //[self sendCmd:[NSString stringWithFormat:@"[RunControl setRunNumber:%u];",[runControl runNumber]]];
     //[self sendCmd:[NSString stringWithFormat:@"[RunControl setSubRunNumber:%d];",[runControl subRunNumber]]];
     [self sendCmd:[NSString stringWithFormat:@"[RunControl setRepeatRun:%d];",[runControl repeatRun]]];
     [self sendCmd:[NSString stringWithFormat:@"[RunControl setTimedRun:%d];",[runControl timedRun]]];
@@ -1644,8 +1644,8 @@ NSString* HaloSentryToggleIntervalChanged   = @"HaloSentryToggleIntervalChanged"
     theReport = [theReport stringByAppendingFormat:@"Sentry running: %@\n",[self sentryIsRunning]?@"YES":@"NO"];
     theReport = [theReport stringByAppendingFormat:@"Sentry type   : %@\n",[self sentryTypeName]];
     if(sentryType == ePrimary){
-        if([runControl subRunNumber]==0) theReport = [theReport stringByAppendingFormat:@"Run Number: %ld\n",[runControl runNumber]];
-        else                             theReport = [theReport stringByAppendingFormat:@"Run Number: %ld.%d\n",[runControl runNumber],[runControl subRunNumber]];
+        if([runControl subRunNumber]==0) theReport = [theReport stringByAppendingFormat:@"Run Number: %d\n",[runControl runNumber]];
+        else                             theReport = [theReport stringByAppendingFormat:@"Run Number: %d.%d\n",[runControl runNumber],[runControl subRunNumber]];
         theReport = [theReport stringByAppendingFormat:@"Elapsed time: %@\n",[runControl elapsedRunTimeString]];
         theReport = [theReport stringByAppendingString:[self diskStatus]];
         theReport = [theReport stringByAppendingString:@"Designated as the Primary machine\n"];

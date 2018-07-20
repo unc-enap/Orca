@@ -22,8 +22,8 @@
 
 @interface NSObject (ORTimeRoiControllerDataSource)
 - (id)		plotter;
-- (long)	minChannel;
-- (long)	maxChannel;
+- (int32_t)	minChannel;
+- (int32_t)	maxChannel;
 - (double)	average;	
 - (double)	centroid;	
 - (double)	sigma;	

@@ -163,8 +163,8 @@ NSString* ORPulserDisableForPulserChangedNotification = @"ORPulserDisableForPuls
     [[NSNotificationCenter defaultCenter] postNotificationName:ORPulserDistribNoisyEnvBroadcastEnabledChanged object:self];
 }
 
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -196,14 +196,14 @@ NSString* ORPulserDisableForPulserChangedNotification = @"ORPulserDisableForPuls
 	 object:self];
 }
 
--(unsigned long)patternMaskForArray:(int)arrayIndex
+-(uint32_t)patternMaskForArray:(int)arrayIndex
 {
     return [[patternArray objectAtIndex:arrayIndex] longValue];
 }
 
--(void)setPatternMaskForArray:(int)arrayIndex to:(unsigned long)aValue
+-(void)setPatternMaskForArray:(int)arrayIndex to:(uint32_t)aValue
 {
-    long currentValue = [self patternMaskForArray:arrayIndex];
+    int32_t currentValue = [self patternMaskForArray:arrayIndex];
     [[[self undoManager] prepareWithInvocationTarget:self] setPatternMaskForArray:arrayIndex to:currentValue];
     
     [patternArray replaceObjectAtIndex:arrayIndex withObject:[NSNumber numberWithLong:aValue]];
@@ -335,8 +335,8 @@ static NSString *ORPulserDisableForPulser    = @"ORPulserDisableForPulser";
         if(noisyEnvBroadcastEnabled){
 			[[NSNotificationCenter defaultCenter] postNotificationName:ORHardwareEnvironmentNoisy object:self];
 		}
-		unsigned long kDataMask     = 0x3ffc0000;
-		unsigned long kStrobeMask	= 0x00010000;
+		uint32_t kDataMask     = 0x3ffc0000;
+		uint32_t kStrobeMask	= 0x00010000;
 		
 		ORIP408Model* the408 = [self objectConnectedTo:ORPulserDistrib408Connector];
 		
@@ -346,7 +346,7 @@ static NSString *ORPulserDisableForPulser    = @"ORPulserDisableForPulser";
 			short i=0;
 			if(!packedArray)packedArray = [[NSMutableArray arrayWithCapacity:16]retain];
 			while(maskPattern = [e nextObject]){
-				unsigned long value = [maskPattern longValue];
+				uint32_t value = [maskPattern longValue];
 				[packedArray addObject:[NSNumber numberWithUnsignedChar:value&0x00ff]];
 				[packedArray addObject:[NSNumber numberWithUnsignedChar:(value&0xff00)>>8]];
 			}
@@ -355,7 +355,7 @@ static NSString *ORPulserDisableForPulser    = @"ORPulserDisableForPulser";
 			NSNumber* bitPattern;
 			i=0;
 			while(bitPattern = [e nextObject]){
-				unsigned long dataWord = 0;
+				uint32_t dataWord = 0;
 				dataWord |= i<<18;						//load the address
 				dataWord |=(([bitPattern longValue]<<22)& kDataMask);     //pack in the data
 				
@@ -394,7 +394,7 @@ static NSString *ORPulserDisableForPulser    = @"ORPulserDisableForPulser";
 
 -(BOOL)waitForCompletion
 {
-    unsigned long theResult 		= 0L;
+    uint32_t theResult 		= 0L;
     
     ORIP408Model* the408 = [self objectConnectedTo:ORPulserDistrib408Connector];
     
@@ -427,17 +427,17 @@ static NSString *ORPulserDisableForPulser    = @"ORPulserDisableForPulser";
 - (void) shipPDSRecord:(NSArray*)aPatternArray
 {
     if([[ORGlobal sharedGlobal] runInProgress]){
-        unsigned long dataWord[4]; 
-        dataWord[0] = dataId | 4; //lengh is 4 long words
+        uint32_t dataWord[4]; 
+        dataWord[0] = dataId | 4; //lengh is 4 int32_t words
         ORIP408Model* the408 = [self objectConnectedTo:ORPulserDistrib408Connector];
-        unsigned long gtid = [[[the408 guardian] crate] requestGTID];
+        uint32_t gtid = [[[the408 guardian] crate] requestGTID];
         dataWord[1] = gtid;    
         dataWord[2] = ([[aPatternArray objectAtIndex:1] longValue] & 0x0000ffff)<<16 | ([[aPatternArray objectAtIndex:0] longValue] & 0x0000ffff);
         dataWord[3] = ([[aPatternArray objectAtIndex:3] longValue] & 0x0000ffff)<<16 | ([[aPatternArray objectAtIndex:2] longValue] & 0x0000ffff);
 		
         //now that we know the size we fill in the header and ship
         [[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-                                                            object:[NSData dataWithBytes:dataWord length:4*sizeof(long)]];
+                                                            object:[NSData dataWithBytes:dataWord length:4*sizeof(int32_t)]];
     }
 }
 
@@ -445,20 +445,20 @@ static NSString *ORPulserDisableForPulser    = @"ORPulserDisableForPulser";
 
 
 @implementation ORPulserDistribDecoderForPDS
--(unsigned long)decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+-(uint32_t)decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
     return 4; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"PDS Record\n\n";
     
-    NSString* gtid  = [NSString stringWithFormat:@"GTID   = %lu\n",ptr[1]];
-    NSString* word1 = [NSString stringWithFormat:@"Board0 = 0x%02lx\n",ptr[2] & 0x0000ffff];
-    NSString* word2 = [NSString stringWithFormat:@"Board1 = 0x%02lx\n",(ptr[2] & 0xffff0000)>>16];
-    NSString* word3 = [NSString stringWithFormat:@"Board2 = 0x%02lx\n",ptr[3] & 0x0000ffff];
-    NSString* word4 = [NSString stringWithFormat:@"Board3 = 0x%02lx\n",(ptr[3] & 0xffff0000)>>16];
+    NSString* gtid  = [NSString stringWithFormat:@"GTID   = %u\n",ptr[1]];
+    NSString* word1 = [NSString stringWithFormat:@"Board0 = 0x%02x\n",ptr[2] & 0x0000ffff];
+    NSString* word2 = [NSString stringWithFormat:@"Board1 = 0x%02x\n",(ptr[2] & 0xffff0000)>>16];
+    NSString* word3 = [NSString stringWithFormat:@"Board2 = 0x%02x\n",ptr[3] & 0x0000ffff];
+    NSString* word4 = [NSString stringWithFormat:@"Board3 = 0x%02x\n",(ptr[3] & 0xffff0000)>>16];
 	
     return [NSString stringWithFormat:@"%@%@%@%@%@%@",title,gtid,word1,word2,word3,word4];               
 }

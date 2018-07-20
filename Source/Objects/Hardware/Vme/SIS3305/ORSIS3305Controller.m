@@ -1725,7 +1725,7 @@
 - (IBAction) readRegisterAction:(id)sender
 {
     [self endEditing];
-    unsigned long aValue = 0;
+    uint32_t aValue = 0;
     unsigned int index = [model registerIndex];
     if (index < kNumSIS3305ReadRegs) {
         aValue = [model readRegister:index];
@@ -1737,7 +1737,7 @@
 - (IBAction) writeRegisterAction:(id)sender
 {
     [self endEditing];
-    unsigned long aValue = [model registerWriteValue];
+    uint32_t aValue = [model registerWriteValue];
     unsigned int index = [model registerIndex];
     if (index < kNumSIS3305ReadRegs) {
         [model writeRegister:index withValue:aValue];
@@ -2126,7 +2126,7 @@
 - (IBAction) sampleLengthAction:(id)sender
 {
     unsigned short group = [[sender selectedCell] tag];
-    unsigned long value = [sender intValue];
+    uint32_t value = [sender intValue];
     [model setSampleLength:group withValue:value];
 }
 

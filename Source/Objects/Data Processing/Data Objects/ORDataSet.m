@@ -130,7 +130,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 {
     if(!globalWatchers)globalWatchers = [[NSMutableDictionary dictionary]retain];
     if([aNote object]){
-        id watcherKey   = [NSNumber numberWithLong:(unsigned long)[aNote object]];
+        id watcherKey   = [NSNumber numberWithLong:(uint32_t)[aNote object]];
         if(watcherKey!=nil){
             [globalWatchers setObject:watcherKey forKey:watcherKey]; //just care if an entry exists
         }
@@ -139,7 +139,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 - (void) removeGlobalWatcher:(NSNotification*) aNote
 {
     if([aNote object]){
-        id watcherKey   = [NSNumber numberWithLong:(unsigned long)[aNote object]];
+        id watcherKey   = [NSNumber numberWithLong:(uint32_t)[aNote object]];
         [globalWatchers removeObjectForKey:watcherKey]; //just care if an entry exists
     }
     if([globalWatchers count]==0){
@@ -217,12 +217,12 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
     return result;
 }
 
-- (unsigned long) runNumber
+- (uint32_t) runNumber
 {
 	return runNumber;
 }
 
-- (void) setRunNumber:(unsigned long)aRunNumber
+- (void) setRunNumber:(uint32_t)aRunNumber
 {
 	runNumber = aRunNumber;
 }
@@ -286,7 +286,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
     
 }
 
-- (unsigned long) recountTotal
+- (uint32_t) recountTotal
 {
     if(data != nil)return totalCounts;
     else totalCounts = 0;
@@ -298,12 +298,12 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
     return totalCounts;
 }
 
-- (unsigned long) totalCounts
+- (uint32_t) totalCounts
 {
     return totalCounts;
 }
 
-- (void) setTotalCounts:(unsigned long) newCount
+- (void) setTotalCounts:(uint32_t) newCount
 {
     totalCounts = newCount;
 }
@@ -313,7 +313,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 	++totalCounts;
 }
 
-- (void) incrementTotalCountsBy:(unsigned long) aValue
+- (void) incrementTotalCountsBy:(uint32_t) aValue
 {
 	totalCounts += aValue;
 }
@@ -493,7 +493,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 - (NSString*) name
 {
     if([self leafNode])return [data name];
-    else return [NSString stringWithFormat:@"%@   count: %lu",key,totalCounts];
+    else return [NSString stringWithFormat:@"%@   count: %u",key,totalCounts];
 }
 
 - (void) setKey:(NSString*)aKey
@@ -591,7 +591,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 }
 
 #pragma mark •••Data Insertion
-- (void)loadHistogram:(unsigned long*)ptr numBins:(unsigned long)numBins withKeyArray:(NSArray*)keyArray
+- (void)loadHistogram:(uint32_t*)ptr numBins:(uint32_t)numBins withKeyArray:(NSArray*)keyArray
 {
 	@synchronized(self){  
 		NSUInteger n = [keyArray count];
@@ -634,7 +634,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 
 
 
-- (void) histogram:(unsigned long)aValue numBins:(unsigned long)numBins sender:(id)obj  withKeys:(NSString*)firstArg,...
+- (void) histogram:(uint32_t)aValue numBins:(uint32_t)numBins sender:(id)obj  withKeys:(NSString*)firstArg,...
 {
 	@synchronized(self){  
 		va_list myArgs;
@@ -685,7 +685,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 }
 
 // ak 6.8.07 
-- (void) histogramWW:(unsigned long)aValue weight:(unsigned long)aWeight numBins:(unsigned long)numBins sender:(id)obj  withKeys:(NSString*)firstArg,...
+- (void) histogramWW:(uint32_t)aValue weight:(uint32_t)aWeight numBins:(uint32_t)numBins sender:(id)obj  withKeys:(NSString*)firstArg,...
 {
 	@synchronized(self){  
 		va_list myArgs;
@@ -732,7 +732,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 }
 
 //! merger for hw histograms -tb- 2008-03-23
-- (void) mergeHistogram:(unsigned long*)ptr numBins:(unsigned long)numBins withKeyArray:(NSArray*)keyArray
+- (void) mergeHistogram:(uint32_t*)ptr numBins:(uint32_t)numBins withKeyArray:(NSArray*)keyArray
 {
 	@synchronized(self){  
 		
@@ -781,7 +781,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
  * Fills the histogram beginning from firstBin, every 'stepSize'-th entry will be 
  * filled (firstBin, firstBin+stepSize,firstBin+2*stepSize, ...).
  */
-- (void) mergeEnergyHistogram:(unsigned long*)ptr numBins:(unsigned long)numBins   maxBins:(unsigned long)maxBins  firstBin:(unsigned long)firstBin  stepSize:(unsigned long)stepSize   counts:(unsigned long)counts withKeys:(NSString*)firstArg,...
+- (void) mergeEnergyHistogram:(uint32_t*)ptr numBins:(uint32_t)numBins   maxBins:(uint32_t)maxBins  firstBin:(uint32_t)firstBin  stepSize:(uint32_t)stepSize   counts:(uint32_t)counts withKeys:(NSString*)firstArg,...
 {
 	@synchronized(self){  
 		
@@ -834,7 +834,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 
 
 
-- (void) histogram2DX:(unsigned long)xValue y:(unsigned long)yValue size:(unsigned short)numBins sender:(id)obj  withKeys:(NSString*)firstArg,...
+- (void) histogram2DX:(uint32_t)xValue y:(uint32_t)yValue size:(unsigned short)numBins sender:(id)obj  withKeys:(NSString*)firstArg,...
 {
 	@synchronized(self){  
 		va_list myArgs;
@@ -882,7 +882,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 }
 
 
-- (void)loadHistogram2D:(unsigned long*)ptr numBins:(unsigned long)numBins withKeyArray:(NSArray*)keyArray
+- (void)loadHistogram2D:(uint32_t*)ptr numBins:(uint32_t)numBins withKeyArray:(NSArray*)keyArray
 {
 	@synchronized(self){  
 		
@@ -924,7 +924,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 	}
 }
 
-- (void) loadData2DX:(unsigned long)xValue y:(unsigned long)yValue z:(unsigned long)zValue size:(unsigned short)numBins sender:(id)obj  withKeys:(NSString*)firstArg,...
+- (void) loadData2DX:(uint32_t)xValue y:(uint32_t)yValue z:(uint32_t)zValue size:(unsigned short)numBins sender:(id)obj  withKeys:(NSString*)firstArg,...
 {
 	@synchronized(self){  
 		va_list myArgs;
@@ -974,7 +974,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 
 
 
-- (void) sumData2DX:(unsigned long)xValue y:(unsigned long)yValue z:(unsigned long)zValue size:(unsigned short)numBins sender:(id)obj  withKeys:(NSString*)firstArg,...
+- (void) sumData2DX:(uint32_t)xValue y:(uint32_t)yValue z:(uint32_t)zValue size:(unsigned short)numBins sender:(id)obj  withKeys:(NSString*)firstArg,...
 {
 	@synchronized(self){  
 		va_list myArgs;
@@ -1055,7 +1055,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
     }
 }
 
-- (void) loadWaveform:(NSData*)aWaveForm offset:(unsigned long)anOffset unitSize:(int)aUnitSize sender:(id)obj  withKeys:(NSString*)firstArg,...
+- (void) loadWaveform:(NSData*)aWaveForm offset:(uint32_t)anOffset unitSize:(int)aUnitSize sender:(id)obj  withKeys:(NSString*)firstArg,...
 {
 	@synchronized(self){  
 		va_list myArgs;
@@ -1189,7 +1189,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 }
 
 
-- (void) loadWaveform:(NSData*)aWaveForm offset:(unsigned long)anOffset unitSize:(int)aUnitSize mask:(unsigned long)aMask sender:(id)obj  withKeys:(NSString*)firstArg,...
+- (void) loadWaveform:(NSData*)aWaveForm offset:(uint32_t)anOffset unitSize:(int)aUnitSize mask:(uint32_t)aMask sender:(id)obj  withKeys:(NSString*)firstArg,...
 {
 	@synchronized(self){  
 		va_list myArgs;
@@ -1240,7 +1240,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 
 
 
-- (void) loadWaveform:(NSData*)aWaveForm offset:(unsigned long)anOffset unitSize:(int)aUnitSize startIndex:(unsigned long)aStartIndex mask:(unsigned long)aMask sender:(id)obj  withKeys:(NSString*)firstArg,...
+- (void) loadWaveform:(NSData*)aWaveForm offset:(uint32_t)anOffset unitSize:(int)aUnitSize startIndex:(uint32_t)aStartIndex mask:(uint32_t)aMask sender:(id)obj  withKeys:(NSString*)firstArg,...
 {
     //if aWaveForm == nil then only increment the counts without displaying the waveform
 	@synchronized(self){  
@@ -1294,11 +1294,11 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 	}
 }
 - (void) loadWaveform:(NSData*)aWaveForm
-               offset:(unsigned long)anOffset
+               offset:(uint32_t)anOffset
              unitSize:(int)aUnitSize
-           startIndex:(unsigned long)aStartIndex
-                 mask:(unsigned long)aMask
-          specialBits:(unsigned long)aSpecialMask
+           startIndex:(uint32_t)aStartIndex
+                 mask:(uint32_t)aMask
+          specialBits:(uint32_t)aSpecialMask
              bitNames:(NSArray*)bitNames
                sender:(id)obj
              withKeys:(NSString*)firstArg,...
@@ -1360,12 +1360,12 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 }
 
 - (void) loadWaveform:(NSData*)aWaveForm 
-			   offset:(unsigned long)anOffset 
+			   offset:(uint32_t)anOffset 
 			 unitSize:(int)aUnitSize 
-		   startIndex:(unsigned long)aStartIndex
-          scaleOffset:(long)aScaleOffset
-				 mask:(unsigned long)aMask 
-		  specialBits:(unsigned long)aSpecialMask
+		   startIndex:(uint32_t)aStartIndex
+          scaleOffset:(int32_t)aScaleOffset
+				 mask:(uint32_t)aMask 
+		  specialBits:(uint32_t)aSpecialMask
 			 bitNames:(NSArray*)bitNames
 			   sender:(id)obj  
 			 withKeys:(NSString*)firstArg,...
@@ -1524,7 +1524,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 	}
 }
 
-- (void) loadScalerSum:(unsigned long)aValue sender:(id)obj withKeys:(NSString*)firstArg,...
+- (void) loadScalerSum:(uint32_t)aValue sender:(id)obj withKeys:(NSString*)firstArg,...
 {
 	@synchronized(self){  
 		va_list myArgs;
@@ -1564,7 +1564,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 	}
 }
 
-- (void) loadTimeSeries:(float)aValue atTime:(unsigned long)aTime sender:(id)obj withKeys:(NSString*)firstArg,...
+- (void) loadTimeSeries:(float)aValue atTime:(uint32_t)aTime sender:(id)obj withKeys:(NSString*)firstArg,...
 {
 	@synchronized(self){  
 		va_list myArgs;

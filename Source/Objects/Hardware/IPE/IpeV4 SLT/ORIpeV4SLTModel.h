@@ -247,17 +247,17 @@ static IpeRegisterNamesStruct regSLTV4[kSltV4NumRegs] = {
 @interface ORIpeV4SLTModel : ORIpeCard <ORDataTaker,SBC_Linking>
 {
 	@private
-		unsigned long	hwVersion;
+		uint32_t	hwVersion;
 		NSString*		patternFilePath;
-		unsigned long	interruptMask;
-		unsigned long	nextPageDelay;
+		uint32_t	interruptMask;
+		uint32_t	nextPageDelay;
 		float			pulserAmp;
 		float			pulserDelay;
 		unsigned short  selectedRegIndex;
-		unsigned long   writeValue;
-		unsigned long	eventDataId;
-		unsigned long	multiplicityId;
-		unsigned long   eventCounter;
+		uint32_t   writeValue;
+		uint32_t	eventDataId;
+		uint32_t	multiplicityId;
+		uint32_t   eventCounter;
 		int				actualPageIndex;
         TimedWorker*    poller;
 		BOOL			pollingWasRunning;
@@ -267,22 +267,22 @@ static IpeRegisterNamesStruct regSLTV4[kSltV4NumRegs] = {
 		// ak, 9.12.07
 		BOOL            displayTrigger;    //< Display pixel and timing view of trigger data
 		BOOL            displayEventLoop;  //< Display the event loop parameter
-		unsigned long   lastDisplaySec;
-		unsigned long   lastDisplayCounter;
+		uint32_t   lastDisplaySec;
+		uint32_t   lastDisplayCounter;
 		double          lastDisplayRate;
 		
-		unsigned long   lastSimSec;
-		unsigned long   pageSize; //< Length of the ADC data (0..100us)
+		uint32_t   lastSimSec;
+		uint32_t   pageSize; //< Length of the ADC data (0..100us)
 
 		PMC_Link*		pmcLink;
         
-		unsigned long controlReg;
-		unsigned long statusReg;
-		unsigned long secondsSet;
-		unsigned long long deadTime;
-		unsigned long long vetoTime;
-		unsigned long long runTime;
-		unsigned long clockTime;
+		uint32_t controlReg;
+		uint32_t statusReg;
+		uint32_t secondsSet;
+		uint64_t deadTime;
+		uint64_t vetoTime;
+		uint64_t runTime;
+		uint32_t clockTime;
 		BOOL countersEnabled;
     NSString* sltScriptArguments;
     BOOL secondsSetInitWithHost;
@@ -317,57 +317,57 @@ static IpeRegisterNamesStruct regSLTV4[kSltV4NumRegs] = {
 - (void) setSltScriptArguments:(NSString*)aSltScriptArguments;
 - (BOOL) countersEnabled;
 - (void) setCountersEnabled:(BOOL)aContersEnabled;
-- (unsigned long) clockTime;
-- (void) setClockTime:(unsigned long)aClockTime;
-- (unsigned long long) runTime;
-- (void) setRunTime:(unsigned long long)aRunTime;
-- (unsigned long long) vetoTime;
-- (void) setVetoTime:(unsigned long long)aVetoTime;
-- (unsigned long long) deadTime;
-- (void) setDeadTime:(unsigned long long)aDeadTime;
-- (unsigned long) secondsSet;
-- (void) setSecondsSet:(unsigned long)aSecondsSet;
-- (unsigned long) statusReg;
-- (void) setStatusReg:(unsigned long)aStatusReg;
-- (unsigned long) controlReg;
-- (void) setControlReg:(unsigned long)aControlReg;
+- (uint32_t) clockTime;
+- (void) setClockTime:(uint32_t)aClockTime;
+- (uint64_t) runTime;
+- (void) setRunTime:(uint64_t)aRunTime;
+- (uint64_t) vetoTime;
+- (void) setVetoTime:(uint64_t)aVetoTime;
+- (uint64_t) deadTime;
+- (void) setDeadTime:(uint64_t)aDeadTime;
+- (uint32_t) secondsSet;
+- (void) setSecondsSet:(uint32_t)aSecondsSet;
+- (uint32_t) statusReg;
+- (void) setStatusReg:(uint32_t)aStatusReg;
+- (uint32_t) controlReg;
+- (void) setControlReg:(uint32_t)aControlReg;
 
 - (SBC_Link*)sbcLink;
 - (bool)sbcIsConnected;
-- (unsigned long) projectVersion;
-- (unsigned long) documentVersion;
-- (unsigned long) implementation;
-- (void) setHwVersion:(unsigned long) aVersion;
+- (uint32_t) projectVersion;
+- (uint32_t) documentVersion;
+- (uint32_t) implementation;
+- (void) setHwVersion:(uint32_t) aVersion;
 
 - (NSString*) patternFilePath;
 - (void) setPatternFilePath:(NSString*)aPatternFilePath;
 
-- (unsigned long) nextPageDelay;
-- (void) setNextPageDelay:(unsigned long)aDelay;
-- (unsigned long) interruptMask;
-- (void) setInterruptMask:(unsigned long)aInterruptMask;
+- (uint32_t) nextPageDelay;
+- (void) setNextPageDelay:(uint32_t)aDelay;
+- (uint32_t) interruptMask;
+- (void) setInterruptMask:(uint32_t)aInterruptMask;
 - (float) pulserDelay;
 - (void) setPulserDelay:(float)aPulserDelay;
 - (float) pulserAmp;
 - (void) setPulserAmp:(float)aPulserAmp;
 - (short) getNumberRegisters;			
 - (NSString*) getRegisterName: (short) anIndex;
-//- (unsigned long) getAddressOffset: (short) anIndex;
-- (unsigned long) getAddress: (short) anIndex;
+//- (uint32_t) getAddressOffset: (short) anIndex;
+- (uint32_t) getAddress: (short) anIndex;
 - (short) getAccessType: (short) anIndex;
 
 - (unsigned short) 	selectedRegIndex;
 - (void)		setSelectedRegIndex: (unsigned short) anIndex;
-- (unsigned long) 	writeValue;
-- (void)		setWriteValue: (unsigned long) anIndex;
+- (uint32_t) 	writeValue;
+- (void)		setWriteValue: (uint32_t) anIndex;
 //- (void) loadPatternFile;
 
 - (BOOL) displayTrigger; //< Staus of dispaly of trigger information
 - (void) setDisplayTrigger:(BOOL) aState; 
 - (BOOL) displayEventLoop; //< Status of display of event loop performance information
 - (void) setDisplayEventLoop:(BOOL) aState;
-- (unsigned long) pageSize; //< Length of the ADC data (0..100us)
-- (void) setPageSize: (unsigned long) pageSize;   
+- (uint32_t) pageSize; //< Length of the ADC data (0..100us)
+- (void) setPageSize: (uint32_t) pageSize;   
 - (void) sendSimulationConfigScriptON;
 - (void) sendSimulationConfigScriptOFF;
 - (void) sendLinkWithDmaLibConfigScriptON;
@@ -388,11 +388,11 @@ static IpeRegisterNamesStruct regSLTV4[kSltV4NumRegs] = {
 //exceptions either directly or indirectly
 - (void)		  readAllStatus;
 - (void)		  checkPresence;
-- (unsigned long) readControlReg;
-- (unsigned long) readPageSelectReg;
+- (uint32_t) readControlReg;
+- (uint32_t) readPageSelectReg;
 - (void)		  writeControlReg;
 - (void)		  printControlReg;
-- (unsigned long) readStatusReg;
+- (uint32_t) readStatusReg;
 - (void)		  printStatusReg;
 - (void)		  loadSecondsReg;
 - (void)		writeSetInhibit;
@@ -409,10 +409,10 @@ static IpeRegisterNamesStruct regSLTV4[kSltV4NumRegs] = {
 - (void)		writePageManagerReset;
 - (void)		clearAllStatusErrorBits;
 
-- (unsigned long long) readBoardID;
-- (void) readEventStatus:(unsigned long*)eventStatusBuffer;
+- (uint64_t) readBoardID;
+- (void) readEventStatus:(uint32_t*)eventStatusBuffer;
 
-- (void)		  writePageSelect:(unsigned long)aPageNum;
+- (void)		  writePageSelect:(uint32_t)aPageNum;
 - (void)		  writeInterruptMask;
 - (void)		  readInterruptMask;
 - (void)		  readInterruptRequest;
@@ -421,19 +421,19 @@ static IpeRegisterNamesStruct regSLTV4[kSltV4NumRegs] = {
 - (void)		  printInterrupt:(int)regIndex;
 //- (void)		  dumpTriggerRAM:(int)aPageIndex;
 
-- (void)		  writeReg:(short)index value:(unsigned long)aValue;
-- (void)		  rawWriteReg:(unsigned long) address  value:(unsigned long)aValue;//TODO: FOR TESTING AND DEBUGGING ONLY -tb-
-- (unsigned long) rawReadReg:(unsigned long) address; //TODO: FOR TESTING AND DEBUGGING ONLY -tb-
-- (unsigned long) readReg:(short) index;
-- (id) writeHardwareRegisterCmd:(unsigned long)regAddress value:(unsigned long) aValue;
-- (id) readHardwareRegisterCmd:(unsigned long)regAddress;
-- (unsigned long) readHwVersion;
-- (unsigned long long) readDeadTime;
-- (unsigned long long) readVetoTime;
-- (unsigned long long) readRunTime;
-- (unsigned long) readSecondsCounter;
-- (unsigned long) readSubSecondsCounter;
-- (unsigned long) getSeconds;
+- (void)		  writeReg:(short)index value:(uint32_t)aValue;
+- (void)		  rawWriteReg:(uint32_t) address  value:(uint32_t)aValue;//TODO: FOR TESTING AND DEBUGGING ONLY -tb-
+- (uint32_t) rawReadReg:(uint32_t) address; //TODO: FOR TESTING AND DEBUGGING ONLY -tb-
+- (uint32_t) readReg:(short) index;
+- (id) writeHardwareRegisterCmd:(uint32_t)regAddress value:(uint32_t) aValue;
+- (id) readHardwareRegisterCmd:(uint32_t)regAddress;
+- (uint32_t) readHwVersion;
+- (uint64_t) readDeadTime;
+- (uint64_t) readVetoTime;
+- (uint64_t) readRunTime;
+- (uint32_t) readSecondsCounter;
+- (uint32_t) readSubSecondsCounter;
+- (uint32_t) getSeconds;
 
 - (void)		reset;
 - (void)		hw_config;
@@ -443,10 +443,10 @@ static IpeRegisterNamesStruct regSLTV4[kSltV4NumRegs] = {
 //- (void)		swTrigger;
 - (void)		initBoard;
 - (void)		autoCalibrate;
-- (long)		getSBCCodeVersion;
-- (long)		getFdhwlibVersion;
-- (long)		getSltPciDriverVersion;
-- (long)		getSltkGetIsLinkedWithPCIDMALib;
+- (int32_t)		getSBCCodeVersion;
+- (int32_t)		getFdhwlibVersion;
+- (int32_t)		getSltPciDriverVersion;
+- (int32_t)		getSltkGetIsLinkedWithPCIDMALib;
 - (void)		setHostTimeToFLTsAndSLT;
 
 #pragma mark •••Archival
@@ -454,10 +454,10 @@ static IpeRegisterNamesStruct regSLTV4[kSltV4NumRegs] = {
 - (void) encodeWithCoder:(NSCoder*)encoder;
 - (NSDictionary*) dataRecordDescription;
 
-- (unsigned long) eventDataId;
-- (void) setEventDataId: (unsigned long) DataId;
-- (unsigned long) multiplicityId;
-- (void) setMultiplicityId: (unsigned long) DataId;
+- (uint32_t) eventDataId;
+- (void) setEventDataId: (uint32_t) DataId;
+- (uint32_t) multiplicityId;
+- (void) setMultiplicityId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherCard;
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary;
@@ -474,12 +474,12 @@ static IpeRegisterNamesStruct regSLTV4[kSltV4NumRegs] = {
 - (void) dumpSltSecondCounter:(NSString*)text;
 - (void) shipSltSecondCounter:(unsigned char)aType;
 - (void) shipSltRunCounter:(unsigned char)aType;
-- (void) shipSltEvent:(unsigned char)aCounterType withType:(unsigned char)aType eventCt:(unsigned long)c high:(unsigned long)h low:(unsigned long)l;
+- (void) shipSltEvent:(unsigned char)aCounterType withType:(unsigned char)aType eventCt:(uint32_t)c high:(uint32_t)h low:(uint32_t)l;
 
 - (ORReadOutList*)	readOutGroup;
 - (void)			setReadOutGroup:(ORReadOutList*)newReadOutGroup;
 - (NSMutableArray*) children;
-- (unsigned long) calcProjection:(unsigned long *)pMult  xyProj:(unsigned long *)xyProj  tyProj:(unsigned long *)tyProj;
+- (uint32_t) calcProjection:(uint32_t *)pMult  xyProj:(uint32_t *)xyProj  tyProj:(uint32_t *)tyProj;
 
 #pragma mark •••SBC_Linking Protocol
 - (NSString*) driverScriptName;

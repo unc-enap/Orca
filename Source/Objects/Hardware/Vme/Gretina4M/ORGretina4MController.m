@@ -1500,7 +1500,7 @@
 }
 - (IBAction) trapThresholdAction:(id)sender
 {
-    long value = [sender intValue];
+    int32_t value = [sender intValue];
     short channel = [[sender selectedCell] tag];
     
 	if(value != [model trapThreshold:channel]){
@@ -1525,7 +1525,7 @@
 - (IBAction) readRegisterAction:(id)sender
 {
 	[self endEditing];
-	unsigned long aValue = 0;
+	uint32_t aValue = 0;
 	unsigned int index = [model registerIndex];
 	if (index < kNumberOfGretina4MRegisters) {
 		aValue = [model readRegister:index];
@@ -1542,7 +1542,7 @@
 - (IBAction) writeRegisterAction:(id)sender
 {
 	[self endEditing];
-	unsigned long aValue = [model registerWriteValue];
+	uint32_t aValue = [model registerWriteValue];
 	unsigned int index = [model registerIndex];
 	if (index < kNumberOfGretina4MRegisters) {
 		[model writeRegister:index withValue:aValue];
@@ -1571,8 +1571,8 @@
 - (IBAction) writeSPIAction:(id)sender
 {
 	[self endEditing];
-	unsigned long aValue = [model spiWriteValue];
-	unsigned long readback = [model writeAuxIOSPI:aValue];
+	uint32_t aValue = [model spiWriteValue];
+	uint32_t readback = [model writeAuxIOSPI:aValue];
 	NSLog(@"Gretina4M(%d,%d) writeSPI(%u) readback: (0x%0x)\n",[model crateNumber],[model slot], aValue, readback);
 }
 
@@ -1726,7 +1726,7 @@
         NSLog(@"Gretina BoardID (slot %d): [0x%x] ID = 0x%x\n",[model slot],[model baseAddress],[model readBoardID]);
         int chan;
         for(chan = 0;chan<kNumGretina4MChannels;chan++){
-            unsigned long value = [model readControlReg:chan];
+            uint32_t value = [model readControlReg:chan];
 			
 			int pol=(value>>10)&0x3;
 			NSString* polString = @"  ?  ";

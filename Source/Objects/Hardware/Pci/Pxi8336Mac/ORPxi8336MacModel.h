@@ -35,8 +35,8 @@
     @private
         NSLock*			theHWLock;
 		NSString*       deviceName;
-        unsigned long 	rwAddress;
-        unsigned long 	writeValue;
+        uint32_t 	rwAddress;
+        uint32_t 	writeValue;
         unsigned int	readWriteType;
                 
         ORAlarm*		noHardwareAlarm;
@@ -65,10 +65,10 @@
 - (void) setRangeToDo:(unsigned short)aRange;
 - (BOOL) doRange;
 - (void) setDoRange:(BOOL)aDoRange;
-- (unsigned long) rwAddress;
-- (void) setRwAddress:(unsigned long)aValue;
-- (unsigned long) writeValue;
-- (void) setWriteValue:(unsigned long)aValue;
+- (uint32_t) rwAddress;
+- (void) setRwAddress:(uint32_t)aValue;
+- (uint32_t) writeValue;
+- (void) setWriteValue:(uint32_t)aValue;
 - (unsigned int) readWriteType;
 - (void) setReadWriteType:(unsigned int)aValue;
 
@@ -78,35 +78,35 @@
 - (void) resetContrl;
 - (void) pxiSysReset:(unsigned char *)status;
 
-- (void) readLongBlock:(unsigned long *) readAddress
-             atAddress:(unsigned long) pxiAddress
-             numToRead:(unsigned long) numberLongs;
+- (void) readLongBlock:(uint32_t *) readAddress
+             atAddress:(uint32_t) pxiAddress
+             numToRead:(uint32_t) numberLongs;
 
 //a special read for reading fifos that reads one address multiple times
-- (void) readLong:(unsigned long *) readAddress
-		atAddress:(unsigned long) pxiAddress
-	  timesToRead:(unsigned long) numberLongs;
+- (void) readLong:(uint32_t *) readAddress
+		atAddress:(uint32_t) pxiAddress
+	  timesToRead:(uint32_t) numberLongs;
 
 
-- (void) writeLongBlock:(unsigned long *) writeAddress
-              atAddress:(unsigned long) pxiAddress
-             numToWrite:(unsigned long) numberLongs;
+- (void) writeLongBlock:(uint32_t *) writeAddress
+              atAddress:(uint32_t) pxiAddress
+             numToWrite:(uint32_t) numberLongs;
 
 - (void) readByteBlock:(unsigned char *) readAddress
-             atAddress:(unsigned long) pxiAddress
-             numToRead:(unsigned long) numberBytes;
+             atAddress:(uint32_t) pxiAddress
+             numToRead:(uint32_t) numberBytes;
 
 - (void) writeByteBlock:(unsigned char *) writeAddress
-              atAddress:(unsigned long) pxiAddress
-             numToWrite:(unsigned long) numberBytes;
+              atAddress:(uint32_t) pxiAddress
+             numToWrite:(uint32_t) numberBytes;
 
 -  (void) readWordBlock:(unsigned short *) readAddress
-              atAddress:(unsigned long) pxiAddress
-              numToRead:(unsigned long) numberWords;
+              atAddress:(uint32_t) pxiAddress
+              numToRead:(uint32_t) numberWords;
 
 -  (void) writeWordBlock:(unsigned short *) writeAddress
-               atAddress:(unsigned long) pxiAddress
-              numToWrite:(unsigned long) numberWords;
+               atAddress:(uint32_t) pxiAddress
+              numToWrite:(uint32_t) numberWords;
 
 #pragma mark •••Archival
 - (id)initWithCoder:(NSCoder*)decoder;

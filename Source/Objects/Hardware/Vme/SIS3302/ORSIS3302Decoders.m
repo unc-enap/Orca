@@ -89,10 +89,10 @@
     }
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr	= (unsigned long*)someData;
-	unsigned long length= ExtractLength(ptr[0]);
+    uint32_t* ptr	= (uint32_t*)someData;
+	uint32_t length= ExtractLength(ptr[0]);
 	int crate			= ShiftAndExtract(ptr[1],21,0xf);
 	int card			= ShiftAndExtract(ptr[1],16,0x1f);
 	int channel			= ShiftAndExtract(ptr[1],8,0xff);
@@ -106,20 +106,20 @@
 	//int energyLength1	 = ptr[3];
 	//int waveformLength2	 = ptr[6];
 
-	long sisHeaderLength;
+	int32_t sisHeaderLength;
 	if(wrapMode)sisHeaderLength = 4;
 	else		sisHeaderLength = 2;
 	if(![self cacheSetUp]){
 		[self cacheCardLevelObject:kFilterLengthKey fromHeader:[aDecoder fileHeader]];
 	}	
-	unsigned long lastWord = ptr[length-1];
+	uint32_t lastWord = ptr[length-1];
 	//if(channel == 0 && !dumpedOneNormal)[self dumpRecord:ptr];
 
 	if(lastWord == 0xdeadbeef){
 		//if(!dumpedOneNormal){
 		//	[self dumpRecord:someData];
 		//}
-		unsigned long energy = ptr[length - 4]; 
+		uint32_t energy = ptr[length - 4]; 
 
         NSArray* theFilterLengths = nil;
         @synchronized (self){
@@ -132,20 +132,20 @@
         
 		[aDataSet histogram:energy numBins:65536 sender:self  withKeys:@"SIS3302", @"Energy", crateKey,cardKey,channelKey,nil];
 		
-		unsigned long waveformLength = ptr[2]; //each long word is two 16 bit adc samples
-		unsigned long energyLength   = ptr[3];  
+		uint32_t waveformLength = ptr[2]; //each int32_t word is two 16 bit adc samples
+		uint32_t energyLength   = ptr[3];  
 	
 		if(waveformLength && (waveformLength == (length - 4 - sisHeaderLength - energyLength - 4))){
 			NSData* recordAsData = nil;
 			if(wrapMode){
-				unsigned long nof_wrap_samples = ptr[6] ;
+				uint32_t nof_wrap_samples = ptr[6] ;
 				if(nof_wrap_samples <= waveformLength*2){
-					unsigned long wrap_start_index = ptr[7] ;
-					recordAsData = [NSMutableData dataWithLength:waveformLength*sizeof(long)];
+					uint32_t wrap_start_index = ptr[7] ;
+					recordAsData = [NSMutableData dataWithLength:waveformLength*sizeof(int32_t)];
 					unsigned short* dataPtr			  = (unsigned short*)[recordAsData bytes];
 					unsigned short* ushort_buffer_ptr = (unsigned short*) &ptr[8];
 					int i;
-					unsigned long j	=	wrap_start_index; 
+					uint32_t j	=	wrap_start_index; 
 					for (i=0;i<nof_wrap_samples;i++) { 
 						if(j >= nof_wrap_samples ) j=0;
 						dataPtr[i] = ushort_buffer_ptr[j++];
@@ -154,7 +154,7 @@
 			}
 			else {
 				unsigned char* bPtr = (unsigned char*)&ptr[4 + sisHeaderLength]; //ORCA header + SIS header
-				recordAsData = [NSData dataWithBytes:bPtr length:waveformLength*sizeof(long)];
+				recordAsData = [NSData dataWithBytes:bPtr length:waveformLength*sizeof(int32_t)];
 			}
 			if(recordAsData)[aDataSet loadWaveform:recordAsData 
 							offset: 0 //bytes!
@@ -165,7 +165,7 @@
 		
 		if(energyLength && (energyLength == (length - 4 - sisHeaderLength - waveformLength - 4))){
 			unsigned char* bPtr = (unsigned char*)&ptr[4 + sisHeaderLength + waveformLength];//ORCA header + SIS header + possible waveform
-			NSData* recordAsData = [NSData dataWithBytes:bPtr length:energyLength*sizeof(long)];
+			NSData* recordAsData = [NSData dataWithBytes:bPtr length:energyLength*sizeof(int32_t)];
 			[aDataSet loadWaveform:recordAsData 
 							offset: 0
 						  unitSize: 4 //unit size in bytes!
@@ -218,7 +218,7 @@
     return length; //must return number of longs
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 	
 	//TODO ---- 
@@ -243,18 +243,18 @@
 {
 	dumpedOneNormal = YES;
 	
-    unsigned long* ptr	= (unsigned long*)someData;
-	unsigned long length= ExtractLength(ptr[0]);
+    uint32_t* ptr	= (uint32_t*)someData;
+	uint32_t length= ExtractLength(ptr[0]);
 	int crate			= ShiftAndExtract(ptr[1],21,0xf);
 	int card			= ShiftAndExtract(ptr[1],16,0x1f);
 	int channel			= ShiftAndExtract(ptr[1],8,0xff);
 	BOOL wrapMode		= ShiftAndExtract(ptr[1],0,0x1);
 	
 	
-	long waveformLength = ptr[2]; //each long word is two 16 bit adc samples
-	long energyLength   = ptr[3];  
+	int32_t waveformLength = ptr[2]; //each int32_t word is two 16 bit adc samples
+	int32_t energyLength   = ptr[3];  
 	
-	long sisHeaderLength;
+	int32_t sisHeaderLength;
 	if(wrapMode)sisHeaderLength = 4;
 	else		sisHeaderLength = 2;
 	NSFont* afont = [NSFont fontWithName:@"Monaco" size:12];
@@ -340,10 +340,10 @@
 // ---- followed by the mcadata record as read 
 //------------------------------------------------------------------
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length = ExtractLength(ptr[0]);
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length = ExtractLength(ptr[0]);
 	int crate	= ShiftAndExtract(ptr[1],21,0xf);
 	int card	= ShiftAndExtract(ptr[1],16,0x1f);
 	int channel = ShiftAndExtract(ptr[1],8,0xff);
@@ -353,14 +353,14 @@
 	NSString* channelKey	= [self getChannelKey: channel];
 	
 	
-	[aDataSet loadSpectrum:[NSMutableData dataWithBytes:&ptr[2] length:(length-2)*sizeof(long)] 
+	[aDataSet loadSpectrum:[NSMutableData dataWithBytes:&ptr[2] length:(length-2)*sizeof(int32_t)] 
 					sender:self  
 				  withKeys:@"SIS3302",@"MCA",crateKey,cardKey,channelKey,nil];
 	
     return length; //must return number of longs
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 	
 	//TODO ---- 
@@ -409,15 +409,15 @@
 }
 
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length = ExtractLength(ptr[0]);
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length = ExtractLength(ptr[0]);
 	int crate	= ShiftAndExtract(ptr[1],21,0xf);
 	int card	= ShiftAndExtract(ptr[1],16,0x1f);
 	int channel = ShiftAndExtract(ptr[1],8,0xff);
-    //unsigned long wfTag = ptr[2];
-    unsigned long totalWFLength = ptr[3];
+    //uint32_t wfTag = ptr[2];
+    uint32_t totalWFLength = ptr[3];
 	
 	NSString* crateKey		= [self getCrateKey: crate];
 	NSString* cardKey		= [self getCardKey: card];
@@ -426,7 +426,7 @@
     
     if(length > 4){
         unsigned char* bPtr = (unsigned char*)&ptr[4];
-        NSMutableData* recordAsData = [NSMutableData dataWithBytes:bPtr length:(length-4)*sizeof(long)];
+        NSMutableData* recordAsData = [NSMutableData dataWithBytes:bPtr length:(length-4)*sizeof(int32_t)];
         if ( length - 4 == totalWFLength ) {
             [aDataSet loadWaveform:recordAsData 
                             offset: 0
@@ -457,7 +457,7 @@
     return length; //must return number of longs
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 	
 	//TODO ---- 
@@ -536,10 +536,10 @@
     [self setObject:theValues forNestedKey:crateKey,cardKey,kFilterLengthKey,nil];
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length = ExtractLength(ptr[0]);
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length = ExtractLength(ptr[0]);
 	int crate	= ShiftAndExtract(ptr[1],21,0xf);
 	int card	= ShiftAndExtract(ptr[1],16,0x1f);
 	int channel = ShiftAndExtract(ptr[1],8,0xff);
@@ -552,10 +552,10 @@
 	NSString* cardKey		= [self getCardKey: card];
 	NSString* channelKey	= [self getChannelKey: channel];
 
-	unsigned long lastWord = ptr[length-1];
+	uint32_t lastWord = ptr[length-1];
 	if(lastWord == 0xdeadbeef){
 		//histogram the energy.... prescale by dividing by 4 so we can have a histogram of reseanable length.... have to do something better at some point
-		unsigned long energy = ptr[length - 4]; 
+		uint32_t energy = ptr[length - 4]; 
 		//int page = energy/kPageLength;
 		//int startPage = page*kPageLength;
 		//int endPage = (page+1)*kPageLength;
@@ -568,12 +568,12 @@
 			[aDataSet histogram:energy numBins:65536 sender:self  withKeys:@"SIS3302", @"Energy", crateKey,cardKey,channelKey,nil];
 		}
 		
-		long waveformLength = ptr[2]; //each long word is two 16 bit adc samples
-		long energyLength   = ptr[3]; //each energy value is a sum of two 
+		int32_t waveformLength = ptr[2]; //each int32_t word is two 16 bit adc samples
+		int32_t energyLength   = ptr[3]; //each energy value is a sum of two 
 		
 		if(waveformLength){
 			unsigned char* bPtr = (unsigned char*)&ptr[4 + 2]; //ORCA header + SIS header
-			NSData* recordAsData = [NSData dataWithBytes:bPtr length:waveformLength*sizeof(long)];
+			NSData* recordAsData = [NSData dataWithBytes:bPtr length:waveformLength*sizeof(int32_t)];
 			[aDataSet loadWaveform:recordAsData 
 							offset: 0 //bytes!
 						  unitSize: 2 //unit size in bytes!
@@ -583,7 +583,7 @@
 
 		if(energyLength){
 			unsigned char* bPtr = (unsigned char*)&ptr[4 + 2 + waveformLength];//ORCA header + SIS header + possible waveform
-			NSData* recordAsData = [NSData dataWithBytes:bPtr length:energyLength*sizeof(long)];
+			NSData* recordAsData = [NSData dataWithBytes:bPtr length:energyLength*sizeof(int32_t)];
 			[aDataSet loadWaveform:recordAsData 
 							offset: 0
 						  unitSize: 4 //unit size in bytes!
@@ -615,7 +615,7 @@
     return length; //must return number of longs
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 	
 	//TODO ---- 
@@ -654,10 +654,10 @@
 //								^^^^ ^^^--spare
 // ---- followed by the mcadata record as read 
 //------------------------------------------------------------------
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length = ExtractLength(ptr[0]);
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length = ExtractLength(ptr[0]);
 	int crate	= ShiftAndExtract(ptr[1],21,0xf);
 	int card	= ShiftAndExtract(ptr[1],16,0x1f);
 	int channel = ShiftAndExtract(ptr[1],8,0xff);
@@ -667,14 +667,14 @@
 	NSString* channelKey	= [self getChannelKey: channel];
 
 	
-	[aDataSet loadSpectrum:[NSMutableData dataWithBytes:&ptr[2] length:(length-2)*sizeof(long)] 
+	[aDataSet loadSpectrum:[NSMutableData dataWithBytes:&ptr[2] length:(length-2)*sizeof(int32_t)] 
 				   sender:self  
 				 withKeys:@"SIS3302",@"MCA",crateKey,cardKey,channelKey,nil];
 	
     return length; //must return number of longs
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 	
 	//TODO ---- 
@@ -727,10 +727,10 @@
     return self;
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length = ExtractLength(ptr[0]);
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length = ExtractLength(ptr[0]);
 	int crate	 = ShiftAndExtract(ptr[1],21,0xf);
 	int card	 = ShiftAndExtract(ptr[1],16,0x1f);
 	int channel  = ShiftAndExtract(ptr[1],8,0xff);
@@ -741,17 +741,17 @@
 	if(dataType == 0){
 		if(channel>=0 && channel<8){
 			totalLost[channel] += ptr[2];
-			NSString* numLostRecords = [NSString stringWithFormat:@"%lu",totalLost[channel]];
+			NSString* numLostRecords = [NSString stringWithFormat:@"%u",totalLost[channel]];
 			[aDataSet loadGenericData:numLostRecords sender:self withKeys:@"SIS3302", @"Lost Records", crateKey,cardKey,channelKey,nil];
 		}
 	}
 	else if(dataType == 1){
-		[aDataSet loadGenericData:[NSString stringWithFormat:@"0x%02lx",ptr[2]>>16] sender:self withKeys:@"SIS3302", @"Reset Event", crateKey,cardKey,nil];
+		[aDataSet loadGenericData:[NSString stringWithFormat:@"0x%02x",ptr[2]>>16] sender:self withKeys:@"SIS3302", @"Reset Event", crateKey,cardKey,nil];
 	}
     return length; //must return number of longs
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 	int crate	 = ShiftAndExtract(ptr[1],21,0xf);
 	int card	 = ShiftAndExtract(ptr[1],16,0x1f);
@@ -765,10 +765,10 @@
     NSString* cardString    = [NSString stringWithFormat:@"Card  = %d\n",card];    
     NSString* channelString = [NSString stringWithFormat:@"Card  = %d\n",channel];  
 	if(dataType == 0){
-		data = [NSString stringWithFormat:@"Num Records Lost = %lu\n",ptr[2]];
+		data = [NSString stringWithFormat:@"Num Records Lost = %u\n",ptr[2]];
 	}
 	else if(dataType == 1){
-		data = [NSString stringWithFormat:@"Reset Event Mask = 0x%02lx\n",ptr[2]];
+		data = [NSString stringWithFormat:@"Reset Event Mask = 0x%02x\n",ptr[2]];
 	}
 
     return [NSString stringWithFormat:@"%@%@%@%@%@",title,crateString,cardString,channelString,data];               

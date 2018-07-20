@@ -30,10 +30,10 @@
 #import "ORSelectorSequence.h"
 
 static const struct {
-	unsigned long Register;	//XL2
-	unsigned long Memory;	//XL2
+	uint32_t Register;	//XL2
+	uint32_t Memory;	//XL2
 	NSString* IPAddress;	//XL3
-	unsigned long Port;	//XL3
+	uint32_t Port;	//XL3
 } kSnoCrateBaseAddress[]={
 {0x00002800, 	0x01400000,	@"10.0.0.1",	44701},	//0
 {0x00003000,	0x01800000,	@"10.0.0.2",	44702},	//1
@@ -154,7 +154,7 @@ NSString* ORSNOCrateSlotChanged = @"ORSNOCrateSlotChanged";
 }
 
 #pragma mark •••Accessors
-- (unsigned long) memoryBaseAddress
+- (uint32_t) memoryBaseAddress
 {
 	int index =  [self crateNumber];
 	if(index>=0 && index<=kMaxSNOCrates) return kSnoCrateBaseAddress[index].Memory;
@@ -164,7 +164,7 @@ NSString* ORSNOCrateSlotChanged = @"ORSNOCrateSlotChanged";
 	}
 }
 
-- (unsigned long) registerBaseAddress
+- (uint32_t) registerBaseAddress
 {
 	int index =  [self crateNumber];
 	if(index>=0 && index<=kMaxSNOCrates) return kSnoCrateBaseAddress[index].Register;
@@ -184,7 +184,7 @@ NSString* ORSNOCrateSlotChanged = @"ORSNOCrateSlotChanged";
 	}
 }
 
-- (unsigned long) portNumber
+- (uint32_t) portNumber
 {
 	int index =  [self crateNumber];
 	if(index>=0 && index<=kMaxSNOCrates) return kSnoCrateBaseAddress[index].Port;

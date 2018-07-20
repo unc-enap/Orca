@@ -46,24 +46,24 @@
     [super dealloc];
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr   = (unsigned long*)someData;
-    unsigned long length = ExtractLength(ptr[0]);
+    uint32_t* ptr   = (uint32_t*)someData;
+    uint32_t length = ExtractLength(ptr[0]);
     
     int unitNumber       = (ptr[1]>>16 & 0xf);
     BOOL packed          = (ptr[1]>>0  & 0x1);
     NSString* unitKey    = [NSString stringWithFormat:@"Unit %2d",unitNumber];
     
-    unsigned long eventLength = length-2;
-    unsigned long index = 2;
+    uint32_t eventLength = length-2;
+    uint32_t index = 2;
     while (eventLength > 4) { //make sure at least the CAEN header is there
         if (ptr[index] == 0 || ptr[index] >> 28 != 0xa) break; //trailing zeros or
-        unsigned long eventSize = ptr[index] & 0x0fffffff;
+        uint32_t eventSize = ptr[index] & 0x0fffffff;
         if (eventSize > eventLength) return length;
         index++;
         int  zeroSuppression      = (ptr[index]>>24  & 0x1);
-        unsigned long channelMask = ptr[index] & 0xf;
+        uint32_t channelMask = ptr[index] & 0xf;
         index += 3;
         
         short numChans = 0;
@@ -104,15 +104,15 @@
                 }
                 else {
                     //not packed, but using zero length encoding
-                    unsigned long size   = ptr[index];
+                    uint32_t size   = ptr[index];
                     tmpData= [[[NSMutableData alloc] initWithLength:2*size*sizeof(unsigned short)] autorelease];
                     unsigned short* dPtr = (unsigned short*)[tmpData bytes];
                     int controlWordCount = 0;
                     while(1){
                         index++; //point to control word
-                        unsigned long controlWord = ptr[index];
+                        uint32_t controlWord = ptr[index];
                         BOOL good = (controlWord >> 31);
-                        unsigned long numStoredSkippedWords = controlWord&0xfffff;
+                        uint32_t numStoredSkippedWords = controlWord&0xfffff;
                         int k;
 
                         if(good || controlWordCount>62){
@@ -149,7 +149,7 @@
                    //packed, no zero suppression
                     int k;
                     for(k=0;k<eventSize;k++){
-                        unsigned long *d = &ptr[index];
+                        uint32_t *d = &ptr[index];
                         
                         dPtr[wordCount++] = (d[0]     & 0xFC0) | (d[0] & 0x7F);
                         if(wordCount>=2*eventSize)break;
@@ -170,21 +170,21 @@
                     }
                 }
                 else {
-                    unsigned long size = ptr[index];
+                    uint32_t size = ptr[index];
                     tmpData= [[[NSMutableData alloc] initWithLength:2*size*sizeof(unsigned short)] autorelease];
                     unsigned short* dPtr = (unsigned short*)[tmpData bytes];
                     int controlWordCount = 0;
                     while(1){
                         index++; //point to control word
-                        unsigned long controlWord = ptr[index];
+                        uint32_t controlWord = ptr[index];
                         BOOL good = (controlWord >> 31);
-                        unsigned long numStoredSkippedWords = controlWord&0xfffff;
+                        uint32_t numStoredSkippedWords = controlWord&0xfffff;
                         int k;
 
                         if(good || controlWordCount>62){
                             index++; //point to data
                             for(k=0;k<numStoredSkippedWords;k++){
-                                unsigned long *d = &ptr[index];
+                                uint32_t *d = &ptr[index];
                                 
                                 dPtr[wordCount++] = (d[0]     & 0xFC0) | (d[0] & 0x7F);
                                 if(wordCount>=2*size)break;
@@ -251,19 +251,19 @@
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
-    unsigned long length = ExtractLength(ptr[0]);
+    uint32_t length = ExtractLength(ptr[0]);
     NSMutableString* dsc = [NSMutableString string];
     
     if(length > 6) { //make sure we have at least the CAEN header
-        NSString* recordLen           = [NSString stringWithFormat:@"Record len = %lu\n",         length];
-        NSString* eventSize           = [NSString stringWithFormat:@"Event size = %lu\n",         ptr[2] & 0x0fffffff];
+        NSString* recordLen           = [NSString stringWithFormat:@"Record len = %u\n",         length];
+        NSString* eventSize           = [NSString stringWithFormat:@"Event size = %u\n",         ptr[2] & 0x0fffffff];
         NSString* packed              = [NSString stringWithFormat:@"Packed: %@\n",              (ptr[2] & 0x1)?@"YES":@"NO"];
         NSString* isZeroLengthEncoded = [NSString stringWithFormat:@"Zero length enc: %@\n",    ((ptr[3] >> 24) & 0x1)?@"YES":@"NO"];
-        NSString* sChannelMask        = [NSString stringWithFormat:@"Channel mask = 0x%02lx\n",   ptr[3] & 0xf];
-        NSString* eventCounter        = [NSString stringWithFormat:@"Event counter = 0x%06lx\n",  ptr[4] & 0xffffff];
-        NSString* timeTag             = [NSString stringWithFormat:@"Time tag = 0x%08lx\n\n",     ptr[5]];
+        NSString* sChannelMask        = [NSString stringWithFormat:@"Channel mask = 0x%02x\n",   ptr[3] & 0xf];
+        NSString* eventCounter        = [NSString stringWithFormat:@"Event counter = 0x%06x\n",  ptr[4] & 0xffffff];
+        NSString* timeTag             = [NSString stringWithFormat:@"Time tag = 0x%08x\n\n",     ptr[5]];
         
         [dsc appendFormat:@"%@%@%@%@%@%@%@", recordLen,eventSize, packed, isZeroLengthEncoded, sChannelMask, eventCounter, timeTag];
     }

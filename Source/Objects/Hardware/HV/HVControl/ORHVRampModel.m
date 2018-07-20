@@ -359,7 +359,7 @@ static NSString* ORHVRampConnector				= @"HV Ramp Connector";
                 }
             }
             
-            unsigned long aMask = [[self interfaceObj] readRelayMask];
+            uint32_t aMask = [[self interfaceObj] readRelayMask];
             
 			NSString* currentRecord = @"";
 			if(saveCurrentToFile){
@@ -763,7 +763,7 @@ static NSString *ORHVDirName 		= @"ORHVDirName";
 
 - (NSString*) stateFileName
 {
-    return [NSString stringWithFormat:@"HVState%lu",[self uniqueIdNumber]];
+    return [NSString stringWithFormat:@"HVState%u",[self uniqueIdNumber]];
 }
 
 #pragma mark ¥¥¥Safety Check

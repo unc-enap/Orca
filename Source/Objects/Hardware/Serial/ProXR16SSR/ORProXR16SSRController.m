@@ -99,7 +99,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"ProXR16SSR (Unit %lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"ProXR16SSR (Unit %u)",[model uniqueIdNumber]]];
 }
 
 - (void) updateWindow

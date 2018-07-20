@@ -798,7 +798,7 @@
 - (IBAction) readTimeAction: (id) sender
 {
 	NS_DURING
-		unsigned long timeLoaded = [model readTime];
+		uint32_t timeLoaded = [model readTime];
 		NSLog(@"FLT %d time:%d = %@\n",[model stationNumber],timeLoaded,[NSDate dateWithTimeIntervalSinceReferenceDate:(NSTimeInterval)timeLoaded]);
 	NS_HANDLER
 		NSLog(@"Exception during FLT read time\n");
@@ -862,7 +862,7 @@
 
 - (IBAction) tModeAction: (id) sender
 {
-	unsigned long pattern = 0;
+	uint32_t pattern = 0;
 	int i;
 	for(i=0;i<2;i++){
 		BOOL state = [[tModeMatrix cellWithTag:i] state];
@@ -904,7 +904,7 @@
 	return [[model totalRate] valueAtIndex:count-x-1];
 }
 
-- (unsigned long)  	secondsPerUnit:(id) aPlotter
+- (uint32_t)  	secondsPerUnit:(id) aPlotter
 {
 	return [[model totalRate] sampleTime];
 }

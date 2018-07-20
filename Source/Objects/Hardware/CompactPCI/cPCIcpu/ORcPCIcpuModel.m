@@ -145,9 +145,9 @@ NSString* ORcPCIcpuLock							= @"ORcPCIcpuLock";
 	return [[self sbcLocalCodePath] lastPathComponent];
 }
 
-- (long) getSBCCodeVersion
+- (int32_t) getSBCCodeVersion
 {
-	long theVersion = 0;
+	int32_t theVersion = 0;
 	if(![sbcLink isConnected]){
 		[NSException raise:@"SBC Not Connected" format:@"Socket not connected."];
 	}

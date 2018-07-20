@@ -115,20 +115,20 @@ NSString* ORMks660BLock = @"ORMks660BLock";
 {
     if([[ORGlobal sharedGlobal] runInProgress]){
 		
-		unsigned long data[4];
+		uint32_t data[4];
 		data[0] = dataId | 4;
 		data[1] = (([self decimalPtPosition]&0xf)<<16) | ([self uniqueIdNumber]&0xfff);
 
 		union {
 			float asFloat;
-			unsigned long asLong;
+			uint32_t asLong;
 		}theData;
 		
 		theData.asFloat = pressure;
 		data[2] = theData.asLong;			
 		data[3] = timeMeasured;
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-															object:[NSData dataWithBytes:data length:sizeof(long)*4]];
+															object:[NSData dataWithBytes:data length:sizeof(int32_t)*4]];
 	}
 }
 
@@ -316,7 +316,7 @@ NSString* ORMks660BLock = @"ORMks660BLock";
 	}
 }
 
-- (unsigned long) timeMeasured
+- (uint32_t) timeMeasured
 {
 	return timeMeasured;
 }
@@ -527,8 +527,8 @@ NSString* ORMks660BLock = @"ORMks660BLock";
 
 
 #pragma mark •••Data Records
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -620,7 +620,7 @@ NSString* ORMks660BLock = @"ORMks660BLock";
 {
 	NSString* s;
  	@synchronized(self){
-		s= [NSString stringWithFormat:@"MKS660,%lu",[self uniqueIdNumber]];
+		s= [NSString stringWithFormat:@"MKS660,%u",[self uniqueIdNumber]];
 	}
 	return s;
 }

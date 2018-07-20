@@ -27,10 +27,10 @@
 @interface ORCC4189Model : ORSerialPortModel <ORAdcProcessing>
 {
     @private
-        unsigned long	dataId;
+        uint32_t	dataId;
 		float		    temperature;
 		float		    humidity;
-		unsigned long	timeMeasured;
+		uint32_t	timeMeasured;
         NSMutableString*  buffer;
 		BOOL			shipValues;
 		ORTimeRate*		timeRates[2];
@@ -39,7 +39,7 @@
 		double			lowLimit1;
 		double			highLimit0;
 		double			highLimit1;
-        unsigned long	lastTimePosted;
+        uint32_t	lastTimePosted;
 }
 
 #pragma mark ***Initialization
@@ -62,7 +62,7 @@
 - (BOOL) shipValues;
 - (void) setShipValues:(BOOL)aFlag;
 - (void) openPort:(BOOL)state;
-- (unsigned long) timeMeasured;
+- (uint32_t) timeMeasured;
 - (float) temperature;
 - (void) setTemperature:(float)aValue;
 - (float) humidity;
@@ -71,8 +71,8 @@
 #pragma mark ***Data Records
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (NSDictionary*) dataRecordDescription;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherCC4189;
 

@@ -29,7 +29,7 @@ bool ORCAEN419Readout::Readout(SBC_LAM_Data* lamData)
 						data[dataIndex++] = dataId | locationMask | 
                             ((chan & 0x0000000f) << 12) | (aValue & 0x0fff);
 					} 
-					else { //long form
+					else { //int32_t form
 						data[dataIndex++] = dataId | 2;
 						data[dataIndex++] = locationMask | 
                             ((chan & 0x0000000f) << 12) | (aValue & 0x0fff);

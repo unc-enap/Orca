@@ -85,7 +85,7 @@ static NSDictionary* xl3Ops;
 	if(aModel) {
         [[self window] setTitle: [NSString stringWithFormat:@"XL3 Crate %d",[model crateNumber]]];
         [connectionIPAddressField setStringValue:[[model guardian] iPAddress]];
-        [connectionIPPortField setStringValue:[NSString stringWithFormat:@"%lu", [[model guardian] portNumber]]];
+        [connectionIPPortField setStringValue:[NSString stringWithFormat:@"%u", [[model guardian] portNumber]]];
         [connectionCrateNumberField setStringValue:[NSString stringWithFormat:@"%d", [model crateNumber]]];
         [hvPowerSupplyMatrix selectCellAtRow:0 column:0];
         if ([model crateNumber] != 16) {
@@ -571,7 +571,7 @@ static NSDictionary* xl3Ops;
 
 - (void) compositeSlotMaskChanged:(NSNotification*)aNote
 { dispatch_async(dispatch_get_main_queue(), ^{
-	unsigned long mask = [model slotMask];
+	uint32_t mask = [model slotMask];
 	int i;
 	for(i=0; i<16; i++){
 		[[compositeSlotMaskMatrix cellWithTag:i] setIntegerValue:(mask & 1UL << i)];
@@ -757,8 +757,8 @@ static NSDictionary* xl3Ops;
 
 - (void) hvRelayMaskChanged:(NSNotification*)aNote
 { dispatch_async(dispatch_get_main_queue(), ^{
-    unsigned long long relayMask = [model relayMask];
-    unsigned long long relayViewMask = [model relayViewMask];
+    uint64_t relayMask = [model relayMask];
+    uint64_t relayViewMask = [model relayViewMask];
 
     [hvRelayMaskLowField setIntValue:relayViewMask & 0xffffffff];
     [hvRelayMaskHighField setIntValue:relayViewMask >> 32];
@@ -815,7 +815,7 @@ static NSDictionary* xl3Ops;
     
     [self updateStatusFields];
     [hvAOnStatusField setStringValue:[model hvASwitch]?@"ON":@"OFF"];
-    [hvAVoltageSetField setStringValue:[NSString stringWithFormat:@"%lu V",[model hvAVoltageDACSetValue]*3000/4096]];
+    [hvAVoltageSetField setStringValue:[NSString stringWithFormat:@"%u V",[model hvAVoltageDACSetValue]*3000/4096]];
     [hvAVoltageReadField setStringValue:[NSString stringWithFormat:@"%d V",(unsigned int)[model hvAVoltageReadValue]]];
     [hvACurrentReadField setStringValue:[NSString stringWithFormat:@"%3.1f mA",[model hvACurrentReadValue]]];
     
@@ -824,7 +824,7 @@ static NSDictionary* xl3Ops;
         [hvAStatusPanel setHidden:(![model hvEverUpdated] || ![model hvSwitchEverUpdated])];
         [hvBStatusPanel setHidden:(![model hvEverUpdated] || ![model hvSwitchEverUpdated])];
         [hvBOnStatusField setStringValue:[model hvBSwitch]?@"ON":@"OFF"];
-        [hvBVoltageSetField setStringValue:[NSString stringWithFormat:@"%lu V",[model hvBVoltageDACSetValue]*3000/4096]];
+        [hvBVoltageSetField setStringValue:[NSString stringWithFormat:@"%u V",[model hvBVoltageDACSetValue]*3000/4096]];
         [hvBVoltageReadField setStringValue:[NSString stringWithFormat:@"%d V",(unsigned int)[model hvBVoltageReadValue]]];
         [hvBCurrentReadField setStringValue:[NSString stringWithFormat:@"%3.1f mA",[model hvBCurrentReadValue]]];
     } else {
@@ -1195,7 +1195,7 @@ static NSDictionary* xl3Ops;
 - (IBAction) compositeSlotMaskAction:(id) sender 
 {
     [self endEditing];
-	unsigned long mask = 0;
+	uint32_t mask = 0;
 	int i;
 	for(i=0;i<16;i++){
 		if([[sender cellWithTag:i] intValue]){	
@@ -1208,7 +1208,7 @@ static NSDictionary* xl3Ops;
 - (IBAction) compositeSlotMaskFieldAction:(id) sender
 {
     [self endEditing];
-	unsigned long mask = [sender intValue];
+	uint32_t mask = [sender intValue];
 	if (mask > 0xFFFFUL) mask = 0xFFFF;
 	[model setSlotMask:mask];
 }
@@ -1257,7 +1257,7 @@ static NSDictionary* xl3Ops;
 - (IBAction) compositeXl3RWModeAction:(id)sender
 {
     [self endEditing];
-	unsigned long addressValue = [model xl3RWAddressValue];
+	uint32_t addressValue = [model xl3RWAddressValue];
 	addressValue = (addressValue & 0x0FFFFFFF) | [sender indexOfSelectedItem] << 28;
 	[model setXl3RWAddressValue:addressValue];
 }
@@ -1265,7 +1265,7 @@ static NSDictionary* xl3Ops;
 - (IBAction) compositeXl3RWSelectAction:(id)sender
 {
     [self endEditing];
-	unsigned long addressValue = [model xl3RWAddressValue];
+	uint32_t addressValue = [model xl3RWAddressValue];
 	addressValue = (addressValue & 0xF00FFFFF) | [[xl3RWSelects objectForKey:[[sender selectedItem] title]] intValue] << 20;
 	[model setXl3RWAddressValue:addressValue];
 }
@@ -1273,7 +1273,7 @@ static NSDictionary* xl3Ops;
 - (IBAction) compositeXl3RWRegisterAction:(id)sender
 {
     [[sender window] makeFirstResponder:tabView];
-	unsigned long addressValue = [model xl3RWAddressValue];
+	uint32_t addressValue = [model xl3RWAddressValue];
 	addressValue = (addressValue & 0xFFF00000) | [[xl3RWAddresses objectForKey:[[sender selectedItem] title]] intValue];
 	[model setXl3RWAddressValue:addressValue];
 }
@@ -1413,22 +1413,22 @@ static NSDictionary* xl3Ops;
 - (IBAction)hvRelayMaskHighAction:(id)sender
 {
     [[sender window] makeFirstResponder:tabView];
-    unsigned long long newRelayMask = [model relayViewMask] & 0xFFFFFFFFULL;
-    newRelayMask |= ((unsigned long long)[sender intValue]) << 32;
+    uint64_t newRelayMask = [model relayViewMask] & 0xFFFFFFFFULL;
+    newRelayMask |= ((uint64_t)[sender intValue]) << 32;
     [model setRelayViewMask:newRelayMask];
 }
 
 - (IBAction)hvRelayMaskLowAction:(id)sender
 {
     [[sender window] makeFirstResponder:tabView];
-    unsigned long long newRelayMask = [model relayViewMask] & (0xFFFFFFFFULL << 32);
+    uint64_t newRelayMask = [model relayViewMask] & (0xFFFFFFFFULL << 32);
     newRelayMask |= [sender intValue] & 0xFFFFFFFF;
     [model setRelayViewMask:newRelayMask];
 }
 
 - (IBAction)hvRelayMaskMatrixAction:(id)sender
 {
-    unsigned long long newRelayMask = 0ULL;
+    uint64_t newRelayMask = 0ULL;
     unsigned char slot;
     unsigned char pmtic;
     for (slot = 0; slot<16; slot++) {
@@ -1462,7 +1462,7 @@ static NSDictionary* xl3Ops;
     @try {
         [model readHVRelays:&relays isKnown:&known];
         if(known) {
-            NSLog(@"Relay mask = %llu\n", (unsigned long long) relays);
+            NSLog(@"Relay mask = %llu\n", (uint64_t) relays);
         } else {
             NSLog(@"Relays are unknown!\n");
         }
@@ -1540,7 +1540,7 @@ static NSDictionary* xl3Ops;
 
 - (IBAction)hvCMOSRateLimitAction:(id)sender
 {
-    unsigned long nextCMOSRateLimit = [sender intValue];
+    uint32_t nextCMOSRateLimit = [sender intValue];
     if (nextCMOSRateLimit > 200) {
         nextCMOSRateLimit = 200;
     }
@@ -1554,7 +1554,7 @@ static NSDictionary* xl3Ops;
 
 - (IBAction)hvCMOSRateIgnoreAction:(id)sender
 {
-    unsigned long nextCMOSRateIgnore = [sender intValue];
+    uint32_t nextCMOSRateIgnore = [sender intValue];
     if (nextCMOSRateIgnore > 20) {
         nextCMOSRateIgnore = 20;
     }
@@ -1583,7 +1583,7 @@ static NSDictionary* xl3Ops;
 - (IBAction)hvStepUpAction:(id)sender;
 {
     [[sender window] makeFirstResponder:tabView];
-    unsigned long aVoltageDACValue;
+    uint32_t aVoltageDACValue;
     if ([hvPowerSupplyMatrix selectedColumn] == 0) {
         aVoltageDACValue = [model hvANextStepValue];
         aVoltageDACValue += 50 * 4096/3000.;
@@ -1601,7 +1601,7 @@ static NSDictionary* xl3Ops;
 - (IBAction)hvStepDownAction:(id)sender
 {
     [[sender window] makeFirstResponder:tabView];
-    unsigned long aVoltageDACValue;
+    uint32_t aVoltageDACValue;
     if ([hvPowerSupplyMatrix selectedColumn] == 0) {
         aVoltageDACValue = [model hvANextStepValue];
         if (aVoltageDACValue < 50 * 4096/3000.) aVoltageDACValue = 0;

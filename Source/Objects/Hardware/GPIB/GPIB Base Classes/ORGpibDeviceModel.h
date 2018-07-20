@@ -63,20 +63,20 @@
 - (void)		clearStatusReg;
 - (void) 		connect;
 - (void)		getID;
-- (long)		readFromGPIBDevice: (char*) aData maxLength: (long) aMaxLength;
+- (int32_t)		readFromGPIBDevice: (char*) aData maxLength: (int32_t) aMaxLength;
 - (void)		writeToGPIBDevice: (NSString*) aCommand;
-- (long)		writeReadGPIBDevice: (NSString*) aCommand 
+- (int32_t)		writeReadGPIBDevice: (NSString*) aCommand 
                                data: (char*) aData
-                          maxLength: (long) aMaxLength;
+                          maxLength: (int32_t) aMaxLength;
 - (void) 		enableEOT: (BOOL) state;
                        
 #pragma mark ¥¥¥Support Functions
 - (bool)		cacheTheController;
 - (id)			getGpibController;
-- (double) 		convertStringToDouble: (char*) aString withLength: (long) aLength;
-- (float) 		convertStringToFloat: (char*) aString withLength: (long) aLength;
-- (long) 		convertStringToLong: (char*) aString withLength: (long) aLength;
-- (char*) 		findNumber: (char*) aString withLength: (long) aLength;
+- (double) 		convertStringToDouble: (char*) aString withLength: (int32_t) aLength;
+- (float) 		convertStringToFloat: (char*) aString withLength: (int32_t) aLength;
+- (int32_t) 		convertStringToLong: (char*) aString withLength: (int32_t) aLength;
+- (char*) 		findNumber: (char*) aString withLength: (int32_t) aLength;
 - (NSString*)   title;
 
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary;

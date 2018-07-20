@@ -25,22 +25,22 @@
 
 @implementation ORXYScannerDecoderForPosition
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    return ExtractLength(*((unsigned long*)someData));
+    return ExtractLength(*((uint32_t*)someData));
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr
 {
     NSString* title= @"Motor Position Record\n\n";
 
-	NSString* motor   = [NSString stringWithFormat:@"Motor  = %lu\n",(dataPtr[2]) & 0x0000ffff];
+	NSString* motor   = [NSString stringWithFormat:@"Motor  = %u\n",(dataPtr[2]) & 0x0000ffff];
     unsigned short optionMask = (dataPtr[2]>>16) & 0x0000ffff;
     NSString* optionString;
     if(optionMask == 0)optionString = @"stopped\n";
     else optionString = @"moving\n";
     union {
-        long theLong;
+        int32_t theLong;
         float theFloat;
     }data;
     data.theLong = dataPtr[3];

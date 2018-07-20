@@ -91,7 +91,7 @@ SOCKET csock_connect(char *ipAddress, int port)
 
 #ifdef WIN32
 	int rc;
-	unsigned long non_block;
+	uint32_t non_block;
 	fd_set writefds;
 	TIMEVAL timeout;
 #else
@@ -850,7 +850,7 @@ short CRTOUT(short crate_id, unsigned int tout)
 ////////////////////////////////////////////
 //	CRIRQ
 ////////////////////////////////////////////
-short CRIRQ(short crate_id, IRQ_CALLBACK irq_callback, unsigned long userInfo)
+short CRIRQ(short crate_id, IRQ_CALLBACK irq_callback, uint32_t userInfo)
 {
 	short retcode = CRATE_OK;
 #ifdef WIN32
@@ -1382,7 +1382,7 @@ short BLKTRANSF(short crate_id, BLK_TRANSF_INFO *blk_info, unsigned int *buffer)
 	ssize_t resp = 0;
 	short retcode = CRATE_OK;
 	char blk_ascii_buf[4096];
-	unsigned long row_buf[2048], transf_res;
+	uint32_t row_buf[2048], transf_res;
 	//PARAMETER lParam[MAX_PAR];
 
 	if ((crate_id > MAX_CRATE) || (crate_id < 0))			return CRATE_ID_ERROR;
@@ -1531,7 +1531,7 @@ short BLKTRANSF(short crate_id, BLK_TRANSF_INFO *blk_info, unsigned int *buffer)
 					else if (resp > 0) bytes_sent += resp;
 				}
 				usleep(100);
-				printf("buffer: %d ret: %ld  %d/%d\n",ccc,resp,t,blk_info->totsize);
+				printf("buffer: %d ret: %d  %d/%d\n",ccc,resp,t,blk_info->totsize);
 				ccc++;
 				
 				numValuesRemaining -= numToSend;

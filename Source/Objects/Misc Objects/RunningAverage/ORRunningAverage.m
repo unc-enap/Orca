@@ -182,9 +182,9 @@
 
 - (NSString*) description
 {
-    NSString* s = [NSString stringWithFormat:@"\nspiked:%@\ntag:%ld\nave:%.3f\nspikeValue:%.3f",
+    NSString* s = [NSString stringWithFormat:@"\nspiked:%@\ntag:%d\nave:%.3f\nspikeValue:%.3f",
                    self.spiked?@"YES":@"NO",
-                   self.tag,
+                   (int)self.tag,
                    self.ave,
                    self.spikeValue];
     return s;

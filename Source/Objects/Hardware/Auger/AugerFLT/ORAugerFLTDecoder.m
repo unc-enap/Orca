@@ -54,13 +54,13 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx energy
 //-------------------------------------------------------------
 
 
-- (unsigned long) decodeData:(void*)someData fromDataPacket:(ORDataPacket*)aDataPacket intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDataPacket:(ORDataPacket*)aDataPacket intoDataSet:(ORDataSet*)aDataSet
 {
 	eventData* ePtr;
 
-    unsigned long* ptr = (unsigned long*)someData;
+    uint32_t* ptr = (uint32_t*)someData;
 	
-	unsigned long length	= ExtractLength(*ptr);	 //get length from first word
+	uint32_t length	= ExtractLength(*ptr);	 //get length from first word
 	++ptr;										 
 	
 	//crate and card from second word
@@ -86,7 +86,7 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx energy
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"Auger FLT Energy Record\n\n";
 	++ptr;		//skip the first word (dataID and length)
@@ -151,11 +151,11 @@ followed by waveform data (n x 1024 16-bit words)
 //-------------------------------------------------------------
 
 
-- (unsigned long) decodeData:(void*)someData fromDataPacket:(ORDataPacket*)aDataPacket intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDataPacket:(ORDataPacket*)aDataPacket intoDataSet:(ORDataSet*)aDataSet
 {
 
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length	= ExtractLength(*ptr);	 //get length from first word
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length	= ExtractLength(*ptr);	 //get length from first word
 
 	++ptr;											//crate, card,channel from second word
 	unsigned char crate		= (*ptr>>21) & 0xf;
@@ -176,23 +176,23 @@ followed by waveform data (n x 1024 16-bit words)
 			  withKeys: @"FLT",@"Energy",crateKey,stationKey,channelKey,nil];
 	
 	// Set up the waveform
-	NSData* waveFormdata = [NSData dataWithBytes:someData length:length*sizeof(long)];
+	NSData* waveFormdata = [NSData dataWithBytes:someData length:length*sizeof(int32_t)];
 
 	[aDataSet loadWaveform: waveFormdata							//pass in the whole data set
-					offset: (2*sizeof(long)+sizeof(eventData)+sizeof(debugData))	// Offset in bytes (2 header words + eventdata)
+					offset: (2*sizeof(int32_t)+sizeof(eventData)+sizeof(debugData))	// Offset in bytes (2 header words + eventdata)
 				    unitSize: sizeof(short)							// unit size in bytes
 					mask:	0x0FFF									// when displayed all values will be masked with this value
 					sender: self 
 					withKeys: @"FLT", @"Waveform",crateKey,stationKey,channelKey,nil];
 					
 
-    ptr = ptr + (sizeof(eventData) + sizeof(debugData)) / sizeof(long);
-	//NSLog(@" len = %d (%d), %x %x %x\n", length, ptr - (unsigned long *) someData , ptr[0], ptr[1], ptr[2]);
+    ptr = ptr + (sizeof(eventData) + sizeof(debugData)) / sizeof(int32_t);
+	//NSLog(@" len = %d (%d), %x %x %x\n", length, ptr - (uint32_t *) someData , ptr[0], ptr[1], ptr[2]);
 					
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 
     NSString* title= @"Auger FLT Waveform Record\n\n";
@@ -218,7 +218,7 @@ followed by waveform data (n x 1024 16-bit words)
 
 
     // Decode extra debug information
-	ptr = ptr + sizeof(eventData) / sizeof(unsigned long);
+	ptr = ptr + sizeof(eventData) / sizeof(uint32_t);
 	debugData* dPtr = (debugData*) ptr;
 
 	NSString* resetSec		= [NSString stringWithFormat:@"ResetSec   = %d\n", dPtr->resetSec];
@@ -265,7 +265,7 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx Hitrate
 //-------------------------------------------------------------
 
 
-- (unsigned long) decodeData:(void*)someData fromDataPacket:(ORDataPacket*)aDataPacket intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDataPacket:(ORDataPacket*)aDataPacket intoDataSet:(ORDataSet*)aDataSet
 {
     int i;
 	//int j;
@@ -273,8 +273,8 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx Hitrate
 	int width;
 	int energy;
 
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length	= ExtractLength(*ptr);	 //get length from first word
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length	= ExtractLength(*ptr);	 //get length from first word
 	++ptr;										 //crate and card from second word
 	
 	unsigned char crate		= (*ptr>>21) & 0xf;
@@ -341,7 +341,7 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx Hitrate
 
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 
     NSString* title= @"Auger FLT Hitrate Record\n\n";

@@ -203,7 +203,7 @@ enum {
 - (void) connectionChanged:(NSNotification*)aNote
 {
     if([aNote object] == model){
-		[[self window] setTitle:[NSString stringWithFormat:@"Stepper Motor (%ld)",(long)[model tag]]];
+		[[self window] setTitle:[NSString stringWithFormat:@"Stepper Motor (%d)",(int32_t)[model tag]]];
 	}
 }
 - (BOOL) validateMenuItem:(NSMenuItem*)menuItem
@@ -246,7 +246,7 @@ enum {
 - (void) setModel:(id)aModel
 {
     [super setModel:aModel];
-    [[self window] setTitle:[NSString stringWithFormat:@"Stepper Motor (%ld)",[model tag]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"Stepper Motor (%d)",(int)[model tag]]];
 }
 
 - (void) updateButtons:(NSNotification*)aNote
@@ -460,7 +460,7 @@ enum {
 - (IBAction) readMotorAction:(id)sender
 {
     @try {
-        long thePosition = [model readMotor];
+        int32_t thePosition = [model readMotor];
         
         NSString* movingState;
         if([model motorRunning])  movingState = @"Moving";
@@ -670,11 +670,11 @@ enum {
     [[self window] setTitle:[NSString stringWithFormat:@"Stepper Motor (%@)",[model motorName]]];
 }
 
-- (void) getQueMinValue:(unsigned long*)aMinValue maxValue:(unsigned long*)aMaxValue head:(unsigned long*)aHeadValue tail:(unsigned long*)aTailValue
+- (void) getQueMinValue:(uint32_t*)aMinValue maxValue:(uint32_t*)aMaxValue head:(uint32_t*)aHeadValue tail:(uint32_t*)aTailValue
 {
     *aMinValue = [model patternStartCount];
     *aMaxValue = [model patternEndCount];
-    long thePosition = [model motorPosition];
+    int32_t thePosition = [model motorPosition];
     *aHeadValue = thePosition+1;
     *aTailValue = thePosition-1;
 }

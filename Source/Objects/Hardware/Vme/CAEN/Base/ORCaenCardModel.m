@@ -77,19 +77,19 @@ NSString* 	caenChnl				= @"CAEN Chnl";
 // Method:	errorCount
 // Purpose:Return the number of errors.
 //--------------------------------------------------------------------------------
-- (unsigned long) errorCount { return(errorCount); }
+- (uint32_t) errorCount { return(errorCount); }
 
 //--------------------------------------------------------------------------------
 // Method:	getTotalEventCount
 // Purpose:Return total number of errors.
 //--------------------------------------------------------------------------------
-- (unsigned long) getTotalEventCount { return totalEventCounter; }
+- (uint32_t) getTotalEventCount { return totalEventCounter; }
 
 //--------------------------------------------------------------------------------
 // Method:	getEventCount
 // Purpose:Return current number of events read in.
 //--------------------------------------------------------------------------------
-- (unsigned long)  getEventCount:(unsigned short) pIndex
+- (uint32_t)  getEventCount:(unsigned short) pIndex
 {
     if(pIndex < 32)return eventCounter[pIndex];
     else return 0;
@@ -169,7 +169,7 @@ NSString* 	caenChnl				= @"CAEN Chnl";
  * \note
  */
 //--------------------------------------------------------------------------------
-- (unsigned long) writeValue
+- (uint32_t) writeValue
 {
     return writeValue;
 }
@@ -181,7 +181,7 @@ NSString* 	caenChnl				= @"CAEN Chnl";
  * \note
  */
 //--------------------------------------------------------------------------------
-- (void) setWriteValue:(unsigned long) aValue
+- (void) setWriteValue:(uint32_t) aValue
 {
     // Set the undo manager action.  The label has already been set by the controller calling this method.
     [[[self undoManager] prepareWithInvocationTarget:self] setWriteValue:[self writeValue]];
@@ -246,8 +246,8 @@ NSString* 	caenChnl				= @"CAEN Chnl";
     [self setDataId:[anotherObj dataId]];
 }
 
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -292,14 +292,14 @@ NSString* 	caenChnl				= @"CAEN Chnl";
 			
             ORDataPacket* tempDataPacket = [[ORDataPacket alloc]init];
 			dataDecoder = [[ORCaenDataDecoder alloc] init];
-			//make buffer for data with extra room for our 2 long word header.
-			dataBuffer = (unsigned long*)malloc([self getDataBufferSize]+2*sizeof(unsigned long));
+			//make buffer for data with extra room for our 2 int32_t word header.
+			dataBuffer = (uint32_t*)malloc([self getDataBufferSize]+2*sizeof(uint32_t));
 			controller = [self adapter]; //cache for speed
 			
             [self takeData:tempDataPacket userInfo:nil];
 			if([[tempDataPacket dataArray]count]){
 				NSData* theData = [[tempDataPacket dataArray] objectAtIndex:0];
-				unsigned long* someData = (unsigned long*)[theData bytes];
+				uint32_t* someData = (uint32_t*)[theData bytes];
                 ORCaenDataDecoder *aDecoder = [[ORCaenDataDecoder alloc] init];
                 [aDecoder printData:[self className] data:someData];
                 [aDecoder release];
@@ -342,7 +342,7 @@ NSString* 	caenChnl				= @"CAEN Chnl";
     
     
     // Get the value - Already validated by stepper.
-    long theValue =  [self writeValue];
+    int32_t theValue =  [self writeValue];
     // Get register and channel from dialog box.
     short theChannelIndex	= [self selectedChannel];
     short theRegIndex 		= [self selectedRegIndex];
@@ -413,13 +413,13 @@ NSString* 	caenChnl				= @"CAEN Chnl";
 		*((unsigned short*)pValue) = aValue;
 	}
 	else {
-		unsigned long aValue;
+		uint32_t aValue;
 		[[self adapter] readLongBlock:&aValue
 							atAddress:[self baseAddress] + [self getAddressOffset:pReg]
 							numToRead:1
 						   withAddMod:[self addressModifier]
 						usingAddSpace:0x01];
-		*((unsigned long*)pValue) = aValue;
+		*((uint32_t*)pValue) = aValue;
 	}
 }
 
@@ -432,7 +432,7 @@ NSString* 	caenChnl				= @"CAEN Chnl";
  * \note	Gets offset to register from unit register map.
  */
 //--------------------------------------------------------------------------------
-- (void) write:(unsigned short) pReg sendValue:(unsigned long) pValue
+- (void) write:(unsigned short) pReg sendValue:(uint32_t) pValue
 {
     // Check that register is a valid register.
     if (pReg >= [self getNumberRegisters]){
@@ -635,9 +635,9 @@ static NSString*	CAENThresholdChnl       = @"CAENThresholdChnl%d";
 //--------------------------------------------------------------------------------
 #pragma mark ¥¥¥Register - General routines
 - (short)		getNumberRegisters			{ return 0; }
-- (unsigned long) 	getBufferOffset				{ return 0; }
+- (uint32_t) 	getBufferOffset				{ return 0; }
 - (unsigned short) 	getDataBufferSize			{ return 0; }
-- (unsigned long) 	getThresholdOffset			{ return 0; }
+- (uint32_t) 	getThresholdOffset			{ return 0; }
 
 - (short)		getStatusRegisterIndex:(short) aRegister   { return 0; }
 - (short)		getThresholdIndex			    { return 0; }
@@ -645,7 +645,7 @@ static NSString*	CAENThresholdChnl       = @"CAENThresholdChnl%d";
 
 #pragma mark ***Register - Register specific routines
 - (NSString*)		getRegisterName:(short) anIndex	{ return 0; }
-- (unsigned long) 	getAddressOffset:(short) anIndex 	{ return 0; }
+- (uint32_t) 	getAddressOffset:(short) anIndex 	{ return 0; }
 - (short)		getAccessSize:(short) anIndex 		{ return 0; }
 - (short)		getAccessType:(short) anIndex 		{ return 0; }
 - (BOOL)		dataReset:(short) anIndex		{ return false; }
@@ -653,7 +653,7 @@ static NSString*	CAENThresholdChnl       = @"CAENThresholdChnl%d";
 - (BOOL)		hwReset:(short) anIndex		{ return false; }
 
 #pragma mark ***Misc routines
-- (unsigned long*)	getDataBuffer				{ return 0; }
+- (uint32_t*)	getDataBuffer				{ return 0; }
 
 #pragma mark ¥¥¥DataTaker
 
@@ -685,8 +685,8 @@ static NSString*	CAENThresholdChnl       = @"CAENThresholdChnl%d";
     [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:NSStringFromClass([self class])]; 
     
     dataDecoder = [[ORCaenDataDecoder alloc] init];
-    //make buffer for data with extra room for our 2 long word header.
-    dataBuffer = (unsigned long*)malloc([self getDataBufferSize]+2*sizeof(unsigned long));
+    //make buffer for data with extra room for our 2 int32_t word header.
+    dataBuffer = (uint32_t*)malloc([self getDataBufferSize]+2*sizeof(uint32_t));
     controller = [self adapter]; //cache for speed
 	
 	[self flushBuffer];
@@ -728,7 +728,7 @@ static NSString*	CAENThresholdChnl       = @"CAENThresholdChnl%d";
         BOOL dataIsReady 		= [dataDecoder isDataReady:theStatus1];
         BOOL bufferIsFull 		= [dataDecoder isBufferFull:theStatus2];
         BOOL unrecoverableError = NO;
-        unsigned long bufferAddress = [self baseAddress] + [self getBufferOffset];
+        uint32_t bufferAddress = [self baseAddress] + [self getBufferOffset];
         unsigned short mod = [self addressModifier];
         
         // Read the buffer.
@@ -738,7 +738,7 @@ static NSString*	CAENThresholdChnl       = @"CAENThresholdChnl%d";
             short dataIndex = 2;                    //leave space for our header
             
             while(1){
-                unsigned long dataValue;
+                uint32_t dataValue;
                 //read the first word, could be a header, or the buffer could be empty now
                 [controller readLongBlock:&dataValue
                                 atAddress:bufferAddress
@@ -830,9 +830,9 @@ static NSString*	CAENThresholdChnl       = @"CAENThresholdChnl%d";
 
 - (void) flushBuffer
 {
-    short n = [self getDataBufferSize]/sizeof(long);
+    short n = [self getDataBufferSize]/sizeof(int32_t);
     int i;
-    unsigned long dataValue;
+    uint32_t dataValue;
     for(i=0;i<n;i++){
         [[self adapter] readLongBlock:&dataValue
                             atAddress:[self baseAddress] + [self getBufferOffset]
@@ -928,7 +928,7 @@ static NSString*	CAENThresholdChnl       = @"CAENThresholdChnl%d";
 	configStruct->card_info[index].base_add		= (int32_t)[self baseAddress];
 	configStruct->card_info[index].deviceSpecificData[0] = (int32_t)[self getAddressOffset:[self getStatusRegisterIndex:1]];
 	configStruct->card_info[index].deviceSpecificData[1] = (int32_t)[self getAddressOffset:[self getStatusRegisterIndex:2]];
-	configStruct->card_info[index].deviceSpecificData[2] = (int32_t)[self getDataBufferSize]/sizeof(long);
+	configStruct->card_info[index].deviceSpecificData[2] = (int32_t)[self getDataBufferSize]/sizeof(int32_t);
 	configStruct->card_info[index].deviceSpecificData[3] = (int32_t)([self baseAddress] + [self getBufferOffset]);
 	configStruct->card_info[index].deviceSpecificData[4] = (int32_t)[self getAccessType:[self getStatusRegisterIndex:1]];
 	configStruct->card_info[index].deviceSpecificData[5] = (int32_t)[self getAccessType:[self getStatusRegisterIndex:2]];

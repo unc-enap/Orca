@@ -70,8 +70,8 @@
     int				fltRunMode;		//!< Run modes: 0 = run, 1=test
     NSMutableArray* thresholds;     //!< Array to keep the threshold of all 22 channel
     NSMutableArray* gains;			//!< Aarry to keep the gains
-    unsigned long	dataId;         //!< Id used to identify energy data set (run mode)
-	unsigned long	waveFormId;		//!< Id used to identify energy+trace data set (debug mode)
+    uint32_t	dataId;         //!< Id used to identify energy data set (run mode)
+	uint32_t	waveFormId;		//!< Id used to identify energy+trace data set (debug mode)
     NSMutableArray* triggersEnabled;	//!< Array to keep the activated channel for the trigger
 	NSMutableArray* hitRatesEnabled;	//!< Array to store the activated trigger rate measurement
     unsigned short	hitRateLength;		//!< Sampling time of the hitrate measurement (1..32 seconds)
@@ -84,11 +84,11 @@
 	
 	ORTimeRate*		totalRate;
     int				thresholdOffset;
-	unsigned long   statisticOffset; //!< Offset guess used with by the hardware statistical evaluation
-	unsigned long   statisticN;		//! Number of samples used for statistical evaluation
-	unsigned long   eventMask;		//!Bits set for last channels hit.
-	unsigned long   coinTime;
-	unsigned long   integrationTime;
+	uint32_t   statisticOffset; //!< Offset guess used with by the hardware statistical evaluation
+	uint32_t   statisticN;		//! Number of samples used for statistical evaluation
+	uint32_t   eventMask;		//!Bits set for last channels hit.
+	uint32_t   coinTime;
+	uint32_t   integrationTime;
 	
 	//testing
 	NSMutableArray* testStatusArray;
@@ -103,18 +103,18 @@
 	int savedLed;
 	BOOL usingPBusSimulation;
     BOOL ledOff;
-    unsigned long interruptMask;
-	unsigned long pageSize; //< Size of the readout pages - defined in slt dialog
-    unsigned long dataMask;
+    uint32_t interruptMask;
+	uint32_t pageSize; //< Size of the readout pages - defined in slt dialog
+    uint32_t dataMask;
 
 	//-----------------------------------------
 	//place to cache some values so they don't have to be calculated every time thru the run loop.
 	//not so important in this object because of length of time it takes to readout waveforms,
 	//but we'll do it anyway.
 	//Caution, these variables are only valid when a run is in progress.
-	unsigned long	statusAddress;
-	unsigned long	memoryAddress;
-	unsigned long	locationWord;
+	uint32_t	statusAddress;
+	uint32_t	memoryAddress;
+	uint32_t	locationWord;
 	/** Reference to the Slt board for hardware access */
 	ORIpeFireWireCard* fireWireCard; 
 	//-----------------------------------------
@@ -127,21 +127,21 @@
 - (void) makeMainController;
 
 #pragma mark ¥¥¥Accessors
-- (unsigned long) dataMask;
-- (void) setDataMask:(unsigned long)aDataMask;
+- (uint32_t) dataMask;
+- (void) setDataMask:(uint32_t)aDataMask;
 - (int) thresholdOffset;
 - (void) setThresholdOffset:(int)aThresholdOffset;
 - (BOOL) ledOff;
 - (void) setLedOff:(BOOL)aledOff;
 
-- (unsigned long) coinTime;
-- (void) setCoinTime:(unsigned long)aValue;
-- (unsigned long) integrationTime;
-- (void) setIntegrationTime:(unsigned long)aValue;
+- (uint32_t) coinTime;
+- (void) setCoinTime:(uint32_t)aValue;
+- (uint32_t) integrationTime;
+- (void) setIntegrationTime:(uint32_t)aValue;
 
 
-- (unsigned long) interruptMask;
-- (void) setInterruptMask:(unsigned long)aInterruptMask;
+- (uint32_t) interruptMask;
+- (void) setInterruptMask:(uint32_t)aInterruptMask;
 - (int) page;
 - (void) setPage:(int)aPage;
 - (int) iterations;
@@ -152,10 +152,10 @@
 - (void) setStartChan:(int)aStartChan;
 - (unsigned short) hitRateLength;
 - (void) setHitRateLength:(unsigned short)aHitRateLength;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
-- (unsigned long) waveFormId;
-- (void) setWaveFormId: (unsigned long) aWaveFormId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
+- (uint32_t) waveFormId;
+- (void) setWaveFormId: (uint32_t) aWaveFormId;
 
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherCard;
@@ -198,13 +198,13 @@
 
 #pragma mark ¥¥¥HW Access
 //all can raise exceptions
-- (unsigned long) regAddress:(int)aReg channel:(int)aChannel;
-- (unsigned long) regAddress:(int)aReg;
-- (unsigned long) adcMemoryChannel:(int)aChannel page:(int)aPage;
-- (unsigned long) readReg:(int)aReg;
-- (unsigned long) readReg:(int)aReg channel:(int)aChannel;
-- (void) writeReg:(int)aReg value:(unsigned long)aValue;
-- (void) writeReg:(int)aReg channel:(int)aChannel value:(unsigned long)aValue;
+- (uint32_t) regAddress:(int)aReg channel:(int)aChannel;
+- (uint32_t) regAddress:(int)aReg;
+- (uint32_t) adcMemoryChannel:(int)aChannel page:(int)aPage;
+- (uint32_t) readReg:(int)aReg;
+- (uint32_t) readReg:(int)aReg channel:(int)aChannel;
+- (void) writeReg:(int)aReg value:(uint32_t)aValue;
+- (void) writeReg:(int)aReg channel:(int)aChannel value:(uint32_t)aValue;
 
 - (void)	checkPresence;
 - (int)		readVersion;
@@ -219,10 +219,10 @@
 - (NSMutableArray*) hitRatesEnabled;
 - (void) setHitRatesEnabled:(NSMutableArray*)anArray;
 - (void) readHitRates;
-- (void) writeTestPattern:(unsigned long*)mask length:(int)len;
+- (void) writeTestPattern:(uint32_t*)mask length:(int)len;
 - (void) rewindTestPattern;
-- (void) writeNextPattern:(unsigned long)aValue;
-- (unsigned long) readControlStatus;
+- (void) writeNextPattern:(uint32_t)aValue;
+- (uint32_t) readControlStatus;
 - (void) writeControlStatus;
 - (void) writePeriphStatus;
 - (void) printStatusReg;
@@ -236,8 +236,8 @@
 - (unsigned short) readGain:(int)i;
 - (void) writeTriggerControl;
 - (BOOL) partOfEvent:(short)chan;
-- (unsigned long) eventMask;
-- (void) eventMask:(unsigned long)aMask;
+- (uint32_t) eventMask;
+- (void) eventMask:(uint32_t)aMask;
 
 /** Disable the trigger algorithm in all channels. In debug mode the ADC Traces are
   * still recorded while the recording is not stopped by any steps in the signal. 
@@ -253,7 +253,7 @@
 - (void) getStatistics:(int)aChannel mean:(double *)aMean  var:(double *)aVar; // ak, 7.10.07
 
 - (unsigned short) readTriggerControl:(int)fpga;
-- (unsigned long) readMemoryChan:(int)chan page:(int)aPage;
+- (uint32_t) readMemoryChan:(int)chan page:(int)aPage;
 - (void) readMemoryChan:(int)aChan page:(int)aPage pageBuffer:(unsigned short*)aPageBuffer;
 - (void) clear:(int)aChan page:(int)aPage value:(unsigned short)aValue;
 

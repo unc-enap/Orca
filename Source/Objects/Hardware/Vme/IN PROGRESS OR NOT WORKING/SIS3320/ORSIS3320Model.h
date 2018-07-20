@@ -37,7 +37,7 @@
 	BOOL			isRunning;
 	BOOL			ledOn;
 	unsigned short	moduleID;
-	unsigned long   dataId;
+	uint32_t   dataId;
 	
 	NSMutableArray* dacValues;
 	NSMutableArray* thresholds;
@@ -50,19 +50,19 @@
  	unsigned char   ltMask;
     int				clockSource;
     BOOL			multiEvent;
-     long			maxNumEvents;
+     int32_t			maxNumEvents;
 
-	unsigned long	location;
+	uint32_t	location;
 	id				theController;
 
 	ORRateGroup*	waveFormRateGroup;
-	unsigned long 	waveFormCount[kNumSIS3320Channels];
+	uint32_t 	waveFormCount[kNumSIS3320Channels];
 
     BOOL autoStartMode;
     BOOL internalTriggerAsStop;
     BOOL lemoStartStopLogic;
-    unsigned long startDelay;
-    unsigned long stopDelay;
+    uint32_t startDelay;
+    uint32_t stopDelay;
     int pageWrapSize;
     BOOL enablePageWrap;
     BOOL enableSampleLenStop;
@@ -71,7 +71,7 @@
     int sampleLength;
     int sampleStartAddress;
 	
-	unsigned long* data;
+	uint32_t* data;
 }
 
 - (id) init;
@@ -97,10 +97,10 @@
 - (void) setPageWrapSize:(int)aPageWrapSize;
 - (int) pageSize;
 
-- (unsigned long) stopDelay;
-- (void) setStopDelay:(unsigned long)aStopDelay;
-- (unsigned long) startDelay;
-- (void) setStartDelay:(unsigned long)aStartDelay;
+- (uint32_t) stopDelay;
+- (void) setStopDelay:(uint32_t)aStopDelay;
+- (uint32_t) startDelay;
+- (void) setStartDelay:(uint32_t)aStartDelay;
 - (BOOL) lemoStartStopLogic;
 - (void) setLemoStartStopLogic:(BOOL)aLemoStartStopLogic;
 - (BOOL) internalTriggerAsStop;
@@ -123,8 +123,8 @@
 - (BOOL)			ltMaskBit:(int)bit;
 - (void)			setLtMaskBit:(int)bit withValue:(BOOL)aValue;
 
-- (long) maxNumEvents;
-- (void) setMaxNumEvents:(long)aMaxNumEvents;
+- (int32_t) maxNumEvents;
+- (void) setMaxNumEvents:(int32_t)aMaxNumEvents;
 - (BOOL) multiEvent;
 - (void) setMultiEvent:(BOOL)aMultiEvent;
 - (int) clockSource;
@@ -133,8 +133,8 @@
 - (unsigned short) moduleID;
 
 
-- (long) dacValue:(int)aChannel;
-- (void) setDacValue:(int)aChannel withValue:(long)aValue;
+- (int32_t) dacValue:(int)aChannel;
+- (void) setDacValue:(int)aChannel withValue:(int32_t)aValue;
 
 - (void) setThreshold:(short)chan withValue:(int)aValue;
 - (int) threshold:(short)chan;
@@ -154,43 +154,43 @@
 #pragma mark •••Hardware Access
 - (void) printReport;
 - (void) initBoard;
-- (unsigned long) readEventCounter;
+- (uint32_t) readEventCounter;
 - (void) readModuleID:(BOOL)verbose;
-- (void) writeStartDelay:(unsigned long)aValue;
-- (void) writeStopDelay:(unsigned long)aValue;
+- (void) writeStartDelay:(uint32_t)aValue;
+- (void) writeStopDelay:(uint32_t)aValue;
 - (void) startSampling;
 - (void) stopSampling;
 - (void) writeEventConfigRegister;
-- (unsigned long) readEventDir:(int)aChannel;
+- (uint32_t) readEventDir:(int)aChannel;
 
 - (void) writeAcquisitionRegister;
-- (unsigned long) readAcquisitionRegister;
+- (uint32_t) readAcquisitionRegister;
 - (void) writeControlStatusRegister;
-- (void) writeValue:(unsigned long)aValue offset:(long)anOffset;
+- (void) writeValue:(uint32_t)aValue offset:(int32_t)anOffset;
 - (void) writeTriggerSetupRegisters;
 - (void) armSamplingLogic;
 - (void) disarmSamplingLogic;
-- (unsigned long) readAcqRegister;
-- (void) writeAdcMemoryPage:(unsigned long)aPage;
-- (void) writeSampleStartAddress:(unsigned long)aValue;
+- (uint32_t) readAcqRegister;
+- (void) writeAdcMemoryPage:(uint32_t)aPage;
+- (void) writeSampleStartAddress:(uint32_t)aValue;
 - (void) writeDacOffsets;
 - (void) writeAdcTestMode;
 - (void) writeGainControlRegister;
 - (void) writeTriggerClearCounter;
 
 #pragma mark •••Data Taker
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherShaper;
 - (NSDictionary*) dataRecordDescription;
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(id)userInfo;
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(id)userInfo;
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(id)userInfo;
-- (unsigned long) waveFormCount:(int)aChannel;
+- (uint32_t) waveFormCount:(int)aChannel;
 - (void)   startRates;
 - (void) clearWaveFormCounts;
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag;
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag;
 - (int) load_HW_Config_Structure:(SBC_crate_config*)configStruct index:(int)index;
 
 #pragma mark •••HW Wizard

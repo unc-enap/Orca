@@ -32,10 +32,10 @@
 
 @interface ORL2551Model : ORCamacIOCard <ORHWWizard>{
     @private
-        unsigned long   dataId;
+        uint32_t   dataId;
         unsigned short  onlineMask;
-        unsigned long 	lastScalerCount[12];
-        unsigned long 	scalerCount[12];
+        uint32_t 	lastScalerCount[12];
+        uint32_t 	scalerCount[12];
         float           scalerRate[12];
         NSDate*         lastTime;
         TimedWorker*    poller;
@@ -56,16 +56,16 @@
 - (void) runAboutToStart:(NSNotification*)aNote;
        
 #pragma mark ¥¥¥Accessors
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (unsigned short)   onlineMask;
 - (void)	    setOnlineMask:(unsigned short)anOnlineMask;
 - (BOOL)	    onlineMaskBit:(int)bit;
 - (void)	    setOnlineMaskBit:(int)bit withValue:(BOOL)aValue;
 - (NSMutableDictionary*) rateAttributes;
 - (void)		 setRateAttributes:(NSMutableDictionary*)newRateAttributes;
-- (void)           setScalerCount:(unsigned short)chan value:(unsigned long)aValue;
-- (unsigned long)  scalerCount:(unsigned short)chan;
+- (void)           setScalerCount:(unsigned short)chan value:(uint32_t)aValue;
+- (uint32_t)  scalerCount:(unsigned short)chan;
 - (void)           setScalerRate:(unsigned short)chan value:(float)aValue;
 - (float)  scalerRate:(unsigned short)chan;
 - (NSDate *) lastTime;

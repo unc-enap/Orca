@@ -150,7 +150,7 @@
 
 - (void) chanEnabledChanged:(NSNotification*)aNote
 {
-    unsigned long aMask = [model chanEnabledMask];
+    uint32_t aMask = [model chanEnabledMask];
     int i;
     for(i=0;i<4;i++){
         [[chanEnabledMatrix cellWithTag:i] setState: aMask & (0x1<<i)];

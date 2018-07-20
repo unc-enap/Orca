@@ -50,7 +50,7 @@
 // Output data structure
 	struct CaenOutputFormatsStruct {
 		char*		name;
-		unsigned long 	mask;
+		uint32_t 	mask;
 		unsigned short 	shift;
     };
     
@@ -90,19 +90,19 @@
 - (void) 			initStructs;
 
 #pragma mark ***General routines for any data word
-- (BOOL) 			isHeader: (unsigned long) pDataValue;
-- (BOOL) 			isEndOfBlock: (unsigned long) pDataValue;
-- (BOOL) 			isValidDatum: (unsigned long) pDataValue;
-- (BOOL) 			isNotValidDatum: (unsigned long) pDataValue;
-- (unsigned short) 	geoAddress: (unsigned long) pDataValue;
+- (BOOL) 			isHeader: (uint32_t) pDataValue;
+- (BOOL) 			isEndOfBlock: (uint32_t) pDataValue;
+- (BOOL) 			isValidDatum: (uint32_t) pDataValue;
+- (BOOL) 			isNotValidDatum: (uint32_t) pDataValue;
+- (unsigned short) 	geoAddress: (uint32_t) pDataValue;
 
 #pragma mark ***Header decoders
-- (unsigned short) 	crate: (unsigned long) pHeader;
-- (unsigned short) 	numMemorizedChannels: (unsigned long) pHeader;
+- (unsigned short) 	crate: (uint32_t) pHeader;
+- (unsigned short) 	numMemorizedChannels: (uint32_t) pHeader;
 
 #pragma mark ***Data word decoders	
-- (unsigned short) 	channel: (unsigned long) pDataValue;
-- (unsigned long) 	adcValue: (unsigned long) pDataValue;
+- (unsigned short) 	channel: (uint32_t) pDataValue;
+- (uint32_t) 	adcValue: (uint32_t) pDataValue;
 
 #pragma mark ***Status Register 1
 - (BOOL) 			isDataReady: (unsigned short) pStatusReg1;
@@ -115,7 +115,7 @@
 #pragma mark ***Support functions.
 - (unsigned short) 	decodeValueStatusReg: ( unsigned short) pDataValue
                                   ofType: (unsigned short) pType;
-- (unsigned long) 	decodeValueOutput: (unsigned long) pDataValue
+- (uint32_t) 	decodeValueOutput: (uint32_t) pDataValue
                                ofType: (unsigned short) pType;
 
 - (void) printData: (NSString*) pName data:(void*) aSomeData;

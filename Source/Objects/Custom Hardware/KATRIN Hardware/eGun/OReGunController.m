@@ -424,7 +424,7 @@
     return (int)[model validTrackCount];
 }
 
-- (void) plotter:(id)aPlotter index:(unsigned long)index x:(double*)xValue y:(double*)yValue
+- (void) plotter:(id)aPlotter index:(uint32_t)index x:(double*)xValue y:(double*)yValue
 {
 	float millimetersPerVolt = [model millimetersPerVolt];
     if(index>kNumTrackPoints){

@@ -42,7 +42,7 @@ NSString* ORCamacIOCardExceptionCountChanged 			= @"ORCamacIOCardExceptionCountC
 }
 
 
-- (unsigned long)   exceptionCount
+- (uint32_t)   exceptionCount
 {
     return exceptionCount;
 }

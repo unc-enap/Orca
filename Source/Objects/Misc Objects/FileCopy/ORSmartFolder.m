@@ -251,7 +251,7 @@ NSString* ORFolderPercentDoneChanged                = @"ORFolderPercentDoneChang
 	NSString* path = @"~"; //default
 	if(useFolderStructure){
 		NSDate* date = [NSDate date];
-		NSString* year  = [NSString stringWithFormat:@"%ld",[date yearOfCommonEra]];
+		NSString* year  = [NSString stringWithFormat:@"%d",(int)[date yearOfCommonEra]];
 		NSString* month = [NSString stringWithFormat:@"%02ld",[date monthOfYear]];
 		path = [self directoryName];
 		path = [path stringByAppendingPathComponent:year];

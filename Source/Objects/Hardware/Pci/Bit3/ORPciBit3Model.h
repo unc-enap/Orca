@@ -164,8 +164,8 @@ enum {
         mach_vm_size_t remMemRegisterLength;    
 		unsigned char* fVStatusReg;
         NSString*       deviceName;
-        unsigned long 	rwAddress;
-        unsigned long 	writeValue;
+        uint32_t 	rwAddress;
+        uint32_t 	writeValue;
         unsigned int	readWriteType;
         unsigned int 	rwAddressModifier;
         unsigned int 	readWriteIOSpace;
@@ -181,8 +181,8 @@ enum {
         NSDictionary* errorRateXAttributes;
         NSDictionary* errorRateYAttributes;
         ORRateGroup*    errorRateGroup;
-        unsigned long   retryCount[3];
-        unsigned long   retryFailedCount[3];
+        uint32_t   retryCount[3];
+        uint32_t   retryFailedCount[3];
         int totalDevicesFound;
 		unsigned timeOutErrors;
 		unsigned remoteBusErrors;
@@ -206,10 +206,10 @@ enum {
 - (void) setDoRange:(BOOL)aDoRange;
 - (NSString *) deviceName;
 - (void) setDeviceName: (NSString *) aDeviceName;
-- (unsigned long) rwAddress;
-- (void) setRwAddress:(unsigned long)aValue;
-- (unsigned long) writeValue;
-- (void) setWriteValue:(unsigned long)aValue;
+- (uint32_t) rwAddress;
+- (void) setRwAddress:(uint32_t)aValue;
+- (uint32_t) writeValue;
+- (void) setWriteValue:(uint32_t)aValue;
 - (unsigned int) rwAddressModifier;
 - (void) setRwAddressModifier:(unsigned int)aValue;
 - (unsigned int) readWriteIOSpace;
@@ -263,52 +263,52 @@ enum {
 //----------------------------------------------------------------
 //the following methods raise exceptions by reraising the exception
 //raised by checkStatusErrors;
-- (void) readLongBlock:(unsigned long *) readAddress
-					 atAddress:(unsigned long) vmeAddress
+- (void) readLongBlock:(uint32_t *) readAddress
+					 atAddress:(uint32_t) vmeAddress
 					 numToRead:(unsigned int) numberLongs
 					withAddMod:(unsigned short) addressModifier
 				 usingAddSpace:(unsigned short) addressSpace;
 
-- (void) readLong:(unsigned long *) readAddress
-             atAddress:(unsigned long) vmeAddress
+- (void) readLong:(uint32_t *) readAddress
+             atAddress:(uint32_t) vmeAddress
              timesToRead:(unsigned int) numberLongs
             withAddMod:(unsigned short) addModifier
          usingAddSpace:(unsigned short) addressSpace;
 
-- (void) writeLongBlock:(unsigned long *) writeAddress
-					  atAddress:(unsigned long) vmeAddress
+- (void) writeLongBlock:(uint32_t *) writeAddress
+					  atAddress:(uint32_t) vmeAddress
 					  numToWrite:(unsigned int) numberLongs
 					 withAddMod:(unsigned short) addressModifier
 				  usingAddSpace:(unsigned short) addressSpace;
 
 - (void) readByteBlock:(unsigned char *) readAddress
-					 atAddress:(unsigned long) vmeAddress
+					 atAddress:(uint32_t) vmeAddress
 					 numToRead:(unsigned int) numberBytes
 					withAddMod:(unsigned short) addressModifier
 				 usingAddSpace:(unsigned short) addressSpace;
 
 - (void) writeByteBlock:(unsigned char *) writeAddress
-					  atAddress:(unsigned long) vmeAddress
+					  atAddress:(uint32_t) vmeAddress
 					  numToWrite:(unsigned int) numberBytes
 					 withAddMod:(unsigned short) addressModifier
 				  usingAddSpace:(unsigned short) addressSpace;
 
 
 - (void) readWordBlock:(unsigned short *) readAddress
-					 atAddress:(unsigned long) vmeAddress
+					 atAddress:(uint32_t) vmeAddress
 					 numToRead:(unsigned int) numberWords
 					withAddMod:(unsigned short) addressModifier
 				 usingAddSpace:(unsigned short) addressSpace;
 
 - (void) writeWordBlock:(unsigned short *) writeAddress
-					  atAddress:(unsigned long) vmeAddress
+					  atAddress:(uint32_t) vmeAddress
 					  numToWrite:(unsigned int) numberWords
 					 withAddMod:(unsigned short) addressModifier
 				  usingAddSpace:(unsigned short) addressSpace;
 
 - (void) executeCommandList:(ORCommandList*)aList;
 
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag;
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag;
 - (void) printErrorSummary;
 - (void) printConfigurationData;
 - (void) printStatus;
@@ -316,33 +316,33 @@ enum {
 
 
 #pragma mark ¥¥¥DMA
-- (void) readLongBlock:(unsigned long *) readAddress
-					 atAddress:(unsigned long) vmeAddress
+- (void) readLongBlock:(uint32_t *) readAddress
+					 atAddress:(uint32_t) vmeAddress
 					 numToRead:(unsigned int) numberLongs
 				 usingAddSpace:(unsigned short) addressSpace
 				 useBlockMode:(bool) useBlockMode;
 
-- (void) writeLongBlock:(unsigned long *) writeAddress
-					  atAddress:(unsigned long) vmeAddress
+- (void) writeLongBlock:(uint32_t *) writeAddress
+					  atAddress:(uint32_t) vmeAddress
 					  numToWrite:(unsigned int) numberLongs
 				  usingAddSpace:(unsigned short) addressSpace
 				 useBlockMode:(bool) useBlockMode;
 				 
 - (bool) checkDmaErrors;
 
-- (bool) checkDmaComplete:(unsigned long*) checkFlag;
+- (bool) checkDmaComplete:(uint32_t*) checkFlag;
 
-- (void) startDma:(unsigned long) vmeAddress 
-  physicalBufferAddress:(unsigned long) physicalBufferAddress
-		numberTransfers:(unsigned long) numberTransfers 
+- (void) startDma:(uint32_t) vmeAddress 
+  physicalBufferAddress:(uint32_t) physicalBufferAddress
+		numberTransfers:(uint32_t) numberTransfers 
 		   addressSpace:(unsigned short) addressSpace
 		 enableByteSwap:(bool) enableByteSwap 
 		 enableWordSwap:(bool) enableWordSwap
 		   useBlockMode:(bool) useBlockMode
 			  direction:(char) theDirection;
 			  
-- (void) setupMappingDMA:(unsigned long) remoteAddress
-	numberBytes:(unsigned long) numberBytes
+- (void) setupMappingDMA:(uint32_t) remoteAddress
+	numberBytes:(uint32_t) numberBytes
 		 enableByteSwap:(bool) enableByteSwap 
 		 enableWordSwap:(bool) enableWordSwap;
 

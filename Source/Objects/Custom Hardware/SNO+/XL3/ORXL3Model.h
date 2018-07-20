@@ -26,7 +26,7 @@
 
 typedef struct  {
 	NSString*	regName;
-	unsigned long	address;
+	uint32_t	address;
 } Xl3RegNamesStruct; 
 
 enum {
@@ -62,29 +62,29 @@ enum {
 @interface ORXL3Model : ORSNOCard
 {
 	XL3_Link*       xl3Link;
-	unsigned long	_xl3MegaBundleDataId;
-	unsigned long	_cmosRateDataId;
-	unsigned long	_pmtBaseCurrentDataId;
-    unsigned long   _xl3FifoDataId;
-    unsigned long   _xl3HvDataId;
-    unsigned long   _xl3VltDataId;
-    unsigned long   _fecVltDataId;
+	uint32_t	_xl3MegaBundleDataId;
+	uint32_t	_cmosRateDataId;
+	uint32_t	_pmtBaseCurrentDataId;
+    uint32_t   _xl3FifoDataId;
+    uint32_t   _xl3HvDataId;
+    uint32_t   _xl3VltDataId;
+    uint32_t   _fecVltDataId;
 	short           selectedRegister;
 	BOOL            basicOpsRunning;
 	BOOL            autoIncrement;	
 	unsigned short	repeatDelay;
 	short           repeatOpCount;
 	BOOL            doReadOp;
-	unsigned long   workingCount;
-	unsigned long   writeValue;
+	uint32_t   workingCount;
+	uint32_t   writeValue;
 	unsigned int    xl3Mode;
-	unsigned long   selectedSlotMask;
+	uint32_t   selectedSlotMask;
 	BOOL            xl3ModeRunning;
-	unsigned long   xl3RWAddressValue;
-    unsigned long   xl3RWDataValue;
+	uint32_t   xl3RWAddressValue;
+    uint32_t   xl3RWDataValue;
 	NSMutableDictionary* xl3OpsRunning;
-	unsigned long   xl3PedestalMask;
-    unsigned long   xl3ChargeInjMask;
+	uint32_t   xl3PedestalMask;
+    uint32_t   xl3ChargeInjMask;
     unsigned char   xl3ChargeInjCharge;
     unsigned short  pollXl3Time;
     BOOL            isPollingXl3;
@@ -102,8 +102,8 @@ enum {
     NSString*       pollStatus;
     NSThread*       pollThread;
     
-    unsigned long long  relayMask;
-    unsigned long long  relayViewMask;
+    uint64_t  relayMask;
+    uint64_t  relayViewMask;
     NSString* relayStatus;
     BOOL hvASwitch;
     BOOL hvBSwitch;
@@ -121,7 +121,7 @@ enum {
     
     BOOL _isTriggerON;
     
-    unsigned long _hvNominalVoltageA;
+    uint32_t _hvNominalVoltageA;
     float _hvReadbackCorrA;
     float _hvramp_a_up;
     float _hvramp_a_down;
@@ -131,7 +131,7 @@ enum {
     float _vhighalarm_a_vmax;
     float _ihighalarm_a_imax;
     
-    unsigned long _hvNominalVoltageB;
+    uint32_t _hvNominalVoltageB;
     float _hvReadbackCorrB;
     float _hvramp_b_up;
     float _hvramp_b_down;
@@ -142,22 +142,22 @@ enum {
     float _ihighalarm_b_imax;
     
 
-    unsigned long hvAVoltageDACSetValue;
-    unsigned long hvBVoltageDACSetValue;
+    uint32_t hvAVoltageDACSetValue;
+    uint32_t hvBVoltageDACSetValue;
     float _hvAVoltageReadValue;
     float _hvBVoltageReadValue;
     float _hvACurrentReadValue;
     float _hvBCurrentReadValue;
-    unsigned long _hvAVoltageTargetValue;
-    unsigned long _hvBVoltageTargetValue;
+    uint32_t _hvAVoltageTargetValue;
+    uint32_t _hvBVoltageTargetValue;
     BOOL _calcCMOSRatesFromCounts;
-    unsigned long _hvCMOSReadsCounter;
-    unsigned long _hvACMOSRateLimit;
-    unsigned long _hvBCMOSRateLimit;
-    unsigned long _hvACMOSRateIgnore;
-    unsigned long _hvBCMOSRateIgnore;
-    unsigned long _hvANextStepValue;
-    unsigned long _hvBNextStepValue;
+    uint32_t _hvCMOSReadsCounter;
+    uint32_t _hvACMOSRateLimit;
+    uint32_t _hvBCMOSRateLimit;
+    uint32_t _hvACMOSRateIgnore;
+    uint32_t _hvBCMOSRateIgnore;
+    uint32_t _hvANextStepValue;
+    uint32_t _hvBNextStepValue;
     NSLock* hvInitLock;
     NSThread* hvInitThread;
     NSThread* hvThread;
@@ -172,7 +172,7 @@ enum {
     MB ecal_bundle[16];
     MB hw_bundle[16];
     MB ui_bundle[16];
-    unsigned long _ecal_received;
+    uint32_t _ecal_received;
     bool _ecalToOrcaInProgress;
 
     bool initialized;
@@ -181,15 +181,15 @@ enum {
     BOOL changingPedMask;
 }
 
-@property (nonatomic,assign) unsigned long xl3MegaBundleDataId;
-@property (nonatomic,assign) unsigned long pmtBaseCurrentDataId;
-@property (nonatomic,assign) unsigned long cmosRateDataId;
-@property (nonatomic,assign) unsigned long xl3FifoDataId;
-@property (nonatomic,assign) unsigned long xl3HvDataId;
-@property (nonatomic,assign) unsigned long xl3VltDataId;
-@property (nonatomic,assign) unsigned long fecVltDataId;
+@property (nonatomic,assign) uint32_t xl3MegaBundleDataId;
+@property (nonatomic,assign) uint32_t pmtBaseCurrentDataId;
+@property (nonatomic,assign) uint32_t cmosRateDataId;
+@property (nonatomic,assign) uint32_t xl3FifoDataId;
+@property (nonatomic,assign) uint32_t xl3HvDataId;
+@property (nonatomic,assign) uint32_t xl3VltDataId;
+@property (nonatomic,assign) uint32_t fecVltDataId;
 
-@property (nonatomic,assign) unsigned long xl3ChargeInjMask;
+@property (nonatomic,assign) uint32_t xl3ChargeInjMask;
 @property (nonatomic,assign) unsigned char xl3ChargeInjCharge;
 @property (nonatomic,assign) unsigned short pollXl3Time;
 @property (nonatomic,assign) BOOL isPollingXl3;
@@ -206,15 +206,15 @@ enum {
 @property (nonatomic,copy) NSString* pollStatus;
 @property (nonatomic,assign) BOOL isPollingForced;
 
-@property (nonatomic,assign) unsigned long long relayMask;
-@property (nonatomic,assign) unsigned long long relayViewMask;
+@property (nonatomic,assign) uint64_t relayMask;
+@property (nonatomic,assign) uint64_t relayViewMask;
 @property (nonatomic,copy) NSString* relayStatus;
 @property (nonatomic,assign) BOOL hvASwitch;
 @property (nonatomic,assign) BOOL hvBSwitch;
 @property (nonatomic,assign) BOOL isTriggerON;
 //ADC counts (3kV 12bit)
-@property (nonatomic,assign) unsigned long hvAVoltageDACSetValue;
-@property (nonatomic,assign) unsigned long hvBVoltageDACSetValue;
+@property (nonatomic,assign) uint32_t hvAVoltageDACSetValue;
+@property (nonatomic,assign) uint32_t hvBVoltageDACSetValue;
 //volts
 @property (nonatomic,assign) float hvAVoltageReadValue;
 @property (nonatomic,assign) float hvBVoltageReadValue;
@@ -222,24 +222,24 @@ enum {
 @property (nonatomic,assign) float hvACurrentReadValue;
 @property (nonatomic,assign) float hvBCurrentReadValue;
 //ADC counts (3kV 12bit)
-@property (nonatomic,assign) unsigned long hvAVoltageTargetValue;
-@property (nonatomic,assign) unsigned long hvBVoltageTargetValue;
+@property (nonatomic,assign) uint32_t hvAVoltageTargetValue;
+@property (nonatomic,assign) uint32_t hvBVoltageTargetValue;
 //volts
-@property (nonatomic,assign) unsigned long hvNominalVoltageA;
-@property (nonatomic,assign) unsigned long hvNominalVoltageB;
+@property (nonatomic,assign) uint32_t hvNominalVoltageA;
+@property (nonatomic,assign) uint32_t hvNominalVoltageB;
 @property (nonatomic,assign) BOOL calcCMOSRatesFromCounts;
-@property (nonatomic,assign) unsigned long hvACMOSRateLimit;
-@property (nonatomic,assign) unsigned long hvBCMOSRateLimit;
-@property (nonatomic,assign) unsigned long hvACMOSRateIgnore;
-@property (nonatomic,assign) unsigned long hvBCMOSRateIgnore;
+@property (nonatomic,assign) uint32_t hvACMOSRateLimit;
+@property (nonatomic,assign) uint32_t hvBCMOSRateLimit;
+@property (nonatomic,assign) uint32_t hvACMOSRateIgnore;
+@property (nonatomic,assign) uint32_t hvBCMOSRateIgnore;
 //ADC counts (3kV 12bit)
-@property (nonatomic,assign) unsigned long hvANextStepValue;
-@property (nonatomic,assign) unsigned long hvBNextStepValue;
-@property (nonatomic,assign) unsigned long hvCMOSReadsCounter;
+@property (nonatomic,assign) uint32_t hvANextStepValue;
+@property (nonatomic,assign) uint32_t hvBNextStepValue;
+@property (nonatomic,assign) uint32_t hvCMOSReadsCounter;
 @property (nonatomic,assign) BOOL isXl3VltThresholdInInit;
 @property (nonatomic,assign) int xl3LinkTimeOut;
 @property (nonatomic,assign) BOOL xl3InitInProgress;
-@property (assign) unsigned long ecal_received; //set accross multiple threads
+@property (assign) uint32_t ecal_received; //set accross multiple threads
 @property (nonatomic,assign) bool ecalToOrcaInProgress;
 @property (assign) id snotDb;//I replaced 'weak' by 'assign' to get Orca compiled under 10.6 (-tb- 2013-09)
 
@@ -305,33 +305,33 @@ enum {
 - (void) setGuardian:(id)aGuardian;
 - (short) getNumberRegisters;
 - (NSString*) getRegisterName:(short) anIndex;
-- (unsigned long) getRegisterAddress: (short) anIndex;
+- (uint32_t) getRegisterAddress: (short) anIndex;
 - (BOOL) basicOpsRunning;
 - (void) setBasicOpsRunning:(BOOL)aBasicOpsRunning;
 - (BOOL) compositeXl3ModeRunning;
 - (void) setCompositeXl3ModeRunning:(BOOL)aCompositeXl3ModeRunning;
-- (unsigned long) slotMask;
-- (void) setSlotMask:(unsigned long)aSlotMask;
+- (uint32_t) slotMask;
+- (void) setSlotMask:(uint32_t)aSlotMask;
 - (BOOL) autoIncrement;
 - (void) setAutoIncrement:(BOOL)aAutoIncrement;
 - (unsigned short) repeatDelay;
 - (void) setRepeatDelay:(unsigned short)aRepeatDelay;
 - (short) repeatOpCount;
 - (void) setRepeatOpCount:(short)aRepeatCount;
-- (unsigned long) writeValue;
-- (void) setWriteValue:(unsigned long)aWriteValue;
+- (uint32_t) writeValue;
+- (void) setWriteValue:(uint32_t)aWriteValue;
 - (unsigned int) xl3Mode;
 - (void) setXl3Mode:(unsigned int)aXl3Mode;
 - (BOOL) xl3ModeRunning;
 - (void) setXl3ModeRunning:(BOOL)anXl3ModeRunning;
-- (unsigned long) xl3RWAddressValue;
-- (void) setXl3RWAddressValue:(unsigned long)anXl3RWAddressValue;
-- (unsigned long) xl3RWDataValue;
-- (void) setXl3RWDataValue:(unsigned long)anXl3RWDataValue;
+- (uint32_t) xl3RWAddressValue;
+- (void) setXl3RWAddressValue:(uint32_t)anXl3RWAddressValue;
+- (uint32_t) xl3RWDataValue;
+- (void) setXl3RWDataValue:(uint32_t)anXl3RWDataValue;
 - (BOOL) xl3OpsRunningForKey:(id)aKey;
 - (void) setXl3OpsRunning:(BOOL)anXl3OpsRunning forKey:(id)aKey;
-- (unsigned long) xl3PedestalMask;
-- (void) setXl3PedestalMask:(unsigned long)anXl3PedestalMask;
+- (uint32_t) xl3PedestalMask;
+- (void) setXl3PedestalMask:(uint32_t)anXl3PedestalMask;
 - (float) xl3VltThreshold:(unsigned short)idx;
 - (void) setXl3VltThreshold:(unsigned short)idx withValue:(float)aThreashold;
 
@@ -369,15 +369,15 @@ enum {
 - (void) loadTriggersWithCrateMask:(NSArray*)XL3Mask;
 - (void) disableTriggers;
 - (void) loadSequencers;
-- (void) selectCards:(unsigned long) selectBits;
+- (void) selectCards:(uint32_t) selectBits;
 - (void) deselectCards;
 - (void) select:(ORSNOCard*) aCard;
-- (void) writeHardwareRegister:(unsigned long) anAddress value:(unsigned long) aValue;
-- (unsigned long) readHardwareRegister:(unsigned long) regAddress;
-- (void) writeHardwareMemory:(unsigned long) memAddress value:(unsigned long) aValue;
-- (unsigned long) readHardwareMemory:(unsigned long) memAddress;
-- (void) writeXL3Register:(short)aRegister value:(unsigned long)aValue;
-- (unsigned long) readXL3Register:(short)aRegister;
+- (void) writeHardwareRegister:(uint32_t) anAddress value:(uint32_t) aValue;
+- (uint32_t) readHardwareRegister:(uint32_t) regAddress;
+- (void) writeHardwareMemory:(uint32_t) memAddress value:(uint32_t) aValue;
+- (uint32_t) readHardwareMemory:(uint32_t) memAddress;
+- (void) writeXL3Register:(short)aRegister value:(uint32_t)aValue;
+- (uint32_t) readXL3Register:(short)aRegister;
 
 - (int) updateXl3Mode;
 - (int) setSequencerMask: (uint32_t) mask forSlot: (int) slot;
@@ -422,19 +422,19 @@ enum {
 - (void) compositeResetXL3StateMachine;
 - (void) compositeEnableChargeInjection;
 - (void) reset;
-- (void) enableChargeInjectionForSlot:(unsigned short)aSlot channelMask:(unsigned long)aChannelMask;
+- (void) enableChargeInjectionForSlot:(unsigned short)aSlot channelMask:(uint32_t)aChannelMask;
 
 #pragma mark •••HV
 - (void) readCMOSCountWithArgs:(CheckTotalCountArgs*)aSlot counts:(CheckTotalCountResults*)aCounts;
-- (void) readCMOSCountForSlot:(unsigned short)aSlot withChannelMask:(unsigned long)aChannelMask;
+- (void) readCMOSCountForSlot:(unsigned short)aSlot withChannelMask:(uint32_t)aChannelMask;
 - (void) readCMOSCount;
 
 - (void) readCMOSRateWithArgs:(CrateNoiseRateArgs*)aArgs rates:(CrateNoiseRateResults*)aRates;
-- (void) readCMOSRateForSlot:(unsigned short)aSlot withChannelMask:(unsigned long)aChannelMask withDelay:(unsigned long)aDelay;
+- (void) readCMOSRateForSlot:(unsigned short)aSlot withChannelMask:(uint32_t)aChannelMask withDelay:(uint32_t)aDelay;
 - (void) readCMOSRate;
 
 - (void) readPMTBaseCurrentsWithArgs:(ReadPMTCurrentArgs*)aArg currents:(ReadPMTCurrentResults*)result;
-- (void) readPMTBaseCurrentsForSlot:(unsigned short)aSlot withChannelMask:(unsigned long)aChannelMask;
+- (void) readPMTBaseCurrentsForSlot:(unsigned short)aSlot withChannelMask:(uint32_t)aChannelMask;
 - (void) readPMTBaseCurrents;
 
 - (void) readHVStatus:(HVReadbackResults*)status;
@@ -442,8 +442,8 @@ enum {
 
 - (void) hvUserIntervention:(BOOL)forA;
 
-- (void) setHVRelays:(unsigned long long)relayMask error:(unsigned long*)aError;
-- (void) setHVRelays:(unsigned long long)relayMask;
+- (void) setHVRelays:(uint64_t)relayMask error:(uint32_t*)aError;
+- (void) setHVRelays:(uint64_t)relayMask;
 - (void) readHVRelays:(uint64_t*) relayMask isKnown:(BOOL*)isKnown;
 - (void) closeHVRelays;
 - (void) openHVRelays;
@@ -477,12 +477,12 @@ enum {
 - (void) pollXl3:(BOOL)forceFlag;
 
 - (void) loadSingleDacForSlot:(unsigned short)aSlot dacNum:(unsigned short)aDacNum dacVal:(unsigned char)aDacVal;
-- (void) setVthrDACsForSlot:(unsigned short)aSlot withChannelMask:(unsigned long)aChannelMask dac:(unsigned char)aDac;
+- (void) setVthrDACsForSlot:(unsigned short)aSlot withChannelMask:(uint32_t)aChannelMask dac:(unsigned char)aDac;
 
-- (id) writeHardwareRegisterCmd:(unsigned long) aRegister value:(unsigned long) aBitPattern;
-- (id) readHardwareRegisterCmd:(unsigned long) regAddress;
+- (id) writeHardwareRegisterCmd:(uint32_t) aRegister value:(uint32_t) aBitPattern;
+- (id) readHardwareRegisterCmd:(uint32_t) regAddress;
 - (void) executeCommandList:(ORCommandList*)aList;
-- (id) delayCmd:(unsigned long) milliSeconds;
+- (id) delayCmd:(uint32_t) milliSeconds;
 
 @end
 

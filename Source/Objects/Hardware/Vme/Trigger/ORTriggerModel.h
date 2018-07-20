@@ -92,10 +92,10 @@ enum {
 	NSArray* dataTakers1;	//cache of data takers.
 	NSArray* dataTakers2;	//cache of data takers.
 	
-	unsigned long gtErrorCount;
+	uint32_t gtErrorCount;
 	
 	BOOL useSoftwareGtId;
-	unsigned long softwareGtId;
+	uint32_t softwareGtId;
 	BOOL useMSAM;
 	
 	BOOL useNoHardware;
@@ -107,14 +107,14 @@ enum {
 	NSString*   trigger2Name;
 
 	//private
-	unsigned long eventPlaceHolder1;
-	unsigned long eventPlaceHolder2;
-	unsigned long timePlaceHolder1;
-	unsigned long timePlaceHolder2;
+	uint32_t eventPlaceHolder1;
+	uint32_t eventPlaceHolder2;
+	uint32_t timePlaceHolder1;
+	uint32_t timePlaceHolder2;
 	ORTimer* timer;
     
-    unsigned long   clockDataId;
-    unsigned long   gtidDataId;
+    uint32_t   clockDataId;
+    uint32_t   gtidDataId;
     
 }
 
@@ -138,8 +138,8 @@ enum {
 - (BOOL) shipEvt2Clk;
 - (void) setShipEvt1Clk:(BOOL)state;
 - (void) setShipEvt2Clk:(BOOL)state;
-- (unsigned long) gtErrorCount;
-- (void) setGtErrorCount:(unsigned long)count;
+- (uint32_t) gtErrorCount;
+- (void) setGtErrorCount:(uint32_t)count;
 - (BOOL) initWithMultiBoardEnabled;
 - (void) setInitWithMultiBoardEnabled:(BOOL)newInitWithMultiBoardEnabled;
 - (BOOL) initWithTrig2InhibitEnabled;
@@ -151,8 +151,8 @@ enum {
 - (void) setUseNoHardware:(BOOL)newUseNoHardware;
 - (BOOL) useMSAM;
 - (void) setUseMSAM:(BOOL)flag;
-- (unsigned long) softwareGtId;
-- (void) setSoftwareGtId:(unsigned long)newSoftwareGtId;
+- (uint32_t) softwareGtId;
+- (void) setSoftwareGtId:(uint32_t)newSoftwareGtId;
 - (void) incrementSoftwareGtId;
 
 - (NSString *) trigger1Name;
@@ -161,10 +161,10 @@ enum {
 - (NSString *) trigger2Name;
 - (void) setTrigger2Name: (NSString *) aTrigger2Name;
 
-- (unsigned long) clockDataId;
-- (void) setClockDataId: (unsigned long) ClockDataId;
-- (unsigned long) gtidDataId;
-- (void) setGtidDataId: (unsigned long) GtidDataId;
+- (uint32_t) clockDataId;
+- (void) setClockDataId: (uint32_t) ClockDataId;
+- (uint32_t) gtidDataId;
+- (void) setGtidDataId: (uint32_t) GtidDataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherObj;
 
@@ -187,8 +187,8 @@ enum {
 - (unsigned short) 	readUpperEvent2GtId; 
 - (void) loadLowerGtId:(unsigned short)  aVal;
 - (void) loadUpperGtId:(unsigned short)  aVal;
-- (unsigned long) getGtId1;
-- (unsigned long) getGtId2;
+- (uint32_t) getGtId1;
+- (uint32_t) getGtId2;
     /*
      - (unsigned short) 	readLowerVmeClock; 
      - (unsigned short) 	readMiddleVmeClock; 
@@ -232,7 +232,7 @@ enum {
 - (void) loadReadOutList:(NSFileHandle*)aFile;
 
 #pragma mark ¥¥¥GTID Generator
-- (unsigned long)  requestGTID;
+- (uint32_t)  requestGTID;
 @end
 
 

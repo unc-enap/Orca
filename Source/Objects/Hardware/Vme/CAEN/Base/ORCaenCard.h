@@ -31,22 +31,22 @@ enum {
 
 // Class variables.
 @interface ORCaenCard : ORVmeIOCard {
-    unsigned long   	mErrorCount;
+    uint32_t   	mErrorCount;
     ORCaenDataDecoder 	*mDecoder;
-    unsigned long 		mTotalEventCounter;
-    unsigned long 		mEventCounter[ 32 ];
+    uint32_t 		mTotalEventCounter;
+    uint32_t 		mEventCounter[ 32 ];
 }
 				
 #pragma mark ***Initialization
 #pragma mark ***Accessors
-- (unsigned long) 	errorCount;
-- (unsigned long)	getTotalEventCount;
-- (unsigned long) 	getEventCount: (unsigned short) i;
+- (uint32_t) 	errorCount;
+- (uint32_t)	getTotalEventCount;
+- (uint32_t) 	getEventCount: (unsigned short) i;
 
 #pragma mark ***Commands
 - (OSErr) 			read: (unsigned short) pReg returnValue: (unsigned short*) pValue;
 - (OSErr) 			write: (unsigned short) pReg sendValue: (unsigned short) pValue;
-- (OSErr) 			readOutputBuffer: (unsigned long *) pOutputBuffer withSize: (unsigned short *) pBufferSize;
+- (OSErr) 			readOutputBuffer: (uint32_t *) pOutputBuffer withSize: (unsigned short *) pBufferSize;
 - (OSErr) 			readThreshold: (unsigned short) pChan returnValue: (unsigned short *) pthres_Value;
 - (OSErr) 			writeThreshold: (unsigned short) pChan sendValue: (unsigned short) pthres_Value;
 
@@ -54,13 +54,13 @@ enum {
 	// Methods that subclasses should define.
 - (short)  			accessSize: (short) i;
 - (short)  			accessType: (short) i;
-- (unsigned long) 	getAddressOffset: (short) i;
-- (unsigned long) 	getBufferOffset;
+- (uint32_t) 	getAddressOffset: (short) i;
+- (uint32_t) 	getBufferOffset;
 - (unsigned short) 	getDataBufferSize;
 - (short) 			getNumberRegisters;
 - (unsigned short) 	getStatus1RegOffset;
 - (unsigned short) 	getStatus2RegOffset;
-- (unsigned long) 	getThresholdOffset;
+- (uint32_t) 	getThresholdOffset;
 
 @end
 

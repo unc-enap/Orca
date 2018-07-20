@@ -65,7 +65,7 @@
 	[rateTextFields setFormatter:rateFormatter];
     blankView = [[NSView alloc] init];
     
-    NSString* key = [NSString stringWithFormat: @"orca.ORIpeV4FLT%lu.selectedtab",[model stationNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORIpeV4FLT%u.selectedtab",(int)[model stationNumber]];
     NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
@@ -696,8 +696,8 @@
 - (void) slotChanged:(NSNotification*)aNotification
 {
 	// Set title of FLT configuration window, ak 15.6.07
-	[[self window] setTitle:[NSString stringWithFormat:@"IPE-DAQ-V4 FLT Card (Slot %d, FLT# %lu)",[model slot]+1,[model stationNumber]]];
-    [fltSlotNumTextField setStringValue: [NSString stringWithFormat:@"FLT# %lu",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"IPE-DAQ-V4 FLT Card (Slot %d, FLT# %u)",(int)[model slot]+1,(int)[model stationNumber]]];
+    [fltSlotNumTextField setStringValue: [NSString stringWithFormat:@"FLT# %u",(int)[model stationNumber]]];
 }
 
 - (void) gainArrayChanged:(NSNotification*)aNotification
@@ -808,7 +808,7 @@
     }
     [[self window] setContentView:totalView];
 	
-    NSString* key = [NSString stringWithFormat: @"orca.ORIpeV4FLT%lu.selectedtab",[model stationNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORIpeV4FLT%u.selectedtab",[model stationNumber]];
     NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
     
@@ -1201,7 +1201,7 @@
 {
 	int index = [model selectedRegIndex]; 
 	@try {
-		unsigned long value;
+		uint32_t value;
         if(([model getAccessType:index] & kIpeRegNeedsChannel)){
             int chan = [model selectedChannelValue];
 		    value = [model readReg:index channel: chan ];
@@ -1224,7 +1224,7 @@
 	[self endEditing];
 	int index = (int)[registerPopUp indexOfSelectedItem];
 	@try {
-		unsigned long val = [model writeValue];
+		uint32_t val = [model writeValue];
         if(([model getAccessType:index] & kIpeRegNeedsChannel)){
             int chan = [model selectedChannelValue];
      		[model writeReg:index  channel: chan value: val];//TODO: allow hex values, e.g. 0x23 -tb-

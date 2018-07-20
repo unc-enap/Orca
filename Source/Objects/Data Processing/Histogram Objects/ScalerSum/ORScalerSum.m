@@ -53,7 +53,7 @@
 	[dataLock lock];
     scalerSum += scalerValue;
     scalerValue = 0;
-    long total = [self totalCounts]-1;
+    int32_t total = [self totalCounts]-1;
     if(total<0)total = 1;
     [self setTotalCounts:total];
 	[dataLock unlock];
@@ -75,12 +75,12 @@
 - (NSString*)   name
 {
 	[dataLock lock];
-	unsigned long temp = scalerSum;
+	uint32_t temp = scalerSum;
 	[dataLock unlock];
-    return [NSString stringWithFormat:@"%@ #runs: %lu  scaler total: %lu",key,[self totalCounts],temp];
+    return [NSString stringWithFormat:@"%@ #runs: %u  scaler total: %u",key,[self totalCounts],temp];
 }
 
-- (void) loadScalerValue:(unsigned long)newScaler
+- (void) loadScalerValue:(uint32_t)newScaler
 {
 	[dataLock lock];
     scalerValue = newScaler;

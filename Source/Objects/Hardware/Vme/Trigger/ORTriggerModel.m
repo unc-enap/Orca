@@ -59,7 +59,7 @@ NSString* ORTriggerSpecialLock				= @"ORTriggerSpecialLock";
 
 #pragma mark ¥¥¥Private Implementation
 @interface ORTriggerModel (private)
-- (void) _readOutChildren:(NSArray*)children dataPacket:(ORDataPacket*)aDataPacket withGTID:(unsigned long)gtid isMSAMEvent:(BOOL)isMSAMEvent;
+- (void) _readOutChildren:(NSArray*)children dataPacket:(ORDataPacket*)aDataPacket withGTID:(uint32_t)gtid isMSAMEvent:(BOOL)isMSAMEvent;
 @end
 
 @implementation ORTriggerModel
@@ -247,11 +247,11 @@ NSString* ORTriggerSpecialLock				= @"ORTriggerSpecialLock";
 
 
 
-- (unsigned long) gtErrorCount
+- (uint32_t) gtErrorCount
 {
     return gtErrorCount;
 }
-- (void) setGtErrorCount:(unsigned long)count
+- (void) setGtErrorCount:(uint32_t)count
 {
     gtErrorCount = count;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORTriggerShipGtErrorCountChangedNotification
@@ -292,11 +292,11 @@ NSString* ORTriggerSpecialLock				= @"ORTriggerSpecialLock";
 }
 
 
-- (unsigned long) softwareGtId
+- (uint32_t) softwareGtId
 {
     return softwareGtId;
 }
-- (void) setSoftwareGtId:(unsigned long)newSoftwareGtId
+- (void) setSoftwareGtId:(uint32_t)newSoftwareGtId
 {
     softwareGtId=newSoftwareGtId;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORTriggerSoftwareGtIdChangedNotification
@@ -490,13 +490,13 @@ NSString* ORTriggerSpecialLock				= @"ORTriggerSpecialLock";
     return val;
 }
 
-- (unsigned long) getGtId1
+- (uint32_t) getGtId1
 {
     if(useNoHardware || useSoftwareGtId)  return softwareGtId;
     else return (([self readUpperEvent1GtId] & 0x00ff)<<16) | [self readLowerEvent1GtId];;
 }
 
-- (unsigned long) getGtId2
+- (uint32_t) getGtId2
 {
     if(useNoHardware || useSoftwareGtId)  return softwareGtId;
     else return (([self readUpperEvent2GtId] & 0x00ff)<<16) | [self readLowerEvent2GtId];
@@ -782,15 +782,15 @@ static NSString *ORTriggerUseMSAM		= @"ORTriggerUseMSAM";
     }
 }
 
-- (unsigned long) clockDataId { return clockDataId; }
-- (void) setClockDataId: (unsigned long) aClockDataId
+- (uint32_t) clockDataId { return clockDataId; }
+- (void) setClockDataId: (uint32_t) aClockDataId
 {
     clockDataId = aClockDataId;
 }
 
 
-- (unsigned long) gtidDataId { return gtidDataId; }
-- (void) setGtidDataId: (unsigned long) aGtidDataId
+- (uint32_t) gtidDataId { return gtidDataId; }
+- (void) setGtidDataId: (uint32_t) aGtidDataId
 {
     gtidDataId = aGtidDataId;
 }
@@ -895,9 +895,9 @@ static NSString *ORTriggerUseMSAM		= @"ORTriggerUseMSAM";
 
 
 //----------------Clock Word------------------------------------
-// two long words
+// two int32_t words
 // word #1:
-// 0000 0000 0000 0000 0000 0000 0000 0000   32 bit unsigned long
+// 0000 0000 0000 0000 0000 0000 0000 0000   32 bit uint32_t
 // ^^^^ ^------------------------------------ kTrigTimeRecordType             [bits 26-31]
 //       ^----------------------------------- spare
 //        ^^--------------------------------- latch register ID (0-4)         [bits 24-25]
@@ -908,7 +908,7 @@ static NSString *ORTriggerUseMSAM		= @"ORTriggerUseMSAM";
 //--------------------------------------------------------------
 
 //-------------------GTID record--------------------------------
-// 0000 0000 0000 0000 0000 0000 0000 0000   32 bit unsigned long
+// 0000 0000 0000 0000 0000 0000 0000 0000   32 bit uint32_t
 // ^^^^ ^------------------------------------ kGTIDRecordType                 [bits 27-31]
 //       ^----------------------------------- sync clear err                  [bits 26]
 //        ^^--------------------------------- spare                           [bits 24-25]
@@ -971,11 +971,11 @@ static NSString *ORTriggerUseMSAM		= @"ORTriggerUseMSAM";
 {
 	struct timeval timeValue;
 	struct timezone timeZone;
-	unsigned long long doeTime  ;
+	uint64_t doeTime  ;
     
-    unsigned long gtid = 0;
-    unsigned long data[2];
-    unsigned long len;
+    uint32_t gtid = 0;
+    uint32_t data[2];
+    uint32_t len;
     NSString* errorLocation = @"";
     
     unsigned short statusReg;
@@ -998,7 +998,7 @@ static NSString *ORTriggerUseMSAM		= @"ORTriggerUseMSAM";
             BOOL removePlaceHolders = NO;
             
             if(!(statusReg & kValidEvent1GtMask)){
-                long deltaTime = [timer microseconds]*1000;
+                int32_t deltaTime = [timer microseconds]*1000;
                 if(deltaTime < 1500){
                     //there should have been a gtid bit set.
                     //try to read it again after a delay of up to 1.5 microseconds
@@ -1045,10 +1045,10 @@ static NSString *ORTriggerUseMSAM		= @"ORTriggerUseMSAM";
 						doeTime = timeValue.tv_sec;
 						doeTime = doeTime * 10000000 + timeValue.tv_usec*10;
 						
-						unsigned long data[3];
+						uint32_t data[3];
 						data[0] = clockDataId | 3;
-						data[1] = (0x1<<24) | (unsigned long)(doeTime>>32);
-						data[2] = (unsigned long)(doeTime&0x00000000ffffffff);
+						data[1] = (0x1<<24) | (uint32_t)(doeTime>>32);
+						data[2] = (uint32_t)(doeTime&0x00000000ffffffff);
 						[aDataPacket addLongsToFrameBuffer:data length:len];
                     }
                 }
@@ -1060,7 +1060,7 @@ static NSString *ORTriggerUseMSAM		= @"ORTriggerUseMSAM";
             }
             
             //keep track if data is taken if in the useSoftware GtId mode.
-            unsigned long lastDataCount = 0;
+            uint32_t lastDataCount = 0;
             if(useSoftwareGtId || useNoHardware){
                 lastDataCount = [aDataPacket dataCount];
             }
@@ -1069,7 +1069,7 @@ static NSString *ORTriggerUseMSAM		= @"ORTriggerUseMSAM";
                 //MSAM is a special bit that is set if a trigger 1 has occurred within 15 microseconds after a trigger2
                 errorLocation = @"Reading Trigger M_SAM";
                 if((statusReg & kValidEvent1GtMask) && !(statusReg & kMSAM_Mask)){
-                    long deltaTime = [timer microseconds];
+                    int32_t deltaTime = [timer microseconds];
                     if(deltaTime < 15){
                         struct timespec ts;
                         ts.tv_sec = 0;
@@ -1108,10 +1108,10 @@ static NSString *ORTriggerUseMSAM		= @"ORTriggerUseMSAM";
 						doeTime = timeValue.tv_sec;
 						doeTime = doeTime * 10000000 + timeValue.tv_usec*10;
 						
-						unsigned long data[3];
+						uint32_t data[3];
 						data[0] = clockDataId | 3;
-						data[1] = (0x1<<24) | (unsigned long)(doeTime>>32);
-						data[2] = (unsigned long)(doeTime&0x00000000ffffffff);
+						data[1] = (0x1<<24) | (uint32_t)(doeTime>>32);
+						data[2] = (uint32_t)(doeTime&0x00000000ffffffff);
 						[aDataPacket replaceReservedDataInFrameBufferAtIndex:timePlaceHolder1 withLongs:data length:3];
                     }
                     removePlaceHolders = NO;
@@ -1147,13 +1147,13 @@ static NSString *ORTriggerUseMSAM		= @"ORTriggerUseMSAM";
             
             //go out and read all the data takers scheduled to be read out with a trigger 2 event.
             //also we keep track if any data was actually taken
-            unsigned long lastDataCount = [aDataPacket frameIndex];
+            uint32_t lastDataCount = [aDataPacket frameIndex];
             errorLocation = @"Reading Event2 Children";
             [self _readOutChildren:dataTakers2 dataPacket:aDataPacket withGTID:0  isMSAMEvent:isMSAMEvent]; //don't know the gtid so pass 0
             BOOL dataWasTaken = [aDataPacket frameIndex]>lastDataCount;
             
             if(!(statusReg & kValidEvent2GtMask)){
-                long deltaTime = [timer microseconds]*1000;
+                int32_t deltaTime = [timer microseconds]*1000;
                 if(deltaTime < 1500){
                     //there should have been a gtid bit set.
                     //try to read it again after a delay of up to 1.5 microseconds
@@ -1196,10 +1196,10 @@ static NSString *ORTriggerUseMSAM		= @"ORTriggerUseMSAM";
 						doeTime = timeValue.tv_sec;
 						doeTime = doeTime * 10000000 + timeValue.tv_usec*10;
 						
-						unsigned long data[3];
+						uint32_t data[3];
 						data[0] = clockDataId | 3;
-						data[1] = (0x1<<25) | (unsigned long)(doeTime>>32);
-						data[2] = (unsigned long)(doeTime&0x00000000ffffffff);
+						data[1] = (0x1<<25) | (uint32_t)(doeTime>>32);
+						data[2] = (uint32_t)(doeTime&0x00000000ffffffff);
 						[aDataPacket replaceReservedDataInFrameBufferAtIndex:timePlaceHolder2 withLongs:data length:3];
 					}
 				}
@@ -1333,14 +1333,14 @@ static NSString *ORTriggerUseMSAM		= @"ORTriggerUseMSAM";
 }
 
 #pragma mark ¥¥¥GTID Generator
-- (unsigned long)  requestGTID
+- (uint32_t)  requestGTID
 {
     return [self getGtId1]; //this is not quite right, but included for compatiblitily with new trigger cards.
 }
 
 
 #pragma mark ¥¥¥Private Methods
-- (void) _readOutChildren:(NSArray*)children dataPacket:(ORDataPacket*)aDataPacket withGTID:(unsigned long)gtid isMSAMEvent:(BOOL)isMSAMEvent
+- (void) _readOutChildren:(NSArray*)children dataPacket:(ORDataPacket*)aDataPacket withGTID:(uint32_t)gtid isMSAMEvent:(BOOL)isMSAMEvent
 {
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithObject:[NSNumber numberWithLong:gtid] forKey:@"GTID"];
     if(useMSAM && !useNoHardware){

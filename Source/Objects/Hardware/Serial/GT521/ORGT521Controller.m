@@ -90,7 +90,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"GT521 (Unit %lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"GT521 (Unit %u)",[model uniqueIdNumber]]];
 }
 
 - (BOOL) portLocked

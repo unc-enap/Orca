@@ -673,7 +673,7 @@ NSString* ORArduinoUNOModelControlValueChanged		= @"ORArduinoUNOModelControlValu
 {
 	NSString* s;
  	@synchronized(self){
-		s= [NSString stringWithFormat:@"ArdUNO,%lu",[self uniqueIdNumber]];
+		s= [NSString stringWithFormat:@"ArdUNO,%u",[self uniqueIdNumber]];
 	}
 	return s;
 }

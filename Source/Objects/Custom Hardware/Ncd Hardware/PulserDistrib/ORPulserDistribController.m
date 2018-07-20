@@ -72,7 +72,7 @@
 
 - (void) patternChanged:(NSNotification*)aNotification
 {
-	long patternMask = [[[model patternArray] objectAtIndex:0] longValue];
+	int32_t patternMask = [[[model patternArray] objectAtIndex:0] longValue];
 	short bit;
 	for(bit=0;bit< [patternMatrix0 numberOfColumns];bit++){
 		[[patternMatrix0 cellWithTag:bit] setState:(patternMask&(1L<<bit)) > 0L];
@@ -130,7 +130,7 @@
 
 - (IBAction) patternAction:(id)sender
 {
-	unsigned long aMask = 0; 
+	uint32_t aMask = 0; 
 	int bit;
 	for(bit=0;bit< [sender numberOfColumns];bit++){
 		if([[sender cellWithTag:bit] state]){

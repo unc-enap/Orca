@@ -169,13 +169,13 @@ NSString* ORTPG262Lock = @"ORTPG262Lock";
 {
     if([[ORGlobal sharedGlobal] runInProgress]){
 		
-		unsigned long data[6];
+		uint32_t data[6];
 		data[0] = dataId | 6;
 		data[1] = [self uniqueIdNumber]&0xfff;
 		
 		union {
 			float asFloat;
-			unsigned long asLong;
+			uint32_t asLong;
 		}theData;
 		int index = 2;
 		int i;
@@ -188,7 +188,7 @@ NSString* ORTPG262Lock = @"ORTPG262Lock";
 			index++;
 		}
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-															object:[NSData dataWithBytes:data length:sizeof(long)*6]];
+															object:[NSData dataWithBytes:data length:sizeof(int32_t)*6]];
 	}
 }
 
@@ -274,7 +274,7 @@ NSString* ORTPG262Lock = @"ORTPG262Lock";
 	else return 0.0;
 }
 
-- (unsigned long) timeMeasured:(int)index
+- (uint32_t) timeMeasured:(int)index
 {
 	if(index>=0 && index<2)return timeMeasured[index];
 	else return 0;
@@ -433,8 +433,8 @@ NSString* ORTPG262Lock = @"ORTPG262Lock";
 }
 
 #pragma mark •••Data Records
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }

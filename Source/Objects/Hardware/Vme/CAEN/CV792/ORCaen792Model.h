@@ -76,9 +76,9 @@ enum {
 {
 	ORRateGroup*	qdcRateGroup;
     int modelType;
-	unsigned long   onlineMask;
-    unsigned long   dataIdN;
-	unsigned long   location;
+	uint32_t   onlineMask;
+    uint32_t   dataIdN;
+	uint32_t   location;
     unsigned short  iPed;
     BOOL            overflowSuppressEnable;
     BOOL            zeroSuppressEnable;
@@ -120,12 +120,12 @@ enum {
 - (void)            setOverflowSuppressEnable:(BOOL)aOverflowSuppressEnable;
 - (unsigned short)  iPed;
 - (void)            setIPed:(unsigned short)aIPed;
-- (unsigned long)   dataIdN;
-- (void)            setDataIdN: (unsigned long) DataId;
+- (uint32_t)   dataIdN;
+- (void)            setDataIdN: (uint32_t) DataId;
 - (int)             modelType;
 - (void)            setModelType:(int)aModelType;
-- (unsigned long)   onlineMask;
-- (void)			setOnlineMask:(unsigned long)anOnlineMask;
+- (uint32_t)   onlineMask;
+- (void)			setOnlineMask:(uint32_t)anOnlineMask;
 - (BOOL)			onlineMaskBit:(int)bit;
 - (void)			setOnlineMaskBit:(int)bit withValue:(BOOL)aValue;
 - (ORRateGroup*)    qdcRateGroup;
@@ -134,9 +134,9 @@ enum {
 #pragma mark ***Register - General routines
 - (int)             numberOfChannels;
 - (short)           getNumberRegisters;
-- (unsigned long) 	getBufferOffset;
+- (uint32_t) 	getBufferOffset;
 - (unsigned short) 	getDataBufferSize;
-- (unsigned long)   getThresholdOffset:(int)aChan;
+- (uint32_t)   getThresholdOffset:(int)aChan;
 - (short)           getStatusRegisterIndex: (short) aRegister;
 - (short)           getThresholdIndex;
 - (short)           getOutputBufferIndex;
@@ -146,11 +146,11 @@ enum {
 - (void)            writeSlideConstReg;
 - (void)            setToDefaults;
 - (unsigned short)  readIPed;
-- (unsigned long)   eventCount:(int)aChannel;
+- (uint32_t)   eventCount:(int)aChannel;
 - (BOOL)            bumpRateFromDecodeStage:(short)channel;
 - (void)            startRates;
 - (void)            clearEventCounts;
-- (unsigned long)   getCounter:(int)counterTag forGroup:(int)groupTag;
+- (uint32_t)   getCounter:(int)counterTag forGroup:(int)groupTag;
 - (void)            clearData;
 - (void)            writeOneShotReset;
 - (void)            doSoftClear;
@@ -158,7 +158,7 @@ enum {
 
 #pragma mark ***Register - Register specific routines
 - (NSString*) 		getRegisterName: (short) anIndex;
-- (unsigned long) 	getAddressOffset: (short) anIndex;
+- (uint32_t) 	getAddressOffset: (short) anIndex;
 - (short)           getAccessType: (short) anIndex;
 - (short)           getAccessSize: (short) anIndex;
 - (BOOL)            dataReset: (short) anIndex;
@@ -167,9 +167,9 @@ enum {
 
 #pragma mark ¥¥¥AdcProviding Protocol
 - (BOOL) partOfEvent:(unsigned short)aChannel;
-- (unsigned long) eventCount:(int)aChannel;
+- (uint32_t) eventCount:(int)aChannel;
 - (void) clearEventCounts;
-- (unsigned long) thresholdForDisplay:(unsigned short) aChan;
+- (uint32_t) thresholdForDisplay:(unsigned short) aChan;
 - (unsigned short) gainForDisplay:(unsigned short) aChan;
 - (void) postAdcInfoProvidingValueChanged;
 

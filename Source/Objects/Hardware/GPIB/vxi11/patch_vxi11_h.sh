@@ -30,25 +30,25 @@ sed -e 's|\(#include <rpc/rpc.h>\)|\1                                           
 #define VXI_CHR          2   /* termination character matched */                    \
 #define VXI_ENDR         4   /* END indicator read */                               \
 |g' \
--e 's/typedef long Device_Link;/                                         \
+-e 's/typedef int32_t Device_Link;/                                         \
 #ifdef __LP64__                                                          \
 typedef int Device_Link;                                                 \
 #else                                                                    \
-typedef long Device_Link;                                                \
+typedef int32_t Device_Link;                                                \
 #endif                                                                   \
 /g' \
--e 's/typedef long Device_ErrorCode;/                                    \
+-e 's/typedef int32_t Device_ErrorCode;/                                    \
 #ifdef __LP64__                                                          \
 typedef int Device_ErrorCode;                                            \
 #else                                                                    \
-typedef long Device_ErrorCode;                                           \
+typedef int32_t Device_ErrorCode;                                           \
 #endif                                                                   \
 /g' \
--e 's/typedef long Device_Flags;/                                        \
+-e 's/typedef int32_t Device_Flags;/                                        \
 #ifdef __LP64__                                                          \
 typedef int Device_Flags;                                                \
 #else                                                                    \
-typedef long Device_Flags;                                               \
+typedef int32_t Device_Flags;                                               \
 #endif                                                                   \
 /g' \
 -e 's/\(.*\)u_long \(.*\);/                                              \
@@ -58,7 +58,7 @@ typedef long Device_Flags;                                               \
 \1u_long \2;                                                             \
 #endif                                                                   \
 /g' \
--e 's/\(	\)long \(.*\);/                                          \
+-e 's/\(	\)int32_t \(.*\);/                                          \
 #ifdef __LP64__                                                          \
 \1int \2;                                                                \
 #else                                                                    \

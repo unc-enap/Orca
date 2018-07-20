@@ -88,14 +88,14 @@
 
 - (void) processData
 {
-	unsigned long* p		= (unsigned long*)[dataToProcess bytes];
-	unsigned long* endPtr		= p + [dataToProcess length]/sizeof(long);
-	unsigned long bytesProcessed	= 0;
+	uint32_t* p		= (uint32_t*)[dataToProcess bytes];
+	uint32_t* endPtr		= p + [dataToProcess length]/sizeof(int32_t);
+	uint32_t bytesProcessed	= 0;
 	while(p<endPtr){
-		unsigned long firstWord		= *p;
-		if(needToSwap)firstWord		= (unsigned long)CFSwapInt32((uint32_t)*p);
-		unsigned long dataId		= ExtractDataId(firstWord);
-		unsigned long recordLength	= ExtractLength(firstWord);
+		uint32_t firstWord		= *p;
+		if(needToSwap)firstWord		= (uint32_t)CFSwapInt32((uint32_t)*p);
+		uint32_t dataId		= ExtractDataId(firstWord);
+		uint32_t recordLength	= ExtractLength(firstWord);
 		if(p+recordLength <= endPtr){
 			if(dataId == 0x0){
 				//[currentDecoder loadHeader:p];
@@ -110,7 +110,7 @@
 			}
 			*/
 			p += recordLength;
-			bytesProcessed += recordLength*sizeof(long);
+			bytesProcessed += recordLength*sizeof(int32_t);
 			if(p>=endPtr)break;
 		}
 		else break;
@@ -118,7 +118,7 @@
 	[dataToProcess replaceBytesInRange:NSMakeRange( 0, bytesProcessed ) withBytes:NULL length:0];
 }
 
-- (void) processRunRecord:(unsigned long*)p
+- (void) processRunRecord:(uint32_t*)p
 {
 	if(needToSwap){
 		//NSNumber* aKey = [NSNumber numberWithInt:ExtractLength(CFSwapInt32(p[0]))];
@@ -165,12 +165,12 @@
 }
 
 - (void)logHeader:(NSDictionary*)aHeader
-		 runStart:(unsigned long)aRunStart 
-		   runEnd:(unsigned long)aRunEnd 
-		runNumber:(unsigned long)aRunNumber 
-		useSubRun:(unsigned long)aUseSubRun
-	 subRunNumber:(unsigned long)aSubRunNumber
-		 fileSize:(unsigned long)aFileSize
+		 runStart:(uint32_t)aRunStart 
+		   runEnd:(uint32_t)aRunEnd 
+		runNumber:(uint32_t)aRunNumber 
+		useSubRun:(uint32_t)aUseSubRun
+	 subRunNumber:(uint32_t)aSubRunNumber
+		 fileSize:(uint32_t)aFileSize
 		 fileName:(NSString*)aFilePath
 {
 	if([delegate respondsToSelector:@selector(logHeader:runStart:runEnd:runNumber:useSubRun:subRunNumber:fileSize:fileName:)]){

@@ -120,7 +120,7 @@ static MotionNodeCalibrations motionNodeCalibrationV10[3] = {
 - (void) checkForDriver;
 - (void) createLongTermTraceStorage;
 - (void) flushCheck;
-- (void) saveTraceToHistory:(unsigned long)aTimeStamp;
+- (void) saveTraceToHistory:(uint32_t)aTimeStamp;
 - (void) closeOutHistoryFile;
 - (void) addToHistoryX:(unsigned short)xAcc y:(unsigned short)yAcc z:(unsigned short)zAcc;
 - (void) postSpecialToCouch;
@@ -746,8 +746,8 @@ static MotionNodeCalibrations motionNodeCalibrationV10[3] = {
 }
 
 #pragma mark •••Data Records
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -801,7 +801,7 @@ static MotionNodeCalibrations motionNodeCalibrationV10[3] = {
 		
 		int type;
 		for(type=0;type<3;type++){
-			unsigned long data[3 + (kSecToShip * kPtPerSec)];
+			uint32_t data[3 + (kSecToShip * kPtPerSec)];
 			data[0] = dataId | (3 + shipLen);
 			data[1] = ((type&0x3)<<16) | ([self uniqueIdNumber]&0xfff); // xtrace
 			data[2] = ut_Time;
@@ -823,7 +823,7 @@ static MotionNodeCalibrations motionNodeCalibrationV10[3] = {
 			}
 			
 			[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-															object:[NSData dataWithBytes:data length:sizeof(long)*(3+shipLen)]];
+															object:[NSData dataWithBytes:data length:sizeof(int32_t)*(3+shipLen)]];
 		}
 		[self setTotalShipped:[self totalShipped]+1];
 		[self setLastRecordShipped:[NSDate date]];
@@ -889,7 +889,7 @@ static MotionNodeCalibrations motionNodeCalibrationV10[3] = {
     }
     return 0;
 }
-- (unsigned long)maxHistoryLength
+- (uint32_t)maxHistoryLength
 {
     return kMaxHistoryLength;
 }
@@ -1203,7 +1203,7 @@ static MotionNodeCalibrations motionNodeCalibrationV10[3] = {
 - (void) createLongTermTraceStorage
 {
 	if(!longTermValid){
-		//alloc a large 2-D array for the long term storage
+		//alloc a large 2-D array for the int32_t term storage
 		int i;
 		longTermTrace = malloc(kNumMin * sizeof(float *));
 		for (i = 0; i < kNumMin; i++) {
@@ -1222,7 +1222,7 @@ static MotionNodeCalibrations motionNodeCalibrationV10[3] = {
     }
     
     if(!historyTrace){
-        unsigned long numBytes = sizeof(MotionNodeHistoryHeader) + kMaxHistoryLength * sizeof(MotionNodeHistoryData);
+        uint32_t numBytes = sizeof(MotionNodeHistoryHeader) + kMaxHistoryLength * sizeof(MotionNodeHistoryData);
         historyTrace  = [[NSMutableData alloc] initWithCapacity:numBytes];
         [historyTrace setLength: numBytes];
         MotionNodeHistoryHeader*  header = (MotionNodeHistoryHeader*)[historyTrace bytes];
@@ -1306,7 +1306,7 @@ static MotionNodeCalibrations motionNodeCalibrationV10[3] = {
     }
 }
 
-- (void) saveTraceToHistory:(unsigned long) aTimeStamp
+- (void) saveTraceToHistory:(uint32_t) aTimeStamp
 {
     
     NSDate* startDate   = [NSDate dateWithTimeIntervalSince1970:aTimeStamp];
@@ -1347,7 +1347,7 @@ static MotionNodeCalibrations motionNodeCalibrationV10[3] = {
         
         NSDictionary* values = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [self fullID],               @"name",
-                                    [NSString stringWithFormat:@"Seismic%lu", [self uniqueIdNumber]], @"title",
+                                    [NSString stringWithFormat:@"Seismic%u", [self uniqueIdNumber]], @"title",
                                     [[specialTrace copy] autorelease],                                @"trace",
                                     [NSNumber numberWithInteger:    [self uniqueIdNumber]],               @"module",
                                     [NSNumber numberWithInt:    eventInProgress],                     @"highResolution",

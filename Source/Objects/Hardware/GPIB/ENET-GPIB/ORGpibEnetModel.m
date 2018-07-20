@@ -208,7 +208,7 @@ NSString*			ORGPIBBoardChangedNotification = @"ORGpibBoardChangedNotification";
     return 0;
 }
 
-- (long) ibcntl
+- (int32_t) ibcntl
 {
     if ( [ self isEnabled ]) {
         return( [gpibEnetInstance ibcntl] );
@@ -420,10 +420,10 @@ NSString*			ORGPIBBoardChangedNotification = @"ORGpibBoardChangedNotification";
 }
 
 
-- (long) readFromDevice: (short) aPrimaryAddress data: (char*) aData maxLength: (long) aMaxLength
+- (int32_t) readFromDevice: (short) aPrimaryAddress data: (char*) aData maxLength: (int32_t) aMaxLength
 {
     if ( ! [ self isEnabled ]) return -1;
-    long	nReadBytes = -1;
+    int32_t	nReadBytes = -1;
     
     @try {
         // Make sure that device is initialized.
@@ -453,7 +453,7 @@ NSString*			ORGPIBBoardChangedNotification = @"ORGpibBoardChangedNotification";
             {
                 NSMutableDictionary* userInfo = [ NSMutableDictionary dictionary ];			
                 NSString* dataStr = [[ NSString alloc ] initWithBytes: aData length: nReadBytes encoding: NSASCIIStringEncoding ];
-                [ userInfo setObject: [ NSString stringWithFormat: @"Read - Address: %d length: %ld data: %@\n", 
+                [ userInfo setObject: [ NSString stringWithFormat: @"Read - Address: %d length: %d data: %@\n",
 									   aPrimaryAddress, nReadBytes, dataStr ] 
                               forKey: ORGpibMonitor ]; 
                 
@@ -517,10 +517,10 @@ NSString*			ORGPIBBoardChangedNotification = @"ORGpibBoardChangedNotification";
 }
 
 
-- (long) writeReadDevice: (short) aPrimaryAddress command: (NSString*) aCommand data: (char*) aData
-               maxLength: (long) aMaxLength
+- (int32_t) writeReadDevice: (short) aPrimaryAddress command: (NSString*) aCommand data: (char*) aData
+               maxLength: (int32_t) aMaxLength
 {
-    long retVal = 0;
+    int32_t retVal = 0;
     if ( ! [ self isEnabled ]) return -1;
     @try {
         
@@ -683,7 +683,7 @@ NSString*			ORGPIBBoardChangedNotification = @"ORGpibBoardChangedNotification";
         
         [ errorMsg release ];
         
-        [ aMsg appendString: [ NSString stringWithFormat: @"ibcntl = %ld\n", [ gpibEnetInstance ibcntl ]]];
+        [ aMsg appendString: [ NSString stringWithFormat: @"ibcntl = %d\n", [ gpibEnetInstance ibcntl ]]];
         
         [theHWLock unlock];   //-----end critical section
 		// Call ibonl to take the device and interface offline

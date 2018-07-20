@@ -29,7 +29,7 @@ NSString* ORPxiIOCardExceptionCountChanged 		= @"ORPxiIOCardExceptionCountChange
 @implementation ORPxiIOCard
 
 #pragma mark ¥¥¥Accessors
-- (void) setBaseAddress:(unsigned long) address
+- (void) setBaseAddress:(uint32_t) address
 {
 	[[[self undoManager] prepareWithInvocationTarget:self] setBaseAddress:[self baseAddress]];
     baseAddress = address;
@@ -39,7 +39,7 @@ NSString* ORPxiIOCardExceptionCountChanged 		= @"ORPxiIOCardExceptionCountChange
 					   object:self]; 
 }
 
-- (unsigned long) baseAddress
+- (uint32_t) baseAddress
 {
     return baseAddress;
 }
@@ -47,7 +47,7 @@ NSString* ORPxiIOCardExceptionCountChanged 		= @"ORPxiIOCardExceptionCountChange
 - (NSRange)	memoryFootprint
 {
 	//subclasses should overide to provide an accurate memory range
-	return NSMakeRange(baseAddress,1*sizeof(long));
+	return NSMakeRange(baseAddress,1*sizeof(int32_t));
 }
 
 - (BOOL) memoryConflictsWith:(NSRange)aRange
@@ -63,7 +63,7 @@ NSString* ORPxiIOCardExceptionCountChanged 		= @"ORPxiIOCardExceptionCountChange
 	return nil;
 }
 
-- (unsigned long)   exceptionCount
+- (uint32_t)   exceptionCount
 {
     return exceptionCount;
 }

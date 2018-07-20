@@ -28,7 +28,7 @@ NSString* CBeValue		= @"Value";
 	[super dealloc];
 }
 
-- ( void ) setSize: (long) aSizeCB
+- ( void ) setSize: (int32_t) aSizeCB
 {
 	mSize = aSizeCB;
 	mStorageArray = [NSMutableArray arrayWithCapacity: mSize];
@@ -36,8 +36,8 @@ NSString* CBeValue		= @"Value";
 //	NSLog( @"Size of array: %d\n", [mStorageArray count] );
 }
 
-//mah -- changed to count to remove compiler warning with other methods named 'size' in other objects that return diff type than long.
-- ( long ) count
+//mah -- changed to count to remove compiler warning with other methods named 'size' in other objects that return diff type than int32_t.
+- ( int32_t ) count
 {
 	return( [mStorageArray count] );
 }
@@ -89,9 +89,9 @@ NSString* CBeValue		= @"Value";
 	}
 }
 
-- (NSDictionary *) HVEntry: (long) anOffsetFromMostRecent
+- (NSDictionary *) HVEntry: (int32_t) anOffsetFromMostRecent
 {
-	long index = mTailIndex - 1 + anOffsetFromMostRecent; // -1 present because mTailIndex points to next position where new entry will be placed.
+	int32_t index = mTailIndex - 1 + anOffsetFromMostRecent; // -1 present because mTailIndex points to next position where new entry will be placed.
 	if ( index < 0 ) index += [mStorageArray count];
 	if ( index >= [mStorageArray count] ) index -= [mStorageArray count];
 	

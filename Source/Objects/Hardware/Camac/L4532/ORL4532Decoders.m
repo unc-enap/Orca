@@ -49,10 +49,10 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 
 @implementation ORL4532DecoderForTrigger
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr   = (unsigned long*)someData;
-	unsigned long length = ExtractLength(*ptr);
+    uint32_t* ptr   = (uint32_t*)someData;
+	uint32_t length = ExtractLength(*ptr);
 
 	ptr++;
 	ptr++;
@@ -63,22 +63,22 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {    
     NSString* title= @"L4532 Trigger Record\n\n";
 	ptr++;
-	NSString* eventCount = [NSString stringWithFormat:@"EventCount = %lu\n",*ptr];
+	NSString* eventCount = [NSString stringWithFormat:@"EventCount = %u\n",*ptr];
 
 	ptr++;
-    NSString* crate = [NSString stringWithFormat:@"Crate    = %lu\n",(*ptr&0x01e00000)>>21];
-    NSString* card  = [NSString stringWithFormat:@"Station  = %lu\n",(*ptr&0x001f0000)>>16];
+    NSString* crate = [NSString stringWithFormat:@"Crate    = %u\n",(*ptr&0x01e00000)>>21];
+    NSString* card  = [NSString stringWithFormat:@"Station  = %u\n",(*ptr&0x001f0000)>>16];
 
 	BOOL timingIncluded = (*ptr&0x02000000)>>25;
 	NSString* timeString;
 	if(timingIncluded)	{
 		union {
 			NSTimeInterval asTimeInterval;
-			unsigned long asLongs[2];
+			uint32_t asLongs[2];
 		}theTimeRef;
 		ptr++;
 		theTimeRef.asLongs[1] = *ptr;
@@ -124,16 +124,16 @@ static NSString* kTriggerKey[32] = {
 
 @implementation ORL4532DecoderForChannelTrigger
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr   = (unsigned long*)someData;
-	unsigned long length = ExtractLength(*ptr);
+    uint32_t* ptr   = (uint32_t*)someData;
+	uint32_t length = ExtractLength(*ptr);
 	ptr++;
     NSString* crate = [self getCrateKey:(*ptr&0x01e00000)>>21];
     NSString* card  = [self getStationKey:(*ptr&0x001f0000)>>16];
 
 	ptr++;
-	unsigned long mask = *ptr;
+	uint32_t mask = *ptr;
 	int i;
 	for(i=0;i<32;i++){
 		if(mask & (1L<<i)){
@@ -143,16 +143,16 @@ static NSString* kTriggerKey[32] = {
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {    
     NSString* title= @"L4532 Channel Trigger Record\n\n";
 
 	ptr++;
-    NSString* crate = [NSString stringWithFormat:@"Crate    = %lu\n",(*ptr&0x01e00000)>>21];
-    NSString* card  = [NSString stringWithFormat:@"Station  = %lu\n",(*ptr&0x001f0000)>>16];
+    NSString* crate = [NSString stringWithFormat:@"Crate    = %u\n",(*ptr&0x01e00000)>>21];
+    NSString* card  = [NSString stringWithFormat:@"Station  = %u\n",(*ptr&0x001f0000)>>16];
 
 	ptr++;
-	NSString* eventCount = [NSString stringWithFormat:@"Trigger Mask = 0x%08lx\n",*ptr];
+	NSString* eventCount = [NSString stringWithFormat:@"Trigger Mask = 0x%08x\n",*ptr];
 
     return [NSString stringWithFormat:@"%@%@%@%@",title,crate,card,eventCount];               
 }

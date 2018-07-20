@@ -174,7 +174,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(USB);
 	}
 }
 
-- (void) claimInterfaceWithVendor:(unsigned long)aVendorID product:(NSUInteger) aProductID for:(id)obj
+- (void) claimInterfaceWithVendor:(uint32_t)aVendorID product:(NSUInteger) aProductID for:(id)obj
 {
 	//just grab the first one....someday this will probably have to be fixed
     NSArray* someInterfaces;
@@ -229,7 +229,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(USB);
 	return [devices objectAtIndex:index];
 }
 
-- (ORUSBInterface*) getUSBInterface:(unsigned long)aVendorID productID:(NSUInteger) aProductID
+- (ORUSBInterface*) getUSBInterface:(uint32_t)aVendorID productID:(NSUInteger) aProductID
 {
 	id intf;
 	NSEnumerator* e = [interfaces objectEnumerator];
@@ -352,7 +352,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(USB);
 			
 			// Now that we have the IOUSBDeviceInterface182, we can call the routines in IOUSBLib.h.
 			// In this case, fetch the locationID. The locationID uniquely identifies the device
-			// and will remain the same, even across reboots, so long as the bus topology doesn't change.
+			// and will remain the same, even across reboots, so int32_t as the bus topology doesn't change.
 			
 			kr = (*deviceInterface)->GetLocationID(deviceInterface, &locationID);
 			if (KERN_SUCCESS != kr) {
@@ -690,9 +690,9 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(USB);
     return kr;
 }
 
-- (NSString*) keyForVendorID:(unsigned long)aVendorID productID:(NSUInteger) aProductID
+- (NSString*) keyForVendorID:(uint32_t)aVendorID productID:(NSUInteger) aProductID
 {
-	return [NSString stringWithFormat:@"%lu_%lu",(unsigned long)aVendorID,(unsigned long)aProductID];
+	return [NSString stringWithFormat:@"%u_%u",(uint32_t)aVendorID,(uint32_t)aProductID];
 }
 
 - (NSArray*) interfacesForVender:(NSUInteger) aVenderID product:(NSUInteger) aProductID
@@ -715,8 +715,8 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(USB);
     if([someVendorIDs count] == [someProductIDs count]){
         int i;
         for(i=0;i<[someVendorIDs count];i++){
-            unsigned long aVendorID  = [[someVendorIDs objectAtIndex:i] unsignedLongValue];
-            unsigned long aProductID = [[someProductIDs objectAtIndex:i] unsignedLongValue];
+            uint32_t aVendorID  = [[someVendorIDs objectAtIndex:i] unsignedLongValue];
+            uint32_t aProductID = [[someProductIDs objectAtIndex:i] unsignedLongValue];
             [matchingInterfaces addObjectsFromArray:[self interfacesForVender:aVendorID product:aProductID]];
         }
        return  matchingInterfaces;

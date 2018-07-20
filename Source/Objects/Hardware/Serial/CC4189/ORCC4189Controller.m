@@ -76,7 +76,7 @@
     processLimitSize = NSMakeSize(400,170);
     plotSize		 = NSMakeSize(400,315);
 	
-	NSString* key = [NSString stringWithFormat: @"orca.ORCC4189%lu.selectedtab",[model uniqueIdNumber]];
+	NSString* key = [NSString stringWithFormat: @"orca.ORCC4189%u.selectedtab",[model uniqueIdNumber]];
     NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
@@ -102,7 +102,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"CC4189 (Unit %lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"CC4189 (Unit %u)",[model uniqueIdNumber]]];
 }
 
 #pragma mark ***Notifications
@@ -220,7 +220,7 @@
 	
     [[self window] setContentView:totalView];
 	
-    NSString* key = [NSString stringWithFormat: @"orca.ORCC4189%lu.selectedtab",[model uniqueIdNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORCC4189%u.selectedtab",[model uniqueIdNumber]];
     NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
 }
@@ -302,7 +302,7 @@
 - (void) temperatureChanged:(NSNotification*)aNote
 {
 	[temperatureField setFloatValue:[model temperature]];
-	unsigned long t = [model timeMeasured];
+	uint32_t t = [model timeMeasured];
 	NSDate* theDate;
 	if(t){
 		theDate = [NSDate dateWithTimeIntervalSince1970:t];

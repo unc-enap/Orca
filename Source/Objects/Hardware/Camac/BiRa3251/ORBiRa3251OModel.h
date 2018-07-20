@@ -30,8 +30,8 @@
 		unsigned short outputRegister;
 		
 		//bit processing variables
-		unsigned long processOutputValue; //outputs to be written at end of process cycle
-		unsigned long processOutputMask;  //controlls which bits are written
+		uint32_t processOutputValue; //outputs to be written at end of process cycle
+		uint32_t processOutputMask;  //controlls which bits are written
 }
 
         

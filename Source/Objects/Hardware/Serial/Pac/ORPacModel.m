@@ -826,8 +826,8 @@ NSString* ORPacModelVetoChanged			= @"ORPacModelVetoChanged";
 }
 
 #pragma mark •••Data Records
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -971,7 +971,7 @@ NSString* ORPacModelVetoChanged			= @"ORPacModelVetoChanged";
 	}
 }
 
-- (unsigned long) timeMeasured:(int)index
+- (uint32_t) timeMeasured:(int)index
 {
 	if(index<0)return 0;
 	else if(index>=8)return 0;
@@ -1088,7 +1088,7 @@ NSString* ORPacModelVetoChanged			= @"ORPacModelVetoChanged";
 {
 	NSString* s;
  	@synchronized(self){
-		s= [NSString stringWithFormat:@"Pac,%lu",[self uniqueIdNumber]];
+		s= [NSString stringWithFormat:@"Pac,%u",[self uniqueIdNumber]];
 	}
 	return s;
 }
@@ -1310,7 +1310,7 @@ NSString* ORPacModelVetoChanged			= @"ORPacModelVetoChanged";
 {
     if([[ORGlobal sharedGlobal] runInProgress]){
 		
-		unsigned long data[18];
+		uint32_t data[18];
 		data[0] = dataId | 18;
 		data[1] = ([self uniqueIdNumber]&0xfff);
 		
@@ -1321,14 +1321,14 @@ NSString* ORPacModelVetoChanged			= @"ORPacModelVetoChanged";
 			data[index++] = adc[i];
 		}
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification
-															object:[NSData dataWithBytes:data length:sizeof(long)*18]];
+															object:[NSData dataWithBytes:data length:sizeof(int32_t)*18]];
 	}
 }
 - (void) loadLogBuffer
 {
 	NSString*   outputString = nil;
 	if(logToFile) {
-		outputString = [NSString stringWithFormat:@"%lu ",timeMeasured[0]];
+		outputString = [NSString stringWithFormat:@"%u ",timeMeasured[0]];
 		short chan;
 		for(chan=0;chan<8;chan++){
 			outputString = [outputString stringByAppendingFormat:@"%.2f ",[self convertedAdc:chan]];

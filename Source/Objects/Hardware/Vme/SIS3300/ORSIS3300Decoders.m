@@ -80,16 +80,16 @@
     [super dealloc];
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length = ExtractLength(*ptr);
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length = ExtractLength(*ptr);
 	ptr++; //point to location info
     int crate = (*ptr&0x01e00000)>>21;
     int card  = (*ptr&0x001f0000)>>16;
 	int moduleID = (*ptr & 0x1);
 	ptr++; //event trigger word
-	unsigned long triggerWord= *ptr;
+	uint32_t triggerWord= *ptr;
 	
 	ptr++; //point to the event# and timestamp (timestamp always zero unless in multievent mode)
 	ptr++; //point to the data
@@ -97,10 +97,10 @@
 	NSString* crateKey		= [self getCrateKey: crate];
 	NSString* cardKey		= [self getCardKey: card];
 	
-	long numDataWords = length-4;
+	int32_t numDataWords = length-4;
 	//any of the channels may have triggered, so have to check each bit in the adc mask
 	int channel;
-	unsigned long aMask = moduleID?0x3fff:0xfff;
+	uint32_t aMask = moduleID?0x3fff:0xfff;
 	for(channel=0;channel<8;channel++){
 		if(triggerWord & (0x80000000 >> channel)){
 			NSMutableData* tmpData = [NSMutableData dataWithLength:numDataWords*sizeof(short)];
@@ -152,18 +152,18 @@
     return length; //must return number of longs
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 	ptr++;
     NSString* title= @"SIS3300 Waveform Record\n\n";
-    NSString* crate = [NSString stringWithFormat:@"Crate = %lu\n",(*ptr&0x01e00000)>>21];
-    NSString* card  = [NSString stringWithFormat:@"Card  = %lu\n",(*ptr&0x001f0000)>>16];
+    NSString* crate = [NSString stringWithFormat:@"Crate = %u\n",(*ptr&0x01e00000)>>21];
+    NSString* card  = [NSString stringWithFormat:@"Card  = %u\n",(*ptr&0x001f0000)>>16];
 	NSString* moduleID = (*ptr&0x1)?@"SIS3301":@"SIS3300";
 	ptr++;
-	NSString* triggerWord = [NSString stringWithFormat:@"TriggerWord  = 0x08%lx\n",*ptr];
+	NSString* triggerWord = [NSString stringWithFormat:@"TriggerWord  = 0x08%x\n",*ptr];
 	ptr++;
-	NSString* Event = [NSString stringWithFormat:@"Event  = 0x%08lx\n",(*ptr>>24)&0xff];
-	NSString* Time = [NSString stringWithFormat:@"Time Since Last Trigger  = 0x%08lx\n",*ptr&0xffffff];
+	NSString* Event = [NSString stringWithFormat:@"Event  = 0x%08x\n",(*ptr>>24)&0xff];
+	NSString* Time = [NSString stringWithFormat:@"Time Since Last Trigger  = 0x%08x\n",*ptr&0xffffff];
 
     return [NSString stringWithFormat:@"%@%@%@%@%@%@%@",title,crate,card,moduleID,triggerWord,Event,Time];               
 }

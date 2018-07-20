@@ -497,9 +497,9 @@ NSString* ORMJDVacuumModelSpikeTriggerValueChanged      = @"ORMJDVacuumModelSpik
 }
 //-------------------------------------------------------------------
 
-- (unsigned long) vetoMask { return vetoMask; }
+- (uint32_t) vetoMask { return vetoMask; }
 
-- (void) setVetoMask:(unsigned long)aVetoMask
+- (void) setVetoMask:(uint32_t)aVetoMask
 {
 	if(vetoMask != aVetoMask){
 		vetoMask = aVetoMask;
@@ -725,7 +725,7 @@ NSString* ORMJDVacuumModelSpikeTriggerValueChanged      = @"ORMJDVacuumModelSpik
 
 - (NSString*) processingTitle
 {
-	return [NSString stringWithFormat:@"MJD Vac,%lu",[self uniqueIdNumber]];
+	return [NSString stringWithFormat:@"MJD Vac,%u",[self uniqueIdNumber]];
 }
 
 - (void) mapChannel:(int)aChannel toHWObject:(NSString*)objIdentifier hwChannel:(int)hwChannel;
@@ -744,7 +744,7 @@ NSString* ORMJDVacuumModelSpikeTriggerValueChanged      = @"ORMJDVacuumModelSpik
 - (void) vetoChangesOnChannel:(int)aChannel state:(BOOL)aState
 {
 	if(aChannel>=0 && aChannel<32){
-		unsigned long newMask = vetoMask;
+		uint32_t newMask = vetoMask;
 		if(aState) newMask |= (0x1<<aChannel);
 		else newMask &= ~(0x1<<aChannel);
 		if(newMask != vetoMask)[self setVetoMask:newMask];
@@ -908,7 +908,7 @@ NSString* ORMJDVacuumModelSpikeTriggerValueChanged      = @"ORMJDVacuumModelSpik
     NSLog(@"------------------------------------------------------------\n");
     NSLog(@"---------------    Constraint Report    --------------------\n");
     NSLog(@"------------------------------------------------------------\n");
-    unsigned long n = [continuedBiasConstraints count];
+    uint32_t n = [continuedBiasConstraints count];
     if(n){
         NSLog(@"There %@ %d constraint%@ against continued bias of the detectors\n",n>1?@"are":@"is",n,n>1?@"s":@"");
         for(id aKey in [continuedBiasConstraints allKeys]){
@@ -959,8 +959,8 @@ NSString* ORMJDVacuumModelSpikeTriggerValueChanged      = @"ORMJDVacuumModelSpik
     //----Cryo
     NSLog(@"--Cryopump--\n");
     ORCP8CryopumpModel* cryo =  [self findCryoPump];
-    unsigned long pmpOffCount = [[cryo pumpOffConstraints] count];
-    unsigned long pmpOnCount = [[cryo pumpOnConstraints] count];
+    uint32_t pmpOffCount = [[cryo pumpOffConstraints] count];
+    uint32_t pmpOnCount = [[cryo pumpOnConstraints] count];
     if(pmpOffCount + pmpOnCount){
         NSLog(@"%@",[cryo pumpOnOffConstraintReport]);
     }
@@ -988,7 +988,7 @@ NSString* ORMJDVacuumModelSpikeTriggerValueChanged      = @"ORMJDVacuumModelSpik
     for(ORVacuumGateValve* aGateValve in gateValves){
         NSDictionary* constraintDict = [aGateValve constraints];
         if(constraintDict){
-            unsigned long n = [constraintDict count];
+            uint32_t n = [constraintDict count];
             if(n){
                 NSLog(@"There %@ %d constraint%@ against changing gatevalve %@\n",n>1?@"are":@"is",n,n>1?@"s":@"",[aGateValve label]);
                 for(id aKey in [constraintDict allKeys]){

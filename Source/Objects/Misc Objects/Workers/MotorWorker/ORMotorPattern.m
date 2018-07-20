@@ -144,7 +144,7 @@
 }
 
 #pragma mark ¥¥¥Hardware Access
-- (long) readMotor;
+- (int32_t) readMotor;
 {
     return [motor readMotor];
 }
@@ -154,12 +154,12 @@
     return [motor motorRunning];
 }
 
-- (void) moveMotor:(id)aMotor amount:(long)amount;
+- (void) moveMotor:(id)aMotor amount:(int32_t)amount;
 {
     [motor moveMotor:motor amount:amount];
 }
 
-- (void) moveMotor:(id)aMotor to:(long)aPosition;
+- (void) moveMotor:(id)aMotor to:(int32_t)aPosition;
 {
     [motor moveMotor:motor to:aPosition];
 }

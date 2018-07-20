@@ -24,10 +24,10 @@ extern "C" {
 #endif
 
 // called with the start position and the window origin + size
-void startTrackball (long x, long y, long originX, long originY, long width, long height);
+void startTrackball (int32_t x, int32_t y, int32_t originX, int32_t originY, int32_t width, int32_t height);
 
 // calculated rotation based on current mouse position
-void rollToTrackball (long x, long y, float rot [4]); // rot is output rotation angle
+void rollToTrackball (int32_t x, int32_t y, float rot [4]); // rot is output rotation angle
 
 // add a GL rotation (dA) to an existing GL rotation (A)
 void addToRotationTrackball (float * dA, float * A);

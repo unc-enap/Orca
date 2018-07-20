@@ -230,12 +230,12 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ORCARootService);
 	name=[newName copy];
 }
 
-- (unsigned long long)totalSent
+- (uint64_t)totalSent
 {
     return totalSent;
 }
 
-- (void)setTotalSent:(unsigned long long)aTotalSent
+- (void)setTotalSent:(uint64_t)aTotalSent
 {
     totalSent = aTotalSent;
 }
@@ -252,12 +252,12 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ORCARootService);
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORCARootServiceTimeConnectedChanged object:self];
 }
 
-- (unsigned long)amountInBuffer 
+- (uint32_t)amountInBuffer 
 {
     return amountInBuffer;
 }
 
-- (void)setAmountInBuffer:(unsigned long)anAmountInBuffer 
+- (void)setAmountInBuffer:(uint32_t)anAmountInBuffer 
 {
     amountInBuffer = anAmountInBuffer;
 }
@@ -267,11 +267,11 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ORCARootService);
     [socket writeData:inData];
 }
 
-- (unsigned long) dataId
+- (uint32_t) dataId
 {
     return dataId;
 }
-- (void) setDataId: (unsigned long) aDataId
+- (void) setDataId: (uint32_t) aDataId
 {
     dataId = aDataId;
 }
@@ -378,7 +378,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ORCARootService);
     [self connectSocket:YES];
 }
 
-- (void) netsocketDataInOutgoingBuffer:(NetSocket*)insocket length:(unsigned long)length
+- (void) netsocketDataInOutgoingBuffer:(NetSocket*)insocket length:(uint32_t)length
 {
 	if(insocket == socket){
 		[self setAmountInBuffer:length];
@@ -391,7 +391,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ORCARootService);
     [self setAmountInBuffer:0];
 }
 
-- (void)netsocketDataSent:(NetSocket*)insocket length:(unsigned long)length
+- (void)netsocketDataSent:(NetSocket*)insocket length:(uint32_t)length
 {
 	if(insocket == socket){
 		[self setTotalSent:[self totalSent]+length];
@@ -410,15 +410,15 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ORCARootService);
 		if(!dataBuffer)dataBuffer = [[NSMutableData alloc] initWithCapacity:5*1025];
 		NSData* data = [inNetSocket readData:inAmount];
 		[dataBuffer appendBytes:[data bytes] length:[data length]];
-		unsigned long* ptr = (unsigned long*)[dataBuffer bytes];
-		unsigned long length = ExtractLength(*ptr);
-		unsigned long theID   = ExtractDataId(*ptr);
+		uint32_t* ptr = (uint32_t*)[dataBuffer bytes];
+		uint32_t length = ExtractLength(*ptr);
+		uint32_t theID   = ExtractDataId(*ptr);
 		if([dataBuffer length]/4 >= length && theID == dataId){
 			ptr++;			
 			NSString* plist = [[[NSString alloc] initWithBytes:(const char *)ptr length:(length-1)*4 encoding:NSASCIIStringEncoding] autorelease];
 			NSDictionary* theResponse = [NSDictionary dictionaryWithPList:plist];
 						
-			unsigned long oldLength = [dataBuffer length];
+			uint32_t oldLength = [dataBuffer length];
 			[dataBuffer replaceBytesInRange:NSMakeRange(0,length*4) withBytes:dataBuffer];
 			[dataBuffer setLength:oldLength - length*4];
 			
@@ -480,24 +480,24 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ORCARootService);
 	NSData* dataBlock = [request asData];
 	
 	//the request is now in dataBlock
-	unsigned long headerLength        = [dataBlock length];												  //in bytes
-	unsigned long lengthWhenPadded    = sizeof(long)*(round(.5 + headerLength/(float)sizeof(long)));	  //length in bytes to long boundary
-	unsigned long padSize             = lengthWhenPadded - headerLength;								  //in bytes
-	unsigned long totalLength		  = 1 + (lengthWhenPadded/sizeof(long));							  //in longs
-	unsigned long theHeaderWord		  = dataId | (0x3ffff & totalLength);								  //compose the header word
-	NSMutableData* dataToSend		  = [NSMutableData dataWithBytes:&theHeaderWord length:sizeof(long)]; //add the header word
+	uint32_t headerLength        = [dataBlock length];												  //in bytes
+	uint32_t lengthWhenPadded    = sizeof(int32_t)*(round(.5 + headerLength/(float)sizeof(int32_t)));	  //length in bytes to int32_t boundary
+	uint32_t padSize             = lengthWhenPadded - headerLength;								  //in bytes
+	uint32_t totalLength		  = 1 + (lengthWhenPadded/sizeof(int32_t));							  //in longs
+	uint32_t theHeaderWord		  = dataId | (0x3ffff & totalLength);								  //compose the header word
+	NSMutableData* dataToSend		  = [NSMutableData dataWithBytes:&theHeaderWord length:sizeof(int32_t)]; //add the header word
 	
 	[dataToSend appendData:dataBlock];
 	
-	//pad to nearest long word
+	//pad to nearest int32_t word
 	unsigned char padByte = 0;
 	int i;
 	for(i=0;i<padSize;i++){
 		[dataToSend appendBytes:&padByte length:1];
 	}
 	
-	if([dataToSend length] * sizeof(long) > 0x3ffff){
-		[dataToSend setLength: 0x3ffff/sizeof(long)];
+	if([dataToSend length] * sizeof(int32_t) > 0x3ffff){
+		[dataToSend setLength: 0x3ffff/sizeof(int32_t)];
 	}
 	
 	[socket writeData:dataToSend];

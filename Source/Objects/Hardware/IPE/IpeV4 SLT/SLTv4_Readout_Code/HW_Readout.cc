@@ -181,10 +181,10 @@ void doWriteBlock(SBC_Packet* aPacket,uint8_t reply)
     if(needToSwap)SwapLongBlock(p,sizeof(SBC_IPEv4WriteBlockStruct)/sizeof(int32_t));
 	
 #if 0
- fprintf(stderr, "doWriteBlock: SBC_Packet size %i, SBC_IPEv4WriteBlockStruct size %i, sizeof(unsigned long *)  %i \n",
+ fprintf(stderr, "doWriteBlock: SBC_Packet size %i, SBC_IPEv4WriteBlockStruct size %i, sizeof(uint32_t *)  %i \n",
  sizeof(SBC_Packet),
  sizeof(SBC_IPEv4WriteBlockStruct), 
- sizeof(unsigned long *)
+ sizeof(uint32_t *)
  );
 	
  fflush(stderr);
@@ -203,7 +203,7 @@ void doWriteBlock(SBC_Packet* aPacket,uint8_t reply)
     int32_t perr = 0;
 #if USE_PBUS
     if (numItems == 1)    perr = pbusWrite(startAddress, *lptr);
-    else                perr = pbusWriteBlock(startAddress, (unsigned long *) lptr, numItems);
+    else                perr = pbusWriteBlock(startAddress, (uint32_t *) lptr, numItems);
 #else
     try{
         if (numItems == 1){
@@ -222,7 +222,7 @@ void doWriteBlock(SBC_Packet* aPacket,uint8_t reply)
 
 			}
 		}
-        else                pbus->writeBlock(startAddress, (unsigned long *) lptr, numItems);
+        else                pbus->writeBlock(startAddress, (uint32_t *) lptr, numItems);
     }catch(PbusError &e){
         e.displayMsg(stdout);
         perr = 1;
@@ -292,7 +292,7 @@ void doReadBlock(SBC_Packet* aPacket,uint8_t reply)
 //TODO: DEBUGGING sim mode+PCIe issue -tb-            fprintf(stdout, "PrPMC: doReadBlock: adr 0x%08x , val %i (0x%08x) \n",startAddress,*lPtr,*lPtr);
 //TODO: DEBUGGING sim mode+PCIe issue -tb-            fflush(stdout);  
 		}
-        else                pbus->readBlock(startAddress, (unsigned long *) lPtr, numItems);
+        else                pbus->readBlock(startAddress, (uint32_t *) lPtr, numItems);
     }catch(PbusError &e){
         e.displayMsg(stdout);
         perr = 1;
@@ -624,7 +624,7 @@ void setHostTimeToFLTsAndSLT(int32_t* args)
         usleep(1000);//this loop needs XXX milli seconds (with usleep(1000) and two register reads)
     }
     //2.+3.
-	unsigned long secSetpoint = secondsSet;
+	uint32_t secSetpoint = secondsSet;
 	if(flags & kSecondsSetInitWithHostFlag){ 
 		struct timeval t;//    call with struct timezone tz; is obsolete ... -tb-
 		gettimeofday(&t,NULL);
@@ -660,7 +660,7 @@ void setHostTimeToFLTsAndSLT(int32_t* args)
     //as the second change between SLT and PrPMC is not syncronized, this might be necessary even if the crate counters were set previously: the SLT may be 'before' OR 'behind' the host clock
     //TODO: keep in mind: all crate computers should be synchronized up to accuracy of 30 % to get this work properly -tb-
     if(sltsec !=secSetpoint){
-	    fprintf(stdout,"setHostTimeToFLTsAndSLT:   need to write SLT TIME!!! sltsec %lu, sltsecsetpoint %lu, \n", (unsigned long)sltsec, (unsigned long)secSetpoint);//TODO: DEBUG -tb-
+	    fprintf(stdout,"setHostTimeToFLTsAndSLT:   need to write SLT TIME!!! sltsec %u, sltsecsetpoint %u, \n", (uint32_t)sltsec, (uint32_t)secSetpoint);//TODO: DEBUG -tb-
 	    secSetpoint += 1;  //value will be taken after the NEXT second strobe, so we need the NEXT second
         srack->theSlt->setSecCounter->write(secSetpoint);
         //TODO: workaround until SLT takes the second counter immediately over from setSec register -tb- 2013-05-24

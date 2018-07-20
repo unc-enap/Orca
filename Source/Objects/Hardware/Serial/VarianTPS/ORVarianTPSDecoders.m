@@ -34,13 +34,13 @@
 
 @implementation ORVarianTPSDecoderForPressure
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-	unsigned long *p = (unsigned long*)someData;
+	uint32_t *p = (uint32_t*)someData;
 	int ident = ShiftAndExtract(p[1],0,0xff);
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theTemp;
 	theTemp.asLong = p[2];									//encoded as float, use union to convert
 	[aDataSet loadTimeSeries:theTemp.asFloat*10.0E7										
@@ -52,7 +52,7 @@
 	return ExtractLength(p[0]);
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)p
+- (NSString*) dataRecordDescription:(uint32_t*)p
 {
     NSString* title= @"VarianTPS Controller\n\n";
     NSString* theString =  [NSString stringWithFormat:@"%@\n",title];               
@@ -61,7 +61,7 @@
 		
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theTemp;
 	theTemp.asLong = p[2];									//encoded as float, use union to convert
 

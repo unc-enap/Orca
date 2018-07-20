@@ -191,8 +191,8 @@ enum Gretina4MFIFOStates {
 {
   @private
 	NSThread*		fpgaProgrammingThread;
-	unsigned long   dataId;
-	unsigned long   dataBuffer[kG4MDataPacketSize];
+	uint32_t   dataId;
+	uint32_t   dataBuffer[kG4MDataPacketSize];
 
     BOOL            forceFullInitCard;
     BOOL			enabled[kNumGretina4MChannels];
@@ -208,7 +208,7 @@ enum Gretina4MFIFOStates {
     BOOL			easySelected[kNumGretina4MChannels];
     
     int				ledThreshold[kNumGretina4MChannels];
-    unsigned long	trapThreshold[kNumGretina4MChannels];
+    uint32_t	trapThreshold[kNumGretina4MChannels];
     short           poleZeroMult[kNumGretina4MChannels];
     short			downSample;
     short			mrpsrt[kNumGretina4MChannels];
@@ -237,10 +237,10 @@ enum Gretina4MFIFOStates {
 	ORAlarm*        fifoFullAlarm;
 
 	//cache to speed takedata
-	unsigned long location;
+	uint32_t location;
 	id theController;
-	unsigned long fifoAddress;
-	unsigned long fifoStateAddress;
+	uint32_t fifoAddress;
+	uint32_t fifoStateAddress;
 
 	BOOL oldEnabled[kNumGretina4MChannels];
 	int oldThreshold[kNumGretina4MChannels];
@@ -261,16 +261,16 @@ enum Gretina4MFIFOStates {
     int fpgaDownProgress;
 	NSLock* progressLock;
 	
-    unsigned long registerWriteValue;
+    uint32_t registerWriteValue;
     int registerIndex;
-    unsigned long spiWriteValue;
+    uint32_t spiWriteValue;
 	
 	ORConnector*    spiConnector; //we won't draw this connector so we have to keep a reference to it
 	ORConnector*    linkConnector; //we won't draw this connector so we have to keep a reference to it
     ORFileMoverOp*  fpgaFileMover;
 	ORRateGroup*	waveFormRateGroup;
     ORRunningAverageGroup* rateRunningAverages; //initialized in initWithCoder, start by runstart
-    unsigned long 	waveFormCount[kNumGretina4MChannels];
+    uint32_t 	waveFormCount[kNumGretina4MChannels];
 
 	BOOL			isRunning;
     NSString*       firmwareStatusString;
@@ -280,11 +280,11 @@ enum Gretina4MFIFOStates {
     //------------------internal use only
     NSOperationQueue*	fileQueue;
     int                 initializationState;
-    unsigned long       snapShot[kNumberOfGretina4MRegisters];
-    unsigned long       fpgaSnapShot[kNumberOfFPGARegisters];
-    unsigned long       serialNumber;
-    unsigned long       runNumberLocal;
-    unsigned long       subRunNumberLocal;
+    uint32_t       snapShot[kNumberOfGretina4MRegisters];
+    uint32_t       fpgaSnapShot[kNumberOfFPGARegisters];
+    uint32_t       serialNumber;
+    uint32_t       runNumberLocal;
+    uint32_t       subRunNumberLocal;
 
 }
 
@@ -306,7 +306,7 @@ enum Gretina4MFIFOStates {
 - (short) histEMultiplier;
 - (void) setHistEMultiplier:(short)aHistEMultiplier;
 - (unsigned short) baselineRestoredDelay;
-- (void) setBaselineRestoredDelay:(long)aBaselineRestoredDelay;
+- (void) setBaselineRestoredDelay:(int32_t)aBaselineRestoredDelay;
 - (NSString*) firmwareStatusString;
 - (void) setFirmwareStatusString:(NSString*)aFirmwareStatusString;
 - (short) integrateTime;
@@ -331,10 +331,10 @@ enum Gretina4MFIFOStates {
 - (void) setDownSample:(short)aDownSample;
 - (short) registerIndex;
 - (void) setRegisterIndex:(int)aRegisterIndex;
-- (unsigned long) registerWriteValue;
-- (void) setRegisterWriteValue:(unsigned long)aWriteValue;
-- (unsigned long) spiWriteValue;
-- (void) setSPIWriteValue:(unsigned long)aWriteValue;
+- (uint32_t) registerWriteValue;
+- (void) setRegisterWriteValue:(uint32_t)aWriteValue;
+- (uint32_t) spiWriteValue;
+- (void) setSPIWriteValue:(uint32_t)aWriteValue;
 - (BOOL) downLoadMainFPGAInProgress;
 - (void) setDownLoadMainFPGAInProgress:(BOOL)aState;
 - (short) fpgaDownProgress;
@@ -356,18 +356,18 @@ enum Gretina4MFIFOStates {
 - (unsigned short) registerOffsetAt:(unsigned int)index;
 - (NSString*) fpgaRegisterNameAt:(unsigned int)index;
 - (unsigned short) fpgaRegisterOffsetAt:(unsigned int)index;
-- (unsigned long) readRegister:(unsigned int)index;
-- (void) writeRegister:(unsigned int)index withValue:(unsigned long)value;
+- (uint32_t) readRegister:(unsigned int)index;
+- (void) writeRegister:(unsigned int)index withValue:(uint32_t)value;
 - (BOOL) canReadRegister:(unsigned int)index;
 - (BOOL) canWriteRegister:(unsigned int)index;
 - (BOOL) displayRegisterOnMainPage:(unsigned int)index;
-- (unsigned long) readFPGARegister:(unsigned int)index;
-- (void) writeFPGARegister:(unsigned int)index withValue:(unsigned long)value;
+- (uint32_t) readFPGARegister:(unsigned int)index;
+- (void) writeFPGARegister:(unsigned int)index withValue:(uint32_t)value;
 - (BOOL) canReadFPGARegister:(unsigned int)index;
 - (BOOL) canWriteFPGARegister:(unsigned int)index;
 - (BOOL) displayFPGARegisterOnMainPage:(unsigned int)index;
-- (void) writeToAddress:(unsigned long)anAddress aValue:(unsigned long)aValue;
-- (unsigned long) readFromAddress:(unsigned long)anAddress;
+- (void) writeToAddress:(uint32_t)anAddress aValue:(uint32_t)aValue;
+- (uint32_t) readFromAddress:(uint32_t)anAddress;
 - (void) printThresholds;
 - (void) fakeASpike:(int) channel started:(BOOL)start;
 
@@ -406,7 +406,7 @@ enum Gretina4MFIFOStates {
 - (void) setDebug:(short)chan withValue:(BOOL)aValue;	
 - (void) setLEDThreshold:(short)chan withValue:(int)aValue;
 - (void) setThreshold:(short)chan withValue:(int)aValue;
-- (void) setTrapThreshold:(short)chan withValue:(unsigned long)aValue;
+- (void) setTrapThreshold:(short)chan withValue:(uint32_t)aValue;
 - (void) setMrpsrt:(short)chan withValue:(short)aValue;
 - (void) setFtCnt:(short)chan withValue:(short)aValue;
 - (void) setMrpsdv:(short)chan withValue:(short)aValue;
@@ -418,7 +418,7 @@ enum Gretina4MFIFOStates {
 - (void) setPresumEnabled:(short)chan withValue:(BOOL)aValue;
 - (void) setEasySelected:(short)chan withValue:(BOOL)aValue;
 - (void) writeClockPhase;
-- (void) writeClockPhaseWithValue:(unsigned long)value;
+- (void) writeClockPhaseWithValue:(uint32_t)value;
 
 
 - (BOOL) enabled:(short)chan;
@@ -432,7 +432,7 @@ enum Gretina4MFIFOStates {
 - (BOOL) pileUp:(short)chan;		
 - (short) triggerMode:(short)chan;
 - (int) ledThreshold:(short)chan;	
-- (unsigned long) trapThreshold:(short)chan;
+- (uint32_t) trapThreshold:(short)chan;
 - (short) mrpsrt:(short)chan;
 - (short) ftCnt:(short)chan;
 - (short) mrpsdv:(short)chan;
@@ -481,9 +481,9 @@ enum Gretina4MFIFOStates {
 - (void) resetSingleFIFO;
 - (void) doForcedInitBoard;
 - (void) initBoard;
-- (unsigned long) readControlReg:(short)channel;
+- (uint32_t) readControlReg:(short)channel;
 - (void) writeControlReg:(short)channel enabled:(BOOL)enabled;
-- (void) writeClockSource: (unsigned long) clocksource;
+- (void) writeClockSource: (uint32_t) clocksource;
 - (void) writeClockSource;
 - (void) writeLEDThreshold:(short)channel;
 - (void) writeTrapThreshold:(int)channel;
@@ -491,8 +491,8 @@ enum Gretina4MFIFOStates {
 - (void) writeRisingEdgeWindow:(short)channel;
 - (unsigned short) readFifoState;
 - (void) setTestThreshold:(short)chan withValue:(int)aValue;
-- (unsigned long) testThreshold:(short)chan;
-- (unsigned long) maxTestThreshold:(short)chan;
+- (uint32_t) testThreshold:(short)chan;
+- (uint32_t) maxTestThreshold:(short)chan;
 - (void) findNoiseFloors;
 - (void) stepNoiseFloor;
 - (BOOL) noiseFloorRunning;
@@ -539,8 +539,8 @@ enum Gretina4MFIFOStates {
 - (void) stopDownLoadingMainFPGA;
 
 #pragma mark •••Data Taker
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherShaper;
 - (NSDictionary*) dataRecordDescription;
@@ -548,10 +548,10 @@ enum Gretina4MFIFOStates {
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runIsStopping:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
-- (unsigned long) waveFormCount:(short)aChannel;
+- (uint32_t) waveFormCount:(short)aChannel;
 - (void)   startRates;
 - (void) clearWaveFormCounts;
-- (unsigned long) getCounter:(short)counterTag forGroup:(short)groupTag;
+- (uint32_t) getCounter:(short)counterTag forGroup:(short)groupTag;
 
 - (void) checkFifoAlarm;
 - (int) load_HW_Config_Structure:(SBC_crate_config*)configStruct index:(int)index;
@@ -576,13 +576,13 @@ enum Gretina4MFIFOStates {
 - (NSArray*) autoTests;
 
 #pragma mark •••SPI Interface
-- (unsigned long) writeAuxIOSPI:(unsigned long)spiData;
+- (uint32_t) writeAuxIOSPI:(uint32_t)spiData;
 #pragma mark •••AdcProviding Protocol
 - (BOOL) onlineMaskBit:(int)bit;
 - (BOOL) partOfEvent:(unsigned short)aChannel;
-- (unsigned long) eventCount:(int)aChannel;
+- (uint32_t) eventCount:(int)aChannel;
 - (void) clearEventCounts;
-- (unsigned long) thresholdForDisplay:(unsigned short) aChan;
+- (uint32_t) thresholdForDisplay:(unsigned short) aChan;
 - (unsigned short) gainForDisplay:(unsigned short) aChan;
 
 - (BOOL) isLocked;

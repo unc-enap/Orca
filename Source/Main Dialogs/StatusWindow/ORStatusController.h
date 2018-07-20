@@ -44,7 +44,7 @@
 	BOOL					logBookDirty;
 	NSString*				logBookFile;
 	NSDate*					lastSnapShot;
-    unsigned  long long     alarmLogSize;
+    uint64_t                alarmLogSize;
     BOOL                    scheduledToPostToDB;
     BOOL                    notFirstTime;
 }
@@ -60,8 +60,8 @@
 - (void) removeDataSet:(ORDataSet*)item;
 - (void) setLogBookFile:(NSString*)aFilePath;
 - (NSString*) contents;
-- (NSString*) contentsTail:(unsigned long)aDuration includeDurationHeader:(BOOL)header;
-- (NSString*) contentsTail:(unsigned long)aDuration;
+- (NSString*) contentsTail:(uint32_t)aDuration includeDurationHeader:(BOOL)header;
+- (NSString*) contentsTail:(uint32_t)aDuration;
 - (NSString*) alarmLogContents;
 - (void) populateFilterPopup;
 - (void) loadAlarmHistory;

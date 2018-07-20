@@ -44,13 +44,13 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  counter 31 //note that only enabled cha
 
 @implementation ORCV830DecoderForEvent
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr		= (unsigned long*)someData;
-	unsigned long length	= ExtractLength(ptr[0]);
+    uint32_t* ptr		= (uint32_t*)someData;
+	uint32_t length	= ExtractLength(ptr[0]);
 	int crate				= ShiftAndExtract(ptr[1],21,0xf);
 	int card				= ShiftAndExtract(ptr[1],16,0x1f);
-	unsigned long enabledMask	= ptr[3];
+	uint32_t enabledMask	= ptr[3];
 	NSString* crateKey   = [self getCrateKey: crate];
 	NSString* cardKey    = [self getCardKey: card];
 	
@@ -60,10 +60,10 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  counter 31 //note that only enabled cha
 		if(enabledMask & (0x1L<<i)){
 			NSString* valueString;
             if((i==0) && (enabledMask&0x1)){
-                valueString = [NSString stringWithFormat:@"%lu - %lu",ptr[2],ptr[5+i]];
+                valueString = [NSString stringWithFormat:@"%u - %u",ptr[2],ptr[5+i]];
             }
             else {
-                valueString = [NSString stringWithFormat:@"%lu",ptr[5+i]];
+                valueString = [NSString stringWithFormat:@"%u",ptr[5+i]];
             }
 			NSString* channelKey = [self getChannelKey:i];
 
@@ -74,26 +74,26 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  counter 31 //note that only enabled cha
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"CV830 Scaler Record\n";
-	unsigned long crateNum			= ShiftAndExtract(ptr[1],21,0xf);
-	unsigned long cardNum			= ShiftAndExtract(ptr[1],16,0x1f);
-	unsigned long enabledMask		= ptr[3];
+	uint32_t crateNum			= ShiftAndExtract(ptr[1],21,0xf);
+	uint32_t cardNum			= ShiftAndExtract(ptr[1],16,0x1f);
+	uint32_t enabledMask		= ptr[3];
 
-    NSString* crate = [NSString stringWithFormat:@"Crate = %ld\n",crateNum];
-    NSString* card  = [NSString stringWithFormat:@"Card  = %ld\n",cardNum];
+    NSString* crate = [NSString stringWithFormat:@"Crate = %d\n",crateNum];
+    NSString* card  = [NSString stringWithFormat:@"Card  = %d\n",cardNum];
 	NSString* s = [NSString stringWithFormat:@"%@%@%@\n",title,crate,card];
-	s = [s stringByAppendingFormat:@"Enabled Mask:0x%08lx\n",enabledMask];
+	s = [s stringByAppendingFormat:@"Enabled Mask:0x%08x\n",enabledMask];
 		
 	int i;
 	for(i=0;i<32;i++){
 		if(enabledMask & (0x1L<<i)){
             if((i==0) && (enabledMask&0x1)){
-                s = [s stringByAppendingFormat:@"%d: 0x%lx - 0x%lx\n",i,ptr[2],ptr[5+i]];
+                s = [s stringByAppendingFormat:@"%d: 0x%x - 0x%x\n",i,ptr[2],ptr[5+i]];
             }
             else {
-                s = [s stringByAppendingFormat:@"%d: 0x%08lx",i,ptr[5+i]];
+                s = [s stringByAppendingFormat:@"%d: 0x%08x",i,ptr[5+i]];
             }
 		}
 	}
@@ -122,40 +122,40 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  counter 31 //note that only enabled cha
 
 @implementation ORCV830DecoderForPolledRead
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length	= ExtractLength(ptr[0]);
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length	= ExtractLength(ptr[0]);
 	int crateNum	= ShiftAndExtract(ptr[1],21,0xf);
 	int cardNum		= ShiftAndExtract(ptr[1],16,0x1f);
-	unsigned long enabledMask = ptr[2];
+	uint32_t enabledMask = ptr[2];
 	NSString* crateKey = [self getCrateKey: crateNum];
 	NSString* cardKey = [self getCardKey: cardNum];
 	int i;
 	for(i=0;i<kNumCV830Channels;i++){
 		if(enabledMask & (0x1L<<i)){
-			NSString* valueString = [NSString stringWithFormat:@"%lu",ptr[5+i]];
+			NSString* valueString = [NSString stringWithFormat:@"%u",ptr[5+i]];
 			[aDataSet loadGenericData:valueString sender:self withKeys:@"V830Poll",  crateKey,cardKey,[self getChannelKey:i],nil];
 		}
 	}
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"CV830 Scaler Record\n\n";
 	int crateNum	= ShiftAndExtract(ptr[1],21,0xf);
 	int cardNum		= ShiftAndExtract(ptr[1],16,0x1f);
-	unsigned long enabledMask = ptr[2];
+	uint32_t enabledMask = ptr[2];
     NSString* crate = [NSString stringWithFormat:@"Crate = %d\n",crateNum];
-    NSString* card  = [NSString stringWithFormat:@"Card  = %lu\n",(*ptr&0x001f0000)>>16];
+    NSString* card  = [NSString stringWithFormat:@"Card  = %u\n",(*ptr&0x001f0000)>>16];
     NSString* mask  = [NSString stringWithFormat:@"Mask  = 0x%x\n",cardNum];
 	NSDate* date = [NSDate dateWithTimeIntervalSince1970:ptr[3]];
 	int i;
 	NSString* s = [NSString stringWithFormat:@"%@%@%@%@%@\n",title,crate,card,mask,[date descriptionFromTemplate:@"MM/dd/yy HH:mm:ss z"]];
 	for(i=0;i<kNumCV830Channels;i++){
 		if(enabledMask & (0x1L<<i)){
-			s = [s stringByAppendingFormat:@"%d:%lu\n",i,ptr[5+i]];
+			s = [s stringByAppendingFormat:@"%d:%u\n",i,ptr[5+i]];
 		}
 	}
 	

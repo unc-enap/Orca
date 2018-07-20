@@ -52,7 +52,7 @@
 - (void) setModel:(id)aModel
 {    
     [super setModel:aModel];
-    [[self window] setTitle:[NSString stringWithFormat:@"%@-%lu",[model className],[(OrcaObject*)model processID]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"%@-%u",[model className],[(OrcaObject*)model processID]]];
     if(model)[self updateWindow];
 }
 

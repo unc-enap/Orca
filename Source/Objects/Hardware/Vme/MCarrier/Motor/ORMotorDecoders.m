@@ -25,22 +25,22 @@
 
 @implementation ORMotorDecoderForMotor
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    return ExtractLength(*((unsigned long*)someData));
+    return ExtractLength(*((uint32_t*)someData));
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr
 {
     NSString* title= @"Motor Motor Record\n\n";
 
-	NSString* crate   = [NSString stringWithFormat:@"Crate  = %lu\n",(dataPtr[2]>>28) & 0x0000000f];
-	NSString* card    = [NSString stringWithFormat:@"Card   = %lu\n",(dataPtr[2]>>23) & 0x0000001f];
-	NSString* module  = [NSString stringWithFormat:@"Module = %lu\n",(dataPtr[2]>>20) & 0x00000007];
-	NSString* motor   = [NSString stringWithFormat:@"Motor  = %lu\n", (dataPtr[2]>>16)&0x00000003];
-	NSString* state   = [NSString stringWithFormat:@"State  = %lu\n",(dataPtr[2]>>12) & 0x0000000f];
+	NSString* crate   = [NSString stringWithFormat:@"Crate  = %u\n",(dataPtr[2]>>28) & 0x0000000f];
+	NSString* card    = [NSString stringWithFormat:@"Card   = %u\n",(dataPtr[2]>>23) & 0x0000001f];
+	NSString* module  = [NSString stringWithFormat:@"Module = %u\n",(dataPtr[2]>>20) & 0x00000007];
+	NSString* motor   = [NSString stringWithFormat:@"Motor  = %u\n", (dataPtr[2]>>16)&0x00000003];
+	NSString* state   = [NSString stringWithFormat:@"State  = %u\n",(dataPtr[2]>>12) & 0x0000000f];
 
-    return [NSString stringWithFormat:@"%@%s%@%@%@%@%@Steps  = %lu",title,ctime((const time_t *)(&dataPtr[1])),crate,card,module,motor,state,dataPtr[3]];               
+    return [NSString stringWithFormat:@"%@%s%@%@%@%@%@Steps  = %u",title,ctime((const time_t *)(&dataPtr[1])),crate,card,module,motor,state,dataPtr[3]];               
 }
 @end
 

@@ -201,8 +201,8 @@
 
 - (void) uniqueIDChanged:(NSNotification*)aNotification
 {
-	unsigned long i = [model mainFrameID];
-	if(i!=0xffffffff)[[self window] setTitle:[NSString stringWithFormat:@"HV4032-%lu",[model mainFrameID]]];
+	uint32_t i = [model mainFrameID];
+	if(i!=0xffffffff)[[self window] setTitle:[NSString stringWithFormat:@"HV4032-%u",[model mainFrameID]]];
 	else [[self window] setTitle:[NSString stringWithFormat:@"HV4032-NOT CONNECTED"]];
 }
 

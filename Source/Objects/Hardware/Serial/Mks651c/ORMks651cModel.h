@@ -29,7 +29,7 @@
         NSString*			portName;
         BOOL				portWasOpen;
         ORSerialPort*		serialPort;
-        unsigned long		dataId;
+        uint32_t		dataId;
         NSString*			lastRequest;
         ORSafeQueue*		cmdQueue;
 		float				pressure;
@@ -57,7 +57,7 @@
         int					batteryStatus;
         int					controlType;
         float               checksum;
-		unsigned long		timeMeasured;
+		uint32_t		timeMeasured;
 		int					pollTime;
         NSMutableString*    buffer;
 		BOOL				shipPressures;
@@ -121,7 +121,7 @@
 - (void) setPortName:(NSString*)aPortName;
 - (void) openPort:(BOOL)state;
 - (float) pressure;
-- (unsigned long) timeMeasured;
+- (uint32_t) timeMeasured;
 - (void) setPressure:(float)aValue;
 - (void) setSetPoint:(int)index withValue:(float)aValue;
 - (void) setLeadValue:(int)index withValue:(float)aValue;
@@ -172,8 +172,8 @@
 #pragma mark •••Data Records
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (NSDictionary*) dataRecordDescription;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherMks651c;
 - (void) shipPressureValues;

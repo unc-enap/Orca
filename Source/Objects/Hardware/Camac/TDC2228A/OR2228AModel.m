@@ -91,8 +91,8 @@ NSString* OR2228ASuppressZerosChangedNotification   = @"OR2228ASuppressZerosChan
 	
     [[NSNotificationCenter defaultCenter] postNotificationName:OR2228AModelOverFlowCheckTimeChanged object:self];
 }
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -237,11 +237,11 @@ NSString* OR2228ASuppressZerosChangedNotification   = @"OR2228ASuppressZerosChan
 						[controller camacShortNAF:cachedStation a:onlineList[i] f:0 data:&tdcValue];
 						if(!(suppressZeros && tdcValue==0)){
 							if(IsShortForm(dataId)){
-								unsigned long data = dataId | unChangingDataPart | (onlineList[i]&0xf)<<12 | (tdcValue & 0xfff);
+								uint32_t data = dataId | unChangingDataPart | (onlineList[i]&0xf)<<12 | (tdcValue & 0xfff);
 								[aDataPacket addLongsToFrameBuffer:&data length:1];
 							}
 							else {
-								unsigned long data[2];
+								uint32_t data[2];
 								data[0] =  dataId | 2;
 								data[1] =  unChangingDataPart | (onlineList[i]&0xf)<<12 | (tdcValue & 0xfff);
 								[aDataPacket addLongsToFrameBuffer:data length:2];
@@ -468,7 +468,7 @@ NSString* OR2228ASuppressZerosChangedNotification   = @"OR2228ASuppressZerosChan
 			}
 			[overflowAlarm setAcknowledged:NO];
 			[overflowAlarm postAlarm];
-            NSLogError(@"Over Flow",@"2228A TDC",[NSString stringWithFormat:@"Station %ld",[self stationNumber]],nil);
+            NSLogError(@"Over Flow",@"2228A TDC",[NSString stringWithFormat:@"Station %d",(int)[self stationNumber]],nil);
 		}
     }
 	

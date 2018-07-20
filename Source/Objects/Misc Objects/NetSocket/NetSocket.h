@@ -23,7 +23,7 @@
 	NSRecursiveLock* mLock;
     int              mBufferStatus;
     int              mOldBufferStatus;
-    unsigned long    mOldAmountInBuffer;
+    uint32_t    mOldAmountInBuffer;
 }
 
 // Creation
@@ -97,7 +97,7 @@
 - (void) netsocketDisconnected:(NetSocket*)inNetSocket;
 - (void) netsocket:(NetSocket*)inNetSocket connectionAccepted:(NetSocket*)inNewNetSocket;
 - (void) netsocket:(NetSocket*)inNetSocket dataAvailable:(NSUInteger)inAmount;
-- (void) netsocketDataSent:(NetSocket*)inNetSocket length:(long)amount;
-- (void) netsocketDataInOutgoingBuffer:(NetSocket*)inNetSocket length:(long)amount;
+- (void) netsocketDataSent:(NetSocket*)inNetSocket length:(int32_t)amount;
+- (void) netsocketDataInOutgoingBuffer:(NetSocket*)inNetSocket length:(int32_t)amount;
 - (void) netsocket:(NetSocket*)inNetSocket status:(int)status;
 @end

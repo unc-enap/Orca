@@ -41,7 +41,7 @@
     [super awakeFromNib];
     [outlineView setDoubleAction:@selector(doubleClick:)];
     [multiPlotView setDoubleAction:@selector(doubleClickMultiPlot:)];
-	[splitView loadLayoutWithName:[NSString stringWithFormat:@"Data Monitor-%lu",[model uniqueIdNumber]]];
+	[splitView loadLayoutWithName:[NSString stringWithFormat:@"Data Monitor-%u",[model uniqueIdNumber]]];
     
     [self updateWindow];
     [plotGroupButton setEnabled:NO];    
@@ -62,7 +62,7 @@
     [super setModel:aModel];
     [outlineView setDoubleAction:@selector(doubleClick:)];
     [multiPlotView setDoubleAction:@selector(doubleClickMultiPlot:)];
-    [[self window] setTitle:[NSString stringWithFormat:@"Data Monitor-%lu",[model uniqueIdNumber]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"Data Monitor-%u",[model uniqueIdNumber]]];
     [outlineView setDataSource:aModel];
     [self updateWindow];
 }
@@ -261,7 +261,7 @@
 
 - (void)splitViewDidResizeSubviews:(NSNotification *)aNotification
 {
-	[splitView storeLayoutWithName:[NSString stringWithFormat:@"Data Monitor-%lu",[model uniqueIdNumber]]];
+	[splitView storeLayoutWithName:[NSString stringWithFormat:@"Data Monitor-%u",[model uniqueIdNumber]]];
 }
 
 #pragma  mark ¥¥¥Actions

@@ -50,12 +50,12 @@ NSString* ORTimeSeriesChangedNotification 	= @"ORTimeSeriesChangedNotification";
 	[[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORTimeSeriesChangedNotification object:self userInfo:nil];
 }
 
-- (unsigned long) startTime
+- (uint32_t) startTime
 {
 	return time[readIndex];
 }
 
-- (void) addValue:(float)aValue atTime:(unsigned long)aTime
+- (void) addValue:(float)aValue atTime:(uint32_t)aTime
 {		
 	if(aTime != time[lastWriteIndex]){
 		value[writeIndex] = aValue;
@@ -79,7 +79,7 @@ NSString* ORTimeSeriesChangedNotification 	= @"ORTimeSeriesChangedNotification";
 }
 
 
-- (void) index:(NSUInteger)index time:(unsigned long*)theTime value:(double*)y
+- (void) index:(NSUInteger)index time:(uint32_t*)theTime value:(double*)y
 {
 	if(index<kTimeSeriesBufferSize){
 		int i = (readIndex+index)%kTimeSeriesBufferSize;
@@ -88,7 +88,7 @@ NSString* ORTimeSeriesChangedNotification 	= @"ORTimeSeriesChangedNotification";
 	}
 }
 
-- (unsigned long) timeAtIndex:(NSUInteger)index
+- (uint32_t) timeAtIndex:(NSUInteger)index
 {
 	if(index<kTimeSeriesBufferSize){
 		int i = (readIndex+index)%kTimeSeriesBufferSize;

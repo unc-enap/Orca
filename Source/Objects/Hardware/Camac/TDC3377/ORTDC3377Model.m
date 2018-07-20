@@ -513,8 +513,8 @@ NSString* ORTDC3377SettingsLock					= @"ORTDC3377SettingsLock";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORTDC3377ModelRunModeChanged object:self];
 }
 
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }
@@ -1093,7 +1093,7 @@ NSString* ORTDC3377SettingsLock					= @"ORTDC3377SettingsLock";
     
     //----------------------------------------------------------------------------------------
     controller = [[self adapter] controller]; //cache the controller for alittle bit more speed.
-	long version = 1;
+	int32_t version = 1;
     unChangingDataPart   = version<<25 | (([self crateNumber]&0xf)<<21) | (([self stationNumber]& 0x0000001f)<<16); //doesn't change so do it here.
 	
 	cachedStation = [self stationNumber];
@@ -1119,7 +1119,7 @@ NSString* ORTDC3377SettingsLock					= @"ORTDC3377SettingsLock";
     NSString* errorLocation = @"";
 	union {
 		NSTimeInterval asTimeInterval;
-		unsigned long asLongs[2];
+		uint32_t asLongs[2];
 	}theTimeRef;
 	
 	
@@ -1134,7 +1134,7 @@ NSString* ORTDC3377SettingsLock					= @"ORTDC3377SettingsLock";
 				//grab the event time as reference from Jan 1, 2004.
 				theTimeRef.asTimeInterval = [NSDate timeIntervalSinceReferenceDate];
 				
-				//read the events, Q Bit will be set as long as data is valid
+				//read the events, Q Bit will be set as int32_t as data is valid
 				NSMutableData* eventBuffer = nil;
 				BOOL printedHeaderErrorOnce = NO;
 				unsigned short dataWordCount = 0;
@@ -1147,15 +1147,15 @@ NSString* ORTDC3377SettingsLock					= @"ORTDC3377SettingsLock";
 						}
 						//start an event
 						[eventBuffer release];
-						eventBuffer = [[NSMutableData allocWithZone:nil] initWithCapacity:1024*sizeof(long)];
+						eventBuffer = [[NSMutableData allocWithZone:nil] initWithCapacity:1024*sizeof(int32_t)];
 						dataWordCount = 0;
 						
-						[eventBuffer appendBytes:&dataId length:sizeof(long)];               //we'll add in the length when we know it.
-						[eventBuffer appendBytes:&unChangingDataPart length:sizeof(long)];   //add in the crate, card info
-						unsigned long highPart = theTimeRef.asLongs[1];
-						unsigned long lowPart  = theTimeRef.asLongs[0];
-						[eventBuffer appendBytes:&highPart length:sizeof(long)];  
-						[eventBuffer appendBytes:&lowPart  length:sizeof(long)];  
+						[eventBuffer appendBytes:&dataId length:sizeof(int32_t)];               //we'll add in the length when we know it.
+						[eventBuffer appendBytes:&unChangingDataPart length:sizeof(int32_t)];   //add in the crate, card info
+						uint32_t highPart = theTimeRef.asLongs[1];
+						uint32_t lowPart  = theTimeRef.asLongs[0];
+						[eventBuffer appendBytes:&highPart length:sizeof(int32_t)];  
+						[eventBuffer appendBytes:&lowPart  length:sizeof(int32_t)];  
 						[eventBuffer appendBytes:&dataWord length:sizeof(short)];			//add in the header word
 					}
 					else {
@@ -1198,12 +1198,12 @@ NSString* ORTDC3377SettingsLock					= @"ORTDC3377SettingsLock";
 	if(dataWordCount){
 		if(eventBuffer){
 			//pad to a longword boundary
-			if([eventBuffer length]%sizeof(long)){
+			if([eventBuffer length]%sizeof(int32_t)){
 				short dataWord = 0x0;
 				[eventBuffer appendBytes:&dataWord length:sizeof(short)];
 			}
-			unsigned long* ptr = (unsigned long*)[eventBuffer mutableBytes];
-			*ptr |= (([eventBuffer length]/sizeof(long)) & kLongFormLengthMask);
+			uint32_t* ptr = (uint32_t*)[eventBuffer mutableBytes];
+			*ptr |= (([eventBuffer length]/sizeof(int32_t)) & kLongFormLengthMask);
 			
 			ptr++;
 			*ptr |= dataWordCount;

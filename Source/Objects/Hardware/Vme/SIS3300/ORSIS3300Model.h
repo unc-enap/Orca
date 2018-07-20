@@ -69,21 +69,21 @@
     int	 startDelay;
     int	 stopDelay;
 	
-	unsigned long   dataId;
+	uint32_t   dataId;
 
-	long			enabledMask;
-	long			ltGtMask;
+	int32_t			enabledMask;
+	int32_t			ltGtMask;
 	NSMutableArray* thresholds;
 	
 	ORRateGroup*	waveFormRateGroup;
-	unsigned long 	waveFormCount[kNumSIS3300Channels];
+	uint32_t 	waveFormCount[kNumSIS3300Channels];
 
 	//cach to speed takedata
-	unsigned long location;
+	uint32_t location;
 	id theController;
 	int currentBank;
-	unsigned long dataWord[4][16*1024];					
-	long count;
+	uint32_t dataWord[4][16*1024];					
+	int32_t count;
 }
 
 - (id) init;
@@ -151,13 +151,13 @@
 - (int) pageSize;
 - (void) setPageSize:(int)aPageSize;
 
-- (long) enabledMask;
+- (int32_t) enabledMask;
 - (BOOL) enabled:(short)chan;
-- (void) setEnabledMask:(long)aMask;
+- (void) setEnabledMask:(int32_t)aMask;
 - (void) setEnabledBit:(short)chan withValue:(BOOL)aValue;
 
-- (long) ltGtMask;
-- (void) setLtGtMask:(long)aMask;
+- (int32_t) ltGtMask;
+- (void) setLtGtMask:(int32_t)aMask;
 - (BOOL) ltGt:(short)chan;
 - (void) setLtGtBit:(short)chan withValue:(BOOL)aValue;
 
@@ -194,11 +194,11 @@
 - (void) startBankSwitching;
 - (void) stopBankSwitching;
 - (void) clearBankFullFlag:(int)whichFlag;
-- (unsigned long) eventNumberGroup:(int)group bank:(int) bank;
-- (void) writeTriggerClearValue:(unsigned long)aValue;
-- (void) setMaxNumberEvents:(unsigned long)aValue;
-- (unsigned long) eventTriggerGroup:(int)group bank:(int) bank;
-- (unsigned long) readTriggerTime:(int)bank index:(int)index;
+- (uint32_t) eventNumberGroup:(int)group bank:(int) bank;
+- (void) writeTriggerClearValue:(uint32_t)aValue;
+- (void) setMaxNumberEvents:(uint32_t)aValue;
+- (uint32_t) eventTriggerGroup:(int)group bank:(int) bank;
+- (uint32_t) readTriggerTime:(int)bank index:(int)index;
 
 - (void) disArm:(int)bank;
 - (void) arm:(int)bank;
@@ -206,30 +206,30 @@
 - (void) writeTriggerSetup;
 
 //some test functions
-- (unsigned long) readTriggerEventBank:(int)bank index:(int)index;
+- (uint32_t) readTriggerEventBank:(int)bank index:(int)index;
 - (void) readAddressCounts;
 
-- (unsigned long) dataWord:(int)chan index:(int)index;
+- (uint32_t) dataWord:(int)chan index:(int)index;
 
-- (unsigned long) acqReg;
-- (unsigned long) configReg;
+- (uint32_t) acqReg;
+- (uint32_t) configReg;
 - (void) testMemory;
 - (void) testEventRead;
 
 
 #pragma mark •••Data Taker
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherShaper;
 - (NSDictionary*) dataRecordDescription;
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
-- (unsigned long) waveFormCount:(int)aChannel;
+- (uint32_t) waveFormCount:(int)aChannel;
 - (void)   startRates;
 - (void) clearWaveFormCounts;
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag;
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag;
 - (int) load_HW_Config_Structure:(SBC_crate_config*)configStruct index:(int)index;
 
 

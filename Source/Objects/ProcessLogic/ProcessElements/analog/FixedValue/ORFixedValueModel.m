@@ -93,7 +93,7 @@ NSString* ORFixedValueLock              = @"ORFixedValueLock";
 {	
 	NSString* s = @"";
 	@synchronized(self){
-        return [NSString stringWithFormat:@"FixedValue,%ld: %@ ", [self uniqueIdNumber],[self iconValue]];
+        return [NSString stringWithFormat:@"FixedValue,%d: %@ ", [self uniqueIdNumber],[self iconValue]];
 	}
 	return s;
 }

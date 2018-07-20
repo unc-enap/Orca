@@ -147,7 +147,7 @@ typedef char mux_result;
 - (BOOL) readAdc:(id) aSupply;
 - (BOOL) readDac:(id) aSupply;
 - (BOOL) readCurrent:(id) aSupply;
-- (unsigned long) readRelayMask;
+- (uint32_t) readRelayMask;
 - (mux_result) getHVADCValue:(unsigned short*)theDrValue mux:(unsigned char) muxBox channel:(unsigned short) aChannel;
 - (BOOL) lowPowerOn;
 

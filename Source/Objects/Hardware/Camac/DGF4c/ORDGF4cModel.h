@@ -51,16 +51,16 @@ enum {
 };
 
 static union {
-	unsigned long asLong;
+	uint32_t asLong;
 	double asDouble;
 } packedDGF4LiveTime;
 
 
 @interface ORDGF4cModel : ORCamacIOCard <ORDataTaker,ORHWWizard,ORHWRamping> {
     @private
-		unsigned long dataId;
-		unsigned long liveTimeId;
-		unsigned long mcaDataId;
+		uint32_t dataId;
+		uint32_t liveTimeId;
+		uint32_t mcaDataId;
 		NSString* firmWarePath;
 		NSString* dspCodePath;
 		NSString* lastParamPath;
@@ -76,15 +76,15 @@ static union {
 		short maxEvents;
 		
 		//place to cache some stuff for alittle more speed.
-		unsigned long 	unChangingDataPart;
+		uint32_t 	unChangingDataPart;
 		unsigned short cachedStation;
 		BOOL firstTime;
 		unsigned short csrValueForResuming;
 
 		//user params
-		unsigned long runBehaviorMask; //synchwait, insynch, etc.
+		uint32_t runBehaviorMask; //synchwait, insynch, etc.
 		short decimation;
-		long numOscPoints;
+		int32_t numOscPoints;
 		unsigned short oscModeData[4][8192];
 		int oscEnabledMask;
 		float energyRiseTime[4];
@@ -116,8 +116,8 @@ static union {
 - (void) dealloc;
 
 #pragma mark ¥¥¥Accessors
-- (unsigned long) runBehaviorMask;
-- (void) setRunBehaviorMask:(unsigned long)aRunBehaviorMask;
+- (uint32_t) runBehaviorMask;
+- (void) setRunBehaviorMask:(uint32_t)aRunBehaviorMask;
 - (void) setSyncWait:(BOOL)state;
 - (BOOL) syncWait;
 - (void) setInSync:(BOOL)state;
@@ -164,12 +164,12 @@ static union {
 
 - (short) decimation;
 - (void) setDecimation:(short)aDecimation;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
-- (unsigned long) liveTimeId;
-- (void) setLiveTimeId: (unsigned long) aDataId;
-- (unsigned long) mcaDataId;
-- (void) setMcaDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
+- (uint32_t) liveTimeId;
+- (void) setLiveTimeId: (uint32_t) aDataId;
+- (uint32_t) mcaDataId;
+- (void) setMcaDataId: (uint32_t) DataId;
 - (short) revision;
 - (void) setRevision:(short)aValue;
 - (NSString *) firmWarePath;
@@ -200,8 +200,8 @@ static union {
 - (NSMutableDictionary *)lookUpTable;
 - (void)setLookUpTable:(NSMutableDictionary *)aLookUpTable;
 
-- (long) numOscPoints;
-- (long) oscData:(short)set value:(short)x;
+- (int32_t) numOscPoints;
+- (int32_t) oscData:(short)set value:(short)x;
 
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary;
 - (NSArray*) valueArrayFor:(SEL)sel;
@@ -219,8 +219,8 @@ static union {
 - (void) writeICSR:(unsigned short)aValue;
 - (void) loadSystemFPGA:(NSString*)filePath;
 - (BOOL) loadFilterTriggerFPGAs:(NSString*)filePath;
-- (void) writeDSPProgramWord:(unsigned long)data;
-- (unsigned long) readDSPProgramWord;
+- (void) writeDSPProgramWord:(uint32_t)data;
+- (uint32_t) readDSPProgramWord;
 - (void) setCSRBit:(unsigned short)bitMask;
 - (void) clearCSRBit:(unsigned short)bitMask;
 - (void) waitForNotActive:(NSTimeInterval)seconds reason:(NSString*)aReason;

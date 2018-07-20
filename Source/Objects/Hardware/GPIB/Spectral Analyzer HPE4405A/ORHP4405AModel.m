@@ -626,8 +626,8 @@ NSString* ORHP4405AModelTraceChanged		= @"ORHP4405AModelTraceChanged";
 				case 1: //Int32
 				{
 					int i;
-					long* p = (long*) [theData bytes];
-					for(i=0;i<lenInBytes/sizeof(long);i++){
+					int32_t* p = (int32_t*) [theData bytes];
+					for(i=0;i<lenInBytes/sizeof(int32_t);i++){
 						[trace1 addObject:[NSNumber numberWithDouble:(double)p[i]]];
 					}
 				}
@@ -695,13 +695,13 @@ NSString* ORHP4405AModelTraceChanged		= @"ORHP4405AModelTraceChanged";
 	NSDateComponents *components = [gregorian components:(NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit) fromDate:today];
 
 #endif
-    [ self writeToGPIBDevice: [ NSString stringWithFormat: @"SYST:DATE %ld,%ld,%ld", [components hour],[components minute],[components second]]];
+    [ self writeToGPIBDevice: [ NSString stringWithFormat: @"SYST:DATE %d,%d,%d", (int)[components hour],(int)[components minute],(int)[components second]]];
 }
 
-- (unsigned long)	getPowerOnTime
+- (uint32_t)	getPowerOnTime
 {
     char reply[1024];
-    long n = [self writeReadGPIBDevice:@":SYST:PON:TIME?" data:reply maxLength:1024];
+    int32_t n = [self writeReadGPIBDevice:@":SYST:PON:TIME?" data:reply maxLength:1024];
     if(n && [[NSString stringWithCString:reply encoding:NSASCIIStringEncoding] rangeOfString:@"No error"].location == NSNotFound){
 		return atol(reply);
 	}
@@ -792,7 +792,7 @@ NSString* ORHP4405AModelTraceChanged		= @"ORHP4405AModelTraceChanged";
 	
 	NSMutableData* theTrace = [NSMutableData dataWithLength:maxTraceLength];
 	char* p = (char*)[theTrace bytes];
-    long  n = [self writeReadGPIBDevice:@":TRAC:DATA? TRACE1" data:p maxLength:maxTraceLength];
+    int32_t  n = [self writeReadGPIBDevice:@":TRAC:DATA? TRACE1" data:p maxLength:maxTraceLength];
     if(n){
 		[theTrace setLength:n];
 		[self setTrace1:theTrace];
@@ -824,7 +824,7 @@ NSString* ORHP4405AModelTraceChanged		= @"ORHP4405AModelTraceChanged";
 {
 	unsigned char theResult = 0;
 	char reply[1024];
-	long n = [self writeReadGPIBDevice:@"*ESR?" data:reply maxLength:1024];
+	int32_t n = [self writeReadGPIBDevice:@"*ESR?" data:reply maxLength:1024];
 	if(n){
 		theResult = atoi(reply);
 		[self setStandardEventReg:theResult];
@@ -836,7 +836,7 @@ NSString* ORHP4405AModelTraceChanged		= @"ORHP4405AModelTraceChanged";
 {
 	unsigned char theResult = 0;
 	char reply[1024];
-	long n = [self writeReadGPIBDevice:@"*STB?" data:reply maxLength:1024];
+	int32_t n = [self writeReadGPIBDevice:@"*STB?" data:reply maxLength:1024];
 	if(n){
 		theResult = atoi(reply);
 		[self setStatusReg:theResult];
@@ -848,7 +848,7 @@ NSString* ORHP4405AModelTraceChanged		= @"ORHP4405AModelTraceChanged";
 {
 	unsigned char theResult = 0;
 	char reply[1024];
-	long n = [self writeReadGPIBDevice:@":STAT:OPER:COND?" data:reply maxLength:1024];
+	int32_t n = [self writeReadGPIBDevice:@":STAT:OPER:COND?" data:reply maxLength:1024];
 	if(n){
 		theResult = atoi(reply);
 		[self setStatusOperationReg:theResult];
@@ -859,7 +859,7 @@ NSString* ORHP4405AModelTraceChanged		= @"ORHP4405AModelTraceChanged";
 {
 	unsigned char theResult = 0;
 	char reply[1024];
-	long n = [self writeReadGPIBDevice:@":STAT:QUES?" data:reply maxLength:1024];
+	int32_t n = [self writeReadGPIBDevice:@":STAT:QUES?" data:reply maxLength:1024];
 	if(n){
 		theResult = atoi(reply);
 		[self setQuestionableEventReg:theResult];
@@ -871,7 +871,7 @@ NSString* ORHP4405AModelTraceChanged		= @"ORHP4405AModelTraceChanged";
 {
 	unsigned char theResult = 0;
 	char reply[1024];
-	long n = [self writeReadGPIBDevice:@":STAT:QUES:CAL:COND?" data:reply maxLength:1024];
+	int32_t n = [self writeReadGPIBDevice:@":STAT:QUES:CAL:COND?" data:reply maxLength:1024];
 	if(n){
 		theResult = atoi(reply);
 		[self setQuestionableConditionReg:theResult];
@@ -883,7 +883,7 @@ NSString* ORHP4405AModelTraceChanged		= @"ORHP4405AModelTraceChanged";
 {
 	unsigned char theResult = 0;
 	char reply[1024];
-	long n = [self writeReadGPIBDevice:@":STAT:QUES:COND?" data:reply maxLength:1024];
+	int32_t n = [self writeReadGPIBDevice:@":STAT:QUES:COND?" data:reply maxLength:1024];
 	if(n){
 		theResult = atoi(reply);
 		[self setQuestionableConditionReg:theResult];
@@ -895,7 +895,7 @@ NSString* ORHP4405AModelTraceChanged		= @"ORHP4405AModelTraceChanged";
 {
 	unsigned char theResult = 0;
 	char reply[1024];
-	long n = [self writeReadGPIBDevice:@"*STB?" data:reply maxLength:1024];
+	int32_t n = [self writeReadGPIBDevice:@"*STB?" data:reply maxLength:1024];
 	if(n){
 		theResult = atoi(reply);
 		[self setQuestionableFreqReg:theResult];
@@ -907,7 +907,7 @@ NSString* ORHP4405AModelTraceChanged		= @"ORHP4405AModelTraceChanged";
 {
 	unsigned char theResult = 0;
 	char reply[1024];
-	long n = [self writeReadGPIBDevice:@":STAT:QUES:INT:COND?" data:reply maxLength:1024];
+	int32_t n = [self writeReadGPIBDevice:@":STAT:QUES:INT:COND?" data:reply maxLength:1024];
 	if(n){
 		theResult = atoi(reply);
 		[self setQuestionableIntegrityReg:theResult];
@@ -919,7 +919,7 @@ NSString* ORHP4405AModelTraceChanged		= @"ORHP4405AModelTraceChanged";
 {
 	unsigned char theResult = 0;
 	char reply[1024];
-	long n = [self writeReadGPIBDevice:@":STAT:QUES:POW:COND?" data:reply maxLength:1024];
+	int32_t n = [self writeReadGPIBDevice:@":STAT:QUES:POW:COND?" data:reply maxLength:1024];
 	if(n){
 		theResult = atoi(reply);
 		[self setQuestionablePowerReg:theResult];
@@ -930,9 +930,9 @@ NSString* ORHP4405AModelTraceChanged		= @"ORHP4405AModelTraceChanged";
 
 #pragma mark ***DataTaker
 
-- (unsigned long) dataId { return dataId; }
+- (uint32_t) dataId { return dataId; }
 
-- (void) setDataId: (unsigned long) DataId
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }

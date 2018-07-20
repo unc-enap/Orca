@@ -69,24 +69,24 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx timestampSubSec
 	
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length	= ExtractLength(*ptr);	 //get length from first word
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length	= ExtractLength(*ptr);	 //get length from first word
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 	union {
 		float asFloat;
-		unsigned long asLong;
+		uint32_t asLong;
 	}theData;
 	
     NSString* title= @"Slow Controls\n\n";
     NSString* theString =  [NSString stringWithFormat:@"%@\n",title];               
-	theString = [theString stringByAppendingFormat:@"ADEI-%lu\n",(ptr[1]>>21) & 0xf];
-	theString = [theString stringByAppendingFormat:@"Polling Channel: %lu\n",ptr[1] & 0xff];
+	theString = [theString stringByAppendingFormat:@"ADEI-%u\n",(ptr[1]>>21) & 0xf];
+	theString = [theString stringByAppendingFormat:@"Polling Channel: %u\n",ptr[1] & 0xff];
 	theData.asLong = ptr[2];
 	theString = [theString stringByAppendingFormat:@"Value: %.4E\n",theData.asFloat];
 	// -tb- theString = [theString stringByAppendingFormat:@"Value: %.4E\n",theData.asFloat];

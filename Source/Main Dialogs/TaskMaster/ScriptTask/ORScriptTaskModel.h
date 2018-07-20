@@ -48,7 +48,7 @@
 - (void) sendMailTo:(NSString*)receipients cc:(NSString*)cc subject:(NSString*)subject content:(NSString*)theContent;
 - (void) mailSent:(NSString*)to;
 - (void) sendStatusLogTo:(NSString*)receipients cc:(NSString*)cc subject:(NSString*)subject;
-- (void) sendStatusLogTo:(NSString*)receipients cc:(NSString*)cc subject:(NSString*)subject lastSeconds:(unsigned long)aDuration;
+- (void) sendStatusLogTo:(NSString*)receipients cc:(NSString*)cc subject:(NSString*)subject lastSeconds:(uint32_t)aDuration;
 - (void) setExternalVariable:(id)aKey to:(id)aValue;
 - (id) externalVariable:(id)aKey;
 

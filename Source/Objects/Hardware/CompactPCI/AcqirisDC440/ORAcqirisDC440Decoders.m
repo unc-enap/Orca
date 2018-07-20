@@ -57,7 +57,7 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx --timeStamp Hi
 xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx --index offset To Valid Data
 xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx --number shorts in waveform
 .. followed by n shorts and padded as
-.. needed to the long word boundary
+.. needed to the int32_t word boundary
 .. at the end of the record
 
 .. note that the data as read off the hardware contains up
@@ -66,11 +66,11 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx --number shorts in waveform
 */
 //---------------------------------------------------------------
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-    unsigned long length = ExtractLength(*ptr);
-	if(length==sizeof(Acquiris_OrcaWaveformStruct)/sizeof(long))return length; //empty waveform
+    uint32_t* ptr = (uint32_t*)someData;
+    uint32_t length = ExtractLength(*ptr);
+	if(length==sizeof(Acquiris_OrcaWaveformStruct)/sizeof(int32_t))return length; //empty waveform
 
     ptr++;	//point to location
 	unsigned char crate   = (*ptr&0x01e00000)>>21;
@@ -85,9 +85,9 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx --number shorts in waveform
     ptr++;	//point to timeHi
     ptr++;	//point to valid data offset
 
-	long offsetToValidDataBytes = *ptr * sizeof(short);
+	int32_t offsetToValidDataBytes = *ptr * sizeof(short);
 
-    NSData* tmpData = [ NSData dataWithBytes: (char*) someData length: length*sizeof(long) ];
+    NSData* tmpData = [ NSData dataWithBytes: (char*) someData length: length*sizeof(int32_t) ];
 
     // Set up the waveform
     [ aDataSet loadWaveform: tmpData								//pass in the whole data set
@@ -121,24 +121,24 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx --number shorts in waveform
     return length; //must return number of bytes processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
 	ptr++;
 
     NSString* title= @"Acqiris DC440 Waveform Record\n\n";
     
-    NSString* crate = [NSString stringWithFormat:@"Crate = %lu\n",(*ptr&0x01e00000)>>21];
-    NSString* card  = [NSString stringWithFormat:@"Card  = %lu\n",(*ptr&0x001f0000)>>16];
-    NSString* chan  = [NSString stringWithFormat:@"Chan  = %lu\n",(*ptr&0x0000ff00)>>8];
+    NSString* crate = [NSString stringWithFormat:@"Crate = %u\n",(*ptr&0x01e00000)>>21];
+    NSString* card  = [NSString stringWithFormat:@"Card  = %u\n",(*ptr&0x001f0000)>>16];
+    NSString* chan  = [NSString stringWithFormat:@"Chan  = %u\n",(*ptr&0x0000ff00)>>8];
 
  	ptr++;
-	NSString* timeLo  = [NSString stringWithFormat:@"Time Lo  = %lu\n",*ptr];
+	NSString* timeLo  = [NSString stringWithFormat:@"Time Lo  = %u\n",*ptr];
 
  	ptr++;
-	NSString* timeHi  = [NSString stringWithFormat:@"Time Hi  = %lu\n",*ptr];
+	NSString* timeHi  = [NSString stringWithFormat:@"Time Hi  = %u\n",*ptr];
 
  	ptr++;
-	NSString* numPoints = [NSString stringWithFormat:@"Num Points = %lu\n",*ptr];
+	NSString* numPoints = [NSString stringWithFormat:@"Num Points = %u\n",*ptr];
 
     return [NSString stringWithFormat:@"%@%@%@%@%@%@%@",title,crate,card,chan,timeLo,timeHi,numPoints];               
 }

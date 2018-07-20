@@ -337,7 +337,7 @@
         else if([[tableColumn identifier] isEqualToString:@"Value"]){
             if(item==0){
                 return [[[NSAttributedString alloc] 
-                        initWithString:[NSString stringWithFormat:@"%ld key/value pairs",(unsigned long)[[model header] count]]
+                        initWithString:[NSString stringWithFormat:@"%d key/value pairs",(uint32_t)[[model header] count]]
                             attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSColor grayColor],NSForegroundColorAttributeName,nil]] autorelease];
             }
             else {
@@ -346,7 +346,7 @@
                 }
                 else {
                     return [[[NSAttributedString alloc] 
-                        initWithString:[NSString stringWithFormat:@"%ld key/value pairs",(unsigned long)[item count]]
+                        initWithString:[NSString stringWithFormat:@"%d key/value pairs",(uint32_t)[item count]]
                             attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSColor grayColor],NSForegroundColorAttributeName,nil]] autorelease];            
                 }
             }

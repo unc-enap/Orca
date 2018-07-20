@@ -57,7 +57,7 @@
     BOOL            ignoreBreakdownPanicOnB;
     BOOL            ignoreBreakdownCheckOnA;
     BOOL            ignoreBreakdownCheckOnB;
-    unsigned long   runType;
+    uint32_t   runType;
     ORMJDHeaderRecordID* anObjForCouchID;
     ORMJDInterlocks*     mjdInterlocks[2];
     ORMJDSource*         mjdSource[2];

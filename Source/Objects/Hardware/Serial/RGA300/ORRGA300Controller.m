@@ -338,7 +338,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"RGA300 (%lu)",[model uniqueIdNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"RGA300 (%u)",[model uniqueIdNumber]]];
 }
 
 - (void) updateWindow
@@ -464,7 +464,7 @@
 {
 	if([model currentActivity]==kRGAIdle)[currentAmuIndexField setStringValue:@""];
 	else {
-		[currentAmuIndexField setStringValue: [NSString stringWithFormat:@"Index: %d/%lu",[model currentAmuIndex],[model amuCount]]];
+		[currentAmuIndexField setStringValue: [NSString stringWithFormat:@"Index: %d/%u",(int)[model currentAmuIndex],(int)[model amuCount]]];
 	}
 }
 

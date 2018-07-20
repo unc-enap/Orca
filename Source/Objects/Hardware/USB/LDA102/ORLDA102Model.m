@@ -510,7 +510,7 @@ NSString* ORLDA102ModelLock					= @"ORLDA102ModelLock";
 	[self setRampRunning:NO];
 }
 
-- (void) writeCommand:(unsigned char)cmdWord count:(unsigned char)count value:(unsigned long)aValue
+- (void) writeCommand:(unsigned char)cmdWord count:(unsigned char)count value:(uint32_t)aValue
 {
 	if(usbInterface && [self getUSBController]){
 		unsigned char data[8];
@@ -534,7 +534,7 @@ NSString* ORLDA102ModelLock					= @"ORLDA102ModelLock";
 	}
 }
 
-- (void) packData:(unsigned char*)data withLong:(unsigned long)aValue
+- (void) packData:(unsigned char*)data withLong:(uint32_t)aValue
 {
 	data[0] = aValue & 0xff;
 	data[1] = (aValue>>8) & 0xff;

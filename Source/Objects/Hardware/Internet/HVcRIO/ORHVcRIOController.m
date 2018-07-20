@@ -137,7 +137,7 @@
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-    [[self window] setTitle:[NSString stringWithFormat:@"HV-cRIO Control (Unit %lu)",[model uniqueIdNumber]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"HV-cRIO Control (Unit %u)",[model uniqueIdNumber]]];
 }
 
 - (void) updateWindow

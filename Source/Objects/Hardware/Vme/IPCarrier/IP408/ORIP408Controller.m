@@ -88,7 +88,7 @@
 
 -(void)writeMaskChanged:(NSNotification*)aNotification
 {
-	unsigned long value = [model writeMask];
+	uint32_t value = [model writeMask];
 	[writeMaskDecimalField setIntegerValue: value];
 	[writeMaskHexField setIntegerValue: value];
 	short i;
@@ -99,7 +99,7 @@
 
 -(void)writeValueChanged:(NSNotification*)aNotification
 {
-	unsigned long value = [model writeValue];
+	uint32_t value = [model writeValue];
 	[writeDecimalField setIntegerValue: value];
 	[writeHexField setIntegerValue: value];
 	short i;
@@ -110,7 +110,7 @@
 
 -(void)readMaskChanged:(NSNotification*)aNotification
 {
-	unsigned long value = [model readMask];
+	uint32_t value = [model readMask];
 	[readMaskDecimalField setIntegerValue: value];
 	[readMaskHexField setIntegerValue: value];
 	short i;
@@ -122,7 +122,7 @@
 
 -(void)readValueChanged:(NSNotification*)aNotification
 {
-	unsigned long value = [model readValue];
+	uint32_t value = [model readValue];
 	[readDecimalField setIntegerValue: value];
 	[readHexField setIntegerValue: value];
 	short i;
@@ -138,7 +138,7 @@
 {
     @try {
         [self endEditing];
-        unsigned long value = [model getInputWithMask:[model readMask]];
+        uint32_t value = [model getInputWithMask:[model readMask]];
         [model setReadValue:value];
     }
 	@catch(NSException* localException) {
@@ -183,7 +183,7 @@
         int i;
         NSInteger number = [writeMaskBitMatrix numberOfColumns];
         NSButtonCell* anObj;
-        long val = 0;
+        int32_t val = 0;
         NSUInteger tag;
         for(i=0;i<number;i++){
             anObj = [writeMaskBitMatrix cellAtRow:0 column:i];
@@ -219,7 +219,7 @@
         int i;
         NSInteger number = [writeBitMatrix numberOfColumns];
         NSButtonCell* anObj;
-        long val = 0;
+        int32_t val = 0;
         NSUInteger tag;
         for(i=0;i<number;i++){
             anObj = [writeBitMatrix cellAtRow:0 column:i];
@@ -256,7 +256,7 @@
         int i;
         NSInteger number = [readMaskBitMatrix numberOfColumns];
         NSButtonCell* anObj;
-        long val = 0;
+        int32_t val = 0;
         NSUInteger tag;
         for(i=0;i<number;i++){
             anObj = [readMaskBitMatrix cellAtRow:0 column:i];

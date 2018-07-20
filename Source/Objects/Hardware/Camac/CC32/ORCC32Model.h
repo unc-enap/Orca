@@ -118,11 +118,11 @@ are declared volatile.
 - (unsigned short)  executeZCycleIOn;
 - (unsigned short)  resetLAMFF;
 - (unsigned short)  readLAMFFStatus:(unsigned short*)value;
-- (unsigned long)   readLEDs;
-- (unsigned long)  setLAMMask:(unsigned long) mask;
-- (unsigned short)  readLAMMask:(unsigned long *)mask;
-- (unsigned short)  readLAMStations:(unsigned long *)stations;
-- (unsigned long)  readLEDs;
+- (uint32_t)   readLEDs;
+- (uint32_t)  setLAMMask:(uint32_t) mask;
+- (unsigned short)  readLAMMask:(uint32_t *)mask;
+- (unsigned short)  readLAMStations:(uint32_t *)stations;
+- (uint32_t)  readLEDs;
 
 - (void) delay:(float)delayValue;
 - (unsigned short) execute;
@@ -142,20 +142,20 @@ are declared volatile.
 - (unsigned short)  camacLongNAF:(unsigned short) n 
 							   a:(unsigned short) a 
 							   f:(unsigned short) f
-							data:(unsigned long*) data;
+							data:(uint32_t*) data;
 
 
 - (unsigned short)  camacShortNAFBlock:(unsigned short) n 
 									 a:(unsigned short) a 
 									 f:(unsigned short) f
 								  data:(unsigned short*) data
-                                length:(unsigned long)   numWords;
+                                length:(uint32_t)   numWords;
 
 - (unsigned short)  camacLongNAFBlock:(unsigned short) n 
 									 a:(unsigned short) a 
 									 f:(unsigned short) f
-								  data:(unsigned long*) data
-                                length:(unsigned long)    numWords;
+								  data:(uint32_t*) data
+                                length:(uint32_t)    numWords;
 
 #pragma mark ¥¥¥DataTaker
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;

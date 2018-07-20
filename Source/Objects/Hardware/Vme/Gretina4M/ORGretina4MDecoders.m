@@ -66,7 +66,7 @@
 	[self setObject:[NSNumber numberWithInt:[theCard histEMultiplier]] forNestedKey:crateKey,cardKey,kHistEMultiplierKey,nil];
 }
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
 
 	if(![self cacheSetUp]){
@@ -74,8 +74,8 @@
 		[self cacheCardLevelObject:kHistEMultiplierKey fromHeader:[aDecoder fileHeader]];
 	}
 	
-    unsigned long* ptr = (unsigned long*)someData;
-	unsigned long length = ExtractLength(*ptr);
+    uint32_t* ptr = (uint32_t*)someData;
+	uint32_t length = ExtractLength(*ptr);
     
 	ptr++; //point to location info
     int crate = (*ptr&0x01e00000)>>21;
@@ -84,16 +84,16 @@
     int numEvents = (int)(length-2)/1024;
 
     ptr++; //point to first word of first data record
-    int headerSize = 14; //long words
+    int headerSize = 14; //int32_t words
     int i;
-    unsigned long* dataPtr = ptr;
+    uint32_t* dataPtr = ptr;
     for(i=0;i<numEvents;i++){
         if(*dataPtr == 0xAAAAAAAA){
-            unsigned long *nextRecordPtr = dataPtr+1024;
+            uint32_t *nextRecordPtr = dataPtr+1024;
             dataPtr++;
             int channel	= *dataPtr & 0xF; //extract the channel
             dataPtr += 2;                 //point to Energy low word
-            unsigned long energy = *dataPtr >> 16;
+            uint32_t energy = *dataPtr >> 16;
             
             dataPtr++;	  //point to Energy second word
             energy += (*dataPtr & 0x000001ff) << 16;
@@ -119,9 +119,9 @@
             struct timeval tv;
             gettimeofday(&tv, NULL);
             
-            unsigned long long now =
-                (unsigned long long)(tv.tv_sec) * 1000 +
-                (unsigned long long)(tv.tv_usec) / 1000;
+            uint64_t now =
+                (uint64_t)(tv.tv_sec) * 1000 +
+                (uint64_t)(tv.tv_usec) / 1000;
             
             if(!decoderOptions){
                 decoderOptions = [[NSMutableDictionary dictionary]retain];
@@ -129,7 +129,7 @@
             
             NSString* lastTimeKey = [NSString stringWithFormat:@"%@,%@,%@,LastTime",crateKey,cardKey,channelKey];
             
-            unsigned long long lastTime = [[decoderOptions objectForKey:lastTimeKey] unsignedLongLongValue];
+            uint64_t lastTime = [[decoderOptions objectForKey:lastTimeKey] unsignedLongLongValue];
 
             if(now - lastTime >= 100){
                 fullDecode = YES;
@@ -148,7 +148,7 @@
                 tmpData = [NSMutableData dataWithCapacity:512*2];
                   
                 int dataLength = 1024 - headerSize -1;
-                [tmpData setLength:dataLength*sizeof(long)];
+                [tmpData setLength:dataLength*sizeof(int32_t)];
                 short* dPtr = (short*)[tmpData bytes];
                 int i;
                 int wordCount = 0;
@@ -196,15 +196,15 @@
     return length; //must return number of longs
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
-    unsigned long* headerStartPtr = ptr+2;
+    uint32_t* headerStartPtr = ptr+2;
 
     NSString* title= @"Gretina4M Waveform Record\n\n";
     
-    NSString* crate = [NSString stringWithFormat:@"Crate = %lu\n",(ptr[1]&0x01e00000)>>21];
-    NSString* card  = [NSString stringWithFormat:@"Card  = %lu\n",(ptr[1]&0x001f0000)>>16];
-    NSString* fifoState  = [NSString stringWithFormat:@"FifoState  = 0x%04lx\n",(ptr[1]>>30)&0x3];
+    NSString* crate = [NSString stringWithFormat:@"Crate = %u\n",(ptr[1]&0x01e00000)>>21];
+    NSString* card  = [NSString stringWithFormat:@"Card  = %u\n",(ptr[1]&0x001f0000)>>16];
+    NSString* fifoState  = [NSString stringWithFormat:@"FifoState  = 0x%04x\n",(ptr[1]>>30)&0x3];
 
     NSString* crateKey			= [self getCrateKey: (ptr[1]&0x01e00000)>>21];
 	NSString* cardKey			= [self getCardKey: (ptr[1]&0x001f0000)>>16];
@@ -213,12 +213,12 @@
     unsigned short* headerPtr = (unsigned short*)(ptr+2);
     NSString* chan  = [NSString stringWithFormat:@"Chan  = %d\n",headerPtr[2]&0xf];
     
-	unsigned long energy = headerPtr[7] + (headerPtr[8] << 16);
+	uint32_t energy = headerPtr[7] + (headerPtr[8] << 16);
 	
 	// energy is in 2's complement, taking abs value if necessary
 	if (energy & 0x1000000) energy = (~energy & 0x1ffffff) + 1;
     
-    NSString* rawEnergyStr = [NSString stringWithFormat:@"Raw Energy  = 0x%08lx\n",energy];
+    NSString* rawEnergyStr = [NSString stringWithFormat:@"Raw Energy  = 0x%08x\n",energy];
 
     int histEMultiplier = [[self objectForNestedKey:crateKey,cardKey,kHistEMultiplierKey,nil] intValue];
     if(histEMultiplier) energy *= histEMultiplier;
@@ -226,15 +226,15 @@
     int integrateTime = [[self objectForNestedKey:crateKey,cardKey,kIntegrateTimeKey,nil] intValue];
     if(integrateTime) energy /= integrateTime;
     
-	NSString* energyStr  = [NSString stringWithFormat:@"Energy  = %lu\n",energy];
+	NSString* energyStr  = [NSString stringWithFormat:@"Energy  = %u\n",energy];
     
-    unsigned long long timeStamp = ((unsigned long long)headerPtr[6] << 32) + ((unsigned long long)headerPtr[5] << 16) + (unsigned long long)headerPtr[4];
+    uint64_t timeStamp = ((uint64_t)headerPtr[6] << 32) + ((uint64_t)headerPtr[5] << 16) + (uint64_t)headerPtr[4];
     NSString* timeStampString = [NSString stringWithFormat:@"Time: %lld\n",timeStamp];
     
     NSString* header = @"Header (Raw)\n";
     int i;
     for(i=0;i<15;i++){
-        header = [header stringByAppendingFormat:@"%d: 0x%08lx\n",i,headerStartPtr[i]];
+        header = [header stringByAppendingFormat:@"%d: 0x%08x\n",i,headerStartPtr[i]];
     }
     return [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@",title,crate,card,chan,fifoState,timeStampString,rawEnergyStr,energyStr,header];
 }

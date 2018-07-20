@@ -500,7 +500,7 @@
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-	[[self window] setTitle:[NSString stringWithFormat:@"JAMF (Station %lu)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"JAMF (Station %u)",(int)[model stationNumber]]];
 }
 
 #pragma mark •••Actions

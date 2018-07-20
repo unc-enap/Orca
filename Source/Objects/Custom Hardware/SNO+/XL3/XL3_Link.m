@@ -268,12 +268,12 @@ NSString* XL3_LinkAutoConnectChanged    = @"XL3_LinkAutoConnectChanged";
 	}
 }
 
-- (unsigned long)  portNumber
+- (uint32_t)  portNumber
 {
 	return portNumber;
 }
 
-- (void) setPortNumber:(unsigned long)aPortNumber;
+- (void) setPortNumber:(uint32_t)aPortNumber;
 {
 	portNumber = aPortNumber;
 }
@@ -309,7 +309,7 @@ NSString* XL3_LinkAutoConnectChanged    = @"XL3_LinkAutoConnectChanged";
  * Appends a new register write to the pending MultiCmd
  * WARNING: does not check that the MultiCmd is full
  */
-- (void) addMultiCmdToAddress:(long)anAddress withValue:(long)aValue
+- (void) addMultiCmdToAddress:(int32_t)anAddress withValue:(int32_t)aValue
 {
 	MultiCommand* theMultiCommand = (MultiCommand*) aMultiCmdPacket.payload;
 	Command* aCommand = &(theMultiCommand->cmd[theMultiCommand->howMany]);
@@ -508,7 +508,7 @@ NSString* XL3_LinkAutoConnectChanged    = @"XL3_LinkAutoConnectChanged";
     } else {
         [connectionLock unlock];
         @throw [NSException exceptionWithName:@"ReadXL3Packet not connected"
-            reason:[NSString stringWithFormat:@"Not connected for %@ <%@> port: %lu\n", [self crateName], IPNumber, portNumber]
+            reason:[NSString stringWithFormat:@"Not connected for %@ <%@> port: %u\n", [self crateName], IPNumber, portNumber]
             userInfo:nil];
     }
     
@@ -561,7 +561,7 @@ NSString* XL3_LinkAutoConnectChanged    = @"XL3_LinkAutoConnectChanged";
             foundCmds = nil;
             [self performSelectorOnMainThread:@selector(disconnectSocket) withObject:nil waitUntilDone:NO];
 			@throw [NSException exceptionWithName:@"ReadXL3Packet time out"
-				reason:[NSString stringWithFormat:@"Time out for %@ <%@> port: %lu\n", [self crateName], IPNumber, portNumber]
+				reason:[NSString stringWithFormat:@"Time out for %@ <%@> port: %u\n", [self crateName], IPNumber, portNumber]
 				userInfo:nil];
 		} else {
             usleep(500);
@@ -575,7 +575,7 @@ NSString* XL3_LinkAutoConnectChanged    = @"XL3_LinkAutoConnectChanged";
         [foundCmds release];
         foundCmds = nil;
         @throw [NSException exceptionWithName:@"ReadXL3Packet XL3 disconnected"
-            reason:[NSString stringWithFormat:@"XL3 disconnected for %@ <%@> port: %lu\n", [self crateName], IPNumber, portNumber]
+            reason:[NSString stringWithFormat:@"XL3 disconnected for %@ <%@> port: %u\n", [self crateName], IPNumber, portNumber]
             userInfo:nil];
     } else if ([foundCmds count] > 1) {
 		NSLogColor([NSColor redColor],@"Multiple responses for XL3 command with packet type: %d and packet num: %d from %@ <%@> port: %d\n",
@@ -907,7 +907,7 @@ static void SwapLongBlock(void* p, int32_t n)
 - (void) writePacket:(XL3Packet*)xl3Packet
 {
 	if (!workingSocket) {
-		[NSException raise:@"Write error" format:@"XL3 not connected %@ <%@> port: %lu",[self crateName], IPNumber, portNumber];
+		[NSException raise:@"Write error" format:@"XL3 not connected %@ <%@> port: %u",[self crateName], IPNumber, portNumber];
 	}
     
 	int bytesWritten;
@@ -939,7 +939,7 @@ static void SwapLongBlock(void* p, int32_t n)
                 [self performSelector:@selector(disconnectSocket) withObject:nil afterDelay:0]; //only runs after the the calling thread is done
 			}
 			else if (selectionResult == 0 || ([self errorTimeOutSeconds] && time(0) - t1 > [self errorTimeOutSeconds])) {
-				[NSException raise:@"Connection time out" format:@"Write to %@ <%@> port: %lu timed out",[self crateName], IPNumber, portNumber];
+				[NSException raise:@"Connection time out" format:@"Write to %@ <%@> port: %u timed out",[self crateName], IPNumber, portNumber];
                 [self performSelector:@selector(disconnectSocket) withObject:nil afterDelay:0]; //only runs after the the calling thread is done
 			}
 
@@ -955,7 +955,7 @@ static void SwapLongBlock(void* p, int32_t n)
 				if (errno == EPIPE) {
                     [self performSelector:@selector(disconnectSocket) withObject:nil afterDelay:0]; //only runs after the the calling thread is done
 				}
-				[NSException raise:@"Write error" format:@"Write error(%s) %@ <%@> port: %lu",strerror(errno),[self crateName],IPNumber,portNumber];
+				[NSException raise:@"Write error" format:@"Write error(%s) %@ <%@> port: %u",strerror(errno),[self crateName],IPNumber,portNumber];
 			}
 		}
 	}

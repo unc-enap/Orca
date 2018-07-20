@@ -71,11 +71,11 @@ enum {
 
 typedef struct MCA927Registers {
 	NSString*       regName;
-	unsigned long 	addressOffset;
+	uint32_t 	addressOffset;
 } MCA927Registers;
 
 @interface ORMCA927Model : ORUsbDeviceModel <USBDevice,ORDataTaker> {
-	unsigned long   dataId;
+	uint32_t   dataId;
 	NSLock*			localLock;
 	ORUSBInterface* usbInterface;
     NSString*		serialNumber;
@@ -84,22 +84,22 @@ typedef struct MCA927Registers {
     BOOL			useCustomFile;
     int				selectedChannel;
     BOOL			runningStatus[2];
-    unsigned long liveTimeStatus[2];
-    unsigned long realTimeStatus[2];
-    unsigned long liveTime[2];
-    unsigned long realTime[2];
-	unsigned long controlReg[2];
-	unsigned long presetCtrlReg[2];
-    unsigned long ltPreset[2];
-    unsigned long roiPreset[2];
-    unsigned long rtPreset[2];
-    unsigned long roiPeakPreset[2];
-    unsigned long convGain[2];
-    unsigned long upperDiscriminator[2];
-    unsigned long lowerDiscriminator[2];
-    unsigned long zdtMode[2];
-	unsigned long spectrum[4][0x4000];
-    unsigned long runOptions[2];
+    uint32_t liveTimeStatus[2];
+    uint32_t realTimeStatus[2];
+    uint32_t liveTime[2];
+    uint32_t realTime[2];
+	uint32_t controlReg[2];
+	uint32_t presetCtrlReg[2];
+    uint32_t ltPreset[2];
+    uint32_t roiPreset[2];
+    uint32_t rtPreset[2];
+    uint32_t roiPeakPreset[2];
+    uint32_t convGain[2];
+    uint32_t upperDiscriminator[2];
+    uint32_t lowerDiscriminator[2];
+    uint32_t zdtMode[2];
+	uint32_t spectrum[4][0x4000];
+    uint32_t runOptions[2];
     BOOL		  autoClear[2];
 	BOOL		  startedFromMainRunControl[2];
 	BOOL		  mainRunIsStopping;
@@ -116,40 +116,40 @@ typedef struct MCA927Registers {
 - (BOOL) startedFromMainRunControl:(int)index;
 - (BOOL) autoClear:(int)index;
 - (void) setAutoClear:(int)index withValue:(BOOL)aValue;
-- (unsigned long) runOptions:(int)index;
-- (void) setRunOptions:(int)index withValue:(unsigned long)optionMask;
+- (uint32_t) runOptions:(int)index;
+- (void) setRunOptions:(int)index withValue:(uint32_t)optionMask;
 - (int) selectedChannel;
 - (void) setSelectedChannel:(int)aSelectedChannel;
-- (unsigned long) upperDiscriminator:(int)index;
-- (void) setUpperDiscriminator:(int)index withValue:(unsigned long)aValue;
-- (unsigned long) lowerDiscriminator:(int)index;
-- (void) setLowerDiscriminator:(int)index withValue:(unsigned long)aValue;
-- (unsigned long) zdtMode:(int)index;
-- (void) setZdtMode:(int)index withValue:(unsigned long)aValue;
+- (uint32_t) upperDiscriminator:(int)index;
+- (void) setUpperDiscriminator:(int)index withValue:(uint32_t)aValue;
+- (uint32_t) lowerDiscriminator:(int)index;
+- (void) setLowerDiscriminator:(int)index withValue:(uint32_t)aValue;
+- (uint32_t) zdtMode:(int)index;
+- (void) setZdtMode:(int)index withValue:(uint32_t)aValue;
 - (BOOL) runningStatus:(int)index;
 - (void) setRunningStatus:(int)index withValue:(BOOL)aValue;
 - (void) writeSpectrum:(int)index toFile:(NSString*)aFilePath;
 
-- (unsigned long) convGain:(int)index;
-- (void) setConvGain:(int)index withValue:(unsigned long)aValue;
-- (unsigned long) liveTime:(int)index;
-- (void) setLiveTime:(int)index withValue:(unsigned long)aValue;
-- (unsigned long) realTime:(int)index;
-- (void) setRealTime:(int)index withValue:(unsigned long)aValue;
-- (unsigned long) liveTimeStatus:(int)index;
-- (void) setLiveTimeStatus:(int)index withValue:(unsigned long)aValue;
-- (unsigned long) realTimeStatus:(int)index;
-- (void) setRealTimeStatus:(int)index withValue:(unsigned long)aValue;
-- (unsigned long) roiPreset:(int)index;
-- (void) setRoiPreset:(int)index withValue:(unsigned long)aValue;
-- (unsigned long) rtPreset:(int)index;
-- (void) setRtPreset:(int)index withValue:(unsigned long)aValue;
-- (unsigned long) roiPeakPreset:(int)index;
-- (void) setRoiPeakPreset:(int)index withValue:(unsigned long)aValue;
-- (unsigned long) spectrum:(int)index valueAtChannel:(int)x;
+- (uint32_t) convGain:(int)index;
+- (void) setConvGain:(int)index withValue:(uint32_t)aValue;
+- (uint32_t) liveTime:(int)index;
+- (void) setLiveTime:(int)index withValue:(uint32_t)aValue;
+- (uint32_t) realTime:(int)index;
+- (void) setRealTime:(int)index withValue:(uint32_t)aValue;
+- (uint32_t) liveTimeStatus:(int)index;
+- (void) setLiveTimeStatus:(int)index withValue:(uint32_t)aValue;
+- (uint32_t) realTimeStatus:(int)index;
+- (void) setRealTimeStatus:(int)index withValue:(uint32_t)aValue;
+- (uint32_t) roiPreset:(int)index;
+- (void) setRoiPreset:(int)index withValue:(uint32_t)aValue;
+- (uint32_t) rtPreset:(int)index;
+- (void) setRtPreset:(int)index withValue:(uint32_t)aValue;
+- (uint32_t) roiPeakPreset:(int)index;
+- (void) setRoiPeakPreset:(int)index withValue:(uint32_t)aValue;
+- (uint32_t) spectrum:(int)index valueAtChannel:(int)x;
 
-- (unsigned long) ltPreset:(int)index;
-- (void) setLtPreset:(int)index withValue:(unsigned long)aValue;
+- (uint32_t) ltPreset:(int)index;
+- (void) setLtPreset:(int)index withValue:(uint32_t)aValue;
 - (BOOL) useCustomFile;
 - (void) setUseCustomFile:(BOOL)aUseCustomFile;
 - (NSString*) fpgaFilePath;
@@ -164,10 +164,10 @@ typedef struct MCA927Registers {
 - (NSString*) usbInterfaceDescription;
 - (void) interfaceAdded:(NSNotification*)aNote;
 - (void) interfaceRemoved:(NSNotification*)aNote;
-- (unsigned long) controlReg:(int)index;
-- (void) setControlReg:(int)index withValue:(unsigned long)aValue;
-- (unsigned long) presetCtrlReg:(int)index;
-- (void) setPresetCtrlReg:(int)index withValue:(unsigned long)aValue;
+- (uint32_t) controlReg:(int)index;
+- (void) setControlReg:(int)index withValue:(uint32_t)aValue;
+- (uint32_t) presetCtrlReg:(int)index;
+- (void) setPresetCtrlReg:(int)index withValue:(uint32_t)aValue;
 - (int) numChannels:(int)index;
 - (const char*) convGainLabel:(int)aValue;
 - (BOOL) viewSpectrum0;
@@ -189,8 +189,8 @@ typedef struct MCA927Registers {
 - (void) getFirmwareVersion;
 - (void) checkUSBAlarm;
 
-- (void) writeReg:(int)aReg adc:(int)adcIndex value:(unsigned long)aValue;
-- (unsigned long) readReg:(int)aReg adc:(int)adcIndex;
+- (void) writeReg:(int)aReg adc:(int)adcIndex value:(uint32_t)aValue;
+- (uint32_t) readReg:(int)aReg adc:(int)adcIndex;
 - (void) report;
 - (void) sync;
 - (void) report:(BOOL)verbose;
@@ -204,8 +204,8 @@ typedef struct MCA927Registers {
 - (void) readZDT:(int)index;
 
 #pragma mark •••Data Taker
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherShaper;
 - (NSDictionary*) dataRecordDescription;

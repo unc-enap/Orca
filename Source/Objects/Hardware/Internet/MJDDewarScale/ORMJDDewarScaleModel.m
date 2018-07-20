@@ -299,7 +299,7 @@ NSString* ORMJDDewarScaleValueChanged           = @"ORMJDDewarScaleValueChanged"
 {
 	NSString* s;
  	@synchronized(self){
-		s= [NSString stringWithFormat:@"MJDDewarScale,%lu",[self uniqueIdNumber]];
+		s= [NSString stringWithFormat:@"MJDDewarScale,%u",[self uniqueIdNumber]];
 	}
 	return s;
 }

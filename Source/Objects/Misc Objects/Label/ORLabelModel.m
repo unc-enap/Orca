@@ -100,7 +100,7 @@ NSString* ORLabelModelFormatChanged				 = @"ORLabelModelFormatChanged";
 
 - (NSString*) description:(NSString*)prefix
 {
-    return [NSString stringWithFormat:@"%@%@ %lu",prefix,[self elementName],[self uniqueIdNumber]];
+    return [NSString stringWithFormat:@"%@%@ %u",prefix,[self elementName],[self uniqueIdNumber]];
 }
 
 

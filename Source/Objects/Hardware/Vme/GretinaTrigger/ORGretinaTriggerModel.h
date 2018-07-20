@@ -262,7 +262,7 @@ enum {
     NSString*       firmwareStatusString;
     BOOL            verbose;
     BOOL            locked;
-    unsigned long   dataId;
+    uint32_t   dataId;
     BOOL            doNotLock;
     unsigned short  numTimesToRetry;
     ORAlarm*        noClockAlarm;
@@ -307,7 +307,7 @@ enum {
 - (void) runStopped:(NSNotification*)aNote;
 
 #pragma mark ***Accessors
-- (unsigned long long) timeStamp;
+- (uint64_t) timeStamp;
 - (int) tryNumber;
 - (unsigned short) numTimesToRetry;
 - (void) setNumTimesToRetry:(unsigned short)aNumTimesToRetry;
@@ -399,7 +399,7 @@ enum {
 - (void) testSandBoxRegisters;
 - (void) testSandBoxRegister:(int)anOffset;
 - (NSString*) registerNameAt:(unsigned int)index;
-- (unsigned long) registerOffsetAt:(unsigned int)index;
+- (uint32_t) registerOffsetAt:(unsigned int)index;
 - (unsigned short) readRegister:(unsigned int)index;
 - (void) writeRegister:(unsigned int)index withValue:(unsigned short)value;
 - (BOOL) canReadRegister:(unsigned int)index;
@@ -408,8 +408,8 @@ enum {
 #pragma mark •••Hardware Access
 - (unsigned short) readCodeRevision;
 - (unsigned short) readCodeDate;
-- (void) writeToAddress:(unsigned long)anAddress aValue:(unsigned short)aValue;
-- (unsigned short) readFromAddress:(unsigned long)anAddress;
+- (void) writeToAddress:(uint32_t)anAddress aValue:(unsigned short)aValue;
+- (unsigned short) readFromAddress:(uint32_t)anAddress;
 - (void) readTimeStamps;
 - (void) resetTimeStamps;
 - (void) resetScalerTimeStamps;
@@ -417,8 +417,8 @@ enum {
 #pragma mark •••Data Records
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (NSDictionary*) dataRecordDescription;
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherObj;
 - (void) shipDataRecord;

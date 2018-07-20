@@ -631,7 +631,7 @@ NSString* ORTM700ConstraintsDisabledChanged    = @"ORTM700ConstraintsDisabledCha
 {
 	NSString* s;
  	@synchronized(self){
-		s= [NSString stringWithFormat:@"TM700,%lu",[self uniqueIdNumber]];
+		s= [NSString stringWithFormat:@"TM700,%u",[self uniqueIdNumber]];
 	}
 	return s;
 }

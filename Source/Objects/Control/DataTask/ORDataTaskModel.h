@@ -39,7 +39,7 @@
     ORReadOutList*  readOutList;
     ORDataChainObject*  nextObject;     //cache for alittle bit more speed.
     NSArray*        dataTakers;     //cache of data takers.
-    unsigned long   queueCount;
+    uint32_t   queueCount;
     
     ORSafeQueue*    transferQueue;
     ORDecoder*      theDecoder;
@@ -51,16 +51,16 @@
     
     ORTimer* dataTimer;
     ORTimer* mainTimer;
-    unsigned long dataTimeHist[kTimeHistoSize];
-    unsigned long processingTimeHist[kTimeHistoSize];
+    uint32_t dataTimeHist[kTimeHistoSize];
+    uint32_t processingTimeHist[kTimeHistoSize];
      
     clock_t			runStartTime;
 	struct tms		runStartTmsTime;
 	short			timeScaler;
 	BOOL			enableTimer;
-	unsigned long	cycleCount;
-	unsigned long	cycleRate;
-    unsigned long   cachedNumberDataTakers;
+	uint32_t	cycleCount;
+	uint32_t	cycleRate;
+    uint32_t   cachedNumberDataTakers;
 	id*				cachedDataTakers;
 	
     BOOL timeToStopProcessThread;
@@ -68,8 +68,8 @@
 	
     NSLock*			 timerLock;
 	//hints
-	unsigned long queAddCount;
-	unsigned long lastqueAddCount;
+	uint32_t queAddCount;
+	uint32_t lastqueAddCount;
     int refreshRate;
 }
 
@@ -80,20 +80,20 @@
 - (void) setRefreshRate:(int)aRefreshRate;
 - (ORReadOutList*) readOutList;
 - (void) setReadOutList:(ORReadOutList*)someDataTakers;
-- (unsigned long)queueCount;
-- (void)setQueueCount:(unsigned long)aQueueCount;
-- (unsigned long) queueMaxSize;
+- (uint32_t)queueCount;
+- (void)setQueueCount:(uint32_t)aQueueCount;
+- (uint32_t) queueMaxSize;
 - (NSString *)lastFile;
 - (void)setLastFile:(NSString *)aLastFile;
-- (unsigned long) dataTimeHist:(int)index;
-- (unsigned long) processingTimeHist:(int)index;
+- (uint32_t) dataTimeHist:(int)index;
+- (uint32_t) processingTimeHist:(int)index;
 - (short) timeScaler;
 - (void) setTimeScaler:(short)aValue;
 - (void) clearTimeHistogram;
 - (BOOL) timerEnabled;
 - (void) setEnableTimer:(int)aState;
-- (unsigned long)cycleRate;
-- (void) setCycleRate:(unsigned long)aRate;
+- (uint32_t)cycleRate;
+- (void) setCycleRate:(uint32_t)aRate;
 - (void) setRunMode:(int)runMode;
 - (void) removeOrcaObject:(id)anObject;
 

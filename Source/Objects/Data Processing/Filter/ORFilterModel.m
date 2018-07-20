@@ -59,14 +59,14 @@ extern int FilterScriptparse(void);
 //we will take over ownership of these pointers
 //and will release them in this object
 //they have to be global for us to get at them
-extern long startFilterNodeCount;
+extern int32_t startFilterNodeCount;
 extern nodeType** startFilterNodes;
-extern long filterNodeCount;
+extern int32_t filterNodeCount;
 extern nodeType** filterNodes;
-extern long finishFilterNodeCount;
+extern int32_t finishFilterNodeCount;
 extern nodeType** finishFilterNodes;
 //-----------------------------------------
-extern long numFilterLines;
+extern int32_t numFilterLines;
 extern BOOL parsedSuccessfully;
 
 ORFilterModel* theFilterRunner = nil;
@@ -260,7 +260,7 @@ int filterGraph(nodeType*);
 {
 	if(!inputValues)inputValues = [[NSMutableArray array] retain];
 	[inputValues addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:
-							[NSString stringWithFormat:@"$%lu",[inputValues count]],	@"name",
+							[NSString stringWithFormat:@"$%u",(int)[inputValues count]],	@"name",
 							[NSNumber numberWithUnsignedLong:0],					@"iValue",
 							nil]];
 	
@@ -298,14 +298,14 @@ int filterGraph(nodeType*);
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORFilterLastFileChangedChanged object:self];
 }
 
-- (unsigned long) processingTimeHist:(int)index
+- (uint32_t) processingTimeHist:(int)index
 {
     return processingTimeHist[index];
 }
 
 - (void) clearTimeHistogram
 {
-    memset(processingTimeHist,0,kFilterTimeHistoSize*sizeof(unsigned long));
+    memset(processingTimeHist,0,kFilterTimeHistoSize*sizeof(uint32_t));
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORFilterUpdateTiming object:self];
 }
 
@@ -363,19 +363,19 @@ int filterGraph(nodeType*);
 	for(id data in dataArray){
 		[data retain];
 		//each record must be filtered by the filter code. 
-		long totalLen = [data length]/sizeof(long);
+		int32_t totalLen = [data length]/sizeof(int32_t);
 		if(totalLen>0){
-			unsigned long* ptr = (unsigned long*)[data bytes];
+			uint32_t* ptr = (uint32_t*)[data bytes];
 			while(totalLen>0){
 				
-				long recordLen = ExtractLength(*ptr);
+				int32_t recordLen = ExtractLength(*ptr);
 				if(recordLen > totalLen){
 					NSLogError(@" ",@"Filter",@"Bad Record:Incorrect Length",nil);
 					break;
 				}
 				
 				filterData tempData;
-				unsigned long t = [runTimer microseconds]/1000;
+				uint32_t t = [runTimer microseconds]/1000;
 				if(t!=lastRunTimeValue){
 					lastRunTimeValue = t;
 					tempData.type		= kFilterLongType;
@@ -423,20 +423,20 @@ int filterGraph(nodeType*);
 	[dataArray release];
 }
 
-- (unsigned long) dataId1D { return dataId1D; }
-- (void) setDataId1D: (unsigned long) aDataId
+- (uint32_t) dataId1D { return dataId1D; }
+- (void) setDataId1D: (uint32_t) aDataId
 {
     dataId1D = aDataId;
 }
 
-- (unsigned long) dataId2D { return dataId2D; }
-- (void) setDataId2D: (unsigned long) aDataId
+- (uint32_t) dataId2D { return dataId2D; }
+- (void) setDataId2D: (uint32_t) aDataId
 {
     dataId2D = aDataId;
 }
 
-- (unsigned long) dataIdStrip { return dataIdStrip; }
-- (void) setDataIdStrip: (unsigned long) aDataId
+- (uint32_t) dataIdStrip { return dataIdStrip; }
+- (void) setDataIdStrip: (uint32_t) aDataId
 {
     dataIdStrip = aDataId;
 }
@@ -864,7 +864,7 @@ int filterGraph(nodeType*);
 
 -(int)yyinputToBuffer:(char* )theBuffer withSize:(int)maxSize 
 {
-	unsigned long theNumberOfBytesRemaining = ([expressionAsData length] - yaccInputPosition);
+	uint32_t theNumberOfBytesRemaining = ([expressionAsData length] - yaccInputPosition);
 	int theCopySize = (int)(maxSize < theNumberOfBytesRemaining ? maxSize : theNumberOfBytesRemaining);
 	[expressionAsData getBytes:theBuffer range:NSMakeRange(yaccInputPosition,theCopySize)];  
 	yaccInputPosition = yaccInputPosition + theCopySize;
@@ -873,36 +873,36 @@ int filterGraph(nodeType*);
 
 #pragma mark ***Plugin Interface
 
-- (BOOL) record:(unsigned long*)aRecordPtr isEqualTo:(unsigned long)aValue
+- (BOOL) record:(uint32_t*)aRecordPtr isEqualTo:(uint32_t)aValue
 {
 	return ExtractDataId(aRecordPtr[0]) == aValue;
 }
 
-- (unsigned long) extractRecordID:(unsigned long)aValue
+- (uint32_t) extractRecordID:(uint32_t)aValue
 {
 	return ExtractDataId(aValue);
 }
 
-- (unsigned long) extractRecordLen:(unsigned long)aValue
+- (uint32_t) extractRecordLen:(uint32_t)aValue
 {
 	return ExtractLength(aValue);
 }
 
-- (unsigned long) extractValue:(unsigned long)aValue mask:(unsigned long)aMask thenShift:(unsigned long)shift
+- (uint32_t) extractValue:(uint32_t)aValue mask:(uint32_t)aMask thenShift:(uint32_t)shift
 {
 	return (aValue & aMask) >> shift;
 }
 
-- (void) shipRecord:(unsigned long*)p length:(long)length
+- (void) shipRecord:(uint32_t*)p length:(int32_t)length
 {
 	if(p && length){
 		//pass it on
-		NSArray* dataArray = [NSArray arrayWithObject:[NSData dataWithBytes:p length:length*sizeof(long)]];
+		NSArray* dataArray = [NSArray arrayWithObject:[NSData dataWithBytes:p length:length*sizeof(int32_t)]];
 		[theFilteredObject processData:dataArray decoder:currentDecoder];
 	}
 }
 
-- (void) checkStackIndex:(unsigned long) i
+- (void) checkStackIndex:(uint32_t) i
 {
 	if(i>=kNumFilterStacks){
 		if(![stackIndexErrorReported objectForKey:[NSNumber numberWithInteger:i]]){
@@ -914,7 +914,7 @@ int filterGraph(nodeType*);
 	}
 }
 
-- (void) checkStack:(unsigned long)i ptr:(unsigned long) ptr
+- (void) checkStack:(uint32_t)i ptr:(uint32_t) ptr
 {
 	if(!ptr){
 		if(![stackPtrErrorReported objectForKey:[NSNumber numberWithInteger:i]]){
@@ -925,32 +925,32 @@ int filterGraph(nodeType*);
 		[NSException raise:@"Filter Script Error" format:@"Stack nil pointer."];
 	}
 }
-- (void) pushOntoStack:(unsigned long)i ptrCheck:(unsigned long)ptrCheck record:(unsigned long*)p
+- (void) pushOntoStack:(uint32_t)i ptrCheck:(uint32_t)ptrCheck record:(uint32_t*)p
 {
 	[self checkStackIndex:i]; //can throw
 	[self checkStack:i ptr:ptrCheck]; //can throw
 	
 	if(!stacks[i])stacks[i] = [[ORQueue alloc] init];
-	NSData* theRecord = [NSData dataWithBytes:p length:ExtractLength(*p)*sizeof(long)];
+	NSData* theRecord = [NSData dataWithBytes:p length:ExtractLength(*p)*sizeof(int32_t)];
 	[stacks[i] enqueue:theRecord];
 }
 
-- (unsigned long*) popFromStack:(unsigned long)i
+- (uint32_t*) popFromStack:(uint32_t)i
 {
 	[self checkStackIndex:i]; //can throw
 	
 	NSData* data = [stacks[i] dequeue];
-	return (unsigned long*)[data bytes];
+	return (uint32_t*)[data bytes];
 }
 
-- (unsigned long*) popFromStackBottom:(unsigned long)i
+- (uint32_t*) popFromStackBottom:(uint32_t)i
 {
 	[self checkStackIndex:i]; //can throw
 	NSData* data = [stacks[i] dequeueFromBottom];
-	return (unsigned long*)[data bytes];
+	return (uint32_t*)[data bytes];
 }
 
-- (void) shipStack:(unsigned long)i
+- (void) shipStack:(uint32_t)i
 {
 	[self checkStackIndex:i]; //can throw
 	if(stacks[i] && ![stacks[i] isEmpty]) {
@@ -963,62 +963,62 @@ int filterGraph(nodeType*);
 	}
 }
 
-- (long) stackCount:(unsigned long)i
+- (int32_t) stackCount:(uint32_t)i
 {
 	[self checkStackIndex:i]; //can throw
 	return [stacks[i] count];
 }
 
-- (void) dumpStack:(unsigned long)i
+- (void) dumpStack:(uint32_t)i
 {
 	[self checkStackIndex:i]; //can throw
 	[stacks[i] release];
 	stacks[i] = nil;
 }
 
-- (void) histo1D:(int)i value:(unsigned long)aValue
+- (void) histo1D:(int)i value:(uint32_t)aValue
 {
-	unsigned long p[2];
+	uint32_t p[2];
 	p[0] = dataId1D | 2;
 	p[1] = (i & 0xff) << 24 | (aValue & 0x00ffffff);
 	//pass it on
-	NSArray* someData = [NSArray arrayWithObject:[NSData dataWithBytes:p length:2*sizeof(long)]];
+	NSArray* someData = [NSArray arrayWithObject:[NSData dataWithBytes:p length:2*sizeof(int32_t)]];
 	[theFilteredObject processData:someData decoder:currentDecoder];
 }
 
-- (void) histo2D:(int)i x:(unsigned long)x y:(unsigned long)y
+- (void) histo2D:(int)i x:(uint32_t)x y:(uint32_t)y
 {
-	unsigned long p[3];
+	uint32_t p[3];
 	p[0] = dataId2D | 3;
 	p[1] = (i & 0xff) << 24 | (x & 0xffff);
 	p[2] = (y & 0xffff);
 	
 	//pass it on
-	NSArray* someData = [NSArray arrayWithObject:[NSData dataWithBytes:p length:3*sizeof(long)]];
+	NSArray* someData = [NSArray arrayWithObject:[NSData dataWithBytes:p length:3*sizeof(int32_t)]];
 	[theFilteredObject processData:someData decoder:currentDecoder];
 }
 
-- (void) stripChart:(int)i time:(unsigned long)aTimeIndex value:(unsigned long)aValue
+- (void) stripChart:(int)i time:(uint32_t)aTimeIndex value:(uint32_t)aValue
 {
-	unsigned long p[3];
+	uint32_t p[3];
 	p[0] = dataIdStrip | 3;
 	p[1] = (i & 0xffff) << 16 | (aValue & 0xffff); 
 	p[2] = aTimeIndex;
 	
 	//pass it on
-	NSArray* someData = [NSArray arrayWithObject:[NSData dataWithBytes:p length:3*sizeof(long)]];
+	NSArray* someData = [NSArray arrayWithObject:[NSData dataWithBytes:p length:3*sizeof(int32_t)]];
 	[theFilteredObject processData:someData decoder:currentDecoder];
 }
 
 
-- (void) setOutput:(int)index withValue:(unsigned long)aValue
+- (void) setOutput:(int)index withValue:(uint32_t)aValue
 {
 	if(!outputValues) outputValues = [[NSMutableArray array] retain];
 	if(index>[outputValues count]){
 		NSUInteger i;
 		for(i=[outputValues count];i<index;i++){
 			[outputValues addObject: [NSMutableDictionary dictionaryWithObjectsAndKeys:
-									  [NSString stringWithFormat:@"%ld",i], @"name",
+									  [NSString stringWithFormat:@"%d",i], @"name",
 									  [NSString stringWithFormat:@"%d",0], @"iValue",
 									  nil]];
 		}
@@ -1026,13 +1026,13 @@ int filterGraph(nodeType*);
 	if(index==[outputValues count]){
 		[outputValues addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:
 								 [NSString stringWithFormat:@"%d",index],   @"name",
-								 [NSString stringWithFormat:@"%lu",aValue], @"iValue",
+								 [NSString stringWithFormat:@"%u",aValue], @"iValue",
 								 nil]];
 	}
 	else {
 		[outputValues replaceObjectAtIndex:index withObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:
 															 [NSString stringWithFormat:@"%d",index],  @"name",
-															 [NSString stringWithFormat:@"%lu",aValue], @"iValue",
+															 [NSString stringWithFormat:@"%u",aValue], @"iValue",
 															 nil]];
 	}
 	NSTimeInterval currentTimeRef = [NSDate timeIntervalSinceReferenceDate];
@@ -1065,9 +1065,9 @@ int filterGraph(nodeType*);
 	//we are a special case and might not be in the data stream if the data is coming from 
 	//the data replay object so we'll check and if needed will define data ids for ourselves.
 	NSDictionary* objDictionary = [descriptionDict objectForKey:@"ORFilterDecoderFor1D"];
-	long anID = [[objDictionary objectForKey:@"dataId"] longValue];
+	int32_t anID = [[objDictionary objectForKey:@"dataId"] longValue];
 	if(anID == 0){
-		unsigned long maxLongID = 0;
+		uint32_t maxLongID = 0;
 		//loop over all objects in the descript and log the highest id
 		while(objKey = [descriptionDictEnum nextObject]){
 			NSDictionary* objDictionary = [descriptionDict objectForKey:objKey];
@@ -1075,7 +1075,7 @@ int filterGraph(nodeType*);
 			NSString* dataObjKey;
 			while(dataObjKey = [dataObjEnum nextObject]){
 				NSDictionary* lowestLevel = [objDictionary objectForKey:dataObjKey];
-				unsigned long anID = [[lowestLevel objectForKey:@"dataId"] longValue];
+				uint32_t anID = [[lowestLevel objectForKey:@"dataId"] longValue];
 				if(IsLongForm(anID)){
 					anID >>= 18;
 					if(anID>maxLongID)maxLongID = anID;
@@ -1124,13 +1124,13 @@ int filterGraph(nodeType*);
 
 @implementation ORFilterDecoderFor1D
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-    unsigned long length = 2;
+    uint32_t* ptr = (uint32_t*)someData;
+    uint32_t length = 2;
 	
     unsigned short index  = (ptr[1]&0xff000000)>>24;
-    unsigned long  value = ptr[1]&0x00ffffff;
+    uint32_t  value = ptr[1]&0x00ffffff;
 	
     [aDataSet histogram:value numBins:4096  sender:self  withKeys:@"Filter",
 	 [NSString stringWithFormat:@"%d",index],
@@ -1138,12 +1138,12 @@ int filterGraph(nodeType*);
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"Filter Record (1D)\n\n";
     
-    NSString* value  = [NSString stringWithFormat:@"Value = %lu\n",ptr[1]&0x00ffffff];
-    NSString* index  = [NSString stringWithFormat: @"Index  = %lu\n",(ptr[1]&0xff000000)>>24];    
+    NSString* value  = [NSString stringWithFormat:@"Value = %u\n",ptr[1]&0x00ffffff];
+    NSString* index  = [NSString stringWithFormat: @"Index  = %u\n",(ptr[1]&0xff000000)>>24];    
 	
     return [NSString stringWithFormat:@"%@%@%@",title,value,index];               
 }
@@ -1152,51 +1152,51 @@ int filterGraph(nodeType*);
 @end
 
 @implementation ORFilterDecoderFor2D
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-    unsigned long length = 3;
+    uint32_t* ptr = (uint32_t*)someData;
+    uint32_t length = 3;
 	
     [aDataSet histogram2DX:ptr[1]&0x0000ffff y:ptr[2]&0x0000ffff size:256  sender:self  
-				  withKeys:@"Filter2D",[NSString stringWithFormat:@"%lu",(ptr[1]&0xff00000)>>24],
+				  withKeys:@"Filter2D",[NSString stringWithFormat:@"%u",(ptr[1]&0xff00000)>>24],
 	 nil];
 	
 	
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"Filter Record (2D)\n\n";
     
-    NSString* index   = [NSString stringWithFormat: @"Index  = %lu\n",(ptr[1]&0xff00000)>>24];
-    NSString* valueX  = [NSString stringWithFormat: @"ValueX = %lu\n",ptr[1]&0x0000ffff];
-    NSString* valueY  = [NSString stringWithFormat: @"ValueY = %lu\n",ptr[2]&0x0000ffff];    
+    NSString* index   = [NSString stringWithFormat: @"Index  = %u\n",(ptr[1]&0xff00000)>>24];
+    NSString* valueX  = [NSString stringWithFormat: @"ValueX = %u\n",ptr[1]&0x0000ffff];
+    NSString* valueY  = [NSString stringWithFormat: @"ValueY = %u\n",ptr[2]&0x0000ffff];    
 	
     return [NSString stringWithFormat:@"%@%@%@%@",title,valueX,valueY,index];               
 }
 @end
 
 @implementation ORFilterDecoderForStrip
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-    unsigned long* ptr = (unsigned long*)someData;
-    unsigned long length = 3;
+    uint32_t* ptr = (uint32_t*)someData;
+    uint32_t length = 3;
 	
     [aDataSet loadTimeSeries:ptr[1]&0xFFFF atTime:ptr[2] sender:self  
-					withKeys:@"FilterStripChart",[NSString stringWithFormat:@"%lu",(ptr[1]&0xffff0000)>>16],
+					withKeys:@"FilterStripChart",[NSString stringWithFormat:@"%u",(ptr[1]&0xffff0000)>>16],
 	 nil];
 	
     return length; //must return number of longs processed.
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)ptr
+- (NSString*) dataRecordDescription:(uint32_t*)ptr
 {
     NSString* title= @"Filter Time Series\n\n";
     
-    NSString* index  =     [NSString stringWithFormat: @"Index = %lu\n",(ptr[1] & 0xffff0000)>>16];
-    NSString* timeValue  = [NSString stringWithFormat: @"Time  = %lu\n",ptr[1] & 0x0000ffff];
-    NSString* value  =     [NSString stringWithFormat: @"Value = %lu\n",ptr[2]];    
+    NSString* index  =     [NSString stringWithFormat: @"Index = %u\n",(ptr[1] & 0xffff0000)>>16];
+    NSString* timeValue  = [NSString stringWithFormat: @"Time  = %u\n",ptr[1] & 0x0000ffff];
+    NSString* value  =     [NSString stringWithFormat: @"Value = %u\n",ptr[2]];    
 	
     return [NSString stringWithFormat:@"%@%@%@%@",title,index,timeValue,value];               
 }

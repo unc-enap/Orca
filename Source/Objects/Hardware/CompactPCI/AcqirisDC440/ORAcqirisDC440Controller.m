@@ -325,13 +325,13 @@
 - (void) slotChanged:(NSNotification*)aNote
 {
 	//[slotField setIntValue: [model slot]];
-	[[self window] setTitle:[NSString stringWithFormat:@"Acqiris DC440 (Station %ld)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"Acqiris DC440 (Station %d)",(int)[model stationNumber]]];
 }
 
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"Acqiris DC440 (Station %ld)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"Acqiris DC440 (Station %d)",(int)[model stationNumber]]];
 }
 
 - (void) baseAddressChanged:(NSNotification*)aNote

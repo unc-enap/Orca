@@ -23,23 +23,23 @@
 
 @interface ORHeaderCollector : ORDecoderOperation {
 	NSMutableData* dataToProcess;
-	unsigned long runDataID;
-	unsigned long currentRunStart;
-	unsigned long currentRunEnd;
-	long long fileSize;
+	uint32_t runDataID;
+	uint32_t currentRunStart;
+	uint32_t currentRunEnd;
+	int64_t fileSize;
 }
 
 - (id)   initWithPath:(NSString*)aPath delegate:(id)aDelegate;
 - (void) dealloc;
 - (void) processData;
-- (void) processRunRecord:(unsigned long*)p;
+- (void) processRunRecord:(uint32_t*)p;
 - (void)logHeader:(NSDictionary*)aHeader
-		 runStart:(unsigned long)runStart 
-		   runEnd:(unsigned long)runEnd 
-		runNumber:(unsigned long)runNumber 
-		useSubRun:(unsigned long)useSubRun
-	 subRunNumber:(unsigned long)subRunNumber
-		 fileSize:(unsigned long)fileSize
+		 runStart:(uint32_t)runStart 
+		   runEnd:(uint32_t)runEnd 
+		runNumber:(uint32_t)runNumber 
+		useSubRun:(uint32_t)useSubRun
+	 subRunNumber:(uint32_t)subRunNumber
+		 fileSize:(uint32_t)fileSize
 		 fileName:(NSString*)aFilePath;
 
 @end
@@ -49,12 +49,12 @@
 - (BOOL) cancelAndStop;
 - (void) setFileToProcess:(NSString*)newFileToProcess;
 - (void)logHeader:(NSDictionary*)aHeader
-		 runStart:(unsigned long)runStart 
-		   runEnd:(unsigned long)runEnd 
-		runNumber:(unsigned long)runNumber 
-		useSubRun:(unsigned long)useSubRun
-	 subRunNumber:(unsigned long)subRunNumber
-		 fileSize:(unsigned long)fileSize		
+		 runStart:(uint32_t)runStart 
+		   runEnd:(uint32_t)runEnd 
+		runNumber:(uint32_t)runNumber 
+		useSubRun:(uint32_t)useSubRun
+	 subRunNumber:(uint32_t)subRunNumber
+		 fileSize:(uint32_t)fileSize		
 		 fileName:(NSString*)aFilePath;
 - (void) checkStatus;
 @end

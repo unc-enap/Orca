@@ -53,7 +53,7 @@ NSString* ORIP320ModelModeChanged					= @"ORIP320ModelModeChanged";
 
 static struct {
     NSString* regName;
-    unsigned long addressOffset;
+    uint32_t addressOffset;
 }reg[kNum320Registers]={
 {@"Control Reg",  0x0000},
 {@"Convert Cmd",  0x0010},
@@ -338,13 +338,13 @@ static struct {
 }
 
 
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) aDataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) aDataId
 {
     dataId = aDataId;
 }
-- (unsigned long) convertedDataId { return convertedDataId; }
-- (void) setConvertedDataId: (unsigned long) aDataId
+- (uint32_t) convertedDataId { return convertedDataId; }
+- (void) setConvertedDataId: (uint32_t) aDataId
 {
     convertedDataId = aDataId;
 }
@@ -377,13 +377,13 @@ static struct {
 }
 
 #pragma mark ¥¥¥Hardware Access
-- (unsigned long) getRegisterAddress:(short) aRegister
+- (uint32_t) getRegisterAddress:(short) aRegister
 {
     int ip = [self slotConv];
     return [guardian baseAddress] + ip*0x100 + reg[aRegister].addressOffset;
 }
 
-- (unsigned long) getAddressOffset:(short) anIndex
+- (uint32_t) getAddressOffset:(short) anIndex
 {
     return reg[anIndex].addressOffset;
 }
@@ -909,10 +909,10 @@ static struct {
 	}		
 }
 
-- (unsigned long) lowMask
+- (uint32_t) lowMask
 {
 	int i;
-	unsigned long aMask = 0;
+	uint32_t aMask = 0;
 	for(i=0;i<32;i++){
 		if([[chanObjs objectAtIndex:i] readEnabled]){
 			aMask |= 1L<<i;
@@ -921,9 +921,9 @@ static struct {
 	return aMask;
 }
 
-- (unsigned long) highMask
+- (uint32_t) highMask
 {
-	unsigned long aMask = 0;
+	uint32_t aMask = 0;
 	int i;
 	for(i=0;i<8;i++){
 		if([[chanObjs objectAtIndex:i+32] readEnabled]){
@@ -1021,7 +1021,7 @@ static struct {
     BOOL runInProgress = [gOrcaGlobals runInProgress];
 	
 	if(runInProgress){
-		unsigned long data[43];
+		uint32_t data[43];
 		
 		data[1] = (([self crateNumber]&0x01e)<<21) | ([guardian slot]& 0x0000001f)<<16 | ([self slot]&0xf);
 		
@@ -1048,7 +1048,7 @@ static struct {
 		if(index>3){
 			//the full record goes into the data stream via a notification
 			[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-																object:[NSData dataWithBytes:data length:index*sizeof(long)]];
+																object:[NSData dataWithBytes:data length:index*sizeof(int32_t)]];
 		}
 	}
 }
@@ -1058,7 +1058,7 @@ static struct {
     BOOL runInProgress = [gOrcaGlobals runInProgress];
 	
 	if(runInProgress){
-		unsigned long data[83];
+		uint32_t data[83];
 		
 		data[1] = (([self crateNumber]&0x01e)<<21) | ([guardian slot]& 0x0000001f)<<16 | ([self slot]&0xf);
 		
@@ -1075,7 +1075,7 @@ static struct {
 		else n = 40;
 		
 		union {
-			long asLong;
+			int32_t asLong;
 			float asFloat;
 		} theValue;
 		
@@ -1093,7 +1093,7 @@ static struct {
 		if(index>3){
 			//the full record goes into the data stream via a notification
 			[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-																object:[NSData dataWithBytes:data length:index*sizeof(long)]];
+																object:[NSData dataWithBytes:data length:index*sizeof(int32_t)]];
 		}
 	}
 }

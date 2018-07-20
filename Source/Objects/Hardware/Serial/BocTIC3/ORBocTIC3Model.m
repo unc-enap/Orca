@@ -145,13 +145,13 @@ NSString* ORBocTIC3Lock = @"ORBocTIC3Lock";
 {
     if([[ORGlobal sharedGlobal] runInProgress]){
 		
-		unsigned long data[8];
+		uint32_t data[8];
 		data[0] = dataId | 8;
 		data[1] = [self uniqueIdNumber]&0xfff;
 		
 		union {
 			float asFloat;
-			unsigned long asLong;
+			uint32_t asLong;
 		}theData;
 		int index = 2;
 		int i;
@@ -164,7 +164,7 @@ NSString* ORBocTIC3Lock = @"ORBocTIC3Lock";
 			index++;
 		}
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-															object:[NSData dataWithBytes:data length:sizeof(long)*8]];
+															object:[NSData dataWithBytes:data length:sizeof(int32_t)*8]];
 	}
 }
 
@@ -239,7 +239,7 @@ NSString* ORBocTIC3Lock = @"ORBocTIC3Lock";
 	else return 0.0;
 }
 
-- (unsigned long) timeMeasured:(int)index
+- (uint32_t) timeMeasured:(int)index
 {
 	if(index>=0 && index<3)return timeMeasured[index];
 	else return 0;
@@ -401,8 +401,8 @@ NSString* ORBocTIC3Lock = @"ORBocTIC3Lock";
 }
 
 #pragma mark ¥¥¥Data Records
-- (unsigned long) dataId { return dataId; }
-- (void) setDataId: (unsigned long) DataId
+- (uint32_t) dataId { return dataId; }
+- (void) setDataId: (uint32_t) DataId
 {
     dataId = DataId;
 }

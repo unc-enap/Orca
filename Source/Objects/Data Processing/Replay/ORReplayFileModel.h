@@ -19,7 +19,7 @@
 	FILE* 				filePointer;
 	FILE* 				statusFilePointer;
 	NSTimer*			fileSizeTimer;
-	unsigned long		dataFileSize;
+	uint32_t		dataFileSize;
 	NSString* 			directoryName;
 	NSString* 			fileName;
 	
@@ -54,8 +54,8 @@
 - (FILE*) statusFilePointer;
 - (void) setStatusFilePointer:(FILE*)newStatusFilePointer;
 
-- (unsigned long)dataFileSize;
-- (void) setDataFileSize:(unsigned long)aSize;
+- (uint32_t)dataFileSize;
+- (void) setDataFileSize:(uint32_t)aSize;
 - (NSTimer*) fileSizeTimer;
 - (void) setFileSizeTimer:(NSTimer*)aTimer;
 - (void) getDataFileSize:(NSTimer*)aTimer;

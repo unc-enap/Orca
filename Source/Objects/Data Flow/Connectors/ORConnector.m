@@ -278,7 +278,7 @@ NSString* ORConnectionChanged = @"OR Connection Changed";
     lineType = aType;
 }
 
-- (unsigned long) connectorType
+- (uint32_t) connectorType
 {
     return connectorType;
 }
@@ -296,13 +296,13 @@ NSString* ORConnectionChanged = @"OR Connection Changed";
 	ioType = aType;
 }
 
-- (void) setConnectorType:(unsigned long) type
+- (void) setConnectorType:(uint32_t) type
 {
     //a non-zero connector type restricts the connection to others of that type
     connectorType = type;
 }
 
-- (void) addRestrictedConnectionType:(unsigned long)type
+- (void) addRestrictedConnectionType:(uint32_t)type
 {
     if(!restrictedList){
 		[self setRestrictedList:[NSMutableArray array]];
@@ -310,7 +310,7 @@ NSString* ORConnectionChanged = @"OR Connection Changed";
     [restrictedList addObject:[NSNumber numberWithLong:type]];
 }
 
-- (BOOL) acceptsConnectionType:(unsigned long)aType
+- (BOOL) acceptsConnectionType:(uint32_t)aType
 {
     if([restrictedList count]){
 		NSEnumerator* e = [restrictedList objectEnumerator];
@@ -323,7 +323,7 @@ NSString* ORConnectionChanged = @"OR Connection Changed";
     else return aType == [self connectorType];
 }
 
-- (BOOL) acceptsIoType:(unsigned long)aType
+- (BOOL) acceptsIoType:(uint32_t)aType
 {
 	if( aType == kInOutConnector || ioType == kInOutConnector)return YES;
 	else {

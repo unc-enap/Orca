@@ -39,20 +39,20 @@ enum {
 @interface ORPxi6289Model : ORPxiIOCard <ORDataTaker,ORHWWizard>
 {
   @private
-	unsigned long   dataId;
-	unsigned long*  dataBuffer;
+	uint32_t   dataId;
+	uint32_t*  dataBuffer;
     short			enabled[kNumPxi6289Channels];
     short			threshold[kNumPxi6289Channels];
  	
 	ORRateGroup*	waveFormRateGroup;
-	unsigned long 	waveFormCount[kNumPxi6289Channels];
+	uint32_t 	waveFormCount[kNumPxi6289Channels];
 	BOOL isRunning;
 
 	//cach to speed takedata
-	unsigned long location;
+	uint32_t location;
 	
 	//for testing
-	unsigned long delay;
+	uint32_t delay;
 }
 
 - (id) init;
@@ -79,18 +79,18 @@ enum {
 - (BOOL)			bumpRateFromDecodeStage:(short)channel;
 
 #pragma mark •••Data Taker
-- (unsigned long) dataId;
-- (void) setDataId: (unsigned long) DataId;
+- (uint32_t) dataId;
+- (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherShaper;
 - (NSDictionary*) dataRecordDescription;
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
-- (unsigned long) waveFormCount:(int)aChannel;
+- (uint32_t) waveFormCount:(int)aChannel;
 - (void)   startRates;
 - (void) clearWaveFormCounts;
-- (unsigned long) getCounter:(int)counterTag forGroup:(int)groupTag;
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag;
 
 #pragma mark •••HW Wizard
 - (int) numberOfChannels;

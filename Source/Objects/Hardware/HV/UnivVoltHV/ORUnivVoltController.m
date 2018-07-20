@@ -207,13 +207,13 @@ const int MAXcCHNLS_PER_PLOT = 6;
 
 - (void) slotChanged:(NSNotification*)aNotification
 {
-    [[self window] setTitle:[NSString stringWithFormat:@"Univ Volt Card (Slot %lu)",[model stationNumber]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"Univ Volt Card (Slot %u)",(int)[model stationNumber]]];
 }
 
 - (void) setModel:(id)aModel
 {
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"Univ Volt Card (Slot %lu)",[model stationNumber]]];
+	[[self window] setTitle:[NSString stringWithFormat:@"Univ Volt Card (Slot %u)",(int)[model stationNumber]]];
 }
 
 - (void) updateWindow

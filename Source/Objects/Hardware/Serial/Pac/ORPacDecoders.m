@@ -41,9 +41,9 @@
 
 @implementation ORPacDecoderForAdc
 
-- (unsigned long) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-	unsigned long *dataPtr = (unsigned long*)someData;
+	uint32_t *dataPtr = (uint32_t*)someData;
 	int ident = dataPtr[1] & 0xfff;
 	int i;
 	int index = 2;
@@ -61,7 +61,7 @@
 	return ExtractLength(dataPtr[0]);
 }
 
-- (NSString*) dataRecordDescription:(unsigned long*)dataPtr
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr
 {
     NSString* title= @"POC Controller\n\n";
     NSString* theString =  [NSString stringWithFormat:@"%@\n",title];               
@@ -72,7 +72,7 @@
 	for(i=0;i<8;i++){
 		
 		NSDate* date = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)dataPtr[index+1]];		
-		theString = [theString stringByAppendingFormat:@"Channel %d: 0x%02lx %@\n",i,dataPtr[index],[date stdDescription]];
+		theString = [theString stringByAppendingFormat:@"Channel %d: 0x%02x %@\n",i,dataPtr[index],[date stdDescription]];
 		index+=2;
 	}
 	return theString;

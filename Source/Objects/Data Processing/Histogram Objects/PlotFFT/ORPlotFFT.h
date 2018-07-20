@@ -28,7 +28,7 @@
 @class ORPlotFFTController;
 
 @interface ORPlotFFT : ORDataSetModel  {
-    unsigned long dataId;
+    uint32_t dataId;
     NSArray* 	realArray;
     NSArray* 	imaginaryArray;
 	NSArray*	powerSpectrumArray;
