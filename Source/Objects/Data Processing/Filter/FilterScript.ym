@@ -27,21 +27,21 @@
 /* prototypes */
 nodeType* opr(int oper, int nops, ...);
 nodeType* ident(char*);
-nodeType* con(int32_t value);
+nodeType* con(int value);
 
 void addFilterNode(int type,nodeType* node);
 
 nodeType** startFilterNodes = 0;
-int32_t startFilterNodeCount = 0;
-int32_t maxStartFilterNodeCount = 0;
+long startFilterNodeCount = 0;
+long maxStartFilterNodeCount = 0;
 
 nodeType** filterNodes = 0;
-int32_t filterNodeCount = 0;
-int32_t maxFilterNodeCount = 0;
+long filterNodeCount = 0;
+long maxFilterNodeCount = 0;
 
 nodeType** finishFilterNodes = 0;
-int32_t finishFilterNodeCount = 0;
-int32_t maxFinishFilterNodeCount = 0;
+long finishFilterNodeCount = 0;
+long maxFinishFilterNodeCount = 0;
 
 
 int ex(nodeType *p);
@@ -52,7 +52,7 @@ void FilterScripterror(char *s);
 %}
 
 %union {
-    uint32_t iValue;       /* integer value */
+    unsigned long iValue;       /* integer value */
     char sIndex[100];           /* symbol table key */
     nodeType *nPtr;             /* node pointer */
 };
@@ -400,7 +400,7 @@ void addFilterNode(int type,nodeType* aNode)
 	}
 }
 
-nodeType *con(int32_t value)
+nodeType *con(int value) 
 {
     /* allocate node */
 	nodeType* p = malloc(SIZEOF_NODETYPE + sizeof(conNodeType));

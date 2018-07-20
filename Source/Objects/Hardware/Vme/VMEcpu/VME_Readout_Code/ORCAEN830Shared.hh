@@ -4,7 +4,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern uint64_t rollOverCount[21];
+extern unsigned long long rollOverCount[21];
 extern  uint32_t lastChan0Count[21];
 #ifdef __cplusplus
 }

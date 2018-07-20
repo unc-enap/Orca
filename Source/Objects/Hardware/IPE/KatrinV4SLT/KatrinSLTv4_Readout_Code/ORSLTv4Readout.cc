@@ -124,7 +124,7 @@ bool ORSLTv4Readout::Start()
         readoutCall = &ORSLTv4Readout::ReadoutLegacyCode;
     }
     
-    if (debug) printf("%d.%06ld: Start readout loop, Flt readout = %s, debug = %d\n",
+    if (debug) printf("%ld.%06ld: Start readout loop, Flt readout = %s, debug = %d\n",
            t0.tv_sec, t0.tv_usec, sEnable[activateFltReadout%2], debug);
 
     
@@ -152,12 +152,12 @@ bool ORSLTv4Readout::Stop()
 {
     float runTime;
     float loopsPerSec;
-    uint64_t int tReadoutTime;
+    unsigned long long int tReadoutTime;
     uint32_t meanBlockSize;
     float load;
     
     struct timezone tz;
-    uint64_t int t0Ticks, t1Ticks;
+    unsigned long long int t0Ticks, t1Ticks;
     float rate;
     float tLoop;
     
@@ -176,8 +176,8 @@ bool ORSLTv4Readout::Stop()
         
         // Measure readout time
         gettimeofday(&t1, &tz);
-        t0Ticks = (int64_t int) t0.tv_sec * 1000000 + t0.tv_usec;
-        t1Ticks = (int64_t int) t1.tv_sec * 1000000 + t1.tv_usec;
+        t0Ticks = (long long int) t0.tv_sec * 1000000 + t0.tv_usec;
+        t1Ticks = (long long int) t1.tv_sec * 1000000 + t1.tv_usec;
         runTime = (float) (t1Ticks - t0Ticks) / 1000000;
         
         try {
@@ -191,7 +191,7 @@ bool ORSLTv4Readout::Stop()
         rate = 0;
         if (tReadoutTime>0) rate = (float) nWords * 40 / tReadoutTime; // MB/s
         
-        printf("%d.%06ld: Stop readout loop, run %.3f s, readout %lld s, data %.1f MB, rate %.1f MB/s\n",
+        printf("%ld.%06ld: Stop readout loop, run %.3f s, readout %lld s, data %.1f MB, rate %.1f MB/s\n",
             t1.tv_sec, t1.tv_usec, runTime, tReadoutTime / 10000000,
             (float) nWords * 4 / 1000 / 1000, rate);
         
@@ -200,7 +200,7 @@ bool ORSLTv4Readout::Stop()
         // For performance testing always run the first run without signal, to measure the loop time
         loopsPerSec = 0;
         if (runTime > 0) loopsPerSec = (float) nLoops / runTime;
-        if ((unsigned ) loopsPerSec > maxLoopsPerSec) maxLoopsPerSec = (uint64_t int) loopsPerSec;
+        if ((unsigned ) loopsPerSec > maxLoopsPerSec) maxLoopsPerSec = (unsigned long long int) loopsPerSec;
         
         tLoop = 0;
         if (nLoops > 0) tLoop = (float) (t1Ticks - t0Ticks) / nLoops;
@@ -245,8 +245,8 @@ bool ORSLTv4Readout::ReadoutEnergyV31(SBC_LAM_Data* lamData)
             memcpy(&data[dataIndex], header, headerLen * sizeof(uint32_t));
             dataIndex += headerLen;
             
-            pbus->readBlock(FIFO0Addr, (uint32_t*)(&data[dataIndex]), numWordsToRead);
-            //srack->theSlt->fifoData->readBlock((uint32_t*)(&data[dataIndex]), numWordsToRead);
+            pbus->readBlock(FIFO0Addr, (unsigned long*)(&data[dataIndex]), numWordsToRead);
+            //srack->theSlt->fifoData->readBlock((unsigned long*)(&data[dataIndex]), numWordsToRead);
             dataIndex += numWordsToRead;
             
             data[firstIndex] |= (numWordsToRead+headerLen); //fill in the record length
@@ -272,8 +272,8 @@ bool ORSLTv4Readout::ReadoutEnergyV31(SBC_LAM_Data* lamData)
             }
             else {
                 numWordsToRead  = (numWordsToRead/48)*48;//always read multiple of 48 word32s
-                pbus->readBlock(FIFO0Addr, (uint32_t*)(&data[dataIndex]), numWordsToRead);
-                //srack->theSlt->fifoData->readBlock((uint32_t*)(&data[dataIndex]), numWordsToRead);
+                pbus->readBlock(FIFO0Addr, (unsigned long*)(&data[dataIndex]), numWordsToRead);
+                //srack->theSlt->fifoData->readBlock((unsigned long*)(&data[dataIndex]), numWordsToRead);
                 dataIndex += numWordsToRead;
             }
         
@@ -328,7 +328,7 @@ bool ORSLTv4Readout::LocalReadoutEnergyV31(SBC_LAM_Data* lamData)
             memcpy(&dataBuffer[dataIndex], header, headerLen * sizeof(uint32_t));
             bufferIndex += headerLen;
             
-            pbus->readBlock(FIFO0Addr, (uint32_t*)(&dataBuffer[bufferIndex]), numWordsToRead);
+            pbus->readBlock(FIFO0Addr, (unsigned long*)(&dataBuffer[bufferIndex]), numWordsToRead);
             dataBuffer[firstIndex] = (header[0] & 0xfffc0000) | (numWordsToRead+headerLen); //fill in the record length
 
             nWords = nWords + numWordsToRead;
@@ -351,7 +351,7 @@ bool ORSLTv4Readout::LocalReadoutEnergyV31(SBC_LAM_Data* lamData)
             }
             else {
                 numWordsToRead  = (numWordsToRead/48)*48;//always read multiple of 48 word32s
-                pbus->readBlock(FIFO0Addr, (uint32_t*)(&dataBuffer[bufferIndex]), numWordsToRead);
+                pbus->readBlock(FIFO0Addr, (unsigned long*)(&dataBuffer[bufferIndex]), numWordsToRead);
                 bufferIndex += numWordsToRead;
             }
             
@@ -485,7 +485,7 @@ void ORSLTv4Readout::SimulationInit()
     
     
     uint32_t time       = 1510872785; // Put always the same time in the data
-                                     // having real time take too int32_t to prepare
+                                     // having real time take too long to prepare
     
     uint32_t headerLen  = 4;
     uint32_t firstIndex = bufferIndex; //so we can insert the length
@@ -556,7 +556,7 @@ bool ORSLTv4Readout::ReadoutLegacyCode(SBC_LAM_Data* lamData)
             }
             else {
                 numWordsToRead = (numWordsToRead>>3)<<3;//always read multiple of 8 word32s
-                pbus->readBlock(FIFO0Addr, (uint32_t *)(&data[dataIndex]), numWordsToRead);//read 2048 word32s
+                pbus->readBlock(FIFO0Addr, (unsigned long *)(&data[dataIndex]), numWordsToRead);//read 2048 word32s
                 dataIndex += numWordsToRead;
             }
             data[firstIndex] |=  (numWordsToRead+headerLen); //fill in the record length
@@ -577,8 +577,8 @@ bool ORSLTv4Readout::Readout(SBC_LAM_Data* lamData)
     static int currentUSec  = 0;
     static int lastSec      = 0;
     static int lastUSec     = 0;
-    //static int32_t int counter =0; //for debugging
-    static int32_t int secCounter=0;
+    //static long int counter =0; //for debugging
+    static long int secCounter=0;
     
     struct timeval t;
     gettimeofday(&t,NULL);
@@ -588,7 +588,7 @@ bool ORSLTv4Readout::Readout(SBC_LAM_Data* lamData)
     
     if(diffTime >1.0){
         secCounter++;
-        printf("PrPMC (SLTv4 simulation mode) sec %d: 1 sec is over ...\n",secCounter);
+        printf("PrPMC (SLTv4 simulation mode) sec %ld: 1 sec is over ...\n",secCounter);
         fflush(stdout);
         lastSec      = currentSec;
         lastUSec     = currentUSec; 

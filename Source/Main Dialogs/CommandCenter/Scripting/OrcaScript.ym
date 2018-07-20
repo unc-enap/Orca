@@ -20,7 +20,7 @@
 	NSMutableDictionary* functionList = nil;
 	NSMutableArray* nodeList = nil;
 	extern void OrcaScripterror(char *);
-	extern int32_t num_lines;
+	extern long num_lines;
 %}
 
 %union {

@@ -403,8 +403,8 @@ int runPreRunChecks()
 #endif
 
     int retval=0;
-    printf("    sizeof(UDPStructIPECrateStatus) is %u\n",sizeof(UDPStructIPECrateStatus));
-    printf("    sizeof(UDPStructIPECrateStatus2) is %u\n",sizeof(UDPStructIPECrateStatus2));
+    printf("    sizeof(UDPStructIPECrateStatus) is %lu\n",sizeof(UDPStructIPECrateStatus));
+    printf("    sizeof(UDPStructIPECrateStatus2) is %lu\n",sizeof(UDPStructIPECrateStatus2));
     if(  (sizeof(UDPStructIPECrateStatus) == SIZEOF_UDPStructIPECrateStatus)   &&   (sizeof(UDPStructIPECrateStatus) == sizeof(UDPStructIPECrateStatus2)) ){
         printf("    OK!\n");
     }
@@ -414,9 +414,9 @@ int runPreRunChecks()
         retval++;
     }
     
-    printf("    sizeof(TypeIpeCrateStatusBlock) is %u\n",sizeof(TypeIpeCrateStatusBlock));
+    printf("    sizeof(TypeIpeCrateStatusBlock) is %lu\n",sizeof(TypeIpeCrateStatusBlock));
     printf("    ---> expected sizeof(TypeIpeCrateStatusBlock) is %i\n",  15*4);
-    printf("    sizeof(TypeBBStatusBlock) is %u\n",sizeof(TypeBBStatusBlock));
+    printf("    sizeof(TypeBBStatusBlock) is %lu\n",sizeof(TypeBBStatusBlock));
     printf("    ---> expected sizeof(TypeBBStatusBlock) is %i\n",  4+4+4+2*_nb_mots_status_bbv2+2 );
     TypeBBStatusBlock bb;
     printf("Offset of size_bytes: %li\n",(char*)&bb.size_bytes - (char*)&bb);
@@ -1336,7 +1336,7 @@ void sendCommandFifo(unsigned char * buffer, int len)
 	//now write command to cmd FIFO
     Code_Commande = buffer[1];
  	//  d'abord un mot de 8 bit precede de 0 en bit 9 pour indiquer le 1er mot
-	//write_word(driver_fpga,REG_CMD, (uint32_t) Code_Commande);
+	//write_word(driver_fpga,REG_CMD, (unsigned long) Code_Commande);
 	pbus->write(CmdFIFOReg ,  Code_Commande);  //this is either 255/0xff or 240/0xf0 (commande 'W')
 
 	printf("cmd %u (%d octets) ",Code_Commande,len-2);//TODO: use debug level setting -tb-
@@ -1406,7 +1406,7 @@ int mot=-1;	// pas de mot = -1
 
 for(j=0;j<1000;j++)	// je lit au maxi 1000 fois la fifo pour aller moins vite
 	{
-	i=waitDataFifoRead(driver_fpga , (uint32_t*)pt_lec_fifo);
+	i=waitDataFifoRead(driver_fpga , (unsigned long*)pt_lec_fifo);
 	status = (i>>24) & 0x1f;
 	nmot_lut=i&0x3ffff;
 	pt_lec_fifo+=nmot_lut;
@@ -1806,7 +1806,7 @@ int		driver_fpga=0;
 void write_word(int fd, uint32_t offset, uint32_t dataout)
 {
 #if 0
-	fprintf(stdout,"CALLED: void write_word(int fd, uint32_t offset, uint32_t dataout)"
+	fprintf(stdout,"CALLED: void write_word(int fd, unsigned long offset, unsigned long dataout)"
 	" with fd=%i, offset=%i,  dataout=%i (0x%x)\n", fd, offset, dataout, dataout);
 #endif		
 		
@@ -2093,7 +2093,7 @@ void parse_sendBBCmd_string(char *buffer, unsigned char* cmdbuf, int* lencmdbuf,
 
     
     char *startptr, *endptr;
-    uint32_t value;
+    unsigned long value;
     unsigned char ch;
     int i;
     foundPos=strstr(buffer,"sendBBCmd");
@@ -2324,24 +2324,24 @@ void parse_sendBBCmd_string(char *buffer, unsigned char* cmdbuf, int* lencmdbuf,
 	          if(  (foundPos=strstr(buffer,"startFIFO"))  ){
 	              printf("handleKCommand: KWC >%s< command 11!\n",foundPos);//DEBUG
                   if(len > (int)strlen("KWC_startFIFO_")){//must have at least one character as argument
-                      printf("   msg: KWC >%s< command - length OK (strlen:%u should be >=15)!\n",buffer,strlen(buffer));//DEBUG
+                      printf("   msg: KWC >%s< command - length OK (strlen:%lu should be >=15)!\n",buffer,strlen(buffer));//DEBUG
                       char *startptr, *endptr;
-                      uint32_t numFIFO=0;
+                      unsigned long numFIFO=0;
                       startptr=foundPos+strlen("startFIFO ");
                       //printf("   startptr:   >%s<  \n",startptr);//DEBUG
                       numFIFO = strtoul((const char *)startptr,&endptr,0);
                       //printf("   numFIFO is %u, startptr: %p, endptr %p  \n",numFIFO,startptr,endptr);//DEBUG
                       
                       if(FIFOREADER::isRunningFIFO(numFIFO)){
-                          printf("   WARNING: FIFO %u is already running! Cmd 'startFIFO' ignored!\n",numFIFO);//DEBUG
+                          printf("   WARNING: FIFO %lu is already running! Cmd 'startFIFO' ignored!\n",numFIFO);//DEBUG
                       }else{
                           if(FIFOREADER::isMarkedToClearAfterDelay(numFIFO)){
-                              printf("    WARNING: FIFO %u is still stopping and clearing! Cmd 'startFIFO' ignored!\n",numFIFO);//DEBUG
+                              printf("    WARNING: FIFO %lu is still stopping and clearing! Cmd 'startFIFO' ignored!\n",numFIFO);//DEBUG
                           }else{
                               if(! FIFOREADER::isConnectedUDPServerSocketForFIFO(numFIFO)) FIFOREADER::initUDPServerSocketForFIFO(numFIFO);
                               FIFOREADER::startFIFO(numFIFO);
                               pbus->write(BBcsrReg(numFIFO),0x2);//enable FIFO
-                              printf("   Message: FIFO %u started\n",numFIFO);//DEBUG
+                              printf("   Message: FIFO %lu started\n",numFIFO);//DEBUG
                           }
                       }
                   }
@@ -2352,9 +2352,9 @@ void parse_sendBBCmd_string(char *buffer, unsigned char* cmdbuf, int* lencmdbuf,
 	          if(  (foundPos=strstr(buffer,"stopFIFO"))  ){
 	              printf("handleKCommand: KWC >%s< command 12!\n",foundPos);//DEBUG
                   if(len > int(strlen("KWC_stopFIFO_"))){//must have at least one character as argument
-                      printf("   msg: KWC >%s< command - length OK (strlen:%u should be >=14)!\n",buffer,strlen(buffer));//DEBUG
+                      printf("   msg: KWC >%s< command - length OK (strlen:%lu should be >=14)!\n",buffer,strlen(buffer));//DEBUG
                       char *startptr, *endptr;
-                      uint32_t numFIFO=0;
+                      unsigned long numFIFO=0;
                       startptr=foundPos+strlen("stopFIFO ");
                       //printf("   startptr:   >%s<  \n",startptr);//DEBUG
                       numFIFO = strtoul((const char *)startptr,&endptr,0);
@@ -2362,9 +2362,9 @@ void parse_sendBBCmd_string(char *buffer, unsigned char* cmdbuf, int* lencmdbuf,
                       //tests
                       //tests
                       if(! FIFOREADER::isRunningFIFO(numFIFO)){
-                          printf("   WARNING: 'stopFIFO': FIFO %u is not running!\n",numFIFO);
+                          printf("   WARNING: 'stopFIFO': FIFO %lu is not running!\n",numFIFO);
                           if(FIFOREADER::isMarkedToClearAfterDelay(numFIFO)){
-                              printf("   WARNING: 'stopFIFO': FIFO %u is still stopping!\n",numFIFO);
+                              printf("   WARNING: 'stopFIFO': FIFO %lu is still stopping!\n",numFIFO);
                           }
                       }
                       FIFOREADER::stopFIFO(numFIFO);
@@ -2381,9 +2381,9 @@ void parse_sendBBCmd_string(char *buffer, unsigned char* cmdbuf, int* lencmdbuf,
 	          if(  (foundPos=strstr(buffer,"usleep"))  ){
 	              printf("handleKCommand: KWC >%s< command 13!\n",foundPos);//DEBUG
                   if(len > int(strlen("KWC_usleep_"))){//must have at least one character as argument
-                      printf("   msg: KWC >%s< command - length OK (strlen:%u should be >=12)!\n",buffer,strlen(buffer));//DEBUG
+                      printf("   msg: KWC >%s< command - length OK (strlen:%lu should be >=12)!\n",buffer,strlen(buffer));//DEBUG
                       char *startptr, *endptr;
-                      uint32_t numUSec=0;
+                      unsigned long numUSec=0;
                       startptr=foundPos+strlen("usleep ");
                       //printf("   startptr:   >%s<  \n",startptr);//DEBUG
                       numUSec = strtoul((const char *)startptr,&endptr,0);
@@ -2394,9 +2394,9 @@ void parse_sendBBCmd_string(char *buffer, unsigned char* cmdbuf, int* lencmdbuf,
                       //tests
                       #if 0
                       if(! FIFOREADER::isRunningFIFO(numFIFO)){
-                          printf("   WARNING: 'stopFIFO': FIFO %u is not running!\n",numFIFO);
+                          printf("   WARNING: 'stopFIFO': FIFO %lu is not running!\n",numFIFO);
                           if(FIFOREADER::isMarkedToClearAfterDelay(numFIFO)){
-                              printf("   WARNING: 'stopFIFO': FIFO %u is still stopping!\n",numFIFO);
+                              printf("   WARNING: 'stopFIFO': FIFO %lu is still stopping!\n",numFIFO);
                           }
                       }
                       FIFOREADER::stopFIFO(numFIFO);
@@ -3665,10 +3665,10 @@ void FIFOREADER::scanFIFObuffer(void)
             pd_faible = FIFObuf32[2] & 0x3fffffff;  // 30 bit
             uint64_t sltTime = 0,sltTimeSubSec;  
             sltTime = (((uint64_t)pd_fort << 30) | pd_faible) ;
-                printf("     - time  %u ",sltTime);
+                printf("     - time  %lu ",sltTime);
             sltTimeSubSec = (((uint64_t)pd_fort << 30) | pd_faible) % 100000 - SLTSETTINGS::SLT->utcTimeCorrection100kHz;
             /* error check */
-            if(sltTimeSubSec != 0) printf("    scanFIFObuffer: *** WARNING *** *** WARNING *** - time from TimeStamp pattern not OK: %u (subSecs are %u) \n",   sltTime, sltTimeSubSec);
+            if(sltTimeSubSec != 0) printf("    scanFIFObuffer: *** WARNING *** *** WARNING *** - time from TimeStamp pattern not OK: %lu (subSecs are %lu) \n",   sltTime, sltTimeSubSec);
         }
         #endif
                 
@@ -3743,7 +3743,7 @@ void FIFOREADER::scanFIFObuffer(void)
 
 	            //following lines by Bernhard to get the localtime in the ipe4reader output
 	            struct tm *Zeit;
-	            int32_t Jetzt;
+	            long Jetzt;
 	            time(&Jetzt);
 	            Zeit = localtime(&Jetzt);
 	            //end modification by Bernhard*/
@@ -3831,7 +3831,7 @@ void FIFOREADER::scanFIFObuffer(void)
             //debug output
             if(show_debug_info>2){
                 printf("  data: %x , %x , %x , %x ",(FIFObuf32[4]>>16)&0xffff,FIFObuf32[4]&0xffff,(FIFObuf32[5]>>16)&0xffff,FIFObuf32[5]&0xffff);
-                //printf("err=%d/%d/%d/%d   data: %x , %x , %x , %x ",erreur_synchro_opera,erreur_synchro_cew,erreur_timestamp,erreur_synchro_bbv2,
+                //printf("err=%d/%d/%d/%d   data: %lx , %lx , %lx , %lx ",erreur_synchro_opera,erreur_synchro_cew,erreur_timestamp,erreur_synchro_bbv2,
                 //					(FIFObuf32[4]>>16)&0xffff,FIFObuf32[4]&0xffff,(FIFObuf32[5]>>16)&0xffff,FIFObuf32[5]&0xffff);
             }
                 
@@ -4015,7 +4015,7 @@ void FIFOREADER::scanFIFObuffer(void)
                 //debug output
                 //if(show_debug_info>2){
                 //    printf("  data: %x , %x , %x , %x ",(FIFObuf32[4]>>16)&0xffff,FIFObuf32[4]&0xffff,(FIFObuf32[5]>>16)&0xffff,FIFObuf32[5]&0xffff);
-                //    //printf("err=%d/%d/%d/%d   data: %x , %x , %x , %x ",erreur_synchro_opera,erreur_synchro_cew,erreur_timestamp,erreur_synchro_bbv2,
+                //    //printf("err=%d/%d/%d/%d   data: %lx , %lx , %lx , %lx ",erreur_synchro_opera,erreur_synchro_cew,erreur_timestamp,erreur_synchro_bbv2,
                 //    //					(FIFObuf32[4]>>16)&0xffff,FIFObuf32[4]&0xffff,(FIFObuf32[5]>>16)&0xffff,FIFObuf32[5]&0xffff);
                 //}
                     
@@ -4222,13 +4222,13 @@ void FIFOREADER::readFIFOtoFIFObuffer(void)
 
         #if 1
         //use DMA
-        pbus->readBlock(FIFOAddr(numfifo), (uint32_t*)&FIFObuf32[pushIndexFIFObuf32], FIFOBlockSize);
+        pbus->readBlock(FIFOAddr(numfifo), (unsigned long*)&FIFObuf32[pushIndexFIFObuf32], FIFOBlockSize);
 		//TODO: change readBlock signature in fdhwlib !!!!! -tb-
 		//TODO: change readBlock signature in fdhwlib !!!!! -tb-
 		//TODO: change readBlock signature in fdhwlib !!!!! -tb-
         //pbus->readBlock(FIFOAddr(numfifo), (uint32_t*)&FIFObuf32[pushIndexFIFObuf32], FIFOBlockSize);
 		//pseudo block mode
-        //pbus->readBlock(FIFOAddr(numfifo) | 0x80000000, (uint32_t*)&FIFObuf32[pushIndexFIFObuf32], FIFOBlockSize);//pseudo block read 
+        //pbus->readBlock(FIFOAddr(numfifo) | 0x80000000, (unsigned long*)&FIFObuf32[pushIndexFIFObuf32], FIFOBlockSize);//pseudo block read 
 #if 0
 if(1){ //DEBUG search explicitly for header ...
         uint32_t i; 
@@ -4870,11 +4870,11 @@ int32_t main(int32_t argc, char *argv[])
         printf("==========  Pre run checks failed!  ============\n");
         exit(123);
     }
-    //check sizeof int32_t 
+    //check sizeof long 
       //TODO: move to preRunChecks -tb-
-    printf("Must be equal:  sizeof(uint32_t) is %li, sizeof(uint32_t) is %li\n", sizeof(uint32_t), sizeof(uint32_t));
-    if(sizeof(uint32_t) != sizeof(uint32_t)){
-        printf("WARNING: sizeof(uint32_t) not equal to sizeof(uint32_t), this software should work correctly, but fdhwlib needs redesign ... \n");
+    printf("Must be equal:  sizeof(unsigned long) is %li, sizeof(uint32_t) is %li\n", sizeof(unsigned long), sizeof(uint32_t));
+    if(sizeof(unsigned long) != sizeof(uint32_t)){
+        printf("WARNING: sizeof(unsigned long) not equal to sizeof(uint32_t), this software should work correctly, but fdhwlib needs redesign ... \n");
         //exit(666);
 		usleep(700000);
     }

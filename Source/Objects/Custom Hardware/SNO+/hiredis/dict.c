@@ -42,7 +42,7 @@
 /* -------------------------- private prototypes ---------------------------- */
 
 static int _dictExpandIfNeeded(dict *ht);
-static uint32_t _dictNextPower(uint32_t size);
+static unsigned long _dictNextPower(unsigned long size);
 static int _dictKeyIndex(dict *ht, const void *key);
 static int _dictInit(dict *ht, dictType *type, void *privDataPtr);
 
@@ -98,9 +98,9 @@ static int _dictInit(dict *ht, dictType *type, void *privDataPtr) {
 }
 
 /* Expand or create the hashtable */
-static int dictExpand(dict *ht, uint32_t size) {
+static int dictExpand(dict *ht, unsigned long size) {
     dict n; /* the new hashtable */
-    uint32_t realsize = _dictNextPower(size), i;
+    unsigned long realsize = _dictNextPower(size), i;
 
     /* the size is invalid if it is smaller than the number of
      * elements already inside the hashtable */
@@ -224,7 +224,7 @@ static int dictDelete(dict *ht, const void *key) {
 
 /* Destroy an entire hash table */
 static int _dictClear(dict *ht) {
-    uint32_t i;
+    unsigned long i;
 
     /* Free all the elements */
     for (i = 0; i < ht->size && ht->used > 0; i++) {
@@ -316,8 +316,8 @@ static int _dictExpandIfNeeded(dict *ht) {
 }
 
 /* Our hash table capability is a power of two */
-static uint32_t _dictNextPower(uint32_t size) {
-    uint32_t i = DICT_HT_INITIAL_SIZE;
+static unsigned long _dictNextPower(unsigned long size) {
+    unsigned long i = DICT_HT_INITIAL_SIZE;
 
     if (size >= LONG_MAX) return LONG_MAX;
     while(1) {
