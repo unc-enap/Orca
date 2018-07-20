@@ -3033,7 +3033,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 {
 	uint32_t status = [self readStatus];
     int width = 74;
-    NSLogStartTable([NSString stringWithFormat:@"%@ Status Reg (address:0x%08lx): 0x%08x\n", [self fullID],[self regAddress:kFLTV4StatusReg],status],width);
+    NSLogStartTable([NSString stringWithFormat:@"%@ Status Reg (address:0x%08x): 0x%08x\n", [self fullID],[self regAddress:kFLTV4StatusReg],status],width);
 	NSLogMono(@"Power            | %@\n",	((status>>0) & 0x1) ? @"FAILED":@"OK");
 	NSLogMono(@"PLL1             | %@\n",	((status>>1) & 0x1) ? @"UNLOCKED":@"OK");
 	NSLogMono(@"PLL2             | %@\n",	((status>>2) & 0x1) ? @"UNLOCKED":@"OK");

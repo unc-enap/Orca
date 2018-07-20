@@ -1531,7 +1531,7 @@ short BLKTRANSF(short crate_id, BLK_TRANSF_INFO *blk_info, unsigned int *buffer)
 					else if (resp > 0) bytes_sent += resp;
 				}
 				usleep(100);
-				printf("buffer: %d ret: %d  %d/%d\n",ccc,resp,t,blk_info->totsize);
+				printf("buffer: %d ret: %ld  %d/%d\n",ccc,resp,t,blk_info->totsize);
 				ccc++;
 				
 				numValuesRemaining -= numToSend;

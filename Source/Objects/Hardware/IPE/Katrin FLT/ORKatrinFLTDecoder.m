@@ -309,7 +309,7 @@ followed by waveform data (n x 1024 16-bit words)
 	NSString* seconds		= [NSString stringWithFormat:@"Seconds    = %u\n", ePtr->sec];
 	NSString* subSec    	= [NSString stringWithFormat:@"Subseconds = %u\n", ePtr->subSec];
 	NSString* eventID		= [NSString stringWithFormat:@"Event ID   = %u\n", ePtr->eventID & 0xffff];
-	NSString* chMap   		= [NSString stringWithFormat:@"Channelmap = 0x%06lx\n", ePtr->channelMap & 0x3fffff];	
+	NSString* chMap   		= [NSString stringWithFormat:@"Channelmap = 0x%06x\n", ePtr->channelMap & 0x3fffff];	
 
 
     // Decode extra debug information
@@ -562,7 +562,7 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx Hitrate
 	
 	NSString* threshold	= [NSString stringWithFormat:@"Threshold  = %u\n",ePtr->threshold];
 	NSString* hitrate	= [NSString stringWithFormat:@"Hitrate    = %u\n",ePtr->hitrate];
-	NSString* chMap   	= [NSString stringWithFormat:@"Channelmap = 0x%06lx\n", ePtr->channelMap & 0x3fffff];	
+	NSString* chMap   	= [NSString stringWithFormat:@"Channelmap = 0x%06x\n", ePtr->channelMap & 0x3fffff];	
 
     return [NSString stringWithFormat:@"%@%@%@%@%@%@%@",title,crate,card,chan,
 	                       threshold,hitrate,chMap];

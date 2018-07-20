@@ -960,7 +960,7 @@
 	// Set title of FLT configuration window, ak 15.6.07
 	// for FLTv4 'slot' go from 0-9, 11-20 (SLTv4 has slot 10)
 	[[self window] setTitle:[NSString stringWithFormat:@"IPE-DAQ V4 KATRIN FLT Card (Slot %d, FLT# %u)",(int)[model slot]+1,(int)[model stationNumber]]];
-    [fltSlotNumTextField setStringValue: [NSString stringWithFormat:@"FLT# %u",[model stationNumber]]];
+    [fltSlotNumTextField setStringValue: [NSString stringWithFormat:@"FLT# %u",(int)[model stationNumber]]];
 }
 
 - (void) gainArrayChanged:(NSNotification*)aNotification
@@ -1083,7 +1083,7 @@
     }
     [[self window] setContentView:totalView];
 	
-    NSString* key = [NSString stringWithFormat: @"orca.ORKatrinV4FLT%u.selectedtab",[model stationNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORKatrinV4FLT%u.selectedtab",(int)[model stationNumber]];
     NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
     

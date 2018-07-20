@@ -651,7 +651,7 @@
 - (NSRange)  textView: (NSTextView*)textView willChangeSelectionFromCharacterRange: (NSRange)oldSelectedCharRange
 	 toCharacterRange:(NSRange)newSelectedCharRange
 {
-	[status setStringValue: [NSString stringWithFormat: @"Selected char %u to %u",
+	[status setStringValue: [NSString stringWithFormat: @"Selected char %lu to %lu",
 							 newSelectedCharRange.location +1,
 							 newSelectedCharRange.location +newSelectedCharRange.length]];
 	

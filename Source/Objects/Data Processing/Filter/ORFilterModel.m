@@ -1018,7 +1018,7 @@ int filterGraph(nodeType*);
 		NSUInteger i;
 		for(i=[outputValues count];i<index;i++){
 			[outputValues addObject: [NSMutableDictionary dictionaryWithObjectsAndKeys:
-									  [NSString stringWithFormat:@"%d",i], @"name",
+									  [NSString stringWithFormat:@"%d",(int)i], @"name",
 									  [NSString stringWithFormat:@"%d",0], @"iValue",
 									  nil]];
 		}

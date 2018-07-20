@@ -808,7 +808,7 @@
     }
     [[self window] setContentView:totalView];
 	
-    NSString* key = [NSString stringWithFormat: @"orca.ORIpeV4FLT%u.selectedtab",[model stationNumber]];
+    NSString* key = [NSString stringWithFormat: @"orca.ORIpeV4FLT%u.selectedtab",(int)[model stationNumber]];
     NSInteger index = [tabView indexOfTabViewItem:tabViewItem];
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:key];
     

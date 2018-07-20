@@ -351,7 +351,7 @@ static NSString* kFLTChanKey[24] = {
         uint32_t aValley  =  4096 - (f5 & 0xfff);
         uint32_t energy   =  f6 & 0xfffff;
         
-        content = [content stringByAppendingFormat:@"Event: %d EventID: %u \nSeconds: %u.%06lu \nPrec: %03d ns\nFLT: %u  Chan: %u\n",i,eventID,sec,subsec/20,(subsec%20)*50+prec*25,flt,chan];
+        content = [content stringByAppendingFormat:@"Event: %d EventID: %u \nSeconds: %u.%06u \nPrec: %03d ns\nFLT: %u  Chan: %u\n",i,eventID,sec,subsec/20,(subsec%20)*50+prec*25,flt,chan];
         content = [content stringByAppendingFormat:@"TPeak: %u TValley: %u\n",tPeak,tValley];
         content = [content stringByAppendingFormat:@"APeak: %u AValley: %u\n",aPeak,aValley];
         content = [content stringByAppendingFormat:@"Multi: %u Energy: %u\n",mult,energy];

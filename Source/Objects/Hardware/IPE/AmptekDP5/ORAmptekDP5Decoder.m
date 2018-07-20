@@ -736,9 +736,9 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
     NSString* subsecStr = 0;//[NSString stringWithFormat:@"SubSec     = %d\n", subsec];
     NSString* energyStr = 0;//[NSString stringWithFormat:@"NumFIFO     = %d\n", numfifo];
     if((eventFlags4bit == 0x2)){//FLT event
-        secStr    = [NSString stringWithFormat:@"Time 0..31 = 0x%08lx\n", sec];
-        subsecStr = [NSString stringWithFormat:@"Time32..47 = 0x%08lx\n", subsec];
-        energyStr = [NSString stringWithFormat:@"Energy     = 0x%08lx\n", energy];
+        secStr    = [NSString stringWithFormat:@"Time 0..31 = 0x%08x\n", sec];
+        subsecStr = [NSString stringWithFormat:@"Time32..47 = 0x%08x\n", subsec];
+        energyStr = [NSString stringWithFormat:@"Energy     = 0x%08x\n", energy];
     }else{
         secStr    = [NSString stringWithFormat:@"Sec        = %d\n", sec];
         subsecStr = [NSString stringWithFormat:@"SubSec     = %d\n", subsec];
@@ -1108,10 +1108,10 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
     NSString* energyStr = 0;//[NSString stringWithFormat:@"NumFIFO     = %d\n", numfifo];
     if((eventFlags4bit == 0x2)){//FLT event
     }
-        secStr    = [NSString stringWithFormat:@"Time 0..31 = 0x%08lx\n", sec];
-        subsecStr = [NSString stringWithFormat:@"Time32..47 = 0x%08lx\n", subsec];
+        secStr    = [NSString stringWithFormat:@"Time 0..31 = 0x%08x\n", sec];
+        subsecStr = [NSString stringWithFormat:@"Time32..47 = 0x%08x\n", subsec];
         timeStr   = [NSString stringWithFormat:@"Timestamp  = %lli\n", timestamp];
-        energyStr = [NSString stringWithFormat:@"Energy     = 0x%08lx\n", energy];
+        energyStr = [NSString stringWithFormat:@"Energy     = 0x%08x\n", energy];
     NSString* chmapStr  = [NSString stringWithFormat:@"ChannelMap = 0x%x\n", chmap];
     NSString* eventIDStr= [NSString stringWithFormat:@"Pg#,offset= %d,%d\n", ShiftAndExtract(eventFifo4,12,0xf),ShiftAndExtract(eventFifo4,0,0xfff)];
     NSString* offsetStr = [NSString stringWithFormat:@"Offset16   = %d\n", traceStart16];

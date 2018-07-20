@@ -543,8 +543,8 @@ NSString* ORSMELLIEEmergencyStop = @"ORSMELLIEEmergencyStop";
     
     //////////////
     // Get Calibration parameters
-    NSArray* IPW_values = [[[self tellieFireParameters] objectForKey:[NSString stringWithFormat:@"channel_%d",channel]] objectForKey:[NSString stringWithFormat:@"%@_IPW",prefix]];
-    NSArray* photon_values = [[[self tellieFireParameters] objectForKey:[NSString stringWithFormat:@"channel_%d",channel]] objectForKey:[NSString stringWithFormat:@"%@_photons",prefix]];
+    NSArray* IPW_values = [[[self tellieFireParameters] objectForKey:[NSString stringWithFormat:@"channel_%d",(int)channel]] objectForKey:[NSString stringWithFormat:@"%@_IPW",prefix]];
+    NSArray* photon_values = [[[self tellieFireParameters] objectForKey:[NSString stringWithFormat:@"channel_%d",(int)channel]] objectForKey:[NSString stringWithFormat:@"%@_photons",prefix]];
     
     ////////////
     // Find minimum calibration point. If request is below minimum, estiamate the IPW
@@ -619,13 +619,13 @@ NSString* ORSMELLIEEmergencyStop = @"ORSMELLIEEmergencyStop";
     /*
      Use node-to-fibre map loaded from the telliedb to find the priority fibre on a node.
      */
-    if(![[self tellieNodeMapping] objectForKey:[NSString stringWithFormat:@"panel_%d",node]]){
+    if(![[self tellieNodeMapping] objectForKey:[NSString stringWithFormat:@"panel_%d",(int)node]]){
         NSLogColor([NSColor redColor], @"[TELLIE]: Node map does not include a reference to node: %d",node);
         return nil;
     }
     
     // Read panel info into local dictionary
-    NSMutableDictionary* nodeInfo = [[self tellieNodeMapping] objectForKey:[NSString stringWithFormat:@"panel_%d",node]];
+    NSMutableDictionary* nodeInfo = [[self tellieNodeMapping] objectForKey:[NSString stringWithFormat:@"panel_%d",(int)node]];
     
     //***************************************//
     // Select appropriate fibre for this node.

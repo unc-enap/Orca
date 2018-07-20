@@ -2364,7 +2364,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 	else if(anError == ENOMEM)	details = @"Out of Memory";
 	else details = [NSString stringWithFormat:@"%d",anError];
 	//[NSException raise: @"SBC access Error" format:@"%@:%@\nAddress: 0x%08lx",baseString,details,anAddress];
-    [NSException raise: [NSString stringWithFormat:@"SBC,%d,%d access Error",[delegate crateNumber],[delegate slot]] format:@"%@:ErrorCode:%@\nAddress: 0x%08lx ",baseString,details,anAddress];//give more info -tb-
+    [NSException raise: [NSString stringWithFormat:@"SBC,%d,%d access Error",[delegate crateNumber],[delegate slot]] format:@"%@:ErrorCode:%@\nAddress: 0x%08x ",baseString,details,anAddress];//give more info -tb-
 }
 
 - (void) fillInScript:(NSString*)theScript

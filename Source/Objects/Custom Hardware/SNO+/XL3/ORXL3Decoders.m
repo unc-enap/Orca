@@ -154,7 +154,7 @@
                 unsigned char mini_card = mini_header >> 24 & 0xf;
                 unsigned char mini_type = mini_header >> 31;
                 
-                [dsc appendFormat:@"\n---\nmini bundle\ncard: %d\ntype: %@\nnum_longs: %u\ninfo: 0x%08lx\n\n",
+                [dsc appendFormat:@"\n---\nmini bundle\ncard: %d\ntype: %@\nnum_longs: %u\ninfo: 0x%08x\n\n",
                  mini_card, mini_type?@"pass cur":@"pmt bundles", mini_num_longs, mini_header];
                 ptr +=1;
                 
@@ -164,7 +164,7 @@
                         if (mini_num_longs % 3 || num_longs < mini_num_longs) {
                             [dsc appendFormat:@"mini bundle header\ncorrupted, quit.\n"];
                             num_longs = 0;
-                            [dsc appendFormat:@"0x%08lx\n0x%08lx\n0x%08lx\n0x%08lx\n", ptr[0], ptr[1], ptr[2], ptr[3]];
+                            [dsc appendFormat:@"0x%08x\n0x%08x\n0x%08x\n0x%08x\n", ptr[0], ptr[1], ptr[2], ptr[3]];
                             break;
                         }
 
@@ -228,9 +228,9 @@
     NSMutableString* dsc = [NSMutableString stringWithFormat: @"CMOS rates crate %u\n\nslot mask: 0x%x\n", dataPtr[1], dataPtr[2]];
     unsigned char slot = 0;
     for (slot=0; slot<16; slot++) {
-        [dsc appendFormat:@"ch mask slot %2d: 0x%08lx\n", slot, dataPtr[3+slot]];
+        [dsc appendFormat:@"ch mask slot %2d: 0x%08x\n", slot, dataPtr[3+slot]];
     }
-    [dsc appendFormat:@"delay: %u ms\n\nerror flags: 0x%08lx\n", dataPtr[19], dataPtr[20]];
+    [dsc appendFormat:@"delay: %u ms\n\nerror flags: 0x%08x\n", dataPtr[19], dataPtr[20]];
 
     unsigned char ch, slot_idx = 0;
     for (slot=0; slot<16; slot++) {
@@ -305,12 +305,12 @@
     
     NSMutableString* dsc = [NSMutableString stringWithFormat: @"PMT base currents crate %u\n", dataPtr[1]];
         
-    [dsc appendFormat:@"slotmask: 0x%04lx\n\nchannel masks:\n", dataPtr[2]];
+    [dsc appendFormat:@"slotmask: 0x%04x\n\nchannel masks:\n", dataPtr[2]];
     unsigned short idx;
     for (idx=3; idx<19; idx++) {
-        [dsc appendFormat:@"slot %02u: 0x%08lx\n", idx-3U, dataPtr[idx]];
+        [dsc appendFormat:@"slot %02u: 0x%08x\n", idx-3U, dataPtr[idx]];
     }
-    [dsc appendFormat:@"\nerrorFlags: 0x%08lx\n", dataPtr[19]];
+    [dsc appendFormat:@"\nerrorFlags: 0x%08x\n", dataPtr[19]];
 
     if (indexerSwaps) for (idx=20; idx < 20+16*8+16*8+6; idx++) dataPtr[idx] = swapLong(dataPtr[idx]);
     [dsc appendFormat:@"\nADC values:"];
@@ -345,7 +345,7 @@
 
     [dsc appendFormat:@"\nraw packet:\n"];
     for (idx = 0; idx < 20+16*8+16*8+6; idx++) {
-        [dsc appendFormat:@"%02hu: 0x%08lx\n", idx, dataPtr[idx]];
+        [dsc appendFormat:@"%02hu: 0x%08x\n", idx, dataPtr[idx]];
     }
     
     return [[dsc retain] autorelease];

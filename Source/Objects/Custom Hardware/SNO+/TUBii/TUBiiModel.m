@@ -412,7 +412,7 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
     // The seconds controls how int32_t the LO window is.
     // The chips that create these delays are the DS1023-200 and DS1023-500, see their data sheet for details
     // See TUBii schematic page 13A for more info
-    NSString* const command = [NSString stringWithFormat:@"SetGTDelays %d %d",aLOMask,aDGTMask];
+    NSString* const command = [NSString stringWithFormat:@"SetGTDelays %d %d",(int)aLOMask,(int)aDGTMask];
     [self sendOkCmd:command];
     currentModelState.DGT_Bits = aDGTMask;
     currentModelState.LO_Bits = aLOMask;
@@ -656,7 +656,7 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
 }
 - (void) setSpeakerMask:(NSUInteger)_speakerMask{
     // Sets the mask for which trigger inputs should driver the speaker/aux jack on TUBii
-    NSString * const command = [NSString stringWithFormat:@"SetSpeakerMask %d",_speakerMask];
+    NSString * const command = [NSString stringWithFormat:@"SetSpeakerMask %d",(int)_speakerMask];
     [self sendOkCmd:command];
     currentModelState.speakerMask = (uint32_t)_speakerMask;
     [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName: ORTubiiSettingsChangedNotification object:self];

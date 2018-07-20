@@ -64,7 +64,7 @@
 	
 	theString = [theString stringByAppendingFormat:@"--------------------------\n"];
 	theString = [theString stringByAppendingFormat:@"Channel 0\n"];
-	theString = [theString stringByAppendingFormat:@"Status Words 0x%02lx  0x%02lx\n",dataPtr[3],dataPtr[4]];
+	theString = [theString stringByAppendingFormat:@"Status Words 0x%02x  0x%02x\n",dataPtr[3],dataPtr[4]];
 	theData.asLong = dataPtr[5]; //act Voltage 0
 	theString = [theString stringByAppendingFormat:@"Act Voltage: %.1f\n",theData.asFloat];
 	theData.asLong = dataPtr[6]; //act Current 0

@@ -480,7 +480,7 @@ NSString* ORTristanFLTSettingsLock                   = @"ORTristanFLTSettingsLoc
 - (void) loadThresholds
 {
     //eventually there will be 8 channels. this test version only sends the first channel
-    NSString* cmd = [NSString stringWithFormat:@"w_%08x_%08lx\r",kTristanFltThreshold,threshold[0]];
+    NSString* cmd = [NSString stringWithFormat:@"w_%08x_%08x\r",kTristanFltThreshold,threshold[0]];
     NSData* cmdAsData = [cmd dataUsingEncoding:NSUTF8StringEncoding];
     [self sendData:cmdAsData];
     NSLog(@"Threshold Cmd: %@",cmd);
@@ -497,7 +497,7 @@ NSString* ORTristanFLTSettingsLock                   = @"ORTristanFLTSettingsLoc
 - (void) loadFilterParameters
 {
     uint32_t data = ((gapLength&0xf)<<4) | (shapingLength & 0xf);
-    NSString* cmd = [NSString stringWithFormat:@"w_%08x_%08lx\r",kTristanFltFilterSet,data];
+    NSString* cmd = [NSString stringWithFormat:@"w_%08x_%08x\r",kTristanFltFilterSet,data];
     NSData* cmdAsData = [cmd dataUsingEncoding:NSUTF8StringEncoding];
     [self sendData:cmdAsData];
     NSLog(@"Filter Cmd: %@",cmd);
@@ -506,7 +506,7 @@ NSString* ORTristanFLTSettingsLock                   = @"ORTristanFLTSettingsLoc
 - (void) loadTraceControl
 {
     uint32_t data = ((postTriggerTime&0xffff)<<8) | (udpFrameSize & 0xffff);
-    NSString* cmd = [NSString stringWithFormat:@"w_%08x_%08lx\r",kTristanFltTraceCntrl,data];
+    NSString* cmd = [NSString stringWithFormat:@"w_%08x_%08x\r",kTristanFltTraceCntrl,data];
     NSData* cmdAsData = [cmd dataUsingEncoding:NSUTF8StringEncoding];
     [self sendData:cmdAsData];
     NSLog(@"Trace Cmd: %@",cmd);

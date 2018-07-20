@@ -74,7 +74,7 @@
     ptr+=2;
     int i;
     for(i=0;i<12;i++){
-        totalString = [totalString stringByAppendingFormat:@"%2lu: %10u\n",(ptr[i]>>28) & 0xf,ptr[i]&0x00ffffff];
+        totalString = [totalString stringByAppendingFormat:@"%2u: %10u\n",(ptr[i]>>28) & 0xf,ptr[i]&0x00ffffff];
     }
     
     return totalString;               

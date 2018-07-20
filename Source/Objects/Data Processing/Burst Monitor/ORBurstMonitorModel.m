@@ -1386,7 +1386,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
             NSLog(@"Level reduced to 1 (possible)\n");
         }
         NSInteger signif = (multInBurst*0.5)+3; //cbmod current background and best (round) fit with likelyhood as of dec 2016 with logaritmic rounding
-        burstcommand = [burstcommand stringByAppendingFormat:@"cd snews/coinccode/ ; ./ctestgcli %i %i 0 %i %i 9", (int32_t)dateint, timeint, level, signif];  //maybe add nanoseconds? 9 is halo
+        burstcommand = [burstcommand stringByAppendingFormat:@"cd snews/coinccode/ ; ./ctestgcli %i %i 0 %i %i 9", (int32_t)dateint, (int)timeint, (int)level, (int)signif];  //maybe add nanoseconds? 9 is halo
         NSLog(@"burstcommand witha a space on each side: | %@ |\n", burstcommand);
         NSTask* Cping;
         Cping =[[NSTask alloc] init];
@@ -1512,7 +1512,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
         int i     = [[queueMap  objectForKey:aKey]intValue];
         id aQueue = [queueArray objectAtIndex:i];
         NSUInteger count = [aQueue count];
-        theContent = [theContent stringByAppendingFormat:@"Channel: %@ Number Events: %d %@\n",aKey,[aQueue count],count>=1?@" <---":@""];
+        theContent = [theContent stringByAppendingFormat:@"Channel: %@ Number Events: %d %@\n",aKey,(int)[aQueue count],count>=1?@" <---":@""];
     }
     if(novaState == 3 && [[runbits objectAtIndex:6] intValue]){  //if supernova candidate
         [emailList insertObject:@"halo_snews_burst@snolab.ca"  atIndex:0]; //add halo full, HALO_full@snolab.ca
