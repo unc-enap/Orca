@@ -176,7 +176,7 @@ static int redisSetTcpNoDelay(redisContext *c) {
     return REDIS_OK;
 }
 
-#define __MAX_MSEC (((LONG_MAX) - 999) / 1000)
+#define __MAX_MSEC (((INT_MAX) - 999) / 1000)
 
 static int redisContextWaitReady(redisContext *c, const struct timeval *timeout) {
     struct pollfd   wfd[1];

@@ -319,7 +319,7 @@ static int _dictExpandIfNeeded(dict *ht) {
 static uint32_t _dictNextPower(uint32_t size) {
     uint32_t i = DICT_HT_INITIAL_SIZE;
 
-    if (size >= LONG_MAX) return LONG_MAX;
+    if (size >= INT_MAX) return INT_MAX;
     while(1) {
         if (i >= size)
             return i;
