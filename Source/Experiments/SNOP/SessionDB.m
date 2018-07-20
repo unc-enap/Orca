@@ -325,7 +325,7 @@ sessionKey = _sessionKey;
 
     /* Launch the modal. */
     [[NSRunningApplication currentApplication] activateWithOptions:NSApplicationActivateIgnoringOtherApps];
-    int32_t modalAction = [alert runModal];
+    NSModalResponse modalAction = [alert runModal];
 
     if (modalAction == NSAlertFirstButtonReturn) {  // Quit Orca
         [alert release];

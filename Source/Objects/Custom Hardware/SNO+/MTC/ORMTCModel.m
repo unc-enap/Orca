@@ -1026,7 +1026,7 @@ tubRegister;
     [self setMemoryOffset:	[decoder decodeIntForKey:		@"ORMTCModelMemoryOffset"]];
     [self setSelectedRegister:[decoder decodeIntForKey:		@"ORMTCModelSelectedRegister"]];
 	[self setIsPulserFixedRate:	[decoder decodeBoolForKey:	@"ORMTCModelIsPulserFixedRate"]];
-	[self setFixedPulserRateCount:	[decoder decodeIntegerForKey:	@"ORMTCModelFixedPulserRateCount"]];
+	[self setFixedPulserRateCount:	[decoder decodeIntForKey:	@"ORMTCModelFixedPulserRateCount"]];
 	[self setFixedPulserRateDelay:	[decoder decodeFloatForKey:	@"ORMTCModelFixedPulserRateDelay"]];
 
     [self setMtcaN100Mask:[decoder decodeIntForKey:@"mtcaN100Mask"]];
@@ -1074,7 +1074,7 @@ tubRegister;
 	[encoder encodeInt:memoryOffset	forKey:@"ORMTCModelMemoryOffset"];
 	[encoder encodeInteger:selectedRegister	forKey:@"ORMTCModelSelectedRegister"];
 	[encoder encodeBool:isPulserFixedRate	forKey:@"ORMTCModelIsPulserFixedRate"];
-	[encoder encodeInteger:(int32_t)fixedPulserRateCount forKey:@"ORMTCModelFixedPulserRateCount"];
+	[encoder encodeInt:fixedPulserRateCount forKey:@"ORMTCModelFixedPulserRateCount"];
 	[encoder encodeFloat:fixedPulserRateDelay forKey:@"ORMTCModelFixedPulserRateDelay"];
     [encoder encodeInt:(int32_t)[self mtcaN100Mask] forKey:@"mtcaN100Mask"];
     [encoder encodeInt:(int32_t)[self mtcaN20Mask] forKey:@"mtcaN20Mask"];
@@ -1348,7 +1348,7 @@ tubRegister;
 {
 	uint32_t theValue = 0;
 	@try {
-        theValue = [mtc intCommand:"mtcd_read %d", reg[aReg].addressOffset];
+        theValue = (uint32_t)[mtc intCommand:"mtcd_read %d", reg[aReg].addressOffset];
 	} @catch(NSException* localException) {
 		NSLog(@"Couldn't read the MTC %@!\n",reg[aReg].regName);
 		[localException raise];

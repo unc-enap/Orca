@@ -1881,11 +1881,11 @@ static NSString *ORA3818ReadWriteAddSpace		= @"A3818 Read/Write Address Space";
     [self setDualPortAddress:[decoder decodeIntForKey:ORA3818DualPortAddress]];
     [self setDualPortRamSize:[decoder decodeIntForKey:ORA3818DualPortRamSize]];
     
-    [self setRwAddress:[decoder decodeIntegerForKey:ORA3818RWAddress]];
-    [self setWriteValue:[decoder decodeIntegerForKey:ORA3818WriteValue]];
+    [self setRwAddress:[decoder decodeIntForKey:ORA3818RWAddress]];
+    [self setWriteValue:[decoder decodeIntForKey:ORA3818WriteValue]];
     [self setRwAddressModifier:[decoder decodeIntForKey:ORA3818ReadWriteAddMod]];
     [self setReadWriteIOSpace:[decoder decodeIntForKey:ORA3818ReadWriteAddSpace]];
-    [self setReadWriteType:[decoder decodeIntegerForKey:ORA3818ReadWriteType]];	
+    [self setReadWriteType:[decoder decodeIntForKey:ORA3818ReadWriteType]];	
     
     [[self undoManager] enableUndoRegistration];
     
@@ -1900,11 +1900,11 @@ static NSString *ORA3818ReadWriteAddSpace		= @"A3818 Read/Write Address Space";
     [encoder encodeInt:dualPortAddress forKey:ORA3818DualPortAddress];
     [encoder encodeInt:dualPortRamSize forKey:ORA3818DualPortRamSize];
     
-    [encoder encodeInteger:rwAddress forKey:ORA3818RWAddress];
-    [encoder encodeInteger:writeValue forKey:ORA3818WriteValue];
+    [encoder encodeInt:rwAddress forKey:ORA3818RWAddress];
+    [encoder encodeInt:writeValue forKey:ORA3818WriteValue];
     [encoder encodeInt:rwAddressModifier forKey:ORA3818ReadWriteAddMod];
     [encoder encodeInt:readWriteIOSpace forKey:ORA3818ReadWriteAddSpace];
-    [encoder encodeInteger:readWriteType forKey:ORA3818ReadWriteType];
+    [encoder encodeInt:readWriteType forKey:ORA3818ReadWriteType];
     
 }
 

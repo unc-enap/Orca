@@ -587,7 +587,7 @@ static NSString*	CAENThresholdChnl       = @"CAENThresholdChnl%d";
     // Get the last values from the first tab of the dialog box.
     [self setSelectedRegIndex:[aDecoder decodeIntegerForKey:CAENSelectedRegIndex]];
     [self setSelectedChannel:[aDecoder decodeIntegerForKey:CAENSelectedChannelIndex]];
-    [self setWriteValue:[aDecoder decodeIntegerForKey:CAENWriteValue]];
+    [self setWriteValue:[aDecoder decodeIntForKey:CAENWriteValue]];
     
     // Get the thresholds
     for (i = 0; i < [self numberOfChannels]; i++){
@@ -617,7 +617,7 @@ static NSString*	CAENThresholdChnl       = @"CAENThresholdChnl%d";
     // Save the information from first TAB.
     [anEncoder encodeInteger:[self selectedRegIndex] forKey:CAENSelectedRegIndex];
     [anEncoder encodeInteger:[self selectedChannel] forKey:CAENSelectedChannelIndex];
-    [anEncoder encodeInteger:[self writeValue] forKey:CAENWriteValue];
+    [anEncoder encodeInt:[self writeValue] forKey:CAENWriteValue];
     
     // Save the thresholds
     for (i = 0; i < [self numberOfChannels]; i++){

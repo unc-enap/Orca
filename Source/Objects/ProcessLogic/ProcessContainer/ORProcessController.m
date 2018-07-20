@@ -598,7 +598,7 @@ NSInteger sortDnFunction(id element1,id element2, void* context){return [element
     NSString *key = [self sortColumn];
     NSArray *a = [tableView tableColumns];
     NSTableColumn *column = [tableView tableColumnWithIdentifier:key];
-    uint32_t i = [a count];
+    uint32_t i = (uint32_t)[a count];
     
     while (i-- > 0) [tableView setIndicatorImage:nil inTableColumn:[a objectAtIndex:i]];
     

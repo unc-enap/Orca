@@ -194,7 +194,7 @@
 
 - (void) decode:(NSData*)someData intoDataSet:(ORDataSet*)aDataSet
 {
-    uint32_t length = [someData length]/sizeof(int32_t);
+    uint32_t length = (uint32_t)[someData length]/sizeof(int32_t);
     if(length){
         uint32_t* dPtr = (uint32_t*)[someData bytes];
         if(dPtr!=0)[self decode:dPtr length:length intoDataSet:aDataSet];
@@ -356,7 +356,7 @@
         return nil;
     }
     NSData* dataBlock = [NSData dataWithContentsOfFile:tempName];
-	uint32_t headerLength        = [dataBlock length];											//in bytes
+	uint32_t headerLength        = (uint32_t)[dataBlock length];											//in bytes
 	uint32_t lengthWhenPadded    = sizeof(int32_t)*(round(.5 + headerLength/(float)sizeof(int32_t)));					//in bytes
 	uint32_t padSize             = lengthWhenPadded - headerLength;							//in bytes
 	uint32_t totalLength		  = 2 + (lengthWhenPadded/4);									//in longs

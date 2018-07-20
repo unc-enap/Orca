@@ -762,8 +762,8 @@
 			uint32_t absStart = [model minRunStartTime];
 			uint32_t absEnd   = [model maxRunEndTime];
 			
-			uint32_t start = [[model run:i objectForKey:@"RunStart"] unsignedLongValue];
-			uint32_t end   = [[model run:i objectForKey:@"RunEnd"] unsignedLongValue];
+			uint32_t start = (uint32_t)[[model run:i objectForKey:@"RunStart"] unsignedLongValue];
+			uint32_t end   = (uint32_t)[[model run:i objectForKey:@"RunEnd"] unsignedLongValue];
 			uint32_t mid = start + (end-start)/2.;
 			if(absEnd-absStart !=0){
 				[model setSelectionDate:1000*(mid - absStart)/(absEnd-absStart)];
@@ -921,8 +921,8 @@
 	int i;
 	for(i=0;i<n;i++){
 	
-		uint32_t start = [[dataSource run:i objectForKey:@"RunStart"] unsignedLongValue];
-		uint32_t end   = [[dataSource run:i objectForKey:@"RunEnd"] unsignedLongValue];
+		uint32_t start = (uint32_t)[[dataSource run:i objectForKey:@"RunStart"] unsignedLongValue];
+		uint32_t end   = (uint32_t)[[dataSource run:i objectForKey:@"RunEnd"] unsignedLongValue];
 
 		if(start && end){
 			float h = [self bounds].size.height;

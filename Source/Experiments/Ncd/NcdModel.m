@@ -1023,7 +1023,7 @@ static NSString *ORNcdMuxFullEfficiencyThresholds = @"ORNcdMuxFullEfficiencyThre
 
 - (void) runAboutToStart:(NSNotification*)aNote
 {
-    uint32_t runTypeMask = [[[aNote userInfo] objectForKey:@"RunType"] longValue];
+    uint32_t runTypeMask = (uint32_t)[[[aNote userInfo] objectForKey:@"RunType"] longValue];
     //note that the source is placed in this object magically by SHaRC at the start of run.
     //note that the runType masks are shifted by one compared to SHaRC because
     //ORCA reserves bit 0 for its own maintenance run type.

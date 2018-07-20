@@ -355,7 +355,7 @@ NSString* ORWaveFormDataChanged            = @"ORWaveFormDataChanged";
         n = MIN(256,n);
         reply[n] = '\n';
         NSString* s =  [NSString stringWithCString:reply encoding:NSASCIIStringEncoding];
-        int32_t nlPos = [s rangeOfString:@"\n"].location;
+        NSInteger nlPos = [s rangeOfString:@"\n"].location;
         if(nlPos != NSNotFound){
             s = [s substringWithRange:NSMakeRange(0,nlPos)];
             NSLog(@"%@\n",s);
@@ -374,7 +374,7 @@ NSString* ORWaveFormDataChanged            = @"ORWaveFormDataChanged";
                              maxLength: 256 ];
     reply[n] = '\n';
     NSString* s =  [NSString stringWithCString:reply encoding:NSASCIIStringEncoding];
-    int32_t nlPos = [s rangeOfString:@"\n"].location;
+    NSInteger nlPos = [s rangeOfString:@"\n"].location;
     if(nlPos != NSNotFound){
         s = [s substringWithRange:NSMakeRange(0,nlPos)];
         NSLog(@"%@\n",s);
@@ -388,7 +388,7 @@ NSString* ORWaveFormDataChanged            = @"ORWaveFormDataChanged";
                              maxLength: 256 ];
     reply[n] = '\n';
     NSString* s =  [NSString stringWithCString:reply encoding:NSASCIIStringEncoding];
-    int32_t nlPos = [s rangeOfString:@"\n"].location;
+    NSInteger nlPos = [s rangeOfString:@"\n"].location;
     if(nlPos != NSNotFound){
         s = [s substringWithRange:NSMakeRange(0,nlPos)];
         NSLog(@"%@\n",s);
@@ -402,7 +402,7 @@ NSString* ORWaveFormDataChanged            = @"ORWaveFormDataChanged";
                              maxLength: 256 ];
     reply[n] = '\n';
     NSString* s =  [NSString stringWithCString:reply encoding:NSASCIIStringEncoding];
-    int32_t nlPos = [s rangeOfString:@"\n"].location;
+    NSInteger nlPos = [s rangeOfString:@"\n"].location;
     if(nlPos != NSNotFound){
         s = [s substringWithRange:NSMakeRange(0,nlPos)];
         NSLog(@"%@\n",s);

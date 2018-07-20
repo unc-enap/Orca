@@ -1352,7 +1352,7 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 	statusAddress			  = theSlotPart;
 	memoryAddress			  = theSlotPart | (ipeReg[kFLTAdcMemory].space << kIpeFlt_AddressSpace); 
 	fireWireCard			  = [[self crate] adapter];
-	locationWord			  = (([self crateNumber]&0x0f)<<21) | ([self stationNumber]& 0x0000001f)<<16;
+	locationWord			  = (uint32_t)((([self crateNumber]&0x0f)<<21) | ([self stationNumber]& 0x0000001f)<<16);
   	usingPBusSimulation		  = [fireWireCard pBusSim];
 	pageSize                  = [slt pageSize];  //us
 }

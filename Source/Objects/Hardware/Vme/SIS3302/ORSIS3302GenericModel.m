@@ -1831,9 +1831,9 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 	int i;
 	for(i = 0; i < kNumSIS3302Channels; i++) {
 		uint32_t aTriggerMask = 
-		(([self pulseLength:i] & 0xffL) << 16) | 
+		(uint32_t)((([self pulseLength:i] & 0xffL) << 16) |
 		(([self sumG:i]        & 0x1fL) <<  8) | 
-		([self peakingTime:i] & 0x1fL);
+		([self peakingTime:i] & 0x1fL));
 		
 		[[self adapter] writeLongBlock:&aTriggerMask
 							 atAddress:[self baseAddress] + [self getTriggerSetupRegOffsets:i]

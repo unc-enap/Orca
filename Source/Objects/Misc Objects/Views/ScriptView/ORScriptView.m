@@ -714,7 +714,7 @@
 			}
 			while( !vIsEndChar && ![vScanner isAtEnd] )	{  // Loop until we find end-of-string marker or our text to color is finished:
 				[vScanner scanUpToString: endCh intoString: nil];
-				uint32_t x = [vScanner scanLocation] -1;
+				uint32_t x = (uint32_t)[vScanner scanLocation] -1;
 				
 				if( [[s string] characterAtIndex: x] != '\\' )	// Backslash before the end marker? That means ignore the end marker.
 					vIsEndChar = YES;	// A real one! Terminate loop.
@@ -725,7 +725,7 @@
 				}
 			}
 			
-			vEndOffs = [vScanner scanLocation];
+			vEndOffs = (uint32_t)[vScanner scanLocation];
 			
 			// Now mess with the string's styles:
 			[s setAttributes: vStyles range: NSMakeRange( vStartOffs, vEndOffs -vStartOffs )];

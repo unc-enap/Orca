@@ -1926,11 +1926,11 @@ static NSString* DT5720RunModeString[4] = {
     [self setGpiRunMode:            [aDecoder decodeBoolForKey:     @"gpiRunMode"]];
     [self setSoftwareTrigEnabled:   [aDecoder decodeBoolForKey:     @"softwareTrigEnabled"]];
     [self setExternalTrigEnabled:   [aDecoder decodeBoolForKey:     @"externalTrigEnabled"]];
-    [self setTriggerSourceMask:     [aDecoder decodeIntegerForKey:      @"triggerSourceMask"]];
+    [self setTriggerSourceMask:     [aDecoder decodeIntForKey:      @"triggerSourceMask"]];
     [self setFpExternalTrigEnabled: [aDecoder decodeBoolForKey:     @"fpExternalTrigEnabled"]];
     [self setFpSoftwareTrigEnabled: [aDecoder decodeBoolForKey:     @"fpSoftwareTrigEnabled"]];
-    [self setTriggerOutMask:        [aDecoder decodeIntegerForKey:      @"triggerOutMask"]];
-    [self setPostTriggerSetting:    [aDecoder decodeIntegerForKey:    @"postTriggerSetting"]];
+    [self setTriggerOutMask:        [aDecoder decodeIntForKey:      @"triggerOutMask"]];
+    [self setPostTriggerSetting:    [aDecoder decodeIntForKey:    @"postTriggerSetting"]];
     [self setGpoEnabled:            [aDecoder decodeBoolForKey:     @"gpoEnabled"]];
     [self setTtlEnabled:            [aDecoder decodeIntForKey:      @"ttlEnabled"]];
     [self setEnabledMask:           [aDecoder decodeIntegerForKey:      @"enabledMask"]];
@@ -1977,13 +1977,13 @@ static NSString* DT5720RunModeString[4] = {
     [anEncoder encodeBool:gpiRunMode                forKey:@"gpiRunMode"];
     [anEncoder encodeBool:softwareTrigEnabled       forKey:@"softwareTrigEnabled"];
     [anEncoder encodeBool:externalTrigEnabled       forKey:@"externalTrigEnabled"];
-    [anEncoder encodeInteger:(int32_t)triggerSourceMask          forKey:@"triggerSourceMask"];
+    [anEncoder encodeInt:triggerSourceMask          forKey:@"triggerSourceMask"];
     [anEncoder encodeBool:fpExternalTrigEnabled     forKey:@"fpExternalTrigEnabled"];
     [anEncoder encodeBool:fpSoftwareTrigEnabled     forKey:@"fpSoftwareTrigEnabled"];
-    [anEncoder encodeInteger:postTriggerSetting       forKey:@"postTriggerSetting"];
+    [anEncoder encodeInt:postTriggerSetting       forKey:@"postTriggerSetting"];
     [anEncoder encodeBool:gpoEnabled                forKey:@"gpoEnabled"];
     [anEncoder encodeInteger:ttlEnabled                 forKey:@"ttlEnabled"];
-    [anEncoder encodeInteger:(int32_t)triggerOutMask             forKey:@"triggerOutMask"];
+    [anEncoder encodeInt:triggerOutMask             forKey:@"triggerOutMask"];
     [anEncoder encodeInteger:enabledMask                forKey:@"enabledMask"];
 
 	[anEncoder encodeInteger:coincidenceLevel           forKey:@"coincidenceLevel"];

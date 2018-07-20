@@ -2419,7 +2419,7 @@ uint32_t triggerThresholdAddress[kNumSIS3320Channels]={
         [self setAccGate7Length:i     withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"accGate7Length%d",i]]];
         [self setAccGate7StartIndex:i withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"accGate7StartIndex%d",i]]];
         [self setAccGate8Length:i     withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"accGate8Length%d",i]]];
-        [self setAccGate8StartIndex:i withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"accGate8StartIndex%d",i]]];
+        [self setAccGate8StartIndex:i withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"accGate8StartIndex%d",i]]];
     }
     for(i=0;i<2;i++){
         [self setTriggerMode:i      withValue: [decoder decodeBoolForKey:[NSString stringWithFormat:@"triggerMode%d",i]]];

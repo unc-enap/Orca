@@ -1599,7 +1599,7 @@ NSString* ORIpeSLTModelHW_ResetChanged          = @"ORIpeSLTModelHW_ResetChanged
 			gettimeofday(&t0, &tz);
 			if (t0.tv_sec > lastSimSec) {
 				lPageStatus = 1;
-				lastSimSec = t0.tv_sec;
+				lastSimSec = (uint32_t)t0.tv_sec;
 			}	
 		}
 		
@@ -1672,7 +1672,7 @@ NSString* ORIpeSLTModelHW_ResetChanged          = @"ORIpeSLTModelHW_ResetChanged
 			//ship the start of event record
 			uint32_t eventData[5];
 			eventData[0] = eventDataId | 5;	
-			eventData[1] = (([self crateNumber]&0x0f)<<21) | ([self stationNumber]& 0x0000001f)<<16;
+			eventData[1] = (uint32_t)((([self crateNumber]&0x0f)<<21) | ([self stationNumber]& 0x0000001f)<<16);
 			eventData[2] = eventCounter;
 			eventData[3] = timeStampH; 
 			eventData[4] = timeStampL;
@@ -1685,7 +1685,7 @@ NSString* ORIpeSLTModelHW_ResetChanged          = @"ORIpeSLTModelHW_ResetChanged
             uint32_t multiplicityRecord[3 + 2000];
             multiplicityRecord[0] = multiplicityId | (20*pageSize + 3);
 			
-			multiplicityRecord[1] = (([self crateNumber]&0x0f)<<21) | ([self stationNumber]& 0x0000001f)<<16; 
+			multiplicityRecord[1] = (uint32_t)((([self crateNumber]&0x0f)<<21) | ([self stationNumber]& 0x0000001f)<<16);
 			multiplicityRecord[2] = eventCounter;
 			
 			// Ship trigger memory and not projection only !!!
@@ -1734,7 +1734,7 @@ NSString* ORIpeSLTModelHW_ResetChanged          = @"ORIpeSLTModelHW_ResetChanged
 					int nEv = (int)(eventCounter - lastDisplayCounter);
 					double rate = 0.1 * nEv / (t0.tv_sec-lastDisplaySec) + 0.9 * lastDisplayRate;
 					
-					uint32_t tRead = (t1.tv_sec - t0.tv_sec) * 1000000 + (t1.tv_usec - t0.tv_usec);
+					uint32_t tRead = (uint32_t)((t1.tv_sec - t0.tv_sec) * 1000000 + (t1.tv_usec - t0.tv_usec));
 					if (t0.tv_sec%20 == 0) {
 					    NSLogFont(aFont, @"%64s  | %16s\n", "Last event", "Interval summary"); 
 						NSLogFont(aFont, @"%4s %14s %4s %14s %4s %4s %14s  |  %4s %10s\n", 
@@ -1746,7 +1746,7 @@ NSString* ORIpeSLTModelHW_ResetChanged          = @"ORIpeSLTModelHW_ResetChanged
 							  nTriggered, tRead, nEv, rate);
 					
 					// Keep the last display second		  
-					lastDisplaySec = t0.tv_sec;	
+					lastDisplaySec = (uint32_t)t0.tv_sec;
 					lastDisplayCounter = eventCounter;
 					lastDisplayRate = rate;	  
 				}

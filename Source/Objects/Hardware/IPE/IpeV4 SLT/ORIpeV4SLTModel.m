@@ -1592,7 +1592,7 @@ return;
 	else [pmcLink setDelegate:self];
 
 	[self setControlReg:		[decoder decodeIntForKey:@"controlReg"]];
-	[self setSecondsSet:		[decoder decodeIntegerForKey:@"secondsSet"]];
+	[self setSecondsSet:		[decoder decodeIntForKey:@"secondsSet"]];
 	if([decoder containsValueForKey:@"secondsSetInitWithHost"])
 		[self setSecondsSetInitWithHost:[decoder decodeBoolForKey:@"secondsSetInitWithHost"]];
 	else[self setSecondsSetInitWithHost: YES];
@@ -1640,7 +1640,7 @@ return;
 	[encoder encodeBool:secondsSetInitWithHost forKey:@"secondsSetInitWithHost"];
 	[encoder encodeObject:sltScriptArguments forKey:@"sltScriptArguments"];
 	[encoder encodeBool:countersEnabled forKey:@"countersEnabled"];
-	[encoder encodeInteger:secondsSet forKey:@"secondsSet"];
+	[encoder encodeInt:secondsSet forKey:@"secondsSet"];
 	[encoder encodeObject:pmcLink		forKey:@"PMC_Link"];
 	[encoder encodeInt:controlReg	forKey:@"controlReg"];
 	

@@ -4073,7 +4073,7 @@ if((len % 4) != 0){
 
 - (void) shipSltEvent:(unsigned char)aCounterType withType:(unsigned char)aType eventCt:(uint32_t)c high:(uint32_t)h low:(uint32_t)l
 {
-	uint32_t location = (([self crateNumber]&0xf)<<21) | ([self stationNumber]& 0x0000001f)<<16;
+	uint32_t location = (uint32_t)((([self crateNumber]&0xf)<<21) | ([self stationNumber]& 0x0000001f)<<16);
 	uint32_t data[5];
 			data[0] = eventDataId | 5; 
 			data[1] = location | ((aCounterType & 0xf)<<4) | (aType & 0xf);
@@ -4284,7 +4284,7 @@ if((len % 4) != 0){
 	configStruct->card_info[index].hw_mask[0] 	= eventDataId;
 	configStruct->card_info[index].hw_mask[1] 	= waveFormId;
 	configStruct->card_info[index].hw_mask[2] 	= fltEventId;
-	configStruct->card_info[index].slot			= [self stationNumber];
+	configStruct->card_info[index].slot			= (uint32_t)[self stationNumber];
 	configStruct->card_info[index].crate		= [self crateNumber];
 	configStruct->card_info[index].add_mod		= 0;		//not needed for this HW
 	

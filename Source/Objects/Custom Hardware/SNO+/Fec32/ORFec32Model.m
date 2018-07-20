@@ -1068,7 +1068,7 @@ static int              sChannelsNotChangedCount = 0;
 {
 	BOOL xl2OK = YES;
 	@try {
-		[[self xl2] selectCards:1L<<[self slot]];	
+		[[self xl2] selectCards:(uint32_t)(1L<<[self slot])];
 	}
 	@catch(NSException* localException) {
 		xl2OK = NO;

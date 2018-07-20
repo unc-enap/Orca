@@ -220,7 +220,7 @@ static NSString *ORVmeCardAddressModifier 	= @"vme Address Modifier";
         //there may be an existing error record for this key, if so we add to it, otherwise we make a new one
         NSMutableDictionary* aRecord = [diagnosticReport objectForKey:aKey];
         if(!aRecord)aRecord = [NSMutableDictionary dictionary];
-        uint32_t errorCount = [[aRecord objectForKey:@"ErrorCount"]unsignedLongValue];
+        uint32_t errorCount = (uint32_t)[[aRecord objectForKey:@"ErrorCount"]unsignedLongValue];
         errorCount++;
         [aRecord setObject:[NSNumber numberWithUnsignedLong:errorCount] forKey:@"ErrorCount"];
         [aRecord setObject:errorString forKey:@"LastErrorString"];

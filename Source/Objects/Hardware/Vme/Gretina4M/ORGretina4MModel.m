@@ -3165,7 +3165,7 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
 		[self setPZTraceEnabled:i withValue:[decoder decodeIntegerForKey:[@"pzTraceEnabled" stringByAppendingFormat:@"%d",i]]];
 		[self setTriggerMode:i	withValue:[decoder decodeIntegerForKey:[@"triggerMode"	stringByAppendingFormat:@"%d",i]]];
 		[self setLEDThreshold:i withValue:[decoder decodeIntForKey:[@"ledThreshold" stringByAppendingFormat:@"%d",i]]];
-		[self setTrapThreshold:i withValue:[decoder decodeIntegerForKey:[@"trapThreshold" stringByAppendingFormat:@"%d",i]]];
+		[self setTrapThreshold:i withValue:[decoder decodeIntForKey:[@"trapThreshold" stringByAppendingFormat:@"%d",i]]];
 		[self setMrpsrt:i       withValue:[decoder decodeIntegerForKey:[@"mrpsrt"       stringByAppendingFormat:@"%d",i]]];
 		[self setFtCnt:i        withValue:[decoder decodeIntegerForKey:[@"ftCnt"        stringByAppendingFormat:@"%d",i]]];
 		[self setMrpsdv:i       withValue:[decoder decodeIntegerForKey:[@"mrpsdv"       stringByAppendingFormat:@"%d",i]]];
@@ -3223,7 +3223,7 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
 		[encoder encodeInteger:pzTraceEnabled[i] forKey:[@"pzTraceEnabled" stringByAppendingFormat:@"%d",i]];
 		[encoder encodeInteger:triggerMode[i]	forKey:[@"triggerMode"	stringByAppendingFormat:@"%d",i]];
 		[encoder encodeInt:ledThreshold[i]	forKey:[@"ledThreshold" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInteger:trapThreshold[i]	forKey:[@"trapThreshold" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt:trapThreshold[i]	forKey:[@"trapThreshold" stringByAppendingFormat:@"%d",i]];
 		[encoder encodeInteger:mrpsrt[i]        forKey:[@"mrpsrt"       stringByAppendingFormat:@"%d",i]];
 		[encoder encodeInteger:ftCnt[i]         forKey:[@"ftCnt"        stringByAppendingFormat:@"%d",i]];
 		[encoder encodeInteger:mrpsdv[i]        forKey:[@"mrpsdv"       stringByAppendingFormat:@"%d",i]];
@@ -3580,7 +3580,7 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
 
 - (void) programFlashBuffer:(NSData*)theData
 {
-    uint32_t totalSize = [theData length];
+    uint32_t totalSize = (uint32_t)[theData length];
     
     [self setProgressStateOnMainThread:@"Programming"];
     [self setFirmwareStatusString: [NSString stringWithFormat:@"FPGA File Size %u KB",totalSize/1000]];
@@ -3667,7 +3667,7 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
 
 - (BOOL) verifyFlashBuffer:(NSData*)theData
 {
-    uint32_t totalSize = [theData length];
+    uint32_t totalSize = (uint32_t)[theData length];
     unsigned char* theDataBytes = (unsigned char*)[theData bytes];
     
     [self setProgressStateOnMainThread:@"Verifying"];

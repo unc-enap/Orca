@@ -915,8 +915,8 @@ double facto(uint64_t num)
                                                 else
                                                 {
                                                     NSLog(@"Burst had only %i channels, needed %i \n", numBurstChan, numBurstsNeeded);
-                                                    removedSec = [[secs objectAtIndex:1] longValue];
-                                                    removedMic = [[mics objectAtIndex:1] longValue];
+                                                    removedSec = (uint32_t)[[secs objectAtIndex:1] longValue];
+                                                    removedMic = (uint32_t)[[mics objectAtIndex:1] longValue];
                                                 }
                                                 //Clean up
                                                 [chans removeAllObjects];
@@ -942,8 +942,8 @@ double facto(uint64_t num)
                                             [burstData release]; //MAH... added to prevent memory leak on early return.
                                             return;
                                         }
-                                        removedSec = [[Nsecs objectAtIndex:(nHit-2)] longValue];
-                                        removedMic = [[Nmics objectAtIndex:(nHit-2)] longValue];
+                                        removedSec = (uint32_t)[[Nsecs objectAtIndex:(nHit-2)] longValue];
+                                        removedMic = (uint32_t)[[Nmics objectAtIndex:(nHit-2)] longValue];
                                         
                                         //NSLog(@"removed time is now %f \n", removedSec+0.000001*removedMic);
                                         [Nchans removeObjectAtIndex:nHit-1]; //remove old things from the buffer
@@ -1658,7 +1658,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
     data[9] = LongFloatUnion.asLong;
     LongFloatUnion.asFloat = alphaP;
     data[10] = LongFloatUnion.asLong;
-    data[11] = ut_time;
+    data[11] = (uint32_t)ut_time;
 
     //pass the record on to the next object
     [theBurstMonitoredObject processData:[NSArray arrayWithObject:[NSData dataWithBytes:data length:sizeof(int32_t)*kBurstRecordLength]] decoder:theDecoder];
@@ -1723,10 +1723,10 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
         //someData.epMic=[[Bmics objectAtIndex:l] longValue];
        // uint32_t* testsec[4]; <<--this is not being used as a pointer. removed MAH 09/16/14
         uint32_t testsec[4];
-        testsec[0]=[[Bwords objectAtIndex:l] longValue];
-        testsec[1]=[[Badcs objectAtIndex:l] longValue]+(4096*[[Bchans objectAtIndex:l] longValue])+(65536*[[Bcards objectAtIndex:l] longValue]); // adc 3 digets, channel, card
-        testsec[2]=[[Bsecs objectAtIndex:l] longValue];
-        testsec[3]=[[Bmics objectAtIndex:l] longValue]; //CB works, make data file from array now
+        testsec[0]=(uint32_t)[[Bwords objectAtIndex:l] longValue];
+        testsec[1]=(uint32_t)[[Badcs objectAtIndex:l] longValue]+(4096*[[Bchans objectAtIndex:l] longValue])+(65536*[[Bcards objectAtIndex:l] longValue]); // adc 3 digets, channel, card
+        testsec[2]=(uint32_t)[[Bsecs objectAtIndex:l] longValue];
+        testsec[3]=(uint32_t)[[Bmics objectAtIndex:l] longValue]; //CB works, make data file from array now
         //someData.dataRecord = [NSData dataWithBytes:&testsec length: sizeof(testsec)]; <<--removed MAH 09/16/14
         someData.dataRecord = [NSData dataWithBytes:testsec length: sizeof(testsec)];
         [anArrayOfData addObject:someData.dataRecord];

@@ -376,8 +376,8 @@ NSString* ORBreakpointsAction = @"ORBreakpointsAction";
 
 - (CGFloat) requiredThickness
 {    
-    int32_t lineCount = [[self lineIndices] count];
-    int32_t digits    = (NSUInteger)log10(lineCount) + 1;
+    int32_t lineCount = (uint32_t)[[self lineIndices] count];
+    int32_t digits    = (uint32_t)log10(lineCount) + 1;
 	NSMutableString* sampleString = [NSMutableString string];
 	int32_t i;
     for (i = 0; i < digits; i++) {

@@ -104,7 +104,7 @@ int32_t 	convertTimeCharToLong( char* aTime )
 	[[timeStr substringWithRange:NSMakeRange( 17,2 )] getCString:tmpStorage maxLength:4 encoding:NSASCIIStringEncoding];
 	timeStruct.tm_sec = atoi( tmpStorage );	
 	
-	return( mktime( &timeStruct ) );	
+	return (uint32_t)mktime( &timeStruct) ;	
 
 }
 

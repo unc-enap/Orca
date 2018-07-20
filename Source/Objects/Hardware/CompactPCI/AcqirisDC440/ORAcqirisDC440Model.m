@@ -359,7 +359,7 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 	Acquiris_GetCmdStatusStruct response = [self doGetXXXCommand:kAcqiris_GetSerialNumbers cmdArgs:nil];
 	if(response.status == 0){
 		NSArray* args = [[NSString stringWithCString:response.responseBuffer encoding:NSASCIIStringEncoding] componentsSeparatedByString:@","];
-		uint32_t n = [args count]/3;
+		uint32_t n = (uint32_t)[args count]/3;
 		if(verbose){
 			NSLog(@"found %d DC440 card%@ Serial #%@:\n",n,n>1?@"s.":@".",n>1?@"s are":@" is");
 		}
@@ -821,7 +821,7 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 	configStruct->total_cards++;
 	configStruct->card_info[index].hw_type_id	= kAcqirisDC440;		//better be unique
 	configStruct->card_info[index].hw_mask[0] 	= dataId;		//better be unique
-	configStruct->card_info[index].slot			= [self stationNumber];
+	configStruct->card_info[index].slot			= (uint32_t)[self stationNumber];
 	configStruct->card_info[index].crate		= [self crateNumber];
 	configStruct->card_info[index].base_add		= boardID;
 	configStruct->card_info[index].deviceSpecificData[0] = numberSamples;
@@ -850,7 +850,7 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
     
     //----------------------------------------------------------------------------------------
     controller = [self adapter]; //cache the controller for alittle bit more speed.
-    location   = (([self crateNumber]&0x000000f)<<21) | (([self stationNumber]& 0x0000001f)<<16);
+    location   = (uint32_t)((([self crateNumber]&0x000000f)<<21) | (([self stationNumber]& 0x0000001f)<<16));
 	
     //[self clearExceptionCount];
     if([[userInfo objectForKey:@"doinit"]intValue]){
@@ -984,7 +984,7 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 	[self setVerticalOffset:[decoder decodeDoubleForKey:@"verticalOffset"]];
 	[self setFullScale:[decoder decodeIntForKey:@"fullScaleIndex"]];
 	[self setSampleInterval:[decoder decodeDoubleForKey:@"sampleInterval"]];
-	[self setNumberSamples:[decoder decodeIntegerForKey:@"numberSamples"]];
+	[self setNumberSamples:[decoder decodeIntForKey:@"numberSamples"]];
 	[self setDelayTime:[decoder decodeDoubleForKey:@"delayTime"]];
     [self setSampleRateGroup:[decoder decodeObjectForKey:@"sampleRateGroup"]];
 	triggerLevels = [[decoder decodeObjectForKey:@"triggerLevels"] retain];
@@ -1018,7 +1018,7 @@ static float DC440_fullscale[8] = {0.05, 0.10, 0.20, 0.50, 1.0, 2.0, 5.0, 10.0};
 	[encoder encodeInteger:fullScale forKey:@"fullScaleIndex"];
 	[encoder encodeDouble:sampleInterval forKey:@"sampleInterval"];
 	[encoder encodeDouble:delayTime forKey:@"delayTime"];
-	[encoder encodeInteger:numberSamples forKey:@"numberSamples"];
+	[encoder encodeInt:numberSamples forKey:@"numberSamples"];
     [encoder encodeObject:[self sampleRateGroup] forKey:@"sampleRateGroup"];
 }
 

@@ -396,7 +396,7 @@ NSString* ORHeaderExplorerProgressChanged		= @"ORHeaderExplorerProgressChanged";
 		for(id runDictionary in runArray){
 			NSString* runFilePath = [runDictionary objectForKey:@"FilePath"];
 			if([selectedRunFilePath isEqual:runFilePath]){
-				uint32_t startTime = [[runDictionary objectForKey:@"RunStart"] unsignedLongValue];
+				uint32_t startTime = (uint32_t)[[runDictionary objectForKey:@"RunStart"] unsignedLongValue];
 				if(startTime < minTime){
 					minTime = startTime;
 					foundIndex = [runArray indexOfObject:runDictionary];
@@ -416,8 +416,8 @@ NSString* ORHeaderExplorerProgressChanged		= @"ORHeaderExplorerProgressChanged";
 	int index;
 	for(index=0;index<n;index++){
 		NSDictionary* runDictionary = [runArray objectAtIndex:index];
-		uint32_t start = [[runDictionary objectForKey:@"RunStart"] unsignedLongValue];
-		uint32_t end   = [[runDictionary objectForKey:@"RunEnd"] unsignedLongValue];
+		uint32_t start = (uint32_t)[[runDictionary objectForKey:@"RunStart"] unsignedLongValue];
+		uint32_t end   = (uint32_t)[[runDictionary objectForKey:@"RunEnd"] unsignedLongValue];
 		if(actualDate >= start && actualDate < end){
 			NSString* fileName  = [runDictionary objectForKey:@"FilePath"];
 			[self setSelectedFileIndex:[self indexOfFile:fileName]];
@@ -504,7 +504,7 @@ NSString* ORHeaderExplorerProgressChanged		= @"ORHeaderExplorerProgressChanged";
 
 - (uint32_t) minRunStartTime {return minRunStartTime;}
 - (uint32_t) maxRunEndTime	  {return maxRunEndTime;}
-- (int32_t) numberRuns {return [runArray count];}
+- (int32_t) numberRuns {return (uint32_t)[runArray count];}
 - (id) run:(int)index objectForKey:(id)aKey
 {
 	if(index<[runArray count]){

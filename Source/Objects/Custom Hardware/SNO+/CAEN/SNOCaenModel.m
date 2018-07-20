@@ -716,7 +716,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
     }
     
     // Perform the read operation.
-    *pValue = [mtc_server intCommand:"caen_read %ld", [self getAddressOffset:pReg] + chan*0x100];
+    *pValue = (uint32_t)[mtc_server intCommand:"caen_read %ld", [self getAddressOffset:pReg] + chan*0x100];
 }
 
 - (void) writeChan:(unsigned short)chan reg:(unsigned short) pReg sendValue:(uint32_t) pValue
@@ -867,7 +867,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
     }
     
     // Perform the read operation.
-    *pValue = [mtc_server intCommand:"caen_read %ld", [self getAddressOffset:pReg]];
+    *pValue = (uint32_t)[mtc_server intCommand:"caen_read %ld", [self getAddressOffset:pReg]];
 }
 
 - (void) write:(unsigned short) pReg sendValue:(uint32_t) pValue
@@ -1223,7 +1223,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 	int i;
     for (i = 0; i < [self numberOfChannels]; i++){
         [self setDac:i withValue:      [aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENDacChnl%d", i]]];
-        [self setThreshold:i withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENThresChnl%d", i]]];
+        [self setThreshold:i withValue:[aDecoder decodeIntForKey: [NSString stringWithFormat:@"CAENThresChnl%d", i]]];
         [self setOverUnderThreshold:i withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENOverUnderChnl%d", i]]];
     }
 
@@ -1262,7 +1262,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 	int i;
 	for (i = 0; i < [self numberOfChannels]; i++){
         [anEncoder encodeInteger:dac[i] forKey:[NSString stringWithFormat:@"CAENDacChnl%d", i]];
-        [anEncoder encodeInteger:thresholds[i] forKey:[NSString stringWithFormat:@"CAENThresChnl%d", i]];
+        [anEncoder encodeInt:thresholds[i] forKey:[NSString stringWithFormat:@"CAENThresChnl%d", i]];
         [anEncoder encodeInteger:overUnderThreshold[i] forKey:[NSString stringWithFormat:@"CAENOverUnderChnl%d", i]];
     }
 }
@@ -1335,16 +1335,16 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 {
     [self setChannelConfigMask:[[settingsDict objectForKey:[self getStandardRunKeyForField:@"channelConfigMask"]] unsignedShortValue]];
     [self setEventSize:[[settingsDict objectForKey:[self getStandardRunKeyForField:@"eventSize"]] intValue]];
-    [self setCustomSize:[[settingsDict objectForKey:[self getStandardRunKeyForField:@"customSize"]] unsignedLongValue]];
+    [self setCustomSize:(uint32_t)[[settingsDict objectForKey:[self getStandardRunKeyForField:@"customSize"]] unsignedLongValue]];
     [self setIsCustomSize:[[settingsDict objectForKey:[self getStandardRunKeyForField:@"isCustomSize"]] boolValue]];
     [self setAcquisitionMode:[[settingsDict objectForKey:[self getStandardRunKeyForField:@"acquisitionMode"]] unsignedShortValue]];
     [self setCountAllTriggers:[[settingsDict objectForKey:[self getStandardRunKeyForField:@"countAllTriggers"]] boolValue]];
-    [self setTriggerSourceMask:[[settingsDict objectForKey:[self getStandardRunKeyForField:@"triggerSourceMask"]] unsignedLongValue]];
+    [self setTriggerSourceMask:(uint32_t)[[settingsDict objectForKey:[self getStandardRunKeyForField:@"triggerSourceMask"]] unsignedLongValue]];
     [self setCoincidenceLevel:[[settingsDict objectForKey:[self getStandardRunKeyForField:@"coincidenceLevel"]] unsignedShortValue]];
-    [self setTriggerOutMask:[[settingsDict objectForKey:[self getStandardRunKeyForField:@"triggerOutMask"]] unsignedLongValue]];
-    [self setPostTriggerSetting:[[settingsDict objectForKey:[self getStandardRunKeyForField:@"postTriggerSetting"]] unsignedLongValue]];
-    [self setFrontPanelControlMask:[[settingsDict objectForKey:[self getStandardRunKeyForField:@"frontPanelControlMask"]] unsignedLongValue]];
-    [self setEnabledMask:[[settingsDict objectForKey:[self getStandardRunKeyForField:@"enabledMask"]] unsignedShortValue]];
+    [self setTriggerOutMask:(uint32_t)[[settingsDict objectForKey:[self getStandardRunKeyForField:@"triggerOutMask"]] unsignedLongValue]];
+    [self setPostTriggerSetting:(uint32_t)[[settingsDict objectForKey:[self getStandardRunKeyForField:@"postTriggerSetting"]] unsignedLongValue]];
+    [self setFrontPanelControlMask:(uint32_t)[[settingsDict objectForKey:[self getStandardRunKeyForField:@"frontPanelControlMask"]] unsignedLongValue]];
+    [self setEnabledMask:(uint32_t)[[settingsDict objectForKey:[self getStandardRunKeyForField:@"enabledMask"]] unsignedShortValue]];
     for (int idac=0; idac<kNumCaenChannelDacs; ++idac) {
         [self setDac:idac withValue:[[settingsDict objectForKey:[NSString stringWithFormat:@"%@_%i",[self getStandardRunKeyForField:@"dac"],idac]] unsignedShortValue]];
     }

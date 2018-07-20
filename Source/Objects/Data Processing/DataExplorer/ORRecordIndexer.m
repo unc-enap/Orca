@@ -152,7 +152,7 @@
 						break;
 					}
 					else {
-						uint32_t offset = dPtr - start;
+						uint32_t offset = (uint32_t)(dPtr - start);
 						[array addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:
 										  [NSNumber numberWithLong:decodedLength],@"Length",
 										  shortName,@"Name",

@@ -1342,7 +1342,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 
 - (uint32_t) sampleLength:(short)group {
-    return [[sampleLengths objectAtIndex:group] unsignedLongValue];
+    return (uint32_t)[[sampleLengths objectAtIndex:group] unsignedLongValue];
 }
 
 - (void) setSampleLength:(short)group withValue:(uint32_t)aValue
@@ -6120,9 +6120,9 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
         [self setGTThresholdOff:chan        withValue:[decoder decodeIntForKey:[@"GTThresholdOff"           stringByAppendingFormat:@"%d",chan]]];
 
         [self setPreTriggerDelay:chan       withValue:[decoder decodeIntForKey:[@"preTriggerDelay"          stringByAppendingFormat:@"%d",chan]]];
-        [self setAdcOffset:chan             toValue:[decoder decodeIntegerForKey:[@"adcOffset"                  stringByAppendingFormat:@"%d",chan]]];
-        [self setAdcGain:chan               toValue:[decoder decodeIntegerForKey:[@"adcGain"                    stringByAppendingFormat:@"%d",chan]]];
-        [self setAdcPhase:chan              toValue:[decoder decodeIntegerForKey:[@"adcPhase"                   stringByAppendingFormat:@"%d",chan]]];
+        [self setAdcOffset:chan             toValue:[decoder decodeIntForKey:[@"adcOffset"                  stringByAppendingFormat:@"%d",chan]]];
+        [self setAdcGain:chan               toValue:[decoder decodeIntForKey:[@"adcGain"                    stringByAppendingFormat:@"%d",chan]]];
+        [self setAdcPhase:chan              toValue:[decoder decodeIntForKey:[@"adcPhase"                   stringByAppendingFormat:@"%d",chan]]];
         
     }
     
@@ -6189,9 +6189,9 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
         [encoder encodeInteger:ringbufferPreDelay[chan]       forKey:[@"preTriggerDelay"      stringByAppendingFormat:@"%d",chan]];
         
         
-        [encoder encodeInteger:adcOffset[chan]              forKey:[@"adcOffset"            stringByAppendingFormat:@"%d",chan]];
-        [encoder encodeInteger:adcGain[chan]                forKey:[@"adcGain"              stringByAppendingFormat:@"%d",chan]];
-        [encoder encodeInteger:adcPhase[chan]               forKey:[@"adcPhase"             stringByAppendingFormat:@"%d",chan]];
+        [encoder encodeInt:adcOffset[chan]              forKey:[@"adcOffset"            stringByAppendingFormat:@"%d",chan]];
+        [encoder encodeInt:adcGain[chan]                forKey:[@"adcGain"              stringByAppendingFormat:@"%d",chan]];
+        [encoder encodeInt:adcPhase[chan]               forKey:[@"adcPhase"             stringByAppendingFormat:@"%d",chan]];
 
     }
     int i;

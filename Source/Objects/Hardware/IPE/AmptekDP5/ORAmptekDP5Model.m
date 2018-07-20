@@ -4995,7 +4995,7 @@ return ;
 	[self setReadOutGroup:			[decoder decodeObjectForKey:@"ReadoutGroup"]];
     [self setPoller:				[decoder decodeObjectForKey:@"poller"]];
 	
-    [self setPageSize:				[decoder decodeIntegerForKey:@"ORAmptekDP5PageSize"]]; // ak, 9.12.07
+    [self setPageSize:				[decoder decodeIntForKey:@"ORAmptekDP5PageSize"]]; // ak, 9.12.07
     [self setDisplayTrigger:		[decoder decodeBoolForKey:@"ORAmptekDP5DisplayTrigger"]];
     [self setDisplayEventLoop:		[decoder decodeBoolForKey:@"ORAmptekDP5DisplayEventLoop"]];
     	
@@ -5063,7 +5063,7 @@ return ;
 	[encoder encodeObject:readOutGroup  forKey:@"ReadoutGroup"];
     [encoder encodeObject:poller         forKey:@"poller"];
 	
-    [encoder encodeInteger:pageSize         forKey:@"ORAmptekDP5PageSize"]; // ak, 9.12.07
+    [encoder encodeInt:pageSize         forKey:@"ORAmptekDP5PageSize"]; // ak, 9.12.07
     [encoder encodeBool:displayTrigger   forKey:@"ORAmptekDP5DisplayTrigger"];
     [encoder encodeBool:displayEventLoop forKey:@"ORAmptekDP5DisplayEventLoop"];
 		

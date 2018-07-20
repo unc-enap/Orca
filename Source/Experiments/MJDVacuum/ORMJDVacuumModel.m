@@ -908,7 +908,7 @@ NSString* ORMJDVacuumModelSpikeTriggerValueChanged      = @"ORMJDVacuumModelSpik
     NSLog(@"------------------------------------------------------------\n");
     NSLog(@"---------------    Constraint Report    --------------------\n");
     NSLog(@"------------------------------------------------------------\n");
-    uint32_t n = [continuedBiasConstraints count];
+    NSUInteger n = [continuedBiasConstraints count];
     if(n){
         NSLog(@"There %@ %d constraint%@ against continued bias of the detectors\n",n>1?@"are":@"is",n,n>1?@"s":@"");
         for(id aKey in [continuedBiasConstraints allKeys]){
@@ -959,8 +959,8 @@ NSString* ORMJDVacuumModelSpikeTriggerValueChanged      = @"ORMJDVacuumModelSpik
     //----Cryo
     NSLog(@"--Cryopump--\n");
     ORCP8CryopumpModel* cryo =  [self findCryoPump];
-    uint32_t pmpOffCount = [[cryo pumpOffConstraints] count];
-    uint32_t pmpOnCount = [[cryo pumpOnConstraints] count];
+    uint32_t pmpOffCount = (uint32_t)[[cryo pumpOffConstraints] count];
+    uint32_t pmpOnCount = (uint32_t)[[cryo pumpOnConstraints] count];
     if(pmpOffCount + pmpOnCount){
         NSLog(@"%@",[cryo pumpOnOffConstraintReport]);
     }
@@ -988,7 +988,7 @@ NSString* ORMJDVacuumModelSpikeTriggerValueChanged      = @"ORMJDVacuumModelSpik
     for(ORVacuumGateValve* aGateValve in gateValves){
         NSDictionary* constraintDict = [aGateValve constraints];
         if(constraintDict){
-            uint32_t n = [constraintDict count];
+            NSUInteger n = [constraintDict count];
             if(n){
                 NSLog(@"There %@ %d constraint%@ against changing gatevalve %@\n",n>1?@"are":@"is",n,n>1?@"s":@"",[aGateValve label]);
                 for(id aKey in [constraintDict allKeys]){

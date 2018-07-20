@@ -194,7 +194,7 @@ static int redisContextWaitReady(redisContext *c, const struct timeval *timeout)
             return REDIS_ERR;
         }
 
-        msec = (timeout->tv_sec * 1000) + ((timeout->tv_usec + 999) / 1000);
+        msec = (int32_t)(timeout->tv_sec * 1000) + ((timeout->tv_usec + 999) / 1000);
 
         if (msec < 0 || msec > INT_MAX) {
             msec = INT_MAX;

@@ -1451,12 +1451,12 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 	int i;
     for (i = 0; i < [self numberOfChannels]; i++){
         [self setDac:i              withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"dac%d",i]]];
-        [self setThreshold:i        withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"thresholds%d",i]]];
+        [self setThreshold:i        withValue:[aDecoder decodeIntForKey: [NSString stringWithFormat:@"thresholds%d",i]]];
 
     }
     
     for (i = 0; i < [self numberOfChannels]/2; i++){
-        [self setSelfTriggerLogic:i withValue:[aDecoder decodeIntegerForKey:   [NSString stringWithFormat:@"selfTriggerLogic%d",i]]];
+        [self setSelfTriggerLogic:i withValue:[aDecoder decodeIntForKey:   [NSString stringWithFormat:@"selfTriggerLogic%d",i]]];
     }
     
     [[self undoManager] enableUndoRegistration];
@@ -1484,10 +1484,10 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 	int i;
 	for (i = 0; i < [self numberOfChannels]; i++){
         [anEncoder encodeInteger:dac[i]               forKey:[NSString stringWithFormat:@"dac%d", i]];
-        [anEncoder encodeInteger:thresholds[i]        forKey:[NSString stringWithFormat:@"thresholds%d", i]];
+        [anEncoder encodeInt:thresholds[i]        forKey:[NSString stringWithFormat:@"thresholds%d", i]];
     }
     for (i = 0; i < [self numberOfChannels]/2; i++){
-        [anEncoder encodeInteger:selfTriggerLogic[i]    forKey:[NSString stringWithFormat:@"selfTriggerLogic%d", i]];
+        [anEncoder encodeInt:selfTriggerLogic[i]    forKey:[NSString stringWithFormat:@"selfTriggerLogic%d", i]];
     }
 }
 

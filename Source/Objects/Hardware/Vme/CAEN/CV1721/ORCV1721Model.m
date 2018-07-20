@@ -1376,7 +1376,7 @@ NSString* ORCV1721ModelBufferCheckChanged                 = @"ORCV1721ModelBuffe
 	int i;
     for (i = 0; i < [self numberOfChannels]; i++){
         [self setDac:i withValue:      [aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENDacChnl%d", i]]];
-        [self setThreshold:i withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENThresChnl%d", i]]];
+        [self setThreshold:i withValue:[aDecoder decodeIntForKey: [NSString stringWithFormat:@"CAENThresChnl%d", i]]];
         [self setOverUnderThreshold:i withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENOverUnderChnl%d", i]]];
     }
     
@@ -1405,7 +1405,7 @@ NSString* ORCV1721ModelBufferCheckChanged                 = @"ORCV1721ModelBuffe
 	int i;
 	for (i = 0; i < [self numberOfChannels]; i++){
         [anEncoder encodeInteger:dac[i] forKey:[NSString stringWithFormat:@"CAENDacChnl%d", i]];
-        [anEncoder encodeInteger:thresholds[i] forKey:[NSString stringWithFormat:@"CAENThresChnl%d", i]];
+        [anEncoder encodeInt:thresholds[i] forKey:[NSString stringWithFormat:@"CAENThresChnl%d", i]];
         [anEncoder encodeInteger:overUnderThreshold[i] forKey:[NSString stringWithFormat:@"CAENOverUnderChnl%d", i]];
     }
 }

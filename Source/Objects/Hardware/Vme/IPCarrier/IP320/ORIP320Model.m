@@ -1030,7 +1030,7 @@ static struct {
 		time(&ut_time);
 		//struct tm* theTimeGMTAsStruct = gmtime(&theTime);
 		//time_t ut_time = mktime(theTimeGMTAsStruct);
-		data[2] = ut_time;	//seconds since 1970
+		data[2] = (uint32_t)ut_time;	//seconds since 1970
 		
 		int index = 3;
 		int i;
@@ -1067,7 +1067,7 @@ static struct {
 		time(&ut_time);
 		//struct tm* theTimeGMTAsStruct = gmtime(&theTime);
 		//time_t ut_time = mktime(theTimeGMTAsStruct);
-		data[2] = ut_time;	//seconds since 1970
+		data[2] = (uint32_t)ut_time;	//seconds since 1970
 		
 		int index = 3;
 		int n;

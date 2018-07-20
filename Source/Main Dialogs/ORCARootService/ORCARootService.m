@@ -237,7 +237,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ORCARootService);
 
 - (void)setTotalSent:(uint64_t)aTotalSent
 {
-    totalSent = (uint64_t)aTotalSent;
+    totalSent = (uint32_t)aTotalSent;
 }
 
 - (NSDate*) timeConnected

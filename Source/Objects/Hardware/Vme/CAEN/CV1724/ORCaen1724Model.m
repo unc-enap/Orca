@@ -1275,11 +1275,11 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
     [self setCoincidenceLevel:[aDecoder decodeIntegerForKey:@"ORCaen1724ModelCoincidenceLevel"]];
     [self setAcquisitionMode:[aDecoder decodeIntegerForKey:@"acquisitionMode"]];
     [self setCountAllTriggers:[aDecoder decodeBoolForKey:@"countAllTriggers"]];
-    [self setCustomSize:[aDecoder decodeIntegerForKey:@"customSize"]];
+    [self setCustomSize:[aDecoder decodeIntForKey:@"customSize"]];
 	[self setIsFixedSize:[aDecoder decodeBoolForKey:@"isFixedSize"]];
     [self setChannelConfigMask:[aDecoder decodeIntegerForKey:@"channelConfigMask"]];
     [self setWaveFormRateGroup:[aDecoder decodeObjectForKey:@"waveFormRateGroup"]];
-    [self setNumberBLTEventsToReadout:[aDecoder decodeIntegerForKey:@"numberBLTEventsToReadout"]];
+    [self setNumberBLTEventsToReadout:[aDecoder decodeIntForKey:@"numberBLTEventsToReadout"]];
     
     if(!waveFormRateGroup){
         [self setWaveFormRateGroup:[[[ORRateGroup alloc] initGroup:8 groupTag:0] autorelease]];
@@ -1309,11 +1309,11 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
 	[anEncoder encodeInteger:coincidenceLevel forKey:@"ORCaen1724ModelCoincidenceLevel"];
 	[anEncoder encodeInteger:acquisitionMode forKey:@"acquisitionMode"];
 	[anEncoder encodeBool:countAllTriggers forKey:@"countAllTriggers"];
-	[anEncoder encodeInteger:customSize forKey:@"customSize"];
+	[anEncoder encodeInt:customSize forKey:@"customSize"];
 	[anEncoder encodeBool:isFixedSize forKey:@"isFixedSize"];
 	[anEncoder encodeInteger:channelConfigMask forKey:@"channelConfigMask"];
     [anEncoder encodeObject:waveFormRateGroup forKey:@"waveFormRateGroup"];
-    [anEncoder encodeInteger:numberBLTEventsToReadout forKey:@"numberBLTEventsToReadout"];
+    [anEncoder encodeInt:numberBLTEventsToReadout forKey:@"numberBLTEventsToReadout"];
 	int i;
 	for (i = 0; i < [self numberOfChannels]; i++){
         [anEncoder encodeInteger:dac[i] forKey:[NSString stringWithFormat:@"CAENDacChnl%d", i]];

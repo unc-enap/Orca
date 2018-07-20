@@ -3985,7 +3985,7 @@ clean_up_mark:
 	triggerMemAddress		  = theSlotPart | (kFLTTriggerDataCode << kKatrinFlt_AddressSpace); 
 	memoryAddress			  = theSlotPart | (kFLTAdcDataCode << kKatrinFlt_AddressSpace); 
 	fireWireCard			  = [[self crate] adapter];
-	locationWord			  = (([self crateNumber]&0x0f)<<21) | ([self stationNumber]& 0x0000001f)<<16;
+	locationWord			  = (uint32_t)((([self crateNumber]&0x0f)<<21) | ([self stationNumber]& 0x0000001f)<<16);
   	usingPBusSimulation		  = [fireWireCard pBusSim];
 	
     // Class member to store the last handled page, ak 15.6.07

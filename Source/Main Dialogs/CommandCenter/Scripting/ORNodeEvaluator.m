@@ -1315,7 +1315,7 @@
 
 - (id) defineArray:(id) p
 {
-	int32_t n = [NodeValue(1) longValue];
+	int32_t n = (uint32_t)[NodeValue(1) longValue];
 	NSMutableArray* theArray = [NSMutableArray arrayWithCapacity:n];
 	//fill it with zeros;
 	int i;
@@ -1326,7 +1326,7 @@
 
 - (id) arrayList:(id) p
 {
-	int32_t n = [NodeValue(1) longValue];
+	int32_t n = (uint32_t)[NodeValue(1) longValue];
 	NSMutableArray* argObject = [[[NSMutableArray alloc] initWithCapacity:100] autorelease];
 	id result = NodeValueWithContainer(2,argObject);
 	if([argObject count] == 0 && result!=nil)[argObject addObject:result];
@@ -1934,8 +1934,8 @@
 
 - (id) genRandom:(id) p
 {
-    int32_t minValue = [NodeValue(0) longValue];
-    int32_t maxValue = [NodeValue(1) longValue];
+    int32_t minValue = (uint32_t)[NodeValue(0) longValue];
+    int32_t maxValue = (uint32_t)[NodeValue(1) longValue];
 	int32_t result =  (rand() % ((maxValue +1) - minValue)) + minValue;
     return [NSDecimalNumber numberWithLong:result];
 }

@@ -1065,7 +1065,7 @@ int filterGraph(nodeType*);
 	//we are a special case and might not be in the data stream if the data is coming from 
 	//the data replay object so we'll check and if needed will define data ids for ourselves.
 	NSDictionary* objDictionary = [descriptionDict objectForKey:@"ORFilterDecoderFor1D"];
-	int32_t anID = [[objDictionary objectForKey:@"dataId"] longValue];
+	int32_t anID = (uint32_t)[[objDictionary objectForKey:@"dataId"] longValue];
 	if(anID == 0){
 		uint32_t maxLongID = 0;
 		//loop over all objects in the descript and log the highest id
@@ -1075,7 +1075,7 @@ int filterGraph(nodeType*);
 			NSString* dataObjKey;
 			while(dataObjKey = [dataObjEnum nextObject]){
 				NSDictionary* lowestLevel = [objDictionary objectForKey:dataObjKey];
-				uint32_t anID = [[lowestLevel objectForKey:@"dataId"] longValue];
+				uint32_t anID = (uint32_t)[[lowestLevel objectForKey:@"dataId"] longValue];
 				if(IsLongForm(anID)){
 					anID >>= 18;
 					if(anID>maxLongID)maxLongID = anID;
@@ -1103,7 +1103,7 @@ int filterGraph(nodeType*);
 			NSDictionary* lowestLevel = [objDictionary objectForKey:dataObjKey];
 			NSString* decoderName = [lowestLevel objectForKey:@"decoder"];
 			filterData theDataType;
-			theDataType.val.lValue = [[lowestLevel objectForKey:@"dataId"] longValue];
+			theDataType.val.lValue = (uint32_t)[[lowestLevel objectForKey:@"dataId"] longValue];
 			theDataType.type  = kFilterLongType;
 			[symbolTable setData:theDataType forKey:[decoderName cStringUsingEncoding:NSASCIIStringEncoding]];
 		} 
@@ -1114,7 +1114,7 @@ int filterGraph(nodeType*);
 	filterData tempData;
 	while(anInputValueDictionary = [e nextObject]){
 		tempData.type		= kFilterLongType;
-		tempData.val.lValue = [[anInputValueDictionary objectForKey:@"iValue"] unsignedLongValue];
+		tempData.val.lValue = (uint32_t)[[anInputValueDictionary objectForKey:@"iValue"] unsignedLongValue];
 		NSString* aKey = [anInputValueDictionary objectForKey:@"name"];
 		[symbolTable setData:tempData forKey:[aKey cStringUsingEncoding:NSASCIIStringEncoding]];
 	}

@@ -2359,7 +2359,7 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
 
 - (BOOL) verifyFlashBuffer:(NSData*)theData
 {
-    uint32_t totalSize = [theData length];
+    uint32_t totalSize = (uint32_t)[theData length];
     unsigned char* theDataBytes = (unsigned char*)[theData bytes];
     
     [self setProgressStateOnMainThread:@"Verifying"];

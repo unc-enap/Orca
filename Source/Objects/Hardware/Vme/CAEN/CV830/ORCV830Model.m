@@ -373,7 +373,7 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
 		data[0] = polledDataId | 36;
 		data[1] = (([self crateNumber]&0x01e)<<21) | ([self slot]& 0x0000001f)<<16;
 		data[2] = enabledMask;
-		data[3] = lastReadTime;	//seconds since 1970
+		data[3] = (uint32_t)lastReadTime;	//seconds since 1970
 		int index = 4;
 		int i;
 		for(i=0;i<kNumCV830Channels;i++){
@@ -941,15 +941,15 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
     self = [super initWithCoder:decoder];
 	
     [[self undoManager] disableUndoRegistration];
-    [self setCount0Offset:  [decoder decodeIntegerForKey: @"count0Offset"]];
+    [self setCount0Offset:  [decoder decodeIntForKey: @"count0Offset"]];
     [self setAutoReset:		[decoder decodeBoolForKey:  @"autoReset"]];
     [self setClearMeb:		[decoder decodeBoolForKey:  @"clearMeb"]];
     [self setTestMode:		[decoder decodeBoolForKey:  @"testMode"]];
     [self setAcqMode:		[decoder decodeIntegerForKey:   @"acqMode"]];
-    [self setDwellTime:		[decoder decodeIntegerForKey: @"dwellTime"]];
+    [self setDwellTime:		[decoder decodeIntForKey: @"dwellTime"]];
 	[self setPollingState:	[decoder decodeIntegerForKey:   @"pollingState"]];
 	[self setShipRecords:	[decoder decodeBoolForKey:  @"shipRecords"]];
-	[self setEnabledMask:	[decoder decodeIntegerForKey: @"enabledMask"]];
+	[self setEnabledMask:	[decoder decodeIntForKey: @"enabledMask"]];
 	[self setReadOutGroup:	[decoder decodeObjectForKey:@"ReadoutGroup"]];
 	
     [[self undoManager] enableUndoRegistration];
@@ -970,15 +970,15 @@ NSString* ORCV830ModelAllScalerValuesChanged	= @"ORCV830ModelAllScalerValuesChan
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInteger:count0Offset   forKey:@"count0Offset"];
+    [encoder encodeInt:count0Offset   forKey:@"count0Offset"];
     [encoder encodeBool:autoReset		forKey:@"autoReset"];
     [encoder encodeBool:clearMeb		forKey:@"clearMeb"];
     [encoder encodeBool:testMode		forKey:@"testMode"];
     [encoder encodeInteger:acqMode			forKey:@"acqMode"];
     [encoder encodeInteger:dwellTime		forKey:@"dwellTime"];
-    [encoder encodeInteger:pollingState     forKey:@"pollingState"];
+    [encoder encodeInt:pollingState     forKey:@"pollingState"];
     [encoder encodeBool:shipRecords     forKey:@"shipRecords"];
-	[encoder encodeInteger:enabledMask    forKey:@"enabledMask"];
+	[encoder encodeInt:enabledMask    forKey:@"enabledMask"];
 	[encoder encodeObject:readOutGroup  forKey:@"ReadoutGroup"];
 }
 - (void) saveReadOutList:(NSFileHandle*)aFile

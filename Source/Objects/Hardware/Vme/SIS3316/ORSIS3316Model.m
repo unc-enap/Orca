@@ -4758,7 +4758,7 @@ NSString* tauTable[4] ={
     [[decoder decodeObjectForKey: @"internalCoinGateLen"]       loadULongCArray:internalCoinGateLen         size:kNumSIS3316Groups];
 
 	//clocks
-    [self setClockSource:			[decoder decodeIntegerForKey:@"clockSource"]];
+    [self setClockSource:			[decoder decodeIntForKey:@"clockSource"]];
 			
     [self setWaveFormRateGroup:     [decoder decodeObjectForKey:@"waveFormRateGroup"]];
     
@@ -4829,7 +4829,7 @@ NSString* tauTable[4] ={
     [encoder encodeInt: rawDataBufferStart         forKey:@"rawDataBufferStart"];
 
     //clocks
-    [encoder encodeInteger:   clockSource                forKey:@"clockSource"];
+    [encoder encodeInt:   clockSource                forKey:@"clockSource"];
     [encoder encodeInteger:   sharing                    forKey:@"sharing"];
 //    [encoder encodeInteger:   hsDiv                      forKey:@"hsDiv"];
 //    [encoder encodeInteger:   n1Div                      forKey:@"n1Div"];

@@ -2030,10 +2030,10 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302ReadRegs]
 							withAddMod:[self addressModifier]
 						 usingAddSpace:0x01];
 		
-		uint32_t aTriggerMask =((uint32_t)(([self gateLength:i]  & 0xffL) << 24) |
+		uint32_t aTriggerMask =((uint32_t)((([self gateLength:i]  & 0xffL) << 24) |
 		(([self pulseLength:i] & 0xffL) << 16) | 
 		(([self sumG:i]        & 0xffL) <<  8) | 
-		([self peakingTime:i] & 0xffL));
+		([self peakingTime:i] & 0xffL)));
 		
 		[[self adapter] writeLongBlock:&aTriggerMask
 							 atAddress:[self baseAddress] + [self getTriggerSetupRegOffsets:i]

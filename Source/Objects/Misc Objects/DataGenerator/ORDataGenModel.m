@@ -195,7 +195,7 @@
 	
 			 time_t	ut_Time;
 			 time(&ut_Time);
-			 uint32_t timeMeasured = ut_Time;
+			 time_t timeMeasured = ut_Time;
 			 
 			 uint32_t data[4];
 			 data[0] = timeSeriesId | 4;
@@ -207,7 +207,7 @@
 			 }theData;
 			 theData.asFloat = theValue;
 			 data[2] = theData.asLong;			 
-			 data[3] = timeMeasured;
+			 data[3] = (uint32_t)timeMeasured;
 			 
 			 [aDataPacket addLongsToFrameBuffer:data length:4];
 		 }

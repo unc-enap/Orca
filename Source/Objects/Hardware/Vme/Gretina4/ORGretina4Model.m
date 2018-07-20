@@ -2734,7 +2734,7 @@ static struct {
 
 - (void) programFlashBuffer:(NSData*)theData
 {
-    uint32_t totalSize = [theData length];
+    uint32_t totalSize =(uint32_t) [theData length];
     
     [self setProgressStateOnMainThread:@"Programming"];
     [self setFirmwareStatusString: [NSString stringWithFormat:@"FPGA File Size %u KB",totalSize/1000]];
@@ -2821,7 +2821,7 @@ static struct {
 
 - (BOOL) verifyFlashBuffer:(NSData*)theData
 {
-    uint32_t totalSize = [theData length];
+    uint32_t totalSize = (uint32_t)[theData length];
     unsigned char* theDataBytes = (unsigned char*)[theData bytes];
     
     [self setProgressStateOnMainThread:@"Verifying"];

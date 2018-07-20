@@ -492,7 +492,7 @@ NSString* ORDataTaskModelTimerEnableChanged			= @"ORDataTaskModelTimerEnableChan
 	
 	[nextObject endOfRunCleanup:userInfo];
 
-    [self setQueueCount:[transferQueue count]];
+    [self setQueueCount:(uint32_t)[transferQueue count]];
 	[self setCycleRate:0];
 }
 
@@ -681,7 +681,7 @@ static NSString *ORDataTaskTimeScaler		= @"ORDataTaskTimeScaler";
 	BOOL singleProcessor = [[ORGlobal sharedGlobal]cpuCount] == 1;
     do {
 		NSAutoreleasePool *pool = [[NSAutoreleasePool allocWithZone:nil] init];
- 		uint32_t qc = [transferQueue count];
+ 		uint32_t qc = (uint32_t)[transferQueue count];
 		if(qc){
 			queueCount = qc;
 			
@@ -729,7 +729,7 @@ static NSString *ORDataTaskTimeScaler		= @"ORDataTaskTimeScaler";
 		
 		
 		if(timeToStopProcessThread){
-			queueCount = [transferQueue count];
+			queueCount = (uint32_t)[transferQueue count];
 			if(!flushMessagePrintedOnce){
 				if(queueCount){
 					NSLog(@"flushing %d block%@from processing queue\n",queueCount,(queueCount>1)?@"s ":@" ");

@@ -174,8 +174,8 @@
 {
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
-    [self setSpecialBitMask:[decoder decodeIntegerForKey:@"specialBitMask"]];
-    [self setScaleOffset:   [decoder decodeIntegerForKey:@"scaleOffset"]];
+    [self setSpecialBitMask:[decoder decodeIntForKey:@"specialBitMask"]];
+    [self setScaleOffset:   [decoder decodeIntForKey:@"scaleOffset"]];
     [self setBitNames:      [decoder decodeObjectForKey:@"bitNames"]];
     [[self undoManager] enableUndoRegistration];
 	
@@ -185,8 +185,8 @@
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInteger:specialBitMask forKey:@"specialBitMask"];
-    [encoder encodeInteger:scaleOffset    forKey:@"scaleOffset"];
+    [encoder encodeInt:specialBitMask forKey:@"specialBitMask"];
+    [encoder encodeInt:scaleOffset    forKey:@"scaleOffset"];
     [encoder encodeObject:bitNames      forKey:@"bitNames"];
 }
 

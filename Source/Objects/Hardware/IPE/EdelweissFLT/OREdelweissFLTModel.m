@@ -3353,7 +3353,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     char filename[4*1024+1];
     uint32_t numBytes=0;
     if([aFile getCString: filename maxLength: 4*1024 encoding:NSASCIIStringEncoding]){//or use [... cStringUsingEncoding: NSASCIIStringEncoding]
-        numBytes=strlen(filename)+1;//+1 : I need the terminating /0
+        numBytes=(uint32_t)strlen(filename)+1;//+1 : I need the terminating /0
         OREdelweissSLTModel *slt=0;
         slt=[[self crate] adapter];
         [slt   chargeBBWithFile:filename numBytes:numBytes];
@@ -3653,13 +3653,13 @@ for(chan=0; chan<6;chan++)
 
 - (uint32_t) regAddress:(uint32_t)aReg channel:(int)aChannel
 {
-	return ([self stationNumber] << 17) | (aChannel << 12)   | regV4[aReg].addressOffset; //TODO: the channel ... -tb-   | ((aChannel&0x01f)<<kIpeFlt_ChannelAddress)
+	return (uint32_t)(([self stationNumber] << 17) | (aChannel << 12)   | regV4[aReg].addressOffset); //TODO: the channel ... -tb-   | ((aChannel&0x01f)<<kIpeFlt_ChannelAddress)
 }
 
 - (uint32_t) regAddress:(uint32_t)aReg
 {
 	
-	return ([self stationNumber] << 17) |  regV4[aReg].addressOffset; //TODO: NEED <<17 !!! -tb-
+	return (uint32_t)(([self stationNumber] << 17) |  regV4[aReg].addressOffset); //TODO: NEED <<17 !!! -tb-
 }
 
 - (uint32_t) adcMemoryChannel:(int)aChannel page:(int)aPage
@@ -4001,16 +4001,16 @@ for(chan=0; chan<6;chan++)
     
     int i;
     for(i=0; i<kNumEWFLTFibers; i++){
-    //[self setSaveIonChanFilterOutputRecords:[decoder decodeBoolForKey:@"saveIonChanFilterOutputRecords"]];
-    [self setRepeatSWTriggerDelay:[decoder decodeDoubleForKey:@"repeatSWTriggerDelay"]];
-    [self setHitrateLimitIon:[decoder decodeIntForKey:@"hitrateLimitIon"]];
-    [self setHitrateLimitHeat:[decoder decodeIntForKey:@"hitrateLimitHeat"]];
-    [self setChargeFICFile:[decoder decodeObjectForKey:@"chargeFICFile"]];
-        [self setFicCardTriggerCmd:[decoder decodeIntegerForKey: [NSString stringWithFormat: @"ficCardTriggerCmd%i",i]] forFiber:i];
-        [self setFicCardADC23CtrlReg:[decoder decodeIntegerForKey: [NSString stringWithFormat: @"ficCardADC23CtrlReg%i",i]] forFiber:i]; 
-        [self setFicCardADC01CtrlReg:[decoder decodeIntegerForKey: [NSString stringWithFormat: @"ficCardADC01CtrlReg%i",i]] forFiber:i];  
-        [self setFicCardCtrlReg2:[decoder decodeIntegerForKey: [NSString stringWithFormat: @"ficCardCtrlReg2%i",i]] forFiber:i]; 
-        [self setFicCardCtrlReg1:[decoder decodeIntegerForKey: [NSString stringWithFormat: @"ficCardCtrlReg1%i",i]] forFiber:i];
+        //[self setSaveIonChanFilterOutputRecords:[decoder decodeBoolForKey:@"saveIonChanFilterOutputRecords"]];
+        [self setRepeatSWTriggerDelay:[decoder decodeDoubleForKey:@"repeatSWTriggerDelay"]];
+        [self setHitrateLimitIon:[decoder decodeIntForKey:@"hitrateLimitIon"]];
+        [self setHitrateLimitHeat:[decoder decodeIntForKey:@"hitrateLimitHeat"]];
+        [self setChargeFICFile:[decoder decodeObjectForKey:@"chargeFICFile"]];
+        [self setFicCardTriggerCmd:[decoder decodeIntForKey: [NSString stringWithFormat: @"ficCardTriggerCmd%i",i]] forFiber:i];
+        [self setFicCardADC23CtrlReg:[decoder decodeIntForKey: [NSString stringWithFormat: @"ficCardADC23CtrlReg%i",i]] forFiber:i];
+        [self setFicCardADC01CtrlReg:[decoder decodeIntForKey: [NSString stringWithFormat: @"ficCardADC01CtrlReg%i",i]] forFiber:i];
+        [self setFicCardCtrlReg2:[decoder decodeIntForKey: [NSString stringWithFormat: @"ficCardCtrlReg2%i",i]] forFiber:i];
+        [self setFicCardCtrlReg1:[decoder decodeIntForKey: [NSString stringWithFormat: @"ficCardCtrlReg1%i",i]] forFiber:i];
     }
     [self setPollBBStatusIntervall:[decoder decodeIntForKey:@"pollBBStatusIntervall"]];
     [self setChargeBBFile:[decoder decodeObjectForKey:@"chargeBBFileForFiber0"] forFiber:0 ];
@@ -4019,7 +4019,7 @@ for(chan=0; chan<6;chan++)
     [self setChargeBBFile:[decoder decodeObjectForKey:@"chargeBBFileForFiber3"] forFiber:3 ];
     [self setChargeBBFile:[decoder decodeObjectForKey:@"chargeBBFileForFiber4"] forFiber:4 ];
     [self setChargeBBFile:[decoder decodeObjectForKey:@"chargeBBFileForFiber5"] forFiber:5 ];
-    [self setBB0x0ACmdMask:[decoder decodeIntegerForKey:@"BB0x0ACmdMask"]];
+    [self setBB0x0ACmdMask:[decoder decodeIntForKey:@"BB0x0ACmdMask"]];
     [self setChargeBBFile:[decoder decodeObjectForKey:@"chargeBBFile"]];
     [self setIonToHeatDelay:[decoder decodeIntForKey:@"ionToHeatDelay"]];
     [self setLowLevelRegInHex:[decoder decodeIntForKey:@"lowLevelRegInHex"]];
@@ -4143,11 +4143,11 @@ for(chan=0; chan<6;chan++)
         
     int i;
     for(i=0; i<kNumEWFLTFibers; i++){
-        [encoder encodeInteger:ficCardTriggerCmd[i] forKey: [NSString stringWithFormat: @"ficCardTriggerCmd%i",i]];
+        [encoder encodeInt:ficCardTriggerCmd[i] forKey: [NSString stringWithFormat: @"ficCardTriggerCmd%i",i]];
         [encoder encodeInteger:ficCardADC23CtrlReg[i] forKey: [NSString stringWithFormat: @"ficCardADC23CtrlReg%i",i]];
-        [encoder encodeInteger:ficCardADC01CtrlReg[i] forKey: [NSString stringWithFormat: @"ficCardADC01CtrlReg%i",i]]; 
-        [encoder encodeInteger:ficCardCtrlReg2[i] forKey: [NSString stringWithFormat: @"ficCardCtrlReg2%i",i]]; 
-        [encoder encodeInteger:ficCardCtrlReg1[i] forKey: [NSString stringWithFormat: @"ficCardCtrlReg1%i",i]];
+        [encoder encodeInt:ficCardADC01CtrlReg[i] forKey: [NSString stringWithFormat: @"ficCardADC01CtrlReg%i",i]];
+        [encoder encodeInt:ficCardCtrlReg2[i] forKey: [NSString stringWithFormat: @"ficCardCtrlReg2%i",i]];
+        [encoder encodeInt:ficCardCtrlReg1[i] forKey: [NSString stringWithFormat: @"ficCardCtrlReg1%i",i]];
     }
     [encoder encodeInt:pollBBStatusIntervall forKey:@"pollBBStatusIntervall"];
     [encoder encodeObject:chargeBBFileForFiber[0] forKey:@"chargeBBFileForFiber0"];
@@ -4156,7 +4156,7 @@ for(chan=0; chan<6;chan++)
     [encoder encodeObject:chargeBBFileForFiber[3] forKey:@"chargeBBFileForFiber3"];
     [encoder encodeObject:chargeBBFileForFiber[4] forKey:@"chargeBBFileForFiber4"];
     [encoder encodeObject:chargeBBFileForFiber[5] forKey:@"chargeBBFileForFiber5"];
-    [encoder encodeInteger:BB0x0ACmdMask forKey:@"BB0x0ACmdMask"];
+    [encoder encodeInt:BB0x0ACmdMask forKey:@"BB0x0ACmdMask"];
     [encoder encodeObject:chargeBBFile forKey:@"chargeBBFile"];
     [encoder encodeInt:ionToHeatDelay forKey:@"ionToHeatDelay"];
     [encoder encodeInt:lowLevelRegInHex forKey:@"lowLevelRegInHex"];

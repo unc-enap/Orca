@@ -400,19 +400,19 @@ static bool LJUSB_isRecentKernel(void)
     fprintf(stderr, "LJUSB_recentKernel: Kernel release: %s.\n", u.release);
 #endif
     tok = strtok(u.release, ".-");
-    kernelMajor = strtoul(tok, NULL, 10);
+    kernelMajor = (uint32_t)strtoul(tok, NULL, 10);
 #if LJ_DEBUG
     fprintf(stderr, "LJUSB_recentKernel: tok: %s\n", tok);
     fprintf(stderr, "LJUSB_recentKernel: kernelMajor: %lu\n", kernelMajor);
 #endif
     tok = strtok(NULL, ".-");
-    kernelMinor = strtoul(tok, NULL, 10);
+    kernelMinor = (uint32_t)strtoul(tok, NULL, 10);
 #if LJ_DEBUG
     fprintf(stderr, "LJUSB_recentKernel: tok: %s\n", tok);
     fprintf(stderr, "LJUSB_recentKernel: kernelMinor: %lu\n", kernelMinor);
 #endif
     tok = strtok(NULL, ".-");
-    kernelRev = strtoul(tok, NULL, 10);
+    kernelRev = (uint32_t)strtoul(tok, NULL, 10);
 #if LJ_DEBUG
     fprintf(stderr, "LJUSB_recentKernel: tok: %s\n", tok);
     fprintf(stderr, "LJUSB_recentKernel: kernelRev: %lu\n", kernelRev);

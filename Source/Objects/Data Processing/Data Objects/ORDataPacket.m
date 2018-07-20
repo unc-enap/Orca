@@ -395,7 +395,7 @@
 {
 	uint32_t theCount = 0;
 	if([theDataLock tryLock]){  //-----begin critical section
-		theCount = [dataArray count];
+		theCount = (uint32_t)[dataArray count];
 		[theDataLock unlock];   //-----end critical section
 	}
 	return theCount;

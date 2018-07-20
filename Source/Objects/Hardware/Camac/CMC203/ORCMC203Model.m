@@ -428,7 +428,7 @@ NSString* ORCMC203SettingsLock					= @"ORCMC203SettingsLock";
 	int index = 0;
 	uint32_t* ptr = (uint32_t*)[histogramData bytes];
 	ptr[0] = histoDataId | (kCMC203ReservedHistoHeaderWords + maxAdc);
-	ptr[1] = (([self crateNumber]&0xf)<<21) | (([self stationNumber]& 0x0000001f)<<16);
+	ptr[1] = (uint32_t)((([self crateNumber]&0xf)<<21) | (([self stationNumber]& 0x0000001f)<<16));
 	[[self adapter] camacLongNAF:[self stationNumber] a:10 f:2 data:&ptr[3]];		//ls histo count
 	[[self adapter] camacLongNAF:[self stationNumber] a:11 f:2 data:&ptr[4]];		//ms histo count
 	while(1){
