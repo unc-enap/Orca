@@ -847,7 +847,7 @@
         NSMutableArray* pointerArray = [NSMutableArray array];
         id obj;
         while(obj = [e nextObject]){
-            [pointerArray addObject:[NSNumber numberWithLong:(uint32_t)obj]];
+            [pointerArray addObject:[NSNumber numberWithUnsignedInteger:(NSUInteger)obj]];
         }
         
         NSMutableData *itemData = [NSMutableData data];
@@ -876,7 +876,7 @@
     NSEnumerator* e = [(ORGroup*)obj objectEnumerator];
     NSNumber* aPointer;
     while(aPointer = [e nextObject]){
-        OrcaObject* anObject = (OrcaObject*)[aPointer longValue];
+        OrcaObject* anObject = (OrcaObject*)[aPointer unsignedIntegerValue];
         if(![anObject acceptsGuardian:group]){
             goodObjectsInDrag = NO;
             break;
