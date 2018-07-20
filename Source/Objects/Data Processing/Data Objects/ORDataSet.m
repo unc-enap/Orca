@@ -1144,7 +1144,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 			[histo setKey:[nextLevel key]];
 			[histo setFullName:[[nextLevel guardian] prependFullName:[nextLevel key]]];
 			[histo setDataSet:self];
-			[histo setNumberBins:[aSpectrum length]/4];
+			[histo setNumberBins:(uint32_t)[aSpectrum length]/4];
 			[nextLevel setData:histo];
 			[histo loadData:aSpectrum];
 			[histo release];

@@ -445,7 +445,7 @@ NSString* ORAlarmAddressChanged			  = @"ORAlarmAddressChanged";
     [[(ORAppDelegate*)[NSApp delegate] undoManager] disableUndoRegistration];
         
     [self setMailAddress:[decoder decodeObjectForKey:@"Address"]];
-    [self setSeverityMask:[decoder decodeIntegerForKey:@"SeverityMask"]];
+    [self setSeverityMask:[decoder decodeIntForKey:@"SeverityMask"]];
     
     [[(ORAppDelegate*)[NSApp delegate] undoManager] enableUndoRegistration];
 	
@@ -463,7 +463,7 @@ NSString* ORAlarmAddressChanged			  = @"ORAlarmAddressChanged";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [encoder encodeObject:mailAddress forKey:@"Address"];
-    [encoder encodeInteger:severityMask forKey:@"SeverityMask"];
+    [encoder encodeInt:severityMask forKey:@"SeverityMask"];
 }
 
 #pragma mark •••Notifications

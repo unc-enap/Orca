@@ -261,7 +261,7 @@
 		}
 		if((frameIndex+length)*sizeof(int32_t)>=[frameBuffer length]){
 			[frameBuffer increaseLengthBy:(length*sizeof(int32_t))+kMinFrameBufferSize];
-			lastFrameBufferSize = [frameBuffer length];
+			lastFrameBufferSize = (uint32_t)[frameBuffer length];
 		}
 		if(frameBuffer){
 			memcpy(((uint32_t*)[frameBuffer bytes])+frameIndex,someData,length*sizeof(int32_t));
@@ -287,7 +287,7 @@
 	if([frameBuffer length]<frameIndex*sizeof(int32_t)){
 		uint32_t deltaLength = (length*sizeof(int32_t))+kMinFrameBufferSize;
 		[frameBuffer increaseLengthBy:deltaLength];
-        lastFrameBufferSize = [frameBuffer length];  
+        lastFrameBufferSize = (uint32_t)[frameBuffer length];
 	}
 	uint32_t* ptr = (uint32_t*)[frameBuffer bytes];
 	[theDataLock unlock];   //-----end critical section
@@ -308,7 +308,7 @@
 	frameIndex += length;
 	if([frameBuffer length]<=frameIndex*sizeof(int32_t)){
 		[frameBuffer increaseLengthBy:(length*sizeof(int32_t))+kMinFrameBufferSize];
-        lastFrameBufferSize = [frameBuffer length];        
+        lastFrameBufferSize = (uint32_t)[frameBuffer length];
 	}
 	[theDataLock unlock];   //-----end critical section
 	return oldIndex;
@@ -323,7 +323,7 @@
         memmove(&ptr[actualReservedLocation],&ptr[actualReservedLocation+aRange.length],(frameIndex-actualReservedLocation-aRange.length)*sizeof(int32_t));
         frameIndex -= aRange.length;
         
-        uint32_t i;
+        NSUInteger i;
         reservePool[aRange.location] = -1;
         for(i=aRange.location+1;i<reserveIndex;i++){
             reservePool[i] -= aRange.length;

@@ -420,7 +420,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
     if(!remoteControl || remoteInterface){
         NSString* fullFileName = [[[self dirName]stringByExpandingTildeInPath] stringByAppendingPathComponent:@"RunNumber"];
         NSString* s = [NSString stringWithContentsOfFile:fullFileName encoding:NSASCIIStringEncoding error:nil];
-        runNumber = [s longLongValue];
+        runNumber = (uint32_t)[s integerValue];
     }
     
     return runNumber;
@@ -1102,7 +1102,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
     data[0] = dataId | 4;
     data[1] = 0x10 | ([self subRunNumber]&0xffff)<<16;
     data[2] = lastRunNumberShipped;
-    data[3] = ut_time;
+    data[3] = (uint32_t)ut_time;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
                                                         object:[NSData dataWithBytes:data length:4*sizeof(int32_t)]];
 
@@ -1168,7 +1168,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
     data[0] = dataId | 4;
     data[1] = 0x20 | ([self subRunNumber]&0xffff)<<16;
     data[2] = lastRunNumberShipped;
-    data[3] = ut_time;
+    data[3] = (uint32_t)ut_time;
     
     [dataToBeInserted appendData:[NSMutableData dataWithBytes:data length:4*sizeof(int32_t)]];
     
@@ -1609,7 +1609,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
 	if(remoteControl) data[1] |= 0x4;
 	data[1] |= ([self subRunNumber]&0xffff)<<16;
 	data[2]  = lastRunNumberShipped;
-	data[3]  = ut_time;
+	data[3]  = (uint32_t)ut_time;
 
 	[dataPacket addLongsToFrameBuffer:data length:4];
     
@@ -1658,7 +1658,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
     //get the time(UT!)
     time_t	ut_time;
     time(&ut_time);    
-    dataHeartBeat[3] = ut_time;
+    dataHeartBeat[3] = (uint32_t)ut_time;
     
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
 														object:[NSData dataWithBytes:dataHeartBeat length:4*sizeof(int32_t)]];
@@ -1833,7 +1833,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
     }
 	
     data[2] = [self runNumber];
-    data[3] = ut_time;
+    data[3] = (uint32_t)ut_time;
 
 	[dataPacket addData:[NSMutableData dataWithBytes:data length:4*sizeof(int32_t)]];
     
@@ -2218,7 +2218,7 @@ static NSString *ORRunTypeNames 	= @"ORRunTypeNames";
     [self setShutDownScript:[decoder decodeObjectForKey:@"shutDownScript"]];
     [self setStartScript:[decoder decodeObjectForKey:@"startScript"]];
     [self setTimeLimit:[decoder decodeIntegerForKey:ORRunTimeLimit]];
-    [self setRunType:[decoder decodeIntegerForKey:ORRunType_Mask]];
+    [self setRunType:[decoder decodeIntForKey:ORRunType_Mask]];
     [self setTimedRun:[decoder decodeBoolForKey:ORRunTimedRun]];
     [self setRepeatRun:[decoder decodeBoolForKey:ORRunRepeatRun]];
     [self setQuickStart:[decoder decodeBoolForKey:ORRunQuickStart]];
@@ -2243,7 +2243,7 @@ static NSString *ORRunTypeNames 	= @"ORRunTypeNames";
     [encoder encodeObject:shutDownScript forKey:@"shutDownScript"];
     [encoder encodeObject:startScript forKey:@"startScript"];
     [encoder encodeInteger:[self timeLimit] forKey:ORRunTimeLimit];
-    [encoder encodeInteger:[self runType] forKey:ORRunType_Mask];
+    [encoder encodeInt:[self runType] forKey:ORRunType_Mask];
     [encoder encodeBool:[self timedRun] forKey:ORRunTimedRun];
     [encoder encodeBool:[self repeatRun] forKey:ORRunRepeatRun];
     [encoder encodeBool:[self quickStart] forKey:ORRunQuickStart];

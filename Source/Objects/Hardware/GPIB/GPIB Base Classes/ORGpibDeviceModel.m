@@ -492,7 +492,7 @@ NSString*   ORGpibDeviceConnectedNotification			= @"GPIB Device connected";
 	tmpString = [ self findNumber: aString withLength: aLength ];
 	if ( tmpString )
 	{
-		retVal = atol( tmpString );	
+		retVal = (int32_t)atol( tmpString );	
 	}
 	return( retVal );
 }

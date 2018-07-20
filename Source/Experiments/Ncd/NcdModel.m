@@ -903,7 +903,7 @@ static NSString *ORNcdMuxFullEfficiencyThresholds = @"ORNcdMuxFullEfficiencyThre
     [self setColorBarAttributes:[decoder decodeObjectForKey:ORNcdColorBarAttributes]];
     [self setXAttributes:[decoder decodeObjectForKey:ORNcdXAttributes]];
     [self setYAttributes:[decoder decodeObjectForKey:ORNcdYAttributes]];
-    [self setDisplayOptionMask:[decoder decodeIntegerForKey:ORNcdDisplayOptionMask]];
+    [self setDisplayOptionMask:[decoder decodeIntForKey:ORNcdDisplayOptionMask]];
     
     [self setHardwareCheck:[decoder decodeIntForKey:ORNcdHardwareCheck]];
     [self setShaperCheck:[decoder decodeIntForKey:ORNcdShaperCheck]];
@@ -945,7 +945,7 @@ static NSString *ORNcdMuxFullEfficiencyThresholds = @"ORNcdMuxFullEfficiencyThre
     [encoder encodeObject:ncdCableCheckTask forKey:ORNcdCableCheckTask];
     
     [encoder encodeObject:colorBarAttributes forKey:ORNcdColorBarAttributes];
-    [encoder encodeInteger:displayOptionMask forKey:ORNcdDisplayOptionMask];
+    [encoder encodeInt:displayOptionMask forKey:ORNcdDisplayOptionMask];
     [encoder encodeObject:xAttributes forKey:ORNcdXAttributes];
     [encoder encodeObject:yAttributes forKey:ORNcdYAttributes];
     

@@ -2121,7 +2121,7 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
                         linkWasLost << 5   |            //link was lost
                         doNotLock   << 6   |            //do Not Lock option bit
                         ([self uniqueIdNumber]&0xf);    //Location and spare bits
-            data[2] = ut_Time;                          //Mac Unix time
+            data[2] = (uint32_t)ut_Time;                          //Mac Unix time
             data[3] = timeStampA;                       //timeStampA (high bits) + 16 bits spare
             data[4] = (timeStampB<<16) | timeStampC;
             
@@ -2272,7 +2272,7 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
 
 - (void) programFlashBuffer:(NSData*)theData
 {
-    uint32_t totalSize = [theData length];
+    uint32_t totalSize = (uint32_t)[theData length];
     
     [self setProgressStateOnMainThread:@"Programming"];
     [self setFirmwareStatusString: [NSString stringWithFormat:@"FPGA File Size %u KB",totalSize/1000]];

@@ -316,7 +316,7 @@ NSString* ORDataTaskModelTimerEnableChanged			= @"ORDataTaskModelTimerEnableChan
 		NSLogColor([NSColor redColor],@"----------------------------------------------------------\n");
 	}
 	
-    cachedNumberDataTakers = [dataTakers count];
+    cachedNumberDataTakers = (uint32_t)[dataTakers count];
 
     if(cachedNumberDataTakers) cachedDataTakers = (id*)malloc(cachedNumberDataTakers * sizeof(id));
 	

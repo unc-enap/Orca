@@ -432,7 +432,7 @@ static NSString *ORHistoPassThruConnection 	= @"Histogrammer PassThru Connector"
 		id header = [userInfo objectForKey:kHeader];
 		NSArray* dataChainObjects = [header objectForNestedKey:@"ObjectInfo,DataChain"];
 		NSDictionary* runControlEntry = [(NSDictionary*)[dataChainObjects objectAtIndex:0] objectForKey:@"Run Control"];
-		runNumber = [[runControlEntry objectForKey:@"RunNumber"] longValue];
+		runNumber = (uint32_t)[[runControlEntry objectForKey:@"RunNumber"] longValue];
 	}	  
 	[dataSet setRunNumber:runNumber];
 	

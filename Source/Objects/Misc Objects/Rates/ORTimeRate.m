@@ -155,13 +155,13 @@ static NSString *ORTimeRate_SampleTime 	= @"ORTimeRate_SampleTime";
 - (id)initWithCoder:(NSCoder*)decoder
 {
     self = [super init];
-    [self setSampleTime:[decoder decodeIntegerForKey:ORTimeRate_SampleTime]];
+    [self setSampleTime:[decoder decodeIntForKey:ORTimeRate_SampleTime]];
     return self;
 }
 
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
-    [encoder encodeInteger:[self sampleTime] forKey:ORTimeRate_SampleTime];
+    [encoder encodeInt:[self sampleTime] forKey:ORTimeRate_SampleTime];
 }
 
 @end

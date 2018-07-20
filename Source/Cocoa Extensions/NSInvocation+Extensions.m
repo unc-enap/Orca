@@ -150,7 +150,7 @@
         [self setArgument:&c atIndex:argIndex];
     }
     else if(*theArg == 'L'){
-        uint32_t c = [aVal unsignedLongValue];
+        uint32_t c = (uint32_t)[aVal unsignedLongValue];
         [self setArgument:&c atIndex:argIndex];
     }
     else if(*theArg == 'Q'){

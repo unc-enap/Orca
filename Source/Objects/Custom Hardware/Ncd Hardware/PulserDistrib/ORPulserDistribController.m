@@ -72,21 +72,21 @@
 
 - (void) patternChanged:(NSNotification*)aNotification
 {
-	int32_t patternMask = [[[model patternArray] objectAtIndex:0] longValue];
+	uint32_t patternMask = (int32_t)[[[model patternArray] objectAtIndex:0] longValue];
 	short bit;
 	for(bit=0;bit< [patternMatrix0 numberOfColumns];bit++){
 		[[patternMatrix0 cellWithTag:bit] setState:(patternMask&(1L<<bit)) > 0L];
 	}
 	
-	patternMask = [[[model patternArray] objectAtIndex:1] longValue];
+	patternMask = (int32_t)[[[model patternArray] objectAtIndex:1] longValue];
 	for(bit=0;bit< [patternMatrix1 numberOfColumns];bit++){
 		[[patternMatrix1 cellWithTag:bit] setState:(patternMask&(1L<<bit)) > 0L];
 	}
-	patternMask = [[[model patternArray] objectAtIndex:2] longValue];
+	patternMask = (int32_t)[[[model patternArray] objectAtIndex:2] longValue];
 	for(bit=0;bit< [patternMatrix2 numberOfColumns];bit++){
 		[[patternMatrix2 cellWithTag:bit] setState:(patternMask&(1L<<bit)) > 0L];
 	}
-	patternMask = [[[model patternArray] objectAtIndex:3] longValue];
+	patternMask = (int32_t)[[[model patternArray] objectAtIndex:3] longValue];
 	for(bit=0;bit< [patternMatrix3 numberOfColumns];bit++){
 		[[patternMatrix3 cellWithTag:bit] setState:(patternMask&(1L<<bit)) > 0L];
 	}

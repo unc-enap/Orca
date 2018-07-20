@@ -198,7 +198,7 @@ NSString* ORPulserDisableForPulserChangedNotification = @"ORPulserDisableForPuls
 
 -(uint32_t)patternMaskForArray:(int)arrayIndex
 {
-    return [[patternArray objectAtIndex:arrayIndex] longValue];
+    return (uint32_t)[[patternArray objectAtIndex:arrayIndex] longValue];
 }
 
 -(void)setPatternMaskForArray:(int)arrayIndex to:(uint32_t)aValue
@@ -346,7 +346,7 @@ static NSString *ORPulserDisableForPulser    = @"ORPulserDisableForPulser";
 			short i=0;
 			if(!packedArray)packedArray = [[NSMutableArray arrayWithCapacity:16]retain];
 			while(maskPattern = [e nextObject]){
-				uint32_t value = [maskPattern longValue];
+				uint32_t value = (uint32_t)[maskPattern longValue];
 				[packedArray addObject:[NSNumber numberWithUnsignedChar:value&0x00ff]];
 				[packedArray addObject:[NSNumber numberWithUnsignedChar:(value&0xff00)>>8]];
 			}
@@ -432,8 +432,8 @@ static NSString *ORPulserDisableForPulser    = @"ORPulserDisableForPulser";
         ORIP408Model* the408 = [self objectConnectedTo:ORPulserDistrib408Connector];
         uint32_t gtid = [[[the408 guardian] crate] requestGTID];
         dataWord[1] = gtid;    
-        dataWord[2] = ([[aPatternArray objectAtIndex:1] longValue] & 0x0000ffff)<<16 | ([[aPatternArray objectAtIndex:0] longValue] & 0x0000ffff);
-        dataWord[3] = ([[aPatternArray objectAtIndex:3] longValue] & 0x0000ffff)<<16 | ([[aPatternArray objectAtIndex:2] longValue] & 0x0000ffff);
+        dataWord[2] = (uint32_t)([[aPatternArray objectAtIndex:1] longValue] & 0x0000ffff)<<16 | ([[aPatternArray objectAtIndex:0] longValue] & 0x0000ffff);
+        dataWord[3] = (uint32_t)([[aPatternArray objectAtIndex:3] longValue] & 0x0000ffff)<<16 | ([[aPatternArray objectAtIndex:2] longValue] & 0x0000ffff);
 		
         //now that we know the size we fill in the header and ship
         [[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 

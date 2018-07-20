@@ -679,7 +679,7 @@ static NSString *ORTriggerUseMSAM		= @"ORTriggerUseMSAM";
     [self setInitWithTrig2InhibitEnabled:[decoder decodeBoolForKey:ORTriggerInitWithTrig2InhibitEnabled]];
     
     [self setUseSoftwareGtId:[decoder decodeBoolForKey:ORTriggerUseSoftwareGtId]];
-    [self setSoftwareGtId:[decoder decodeIntegerForKey:ORTriggerSoftwareGtId]];
+    [self setSoftwareGtId:[decoder decodeIntForKey:ORTriggerSoftwareGtId]];
     
     [self setTrigger1Name:[decoder decodeObjectForKey:ORTrigger1Name]];
     [self setTrigger2Name:[decoder decodeObjectForKey:ORTrigger2Name]];
@@ -719,7 +719,7 @@ static NSString *ORTriggerUseMSAM		= @"ORTriggerUseMSAM";
     [encoder encodeBool:[self initWithTrig2InhibitEnabled] forKey:ORTriggerInitWithTrig2InhibitEnabled];
     
     [encoder encodeBool:[self useSoftwareGtId] forKey:ORTriggerUseSoftwareGtId];
-    [encoder encodeInteger:[self softwareGtId] forKey:ORTriggerSoftwareGtId];
+    [encoder encodeInt:[self softwareGtId] forKey:ORTriggerSoftwareGtId];
     
     [encoder encodeObject:[self trigger1Name] forKey:ORTrigger1Name];
     [encoder encodeObject:[self trigger2Name] forKey:ORTrigger2Name];

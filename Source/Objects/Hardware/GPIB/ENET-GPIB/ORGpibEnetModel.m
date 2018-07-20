@@ -502,7 +502,7 @@ NSString*			ORGPIBBoardChangedNotification = @"ORGpibBoardChangedNotification";
         // Write to device.
         [ gpibEnetInstance ibwrt:mDeviceUnit[ aPrimaryAddress ]
 							 buf:(char *)[ aCommand cStringUsingEncoding:NSASCIIStringEncoding ]
-							 cnt:[ aCommand length ] ];
+							 cnt:(int32_t)[ aCommand length ] ];
         if ( [ gpibEnetInstance ibsta ] & [ gpibEnetInstance err ] ) {
             [ mErrorMsg setString:  @"***Error: ibwrt" ];
             [ self GpibError: mErrorMsg ]; 

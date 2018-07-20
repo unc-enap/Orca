@@ -1041,7 +1041,7 @@ static void _cfsocketCallback( CFSocketRef inCFSocketRef, CFSocketCallBackType i
     }
     
     if( [mDelegate respondsToSelector:@selector( netsocketDataInOutgoingBuffer:length: )] ){
-        [mDelegate netsocketDataInOutgoingBuffer:self length:[mOutgoingBuffer length]];
+        [mDelegate netsocketDataInOutgoingBuffer:self length:(int32_t)[mOutgoingBuffer length]];
     }
 
     // Remove the data we managed to write to the socket
@@ -1050,10 +1050,10 @@ static void _cfsocketCallback( CFSocketRef inCFSocketRef, CFSocketCallBackType i
     // If our outgoing buffer is empty, notify our delegate to update
     if( amountSent > 0){
 		if( [mDelegate respondsToSelector:@selector( netsocketDataSent:length: )] ){
-			[mDelegate netsocketDataSent:self length:amountSent];
+			[mDelegate netsocketDataSent:self length:(int32_t)amountSent];
         }
     }
-    uint32_t len = [mOutgoingBuffer length];
+    uint32_t len = (uint32_t)[mOutgoingBuffer length];
     if((mBufferStatus!=mOldBufferStatus) || (len != mOldAmountInBuffer)){
         if( [mDelegate respondsToSelector:@selector( netsocket:status: )] ){
             [mDelegate netsocket:self status:mBufferStatus];

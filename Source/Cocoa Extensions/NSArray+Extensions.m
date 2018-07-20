@@ -147,49 +147,49 @@
 }
 - (void) loadLongCArray:(int32_t*)cArray size:(int)num
 {
-    uint32_t n = MIN([self count],num);
+    uint32_t n = (uint32_t)MIN([self count],num);
     int i;
-    for(i=0;i<n;i++)cArray[i] = [[self objectAtIndex:i] longValue];
+    for(i=0;i<n;i++)cArray[i] = (uint32_t)[[self objectAtIndex:i] longValue];
 }
 
 
 - (void) loadULongCArray:(uint32_t*)cArray size:(int)num
 {
-    uint32_t n = MIN([self count],num);
+    uint32_t n = (uint32_t)MIN([self count],num);
     int i;
-    for(i=0;i<n;i++)cArray[i] = [[self objectAtIndex:i] unsignedLongValue];
+    for(i=0;i<n;i++)cArray[i] = (uint32_t)[[self objectAtIndex:i] unsignedLongValue];
 }
 
 
 - (void) loadShortCArray:(short*)cArray size:(int)num
 {
-    uint32_t n = MIN([self count],num);
+    uint32_t n = (uint32_t)MIN([self count],num);
     int i;
     for(i=0;i<n;i++)cArray[i] = [[self objectAtIndex:i] shortValue];
 }
 
 - (void) loadUShortCArray:(unsigned short*)cArray size:(int)num
 {
-    uint32_t n = MIN([self count],num);
+    uint32_t n = (uint32_t)MIN([self count],num);
     int i;
     for(i=0;i<n;i++)cArray[i] = [[self objectAtIndex:i] unsignedShortValue];
 }
 
 - (void) loadBoolCArray:(BOOL*)cArray size:(int)num
 {
-    uint32_t n = MIN([self count],num);
+    uint32_t n = (uint32_t)MIN([self count],num);
     int i;
     for(i=0;i<n;i++)cArray[i] = [[self objectAtIndex:i] boolValue];
 }
 - (void) loadCharCArray:(char*)cArray size:(int)num
 {
-    uint32_t n = MIN([self count],num);
+    uint32_t n = (uint32_t)MIN([self count],num);
     int i;
     for(i=0;i<n;i++)cArray[i] = [[self objectAtIndex:i] charValue];
 }
 - (void) loadUCharCArray:(unsigned char*)cArray size:(int)num
 {
-    uint32_t n = MIN([self count],num);
+    uint32_t n = (uint32_t)MIN([self count],num);
     int i;
     for(i=0;i<n;i++)cArray[i] = [[self objectAtIndex:i] unsignedCharValue];
 }

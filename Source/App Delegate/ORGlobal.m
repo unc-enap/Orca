@@ -127,7 +127,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(Global);
 - (void) runStatusChanged:(NSNotification*)aNotification
 {
     [self setRunState: [[[aNotification userInfo] objectForKey:ORRunStatusValue] intValue]];
-    [self setRunType: [[[aNotification userInfo] objectForKey:ORRunTypeMask] longValue]];
+    [self setRunType: (uint32_t)[[[aNotification userInfo] objectForKey:ORRunTypeMask] longValue]];
     if(runState == eRunStarting){
         [[ORStatusController sharedStatusController] clearAllAction:nil];
     }

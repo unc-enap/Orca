@@ -489,7 +489,7 @@ static RegisterNamesStruct reg[kNumRegisters] = {
     [[self undoManager] disableUndoRegistration];
 
 	[self setModelType:[aDecoder decodeIntForKey:@"modelType"]];
-	[self setOnlineMask:[aDecoder decodeIntegerForKey:@"onlineMask"]];
+	[self setOnlineMask:[aDecoder decodeIntForKey:@"onlineMask"]];
 
     [[self undoManager] enableUndoRegistration];
     return self;
@@ -499,7 +499,7 @@ static RegisterNamesStruct reg[kNumRegisters] = {
 {
     [super encodeWithCoder:anEncoder];
 	[anEncoder encodeInteger:modelType forKey:@"modelType"];
-	[anEncoder encodeInteger:onlineMask forKey:@"onlineMask"];
+	[anEncoder encodeInt:onlineMask forKey:@"onlineMask"];
 }
 
 @end

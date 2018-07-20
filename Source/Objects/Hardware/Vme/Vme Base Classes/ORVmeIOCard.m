@@ -120,8 +120,8 @@ static NSString *ORVmeCardAddressModifier 	= @"vme Address Modifier";
     
 	[[self undoManager] disableUndoRegistration];
     
-	[self setBaseAddress:[decoder decodeIntegerForKey:ORVmeCardBaseAddress]];
-	[self setAddressModifier:[decoder decodeIntegerForKey:ORVmeCardAddressModifier]];
+	[self setBaseAddress:[decoder decodeIntForKey:ORVmeCardBaseAddress]];
+	[self setAddressModifier:[decoder decodeIntForKey:ORVmeCardAddressModifier]];
     
 	[[self undoManager] enableUndoRegistration];
     
@@ -131,8 +131,8 @@ static NSString *ORVmeCardAddressModifier 	= @"vme Address Modifier";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-	[encoder encodeInteger:[self baseAddress] forKey:ORVmeCardBaseAddress];
-	[encoder encodeInteger:[self addressModifier] forKey:ORVmeCardAddressModifier];
+	[encoder encodeInt:[self baseAddress] forKey:ORVmeCardBaseAddress];
+	[encoder encodeInt:[self addressModifier] forKey:ORVmeCardAddressModifier];
 }
 
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary

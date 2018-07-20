@@ -168,7 +168,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(Security);
 {
     superUnlockMask = 0;
     for(id aKey in superUnlockMaskRequests){
-        uint32_t aMask = [[superUnlockMaskRequests objectForKey:aKey] unsignedLongValue];
+        uint32_t aMask = (uint32_t)[[superUnlockMaskRequests objectForKey:aKey] unsignedLongValue];
         superUnlockMask |= aMask;
     }
 }

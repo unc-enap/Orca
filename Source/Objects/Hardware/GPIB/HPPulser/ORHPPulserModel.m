@@ -638,7 +638,7 @@ static HPPulserCustomWaveformStruct waveformData[kNumWaveforms] = {
                                  maxLength: 256 ];
         reply[n] = '\n';
         NSString* s =  [NSString stringWithCString:reply encoding:NSASCIIStringEncoding];
-        int32_t nlPos = [s rangeOfString:@"\n"].location;
+        NSUInteger nlPos = [s rangeOfString:@"\n"].location;
         if(nlPos != NSNotFound){
             s = [s substringWithRange:NSMakeRange(0,nlPos)];
         }

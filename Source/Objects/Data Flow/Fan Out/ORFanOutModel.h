@@ -30,7 +30,7 @@
     int			 lineType;
     NSColor*	 lineColor;
 	NSMutableArray* cachedProcessors;
-	uint32_t cachedProcessorsCount;
+	NSUInteger cachedProcessorsCount;
 }
 
 #pragma mark ¥¥¥Initialization

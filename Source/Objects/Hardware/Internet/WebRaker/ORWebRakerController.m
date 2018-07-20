@@ -233,7 +233,7 @@
         
         //do the plot set up here since we didn't know the number of plots until now
         
-        int32_t plotCountDiff = [model numDataItems] - [plotter0 numberOfPlots];
+        int32_t plotCountDiff = (int32_t)[model numDataItems] - [plotter0 numberOfPlots];
         if(plotCountDiff != 0){
         [plotter0 removeAllPlots];
             NSColor* theColors[10] =

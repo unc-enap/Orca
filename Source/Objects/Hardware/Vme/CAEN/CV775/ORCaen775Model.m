@@ -520,7 +520,7 @@ static RegisterNamesStruct reg[kNumRegisters] = {
     [self setFullScaleRange:[aDecoder decodeIntegerForKey:@"fullScaleRange"]];
     [self setCommonStopMode:	[aDecoder decodeBoolForKey:@"commonStopMode"]];
     [self setModelType:			[aDecoder decodeIntForKey:@"modelType"]];
-   	[self setOnlineMask:		[aDecoder decodeIntegerForKey:@"onlineMask"]];
+   	[self setOnlineMask:		[aDecoder decodeIntForKey:@"onlineMask"]];
  
     [[self undoManager] enableUndoRegistration];
     return self;
@@ -533,7 +533,7 @@ static RegisterNamesStruct reg[kNumRegisters] = {
 	[anEncoder encodeInteger:(int32_t)fullScaleRange forKey:@"fullScaleRange"];
 	[anEncoder encodeBool:commonStopMode	forKey:@"commonStopMode"];
 	[anEncoder encodeInteger:modelType			forKey:@"modelType"];
-	[anEncoder encodeInteger:onlineMask		forKey:@"onlineMask"];
+	[anEncoder encodeInt:onlineMask		forKey:@"onlineMask"];
 }
 
 @end
