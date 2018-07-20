@@ -177,7 +177,7 @@
     NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter]; 
 	[notifyCenter removeObserver:self name:ORSerialPortDataReceived object:nil];
 	if([aNote object] == serialPortView || !aNote){
-		int32_t index = [serialPortView selectedRow];
+		int32_t index = (int32_t)[serialPortView selectedRow];
 		if(index >= 0){
             ORSerialPort* thePort = [[ORSerialPortList sharedSerialPortList] objectAtIndex: index];
 			[selectedPortNameField setStringValue:[thePort name]];
@@ -229,7 +229,7 @@
 	}
 
 	if([aNote object] == usbDevicesView  || !aNote){
-		int32_t index = [usbDevicesView selectedRow];
+		int32_t index = (int32_t)[usbDevicesView selectedRow];
 		if(index>=0 && [model usbDeviceCount]>0)[usbDetailsView setString:[[model usbDeviceAtIndex:index] usbInterfaceDescription]];
 		else [usbDetailsView setString:@"<nothing selected>"];
 	}
@@ -249,7 +249,7 @@
     [self tableViewSelectionDidChange:nil];
     [groupView setNeedsDisplay:YES];
     [self reloadSerialPortList];
-	int32_t index = [usbDevicesView selectedRow];
+	int32_t index = (uint32_t)[usbDevicesView selectedRow];
 	if(index>=0 && [model usbDeviceCount]>0)[usbDetailsView setString:[[model usbDeviceAtIndex:index] usbInterfaceDescription]];
 	else [usbDetailsView setString:@"<nothing selected>"];
 	[self eolTypeChanged:nil];
@@ -275,7 +275,7 @@
 {
     [usbDevicesView reloadData];
 	
-	int32_t index = [usbDevicesView selectedRow];
+	int32_t index = (uint32_t)[usbDevicesView selectedRow];
 	if(index>=0 && [model usbDeviceCount]>0)[usbDetailsView setString:[[model usbDeviceAtIndex:index] usbInterfaceDescription]];
 	else [usbDetailsView setString:@"<nothing selected>"];
 }
@@ -292,7 +292,7 @@
 
 - (void) dataReceived:(NSNotification*)note
 {
-    int32_t index = [serialPortView selectedRow];
+    int32_t index = (uint32_t)[serialPortView selectedRow];
     if(index >=0){
         ORSerialPort* thePort = [[ORSerialPortList sharedSerialPortList] objectAtIndex:index];
         if([[note userInfo] objectForKey:@"serialPort"] == thePort){
@@ -345,7 +345,7 @@
 
 - (IBAction) openPortAction:(id)sender
 {
-    int32_t index = [serialPortView selectedRow];
+    int32_t index = (uint32_t)[serialPortView selectedRow];
     if(index >=0){
         ORSerialPort* thePort = [[ORSerialPortList sharedSerialPortList] objectAtIndex:index];
         if([thePort isOpen]){
@@ -361,7 +361,7 @@
 
 - (IBAction) optionAction:(id)sender
 {
-    int32_t index = [serialPortView selectedRow];
+    int32_t index = (uint32_t)[serialPortView selectedRow];
     if(index >=0){
         ORSerialPort* thePort = [[ORSerialPortList sharedSerialPortList] objectAtIndex:index];
         if([thePort isOpen]){
@@ -399,7 +399,7 @@
 - (IBAction) sendAction:(id)sender
 {
     [self endEditing];
-    int32_t index = [serialPortView selectedRow];
+    int32_t index = (uint32_t)[serialPortView selectedRow];
     if(index >= 0){
         ORSerialPort* thePort = [[ORSerialPortList sharedSerialPortList] objectAtIndex:index];
         if([thePort isOpen]){

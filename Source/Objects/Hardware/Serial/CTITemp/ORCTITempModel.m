@@ -216,7 +216,7 @@ NSString* ORCTITempLock = @"ORCTITempLock";
 	time_t	ut_Time;
 	time(&ut_Time);
 	//struct tm* theTimeGMTAsStruct = gmtime(&theTime);
-	timeMeasured = ut_Time;
+	timeMeasured = (uint32_t)ut_Time;
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORCTITempTempChanged 
 														object:self]; 

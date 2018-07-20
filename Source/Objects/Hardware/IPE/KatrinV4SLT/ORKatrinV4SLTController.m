@@ -597,7 +597,7 @@
 
 - (IBAction) testPatternEnableAction:(id)sender;
 {
-	uint32_t aMask       = [[testPatternEnableMatrix selectedCell] tag];
+	uint32_t aMask       = (uint32_t)[[testPatternEnableMatrix selectedCell] tag];
 	uint32_t theRegValue = [model controlReg] & ~kCtrlTpEnMask; 
 	theRegValue |= (aMask<<kCtrlTpEnEnShift);
 	[model setControlReg:theRegValue];

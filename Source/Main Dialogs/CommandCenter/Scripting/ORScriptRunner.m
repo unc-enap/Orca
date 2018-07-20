@@ -453,7 +453,7 @@ int OrcaScriptYYINPUT(char* theBuffer,uint32_t maxSize)
 #pragma mark ¥¥¥Yacc Input
 -(uint32_t)yyinputToBuffer:(char* )theBuffer withSize:(int)maxSize
 {
-	uint32_t theNumberOfBytesRemaining = ([expressionAsData length] - yaccInputPosition);
+	uint32_t theNumberOfBytesRemaining = (uint32_t)([expressionAsData length] - yaccInputPosition);
 	uint32_t theCopySize = maxSize < theNumberOfBytesRemaining ? maxSize : theNumberOfBytesRemaining;
 	[expressionAsData getBytes:theBuffer range:NSMakeRange(yaccInputPosition,theCopySize)];  
 	yaccInputPosition = yaccInputPosition + theCopySize;

@@ -111,7 +111,7 @@
 
 - (void) scanForNext:(id)currentDataName
 {
-    uint32_t num = [[model dataRecords] count];
+    uint32_t num = (uint32_t)[[model dataRecords] count];
     if(stopScan || currentSearchIndex>=num){
         [self setScanInProgress:NO];
         return;
@@ -269,7 +269,7 @@
 
 - (void) catalogAll
 {
-    uint32_t num = [[model dataRecords] count];
+    uint32_t num = (uint32_t)[[model dataRecords] count];
 	if(num >0){
 	
 		if([model multiCatalog])[model setHistoErrorFlag:YES];
@@ -563,7 +563,7 @@
 - (void) tableViewSelectionDidChange:(NSNotification *)aNotification
 {
     NSTableView* tv = [aNotification object];
-    NSInteger row = [tv selectedRow];
+    uint32_t row = (uint32_t)[tv selectedRow];
     if(tv == dataView && row != -1){
         [self process:row];
 		if([model multiCatalog])[model setHistoErrorFlag:YES];
@@ -574,7 +574,7 @@
 {
     if(![model dataSet])[model createDataSet];
     NSMutableDictionary* dataDictionary = [model dataRecordAtIndex:(int)row];
-    uint32_t offset = [[dataDictionary objectForKey:@"StartingOffset"] longValue];
+    uint32_t offset = (uint32_t)[[dataDictionary objectForKey:@"StartingOffset"] longValue];
     id aKey = [dataDictionary objectForKey:@"Key"];
 	BOOL alreadyDecodedOnce = [[dataDictionary objectForKey:@"DecodedOnce"] boolValue];
     if(!alreadyDecodedOnce || [model multiCatalog]){

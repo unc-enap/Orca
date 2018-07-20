@@ -146,7 +146,7 @@ NSString* OROnCallListModelEdited           = @"OROnCallListMessageChanged";
 	else return nil;
 }
 
-- (uint32_t) onCallListCount { return [onCallList count]; }
+- (uint32_t) onCallListCount { return (uint32_t)[onCallList count]; }
 - (BOOL) notificationScheduled
 {
     return notificationTimer != nil;

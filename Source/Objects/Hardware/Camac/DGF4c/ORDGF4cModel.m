@@ -820,7 +820,7 @@ enum {
 		
 		NSLog(@"Begining DFG4c (station %d) System Configuration\n",[self stationNumber]);
 		NSData* fpgaData = [NSData dataWithContentsOfFile:filePath];
-		uint32_t len = [fpgaData length];
+		uint32_t len = (uint32_t)[fpgaData length];
 		if(fpgaData){
 			int i;
 			const unsigned char* dataPtr = (unsigned char*)[fpgaData bytes];
@@ -845,8 +845,8 @@ enum {
 	[self writeICSR:0xF0];	//configure the Trigger/Filter FPGA
 	[ORTimer delay:0.060];	//delay at least 50ms
     
-	NSData* fpgaData        = [NSData dataWithContentsOfFile:filePath];
-	uint32_t len		= [fpgaData length];
+	NSData* fpgaData    = [NSData dataWithContentsOfFile:filePath];
+	uint32_t len		= (uint32_t)[fpgaData length];
 	controller = [[self adapter] controller]; //cache the controller for alittle bit more speed.
 	if(fpgaData){
 		int i;
@@ -968,7 +968,7 @@ enum {
         
         NSLog(@"Begining DFG4c (station %d) DSP load/boot\n",[self stationNumber]);
         NSData* fpgaData = [NSData dataWithContentsOfFile:dspCodePath];
-        uint32_t len = [fpgaData length]/4;
+        uint32_t len = (uint32_t)[fpgaData length]/4;
         if(fpgaData && len){
             int i;
             const uint32_t* dataPtr = (uint32_t*)[fpgaData bytes];
@@ -1774,7 +1774,7 @@ enum {
     
     //----------------------------------------------------------------------------------------
     controller = [[self adapter] controller]; //cache the controller for alittle bit more speed.
-    unChangingDataPart   = (([self crateNumber]&0xf)<<21) | (([self stationNumber]& 0x0000001f)<<16); //doesn't change so do it here.
+    unChangingDataPart   = (([self crateNumber]&0xf)<<21) | (((uint32_t)[self stationNumber]& 0x0000001f)<<16); //doesn't change so do it here.
 	cachedStation = [self stationNumber];
     [self clearExceptionCount];
     
@@ -1923,7 +1923,7 @@ enum {
 	
 	liveTimeData[0] = liveTimeId | 19;		//old version == 13 new version == 19
 	liveTimeData[1] = 0;					//spare
-	liveTimeData[2] = (([self crateNumber]&0xf)<<21) | (([self stationNumber]& 0x0000001f)<<16);
+	liveTimeData[2] = (([self crateNumber]&0xf)<<21) | (((uint32_t)[self stationNumber]& 0x0000001f)<<16);
 	
 	int chan;
 	

@@ -1295,7 +1295,7 @@
 {
     uint32_t regValue = [model extDiscriminatorSrc];
     unsigned short chan    = [sender selectedRow];
-    uint32_t value   = [[sender selectedCell] indexOfSelectedItem];
+    uint32_t value   = (uint32_t)[[sender selectedCell] indexOfSelectedItem];
     regValue &= ~(0x00000007<<(chan*3));
     regValue |= ((value&0x7)<<(chan*3));
     [model setExtDiscriminatorSrc:regValue];
@@ -1305,7 +1305,7 @@
 {
     uint32_t regValue = [model extDiscriminatorMode];
     unsigned short chan    = [sender selectedRow];
-    uint32_t value   = [[sender selectedCell] indexOfSelectedItem];
+    uint32_t value   = (uint32_t)[[sender selectedCell] indexOfSelectedItem];
     regValue &= ~(0x00000003<<(chan*2));
     regValue |= ((value&0x3)<<(chan*2));
     [model setExtDiscriminatorMode:regValue];

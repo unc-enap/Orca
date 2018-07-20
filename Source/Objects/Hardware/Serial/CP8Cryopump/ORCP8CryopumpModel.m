@@ -632,7 +632,7 @@ NSString* ORCP8CryopumpConstraintsDisabledChanged    = @"ORCP8CryopumpConstraint
     //get the time(UT!)
 	time_t	ut_Time;
 	time(&ut_Time);
-	timeMeasured = ut_Time;
+	timeMeasured = (uint32_t)ut_Time;
     
 	if(timeRates[0] == nil) timeRates[0] = [[ORTimeRate alloc] init];
 	[timeRates[0] addDataToTimeAverage:firstStageTemp];

@@ -56,7 +56,7 @@
         uint32_t           i, count;
         NSRect                  frame;
 
-        count = MIN( [viewRects count], [views count] );
+        count = (uint32_t)(MIN( [viewRects count], [views count] ));
 
         for( i = 0; i < count; i++ )
         {

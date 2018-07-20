@@ -673,14 +673,14 @@ struct {
 	if([gOrcaGlobals runInProgress]){
 		uint32_t data[32];
 		
-		data[1] = (([self crateNumber]&0x01e)<<21) | (([self stationNumber]& 0x0000001f)<<16);
+		data[1] = (uint32_t)((([self crateNumber]&0x01e)<<21) | (([self stationNumber]& 0x0000001f)<<16));
 		
 		//get the time(UT!)
 		time_t	ut_time;
 		time(&ut_time);
 		//struct tm* theTimeGMTAsStruct = gmtime(&theTime);
 		//time_t ut_time = mktime(theTimeGMTAsStruct);
-		data[2] = ut_time;	//seconds since 1970
+		data[2] = (uint32_t)ut_time;	//seconds since 1970
 		
 		int index = 3;
 		int i;

@@ -263,7 +263,7 @@ void registryChanged(
 	if(!fwBus){
 		fwBus = [[ORFireWireBus alloc] init];
 	}
-	return [fwBus getFireWireInterface:aVenderID];
+	return [fwBus getFireWireInterface:(uint32_t)aVenderID];
 }
 
 #pragma mark ¥¥¥USB

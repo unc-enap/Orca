@@ -92,18 +92,18 @@
  To encode, simply save 'value'; on decode, replace self with
  the existing instance from 'allSourceMasks' with the same value
  */
-- (void)encodeWithCoder:(NSCoder *)encoder
-{
-    [encoder encodeInteger: (int32_t)value forKey:@"value"];
-}
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
 	uint32_t theValue = 0;
-    theValue = [decoder decodeIntegerForKey:@"value"];
+    theValue = [decoder decodeIntForKey:@"value"];
 	[self autorelease];
 	// returning "static" object from init method -- ensure retain count maintained
 	return [[SourceMask sourceMaskForValue:theValue] retain];
+}
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+    [encoder encodeInt: (int32_t)value forKey:@"value"];
 }
 
 

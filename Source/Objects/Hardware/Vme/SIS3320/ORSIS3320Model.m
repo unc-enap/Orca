@@ -2402,23 +2402,23 @@ uint32_t triggerThresholdAddress[kNumSIS3320Channels]={
     
     int i;
     for(i=0;i<4;i++){
-        [self setBufferStart:i      withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"bufferStart%d",i]]];
-        [self setBufferLength:i     withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"bufferLength%d",i]]];
-        [self setAccGate1Length:i     withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"accGate1Length%d",i]]];
-        [self setAccGate1StartIndex:i withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"accGate1StartIndex%d",i]]];
-        [self setAccGate2Length:i     withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"accGate2Length%d",i]]];
-        [self setAccGate2StartIndex:i withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"accGate2StartIndex%d",i]]];
-        [self setAccGate3Length:i     withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"accGate3Length%d",i]]];
-        [self setAccGate3StartIndex:i withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"accGate3StartIndex%d",i]]];
-        [self setAccGate4Length:i     withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"accGate4Length%d",i]]];
-        [self setAccGate4StartIndex:i withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"accGate4StartIndex%d",i]]];
-        [self setAccGate5Length:i     withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"accGate5Length%d",i]]];
-        [self setAccGate5StartIndex:i withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"accGate5StartIndex%d",i]]];
-        [self setAccGate6Length:i     withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"accGate6Length%d",i]]];
-        [self setAccGate6StartIndex:i withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"accGate6StartIndex%d",i]]];
-        [self setAccGate7Length:i     withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"accGate7Length%d",i]]];
-        [self setAccGate7StartIndex:i withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"accGate7StartIndex%d",i]]];
-        [self setAccGate8Length:i     withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"accGate8Length%d",i]]];
+        [self setBufferStart:i      withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"bufferStart%d",i]]];
+        [self setBufferLength:i     withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"bufferLength%d",i]]];
+        [self setAccGate1Length:i     withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"accGate1Length%d",i]]];
+        [self setAccGate1StartIndex:i withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"accGate1StartIndex%d",i]]];
+        [self setAccGate2Length:i     withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"accGate2Length%d",i]]];
+        [self setAccGate2StartIndex:i withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"accGate2StartIndex%d",i]]];
+        [self setAccGate3Length:i     withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"accGate3Length%d",i]]];
+        [self setAccGate3StartIndex:i withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"accGate3StartIndex%d",i]]];
+        [self setAccGate4Length:i     withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"accGate4Length%d",i]]];
+        [self setAccGate4StartIndex:i withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"accGate4StartIndex%d",i]]];
+        [self setAccGate5Length:i     withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"accGate5Length%d",i]]];
+        [self setAccGate5StartIndex:i withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"accGate5StartIndex%d",i]]];
+        [self setAccGate6Length:i     withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"accGate6Length%d",i]]];
+        [self setAccGate6StartIndex:i withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"accGate6StartIndex%d",i]]];
+        [self setAccGate7Length:i     withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"accGate7Length%d",i]]];
+        [self setAccGate7StartIndex:i withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"accGate7StartIndex%d",i]]];
+        [self setAccGate8Length:i     withValue: [decoder decodeIntForKey:[NSString stringWithFormat:@"accGate8Length%d",i]]];
         [self setAccGate8StartIndex:i withValue: [decoder decodeIntegerForKey:[NSString stringWithFormat:@"accGate8StartIndex%d",i]]];
     }
     for(i=0;i<2;i++){
@@ -2475,22 +2475,22 @@ uint32_t triggerThresholdAddress[kNumSIS3320Channels]={
         [encoder encodeInteger:bufferStart[i]             forKey:[NSString stringWithFormat:@"bufferStart%d",i]];
         [encoder encodeInteger:bufferLength[i]            forKey:[NSString stringWithFormat:@"bufferLength%d",i]];
         
-        [encoder encodeInteger: accGate1StartIndex[i]      forKey:[NSString stringWithFormat:@"accGate1StartIndex%d",i]];
-        [encoder encodeInteger: accGate1Length[i]        forKey:[NSString stringWithFormat:@"accGate1Length%d",i]];
-        [encoder encodeInteger: accGate2StartIndex[i]      forKey:[NSString stringWithFormat:@"accGate2StartIndex%d",i]];
-        [encoder encodeInteger: accGate2Length[i]        forKey:[NSString stringWithFormat:@"accGate2Length%d",i]];
-        [encoder encodeInteger: accGate3StartIndex[i]      forKey:[NSString stringWithFormat:@"accGate3StartIndex%d",i]];
-        [encoder encodeInteger: accGate3Length[i]        forKey:[NSString stringWithFormat:@"accGate3Length%d",i]];
-        [encoder encodeInteger: accGate4StartIndex[i]      forKey:[NSString stringWithFormat:@"accGate4StartIndex%d",i]];
-        [encoder encodeInteger: accGate4Length[i]        forKey:[NSString stringWithFormat:@"accGate4Length%d",i]];
-        [encoder encodeInteger: accGate5StartIndex[i]      forKey:[NSString stringWithFormat:@"accGate5StartIndex%d",i]];
-        [encoder encodeInteger: accGate5Length[i]        forKey:[NSString stringWithFormat:@"accGate5Length%d",i]];
-        [encoder encodeInteger: accGate6StartIndex[i]      forKey:[NSString stringWithFormat:@"accGate6StartIndex%d",i]];
-        [encoder encodeInteger: accGate6Length[i]        forKey:[NSString stringWithFormat:@"accGate6Length%d",i]];
-        [encoder encodeInteger: accGate7StartIndex[i]      forKey:[NSString stringWithFormat:@"accGate7StartIndex%d",i]];
-        [encoder encodeInteger: accGate7Length[i]        forKey:[NSString stringWithFormat:@"accGate7Length%d",i]];
-        [encoder encodeInteger: accGate8StartIndex[i]      forKey:[NSString stringWithFormat:@"accGate8StartIndex%d",i]];
-        [encoder encodeInteger: accGate8Length[i]        forKey:[NSString stringWithFormat:@"accGate8Length%d",i]];
+        [encoder encodeInt: accGate1StartIndex[i]      forKey:[NSString stringWithFormat:@"accGate1StartIndex%d",i]];
+        [encoder encodeInt: accGate1Length[i]        forKey:[NSString stringWithFormat:@"accGate1Length%d",i]];
+        [encoder encodeInt: accGate2StartIndex[i]      forKey:[NSString stringWithFormat:@"accGate2StartIndex%d",i]];
+        [encoder encodeInt: accGate2Length[i]        forKey:[NSString stringWithFormat:@"accGate2Length%d",i]];
+        [encoder encodeInt: accGate3StartIndex[i]      forKey:[NSString stringWithFormat:@"accGate3StartIndex%d",i]];
+        [encoder encodeInt: accGate3Length[i]        forKey:[NSString stringWithFormat:@"accGate3Length%d",i]];
+        [encoder encodeInt: accGate4StartIndex[i]      forKey:[NSString stringWithFormat:@"accGate4StartIndex%d",i]];
+        [encoder encodeInt: accGate4Length[i]        forKey:[NSString stringWithFormat:@"accGate4Length%d",i]];
+        [encoder encodeInt: accGate5StartIndex[i]      forKey:[NSString stringWithFormat:@"accGate5StartIndex%d",i]];
+        [encoder encodeInt: accGate5Length[i]        forKey:[NSString stringWithFormat:@"accGate5Length%d",i]];
+        [encoder encodeInt: accGate6StartIndex[i]      forKey:[NSString stringWithFormat:@"accGate6StartIndex%d",i]];
+        [encoder encodeInt: accGate6Length[i]        forKey:[NSString stringWithFormat:@"accGate6Length%d",i]];
+        [encoder encodeInt: accGate7StartIndex[i]      forKey:[NSString stringWithFormat:@"accGate7StartIndex%d",i]];
+        [encoder encodeInt: accGate7Length[i]        forKey:[NSString stringWithFormat:@"accGate7Length%d",i]];
+        [encoder encodeInt: accGate8StartIndex[i]      forKey:[NSString stringWithFormat:@"accGate8StartIndex%d",i]];
+        [encoder encodeInt: accGate8Length[i]        forKey:[NSString stringWithFormat:@"accGate8Length%d",i]];
     }
     for(i=0;i<2;i++){
         [encoder encodeBool:triggerMode[i]              forKey:[NSString stringWithFormat:@"triggerMode%d",i]];

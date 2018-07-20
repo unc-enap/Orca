@@ -1402,12 +1402,12 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 	
 
     [self setClockSource:				[decoder decodeIntForKey:@"clockSource"]];
-	[self setGtMask:					[decoder decodeIntegerForKey:@"gtMask"]];
+	[self setGtMask:					[decoder decodeIntForKey:@"gtMask"]];
 	[self setUseTrapTriggerMask:		[decoder decodeIntegerForKey:@"trapMask"]];    
     [self setWaveFormRateGroup:			[decoder decodeObjectForKey:@"waveFormRateGroup"]];
-    [self setStopEventAtLength:         [decoder decodeIntegerForKey:@"stopEventAtLength"]];
-    [self setPageWrap:                  [decoder decodeIntegerForKey:@"enablePageWrap"]];
-    [self setEnableTestData:            [decoder decodeIntegerForKey:@"enableTestData"]];    
+    [self setStopEventAtLength:         [decoder decodeIntForKey:@"stopEventAtLength"]];
+    [self setPageWrap:                  [decoder decodeIntForKey:@"enablePageWrap"]];
+    [self setEnableTestData:            [decoder decodeIntForKey:@"enableTestData"]];
     [self setLemoTimestampEnabled:            [decoder decodeIntegerForKey:@"lemoTimestampEnabled"]];    
     [self setLemoStartStopEnabled:            [decoder decodeIntegerForKey:@"lemoStartStopEnabled"]];    
     [self setInternalTrigStartEnabled:        [decoder decodeIntegerForKey:@"internalTrigStartEnabled"]];    
@@ -1460,13 +1460,13 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302GenReadRe
 	
 	[encoder encodeFloat:firmwareVersion		forKey:@"firmwareVersion"];
 
-    [encoder encodeInteger:gtMask					forKey:@"gtMask"];
+    [encoder encodeInt:gtMask					forKey:@"gtMask"];
 	[encoder encodeInteger:useTrapTriggerMask       forKey:@"trapMask"];        
     [encoder encodeInt:clockSource				forKey:@"clockSource"];
     
-    [encoder encodeInteger:stopAtEventLengthMask    forKey:@"stopEventAtLength"];
-    [encoder encodeInteger:enablePageWrapMask       forKey:@"enablePageWrap"];
-    [encoder encodeInteger:enableTestDataMask       forKey:@"enableTestData"]; 
+    [encoder encodeInt:stopAtEventLengthMask    forKey:@"stopEventAtLength"];
+    [encoder encodeInt:enablePageWrapMask       forKey:@"enablePageWrap"];
+    [encoder encodeInt:enableTestDataMask       forKey:@"enableTestData"]; 
     
     [encoder encodeObject:waveFormRateGroup		forKey:@"waveFormRateGroup"];
 	[encoder encodeObject:thresholds			forKey:@"thresholds"];

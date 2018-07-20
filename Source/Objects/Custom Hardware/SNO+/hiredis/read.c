@@ -258,8 +258,8 @@ static int processBulkItem(redisReader *r) {
     s = seekNewline(p,r->len-r->pos);
     if (s != NULL) {
         p = r->buf+r->pos;
-        bytelen = s-(r->buf+r->pos)+2; /* include \r\n */
-        len = readLongLong(p);
+        bytelen = (uint32_t)(s-(r->buf+r->pos)+2); /* include \r\n */
+        len = (uint32_t)readLongLong(p);
 
         if (len < 0) {
             /* The nil object can always be created. */
@@ -314,7 +314,7 @@ static int processMultiBulkItem(redisReader *r) {
     }
 
     if ((p = readLine(r,NULL)) != NULL) {
-        elements = readLongLong(p);
+        elements = (uint32_t)readLongLong(p);
         root = (r->ridx == 0);
 
         if (elements == -1) {

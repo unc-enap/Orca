@@ -1141,7 +1141,7 @@ struct {
     //get the time(UT!) for the data record.
     time_t	ut_Time;
     time(&ut_Time);
-    timeMeasured = ut_Time;
+    timeMeasured = (uint32_t)ut_Time;
 }
          
 - (BOOL) controllerIsSBC
@@ -1291,7 +1291,7 @@ struct {
 	
     [[self undoManager] disableUndoRegistration];
     [self setBoardRev:      [decoder decodeIntForKey:   @"boardRev"]];
-    [self setAdcEnabledMask:[decoder decodeIntegerForKey: @"adcEnabledMask"]];
+    [self setAdcEnabledMask:[decoder decodeIntForKey: @"adcEnabledMask"]];
     [self setShipValues:	[decoder decodeBoolForKey:  @"shipValues"]];
 	[self setPollTime:		[decoder decodeIntForKey:   @"pollTime"]];
     [self setFirmwareRev:   [decoder decodeIntForKey:   @"firmwareRev"]];
@@ -1338,7 +1338,7 @@ struct {
     [super encodeWithCoder:encoder];
     [encoder encodeBool:doNotUseHWMap   forKey:@"doNotUseHWMap"];
 	[encoder encodeInteger:boardRev         forKey:@"boardRev"];
-	[encoder encodeInteger:adcEnabledMask forKey:@"adcEnabledMask"];
+	[encoder encodeInt:adcEnabledMask forKey:@"adcEnabledMask"];
 	[encoder encodeBool:shipValues		forKey:@"shipValues"];
 	[encoder encodeInteger:pollTime			forKey:@"pollTime"];
     [encoder encodeInteger:firmwareRev      forKey:@"firmwareRev"];

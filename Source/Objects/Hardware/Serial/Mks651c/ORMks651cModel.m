@@ -552,7 +552,7 @@ NSString* ORMks651cLock = @"ORMks651cLock";
 	time_t	ut_Time;
 	time(&ut_Time);
 	//struct tm* theTimeGMTAsStruct = gmtime(&theTime);
-	timeMeasured = ut_Time;
+	timeMeasured = (uint32_t)ut_Time;
 
 
 	if(timeRates == nil) timeRates = [[ORTimeRate alloc] init];

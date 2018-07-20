@@ -1752,7 +1752,7 @@ NSString* ORTek754GpibLock  = @"ORTek754GpibLock";
                     // Place data in array where other parts of ORCA can grab it.
                     for ( i = 0; i < kMaxOscChnls; i++ ) {
                         if ( mChannels[ i ].chnlAcquire && ( mask & ( 1 << i ) )) {
-                            [ mDataObj[ i ] setGtid: gtidNumber ? [ gtidNumber longValue ] : 0 ];
+                            [ mDataObj[ i ] setGtid: gtidNumber ? (uint32_t)[gtidNumber longValue ] : 0 ];
 							
                             //Note only mDataObj[ 0 ] has the timeData.
                             NSData* theTimeData = [ mDataObj[ 0 ] timePacketData: aDataPacket channel: i ];

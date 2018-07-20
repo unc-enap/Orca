@@ -410,8 +410,8 @@ NSString* ORPxi8336MacLock										= @"ORPxi8336MacLock";
     
     [self setRangeToDo:[decoder decodeIntegerForKey:@"rangeToDo"]];
     [self setDoRange:[decoder decodeBoolForKey:@"doRange"]];
-    [self setRwAddress:[decoder decodeIntegerForKey:@"rwAddress"]];
-    [self setWriteValue:[decoder decodeIntegerForKey:@"writeValue"]];
+    [self setRwAddress:[decoder decodeIntForKey:@"rwAddress"]];
+    [self setWriteValue:[decoder decodeIntForKey:@"writeValue"]];
     [self setReadWriteType:[decoder decodeIntForKey:@"readWriteType"]];	
     
     [[self undoManager] enableUndoRegistration];
@@ -424,8 +424,8 @@ NSString* ORPxi8336MacLock										= @"ORPxi8336MacLock";
     [super encodeWithCoder:encoder];
     [encoder encodeInteger:rangeToDo forKey:@"rangeToDo"];
     [encoder encodeBool:doRange forKey:@"doRange"];
-	[encoder encodeInteger:rwAddress forKey:@"rwAddress"];
-    [encoder encodeInteger:writeValue forKey:@"writeValue"];
+	[encoder encodeInt:rwAddress forKey:@"rwAddress"];
+    [encoder encodeInt:writeValue forKey:@"writeValue"];
     [encoder encodeInteger:readWriteType forKey:@"readWriteType"];
 }
 

@@ -147,7 +147,7 @@ NSString* ORSBC_LAMLock						= @"ORSBC_LAMLock";
 	while(obj = [e nextObject]){
 		[obj runTaskStarted:aDataPacket userInfo:userInfo];
 	}
-	cachedNumberOfDataTakers = [dataTakers count];
+	cachedNumberOfDataTakers = (uint32_t)[dataTakers count];
 }
 
 - (void) saveReadOutList:(NSFileHandle*)aFile

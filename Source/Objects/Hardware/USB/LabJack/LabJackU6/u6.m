@@ -5,7 +5,7 @@
 
 #include "u6.h"
 #include <stdlib.h>
-
+#include <stdint.h>
 u6CalibrationInfo U6_CALIBRATION_INFO_DEFAULT = {
     6,
     1,
@@ -239,7 +239,7 @@ int32_t getTickCount()
 
     gettimeofday(&tv, NULL);
 
-    return (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
+    return (uint32_t)((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
 

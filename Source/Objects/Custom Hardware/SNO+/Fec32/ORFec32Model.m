@@ -611,7 +611,7 @@ static int              sChannelsNotChangedCount = 0;
 
 - (uint32_t) boardIDAsInt
 {
-    return strtoul([[self boardID] UTF8String], NULL, 16);
+    return (uint32_t)strtoul([[self boardID] UTF8String], NULL, 16);
 }
 
 - (void) checkConfig: (FECConfiguration *) config
@@ -935,17 +935,17 @@ static int              sChannelsNotChangedCount = 0;
     [self setComments:                      [decoder decodeObjectForKey:@"comments"]];
     [self setVRes:                          [decoder decodeFloatForKey: @"vRes"]];
     [self setHVRef:                         [decoder decodeFloatForKey: @"hVRef"]];
-	[self setOnlineMask:                    [decoder decodeIntegerForKey: @"onlineMask"]];
-	[self setPedEnabledMask:                [decoder decodeIntegerForKey: @"pedEnableMask"]];
+	[self setOnlineMask:                    [decoder decodeIntForKey: @"onlineMask"]];
+	[self setPedEnabledMask:                [decoder decodeIntForKey: @"pedEnableMask"]];
     [self setAdcVoltageStatusOfCard:        [decoder decodeIntForKey:	@"adcVoltageStatusOfCard"]];
-    [self setSeqDisabledMask:               [decoder decodeIntegerForKey: @"seqDisabledMask"]];
-    [self setCmosReadDisabledMask:              [decoder decodeIntegerForKey: @"cmosReadDisabledMask"]];
-    [self setTrigger20nsDisabledMask:           [decoder decodeIntegerForKey: @"trigger20nsDisabledMask"]];
-    [self setTrigger100nsDisabledMask:          [decoder decodeIntegerForKey: @"trigger100nsDisabledMask"]];
-    [self setSeqPendingDisabledMask:            [decoder decodeIntegerForKey: @"seqPendingDisabledMask"]];
-    [self setTrigger20nsPendingDisabledMask:    [decoder decodeIntegerForKey: @"trigger20nsPendingDisabledMask"]];
-    [self setTrigger100nsPendingDisabledMask:   [decoder decodeIntegerForKey: @"trigger100nsPendingDisabledMask"]];
-    [self setCmosReadPendingDisabledMask:       [decoder decodeIntegerForKey: @"cmosReadPendingDisabledMask"]];
+    [self setSeqDisabledMask:               [decoder decodeIntForKey: @"seqDisabledMask"]];
+    [self setCmosReadDisabledMask:              [decoder decodeIntForKey: @"cmosReadDisabledMask"]];
+    [self setTrigger20nsDisabledMask:           [decoder decodeIntForKey: @"trigger20nsDisabledMask"]];
+    [self setTrigger100nsDisabledMask:          [decoder decodeIntForKey: @"trigger100nsDisabledMask"]];
+    [self setSeqPendingDisabledMask:            [decoder decodeIntForKey: @"seqPendingDisabledMask"]];
+    [self setTrigger20nsPendingDisabledMask:    [decoder decodeIntForKey: @"trigger20nsPendingDisabledMask"]];
+    [self setTrigger100nsPendingDisabledMask:   [decoder decodeIntForKey: @"trigger100nsPendingDisabledMask"]];
+    [self setCmosReadPendingDisabledMask:       [decoder decodeIntForKey: @"cmosReadPendingDisabledMask"]];
     
 	int i;
 	for(i=0;i<6;i++){
@@ -956,7 +956,7 @@ static int              sChannelsNotChangedCount = 0;
 		[self setAdcVoltageStatus:i withValue: (eFecMonitorState)[decoder decodeIntegerForKey: [NSString stringWithFormat:@"adcStatus%d",i]]];
 	}
 	for(i=0;i<32;i++){
-		[self setCmosRate:i withValue:[decoder decodeIntegerForKey:		[NSString stringWithFormat:@"cmosRate%d",i]]];
+		[self setCmosRate:i withValue:[decoder decodeIntForKey:		[NSString stringWithFormat:@"cmosRate%d",i]]];
 		[self setBaseCurrent:i withValue:[decoder decodeFloatForKey:	[NSString stringWithFormat:@"baseCurrent%d",i]]];
 	}
 	[[self undoManager] enableUndoRegistration];
@@ -976,17 +976,17 @@ static int              sChannelsNotChangedCount = 0;
     [encoder encodeObject:comments                  forKey: @"comments"];
     [encoder encodeFloat:vRes                       forKey: @"vRes"];
     [encoder encodeFloat:hVRef                      forKey: @"hVRef"];
-    [encoder encodeInteger:onlineMask                 forKey: @"onlineMask"];
+    [encoder encodeInt:onlineMask                 forKey: @"onlineMask"];
     [encoder encodeInteger:adcVoltageStatusOfCard       forKey: @"adcVoltageStatusOfCard"];
-    [encoder encodeInteger:pedEnabledMask             forKey: @"pedEnabledMask"];
-    [encoder encodeInteger:seqDisabledMask                    forKey: @"seqDisabledMask"];
-    [encoder encodeInteger:cmosReadDisabledMask               forKey: @"cmosReadDisabledMask"];
-    [encoder encodeInteger:trigger20nsDisabledMask            forKey: @"trigger20nsDisabledMask"];
-    [encoder encodeInteger:trigger100nsDisabledMask           forKey: @"trigger100nsDisabledMask"];
-    [encoder encodeInteger:seqPendingDisabledMask             forKey: @"seqDisabledPendingMask"];
-    [encoder encodeInteger:cmosReadPendingDisabledMask        forKey: @"cmosReadPendingDisabledMask"];
-    [encoder encodeInteger:trigger20nsPendingDisabledMask     forKey: @"trigger20nsPendingDisabledMask"];
-    [encoder encodeInteger:trigger100nsPendingDisabledMask    forKey: @"trigger100nsPendingDisabledMask"];
+    [encoder encodeInt:pedEnabledMask             forKey: @"pedEnabledMask"];
+    [encoder encodeInt:seqDisabledMask                    forKey: @"seqDisabledMask"];
+    [encoder encodeInt:cmosReadDisabledMask               forKey: @"cmosReadDisabledMask"];
+    [encoder encodeInt:trigger20nsDisabledMask            forKey: @"trigger20nsDisabledMask"];
+    [encoder encodeInt:trigger100nsDisabledMask           forKey: @"trigger100nsDisabledMask"];
+    [encoder encodeInt:seqPendingDisabledMask             forKey: @"seqDisabledPendingMask"];
+    [encoder encodeInt:cmosReadPendingDisabledMask        forKey: @"cmosReadPendingDisabledMask"];
+    [encoder encodeInt:trigger20nsPendingDisabledMask     forKey: @"trigger20nsPendingDisabledMask"];
+    [encoder encodeInt:trigger100nsPendingDisabledMask    forKey: @"trigger100nsPendingDisabledMask"];
 
     for(i = 0; i < 6; i++) {
         [encoder encodeFloat:cmos[i] forKey:[NSString stringWithFormat:@"cmos%d",i]];
@@ -998,7 +998,7 @@ static int              sChannelsNotChangedCount = 0;
     }
 
     for(i = 0; i < 32; i++){
-        [encoder encodeInteger:cmosRate[i] forKey: [NSString stringWithFormat:@"cmosRate%d",i]];
+        [encoder encodeInt:cmosRate[i] forKey: [NSString stringWithFormat:@"cmosRate%d",i]];
         [encoder encodeFloat:baseCurrent[i] forKey: [NSString stringWithFormat:@"baseCurrent%d",i]];
     }
 }

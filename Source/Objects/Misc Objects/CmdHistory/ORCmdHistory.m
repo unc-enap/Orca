@@ -40,7 +40,7 @@ NSString* ORCmdHistoryChangedNotification	= @"ORCmdHistoryChangedNotification";
 	if(aCommandString){
 		[history addObject:aCommandString];
 		if([history count] > 50)[history removeObjectAtIndex:0];
-		historyIndex = [history count]-1;
+		historyIndex =(uint32_t) [history count]-1;
 	}
 }
 

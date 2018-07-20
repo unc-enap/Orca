@@ -2019,10 +2019,10 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302ReadRegs]
 	int group;
 	for(i = 0; i < 8; i++) {
 		group = i/2;
-		uint32_t aExtValueMask = (([self internalTriggerDelay:i] & 0x00ffL) << 24) | 
+		uint32_t aExtValueMask = (uint32_t)((([self internalTriggerDelay:i] & 0x00ffL) << 24) |
 		(([self triggerDecimation:group]      & 0x0003L) << 16) | 
 		(([self sumG:i]                 & 0x0F00L)) | 
-		(([self peakingTime:i]          & 0x0F00L) >> 8);
+		(([self peakingTime:i]          & 0x0F00L) >> 8));
 		
 		[[self adapter] writeLongBlock:&aExtValueMask
 							 atAddress:[self baseAddress] + [self getTriggerExtSetupRegOffsets:i]
@@ -2030,10 +2030,10 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302ReadRegs]
 							withAddMod:[self addressModifier]
 						 usingAddSpace:0x01];
 		
-		uint32_t aTriggerMask =(([self gateLength:i]  & 0xffL) << 24) | 
+		uint32_t aTriggerMask =((uint32_t)(([self gateLength:i]  & 0xffL) << 24) |
 		(([self pulseLength:i] & 0xffL) << 16) | 
 		(([self sumG:i]        & 0xffL) <<  8) | 
-		([self peakingTime:i] & 0xffL);
+		([self peakingTime:i] & 0xffL));
 		
 		[[self adapter] writeLongBlock:&aTriggerMask
 							 atAddress:[self baseAddress] + [self getTriggerSetupRegOffsets:i]

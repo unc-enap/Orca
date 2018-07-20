@@ -718,7 +718,7 @@
 - (NSCell *)tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
     NSTextFieldCell *cell = [tableColumn dataCell];
-    if(![model fileHasBeenProcessed:row]){
+    if(![model fileHasBeenProcessed:(uint32_t)row]){
         [cell setTextColor: [NSColor lightGrayColor]];
     }
     else {

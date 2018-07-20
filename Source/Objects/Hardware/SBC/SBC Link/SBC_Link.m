@@ -947,8 +947,8 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 	[self setLoadMode:		[decoder decodeIntForKey:   @"loadMode"]];
     [self setInitAfterConnect:[decoder decodeBoolForKey:@"InitAfterConnect"]];
     [self setDisableThrottle:[decoder decodeBoolForKey: @"disableThrottle"]];
-	[self setWriteValue:	[decoder decodeIntegerForKey: @"WriteValue"]];
-	[self setWriteAddress:	[decoder decodeIntegerForKey: @"WriteAddress"]];
+	[self setWriteValue:	[decoder decodeIntForKey: @"WriteValue"]];
+	[self setWriteAddress:	[decoder decodeIntForKey: @"WriteAddress"]];
 	[self setFilePath:		[decoder decodeObjectForKey:@"FilePath"]];
 	[self setUserName:		[decoder decodeObjectForKey:@"UserName"]];
 	[self setPassWord:		[decoder decodeObjectForKey:@"PassWord"]];
@@ -982,8 +982,8 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
     [encoder encodeBool:doRange			forKey:@"DoRange"];
 	[encoder encodeInteger:loadMode			forKey:@"loadMode"];
 	[encoder encodeBool:initAfterConnect forKey:@"InitAfterConnect"];
-	[encoder encodeInteger:writeValue		forKey:@"WriteValue"];
-	[encoder encodeInteger:writeAddress	forKey:@"WriteAddress"];
+	[encoder encodeInt:writeValue		forKey:@"WriteValue"];
+	[encoder encodeInt:writeAddress	forKey:@"WriteAddress"];
 	[encoder encodeObject:filePath		forKey:@"FilePath"];
 	[encoder encodeObject:userName		forKey:@"UserName"];
 	[encoder encodeObject:passWord		forKey:@"PassWord"];

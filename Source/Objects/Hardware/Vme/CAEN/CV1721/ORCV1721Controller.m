@@ -857,7 +857,7 @@ int chanConfigToMaskBit1721[kNumChanConfigBits] = {1,3,6};
 		[model setCustomSize:([sender intValue] / 4)];
 	}
 	else {
-		[model setCustomSize:maxNumSamples / 4];
+		[model setCustomSize:(uint32_t)maxNumSamples / 4];
 	}
 }
 

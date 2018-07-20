@@ -206,7 +206,7 @@
 - (void) tableViewSelectionDidChange:(NSNotification *)aNotification
 {
 	if([aNotification object] == onCallListView || aNotification == nil){
-		int32_t selectedIndex = [onCallListView selectedRow];
+		NSInteger selectedIndex = [onCallListView selectedRow];
 		[removePersonButton setEnabled:selectedIndex>=0];
 	}
 }

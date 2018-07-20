@@ -155,7 +155,7 @@ NSString* ORiTransGasDecimalPlacesChanged			= @"ORiTransGasDecimalPlacesChanged"
 {
 	time_t	ut_Time;
 	time(&ut_Time);
-	timeMeasured = ut_Time;
+	timeMeasured = (uint32_t)ut_Time;
 	
     gasReading = aValue;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORiTransGasSensorGasReadingChanged object:self];

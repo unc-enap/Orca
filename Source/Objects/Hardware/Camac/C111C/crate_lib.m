@@ -1478,7 +1478,7 @@ short BLKTRANSF(short crate_id, BLK_TRANSF_INFO *blk_info, unsigned int *buffer)
 					}
 				}
 				else {
-					transf_res = strtoul((char *)&blk_ascii_buf[0], 0, 10);
+					transf_res = (uint32_t)strtoul((char *)&blk_ascii_buf[0], 0, 10);
 					if (transf_res <= 0) {
 						blk_info->totsize = (short) strtoul((char *)&blk_ascii_buf[4], 0, 16);
 						retcode = (short) transf_res;

@@ -402,7 +402,7 @@ NSString* ORManualPlotDataChanged			= @"ORManualPlotDataChanged";
 
 - (uint32_t) numPoints
 {
-    return [data count];
+    return (uint32_t)[data count];
 }
 
 - (BOOL) dataSet:(int)set index:(uint32_t)index x:(double*)xValue y:(double*)yValue

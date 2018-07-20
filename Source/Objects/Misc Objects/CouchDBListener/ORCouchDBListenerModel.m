@@ -695,13 +695,13 @@ if (strcmp(@encode(atype), the_type) == 0)         \
                         HANDLE_NUMBER_ARG(float, float)
                         HANDLE_NUMBER_ARG(int, int)
                         HANDLE_NUMBER_ARG(double, double)
-                        HANDLE_NUMBER_ARG(int32_t, int32_t)
+                        HANDLE_NUMBER_ARG(long, long)
                         HANDLE_NUMBER_ARG(longLong, int64_t)
                         HANDLE_NUMBER_ARG(short, short)
                         HANDLE_NUMBER_ARG(unsignedChar, unsigned char)
                         HANDLE_NUMBER_ARG(unsignedInt, unsigned int)
-                        HANDLE_NUMBER_ARG(unsignedLong, uint32_t)
-                        HANDLE_NUMBER_ARG(unsignedLongLong, uint32_t)
+                        HANDLE_NUMBER_ARG(unsignedLong, unsigned long)
+                        HANDLE_NUMBER_ARG(unsignedLongLong, unsigned long long)
                         HANDLE_NUMBER_ARG(unsignedShort, unsigned short)
                         [NSException raise:@"ORCouchDBListenerInvalidArguments"
                                     format:@"Found invalid requested number type as argument(%s)?!",the_type];

@@ -1401,7 +1401,7 @@
 	uint32_t val;//   =	[readWriteRegisterField integerValue];
     //NSString *s=[NSString stringWithString: [readWriteRegisterField stringValue] ];
     //NSLog(@"String is %@\n",s);
-    uint32_t  val2 = [[NSString stringWithString: [readWriteRegisterField stringValue] ] longLongValue];
+    uint32_t  val2 = (uint32_t)[[NSString stringWithString: [readWriteRegisterField stringValue] ] longLongValue];
     val=val2;
     NSLog(@"LongLong  is %Lu\n",val2);
     int aChan = [model readWriteRegisterChan];
@@ -1418,7 +1418,7 @@
 
 - (IBAction) writeRegisterWithAdressButtonAction:(id)sender
 {
-    uint32_t  val = [[NSString stringWithString: [readWriteRegisterField stringValue] ] longLongValue];
+    uint32_t  val = (uint32_t)[[NSString stringWithString: [readWriteRegisterField stringValue] ] longLongValue];
 	int adr   =	[readWriteRegisterAdressField intValue];
     NSLog(@"writeRegisterWithAdressButtonAction: write adr: %i  val %i\n",adr,val);
     [model write: adr   value: val];

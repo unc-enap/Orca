@@ -883,7 +883,7 @@ static void ORCouchDB_Feed_callback(CFReadStreamRef stream,
     
     uint8_t data[1024];
     CFHTTPMessageRef aResponse;
-    int32_t len;
+    CFIndex len;
     switch(type){
         case kCFStreamEventHasBytesAvailable:
             if([delegate isWaitingForResponse]){

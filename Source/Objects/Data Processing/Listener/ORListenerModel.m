@@ -315,7 +315,7 @@ static NSString* ORListenerConnector = @"ORListenerConnector";
                 if(!dataToProcess)dataToProcess = [[NSMutableData alloc] initWithCapacity:50000];
                 NSData* theData = [socket readData];
                 [dataToProcess appendData:theData];
-                [self incByteCount:[theData length]];
+                [self incByteCount:(uint32_t)[theData length]];
             }
         }
     }
@@ -380,7 +380,7 @@ static NSString* ORListenerConnector = @"ORListenerConnector";
         @synchronized(self){
 
             if(timeToQuit){
-                uint32_t numBytesLeft = [dataToProcess length];
+                uint32_t numBytesLeft = (uint32_t)[dataToProcess length];
                 if(!flushMessagePrintedOnce){
                     if(numBytesLeft) NSLog(@"flushing %d bytes from listening queue\n",numBytesLeft);
                     flushMessagePrintedOnce = YES;						
@@ -402,7 +402,7 @@ static NSString* ORListenerConnector = @"ORListenerConnector";
 	uint32_t* p                = (uint32_t*)[dataToProcess bytes];
 	uint32_t* endPtr           = p + [dataToProcess length]/sizeof(int32_t);
 	uint32_t bytesProcessed	= 0;
-    uint32_t longsInBuffer     = [dataToProcess length]/sizeof(int32_t);
+    uint32_t longsInBuffer     = (uint32_t)[dataToProcess length]/sizeof(int32_t);
 	while(p<endPtr){
 		uint32_t firstWord		= *p;
 		//the first time is a special case. We have to have a header as the first record or we can not continue
@@ -417,7 +417,7 @@ static NSString* ORListenerConnector = @"ORListenerConnector";
 						[currentDecoder loadHeader:(uint32_t*)p];
 						needToSwap = [currentDecoder needToSwap];
 						[self loadRunInfoFromHeader];
-                        runDataID = [[currentDecoder headerObject:@"dataDescription",@"ORRunModel",@"Run",@"dataId",nil] longValue];
+                        runDataID = (uint32_t)[[currentDecoder headerObject:@"dataDescription",@"ORRunModel",@"Run",@"dataId",nil] longValue];
 						id nextObject = [self objectConnectedTo:ORListenerConnector];
 						[nextObject runTaskStarted:runInfo];
                         [dataArray addObject:[NSData dataWithBytes:p length:recordLength*sizeof(int32_t)]];
@@ -445,7 +445,7 @@ static NSString* ORListenerConnector = @"ORListenerConnector";
 				if(dataId == 0x0){
 					[currentDecoder loadHeader:(uint32_t*)p];
 					needToSwap = [currentDecoder needToSwap];
-					runDataID = [[currentDecoder headerObject:@"dataDescription",@"ORRunModel",@"Run",@"dataId",nil] longValue];
+					runDataID = (uint32_t)[[currentDecoder headerObject:@"dataDescription",@"ORRunModel",@"Run",@"dataId",nil] longValue];
 				}
 				else if(dataId == runDataID)[self processRunRecord:(uint32_t*)p];
 				

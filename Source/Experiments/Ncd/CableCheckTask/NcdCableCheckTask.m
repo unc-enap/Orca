@@ -695,7 +695,7 @@ static NSString* NcdCableCheckMuxVerbose  = @"NcdCableCheckMuxVerbose";
     NSArray* allShapers = [[(ORAppDelegate*)[NSApp delegate] document] collectObjectsOfClass:NSClassFromString(@"ORShaperModel")];
     int slot    = [[currentTube objectForKey:@"kAdcSlot"] intValue];    
     int channel = [[currentTube objectForKey:@"kAdcChannel"] intValue];
-    uint32_t address = strtol([[currentTube objectForKey:@"kAdcHWAddress"] cStringUsingEncoding:NSASCIIStringEncoding],0,16);;
+    uint32_t address = (uint32_t)strtol([[currentTube objectForKey:@"kAdcHWAddress"] cStringUsingEncoding:NSASCIIStringEncoding],0,16);;
     NSEnumerator* e = [allShapers objectEnumerator];
     ORShaperModel* shaper;
     while(shaper = [e nextObject]){

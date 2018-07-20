@@ -1150,16 +1150,16 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
     
     
     [self setRestartClkAtRunStart:[decoder decodeBoolForKey:@"ORTrigger32ModelRestartClkAtRunStart"]];
-    [self setLowerTimeValue:[decoder decodeIntegerForKey:ORTriggerClockLow]];
-    [self setUpperTimeValue:[decoder decodeIntegerForKey:ORTriggerClockUpper]];
-    [self setTestRegisterValue:[decoder decodeIntegerForKey:ORTriggerTestReg]];
+    [self setLowerTimeValue:[decoder decodeIntForKey:ORTriggerClockLow]];
+    [self setUpperTimeValue:[decoder decodeIntForKey:ORTriggerClockUpper]];
+    [self setTestRegisterValue:[decoder decodeIntForKey:ORTriggerTestReg]];
     [self setClockEnabled:[decoder decodeBoolForKey:ORTriggerClockEnabled]];
     [self setTrigger1GtXor:[decoder decodeBoolForKey:ORTriggerTrigger1Xor]];
     [self setTrigger1GtXor:[decoder decodeBoolForKey:ORTriggerTrigger2Xor]];
     
-    [self setGtIdValue:[decoder decodeIntegerForKey:ORTriggerGTID]];
-    [self setLowerTimeValue:[decoder decodeIntegerForKey:ORTriggerLowerClock]];
-    [self setUpperTimeValue:[decoder decodeIntegerForKey:ORTriggerUpperClock]];
+    [self setGtIdValue:[decoder decodeIntForKey:ORTriggerGTID]];
+    [self setLowerTimeValue:[decoder decodeIntForKey:ORTriggerLowerClock]];
+    [self setUpperTimeValue:[decoder decodeIntForKey:ORTriggerUpperClock]];
     
     [self setTrigger1Group:[decoder decodeObjectForKey:ORTriggerGroup1]];
     [self setTrigger2Group:[decoder decodeObjectForKey:ORTriggerGroup2]];
@@ -1200,16 +1200,16 @@ static NSString *ORTriggerEnableLiveTime		= @"ORTriggerEnableLiveTime";
     [super encodeWithCoder:encoder];
     
     [encoder encodeBool:restartClkAtRunStart forKey:@"ORTrigger32ModelRestartClkAtRunStart"];
-    [encoder encodeInteger:[self lowerTimeValue] forKey:ORTriggerClockLow];
-    [encoder encodeInteger:[self upperTimeValue] forKey:ORTriggerClockUpper];
-    [encoder encodeInteger:[self testRegisterValue] forKey:ORTriggerTestReg];
+    [encoder encodeInt:[self lowerTimeValue] forKey:ORTriggerClockLow];
+    [encoder encodeInt:[self upperTimeValue] forKey:ORTriggerClockUpper];
+    [encoder encodeInt:[self testRegisterValue] forKey:ORTriggerTestReg];
     [encoder encodeBool:[self clockEnabled] forKey:ORTriggerClockEnabled];
     [encoder encodeBool:[self trigger1GtXor] forKey:ORTriggerTrigger1Xor];
     [encoder encodeBool:[self trigger2GtXor] forKey:ORTriggerTrigger2Xor];
     
-    [encoder encodeInteger:(int32_t)[self gtIdValue] forKey:ORTriggerGTID];
-    [encoder encodeInteger:(int32_t)[self lowerTimeValue] forKey:ORTriggerLowerClock];
-    [encoder encodeInteger:(int32_t)[self upperTimeValue] forKey:ORTriggerUpperClock];
+    [encoder encodeInt:[self gtIdValue] forKey:ORTriggerGTID];
+    [encoder encodeInt:[self lowerTimeValue] forKey:ORTriggerLowerClock];
+    [encoder encodeInt:[self upperTimeValue] forKey:ORTriggerUpperClock];
     
     [encoder encodeObject:[self trigger1Group] forKey:ORTriggerGroup1];
     [encoder encodeObject:[self trigger2Group] forKey:ORTriggerGroup2];

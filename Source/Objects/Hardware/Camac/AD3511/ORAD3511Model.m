@@ -208,7 +208,7 @@ NSString* ORAD3511WarningPosted						= @"ORAD3511WarningPosted";
     
     //----------------------------------------------------------------------------------------
     controller = [[self adapter] controller]; //cache the controller for alittle bit more speed.
-    crateAndStationId   = (([self crateNumber]&0xf)<<21) | (([self stationNumber]& 0x0000001f)<<16); //doesn't change so do it here.
+    crateAndStationId   = (uint32_t)((([self crateNumber]&0xf)<<21) | (([self stationNumber]& 0x0000001f)<<16)); //doesn't change so do it here.
 	if(includeTiming)crateAndStationId |= 0x02000000;
 	cachedStation = [self stationNumber];
     [self clearExceptionCount];

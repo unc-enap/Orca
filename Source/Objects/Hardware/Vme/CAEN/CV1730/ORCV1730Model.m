@@ -1427,11 +1427,11 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
     [[self undoManager] disableUndoRegistration];
     [self setEventSize:                 [aDecoder decodeIntForKey:   @"eventSize"]];
     [self setEnabledMask:               [aDecoder decodeIntegerForKey:   @"enabledMask"]];
-    [self setPostTriggerSetting:        [aDecoder decodeIntegerForKey: @"postTriggerSetting"]];
-    [self setTriggerSourceMask:         [aDecoder decodeIntegerForKey: @"triggerSourceMask"]];
-    [self setTriggerOutMask:            [aDecoder decodeIntegerForKey: @"triggerOutMask"]];
+    [self setPostTriggerSetting:        [aDecoder decodeIntForKey: @"postTriggerSetting"]];
+    [self setTriggerSourceMask:         [aDecoder decodeIntForKey: @"triggerSourceMask"]];
+    [self setTriggerOutMask:            [aDecoder decodeIntForKey: @"triggerOutMask"]];
     [self setTriggerOutLogic:           [aDecoder decodeIntegerForKey:   @"triggerOutLogic"]];
-	[self setFrontPanelControlMask:     [aDecoder decodeIntegerForKey: @"frontPanelControlMask"]];
+	[self setFrontPanelControlMask:     [aDecoder decodeIntForKey: @"frontPanelControlMask"]];
     [self setCoincidenceLevel:          [aDecoder decodeIntegerForKey:   @"coincidenceLevel"]];
     [self setCoincidenceWindow:         [aDecoder decodeIntegerForKey:   @"coincidenceWindow"]];
     [self setMajorityLevel:             [aDecoder decodeIntegerForKey:   @"majorityLevel"]];
@@ -1439,7 +1439,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
     [self setCountAllTriggers:          [aDecoder decodeBoolForKey:  @"countAllTriggers"]];
     [self setChannelConfigMask:         [aDecoder decodeIntegerForKey:   @"channelConfigMask"]];
     [self setWaveFormRateGroup:         [aDecoder decodeObjectForKey:@"waveFormRateGroup"]];
-    [self setNumberBLTEventsToReadout:  [aDecoder decodeIntegerForKey: @"numberBLTEventsToReadout"]];
+    [self setNumberBLTEventsToReadout:  [aDecoder decodeIntForKey: @"numberBLTEventsToReadout"]];
     
     if(!waveFormRateGroup){
         [self setWaveFormRateGroup:[[[ORRateGroup alloc] initGroup:8 groupTag:0] autorelease]];
@@ -1468,11 +1468,11 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
     [super encodeWithCoder:anEncoder];
 	[anEncoder encodeInteger:eventSize                  forKey:@"eventSize"];
 	[anEncoder encodeInteger:enabledMask                forKey:@"enabledMask"];
-	[anEncoder encodeInteger:postTriggerSetting       forKey:@"postTriggerSetting"];
-	[anEncoder encodeInteger:triggerSourceMask        forKey:@"triggerSourceMask"];
-    [anEncoder encodeInteger:triggerOutMask           forKey:@"triggerOutMask"];
+	[anEncoder encodeInt:postTriggerSetting       forKey:@"postTriggerSetting"];
+	[anEncoder encodeInt:triggerSourceMask        forKey:@"triggerSourceMask"];
+    [anEncoder encodeInt:triggerOutMask           forKey:@"triggerOutMask"];
     [anEncoder encodeInteger:triggerOutLogic            forKey:@"triggerOutLogic"];
-	[anEncoder encodeInteger:frontPanelControlMask    forKey:@"frontPanelControlMask"];
+	[anEncoder encodeInt:frontPanelControlMask    forKey:@"frontPanelControlMask"];
     [anEncoder encodeInteger:coincidenceLevel           forKey:@"coincidenceLevel"];
     [anEncoder encodeInteger:coincidenceWindow          forKey:@"coincidenceWindow"];
     [anEncoder encodeInteger:majorityLevel              forKey:@"majorityLevel"];
@@ -1480,7 +1480,7 @@ NSString* ORCV1730SelfTriggerLogicChanged                 = @"ORCV1730SelfTrigge
 	[anEncoder encodeBool:countAllTriggers          forKey:@"countAllTriggers"];
 	[anEncoder encodeInteger:channelConfigMask          forKey:@"channelConfigMask"];
     [anEncoder encodeObject:waveFormRateGroup       forKey:@"waveFormRateGroup"];
-    [anEncoder encodeInteger:numberBLTEventsToReadout forKey:@"numberBLTEventsToReadout"];
+    [anEncoder encodeInt:numberBLTEventsToReadout forKey:@"numberBLTEventsToReadout"];
 	int i;
 	for (i = 0; i < [self numberOfChannels]; i++){
         [anEncoder encodeInteger:dac[i]               forKey:[NSString stringWithFormat:@"dac%d", i]];

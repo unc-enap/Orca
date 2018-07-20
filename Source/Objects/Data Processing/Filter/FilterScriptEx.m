@@ -532,7 +532,7 @@
 				{
 					time_t theTime;
 					time(&theTime);
-					tempData.val.lValue = theTime;
+					tempData.val.lValue = (uint32_t)theTime;
 				}
 					break;
 					

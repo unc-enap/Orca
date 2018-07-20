@@ -1178,9 +1178,9 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
     [[self undoManager] disableUndoRegistration];
 	
     [self setThresholdOffset:	[decoder decodeIntForKey:@"ORIpeFLTModelThresholdOffset"]];
-    [self setInterruptMask:		[decoder decodeIntegerForKey:@"ORIpeFLTModelInterruptMask"]];
-    [self setCoinTime:			[decoder decodeIntegerForKey:@"coinTime"]];
-    [self setIntegrationTime:	[decoder decodeIntegerForKey:@"integrationTime"]];
+    [self setInterruptMask:		[decoder decodeIntForKey:@"ORIpeFLTModelInterruptMask"]];
+    [self setCoinTime:			[decoder decodeIntForKey:@"coinTime"]];
+    [self setIntegrationTime:	[decoder decodeIntForKey:@"integrationTime"]];
     [self setPage:				[decoder decodeIntForKey:@"ORIpeFLTModelPage"]];
     [self setIterations:		[decoder decodeIntForKey:@"ORIpeFLTModelIterations"]];
     [self setEndChan:			[decoder decodeIntForKey:@"ORIpeFLTModelEndChan"]];
@@ -1195,7 +1195,7 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 	[self setTestEnabledArray:	[decoder decodeObjectForKey:@"testsEnabledArray"]];
 	[self setTestStatusArray:	[decoder decodeObjectForKey:@"testsStatusArray"]];
     [self setReadoutPages:		[decoder decodeIntegerForKey:@"ORIpeFLTModelReadoutPages"]];	// ak, 2.7.07
-    [self setDataMask:			[decoder decodeIntegerForKey:@"ORIpeFLTModelDataMask"]];
+    [self setDataMask:			[decoder decodeIntForKey:@"ORIpeFLTModelDataMask"]];
 	if(dataMask ==0)dataMask=0xfff;
 	//make sure these objects exist and are populated with nil objects.
 	int i;	
@@ -1238,11 +1238,11 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 {
     [super encodeWithCoder:encoder];
 	
-    [encoder encodeInteger:dataMask			forKey:@"ORIpeFLTModelDataMask"];
+    [encoder encodeInt:dataMask			forKey:@"ORIpeFLTModelDataMask"];
     [encoder encodeInteger:thresholdOffset		forKey:@"ORIpeFLTModelThresholdOffset"];
-    [encoder encodeInteger:interruptMask		forKey:@"ORIpeFLTModelInterruptMask"];
-    [encoder encodeInteger:coinTime			forKey:@"coinTime"];
-    [encoder encodeInteger:integrationTime	forKey:@"integrationTime"];
+    [encoder encodeInt:interruptMask		forKey:@"ORIpeFLTModelInterruptMask"];
+    [encoder encodeInt:coinTime			forKey:@"coinTime"];
+    [encoder encodeInt:integrationTime	forKey:@"integrationTime"];
     [encoder encodeInt:page					forKey:@"ORIpeFLTModelPage"];
     [encoder encodeInteger:iterations			forKey:@"ORIpeFLTModelIterations"];
     [encoder encodeInteger:endChan				forKey:@"ORIpeFLTModelEndChan"];

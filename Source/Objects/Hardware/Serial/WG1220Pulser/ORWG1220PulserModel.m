@@ -933,7 +933,7 @@ NSString* ORWG1220PulserLock = @"ORWG1220PulserLock";
     [self setLastRequest:cmdData];
     [serialPort writeDataInBackground:cmdData];
     float delay = 10.0;
-    uint32_t cmdLength = [cmdData length];
+    NSUInteger cmdLength = [cmdData length];
     if(cmdLength > 7){
       delay +=2;
       delay += cmdLength / 2000;  // todo: check if additional time is sufficient for max data points (32768)

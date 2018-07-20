@@ -599,7 +599,7 @@ NSString* ORCaen1190RateGroupChangedNotification    = @"ORCaen1190RateGroupChang
 	
 	int i;
     for (i = 0; i < 4; i++){
-        [self setEnabledMask:i withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"enabledMask%d", i]]];
+        [self setEnabledMask:i withValue:[aDecoder decodeIntForKey: [NSString stringWithFormat:@"enabledMask%d", i]]];
     }
 	
 	if(!tdcRateGroup){
@@ -635,7 +635,7 @@ NSString* ORCaen1190RateGroupChangedNotification    = @"ORCaen1190RateGroupChang
 	[anEncoder encodeInteger:windowWidth		forKey:@"windowWidth"];
     [anEncoder encodeObject:tdcRateGroup	forKey:@"tdcRateGroup"];
     for (i = 0; i < 4; i++){
-        [anEncoder encodeInteger:enabledMask[i] forKey:[NSString stringWithFormat:@"enabledMask%d", i]];
+        [anEncoder encodeInt:enabledMask[i] forKey:[NSString stringWithFormat:@"enabledMask%d", i]];
     }
 }
 

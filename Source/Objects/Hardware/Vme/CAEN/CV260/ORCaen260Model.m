@@ -310,7 +310,7 @@ NSString* ORCaen260ModelAllScalerValuesChanged= @"ORCaen260ModelAllScalerValuesC
 		
 		data[0] = dataId | 19;
 		data[1] = (([self crateNumber]&0x01e)<<21) | ([self slot]& 0x0000001f)<<16  | (enabledMask & 0x0000ffff);
-		data[2] = lastReadTime;	//seconds since 1970
+		data[2] = (uint32_t)lastReadTime;	//seconds since 1970
 		
 		int index = 3;
 		int i;

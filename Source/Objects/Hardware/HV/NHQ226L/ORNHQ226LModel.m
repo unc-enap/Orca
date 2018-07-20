@@ -520,7 +520,7 @@ return NO; /////////ToDo
 		uint32_t data[11];
 		data[0] = dataId | 11;
 		data[1] = [self uniqueIdNumber]&0xfff;
-		data[2] = ut_Time;
+		data[2] = (uint32_t)ut_Time;
 		
 		union {
 			float asFloat;

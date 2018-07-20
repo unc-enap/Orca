@@ -246,7 +246,7 @@ NSString* ORLakeShore210Lock = @"ORLakeShore210Lock";
 		time_t	ut_Time;
 		time(&ut_Time);
 		//struct tm* theTimeGMTAsStruct = gmtime(&theTime);
-		timeMeasured[index] = ut_Time;
+		timeMeasured[index] = (uint32_t)ut_Time;
 
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORLakeShore210TempChanged 
 															object:self 

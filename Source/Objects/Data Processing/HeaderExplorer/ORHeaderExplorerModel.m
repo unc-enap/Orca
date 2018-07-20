@@ -243,7 +243,7 @@ NSString* ORHeaderExplorerProgressChanged		= @"ORHeaderExplorerProgressChanged";
 
 - (uint32_t)   total
 {
-	return [filesToProcess count];
+	return (uint32_t)[filesToProcess count];
 }
 
 - (NSDictionary*) runDictionaryForIndex:(int)index

@@ -909,7 +909,7 @@
 
 - (IBAction) triggerModeAction:(id)sender
 {
-	[model setTriggerMode:[sender tag] withValue:[sender indexOfSelectedItem]];
+	[model setTriggerMode:[sender tag] withValue:(uint32_t)[sender indexOfSelectedItem]];
 }
 
 - (IBAction) gainAction:(id)sender

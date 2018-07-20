@@ -101,7 +101,7 @@
 	[fileHeader release];
 	fileHeader = [aHeader retain];
 	[self generateObjectLookup];
-	uint32_t headerLength = [[self headerAsData] length]; 
+	uint32_t headerLength = (uint32_t)[[self headerAsData] length]; 
 	[fileHeader setObject:[NSNumber numberWithLong:headerLength] forKey:@"Header Length"];
 
 }

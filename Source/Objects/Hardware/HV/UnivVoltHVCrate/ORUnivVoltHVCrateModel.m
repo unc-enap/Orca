@@ -835,7 +835,7 @@ NSString* HVkErrorMsg = @"ErrorMsg";
 	@try
 	{
 		// Get amount of data and data itself.
-		lengthOfReturn = [aDataObject length];
+		lengthOfReturn = (uint32_t)[aDataObject length];
 		[aDataObject getBytes: returnBufferArray length: lengthOfReturn];
 		NSLog( @"ORUnivVoltHVCrateModel - Return string '%s'  length: %d\n", returnBufferArray, lengthOfReturn );
 		

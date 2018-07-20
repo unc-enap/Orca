@@ -1115,7 +1115,7 @@ ORTTCPX_READ_IMPLEMENT(GetSTB, int)
     struct ORTTCPX400DPCmdInfo* theCmd = &gORTTCPXCmds[cmd];
     if (theCmd->responds) {
         if (selName == nil){
-            uint32_t numberOfOutputs = [[theCmd->responseFormat componentsSeparatedByString:@"%"] count] - 1;
+            uint32_t numberOfOutputs = (uint32_t)[[theCmd->responseFormat componentsSeparatedByString:@"%"] count] - 1;
             switch (numberOfOutputs) {
                 case 1:
                     selName = NSStringFromSelector(@selector(_processGeneralReadback:));

@@ -152,7 +152,7 @@
 
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-	if([[tableColumn identifier] isEqualToString:@"Value"])return [NSNumber numberWithInteger:[model value:row]];
+	if([[tableColumn identifier] isEqualToString:@"Value"])return [NSNumber numberWithInteger:[model value:(uint32_t)row]];
 	else return [NSNumber numberWithInteger:row];
 }
 

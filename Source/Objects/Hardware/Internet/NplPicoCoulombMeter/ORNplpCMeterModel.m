@@ -269,7 +269,7 @@ NSString* ORNplpCMeterLowLimitChanged		= @"ORNplpCMeterLowLimitChanged";
 			time(&ut_time);
 			//struct tm* theTimeGMTAsStruct = gmtime(&theTime);
 			//time_t ut_time = mktime(theTimeGMTAsStruct);
-			data[2] = ut_time;											//third word is seconds since 1970 (UT)
+			data[2] = (uint32_t)ut_time;											//third word is seconds since 1970 (UT)
 			
 			uint32_t* p = (uint32_t*)[meterData bytes];
 			
@@ -361,7 +361,7 @@ NSString* ORNplpCMeterLowLimitChanged		= @"ORNplpCMeterLowLimitChanged";
 - (BOOL) validateMeterData
 {
 	uint32_t* p = (uint32_t*)[meterData bytes];
-	uint32_t len = [meterData length]/4;
+	uint32_t len = (uint32_t)[meterData length]/4;
 	int i;
 	short lastCount = 0;
 	short count;

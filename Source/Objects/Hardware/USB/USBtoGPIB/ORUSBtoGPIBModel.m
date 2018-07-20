@@ -290,7 +290,7 @@ NSString* ORUSBtoGPIBUSBOutConnection			= @"ORUSBtoGPIBUSBOutConnection";
 - (int32_t) readFromDevice: (short) aPrimaryAddress data: (char*) aData maxLength: (int32_t) aMaxLength
 {
 	ssize_t result = 0;
-	if(!fd)return result;
+	if(!fd)return (uint32_t)result;
     @try {
 		[theHWLock lock];   //-----begin critical section
 		[self selectDevice:aPrimaryAddress];
@@ -319,7 +319,7 @@ NSString* ORUSBtoGPIBUSBOutConnection			= @"ORUSBtoGPIBUSBOutConnection";
         [localException raise];
     }
 	
-	return result;
+	return (uint32_t)result;
 }
 //-------------------------------------------------------------------------------------------------------
 

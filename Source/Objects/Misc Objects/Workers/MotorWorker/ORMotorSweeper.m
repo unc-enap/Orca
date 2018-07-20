@@ -325,7 +325,7 @@
     if(positionArray){
         stepIndex++;
         if(stepIndex<[positionArray count]){
-            aValue = [[positionArray objectAtIndex:stepIndex] longValue];
+            aValue = (int32_t)[[positionArray objectAtIndex:stepIndex] longValue];
             [motor moveMotor:motor to:aValue];
         }
     }

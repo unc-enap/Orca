@@ -919,7 +919,7 @@ NSString* ORLabJackU6CounterEnabledChanged      = @"ORLabJackU6CounterEnabledCha
     }
 
 	[self setAdcDiff:       [decoder decodeIntegerForKey:  @"adcDiff"]];
-	[self setDoDirection:	[decoder decodeIntegerForKey:@"doDirection"]];
+	[self setDoDirection:	[decoder decodeIntForKey:@"doDirection"]];
     [self setPollTime:		[decoder decodeIntForKey:  @"pollTime"]];
     
     BOOL wasOpen = [decoder decodeBoolForKey:@"wasOpen"];
@@ -964,7 +964,7 @@ NSString* ORLabJackU6CounterEnabledChanged      = @"ORLabJackU6CounterEnabledCha
     }
 	
     [encoder encodeInteger:adcDiff		forKey:@"adcDiff"];
-    [encoder encodeInteger:doDirection	forKey:@"doDirection"];
+    [encoder encodeInt:doDirection	forKey:@"doDirection"];
     [encoder encodeBool:[self deviceOpen] forKey:@"wasOpen"];
 }
 
@@ -1066,7 +1066,7 @@ NSString* ORLabJackU6CounterEnabledChanged      = @"ORLabJackU6CounterEnabledCha
         
         time_t	ut_Time;
         time(&ut_Time);
-        timeMeasured = ut_Time;
+        timeMeasured = (uint32_t)ut_Time;
         
         for(i=0;i<kNumU6AdcChannels;i++){
             if(!enabled[i])continue;

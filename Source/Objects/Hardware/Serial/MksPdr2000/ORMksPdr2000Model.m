@@ -278,7 +278,7 @@ NSString* ORMksPdr2000Lock = @"ORMksPdr2000Lock";
 		time_t	ut_Time;
 		time(&ut_Time);
 		//struct tm* theTimeGMTAsStruct = gmtime(&theTime);
-		timeMeasured[index] = ut_Time;
+		timeMeasured[index] = (uint32_t)ut_Time;
 
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORMksPdr2000PressureChanged 
 															object:self 

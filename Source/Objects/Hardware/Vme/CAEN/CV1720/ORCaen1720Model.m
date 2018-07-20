@@ -1371,19 +1371,19 @@ NSString* ORCaen1720ModelContinuousModeChanged              = @"ORCaen1720ModelC
     [[self undoManager] disableUndoRegistration];
     [self setEventSize:[aDecoder decodeIntForKey:@"ORCaen1720ModelEventSize"]];
     [self setEnabledMask:[aDecoder decodeIntegerForKey:@"ORCaen1720ModelEnabledMask"]];
-    [self setPostTriggerSetting:[aDecoder decodeIntegerForKey:@"ORCaen1720ModelPostTriggerSetting"]];
-    [self setTriggerSourceMask:[aDecoder decodeIntegerForKey:@"ORCaen1720ModelTriggerSourceMask"]];
-	[self setTriggerOutMask:[aDecoder decodeIntegerForKey:@"ORCaen1720ModelTriggerOutMask"]];
-	[self setFrontPanelControlMask:[aDecoder decodeIntegerForKey:@"ORCaen1720ModelFrontPanelControlMask"]];
+    [self setPostTriggerSetting:[aDecoder decodeIntForKey:@"ORCaen1720ModelPostTriggerSetting"]];
+    [self setTriggerSourceMask:[aDecoder decodeIntForKey:@"ORCaen1720ModelTriggerSourceMask"]];
+	[self setTriggerOutMask:[aDecoder decodeIntForKey:@"ORCaen1720ModelTriggerOutMask"]];
+	[self setFrontPanelControlMask:[aDecoder decodeIntForKey:@"ORCaen1720ModelFrontPanelControlMask"]];
     [self setCoincidenceLevel:[aDecoder decodeIntegerForKey:@"ORCaen1720ModelCoincidenceLevel"]];
     [self setAcquisitionMode:[aDecoder decodeIntegerForKey:@"acquisitionMode"]];
     [self setCountAllTriggers:[aDecoder decodeBoolForKey:@"countAllTriggers"]];
-    [self setCustomSize:[aDecoder decodeIntegerForKey:@"customSize"]];
+    [self setCustomSize:[aDecoder decodeIntForKey:@"customSize"]];
 	[self setIsCustomSize:[aDecoder decodeBoolForKey:@"isCustomSize"]];
 	[self setIsFixedSize:[aDecoder decodeBoolForKey:@"isFixedSize"]];
     [self setChannelConfigMask:[aDecoder decodeIntegerForKey:@"channelConfigMask"]];
     [self setWaveFormRateGroup:[aDecoder decodeObjectForKey:@"waveFormRateGroup"]];
-    [self setNumberBLTEventsToReadout:[aDecoder decodeIntegerForKey:@"numberBLTEventsToReadout"]];
+    [self setNumberBLTEventsToReadout:[aDecoder decodeIntForKey:@"numberBLTEventsToReadout"]];
     [self setContinuousMode:[aDecoder decodeBoolForKey:@"continuousMode"]];
     
     if(!waveFormRateGroup){
@@ -1396,7 +1396,7 @@ NSString* ORCaen1720ModelContinuousModeChanged              = @"ORCaen1720ModelC
 	int i;
     for (i = 0; i < [self numberOfChannels]; i++){
         [self setDac:i withValue:      [aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENDacChnl%d", i]]];
-        [self setThreshold:i withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENThresChnl%d", i]]];
+        [self setThreshold:i withValue:[aDecoder decodeIntForKey: [NSString stringWithFormat:@"CAENThresChnl%d", i]]];
         [self setOverUnderThreshold:i withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENOverUnderChnl%d", i]]];
     }
     
@@ -1409,10 +1409,10 @@ NSString* ORCaen1720ModelContinuousModeChanged              = @"ORCaen1720ModelC
     [super encodeWithCoder:anEncoder];
 	[anEncoder encodeInteger:eventSize forKey:@"ORCaen1720ModelEventSize"];
 	[anEncoder encodeInteger:enabledMask forKey:@"ORCaen1720ModelEnabledMask"];
-	[anEncoder encodeInteger:postTriggerSetting forKey:@"ORCaen1720ModelPostTriggerSetting"];
-	[anEncoder encodeInteger:triggerSourceMask forKey:@"ORCaen1720ModelTriggerSourceMask"];
-	[anEncoder encodeInteger:triggerOutMask forKey:@"ORCaen1720ModelTriggerOutMask"];
-	[anEncoder encodeInteger:frontPanelControlMask forKey:@"ORCaen1720ModelFrontPanelControlMask"];
+	[anEncoder encodeInt:postTriggerSetting forKey:@"ORCaen1720ModelPostTriggerSetting"];
+	[anEncoder encodeInt:triggerSourceMask forKey:@"ORCaen1720ModelTriggerSourceMask"];
+	[anEncoder encodeInt:triggerOutMask forKey:@"ORCaen1720ModelTriggerOutMask"];
+	[anEncoder encodeInt:frontPanelControlMask forKey:@"ORCaen1720ModelFrontPanelControlMask"];
 	[anEncoder encodeInteger:coincidenceLevel forKey:@"ORCaen1720ModelCoincidenceLevel"];
 	[anEncoder encodeInteger:acquisitionMode forKey:@"acquisitionMode"];
 	[anEncoder encodeBool:countAllTriggers forKey:@"countAllTriggers"];
@@ -1421,12 +1421,12 @@ NSString* ORCaen1720ModelContinuousModeChanged              = @"ORCaen1720ModelC
 	[anEncoder encodeBool:isFixedSize forKey:@"isFixedSize"];
 	[anEncoder encodeInteger:channelConfigMask forKey:@"channelConfigMask"];
     [anEncoder encodeObject:waveFormRateGroup forKey:@"waveFormRateGroup"];
-    [anEncoder encodeInteger:numberBLTEventsToReadout forKey:@"numberBLTEventsToReadout"];
+    [anEncoder encodeInt:numberBLTEventsToReadout forKey:@"numberBLTEventsToReadout"];
     [anEncoder encodeBool:continuousMode forKey:@"continuousMode"];
 	int i;
 	for (i = 0; i < [self numberOfChannels]; i++){
         [anEncoder encodeInteger:dac[i] forKey:[NSString stringWithFormat:@"CAENDacChnl%d", i]];
-        [anEncoder encodeInteger:thresholds[i] forKey:[NSString stringWithFormat:@"CAENThresChnl%d", i]];
+        [anEncoder encodeInt:thresholds[i] forKey:[NSString stringWithFormat:@"CAENThresChnl%d", i]];
         [anEncoder encodeInteger:overUnderThreshold[i] forKey:[NSString stringWithFormat:@"CAENOverUnderChnl%d", i]];
     }
 }

@@ -1873,12 +1873,12 @@
 
 - (IBAction) extraFilterAction:(id)sender
 {
-    [model setExtraFilterBits:[sender selectedRow] withValue:[[sender selectedCell] indexOfSelectedItem]];
+    [model setExtraFilterBits:[sender selectedRow] withValue:(uint32_t)[[sender selectedCell] indexOfSelectedItem]];
 }
 
 - (IBAction) tauTableAction:(id)sender
 {
-    [model setTauTableBits:[sender selectedRow] withValue:[[sender selectedCell] indexOfSelectedItem]];
+    [model setTauTableBits:[sender selectedRow] withValue:(uint32_t)[[sender selectedCell] indexOfSelectedItem]];
 }
 
 - (IBAction) riseTimeAction:(id)sender
@@ -2060,7 +2060,7 @@
 
 - (IBAction) clockSourceAction:(id)sender
 {
-	[model setClockSource:[sender indexOfSelectedItem]];
+	[model setClockSource:(uint32_t)[sender indexOfSelectedItem]];
 }
 
 

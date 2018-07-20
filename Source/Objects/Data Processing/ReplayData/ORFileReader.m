@@ -139,7 +139,7 @@
 			if(dataId == 0x0){
 				runEnded = NO;
 				[currentDecoder loadHeader:p];
-				runDataID = [[currentDecoder headerObject:@"dataDescription",@"ORRunModel",@"Run",@"dataId",nil] longValue];
+				runDataID = (uint32_t)[[currentDecoder headerObject:@"dataDescription",@"ORRunModel",@"Run",@"dataId",nil] longValue];
 			}
 			else if(dataId == runDataID){
 				[self processRunRecord:p];

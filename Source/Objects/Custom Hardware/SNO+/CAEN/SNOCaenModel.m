@@ -716,7 +716,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
     }
     
     // Perform the read operation.
-    *pValue = [mtc_server intCommand:"caen_read %d", [self getAddressOffset:pReg] + chan*0x100];
+    *pValue = [mtc_server intCommand:"caen_read %ld", [self getAddressOffset:pReg] + chan*0x100];
 }
 
 - (void) writeChan:(unsigned short)chan reg:(unsigned short) pReg sendValue:(uint32_t) pValue
@@ -867,7 +867,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
     }
     
     // Perform the read operation.
-    *pValue = [mtc_server intCommand:"caen_read %d", [self getAddressOffset:pReg]];
+    *pValue = [mtc_server intCommand:"caen_read %ld", [self getAddressOffset:pReg]];
 }
 
 - (void) write:(unsigned short) pReg sendValue:(uint32_t) pValue
@@ -912,7 +912,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 {
 	int i;
 	for(i=0;i<8;i++){
-		uint32_t value = [mtc_server intCommand:"caen_read %d", reg[kNumOUThreshold].addressOffset + (i*0x100)];
+		uint32_t value = [mtc_server intCommand:"caen_read %ld", reg[kNumOUThreshold].addressOffset + (i*0x100)];
         [self setOverUnderThreshold:i withValue:value];
 	}
 }
@@ -1198,19 +1198,19 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
     [[self undoManager] disableUndoRegistration];
     [self setEventSize:[aDecoder decodeIntForKey:@"SNOCaenModelEventSize"]];
     [self setEnabledMask:[aDecoder decodeIntegerForKey:@"SNOCaenModelEnabledMask"]];
-    [self setPostTriggerSetting:[aDecoder decodeIntegerForKey:@"SNOCaenModelPostTriggerSetting"]];
-    [self setTriggerSourceMask:[aDecoder decodeIntegerForKey:@"SNOCaenModelTriggerSourceMask"]];
-	[self setTriggerOutMask:[aDecoder decodeIntegerForKey:@"SNOCaenModelTriggerOutMask"]];
-	[self setFrontPanelControlMask:[aDecoder decodeIntegerForKey:@"SNOCaenModelFrontPanelControlMask"]];
+    [self setPostTriggerSetting:[aDecoder decodeIntForKey:@"SNOCaenModelPostTriggerSetting"]];
+    [self setTriggerSourceMask:[aDecoder decodeIntForKey:@"SNOCaenModelTriggerSourceMask"]];
+	[self setTriggerOutMask:[aDecoder decodeIntForKey:@"SNOCaenModelTriggerOutMask"]];
+	[self setFrontPanelControlMask:[aDecoder decodeIntForKey:@"SNOCaenModelFrontPanelControlMask"]];
     [self setCoincidenceLevel:[aDecoder decodeIntegerForKey:@"SNOCaenModelCoincidenceLevel"]];
     [self setAcquisitionMode:[aDecoder decodeIntegerForKey:@"acquisitionMode"]];
     [self setCountAllTriggers:[aDecoder decodeBoolForKey:@"countAllTriggers"]];
-    [self setCustomSize:[aDecoder decodeIntegerForKey:@"customSize"]];
+    [self setCustomSize:[aDecoder decodeIntForKey:@"customSize"]];
 	[self setIsCustomSize:[aDecoder decodeBoolForKey:@"isCustomSize"]];
 	[self setIsFixedSize:[aDecoder decodeBoolForKey:@"isFixedSize"]];
     [self setChannelConfigMask:[aDecoder decodeIntegerForKey:@"channelConfigMask"]];
     [self setWaveFormRateGroup:[aDecoder decodeObjectForKey:@"waveFormRateGroup"]];
-    [self setNumberBLTEventsToReadout:[aDecoder decodeIntegerForKey:@"numberBLTEventsToReadout"]];
+    [self setNumberBLTEventsToReadout:[aDecoder decodeIntForKey:@"numberBLTEventsToReadout"]];
     [self setContinuousMode:[aDecoder decodeBoolForKey:@"continuousMode"]];
     
     if(!waveFormRateGroup){
@@ -1245,19 +1245,19 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
     [super encodeWithCoder:anEncoder];
 	[anEncoder encodeInteger:eventSize forKey:@"SNOCaenModelEventSize"];
 	[anEncoder encodeInteger:enabledMask forKey:@"SNOCaenModelEnabledMask"];
-	[anEncoder encodeInteger:postTriggerSetting forKey:@"SNOCaenModelPostTriggerSetting"];
-	[anEncoder encodeInteger:triggerSourceMask forKey:@"SNOCaenModelTriggerSourceMask"];
-	[anEncoder encodeInteger:triggerOutMask forKey:@"SNOCaenModelTriggerOutMask"];
-	[anEncoder encodeInteger:frontPanelControlMask forKey:@"SNOCaenModelFrontPanelControlMask"];
+	[anEncoder encodeInt:postTriggerSetting forKey:@"SNOCaenModelPostTriggerSetting"];
+	[anEncoder encodeInt:triggerSourceMask forKey:@"SNOCaenModelTriggerSourceMask"];
+	[anEncoder encodeInt:triggerOutMask forKey:@"SNOCaenModelTriggerOutMask"];
+	[anEncoder encodeInt:frontPanelControlMask forKey:@"SNOCaenModelFrontPanelControlMask"];
 	[anEncoder encodeInteger:coincidenceLevel forKey:@"SNOCaenModelCoincidenceLevel"];
 	[anEncoder encodeInteger:acquisitionMode forKey:@"acquisitionMode"];
 	[anEncoder encodeBool:countAllTriggers forKey:@"countAllTriggers"];
-	[anEncoder encodeInteger:customSize forKey:@"customSize"];
+	[anEncoder encodeInt:customSize forKey:@"customSize"];
 	[anEncoder encodeBool:isCustomSize forKey:@"isCustomSize"];
 	[anEncoder encodeBool:isFixedSize forKey:@"isFixedSize"];
 	[anEncoder encodeInteger:channelConfigMask forKey:@"channelConfigMask"];
     [anEncoder encodeObject:waveFormRateGroup forKey:@"waveFormRateGroup"];
-    [anEncoder encodeInteger:numberBLTEventsToReadout forKey:@"numberBLTEventsToReadout"];
+    [anEncoder encodeInt:numberBLTEventsToReadout forKey:@"numberBLTEventsToReadout"];
     [anEncoder encodeBool:continuousMode forKey:@"continuousMode"];
 	int i;
 	for (i = 0; i < [self numberOfChannels]; i++){

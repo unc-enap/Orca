@@ -804,7 +804,7 @@ static MotionNodeCalibrations motionNodeCalibrationV10[3] = {
 			uint32_t data[3 + (kSecToShip * kPtPerSec)];
 			data[0] = dataId | (3 + shipLen);
 			data[1] = ((type&0x3)<<16) | ([self uniqueIdNumber]&0xfff); // xtrace
-			data[2] = ut_Time;
+			data[2] = (uint32_t)ut_Time;
 			int i;
             float slope;
             float intercept;

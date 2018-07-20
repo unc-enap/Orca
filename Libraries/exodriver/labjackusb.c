@@ -62,10 +62,10 @@ struct LJUSB_FirmwareHardwareVersion
 
 static void LJUSB_U3_FirmwareHardwareVersion(HANDLE hDevice, struct LJUSB_FirmwareHardwareVersion * fhv)
 {
-    unsigned long i = 0, r = 0;
-    unsigned long epOut = U3_PIPE_EP1_OUT, epIn = U3_PIPE_EP2_IN;
-    const unsigned long COMMAND_LENGTH = 26;
-    const unsigned long RESPONSE_LENGTH = 38;
+    uint32_t i = 0, r = 0;
+    uint32_t epOut = U3_PIPE_EP1_OUT, epIn = U3_PIPE_EP2_IN;
+    const uint32_t COMMAND_LENGTH = 26;
+    const uint32_t RESPONSE_LENGTH = 38;
     BYTE command[COMMAND_LENGTH];
     BYTE response[RESPONSE_LENGTH];
 
@@ -111,10 +111,10 @@ static void LJUSB_U3_FirmwareHardwareVersion(HANDLE hDevice, struct LJUSB_Firmwa
 
 static void LJUSB_U6_FirmwareHardwareVersion(HANDLE hDevice, struct LJUSB_FirmwareHardwareVersion * fhv)
 {
-    unsigned long i = 0, r = 0;
-    unsigned long epOut = U6_PIPE_EP1_OUT, epIn = U6_PIPE_EP2_IN;
-    const unsigned long COMMAND_LENGTH = 26;
-    const unsigned long RESPONSE_LENGTH = 38;
+    uint32_t i = 0, r = 0;
+    uint32_t epOut = U6_PIPE_EP1_OUT, epIn = U6_PIPE_EP2_IN;
+    const uint32_t COMMAND_LENGTH = 26;
+    const uint32_t RESPONSE_LENGTH = 38;
     BYTE command[COMMAND_LENGTH];
     BYTE response[RESPONSE_LENGTH];
 
@@ -159,10 +159,10 @@ static void LJUSB_U6_FirmwareHardwareVersion(HANDLE hDevice, struct LJUSB_Firmwa
 
 static void LJUSB_UE9_FirmwareHardwareVersion(HANDLE hDevice, struct LJUSB_FirmwareHardwareVersion * fhv)
 {
-    unsigned long i = 0, r = 0;
-    unsigned long epOut = UE9_PIPE_EP1_OUT, epIn = UE9_PIPE_EP1_IN;
-    const unsigned long COMMAND_LENGTH = 38;
-    const unsigned long RESPONSE_LENGTH = 38;
+    uint32_t i = 0, r = 0;
+    uint32_t epOut = UE9_PIPE_EP1_OUT, epIn = UE9_PIPE_EP1_IN;
+    const uint32_t COMMAND_LENGTH = 38;
+    const uint32_t RESPONSE_LENGTH = 38;
     BYTE command[COMMAND_LENGTH];
     BYTE response[RESPONSE_LENGTH];
 
@@ -377,7 +377,7 @@ static bool LJUSB_isRecentKernel(void)
 {
     struct utsname u;
     char *tok = NULL;
-    unsigned long kernelMajor = 0, kernelMinor = 0, kernelRev = 0;
+    uint32_t kernelMajor = 0, kernelMinor = 0, kernelRev = 0;
 
     if (uname(&u) != 0) {
         fprintf(stderr, "Error calling uname(2).");
@@ -424,7 +424,7 @@ static bool LJUSB_isRecentKernel(void)
 }
 
 
-static bool LJUSB_isMinFirmware(HANDLE hDevice, unsigned long ProductID)
+static bool LJUSB_isMinFirmware(HANDLE hDevice, uint32_t ProductID)
 {
     struct LJUSB_FirmwareHardwareVersion fhv = {0, 0, 0, 0};
 
@@ -480,7 +480,7 @@ float LJUSB_GetLibraryVersion(void)
 }
 
 
-HANDLE LJUSB_OpenDevice(UINT DevNum, unsigned int dwReserved, unsigned long ProductID)
+HANDLE LJUSB_OpenDevice(UINT DevNum, unsigned int dwReserved, uint32_t ProductID)
 {
     (void)dwReserved;
     libusb_device **devs = NULL, *dev = NULL;
@@ -702,7 +702,7 @@ bool LJUSB_ResetConnection(HANDLE hDevice)
 }
 
 
-static unsigned long LJUSB_DoTransfer(HANDLE hDevice, unsigned char endpoint, BYTE *pBuff, unsigned long count, unsigned int timeout, bool isBulk)
+static uint32_t LJUSB_DoTransfer(HANDLE hDevice, unsigned char endpoint, BYTE *pBuff, uint32_t count, unsigned int timeout, bool isBulk)
 {
     int r = 0;
     int transferred = 0;
@@ -768,7 +768,7 @@ static unsigned long LJUSB_DoTransfer(HANDLE hDevice, unsigned char endpoint, BY
 
 
 // Automatically uses the correct endpoint and transfer method (bulk or interrupt)
-static unsigned long LJUSB_SetupTransfer(HANDLE hDevice, BYTE *pBuff, unsigned long count, unsigned int timeout, enum LJUSB_TRANSFER_OPERATION operation)
+static uint32_t LJUSB_SetupTransfer(HANDLE hDevice, BYTE *pBuff, uint32_t count, unsigned int timeout, enum LJUSB_TRANSFER_OPERATION operation)
 {
     libusb_device *dev = NULL;
     struct libusb_device_descriptor desc;
@@ -930,20 +930,20 @@ static unsigned long LJUSB_SetupTransfer(HANDLE hDevice, BYTE *pBuff, unsigned l
 
 
 // Deprecated: Kept for backwards compatibility
-unsigned long LJUSB_BulkRead(HANDLE hDevice, unsigned char endpoint, BYTE *pBuff, unsigned long count)
+uint32_t LJUSB_BulkRead(HANDLE hDevice, unsigned char endpoint, BYTE *pBuff, uint32_t count)
 {
     return LJUSB_DoTransfer(hDevice, endpoint, pBuff, count, LJ_LIBUSB_TIMEOUT_DEFAULT, true);
 }
 
 
 // Deprecated: Kept for backwards compatibility
-unsigned long LJUSB_BulkWrite(HANDLE hDevice, unsigned char endpoint, BYTE *pBuff, unsigned long count)
+uint32_t LJUSB_BulkWrite(HANDLE hDevice, unsigned char endpoint, BYTE *pBuff, uint32_t count)
 {
     return LJUSB_DoTransfer(hDevice, endpoint, pBuff, count, LJ_LIBUSB_TIMEOUT_DEFAULT, true);
 }
 
 
-unsigned long LJUSB_Write(HANDLE hDevice, BYTE *pBuff, unsigned long count)
+uint32_t LJUSB_Write(HANDLE hDevice, BYTE *pBuff, uint32_t count)
 {
 #if LJ_DEBUG
     fprintf(stderr, "LJUSB_Write: calling LJUSB_Write.\n");
@@ -952,7 +952,7 @@ unsigned long LJUSB_Write(HANDLE hDevice, BYTE *pBuff, unsigned long count)
 }
 
 
-unsigned long LJUSB_Read(HANDLE hDevice, BYTE *pBuff, unsigned long count)
+uint32_t LJUSB_Read(HANDLE hDevice, BYTE *pBuff, uint32_t count)
 {
 #if LJ_DEBUG
     fprintf(stderr, "LJUSB_Read: calling LJUSB_Read.\n");
@@ -961,7 +961,7 @@ unsigned long LJUSB_Read(HANDLE hDevice, BYTE *pBuff, unsigned long count)
 }
 
 
-unsigned long LJUSB_Stream(HANDLE hDevice, BYTE *pBuff, unsigned long count)
+uint32_t LJUSB_Stream(HANDLE hDevice, BYTE *pBuff, uint32_t count)
 {
 #if LJ_DEBUG
     fprintf(stderr, "LJUSB_Stream: calling LJUSB_Stream.\n");
@@ -970,7 +970,7 @@ unsigned long LJUSB_Stream(HANDLE hDevice, BYTE *pBuff, unsigned long count)
 }
 
 
-unsigned long LJUSB_WriteTO(HANDLE hDevice, BYTE *pBuff, unsigned long count, unsigned int timeout)
+uint32_t LJUSB_WriteTO(HANDLE hDevice, BYTE *pBuff, uint32_t count, unsigned int timeout)
 {
 #if LJ_DEBUG
     fprintf(stderr, "LJUSB_Stream: calling LJUSB_WriteTO.\n");
@@ -979,7 +979,7 @@ unsigned long LJUSB_WriteTO(HANDLE hDevice, BYTE *pBuff, unsigned long count, un
 }
 
 
-unsigned long LJUSB_ReadTO(HANDLE hDevice, BYTE *pBuff, unsigned long count, unsigned int timeout)
+uint32_t LJUSB_ReadTO(HANDLE hDevice, BYTE *pBuff, uint32_t count, unsigned int timeout)
 {
 #if LJ_DEBUG
     fprintf(stderr, "LJUSB_Stream: calling LJUSB_ReadTO.\n");
@@ -988,7 +988,7 @@ unsigned long LJUSB_ReadTO(HANDLE hDevice, BYTE *pBuff, unsigned long count, uns
 }
 
 
-unsigned long LJUSB_StreamTO(HANDLE hDevice, BYTE *pBuff, unsigned long count, unsigned int timeout)
+uint32_t LJUSB_StreamTO(HANDLE hDevice, BYTE *pBuff, uint32_t count, unsigned int timeout)
 {
 #if LJ_DEBUG
     fprintf(stderr, "LJUSB_Stream: calling LJUSB_StreamTO.\n");
@@ -1018,7 +1018,7 @@ void LJUSB_CloseDevice(HANDLE hDevice)
 }
 
 
-unsigned int LJUSB_GetDevCount(unsigned long ProductID)
+unsigned int LJUSB_GetDevCount(uint32_t ProductID)
 {
     libusb_device **devs = NULL;
     ssize_t cnt = 0;
@@ -1239,7 +1239,7 @@ unsigned short LJUSB_GetDeviceDescriptorReleaseNumber(HANDLE hDevice)
 }
 
 
-unsigned long LJUSB_GetHIDReportDescriptor(HANDLE hDevice, BYTE *pBuff, unsigned long count)
+uint32_t LJUSB_GetHIDReportDescriptor(HANDLE hDevice, BYTE *pBuff, uint32_t count)
 {
     libusb_device *dev = NULL;
     struct libusb_device_descriptor desc;
@@ -1282,7 +1282,7 @@ unsigned long LJUSB_GetHIDReportDescriptor(HANDLE hDevice, BYTE *pBuff, unsigned
 
 
 //not supported
-bool LJUSB_AbortPipe(HANDLE hDevice, unsigned long Pipe)
+bool LJUSB_AbortPipe(HANDLE hDevice, uint32_t Pipe)
 {
     (void)hDevice;
     (void)Pipe;

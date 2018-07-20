@@ -261,7 +261,7 @@ static NSString* ORRunListDataOut1	= @"ORRunListDataOut1";
 
 - (uint32_t) itemCount
 {
-	return [items count];
+	return (uint32_t)[items count];
 }
 
 - (void) registerNotificationObservers

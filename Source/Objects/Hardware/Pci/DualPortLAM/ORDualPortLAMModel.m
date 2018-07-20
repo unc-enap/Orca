@@ -172,7 +172,7 @@ static NSString *ORDualPortLAMVariables       = @"ORDualPortLAMVariables";
 		}
 	}
 	started = YES;
-	cachedNumberOfDataTakers = [dataTakers1 count];
+	cachedNumberOfDataTakers = (uint32_t)[dataTakers1 count];
 }
 
 - (void) saveReadOutList:(NSFileHandle*)aFile

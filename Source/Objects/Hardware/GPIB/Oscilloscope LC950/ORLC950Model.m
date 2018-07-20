@@ -1589,7 +1589,7 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 					{
 						if ( mChannels[ i ].chnlAcquire && ( mask & ( 1 << i ) ))
 						{
-							[ mDataObj[ i ] setGtid: gtidNumber ? [ gtidNumber longValue ] : 0 ];
+							[ mDataObj[ i ] setGtid: (uint32_t)(gtidNumber ? [ gtidNumber longValue ] : 0) ];
 							
 							//Note only mDataObj[ 0 ] has the timeData.
 							NSData* theTimeData = [ mDataObj[ 0 ] timePacketData: aDataPacket channel: i ];
@@ -1787,7 +1787,7 @@ NSString* ORLC950GpibLock  = @"ORLC950GpibLock";
 	"OCT", "NOV", "DEC" };
     struct tm					unixTime;
 	//    struct tm*					tmpStruct;
-    uint32_t				baseTime;
+    time_t				baseTime;
 	uint64_t			fracSecs;
     const uint64_t	mult = 10000000;
 	const uint64_t	mult1 = 1000;

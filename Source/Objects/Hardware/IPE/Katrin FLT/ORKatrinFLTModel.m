@@ -3691,7 +3691,7 @@ clean_up_mark:
 	[self setVetoFeatureIsAvailable:  [decoder decodeBoolForKey:@"vetoFeatureIsAvailable"]];
 	[self setHistoFeatureIsAvailable: [decoder decodeBoolForKey:@"histoFeatureIsAvailable"]];
 	[self setFilterGapFeatureIsAvailable: [decoder decodeBoolForKey:@"filterGapFeatureIsAvailable"]];
-	[self setVersionRegister:		  [decoder decodeIntegerForKey:@"versionRegister"]];
+	[self setVersionRegister:		  [decoder decodeIntForKey:@"versionRegister"]];
     
     [self setFilterGap: [decoder decodeIntForKey:@"filterGapSetting"]];
 	
@@ -3770,7 +3770,7 @@ clean_up_mark:
     [encoder encodeBool:vetoFeatureIsAvailable forKey:@"vetoFeatureIsAvailable"];	
     [encoder encodeBool:histoFeatureIsAvailable forKey:@"histoFeatureIsAvailable"];	
     [encoder encodeBool:filterGapFeatureIsAvailable forKey:@"filterGapFeatureIsAvailable"];	
-    [encoder encodeInteger:(int)versionRegister forKey:@"versionRegister"];
+    [encoder encodeInt:(int)versionRegister forKey:@"versionRegister"];
 	
     [encoder encodeInt:filterGap forKey:@"filterGapSetting"];	
 	

@@ -81,7 +81,7 @@
 	int boxcarLen           = ShiftAndExtract(ptr[1], 4,0x03);
 	int filterShapingLength = ShiftAndExtract(ptr[1], 0,0x0f);
 	uint32_t histoLen  = 4*4096;
-	uint32_t filterDiv = 1L << filterShapingLength;
+	uint32_t filterDiv = (uint32_t)(1L << filterShapingLength);
 	if(filterShapingLength==0){
 		filterDiv = boxcarLen + 1;
 	}
@@ -478,8 +478,8 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx histogramInfo (some flags; some spare fo
 	NSString* channelKey	= [self getChannelKey: chan];
     
     int filterShapingLength = ShiftAndExtract(ptr[1],0,0xf);
-	uint32_t filterLen = 1L << filterShapingLength;
-    uint32_t histoEBinSize = 1L << ptr[8];
+	uint32_t filterLen = (uint32_t)(1L << filterShapingLength);
+    uint32_t histoEBinSize = (uint32_t)(1L << ptr[8]);
     uint32_t histoEOffset = ptr[9];
     
     

@@ -49,7 +49,7 @@
 {
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
-    [self setMask:[decoder decodeIntegerForKey:@"mask"]];
+    [self setMask:[decoder decodeIntForKey:@"mask"]];
     [[self undoManager] enableUndoRegistration];
 
     return self;
@@ -58,7 +58,7 @@
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInteger:mask forKey:@"mask"];
+    [encoder encodeInt:mask forKey:@"mask"];
 }
 
 @end
@@ -88,7 +88,7 @@
 {
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
-    [self setStartIndex:[decoder decodeIntegerForKey:@"startIndex"]];
+    [self setStartIndex:[decoder decodeIntForKey:@"startIndex"]];
     [[self undoManager] enableUndoRegistration];
 	
     return self;
@@ -97,7 +97,7 @@
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInteger:startIndex forKey:@"startIndex"];
+    [encoder encodeInt:startIndex forKey:@"startIndex"];
 }
 @end
 

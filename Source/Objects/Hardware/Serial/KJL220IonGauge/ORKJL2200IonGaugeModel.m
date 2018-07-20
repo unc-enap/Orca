@@ -335,7 +335,7 @@ NSString* ORKJL2200IonGaugeModelQueCountChanged			= @"ORKJL2200IonGaugeModelQueC
 	time_t	ut_Time;
 	time(&ut_Time);
 	//struct tm* theTimeGMTAsStruct = gmtime(&theTime);
-	timeMeasured = ut_Time;
+	timeMeasured = (uint32_t)ut_Time;
 		
 	if(timeRate == nil) timeRate = [[ORTimeRate alloc] init];
 	[timeRate addDataToTimeAverage:aPressure];

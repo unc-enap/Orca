@@ -151,19 +151,19 @@ NSString* ORFFTOptionChanged = @"ORFFTOptionChanged";
 {
     self = [super init];
     		
-    [self setMinChannel:	[decoder decodeIntegerForKey:@"minChannel"]];
-    [self setMaxChannel:	[decoder decodeIntegerForKey:@"maxChannel"]];
-	[self setFftOption:		[decoder decodeIntegerForKey:@"fftOption"]];
-	[self setFftWindow:		[decoder decodeIntegerForKey:@"fftWindow"]];
+    [self setMinChannel:	[decoder decodeIntForKey:@"minChannel"]];
+    [self setMaxChannel:	[decoder decodeIntForKey:@"maxChannel"]];
+	[self setFftOption:		[decoder decodeIntForKey:@"fftOption"]];
+	[self setFftWindow:		[decoder decodeIntForKey:@"fftWindow"]];
 	
     return self;
 }
 
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
-    [encoder encodeInteger:minChannel forKey:@"minChannel"];
-    [encoder encodeInteger:maxChannel forKey:@"maxChannel"];
-	[encoder encodeInteger:fftOption  forKey:@"fftOption"];
-    [encoder encodeInteger:fftWindow  forKey:@"fftWindow"];
+    [encoder encodeInt:minChannel forKey:@"minChannel"];
+    [encoder encodeInt:maxChannel forKey:@"maxChannel"];
+	[encoder encodeInt:fftOption  forKey:@"fftOption"];
+    [encoder encodeInt:fftWindow  forKey:@"fftWindow"];
 }
 @end

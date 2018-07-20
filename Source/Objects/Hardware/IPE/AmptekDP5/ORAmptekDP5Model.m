@@ -4977,7 +4977,7 @@ return ;
 
 
 
-	[self setControlReg:		[decoder decodeIntegerForKey:@"controlReg"]];
+	[self setControlReg:		[decoder decodeIntForKey:@"controlReg"]];
 	if([decoder containsValueForKey:@"secondsSetInitWithHost"])
 		[self setSecondsSetInitWithHost:[decoder decodeBoolForKey:@"secondsSetInitWithHost"]];
 	else[self setSecondsSetInitWithHost: YES];
@@ -4990,7 +4990,7 @@ return ;
 	[self setPulserAmp:				[decoder decodeFloatForKey:@"ORAmptekDP5ModelPulserAmp"]];
 		
 	//special
-    [self setNextPageDelay:			[decoder decodeIntegerForKey:@"nextPageDelay"]]; // ak, 5.10.07
+    [self setNextPageDelay:			[decoder decodeIntForKey:@"nextPageDelay"]]; // ak, 5.10.07
 	
 	[self setReadOutGroup:			[decoder decodeObjectForKey:@"ReadoutGroup"]];
     [self setPoller:				[decoder decodeObjectForKey:@"poller"]];
@@ -5045,7 +5045,7 @@ return ;
 	[encoder encodeInt:crateUDPCommandPort forKey:@"crateUDPCommandPort"];
 	[encoder encodeBool:secondsSetInitWithHost forKey:@"secondsSetInitWithHost"];
 	[encoder encodeObject:sltScriptArguments forKey:@"sltScriptArguments"];
-	[encoder encodeInteger:controlReg	forKey:@"controlReg"];
+	[encoder encodeInt:controlReg	forKey:@"controlReg"];
 	
 	//status reg
 	[encoder encodeObject:patternFilePath forKey:@"ORAmptekDP5ModelPatternFilePath"];
@@ -5057,7 +5057,7 @@ return ;
 	[encoder encodeObject:commandTable  forKey:@"CommandTable"];
     
 	//special
-    [encoder encodeInteger:nextPageDelay     forKey:@"nextPageDelay"]; // ak, 5.10.07
+    [encoder encodeInt:nextPageDelay     forKey:@"nextPageDelay"]; // ak, 5.10.07
 	
     
 	[encoder encodeObject:readOutGroup  forKey:@"ReadoutGroup"];

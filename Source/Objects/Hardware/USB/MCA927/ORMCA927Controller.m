@@ -714,7 +714,7 @@
 
 - (IBAction) convGainAction:(id)sender
 {
-	[model setConvGain:[model selectedChannel] withValue:[sender indexOfSelectedItem]];	
+	[model setConvGain:[model selectedChannel] withValue:(uint32_t)[sender indexOfSelectedItem]];	
 }
 
 - (IBAction) liveTimeAction:(id)sender

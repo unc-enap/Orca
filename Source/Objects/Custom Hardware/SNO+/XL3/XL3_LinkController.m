@@ -1258,7 +1258,7 @@ static NSDictionary* xl3Ops;
 {
     [self endEditing];
 	uint32_t addressValue = [model xl3RWAddressValue];
-	addressValue = (addressValue & 0x0FFFFFFF) | [sender indexOfSelectedItem] << 28;
+	addressValue = (uint32_t)((addressValue & 0x0FFFFFFF) | [sender indexOfSelectedItem] << 28);
 	[model setXl3RWAddressValue:addressValue];
 }
 

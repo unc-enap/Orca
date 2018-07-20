@@ -735,7 +735,7 @@ static NSString *ORMotorLinkInConnection = @"ORMotorLinkInConnection";
     [self setPatternDwellTime:[decoder decodeFloatForKey:@"PatternDwellTime"]];
     [self setPatternNumSweeps:[decoder decodeIntForKey:@"PatternNumSweeps"]];
     [self setPatternType:[decoder decodeIntForKey:@"PatternType"]];
-    [self setOptionMask:[decoder decodeIntegerForKey:@"OptionMask"]];
+    [self setOptionMask:[decoder decodeIntForKey:@"OptionMask"]];
     [self setUseFileForPattern:[decoder decodeIntegerForKey:@"UsePatternFileName"]];
     [self setPatternFileName:[decoder decodeObjectForKey:@"PatternFileName"]];
     
@@ -772,7 +772,7 @@ static NSString *ORMotorLinkInConnection = @"ORMotorLinkInConnection";
     [encoder encodeFloat:patternDwellTime forKey:@"PatternDwellTime"];
     [encoder encodeInteger:patternNumSweeps forKey:@"PatternNumSweeps"];
     [encoder encodeInteger:patternType forKey:@"PatternType"];
-    [encoder encodeInteger:optionMask forKey:@"OptionMask"];
+    [encoder encodeInt:optionMask forKey:@"OptionMask"];
     [encoder encodeInteger:useFileForPattern forKey:@"UsePatternFileName"];
     [encoder encodeObject:patternFileName forKey:@"PatternFileName"];
     
@@ -960,12 +960,12 @@ static NSString *ORMotorLinkInConnection = @"ORMotorLinkInConnection";
             
             uint32_t data[4];
             data[0] = dataId | 4;
-            data[1] = ut_time;
-            data[2] = ([[self motorController] crateNumber]&0x0000000f) << 28 | 
+            data[1] = (uint32_t)ut_time;
+            data[2] = (uint32_t)(([[self motorController] crateNumber]&0x0000000f) << 28 |
 			([[[self motorController] guardian] slot] & 0x0000001f) << 23     |
 			([[self motorController] slot]          & 0x00000007) << 20		|
 			([[aWorker motor] tag]   & 0x00000003) << 16		|
-			([aWorker stateId]    & 0x0000000F) << 12;
+			([aWorker stateId]    & 0x0000000F) << 12);
             
             data[3] = [self motorPosition];
             

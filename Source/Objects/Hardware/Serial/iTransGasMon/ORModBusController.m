@@ -200,7 +200,7 @@
 {
 	if(!sensorControllers)	sensorControllers = [[NSMutableArray array] retain];
 
-	uint32_t numToAdd = [[model sensors] count] - [sensorControllers count];
+	uint32_t numToAdd = (uint32_t)([[model sensors] count] - [sensorControllers count]);
 	int i;
 	for(i=0;i<numToAdd;i++){
 		ORiTransGasSensorController* aSensorPanel = [ORiTransGasSensorController sensorPanel];
@@ -211,7 +211,7 @@
 
 - (void) sensorRemoved:(NSNotification*)aNotification
 {
-	uint32_t numToRemove = [sensorControllers count] - [[model sensors]count];
+	uint32_t numToRemove = (uint32_t)([sensorControllers count] - [[model sensors]count]);
 	int i;
 	for(i=0;i<numToRemove;i++){
 		[sensorControllers removeLastObject];
@@ -222,7 +222,7 @@
 - (void) sensorsChanged:(NSNotification*)aNotification
 {
 	if(!sensorControllers)	sensorControllers = [[NSMutableArray array] retain];
-	uint32_t numToAdd = [[model sensors] count] - [sensorControllers count];
+	uint32_t numToAdd = (uint32_t)([[model sensors] count] - [sensorControllers count]);
 	int i;
 	for(i=0;i<numToAdd;i++){
 		[sensorControllers addObject:[ORiTransGasSensorController sensorPanel]];

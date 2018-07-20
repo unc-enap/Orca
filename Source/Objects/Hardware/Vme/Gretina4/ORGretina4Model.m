@@ -1325,7 +1325,7 @@ static struct {
     //write the card level params
 	int i;
 	for(i=0;i<kNumGretina4CardParams;i++){
-		uint32_t theValue = [[cardInfo objectAtIndex:i] longValue];
+		uint32_t theValue = (uint32_t)[[cardInfo objectAtIndex:i] longValue];
 		[[self adapter] writeLongBlock:&theValue
 							atAddress:[self baseAddress] + cardConstants[i].regOffset
 							numToWrite:1
@@ -2405,8 +2405,8 @@ static struct {
     [self setDownSample:				[decoder decodeIntForKey:@"downSample"]];
     [self setHistEMultiplier:		    [decoder decodeIntForKey:@"histEMultiplier"]];
     [self setRegisterIndex:				[decoder decodeIntForKey:@"registerIndex"]];
-    [self setRegisterWriteValue:		[decoder decodeIntegerForKey:@"registerWriteValue"]];
-    [self setSPIWriteValue:     		[decoder decodeIntegerForKey:@"spiWriteValue"]];
+    [self setRegisterWriteValue:		[decoder decodeIntForKey:@"registerWriteValue"]];
+    [self setSPIWriteValue:     		[decoder decodeIntForKey:@"spiWriteValue"]];
     [self setFpgaFilePath:				[decoder decodeObjectForKey:@"fpgaFilePath"]];
     [self setNoiseFloorIntegrationTime:	[decoder decodeFloatForKey:@"NoiseFloorIntegrationTime"]];
     [self setNoiseFloorOffset:			[decoder decodeIntForKey:@"NoiseFloorOffset"]];
@@ -2455,8 +2455,8 @@ static struct {
     [encoder encodeInt:downSample			        forKey:@"downSample"];
     [encoder encodeInt:histEMultiplier          forKey:@"histEMultiplier"];
     [encoder encodeInt:registerIndex		    forKey:@"registerIndex"];
-    [encoder encodeInteger:registerWriteValue		forKey:@"registerWriteValue"];
-    [encoder encodeInteger:spiWriteValue			forKey:@"spiWriteValue"];
+    [encoder encodeInt:registerWriteValue		forKey:@"registerWriteValue"];
+    [encoder encodeInt:spiWriteValue			forKey:@"spiWriteValue"];
     [encoder encodeObject:fpgaFilePath				forKey:@"fpgaFilePath"];
     [encoder encodeFloat:noiseFloorIntegrationTime	forKey:@"NoiseFloorIntegrationTime"];
     [encoder encodeInt:noiseFloorOffset		    forKey:@"NoiseFloorOffset"];

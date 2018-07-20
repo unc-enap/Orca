@@ -1591,7 +1591,7 @@ return;
 	if(!pmcLink)pmcLink = [[PMC_Link alloc] initWithDelegate:self];
 	else [pmcLink setDelegate:self];
 
-	[self setControlReg:		[decoder decodeIntegerForKey:@"controlReg"]];
+	[self setControlReg:		[decoder decodeIntForKey:@"controlReg"]];
 	[self setSecondsSet:		[decoder decodeIntegerForKey:@"secondsSet"]];
 	if([decoder containsValueForKey:@"secondsSetInitWithHost"])
 		[self setSecondsSetInitWithHost:[decoder decodeBoolForKey:@"secondsSetInitWithHost"]];
@@ -1602,17 +1602,17 @@ return;
 
 	//status reg
 	[self setPatternFilePath:		[decoder decodeObjectForKey:@"ORIpeV4SLTModelPatternFilePath"]];
-	[self setInterruptMask:			[decoder decodeIntegerForKey:@"ORIpeV4SLTModelInterruptMask"]];
+	[self setInterruptMask:			[decoder decodeIntForKey:@"ORIpeV4SLTModelInterruptMask"]];
 	[self setPulserDelay:			[decoder decodeFloatForKey:@"ORIpeV4SLTModelPulserDelay"]];
 	[self setPulserAmp:				[decoder decodeFloatForKey:@"ORIpeV4SLTModelPulserAmp"]];
 		
 	//special
-    [self setNextPageDelay:			[decoder decodeIntegerForKey:@"nextPageDelay"]]; // ak, 5.10.07
+    [self setNextPageDelay:			[decoder decodeIntForKey:@"nextPageDelay"]]; // ak, 5.10.07
 	
 	[self setReadOutGroup:			[decoder decodeObjectForKey:@"ReadoutGroup"]];
     [self setPoller:				[decoder decodeObjectForKey:@"poller"]];
 	
-    [self setPageSize:				[decoder decodeIntegerForKey:@"ORIpeV4SLTPageSize"]]; // ak, 9.12.07
+    [self setPageSize:				[decoder decodeIntForKey:@"ORIpeV4SLTPageSize"]]; // ak, 9.12.07
     [self setDisplayTrigger:		[decoder decodeBoolForKey:@"ORIpeV4SLTDisplayTrigger"]];
     [self setDisplayEventLoop:		[decoder decodeBoolForKey:@"ORIpeV4SLTDisplayEventLoop"]];
     	
@@ -1642,11 +1642,11 @@ return;
 	[encoder encodeBool:countersEnabled forKey:@"countersEnabled"];
 	[encoder encodeInteger:secondsSet forKey:@"secondsSet"];
 	[encoder encodeObject:pmcLink		forKey:@"PMC_Link"];
-	[encoder encodeInteger:controlReg	forKey:@"controlReg"];
+	[encoder encodeInt:controlReg	forKey:@"controlReg"];
 	
 	//status reg
 	[encoder encodeObject:patternFilePath forKey:@"ORIpeV4SLTModelPatternFilePath"];
-	[encoder encodeInteger:interruptMask	 forKey:@"ORIpeV4SLTModelInterruptMask"];
+	[encoder encodeInt:interruptMask	 forKey:@"ORIpeV4SLTModelInterruptMask"];
 	[encoder encodeFloat:pulserDelay	 forKey:@"ORIpeV4SLTModelPulserDelay"];
 	[encoder encodeFloat:pulserAmp		 forKey:@"ORIpeV4SLTModelPulserAmp"];
 		
@@ -1656,7 +1656,7 @@ return;
 	[encoder encodeObject:readOutGroup  forKey:@"ReadoutGroup"];
     [encoder encodeObject:poller         forKey:@"poller"];
 	
-    [encoder encodeInteger:pageSize         forKey:@"ORIpeV4SLTPageSize"]; // ak, 9.12.07
+    [encoder encodeInt:pageSize         forKey:@"ORIpeV4SLTPageSize"]; // ak, 9.12.07
     [encoder encodeBool:displayTrigger   forKey:@"ORIpeV4SLTDisplayTrigger"];
     [encoder encodeBool:displayEventLoop forKey:@"ORIpeV4SLTDisplayEventLoop"];
 		
@@ -1974,7 +1974,7 @@ return;
 
 - (void) shipSltEvent:(unsigned char)aCounterType withType:(unsigned char)aType eventCt:(uint32_t)c high:(uint32_t)h low:(uint32_t)l
 {
-	uint32_t location = (([self crateNumber]&0xf)<<21) | ([self stationNumber]& 0x0000001f)<<16;
+	uint32_t location = (uint32_t)((([self crateNumber]&0xf)<<21) | ([self stationNumber]& 0x0000001f)<<16);
 	uint32_t data[5];
 			data[0] = eventDataId | 5; 
 			data[1] = location | ((aCounterType & 0xf)<<4) | (aType & 0xf);

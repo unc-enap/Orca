@@ -552,9 +552,9 @@ static NSString* ORPQModelInConnector 	= @"ORPQModelInConnector";
         for (int i=0; i<numRows; ++i) {
             int64_t val = [theResult getInt64atRow:i column:3];
             if (val == kPQBadValue) continue;
-            uint32_t crate   = [theResult getInt64atRow:i column:0];
-            uint32_t card    = [theResult getInt64atRow:i column:1];
-            uint32_t channel = [theResult getInt64atRow:i column:2];
+            uint32_t crate   = (uint32_t)[theResult getInt64atRow:i column:0];
+            uint32_t card    = (uint32_t)[theResult getInt64atRow:i column:1];
+            uint32_t channel = (uint32_t)[theResult getInt64atRow:i column:2];
             if (crate < kSnoCrates && card < kSnoCardsPerCrate && channel < kSnoChannelsPerCard) {
                 PQ_FEC *pqFEC = [detDB getPmthv:(int)card crate:(int)crate];
                 pqFEC->valid[kFEC_hvDisabled] |= (1 << channel);
@@ -586,8 +586,8 @@ static NSString* ORPQModelInConnector 	= @"ORPQModelInConnector";
         }
         detDB->fecLoaded = (int)numRows;
         for (int i=0; i<numRows; ++i) {
-            uint32_t crate = [theResult getInt64atRow:i column:0];
-            uint32_t card  = [theResult getInt64atRow:i column:1];
+            uint32_t crate = (uint32_t)[theResult getInt64atRow:i column:0];
+            uint32_t card  = (uint32_t)[theResult getInt64atRow:i column:1];
             if (crate >= kSnoCrates || card >= kSnoCardsPerCrate) continue;
             PQ_FEC *pqFEC = [detDB getFEC:(int)card crate:(int)crate];
             // set flag indicating that the card exists in the current detector state

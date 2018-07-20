@@ -303,7 +303,7 @@ NSString* ORTRS1ModelControlRegisterChanged = @"ORTRS1ModelControlRegisterChange
     
     //----------------------------------------------------------------------------------------
     controller = [[self adapter] controller]; //cache the controller for alittle bit more speed.
-    crateAndStationId   = (([self crateNumber]&0xf)<<21) | ((([self stationNumber]+1)& 0x0000001f)<<16); //doesn't change so do it here.
+    crateAndStationId   = (([self crateNumber]&0xf)<<21) | ((((uint32_t)[self stationNumber]+1)& 0x0000001f)<<16); //doesn't change so do it here.
 	cachedStation = [self stationNumber]+1;
     [self clearExceptionCount];
 	[self initBoard];

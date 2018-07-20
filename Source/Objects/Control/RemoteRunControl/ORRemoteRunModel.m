@@ -632,7 +632,7 @@ static NSString *ORRunRemoteConnectAtStart	= @"ORRunRemoteConnectAtStart";
     [self setRemoteHost:[decoder decodeObjectForKey:ORRunRemoteHost]];
     [self setAutoReconnect:[decoder decodeBoolForKey:ORRunRemoteAutoReconnect]];
     [self setConnectAtStart:[decoder decodeBoolForKey:ORRunRemoteConnectAtStart]];
-    [self setRemotePort:[decoder decodeIntegerForKey:ORRunRemotePort]];
+    [self setRemotePort:[decoder decodeIntForKey:ORRunRemotePort]];
     
     [[self undoManager] enableUndoRegistration];
     
@@ -652,7 +652,7 @@ static NSString *ORRunRemoteConnectAtStart	= @"ORRunRemoteConnectAtStart";
     [encoder encodeObject:remoteHost forKey:ORRunRemoteHost];
     [encoder encodeBool:autoReconnect forKey:ORRunRemoteAutoReconnect];
     [encoder encodeBool:connectAtStart forKey:ORRunRemoteConnectAtStart];
-    [encoder encodeInteger:(int)remotePort forKey:ORRunRemotePort];
+    [encoder encodeInt:remotePort forKey:ORRunRemotePort];
 }
 
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary

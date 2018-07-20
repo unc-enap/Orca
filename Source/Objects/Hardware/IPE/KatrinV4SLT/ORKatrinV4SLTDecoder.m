@@ -246,7 +246,7 @@ static NSString* kFLTChanKey[24] = {
     NSArray* listOfFlts = [[(ORAppDelegate*)[NSApp delegate] document] collectObjectsOfClass:NSClassFromString(@"ORKatrinV4FLTModel")];
     for(ORKatrinV4FLTModel* aCard in listOfFlts){
         int filterShapingLength = [aCard filterShapingLength];
-        uint32_t filterDiv = 1L << filterShapingLength;
+        uint32_t filterDiv = (uint32_t)(1L << filterShapingLength);
         if(filterShapingLength==0){
             filterDiv = [aCard boxcarLength] + 1;
         }

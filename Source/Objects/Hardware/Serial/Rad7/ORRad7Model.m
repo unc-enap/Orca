@@ -824,8 +824,8 @@ static NSString* rad7ThoronNames[kNumberRad7ThoronNames] = {
 	[self setPumpCurrentMaxLimit:[decoder decodeFloatForKey:@"pumpCurrentMaxLimit"]];
 	[self setPumpCurrentAlarm:	[decoder decodeFloatForKey:@"pumpCurrentAlarm"]];
 	[self setHumidityAlarm:		[decoder decodeFloatForKey:@"humidityAlarm"]];
-	[self setMaxRadon:			[decoder decodeIntegerForKey:@"maxRadon"]];
-	[self setAlarmLimit:		[decoder decodeIntegerForKey:@"alarmLimit"]];
+	[self setMaxRadon:			[decoder decodeIntForKey:@"maxRadon"]];
+	[self setAlarmLimit:		[decoder decodeIntForKey:@"alarmLimit"]];
 	[self setMakeFile:			[decoder decodeBoolForKey:	@"makeFile"]];
 	[self setVerbose:			[decoder decodeBoolForKey:	@"verbose"]];
 	[self setDeleteDataOnStart:	[decoder decodeBoolForKey:	@"deleteDataOnStart"]];
@@ -858,8 +858,8 @@ static NSString* rad7ThoronNames[kNumberRad7ThoronNames] = {
     [encoder encodeFloat:	pumpCurrentMaxLimit forKey:@"pumpCurrentMaxLimit"];
     [encoder encodeFloat:	pumpCurrentAlarm forKey:@"pumpCurrentAlarm"];
     [encoder encodeFloat:	humidityAlarm	forKey:@"humidityAlarm"];
-    [encoder encodeInteger:	maxRadon		forKey:@"maxRadon"];
-    [encoder encodeInteger:	alarmLimit		forKey:@"alarmLimit"];
+    [encoder encodeInt:	maxRadon		forKey:@"maxRadon"];
+    [encoder encodeInt:	alarmLimit		forKey:@"alarmLimit"];
     [encoder encodeBool:	makeFile		forKey:@"makeFile"];
     [encoder encodeBool:	verbose			forKey:@"verbose"];
     [encoder encodeBool:	deleteDataOnStart forKey:@"deleteDataOnStart"];

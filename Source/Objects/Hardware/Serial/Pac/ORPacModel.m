@@ -441,7 +441,7 @@ NSString* ORPacModelVetoChanged			= @"ORPacModelVetoChanged";
 		time_t	ut_Time;
 		time(&ut_Time);
 		//struct tm* theTimeGMTAsStruct = gmtime(&theTime);
-		timeMeasured[index] = ut_Time;
+		timeMeasured[index] = (uint32_t)ut_Time;
 		
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORPacModelAdcChanged
 															object:self

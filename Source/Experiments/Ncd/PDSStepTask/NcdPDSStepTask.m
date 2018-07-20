@@ -150,7 +150,7 @@
 
 - (uint32_t)patternMaskForArray:(int)arrayIndex
 {
-    return [[patternArray objectAtIndex:arrayIndex] longValue];
+    return (uint32_t)[[patternArray objectAtIndex:arrayIndex] longValue];
 }
 
 - (void) setPatternMaskForArray:(int)arrayIndex to:(uint32_t)aValue
@@ -275,7 +275,7 @@
     NSEnumerator* e = [patternMatrixArray objectEnumerator];
     int i=0;
     while(patternMatrixObj = [e nextObject]){
-        uint32_t patternMask = [[patternArray objectAtIndex:i] longValue];
+        uint32_t patternMask = (uint32_t)[[patternArray objectAtIndex:i] longValue];
         short bit;
         for(bit=0;bit< [patternMatrixObj numberOfColumns];bit++){
             [[patternMatrixObj cellWithTag:bit] setState:(patternMask&(1L<<bit)) > 0L];

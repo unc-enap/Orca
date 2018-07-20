@@ -1270,8 +1270,8 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
     [[self undoManager] disableUndoRegistration];
     [self setEventSize:[aDecoder decodeIntForKey:@"ORCaen1724ModelEventSize"]];
     [self setEnabledMask:[aDecoder decodeIntegerForKey:@"ORCaen1724ModelEnabledMask"]];
-    [self setPostTriggerSetting:[aDecoder decodeIntegerForKey:@"ORCaen1724ModelPostTriggerSetting"]];
-    [self setTriggerSourceMask:[aDecoder decodeIntegerForKey:@"ORCaen1724ModelTriggerSourceMask"]];
+    [self setPostTriggerSetting:[aDecoder decodeIntForKey:@"ORCaen1724ModelPostTriggerSetting"]];
+    [self setTriggerSourceMask:[aDecoder decodeIntForKey:@"ORCaen1724ModelTriggerSourceMask"]];
     [self setCoincidenceLevel:[aDecoder decodeIntegerForKey:@"ORCaen1724ModelCoincidenceLevel"]];
     [self setAcquisitionMode:[aDecoder decodeIntegerForKey:@"acquisitionMode"]];
     [self setCountAllTriggers:[aDecoder decodeBoolForKey:@"countAllTriggers"]];
@@ -1304,8 +1304,8 @@ NSString* ORCaen1724ModelBufferCheckChanged                 = @"ORCaen1724ModelB
     [super encodeWithCoder:anEncoder];
 	[anEncoder encodeInteger:eventSize forKey:@"ORCaen1724ModelEventSize"];
 	[anEncoder encodeInteger:enabledMask forKey:@"ORCaen1724ModelEnabledMask"];
-	[anEncoder encodeInteger:postTriggerSetting forKey:@"ORCaen1724ModelPostTriggerSetting"];
-	[anEncoder encodeInteger:triggerSourceMask forKey:@"ORCaen1724ModelTriggerSourceMask"];
+	[anEncoder encodeInt:postTriggerSetting forKey:@"ORCaen1724ModelPostTriggerSetting"];
+	[anEncoder encodeInt:triggerSourceMask forKey:@"ORCaen1724ModelTriggerSourceMask"];
 	[anEncoder encodeInteger:coincidenceLevel forKey:@"ORCaen1724ModelCoincidenceLevel"];
 	[anEncoder encodeInteger:acquisitionMode forKey:@"acquisitionMode"];
 	[anEncoder encodeBool:countAllTriggers forKey:@"countAllTriggers"];

@@ -613,7 +613,7 @@ NSString* ORAmi286Lock = @"ORAmi286Lock";
 		time_t	ut_Time;
 		time(&ut_Time);
 		//struct tm* theTimeGMTAsStruct = gmtime(&theTime);
-		timeMeasured[index] = ut_Time;
+		timeMeasured[index] = (uint32_t)ut_Time;
 		
 		NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:index] forKey:@"Index"];
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORAmi286Update 
@@ -806,7 +806,7 @@ NSString* ORAmi286Lock = @"ORAmi286Lock";
 	self = [super initWithCoder:decoder];
 	[[self undoManager] disableUndoRegistration];
 	[self setSendOnAlarm:[decoder decodeBoolForKey:@"sendOnAlarm"]];
-	[self setExpiredTime:[decoder decodeIntegerForKey:@"expiredTime"]];
+	[self setExpiredTime:[decoder decodeIntForKey:@"expiredTime"]];
 	[self setSendOnExpired:[decoder decodeBoolForKey:@"sendOnExpired"]];
 	[self setSendOnValveChange:[decoder decodeBoolForKey:@"sendOnValveChange"]];
 	[self setEnabledMask:[decoder decodeIntegerForKey:@"enabledMask"]];
@@ -844,7 +844,7 @@ NSString* ORAmi286Lock = @"ORAmi286Lock";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeBool:sendOnAlarm forKey:@"sendOnAlarm"];
-    [encoder encodeInteger:expiredTime forKey:@"expiredTime"];
+    [encoder encodeInt:expiredTime forKey:@"expiredTime"];
     [encoder encodeBool:sendOnExpired forKey:@"sendOnExpired"];
     [encoder encodeBool:sendOnValveChange forKey:@"sendOnValveChange"];
     [encoder encodeInteger:enabledMask forKey:@"enabledMask"];

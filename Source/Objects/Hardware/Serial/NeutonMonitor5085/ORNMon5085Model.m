@@ -248,7 +248,7 @@ NSString* ORNMon5085IsLogChanged                  = @"ORNMon5085IsLogChanged";
     
     time_t	ut_Time;
     time(&ut_Time);
-    timeMeasured = ut_Time;
+    timeMeasured = (uint32_t)ut_Time;
     
     radValue = aRadValue;
     

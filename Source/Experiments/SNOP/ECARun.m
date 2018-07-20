@@ -509,8 +509,8 @@ err:
 
                 [aSNOPModel updateEPEDStructWithStepNumber:step];
 
-                uint32_t current_coarse_delay = [[tslope_delays_coarse objectAtIndex:ipoint] unsignedLongValue];
-                uint32_t current_fine_delay = [[tslope_delays_fine objectAtIndex:ipoint] unsignedLongValue];
+                uint32_t current_coarse_delay = (uint32_t)[[tslope_delays_coarse objectAtIndex:ipoint] unsignedLongValue];
+                uint32_t current_fine_delay = (uint32_t)[[tslope_delays_fine objectAtIndex:ipoint] unsignedLongValue];
 
                 [self setECA_currentPoint:ipoint+1];
 

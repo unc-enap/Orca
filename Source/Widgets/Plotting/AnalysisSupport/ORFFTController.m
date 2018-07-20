@@ -150,8 +150,8 @@
 
 #pragma mark ***Actions
 - (IBAction) doFFTAction:(id)sender		 { [model doFFT]; }
-- (IBAction) fftOptionAction:(id)sender  { [model setFftOption:[sender indexOfSelectedItem]]; }
-- (IBAction) fftWindowAction:(id)sender  { [model setFftWindow:[sender indexOfSelectedItem]]; }
+- (IBAction) fftOptionAction:(id)sender  { [model setFftOption:(uint32_t)[sender indexOfSelectedItem]]; }
+- (IBAction) fftWindowAction:(id)sender  { [model setFftWindow:(uint32_t)[sender indexOfSelectedItem]]; }
 
 @end
 

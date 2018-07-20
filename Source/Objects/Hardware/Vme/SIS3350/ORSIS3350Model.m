@@ -982,7 +982,7 @@ uint32_t rblt_data[kMaxNumberWords];
 	}
 	
 	for(i = 0; i < 4; i++) {
-		uint32_t thresValue = (([[thresholdOffs objectAtIndex:i] longValue] & 0xfff) << 16) | ([[thresholds objectAtIndex:i] longValue] &0xfff);
+		uint32_t thresValue = (uint32_t)((([[thresholdOffs objectAtIndex:i] longValue] & 0xfff) << 16) | ([[thresholds objectAtIndex:i] longValue] &0xfff));
 		[[self adapter] writeLongBlock:&thresValue
 							 atAddress:baseAddress + thresholdRegOffsets[i]
 							numToWrite:1

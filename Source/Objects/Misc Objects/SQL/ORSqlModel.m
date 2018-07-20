@@ -1708,7 +1708,7 @@ Table: Histogram2Ds
 																				   [aMonitor uniqueIdNumber]]];
 							id dataSetEntry			 = [theResult fetchRowAsDictionary];
 							id dataset_id			 = [dataSetEntry objectForKey:@"dataset_id"];
-							uint32_t lastCounts = [[dataSetEntry objectForKey:@"counts"] longValue];
+							uint32_t lastCounts = (uint32_t)[[dataSetEntry objectForKey:@"counts"] longValue];
 							uint32_t countsNow  = [aDataSet totalCounts];
 							uint32_t start,end;
 							if(dataset_id) {
@@ -1771,7 +1771,7 @@ Table: Histogram2Ds
 																				   [aMonitor uniqueIdNumber]]];
 							id dataSetEntry			  = [theResult fetchRowAsDictionary];
 							id dataset_id			  = [dataSetEntry objectForKey:@"dataset_id"];
-							uint32_t lastCounts  = [[dataSetEntry objectForKey:@"counts"] longValue];
+							uint32_t lastCounts  = (uint32_t)[[dataSetEntry objectForKey:@"counts"] longValue];
 							uint32_t countsNow   = [aDataSet totalCounts];
 							uint32_t binsPerSide = [aDataSet numberBinsPerSide];
 							unsigned short minX,maxX,minY,maxY;
@@ -1822,7 +1822,7 @@ Table: Histogram2Ds
 																				   [aMonitor uniqueIdNumber]]];
 							id dataSetEntry			 = [theResult fetchRowAsDictionary];
 							id dataset_id			 = [dataSetEntry objectForKey:@"dataset_id"];
-							uint32_t lastCounts = [[dataSetEntry objectForKey:@"counts"] longValue];
+							uint32_t lastCounts = (uint32_t)[[dataSetEntry objectForKey:@"counts"] longValue];
 							uint32_t countsNow  = [aDataSet totalCounts];
 							if(dataset_id) {
 								if(lastCounts != countsNow){

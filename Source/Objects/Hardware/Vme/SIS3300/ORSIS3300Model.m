@@ -1550,9 +1550,9 @@ static uint32_t addressCounterOffset[4][2]={ //group,bank
     [self setPageWrap:				[decoder decodeBoolForKey:@"pageWrap"]];
     [self setStopTrigger:			[decoder decodeBoolForKey:@"stopTrigger"]];
     [self setPageSize:				[decoder decodeIntForKey:@"pageSize"]];
-    [self setEnabledMask:			[decoder decodeIntegerForKey:@"enabledMask"]];
+    [self setEnabledMask:			[decoder decodeIntForKey:@"enabledMask"]];
 	[self setThresholds:			[decoder decodeObjectForKey:@"thresholds"]];
-	[self setLtGtMask:				[decoder decodeIntegerForKey:@"ltGtMask"]];
+	[self setLtGtMask:				[decoder decodeIntForKey:@"ltGtMask"]];
 		
     [self setWaveFormRateGroup:[decoder decodeObjectForKey:@"waveFormRateGroup"]];
     
@@ -1601,9 +1601,9 @@ static uint32_t addressCounterOffset[4][2]={ //group,bank
     [encoder encodeBool:stopTrigger				forKey:@"stopTrigger"];
 
     [encoder encodeInteger:pageSize					forKey:@"pageSize"];
-    [encoder encodeInteger:enabledMask			forKey:@"enabledMask"];
+    [encoder encodeInt:enabledMask			forKey:@"enabledMask"];
     [encoder encodeObject:thresholds			forKey:@"thresholds"];
-    [encoder encodeInteger:(int32_t)ltGtMask					forKey:@"ltGtMask"];
+    [encoder encodeInt:(int32_t)ltGtMask					forKey:@"ltGtMask"];
 	
     [encoder encodeObject:waveFormRateGroup forKey:@"waveFormRateGroup"];
 	

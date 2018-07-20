@@ -1137,7 +1137,7 @@ NSString* ORVHS4030VoltageBoundsChanged				= @"ORVHS4030VoltageBoundsChanged";
 		uint32_t data[kVHS403DataRecordLength];
 		data[0] = dataId | kVHS403DataRecordLength;
 		data[1] = [self uniqueIdNumber]&0xfff;
-		data[2] = ut_Time;
+		data[2] = (uint32_t)ut_Time;
 		
 		union {
 			float asFloat;

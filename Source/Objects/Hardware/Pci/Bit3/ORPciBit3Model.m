@@ -2108,8 +2108,8 @@ static NSString *ORPciBit3ErrorRateYAttributes  = @"Bit3 ErrorRateYAttributes";
     [self setDualPortAddress:[decoder decodeIntForKey:ORPciBit3DualPortAddress]];
     [self setDualPortRamSize:[decoder decodeIntForKey:ORPciBit3DualPortRamSize]];
     
-    [self setRwAddress:[decoder decodeIntegerForKey:ORPciBit3RWAddress]];
-    [self setWriteValue:[decoder decodeIntegerForKey:ORPciBit3WriteValue]];
+    [self setRwAddress:[decoder decodeIntForKey:ORPciBit3RWAddress]];
+    [self setWriteValue:[decoder decodeIntForKey:ORPciBit3WriteValue]];
     [self setRwAddressModifier:[decoder decodeIntForKey:ORPciBit3ReadWriteAddMod]];
     [self setReadWriteIOSpace:[decoder decodeIntForKey:ORPciBit3ReadWriteAddSpace]];
     [self setReadWriteType:[decoder decodeIntForKey:ORPciBit3ReadWriteType]];
@@ -2140,8 +2140,8 @@ static NSString *ORPciBit3ErrorRateYAttributes  = @"Bit3 ErrorRateYAttributes";
     [encoder encodeInteger:dualPortAddress forKey:ORPciBit3DualPortAddress];
     [encoder encodeInteger:dualPortRamSize forKey:ORPciBit3DualPortRamSize];
     
-    [encoder encodeInteger:(int32_t)rwAddress forKey:ORPciBit3RWAddress];
-    [encoder encodeInteger:(int32_t)writeValue forKey:ORPciBit3WriteValue];
+    [encoder encodeInt:rwAddress forKey:ORPciBit3RWAddress];
+    [encoder encodeInt:writeValue forKey:ORPciBit3WriteValue];
     [encoder encodeInteger:rwAddressModifier forKey:ORPciBit3ReadWriteAddMod];
     [encoder encodeInteger:readWriteIOSpace forKey:ORPciBit3ReadWriteAddSpace];
     [encoder encodeInteger:readWriteType forKey:ORPciBit3ReadWriteType];

@@ -779,7 +779,7 @@ snopGreenColor;
     }
 
     // Get the run type word of the next run
-    dbruntypeword = [[runSettings valueForKey:@"run_type_word"] unsignedLongValue];
+    dbruntypeword = (uint32_t)[[runSettings valueForKey:@"run_type_word"] unsignedLongValue];
 
     if (!((dbruntypeword & kMaintenanceRun) || (dbruntypeword & kDiagnosticRun))) {
         // Make sure we are not polling
@@ -2790,7 +2790,7 @@ snopGreenColor;
     }
 
     //Get run type word first
-    uint32_t dbruntypeword = [[runSettings valueForKey:@"run_type_word"] unsignedLongValue];
+    uint32_t dbruntypeword = (uint32_t)[[runSettings valueForKey:@"run_type_word"] unsignedLongValue];
 
     //If in DIAGNOSTIC run: display null threshold values
     if(dbruntypeword & kDiagnosticRun){

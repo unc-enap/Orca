@@ -221,11 +221,11 @@
 {
 	NSString* originalText = [[self textStorage] string];
 	NSArray* lines = [originalText componentsSeparatedByString:@"\n"];
-	int32_t selectionStart = 0;
-	int32_t selectionLen = [[lines objectAtIndex:aLine] length];
-	int i;
+	NSUInteger selectionStart = 0;
+	NSUInteger selectionLen = [[lines objectAtIndex:aLine] length];
+	NSUInteger i;
 	for(i=0;i<aLine;i++){
-		int32_t lineLen = [[lines objectAtIndex:i] length];
+		NSUInteger lineLen = [[lines objectAtIndex:i] length];
 		selectionStart+=lineLen+1;
 	}
 	NSRange selectionRange = NSMakeRange(selectionStart,selectionLen);

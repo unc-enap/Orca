@@ -970,14 +970,14 @@ NSString* ORCaen1785WriteValueChanged			= @"ORCaen1785WriteValueChanged";
     [[self undoManager] disableUndoRegistration];
 	int i;
     for (i = 0; i < kCV1785NumberChannels; i++){
-        [self setLowThreshold:i withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENLowThresholdChnl%d", i]]];
-        [self setHighThreshold:i withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENHighThresholdChnl%d", i]]];
+        [self setLowThreshold:i withValue:[aDecoder decodeIntForKey: [NSString stringWithFormat:@"CAENLowThresholdChnl%d", i]]];
+        [self setHighThreshold:i withValue:[aDecoder decodeIntForKey: [NSString stringWithFormat:@"CAENHighThresholdChnl%d", i]]];
     }    
 	
 	[self setOnlineMask:[aDecoder decodeIntegerForKey:@"onlineMask"]];
     [self setSelectedRegIndex:[aDecoder decodeIntegerForKey:@"selectedRegIndex"]];
     [self setSelectedChannel:[aDecoder decodeIntegerForKey:@"selectedChannel"]];
-    [self setWriteValue:[aDecoder decodeIntegerForKey:@"writeValue"]];
+    [self setWriteValue:[aDecoder decodeIntForKey:@"writeValue"]];
     [self setTrigger1Group:[aDecoder decodeObjectForKey:@"trigger1Group"]];
 	
     [[self undoManager] enableUndoRegistration];
@@ -990,12 +990,12 @@ NSString* ORCaen1785WriteValueChanged			= @"ORCaen1785WriteValueChanged";
     [anEncoder encodeInteger:onlineMask forKey:@"onlineMask"];
 	int i;
 	for (i = 0; i < kCV1785NumberChannels; i++){
-        [anEncoder encodeInteger:lowThresholds[i] forKey:[NSString stringWithFormat:@"CAENLowThresholdChnl%d", i]];
-        [anEncoder encodeInteger:highThresholds[i] forKey:[NSString stringWithFormat:@"CAENHighThresholdChnl%d", i]];
+        [anEncoder encodeInt:lowThresholds[i] forKey:[NSString stringWithFormat:@"CAENLowThresholdChnl%d", i]];
+        [anEncoder encodeInt:highThresholds[i] forKey:[NSString stringWithFormat:@"CAENHighThresholdChnl%d", i]];
     }
 	[anEncoder encodeInteger:selectedRegIndex forKey:@"selectedRegIndex"];
     [anEncoder encodeInteger:selectedChannel forKey:@"selectedChannel"];
-    [anEncoder encodeInteger:writeValue forKey:@"writeValue"];
+    [anEncoder encodeInt:writeValue forKey:@"writeValue"];
     [anEncoder encodeObject:[self trigger1Group] forKey:@"trigger1Group"];
 }
 

@@ -709,11 +709,11 @@ static Caen419Registers reg[kNumRegisters] = {
 	[[self undoManager] disableUndoRegistration];
     [self setEnabledMask:[aDecoder decodeIntegerForKey:@"enabledMask"]];
     [self setResetMask:[aDecoder decodeBoolForKey:@"resetMask"]];
-    [self setAuxAddress:[aDecoder decodeIntegerForKey:@"auxAddress"]];
+    [self setAuxAddress:[aDecoder decodeIntForKey:@"auxAddress"]];
 	int i;
     for (i = 0; i < kCV419NumberChannels; i++){
-        [self setLowThreshold:i withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENLowThresholdChnl%d", i]]];
-        [self setHighThreshold:i withValue:[aDecoder decodeIntegerForKey: [NSString stringWithFormat:@"CAENHighThresholdChnl%d", i]]];
+        [self setLowThreshold:i withValue:[aDecoder decodeIntForKey: [NSString stringWithFormat:@"CAENLowThresholdChnl%d", i]]];
+        [self setHighThreshold:i withValue:[aDecoder decodeIntForKey: [NSString stringWithFormat:@"CAENHighThresholdChnl%d", i]]];
 		[self setLinearGateMode:i withValue:[aDecoder decodeIntegerForKey:[NSString stringWithFormat:@"CAENLinearGateModeChnl%d", i]]];
 		[self setRiseTimeProtection:i withValue:[aDecoder decodeIntegerForKey:[NSString stringWithFormat:@"CAENRiseTimeProtectionChnl%d", i]]];
     }    
@@ -738,11 +738,11 @@ static Caen419Registers reg[kNumRegisters] = {
     [super encodeWithCoder:anEncoder];
 	[anEncoder encodeInteger:enabledMask forKey:@"enabledMask"];
 	[anEncoder encodeBool:resetMask forKey:@"resetMask"];
-	[anEncoder encodeInteger:auxAddress forKey:@"auxAddress"];
+	[anEncoder encodeInt:auxAddress forKey:@"auxAddress"];
 	int i;
     for (i = 0; i < kCV419NumberChannels; i++){
-        [anEncoder encodeInteger:lowThresholds[i] forKey:[NSString stringWithFormat:@"CAENLowThresholdChnl%d", i]];
-        [anEncoder encodeInteger:highThresholds[i] forKey:[NSString stringWithFormat:@"CAENHighThresholdChnl%d", i]];
+        [anEncoder encodeInt:lowThresholds[i] forKey:[NSString stringWithFormat:@"CAENLowThresholdChnl%d", i]];
+        [anEncoder encodeInt:highThresholds[i] forKey:[NSString stringWithFormat:@"CAENHighThresholdChnl%d", i]];
 		[anEncoder encodeInteger:linearGateMode[i] forKey:[NSString stringWithFormat:@"CAENLinearGateModeChnl%d", i]];
 		[anEncoder encodeInteger:riseTimeProtection[i] forKey:[NSString stringWithFormat:@"CAENRiseTimeProtectionChnl%d", i]];
     }

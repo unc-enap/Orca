@@ -39,7 +39,7 @@ NSString* CBeValue		= @"Value";
 //mah -- changed to count to remove compiler warning with other methods named 'size' in other objects that return diff type than int32_t.
 - ( int32_t ) count
 {
-	return( [mStorageArray count] );
+	return (uint32_t)[mStorageArray count];
 }
 
 - (void) insertHVEntry: (NSDate *) aDateOfAquistion hvValue: (NSNumber*) anHVEntry

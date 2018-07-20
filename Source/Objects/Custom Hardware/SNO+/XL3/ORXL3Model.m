@@ -1627,10 +1627,10 @@ void SwapLongBlock(void* p, int32_t n)
     [self setRepeatOpCount:         [decoder decodeIntegerForKey:@"ORXL3ModelRepeatOpCount"]];
     [self setXl3Mode:               [decoder decodeIntForKey:@"ORXL3ModelXl3Mode"]];
     [self setSlotMask:              [decoder decodeIntegerForKey:@"ORXL3ModelSlotMask"]];
-    [self setXl3RWAddressValue:     [decoder decodeIntegerForKey:@"ORXL3ModelXl3RWAddressValue"]];
-    [self setXl3RWDataValue:        [decoder decodeIntegerForKey:@"ORXL3ModelXl3RWDataValue"]];
-    [self setXl3PedestalMask:       [decoder decodeIntegerForKey:@"ORXL3ModelXl3PedestalMask"]];
-    [self setXl3ChargeInjMask:      [decoder decodeIntegerForKey:@"ORXL3ModelXl3ChargeInjMask"]];
+    [self setXl3RWAddressValue:     [decoder decodeIntForKey:@"ORXL3ModelXl3RWAddressValue"]];
+    [self setXl3RWDataValue:        [decoder decodeIntForKey:@"ORXL3ModelXl3RWDataValue"]];
+    [self setXl3PedestalMask:       [decoder decodeIntForKey:@"ORXL3ModelXl3PedestalMask"]];
+    [self setXl3ChargeInjMask:      [decoder decodeIntForKey:@"ORXL3ModelXl3ChargeInjMask"]];
     [self setXl3ChargeInjCharge:    [decoder decodeIntegerForKey:@"ORXL3ModelXl3ChargeInjCharge"]];
     [self setPollXl3Time:           [decoder decodeIntegerForKey:@"ORXL3ModelPollXl3Time"]];
     //[self setIsPollingXl3:          [decoder decodeBoolForKey:@"ORXL3ModelIsPollingXl3"]];
@@ -1705,10 +1705,10 @@ void SwapLongBlock(void* p, int32_t n)
     [encoder encodeInteger:repeatOpCount        forKey:@"ORXL3ModelRepeatOpCount"];
     [encoder encodeInt:xl3Mode              forKey:@"ORXL3ModelXl3Mode"];
     [encoder encodeInteger:selectedSlotMask     forKey:@"ORXL3ModelSlotMask"];
-    [encoder encodeInteger:xl3RWAddressValue    forKey:@"ORXL3ModelXl3RWAddressValue"];
-    [encoder encodeInteger:xl3RWDataValue       forKey:@"ORXL3ModelXl3RWDataValue"];
-    [encoder encodeInteger:xl3PedestalMask      forKey:@"ORXL3ModelXl3PedestalMask"];
-    [encoder encodeInteger:xl3ChargeInjMask     forKey:@"ORXL3ModelXl3ChargeInjMask"];
+    [encoder encodeInt:xl3RWAddressValue    forKey:@"ORXL3ModelXl3RWAddressValue"];
+    [encoder encodeInt:xl3RWDataValue       forKey:@"ORXL3ModelXl3RWDataValue"];
+    [encoder encodeInt:xl3PedestalMask      forKey:@"ORXL3ModelXl3PedestalMask"];
+    [encoder encodeInt:xl3ChargeInjMask     forKey:@"ORXL3ModelXl3ChargeInjMask"];
     [encoder encodeInteger:xl3ChargeInjCharge   forKey:@"ORXL3ModelXl3ChargeInjCharge"];
 
     [encoder encodeInteger:pollXl3Time              forKey:@"ORXL3ModelPollXl3Time"];

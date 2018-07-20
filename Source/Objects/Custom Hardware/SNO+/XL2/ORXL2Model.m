@@ -300,7 +300,7 @@ uint32_t xl2_register_offsets[] =
 {
 	uint32_t selectBits;
 	if(aCard == self)	selectBits = XL2_SELECT_XL2;
-	else				selectBits = (1L<<[aCard stationNumber]);
+	else				selectBits = (uint32_t)(1L<<[aCard stationNumber]);
 	//NSLog(@"selectBits for card in slot %d: 0x%x\n", [aCard slot], selectBits);
 	[self selectCards:selectBits];
 }
@@ -633,7 +633,7 @@ uint32_t xl2_register_offsets[] =
 		// Load the data from the Xilinx File
 		NSData* theData = [[self xl1] xilinxFileData];	// load the entire content of the file
 		char*   charData = (char*)[theData bytes];
-		uint32_t length = [theData length];
+		uint32_t length = (uint32_t)[theData length];
 		uint32_t index = length; 
 		
 		// select the mother cards in the SNO Crate

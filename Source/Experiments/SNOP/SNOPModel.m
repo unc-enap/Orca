@@ -913,7 +913,7 @@ err:
 
     /* We set the run to the next run number - 1 because the run control will
      * increment the run number before the run starts. */
-    [runControl setRunNumber:run_number-1];
+    [runControl setRunNumber:(uint32_t)run_number-1];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:ORReleaseRunStateChangeWait object: self];
 
@@ -2757,7 +2757,7 @@ err:
     //Load values
     @try {
         //Load run type word
-        uint32_t nextruntypeword = [[runSettings valueForKey:@"run_type_word"] unsignedLongValue];
+        uint32_t nextruntypeword = (uint32_t)[[runSettings valueForKey:@"run_type_word"] unsignedLongValue];
         uint32_t currentruntypeword = [runControlModel runType];
         //Do not touch the data quality bits
         currentruntypeword &= 0xFFE00000;

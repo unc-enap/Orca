@@ -1637,14 +1637,14 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 
     
     [self setMinimizeDecoding:       [decoder decodeBoolForKey:  @"minimizeDecoding"]];
-	[self setPixelBusEnableReg:     [decoder decodeIntegerForKey:@"pixelBusEnableReg"]];
+	[self setPixelBusEnableReg:     [decoder decodeIntForKey:@"pixelBusEnableReg"]];
 	[self setSltScriptArguments:    [decoder decodeObjectForKey:@"sltScriptArguments"]];
-	[self setControlReg:            [decoder decodeIntegerForKey:@"controlReg"]];
-	[self setSecondsSet:            [decoder decodeIntegerForKey:@"secondsSet"]];
+	[self setControlReg:            [decoder decodeIntForKey:@"controlReg"]];
+	[self setSecondsSet:            [decoder decodeIntForKey:@"secondsSet"]];
 	[self setSecondsSetSendToFLTs:  [decoder decodeBoolForKey:@"secondsSetSendToFLTs"]];
 	[self setCountersEnabled:       [decoder decodeBoolForKey:@"countersEnabled"]];
 	[self setPatternFilePath:		[decoder decodeObjectForKey:@"ORKatrinV4SLTModelPatternFilePath"]];
-	[self setInterruptMask:			[decoder decodeIntegerForKey:@"ORKatrinV4SLTModelInterruptMask"]];
+	[self setInterruptMask:			[decoder decodeIntForKey:@"ORKatrinV4SLTModelInterruptMask"]];
 	[self setPulserDelay:			[decoder decodeFloatForKey:@"ORKatrinV4SLTModelPulserDelay"]];
 	[self setPulserAmp:				[decoder decodeFloatForKey:@"ORKatrinV4SLTModelPulserAmp"]];
 	[self setReadOutGroup:			[decoder decodeObjectForKey:@"ReadoutGroup"]];
@@ -1673,17 +1673,17 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 {
 	[super encodeWithCoder:encoder];
 	
-	[encoder encodeInteger:pixelBusEnableReg        forKey:@"pixelBusEnableReg"];
+	[encoder encodeInt:pixelBusEnableReg        forKey:@"pixelBusEnableReg"];
     [encoder encodeBool:minimizeDecoding        forKey:@"minimizeDecoding"];
 	[encoder encodeBool:secondsSetSendToFLTs    forKey:@"secondsSetSendToFLTs"];
 	[encoder encodeBool:secondsSetInitWithHost  forKey:@"secondsSetInitWithHost"];
 	[encoder encodeObject:sltScriptArguments    forKey:@"sltScriptArguments"];
 	[encoder encodeBool:countersEnabled         forKey:@"countersEnabled"];
-	[encoder encodeInteger:secondsSet             forKey:@"secondsSet"];
+	[encoder encodeInt:secondsSet             forKey:@"secondsSet"];
 	[encoder encodeObject:pmcLink               forKey:@"PMC_Link"];
-	[encoder encodeInteger:controlReg             forKey:@"controlReg"];
+	[encoder encodeInt:controlReg             forKey:@"controlReg"];
 	[encoder encodeObject:patternFilePath       forKey:@"ORKatrinV4SLTModelPatternFilePath"];
-	[encoder encodeInteger:interruptMask          forKey:@"ORKatrinV4SLTModelInterruptMask"];
+	[encoder encodeInt:interruptMask          forKey:@"ORKatrinV4SLTModelInterruptMask"];
 	[encoder encodeFloat:pulserDelay            forKey:@"ORKatrinV4SLTModelPulserDelay"];
 	[encoder encodeFloat:pulserAmp              forKey:@"ORKatrinV4SLTModelPulserAmp"];
 	[encoder encodeObject:readOutGroup          forKey:@"ReadoutGroup"];
@@ -2166,7 +2166,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 
 - (void) shipSltEvent:(unsigned char)aCounterType withType:(unsigned char)aType eventCt:(uint32_t)c high:(uint32_t)h low:(uint32_t)l
 {
-	uint32_t location = (([self crateNumber]&0xf)<<21) | ([self stationNumber]& 0x0000001f)<<16;
+	uint32_t location = (uint32_t)((([self crateNumber]&0xf)<<21) | ([self stationNumber]& 0x0000001f)<<16);
 	uint32_t data[5];
 			data[0] = eventDataId | 5; 
 			data[1] = location | ((aCounterType & 0xf)<<4) | (aType & 0xf);
@@ -2247,7 +2247,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 	configStruct->card_info[index].hw_mask[1] 	= multiplicityId;
 	configStruct->card_info[index].hw_mask[2] 	= eventFifoId;
 	configStruct->card_info[index].hw_mask[3] 	= energyId;
-	configStruct->card_info[index].slot			= [self stationNumber];
+	configStruct->card_info[index].slot			= (uint32_t)[self stationNumber];
 	configStruct->card_info[index].crate		= [self crateNumber];
 	configStruct->card_info[index].add_mod		= 0;		//not needed for this HW
     

@@ -70,6 +70,7 @@
 #define LJUSB_LIBRARY_VERSION 2.05f
 
 #include <stdbool.h>
+#include <stdint.h>
 
 typedef void * HANDLE;
 typedef unsigned int UINT;
@@ -131,7 +132,7 @@ extern "C"{
 float LJUSB_GetLibraryVersion(void);
 //Returns the labjackusb library version number.
 
-unsigned int LJUSB_GetDevCount(unsigned long ProductID);
+unsigned int LJUSB_GetDevCount(uint32_t ProductID);
 // Returns the total number of LabJack USB devices connected.
 // ProductID = The product ID of the devices you want to get the count of.
 
@@ -169,7 +170,7 @@ int LJUSB_OpenAllDevices(HANDLE* devHandles, UINT* productIds, UINT maxDevices);
 // where the return value is 2. 2341234 is the handle for a U3, and 55343 is the
 // handle for a SkyMote Bridge.
 
-HANDLE LJUSB_OpenDevice(UINT DevNum, unsigned int dwReserved, unsigned long ProductID);
+HANDLE LJUSB_OpenDevice(UINT DevNum, unsigned int dwReserved, uint32_t ProductID);
 // Obtains a handle for a LabJack USB device.  Returns NULL if there is an
 // error.
 // If the device is already open, NULL is returned and errno is set to EBUSY.
@@ -188,7 +189,7 @@ bool LJUSB_ResetConnection(HANDLE hDevice);
 // and you should re-open the device.
 // hDevice = The handle for your device
 
-unsigned long LJUSB_Write(HANDLE hDevice, BYTE *pBuff, unsigned long count);
+uint32_t LJUSB_Write(HANDLE hDevice, BYTE *pBuff, uint32_t count);
 // Writes to a device with a 1 second timeout.  If the timeout time elapses and
 // no data is transferred the USB request is aborted and the call returns.
 // Returns the number of bytes written, or 0 on error and errno is set.
@@ -198,7 +199,7 @@ unsigned long LJUSB_Write(HANDLE hDevice, BYTE *pBuff, unsigned long count);
 // This function replaces the deprecated LJUSB_BulkWrite, which required the
 // endpoint.
 
-unsigned long LJUSB_Read(HANDLE hDevice, BYTE *pBuff, unsigned long count);
+uint32_t LJUSB_Read(HANDLE hDevice, BYTE *pBuff, uint32_t count);
 // Reads from a device with a 1 second timeout. If the timeout time elapses and
 // no data is transferred the USB request is aborted and the call returns.
 // Returns the number of bytes read, or 0 on error and errno is set.
@@ -208,7 +209,7 @@ unsigned long LJUSB_Read(HANDLE hDevice, BYTE *pBuff, unsigned long count);
 // This function replaces the deprecated LJUSB_BulkRead, which required the
 // endpoint.
 
-unsigned long LJUSB_Stream(HANDLE hDevice, BYTE *pBuff, unsigned long count);
+uint32_t LJUSB_Stream(HANDLE hDevice, BYTE *pBuff, uint32_t count);
 // Reads from a device's stream interface with a 1 second timeout.  If the
 // timeout time elapses and no data is transferred the USB request is aborted
 // and the call returns.  Returns the number of bytes written, or 0 on error and
@@ -219,7 +220,7 @@ unsigned long LJUSB_Stream(HANDLE hDevice, BYTE *pBuff, unsigned long count);
 // This function replaces the deprecated LJUSB_BulkRead, which required the
 // (stream) endpoint.
 
-unsigned long LJUSB_WriteTO(HANDLE hDevice, BYTE *pBuff, unsigned long count, unsigned int timeout);
+uint32_t LJUSB_WriteTO(HANDLE hDevice, BYTE *pBuff, uint32_t count, unsigned int timeout);
 // Writes to a device with a specified timeout.  If the timeout time elapses and
 // no data is transferred the USB request is aborted and the call returns.
 // Returns the number of bytes written, or 0 on error and errno is set.
@@ -229,7 +230,7 @@ unsigned long LJUSB_WriteTO(HANDLE hDevice, BYTE *pBuff, unsigned long count, un
 // timeout = The USB communication timeout value in milliseconds.  Pass 0 for
 //           an unlimited timeout.
 
-unsigned long LJUSB_ReadTO(HANDLE hDevice, BYTE *pBuff, unsigned long count, unsigned int timeout);
+uint32_t LJUSB_ReadTO(HANDLE hDevice, BYTE *pBuff, uint32_t count, unsigned int timeout);
 // Reads from a device with a specified timeout. If the timeout time elapses and
 // no data is transferred the USB request is aborted and the call returns.
 // Returns the number of bytes read, or 0 on error and errno is set.
@@ -239,7 +240,7 @@ unsigned long LJUSB_ReadTO(HANDLE hDevice, BYTE *pBuff, unsigned long count, uns
 // timeout = The USB communication timeout value in milliseconds.  Pass 0 for
 //           an unlimited timeout.
 
-unsigned long LJUSB_StreamTO(HANDLE hDevice, BYTE *pBuff, unsigned long count, unsigned int timeout);
+uint32_t LJUSB_StreamTO(HANDLE hDevice, BYTE *pBuff, uint32_t count, unsigned int timeout);
 // Reads from a device's stream interface with a specified timeout.  If the
 // timeout time elapses and no data is transferred the USB request is aborted
 // and the call returns.  Returns the number of bytes read, or 0 on error and
@@ -262,7 +263,7 @@ unsigned short LJUSB_GetDeviceDescriptorReleaseNumber(HANDLE hDevice);
 // device descriptor.
 // hDevice = The handle for your device.
 
-unsigned long LJUSB_GetHIDReportDescriptor(HANDLE hDevice, BYTE *pBuff, unsigned long count);
+uint32_t LJUSB_GetHIDReportDescriptor(HANDLE hDevice, BYTE *pBuff, uint32_t count);
 // Reads the HID report descriptor bytes from a device with a 1 second timeout.
 // If the timeout time elapses and no data is transferred the USB request is
 // aborted and the call returns.  Returns the number of bytes read, or 0 on
@@ -276,7 +277,7 @@ unsigned long LJUSB_GetHIDReportDescriptor(HANDLE hDevice, BYTE *pBuff, unsigned
 
 /* --------------- DEPRECATED Functions --------------- */
 
-unsigned long LJUSB_BulkRead(HANDLE hDevice, unsigned char endpoint, BYTE *pBuff, unsigned long count);
+uint32_t LJUSB_BulkRead(HANDLE hDevice, unsigned char endpoint, BYTE *pBuff, uint32_t count);
 // Reads from a bulk endpoint.  Returns the count of the number of bytes read,
 // or 0 on error (and sets errno).  If there is no response within a certain
 // amount of time (LJ_LIBUSB_TIMEOUT in labjackusb.c), the read will timeout.
@@ -286,7 +287,7 @@ unsigned long LJUSB_BulkRead(HANDLE hDevice, unsigned char endpoint, BYTE *pBuff
 // count = The size of the buffer to be read from the device.
 
 
-unsigned long LJUSB_BulkWrite(HANDLE hDevice, unsigned char endpoint, BYTE *pBuff, unsigned long count);
+uint32_t LJUSB_BulkWrite(HANDLE hDevice, unsigned char endpoint, BYTE *pBuff, uint32_t count);
 // Writes to a bulk endpoint.  Returns the count of the number of bytes wrote,
 // or 0 on error and sets errno.
 // hDevice = Handle of the LabJack USB device.
@@ -294,7 +295,7 @@ unsigned long LJUSB_BulkWrite(HANDLE hDevice, unsigned char endpoint, BYTE *pBuf
 // *pBuff = Pointer to the buffer that will be written to the device.
 // count = The size of the buffer to be written to the device.
 
-bool LJUSB_AbortPipe(HANDLE hDevice, unsigned long Pipe);
+bool LJUSB_AbortPipe(HANDLE hDevice, uint32_t Pipe);
 // No longer supported and will return false.
 // Pipes will timeout after LJ_LIBUSB_TIMEOUT, which is set by default to 1
 // second.

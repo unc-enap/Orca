@@ -382,8 +382,8 @@ NSString* OR1dRoiCurveFitChanged = @"OR1dRoiCurveFitChanged";
 {
     self = [super init];
     
-    [self setMinChannel:[decoder decodeIntegerForKey:@"minChannel"]];
-    [self setMaxChannel:[decoder decodeIntegerForKey:@"maxChannel"]];
+    [self setMinChannel:[decoder decodeIntForKey:@"minChannel"]];
+    [self setMaxChannel:[decoder decodeIntForKey:@"maxChannel"]];
 	[self setFit:[decoder decodeObjectForKey:@"fit"]];
 	[self setFFT:[decoder decodeObjectForKey:@"fft"]];
 	if(!fit)[self setFit:[self makeFitObject]];
@@ -394,8 +394,8 @@ NSString* OR1dRoiCurveFitChanged = @"OR1dRoiCurveFitChanged";
 
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
-    [encoder encodeInteger:minChannel forKey:@"minChannel"];
-    [encoder encodeInteger:maxChannel forKey:@"maxChannel"];
+    [encoder encodeInt:minChannel forKey:@"minChannel"];
+    [encoder encodeInt:maxChannel forKey:@"maxChannel"];
 	[encoder encodeObject:fit forKey:@"fit"];
 	[encoder encodeObject:fft forKey:@"fft"];
 }

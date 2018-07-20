@@ -295,7 +295,7 @@ NSString* ORTPG256ALock = @"ORTPG256ALock";
 		//get the time(UT!)
 		time_t	ut_Time;
 		time(&ut_Time);
-		timeMeasured[index] = ut_Time;
+		timeMeasured[index] = (uint32_t)ut_Time;
 
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORTPG256APressureChanged 
 															object:self 

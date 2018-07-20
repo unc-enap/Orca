@@ -119,7 +119,7 @@
 	[dataSetLock lock];
     fprintf( aFile, "WAVES/I/N=(%d) '%s'\nBEGIN\n",numberBins,[shortName cStringUsingEncoding:NSASCIIStringEncoding]);
     uint32_t* histogramPtr = (uint32_t*)[histogram bytes];
-    uint32_t n = [histogram length]/sizeof(uint32_t);
+    uint32_t n = (uint32_t)[histogram length]/sizeof(uint32_t);
     int i;
     for (i=0; i<n; ++i) {
         fprintf(aFile, "%d\n",histogramPtr[i]);
@@ -224,7 +224,7 @@
 {
 	NSData* pd = [self getNonZeroRawDataWithStart:start end:end];
 	uint32_t* plotData = (uint32_t*)[pd bytes];
-	uint32_t n = [pd length]/4;
+	uint32_t n = (uint32_t)[pd length]/4;
 	int i;
 	NSMutableString* s = [NSMutableString stringWithCapacity:n*64];
 	for(i=0;i<n;i++){
@@ -285,7 +285,7 @@
 	[dataSetLock lock];
     [histogram release];
     histogram = [[NSMutableData dataWithData:someData] retain];
-    numberBins = [histogram length]/sizeof(uint32_t);
+    numberBins = (uint32_t)[histogram length]/sizeof(uint32_t);
 	[dataSetLock unlock];
 	[self incrementTotalCounts];	
 }
@@ -350,7 +350,7 @@
 	if(allKeys && ![allKeys hasPrefix:@"Final"]){
 		allKeys = [@"Final/" stringByAppendingString:allKeys];
 		const char* p = [allKeys UTF8String];
-		uint32_t allKeysLengthWithTerminator = strlen(p)+1;
+		uint32_t allKeysLengthWithTerminator = (uint32_t)strlen(p)+1;
 		uint32_t paddedKeyLength = 4*((uint32_t)(allKeysLengthWithTerminator+4)/4);
 		uint32_t paddedKeyLengthLong = paddedKeyLength/4;
 		[dataToShip appendBytes:&paddedKeyLengthLong length:4];
@@ -368,7 +368,7 @@
 		
 		//go back and fill in the total length
 		uint32_t *ptr = (uint32_t*)[dataToShip bytes];
-		uint32_t totalLength = [dataToShip length]/4; //num of longs
+		uint32_t totalLength = (uint32_t)[dataToShip length]/4; //num of longs
 		*ptr |= (kLongFormLengthMask & totalLength);
 		[aDataPacket addData:dataToShip];
 	}
@@ -393,7 +393,7 @@ static NSString *OR1DHistoNumberBins	= @"1D Histogram Number Bins";
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
     
-    [self setNumberBins:[decoder decodeIntegerForKey:OR1DHistoNumberBins]];
+    [self setNumberBins:[decoder decodeIntForKey:OR1DHistoNumberBins]];
 	rois = [[decoder decodeObjectForKey:@"rois"] retain];
     [[self undoManager] enableUndoRegistration];
     return self;
@@ -402,7 +402,7 @@ static NSString *OR1DHistoNumberBins	= @"1D Histogram Number Bins";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInteger:(int)numberBins forKey:OR1DHistoNumberBins];
+    [encoder encodeInt:(int)numberBins forKey:OR1DHistoNumberBins];
     [encoder encodeObject:rois forKey:@"rois"];
 }
 

@@ -99,7 +99,7 @@
 	@try {
 		array = [NSMutableArray arrayWithCapacity:1024*1000];
 		NSNumber* aKey;
-		int32_t length = [fileAsData length]/sizeof(int32_t);
+		int32_t length = (int32_t)[fileAsData length]/sizeof(int32_t);
 		uint32_t decodedLength;
 		uint32_t* dPtr = (uint32_t*)[fileAsData bytes];
 		uint32_t* start = dPtr;

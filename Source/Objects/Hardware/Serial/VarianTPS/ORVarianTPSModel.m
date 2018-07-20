@@ -201,7 +201,7 @@ NSString* ORVarianTPSModelControllerTempChanged	= @"ORVarianTPSModelControllerTe
 	[timeRate addDataToTimeAverage:aPressure];
 	time_t	ut_Time;
 	time(&ut_Time);
-	timeMeasured = ut_Time;
+	timeMeasured = (uint32_t)ut_Time;
 	[self shipPressure];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORVarianTPSModelPressureChanged object:self];
 }

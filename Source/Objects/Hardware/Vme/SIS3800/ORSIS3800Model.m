@@ -907,7 +907,7 @@ NSString* ORSIS3800ChannelNameChanged				 = @"ORSIS3800ChannelNameChanged";
     [self setEnable25MHzPulses:[decoder decodeBoolForKey:@"enable25MHzPulses"]];
     [self setLemoInMode:[decoder decodeIntForKey:@"lemoInMode"]];
     [self setPollTime:[decoder decodeIntForKey:@"pollTime"]];
-    [self setCountEnableMask:[decoder decodeIntegerForKey:@"countEnableMask"]];
+    [self setCountEnableMask:[decoder decodeIntForKey:@"countEnableMask"]];
 	int i;
 	for(i=0;i<32;i++) {
 		NSString* aName = [decoder decodeObjectForKey:[NSString stringWithFormat:@"channelName%d",i]];
@@ -932,7 +932,7 @@ NSString* ORSIS3800ChannelNameChanged				 = @"ORSIS3800ChannelNameChanged";
     [encoder encodeBool:enable25MHzPulses forKey:@"enable25MHzPulses"];
     [encoder encodeInteger:lemoInMode forKey:@"lemoInMode"];
     [encoder encodeInteger:pollTime forKey:@"pollTime"];
-    [encoder encodeInteger:countEnableMask forKey:@"countEnableMask"];
+    [encoder encodeInt:countEnableMask forKey:@"countEnableMask"];
 	int i;
 	for(i=0;i<32;i++) {
 		[encoder encodeObject:channelName[i] forKey:[NSString stringWithFormat:@"channelName%d",i]];
@@ -946,7 +946,7 @@ NSString* ORSIS3800ChannelNameChanged				 = @"ORSIS3800ChannelNameChanged";
 {
 	time_t	ut_Time;
 	time(&ut_Time);
-	timeMeasured = ut_Time;
+	timeMeasured = (uint32_t)ut_Time;
 }
 
 - (void) shipData

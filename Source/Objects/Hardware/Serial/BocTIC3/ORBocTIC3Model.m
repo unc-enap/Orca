@@ -253,7 +253,7 @@ NSString* ORBocTIC3Lock = @"ORBocTIC3Lock";
 		time_t	ut_Time;
 		time(&ut_Time);
 		//struct tm* theTimeGMTAsStruct = gmtime(&theTime);
-		timeMeasured[index] = ut_Time;
+		timeMeasured[index] = (uint32_t)ut_Time;
 
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORBocTIC3PressureChanged 
 															object:self 

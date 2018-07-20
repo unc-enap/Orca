@@ -142,7 +142,7 @@ NSString* ORVXMLock							= @"ORVXMLock";
         
 		uint32_t data[5];
 		data[0] = dataId | 5;
-		data[1] = ut_time;
+		data[1] = (uint32_t)ut_time;
 		data[2] = ([aMotor motorId]<<16) | ([self uniqueIdNumber]&0x0000fffff);
 		//encode the position
 		union {

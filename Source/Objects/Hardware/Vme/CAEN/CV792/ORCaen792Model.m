@@ -696,8 +696,8 @@ NSString* ORCaen792ModelShipTimeStampChanged          = @"ORCaen792ModelShipTime
                     if(shipTimeStamp) {
                         struct timeval ts;
                         if(gettimeofday(&ts,NULL) ==0){
-                            dataRecord[index++] = ts.tv_sec;
-                            dataRecord[index++] = ts.tv_usec;
+                            dataRecord[index++] = (uint32_t)ts.tv_sec;
+                            dataRecord[index++] = (uint32_t)ts.tv_usec;
                         }
                     }
 					for(i=0;i<numMemorizedChannels;i++){
@@ -878,7 +878,7 @@ NSString* ORCaen792ModelShipTimeStampChanged          = @"ORCaen792ModelShipTime
     [self setOverflowSuppressEnable:[aDecoder decodeBoolForKey: @"overflowSuppressEnable"]];
     [self setIPed:                  [aDecoder decodeIntegerForKey:  @"iPed"]];
     [self setModelType:             [aDecoder decodeIntForKey:  @"modelType"]];
-   	[self setOnlineMask:            [aDecoder decodeIntegerForKey:@"onlineMask"]];
+   	[self setOnlineMask:            [aDecoder decodeIntForKey:@"onlineMask"]];
     [self setShipTimeStamp:         [aDecoder decodeBoolForKey:@"shipTimeStamp"]];
 
     [self setQdcRateGroup:[aDecoder decodeObjectForKey:@"qdcRateGroup"]];
@@ -910,7 +910,7 @@ NSString* ORCaen792ModelShipTimeStampChanged          = @"ORCaen792ModelShipTime
 	[anEncoder encodeBool: overflowSuppressEnable forKey:@"overflowSuppressEnable"];
 	[anEncoder encodeInteger:  iPed                   forKey:@"iPed"];
 	[anEncoder encodeInteger:  modelType              forKey:@"modelType"];
-	[anEncoder encodeInteger:onlineMask             forKey:@"onlineMask"];
+	[anEncoder encodeInt:onlineMask             forKey:@"onlineMask"];
     [anEncoder encodeObject: qdcRateGroup         forKey:@"qdcRateGroup"];
     [anEncoder encodeBool: shipTimeStamp          forKey:@"shipTimeStamp"];
 }

@@ -388,8 +388,8 @@ NSString* OR1dFitFunctionChanged = @"OR1dFitFunctionChanged";
     
 	[self setFitValid:[decoder decodeBoolForKey:@"fitValid"]];
 		
-    [self setMinChannel:	[decoder decodeIntegerForKey:@"minChannel"]];
-    [self setMaxChannel:	[decoder decodeIntegerForKey:@"maxChannel"]];
+    [self setMinChannel:	[decoder decodeIntForKey:@"minChannel"]];
+    [self setMaxChannel:	[decoder decodeIntForKey:@"maxChannel"]];
 	[self setFitParams:		[decoder decodeObjectForKey:@"fitParams"]];
 	[self setFitParamNames:	[decoder decodeObjectForKey:@"fitParamNames"]];
 	[self setFitParamErrors:[decoder decodeObjectForKey:@"fitParamErrors"]];
@@ -407,8 +407,8 @@ NSString* OR1dFitFunctionChanged = @"OR1dFitFunctionChanged";
 
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
-    [encoder encodeInteger:minChannel forKey:@"minChannel"];
-    [encoder encodeInteger:maxChannel forKey:@"maxChannel"];
+    [encoder encodeInt:minChannel forKey:@"minChannel"];
+    [encoder encodeInt:maxChannel forKey:@"maxChannel"];
 	
 	[encoder encodeBool:fitValid forKey:@"fitValid"];
 	

@@ -703,7 +703,7 @@ NSString* ORHP4405AModelTraceChanged		= @"ORHP4405AModelTraceChanged";
     char reply[1024];
     int32_t n = [self writeReadGPIBDevice:@":SYST:PON:TIME?" data:reply maxLength:1024];
     if(n && [[NSString stringWithCString:reply encoding:NSASCIIStringEncoding] rangeOfString:@"No error"].location == NSNotFound){
-		return atol(reply);
+		return (uint32_t)atol(reply);
 	}
 	else return 0; //inserted to get rid of compiler warnings MAH -8/06/08
 }

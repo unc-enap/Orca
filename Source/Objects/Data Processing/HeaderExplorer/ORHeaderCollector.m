@@ -99,7 +99,7 @@
 		if(p+recordLength <= endPtr){
 			if(dataId == 0x0){
 				//[currentDecoder loadHeader:p];
-				runDataID = [[currentDecoder headerObject:@"dataDescription",@"ORRunModel",@"Run",@"dataId",nil] longValue];
+				runDataID = (uint32_t)[[currentDecoder headerObject:@"dataDescription",@"ORRunModel",@"Run",@"dataId",nil] longValue];
 			}
 			else if(dataId == runDataID){
 				[self processRunRecord:p];
@@ -141,7 +141,7 @@
 						  runNumber:p[2]
 						  useSubRun:subRunNumber!=0
 					   subRunNumber:subRunNumber
-						   fileSize:fileSize
+						   fileSize:(uint32_t)fileSize
 						   fileName:filePath];
 		}
 		else if(p[1] & 0x20){
@@ -158,7 +158,7 @@
 				  runNumber:p[2]
 				  useSubRun:subRunNumber!=0
 			   subRunNumber:subRunNumber
-				   fileSize:fileSize
+				   fileSize:(uint32_t)fileSize
 				   fileName:filePath];	
 		}
 	}

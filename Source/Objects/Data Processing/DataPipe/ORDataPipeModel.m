@@ -325,7 +325,7 @@ NSString* ORDataPipeTypeChangedNotification = @"ORDataPipeTypeChangedNotificatio
     [[self undoManager] disableUndoRegistration];
     [self setPipeName:     [decoder decodeObjectForKey:   @"pipeName"]];
     [self setReaderPath:   [decoder decodeObjectForKey:   @"readerPath"]];
-    [self setRunType:   [decoder decodeIntegerForKey:   @"runType"]];
+    [self setRunType:   [decoder decodeIntForKey:   @"runType"]];
     [[self undoManager] enableUndoRegistration];
     
     validRunType = YES; //assume ok. Check again when run starts
@@ -336,7 +336,7 @@ NSString* ORDataPipeTypeChangedNotification = @"ORDataPipeTypeChangedNotificatio
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInteger:runType            forKey:@"runType"];
+    [encoder encodeInt:runType            forKey:@"runType"];
     [encoder encodeObject:readerPath         forKey:@"readerPath"];
     [encoder encodeObject:pipeName           forKey:@"pipeName"];
 }

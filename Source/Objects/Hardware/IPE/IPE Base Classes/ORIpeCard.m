@@ -70,7 +70,7 @@ NSString* ORIpeCardExceptionCountChanged		= @"ORIpeCardExceptionCountChanged";
 {
 	if(!registers)registers = [[NSMutableArray array] retain];
 	if(index > [registers count]){
-		uint32_t i;
+		unsigned int i;
 		for(i=[registers count];i<index;i++){
 			[registers addObject:[NSNull null]];
 		}

@@ -345,7 +345,7 @@ NSString* ORAmrelHVModelDataIsValidChanged	= @"ORAmrelHVModelDataIsValidChanged"
 			uint32_t data[5];
 			data[0] = dataId | 5;
 			data[1] = ((i & 0x1)<<28) | (([self outputState:i] & 0x1)<<16) | ([self uniqueIdNumber]&0xfff);
-			data[2] = ut_Time;
+			data[2] = (uint32_t)ut_Time;
 			
 			union {
 				float asFloat;

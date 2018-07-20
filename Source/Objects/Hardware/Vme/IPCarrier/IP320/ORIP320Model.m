@@ -999,7 +999,7 @@ static struct {
 - (void) loadConvertedTimeSeries:(float)convertedValue atTime:(time_t) aTime forChannel:(int) channel
 {
 	if(!dataSet)[self setDataSet:[[[ORDataSet alloc] initWithKey:@"IP320" guardian:nil] autorelease]];
-	[dataSet loadTimeSeries:convertedValue atTime:aTime sender:self withKeys:@"IP320",@"Value",
+	[dataSet loadTimeSeries:convertedValue atTime:(uint32_t)aTime sender:self withKeys:@"IP320",@"Value",
 	 [NSString stringWithFormat:@"Crate %d",[[self guardian] crateNumber]],
 	 [NSString stringWithFormat:@"Slot %02d",[[self guardian] slot]],
 	 [self getSlotKey:[self slot]],
@@ -1009,7 +1009,7 @@ static struct {
 - (void) loadRawTimeSeries:(float)aRawValue atTime:(time_t) aTime forChannel:(int) channel
 {
 	if(!dataSet)[self setDataSet:[[[ORDataSet alloc] initWithKey:@"IP320" guardian:nil] autorelease]];
-	[dataSet loadTimeSeries:aRawValue atTime:aTime sender:self withKeys:@"IP320",@"Raw",
+	[dataSet loadTimeSeries:aRawValue atTime:(uint32_t)aTime sender:self withKeys:@"IP320",@"Raw",
 	 [NSString stringWithFormat:@"Crate %d",[[self guardian] crateNumber]],
 	 [NSString stringWithFormat:@"Slot %02d",[[self guardian] slot]],
 	 [self getSlotKey:[self slot]],

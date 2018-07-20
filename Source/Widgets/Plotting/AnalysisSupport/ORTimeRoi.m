@@ -134,7 +134,7 @@ NSString* ORTimeRoiCurveFitChanged = @"ORTimeRoiCurveFitChanged";
 	int32_t endTimeOffset		 = [self maxChannel];
 	NSTimeInterval startTime = startingTime - startTimeOffset;
 	NSTimeInterval endTime	 = startingTime - endTimeOffset;
-	int32_t numPts				 = labs(endTimeOffset-startTimeOffset);
+	int32_t numPts				 = (uint32_t)labs(endTimeOffset-startTimeOffset);
 											  
 	int32_t count = 0;
 	double minY = 9.9E99;
@@ -315,16 +315,16 @@ NSString* ORTimeRoiCurveFitChanged = @"ORTimeRoiCurveFitChanged";
 {
     self = [super init];
     
-    [self setMinChannel:[decoder decodeIntegerForKey:@"minChannel"]];
-    [self setMaxChannel:[decoder decodeIntegerForKey:@"maxChannel"]];
+    [self setMinChannel:[decoder decodeIntForKey:@"minChannel"]];
+    [self setMaxChannel:[decoder decodeIntForKey:@"maxChannel"]];
 
     return self;
 }
 
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
-    [encoder encodeInteger:minChannel forKey:@"minChannel"];
-    [encoder encodeInteger:maxChannel forKey:@"maxChannel"];
+    [encoder encodeInt:minChannel forKey:@"minChannel"];
+    [encoder encodeInt:maxChannel forKey:@"maxChannel"];
 }
 
 @end

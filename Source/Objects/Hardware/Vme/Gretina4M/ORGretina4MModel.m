@@ -2868,8 +2868,8 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
 
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
-    runNumberLocal     = [[userInfo objectForKey:@"kRunNumber"] unsignedLongValue];
-    subRunNumberLocal     = [[userInfo objectForKey:@"kSubRunNumber"] unsignedLongValue];
+    runNumberLocal     = (uint32_t)[[userInfo objectForKey:@"kRunNumber"] unsignedLongValue];
+    subRunNumberLocal     = (uint32_t)[[userInfo objectForKey:@"kSubRunNumber"] unsignedLongValue];
 
     if(![[self adapter] controllerCard]){
         [NSException raise:@"Not Connected" format:@"You must connect to a PCI Controller (i.e. a 617)."];
@@ -3113,7 +3113,7 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
     self = [super initWithCoder:decoder];
     
     [[self undoManager] disableUndoRegistration];
-    [self setBaselineRestoredDelay:     [decoder decodeIntegerForKey:@"baselineRestoredDelay"]];
+    [self setBaselineRestoredDelay:     [decoder decodeIntForKey:@"baselineRestoredDelay"]];
     [self setNoiseWindow:               [decoder decodeIntegerForKey:@"noiseWindow"]];
     [self setIntegrateTime:             [decoder decodeIntegerForKey:@"integrateTime"]];
     [self setCollectionTime:            [decoder decodeIntegerForKey:@"collectionTime"]];
@@ -3126,8 +3126,8 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
     [self setLinkConnector:             [decoder decodeObjectForKey:@"linkConnector"]];
     [self setDownSample:				[decoder decodeIntegerForKey:@"downSample"]];
     [self setRegisterIndex:				[decoder decodeIntForKey:@"registerIndex"]];
-    [self setRegisterWriteValue:		[decoder decodeIntegerForKey:@"registerWriteValue"]];
-    [self setSPIWriteValue:     		[decoder decodeIntegerForKey:@"spiWriteValue"]];
+    [self setRegisterWriteValue:		[decoder decodeIntForKey:@"registerWriteValue"]];
+    [self setSPIWriteValue:     		[decoder decodeIntForKey:@"spiWriteValue"]];
     [self setFpgaFilePath:				[decoder decodeObjectForKey:@"fpgaFilePath"]];
     [self setNoiseFloorIntegrationTime:	[decoder decodeFloatForKey:@"NoiseFloorIntegrationTime"]];
     [self setNoiseFloorOffset:			[decoder decodeIntegerForKey:@"NoiseFloorOffset"]];
@@ -3187,7 +3187,7 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInteger:baselineRestoredDelay forKey:@"baselineRestoredDelay"];
+    [encoder encodeInt:baselineRestoredDelay forKey:@"baselineRestoredDelay"];
     [encoder encodeInteger:noiseWindow                  forKey:@"noiseWindow"];
     [encoder encodeInteger:integrateTime                forKey:@"integrateTime"];
     [encoder encodeInteger:collectionTime               forKey:@"collectionTime"];
@@ -3200,8 +3200,8 @@ static Gretina4MRegisterInformation fpga_register_information[kNumberOfFPGARegis
     [encoder encodeObject:linkConnector				forKey:@"linkConnector"];
     [encoder encodeInteger:downSample					forKey:@"downSample"];
     [encoder encodeInt:registerIndex				forKey:@"registerIndex"];
-    [encoder encodeInteger:registerWriteValue			forKey:@"registerWriteValue"];
-    [encoder encodeInteger:spiWriteValue			    forKey:@"spiWriteValue"];
+    [encoder encodeInt:registerWriteValue			forKey:@"registerWriteValue"];
+    [encoder encodeInt:spiWriteValue			    forKey:@"spiWriteValue"];
     [encoder encodeObject:fpgaFilePath				forKey:@"fpgaFilePath"];
     [encoder encodeFloat:noiseFloorIntegrationTime	forKey:@"NoiseFloorIntegrationTime"];
     [encoder encodeInteger:noiseFloorOffset				forKey:@"NoiseFloorOffset"];

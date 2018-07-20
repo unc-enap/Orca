@@ -570,10 +570,10 @@ NSString* ORTristanFLTSettingsLock                   = @"ORTristanFLTSettingsLoc
     NSLog(@"%@\n",[self DisplayStringFromData:udpData]);
     
     //only data so far is the trace....
-    uint32_t len = ([udpData length]/sizeof(uint32_t)) + 2;
+    uint32_t len = (uint32_t) + 2;
     uint32_t data[len];
     data[0] = dataId | len;
-    data[1] =    (([self crateNumber] & 0x0000000f)<<21) | (([self stationNumber] & 0x0000001f)<<16);
+    data[1] =    (uint32_t)((([self crateNumber] & 0x0000000f)<<21) | (([self stationNumber] & 0x0000001f)<<16));
     uint32_t* ptr = (uint32_t*)[udpData bytes];
     int i;
     int n = (int)([udpData length]/sizeof(uint32_t));
@@ -626,7 +626,7 @@ NSString* ORTristanFLTSettingsLock                   = @"ORTristanFLTSettingsLoc
     [self setUdpFrameSize:      [decoder decodeIntegerForKey:   @"udpFrameSize"]];
     int i;
     for(i=0;i<kNumTristanFLTChannels;i++) {
-        [self setThreshold:i withValue:[decoder decodeIntegerForKey: [NSString stringWithFormat:@"threshold%d",i]]];
+        [self setThreshold:i withValue:[decoder decodeIntForKey: [NSString stringWithFormat:@"threshold%d",i]]];
         [self setEnabled:i   withValue:[decoder decodeBoolForKey:  [NSString stringWithFormat:@"enabled%d",i]]];
     }
     
@@ -654,7 +654,7 @@ NSString* ORTristanFLTSettingsLock                   = @"ORTristanFLTSettingsLoc
     [encoder encodeInteger:udpFrameSize        forKey:@"udpFrameSize"];
     int i;
     for(i=0;i<kNumTristanFLTChannels;i++) {
-        [encoder encodeInteger: (int32_t)threshold[i] forKey:[NSString stringWithFormat:@"threshold%d",i]];
+        [encoder encodeInt: threshold[i] forKey:[NSString stringWithFormat:@"threshold%d",i]];
         [encoder encodeBool:  enabled[i]   forKey:[NSString stringWithFormat:@"enabled%d",i]];
     }
 }

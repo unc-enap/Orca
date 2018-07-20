@@ -237,7 +237,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ORCARootService);
 
 - (void)setTotalSent:(uint64_t)aTotalSent
 {
-    totalSent = aTotalSent;
+    totalSent = (uint64_t)aTotalSent;
 }
 
 - (NSDate*) timeConnected
@@ -418,7 +418,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ORCARootService);
 			NSString* plist = [[[NSString alloc] initWithBytes:(const char *)ptr length:(length-1)*4 encoding:NSASCIIStringEncoding] autorelease];
 			NSDictionary* theResponse = [NSDictionary dictionaryWithPList:plist];
 						
-			uint32_t oldLength = [dataBuffer length];
+			uint32_t oldLength = (uint32_t)[dataBuffer length];
 			[dataBuffer replaceBytesInRange:NSMakeRange(0,length*4) withBytes:dataBuffer];
 			[dataBuffer setLength:oldLength - length*4];
 			
@@ -480,7 +480,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ORCARootService);
 	NSData* dataBlock = [request asData];
 	
 	//the request is now in dataBlock
-	uint32_t headerLength        = [dataBlock length];												  //in bytes
+	uint32_t headerLength        = (uint32_t)[dataBlock length];												  //in bytes
 	uint32_t lengthWhenPadded    = sizeof(int32_t)*(round(.5 + headerLength/(float)sizeof(int32_t)));	  //length in bytes to int32_t boundary
 	uint32_t padSize             = lengthWhenPadded - headerLength;								  //in bytes
 	uint32_t totalLength		  = 1 + (lengthWhenPadded/sizeof(int32_t));							  //in longs

@@ -128,12 +128,12 @@
                 //this is the header
 				runEnded = NO;
 				[currentDecoder loadHeader:p];
-                runDataID   = [[currentDecoder headerObject:@"dataDescription",@"ORRunModel",    @"Run",        @"dataId",nil] longValue];
-                gretina4ID  = [[currentDecoder headerObject:@"dataDescription",@"ORGretina4M",   @"Gretina4",   @"dataId",nil] longValue];
-                gretina4MID = [[currentDecoder headerObject:@"dataDescription",@"ORGretina4M",   @"Gretina4M",  @"dataId",nil] longValue];
-                gretina4AID = [[currentDecoder headerObject:@"dataDescription",@"ORGretina4A",   @"Gretina4A",  @"dataId",nil] longValue];
-                v830ID      = [[currentDecoder headerObject:@"dataDescription",@"ORCV830Model",  @"Event",      @"dataId",nil] longValue];
-                v792ID      = [[currentDecoder headerObject:@"dataDescription",@"ORCaen792Model",@"QdcN",       @"dataId",nil] longValue];
+                runDataID   = (uint32_t)[[currentDecoder headerObject:@"dataDescription",@"ORRunModel",    @"Run",        @"dataId",nil] longValue];
+                gretina4ID  = (uint32_t)[[currentDecoder headerObject:@"dataDescription",@"ORGretina4M",   @"Gretina4",   @"dataId",nil] longValue];
+                gretina4MID = (uint32_t)[[currentDecoder headerObject:@"dataDescription",@"ORGretina4M",   @"Gretina4M",  @"dataId",nil] longValue];
+                gretina4AID = (uint32_t)[[currentDecoder headerObject:@"dataDescription",@"ORGretina4A",   @"Gretina4A",  @"dataId",nil] longValue];
+                v830ID      = (uint32_t)[[currentDecoder headerObject:@"dataDescription",@"ORCV830Model",  @"Event",      @"dataId",nil] longValue];
+                v792ID      = (uint32_t)[[currentDecoder headerObject:@"dataDescription",@"ORCaen792Model",@"QdcN",       @"dataId",nil] longValue];
 
                 
 			}

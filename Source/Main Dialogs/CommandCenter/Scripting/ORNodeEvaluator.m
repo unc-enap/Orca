@@ -940,7 +940,7 @@
 
 - (id) doAssign:(id)p op:(int)opr
 {
-	int32_t value = [NodeValue(0) longValue];
+	int32_t value = (int32_t)[NodeValue(0) longValue];
 	switch(opr){
 		case LEFT_ASSIGN:  value <<= [NodeValue(1) longValue]; break;
 		case RIGHT_ASSIGN: value >>= [NodeValue(1) longValue]; break;

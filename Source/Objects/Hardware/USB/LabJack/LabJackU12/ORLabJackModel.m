@@ -1331,7 +1331,7 @@ NSString* ORLabJackMaxValueChanged				= @"ORLabJackMaxValueChanged";
                     //always this is the last query so timestamp here
                     time_t	ut_Time;
                     time(&ut_Time);
-                    timeMeasured = ut_Time;
+                    timeMeasured = (uint32_t)ut_Time;
                     
                     if(shipData) [self shipIOData];
                 }

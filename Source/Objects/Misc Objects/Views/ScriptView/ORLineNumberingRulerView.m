@@ -272,11 +272,11 @@ NSString* ORBreakpointsAction = @"ORBreakpointsAction";
 		NSRange nullRange = NSMakeRange(NSNotFound, 0);
 		NSLayoutManager* layoutManager = [view layoutManager];
 		NSTextContainer* container = [view textContainer];
-		uint32_t count = [lines count];
-		uint32_t line;
+		NSUInteger count = [lines count];
+		NSUInteger line;
 		for (line = 0; line < count; line++){
-			uint32_t index = [[lines objectAtIndex:line] unsignedIntValue];
-			uint32_t rectCount;
+			NSUInteger index = [[lines objectAtIndex:line] unsignedIntValue];
+			NSUInteger rectCount;
 			NSRectArray rects = [layoutManager rectArrayForCharacterRange:NSMakeRange(index, 0)
 											 withinSelectedCharacterRange:nullRange
 														  inTextContainer:container

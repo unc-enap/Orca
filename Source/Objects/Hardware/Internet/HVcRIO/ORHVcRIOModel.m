@@ -1385,7 +1385,7 @@ static NSString* itemsToShip[kNumToShip*2] = {
 
     time_t    ut_Time;
     time(&ut_Time);
-    uint32_t  timeMeasured = ut_Time;
+    time_t  timeMeasured = ut_Time;
 
     for(NSString* aKey in shipValueDictionary){
         int j = [aKey intValue];
@@ -1394,7 +1394,7 @@ static NSString* itemsToShip[kNumToShip*2] = {
                 uint32_t record[kHVcRIORecordSize];
                 record[0] = dataId | kHVcRIORecordSize;
                 record[1] = ([self uniqueIdNumber] & 0x0000fffff);
-                record[2] = timeMeasured;
+                record[2] = (uint32_t)timeMeasured;
                 record[3] = j;
 
                 union {
@@ -1700,7 +1700,7 @@ static NSString* itemsToShip[kNumToShip*2] = {
     }
 }
 
-- (uint32_t) numPostRegulationPoints { return [postRegulationArray count]; }
+- (uint32_t) numPostRegulationPoints { return (uint32_t)[postRegulationArray count]; }
 - (id) postRegulationPointAtIndex:(int)anIndex
 {
     if(anIndex>=0 && anIndex<[postRegulationArray count])return [postRegulationArray objectAtIndex:anIndex];

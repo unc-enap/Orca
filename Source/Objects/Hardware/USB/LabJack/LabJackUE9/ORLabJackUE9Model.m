@@ -1149,7 +1149,7 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
     [[self undoManager] disableUndoRegistration];
     [self setClockDivisor:[decoder decodeIntForKey:@"clockDivisor"]];
     [self setClockSelection:[decoder decodeIntForKey:@"clockSelection"]];
-    [self setDoDirection:[decoder decodeIntegerForKey:@"doDirection"]];
+    [self setDoDirection:[decoder decodeIntForKey:@"doDirection"]];
     [self setTimerEnableMask:[decoder decodeIntegerForKey:@"timerEnableMask"]];
     [self setCounterEnableMask:[decoder decodeIntegerForKey:@"counterEnableMask"]];
   	[self setIpAddress:[decoder decodeObjectForKey:@"ipAddress"]];
@@ -1176,7 +1176,7 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 		[self setIntercept:i value:[decoder decodeFloatForKey:[NSString stringWithFormat:@"intercept%d",i]]];
 	}
 	for(i=0;i<3;i++) {
-		[self setAdcEnabled:i mask:[decoder decodeIntegerForKey:[NSString stringWithFormat:@"adcEnabledMask%d",i]]];
+		[self setAdcEnabled:i mask:[decoder decodeIntForKey:[NSString stringWithFormat:@"adcEnabledMask%d",i]]];
 	}
 	
 	for(i=0;i<kUE9NumIO;i++) {
@@ -1218,7 +1218,7 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
     [encoder encodeInteger:aOut0 forKey:@"aOut0"];
     [encoder encodeBool:shipData forKey:@"shipData"];
     [encoder encodeInteger:pollTime forKey:@"pollTime"];
-    [encoder encodeInteger:doDirection forKey:@"doDirection"];
+    [encoder encodeInt:doDirection forKey:@"doDirection"];
     [encoder encodeBool:digitalOutputEnabled forKey:@"digitalOutputEnabled"];
 	int i;
 	for(i=0;i<kUE9NumAdcs;i++) {
@@ -1232,7 +1232,7 @@ NSString* ORLabJackUE9ModelAdcEnableMaskChanged		= @"ORLabJackUE9ModelAdcEnableM
 		[encoder encodeFloat:maxValue[i] forKey:[NSString stringWithFormat:@"maxValue%d",i]];
 	}
 	for(i=0;i<3;i++) {
-		[encoder encodeInteger:adcEnabledMask[i] forKey:[NSString stringWithFormat:@"adcEnabledMask%d",i]];
+		[encoder encodeInt:adcEnabledMask[i] forKey:[NSString stringWithFormat:@"adcEnabledMask%d",i]];
 	}
 	
 	for(i=0;i<kUE9NumIO;i++) {

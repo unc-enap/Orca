@@ -506,12 +506,12 @@ NSString* ORCV977ModelWriteValueChanged         = @"ORCV977ModelWriteValueChange
     [self setGateMaskBit:       [aDecoder decodeBoolForKey:@"gateMaskBit"]];
     [self setPatternBit:        [aDecoder decodeBoolForKey:@"patternBit"]];
     [self setSelectedRegIndex:  [aDecoder decodeIntegerForKey:  @"selectedRegIndex"]];
-    [self setWriteValue:        [aDecoder decodeIntegerForKey:@"writeValue"]];
-   	[self setInputSet:          [aDecoder decodeIntegerForKey:@"inputSet"]];
-   	[self setInputMask:         [aDecoder decodeIntegerForKey:@"inputMask"]];
-   	[self setOutputSet:         [aDecoder decodeIntegerForKey:@"outputSet"]];
-   	[self setOutputMask:        [aDecoder decodeIntegerForKey:@"outputMask"]];
-   	[self setInterruptMask:     [aDecoder decodeIntegerForKey:@"interruptMask"]];
+    [self setWriteValue:        [aDecoder decodeIntForKey:@"writeValue"]];
+   	[self setInputSet:          [aDecoder decodeIntForKey:@"inputSet"]];
+   	[self setInputMask:         [aDecoder decodeIntForKey:@"inputMask"]];
+   	[self setOutputSet:         [aDecoder decodeIntForKey:@"outputSet"]];
+   	[self setOutputMask:        [aDecoder decodeIntForKey:@"outputMask"]];
+   	[self setInterruptMask:     [aDecoder decodeIntForKey:@"interruptMask"]];
     [self registerNotificationObservers];
 
     [[self undoManager] enableUndoRegistration];
@@ -525,12 +525,12 @@ NSString* ORCV977ModelWriteValueChanged         = @"ORCV977ModelWriteValueChange
     [anEncoder encodeBool:gateMaskBit       forKey:@"gateMaskBit"];
     [anEncoder encodeBool:patternBit        forKey:@"patternBit"];
     [anEncoder encodeInteger:selectedRegIndex   forKey:@"selectedRegIndex"];
-    [anEncoder encodeInteger:writeValue       forKey:@"writeValue"];
-	[anEncoder encodeInteger:inputSet         forKey:@"inputSet"];
-	[anEncoder encodeInteger:inputMask        forKey:@"inputMask"];
-	[anEncoder encodeInteger:outputSet        forKey:@"outputSet"];
-	[anEncoder encodeInteger:outputMask       forKey:@"outputMask"];
-	[anEncoder encodeInteger:interruptMask    forKey:@"interruptMask"];
+    [anEncoder encodeInt:writeValue       forKey:@"writeValue"];
+	[anEncoder encodeInt:inputSet         forKey:@"inputSet"];
+	[anEncoder encodeInt:inputMask        forKey:@"inputMask"];
+	[anEncoder encodeInt:outputSet        forKey:@"outputSet"];
+	[anEncoder encodeInt:outputMask       forKey:@"outputMask"];
+	[anEncoder encodeInt:interruptMask    forKey:@"interruptMask"];
 }
 @end
 

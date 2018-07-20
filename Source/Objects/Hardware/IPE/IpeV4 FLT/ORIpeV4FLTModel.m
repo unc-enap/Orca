@@ -897,13 +897,13 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 
 - (uint32_t) regAddress:(short)aReg channel:(int)aChannel
 {
-	return ([self stationNumber] << 17) | (aChannel << 12)   | regV4[aReg].addressOffset; //TODO: the channel ... -tb-   | ((aChannel&0x01f)<<kIpeFlt_ChannelAddress)
+	return (uint32_t)(([self stationNumber] << 17) | (aChannel << 12)   | regV4[aReg].addressOffset); //TODO: the channel ... -tb-   | ((aChannel&0x01f)<<kIpeFlt_ChannelAddress)
 }
 
 - (uint32_t) regAddress:(short)aReg
 {
 	
-	return ([self stationNumber] << 17) |  regV4[aReg].addressOffset; //TODO: NEED <<17 !!! -tb-
+	return (uint32_t)(([self stationNumber] << 17) |  regV4[aReg].addressOffset); //TODO: NEED <<17 !!! -tb-
 }
 
 - (uint32_t) adcMemoryChannel:(short)aChannel page:(int)aPage

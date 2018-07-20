@@ -682,7 +682,7 @@ NSString* ORSIS3820ModelShipAtRunEndOnlyChanged		 = @"ORSIS3820ModelShipAtRunEnd
 
 - (void) clearCounter:(int)i
 {
-	uint32_t aMask = (1L<<i);
+	uint32_t aMask = (uint32_t)(1L<<i);
 	
 	[[self adapter] writeLongBlock:&aMask
 						 atAddress:[self baseAddress] + kCounterClear
@@ -913,7 +913,7 @@ NSString* ORSIS3820ModelShipAtRunEndOnlyChanged		 = @"ORSIS3820ModelShipAtRunEnd
     [self setEnable25MHzPulses:[decoder decodeBoolForKey:@"enable25MHzPulses"]];
     [self setLemoInMode:[decoder decodeIntForKey:@"lemoInMode"]];
     [self setPollTime:[decoder decodeIntForKey:@"pollTime"]];
-    [self setCountEnableMask:[decoder decodeIntegerForKey:@"countEnableMask"]];
+    [self setCountEnableMask:[decoder decodeIntforKey:@"countEnableMask"]];
 	int i;
 	for(i=0;i<32;i++) {
 		NSString* aName = [decoder decodeObjectForKey:[NSString stringWithFormat:@"channelName%d",i]];
@@ -942,7 +942,7 @@ NSString* ORSIS3820ModelShipAtRunEndOnlyChanged		 = @"ORSIS3820ModelShipAtRunEnd
     [encoder encodeBool:enable25MHzPulses forKey:@"enable25MHzPulses"];
     [encoder encodeInteger:lemoInMode forKey:@"lemoInMode"];
     [encoder encodeInteger:pollTime forKey:@"pollTime"];
-    [encoder encodeInteger:countEnableMask forKey:@"countEnableMask"];
+    [encoder encodeInt:countEnableMask forKey:@"countEnableMask"];
 	int i;
 	for(i=0;i<32;i++) {
 		[encoder encodeObject:channelName[i] forKey:[NSString stringWithFormat:@"channelName%d",i]];
@@ -956,7 +956,7 @@ NSString* ORSIS3820ModelShipAtRunEndOnlyChanged		 = @"ORSIS3820ModelShipAtRunEnd
 {
 	time_t	ut_Time;
 	time(&ut_Time);
-	timeMeasured = ut_Time;
+	timeMeasured = (uint32_t)ut_Time;
 }
 
 - (void) shipData

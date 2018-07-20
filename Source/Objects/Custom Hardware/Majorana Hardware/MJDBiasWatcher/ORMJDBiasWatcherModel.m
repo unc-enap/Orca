@@ -227,12 +227,12 @@ NSString* ORMJDBiasWatcherForceUpdate			= @"ORMJDBiasWatcherForceUpdate";
 
 - (uint32_t) numberPointsInHvPlot:(ORiSegHVCard*)anHVCard channel:(int)aChan
 {
-   return [[anHVCard currentHistory:aChan] count];
+   return (uint32_t)[[anHVCard currentHistory:aChan] count];
 }
 
 - (uint32_t) numberPointsInPreAmpPlot:(ORMJDPreAmpModel*)aPreAmpCard channel:(int)aChan
 {
-    return [[aPreAmpCard adcHistory:aChan] count];
+    return (uint32_t)[[aPreAmpCard adcHistory:aChan] count];
 }
 
 //scripting method for testing

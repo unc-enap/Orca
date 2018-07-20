@@ -140,7 +140,7 @@
 	if(allKeys && ![allKeys hasPrefix:@"Final"]){
 		allKeys = [@"Final/" stringByAppendingString:allKeys];
 		const char* p = [allKeys UTF8String];
-		uint32_t allKeysLengthWithTerminator = strlen(p)+1;
+		uint32_t allKeysLengthWithTerminator = (uint32_t)strlen(p)+1;
 		uint32_t paddedKeyLength = 4*((uint32_t)(allKeysLengthWithTerminator+4)/4);
 		uint32_t paddedKeyLengthLong = paddedKeyLength/4;
 		[dataToShip appendBytes:&paddedKeyLengthLong length:4];
@@ -161,7 +161,7 @@
 		
 		//go back and fill in the total length
 		uint32_t *ptr = (uint32_t*)[dataToShip bytes];
-		uint32_t totalLength = [dataToShip length]/4; //num of longs
+		uint32_t totalLength = (uint32_t)[dataToShip length]/4; //num of longs
 		*ptr |= (kLongFormLengthMask & totalLength);
 		[aDataPacket addData:dataToShip];
 	}

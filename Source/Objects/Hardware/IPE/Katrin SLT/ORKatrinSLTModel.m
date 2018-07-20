@@ -144,11 +144,9 @@
     //
     struct timeval t;//    struct timezone tz; is obsolete ... -tb-
     //timing
-        int32_t currentSec;
-        int32_t currentUSec;
     gettimeofday(&t,NULL);
-    currentSec = t.tv_sec;  
-    currentUSec = t.tv_usec;  
+    time_t currentSec = t.tv_sec;
+    time_t currentUSec = t.tv_usec;
 
 		NSArray* cards = [[self crate] orcaObjects];
 		NSEnumerator* e = [cards objectEnumerator];

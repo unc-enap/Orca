@@ -866,7 +866,7 @@
 
 - (IBAction) histEBinAction:(id)sender
 {
-	[model setHistEBin:[sender indexOfSelectedItem]];	
+	[model setHistEBin:(uint32_t)[sender indexOfSelectedItem]];	
 }
 
 - (IBAction) histEMinAction:(id)sender

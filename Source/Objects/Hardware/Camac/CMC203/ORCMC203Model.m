@@ -238,13 +238,13 @@ NSString* ORCMC203SettingsLock					= @"ORCMC203SettingsLock";
 {
 	self = [super initWithCoder:decoder];
 	[[self undoManager] disableUndoRegistration];
-	[self setHistoMask:			[decoder decodeIntegerForKey:@"histoMask"]];
+	[self setHistoMask:			[decoder decodeIntForKey:@"histoMask"]];
 	[self setOperationMode:		[decoder decodeIntForKey:	@"operationMode"]];
 	[self setAdcBits:			[decoder decodeIntForKey:   @"adcBits;"]];
 	[self setHistogramMode:		[decoder decodeIntForKey:   @"histogramMode"]];
 	[self setWordSize:			[decoder decodeIntForKey:   @"wordSize"]];
-	[self setHistogramLength:	[decoder decodeIntegerForKey: @"histogramLength"]];
-	[self setHistogramStart:	[decoder decodeIntegerForKey: @"histogramStart"]];
+	[self setHistogramLength:	[decoder decodeIntForKey: @"histogramLength"]];
+	[self setHistogramStart:	[decoder decodeIntForKey: @"histogramStart"]];
     [self setFifoRateGroup:		[decoder decodeObjectForKey:@"adcRateGroup"]];
 	[self setReadOutGroup:  [decoder decodeObjectForKey:@"ReadoutGroup"]];
 	
@@ -264,13 +264,13 @@ NSString* ORCMC203SettingsLock					= @"ORCMC203SettingsLock";
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInteger:(int32_t)histoMask forKey:@"histoMask"];
+    [encoder encodeInt:histoMask forKey:@"histoMask"];
     [encoder encodeInteger:	  operationMode	  forKey:@"operationMode"];
     [encoder encodeInteger:	  adcBits		  forKey:@"adcBits;"];
     [encoder encodeInteger:   histogramMode   forKey:@"histogramMode"];
     [encoder encodeInteger:   wordSize		  forKey:@"wordSize"];
-    [encoder encodeInteger: histogramLength forKey:@"histogramLength"];
-    [encoder encodeInteger: histogramStart  forKey:@"histogramStart"];
+    [encoder encodeInt: histogramLength forKey:@"histogramLength"];
+    [encoder encodeInt: histogramStart  forKey:@"histogramStart"];
     [encoder encodeObject:fifoRateGroup	  forKey:@"fifoRateGroup"];
 	[encoder encodeObject:readOutGroup  forKey:@"ReadoutGroup"];
 }

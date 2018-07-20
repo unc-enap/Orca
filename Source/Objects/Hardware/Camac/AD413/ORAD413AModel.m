@@ -384,7 +384,7 @@ NSString* ORAD413AControlReg2ChangedNotification     = @"ORAD413AControlReg2Chan
     
     //----------------------------------------------------------------------------------------
     controller = [[self adapter] controller]; //cache the controller for alittle bit more speed.
-    unChangingDataPart   = (([self crateNumber]&0xf)<<21) | ((([self stationNumber]+1)& 0x0000001f)<<16); //doesn't change so do it here.
+    unChangingDataPart   = (uint32_t)((([self crateNumber]&0xf)<<21) | ((([self stationNumber]+1)& 0x0000001f)<<16)); //doesn't change so do it here.
 	cachedStation = [self stationNumber]+1;
 	
     [self clearExceptionCount];

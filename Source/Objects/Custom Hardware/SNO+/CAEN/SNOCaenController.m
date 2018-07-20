@@ -862,7 +862,7 @@ static int chanConfigToMaskBit[kNumChanConfigBits] = {1,3,4,6,11};
 
 - (IBAction) customSizeAction:(id)sender
 {
-	NSUInteger maxNumSamples = (NSUInteger) 1024 * 1024./powf(2.,(float)[model eventSize]) / 2;
+	uint32_t maxNumSamples =  1024 * 1024./powf(2.,(float)[model eventSize]) / 2;
 	if(maxNumSamples > [sender intValue]) {
 		//todo /4 in std mode /5 in packed mode
 		[model setCustomSize:([sender intValue] / 4)];

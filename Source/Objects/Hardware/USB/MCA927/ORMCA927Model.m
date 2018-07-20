@@ -1015,7 +1015,7 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
 		unsigned char aCommand[4] = {0x5,0x0,0x2,0x0};
 		unsigned char packet[kChunkSize+4]; 
 		NSData* fpgaFileData = [self fpgaFileData];
-		int32_t len = [fpgaFileData length];
+		NSUInteger len = [fpgaFileData length];
 		if(len){
 			unsigned char* p = (unsigned char*)[fpgaFileData bytes];
 			do {
@@ -1116,20 +1116,20 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
     [self setSerialNumber:	  [decoder decodeObjectForKey:@"serialNumber"]];
 	int i;
 	for(i=0;i<2;i++){
-		[self setControlReg:i withValue:	[decoder decodeIntegerForKey:    [@"controlReg" stringByAppendingFormat:@"%d",i]]];
-		[self setPresetCtrlReg:i withValue:	[decoder decodeIntegerForKey:	   [@"presetCtrlReg" stringByAppendingFormat:@"%d",i]]];
-		[self setLiveTime:i withValue:		[decoder decodeIntegerForKey:	   [@"liveTime" stringByAppendingFormat:@"%d",i]]];
-		[self setRealTime:i withValue:		[decoder decodeIntegerForKey:	   [@"realTime" stringByAppendingFormat:@"%d",i]]];
-		[self setLtPreset:i withValue:		[decoder decodeIntegerForKey:	   [@"ltPreset" stringByAppendingFormat:@"%d",i]]];
-		[self setRtPreset:i withValue:		[decoder decodeIntegerForKey:	   [@"rtPreset" stringByAppendingFormat:@"%d",i]]];
-		[self setRoiPeakPreset:i withValue:	[decoder decodeIntegerForKey:	   [@"roiPeakPreset" stringByAppendingFormat:@"%d",i]]];
-		[self setRoiPreset:i withValue:		[decoder decodeIntegerForKey:	   [@"roiPreset" stringByAppendingFormat:@"%d",i]]];
-		[self setConvGain:i withValue:		[decoder decodeIntegerForKey:	   [@"convGain" stringByAppendingFormat:@"%d",i]]];
-		[self setLowerDiscriminator:i withValue:[decoder decodeIntegerForKey:[@"lowerDiscriminator" stringByAppendingFormat:@"%d",i]]];
-		[self setUpperDiscriminator:i withValue:[decoder decodeIntegerForKey:[@"upperDiscriminator" stringByAppendingFormat:@"%d",i]]];
-		[self setRunOptions:i withValue:	[decoder decodeIntegerForKey:    [@"runOptions" stringByAppendingFormat:@"%d",i]]];
+		[self setControlReg:i withValue:	[decoder decodeIntForKey:    [@"controlReg" stringByAppendingFormat:@"%d",i]]];
+		[self setPresetCtrlReg:i withValue:	[decoder decodeIntForKey:	   [@"presetCtrlReg" stringByAppendingFormat:@"%d",i]]];
+		[self setLiveTime:i withValue:		[decoder decodeIntForKey:	   [@"liveTime" stringByAppendingFormat:@"%d",i]]];
+		[self setRealTime:i withValue:		[decoder decodeIntForKey:	   [@"realTime" stringByAppendingFormat:@"%d",i]]];
+		[self setLtPreset:i withValue:		[decoder decodeIntForKey:	   [@"ltPreset" stringByAppendingFormat:@"%d",i]]];
+		[self setRtPreset:i withValue:		[decoder decodeIntForKey:	   [@"rtPreset" stringByAppendingFormat:@"%d",i]]];
+		[self setRoiPeakPreset:i withValue:	[decoder decodeIntForKey:	   [@"roiPeakPreset" stringByAppendingFormat:@"%d",i]]];
+		[self setRoiPreset:i withValue:		[decoder decodeIntForKey:	   [@"roiPreset" stringByAppendingFormat:@"%d",i]]];
+		[self setConvGain:i withValue:		[decoder decodeIntForKey:	   [@"convGain" stringByAppendingFormat:@"%d",i]]];
+		[self setLowerDiscriminator:i withValue:[decoder decodeIntForKey:[@"lowerDiscriminator" stringByAppendingFormat:@"%d",i]]];
+		[self setUpperDiscriminator:i withValue:[decoder decodeIntForKey:[@"upperDiscriminator" stringByAppendingFormat:@"%d",i]]];
+		[self setRunOptions:i withValue:	[decoder decodeIntForKey:    [@"runOptions" stringByAppendingFormat:@"%d",i]]];
 		[self setAutoClear:i withValue:		[decoder decodeBoolForKey:     [@"autoClear" stringByAppendingFormat:@"%d",i]]];
-		[self setZdtMode:i withValue:		[decoder decodeIntegerForKey:	   [@"zdtMode" stringByAppendingFormat:@"%d",i]]];
+		[self setZdtMode:i withValue:		[decoder decodeIntForKey:	   [@"zdtMode" stringByAppendingFormat:@"%d",i]]];
 	}
     [[self undoManager] enableUndoRegistration];    
 	
@@ -1147,20 +1147,20 @@ static MCA927Registers reg[kNumberMCA927Registers] = {
     [encoder encodeObject:serialNumber	forKey:@"serialNumber"];
 	int i;
 	for(i=0;i<2;i++){
-		[encoder encodeInteger:controlReg[i] forKey:[@"controlReg" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInteger:liveTime[i] forKey:[@"liveTime" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInteger:realTime[i] forKey:[@"realTime" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInteger:presetCtrlReg[i] forKey:[@"presetCtrlReg" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInteger:ltPreset[i] forKey:[@"ltPreset" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInteger:rtPreset[i] forKey:[@"rtPreset" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInteger:roiPeakPreset[i] forKey:[@"roiPeakPreset" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInteger:roiPreset[i] forKey:[@"roiPreset" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInteger:convGain[i] forKey:[@"convGain" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInteger:lowerDiscriminator[i] forKey:[@"lowerDiscriminator" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInteger:upperDiscriminator[i] forKey:[@"upperDiscriminator" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInteger:runOptions[i] forKey:[@"runOptions" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt:controlReg[i] forKey:[@"controlReg" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt:liveTime[i] forKey:[@"liveTime" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt:realTime[i] forKey:[@"realTime" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt:presetCtrlReg[i] forKey:[@"presetCtrlReg" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt:ltPreset[i] forKey:[@"ltPreset" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt:rtPreset[i] forKey:[@"rtPreset" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt:roiPeakPreset[i] forKey:[@"roiPeakPreset" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt:roiPreset[i] forKey:[@"roiPreset" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt:convGain[i] forKey:[@"convGain" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt:lowerDiscriminator[i] forKey:[@"lowerDiscriminator" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt:upperDiscriminator[i] forKey:[@"upperDiscriminator" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt:runOptions[i] forKey:[@"runOptions" stringByAppendingFormat:@"%d",i]];
 		[encoder encodeBool:autoClear[i] forKey:[@"autoClear" stringByAppendingFormat:@"%d",i]];
-		[encoder encodeInteger:zdtMode[i] forKey:[@"zdtMode" stringByAppendingFormat:@"%d",i]];
+		[encoder encodeInt:zdtMode[i] forKey:[@"zdtMode" stringByAppendingFormat:@"%d",i]];
 	}
 }
 

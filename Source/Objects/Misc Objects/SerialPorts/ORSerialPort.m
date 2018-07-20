@@ -347,7 +347,7 @@ error:
 
 -(int32_t)getSpeed
 {
-	return cfgetospeed(options);	// we should support cfgetispeed too
+	return (uint32_t)cfgetospeed(options);	// we should support cfgetispeed too
 }
 
 -(void)setSpeed:(int32_t)speed

@@ -3314,7 +3314,7 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 	[self setCrateUDPDataReplyPort:[decoder decodeIntForKey:@"crateUDPDataReplyPort"]];
 	[self setCrateUDPDataIP:[decoder decodeObjectForKey:@"crateUDPDataIP"]];
 	[self setCrateUDPDataPort:[decoder decodeIntForKey:@"crateUDPDataPort"]];
-	[self setPixelBusEnableReg:[decoder decodeIntegerForKey:@"pixelBusEnableReg"]];
+	[self setPixelBusEnableReg:[decoder decodeIntForKey:@"pixelBusEnableReg"]];
 	[self setSelectedFifoIndex:[decoder decodeIntForKey:@"selectedFifoIndex"]];
 	[self setCrateUDPCommand:[decoder decodeObjectForKey:@"crateUDPCommand"]];
 	[self setCrateUDPReplyPort:[decoder decodeIntForKey:@"crateUDPReplyPort"]];
@@ -3325,7 +3325,7 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 	if(!pmcLink)pmcLink = [[PMC_Link alloc] initWithDelegate:self];
 	else [pmcLink setDelegate:self];
 
-	[self setControlReg:		[decoder decodeIntegerForKey:@"controlReg"]];
+	[self setControlReg:		[decoder decodeIntForKey:@"controlReg"]];
 	if([decoder containsValueForKey:@"secondsSetInitWithHost"])
 		[self setSecondsSetInitWithHost:[decoder decodeBoolForKey:@"secondsSetInitWithHost"]];
 	else[self setSecondsSetInitWithHost: YES];
@@ -3333,17 +3333,17 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 
 	//status reg
 	[self setPatternFilePath:		[decoder decodeObjectForKey:@"OREdelweissSLTModelPatternFilePath"]];
-	[self setInterruptMask:			[decoder decodeIntegerForKey:@"OREdelweissSLTModelInterruptMask"]];
+	[self setInterruptMask:			[decoder decodeIntForKey:@"OREdelweissSLTModelInterruptMask"]];
 	[self setPulserDelay:			[decoder decodeFloatForKey:@"OREdelweissSLTModelPulserDelay"]];
 	[self setPulserAmp:				[decoder decodeFloatForKey:@"OREdelweissSLTModelPulserAmp"]];
 		
 	//special
-    [self setNextPageDelay:			[decoder decodeIntegerForKey:@"nextPageDelay"]]; // ak, 5.10.07
+    [self setNextPageDelay:			[decoder decodeIntForKey:@"nextPageDelay"]]; // ak, 5.10.07
 	
 	[self setReadOutGroup:			[decoder decodeObjectForKey:@"ReadoutGroup"]];
     [self setPoller:				[decoder decodeObjectForKey:@"poller"]];
 	
-    [self setPageSize:				[decoder decodeIntegerForKey:@"OREdelweissSLTPageSize"]]; // ak, 9.12.07
+    [self setPageSize:				[decoder decodeIntForKey:@"OREdelweissSLTPageSize"]]; // ak, 9.12.07
     [self setDisplayTrigger:		[decoder decodeBoolForKey:@"OREdelweissSLTDisplayTrigger"]];
     [self setDisplayEventLoop:		[decoder decodeBoolForKey:@"OREdelweissSLTDisplayEventLoop"]];
     	
@@ -3390,7 +3390,7 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 	[encoder encodeInteger:crateUDPDataReplyPort forKey:@"crateUDPDataReplyPort"];
 	[encoder encodeObject:crateUDPDataIP forKey:@"crateUDPDataIP"];
 	[encoder encodeInteger:crateUDPDataPort forKey:@"crateUDPDataPort"];
-	[encoder encodeInteger:pixelBusEnableReg forKey:@"pixelBusEnableReg"];
+	[encoder encodeInt:pixelBusEnableReg forKey:@"pixelBusEnableReg"];
 	[encoder encodeInteger:selectedFifoIndex forKey:@"selectedFifoIndex"];
 	[encoder encodeObject:crateUDPCommand forKey:@"crateUDPCommand"];
 	[encoder encodeInteger:crateUDPReplyPort forKey:@"crateUDPReplyPort"];
@@ -3399,21 +3399,21 @@ NSLog(@"WARNING: %@::%@: under construction! \n",NSStringFromClass([self class])
 	[encoder encodeBool:secondsSetInitWithHost forKey:@"secondsSetInitWithHost"];
 	[encoder encodeObject:sltScriptArguments forKey:@"sltScriptArguments"];
 	[encoder encodeObject:pmcLink		forKey:@"PMC_Link"];
-	[encoder encodeInteger:controlReg	forKey:@"controlReg"];
+	[encoder encodeInt:controlReg	forKey:@"controlReg"];
 	
 	//status reg
 	[encoder encodeObject:patternFilePath forKey:@"OREdelweissSLTModelPatternFilePath"];
-	[encoder encodeInteger:interruptMask	 forKey:@"OREdelweissSLTModelInterruptMask"];
+	[encoder encodeInt:interruptMask	 forKey:@"OREdelweissSLTModelInterruptMask"];
 	[encoder encodeFloat:pulserDelay	 forKey:@"OREdelweissSLTModelPulserDelay"];
 	[encoder encodeFloat:pulserAmp		 forKey:@"OREdelweissSLTModelPulserAmp"];
 		
 	//special
-    [encoder encodeInteger:nextPageDelay     forKey:@"nextPageDelay"]; // ak, 5.10.07
+    [encoder encodeInt:nextPageDelay     forKey:@"nextPageDelay"]; // ak, 5.10.07
 	
 	[encoder encodeObject:readOutGroup  forKey:@"ReadoutGroup"];
     [encoder encodeObject:poller         forKey:@"poller"];
 	
-    [encoder encodeInteger:pageSize         forKey:@"OREdelweissSLTPageSize"]; // ak, 9.12.07
+    [encoder encodeInt:pageSize         forKey:@"OREdelweissSLTPageSize"]; // ak, 9.12.07
     [encoder encodeBool:displayTrigger   forKey:@"OREdelweissSLTDisplayTrigger"];
     [encoder encodeBool:displayEventLoop forKey:@"OREdelweissSLTDisplayEventLoop"];
 		

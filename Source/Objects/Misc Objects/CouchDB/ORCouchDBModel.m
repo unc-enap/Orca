@@ -1186,8 +1186,8 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
 {
     NSDictionary* info = [aNote userInfo];
     if([[info objectForKey:@"kRunMode"] intValue]==0){
-        uint32_t runNumberLocal     = [[info objectForKey:@"kRunNumber"] unsignedLongValue];
-        uint32_t subRunNumberLocal  = [[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
+        uint32_t runNumberLocal     = (uint32_t)[[info objectForKey:@"kRunNumber"] unsignedLongValue];
+        uint32_t subRunNumberLocal  = (uint32_t)[[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
         NSString* comment;
         if(subRunNumberLocal==0) comment = [NSString stringWithFormat:@"Run %u Started",runNumberLocal];
         else                     comment = [NSString stringWithFormat:@"Run %u.%u Started",runNumberLocal,subRunNumberLocal];
@@ -1210,8 +1210,8 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
 {
     NSDictionary* info = [aNote userInfo];
     if([[info objectForKey:@"kRunMode"] intValue]==0){
-        uint32_t runNumberLocal     = [[info objectForKey:@"kRunNumber"] unsignedLongValue];
-        uint32_t subRunNumberLocal  = [[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
+        uint32_t runNumberLocal     = (uint32_t)[[info objectForKey:@"kRunNumber"] unsignedLongValue];
+        uint32_t subRunNumberLocal  = (uint32_t)[[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
         float elapsedTimeLocal   = [[info objectForKey:@"kElapsedTime"]floatValue];
         NSString* comment;
         if(subRunNumberLocal==0) comment = [NSString stringWithFormat:@"Run %u Stopped",runNumberLocal];

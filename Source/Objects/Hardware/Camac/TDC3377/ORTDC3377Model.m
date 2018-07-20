@@ -1094,7 +1094,7 @@ NSString* ORTDC3377SettingsLock					= @"ORTDC3377SettingsLock";
     //----------------------------------------------------------------------------------------
     controller = [[self adapter] controller]; //cache the controller for alittle bit more speed.
 	int32_t version = 1;
-    unChangingDataPart   = version<<25 | (([self crateNumber]&0xf)<<21) | (([self stationNumber]& 0x0000001f)<<16); //doesn't change so do it here.
+    unChangingDataPart   = version<<25 | (uint32_t)((([self crateNumber]&0xf)<<21) | (([self stationNumber]& 0x0000001f)<<16)); //doesn't change so do it here.
 	
 	cachedStation = [self stationNumber];
     [self clearExceptionCount];

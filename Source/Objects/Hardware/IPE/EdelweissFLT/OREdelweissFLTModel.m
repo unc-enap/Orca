@@ -3648,7 +3648,7 @@ for(chan=0; chan<6;chan++)
 - (uint32_t) regAddress:(uint32_t)aReg channel:(int)aChannel index:(int)index
 {
         //DEBUG OUTPUT:         NSLog(@"%@::%@: addr is 0x%08x \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),(([self stationNumber] << 17) | (aChannel << 12)   | regV4[aReg].addressOffset) + index);//TODO : DEBUG testing ...-tb-
-	return (([self stationNumber] << 17) | (aChannel << 12)   | regV4[aReg].addressOffset) | index; //TODO: the channel ... -tb-   | ((aChannel&0x01f)<<kIpeFlt_ChannelAddress)
+	return (uint32_t)(([self stationNumber] << 17) | (aChannel << 12)   | regV4[aReg].addressOffset) | index; //TODO: the channel ... -tb-   | ((aChannel&0x01f)<<kIpeFlt_ChannelAddress)
 }
 
 - (uint32_t) regAddress:(uint32_t)aReg channel:(int)aChannel

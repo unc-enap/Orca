@@ -1385,7 +1385,7 @@ NSString* ORIpeSLTModelHW_ResetChanged          = @"ORIpeSLTModelHW_ResetChanged
 	
 	//status reg
 	[self setPatternFilePath:		[decoder decodeObjectForKey:@"ORIpeSLTModelPatternFilePath"]];
-	[self setInterruptMask:			[decoder decodeIntegerForKey:@"ORIpeSLTModelInterruptMask"]];
+	[self setInterruptMask:			[decoder decodeIntForKey:@"ORIpeSLTModelInterruptMask"]];
 	[self setPulserDelay:			[decoder decodeFloatForKey:@"ORIpeSLTModelPulserDelay"]];
 	[self setPulserAmp:				[decoder decodeFloatForKey:@"ORIpeSLTModelPulserAmp"]];
 	[self setInhibit:				[decoder decodeBoolForKey:@"ORIpeSLTStatusInhibit"]];
@@ -1408,12 +1408,12 @@ NSString* ORIpeSLTModelHW_ResetChanged          = @"ORIpeSLTModelHW_ResetChanged
 	[self setNHitThreshold:			[decoder decodeIntegerForKey:@"ORIpeSLTModelNHitThreshold"]];
 	[self setNHit:					[decoder decodeIntegerForKey:@"ORIpeSLTModelNHit"]];
 	[self setReadAll:				[decoder decodeBoolForKey:@"readAll"]];
-    [self setNextPageDelay:			[decoder decodeIntegerForKey:@"nextPageDelay"]]; // ak, 5.10.07
+    [self setNextPageDelay:			[decoder decodeIntForKey:@"nextPageDelay"]]; // ak, 5.10.07
 	
 	[self setReadOutGroup:			[decoder decodeObjectForKey:@"ReadoutGroup"]];
     [self setPoller:				[decoder decodeObjectForKey:@"poller"]];
 	
-    [self setPageSize:				[decoder decodeIntegerForKey:@"ORIpeSLTPageSize"]]; // ak, 9.12.07
+    [self setPageSize:				[decoder decodeIntForKey:@"ORIpeSLTPageSize"]]; // ak, 9.12.07
     [self setDisplayTrigger:		[decoder decodeBoolForKey:@"ORIpeSLTDisplayTrigger"]];
     [self setDisplayEventLoop:		[decoder decodeBoolForKey:@"ORIpeSLTDisplayEventLoop"]];
 	
@@ -1439,7 +1439,7 @@ NSString* ORIpeSLTModelHW_ResetChanged          = @"ORIpeSLTModelHW_ResetChanged
 	
 	//status reg
 	[encoder encodeObject:patternFilePath forKey:@"ORIpeSLTModelPatternFilePath"];
-	[encoder encodeInteger:interruptMask	 forKey:@"ORIpeSLTModelInterruptMask"];
+	[encoder encodeInt:interruptMask	 forKey:@"ORIpeSLTModelInterruptMask"];
 	[encoder encodeFloat:pulserDelay	 forKey:@"ORIpeSLTModelPulserDelay"];
 	[encoder encodeFloat:pulserAmp		 forKey:@"ORIpeSLTModelPulserAmp"];
 	[encoder encodeBool:inhibit			 forKey:@"ORIpeSLTStatusInhibit"];
@@ -1463,12 +1463,12 @@ NSString* ORIpeSLTModelHW_ResetChanged          = @"ORIpeSLTModelHW_ResetChanged
 	[encoder encodeInteger:nHitThreshold	 forKey:@"ORIpeSLTModelNHitThreshold"];
 	[encoder encodeInteger:nHit				 forKey:@"ORIpeSLTModelNHit"];
 	[encoder encodeBool:readAll			 forKey:@"readAll"];
-    [encoder encodeInteger:(int32_t)nextPageDelay     forKey:@"nextPageDelay"]; // ak, 5.10.07
+    [encoder encodeInt:(int32_t)nextPageDelay     forKey:@"nextPageDelay"]; // ak, 5.10.07
 	
 	[encoder encodeObject:readOutGroup  forKey:@"ReadoutGroup"];
     [encoder encodeObject:poller         forKey:@"poller"];
 	
-    [encoder encodeInteger:(int32_t)pageSize         forKey:@"ORIpeSLTPageSize"]; // ak, 9.12.07
+    [encoder encodeInt:(int32_t)pageSize         forKey:@"ORIpeSLTPageSize"]; // ak, 9.12.07
     [encoder encodeBool:displayTrigger   forKey:@"ORIpeSLTDisplayTrigger"];
     [encoder encodeBool:displayEventLoop forKey:@"ORIpeSLTDisplayEventLoop"];
 	

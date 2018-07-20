@@ -261,7 +261,7 @@ NSString* ORSNOCrateSlotChanged = @"ORSNOCrateSlotChanged";
 	pauseWork = NO;
 	BOOL adapterOK = YES;
 	@try {
-		[[self adapter] selectCards:1L<<[self stationForSlot:workingSlot]];	
+		[[self adapter] selectCards:(uint32_t)(1L<<[self stationForSlot:workingSlot])];	
 	}
 	@catch(NSException* localException) {
 		adapterOK = NO;

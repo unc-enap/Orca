@@ -363,7 +363,7 @@ int filterGraph(nodeType*);
 	for(id data in dataArray){
 		[data retain];
 		//each record must be filtered by the filter code. 
-		int32_t totalLen = [data length]/sizeof(int32_t);
+		int32_t totalLen = (uint32_t)[data length]/sizeof(int32_t);
 		if(totalLen>0){
 			uint32_t* ptr = (uint32_t*)[data bytes];
 			while(totalLen>0){
@@ -864,7 +864,7 @@ int filterGraph(nodeType*);
 
 -(int)yyinputToBuffer:(char* )theBuffer withSize:(int)maxSize 
 {
-	uint32_t theNumberOfBytesRemaining = ([expressionAsData length] - yaccInputPosition);
+	uint32_t theNumberOfBytesRemaining = (uint32_t)([expressionAsData length] - yaccInputPosition);
 	int theCopySize = (int)(maxSize < theNumberOfBytesRemaining ? maxSize : theNumberOfBytesRemaining);
 	[expressionAsData getBytes:theBuffer range:NSMakeRange(yaccInputPosition,theCopySize)];  
 	yaccInputPosition = yaccInputPosition + theCopySize;
@@ -966,7 +966,7 @@ int filterGraph(nodeType*);
 - (int32_t) stackCount:(uint32_t)i
 {
 	[self checkStackIndex:i]; //can throw
-	return [stacks[i] count];
+	return (uint32_t)[stacks[i] count];
 }
 
 - (void) dumpStack:(uint32_t)i

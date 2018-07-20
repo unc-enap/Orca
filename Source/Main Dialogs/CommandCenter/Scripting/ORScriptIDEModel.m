@@ -699,7 +699,7 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
 	
 	do {
 		if([theContents hasPrefix:@"//#Global:"]){
-			uint32_t eofLoc = [theContents rangeOfString:@"\n"].location;
+			NSUInteger eofLoc = [theContents rangeOfString:@"\n"].location;
 			NSString* theLine = [theContents substringToIndex:eofLoc];
 			theContents = [theContents substringFromIndex:eofLoc+1];
 			theLine = [theLine substringFromIndex:[theLine rangeOfString:@":"].location+1];
@@ -851,7 +851,7 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
 		uint32_t data[4];		
 		data[0] = dataId | 4; 
 		data[1] = ([self scriptType]&0xf)<<24 | [self uniqueIdNumber]; 
-		data[2] = ut_time;	
+		data[2] = (uint32_t)ut_time;
 		data[3] = aState;
 		
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
@@ -882,11 +882,11 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
 				
 				NSMutableData*  theRecord = [NSMutableData dataWithCapacity:1024];
 				uint32_t data[5];
-				data[0] = recordDataId | (5 + ([plist length]+3)/4) ; 		
+				data[0] = recordDataId | (uint32_t)(5 + ([plist length]+3)/4) ;
 				data[1] = ([self scriptType]&0xf)<<24 | [self uniqueIdNumber]; 
-				data[2] = ut_time;	//seconds since 1970
+				data[2] = (uint32_t)ut_time;	//seconds since 1970
 				data[3] = anID;
-				data[4] = [plist length];
+				data[4] = (uint32_t)[plist length];
 				
 				[theRecord appendBytes:data length:sizeof(int32_t) * 5];
 				[theRecord appendData:plist];

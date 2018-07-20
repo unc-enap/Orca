@@ -425,7 +425,7 @@ double facto(uint64_t num)
     //each block of data is an array of NSData objects, each potentially containing many records
     for(id data in dataArray){
         [data retain];
-        int32_t totalLen = [data length]/sizeof(int32_t);
+        int32_t totalLen = (uint32_t)([data length]/sizeof(int32_t));
         if(totalLen>0){
             uint32_t* ptr = (uint32_t*)[data bytes];
             while(totalLen>0){
@@ -445,7 +445,7 @@ double facto(uint64_t num)
                     //NSDictionary* runHeader     = [runHeaderString propertyList];
                     runHeader = [[runHeaderString propertyList] retain]; //save for burst file
                     
-                    shaperID                    = [[runHeader nestedObjectForKey:@"dataDescription",@"ORShaperModel",@"Shaper",@"dataId",nil] unsignedLongValue];
+                    shaperID                    = (uint32_t)[[runHeader nestedObjectForKey:@"dataDescription",@"ORShaperModel",@"Shaper",@"dataId",nil] unsignedLongValue];
                     //Find run information
                     //headerID                    = [[runHeader nestedObjectForKey:@"ObjectInfo",@"DataChain",@"Run Control",@"runType",nil] unsignedLongValue];
                     //headerID                    = [[runHeader valueForKeyPath:@"dataDescription.ORShaperModel.Shaper.dataID"] unsignedLongValue];  //gets 0

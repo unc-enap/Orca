@@ -945,8 +945,8 @@ static XyCom564RegisterInformation mIOXY564Reg[kNumberOfXyCom564Registers] = {
     //get the time(UT!)
     struct timeval ut_time;
     gettimeofday(&ut_time, NULL);
-    data[2] = ut_time.tv_sec;	//seconds since 1970
-    data[3] = ut_time.tv_usec;	//seconds since 1970
+    data[2] = (uint32_t)ut_time.tv_sec;	//seconds since 1970
+    data[3] = (uint32_t)ut_time.tv_usec;	//seconds since 1970
     int index = headernumber;
     int i;
     for(i=0;i<channelsToRead;i++){

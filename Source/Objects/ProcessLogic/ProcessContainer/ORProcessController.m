@@ -353,7 +353,7 @@ NSInteger sortDnFunction(id element1,id element2, void* context){return [element
         }
     }
     
-    int32_t selectedIndex = [emailListTable selectedRow];
+    NSInteger selectedIndex = [emailListTable selectedRow];
 
     [emailListTable      setHidden:  aDiffMasterExists];
 	[addAddressButton    setEnabled:!aDiffMasterExists];
@@ -377,7 +377,7 @@ NSInteger sortDnFunction(id element1,id element2, void* context){return [element
         
         NSIndexSet* theSelectedSet =  [tableView selectedRowIndexes];
         if(theSelectedSet){
-            int32_t rowIndex = [theSelectedSet firstIndex];
+            NSInteger rowIndex = [theSelectedSet firstIndex];
             id item = [[model orcaObjects]objectAtIndex:rowIndex];
             theDetails = [NSString stringWithFormat:@"%@",[item description:@""]];
         }

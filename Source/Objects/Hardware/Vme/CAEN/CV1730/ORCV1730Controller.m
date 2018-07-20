@@ -1066,7 +1066,7 @@
 
 - (IBAction) selfTriggerLogicAction:(id)aSender
 {
-    [model setSelfTriggerLogic:[aSender selectedRow] withValue:[[aSender selectedCell] indexOfSelectedItem]];
+    [model setSelfTriggerLogic:[aSender selectedRow] withValue:(uint32_t)[[aSender selectedCell] indexOfSelectedItem]];
 }
 
 #pragma mark ***Misc Helpers

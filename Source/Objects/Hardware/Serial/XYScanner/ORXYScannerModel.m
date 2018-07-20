@@ -177,7 +177,7 @@ NSString* ORXYScannerLock = @"ORXYScannerLock";
             
             uint32_t data[5];
             data[0] = dataId | 5;
-            data[1] = ut_time;
+            data[1] = (uint32_t)ut_time;
             data[2] = (running?1:0)<<16 | ([self uniqueIdNumber]&0x0000fffff);
             
             //encode the position 
@@ -507,7 +507,7 @@ NSString* ORXYScannerLock = @"ORXYScannerLock";
 {
 	self = [super initWithCoder:decoder];
 	[[self undoManager] disableUndoRegistration];
-	[self setOptionMask:[decoder decodeIntegerForKey:@"ORXYScannerModelOptionMask"]];
+	[self setOptionMask:[decoder decodeIntForKey:@"ORXYScannerModelOptionMask"]];
 	[self setPatternType:[decoder decodeIntForKey:@"ORXYScannerModelPatternType"]];
 	[self setCmdFile:[decoder decodeObjectForKey:  @"ORXYScannerModelCmdFile"]];
 	[self setAbsMotion:[decoder decodeBoolForKey:  @"ORXYScannerModelAbsMotion"]];
@@ -529,7 +529,7 @@ NSString* ORXYScannerLock = @"ORXYScannerLock";
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInteger:optionMask forKey:@"ORXYScannerModelOptionMask"];
+    [encoder encodeInt:optionMask forKey:@"ORXYScannerModelOptionMask"];
     [encoder encodeInteger:patternType forKey:@"ORXYScannerModelPatternType"];
     [encoder encodeObject:cmdFile forKey:  @"ORXYScannerModelCmdFile"];
     [encoder encodeBool:absMotion forKey:  @"ORXYScannerModelAbsMotion"];

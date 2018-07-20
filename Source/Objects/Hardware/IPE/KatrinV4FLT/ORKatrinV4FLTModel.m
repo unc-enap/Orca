@@ -1920,7 +1920,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
                     }
                 }
 
-                uint32_t location = (([self crateNumber]&0xf)<<21) | ([self stationNumber]& 0x0000001f)<<16;
+                uint32_t location = (uint32_t)((([self crateNumber]&0xf)<<21) | ([self stationNumber]& 0x0000001f)<<1);
                 uint32_t data[5 + kNumV4FLTChannels + kNumV4FLTChannels];//2013-04-24 changed to ship full 32 bit counter; data format changed! see decoder -tb-
                 
                 //get the hitrates
@@ -2171,7 +2171,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 	
     [self setEnergyOffset:              [decoder decodeIntForKey:   @"energyOffset"]];
     [self setSkipFltEventReadout:       [decoder decodeIntForKey:   @"skipFltEventReadout"]];
-    [self setBipolarEnergyThreshTest:   [decoder decodeIntegerForKey: @"bipolarEnergyThreshTest"]];
+    [self setBipolarEnergyThreshTest:   [decoder decodeIntForKey: @"bipolarEnergyThreshTest"]];
     [self setBoxcarLength:              [decoder decodeIntForKey:   @"boxcarLength"]];
     [self setUseDmaBlockRead:           [decoder decodeIntForKey:   @"useDmaBlockRead"]];
     [self setDecayTime:                 [decoder decodeDoubleForKey:@"decayTime"]];
@@ -2204,7 +2204,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
     [encoder encodeInteger:energyOffset                 forKey:@"energyOffset"];
     [encoder encodeBool:forceFLTReadout             forKey:@"forceFLTReadout"];
     [encoder encodeInteger:skipFltEventReadout          forKey:@"skipFltEventReadout"];
-    [encoder encodeInteger:bipolarEnergyThreshTest    forKey:@"bipolarEnergyThreshTest"];
+    [encoder encodeInt:bipolarEnergyThreshTest    forKey:@"bipolarEnergyThreshTest"];
     [encoder encodeInteger:boxcarLength                 forKey:@"boxcarLength"];
     [encoder encodeInteger:useDmaBlockRead              forKey:@"useDmaBlockRead"];
     [encoder encodeDouble:decayTime                 forKey:@"decayTime"];
@@ -2631,7 +2631,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 	configStruct->card_info[index].hw_mask[0] 	= dataId;					//record id for energies
 	configStruct->card_info[index].hw_mask[1] 	= waveFormId;				//record id for the waveforms
 	configStruct->card_info[index].hw_mask[2] 	= histogramId;				//record id for the histograms
-	configStruct->card_info[index].slot			= [self stationNumber];		//PMC readout (fdhwlib) uses col 0->n-1; stationNumber is from 1->n (FLT register entry SlotID too)
+	configStruct->card_info[index].slot			= (uint32_t)[self stationNumber];		//PMC readout (fdhwlib) uses col 0->n-1; stationNumber is from 1->n (FLT register entry SlotID too)
 	configStruct->card_info[index].crate		= [self crateNumber];
 	configStruct->card_info[index].deviceSpecificData[0] = [self postTriggerTime];	//needed to align the waveforms
 	uint32_t eventTypeMask = 0;

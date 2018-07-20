@@ -1120,7 +1120,7 @@ NSString* ORiSegHVCardCustomInfoChanged         = @"ORiSegHVCardCustomInfoChange
         ([self polarity] & 0x1);
         data[2] = onMask;
 		data[3] = 0x0; //spare
-		data[4] = ut_Time;
+		data[4] = (uint32_t)ut_Time;
 		
 		union {
 			float asFloat;

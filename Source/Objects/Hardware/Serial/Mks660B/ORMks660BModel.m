@@ -332,7 +332,7 @@ NSString* ORMks660BLock = @"ORMks660BLock";
 	//get the time(UT!)
 	time_t	ut_Time;
 	time(&ut_Time);
-	timeMeasured = ut_Time;
+	timeMeasured = (uint32_t)ut_Time;
 
 	if(timeRates == nil) timeRates = [[ORTimeRate alloc] init];
 	[timeRates addDataToTimeAverage:pressure];

@@ -461,7 +461,7 @@ int32_t	vxi11_obtain_long_value(CLINK *clink, const char *cmd, uint32_t timeout)
 		NSLog(@"Returning 0\n");
 		return 0;
 	}
-	return strtol(buf, (char **)NULL, 10);
+	return (uint32_t)strtol(buf, (char **)NULL, 10);
 }
 
 

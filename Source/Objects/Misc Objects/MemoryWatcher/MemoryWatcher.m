@@ -208,16 +208,16 @@ enum {
     }
     [scanner release];
 
-    pageSize    = [[resultDict objectForKey: @"Mach Virtual Memory Statistics"] unsignedLongValue];
+    pageSize    = (uint32_t)[[resultDict objectForKey: @"Mach Virtual Memory Statistics"] unsignedLongValue];
     
-    totalMemory = [[resultDict objectForKey: @"free"]        unsignedLongValue] +
+    totalMemory = (uint32_t)([[resultDict objectForKey: @"free"]        unsignedLongValue] +
                    [[resultDict objectForKey: @"active"]      unsignedLongValue] +
                    [[resultDict objectForKey: @"wired down"]  unsignedLongValue] +
-                   [[resultDict objectForKey: @"inactive"]    unsignedLongValue];
+                   [[resultDict objectForKey: @"inactive"]    unsignedLongValue]);
     
-    freeMemory  = [[resultDict objectForKey: @"free"]        unsignedLongValue] +
+    freeMemory  = (uint32_t)([[resultDict objectForKey: @"free"]        unsignedLongValue] +
                    [[resultDict objectForKey: @"inactive"]    unsignedLongValue] +
-                   [[resultDict objectForKey: @"speculative"] unsignedLongValue];
+                   [[resultDict objectForKey: @"speculative"] unsignedLongValue]);
 
     
 }
