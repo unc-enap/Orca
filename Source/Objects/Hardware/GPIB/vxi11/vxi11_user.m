@@ -428,7 +428,7 @@ int32_t	vxi11_send_and_receive(CLINK *clink, const char *cmd, char *buf, uint32_
 	int	ret;
 	int32_t	bytes_returned;
 	do {
-		ret = (uint32_t)vxi11_send(clink, cmd, strlen(cmd));
+		ret = (uint32_t)vxi11_send(clink, cmd, (uint32_t)strlen(cmd));
 		if (ret != 0) {
 			if (ret != -VXI11_NULL_WRITE_RESP) {
 				NSLog(@"Error: vxi11_send_and_receive: could not send cmd.\n");

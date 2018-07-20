@@ -912,7 +912,7 @@ NSString* SNOCaenModelContinuousModeChanged              = @"SNOCaenModelContinu
 {
 	int i;
 	for(i=0;i<8;i++){
-		uint32_t value = [mtc_server intCommand:"caen_read %ld", reg[kNumOUThreshold].addressOffset + (i*0x100)];
+		uint32_t value = (int32_t)[mtc_server intCommand:"caen_read %ld", reg[kNumOUThreshold].addressOffset + (i*0x100)];
         [self setOverUnderThreshold:i withValue:value];
 	}
 }

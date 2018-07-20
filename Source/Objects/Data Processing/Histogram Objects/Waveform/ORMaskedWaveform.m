@@ -144,7 +144,7 @@
 	for(i=0;i<32;i++){
 		if(specialBitMask & (1UL<<i)) {
 			numBits++;
-			if(firstBitMask==0)firstBitMask = (1L<<i);
+			if(firstBitMask==0)firstBitMask = (uint32_t)(1L<<i);
 		}
 	}
 }

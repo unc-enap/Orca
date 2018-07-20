@@ -2081,7 +2081,7 @@ static NSString* DT5720RunModeString[4] = {
             
             
             uint32_t* theData = (uint32_t*)[eventData bytes];
-            int num     = [self readFifo:(char*)theData numBytesToRead:[eventData length]];
+            uint32_t num     = (uint32_t)[self readFifo:(char*)theData numBytesToRead:(uint32_t)[eventData length]];
             if(num>0){
                 uint32_t index=0;
                 do {

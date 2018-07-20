@@ -1211,7 +1211,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
     [self setGapLength:			[decoder decodeIntForKey:@"gapLength"]];
     [self setHistNofMeas:		[decoder decodeIntForKey:@"histNofMeas"]];
     [self setHistMeasTime:		[decoder decodeIntForKey:@"histMeasTime"]];
-    [self setPostTriggerTime:	[decoder decodeIntegerForKey:@"postTriggerTime"]];
+    [self setPostTriggerTime:	[decoder decodeIntForKey:@"postTriggerTime"]];
     [self setFifoBehaviour:		[decoder decodeIntForKey:@"fifoBehaviour"]];
     [self setAnalogOffset:		[decoder decodeIntForKey:@"analogOffset"]];
     [self setInterruptMask:		[decoder decodeIntForKey:@"interruptMask"]];
@@ -1510,7 +1510,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 	configStruct->card_info[index].hw_mask[0] 	= dataId;					//record id for energies
 	configStruct->card_info[index].hw_mask[1] 	= waveFormId;				//record id for the waveforms
 	configStruct->card_info[index].hw_mask[2] 	= histogramId;				//record id for the histograms
-	configStruct->card_info[index].slot			= [self stationNumber];		//the PMC readout uses col 0 thru n
+	configStruct->card_info[index].slot			= (uint32_t)[self stationNumber];		//the PMC readout uses col 0 thru n
 	configStruct->card_info[index].crate		= [self crateNumber];
 	
 	configStruct->card_info[index].deviceSpecificData[0] = postTriggerTime;	//needed to align the waveforms

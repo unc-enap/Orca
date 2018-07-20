@@ -1724,7 +1724,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
        // uint32_t* testsec[4]; <<--this is not being used as a pointer. removed MAH 09/16/14
         uint32_t testsec[4];
         testsec[0]=(uint32_t)[[Bwords objectAtIndex:l] longValue];
-        testsec[1]=(uint32_t)[[Badcs objectAtIndex:l] longValue]+(4096*[[Bchans objectAtIndex:l] longValue])+(65536*[[Bcards objectAtIndex:l] longValue]); // adc 3 digets, channel, card
+        testsec[1]=(uint32_t)([[Badcs objectAtIndex:l] longValue]+(4096*[[Bchans objectAtIndex:l] longValue])+(65536*[[Bcards objectAtIndex:l] longValue])); // adc 3 digets, channel, card
         testsec[2]=(uint32_t)[[Bsecs objectAtIndex:l] longValue];
         testsec[3]=(uint32_t)[[Bmics objectAtIndex:l] longValue]; //CB works, make data file from array now
         //someData.dataRecord = [NSData dataWithBytes:&testsec length: sizeof(testsec)]; <<--removed MAH 09/16/14

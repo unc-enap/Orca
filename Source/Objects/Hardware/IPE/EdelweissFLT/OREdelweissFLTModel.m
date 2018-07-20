@@ -4049,10 +4049,10 @@ for(chan=0; chan<6;chan++)
     [self setFiberSelectForBBAccess:[decoder decodeIntForKey:@"fiberSelectForBBAccess"]];
 //RM    [self setRelaisStatesBB:[decoder decodeIntegerForKey:@"relaisStatesBB"]];
     [self setFiberSelectForBBStatusBits:[decoder decodeIntForKey:@"fiberSelectForBBStatusBits"]];
-    [self setFiberOutMask:[decoder decodeIntegerForKey:@"fiberOutMask"]];
+    [self setFiberOutMask:[decoder decodeIntForKey:@"fiberOutMask"]];
     //[self setTpix:[decoder decodeIntegerForKey:@"tpix"]];
     [self setRepeatSWTriggerMode:[decoder decodeIntForKey:@"repeatSWTriggerMode"]];
-    [self setControlRegister:[decoder decodeIntegerForKey:@"controlRegister"]];
+    [self setControlRegister:[decoder decodeIntForKey:@"controlRegister"]];
     [self setFastWrite:[decoder decodeIntForKey:@"fastWrite"]];
     [self setFiberDelays:[decoder decodeInt64ForKey:@"fiberDelays"]];
     [self setStreamMask:[decoder decodeInt64ForKey:@"streamMask"]];
@@ -4068,17 +4068,17 @@ for(chan=0; chan<6;chan++)
     [self setStoreDataInRam:	[decoder decodeBoolForKey:@"storeDataInRam"]];
     [self setFilterLength:		[decoder decodeIntForKey:@"filterLength"]-2];//to be backward compatible with old Orca config files -tb-
     [self setGapLength:			[decoder decodeIntForKey:@"gapLength"]];
-    [self setPostTriggerTime:	[decoder decodeIntegerForKey:@"postTriggerTime"]];
-    [self setInterruptMask:		[decoder decodeIntegerForKey:@"interruptMask"]];
+    [self setPostTriggerTime:	[decoder decodeIntForKey:@"postTriggerTime"]];
+    [self setInterruptMask:		[decoder decodeIntForKey:@"interruptMask"]];
     [self setHitRateLength:		[decoder decodeIntegerForKey:@"OREdelweissFLTModelHitRateLength"]];
-    [self setHitRateEnabledMask:[decoder decodeIntegerForKey:@"hitRateEnabledMask"]];
+    [self setHitRateEnabledMask:[decoder decodeIntForKey:@"hitRateEnabledMask"]];
     [self setGains:				[decoder decodeObjectForKey:@"gains"]];
     [self setThresholds:		[decoder decodeObjectForKey:@"thresholds"]];
     [self setTriggerParameter:	[decoder decodeObjectForKey:@"triggerParameter"]];
     [self setTotalRate:			[decoder decodeObjectForKey:@"totalRate"]];
 	[self setTestEnabledArray:	[decoder decodeObjectForKey:@"testsEnabledArray"]];
 	[self setTestStatusArray:	[decoder decodeObjectForKey:@"testsStatusArray"]];
-    [self setWriteValue:		[decoder decodeIntegerForKey:@"writeValue"]];
+    [self setWriteValue:		[decoder decodeIntForKey:@"writeValue"]];
     [self setSelectedRegIndex:  [decoder decodeIntegerForKey:@"selectedRegIndex"]];
     [self setSelectedChannelValue:  [decoder decodeIntegerForKey:@"selectedChannelValue"]];
     /* unused
@@ -4191,10 +4191,10 @@ for(chan=0; chan<6;chan++)
     //others
 //RM    [encoder encodeInteger:relaisStatesBB forKey:@"relaisStatesBB"];
     [encoder encodeInt:fiberSelectForBBStatusBits forKey:@"fiberSelectForBBStatusBits"];
-    [encoder encodeInteger:fiberOutMask forKey:@"fiberOutMask"];
+    [encoder encodeInt:fiberOutMask forKey:@"fiberOutMask"];
     //[encoder encodeInteger:tpix forKey:@"tpix"];
     [encoder encodeInt:repeatSWTriggerMode forKey:@"repeatSWTriggerMode"];
-    [encoder encodeInteger:controlRegister forKey:@"controlRegister"];
+    [encoder encodeInt:controlRegister forKey:@"controlRegister"];
     [encoder encodeInt:fastWrite forKey:@"fastWrite"];
     [encoder encodeInt64:fiberDelays forKey:@"fiberDelays"];
     [encoder encodeInt64:streamMask forKey:@"streamMask"];
@@ -4211,10 +4211,10 @@ for(chan=0; chan<6;chan++)
     [encoder encodeBool:storeDataInRam		forKey:@"storeDataInRam"];
     [encoder encodeInt:(filterLength+2)			forKey:@"filterLength"];//to be backward compatible with old Orca config files (this is the register value)-tb-
     [encoder encodeInt:gapLength			forKey:@"gapLength"];
-    [encoder encodeInteger:postTriggerTime	forKey:@"postTriggerTime"];
-    [encoder encodeInteger:interruptMask		forKey:@"interruptMask"];
+    [encoder encodeInt:postTriggerTime	forKey:@"postTriggerTime"];
+    [encoder encodeInt:interruptMask		forKey:@"interruptMask"];
     [encoder encodeInteger:hitRateLength		forKey:@"OREdelweissFLTModelHitRateLength"];
-    [encoder encodeInteger:hitRateEnabledMask	forKey:@"hitRateEnabledMask"];
+    [encoder encodeInt:hitRateEnabledMask	forKey:@"hitRateEnabledMask"];
     [encoder encodeObject:gains				forKey:@"gains"];
     [encoder encodeObject:thresholds		forKey:@"thresholds"];
     //int i;
@@ -4546,7 +4546,7 @@ for(chan=0; chan<6;chan++)
 	configStruct->card_info[index].hw_mask[0] 	= dataId;					//record id for energies
 	configStruct->card_info[index].hw_mask[1] 	= waveFormId;				//record id for the waveforms
 	configStruct->card_info[index].hw_mask[2] 	= histogramId;				//record id for the histograms
-	configStruct->card_info[index].slot			= [self stationNumber];		//the PMC readout uses col 0 thru n
+	configStruct->card_info[index].slot			= (uint32_t)[self stationNumber];		//the PMC readout uses col 0 thru n
 	configStruct->card_info[index].crate		= [self crateNumber];
 //DEBUG OUTPUT: 
 	NSLog(@"    %@::%@:slot %i, crate %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd), [self stationNumber], [self crateNumber]);//TODO: DEBUG testing ...-tb-

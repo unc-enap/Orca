@@ -1463,7 +1463,7 @@ tubRegister;
 {
 	uint32_t aValue = 0;
 	@try {	
-        aValue =  [mtc intCommand:"get_gt_mask"];
+        aValue =  (uint32_t)[mtc intCommand:"get_gt_mask"];
 	} @catch(NSException* localException) {
 		NSLog(@"Could not get GT word mask!\n");					
 		NSLog(@"Exception: %@\n",localException);
@@ -1554,7 +1554,7 @@ tubRegister;
 	uint32_t aValue = 0;
 
 	@try {
-		aValue = [mtc intCommand:"get_gt_crate_mask"];
+		aValue = (uint32_t)[mtc intCommand:"get_gt_crate_mask"];
 	} @catch(NSException* localException) {
 		NSLog(@"Could not get GT crate mask!\n");					
 		NSLog(@"Exception: %@\n",localException);

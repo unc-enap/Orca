@@ -4946,8 +4946,8 @@ clean_up_mark:
         struct timeval t;//    struct timezone tz; is obsolete ... -tb-
         //timing
         gettimeofday(&t,NULL);
-        currentSec = t.tv_sec;  
-        currentUSec = t.tv_usec;  
+        currentSec = (uint32_t)t.tv_sec;
+        currentUSec = (uint32_t)t.tv_usec;  
         double diffTime = (double)(currentSec  - histoLastPageToggleSec) +
 		((double)(currentUSec - histoLastPageToggleUSec)) * 0.000001;
         //I want run this method only every 0.1 sec (=delayTime) or less -tb-

@@ -2184,7 +2184,7 @@ return;
 	configStruct->card_info[index].hw_type_id	= kSLTv4;	//should be unique
 	configStruct->card_info[index].hw_mask[0] 	= eventDataId;
 	configStruct->card_info[index].hw_mask[1] 	= multiplicityId;
-	configStruct->card_info[index].slot			= [self stationNumber];
+	configStruct->card_info[index].slot			= (uint32_t)[self stationNumber];
 	configStruct->card_info[index].crate		= [self crateNumber];
 	configStruct->card_info[index].add_mod		= 0;		//not needed for this HW
     

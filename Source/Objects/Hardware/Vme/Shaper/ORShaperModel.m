@@ -1390,7 +1390,7 @@ static NSString *ORShaperDisplayRaw 		= @"ORShaper DisplayRaw";
 		[self setOnlineMask:0xff];
     }
     [self setScanStart:[decoder decodeIntForKey:ORShaperScanStart]];
-    [self setScanDelta:[decoder decodeIntegerForKey:ORShaperScanDelta]];
+    [self setScanDelta:[decoder decodeIntForKey:ORShaperScanDelta]];
     [self setScanNumber:[decoder decodeIntegerForKey:ORShaperScanNumber]];
 	
     [self setAdcRateGroup:[decoder decodeObjectForKey:ORShaperAdcRateGroup]];
@@ -1433,7 +1433,7 @@ static NSString *ORShaperDisplayRaw 		= @"ORShaper DisplayRaw";
     [encoder encodeInteger:[self onlineMask]		forKey:ORShaperOnlineMask];
 	
     [encoder encodeInt:[self scanStart]		forKey:ORShaperScanStart];
-    [encoder encodeInteger:(int32_t)[self scanDelta]			forKey:ORShaperScanDelta];
+    [encoder encodeInt:[self scanDelta]			forKey:ORShaperScanDelta];
     [encoder encodeInteger:[self scanNumber]		forKey:ORShaperScanNumber];
 	
     [encoder encodeObject:[self adcRateGroup] forKey:ORShaperAdcRateGroup];

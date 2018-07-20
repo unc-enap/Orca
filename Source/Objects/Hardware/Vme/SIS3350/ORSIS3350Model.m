@@ -1705,7 +1705,7 @@ uint32_t rblt_data[kMaxNumberWords];
 	uint32_t i;
 	uint32_t  wrap_length	= [self memoryWrapLength];
 	uint32_t* inDataPtr    = (uint32_t*)[theOriginalData bytes];
-	uint32_t  dataLength   = [theOriginalData length];
+	uint32_t  dataLength   = (uint32_t)[theOriginalData length];
 	
 	NSMutableData* theRearrangedData = [NSMutableData dataWithLength:dataLength];
 	uint32_t* outDataPtr		 = (uint32_t*)[theRearrangedData bytes];

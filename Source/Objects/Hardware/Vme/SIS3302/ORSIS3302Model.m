@@ -3295,11 +3295,11 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302ReadRegs]
     [self setMcaMode:					[decoder decodeIntForKey:@"mcaMode"]];
     [self setMcaPileupEnabled:			[decoder decodeBoolForKey:@"mcaPileupEnabled"]];
     [self setMcaHistoSize:				[decoder decodeIntForKey:@"mcaHistoSize"]];
-    [self setMcaNofScansPreset:			[decoder decodeIntegerForKey:@"mcaNofScansPreset"]];
+    [self setMcaNofScansPreset:			[decoder decodeIntForKey:@"mcaNofScansPreset"]];
     [self setMcaAutoClear:				[decoder decodeBoolForKey:@"mcaAutoClear"]];
-    [self setMcaPrescaleFactor:			[decoder decodeIntegerForKey:@"mcaPrescaleFactor"]];
+    [self setMcaPrescaleFactor:			[decoder decodeIntForKey:@"mcaPrescaleFactor"]];
     [self setMcaLNESetup:				[decoder decodeBoolForKey:@"mcaLNESetup"]];
-    [self setMcaNofHistoPreset:			[decoder decodeIntegerForKey:@"mcaNofHistoPreset"]];
+    [self setMcaNofHistoPreset:			[decoder decodeIntForKey:@"mcaNofHistoPreset"]];
 	
     [self setRunMode:					[decoder decodeIntForKey:@"runMode"]];
     [self setInternalExternalTriggersOred:[decoder decodeBoolForKey:@"internalExternalTriggersOred"]];
@@ -3385,11 +3385,11 @@ static SIS3302GammaRegisterInformation register_information[kNumSIS3302ReadRegs]
 	[encoder encodeInteger:mcaMode					forKey:@"mcaMode"];
 	[encoder encodeBool:mcaPileupEnabled		forKey:@"mcaPileupEnabled"];
 	[encoder encodeInteger:mcaHistoSize				forKey:@"mcaHistoSize"];
-	[encoder encodeInteger:mcaNofScansPreset		forKey:@"mcaNofScansPreset"];
+	[encoder encodeInt:mcaNofScansPreset		forKey:@"mcaNofScansPreset"];
 	[encoder encodeBool:mcaAutoClear			forKey:@"mcaAutoClear"];
-	[encoder encodeInteger:mcaPrescaleFactor		forKey:@"mcaPrescaleFactor"];
+	[encoder encodeInt:mcaPrescaleFactor		forKey:@"mcaPrescaleFactor"];
 	[encoder encodeBool:mcaLNESetup				forKey:@"mcaLNESetup"];
-	[encoder encodeInteger:mcaNofHistoPreset		forKey:@"mcaNofHistoPreset"];
+	[encoder encodeInt:mcaNofHistoPreset		forKey:@"mcaNofHistoPreset"];
 	
 	[encoder encodeInteger:runMode					forKey:@"runMode"];
     [encoder encodeInteger:gtMask					forKey:@"gtMask"];

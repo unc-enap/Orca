@@ -2794,7 +2794,7 @@ err:
     [self updateUIFromEcalBundle:hwDic slot:slotNum];
     [self synthesizeFECIntoBundle:&hw_bundle[slotNum] forSlot:slotNum];
     
-    [self setEcal_received:[self ecal_received] | 1UL << slotNum];
+    [self setEcal_received:(uint32_t)([self ecal_received] | 1UL << slotNum)];
     //NSLog(@"ecal received mask: 0x%08x\n", [self ecal_received]);
     if ([self ecal_received] == 0xffffUL) {
         [self ecalToOrcaDocumentsReceived];

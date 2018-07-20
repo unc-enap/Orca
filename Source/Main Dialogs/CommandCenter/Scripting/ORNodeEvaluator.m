@@ -1530,7 +1530,7 @@
 
 - (id) bitExtract:(id) p
 {
-    uint32_t theValue = [NodeValue(0) unsignedLongValue];
+    uint32_t theValue = (int32_t)[NodeValue(0) unsignedLongValue];
     NSInteger val1 = [NodeValue(1) unsignedLongValue];
     NSInteger val2 = [NodeValue(2) unsignedLongValue];
     if(val1 > val2) {
