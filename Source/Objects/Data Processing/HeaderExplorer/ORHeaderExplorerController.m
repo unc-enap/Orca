@@ -206,7 +206,6 @@
 		[pb setString:thePath forType:NSStringPboardType];
 	}
 }
-
 - (NSDragOperation) draggingSourceOperationMaskForLocal:(BOOL)isLocal
 {
 	return NSDragOperationCopy;

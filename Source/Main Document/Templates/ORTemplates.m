@@ -49,7 +49,7 @@
 	[ipeV4Option setState:NSOffState];
 	[vme64Matrix setEnabled:NO];
 	[vmeAdapterMatrix setEnabled:NO];
-    [NSApp beginSheet:templateSheet modalForWindow:mainWindow modalDelegate:nil didEndSelector:nil contextInfo:nil];
+    [mainWindow beginSheet:templateSheet completionHandler:nil];
 }
 
 

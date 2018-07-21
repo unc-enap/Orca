@@ -331,8 +331,7 @@
 			[s appendFormat:@"%@ --> %@\n\n",aKey,[[gv constraints] objectForKey:aKey]];
 		}
 		[gvConstraintView setString:s];
-		[NSApp beginSheet:gvConstraintPanel modalForWindow:[self window]
-			modalDelegate:self didEndSelector:NULL contextInfo:nil];
+        [[self window] beginSheet:gvConstraintPanel completionHandler:nil];
 	}
 	else {
 		uint32_t changesVetoed = ([model vetoMask] & (0x1>>gateValveTag)) != 0;
@@ -412,8 +411,7 @@
 				[gvOpenToText2 setStringValue:@"--"];
 			}
 			[gvControlField setStringValue:s];
-			[NSApp beginSheet:gvControlPanel modalForWindow:[self window]
-				modalDelegate:self didEndSelector:NULL contextInfo:nil];
+            [[self window] beginSheet:gvControlPanel completionHandler:nil];
 		}
 	}
 }

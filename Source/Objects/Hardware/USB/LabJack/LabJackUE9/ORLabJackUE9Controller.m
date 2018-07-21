@@ -862,8 +862,7 @@
 - (IBAction) openIDChangePanel:(id)sender
 {
 	[self endEditing];
-    [NSApp beginSheet:idChangePanel modalForWindow:[self window]
-		modalDelegate:self didEndSelector:NULL contextInfo:nil];
+    [[self window] beginSheet:idChangePanel completionHandler:nil];
 	[newLocalIDField setIntValue:[model localID]];
 }
 - (IBAction) closeIDChangePanel:(id)sender
@@ -1051,8 +1050,7 @@
 - (IBAction) openIPChangePanel:(id)sender
 {
 	[self endEditing];
-    [NSApp beginSheet:ipChangePanel modalForWindow:[self window]
-		modalDelegate:self didEndSelector:NULL contextInfo:nil];
+    [[self window] beginSheet:ipChangePanel completionHandler:nil];
 }
 
 - (IBAction) closeIPChangePanel:(id)sender

@@ -29,9 +29,6 @@
 @interface ORPreferencesController (private)
 - (void) _openValidatePassWordPanel;
 - (void) _openSetNewPassWordPanel;
-- (void) _validatePasswordPanelDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo;
-- (void) _changePasswordPanelDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo;
-- (void) _setNewPasswordPanelDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo;
 - (void) _shakeIt;
 - (void) _setPassWordButtonText;
 @end;
@@ -255,13 +252,35 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(PreferencesController);
 		[oldPassWordField setStringValue:@""];
         [newPassWordField setStringValue:@""];
         [confirmPassWordField setStringValue:@""];
-        [NSApp beginSheet: changePassWordPanel
-                modalForWindow: [self window]
-                modalDelegate: self
-                didEndSelector: @selector(_changePasswordPanelDidEnd:returnCode:contextInfo:)
-                contextInfo: nil];
+        [[self window] beginSheet:changePassWordPanel completionHandler:^(NSModalResponse returnCode){
+                if(returnCode == NSModalResponseOK){
+                    if([[oldPassWordField stringValue] isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:OROrcaPassword]]){
+                        if([[newPassWordField stringValue] length] == 0){
+                            NSBeep();
+                            NSLog(@"Orca passwords cannot have zero length.\n");
+                            [self _shakeIt];
+                        }
+                        else if([[newPassWordField stringValue] isEqualToString:[confirmPassWordField stringValue]]){
+                            [[NSUserDefaults standardUserDefaults] setObject:[newPassWordField stringValue] forKey:OROrcaPassword];
+                            NSLog(@"Orca password changed.\n");
+                        }
+                        else {
+                            NSBeep();
+                            NSLog(@"The confirming password doesn't match.\n");
+                            NSLog(@"Password NOT changed!\n");
+                            [self _shakeIt];
+                        }
+                    }
+                    else [self _shakeIt];
+                }
+            [self _setPassWordButtonText];
+
+        }];
+
     }
 }
+
+
 
 - (IBAction) closeChangePassWordPanel:(id)sender
 {
@@ -441,110 +460,60 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(PreferencesController);
 {
     [setPassWordField setStringValue:@""];
     [confirmSetPassWordField setStringValue:@""];
-    [NSApp beginSheet: setPassWordPanel
-            modalForWindow: [self window]
-            modalDelegate: self
-            didEndSelector: @selector(_setNewPasswordPanelDidEnd:returnCode:contextInfo:)
-            contextInfo: nil];
+    
+    [[self window] beginSheet:changePassWordPanel completionHandler:^(NSModalResponse returnCode){
+        if(returnCode == NSModalResponseOK){
+            if([[setPassWordField stringValue] length] == 0){
+                if(!disallowStateChange)[self setLockState:YES];
+                NSBeep();
+                NSLog(@"Orca passwords cannot have zero length.\n");
+                [self _shakeIt];
+            }
+            else if([[setPassWordField stringValue] isEqualToString:[confirmSetPassWordField stringValue]]){
+                [[NSUserDefaults standardUserDefaults] setObject:[setPassWordField stringValue] forKey:OROrcaPassword];
+                
+                if(!disallowStateChange)[self setLockState:NO];
+                NSLog(@"Global security disabled.\n");
+            }
+            else {
+                if(!disallowStateChange)[self setLockState:YES];
+                NSBeep();
+                NSLog(@"The confirming password doesn't match.\n");
+                [self _shakeIt];
+            }
+        }
+        else if(!disallowStateChange)[self setLockState:YES];
+        [self _setPassWordButtonText];
+
+    }];
 }
 
 - (void)  _openValidatePassWordPanel     
 {
     [passWordField setStringValue:@""];
-    [NSApp beginSheet: passWordPanel
-            modalForWindow: [self window]
-            modalDelegate: self
-            didEndSelector: @selector(_validatePasswordPanelDidEnd:returnCode:contextInfo:)
-            contextInfo: nil];
-}
-
-- (void) _validatePasswordPanelDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
-{
-#if defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
-    if(returnCode == NSModalResponseOK){
-#else
-    if(returnCode == NSOKButton){
-#endif
     
-        if([[passWordField stringValue] isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:OROrcaPassword]]){
-            [self setLockState:NO];
-            NSLog(@"Orca global security password entered successfully.\n");
-            NSLog(@"Global security disabled.\n");
+    [[self window] beginSheet:passWordPanel completionHandler:^(NSModalResponse returnCode){
+        if(returnCode == NSModalResponseOK){
+            if([[passWordField stringValue] isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:OROrcaPassword]]){
+                [self setLockState:NO];
+                NSLog(@"Orca global security password entered successfully.\n");
+                NSLog(@"Global security disabled.\n");
+            }
+            else {
+                [self setLockState:YES];
+                NSLog(@"Attempt to enter a global Orca security password failed.\n");
+                NSLog(@"Global security remains enabled.\n");
+                [self _shakeIt];
+            }
         }
         else {
             [self setLockState:YES];
-            NSLog(@"Attempt to enter a global Orca security password failed.\n");
-            NSLog(@"Global security remains enabled.\n");
-            [self _shakeIt];
+            NSLog(@"Global security enabled.\n");
         }
-    }
-    else {
-        [self setLockState:YES];
-        NSLog(@"Global security enabled.\n");
-    }
-   
+    }];
+    
 }
 
-- (void) _changePasswordPanelDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
-{
-#if defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
-    if(returnCode == NSModalResponseOK){
-#else 
-    if(returnCode == NSOKButton){
-#endif
-        if([[oldPassWordField stringValue] isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:OROrcaPassword]]){
-            if([[newPassWordField stringValue] length] == 0){ 
-                NSBeep();
-                NSLog(@"Orca passwords cannot have zero length.\n");
-                [self _shakeIt];
-            }
-            else if([[newPassWordField stringValue] isEqualToString:[confirmPassWordField stringValue]]){
-                [[NSUserDefaults standardUserDefaults] setObject:[newPassWordField stringValue] forKey:OROrcaPassword];
-                NSLog(@"Orca password changed.\n");
-            }
-            else {
-                NSBeep();
-                NSLog(@"The confirming password doesn't match.\n");
-                NSLog(@"Password NOT changed!\n");
-                [self _shakeIt];
-            }
-        }
-        else [self _shakeIt];
-    }  
-    [self _setPassWordButtonText];
-  
-}
-
-- (void) _setNewPasswordPanelDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
-{   
-#if defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
-    if(returnCode == NSModalResponseOK){
-#else
-    if(returnCode == NSOKButton){
-#endif
-        if([[setPassWordField stringValue] length] == 0){
-            if(!disallowStateChange)[self setLockState:YES];
-            NSBeep();
-            NSLog(@"Orca passwords cannot have zero length.\n");
-            [self _shakeIt];
-        }
-        else if([[setPassWordField stringValue] isEqualToString:[confirmSetPassWordField stringValue]]){
-            [[NSUserDefaults standardUserDefaults] setObject:[setPassWordField stringValue] forKey:OROrcaPassword];
-
-            if(!disallowStateChange)[self setLockState:NO];
-            NSLog(@"Global security disabled.\n");
-        }
-        else {
-            if(!disallowStateChange)[self setLockState:YES];
-            NSBeep();
-            NSLog(@"The confirming password doesn't match.\n");
-            [self _shakeIt];
-        }
-    }
-    else if(!disallowStateChange)[self setLockState:YES];
-    [self _setPassWordButtonText];
-
-}
 - (void) _shakeIt 
 {
     NSRect theFrame = [[self window] frame];

@@ -3589,8 +3589,7 @@
 - (IBAction) openNoiseFloorPanel:(id)sender
 {
 	[self endEditing];
-    [NSApp beginSheet:noiseFloorPanel modalForWindow:[self window]
-		modalDelegate:self didEndSelector:NULL contextInfo:nil];
+    [[self window] beginSheet:noiseFloorPanel completionHandler:nil];
 }
 
 - (IBAction) closeNoiseFloorPanel:(id)sender

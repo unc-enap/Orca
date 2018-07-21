@@ -908,7 +908,7 @@
 
 - (IBAction) radLinkSelection:(id)sender
 {
-	[NSApp beginSheet:radLinkSelectionPanel modalForWindow:[self window] modalDelegate:self didEndSelector:NULL contextInfo:nil];
+    [[self window] beginSheet:radLinkSelectionPanel completionHandler:nil];
 }
 
 - (IBAction) radLinkLoadOps:(id)sender
@@ -917,9 +917,8 @@
 	[NSApp endSheet:radLinkSelectionPanel];
  	int index = (int)[radLinkSelectionMatrix selectedRow];
 	if(index==0){
-		[NSApp beginSheet:radLinkLoadPanel modalForWindow:[self window]
-			modalDelegate:self didEndSelector:NULL contextInfo:nil];
-	}	
+        [[self window] beginSheet:radLinkLoadPanel completionHandler:nil];
+	}
 	else {
         [self getRadLinkFile];
 	}

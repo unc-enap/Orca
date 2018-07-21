@@ -421,8 +421,7 @@ NSInteger sortListDnFunc(id element1,id element2, void* context){return [element
 - (IBAction) openProductionModePanel:(id)sender;
 {
     [self productionModeChanged:nil];
-    [NSApp beginSheet:productionModePanel modalForWindow:[self window]
-        modalDelegate:self didEndSelector:NULL contextInfo:nil];
+    [[self window] beginSheet:productionModePanel completionHandler:nil];
 }
 
 - (IBAction) closeProductionModePanel:(id)sender;

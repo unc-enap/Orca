@@ -36,9 +36,6 @@
 #if !defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
 - (void) _killCrateDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo;
 #endif
-- (void) _validatePasswordPanelDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo;
-- (void) _validateSetTimePanelDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo;
-- (void) _driverInstallPanelDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo;
 @end
 
 @implementation SBC_LinkController
@@ -855,22 +852,22 @@
 
 - (IBAction) downloadDriverAction:(id)sender
 {
-		[driverPassWordField setStringValue:@""];
-		[NSApp beginSheet: driverInstallPanel
-		   modalForWindow: [self window]
-			modalDelegate: self
-		   didEndSelector: @selector(_driverInstallPanelDidEnd:returnCode:contextInfo:)
-			  contextInfo: nil];
+    [driverPassWordField setStringValue:@""];
+    [[self window] beginSheet:driverInstallPanel completionHandler:^(NSModalResponse returnCode){
+        if(returnCode == NSModalResponseOK){
+            [[model sbcLink] installDriver:[driverPassWordField stringValue]];
+        }
+    }];
 }
 
 - (IBAction)  shutdownAction:(id)sender;     
 {
     [rootPassWordField setStringValue:@""];
-    [NSApp beginSheet: passWordPanel
-	   modalForWindow: [self window]
-		modalDelegate: self
-	   didEndSelector: @selector(_validatePasswordPanelDidEnd:returnCode:contextInfo:)
-		  contextInfo: nil];
+    [[self window] beginSheet:driverInstallPanel completionHandler:^(NSModalResponse returnCode){
+        if(returnCode == NSModalResponseOK){
+            [[model sbcLink] shutDown:[rootPassWordField stringValue] reboot:[[rebootMatrix selectedCell]tag]];
+        }
+    }];
 }
 
 - (IBAction) rebootHaltSelectionAction:(id)sender
@@ -1204,12 +1201,11 @@
 - (IBAction) setTimeAction:(id)sender;
 {
     [rootPassWordField setStringValue:@""];
-    [NSApp beginSheet: setTimePanel
-       modalForWindow: [self window]
-        modalDelegate: self
-       didEndSelector: @selector(_validateSetTimePanelDidEnd:returnCode:contextInfo:)
-          contextInfo: nil];
-
+     [[self window] beginSheet:setTimePanel completionHandler:^(NSModalResponse returnCode){
+        if(returnCode == NSModalResponseOK){
+            [[model sbcLink] setSBCTime:[setTimePassWordField stringValue]];
+        }
+    }];
 }
 
 - (int)	numberPointsInPlot:(id)aPlotter
@@ -1273,40 +1269,8 @@
 }
 #endif
 
-- (void) _validatePasswordPanelDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
-{
-#if defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
-    if(returnCode == NSModalResponseOK){
-#else
-    if(returnCode == NSOKButton){
-#endif
-		[[model sbcLink] shutDown:[rootPassWordField stringValue] reboot:[[rebootMatrix selectedCell]tag]];
-	}
-}
-
-- (void) _validateSetTimePanelDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
-{
-#if defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
-    if(returnCode == NSModalResponseOK){
-#else
-    if(returnCode == NSOKButton){
-#endif
-        [[model sbcLink] setSBCTime:[setTimePassWordField stringValue]];
-    }
-}
-
-
     
-- (void) _driverInstallPanelDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
-{
-#if defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
-    if(returnCode == NSModalResponseOK){
-#else
-    if(returnCode == NSOKButton){
-#endif
-		[[model sbcLink] installDriver:[driverPassWordField stringValue]];
-	}
-}
+
 @end
 
 @implementation OrcaObject (SBC_Link)

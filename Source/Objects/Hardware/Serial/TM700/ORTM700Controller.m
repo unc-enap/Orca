@@ -430,8 +430,7 @@
 		[s appendFormat:@"%@ --> %@\n\n",aKey,[constraints objectForKey:aKey]];
 	}
 	[constraintView setString:s];
-	[NSApp beginSheet:constraintPanel modalForWindow:[self window]
-		modalDelegate:self didEndSelector:NULL contextInfo:nil];
+    [[self window] beginSheet:constraintPanel completionHandler:nil];
 }
 - (IBAction) closeConstraintPanel:(id)sender
 {

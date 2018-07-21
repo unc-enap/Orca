@@ -316,8 +316,7 @@
 	[self endEditing];
     [addItemValueField setObjectValue:@""];
     [addItemNameField setObjectValue:@""];
-    [NSApp beginSheet:addItemPanel modalForWindow:[self window]
-		modalDelegate:self didEndSelector:NULL contextInfo:nil];
+    [[self window] beginSheet:addItemPanel completionHandler:nil];
 }
 
 - (IBAction) closeAddItemPanel:(id)sender

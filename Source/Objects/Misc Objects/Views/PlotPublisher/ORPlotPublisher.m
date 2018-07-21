@@ -37,7 +37,6 @@
 
 @interface ORPlotPublisher (private)
 - (void) dumpAndStore;
-- (void) _publishingDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo;
 - (void) storeNewAttributes;
 - (void) loadNewAttributes;
 - (void) finish;
@@ -112,7 +111,22 @@
 	
 	[compositePlotView setUseGradient:NO];
 	
-    [NSApp beginSheet:[self window] modalForWindow:[compositePlotView window] modalDelegate:self didEndSelector:@selector(_publishingDidEnd:returnCode:contextInfo:) contextInfo:nil];
+
+    [[compositePlotView window] beginSheet:[self window] completionHandler:^(NSModalResponse returnCode){
+            if(returnCode == NSModalResponseOK){
+                [self performSelector:@selector(dumpAndStore) withObject:nil afterDelay:1];
+            }
+            else {
+                [self finish];
+                int maxPlots = [compositePlotView numberOfPlots];
+                int i;
+                for(i=0;i<maxPlots;i++){
+                    [[compositePlotView plot:i] restoreColor];
+                }
+            }
+    }];
+
+    
 }
 
 - (IBAction) publish:(id)sender
@@ -236,32 +250,22 @@
     NSSavePanel *savePanel = [NSSavePanel savePanel];
     [savePanel setPrompt:@"Save"];
     [savePanel setDirectoryURL:[NSURL fileURLWithPath:NSHomeDirectory()]];
-    [savePanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result){
+    [savePanel beginSheetModalForWindow:[compositePlotView window] completionHandler:^(NSInteger result){
         if (result == NSFileHandlingPanelOKButton){
             NSString* savePath = [[savePanel URL]path];
             NSData* pdfData = [compositePlotView plotAsPDFData];
             [pdfData writeToFile:[savePath stringByExpandingTildeInPath] atomically:NO];
 			[self finish];
        }
+        int maxPlots = [compositePlotView numberOfPlots];
+        int i;
+        for(i=0;i<maxPlots;i++){
+            [[compositePlotView plot:i] restoreColor];
+        }
+
     }];
 }
 
-- (void) _publishingDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
-{
-#if defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
-    if(returnCode == NSModalResponseOK){
-#else
-    if(returnCode == NSOKButton){
-#endif
-		[self dumpAndStore];
-	}
-	else [self finish];
-	int maxPlots = [compositePlotView numberOfPlots];
-	int i;
-	for(i=0;i<maxPlots;i++){
-		[[compositePlotView plot:i] restoreColor];
-	}
-}
 - (void) finish
 {
 	[(ORPlotView*)[compositePlotView plotView] setAttributes: oldAttributes];
