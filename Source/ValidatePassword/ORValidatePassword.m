@@ -23,7 +23,7 @@
 #import "ORValidatePassword.h"
 
 @interface ORValidatePassword (private)
-- (void) _panelDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo;
+- (void) _panelDidEnd:(id)sheet returnCode:(NSModalResponse)returnCode contextInfo:(NSDictionary*)userInfo;
 - (void) _shakeIt;
 @end
 
@@ -43,13 +43,20 @@
     return self;
 }
 
-- (void) beginSheetForWindow:(NSWindow *)aDocWindow modalDelegate:(id)aModalDelegate didEndSelector:(SEL)aDidEndSelector contextInfo:(id)aContextInfo
+- (void) beginSheetForWindow:(NSWindow *)aDocWindow modalDelegate:(id)aModalDelegate didEndSelector:(SEL)aDidEndSelector contextInfo:(NSDictionary*)aContextInfo
 {
     modalWindow = aDocWindow;
     modalDelegate = aModalDelegate; 
     didEndSelector = aDidEndSelector; 
     [aContextInfo retain];
-    [NSApp beginSheet:passWordPanel modalForWindow:aDocWindow modalDelegate:self didEndSelector:@selector(_panelDidEnd:returnCode:contextInfo:) contextInfo:aContextInfo];
+//    [NSApp beginSheet:passWordPanel modalForWindow:aDocWindow modalDelegate:self didEndSelector:@selector(_panelDidEnd:returnCode:contextInfo:) contextInfo:aContextInfo];
+    
+    [aDocWindow beginSheet:passWordPanel completionHandler:^(NSModalResponse returnCode){
+        [self _panelDidEnd:passWordPanel returnCode:returnCode contextInfo:aContextInfo];
+
+    }];
+
+    
 }
 
 - (IBAction)closePassWordPanel:(id)sender
@@ -67,14 +74,10 @@
 @end
 
 @implementation ORValidatePassword (private)
-- (void) _panelDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
+- (void) _panelDidEnd:(id)sheet returnCode:(NSModalResponse)returnCode contextInfo:(NSDictionary*)userInfo
 {
     int returnValue = kPasswordCancelled;
-#if defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
     if(returnCode == NSModalResponseOK){
-#else
-    if(returnCode == NSOKButton){
-#endif
         if([[passWordField stringValue] isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:OROrcaPassword]]){
 	    returnValue = kGoodPassword;
         }

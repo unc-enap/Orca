@@ -174,7 +174,7 @@ NSString* ORPlotLinkLock							 = @"ORPlotLinkLock";
                                     modifierFlags:NSEventModifierFlagControl // 0x100
                                         timestamp:(NSTimeInterval)0
                                      windowNumber:[theCurrentEvent windowNumber]
-                                          context:[theCurrentEvent context]
+                                          context:nil
                                       eventNumber:0
                                        clickCount:1
                                          pressure:1];

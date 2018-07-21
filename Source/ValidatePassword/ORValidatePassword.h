@@ -32,7 +32,7 @@
 }
 + (id) validateForWindow:(NSWindow *)aDocWindow modalDelegate:(id)aModalDelegate didEndSelector:(SEL)aDidEndSelector contextInfo:(id)aContextInfo;
 
-- (void) beginSheetForWindow:(NSWindow *)aDocWindow modalDelegate:(id)aModalDelegate didEndSelector:(SEL)aDidEndSelector contextInfo:(id)aContextInfo;
+- (void) beginSheetForWindow:(NSWindow *)aDocWindow modalDelegate:(id)aModalDelegate didEndSelector:(SEL)aDidEndSelector contextInfo:(NSDictionary*)aContextInfo;
 - (IBAction) closePassWordPanel:(id)sender;
 
 

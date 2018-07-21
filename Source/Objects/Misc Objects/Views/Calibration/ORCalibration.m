@@ -82,7 +82,20 @@
 
 - (void) beginSheetFor:(NSWindow *)aWindow delegate:(id)aDelegate didEndSelector:(SEL)aDidEndSelector contextInfo:(id)aContextInfo
 {
-    [NSApp beginSheet:[self window] modalForWindow:aWindow modalDelegate:aDelegate didEndSelector:aDidEndSelector contextInfo:aContextInfo];
+ //   [NSApp beginSheet:[self window] modalForWindow:aWindow modalDelegate:aDelegate didEndSelector:aDidEndSelector contextInfo:aContextInfo];
+    
+    [aWindow beginSheet:[self window] completionHandler:^(NSModalResponse returnCode){
+        NSInvocation* callBack = [NSInvocation invocationWithMethodSignature:[aDelegate methodSignatureForSelector:aDidEndSelector]];
+        [callBack setSelector:aDidEndSelector];
+        NSWindow* aPanel = [self window];
+        [callBack setArgument:&aPanel atIndex:2];
+        [callBack setArgument:&returnCode atIndex:3];
+        [callBack setArgument:aContextInfo atIndex:4];
+        [callBack performSelectorOnMainThread:@selector(invoke) withObject:nil waitUntilDone:YES];
+    }];
+    
+//    - (void) _calibrationDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
+
 }
 
 - (void) calibrate
