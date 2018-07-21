@@ -844,9 +844,9 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
 	uint32_t trigChan	    = ShiftAndExtract(ptr[1],8,0xff);
     uint32_t sec            = ptr[2]; //f0
     uint32_t subsec         = ptr[3]; //f1   // ShiftAndExtract(ptr[1],0,0xffffffff);
-    uint32_t timelo         = ptr[2];
-    uint32_t timehi         = ptr[3]; // ShiftAndExtract(ptr[1],0,0xffffffff);
-    uint32_t timestamp=timelo | ((timehi & 0xffff)<<32);
+    uint64_t timelo         = ptr[2];
+    uint64_t timehi         = ptr[3]; // ShiftAndExtract(ptr[1],0,0xffffffff);
+    uint64_t timestamp      = timelo | ((timehi & 0x0000ffff)<<32);
     uint32_t chmap          = ptr[4]; //f2
     uint32_t energy         = ptr[5] & 0x00ffffff;  //f3
   //  uint32_t eventID        = ptr[6];
@@ -874,10 +874,10 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
     NSString* energyStr = 0;//[NSString stringWithFormat:@"NumFIFO     = %d\n", numfifo];
     if(eventFlags4bit == 0x2){//FLT event
     }
-        secStr    = [NSString stringWithFormat:@"Time 0..31 = 0x%08x\n", sec];
-        subsecStr = [NSString stringWithFormat:@"Time32..47 = 0x%08x\n", subsec];
-        timeStr   = [NSString stringWithFormat:@"Timestamp  = %u\n", timestamp];
-        energyStr = [NSString stringWithFormat:@"Energy     = 0x%08x\n", energy];
+    secStr    = [NSString stringWithFormat:@"Time 0..31 = 0x%08x\n", sec];
+    subsecStr = [NSString stringWithFormat:@"Time32..47 = 0x%08x\n", subsec];
+    timeStr   = [NSString stringWithFormat:@"Timestamp  = %llu\n", timestamp];
+    energyStr = [NSString stringWithFormat:@"Energy     = 0x%08x\n", energy];
     NSString* chmapStr  = [NSString stringWithFormat:@"ChannelMap = 0x%x\n", chmap];
     NSString* eventIDStr= [NSString stringWithFormat:@"Pg#,offset= %d,%d\n", ShiftAndExtract(eventFifo4,12,0xf),ShiftAndExtract(eventFifo4,0,0xfff)];
     NSString* offsetStr = [NSString stringWithFormat:@"Offset16   = %d\n", traceStart16];
