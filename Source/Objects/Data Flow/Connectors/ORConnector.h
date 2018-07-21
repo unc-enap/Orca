@@ -48,8 +48,8 @@
 
 	int			 lineType;
 	int 		 connectorImageType;
-	uint32_t 		 connectorType;
-	int 		 ioType;
+	uint32_t     connectorType;
+	uint32_t 	 ioType;
 	int 		 identifer;
     NSColor*     onColor;
     NSColor*     offColor;
@@ -97,8 +97,8 @@
 - (NSImage*) 	offImage;
 - (void) 		setOffImage: (NSImage*)anImage;
 
-- (int) 		ioType;
-- (void) 		setIoType: (int)aType;
+- (uint32_t) 		ioType;
+- (void) 		setIoType: (uint32_t)aType;
 
 - (NSMutableArray*) restrictedList;
 - (void) setRestrictedList:(NSMutableArray*)newRestrictedList;
