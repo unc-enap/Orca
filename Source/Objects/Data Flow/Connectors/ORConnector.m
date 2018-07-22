@@ -299,7 +299,6 @@ NSString* ORConnectionChanged = @"OR Connection Changed";
 - (void) setConnectorType:(uint32_t) type
 {
     //a non-zero connector type restricts the connection to others of that type
-    NSLog(@"%@: %u\n",[guardian className],type);
     connectorType = type;
 }
 
