@@ -412,7 +412,7 @@ static NSString* OROrcaControllers	    = @"OROrcaControllers";
 static NSString* ORTaskMasterVisibleKey = @"ORTaskMasterVisibleKey";
 static NSString* ORDocumentScaleFactor  = @"ORDocumentScaleFactor";
 
-- (NSData *)dataRepresentationOfType:(NSString *)type
+- (NSData *)dataOfType:(NSString *)type error:(NSError **)outError
 {
 	//special case -- if the config file came from a fall back config, then we won't store it as the last file
 	NSString* lastFile = [[NSUserDefaults standardUserDefaults] stringForKey:@"config"];
@@ -474,8 +474,7 @@ static NSString* ORDocumentScaleFactor  = @"ORDocumentScaleFactor";
 	afterSaveSelector = aSelector;
 }
 
-
-- (BOOL)loadDataRepresentation:(NSData *)data ofType:(NSString *)type
+- (BOOL)readFromData:(NSData *)data ofType:(NSString *)type error:(NSError **)outError;
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"ORStartUpMessage"
 														object:self
