@@ -20,7 +20,7 @@
 #ifndef FilterScript_h
 #define  FilterScript_h
 
-extern int FilterScriptYYINPUT(char* theBuffer,int maxSize);
+extern int FilterScriptYYINPUT(char* theBuffer,unsigned long maxSize);
 #undef YY_INPUT
 #define YY_INPUT(b,r,s) (r = FilterScriptYYINPUT(b,s))
 

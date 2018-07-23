@@ -70,9 +70,9 @@ extern int32_t numFilterLines;
 extern BOOL parsedSuccessfully;
 
 ORFilterModel* theFilterRunner = nil;
-int FilterScriptYYINPUT(char* theBuffer,int maxSize) 
+int FilterScriptYYINPUT(char* theBuffer,unsigned long maxSize) 
 {
-	return [theFilterRunner yyinputToBuffer:theBuffer withSize:maxSize];
+	return [theFilterRunner yyinputToBuffer:theBuffer withSize:(int)maxSize];
 }
 int ex(nodeType*, id);
 int filterGraph(nodeType*);
