@@ -208,7 +208,8 @@ NSString* severityName[kNumAlarmSeverityTypes] = {
 
 - (void) clearAlarm
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORAlarmWasClearedNotification object:self];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:ORAlarmWasClearedNotification object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORAlarmWasClearedNotification object:self];
 }
 
 - (void) setIsPosted:(BOOL)state

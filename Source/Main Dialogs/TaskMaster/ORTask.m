@@ -77,8 +77,14 @@ NSString* ORTaskDidFinishNotification   = @"ORTaskDidFinishNotification";
         delegate = nil;
     }
     
-    [extraView removeFromSuperview];
-    [view removeFromSuperview];
+    if(![NSThread isMainThread]){
+        [view performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:YES];
+        [extraView performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:YES];
+    }
+    else {
+        [view removeFromSuperview];
+        [extraView removeFromSuperview];
+    }
     [title release];
     [[ORTaskMaster sharedTaskMaster] removeTask:self];
     [topLevelObjects release];

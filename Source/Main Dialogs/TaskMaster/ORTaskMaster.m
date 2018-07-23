@@ -64,6 +64,10 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(TaskMaster);
 
 - (void) removeTask:(ORTask*)aTask
 {
+    if(![NSThread isMainThread]){
+        [self performSelectorOnMainThread:@selector(removeTask:) withObject:aTask waitUntilDone:YES];
+        return;
+    }
     [[aTask view] removeFromSuperview];
     [self tileTaskViews];
 }
