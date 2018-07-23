@@ -73,7 +73,10 @@ NSString* ORFolderPercentDoneChanged                = @"ORFolderPercentDoneChang
 - (void) dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [view removeFromSuperview];
+    if(![NSThread isMainThread]){
+        [view performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:YES];
+    }
+    else [view removeFromSuperview];
     [title release];
     [remoteHost release];
     [remotePath release];
