@@ -41,7 +41,7 @@
 	NSPoint aPoint = NSMakePoint(85,105);
 	[stringsImage drawAtPoint:aPoint fromRect:[stringsImage imageRect] operation:NSCompositingOperationSourceOver fraction:1.0];
 
-    [self drawString:[NSString stringWithFormat:@"Cryo #%d",tag+1] atPoint:NSMakePoint( 3, 167)];
+    [self drawString:[NSString stringWithFormat:@"Cryo #%lu",tag+1] atPoint:NSMakePoint( 3, 167)];
     [self drawString:@"A" atPoint:NSMakePoint( 75, 160)];
     [self drawString:@"B" atPoint:NSMakePoint(115, 160)];
     [self drawString:@"C" atPoint:NSMakePoint( 75, 150)];
