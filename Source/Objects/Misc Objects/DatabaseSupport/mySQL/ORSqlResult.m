@@ -86,7 +86,7 @@ NSDate* MCPYear0000;
 - (id) fetchRowAsType:(MCPReturnType) aType
 {
     MYSQL_ROW		theRow;
-    uint32_t*	theLengths;
+    unsigned long*	theLengths;
     MYSQL_FIELD*	theField;
     int				i;
     id				theReturn;
