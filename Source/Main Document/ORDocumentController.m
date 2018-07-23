@@ -204,6 +204,10 @@ NSInteger sortListDnFunc(id element1,id element2, void* context){return [element
 
 - (void) updateWindow
 {
+    if(![NSThread isMainThread]){
+        [self performSelectorOnMainThread:@selector(updateWindow) withObject:nil waitUntilDone:YES];
+        return;
+    }
     [groupView setNeedsDisplay:YES];
     [self statusTextChanged:nil];
     [self productionModeChanged:nil];
