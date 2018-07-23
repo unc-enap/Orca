@@ -57,7 +57,7 @@ typedef struct IpeRegisterNamesStruct {
 - (Class) guardianClass;
 - (NSString*) cardSlotChangedNotification;
 - (NSString*) identifier;
-- (NSUInteger) stationNumber;
+- (int) stationNumber;
 - (uint32_t)   exceptionCount;
 - (void)clearExceptionCount;
 - (void)incExceptionCount;

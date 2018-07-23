@@ -380,7 +380,7 @@ static enum  {
 - (unsigned short) readGain:(int)i;
 - (void) writeTriggerControl;
 - (BOOL) partOfEvent:(short)chan;
-- (NSUInteger) stationNumber;
+- (int) stationNumber;
 - (uint32_t) eventMask;
 - (void) eventMask:(uint32_t)aMask;
 - (NSString*) boardTypeName:(int)aType;

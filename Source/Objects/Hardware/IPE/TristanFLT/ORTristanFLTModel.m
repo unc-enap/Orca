@@ -89,7 +89,7 @@ NSString* ORTristanFLTSettingsLock                   = @"ORTristanFLTSettingsLoc
 
 //'stationNumber' returns the logical number of the FLT (FLT#) (1...20),
 //method 'slot' returns index (0...9,11-20) of the FLT, so it represents the position of the FLT in the crate. 
-- (NSUInteger) stationNumber
+- (int) stationNumber
 {
 	//is it a minicrate?
 	if([[[self crate] class]  isSubclassOfClass: NSClassFromString(@"ORIpeV4MiniCrateModel")]){

@@ -983,7 +983,7 @@ snopGreenColor;
     waitingForBuffersAlert = [[[NSAlert alloc] init] autorelease];
     [waitingForBuffersAlert setMessageText:s];
     [waitingForBuffersAlert addButtonWithTitle:@"Force Stop and LOSE DATA!"];
-    [waitingForBuffersAlert setAlertStyle:NSInformationalAlertStyle];
+    [waitingForBuffersAlert setAlertStyle:NSAlertStyleInformational];
     [waitingForBuffersAlert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if (result == NSAlertFirstButtonReturn) {
             [model abortWaitingForBuffers]; // don't wait for buffers to clear

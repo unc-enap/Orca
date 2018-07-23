@@ -29,8 +29,8 @@
 #pragma mark •••Accessors
 - (NSString*) cardSlotChangedNotification;
 - (Class)	guardianClass;
-- (NSUInteger) tagBase;
-- (NSUInteger) stationNumber;
+- (int) tagBase;
+- (int) stationNumber;
 - (NSString*) fullID;
 - (void) guardian:(id)aGuardian positionConnectorsForCard:(id)aCard;
 - (void) guardianRemovingDisplayOfConnectors:(id)aGuardian;

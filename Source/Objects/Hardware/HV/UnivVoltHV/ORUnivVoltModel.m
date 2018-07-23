@@ -1243,7 +1243,7 @@ NSString* UVkWrite = @"W";
 }
 
 //Added the following during a sweep to put the CrateView functionality into the Crate  objects MAH 11/18/08
-- (NSUInteger) stationNumber
+- (int) stationNumber
 {
 	int station = [[self crate] maxNumberOfObjects] - [self slot] - 1;
 	return( station );

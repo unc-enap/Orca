@@ -50,7 +50,7 @@
 - (NSUInteger) tagBase;
 - (NSString*) cardSlotChangedNotification;
 - (NSString*) identifier;
-- (NSUInteger)  stationNumber;
+- (int)  stationNumber;
 - (BOOL) cmdResponse;
 - (void) setCmdResponse:(BOOL)aValue;
 - (BOOL) cmdAccepted;

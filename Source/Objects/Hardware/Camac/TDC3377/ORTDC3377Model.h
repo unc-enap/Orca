@@ -36,7 +36,7 @@
         
         //place to cache some stuff for alittle more speed.
         uint32_t 	unChangingDataPart;
-        unsigned short cachedStation;
+        int cachedStation;
 		int controlMode;
 		unsigned short controlReg0;
 		unsigned short controlReg1;

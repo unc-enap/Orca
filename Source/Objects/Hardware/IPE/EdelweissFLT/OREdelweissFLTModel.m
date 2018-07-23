@@ -347,7 +347,7 @@ static IpeRegisterNamesStruct regV4[kFLTV4NumRegs] = {
 	return (eventMask & (1L<<chan)) != 0;
 }
 
-- (NSUInteger) stationNumber //counts FLT #: 1, 2, 3, ... (slot: 0, 1, ... SLT gap ... )
+- (int) stationNumber //counts FLT #: 1, 2, 3, ... (slot: 0, 1, ... SLT gap ... )
 {
 	//is it a minicrate?
 	if([[[self crate] class]  isSubclassOfClass: NSClassFromString(@"ORIpeV4MiniCrateModel")]){
@@ -4546,7 +4546,7 @@ for(chan=0; chan<6;chan++)
 	configStruct->card_info[index].hw_mask[0] 	= dataId;					//record id for energies
 	configStruct->card_info[index].hw_mask[1] 	= waveFormId;				//record id for the waveforms
 	configStruct->card_info[index].hw_mask[2] 	= histogramId;				//record id for the histograms
-	configStruct->card_info[index].slot			= (uint32_t)[self stationNumber];		//the PMC readout uses col 0 thru n
+	configStruct->card_info[index].slot			= [self stationNumber];		//the PMC readout uses col 0 thru n
 	configStruct->card_info[index].crate		= [self crateNumber];
 //DEBUG OUTPUT: 
 	NSLog(@"    %@::%@:slot %i, crate %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd), [self stationNumber], [self crateNumber]);//TODO: DEBUG testing ...-tb-

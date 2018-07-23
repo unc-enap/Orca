@@ -1528,7 +1528,7 @@ static int              sChannelsNotChangedCount = 0;
 	return theAveCurrent;
 }
 
-- (NSUInteger) stationNumber
+- (int) stationNumber
 {
 	//we have a weird mapping because fec cards can only be in slots 1-16 and they are mapped to 0 - 15
 	return [[self crate] maxNumberOfObjects] - [self slot] - 2;

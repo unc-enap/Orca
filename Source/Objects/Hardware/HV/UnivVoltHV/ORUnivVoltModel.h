@@ -99,7 +99,7 @@ typedef enum hveStatus hveStatus;
 - (float)  HVLimit: (int) aCurrentChnl;
 - (bool) areAlarmsEnabled;
 - (void) enableAlarms: (bool) aFlag;
-- (NSUInteger) stationNumber;
+- (int) stationNumber;
 - (int) numPointsInCB: (int)aChnl; //mah -- added to get the actual number of plots in CB rather
 - (bool) updateFirst: (int) aCurrentChnl;
 

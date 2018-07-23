@@ -113,12 +113,12 @@ NSString* ORIpeCardExceptionCountChanged		= @"ORIpeCardExceptionCountChanged";
 
 - (NSString*) identifier
 {
-    return [NSString stringWithFormat:@"station %d",(int)[self stationNumber]];
+    return [NSString stringWithFormat:@"station %d",[self stationNumber]];
 }
 
-- (NSUInteger) stationNumber
+- (int) stationNumber
 {
-    return [self tag]+1;
+    return (int)[self tag]+1;
 }
 - (int) displayedSlotNumber
 {

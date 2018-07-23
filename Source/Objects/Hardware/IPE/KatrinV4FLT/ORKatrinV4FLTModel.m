@@ -187,7 +187,7 @@ static NSString* fltTestName[kNumKatrinV4FLTTests]= {
 
 //'stationNumber' returns the logical number of the FLT (FLT#) (1...20),
 //method 'slot' returns index (0...9,11-20) of the FLT, so it represents the position of the FLT in the crate. 
-- (NSUInteger) stationNumber
+- (int) stationNumber
 {
 	//is it a minicrate?
 	if([[[self crate] class]  isSubclassOfClass: NSClassFromString(@"ORIpeV4MiniCrateModel")]){
@@ -1930,8 +1930,8 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
                 aPacket.cmdHeader.numberBytesinPayload    = (kNumV4FLTChannels + 5)*sizeof(int32_t);
                 
                 katrinV4_HitRateStructure* p = (katrinV4_HitRateStructure*) aPacket.payload;
-                p->station      = (uint32_t)[self stationNumber];
-                p->enabledMask  = (uint32_t)hitRateEnabledMask;
+                p->station      = [self stationNumber];
+                p->enabledMask  = hitRateEnabledMask;
                 p->seconds      = 0;
                 p->subSeconds   = 0;
 

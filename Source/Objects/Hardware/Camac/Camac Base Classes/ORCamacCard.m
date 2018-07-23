@@ -51,7 +51,7 @@ NSString* ORCamacCardSlotChangedNotification 	= @"ORCamacCardSlotChangedNotifica
 
 - (NSString*) identifier
 {
-    return [NSString stringWithFormat:@"station %d",(uint32_t)[self stationNumber]];
+    return [NSString stringWithFormat:@"station %d",[self stationNumber]];
 }
 
 - (int) slot
@@ -59,9 +59,9 @@ NSString* ORCamacCardSlotChangedNotification 	= @"ORCamacCardSlotChangedNotifica
 	return (int)[self tag];
 }
 
-- (NSUInteger) stationNumber
+- (int) stationNumber
 {
-    return [self tag]+1;
+    return (int)([self tag])+1;
 }
 
 - (BOOL)    cmdResponse
