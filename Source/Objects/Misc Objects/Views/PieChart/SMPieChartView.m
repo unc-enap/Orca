@@ -522,11 +522,11 @@ static NSDictionary *_sm_local_defaultSliceAttributes( unsigned int inSliceIndex
 - (id)delegate
 {	return delegate;	}
 
-- (void)setTag:(int)inTag
-{	myPrivateData->tag = inTag;	}
+- (void)setTag:(NSInteger)inTag
+{	myPrivateData->tag = (int)inTag;	}
 
-- (int)tag
-{	return myPrivateData->tag;	}
+- (NSInteger)tag
+{	return (NSInteger)myPrivateData->tag;	}
 
 - (void)setBackgroundColor:(NSColor *)inColor
 {

@@ -72,7 +72,7 @@ enum A3818UserClientCommandCodes {
 
 typedef struct A3818ConfigStruct
 {
-    UInt32 int32[64];
+    uint32_t int32[64];
 } A3818ConfigStruct;
 
 // A3818 CSR definitions - offsets from I/O base address

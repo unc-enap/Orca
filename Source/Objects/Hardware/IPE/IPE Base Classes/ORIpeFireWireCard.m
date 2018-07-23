@@ -236,7 +236,7 @@ NSString* ORIpePBusSimChanged		= @"ORIpePBusSimChanged";
 }
 
 
-- (void) read:(uint64_t) address data:(uint32_t*)theData size:(UInt32)len;
+- (void) read:(uint64_t) address data:(uint32_t*)theData size:(uint32_t)len;
 { 
 	if([fireWireInterface serviceAlive]) {
 	    [fireWireInterface read_raw:address data:theData size:len];

@@ -19,7 +19,7 @@ extern "C"{
 
 typedef unsigned char uint8;
 typedef unsigned short uint16_t;
-typedef unsigned int uint32;
+typedef unsigned int uint32_t;
 
 //Structure for storing calibration constants
 struct U6_CALIBRATION_INFORMATION {
@@ -174,7 +174,7 @@ int32_t getAinVoltCalibrated( u6CalibrationInfo *caliInfo,
                            int resolutionIndex,
                            int gainIndex,
                            int bits24,
-                           uint32 bytesVolt,
+                           uint32_t bytesVolt,
                            double *analogVolt);
 //Translates the binary AIN reading from the U6 to a voltage value (calibrated)
 //in Volts.  Call getCalibrationInfo first to set up caliInfo.  Returns -1 on
@@ -218,7 +218,7 @@ int32_t getTempKCalibrated( u6CalibrationInfo *caliInfo,
                          int resolutionIndex,
                          int gainIndex,
                          int bits24,
-                         uint32 bytesTemp,
+                         uint32_t bytesTemp,
                          double *kelvinTemp);
 //Translates the binary reading from the U6 to a temperature value
 //(calibrated) in Kelvin.  Call getCalibrationInfo first to set up caliInfo.
@@ -249,7 +249,7 @@ int32_t getTdacBinVoltCalibrated( u6TdacCalibrationInfo *caliInfo,
 int32_t getAinVoltUncalibrated( int resolutionIndex,
                              int gainIndex,
                              int bits24,
-                             uint32 bytesVolt,
+                             uint32_t bytesVolt,
                              double *analogVolt);
 //Translates the binary AIN reading from the U6 to a voltage value
 //(uncalibrated) in Volts.  Returns -1 on error, 0 on success.
@@ -285,7 +285,7 @@ int32_t getDacBinVoltUncalibrated16Bit( int dacNumber,
 int32_t getTempKUncalibrated( int resolutionIndex,
                            int gainIndex,
                            int bits24,
-                           uint32 bytesTemp,
+                           uint32_t bytesTemp,
                            double *kelvinTemp);
 //Translates the binary reading from the U6, to a temperature value
 //(uncalibrated) in Kelvin.

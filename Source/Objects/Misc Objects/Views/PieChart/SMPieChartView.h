@@ -121,12 +121,12 @@ typedef enum _SMLabelPosition {
     @discussion	Sets the tag of the receiver to inTag.  This is an integer you can use for whatever you'd like.
     @param	inTag	The new tag of the receiver.
 */
-- (void)setTag:(int)inTag;
+- (void)setTag:(NSInteger)inTag;
 /*!	@method	tag
     @discussion	Returns the tag of the receiver.  This is an integer you can use for whatever you'd like.
     @result	The tag of the receiver.
 */
-- (int)tag;
+- (NSInteger)tag;
 
 /*!	@method	setBackgroundColor:
     @discussion	Sets the receiver's background color to aColor.  The default is white.  If set to nil, no

@@ -193,7 +193,7 @@ NSString* totalRatePlotChanged                      = @"totalRatePlotChanged";
             
         [runTypes release];
         //[jsonStr release];
-        [runTypesView release];
+        //[runTypesView release];
   //  }
     
     [urlName release];
@@ -393,7 +393,7 @@ NSString* totalRatePlotChanged                      = @"totalRatePlotChanged";
     //[jsonStr release];
     [urlName release];
     [responseData release];
-    [jsonServer release];
+    //[jsonServer release];
     [serverRows release];
 }
 
@@ -740,7 +740,7 @@ NSString* totalRatePlotChanged                      = @"totalRatePlotChanged";
 		[slowControlEntry release];
 	}
     
-    [jsonSlowControlVariablesView release];
+    //[jsonSlowControlVariablesView release];
     [slowControlVariablesView release];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:slowControlTableChanged object:self];

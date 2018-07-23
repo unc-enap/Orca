@@ -56,7 +56,7 @@
 
 
 - (uint32_t) read:(uint32_t) address;
-- (void) read:(uint64_t) address data:(uint32_t*)theData size:(UInt32)len;
+- (void) read:(uint64_t) address data:(uint32_t*)theData size:(uint32_t)len;
 
 - (void) write:(uint32_t) address 
 			   value:(uint32_t)aValue;

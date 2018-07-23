@@ -142,11 +142,11 @@ HANDLE openUSBConnection(int searchValue, BOOL verbose) //-1 is probe only
 {
     BYTE sendBuffer[26], recBuffer[38];
     uint16_t checksumTotal = 0;
-    uint32 dev = 0;
+    uint32_t dev = 0;
     int i;
     HANDLE hDevice = 0;
 
-    uint32 numDevices = LJUSB_GetDevCount(U6_PRODUCT_ID);
+    uint32_t numDevices = LJUSB_GetDevCount(U6_PRODUCT_ID);
     if( numDevices == 0 ){
         NSLog(@"Open error: No U6 devices could be found\n");
         return NULL;
@@ -400,23 +400,23 @@ int32_t getTdacCalibrationInfo(HANDLE hDevice, u6TdacCalibrationInfo *caliInfo, 
 
 double FPuint8ArrayToFPDouble(uint8 *buffer, int startIndex)
 {
-    uint32 resultDec = 0, resultWh = 0;
+    uint32_t resultDec = 0, resultWh = 0;
 
-    resultDec = (uint32)buffer[startIndex] |
-                ((uint32)buffer[startIndex + 1] << 8) |
-                ((uint32)buffer[startIndex + 2] << 16) |
-                ((uint32)buffer[startIndex + 3] << 24);
+    resultDec = (uint32_t)buffer[startIndex] |
+                ((uint32_t)buffer[startIndex + 1] << 8) |
+                ((uint32_t)buffer[startIndex + 2] << 16) |
+                ((uint32_t)buffer[startIndex + 3] << 24);
 
-    resultWh = (uint32)buffer[startIndex + 4] |
-                ((uint32)buffer[startIndex + 5] << 8) |
-                ((uint32)buffer[startIndex + 6] << 16) |
-                ((uint32)buffer[startIndex + 7] << 24);
+    resultWh = (uint32_t)buffer[startIndex + 4] |
+                ((uint32_t)buffer[startIndex + 5] << 8) |
+                ((uint32_t)buffer[startIndex + 6] << 16) |
+                ((uint32_t)buffer[startIndex + 7] << 24);
 
     return ( (double)((int)resultWh) + (double)(resultDec)/4294967296.0 );
 }
 
 
-int32_t getAinVoltCalibrated(u6CalibrationInfo *caliInfo, int resolutionIndex, int gainIndex, int bits24, uint32 bytesVolt, double *analogVolt)
+int32_t getAinVoltCalibrated(u6CalibrationInfo *caliInfo, int resolutionIndex, int gainIndex, int bits24, uint32_t bytesVolt, double *analogVolt)
 {
     double value = 0;
     int indexAdjust = 0;
@@ -456,7 +456,7 @@ int32_t getDacBinVoltCalibrated8Bit(u6CalibrationInfo *caliInfo, int dacNumber, 
 
 int32_t getDacBinVoltCalibrated16Bit(u6CalibrationInfo *caliInfo, int dacNumber, double analogVolt, uint16_t *bytesVolt16)
 {
-    uint32 dBytesVolt;
+    uint32_t dBytesVolt;
 
     if( isCalibrationInfoValid(caliInfo) == 0 )return -1;
 
@@ -476,7 +476,7 @@ int32_t getDacBinVoltCalibrated16Bit(u6CalibrationInfo *caliInfo, int dacNumber,
 }
 
 
-int32_t getTempKCalibrated(u6CalibrationInfo *caliInfo, int resolutionIndex, int gainIndex, int bits24, uint32 bytesTemp, double *kelvinTemp)
+int32_t getTempKCalibrated(u6CalibrationInfo *caliInfo, int resolutionIndex, int gainIndex, int bits24, uint32_t bytesTemp, double *kelvinTemp)
 {
     double value;
 
@@ -489,7 +489,7 @@ int32_t getTempKCalibrated(u6CalibrationInfo *caliInfo, int resolutionIndex, int
 
 int32_t getTdacBinVoltCalibrated(u6TdacCalibrationInfo *caliInfo, int dacNumber, double analogVolt, uint16_t *bytesVolt)
 {
-    uint32 dBytesVolt;
+    uint32_t dBytesVolt;
 
     if( isTdacCalibrationInfoValid(caliInfo) == 0 )return -1;
 
@@ -510,7 +510,7 @@ int32_t getTdacBinVoltCalibrated(u6TdacCalibrationInfo *caliInfo, int dacNumber,
 }
 
 
-int32_t getAinVoltUncalibrated(int resolutionIndex, int gainIndex, int bits24, uint32 bytesVolt, double *analogVolt)
+int32_t getAinVoltUncalibrated(int resolutionIndex, int gainIndex, int bits24, uint32_t bytesVolt, double *analogVolt)
 {
     return getAinVoltCalibrated(&U6_CALIBRATION_INFO_DEFAULT, resolutionIndex, gainIndex, bits24, bytesVolt, analogVolt);
 }
@@ -528,7 +528,7 @@ int32_t getDacBinVoltUncalibrated16Bit(int dacNumber, double analogVolt, uint16_
 }
 
 
-int32_t getTempKUncalibrated(int resolutionIndex, int gainIndex, int bits24, uint32 bytesTemp, double *kelvinTemp)
+int32_t getTempKUncalibrated(int resolutionIndex, int gainIndex, int bits24, uint32_t bytesTemp, double *kelvinTemp)
 {
     return getTempKCalibrated(&U6_CALIBRATION_INFO_DEFAULT, resolutionIndex, gainIndex, bits24, bytesTemp, kelvinTemp);
 }
@@ -537,7 +537,7 @@ int32_t I2C(HANDLE hDevice, uint8 I2COptions, uint8 SpeedAdjust, uint8 SDAPinNum
 {
     uint8 *sendBuff, *recBuff;
     uint16_t checksumTotal = 0;
-    uint32 ackArrayTotal, expectedAckArray;
+    uint32_t ackArrayTotal, expectedAckArray;
     uint32_t sendChars, recChars;
     int sendSize, recSize, i, ret;
 
@@ -649,7 +649,7 @@ int32_t eAIN(HANDLE Handle, u6CalibrationInfo *CalibrationInfo, int32_t ChannelP
 {
     uint8 diff, gain, Errorcode, ErrorFrame;
     uint8 sendDataBuff[4], recDataBuff[5];
-    uint32 bytesV;
+    uint32_t bytesV;
 
     if( isCalibrationInfoValid(CalibrationInfo) == 0 ){
         NSLog(@"eAIN error: Invalid calibration information.\n");
@@ -706,7 +706,7 @@ int32_t eAIN(HANDLE Handle, u6CalibrationInfo *CalibrationInfo, int32_t ChannelP
     if( ehFeedback(Handle, sendDataBuff, 4, &Errorcode, &ErrorFrame, recDataBuff, 5) < 0 )return -1;
     if( Errorcode )return (int32_t)Errorcode;
 
-    bytesV = recDataBuff[0] + ((uint32)recDataBuff[1])*256 + ((uint32)recDataBuff[2])*65536;
+    bytesV = recDataBuff[0] + ((uint32_t)recDataBuff[1])*256 + ((uint32_t)recDataBuff[2])*65536;
     gain = recDataBuff[3]/16;
 
     if( Binary != 0 ){

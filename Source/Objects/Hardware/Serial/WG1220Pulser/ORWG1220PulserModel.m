@@ -736,18 +736,19 @@ NSString* ORWG1220PulserLock = @"ORWG1220PulserLock";
 - (NSData*) attenuationCommand:(float) aamplitude
 {
   unsigned char cmdData[7];
-  NSString* attenuationInfo = [NSString stringWithFormat:@"set this string"];
+    cmdData[2] = '0';
+    //NSString* attenuationInfo = [NSString stringWithFormat:@"set this string"];
   if (aamplitude <= dampedMax){
     cmdData[2] = '1';
-    attenuationInfo = [NSString stringWithFormat:@"attenuated"];
+   // attenuationInfo = [NSString stringWithFormat:@"attenuated"];
   }
   else if( aamplitude > dampedMax){
     cmdData[2] = '2';
-    attenuationInfo = [NSString stringWithFormat:@"not attenuated"];
+   // attenuationInfo = [NSString stringWithFormat:@"not attenuated"];
   }
   if (aamplitude == 0){
     cmdData[2] = '0';
-    attenuationInfo = [NSString stringWithFormat:@"off"];
+   // attenuationInfo = [NSString stringWithFormat:@"off"];
   }
 
   cmdData[0] = 'X';
@@ -759,7 +760,6 @@ NSString* ORWG1220PulserLock = @"ORWG1220PulserLock";
   cmdData[6] = cmdData[1] ^  cmdData[2] ^ cmdData[3] ^ cmdData[4] ^ cmdData[5];
 
   return [NSData dataWithBytes:cmdData length:7];
-
 }
 
 - (NSData*) amplitudeCommand:(float) aamplitude

@@ -81,12 +81,12 @@ NSString* ORUSBRegisteredObjectChanged	= @"ORUSBRegisteredObjectChanged";
     vendor = aVendor;
 }
 
-- (UInt32) locationID
+- (uint32_t) locationID
 {
     return locationID;
 }
 
-- (void) setLocationID:(UInt32)aLocationID
+- (void) setLocationID:(uint32_t)aLocationID
 {
     locationID = aLocationID;
 }
@@ -104,7 +104,7 @@ NSString* ORUSBRegisteredObjectChanged	= @"ORUSBRegisteredObjectChanged";
 
 - (NSString*) serialNumber
 {
-	if([serialNumber isEqualToString:@"0"])return [NSString stringWithFormat:@"0x%8x", locationID];
+	if([serialNumber isEqualToString:@"0"])return [NSString stringWithFormat:@"0x%8lx", (unsigned long)locationID];
     else return serialNumber;
 }
 
@@ -189,7 +189,7 @@ NSString* ORUSBRegisteredObjectChanged	= @"ORUSBRegisteredObjectChanged";
 		//(*interface)->ResetPipe(interface,inPipe);
 		
 		//startUp Interrupt handling
-		//UInt32 numBytesRead = sizeof(_recieveBuffer); // leave one byte at the end for NUL termination
+		//uint32_t numBytesRead = sizeof(_recieveBuffer); // leave one byte at the end for NUL termination
 		//bzero(&_recieveBuffer, numBytesRead);
 		//kr = (*interface)->ReadPipeAsync(interface, inPipe, &_recieveBuffer, numBytesRead, (IOAsyncCallback1)_interruptRecieved, self);
 		
@@ -213,7 +213,7 @@ NSString* ORUSBRegisteredObjectChanged	= @"ORUSBRegisteredObjectChanged";
 	kr = (*interface)->ResetPipe(interface,pipe);
 
 	//startUp Interrupt handling
-	UInt32 numBytesRead = 1024; // leave one byte at the end for NUL termination
+	uint32_t numBytesRead = 1024; // leave one byte at the end for NUL termination
 	bzero(receiveBuffer, numBytesRead);
 	kr = (*interface)->ReadPipeAsync(interface,pipe, receiveBuffer, numBytesRead, (IOAsyncCallback1)_interruptRecieved, self);
 	
@@ -275,9 +275,9 @@ readon:
 		char buffer[512];
 		USB488Header* hp;
 		
-		uint32_t commandLength =  (uint32_t)[aCommand length];
+		uint32_t commandLength = (uint32_t)[aCommand length];
 		
-		uint32_t unpaddedLength = commandLength + sizeof(USB488Header);
+		uint32_t unpaddedLength = (uint32_t)(commandLength + sizeof(USB488Header));
 		uint32_t paddedLength;
 		if(unpaddedLength%4 != 0){
 			paddedLength = ((unpaddedLength + 4)/4)*4;	
@@ -314,7 +314,7 @@ readon:
 	[self writeBytes:bytes length:length pipe:0];
 }
 
-- (void) writeBytes:(void*)bytes length:(uint32_t)length pipe:(int)aPipeIndex
+- (void) writeBytes:(void*)bytes length:(uint32_t)length pipe:(uint32_t)aPipeIndex
 {
 	[usbLock lock];
 	uint8_t pipe;
@@ -388,7 +388,8 @@ readon:
     [usbLock lock];
 	uint32_t actualRead = amountRead;
 	uint8_t pipe = inPipes[aPipeIndex];
-	
+
+ //   IOReturn (*ReadPipeTO)(void *self, UInt8 pipeRef, void *buf, uint32_t *size, uint32_t noDataTimeout, uint32_t completionTimeout);
 	IOReturn kr = (*interface)->ReadPipeTO(interface, pipe, bytes, &actualRead, 1000, 1000);
 	if(kr)	{
 		kr = (*interface)->GetPipeStatus(interface, pipe);
@@ -588,7 +589,7 @@ readon:
 		s = [s stringByAppendingFormat:@"SW Object: %@\n",[registeredObject className]];
 	}
 	else      s = [s stringByAppendingString:@"SW Object: ---\n"];
-	s = [s stringByAppendingFormat:@"Location : 0x%x\n",(unsigned int)locationID];
+	s = [s stringByAppendingFormat:@"Location : 0x%lx\n",(unsigned long)locationID];
 	if(serialNumber){
 		s = [s stringByAppendingFormat:@"Serial # : %@\n",serialNumber];
 	}

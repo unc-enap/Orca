@@ -35,15 +35,15 @@
 #pragma mark •••Type Defs
 typedef struct A3818ConfigStructUser
 {
-    UInt32 int32[64];
+    uint32_t int32[64];
 } A3818ConfigStructUser;
 
 
 typedef struct MapRegisterStructUser
 {
-    UInt32 *userAddress;
-    UInt32 vmeAddress;
-    UInt32 numberBytes;
+    uint32_t *userAddress;
+    uint32_t vmeAddress;
+    uint32_t numberBytes;
     uint16_t addressModifier;
     uint16_t addressSpace; 
     uint8_t accessWidth;

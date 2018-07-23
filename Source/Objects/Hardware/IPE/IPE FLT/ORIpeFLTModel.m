@@ -1413,7 +1413,7 @@ static NSString* fltTestName[kNumIpeFLTTests]= {
 					// documentation says 1000 data words followed by 24 words not used
 					[fireWireCard read:addr
                                   data:wPtr
-                                  size:(UInt32)fltSize*sizeof(UInt32)];
+                                  size:(uint32_t)fltSize*sizeof(uint32_t)];
 					
 					// Remove the flags
 					// TODO: Add a control to enable or disable flags in the data

@@ -302,7 +302,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(USB);
 	uint16_t			vendor;
 	uint16_t			product;
 	uint16_t			release;
-	UInt32			locationID;
+	uint32_t			locationID;
 	
     while ((usbDevice = IOIteratorNext(iterator))){
 		IOCFPlugInInterface**	    plugInInterface=NULL;
@@ -673,7 +673,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(USB);
 			[NSException raise: @"USB Exception" format:@"IOServiceAddInterestNotification returned 0x%08x\n", kr];
 		}
 		//startUp Interrupt handling
-		//        UInt32 numBytesRead = sizeof(_recieveBuffer); // leave one byte at the end for NUL termination
+		//        uint32_t numBytesRead = sizeof(_recieveBuffer); // leave one byte at the end for NUL termination
 		//        bzero(&_recieveBuffer, numBytesRead);
 		//        kr = (*intf)->ReadPipeAsync(intf, kInPipe, &_recieveBuffer, numBytesRead, (IOAsyncCallback1)_interruptRecieved, this);
 		

@@ -2695,12 +2695,12 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 
 - (void) readSocket:(int)aSocket buffer:(SBC_Packet*)aPacket
 {
-	ssize_t n;
+    ssize_t n;
     int  selectionResult = 0;
 	int32_t numBytesToGet = 0;
 	time_t t1 = time(0);
 	do {
-		n = recv(aSocket, &numBytesToGet, sizeof(numBytesToGet), 0);
+		n = (int32_t)recv(aSocket, &numBytesToGet, sizeof(numBytesToGet), 0);
 		if(n<0 && (errno == EAGAIN || errno == EINTR)){
 			int timeout = [self errorTimeOutSeconds];
 			if(timeout>0){
@@ -2744,7 +2744,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
             if(selectionResult > 0){
 				time_t t1 = time(0);
 				do {
-					n = recv(aSocket, ptrToNumBytesToGet, numToGet, 0);	
+					n = (int)recv(aSocket, ptrToNumBytesToGet, numToGet, 0);	
 					if(n<0 && (errno == EAGAIN || errno == EINTR)){
 						int timeout = [self errorTimeOutSeconds];
 						if(timeout>0){
@@ -2778,9 +2778,10 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
             
         }
     }
-	bytesReceived += sizeof(numBytesToGet);
-	numBytesToGet -= sizeof(numBytesToGet);
-	
+    //first word is the length of the packet
+    bytesReceived += sizeof(numBytesToGet);
+    numBytesToGet -= sizeof(numBytesToGet);
+
 	char* packetPtr = (char*)&aPacket->cmdHeader;
 	while(numBytesToGet){
 		// The loop is to ignore EAGAIN and EINTR errors as these are harmless 
@@ -2941,6 +2942,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 	totalMeasurements++;
 	[timer release];
 	
+
 	uint32_t* rp = (uint32_t*)aPacket->payload;
 	int32_t numLongs = aPacket->cmdHeader.numberBytesinPayload/sizeof(int32_t);
 	uint32_t* endPt = rp + numLongs;

@@ -61,24 +61,24 @@
 - (void) deviceCallback:(natural_t) messageType argument:(void*)messageArgument;
 
 - (void) unLockAndRaise;
-- (void) write_raw:(uint64_t)address value:(uint32_t*)theData size:(UInt32)len;
-- (void) read_raw:(uint64_t) address data:(uint32_t*)theData size:(UInt32)len;
+- (void) write_raw:(uint64_t)address value:(uint32_t*)theData size:(uint32_t)len;
+- (void) read_raw:(uint64_t) address data:(uint32_t*)theData size:(uint32_t)len;
 
 - (void) write_raw:(uint64_t)address value:(uint32_t)aValue;
 - (uint32_t) read_raw:(uint64_t) address;
 
 
 - (void) compareSwap64:(IOFireWireLibDeviceRef) addr
-		 expectedValue:(UInt32*)expectedVal
-				newVal:(UInt32*)newVal
-				oldVal:(UInt32*)oldVal
+		 expectedValue:(uint32_t*)expectedVal
+				newVal:(uint32_t*)newVal
+				oldVal:(uint32_t*)oldVal
 				  size:(IOByteCount)size
 				   abs:(BOOL) abs
 		   failOnReset:(BOOL)failOnReset
-			generation:(UInt32)generation;	
+			generation:(uint32_t)generation;	
 
 - (void) busReset;														
-- (void) getBusGeneration:(UInt32*) generation;						
+- (void) getBusGeneration:(uint32_t*) generation;						
 - (void) getLocalNodeIDWithGeneration:(uint32_t) checkGeneration
 						  localNodeID:(unsigned short*) localNodeID;
 

@@ -74,7 +74,7 @@ enum Bit3UserClientCommandCodes {
 
 typedef struct PCIConfigStruct
 {
-    UInt32 int32[64];
+    uint32_t int32[64];
 } PCIConfigStruct;
 
 // Bit3 CSR definitions - offsets from I/O base address

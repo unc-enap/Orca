@@ -66,8 +66,8 @@
 #import <AvailabilityMacros.h>
 
 // static variables
-static UInt32 *fVLCReg;
-static UInt32 *fVPCICamacMem;
+static uint32_t *fVLCReg;
+static uint32_t *fVPCICamacMem;
 
 #define OExceptionCamacPowerError    @"OExceptionCamacPowerError"
 #define OExceptionCamacAccessError   @"OExceptionCamacAccessError"
@@ -385,7 +385,7 @@ static UInt32 *fVPCICamacMem;
                              kIOMapAnywhere);
     if( ret != KERN_SUCCESS ) return NO;
     
-    fVLCReg = (UInt32 *)mapLCRegisterAddress;
+    fVLCReg = (uint32_t *)mapLCRegisterAddress;
     
     
     // map PCICamac memory address space
@@ -397,7 +397,7 @@ static UInt32 *fVPCICamacMem;
                              kIOMapAnywhere);
     if( ret != KERN_SUCCESS ) return NO;
     
-    fVPCICamacMem = (UInt32 *)mapPCICamacMemoryAddress;
+    fVPCICamacMem = (uint32_t *)mapPCICamacMemoryAddress;
     
     return YES;
 }
@@ -517,8 +517,8 @@ static UInt32 *fVPCICamacMem;
 {
     if(hardwareExists){
         [theHWLock lock];   //----begin critical section
-		UInt32 lnafOffset = (UInt32)(offsetNAF(29,0,0) / 4);	// note divide by 4
-		volatile UInt32 *lPCICamacMemBase = (UInt32 *)&fVPCICamacMem[lnafOffset];
+		uint32_t lnafOffset = (uint32_t)(offsetNAF(29,0,0) / 4);	// note divide by 4
+		volatile uint32_t *lPCICamacMemBase = (uint32_t *)&fVPCICamacMem[lnafOffset];
 		
 		uint32_t led = Swap8Bits(*lPCICamacMemBase);
         [theHWLock unlock];   //----end critical section
@@ -672,7 +672,7 @@ static UInt32 *fVPCICamacMem;
         @try {
             [theHWLock lock];   //---begin critical section
             // read dataway
-            UInt32 lnafOffset = (UInt32)(offsetNAF(n,a,f) / 4);	 // note divide by 4
+            uint32_t lnafOffset = (uint32_t)(offsetNAF(n,a,f) / 4);	 // note divide by 4
             volatile uint32_t *wPCICamacMemBase = (uint32_t *)&fVPCICamacMem[lnafOffset];
             
             //The PCI-CAMAC hardware forces all NAF command writes to set
@@ -714,10 +714,10 @@ static UInt32 *fVPCICamacMem;
             [theHWLock lock];   //----begin crital section
             
             // write dataway
-            UInt32 wnafOffset = (UInt32)(offsetNAF(n,a,f) / 4);	 // note divide by 4
-            volatile UInt32 *wCC32MemBase = (UInt32 *)&fVPCICamacMem[wnafOffset];
-            UInt32 *ptrData = (UInt32 *)data;
-            UInt32 ptrOffset;
+            uint32_t wnafOffset = (uint32_t)(offsetNAF(n,a,f) / 4);	 // note divide by 4
+            volatile uint32_t *wCC32MemBase = (uint32_t *)&fVPCICamacMem[wnafOffset];
+            uint32_t *ptrData = (uint32_t *)data;
+            uint32_t ptrOffset;
             
             //The PCI-CAMAC hardware forces all NAF command writes to set
             //the F16 bit to a 1 and all NAF command reads to set the F16

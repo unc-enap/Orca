@@ -365,6 +365,7 @@ void processSBCCommand(SBC_Packet* aPacket,uint8_t reply)
             break;
 			
         case kSBC_MacAddressRequest:
+            printf("got mac address request\n");
             processMacAddressRequest(aPacket);
             break;
             
@@ -689,6 +690,7 @@ int32_t writeBuffer(SBC_Packet* aPacket)
     char* p = (char*)aPacket;
     while (numBytesToSend) {       
         int32_t bytesWritten = write(workingSocket,p,numBytesToSend);
+        printf("sent out: %d bytes out of %d\n",bytesWritten,numBytesToSend);
         /* Negative socket value indicates an error, pass it along. */
         if (bytesWritten <= 0) {
             if (errno == EPIPE) {
@@ -701,6 +703,7 @@ int32_t writeBuffer(SBC_Packet* aPacket)
         p += bytesWritten;
         numBytesToSend -= bytesWritten;
     }
+
     return numBytesToSend;
 }
 
@@ -1238,12 +1241,19 @@ void processMacAddressRequest(SBC_Packet* aPacket)
     
     char* mac = (char*)ifr.ifr_hwaddr.sa_data;
         
-    p->macAddress[0] = mac[0];
-    p->macAddress[1] = mac[1];
-    p->macAddress[2] = mac[2];
-    p->macAddress[3] = mac[3];
-    p->macAddress[4] = mac[4];
-    p->macAddress[5] = mac[5];
+//    p->macAddress[0] = mac[0];
+//    p->macAddress[1] = mac[1];
+//    p->macAddress[2] = mac[2];
+//    p->macAddress[3] = mac[3];
+//    p->macAddress[4] = mac[4];
+//    p->macAddress[5] = mac[5];
+    
+    p->macAddress[0] = 'd';
+    p->macAddress[1] = 'e';
+    p->macAddress[2] = 'a';
+    p->macAddress[3] = 'd';
+    p->macAddress[4] = 'b';
+    p->macAddress[5] = 'e';
     
     //no need to swap... just characters
     if (writeBuffer(aPacket) < 0) {

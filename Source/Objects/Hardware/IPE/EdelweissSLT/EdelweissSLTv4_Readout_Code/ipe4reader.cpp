@@ -3505,7 +3505,7 @@ void FIFOREADER::scanFIFObuffer(void)
     udpPacketLen +=4;
 
     
-    //compute packet size (360 uint32's are 1440 bytes)
+    //compute packet size (360 uint32_t's are 1440 bytes)
     int numWord32=udpDataPacketPayloadSize32()/*360*/;
     
     

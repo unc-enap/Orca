@@ -21,6 +21,6 @@
 	int tag;
 }
 - (NSUInteger) tag;
-- (void) setTag:(int)aValue;
+- (void) setTag:(NSUInteger)aValue;
 - (void) drawString:(NSString*)aString atPoint:(NSPoint)aPoint;
 @end

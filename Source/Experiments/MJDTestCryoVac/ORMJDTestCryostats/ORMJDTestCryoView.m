@@ -25,7 +25,7 @@
 {
 	return tag;
 }
-- (void) setTag:(int)aValue
+- (void) setTag:(NSUInteger)aValue
 {
 	tag = aValue;
 }

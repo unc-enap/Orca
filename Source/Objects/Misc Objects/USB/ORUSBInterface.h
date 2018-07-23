@@ -51,7 +51,7 @@ typedef struct  {
 		unsigned char				interruptInPipes[8];
 		unsigned char				interruptOutPipes[8];
 		NSString*					deviceName;
-		UInt32						locationID;
+		uint32_t						locationID;
 		uint16_t						vendor;
 		uint16_t						product;
 		io_object_t					notification;
@@ -72,7 +72,7 @@ typedef struct  {
 - (void)		writeString:(NSString*)aCommand;
 - (void)		writeUSB488Command:(NSString*)aCommand eom:(BOOL)eom;
 - (int)			readUSB488:(char*)resultData length:(uint32_t)amountRead;
-- (void)		writeBytes:(void*)bytes length:(uint32_t)length pipe:(int)aPipeIndex;
+- (void)		writeBytes:(void*)bytes length:(uint32_t)length pipe:(uint32_t)aPipeIndex;
 - (int)			readBytes:(void*)bytes length:(uint32_t)length pipe:(int)aPipeIndex;
 - (void)		writeBytes:(void*)bytes length:(uint32_t)length;
 - (int)			readBytes:(void*)bytes length:(uint32_t)amountToRead;
@@ -83,8 +83,8 @@ typedef struct  {
 - (void)		setProduct:(uint16_t)aProduct;
 - (uint16_t)		vendor;
 - (void)		setVendor:(uint16_t)aVendor;
-- (UInt32)		locationID;
-- (void)		setLocationID:(UInt32)aLocationID;
+- (uint32_t)		locationID;
+- (void)		setLocationID:(uint32_t)aLocationID;
 - (NSString*)	deviceName;
 - (void)		setDeviceName:(NSString*)aDeviceName;
 - (NSString*)	serialNumber;
