@@ -980,7 +980,7 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
     [encoder encodeObject:scriptName			forKey:@"scriptName"];
     [encoder encodeObject:inputValues			forKey:@"inputValues"];
     [encoder encodeObject:lastFile				forKey:@"lastFile"];
-    // comment out because this throws an exception of the config contains breakpoints! - PH
+    // comment out because this throws an exception if the config contains breakpoints! - PH
     //[encoder encodeObject:breakpoints			forKey:@"breakpoints"];
 }
 
