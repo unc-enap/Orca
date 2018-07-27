@@ -980,7 +980,8 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
     [encoder encodeObject:scriptName			forKey:@"scriptName"];
     [encoder encodeObject:inputValues			forKey:@"inputValues"];
     [encoder encodeObject:lastFile				forKey:@"lastFile"];
-    [encoder encodeObject:breakpoints			forKey:@"breakpoints"];
+    // comment out because this throws an exception of the config contains breakpoints! - PH
+    //[encoder encodeObject:breakpoints			forKey:@"breakpoints"];
 }
 
 - (uint32_t) currentTime
