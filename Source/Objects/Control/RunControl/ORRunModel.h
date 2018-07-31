@@ -23,6 +23,7 @@
 #import "ORBaseDecoder.h"
 #import "ORDataChainObject.h"
 #import "ORBitProcessing.h"
+#import "OROrderedObjHolding.h"
 
 #pragma mark ¥¥¥Forward Declarations
 @class ORDataPacket;
@@ -31,7 +32,7 @@
 @class ORDataTypeAssigner;
 @class ORRunScriptModel;
 
-@interface ORRunModel :  ORDataChainObjectWithGroup <ORBitProcessing>{
+@interface ORRunModel :  ORDataChainObjectWithGroup <ORBitProcessing,OROrderedObjHolding>{
     @private
         uint32_t 	runNumber;
 
