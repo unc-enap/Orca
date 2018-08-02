@@ -323,6 +323,7 @@ static NSString* ORRunListDataOut1	= @"ORRunListDataOut1";
 			 [[anItem objectForKey:@"RunLength"]length]          > 0 ? [anItem objectForKey:@"RunLength"]:@"0",
              isSubRun];
 	}
+    [[NSFileManager defaultManager] removeItemAtPath:aPath error:nil];
 	[s writeToFile:aPath atomically:YES encoding:NSASCIIStringEncoding error:nil];
 }
 
@@ -334,6 +335,7 @@ static NSString* ORRunListDataOut1	= @"ORRunListDataOut1";
 	[items release];
 	items = [[NSMutableArray array] retain];
 	NSArray* lines = [s componentsSeparatedByString:@"\n"];
+    int lineNumber = 0;
 	for(id aLine in lines){
 		aLine = [aLine trimSpacesFromEnds];
 		if(![aLine hasPrefix:@"#"]){
@@ -346,7 +348,7 @@ static NSString* ORRunListDataOut1	= @"ORRunListDataOut1";
 				NSMutableDictionary* anItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 										args,@"ScriptParameters",endArgs,@"EndScriptParameters",
 										[NSNumber numberWithFloat:[[[parts objectAtIndex:2] trimSpacesFromEnds]floatValue]],@"RunLength",
-										[NSNumber numberWithInt:[[[parts objectAtIndex:3] trimSpacesFromEnds]intValue]],@"SubRun",
+                                               lineNumber==0?@0:[NSNumber numberWithInt:[[[parts objectAtIndex:3] trimSpacesFromEnds]intValue]],@"SubRun",
 										@"",@"RunState",
 										nil];
 				[items addObject:anItem];
@@ -358,12 +360,12 @@ static NSString* ORRunListDataOut1	= @"ORRunListDataOut1";
                 NSMutableDictionary* anItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                                args,@"ScriptParameters",@"",@"EndScriptParameters",
                                                [NSNumber numberWithFloat:[[[parts objectAtIndex:1] trimSpacesFromEnds]floatValue]],@"RunLength",
-                                               [NSNumber numberWithInt:[[[parts objectAtIndex:2] trimSpacesFromEnds]intValue]],@"SubRun",
+                                               lineNumber==0?@0:[NSNumber numberWithInt:[[[parts objectAtIndex:2] trimSpacesFromEnds]intValue]],@"SubRun",
                                                @"",@"RunState",
                                                nil];
                 [items addObject:anItem];
             }
-
+            lineNumber++;
 		}
 	}
     [[NSNotificationCenter defaultCenter] postNotificationName:ORRunListModelReloadTable object:self];    
