@@ -2459,9 +2459,6 @@ static NSString *ORRunTypeNames 	= @"ORRunTypeNames";
 {
     return @"RunControl";
 }
-@end
-
-@implementation ORRunModel (OROrderedObjHolding)
 #pragma mark ¥¥¥CardHolding Protocol
 - (int) maxNumberOfObjects	{ return 32; }
 - (int) objWidth			{ return 25; }	//default
