@@ -2470,11 +2470,10 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 
 - (BOOL) bumpRateFromDecodeStage:(short)channel
 {
-//    if(channel>=0 && channel<kNumV4FLTChannels){
-//        ++eventCount[channel];
-//    }
-//    return YES;
-    return NO; //Aug 4/2018 -- get the event count from the hit rate
+    if(channel>=0 && channel<kNumV4FLTChannels){
+        ++eventCount[channel];
+    }
+    return YES;
 }
 - (BOOL) setFromDecodeStage:(short)aChan fifoFlags:(unsigned char)flags
 {
