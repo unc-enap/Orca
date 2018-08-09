@@ -123,9 +123,6 @@ bool ORSLTv4Readout::Start()
     
         readoutCall = &ORSLTv4Readout::ReadoutLegacyCode;
     }
-    
-    if (debug) printf("%d.%06ld: Start readout loop, Flt readout = %s, debug = %d\n",
-           t0.tv_sec, t0.tv_usec, sEnable[activateFltReadout%2], debug);
 
     
     return true;
@@ -152,12 +149,12 @@ bool ORSLTv4Readout::Stop()
 {
     float runTime;
     float loopsPerSec;
-    uint64_t int tReadoutTime;
+    uint64_t tReadoutTime;
     uint32_t meanBlockSize;
     float load;
     
     struct timezone tz;
-    uint64_t int t0Ticks, t1Ticks;
+    uint64_t t0Ticks, t1Ticks;
     float rate;
     float tLoop;
     
@@ -176,8 +173,8 @@ bool ORSLTv4Readout::Stop()
         
         // Measure readout time
         gettimeofday(&t1, &tz);
-        t0Ticks = (int64_t int) t0.tv_sec * 1000000 + t0.tv_usec;
-        t1Ticks = (int64_t int) t1.tv_sec * 1000000 + t1.tv_usec;
+        t0Ticks = (int64_t) t0.tv_sec * 1000000 + t0.tv_usec;
+        t1Ticks = (int64_t) t1.tv_sec * 1000000 + t1.tv_usec;
         runTime = (float) (t1Ticks - t0Ticks) / 1000000;
         
         try {
@@ -200,7 +197,7 @@ bool ORSLTv4Readout::Stop()
         // For performance testing always run the first run without signal, to measure the loop time
         loopsPerSec = 0;
         if (runTime > 0) loopsPerSec = (float) nLoops / runTime;
-        if ((unsigned ) loopsPerSec > maxLoopsPerSec) maxLoopsPerSec = (uint64_t int) loopsPerSec;
+        if ((unsigned ) loopsPerSec > maxLoopsPerSec) maxLoopsPerSec = (uint64_t) loopsPerSec;
         
         tLoop = 0;
         if (nLoops > 0) tLoop = (float) (t1Ticks - t0Ticks) / nLoops;
@@ -577,8 +574,8 @@ bool ORSLTv4Readout::Readout(SBC_LAM_Data* lamData)
     static int currentUSec  = 0;
     static int lastSec      = 0;
     static int lastUSec     = 0;
-    //static int32_t int counter =0; //for debugging
-    static int32_t int secCounter=0;
+    //static int counter =0; //for debugging
+    static int32_t secCounter=0;
     
     struct timeval t;
     gettimeofday(&t,NULL);
