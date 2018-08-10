@@ -9,26 +9,26 @@
 
 
 #ifndef PMC_COMPILE_IN_SIMULATION_MODE
-	#define PMC_COMPILE_IN_SIMULATION_MODE 0
+#define PMC_COMPILE_IN_SIMULATION_MODE 0
 #endif
 
 #if PMC_COMPILE_IN_SIMULATION_MODE
-    #warning MESSAGE: ORSLTv4Readout - PMC_COMPILE_IN_SIMULATION_MODE is 1
+#warning MESSAGE: ORSLTv4Readout - PMC_COMPILE_IN_SIMULATION_MODE is 1
 #else
-    //#warning MESSAGE: ORFLTv4Readout - PMC_COMPILE_IN_SIMULATION_MODE is 0
-	#include "katrinhw4/subrackkatrin.h"
+//#warning MESSAGE: ORFLTv4Readout - PMC_COMPILE_IN_SIMULATION_MODE is 0
+#include "katrinhw4/subrackkatrin.h"
 #endif
 
 
 #if !PMC_COMPILE_IN_SIMULATION_MODE
 // (this is the standard code accessing the v4 crate-tb-)
 //----------------------------------------------------------------
-extern hw4::SubrackKatrin* srack; 
+extern hw4::SubrackKatrin* srack;
 extern Pbus* pbus;
 
 static const uint32_t FIFO0Addr         = 0xd00000 >> 2;
 static const uint32_t FIFO0ModeReg      = 0xe00000 >> 2;//obsolete 2012-10
-static const uint32_t FIFO0StatusReg    = 0xe00004 >> 2;//obsolete 2012-10  
+static const uint32_t FIFO0StatusReg    = 0xe00004 >> 2;//obsolete 2012-10
 
 extern int debug;
 extern int nSendToOrca;
@@ -120,10 +120,13 @@ bool ORSLTv4Readout::Start()
         }
         
     } else {
-    
+        
         readoutCall = &ORSLTv4Readout::ReadoutLegacyCode;
     }
-
+    
+    if (debug) printf("%ld.%06ld: Start readout loop, Flt readout = %s, debug = %d\n",
+                      t0.tv_sec, t0.tv_usec, sEnable[activateFltReadout%2], debug);
+    
     
     return true;
 }
@@ -132,9 +135,9 @@ bool ORSLTv4Readout::Start()
 bool ORSLTv4Readout::Readout(SBC_LAM_Data* lamData)
 {
     nLoops = nLoops + 1;
-
+    
     (*this.*readoutCall)(lamData);
-
+    
     // Read out the children flts that are in the readout list
     // Leave out for the high rate tests
     int32_t leaf_index = GetNextTriggerIndex()[0];
@@ -142,19 +145,19 @@ bool ORSLTv4Readout::Readout(SBC_LAM_Data* lamData)
         leaf_index = readout_card(leaf_index,lamData);
     }
     
-    return true; 
+    return true;
 }
 
 bool ORSLTv4Readout::Stop()
 {
     float runTime;
     float loopsPerSec;
-    uint64_t tReadoutTime;
+    unsigned long long int tReadoutTime;
     uint32_t meanBlockSize;
     float load;
     
     struct timezone tz;
-    uint64_t t0Ticks, t1Ticks;
+    unsigned long long int t0Ticks, t1Ticks;
     float rate;
     float tLoop;
     
@@ -167,14 +170,14 @@ bool ORSLTv4Readout::Stop()
         case kSimulation:
             break;
     }
-
+    
     
     if (debug) {
         
         // Measure readout time
         gettimeofday(&t1, &tz);
-        t0Ticks = (int64_t) t0.tv_sec * 1000000 + t0.tv_usec;
-        t1Ticks = (int64_t) t1.tv_sec * 1000000 + t1.tv_usec;
+        t0Ticks = (long long int) t0.tv_sec * 1000000 + t0.tv_usec;
+        t1Ticks = (long long int) t1.tv_sec * 1000000 + t1.tv_usec;
         runTime = (float) (t1Ticks - t0Ticks) / 1000000;
         
         try {
@@ -184,20 +187,20 @@ bool ORSLTv4Readout::Stop()
             perr.displayMsg(stdout);
             fflush(stdout);
         }
-
+        
         rate = 0;
         if (tReadoutTime>0) rate = (float) nWords * 40 / tReadoutTime; // MB/s
         
-        printf("%d.%06ld: Stop readout loop, run %.3f s, readout %lld s, data %.1f MB, rate %.1f MB/s\n",
-            t1.tv_sec, t1.tv_usec, runTime, tReadoutTime / 10000000,
-            (float) nWords * 4 / 1000 / 1000, rate);
+        printf("%ld.%06ld: Stop readout loop, run %.3f s, readout %lld s, data %.1f MB, rate %.1f MB/s\n",
+               t1.tv_sec, t1.tv_usec, runTime, tReadoutTime / 10000000,
+               (float) nWords * 4 / 1000 / 1000, rate);
         
         // Readout loops
         
         // For performance testing always run the first run without signal, to measure the loop time
         loopsPerSec = 0;
         if (runTime > 0) loopsPerSec = (float) nLoops / runTime;
-        if ((unsigned ) loopsPerSec > maxLoopsPerSec) maxLoopsPerSec = (uint64_t) loopsPerSec;
+        if ((unsigned ) loopsPerSec > maxLoopsPerSec) maxLoopsPerSec = (unsigned long long int) loopsPerSec;
         
         tLoop = 0;
         if (nLoops > 0) tLoop = (float) (t1Ticks - t0Ticks) / nLoops;
@@ -215,10 +218,10 @@ bool ORSLTv4Readout::Stop()
             load = (float) 100 * nWords / nReadout / 8160;
         }
         
-         printf("%17s: mean block size %d, load %.2f %s, loops/s %lld\n", "",
+        printf("%17s: mean block size %d, load %.2f %s, loops/s %lld\n", "",
                meanBlockSize, load, "%", maxLoopsPerSec);
-
-        }
+        
+    }
     
     return true;
 }
@@ -231,7 +234,7 @@ bool ORSLTv4Readout::ReadoutEnergyV31(SBC_LAM_Data* lamData)
         uint32_t headerLen  = 4;
         uint32_t numWordsToRead  = srack->theSlt->fifoSize->read();
         //uint32_t numWordsToRead  = pbus->read(FIFO0ModeReg) & 0x3fffff;
-
+        
         if (numWordsToRead >= 8160){ // full block readout
             nNoReadout = 0; // Clear no readout
             nReadout   = nReadout + 1;
@@ -242,12 +245,12 @@ bool ORSLTv4Readout::ReadoutEnergyV31(SBC_LAM_Data* lamData)
             memcpy(&data[dataIndex], header, headerLen * sizeof(uint32_t));
             dataIndex += headerLen;
             
-            pbus->readBlock(FIFO0Addr, (uint32_t*)(&data[dataIndex]), numWordsToRead);
-            //srack->theSlt->fifoData->readBlock((uint32_t*)(&data[dataIndex]), numWordsToRead);
+            pbus->readBlock(FIFO0Addr, (unsigned long*)(&data[dataIndex]), numWordsToRead);
+            //srack->theSlt->fifoData->readBlock((unsigned long*)(&data[dataIndex]), numWordsToRead);
             dataIndex += numWordsToRead;
             
             data[firstIndex] |= (numWordsToRead+headerLen); //fill in the record length
-
+            
             nWords = nWords + numWordsToRead;
         }
         else if (numWordsToRead > 0) { // partial readout
@@ -259,7 +262,7 @@ bool ORSLTv4Readout::ReadoutEnergyV31(SBC_LAM_Data* lamData)
             
             memcpy(&data[dataIndex], header, headerLen * sizeof(uint32_t));
             dataIndex += headerLen;
-
+            
             if (numWordsToRead < 48) {
                 numWordsToRead = (numWordsToRead/6)*6; //make sure we are on event boundary
                 for(uint32_t i=0;i<numWordsToRead; i++){
@@ -269,11 +272,11 @@ bool ORSLTv4Readout::ReadoutEnergyV31(SBC_LAM_Data* lamData)
             }
             else {
                 numWordsToRead  = (numWordsToRead/48)*48;//always read multiple of 48 word32s
-                pbus->readBlock(FIFO0Addr, (uint32_t*)(&data[dataIndex]), numWordsToRead);
-                //srack->theSlt->fifoData->readBlock((uint32_t*)(&data[dataIndex]), numWordsToRead);
+                pbus->readBlock(FIFO0Addr, (unsigned long*)(&data[dataIndex]), numWordsToRead);
+                //srack->theSlt->fifoData->readBlock((unsigned long*)(&data[dataIndex]), numWordsToRead);
                 dataIndex += numWordsToRead;
             }
-        
+            
             data[firstIndex] |= (numWordsToRead+headerLen); //fill in the record length
             
             nWords = nWords + numWordsToRead;
@@ -308,7 +311,7 @@ bool ORSLTv4Readout::ReadoutEnergyV31(SBC_LAM_Data* lamData)
 bool ORSLTv4Readout::LocalReadoutEnergyV31(SBC_LAM_Data* lamData)
 {
     // Write the Orca data blocks to file; do not transmit anything to Orca
-
+    
     uint32_t bufferIndex = 0;
     
     try {
@@ -325,11 +328,11 @@ bool ORSLTv4Readout::LocalReadoutEnergyV31(SBC_LAM_Data* lamData)
             memcpy(&dataBuffer[dataIndex], header, headerLen * sizeof(uint32_t));
             bufferIndex += headerLen;
             
-            pbus->readBlock(FIFO0Addr, (uint32_t*)(&dataBuffer[bufferIndex]), numWordsToRead);
+            pbus->readBlock(FIFO0Addr, (unsigned long*)(&dataBuffer[bufferIndex]), numWordsToRead);
             dataBuffer[firstIndex] = (header[0] & 0xfffc0000) | (numWordsToRead+headerLen); //fill in the record length
-
+            
             nWords = nWords + numWordsToRead;
-
+            
         } else if ((numWordsToRead > 0) && (nNoReadout > 10)) { // partial readout
             nNoReadout = 0; // Clear no readout
             nReadout = nReadout + 1;
@@ -348,7 +351,7 @@ bool ORSLTv4Readout::LocalReadoutEnergyV31(SBC_LAM_Data* lamData)
             }
             else {
                 numWordsToRead  = (numWordsToRead/48)*48;//always read multiple of 48 word32s
-                pbus->readBlock(FIFO0Addr, (uint32_t*)(&dataBuffer[bufferIndex]), numWordsToRead);
+                pbus->readBlock(FIFO0Addr, (unsigned long*)(&dataBuffer[bufferIndex]), numWordsToRead);
                 bufferIndex += numWordsToRead;
             }
             
@@ -369,8 +372,8 @@ bool ORSLTv4Readout::LocalReadoutEnergyV31(SBC_LAM_Data* lamData)
         // Write block to local file
         // Merge late with the Orca readout file
         //write(filePtr, dataBuffer, (numWordsToRead+headerLen) * sizeof(uint32_t));
-
-
+        
+        
         // Send a few blocks to Orca - just to validate that still correct data is recorded)
         if ((nNoReadout == 0) && (nReadout > 0) && (nSendToOrca > 0) && (nReadout % nSendToOrca == 0)){
             
@@ -379,7 +382,7 @@ bool ORSLTv4Readout::LocalReadoutEnergyV31(SBC_LAM_Data* lamData)
             dataIndex += (numWordsToRead + headerLen);
             
         }
-
+        
         // Save single blocks to a file for usage in simulation mode
         if ((nNoReadout == 0) && (fileSnapshotPtr > 0) && (nReadout == 1234)) {
             if (debug) printf("Save sample block for simulation mode, nReadout %lld, block size %d\n",
@@ -390,7 +393,7 @@ bool ORSLTv4Readout::LocalReadoutEnergyV31(SBC_LAM_Data* lamData)
         
     } catch (PbusError &perr) {
         if (debug){
-             printf("ORSLTv4Readout::ReadoutEnergyV31: Error %s\n", perr.what());
+            printf("ORSLTv4Readout::ReadoutEnergyV31: Error %s\n", perr.what());
             perr.displayMsg(stdout);
             fflush(stdout);
         }
@@ -437,7 +440,7 @@ void ORSLTv4Readout::LocalReadoutClose()
 
 bool ORSLTv4Readout::SimulationReadoutEnergyV31(SBC_LAM_Data*)
 {
- 
+    
     
     // Send the simulated data to Orca
     // Parameter: block size; data rate
@@ -463,7 +466,7 @@ void ORSLTv4Readout::SimulationInit()
     // Each block has a header of 4 words and upto 8160 words of data
     
     // Parameter: block size
-   
+    
     //
     // Todo: Set this paraeters by any other measns (e.g. preprocessor, inifile, etc)
     //
@@ -482,7 +485,7 @@ void ORSLTv4Readout::SimulationInit()
     
     
     uint32_t time       = 1510872785; // Put always the same time in the data
-                                     // having real time take too int32_t to prepare
+    // having real time take too long to prepare
     
     uint32_t headerLen  = 4;
     uint32_t firstIndex = bufferIndex; //so we can insert the length
@@ -553,7 +556,7 @@ bool ORSLTv4Readout::ReadoutLegacyCode(SBC_LAM_Data* lamData)
             }
             else {
                 numWordsToRead = (numWordsToRead>>3)<<3;//always read multiple of 8 word32s
-                pbus->readBlock(FIFO0Addr, (uint32_t *)(&data[dataIndex]), numWordsToRead);//read 2048 word32s
+                pbus->readBlock(FIFO0Addr, (unsigned long *)(&data[dataIndex]), numWordsToRead);//read 2048 word32s
                 dataIndex += numWordsToRead;
             }
             data[firstIndex] |=  (numWordsToRead+headerLen); //fill in the record length
@@ -574,21 +577,21 @@ bool ORSLTv4Readout::Readout(SBC_LAM_Data* lamData)
     static int currentUSec  = 0;
     static int lastSec      = 0;
     static int lastUSec     = 0;
-    //static int counter =0; //for debugging
-    static int32_t secCounter=0;
+    //static long int counter =0; //for debugging
+    static long int secCounter=0;
     
     struct timeval t;
     gettimeofday(&t,NULL);
     currentSec  = t.tv_sec;
-    currentUSec = t.tv_usec;  
+    currentUSec = t.tv_usec;
     double diffTime = (double)(currentSec  - lastSec) + ((double)(currentUSec - lastUSec)) * 0.000001;
     
     if(diffTime >1.0){
         secCounter++;
-        printf("PrPMC (SLTv4 simulation mode) sec %d: 1 sec is over ...\n",secCounter);
+        printf("PrPMC (SLTv4 simulation mode) sec %ld: 1 sec is over ...\n",secCounter);
         fflush(stdout);
         lastSec      = currentSec;
-        lastUSec     = currentUSec; 
+        lastUSec     = currentUSec;
     }
     else {
         // skip shipping data record
@@ -601,7 +604,7 @@ bool ORSLTv4Readout::Readout(SBC_LAM_Data* lamData)
     while(leaf_index >= 0) {
         leaf_index = readout_card(leaf_index,lamData);
     }
-    return true; 
+    return true;
 }
 
 #endif //of #if !PMC_COMPILE_IN_SIMULATION_MODE ... #else ...
