@@ -151,7 +151,6 @@ struct TUBiiState { //A struct that allows users of TUBiiModel to get/set all of
 - (void) makeMainController;
 - (void) encodeWithCoder:(NSCoder *)aCoder;
 - (void) dealloc;
-- (void) awakeAfterDocumentLoaded;
 - (BOOL) solitaryObject;
 
 - (float) ConvertBitsToValue:(NSUInteger)bits NBits: (int) nBits MinVal: (float) minVal MaxVal: (float) maxVal;

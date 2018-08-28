@@ -104,6 +104,7 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
 #pragma mark •••Archival
 - (id) initWithCoder:(NSCoder *)aCoder {
     self = [super initWithCoder:aCoder];
+    [self registerNotificationObservers];
     if (self) {
         //  Initialize model member variables
         currentModelState.smellieRate = 0;
@@ -148,6 +149,7 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
         // latency from remote shift stations causing timeouts
         [connection setTimeout:2000];
     }
+    [self activateKeepAlive];
     return self;
 }
 - (void) encodeWithCoder:(NSCoder *)aCoder{
@@ -168,25 +170,9 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
     NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
 
     [notifyCenter addObserver : self
-                     selector : @selector(runAboutToStart:)
-                         name : ORRunAboutToStartNotification
-                       object : nil];
-
-    [notifyCenter addObserver : self
                      selector : @selector(killKeepAlive:)
                          name : @"TELLIEEmergencyStop"
                        object : nil];
-}
-- (void) runAboutToStart: (NSNotification*) aNone {
-    [self setDataReadout:NO];
-    [self ResetFifo]; //Maybe take this out eventually? I'm not sure
-    [self setDataReadout:YES];
-}
-
-- (void) awakeAfterDocumentLoaded
-{
-    [self registerNotificationObservers];
-    [self activateKeepAlive];
 }
 
 #pragma mark •••Network Communication
@@ -409,7 +395,7 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
     // Sets two 8 bit shift register that are daisy chained together such that they
     // act like a single 16 bit register.
     // The first of these registers controls the length of time between when a GT arrives and when DGT is sent
-    // The seconds controls how int32_t the LO window is.
+    // The seconds controls how long the LO window is.
     // The chips that create these delays are the DS1023-200 and DS1023-500, see their data sheet for details
     // See TUBii schematic page 13A for more info
     NSString* const command = [NSString stringWithFormat:@"SetGTDelays %d %d",(int)aLOMask,(int)aDGTMask];
@@ -496,7 +482,7 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
     return [self sendIntCmd:@"GetAsyncTriggerMask"];
 }
 - (void) setSmellieDelay:(NSUInteger)_smellieDelay {
-    // This specifies (in nanoseconds) how int32_t the MicroZed should delay a pulse that
+    // This specifies (in nanoseconds) how long the MicroZed should delay a pulse that
     // is put into TUBii's SMELLIE Delay In port. After that delay the signal is then sent back out
     // at TUBii's SMELLIE Delay Out port. Additionally the MicroZed registers the input signal as a trigger
     // after that delay.
@@ -510,7 +496,7 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
     return [self sendIntCmd:@"GetSmellieDelay"];
 }
 - (void) setTellieDelay:(NSUInteger)_tellieDelay {
-    // This specifies (in nanoseconds) how int32_t the MicroZed should delay a pulse that
+    // This specifies (in nanoseconds) how long the MicroZed should delay a pulse that
     // is put into TUBii's TELLIE Delay In port. After that delay the signal is then sent back out
     // at TUBii's TELLIE Delay Out port. Additionally the MicroZed registers the input signal as a trigger
     // after that delay.
@@ -524,7 +510,7 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
     return [self sendIntCmd:@"GetTellieDelay"];
 }
 - (void) setGenericDelay:(NSUInteger)_genericDelay {
-    // This specifies how int32_t a pulse fed into TUBii's Generic Delay in port in
+    // This specifies how long a pulse fed into TUBii's Generic Delay in port in
     // should be delayed before it appears on TUBii's Generic Delay Out port
     // The arguement should be in nano-seconds.
     // It's not currently supported in the TUBiiServer but the hardware supports a a coarse and a fine delay
@@ -952,9 +938,9 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
             break;
         }
         
-        [NSThread sleepForTimeInterval:0.5];
+        [NSThread sleepForTimeInterval:5.0];
 
-        // This is a very int32_t running thread need to relase the pool every so often
+        // This is a very long running thread need to relase the pool every so often
         if(counter == 1000){
             [pool release];
             pool = [[NSAutoreleasePool alloc] init];
@@ -965,6 +951,9 @@ NSString* ORTubiiSettingsChangedNotification    = @"ORTubiiSettingsChangedNotifi
 
     NSLogColor([NSColor redColor],@"[TUBii]: Stopped sending keep-alive to TUBii\n");
     NSLogColor([NSColor redColor],@"[TUBii]: Unless you restart this process the ELLIE systems will not be able to trigger through TUBii. If you'd like to restart at a later time please do so from the servers tab of the ELLIE gui\n");
+
+    // Update the servers tab of the ELLIE gui to denote that the keep alive is no longer active
+    [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:@"TUBiiKeepAliveDied" object:self];
 
     // release memory
     [pool release];
