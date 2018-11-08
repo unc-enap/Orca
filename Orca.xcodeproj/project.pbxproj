@@ -1579,7 +1579,6 @@
 		8457D37712F9AB8A00D3E3B4 /* ORiSegHVCardDecoders.h in Headers */ = {isa = PBXBuildFile; fileRef = 8457D37512F9AB8A00D3E3B4 /* ORiSegHVCardDecoders.h */; };
 		8457D37812F9AB8A00D3E3B4 /* ORiSegHVCardDecoders.m in Sources */ = {isa = PBXBuildFile; fileRef = 8457D37612F9AB8A00D3E3B4 /* ORiSegHVCardDecoders.m */; };
 		8458E8ED15DA89B5005C43A9 /* Mail.app in Resources */ = {isa = PBXBuildFile; fileRef = 8458E8EC15DA89B5005C43A9 /* Mail.app */; };
-		8458E8EE15DA89EF005C43A9 /* Mail.app in Sources */ = {isa = PBXBuildFile; fileRef = 8458E8EC15DA89B5005C43A9 /* Mail.app */; };
 		8458E91515DA8A2A005C43A9 /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8458E91415DA8A2A005C43A9 /* ScriptingBridge.framework */; };
 		8458EA3A15DBCFF6005C43A9 /* MPodCrate.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8458EA3315DBCFF6005C43A9 /* MPodCrate.nib */; };
 		8458EA3B15DBCFF6005C43A9 /* MPodCrate.tif in Resources */ = {isa = PBXBuildFile; fileRef = 8458EA3415DBCFF6005C43A9 /* MPodCrate.tif */; };
@@ -17571,7 +17570,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C6FAAAEF1FBDD5320069E81C /* ORWG1220PulserController.m in Sources */,
-				8458E8EE15DA89EF005C43A9 /* Mail.app in Sources */,
 				8434A2A7055B3287002D3102 /* main.m in Sources */,
 				8434A2A8055B3287002D3102 /* ORAppDelegate.m in Sources */,
 				84BF74C217590CB000AF1F56 /* OR3DScanPlatformController.m in Sources */,
