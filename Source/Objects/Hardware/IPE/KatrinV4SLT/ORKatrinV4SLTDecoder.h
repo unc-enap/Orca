@@ -35,10 +35,17 @@
     int filter[21];
     BOOL useMinimizedDecoding; //only one crate for now
     uint32_t decimationCount[22][24];
+    BOOL isLive;
+    uint64_t nBlocksSkipped;
+    uint64_t nBlock;
 }
 - (int) filterShapingLength;
+- (int) ageOfRecord:(void*)someData;
+- (void) runStarted:(NSNotification*)aNote;
+- (void) runStopped:(NSNotification*)aNote;
 - (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
 - (NSString*) dataRecordDescription:(uint32_t*)dataPtr;
+
 @end
 
 

@@ -271,18 +271,98 @@ static NSString* kFLTChanKey[24] = {
 //this is to  return a dummy value, if the FLT card cannot be found (see below) -tb-
 - (int) filterShapingLength {return 8;}//return the maximum value as default
 
+- (void) runStarted:(NSNotification*)aNote
+{
+    isLive = FALSE;
+    nBlock = 0;
+    nBlocksSkipped = 0;
+
+    //NSLog(@"SLT decoder: run has started; clear decoder skip count\n");
+}
+
+- (void) runStopped:(NSNotification*)aNote
+{
+    float fSkipped;
+    
+    // Display the fraction of skipped events - if any
+    if (nBlocksSkipped > 0){
+        fSkipped = (float) 100 * nBlocksSkipped / nBlock;
+        NSLog(@"SLT decoder: fraction of skipped records in data monitor: %.2f %s  (%lld / %lld)\n",
+                    fSkipped , "%", nBlocksSkipped, nBlock);
+    }
+}
+
+- (int) ageOfRecord:(void*)someData
+{
+    uint32_t* ptr = (uint32_t*)someData;
+    
+    // Timestamp of the current record
+    uint32_t f1 = ptr[4+0];
+    uint32_t f2 = ptr[4+1];
+    
+    uint32_t subsec   = (f1 >>  3) & 0x01ffffff;
+    uint32_t sltsubsec2 = (subsec >> 11) & 0x3fff;
+    uint32_t sec      = ((f1 & 0x7) << 29) | (f2 & 0x1fffffff);
+    
+    uint64_t msec = (uint64_t) sec * 1000 + sltsubsec2 / 10;
+    
+    // Mac time
+    struct timeval t;
+    gettimeofday(&t, NULL);
+    uint32_t tmac = (int) t.tv_sec;
+    uint32_t tumac = (int) t.tv_usec;
+    
+    uint64_t msec_mac = (uint64_t) tmac * 1000 + tumac / 1000;
+    
+    int64_t t_dec_delay = msec_mac - msec;
+
+    //NSLog(@"SLT decoder: %llu - %llu, age %lld\n", msec_mac, msec, t_dec_delay);
+    
+    return (int) t_dec_delay;
+    
+}
+
 
 - (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
     uint32_t* ptr = (uint32_t*)someData;
-	uint32_t length	= ExtractLength(ptr[0]);	 //get length from first word
-	unsigned char crate		= ShiftAndExtract(ptr[1],21,0xf);
-    
- 	NSString* crateKey = @"??";
-    if(crate<4)crateKey= kSLTCrate[crate];
-    
+	 uint32_t length	= ExtractLength(ptr[0]);	 //get length from first word
+ 
     uint32_t headerlen = 4;
     uint32_t numEv=(length-headerlen)/6;
+
+    if (numEv == 0) return length;
+
+
+    // Decode the time stamp of the first event
+    int t_dec_delay = [self ageOfRecord:someData];
+
+    // Detect, if live data is decoded (and not replayed data)
+    // Live data should arrive at Orca within a second
+    nBlock += 1;
+    if ((!isLive) && (t_dec_delay < 1000)) {
+       isLive = TRUE;
+       NSLog(@"SLT decoder: detected live stream in record #%d age %d ms\n", nBlock, t_dec_delay);
+
+       if (nBlock >1)
+           NSLog(@"SLT decoder: error - old data in the run file\n");
+    }
+   
+    // Limit time for decoding data to max 1 second
+    if (isLive && (t_dec_delay > 1000 )) {
+        // Decoding takes too long - skip this record
+        //NSLog(@"SLT decoder: skip record %d - age %d\n", nBlock, t_dec_delay);
+        nBlocksSkipped += 1;
+        return length;
+    }
+
+    
+    // Parse the full data set
+    unsigned char crate		= ShiftAndExtract(ptr[1],21,0xf);
+    
+    NSString* crateKey = @"??";
+    if(crate<4)crateKey= kSLTCrate[crate];
+
     
     ptr+=headerlen;
     int i;
@@ -314,13 +394,13 @@ static NSString* kFLTChanKey[24] = {
         
         ptr+=6;//next event
     }
-    
+   
     return length;
 }
 
 - (NSString*) dataRecordDescription:(uint32_t*)dataPtr
 {
-	uint32_t length	= ExtractLength(dataPtr[0]);
+	 uint32_t length	= ExtractLength(dataPtr[0]);
     
     uint32_t numEv = (length-4)/6;
 
