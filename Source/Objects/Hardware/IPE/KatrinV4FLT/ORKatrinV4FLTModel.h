@@ -332,9 +332,12 @@ static enum  {
 
 - (void) executeCommandList:(ORCommandList*)aList;
 - (id) readRegCmd:(short) aRegister channel:(short) aChannel;
-- (id) writeRegCmd:(short) aRegister channel:(short) aChannel value:(uint32_t)aValue;
 - (id) readRegCmd:(short) aRegister;
+
+/*
+- (id) writeRegCmd:(short) aRegister channel:(short) aChannel value:(uint32_t)aValue;
 - (id) writeRegCmd:(short) aRegister value:(uint32_t)aValue;
+*/
 
 - (uint32_t)  readSeconds;
 - (void)  writeSeconds:(uint32_t)aValue;

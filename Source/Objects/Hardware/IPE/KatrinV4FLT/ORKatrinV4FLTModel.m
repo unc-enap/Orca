@@ -1507,6 +1507,8 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 {
     BOOL gainChanged = NO;
     int i;
+    //int busy;
+   
     for(i=0;i<kNumV4FLTChannels;i++){
         uint32_t newThres;
         if( !(triggerEnabledMask & (0x1<<i)) )  newThres = 0xFFFFF;
@@ -1522,7 +1524,28 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
         }
     }
     
-    if(gainChanged)[self writeRegCmd:kFLTV4CommandReg value:kIpeFlt_Cmd_LoadGains];
+    if(gainChanged){
+        [self writeRegCmd:kFLTV4CommandReg value:kIpeFlt_Cmd_LoadGains];
+      
+        // Wait for end of transfer indicated by busy flag in the status register bit 8
+        usleep(30000);
+       
+/*
+        // Problems with reading of busy flag?!
+        i = 0;
+        busy = ([self readReg:kFLTV4StatusReg ] >> kIpeFlt_Status_Busy_Shift) & 0x1;
+        while ( busy && (i<10)) {
+           NSLog(@"Loading gain setting to ADC: busy %d - %d\n", busy,i);
+           usleep(10000); // This is a slow transfer in the order of a couple of ms
+           busy = ([self readReg:kFLTV4StatusReg ] >> kIpeFlt_Status_Busy_Shift) & 0x1;
+           i++;
+        }
+        
+        busy = ([self readReg:kFLTV4StatusReg ] >> kIpeFlt_Status_Busy_Shift) & 0x1;
+        if (busy) NSLog(@"Loading gain setting to ADC: still busy %d\n", busy);
+*/
+    }
+
 }
 
 - (BOOL) waitOnBusyFlag
@@ -2128,6 +2151,8 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 	return [[[self crate] adapter] readHardwareRegisterCmd:[self regAddress:aRegister]];		
 }
 
+/*
+
 - (id) writeRegCmd:(short) aRegister channel:(short) aChannel value:(uint32_t)aValue
 {
 	uint32_t theAddress = [self regAddress:aRegister channel:aChannel];
@@ -2138,6 +2163,8 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 {
 	return [[[self crate] adapter] writeHardwareRegisterCmd:[self regAddress:aRegister] value:aValue];
 }
+
+*/
 
 //------------------
 

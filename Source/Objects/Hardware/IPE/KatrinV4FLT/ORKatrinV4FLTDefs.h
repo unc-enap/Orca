@@ -19,6 +19,8 @@
 #define kIpeFlt_Pages 64
 
 // Position of the bit fields
+#define kIpeFlt_Status_Busy_Shift           8
+
 #define kIpeFlt_Cntl_InterruptMask_Shift	8
 #define kIpeFlt_Cntl_InterruptMask_Mask		0xff
 
