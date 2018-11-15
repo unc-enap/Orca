@@ -3499,6 +3499,8 @@
 		DB704A1418EBA4E100839B42 /* ELLIEModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DB704A1218EBA4E100839B42 /* ELLIEModel.m */; };
 		DB704A1618EBA61E00839B42 /* ellie.xib in Resources */ = {isa = PBXBuildFile; fileRef = DB704A1518EBA61E00839B42 /* ellie.xib */; };
 		DBEC755518EB9E9B0077D493 /* ellie.gif in Resources */ = {isa = PBXBuildFile; fileRef = DBEC755418EB9E9B0077D493 /* ellie.gif */; };
+		E6983CAC219DB3EA00029B9C /* SNOP_Run_Constants.h in Headers */ = {isa = PBXBuildFile; fileRef = E6983CAB219DB3E900029B9C /* SNOP_Run_Constants.h */; };
+		E6983CAE219DB45700029B9C /* ORCamacExceptions.h in Headers */ = {isa = PBXBuildFile; fileRef = E6983CAD219DB45600029B9C /* ORCamacExceptions.h */; };
 		EF69C433116E5DC3008ABADC /* ORSNOCrateReadout.hh in Headers */ = {isa = PBXBuildFile; fileRef = EF69C431116E5DC3008ABADC /* ORSNOCrateReadout.hh */; };
 		EF69C482116E6526008ABADC /* ORSNOCrateReadout.cc in VME_Copy */ = {isa = PBXBuildFile; fileRef = EF69C430116E5DC3008ABADC /* ORSNOCrateReadout.cc */; };
 		EF69C483116E6526008ABADC /* ORSNOCrateReadout.hh in VME_Copy */ = {isa = PBXBuildFile; fileRef = EF69C431116E5DC3008ABADC /* ORSNOCrateReadout.hh */; };
@@ -3536,7 +3538,7 @@
 			outputFiles = (
 				"$(DERIVED_FILES_DIR)/$(INPUT_FILE_BASE).h",
 			);
-			script = "sdef \"$INPUT_FILE_PATH\" | sdp -fh -o \"$DERIVED_FILES_DIR\" --basename \"$INPUT_FILE_BASE\" --bundleid `defaults read \"$INPUT_FILE_PATH/Contents/Info\" CFBundleIdentifier`";
+			script = "sdef \"$INPUT_FILE_PATH\" | sdp -fh -o \"$DERIVED_FILES_DIR\" --basename \"$INPUT_FILE_BASE\" --bundleid `defaults read \"$INPUT_FILE_PATH/Contents/Info\" CFBundleIdentifier`\n";
 		};
 		9C2595AC0D5171B90039C5DF /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
@@ -3544,9 +3546,9 @@
 			fileType = sourcecode.lex;
 			isEditable = 1;
 			outputFiles = (
-				"lex.${INPUT_FILE_BASE}.m",
+				"${DERIVED_FILES_DIR}/lex.${INPUT_FILE_BASE}.m",
 			);
-			script = "if [ ${MAC_OS_X_VERSION_MAJOR} -gt 1040 ] ; then /usr/bin/lex --prefix=\"${INPUT_FILE_BASE}\" --outfile=\"${DERIVED_FILE_DIR}/lex.${INPUT_FILE_BASE}.m\" \"${INPUT_FILE_PATH}\"; else /usr/bin/lex -P\"${INPUT_FILE_BASE}\" -o\"${DERIVED_FILE_DIR}/lex.${INPUT_FILE_BASE}.m\" \"${INPUT_FILE_PATH}\"; fi\n";
+			script = "if [ ${MAC_OS_X_VERSION_MAJOR} -gt 1040 ] ; then /usr/bin/lex --prefix=\"${INPUT_FILE_BASE}\" --outfile=\"${DERIVED_FILES_DIR}/lex.${INPUT_FILE_BASE}.m\" \"${INPUT_FILE_PATH}\"; else /usr/bin/lex -P\"${INPUT_FILE_BASE}\" -o\"${DERIVED_FILES_DIR}/lex.${INPUT_FILE_BASE}.m\" \"${INPUT_FILE_PATH}\"; fi\n";
 		};
 		9C2595AD0D5171B90039C5DF /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
@@ -3554,8 +3556,8 @@
 			fileType = sourcecode.yacc;
 			isEditable = 1;
 			outputFiles = (
-				"${INPUT_FILE_BASE}.tab.m",
-				"${INPUT_FILE_BASE}.tab.h",
+				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.m",
+				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.h",
 			);
 			script = "if [ ${MAC_OS_X_VERSION_MAJOR} -gt 1040 ] ; then /usr/bin/yacc -d --file-prefix=\"${INPUT_FILE_BASE}\" --name-prefix=\"${INPUT_FILE_BASE}\" --output=\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.c\" \"${INPUT_FILE_PATH}\" && cd \"${DERIVED_FILES_DIR}\" && if [ -f \"${INPUT_FILE_BASE}.tab.c\" ] ; then mv \"${INPUT_FILE_BASE}.tab.c\" \"${INPUT_FILE_BASE}.tab.m\"; fi; else /usr/bin/yacc -d -b \"${INPUT_FILE_BASE}\" -p \"${INPUT_FILE_BASE}\" -o \"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.c\" \"${INPUT_FILE_PATH}\" && cd \"${DERIVED_FILES_DIR}\" && if [ -f \"${INPUT_FILE_BASE}.tab.c\" ] ; then mv \"${INPUT_FILE_BASE}.tab.c\" \"${INPUT_FILE_BASE}.tab.m\"; fi; fi;\n";
 		};
@@ -7214,6 +7216,8 @@
 		DB704A1218EBA4E100839B42 /* ELLIEModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELLIEModel.m; sourceTree = "<group>"; };
 		DB704A1518EBA61E00839B42 /* ellie.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ellie.xib; sourceTree = "<group>"; };
 		DBEC755418EB9E9B0077D493 /* ellie.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = ellie.gif; sourceTree = "<group>"; };
+		E6983CAB219DB3E900029B9C /* SNOP_Run_Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SNOP_Run_Constants.h; sourceTree = "<group>"; };
+		E6983CAD219DB45600029B9C /* ORCamacExceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORCamacExceptions.h; sourceTree = "<group>"; };
 		EF69C430116E5DC3008ABADC /* ORSNOCrateReadout.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ORSNOCrateReadout.cc; sourceTree = "<group>"; };
 		EF69C431116E5DC3008ABADC /* ORSNOCrateReadout.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ORSNOCrateReadout.hh; sourceTree = "<group>"; };
 		EF7722B211E813120064A1CF /* ORXL3Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORXL3Model.h; sourceTree = "<group>"; };
@@ -13937,6 +13941,7 @@
 		84E583F904DB1772005F64B1 /* PCItoCamac */ = {
 			isa = PBXGroup;
 			children = (
+				E6983CAD219DB45600029B9C /* ORCamacExceptions.h */,
 				84E583FE04DB1772005F64B1 /* ORPCICamacCommands.h */,
 				84E5840304DB1772005F64B1 /* ORPCICamacModel.h */,
 				84E5840404DB1772005F64B1 /* ORPCICamacModel.m */,
@@ -14706,6 +14711,7 @@
 				EFB39FC6130BA1C5001220AC /* SNOP.gif */,
 				0FF177B41DF7A09900BA783B /* RunStatusIcon.h */,
 				0FF177B51DF7A09900BA783B /* RunStatusIcon.m */,
+				E6983CAB219DB3E900029B9C /* SNOP_Run_Constants.h */,
 				EFB39FC8130BA1C5001220AC /* SNOPController.h */,
 				EFB39FC9130BA1C5001220AC /* SNOPController.m */,
 				EFB39FCC130BA1C5001220AC /* SNOPModel.h */,
@@ -15688,6 +15694,7 @@
 				0F16E3401C493AD7003C9EC9 /* qt.h in Headers */,
 				9CD6DD890BE83F1B007096CE /* ORPlotFFT.h in Headers */,
 				9CD6DD8B0BE83F1B007096CE /* ORPlotFFTController.h in Headers */,
+				E6983CAC219DB3EA00029B9C /* SNOP_Run_Constants.h in Headers */,
 				849DA70F0BF4DB3000044320 /* ORPlotTimeSeries.h in Headers */,
 				849DA7110BF4DB3000044320 /* ORPlotTimeSeriesController.h in Headers */,
 				849DA7160BF4DB5300044320 /* ORTimeSeries.h in Headers */,
@@ -16299,6 +16306,7 @@
 				8499517A1D5CE50700A6FA40 /* ORMJDBiasWatcherModel.h in Headers */,
 				8415E586152C7C560092C975 /* ORVacuumParts.h in Headers */,
 				43135804195C5DA3007B1F15 /* ORGretinaTriggerModel.h in Headers */,
+				E6983CAE219DB45700029B9C /* ORCamacExceptions.h in Headers */,
 				8415EB63152DF0970092C975 /* ORAdcProcessorController.h in Headers */,
 				8415EB65152DF0970092C975 /* ORAdcProcessorModel.h in Headers */,
 				8491303315334EAA00597004 /* ORBitProcessorController.h in Headers */,

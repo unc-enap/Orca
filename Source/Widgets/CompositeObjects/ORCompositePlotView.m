@@ -26,7 +26,6 @@
 #import "ORLegend.h"
 #import "ORCalibration.h"
 #import "ORDataSetModel.h"
-#import "ORColorBar.h"
 #import "ORRamperView.h"
 #import "ORPlotPublisher.h"
 
