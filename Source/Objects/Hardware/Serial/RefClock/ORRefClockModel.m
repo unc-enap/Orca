@@ -30,6 +30,7 @@ NSString* ORRefClockModelVerboseChanged         = @"ORRefClockModelVerboseChange
 NSString* ORRefClockModelSerialPortChanged      = @"ORRefClockModelSerialPortChanged";
 NSString* ORRefClockModelUpdatedQueue           = @"ORRefClockModelUpdatedQueue";
 NSString* ORRefClockLock                        = @"ORRefClockLock";
+NSString* ORRefClockModelStatusPollChanged       = @"ORRefClockModelStatusPollChanged";
 
 NSString* ORSynClock                            = @"ORSynClock";
 NSString* ORMotoGPS                             = @"ORMotoGPS";
@@ -41,6 +42,7 @@ NSString* ORMotoGPS                             = @"ORMotoGPS";
 - (void) timeout;
 - (void) processOneCommandFromQueue;
 - (void) processResponse:(NSData*)someData;
+- (void) updatePoll;
 @end
 
 @implementation ORRefClockModel
@@ -153,6 +155,18 @@ NSString* ORMotoGPS                             = @"ORMotoGPS";
 
 	[dictionary setObject:objDictionary forKey:[self identifier]];
 	return objDictionary;
+}
+
+- (BOOL) statusPoll
+{
+    return statusPoll;
+}
+
+- (void) setStatusPoll:(BOOL)aStatusPoll
+{
+    statusPoll = aStatusPoll;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORRefClockModelStatusPollChanged object:self];
+    [self updatePoll];
 }
 
 #pragma mark *** Commands
@@ -338,6 +352,21 @@ NSString* ORMotoGPS                             = @"ORMotoGPS";
 	}
 }
 
-
+- (void) updatePoll
+{
+// todo
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updatePoll) object:nil];
+    float delay = 10.0; //10.0; // Seconds
+    if([self verbose]){
+        NSLog(@"%@\n", @"RefClock updatePoll");
+    }
+    if(statusPoll){
+//        [self requestStatus];
+        [synClockModel requestStatus];
+        [motoGPSModel requestStatus];
+        [self performSelector:@selector(updatePoll) withObject:nil afterDelay:delay];
+    }
+    return;
+}
 
 @end

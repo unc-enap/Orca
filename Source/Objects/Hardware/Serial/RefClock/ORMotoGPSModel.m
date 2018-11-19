@@ -21,6 +21,8 @@
 
 #import "ORMotoGPSModel.h"
 #import "ORRefClockModel.h"
+#import "ORDataTypeAssigner.h"
+#import "ORDataPacket.h"
 
 #pragma mark ***External Strings
 NSString* ORMotoGPSModelSetDefaultsChanged      = @"ORMotoGPSModelSetDefaultsChanged";
@@ -41,6 +43,7 @@ extern NSString* ORMotoGPS;
 
 @interface ORMotoGPSModel (private)
 - (void) updatePoll;
+- (void) shipStatusValues;
 @end
 
 @implementation ORMotoGPSModel
@@ -125,6 +128,37 @@ extern NSString* ORMotoGPS;
     return refClock;
 }
 
+#pragma mark •••Data Records
+- (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
+{
+    //----------------------------------------------------------------------------------------
+    // first add our description to the data description
+    [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:@"MotoGPSModel"];
+}
+
+- (NSDictionary*) dataRecordDescription
+{
+    NSMutableDictionary* dataDictionary = [NSMutableDictionary dictionary];
+    NSDictionary* aDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 @"ORMotoGPSDecoder",                @"decoder",
+                                 [NSNumber numberWithLong:dataId],   @"dataId",
+                                 [NSNumber numberWithBool:NO],       @"variable",
+                                 [NSNumber numberWithLong:4],        @"length",
+                                 nil];
+    [dataDictionary setObject:aDictionary forKey:@"MotoGPS"];
+    
+    return dataDictionary;
+}
+- (unsigned long) dataId { return dataId; }
+- (void) setDataId: (unsigned long) DataId
+{
+    dataId = DataId;
+}
+- (void) setDataIds:(id)assigner
+{
+    dataId       = [assigner assignDataIds:kLongForm];
+}
+
 #pragma mark *** Commands
 - (void) writeData:(NSDictionary*)aDictionary
 {
@@ -197,7 +231,12 @@ extern NSString* ORMotoGPS;
             unsigned short temperature = bytes[tempIdx];
             oscTemperature += 0.5 * temperature;
             
+            time_t    ut_Time;
+            time(&ut_Time);
+            timeStatusProbed = ut_Time;
+            
             [[NSNotificationCenter defaultCenter] postNotificationName:ORMotoGPSStatusValuesReceived object:self];
+            [self shipStatusValues];
         }
         
 //        if([refClock verbose]){
@@ -391,7 +430,7 @@ extern NSString* ORMotoGPS;
 
 - (void)encodeWithCoder:(NSCoder*)encoder  // todo: function needed?
 {
-    [encoder encodeInteger: cableDelayNs  forKey:@"cableDelayNs"];
+    [encoder encodeInt: cableDelayNs  forKey:@"cableDelayNs"];
 }
 @end
 
@@ -400,7 +439,7 @@ extern NSString* ORMotoGPS;
 - (void) updatePoll
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updatePoll) object:nil];
-    float delay = 4.0; // Seconds
+    float delay = 10.0; // Seconds
     if(statusPoll){
         [self requestStatus];
         [self performSelector:@selector(updatePoll) withObject:nil afterDelay:delay];
@@ -408,5 +447,40 @@ extern NSString* ORMotoGPS;
     return;
 }
 
+- (void) shipStatusValues
+{
+    // todo
+    if([[ORGlobal sharedGlobal] runInProgress]){
+        
+        unsigned long data[7];
+        data[0] = dataId | 7;
+        data[1] = 0; //([self uniqueIdNumber]&0xfff);  // todo: uniqueIdNumber needed?
+        
+//        int index = 2;
+//        int i;
+//        for(i=0;i<8;i++){
+//            data[index++] = timeMeasured[i];
+//            data[index++] = adc[i];
+//        }
+        
+//        for(int i = 2, j = 0; i < 10; i+=2, j+=2){
+//            data[i] = timeMeasured[j];  // todo
+//        }
+        data[2] = timeStatusProbed;
+//        - (unsigned int) visibleSatellites;
+//        - (unsigned int) trackedSatellites;
+//        - (unsigned int) accSignalStrength;
+//        - (NSString*) antennaSense;
+        data[3] = [self visibleSatellites];
+        data[4] = [self trackedSatellites];
+        data[5] = [self accSignalStrength];
+        data[6] = 0;  // clear this to a defined value in case antenna sense (next line) contains no data yet
+        [[self antennaSense]getCString:(char*)(data + 6) maxLength:2 encoding:NSASCIIStringEncoding];  // put the first 2 chars of the antenna sense status into the first to bytes of data[9]. If the antenna is connected, it should be the 2 chars 'OK'. See function processResponse in this file.
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification
+                                                            object:[NSData dataWithBytes:data length:sizeof(long)*7]];
+    }
+    return;
+}
 
 @end

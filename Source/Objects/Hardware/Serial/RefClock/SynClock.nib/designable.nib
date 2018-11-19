@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1050" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
         <capability name="box content view" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -57,13 +57,13 @@
                                 <popUpButton verticalHuggingPriority="750" misplaced="YES" imageHugsTitle="YES" id="HFg-go-Bng" userLabel="Signal Form">
                                     <rect key="frame" x="121" y="148" width="153" height="22"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <popUpButtonCell key="cell" type="push" title="Free Run" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Mkt-5f-qUp" id="oRU-mZ-DBD">
+                                    <popUpButtonCell key="cell" type="push" title="Always" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="x6l-3M-gc1" id="oRU-mZ-DBD">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="smallSystem"/>
                                         <menu key="menu" title="OtherViews" id="wNo-kB-tjV">
                                             <items>
-                                                <menuItem title="Free Run" state="on" id="Mkt-5f-qUp"/>
-                                                <menuItem title="Always" id="x6l-3M-gc1"/>
+                                                <menuItem title="Free Run" id="Mkt-5f-qUp"/>
+                                                <menuItem title="Always" state="on" id="x6l-3M-gc1"/>
                                             </items>
                                         </menu>
                                     </popUpButtonCell>
@@ -74,13 +74,13 @@
                                 <popUpButton verticalHuggingPriority="750" misplaced="YES" imageHugsTitle="YES" id="39F-Ft-5cr" userLabel="Signal Form">
                                     <rect key="frame" x="121" y="121" width="153" height="22"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <popUpButtonCell key="cell" type="push" title="Never Sync" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="5eV-CM-CHM" id="ibD-qb-vQT">
+                                    <popUpButtonCell key="cell" type="push" title="Always Sync" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="LP6-nv-8Om" id="ibD-qb-vQT">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="smallSystem"/>
                                         <menu key="menu" title="OtherViews" id="H9T-iT-ThA">
                                             <items>
-                                                <menuItem title="Never Sync" state="on" id="5eV-CM-CHM"/>
-                                                <menuItem title="Always Sync" id="LP6-nv-8Om"/>
+                                                <menuItem title="Never Sync" id="5eV-CM-CHM"/>
+                                                <menuItem title="Always Sync" state="on" id="LP6-nv-8Om"/>
                                             </items>
                                         </menu>
                                     </popUpButtonCell>
@@ -149,7 +149,7 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <button misplaced="YES" id="PTL-qh-Owa">
+                                <button hidden="YES" misplaced="YES" id="PTL-qh-Owa">
                                     <rect key="frame" x="124" y="20" width="45" height="20"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Poll" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="fTu-G6-pCd">

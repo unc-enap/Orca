@@ -133,9 +133,9 @@ NSString* ORSynClockIDChanged                   = @"ORSynClockIDChanged";
     [self writeData:[self syncModeCommand:[self syncMode]]];
 }
 
-- (uint32_t) alarmWindow
+- (unsigned int) alarmWindow
 {
-    uint32_t err = alarmWindow % 50;  // make the alarm windown divisible by 50 according to datasheet..
+    int err = alarmWindow % 50;  // make the alarm windown divisible by 50 according to datasheet..
     if (err > 25){
         err = 50 - err;
         alarmWindow += err;
@@ -148,7 +148,7 @@ NSString* ORSynClockIDChanged                   = @"ORSynClockIDChanged";
     return alarmWindow;
 }
 
-- (void) setAlarmWindow:(uint32_t)aValue
+- (void) setAlarmWindow:(unsigned int)aValue
 {
     if(aValue<50)          aValue = 50;
     else if(aValue>12750)  aValue = 12750;
@@ -312,7 +312,7 @@ NSString* ORSynClockIDChanged                   = @"ORSynClockIDChanged";
     return commandDict;
 }
 
-- (NSDictionary*) alarmWindowCommand:(uint32_t)nanoseconds
+- (NSDictionary*) alarmWindowCommand:(unsigned int)nanoseconds
 {
     char cmdData[9];
     cmdData[0] = 'A';
@@ -411,7 +411,7 @@ NSString* ORSynClockIDChanged                   = @"ORSynClockIDChanged";
     [self setTrackMode:  [decoder decodeIntForKey:  @"trackMode"]];
     [self setSyncMode:   [decoder decodeIntForKey:  @"syncMode"]];
     
-    int32_t aValue = [decoder decodeIntForKey:@"alarmWindow"];
+    unsigned int aValue = [decoder decodeInt32ForKey:@"alarmWindow"];
     if(aValue == 0)aValue = 2000; //0 is illegal and means first start, so set to default value
     [self setAlarmWindow:aValue];
     
@@ -431,9 +431,9 @@ NSString* ORSynClockIDChanged                   = @"ORSynClockIDChanged";
 
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
-    [encoder encodeInteger:   trackMode   forKey:@"trackMode"];
-    [encoder encodeInteger:   syncMode    forKey:@"syncMode"];
-    [encoder encodeInteger: (int32_t)alarmWindow forKey:@"alarmWindow"];
+    [encoder encodeInt:   trackMode   forKey:@"trackMode"];
+    [encoder encodeInt:   syncMode    forKey:@"syncMode"];
+    [encoder encodeInt32: alarmWindow forKey:@"alarmWindow"];
     [encoder encodeObject:previousStatusMessages forKey:@"previousStatusMessages"];
 }
 
@@ -467,7 +467,7 @@ NSString* ORSynClockIDChanged                   = @"ORSynClockIDChanged";
 - (void) updatePoll
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updatePoll) object:nil];
-    float delay = 4.0; // Seconds
+    float delay = 10.0; // Seconds
     if(statusPoll && [refClock portIsOpen]) {
         [self requestStatus];
         [self performSelector:@selector(updatePoll) withObject:nil afterDelay:delay];

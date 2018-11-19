@@ -87,6 +87,11 @@
                          object: model];
     
     [notifyCenter addObserver : self
+                     selector : @selector(statusPollChanged:)
+                         name : ORRefClockModelStatusPollChanged
+                        object: model];
+    
+    [notifyCenter addObserver : self
                      selector : @selector(queueCountChanged:)
                          name : ORRefClockModelUpdatedQueue
                        object : model];
@@ -120,9 +125,13 @@
     BOOL lockedOrRunningMaintenance = [gSecurity runInProgressButNotType:eMaintenanceRunType orIsLocked:ORRefClockLock];
     BOOL locked = [gSecurity isLocked:ORRefClockLock];
     
-    [lockButton setState:       locked];
-    [openPortButton setEnabled: !locked];
-    [verboseCB setEnabled:      !lockedOrRunningMaintenance];
+    [lockButton setState:         locked];
+    [openPortButton setEnabled:   !locked];
+    [verboseCB setEnabled:        !lockedOrRunningMaintenance];
+    [statusPollBothCB setEnabled: !lockedOrRunningMaintenance && [model portIsOpen]];
+    if(![model portIsOpen]){
+        [statusPollBothCB setState:NSOffState];
+    }
     
     [motoGPSController setButtonStates];
     [synClockController setButtonStates];
@@ -187,6 +196,16 @@
 - (IBAction) portNameAction:(id)sender;
 {
     [model setPortName:[sender stringValue]];
+}
+
+- (void) statusPollAction:(id)sender
+{
+    [model setStatusPoll:[sender intValue]];
+}
+
+- (void) statusPollChanged:(NSNotification*)aNote
+{
+    [statusPollBothCB setIntValue:[model statusPoll]];
 }
 
 #pragma mark •••Data Source for queue

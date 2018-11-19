@@ -32,6 +32,7 @@
         ORMotoGPSModel*  motoGPSModel;
         NSMutableData*	 inComingData;
         BOOL             verbose;
+        BOOL        statusPoll;
 }
 
 #pragma mark ***Initialization
@@ -45,6 +46,8 @@
 - (void) setVerbose:(BOOL)aVerbose;
 - (void) openPort:(BOOL)state;
 - (void) setLastRequest:(NSDictionary*)aRequest;
+- (BOOL) statusPoll;
+- (void) setStatusPoll:(BOOL)aStatusPoll;
 
 #pragma mark ***Commands
 - (void) addCmdToQueue:(NSDictionary*)aCmd;
@@ -62,6 +65,7 @@ extern NSString* ORRefClockLock;
 extern NSString* ORRefClockModelSerialPortChanged;
 extern NSString* ORRefClockModelVerboseChanged;
 extern NSString* ORRefClockModelUpdatedQueue;
+extern NSString* ORRefClockModelStatusPollChanged;
 
 extern NSString* ORSynClock;
 extern NSString* ORMotoGPS;

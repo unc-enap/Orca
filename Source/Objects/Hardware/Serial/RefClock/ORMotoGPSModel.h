@@ -25,7 +25,9 @@
 {
     @private
         ORRefClockModel* refClock;
+        unsigned long        dataId;
 
+        unsigned long        timeStatusProbed;
         // int reTxCount;  // in case of errors or timeout retransmit; if retransmit
         // // is required, put last command to cmdQueue and dequeueFromBottom
         //
@@ -61,6 +63,13 @@
 - (NSString*) oscTemperature;
 - (NSString*) modelInfo;
 - (ORRefClockModel*) refClockModel;
+
+#pragma mark •••Data Records
+- (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
+- (NSDictionary*) dataRecordDescription;
+- (unsigned long) dataId;
+- (void) setDataId: (unsigned long) DataId;
+- (void) setDataIds:(id)assigner;
 
 #pragma mark ***Commands
 - (void) writeData:(NSDictionary*)aDictionary;

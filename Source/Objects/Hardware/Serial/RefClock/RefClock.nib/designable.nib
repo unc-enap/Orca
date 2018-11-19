@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1050" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
         <capability name="box content view" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,6 +15,7 @@
                 <outlet property="portNameField" destination="7Al-mA-my7" id="P7A-H6-ODC"/>
                 <outlet property="portStateField" destination="892" id="893"/>
                 <outlet property="queueBarGraph" destination="HDN-Na-QtY" id="7BQ-5e-nkM"/>
+                <outlet property="statusPollBothCB" destination="czc-3o-Iio" id="GbR-7V-GNi"/>
                 <outlet property="synClockController" destination="sdu-iM-aGy" id="98H-pQ-uvc"/>
                 <outlet property="verboseCB" destination="giU-1v-5T2" id="D3x-xb-kO2"/>
                 <outlet property="window" destination="5" id="38"/>
@@ -164,6 +165,17 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="RefClock" id="97A-Mp-Zf5"/>
                     </imageView>
+                    <button misplaced="YES" id="czc-3o-Iio" userLabel="Status Poll Both CB">
+                        <rect key="frame" x="249" y="7" width="45" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" title="Poll" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="y6E-e9-8zw">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="statusPollAction:" target="-2" id="peY-Z0-Fxe"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <connections>
@@ -186,7 +198,7 @@
     </objects>
     <resources>
         <image name="Locked" width="33" height="36"/>
-        <image name="RefClock" width="114.88086700439453" height="18.344249725341797"/>
+        <image name="RefClock" width="151" height="24"/>
         <image name="Unlocked" width="33" height="36"/>
     </resources>
 </document>

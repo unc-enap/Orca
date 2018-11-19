@@ -35,6 +35,7 @@
 
     IBOutlet NSButton*      lockButton;
     IBOutlet NSButton*		verboseCB;
+    IBOutlet NSButton*      statusPollBothCB;
     
     IBOutlet ORValueBarGroupView*    queueBarGraph;
 
@@ -56,12 +57,14 @@
 - (void) portNameChanged:(NSNotification*)aNotification;
 - (void) portStateChanged:(NSNotification*)aNotification;
 - (void) verboseChanged:(NSNotification*)aNote;
+- (void) statusPollChanged:(NSNotification*)aNote;
 
 #pragma mark ***Actions
 - (IBAction) openPortAction:(id)sender;
 - (IBAction) lockAction:(id) sender;
 - (IBAction) verboseAction:(id)sender;
 - (IBAction) portNameAction:(id)sender;
+- (IBAction) statusPollAction:(id)sender;
 
 #pragma mark •••Data Source for queue
 - (double) doubleValue;
