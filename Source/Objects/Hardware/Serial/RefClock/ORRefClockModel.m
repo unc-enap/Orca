@@ -189,6 +189,7 @@ NSString* ORMotoGPS                             = @"ORMotoGPS";
 #pragma mark ***Archival
 - (id)initWithCoder:(NSCoder*)decoder
 {
+    //NSLog(@"debug: RefClock  initWithCoder \n");  // todo: remove
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
     
@@ -199,15 +200,21 @@ NSString* ORMotoGPS                             = @"ORMotoGPS";
     [synClockModel setRefClock:self];
     [motoGPSModel  setRefClock:self];
 
+    [self setVerbose:[decoder decodeBoolForKey:@"verbose"]];
+    
     [[self undoManager] enableUndoRegistration];
     return self;
 }
 
-- (void)encodeWithCoder:(NSCoder*)encoder  // todo: function needed?
+- (void)encodeWithCoder:(NSCoder*)encoder  
 {
+    //NSLog(@"debug: RefClock encode WithCoder \n");  // todo: remove
     [super encodeWithCoder:encoder];
     [encoder encodeObject:synClockModel    forKey:@"synClockModel"];
     [encoder encodeObject:motoGPSModel    forKey:@"motoGPSModel"];
+    
+    [encoder encodeBool:verbose forKey:@"verbose"];
+    
 }
 
 - (void)serialPortWriteProgress:(NSDictionary *)dataDictionary

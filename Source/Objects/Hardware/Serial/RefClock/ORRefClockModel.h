@@ -32,7 +32,8 @@
         ORMotoGPSModel*  motoGPSModel;
         NSMutableData*	 inComingData;
         BOOL             verbose;
-        BOOL        statusPoll;
+        BOOL             statusPoll;
+//        NSString*        portName;  // port name alredy stored in baseclass
 }
 
 #pragma mark ***Initialization
