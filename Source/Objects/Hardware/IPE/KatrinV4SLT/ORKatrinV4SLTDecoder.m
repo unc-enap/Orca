@@ -66,6 +66,17 @@ record type = 2 = kStopRunType:		the timestamp is a run stop timestamp
 record type = 3 = kStartSubRunType: the timestamp is a subrun start timestamp
 record type = 4 = kStopSubRunType:	the timestamp is a subrun stop timestamp
 
+record tyoe = 8 = kSyncMessageType  the timestamp Lo is the phase between Orca and Slt clock
+                                    and timestamp Hi contains status information (s. below for coding)
+
+ Sync status messages (form ORKatrinV4SLTDefs.h):
+ 
+ #define kSyncSltGPSErr          (0x1 << 0);
+ #define kSyncSltPPSErr          (0x1 << 1);
+ #define kSyncRefClockAccessErr  (0x1 << 2);
+ #define kSyncRefClockSatErr     (0x1 << 3);
+ #define kSyncRefClockOscErr     (0x1 << 4);
+ 
 For these settings the eventCounter field is 0 and has no meaning.
 
 **/

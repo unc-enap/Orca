@@ -2234,7 +2234,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
                 (double) (orcaTime0.tv_usec + orcaTime1.tv_usec) / 1000000 ) / 2;
     phase = (sltTime - orcaTime) * 1000; // ms
     
-    NSLog(@"Time sync: %d.%06d - %f - %d.%06d => phase %fms\n", orcaTime0.tv_sec, orcaTime0.tv_usec, sltTime, orcaTime1.tv_sec, orcaTime1.tv_usec, (sltTime - orcaTime) * 1000);
+    NSLog(@"Time sync: %d.%06d - %f - %d.%06d => phase %fms\n", orcaTime0.tv_sec, orcaTime0.tv_usec, sltTime, orcaTime1.tv_sec, orcaTime1.tv_usec, phase);
     
     
     // Read Slt status
