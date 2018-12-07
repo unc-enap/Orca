@@ -261,6 +261,10 @@ static NSString* kFLTChanKey[24] = {
         if( minimizeDecoding)break;
     }
     useMinimizedDecoding = minimizeDecoding;
+    isLive = FALSE;
+    nBlock = 0;
+    nBlocksSkipped = 0;
+
     return self;
 }
 - (void) dealloc
@@ -295,6 +299,8 @@ static NSString* kFLTChanKey[24] = {
 - (int) ageOfRecord:(void*)someData
 {
     uint32_t* ptr = (uint32_t*)someData;
+    
+    // Todo: Optimize performance, if necessary! (ak)
     
     // Timestamp of the current record
     uint32_t f1 = ptr[4+0];
@@ -347,7 +353,16 @@ static NSString* kFLTChanKey[24] = {
        if (nBlock >1)
            NSLog(@"SLT decoder: error - old data in the run file\n");
     }
-   
+  
+    
+/*
+ 
+Sanshiro suggests here to stop decoding always at 1/2, 1/3 , 1/4 etc of the second
+ and instead of shiping a single event ship 2, 3 or 4 of the same events. In this case
+ even the hitrate would approximately match.
+ 
+*/
+    
     // Limit time for decoding data to max 1 second
     if (isLive && (t_dec_delay > 1000 )) {
         // Decoding takes too long - skip this record
