@@ -2214,7 +2214,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 
     int trackedSats;
     int oscillatorSync;
-    
+    bool refClockNotConnected;
     
     // Clock status:
     //  - Clear Slt status flags
@@ -2232,9 +2232,9 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 
     orcaTime = ((double) orcaTime0.tv_sec + orcaTime1.tv_sec +
                 (double) (orcaTime0.tv_usec + orcaTime1.tv_usec) / 1000000 ) / 2;
-    phase = (sltTime - orcaTime) * 1000; // ms
+    phase = (sltTime - orcaTime) * 1000000; // us
     
-    NSLog(@"Time sync: %d.%06d - %f - %d.%06d => phase %fms\n", orcaTime0.tv_sec, orcaTime0.tv_usec, sltTime, orcaTime1.tv_sec, orcaTime1.tv_usec, phase);
+    NSLog(@"Time sync: %d.%06d - %f - %d.%06d => phase %dus\n", orcaTime0.tv_sec, orcaTime0.tv_usec, sltTime, orcaTime1.tv_sec, orcaTime1.tv_usec, (int) phase);
     
     
     // Read Slt status
@@ -2248,6 +2248,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     
     trackedSats = 0;
     oscillatorSync = 0;
+    refClockNotConnected = TRUE;
     
     refClockList = [[self document] collectObjectsOfClass:NSClassFromString(@"ORRefClockModel")];
     NSLog(@"Number of refclock objects %d\n", [refClockList count]);
@@ -2258,7 +2259,12 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
         // Otherwise old messages are displayed!!!
         if([refClock portIsOpen]){
             NSLog(@"RefClock object exisiting and configured properly\n");
-        
+            refClockNotConnected = FALSE;
+            
+            //
+            // Todo: check age of the information
+            //
+            
             ORMotoGPSModel*  gps = [refClock motoGPSModel];
             trackedSats = [gps trackedSatellites];
             NSLog(@"Tracked sats = %d\n", trackedSats);
@@ -2274,15 +2280,17 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
         NSLog(@"Add refclock object to the configuration\n");
     }
   
-    
-    
-    
     // Construct the sync status message
     syncStatusLow = (abs( (int) phase) & 0xffffffff);
     syncStatusHigh = 0;
     if (lStatus & kStatusGpsErr) syncStatusHigh = syncStatusHigh | kSyncSltGPSErr;
     if (lStatus & kStatusPpsErr) syncStatusHigh = syncStatusHigh | kSyncSltPPSErr;
-    
+    if (refClockNotConnected) {
+        syncStatusHigh = syncStatusHigh | kSyncRefClockAccessErr;
+    } else {
+        if (trackedSats < 4) syncStatusHigh = syncStatusHigh | kSyncRefClockSatErr;
+        if (oscillatorSync != 3) syncStatusHigh = syncStatusHigh | kSyncRefClockOscErr;
+    }
     [self shipSltEvent:kSyncMessageType withType:aType eventCt:0 high:syncStatusHigh low:syncStatusLow ];
     
     return;

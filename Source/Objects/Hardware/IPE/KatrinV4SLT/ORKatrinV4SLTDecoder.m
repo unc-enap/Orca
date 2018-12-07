@@ -66,7 +66,7 @@ record type = 2 = kStopRunType:		the timestamp is a run stop timestamp
 record type = 3 = kStartSubRunType: the timestamp is a subrun start timestamp
 record type = 4 = kStopSubRunType:	the timestamp is a subrun stop timestamp
 
-record tyoe = 8 = kSyncMessageType  the timestamp Lo is the phase between Orca and Slt clock
+record type = 8 = kSyncMessageType  the timestamp Lo is the phase between Orca and Slt clock (in us)
                                     and timestamp Hi contains status information (s. below for coding)
 
  Sync status messages (form ORKatrinV4SLTDefs.h):
