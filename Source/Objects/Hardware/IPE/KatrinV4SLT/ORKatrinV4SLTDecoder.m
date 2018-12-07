@@ -57,6 +57,7 @@ counter type (form ORKatrinV4SLTDefs.h):
 #define kLostFltEventCounterType 5
 #define kLostSltEventCounterType 6
 #define kLostFltEventTrCounterType 7
+#define kSyncMessageType 8
 
 For record types > 0  64 bit timestamps are stored.
 
@@ -105,6 +106,7 @@ For these settings the eventCounter field is 0 and has no meaning.
             case kRunCounterType:		counterString    = [NSString stringWithFormat:@"Run  Counter\n"]; break;
             case kLostFltEventCounterType: counterString = [NSString stringWithFormat:@"Lost Flt Events\n"]; break;
             case kLostSltEventCounterType: counterString = [NSString stringWithFormat:@"Lost Slt Events\n"]; break;
+            case kSyncMessageType:      counterString    = [NSString stringWithFormat:@"Clock Sync Message\n"]; break;
             default:					counterString    = [NSString stringWithFormat:@"Unknown Counter\n"]; break;
         }
         NSString* typeString;

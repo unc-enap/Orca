@@ -19188,6 +19188,7 @@
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-lnetsnmp",
+					"-headerpad_max_install_names",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = edu.washington.npl.orca;
 				PRODUCT_NAME = Orca;

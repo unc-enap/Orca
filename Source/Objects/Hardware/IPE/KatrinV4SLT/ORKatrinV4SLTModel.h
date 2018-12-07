@@ -153,6 +153,7 @@
         int             pollTime;
 		ORReadOutList*	readOutGroup;
 		NSArray*		dataTakers;			//< cache of data takers.
+        NSArray*        refClockList;       //< cache of link to the ref clock object
 		BOOL			first;
         uint32_t   inhibitBeforeRun; //< Saves inhibit state at run start
 		uint32_t   lastDisplaySec;
@@ -409,6 +410,7 @@
 - (void) shipSltSecondCounter:(unsigned char)aType;
 - (void) shipSltRunCounter:(unsigned char)aType;
 - (void) shipSltEvent:(unsigned char)aCounterType withType:(unsigned char)aType eventCt:(uint32_t)c high:(uint32_t)h low:(uint32_t)l;
+- (void) shipSyncStatus:(unsigned char) aType;
 
 - (ORReadOutList*)	readOutGroup;
 - (void)			setReadOutGroup:(ORReadOutList*)newReadOutGroup;

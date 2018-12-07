@@ -25,6 +25,7 @@
 #import "ORKatrinV4SLTDefs.h"
 #import "ORKatrinV4FLTModel.h"
 #import "ORReadOutList.h"
+#import <sys/time.h>
 #import "unistd.h"
 #import "TimedWorker.h"
 #import "ORDataTypeAssigner.h"
@@ -35,6 +36,10 @@
 #import "ORTaskSequence.h"
 #import "ORFileMover.h"
 #import "ORAlarm.h"
+
+#import "ORRefClockModel.h"
+#import "ORSynClockModel.h"
+#import "ORMotoGPSModel.h"
 
 #import "ORRunModel.h"
 #import <objc/runtime.h>
@@ -1807,6 +1812,9 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 	
     dataTakers = [[readOutGroup allObjects] retain];//cache of data takers.
     
+    refClockList = [[self document] collectObjectsOfClass:NSClassFromString(@"ORRefClockModel")];
+    NSLog(@"Number of ojects found by name %s: %d\n", "ORRefClockModelModel", [refClockList count]);
+    
     
     // Check if any of the Flts is using the threshold finder
     if ([self numberOfActiveThresholdFinder] > 0){
@@ -1931,6 +1939,11 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     // Write run start time; starts always with the second strobe
     [self shipSltEvent:kSecondsCounterType withType:kStartRunType eventCt:0 high:runStartSec low:0 ];
 
+    // Ship clock status
+    [self clearAllStatusErrorBits]; // is also included in init procedure
+    [self shipSyncStatus:kStartRunType ];
+
+    
     callRunIsStopping = false;
     lastHitrateSec = runStartSec -1;
     
@@ -1938,7 +1951,6 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
-    
     uint32_t subseconds;
     uint32_t seconds;
     //uint32_t subsec2;
@@ -1970,6 +1982,10 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
             [self shipSltRunCounter:    kStartSubRunType];
             NSLog(@"SLT %f - met second strobe %i\n", sltTime, secondToWaitFor);
             
+            // Ship sync status
+            [self clearAllStatusErrorBits];
+            [self shipSyncStatus:kStartSubRunType ];
+            
             // Wait for second strobe or inhibit to become active
             NSLog(@"Go ahead to start subrun\n");
             [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORReleaseRunStateChangeWait object: self];
@@ -1985,6 +2001,9 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
             [self shipSltRunCounter:    kStopSubRunType];
             NSLog(@"SLT %f - met second strobe %i\n", sltTime, secondToWaitFor);
             
+            // Ship sync status
+            [self shipSyncStatus:kStopSubRunType ];
+
             // Wait for second strobe or inhibit to become active
             NSLog(@"Go ahead to terminate subrun\n");
             [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORReleaseRunStateChangeWait object: self];
@@ -2103,6 +2122,10 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 
     [self shipSltEvent:kLostFltEventCounterType withType:kStopRunType eventCt:0 high: (lostFltEvents>>32)&0xffffffff low:(lostFltEvents)&0xffffffff ];
     
+    // Ship sync status
+    [self shipSyncStatus:kStopRunType ];
+
+    
     // Delete unused structures
     [pmcLink runTaskStopped:aDataPacket userInfo:userInfo];
 
@@ -2179,6 +2202,90 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 			data[4] = l;
 			[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
 																object:[NSData dataWithBytes:data length:sizeof(int32_t)*(5)]];
+}
+
+- (void) shipSyncStatus:(unsigned char) aType
+{
+    uint32_t lStatus;
+    uint32_t syncStatusHigh;
+    uint32_t syncStatusLow;
+    struct timeval orcaTime0, orcaTime1;
+    double sltTime, orcaTime, phase;
+
+    int trackedSats;
+    int oscillatorSync;
+    
+    
+    // Clock status:
+    //  - Clear Slt status flags
+    //  - Slt PPS Error
+    //  - Slt Clock Error
+    //  - Ref clock sync
+    //  - Ref clock tracked sat
+    //  - Mac NTP sync
+    //  - Phase Mac - Hw (in ms)
+
+    // Check phase between Slt and Orca
+    gettimeofday(&orcaTime0,0);
+    sltTime = [self readTime];
+    gettimeofday(&orcaTime1,0);
+
+    orcaTime = ((double) orcaTime0.tv_sec + orcaTime1.tv_sec +
+                (double) (orcaTime0.tv_usec + orcaTime1.tv_usec) / 1000000 ) / 2;
+    phase = (sltTime - orcaTime) * 1000; // ms
+    
+    NSLog(@"Time sync: %d.%06d - %f - %d.%06d => phase %fms\n", orcaTime0.tv_sec, orcaTime0.tv_usec, sltTime, orcaTime1.tv_sec, orcaTime1.tv_usec, (sltTime - orcaTime) * 1000);
+    
+    
+    // Read Slt status
+    lStatus = [self readStatusReg];
+    
+    // Read Ref clock status
+    // Object is created
+    // Refclock is physically connected
+    // Read status: sufficient number of satelites tracked
+    // Read status: PLL locked
+    
+    trackedSats = 0;
+    oscillatorSync = 0;
+    
+    refClockList = [[self document] collectObjectsOfClass:NSClassFromString(@"ORRefClockModel")];
+    NSLog(@"Number of refclock objects %d\n", [refClockList count]);
+    if ([refClockList count] > 0){
+        id refClock = refClockList[0];
+        
+        // Todo: Ckeck also, if polling is activated !!!
+        // Otherwise old messages are displayed!!!
+        if([refClock portIsOpen]){
+            NSLog(@"RefClock object exisiting and configured properly\n");
+        
+            ORMotoGPSModel*  gps = [refClock motoGPSModel];
+            trackedSats = [gps trackedSatellites];
+            NSLog(@"Tracked sats = %d\n", trackedSats);
+        
+            ORSynClockModel* osci = [refClock synClockModel];
+            // oscillatorSync = [osci statusMessages];
+            NSLog(@"Oscillator status %@\n", [osci statusMessages]);
+            
+        } else {
+            NSLog(@"RefClock object not connected with clock hardware\n");
+        }
+    } else {
+        NSLog(@"Add refclock object to the configuration\n");
+    }
+  
+    
+    
+    
+    // Construct the sync status message
+    syncStatusLow = (abs( (int) phase) & 0xffffffff);
+    syncStatusHigh = 0;
+    if (lStatus & kStatusGpsErr) syncStatusHigh = syncStatusHigh | kSyncSltGPSErr;
+    if (lStatus & kStatusPpsErr) syncStatusHigh = syncStatusHigh | kSyncSltPPSErr;
+    
+    [self shipSltEvent:kSyncMessageType withType:aType eventCt:0 high:syncStatusHigh low:syncStatusLow ];
+    
+    return;
 }
 
 - (void) saveReadOutList:(NSFileHandle*)aFile

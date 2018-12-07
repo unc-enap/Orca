@@ -135,6 +135,7 @@
 #define kLostFltEventCounterType 5
 #define kLostSltEventCounterType 6
 #define kLostFltEventTrCounterType 7
+#define kSyncMessageType 8
 
 
 /*  Time Stamp Record Types used with the
@@ -145,4 +146,9 @@
 #define kStartSubRunType	3
 #define kStopSubRunType		4
 
-
+/* Bit field definition for the sync status message */
+#define kSyncSltGPSErr          (0x1 << 0);
+#define kSyncSltPPSErr          (0x1 << 1);
+#define kSyncRefClockAccessErr  (0x1 << 2);
+#define kSyncRefClockSatErr     (0x1 << 3);
+#define kSyncRefClockOscErr     (0x1 << 4);
