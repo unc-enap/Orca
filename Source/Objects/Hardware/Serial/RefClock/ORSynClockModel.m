@@ -82,6 +82,11 @@ NSString* ORSynClockIDChanged                   = @"ORSynClockIDChanged";
     [self updatePoll];
 }
 
+- (int) status{
+    
+    return status;
+}
+
 - (void) requestStatus
 {
     [self writeData:[self statusCommand]];
@@ -209,6 +214,7 @@ NSString* ORSynClockIDChanged                   = @"ORSynClockIDChanged";
         }
         if([lastRequest isEqualToDictionary:[self statusCommand]]){
             NSString* statusMessage = nil;
+            status = bytes[0];
             switch(bytes[0]){
                 case '0': statusMessage = @"0: warming up"; break;
                 case '1': statusMessage = @"1: tracking set-up"; break;
@@ -407,6 +413,7 @@ NSString* ORSynClockIDChanged                   = @"ORSynClockIDChanged";
 - (id) initWithCoder:(NSCoder*)decoder
 {
     self = [super init];
+    status = -1;
     [[self undoManager] disableUndoRegistration];
     [self setTrackMode:  [decoder decodeIntForKey:  @"trackMode"]];
     [self setSyncMode:   [decoder decodeIntForKey:  @"syncMode"]];

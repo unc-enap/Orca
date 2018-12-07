@@ -35,6 +35,7 @@
         // // is required, put last command to cmdQueue and dequeueFromBottom
         //
         BOOL                statusPoll;
+        int                 status;  // contains most recent status
         NSMutableArray*     previousStatusMessages;
         NSString*           clockID;
 }
@@ -49,6 +50,7 @@
 - (void) requestStatus;
 - (BOOL) statusPoll;
 - (void) setStatusPoll:(BOOL)aStatusPoll;
+- (int) status;
 - (NSString*) statusMessages;  // returns the statusses of nLastMsgs previeous requests for display
 - (NSString*) clockID;
 - (BOOL) portIsOpen;
