@@ -12,6 +12,7 @@
                 <outlet property="lockButton" destination="1311" id="1319"/>
                 <outlet property="motoGPSController" destination="rTr-Oc-9lG" id="F4t-vL-ujU"/>
                 <outlet property="openPortButton" destination="888" id="889"/>
+                <outlet property="pollPeriod" destination="xU8-n1-IpP" id="g6G-lA-I21"/>
                 <outlet property="portNameField" destination="7Al-mA-my7" id="P7A-H6-ODC"/>
                 <outlet property="portStateField" destination="892" id="893"/>
                 <outlet property="queueBarGraph" destination="HDN-Na-QtY" id="7BQ-5e-nkM"/>
@@ -176,6 +177,15 @@
                             <action selector="statusPollAction:" target="-2" id="peY-Z0-Fxe"/>
                         </connections>
                     </button>
+                    <textField verticalHuggingPriority="750" misplaced="YES" id="xU8-n1-IpP">
+                        <rect key="frame" x="300" y="8" width="150" height="19"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" enabled="NO" allowsUndo="NO" state="on" borderStyle="bezel" drawsBackground="YES" id="N9Y-Y3-RsE">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
             </view>
             <connections>

@@ -36,6 +36,7 @@
     IBOutlet NSButton*      lockButton;
     IBOutlet NSButton*		verboseCB;
     IBOutlet NSButton*      statusPollBothCB;
+    IBOutlet NSTextField*   pollPeriod;
     
     IBOutlet ORValueBarGroupView*    queueBarGraph;
 

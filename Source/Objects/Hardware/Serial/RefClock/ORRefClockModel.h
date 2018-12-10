@@ -35,6 +35,7 @@
         BOOL             statusPoll;
         struct timeval   orcaRefClkTime;
 //        NSString*        portName;  // port name alredy stored in baseclass
+        float            pollDelay; //10.0; // Seconds
 }
 
 #pragma mark ***Initialization
@@ -51,6 +52,7 @@
 - (BOOL) statusPoll;
 - (void) setStatusPoll:(BOOL)aStatusPoll;
 - (long) lastMessagesAge;
+- (float) pollDelay;
 
 #pragma mark ***Commands
 - (void) addCmdToQueue:(NSDictionary*)aCmd;

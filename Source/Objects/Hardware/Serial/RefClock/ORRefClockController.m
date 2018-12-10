@@ -46,6 +46,7 @@
     
     [[queueBarGraph xAxis] setRngLow:0 withHigh:100];
     [[queueBarGraph xAxis] setLog:YES];
+    [pollPeriod setStringValue: [NSString stringWithFormat: @"period: %.1f ", [model pollDelay]]];
 
 }
 

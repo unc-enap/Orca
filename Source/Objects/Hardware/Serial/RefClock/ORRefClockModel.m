@@ -182,6 +182,11 @@ NSString* ORMotoGPS                             = @"ORMotoGPS";
     return age;
 }
 
+- (float) pollDelay
+{
+    return pollDelay;
+}
+
 #pragma mark *** Commands
 - (void) addCmdToQueue:(NSDictionary*)aCmd
 {
@@ -203,6 +208,7 @@ NSString* ORMotoGPS                             = @"ORMotoGPS";
 - (id)initWithCoder:(NSCoder*)decoder
 {
     //NSLog(@"debug: RefClock  initWithCoder \n");  // todo: remove
+    pollDelay = 10.0;  // pollDelay seconds;
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
     
@@ -376,7 +382,7 @@ NSString* ORMotoGPS                             = @"ORMotoGPS";
 {
 // todo
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updatePoll) object:nil];
-    float delay = 10.0; //10.0; // Seconds
+    //float delay = 10.0; //10.0; // Seconds
     if([self verbose]){
         NSLog(@"%@\n", @"RefClock updatePoll");
     }
@@ -384,7 +390,7 @@ NSString* ORMotoGPS                             = @"ORMotoGPS";
 //        [self requestStatus];
         [synClockModel requestStatus];
         [motoGPSModel requestStatus];
-        [self performSelector:@selector(updatePoll) withObject:nil afterDelay:delay];
+        [self performSelector:@selector(updatePoll) withObject:nil afterDelay:pollDelay];
     }
     return;
 }
