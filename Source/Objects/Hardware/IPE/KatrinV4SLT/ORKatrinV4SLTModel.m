@@ -2261,24 +2261,20 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
         
         // Todo: Ckeck also, if polling is activated !!!
         // Otherwise old messages are displayed!!!
-        if([refClock portIsOpen]){
-            NSLog(@"RefClock object exisiting and configured properly\n");
+        if([refClock portIsOpen] && ([refClock lastMessagesAge] < 30)){
+            NSLog(@"RefClock object exisiting and configured properly (last message %d sec ago)\n", [refClock lastMessagesAge]);
             refClockNotConnected = FALSE;
-            
-            //
-            // Todo: check age of the information
-            //
             
             ORMotoGPSModel*  gps = [refClock motoGPSModel];
             trackedSats = [gps trackedSatellites];
             NSLog(@"Tracked sats = %d\n", trackedSats);
         
             ORSynClockModel* osci = [refClock synClockModel];
-            // oscillatorSync = [osci statusMessages];
-            NSLog(@"Oscillator status %@\n", [osci statusMessages]);
+            oscillatorSync = [osci status];
+            NSLog(@"Oscillator status %d\n", oscillatorSync);
             
         } else {
-            NSLog(@"RefClock object not connected to clock hardware\n");
+            NSLog(@"RefClock object not connected to clock hardware or polling deactivated\n");
         }
     } else {
         NSLog(@"Add refclock object to the configuration\n");
