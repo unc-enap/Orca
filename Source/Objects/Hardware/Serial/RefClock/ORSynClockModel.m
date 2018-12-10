@@ -219,7 +219,7 @@ NSString* ORSynClockIDChanged                   = @"ORSynClockIDChanged";
         }
         if([lastRequest isEqualToDictionary:[self statusCommand]]){
             NSString* statusMessage = nil;
-            status = bytes[0];
+            status = bytes[0] - '0';  // convert from ascii to int
             switch(bytes[0]){
                 case '0': statusMessage = @"0: warming up"; break;
                 case '1': statusMessage = @"1: tracking set-up"; break;
