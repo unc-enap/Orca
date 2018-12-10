@@ -2049,7 +2049,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
                     }
                     
                     if ((sltSec > sltRunEndSec) && (nHitrateCount > 0)){
-                        NSLog(@"Number of counts in slot %d: %d \n", [self stationNumber], nHitrateCount);
+                        //NSLog(@"Number of counts in slot %d: %d \n", [self stationNumber], nHitrateCount);
                         nHitrateCount = 0;
                     }
                     

@@ -1851,7 +1851,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
 - (void) takeData
 {
 	NSAutoreleasePool *outerpool = [[NSAutoreleasePool allocWithZone:nil] init];
-	NSLog(@"DataTaking Thread Started\n");
+	//NSLog(@"DataTaking Thread Started\n");
 	[NSThread setThreadPriority:.8];
 
 	dataTakingThreadRunning = YES;
@@ -1895,7 +1895,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
 		NSLogError(@"Uncaught exception",@"Run Loop Cleanup",nil);
 	}
 	
-	NSLog(@"DataTaking Thread Exited\n");
+	//NSLog(@"DataTaking Thread Exited\n");
 	dataTakingThreadRunning = NO;
 	[outerpool release];
 	

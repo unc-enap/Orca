@@ -251,11 +251,11 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     BOOL isSubRun = [[[aNote userInfo] objectForKey:@"StartingSubRun"] boolValue];
 
     id rc =  [aNote object];
-    NSLog(@"%@::%@ Calling object %@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),NSStringFromClass([rc class]));
+    //NSLog(@"%@::%@ Calling object %@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),NSStringFromClass([rc class]));
     switch (state) {
         case eRunStarting:
             if (isSubRun){
-                NSLog(@"--- Notification: go to  %@\n",@"eSubRunStarting");
+                //NSLog(@"--- Notification: go to  %@\n",@"eSubRunStarting");
             
                 // Define the start of the subrun here; there is no inhibit used
                 // during subruns, but still phases change only at the second strobe
@@ -279,12 +279,12 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
                 [self shipSecondCounter: kStartSubRunType sec:secondToWaitFor];
                 
             } else {
-                NSLog(@"--- Notification: go to  %@\n",@"eRunStarting");
+                //NSLog(@"--- Notification: go to  %@\n",@"eRunStarting");
             }
             break;
             
         case eRunBetweenSubRuns:
-            NSLog(@"--- Notification: go to  %@\n",@"eRunBetweenSubRuns");
+            //NSLog(@"--- Notification: go to  %@\n",@"eRunBetweenSubRuns");
             
             // Define the end of the subrun here; there is no inhibit used
             // during subruns, but still phases change only at the second strobe
@@ -310,7 +310,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
             break;
             
         case eRunStopping:
-            NSLog(@"--- Notification: go to  %@\n",@"eRunStopping");
+            //NSLog(@"--- Notification: go to  %@\n",@"eRunStopping");
             break;
             
         default:
@@ -1812,8 +1812,8 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 	
     dataTakers = [[readOutGroup allObjects] retain];//cache of data takers.
     
-    refClockList = [[self document] collectObjectsOfClass:NSClassFromString(@"ORRefClockModel")];
-    NSLog(@"Number of ojects found by name %s: %d\n", "ORRefClockModelModel", [refClockList count]);
+    //refClockList = [[self document] collectObjectsOfClass:NSClassFromString(@"ORRefClockModel")];
+    //NSLog(@"Number of ojects found by name %s: %d\n", "ORRefClockModelModel", [refClockList count]);
     
     
     // Check if any of the Flts is using the threshold finder
@@ -1832,7 +1832,8 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     NSLog(@"SLT %f - Prepare for run\n", sltTime);
     
     
-    [[self sbcLink] checkSBCAccurateTime];
+    // Todo: It looks like the us resolution is not working properly?!
+    //[[self Link] checkSBCAccurateTime];
 
           
     // Stop crate
@@ -1857,7 +1858,10 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     sltTime = [self readTime];
     NSLog(@"SLT %f - Crate has stopped\n", sltTime);
     
-    [[self sbcLink] checkSBCTime];
+    
+    //[[self sbcLink] checkSBCTime];
+    
+    
     
     sltsubsecreg  = [self readReg:kKatrinV4SLTSubSecondCounterReg];
     sltsubsec2    = (sltsubsecreg >> 11) & 0x3fff;
@@ -2210,20 +2214,18 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     uint32_t syncStatusHigh;
     uint32_t syncStatusLow;
     struct timeval orcaTime0, orcaTime1;
-    double sltTime, orcaTime, phase;
+    double sltTime, orcaTime, phase, meas;
 
     int trackedSats;
     int oscillatorSync;
     bool refClockNotConnected;
     
     // Clock status:
-    //  - Clear Slt status flags
-    //  - Slt PPS Error
-    //  - Slt Clock Error
-    //  - Ref clock sync
-    //  - Ref clock tracked sat
-    //  - Mac NTP sync
     //  - Phase Mac - Hw (in ms)
+    //  - Slt Clock Error
+    //  - Slt PPS Error
+    //  - Ref clock tracked sat
+    //  - Ref clock sync
 
     // Check phase between Slt and Orca
     gettimeofday(&orcaTime0,0);
@@ -2233,8 +2235,10 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     orcaTime = ((double) orcaTime0.tv_sec + orcaTime1.tv_sec +
                 (double) (orcaTime0.tv_usec + orcaTime1.tv_usec) / 1000000 ) / 2;
     phase = (sltTime - orcaTime) * 1000000; // us
+    meas = (double) (orcaTime1.tv_sec - orcaTime0.tv_sec) * 100000 +
+            (double) (orcaTime1.tv_usec - orcaTime0.tv_usec);
     
-    NSLog(@"Time sync: %d.%06d - %f - %d.%06d => phase %dus\n", orcaTime0.tv_sec, orcaTime0.tv_usec, sltTime, orcaTime1.tv_sec, orcaTime1.tv_usec, (int) phase);
+    NSLog(@"Time sync: phase (Slt - Orca) = %d +- %d us\n", (int) phase, (int) (meas / 2) );
     
     
     // Read Slt status
@@ -2251,7 +2255,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     refClockNotConnected = TRUE;
     
     refClockList = [[self document] collectObjectsOfClass:NSClassFromString(@"ORRefClockModel")];
-    NSLog(@"Number of refclock objects %d\n", [refClockList count]);
+    //NSLog(@"Number of refclock objects %d\n", [refClockList count]);
     if ([refClockList count] > 0){
         id refClock = refClockList[0];
         
@@ -2274,7 +2278,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
             NSLog(@"Oscillator status %@\n", [osci statusMessages]);
             
         } else {
-            NSLog(@"RefClock object not connected with clock hardware\n");
+            NSLog(@"RefClock object not connected to clock hardware\n");
         }
     } else {
         NSLog(@"Add refclock object to the configuration\n");
