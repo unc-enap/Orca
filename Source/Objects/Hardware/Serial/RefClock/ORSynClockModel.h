@@ -38,6 +38,8 @@
         int                 status;  // contains most recent status
         NSMutableArray*     previousStatusMessages;
         NSString*           clockID;
+        //uint32_t            tsLastOscMessage;
+        struct timeval      orcaOscTime; // timestamp of last SynClock Message
 }
 
 #pragma mark ***Initialization
@@ -61,6 +63,7 @@
 - (unsigned int) alarmWindow;
 - (void) setAlarmWindow:(unsigned int)aValue;
 - (ORRefClockModel*) refClockModel;
+- (long) lastOscMessageTime;
 
 #pragma mark ***Commands
 - (void) writeData:(NSDictionary*)aDictionary;

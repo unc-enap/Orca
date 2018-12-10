@@ -168,6 +168,10 @@ NSString* ORSynClockIDChanged                   = @"ORSynClockIDChanged";
     return refClock;
 }
 
+- (long) lastOscMessageTime{
+    return orcaOscTime.tv_sec;
+}
+
 //put our parameters into any run header
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary
 {
@@ -206,6 +210,7 @@ NSString* ORSynClockIDChanged                   = @"ORSynClockIDChanged";
     unsigned char * bytes = (unsigned char *)[receivedData bytes];
     //if([inComingData length] >= 7) {
     if(bytes[nBytes - 1] == '\n') { // check for trailing \n (LF)
+        gettimeofday(&orcaOscTime, 0);
         
         
         if([refClock verbose]){

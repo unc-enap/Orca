@@ -169,6 +169,19 @@ NSString* ORMotoGPS                             = @"ORMotoGPS";
     [self updatePoll];
 }
 
+- (long) lastMessagesAge {
+    NSLog(@"warning: todo (implement lastMessagesAge) \n");
+    long age;
+    long oldestTimestamp;
+
+    long latestGPS = [motoGPSModel lastGPSMessageTime];
+    long latestOsc = [synClockModel lastOscMessageTime];
+    oldestTimestamp = latestGPS < latestOsc ? latestGPS : latestOsc;
+    gettimeofday(&orcaRefClkTime, 0);
+    age = orcaRefClkTime.tv_sec - oldestTimestamp;
+    return age;
+}
+
 #pragma mark *** Commands
 - (void) addCmdToQueue:(NSDictionary*)aCmd
 {

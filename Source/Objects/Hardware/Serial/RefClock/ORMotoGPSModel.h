@@ -42,6 +42,8 @@
         NSString*       antennaSense;
         float           oscTemperature;
         NSString*       modelInfo;
+        //uint32_t        tsLastGPSMessage;
+        struct timeval  orcaMGPSTime;  // timestamp of last GPS Message
 }
 
 #pragma mark ***Initialization
@@ -63,6 +65,7 @@
 - (NSString*) oscTemperature;
 - (NSString*) modelInfo;
 - (ORRefClockModel*) refClockModel;
+- (long) lastGPSMessageTime;
 
 #pragma mark •••Data Records
 - (void) appendDataDescription:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;

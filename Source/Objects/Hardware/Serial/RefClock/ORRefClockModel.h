@@ -33,6 +33,7 @@
         NSMutableData*	 inComingData;
         BOOL             verbose;
         BOOL             statusPoll;
+        struct timeval   orcaRefClkTime;
 //        NSString*        portName;  // port name alredy stored in baseclass
 }
 
@@ -49,6 +50,7 @@
 - (void) setLastRequest:(NSDictionary*)aRequest;
 - (BOOL) statusPoll;
 - (void) setStatusPoll:(BOOL)aStatusPoll;
+- (long) lastMessagesAge;
 
 #pragma mark ***Commands
 - (void) addCmdToQueue:(NSDictionary*)aCmd;
