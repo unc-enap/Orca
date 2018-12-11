@@ -2238,9 +2238,6 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     meas = (double) (orcaTime1.tv_sec - orcaTime0.tv_sec) * 100000 +
             (double) (orcaTime1.tv_usec - orcaTime0.tv_usec);
     
-    NSLog(@"Time sync: phase (Slt - Orca) = %d +- %d us\n", (int) phase, (int) (meas / 2) );
-    
-    
     // Read Slt status
     lStatus = [self readStatusReg];
     
@@ -2262,24 +2259,27 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
         // Todo: Ckeck also, if polling is activated !!!
         // Otherwise old messages are displayed!!!
         if([refClock portIsOpen] && ([refClock lastMessagesAge] < 30)){
-            NSLog(@"RefClock object exisiting and configured properly (last message %d sec ago)\n", [refClock lastMessagesAge]);
+            //NSLog(@"RefClock object exisiting and configured properly (last message %d sec ago)\n", [refClock lastMessagesAge]);
             refClockNotConnected = FALSE;
             
             ORMotoGPSModel*  gps = [refClock motoGPSModel];
             trackedSats = [gps trackedSatellites];
-            NSLog(@"Tracked sats = %d\n", trackedSats);
+            //NSLog(@"Tracked sats = %d\n", trackedSats);
         
             ORSynClockModel* osci = [refClock synClockModel];
             oscillatorSync = [osci status];
-            NSLog(@"Oscillator status %d\n", oscillatorSync);
+            //NSLog(@"Oscillator status %d\n", oscillatorSync);
             
         } else {
-            NSLog(@"RefClock object not connected to clock hardware or polling deactivated\n");
+            NSLog(@"Warning: RefClock object not connected to clock hardware or polling deactivated\n");
         }
     } else {
-        NSLog(@"Add refclock object to the configuration\n");
+        NSLog(@"Warning: no refclock object in the configuration\n");
     }
   
+    NSLog(@"Time sync: phase (Slt - Orca) = %d +- %d us, GPS sats = %d\n", (int) phase, (int) (meas / 2), trackedSats);
+
+    
     // Construct the sync status message
     syncStatusLow = (abs( (int) phase) & 0xffffffff);
     syncStatusHigh = 0;

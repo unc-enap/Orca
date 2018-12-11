@@ -170,7 +170,6 @@ NSString* ORMotoGPS                             = @"ORMotoGPS";
 }
 
 - (long) lastMessagesAge {
-    NSLog(@"warning: todo (implement lastMessagesAge) \n");
     long age;
     long oldestTimestamp;
 

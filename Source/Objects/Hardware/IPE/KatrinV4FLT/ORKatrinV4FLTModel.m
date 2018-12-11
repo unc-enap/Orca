@@ -828,8 +828,7 @@ static double table[32]={
             [slt enablePixelBus:(int)[self stationNumber]];
 			break;
 	}
-    //    -> removed automatic settings of FIFO length (64) and FIFO behaviour (stop on full) 2013-05 -tb-
-	//-tb- 2013-05 [self setFifoLength: fifoLengthSetting];
+    
 }
 
 - (BOOL) noiseFloorRunning { return noiseFloorRunning; }
