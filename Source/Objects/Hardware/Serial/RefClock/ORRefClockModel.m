@@ -69,6 +69,23 @@ NSString* ORMotoGPS                             = @"ORMotoGPS";
 	return @"RS232/RefClock.html";
 }
 
+- (void) awakeAfterDocumentLoaded
+{
+    @try {
+        if(![self portIsOpen]){
+            [self openPort:true];
+        }
+       
+    }
+    @catch(NSException* localException) {
+        NSLog(@"Error RefClock: %@ \n", [localException reason]);
+    }
+    if([self portIsOpen]){
+        // start polling
+        [self setStatusPoll:true];
+    }
+}
+
 #pragma mark ***Accessors
 
 - (ORSynClockModel*) synClockModel{
