@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1050" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
         <capability name="box content view" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -1889,12 +1889,9 @@ Enable</string>
                                                                 <items>
                                                                     <menuItem title="50 ns (0)" state="on" id="4209"/>
                                                                     <menuItem title="100 ns (1)" tag="1" id="4206"/>
-                                                                    <menuItem title="150 ns (2)" tag="2" id="4214"/>
-                                                                    <menuItem title="200 ns (3)" tag="3" id="4208"/>
-                                                                    <menuItem title="250 ns (4)" tag="4" id="4290"/>
-                                                                    <menuItem title="300 ns (5)" tag="5" id="4291"/>
-                                                                    <menuItem title="350 ns (6)" tag="6" id="4292"/>
-                                                                    <menuItem title="400 ns (7)" tag="7" id="4293"/>
+                                                                    <menuItem title="200 ns (2)" tag="2" id="4214"/>
+                                                                    <menuItem title="400 ns (3)" tag="3" id="4208"/>
+                                                                    <menuItem title="800 ns (4)" tag="4" id="4290"/>
                                                                 </items>
                                                             </menu>
                                                         </popUpButtonCell>

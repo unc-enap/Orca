@@ -410,14 +410,14 @@ static NSString* fltTestName[kNumKatrinV4FLTTests]= {
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setBoxcarLength:boxcarLength];
 
-    float old = boxcarLength + 1;
-    float new = aBoxcarLength + 1;
+    float old = 0x1 << boxcarLength;
+    float new = 0x1 << aBoxcarLength;
     float ratio = new/old;
     int chan;
   
     boxcarLength = aBoxcarLength;
 	if(boxcarLength<0) boxcarLength=0;
-	if(boxcarLength>7) boxcarLength=7;
+	if(boxcarLength>4) boxcarLength=4;
 
     // Adjust all ADC related parameters according to the boxcar length
     for(chan=0;chan<kNumV4FLTChannels;chan++){
@@ -940,7 +940,8 @@ static double table[32]={
             
         case kKatrinV4Flt_VetoEnergyDaqMode:
         case kKatrinV4Flt_VetoEnergyTraceDaqMode:
-            bins = [self boxcarLength] +1;
+            //bins = [self boxcarLength] +1;
+            bins = 0x1 << [self boxcarLength];
             break;
             
         default:
