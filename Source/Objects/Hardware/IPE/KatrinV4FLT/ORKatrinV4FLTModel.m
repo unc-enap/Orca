@@ -1115,28 +1115,7 @@ static double table[32]={
 //for HardwareWizard access
 - (void) setScaledThreshold:(short)aChan withValue:(float)aValue
 {
-    switch (runMode) {
-        case kKatrinV4Flt_EnergyDaqMode:
-        case kKatrinV4Flt_EnergyTraceDaqMode:
-        case kKatrinV4Flt_Histogram_DaqMode:
-        case kKatrinV4Flt_BipolarEnergyDaqMode:
-        case kKatrinV4Flt_BipolarEnergyTraceDaqMode:
-
-            [self setFloatThreshold:aChan withValue:aValue * [self filterLengthInBins]];
-            break;
-            
-        case kKatrinV4Flt_VetoEnergyDaqMode:
-        case kKatrinV4Flt_VetoEnergyTraceDaqMode:
-
-            [self setFloatThreshold:aChan withValue:aValue * ( [self boxcarLength] +1)];
-            break;
-
-            
-        default:
-            NSLog(@"ORKatrinV4FLTModel WARNING: unknown DAQ run mode (%i)!\n",runMode);
-            break;
-        
-    }
+    [self setFloatThreshold:aChan withValue:aValue * [self filterLengthInBins]];
 }
 
 - (float) actualFilterLength
