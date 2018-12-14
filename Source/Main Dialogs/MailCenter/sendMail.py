@@ -9,10 +9,12 @@ import optparse
 import os
 from os.path import basename
 
-def send_mail(user, password, server, to, subject,
+def send_mail(user, password, server, fromaddr, to, subject,
               message, attachments, filename):
     msg = MIMEMultipart()
-    msg['From'] = user + '@' + server
+    if fromaddr == '':
+        fromaddr = user + '@' + server
+    msg['From'] = fromaddr
     msg['To'] = to
     msg['Subject'] = subject
     if filename:
@@ -40,15 +42,14 @@ def send_mail(user, password, server, to, subject,
             part['Content-Disposition'] = 'attachment; filename=' + basename(fname)
             msg.attach(part)
             f.close()
-    server = smtplib.SMTP('smtp.' + server, 587)
-    server.ehlo()
-    server.starttls()
-    server.ehlo()
-    server.login(user, password)
+    serv = smtplib.SMTP('smtp.' + server, 587)
+    serv.ehlo()
+    serv.starttls()
+    serv.ehlo()
+    serv.login(user, password)
     to.replace(' ', '')
-    server.sendmail(str(user) + '@' + str(server),
-                    to.split(','), msg.as_string())
-    server.close()
+    serv.sendmail(fromaddr, to.split(','), msg.as_string())
+    serv.close()
     
 if __name__ == '__main__':
 
@@ -59,6 +60,8 @@ if __name__ == '__main__':
                       help = 'password', default = '')
     parser.add_option('-e', type = 'str', dest = 'server',
                       help = 'mail server name', default = '')
+    parser.add_option('-F', type = 'str', dest = 'fromaddr',
+                      help = 'from address', default = '')
     parser.add_option('-t', type = 'str', dest = 'to',
                      help = 'to address', default = '')
     parser.add_option('-s', type = 'str', dest = 'subject',
@@ -71,6 +74,6 @@ if __name__ == '__main__':
                       help = 'message filename', default = '')
     options, args = parser.parse_args()
 
-    send_mail(options.user, options.password, options.server, options.to,
-              options.subject, options.message, options.attachments,
+    send_mail(options.user, options.password, options.server, options.fromaddr,
+              options.to, options.subject, options.message, options.attachments,
               options.filename)

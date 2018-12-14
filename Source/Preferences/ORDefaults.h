@@ -52,6 +52,7 @@
 #define ORMailSelectionPreference   @"ORMailSelectionPreference"
 #define ORMailServer                @"ORMailServer"
 #define ORMailAddress               @"ORMailAddress"
+#define ORMailFromAddress           @"ORMailFromAddress"
 #define ORMailPassword              @"ORMailPassword"
 
 enum {

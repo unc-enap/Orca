@@ -131,11 +131,14 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(PreferencesController);
     if(ser)[mailServerField setStringValue: ser];
     NSString* add = [defaults objectForKey: ORMailAddress];
     if(add)[mailAddressField setStringValue: add];
+    NSString* frm = [defaults objectForKey: ORMailFromAddress];
+    if(frm)[mailFromAddressField setStringValue: frm];
     NSString* pw = [defaults objectForKey: ORMailPassword];
     if(pw)[mailPasswordField setStringValue:pw];
 
     [mailServerField   setEnabled: tag == 1];
     [mailAddressField  setEnabled: tag == 1];
+    [mailFromAddressField setEnabled: tag == 1];
     [mailPasswordField setEnabled: tag == 1];
     
 }
@@ -445,6 +448,12 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(PreferencesController);
 {
     [mailAddressField setStringValue:[sender stringValue]];
     [[NSUserDefaults standardUserDefaults] setObject:[sender stringValue] forKey:ORMailAddress];
+}
+
+- (IBAction) mailFromAddressAction:(id)sender
+{
+    [mailFromAddressField setStringValue:[sender stringValue]];
+    [[NSUserDefaults standardUserDefaults] setObject:[sender stringValue] forKey:ORMailFromAddress];
 }
 
 - (IBAction) mailPasswordAction:(id)sender;

@@ -64,6 +64,7 @@
     IBOutlet NSMatrix*		mailSelectionMatrix;
     IBOutlet NSTextField*   mailAddressField;
     IBOutlet NSTextField*   mailServerField;
+    IBOutlet NSTextField*   mailFromAddressField;
     IBOutlet NSSecureTextField* mailPasswordField;
 
     BOOL disallowStateChange;
@@ -113,6 +114,7 @@
 - (IBAction) mailSelectionAction:(id)sender;
 - (IBAction) mailServerAction:(id)sender;
 - (IBAction) mailAddressAction:(id)sender;
+- (IBAction) mailFromAddressAction:(id)sender;
 - (IBAction) mailPasswordAction:(id)sender;
 
 @end

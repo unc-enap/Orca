@@ -73,7 +73,7 @@
 
         if(usePythonScript){
             @try {
-                //args ->  -u "username" -p "password" -e "server" -t "addresses" -s "subject" -m "message" -a "attachments"
+                //args ->  -u "username" -p "password" -e "server" -F "fromaddress" -t "addresses" -s "subject" -m "message" -a "attachments"
                 NSMutableArray* args = [NSMutableArray array];
       
                 NSString *scriptPath = [[NSBundle mainBundle] pathForResource:@"sendMail" ofType:@"py"];
@@ -90,6 +90,10 @@
                 //server
                 [args addObject:@"-e"];
                 [args addObject:[[NSUserDefaults standardUserDefaults] objectForKey:ORMailServer]];
+                
+                // from address
+                [args addObject:@"-F"];
+                [args addObject:[[NSUserDefaults standardUserDefaults] objectForKey:ORMailFromAddress]];
                 
                 //addresses
                 [args addObject:@"-t"];
