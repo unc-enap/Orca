@@ -1046,6 +1046,17 @@ static double table[32]={
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4FLTModelAnalogOffsetChanged object:self];
 }
 
+- (void) setScaledAnalogOffset:(int)aValue
+{
+    // Todo: Put lookup table here
+    [self setAnalogOffset:aValue];
+}
+- (int) scaledAnalogOffset
+{
+    // Todo: Put lookup table here
+    return [self analogOffset];
+}
+
 - (BOOL) ledOff{ return ledOff; }
 - (void) setLedOff:(BOOL)aState
 {

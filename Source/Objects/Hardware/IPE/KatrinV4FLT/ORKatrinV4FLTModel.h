@@ -218,6 +218,8 @@ static enum  {
 - (void) setFifoBehaviour:(int)aFifoBehaviour;
 - (int) analogOffset;
 - (void) setAnalogOffset:(int)aAnalogOffset;
+- (void) setScaledAnalogOffset:(int)aValue;
+- (int) scaledAnalogOffset;
 - (BOOL) ledOff;
 - (void) setLedOff:(BOOL)aledOff;
 - (uint32_t) interruptMask;
