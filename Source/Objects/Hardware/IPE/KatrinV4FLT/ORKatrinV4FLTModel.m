@@ -1504,7 +1504,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
     }
     
     if(gainChanged){
-        [self writeRegCmd:kFLTV4CommandReg value:kIpeFlt_Cmd_LoadGains];
+        [self writeReg:kFLTV4CommandReg value:kIpeFlt_Cmd_LoadGains];
       
         // Wait for end of transfer indicated by busy flag in the status register bit 8
         usleep(30000);
