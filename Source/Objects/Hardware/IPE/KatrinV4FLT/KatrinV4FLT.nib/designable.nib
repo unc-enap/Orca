@@ -3453,7 +3453,7 @@ Enable</string>
             <connections>
                 <outlet property="delegate" destination="-2" id="308"/>
             </connections>
-            <point key="canvasLocation" x="-68.5" y="180"/>
+            <point key="canvasLocation" x="-112" y="187"/>
         </window>
         <customObject id="318" userLabel="OHexFormatter" customClass="OHexFormatter"/>
         <window title="Panel" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="3174" userLabel="ThresholdFinder" customClass="NSPanel">

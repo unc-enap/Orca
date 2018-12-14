@@ -746,8 +746,6 @@
     [gainTextFields              setEnabled: !lockedOrRunningMaintenance];
     [thresholdTextFields         setEnabled: !lockedOrRunningMaintenance];
     [triggerEnabledCBs           setEnabled: !lockedOrRunningMaintenance];
-    [fireSoftwareTriggerButton   setEnabled: !lockedOrRunningMaintenance];
-    [fireSoftwareTriggerButton1  setEnabled: !lockedOrRunningMaintenance];
     [hitRateEnabledCBs           setEnabled: !lockedOrRunningMaintenance];
 	
 	[versionButton               setEnabled: !runInProgress];
