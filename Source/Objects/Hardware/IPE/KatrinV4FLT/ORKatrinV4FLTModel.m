@@ -1568,7 +1568,15 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
     if(([self readReg:kFLTV4HrControlReg]      & 0x00000f) != [self hitRateLength])   [self writeReg: kFLTV4HrControlReg     value:[self hitRateLength]];
     if(([self readReg:kFLTV4PostTriggerReg]    & 0x0007ff) != [self postTriggerTime]) [self writeReg: kFLTV4PostTriggerReg   value:[self postTriggerTime]];
     if((([self readReg:kFLTV4EnergyOffsetReg]  & 0x0fffff) / [self filterLengthInBins]) != [self energyOffset] )    [self writeReg: kFLTV4EnergyOffsetReg  value:[self energyOffset]];
-    if(([self readReg:kFLTV4AnalogOffsetReg]   & 0x000fff) != [self analogOffset])    [self writeReg: kFLTV4AnalogOffsetReg  value:[self analogOffset]];
+    if(([self readReg:kFLTV4AnalogOffsetReg]   & 0x000fff) != [self analogOffset])  {
+        [self writeReg: kFLTV4AnalogOffsetReg  value:[self analogOffset]];
+        // Use load gain command !!!
+        [self writeReg:kFLTV4CommandReg value:kIpeFlt_Cmd_LoadGains];
+        
+        // Wait for end of transfer indicated by busy flag in the status register bit 8
+        usleep(30000);
+
+    }
     [self writeTriggerControl];
 	[self writeHitRateMask];
 	
