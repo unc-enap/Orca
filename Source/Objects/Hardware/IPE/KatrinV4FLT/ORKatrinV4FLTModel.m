@@ -1593,11 +1593,14 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 
 - (void) writeRunControl:(BOOL)startSampling
 {
+    uint32_t nfold = 1; // Must be 1; 0 will deactivate the veto
     uint32_t hwValue = [self readReg:kFLTV4RunControlReg];
+ 
     
 	uint32_t aValue = 
 	(((boxcarLength)        & 0x7)<<28)	|		//boxcarLength is the register value and the popup item tag. extended to 3 bits in 2016, needed to be shifted to bit 28
     (((poleZeroCorrection)  & 0xf)<<24) |		//poleZeroCorrection is stored as the popup index -- NEW since 2011-06-09 -tb-
+    (((nfold) & 0xf)<<20)               |       // veto mode parameter - nFold, default is 1
 	(((filterShapingLength) & 0x3f)<<8)	|		//filterShapingLength is the register value and the popup item tag -tb-
 	((gapLength & 0xf)<<4)              |
 	((startSampling & 0x1)<<3)          |		// run trigger unit
@@ -1607,6 +1610,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
     
     uint32_t aMask =   (0x7<<28) |
                             (0xf<<24) |
+                            (0xf<<20) |
                             (0x3f<<8) |
                             (0xf<<4)  |
                             (0x1<<3)  |
