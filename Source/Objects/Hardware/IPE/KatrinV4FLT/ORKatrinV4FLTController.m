@@ -609,7 +609,7 @@
 
 - (void) analogOffsetChanged:(NSNotification*)aNote
 {
-	[analogOffsetField setIntValue: [model analogOffset]];
+	[analogOffsetField setIntValue: [model scaledAnalogOffset]];
 }
 
 - (void) interruptMaskChanged:(NSNotification*)aNote
@@ -1304,7 +1304,7 @@
 - (IBAction) analogOffsetAction:(id)sender
 {
 	@try {
-		[model setAnalogOffset:[sender intValue]];	
+		[model setScaledAnalogOffset:[sender intValue]];
 	}
 	@catch(NSException* localException) {
 		NSLog(@"Exception setting FLT analog offset\n");

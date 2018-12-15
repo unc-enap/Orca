@@ -1038,6 +1038,7 @@ static double table[32]={
 }
 
 - (int) analogOffset{ return analogOffset & 0xfff; }
+
 - (void) setAnalogOffset:(int)aAnalogOffset
 {
 	
@@ -1048,13 +1049,28 @@ static double table[32]={
 
 - (void) setScaledAnalogOffset:(int)aValue
 {
-    // Todo: Put lookup table here
-    [self setAnalogOffset:aValue];
+    //
+    // The pedestal is normally in the middle of the ADC range at about 200 ADC counts
+    // With only positive pulses the dynamic range of the pulses is reduced.
+    // The pedestal can be moved withan offset parameter.
+    // The offset parameter is subtracted from the pedestal.
+    // The dependancy of the pedestal from the offset parameter can be
+    // approximated by:
+    // pedestal = -0,5746 * offset + 2061,9
+    //
+    // Todo: analog electronic differ from channel to channel and board to board
+    // It might worth to store individual parameters per board.
+    //
+    
+    float offset;
+    offset = ( 2061.9 - aValue ) / 0.5746;
+    [self setAnalogOffset:  (int) offset  ];
 }
 - (int) scaledAnalogOffset
 {
-    // Todo: Put lookup table here
-    return [self analogOffset];
+    float offset;
+    offset =  2061.9 - 0.5746 * [self analogOffset];
+    return(   (int) offset );
 }
 
 - (BOOL) ledOff{ return ledOff; }
@@ -2220,7 +2236,6 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
     for(i=0;i<kNumV4FLTChannels;i++){
         [self setScaledThreshold:i withValue: [decoder decodeFloatForKey: [NSString stringWithFormat:@"scaledThreshold%d",i]]];
     }
-    //TODO: many fields are  still in super class ORIpeV4FLTModel, some should move here (see ORIpeV4FLTModel::initWithCoder, see my comments in 2011-04-07-ORKatrinV4FLTModel.m) -tb-
     
     [[self undoManager] enableUndoRegistration];
     [self registerNotificationObservers];
@@ -2252,7 +2267,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
     for(i=0;i<kNumV4FLTChannels;i++){
         [encoder encodeFloat:[self scaledThreshold:i] forKey:[NSString stringWithFormat:@"scaledThreshold%d",i]];
     }
-
+    
 }
 
 #pragma mark Data Taking
@@ -2763,7 +2778,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
     p = [[[ORHWWizParam alloc] init] autorelease];
     [p setName:@"Analog Offset"];
     [p setFormat:@"##0" upperLimit:4095 lowerLimit:0 stepSize:1 units:@""];
-    [p setSetMethod:@selector(setAnalogOffset:) getMethod:@selector(analogOffset)];
+    [p setSetMethod:@selector(setScaledAnalogOffset:) getMethod:@selector(scaledAnalogOffset)];
     [a addObject:p];			
 
 	p = [[[ORHWWizParam alloc] init] autorelease];
