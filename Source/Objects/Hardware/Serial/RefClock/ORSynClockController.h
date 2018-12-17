@@ -36,6 +36,7 @@
     IBOutlet NSButton*      deviceIDButton;
     IBOutlet NSTextField*   deviceIDField;
     IBOutlet NSButton*		resetButton;
+    IBOutlet NSButton*      initButton;
     
     id                      model;
     NSArray*                topLevelObjects;
@@ -71,5 +72,6 @@
 - (IBAction) statusPollAction:(id)sender;  // todo: needed?
 - (IBAction) deviceIDAction:(id)sender;
 - (IBAction) resetAction:(id)sender;
+- (IBAction) shipSettingsAction:(id)sender;
 
 @end

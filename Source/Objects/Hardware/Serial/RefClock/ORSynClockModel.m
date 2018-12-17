@@ -65,6 +65,13 @@ NSString* ORSynClockIDChanged                   = @"ORSynClockIDChanged";
     [self writeData:[self errMessgOffCommand]];  // this is written to SynClock flash and needs to be activate only once for a new device (2018-03-28 JH.) (dont use more than 100'000 times to save the synclocks flash memory)
 }
 
+- (void) shipSettings{  // send important GUI settings to the device
+    NSLog(@"SynClockModel: shipping trackMode, syncMode \n");
+    [self setTrackMode:[self trackMode]];
+    [self setSyncMode:[self syncMode]];
+    // todo: alarm window
+}
+
 - (void) requestID{
     [self writeData:[self iDCommand]];
 }

@@ -83,6 +83,7 @@ NSString* ORMotoGPS                             = @"ORMotoGPS";
     if([self portIsOpen]){
         // start polling
         [self setStatusPoll:true];
+        [synClockModel shipSettings];
     }
 }
 

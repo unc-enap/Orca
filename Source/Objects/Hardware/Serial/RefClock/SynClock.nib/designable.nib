@@ -13,6 +13,7 @@
                 <outlet property="deviceContent" destination="6" id="W8Z-QY-0gX"/>
                 <outlet property="deviceIDButton" destination="HFP-h0-yK6" id="KAl-dl-Wu5"/>
                 <outlet property="deviceIDField" destination="8NR-IJ-lIx" id="D7T-FU-iLS"/>
+                <outlet property="initButton" destination="eT0-dA-tp5" id="Bph-0t-IAW"/>
                 <outlet property="resetButton" destination="im4-6S-Pt9" id="sB0-KG-hBX"/>
                 <outlet property="statusButton" destination="Z1f-bu-KCh" id="Os1-6w-Jeo"/>
                 <outlet property="statusOutputField" destination="XZc-Vg-KTl" id="ZM5-FC-1pM"/>
@@ -158,6 +159,17 @@
                                     </buttonCell>
                                     <connections>
                                         <action selector="statusPollAction:" target="-2" id="ahd-Mj-CbG"/>
+                                    </connections>
+                                </button>
+                                <button verticalHuggingPriority="750" misplaced="YES" id="eT0-dA-tp5">
+                                    <rect key="frame" x="183" y="16" width="96" height="28"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <buttonCell key="cell" type="push" title="ShipSettings" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ef6-SR-pcX">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="smallSystem"/>
+                                    </buttonCell>
+                                    <connections>
+                                        <action selector="shipSettingsAction:" target="-2" id="Rgc-k3-5nB"/>
                                     </connections>
                                 </button>
                             </subviews>

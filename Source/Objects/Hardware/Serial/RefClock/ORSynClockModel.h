@@ -48,6 +48,7 @@
 
 #pragma mark ***Accessors
 - (void) reset;
+- (void) shipSettings;  // ship some GUI settings
 - (void) requestID;
 - (void) requestStatus;
 - (BOOL) statusPoll;

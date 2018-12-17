@@ -221,6 +221,12 @@
 {
     [model reset];
 }
+
+- (IBAction) shipSettingsAction:(id)sender
+{
+    [model shipSettings];
+}
+
 @end
 
 
