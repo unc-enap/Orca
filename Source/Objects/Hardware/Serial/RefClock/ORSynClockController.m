@@ -163,7 +163,9 @@
     if([[model refClockModel] verbose]){
         NSLog(@"statusMessageChanged!! updating... \n");
     }
-    [statusOutputField setStringValue:[model statusMessages]];
+    if([model statusMessages] != nil){
+        [statusOutputField setStringValue:[model statusMessages]];
+    }
 }
 
 - (void) iDChanged:(NSNotification*)aNotification{
