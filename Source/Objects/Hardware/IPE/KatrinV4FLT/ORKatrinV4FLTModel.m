@@ -1961,7 +1961,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
                     }
                 }
 
-                uint32_t location = (uint32_t)((([self crateNumber]&0xf)<<21) | ([self stationNumber]& 0x0000001f)<<1);
+                uint32_t location = (uint32_t)((([self crateNumber]&0xf)<<21) | ([self stationNumber]& 0x0000001f)<<16);
                 uint32_t data[5 + kNumV4FLTChannels + kNumV4FLTChannels];//2013-04-24 changed to ship full 32 bit counter; data format changed! see decoder -tb-
                 
                 //get the hitrates
