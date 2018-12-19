@@ -117,6 +117,7 @@ For these settings the eventCounter field is 0 and has no meaning.
             case kRunCounterType:		counterString    = [NSString stringWithFormat:@"Run  Counter\n"]; break;
             case kLostFltEventCounterType: counterString = [NSString stringWithFormat:@"Lost Flt Events\n"]; break;
             case kLostSltEventCounterType: counterString = [NSString stringWithFormat:@"Lost Slt Events\n"]; break;
+            case kLostFltEventTrCounterType: counterString = [NSString stringWithFormat:@"Lost Flt Input Stage Events\n"]; break;
             case kSyncMessageType:      counterString    = [NSString stringWithFormat:@"Clock Sync Message\n"]; break;
             default:					counterString    = [NSString stringWithFormat:@"Unknown Counter\n"]; break;
         }
