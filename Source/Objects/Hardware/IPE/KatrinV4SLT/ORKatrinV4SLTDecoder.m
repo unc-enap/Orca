@@ -86,7 +86,29 @@ For these settings the eventCounter field is 0 and has no meaning.
 {
     uint32_t* ptr = (uint32_t*)someData;
 	uint32_t length	= ExtractLength(*ptr);	 //get length from first word
-	[aDataSet loadGenericData:@" " sender:self withKeys:@"v4SLT",@"Test Record",nil];
+    int recordType  =  (ptr[1])     & 0xf;
+    int counterType = ((ptr[1])>>4) & 0xf;
+    
+    if (counterType == kSecondsCounterType) {
+        switch (recordType) {
+            case kStartRunType: [aDataSet loadGenericData:@" " sender:self withKeys:@"SLT",@"Event",@"Start",nil];        break;
+            case kStopRunType:  [aDataSet loadGenericData:@" " sender:self withKeys:@"SLT",@"Event",@"End",nil]; break;
+            case kStartSubRunType:  [aDataSet loadGenericData:@" " sender:self withKeys:@"SLT",@"Event",@"Subrun Start",nil]; break;
+            case kStopSubRunType:   [aDataSet loadGenericData:@" " sender:self withKeys:@"SLT",@"Event",@"Subrun End",nil]; break;
+        }
+    } else {
+        switch (counterType) {
+            case kVetoCounterType:   [aDataSet loadGenericData:@" " sender:self withKeys:@"SLT",@"Event",@"Veto Message",nil]; break;
+            case kDeadCounterType:   [aDataSet loadGenericData:@" " sender:self withKeys:@"SLT",@"Event",@"Deadtime Message",nil]; break;
+            case kRunCounterType:    [aDataSet loadGenericData:@" " sender:self withKeys:@"SLT",@"Event",@"Runtime Message",nil];break;
+            case kLostFltEventCounterType: [aDataSet loadGenericData:@" " sender:self withKeys:@"SLT",@"Event",@"Lost Event Message",nil];break;
+            case kLostSltEventCounterType: [aDataSet loadGenericData:@" " sender:self withKeys:@"SLT",@"Event",@"Lost Event Message",nil];break;
+            case kLostFltEventTrCounterType:[aDataSet loadGenericData:@" " sender:self withKeys:@"SLT",@"Event",@"Lost Event Message",nil];break;
+            case kSyncMessageType:   [aDataSet loadGenericData:@" " sender:self withKeys:@"SLT",@"Event",@"Sync Status",nil]; break;
+            default:                 [aDataSet loadGenericData:@" " sender:self withKeys:@"SLT",@"Event",@"Other",nil]; break;
+        }
+    }
+	
     return length; //nothing to display at this time.. just return the length
 }
 
@@ -167,7 +189,7 @@ For these settings the eventCounter field is 0 and has no meaning.
 {
     uint32_t* ptr = (uint32_t*)someData;
 	uint32_t length	= ExtractLength(*ptr);	 //get length from first word
-	[aDataSet loadGenericData:@" " sender:self withKeys:@"v4SLT",@"Event Fifo Records",nil];
+	[aDataSet loadGenericData:@" " sender:self withKeys:@"SLT",@"Event Fifo Records",nil];
     return length; //nothing to display at this time.. just return the length
 }
 
@@ -205,10 +227,6 @@ For these settings the eventCounter field is 0 and has no meaning.
 
 
 @implementation ORKatrinV4SLTDecoderForEnergy
-static NSString* kSLTCrate[4] = {
-    //pre-make some keys for speed.
-    @"SLT0.FLT.Energy", @"SLT0.FLT.Energy", @"SLT0.FLT.Energy", @"SLT0.FLT.Energy",
- };
 static NSString* kSLTStation[32] = {
     //pre-make some keys for speed.
     @"Station  0", @"Station  1", @"Station  2", @"Station  3",
@@ -390,8 +408,7 @@ Sanshiro suggests here to stop decoding always at 1/2, 1/3 , 1/4 etc of the seco
     unsigned char crate		= ShiftAndExtract(ptr[1],21,0xf);
     
     NSString* crateKey = @"??";
-    if(crate<4)crateKey= kSLTCrate[crate];
-
+    crateKey = [NSString stringWithFormat:@"Crate %2u", crate];
     
     ptr+=headerlen;
     int i;
@@ -419,7 +436,7 @@ Sanshiro suggests here to stop decoding always at 1/2, 1/3 , 1/4 etc of the seco
         }
         if(decode)[aDataSet histogram:energy/aFilter
                     numBins:4*4096 sender:self
-                   withKeys: crateKey,stationKey,channelKey,nil];
+                   withKeys: @"SLT",@"Energy",crateKey,stationKey,channelKey,nil];
         
         ptr+=6;//next event
     }

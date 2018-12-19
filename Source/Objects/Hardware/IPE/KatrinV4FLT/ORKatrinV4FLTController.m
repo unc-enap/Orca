@@ -747,8 +747,8 @@
     [thresholdTextFields         setEnabled: !lockedOrRunningMaintenance];
     [triggerEnabledCBs           setEnabled: !lockedOrRunningMaintenance];
     [hitRateEnabledCBs           setEnabled: !lockedOrRunningMaintenance];
-	
-	[versionButton               setEnabled: !runInProgress];
+
+    [versionButton               setEnabled: !runInProgress];
 	[testButton                  setEnabled: !runInProgress];
 	[statusButton                setEnabled: !runInProgress];
 	

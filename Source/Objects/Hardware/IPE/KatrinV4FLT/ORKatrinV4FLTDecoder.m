@@ -340,17 +340,17 @@
 			[aDataSet histogram:hitRate
 							   numBins:65536 
 								sender:self  
-							  withKeys: @"FLT",@"HitrateHistogram",crateKey,stationKey,channelKey,nil];
+							  withKeys: @"FLT",@"Hitrate",@"Histogram",crateKey,stationKey,channelKey,nil];
 			
-			[aDataSet loadData2DX:card y:chan z:hitRate size:25  sender:self  withKeys:@"FLT",@"HitRate_2D",crateKey, nil];
-			[aDataSet sumData2DX:card y:chan z:hitRate size:25  sender:self  withKeys:@"FLT",@"HitRateSum_2D",crateKey, nil];
+			[aDataSet loadData2DX:card y:chan z:hitRate size:25  sender:self  withKeys:@"FLT",@"Hitrate",@"2D",crateKey, nil];
+			[aDataSet sumData2DX:card y:chan z:hitRate size:25  sender:self  withKeys:@"FLT",@"Hitrate",@"Sum2D",crateKey, nil];
 		}
 	}
 	
 	[aDataSet loadTimeSeries: hitRateTotal
                       atTime:seconds
 					  sender:self  
-					withKeys: @"FLT",@"HitrateTimeSeries",crateKey,stationKey,nil];
+					withKeys: @"FLT",@"Hitrate",@"TimeSeries",crateKey,stationKey,nil];
 	
 	
 	
