@@ -200,6 +200,7 @@
 - (void) updateWindow;
 - (void) settingsLockChanged:(NSNotification*)aNote;
 - (void) enableRegControls;
+- (void) enableVetoChannels:(BOOL) isVeto;
 - (void) slotChanged:(NSNotification*)aNote;
 - (void) modeChanged:(NSNotification*)aNote;
 - (void) gainChanged:(NSNotification*)aNote;

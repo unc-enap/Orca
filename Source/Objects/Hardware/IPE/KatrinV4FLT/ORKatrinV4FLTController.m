@@ -726,7 +726,8 @@
     BOOL locked           = [gSecurity isLocked:ORKatrinV4FLTSettingsLock];
 	BOOL testsAreRunning  = [model testsRunning];
 	BOOL testingOrRunning = testsAreRunning | runInProgress;
-    bool useBoxcar        = ([(ORKatrinV4FLTModel*)model runMode] == 3) || ([(ORKatrinV4FLTModel*)model runMode] == 4);
+    bool isVetoMode       = ([(ORKatrinV4FLTModel*)model runMode] == 3) || ([(ORKatrinV4FLTModel*)model runMode] == 4);
+    bool useBoxcar        = isVetoMode;
 
     //MAH. put in casts below to clear warning from XCode 5
 //    if([(ORKatrinV4FLTModel*)model runMode] < 3 || [(ORKatrinV4FLTModel*)model runMode] > 6)    [modeTabView selectTabViewItemAtIndex:0];
@@ -748,6 +749,8 @@
     [triggerEnabledCBs           setEnabled: !lockedOrRunningMaintenance];
     [hitRateEnabledCBs           setEnabled: !lockedOrRunningMaintenance];
 
+    [self enableVetoChannels:isVetoMode];
+    
     [versionButton               setEnabled: !runInProgress];
 	[testButton                  setEnabled: !runInProgress];
 	[statusButton                setEnabled: !runInProgress];
@@ -798,6 +801,20 @@
     
     //TODO: extend the accesstype to "channel" and "block64" -tb-
     [channelPopUp setEnabled: needsChannel];
+}
+
+- (void) enableVetoChannels:(BOOL) isVeto
+{
+    int i;
+    int nonVetoChannel[9] = {8,15,24,4,6,11,13,20,22};
+    
+    for (i=0; i<9; i++)
+    {
+        [[gainTextFields cellWithTag:nonVetoChannel[i]] setEnabled: !isVeto];
+        [[thresholdTextFields cellWithTag:nonVetoChannel[i]] setEnabled: !isVeto];
+        [[triggerEnabledCBs cellWithTag:nonVetoChannel[i]] setEnabled: !isVeto];
+        [[hitRateEnabledCBs cellWithTag:nonVetoChannel[i]] setEnabled: !isVeto];
+    }
 }
 
 - (void) fifoFlagsChanged:(NSNotification*)aNote
