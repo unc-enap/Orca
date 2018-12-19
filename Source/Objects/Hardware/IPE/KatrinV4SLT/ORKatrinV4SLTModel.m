@@ -1903,8 +1903,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 	[self load_HW_Config];
 	[pmcLink runTaskStarted:aDataPacket userInfo:userInfo];//method of SBC_Link.m: init alarm handling; send kSBC_StartRun to SBC/PrPMC -tb-
 
-    uint64_t runcount = [self readRunTime];
-    [self shipSltEvent:kRunCounterType withType:kStartRunType eventCt:0 high: (runcount>>32)&0xffffffff low:(runcount)&0xffffffff ];
+    [self shipSltRunCounter:    kStartRunType];
     
     // Check finally, if the inhibit soiurce has been deactivated during config upload
     lStatus = [self readStatusReg];
@@ -2109,9 +2108,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 
     // Ship run counter
     [self shipSltEvent:kSecondsCounterType withType:kStopRunType eventCt:0 high:sltSecondRunStop low:0 ];
-    
-    uint64_t runcount = [self readRunTime];
-    [self shipSltEvent:kRunCounterType withType:kStopRunType eventCt:0 high: (runcount>>32)&0xffffffff low:(runcount)&0xffffffff ];
+    [self shipSltRunCounter: kStopRunType];
     
     // LShip lost event counters
     [self readLostEvents];
