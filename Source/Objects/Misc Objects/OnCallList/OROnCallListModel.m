@@ -597,7 +597,7 @@ NSString* OROnCallListModelEdited           = @"OROnCallListMessageChanged";
     if([[self address] length]){
         if([aMessage length]){
             NSString* s;
-            if(isAlarm) s = [NSString stringWithFormat:@"[%@] Posted alarms:\n\n%@\nAcknowlege them or others will be contacted!",computerName(),aMessage];
+            if(isAlarm) s = [NSString stringWithFormat:@"[%@] Posted alarms:\n\n%@\nAcknowlege them or others will be contacted!\n",computerName(),aMessage];
             else        s = [NSString stringWithFormat:@"From ORCA (%@). \n\n%@\n",computerName(),aMessage];
             
             NSArray* addresses = [[self address] componentsSeparatedByString:@","];
