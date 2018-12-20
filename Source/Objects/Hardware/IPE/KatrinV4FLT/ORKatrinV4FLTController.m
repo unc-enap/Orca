@@ -806,7 +806,7 @@
 - (void) enableVetoChannels:(BOOL) isVeto
 {
     int i;
-    int nonVetoChannel[9] = {8,15,24,4,6,11,13,20,22};
+    int nonVetoChannel[9] = {7,14,23,3,5,10,12,19,21}; // numbering 0...23
     
     for (i=0; i<9; i++)
     {
