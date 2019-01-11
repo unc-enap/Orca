@@ -101,6 +101,15 @@ NSString* OROrcaFinalQuitNotice      = @"OROrcaFinalQuitNotice";
 
         //default to using Apple Mail
         [initialUserDefaults setObject:[NSNumber numberWithBool:0] forKey:ORMailSelectionPreference];
+        
+        [initialUserDefaults setObject:@"" forKey:ORSlackWebhook];
+        [initialUserDefaults setObject:@"" forKey:ORRocketChatURL];
+        [initialUserDefaults setObject:@"" forKey:ORRocketChatPort];
+        [initialUserDefaults setObject:@"" forKey:ORRocketChatUser];
+        [initialUserDefaults setObject:@"" forKey:ORRocketChatPassword];
+        [initialUserDefaults setObject:@"" forKey:ORRocketChatID];
+        [initialUserDefaults setObject:@"" forKey:ORRocketChatToken];
+        [initialUserDefaults setObject:@"" forKey:ORRocketChatChannel];
 		
         [defaults registerDefaults:initialUserDefaults];
         initialized = YES;

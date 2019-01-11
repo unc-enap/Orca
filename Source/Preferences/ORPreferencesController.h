@@ -61,11 +61,19 @@
     IBOutlet NSButton*      activateHeartbeatCB;
     IBOutlet NSButton*      activatePostLogCB;
     
-    IBOutlet NSMatrix*		mailSelectionMatrix;
-    IBOutlet NSTextField*   mailAddressField;
-    IBOutlet NSTextField*   mailServerField;
-    IBOutlet NSTextField*   mailFromAddressField;
+    IBOutlet NSMatrix*		    mailSelectionMatrix;
+    IBOutlet NSTextField*       mailAddressField;
+    IBOutlet NSTextField*       mailServerField;
+    IBOutlet NSTextField*       mailFromAddressField;
     IBOutlet NSSecureTextField* mailPasswordField;
+    IBOutlet NSTextField*       slackWebhookField;
+    IBOutlet NSTextField*       rocketChatURLField;
+    IBOutlet NSTextField*       rocketChatPortField;
+    IBOutlet NSTextField*       rocketChatUserField;
+    IBOutlet NSSecureTextField* rocketChatPasswordField;
+    IBOutlet NSButton*          rocketChatAuthenticateField;
+    IBOutlet NSButton*          rocketChatLogoutField;
+    IBOutlet NSTextField*       rocketChatChannelField;
 
     BOOL disallowStateChange;
 }
@@ -110,11 +118,18 @@
 - (IBAction) activatePostLogAction:(id)sender;
 - (IBAction) selectHeartbeatPathAction:(id)sender;
 
-
 - (IBAction) mailSelectionAction:(id)sender;
 - (IBAction) mailServerAction:(id)sender;
 - (IBAction) mailAddressAction:(id)sender;
 - (IBAction) mailFromAddressAction:(id)sender;
 - (IBAction) mailPasswordAction:(id)sender;
+- (IBAction) slackWebhookAction:(id)sender;
+- (IBAction) rocketChatURLAction:(id)sender;
+- (IBAction) rocketChatPortAction:(id)sender;
+- (IBAction) rocketChatUserAction:(id)sender;
+- (IBAction) rocketChatPasswordAction:(id)sender;
+- (IBAction) rocketChatAuthenticateAction:(id)sender;
+- (IBAction) rocketChatLogoutAction:(id)sender;
+- (IBAction) rocketChatChannelAction:(id)sender;
 
 @end

@@ -54,6 +54,14 @@
 #define ORMailAddress               @"ORMailAddress"
 #define ORMailFromAddress           @"ORMailFromAddress"
 #define ORMailPassword              @"ORMailPassword"
+#define ORSlackWebhook              @"ORSlackWebhook"
+#define ORRocketChatURL             @"ORRocketChatURL"
+#define ORRocketChatPort            @"ORRocketChatPort"
+#define ORRocketChatUser            @"ORRocketChatUser"
+#define ORRocketChatPassword        @"ORRocketChatPassword"
+#define ORRocketChatID              @"ORRocketChatID"
+#define ORRocketChatToken           @"ORRocketChatToken"
+#define ORRocketChatChannel         @"ORRocketChatChannel"
 
 enum {
     straightLines,

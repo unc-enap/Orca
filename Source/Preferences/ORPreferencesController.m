@@ -31,6 +31,7 @@
 - (void) _openSetNewPassWordPanel;
 - (void) _shakeIt;
 - (void) _setPassWordButtonText;
+- (NSDictionary*) _sendCurlMessage:(NSString*)type withArgs:(NSArray*)args;
 @end;
 
 @implementation ORPreferencesController
@@ -135,12 +136,30 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(PreferencesController);
     if(frm)[mailFromAddressField setStringValue: frm];
     NSString* pw = [defaults objectForKey: ORMailPassword];
     if(pw)[mailPasswordField setStringValue:pw];
-
-    [mailServerField   setEnabled: tag == 1];
-    [mailAddressField  setEnabled: tag == 1];
-    [mailFromAddressField setEnabled: tag == 1];
-    [mailPasswordField setEnabled: tag == 1];
+    NSString* swh = [defaults objectForKey:ORSlackWebhook];
+    if(swh)[slackWebhookField setStringValue:swh];
+    NSString* rcurl = [defaults objectForKey:ORRocketChatURL];
+    if(rcurl)[rocketChatURLField setStringValue:rcurl];
+    NSString* rcport = [defaults objectForKey:ORRocketChatPort];
+    if(rcport)[rocketChatPortField setStringValue:rcport];
+    NSString* rcuser = [defaults objectForKey:ORRocketChatUser];
+    if(rcuser)[rocketChatUserField setStringValue:rcuser];
+    NSString* rcpwd = [defaults objectForKey:ORRocketChatPassword];
+    if(rcpwd)[rocketChatPasswordField setStringValue:rcpwd];
+    NSString* rcchan = [defaults objectForKey:ORRocketChatChannel];
+    if(rcchan)[rocketChatChannelField setStringValue:rcchan];
     
+    [mailServerField              setEnabled: tag == 1];
+    [mailAddressField             setEnabled: tag == 1];
+    [mailFromAddressField         setEnabled: tag == 1];
+    [mailPasswordField            setEnabled: tag == 1];
+    [slackWebhookField            setEnabled: tag == 1];
+    [rocketChatURLField           setEnabled: tag == 1];
+    [rocketChatPortField          setEnabled: tag == 1];
+    [rocketChatUserField          setEnabled: tag == 1];
+    [rocketChatPasswordField      setEnabled: tag == 1];
+    [rocketChatLogoutField        setEnabled: tag == 1];
+    [rocketChatChannelField       setEnabled: tag == 1];
 }
 
 #pragma mark ¥¥¥Accessors
@@ -431,10 +450,10 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(PreferencesController);
     NSInteger tag = [[mailSelectionMatrix selectedCell] tag];
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInteger:tag] forKey:ORMailSelectionPreference];
     
-    [mailServerField   setEnabled: tag == 1];
-    [mailAddressField  setEnabled: tag == 1];
-    [mailPasswordField setEnabled: tag == 1];
-    
+    [mailServerField      setEnabled: tag == 1];
+    [mailAddressField     setEnabled: tag == 1];
+    [mailFromAddressField setEnabled: tag == 1];
+    [mailPasswordField    setEnabled: tag == 1];
 }
 
 - (IBAction) mailServerAction:(id)sender
@@ -456,10 +475,110 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(PreferencesController);
     [[NSUserDefaults standardUserDefaults] setObject:[sender stringValue] forKey:ORMailFromAddress];
 }
 
-- (IBAction) mailPasswordAction:(id)sender;
+- (IBAction) mailPasswordAction:(id)sender
 {
     [mailPasswordField setStringValue:[sender stringValue]];
     [[NSUserDefaults standardUserDefaults] setObject:[sender stringValue] forKey:ORMailPassword];
+}
+
+- (IBAction) slackWebhookAction:(id)sender
+{
+    [slackWebhookField setStringValue:[sender stringValue]];
+    [[NSUserDefaults standardUserDefaults] setObject:[sender stringValue] forKey:ORSlackWebhook];
+}
+
+- (IBAction) rocketChatURLAction:(id)sender
+{
+    [rocketChatURLField setStringValue:[sender stringValue]];
+    [[NSUserDefaults standardUserDefaults] setObject:[sender stringValue] forKey:ORRocketChatURL];
+}
+
+- (IBAction) rocketChatPortAction:(id)sender
+{
+    [rocketChatPortField setStringValue:[sender stringValue]];
+    [[NSUserDefaults standardUserDefaults] setObject:[sender stringValue] forKey:ORRocketChatPort];
+}
+
+- (IBAction) rocketChatUserAction:(id)sender
+{
+    [rocketChatUserField setStringValue:[sender stringValue]];
+    [[NSUserDefaults standardUserDefaults] setObject:[sender stringValue] forKey:ORRocketChatUser];
+}
+
+- (IBAction) rocketChatPasswordAction:(id)sender
+{
+    [rocketChatPasswordField setStringValue:[sender stringValue]];
+    [[NSUserDefaults standardUserDefaults] setObject:[sender stringValue] forKey:ORRocketChatPassword];
+}
+
+- (IBAction) rocketChatAuthenticateAction:(id)sender
+{
+    @try{
+        NSArray* args = [NSArray arrayWithObjects:@"-sS",@"-H", @"Content-type: application/json", @"--data",
+                         [NSString stringWithFormat:@"{\"user\":\"%@\", \"password\":\"%@\"}",
+                          [rocketChatUserField stringValue],
+                          [rocketChatPasswordField stringValue]],
+                         @"--connect-timeout", @"10",
+                         [NSString stringWithFormat:@"%@:%@/api/v1/login",
+                          [[NSUserDefaults standardUserDefaults] objectForKey:ORRocketChatURL],
+                          [[NSUserDefaults standardUserDefaults] objectForKey:ORRocketChatPort]], nil];
+        NSDictionary* jdict = [self _sendCurlMessage:@"RocketChat authentification" withArgs:args];
+        if(jdict){
+            if(![[jdict objectForKey:@"status"] isEqualToString:@"success"]){
+                [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:ORRocketChatID];
+                [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:ORRocketChatToken];
+                NSLog(@"RocketChat authentication failure\n");
+            }
+            else{
+                NSDictionary* ddict = [jdict objectForKey:@"data"];
+                [[NSUserDefaults standardUserDefaults] setObject:[ddict objectForKey:@"userId"] forKey:ORRocketChatID];
+                [[NSUserDefaults standardUserDefaults] setObject:[ddict objectForKey:@"authToken"] forKey:ORRocketChatToken];
+                NSLog(@"RocketChat authentification successful\n");
+            }
+        }
+    }
+    @catch(NSException* e){
+        [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:ORRocketChatID];
+        [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:ORRocketChatToken];
+        NSLog([NSString stringWithFormat:@"RocketChat authentification exception: %@\n", [e reason]]);
+    }
+}
+
+- (IBAction) rocketChatLogoutAction:(id)sender
+{
+    @try{
+        NSArray* args = [NSArray arrayWithObjects:@"-sS",
+                         @"-H",[NSString stringWithFormat:@"X-User-Id: %@",
+                                [[NSUserDefaults standardUserDefaults] objectForKey:ORRocketChatID]],
+                         @"-H",[NSString stringWithFormat:@"X-Auth-Token: %@",
+                                [[NSUserDefaults standardUserDefaults] objectForKey:ORRocketChatToken]],
+                         [NSString stringWithFormat:@"%@:%@/api/v1/logout",
+                          [[NSUserDefaults standardUserDefaults] objectForKey:ORRocketChatURL],
+                          [[NSUserDefaults standardUserDefaults] objectForKey:ORRocketChatPort]], nil];
+        NSDictionary* jdict = [self _sendCurlMessage:@"RocketChat logout" withArgs:args];
+        if(jdict){
+            if([[jdict objectForKey:@"status"] isEqualToString:@"error"]){
+                if([[jdict objectForKey:@"message"] isEqualToString:@"You must be logged in to do this."])
+                    NSLog(@"RocketChat already logged out\n");
+                else NSLog(@"RocketChat logout error %@\n", [jdict objectForKey:@"message"]);
+            }
+            else if([[jdict objectForKey:@"status"] isEqualToString:@"success"]){
+                [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:ORRocketChatID];
+                [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:ORRocketChatToken];
+                NSLog(@"RocketChat logout successful\n");
+            }
+            else NSLog(@"RocketChat unrecognized logout status\n");
+        }
+    }
+    @catch(NSException* e){
+        NSLog([NSString stringWithFormat:@"RocketChat logout exception: %@\n", [e reason]]);
+    }
+}
+
+- (IBAction) rocketChatChannelAction:(id)sender
+{
+    [rocketChatChannelField setStringValue:[sender stringValue]];
+    [[NSUserDefaults standardUserDefaults] setObject:[sender stringValue] forKey:ORRocketChatChannel];
 }
 
 @end
@@ -551,6 +670,33 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(PreferencesController);
     }
     else {
         [passwordButton setTitle:@"Change Password"];
+    }
+}
+
+- (NSDictionary*) _sendCurlMessage:(NSString*)type withArgs:(NSArray*)args
+{
+    NSTask* task = [[[NSTask alloc] init] autorelease];
+    task.launchPath = @"/usr/bin/curl";
+    task.arguments = args;
+    NSPipe* stdOutPipe = [NSPipe pipe];
+    [task setStandardOutput:stdOutPipe];
+    [task launch];
+    [task waitUntilExit];
+    NSInteger exitCode = task.terminationStatus;
+    if(exitCode){
+        NSLog(@"%@ error - curl exited with code %li\n", type, (long) exitCode);
+        return nil;
+    }
+    else{
+        NSData* cdata = [[stdOutPipe fileHandleForReading] readDataToEndOfFile];
+        NSError* jerror = nil;
+        @try{
+            return [NSJSONSerialization JSONObjectWithData:cdata options:NSJSONReadingMutableContainers error:&jerror];
+        }
+        @catch(NSException* e){
+            NSLog(@"Exception %@ parsing curl response from %@\n", [e reason], type);
+            return nil;
+        }
     }
 }
 

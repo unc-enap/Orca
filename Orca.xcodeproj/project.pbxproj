@@ -3499,6 +3499,7 @@
 		DB704A1418EBA4E100839B42 /* ELLIEModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DB704A1218EBA4E100839B42 /* ELLIEModel.m */; };
 		DB704A1618EBA61E00839B42 /* ellie.xib in Resources */ = {isa = PBXBuildFile; fileRef = DB704A1518EBA61E00839B42 /* ellie.xib */; };
 		DBEC755518EB9E9B0077D493 /* ellie.gif in Resources */ = {isa = PBXBuildFile; fileRef = DBEC755418EB9E9B0077D493 /* ellie.gif */; };
+		E67894D721E91CD500B66977 /* Messaging.tif in Resources */ = {isa = PBXBuildFile; fileRef = E67894D621E91CD400B66977 /* Messaging.tif */; };
 		E6983CAC219DB3EA00029B9C /* SNOP_Run_Constants.h in Headers */ = {isa = PBXBuildFile; fileRef = E6983CAB219DB3E900029B9C /* SNOP_Run_Constants.h */; };
 		E6983CAE219DB45700029B9C /* ORCamacExceptions.h in Headers */ = {isa = PBXBuildFile; fileRef = E6983CAD219DB45600029B9C /* ORCamacExceptions.h */; };
 		EF69C433116E5DC3008ABADC /* ORSNOCrateReadout.hh in Headers */ = {isa = PBXBuildFile; fileRef = EF69C431116E5DC3008ABADC /* ORSNOCrateReadout.hh */; };
@@ -7216,6 +7217,7 @@
 		DB704A1218EBA4E100839B42 /* ELLIEModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELLIEModel.m; sourceTree = "<group>"; };
 		DB704A1518EBA61E00839B42 /* ellie.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ellie.xib; sourceTree = "<group>"; };
 		DBEC755418EB9E9B0077D493 /* ellie.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = ellie.gif; sourceTree = "<group>"; };
+		E67894D621E91CD400B66977 /* Messaging.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Messaging.tif; sourceTree = "<group>"; };
 		E6983CAB219DB3E900029B9C /* SNOP_Run_Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SNOP_Run_Constants.h; sourceTree = "<group>"; };
 		E6983CAD219DB45600029B9C /* ORCamacExceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORCamacExceptions.h; sourceTree = "<group>"; };
 		EF69C430116E5DC3008ABADC /* ORSNOCrateReadout.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ORSNOCrateReadout.cc; sourceTree = "<group>"; };
@@ -9656,6 +9658,7 @@
 				84C859040665624C00FBAF9C /* Bugs.tif */,
 				840B20C50B4D7CE80021220C /* Editing.tif */,
 				8467DE691E525EF800DDF735 /* Mail.tif */,
+				E67894D621E91CD400B66977 /* Messaging.tif */,
 				843CDEDC03BE307400C39F5F /* ORPreferences.nib */,
 			);
 			name = Preferences;
@@ -16690,6 +16693,7 @@
 				846798A0069385A300DF8B2A /* NcdLogAmpTask.nib in Resources */,
 				846798EB069488AE00DF8B2A /* NcdLinearityTask.nib in Resources */,
 				846799590694B82200DF8B2A /* NcdThresholdTask.nib in Resources */,
+				E67894D721E91CD500B66977 /* Messaging.tif in Resources */,
 				8483270506DA623100172F1C /* DualPortLAM.nib in Resources */,
 				8483272206DA6CBF00172F1C /* DualPortLAM.gif in Resources */,
 				84662FAD070B3745001CDA7E /* exMark.tif in Resources */,

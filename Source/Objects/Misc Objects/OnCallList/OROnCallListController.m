@@ -92,10 +92,19 @@
                         object: model];
     
     [notifyCenter addObserver: self
+                     selector: @selector(slackChanged:)
+                         name: OROnCallListSlackChanged
+                       object: model];
+    
+    [notifyCenter addObserver: self
+                     selector: @selector(rocketChatChanged:)
+                         name: OROnCallListRocketChatChanged
+                       object: self];
+    
+    [notifyCenter addObserver: self
                      selector: @selector(editingDidEnd:)
                          name: NSControlTextDidEndEditingNotification
                        object: onCallListView];
-
 }
 
 - (void) updateWindow
@@ -106,6 +115,8 @@
     [self lastFileChanged:nil];
     [self peopleNotifiedChanged:nil];
     [self messageChanged:nil];
+    [self slackChanged:nil];
+    [self rocketChatChanged:nil];
 }
 
 - (void) forceReload
@@ -138,6 +149,18 @@
     [onCallListView reloadData];
 }
 
+- (void) slackChanged:(NSNotification*)aNote
+{
+    [slackButton setState:[model slackEnabled]];
+    [self setButtonStates];
+}
+
+- (void) rocketChatChanged:(NSNotification*)aNote
+{
+    [rocketChatButton setState:[model rocketChatEnabled]];
+    [self setButtonStates];
+}
+
 - (void) setButtonStates
 {
     BOOL locked = [gSecurity isLocked:OROnCallListListLock];
@@ -146,6 +169,8 @@
 	[removePersonButton setEnabled: !locked];
 	[saveButton setEnabled:         !locked];
 	[restoreButton setEnabled:      !locked];
+    [slackButton setEnabled:        !locked];
+    [rocketChatButton setEnabled:   !locked];
     
     OROnCallPerson* primary     = [model primaryPerson];
    
@@ -322,6 +347,16 @@
             [model saveToFile:[[savePanel URL]path]];
        }
     }];
+}
+
+- (IBAction) slackAction:(id) sender
+{
+    [model setSlackEnabled:[(NSButton*)sender state]];
+}
+
+- (IBAction) rocketChatAction:(id) sender
+{
+    [model setRocketChatEnabled:[(NSButton*)sender state]];
 }
 
 

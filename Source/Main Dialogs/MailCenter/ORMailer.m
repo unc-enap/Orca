@@ -92,8 +92,10 @@
                 [args addObject:[[NSUserDefaults standardUserDefaults] objectForKey:ORMailServer]];
                 
                 // from address
-                [args addObject:@"-F"];
-                [args addObject:[[NSUserDefaults standardUserDefaults] objectForKey:ORMailFromAddress]];
+                if([[NSUserDefaults standardUserDefaults] objectForKey:ORMailFromAddress]){
+                    [args addObject:@"-F"];
+                    [args addObject:[[NSUserDefaults standardUserDefaults] objectForKey:ORMailFromAddress]];
+                }
                 
                 //addresses
                 [args addObject:@"-t"];

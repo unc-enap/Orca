@@ -35,6 +35,8 @@
     NSDate*         timePrimaryNotified;
     NSDate*         timeSecondaryNotified;
     NSDate*         timeTertiaryNotified;
+    BOOL            slackEnabled;
+    BOOL            rocketChatEnabled;
 }
 
 #pragma mark •••Notifications
@@ -61,6 +63,9 @@
 - (void) sendMessageToOnCallPerson;
 - (void) broadcastMessage:(NSString*)aMessage;
 - (void) sendShiftChangeMessage;
+- (void) sendChatMessage:(NSString*)aMessage withList:(NSMutableArray*)aList;
+- (void) sendChatMessage:(NSString*)aMessage withList:(NSMutableArray*)aList isAlarm:(BOOL)isAlarm;
+- (BOOL) sendCurlMessage:(NSString*)type withArgs:(NSMutableArray*)args;
 
 #pragma mark •••Save/Restore
 - (void) saveToFile:        (NSString*)aPath;
@@ -77,6 +82,8 @@
 @property   (assign) BOOL            primaryNotified;
 @property   (assign) BOOL            secondaryNotified;
 @property   (assign) BOOL            tertiaryNotified;
+@property   (assign,nonatomic) BOOL  slackEnabled;
+@property   (assign,nonatomic) BOOL  rocketChatEnabled;
 @end
 
 extern NSString* OROnCallListModelLastFileChanged;
@@ -86,6 +93,8 @@ extern NSString* OROnCallListModelReloadTable;
 extern NSString* OROnCallListListLock;
 extern NSString* OROnCallListPeopleNotifiedChanged;
 extern NSString* OROnCallListMessageChanged;
+extern NSString* OROnCallListSlackChanged;
+extern NSString* OROnCallListRocketChatChanged;
 extern NSString* OROnCallListModelEdited;
 
 @interface OROnCallPerson : NSObject <NSCopying> {
@@ -108,7 +117,7 @@ extern NSString* OROnCallListModelEdited;
 - (NSString*) status;
 - (void) sendMessage:(NSString*)aMessage;
 - (void) sendMessage:(NSString*)aMessage isAlarm:(BOOL)isAlarm;
-- (void) sendAlarmReport;
+- (NSString*) sendAlarmReport;
 - (id)   initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
 - (void) mailSent:(NSString*)to;

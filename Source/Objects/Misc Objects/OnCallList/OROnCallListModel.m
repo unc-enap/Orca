@@ -22,6 +22,7 @@
 #import "ORAlarm.h"
 #import "ORAlarmCollection.h"
 #import "ORMailer.h"
+#import "ORPreferencesController.h"
 
 #pragma mark •••Local Strings
 NSString* OROnCallListModelLastFileChanged	= @"OROnCallListModelLastFileChanged";
@@ -31,7 +32,9 @@ NSString* OROnCallListListLock              = @"OROnCallListListLock";
 NSString* OROnCallListModelReloadTable      = @"OROnCallListModelReloadTable";
 NSString* OROnCallListPeopleNotifiedChanged = @"OROnCallListPeopleNotifiedChanged";
 NSString* OROnCallListMessageChanged        = @"OROnCallListMessageChanged";
-NSString* OROnCallListModelEdited           = @"OROnCallListMessageChanged";
+NSString* OROnCallListSlackChanged          = @"OROnCallListSlackChanged";
+NSString* OROnCallListRocketChatChanged     = @"OROnCallListRocketChatChanged";
+NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
 
 #define kOnCallAlarmWaitTime        3*60
 #define kOnCallAcknowledgeWaitTime 10*60
@@ -46,6 +49,7 @@ NSString* OROnCallListModelEdited           = @"OROnCallListMessageChanged";
 
 @synthesize onCallList,lastFile,primaryNotified,secondaryNotified,tertiaryNotified;
 @synthesize timePrimaryNotified,timeSecondaryNotified,timeTertiaryNotified,message;
+@synthesize slackEnabled,rocketChatEnabled;
 
 #pragma mark •••initialization
 
@@ -204,6 +208,18 @@ NSString* OROnCallListModelEdited           = @"OROnCallListMessageChanged";
     [self postAGlobalNotification];
 }
 
+-(void) setSlackEnabled:(BOOL)enabled
+{
+    slackEnabled = enabled;
+    [[NSNotificationCenter defaultCenter] postNotificationName:OROnCallListSlackChanged object:self];
+}
+
+-(void) setRocketChatEnabled:(BOOL)enabled
+{
+    rocketChatEnabled = enabled;
+    [[NSNotificationCenter defaultCenter] postNotificationName:OROnCallListRocketChatChanged object:self];
+}
+
 - (void) registerNotificationObservers
 {
     NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
@@ -265,10 +281,21 @@ NSString* OROnCallListModelEdited           = @"OROnCallListMessageChanged";
     OROnCallPerson* primary     = [self primaryPerson];
     OROnCallPerson* secondary   = [self secondaryPerson];
     OROnCallPerson* tertiary    = [self tertiaryPerson];
-    if(primary)         [primary   sendMessage:message];
-    else if(secondary)  [secondary sendMessage:message];
-    else if(tertiary)   [tertiary  sendMessage:message];
+    NSMutableArray* rlist = [[[NSMutableArray alloc] init] autorelease];
+    if(primary){
+        [primary sendMessage:message];
+        [rlist addObject:[[primary name] copy]];
+    }
+    else if(secondary){
+        [secondary sendMessage:message];
+        [rlist addObject:[[secondary name] copy]];
+    }
+    else if(tertiary){
+        [tertiary sendMessage:message];
+        [rlist addObject:[[tertiary name] copy]];
+    }
     else NSLog(@"No on call person to send message to!\n");
+    if([rlist count]) [self sendChatMessage:message withList:rlist];
 }
 
 - (void) broadcastMessage:(NSString*)aMessage
@@ -277,6 +304,11 @@ NSString* OROnCallListModelEdited           = @"OROnCallListMessageChanged";
         [[self primaryPerson]   sendMessage:aMessage];
         [[self secondaryPerson] sendMessage:aMessage];
         [[self tertiaryPerson]  sendMessage:aMessage];
+        NSMutableArray* rlist = [[[NSMutableArray alloc] init] autorelease];
+        if([[[self primaryPerson] address]   length]) [rlist addObject:[[[self primaryPerson]   name] copy]];
+        if([[[self secondaryPerson] address] length]) [rlist addObject:[[[self secondaryPerson] name] copy]];
+        if([[[self tertiaryPerson] address]  length]) [rlist addObject:[[[self tertiaryPerson]  name] copy]];
+        if([rlist count]) [self sendChatMessage:aMessage withList:rlist];
     }
 }
 
@@ -359,8 +391,11 @@ NSString* OROnCallListModelEdited           = @"OROnCallListMessageChanged";
     OROnCallPerson* tertiary    = [self tertiaryPerson];
     if(primary){
         
-        [primary sendAlarmReport];
-
+        NSString* report = [primary sendAlarmReport];
+        if(report){
+            NSMutableArray* rlist = [NSMutableArray arrayWithObjects:[[[primary name] copy] autorelease], nil];
+            [self sendChatMessage:report withList:rlist isAlarm:YES];
+        }
         self.primaryNotified        = YES;
         self.timePrimaryNotified    = [NSDate date];
         if(!notificationTimer){
@@ -389,7 +424,11 @@ NSString* OROnCallListModelEdited           = @"OROnCallListMessageChanged";
         [notificationTimer release];
         notificationTimer = nil;
 
-        [secondary sendAlarmReport];
+        NSString* report = [secondary sendAlarmReport];
+        if(report){
+            NSMutableArray* rlist = [NSMutableArray arrayWithObjects:[[[secondary name] copy] autorelease], nil];
+            [self sendChatMessage:report withList:rlist isAlarm:YES];
+        }
         self.secondaryNotified = YES;
         self.timeSecondaryNotified = [NSDate date];
         if(!notificationTimer){
@@ -414,8 +453,11 @@ NSString* OROnCallListModelEdited           = @"OROnCallListMessageChanged";
     
     OROnCallPerson* tertiary    = [self tertiaryPerson];
     if(tertiary){
-        [tertiary sendAlarmReport];
-    
+        NSString* report = [tertiary sendAlarmReport];
+        if(report){
+            NSMutableArray* rlist = [NSMutableArray arrayWithObjects:[[[tertiary name] copy] autorelease], nil];
+            [self sendChatMessage:report withList:rlist isAlarm:YES];
+        }
         self.tertiaryNotified       = YES;
         self.timeTertiaryNotified   = [NSDate date];
     }
@@ -431,6 +473,8 @@ NSString* OROnCallListModelEdited           = @"OROnCallListMessageChanged";
     [self setLastFile:  [decoder decodeObjectForKey:@"lastFile"]];
     [self setMessage:   [decoder decodeObjectForKey:@"message"]];
     onCallList =        [[decoder decodeObjectForKey:@"onCallList"] retain];
+    slackEnabled =       [[decoder decodeObjectForKey:@"slackEnabled"] boolValue];
+    rocketChatEnabled =  [[decoder decodeObjectForKey:@"rocketChatEnabled"] boolValue];
 	
     if([lastFile length] == 0)self.lastFile = @"";
     
@@ -447,6 +491,8 @@ NSString* OROnCallListModelEdited           = @"OROnCallListMessageChanged";
 	[encoder encodeObject:lastFile      forKey:@"lastFile"];
     [encoder encodeObject:onCallList    forKey:@"onCallList"];
     [encoder encodeObject:message       forKey:@"message"];
+    [encoder encodeObject:[NSNumber numberWithBool:slackEnabled]  forKey:@"slackEnabled"];
+    [encoder encodeObject:[NSNumber numberWithBool:rocketChatEnabled] forKey:@"rocketChatEnabled"];
 }
 
 - (void) saveToFile:(NSString*)aPath
@@ -487,11 +533,127 @@ NSString* OROnCallListModelEdited           = @"OROnCallListMessageChanged";
         [messageToSend appendString:@"The On-list has been changed. There is no one on call!!\n Someone should take responibility!"];
    
     }
-    for(id aPerson in onCallList){
-        [aPerson sendMessage:messageToSend];
+    for(id aPerson in onCallList) [aPerson sendMessage:messageToSend];
+    [self sendChatMessage:messageToSend withList:nil];
+}
+
+- (void) sendChatMessage:(NSString*)aMessage withList:(NSMutableArray*)aList{
+    [self sendChatMessage:aMessage withList:aList isAlarm:NO];
+}
+
+- (void) sendChatMessage:(NSString*)aMessage withList:(NSMutableArray*)aList isAlarm:(BOOL)isAlarm
+{
+    if([aMessage length] && (slackEnabled || rocketChatEnabled)){
+        NSString* s;
+        if(isAlarm) s = [NSString stringWithFormat:@"[%@] Posted alarms:\n\n%@\nAcknowlege them or others will be contacted!\n",computerName(),aMessage];
+        else s = [NSString stringWithFormat:@"From ORCA (%@). \n\n%@\n",computerName(),aMessage];
+        NSString* rlist;
+        if([aList count])
+            rlist = [NSString stringWithFormat:@"Message sent to: %@\"}",
+                     [aList componentsJoinedByString:@", "]];
+        else rlist = @"\"}";
+        // send a slack message with curl if the webhook is in the global preferences
+        if([[[NSUserDefaults standardUserDefaults] objectForKey:ORSlackWebhook] length] && slackEnabled){
+            @try{
+                NSMutableString* jmessage = [[[NSMutableString alloc] init] autorelease];
+                [jmessage appendString:[NSString stringWithFormat:@"{\"text\":\"%@\n%@", s, rlist]];
+                NSMutableArray* args = [NSMutableArray arrayWithObjects:@"-sS", @"-X", @"POST",
+                                        @"-H", @"Content-Type: application/json",
+                                        @"--connect-timeout", @"5", @"--data", jmessage,
+                                        [[NSUserDefaults standardUserDefaults]
+                                         objectForKey:ORSlackWebhook], nil];
+                if([self sendCurlMessage:@"Slack" withArgs:args]) NSLog(@"Sent to Slack\n");
+            }
+            @catch(NSException* e){
+                NSLog([NSString stringWithFormat:@"Slack messaging exception: %@\n", [e reason]]);
+            }
+        }
+        // try to send a rocket chat message with curl if we have a valid username and password
+        // if no user ID and token are empty, first attempt to authenticate
+        // if the user ID and token are invalid, the first attempt will fail, so try to re-authenticate
+        if([[[NSUserDefaults standardUserDefaults] objectForKey:ORRocketChatUser]     length] &&
+           [[[NSUserDefaults standardUserDefaults] objectForKey:ORRocketChatPassword] length] &&
+           rocketChatEnabled){
+            if(![[[NSUserDefaults standardUserDefaults] objectForKey:ORRocketChatID]    length] ||
+               ![[[NSUserDefaults standardUserDefaults] objectForKey:ORRocketChatToken] length]){
+                NSLog(@"Not logged in to rocket chat - attempting to authenticate\n");
+                [[ORPreferencesController sharedPreferencesController] rocketChatAuthenticateAction:nil];
+            }
+            if([[[NSUserDefaults standardUserDefaults] objectForKey:ORRocketChatID]    length] &&
+               [[[NSUserDefaults standardUserDefaults] objectForKey:ORRocketChatToken] length]){
+                @try{
+                    NSMutableString* jmessage = [[[NSMutableString alloc] init] autorelease];
+                    [jmessage appendString:[NSString stringWithFormat:@"{\"channel\":\"#%@\",",
+                                            [[NSUserDefaults standardUserDefaults]
+                                             objectForKey:ORRocketChatChannel]]];
+                    [jmessage appendString:[NSString stringWithFormat:@"\"text\":\"%@\n%@", s, rlist]];
+                    NSString* rmessage=[jmessage stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
+                    NSString* rctoken = [NSString stringWithFormat:@"X-Auth-Token: %@",
+                                         [[NSUserDefaults standardUserDefaults]
+                                          objectForKey:ORRocketChatToken]];
+                    NSString* rcid = [NSString stringWithFormat:@"X-User-Id: %@",
+                                      [[NSUserDefaults standardUserDefaults] objectForKey:ORRocketChatID]];
+                    NSString* rcurl = [NSString stringWithFormat:@"%@:%@/api/v1/chat.postMessage",
+                                       [[NSUserDefaults standardUserDefaults] objectForKey:ORRocketChatURL],
+                                       [[NSUserDefaults standardUserDefaults] objectForKey:ORRocketChatPort]];
+                    NSMutableArray* args = [NSMutableArray arrayWithObjects:@"-sS",
+                                            @"-H", @"Content-type: application/json",
+                                            @"-H", rctoken, @"-H", rcid,
+                                            @"--connect-timeout", @"5", @"--data", rmessage, rcurl, nil];
+                    if([self sendCurlMessage:@"RocketChat" withArgs:args]){
+                        NSLog(@"Sent to RocketChat\n");
+                    }
+                    else{
+                        NSLog(@"Attempting to re-authenticate with RocketChat\n");
+                        [[ORPreferencesController sharedPreferencesController] rocketChatAuthenticateAction:nil];
+                        if([[NSUserDefaults standardUserDefaults] objectForKey:ORRocketChatID] &&
+                           [[NSUserDefaults standardUserDefaults] objectForKey:ORRocketChatToken]){
+                            NSString* rtoken = [NSString stringWithFormat:@"X-Auth-Token: %@",
+                                                [[NSUserDefaults standardUserDefaults]  objectForKey:ORRocketChatToken]];
+                            NSString* rid = [NSString stringWithFormat:@"X-User-Id: %@",
+                                             [[NSUserDefaults standardUserDefaults]     objectForKey:ORRocketChatID]];
+                            [args replaceObjectAtIndex:4 withObject:rtoken];
+                            [args replaceObjectAtIndex:6 withObject:rid];
+                            if([self sendCurlMessage:@"RocketChat" withArgs:args])
+                                NSLog(@"Sent to RocketChat\n");
+                            else
+                                NSLog(@"Failed to send RocketChat message after re-authentication attempt\n");
+                        }
+                    }
+                }
+                @catch(NSException* e){
+                    NSLog([NSString stringWithFormat:@"RocketChat messaging exception: %@\n", [e reason]]);
+                }
+            }
+        }
     }
 }
 
+- (BOOL) sendCurlMessage:(NSString*)type withArgs:(NSMutableArray*)args
+{
+    NSTask* task = [[[NSTask alloc] init] autorelease];
+    task.launchPath = @"/usr/bin/curl";
+    task.arguments = args;
+    NSPipe* stdOutPipe = [NSPipe pipe];
+    [task setStandardOutput:stdOutPipe];
+    [task launch];
+    [task waitUntilExit];
+    NSInteger exitCode = task.terminationStatus;
+    BOOL success = NO;
+    if(exitCode) NSLog(@"%@ messaging error - curl exited with code %li\n", type, (long) exitCode);
+    else{
+        NSData* cdata = [[stdOutPipe fileHandleForReading] readDataToEndOfFile];
+        NSString* stdOut = [[[NSString alloc] initWithData:cdata encoding:NSUTF8StringEncoding] autorelease];
+        success = [stdOut isEqualToString:@"ok"];
+        if(!success){
+            NSError* jerror = nil;
+            NSDictionary* jdict = [NSJSONSerialization JSONObjectWithData:cdata options:NSJSONReadingMutableContainers error:&jerror];
+            if([jdict objectForKey:@"success"]) success = YES;
+            else NSLog(@"%@ messaging error - curl returned %@\n", type, stdOut);
+        }
+    }
+    return success;
+}
 
 @end
 
@@ -665,7 +827,7 @@ NSString* OROnCallListModelEdited           = @"OROnCallListMessageChanged";
     else NSLog(@"No contact info available for %@\n",[self name]);
 }
 
-- (void) sendAlarmReport
+- (NSString*) sendAlarmReport
 {
     if([[self address] length]){
         [self setStatus:[NSString stringWithFormat:@"Contacted: %@",[[NSDate date] descriptionFromTemplate:@"HH:mm:ss"]]];
@@ -679,12 +841,14 @@ NSString* OROnCallListModelEdited           = @"OROnCallListMessageChanged";
         
         if([report length]){
             [self sendMessage:report isAlarm:YES];
+            return [[report copy] autorelease];
          }
     }
     else {
         [self setStatus:@"No Address"];
         NSLog(@"No contact info available for %@\n",[self name]);
     }
+    return nil;
 }
 
 - (void) mailSent:(NSString*)to

@@ -27,6 +27,8 @@
     IBOutlet NSButton*      saveButton;
     IBOutlet NSButton*      restoreButton;
     IBOutlet NSButton*      sendMessageButton;
+    IBOutlet NSButton*      slackButton;
+    IBOutlet NSButton*      rocketChatButton;
  }
 
 - (void) setButtonStates;
@@ -42,6 +44,8 @@
 - (void) listLockChanged:       (NSNotification*)aNote;
 - (void) peopleNotifiedChanged: (NSNotification*)aNote;
 - (void) messageChanged:        (NSNotification*)aNote;
+- (void) slackChanged:          (NSNotification*)aNote;
+- (void) rocketChatChanged:     (NSNotification*)aNote;
 - (void) editingDidEnd:         (NSNotification*)aNote;
 
 #pragma mark •••Actions
@@ -53,6 +57,8 @@
 - (IBAction) cut:(id)sender;
 - (IBAction) loadFileAction:(id) sender;
 - (IBAction) saveFileAction:(id) sender;
+- (IBAction) slackAction:(id) sender;
+- (IBAction) rocketChatAction:(id) sender;
 
 #pragma mark •••Delegate Methods
 - (void) tableViewSelectionDidChange:(NSNotification *)aNotification;
