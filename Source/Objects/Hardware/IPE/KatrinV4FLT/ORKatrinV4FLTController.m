@@ -814,7 +814,14 @@
         [[thresholdTextFields cellWithTag:nonVetoChannel[i]] setEnabled: !isVeto];
         [[triggerEnabledCBs cellWithTag:nonVetoChannel[i]] setEnabled: !isVeto];
         [[hitRateEnabledCBs cellWithTag:nonVetoChannel[i]] setEnabled: !isVeto];
+       
+        // Disable hardware trigger and hitrate
+        if (isVeto){
+            [model setTriggerEnabled:nonVetoChannel[i] withValue: 0];
+            [model setHitRateEnabled:nonVetoChannel[i] withValue: 0];
+        }
     }
+
 }
 
 - (void) fifoFlagsChanged:(NSNotification*)aNote
