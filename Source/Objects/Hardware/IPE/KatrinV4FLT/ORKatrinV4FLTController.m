@@ -806,9 +806,11 @@
 - (void) enableVetoChannels:(BOOL) isVeto
 {
     int i;
-    int nonVetoChannel[9] = {7,14,23,3,5,10,12,19,21}; // numbering 0...23
-    
-    for (i=0; i<9; i++)
+    //int nonVetoChannel[9] = {7,14,23,3,5,10,12,19,21}; // numbering 0...23
+    int nonVetoChannel[6] = {7,14,23,5,12,21}; // numbering 0...23
+    int nNonVetoChannels = sizeof(nonVetoChannel)/sizeof(int);
+
+    for (i=0; i<nNonVetoChannels; i++)
     {
         [[gainTextFields cellWithTag:nonVetoChannel[i]] setEnabled: !isVeto];
         [[thresholdTextFields cellWithTag:nonVetoChannel[i]] setEnabled: !isVeto];
