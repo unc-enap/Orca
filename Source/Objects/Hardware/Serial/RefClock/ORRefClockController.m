@@ -105,6 +105,7 @@
     [self portStateChanged:nil];
     [self portNameChanged:nil];
     [self verboseChanged:nil];
+    [self statusPollChanged:nil];
     [self queueCountChanged:nil];
 }
 
