@@ -161,9 +161,12 @@
 - (void) statusMessageChanged:(NSNotification*)aNote
 {
     if([[model refClockModel] verbose]){
-        NSLog(@"statusMessageChanged!! updating... \n");
+        NSLog(@"OSC statusMessageChanged!! updating... \n");
     }
-    if([model statusMessages] != nil){
+    if(aNote == nil){
+        [statusOutputField setStringValue:@""];
+    }
+    else if([model statusMessages] != nil){
         [statusOutputField setStringValue:[model statusMessages]];
     }
 }

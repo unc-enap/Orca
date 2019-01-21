@@ -112,9 +112,12 @@
 
 - (void) receivedMessageChanged:(NSNotification*)aNote
 {   if([[model refClockModel] verbose]){
-        NSLog(@"New message received \n");
+        NSLog(@"New GPS message received \n");
     }
-    if([model lastReceived] != nil){
+    if(aNote == nil){
+        [receivedMessageField setStringValue:@""];
+    }
+    else if([model lastReceived] != nil){
         [receivedMessageField setStringValue:[model lastReceived]];
     }
 }
