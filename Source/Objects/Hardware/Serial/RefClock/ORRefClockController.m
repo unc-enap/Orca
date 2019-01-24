@@ -133,6 +133,7 @@
     [statusPollBothCB setEnabled: !lockedOrRunningMaintenance && [model portIsOpen]];
     if(![model portIsOpen]){
         [statusPollBothCB setState:NSOffState];
+        [self statusPollAction:0];
     }
     
     [motoGPSController setButtonStates];
