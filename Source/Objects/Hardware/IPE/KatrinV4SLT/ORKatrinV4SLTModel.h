@@ -316,7 +316,8 @@
 - (void) writePixelBusEnableReg;
 - (void) readPixelBusEnableReg;
 - (void) readSLTEventFifoSingleEvent;
-
+- (void) resetEventBuffer;
+    
 - (void)		loadSecondsReg;
 - (void)		writeSetInhibit;
 - (void)		writeClrInhibit;

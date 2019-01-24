@@ -1323,6 +1323,29 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     }
 }
 
+    // Warning: This command sequence does not clear all available FIFOs in the Slt prperly
+    // It is necessary to use Slt reset instead, and initialize all registers afterwards!
+    // Alternative code:
+    // [self writeSltReset];
+    // [self initBoard];
+- (void) resetEventBuffer
+{
+    int fifosize;
+
+    // Stop run mode before clearing the event buffer
+    [self writeControlRegRunFlagOn:FALSE];
+    [self writeFIFOcsrReset];
+    
+    // Check if FIFO is really cleared
+    fifosize = [self readReg:kKatrinV4SLTFIFOModeReg];
+    if (fifosize > 0)
+        NSLog(@"Error: Event buffer has not been cleared properly - still %d events left %\n", fifosize/6);
+
+    // Restart again - otherwise nothing would work
+    [self writeControlRegRunFlagOn:TRUE];
+
+}
+    
 - (void) loadSecondsReg
 {
     [self setHostTimeToFLTsAndSLT];
@@ -1495,9 +1518,10 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     
 - (void) initBoard
 {
+    //
     // Todo: Check that all Slt parameters are included
-    [self writeFIFOcsrReset];
-
+    //
+    
     if (countersEnabled) [self writeEnCnt];
     else                 [self writeDisCnt];
     [self loadSecondsReg];
@@ -1857,28 +1881,21 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     // Make sure we start not at the very end of the secons
     sltTime = [self readTime];
     NSLog(@"SLT %f - Crate has stopped\n", sltTime);
-    
-    
     //[[self sbcLink] checkSBCTime];
-    
-    
+
     
     sltsubsecreg  = [self readReg:kKatrinV4SLTSubSecondCounterReg];
     sltsubsec2    = (sltsubsecreg >> 11) & 0x3fff;
     if (sltsubsec2 > 8000) {
         usleep(205000);
     }
-    [self writeControlRegRunFlagOn:FALSE];//stop run mode -> clear event buffer -tb- 2016-05
 
-    // Reset Slt FIFO
-    //[self writeFIFOcsrReset];
-   
-   
-    //if cold start (not 'quick start' in RunControl) ...
-    if([[userInfo objectForKey:@"doinit"]intValue]){
-        [self initBoard];
-    }
-    //loop over Readout List and tell our children the run is starting
+    // Reset Slt FIFO and initialize the Slt
+    // The Slt is initialized always, because otherwise some FIFOs can't be cleared properly
+    [self writeSltReset];
+    [self initBoard];
+  
+    // Loop over Readout List and tell our children the run is starting
 	for(id obj in dataTakers){
         [obj runTaskStarted:aDataPacket userInfo:userInfo];
         [obj stopReadingHitRates];
@@ -1911,7 +1928,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
         NSLog(@"Set inhibit failed\n");
         [NSException raise:@"SLT error" format:@"Set inhibit failed"];
     }
-
+    
     // Release inhibit with the next second strobe
     [self writeClrInhibit];
 
@@ -1949,7 +1966,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     
     callRunIsStopping = false;
     lastHitrateSec = runStartSec -1;
-    
+ 
 }
 
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo

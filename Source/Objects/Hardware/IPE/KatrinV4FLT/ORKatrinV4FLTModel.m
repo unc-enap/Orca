@@ -2612,10 +2612,10 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 	//}
     
     //if cold start (not 'quick start' in RunControl) ...
+    // Quickstart option is not available for IPE-DAQ;
+    // Note: the initialization phase of 1 sec is always required
     [self setLedOff:NO];
-    if([[userInfo objectForKey:@"doinit"]intValue]){
-	    [self initBoard];           // writes control reg + hr control reg + PostTrigg + thresh+gains + offset + triggControl + hr mask + enab.statistics
-	}
+    [self initBoard];           // writes control reg + hr control reg + PostTrigg + thresh+gains + offset + triggControl + hr mask + enab.statistics
 	
     [self reset];               // Write 1 to all reset/clear flags of the FLTv4 command register. (-> will 'clear' the event FIFO pointers)
     
