@@ -1526,6 +1526,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     else                 [self writeDisCnt];
     [self loadSecondsReg];
     [self writeControlReg];
+    [self writeControlRegRunFlagOn:FALSE]; // this bit is only active during a run
     [self writeInterruptMask];
     [self clearAllStatusErrorBits];
     [self writePixelBusEnableReg];
@@ -1891,10 +1892,14 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     }
 
     // Reset Slt FIFO and initialize the Slt
-    // The Slt is initialized always, because otherwise some FIFOs can't be cleared properly
-    [self writeSltReset];
+    // Reses buffers might have som problems if the buffering is exposed to very high rates
+    // with out readout. Therefore the buffering is turned off after each run.
+    // Alternatively a Slt reset can be performed in order to clear also hidden FIFOs in the
+    // input stage.
+    //[self writeSltReset];
+    [self resetEventBuffer];
     [self initBoard];
-  
+    
     // Loop over Readout List and tell our children the run is starting
 	for(id obj in dataTakers){
         [obj runTaskStarted:aDataPacket userInfo:userInfo];
@@ -1930,8 +1935,11 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     }
     
     // Release inhibit with the next second strobe
+    // Activate Slt event buffering
+    [self writeControlRegRunFlagOn:TRUE];
     [self writeClrInhibit];
 
+    
     //
     // Save the first second of the run
     // Is used by hitrate readout to aviod too early storage
@@ -2066,7 +2074,9 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
         [e raise]; //this will also be caught in Run Control
     }
     
-    [self writeSetInhibit]; //TODO: maybe move to readout loop to avoid dead time -tb-
+    // Stop crate
+    [self writeSetInhibit];
+
     inhibitLastCheck = 0;
 }
 
@@ -2163,6 +2173,10 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     // Activate crate during the run pause for configuration
     // Release inhibit with the next second strobe
     //
+    
+    // Stop Slt event buffering; is only needed for readout
+    // But Flts are operating independandtly; count rates will be displayed
+    [self writeControlRegRunFlagOn:FALSE];
     [self restoreInhibitStatus];
 
 
