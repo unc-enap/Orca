@@ -43,6 +43,7 @@
 }
 
 #pragma mark ***Initialization
+- (id) init;
 - (void) dealloc;
 - (void) setRefClock:(ORRefClockModel*)aRefClock;
 

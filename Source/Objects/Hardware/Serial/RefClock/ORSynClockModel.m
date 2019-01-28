@@ -42,6 +42,15 @@ NSString* ORSynClockIDChanged                   = @"ORSynClockIDChanged";
 @end
 
 @implementation ORSynClockModel
+
+- (id) init
+{
+    self = [super init];
+    trackMode = 3;
+    syncMode = 3;
+    return self;
+}
+
 - (void) dealloc
 {
     [previousStatusMessages dealloc];
