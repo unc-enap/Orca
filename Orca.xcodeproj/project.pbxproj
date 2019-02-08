@@ -3398,6 +3398,14 @@
 		9CF2C1B90CC195E2002B279B /* ORL8013CrateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF2C1AF0CC195E1002B279B /* ORL8013CrateController.m */; };
 		9CF2C1BA0CC195E2002B279B /* ORL8013CrateModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CF2C1B00CC195E1002B279B /* ORL8013CrateModel.h */; };
 		9CF2C1BB0CC195E2002B279B /* ORL8013CrateModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF2C1B10CC195E1002B279B /* ORL8013CrateModel.m */; };
+		A8175F84220D8D07003AC7E5 /* ORADEIControlDecoders.m in Sources */ = {isa = PBXBuildFile; fileRef = A8175F7B220D8D06003AC7E5 /* ORADEIControlDecoders.m */; };
+		A8175F85220D8D07003AC7E5 /* ORADEIControlController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8175F7C220D8D06003AC7E5 /* ORADEIControlController.m */; };
+		A8175F86220D8D07003AC7E5 /* ORADEIControlModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A8175F7D220D8D06003AC7E5 /* ORADEIControlModel.m */; };
+		A8175F88220D8D07003AC7E5 /* ADEIControl.png in Resources */ = {isa = PBXBuildFile; fileRef = A8175F7F220D8D06003AC7E5 /* ADEIControl.png */; };
+		A8175F89220D8D07003AC7E5 /* ORADEIControlDecoders.h in Headers */ = {isa = PBXBuildFile; fileRef = A8175F80220D8D06003AC7E5 /* ORADEIControlDecoders.h */; };
+		A8175F8A220D8D07003AC7E5 /* ORADEIControlModel.h in Headers */ = {isa = PBXBuildFile; fileRef = A8175F81220D8D06003AC7E5 /* ORADEIControlModel.h */; };
+		A8175F8B220D8D07003AC7E5 /* ADEIControl.nib in Resources */ = {isa = PBXBuildFile; fileRef = A8175F82220D8D06003AC7E5 /* ADEIControl.nib */; };
+		A8175F8C220D8D07003AC7E5 /* ORADEIControlController.h in Headers */ = {isa = PBXBuildFile; fileRef = A8175F83220D8D06003AC7E5 /* ORADEIControlController.h */; };
 		B322A309146D64D000491347 /* ORTcpIpProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = B322A308146D64D000491347 /* ORTcpIpProtocol.h */; };
 		B33FBC93146F2A6A0046A733 /* edu.washington.npl.orca.VXIHardware.plist in Resources */ = {isa = PBXBuildFile; fileRef = B33FBC92146F2A6A0046A733 /* edu.washington.npl.orca.VXIHardware.plist */; };
 		B3805611172BE4A100B5B134 /* Changesfeed.tif in Resources */ = {isa = PBXBuildFile; fileRef = B3805610172BE4A100B5B134 /* Changesfeed.tif */; };
@@ -7119,6 +7127,14 @@
 		9CF2C1AF0CC195E1002B279B /* ORL8013CrateController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = ORL8013CrateController.m; path = "Source/Objects/Hardware/Camac/L8013 Crate/ORL8013CrateController.m"; sourceTree = SOURCE_ROOT; };
 		9CF2C1B00CC195E1002B279B /* ORL8013CrateModel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORL8013CrateModel.h; path = "Source/Objects/Hardware/Camac/L8013 Crate/ORL8013CrateModel.h"; sourceTree = SOURCE_ROOT; };
 		9CF2C1B10CC195E1002B279B /* ORL8013CrateModel.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = ORL8013CrateModel.m; path = "Source/Objects/Hardware/Camac/L8013 Crate/ORL8013CrateModel.m"; sourceTree = SOURCE_ROOT; };
+		A8175F7B220D8D06003AC7E5 /* ORADEIControlDecoders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORADEIControlDecoders.m; sourceTree = "<group>"; };
+		A8175F7C220D8D06003AC7E5 /* ORADEIControlController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORADEIControlController.m; sourceTree = "<group>"; };
+		A8175F7D220D8D06003AC7E5 /* ORADEIControlModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORADEIControlModel.m; sourceTree = "<group>"; };
+		A8175F7F220D8D06003AC7E5 /* ADEIControl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ADEIControl.png; sourceTree = "<group>"; };
+		A8175F80220D8D06003AC7E5 /* ORADEIControlDecoders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORADEIControlDecoders.h; sourceTree = "<group>"; };
+		A8175F81220D8D06003AC7E5 /* ORADEIControlModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORADEIControlModel.h; sourceTree = "<group>"; };
+		A8175F82220D8D06003AC7E5 /* ADEIControl.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = ADEIControl.nib; sourceTree = "<group>"; };
+		A8175F83220D8D06003AC7E5 /* ORADEIControlController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORADEIControlController.h; sourceTree = "<group>"; };
 		B322A308146D64D000491347 /* ORTcpIpProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORTcpIpProtocol.h; sourceTree = "<group>"; };
 		B33FBC92146F2A6A0046A733 /* edu.washington.npl.orca.VXIHardware.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = edu.washington.npl.orca.VXIHardware.plist; sourceTree = "<group>"; };
 		B3805610172BE4A100B5B134 /* Changesfeed.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Changesfeed.tif; path = CouchDBListener/Changesfeed.tif; sourceTree = "<group>"; };
@@ -12439,6 +12455,7 @@
 		84B28D4C0F4C651C00E2B056 /* Internet */ = {
 			isa = PBXGroup;
 			children = (
+				A8175F7A220D8D06003AC7E5 /* ADEIControl */,
 				543BF1FA1E548158003E4582 /* HVcRIO */,
 				84E9C348194F42140028B7E2 /* PacFP */,
 				846F313517E8819000A5F1DA /* ApcUps */,
@@ -14546,6 +14563,21 @@
 			path = "Source/Objects/Hardware/Camac/L8013 Crate";
 			sourceTree = SOURCE_ROOT;
 		};
+		A8175F7A220D8D06003AC7E5 /* ADEIControl */ = {
+			isa = PBXGroup;
+			children = (
+				A8175F7B220D8D06003AC7E5 /* ORADEIControlDecoders.m */,
+				A8175F7C220D8D06003AC7E5 /* ORADEIControlController.m */,
+				A8175F7D220D8D06003AC7E5 /* ORADEIControlModel.m */,
+				A8175F7F220D8D06003AC7E5 /* ADEIControl.png */,
+				A8175F80220D8D06003AC7E5 /* ORADEIControlDecoders.h */,
+				A8175F81220D8D06003AC7E5 /* ORADEIControlModel.h */,
+				A8175F82220D8D06003AC7E5 /* ADEIControl.nib */,
+				A8175F83220D8D06003AC7E5 /* ORADEIControlController.h */,
+			);
+			path = ADEIControl;
+			sourceTree = "<group>";
+		};
 		B3808A931700F85C0019C27D /* CouchDBListener */ = {
 			isa = PBXGroup;
 			children = (
@@ -15781,6 +15813,7 @@
 				84AB8BD40D2314DD00EC39F2 /* ORJAMFModel.h in Headers */,
 				84A8B1460D35702300263D31 /* ORSBC_LAMController.h in Headers */,
 				84A8B1480D35702300263D31 /* ORSBC_LAMModel.h in Headers */,
+				A8175F8A220D8D07003AC7E5 /* ORADEIControlModel.h in Headers */,
 				84A8B14F0D35703300263D31 /* SBCLamView.h in Headers */,
 				84A5CD5B0D464F4600D9833C /* ORFilterController.h in Headers */,
 				84A5CD5D0D464F4600D9833C /* ORFilterModel.h in Headers */,
@@ -16408,6 +16441,7 @@
 				84997895174BA2F600BFEE3E /* ORiSegHVCard.h in Headers */,
 				84BF74C117590CB000AF1F56 /* OR3DScanPlatformController.h in Headers */,
 				84BF74C317590CB000AF1F56 /* OR3DScanPlatformModel.h in Headers */,
+				A8175F89220D8D07003AC7E5 /* ORADEIControlDecoders.h in Headers */,
 				841DACE5175CF05B002542BD /* Katrin3DView.h in Headers */,
 				B3808A8E1700F84B0019C27D /* ORCouchDBListenerController.h in Headers */,
 				B3808A901700F84B0019C27D /* ORCouchDBListenerModel.h in Headers */,
@@ -16449,6 +16483,7 @@
 				2DD0C8C2193FBAE4009112B2 /* SLTv4GeneralOperations.h in Headers */,
 				2DD0C8C5193FBAE4009112B2 /* ORKatrinV4SLTController.h in Headers */,
 				2DD0C8C7193FBAE4009112B2 /* ORKatrinV4SLTDecoder.h in Headers */,
+				A8175F8C220D8D07003AC7E5 /* ORADEIControlController.h in Headers */,
 				2DD0C8C9193FBAE4009112B2 /* ORKatrinV4SLTDefs.h in Headers */,
 				2DD0C8CA193FBAE4009112B2 /* ORKatrinV4SLTModel.h in Headers */,
 				0F16E3421C493AD7003C9EC9 /* async.h in Headers */,
@@ -16831,6 +16866,7 @@
 				8435626008FDB287002864C7 /* ContainerOutput.tif in Resources */,
 				C65995B320529EE400FE5973 /* RefClock.nib in Resources */,
 				84D0592E08FF367A00A99A83 /* goBack.tif in Resources */,
+				A8175F88220D8D07003AC7E5 /* ADEIControl.png in Resources */,
 				84D0593F08FF39EA00A99A83 /* goBackPressed.tif in Resources */,
 				8408A4BB09071C6A004A3B34 /* HV2132.nib in Resources */,
 				8408A4BC09071C6A004A3B34 /* HV2132Card.tif in Resources */,
@@ -16943,6 +16979,7 @@
 				8443574D0B5AC9E00033B918 /* Folder.tiff in Resources */,
 				8443574E0B5AC9E00033B918 /* Get Info.tiff in Resources */,
 				844357540B5AC9E00033B918 /* Play.tif in Resources */,
+				A8175F8B220D8D07003AC7E5 /* ADEIControl.nib in Resources */,
 				844357550B5AC9E00033B918 /* Stop.tif in Resources */,
 				84519C6C0B5C0B0900B08915 /* GoToLine.nib in Resources */,
 				842702810B5EE938009176B4 /* katrin.gif in Resources */,
@@ -17990,6 +18027,7 @@
 				8400D67B09AF96C6000C1DA4 /* ORTaskSequence.m in Sources */,
 				848E3BCA09DB0B3E0003F7A2 /* ORMailCenter.m in Sources */,
 				8448E4FD09E5C4AC001B88B5 /* NSView+Extensions.m in Sources */,
+				A8175F85220D8D07003AC7E5 /* ORADEIControlController.m in Sources */,
 				84E0968609F44E3200EFE044 /* ORTek754DModel.m in Sources */,
 				844D93030A0A79AA00E83C57 /* ORPulser33220Model.m in Sources */,
 				843A4D4D0A1288A9003DF248 /* ORUSB.m in Sources */,
@@ -18438,6 +18476,7 @@
 				84AC14E11B70E2460071C4EF /* ORMjdFileReader.m in Sources */,
 				84065D971226B600004E8970 /* ORPxi8336MacController.m in Sources */,
 				84065D991226B600004E8970 /* ORPxi8336MacModel.m in Sources */,
+				A8175F84220D8D07003AC7E5 /* ORADEIControlDecoders.m in Sources */,
 				84065F1C1226E18E004E8970 /* ORPxiCrate6Controller.m in Sources */,
 				84065F1E1226E18E004E8970 /* ORPxiCrate6Model.m in Sources */,
 				84065F211226E18E004E8970 /* ORPxiAdapterModel.m in Sources */,
@@ -18493,6 +18532,7 @@
 				EFEBD8931327588F00C96C86 /* ORXLGPSController.m in Sources */,
 				EFEBD8951327588F00C96C86 /* ORXLGPSModel.m in Sources */,
 				844B9BF0132E527700FEDA6B /* ORCaen1724Controller.m in Sources */,
+				A8175F86220D8D07003AC7E5 /* ORADEIControlModel.m in Sources */,
 				844B9BF2132E527700FEDA6B /* ORCaen1724Decoder.m in Sources */,
 				844B9BF4132E527700FEDA6B /* ORCaen1724Model.m in Sources */,
 				841224D8132E6638001AC05B /* ORTPG262Controller.m in Sources */,
