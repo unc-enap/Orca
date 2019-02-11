@@ -47,7 +47,12 @@
 {
 	NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
     [super registerNotificationObservers];
-		
+
+    [notifyCenter addObserver : self
+                     selector : @selector(sensorGroupChanged:)
+                         name : ORADEIControlModelSensorGroupChanged
+                       object : nil];
+
     [notifyCenter addObserver : self
                      selector : @selector(ipAddressChanged:)
                          name : ORADEIControlModelIpAddressChanged
@@ -123,7 +128,6 @@
                      selector : @selector(postRegulationFileChanged:)
                          name : ORADEIControlModelPostRegulationFileChanged
                        object : nil];
-
     
     [notifyCenter addObserver : self
                      selector : @selector(pollTimeChanged:)
@@ -150,6 +154,7 @@
 	[self setPointsReadBackChanged:nil];
 	[self queCountChanged:nil];
     
+    [self sensorGroupChanged:nil];
     [self ipAddressChanged:nil];
     [self verboseChanged:nil];
 	[self isConnectedChanged:nil];
@@ -157,6 +162,13 @@
     [self postRegulationFileChanged:nil];
     [self pollTimeChanged:nil];
 }
+
+
+- (void) sensorGroupChanged:(NSNotification*)aNote
+{
+    [sensorGroupPU selectItemWithTag:[model sensorGroup]];
+}
+
 
 - (void) pollTimeChanged:(NSNotification*)aNote
 {
@@ -330,13 +342,16 @@
 #pragma mark ***Table Data Source
 - (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
+    NSString *sensorName = (NSString *)[model setPointItem:(int)rowIndex forKey:@"data"];
+    
     if(setPointTableView == aTableView){
         if([[aTableColumn identifier] isEqualToString:@"index"]){
             return  [NSNumber numberWithInteger:rowIndex];
         }
         else {
             if([model showFormattedDates] &&
-               ([[aTableColumn identifier] isEqualToString:@"readBack"] && [[model setPointItem:(int)rowIndex forKey:@"item"] isEqualToString:@"Zeitstempel"])){
+               ([[aTableColumn identifier] isEqualToString:@"readBack"] &&
+               [sensorName rangeOfString:@"Timestamp"].location != NSNotFound)){
                 
                 NSTimeInterval s = [[model setPointItem:(int)rowIndex forKey:@"readBack"]doubleValue] - kSecsBetween1904and1070;
                 if(s<1)return @"?";
@@ -356,8 +371,9 @@
         }
         else {
             if([model showFormattedDates] &&
-               ([[aTableColumn identifier] isEqualToString:@"value"] && [[model measuredValueItem:(int)rowIndex forKey:@"item"] isEqualToString:@"Zeitstempel"]) ||
-               ([[aTableColumn identifier] isEqualToString:@"value"] && [[model measuredValueItem:(int)rowIndex forKey:@"data"] isEqualToString:@"Zeitstempel"])){
+               ([[aTableColumn identifier] isEqualToString:@"value"] &&
+               [sensorName rangeOfString:@"Timestamp"].location != NSNotFound)){
+
                 NSTimeInterval s = [[model measuredValueItem:(int)rowIndex forKey:@"value"]doubleValue] - kSecsBetween1904and1070;
                 if(s<1)return @"?";
 
@@ -409,6 +425,11 @@
     }
 }
 
+
+- (IBAction) sensorGroupAction: (id)sender
+{
+    [model setSensorGroup:(int)[[sender selectedItem]tag]];
+}
 
 - (IBAction) readSetPointFile:(id)sender
 {

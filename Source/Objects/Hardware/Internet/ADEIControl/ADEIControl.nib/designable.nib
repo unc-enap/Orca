@@ -25,6 +25,7 @@
                 <outlet property="readPostRegulationButton" destination="ZIk-CZ-Kmh" id="Vmc-7f-Cf5"/>
                 <outlet property="readSetPointFileButton" destination="Ymd-sD-4Jp" id="8c0-hj-HO4"/>
                 <outlet property="removePostRegulationPointButton" destination="Pj2-5O-9nA" id="nx8-ER-d1X"/>
+                <outlet property="sensorGroupPU" destination="RVZ-Xz-EzG" id="LiX-BS-IA8"/>
                 <outlet property="setPointFileField" destination="Pv7-wH-aAd" id="jP6-fx-hbx"/>
                 <outlet property="setPointTableView" destination="VQ0-Pu-OqC" id="qmh-As-C4k"/>
                 <outlet property="showFormattedDatesCB" destination="EiM-OL-qJj" id="wDX-56-Euh"/>
@@ -104,8 +105,8 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" id="Ymd-sD-4Jp">
-                        <rect key="frame" x="476" y="502" width="132" height="28"/>
+                    <button verticalHuggingPriority="750" misplaced="YES" id="Ymd-sD-4Jp">
+                        <rect key="frame" x="693" y="502" width="132" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Read SetPoint File..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4eW-pi-yma">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -116,7 +117,7 @@
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" misplaced="YES" id="H4X-Yt-oix">
-                        <rect key="frame" x="477" y="466" width="131" height="28"/>
+                        <rect key="frame" x="694" y="466" width="131" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Save SetPoint File..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Mt1-e3-Hlo">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -126,8 +127,8 @@
                             <action selector="saveSetPointFile:" target="-2" id="TaL-Ds-8fk"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" id="Pv7-wH-aAd">
-                        <rect key="frame" x="620" y="510" width="188" height="14"/>
+                    <textField verticalHuggingPriority="750" misplaced="YES" id="Pv7-wH-aAd">
+                        <rect key="frame" x="837" y="510" width="188" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="--" id="DAo-EC-0bJ">
                             <font key="font" metaFont="smallSystem"/>
@@ -167,9 +168,9 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" misplaced="YES" id="00F-Bs-MMl">
-                        <rect key="frame" x="572" y="407" width="513" height="40"/>
+                        <rect key="frame" x="572" y="407" width="513" height="44"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Measured Values" id="4Do-hN-9Gj">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="IST / Measured Values" id="4Do-hN-9Gj">
                             <font key="font" size="23" name="Papyrus"/>
                             <color key="textColor" red="0.078694656449999997" green="0.1157358394" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -178,7 +179,7 @@
                     <textField verticalHuggingPriority="750" misplaced="YES" id="P8V-AR-RMN">
                         <rect key="frame" x="1098" y="407" width="422" height="44"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Desired Setpoints" id="zFS-6j-ZMR">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Scripting Parameters" id="zFS-6j-ZMR">
                             <font key="font" size="23" name="Papyrus"/>
                             <color key="textColor" red="0.078694656449999997" green="0.1157358394" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -223,8 +224,8 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="item" editable="NO" width="215" minWidth="40" maxWidth="1000" id="XKM-ky-A6g">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Item">
+                                        <tableColumn identifier="item" editable="NO" width="127" minWidth="40" maxWidth="1000" id="XKM-ky-A6g">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="KATRIN no">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
@@ -236,8 +237,8 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="data" editable="NO" width="110.51953125" minWidth="10" maxWidth="3.4028234663852886e+38" id="Sf8-mW-jdZ">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Data">
+                                        <tableColumn identifier="data" editable="NO" width="248.01953125" minWidth="10" maxWidth="3.4028234663852886e+38" id="Sf8-mW-jdZ">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Sensor Name">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -249,7 +250,7 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="value" editable="NO" width="117.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="gzc-pC-rkx">
+                                        <tableColumn identifier="value" editable="NO" width="68" minWidth="10" maxWidth="3.4028234663852886e+38" id="gzc-pC-rkx">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="right" title="Value">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -312,7 +313,7 @@
                                             <tableColumnResizingMask key="resizingMask" userResizable="YES"/>
                                         </tableColumn>
                                         <tableColumn identifier="kVesselVoltageSetPt" width="128" minWidth="40" maxWidth="1000" id="Dq5-M3-2zg">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Vessel Voltage">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Sensor Value">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
@@ -338,7 +339,7 @@
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
                                         <tableColumn identifier="kPowerSupplyOffset" width="124.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="klx-lP-Ldk">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Supply Offset">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Offset">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -379,7 +380,7 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" headerView="hUT-ir-kfb" id="VQ0-Pu-OqC">
-                                    <rect key="frame" x="0.0" y="0.0" width="512" height="222"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="512.5" height="222"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" red="1" green="0.40000000600000002" blue="0.40000000600000002" alpha="0.1034482759" colorSpace="calibratedRGB"/>
@@ -399,8 +400,8 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="item" width="183" minWidth="40" maxWidth="1000" id="9G6-Ep-Vft">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Item">
+                                        <tableColumn identifier="item" width="125.5" minWidth="40" maxWidth="1000" id="9G6-Ep-Vft">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="KATRIN no">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
@@ -412,8 +413,8 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="data" width="80" minWidth="10" maxWidth="3.4028234663852886e+38" id="S7R-iJ-3ux">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Data">
+                                        <tableColumn identifier="data" width="189" minWidth="10" maxWidth="3.4028234663852886e+38" id="S7R-iJ-3ux">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Sensor Name">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -438,7 +439,7 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="readBack" width="115" minWidth="10" maxWidth="3.4028234663852886e+38" id="HhG-wd-Lh1">
+                                        <tableColumn identifier="readBack" width="64" minWidth="10" maxWidth="3.4028234663852886e+38" id="HhG-wd-Lh1">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="right" title="Readback">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -468,12 +469,12 @@
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <tableHeaderView key="headerView" id="hUT-ir-kfb">
-                            <rect key="frame" x="0.0" y="0.0" width="512" height="23"/>
+                            <rect key="frame" x="0.0" y="0.0" width="512.5" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
                     <textField verticalHuggingPriority="750" misplaced="YES" id="5qs-rT-FIz">
-                        <rect key="frame" x="205" y="510" width="111" height="19"/>
+                        <rect key="frame" x="428" y="506" width="111" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="Y1r-n7-D1g">
                             <font key="font" metaFont="smallSystem"/>
@@ -485,7 +486,7 @@
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" misplaced="YES" id="swn-Hj-lmC">
-                        <rect key="frame" x="123" y="511" width="76" height="15"/>
+                        <rect key="frame" x="346" y="507" width="76" height="15"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="IP #:" id="i3A-Zf-gbR">
                             <font key="font" metaFont="smallSystem"/>
@@ -494,7 +495,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" misplaced="YES" id="gnQ-Cu-LmB">
-                        <rect key="frame" x="209" y="491" width="88" height="14"/>
+                        <rect key="frame" x="432" y="487" width="88" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Not Connected" id="3KT-15-Gew">
                             <font key="font" metaFont="smallSystem"/>
@@ -503,7 +504,7 @@
                         </textFieldCell>
                     </textField>
                     <button verticalHuggingPriority="750" misplaced="YES" id="Gio-Uk-g4q">
-                        <rect key="frame" x="319" y="504" width="100" height="28"/>
+                        <rect key="frame" x="542" y="500" width="100" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Connect" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="JTs-cU-gjl">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -592,17 +593,6 @@
                             <action selector="pushReadBacksToSetPointsAction:" target="-2" id="0cc-GE-gjh"/>
                         </connections>
                     </button>
-                    <button misplaced="YES" id="EiM-OL-qJj">
-                        <rect key="frame" x="122" y="456" width="157" height="20"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Show Formatted Dates" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="k3I-er-JaQ">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="smallSystem"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="showFormatedDatedAction:" target="-2" id="V3g-y4-fhC"/>
-                        </connections>
-                    </button>
                     <box horizontalHuggingPriority="750" misplaced="YES" boxType="separator" id="4ZX-JM-BVf">
                         <rect key="frame" x="549" y="27" width="5" height="426"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -671,12 +661,41 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="ADEIControl" id="Nn3-o0-JCJ"/>
                     </imageView>
+                    <button misplaced="YES" id="EiM-OL-qJj">
+                        <rect key="frame" x="26" y="456" width="157" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" title="Show Formatted Dates" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="k3I-er-JaQ">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="showFormatedDatedAction:" target="-2" id="V3g-y4-fhC"/>
+                        </connections>
+                    </button>
+                    <popUpButton verticalHuggingPriority="750" misplaced="YES" id="RVZ-Xz-EzG" userLabel="SensorGroupPU">
+                        <rect key="frame" x="162" y="504" width="204" height="22"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <popUpButtonCell key="cell" type="push" title="113-RS e-gun cRIO" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="F7N-9S-eHC" id="FNL-1f-bhf" userLabel="RS1">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                            <menu key="menu" id="2DM-cb-eHr">
+                                <items>
+                                    <menuItem title="113-RS e-gun cRIO" state="on" id="F7N-9S-eHC" userLabel="RS1"/>
+                                    <menuItem title="113-RS e-gun embedded PC" tag="1" id="wIM-xQ-Zsj" userLabel="RS2"/>
+                                    <menuItem title="436-MS High voltage" tag="2" id="24S-Dp-0nz" userLabel="MS-HV"/>
+                                </items>
+                            </menu>
+                        </popUpButtonCell>
+                        <connections>
+                            <action selector="sensorGroupAction:" target="-2" id="yjx-Yd-UOE"/>
+                        </connections>
+                    </popUpButton>
                 </subviews>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="2744"/>
             </connections>
-            <point key="canvasLocation" x="444.5" y="-51.5"/>
+            <point key="canvasLocation" x="509.5" y="-22.5"/>
         </window>
         <customObject id="2377" userLabel="Hex Formatter" customClass="OHexFormatter"/>
     </objects>

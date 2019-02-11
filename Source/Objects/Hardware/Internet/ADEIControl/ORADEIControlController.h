@@ -20,6 +20,8 @@
 
 @interface ORADEIControlController : OrcaObjectController
 {
+    IBOutlet NSPopUpButton* sensorGroupPU;
+
 	IBOutlet NSTextField*	ipConnectedTextField;
 	IBOutlet NSTextField*	ipAddressTextField;
 	IBOutlet NSButton*		ipConnectButton;
@@ -46,7 +48,7 @@
     IBOutlet NSTextField* orcaHasControlField;
     IBOutlet NSPopUpButton* pollTimePU;
     IBOutlet NSProgressIndicator* progressWheel;
-    
+
     IBOutlet ORValueBarGroupView*  queueValueBar;
     IBOutlet NSButton*    verboseCB;
     IBOutlet NSButton*    showFormattedDatesCB;
@@ -61,6 +63,7 @@
 - (void) updateWindow;
 
 #pragma mark ***Interface Management
+- (void) sensorGroupChanged:(NSNotification*)aNote;
 - (void) setPointChanged:(NSNotification*)aNote;
 - (void) setPointsReadBackChanged:(NSNotification*)aNote;
 - (void) lockChanged:(NSNotification*)aNote;
@@ -77,7 +80,8 @@
 
 #pragma mark ***Actions
 
-//ADEIControl
+//ADEIControl#
+- (IBAction) sensorGroupAction:(id)sender;
 - (IBAction) writeSetpointsAction:(id)sender;
 - (IBAction) readBackSetpointsAction:(id)sender;
 - (IBAction) pushReadBacksToSetPointsAction:(id)sender;

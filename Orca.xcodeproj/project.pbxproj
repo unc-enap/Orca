@@ -3406,6 +3406,7 @@
 		A8175F8A220D8D07003AC7E5 /* ORADEIControlModel.h in Headers */ = {isa = PBXBuildFile; fileRef = A8175F81220D8D06003AC7E5 /* ORADEIControlModel.h */; };
 		A8175F8B220D8D07003AC7E5 /* ADEIControl.nib in Resources */ = {isa = PBXBuildFile; fileRef = A8175F82220D8D06003AC7E5 /* ADEIControl.nib */; };
 		A8175F8C220D8D07003AC7E5 /* ORADEIControlController.h in Headers */ = {isa = PBXBuildFile; fileRef = A8175F83220D8D06003AC7E5 /* ORADEIControlController.h */; };
+		A86253F3221217E7005D26EC /* ORADEIControlDefs.h in Headers */ = {isa = PBXBuildFile; fileRef = A86253F2221217E6005D26EC /* ORADEIControlDefs.h */; };
 		B322A309146D64D000491347 /* ORTcpIpProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = B322A308146D64D000491347 /* ORTcpIpProtocol.h */; };
 		B33FBC93146F2A6A0046A733 /* edu.washington.npl.orca.VXIHardware.plist in Resources */ = {isa = PBXBuildFile; fileRef = B33FBC92146F2A6A0046A733 /* edu.washington.npl.orca.VXIHardware.plist */; };
 		B3805611172BE4A100B5B134 /* Changesfeed.tif in Resources */ = {isa = PBXBuildFile; fileRef = B3805610172BE4A100B5B134 /* Changesfeed.tif */; };
@@ -7135,6 +7136,7 @@
 		A8175F81220D8D06003AC7E5 /* ORADEIControlModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORADEIControlModel.h; sourceTree = "<group>"; };
 		A8175F82220D8D06003AC7E5 /* ADEIControl.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = ADEIControl.nib; sourceTree = "<group>"; };
 		A8175F83220D8D06003AC7E5 /* ORADEIControlController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORADEIControlController.h; sourceTree = "<group>"; };
+		A86253F2221217E6005D26EC /* ORADEIControlDefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORADEIControlDefs.h; sourceTree = "<group>"; };
 		B322A308146D64D000491347 /* ORTcpIpProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORTcpIpProtocol.h; sourceTree = "<group>"; };
 		B33FBC92146F2A6A0046A733 /* edu.washington.npl.orca.VXIHardware.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = edu.washington.npl.orca.VXIHardware.plist; sourceTree = "<group>"; };
 		B3805610172BE4A100B5B134 /* Changesfeed.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Changesfeed.tif; path = CouchDBListener/Changesfeed.tif; sourceTree = "<group>"; };
@@ -14569,6 +14571,7 @@
 				A8175F7B220D8D06003AC7E5 /* ORADEIControlDecoders.m */,
 				A8175F7C220D8D06003AC7E5 /* ORADEIControlController.m */,
 				A8175F7D220D8D06003AC7E5 /* ORADEIControlModel.m */,
+				A86253F2221217E6005D26EC /* ORADEIControlDefs.h */,
 				A8175F7F220D8D06003AC7E5 /* ADEIControl.png */,
 				A8175F80220D8D06003AC7E5 /* ORADEIControlDecoders.h */,
 				A8175F81220D8D06003AC7E5 /* ORADEIControlModel.h */,
@@ -15849,6 +15852,7 @@
 				84A9816D18E1D7A400BD3FB3 /* NSFileManager+Extensions.h in Headers */,
 				8499FE8E0DC8E9B700E82DB4 /* ORSNOCrateController.h in Headers */,
 				8499FE900DC8E9B700E82DB4 /* ORSNOCrateModel.h in Headers */,
+				A86253F3221217E7005D26EC /* ORADEIControlDefs.h in Headers */,
 				8499FF910DC9090400E82DB4 /* ORSNOCard.h in Headers */,
 				8499FFDD0DC90F5800E82DB4 /* ORXL1Model.h in Headers */,
 				8499FFE40DC9102700E82DB4 /* ORXL2Model.h in Headers */,

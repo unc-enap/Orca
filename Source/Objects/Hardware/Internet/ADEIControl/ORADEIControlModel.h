@@ -31,6 +31,7 @@
 @interface ORADEIControlModel : OrcaObject <ORAdcProcessing>
 {
     @private
+        int                 sensorGroup;
         NSString*           ipAddress;
         BOOL                isConnected;
         NetSocket*          socket;
@@ -54,7 +55,15 @@
         NSMutableString*    stringBuffer;
         BOOL                showFormattedDates;
         int                 pollTime;
-        uint32_t       dataId;
+        uint32_t            dataId;
+    
+        NSString *          cmdReadSetpoints;
+        NSString *          cmdWriteSetpoints;
+        NSString *          cmdReadActualValues;
+    
+        NSString **         setPointList;
+        NSString **         measuredValueList;
+    
 }
 
 #pragma mark ***Initialization
@@ -62,6 +71,8 @@
 - (NSString*) commonScriptMethods;
 
 #pragma mark ***Accessors
+- (int) sensorGroup;
+- (void) setSensorGroup:(int)group;
 - (int)  pollTime;
 - (void) setPollTime:(int)aPollTime;
 - (id) setPointItem:(int)i forKey:(NSString*)aKey;
@@ -72,6 +83,15 @@
 - (id) setPointReadBackAtIndex:(int)i;
 - (id) measuredValueAtIndex:(int)i;
 - (void) setMeasuredValue: (int)aIndex withValue: (double)value;
+
+- (int) getIndexOfSetPoint:(NSString *) aUID;
+- (int) getIndexOfMeasuredValue:(NSString *) aUID;
+- (void) setSetPointWithUID: (NSString *)aUID withValue: (double)value;
+- (void) setSetPointReadbackWithUID: (NSString *)aUID withValue: (double)value;
+- (id) setPointWithUID:(NSString *)aUID;
+- (id) setPointReadBackWithUID:(NSString *)aUID;
+- (id) measuredValueWithUID:(NSString *)aUID;
+
 - (NetSocket*) socket;
 - (void) setSocket:(NetSocket*)aSocket;
 - (NSString*) ipAddress;
@@ -164,6 +184,7 @@ extern NSString* ORADEIControlLock;
 extern NSString* ORADEIControlModelSetPointChanged;
 extern NSString* ORADEIControlModelQueCountChanged;
 extern NSString* ORADEIControlModelReadBackChanged;
+extern NSString* ORADEIControlModelSensorGroupChanged;
 extern NSString* ORADEIControlModelIsConnectedChanged;
 extern NSString* ORADEIControlModelIpAddressChanged;
 extern NSString* ORADEIControlModelSetPointsChanged;
@@ -176,6 +197,7 @@ extern NSString* ORADEIControlModelDesiredSetPointAdded;
 extern NSString* ORADEIControlModelDesiredSetPointRemoved;
 extern NSString* ORADEIControlModelUpdatePostRegulationTable;
 extern NSString* ORADEIControlModelPollTimeChanged;
+
 
 @interface DesiredSetPoint : NSObject
 {

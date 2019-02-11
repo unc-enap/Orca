@@ -21,8 +21,11 @@
 #import "NetSocket.h"
 #import "ORDataTypeAssigner.h"
 #import "ORDataPacket.h"
+#import "ORADEIControlDefs.h"
+
 
 #pragma mark ***External Strings
+NSString* ORADEIControlModelSensorGroupChanged              = @"ORADEIControlModelSensorGroupChanged";
 NSString* ORADEIControlModelIsConnectedChanged           = @"ORADEIControlModelIsConnectedChanged";
 NSString* ORADEIControlModelIpAddressChanged             = @"ORADEIControlModelIpAddressChanged";
 NSString* ORADEIControlModelSetPointChanged              = @"ORADEIControlModelSetPointChanged";
@@ -42,920 +45,6 @@ NSString* ORADEIControlModelPollTimeChanged              = @"ORADEIControlModelP
 NSString* ORADEIControlLock						        = @"ORADEIControlLock";
 
 
-//new lists from 10/17/2017   -mah-
-static NSString* setPointList[] = {
-    @"Zeitstempel",    @"-",
-    @"Zeitstempel",    @"-",
-    @"SOLL_PXI_MODUL#WestModul0",    @"Rampe",
-    @"SOLL_PXI_MODUL#WestModul1",    @"Rampe",
-    @"SOLL_PXI_MODUL#WestModul2",    @"Rampe",
-    @"", @""
-};
-    
-/*
-    @"SOLL_PXI_MODUL#EastModul0",    @"Rampe",
-    @"SOLL_PXI_MODUL#EastModul1",    @"Rampe",
-    @"SOLL_PXI_MODUL#EastModul2",    @"Rampe",
-    @"SOLL_PXI_CHANNEL#WestCh0",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh0",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh0",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh1",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh1",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh1",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh2",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh2",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh2",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh3",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh3",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh3",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh4",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh4",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh4",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh5",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh5",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh5",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh6",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh6",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh6",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh7",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh7",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh7",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh8",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh8",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh8",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh9",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh9",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh9",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh10",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh10",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh10",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh11",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh11",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh11",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh12",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh12",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh12",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh13",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh13",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh13",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh14",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh14",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh14",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh15",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh15",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh15",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh16",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh16",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh16",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh17",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh17",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh17",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh18",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh18",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh18",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh19",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh19",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh19",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh20",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh20",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh20",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh21",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh21",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh21",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh22",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh22",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh22",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#WestCh23",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#WestCh23",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#WestCh23",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh0",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh0",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh0",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh1",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh1",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh1",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh2",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh2",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh2",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh3",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh3",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh3",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh4",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh4",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh4",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh5",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh5",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh5",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh6",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh6",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh6",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh7",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh7",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh7",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh8",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh8",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh8",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh9",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh9",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh9",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh10",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh10",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh10",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh11",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh11",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh11",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh12",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh12",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh12",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh13",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh13",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh13",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh14",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh14",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh14",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh15",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh15",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh15",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh16",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh16",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh16",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh17",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh17",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh17",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh18",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh18",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh18",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh19",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh19",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh19",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh20",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh20",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh20",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh21",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh21",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh21",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh22",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh22",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh22",    @"U_EXAKT",
-    @"SOLL_PXI_CHANNEL#EastCh23",    @"U_SOLL",
-    @"SOLL_PXI_CHANNEL#EastCh23",    @"I_MAX",
-    @"SOLL_PXI_CHANNEL#EastCh23",    @"U_EXAKT",
-    @"SOLL_EHV#mainSpecVesel",    @"U_Soll",
-    @"SOLL_EHV#mainSpecVesel",    @"I_MAX",
-    @"SOLL_EHV#mainSpecVesel",    @"Rampe",
-    @"SOLL_EHV#mainSpecElektrode",    @"U_Soll",
-    @"SOLL_EHV#mainSpecElektrode",    @"I_MAX",
-    @"SOLL_EHV#mainSpecElektrode",    @"Rampe",
-    @"SOLL_EHV#mainSpecCorrSouth",    @"U_Soll",
-    @"SOLL_EHV#mainSpecCorrSouth",    @"I_MAX",
-    @"SOLL_EHV#mainSpecCorrSouth",    @"Rampe",
-    @"SOLL_EHV#mainSpecCorrWest",    @"U_Soll",
-    @"SOLL_EHV#mainSpecCorrWest",    @"I_MAX",
-    @"SOLL_EHV#mainSpecCorrWest",    @"Rampe",
-    @"SOLL_EHV#mainSpecDipolWest",    @"U_Soll",
-    @"SOLL_EHV#mainSpecDipolWest",    @"I_MAX",
-    @"SOLL_EHV#mainSpecDipolWest",    @"Rampe",
-    @"SOLL_EHV#mainSpecDipolEast",    @"U_Soll",
-    @"SOLL_EHV#mainSpecDipolEast",    @"I_MAX",
-    @"SOLL_EHV#mainSpecDipolEast",    @"Rampe",
-    @"SOLL_EHV#IECommon",    @"U_Soll",
-    @"SOLL_EHV#IECommon",    @"I_MAX",
-    @"SOLL_EHV#IECommon",    @"Rampe",
-    @"SOLL_EHV#preSpecVesel",    @"U_Soll",
-    @"SOLL_EHV#preSpecVesel",    @"I_MAX",
-    @"SOLL_EHV#preSpecVesel",    @"Rampe",
-    @"SOLL_EHV#preSpecIE1",    @"U_Soll",
-    @"SOLL_EHV#preSpecIE1",    @"I_MAX",
-    @"SOLL_EHV#preSpecIE1",    @"Rampe",
-    @"SOLL_EHV#preSpecIE2",    @"U_Soll",
-    @"SOLL_EHV#preSpecIE2",    @"I_MAX",
-    @"SOLL_EHV#preSpecIE2",    @"Rampe",
-    @"SOLL_EHV#preSpecIE3",    @"U_Soll",
-    @"SOLL_EHV#preSpecIE3",    @"I_MAX",
-    @"SOLL_EHV#preSpecIE3",    @"Rampe",
-    @"SOLL_EHV#preSpecIE4",    @"U_Soll",
-    @"SOLL_EHV#preSpecIE4",    @"I_MAX",
-    @"SOLL_EHV#preSpecIE4",    @"Rampe",
-    @"SOLL_STATUS#Ost_Relais",    @"Bed",
-    @"SOLL_STATUS#Ost_Relais",    @"Modus",
-    @"SOLL_STATUS#Ost_Relais",    @"Time_On",
-    @"SOLL_STATUS#Ost_Relais",    @"Time_Off",
-    @"SOLL_STATUS#West_Relais",    @"Bed",
-    @"SOLL_STATUS#West_Relais",    @"Modus",
-    @"SOLL_STATUS#West_Relais",    @"Time_On",
-    @"SOLL_STATUS#West_Relais",    @"Time_Off",
-    @"SOLL_EHV#postReg",    @"U_Soll",
-    @"SOLL_EHV#postRegInhibit",    @"Status",
-    @"", @""
-};
-
-*/
-
-static NSString* measuredValueList[] = {
-    @"Zeitstempel",    @"-",
-    @"Zeitstempel",    @"-",
-    @"IST_PXI_MODUL#WestModul0",    @"Temperatur Board",
-    @"IST_PXI_MODUL#WestModul0",    @"24 Spannung",
-    @"IST_PXI_MODUL#WestModul0",    @"5V Spannung",
-    @"", @""
-};
-
-/*
-    @"IST_PXI_MODUL#WestModul0",    @"Rampe",
-    @"IST_PXI_MODUL#WestModul0",    @"Warnung",
-    @"IST_PXI_MODUL#WestModul0",    @"Fehler",
-    @"IST_PXI_MODUL#WestModul1",    @"Temperatur Board",
-    @"IST_PXI_MODUL#WestModul1",    @"24 Spannung",
-    @"IST_PXI_MODUL#WestModul1",    @"5V Spannung",
-    @"IST_PXI_MODUL#WestModul1",    @"Rampe",
-    @"IST_PXI_MODUL#WestModul1",    @"Warnung",
-    @"IST_PXI_MODUL#WestModul1",    @"Fehler",
-    @"IST_PXI_MODUL#WestModul2",    @"Temperatur Board",
-    @"IST_PXI_MODUL#WestModul2",    @"24 Spannung",
-    @"IST_PXI_MODUL#WestModul2",    @"5V Spannung",
-    @"IST_PXI_MODUL#WestModul2",    @"Rampe",
-    @"IST_PXI_MODUL#WestModul2",    @"Warnung",
-    @"IST_PXI_MODUL#WestModul2",    @"Fehler",
-    @"IST_PXI_MODUL#EastModul0",    @"Temperatur Board",
-    @"IST_PXI_MODUL#EastModul0",    @"24 Spannung",
-    @"IST_PXI_MODUL#EastModul0",    @"5V Spannung",
-    @"IST_PXI_MODUL#EastModul0",    @"Rampe",
-    @"IST_PXI_MODUL#EastModul0",    @"Warnung",
-    @"IST_PXI_MODUL#EastModul0",    @"Fehler",
-    @"IST_PXI_MODUL#EastModul1",    @"Temperatur Board",
-    @"IST_PXI_MODUL#EastModul1",    @"24 Spannung",
-    @"IST_PXI_MODUL#EastModul1",    @"5V Spannung",
-    @"IST_PXI_MODUL#EastModul1",    @"Rampe",
-    @"IST_PXI_MODUL#EastModul1",    @"Warnung",
-    @"IST_PXI_MODUL#EastModul1",    @"Fehler",
-    @"IST_PXI_MODUL#EastModul2",    @"Temperatur Board",
-    @"IST_PXI_MODUL#EastModul2",    @"24 Spannung",
-    @"IST_PXI_MODUL#EastModul2",    @"5V Spannung",
-    @"IST_PXI_MODUL#EastModul2",    @"Rampe",
-    @"IST_PXI_MODUL#EastModul2",    @"Warnung",
-    @"IST_PXI_MODUL#EastModul2",    @"Fehler",
-    @"IST_EHV#mainSpecVessel",    @"U_SOLL",
-    @"IST_EHV#mainSpecVessel",    @"U_IST",
-    @"IST_EHV#mainSpecVessel",    @"I_MAX",
-    @"IST_EHV#mainSpecVessel",    @"I_IST",
-    @"IST_EHV#mainSpecVessel",    @"Rampe",
-    @"IST_EHV#mainSpecVessel",    @"I_Begrenzt",
-    @"IST_EHV#mainSpecVessel",    @"Warnung",
-    @"IST_EHV#mainSpecVessel",    @"Fehler",
-    @"IST_EHV#mainSpecElektrode",    @"U_SOLL",
-    @"IST_EHV#mainSpecElektrode",    @"U_IST",
-    @"IST_EHV#mainSpecElektrode",    @"I_MAX",
-    @"IST_EHV#mainSpecElektrode",    @"I_IST",
-    @"IST_EHV#mainSpecElektrode",    @"Rampe",
-    @"IST_EHV#mainSpecElektrode",    @"I_Begrenzt",
-    @"IST_EHV#mainSpecElektrode",    @"Warnung",
-    @"IST_EHV#mainSpecElektrode",    @"Fehler",
-    @"IST_EHV#mainSpecCorrSouth",    @"U_SOLL",
-    @"IST_EHV#mainSpecCorrSouth",    @"U_IST",
-    @"IST_EHV#mainSpecCorrSouth",    @"I_MAX",
-    @"IST_EHV#mainSpecCorrSouth",    @"I_IST",
-    @"IST_EHV#mainSpecCorrSouth",    @"Rampe",
-    @"IST_EHV#mainSpecCorrSouth",    @"I_Begrenzt",
-    @"IST_EHV#mainSpecCorrSouth",    @"Warnung",
-    @"IST_EHV#mainSpecCorrSouth",    @"Fehler",
-    @"IST_EHV#mainSpecCorrNorth",    @"U_SOLL",
-    @"IST_EHV#mainSpecCorrNorth",    @"U_IST",
-    @"IST_EHV#mainSpecCorrNorth",    @"I_MAX",
-    @"IST_EHV#mainSpecCorrNorth",    @"I_IST",
-    @"IST_EHV#mainSpecCorrNorth",    @"Rampe",
-    @"IST_EHV#mainSpecCorrNorth",    @"I_Begrenzt",
-    @"IST_EHV#mainSpecCorrNorth",    @"Warnung",
-    @"IST_EHV#mainSpecCorrNorth",    @"Fehler",
-    @"IST_EHV#mainSpecDipolWest",    @"U_SOLL",
-    @"IST_EHV#mainSpecDipolWest",    @"U_IST",
-    @"IST_EHV#mainSpecDipolWest",    @"I_MAX",
-    @"IST_EHV#mainSpecDipolWest",    @"I_IST",
-    @"IST_EHV#mainSpecDipolWest",    @"Rampe",
-    @"IST_EHV#mainSpecDipolWest",    @"I_Begrenzt",
-    @"IST_EHV#mainSpecDipolWest",    @"Warnung",
-    @"IST_EHV#mainSpecDipolWest",    @"Fehler",
-    @"IST_EHV#mainSpecDipolEast",    @"U_SOLL",
-    @"IST_EHV#mainSpecDipolEast",    @"U_IST",
-    @"IST_EHV#mainSpecDipolEast",    @"I_MAX",
-    @"IST_EHV#mainSpecDipolEast",    @"I_IST",
-    @"IST_EHV#mainSpecDipolEast",    @"Rampe",
-    @"IST_EHV#mainSpecDipolEast",    @"I_Begrenzt",
-    @"IST_EHV#mainSpecDipolEast",    @"Warnung",
-    @"IST_EHV#mainSpecDipolEast",    @"Fehler",
-    @"IST_EHV#IECommon",    @"U_SOLL",
-    @"IST_EHV#IECommon",    @"U_IST",
-    @"IST_EHV#IECommon",    @"I_MAX",
-    @"IST_EHV#IECommon",    @"I_IST",
-    @"IST_EHV#IECommon",    @"Rampe",
-    @"IST_EHV#IECommon",    @"I_Begrenzt",
-    @"IST_EHV#IECommon",    @"Warnung",
-    @"IST_EHV#IECommon",    @"Fehler",
-    @"IST_EHV#preSpecVesel",    @"U_SOLL",
-    @"IST_EHV#preSpecVesel",    @"U_IST",
-    @"IST_EHV#preSpecVesel",    @"I_MAX",
-    @"IST_EHV#preSpecVesel",    @"I_IST",
-    @"IST_EHV#preSpecVesel",    @"Rampe",
-    @"IST_EHV#preSpecVesel",    @"I_Begrenzt",
-    @"IST_EHV#preSpecVesel",    @"Warnung",
-    @"IST_EHV#preSpecVesel",    @"Fehler",
-    @"IST_EHV#preSpecIE1",    @"U_SOLL",
-    @"IST_EHV#preSpecIE1",    @"U_IST",
-    @"IST_EHV#preSpecIE1",    @"I_MAX",
-    @"IST_EHV#preSpecIE1",    @"I_IST",
-    @"IST_EHV#preSpecIE1",    @"Rampe",
-    @"IST_EHV#preSpecIE1",    @"I_Begrenzt",
-    @"IST_EHV#preSpecIE1",    @"Warnung",
-    @"IST_EHV#preSpecIE1",    @"Fehler",
-    @"IST_EHV#preSpecIE2",    @"U_SOLL",
-    @"IST_EHV#preSpecIE2",    @"U_IST",
-    @"IST_EHV#preSpecIE2",    @"I_MAX",
-    @"IST_EHV#preSpecIE2",    @"I_IST",
-    @"IST_EHV#preSpecIE2",    @"Rampe",
-    @"IST_EHV#preSpecIE2",    @"I_Begrenzt",
-    @"IST_EHV#preSpecIE2",    @"Warnung",
-    @"IST_EHV#preSpecIE2",    @"Fehler",
-    @"IST_EHV#preSpecIE3",    @"U_SOLL",
-    @"IST_EHV#preSpecIE3",    @"U_IST",
-    @"IST_EHV#preSpecIE3",    @"I_MAX",
-    @"IST_EHV#preSpecIE3",    @"I_IST",
-    @"IST_EHV#preSpecIE3",    @"Rampe",
-    @"IST_EHV#preSpecIE3",    @"I_Begrenzt",
-    @"IST_EHV#preSpecIE3",    @"Warnung",
-    @"IST_EHV#preSpecIE3",    @"Fehler",
-    @"IST_EHV#preSpecIE4",    @"U_SOLL",
-    @"IST_EHV#preSpecIE4",    @"U_IST",
-    @"IST_EHV#preSpecIE4",    @"I_MAX",
-    @"IST_EHV#preSpecIE4",    @"I_IST",
-    @"IST_EHV#preSpecIE4",    @"Rampe",
-    @"IST_EHV#preSpecIE4",    @"I_Begrenzt",
-    @"IST_EHV#preSpecIE4",    @"Warnung",
-    @"IST_EHV#preSpecIE4",    @"Fehler",
-    @"IST_cFP_STATUS#cFP35KVStatus",    @"Temperatur_1",
-    @"IST_cFP_STATUS#cFP35KVStatus",    @"Temperatur_2",
-    @"IST_cFP_STATUS#cFP35KVStatus",    @"Luftfeuchte",
-    @"IST_cFP_STATUS#cFP35KVStatus",    @"Spannung",
-    @"IST_cFP_STATUS#cFP35KVStatus",    @"Warnung",
-    @"IST_cFP_STATUS#cFP35KVStatus",    @"Fehler",
-    @"IST_cFP_STATUS#cFP65KVStatus",    @"Temperatur_1",
-    @"IST_cFP_STATUS#cFP65KVStatus",    @"Temperatur_2",
-    @"IST_cFP_STATUS#cFP65KVStatus",    @"Luftfeuchte",
-    @"IST_cFP_STATUS#cFP65KVStatus",    @"Spannung",
-    @"IST_cFP_STATUS#cFP65KVStatus",    @"Warnung",
-    @"IST_cFP_STATUS#cFP65KVStatus",    @"Fehler",
-    @"IST_cRIO_STATUS#ExpPC_SollSet",    @"Zustand",
-    @"IST_cRIO_STATUS#ZEUS_SollSet",    @"Zustand",
-    @"IST_cRIO_STATUS#ORCA_SollSet",    @"Zustand",
-    @"IST_cRIO_STATUS#416Status_OK",    @"Zustand",
-    @"IST_cRIO_STATUS#416HV_Freigabe",    @"Zustand",
-    @"IST_cRIO_STATUS#416HV_aktiv",    @"Zustand",
-    @"IST_cRIO_STATUS#436Status_OK",    @"Zustand",
-    @"IST_cRIO_STATUS#436HV_Freigabe",    @"Zustand",
-    @"IST_cRIO_STATUS#436HV_aktiv",    @"Zustand",
-    @"IST_cRIO_STATUS#436VAO_AUF",    @"Zustand",
-    @"IST_cRIO_STATUS#436HV_gekoppelt",    @"Zustand",
-    @"IST_HV_RELAIS#Ost_Relais",    @"Zustand",
-    @"IST_HV_RELAIS#West_Relais",    @"Zustand",
-    @"IST_PXI_VOLTAGE#WestCh0",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh0",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh0",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh1",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh1",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh1",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh2",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh2",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh2",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh3",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh3",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh3",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh4",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh4",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh4",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh5",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh5",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh5",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh6",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh6",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh6",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh7",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh7",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh7",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh8",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh8",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh8",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh9",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh9",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh9",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh10",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh10",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh10",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh11",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh11",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh11",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh12",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh12",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh12",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh13",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh13",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh13",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh14",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh14",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh14",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh15",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh15",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh15",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh16",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh16",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh16",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh17",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh17",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh17",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh18",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh18",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh18",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh19",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh19",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh19",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh20",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh20",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh20",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh21",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh21",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh21",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh22",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh22",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh22",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#WestCh23",    @"U_IST",
-    @"IST_PXI_VOLTAGE#WestCh23",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#WestCh23",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh0",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh0",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh0",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh1",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh1",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh1",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh2",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh2",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh2",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh3",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh3",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh3",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh4",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh4",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh4",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh5",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh5",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh5",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh6",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh6",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh6",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh7",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh7",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh7",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh8",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh8",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh8",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh9",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh9",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh9",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh10",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh10",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh10",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh11",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh11",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh11",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh12",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh12",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh12",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh13",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh13",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh13",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh14",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh14",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh14",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh15",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh15",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh15",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh16",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh16",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh16",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh17",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh17",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh17",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh18",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh18",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh18",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh19",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh19",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh19",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh20",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh20",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh20",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh21",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh21",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh21",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh22",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh22",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh22",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#EastCh23",    @"U_IST",
-    @"IST_PXI_VOLTAGE#EastCh23",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#EastCh23",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#35KV_U",    @"U_IST",
-    @"IST_PXI_VOLTAGE#35KV_U",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#35KV_U",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#65KV_U",    @"U_IST",
-    @"IST_PXI_VOLTAGE#65KV_U",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#65KV_U",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#KAL_U1",    @"U_IST",
-    @"IST_PXI_VOLTAGE#KAL_U1",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#KAL_U1",    @"Messung lauft",
-    @"IST_PXI_VOLTAGE#KAL_U2",    @"U_IST",
-    @"IST_PXI_VOLTAGE#KAL_U2",    @"Zeitstempel",
-    @"IST_PXI_VOLTAGE#KAL_U2",    @"Messung lauft",
-    @"IST_PXI_CHANNEL#WestCh0",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh0",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh0",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh0",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh0",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh0",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh0",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh1",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh1",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh1",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh1",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh1",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh1",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh1",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh2",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh2",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh2",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh2",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh2",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh2",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh2",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh3",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh3",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh3",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh3",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh3",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh3",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh3",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh4",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh4",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh4",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh4",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh4",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh4",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh4",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh5",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh5",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh5",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh5",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh5",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh5",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh5",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh6",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh6",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh6",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh6",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh6",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh6",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh6",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh7",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh7",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh7",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh7",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh7",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh7",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh7",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh8",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh8",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh8",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh8",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh8",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh8",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh8",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh9",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh9",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh9",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh9",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh9",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh9",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh9",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh10",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh10",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh10",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh10",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh10",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh10",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh10",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh11",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh11",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh11",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh11",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh11",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh11",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh11",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh12",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh12",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh12",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh12",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh12",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh12",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh12",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh13",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh13",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh13",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh13",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh13",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh13",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh13",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh14",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh14",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh14",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh14",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh14",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh14",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh14",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh15",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh15",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh15",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh15",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh15",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh15",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh15",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh16",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh16",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh16",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh16",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh16",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh16",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh16",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh17",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh17",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh17",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh17",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh17",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh17",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh17",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh18",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh18",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh18",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh18",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh18",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh18",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh18",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh19",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh19",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh19",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh19",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh19",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh19",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh19",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh20",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh20",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh20",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh20",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh20",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh20",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh20",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh21",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh21",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh21",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh21",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh21",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh21",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh21",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh22",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh22",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh22",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh22",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh22",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh22",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh22",    @"Fehler",
-    @"IST_PXI_CHANNEL#WestCh23",    @"U_Soll",
-    @"IST_PXI_CHANNEL#WestCh23",    @"U_IST",
-    @"IST_PXI_CHANNEL#WestCh23",    @"I_MAX",
-    @"IST_PXI_CHANNEL#WestCh23",    @"I_IST",
-    @"IST_PXI_CHANNEL#WestCh23",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#WestCh23",    @"Warnung",
-    @"IST_PXI_CHANNEL#WestCh23",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh0",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh0",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh0",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh0",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh0",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh0",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh0",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh1",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh1",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh1",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh1",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh1",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh1",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh1",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh2",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh2",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh2",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh2",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh2",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh2",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh2",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh3",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh3",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh3",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh3",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh3",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh3",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh3",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh4",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh4",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh4",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh4",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh4",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh4",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh4",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh5",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh5",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh5",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh5",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh5",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh5",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh5",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh6",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh6",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh6",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh6",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh6",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh6",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh6",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh7",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh7",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh7",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh7",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh7",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh7",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh7",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh8",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh8",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh8",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh8",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh8",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh8",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh8",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh9",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh9",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh9",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh9",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh9",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh9",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh9",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh10",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh10",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh10",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh10",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh10",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh10",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh10",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh11",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh11",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh11",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh11",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh11",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh11",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh11",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh12",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh12",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh12",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh12",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh12",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh12",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh12",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh13",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh13",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh13",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh13",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh13",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh13",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh13",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh14",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh14",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh14",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh14",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh14",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh14",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh14",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh15",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh15",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh15",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh15",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh15",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh15",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh15",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh16",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh16",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh16",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh16",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh16",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh16",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh16",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh17",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh17",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh17",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh17",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh17",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh17",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh17",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh18",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh18",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh18",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh18",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh18",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh18",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh18",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh19",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh19",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh19",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh19",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh19",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh19",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh19",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh20",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh20",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh20",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh20",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh20",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh20",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh20",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh21",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh21",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh21",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh21",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh21",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh21",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh21",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh22",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh22",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh22",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh22",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh22",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh22",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh22",    @"Fehler",
-    @"IST_PXI_CHANNEL#EastCh23",    @"U_Soll",
-    @"IST_PXI_CHANNEL#EastCh23",    @"U_IST",
-    @"IST_PXI_CHANNEL#EastCh23",    @"I_MAX",
-    @"IST_PXI_CHANNEL#EastCh23",    @"I_IST",
-    @"IST_PXI_CHANNEL#EastCh23",    @"I_BEGRENZT",
-    @"IST_PXI_CHANNEL#EastCh23",    @"Warnung",
-    @"IST_PXI_CHANNEL#EastCh23",    @"Fehler",
-    @"IST_EHV#postReg",    @"U_IST",
-    @"IST_EHV#postRegInhibit",    @"Inh_IST",
-    @"IST_EHV#postRegStatus",    @"Status",
-    @"", @""
-};
-
-*/
-
-#define kNumToShip  38
-static NSString* itemsToShip[kNumToShip*2] = {
-    @"38",  @"436-EHV-0-1001-0001-U_set",
-    @"39",  @"436-EHV-0-1001-0002-U_act",
-    @"40",  @"436-EHV-0-1001-0003-I_max",
-    @"41",  @"436-EHV-0-1001-0004-I_act",
-    @"42",  @"436-EHV-0-1001-0005-U_ramp",
-    @"43",  @"436-EHV-0-1001-0030-I_limited",
-    @"44",  @"436-EHV-0-1001-0031-warning",
-    @"45",  @"436-EHV-0-1001-0032-error",
-    @"46",  @"436-EHV-0-1002-0001-U_set",
-    @"47",  @"436-EHV-0-1002-0002-U_act",
-    @"48",  @"436-EHV-0-1002-0003-I_max",
-    @"49",  @"436-EHV-0-1002-0004-I_act",
-    @"50",  @"436-EHV-0-1002-0005-U_ramp",
-    @"51",  @"436-EHV-0-1002-0030-I_limited",
-    @"52",  @"436-EHV-0-1002-0031-warning",
-    @"53",  @"436-EHV-0-1002-0032-error",
-    @"86",  @"436-EHV-0-1003-0001-U_set",
-    @"87",  @"436-EHV-0-1003-0002-U_act",
-    @"88",  @"436-EHV-0-1003-0003-I_max",
-    @"89",  @"436-EHV-0-1003-0004-I_act",
-    @"90",  @"436-EHV-0-1003-0005-U_ramp",
-    @"91",  @"436-EHV-0-1003-0030-I_limited",
-    @"92",  @"436-EHV-0-1003-0031-warning",
-    @"93",  @"436-EHV-0-1003-0032-error",
-    @"94",  @"416-EHV-0-1001-0001-U_set",
-    @"95",  @"416-EHV-0-1001-0002-U_act",
-    @"96",  @"416-EHV-0-1001-0003-I_max",
-    @"97",  @"416-EHV-0-1001-0004-I_act",
-    @"98",  @"416-EHV-0-1001-0005-U_ramp",
-    @"99",  @"416-EHV-0-1001-0030-I_limited",
-    @"100", @"416-EHV-0-1001-0031-warning",
-    @"101", @"416-EHV-0-1001-0032-error",
-    @"303", @"436-REU-0-0201-0001-U_act",
-    @"304", @"436-REU-0-0201-0020-trigger_time",
-    @"305", @"436-REU-0-0201-0030-meas_flag",
-    @"306", @"436-REU-0-0301-0001-U_act",
-    @"307", @"436-REU-0-0301-0020-trigger_time",
-    @"308", @"436-REU-0-0301-0030-meas_flag",
-};
 
 @interface ORADEIControlModel (private)
 - (void) timeout;
@@ -995,6 +84,7 @@ static NSString* itemsToShip[kNumToShip*2] = {
         [self performSelector:@selector(pollMeasuredValues) withObject:nil afterDelay:2];
     }
     [super wakeUp];
+    
 }
 
 - (void) sleep
@@ -1070,7 +160,7 @@ static NSString* itemsToShip[kNumToShip*2] = {
     }
 }
 
-- (NSString*) measuredValueName:(NSUInteger)anIndex
+- (NSString *) measuredValueName:(NSUInteger)anIndex
 {
     [self checkShipValueDictionary];
     NSString* aKey = [NSString stringWithFormat:@"%d",(int)anIndex];
@@ -1142,6 +232,63 @@ static NSString* itemsToShip[kNumToShip*2] = {
         return [[measuredValues objectAtIndex:i] objectForKey:@"value"];
     }
     else return nil;
+}
+
+- (int) getIndexOfSetPoint:(NSString *) aUID
+{
+    int row = -1;
+    
+    for (int i = 0; i < [setPoints count]; i++)
+    {
+        NSString *uidSensor = (NSString *) [self setPointItem:i forKey:@"item"];
+        if ([uidSensor isEqualToString:aUID])
+        {
+            row = i;
+        }
+    }
+    
+    return row;
+}
+
+- (int) getIndexOfMeasuredValue:(NSString *) aUID
+{
+    int row = -1;
+    
+    for (int i = 0; i < [measuredValues count]; i++)
+    {
+        NSString *uidSensor = (NSString *) [self measuredValueItem:i forKey:@"item"];
+        if ([uidSensor isEqualToString:aUID])
+        {
+            row = i;
+        }
+    }
+    
+    return row;
+}
+
+- (void) setSetPointWithUID: (NSString *)aUID withValue: (double)value
+{
+   [self setSetPoint:[self getIndexOfSetPoint:aUID] withValue:value];
+}
+
+- (void) setSetPointReadbackWithUID: (NSString *)aUID withValue: (double)value
+{
+   [self setSetPointReadback:[self getIndexOfSetPoint:aUID] withValue:value];
+}
+
+- (id) setPointWithUID:(NSString *)aUID
+{
+   return ([self setPointAtIndex:[self getIndexOfSetPoint:aUID]]);
+}
+
+- (id) setPointReadBackWithUID:(NSString *)aUID
+{
+   return ([self setPointReadBackAtIndex:[self getIndexOfSetPoint:aUID]]);
+}
+
+- (id) measuredValueWithUID:(NSString *)aUID
+{
+   return ([self measuredValueAtIndex:[self getIndexOfMeasuredValue:aUID]]);
 }
 
 - (NSString*) title
@@ -1246,9 +393,9 @@ static NSString* itemsToShip[kNumToShip*2] = {
                 NSLog(@"ADEIControl got end of string delimiter and will now parse the incoming string.\n");
             }
             [stringBuffer replaceOccurrencesOfString:@"+"         withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(0,1)];//remove leading '+' if there
-            [stringBuffer replaceOccurrencesOfString:@"readssps"  withString:@"get gain " options:NSCaseInsensitiveSearch range:NSMakeRange(0,[stringBuffer length])];
-            [stringBuffer replaceOccurrencesOfString:@"readsmvs"  withString:@"get temperatures " options:NSCaseInsensitiveSearch range:NSMakeRange(0,[stringBuffer length])];
-            [stringBuffer replaceOccurrencesOfString:@"writessps" withString:@"set gain " options:NSCaseInsensitiveSearch range:NSMakeRange(0,[stringBuffer length])];
+            [stringBuffer replaceOccurrencesOfString:@"readssps"  withString:cmdReadSetpoints options:NSCaseInsensitiveSearch range:NSMakeRange(0,[stringBuffer length])];
+            [stringBuffer replaceOccurrencesOfString:@"readsmvs"  withString:cmdReadActualValues options:NSCaseInsensitiveSearch range:NSMakeRange(0,[stringBuffer length])];
+            [stringBuffer replaceOccurrencesOfString:@"writessps" withString:cmdWriteSetpoints options:NSCaseInsensitiveSearch range:NSMakeRange(0,[stringBuffer length])];
             [stringBuffer replaceOccurrencesOfString:@"s:done"    withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(0,[stringBuffer length])];
             [stringBuffer replaceOccurrencesOfString:@":done"     withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(0,[stringBuffer length])];       
             [stringBuffer replaceOccurrencesOfString:@"\n"     withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(0,[stringBuffer length])];
@@ -1280,13 +427,12 @@ static NSString* itemsToShip[kNumToShip*2] = {
 
 - (void) parseString:(NSString*)aLine
 {
-    NSLog(@"Line received: %s", aLine);
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(timeout) object:nil];
     
     aLine = [aLine trimSpacesFromEnds];
     aLine = [aLine lowercaseString];
-    if([aLine hasPrefix:@"set gain"]) {
-        aLine = [aLine substringFromIndex:8];
+    if([aLine hasPrefix:cmdWriteSetpoints]) {
+        aLine = [aLine substringFromIndex:cmdWriteSetpoints.length];
         NSArray* theParts = [aLine componentsSeparatedByString:@","];
         int i;
         for(i=0;i<[theParts count];i++){
@@ -1297,8 +443,8 @@ static NSString* itemsToShip[kNumToShip*2] = {
         }
         [self setLastRequest:nil];
     }
-    else if([aLine hasPrefix:@"get gain"]) {
-        aLine = [aLine substringFromIndex:7];
+    else if([aLine hasPrefix:cmdReadSetpoints]) {
+        aLine = [aLine substringFromIndex:cmdReadSetpoints.length];
         NSArray* theParts = [aLine componentsSeparatedByString:@","];
         int i=0;
         for(i=0;i<[theParts count];i++){
@@ -1317,21 +463,24 @@ static NSString* itemsToShip[kNumToShip*2] = {
         [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelSetPointsChanged object: self];
     }
     
-    else if([aLine hasPrefix:@"get temperatures"]) {
-        aLine = [aLine substringFromIndex:7];
+    else if([aLine hasPrefix:cmdReadActualValues]) {
+        aLine = [aLine substringFromIndex:cmdReadActualValues.length];
         NSArray* theParts = [aLine componentsSeparatedByString:@","];
         int i;
         for(i=0;i<[theParts count];i++){
             if(i<[measuredValues count]){
                 [self setMeasuredValue:i withValue:[[theParts objectAtIndex:i]doubleValue]];
+                
             }
         }
         [self shipRecords];
         [self setLastRequest:nil];
         
-        expertPCControlOnly = [[[measuredValues objectAtIndex:146] objectForKey:@"value"] boolValue];
-        zeusHasControl      = [[[measuredValues objectAtIndex:147] objectForKey:@"value"] boolValue];
-        orcaHasControl      = [[[measuredValues objectAtIndex:148] objectForKey:@"value"] boolValue];
+        // Todo: Check, if this is necessary??? --ak--
+        
+        //expertPCControlOnly = [[[measuredValues objectAtIndex:146] objectForKey:@"value"] boolValue];
+        //zeusHasControl      = [[[measuredValues objectAtIndex:147] objectForKey:@"value"] boolValue];
+        //orcaHasControl      = [[[measuredValues objectAtIndex:148] objectForKey:@"value"] boolValue];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelMeasuredValuesChanged object: self];
     }
@@ -1529,6 +678,64 @@ static NSString* itemsToShip[kNumToShip*2] = {
     }
 }
 
+
+- (int) sensorGroup
+{
+    return sensorGroup;
+}
+
+- (void) setSensorGroup:(int)aGroup
+{
+    [[[self undoManager] prepareWithInvocationTarget:self] setSensorGroup:sensorGroup];
+    sensorGroup = aGroup;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelSensorGroupChanged object:self];
+    
+    NSLog(@"Sensor group is %d\n", sensorGroup);
+
+    // Load sensor list of the selected group
+    if (sensorGroup == 0){
+        setPointList = setPointList_RS1;
+        measuredValueList = measuredValueList_RS1;
+ 
+        // Define command strings used in Fieldpoint implementation
+        cmdReadSetpoints = @"get gains ";
+        cmdWriteSetpoints = @"set gains ";
+        cmdReadActualValues = @"get temperatures ";
+    }
+    
+    if (sensorGroup == 1){
+        setPointList = setPointList_RS2;
+        measuredValueList = measuredValueList_RS2;
+
+        // Define command strings used in Fieldpoint implementation
+        cmdReadSetpoints = @"get gains ";
+        cmdWriteSetpoints = @"set gains ";
+        cmdReadActualValues = @"get temperatures ";
+    }
+    
+     if (sensorGroup == 2){
+        setPointList = setPointList_HV;
+        measuredValueList = measuredValueList_HV;
+
+        // Define command strings used in Fieldpoint implementation
+        cmdReadSetpoints = @"read sp ";
+        cmdWriteSetpoints = @"write sp ";
+        cmdReadActualValues = @"read mv ";
+        
+        // Todo:
+        // Shipping is NOT configured !!!
+        // ORCA / ZEUS - Master flag is disabled?!
+        //
+    }
+    
+    [self createSetPointArray];
+    [self createMeasuredValueArray];
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelShowFormattedDatesChanged object:self];
+
+}
+
+
 #pragma mark ***Archival
 - (id) initWithCoder:(NSCoder*)decoder
 {
@@ -1545,9 +752,7 @@ static NSString* itemsToShip[kNumToShip*2] = {
     [self setPostRegulationFile:[decoder decodeObjectForKey: @"postRegulationFile"]];
     [self setPostRegulationArray:[decoder decodeObjectForKey:@"postRegulationArray"]];
     [self setPollTime:          [decoder decodeIntForKey:@"pollTime"]];
-    if(!setPoints)[self createSetPointArray];
-    
-    [self createMeasuredValueArray];
+    [self setSensorGroup:       [decoder decodeIntForKey:@"sensorGroup"]];
     
     if(wasConnected)[self connect];
     
@@ -1567,18 +772,19 @@ static NSString* itemsToShip[kNumToShip*2] = {
     [encoder encodeBool:showFormattedDates    forKey:@"showFormattedDates"];
     [encoder encodeObject:postRegulationFile  forKey: @"postRegulationFile"];
     [encoder encodeObject:postRegulationArray forKey: @"postRegulationArray"];
-    [encoder encodeInteger:pollTime               forKey: @"pollTime"];
+    [encoder encodeInteger:pollTime           forKey: @"pollTime"];
+    [encoder encodeInteger:sensorGroup        forKey: @"sensorGroup"];
 }
 
 #pragma mark *** Commands
 - (void) writeSetpoints
 {
     if([self isConnected]){
-        NSMutableString* cmd = [NSMutableString stringWithString:@"set gain"];
+        NSMutableString* cmd = [NSMutableString stringWithString:cmdWriteSetpoints];
         [cmd appendString:@":"];
         int i;
         int maxIndex = (int)[setPoints count];
-        for(i=0;i<maxIndex;i++){
+        for(i=2;i<maxIndex;i++){
             float valueToWrite = [[[setPoints objectAtIndex:i] objectForKey:@"setPoint"] floatValue];
             [cmd appendFormat:@"%f",valueToWrite];
             if(i != maxIndex-1)[cmd appendString:@","];
@@ -1590,15 +796,14 @@ static NSString* itemsToShip[kNumToShip*2] = {
 - (void) readBackSetpoints
 {
     if([self isConnected]){
-        [self writeCmdString:@"get gain"];
+        [self writeCmdString:@"get gains"];
     }
 }
 
 - (void) readMeasuredValues
 {
     if([self isConnected]){
-        [self writeCmdString:@"get temperatures"];
-        NSLog(@"Request IST values\n");
+        [self writeCmdString:cmdReadActualValues];
     }
 }
 
@@ -1951,18 +1156,17 @@ static NSString* itemsToShip[kNumToShip*2] = {
     else return obj;
 }
 
-
 - (id) initWithCoder:(NSCoder*)decoder
 {
     self = [super init];
     self.data    = [decoder decodeObjectForKey:@"data"];
     return self;
 }
+
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [encoder encodeObject:data  forKey:@"data"];
 }
-
 
 @end
 
