@@ -41,12 +41,12 @@
         <window title="ADEIControl" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="5" userLabel="Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="142" y="159" width="1545" height="555"/>
+            <rect key="contentRect" x="142" y="159" width="1557" height="555"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
             <value key="minSize" type="size" width="1103" height="555"/>
             <value key="maxSize" type="size" width="1103" height="555"/>
             <view key="contentView" misplaced="YES" id="6">
-                <rect key="frame" x="0.0" y="0.0" width="1545" height="555"/>
+                <rect key="frame" x="0.0" y="0.0" width="1557" height="555"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button misplaced="YES" id="2127">
@@ -186,7 +186,7 @@
                         </textFieldCell>
                     </textField>
                     <button verticalHuggingPriority="750" misplaced="YES" tag="4" id="kyJ-3l-GgR">
-                        <rect key="frame" x="185" y="119" width="106" height="28"/>
+                        <rect key="frame" x="291" y="118" width="106" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Read Setpoints" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aQ5-3X-bAg">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -237,7 +237,7 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="data" editable="NO" width="248.01953125" minWidth="10" maxWidth="3.4028234663852886e+38" id="Sf8-mW-jdZ">
+                                        <tableColumn identifier="data" editable="NO" width="217.01953125" minWidth="10" maxWidth="3.4028234663852886e+38" id="Sf8-mW-jdZ">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Sensor Name">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -250,7 +250,7 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="value" editable="NO" width="68" minWidth="10" maxWidth="3.4028234663852886e+38" id="gzc-pC-rkx">
+                                        <tableColumn identifier="value" editable="NO" width="98.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="gzc-pC-rkx">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="right" title="Value">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -380,7 +380,7 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" headerView="hUT-ir-kfb" id="VQ0-Pu-OqC">
-                                    <rect key="frame" x="0.0" y="0.0" width="512.5" height="222"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="512" height="222"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" red="1" green="0.40000000600000002" blue="0.40000000600000002" alpha="0.1034482759" colorSpace="calibratedRGB"/>
@@ -413,7 +413,7 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="data" width="189" minWidth="10" maxWidth="3.4028234663852886e+38" id="S7R-iJ-3ux">
+                                        <tableColumn identifier="data" width="161.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="S7R-iJ-3ux">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Sensor Name">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -426,7 +426,7 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="setPoint" width="79" minWidth="10" maxWidth="3.4028234663852886e+38" id="W42-p3-65X">
+                                        <tableColumn identifier="setPoint" width="79.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="W42-p3-65X">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="right" title="Set Point">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -439,7 +439,7 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="readBack" width="64" minWidth="10" maxWidth="3.4028234663852886e+38" id="HhG-wd-Lh1">
+                                        <tableColumn identifier="readBack" width="90.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="HhG-wd-Lh1">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="right" title="Readback">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -469,7 +469,7 @@
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <tableHeaderView key="headerView" id="hUT-ir-kfb">
-                            <rect key="frame" x="0.0" y="0.0" width="512.5" height="23"/>
+                            <rect key="frame" x="0.0" y="0.0" width="512" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
@@ -523,7 +523,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </box>
                     <button verticalHuggingPriority="750" misplaced="YES" tag="4" id="eij-uj-eZO">
-                        <rect key="frame" x="878" y="119" width="146" height="28"/>
+                        <rect key="frame" x="933" y="119" width="146" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Read Measured Values" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Jrb-ig-bO2">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -531,17 +531,6 @@
                         </buttonCell>
                         <connections>
                             <action selector="readMeasuredValuesAction:" target="-2" id="WdH-bH-EeF"/>
-                        </connections>
-                    </button>
-                    <button verticalHuggingPriority="750" misplaced="YES" tag="4" id="0u4-t1-GWK">
-                        <rect key="frame" x="12" y="118" width="107" height="28"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="push" title="Write Setpoints" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8le-9s-6vx">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="smallSystem"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="writeSetpointsAction:" target="-2" id="JvL-xS-8Pq"/>
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" misplaced="YES" id="DQV-xl-B5H">
@@ -583,9 +572,9 @@
                         </connections>
                     </button>
                     <button toolTip="Push the values in the ReadBack column into the Setpoint column" verticalHuggingPriority="750" misplaced="YES" id="sCk-kf-AuB">
-                        <rect key="frame" x="356" y="119" width="141" height="28"/>
+                        <rect key="frame" x="395" y="119" width="141" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="push" title="ReadBack -&gt; Setpoint" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="onZ-eE-D8e">
+                        <buttonCell key="cell" type="push" title="Setpoint &lt;- ReadBack" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="onZ-eE-D8e">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
@@ -602,7 +591,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </box>
                     <button misplaced="YES" id="R0A-8B-EPL">
-                        <rect key="frame" x="1494" y="35" width="16" height="16"/>
+                        <rect key="frame" x="1506" y="35" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" alignment="center" borderStyle="border" inset="2" id="cGF-yA-DL6">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -613,7 +602,7 @@
                         </connections>
                     </button>
                     <button misplaced="YES" id="Pj2-5O-9nA">
-                        <rect key="frame" x="1509" y="35" width="16" height="16"/>
+                        <rect key="frame" x="1521" y="35" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" alignment="center" borderStyle="border" inset="2" id="OLL-DB-EtE">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -690,12 +679,23 @@
                             <action selector="sensorGroupAction:" target="-2" id="yjx-Yd-UOE"/>
                         </connections>
                     </popUpButton>
+                    <button verticalHuggingPriority="750" misplaced="YES" tag="4" id="0u4-t1-GWK">
+                        <rect key="frame" x="186" y="117" width="107" height="28"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="Write Setpoints" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8le-9s-6vx">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="writeSetpointsAction:" target="-2" id="JvL-xS-8Pq"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="2744"/>
             </connections>
-            <point key="canvasLocation" x="509.5" y="-22.5"/>
+            <point key="canvasLocation" x="515.5" y="-22.5"/>
         </window>
         <customObject id="2377" userLabel="Hex Formatter" customClass="OHexFormatter"/>
     </objects>

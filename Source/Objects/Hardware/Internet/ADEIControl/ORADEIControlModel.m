@@ -435,7 +435,7 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
         aLine = [aLine substringFromIndex:cmdWriteSetpoints.length];
         NSArray* theParts = [aLine componentsSeparatedByString:@","];
         int i;
-        for(i=0;i<[theParts count];i++){
+        for(i=2;i<[theParts count];i++){
             if(i<[setPoints count]){
                 float aValue = [[theParts objectAtIndex:i] floatValue];
                 [self setSetPoint:i withValue:aValue];
@@ -449,11 +449,11 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
         int i=0;
         for(i=0;i<[theParts count];i++){
             if(i<[setPoints count]){
-                float readBack = [[theParts objectAtIndex:i]floatValue];
+                double readBack = [[theParts objectAtIndex:i]doubleValue];
                 [self setSetPointReadback:i withValue:readBack];
-                
-                float setValue  =    [[[setPoints objectAtIndex:i] objectForKey:@"setPoint"] floatValue];
-                float diff = fabsf(setValue-readBack);
+
+                double setValue  =    [[[setPoints objectAtIndex:i] objectForKey:@"setPoint"] floatValue];
+                double diff = fabs(setValue-readBack);
                 if((i>=2) && (diff > 0.00001)){
                     NSLog(@"ADEIControl WARNING: index %i: setPoint-readBack > 0.00001 (abs(%f-%f) = %f)\n",i,setValue,readBack,diff);
                 }
@@ -654,7 +654,7 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
 - (void) pushReadBacksToSetPoints
 {
     int i;
-    for(i=0;i<[setPoints count];i++){
+    for(i=2;i<[setPoints count];i++){
         float theReadBack = [[self setPointReadBackAtIndex:i] floatValue];
         [self setSetPoint:i withValue:theReadBack];
     }
@@ -698,9 +698,9 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
         measuredValueList = measuredValueList_RS1;
  
         // Define command strings used in Fieldpoint implementation
-        cmdReadSetpoints = @"get gains ";
-        cmdWriteSetpoints = @"set gains ";
-        cmdReadActualValues = @"get temperatures ";
+        cmdReadSetpoints = @"get gains";
+        cmdWriteSetpoints = @"set gains";
+        cmdReadActualValues = @"get temperatures";
     }
     
     if (sensorGroup == 1){
@@ -708,9 +708,9 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
         measuredValueList = measuredValueList_RS2;
 
         // Define command strings used in Fieldpoint implementation
-        cmdReadSetpoints = @"get gains ";
-        cmdWriteSetpoints = @"set gains ";
-        cmdReadActualValues = @"get temperatures ";
+        cmdReadSetpoints = @"get gains";
+        cmdWriteSetpoints = @"set gains";
+        cmdReadActualValues = @"get temperatures";
     }
     
      if (sensorGroup == 2){
@@ -718,9 +718,9 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
         measuredValueList = measuredValueList_HV;
 
         // Define command strings used in Fieldpoint implementation
-        cmdReadSetpoints = @"read sp ";
-        cmdWriteSetpoints = @"write sp ";
-        cmdReadActualValues = @"read mv ";
+        cmdReadSetpoints = @"read sp";
+        cmdWriteSetpoints = @"write sp";
+        cmdReadActualValues = @"read mv";
         
         // Todo:
         // Shipping is NOT configured !!!
