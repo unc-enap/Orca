@@ -432,13 +432,13 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
     aLine = [aLine trimSpacesFromEnds];
     aLine = [aLine lowercaseString];
     if([aLine hasPrefix:cmdWriteSetpoints]) {
-        aLine = [aLine substringFromIndex:cmdWriteSetpoints.length];
+        aLine = [aLine substringFromIndex:cmdWriteSetpoints.length+1]; // also remove colon here !!!
         NSArray* theParts = [aLine componentsSeparatedByString:@","];
         int i;
-        for(i=2;i<[theParts count];i++){
+        for(i=0;i<[theParts count];i++){
             if(i<[setPoints count]){
                 float aValue = [[theParts objectAtIndex:i] floatValue];
-                [self setSetPoint:i withValue:aValue];
+                [self setSetPoint:i+2 withValue:aValue];
             }
         }
         [self setLastRequest:nil];
@@ -690,7 +690,7 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
     sensorGroup = aGroup;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelSensorGroupChanged object:self];
     
-    NSLog(@"Sensor group is %d\n", sensorGroup);
+    //NSLog(@"Sensor group is %d\n", sensorGroup);
 
     // Load sensor list of the selected group
     if (sensorGroup == 0){

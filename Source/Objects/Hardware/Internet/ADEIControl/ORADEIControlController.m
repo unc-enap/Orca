@@ -342,10 +342,10 @@
 #pragma mark ***Table Data Source
 - (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
-    NSString *sensorName = (NSString *)[model setPointItem:(int)rowIndex forKey:@"data"];
-    
     if(setPointTableView == aTableView){
-        if([[aTableColumn identifier] isEqualToString:@"index"]){
+       NSString *sensorName = (NSString *)[model setPointItem:(int)rowIndex forKey:@"data"];
+
+       if([[aTableColumn identifier] isEqualToString:@"index"]){
             return  [NSNumber numberWithInteger:rowIndex];
         }
         else {
@@ -365,6 +365,7 @@
         }
     }
     else if(measuredValueTableView == aTableView){
+        NSString *sensorName = (NSString *)[model measuredValueItem:(int)rowIndex forKey:@"data"];
 
         if([[aTableColumn identifier] isEqualToString:@"index"]){
             return  [NSNumber numberWithInt:(int)rowIndex];
