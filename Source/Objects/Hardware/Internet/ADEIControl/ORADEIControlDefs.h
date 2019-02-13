@@ -257,6 +257,20 @@ static NSString* itemsToShip_RS1[kNumToShip_RS1*2] = {
 static NSString* setPointList_RS2[] = {
     @"-", @"Timestamp 1",
     @"-", @"Timestamp 2",
+    @"111-LGU-0-2300-0100", @"Optical fiber ID ",
+    @"111-AAI-0-2301-0100", @"Translation Stage X position ",
+    @"111-AAI-0-2302-0100", @"Translation Stage Y position ",
+    @"111-AAI-0-2303-0100", @"Translation Stage Z position ",
+    @"111-AAI-0-2601-0100", @"Noise Eater Regulation ON/OFF ",
+    @"111-AAI-0-2601-0101", @"Noise-Eater Regulation Setpoint ",
+    @"-", @"Reserved",
+    @"-", @"Reserved",
+    @"", @""
+};
+
+static NSString* measuredValueList_RS2[] = {
+    @"-", @"Timestamp 1",
+    @"-", @"Timestamp 2",
     @"111-LGU-0-2300-0000", @"Optical fiber ID ",
     @"111-AAI-0-2301-0000", @"Translation Stage X position ",
     @"111-AAI-0-2301-0001", @"Translation Stage X on position? ",
@@ -273,21 +287,6 @@ static NSString* setPointList_RS2[] = {
     @"111-EHV-0-1311-0000", @"Dipole electrode West Voltage (spare) ",
     @"111-EHV-0-1312-0000", @"Dipole electrode East Voltage (spare) ",
     @"212-EHV-0-1310-0000", @"Rear wall  Voltage (spare) ",
-    @"-", @"Reserved",
-    @"-", @"Reserved",
-    @"", @""
-};
-
-
-static NSString* measuredValueList_RS2[] = {
-    @"-", @"Timestamp 1",
-    @"-", @"Timestamp 2",
-    @"111-LGU-0-2300-0100", @"Optical fiber ID ",
-    @"111-AAI-0-2301-0100", @"Translation Stage X position ",
-    @"111-AAI-0-2302-0100", @"Translation Stage Y position ",
-    @"111-AAI-0-2303-0100", @"Translation Stage Z position ",
-    @"111-AAI-0-2601-0100", @"Noise Eater Regulation ON/OFF ",
-    @"111-AAI-0-2601-0101", @"Noise-Eater Regulation Setpoint ",
     @"-", @"Reserved",
     @"-", @"Reserved",
     @"", @""
