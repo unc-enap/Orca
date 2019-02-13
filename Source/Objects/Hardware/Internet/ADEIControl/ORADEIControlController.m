@@ -373,7 +373,7 @@
 - (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
     if(setPointTableView == aTableView){
-       NSString *sensorName = (NSString *)[model setPointItem:(int)rowIndex forKey:@"data"];
+       NSString *sensorName = (NSString *)[model setPointItem:(int)rowIndex forKey:@"name"];
 
        if([[aTableColumn identifier] isEqualToString:@"index"]){
             return  [NSNumber numberWithInteger:rowIndex];
@@ -395,7 +395,7 @@
         }
     }
     else if(measuredValueTableView == aTableView){
-        NSString *sensorName = (NSString *)[model measuredValueItem:(int)rowIndex forKey:@"data"];
+        NSString *sensorName = (NSString *)[model measuredValueItem:(int)rowIndex forKey:@"name"];
 
         if([[aTableColumn identifier] isEqualToString:@"index"]){
             return  [NSNumber numberWithInt:(int)rowIndex];
@@ -442,8 +442,8 @@
     if(anObject == nil)return;
     
     if(setPointTableView == aTableView){
-        if([[aTableColumn identifier] isEqualToString:@"item"]) return;
-        if([[aTableColumn identifier] isEqualToString:@"data"]) return;
+        if([[aTableColumn identifier] isEqualToString:@"uid"]) return;
+        if([[aTableColumn identifier] isEqualToString:@"name"]) return;
         if([[aTableColumn identifier] isEqualToString:@"readback"]) return;
         if([[aTableColumn identifier] isEqualToString:@"setPoint"]){
             [model setSetPoint:(int)rowIndex  withValue:[anObject floatValue]];

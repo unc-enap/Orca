@@ -183,7 +183,7 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="item" editable="NO" width="127" minWidth="40" maxWidth="1000" id="XKM-ky-A6g">
+                                        <tableColumn identifier="uid" editable="NO" width="127" minWidth="40" maxWidth="1000" id="XKM-ky-A6g">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="KATRIN no">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -196,7 +196,7 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="data" editable="NO" width="217.01953125" minWidth="10" maxWidth="3.4028234663852886e+38" id="Sf8-mW-jdZ">
+                                        <tableColumn identifier="name" editable="NO" width="217.01953125" minWidth="10" maxWidth="3.4028234663852886e+38" id="Sf8-mW-jdZ">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Sensor Name">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -271,7 +271,7 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="item" width="125.5" minWidth="40" maxWidth="1000" id="9G6-Ep-Vft">
+                                        <tableColumn identifier="uid" width="125.5" minWidth="40" maxWidth="1000" id="9G6-Ep-Vft">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="KATRIN no">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -284,7 +284,7 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="data" width="161.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="S7R-iJ-3ux">
+                                        <tableColumn identifier="name" width="161.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="S7R-iJ-3ux">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Sensor Name">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>

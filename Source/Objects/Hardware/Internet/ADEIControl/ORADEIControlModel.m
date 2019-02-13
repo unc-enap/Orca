@@ -131,8 +131,8 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
     int index = 0;
     for(;;) {
         NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-        [dict setObject:setPointList[index++]   forKey:@"item"];
-        [dict setObject:setPointList[index++]   forKey:@"data"];
+        [dict setObject:setPointList[index++]   forKey:@"uid"];
+        [dict setObject:setPointList[index++]   forKey:@"name"];
         [dict setObject:@"0"   forKey:@"setPoint"];
         [dict setObject:@"?" forKey:@"readBack"];
         [setPoints addObject:dict];
@@ -152,8 +152,8 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
     int index = 0;
     for(;;) {
         NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-        [dict setObject:measuredValueList[index++]   forKey:@"item"];
-        [dict setObject:measuredValueList[index++]   forKey:@"data"];
+        [dict setObject:measuredValueList[index++]   forKey:@"uid"];
+        [dict setObject:measuredValueList[index++]   forKey:@"name"];
         [dict setObject:@"?" forKey:@"value"];
         [measuredValues addObject:dict];
         if([measuredValueList[index] isEqualToString:@""])break;
@@ -169,8 +169,8 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
         return aName;
     }
     else if(anIndex < [measuredValues count]){
-        NSString* part1 = [[measuredValues objectAtIndex:anIndex] objectForKey:@"item"];
-        NSString* part2 = [[measuredValues objectAtIndex:anIndex] objectForKey:@"data"];
+        NSString* part1 = [[measuredValues objectAtIndex:anIndex] objectForKey:@"uid"];
+        NSString* part2 = [[measuredValues objectAtIndex:anIndex] objectForKey:@"name"];
         return [part1 stringByAppendingFormat:@" %@",part2];
     }
     return [NSString stringWithFormat:@"Index %d",(int)anIndex];
@@ -240,7 +240,7 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
     
     for (int i = 0; i < [setPoints count]; i++)
     {
-        NSString *uidSensor = (NSString *) [self setPointItem:i forKey:@"item"];
+        NSString *uidSensor = (NSString *) [self setPointItem:i forKey:@"uid"];
         if ([uidSensor isEqualToString:aUID])
         {
             row = i;
@@ -256,7 +256,7 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
     
     for (int i = 0; i < [measuredValues count]; i++)
     {
-        NSString *uidSensor = (NSString *) [self measuredValueItem:i forKey:@"item"];
+        NSString *uidSensor = (NSString *) [self measuredValueItem:i forKey:@"uid"];
         if ([uidSensor isEqualToString:aUID])
         {
             row = i;
