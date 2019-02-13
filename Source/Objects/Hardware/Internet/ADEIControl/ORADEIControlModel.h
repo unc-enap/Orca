@@ -32,6 +32,7 @@
 {
     @private
         int                 sensorGroup;
+        NSString*           sensorGroupName;
         NSString*           ipAddress;
         BOOL                isConnected;
         NetSocket*          socket;
@@ -60,10 +61,16 @@
         NSString *          cmdReadSetpoints;
         NSString *          cmdWriteSetpoints;
         NSString *          cmdReadActualValues;
+        int                 spOffset;
     
         NSString **         setPointList;
         NSString **         measuredValueList;
-    
+        int                 kNumToShip;
+        NSString **         itemsToShip;
+
+        int                 localControlIndex;
+        int                 zeusControlIndex;
+        int                 orcaControlIndex;
 }
 
 #pragma mark ***Initialization
@@ -73,6 +80,7 @@
 #pragma mark ***Accessors
 - (int) sensorGroup;
 - (void) setSensorGroup:(int)group;
+- (NSString*) sensorGroupName;
 - (int)  pollTime;
 - (void) setPollTime:(int)aPollTime;
 - (id) setPointItem:(int)i forKey:(NSString*)aKey;

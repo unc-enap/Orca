@@ -11,6 +11,7 @@
                 <outlet property="addPostRegulationPointButton" destination="R0A-8B-EPL" id="7CO-eG-FeO"/>
                 <outlet property="cmdQueCountField" destination="2730" id="2732"/>
                 <outlet property="expertPCControlOnlyField" destination="DQV-xl-B5H" id="ugB-bV-m2C"/>
+                <outlet property="groupNumTextField" destination="oiB-4F-H01" id="H3T-AH-tQR"/>
                 <outlet property="ipAddressTextField" destination="5qs-rT-FIz" id="BGN-Ty-Rfs"/>
                 <outlet property="ipConnectButton" destination="Gio-Uk-g4q" id="Lwt-Kf-wzG"/>
                 <outlet property="ipConnectedTextField" destination="gnQ-Cu-LmB" id="v7i-Bk-iOB"/>
@@ -97,9 +98,9 @@
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" misplaced="YES" id="3Qt-6g-eCE">
-                        <rect key="frame" x="15" y="428" width="530" height="40"/>
+                        <rect key="frame" x="15" y="428" width="530" height="44"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="SOLL/Setpoints" id="CRb-ba-5ql">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="SOLL / Setpoints" id="CRb-ba-5ql">
                             <font key="font" size="23" name="Papyrus"/>
                             <color key="textColor" red="0.078694656449999997" green="0.1157358394" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -533,6 +534,17 @@
                             <action selector="readMeasuredValuesAction:" target="-2" id="WdH-bH-EeF"/>
                         </connections>
                     </button>
+                    <button verticalHuggingPriority="750" misplaced="YES" tag="4" id="0u4-t1-GWK">
+                        <rect key="frame" x="325" y="139" width="107" height="28"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="Write Setpoints" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8le-9s-6vx">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="writeSetpointsAction:" target="-2" id="JvL-xS-8Pq"/>
+                        </connections>
+                    </button>
                     <textField verticalHuggingPriority="750" misplaced="YES" id="DQV-xl-B5H">
                         <rect key="frame" x="572" y="75" width="421" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -651,7 +663,7 @@
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="ADEIControl" id="Nn3-o0-JCJ"/>
                     </imageView>
                     <button misplaced="YES" id="EiM-OL-qJj">
-                        <rect key="frame" x="26" y="477" width="157" height="20"/>
+                        <rect key="frame" x="17" y="144" width="157" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Show Formatted Dates" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="k3I-er-JaQ">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -671,7 +683,7 @@
                                 <items>
                                     <menuItem title="113-RS e-gun cRIO" state="on" id="F7N-9S-eHC" userLabel="RS1"/>
                                     <menuItem title="113-RS e-gun embedded PC" tag="1" id="wIM-xQ-Zsj" userLabel="RS2"/>
-                                    <menuItem title="436-MS High voltage" tag="2" id="24S-Dp-0nz" userLabel="MS-HV"/>
+                                    <menuItem title="436-MS high voltage" tag="2" id="24S-Dp-0nz" userLabel="MS-HV"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>
@@ -679,17 +691,37 @@
                             <action selector="sensorGroupAction:" target="-2" id="yjx-Yd-UOE"/>
                         </connections>
                     </popUpButton>
-                    <button verticalHuggingPriority="750" misplaced="YES" tag="4" id="0u4-t1-GWK">
-                        <rect key="frame" x="325" y="139" width="107" height="28"/>
+                    <button misplaced="YES" imageHugsTitle="YES" id="6cG-Kg-4Er">
+                        <rect key="frame" x="40" y="491" width="28" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="push" title="Write Setpoints" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8le-9s-6vx">
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="dec" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="gIo-vU-eWy">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="smallSystem"/>
+                            <font key="font" metaFont="system" size="10"/>
                         </buttonCell>
                         <connections>
-                            <action selector="writeSetpointsAction:" target="-2" id="JvL-xS-8Pq"/>
+                            <action selector="decDialog:" target="-2" id="zzK-Qa-2Sm"/>
                         </connections>
                     </button>
+                    <button misplaced="YES" imageHugsTitle="YES" id="kBr-Q0-iBT">
+                        <rect key="frame" x="67" y="491" width="28" height="28"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="inc" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="yBI-20-A3w">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system" size="10"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="incDialog:" target="-2" id="iFE-j7-jFC"/>
+                        </connections>
+                    </button>
+                    <textField verticalHuggingPriority="750" misplaced="YES" id="oiB-4F-H01" userLabel="Group Number">
+                        <rect key="frame" x="48" y="480" width="41" height="14"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Unit# 1" id="2CA-IM-gf6" userLabel="GroupNumTextField">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
             </view>
             <connections>
@@ -703,5 +735,7 @@
         <image name="ADEIControl" width="100" height="37"/>
         <image name="Locked" width="33" height="36"/>
         <image name="Unlocked" width="33" height="36"/>
+        <image name="dec" width="18" height="18"/>
+        <image name="inc" width="18" height="18"/>
     </resources>
 </document>

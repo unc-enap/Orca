@@ -21,6 +21,7 @@
 @interface ORADEIControlController : OrcaObjectController
 {
     IBOutlet NSPopUpButton* sensorGroupPU;
+    IBOutlet NSTextField*   groupNumTextField;
 
 	IBOutlet NSTextField*	ipConnectedTextField;
 	IBOutlet NSTextField*	ipAddressTextField;

@@ -39,6 +39,8 @@
     [[queueValueBar xAxis] setRngDefaultsLow:0 withHigh:300];
     
 	[super awakeFromNib];
+ 
+    [self updateWindow];
 }
 
 #pragma mark ***Notifications
@@ -161,14 +163,22 @@
     [self showFormattedDatesChanged:nil];
     [self postRegulationFileChanged:nil];
     [self pollTimeChanged:nil];
+    
 }
 
 
 - (void) sensorGroupChanged:(NSNotification*)aNote
 {
     [sensorGroupPU selectItemWithTag:[model sensorGroup]];
-}
+    
+    [groupNumTextField setStringValue: [NSString stringWithFormat:@"Unit# %u",(int)[model uniqueIdNumber]]];
+    
+    // todo: renaming of the title does not work; is only updated, when
+    //       the group selector is touched?! --ak--
+    
+    //[[self window] setTitle:[NSString stringWithFormat:@"ADEIControl (Group# %u)",(int)[model uniqueIdNumber]]];
 
+}
 
 - (void) pollTimeChanged:(NSNotification*)aNote
 {

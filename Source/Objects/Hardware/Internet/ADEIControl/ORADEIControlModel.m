@@ -438,7 +438,7 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
         for(i=0;i<[theParts count];i++){
             if(i<[setPoints count]){
                 float aValue = [[theParts objectAtIndex:i] floatValue];
-                [self setSetPoint:i+2 withValue:aValue];
+                [self setSetPoint:i+spOffset withValue:aValue];
             }
         }
         [self setLastRequest:nil];
@@ -476,11 +476,13 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
         [self shipRecords];
         [self setLastRequest:nil];
         
-        // Todo: Check, if this is necessary??? --ak--
-        
-        //expertPCControlOnly = [[[measuredValues objectAtIndex:146] objectForKey:@"value"] boolValue];
-        //zeusHasControl      = [[[measuredValues objectAtIndex:147] objectForKey:@"value"] boolValue];
-        //orcaHasControl      = [[[measuredValues objectAtIndex:148] objectForKey:@"value"] boolValue];
+        // Parse control flags
+        if (localControlIndex > 1)
+             expertPCControlOnly = [[[measuredValues objectAtIndex:localControlIndex] objectForKey:@"value"] boolValue];
+        if (zeusControlIndex > 1)
+             zeusHasControl      = [[[measuredValues objectAtIndex:zeusControlIndex] objectForKey:@"value"] boolValue];
+        if (orcaControlIndex > 1)
+             orcaHasControl      = [[[measuredValues objectAtIndex:orcaControlIndex] objectForKey:@"value"] boolValue];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelMeasuredValuesChanged object: self];
     }
@@ -684,6 +686,11 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
     return sensorGroup;
 }
 
+- (NSString*) sensorGroupName;
+{
+    return sensorGroupName;
+}
+
 - (void) setSensorGroup:(int)aGroup
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setSensorGroup:sensorGroup];
@@ -694,38 +701,60 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
 
     // Load sensor list of the selected group
     if (sensorGroup == 0){
+        sensorGroupName = @"113-RS e-gun cRIO";
+        // Set sensor lists (setpoints, measured vcalues, archival)
         setPointList = setPointList_RS1;
         measuredValueList = measuredValueList_RS1;
- 
-        // Define command strings used in Fieldpoint implementation
-        cmdReadSetpoints = @"get gains";
-        cmdWriteSetpoints = @"set gains";
-        cmdReadActualValues = @"get temperatures";
-    }
-    
-    if (sensorGroup == 1){
-        setPointList = setPointList_RS2;
-        measuredValueList = measuredValueList_RS2;
+        kNumToShip = kNumToShip_RS1;
+        itemsToShip = itemsToShip_RS1;
 
         // Define command strings used in Fieldpoint implementation
         cmdReadSetpoints = @"get gains";
         cmdWriteSetpoints = @"set gains";
         cmdReadActualValues = @"get temperatures";
+        spOffset = 2;
+    
+        localControlIndex = 0;
+        zeusControlIndex = 0;
+        orcaControlIndex = 0;
+    }
+    
+    if (sensorGroup == 1){
+        sensorGroupName = @"113-RS e-gun enbedded PC";
+        // Set sensor lists (setpoints, measured vcalues, archival)
+        setPointList = setPointList_RS2;
+        measuredValueList = measuredValueList_RS2;
+        kNumToShip = kNumToShip_RS2;
+        itemsToShip = itemsToShip_RS2;
+
+        // Define command strings used in Fieldpoint implementation
+        cmdReadSetpoints = @"get gains";
+        cmdWriteSetpoints = @"set gains";
+        cmdReadActualValues = @"get temperatures";
+        spOffset = 2;
+        
+        localControlIndex = 0;
+        zeusControlIndex = 0;
+        orcaControlIndex = 0;
     }
     
      if (sensorGroup == 2){
+        sensorGroupName = @"436-MS high voltage";
+        // Set sensor lists (setpoints, measured vcalues, archival)
         setPointList = setPointList_HV;
         measuredValueList = measuredValueList_HV;
+        kNumToShip = kNumToShip_HV;
+        itemsToShip = itemsToShip_HV;
 
         // Define command strings used in Fieldpoint implementation
         cmdReadSetpoints = @"read sp";
         cmdWriteSetpoints = @"write sp";
         cmdReadActualValues = @"read mv";
+        spOffset = 0;
         
-        // Todo:
-        // Shipping is NOT configured !!!
-        // ORCA / ZEUS - Master flag is disabled?!
-        //
+        localControlIndex = 146;
+        zeusControlIndex = 147;
+        orcaControlIndex = 148;
     }
     
     [self createSetPointArray];
@@ -784,7 +813,7 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
         [cmd appendString:@":"];
         int i;
         int maxIndex = (int)[setPoints count];
-        for(i=2;i<maxIndex;i++){
+        for(i=spOffset;i<maxIndex;i++){
             float valueToWrite = [[[setPoints objectAtIndex:i] objectForKey:@"setPoint"] floatValue];
             [cmd appendFormat:@"%f",valueToWrite];
             if(i != maxIndex-1)[cmd appendString:@","];
