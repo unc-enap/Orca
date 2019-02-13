@@ -112,13 +112,13 @@
                        object : model];
     
     [notifyCenter addObserver : self
-                     selector : @selector(desiredSetPointAdded:)
-                         name : ORADEIControlModelDesiredSetPointAdded
+                     selector : @selector(postRegulationPointAdded:)
+                         name : ORADEIControlModelPostRegulationPointAdded
                        object : model];
     
     [notifyCenter addObserver : self
-                     selector : @selector(desiredSetPointRemoved:)
-                         name : ORADEIControlModelDesiredSetPointRemoved
+                     selector : @selector(postRegulationPointRemoved:)
+                         name : ORADEIControlModelPostRegulationPointRemoved
                        object : model];
     
     [notifyCenter addObserver : self
@@ -136,6 +136,15 @@
                          name : ORADEIControlModelPollTimeChanged
                        object : nil];
     
+    [notifyCenter addObserver : self
+                     selector : @selector(drawDidClose:)
+                         name : NSDrawerDidCloseNotification
+                       object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(drawDidOpen:)
+                         name : NSDrawerDidOpenNotification
+                       object : nil];
     
 }
 
@@ -197,18 +206,18 @@
 {
     [postRegulationFileField setStringValue:[[model postRegulationFile] stringByAbbreviatingWithTildeInPath] ];
 }
-- (void) desiredSetPointAdded:(NSNotification*)aNote
+- (void) postRegulationPointAdded:(NSNotification*)aNote
 {
     [postRegulationTableView reloadData];
-    NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:[model numDesiredSetPoints]];
+    NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:[model numPostRegulationPoints]];
     [postRegulationTableView selectRowIndexes:indexSet byExtendingSelection:NO];
     [self setButtonStates];
 }
 
-- (void) desiredSetPointRemoved:(NSNotification*)aNote
+- (void) postRegulationPointRemoved:(NSNotification*)aNote
 {
     int index = [[[aNote userInfo] objectForKey:@"Index"] intValue];
-    index = MIN(index,(int)[model numDesiredSetPoints]-1);
+    index = MIN(index,(int)[model numPostRegulationPoints]-1);
     index = MAX(index,0);
     [postRegulationTableView reloadData];
     NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:index];
@@ -288,6 +297,17 @@
     [self setButtonStates];
 }
 
+- (void) drawDidOpen:(NSNotification*)aNote
+{
+    if([aNote object] == scriptParameterDrawer)          [parameterViewButton setTitle:@"<"];
+}
+
+- (void) drawDidClose:(NSNotification*)aNote
+{
+    if([aNote object] == scriptParameterDrawer)          [parameterViewButton setTitle:@">"];
+}
+
+
 #pragma mark ***Actions
 - (IBAction) writeSetpointsAction:(id)sender
 {
@@ -323,17 +343,17 @@
     [model connect];
 }
 
-- (IBAction) addDesiredSetPoint: (id) aSender
+- (IBAction) addPostRegulationPoint: (id) aSender
 {
-    [model addDesiredSetPoint];
+    [model addPostRegulationPoint];
 }
 
-- (IBAction) removeDesiredSetPoint: (id) aSender
+- (IBAction) removePostRegulationPoint: (id) aSender
 {
     NSIndexSet* theSet = [postRegulationTableView selectedRowIndexes];
     NSUInteger current_index = [theSet firstIndex];
     if(current_index != NSNotFound){
-        [model removeDesiredSetPointAtIndex:(int)current_index];
+        [model removePostRegulationPointAtIndex:(int)current_index];
     }
     [self setButtonStates];
 }
@@ -341,9 +361,9 @@
 - (void) setButtonStates
 {
     BOOL locked = [gSecurity isLocked:ORADEIControlLock];
-    [readPostRegulationButton           setEnabled:    !locked];
-    [addDesiredSetPointButton       setEnabled:    !locked];
-    [removeDesiredSetPointButton    setEnabled: !locked];
+    [readPostRegulationButton           setEnabled:!locked];
+    [addPostRegulationPointButton       setEnabled:!locked];
+    [removePostRegulationPointButton    setEnabled:!locked];
     [readSetPointFileButton             setEnabled:!locked];
     [writeAllSetPointsButton            setEnabled:!locked];
     [setPointTableView                  setEnabled:!locked];
@@ -402,7 +422,7 @@
             return  [NSNumber numberWithInt:(int)rowIndex];
         }
         else {
-            return [[model desiredSetPointAtIndex:(int)rowIndex] objectForKey:[aTableColumn identifier]];
+            return [[model postRegulationPointAtIndex:(int)rowIndex] objectForKey:[aTableColumn identifier]];
         }
     }
     else return nil;
@@ -413,7 +433,7 @@
 {
 	if(setPointTableView == aTableView)return [model numSetPoints];
     else if(measuredValueTableView == aTableView)return [model numMeasuredValues];
-    else if(postRegulationTableView == aTableView)return [model numDesiredSetPoints];
+    else if(postRegulationTableView == aTableView)return [model numPostRegulationPoints];
 	else return 0;
 }
 
@@ -431,7 +451,7 @@
         }
     }
     else if(postRegulationTableView == aTableView){
-        id aPoint = [model desiredSetPointAtIndex:(int)rowIndex];
+        id aPoint = [model postRegulationPointAtIndex:(int)rowIndex];
         [aPoint setValue:anObject forKey:[aTableColumn identifier]];
     }
 }
@@ -566,6 +586,17 @@
 - (IBAction) pollTimeAction: (id) aSender
 {
     [model setPollTime:(int)[[aSender selectedItem]tag]];
+}
+
+- (IBAction) toggleScriptParameterDrawer:(id)sender
+{
+    NSDrawerState state = [scriptParameterDrawer state];
+    if (NSDrawerOpeningState == state || NSDrawerOpenState == state){
+        [scriptParameterDrawer close];
+    }
+    else {
+        [scriptParameterDrawer openOnEdge:NSMaxXEdge];
+    }
 }
 
 #pragma  mark ***Delegate Responsiblities

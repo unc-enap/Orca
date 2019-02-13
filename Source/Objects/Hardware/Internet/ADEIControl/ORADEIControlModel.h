@@ -135,12 +135,12 @@
 
 - (NSString*) postRegulationFile;
 - (void) setPostRegulationFile:(NSString*)aPath;
-- (void) addDesiredSetPoint;
-- (void) removeDesiredSetPointAtIndex:(int)anIndex;
-- (void) removeAllDesiredSetPoints;
+- (void) addPostRegulationPoint;
+- (void) removePostRegulationPointAtIndex:(int)anIndex;
+- (void) removeAllPostRegulationPoints;
 - (void) setPostRegulationArray:(NSMutableArray*)anArray;
-- (uint32_t) numDesiredSetPoints;
-- (id) desiredSetPointAtIndex:(int)anIndex;
+- (uint32_t) numPostRegulationPoints;
+- (id) postRegulationPointAtIndex:(int)anIndex;
 - (NSString*)measuredValueName:(NSUInteger)anIndex;
 
 #pragma mark ***Commands
@@ -201,17 +201,17 @@ extern NSString* ORADEIControlModelSetPointFileChanged;
 extern NSString* ORADEIControlModelVerboseChanged;
 extern NSString* ORADEIControlModelShowFormattedDatesChanged;
 extern NSString* ORADEIControlModelPostRegulationFileChanged;
-extern NSString* ORADEIControlModelDesiredSetPointAdded;
-extern NSString* ORADEIControlModelDesiredSetPointRemoved;
+extern NSString* ORADEIControlModelPostRegulationPointAdded;
+extern NSString* ORADEIControlModelPostRegulationPointRemoved;
 extern NSString* ORADEIControlModelUpdatePostRegulationTable;
 extern NSString* ORADEIControlModelPollTimeChanged;
 
 
-@interface DesiredSetPoint : NSObject
+@interface ScriptingParameter : NSObject
 {
     NSMutableDictionary* data;
 }
-+ (id) desiredSetPoint;
++ (id) postRegulationPoint;
 - (void) setValue:(id)anObject forKey:(id)aKey;
 - (id) objectForKey:(id)aKey;
 - (id)   initWithCoder:(NSCoder*)decoder;

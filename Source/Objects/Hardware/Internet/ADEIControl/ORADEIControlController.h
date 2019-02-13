@@ -40,8 +40,8 @@
 	IBOutlet NSTableView*	setPointTableView;
     IBOutlet NSTableView*   measuredValueTableView;
     IBOutlet NSTableView*   postRegulationTableView;
-    IBOutlet NSButton*      addDesiredSetPointButton;
-    IBOutlet NSButton*      removeDesiredSetPointButton;
+    IBOutlet NSButton*      addPostRegulationPointButton;
+    IBOutlet NSButton*      removePostRegulationPointButton;
     IBOutlet NSTextField*   postRegulationFileField;
     
     IBOutlet NSTextField* expertPCControlOnlyField;
@@ -53,6 +53,11 @@
     IBOutlet ORValueBarGroupView*  queueValueBar;
     IBOutlet NSButton*    verboseCB;
     IBOutlet NSButton*    showFormattedDatesCB;
+    
+    //Drawers
+    IBOutlet NSDrawer*    scriptParameterDrawer;
+    IBOutlet NSButton*    parameterViewButton;
+
 }
 
 #pragma mark ***Initialization
@@ -75,9 +80,11 @@
 - (void) verboseChanged:(NSNotification*)aNote;
 - (void) pollTimeChanged:(NSNotification*)aNote;
 - (void) setButtonStates;
-- (void) desiredSetPointAdded:(NSNotification*)aNote;
-- (void) desiredSetPointRemoved:(NSNotification*)aNote;
+- (void) postRegulationPointAdded:(NSNotification*)aNote;
+- (void) postRegulationPointRemoved:(NSNotification*)aNote;
 - (void) updatePostRegulationTable;
+- (void) drawDidOpen:(NSNotification*)aNote;
+- (void) drawDidClose:(NSNotification*)aNote;
 
 #pragma mark ***Actions
 
@@ -94,11 +101,12 @@
 - (IBAction) connectAction: (id) aSender;
 - (IBAction) flushQueueAction: (id) aSender;
 - (IBAction) verboseAction: (id) aSender;
-- (IBAction) addDesiredSetPoint: (id) aSender;
-- (IBAction) removeDesiredSetPoint: (id) aSender;
+- (IBAction) addPostRegulationPoint: (id) aSender;
+- (IBAction) removePostRegulationPoint: (id) aSender;
 - (IBAction) readPostRegulationScaleFactors: (id) aSender;
 - (IBAction) savePostRegulationScaleFactors: (id) aSender;
 - (IBAction) pollTimeAction: (id) aSender;
+- (IBAction) toggleScriptParameterDrawer:(id)sender;
 - (BOOL) tableView:(NSTableView *)tableView shouldSelectRow:(int)row;
 @end
 

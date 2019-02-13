@@ -37,8 +37,8 @@ NSString* ORADEIControlModelSetPointFileChanged          = @"ORADEIControlModelS
 NSString* ORADEIControlModelPostRegulationFileChanged    = @"ORADEIControlModelPostRegulationFileChanged";
 NSString* ORADEIControlModelVerboseChanged               = @"ORADEIControlModelVerboseChanged";
 NSString* ORADEIControlModelShowFormattedDatesChanged    = @"ORADEIControlModelShowFormattedDatesChanged";
-NSString* ORADEIControlModelDesiredSetPointAdded         = @"ORADEIControlModelDesiredSetPointAdded";
-NSString* ORADEIControlModelDesiredSetPointRemoved       = @"ORADEIControlModelDesiredSetPointRemoved";
+NSString* ORADEIControlModelPostRegulationPointAdded         = @"ORADEIControlModelPostRegulationPointAdded";
+NSString* ORADEIControlModelPostRegulationPointRemoved       = @"ORADEIControlModelPostRegulationPointRemoved";
 NSString* ORADEIControlModelUpdatePostRegulationTable    = @"ORADEIControlModelUpdatePostRegulationTable";
 NSString* ORADEIControlModelPollTimeChanged              = @"ORADEIControlModelPollTimeChanged";
 
@@ -921,14 +921,15 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelPostRegulationFileChanged object:self];
 }
 
-- (void) addDesiredSetPoint
+- (void) addPostRegulationPoint
 {
     if(!postRegulationArray)postRegulationArray = [[NSMutableArray array] retain];
-    [postRegulationArray addObject:[DesiredSetPoint desiredSetPoint]];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelDesiredSetPointAdded object:self];
+    [postRegulationArray addObject:[ScriptingParameter postRegulationPoint]];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelPostRegulationPointAdded object:self];
 }
 
-- (void) removeAllDesiredSetPoints
+- (void) removePostRegulationPoints
 {
     [postRegulationArray release];
     postRegulationArray = nil;
@@ -936,17 +937,21 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelUpdatePostRegulationTable object:self];
 }
 
-- (void) removeDesiredSetPointAtIndex:(int) anIndex
+- (void) removePostRegulationPointAtIndex:(int) anIndex
 {
     if(anIndex < [postRegulationArray count]){
         [postRegulationArray removeObjectAtIndex:anIndex];
         NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:anIndex] forKey:@"Index"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelDesiredSetPointRemoved object:self userInfo:userInfo];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelPostRegulationPointRemoved object:self userInfo:userInfo];
     }
 }
 
-- (uint32_t) numDesiredSetPoints { return (uint32_t)[postRegulationArray count]; }
-- (id) desiredSetPointAtIndex:(int)anIndex
+- (uint32_t) numPostRegulationPoints
+{
+    return (uint32_t)[postRegulationArray count];
+}
+
+- (id) postRegulationPointAtIndex:(int)anIndex
 {
     if(anIndex>=0 && anIndex<[postRegulationArray count])return [postRegulationArray objectAtIndex:anIndex];
     else return nil;
@@ -1135,12 +1140,12 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
 
 //------------------------------------------------------------------------
 
-@implementation DesiredSetPoint
+@implementation ScriptingParameter
 @synthesize data;
 
-+ (id) desiredSetPoint
++ (id) postRegulationPoint
 {
-    DesiredSetPoint* aPoint = [[DesiredSetPoint alloc] init];
+    ScriptingParameter* aPoint = [[ScriptingParameter alloc] init];
     return [aPoint autorelease];
 }
 
@@ -1164,7 +1169,7 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
 
 - (id) copyWithZone:(NSZone *)zone
 {
-    DesiredSetPoint* copy = [[DesiredSetPoint alloc] init];
+    ScriptingParameter* copy = [[ScriptingParameter alloc] init];
     copy.data = [[data copyWithZone:zone] autorelease];
     return copy;
 }
@@ -1198,4 +1203,5 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
 }
 
 @end
+
 
