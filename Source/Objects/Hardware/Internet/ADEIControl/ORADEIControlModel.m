@@ -1134,6 +1134,7 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(pollMeasuredValues) object:nil];
     [self readMeasuredValues];
+    [self readBackSetpoints];
     if(pollTime)[self performSelector:@selector(pollMeasuredValues) withObject:nil afterDelay:pollTime];
 }
 @end
