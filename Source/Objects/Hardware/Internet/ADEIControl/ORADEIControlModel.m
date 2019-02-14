@@ -186,6 +186,7 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
     [anArray retain];
     [setPoints release];
     setPoints = anArray;
+
     [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelSetPointsChanged object:self];
 }
 
@@ -775,14 +776,16 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
 	[self setWasConnected:      [decoder decodeBoolForKey:	 @"wasConnected"]];
     [self setIpAddress:         [decoder decodeObjectForKey: @"ORADEIControlModelIpAddress"]];
     [self setSetPointFile:      [decoder decodeObjectForKey: @"setPointFile"]];
-    [self setSetPoints:         [decoder decodeObjectForKey: @"setPoints"]];
     [self setVerbose:           [decoder decodeBoolForKey:   @"verbose"]];
     [self setShowFormattedDates:[decoder decodeBoolForKey:   @"showFormattedDates"]];
     [self setPostRegulationFile:[decoder decodeObjectForKey: @"postRegulationFile"]];
     [self setPostRegulationArray:[decoder decodeObjectForKey:@"postRegulationArray"]];
     [self setPollTime:          [decoder decodeIntForKey:@"pollTime"]];
+
+    // Note: Sensor group needs to be defined before loading setpoints!!!
     [self setSensorGroup:       [decoder decodeIntForKey:@"sensorGroup"]];
-    
+    [self setSetPoints:         [decoder decodeObjectForKey: @"setPoints"]];
+
     if(wasConnected)[self connect];
     
 	[[self undoManager] enableUndoRegistration];
