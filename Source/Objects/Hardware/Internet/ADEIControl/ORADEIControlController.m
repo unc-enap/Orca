@@ -41,8 +41,11 @@
     [[queueValueBar xAxis] setRngDefaultsLow:0 withHigh:300];
     
     [lightBoardView hideCautionLight];
-    [lightBoardView setGoLight:[ORDotImage bigDotWithColor:[NSColor lightGrayColor]]];
-    [lightBoardView setStopLight:[ORDotImage bigDotWithColor:[NSColor lightGrayColor]]];
+    [lightBoardView setState:kCautionLight];
+
+    //[lightBoardView setGoLight:[ORDotImage bigDotWithColor:[NSColor lightGrayColor]]];
+    //[lightBoardView setStopLight:[ORDotImage bigDotWithColor:[NSColor lightGrayColor]]];
+    
     
 
 	[super awakeFromNib];
@@ -291,8 +294,7 @@
     } else if ([model orcaHasControl]) {
         [lightBoardView setState:kGoLight];
     } else {
-       [lightBoardView setGoLight:[ORDotImage bigDotWithColor:[NSColor lightGrayColor]]];
-       [lightBoardView setStopLight:[ORDotImage bigDotWithColor:[NSColor lightGrayColor]]];
+        [lightBoardView setState:kCautionLight];
     }
 }
 

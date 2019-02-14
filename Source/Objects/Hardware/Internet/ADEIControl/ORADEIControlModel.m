@@ -929,7 +929,7 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelPostRegulationPointAdded object:self];
 }
 
-- (void) removePostRegulationPoints
+- (void) removeAllPostRegulationPoints
 {
     [postRegulationArray release];
     postRegulationArray = nil;
