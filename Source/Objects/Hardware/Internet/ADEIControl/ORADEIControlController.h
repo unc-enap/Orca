@@ -18,6 +18,8 @@
 #pragma mark ***Imported Files
 @class ORValueBarGroupView;
 
+@class StopLightView;
+
 @interface ORADEIControlController : OrcaObjectController
 {
     IBOutlet NSPopUpButton* sensorGroupPU;
@@ -44,6 +46,7 @@
     IBOutlet NSButton*      removePostRegulationPointButton;
     IBOutlet NSTextField*   postRegulationFileField;
     
+    IBOutlet StopLightView* lightBoardView;
     IBOutlet NSTextField* expertPCControlOnlyField;
     IBOutlet NSTextField* zeusHasControlField;
     IBOutlet NSTextField* orcaHasControlField;

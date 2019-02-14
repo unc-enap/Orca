@@ -21,6 +21,8 @@
 #import "ORADEIControlModel.h"
 #import "ORValueBarGroupView.h"
 #import "ORAxis.h"
+#import "StopLightView.h"
+#import "ORDotImage.h"
 
 #define kSecsBetween1904and1070 2082844800
 
@@ -38,6 +40,11 @@
     [[queueValueBar xAxis] setRngLimitsLow:0 withHigh:300 withMinRng:10];
     [[queueValueBar xAxis] setRngDefaultsLow:0 withHigh:300];
     
+    [lightBoardView hideCautionLight];
+    [lightBoardView setGoLight:[ORDotImage bigDotWithColor:[NSColor lightGrayColor]]];
+    [lightBoardView setStopLight:[ORDotImage bigDotWithColor:[NSColor lightGrayColor]]];
+    
+
 	[super awakeFromNib];
  
     [self updateWindow];
@@ -273,9 +280,20 @@
 {
     [measuredValueTableView reloadData];
     
+    // Textual message on who is master
     [expertPCControlOnlyField setStringValue:[model expertPCControlOnly] ? @"Ony Expert PC Can Set Values":@""];
     [zeusHasControlField setStringValue:     [model zeusHasControl]      ? @"ZEUS has control":@""];
     [orcaHasControlField setStringValue:     [model orcaHasControl]      ? @"ORCA has control":@""];
+ 
+    // Switch red and green light
+    if([model expertPCControlOnly] || [model zeusHasControl]) {
+        [lightBoardView setState:kStoppedLight];
+    } else if ([model orcaHasControl]) {
+        [lightBoardView setState:kGoLight];
+    } else {
+       [lightBoardView setGoLight:[ORDotImage bigDotWithColor:[NSColor lightGrayColor]]];
+       [lightBoardView setStopLight:[ORDotImage bigDotWithColor:[NSColor lightGrayColor]]];
+    }
 }
 
 - (void) setPointsReadBackChanged:(NSNotification*)aNote

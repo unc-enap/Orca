@@ -14,6 +14,7 @@
                 <outlet property="ipAddressTextField" destination="5qs-rT-FIz" id="BGN-Ty-Rfs"/>
                 <outlet property="ipConnectButton" destination="Gio-Uk-g4q" id="Lwt-Kf-wzG"/>
                 <outlet property="ipConnectedTextField" destination="gnQ-Cu-LmB" id="v7i-Bk-iOB"/>
+                <outlet property="lightBoardView" destination="774-2T-O9i" id="3Q3-0x-ALC"/>
                 <outlet property="lockButton" destination="2127" id="2135"/>
                 <outlet property="measuredValueTableView" destination="YXo-Eh-RZ3" id="q3q-uX-PlL"/>
                 <outlet property="orcaHasControlField" destination="V0H-WK-9WT" id="yMG-eq-GDs"/>
@@ -184,7 +185,7 @@
                                             <tableColumnResizingMask key="resizingMask" userResizable="YES"/>
                                         </tableColumn>
                                         <tableColumn identifier="uid" editable="NO" width="127" minWidth="40" maxWidth="1000" id="XKM-ky-A6g">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="KATRIN no">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="KATRIN No">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
@@ -272,7 +273,7 @@
                                             <tableColumnResizingMask key="resizingMask" userResizable="YES"/>
                                         </tableColumn>
                                         <tableColumn identifier="uid" width="125.5" minWidth="40" maxWidth="1000" id="9G6-Ep-Vft">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="KATRIN no">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="KATRIN No">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
@@ -298,7 +299,7 @@
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
                                         <tableColumn identifier="setPoint" width="79.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="W42-p3-65X">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="right" title="Set Point">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="right" title="Setpoint">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -581,6 +582,19 @@
                             <action selector="toggleScriptParameterDrawer:" target="-2" id="YRI-X5-tsk"/>
                         </connections>
                     </button>
+                    <textField verticalHuggingPriority="750" misplaced="YES" id="RpK-8N-avQ">
+                        <rect key="frame" x="1010" y="550" width="79" height="26"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Control by Orca" id="YoE-RF-9dy">
+                            <font key="font" metaFont="label"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <customView misplaced="YES" id="774-2T-O9i" customClass="StopLightView">
+                        <rect key="frame" x="1035" y="480" width="35" height="70"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </customView>
                 </subviews>
             </view>
             <connections>
