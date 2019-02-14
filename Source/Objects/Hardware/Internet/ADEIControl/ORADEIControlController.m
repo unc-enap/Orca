@@ -251,6 +251,7 @@
     [showFormattedDatesCB setIntValue: [model showFormattedDates]];
     [setPointTableView reloadData];
     [measuredValueTableView reloadData];
+    [postRegulationTableView reloadData];
 
 }
 - (void) verboseChanged:(NSNotification*)aNote
