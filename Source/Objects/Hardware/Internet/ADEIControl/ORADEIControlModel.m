@@ -804,6 +804,28 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
         orcaControlIndex = 148;
     }
     
+    
+    // Load sensor list of the selected group
+    if (sensorGroup == 3){
+        sensorGroupName = @"DAQ-lab";
+        // Set sensor lists (setpoints, measured vcalues, archival)
+        setPointList = setPointList_DAQlab;
+        measuredValueList = measuredValueList_DAQlab;
+        kNumToShip = kNumToShip_DAQlab;
+        itemsToShip = itemsToShip_DAQlab;
+        
+        // Define command strings used in Fieldpoint implementation
+        cmdReadSetpoints = @"get gains";
+        cmdWriteSetpoints = @"set gains";
+        cmdReadActualValues = @"get temperatures";
+        spOffset = 2;
+        
+        localControlIndex = 0;
+        zeusControlIndex = 2;
+        orcaControlIndex = 0;
+    }
+    
+    
     [self createSetPointArray];
     [self createMeasuredValueArray];
 
