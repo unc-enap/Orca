@@ -155,6 +155,7 @@
 - (void) readSetPointsFile:(NSString*) aPath;
 - (void) saveSetPointsFile:(NSString*) aPath;
 - (void) pushReadBacksToSetPoints;
+- (int)  compareSetPoints;
 
 #pragma mark •••Scripting Convenience Methods
 - (double) vesselVoltageSetPoint:(int)anIndex;

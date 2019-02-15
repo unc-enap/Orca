@@ -50,6 +50,7 @@
     IBOutlet NSTextField* expertPCControlOnlyField;
     IBOutlet NSTextField* zeusHasControlField;
     IBOutlet NSTextField* orcaHasControlField;
+    IBOutlet NSTextField* setPointNoteField;
     IBOutlet NSPopUpButton* pollTimePU;
     IBOutlet NSProgressIndicator* progressWheel;
 

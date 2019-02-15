@@ -428,15 +428,19 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
 
 - (void) parseString:(NSString*)aLine
 {
+    int n;
+    
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(timeout) object:nil];
     
+    n = 0;
     aLine = [aLine trimSpacesFromEnds];
     aLine = [aLine lowercaseString];
     if([aLine hasPrefix:cmdWriteSetpoints]) {
         aLine = [aLine substringFromIndex:cmdWriteSetpoints.length+1]; // also remove colon here !!!
         NSArray* theParts = [aLine componentsSeparatedByString:@","];
         int i;
-        for(i=0;i<[theParts count];i++){
+        n = (int) [theParts count];
+        for(i=0;i<n;i++){
             if(i<[setPoints count]){
                 float aValue = [[theParts objectAtIndex:i] floatValue];
                 [self setSetPoint:i+spOffset withValue:aValue];
@@ -448,18 +452,23 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
         aLine = [aLine substringFromIndex:cmdReadSetpoints.length];
         NSArray* theParts = [aLine componentsSeparatedByString:@","];
         int i=0;
-        for(i=0;i<[theParts count];i++){
+        n = (int) [theParts count];
+        for(i=0;i<n;i++){
             if(i<[setPoints count]){
                 double readBack = [[theParts objectAtIndex:i]doubleValue];
                 [self setSetPointReadback:i withValue:readBack];
 
+/*
                 double setValue  =    [[[setPoints objectAtIndex:i] objectForKey:@"setPoint"] floatValue];
                 double diff = fabs(setValue-readBack);
                 if((i>=2) && (diff > 0.00001)){
                     NSLog(@"ADEIControl WARNING: index %i: setPoint-readBack > 0.00001 (abs(%f-%f) = %f)\n",i,setValue,readBack,diff);
                 }
+*/
             }
         }
+        //[self compareSetPoints];
+        
         [self setLastRequest:nil];
         [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelSetPointsChanged object: self];
     }
@@ -468,7 +477,8 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
         aLine = [aLine substringFromIndex:cmdReadActualValues.length];
         NSArray* theParts = [aLine componentsSeparatedByString:@","];
         int i;
-        for(i=0;i<[theParts count];i++){
+        n = (int) [theParts count];
+        for(i=0;i<n;i++){
             if(i<[measuredValues count]){
                 [self setMeasuredValue:i withValue:[[theParts objectAtIndex:i]doubleValue]];
                 
@@ -484,9 +494,17 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
              zeusHasControl      = [[[measuredValues objectAtIndex:zeusControlIndex] objectForKey:@"value"] boolValue];
         if (orcaControlIndex > 1)
              orcaHasControl      = [[[measuredValues objectAtIndex:orcaControlIndex] objectForKey:@"value"] boolValue];
-        
+        if ((zeusControlIndex >1) && (orcaControlIndex == 0))
+             orcaHasControl      = ![[[measuredValues objectAtIndex:zeusControlIndex] objectForKey:@"value"] boolValue];
+
         [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelMeasuredValuesChanged object: self];
     }
+    
+    if(verbose){
+        NSLog(@"N = %d\n", n);
+    }
+
+    
     [self processNextCommandFromQueue];
 }
 #pragma mark ***Data Records
@@ -662,6 +680,24 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
         [self setSetPoint:i withValue:theReadBack];
     }
 }
+
+- (int) compareSetPoints
+{
+    int n = 0;
+    for (int i=0; i<[setPoints count]; i++){
+        double readBack = [[[setPoints objectAtIndex:i] objectForKey:@"readBack"] doubleValue];
+        double setValue  = [[[setPoints objectAtIndex:i] objectForKey:@"setPoint"] doubleValue];
+    
+        double diff = fabs(setValue-readBack);
+        if((i>=2) && (diff > 0.00001)){
+            NSLog(@"ADEIControl WARNING: index %i: setPoint-readBack > 0.00001 (abs(%f-%f) = %f)\n",i,setValue,readBack,diff);
+            n = n+1;
+        }
+    }
+    
+    return(n);
+}
+
 - (int) pollTime
 {
     return pollTime;
@@ -716,7 +752,7 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
         spOffset = 2;
     
         localControlIndex = 0;
-        zeusControlIndex = 0;
+        zeusControlIndex = 140;
         orcaControlIndex = 0;
     }
     
@@ -816,6 +852,7 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
         [cmd appendString:@":"];
         int i;
         int maxIndex = (int)[setPoints count];
+        if (verbose) NSLog(@"N = %d\n", maxIndex);
         for(i=spOffset;i<maxIndex;i++){
             float valueToWrite = [[[setPoints objectAtIndex:i] objectForKey:@"setPoint"] floatValue];
             [cmd appendFormat:@"%f",valueToWrite];

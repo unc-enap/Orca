@@ -27,6 +27,7 @@
                 <outlet property="scriptParameterDrawer" destination="zys-hL-i3W" id="pNN-0Q-kVs"/>
                 <outlet property="sensorGroupPU" destination="RVZ-Xz-EzG" id="LiX-BS-IA8"/>
                 <outlet property="setPointFileField" destination="Pv7-wH-aAd" id="jP6-fx-hbx"/>
+                <outlet property="setPointNoteField" destination="STO-pa-6ZE" id="h4T-eD-gIk"/>
                 <outlet property="setPointTableView" destination="VQ0-Pu-OqC" id="qmh-As-C4k"/>
                 <outlet property="showFormattedDatesCB" destination="EiM-OL-qJj" id="wDX-56-Euh"/>
                 <outlet property="verboseCB" destination="emZ-mR-bhg" id="Xez-Yy-UC1"/>
@@ -210,7 +211,7 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="value" editable="NO" width="98.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="gzc-pC-rkx">
+                                        <tableColumn identifier="value" editable="NO" width="99" minWidth="10" maxWidth="3.4028234663852886e+38" id="gzc-pC-rkx">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="right" title="Value">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -512,7 +513,7 @@
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="ADEIControl" id="Nn3-o0-JCJ"/>
                     </imageView>
                     <button misplaced="YES" id="EiM-OL-qJj">
-                        <rect key="frame" x="17" y="144" width="157" height="20"/>
+                        <rect key="frame" x="17" y="120" width="157" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Show Formatted Dates" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="k3I-er-JaQ">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -595,6 +596,15 @@
                         <rect key="frame" x="1035" y="480" width="35" height="70"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </customView>
+                    <textField verticalHuggingPriority="750" misplaced="YES" id="STO-pa-6ZE">
+                        <rect key="frame" x="15" y="144" width="309" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="--" id="c7P-bD-ZYS">
+                            <font key="font" size="15" name="Geneva"/>
+                            <color key="textColor" red="0.078694656449999997" green="0.1157358394" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
             </view>
             <connections>
@@ -651,7 +661,7 @@
                     <rect key="frame" x="17" y="47" width="422" height="346"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <clipView key="contentView" id="MIQ-nm-Q82">
-                        <rect key="frame" x="1" y="25" width="420" height="320"/>
+                        <rect key="frame" x="1" y="0.0" width="420" height="345"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" headerView="OFQ-8V-Buy" id="8Ll-dB-u6e" userLabel="Scripting Parameter">

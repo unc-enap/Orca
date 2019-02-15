@@ -285,7 +285,7 @@
     [measuredValueTableView reloadData];
     
     // Textual message on who is master
-    [expertPCControlOnlyField setStringValue:[model expertPCControlOnly] ? @"Ony Expert PC Can Set Values":@""];
+    [expertPCControlOnlyField setStringValue:[model expertPCControlOnly] ? @"Only Expert PC can set values":@""];
     [zeusHasControlField setStringValue:     [model zeusHasControl]      ? @"ZEUS has control":@""];
     [orcaHasControlField setStringValue:     [model orcaHasControl]      ? @"ORCA has control":@""];
  
@@ -302,6 +302,16 @@
 - (void) setPointsReadBackChanged:(NSNotification*)aNote
 {
 	[setPointTableView reloadData];
+
+    int n = [model compareSetPoints];
+    
+    if (n > 0){
+       NSString* msg = [NSString stringWithFormat:@"Transfer %d new setpoints -> ", n];
+       [orcaHasControlField setStringValue: msg ];
+    } else {
+       [orcaHasControlField setStringValue: @""];
+    }
+    
 }
 
 - (void) checkGlobalSecurity
