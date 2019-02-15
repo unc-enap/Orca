@@ -71,6 +71,8 @@
         int                 localControlIndex;
         int                 zeusControlIndex;
         int                 orcaControlIndex;
+    
+        int                 numSetpointsDiffer;
 }
 
 #pragma mark ***Initialization

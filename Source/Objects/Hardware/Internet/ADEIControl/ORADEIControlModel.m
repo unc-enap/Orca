@@ -85,6 +85,7 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
     }
     [super wakeUp];
     
+    numSetpointsDiffer = 0;
 }
 
 - (void) sleep
@@ -108,19 +109,19 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
     NSNumber* oldValue = [[setPoints objectAtIndex:aIndex] objectForKey:@"setPoint"];
     [[[self undoManager] prepareWithInvocationTarget:self] setSetPoint:aIndex withValue:[oldValue floatValue]];
     [[setPoints objectAtIndex:aIndex] setObject:[NSString stringWithFormat:@"%.6f",value] forKey:@"setPoint"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelSetPointChanged object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelSetPointsChanged object:self];
 }
 
 - (void) setSetPointReadback: (int)aIndex withValue: (double)value
 {
     [[setPoints objectAtIndex:aIndex] setObject:[NSString stringWithFormat:@"%.6f",value] forKey:@"readBack"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelSetPointChanged object:self];
+    //[[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelSetPointsChanged object:self];
 }
 
 - (void) setMeasuredValue: (int)aIndex withValue: (double)value
 {
     [[measuredValues objectAtIndex:aIndex] setObject:[NSString stringWithFormat:@"%lf",value] forKey:@"value"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelSetPointChanged object:self];
+    //[[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelMeasuredValuesChanged object:self];
     
 }
 
@@ -195,7 +196,7 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
     [anArray retain];
     [measuredValues release];
     measuredValues = anArray;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelSetPointsChanged object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelMeasuredValuesChanged object:self];
 }
 - (id) setPointAtIndex:(int)i
 {
@@ -447,6 +448,8 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
             }
         }
         [self setLastRequest:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelSetPointsChanged object: self];
+
     }
     else if([aLine hasPrefix:cmdReadSetpoints]) {
         aLine = [aLine substringFromIndex:cmdReadSetpoints.length];
@@ -457,20 +460,11 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
             if(i<[setPoints count]){
                 double readBack = [[theParts objectAtIndex:i]doubleValue];
                 [self setSetPointReadback:i withValue:readBack];
-
-/*
-                double setValue  =    [[[setPoints objectAtIndex:i] objectForKey:@"setPoint"] floatValue];
-                double diff = fabs(setValue-readBack);
-                if((i>=2) && (diff > 0.00001)){
-                    NSLog(@"ADEIControl WARNING: index %i: setPoint-readBack > 0.00001 (abs(%f-%f) = %f)\n",i,setValue,readBack,diff);
-                }
-*/
             }
         }
-        //[self compareSetPoints];
-        
+
         [self setLastRequest:nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelSetPointsChanged object: self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelReadBackChanged object: self];
     }
     
     else if([aLine hasPrefix:cmdReadActualValues]) {
@@ -676,9 +670,11 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
 {
     int i;
     for(i=2;i<[setPoints count];i++){
-        float theReadBack = [[self setPointReadBackAtIndex:i] floatValue];
+        double theReadBack = [[self setPointReadBackAtIndex:i] doubleValue];
         [self setSetPoint:i withValue:theReadBack];
     }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelSetPointsChanged object: self];
 }
 
 - (int) compareSetPoints
@@ -690,9 +686,23 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
     
         double diff = fabs(setValue-readBack);
         if((i>=2) && (diff > 0.00001)){
-            NSLog(@"ADEIControl WARNING: index %i: setPoint-readBack > 0.00001 (abs(%f-%f) = %f)\n",i,setValue,readBack,diff);
             n = n+1;
         }
+    }
+    
+    // Display list of potentially changed setpoint in the Orca log
+    if (n != numSetpointsDiffer){
+       for (int i=0; i<[setPoints count]; i++){
+           double readBack = [[[setPoints objectAtIndex:i] objectForKey:@"readBack"] doubleValue];
+           double setValue  = [[[setPoints objectAtIndex:i] objectForKey:@"setPoint"] doubleValue];
+           
+           double diff = fabs(setValue-readBack);
+           if((i>=2) && (diff > 0.00001)){
+               NSLog(@"ADEIControl WARNING: index %i: setPoint-readBack > 0.00001 (abs(%f-%f) = %f)\n",i,setValue,readBack,diff);
+           }
+       }
+       
+       numSetpointsDiffer = n;
     }
     
     return(n);

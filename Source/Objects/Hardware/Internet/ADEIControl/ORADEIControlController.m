@@ -43,10 +43,7 @@
     [lightBoardView hideCautionLight];
     [lightBoardView setState:kCautionLight];
 
-    //[lightBoardView setGoLight:[ORDotImage bigDotWithColor:[NSColor lightGrayColor]]];
-    //[lightBoardView setStopLight:[ORDotImage bigDotWithColor:[NSColor lightGrayColor]]];
-    
-    
+    [setPointNoteField setStringValue: @""];
 
 	[super awakeFromNib];
  
@@ -88,7 +85,7 @@
     
     [notifyCenter addObserver : self
                      selector : @selector(setPointChanged:)
-                         name : ORADEIControlModelSetPointChanged
+                         name : ORADEIControlModelSetPointsChanged
                         object: model];
  
     [notifyCenter addObserver : self
@@ -252,7 +249,6 @@
     [setPointTableView reloadData];
     [measuredValueTableView reloadData];
     [postRegulationTableView reloadData];
-
 }
 - (void) verboseChanged:(NSNotification*)aNote
 {
@@ -273,6 +269,15 @@
 - (void) setPointChanged:(NSNotification*)aNote
 {
 	[setPointTableView reloadData];
+
+    int n = [model compareSetPoints];
+    if (n > 0){
+        NSString* msg = [NSString stringWithFormat:@"Transfer %d new setpoint(s) -> ", n];
+        [setPointNoteField setStringValue: msg ];
+    } else {
+        [setPointNoteField setStringValue: @""];
+    }
+   
 }
 
 - (void) setPointFileChanged:(NSNotification*)aNote
@@ -301,17 +306,16 @@
 
 - (void) setPointsReadBackChanged:(NSNotification*)aNote
 {
-	[setPointTableView reloadData];
-
+    // Update only the column with readBack data in col 4
+    [setPointTableView setNeedsDisplayInRect:[setPointTableView rectOfColumn:4]];
+    
     int n = [model compareSetPoints];
-    
     if (n > 0){
-       NSString* msg = [NSString stringWithFormat:@"Transfer %d new setpoints -> ", n];
-       [orcaHasControlField setStringValue: msg ];
+        NSString* msg = [NSString stringWithFormat:@"Transfer %d new setpoint(s) -> ", n];
+        [setPointNoteField setStringValue: msg ];
     } else {
-       [orcaHasControlField setStringValue: @""];
+        [setPointNoteField setStringValue: @""];
     }
-    
 }
 
 - (void) checkGlobalSecurity
@@ -343,6 +347,7 @@
 - (IBAction) writeSetpointsAction:(id)sender
 {
     [model writeSetpoints];
+    [model readBackSetpoints];
     [self lockChanged:nil];
 }
 

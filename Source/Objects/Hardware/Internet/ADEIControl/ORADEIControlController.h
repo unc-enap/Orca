@@ -40,6 +40,7 @@
     IBOutlet NSButton*      readPostRegulationButton;
 
 	IBOutlet NSTableView*	setPointTableView;
+    IBOutlet NSTableColumn* readBackColumn;
     IBOutlet NSTableView*   measuredValueTableView;
     IBOutlet NSTableView*   postRegulationTableView;
     IBOutlet NSButton*      addPostRegulationPointButton;
