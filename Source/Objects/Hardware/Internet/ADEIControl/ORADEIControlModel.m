@@ -439,23 +439,35 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
     if([aLine hasPrefix:cmdWriteSetpoints]) {
         aLine = [aLine substringFromIndex:cmdWriteSetpoints.length+1]; // also remove colon here !!!
         NSArray* theParts = [aLine componentsSeparatedByString:@","];
-        int i;
         n = (int) [theParts count];
+        
+        if (n+spOffset < [setPoints count]) {
+            NSLog(@"Error: The number of setpoints returned is too low: recv %d < send %d\n", n+spOffset, [setPoints count]);
+            NSLog(@"Turn on <verbose> and resend data. It's possible that the buffer in the Fieldpoint device is too small\n");
+            NSLog(@"It's also possible that the sensor list has changed.\n");
+        }
+        
+        /*
+        int i;
         for(i=0;i<n;i++){
             if(i<[setPoints count]){
                 float aValue = [[theParts objectAtIndex:i] floatValue];
-                [self setSetPoint:i+spOffset withValue:aValue];
+                //[self setSetPoint:i+spOffset withValue:aValue];
+            
+                // Compare with setpoints send?!
             }
         }
-        [self setLastRequest:nil];
         [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelSetPointsChanged object: self];
+         */
+        
+        [self setLastRequest:nil];
 
     }
     else if([aLine hasPrefix:cmdReadSetpoints]) {
         aLine = [aLine substringFromIndex:cmdReadSetpoints.length];
         NSArray* theParts = [aLine componentsSeparatedByString:@","];
-        int i=0;
         n = (int) [theParts count];
+        int i=0;
         for(i=0;i<n;i++){
             if(i<[setPoints count]){
                 double readBack = [[theParts objectAtIndex:i]doubleValue];
@@ -470,8 +482,8 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
     else if([aLine hasPrefix:cmdReadActualValues]) {
         aLine = [aLine substringFromIndex:cmdReadActualValues.length];
         NSArray* theParts = [aLine componentsSeparatedByString:@","];
-        int i;
         n = (int) [theParts count];
+        int i;
         for(i=0;i<n;i++){
             if(i<[measuredValues count]){
                 [self setMeasuredValue:i withValue:[[theParts objectAtIndex:i]doubleValue]];
@@ -634,10 +646,16 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
                               @"readMeasuredValues",
                               @"readSetPointsFile:(NSString*)",
                               @"setSetPoint:(int) withValue:(float)",
+                              @"setSetPointWithUID:(string) withValue:(float)",
                               @"setPointAtIndex:(int)",
+                              @"setPointWithUID:(string)",
                               @"setPointReadBackAtIndex:(int)",
+                              @"setPointReadBackWithUID:(string)",
                               @"measuredValueAtIndex:(int)",
+                              @"measuredVakueWithUID:(string)",
                               @"pushReadBacksToSetPoints",
+                              @"getIndexOfSetPoint:(string)",
+                              @"getIndexOfMeasuredValue:(string)",
                               nil];
     
     return [selectorArray componentsJoinedByString:@"\n"];
