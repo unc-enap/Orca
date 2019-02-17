@@ -31,7 +31,8 @@
                 <outlet property="setPointNoteField" destination="STO-pa-6ZE" id="h4T-eD-gIk"/>
                 <outlet property="setPointTableView" destination="VQ0-Pu-OqC" id="qmh-As-C4k"/>
                 <outlet property="showFormattedDatesCB" destination="EiM-OL-qJj" id="wDX-56-Euh"/>
-                <outlet property="verboseCB" destination="emZ-mR-bhg" id="Xez-Yy-UC1"/>
+                <outlet property="verboseCB" destination="V6B-e8-sZQ" id="vlc-Fy-I7B"/>
+                <outlet property="warningsCB" destination="emZ-mR-bhg" id="uKj-va-9Ju"/>
                 <outlet property="window" destination="5" id="38"/>
                 <outlet property="writeAllSetPointsButton" destination="0u4-t1-GWK" id="rdQ-uh-Wuz"/>
                 <outlet property="writeSetPointFileButton" destination="H4X-Yt-oix" id="dRK-27-A7D"/>
@@ -162,11 +163,11 @@
                         <rect key="frame" x="574" y="179" width="500" height="246"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <clipView key="contentView" id="OhP-c4-dLC">
-                            <rect key="frame" x="1" y="0.0" width="483" height="230"/>
+                            <rect key="frame" x="1" y="0.0" width="498" height="245"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" headerView="1uJ-cE-VfX" id="YXo-Eh-RZ3">
-                                    <rect key="frame" x="0.0" y="0.0" width="483" height="207"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="498" height="222"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" red="0.40000000600000002" green="0.40000000600000002" blue="1" alpha="0.1034482759" colorSpace="calibratedRGB"/>
@@ -212,7 +213,7 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="value" editable="NO" width="84" minWidth="10" maxWidth="3.4028234663852886e+38" id="gzc-pC-rkx">
+                                        <tableColumn identifier="value" editable="NO" width="99" minWidth="10" maxWidth="3.4028234663852886e+38" id="gzc-pC-rkx">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="right" title="Value">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -234,15 +235,15 @@
                             </subviews>
                         </clipView>
                         <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="0L3-WD-pgr">
-                            <rect key="frame" x="1" y="230" width="483" height="15"/>
+                            <rect key="frame" x="1" y="229" width="498" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="kFa-cv-7xv">
-                            <rect key="frame" x="484" y="23" width="15" height="207"/>
+                            <rect key="frame" x="483" y="23" width="16" height="222"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <tableHeaderView key="headerView" id="1uJ-cE-VfX">
-                            <rect key="frame" x="0.0" y="0.0" width="483" height="23"/>
+                            <rect key="frame" x="0.0" y="0.0" width="498" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
@@ -250,11 +251,11 @@
                         <rect key="frame" x="17" y="179" width="514" height="246"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <clipView key="contentView" id="E24-RG-mM8">
-                            <rect key="frame" x="1" y="0.0" width="497" height="230"/>
+                            <rect key="frame" x="1" y="0.0" width="512" height="245"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" headerView="hUT-ir-kfb" id="VQ0-Pu-OqC">
-                                    <rect key="frame" x="0.0" y="0.0" width="497" height="207"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="512" height="222"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" red="1" green="0.40000000600000002" blue="0.40000000600000002" alpha="0.1034482759" colorSpace="calibratedRGB"/>
@@ -335,15 +336,15 @@
                             </subviews>
                         </clipView>
                         <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="THR-il-UTM">
-                            <rect key="frame" x="1" y="230" width="497" height="15"/>
+                            <rect key="frame" x="1" y="229" width="512" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="UN7-jr-hk8">
-                            <rect key="frame" x="498" y="23" width="15" height="207"/>
+                            <rect key="frame" x="497" y="23" width="16" height="222"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <tableHeaderView key="headerView" id="hUT-ir-kfb">
-                            <rect key="frame" x="0.0" y="0.0" width="497" height="23"/>
+                            <rect key="frame" x="0.0" y="0.0" width="512" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
@@ -446,14 +447,14 @@
                         </textFieldCell>
                     </textField>
                     <button misplaced="YES" id="emZ-mR-bhg">
-                        <rect key="frame" x="428" y="30" width="66" height="20"/>
+                        <rect key="frame" x="185" y="120" width="117" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Verbose" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="RqN-5P-Uzt">
+                        <buttonCell key="cell" type="check" title="Setpoint warnings" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="RqN-5P-Uzt">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
                         <connections>
-                            <action selector="verboseAction:" target="-2" id="QqU-6T-QuH"/>
+                            <action selector="warningsAction:" target="-2" id="z51-rT-DzO"/>
                         </connections>
                     </button>
                     <button toolTip="Push the values in the ReadBack column into the Setpoint column" verticalHuggingPriority="750" misplaced="YES" id="sCk-kf-AuB">
@@ -607,6 +608,17 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <button misplaced="YES" id="V6B-e8-sZQ">
+                        <rect key="frame" x="422" y="30" width="66" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" title="Verbose" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="b9W-97-K0C">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="verboseAction:" target="-2" id="p9C-nm-AlB"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <connections>
@@ -663,11 +675,11 @@
                     <rect key="frame" x="17" y="47" width="422" height="346"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <clipView key="contentView" id="MIQ-nm-Q82">
-                        <rect key="frame" x="1" y="0.0" width="405" height="330"/>
-                        <autoresizingMask key="autoresizingMask"/>
+                        <rect key="frame" x="1" y="0.0" width="420" height="345"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" headerView="OFQ-8V-Buy" id="8Ll-dB-u6e" userLabel="Scripting Parameter">
-                                <rect key="frame" x="0.0" y="0.0" width="405" height="305"/>
+                                <rect key="frame" x="0.0" y="0.0" width="420" height="320"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" red="0.40000000600000002" green="0.40000000600000002" blue="1" alpha="0.1034482759" colorSpace="calibratedRGB"/>
@@ -735,15 +747,15 @@
                         </subviews>
                     </clipView>
                     <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Zai-Qc-ay8">
-                        <rect key="frame" x="1" y="330" width="405" height="15"/>
+                        <rect key="frame" x="1" y="329" width="420" height="16"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="uc7-xy-D3c">
-                        <rect key="frame" x="406" y="25" width="15" height="305"/>
+                        <rect key="frame" x="405" y="25" width="16" height="320"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <tableHeaderView key="headerView" id="OFQ-8V-Buy">
-                        <rect key="frame" x="0.0" y="0.0" width="405" height="25"/>
+                        <rect key="frame" x="0.0" y="0.0" width="420" height="25"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </tableHeaderView>
                 </scrollView>

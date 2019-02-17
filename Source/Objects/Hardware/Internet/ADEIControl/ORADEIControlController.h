@@ -57,6 +57,7 @@
 
     IBOutlet ORValueBarGroupView*  queueValueBar;
     IBOutlet NSButton*    verboseCB;
+    IBOutlet NSButton*    warningsCB;
     IBOutlet NSButton*    showFormattedDatesCB;
     
     //Drawers
@@ -83,6 +84,7 @@
 - (void) isConnectedChanged:(NSNotification*)aNote;
 - (void) measuredValuesChanged:(NSNotification*)aNote;
 - (void) verboseChanged:(NSNotification*)aNote;
+- (void) warningsChanged:(NSNotification*)aNote;
 - (void) pollTimeChanged:(NSNotification*)aNote;
 - (void) setButtonStates;
 - (void) postRegulationPointAdded:(NSNotification*)aNote;
@@ -106,6 +108,7 @@
 - (IBAction) connectAction: (id) aSender;
 - (IBAction) flushQueueAction: (id) aSender;
 - (IBAction) verboseAction: (id) aSender;
+- (IBAction) warningsAction: (id) aSender;
 - (IBAction) addPostRegulationPoint: (id) aSender;
 - (IBAction) removePostRegulationPoint: (id) aSender;
 - (IBAction) readPostRegulationScaleFactors: (id) aSender;

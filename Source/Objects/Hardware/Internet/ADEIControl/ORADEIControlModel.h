@@ -53,6 +53,7 @@
         BOOL                zeusHasControl;
         BOOL                orcaHasControl;
         BOOL                verbose;
+        BOOL                warnings;
         NSMutableString*    stringBuffer;
         BOOL                showFormattedDates;
         int                 pollTime;
@@ -113,6 +114,8 @@
 - (void) connect;
 - (void) setVerbose:(BOOL)aState;
 - (BOOL) verbose;
+- (void) setWarnings:(BOOL)aState;
+- (BOOL) warnings;
 - (void) setShowFormattedDates:(BOOL)aState;
 - (BOOL) showFormattedDates;
 - (void) shipRecords;
@@ -202,6 +205,7 @@ extern NSString* ORADEIControlModelSetPointsChanged;
 extern NSString* ORADEIControlModelMeasuredValuesChanged;
 extern NSString* ORADEIControlModelSetPointFileChanged;
 extern NSString* ORADEIControlModelVerboseChanged;
+extern NSString* ORADEIControlModelWarningsChanged;
 extern NSString* ORADEIControlModelShowFormattedDatesChanged;
 extern NSString* ORADEIControlModelPostRegulationFileChanged;
 extern NSString* ORADEIControlModelPostRegulationPointAdded;

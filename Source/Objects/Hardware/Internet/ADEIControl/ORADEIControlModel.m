@@ -25,7 +25,7 @@
 
 
 #pragma mark ***External Strings
-NSString* ORADEIControlModelSensorGroupChanged              = @"ORADEIControlModelSensorGroupChanged";
+NSString* ORADEIControlModelSensorGroupChanged           = @"ORADEIControlModelSensorGroupChanged";
 NSString* ORADEIControlModelIsConnectedChanged           = @"ORADEIControlModelIsConnectedChanged";
 NSString* ORADEIControlModelIpAddressChanged             = @"ORADEIControlModelIpAddressChanged";
 NSString* ORADEIControlModelSetPointChanged              = @"ORADEIControlModelSetPointChanged";
@@ -36,13 +36,14 @@ NSString* ORADEIControlModelMeasuredValuesChanged        = @"ORADEIControlModelM
 NSString* ORADEIControlModelSetPointFileChanged          = @"ORADEIControlModelSetPointFileChanged";
 NSString* ORADEIControlModelPostRegulationFileChanged    = @"ORADEIControlModelPostRegulationFileChanged";
 NSString* ORADEIControlModelVerboseChanged               = @"ORADEIControlModelVerboseChanged";
+NSString* ORADEIControlModelWarningsChanged              = @"ORADEIControlModelWarningsChanged";
 NSString* ORADEIControlModelShowFormattedDatesChanged    = @"ORADEIControlModelShowFormattedDatesChanged";
-NSString* ORADEIControlModelPostRegulationPointAdded         = @"ORADEIControlModelPostRegulationPointAdded";
-NSString* ORADEIControlModelPostRegulationPointRemoved       = @"ORADEIControlModelPostRegulationPointRemoved";
+NSString* ORADEIControlModelPostRegulationPointAdded     = @"ORADEIControlModelPostRegulationPointAdded";
+NSString* ORADEIControlModelPostRegulationPointRemoved   = @"ORADEIControlModelPostRegulationPointRemoved";
 NSString* ORADEIControlModelUpdatePostRegulationTable    = @"ORADEIControlModelUpdatePostRegulationTable";
 NSString* ORADEIControlModelPollTimeChanged              = @"ORADEIControlModelPollTimeChanged";
 
-NSString* ORADEIControlLock						        = @"ORADEIControlLock";
+NSString* ORADEIControlLock						         = @"ORADEIControlLock";
 
 
 
@@ -676,6 +677,13 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelVerboseChanged object:self];
 }
 
+- (void) setWarnings:(BOOL)aState
+{
+    [[[self undoManager] prepareWithInvocationTarget:self] setWarnings:warnings];
+    warnings = aState;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelWarningsChanged object:self];
+}
+
 - (BOOL) showFormattedDates
 {
     return showFormattedDates;
@@ -690,6 +698,11 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
 - (BOOL) verbose
 {
     return verbose;
+}
+
+- (BOOL) warnings
+{
+    return warnings;
 }
 
 - (void) pushReadBacksToSetPoints
@@ -717,7 +730,7 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
     }
     
     // Display list of potentially changed setpoint in the Orca log
-    if (n != numSetpointsDiffer){
+    if ((warnings) && (n != numSetpointsDiffer)){
        for (int i=0; i<[setPoints count]; i++){
            double readBack = [[[setPoints objectAtIndex:i] objectForKey:@"readBack"] doubleValue];
            double setValue  = [[[setPoints objectAtIndex:i] objectForKey:@"setPoint"] doubleValue];
@@ -871,6 +884,7 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
     [self setIpAddress:         [decoder decodeObjectForKey: @"ORADEIControlModelIpAddress"]];
     [self setSetPointFile:      [decoder decodeObjectForKey: @"setPointFile"]];
     [self setVerbose:           [decoder decodeBoolForKey:   @"verbose"]];
+    [self setWarnings:          [decoder decodeBoolForKey:   @"warnings"]];
     [self setShowFormattedDates:[decoder decodeBoolForKey:   @"showFormattedDates"]];
     [self setPostRegulationFile:[decoder decodeObjectForKey: @"postRegulationFile"]];
     [self setPostRegulationArray:[decoder decodeObjectForKey:@"postRegulationArray"]];
@@ -893,6 +907,7 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
     [encoder encodeObject:setPointFile        forKey:@"setPointFile"];
     [encoder encodeBool:  wasConnected        forKey:@"wasConnected"];
     [encoder encodeBool:  verbose             forKey:@"verbose"];
+    [encoder encodeBool:  warnings            forKey:@"warnings"];
     [encoder encodeObject:ipAddress           forKey:@"ORADEIControlModelIpAddress"];
     [encoder encodeObject:setPoints           forKey:@"setPoints"];
     [encoder encodeBool:showFormattedDates    forKey:@"showFormattedDates"];

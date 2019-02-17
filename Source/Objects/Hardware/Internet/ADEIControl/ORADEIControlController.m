@@ -113,6 +113,11 @@
                          name : ORADEIControlModelVerboseChanged
                        object : model];
     
+  [notifyCenter addObserver : self
+                     selector : @selector(warningsChanged:)
+                         name : ORADEIControlModelWarningsChanged
+                       object : model];
+    
     [notifyCenter addObserver : self
                      selector : @selector(showFormattedDatesChanged:)
                          name : ORADEIControlModelShowFormattedDatesChanged
@@ -175,7 +180,8 @@
     [self sensorGroupChanged:nil];
     [self ipAddressChanged:nil];
     [self verboseChanged:nil];
-	[self isConnectedChanged:nil];
+    [self warningsChanged:nil];
+    [self isConnectedChanged:nil];
     [self showFormattedDatesChanged:nil];
     [self postRegulationFileChanged:nil];
     [self pollTimeChanged:nil];
@@ -253,6 +259,10 @@
 - (void) verboseChanged:(NSNotification*)aNote
 {
     [verboseCB setIntValue: [model verbose]];
+}
+- (void) warningsChanged:(NSNotification*)aNote
+{
+    [warningsCB setIntValue: [model warnings]];
 }
 - (void) ipAddressChanged:(NSNotification*)aNote
 {
@@ -530,7 +540,10 @@
 {
     [model setVerbose:[sender intValue]];
 }
-
+- (IBAction) warningsAction: (id) sender
+{
+    [model setWarnings:[sender intValue]];
+}
 - (IBAction) showFormatedDatedAction: (id) sender
 {
     [model setShowFormattedDates:[sender intValue]];
