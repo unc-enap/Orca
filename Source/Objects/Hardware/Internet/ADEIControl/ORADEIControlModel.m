@@ -622,7 +622,15 @@ NSString* ORADEIControlLock						        = @"ORADEIControlLock";
 
 - (BOOL) isBusy
 {
-    return [self queCount]!=0 || lastRequest!=nil;
+    BOOL busy;
+    busy = [self queCount]!=0 || lastRequest!=nil;
+    
+    if (verbose){
+        NSString* lastCmd = lastRequest;
+        if ([lastCmd hasPrefix:cmdWriteSetpoints]) lastCmd = cmdWriteSetpoints;
+        NSLog(@"ADEIControl is busy = %d, commands in queue = %d, waitin for msg = %@ ====\n", busy, [self queCount], lastCmd);
+    }
+    return busy;
 }
 
 - (NSString*) lastRequest
