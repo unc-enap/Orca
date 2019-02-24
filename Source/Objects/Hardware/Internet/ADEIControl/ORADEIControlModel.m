@@ -661,7 +661,7 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
                               @"setPointReadBackAtIndex:(int)",
                               @"setPointReadBackWithUID:(string)",
                               @"measuredValueAtIndex:(int)",
-                              @"measuredVakueWithUID:(string)",
+                              @"measuredValueWithUID:(string)",
                               @"pushReadBacksToSetPoints",
                               @"getIndexOfSetPoint:(string)",
                               @"getIndexOfMeasuredValue:(string)",

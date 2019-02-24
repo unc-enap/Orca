@@ -490,7 +490,8 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx histogramInfo (some flags; some spare fo
     uint32_t normE;
     uint32_t spacing;
     uint32_t digiErr;
-    uint32_t low, high, edge;
+    uint32_t low, high;
+    int32_t edge;
     
     ptrData = &ptr[12];
     for (int i=0;i<4095;i++) normHisto[i] = 0;
