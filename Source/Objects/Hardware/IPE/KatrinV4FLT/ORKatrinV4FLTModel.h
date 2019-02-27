@@ -99,6 +99,7 @@ static enum  {
     int filterShapingLength;  
 	BOOL activateDebuggingDisplays;
 	unsigned char fifoFlags[kNumV4FLTChannels];
+    int receivedHistoChanMap;
     int receivedHistoCounter;
     int customVariable;
     int poleZeroCorrection;
@@ -185,6 +186,8 @@ static enum  {
 - (int) receivedHistoCounter;
 - (void) setReceivedHistoCounter:(int)aReceivedHistoCounter;
 - (void) clearReceivedHistoCounter;
+- (int) receivedHistoChanMap;
+- (void) setReceivedHistoChanMap:(int)aReceivedHistoChanMap;
 - (BOOL) activateDebuggingDisplays;
 - (void) setActivateDebuggingDisplays:(BOOL)aState;
 - (int) fifoLength;
@@ -470,6 +473,7 @@ extern NSString* ORKatrinV4FLTModelDecayTimeChanged;
 extern NSString* ORKatrinV4FLTModelPoleZeroCorrectionChanged;
 extern NSString* ORKatrinV4FLTModelCustomVariableChanged;
 extern NSString* ORKatrinV4FLTModelReceivedHistoCounterChanged;
+extern NSString* ORKatrinV4FLTModelReceivedHistoChanMapChanged;
 extern NSString* ORKatrinV4FLTModelFifoLengthChanged;
 extern NSString* ORKatrinV4FLTModelShipSumHistogramChanged;
 extern NSString* ORKatrinV4FLTModelTargetRateChanged;
