@@ -45,7 +45,6 @@ NSString* ORKatrinV4FLTModelDecayTimeChanged                = @"ORKatrinV4FLTMod
 NSString* ORKatrinV4FLTModelPoleZeroCorrectionChanged       = @"ORKatrinV4FLTModelPoleZeroCorrectionChanged";
 NSString* ORKatrinV4FLTModelCustomVariableChanged           = @"ORKatrinV4FLTModelCustomVariableChanged";
 NSString* ORKatrinV4FLTModelReceivedHistoCounterChanged     = @"ORKatrinV4FLTModelReceivedHistoCounterChanged";
-NSString* ORKatrinV4FLTModelReceivedHistoChanMapChanged     = @"ORKatrinV4FLTModelReceivedHistoChanMapChanged";
 NSString* ORKatrinV4FLTModelFifoLengthChanged               = @"ORKatrinV4FLTModelFifoLengthChanged";
 NSString* ORKatrinV4FLTModelShipSumHistogramChanged         = @"ORKatrinV4FLTModelShipSumHistogramChanged";
 NSString* ORKatrinV4FLTModelTargetRateChanged               = @"ORKatrinV4FLTModelTargetRateChanged";
@@ -212,12 +211,13 @@ static NSString* fltTestName[kNumKatrinV4FLTTests]= {
 {
     NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
  	[notifyCenter removeObserver:self]; //guard against a double register
-   
+
+    /*
     [notifyCenter addObserver : self
                      selector : @selector(runIsAboutToChangeState:)
                          name : ORRunAboutToChangeState
                        object : nil];
-					   
+	*/
     [notifyCenter addObserver : self
                      selector : @selector(runIsAboutToStop:)
                          name : ORRunAboutToStopNotification
@@ -247,6 +247,7 @@ static NSString* fltTestName[kNumKatrinV4FLTTests]= {
 	runControlState               = eRunStopping;
 }
 
+/*
 - (void) runIsAboutToChangeState:(NSNotification*)aNote
 {
     int state = [[[aNote userInfo] objectForKey:@"State"] intValue];
@@ -254,70 +255,9 @@ static NSString* fltTestName[kNumKatrinV4FLTTests]= {
     //is FLT  in data taker list of data task manager?
     if(![self isPartOfRun]) return;
     
-	
-	//we need to care about the following cases:
-	// 1. no run active, system going to start run:
-	//    do nothing
-    //    (old state: eRunStopping/0  , new state: eRunStarting)
-	// 2. run active, system going to change state:
-	//    then start 'sync'ing' (=waiting until currently recording histograms finished)
-	//    possible cases:
-    //    old state: eRunStarting        , new state: eRunStopping ->stop run
-    //    old state: eRunBetweenSubRuns  , new state: eRunStopping ->stop run (from 'between subruns')
-    //    old state: eRunStarting        , new state: eRunBetweenSubRuns ->stop subrun, stay 'between subruns'
-    //    old state: eRunBetweenSubRuns  , new state: eRunStarting ->start new subrun (from 'between subruns')
-	//    
-	//    sync'ing: set 'run wait' (use internal counter); clear histogram counter; wait for next 1 histogram(s); if received: set 'run wait done', reset flag/counter
-    //
-	//TODO:    WARNING: I observed that I receive 'eRunStarting' after the same state 'eRunStarting', seems to me to be a bug -tb- OK I think this is fixed?
-	//    
-	
-    //NSLog(@"Called %@::%@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//DEBUG -tb-
-    //NSLog(@"Called %@::%@   aNote:>>>%@<<<\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),aNote);//DEBUG -tb-
-	//aNote: >>>NSConcreteNotification 0x5a552d0 {name = ORRunAboutToChangeState; object = (ORRunModel,1) Decoders: ORRunDecoderForRun
-    // Connectors: "Run Control Connector"  ; userInfo = {State = 4;}}<<<
-	// states: 2,3,4: 2=starting, 3=stopping, 4=between subruns (0 = eRunStopped); see ORGlobal.h, enum 'eRunState'
-      //moved to top: int state = [[[aNote userInfo] objectForKey:@"State"] intValue];
-	/*
-	id rc =  [aNote object];
-    NSLog(@"Calling object %@\n",NSStringFromClass([rc class]));//DEBUG -tb-
-	switch (state) {
-		case eRunStarting://=2
-            NSLog(@"   Notification: go to  %@\n",@"eRunStarting");//DEBUG -tb-
-			break;
-		case eRunBetweenSubRuns://=4
-            NSLog(@"   Notification: go to  %@\n",@"eRunBetweenSubRuns");//DEBUG -tb-
-			break;
-		case eRunStopping://=3
-            NSLog(@"   Notification: go to  %@\n",@"eRunStopping");//DEBUG -tb-
-			break;
-		default:
-			break;
-	}
-	*/
-	int lastState = runControlState;
-	runControlState = state;
-		//NSLog(@"   lastState: %i,   newState: %i\n",lastState,runControlState);//DEBUG -tb-
-	if(runControlState==eRunStarting && (lastState==0 || lastState==eRunStopping)){
-	    // case 1.
-		//NSLog(@"   Case 1: do nothing\n");//DEBUG -tb-
-		return;
-	}
-    else {
-	    //catch errors
-	    if(runControlState==eRunStarting && lastState==eRunStarting){//should not happen! bug? -tb-
-		    NSLog(@" %@::%@   Case 2: ERROR - runControlState==eRunStarting && lastState==eRunStarting\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//DEBUG -tb-
-		    return;
-		}
-        //if(lastState==eRunBetweenSubRuns) isBetweenSubruns=1; else isBetweenSubruns=0;
-	    // case 2. (all other cases)
-		//NSLog(@"   Case 2: wait for 1 histogram\n");//DEBUG -tb-
-        if([self receivedHistoChanMap]){
-		    NSLog(@" %@::%@    WARNING - some of the single histograms already rceived, for others still awaiting: check that sum histograms all added the same amount of histograms. ([self receivedHistoChanMap]:%i) WARNING\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[self receivedHistoChanMap]);//DEBUG -tb-
-        }
-	}
-}
 
+}
+ */
 
 #pragma mark •••Accessors
 - (int) energyOffset
@@ -655,19 +595,6 @@ static double table[32]={
     [self setReceivedHistoCounter: 0];
 }
 
-
-- (int) receivedHistoChanMap
-{
-    return receivedHistoChanMap;
-}
-
-- (void) setReceivedHistoChanMap:(int)aReceivedHistoChanMap
-{
-    receivedHistoChanMap = aReceivedHistoChanMap;
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4FLTModelReceivedHistoChanMapChanged object:self];
-}
-
 - (BOOL) activateDebuggingDisplays {return activateDebuggingDisplays;}
 - (void) setActivateDebuggingDisplays:(BOOL)aState
 {
@@ -787,7 +714,6 @@ static double table[32]={
             
         case kKatrinV4Flt_Histogram_DaqMode:
             [self setFltRunMode:kKatrinV4FLT_Histo_Mode];
-            //TODO: workaround - if set to kFifoStopOnFull the histogramming stops after some seconds - probably a FPGA bug? -tb-
             if(fifoBehaviour == kFifoStopOnFull){
                 //NSLog(@"ORKatrinV4FLTModel message: due to a FPGA side effect histogramming mode should run with kFifoEnableOverFlow setting! -tb-\n");//TODO: fix it -tb-
                 //    -> removed automatic settings of FIFO length (64) and FIFO behaviour (stop on full) 2013-05 -tb-
@@ -2389,128 +2315,6 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 	
 	return objDictionary;
 }
-
-
-
-// set the bit according to aChan in a channel map when received the according HW histogram (histogram mode);
-// when all active channels sent the histogram, the histogram counter is incremented
-// this way we can delay a subrun start until all histograms have been received   -tb-
-//this is called from the decoder thread so have to be careful not to update the GUI from the thread
-- (BOOL) setFromDecodeStageReceivedHistoForChan:(short)aChan
-{
-    int map = receivedHistoChanMap;
-    if(aChan>=0 && aChan<kNumV4FLTChannels){
-		map |= 0x1<<aChan;
-        receivedHistoChanMap = map;
-        [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORKatrinV4FLTModelReceivedHistoChanMapChanged object:self userInfo:nil waitUntilDone:NO];
-
-		if(triggerEnabledMask == (map & triggerEnabledMask)){
-		    //we got all histograms
-            map=0;
-            receivedHistoChanMap = map;
-            receivedHistoCounter = receivedHistoCounter+1;
-            [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORKatrinV4FLTModelReceivedHistoChanMapChanged object:self userInfo:nil waitUntilDone:NO];
-            [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORKatrinV4FLTModelReceivedHistoCounterChanged object:self userInfo:nil waitUntilDone:NO];
-
-		}
-	}
-    return YES;
-}
-
-/*
-// REMOVE - sum histograms are calculated at the crate PC (ak)
- 
-- (void) initSumHistogramBuffers
-{
-        //clear histogram buffers
-        uint32_t crate = [self crateNumber];
-        uint32_t station = [self stationNumber];
-        int chan;
-        for(chan=0; chan<kNumV4FLTChannels; chan++){
-            if(triggerEnabledMask & (0x1<<chan)){//if this channel is active, clear histogram buffer(s)
-                bzero(&(histoBuf[chan]), sizeof(katrinV4FltFullHistogramDataStruct));
-                histoBuf[chan].orcaHeader = histogramId | (sizeof(katrinV4FltFullHistogramDataStruct)/sizeof(int32_t));
-                histoBuf[chan].location =    ((crate & 0x01e)<<21) | (((station) & 0x1f)<<16) | ((boxcarLength & 0x3)<<4)  | (filterShapingLength & 0xf)      |    (chan<<8);
-                histoBuf[chan].readoutSec      =  0;
-                histoBuf[chan].refreshTimeSec  =  0;
-                histoBuf[chan].firstBin        =  0;
-                histoBuf[chan].lastBin         =   2047;
-                histoBuf[chan].histogramLength =   2048;
-                histoBuf[chan].maxHistogramLength =   2048;
-                histoBuf[chan].binSize    =   histEBin;
-                histoBuf[chan].offsetEMin =   histEMin;
-				histoBuf[chan].histogramID    = 0;
-				histoBuf[chan].histogramInfo  = 0x2;// bit1 means 'this is a sum histogram'
-            }
-        }
-}
-
-
-//2013: this is called from the decoder! -tb-
-- (void) addToSumHistogram:(void*)someData
-{
-    
-    if(!shipSumHistogram) return;
-
-    
-    uint32_t* ptr = (uint32_t*)someData;
-
-	unsigned char chan = (ptr[1]>>8) & 0xff;
-    
-	katrinV4FltFullHistogramDataStruct* ePtr = (katrinV4FltFullHistogramDataStruct*) &ptr[2];
-    
-    uint32_t* histoData = ePtr->h;
-    //ptr + (sizeof(katrinV4FltHistogramDataStruct)/sizeof(int32_t));// points now to the histogram data -tb-
-   	int isSumHistogram = ePtr->histogramInfo & 0x2; //the bit1 marks the Sum Histograms
-
-    
-    if(isSumHistogram){ //avoid adding the already shipped histograms
-        return;
-    }
-
-    int i, firstBin = ePtr->firstBin;//first bin should always be 0 ... -tb-
-    for(i=0; i<ePtr->histogramLength;i++){
-        histoBuf[chan].h[firstBin+i] += histoData[i];
-    }
-    histoBuf[chan].refreshTimeSec += ePtr->refreshTimeSec;
-    histoBuf[chan].readoutSec      =  ePtr->readoutSec;
-}
-
-
-- (void) shipSumHistograms
-{
-    
-    if(shipSumHistogram){
-        int chan;
-        for(chan=0; chan<kNumV4FLTChannels; chan++){
-            if(triggerEnabledMask & (0x1<<chan)){//if this channel is active, ship histogram, then clear
-                //set the 'between subrun' flag
-                if(isBetweenSubruns) histoBuf[chan].histogramInfo  |=  0x04; //set bit 2
-                else                 histoBuf[chan].histogramInfo  &=  0xfffffffb; //set bit 2 so 0
-                //ship
-                [[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
-																object:[NSData dataWithBytes:(void*)&(histoBuf[chan]) length:sizeof(katrinV4FltFullHistogramDataStruct)]];
-
-                // ... TODO ...
-                //clear histogram buffer
-                histoBuf[chan].readoutSec      =  0;
-                histoBuf[chan].refreshTimeSec  =  0;
-                bzero(&(histoBuf[chan].h[0]), sizeof(uint32_t)*2048);
- 
-                //histoBuf[chan].orcaHeader = histogramId | (sizeof(katrinV4FullHistogramDataStruct)/sizeof(int32_t));
-                //histoBuf[chan].location =    ((crate & 0x01e)<<21) | (((station) & 0x1f)<<16) | ((boxcarLength & 0x3)<<4)  | (filterShapingLength & 0xf)      |    (chan<<8);
-                //histoBuf[chan].firstBin =  0;
-                //histoBuf[chan].lastBin =   2048;
-                //histoBuf[chan].histogramLength =   2048;
-                //histoBuf[chan].maxHistogramLength =   2048;
-                //histoBuf[chan].binSize    =   histEBin;
-                //histoBuf[chan].offsetEMin =   histEMin;
- 
-            }
-        }
-    }
-}
-*/
 
 - (BOOL) bumpRateFromDecodeStage:(short)channel
 {

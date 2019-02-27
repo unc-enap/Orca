@@ -99,7 +99,6 @@ static enum  {
     int filterShapingLength;  
 	BOOL activateDebuggingDisplays;
 	unsigned char fifoFlags[kNumV4FLTChannels];
-    int receivedHistoChanMap;
     int receivedHistoCounter;
     int customVariable;
     int poleZeroCorrection;
@@ -153,7 +152,7 @@ static enum  {
 #pragma mark •••Notifications
 - (void) registerNotificationObservers;
 - (void) runIsAboutToStop:(NSNotification*)aNote;
-- (void) runIsAboutToChangeState:(NSNotification*)aNote;
+//- (void) runIsAboutToChangeState:(NSNotification*)aNote;
 - (void) betweenSubRun:(NSNotification*)aNote;
 - (void) startSubRun:(NSNotification*)aNote;
 
@@ -186,8 +185,6 @@ static enum  {
 - (int) receivedHistoCounter;
 - (void) setReceivedHistoCounter:(int)aReceivedHistoCounter;
 - (void) clearReceivedHistoCounter;
-- (int) receivedHistoChanMap;
-- (void) setReceivedHistoChanMap:(int)aReceivedHistoChanMap;
 - (BOOL) activateDebuggingDisplays;
 - (void) setActivateDebuggingDisplays:(BOOL)aState;
 - (int) fifoLength;
@@ -336,11 +333,6 @@ static enum  {
 - (id) readRegCmd:(short) aRegister channel:(short) aChannel;
 - (id) readRegCmd:(short) aRegister;
 
-/*
-- (id) writeRegCmd:(short) aRegister channel:(short) aChannel value:(uint32_t)aValue;
-- (id) writeRegCmd:(short) aRegister value:(uint32_t)aValue;
-*/
-
 - (uint32_t)  readSeconds;
 - (void)  writeSeconds:(uint32_t)aValue;
 - (void) setTimeToMacClock;
@@ -408,9 +400,6 @@ static enum  {
 - (uint32_t) getAddressOffset: (short) anIndex;
 
 - (uint64_t ) readLostEventsTr;
-
-//for sync of HW histogramming with sub-runs
-- (BOOL) setFromDecodeStageReceivedHistoForChan:(short)aChan;
 
 
 #pragma mark •••Archival
@@ -481,7 +470,6 @@ extern NSString* ORKatrinV4FLTModelDecayTimeChanged;
 extern NSString* ORKatrinV4FLTModelPoleZeroCorrectionChanged;
 extern NSString* ORKatrinV4FLTModelCustomVariableChanged;
 extern NSString* ORKatrinV4FLTModelReceivedHistoCounterChanged;
-extern NSString* ORKatrinV4FLTModelReceivedHistoChanMapChanged;
 extern NSString* ORKatrinV4FLTModelFifoLengthChanged;
 extern NSString* ORKatrinV4FLTModelShipSumHistogramChanged;
 extern NSString* ORKatrinV4FLTModelTargetRateChanged;

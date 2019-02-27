@@ -43,7 +43,6 @@
 	    IBOutlet NSTextField*   customVariableTextField;
 	    IBOutlet NSButton*      clearReceivedHistoCounterButton;
 	    IBOutlet NSTextField*   receivedHistoCounterTextField;
-	    IBOutlet NSTextField*   receivedHistoChanMapTextField;
 		IBOutlet NSPopUpButton* fifoLengthPU;
 		IBOutlet NSButton*		settingLockButton;
 		IBOutlet NSMatrix*		displayEventRateMatrix;
@@ -80,6 +79,7 @@
 		IBOutlet NSMatrix*		thresholdTextFields;
 		IBOutlet NSMatrix*		triggerEnabledCBs;
 		IBOutlet NSMatrix*		hitRateEnabledCBs;
+        IBOutlet NSView*        hideVetoBox;
 		IBOutlet NSPopUpButton*	hitRateLengthPU;
 		IBOutlet NSButton*		hitRateAllButton;
 		IBOutlet NSButton*		hitRateNoneButton;
@@ -171,7 +171,6 @@
 - (void) poleZeroCorrectionChanged:(NSNotification*)aNote;
 - (void) customVariableChanged:(NSNotification*)aNote;
 - (void) receivedHistoCounterChanged:(NSNotification*)aNote;
-- (void) receivedHistoChanMapChanged:(NSNotification*)aNote;
 - (void) activateDebuggerDisplaysChanged:(NSNotification*)aNote;
 - (void) fifoLengthChanged:(NSNotification*)aNote;
 - (void) shipSumHistogramChanged:(NSNotification*)aNote;
@@ -242,7 +241,6 @@
 - (IBAction) customVariableTextFieldAction:(id)sender;
 - (IBAction) clearHistoCounterButtonAction:(id)sender;
 - (IBAction) receivedHistoCounterTextFieldAction:(id)sender;
-- (IBAction) receivedHistoChanMapTextFieldAction:(id)sender;
 - (IBAction) activateDebuggingDisplayAction:(id)sender;
 - (IBAction) fifoLengthPUAction:(id)sender;
 - (IBAction) shipSumHistogramPUAction:(id)sender;

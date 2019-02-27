@@ -336,11 +336,6 @@
                      selector : @selector(fifoFlagsChanged:)
                          name : ORKatrinV4FLTModeFifoFlagsChanged
 						object: model];
-	
-    [notifyCenter addObserver : self
-                     selector : @selector(receivedHistoChanMapChanged:)
-                         name : ORKatrinV4FLTModelReceivedHistoChanMapChanged
-						object: model];
 
     [notifyCenter addObserver : self
                      selector : @selector(receivedHistoCounterChanged:)
@@ -491,15 +486,12 @@
 	[receivedHistoCounterTextField setIntValue: [model receivedHistoCounter]];
 }
 
-- (void) receivedHistoChanMapChanged:(NSNotification*)aNote
-{
-	[receivedHistoChanMapTextField setIntValue: [model receivedHistoChanMap]];
-}
 - (void) activateDebuggerDisplaysChanged:(NSNotification*)aNote
 {
 	[activateDebuggerCB setIntValue: [model activateDebuggingDisplays]];
 	[fifoDisplayMatrix setHidden: ![model activateDebuggingDisplays]];
 }
+
 - (void) fifoLengthChanged:(NSNotification*)aNote
 {
 	//NSLog(@"%@::%@: fifoLength is %i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[model fifoLength]);//-tb-NSLog-tb-
@@ -687,7 +679,6 @@
 	[self fifoLengthChanged:nil];
 	[self activateDebuggerDisplaysChanged:nil];
 	[self fifoFlagsChanged:nil];
-	[self receivedHistoChanMapChanged:nil];
 	[self receivedHistoCounterChanged:nil];
 	[self customVariableChanged:nil];
 	[self poleZeroCorrectionChanged:nil];
@@ -748,8 +739,9 @@
     [thresholdTextFields         setEnabled: !lockedOrRunningMaintenance];
     [triggerEnabledCBs           setEnabled: !lockedOrRunningMaintenance];
     [hitRateEnabledCBs           setEnabled: !lockedOrRunningMaintenance];
-
-    [self enableVetoChannels:isVetoMode];
+    
+    [hideVetoBox                 setHidden:!isVetoMode];
+    if (isVetoMode) [self enableVetoChannels:isVetoMode];
     
     [versionButton               setEnabled: !runInProgress];
 	[testButton                  setEnabled: !runInProgress];
@@ -809,7 +801,7 @@
     //int nonVetoChannel[9] = {7,14,23,3,5,10,12,19,21}; // numbering 0...23
     int nonVetoChannel[6] = {7,14,23,5,12,21}; // numbering 0...23
     int nNonVetoChannels = sizeof(nonVetoChannel)/sizeof(int);
-
+    
     for (i=0; i<nNonVetoChannels; i++)
     {
         [[gainTextFields cellWithTag:nonVetoChannel[i]] setEnabled: !isVeto];
@@ -1186,11 +1178,6 @@
 - (void) receivedHistoCounterTextFieldAction:(id)sender
 {
 	[model setReceivedHistoCounter:[sender intValue]];	
-}
-
-- (void) receivedHistoChanMapTextFieldAction:(id)sender
-{
-	[model setReceivedHistoChanMap:[sender intValue]];	
 }
 
 - (IBAction) fifoLengthPUAction:(id)sender
