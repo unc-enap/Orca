@@ -156,7 +156,7 @@
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="KatrinV4FLTCard" id="2792"/>
                     </imageView>
                     <tabView misplaced="YES" controlSize="small" id="1184">
-                        <rect key="frame" x="61" y="35" width="633" height="744"/>
+                        <rect key="frame" x="61" y="10" width="633" height="744"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <tabViewItems>
                             <tabViewItem label="Settings" identifier="" id="1185">
@@ -3514,7 +3514,7 @@ Enable</string>
             <connections>
                 <outlet property="delegate" destination="-2" id="308"/>
             </connections>
-            <point key="canvasLocation" x="-89.5" y="191"/>
+            <point key="canvasLocation" x="-38" y="334"/>
         </window>
         <customObject id="318" userLabel="OHexFormatter" customClass="OHexFormatter"/>
         <window title="Panel" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="3174" userLabel="ThresholdFinder" customClass="NSPanel">
