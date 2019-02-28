@@ -243,7 +243,7 @@ case_statement
 | CASE constant_expr CASERANGE constant_expr ':' break_statement                { $$ = executionNode(kCaseRange, $2, $4, $6, nil); }
 
 | CASE constant_expr LEFT_OP constant_expr ':' statement_list break_statement { $$ = executionNode(kCaseRange1, $2, $4, $6, $7, nil); }
-| CASE constant_expr LEFT_OP constant_expr ':' statement_list break_statement { $$ = executionNode(kCaseRange1, $2, $4, $6, $7, nil); }
+| CASE constant_expr RIGHT_OP constant_expr ':' statement_list break_statement { $$ = executionNode(kCaseRange2, $2, $4, $6, $7, nil); }
 
 | CASE GE_OP constant_expr ':' statement_list break_statement                   { $$ = executionNode(kCaseGtE, $3, $5, $6, nil); }
 | CASE LE_OP constant_expr ':' statement_list break_statement                   { $$ = executionNode(kCaseLtE, $3, $5, $6, nil); }

@@ -2152,7 +2152,7 @@
                 case kCaseLt:           line = [NSMutableString stringWithString:@"[<]"];         break;
 
                 case LEFT_OP:           line = [NSMutableString stringWithString:@"[<<]"];          break;
-                case RIGHT_OP:			line = [NSMutableString stringWithString:@"[<<]"];			break;
+                case RIGHT_OP:			line = [NSMutableString stringWithString:@"[>>]"];			break;
 				case AND_OP:			line = [NSMutableString stringWithString:@"[&&]"];			break;
 				case '&':				line = [NSMutableString stringWithString:@"[&]"];			break;
 				case OR_OP:				line = [NSMutableString stringWithString:@"[||]"];			break;

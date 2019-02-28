@@ -31,6 +31,7 @@ enum {
     kBitExtract,
     kCaseRange,
     kCaseRange1,
+    kCaseRange2,
     kCaseGtE,
     kCaseLtE,
     kCaseLt,
