@@ -336,12 +336,12 @@
                      selector : @selector(fifoFlagsChanged:)
                          name : ORKatrinV4FLTModeFifoFlagsChanged
 						object: model];
-
+/*
     [notifyCenter addObserver : self
                      selector : @selector(receivedHistoCounterChanged:)
                          name : ORKatrinV4FLTModelReceivedHistoCounterChanged
 						object: model];
-
+*/
     [notifyCenter addObserver : self
                      selector : @selector(customVariableChanged:)
                          name : ORKatrinV4FLTModelCustomVariableChanged

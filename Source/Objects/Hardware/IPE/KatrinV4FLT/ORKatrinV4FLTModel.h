@@ -99,8 +99,6 @@ static enum  {
     int filterShapingLength;  
 	BOOL activateDebuggingDisplays;
 	unsigned char fifoFlags[kNumV4FLTChannels];
-    int receivedHistoChanMap;
-    int receivedHistoCounter;
     int customVariable;
     int poleZeroCorrection;
     double decayTime;
@@ -153,7 +151,6 @@ static enum  {
 #pragma mark •••Notifications
 - (void) registerNotificationObservers;
 - (void) runIsAboutToStop:(NSNotification*)aNote;
-//- (void) runIsAboutToChangeState:(NSNotification*)aNote;
 - (void) betweenSubRun:(NSNotification*)aNote;
 - (void) startSubRun:(NSNotification*)aNote;
 
@@ -183,11 +180,6 @@ static enum  {
 - (int) poleZeroCorrectionSettingHint:(double)attenuation;
 - (int) customVariable;
 - (void) setCustomVariable:(int)aCustomVariable;
-- (int) receivedHistoCounter;
-- (void) setReceivedHistoCounter:(int)aReceivedHistoCounter;
-- (void) clearReceivedHistoCounter;
-- (int) receivedHistoChanMap;
-- (void) setReceivedHistoChanMap:(int)aReceivedHistoChanMap;
 - (BOOL) activateDebuggingDisplays;
 - (void) setActivateDebuggingDisplays:(BOOL)aState;
 - (int) fifoLength;
@@ -472,8 +464,6 @@ extern NSString* ORKatrinV4FLTModelUseDmaBlockReadChanged;
 extern NSString* ORKatrinV4FLTModelDecayTimeChanged;
 extern NSString* ORKatrinV4FLTModelPoleZeroCorrectionChanged;
 extern NSString* ORKatrinV4FLTModelCustomVariableChanged;
-extern NSString* ORKatrinV4FLTModelReceivedHistoCounterChanged;
-extern NSString* ORKatrinV4FLTModelReceivedHistoChanMapChanged;
 extern NSString* ORKatrinV4FLTModelFifoLengthChanged;
 extern NSString* ORKatrinV4FLTModelShipSumHistogramChanged;
 extern NSString* ORKatrinV4FLTModelTargetRateChanged;

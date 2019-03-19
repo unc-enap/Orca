@@ -44,8 +44,6 @@ NSString* ORKatrinV4FLTModelUseDmaBlockReadChanged          = @"ORKatrinV4FLTMod
 NSString* ORKatrinV4FLTModelDecayTimeChanged                = @"ORKatrinV4FLTModelDecayTimeChanged";
 NSString* ORKatrinV4FLTModelPoleZeroCorrectionChanged       = @"ORKatrinV4FLTModelPoleZeroCorrectionChanged";
 NSString* ORKatrinV4FLTModelCustomVariableChanged           = @"ORKatrinV4FLTModelCustomVariableChanged";
-NSString* ORKatrinV4FLTModelReceivedHistoCounterChanged     = @"ORKatrinV4FLTModelReceivedHistoCounterChanged";
-NSString* ORKatrinV4FLTModelReceivedHistoChanMapChanged     = @"ORKatrinV4FLTModelReceivedHistoChanMapChanged";
 NSString* ORKatrinV4FLTModelFifoLengthChanged               = @"ORKatrinV4FLTModelFifoLengthChanged";
 NSString* ORKatrinV4FLTModelShipSumHistogramChanged         = @"ORKatrinV4FLTModelShipSumHistogramChanged";
 NSString* ORKatrinV4FLTModelTargetRateChanged               = @"ORKatrinV4FLTModelTargetRateChanged";
@@ -213,12 +211,7 @@ static NSString* fltTestName[kNumKatrinV4FLTTests]= {
     NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
  	[notifyCenter removeObserver:self]; //guard against a double register
 
-    /*
-    [notifyCenter addObserver : self
-                     selector : @selector(runIsAboutToChangeState:)
-                         name : ORRunAboutToChangeState
-                       object : nil];
-	*/
+
     [notifyCenter addObserver : self
                      selector : @selector(runIsAboutToStop:)
                          name : ORRunAboutToStopNotification
@@ -248,17 +241,6 @@ static NSString* fltTestName[kNumKatrinV4FLTTests]= {
 	runControlState               = eRunStopping;
 }
 
-/*
-- (void) runIsAboutToChangeState:(NSNotification*)aNote
-{
-    int state = [[[aNote userInfo] objectForKey:@"State"] intValue];
-
-    //is FLT  in data taker list of data task manager?
-    if(![self isPartOfRun]) return;
-    
-
-}
- */
 
 #pragma mark •••Accessors
 - (int) energyOffset
@@ -577,35 +559,6 @@ static double table[32]={
     customVariable = aCustomVariable;
 
     [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4FLTModelCustomVariableChanged object:self];
-}
-
-- (int) receivedHistoCounter
-{
-    return receivedHistoCounter;
-}
-
-- (void) setReceivedHistoCounter:(int)aReceivedHistoCounter
-{
-    //DEBUG                 NSLog(@"%@::%@   FLT #%i<------------- aReceivedHistoCounter: %i\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[self stationNumber],aReceivedHistoCounter);//DEBUG -tb-
-    receivedHistoCounter = aReceivedHistoCounter;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4FLTModelReceivedHistoCounterChanged object:self];
-}
-
-- (void) clearReceivedHistoCounter
-{
-    [self setReceivedHistoCounter: 0];
-}
-
-- (int) receivedHistoChanMap
-{
-    return receivedHistoChanMap;
-}
-
-- (void) setReceivedHistoChanMap:(int)aReceivedHistoChanMap
-{
-    receivedHistoChanMap = aReceivedHistoChanMap;
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORKatrinV4FLTModelReceivedHistoChanMapChanged object:self];
 }
 
 - (BOOL) activateDebuggingDisplays {return activateDebuggingDisplays;}
@@ -2108,20 +2061,6 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 	return [[[self crate] adapter] readHardwareRegisterCmd:[self regAddress:aRegister]];		
 }
 
-/*
-
-- (id) writeRegCmd:(short) aRegister channel:(short) aChannel value:(uint32_t)aValue
-{
-	uint32_t theAddress = [self regAddress:aRegister channel:aChannel];
-	return [[[self crate] adapter] writeHardwareRegisterCmd:theAddress value:aValue];		
-}
-
-- (id) writeRegCmd:(short) aRegister value:(uint32_t)aValue
-{
-	return [[[self crate] adapter] writeHardwareRegisterCmd:[self regAddress:aRegister] value:aValue];
-}
-
-*/
 
 //------------------
 
@@ -2135,11 +2074,11 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
     uint32_t histoID = [self readReg:kFLTV4HistNumMeasReg];
     uint32_t pageAB  = ([self readReg:kFLTV4StatusReg] >>28) & 0x1;
     
-    //DEBUG OUTPUT - NSLog(@"HistoStatus: recTime: %i  histoID: %i, pageAB: %i \n",recTime,histoID, pageAB);
+    //NSLog(@"HistoStatus: recTime: %i  histoID: %i, pageAB: %i \n",recTime,histoID, pageAB);
     [self setHistRecTime: recTime];
     [self setHistNofMeas: histoID];
     [self setHistPageAB: (int)pageAB];
-    
+        
 	[self performSelector:@selector(readHistogrammingStatus) withObject:nil afterDelay:histoUpdateRate];
 }
 
@@ -2327,33 +2266,6 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
     [objDictionary setObject:[NSNumber numberWithInt:energyOffset]				forKey:@"energyOffset"];
 	
 	return objDictionary;
-}
-
-// set the bit according to aChan in a channel map when received the according HW histogram (histogram mode);
-// when all active channels sent the histogram, the histogram counter is incremented
-// this way we can delay a subrun start until all histograms have been received   -tb-
-//this is called from the decoder thread so have to be careful not to update the GUI from the thread
-- (BOOL) setFromDecodeStageReceivedHistoForChan:(short)aChan
-{
-    /*
-    int map = receivedHistoChanMap;
-    if(aChan>=0 && aChan<kNumV4FLTChannels){
-        map |= 0x1<<aChan;
-        receivedHistoChanMap = map;
-        [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORKatrinV4FLTModelReceivedHistoChanMapChanged object:self userInfo:nil waitUntilDone:NO];
-        
-        if(triggerEnabledMask == (map & triggerEnabledMask)){
-            //we got all histograms
-            map=0;
-            receivedHistoChanMap = map;
-            receivedHistoCounter = receivedHistoCounter+1;
-            [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORKatrinV4FLTModelReceivedHistoChanMapChanged object:self userInfo:nil waitUntilDone:NO];
-            [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORKatrinV4FLTModelReceivedHistoCounterChanged object:self userInfo:nil waitUntilDone:NO];
-            
-        }
-    }
-     */
-    return YES;
 }
 
 - (BOOL) bumpRateFromDecodeStage:(short)channel

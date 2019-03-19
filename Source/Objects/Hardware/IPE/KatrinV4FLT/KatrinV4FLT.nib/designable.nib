@@ -161,11 +161,11 @@
                         <tabViewItems>
                             <tabViewItem label="Settings" identifier="" id="1185">
                                 <view key="view" id="1187">
-                                    <rect key="frame" x="10" y="29" width="613" height="702"/>
+                                    <rect key="frame" x="10" y="25" width="613" height="706"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <box misplaced="YES" title="Control Register" id="595">
-                                            <rect key="frame" x="-1" y="571" width="280" height="128"/>
+                                            <rect key="frame" x="-1" y="575" width="280" height="128"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="iWR-qe-1Lq">
                                                 <rect key="frame" x="3" y="3" width="274" height="110"/>
@@ -273,7 +273,7 @@
                                             </view>
                                         </box>
                                         <box autoresizesSubviews="NO" misplaced="YES" borderType="line" title="Misc HW Settings" id="2907">
-                                            <rect key="frame" x="452" y="117" width="147" height="144"/>
+                                            <rect key="frame" x="452" y="121" width="147" height="144"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="KKy-KN-lvH">
                                                 <rect key="frame" x="3" y="3" width="141" height="126"/>
@@ -377,7 +377,7 @@
                                             </view>
                                         </box>
                                         <box autoresizesSubviews="NO" misplaced="YES" borderType="line" title="Misc Requests" id="2988">
-                                            <rect key="frame" x="452" y="550" width="147" height="148"/>
+                                            <rect key="frame" x="452" y="554" width="147" height="148"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="FPb-hv-qb4">
                                                 <rect key="frame" x="3" y="3" width="141" height="130"/>
@@ -442,7 +442,7 @@
                                             </view>
                                         </box>
                                         <box autoresizesSubviews="NO" misplaced="YES" borderType="line" title="Thresold Finder" id="3255">
-                                            <rect key="frame" x="452" y="347" width="147" height="82"/>
+                                            <rect key="frame" x="452" y="351" width="147" height="82"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="Ykk-NE-LQe">
                                                 <rect key="frame" x="3" y="3" width="141" height="64"/>
@@ -472,7 +472,7 @@
                                             </view>
                                         </box>
                                         <tabView misplaced="YES" drawsBackground="NO" controlSize="small" type="noTabsNoBorder" id="3343">
-                                            <rect key="frame" x="-4" y="8" width="458" height="553"/>
+                                            <rect key="frame" x="-4" y="12" width="458" height="553"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <tabViewItems>
                                                 <tabViewItem label="Tab" identifier="1" id="3344">
@@ -1834,7 +1834,7 @@ Enable</string>
                                             </tabViewItems>
                                         </tabView>
                                         <box autoresizesSubviews="NO" misplaced="YES" borderType="line" title="Init Event Time with" id="4220">
-                                            <rect key="frame" x="452" y="492" width="147" height="54"/>
+                                            <rect key="frame" x="452" y="496" width="147" height="54"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="TLv-J0-iyv">
                                                 <rect key="frame" x="3" y="3" width="141" height="36"/>
@@ -1862,7 +1862,7 @@ Enable</string>
                                             </view>
                                         </box>
                                         <box autoresizesSubviews="NO" misplaced="YES" borderType="line" title="Filter Parameters" id="3006">
-                                            <rect key="frame" x="279" y="571" width="164" height="127"/>
+                                            <rect key="frame" x="279" y="575" width="164" height="127"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="enX-Fg-qYe">
                                                 <rect key="frame" x="3" y="3" width="158" height="109"/>
@@ -1964,7 +1964,7 @@ Enable</string>
                                             </view>
                                         </box>
                                         <box autoresizesSubviews="NO" misplaced="YES" borderType="line" title="Hit Rate Polling" id="3035">
-                                            <rect key="frame" x="449" y="265" width="150" height="78"/>
+                                            <rect key="frame" x="449" y="269" width="150" height="78"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="XBP-b6-1Ty">
                                                 <rect key="frame" x="3" y="3" width="144" height="60"/>
@@ -2059,7 +2059,7 @@ Enable</string>
                                             </connections>
                                         </button>
                                         <box autoresizesSubviews="NO" misplaced="YES" borderType="line" title="Debug Displays" id="3901">
-                                            <rect key="frame" x="452" y="433" width="147" height="54"/>
+                                            <rect key="frame" x="452" y="437" width="147" height="54"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="bmV-YY-lEt">
                                                 <rect key="frame" x="3" y="3" width="141" height="36"/>
