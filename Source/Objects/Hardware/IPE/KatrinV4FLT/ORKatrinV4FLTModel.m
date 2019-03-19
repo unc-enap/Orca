@@ -2335,6 +2335,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
 //this is called from the decoder thread so have to be careful not to update the GUI from the thread
 - (BOOL) setFromDecodeStageReceivedHistoForChan:(short)aChan
 {
+    /*
     int map = receivedHistoChanMap;
     if(aChan>=0 && aChan<kNumV4FLTChannels){
         map |= 0x1<<aChan;
@@ -2351,6 +2352,7 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
             
         }
     }
+     */
     return YES;
 }
 

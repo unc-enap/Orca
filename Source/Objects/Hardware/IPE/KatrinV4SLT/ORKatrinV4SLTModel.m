@@ -104,7 +104,8 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     
     runStartSec = 0;
     sltSecondRunStop = 0;
-
+    runActive = FALSE;
+    
     return self;
 }
 
@@ -1522,16 +1523,21 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     // Todo: Check that all Slt parameters are included
     //
     
-    if (countersEnabled) [self writeEnCnt];
-    else                 [self writeDisCnt];
-    [self loadSecondsReg];
-    [self writeControlReg];
-    [self writeControlRegRunFlagOn:FALSE]; // this bit is only active during a run
-    [self writeInterruptMask];
-    [self clearAllStatusErrorBits];
-    [self writePixelBusEnableReg];
-    [self clearRunTime];
+    // Don't initialize the electronics during a run
+    if (runActive == FALSE) {
+  
+        if (countersEnabled) [self writeEnCnt];
+        else                 [self writeDisCnt];
+        [self loadSecondsReg];
+        [self writeControlReg];
+        [self writeControlRegRunFlagOn:FALSE]; // this bit is only active during a run
+        [self writeInterruptMask];
+        [self clearAllStatusErrorBits];
+        [self writePixelBusEnableReg];
+        [self clearRunTime];
 
+    }
+    
     //-----------------------------------------------
 	//board doesn't appear to start without this stuff
 	//[self writeReg:kSltActResetFlt value:0];
@@ -1576,11 +1582,15 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
 	//[self printStatusReg];
 	//[self printControlReg];
 }
+
 - (void) initAllBoards
 {
-    [self initBoard];
-    for(id obj in dataTakers){
-        [obj initBoard];
+    // Don't initialize the electronics during a run
+    if (runActive == FALSE) {
+        [self initBoard];
+        for(id obj in dataTakers){
+            [obj initBoard];
+        }        
     }
 }
 
@@ -1906,6 +1916,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
         [obj stopReadingHitRates];
     }
 
+    runActive = TRUE;
     sltTime = [self readTime];
     NSLog(@"SLT %f - Data takers started\n", sltTime);
 
@@ -2179,6 +2190,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     [self writeControlRegRunFlagOn:FALSE];
     [self restoreInhibitStatus];
 
+    runActive = FALSE;
 
 }
 

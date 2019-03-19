@@ -196,6 +196,8 @@
         BOOL                waitForSubRunStart;
         BOOL                waitForSubRunEnd;
         uint32_t       secondToWaitFor;
+    
+        BOOL           runActive;
 
 }
 
