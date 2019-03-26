@@ -151,6 +151,10 @@
                          name : ORMJDVacuumModelSpikeTriggerValueChanged
                         object: model];
 
+    [notifyCenter addObserver : self
+                      selector : @selector(constrainingGaugeChanged:)
+                          name : ORMJDVacuumModelConstrainingGaugeChanged
+                        object : model];
 }
 
 - (void) updateWindow
@@ -167,6 +171,7 @@
 	[self nextHvUpdateTimeChanged:nil];
 	[self coolerModeChanged:nil];
     [self spikeValueChanged:nil];
+    [self constrainingGaugeChanged:nil];
 }
 
 #pragma mark •••Interface Management
@@ -256,6 +261,7 @@
 {
     BOOL locked = [gSecurity isLocked:ORMJCVacuumLock];
     [lockButton setState: locked];
+    [constrainingGaugePU setEnabled:!locked];
 	
 	[vacuumView updateButtons];
 }
@@ -267,6 +273,15 @@
 		[self performSelector:@selector(delayedRefresh) withObject:nil afterDelay:.5];
 	}
 }
+
+- (void)  constrainingGaugeChanged:(NSNotification *)aNote
+{
+    int index = 0;
+    if([model constrainCryostatGauge] && [model constrainRGAGauge]) index = 2;
+    else if([model constrainRGAGauge]) index = 1;
+    [constrainingGaugePU selectItemAtIndex:index];
+}
+
 - (void) delayedRefresh
 {
 	updateScheduled = NO;
@@ -449,6 +464,15 @@
 - (IBAction) spikeValueAction:(id)sender
 {
     [model setSpikeTriggerValue:[sender floatValue]];
+}
+
+- (IBAction) constrainingGaugeAction:(id)sender
+{
+    int index = [sender indexOfSelectedItem];
+    if(index == 0 || index == 2) [model setConstrainCryostatGauge:YES];
+    else [model setConstrainCryostatGauge:NO];
+    if(index == 1 || index == 2) [model setConstrainRGAGauge:YES];
+    else [model setConstrainRGAGauge:NO];
 }
 
 - (IBAction) overRideAction:(id)sender

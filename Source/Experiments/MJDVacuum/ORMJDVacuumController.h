@@ -52,6 +52,7 @@
 	IBOutlet NSTextField*   constraintOverrideField;
     IBOutlet NSButton*      overRideButton;
     IBOutlet NSTextField*   spikeValueField;
+    IBOutlet NSPopUpButton* constrainingGaugePU;
 
 	BOOL					updateScheduled;
 }
@@ -78,6 +79,7 @@
 - (void) localConstraintsChanged:(NSNotification*)aNote;
 - (void) vetoMaskChanged:(NSNotification*)aNote;
 - (void) stateChanged:(NSNotification*)aNote;
+- (void) constrainingGaugeChanged:(NSNotification*)aNote;
 - (void) delayedRefresh;
 - (void) constraintsDisabledChanged:(NSNotification*)aNote;
 #if !defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
@@ -94,6 +96,7 @@
 - (IBAction) overRideAction:(id)sender;
 - (IBAction) reportConstraints:(id)sender;
 - (IBAction) spikeValueAction:(id)sender;
+- (IBAction) constrainingGaugeAction:(id)sender;
 
 #pragma mark •••Data Source For Tables
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;

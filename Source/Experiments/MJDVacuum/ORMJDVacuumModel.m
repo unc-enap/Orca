@@ -87,8 +87,8 @@ NSString* ORMJDVacuumModelLastHvUpdateTimeChanged       = @"ORMJDVacuumModelLast
 NSString* ORMJDVacuumModelHvUpdateTimeChanged           = @"ORMJDVacuumModelHvUpdateTimeChanged";
 NSString* ORMJDVacuumModelConstraintsDisabledChanged    = @"ORMJDVacuumModelConstraintsDisabledChanged";
 NSString* ORMJDVacuumModelCoolerModeChanged             = @"ORMJDVacuumModelCoolerModeChanged";
-
 NSString* ORMJDVacuumModelSpikeTriggerValueChanged      = @"ORMJDVacuumModelSpikeTriggerValueChanged";
+NSString* ORMJDVacuumModelConstrainingGaugeChanged      = @"ORMJDVacuumModelConstrainingGaugeChanged";
 
 @implementation ORMJDVacuumModel
 
@@ -439,6 +439,26 @@ NSString* ORMJDVacuumModelSpikeTriggerValueChanged      = @"ORMJDVacuumModelSpik
 
 - (void)    setNoHvInfo      { [self setNoHvInfo:YES];  }
 - (void)    clearNoHvInfo    { [self setNoHvInfo:NO];   }
+- (void)  setConstrainCryostatGauge:(BOOL)constrain
+{
+    constrainCryostatGauge = constrain;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORMJDVacuumModelConstrainingGaugeChanged object:self];
+}
+- (void)  setConstrainRGAGauge:(BOOL)constrain
+{
+    constrainRGAGauge = constrain;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORMJDVacuumModelConstrainingGaugeChanged object:self];
+}
+
+- (BOOL) constrainCryostatGauge
+{
+    return constrainCryostatGauge;
+}
+
+- (BOOL) constrainRGAGauge
+{
+    return constrainRGAGauge;
+}
 
 - (void) setNoHvInfo:(BOOL)aNoHvInfo
 {
@@ -545,6 +565,8 @@ NSString* ORMJDVacuumModelSpikeTriggerValueChanged      = @"ORMJDVacuumModelSpik
     [self setCoolerMode:        [decoder decodeIntForKey:@"coolerMode"]];
 	[self setShowGrid:          [decoder decodeBoolForKey:	@"showGrid"]];
     [self setSpikeTriggerValue: [decoder decodeFloatForKey: @"spikeTriggerValue"]];
+    [self setConstrainCryostatGauge: [decoder decodeBoolForKey: @"constrainCryostatGauge"]];
+    [self setConstrainRGAGauge:      [decoder decodeBoolForKey: @"constrainRGAGauge"]];
 	[self makeParts];
 	[self registerNotificationObservers];
 	
@@ -566,6 +588,8 @@ NSString* ORMJDVacuumModelSpikeTriggerValueChanged      = @"ORMJDVacuumModelSpik
     [encoder encodeInteger:coolerMode           forKey:@"coolerMode"];
     [encoder encodeBool:showGrid            forKey: @"showGrid"];
     [encoder encodeFloat:spikeTriggerValue  forKey: @"spikeTriggerValue"];
+    [encoder encodeBool:constrainCryostatGauge forKey:@"constrainCryostatGauge"];
+    [encoder encodeBool:constrainRGAGauge      forKey:@"constrainRGAGauge"];
 }
 
 - (NSArray*) parts
@@ -1971,7 +1995,8 @@ NSString* ORMJDVacuumModelSpikeTriggerValueChanged      = @"ORMJDVacuumModelSpik
 	//baratron must be >.75  and <2.0Bar if baratron is used
     //LakeShore A must be >100K is baratron is NOT used
 	//Note: the bias info can only get back to the DAQ via the DAQ system script
-	double			cyrostatPress		= [self valueForRegion:kRegionCryostat];
+	double			cryostatPress		= [self valueForRegion:kRegionCryostat];
+    double          rgaPress            = [self valueForRegion:kRegionRGA];
 	
 	//baratron operational?
     if([self coolerMode] == kThermosyphon){
@@ -2035,22 +2060,74 @@ NSString* ORMJDVacuumModelSpikeTriggerValueChanged      = @"ORMJDVacuumModelSpik
         }
     }
 	//cryostat region pressure must be <1E-5 to stay biased (also must be non-zero -- zero indicates no data)
-    
-    if(cyrostatPress==0){
-        [self addContinuedBiasConstraints:kG3NoDataConstraint  reason:kG3NoDataReason];
-        [self addOkToBiasConstraints:     kG3NoDataConstraint  reason:kG3NoDataReason];
+    BOOL cryoValid = constrainCryostatGauge;
+    BOOL cryoGood0 = YES;
+    BOOL cryoGood1 = YES;
+    // check the cryostat gauge status, only set constraints if not checking the rga gauge
+    if(constrainCryostatGauge){
+        if(cryostatPress==0){
+            cryoValid = NO;
+            if(!constrainRGAGauge){
+                [self addContinuedBiasConstraints:kG3NoDataConstraint  reason:kG3NoDataReason];
+                [self addOkToBiasConstraints:     kG3NoDataConstraint  reason:kG3NoDataReason];
+            }
+        }
+        else {
+            //there is data on G3, so remove these constrainst. The pressure may be bad so continue check.
+            [self removeContinuedBiasConstraints: kG3NoDataConstraint];
+            [self removeOkToBiasConstraints:      kG3NoDataConstraint];
+            if(cryostatPress>1E-5){
+                cryoGood0 = NO;
+                if(!constrainRGAGauge) [self addContinuedBiasConstraints:kG3WayHighConstraint  reason:kG3WayHighReason];
+            }
+            else [self removeContinuedBiasConstraints:kG3WayHighConstraint];
+            //cryostat region pressure must be <1E-6 to allow biasing
+            if(cryostatPress>1E-6){
+                cryoGood1 = NO;
+                if(!constrainRGAGauge) [self addOkToBiasConstraints:kG3HighConstraint  reason:kG3HighReason];
+            }
+            else [self removeOkToBiasConstraints:kG3HighConstraint];
+        }
     }
-    else {
-        //there is data on G3, so remove these constrainst. The pressure may be bad so continue check.
-        [self removeContinuedBiasConstraints: kG3NoDataConstraint];
-        [self removeOkToBiasConstraints:      kG3NoDataConstraint];
-
-        if(cyrostatPress>1E-5) [self addContinuedBiasConstraints:kG3WayHighConstraint  reason:kG3WayHighReason];
-        else                   [self removeContinuedBiasConstraints:kG3WayHighConstraint];
-        
-        //cryostat region pressure must be <1E-6 to allow biasing
-        if(cyrostatPress>1E-6) [self addOkToBiasConstraints:kG3HighConstraint  reason:kG3HighReason];
-        else                   [self removeOkToBiasConstraints:kG3HighConstraint];
+    BOOL rgaValid = constrainRGAGauge;
+    BOOL rgaGood0 = YES;
+    BOOL rgaGood1 = YES;
+    // check the rga gauge status, only set constraints if not checking the cryostat gauge
+    if(constrainRGAGauge){
+        if(rgaPress==0){
+            rgaValid = NO;
+            if(!constrainCryostatGauge){
+                [self addContinuedBiasConstraints:kG3NoDataConstraint  reason:kG3NoDataReason];
+                [self addOkToBiasConstraints:     kG3NoDataConstraint  reason:kG3NoDataReason];
+            }
+        }
+        else {
+            //there is data on G2, so remove these constraint. The pressure may be bad so continue check.
+            [self removeContinuedBiasConstraints: kG3NoDataConstraint];
+            [self removeOkToBiasConstraints:      kG3NoDataConstraint];
+            if(rgaPress>1E-5){
+                rgaGood0 = NO;
+                if(!constrainCryostatGauge) [self addContinuedBiasConstraints:kG3WayHighConstraint  reason:kG3WayHighReason];
+            }
+            else [self removeContinuedBiasConstraints:kG3WayHighConstraint];
+            //cryostat region pressure must be <1E-6 to allow biasing
+            if(rgaPress>1E-6){
+                rgaGood1 = NO;
+                if(!constrainCryostatGauge) [self addOkToBiasConstraints:kG3HighConstraint  reason:kG3HighReason];
+            }
+            else [self removeOkToBiasConstraints:kG3HighConstraint];
+        }
+    }
+    // set constraints in the case of checking both gauges
+    if(constrainRGAGauge && constrainRGAGauge){
+        if(!cryoValid && !rgaValid){
+            [self addContinuedBiasConstraints:kG3NoDataConstraint  reason:kG3NoDataReason];
+            [self addOkToBiasConstraints:     kG3NoDataConstraint  reason:kG3NoDataReason];
+        }
+        else{
+            if(!cryoGood0 && !rgaGood0) [self addContinuedBiasConstraints:kG3WayHighConstraint  reason:kG3WayHighReason];
+            if(!cryoGood1 && !rgaGood1) [self addOkToBiasConstraints:kG3HighConstraint          reason:kG3HighReason];
+        }
     }
 }
 

@@ -149,6 +149,8 @@
     BOOL                 noHvInfo;
     BOOL                 disableConstraints;
     int                  coolerMode;
+    BOOL                 constrainCryostatGauge;
+    BOOL                 constrainRGAGauge;
 
     ORRunningAverageGroup* vacuumRunningAverages;
     BOOL                 vacuumSpike[kNumberRegions];
@@ -172,6 +174,10 @@
 - (void) setDetectorsBiased:(BOOL)aDetectorsBiased;
 - (void) setNoHvInfo;
 - (void) clearNoHvInfo;
+- (void) setConstrainCryostatGauge:(BOOL)constrain;
+- (void) setConstrainRGAGauge:(BOOL)constrain;
+- (BOOL) constrainCryostatGauge;
+- (BOOL) constrainRGAGauge;
 
 - (uint32_t) vetoMask;
 - (void) setVetoMask:(uint32_t)aVetoMask;
@@ -270,7 +276,7 @@ extern NSString* ORMJDVacuumModelConstraintsChanged;
 extern NSString* ORMJDVacuumModelConstraintsDisabledChanged;
 extern NSString* ORMJDVacuumModelVacuumSpiked;
 extern NSString* ORMJDVacuumModelSpikeTriggerValueChanged;
-
+extern NSString* ORMJDVacuumModelConstrainingGaugeChanged;
 
 @interface ORMJDVacuumModel (hidden)
 //hide these from casual scripting -- too dangerous
