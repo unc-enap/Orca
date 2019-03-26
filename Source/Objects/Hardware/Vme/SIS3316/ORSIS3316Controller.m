@@ -806,7 +806,8 @@
     short i;
     uint32_t aMask = [model eventConfigMask];
     for(i=0;i<8;i++){
-        [[eventConfigMatrix cellWithTag:i] setState:aMask & (0x1<<i)];
+        if(i ==0) [[eventConfigMatrix cellWithTag:i] setState:!(aMask & ((0x1<<i)))];
+        else      [[eventConfigMatrix cellWithTag:i] setState:aMask & (0x1<<i)];
     }
 }
 
