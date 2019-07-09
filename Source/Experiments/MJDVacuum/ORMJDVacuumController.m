@@ -468,7 +468,7 @@
 
 - (IBAction) constrainingGaugeAction:(id)sender
 {
-    int index = [sender indexOfSelectedItem];
+    long index = [sender indexOfSelectedItem];
     if(index == 0 || index == 2) [model setConstrainCryostatGauge:YES];
     else [model setConstrainCryostatGauge:NO];
     if(index == 1 || index == 2) [model setConstrainRGAGauge:YES];

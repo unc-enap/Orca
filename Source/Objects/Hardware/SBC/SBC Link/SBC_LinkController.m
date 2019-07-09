@@ -863,7 +863,7 @@
 - (IBAction)  shutdownAction:(id)sender;     
 {
     [rootPassWordField setStringValue:@""];
-    [[self window] beginSheet:driverInstallPanel completionHandler:^(NSModalResponse returnCode){
+    [[self window] beginSheet:passWordPanel completionHandler:^(NSModalResponse returnCode){
         if(returnCode == NSModalResponseOK){
             [[model sbcLink] shutDown:[rootPassWordField stringValue] reboot:[[rebootMatrix selectedCell]tag]];
         }
