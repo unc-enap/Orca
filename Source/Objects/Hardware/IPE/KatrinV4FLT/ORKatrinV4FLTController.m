@@ -336,12 +336,7 @@
                      selector : @selector(fifoFlagsChanged:)
                          name : ORKatrinV4FLTModeFifoFlagsChanged
 						object: model];
-/*
-    [notifyCenter addObserver : self
-                     selector : @selector(receivedHistoCounterChanged:)
-                         name : ORKatrinV4FLTModelReceivedHistoCounterChanged
-						object: model];
-*/
+
     [notifyCenter addObserver : self
                      selector : @selector(customVariableChanged:)
                          name : ORKatrinV4FLTModelCustomVariableChanged
@@ -479,11 +474,6 @@
 - (void) customVariableChanged:(NSNotification*)aNote
 {
 	[customVariableTextField setIntValue: [model customVariable]];
-}
-
-- (void) receivedHistoCounterChanged:(NSNotification*)aNote
-{
-	[receivedHistoCounterTextField setIntValue: [model receivedHistoCounter]];
 }
 
 - (void) activateDebuggerDisplaysChanged:(NSNotification*)aNote
@@ -679,7 +669,6 @@
 	[self fifoLengthChanged:nil];
 	[self activateDebuggerDisplaysChanged:nil];
 	[self fifoFlagsChanged:nil];
-	[self receivedHistoCounterChanged:nil];
 	[self customVariableChanged:nil];
 	[self poleZeroCorrectionChanged:nil];
 	[self decayTimeChanged:nil];
@@ -768,8 +757,7 @@
 	[shipSumHistogramPU setEnabled:              !lockedOrRunningMaintenance & (daqMode == kIpeFltV4_Histogram_DaqMode)];
 	[histModePU setEnabled:                      !lockedOrRunningMaintenance & (daqMode == kIpeFltV4_Histogram_DaqMode)];
 	[histClrModePU setEnabled:                   !lockedOrRunningMaintenance & (daqMode == kIpeFltV4_Histogram_DaqMode)];
-	[clearReceivedHistoCounterButton setEnabled: !lockedOrRunningMaintenance & (daqMode == kIpeFltV4_Histogram_DaqMode)];
-	
+    
     [compareRegistersButton setEnabled:!lockedOrRunningMaintenance];
     
     [startNoiseFloorButton setEnabled: !runInProgress];
@@ -1167,17 +1155,6 @@
 - (IBAction) customVariableTextFieldAction:(id)sender
 {
 	[model setCustomVariable:[sender intValue]];	
-}
-
-- (IBAction) clearHistoCounterButtonAction:(id)sender
-{
-	[model clearReceivedHistoCounter];	
-}
-
-
-- (void) receivedHistoCounterTextFieldAction:(id)sender
-{
-	[model setReceivedHistoCounter:[sender intValue]];	
 }
 
 - (IBAction) fifoLengthPUAction:(id)sender
