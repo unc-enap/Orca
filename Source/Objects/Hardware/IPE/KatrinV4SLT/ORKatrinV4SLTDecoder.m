@@ -414,14 +414,20 @@ Sanshiro suggests here to stop decoding always at 1/2, 1/3 , 1/4 etc of the seco
     int i;
     for(i=0;i<numEv;i++){
         //only decode some things in ORCA for speed
-        uint32_t f3        = ptr[2]; //flt,ch,multi,eventID
-        uint32_t f6        = ptr[5]; //Energy
+        uint32_t f3 = ptr[2]; //flt,ch,multi,eventID
+        uint32_t f4 = ptr[3];
+        uint32_t f5 = ptr[4];
+        uint32_t f6 = ptr[5]; //Energy
 
         unsigned char card      = (f3 >> 24) & 0x1f;
         unsigned char chan      = (f3 >> 19) & 0x1f;
         uint32_t energy    =  f6        & 0xfffff;
         //uint32_t lostEvents    =  (f6>>20)&0x1ff;;
-        
+        uint32_t aPeak    =  f4 & 0x7ff; // & 0xfff; bit 12 unused and always 1 -tb-
+        uint32_t aValley  =  4096 - (f5 & 0xfff);
+        uint32_t tPeak    = (f4 >> 16) & 0x01ff;
+        uint32_t tValley  = (f5 >> 16) & 0x1ff;
+
         NSString* stationKey = @"??";
 	    if(card<32)stationKey  = kSLTStation[card];
         
@@ -437,6 +443,19 @@ Sanshiro suggests here to stop decoding always at 1/2, 1/3 , 1/4 etc of the seco
         if(decode)[aDataSet histogram:energy/aFilter
                     numBins:4*4096 sender:self
                    withKeys: @"SLT",@"Energy",crateKey,stationKey,channelKey,nil];
+        
+        // In bipolar mode add the corrected energy
+        // Todo: How to get run mode here???
+        if(decode)[aDataSet histogram:(aPeak+aValley)
+                              numBins:4*4096 sender:self
+                             withKeys: @"SLT",@"Bipolar Energy",crateKey,stationKey,channelKey,nil];
+        if(decode)[aDataSet histogram:(tPeak)
+                              numBins:4*4096 sender:self
+                             withKeys: @"SLT",@"tPeak",crateKey,stationKey,channelKey,nil];
+        if(decode)[aDataSet histogram:(tValley)
+                              numBins:4*4096 sender:self
+                             withKeys: @"SLT",@"tValley",crateKey,stationKey,channelKey,nil];
+
         
         ptr+=6;//next event
     }
