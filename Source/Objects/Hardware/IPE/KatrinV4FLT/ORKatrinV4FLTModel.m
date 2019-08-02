@@ -2251,7 +2251,8 @@ static const uint32_t SLTCommandReg      = 0xa80008 >> 2;
     [objDictionary setObject:[NSNumber numberWithLong:analogOffset]			forKey:@"analogOffset"];
     [objDictionary setObject:[NSNumber numberWithLong:hitRateLength]		forKey:@"hitRateLength"];
     [objDictionary setObject:[NSNumber numberWithLong:gapLength]			forKey:@"gapLength"];
-    [objDictionary setObject:[NSNumber numberWithLong:filterShapingLength]  forKey:@"filterShapingLength"];//this is the fpga register value -tb-
+    [objDictionary setObject:[NSNumber numberWithLong:[self filterShapingLengthInBins]]  forKey:@"filterLength"];
+    [objDictionary setObject:[NSNumber numberWithLong:filterShapingLength]  forKey:@"filterShapingLength"];//this is the fpga register value
 	[objDictionary setObject:[NSNumber numberWithInteger:histMeasTime]			forKey:@"histMeasTime"];
 	[objDictionary setObject:[NSNumber numberWithInteger:histEMin]				forKey:@"histEMin"];
 	[objDictionary setObject:[NSNumber numberWithInt:shipSumHistogram]		forKey:@"shipSumHistogram"];
