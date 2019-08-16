@@ -130,6 +130,11 @@
     [[aNotification object] readInBackgroundAndNotify];  // go back for more.
 
 }
+
+- (void) abortTasks
+{
+    [tasks removeAllObjects];
+}
 @end
 
 

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
-        <capability name="box content view" minToolsVersion="7.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -20,11 +19,11 @@
             <rect key="contentRect" x="189" y="244" width="945" height="310"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
             <value key="minSize" type="size" width="213" height="107"/>
-            <view key="contentView" misplaced="YES" id="6">
+            <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="945" height="310"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <tabView misplaced="YES" controlSize="small" initialItem="70" id="19">
+                    <tabView controlSize="small" initialItem="70" id="19">
                         <rect key="frame" x="3" y="0.0" width="943" height="303"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <tabViewItems>
@@ -688,7 +687,7 @@
                                                                     <font key="font" metaFont="system" size="10"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <button toolTip="ORIPCarrierModel" misplaced="YES" id="26511" customClass="ObjectFactory">
+                                                            <button toolTip="ORIPCarrierModel" id="26511" customClass="ObjectFactory">
                                                                 <rect key="frame" x="173" y="55" width="61" height="150"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="IP Carrier" bezelStyle="regularSquare" image="IPCarrierCard" imagePosition="above" alignment="center" inset="2" id="26512">
@@ -1264,15 +1263,15 @@
                                     <rect key="frame" x="10" y="25" width="923" height="265"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <box horizontalHuggingPriority="750" misplaced="YES" boxType="separator" id="5650">
+                                        <box horizontalHuggingPriority="750" boxType="separator" id="5650">
                                             <rect key="frame" x="280" y="29" width="5" height="223"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         </box>
-                                        <box horizontalHuggingPriority="750" misplaced="YES" boxType="separator" id="16564">
+                                        <box horizontalHuggingPriority="750" boxType="separator" id="16564">
                                             <rect key="frame" x="730" y="39" width="5" height="223"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         </box>
-                                        <button toolTip="ORIpeCrateModel" misplaced="YES" id="26616" customClass="ObjectFactory">
+                                        <button toolTip="ORIpeCrateModel" id="26616" customClass="ObjectFactory">
                                             <rect key="frame" x="-3" y="62" width="151" height="165"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="bevel" title="IPE-DAQ-V3 crate" bezelStyle="regularSquare" image="IpeCrate" imagePosition="above" alignment="center" inset="2" id="26617">
@@ -1280,7 +1279,7 @@
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
                                         </button>
-                                        <button toolTip="ORIpeV4CrateModel" misplaced="YES" id="26632" customClass="ObjectFactory">
+                                        <button toolTip="ORIpeV4CrateModel" id="26632" customClass="ObjectFactory">
                                             <rect key="frame" x="291" y="66" width="139" height="133"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="bevel" title="IPE-DAQ-V4 crate" bezelStyle="regularSquare" image="IpeV4Crate" imagePosition="above" alignment="center" inset="2" id="26633">
@@ -1288,7 +1287,7 @@
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
                                         </button>
-                                        <button toolTip="ORIpeV4MiniCrateModel" misplaced="YES" id="26634" customClass="ObjectFactory">
+                                        <button toolTip="ORIpeV4MiniCrateModel" id="26634" customClass="ObjectFactory">
                                             <rect key="frame" x="427" y="54" width="68" height="147"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="bevel" title="V4 Mini crate" bezelStyle="regularSquare" image="IpeV4MiniCrate" imagePosition="above" alignment="center" inset="2" id="26635">
@@ -1296,7 +1295,7 @@
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
                                         </button>
-                                        <button toolTip="ORIpeSimulationModel" misplaced="YES" id="26646" customClass="ObjectFactory">
+                                        <button toolTip="ORIpeSimulationModel" id="26646" customClass="ObjectFactory">
                                             <rect key="frame" x="732" y="99" width="120" height="79"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="bevel" title="IPE Simulation" bezelStyle="regularSquare" image="IpeSimulation" imagePosition="above" alignment="center" inset="2" id="26647">
@@ -1304,7 +1303,7 @@
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
                                         </button>
-                                        <button toolTip="ORAmptekDP5Model" misplaced="YES" id="g03-7i-R1s" customClass="ObjectFactory">
+                                        <button toolTip="ORAmptekDP5Model" id="g03-7i-R1s" customClass="ObjectFactory">
                                             <rect key="frame" x="756" y="17" width="83" height="74"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="bevel" title="Amptek DP5" bezelStyle="regularSquare" image="AmptekDP5Card" imagePosition="above" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="LRO-mH-TAf">
@@ -1312,7 +1311,7 @@
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
                                         </button>
-                                        <button toolTip="ORIpeSlowControlModel" misplaced="YES" id="26648" customClass="ObjectFactory">
+                                        <button toolTip="ORIpeSlowControlModel" id="26648" customClass="ObjectFactory">
                                             <rect key="frame" x="749" y="176" width="90" height="81"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="bevel" title="IPE Slow Control" bezelStyle="regularSquare" image="IpeSlowControl" imagePosition="above" alignment="center" inset="2" id="26649">
@@ -1320,7 +1319,7 @@
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
                                         </button>
-                                        <button toolTip="ORIpeSLTModel" misplaced="YES" id="26618" customClass="ObjectFactory">
+                                        <button toolTip="ORIpeSLTModel" id="26618" customClass="ObjectFactory">
                                             <rect key="frame" x="149" y="6" width="28" height="233"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="bevel" title="SLT" bezelStyle="regularSquare" image="IpeSLTCard" imagePosition="above" alignment="center" inset="2" id="26619">
@@ -1328,7 +1327,7 @@
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
                                         </button>
-                                        <button toolTip="ORIpeFLTModel" misplaced="YES" id="26620" customClass="ObjectFactory">
+                                        <button toolTip="ORIpeFLTModel" id="26620" customClass="ObjectFactory">
                                             <rect key="frame" x="181" y="6" width="29" height="233"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="bevel" title="FLT" bezelStyle="regularSquare" image="IpeFLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="26621">
@@ -1336,7 +1335,7 @@
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
                                         </button>
-                                        <button toolTip="ORKatrinSLTModel" misplaced="YES" id="26622" customClass="ObjectFactory">
+                                        <button toolTip="ORKatrinSLTModel" id="26622" customClass="ObjectFactory">
                                             <rect key="frame" x="218" y="6" width="28" height="233"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="bevel" title="SLT" bezelStyle="regularSquare" image="KatrinSLTCard" imagePosition="above" alignment="center" inset="2" id="26623">
@@ -1344,7 +1343,7 @@
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
                                         </button>
-                                        <button toolTip="ORKatrinFLTModel" misplaced="YES" id="26624" customClass="ObjectFactory">
+                                        <button toolTip="ORKatrinFLTModel" id="26624" customClass="ObjectFactory">
                                             <rect key="frame" x="250" y="6" width="30" height="233"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="bevel" title="FLT" bezelStyle="regularSquare" image="KatrinFLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="26625">
@@ -1352,7 +1351,7 @@
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
                                         </button>
-                                        <button toolTip="ORIpeV4SLTModel" misplaced="YES" id="26636" customClass="ObjectFactory">
+                                        <button toolTip="ORIpeV4SLTModel" id="26636" customClass="ObjectFactory">
                                             <rect key="frame" x="495" y="34" width="30" height="178"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="bevel" title="SLT" bezelStyle="regularSquare" image="IpeV4SLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="26637">
@@ -1360,7 +1359,7 @@
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
                                         </button>
-                                        <button toolTip="ORKatrinV4SLTModel" misplaced="YES" id="BfE-ou-XXY" customClass="ObjectFactory">
+                                        <button toolTip="ORKatrinV4SLTModel" id="BfE-ou-XXY" customClass="ObjectFactory">
                                             <rect key="frame" x="556" y="34" width="30" height="178"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="bevel" title="SLT" bezelStyle="regularSquare" image="KatrinV4SLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="BvF-I6-1FS">
@@ -1368,7 +1367,7 @@
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
                                         </button>
-                                        <button toolTip="OREdelweissSLTModel" misplaced="YES" id="26963" customClass="ObjectFactory">
+                                        <button toolTip="OREdelweissSLTModel" id="26963" customClass="ObjectFactory">
                                             <rect key="frame" x="616" y="34" width="30" height="178"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="bevel" title="SLT" bezelStyle="regularSquare" image="EdelweissSLTCard" imagePosition="above" alignment="center" inset="2" id="26964">
@@ -1376,7 +1375,7 @@
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
                                         </button>
-                                        <button toolTip="ORIpeV4FLTModel" misplaced="YES" id="26642" customClass="ObjectFactory">
+                                        <button toolTip="ORIpeV4FLTModel" id="26642" customClass="ObjectFactory">
                                             <rect key="frame" x="521" y="34" width="30" height="178"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="bevel" title="FLT" bezelStyle="regularSquare" image="IpeV4FLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="26643">
@@ -1384,7 +1383,7 @@
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
                                         </button>
-                                        <button toolTip="ORKatrinV4FLTModel" misplaced="YES" id="26644" customClass="ObjectFactory">
+                                        <button toolTip="ORKatrinV4FLTModel" id="26644" customClass="ObjectFactory">
                                             <rect key="frame" x="582" y="34" width="30" height="178"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="bevel" title="FLT" bezelStyle="regularSquare" image="KatrinV4FLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="26645">
@@ -1392,7 +1391,7 @@
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
                                         </button>
-                                        <button toolTip="ORTristanFLTModel" misplaced="YES" id="GVb-qZ-51i" customClass="ObjectFactory">
+                                        <button toolTip="ORTristanFLTModel" id="GVb-qZ-51i" customClass="ObjectFactory">
                                             <rect key="frame" x="694" y="39" width="30" height="178"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="bevel" title="FLT" bezelStyle="regularSquare" image="TristanFLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="65i-tm-Wfz">
@@ -1400,7 +1399,7 @@
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
                                         </button>
-                                        <textField verticalHuggingPriority="750" misplaced="YES" id="26628">
+                                        <textField verticalHuggingPriority="750" id="26628">
                                             <rect key="frame" x="172" y="245" width="22" height="14"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="IPE" id="26629">
@@ -1409,7 +1408,7 @@
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField verticalHuggingPriority="750" misplaced="YES" id="26638">
+                                        <textField verticalHuggingPriority="750" id="26638">
                                             <rect key="frame" x="506" y="218" width="37" height="14"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="IPE V4" id="26639">
@@ -1418,7 +1417,7 @@
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField verticalHuggingPriority="750" misplaced="YES" id="26640">
+                                        <textField verticalHuggingPriority="750" id="26640">
                                             <rect key="frame" x="564" y="218" width="44" height="14"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="KATRIN" id="26641">
@@ -1427,7 +1426,7 @@
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField verticalHuggingPriority="750" misplaced="YES" id="26630">
+                                        <textField verticalHuggingPriority="750" id="26630">
                                             <rect key="frame" x="223" y="245" width="44" height="14"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="KATRIN" id="26631">
@@ -1436,7 +1435,7 @@
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <button toolTip="OREdelweissFLTModel" misplaced="YES" id="26959" customClass="ObjectFactory">
+                                        <button toolTip="OREdelweissFLTModel" id="26959" customClass="ObjectFactory">
                                             <rect key="frame" x="639" y="34" width="30" height="178"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="bevel" title="FLT" bezelStyle="regularSquare" image="EdelweissFLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="26962">
@@ -1444,7 +1443,7 @@
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
                                         </button>
-                                        <textField verticalHuggingPriority="750" misplaced="YES" id="26960">
+                                        <textField verticalHuggingPriority="750" id="26960">
                                             <rect key="frame" x="615" y="218" width="56" height="14"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Edelweiss" id="26961">
@@ -1453,7 +1452,7 @@
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField verticalHuggingPriority="750" misplaced="YES" id="LJB-LW-v2j">
+                                        <textField verticalHuggingPriority="750" id="LJB-LW-v2j">
                                             <rect key="frame" x="686" y="218" width="40" height="14"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Tristan" id="LWL-sF-A5c">
@@ -1817,7 +1816,7 @@ Controller</string>
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
                                         </button>
-                                        <button toolTip="ORADU200Model" misplaced="YES" id="26712" customClass="ObjectFactory">
+                                        <button toolTip="ORADU200Model" id="26712" customClass="ObjectFactory">
                                             <rect key="frame" x="285" y="108" width="75" height="60"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="bevel" title="ADU200" bezelStyle="regularSquare" image="ADU200" imagePosition="above" alignment="center" state="on" inset="2" id="26713">
@@ -1906,7 +1905,7 @@ Controller</string>
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
                                         </button>
-                                        <button toolTip="ORMotionNodeModel" misplaced="YES" id="26710" customClass="ObjectFactory">
+                                        <button toolTip="ORMotionNodeModel" id="26710" customClass="ObjectFactory">
                                             <rect key="frame" x="55" y="7" width="69" height="67"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="bevel" title="MotionNode" bezelStyle="regularSquare" image="MotionNode" imagePosition="above" alignment="center" state="on" inset="2" id="26711">
@@ -1914,7 +1913,7 @@ Controller</string>
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
                                         </button>
-                                        <button toolTip="ORTDS2024Model" misplaced="YES" id="2Xj-vm-0d0" customClass="ObjectFactory">
+                                        <button toolTip="ORTDS2024Model" id="2Xj-vm-0d0" customClass="ObjectFactory">
                                             <rect key="frame" x="177" y="167" width="100" height="67"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="bevel" title="TDS2024" bezelStyle="regularSquare" image="TDS2024" imagePosition="above" alignment="center" state="on" inset="2" id="VPh-S2-7sf">
@@ -1930,7 +1929,7 @@ Controller</string>
                                     <rect key="frame" x="10" y="25" width="923" height="265"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <tabView misplaced="YES" controlSize="small" type="bottomTabsBezelBorder" id="27075">
+                                        <tabView controlSize="small" type="bottomTabsBezelBorder" id="27075">
                                             <rect key="frame" x="-10" y="-3" width="944" height="271"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <tabViewItems>
@@ -1939,7 +1938,7 @@ Controller</string>
                                                         <rect key="frame" x="10" y="7" width="924" height="235"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <button toolTip="ORProXR16SSRModel" misplaced="YES" id="26991" customClass="ObjectFactory">
+                                                            <button toolTip="ORProXR16SSRModel" id="26991" customClass="ObjectFactory">
                                                                 <rect key="frame" x="412" y="46" width="85" height="76"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="ProXR16" bezelStyle="regularSquare" image="ProXR16SSR" imagePosition="above" alignment="center" inset="2" id="26992">
@@ -1947,7 +1946,7 @@ Controller</string>
                                                                     <font key="font" metaFont="system" size="10"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <button toolTip="ORCC4189Model" misplaced="YES" id="26742" customClass="ObjectFactory">
+                                                            <button toolTip="ORCC4189Model" id="26742" customClass="ObjectFactory">
                                                                 <rect key="frame" x="505" y="21" width="47" height="106"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="CC4189" bezelStyle="regularSquare" image="CC4189" imagePosition="above" alignment="center" state="on" inset="2" id="26743">
@@ -1955,7 +1954,7 @@ Controller</string>
                                                                     <font key="font" metaFont="system" size="10"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <button toolTip="ORNMon5085Model" misplaced="YES" id="27102" customClass="ObjectFactory">
+                                                            <button toolTip="ORNMon5085Model" id="27102" customClass="ObjectFactory">
                                                                 <rect key="frame" x="766" y="134" width="85" height="95"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="Neutron Monitor" bezelStyle="regularSquare" image="NMon5085" imagePosition="above" alignment="center" state="on" inset="2" id="27103">
@@ -1963,7 +1962,7 @@ Controller</string>
                                                                     <font key="font" metaFont="system" size="10"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <button toolTip="ORMksPdr2000Model" misplaced="YES" id="26738" customClass="ObjectFactory">
+                                                            <button toolTip="ORMksPdr2000Model" id="26738" customClass="ObjectFactory">
                                                                 <rect key="frame" x="517" y="148" width="87" height="70"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title=" MKS PDR2000" bezelStyle="regularSquare" image="MksPdr2000" imagePosition="above" alignment="center" state="on" inset="2" id="26739">
@@ -1991,7 +1990,7 @@ Temp Monitor</string>
                                                                     <font key="font" metaFont="system" size="10"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <button toolTip="ORModBusModel" misplaced="YES" id="26752" customClass="ObjectFactory">
+                                                            <button toolTip="ORModBusModel" id="26752" customClass="ObjectFactory">
                                                                 <rect key="frame" x="334" y="19" width="70" height="101"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="ModBus" imagePosition="above" alignment="center" state="on" inset="2" id="26753">
@@ -2001,7 +2000,7 @@ Monitor</string>
                                                                     <font key="font" metaFont="system" size="10"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <button toolTip="ORRad7Model" misplaced="YES" id="26758" customClass="ObjectFactory">
+                                                            <button toolTip="ORRad7Model" id="26758" customClass="ObjectFactory">
                                                                 <rect key="frame" x="271" y="29" width="62" height="89"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="Rad7" bezelStyle="regularSquare" image="Rad7" imagePosition="above" alignment="center" state="on" inset="2" id="26759">
@@ -2019,7 +2018,7 @@ Meter</string>
                                                                     <font key="font" metaFont="system" size="10"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <button toolTip="ORAmi286Model" misplaced="YES" id="26740" customClass="ObjectFactory">
+                                                            <button toolTip="ORAmi286Model" id="26740" customClass="ObjectFactory">
                                                                 <rect key="frame" x="630" y="143" width="115" height="86"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="Ami286" imagePosition="above" alignment="center" state="on" inset="2" id="26741">
@@ -2061,7 +2060,7 @@ Level Controller</string>
                                                                     <font key="font" metaFont="system" size="10"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <button toolTip="ORGT521Model" misplaced="YES" id="27104" customClass="ObjectFactory">
+                                                            <button toolTip="ORGT521Model" id="27104" customClass="ObjectFactory">
                                                                 <rect key="frame" x="760" y="4" width="52" height="76"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="GT521" bezelStyle="regularSquare" image="GT521" imagePosition="above" alignment="center" state="on" inset="2" id="27105">
@@ -2069,7 +2068,7 @@ Level Controller</string>
                                                                     <font key="font" metaFont="system" size="10"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <button toolTip="ORWG1220PulserModel" misplaced="YES" id="nCl-B0-aWu" customClass="ObjectFactory">
+                                                            <button toolTip="ORWG1220PulserModel" id="nCl-B0-aWu" customClass="ObjectFactory">
                                                                 <rect key="frame" x="368" y="158" width="124" height="67"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="WG1220 Pulser" bezelStyle="regularSquare" image="WG1220Pulser" imagePosition="above" alignment="center" state="on" inset="2" id="0XN-GR-WM5">
@@ -2077,7 +2076,7 @@ Level Controller</string>
                                                                     <font key="font" metaFont="system" size="10"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <button toolTip="ORMet637Model" misplaced="YES" id="26936" customClass="ObjectFactory">
+                                                            <button toolTip="ORMet637Model" id="26936" customClass="ObjectFactory">
                                                                 <rect key="frame" x="575" y="29" width="75" height="90"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="Met637" bezelStyle="regularSquare" image="Met637" imagePosition="above" alignment="center" state="on" inset="2" id="26937">
@@ -2291,6 +2290,14 @@ Gauge Controller</string>
                                             <rect key="frame" x="680" y="10" width="100" height="98"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="bevel" title="Web Raker" bezelStyle="regularSquare" image="WebRaker" imagePosition="above" alignment="center" state="on" inset="2" id="C0T-4s-jK8">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system" size="10"/>
+                                            </buttonCell>
+                                        </button>
+                                        <button toolTip="ORFlashCamModel" id="lbV-sH-jgg" customClass="ObjectFactory">
+                                            <rect key="frame" x="800" y="163" width="60" height="59"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="flashcam" imagePosition="above" alignment="center" imageScaling="proportionallyDown" inset="2" id="iCa-Xr-f86">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
@@ -2830,7 +2837,7 @@ Relay</string>
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
                                         </button>
-                                        <button toolTip="ORMultiplierModel" misplaced="YES" id="eyO-kd-2X9" customClass="ObjectFactory">
+                                        <button toolTip="ORMultiplierModel" id="eyO-kd-2X9" customClass="ObjectFactory">
                                             <rect key="frame" x="600" y="29" width="72" height="58"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="bevel" title="Multiplier" bezelStyle="regularSquare" image="Multiplier" imagePosition="above" alignment="center" inset="2" id="V3O-5s-3WB">
@@ -2942,7 +2949,7 @@ Relay</string>
                                                                     <font key="font" metaFont="system" size="10"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <button toolTip="BamDetectorModel" misplaced="YES" id="26786" customClass="ObjectFactory">
+                                                            <button toolTip="BamDetectorModel" id="26786" customClass="ObjectFactory">
                                                                 <rect key="frame" x="670" y="43" width="136" height="149"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="BAM Detector" bezelStyle="regularSquare" image="BamDetector" imagePosition="above" alignment="center" state="on" inset="2" id="26787">
@@ -2966,7 +2973,7 @@ Relay</string>
                                                                     <font key="font" metaFont="system" size="10"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <button toolTip="ORHVcRIOModel" misplaced="YES" id="CmX-tB-bNQ" customClass="ObjectFactory">
+                                                            <button toolTip="ORHVcRIOModel" id="CmX-tB-bNQ" customClass="ObjectFactory">
                                                                 <rect key="frame" x="565" y="20" width="45" height="74"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="HVcRIO" bezelStyle="regularSquare" image="HVcRIO" imagePosition="above" alignment="center" controlSize="mini" state="on" imageScaling="proportionallyDown" inset="2" id="dyf-7p-7Hk">
@@ -2974,7 +2981,7 @@ Relay</string>
                                                                     <font key="font" metaFont="miniSystem"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <button toolTip="KatrinModel" misplaced="YES" id="26778" customClass="ObjectFactory">
+                                                            <button toolTip="KatrinModel" id="26778" customClass="ObjectFactory">
                                                                 <rect key="frame" x="39" y="93" width="110" height="115"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="Katrin" bezelStyle="regularSquare" image="katrin" imagePosition="above" alignment="center" state="on" inset="2" id="26779">
@@ -2982,7 +2989,7 @@ Relay</string>
                                                                     <font key="font" metaFont="system" size="10"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <button toolTip="ORRefClockModel" misplaced="YES" id="JQL-xJ-X2r" customClass="ObjectFactory">
+                                                            <button toolTip="ORRefClockModel" id="JQL-xJ-X2r" customClass="ObjectFactory">
                                                                 <rect key="frame" x="324" y="17" width="169" height="39"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="Ref Clock" bezelStyle="regularSquare" image="RefClock" imagePosition="above" alignment="center" state="on" inset="2" id="w7b-Ax-kkz">
@@ -2990,7 +2997,7 @@ Relay</string>
                                                                     <font key="font" metaFont="system" size="10"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <button toolTip="ORADEIControlModel" misplaced="YES" imageHugsTitle="YES" id="dRW-eI-vTw" customClass="ObjectFactory">
+                                                            <button toolTip="ORADEIControlModel" imageHugsTitle="YES" id="dRW-eI-vTw" customClass="ObjectFactory">
                                                                 <rect key="frame" x="165" y="93" width="100" height="99"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="ADEIControl" bezelStyle="regularSquare" image="ADEIControl" imagePosition="above" alignment="center" controlSize="mini" state="on" imageScaling="proportionallyDown" inset="2" id="sEE-eI-czc">
@@ -3533,6 +3540,7 @@ Relay</string>
         <image name="eGun" width="100" height="86"/>
         <image name="ellie" width="59" height="72"/>
         <image name="fixedValue" width="83" height="16"/>
+        <image name="flashcam" width="185" height="154"/>
         <image name="katrin" width="100" height="100"/>
         <image name="monspectrometer" width="79.578948974609375" height="40.872180938720703"/>
         <image name="nEDMCoil" width="150" height="136"/>

@@ -42,6 +42,7 @@
 - (void) taskDataAvailable:(NSNotification*)aNotification;
 - (void) movetoNextTask:(NSNotification*)aNote;
 - (BOOL) sawErrors;
+- (void) abortTasks;
 
 @end
 

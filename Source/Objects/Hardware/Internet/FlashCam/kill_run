@@ -1,0 +1,62 @@
+#!/usr/bin/expect -f
+
+# Expect script to supply username for remote ssh server and execute command.
+# Currently this assumes that valid ssh keys are exist between the host
+# and the remote server.
+# This script needs three argument to(s) connect to remote server:
+# username = Username of remote UNIX server
+# ipaddr = IP Addreess of remote UNIX server, no hostname
+# scriptname = Path to remote script which will execute on remote server
+# For example:
+#  ./remote_run username password 192.168.1.11 who
+
+set nargs [llength $argv]
+set username [lrange $argv 0 0]
+set ipaddr [lrange $argv 1 1]
+set scriptname [lrange $argv 2 2]
+set timeout -1
+
+# now connect to remote UNIX box (ipaddr) with given script to execute
+match_max 100000
+send_user "Connecting to flashcam with user $username on $ipaddr\n"
+spawn -noecho ssh -X -Y $username@$ipaddr
+
+#expect {
+#  "*>* " { }
+#  "*$* " { }
+#  "*#* " { }
+#  "*%* " { }
+#  "assword:" {
+#        send "$password\r"
+#        expect {
+#          "*>* " { }
+#          "*$* " { }
+#          "*#* " { }
+#          "*%* " { }
+#        default {
+#                send_user "Login failed\n"
+#                exit 1
+#          }
+#
+#        }
+#  }
+#  default {
+#        send_user "Login failed\n"
+#        exit 1
+#  }
+#}
+
+send "$scriptname [lrange $argv 3 $nargs-1]\r"
+expect {
+    "0" {
+        send_user "No flashcam run in progress on $ipaddr\n"
+    }
+    "1" {
+        send_user "Killed readout-fc process on $ipaddr\n"
+    }
+    default {
+        send_user "Killed readout-fc processes on $ipaddr\n"
+    }
+}
+send "exit\n\r"
+expect eof

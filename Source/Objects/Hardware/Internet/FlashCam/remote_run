@@ -1,0 +1,66 @@
+#!/usr/bin/expect -f
+
+# Expect script to supply username for remote ssh server and execute command.
+# Currently this assumes that valid ssh keys are exist between the host
+# and the remote server.
+# This script needs three argument to(s) connect to remote server:
+# username = Username of remote UNIX server
+# ipaddr = IP Addreess of remote UNIX server, no hostname
+# scriptname = Path to remote script which will execute on remote server
+# For example:
+#  ./remote_run username password 192.168.1.11 who
+
+set nargs [llength $argv]
+set username [lrange $argv 0 0]
+set ipaddr [lrange $argv 1 1]
+set script [lrange $argv 2 2]
+set scriptname [regsub -all {\{|\}} $script ""]
+set run [lrange $argv $nargs-1 $nargs-1]
+set timeout -1
+
+# now connect to remote UNIX box (ipaddr) with given script to execute
+match_max 100000
+send_user "Attempting to start flashcam run $run with user $username on $ipaddr\n"
+spawn -noecho ssh -X -Y -q $username@$ipaddr
+
+expect {
+    "*>* " { }
+    "*$* " { }
+    "*#* " { }
+    "*%* " { }
+    "assword:" {
+        send_user "SSH keys not valid for user $username on $ipaddr\n"
+        exit 1
+    }
+    default {
+        send_uerr "Login to $ipaddr failed\n"
+        exit 1
+    }
+}
+
+send "$scriptname [lrange $argv 3 $nargs-2]\r"
+expect {
+    "OK/terminated" {
+        send_user "Completed flashcam run $run\n"
+    }
+    "Killed" {
+        send_user "Flashcam process for run $run killed\n"
+    }
+    "Terminated" {
+        send_user "Flashcam process for run $run terminated\n"
+    }
+    "Error can not contact output stream" {
+        send_user "Cannot write to user specified remote host location\n"
+    }
+    "Error can not initialize adc system" {
+        send_user "Failed to connect to flashcam card on $ipaddr, check ethernet settings and connections\n"
+    }
+    "no adc/trigger cards ..." {
+        send_user "No flashcam cards found, check ethernet type and board address\n"
+    }
+    default {
+        send_user "Failed to start flashcam readout for run $run\n"
+    }
+}
+send "exit\n\r"
+expect eof
