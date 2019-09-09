@@ -243,6 +243,8 @@ static NSString* setPointList[] = {
     @"SOLL_STATUS#West_Relais",    @"Time_Off",
     @"SOLL_EHV#postReg",    @"U_Soll",
     @"SOLL_EHV#postRegInhibit",    @"Status",
+    @"SOLL_EHV#postRegPIDSoll",    @"U_Soll",
+    @"SOLL_EHV#postRegPIDBed",    @"Regelung aktiv",
     @"", @""
 };
 
@@ -903,6 +905,10 @@ static NSString* measuredValueList[] = {
     @"IST_EHV#postReg",    @"U_IST",
     @"IST_EHV#postRegInhibit",    @"Inh_IST",
     @"IST_EHV#postRegStatus",    @"Status",
+    @"IST_EHV#postRegStrom",    @"I_IST",
+    @"IST_EHV#postRegPIDSoll",    @"U_Soll",
+    @"IST_EHV#postRegPIDStell",    @"U_Stell",
+    @"IST_EHV#postRegPIDStatus",    @"Regelung Status"
     @"", @""
 };
 
