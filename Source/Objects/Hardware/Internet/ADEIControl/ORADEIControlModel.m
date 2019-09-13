@@ -88,6 +88,7 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
     [super wakeUp];
     
     numSetpointsDiffer = 0;
+    ipPort = kADEIControlPort;
 }
 
 - (void) sleep
@@ -333,7 +334,7 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
 - (void) connect
 {
 	if(!isConnected && [ipAddress length]){
-        NSLog(@"%@: trying to connect\n",[self fullID]);
+        NSLog(@"%@: trying to connect to port %d\n",[self fullID], [self ipPort]);
         
         // Todo: Split port number, if given
 		[self setSocket:[NetSocket netsocketConnectedToHost:ipAddress port:ipPort]];
@@ -821,6 +822,8 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
         localControlIndex = 0;
         zeusControlIndex = 140;
         orcaControlIndex = 0;
+        
+        ipPort = kADEIControlPort;
     }
     
     if (sensorGroup == 1){
@@ -840,6 +843,8 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
         localControlIndex = 0;
         zeusControlIndex = 0;
         orcaControlIndex = 0;
+        
+        ipPort = kADEIControlPort;
     }
     
     if (sensorGroup == 2){
@@ -857,8 +862,10 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
         spOffset = 2;
         
         localControlIndex = 0;
-        zeusControlIndex = 2;
+        zeusControlIndex = 0;
         orcaControlIndex = 0;
+        
+        ipPort = kADEIControlPort;
     }
     
     if (sensorGroup == 3){
@@ -901,6 +908,8 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
         localControlIndex = 0;
         zeusControlIndex = 2;
         orcaControlIndex = 0;
+        
+        ipPort = kADEIControlPort;
     }
     
     
@@ -921,7 +930,7 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
     
 	[self setWasConnected:      [decoder decodeBoolForKey:	 @"wasConnected"]];
     [self setIpAddress:         [decoder decodeObjectForKey: @"ORADEIControlModelIpAddress"]];
-    [self setIpPort:         [decoder decodeObjectForKey: @"ORADEIControlModelIpPort"]];
+    [self setIpPort:            [decoder decodeIntForKey: @"ORADEIControlModelIpPort"]];
     [self setSetPointFile:      [decoder decodeObjectForKey: @"setPointFile"]];
     [self setVerbose:           [decoder decodeBoolForKey:   @"verbose"]];
     [self setWarnings:          [decoder decodeBoolForKey:   @"warnings"]];
@@ -949,7 +958,7 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
     [encoder encodeBool:  verbose             forKey:@"verbose"];
     [encoder encodeBool:  warnings            forKey:@"warnings"];
     [encoder encodeObject:ipAddress           forKey:@"ORADEIControlModelIpAddress"];
-    [encoder encodeObject:ipPort           forKey:@"ORADEIControlModelIpPort"];
+    [encoder encodeInteger:ipPort             forKey:@"ORADEIControlModelIpPort"];
     [encoder encodeObject:setPoints           forKey:@"setPoints"];
     [encoder encodeBool:showFormattedDates    forKey:@"showFormattedDates"];
     [encoder encodeObject:postRegulationFile  forKey: @"postRegulationFile"];

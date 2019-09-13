@@ -1494,6 +1494,7 @@ static NSString* setPointList_DPS[] = {
     @"310-EEL-3-2010-0041", @"Dipol 2 lower half shell",
     @"310-EEL-3-3000-0041", @"Dipol 3 upper half shell",
     @"310-EEL-3-3010-0041", @"Dipol 3 lower half shell",
+    @"", @"Reserved",
     @"", @""
 };
 
@@ -1506,6 +1507,7 @@ static NSString* measuredValueList_DPS[] = {
     @"310-EEL-3-2010-0001", @"Dipol 2 lower half shell",
     @"310-EEL-3-3000-0001", @"Dipol 3 upper half shell",
     @"310-EEL-3-3010-0001", @"Dipol 3 lower half shell",
+    @"", @"Reserved",
     @"", @""
 };
 
