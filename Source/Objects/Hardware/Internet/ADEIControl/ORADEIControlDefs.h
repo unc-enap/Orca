@@ -1463,6 +1463,56 @@ static NSString* itemsToShip_HV[kNumToShip_HV*2] = {
 //
 
 
+//
+// CPS
+//
+
+/*
+Soll-Werte:
+310-EEL-3-1000-0041 (Dipol 1 upper half shell)
+310-EEL-3-1010-0041 (Dipol 1 lower half shell)
+310-EEL-3-2000-0041 (Dipol 2 upper half shell)
+310-EEL-3-2010-0041 (Dipol 2 lower half shell)
+310-EEL-3-3000-0041 (Dipol 3 upper half shell)
+310-EEL-3-3010-0041 (Dipol 3 lower half shell)
+
+Read-Werte:
+310-EEL-3-1000-0001
+310-EEL-3-1010-0001
+310-EEL-3-2000-0001
+310-EEL-3-2010-0001
+310-EEL-3-3000-0001
+310-EEL-3-3010-0001
+*/
+
+static NSString* setPointList_DPS[] = {
+    @"-", @"Timestamp 1",
+    @"-", @"Timestamp 2",
+    @"310-EEL-3-1000-0041", @"Dipol 1 upper half shell",
+    @"310-EEL-3-1010-0041", @"Dipol 1 lower half shell",
+    @"310-EEL-3-2000-0041", @"Dipol 2 upper half shell",
+    @"310-EEL-3-2010-0041", @"Dipol 2 lower half shell",
+    @"310-EEL-3-3000-0041", @"Dipol 3 upper half shell",
+    @"310-EEL-3-3010-0041", @"Dipol 3 lower half shell",
+    @"", @""
+};
+
+static NSString* measuredValueList_DPS[] = {
+    @"-", @"Timestamp 1",
+    @"-", @"Timestamp 2",
+    @"310-EEL-3-1000-0001", @"Dipol 1 upper half shell",
+    @"310-EEL-3-1010-0001", @"Dipol 1 lower half shell",
+    @"310-EEL-3-2000-0001", @"Dipol 2 upper half shell",
+    @"310-EEL-3-2010-0001", @"Dipol 2 lower half shell",
+    @"310-EEL-3-3000-0001", @"Dipol 3 upper half shell",
+    @"310-EEL-3-3010-0001", @"Dipol 3 lower half shell",
+    @"", @""
+};
+
+#define kNumToShip_DPS  0 //
+static NSString* itemsToShip_DPS[kNumToShip_DPS*2] = {
+};
+
 
 //
 // DAQlab (similar to RS configuration)

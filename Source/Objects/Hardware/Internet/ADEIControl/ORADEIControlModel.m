@@ -28,6 +28,7 @@
 NSString* ORADEIControlModelSensorGroupChanged           = @"ORADEIControlModelSensorGroupChanged";
 NSString* ORADEIControlModelIsConnectedChanged           = @"ORADEIControlModelIsConnectedChanged";
 NSString* ORADEIControlModelIpAddressChanged             = @"ORADEIControlModelIpAddressChanged";
+NSString* ORADEIControlModelIpPortChanged             = @"ORADEIControlModelIpPortChanged";
 NSString* ORADEIControlModelSetPointChanged              = @"ORADEIControlModelSetPointChanged";
 NSString* ORADEIControlModelReadBackChanged              = @"ORADEIControlModelReadBackChanged";
 NSString* ORADEIControlModelQueCountChanged              = @"ORADEIControlModelQueCountChanged";
@@ -333,7 +334,9 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
 {
 	if(!isConnected && [ipAddress length]){
         NSLog(@"%@: trying to connect\n",[self fullID]);
-		[self setSocket:[NetSocket netsocketConnectedToHost:ipAddress port:kADEIControlPort]];
+        
+        // Todo: Split port number, if given
+		[self setSocket:[NetSocket netsocketConnectedToHost:ipAddress port:ipPort]];
         [self setIsConnected:[socket isConnected]];
 	}
 	else {
@@ -362,6 +365,21 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
     ipAddress = [aIpAddress copy];
 	
     [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelIpAddressChanged object:self];
+}
+
+- (int) ipPort
+{
+    return ipPort;
+}
+
+- (void) setIpPort:(int)aIpPort
+{
+    if(!aIpPort)aIpPort = kADEIControlPort;
+    [[[self undoManager] prepareWithInvocationTarget:self] setIpAddress:ipAddress];
+    
+    ipPort = aIpPort;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelIpPortChanged object:self];
 }
 
 - (void) netsocketConnected:(NetSocket*)inNetSocket
@@ -824,7 +842,26 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
         orcaControlIndex = 0;
     }
     
-     if (sensorGroup == 2){
+    if (sensorGroup == 2){
+        sensorGroupName = @"310-DPS";
+        // Set sensor lists (setpoints, measured vcalues, archival)
+        setPointList = setPointList_DPS;
+        measuredValueList = measuredValueList_DPS;
+        kNumToShip = kNumToShip_DPS;
+        itemsToShip = itemsToShip_DPS;
+        
+        // Define command strings used in Fieldpoint implementation
+        cmdReadSetpoints = @"get gains";
+        cmdWriteSetpoints = @"set gains";
+        cmdReadActualValues = @"get temperatures";
+        spOffset = 2;
+        
+        localControlIndex = 0;
+        zeusControlIndex = 2;
+        orcaControlIndex = 0;
+    }
+    
+    if (sensorGroup == 3){
         sensorGroupName = @"436-MS high voltage";
         // Set sensor lists (setpoints, measured vcalues, archival)
         setPointList = setPointList_HV;
@@ -841,11 +878,13 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
         localControlIndex = 146;
         zeusControlIndex = 147;
         orcaControlIndex = 148;
+        
+        //[self setIpPort:12345]; // using non-standard port
+        ipPort = 12345; // using non-standard port
     }
     
-    
     // Load sensor list of the selected group
-    if (sensorGroup == 3){
+    if (sensorGroup == 4){
         sensorGroupName = @"DAQ-lab";
         // Set sensor lists (setpoints, measured vcalues, archival)
         setPointList = setPointList_DAQlab;
@@ -882,6 +921,7 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
     
 	[self setWasConnected:      [decoder decodeBoolForKey:	 @"wasConnected"]];
     [self setIpAddress:         [decoder decodeObjectForKey: @"ORADEIControlModelIpAddress"]];
+    [self setIpPort:         [decoder decodeObjectForKey: @"ORADEIControlModelIpPort"]];
     [self setSetPointFile:      [decoder decodeObjectForKey: @"setPointFile"]];
     [self setVerbose:           [decoder decodeBoolForKey:   @"verbose"]];
     [self setWarnings:          [decoder decodeBoolForKey:   @"warnings"]];
@@ -909,6 +949,7 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
     [encoder encodeBool:  verbose             forKey:@"verbose"];
     [encoder encodeBool:  warnings            forKey:@"warnings"];
     [encoder encodeObject:ipAddress           forKey:@"ORADEIControlModelIpAddress"];
+    [encoder encodeObject:ipPort           forKey:@"ORADEIControlModelIpPort"];
     [encoder encodeObject:setPoints           forKey:@"setPoints"];
     [encoder encodeBool:showFormattedDates    forKey:@"showFormattedDates"];
     [encoder encodeObject:postRegulationFile  forKey: @"postRegulationFile"];

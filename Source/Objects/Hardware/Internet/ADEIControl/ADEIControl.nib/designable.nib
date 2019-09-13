@@ -535,8 +535,9 @@
                                 <items>
                                     <menuItem title="113-RS e-gun cRIO" state="on" id="F7N-9S-eHC" userLabel="RS1"/>
                                     <menuItem title="113-RS e-gun embedded PC" tag="1" id="wIM-xQ-Zsj" userLabel="RS2"/>
-                                    <menuItem title="436-MS high voltage" tag="2" id="24S-Dp-0nz" userLabel="MS-HV"/>
-                                    <menuItem title="DAQ-lab" tag="3" id="Qa7-eb-ZkJ" userLabel="DAQlab"/>
+                                    <menuItem title="310-DPS dipoles" tag="2" id="5tO-L3-pxf" userLabel="CPS"/>
+                                    <menuItem title="436-MS high voltage" tag="3" id="24S-Dp-0nz" userLabel="MS-HV"/>
+                                    <menuItem title="DAQ-lab" tag="4" id="Qa7-eb-ZkJ" userLabel="DAQlab"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>

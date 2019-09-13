@@ -34,6 +34,7 @@
         int                 sensorGroup;
         NSString*           sensorGroupName;
         NSString*           ipAddress;
+        int                 ipPort;
         BOOL                isConnected;
         NetSocket*          socket;
         BOOL                wasConnected;
@@ -107,6 +108,8 @@
 - (void) setSocket:(NetSocket*)aSocket;
 - (NSString*) ipAddress;
 - (void) setIpAddress:(NSString*)aIpAddress;
+- (int) ipPort;
+- (void) setIpPort:(int)aIpPort;
 - (BOOL) isConnected;
 - (void) setIsConnected:(BOOL)aFlag;
 - (void) writeCmdString:(NSString*)aCommand;
@@ -201,6 +204,7 @@ extern NSString* ORADEIControlModelReadBackChanged;
 extern NSString* ORADEIControlModelSensorGroupChanged;
 extern NSString* ORADEIControlModelIsConnectedChanged;
 extern NSString* ORADEIControlModelIpAddressChanged;
+extern NSString* ORADEIControlModelIpPortChanged;
 extern NSString* ORADEIControlModelSetPointsChanged;
 extern NSString* ORADEIControlModelMeasuredValuesChanged;
 extern NSString* ORADEIControlModelSetPointFileChanged;
