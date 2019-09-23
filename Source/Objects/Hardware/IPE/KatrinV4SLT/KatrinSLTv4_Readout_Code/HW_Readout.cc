@@ -166,6 +166,7 @@ void FindHardware(void)
     }
     delete ini;
     
+    if (debug)    printf("OrcaReadout (compiled for %dbit)\n", sizeof(int)*8);
     if (debug)    printf("Parameter: debug = %d, sendtoorca %d\n", debug, nSendToOrca);
     
     
