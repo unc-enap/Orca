@@ -218,6 +218,14 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
     measuredValues = anArray;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelMeasuredValuesChanged object:self];
 }
+
+- (void) setItemsToShip:(NSMutableArray*)anArray
+{
+    [anArray retain];
+    [itemsToShipList release];
+    itemsToShipList = anArray;
+}
+
 - (id) setPointAtIndex:(int)i
 {
     if(i<[setPoints count]){
@@ -630,7 +638,7 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
     for(i=0;i<[itemsToShipList count]/2;i++){
         NSString* itemIndex = itemsToShipList[index++];
         NSString* itemName  = itemsToShipList[index++];
-        NSString* aName = [NSString stringWithFormat:@"(%@) %@",itemIndex,itemName];
+        NSString* aName = [NSString stringWithFormat:@"%@",itemName];
         [shipValueDictionary setObject:aName forKey:itemIndex];
     }
     
@@ -639,7 +647,7 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
 - (void) shipRecords
 {
     [self checkShipValueDictionary];
-
+    
     time_t    ut_Time;
     time(&ut_Time);
     time_t  timeMeasured = ut_Time;
@@ -1035,6 +1043,7 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
     [self setSensorGroupName:   [decoder decodeObjectForKey: @"sensorGroupName"]];
     [self setSetPoints:         [decoder decodeObjectForKey: @"setPoints"]];
     [self setMeasuredValues:    [decoder decodeObjectForKey: @"measuredValues"]];
+    [self setItemsToShip:       [decoder decodeObjectForKey: @"itemsToShip"]];
 
     [self setCmdReadSetpoints:  [decoder decodeObjectForKey: @"cmdReadSetpoints"]];
     [self setCmdWriteSetpoints:  [decoder decodeObjectForKey: @"cmdWriteSetpoints"]];
@@ -1045,6 +1054,7 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
     zeusControlIndex = [decoder decodeIntForKey:@"zeusControlIndex"];
     orcaControlIndex = [decoder decodeIntForKey:@"orcaControlIndex"];
  
+    [self checkShipValueDictionary];
  
     if(wasConnected)[self connect];
     
@@ -1071,6 +1081,7 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
     [encoder encodeObject:sensorGroupName     forKey: @"sensorGroupName"];
     [encoder encodeObject:setPoints           forKey:@"setPoints"];
     [encoder encodeObject:measuredValues      forKey:@"measuredValues"];
+    [encoder encodeObject:itemsToShipList     forKey:@"itemsToShip"];
 
     [encoder encodeObject:cmdReadSetpoints     forKey: @"cmdReadSetpoints"];
     [encoder encodeObject:cmdWriteSetpoints    forKey: @"cmdWriteSetpoints"];
@@ -1104,7 +1115,7 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
 - (void) readBackSetpoints
 {
     if([self isConnected]){
-        [self writeCmdString:@"get gains"];
+        [self writeCmdString:cmdReadSetpoints];
     }
 }
 
