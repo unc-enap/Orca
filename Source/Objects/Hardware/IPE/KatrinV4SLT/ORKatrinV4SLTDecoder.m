@@ -449,6 +449,12 @@ Sanshiro suggests here to stop decoding always at 1/2, 1/3 , 1/4 etc of the seco
         if(decode)[aDataSet histogram:(aPeak+aValley)
                               numBins:4*4096 sender:self
                              withKeys: @"SLT",@"Bipolar Energy",crateKey,stationKey,channelKey,nil];
+        if(decode)[aDataSet histogram:(aPeak)
+                              numBins:4*4096 sender:self
+                             withKeys: @"SLT",@"aPeak",crateKey,stationKey,channelKey,nil];
+        if(decode)[aDataSet histogram:(aValley)
+                              numBins:4*4096 sender:self
+                             withKeys: @"SLT",@"aValley",crateKey,stationKey,channelKey,nil];
         if(decode)[aDataSet histogram:(tPeak)
                               numBins:4*4096 sender:self
                              withKeys: @"SLT",@"tPeak",crateKey,stationKey,channelKey,nil];
