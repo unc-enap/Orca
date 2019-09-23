@@ -24,12 +24,14 @@
 {
     IBOutlet NSPopUpButton* sensorGroupPU;
     IBOutlet NSTextField*   groupNumTextField;
+    IBOutlet NSTextField*   sensorGroupNameField;
 
 	IBOutlet NSTextField*	ipConnectedTextField;
 	IBOutlet NSTextField*	ipAddressTextField;
 	IBOutlet NSButton*		ipConnectButton;
 
 	IBOutlet NSTextField*   setPointFileField;
+    IBOutlet NSTextField*   deviceConfigFileField;
 	IBOutlet NSTextField*	cmdQueCountField;
     IBOutlet NSButton*      lockButton;
 
@@ -37,6 +39,7 @@
 		
 	IBOutlet NSButton*		readSetPointFileButton;
 	IBOutlet NSButton*		writeSetPointFileButton;
+    IBOutlet NSButton*      readDeviceConfigFileButton;
     IBOutlet NSButton*      readPostRegulationButton;
 
 	IBOutlet NSTableView*	setPointTableView;
@@ -104,6 +107,7 @@
 - (IBAction) lockAction:(id) sender;
 - (IBAction) readSetPointFile:(id)sender;
 - (IBAction) saveSetPointFile:(id)sender;
+- (IBAction) readDeviceConfigFile:(id)sender;
 - (IBAction) ipAddressFieldAction:(id)sender;
 - (IBAction) connectAction: (id) aSender;
 - (IBAction) flushQueueAction: (id) aSender;

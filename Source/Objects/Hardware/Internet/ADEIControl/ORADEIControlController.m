@@ -35,6 +35,7 @@
 	return self;
 }
 
+
 - (void) awakeFromNib
 {
     [[queueValueBar xAxis] setRngLimitsLow:0 withHigh:300 withMinRng:10];
@@ -44,11 +45,12 @@
     [lightBoardView setState:kCautionLight];
 
     [setPointNoteField setStringValue: @""];
-
+    
 	[super awakeFromNib];
  
     [self updateWindow];
 }
+
 
 #pragma mark ***Notifications
 
@@ -91,6 +93,11 @@
     [notifyCenter addObserver : self
                      selector : @selector(setPointFileChanged:)
                          name : ORADEIControlModelSetPointFileChanged
+                        object: model];
+
+    [notifyCenter addObserver : self
+                     selector : @selector(deviceConfigFileChanged:)
+                         name : ORADEIControlModelDeviceConfigFileChanged
                         object: model];
 
     [notifyCenter addObserver : self
@@ -157,7 +164,7 @@
                      selector : @selector(drawDidOpen:)
                          name : NSDrawerDidOpenNotification
                        object : nil];
-    
+  
 }
 
 - (void) setModel:(id)aModel
@@ -169,10 +176,12 @@
 - (void) updateWindow
 {
     [super updateWindow];
+    
     [self lockChanged:nil];
     [self setPointChanged:nil];
     [self setPointFileChanged:nil];
-    
+    [self deviceConfigFileChanged:nil];
+
     [self measuredValuesChanged:nil];
 	[self setPointsReadBackChanged:nil];
 	[self queCountChanged:nil];
@@ -185,7 +194,7 @@
     [self showFormattedDatesChanged:nil];
     [self postRegulationFileChanged:nil];
     [self pollTimeChanged:nil];
-    
+
 }
 
 
@@ -194,6 +203,10 @@
     [sensorGroupPU selectItemWithTag:[model sensorGroup]];
     
     [groupNumTextField setStringValue: [NSString stringWithFormat:@"Unit# %u",(int)[model uniqueIdNumber]]];
+
+    if ([model sensorGroupName]) {
+        [sensorGroupNameField setStringValue: [model sensorGroupName]];
+    }
     
     // todo: renaming of the title does not work; is only updated, when
     //       the group selector is touched?! --ak--
@@ -294,6 +307,12 @@
 {
     [setPointFileField setStringValue:[model setPointFile]];
 }
+
+- (void) deviceConfigFileChanged:(NSNotification*)aNote
+{
+    [deviceConfigFileField setStringValue:[model deviceConfigFile]];
+}
+
 
 - (void) measuredValuesChanged:(NSNotification*)aNote
 {
@@ -411,6 +430,7 @@
     [addPostRegulationPointButton       setEnabled:!locked];
     [removePostRegulationPointButton    setEnabled:!locked];
     [readSetPointFileButton             setEnabled:!locked];
+    [readDeviceConfigFileButton         setEnabled:!locked];
     [writeAllSetPointsButton            setEnabled:!locked];
     [setPointTableView                  setEnabled:!locked];
 }
@@ -528,6 +548,30 @@
     [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result){
         if (result == NSFileHandlingPanelOKButton){
             [model readSetPointsFile:[[openPanel URL] path]];
+        }
+    }];
+}
+
+- (IBAction) readDeviceConfigFile:(id)sender
+{
+    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+    [openPanel setCanChooseDirectories:NO];
+    [openPanel setCanChooseFiles:YES];
+    [openPanel setAllowsMultipleSelection:NO];
+    [openPanel setPrompt:@"Choose"];
+    NSString* startingDir;
+    NSString* fullPath = [[model deviceConfigFile] stringByExpandingTildeInPath];
+    if(fullPath){
+        startingDir = [fullPath stringByDeletingLastPathComponent];
+    }
+    else {
+        startingDir = NSHomeDirectory();
+    }
+    
+    [openPanel setDirectoryURL:[NSURL fileURLWithPath:startingDir]];
+    [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result){
+        if (result == NSFileHandlingPanelOKButton){
+            [model readDeviceConfigFile:[[openPanel URL] path]];
         }
     }];
 }

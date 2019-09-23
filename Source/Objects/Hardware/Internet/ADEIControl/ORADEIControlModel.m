@@ -28,13 +28,13 @@
 NSString* ORADEIControlModelSensorGroupChanged           = @"ORADEIControlModelSensorGroupChanged";
 NSString* ORADEIControlModelIsConnectedChanged           = @"ORADEIControlModelIsConnectedChanged";
 NSString* ORADEIControlModelIpAddressChanged             = @"ORADEIControlModelIpAddressChanged";
-NSString* ORADEIControlModelIpPortChanged             = @"ORADEIControlModelIpPortChanged";
 NSString* ORADEIControlModelSetPointChanged              = @"ORADEIControlModelSetPointChanged";
 NSString* ORADEIControlModelReadBackChanged              = @"ORADEIControlModelReadBackChanged";
 NSString* ORADEIControlModelQueCountChanged              = @"ORADEIControlModelQueCountChanged";
 NSString* ORADEIControlModelSetPointsChanged             = @"ORADEIControlModelSetPointsChanged";
 NSString* ORADEIControlModelMeasuredValuesChanged        = @"ORADEIControlModelMeasuredValuesChanged";
 NSString* ORADEIControlModelSetPointFileChanged          = @"ORADEIControlModelSetPointFileChanged";
+NSString* ORADEIControlModelDeviceConfigFileChanged          = @"ORADEIControlModelDeviceConfigFileChanged";
 NSString* ORADEIControlModelPostRegulationFileChanged    = @"ORADEIControlModelPostRegulationFileChanged";
 NSString* ORADEIControlModelVerboseChanged               = @"ORADEIControlModelVerboseChanged";
 NSString* ORADEIControlModelWarningsChanged              = @"ORADEIControlModelWarningsChanged";
@@ -62,6 +62,7 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
 - (void) dealloc
 {
     [setPointFile release];
+    [postRegulationFile release];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     [buffer release];
@@ -77,7 +78,18 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
     }
     [shipValueDictionary release];
     [ipAddress release];
-	
+    [sensorGroupName release];
+    [deviceConfigFile release];
+    [deviceConfig release];
+    [cmdReadSetpoints release];
+    [cmdWriteSetpoints release];
+    [cmdReadActualValues release];
+    [setPointList release];
+    [measuredValueList release];
+    [itemsToShipList release];
+    [deviceConfigFile release];
+    [deviceConfig release];
+
 	[super dealloc];
 }
 - (void) wakeUp
@@ -88,7 +100,6 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
     [super wakeUp];
     
     numSetpointsDiffer = 0;
-    ipPort = kADEIControlPort;
 }
 
 - (void) sleep
@@ -132,18 +143,21 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
 {
     if(setPoints)[setPoints release];
     setPoints = [[NSMutableArray array] retain];
-    int index = 0;
-    for(;;) {
-        NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-        [dict setObject:setPointList[index++]   forKey:@"uid"];
-        [dict setObject:setPointList[index++]   forKey:@"name"];
-        [dict setObject:@"0"   forKey:@"setPoint"];
-        [dict setObject:@"?" forKey:@"readBack"];
-        [setPoints addObject:dict];
-        if([setPointList[index] isEqualToString:@""])break;
+    
+    if (setPointList > 0){
+        int index = 0;
+        for(int i=0;i<[setPointList count]/2; i++) {
+            NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+            [dict setObject:setPointList[index++]   forKey:@"uid"];
+            [dict setObject:setPointList[index++]   forKey:@"name"];
+            [dict setObject:@"0"   forKey:@"setPoint"];
+            [dict setObject:@"?" forKey:@"readBack"];
+            [setPoints addObject:dict];
+            if (index < [setPointList count])
+                if([setPointList[index] isEqualToString:@""])break;
+        }
     }
 }
-
 
 - (NSInteger) numSetPoints
 {
@@ -153,14 +167,17 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
 {
     if(measuredValues)[measuredValues release];
     measuredValues = [[NSMutableArray array] retain];
-    int index = 0;
-    for(;;) {
-        NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-        [dict setObject:measuredValueList[index++]   forKey:@"uid"];
-        [dict setObject:measuredValueList[index++]   forKey:@"name"];
-        [dict setObject:@"?" forKey:@"value"];
-        [measuredValues addObject:dict];
-        if([measuredValueList[index] isEqualToString:@""])break;
+    if (measuredValueList >0){
+        int index = 0;
+        for(int i=0;i<[measuredValueList count]/2;i++) {
+            NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+            [dict setObject:measuredValueList[index++]   forKey:@"uid"];
+            [dict setObject:measuredValueList[index++]   forKey:@"name"];
+            [dict setObject:@"?" forKey:@"value"];
+            [measuredValues addObject:dict];
+            if (index < [measuredValueList count])
+                if([measuredValueList[index] isEqualToString:@""])break;
+        }
     }
 }
 
@@ -296,6 +313,36 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
    return ([self measuredValueAtIndex:[self getIndexOfMeasuredValue:aUID]]);
 }
 
+
+- (NSString *) cmdReadSetpoints
+{
+    return cmdReadSetpoints;
+}
+- (void) setCmdReadSetpoints:(NSString*) cmd
+{
+    [cmdReadSetpoints autorelease];
+    cmdReadSetpoints = [cmd copy];
+}
+- (NSString *) cmdWriteSetpoints
+{
+    return cmdWriteSetpoints;
+}
+- (void) setCmdWriteSetpoints:(NSString*) cmd
+{
+    [cmdWriteSetpoints autorelease];
+    cmdWriteSetpoints = [cmd copy];
+}
+- (NSString *) cmdReadActualValues
+{
+    return cmdReadActualValues;
+}
+- (void) setCmdReadActualValues:(NSString*) cmd
+{
+    [cmdReadActualValues autorelease];
+    cmdReadActualValues = [cmd copy];
+}
+
+
 - (NSString*) title
 {
     return [NSString stringWithFormat:@"%@ (%@)",[self fullID],[self ipAddress]];
@@ -333,18 +380,36 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
 
 - (void) connect
 {
+    NSString *hostname;
+    int portno = kADEIControlPort; // default port
+    
 	if(!isConnected && [ipAddress length]){
-        NSLog(@"%@: trying to connect to port %d\n",[self fullID], [self ipPort]);
+        // Split ipAddress in hostname and port
+        NSArray *ip = [ipAddress componentsSeparatedByString:@":"];
+        hostname = ip[0];
+        if ([ip count] > 1) portno = [ip[1] intValue];
+        NSLog(@"%@: trying to connect to host %@, port %d\n",[self fullID], hostname, portno);
         
         // Todo: Split port number, if given
-		[self setSocket:[NetSocket netsocketConnectedToHost:ipAddress port:ipPort]];
+		[self setSocket:[NetSocket netsocketConnectedToHost:hostname port:portno]];
         [self setIsConnected:[socket isConnected]];
+        
+        // Debug message
+        if (verbose) {
+            NSLog(@"ADEIControl sensor group configuration:\n");
+            NSLog(@"instructions set   %@ / %@ / %@\n", cmdReadSetpoints, cmdWriteSetpoints, cmdReadActualValues);
+            NSLog(@"first sensor values at index   %d\n", spOffset);
+            NSLog(@"control master indators at index   %d / %d / %d\n", localControlIndex, zeusControlIndex, orcaControlIndex);
+            
+            NSLog(@"Items to ship: \n%@\n", shipValueDictionary);
+        }
 	}
 	else {
         NSLog(@"%@: trying to disconnect\n",[self fullID]);
 		[self setSocket:nil];
         [self setIsConnected:[socket isConnected]];
 	}
+
 }
 
 - (BOOL) isConnected
@@ -366,21 +431,6 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
     ipAddress = [aIpAddress copy];
 	
     [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelIpAddressChanged object:self];
-}
-
-- (int) ipPort
-{
-    return ipPort;
-}
-
-- (void) setIpPort:(int)aIpPort
-{
-    if(!aIpPort)aIpPort = kADEIControlPort;
-    [[[self undoManager] prepareWithInvocationTarget:self] setIpAddress:ipAddress];
-    
-    ipPort = aIpPort;
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelIpPortChanged object:self];
 }
 
 - (void) netsocketConnected:(NetSocket*)inNetSocket
@@ -572,17 +622,18 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
 
 - (void) checkShipValueDictionary
 {
-    if(!shipValueDictionary){
-        shipValueDictionary = [[NSMutableDictionary dictionary] retain];
-        int i;
-        int index=0;
-        for(i=0;i<kNumToShip;i++){
-            NSString* itemIndex = itemsToShip[index++];
-            NSString* itemName  = itemsToShip[index++];
-            NSString* aName = [NSString stringWithFormat:@"(%@) %@",itemIndex,itemName];
-            [shipValueDictionary setObject:aName forKey:itemIndex];
-        }
+    if(shipValueDictionary) [shipValueDictionary release];
+    
+    shipValueDictionary = [[NSMutableDictionary dictionary] retain];
+    int i;
+    int index=0;
+    for(i=0;i<[itemsToShipList count]/2;i++){
+        NSString* itemIndex = itemsToShipList[index++];
+        NSString* itemName  = itemsToShipList[index++];
+        NSString* aName = [NSString stringWithFormat:@"(%@) %@",itemIndex,itemName];
+        [shipValueDictionary setObject:aName forKey:itemIndex];
     }
+    
 }
 
 - (void) shipRecords
@@ -791,133 +842,173 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
     return sensorGroup;
 }
 
-- (NSString*) sensorGroupName;
-{
-    return sensorGroupName;
-}
-
 - (void) setSensorGroup:(int)aGroup
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setSensorGroup:sensorGroup];
     sensorGroup = aGroup;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelSensorGroupChanged object:self];
     
     //NSLog(@"Sensor group is %d\n", sensorGroup);
 
+    // Note: With the non static configurations read from file it is not possible
+    // any more to use only pointers to these array. It is necessary to create
+    // copies of the static arrays in order to have a uniform memory management.
+    [setPointList release];
+    [measuredValueList release];
+    [itemsToShipList release];
+
     // Load sensor list of the selected group
     if (sensorGroup == 0){
-        sensorGroupName = @"113-RS e-gun cRIO";
+        [self setSensorGroupName:@"113-RS e-gun cRIO"];
         // Set sensor lists (setpoints, measured vcalues, archival)
-        setPointList = setPointList_RS1;
-        measuredValueList = measuredValueList_RS1;
-        kNumToShip = kNumToShip_RS1;
-        itemsToShip = itemsToShip_RS1;
+        //kNumToShip = kNumToShip_RS1;
+        //itemsToShip = itemsToShip_RS1;
+        
+        setPointList = [[NSArray arrayWithObjects: setPointList_RS1 count:sizeof(setPointList_RS1)/sizeof(NSString*)] copy];
+        measuredValueList = [[NSArray arrayWithObjects: measuredValueList_RS1 count:sizeof(measuredValueList_RS1)/sizeof(NSString*)] copy];
+        itemsToShipList = [[NSArray arrayWithObjects: itemsToShip_RS1
+            count:sizeof(itemsToShip_RS1)/sizeof(NSString*)] copy];
 
         // Define command strings used in Fieldpoint implementation
-        cmdReadSetpoints = @"get gains";
-        cmdWriteSetpoints = @"set gains";
-        cmdReadActualValues = @"get temperatures";
+        [self setCmdReadSetpoints:@"get gains"];
+        [self setCmdWriteSetpoints:@"set gains"];
+        [self setCmdReadActualValues:@"get temperatures"];
         spOffset = 2;
     
         localControlIndex = 0;
         zeusControlIndex = 140;
         orcaControlIndex = 0;
-        
-        ipPort = kADEIControlPort;
     }
     
     if (sensorGroup == 1){
-        sensorGroupName = @"113-RS e-gun enbedded PC";
+        [self setSensorGroupName:@"113-RS e-gun enbedded PC"];
         // Set sensor lists (setpoints, measured vcalues, archival)
-        setPointList = setPointList_RS2;
-        measuredValueList = measuredValueList_RS2;
-        kNumToShip = kNumToShip_RS2;
-        itemsToShip = itemsToShip_RS2;
+        //kNumToShip = kNumToShip_RS2;
+        //itemsToShip = itemsToShip_RS2;
+
+        setPointList = [[NSArray arrayWithObjects: setPointList_RS2 count:sizeof(setPointList_RS2)/sizeof(NSString*)] copy];
+        measuredValueList = [[NSArray arrayWithObjects: measuredValueList_RS2 count:sizeof(measuredValueList_RS2)/sizeof(NSString*)] copy];
+        itemsToShipList = [[NSArray arrayWithObjects: itemsToShip_RS2
+            count:sizeof(itemsToShip_RS2)/sizeof(NSString*)] copy];
 
         // Define command strings used in Fieldpoint implementation
-        cmdReadSetpoints = @"get gains";
-        cmdWriteSetpoints = @"set gains";
-        cmdReadActualValues = @"get temperatures";
+        [self setCmdReadSetpoints:@"get gains"];
+        [self setCmdWriteSetpoints:@"set gains"];
+        [self setCmdReadActualValues:@"get temperatures"];
         spOffset = 2;
         
         localControlIndex = 0;
         zeusControlIndex = 0;
         orcaControlIndex = 0;
-        
-        ipPort = kADEIControlPort;
     }
     
     if (sensorGroup == 2){
-        sensorGroupName = @"310-DPS";
+        [self setSensorGroupName:@"310-DPS dipoles"];
         // Set sensor lists (setpoints, measured vcalues, archival)
-        setPointList = setPointList_DPS;
-        measuredValueList = measuredValueList_DPS;
-        kNumToShip = kNumToShip_DPS;
-        itemsToShip = itemsToShip_DPS;
-        
+        //kNumToShip = kNumToShip_DPS;
+        //itemsToShip = itemsToShip_DPS;
+
+        setPointList = [[NSArray arrayWithObjects: setPointList_DPS count:sizeof(setPointList_DPS)/sizeof(NSString*)] copy];
+        measuredValueList = [[NSArray arrayWithObjects: measuredValueList_DPS count:sizeof(measuredValueList_DPS)/sizeof(NSString*)] copy];
+        itemsToShipList = [[NSArray arrayWithObjects: itemsToShip_DPS
+            count:sizeof(itemsToShip_DPS)/sizeof(NSString*)] copy];
+
+      
         // Define command strings used in Fieldpoint implementation
-        cmdReadSetpoints = @"get gains";
-        cmdWriteSetpoints = @"set gains";
-        cmdReadActualValues = @"get temperatures";
+        [self setCmdReadSetpoints:@"get gains"];
+        [self setCmdWriteSetpoints:@"set gains"];
+        [self setCmdReadActualValues:@"get temperatures"];
         spOffset = 2;
         
         localControlIndex = 0;
         zeusControlIndex = 0;
         orcaControlIndex = 0;
-        
-        ipPort = kADEIControlPort;
     }
     
     if (sensorGroup == 3){
-        sensorGroupName = @"436-MS high voltage";
+        [self setSensorGroupName:@"436-MS high voltage"];
         // Set sensor lists (setpoints, measured vcalues, archival)
-        setPointList = setPointList_HV;
-        measuredValueList = measuredValueList_HV;
-        kNumToShip = kNumToShip_HV;
-        itemsToShip = itemsToShip_HV;
+        //kNumToShip = kNumToShip_HV;
+        //itemsToShip = itemsToShip_HV;
+
+        setPointList = [[NSArray arrayWithObjects: setPointList_HV count:sizeof(setPointList_HV)/sizeof(NSString*)] copy];
+        measuredValueList = [[NSArray arrayWithObjects: measuredValueList_HV count:sizeof(measuredValueList_HV)/sizeof(NSString*)] copy];
+        itemsToShipList = [[NSArray arrayWithObjects: itemsToShip_HV
+            count:sizeof(itemsToShip_HV)/sizeof(NSString*)] copy];
 
         // Define command strings used in Fieldpoint implementation
-        cmdReadSetpoints = @"read sp";
-        cmdWriteSetpoints = @"write sp";
-        cmdReadActualValues = @"read mv";
+        [self setCmdReadSetpoints:@"read sp"];
+        [self setCmdWriteSetpoints:@"write sp"];
+        [self setCmdReadActualValues:@"read mv"];
         spOffset = 0;
         
         localControlIndex = 146;
         zeusControlIndex = 147;
         orcaControlIndex = 148;
-        
-        //[self setIpPort:12345]; // using non-standard port
-        ipPort = 12345; // using non-standard port
     }
     
     // Load sensor list of the selected group
     if (sensorGroup == 4){
-        sensorGroupName = @"DAQ-lab";
+        [self setSensorGroupName:@"DAQ-lab"];
         // Set sensor lists (setpoints, measured vcalues, archival)
-        setPointList = setPointList_DAQlab;
-        measuredValueList = measuredValueList_DAQlab;
-        kNumToShip = kNumToShip_DAQlab;
-        itemsToShip = itemsToShip_DAQlab;
-        
+        //kNumToShip = kNumToShip_DAQlab;
+        //itemsToShip = itemsToShip_DAQlab;
+
+        setPointList = [[NSArray arrayWithObjects: setPointList_DAQlab count:sizeof(setPointList_DAQlab)/sizeof(NSString*)] copy];
+        measuredValueList = [[NSArray arrayWithObjects: measuredValueList_DAQlab count:sizeof(measuredValueList_DAQlab)/sizeof(NSString*)] copy];
+        itemsToShipList = [[NSArray arrayWithObjects: itemsToShip_DAQlab
+            count:sizeof(itemsToShip_DAQlab)/sizeof(NSString*)] copy];
+
         // Define command strings used in Fieldpoint implementation
-        cmdReadSetpoints = @"get gains";
-        cmdWriteSetpoints = @"set gains";
-        cmdReadActualValues = @"get temperatures";
+        [self setCmdReadSetpoints: @"get gains"];
+        [self setCmdWriteSetpoints: @"set gains"];
+        [self setCmdReadActualValues: @"get temperatures"];
         spOffset = 2;
         
         localControlIndex = 0;
         zeusControlIndex = 2;
         orcaControlIndex = 0;
-        
-        ipPort = kADEIControlPort;
     }
-    
-    
+
+    if (sensorGroup == 5){
+        [self setSensorGroupName:@"Load config from file"];
+        // Set sensor lists (setpoints, measured vcalues, archival)
+        //kNumToShip = 0;
+        //itemsToShip = 0;
+        
+        setPointList = 0;
+        measuredValueList = 0;
+        itemsToShipList = 0;
+        
+        // Define command strings used in Fieldpoint implementation
+        [self setCmdReadSetpoints:@"get gains"];
+        [self setCmdWriteSetpoints:@"set gains"];
+        [self setCmdReadActualValues:@"get temperatures"];
+        spOffset = 2;
+        
+        localControlIndex = 0;
+        zeusControlIndex = 0;
+        orcaControlIndex = 0;
+    }
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelSensorGroupChanged object:self];
+
     [self createSetPointArray];
     [self createMeasuredValueArray];
+    [self checkShipValueDictionary];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelShowFormattedDatesChanged object:self];
 
+}
+
+- (NSString*) sensorGroupName;
+{
+    return sensorGroupName;
+}
+
+- (void) setSensorGroupName:(NSString *)name
+{
+    [sensorGroupName autorelease];
+    sensorGroupName = [name copy];
 }
 
 
@@ -930,19 +1021,31 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
     
 	[self setWasConnected:      [decoder decodeBoolForKey:	 @"wasConnected"]];
     [self setIpAddress:         [decoder decodeObjectForKey: @"ORADEIControlModelIpAddress"]];
-    [self setIpPort:            [decoder decodeIntForKey: @"ORADEIControlModelIpPort"]];
     [self setSetPointFile:      [decoder decodeObjectForKey: @"setPointFile"]];
     [self setVerbose:           [decoder decodeBoolForKey:   @"verbose"]];
     [self setWarnings:          [decoder decodeBoolForKey:   @"warnings"]];
     [self setShowFormattedDates:[decoder decodeBoolForKey:   @"showFormattedDates"]];
     [self setPostRegulationFile:[decoder decodeObjectForKey: @"postRegulationFile"]];
     [self setPostRegulationArray:[decoder decodeObjectForKey:@"postRegulationArray"]];
-    [self setPollTime:          [decoder decodeIntForKey:@"pollTime"]];
+    [self setPollTime:          [decoder decodeIntForKey:    @"pollTime"]];
+
 
     // Note: Sensor group needs to be defined before loading setpoints!!!
-    [self setSensorGroup:       [decoder decodeIntForKey:@"sensorGroup"]];
+    [self setSensorGroup:       [decoder decodeIntForKey:    @"sensorGroup"]];
+    [self setSensorGroupName:   [decoder decodeObjectForKey: @"sensorGroupName"]];
     [self setSetPoints:         [decoder decodeObjectForKey: @"setPoints"]];
+    [self setMeasuredValues:    [decoder decodeObjectForKey: @"measuredValues"]];
 
+    [self setCmdReadSetpoints:  [decoder decodeObjectForKey: @"cmdReadSetpoints"]];
+    [self setCmdWriteSetpoints:  [decoder decodeObjectForKey: @"cmdWriteSetpoints"]];
+    [self setCmdReadActualValues: [decoder decodeObjectForKey: @"cmdReadActualValues"]];
+
+    spOffset = [decoder decodeIntForKey:@"spOffset"];
+    localControlIndex = [decoder decodeIntForKey:@"localControlIndex"];
+    zeusControlIndex = [decoder decodeIntForKey:@"zeusControlIndex"];
+    orcaControlIndex = [decoder decodeIntForKey:@"orcaControlIndex"];
+ 
+ 
     if(wasConnected)[self connect];
     
 	[[self undoManager] enableUndoRegistration];
@@ -953,18 +1056,31 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
+  
     [encoder encodeObject:setPointFile        forKey:@"setPointFile"];
     [encoder encodeBool:  wasConnected        forKey:@"wasConnected"];
     [encoder encodeBool:  verbose             forKey:@"verbose"];
     [encoder encodeBool:  warnings            forKey:@"warnings"];
     [encoder encodeObject:ipAddress           forKey:@"ORADEIControlModelIpAddress"];
-    [encoder encodeInteger:ipPort             forKey:@"ORADEIControlModelIpPort"];
-    [encoder encodeObject:setPoints           forKey:@"setPoints"];
     [encoder encodeBool:showFormattedDates    forKey:@"showFormattedDates"];
     [encoder encodeObject:postRegulationFile  forKey: @"postRegulationFile"];
     [encoder encodeObject:postRegulationArray forKey: @"postRegulationArray"];
     [encoder encodeInteger:pollTime           forKey: @"pollTime"];
+
     [encoder encodeInteger:sensorGroup        forKey: @"sensorGroup"];
+    [encoder encodeObject:sensorGroupName     forKey: @"sensorGroupName"];
+    [encoder encodeObject:setPoints           forKey:@"setPoints"];
+    [encoder encodeObject:measuredValues      forKey:@"measuredValues"];
+
+    [encoder encodeObject:cmdReadSetpoints     forKey: @"cmdReadSetpoints"];
+    [encoder encodeObject:cmdWriteSetpoints    forKey: @"cmdWriteSetpoints"];
+    [encoder encodeObject:cmdReadActualValues  forKey: @"cmdReadActualValues"];
+
+    [encoder encodeInteger:spOffset            forKey: @"spOffset"];
+    [encoder encodeInteger:localControlIndex   forKey: @"localControlIndex"];
+    [encoder encodeInteger:zeusControlIndex    forKey: @"zeusControlIndex"];
+    [encoder encodeInteger:orcaControlIndex    forKey: @"orcaControlIndex"];
+
 }
 
 #pragma mark *** Commands
@@ -1188,6 +1304,148 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
     }
     [anEntry setObject:[NSNumber numberWithDouble:aValue] forKey:kVesselVoltageSetPt];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelUpdatePostRegulationTable object:self];
+}
+
+- (void) setDeviceConfig:(NSMutableDictionary*)anDict
+{
+    [anDict retain];
+    [deviceConfig release];
+    deviceConfig = anDict;
+
+    //[[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelSetPointsChanged object:self];
+}
+
+- (void) readDeviceConfigFile:(NSString *)aPath
+{
+    NSNumber *value;
+    NSString *text;
+    NSArray *array;
+    NSMutableArray *shipArray;
+ 
+    // Read configuration from file
+    [deviceConfig release];
+    deviceConfig = [[NSMutableDictionary dictionary] retain];
+    
+    [self setDeviceConfigFile:aPath];
+    NSMutableDictionary* anDict = [[NSDictionary dictionaryWithContentsOfFile:aPath]mutableCopy];
+    [self setDeviceConfig: anDict];
+    [anDict release];
+    
+    // Copy configuration to class variables
+    // Print all tags !!!
+    if (verbose) NSLog(@"ADEIControl reading configuration:\n%@\n", deviceConfig);
+    
+    // Select predefined configurations (for comapatibility reasons)
+    value = [deviceConfig objectForKey:@"sensorGroupId"];
+    if (value != NULL){
+        if (verbose) NSLog(@"ADEIControl sensor group %@ selected\n", value);
+        [self setSensorGroup: [value intValue]];
+        
+    } else {
+        [self setSensorGroup: 5]; // read device configuration from file
+        
+        // Default parameter
+        [self setSensorGroupName:@"Use <sensorGroupName> in config"];
+        // Set sensor lists (setpoints, measured vcalues, archival)
+        //kNumToShip = 0;
+        //itemsToShip = 0;
+        
+        // Define command strings used in Fieldpoint implementation
+        [self setCmdReadSetpoints:@"get gains"];
+        [self setCmdWriteSetpoints:@"set gains"];
+        [self setCmdReadActualValues:@"get temperatures"];
+        spOffset = 2;
+        
+        localControlIndex = 0;
+        zeusControlIndex = 0;
+        orcaControlIndex = 0;
+        
+    
+        // Set specific parameters from file
+        text = [deviceConfig objectForKey:@"sensorGroupName"];
+        if (text !=NULL) [self setSensorGroupName:text];
+
+        text = [deviceConfig objectForKey:@"cmdReadSetpoints"];
+        if (text !=NULL) [self setCmdReadSetpoints:text];
+        text = [deviceConfig objectForKey:@"cmdWriteSetpoints"];
+        if (text !=NULL) [self setCmdWriteSetpoints:text];
+        text = [deviceConfig objectForKey:@"cmdReadActualValues"];
+        if (text !=NULL) [self setCmdReadActualValues:text];
+
+        value = [deviceConfig objectForKey:@"spOffset"];
+        if (value != NULL) spOffset = [value intValue];
+        value = [deviceConfig objectForKey:@"localControlIndex"];
+        if (value != NULL) localControlIndex = [value intValue];
+        value = [deviceConfig objectForKey:@"zeusControlIndex"];
+        if (value != NULL) zeusControlIndex = [value intValue];
+        value = [deviceConfig objectForKey:@"orcaControlIndex"];
+        if (value != NULL) orcaControlIndex = [value intValue];
+
+        // Read sensor configurations
+        // Note: the array are already released in the function setSensorGroup
+        array = [deviceConfig objectForKey:@"setPointList"];
+        if ([array count] > 0) setPointList = [array copy];
+
+        array = [deviceConfig objectForKey:@"measuredValueList"];
+        if ([array count] > 0) measuredValueList = [array copy];
+
+        [self createSetPointArray];
+        [self createMeasuredValueArray];
+
+        array = [deviceConfig objectForKey:@"itemsToShip"];
+        
+        shipArray = [[NSMutableArray array] retain];
+        if (array != NULL) {
+            // Ship all given sensor with their index
+            for (int j=0;j<[array count];j++){
+                //NSLog(@"Searching for index of sensor %@\n", array[j]);
+                int found = 0;
+                for (int i=0;i<[measuredValues count];i++){
+                    NSString *uid = [[measuredValues objectAtIndex:i] objectForKey:@"uid"];
+                    if (array[j] == uid){
+                        //NSLog(@"Found sensor %@ at index %d\n", array[j], i);
+                        [shipArray addObject:[NSString stringWithFormat:@"%d",i]];
+                        [shipArray addObject:uid];
+                        found = 1;
+                        break;
+                    }
+                }
+                if (found == 0)
+                    NSLog(@"Error: Sensor %@ not found - check sensor configuration\n", array[j]);
+            }
+        } else {
+            // Ship all sensors, that have an uid
+            for (int i=0;i<[measuredValues count];i++){
+                NSString *uid = [[measuredValues objectAtIndex:i] objectForKey:@"uid"];
+                if ([uid length] > 3){
+                    [shipArray addObject:[NSString stringWithFormat:@"%d",i]];
+                    [shipArray addObject:uid];
+                }
+            }
+        }
+        itemsToShipList = [shipArray copy];
+        [shipArray release];
+        
+        [self checkShipValueDictionary];
+
+        // Update GUI
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelSensorGroupChanged object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelShowFormattedDatesChanged object:self];
+
+    }
+
+}
+
+- (NSString*) deviceConfigFile
+{
+    if(deviceConfigFile==nil)return @"";
+    else return deviceConfigFile;
+}
+
+- (void) setDeviceConfigFile:(NSString*)aName
+{
+    [deviceConfigFile autorelease];
+    deviceConfigFile = [aName copy];
 }
 
 

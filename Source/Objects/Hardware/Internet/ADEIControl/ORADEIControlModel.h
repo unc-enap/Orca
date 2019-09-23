@@ -34,7 +34,6 @@
         int                 sensorGroup;
         NSString*           sensorGroupName;
         NSString*           ipAddress;
-        int                 ipPort;
         BOOL                isConnected;
         NetSocket*          socket;
         BOOL                wasConnected;
@@ -60,21 +59,24 @@
         int                 pollTime;
         uint32_t            dataId;
     
-        NSString *          cmdReadSetpoints;
-        NSString *          cmdWriteSetpoints;
-        NSString *          cmdReadActualValues;
+        NSString*           cmdReadSetpoints;
+        NSString*           cmdWriteSetpoints;
+        NSString*           cmdReadActualValues;
         int                 spOffset;
     
-        NSString **         setPointList;
-        NSString **         measuredValueList;
-        int                 kNumToShip;
+        NSArray *           setPointList;
+        NSArray *           measuredValueList;
+        //int                 kNumToShip;
         NSString **         itemsToShip;
+        NSArray *           itemsToShipList;
 
         int                 localControlIndex;
         int                 zeusControlIndex;
         int                 orcaControlIndex;
     
         int                 numSetpointsDiffer;
+        NSString*           deviceConfigFile;
+        NSMutableDictionary* deviceConfig;
 }
 
 #pragma mark ***Initialization
@@ -85,6 +87,7 @@
 - (int) sensorGroup;
 - (void) setSensorGroup:(int)group;
 - (NSString*) sensorGroupName;
+- (void) setSensorGroupName:(NSString*)name;
 - (int)  pollTime;
 - (void) setPollTime:(int)aPollTime;
 - (id) setPointItem:(int)i forKey:(NSString*)aKey;
@@ -108,8 +111,6 @@
 - (void) setSocket:(NetSocket*)aSocket;
 - (NSString*) ipAddress;
 - (void) setIpAddress:(NSString*)aIpAddress;
-- (int) ipPort;
-- (void) setIpPort:(int)aIpPort;
 - (BOOL) isConnected;
 - (void) setIsConnected:(BOOL)aFlag;
 - (void) writeCmdString:(NSString*)aCommand;
@@ -123,6 +124,13 @@
 - (BOOL) showFormattedDates;
 - (void) shipRecords;
 - (void) checkShipValueDictionary;
+
+- (NSString*) cmdReadSetpoints;
+- (void) setCmdReadSetpoints:(NSString*) cmd;
+- (NSString*) cmdWriteSetpoints;
+- (void) setCmdWriteSetpoints:(NSString*) cmd;
+- (NSString*) cmdReadActualValues;
+- (void) setCmdReadActualValues:(NSString*) cmd;
 
 - (NSString*) title;
 
@@ -151,6 +159,9 @@
 - (id) postRegulationPointAtIndex:(int)anIndex;
 - (NSString*)measuredValueName:(NSUInteger)anIndex;
 
+- (NSString*) deviceConfigFile;
+- (void) setDeviceConfigFile:(NSString*)aPath;
+
 #pragma mark ***Commands
 - (void) writeSetpoints;
 - (void) readBackSetpoints;
@@ -164,6 +175,7 @@
 - (void) saveSetPointsFile:(NSString*) aPath;
 - (void) pushReadBacksToSetPoints;
 - (int)  compareSetPoints;
+- (void) readDeviceConfigFile:(NSString*) aPath;
 
 #pragma mark •••Scripting Convenience Methods
 - (double) vesselVoltageSetPoint:(int)anIndex;
@@ -204,10 +216,10 @@ extern NSString* ORADEIControlModelReadBackChanged;
 extern NSString* ORADEIControlModelSensorGroupChanged;
 extern NSString* ORADEIControlModelIsConnectedChanged;
 extern NSString* ORADEIControlModelIpAddressChanged;
-extern NSString* ORADEIControlModelIpPortChanged;
 extern NSString* ORADEIControlModelSetPointsChanged;
 extern NSString* ORADEIControlModelMeasuredValuesChanged;
 extern NSString* ORADEIControlModelSetPointFileChanged;
+extern NSString* ORADEIControlModelDeviceConfigFileChanged;
 extern NSString* ORADEIControlModelVerboseChanged;
 extern NSString* ORADEIControlModelWarningsChanged;
 extern NSString* ORADEIControlModelShowFormattedDatesChanged;

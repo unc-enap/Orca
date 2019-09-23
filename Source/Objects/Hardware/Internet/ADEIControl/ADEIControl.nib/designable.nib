@@ -9,6 +9,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="ORADEIControlController">
             <connections>
                 <outlet property="cmdQueCountField" destination="2730" id="2732"/>
+                <outlet property="deviceConfigFileField" destination="QOG-CD-nDx" id="yBA-i3-PDe"/>
                 <outlet property="expertPCControlOnlyField" destination="DQV-xl-B5H" id="ugB-bV-m2C"/>
                 <outlet property="groupNumTextField" destination="oiB-4F-H01" id="H3T-AH-tQR"/>
                 <outlet property="ipAddressTextField" destination="5qs-rT-FIz" id="BGN-Ty-Rfs"/>
@@ -24,8 +25,10 @@
                 <outlet property="progressWheel" destination="KuK-LK-YmQ" id="98o-hA-wkN"/>
                 <outlet property="queueValueBar" destination="3078" id="3080"/>
                 <outlet property="readBackColumn" destination="HhG-wd-Lh1" id="EkW-Xh-YDz"/>
+                <outlet property="readDeviceConfigFileButton" destination="DpR-Sc-dgV" id="s3x-uj-lg9"/>
                 <outlet property="readSetPointFileButton" destination="Ymd-sD-4Jp" id="8c0-hj-HO4"/>
                 <outlet property="scriptParameterDrawer" destination="zys-hL-i3W" id="pNN-0Q-kVs"/>
+                <outlet property="sensorGroupNameField" destination="LOH-9t-ICO" id="DwZ-UO-R1C"/>
                 <outlet property="sensorGroupPU" destination="RVZ-Xz-EzG" id="LiX-BS-IA8"/>
                 <outlet property="setPointFileField" destination="Pv7-wH-aAd" id="jP6-fx-hbx"/>
                 <outlet property="setPointNoteField" destination="STO-pa-6ZE" id="h4T-eD-gIk"/>
@@ -109,7 +112,7 @@
                         </textFieldCell>
                     </textField>
                     <button verticalHuggingPriority="750" misplaced="YES" id="Ymd-sD-4Jp">
-                        <rect key="frame" x="693" y="523" width="132" height="28"/>
+                        <rect key="frame" x="694" y="500" width="132" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Read SetPoint File..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4eW-pi-yma">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -120,7 +123,7 @@
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" misplaced="YES" id="H4X-Yt-oix">
-                        <rect key="frame" x="694" y="487" width="131" height="28"/>
+                        <rect key="frame" x="694" y="477" width="131" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Save SetPoint File..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Mt1-e3-Hlo">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -131,7 +134,7 @@
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" misplaced="YES" id="Pv7-wH-aAd">
-                        <rect key="frame" x="837" y="531" width="188" height="14"/>
+                        <rect key="frame" x="827" y="511" width="188" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="--" id="DAo-EC-0bJ">
                             <font key="font" metaFont="smallSystem"/>
@@ -351,7 +354,7 @@
                     <textField verticalHuggingPriority="750" misplaced="YES" id="5qs-rT-FIz">
                         <rect key="frame" x="428" y="527" width="111" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="Y1r-n7-D1g">
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="localhost" drawsBackground="YES" id="Y1r-n7-D1g">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -364,6 +367,15 @@
                         <rect key="frame" x="346" y="528" width="76" height="15"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="IP #:" id="i3A-Zf-gbR">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" misplaced="YES" id="57b-ff-nnf">
+                        <rect key="frame" x="132" y="529" width="45" height="15"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Device:" id="T40-0d-Eak">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -526,7 +538,7 @@
                         </connections>
                     </button>
                     <popUpButton verticalHuggingPriority="750" misplaced="YES" id="RVZ-Xz-EzG" userLabel="SensorGroupPU">
-                        <rect key="frame" x="162" y="525" width="204" height="22"/>
+                        <rect key="frame" x="826" y="528" width="190" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" title="113-RS e-gun cRIO" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="F7N-9S-eHC" id="FNL-1f-bhf" userLabel="RS1">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -538,6 +550,7 @@
                                     <menuItem title="310-DPS dipoles" tag="2" id="5tO-L3-pxf" userLabel="CPS"/>
                                     <menuItem title="436-MS high voltage" tag="3" id="24S-Dp-0nz" userLabel="MS-HV"/>
                                     <menuItem title="DAQ-lab" tag="4" id="Qa7-eb-ZkJ" userLabel="DAQlab"/>
+                                    <menuItem title="Load config from file" tag="5" id="gvk-2B-jap" userLabel="Load config from file "/>
                                 </items>
                             </menu>
                         </popUpButtonCell>
@@ -620,6 +633,35 @@
                             <action selector="verboseAction:" target="-2" id="p9C-nm-AlB"/>
                         </connections>
                     </button>
+                    <button verticalHuggingPriority="750" misplaced="YES" id="DpR-Sc-dgV">
+                        <rect key="frame" x="694" y="525" width="132" height="28"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="Read Device Config" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5py-gs-3Ik">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="readDeviceConfigFile:" target="-2" id="9cB-TJ-T49"/>
+                        </connections>
+                    </button>
+                    <textField verticalHuggingPriority="750" misplaced="YES" id="LOH-9t-ICO" userLabel="Device Name Text Field">
+                        <rect key="frame" x="179" y="527" width="202" height="19"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" alignment="left" title="Generic test mode" drawsBackground="YES" id="PTQ-6Q-dR2">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" misplaced="YES" id="QOG-CD-nDx" userLabel="Device Config File Field">
+                        <rect key="frame" x="827" y="556" width="188" height="14"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="--" id="w1q-xe-pxH">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
             </view>
             <connections>
@@ -677,7 +719,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <clipView key="contentView" id="MIQ-nm-Q82">
                         <rect key="frame" x="1" y="0.0" width="420" height="345"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" headerView="OFQ-8V-Buy" id="8Ll-dB-u6e" userLabel="Scripting Parameter">
                                 <rect key="frame" x="0.0" y="0.0" width="420" height="320"/>
