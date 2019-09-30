@@ -440,8 +440,6 @@ NSString* ORFlashCamModelRunEnded              = @"ORFlashCamModelRunEnded";
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    NSLog(ipAddress);
-    NSLog(@"\n");
     [encoder encodeObject:ipAddress      forKey:@"ipAddress"];
     [encoder encodeObject:username       forKey:@"username"];
     [encoder encodeObject:ethInterface   forKey:@"ethInterface"];
@@ -555,6 +553,7 @@ NSString* ORFlashCamModelRunEnded              = @"ORFlashCamModelRunEnded";
         [args addObjectsFromArray:@[@"-a",      [NSString stringWithFormat:@"%i", [self boardAddress]]]];
         [args addObjectsFromArray:@[@"-gt",     [NSString stringWithFormat:@"%i", [self traceType]+1]]];
         [args addObjectsFromArray:@[@"-sd",     [NSString stringWithFormat:@"%i", [self signalDepth]]]];
+	[args addObjectsFromArray:@[@"-es",     [NSString stringWithFormat:@"%i", [self postTrigger]]]];
         [args addObjectsFromArray:@[@"-bl",     [NSString stringWithFormat:@"%i", [self baselineOffset]]]];
         [args addObjectsFromArray:@[@"-blbias", [NSString stringWithFormat:@"%i", [self baselineBias]]]];
         for(int i=0; i<kMaxFlashCamChannels; i++){
