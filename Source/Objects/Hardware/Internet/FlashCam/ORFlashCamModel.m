@@ -73,6 +73,7 @@ NSString* ORFlashCamModelRunEnded              = @"ORFlashCamModelRunEnded";
     [remoteFilename release];
     if(pingTask) [pingTask release];
     if(runTasks) [runTasks release];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
     [super dealloc];
 }
 
@@ -115,21 +116,25 @@ NSString* ORFlashCamModelRunEnded              = @"ORFlashCamModelRunEnded";
 #pragma mark ***Accessors
 - (NSString*) ipAddress
 {
+    if(!ipAddress) return @"";
     return ipAddress;
 }
 
 - (NSString*) username
 {
+    if(!username) return @"";
     return username;
 }
 
 - (NSString*) ethInterface
 {
+    if(!ethInterface) return @"";
     return ethInterface;
 }
 
 - (NSString*) ethType
 {
+    if(!ethType) return @"";
     return ethType;
 }
 
@@ -165,11 +170,13 @@ NSString* ORFlashCamModelRunEnded              = @"ORFlashCamModelRunEnded";
 
 - (NSString*) remoteDataPath
 {
+    if(!remoteDataPath) return @"";
     return remoteDataPath;
 }
 
 - (NSString*) remoteFilename
 {
+    if(!remoteFilename) return @"";
     return remoteFilename;
 }
 
@@ -224,29 +231,37 @@ NSString* ORFlashCamModelRunEnded              = @"ORFlashCamModelRunEnded";
 
 - (void) setIPAddress:(NSString*)ip
 {
+    if(!ip) ip = @"";
     [[[self undoManager] prepareWithInvocationTarget:self] setIPAddress:[self ipAddress]];
-    ipAddress = ip;
+    [ipAddress autorelease];
+    ipAddress = [ip copy];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamModelIPAddressChanged object:self];
 }
 
 - (void) setUsername:(NSString*)user
 {
+    if(!user) user = @"";
     [[[self undoManager] prepareWithInvocationTarget:self] setUsername:[self username]];
-    username = user;
+    [username autorelease];
+    username = [user copy];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamModelUsernameChanged object:self];
 }
 
 - (void) setEthInterface:(NSString *)eth
 {
+    if(!eth) eth = @"";
     [[[self undoManager] prepareWithInvocationTarget:self] setEthInterface:[self ethInterface]];
-    ethInterface = eth;
+    [ethInterface autorelease];
+    ethInterface = [eth copy];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamModelEthInterfaceChanged object:self];
 }
 
 - (void) setEthType:(NSString *)etype
 {
+    if(!etype) etype = @"";
     [[[self undoManager] prepareWithInvocationTarget:self] setEthType:[self ethType]];
-    ethType = etype;
+    [ethType autorelease];
+    ethType = [etype copy];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamModelEthTypeChanged object:self];
 }
 
@@ -296,16 +311,20 @@ NSString* ORFlashCamModelRunEnded              = @"ORFlashCamModelRunEnded";
 
 - (void) setRemoteDataPath:(NSString*)path
 {
+    if(!path) path = @"";
     [[[self undoManager] prepareWithInvocationTarget:self] setRemoteDataPath:[self remoteDataPath]];
-    remoteDataPath = path;
+    [remoteDataPath autorelease];
+    remoteDataPath = [path copy];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamModelRemoteDataPathChanged
                                                         object:self];
 }
 
 - (void) setRemoteFilename:(NSString*)fname
 {
+    if(!fname) fname = @"";
     [[[self undoManager] prepareWithInvocationTarget:self] setRemoteFilename:[self remoteFilename]];
-    remoteFilename = fname;
+    [remoteFilename autorelease];
+    remoteFilename = [fname copy];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamModelRemoteFilenameChanged
                                                         object:self];
 }
@@ -391,24 +410,24 @@ NSString* ORFlashCamModelRunEnded              = @"ORFlashCamModelRunEnded";
     [self setUsername:      [decoder decodeObjectForKey:@"username"]];
     [self setEthInterface:  [decoder decodeObjectForKey:@"ethInterface"]];
     [self setEthType:       [decoder decodeObjectForKey:@"ethType"]];
-    [self setBoardAddress:  [decoder decodeIntForKey:@"boardAddress"]];
-    [self setTraceType:     [decoder decodeIntForKey:@"traceType"]];
-    [self setSignalDepth:   [decoder decodeIntForKey:@"signalDepth"]];
-    [self setPostTrigger:   [decoder decodeIntForKey:@"postTrigger"]];
-    [self setBaselineOffset:[decoder decodeIntForKey:@"baselineOffset"]];
-    [self setBaselineBias:  [decoder decodeIntForKey:@"baselineBias"]];
+    [self setBoardAddress:  [[decoder decodeObjectForKey:@"boardAddress"]   unsignedIntegerValue]];
+    [self setTraceType:     [[decoder decodeObjectForKey:@"traceType"]      unsignedIntegerValue]];
+    [self setSignalDepth:   [[decoder decodeObjectForKey:@"signalDepth"]    unsignedIntegerValue]];
+    [self setPostTrigger:   [[decoder decodeObjectForKey:@"postTrigger"]    unsignedIntegerValue]];
+    [self setBaselineOffset:[[decoder decodeObjectForKey:@"baselineOffset"] unsignedIntegerValue]];
+    [self setBaselineBias:  [[decoder decodeObjectForKey:@"baselineBias"]   unsignedIntegerValue]];
     [self setRemoteDataPath:[decoder decodeObjectForKey:@"remoteDataPath"]];
     [self setRemoteFilename:[decoder decodeObjectForKey:@"remoteFilename"]];
-    [self setRunNumber:     [decoder decodeIntForKey:@"runNumber"]];
-    [self setRunCount:      [decoder decodeIntForKey:@"runCount"]];
-    [self setRunLength:     [decoder decodeIntForKey:@"runLength"]];
+    [self setRunNumber:     [[decoder decodeObjectForKey:@"runNumber"]      unsignedIntegerValue]];
+    [self setRunCount:      [[decoder decodeObjectForKey:@"runCount"]       unsignedIntegerValue]];
+    [self setRunLength:     [[decoder decodeObjectForKey:@"runLength"]      unsignedIntegerValue]];
     [self setRunUpdate:     [decoder decodeBoolForKey:@"runUpdate"]];
     for(int i=0; i<kMaxFlashCamChannels; i++){
         [self setChanEnabled:i
                    withValue:[decoder decodeBoolForKey:[NSString stringWithFormat:@"chanEnabled%i", i]]];
-        [self setThreshold:i withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"threshold%i", i]]];
-        [self setPoleZero:i  withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"poleZero%i", i]]];
-        [self setShapeTime:i withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"shapeTime%i", i]]];
+        [self setThreshold:i withValue:[[decoder decodeObjectForKey:[NSString stringWithFormat:@"threshold%i", i]] unsignedIntegerValue]];
+        [self setPoleZero:i  withValue:[[decoder decodeObjectForKey:[NSString stringWithFormat:@"poleZero%i",  i]] unsignedIntegerValue]];
+        [self setShapeTime:i withValue:[[decoder decodeObjectForKey:[NSString stringWithFormat:@"shapeTime%i", i]] unsignedIntegerValue]];
     }
     pingTask = nil;
     pingSuccess = NO;
@@ -421,27 +440,29 @@ NSString* ORFlashCamModelRunEnded              = @"ORFlashCamModelRunEnded";
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
+    NSLog(ipAddress);
+    NSLog(@"\n");
     [encoder encodeObject:ipAddress      forKey:@"ipAddress"];
     [encoder encodeObject:username       forKey:@"username"];
     [encoder encodeObject:ethInterface   forKey:@"ethInterface"];
     [encoder encodeObject:ethType        forKey:@"ethType"];
-    [encoder encodeInt:boardAddress      forKey:@"boardAddress"];
-    [encoder encodeInt:traceType         forKey:@"traceType"];
-    [encoder encodeInt:signalDepth       forKey:@"signalDepth"];
-    [encoder encodeInt:postTrigger       forKey:@"postTrigger"];
-    [encoder encodeInt:baselineOffset    forKey:@"baselineOffset"];
-    [encoder encodeInt:baselineBias      forKey:@"baselineBias"];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInteger:boardAddress]   forKey:@"boardAddress"];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInteger:traceType]      forKey:@"traceType"];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInteger:signalDepth]    forKey:@"signalDepth"];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInteger:postTrigger]    forKey:@"postTrigger"];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInteger:baselineOffset] forKey:@"baselineOffset"];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInteger:baselineBias]   forKey:@"baselineBias"];
     [encoder encodeObject:remoteDataPath forKey:@"remoteDataPath"];
     [encoder encodeObject:remoteFilename forKey:@"remoteFilename"];
-    [encoder encodeInt:runNumber         forKey:@"runNumber"];
-    [encoder encodeInt:runCount          forKey:@"runCount"];
-    [encoder encodeInt:runLength         forKey:@"runLength"];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInteger:runNumber]      forKey:@"runNumber"];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInteger:runCount]       forKey:@"runCount"];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInteger:runLength]      forKey:@"runLength"];
     [encoder encodeBool:runUpdate        forKey:@"runUpdate"];
     for(int i=0; i<kMaxFlashCamChannels; i++){
         [encoder encodeBool:chanEnabled[i] forKey:[NSString stringWithFormat:@"chanEnabled%i", i]];
-        [encoder encodeInt:threshold[i]    forKey:[NSString stringWithFormat:@"threshold%i", i]];
-        [encoder encodeInt:poleZero[i]     forKey:[NSString stringWithFormat:@"poleZero%i", i]];
-        [encoder encodeInt:shapeTime[i]    forKey:[NSString stringWithFormat:@"shapeTime%i", i]];
+        [encoder encodeObject:[NSNumber numberWithUnsignedInteger:threshold[i]] forKey:[NSString stringWithFormat:@"threshold%i", i]];
+        [encoder encodeObject:[NSNumber numberWithUnsignedInteger:poleZero[i]]  forKey:[NSString stringWithFormat:@"poleZero%i", i]];
+        [encoder encodeObject:[NSNumber numberWithUnsignedInteger:shapeTime[i]] forKey:[NSString stringWithFormat:@"shapeTime%i", i]];
     }
 }
 
