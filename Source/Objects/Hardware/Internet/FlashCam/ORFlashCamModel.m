@@ -410,24 +410,24 @@ NSString* ORFlashCamModelRunEnded              = @"ORFlashCamModelRunEnded";
     [self setUsername:      [decoder decodeObjectForKey:@"username"]];
     [self setEthInterface:  [decoder decodeObjectForKey:@"ethInterface"]];
     [self setEthType:       [decoder decodeObjectForKey:@"ethType"]];
-    [self setBoardAddress:  [[decoder decodeObjectForKey:@"boardAddress"]   unsignedIntegerValue]];
-    [self setTraceType:     [[decoder decodeObjectForKey:@"traceType"]      unsignedIntegerValue]];
-    [self setSignalDepth:   [[decoder decodeObjectForKey:@"signalDepth"]    unsignedIntegerValue]];
-    [self setPostTrigger:   [[decoder decodeObjectForKey:@"postTrigger"]    unsignedIntegerValue]];
-    [self setBaselineOffset:[[decoder decodeObjectForKey:@"baselineOffset"] unsignedIntegerValue]];
-    [self setBaselineBias:  [[decoder decodeObjectForKey:@"baselineBias"]   unsignedIntegerValue]];
+    [self setBoardAddress:  [[decoder decodeObjectForKey:@"boardAddress"]   unsignedIntValue]];
+    [self setTraceType:     [[decoder decodeObjectForKey:@"traceType"]      unsignedIntValue]];
+    [self setSignalDepth:   [[decoder decodeObjectForKey:@"signalDepth"]    unsignedIntValue]];
+    [self setPostTrigger:   [[decoder decodeObjectForKey:@"postTrigger"]    unsignedIntValue]];
+    [self setBaselineOffset:[[decoder decodeObjectForKey:@"baselineOffset"] unsignedIntValue]];
+    [self setBaselineBias:  [[decoder decodeObjectForKey:@"baselineBias"]   unsignedIntValue]];
     [self setRemoteDataPath:[decoder decodeObjectForKey:@"remoteDataPath"]];
     [self setRemoteFilename:[decoder decodeObjectForKey:@"remoteFilename"]];
-    [self setRunNumber:     [[decoder decodeObjectForKey:@"runNumber"]      unsignedIntegerValue]];
-    [self setRunCount:      [[decoder decodeObjectForKey:@"runCount"]       unsignedIntegerValue]];
-    [self setRunLength:     [[decoder decodeObjectForKey:@"runLength"]      unsignedIntegerValue]];
+    [self setRunNumber:     [[decoder decodeObjectForKey:@"runNumber"]      unsignedIntValue]];
+    [self setRunCount:      [[decoder decodeObjectForKey:@"runCount"]       unsignedIntValue]];
+    [self setRunLength:     [[decoder decodeObjectForKey:@"runLength"]      unsignedIntValue]];
     [self setRunUpdate:     [decoder decodeBoolForKey:@"runUpdate"]];
     for(int i=0; i<kMaxFlashCamChannels; i++){
         [self setChanEnabled:i
                    withValue:[decoder decodeBoolForKey:[NSString stringWithFormat:@"chanEnabled%i", i]]];
-        [self setThreshold:i withValue:[[decoder decodeObjectForKey:[NSString stringWithFormat:@"threshold%i", i]] unsignedIntegerValue]];
-        [self setPoleZero:i  withValue:[[decoder decodeObjectForKey:[NSString stringWithFormat:@"poleZero%i",  i]] unsignedIntegerValue]];
-        [self setShapeTime:i withValue:[[decoder decodeObjectForKey:[NSString stringWithFormat:@"shapeTime%i", i]] unsignedIntegerValue]];
+        [self setThreshold:i withValue:[[decoder decodeObjectForKey:[NSString stringWithFormat:@"threshold%i", i]] unsignedIntValue]];
+        [self setPoleZero:i  withValue:[[decoder decodeObjectForKey:[NSString stringWithFormat:@"poleZero%i",  i]] unsignedIntValue]];
+        [self setShapeTime:i withValue:[[decoder decodeObjectForKey:[NSString stringWithFormat:@"shapeTime%i", i]] unsignedIntValue]];
     }
     pingTask = nil;
     pingSuccess = NO;
@@ -444,23 +444,23 @@ NSString* ORFlashCamModelRunEnded              = @"ORFlashCamModelRunEnded";
     [encoder encodeObject:username       forKey:@"username"];
     [encoder encodeObject:ethInterface   forKey:@"ethInterface"];
     [encoder encodeObject:ethType        forKey:@"ethType"];
-    [encoder encodeObject:[NSNumber numberWithUnsignedInteger:boardAddress]   forKey:@"boardAddress"];
-    [encoder encodeObject:[NSNumber numberWithUnsignedInteger:traceType]      forKey:@"traceType"];
-    [encoder encodeObject:[NSNumber numberWithUnsignedInteger:signalDepth]    forKey:@"signalDepth"];
-    [encoder encodeObject:[NSNumber numberWithUnsignedInteger:postTrigger]    forKey:@"postTrigger"];
-    [encoder encodeObject:[NSNumber numberWithUnsignedInteger:baselineOffset] forKey:@"baselineOffset"];
-    [encoder encodeObject:[NSNumber numberWithUnsignedInteger:baselineBias]   forKey:@"baselineBias"];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInt:boardAddress]   forKey:@"boardAddress"];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInt:traceType]      forKey:@"traceType"];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInt:signalDepth]    forKey:@"signalDepth"];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInt:postTrigger]    forKey:@"postTrigger"];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInt:baselineOffset] forKey:@"baselineOffset"];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInt:baselineBias]   forKey:@"baselineBias"];
     [encoder encodeObject:remoteDataPath forKey:@"remoteDataPath"];
     [encoder encodeObject:remoteFilename forKey:@"remoteFilename"];
-    [encoder encodeObject:[NSNumber numberWithUnsignedInteger:runNumber]      forKey:@"runNumber"];
-    [encoder encodeObject:[NSNumber numberWithUnsignedInteger:runCount]       forKey:@"runCount"];
-    [encoder encodeObject:[NSNumber numberWithUnsignedInteger:runLength]      forKey:@"runLength"];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInt:runNumber]      forKey:@"runNumber"];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInt:runCount]       forKey:@"runCount"];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInt:runLength]      forKey:@"runLength"];
     [encoder encodeBool:runUpdate        forKey:@"runUpdate"];
     for(int i=0; i<kMaxFlashCamChannels; i++){
         [encoder encodeBool:chanEnabled[i] forKey:[NSString stringWithFormat:@"chanEnabled%i", i]];
-        [encoder encodeObject:[NSNumber numberWithUnsignedInteger:threshold[i]] forKey:[NSString stringWithFormat:@"threshold%i", i]];
-        [encoder encodeObject:[NSNumber numberWithUnsignedInteger:poleZero[i]]  forKey:[NSString stringWithFormat:@"poleZero%i", i]];
-        [encoder encodeObject:[NSNumber numberWithUnsignedInteger:shapeTime[i]] forKey:[NSString stringWithFormat:@"shapeTime%i", i]];
+        [encoder encodeObject:[NSNumber numberWithUnsignedInt:threshold[i]] forKey:[NSString stringWithFormat:@"threshold%i", i]];
+        [encoder encodeObject:[NSNumber numberWithUnsignedInt:poleZero[i]]  forKey:[NSString stringWithFormat:@"poleZero%i", i]];
+        [encoder encodeObject:[NSNumber numberWithUnsignedInt:shapeTime[i]] forKey:[NSString stringWithFormat:@"shapeTime%i", i]];
     }
 }
 
