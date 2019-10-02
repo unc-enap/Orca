@@ -80,6 +80,7 @@
 }
 
 #pragma mark ***Initialization
+- (id) init;
 - (void) dealloc;
 - (NSString*) commonScriptMethods;
 

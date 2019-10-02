@@ -74,7 +74,6 @@
                          name : ORADEIControlModelIsConnectedChanged
 						object: model];
 	   
-
     [notifyCenter addObserver : self
                      selector : @selector(lockChanged:)
                          name : ORRunStatusChangedNotification
@@ -200,8 +199,6 @@
 
 - (void) sensorGroupChanged:(NSNotification*)aNote
 {
-    [sensorGroupPU selectItemWithTag:[model sensorGroup]];
-    
     [groupNumTextField setStringValue: [NSString stringWithFormat:@"Unit# %u",(int)[model uniqueIdNumber]]];
 
     if ([model sensorGroupName]) {
@@ -305,12 +302,12 @@
 
 - (void) setPointFileChanged:(NSNotification*)aNote
 {
-    [setPointFileField setStringValue:[model setPointFile]];
+    [setPointFileField setStringValue:[[model setPointFile] stringByAbbreviatingWithTildeInPath] ];
 }
 
 - (void) deviceConfigFileChanged:(NSNotification*)aNote
 {
-    [deviceConfigFileField setStringValue:[model deviceConfigFile]];
+    [deviceConfigFileField setStringValue:[[model deviceConfigFile] stringByAbbreviatingWithTildeInPath] ];
 }
 
 
@@ -520,12 +517,6 @@
         id aPoint = [model postRegulationPointAtIndex:(int)rowIndex];
         [aPoint setValue:anObject forKey:[aTableColumn identifier]];
     }
-}
-
-
-- (IBAction) sensorGroupAction: (id)sender
-{
-    [model setSensorGroup:(int)[[sender selectedItem]tag]];
 }
 
 - (IBAction) readSetPointFile:(id)sender

@@ -22,7 +22,6 @@
 
 @interface ORADEIControlController : OrcaObjectController
 {
-    IBOutlet NSPopUpButton* sensorGroupPU;
     IBOutlet NSTextField*   groupNumTextField;
     IBOutlet NSTextField*   sensorGroupNameField;
 
@@ -99,7 +98,6 @@
 #pragma mark ***Actions
 
 //ADEIControl#
-- (IBAction) sensorGroupAction:(id)sender;
 - (IBAction) writeSetpointsAction:(id)sender;
 - (IBAction) readBackSetpointsAction:(id)sender;
 - (IBAction) pushReadBacksToSetPointsAction:(id)sender;

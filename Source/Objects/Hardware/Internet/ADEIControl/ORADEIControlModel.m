@@ -59,6 +59,13 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
 
 @implementation ORADEIControlModel
 
+- (id) init
+{
+    self = [super init];
+    [self setSensorGroup:5]; // load configuration from file
+    return self;
+}
+
 - (void) dealloc
 {
     [setPointFile release];
@@ -1442,7 +1449,7 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
         // Update GUI
         [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelSensorGroupChanged object:self];
         [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelShowFormattedDatesChanged object:self];
-
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelDeviceConfigFileChanged object:self];
     }
 
 }
