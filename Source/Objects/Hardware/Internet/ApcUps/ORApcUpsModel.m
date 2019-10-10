@@ -474,7 +474,8 @@ NSString* ORApcUpsLowLimitChanged		= @"ORApcUpsLowLimitChanged";
     if(!eventLog)[self setEventLog:[NSMutableSet setWithCapacity:500]];
     for(id aLine in lines){
         if(i>=7){
-            if([aLine rangeOfString:@"logged"].location != NSNotFound) continue;
+            if([aLine rangeOfString:@"logged"].location != NSNotFound ||
+               [aLine rangeOfString:@"Unknown"].location != NSNotFound) continue;
             else {
                 NSMutableArray* parts = [[aLine componentsSeparatedByString:@"\t"] mutableCopy];
                 if([parts count]){
