@@ -3516,6 +3516,14 @@
 		E61D05922307313E00140549 /* ORFlashCamModel.h in Headers */ = {isa = PBXBuildFile; fileRef = E61D058A2307313E00140549 /* ORFlashCamModel.h */; };
 		E61D05932307313E00140549 /* ORFlashCamController.m in Sources */ = {isa = PBXBuildFile; fileRef = E61D058B2307313E00140549 /* ORFlashCamController.m */; };
 		E61D05942307313E00140549 /* ORFlashCamModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E61D058C2307313E00140549 /* ORFlashCamModel.m */; };
+		E635F3B523799E2200CDAAC4 /* ORVHS4060nModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E635F3AD23799E2200CDAAC4 /* ORVHS4060nModel.m */; };
+		E635F3B623799E2200CDAAC4 /* ORVHS4060nController.m in Sources */ = {isa = PBXBuildFile; fileRef = E635F3AE23799E2200CDAAC4 /* ORVHS4060nController.m */; };
+		E635F3B723799E2200CDAAC4 /* ORVHS4060nDecoders.h in Headers */ = {isa = PBXBuildFile; fileRef = E635F3AF23799E2200CDAAC4 /* ORVHS4060nDecoders.h */; };
+		E635F3B823799E2200CDAAC4 /* VHS4060n.tif in Resources */ = {isa = PBXBuildFile; fileRef = E635F3B023799E2200CDAAC4 /* VHS4060n.tif */; };
+		E635F3B923799E2200CDAAC4 /* VHS4060n.nib in Resources */ = {isa = PBXBuildFile; fileRef = E635F3B123799E2200CDAAC4 /* VHS4060n.nib */; };
+		E635F3BA23799E2200CDAAC4 /* ORVHS4060nModel.h in Headers */ = {isa = PBXBuildFile; fileRef = E635F3B223799E2200CDAAC4 /* ORVHS4060nModel.h */; };
+		E635F3BB23799E2200CDAAC4 /* ORVHS4060nController.h in Headers */ = {isa = PBXBuildFile; fileRef = E635F3B323799E2200CDAAC4 /* ORVHS4060nController.h */; };
+		E635F3BC23799E2200CDAAC4 /* ORVHS4060nDecoders.m in Sources */ = {isa = PBXBuildFile; fileRef = E635F3B423799E2200CDAAC4 /* ORVHS4060nDecoders.m */; };
 		E67894D721E91CD500B66977 /* Messaging.tif in Resources */ = {isa = PBXBuildFile; fileRef = E67894D621E91CD400B66977 /* Messaging.tif */; };
 		E6983CAC219DB3EA00029B9C /* SNOP_Run_Constants.h in Headers */ = {isa = PBXBuildFile; fileRef = E6983CAB219DB3E900029B9C /* SNOP_Run_Constants.h */; };
 		E6983CAE219DB45700029B9C /* ORCamacExceptions.h in Headers */ = {isa = PBXBuildFile; fileRef = E6983CAD219DB45600029B9C /* ORCamacExceptions.h */; };
@@ -7251,6 +7259,14 @@
 		E61D058A2307313E00140549 /* ORFlashCamModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORFlashCamModel.h; sourceTree = "<group>"; };
 		E61D058B2307313E00140549 /* ORFlashCamController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamController.m; sourceTree = "<group>"; };
 		E61D058C2307313E00140549 /* ORFlashCamModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamModel.m; sourceTree = "<group>"; };
+		E635F3AD23799E2200CDAAC4 /* ORVHS4060nModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORVHS4060nModel.m; sourceTree = "<group>"; };
+		E635F3AE23799E2200CDAAC4 /* ORVHS4060nController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORVHS4060nController.m; sourceTree = "<group>"; };
+		E635F3AF23799E2200CDAAC4 /* ORVHS4060nDecoders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORVHS4060nDecoders.h; sourceTree = "<group>"; };
+		E635F3B023799E2200CDAAC4 /* VHS4060n.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = VHS4060n.tif; sourceTree = "<group>"; };
+		E635F3B123799E2200CDAAC4 /* VHS4060n.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = VHS4060n.nib; sourceTree = "<group>"; };
+		E635F3B223799E2200CDAAC4 /* ORVHS4060nModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORVHS4060nModel.h; sourceTree = "<group>"; };
+		E635F3B323799E2200CDAAC4 /* ORVHS4060nController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORVHS4060nController.h; sourceTree = "<group>"; };
+		E635F3B423799E2200CDAAC4 /* ORVHS4060nDecoders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORVHS4060nDecoders.m; sourceTree = "<group>"; };
 		E67894D621E91CD400B66977 /* Messaging.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Messaging.tif; sourceTree = "<group>"; };
 		E6983CAB219DB3E900029B9C /* SNOP_Run_Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SNOP_Run_Constants.h; sourceTree = "<group>"; };
 		E6983CAD219DB45600029B9C /* ORCamacExceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORCamacExceptions.h; sourceTree = "<group>"; };
@@ -14744,6 +14760,22 @@
 			path = FlashCam;
 			sourceTree = "<group>";
 		};
+		E635F3AC23799E2200CDAAC4 /* VHS4060n */ = {
+			isa = PBXGroup;
+			children = (
+				E635F3AD23799E2200CDAAC4 /* ORVHS4060nModel.m */,
+				E635F3AE23799E2200CDAAC4 /* ORVHS4060nController.m */,
+				E635F3AF23799E2200CDAAC4 /* ORVHS4060nDecoders.h */,
+				E635F3B023799E2200CDAAC4 /* VHS4060n.tif */,
+				E635F3B123799E2200CDAAC4 /* VHS4060n.nib */,
+				E635F3B223799E2200CDAAC4 /* ORVHS4060nModel.h */,
+				E635F3B323799E2200CDAAC4 /* ORVHS4060nController.h */,
+				E635F3B423799E2200CDAAC4 /* ORVHS4060nDecoders.m */,
+			);
+			name = VHS4060n;
+			path = Source/Objects/Hardware/Vme/VHS4060n;
+			sourceTree = SOURCE_ROOT;
+		};
 		EF7722B111E813120064A1CF /* XL3 */ = {
 			isa = PBXGroup;
 			children = (
@@ -15070,6 +15102,7 @@
 				848285A1112C5AD600BA30ED /* VHS4030 */,
 				84AFC23D1029F35E009F4139 /* VHQ224L */,
 				8449CC7A123E85D9009C8AA2 /* VHSC040n */,
+				E635F3AC23799E2200CDAAC4 /* VHS4060n */,
 			);
 			path = Vme;
 			sourceTree = "<group>";
@@ -15400,6 +15433,7 @@
 				8434A237055B3287002D3102 /* ORPulserDistribController.h in Headers */,
 				C65995A820529EE300FE5973 /* ORSynClockModel.h in Headers */,
 				8434A239055B3287002D3102 /* ORPulserDistribModel.h in Headers */,
+				E635F3BA23799E2200CDAAC4 /* ORVHS4060nModel.h in Headers */,
 				8434A23A055B3287002D3102 /* NSData+Extensions.h in Headers */,
 				8434A23B055B3287002D3102 /* ORReplayDataController.h in Headers */,
 				8434A23D055B3287002D3102 /* ORReplayDataModel.h in Headers */,
@@ -16295,6 +16329,7 @@
 				8483D3BA139FAAB8000C8901 /* ORCV895Controller.h in Headers */,
 				8483D3BC139FAAB8000C8901 /* ORCV895Model.h in Headers */,
 				8461653513A259BD00D8B852 /* ORCVCfdLedController.h in Headers */,
+				E635F3BB23799E2200CDAAC4 /* ORVHS4060nController.h in Headers */,
 				8461653713A259BD00D8B852 /* ORCVCfdLedModel.h in Headers */,
 				847F947B13D4AA31006B06B4 /* ORRad7Controller.h in Headers */,
 				847F947F13D4AA31006B06B4 /* ORRad7Model.h in Headers */,
@@ -16451,6 +16486,7 @@
 				8449A53816AEDF5B00296104 /* ORCV1721Controller.h in Headers */,
 				4AB9E53B1DE5D955007C75E0 /* ORPQConnection.h in Headers */,
 				8449A53A16AEDF5B00296104 /* ORCV1721Decoder.h in Headers */,
+				E635F3B723799E2200CDAAC4 /* ORVHS4060nDecoders.h in Headers */,
 				8449A53C16AEDF5B00296104 /* ORCV1721Model.h in Headers */,
 				8449A54216AEE44300296104 /* ORCAEN1721Readout.hh in Headers */,
 				5B5A40531A79385C00543633 /* ORSIS3305Model.h in Headers */,
@@ -17104,6 +17140,7 @@
 				8461CB041CB2D8DB001E4044 /* PulseCheck.tif in Resources */,
 				84FDF5290D7E1EAE003AE119 /* KatrinSLT.nib in Resources */,
 				84FDF52A0D7E1EAE003AE119 /* KatrinSLTCard.gif in Resources */,
+				E635F3B923799E2200CDAAC4 /* VHS4060n.nib in Resources */,
 				84FDF54F0D7F084E003AE119 /* IpeV4Crate.nib in Resources */,
 				84FDF5500D7F084E003AE119 /* IpeV4Crate.tif in Resources */,
 				84FDF5510D7F084E003AE119 /* IpeV4CrateBig.tif in Resources */,
@@ -17510,6 +17547,7 @@
 				3AFC9E231D2AAD4600190989 /* NodePanelMap.png in Resources */,
 				8491303215334EAA00597004 /* BitProcessor.tif in Resources */,
 				8491303B15334EAA00597004 /* TwoBitProcessor.nib in Resources */,
+				E635F3B823799E2200CDAAC4 /* VHS4060n.tif in Resources */,
 				84D29FE01843EAC800D320DB /* warn.png in Resources */,
 				8491303C15334EAA00597004 /* TwoBitProcessor.tif in Resources */,
 				84913CA61538698000597004 /* OutputCallBack.nib in Resources */,
@@ -17733,6 +17771,7 @@
 				8434A305055B3287002D3102 /* OReCPU147Controller.m in Sources */,
 				8434A306055B3287002D3102 /* ORQueueView.m in Sources */,
 				8434A307055B3287002D3102 /* ORCircularBuffer.m in Sources */,
+				E635F3BC23799E2200CDAAC4 /* ORVHS4060nDecoders.m in Sources */,
 				8434A308055B3287002D3102 /* ORCircularBufferWriter.m in Sources */,
 				C65995AA20529EE400FE5973 /* ORSynClockController.m in Sources */,
 				8434A309055B3287002D3102 /* ORCircularBufferReader.m in Sources */,
@@ -17796,6 +17835,7 @@
 				8434A355055B3287002D3102 /* ORCommandCenterController.m in Sources */,
 				844E494B057529A6005F11A0 /* ORTaskMaster.m in Sources */,
 				844E49F3057538B1005F11A0 /* ORTask.m in Sources */,
+				E635F3B523799E2200CDAAC4 /* ORVHS4060nModel.m in Sources */,
 				C65995A620529EE300FE5973 /* ORMotoGPSController.m in Sources */,
 				8483E56E058652E400C28344 /* ORDataController.m in Sources */,
 				84716E3420D2BBD400649339 /* ORMultiplierModel.m in Sources */,
@@ -18457,6 +18497,7 @@
 				840DEA26115D7981006AF231 /* ORWindowSaveSet.m in Sources */,
 				84B754601160E01C00667631 /* ORCC4189Controller.m in Sources */,
 				0FF177B71DF7A09900BA783B /* RunStatusIcon.m in Sources */,
+				E635F3B623799E2200CDAAC4 /* ORVHS4060nController.m in Sources */,
 				84B754621160E01C00667631 /* ORCC4189Decoders.m in Sources */,
 				84B754641160E01C00667631 /* ORCC4189Model.m in Sources */,
 				84F50A2F116B7151000275F2 /* ORCmdLabelController.m in Sources */,

@@ -922,7 +922,7 @@
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="ORVHQ224LModel" id="26560" customClass="ObjectFactory">
-                                                                <rect key="frame" x="570" y="58" width="67" height="150"/>
+                                                                <rect key="frame" x="555" y="58" width="67" height="150"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="VHQ224L HV" bezelStyle="regularSquare" image="VHQ224L" imagePosition="above" alignment="center" inset="2" id="26561">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -930,7 +930,7 @@
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="ORVHS4030Model" id="26562" customClass="ObjectFactory">
-                                                                <rect key="frame" x="645" y="58" width="66" height="150"/>
+                                                                <rect key="frame" x="630" y="58" width="66" height="150"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="VHS4030 HV" bezelStyle="regularSquare" image="VHS4030" imagePosition="above" alignment="center" inset="2" id="26563">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -938,7 +938,7 @@
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="ORVHSC040nModel" id="26564" customClass="ObjectFactory">
-                                                                <rect key="frame" x="728" y="58" width="66" height="150"/>
+                                                                <rect key="frame" x="710" y="58" width="66" height="150"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="VHSC040n" bezelStyle="regularSquare" image="VHSC040n" imagePosition="above" alignment="center" inset="2" id="26565">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -946,7 +946,7 @@
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="ORPollingTimeStampModel" id="cbZ-ZZ-Z3d" customClass="ObjectFactory">
-                                                                <rect key="frame" x="492" y="123" width="70" height="72"/>
+                                                                <rect key="frame" x="467" y="104" width="70" height="72"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="TimeStamp" bezelStyle="regularSquare" image="PollingTimeStamp" imagePosition="above" alignment="center" inset="2" id="xpA-sF-Gw1">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -966,6 +966,14 @@
                                                                 <rect key="frame" x="82" y="58" width="58" height="150"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="Cytec VM8" bezelStyle="regularSquare" image="CytecVM8" imagePosition="above" alignment="center" inset="2" id="Dl3-Ff-Bq1">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system" size="10"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <button toolTip="ORVHS4060nModel" id="clT-1g-hYs" customClass="ObjectFactory">
+                                                                <rect key="frame" x="777" y="58" width="66" height="150"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="bevel" title="VHS4060n" bezelStyle="regularSquare" image="VHS4060n" imagePosition="above" alignment="center" inset="2" id="yLh-cc-VUI">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system" size="10"/>
                                                                 </buttonCell>
@@ -3514,6 +3522,7 @@ Relay</string>
         <image name="V2718Card" width="16" height="128"/>
         <image name="VHQ224L" width="32" height="128"/>
         <image name="VHS4030" width="16" height="128"/>
+        <image name="VHS4060n" width="16" height="128"/>
         <image name="VHSC040n" width="32" height="128"/>
         <image name="VXM" width="70" height="63"/>
         <image name="VarianTPS" width="80" height="67"/>
