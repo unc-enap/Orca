@@ -128,7 +128,7 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
 - (void) setSetPoint: (int)aIndex withValue: (double)value
 {
     NSNumber* oldValue = [[setPoints objectAtIndex:aIndex] objectForKey:@"setPoint"];
-    [[[self undoManager] prepareWithInvocationTarget:self] setSetPoint:aIndex withValue:[oldValue floatValue]];
+    [[[self undoManager] prepareWithInvocationTarget:self] setSetPoint:aIndex withValue:[oldValue doubleValue]];
     [[setPoints objectAtIndex:aIndex] setObject:[NSString stringWithFormat:@"%.6f",value] forKey:@"setPoint"];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelSetPointsChanged object:self];
 }
@@ -536,7 +536,7 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
         int i;
         for(i=0;i<n;i++){
             if(i<[setPoints count]){
-                float aValue = [[theParts objectAtIndex:i] floatValue];
+                double aValue = [[theParts objectAtIndex:i] doubleValue];
                 //[self setSetPoint:i+spOffset withValue:aValue];
             
                 // Compare with setpoints send?!
@@ -739,8 +739,8 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
                               @"readBackSetpoints",
                               @"readMeasuredValues",
                               @"readSetPointsFile:(NSString*)",
-                              @"setSetPoint:(int) withValue:(float)",
-                              @"setSetPointWithUID:(string) withValue:(float)",
+                              @"setSetPoint:(int) withValue:(double)",
+                              @"setSetPointWithUID:(string) withValue:(double)",
                               @"setPointAtIndex:(int)",
                               @"setPointWithUID:(string)",
                               @"setPointReadBackAtIndex:(int)",
@@ -1111,7 +1111,7 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
         int maxIndex = (int)[setPoints count];
         if (verbose) NSLog(@"N = %d\n", maxIndex);
         for(i=spOffset;i<maxIndex;i++){
-            float valueToWrite = [[[setPoints objectAtIndex:i] objectForKey:@"setPoint"] floatValue];
+            double valueToWrite = [[[setPoints objectAtIndex:i] objectForKey:@"setPoint"] doubleValue];
             [cmd appendFormat:@"%f",valueToWrite];
             if(i != maxIndex-1)[cmd appendString:@","];
         }

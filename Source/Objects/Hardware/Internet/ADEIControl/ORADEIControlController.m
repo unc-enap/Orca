@@ -509,7 +509,7 @@
         if([[aTableColumn identifier] isEqualToString:@"name"]) return;
         if([[aTableColumn identifier] isEqualToString:@"readback"]) return;
         if([[aTableColumn identifier] isEqualToString:@"setPoint"]){
-            [model setSetPoint:(int)rowIndex  withValue:[anObject floatValue]];
+            [model setSetPoint:(int)rowIndex  withValue:[anObject doubleValue]];
             return;
         }
     }
