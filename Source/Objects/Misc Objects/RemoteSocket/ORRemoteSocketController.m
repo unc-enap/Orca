@@ -94,7 +94,7 @@
 
 - (void) remotePortChanged:(NSNotification*)aNote
 {
-	[remotePortField setIntValue:[model remotePort]];
+	[remotePortField setIntValue:[(ORRemoteSocketModel*)(model) remotePort]];
 }
 
 

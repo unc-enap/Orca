@@ -73,7 +73,6 @@ are declared volatile.
 #import <mach/mach_error.h>
 #import <CoreFoundation/CoreFoundation.h>
 #import <IOKit/IOTypes.h>
-#import <IOKit/iokitmig.h>
 #import <IOKit/IOKitLib.h>
 #import <ApplicationServices/ApplicationServices.h>
 #import "ORCamacExceptions.h"

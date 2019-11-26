@@ -300,7 +300,7 @@
 
 - (void) remotePortChanged:(NSNotification*)aNotification
 {
-	[remotePortField setIntegerValue:[model remotePort]];
+	[remotePortField setIntegerValue:[(ORRemoteRunModel*)(model) remotePort]];
 }
 
 -(void)runStatusChanged:(NSNotification*)aNotification
