@@ -469,7 +469,7 @@ static uint32_t addressCounterOffset[4][2]={ //group,bank
     [self setLemoToMask:0x0];
     [self setLemoUoMask:0x0];
     [self setLemoCoMask:0x0];
-    [self setAcquisitionControlMask:0x05]; //ext timestamp clear enable | ext trig enable
+    [self setAcquisitionControlMask:0x0];
     [self setRawDataBufferLen:2048];
     [self setRawDataBufferStart:0];
 
