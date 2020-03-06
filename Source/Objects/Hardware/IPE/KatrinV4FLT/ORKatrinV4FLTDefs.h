@@ -69,13 +69,6 @@
 #define kIpeFlt_Periph_Integration_Shift	20
 #define kIpeFlt_Periph_Integration_Mask		0xf
 
-#if 0 //moved to SLTv4_HW_Definitions.h - names have changed -tb-
-//run modes set by user in popup
-#define kIpeFlt_EnergyMode		0
-#define kIpeFlt_EnergyTrace		1
-#define kIpeFlt_Histogram_Mode	2
-...
-#endif
 
 #define kIpeFlt_Intack				0x40000000
 #define kIpeFlt_READ				0x80000000
@@ -97,24 +90,3 @@
 #define kFifoLength64		1
 
 #define SELECT_ALL_CHANNELS ( 0x1F <<16) // ak, 7.10.07
-
-#if 0 //is already in ORIpeV4FLTDefs.h -tb-
-typedef struct {
-	uint32_t channelMap; // 8bit channel + 24 channelMap
-	uint32_t threshold;   
-	uint32_t hitrate;
-} ipeFltHitRateDataStruct;
-#endif
-
-#if 0
-typedef struct { // -tb- 2008-02-27
-	int32_t readoutSec;
-	int32_t recordingTimeSec;  //! this holds the refresh time -tb-
-	int32_t firstBin;
-	int32_t lastBin;
-	int32_t histogramLength; //don't use unsigned! - it may become negative, at least temporaryly -tb-
-    int32_t maxHistogramLength;
-    int32_t binSize;
-    int32_t offsetEMin;
-} ipcFltV4HistogramDataStruct;
-#endif

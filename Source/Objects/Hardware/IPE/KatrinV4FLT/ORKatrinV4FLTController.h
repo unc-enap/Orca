@@ -170,7 +170,7 @@
 - (void) decayTimeChanged:(NSNotification*)aNote;
 - (void) poleZeroCorrectionChanged:(NSNotification*)aNote;
 - (void) customVariableChanged:(NSNotification*)aNote;
-- (void) receivedHistoCounterChanged:(NSNotification*)aNote;
+//- (void) receivedHistoCounterChanged:(NSNotification*)aNote;
 - (void) activateDebuggerDisplaysChanged:(NSNotification*)aNote;
 - (void) fifoLengthChanged:(NSNotification*)aNote;
 - (void) shipSumHistogramChanged:(NSNotification*)aNote;
@@ -239,8 +239,8 @@
 - (IBAction) decayTimeTextFieldAction:(id)sender;
 - (IBAction) poleZeroCorrectionPUAction:(id)sender;
 - (IBAction) customVariableTextFieldAction:(id)sender;
-- (IBAction) clearHistoCounterButtonAction:(id)sender;
-- (IBAction) receivedHistoCounterTextFieldAction:(id)sender;
+//- (IBAction) clearHistoCounterButtonAction:(id)sender;
+//- (IBAction) receivedHistoCounterTextFieldAction:(id)sender;
 - (IBAction) activateDebuggingDisplayAction:(id)sender;
 - (IBAction) fifoLengthPUAction:(id)sender;
 - (IBAction) shipSumHistogramPUAction:(id)sender;

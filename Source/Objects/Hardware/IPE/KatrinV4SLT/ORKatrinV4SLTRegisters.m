@@ -23,7 +23,7 @@ typedef struct KatrinV4SLTRegisterNamesStruct {
     uint32_t 	addressOffset;
     int				length;
     short			accessType;
-    eKatriV4SLTEnum enumCheckValue;
+    eKatrinV4SLTEnum enumCheckValue;
 } KatrinV4SLTRegisterNamesStruct;
 
 static KatrinV4SLTRegisterNamesStruct regV4SLT[kKatrinV4SLTNumRegs] = {

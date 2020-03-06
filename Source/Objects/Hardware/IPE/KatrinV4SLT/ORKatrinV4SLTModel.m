@@ -251,7 +251,7 @@ NSString* ORKatrinV4SLTcpuLock                              = @"ORKatrinV4SLTcpu
     int state = [[[aNote userInfo] objectForKey:@"State"] intValue];
     BOOL isSubRun = [[[aNote userInfo] objectForKey:@"StartingSubRun"] boolValue];
 
-    id rc =  [aNote object];
+    //id rc =  [aNote object];
     //NSLog(@"%@::%@ Calling object %@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),NSStringFromClass([rc class]));
     switch (state) {
         case eRunStarting:

@@ -31,7 +31,7 @@
 static ORKatrinV4SLTRegisters* sharedKatrinV4SLTRegisters;
 
 //IPE V4 register definitions
-typedef enum eKatriV4SLTEnum {
+typedef enum eKatrinV4SLTEnum {
     kKatrinV4SLTControlReg,
     kKatrinV4SLTStatusReg,
     kKatrinV4SLTCommandReg,
@@ -70,7 +70,7 @@ typedef enum eKatriV4SLTEnum {
     kKatrinV4SLTFIFOxRequestReg,
     kKatrinV4SLTFIFOMaskReg,
     kKatrinV4SLTNumRegs //must be last
-} eKatriV4SLTEnum;
+} eKatrinV4SLTEnum;
 
 
 @interface ORKatrinV4SLTRegisters : NSObject
