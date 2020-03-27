@@ -866,7 +866,7 @@
 {
     NSAutoreleasePool *thePool = [[NSAutoreleasePool alloc] init];
     if(![self isCancelled]){
-        NSString* escaped = [documentId stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSString* escaped = [documentId stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLPathAllowedCharacterSet]];
         NSString *httpString = [NSString stringWithFormat:@"%@//%@:%u/%@/%@", httpType,host, (int)port, database, escaped];
         id result = [self send:httpString];
         [self sendToDelegate:result];

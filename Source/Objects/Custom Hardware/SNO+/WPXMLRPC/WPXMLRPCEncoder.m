@@ -32,6 +32,10 @@
 @synthesize method = _method;
 @synthesize parameters = _parameters;
 
+- (id)init
+{
+    return [self initWithMethod:nil andParameters:nil];
+}
 
 - (id)initWithMethod:(NSString *)method andParameters:(NSArray *)parameters {
     self = [super init];

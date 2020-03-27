@@ -1644,7 +1644,7 @@ enum {
 		id anItem = [topLevelDictionary objectForKey:itemKey];
         NSString* result  = [anItem objectForKey:@"Result"];
         if(!result) return false;//key "Result" not set: no error (not yet loaded, not a control request, ...) -tb-
-        int tmp=[result caseInsensitiveCompare:@"OK"];//note: caseInsensitiveCompare: returns a 'NSComparisonResult' which may be -1, 0 or 1 ({NSOrderedAscending = -1, NSOrderedSame, NSOrderedDescending})-tb-
+        NSInteger tmp=[result caseInsensitiveCompare:@"OK"];//note: caseInsensitiveCompare: returns a 'NSComparisonResult' which may be -1, 0 or 1 ({NSOrderedAscending = -1, NSOrderedSame, NSOrderedDescending})-tb-
                                                       //if "OK" not found: NSOrderedAscending (==-1), all other cases mean: found
     //DEBUG        NSLog(@"%@::%@   result is >>>%@<<< retval is:(%i)\n", NSStringFromClass([self class]), NSStringFromSelector(_cmd),result,tmp);//DEBUG OUTPUT -tb-
         //NSLog(@"%@::%@   result is >>>%@<<< retval is:%@ (%i)\n", NSStringFromClass([self class]), NSStringFromSelector(_cmd),result,[result caseInsensitiveCompare:@"OK"],[result caseInsensitiveCompare:@"OK"]);//DEBUG OUTPUT -tb-
@@ -2079,7 +2079,7 @@ enum {
             NSString* resultObj  = [resultItem objectForKey:@"Result"];
             if(errorObj){
                 if(resultObj){//if 'Result' key is not present, we probably come from a get request ... -tb-
-                    int tmp=[resultObj caseInsensitiveCompare:@"Error"];//note: caseInsensitiveCompare: returns a 'NSComparisonResult' which may be -1, 0 or 1 ({NSOrderedAscending = -1, NSOrderedSame, NSOrderedDescending})-tb-
+                    NSInteger tmp=[resultObj caseInsensitiveCompare:@"Error"];//note: caseInsensitiveCompare: returns a 'NSComparisonResult' which may be -1, 0 or 1 ({NSOrderedAscending = -1, NSOrderedSame, NSOrderedDescending})-tb-
                     //DEBUG  NSLog(@"%@::%@   result is >>>%@<<< comparison is:(%i) ((NSOrderedAscending is %i))\n", NSStringFromClass([self class]), NSStringFromSelector(_cmd),result,tmp,NSOrderedAscending);//DEBUG OUTPUT -tb-
                     if(tmp!=NSOrderedDescending){//== @"Error"  found 
                         isError=1;
@@ -2091,7 +2091,7 @@ enum {
                 }
             }else{
                 if(resultObj){//if 'Result' key is not present, we probably come from a get request ... -tb-
-                    int tmp=[resultObj caseInsensitiveCompare:@"Error"];//note: caseInsensitiveCompare: returns a 'NSComparisonResult' which may be -1, 0 or 1 ({NSOrderedAscending = -1, NSOrderedSame, NSOrderedDescending})-tb-
+                    NSInteger tmp=[resultObj caseInsensitiveCompare:@"Error"];//note: caseInsensitiveCompare: returns a 'NSComparisonResult' which may be -1, 0 or 1 ({NSOrderedAscending = -1, NSOrderedSame, NSOrderedDescending})-tb-
                     //DEBUG  NSLog(@"%@::%@   result is >>>%@<<< comparison is:(%i) ((NSOrderedAscending is %i))\n", NSStringFromClass([self class]), NSStringFromSelector(_cmd),result,tmp,NSOrderedAscending);//DEBUG OUTPUT -tb-
                     if(tmp!=NSOrderedDescending){//== @"Error"  found 
                         NSLog(@"%@::%@   warning: Error does not exist, but Result is 'Error'  -   something is strange!\n", NSStringFromClass([self class]), NSStringFromSelector(_cmd));//DEBUG OUTPUT -tb-
@@ -2189,7 +2189,7 @@ enum {
             NSString* errorObj  = [dictionary objectForKey:@"Error"];
             NSString* resultObj  = [dictionary objectForKey:@"Result"];
             int isError = 0;
-            int tmp=[resultObj caseInsensitiveCompare:@"Error"];//note: caseInsensitiveCompare: returns a 'NSComparisonResult' which may be -1, 0 or 1 ({NSOrderedAscending = -1, NSOrderedSame, NSOrderedDescending})-tb-
+            NSInteger tmp=[resultObj caseInsensitiveCompare:@"Error"];//note: caseInsensitiveCompare: returns a 'NSComparisonResult' which may be -1, 0 or 1 ({NSOrderedAscending = -1, NSOrderedSame, NSOrderedDescending})-tb-
             //DEBUG  NSLog(@"%@::%@   result is >>>%@<<< comparison is:(%i) ((NSOrderedAscending is %i))\n", NSStringFromClass([self class]), NSStringFromSelector(_cmd),result,tmp,NSOrderedAscending);//DEBUG OUTPUT -tb-
             if(tmp!=NSOrderedDescending){//== @"Error"  found 
                 isError=1;

@@ -46,7 +46,7 @@
 - (void) setDisplayFormat:(NSString*)aLabel;
 - (NSString*) label;
 - (void) setLabel:(NSString*)aLabel;
-- (int) compareStringTo:(id)anElement usingKey:(NSString*)aKey;
+- (NSInteger) compareStringTo:(id)anElement usingKey:(NSString*)aKey;
 - (void) setLabelNoNotify:(NSString*)aLabel;
 - (void) setFormatNoNotify:(NSString*)aFormat;
 - (int) labelType;

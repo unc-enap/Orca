@@ -65,7 +65,7 @@
 - (Class) guardianClass ;
 - (BOOL) acceptsGuardian: (OrcaObject *)aGuardian;
 - (BOOL) canImageChangeWithState;
-- (int) compareStringTo:(id)anElement usingKey:(NSString*)aKey;
+- (NSInteger) compareStringTo:(id)anElement usingKey:(NSString*)aKey;
 - (BOOL) partOfRun;
 - (NSString*) iconValue;
 - (NSString*) iconLabel;

@@ -601,7 +601,7 @@ NSString* ORForceProcessPollNotification			= @"ORForceProcessPollNotification";
     [self linkToController:@"ORProcessController"];
 }
 
-- (int) compareStringTo:(id)anElement usingKey:(NSString*)aKey
+- (NSInteger) compareStringTo:(id)anElement usingKey:(NSString*)aKey
 {
     NSString* ourKey   = [self valueForKey:aKey];
     NSString* theirKey = [anElement valueForKey:aKey];

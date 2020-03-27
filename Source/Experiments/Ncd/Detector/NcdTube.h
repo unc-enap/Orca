@@ -88,7 +88,7 @@ typedef  enum  tubeNameConstants { //don't change the order
 -(void) setObject:(id)obj forKey:(id)key;
 - (NSUndoManager*) undoManager;
 - (int) compareIntTo:(id)aTube usingKey:(NSString*)aKey;
-- (int) compareStringTo:(id)aTube usingKey:(NSString*)aKey;
+- (NSInteger) compareStringTo:(id)aTube usingKey:(NSString*)aKey;
 - (int) compareFloatTo:(id)aTube usingKey:(NSString*)aKey;
 - (int) sortTypeFor:(NSString*)aKey;
 

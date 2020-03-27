@@ -91,7 +91,7 @@
 - (void) setTimeScaler:(short)aValue;
 - (void) clearTimeHistogram;
 - (BOOL) timerEnabled;
-- (void) setEnableTimer:(int)aState;
+- (void) setEnableTimer:(NSInteger)aState;
 - (uint32_t)cycleRate;
 - (void) setCycleRate:(uint32_t)aRate;
 - (void) setRunMode:(int)runMode;

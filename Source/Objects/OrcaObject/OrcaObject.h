@@ -110,7 +110,7 @@ extern NSString* ORObjArrayPtrPBType;
 - (void)        setUniqueIdNumber:(uint32_t)anIdNumber;
 - (uint32_t) uniqueIdNumber;
 - (BOOL)        selectionAllowed;
-- (int) compareStringTo:(id)anElement usingKey:(NSString*)aKey;
+- (NSInteger) compareStringTo:(id)anElement usingKey:(NSString*)aKey;
 - (BOOL) isObjectInConnectionChain:(id)anObject;
 - (void) resetAlreadyVisitedInChainSearch;
 - (BOOL) changesAllowed;

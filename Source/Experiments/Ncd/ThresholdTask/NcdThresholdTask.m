@@ -88,7 +88,7 @@
     return doAllChannels;
 }
 
-- (void) setDoAllChannels:(int)state
+- (void) setDoAllChannels:(NSInteger)state
 {
     [[[self undoManager] prepareWithInvocationTarget: self] setDoAllChannels: doAllChannels];
     doAllChannels = state;

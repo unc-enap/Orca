@@ -80,7 +80,7 @@ NSString* ORProcessElementForceUpdateNotification   = @"ORProcessElementForceUpd
 	[self setUpImage];
 }
 
-- (int) compareStringTo:(id)anElement usingKey:(NSString*)aKey
+- (NSInteger) compareStringTo:(id)anElement usingKey:(NSString*)aKey
 {
     NSString* ourKey   = [self valueForKey:aKey];
     NSString* theirKey = [anElement valueForKey:aKey];

@@ -111,7 +111,9 @@
 
 - (void) remotePortChanged:(NSNotification*)aNote
 {
-	[remotePortField setIntValue:[model remotePort]];
+    // the check below is to avoid warnings with mulitple classes implementing remotePort and different return types
+    if([[model className] isEqualToString:@"ORListenerModel"])
+        [remotePortField setIntValue:[(ORListenerModel*)model remotePort]];
 }
 
 - (void) remoteHostChanged:(NSNotification*)aNote

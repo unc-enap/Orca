@@ -62,7 +62,7 @@
 }
 
 - (int) doAllChannels;
-- (void) setDoAllChannels:(int)state;
+- (void) setDoAllChannels:(NSInteger)state;
 - (int)     selectedWaveform;
 - (void)    setSelectedWaveform:(int)newSelectedWaveform;
 - (int)     timeOnOneChannel;

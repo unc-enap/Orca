@@ -115,7 +115,7 @@
 			theQHeadAddress += (aLongWordsInBlock - theNumberOfLongWordsToWrite)*sizeof(uint32_t);
 		}
 		// update the header
-		theControlBlockHeader.qHead = (tCBWord *)theQHeadAddress;
+		theControlBlockHeader.qHead = (tCBWord *)(NSUInteger)theQHeadAddress;
 		theControlBlockHeader.blocksWritten++;
 		theControlBlockHeader.bytesWritten += theWordsToAdd * sizeof( tCBWord );
 		if( theControlBlockHeader.bytesWritten > (theQueueSize * sizeof(tCBWord)) )

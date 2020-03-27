@@ -414,7 +414,7 @@ static NSString* NcdTubeParams      = @"NcdTubeParams";
     else return 0;
 }
 
-- (int) compareStringTo:(id)aTube usingKey:(NSString*)aKey
+- (NSInteger) compareStringTo:(id)aTube usingKey:(NSString*)aKey
 {
     NSString* ourKey = [self objectForKey:aKey];
     NSString* theirKey = [aTube objectForKey:aKey];

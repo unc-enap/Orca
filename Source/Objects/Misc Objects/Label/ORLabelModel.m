@@ -114,7 +114,7 @@ NSString* ORLabelModelFormatChanged				 = @"ORLabelModelFormatChanged";
     return @"N/A";
 }
 
-- (int) compareStringTo:(id)anElement usingKey:(NSString*)aKey
+- (NSInteger) compareStringTo:(id)anElement usingKey:(NSString*)aKey
 {
     NSString* ourKey   = [self valueForKey:aKey];
     NSString* theirKey = [anElement valueForKey:aKey];

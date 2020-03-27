@@ -1584,8 +1584,8 @@
     NSDecimalNumber* leftNum  = NodeValue(0);
     NSDecimalNumber* rightNum = NodeValue(1);
     if([leftNum compare:rightNum] == NSOrderedAscending){
-        int leftCompare  = [switchValue[switchLevel] compare: leftNum];
-        int rightCompare = [switchValue[switchLevel] compare: rightNum];
+        NSInteger leftCompare  = [switchValue[switchLevel] compare: leftNum];
+        NSInteger rightCompare = [switchValue[switchLevel] compare: rightNum];
         if(leftCompare  != NSOrderedSame && rightCompare  != NSOrderedSame ){
             if((leftCompare  == NSOrderedDescending) && (rightCompare == NSOrderedAscending) ){
                 NodeValue(2);
@@ -1603,8 +1603,8 @@
     NSDecimalNumber* leftNum  = NodeValue(0);
     NSDecimalNumber* rightNum = NodeValue(1);
     if([leftNum compare:rightNum] == NSOrderedAscending){
-        int leftCompare  = [switchValue[switchLevel] compare: leftNum];
-        int rightCompare = [switchValue[switchLevel] compare: rightNum];
+        NSInteger leftCompare  = [switchValue[switchLevel] compare: leftNum];
+        NSInteger rightCompare = [switchValue[switchLevel] compare: rightNum];
         if((leftCompare  == NSOrderedSame || leftCompare  == NSOrderedDescending) &&
            (rightCompare == NSOrderedSame || rightCompare == NSOrderedAscending) ){
             NodeValue(2);
@@ -1619,7 +1619,7 @@
 
 - (id) doCaseGt:(id)p
 {
-    int compare  = [switchValue[switchLevel] compare: NodeValue(0)];
+    NSInteger compare  = [switchValue[switchLevel] compare: NodeValue(0)];
     if(compare  == NSOrderedDescending){
         NodeValue(1);
         if([[p nodeData] count] == 3)NodeValue(2);
@@ -1630,7 +1630,7 @@
 
 - (id) doCaseLt:(id)p
 {
-    int compare  = [switchValue[switchLevel] compare: NodeValue(0)];
+    NSInteger compare  = [switchValue[switchLevel] compare: NodeValue(0)];
     if(compare  == NSOrderedAscending){
         NodeValue(1);
         if([[p nodeData] count] == 3)NodeValue(2);
@@ -1640,7 +1640,7 @@
 
 - (id) doCaseGtE:(id)p
 {
-    int compare  = [switchValue[switchLevel] compare: NodeValue(0)];
+    NSInteger compare  = [switchValue[switchLevel] compare: NodeValue(0)];
     if(compare  == NSOrderedSame || compare  == NSOrderedDescending){
         NodeValue(1);
         if([[p nodeData] count] == 3)NodeValue(2);
@@ -1651,7 +1651,7 @@
 
 - (id) doCaseLtE:(id)p
 {
-    int compare  = [switchValue[switchLevel] compare: NodeValue(0)];
+    NSInteger compare  = [switchValue[switchLevel] compare: NodeValue(0)];
     if(compare  == NSOrderedSame || compare  == NSOrderedAscending){
         NodeValue(1);
         if([[p nodeData] count] == 3)NodeValue(2);

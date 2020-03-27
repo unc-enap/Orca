@@ -314,7 +314,7 @@ int filterGraph(nodeType*);
 	return timerEnabled;
 }
 
-- (void) setTimerEnabled:(int)aState
+- (void) setTimerEnabled:(NSInteger)aState
 {
 	timerEnabled = aState;
 	if(timerEnabled){

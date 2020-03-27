@@ -264,7 +264,7 @@ NSString* ORDataTaskModelTimerEnableChanged			= @"ORDataTaskModelTimerEnableChan
 	return enableTimer;
 }
 
-- (void) setEnableTimer:(int)aState
+- (void) setEnableTimer:(NSInteger)aState
 {
 	[timerLock lock];	//start critical section
 	enableTimer = aState;

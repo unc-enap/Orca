@@ -113,7 +113,7 @@
 - (uint32_t) processingTimeHist:(int)index;
 - (void) clearTimeHistogram;
 - (BOOL) timerEnabled;
-- (void) setTimerEnabled:(int)aState;
+- (void) setTimerEnabled:(NSInteger)aState;
 
 - (BOOL) exitNow;
 - (NSMutableArray*) inputValues;

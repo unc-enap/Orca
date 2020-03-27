@@ -98,7 +98,7 @@
 	theControlBlockHeader->bytesRead += blockSize*sizeof(tCBWord);
 	if( theControlBlockHeader->bytesRead > theControlBlockHeader->cbNumWords*sizeof(tCBWord) )
 		theControlBlockHeader->bytesRead -= theControlBlockHeader->cbNumWords*sizeof(tCBWord);
-	theControlBlockHeader->qTail = (tCBWord *)readPtr;
+	theControlBlockHeader->qTail = (tCBWord *)(NSUInteger)readPtr;
 	
 	[self writeControlBlockHeader:theControlBlockHeader];
 	

@@ -406,7 +406,7 @@ NSInteger windowSort(id w1, id w2, void *context) { return [[w2 title] compare:[
 - (IBAction) hideShowControls:(id)sender
 {
 	
-    unsigned int oldResizeMask = [containingView autoresizingMask];
+    NSUInteger oldResizeMask = [containingView autoresizingMask];
     [containingView setAutoresizingMask:NSViewMinYMargin];
 	
     NSRect aFrame = [NSWindow contentRectForFrameRect:[[self window] frame] 

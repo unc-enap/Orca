@@ -1168,7 +1168,13 @@ NSString* ORXLGPSModelPpoRepeatsChanged		= @"ORXLGPSModelPpoRepeatsChanged";
 			break;
 		case 1:	//F3 ack
 			NSLog(@"time resp: %@\n", gpsInBuffer);
-			[processDict setObject:[NSDate dateWithNaturalLanguageString:gpsInBuffer] forKey:@"time"];
+			//[processDict setObject:[NSDate dateWithNaturalLanguageString:gpsInBuffer] forKey:@"time"];
+            // the line above uses a deprecated method
+            // the 4 lines below are untested, but should work based on the return format in the manual
+            NSDateFormatter* dformat = [[NSDateFormatter alloc] init];
+            [dformat setDateFormat:@"MM/dd/yyyy H:mm:ss"];
+            [processDict setObject:[dformat dateFromString:gpsInBuffer] forKey:@"time"];
+            [dformat release];
 			[gpsInBuffer setString:@""];
 			[processDict setObject:[NSString stringWithFormat:@"log:"] forKey:@"selector"];
 			[self timeFinished];
