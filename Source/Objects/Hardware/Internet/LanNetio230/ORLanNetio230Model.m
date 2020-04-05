@@ -58,6 +58,7 @@ Finally I used popen and called shell commands to read status and switch the out
 #pragma mark ‚Ä¢‚Ä¢‚Ä¢Imported Files
 #import "ORLanNetio230Model.h"
 #import "NetSocket.h"
+#import "ORURLSession.h"
 
 #define kLanNetio230Port 9100
 
@@ -543,45 +544,33 @@ int curlGetLanNetIOStatus(const char * request)
     
     int showDebugOutput=1;
     
-		if(requestString){
-			NSURL* furl = [NSURL URLWithString: requestString];
-            if(showDebugOutput) NSLog(@"Sending out request string: >>>%@<<<\n",requestString);//debugging
-			NSMutableURLRequest* theRequest=[NSMutableURLRequest requestWithURL:furl  cachePolicy:NSURLRequestReloadIgnoringCacheData  timeoutInterval:kLanNetioTimeoutInterval];// make it configurable
+    if(requestString){
+        NSURL* furl = [NSURL URLWithString: requestString];
+        if(showDebugOutput) NSLog(@"Sending out request string: >>>%@<<<\n",requestString);//debugging
+        NSMutableURLRequest* theRequest=[NSMutableURLRequest requestWithURL:furl
+                                                                cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                                            timeoutInterval:kLanNetioTimeoutInterval];// make it configurable
 
+        NSString *postBody = @"login=p:admin:admin&p=l";
+        if(showDebugOutput) NSLog(@"Sending http body: >>>%@<<<\n",postBody);//debugging
+        NSData *postData = [postBody dataUsingEncoding:NSASCIIStringEncoding];
 
-    //NSString *postBody = @"foo=bar";   
-    NSString *postBody = @"login=p:admin:admin&p=l";   
+        [theRequest setHTTPMethod:@"POST"];
+        [theRequest setHTTPBody:postData];
+        //[theRequest setValue:@"text/xml" forHTTPHeaderField:@"Accept"];
+        //[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+        //[theRequest setValue:@"multipart/form-data" forHTTPHeaderField:@"Content-Type"];
 
-            if(showDebugOutput) NSLog(@"Sending http body: >>>%@<<<\n",postBody);//debugging
+        NSError       *error = nil;
+        NSURLResponse *urlResponse = nil;
+        NSData        *response = [ORURLSession sendSynchronousRequest: theRequest returningResponse: &urlResponse error: &error];
+        if(response) NSLog(@"%@::%@: response: %@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),response);//TODO: DEBUG testing ...-tb-
+        else NSLog(@"%@::%@: response: %@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),@"is nil");
+        if(error) NSLog(@"%@::%@: error: %@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),error);//TODO: DEBUG testing ...-tb-
+        if(urlResponse) NSLog(@"%@::%@: url response: %@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),urlResponse);//TODO: DEBUG testing ...-tb-
 
-    NSData *postData = [postBody dataUsingEncoding:NSASCIIStringEncoding];
-
-                [theRequest setHTTPMethod: @"POST"];
-                //[theRequest setHTTPMethod: @"POST"];
-    [theRequest setHTTPBody:postData];
-    //[theRequest setValue:@"text/xml" forHTTPHeaderField:@"Accept"];
-    //[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];  
-    
-    
-    //[theRequest setValue:@"multipart/form-data" forHTTPHeaderField:@"Content-Type"];  
-
-            
-            
-            
-            
-			NSError        *error = nil;
-            NSURLResponse  *urlResponse = nil;
-NSData *response = 
-            [NSURLConnection sendSynchronousRequest: theRequest returningResponse: &urlResponse error: &error];
-            if(response)     NSLog(@"%@::%@: response: %@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),response);//TODO: DEBUG testing ...-tb-
-            else      NSLog(@"%@::%@: response: %@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),@"is nil");
-            if(error)     NSLog(@"%@::%@: error: %@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),error);//TODO: DEBUG testing ...-tb-
-            if(urlResponse)     NSLog(@"%@::%@: url response: %@\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),urlResponse);//TODO: DEBUG testing ...-tb-
-
-
-            //   theURLConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
-			//theURLConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
-		}
+        // theURLConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+    }
 }
 
 

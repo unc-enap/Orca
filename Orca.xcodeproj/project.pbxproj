@@ -3547,6 +3547,8 @@
 		E6983CAE219DB45700029B9C /* ORCamacExceptions.h in Headers */ = {isa = PBXBuildFile; fileRef = E6983CAD219DB45600029B9C /* ORCamacExceptions.h */; };
 		E6C2E7F223A9845700673DB8 /* ORFlashCamADCModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E6C2E7F123A9845700673DB8 /* ORFlashCamADCModel.m */; };
 		E6C2E7F523A984B900673DB8 /* ORFlashCamADCController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6C2E7F423A984B900673DB8 /* ORFlashCamADCController.m */; };
+		E6DC1B4B243A240500A559F0 /* ORURLSession.m in Sources */ = {isa = PBXBuildFile; fileRef = E6DC1B49243A240400A559F0 /* ORURLSession.m */; };
+		E6DC1B4C243A240500A559F0 /* ORURLSession.h in Headers */ = {isa = PBXBuildFile; fileRef = E6DC1B4A243A240400A559F0 /* ORURLSession.h */; };
 		EF69C433116E5DC3008ABADC /* ORSNOCrateReadout.hh in Headers */ = {isa = PBXBuildFile; fileRef = EF69C431116E5DC3008ABADC /* ORSNOCrateReadout.hh */; };
 		EF69C482116E6526008ABADC /* ORSNOCrateReadout.cc in VME_Copy */ = {isa = PBXBuildFile; fileRef = EF69C430116E5DC3008ABADC /* ORSNOCrateReadout.cc */; };
 		EF69C483116E6526008ABADC /* ORSNOCrateReadout.hh in VME_Copy */ = {isa = PBXBuildFile; fileRef = EF69C431116E5DC3008ABADC /* ORSNOCrateReadout.hh */; };
@@ -7330,6 +7332,8 @@
 		E6C2E7F123A9845700673DB8 /* ORFlashCamADCModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamADCModel.m; sourceTree = "<group>"; };
 		E6C2E7F323A9848E00673DB8 /* ORFlashCamADCController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORFlashCamADCController.h; sourceTree = "<group>"; };
 		E6C2E7F423A984B900673DB8 /* ORFlashCamADCController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamADCController.m; sourceTree = "<group>"; };
+		E6DC1B49243A240400A559F0 /* ORURLSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORURLSession.m; sourceTree = "<group>"; };
+		E6DC1B4A243A240400A559F0 /* ORURLSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORURLSession.h; sourceTree = "<group>"; };
 		EF69C430116E5DC3008ABADC /* ORSNOCrateReadout.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ORSNOCrateReadout.cc; sourceTree = "<group>"; };
 		EF69C431116E5DC3008ABADC /* ORSNOCrateReadout.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ORSNOCrateReadout.hh; sourceTree = "<group>"; };
 		EF7722B211E813120064A1CF /* ORXL3Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORXL3Model.h; sourceTree = "<group>"; };
@@ -9328,6 +9332,7 @@
 				8471D4721588DF3C0039894D /* RemoteSocket */,
 				845313D01B9886B800FCEEE5 /* RemoteCommander */,
 				840BB580201BCA7400F37939 /* UDPConnection */,
+				E6DC1B48243A240400A559F0 /* URLSession */,
 			);
 			name = "Misc Objects";
 			path = "Source/Objects/Misc Objects";
@@ -14926,6 +14931,15 @@
 			path = FlashCamBaseClasses;
 			sourceTree = "<group>";
 		};
+		E6DC1B48243A240400A559F0 /* URLSession */ = {
+			isa = PBXGroup;
+			children = (
+				E6DC1B49243A240400A559F0 /* ORURLSession.m */,
+				E6DC1B4A243A240400A559F0 /* ORURLSession.h */,
+			);
+			path = URLSession;
+			sourceTree = "<group>";
+		};
 		EF7722B111E813120064A1CF /* XL3 */ = {
 			isa = PBXGroup;
 			children = (
@@ -16355,6 +16369,7 @@
 				0FF177B61DF7A09900BA783B /* RunStatusIcon.h in Headers */,
 				84762012118CD53D00016A8D /* OR1dFit.h in Headers */,
 				362020251CBD390A0089296E /* WPXMLRPCDataCleaner.h in Headers */,
+				E6DC1B4C243A240500A559F0 /* ORURLSession.h in Headers */,
 				84762014118CD53D00016A8D /* OR1dFitController.h in Headers */,
 				845313D31B9886F400FCEEE5 /* ORRemoteCommander.h in Headers */,
 				84762016118CD53D00016A8D /* OR1dRoi.h in Headers */,
@@ -18827,6 +18842,7 @@
 				CE6CCDDE146732D90099238D /* vxi11_clnt.c in Sources */,
 				CE6CCDE1146732D90099238D /* vxi11_xdr.c in Sources */,
 				CEB1A5C514673AB6001381E6 /* vxi11_user.m in Sources */,
+				E6DC1B4B243A240500A559F0 /* ORURLSession.m in Sources */,
 				848E59181472B34400A70AB4 /* ORTTCPX400DPController.m in Sources */,
 				0F16E3611C493B00003C9EC9 /* RedisClient.m in Sources */,
 				848E591A1472B34400A70AB4 /* ORTTCPX400DPModel.m in Sources */,

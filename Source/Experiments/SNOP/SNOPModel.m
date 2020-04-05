@@ -53,6 +53,7 @@
 #import "RunTypeWordBits.hh"
 #import "TUBiiModel.h"
 #import "SessionDB.h"
+#import "ORURLSession.h"
 
 #define RUNNING 0
 #define STARTING 1
@@ -2635,8 +2636,8 @@ static NSComparisonResult compareXL3s(ORXL3Model *xl3_1, ORXL3Model *xl3_2, void
 
     //link = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     link = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-   request = [NSURLRequest requestWithURL:[NSURL URLWithString:link] cachePolicy:0 timeoutInterval:2];
-    data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    request = [NSURLRequest requestWithURL:[NSURL URLWithString:link] cachePolicy:0 timeoutInterval:2];
+    data = [[ORURLSession sendSynchronousRequest:request returningResponse:&response error:&error] autorelease];
     if (error != nil) {
         NSLogColor([NSColor redColor], @"Error reading standard runs from "
                    "database: %@\n", [error localizedDescription]);

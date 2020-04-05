@@ -39,52 +39,32 @@
  	
  	//NSLog ( @"GET: %@", urlString ); 
     
-    NSURLRequest *request = [[NSURLRequest alloc]
- 							 initWithURL: [NSURL URLWithString:urlString]
- 							 cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
- 							 timeoutInterval: 5
- 							 ];
-    
-    NSURLConnection *connection = [[NSURLConnection alloc]
- 								   initWithRequest:request
- 								   delegate:self
- 								   startImmediately:YES];
- 	
-    [connection release];
-    [request release];
+    NSURLRequest *request = [[[NSURLRequest alloc] initWithURL: [NSURL URLWithString:urlString]
+                                                   cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
+                                               timeoutInterval: 5] autorelease];
+   
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request] resume];
 }
 
 
 - (void)put: (NSData *)postBody atURL:(NSString *)urlString{
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:urlString]];
+    NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:urlString]] autorelease];
     [request setValue:@"application/json" forHTTPHeaderField: @"Content-Type"];
     [request setValue:[NSString stringWithFormat:@"%u", (int)[postBody length]] forHTTPHeaderField:@"Content-Length"];
     [request setHTTPMethod:@"PUT"];
     [request setHTTPBody:postBody];
     
-    NSURLConnection *connection = [[NSURLConnection alloc]
- 								   initWithRequest:request
- 								   delegate:self
-                                   startImmediately:YES];
- 	
-    [connection release];
-    [request release];
-}	
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request] resume];
+}
 
 - (void)post: (NSData *)postBody atURL:(NSString *)urlString{
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:urlString]];
+    NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:urlString]] autorelease];
     [request setValue:@"application/json" forHTTPHeaderField: @"Content-Type"];
     [request setValue:[NSString stringWithFormat:@"%u", (int)[postBody length]] forHTTPHeaderField:@"Content-Length"];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:postBody];
     
-    NSURLConnection *connection = [[NSURLConnection alloc]
- 								   initWithRequest:request
- 								   delegate:self
- 								   startImmediately:YES];
- 	
-    [connection release];
-    [request release];
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request] resume];
 }
 
 - (void) setDelegateAction:(NSString *)aString{

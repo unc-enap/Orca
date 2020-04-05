@@ -29,6 +29,7 @@
 //#import "YAJL/YAJL.h"
 #import "ORTaskSequence.h"
 #import "ORTimeRate.h"
+#import "ORURLSession.h"
 
 NSString* ORSNOChartXChangedNotification            = @"ORSNOChartXChangedNotification";
 NSString* ORSNOChartYChangedNotification            = @"ORSNOChartYChangedNotification";
@@ -177,8 +178,7 @@ NSString* totalRatePlotChanged                      = @"totalRatePlotChanged";
                        @"http://snoplus:scintillate@snotpenn01.snolab.ca:5984/orcatest/_design/run_type/_view/all?group=True&group_level=1"];
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:
                                     [NSURL URLWithString:urlName] cachePolicy: NSURLRequestReloadIgnoringCacheData timeoutInterval:1];	
-	NSData *responseData = [[NSData alloc] initWithData:
-                            [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&connectionError]];
+	NSData *responseData = [[ORURLSession sendSynchronousRequest:request returningResponse:&response error:&connectionError] autorelease];
     
    // if (responseData!=nil){
         //NSString *jsonStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
@@ -197,7 +197,6 @@ NSString* totalRatePlotChanged                      = @"totalRatePlotChanged";
   //  }
     
     [urlName release];
-    [responseData release];
 }
 
 - (void) setRunTypeName:(NSString *)aType
@@ -361,7 +360,7 @@ NSString* totalRatePlotChanged                      = @"totalRatePlotChanged";
     NSError *connectionError;
     NSString *urlName=[[NSString alloc] initWithString:@"http://snoplus:scintillate@snotpenn01.snolab.ca:5984/slow_control/_design/hwinfo/_view/ios"];
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlName] cachePolicy: NSURLRequestReloadIgnoringCacheData timeoutInterval:1];
-    NSData *responseData = [[NSData alloc] initWithData:[NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&connectionError]];
+    NSData *responseData = [[ORURLSession sendSynchronousRequest:request returningResponse:&response error:&connectionError] autorelease];
 	//NSString *jsonStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
 	//NSDictionary *jsonServer = [[NSDictionary alloc] initWithDictionary:[jsonStr yajl_JSON]];
 	//NSArray *serverRows = [[NSArray alloc] initWithArray:[jsonServer objectForKey:@"rows"]];
@@ -392,7 +391,6 @@ NSString* totalRatePlotChanged                      = @"totalRatePlotChanged";
     
     //[jsonStr release];
     [urlName release];
-    [responseData release];
     //[jsonServer release];
     [serverRows release];
 }

@@ -101,17 +101,17 @@ funcdef
 
 filterFunction
 		: filterFunction statement         {addFilterNode(filterNodeType,$2);}
-		| /*NULL*/
+        | /*NULL*/                         {}
         ;
 
 startFunction
 		: startFunction statement         {addFilterNode(startNodeType,$2);}
-		| /*NULL*/
+        | /*NULL*/                        {}
         ;
 
 finishFunction
 		: finishFunction statement         {addFilterNode(finishNodeType,$2);}
-		| /*NULL*/
+        | /*NULL*/                         {}
         ;
 
 statement

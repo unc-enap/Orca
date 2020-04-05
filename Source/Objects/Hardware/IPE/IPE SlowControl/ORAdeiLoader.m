@@ -48,6 +48,10 @@
 	self = [super init];
 	host = [aHost retain];
 	delegate			= aDelegate;
+    NSURLSessionConfiguration* urlConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+    [urlConfig setRequestCachePolicy:NSURLRequestReloadIgnoringCacheData];
+    [urlConfig setTimeoutIntervalForRequest:kTimeoutInterval];
+    theAdeiSession = [NSURLSession sessionWithConfiguration:urlConfig delegate:delegate delegateQueue:nil];
 	didFinishSelector	= aSelector;
 	adeiType			= aType;
 	setupOptions		= [someArray retain];
@@ -61,7 +65,7 @@
 	[host release];
 	[path release];
 	[setupOptions release];
-	[theAdeiConnection release];
+	[theAdeiSession release];
 	[receivedData release];
 	[resultArray release];
 	[super dealloc];
@@ -91,8 +95,7 @@
 			recursive  = NO;
 			NSURL* furl = [NSURL URLWithString: requestString];
             if(showDebugOutput) NSLog(@"Sending out 'set control' request string: >>>%@<<<\n",requestString);//debugging
-			NSURLRequest* theRequest=[NSURLRequest requestWithURL:furl  cachePolicy:NSURLRequestReloadIgnoringCacheData  timeoutInterval:kTimeoutInterval];// make it configurable
-			theAdeiConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+            [[theAdeiSession dataTaskWithRequest:[NSURLRequest requestWithURL:furl]] resume];
 		}
 	}
 }
@@ -122,8 +125,7 @@
 			recursive  = NO;
 			NSURL* furl = [NSURL URLWithString: requestString];
             if(showDebugOutput) NSLog(@"Sending out 'send control' request string: >>>%@<<<\n",requestString);//debugging
-			NSURLRequest* theRequest=[NSURLRequest requestWithURL:furl  cachePolicy:NSURLRequestReloadIgnoringCacheData  timeoutInterval:kTimeoutInterval];// make it configurable
-			theAdeiConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+            [[theAdeiSession dataTaskWithRequest:[NSURLRequest requestWithURL:furl]] resume];
 		}
 	}
 }
@@ -142,8 +144,7 @@
 			recursive  = NO;
 			NSURL* furl = [NSURL URLWithString: requestString];
             if(showDebugOutput) NSLog(@"Sending out request string: >>>%@<<<\n",requestString);//debugging
-			NSURLRequest* theRequest=[NSURLRequest requestWithURL:furl  cachePolicy:NSURLRequestReloadIgnoringCacheData  timeoutInterval:kTimeoutInterval];// make it configurable
-			theAdeiConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+            [[theAdeiSession dataTaskWithRequest:[NSURLRequest requestWithURL:furl]] resume];
 		}
 }
 
@@ -167,8 +168,7 @@
 		recursive  = NO;
 		NSURL* furl = [NSURL URLWithString: requestString];
         if(showDebugOutput) NSLog(@"Sending out sensor request string: >>>%@<<<\n",requestString);//debugging
-		NSURLRequest* theRequest=[NSURLRequest requestWithURL:furl  cachePolicy:NSURLRequestReloadIgnoringCacheData  timeoutInterval:kTimeoutInterval];// make it configurable
-		theAdeiConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+        [[theAdeiSession dataTaskWithRequest:[NSURLRequest requestWithURL:furl]] resume];
 	}
 }
 
@@ -181,8 +181,7 @@
 		recursive  = NO;
 		NSURL* furl = [NSURL URLWithString: requestString];
         if(showDebugOutput) NSLog(@"Sending out control request string: >>>%@<<<\n",requestString);//debugging
-		NSURLRequest* theRequest=[NSURLRequest requestWithURL:furl  cachePolicy:NSURLRequestReloadIgnoringCacheData  timeoutInterval:kTimeoutInterval];// make it configurable
-		theAdeiConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+        [[theAdeiSession dataTaskWithRequest:[NSURLRequest requestWithURL:furl]] resume];
 	}
 }
 
@@ -239,8 +238,7 @@
 		dataFormat = kxmlFormat;
 		path = [aPath copy];
 		NSURL* furl = [NSURL URLWithString: requestString];
-		NSURLRequest* theRequest=[NSURLRequest requestWithURL:furl  cachePolicy:NSURLRequestReloadIgnoringCacheData  timeoutInterval:kTimeoutInterval];//was 5*kTimeoutInterval ... ->timeouts? // make it configurable
-		theAdeiConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+        [[theAdeiSession dataTaskWithRequest:[NSURLRequest requestWithURL:furl]] resume];
 	}
 }
 
@@ -264,34 +262,33 @@
 
 
 #pragma mark ***Delegate Methods
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+- (void) URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse*) response
 {
 }
 
-- (void) connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+- (void) URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData* )data
 {
 	if(!receivedData)receivedData = [[NSMutableData data] retain];
 	[receivedData appendData:data];
 }
 
-- (void)connection:(NSURLConnection *)connection  didFailWithError:(NSError *)error
-{	
-    if(showDebugOutput) 
-    NSLog(@"ADEI Loader::didFailWithError: Connection Failed :: descr. >>>%@<<<\n",[error localizedDescription]);//debugging timeouts
-
-    if(connection==theAdeiConnection){
-        // release the connection, and the data object
-        [theAdeiConnection release];
-		theAdeiConnection = nil;
-        [receivedData release];
-		receivedData = nil;
-		NSLogError(@"ADEI Loader",@"Connection Failed",[error localizedDescription], nil);
-        NSLog(@"ERROR:  ORAdeiLoader::ADEI Loader-Connection Failed (%@)\n",[error localizedDescription]);
-    }
-}
-
-- (void) connectionDidFinishLoading:(NSURLConnection *)connection
+- (void) URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
 {
+    if(error != nil){
+        if(showDebugOutput)
+            NSLog(@"ADEI Loader::didFailWithError: Connection Failed :: descr. >>>%@<<<\n",[error localizedDescription]);//debugging timeouts
+
+        if(session==theAdeiSession){
+            // release the connection, and the data object
+            [theAdeiSession release];
+            theAdeiSession = nil;
+            [receivedData release];
+            receivedData = nil;
+            NSLogError(@"ADEI Loader",@"Connection Failed",[error localizedDescription], nil);
+            NSLog(@"ERROR:  ORAdeiLoader::ADEI Loader-Connection Failed (%@)\n",[error localizedDescription]);
+        }
+        return;
+    }
     if(showDebugOutput){//debug timeouts
         NSFont* aFont = [NSFont userFixedPitchFontOfSize:10];
         NSLogFont(aFont,@"Received data/string after URL request (dataFormat: %i): BEGIN-%@-END\n",dataFormat,receivedData);

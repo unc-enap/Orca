@@ -18,6 +18,7 @@
 //-------------------------------------------------------------
 
 #import "ORCouchDB.h"
+#import "ORURLSession.h"
 //#import <YAJL/NSObject+YAJL.h>
 //#import <YAJL/YAJLDocument.h>
 #import "SynthesizeSingleton.h"
@@ -352,8 +353,7 @@
             }
         }
         [self _updateAuthentication:request];
-        NSData *data = [[[NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil] retain] autorelease];
-        
+        NSData* data = [[ORURLSession sendSynchronousRequest:request returningResponse:&response error:nil] autorelease];
         if (data) {
             //YAJLDocument *document = [[[YAJLDocument alloc] initWithData:data parserOptions:YAJLParserOptionsNone error:nil] autorelease];
             result =  [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
@@ -396,7 +396,7 @@
         [request setAllHTTPHeaderFields:[NSDictionary dictionaryWithObject:@"application/json" forKey:@"Content-Type"]];
         [request setHTTPMethod:@"POST"];
         [self _updateAuthentication:request];
-        NSData *data = [[[NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil] retain] autorelease];	
+        NSData *data = [[ORURLSession sendSynchronousRequest:request returningResponse:&response error:nil] autorelease];
         //YAJLDocument *document = nil;
         if (data) {
             //document = [[[YAJLDocument alloc] initWithData:data parserOptions:YAJLParserOptionsNone error:nil] autorelease];
@@ -607,7 +607,7 @@
         //NSString* s = [aBody yajl_JSONString];
         //NSData* asData = [s dataUsingEncoding:NSASCIIStringEncoding];
         [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:aBody options:NSJSONWritingPrettyPrinted error:nil]];
-        NSData *data = [[[NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil] retain] autorelease];
+        NSData *data = [[ORURLSession sendSynchronousRequest:request returningResponse:&response error:nil] autorelease];
         
         id result = nil;
         if (data) {
@@ -701,7 +701,7 @@
 		[request setHTTPMethod:@"PUT"];
 		[request setHTTPBody:attachmentData];
 		
-		NSData *data = [[[NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil] retain] autorelease];
+		NSData *data = [[ORURLSession sendSynchronousRequest:request returningResponse:&response error:nil] autorelease];
 		
 		
 		if (data) {

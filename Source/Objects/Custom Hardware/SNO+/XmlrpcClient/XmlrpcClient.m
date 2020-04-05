@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "wpxmlrpc.h"
 #import "XmlrpcClient.h"
+#import "ORURLSession.h"
 
 @implementation XmlrpcClient
 
@@ -83,9 +84,9 @@
     
     NSURLResponse * response = nil;
     NSError * error = nil;
-    NSData * data = [NSURLConnection sendSynchronousRequest:request
-                                            returningResponse:&response
-                                                        error:&error];
+    NSData * data = [ORURLSession sendSynchronousRequest:request
+                                                returningResponse:&response
+                                                            error:&error];
     if(error){
         NSException *excep = [NSException exceptionWithName:@"XmlrpcClient"
                                                      reason:[error localizedDescription]

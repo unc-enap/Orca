@@ -11,6 +11,7 @@
 #import "SNOPModel.h"
 #import "ORFec32Model.h"
 #import "ORRunModel.h"
+#import "ORURLSession.h"
 
 #define kResistorDbHeaderRetrieved @"kResistorDbHeaderRetrieved"
 #define kResistorDbDocumentPosted @"kResistorDbDocumentPosted"
@@ -83,7 +84,7 @@ endRunNumber = _endRunNumber;
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:
                                     [NSURL URLWithString:urlName] cachePolicy: NSURLRequestReloadIgnoringCacheData timeoutInterval:1];
 	NSData *responseData = [[[NSData alloc] initWithData:
-                            [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&connectionError]]autorelease];
+                            [ORURLSession sendSynchronousRequest:request returningResponse:&response error:&connectionError]]autorelease];
     
     //this jsonObject contains all the responses from a view 
     NSDictionary *couchDbQueryResponse=[NSJSONSerialization

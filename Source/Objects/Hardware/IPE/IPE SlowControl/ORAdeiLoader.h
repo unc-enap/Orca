@@ -30,9 +30,9 @@
 #define kTimeoutInterval 10.0
 // #define kTimeoutInterval 15.0
 
-@interface ORAdeiLoader : NSObject <NSXMLParserDelegate> {
+@interface ORAdeiLoader : NSObject <NSXMLParserDelegate, NSURLSessionDataDelegate> {
 	NSString*			host;
-	NSURLConnection*	theAdeiConnection;
+    NSURLSession*       theAdeiSession;
 	NSMutableData*		receivedData;
 	NSMutableArray*		resultArray;
 	BOOL				recursive;
@@ -74,11 +74,10 @@
 + (NSString*) sensorItemRequestStringUrl:(NSString*)aUrl itemPath:(NSString*)aPath;
 + (NSString*) webRequestStringUrl:(NSString*)url itemPath:(NSString*)path;
 
-#pragma mark ***Delegate Methods for connection
-- (void) connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response;
-- (void) connection:(NSURLConnection *)connection didReceiveData:(NSData *)data;
-- (void) connection:(NSURLConnection *)connection  didFailWithError:(NSError *)error;
-- (void) connectionDidFinishLoading:(NSURLConnection *)connection;
+#pragma mark ***Delegate Methods for URL session
+- (void) URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response;
+- (void) URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data;
+- (void) URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error;
 
 #pragma mark ***Delegate Methods for XML parsing
 - (void) parser:(NSXMLParser*) parser
