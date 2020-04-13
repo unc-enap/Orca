@@ -1099,11 +1099,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     }
     [[[self undoManager] prepareWithInvocationTarget:self] setGTThresholdEnabled:aChan withValue:aValue];
 
-    if (aValue<=3 && aValue>=0) {
-        GTThresholdEnabled[aChan] = aValue;
-    }
-    else
-        NSLog(@"That wasn't supposed to happen...\n");
+    GTThresholdEnabled[aChan] = aValue;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:ORSIS3305GTThresholdEnabledChanged object:self];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORSIS3305ChannelEnabledChanged object:self];

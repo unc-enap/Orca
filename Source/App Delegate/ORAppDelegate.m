@@ -454,6 +454,8 @@ NSString* OROrcaFinalQuitNotice      = @"OROrcaFinalQuitNotice";
     bool debugging = [self inDebugger];
     NSLog(@"--------------------------------------------------------\n");
     NSLog(@"   Orca (v%@)\n",fullVersion());
+    if(![gitRevHash() isEqualToString:@""])
+        NSLog(@"   Orca git revision: %@\n", gitRevHash());
     if(debugging)NSLog(@"   Running in the debugger\n");
     NSNumber* shutdownFlag = [[NSUserDefaults standardUserDefaults] objectForKey:ORNormalShutDownFlag];
     if(shutdownFlag && ([shutdownFlag boolValue]==NO)){

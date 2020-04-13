@@ -58,15 +58,15 @@
         NSString* versionString = [infoDictionary objectForKey:@"CFBundleVersion"];
 		
 		NSFileManager* fm = [NSFileManager defaultManager];
-		NSString* svnVersionPath = [[NSBundle mainBundle] pathForResource:@"svnversion"ofType:nil];
-		NSMutableString* svnVersion = [NSMutableString stringWithString:@""];
-		if([fm fileExistsAtPath:svnVersionPath])svnVersion = [NSMutableString stringWithContentsOfFile:svnVersionPath encoding:NSASCIIStringEncoding error:nil];
-		if([svnVersion hasSuffix:@"\n"]){
-			[svnVersion replaceCharactersInRange:NSMakeRange([svnVersion length]-1, 1) withString:@""];
+		NSString* orcaVersionPath = [[NSBundle mainBundle] pathForResource:@"orcaversion"ofType:nil];
+		NSMutableString* orcaVersion = [NSMutableString stringWithString:@""];
+		if([fm fileExistsAtPath:orcaVersionPath])orcaVersion = [NSMutableString stringWithContentsOfFile:orcaVersionPath encoding:NSASCIIStringEncoding error:nil];
+		if([orcaVersion hasSuffix:@"\n"]){
+			[orcaVersion replaceCharactersInRange:NSMakeRange([orcaVersion length]-1, 1) withString:@""];
 		}
 
         [versionField setStringValue:[NSString stringWithFormat:@"Version %@%@%@",
-            versionString,[svnVersion length]?@":":@"",[svnVersion length]?svnVersion:@""]];
+            versionString,[orcaVersion length]?@":":@"",[orcaVersion length]?orcaVersion:@""]];
 
         // Setup our credits
         NSString* creditsPath = [[NSBundle mainBundle] pathForResource:@"Credits"

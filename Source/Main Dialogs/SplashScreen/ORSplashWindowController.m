@@ -47,18 +47,18 @@
 	
 	NSDictionary* infoDictionary = [[NSBundle mainBundle] infoDictionary];
 
-	NSMutableString* svnVersion = [NSMutableString stringWithString:@""];
-	NSString* svnVersionPath = [[NSBundle mainBundle] pathForResource:@"svnversion"ofType:nil];
+	NSMutableString* orcaVersion = [NSMutableString stringWithString:@""];
+	NSString* orcaVersionPath = [[NSBundle mainBundle] pathForResource:@"orcaversion"ofType:nil];
 	NSFileManager* fm = [NSFileManager defaultManager];
-	if([fm fileExistsAtPath:svnVersionPath])svnVersion = [NSMutableString stringWithContentsOfFile:svnVersionPath encoding:NSASCIIStringEncoding error:nil];
-	if([svnVersion hasSuffix:@"\n"]){
-		[svnVersion replaceCharactersInRange:NSMakeRange([svnVersion length]-1, 1) withString:@""];
+	if([fm fileExistsAtPath:orcaVersionPath])orcaVersion = [NSMutableString stringWithContentsOfFile:orcaVersionPath encoding:NSASCIIStringEncoding error:nil];
+	if([orcaVersion hasSuffix:@"\n"]){
+		[orcaVersion replaceCharactersInRange:NSMakeRange([orcaVersion length]-1, 1) withString:@""];
 	}
 
 
 	NSString* versionString = [infoDictionary objectForKey:@"CFBundleVersion"];
 	[versionField setStringValue:[NSString stringWithFormat:@"Version %@%@%@",
-		versionString,[svnVersion length]?@":":@"",[svnVersion length]?svnVersion:@""]];
+		versionString,[orcaVersion length]?@":":@"",[orcaVersion length]?orcaVersion:@""]];
 
 	[infoField setStringValue:@"Starting..."];
 

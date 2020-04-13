@@ -1029,9 +1029,7 @@ static NSString* rad7ThoronNames[kNumberRad7ThoronNames] = {
 }
 - (void) setupThoron
 {
-	if(thoron >= 0 && thoron <kNumberRad7ThoronNames){
-		[self addCmdToQueue:[NSString stringWithFormat: @"SETUP THORON %@",rad7ThoronNames[thoron]]];
-	}
+    [self addCmdToQueue:[NSString stringWithFormat: @"SETUP THORON %@",rad7ThoronNames[thoron]]];
 }
 - (void) setupPumpMode
 {

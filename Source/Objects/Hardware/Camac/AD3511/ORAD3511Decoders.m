@@ -73,7 +73,7 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 	NSString* crateKey = [self getCrateKey: crate];
 	NSString* cardKey = [self getStationKey: card];
 	BOOL timingIncluded = (*ptr&0x02000000)>>25;
-	BOOL dataOffset;
+	NSUInteger dataOffset;
 	if(timingIncluded)	{
 		dataOffset = 4;
 		ptr++;	//skip over the timing word #1
@@ -103,7 +103,7 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
     NSString* card  = [NSString stringWithFormat:@"Station  = %u\n",(*ptr&0x001f0000)>>16];
 
 	BOOL timingIncluded = (*ptr&0x02000000)>>25;
-	BOOL dataOffset;
+	NSUInteger dataOffset;
 	NSMutableString* adcValues = [NSMutableString stringWithFormat:@"buffer size: %u\n",timingIncluded?length-4:length-2];
 	if(timingIncluded)	{
 		dataOffset = 4;

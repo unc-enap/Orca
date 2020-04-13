@@ -1577,7 +1577,6 @@
 		8457D25612F9986E00D3E3B4 /* ORiSegHVCardController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8457D25412F9986E00D3E3B4 /* ORiSegHVCardController.m */; };
 		8457D37712F9AB8A00D3E3B4 /* ORiSegHVCardDecoders.h in Headers */ = {isa = PBXBuildFile; fileRef = 8457D37512F9AB8A00D3E3B4 /* ORiSegHVCardDecoders.h */; };
 		8457D37812F9AB8A00D3E3B4 /* ORiSegHVCardDecoders.m in Sources */ = {isa = PBXBuildFile; fileRef = 8457D37612F9AB8A00D3E3B4 /* ORiSegHVCardDecoders.m */; };
-		8458E8ED15DA89B5005C43A9 /* Mail.app in Resources */ = {isa = PBXBuildFile; fileRef = 8458E8EC15DA89B5005C43A9 /* Mail.app */; };
 		8458E91515DA8A2A005C43A9 /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8458E91415DA8A2A005C43A9 /* ScriptingBridge.framework */; };
 		8458EA3A15DBCFF6005C43A9 /* MPodCrate.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8458EA3315DBCFF6005C43A9 /* MPodCrate.nib */; };
 		8458EA3B15DBCFF6005C43A9 /* MPodCrate.tif in Resources */ = {isa = PBXBuildFile; fileRef = 8458EA3415DBCFF6005C43A9 /* MPodCrate.tif */; };
@@ -2011,7 +2010,6 @@
 		848822A61D2413910030B398 /* ORDT5725Decoders.m in Sources */ = {isa = PBXBuildFile; fileRef = 8488229E1D2413910030B398 /* ORDT5725Decoders.m */; };
 		848822A71D2413910030B398 /* ORDT5725Model.h in Headers */ = {isa = PBXBuildFile; fileRef = 8488229F1D2413910030B398 /* ORDT5725Model.h */; };
 		848822A81D2413910030B398 /* ORDT5725Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 848822A01D2413910030B398 /* ORDT5725Model.m */; };
-		848883CC10179CBA0043E7D6 /* EduWashingtonNplOrcaNi488PlugIn.plugin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 84888394101796C10043E7D6 /* EduWashingtonNplOrcaNi488PlugIn.plugin */; };
 		848917781D6B73D300CF5AAF /* CytecVM8.gif in Resources */ = {isa = PBXBuildFile; fileRef = 848917721D6B73D300CF5AAF /* CytecVM8.gif */; };
 		848917791D6B73D300CF5AAF /* CytecVM8.nib in Resources */ = {isa = PBXBuildFile; fileRef = 848917731D6B73D300CF5AAF /* CytecVM8.nib */; };
 		8489177A1D6B73D300CF5AAF /* ORCytecVM8Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 848917741D6B73D300CF5AAF /* ORCytecVM8Controller.h */; };
@@ -3534,6 +3532,7 @@
 		E6653F9B23A82A7D00A53678 /* ORFlashCamMiniCrateModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E6653F9A23A82A7D00A53678 /* ORFlashCamMiniCrateModel.m */; };
 		E6653F9E23A8301C00A53678 /* ORFlashCamMiniCrateController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6653F9D23A8301C00A53678 /* ORFlashCamMiniCrateController.m */; };
 		E66DB72F23B42E17005CDB2C /* FlashCamADC.xib in Resources */ = {isa = PBXBuildFile; fileRef = E66DB72E23B42E17005CDB2C /* FlashCamADC.xib */; };
+		E677BBA32444AD34006DB631 /* EduWashingtonNplOrcaNi488PlugIn.plugin in Resources */ = {isa = PBXBuildFile; fileRef = 84888394101796C10043E7D6 /* EduWashingtonNplOrcaNi488PlugIn.plugin */; };
 		E67894D721E91CD500B66977 /* Messaging.tif in Resources */ = {isa = PBXBuildFile; fileRef = E67894D621E91CD400B66977 /* Messaging.tif */; };
 		E681A79E23BA765A00F76977 /* flashcam.png in Resources */ = {isa = PBXBuildFile; fileRef = E61D05892307313E00140549 /* flashcam.png */; };
 		E681A7A023BA771F00F76977 /* FlashCamMiniCrate.nib in Resources */ = {isa = PBXBuildFile; fileRef = E681A79F23BA771F00F76977 /* FlashCamMiniCrate.nib */; };
@@ -3547,6 +3546,7 @@
 		E6983CAE219DB45700029B9C /* ORCamacExceptions.h in Headers */ = {isa = PBXBuildFile; fileRef = E6983CAD219DB45600029B9C /* ORCamacExceptions.h */; };
 		E6C2E7F223A9845700673DB8 /* ORFlashCamADCModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E6C2E7F123A9845700673DB8 /* ORFlashCamADCModel.m */; };
 		E6C2E7F523A984B900673DB8 /* ORFlashCamADCController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6C2E7F423A984B900673DB8 /* ORFlashCamADCController.m */; };
+		E6CC0769244405DE00D8DE0F /* Mail.app in Resources */ = {isa = PBXBuildFile; fileRef = E6CC0768244405DD00D8DE0F /* Mail.app */; };
 		E6DC1B4B243A240500A559F0 /* ORURLSession.m in Sources */ = {isa = PBXBuildFile; fileRef = E6DC1B49243A240400A559F0 /* ORURLSession.m */; };
 		E6DC1B4C243A240500A559F0 /* ORURLSession.h in Headers */ = {isa = PBXBuildFile; fileRef = E6DC1B4A243A240400A559F0 /* ORURLSession.h */; };
 		EF69C433116E5DC3008ABADC /* ORSNOCrateReadout.hh in Headers */ = {isa = PBXBuildFile; fileRef = EF69C431116E5DC3008ABADC /* ORSNOCrateReadout.hh */; };
@@ -3880,7 +3880,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				848883CC10179CBA0043E7D6 /* EduWashingtonNplOrcaNi488PlugIn.plugin in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5222,7 +5221,6 @@
 		8457D25412F9986E00D3E3B4 /* ORiSegHVCardController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORiSegHVCardController.m; path = "Source/Objects/Hardware/HV/MPod/MPod Base Classes/ORiSegHVCardController.m"; sourceTree = SOURCE_ROOT; };
 		8457D37512F9AB8A00D3E3B4 /* ORiSegHVCardDecoders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORiSegHVCardDecoders.h; path = "Source/Objects/Hardware/HV/MPod/MPod Base Classes/ORiSegHVCardDecoders.h"; sourceTree = SOURCE_ROOT; };
 		8457D37612F9AB8A00D3E3B4 /* ORiSegHVCardDecoders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORiSegHVCardDecoders.m; path = "Source/Objects/Hardware/HV/MPod/MPod Base Classes/ORiSegHVCardDecoders.m"; sourceTree = SOURCE_ROOT; };
-		8458E8EC15DA89B5005C43A9 /* Mail.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = Mail.app; path = /Applications/Mail.app; sourceTree = "<absolute>"; };
 		8458E91415DA8A2A005C43A9 /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = ../../../../System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SOURCE_ROOT; };
 		8458EA3315DBCFF6005C43A9 /* MPodCrate.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = MPodCrate.nib; path = Source/Objects/Hardware/HV/MPod/MPodCrate/MPodCrate.nib; sourceTree = SOURCE_ROOT; };
 		8458EA3415DBCFF6005C43A9 /* MPodCrate.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = MPodCrate.tif; path = Source/Objects/Hardware/HV/MPod/MPodCrate/MPodCrate.tif; sourceTree = SOURCE_ROOT; };
@@ -7332,6 +7330,7 @@
 		E6C2E7F123A9845700673DB8 /* ORFlashCamADCModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamADCModel.m; sourceTree = "<group>"; };
 		E6C2E7F323A9848E00673DB8 /* ORFlashCamADCController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORFlashCamADCController.h; sourceTree = "<group>"; };
 		E6C2E7F423A984B900673DB8 /* ORFlashCamADCController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamADCController.m; sourceTree = "<group>"; };
+		E6CC0768244405DD00D8DE0F /* Mail.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = Mail.app; path = ../../../../../../../../System/Applications/Mail.app; sourceTree = "<group>"; };
 		E6DC1B49243A240400A559F0 /* ORURLSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORURLSession.m; sourceTree = "<group>"; };
 		E6DC1B4A243A240400A559F0 /* ORURLSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORURLSession.h; sourceTree = "<group>"; };
 		EF69C430116E5DC3008ABADC /* ORSNOCrateReadout.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ORSNOCrateReadout.cc; sourceTree = "<group>"; };
@@ -7413,7 +7412,7 @@
 		F576B08203B12320015F64B1 /* ORShaperController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORShaperController.m; sourceTree = "<group>"; };
 		F576B08303B12320015F64B1 /* ShaperCard.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = ShaperCard.gif; sourceTree = "<group>"; };
 		F576B09403B154A7015F64B1 /* Shaper.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Shaper.nib; path = Source/Objects/Hardware/Vme/Shaper/Shaper.nib; sourceTree = SOURCE_ROOT; };
-		F5AD34B203A7AEB8015F64B1 /* Readme */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = Readme; sourceTree = SOURCE_ROOT; };
+		F5AD34B203A7AEB8015F64B1 /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = SOURCE_ROOT; };
 		F5B1802503B297FD015F64B1 /* ORCaenDataDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ORCaenDataDecoder.h; sourceTree = "<group>"; };
 		F5B1802603B297FD015F64B1 /* ORCaenDataDecoder.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORCaenDataDecoder.m; sourceTree = "<group>"; };
 		F5B1802903B297FD015F64B1 /* Caen775.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = Caen775.nib; sourceTree = "<group>"; };
@@ -7649,7 +7648,7 @@
 			children = (
 				846574BF1F9D449500B4BAA9 /* Orca.entitlements */,
 				CE68866C0D0CE0E400FA4158 /* PlugIns */,
-				F5AD34B203A7AEB8015F64B1 /* Readme */,
+				F5AD34B203A7AEB8015F64B1 /* Readme.md */,
 				F51E693F03AE4775015F64B1 /* Source */,
 				2A37F4B8FDCFA73011CA2CEA /* Resources */,
 				84F7FB520AE5558900A5AA4C /* Libraries */,
@@ -11222,7 +11221,7 @@
 		848E3BC509DB0B3E0003F7A2 /* MailCenter */ = {
 			isa = PBXGroup;
 			children = (
-				8458E8EC15DA89B5005C43A9 /* Mail.app */,
+				E6CC0768244405DD00D8DE0F /* Mail.app */,
 				84E743420DAD5EEF0099CAEE /* ORMailer.h */,
 				84E743430DAD5EEF0099CAEE /* ORMailer.m */,
 				848E3BC609DB0B3E0003F7A2 /* ORMailCenter.h */,
@@ -16854,6 +16853,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E677BBA32444AD34006DB631 /* EduWashingtonNplOrcaNi488PlugIn.plugin in Resources */,
 				E681A79E23BA765A00F76977 /* flashcam.png in Resources */,
 				849415861B330FEB00ED42F8 /* onOffPendingBox.tif in Resources */,
 				840C80001955E1D300E36622 /* RelaunchOrca in Resources */,
@@ -17747,9 +17747,9 @@
 				84880EEE15B8950D0073CDFC /* MJDStrings.tif in Resources */,
 				8432B5E915D56C7C00C5FB5D /* CouchHistoryValuesMap.txt in Resources */,
 				8432B6BE15D92D4700C5FB5D /* MJDString.tif in Resources */,
+				E6CC0769244405DE00D8DE0F /* Mail.app in Resources */,
 				8432B6BF15D92D4700C5FB5D /* MJDPumpCart.nib in Resources */,
 				8432B6C015D92D4700C5FB5D /* MJDPumpCart.tif in Resources */,
-				8458E8ED15DA89B5005C43A9 /* Mail.app in Resources */,
 				8458EA3A15DBCFF6005C43A9 /* MPodCrate.nib in Resources */,
 				8458EA3B15DBCFF6005C43A9 /* MPodCrate.tif in Resources */,
 				8458EA3C15DBCFF6005C43A9 /* MPodCrateSmall.tif in Resources */,
@@ -17846,7 +17846,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ -x \"/usr/bin/svnversion\" ]; then\n   svnver=`/usr/bin/svnversion .`\nelse\n   svnver=\"-\"\nfi\n\nif [ \"$svnver\" == \"Unversioned directory\" ]; then\n   if [ -x \"/usr/bin/git\" ]; then\n      svnver=`/usr/bin/git -C $SOURCE_ROOT svn info | grep '^Revision: ' | cut -c 11-`\n   fi\nfi\n\necho \"$svnver\" > $TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/svnversion\n\n#\n# add dynamic libraries to the app bundle - PH\n#\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n\nexport DYLIB=libcrypto.1.0.0.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n# note: run \"otool -L\" on the library to get the source library name for \"-change\"\ninstall_name_tool -change $DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libmysqlclient.21.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change @rpath/$DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libpq.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change $DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libssl.1.0.0.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change $DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\n";
+			shellScript = "# set the code version from svn or git\n# if using git, set the bundle version to the git tag\nversion=\"-\"\nif [ -d \".svn\" ]; then\n    if [ -x \"/usr/bin/svnversion\" ]; then\n        version=`/usr/bin/svnversion .`\n        if [ \"$version\" == \"Unversioned directory\" ]; then\n            version=\"-\"\n        fi\n    fi\nfi\nif [ -d \".git\" ]; then\n    if [ -x \"/usr/bin/git\" ]; then\n        version=`/usr/bin/git rev-list HEAD --count`\n        if [\"$version\" == \"fatal: not a git repository (or any of the parent directories): .git\" ]; then\n            version=\"-\"\n        fi\n        gitrev=`/usr/bin/git rev-parse HEAD`\n        echo \"$gitrev\" > $TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/gitrevhash\n        release=`/usr/bin/git describe --tags --always --abbrev=0`\n        target_plist=\"$TARGET_BUILD_DIR/$INFOPLIST_PATH\"\n        dsym_plist=\"$DWARF_DSYM_FOLDER_PATH/$DWARF_DSYM_FILE_NAME/Contents/Info.plist\"\n        for plist in \"$target_plist\" \"$dsym_plist\"; do\n          if [ -f \"$plist\" ]; then\n            /usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $release\" \"$plist\"\n          fi\n        done\n    fi\nfi\necho \"$version\" > $TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/orcaversion\n\n#\n# add dynamic libraries to the app bundle - PH\n#\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n\nexport DYLIB=libcrypto.1.0.0.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n# note: run \"otool -L\" on the library to get the source library name for \"-change\"\ninstall_name_tool -change $DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libmysqlclient.21.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change @rpath/$DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libpq.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change $DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libssl.1.0.0.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change $DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
