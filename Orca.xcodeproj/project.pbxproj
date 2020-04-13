@@ -3532,6 +3532,7 @@
 		E6653F9B23A82A7D00A53678 /* ORFlashCamMiniCrateModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E6653F9A23A82A7D00A53678 /* ORFlashCamMiniCrateModel.m */; };
 		E6653F9E23A8301C00A53678 /* ORFlashCamMiniCrateController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6653F9D23A8301C00A53678 /* ORFlashCamMiniCrateController.m */; };
 		E66DB72F23B42E17005CDB2C /* FlashCamADC.xib in Resources */ = {isa = PBXBuildFile; fileRef = E66DB72E23B42E17005CDB2C /* FlashCamADC.xib */; };
+		E677BBA32444AD34006DB631 /* EduWashingtonNplOrcaNi488PlugIn.plugin in Resources */ = {isa = PBXBuildFile; fileRef = 84888394101796C10043E7D6 /* EduWashingtonNplOrcaNi488PlugIn.plugin */; };
 		E67894D721E91CD500B66977 /* Messaging.tif in Resources */ = {isa = PBXBuildFile; fileRef = E67894D621E91CD400B66977 /* Messaging.tif */; };
 		E681A79E23BA765A00F76977 /* flashcam.png in Resources */ = {isa = PBXBuildFile; fileRef = E61D05892307313E00140549 /* flashcam.png */; };
 		E681A7A023BA771F00F76977 /* FlashCamMiniCrate.nib in Resources */ = {isa = PBXBuildFile; fileRef = E681A79F23BA771F00F76977 /* FlashCamMiniCrate.nib */; };
@@ -16852,6 +16853,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E677BBA32444AD34006DB631 /* EduWashingtonNplOrcaNi488PlugIn.plugin in Resources */,
 				E681A79E23BA765A00F76977 /* flashcam.png in Resources */,
 				849415861B330FEB00ED42F8 /* onOffPendingBox.tif in Resources */,
 				840C80001955E1D300E36622 /* RelaunchOrca in Resources */,
