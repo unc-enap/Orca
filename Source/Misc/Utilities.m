@@ -34,15 +34,29 @@ NSString* fullVersion(void)
 	
 	NSString* versionString = [infoDictionary objectForKey:@"CFBundleVersion"];
 	NSFileManager* fm = [NSFileManager defaultManager];
-	NSString* svnVersionPath = [[NSBundle mainBundle] pathForResource:@"svnversion"ofType:nil];
-	NSMutableString* svnVersion = [NSMutableString stringWithString:@""];
-	if([fm fileExistsAtPath:svnVersionPath]){
-		svnVersion = [NSMutableString stringWithContentsOfFile:svnVersionPath encoding:NSASCIIStringEncoding error:nil];
-		if([svnVersion hasSuffix:@"\n"]){
-			[svnVersion replaceCharactersInRange:NSMakeRange([svnVersion length]-1, 1) withString:@""];
+	NSString* orcaVersionPath = [[NSBundle mainBundle] pathForResource:@"orcaversion"ofType:nil];
+	NSMutableString* orcaVersion = [NSMutableString stringWithString:@""];
+	if([fm fileExistsAtPath:orcaVersionPath]){
+		orcaVersion = [NSMutableString stringWithContentsOfFile:orcaVersionPath encoding:NSASCIIStringEncoding error:nil];
+		if([orcaVersion hasSuffix:@"\n"]){
+			[orcaVersion replaceCharactersInRange:NSMakeRange([orcaVersion length]-1, 1) withString:@""];
 		}
 	}
-	return [NSString stringWithFormat:@"%@%@%@",versionString,[svnVersion length]?@":":@"",[svnVersion length]?svnVersion:@""];
+	return [NSString stringWithFormat:@"%@%@%@",versionString,[orcaVersion length]?@":":@"",[orcaVersion length]?orcaVersion:@""];
+}
+
+NSString* gitRevHash(void)
+{
+    NSFileManager* fm = [NSFileManager defaultManager];
+    NSString* gitHashPath = [[NSBundle mainBundle] pathForResource:@"gitrevhash"ofType:nil];
+    NSMutableString* gitHash = [NSMutableString stringWithString:@""];
+    if([fm fileExistsAtPath:gitHashPath]){
+        gitHash = [NSMutableString stringWithContentsOfFile:gitHashPath encoding:NSASCIIStringEncoding error:nil];
+        if([gitHash hasSuffix:@"\n"])
+            [gitHash replaceCharactersInRange:NSMakeRange([gitHash length]-1, 1) withString:@""];
+    }
+    return [NSString stringWithFormat:@"%@",[gitHash length]?gitHash:@""];
+        
 }
 
 NSString* appPath(void)

@@ -40,7 +40,7 @@
 	id					delegate;
 	NSMutableString*	path;
 	SEL					didFinishSelector;
-	BOOL				dataFormat;
+	int 				dataFormat;
 	BOOL				fastGenOption;
 	NSArray*			setupOptions;
     NSMutableString*    resultInProgress;

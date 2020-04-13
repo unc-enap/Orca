@@ -84,8 +84,8 @@ NSString*  ORGretinaTriggerTimeStampChanged             = @"ORGretinaTriggerTime
 typedef struct {
 	uint32_t offset; //from the base address
 	NSString* name;
-	BOOL accessType;
-	BOOL hwType;
+	NSUInteger accessType;
+	NSUInteger hwType;
 } GretinaTriggerRegisterInformation;
 
 

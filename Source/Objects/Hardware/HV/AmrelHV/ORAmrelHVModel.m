@@ -641,7 +641,7 @@ NSString* ORAmrelHVModelDataIsValidChanged	= @"ORAmrelHVModelDataIsValidChanged"
 				int theChannel	 = [[theLastCommand substringFromIndex:[kGetActualVoltageCmd length]] intValue] - 1;
 				float theVoltage = [theResponse floatValue];
 				[self setActVoltage:theChannel withValue:theVoltage];
-				[self setDataValid:theChannel bit: kActualVoltageValidMask];
+				[self setDataValid:theChannel bit: (BOOL)kActualVoltageValidMask];
 				if(doSync[theChannel]){
 					[[self undoManager] disableUndoRegistration];
 					[self setVoltage:theChannel withValue:theVoltage];
@@ -656,7 +656,7 @@ NSString* ORAmrelHVModelDataIsValidChanged	= @"ORAmrelHVModelDataIsValidChanged"
 				int theChannel	 = [[theLastCommand substringFromIndex:[kGetActualCurrentCmd length]] intValue] - 1;
 				float theCurrent = [theResponse floatValue];
 				[self setActCurrent:theChannel withValue:theCurrent];
-				[self setDataValid:theChannel bit: kActualCurrentValidMask];
+				[self setDataValid:theChannel bit: (BOOL)kActualCurrentValidMask];
 				done = YES;
 			}
 			

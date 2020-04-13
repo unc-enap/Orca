@@ -71,6 +71,6 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>ReportBugsTo</key>
-	<string>mhowe@physics.unc.edu</string>
+	<string>tcald@unc.edu</string>
 </dict>
 </plist>
