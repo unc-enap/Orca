@@ -7411,7 +7411,7 @@
 		F576B08203B12320015F64B1 /* ORShaperController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORShaperController.m; sourceTree = "<group>"; };
 		F576B08303B12320015F64B1 /* ShaperCard.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = ShaperCard.gif; sourceTree = "<group>"; };
 		F576B09403B154A7015F64B1 /* Shaper.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Shaper.nib; path = Source/Objects/Hardware/Vme/Shaper/Shaper.nib; sourceTree = SOURCE_ROOT; };
-		F5AD34B203A7AEB8015F64B1 /* Readme */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = Readme; sourceTree = SOURCE_ROOT; };
+		F5AD34B203A7AEB8015F64B1 /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = SOURCE_ROOT; };
 		F5B1802503B297FD015F64B1 /* ORCaenDataDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ORCaenDataDecoder.h; sourceTree = "<group>"; };
 		F5B1802603B297FD015F64B1 /* ORCaenDataDecoder.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORCaenDataDecoder.m; sourceTree = "<group>"; };
 		F5B1802903B297FD015F64B1 /* Caen775.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = Caen775.nib; sourceTree = "<group>"; };
@@ -7647,7 +7647,7 @@
 			children = (
 				846574BF1F9D449500B4BAA9 /* Orca.entitlements */,
 				CE68866C0D0CE0E400FA4158 /* PlugIns */,
-				F5AD34B203A7AEB8015F64B1 /* Readme */,
+				F5AD34B203A7AEB8015F64B1 /* Readme.md */,
 				F51E693F03AE4775015F64B1 /* Source */,
 				2A37F4B8FDCFA73011CA2CEA /* Resources */,
 				84F7FB520AE5558900A5AA4C /* Libraries */,
