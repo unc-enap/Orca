@@ -3532,7 +3532,6 @@
 		E6653F9B23A82A7D00A53678 /* ORFlashCamMiniCrateModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E6653F9A23A82A7D00A53678 /* ORFlashCamMiniCrateModel.m */; };
 		E6653F9E23A8301C00A53678 /* ORFlashCamMiniCrateController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6653F9D23A8301C00A53678 /* ORFlashCamMiniCrateController.m */; };
 		E66DB72F23B42E17005CDB2C /* FlashCamADC.xib in Resources */ = {isa = PBXBuildFile; fileRef = E66DB72E23B42E17005CDB2C /* FlashCamADC.xib */; };
-		E677BBA32444AD34006DB631 /* EduWashingtonNplOrcaNi488PlugIn.plugin in Resources */ = {isa = PBXBuildFile; fileRef = 84888394101796C10043E7D6 /* EduWashingtonNplOrcaNi488PlugIn.plugin */; };
 		E67894D721E91CD500B66977 /* Messaging.tif in Resources */ = {isa = PBXBuildFile; fileRef = E67894D621E91CD400B66977 /* Messaging.tif */; };
 		E681A79E23BA765A00F76977 /* flashcam.png in Resources */ = {isa = PBXBuildFile; fileRef = E61D05892307313E00140549 /* flashcam.png */; };
 		E681A7A023BA771F00F76977 /* FlashCamMiniCrate.nib in Resources */ = {isa = PBXBuildFile; fileRef = E681A79F23BA771F00F76977 /* FlashCamMiniCrate.nib */; };
@@ -5660,7 +5659,6 @@
 		8488229E1D2413910030B398 /* ORDT5725Decoders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORDT5725Decoders.m; sourceTree = "<group>"; };
 		8488229F1D2413910030B398 /* ORDT5725Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORDT5725Model.h; sourceTree = "<group>"; };
 		848822A01D2413910030B398 /* ORDT5725Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORDT5725Model.m; sourceTree = "<group>"; };
-		84888394101796C10043E7D6 /* EduWashingtonNplOrcaNi488PlugIn.plugin */ = {isa = PBXFileReference; lastKnownFileType = folder; name = EduWashingtonNplOrcaNi488PlugIn.plugin; path = PlugIns/Universal/EduWashingtonNplOrcaNi488PlugIn.plugin; sourceTree = SOURCE_ROOT; };
 		848917721D6B73D300CF5AAF /* CytecVM8.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = CytecVM8.gif; sourceTree = "<group>"; };
 		848917731D6B73D300CF5AAF /* CytecVM8.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = CytecVM8.nib; sourceTree = "<group>"; };
 		848917741D6B73D300CF5AAF /* ORCytecVM8Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORCytecVM8Controller.h; sourceTree = "<group>"; };
@@ -7647,7 +7645,6 @@
 			isa = PBXGroup;
 			children = (
 				846574BF1F9D449500B4BAA9 /* Orca.entitlements */,
-				CE68866C0D0CE0E400FA4158 /* PlugIns */,
 				F5AD34B203A7AEB8015F64B1 /* Readme.md */,
 				F51E693F03AE4775015F64B1 /* Source */,
 				2A37F4B8FDCFA73011CA2CEA /* Resources */,
@@ -14763,14 +14760,6 @@
 			path = nEDMCoil;
 			sourceTree = "<group>";
 		};
-		CE68866C0D0CE0E400FA4158 /* PlugIns */ = {
-			isa = PBXGroup;
-			children = (
-				84888394101796C10043E7D6 /* EduWashingtonNplOrcaNi488PlugIn.plugin */,
-			);
-			name = PlugIns;
-			sourceTree = "<group>";
-		};
 		CE7328A81466EEDC00A50AE9 /* HardwareFinder */ = {
 			isa = PBXGroup;
 			children = (
@@ -16853,7 +16842,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E677BBA32444AD34006DB631 /* EduWashingtonNplOrcaNi488PlugIn.plugin in Resources */,
 				E681A79E23BA765A00F76977 /* flashcam.png in Resources */,
 				849415861B330FEB00ED42F8 /* onOffPendingBox.tif in Resources */,
 				840C80001955E1D300E36622 /* RelaunchOrca in Resources */,
