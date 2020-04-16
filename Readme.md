@@ -27,7 +27,6 @@ III. Getting Started
 If you do not plan to make changes to the source code, you can obtain a local copy of the code from a terminal with:
 ```bash
 git clone https://github.com/unc-enap/Orca
-git clone https://github.com/unc-enap/OrcaPlugin
 ```
 Alternatively, you can launch a zip file download from the browser by selecting "Clone or download" from the URL.
 
@@ -143,7 +142,7 @@ If you only need the 64 bit version of Orca:
 svn co svn://orca.physics.unc.edu/Orca64
 ```
 
-For the plugin:
+For the obsolete plugin:
 ```bash
 svn co svn://orca.physics.unc.edu/OrcaPlugin
 ```
