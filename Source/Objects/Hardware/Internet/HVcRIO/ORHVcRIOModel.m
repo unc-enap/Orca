@@ -1028,7 +1028,6 @@ static NSString* itemsToShip[kNumToShip*2] = {
 {
     [[measuredValues objectAtIndex:aIndex] setObject:[NSString stringWithFormat:@"%lf",value] forKey:@"value"];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORHVcRIOModelSetPointChanged object:self];
-    
 }
 
 - (void) createSetPointArray
@@ -1824,10 +1823,12 @@ static NSString* itemsToShip[kNumToShip*2] = {
     return [self convertedValue:channel]!=0;
 }
 
-//!convertedValue: and valueForChan: are the same.
 - (double) convertedValue:(int)channel
 {
-    return [[self measuredValueAtIndex:channel] doubleValue];
+    id mv = [[[self measuredValueAtIndex:channel] copy] autorelease];
+    if(mv){ if(![mv respondsToSelector:@selector(doubleValue)]) return 0.0; }
+    else return 0.0;
+    return [mv doubleValue];
 }
 
 - (double) maxValueForChan:(int)channel

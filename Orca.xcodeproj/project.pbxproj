@@ -7328,7 +7328,7 @@
 		E6C2E7F123A9845700673DB8 /* ORFlashCamADCModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamADCModel.m; sourceTree = "<group>"; };
 		E6C2E7F323A9848E00673DB8 /* ORFlashCamADCController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORFlashCamADCController.h; sourceTree = "<group>"; };
 		E6C2E7F423A984B900673DB8 /* ORFlashCamADCController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamADCController.m; sourceTree = "<group>"; };
-		E6CC0768244405DD00D8DE0F /* Mail.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = Mail.app; path = ../../../../../../../../System/Applications/Mail.app; sourceTree = "<group>"; };
+		E6CC0768244405DD00D8DE0F /* Mail.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = Mail.app; path = ../../../../../../../../Applications/Mail.app; sourceTree = "<group>"; };
 		E6DC1B49243A240400A559F0 /* ORURLSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORURLSession.m; sourceTree = "<group>"; };
 		E6DC1B4A243A240400A559F0 /* ORURLSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORURLSession.h; sourceTree = "<group>"; };
 		EF69C430116E5DC3008ABADC /* ORSNOCrateReadout.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ORSNOCrateReadout.cc; sourceTree = "<group>"; };
