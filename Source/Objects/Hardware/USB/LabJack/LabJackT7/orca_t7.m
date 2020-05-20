@@ -1,3 +1,10 @@
+//
+//  orca_t7.h
+//  Orca functions for LabJack T7-Pro
+//
+//  Created by Jan Behrens on Fri May 22, 2020.
+//-----------------------------------------------------------
+
 #include <sys/time.h>
 #include <assert.h>
 #include <stdio.h>
@@ -13,9 +20,9 @@
 
 #include "orca_t7.h"
 
-long openDevice(int* hDevice)
+long openLabJack(int* hDevice)
 {
-    int err;
+    int err = 0;
 
     EnableLoggingLevel(LJM_TRACE);
     SetConfigValue(LJM_OPEN_TCP_DEVICE_TIMEOUT_MS, 500);
@@ -29,9 +36,9 @@ long openDevice(int* hDevice)
     return err;
 }
 
-long closeDevice(int hDevice)
+long closeLabJack(int hDevice)
 {
-    int err;
+    int err = 0;
 
     err = LJM_Close(hDevice);
     ErrorCheck(err, "LJM_Close");
@@ -47,7 +54,7 @@ long getConfigInfo(int hDevice, DeviceConfigT7* confInfo)
         return -1;
     }
 
-    int err, i;
+    int err = 0, i;
     int errorAddress = INITIAL_ERR_ADDRESS;
 
     enum { NUM_VALUES = 8 };
@@ -86,7 +93,7 @@ long getCalibrationInfo(int hDevice, DeviceCalibrationT7* calInfo)
         return -1;
     }
 
-    int err, i;
+    int err = 0, i;
     int errorAddress = INITIAL_ERR_ADDRESS;
 
     const double EFAdd_CalValues = 0x3C4000;  // TODO: what is this?
@@ -169,7 +176,7 @@ long getCalibrationInfo(int hDevice, DeviceCalibrationT7* calInfo)
  */
 long getCurrentValues(int hDevice, double* Current10u, double* Current200u)
 {
-    int err;
+    int err = 0;
     int errorAddress = INITIAL_ERR_ADDRESS;
 
     // Set up for reading CS calibration
@@ -223,8 +230,9 @@ long getCurrentValues(int hDevice, double* Current10u, double* Current200u)
  * AIN#(0:13)_BINARY - Starting Address: 50000
  *   Returns the 24-bit binary representation of the specified analog input.
  */
-long eAIN(int hDevice, DeviceCalibrationT7* CalibrationInfo, int ChannelP, int ChannelN,
-    double* Voltage, double Range, long Resolution, double Settling, int Binary, double* Temperature)
+long readAIN(int hDevice, DeviceCalibrationT7* CalibrationInfo,
+             int ChannelP, int ChannelN, double* Voltage, double* Temperature,
+             double Range, long Resolution, double Settling, int Binary)
 {
     if( CalibrationInfo == NULL )
     {
@@ -273,7 +281,7 @@ long eAIN(int hDevice, DeviceCalibrationT7* CalibrationInfo, int ChannelP, int C
         return -1;
     }
 
-    int err;
+    int err = 0;
     int errorAddress = INITIAL_ERR_ADDRESS;
 
     // Set up for configuring the AINs
@@ -337,7 +345,8 @@ long eAIN(int hDevice, DeviceCalibrationT7* CalibrationInfo, int ChannelP, int C
  * DAC#(0:1) - Starting Address: 1000
  *   Pass a voltage for the specified analog output.
  */
-long eDAC(int hDevice, DeviceCalibrationT7* CalibrationInfo, int Channel, double Voltage)
+long writeDAC(int hDevice, DeviceCalibrationT7* CalibrationInfo,
+              int Channel, double Voltage)
 {
     if( CalibrationInfo == NULL )
     {
@@ -351,7 +360,7 @@ long eDAC(int hDevice, DeviceCalibrationT7* CalibrationInfo, int Channel, double
         return -1;
     }
 
-    int err;
+    int err = 0;
 
     // Set up for reading DIO state
     int ADDRESS = 1000 + Channel * 2; // DAC#: 1000, 1002
@@ -376,7 +385,7 @@ long eDAC(int hDevice, DeviceCalibrationT7* CalibrationInfo, int Channel, double
  * DIO#(0:22) - Starting Address: 2000
  *    Read or set the state of 1 bit of digital I/O.
  */
-long eDI(int hDevice, int Channel, long* State)
+long readDI(int hDevice, int Channel, long* State)
 {
     if( Channel < 0 || Channel > 22 )
     {
@@ -384,7 +393,7 @@ long eDI(int hDevice, int Channel, long* State)
         return -1;
     }
 
-    int err;
+    int err = 0;
 
     // Set up for reading DIO state
     int ADDRESS = 2000 + Channel; // DIO#: 2000, 2001, ...
@@ -412,7 +421,7 @@ long eDI(int hDevice, int Channel, long* State)
  * DIO#(0:22) - Starting Address: 2000
  *    Read or set the state of 1 bit of digital I/O.
  */
-long eDO(int hDevice, int Channel, long State)
+long writeDO(int hDevice, int Channel, long State)
 {
     if( Channel < 0 || Channel > 22 )
     {
@@ -420,7 +429,7 @@ long eDO(int hDevice, int Channel, long State)
         return -1;
     }
 
-    int err;
+    int err = 0;
 
     // Set up for reading DIO state
     int ADDRESS = 2000 + Channel; // DIO#: 2000, 2001, ...
@@ -446,7 +455,8 @@ long eDO(int hDevice, int Channel, long State)
  *     CLOCK2: 16-bit. Mutual Exclusions: CLOCK0, COUNTER_B (CIO1)
  *
  */
-long setupClock(int hDevice, int Channel, int Enable, long Divisor, long RollValue, int External)
+long setupClock(int hDevice, int Channel, int Enable,
+                long Divisor, long RollValue, int External)
 {
     if( Channel < 0 || Channel > 3 )
     {
@@ -472,7 +482,7 @@ long setupClock(int hDevice, int Channel, int Enable, long Divisor, long RollVal
         return -1;
     }
 
-    int err;
+    int err = 0;
     int errorAddress = INITIAL_ERR_ADDRESS;
 
     // Enable or disable shared clock sources / counters, if necessary
@@ -536,7 +546,8 @@ long readClock(int hDevice, int Channel, long* Count)
         return -1;
     }
 
-    int err;
+    int err = 0;
+    
     int ADDRESS = 44908 + Channel * 10;  // CL# count: 44908, 44918, 44928
     int TYPE = LJM_UINT32;
     double value = 0;
@@ -579,7 +590,7 @@ long enableCounter(int hDevice, int Channel)
         return -1;
     }
 
-    int err;
+    int err = 0;
     int errorAddress = INITIAL_ERR_ADDRESS;
 
     // Disable shared clock sources, if necessary
@@ -626,7 +637,7 @@ long disableCounter(int hDevice, int Channel)
         return -1;
     }
 
-    int err;
+    int err = 0;
     int errorAddress = INITIAL_ERR_ADDRESS;
 
     // Set up for configuring the counter
@@ -654,7 +665,7 @@ long readCounter(int hDevice, int Channel, int Reset, long* Count)
         return -1;
     }
 
-    int err;
+    int err = 0;
 
     // Set up for reading (and resetting) the counter
     int ch = Channel + 16;  // CIO#0=DIO#16, ...
@@ -688,7 +699,8 @@ long readCounter(int hDevice, int Channel, int Reset, long* Count)
  *    Resolution(s) = 1 / Clock#Frequency
  *    Max Period(s) = DIO_EF_CLOCK#_ROLL_VALUE / Clock#Frequency
  */
-long enableFreqIn(int hDevice, int Channel, int Clock, int EdgeIndex, int Continuous)
+long enableFreqIn(int hDevice, int Channel, int Clock,
+                  int EdgeIndex, int Continuous)
 {
     if( Channel < 0 || Channel > 3 )
     {
@@ -748,7 +760,8 @@ long enableFreqIn(int hDevice, int Channel, int Clock, int EdgeIndex, int Contin
     return err;
 }
 
-long readFreqIn(int hDevice, int Channel, double ClockFreq, double* Period, double* Frequency)
+long readFreqIn(int hDevice, int Channel, double ClockFreq,
+                double* Period, double* Frequency)
 {
     if( Channel < 0 || Channel > 4 )
     {
@@ -762,7 +775,7 @@ long readFreqIn(int hDevice, int Channel, double ClockFreq, double* Period, doub
         return -1;
     }
 
-    int err;
+    int err = 0;
 
     // Set up for reading the frequency
     int ch = Channel + 16;  // CIO#0=DIO#16, ...

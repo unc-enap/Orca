@@ -1,3 +1,11 @@
+//
+//  orca_t7.h
+//  Orca functions for LabJack T7-Pro
+//
+//  Created by Jan Behrens on Fri May 22, 2020.
+//-----------------------------------------------------------
+
+
 #ifndef _ORCA_LABJACKT7_H
 #define _ORCA_LABJACKT7_H
 
@@ -97,9 +105,9 @@ typedef struct {
  * "Easy access" function declarations
  */
 
-long openDevice(int* hDevice);
+long openLabJack(int* hDevice);
 
-long closeDevice(int hDevice);
+long closeLabJack(int hDevice);
 
 long getConfigInfo(int hDevice, DeviceConfigT7* confInfo);
 
@@ -107,16 +115,19 @@ long getCalibrationInfo(int hDevice, DeviceCalibrationT7* calInfo);
 
 long getCurrentValues(int hDevice, double* Current10u, double* Current200u);
 
-long eAIN(int hDevice, DeviceCalibrationT7* CalibrationInfo, int ChannelP, int ChannelN,
-    double* Voltage, double Range, long Resolution, double Settling, int Binary, double* Temperature);
+long readAIN(int hDevice, DeviceCalibrationT7* CalibrationInfo,
+             int ChannelP, int ChannelN, double* Voltage, double* Temperature,
+             double Range, long Resolution, double Settling, int Binary);
 
-long eDAC(int hDevice, DeviceCalibrationT7* CalibrationInfo, int Channel, double Voltage);
+long writeDAC(int hDevice, DeviceCalibrationT7* CalibrationInfo,
+              int Channel, double Voltage);
 
-long eDI(int hDevice, int Channel, long* State);
+long readDI(int hDevice, int Channel, long* State);
 
-long eDO(int hDevice, int Channel, long State);
+long writeDO(int hDevice, int Channel, long State);
 
-long setupClock(int hDevice, int Channel, int Enable, long Divisor, long RollValue, int External);
+long setupClock(int hDevice, int Channel, int Enable,
+                long Divisor, long RollValue, int External);
 
 long readClock(int hDevice, int Channel, long* Count);
 
@@ -126,9 +137,11 @@ long disableCounter(int hDevice, int Channel);
 
 long readCounter(int hDevice, int Channel, int Reset, long* Count);
 
-long enableFreqIn(int hDevice, int Channel, int Clock, int EdgeIndex, int Continuous);
+long enableFreqIn(int hDevice, int Channel, int Clock,
+                  int EdgeIndex, int Continuous);
 
-long readFreqIn(int hDevice, int Channel, double ClockFreq, double* Period, double* Frequency);
+long readFreqIn(int hDevice, int Channel, double ClockFreq,
+                double* Period, double* Frequency);
 
 #ifdef __cplusplus
 }
