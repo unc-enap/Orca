@@ -1,0 +1,87 @@
+// ljm_startup_configs.json:
+//   This is the configurations file that is loaded when LJM is started up.
+//   Distributed with LJM version 1.2000.
+//
+//   Use the string "default" to load the default value for each config
+//   parameter. Otherwise, see the "type" for each config parameter for what
+//   kinds of values can be accepted. Please see LabJackM.h for more information
+//   about what each config parameter does.
+//
+//   Windows file paths must escape \ characters with \. For example, the path
+//       C:\ljm.log
+//   must be escaped as
+//       C:\\ljm.log
+//
+//   Report bugs to support@labjack.com
+//   LabJack's LJM driver/library: https://labjack.com/support/ljm
+
+{
+  "LJM_CONFIG_VALUES":
+  [
+    {"LJM_ALLOWS_AUTO_CONDENSE_ADDRESSES":"default",   "type":"boolean", "values":[true, false]},
+    {"LJM_ALLOWS_AUTO_MULTIPLE_FEEDBACKS":"default",   "type":"boolean", "values":[true, false]},
+    {"LJM_AUTO_IPS":"default",                         "type":"boolean", "values":[true, false]},
+    {"LJM_AUTO_IPS_FILE":"default",                    "type":"string"},
+    {"LJM_AUTO_RECONNECT_STICKY_CONNECTION":"default", "type":"boolean", "values":[true, false]},
+    {"LJM_AUTO_RECONNECT_STICKY_SERIAL":"default",     "type":"boolean", "values":[true, false]},
+    {"LJM_AUTO_RECONNECT_WAIT_MS":"default",           "type":"integer"},
+    {"LJM_DEBUG_LOG_BUFFER_MAX_SIZE":"default",        "type":"integer"},
+    {"LJM_DEBUG_LOG_FILE":"default",                   "type":"string"},
+    {"LJM_DEBUG_LOG_FILE_MAX_SIZE":"default",          "type":"integer"},
+    {"LJM_DEBUG_LOG_LEVEL":"default",                  "type":"integer", "values":[
+                                                           "LJM_STREAM_PACKET", "LJM_TRACE",
+                                                           "LJM_DEBUG", "LJM_INFO", "LJM_PACKET",
+                                                           "LJM_WARNING", "LJM_USER", "LJM_ERROR",
+                                                           "LJM_FATAL"
+                                                       ]},
+    {"LJM_DEBUG_LOG_MODE":"default",                   "type":"integer", "values":[
+                                                           "LJM_DEBUG_LOG_MODE_NEVER",
+                                                           "LJM_DEBUG_LOG_MODE_CONTINUOUS",
+                                                           "LJM_DEBUG_LOG_MODE_ON_ERROR"
+                                                       ]},
+    {"LJM_DEBUG_LOG_SLEEP_TIME_MS":"default",          "type":"integer"},
+    {"LJM_DEEP_SEARCH_FILE":"default",                 "type":"string"},
+    {"LJM_ERROR_CONSTANTS_FILE":"default",             "type":"string"},
+    {"LJM_ETHERNET_OPEN_TIMEOUT_MS":"default",         "type":"integer"},
+    {"LJM_ETHERNET_SEND_RECEIVE_TIMEOUT_MS":"default", "type":"integer"},
+    {"LJM_LISTALL_NUM_ATTEMPTS_ETHERNET":"default",    "type":"integer"},
+    {"LJM_LISTALL_NUM_ATTEMPTS_WIFI":"default",        "type":"integer"},
+    {"LJM_LISTALL_THREADED_ETHERNET":"default",        "type":"boolean", "values":[true, false]},
+    {"LJM_LISTALL_THREADED_USB":"default",             "type":"boolean", "values":[true, false]},
+    {"LJM_LISTALL_THREADED_WIFI":"default",            "type":"boolean", "values":[true, false]},
+    {"LJM_LISTALL_TIMEOUT_MS_ETHERNET":"default",      "type":"integer"},
+    {"LJM_LISTALL_TIMEOUT_MS_WIFI":"default",          "type":"integer"},
+    {"LJM_LISTALL_UDP_ETHERNET":"default",             "type":"boolean", "values":[true, false]},
+    {"LJM_LISTALL_UDP_WIFI":"default",                 "type":"boolean", "values":[true, false]},
+    {"LJM_MODBUS_MAP_CONSTANTS_FILE":"default",        "type":"string"},
+    {"LJM_OLD_FIRMWARE_CHECK":"default",               "type":"boolean", "values":[true, false]},
+    {"LJM_RETRY_ON_TRANSACTION_ID_MISMATCH":"default", "type":"boolean", "values":[true, false]},
+    {"LJM_RPC_HEARTBEAT_PORT":"default",               "type":"integer"},
+    {"LJM_RPC_ENABLE":"default",                       "type":"boolean", "values":[true, false]},
+    {"LJM_RPC_TIMEOUT_MS":"default",                   "type":"integer"},
+    {"LJM_SPECIFIC_IPS_FILE":"default",                "type":"string"},
+    {"LJM_STREAM_AIN_BINARY":"default",                "type":"boolean", "values":[true, false]},
+    {"LJM_STREAM_BUFFER_MAX_NUM_SECONDS":"default",    "type":"integer"},
+    {"LJM_STREAM_CAL_LOAD_MAX_NUM_ATTEMPTS":"default", "type":"integer"},
+    {"LJM_STREAM_CONVERT_AIN14": "default",            "type":"boolean", "values":[true, false]},
+    {"LJM_STREAM_PORT": "default",                     "type":"integer"},
+    {"LJM_STREAM_RECEIVE_TIMEOUT_MODE":"default",      "type":"integer", "values":[
+                                                           "LJM_STREAM_RECEIVE_TIMEOUT_MODE_CALCULATED",
+                                                           "LJM_STREAM_RECEIVE_TIMEOUT_MODE_MANUAL"
+                                                       ]},
+    {"LJM_STREAM_RECEIVE_TIMEOUT_MS":"default",        "type":"integer"},
+    {"LJM_STREAM_SCANS_RETURN":"default",              "type":"integer", "values":[
+                                                           "LJM_STREAM_SCANS_RETURN_ALL",
+                                                           "LJM_STREAM_SCANS_RETURN_ALL_OR_NONE"
+                                                       ]},
+    {"LJM_STREAM_TRANSFERS_PER_SECOND":"default",      "type":"integer"},
+    {"LJM_USE_TCP_INIT_FOR_T7_WIFI_TCP":"default",     "type":"boolean", "values":[true, false]},
+    {"LJM_USB_SEND_RECEIVE_TIMEOUT_MS":"default",      "type":"integer"},
+    {"LJM_WIFI_OPEN_TIMEOUT_MS":"default",             "type":"integer"},
+    {"LJM_WIFI_SEND_RECEIVE_TIMEOUT_MS":"default",     "type":"integer"},
+    {"LJM_ZERO_LENGTH_ARRAY_MODE":"default",           "type":"integer", "values":[
+                                                           "LJM_ZERO_LENGTH_ARRAY_ERROR",
+                                                           "LJM_ZERO_LENGTH_ARRAY_IGNORE_OPERATION"
+                                                       ]}
+  ]
+}

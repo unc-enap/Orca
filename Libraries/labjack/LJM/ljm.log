@@ -1,0 +1,621 @@
+[May 22 08:35:29 2020] INFO - LJM version: 1.2
+[May 22 08:35:29 2020] INFO - Now setting up signal handler for signals.
+[May 22 08:35:29 2020] INFO - Signal handler force closes devices and re-raises signal with default handler handling.
+[May 22 08:35:29 2020] INFO - Enabled handler for signal:    1 (Hangup: 1)
+[May 22 08:35:29 2020] INFO - Enabled handler for signal:    2 (Interrupt: 2)
+[May 22 08:35:29 2020] INFO - Enabled handler for signal:    3 (Quit: 3)
+[May 22 08:35:29 2020] INFO - Enabled handler for signal:    4 (Illegal instruction: 4)
+[May 22 08:35:29 2020] INFO - Enabled handler for signal:    6 (Abort trap: 6)
+[May 22 08:35:29 2020] INFO - Enabled handler for signal:   10 (Bus error: 10)
+[May 22 08:35:29 2020] INFO - Enabled handler for signal:   15 (Terminated: 15)
+[May 22 08:35:29 2020] INFO - Enabled handler for signal:   18 (Suspended: 18)
+[May 22 08:35:29 2020] INFO - Enabled handler for signal:   13 (Broken pipe: 13)
+[May 22 08:35:29 2020] INFO - Enabled handler for signal:    8 (Floating point exception: 8)
+[May 22 08:35:29 2020] INFO - Enabled handler for signal:   11 (Segmentation fault: 11)
+[May 22 08:35:29 2020] INFO - TryForAnchor: Heartbeat returned status.error_code(): 14, status.error_message(): Connect Failed
+
+[May 22 08:35:29 2020] WARNING - Unknown type in /usr/local/share/LabJack/LJM/ljm_constants.json: UINT64
+[May 22 08:35:29 2020] WARNING - Unknown type in /usr/local/share/LabJack/LJM/ljm_constants.json: UINT64
+[May 22 08:35:29 2020] TRACE - handle   1: Device constructor - connType: 1, identifier: 1, lowlevel connection on handle: 0x7ff4ef809000
+[May 22 08:35:29 2020] TRACE - handle   1: Opening lowlevel USB connection to device type LJM_dtT7, identifier 1
+[May 22 08:35:29 2020] PACKET - handle   1:  12 byte send	0x 6B 93 00 00 00 06 01 4C
+                                                        	                           00 C2 EC 01
+[May 22 08:35:29 2020] PACKET - handle   1:  10 byte recv	0x 6B 93 00 00 00 04 01 4C
+                                                        	                           00 40
+[May 22 08:35:29 2020] PACKET - handle   1:  12 byte send	0x 6B 94 00 00 00 06 01 4C
+                                                        	                           00 EA 7C 02
+[May 22 08:35:29 2020] PACKET - handle   1:  12 byte recv	0x 6B 94 00 00 00 06 01 4C
+                                                        	                           1C 03 F2 9D
+[May 22 08:35:29 2020] PACKET - handle   1:  12 byte send	0x 6B 95 00 00 00 06 01 4C
+                                                        	                           00 EA 64 02
+[May 22 08:35:29 2020] PACKET - handle   1:  12 byte recv	0x 6B 95 00 00 00 06 01 4C
+                                                        	                           3F 83 95 81
+[May 22 08:35:29 2020] PACKET - handle   1:  12 byte send	0x 6B 96 00 00 00 06 01 4C
+                                                        	                           00 EC 54 19
+[May 22 08:35:29 2020] PACKET - handle   1:  58 byte recv	0x 6B 96 00 00 00 34 01 4C
+                                                        	                           4D 79 5F 54 37 5F 30 37 36 35 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[May 22 08:35:29 2020] INFO - handle   1: Registered - dev: 7, conn: 1, port: 0, iden: 1, seri: 470020765, firm: 1.028, lowh: 0x7ff4ef809000, state: 1, packetmax: 64, usermax: 64
+[May 22 08:35:31 2020] PACKET - handle   1:  20 byte send	0x 6B 97 00 00 00 0E 01 4C
+                                                        	                           00 D7 3C 02
+                                                        	                           00 EA 60 0C
+                                                        	                           00 EA 7C 02
+[May 22 08:35:31 2020] PACKET - handle   1:  40 byte recv	0x 6B 97 00 00 00 22 01 4C
+                                                        	                           00 11 22 33 40 E0 00 00 3F AC CC CD 3F 83 95 81 3F 75 C2 8F 00 00 00 00 00 00 00 0F 1C 03 F2 9D
+[May 22 08:35:31 2020] PACKET - handle   1:  16 byte send	0x 6B 98 00 00 00 0A 01 4C
+                                                        	                           01 F1 72 02 00 3C 40 00
+[May 22 08:35:31 2020] PACKET - handle   1:   8 byte recv	0x 6B 98 00 00 00 02 01 4C
+[May 22 08:35:31 2020] PACKET - handle   1:  12 byte send	0x 6B 99 00 00 00 06 01 4C
+                                                        	                           00 F1 74 1A
+[May 22 08:35:31 2020] PACKET - handle   1:  60 byte recv	0x 6B 99 00 00 00 36 01 4C
+                                                        	                           39 A5 A3 D8 B9 A5 9C E7 47 03 00 8C C1 29 7F 49 38 04 79 A5 B8 04 78 A8 47 03 00 7A BF 87 93 FB 36 53 F6 52 B6 53 EC 8E 47 02 F8 7E BD D8 D7 AB 34 A9 C8 8A
+[May 22 08:35:31 2020] PACKET - handle   1:  16 byte send	0x 6B 9A 00 00 00 0A 01 4C
+                                                        	                           01 F1 72 02 00 3C 40 34
+[May 22 08:35:31 2020] PACKET - handle   1:   8 byte recv	0x 6B 9A 00 00 00 02 01 4C
+[May 22 08:35:31 2020] PACKET - handle   1:  12 byte send	0x 6B 9B 00 00 00 06 01 4C
+                                                        	                           00 F1 74 1A
+[May 22 08:35:31 2020] PACKET - handle   1:  60 byte recv	0x 6B 9B 00 00 00 36 01 4C
+                                                        	                           B4 A9 60 74 47 02 A1 1C BC 2C DB 27 39 A5 A3 5B B9 A5 9C D1 47 02 FF A3 C1 29 7E 06 38 04 79 9E B8 04 77 B4 47 02 FF 9C BF 87 92 1B 36 53 F6 F9 B6 53 EC 8A
+[May 22 08:35:31 2020] PACKET - handle   1:  16 byte send	0x 6B 9C 00 00 00 0A 01 4C
+                                                        	                           01 F1 72 02 00 3C 40 68
+[May 22 08:35:31 2020] PACKET - handle   1:   8 byte recv	0x 6B 9C 00 00 00 02 01 4C
+[May 22 08:35:31 2020] PACKET - handle   1:  12 byte send	0x 6B 9D 00 00 00 06 01 4C
+                                                        	                           00 F1 74 1A
+[May 22 08:35:31 2020] PACKET - handle   1:  60 byte recv	0x 6B 9D 00 00 00 36 01 4C
+                                                        	                           47 02 F8 66 BD D8 D7 80 34 A9 CA FD B4 A9 73 9E 47 02 A1 A8 BC 2C EF 6E 46 4D 47 AB C1 FC 09 5F 46 4D 17 C3 C2 5C E9 73 C2 B9 33 33 43 E9 CC CD 37 27 D1 D6
+[May 22 08:35:31 2020] PACKET - handle   1:  16 byte send	0x 6B 9E 00 00 00 0A 01 4C
+                                                        	                           01 F1 72 02 00 3C 40 9C
+[May 22 08:35:31 2020] PACKET - handle   1:   8 byte recv	0x 6B 9E 00 00 00 02 01 4C
+[May 22 08:35:31 2020] PACKET - handle   1:  12 byte send	0x 6B 9F 00 00 00 06 01 4C
+                                                        	                           00 F1 74 04
+[May 22 08:35:31 2020] PACKET - handle   1:  16 byte recv	0x 6B 9F 00 00 00 0A 01 4C
+                                                        	                           39 50 E4 E1 32 A6 F2 62
+[May 22 08:35:31 2020] PACKET - handle   1:  12 byte send	0x 6B A0 00 00 00 06 01 4C
+                                                        	                           00 07 6C 04
+[May 22 08:35:31 2020] PACKET - handle   1:  16 byte recv	0x 6B A0 00 00 00 0A 01 4C
+                                                        	                           37 27 D1 D6 39 50 E4 E1
+[May 22 08:35:33 2020] PACKET - handle   1:  16 byte send	0x 6B A1 00 00 00 0A 01 4C
+                                                        	                           01 03 E8 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B A1 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  16 byte send	0x 6B A2 00 00 00 0A 01 4C
+                                                        	                           01 03 EA 02 3D CC CC CD
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B A2 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B A3 00 00 00 1E 01 4C
+                                                        	                           01 A0 28 01 00 C7
+                                                        	                           01 A2 1C 01 00 00
+                                                        	                           01 9C 40 02 00 00 00 00
+                                                        	                           01 A4 10 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B A3 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B A4 00 00 00 06 01 4C
+                                                        	                           00 00 00 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B A4 00 00 00 06 01 4C
+                                                        	                           BF 96 D0 30
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B A5 00 00 00 1E 01 4C
+                                                        	                           01 A0 29 01 00 C7
+                                                        	                           01 A2 1D 01 00 00
+                                                        	                           01 9C 42 02 00 00 00 00
+                                                        	                           01 A4 12 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B A5 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B A6 00 00 00 06 01 4C
+                                                        	                           00 00 02 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B A6 00 00 00 06 01 4C
+                                                        	                           C0 02 E1 1C
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B A7 00 00 00 1E 01 4C
+                                                        	                           01 A0 2A 01 00 C7
+                                                        	                           01 A2 1E 01 00 00
+                                                        	                           01 9C 44 02 00 00 00 00
+                                                        	                           01 A4 14 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B A7 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B A8 00 00 00 06 01 4C
+                                                        	                           00 00 04 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B A8 00 00 00 06 01 4C
+                                                        	                           C0 37 C9 31
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B A9 00 00 00 1E 01 4C
+                                                        	                           01 A0 2B 01 00 C7
+                                                        	                           01 A2 1F 01 00 00
+                                                        	                           01 9C 46 02 00 00 00 00
+                                                        	                           01 A4 16 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B A9 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B AA 00 00 00 06 01 4C
+                                                        	                           00 00 06 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B AA 00 00 00 06 01 4C
+                                                        	                           C0 61 7E C6
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B AB 00 00 00 1E 01 4C
+                                                        	                           01 A0 2C 01 00 C7
+                                                        	                           01 A2 20 01 00 00
+                                                        	                           01 9C 48 02 00 00 00 00
+                                                        	                           01 A4 18 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B AB 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B AC 00 00 00 06 01 4C
+                                                        	                           00 00 08 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B AC 00 00 00 06 01 4C
+                                                        	                           C0 93 C5 B2
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B AD 00 00 00 1E 01 4C
+                                                        	                           01 A0 2D 01 00 C7
+                                                        	                           01 A2 21 01 00 00
+                                                        	                           01 9C 4A 02 00 00 00 00
+                                                        	                           01 A4 1A 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B AD 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B AE 00 00 00 06 01 4C
+                                                        	                           00 00 0A 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B AE 00 00 00 06 01 4C
+                                                        	                           C0 AB 2B 02
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B AF 00 00 00 1E 01 4C
+                                                        	                           01 A0 2E 01 00 C7
+                                                        	                           01 A2 22 01 00 00
+                                                        	                           01 9C 4C 02 00 00 00 00
+                                                        	                           01 A4 1C 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B AF 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B B0 00 00 00 06 01 4C
+                                                        	                           00 00 0C 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B B0 00 00 00 06 01 4C
+                                                        	                           C0 C8 AA 23
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B B1 00 00 00 1E 01 4C
+                                                        	                           01 A0 2F 01 00 C7
+                                                        	                           01 A2 23 01 00 00
+                                                        	                           01 9C 4E 02 00 00 00 00
+                                                        	                           01 A4 1E 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B B1 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B B2 00 00 00 06 01 4C
+                                                        	                           00 00 0E 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B B2 00 00 00 06 01 4C
+                                                        	                           C0 DD BE 12
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B B3 00 00 00 1E 01 4C
+                                                        	                           01 A0 30 01 00 C7
+                                                        	                           01 A2 24 01 00 00
+                                                        	                           01 9C 50 02 00 00 00 00
+                                                        	                           01 A4 20 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B B3 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B B4 00 00 00 06 01 4C
+                                                        	                           00 00 10 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B B4 00 00 00 06 01 4C
+                                                        	                           C0 F7 6E ED
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B B5 00 00 00 1E 01 4C
+                                                        	                           01 A0 31 01 00 C7
+                                                        	                           01 A2 25 01 00 00
+                                                        	                           01 9C 52 02 00 00 00 00
+                                                        	                           01 A4 22 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B B5 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B B6 00 00 00 06 01 4C
+                                                        	                           00 00 12 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B B6 00 00 00 06 01 4C
+                                                        	                           C1 04 47 F7
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B B7 00 00 00 1E 01 4C
+                                                        	                           01 A0 32 01 00 C7
+                                                        	                           01 A2 26 01 00 00
+                                                        	                           01 9C 54 02 00 00 00 00
+                                                        	                           01 A4 24 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B B7 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B B8 00 00 00 06 01 4C
+                                                        	                           00 00 14 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B B8 00 00 00 06 01 4C
+                                                        	                           C1 0F 1D C0
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B B9 00 00 00 1E 01 4C
+                                                        	                           01 A0 33 01 00 C7
+                                                        	                           01 A2 27 01 00 00
+                                                        	                           01 9C 56 02 00 00 00 00
+                                                        	                           01 A4 26 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B B9 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B BA 00 00 00 06 01 4C
+                                                        	                           00 00 16 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B BA 00 00 00 06 01 4C
+                                                        	                           C1 16 1C 6D
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B BB 00 00 00 1E 01 4C
+                                                        	                           01 A0 34 01 00 C7
+                                                        	                           01 A2 28 01 00 00
+                                                        	                           01 9C 58 02 00 00 00 00
+                                                        	                           01 A4 28 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B BB 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B BC 00 00 00 06 01 4C
+                                                        	                           00 00 18 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B BC 00 00 00 06 01 4C
+                                                        	                           C1 1D 62 55
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B BD 00 00 00 1E 01 4C
+                                                        	                           01 A0 35 01 00 C7
+                                                        	                           01 A2 29 01 00 00
+                                                        	                           01 9C 5A 02 00 00 00 00
+                                                        	                           01 A4 2A 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B BD 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B BE 00 00 00 06 01 4C
+                                                        	                           00 00 1A 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B BE 00 00 00 06 01 4C
+                                                        	                           C1 20 F7 C5
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B BF 00 00 00 1E 01 4C
+                                                        	                           01 A0 36 01 00 C7
+                                                        	                           01 A2 2A 01 00 00
+                                                        	                           01 9C 5C 02 00 00 00 00
+                                                        	                           01 A4 2C 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B BF 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B C0 00 00 00 06 01 4C
+                                                        	                           00 00 1C 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B C0 00 00 00 06 01 4C
+                                                        	                           3F EF AE 9B
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B C1 00 00 00 1E 01 4C
+                                                        	                           01 A0 37 01 00 C7
+                                                        	                           01 A2 2B 01 00 00
+                                                        	                           01 9C 5E 02 00 00 00 00
+                                                        	                           01 A4 2E 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B C1 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B C2 00 00 00 06 01 4C
+                                                        	                           00 00 1E 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B C2 00 00 00 06 01 4C
+                                                        	                           39 0F A3 A9
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B C3 00 00 00 1E 01 4C
+                                                        	                           01 A0 28 01 00 01
+                                                        	                           01 A2 1C 01 00 00
+                                                        	                           01 9C 40 02 00 00 00 00
+                                                        	                           01 A4 10 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B C3 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B C4 00 00 00 06 01 4C
+                                                        	                           00 00 00 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B C4 00 00 00 06 01 4C
+                                                        	                           BD 6C F4 C7
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B C5 00 00 00 1E 01 4C
+                                                        	                           01 A0 2A 01 00 03
+                                                        	                           01 A2 1E 01 00 00
+                                                        	                           01 9C 44 02 00 00 00 00
+                                                        	                           01 A4 14 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B C5 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B C6 00 00 00 06 01 4C
+                                                        	                           00 00 04 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B C6 00 00 00 06 01 4C
+                                                        	                           BE 19 4A 6A
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B C7 00 00 00 1E 01 4C
+                                                        	                           01 A0 2C 01 00 05
+                                                        	                           01 A2 20 01 00 00
+                                                        	                           01 9C 48 02 00 00 00 00
+                                                        	                           01 A4 18 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B C7 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B C8 00 00 00 06 01 4C
+                                                        	                           00 00 08 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B C8 00 00 00 06 01 4C
+                                                        	                           BE 87 10 7A
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B C9 00 00 00 1E 01 4C
+                                                        	                           01 A0 2E 01 00 07
+                                                        	                           01 A2 22 01 00 00
+                                                        	                           01 9C 4C 02 00 00 00 00
+                                                        	                           01 A4 1C 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B C9 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B CA 00 00 00 06 01 4C
+                                                        	                           00 00 0C 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B CA 00 00 00 06 01 4C
+                                                        	                           BE B5 53 8D
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B CB 00 00 00 1E 01 4C
+                                                        	                           01 A0 30 01 00 09
+                                                        	                           01 A2 24 01 00 00
+                                                        	                           01 9C 50 02 00 00 00 00
+                                                        	                           01 A4 20 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B CB 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B CC 00 00 00 06 01 4C
+                                                        	                           00 00 10 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B CC 00 00 00 06 01 4C
+                                                        	                           BE E7 A4 75
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B CD 00 00 00 1E 01 4C
+                                                        	                           01 A0 32 01 00 0B
+                                                        	                           01 A2 26 01 00 00
+                                                        	                           01 9C 54 02 00 00 00 00
+                                                        	                           01 A4 24 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B CD 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B CE 00 00 00 06 01 4C
+                                                        	                           00 00 14 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B CE 00 00 00 06 01 4C
+                                                        	                           BF 0B E3 4B
+[May 22 08:35:33 2020] PACKET - handle   1:  36 byte send	0x 6B CF 00 00 00 1E 01 4C
+                                                        	                           01 A0 34 01 00 0D
+                                                        	                           01 A2 28 01 00 00
+                                                        	                           01 9C 58 02 00 00 00 00
+                                                        	                           01 A4 28 02 00 00 00 00
+[May 22 08:35:33 2020] PACKET - handle   1:   8 byte recv	0x 6B CF 00 00 00 02 01 4C
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte send	0x 6B D0 00 00 00 06 01 4C
+                                                        	                           00 00 18 02
+[May 22 08:35:33 2020] PACKET - handle   1:  12 byte recv	0x 6B D0 00 00 00 06 01 4C
+                                                        	                           BF 26 9B 23
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B D1 00 00 00 08 01 4C
+                                                        	                           01 07 D0 01 00 00
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B D1 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B D2 00 00 00 08 01 4C
+                                                        	                           01 07 D1 01 00 01
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B D2 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B D3 00 00 00 08 01 4C
+                                                        	                           01 07 D2 01 00 00
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B D3 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B D4 00 00 00 08 01 4C
+                                                        	                           01 07 D3 01 00 01
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B D4 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B D5 00 00 00 08 01 4C
+                                                        	                           01 07 D4 01 00 00
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B D5 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B D6 00 00 00 08 01 4C
+                                                        	                           01 07 D5 01 00 01
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B D6 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B D7 00 00 00 08 01 4C
+                                                        	                           01 07 D6 01 00 00
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B D7 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B D8 00 00 00 08 01 4C
+                                                        	                           01 07 D7 01 00 01
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B D8 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B D9 00 00 00 08 01 4C
+                                                        	                           01 07 D8 01 00 00
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B D9 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B DA 00 00 00 08 01 4C
+                                                        	                           01 07 D9 01 00 01
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B DA 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B DB 00 00 00 08 01 4C
+                                                        	                           01 07 DA 01 00 00
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B DB 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B DC 00 00 00 08 01 4C
+                                                        	                           01 07 DB 01 00 01
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B DC 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B DD 00 00 00 08 01 4C
+                                                        	                           01 07 DC 01 00 00
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B DD 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B DE 00 00 00 08 01 4C
+                                                        	                           01 07 DD 01 00 01
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B DE 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B DF 00 00 00 08 01 4C
+                                                        	                           01 07 DE 01 00 00
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B DF 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B E0 00 00 00 08 01 4C
+                                                        	                           01 07 DF 01 00 01
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B E0 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B E1 00 00 00 08 01 4C
+                                                        	                           01 07 E0 01 00 00
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B E1 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B E2 00 00 00 08 01 4C
+                                                        	                           01 07 E1 01 00 01
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B E2 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B E3 00 00 00 08 01 4C
+                                                        	                           01 07 E2 01 00 00
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B E3 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B E4 00 00 00 08 01 4C
+                                                        	                           01 07 E3 01 00 01
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B E4 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B E5 00 00 00 08 01 4C
+                                                        	                           01 07 E4 01 00 00
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B E5 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B E6 00 00 00 08 01 4C
+                                                        	                           01 07 E5 01 00 01
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B E6 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  14 byte send	0x 6B E7 00 00 00 08 01 4C
+                                                        	                           01 07 E6 01 00 00
+[May 22 08:35:35 2020] PACKET - handle   1:   8 byte recv	0x 6B E7 00 00 00 02 01 4C
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B E8 00 00 00 06 01 4C
+                                                        	                           00 07 D0 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B E8 00 00 00 04 01 4C
+                                                        	                           00 00
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B E9 00 00 00 06 01 4C
+                                                        	                           00 07 D1 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B E9 00 00 00 04 01 4C
+                                                        	                           00 01
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B EA 00 00 00 06 01 4C
+                                                        	                           00 07 D2 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B EA 00 00 00 04 01 4C
+                                                        	                           00 00
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B EB 00 00 00 06 01 4C
+                                                        	                           00 07 D3 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B EB 00 00 00 04 01 4C
+                                                        	                           00 01
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B EC 00 00 00 06 01 4C
+                                                        	                           00 07 D4 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B EC 00 00 00 04 01 4C
+                                                        	                           00 00
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B ED 00 00 00 06 01 4C
+                                                        	                           00 07 D5 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B ED 00 00 00 04 01 4C
+                                                        	                           00 01
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B EE 00 00 00 06 01 4C
+                                                        	                           00 07 D6 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B EE 00 00 00 04 01 4C
+                                                        	                           00 00
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B EF 00 00 00 06 01 4C
+                                                        	                           00 07 D7 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B EF 00 00 00 04 01 4C
+                                                        	                           00 01
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B F0 00 00 00 06 01 4C
+                                                        	                           00 07 D8 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B F0 00 00 00 04 01 4C
+                                                        	                           00 00
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B F1 00 00 00 06 01 4C
+                                                        	                           00 07 D9 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B F1 00 00 00 04 01 4C
+                                                        	                           00 01
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B F2 00 00 00 06 01 4C
+                                                        	                           00 07 DA 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B F2 00 00 00 04 01 4C
+                                                        	                           00 00
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B F3 00 00 00 06 01 4C
+                                                        	                           00 07 DB 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B F3 00 00 00 04 01 4C
+                                                        	                           00 01
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B F4 00 00 00 06 01 4C
+                                                        	                           00 07 DC 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B F4 00 00 00 04 01 4C
+                                                        	                           00 00
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B F5 00 00 00 06 01 4C
+                                                        	                           00 07 DD 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B F5 00 00 00 04 01 4C
+                                                        	                           00 01
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B F6 00 00 00 06 01 4C
+                                                        	                           00 07 DE 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B F6 00 00 00 04 01 4C
+                                                        	                           00 00
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B F7 00 00 00 06 01 4C
+                                                        	                           00 07 DF 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B F7 00 00 00 04 01 4C
+                                                        	                           00 01
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B F8 00 00 00 06 01 4C
+                                                        	                           00 07 E0 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B F8 00 00 00 04 01 4C
+                                                        	                           00 00
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B F9 00 00 00 06 01 4C
+                                                        	                           00 07 E1 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B F9 00 00 00 04 01 4C
+                                                        	                           00 01
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B FA 00 00 00 06 01 4C
+                                                        	                           00 07 E2 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B FA 00 00 00 04 01 4C
+                                                        	                           00 00
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B FB 00 00 00 06 01 4C
+                                                        	                           00 07 E3 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B FB 00 00 00 04 01 4C
+                                                        	                           00 01
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B FC 00 00 00 06 01 4C
+                                                        	                           00 07 E4 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B FC 00 00 00 04 01 4C
+                                                        	                           00 00
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B FD 00 00 00 06 01 4C
+                                                        	                           00 07 E5 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B FD 00 00 00 04 01 4C
+                                                        	                           00 01
+[May 22 08:35:35 2020] PACKET - handle   1:  12 byte send	0x 6B FE 00 00 00 06 01 4C
+                                                        	                           00 07 E6 01
+[May 22 08:35:35 2020] PACKET - handle   1:  10 byte recv	0x 6B FE 00 00 00 04 01 4C
+                                                        	                           00 00
+[May 22 08:35:37 2020] PACKET - handle   1:  20 byte send	0x 6B FF 00 00 00 0E 01 4C
+                                                        	                           01 AF 64 01 00 00
+                                                        	                           01 AF 6E 01 00 00
+[May 22 08:35:37 2020] PACKET - handle   1:   8 byte recv	0x 6B FF 00 00 00 02 01 4C
+[May 22 08:35:37 2020] PACKET - handle   1:  32 byte send	0x 6C 00 00 00 00 1A 01 4C
+                                                        	                           01 AC 00 02 00 00 00 00
+                                                        	                           01 AC 64 02 00 00 00 07
+                                                        	                           01 AC 00 02 00 00 00 01
+[May 22 08:35:37 2020] PACKET - handle   1:   8 byte recv	0x 6C 00 00 00 00 02 01 4C
+[May 22 08:35:37 2020] PACKET - handle   1:  20 byte send	0x 6C 01 00 00 00 0E 01 4C
+                                                        	                           01 AF 64 01 00 00
+                                                        	                           01 AF 78 01 00 00
+[May 22 08:35:37 2020] PACKET - handle   1:   8 byte recv	0x 6C 01 00 00 00 02 01 4C
+[May 22 08:35:37 2020] PACKET - handle   1:  32 byte send	0x 6C 02 00 00 00 1A 01 4C
+                                                        	                           01 AC 02 02 00 00 00 00
+                                                        	                           01 AC 66 02 00 00 00 07
+                                                        	                           01 AC 02 02 00 00 00 01
+[May 22 08:35:37 2020] PACKET - handle   1:   8 byte recv	0x 6C 02 00 00 00 02 01 4C
+[May 22 08:35:37 2020] PACKET - handle   1:  32 byte send	0x 6C 03 00 00 00 1A 01 4C
+                                                        	                           01 AC 04 02 00 00 00 00
+                                                        	                           01 AC 68 02 00 00 00 07
+                                                        	                           01 AC 04 02 00 00 00 01
+[May 22 08:35:37 2020] PACKET - handle   1:   8 byte recv	0x 6C 03 00 00 00 02 01 4C
+[May 22 08:35:37 2020] PACKET - handle   1:  32 byte send	0x 6C 04 00 00 00 1A 01 4C
+                                                        	                           01 AC 06 02 00 00 00 00
+                                                        	                           01 AC 6A 02 00 00 00 07
+                                                        	                           01 AC 06 02 00 00 00 01
+[May 22 08:35:37 2020] PACKET - handle   1:   8 byte recv	0x 6C 04 00 00 00 02 01 4C
+[May 22 08:35:37 2020] PACKET - handle   1:  12 byte send	0x 6C 05 00 00 00 06 01 4C
+                                                        	                           00 0C 3C 02
+[May 22 08:35:37 2020] PACKET - handle   1:  12 byte recv	0x 6C 05 00 00 00 06 01 4C
+                                                        	                           00 00 00 00
+[May 22 08:35:37 2020] PACKET - handle   1:  12 byte send	0x 6C 06 00 00 00 06 01 4C
+                                                        	                           00 0B DA 02
+[May 22 08:35:37 2020] PACKET - handle   1:  12 byte recv	0x 6C 06 00 00 00 06 01 4C
+                                                        	                           00 00 00 00
+[May 22 08:35:37 2020] PACKET - handle   1:  12 byte send	0x 6C 07 00 00 00 06 01 4C
+                                                        	                           00 0C 40 02
+[May 22 08:35:37 2020] PACKET - handle   1:  12 byte recv	0x 6C 07 00 00 00 06 01 4C
+                                                        	                           00 00 00 00
+[May 22 08:35:37 2020] PACKET - handle   1:  12 byte send	0x 6C 08 00 00 00 06 01 4C
+                                                        	                           00 0B DE 02
+[May 22 08:35:37 2020] PACKET - handle   1:  12 byte recv	0x 6C 08 00 00 00 06 01 4C
+                                                        	                           00 00 00 00
+[May 22 08:35:38 2020] PACKET - handle   1:  12 byte send	0x 6C 09 00 00 00 06 01 4C
+                                                        	                           00 0C 3C 02
+[May 22 08:35:38 2020] PACKET - handle   1:  12 byte recv	0x 6C 09 00 00 00 06 01 4C
+                                                        	                           00 00 00 00
+[May 22 08:35:38 2020] PACKET - handle   1:  12 byte send	0x 6C 0A 00 00 00 06 01 4C
+                                                        	                           00 0B DA 02
+[May 22 08:35:38 2020] PACKET - handle   1:  12 byte recv	0x 6C 0A 00 00 00 06 01 4C
+                                                        	                           00 00 00 00
+[May 22 08:35:38 2020] PACKET - handle   1:  12 byte send	0x 6C 0B 00 00 00 06 01 4C
+                                                        	                           00 0C 40 02
+[May 22 08:35:38 2020] PACKET - handle   1:  12 byte recv	0x 6C 0B 00 00 00 06 01 4C
+                                                        	                           00 00 00 00
+[May 22 08:35:38 2020] PACKET - handle   1:  12 byte send	0x 6C 0C 00 00 00 06 01 4C
+                                                        	                           00 0B DE 02
+[May 22 08:35:38 2020] PACKET - handle   1:  12 byte recv	0x 6C 0C 00 00 00 06 01 4C
+                                                        	                           00 00 00 00
+[May 22 08:35:39 2020] PACKET - handle   1:  12 byte send	0x 6C 0D 00 00 00 06 01 4C
+                                                        	                           00 0C 3C 02
+[May 22 08:35:39 2020] PACKET - handle   1:  12 byte recv	0x 6C 0D 00 00 00 06 01 4C
+                                                        	                           00 00 00 00
+[May 22 08:35:39 2020] PACKET - handle   1:  12 byte send	0x 6C 0E 00 00 00 06 01 4C
+                                                        	                           00 0B DA 02
+[May 22 08:35:39 2020] PACKET - handle   1:  12 byte recv	0x 6C 0E 00 00 00 06 01 4C
+                                                        	                           00 00 00 00
+[May 22 08:35:39 2020] PACKET - handle   1:  12 byte send	0x 6C 0F 00 00 00 06 01 4C
+                                                        	                           00 0C 40 02
+[May 22 08:35:39 2020] PACKET - handle   1:  12 byte recv	0x 6C 0F 00 00 00 06 01 4C
+                                                        	                           00 00 00 00
+[May 22 08:35:39 2020] PACKET - handle   1:  12 byte send	0x 6C 10 00 00 00 06 01 4C
+                                                        	                           00 0B DE 02
+[May 22 08:35:39 2020] PACKET - handle   1:  12 byte recv	0x 6C 10 00 00 00 06 01 4C
+                                                        	                           00 00 00 00
+[May 22 08:35:40 2020] PACKET - handle   1:  16 byte send	0x 6C 11 00 00 00 0A 01 4C
+                                                        	                           01 AC 00 02 00 00 00 00
+[May 22 08:35:40 2020] PACKET - handle   1:   8 byte recv	0x 6C 11 00 00 00 02 01 4C
+[May 22 08:35:40 2020] PACKET - handle   1:  16 byte send	0x 6C 12 00 00 00 0A 01 4C
+                                                        	                           01 AC 02 02 00 00 00 00
+[May 22 08:35:40 2020] PACKET - handle   1:   8 byte recv	0x 6C 12 00 00 00 02 01 4C
+[May 22 08:35:40 2020] PACKET - handle   1:  16 byte send	0x 6C 13 00 00 00 0A 01 4C
+                                                        	                           01 AC 04 02 00 00 00 00
+[May 22 08:35:40 2020] PACKET - handle   1:   8 byte recv	0x 6C 13 00 00 00 02 01 4C
+[May 22 08:35:40 2020] PACKET - handle   1:  16 byte send	0x 6C 14 00 00 00 0A 01 4C
+                                                        	                           01 AC 06 02 00 00 00 00
+[May 22 08:35:40 2020] PACKET - handle   1:   8 byte recv	0x 6C 14 00 00 00 02 01 4C
+[May 22 08:35:42 2020] PACKET - handle   1:  32 byte send	0x 6C 15 00 00 00 1A 01 4C
+                                                        	                           01 AF 6E 01 00 00
+                                                        	                           01 AF 78 01 00 00
+                                                        	                           01 AC 00 04 00 00 00 00 00 00 00 00
+[May 22 08:35:42 2020] PACKET - handle   1:   8 byte recv	0x 6C 15 00 00 00 02 01 4C
+[May 22 08:35:42 2020] PACKET - handle   1:  28 byte send	0x 6C 16 00 00 00 16 01 4C
+                                                        	                           01 AF 64 02 00 01 00 08
+                                                        	                           01 AF 66 04 00 00 00 00 00 00 00 00
+[May 22 08:35:42 2020] PACKET - handle   1:   8 byte recv	0x 6C 16 00 00 00 02 01 4C
+[May 22 08:35:42 2020] PACKET - handle   1:  12 byte send	0x 6C 17 00 00 00 06 01 4C
+                                                        	                           00 AF 6C 02
+[May 22 08:35:42 2020] PACKET - handle   1:  12 byte recv	0x 6C 17 00 00 00 06 01 4C
+                                                        	                           00 00 16 23
+[May 22 08:35:43 2020] PACKET - handle   1:  12 byte send	0x 6C 18 00 00 00 06 01 4C
+                                                        	                           00 AF 6C 02
+[May 22 08:35:43 2020] PACKET - handle   1:  12 byte recv	0x 6C 18 00 00 00 06 01 4C
+                                                        	                           00 98 E5 CF
+[May 22 08:35:44 2020] PACKET - handle   1:  12 byte send	0x 6C 19 00 00 00 06 01 4C
+                                                        	                           00 AF 6C 02
+[May 22 08:35:44 2020] PACKET - handle   1:  12 byte recv	0x 6C 19 00 00 00 06 01 4C
+                                                        	                           01 32 0B 39
+[May 22 08:35:45 2020] PACKET - handle   1:  22 byte send	0x 6C 1A 00 00 00 10 01 4C
+                                                        	                           01 AF 64 01 00 00
+                                                        	                           01 AC 00 02 00 00 00 00
+[May 22 08:35:45 2020] PACKET - handle   1:   8 byte recv	0x 6C 1A 00 00 00 02 01 4C
+[May 22 08:35:45 2020] PACKET - handle   1:  28 byte send	0x 6C 1B 00 00 00 16 01 4C
+                                                        	                           01 AF 6E 02 00 01 00 10
+                                                        	                           01 AF 70 04 00 00 00 00 00 00 00 00
+[May 22 08:35:45 2020] PACKET - handle   1:   8 byte recv	0x 6C 1B 00 00 00 02 01 4C
+[May 22 08:35:45 2020] PACKET - handle   1:  12 byte send	0x 6C 1C 00 00 00 06 01 4C
+                                                        	                           00 AF 76 02
+[May 22 08:35:45 2020] PACKET - handle   1:  12 byte recv	0x 6C 1C 00 00 00 06 01 4C
+                                                        	                           00 00 0C 0F
+[May 22 08:35:46 2020] PACKET - handle   1:  12 byte send	0x 6C 1D 00 00 00 06 01 4C
+                                                        	                           00 AF 76 02
+[May 22 08:35:46 2020] PACKET - handle   1:  12 byte recv	0x 6C 1D 00 00 00 06 01 4C
+                                                        	                           00 00 00 00
+[May 22 08:35:47 2020] PACKET - handle   1:  12 byte send	0x 6C 1E 00 00 00 06 01 4C
+                                                        	                           00 AF 76 02
+[May 22 08:35:47 2020] PACKET - handle   1:  12 byte recv	0x 6C 1E 00 00 00 06 01 4C
+                                                        	                           00 00 00 00
+[May 22 08:35:48 2020] PACKET - handle   1:  22 byte send	0x 6C 1F 00 00 00 10 01 4C
+                                                        	                           01 AF 64 01 00 00
+                                                        	                           01 AC 02 02 00 00 00 00
+[May 22 08:35:48 2020] PACKET - handle   1:   8 byte recv	0x 6C 1F 00 00 00 02 01 4C
+[May 22 08:35:48 2020] PACKET - handle   1:  28 byte send	0x 6C 20 00 00 00 16 01 4C
+                                                        	                           01 AF 78 02 00 01 00 20
+                                                        	                           01 AF 7A 04 00 00 00 00 00 00 00 00
+[May 22 08:35:48 2020] PACKET - handle   1:   8 byte recv	0x 6C 20 00 00 00 02 01 4C
+[May 22 08:35:48 2020] PACKET - handle   1:  12 byte send	0x 6C 21 00 00 00 06 01 4C
+                                                        	                           00 AF 80 02
+[May 22 08:35:48 2020] PACKET - handle   1:  12 byte recv	0x 6C 21 00 00 00 06 01 4C
+                                                        	                           00 00 05 8E
+[May 22 08:35:49 2020] PACKET - handle   1:  12 byte send	0x 6C 22 00 00 00 06 01 4C
+                                                        	                           00 AF 80 02
+[May 22 08:35:49 2020] PACKET - handle   1:  12 byte recv	0x 6C 22 00 00 00 06 01 4C
+                                                        	                           00 00 00 00
+[May 22 08:35:50 2020] PACKET - handle   1:  12 byte send	0x 6C 23 00 00 00 06 01 4C
+                                                        	                           00 AF 80 02
+[May 22 08:35:50 2020] PACKET - handle   1:  12 byte recv	0x 6C 23 00 00 00 06 01 4C
+                                                        	                           00 00 00 00
