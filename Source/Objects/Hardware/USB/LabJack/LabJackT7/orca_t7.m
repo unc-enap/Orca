@@ -18,8 +18,13 @@
 // ErrorCheck, etc.
 #include "LJM_Utilities.h"
 
+// Enable for additional output on read/write
+#define LJM_DEBUG
+
 #include "orca_t7.h"
 
+// TODO: open by serial number / device name
+//   @see https://labjack.com/support/software/api/ljm/function-reference/ljmopen
 long openLabJack(int* hDevice)
 {
     int err = 0;
@@ -28,7 +33,7 @@ long openLabJack(int* hDevice)
     SetConfigValue(LJM_OPEN_TCP_DEVICE_TIMEOUT_MS, 500);
     SetConfigValue(LJM_SEND_RECEIVE_TIMEOUT_MS, 500);
 
-    err = LJM_Open(LJM_dtT7, LJM_ctANY, "LJM_idANY", hDevice);  // see LabJackM.h
+    err = LJM_Open(LJM_dtT7, LJM_ctANY, "ANY", hDevice);  // see LabJackM.h
     ErrorCheck(err, "LJM_Open");
 
     PrintDeviceInfoFromHandle(*hDevice);
@@ -46,7 +51,26 @@ long closeLabJack(int hDevice)
     return err;
 }
 
-long getConfigInfo(int hDevice, DeviceConfigT7* confInfo)
+long findLabJacks()
+{
+    int err = 0;
+    
+    int numFound = 0;
+    int aDeviceTypes[LJM_LIST_ALL_SIZE];
+    int aConnectionTypes[LJM_LIST_ALL_SIZE];
+    int aSerialNumbers[LJM_LIST_ALL_SIZE];
+    int aIPAddresses[LJM_LIST_ALL_SIZE];
+    
+    err = LJM_ListAll(LJM_dtT7, LJM_ctANY, &numFound,
+                      aDeviceTypes, aConnectionTypes, aSerialNumbers, aIPAddresses);
+    ErrorCheck(err, "LJM_ListAll");
+    
+    // TODO: print devices
+    
+    return err;
+}
+
+long getConfig(int hDevice, DeviceConfigT7* confInfo)
 {
     if( confInfo == NULL )
     {
@@ -73,6 +97,7 @@ long getConfigInfo(int hDevice, DeviceConfigT7* confInfo)
     for (i=1; i<NUM_VALUES; i++)
         conf[i-1] = aValues[i];
 
+#ifdef LJM_DEBUG
     printf("Conf values:\n");
     printf("  ProductID     : %.0f\n", confInfo->prodID);
     printf("  HW version    : %.3f\n", confInfo->hwVersion);
@@ -81,11 +106,12 @@ long getConfigInfo(int hDevice, DeviceConfigT7* confInfo)
     printf("  WiFi version  : %.3f\n", confInfo->wifiVersion);
     printf("  HW installed  : %.0f\n", confInfo->hwInstalled);
     printf("  Serial number : %.0f\n", confInfo->serial);
-
+#endif
+    
     return err;
 }
 
-long getCalibrationInfo(int hDevice, DeviceCalibrationT7* calInfo)
+long getCalibration(int hDevice, DeviceCalibrationT7* calInfo)
 {
     if( calInfo == NULL )
     {
@@ -127,6 +153,7 @@ long getCalibrationInfo(int hDevice, DeviceCalibrationT7* calInfo)
     for (i=0; i<NUM_VALUES; i++)
         cal[i] = aValues[i];
 
+#ifdef LJM_DEBUG
     printf("Cal values:\n");
     for (i=0; i<4; i++) {
         printf("  HS[%d]:\n", i);
@@ -159,7 +186,8 @@ long getCalibrationInfo(int hDevice, DeviceCalibrationT7* calInfo)
     printf("    ISource_200u : %+.10f\n", calInfo->ISource_200u);
 
     printf("  I_Bias : %+.10f\n", calInfo->I_Bias);
-
+#endif
+    
     return err;
 }
 
@@ -189,9 +217,11 @@ long getCurrentValues(int hDevice, double* Current10u, double* Current200u)
             &errorAddress);
     ErrorCheckWithAddress(err, errorAddress, "LJM_eReadAddresses");
 
+#ifdef LJM_DEBUG
     printf("\nCS  10uA calibration : %f\n", aValues[0]);
     printf("\nCS 200uA calibration : %f\n", aValues[1]);
-
+#endif
+    
     if( Current10u != NULL)
         *Current10u = aValues[0];
     if( Current200u != NULL)
@@ -297,12 +327,14 @@ long readAIN(int hDevice, DeviceCalibrationT7* CalibrationInfo,
             &errorAddress);
     ErrorCheckWithAddress(err, errorAddress, "LJM_eWriteAddresses");
 
+#ifdef LJM_DEBUG
     printf("\nAIN#%d configuration:\n", ChannelP);
     printf("    NEGATIVE_CH      : %f\n", aValuesConfig[0]);
     printf("    RESOLUTION_INDEX : %f\n", aValuesConfig[1]);
     printf("    RANGE            : %f\n", aValuesConfig[2]);
     printf("    SETTLING_US      : %f\n", aValuesConfig[3]);
-
+#endif
+    
     // Set up for reading AIN state
     int ADDRESS, TYPE;
     if( Binary == 0 ) {
@@ -319,15 +351,18 @@ long readAIN(int hDevice, DeviceCalibrationT7* CalibrationInfo,
     err = LJM_eReadAddress(hDevice, ADDRESS, TYPE, &value);
     ErrorCheck(err, "LJM_eReadAddress");
 
+#ifdef LJM_DEBUG
     printf("\nAIN#%d state : %f\n", ChannelP, value);
-
+#endif
+    
     if( Voltage != NULL )
         *Voltage = value;
 
     if( ChannelP == 14 ) {
         tempK = value * -92.6 + 467.6;  // Device temperature K
+#ifdef LJM_DEBUG
         printf("\nAIN#%d temperature : %f K\n", ChannelP, tempK);
-
+#endif
         if( Temperature != NULL )
             *Temperature = tempK;
     }
@@ -370,8 +405,10 @@ long writeDAC(int hDevice, DeviceCalibrationT7* CalibrationInfo,
     err = LJM_eWriteAddress(hDevice, ADDRESS, TYPE, value);
     ErrorCheck(err, "LJM_eWriteAddress");
 
+#ifdef LJM_DEBUG
     printf("\nDAC#%d state : %f\n", Channel, value);
-
+#endif
+    
     return err;
 }
 
@@ -402,9 +439,11 @@ long readDI(int hDevice, int Channel, long* State)
 
     err = LJM_eReadAddress(hDevice, ADDRESS, TYPE, &value);
     ErrorCheck(err, "LJM_eReadAddress");
-
+    
+#ifdef LJM_DEBUG
     printf("\nDIO#%d state : %f\n", Channel, value);
-
+#endif
+    
     if( State != NULL )
         *State = (long)value;
 
@@ -439,8 +478,10 @@ long writeDO(int hDevice, int Channel, long State)
     err = LJM_eWriteAddress(hDevice, ADDRESS, TYPE, value);
     ErrorCheck(err, "LJM_eWriteAddress");
 
+#ifdef LJM_DEBUG
     printf("\nDIO#%d state : %f\n", Channel, value);
-
+#endif
+    
     return err;
 }
 
@@ -497,8 +538,10 @@ long setupClock(int hDevice, int Channel, int Enable,
                 &errorAddress);
         ErrorCheckWithAddress(err, errorAddress, "LJM_eWriteAddresses");
 
+#ifdef LJM_DEBUG
         printf("\nCL#1+2 disabled : %.0f %.0f\n", aClocksEnable[0], aClocksEnable[1]);
         printf("\nCIO#0+1 disabled : %.0f %.0f\n", aClocksEnable[2], aClocksEnable[3]);
+#endif
     }
     else if( Channel == 1 || Channel == 2 ) {
         int cio2 = Channel - 1;
@@ -512,8 +555,10 @@ long setupClock(int hDevice, int Channel, int Enable,
                 &errorAddress);
         ErrorCheckWithAddress(err, errorAddress, "LJM_eWriteAddresses");
 
+#ifdef LJM_DEBUG
         printf("\nCL#0 disabled : %.0f\n", aClocksEnable[0]);
         printf("\nCIO#%d disabled : %.0f\n", cio2, aClocksEnable[1]);
+#endif
     }
 
     // Set up for configuring the clock
@@ -529,12 +574,14 @@ long setupClock(int hDevice, int Channel, int Enable,
             &errorAddress);
     ErrorCheckWithAddress(err, errorAddress, "LJM_eWriteAddresses");
 
+#ifdef LJM_DEBUG
     printf("\nCL#%d configuration:\n", Channel);
     printf("    ENABLED    : %.0f\n", aValuesConfig[0]);
     printf("    DIVISOR    : %f\n", aValuesConfig[1]);
     printf("    OPTIONS    : %f\n", aValuesConfig[2]);
     printf("    ROLL_VALUE : %f\n", aValuesConfig[3]);
-
+#endif
+    
     return err;
 }
 
@@ -555,8 +602,10 @@ long readClock(int hDevice, int Channel, long* Count)
     err = LJM_eReadAddress(hDevice, ADDRESS, TYPE, &value);
     ErrorCheck(err, "LJM_eReadAddress");
 
+#ifdef LJM_DEBUG
     printf("\nCL#%d count : %f\n", Channel, value);
-
+#endif
+    
     if( Count != NULL )
         *Count = (long)value;
 
@@ -606,7 +655,9 @@ long enableCounter(int hDevice, int Channel)
                 &errorAddress);
         ErrorCheckWithAddress(err, errorAddress, "LJM_eWriteAddresses");
 
+#ifdef LJM_DEBUG
         printf("\nCL#0+%d disabled : %.0f %.0f\n", cl2, aClocksEnable[0], aClocksEnable[1]);
+#endif
     }
 
     // Set up for configuring the counter
@@ -622,10 +673,12 @@ long enableCounter(int hDevice, int Channel)
             &errorAddress);
     ErrorCheckWithAddress(err, errorAddress, "LJM_eWriteAddresses");
 
+#ifdef LJM_DEBUG
     printf("\nCIO#%d configuration:\n", Channel);
     printf("    INDEX   : %f\n", aValuesConfig[1]);
     printf("    ENABLED : %f\n", aValuesConfig[2]);
-
+#endif
+    
     return err;
 }
 
@@ -651,9 +704,11 @@ long disableCounter(int hDevice, int Channel)
             &errorAddress);
     ErrorCheckWithAddress(err, errorAddress, "LJM_eWriteAddresses");
 
+#ifdef LJM_DEBUG
     printf("\nCIO#%d configuration:\n", Channel);
     printf("    ENABLED : %f\n", aValuesConfig[0]);
-
+#endif
+    
     return err;
 }
 
@@ -678,8 +733,10 @@ long readCounter(int hDevice, int Channel, int Reset, long* Count)
     err = LJM_eReadAddress(hDevice, ADDRESS, TYPE, &value);
     ErrorCheck(err, "LJM_eReadAddress");
 
+#ifdef LJM_DEBUG
     printf("\nCIO#%d state : %f\n", Channel, value);
-
+#endif
+    
     if( Count != NULL )
         *Count = value;
 
@@ -751,12 +808,14 @@ long enableFreqIn(int hDevice, int Channel, int Clock,
             &errorAddress);
     ErrorCheckWithAddress(err, errorAddress, "LJM_eWriteAddresses");
 
+#ifdef LJM_DEBUG
     printf("\nCIO#%d freq-in configuration:\n", Channel);
     printf("    INDEX    : %f\n", aValuesConfig[1]);
     printf("    CLOCK    : %f\n", aValuesConfig[2]);
     printf("    CONFIG_A : %f\n", aValuesConfig[3]);
     printf("    ENABLED  : %f\n", aValuesConfig[4]);
-
+#endif
+    
     return err;
 }
 
@@ -786,8 +845,10 @@ long readFreqIn(int hDevice, int Channel, double ClockFreq,
     err = LJM_eReadAddress(hDevice, ADDRESS, TYPE, &value);
     ErrorCheck(err, "LJM_eReadAddress");
 
+#ifdef LJM_DEBUG
     printf("\nCIO#%d freq-in state : %f\n", Channel, value);
-
+#endif
+    
     if( Period != NULL )
         *Period = value / ClockFreq;
     if( Frequency != NULL )

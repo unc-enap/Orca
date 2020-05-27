@@ -108,10 +108,12 @@ typedef struct {
 long openLabJack(int* hDevice);
 
 long closeLabJack(int hDevice);
+    
+long findLabJacks(void);
 
-long getConfigInfo(int hDevice, DeviceConfigT7* confInfo);
+long getConfig(int hDevice, DeviceConfigT7* confInfo);
 
-long getCalibrationInfo(int hDevice, DeviceCalibrationT7* calInfo);
+long getCalibration(int hDevice, DeviceCalibrationT7* calInfo);
 
 long getCurrentValues(int hDevice, double* Current10u, double* Current200u);
 
