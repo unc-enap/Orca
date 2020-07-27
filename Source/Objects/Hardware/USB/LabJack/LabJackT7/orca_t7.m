@@ -23,9 +23,7 @@
 
 #include "orca_t7.h"
 
-// TODO: open by serial number / device name
-//   @see https://labjack.com/support/software/api/ljm/function-reference/ljmopen
-long openLabJack(int* hDevice)
+int openLabJack(int* hDevice, const char* identifier)
 {
     int err = 0;
 
@@ -33,7 +31,10 @@ long openLabJack(int* hDevice)
     SetConfigValue(LJM_OPEN_TCP_DEVICE_TIMEOUT_MS, 500);
     SetConfigValue(LJM_SEND_RECEIVE_TIMEOUT_MS, 500);
 
-    err = LJM_Open(LJM_dtT7, LJM_ctANY, "ANY", hDevice);  // see LabJackM.h
+    if (identifier)
+        err = LJM_Open(LJM_dtT7, LJM_ctANY, identifier, hDevice);  // see LabJackM.h
+    else
+        err = LJM_Open(LJM_dtT7, LJM_ctANY, "ANY", hDevice);  // see LabJackM.h
     ErrorCheck(err, "LJM_Open");
 
     PrintDeviceInfoFromHandle(*hDevice);
@@ -41,7 +42,7 @@ long openLabJack(int* hDevice)
     return err;
 }
 
-long closeLabJack(int hDevice)
+int closeLabJack(int hDevice)
 {
     int err = 0;
 
@@ -51,9 +52,9 @@ long closeLabJack(int hDevice)
     return err;
 }
 
-long findLabJacks()
+int findLabJacks(int* hDevice)
 {
-    int err = 0;
+    int err = 0, i;
     
     int numFound = 0;
     int aDeviceTypes[LJM_LIST_ALL_SIZE];
@@ -65,12 +66,19 @@ long findLabJacks()
                       aDeviceTypes, aConnectionTypes, aSerialNumbers, aIPAddresses);
     ErrorCheck(err, "LJM_ListAll");
     
-    // TODO: print devices
+    for (i=0; i<numFound; i++)
+        printf("LabJack device found: 0x%x (%s, %s)\n",
+               aSerialNumbers[i],
+               NumberToDeviceType(aDeviceTypes[i]),
+               NumberToConnectionType(aConnectionTypes[i]));
+
+    if (hDevice && numFound > 0)
+        *hDevice = aSerialNumbers[0];
     
     return err;
 }
 
-long getConfig(int hDevice, DeviceConfigT7* confInfo)
+int getConfig(int hDevice, DeviceConfigT7* confInfo)
 {
     if( confInfo == NULL )
     {
@@ -111,7 +119,7 @@ long getConfig(int hDevice, DeviceConfigT7* confInfo)
     return err;
 }
 
-long getCalibration(int hDevice, DeviceCalibrationT7* calInfo)
+int getCalibration(int hDevice, DeviceCalibrationT7* calInfo)
 {
     if( calInfo == NULL )
     {
@@ -202,7 +210,7 @@ long getCalibration(int hDevice, DeviceCalibrationT7* calInfo)
  * CURRENT_SOURCE_200UA_CAL_VALUE - Address: 1902
  *    Fixed current source value in Amps for the 10UA/200UA terminal.
  */
-long getCurrentValues(int hDevice, double* Current10u, double* Current200u)
+int getCurrentValues(int hDevice, double* Current10u, double* Current200u)
 {
     int err = 0;
     int errorAddress = INITIAL_ERR_ADDRESS;
@@ -260,7 +268,7 @@ long getCurrentValues(int hDevice, double* Current10u, double* Current200u)
  * AIN#(0:13)_BINARY - Starting Address: 50000
  *   Returns the 24-bit binary representation of the specified analog input.
  */
-long readAIN(int hDevice, DeviceCalibrationT7* CalibrationInfo,
+int readAIN(int hDevice, DeviceCalibrationT7* CalibrationInfo,
              int ChannelP, int ChannelN, double* Voltage, double* Temperature,
              double Range, long Resolution, double Settling, int Binary)
 {
@@ -380,7 +388,7 @@ long readAIN(int hDevice, DeviceCalibrationT7* CalibrationInfo,
  * DAC#(0:1) - Starting Address: 1000
  *   Pass a voltage for the specified analog output.
  */
-long writeDAC(int hDevice, DeviceCalibrationT7* CalibrationInfo,
+int writeDAC(int hDevice, DeviceCalibrationT7* CalibrationInfo,
               int Channel, double Voltage)
 {
     if( CalibrationInfo == NULL )
@@ -422,7 +430,7 @@ long writeDAC(int hDevice, DeviceCalibrationT7* CalibrationInfo,
  * DIO#(0:22) - Starting Address: 2000
  *    Read or set the state of 1 bit of digital I/O.
  */
-long readDI(int hDevice, int Channel, long* State)
+int readDI(int hDevice, int Channel, long* State)
 {
     if( Channel < 0 || Channel > 22 )
     {
@@ -460,7 +468,7 @@ long readDI(int hDevice, int Channel, long* State)
  * DIO#(0:22) - Starting Address: 2000
  *    Read or set the state of 1 bit of digital I/O.
  */
-long writeDO(int hDevice, int Channel, long State)
+int writeDO(int hDevice, int Channel, long State)
 {
     if( Channel < 0 || Channel > 22 )
     {
@@ -496,7 +504,7 @@ long writeDO(int hDevice, int Channel, long State)
  *     CLOCK2: 16-bit. Mutual Exclusions: CLOCK0, COUNTER_B (CIO1)
  *
  */
-long setupClock(int hDevice, int Channel, int Enable,
+int setupClock(int hDevice, int Channel, int Enable,
                 long Divisor, long RollValue, int External)
 {
     if( Channel < 0 || Channel > 3 )
@@ -585,7 +593,7 @@ long setupClock(int hDevice, int Channel, int Enable,
     return err;
 }
 
-long readClock(int hDevice, int Channel, long* Count)
+int readClock(int hDevice, int Channel, long* Count)
 {
     if( Channel < 0 || Channel > 3 )
     {
@@ -631,7 +639,7 @@ long readClock(int hDevice, int Channel, long* Count)
  *     1 = enabled. 0 = disabled. Must be disabled during configuration.
  * DIO#_EF_INDEX - Starting Address: 44100
  */
-long enableCounter(int hDevice, int Channel)
+int enableCounter(int hDevice, int Channel)
 {
     if( Channel < 0 || Channel > 3 )
     {
@@ -682,7 +690,7 @@ long enableCounter(int hDevice, int Channel)
     return err;
 }
 
-long disableCounter(int hDevice, int Channel)
+int disableCounter(int hDevice, int Channel)
 {
     if( Channel < 0 || Channel > 4 )
     {
@@ -712,7 +720,7 @@ long disableCounter(int hDevice, int Channel)
     return err;
 }
 
-long readCounter(int hDevice, int Channel, int Reset, long* Count)
+int readCounter(int hDevice, int Channel, int Reset, long* Count)
 {
     if( Channel < 0 || Channel > 4 )
     {
@@ -756,7 +764,7 @@ long readCounter(int hDevice, int Channel, int Reset, long* Count)
  *    Resolution(s) = 1 / Clock#Frequency
  *    Max Period(s) = DIO_EF_CLOCK#_ROLL_VALUE / Clock#Frequency
  */
-long enableFreqIn(int hDevice, int Channel, int Clock,
+int enableFreqIn(int hDevice, int Channel, int Clock,
                   int EdgeIndex, int Continuous)
 {
     if( Channel < 0 || Channel > 3 )
@@ -819,7 +827,7 @@ long enableFreqIn(int hDevice, int Channel, int Clock,
     return err;
 }
 
-long readFreqIn(int hDevice, int Channel, double ClockFreq,
+int readFreqIn(int hDevice, int Channel, double ClockFreq,
                 double* Period, double* Frequency)
 {
     if( Channel < 0 || Channel > 4 )

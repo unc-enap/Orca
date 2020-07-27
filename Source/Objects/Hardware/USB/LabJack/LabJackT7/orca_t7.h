@@ -105,44 +105,44 @@ typedef struct {
  * "Easy access" function declarations
  */
 
-long openLabJack(int* hDevice);
+int openLabJack(int* hDevice, const char* identifier);
 
-long closeLabJack(int hDevice);
+int closeLabJack(int hDevice);
     
-long findLabJacks(void);
+int findLabJacks(int* hDevice);
 
-long getConfig(int hDevice, DeviceConfigT7* confInfo);
+int getConfig(int hDevice, DeviceConfigT7* confInfo);
 
-long getCalibration(int hDevice, DeviceCalibrationT7* calInfo);
+int getCalibration(int hDevice, DeviceCalibrationT7* calInfo);
 
-long getCurrentValues(int hDevice, double* Current10u, double* Current200u);
+int getCurrentValues(int hDevice, double* Current10u, double* Current200u);
 
-long readAIN(int hDevice, DeviceCalibrationT7* CalibrationInfo,
+int readAIN(int hDevice, DeviceCalibrationT7* CalibrationInfo,
              int ChannelP, int ChannelN, double* Voltage, double* Temperature,
              double Range, long Resolution, double Settling, int Binary);
 
-long writeDAC(int hDevice, DeviceCalibrationT7* CalibrationInfo,
+int writeDAC(int hDevice, DeviceCalibrationT7* CalibrationInfo,
               int Channel, double Voltage);
 
-long readDI(int hDevice, int Channel, long* State);
+int readDI(int hDevice, int Channel, long* State);
 
-long writeDO(int hDevice, int Channel, long State);
+int writeDO(int hDevice, int Channel, long State);
 
-long setupClock(int hDevice, int Channel, int Enable,
+int setupClock(int hDevice, int Channel, int Enable,
                 long Divisor, long RollValue, int External);
 
-long readClock(int hDevice, int Channel, long* Count);
+int readClock(int hDevice, int Channel, long* Count);
 
-long enableCounter(int hDevice, int Channel);
+int enableCounter(int hDevice, int Channel);
 
-long disableCounter(int hDevice, int Channel);
+int disableCounter(int hDevice, int Channel);
 
-long readCounter(int hDevice, int Channel, int Reset, long* Count);
+int readCounter(int hDevice, int Channel, int Reset, long* Count);
 
-long enableFreqIn(int hDevice, int Channel, int Clock,
+int enableFreqIn(int hDevice, int Channel, int Clock,
                   int EdgeIndex, int Continuous);
 
-long readFreqIn(int hDevice, int Channel, double ClockFreq,
+int readFreqIn(int hDevice, int Channel, double ClockFreq,
                 double* Period, double* Frequency);
 
 #ifdef __cplusplus
