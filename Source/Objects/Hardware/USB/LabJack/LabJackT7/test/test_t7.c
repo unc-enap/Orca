@@ -36,16 +36,16 @@ int main()
     int i, j;
 
     // Open first found LabJack T7
-    err += openLabJack(&handle);
+    err += openLabJack(&handle, NULL);
 
     sleep(2);
     printf("\n-- BASIC CONFIG --\n");
 
     // Get config info
-    err += getConfigInfo(handle, &confInfo);
+    err += getConfig(handle, &confInfo);
 
     // Get calibration info
-    err += getCalibrationInfo(handle, &calInfo);
+    err += getCalibration(handle, &calInfo);
 
     // Read 10uA/200uA current source calibration from the LabJack
     {

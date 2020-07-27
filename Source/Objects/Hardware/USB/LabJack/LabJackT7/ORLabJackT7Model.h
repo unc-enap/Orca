@@ -45,7 +45,7 @@
  */
 
 #define kNumT7DacChannels 2
-#define kNumT7AdcChannels 14
+#define kNumT7AdcChannels (14+2)
 #define kNumT7IOChannels  23
 #define kNumT7Counters    2
 
@@ -173,7 +173,7 @@
 - (void) setDataId: (uint32_t) DataId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherLakeShore210;
-- (void) readSerialNumbers;
+- (int) readSerialNumbers;
 - (void) shipTheData;
 
 #pragma mark •••Adc Processing Protocol

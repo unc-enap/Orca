@@ -652,7 +652,13 @@
 #pragma mark •••Actions
 - (IBAction) probeAction:(id)sender
 {
-	[model readSerialNumbers];
+	int deviceSerialNumber = [model readSerialNumbers];
+
+    if (deviceSerialNumber >= 0) {
+        NSLog(@"LabJack found: 0x%x\n", deviceSerialNumber);
+        [deviceSerialNumberField setIntValue: deviceSerialNumber];
+    }
+    else NSLog(@"No LabJack found!\n");
 }
 
 - (IBAction) toggleOpenAction:(id)sender

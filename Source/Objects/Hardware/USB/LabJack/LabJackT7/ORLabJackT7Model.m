@@ -423,7 +423,7 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
 {
 	if(chan<kNumT7AdcChannels){
 		if([channelName[chan] length])return channelName[chan];
-		else return [NSString stringWithFormat:@"Chan %d",chan];
+		else return [NSString stringWithFormat:@"AI %d",chan];
 	}
 	else return @"";
 }
@@ -673,13 +673,18 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
 - (void) openDevice
 {
     int h;
-    long error = openLabJack(&h);   // FIXME: use deviceSerialNumber
+
+    const char *serial = NULL;
+    if (deviceSerialNumber!=0)
+        serial = [[NSString stringWithFormat:@"%d", deviceSerialNumber] cStringUsingEncoding:NSASCIIStringEncoding];
+    
+    int error = openLabJack(&h, serial);
     if(error!=0){
         NSLog(@"%@ cannot open device (error: %d)\n",[self fullID],error);
     }
     if(h){
         [self setDeviceHandle:h];
-        long error = getCalibrationInfo(deviceHandle, &caliInfo);  // FIXME: is this needed?
+        int error = getCalibration(deviceHandle, &caliInfo);  // FIXME: is this needed?
         
         [self setUpCounters];
         
@@ -907,6 +912,7 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
 		
 		NSString* aUnit = [decoder decodeObjectForKey:[NSString stringWithFormat:@"channelUnit%d",i]];
 		if(aUnit)[self setChannel:i unit:aName];
+        else if (i==14) [self setChannel:i unit:@"K"];
 		else	 [self setChannel:i unit:@"V"];
 		
 		[self setMinValue:i withValue:[decoder decodeFloatForKey:[NSString stringWithFormat:@"minValue%d",i]]];
@@ -990,9 +996,12 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
     return objDictionary;
 }
 
-- (void) readSerialNumbers
+- (int) readSerialNumbers
 {
-    findLabJacks();  // FIXME: improve this function (e.g. show in GUI)
+    int serialNumber = -1;
+    findLabJacks(&serialNumber);  // returns first found device
+    
+    return serialNumber;
 }
 - (int) adcConvertedRange:(unsigned short)chan
 {
