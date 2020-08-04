@@ -122,7 +122,7 @@ int readAIN(int hDevice, DeviceCalibrationT7* CalibrationInfo,
              double Range, long Resolution, double Settling, int Binary);
 
 int writeDAC(int hDevice, DeviceCalibrationT7* CalibrationInfo,
-              int Channel, double Voltage);
+              int Channel, unsigned Voltage);
 
 int readDI(int hDevice, int Channel, long* State);
 

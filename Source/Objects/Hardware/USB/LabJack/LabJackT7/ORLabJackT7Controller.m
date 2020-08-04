@@ -67,11 +67,13 @@
     }
     
     for(i=0;i<kNumT7IOChannels;i++){
+        [[doNameMatrix cellAtRow:i column:0] setEditable:YES];
         [[doNameMatrix cellAtRow:i column:0] setTag:i];
         [[doDirectionMatrix cellAtRow:i column:0] setTag:i];
         [[doValueOutMatrix cellAtRow:i column:0] setTag:i];
         [[doValueInMatrix cellAtRow:i column:0] setTag:i];
     }
+    
     [super awakeFromNib];
     
     blankView = [[NSView alloc] init];
@@ -327,14 +329,14 @@
 }
 - (void) aOut1Changed:(NSNotification*)aNote
 {
-	[aOut1Field setFloatValue: [model aOut1] * 5.0/4095.];
-	[aOut1Slider setFloatValue:[model aOut1] * 5.0/4095.];
+	[aOut1Field setFloatValue: [model aOut1] * 5.0/65535.];
+	[aOut1Slider setFloatValue:[model aOut1] * 5.0/65535.];
 }
 
 - (void) aOut0Changed:(NSNotification*)aNote
 {
-	[aOut0Field setFloatValue: [model aOut0] * 5.0/4095.];
-	[aOut0Slider setFloatValue:[model aOut0] * 5.0/4095.];
+	[aOut0Field setFloatValue: [model aOut0] * 5.0/65535.];
+	[aOut0Slider setFloatValue:[model aOut0] * 5.0/65535.];
 }
 
 - (void) adcDiffChanged:(NSNotification*)aNotification
@@ -655,10 +657,12 @@
 	int deviceSerialNumber = [model readSerialNumbers];
 
     if (deviceSerialNumber >= 0) {
-        NSLog(@"LabJack found: 0x%x\n", deviceSerialNumber);
-        [deviceSerialNumberField setIntValue: deviceSerialNumber];
+        NSLog(@"LabJackT7 found: 0x%x\n", deviceSerialNumber);
+        
+        if ([deviceSerialNumberField intValue] == 0)
+             [deviceSerialNumberField setIntValue: deviceSerialNumber];
     }
-    else NSLog(@"No LabJack found!\n");
+    else NSLog(@"No LabJackT7 found!\n");
 }
 
 - (IBAction) toggleOpenAction:(id)sender
@@ -676,12 +680,12 @@
 }
 - (IBAction) aOut1Action:(id)sender
 {
-	[model setAOut1:[sender floatValue] * 4095./5.];
+	[model setAOut1:[sender floatValue] * 65535./5.];
 }
 
 - (IBAction) aOut0Action:(id)sender
 {
-	[model setAOut0:[sender floatValue]* 4095./5.];
+	[model setAOut0:[sender floatValue]* 65535./5.];
 }
 
 - (IBAction) shipDataAction:(id)sender

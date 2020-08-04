@@ -39,6 +39,7 @@
 // xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 5 encoded as a float
 // xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 6 encoded as a float
 // xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 7 encoded as a float
+// xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 8 encoded as a float *
 // xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  counter0 lo 32 bites
 // xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  counter0 hi 32 bites
 // xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  counter1 lo 32 bites
@@ -58,10 +59,10 @@
 //------------------------------------------------------------------------------------------------
 static NSString* kLabJackT7Unit[kNumT7AdcChannels] = {
     //pre-make some keys for speed.
-    @"Unit 0",  @"Unit 1",  @"Unit 2",   @"Unit 3",
-    @"Unit 4",  @"Unit 5",  @"Unit 6",   @"Unit 7",
-    @"Unit 8",  @"Unit 9",  @"Unit 10",  @"Unit 11",
-    @"Unit 12", @"Unit 13"
+    @"Unit 0",  @"Unit 1",  @"Unit 2",  @"Unit 3",
+    @"Unit 4",  @"Unit 5",  @"Unit 6",  @"Unit 7",
+    @"Unit 8",  @"Unit 9",  @"Unit 10", @"Unit 11",
+    @"Unit 12", @"Unit 13", @"Unit 14", @"Unit 15"
 
 };
 

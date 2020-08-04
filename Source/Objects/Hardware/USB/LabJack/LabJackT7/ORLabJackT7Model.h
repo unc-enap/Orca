@@ -45,7 +45,7 @@
  */
 
 #define kNumT7DacChannels 2
-#define kNumT7AdcChannels (14+2)
+#define kNumT7AdcChannels (14+2)  // two extra channels (temp+noise)
 #define kNumT7IOChannels  23
 #define kNumT7Counters    2
 
@@ -67,11 +67,11 @@
 	NSString* channelName[kNumT7AdcChannels];   //adc names
 	NSString* channelUnit[kNumT7AdcChannels];   //adc names
 	uint32_t timeMeasured;
-    NSString* doName[kNumT7IOChannels];
-	unsigned short adcDiff;
-	uint32_t doDirection;
-	uint32_t doValueOut;
-	uint32_t doValueIn;
+    NSString* doName[kNumT7IOChannels];  //dio names
+	uint32_t adcDiff;  // bitmask
+	uint32_t doDirection;  // bitmask
+	uint32_t doValueOut;  // bitmask
+	uint32_t doValueIn;  // bitmask
     unsigned short aOut0;
     unsigned short aOut1;
 	BOOL	led;
@@ -93,7 +93,7 @@
     BOOL involvedInProcess;
     int   deviceHandle;
     int   deviceSerialNumber;
-    DeviceCalibrationT7 caliInfo;  // FIXME: is this needed?
+    DeviceCalibrationT7 caliInfo;
     
 }
 
@@ -133,7 +133,7 @@
 - (void) setDo:(unsigned short)chan name:(NSString*)aName;
 - (double) adc:(unsigned short)chan;
 - (void) setAdc:(unsigned short)chan withValue:(double)aValue;
-- (int)adcConvertedRange:(unsigned short)chan;
+- (float)adcConvertedRange:(unsigned short)chan;
 - (int) adcRange:(unsigned short)chan;
 - (void) setAdcRange:(unsigned short)chan withValue:(int)aValue;
 - (float) lowLimit:(unsigned short)chan;

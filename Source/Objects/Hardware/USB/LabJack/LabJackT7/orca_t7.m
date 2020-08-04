@@ -256,13 +256,13 @@ int getCurrentValues(int hDevice, double* Current10u, double* Current200u)
  *   AIN16-AIN47 are optional extended channels that can be created with custom analog input muxing circuitry.
  *   AIN48-AIN127 are extended channels that are available when using a Mux80.
  * AIN#(0:13)_RANGE - Starting Address: 40000
- *   Valid values/ranges: 0.0=Default => +/-10V, 10.0 => +/-10V, 1.0 => +/-1V, 0.1 => +/-0.1V, or 0.01 => +/-0.01V.
+ *   Valid values/ranges: 0.0=Default => +/-10V; 10.0 => +/-10V, 1.0 => +/-1V, 0.1 => +/-0.1V, or 0.01 => +/-0.01V.
  * AIN#(0:13)_NEGATIVE_CH - Starting Address: 41000
  *   Specifies the negative channel to be used for each positive channel. 199=Default => Single-Ended.
  *   T7: For base differential channels, positive must be an even channel from 0-12 and negative must be positive+1.
  * AIN#(0:13)_RESOLUTION_INDEX - Starting Address: 41500
  *   The resolution index for command-response and AIN-EF readings.
- *   T7: Valid values: 0-8 for T7, 0-12 for T7-Pro.
+ *   T7: Valid values:  0=Default => 8 or 9; 0-8 for T7, or 0-12 for T7-Pro.
  * AIN#(0:13)_SETTLING_US - Starting Address: 42000
  *   T7: 0 = Auto. Max is 50000 (microseconds).
  * AIN#(0:13)_BINARY - Starting Address: 50000
@@ -385,11 +385,11 @@ int readAIN(int hDevice, DeviceCalibrationT7* CalibrationInfo,
  * There are two DACs (digital-to-analog converters, also known as analog outputs) on T-series devices.
  * Each DAC can be set to a voltage between about 0 and 5 volts with 12 bits of resolution (T7).
  *
- * DAC#(0:1) - Starting Address: 1000
- *   Pass a voltage for the specified analog output.
+ * DAC#(0:1) - Starting Address: 51000
+ *   Writes binary values to the DACs. 0 = lowest output, 65535 = highest output.
  */
 int writeDAC(int hDevice, DeviceCalibrationT7* CalibrationInfo,
-              int Channel, double Voltage)
+              int Channel, unsigned Voltage)
 {
     if( CalibrationInfo == NULL )
     {
@@ -406,15 +406,15 @@ int writeDAC(int hDevice, DeviceCalibrationT7* CalibrationInfo,
     int err = 0;
 
     // Set up for reading DIO state
-    int ADDRESS = 1000 + Channel * 2; // DAC#: 1000, 1002
-    int TYPE = LJM_FLOAT32;
-    double value = Voltage;
+    int ADDRESS = 51000 + Channel * 2; // DAC#: 51000, 51002
+    int TYPE = LJM_UINT32;
+    uint32_t value = Voltage;
 
     err = LJM_eWriteAddress(hDevice, ADDRESS, TYPE, value);
     ErrorCheck(err, "LJM_eWriteAddress");
 
 #ifdef LJM_DEBUG
-    printf("\nDAC#%d state : %f\n", Channel, value);
+    printf("\nDAC#%d state : %u\n", Channel, value);
 #endif
     
     return err;

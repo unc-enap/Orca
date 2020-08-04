@@ -68,7 +68,7 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
     self = [super init];
     int i;
     for(i=0;i<kNumT7AdcChannels;i++){
-        counterEnabled[i] = YES;
+        counterEnabled[i] = NO;  // disabled by default
         enabled[i]      = YES;
         lowLimit[i]     = -10;
         hiLimit[i]      = 10;
@@ -207,7 +207,6 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
 
 - (void) setAOut1:(unsigned short)aValue
 {
-    if(aValue>4095) aValue=4095;  // FIXME: check this number
     [[[self undoManager] prepareWithInvocationTarget:self] setAOut1:aOut1];
     
     aOut1 = aValue;
@@ -217,12 +216,12 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
 
 - (void) setAOut0Voltage:(float)aValue
 {
-    [self setAOut0:aValue*4095./5.0];  // FIXME: see above
+    [self setAOut0:aValue*65535./5.0];
 }
 
 - (void) setAOut1Voltage:(float)aValue
 {
-    [self setAOut1:aValue*4095./5.0];  // FIXME: see above
+    [self setAOut1:aValue*65535./5.0];
 }
 		 
 - (unsigned short) aOut0
@@ -232,7 +231,6 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
 
 - (void) setAOut0:(unsigned short)aValue
 {
-	if(aValue>4095) aValue=4095;  // FIXME: check this number
     [[[self undoManager] prepareWithInvocationTarget:self] setAOut0:aOut0];
     
     aOut0 = aValue;
@@ -243,7 +241,7 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
 - (float) slope:(unsigned short)chan
 {
 	if(chan<kNumT7AdcChannels)return slope[chan];
-	else return 20./4095.;  // FIXME: see above
+    else return 0.;  // FIXME: check this number (was: 20/4095)
 }
 
 - (void) setSlope:(unsigned short)chan withValue:(float)aValue
@@ -448,6 +446,7 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
 {
 	if(chan<kNumT7AdcChannels){
 		if([channelUnit[chan] length])return channelUnit[chan];
+        else if (chan==14) return @"K";
 		else return @"V";
 	}
 	else return @"";
@@ -473,7 +472,7 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
 {
 	if(chan<kNumT7IOChannels){
 		if([doName[chan] length])return doName[chan];
-		else return [NSString stringWithFormat:@"DO%d",chan];
+		else return [NSString stringWithFormat:@"DO %d",chan];
 	}
 	else return @"";
 }
@@ -684,7 +683,7 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
     }
     if(h){
         [self setDeviceHandle:h];
-        int error = getCalibration(deviceHandle, &caliInfo);  // FIXME: is this needed?
+        int error = getCalibration(deviceHandle, &caliInfo);
         
         [self setUpCounters];
         
@@ -1003,15 +1002,14 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
     
     return serialNumber;
 }
-- (int) adcConvertedRange:(unsigned short)chan
+- (float) adcConvertedRange:(unsigned short)chan
 {
-    // FIXME: this needs to be changed
     switch([self adcRange:chan]){
         case 0: return 0;
-        case 1: return 2;
-        case 2: return 8;
-        case 3: return 10;
-        case 4: return 11;
+        case 1: return 10.0;
+        case 2: return 1.0;
+        case 3: return 0.1;
+        case 4: return 0.01;
         default: return 0;
     }
 }
@@ -1096,14 +1094,16 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
         time(&ut_Time);
         timeMeasured = (uint32_t)ut_Time;
         
+        // TODO: option to change resolution index
+        // TODO: option to change settling time
+        
         for(i=0;i<kNumT7AdcChannels;i++){
             if(!enabled[i]) continue;
             int chanP = i;
-            if(diffMask & (0x1<<i/2)){
+            if((chanP<14) && (diffMask & (0x1<<i/2))) {
                 //differential read
-                //eAIN(deviceHandle, &caliInfo, chanP, chanP+1, &dblVoltage, [self adcConvertedRange:i], 0, 0, 0, 0, 0);
-                readAIN(deviceHandle, NULL, chanP, chanP+1, &dblVoltage, NULL,
-                        0, 0, 0, 0);  // FIXME: set adc range
+                readAIN(deviceHandle, &caliInfo, chanP, chanP+1, &dblVoltage, NULL,
+                        [self adcConvertedRange:i], 0, 0, 0);
                 [self setAdc:i withValue:dblVoltage];
                 
                 // adjacent channel not used
@@ -1112,11 +1112,22 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
             }
             else {
                 //single ended read
-                //eAIN(deviceHandle, &caliInfo, chanP, 15, &dblVoltage, [self adcConvertedRange:i], 0, 0, 0, 0, 0);
-                readAIN(deviceHandle, NULL, chanP, -1, &dblVoltage, NULL,
-                        0, 0, 0, 0);  // FIXME: set adc range
-                
-                [self setAdc:i withValue:dblVoltage];
+                if (chanP<14) {
+                    readAIN(deviceHandle, &caliInfo, chanP, -1, &dblVoltage, NULL,
+                            [self adcConvertedRange:i], 0, 0, 0);
+                    [self setAdc:i withValue:dblVoltage];
+                }
+                else if (chanP==14) {
+                    readAIN(deviceHandle, &caliInfo, chanP, -1, NULL, &dblVoltage,
+                            0, 0, 0, 0);  // using auto-range
+                    [self setAdc:i withValue:dblVoltage];  // temperature in K
+                }
+                else if (chanP==15) {
+                    readAIN(deviceHandle, &caliInfo, chanP, -1, &dblVoltage, NULL,
+                            0, 0, 0, 0);  // using auto-range
+                    [self setAdc:i withValue:dblVoltage];
+                }
+                else [self setAdc:i withValue:0];
             }
         }
     }
@@ -1124,12 +1135,9 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
 
 - (void) writeDacs
 {
-    // FIXME: add user option for channels
     if(deviceHandle && digitalOutputEnabled){
-        //eDAC(deviceHandle,&caliInfo,0,aOut0*5./4095.,0,0,0);
-        //eDAC(deviceHandle,&caliInfo,1,aOut1*5./4095.,0,0,0);
-        writeDAC(deviceHandle, NULL, 0, aOut0*5./4095.);
-        writeDAC(deviceHandle, NULL, 1, aOut1*5./4095.);
+        writeDAC(deviceHandle, &caliInfo, 0, aOut0);
+        writeDAC(deviceHandle, &caliInfo, 1, aOut1);
     }
 }
 
@@ -1141,14 +1149,12 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
         for(i=0;i<kNumT7IOChannels;i++){
             if((doDirection>>i)&1){
                 long result = 0;
-                //eDI(deviceHandle,i,&result);
                 readDI(deviceHandle, i, &result);
                 
                 if (result) doValueIn |= (1<<i);
                 else doValueIn &= ~(1<<i);
             }
             else {
-                //eDO(deviceHandle,i,(doValueOut>>i)&0x1);
                 writeDO(deviceHandle, i, (doValueOut>>i)&0x1);
             }
         }
