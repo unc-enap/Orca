@@ -30,12 +30,12 @@
 
 
 // Prompts the user to press enter
-void WaitForUser();
+void WaitForUser(void);
 
 // Calls WaitForUser if this is compiled on Windows. This call is intended to be
 // placed at the end of a program to prevent output from being lost in the case
 // that it is being called from Visual Studio.
-void WaitForUserIfWindows();
+void WaitForUserIfWindows(void);
 
 // Returns a new handle or exits on error with a description of the error.
 int OpenOrDie(int deviceType, int connectionType, const char * identifier);
@@ -79,7 +79,7 @@ void GetAndPrintConfigValue(const char * configParameter);
 void GetAndPrintConfigString(const char * configParameter);
 
 // Prints the current LJM logging configurations
-void DisplayDebugLoggingConfigurations();
+void DisplayDebugLoggingConfigurations(void);
 
 // Sets the LJM config value via LJM_WriteLibraryConfigS.
 // Outputs error, if any
@@ -199,7 +199,7 @@ const char * NumberToDebugLogMode(int mode);
 /**
  * Desc: Returns the current CPU time in milliseconds
 **/
-unsigned int GetCurrentTimeMS();
+unsigned int GetCurrentTimeMS(void);
 
 /**
  * Desc: Returns IPv4String in integer form, handling error by calling
@@ -727,7 +727,7 @@ void EnableLoggingLevel(double logLevel)
 
 unsigned int GetCurrentTimeMS()
 {
-	return LJM_GetHostTick() / 1000;
+	return (int)(LJM_GetHostTick() / 1000L);
 }
 
 unsigned int IPToNumber(const char * IPv4String)
