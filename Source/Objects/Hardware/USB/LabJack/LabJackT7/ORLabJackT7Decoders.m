@@ -24,38 +24,56 @@
 #import "ORLabJackT7Model.h"
 
 //------------------------------------------------------------------------------------------------
-// Data Format
-//xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
-//^^^^ ^^^^ ^^^^ ^^-----------------------data id
-//                 ^^ ^^^^ ^^^^ ^^^^ ^^^^-length in longs
+// Data Format (total length: 34 longs/qwords = 1088 bits)
 //
-// xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
-//                     ^^^^ ^^^^ ^^^^ ^^^^- device id
-// xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 0 encoded as a float
-// xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 1 encoded as a float
-// xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 2 encoded as a float
-// xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 3 encoded as a float
-// xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 4 encoded as a float
-// xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 5 encoded as a float
-// xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 6 encoded as a float
-// xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 7 encoded as a float
-// xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 8 encoded as a float *
-// xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  counter0 lo 32 bites
-// xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  counter0 hi 32 bites
-// xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  counter1 lo 32 bites
-// xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  counter1 hi 32 bites
-// xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
-// --------------------^^^^ ^^^^ ^^^^ ^^^^  DO Direction Bits
-// ---------------^^^^--------------------  IO Direction Bits
-// xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  
-// --------------------^^^^ ^^^^ ^^^^ ^^^^  DO Out Bit Values
-// ---------------^^^^--------------------  IO Out Bit Values
-// xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  
-// --------------------^^^^ ^^^^ ^^^^ ^^^^  DO In Bit Values
-// ---------------^^^^--------------------  IO In Bit Values
-// xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  seconds since Jan 1, 1970
-// xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  spare
-// xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  spare
+// 0x0000: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+// 0x0020: ^^^^ ^^^^ ^^^^ ^^----------------------  data id
+//                          ^^ ^^^^ ^^^^ ^^^^ ^^^^  length in longs (qwords)
+//
+// 0x0040: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+//              ^^^^ ^^^^-------------------------  adc diff mask (8 bits)
+//                        ^^^^ ^^^^ ^^^^ ^^^^ ^^^^  device id (20 bits)
+// 0x0060: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 0 encoded as a float
+// 0x0080: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 1 encoded as a float
+// 0x00A0: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 2 encoded as a float
+// 0x00C0: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 3 encoded as a float
+// 0x00E0: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 4 encoded as a float
+//
+// 0x0100: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 5 encoded as a float
+// 0x0120: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 6 encoded as a float
+// 0x0140: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 7 encoded as a float
+// 0x0160: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 8 encoded as a float
+// 0x0180: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 9 encoded as a float
+// 0x01A0: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 10 encoded as a float
+// 0x01C0: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 11 encoded as a float
+// 0x01E0: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 12 encoded as a float
+//
+// 0x0200: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 13 encoded as a float
+// 0x0220: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 14 encoded as a float
+// 0x0240: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 15 encoded as a float (internal)
+// 0x0260: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  adc chan 16 encoded as a float (internal)
+// 0x0280: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  counter0 lo (32 bits)
+// 0x02A0: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  counter0 hi (32 bits)
+// 0x02C0: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  counter1 lo (32 bits)
+// 0x02E0: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  counter1 hi (32 bits)
+//
+// 0x0300: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  counter2 lo (32 bits)
+// 0x0320: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  counter2 hi (32 bits)
+// 0x0340: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  counter3 lo (32 bits)
+// 0x0360: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  counter3 hi (32 bits)
+// 0x0380: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+//                             ^^^^ ^^^^ ^^^^ ^^^^  DO direction bits (24 bits)
+//                        ^^^^--------------------  IO direction bits (4 bits)
+// 0x03A0: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+//                             ^^^^ ^^^^ ^^^^ ^^^^  DO out bit values
+//                        ^^^^--------------------  IO out bit values
+// 0x03C0: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+//                             ^^^^ ^^^^ ^^^^ ^^^^  DO in bit values
+//                        ^^^^--------------------  IO in bit values
+// 0x03E0: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  seconds since Jan 1, 1970
+//
+// 0x0400: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  internal RTC (seconds since Jan 1, 1970)
+// 0x0420: xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  spare
 //------------------------------------------------------------------------------------------------
 static NSString* kLabJackT7Unit[kNumT7AdcChannels] = {
     //pre-make some keys for speed.
@@ -82,11 +100,13 @@ static NSString* kLabJackT7Unit[kNumT7AdcChannels] = {
 		uint32_t asLong;
 	}theAdcValue;
 	
-	int i;
-	int index = 2;
-	uint32_t theTime = dataPtr[23];
+	int index = 2;  // skip first two dwords
+    int i;
+
+	uint32_t theTime = dataPtr[0x03E0];
+    
 	for(i=0;i<kNumT7AdcChannels;i++){
-		theAdcValue.asLong = dataPtr[index];									//encoded as float, use union to convert
+		theAdcValue.asLong = dataPtr[index];  // encoded as float, use union to convert
 		[aDataSet loadTimeSeries:theAdcValue.asFloat										
 						  atTime:theTime
 						  sender:self 
@@ -96,6 +116,8 @@ static NSString* kLabJackT7Unit[kNumT7AdcChannels] = {
 								nil];
 		index++;
 	}
+    
+    // TODO: what about counters and digital I/O
 	
 	return ExtractLength(dataPtr[0]);
 }
@@ -108,23 +130,30 @@ static NSString* kLabJackT7Unit[kNumT7AdcChannels] = {
 		float asFloat;
 		uint32_t asLong;
 	}theAdcValue;
+    
 	theString = [theString stringByAppendingFormat:@"HW ID = %u\n",dataPtr[1] & 0x0000ffff];
-	int i;
-	int index = 2;
-	for(i=0;i<kNumT7AdcChannels;i++){
-		theAdcValue.asLong = dataPtr[index];
+
+    int index = 2;  // skip first two dwords
+    int i;
+	
+    for(i=0;i<kNumT7AdcChannels;i++){
+		theAdcValue.asLong = dataPtr[index++];
 		theString = [theString stringByAppendingFormat:@"%d: %.3f\n",i,theAdcValue.asFloat];
-		index++;
 	}
+    
     theString = [theString stringByAppendingFormat:@"Counter0 lo = 0x%08x\n",dataPtr[index++]];
     theString = [theString stringByAppendingFormat:@"Counter0 hi = 0x%08x\n",dataPtr[index++]];
     theString = [theString stringByAppendingFormat:@"Counter1 lo = 0x%08x\n",dataPtr[index++]];
     theString = [theString stringByAppendingFormat:@"Counter1 hi = 0x%08x\n",dataPtr[index++]];
-	theString = [theString stringByAppendingFormat:@"I/O Dir = 0x%08x\n",dataPtr[index++] & 0x000fffff];
+    theString = [theString stringByAppendingFormat:@"Counter2 lo = 0x%08x\n",dataPtr[index++]];
+    theString = [theString stringByAppendingFormat:@"Counter2 hi = 0x%08x\n",dataPtr[index++]];
+    theString = [theString stringByAppendingFormat:@"Counter3 lo = 0x%08x\n",dataPtr[index++]];
+    theString = [theString stringByAppendingFormat:@"Counter3 hi = 0x%08x\n",dataPtr[index++]];
+    theString = [theString stringByAppendingFormat:@"I/O Dir = 0x%08x\n",dataPtr[index++] & 0x000fffff];
 	theString = [theString stringByAppendingFormat:@"I/O Out = 0x%08x\n",dataPtr[index++] & 0x000fffff];
 	theString = [theString stringByAppendingFormat:@"I/O In  = 0x%08x\n",dataPtr[index++] & 0x000fffff];
 	
-	NSDate* date = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)dataPtr[index]];
+	NSDate* date = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)dataPtr[0x03E0]];
 	theString = [theString stringByAppendingFormat:@"%@\n",date];
 	
 	return theString;

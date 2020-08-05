@@ -322,7 +322,7 @@
 - (void) counterEnabledChanged:(NSNotification*)aNote
 {
     short chan;
-    for(chan=0;chan<2;chan++){
+    for(chan=0;chan<kNumT7Counters;chan++){
         [[counterEnabledMatrix cellWithTag:chan] setIntValue:[model counterEnabled:chan]];
     }
     [self lockChanged:nil];
@@ -463,8 +463,10 @@
 
 - (void) counterChanged:(NSNotification*)aNote
 {
-    [[counterMatrix cellWithTag:0] setDoubleValue:(double)[model counter:0]];
-    [[counterMatrix cellWithTag:1] setDoubleValue:(double)[model counter:1]];
+    short chan;
+    for(chan=0;chan<kNumT7Counters;chan++){
+        [[counterMatrix cellWithTag:chan] setDoubleValue:(double)[model counter:chan]];
+    }
 }
 
 - (void) checkGlobalSecurity
@@ -632,7 +634,7 @@
     }
     
     for(i=0;i<kNumT7IOChannels;i++){
-        if(i==0 || i==1){
+        if(i<kNumT7Counters){
             if([model counterEnabled:i]){
                 [[doDirectionMatrix cellAtRow:i column:0] setEnabled:NO];
                 [[doValueOutMatrix cellAtRow:i  column:0] setEnabled:NO];

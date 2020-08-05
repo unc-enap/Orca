@@ -494,6 +494,33 @@ int writeDO(int hDevice, int Channel, long State)
 }
 
 /**
+ * RTC (real-time clock)
+ *  @see https://labjack.com/support/datasheets/t-series/rtc
+ */
+int readRtc(int hDevice, unsigned* Seconds)
+{
+    int err = 0;
+    
+    // Set up for reading RTC
+    int ADDRESS = 61500;
+    int TYPE = LJM_UINT32;
+    double value = 0;
+    
+    err = LJM_eReadAddress(hDevice, ADDRESS, TYPE, &value);
+    ErrorCheck(err, "LJM_eReadAddress");
+    
+#ifdef LJM_DEBUG
+    printf("\nRTC state : %f\n", value);
+#endif
+    
+    if( Seconds != NULL )
+        *Seconds = (unsigned)value;
+
+    return err;
+}
+
+
+/**
  * Clock sources
  *  @see https://labjack.com/support/datasheets/t-series/digital-io/extended-features/ef-clock-source
  *

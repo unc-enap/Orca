@@ -9,7 +9,7 @@
 // For sleep
 #include <unistd.h>
 
-// FOr assert
+// For assert
 #include <assert.h>
 
 // For the LabJackM library
@@ -30,6 +30,7 @@ int main()
     DeviceCalibrationT7 calInfo;
     DeviceConfigT7 confInfo;
 
+    unsigned timeValue;
     long digitalValue;
     double analogValue, analogValue2;
 
@@ -46,6 +47,12 @@ int main()
 
     // Get calibration info
     err += getCalibration(handle, &calInfo);
+
+    // Read RTC
+    {
+        timeValue = 0;
+        err += readRtc(handle, &timeValue);
+    }
 
     // Read 10uA/200uA current source calibration from the LabJack
     {

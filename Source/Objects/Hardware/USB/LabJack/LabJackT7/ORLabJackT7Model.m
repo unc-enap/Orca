@@ -51,6 +51,7 @@ NSString* ORLabJackT7MinValueChanged			= @"ORLabJackT7MinValueChanged";
 NSString* ORLabJackT7MaxValueChanged			= @"ORLabJackT7MaxValueChanged";
 NSString* ORLabJackT7EnabledChanged             = @"ORLabJackT7EnabledChanged";
 NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledChanged";
+NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
 
 @interface ORLabJackT7Model (private)
 - (void) pollHardware;
@@ -59,6 +60,7 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
 - (void) writeDigitalIO;
 - (void) writeDacs;
 - (void) readAdcValues;
+- (void) readRtcTime;
 - (void) addCurrentState:(NSMutableDictionary*)dictionary cArray:(int*)anArray forKey:(NSString*)aKey;
 @end
 
@@ -241,7 +243,7 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
 - (float) slope:(unsigned short)chan
 {
 	if(chan<kNumT7AdcChannels)return slope[chan];
-    else return 0.;  // FIXME: check this number (was: 20/4095)
+    else return 0.;
 }
 
 - (void) setSlope:(unsigned short)chan withValue:(float)aValue
@@ -648,6 +650,18 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
 	else						 return @"";
 }
 
+- (uint32_t) rtcTime
+{
+    return rtcTime;
+}
+
+- (void) setRtcTime:(uint32_t)aValue
+{
+    @synchronized(self){
+        rtcTime = aValue;
+        [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORLabJackT7RtcTimeChanged object:self];
+    }
+}
 
 - (void) resetCounter:(int)i
 {
@@ -763,31 +777,40 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
 		
 		uint32_t data[kLabJackT7DataSize];
 		data[0] = dataId | kLabJackT7DataSize;
-		data[1] = ((adcDiff & 0x7f) << 16) | ([self uniqueIdNumber] & 0x0000fffff);
+		data[1] = ((adcDiff & 0xff) << 16)  // 8 bits
+                | ([self uniqueIdNumber] & 0x0000fffff);  // 20 bits
 		
 		union {
 			float asFloat;
 			uint32_t asLong;
 		} theData;
 		
-		int index = 2;
+		int index = 2;  // skip first two dwords
+        
 		int i;
 		for(i=0;i<kNumT7AdcChannels;i++){
 			theData.asFloat = [self convertedValue:i];
-			data[index] = theData.asLong;
-			index++;
+			data[index++] = theData.asLong;
 		}
+        
         data[index++] = (int32_t)(counter[0]         & 0x00000000ffffffff);
         data[index++] = (int32_t)((counter[0] >> 32) & 0x00000000ffffffff);
         data[index++] = (int32_t)(counter[1]         & 0x00000000ffffffff);
         data[index++] = (int32_t)((counter[1] >> 32) & 0x00000000ffffffff);
-		data[index++] = (doDirection & 0xFFFFF);
+        data[index++] = (int32_t)(counter[2]         & 0x00000000ffffffff);
+        data[index++] = (int32_t)((counter[2] >> 32) & 0x00000000ffffffff);
+        data[index++] = (int32_t)(counter[3]         & 0x00000000ffffffff);
+        data[index++] = (int32_t)((counter[3] >> 32) & 0x00000000ffffffff);
+        
+        data[index++] = (doDirection & 0xFFFFF);
 		data[index++] = (doValueOut  & 0xFFFFF);
 		data[index++] = (doValueIn   & 0xFFFFF);
 	
 		data[index++] = timeMeasured;
-		data[index++] = 0; //spares
-		data[index++] = 0;
+        data[index++] = rtcTime;
+		data[index++] = 0;  // spare
+        
+        assert(index == kLabJackT7DataSize);
 		
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
 															object:[NSData dataWithBytes:data length:sizeof(int32_t)*kLabJackT7DataSize]];
@@ -931,7 +954,7 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
         if(aName)[self setDo:i name:aName];
         else [self setDo:i name:[NSString stringWithFormat:@"DO%d",i]];
    }
-    for(i=0;i<2;i++) {
+    for(i=0;i<kNumT7Counters;i++) {
         [self setCounterEnabled:i withValue:[decoder decodeBoolForKey:[NSString stringWithFormat:@"counterEnabled%d",i]]];
     }
 
@@ -1035,7 +1058,7 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
     int32_t aEnableTimers[4] = {0,0,0,0}; //not supporting timers at this time
     int32_t aTimerModes[4]   = {0,0,0,0}; //not supporting timers at this time
     double aTimerValues[4]  = {0,0,0,0};
-    int32_t aEnableCounters[2] = {counterEnabled[0],counterEnabled[1]};
+    int32_t aEnableCounters[4] = {counterEnabled[0],counterEnabled[1],counterEnabled[2],counterEnabled[3]};
     int32_t error = eTCConfig(deviceHandle,
                           aEnableTimers,
                           aEnableCounters,
@@ -1056,7 +1079,7 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
 {
     // FIXME: update this
 #if 0
-    if(counterEnabled[0] || counterEnabled[1]){
+    if(counterEnabled[0] || counterEnabled[1] || counterEnabled[2] || counterEnabled[3]){
         int32_t aReadTimers[4]       = {0,0,0,0}; //don't support timers at this time
         int32_t aUpdateResetTimers[4]= {0,0,0,0}; //don't support timers at this time
         int32_t aReadCounters[2]      = {counterEnabled[0],counterEnabled[1]};
@@ -1161,6 +1184,15 @@ NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledCha
         if(doValueIn!=doValueInStart){
             [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORLabJackT7DoValueInChanged object:self];
         }
+    }
+}
+
+- (void) readRtcTime
+{
+    if(deviceHandle){
+        uint32_t secondsSinceEpoch;
+        readRtc(deviceHandle, &secondsSinceEpoch);
+        [self setRtcTime:secondsSinceEpoch];
     }
 }
 

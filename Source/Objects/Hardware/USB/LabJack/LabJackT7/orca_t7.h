@@ -128,6 +128,8 @@ int readDI(int hDevice, int Channel, long* State);
 
 int writeDO(int hDevice, int Channel, long State);
 
+int readRtc(int hDevice, unsigned* Seconds);
+    
 int setupClock(int hDevice, int Channel, int Enable,
                 long Divisor, long RollValue, int External);
 

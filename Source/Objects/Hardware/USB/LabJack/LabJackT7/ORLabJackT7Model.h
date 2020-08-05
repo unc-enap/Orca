@@ -47,10 +47,10 @@
 #define kNumT7DacChannels 2
 #define kNumT7AdcChannels (14+2)  // two extra channels (temp+noise)
 #define kNumT7IOChannels  23
-#define kNumT7Counters    2
+#define kNumT7Counters    4
+#define kNumT7Clocks      3
 
-
-#define kLabJackT7DataSize 26  // length of internal data record
+#define kLabJackT7DataSize 34  // see ORLabJackT7Decoders.m
 
 
 @interface ORLabJackT7Model : OrcaObject <ORAdcProcessing,ORBitProcessing> {
@@ -77,8 +77,10 @@
 	BOOL	led;
     BOOL    counterEnabled[kNumT7Counters];
 	BOOL	doResetOfCounter[kNumT7Counters];
+    //BOOL    clockEnabled[kNumT7Clocks];
     uint64_t counter[kNumT7Counters];
     BOOL digitalOutputEnabled;
+    uint32_t rtcTime;
     int pollTime;
 	uint32_t	dataId;
     BOOL shipData;
@@ -167,6 +169,9 @@
 - (NSString*) doInString:(int)bit;
 - (NSColor*) doInColor:(int)bit;
 
+- (uint32_t) rtcTime;
+- (void) setRtcTime:(uint32_t)aValue;
+
 - (uint32_t) timeMeasured;
 
 - (uint32_t) dataId;
@@ -228,6 +233,7 @@ extern NSString* ORLabJackT7InterceptChanged;
 extern NSString* ORLabJackT7MinValueChanged;
 extern NSString* ORLabJackT7MaxValueChanged;
 extern NSString* ORLabJackT7CounterEnabledChanged;
+extern NSString* ORLabJackT7RtcTimeChanged;
 
 @interface ORLabJackT7Query : NSOperation
 {
