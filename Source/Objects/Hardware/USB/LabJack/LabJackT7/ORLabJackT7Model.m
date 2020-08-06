@@ -31,12 +31,14 @@ NSString* ORLabJackT7ModelAOut1Changed			= @"ORLabJackT7ModelAOut1Changed";
 NSString* ORLabJackT7ModelAOut0Changed			= @"ORLabJackT7ModelAOut0Changed";
 NSString* ORLabJackT7ShipDataChanged			= @"ORLabJackT7ShipDataChanged";
 NSString* ORLabJackT7DigitalOutputEnabledChanged= @"ORLabJackT7DigitalOutputEnabledChanged";
+NSString* ORLabJackT7PwmOutputEnabledChanged    = @"ORLabJackT7PwmOutputEnabledChanged";
 NSString* ORLabJackT7CounterChanged				= @"ORLabJackT7CounterChanged";
 NSString* ORLabJackT7Lock						= @"ORLabJackT7Lock";
 NSString* ORLabJackT7ChannelNameChanged			= @"ORLabJackT7ChannelNameChanged";
 NSString* ORLabJackT7ChannelUnitChanged			= @"ORLabJackT7ChannelUnitChanged";
 NSString* ORLabJackT7AdcChanged					= @"ORLabJackT7AdcChanged";
 NSString* ORLabJackT7AdcRangeChanged            = @"ORLabJackT7AdcRangeChanged";
+NSString* ORLabJackT7AdcResChanged              = @"ORLabJackT7AdcResChanged";
 NSString* ORLabJackT7DoNameChanged				= @"ORLabJackT7DoNameChanged";
 NSString* ORLabJackT7DoDirectionChanged			= @"ORLabJackT7DoDirectionChanged";
 NSString* ORLabJackT7DoValueOutChanged			= @"ORLabJackT7DoValueOutChanged";
@@ -60,6 +62,7 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
 - (void) writeDigitalIO;
 - (void) writeDacs;
 - (void) readAdcValues;
+- (void) setUpPwm;
 - (void) readRtcTime;
 - (void) addCurrentState:(NSMutableDictionary*)dictionary cArray:(int*)anArray forKey:(NSString*)aKey;
 @end
@@ -403,6 +406,18 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORLabJackT7DigitalOutputEnabledChanged object:self];
 }
 
+- (BOOL) pwmOutputEnabled
+{
+    return pwmOutputEnabled;
+}
+
+- (void) setPwmOutputEnabled:(BOOL)aPwmOutputEnabled
+{
+    [[[self undoManager] prepareWithInvocationTarget:self] setPwmOutputEnabled:pwmOutputEnabled];
+    pwmOutputEnabled = aPwmOutputEnabled;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORLabJackT7PwmOutputEnabledChanged object:self];
+}
+
 - (uint64_t) counter:(unsigned short)chan
 {
     if(chan<kNumT7Counters){
@@ -519,6 +534,7 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
 		}	
 	}
 }
+
 - (int) adcRange:(unsigned short)chan
 {
 	unsigned short result = 0;
@@ -543,6 +559,32 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
             [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORLabJackT7AdcRangeChanged object:self  userInfo:userInfo];
         }
 	}
+}
+
+- (int) adcRes:(unsigned short)chan
+{
+    unsigned short result = 0;
+    @synchronized(self){
+        if(chan<kNumT7AdcChannels){
+            result =  adcRes[chan];
+        }
+    }
+    return result;
+}
+
+- (void) setAdcRes:(unsigned short)chan withValue:(int)aValue
+{
+    @synchronized(self){
+        if(chan>=0 && chan<kNumT7AdcChannels){
+            [[[self undoManager] prepareWithInvocationTarget:self] setAdcRes:chan withValue:adcRes[chan]];
+            adcRes[chan] = aValue;
+            
+            NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
+            [userInfo setObject:[NSNumber numberWithInt:chan] forKey: @"Channel"];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORLabJackT7AdcResChanged object:self  userInfo:userInfo];
+        }
+    }
 }
 
 - (unsigned short) adcDiff
@@ -665,7 +707,7 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
 
 - (void) resetCounter:(int)i
 {
-    if(i>=0 && i<2){
+    if(i>=0 && i<kNumT7Counters){
         doResetOfCounter[i] = YES;
         [self queryAll];
     }
@@ -777,8 +819,8 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
 		
 		uint32_t data[kLabJackT7DataSize];
 		data[0] = dataId | kLabJackT7DataSize;
-		data[1] = ((adcDiff & 0xff) << 16)  // 8 bits
-                | ([self uniqueIdNumber] & 0x0000fffff);  // 20 bits
+        data[1] = ((adcDiff & 0xff) << 16);  // 8 bits
+        data[1] |= ([self uniqueIdNumber] & 0x0000fffff);  // 20 bits
 		
 		union {
 			float asFloat;
@@ -793,14 +835,10 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
 			data[index++] = theData.asLong;
 		}
         
-        data[index++] = (int32_t)(counter[0]         & 0x00000000ffffffff);
-        data[index++] = (int32_t)((counter[0] >> 32) & 0x00000000ffffffff);
-        data[index++] = (int32_t)(counter[1]         & 0x00000000ffffffff);
-        data[index++] = (int32_t)((counter[1] >> 32) & 0x00000000ffffffff);
-        data[index++] = (int32_t)(counter[2]         & 0x00000000ffffffff);
-        data[index++] = (int32_t)((counter[2] >> 32) & 0x00000000ffffffff);
-        data[index++] = (int32_t)(counter[3]         & 0x00000000ffffffff);
-        data[index++] = (int32_t)((counter[3] >> 32) & 0x00000000ffffffff);
+        for(i=0;i<kNumT7Counters;i++){
+            data[index++] = (int32_t)(counter[i]         & 0x00000000ffffffff);
+            data[index++] = (int32_t)((counter[i] >> 32) & 0x00000000ffffffff);
+        }
         
         data[index++] = (doDirection & 0xFFFFF);
 		data[index++] = (doValueOut  & 0xFFFFF);
@@ -921,6 +959,7 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
     [self setAOut0:                 [decoder decodeIntegerForKey:@"aOut0"]];
     [self setShipData:              [decoder decodeBoolForKey:@"shipData"]];
     [self setDigitalOutputEnabled:  [decoder decodeBoolForKey:@"digitalOutputEnabled"]];
+    [self setPwmOutputEnabled:      [decoder decodeBoolForKey:@"pwmOutputEnabled"]];
 	int i;
     
     for(i=0;i<kNumT7AdcChannels;i++) {
@@ -945,6 +984,7 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
         [self setIntercept:i withValue:[decoder decodeFloatForKey:[NSString stringWithFormat:@"intercept%d",i]]];
  
         [self setAdcRange:i withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"adcRange%d",i]]];
+        [self setAdcRes:i withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"adcRes%d",i]]];
         [self setEnabled:i withValue:[decoder decodeBoolForKey:[NSString stringWithFormat:@"enabled%d",i]]];
         [self setChannel:i unit:[decoder decodeObjectForKey:[NSString stringWithFormat:@"channelUnit%d",i]]];
         
@@ -979,9 +1019,10 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
     [encoder encodeInteger:deviceSerialNumber	    forKey: @"deviceSerialNumber"];
     [encoder encodeInteger:aOut1                    forKey:@"aOut1"];
     [encoder encodeInteger:aOut0                    forKey:@"aOut0"];
-    [encoder encodeBool:shipData                forKey:@"shipData"];
+    [encoder encodeBool:shipData                    forKey:@"shipData"];
     [encoder encodeInteger:pollTime                 forKey:@"pollTime"];
-    [encoder encodeBool:digitalOutputEnabled    forKey:@"digitalOutputEnabled"];
+    [encoder encodeBool:digitalOutputEnabled        forKey:@"digitalOutputEnabled"];
+    [encoder encodeBool:pwmOutputEnabled            forKey:@"pwmOutputEnabled"];
 	int i;
 	for(i=0;i<kNumT7AdcChannels;i++) {
 		[encoder encodeObject:channelUnit[i] forKey:[NSString stringWithFormat:@"unitName%d",i]];
@@ -993,6 +1034,7 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
 		[encoder encodeFloat:minValue[i] forKey:[NSString stringWithFormat:@"minValue%d",i]];
         [encoder encodeFloat:maxValue[i] forKey:[NSString stringWithFormat:@"maxValue%d",i]];
         [encoder encodeInteger:adcRange[i] forKey:[NSString stringWithFormat:@"adcRange%d",i]];
+        [encoder encodeInteger:adcRes[i] forKey:[NSString stringWithFormat:@"adcRes%d",i]];
         [encoder encodeBool:enabled[i] forKey:[NSString stringWithFormat:@"enabled%d",i]];
         [encoder encodeObject:channelUnit[i] forKey:[NSString stringWithFormat:@"channelUnit%d",i]];
     }
@@ -1013,7 +1055,8 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
     NSMutableDictionary* objDictionary = [super addParametersToDictionary:dictionary];
 	
     [self addCurrentState:objDictionary cArray:adcRange forKey:@"adcRange"];
-    [objDictionary setObject:[NSNumber numberWithInt:adcDiff] forKey:@"AdcDiffMask"];
+    [self addCurrentState:objDictionary cArray:adcRes forKey:@"adcRes"];
+    [objDictionary setObject:[NSNumber numberWithInt:adcDiff] forKey:@"adcDiffMask"];
 	
     return objDictionary;
 }
@@ -1025,6 +1068,7 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
     
     return serialNumber;
 }
+
 - (float) adcConvertedRange:(unsigned short)chan
 {
     switch([self adcRange:chan]){
@@ -1033,6 +1077,14 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
         case 2: return 1.0;
         case 3: return 0.1;
         case 4: return 0.01;
+        default: return 0;
+    }
+}
+
+-(int) adcConvertedResolution:(unsigned short)chan
+{
+    switch([self adcRes:chan]){
+        // TODO
         default: return 0;
     }
 }
@@ -1048,62 +1100,65 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
 	[self queryAll];
     [[self undoManager] enableUndoRegistration];
 	if(pollTime == -1)[self performSelector:@selector(pollHardware) withObject:nil afterDelay:1/200.];
-	else [self performSelector:@selector(pollHardware) withObject:nil afterDelay:pollTime];
+	else if(pollTime > 0)[self performSelector:@selector(pollHardware) withObject:nil afterDelay:pollTime];
+}
+
+- (void) setUpPwm
+{
+    if(deviceHandle){
+        int error = 0;
+        
+        // TODO
+        //error += setupClock();
+        //error += setupPwm();
+        
+        if(error!=0){
+            NSLog(@"%@ return invalid counter constants (error: %d)\n",[self fullID],error);
+        }
+    }
 }
 
 - (void) setUpCounters
 {
-    // FIXME: update this
-#if 0
-    int32_t aEnableTimers[4] = {0,0,0,0}; //not supporting timers at this time
-    int32_t aTimerModes[4]   = {0,0,0,0}; //not supporting timers at this time
-    double aTimerValues[4]  = {0,0,0,0};
-    int32_t aEnableCounters[4] = {counterEnabled[0],counterEnabled[1],counterEnabled[2],counterEnabled[3]};
-    int32_t error = eTCConfig(deviceHandle,
-                          aEnableTimers,
-                          aEnableCounters,
-                          0,
-                          LJ_tc48MHZ,
-                          1,
-                          aTimerModes,
-                          aTimerValues,
-                          0,
-                          0);
-    if(error!=0){
-        NSLog(@"%@ return invalid counter constants (error: %d)\n",[self fullID],error);
+    // TODO: could be done in one function call if orca_t7 is extended accordingly.
+    
+    if(deviceHandle){
+        int i;
+        int error = 0;
+        for(i=0;i<kNumT7Counters;i++){
+            if (counterEnabled[i])
+                error = enableCounter(deviceHandle, i);
+            else
+                error = disableCounter(deviceHandle, i);
+        }
+        
+        if(error!=0){
+            NSLog(@"%@ return invalid counter constants (error: %d)\n",[self fullID],error);
+        }
     }
-#endif
 }
 
 - (void) readCounters
 {
-    // FIXME: update this
-#if 0
-    if(counterEnabled[0] || counterEnabled[1] || counterEnabled[2] || counterEnabled[3]){
-        int32_t aReadTimers[4]       = {0,0,0,0}; //don't support timers at this time
-        int32_t aUpdateResetTimers[4]= {0,0,0,0}; //don't support timers at this time
-        int32_t aReadCounters[2]      = {counterEnabled[0],counterEnabled[1]};
-        int32_t aResetCounters[2]    = {doResetOfCounter[0],doResetOfCounter[1]};
-        double aTimerValues[4];
-        double aCounterValues[2];
-        int32_t error =  eTCValues( deviceHandle,
-                   aReadTimers,
-                   aUpdateResetTimers,
-                   aReadCounters,
-                   aResetCounters,
-                   aTimerValues,
-                   aCounterValues,
-                   0,
-                   0);
+    // TODO: could be done in one function call if orca_t7 is extended accordingly.
+
+    if(deviceHandle){
+        long aCounterValues[kNumT7Counters];
         
-        doResetOfCounter[0] = NO;
-        doResetOfCounter[1] = NO;
-        if(error == 0){
-            [self setCounter:0 withValue:(int64_t)aCounterValues[0]];
-            [self setCounter:1 withValue:(int64_t)aCounterValues[1]];
+        int i;
+        int error = 0;
+        for(i=0;i<kNumT7Counters;i++){
+            aCounterValues[i] = 0;
+            if (counterEnabled[i]) {
+                error = readCounter(deviceHandle, i, doResetOfCounter[i], &aCounterValues[i]);
+                doResetOfCounter[i] = NO;
+            
+                if(error==0){
+                    [self setCounter:i withValue:(int64_t)aCounterValues[i]];
+                }
+            }
         }
     }
-#endif
 }
 
 - (void) readAdcValues
@@ -1222,6 +1277,7 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
     NSAutoreleasePool* thePool = [[NSAutoreleasePool alloc] init];
 
 	@try {
+        [delegate readRtcTime];
         [delegate readAdcValues];
 		[delegate writeDigitalIO];
         [delegate writeDacs];

@@ -130,11 +130,14 @@ int writeDO(int hDevice, int Channel, long State);
 
 int readRtc(int hDevice, unsigned* Seconds);
     
-int setupClock(int hDevice, int Channel, int Enable,
+int setupClock(int hDevice, int Clock, int Enable,
                 long Divisor, long RollValue, int External);
 
-int readClock(int hDevice, int Channel, long* Count);
+int readClock(int hDevice, int Clock, long* Count);
 
+int setupPwm(int hDevice, int Channel, int Enable,
+              int Clock, long DutyCycle);
+    
 int enableCounter(int hDevice, int Channel);
 
 int disableCounter(int hDevice, int Channel);

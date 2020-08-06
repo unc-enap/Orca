@@ -25,14 +25,17 @@
     IBOutlet NSTextField*   openCloseStatusField;
     IBOutlet NSButton*		probeButton;
     IBOutlet NSButton*		openCloseButton;
-
+    IBOutlet NSTextField*   rtcTimeField;
+    
 	IBOutlet NSView*		totalView;
 	IBOutlet NSTextField*	aOut1Field;
 	IBOutlet NSTextField*	aOut0Field;
 	IBOutlet NSButton*		shipDataCB;
     IBOutlet NSButton*		resetCounter0Button;
     IBOutlet NSButton*		resetCounter1Button;
-	IBOutlet NSButton*		digitalOutputEnabledButton;
+    IBOutlet NSButton*      resetCounter2Button;
+    IBOutlet NSButton*      resetCounter3Button;
+    IBOutlet NSButton*		digitalOutputEnabledButton;
 	IBOutlet NSButton*		lockButton;
     IBOutlet NSMatrix*		nameMatrix;
     IBOutlet NSMatrix*		nameMatrix1;
@@ -43,7 +46,8 @@
 	IBOutlet NSMatrix*		doValueOutMatrix;
 	IBOutlet NSMatrix*		doValueInMatrix;
 	IBOutlet NSPopUpButton* pollTimePopup;
-	IBOutlet NSMatrix*		lowLimitMatrix;
+    IBOutlet NSButton*      pollNowButton;
+    IBOutlet NSMatrix*		lowLimitMatrix;
 	IBOutlet NSMatrix*		hiLimitMatrix;
 	IBOutlet NSMatrix*		slopeMatrix;
 	IBOutlet NSMatrix*		interceptMatrix;
@@ -56,8 +60,9 @@
     IBOutlet NSMatrix*		enabledMatrix;
     IBOutlet NSMatrix*      counterMatrix;
     IBOutlet NSMatrix*		counterEnabledMatrix;
-
-	NSSize					ioSize;
+    IBOutlet NSButton*      pwmOutputEnabledCB;
+    
+    NSSize					ioSize;
 	NSSize					setupSize;
 	NSView*					blankView;
 }
@@ -91,6 +96,8 @@
 - (void) interceptChanged:(NSNotification*)aNote;
 - (void) minValueChanged:(NSNotification*)aNote;
 - (void) maxValueChanged:(NSNotification*)aNote;
+- (void) rtcTimeChanged:(NSNotification*)aNote;
+- (void) pwmOutputChanged:(NSNotification*)aNote;
 
 #pragma mark •••Actions
 - (IBAction) enabledAction:(id)sender;
@@ -102,19 +109,22 @@
 - (IBAction) adcDiffBitAction:(id)sender;
 - (IBAction) shipDataAction:(id)sender;
 - (IBAction) pollTimeAction:(id)sender;
+- (IBAction) updateAllAction:(id)sender;
 - (IBAction) digitalOutputEnabledAction:(id)sender;
 - (IBAction) serialNumberAction:(id)sender;
 - (IBAction) settingLockAction:(id) sender;
 - (IBAction) channelNameAction:(id)sender;
 - (IBAction) channelUnitAction:(id)sender;
+- (IBAction) pwnOutputEnabledAction:(id)sender;
 
 - (IBAction) doNameAction:(id)sender;
 - (IBAction) doDirectionBitAction:(id)sender;
 - (IBAction) doValueOutBitAction:(id)sender;
 
-- (IBAction) updateAllAction:(id)sender;
 - (IBAction) resetCounter0:(id)sender;
 - (IBAction) resetCounter1:(id)sender;
+- (IBAction) resetCounter2:(id)sender;
+- (IBAction) resetCounter3:(id)sender;
 
 - (IBAction) minValueAction:(id)sender;
 - (IBAction) maxValueAction:(id)sender;

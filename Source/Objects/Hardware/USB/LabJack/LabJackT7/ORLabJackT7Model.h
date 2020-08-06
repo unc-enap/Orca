@@ -58,6 +58,7 @@
     BOOL  enabled[kNumT7AdcChannels];
 	double adc[kNumT7AdcChannels];
 	int    adcRange[kNumT7AdcChannels];
+    int    adcRes[kNumT7AdcChannels];
 	float  lowLimit[kNumT7AdcChannels];
 	float  hiLimit[kNumT7AdcChannels];
 	float  minValue[kNumT7AdcChannels];
@@ -80,6 +81,7 @@
     //BOOL    clockEnabled[kNumT7Clocks];
     uint64_t counter[kNumT7Counters];
     BOOL digitalOutputEnabled;
+    BOOL pwmOutputEnabled;
     uint32_t rtcTime;
     int pollTime;
 	uint32_t	dataId;
@@ -138,6 +140,9 @@
 - (float)adcConvertedRange:(unsigned short)chan;
 - (int) adcRange:(unsigned short)chan;
 - (void) setAdcRange:(unsigned short)chan withValue:(int)aValue;
+- (int)adcConvertedResolution:(unsigned short)chan;
+- (int) adcRes:(unsigned short)chan;
+- (void) setAdcRes:(unsigned short)chan withValue:(int)aValue;
 - (float) lowLimit:(unsigned short)chan;
 - (void) setLowLimit:(unsigned short)chan withValue:(float)aValue;
 - (float) hiLimit:(unsigned short)chan;
@@ -181,6 +186,9 @@
 - (int) readSerialNumbers;
 - (void) shipTheData;
 
+- (BOOL) pwmOutputEnabled;
+- (void) setPwmOutputEnabled:(BOOL)aValue;
+
 #pragma mark •••Adc Processing Protocol
 - (void)processIsStarting;
 - (void)processIsStopping;
@@ -214,6 +222,7 @@ extern NSString* ORLabJackT7PollTimeChanged;
 extern NSString* ORLabJackT7EnabledChanged;
 extern NSString* ORLabJackT7DigitalOutputEnabledChanged;
 extern NSString* ORLabJackT7DigitalOutputCounterEnabledChanged;
+extern NSString* ORLabJackT7PwmOutputEnabledChanged;
 extern NSString* ORLabJackT7CounterChanged;
 extern NSString* ORLabJackT7RelayChanged;
 extern NSString* ORLabJackT7Lock;
@@ -228,6 +237,7 @@ extern NSString* ORLabJackT7HiLimitChanged;
 extern NSString* ORLabJackT7LowLimitChanged;
 extern NSString* ORLabJackT7AdcDiffChanged;
 extern NSString* ORLabJackT7AdcRangeChanged;
+extern NSString* ORLabJackT7AdcResChanged;
 extern NSString* ORLabJackT7SlopeChanged;
 extern NSString* ORLabJackT7InterceptChanged;
 extern NSString* ORLabJackT7MinValueChanged;

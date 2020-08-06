@@ -55,7 +55,6 @@
         [[enabledMatrix  cellAtRow:i column:0] setTag:i];
         [[enabledMatrix  cellAtRow:i column:0] setTag:i];
 
-        
         if(i<kNumT7AdcChannels/2){
             [[adcDiffMatrix cellAtRow:i column:0] setTag:i];
         }
@@ -231,6 +230,17 @@
                      selector : @selector(deviceSerialNumberChanged:)
                          name : ORLabJackT7ModelDeviceSerialNumberChanged
 						object: model];
+
+    [notifyCenter addObserver : self
+                     selector : @selector(rtcTimeChanged:)
+                         name : ORLabJackT7RtcTimeChanged
+                        object: model];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(pwmOutputEnabledChanged:)
+                         name : ORLabJackT7PwmOutputEnabledChanged
+                        object: model];
+    
 }
 
 
@@ -264,6 +274,8 @@
 	[self interceptChanged:nil];
 	[self involvedInProcessChanged:nil];
 	[self deviceSerialNumberChanged:nil];
+    [self rtcTimeChanged:nil];
+    [self pwmOutputChanged:nil];
 }
 
 - (void) deviceSerialNumberChanged:(NSNotification*)aNote
@@ -454,11 +466,19 @@
 - (void) pollTimeChanged:(NSNotification*)aNote
 {
 	[pollTimePopup selectItemWithTag: [model pollTime]];
+    
+    bool isPolling = ([model pollTime]!=0);
+    [pollNowButton setEnabled: !isPolling];
 }
 
 - (void) digitalOutputEnabledChanged:(NSNotification*)aNote
 {
 	[digitalOutputEnabledButton setState: [model digitalOutputEnabled]];
+}
+
+- (void) pwmOutputChanged:(NSNotification *)aNote
+{
+    [pwmOutputEnabledCB setState: [model pwmOutputEnabled]];
 }
 
 - (void) counterChanged:(NSNotification*)aNote
@@ -591,6 +611,11 @@
 	}
 }
 
+- (void) rtcTimeChanged:(NSNotification *)aNote
+{
+    NSDate* date = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)[model rtcTime]];
+    [rtcTimeField setStringValue:[NSString stringWithFormat:@"%@",date]];
+}
 
 
 #pragma mark •••Notifications
@@ -608,10 +633,13 @@
 	[doValueOutMatrix	setEnabled:!locked && !inProcess];
     [adcDiffMatrix		setEnabled:!locked && !inProcess];
 	[digitalOutputEnabledButton		setEnabled:!locked && !inProcess];
+    [pwmOutputEnabledCB setEnabled:!locked && !inProcess];
 
     [resetCounter0Button setEnabled:!locked];
     [resetCounter1Button setEnabled:!locked];
-	
+	[resetCounter2Button setEnabled:!locked];
+    [resetCounter3Button setEnabled:!locked];
+    
 	//int adcDiff = [model adcDiff];
 	[pollTimePopup	setEnabled:!lockedOrRunningMaintenance && !inProcess];
 	
@@ -648,6 +676,15 @@
             [[doDirectionMatrix cellAtRow:i column:0] setEnabled:!lockedOrRunningMaintenance];
             [[doValueOutMatrix cellAtRow:i column:0] setEnabled:!lockedOrRunningMaintenance];
         }
+    }
+    
+    if([model pwmOutputEnabled]){
+        [[counterEnabledMatrix cellAtRow:0 column:0] setEnabled:NO];
+        [[doDirectionMatrix cellAtRow:0 column:0] setEnabled:NO];
+        [[doValueOutMatrix cellAtRow:0  column:0] setEnabled:NO];
+        [[counterEnabledMatrix cellAtRow:1 column:0] setEnabled:NO];
+        [[doDirectionMatrix cellAtRow:1 column:0] setEnabled:NO];
+        [[doValueOutMatrix cellAtRow:1  column:0] setEnabled:NO];
     }
 
     
@@ -705,6 +742,11 @@
 	[model setDigitalOutputEnabled:[sender state]];	
 }
 
+- (void) pwmOutputEnabledAction:(id)sender
+{
+    [model setPwmOutputEnabled:[sender state]];
+}
+
 - (IBAction) settingLockAction:(id) sender
 {
     [gSecurity tryToSetLock:ORLabJackT7Lock to:[sender intValue] forWindow:[self window]];
@@ -759,6 +801,14 @@
 - (IBAction) resetCounter1:(id)sender
 {
     [model resetCounter:1];
+}
+- (IBAction) resetCounter2:(id)sender
+{
+    [model resetCounter:2];
+}
+- (IBAction) resetCounter3:(id)sender
+{
+    [model resetCounter:3];
 }
 
 - (IBAction) lowLimitAction:(id)sender
