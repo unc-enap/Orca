@@ -18,7 +18,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="189" y="244" width="945" height="310"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="800"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="778"/>
             <value key="minSize" type="size" width="213" height="107"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="945" height="310"/>
@@ -1277,7 +1277,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         </box>
                                         <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="16564">
-                                            <rect key="frame" x="730" y="39" width="167" height="223"/>
+                                            <rect key="frame" x="730" y="39" width="5" height="223"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         </box>
                                         <button toolTip="ORIpeCrateModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26616" customClass="ObjectFactory">
@@ -1931,9 +1931,9 @@ Controller</string>
                                             </buttonCell>
                                         </button>
                                         <button toolTip="ORLabJackT7Model" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pBO-YZ-4o7" customClass="ObjectFactory">
-                                            <rect key="frame" x="424" y="17" width="137" height="65"/>
+                                            <rect key="frame" x="430" y="18" width="120" height="65"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="bevel" title="LabJack T7" bezelStyle="regularSquare" image="LabJackU6" imagePosition="above" alignment="center" inset="2" id="0Qf-vg-WtA">
+                                            <buttonCell key="cell" type="bevel" title="LabJack T7" bezelStyle="regularSquare" image="LabJackT7" imagePosition="above" alignment="center" imageScaling="proportionallyDown" inset="2" id="0Qf-vg-WtA">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
@@ -3533,6 +3533,7 @@ Relay</string>
         <image name="LC950Oscilloscope" width="100" height="66"/>
         <image name="LDA102" width="75" height="48"/>
         <image name="LabJack" width="75" height="100"/>
+        <image name="LabJackT7" width="162" height="76.800003051757812"/>
         <image name="LabJackU6" width="123" height="50"/>
         <image name="LabJackUE9" width="40" height="89"/>
         <image name="Label" width="74" height="14"/>
