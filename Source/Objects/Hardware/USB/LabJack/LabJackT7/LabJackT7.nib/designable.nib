@@ -16,6 +16,7 @@
                 <outlet property="adcDiffMatrix" destination="1525" id="1534"/>
                 <outlet property="adcMatrix" destination="1021" id="1039"/>
                 <outlet property="adcRangeMatrix" destination="kHf-ea-oNB" id="AM8-SW-94r"/>
+                <outlet property="adcResMatrix" destination="A8b-LF-5t8" id="5ci-it-Kll"/>
                 <outlet property="counterEnabledMatrix" destination="pc0-q7-Gue" id="MZF-NF-Jbx"/>
                 <outlet property="counterMatrix" destination="EaT-Zr-nsm" id="9Rn-b9-RkR"/>
                 <outlet property="deviceSerialNumberField" destination="zac-iM-Dab" id="GvC-MJ-e6x"/>
@@ -40,7 +41,7 @@
                 <outlet property="probeButton" destination="1799" id="JGg-CJ-yEs"/>
                 <outlet property="pwmOutput" destination="4HG-y0-Xvd" id="M4i-Gx-tFR"/>
                 <outlet property="pwmOutputCB" destination="4HG-y0-Xvd" id="mvT-75-hXg"/>
-                <outlet property="pwmOutputEnabledCB" destination="4HG-y0-Xvd" id="lVv-EC-O03"/>
+                <outlet property="pwmOutputEnabledCB" destination="4HG-y0-Xvd" id="IBg-tH-tgT"/>
                 <outlet property="resetCounter0Button" destination="SHl-SK-qis" id="cfr-qa-iRc"/>
                 <outlet property="resetCounter1Button" destination="Sbv-Hl-AIk" id="1Us-FX-6tc"/>
                 <outlet property="resetCounter2Button" destination="yZI-bt-zvN" id="Pqh-qq-hhb"/>
@@ -82,7 +83,7 @@
                     <imageView id="341">
                         <rect key="frame" x="13" y="605" width="162" height="90"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="LabJackU6" id="746"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="LabJackT7" id="746"/>
                     </imageView>
                     <box title="SerialNumber" id="382">
                         <rect key="frame" x="180" y="613" width="191" height="82"/>
@@ -149,7 +150,7 @@
                                     <rect key="frame" x="10" y="25" width="727" height="500"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <userGuides>
-                                        <userLayoutGuide location="15" affinity="maxY"/>
+                                        <userLayoutGuide location="16" affinity="maxY"/>
                                     </userGuides>
                                     <subviews>
                                         <box autoresizesSubviews="NO" misplaced="YES" borderType="line" title="Analog I/O Pins" id="1262">
@@ -599,7 +600,7 @@
                                                                         </items>
                                                                     </menu>
                                                                 </popUpButtonCell>
-                                                                <popUpButtonCell type="push" title="-0.01V to +0.01V" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="11" transparent="YES" imageScaling="proportionallyDown" inset="2" selectedItem="ACW-uw-8Se" id="VIb-qg-Ang">
+                                                                <popUpButtonCell type="push" title="-0.01V to +0.01V" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="borderAndBezel" tag="11" transparent="YES" imageScaling="proportionallyDown" inset="2" selectedItem="ACW-uw-8Se" id="VIb-qg-Ang">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="miniSystem"/>
                                                                     <menu key="menu" title="OtherViews" id="rvQ-SH-lgs">
@@ -612,7 +613,7 @@
                                                                         </items>
                                                                     </menu>
                                                                 </popUpButtonCell>
-                                                                <popUpButtonCell type="push" title="-0.01V to +0.01V" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="11" transparent="YES" imageScaling="proportionallyDown" inset="2" selectedItem="w4J-WY-iQ6" id="VqA-9J-VWS">
+                                                                <popUpButtonCell type="push" title="-0.01V to +0.01V" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="borderAndBezel" tag="11" transparent="YES" imageScaling="proportionallyDown" inset="2" selectedItem="w4J-WY-iQ6" id="VqA-9J-VWS">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="miniSystem"/>
                                                                     <menu key="menu" title="OtherViews" id="3RA-v6-Jab">
@@ -924,238 +925,221 @@
                                                             <action selector="adcDiffBitAction:" target="-2" id="1535"/>
                                                         </connections>
                                                     </matrix>
-                                                    <matrix verticalHuggingPriority="750" misplaced="YES" mode="highlight" allowsEmptySelection="NO" id="A8b-LF-5t8">
+                                                    <matrix verticalHuggingPriority="750" misplaced="YES" mode="highlight" allowsEmptySelection="NO" id="A8b-LF-5t8" userLabel="Adc Res Matrix">
                                                         <rect key="frame" x="250" y="21" width="85" height="272"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         <size key="cellSize" width="85" height="17"/>
-                                                        <popUpButtonCell key="prototype" type="push" title="-0.01V to +0.01V" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="11" imageScaling="proportionallyDown" inset="2" selectedItem="YwW-aa-Wi4" id="jXk-WF-bj3">
+                                                        <popUpButtonCell key="prototype" type="push" title="Mid" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="8" imageScaling="proportionallyDown" inset="2" selectedItem="GY0-6n-Y9A" id="jXk-WF-bj3" userLabel="Mid">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="miniSystem"/>
                                                             <menu key="menu" title="OtherViews" id="MJx-4f-AoJ">
                                                                 <items>
                                                                     <menuItem title="Auto" id="atV-De-rub"/>
-                                                                    <menuItem title="-10V to +10V" tag="2" id="qW6-ot-Jaj"/>
-                                                                    <menuItem title="-1V to +1V" tag="8" id="GY0-6n-Y9A"/>
-                                                                    <menuItem title="-0.1V to +0.1V" tag="10" id="CYf-8a-nUY"/>
-                                                                    <menuItem title="-0.01V to +0.01V" state="on" tag="11" id="YwW-aa-Wi4"/>
+                                                                    <menuItem title="Low" tag="2" id="qW6-ot-Jaj" userLabel="Low"/>
+                                                                    <menuItem title="Mid" state="on" tag="8" id="GY0-6n-Y9A"/>
+                                                                    <menuItem title="High" tag="10" id="CYf-8a-nUY" userLabel="High"/>
                                                                 </items>
                                                             </menu>
                                                         </popUpButtonCell>
                                                         <cells>
                                                             <column>
-                                                                <popUpButtonCell type="push" title="-0.01V to +0.01V" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="11" imageScaling="proportionallyDown" inset="2" selectedItem="wXJ-jE-lyP" id="DMM-aG-TLC">
+                                                                <popUpButtonCell type="push" title="Mid" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="8" imageScaling="proportionallyDown" inset="2" selectedItem="34A-eO-edN" id="4PZ-KY-qAa">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="miniSystem"/>
-                                                                    <menu key="menu" title="OtherViews" id="AxJ-dx-M3Y">
+                                                                    <menu key="menu" title="OtherViews" id="rKX-TX-JYd">
                                                                         <items>
-                                                                            <menuItem title="Auto" id="HtX-WA-oId"/>
-                                                                            <menuItem title="-10V to +10V" tag="2" id="r0s-l7-voJ"/>
-                                                                            <menuItem title="-1V to +1V" tag="8" id="fYt-bb-ZFg"/>
-                                                                            <menuItem title="-0.1V to +0.1V" tag="10" id="mSa-Sd-dD5"/>
-                                                                            <menuItem title="-0.01V to +0.01V" state="on" tag="11" id="wXJ-jE-lyP"/>
+                                                                            <menuItem title="Auto" id="JwB-tr-tyx"/>
+                                                                            <menuItem title="Low" tag="2" id="SC3-mN-Ya5"/>
+                                                                            <menuItem title="Mid" state="on" tag="8" id="34A-eO-edN"/>
+                                                                            <menuItem title="High" tag="10" id="ccl-k5-8uh"/>
                                                                         </items>
                                                                     </menu>
                                                                 </popUpButtonCell>
-                                                                <popUpButtonCell type="push" title="-0.01V to +0.01V" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="11" imageScaling="proportionallyDown" inset="2" selectedItem="Qik-Vs-jTw" id="YIN-65-Xya">
+                                                                <popUpButtonCell type="push" title="Mid" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="8" imageScaling="proportionallyDown" inset="2" selectedItem="OWc-eD-fEs" id="98o-9J-H1F">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="miniSystem"/>
-                                                                    <menu key="menu" title="OtherViews" id="iGu-9g-u0X">
+                                                                    <menu key="menu" title="OtherViews" id="hll-Q2-Iy9">
                                                                         <items>
-                                                                            <menuItem title="Auto" id="C8n-qA-KF9"/>
-                                                                            <menuItem title="-10V to +10V" tag="2" id="5hs-wy-UlN"/>
-                                                                            <menuItem title="-1V to +1V" tag="8" id="cT3-jj-Dt2"/>
-                                                                            <menuItem title="-0.1V to +0.1V" tag="10" id="uta-en-6rf"/>
-                                                                            <menuItem title="-0.01V to +0.01V" state="on" tag="11" id="Qik-Vs-jTw"/>
+                                                                            <menuItem title="Auto" id="6cD-td-mgQ"/>
+                                                                            <menuItem title="Low" tag="2" id="az3-sH-5Dd"/>
+                                                                            <menuItem title="Mid" state="on" tag="8" id="OWc-eD-fEs"/>
+                                                                            <menuItem title="High" tag="10" id="Xmq-Rz-ERI"/>
                                                                         </items>
                                                                     </menu>
                                                                 </popUpButtonCell>
-                                                                <popUpButtonCell type="push" title="-0.01V to +0.01V" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="11" imageScaling="proportionallyDown" inset="2" selectedItem="Qdj-BP-uRY" id="r0L-8Z-jLo">
+                                                                <popUpButtonCell type="push" title="Mid" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="8" imageScaling="proportionallyDown" inset="2" selectedItem="Fy3-Rx-zkk" id="9Y3-No-gzi">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="miniSystem"/>
-                                                                    <menu key="menu" title="OtherViews" id="oRl-l0-7lA">
+                                                                    <menu key="menu" title="OtherViews" id="C1L-TZ-xI3">
                                                                         <items>
-                                                                            <menuItem title="Auto" id="fRn-pL-uRD"/>
-                                                                            <menuItem title="-10V to +10V" tag="2" id="Pyl-xl-HRH"/>
-                                                                            <menuItem title="-1V to +1V" tag="8" id="vFN-3r-Ucc"/>
-                                                                            <menuItem title="-0.1V to +0.1V" tag="10" id="h0E-N0-gQT"/>
-                                                                            <menuItem title="-0.01V to +0.01V" state="on" tag="11" id="Qdj-BP-uRY"/>
+                                                                            <menuItem title="Auto" id="46x-lg-Ztz"/>
+                                                                            <menuItem title="Low" tag="2" id="oTM-YO-IgG"/>
+                                                                            <menuItem title="Mid" state="on" tag="8" id="Fy3-Rx-zkk"/>
+                                                                            <menuItem title="High" tag="10" id="17P-H9-U98"/>
                                                                         </items>
                                                                     </menu>
                                                                 </popUpButtonCell>
-                                                                <popUpButtonCell type="push" title="-0.01V to +0.01V" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="11" imageScaling="proportionallyDown" inset="2" selectedItem="NLY-AM-ZzT" id="CC9-sA-7U7">
+                                                                <popUpButtonCell type="push" title="Mid" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="8" imageScaling="proportionallyDown" inset="2" selectedItem="Qqh-yC-qnS" id="WWA-yg-zMq">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="miniSystem"/>
-                                                                    <menu key="menu" title="OtherViews" id="Kpc-Yc-2nY">
+                                                                    <menu key="menu" title="OtherViews" id="o9P-nU-Qlf">
                                                                         <items>
-                                                                            <menuItem title="Auto" id="sRi-Sv-6Zx"/>
-                                                                            <menuItem title="-10V to +10V" tag="2" id="2Ne-dX-8og"/>
-                                                                            <menuItem title="-1V to +1V" tag="8" id="yNW-bO-8Qq"/>
-                                                                            <menuItem title="-0.1V to +0.1V" tag="10" id="iyW-sU-iue"/>
-                                                                            <menuItem title="-0.01V to +0.01V" state="on" tag="11" id="NLY-AM-ZzT"/>
+                                                                            <menuItem title="Auto" id="Uay-zV-goz"/>
+                                                                            <menuItem title="Low" tag="2" id="OK2-MB-sGz"/>
+                                                                            <menuItem title="Mid" state="on" tag="8" id="Qqh-yC-qnS"/>
+                                                                            <menuItem title="High" tag="10" id="zfA-tS-Bvb"/>
                                                                         </items>
                                                                     </menu>
                                                                 </popUpButtonCell>
-                                                                <popUpButtonCell type="push" title="-0.01V to +0.01V" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="11" imageScaling="proportionallyDown" inset="2" selectedItem="dcS-7h-XhB" id="rvc-K9-qXI">
+                                                                <popUpButtonCell type="push" title="Mid" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="8" imageScaling="proportionallyDown" inset="2" selectedItem="JgJ-Ic-mru" id="df6-PQ-niw">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="miniSystem"/>
-                                                                    <menu key="menu" title="OtherViews" id="Dxt-pg-1MZ">
+                                                                    <menu key="menu" title="OtherViews" id="bqq-Kd-FmD">
                                                                         <items>
-                                                                            <menuItem title="Auto" id="2Yi-Tp-C5l"/>
-                                                                            <menuItem title="-10V to +10V" tag="2" id="s6B-5h-kBy"/>
-                                                                            <menuItem title="-1V to +1V" tag="8" id="o7B-lf-DYv"/>
-                                                                            <menuItem title="-0.1V to +0.1V" tag="10" id="PZO-gY-qGK"/>
-                                                                            <menuItem title="-0.01V to +0.01V" state="on" tag="11" id="dcS-7h-XhB"/>
+                                                                            <menuItem title="Auto" id="uXv-lj-WfH"/>
+                                                                            <menuItem title="Low" tag="2" id="udg-AL-LDV"/>
+                                                                            <menuItem title="Mid" state="on" tag="8" id="JgJ-Ic-mru"/>
+                                                                            <menuItem title="High" tag="10" id="1gx-Wg-mSU"/>
                                                                         </items>
                                                                     </menu>
                                                                 </popUpButtonCell>
-                                                                <popUpButtonCell type="push" title="-0.01V to +0.01V" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="11" imageScaling="proportionallyDown" inset="2" selectedItem="ZLo-Qb-FPY" id="uab-J3-4Dr">
+                                                                <popUpButtonCell type="push" title="Mid" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="8" imageScaling="proportionallyDown" inset="2" selectedItem="hU9-Eh-Cqj" id="ODe-dj-8fG">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="miniSystem"/>
-                                                                    <menu key="menu" title="OtherViews" id="HnN-8P-Nzy">
+                                                                    <menu key="menu" title="OtherViews" id="u75-ub-vKd">
                                                                         <items>
-                                                                            <menuItem title="Auto" id="O7s-em-arv"/>
-                                                                            <menuItem title="-10V to +10V" tag="2" id="4Tb-WQ-eby"/>
-                                                                            <menuItem title="-1V to +1V" tag="8" id="QUg-OU-vLk"/>
-                                                                            <menuItem title="-0.1V to +0.1V" tag="10" id="GTL-nk-Teh"/>
-                                                                            <menuItem title="-0.01V to +0.01V" state="on" tag="11" id="ZLo-Qb-FPY"/>
+                                                                            <menuItem title="Auto" id="lRY-cc-Lpl"/>
+                                                                            <menuItem title="Low" tag="2" id="LIq-hS-lH6"/>
+                                                                            <menuItem title="Mid" state="on" tag="8" id="hU9-Eh-Cqj"/>
+                                                                            <menuItem title="High" tag="10" id="jKC-li-tCJ"/>
                                                                         </items>
                                                                     </menu>
                                                                 </popUpButtonCell>
-                                                                <popUpButtonCell type="push" title="-0.01V to +0.01V" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="11" imageScaling="proportionallyDown" inset="2" selectedItem="jIZ-Aw-BUu" id="9Eb-qp-c2I">
+                                                                <popUpButtonCell type="push" title="Mid" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="8" imageScaling="proportionallyDown" inset="2" selectedItem="vLy-Hl-070" id="AMe-PA-fDc">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="miniSystem"/>
-                                                                    <menu key="menu" title="OtherViews" id="uUu-gR-Rsg">
+                                                                    <menu key="menu" title="OtherViews" id="hSR-bI-wL0">
                                                                         <items>
-                                                                            <menuItem title="Auto" id="iUU-Bf-uPR"/>
-                                                                            <menuItem title="-10V to +10V" tag="2" id="axf-je-qox"/>
-                                                                            <menuItem title="-1V to +1V" tag="8" id="iWe-VS-8KN"/>
-                                                                            <menuItem title="-0.1V to +0.1V" tag="10" id="TM5-QW-LyM"/>
-                                                                            <menuItem title="-0.01V to +0.01V" state="on" tag="11" id="jIZ-Aw-BUu"/>
+                                                                            <menuItem title="Auto" id="Exc-9M-Uoj"/>
+                                                                            <menuItem title="Low" tag="2" id="CzL-nE-y5m"/>
+                                                                            <menuItem title="Mid" state="on" tag="8" id="vLy-Hl-070"/>
+                                                                            <menuItem title="High" tag="10" id="hHQ-pP-Ueb"/>
                                                                         </items>
                                                                     </menu>
                                                                 </popUpButtonCell>
-                                                                <popUpButtonCell type="push" title="-0.01V to +0.01V" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="11" imageScaling="proportionallyDown" inset="2" selectedItem="nRv-1K-xrc" id="d5D-R0-Y1k">
+                                                                <popUpButtonCell type="push" title="Mid" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="8" imageScaling="proportionallyDown" inset="2" selectedItem="Kan-ue-GME" id="ohP-cy-IZJ">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="miniSystem"/>
-                                                                    <menu key="menu" title="OtherViews" id="Obm-PM-6e0">
+                                                                    <menu key="menu" title="OtherViews" id="nqr-O4-VpN">
                                                                         <items>
-                                                                            <menuItem title="Auto" id="ZAZ-qZ-AWf"/>
-                                                                            <menuItem title="-10V to +10V" tag="2" id="Kf9-zi-WvS"/>
-                                                                            <menuItem title="-1V to +1V" tag="8" id="iZd-WB-Xl7"/>
-                                                                            <menuItem title="-0.1V to +0.1V" tag="10" id="b79-oG-98C"/>
-                                                                            <menuItem title="-0.01V to +0.01V" state="on" tag="11" id="nRv-1K-xrc"/>
+                                                                            <menuItem title="Auto" id="LAX-FB-iKf"/>
+                                                                            <menuItem title="Low" tag="2" id="1ga-sR-UJR"/>
+                                                                            <menuItem title="Mid" state="on" tag="8" id="Kan-ue-GME"/>
+                                                                            <menuItem title="High" tag="10" id="Qx9-ag-3vz"/>
                                                                         </items>
                                                                     </menu>
                                                                 </popUpButtonCell>
-                                                                <popUpButtonCell type="push" title="-0.01V to +0.01V" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="11" imageScaling="proportionallyDown" inset="2" selectedItem="Syu-RX-bor" id="3ht-lA-foB">
+                                                                <popUpButtonCell type="push" title="Mid" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="8" imageScaling="proportionallyDown" inset="2" selectedItem="z9M-AC-bFc" id="Qar-ZM-M6n">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="miniSystem"/>
-                                                                    <menu key="menu" title="OtherViews" id="hRX-2m-ljn">
+                                                                    <menu key="menu" title="OtherViews" id="kRQ-i5-CRT">
                                                                         <items>
-                                                                            <menuItem title="Auto" id="A62-Cf-7RJ"/>
-                                                                            <menuItem title="-10V to +10V" tag="2" id="o3l-EZ-i6P"/>
-                                                                            <menuItem title="-1V to +1V" tag="8" id="APa-tK-vsb"/>
-                                                                            <menuItem title="-0.1V to +0.1V" tag="10" id="tcz-50-5J2"/>
-                                                                            <menuItem title="-0.01V to +0.01V" state="on" tag="11" id="Syu-RX-bor"/>
+                                                                            <menuItem title="Auto" id="bD7-F4-8KV"/>
+                                                                            <menuItem title="Low" tag="2" id="dxT-vV-n0q"/>
+                                                                            <menuItem title="Mid" state="on" tag="8" id="z9M-AC-bFc"/>
+                                                                            <menuItem title="High" tag="10" id="YNm-OH-phG"/>
                                                                         </items>
                                                                     </menu>
                                                                 </popUpButtonCell>
-                                                                <popUpButtonCell type="push" title="-0.01V to +0.01V" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="11" imageScaling="proportionallyDown" inset="2" selectedItem="LQI-Ph-ONR" id="9zb-4m-YgF">
+                                                                <popUpButtonCell type="push" title="Mid" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="8" imageScaling="proportionallyDown" inset="2" selectedItem="bYH-il-Qmy" id="xkR-hL-Pig">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="miniSystem"/>
-                                                                    <menu key="menu" title="OtherViews" id="ML5-qX-BUP">
+                                                                    <menu key="menu" title="OtherViews" id="AwF-gG-f3l">
                                                                         <items>
-                                                                            <menuItem title="Auto" id="8J5-Tf-kiR"/>
-                                                                            <menuItem title="-10V to +10V" tag="2" id="P8K-Yu-uvI"/>
-                                                                            <menuItem title="-1V to +1V" tag="8" id="kML-YU-chx"/>
-                                                                            <menuItem title="-0.1V to +0.1V" tag="10" id="llo-yu-IlD"/>
-                                                                            <menuItem title="-0.01V to +0.01V" state="on" tag="11" id="LQI-Ph-ONR"/>
+                                                                            <menuItem title="Auto" id="fie-4g-GL4"/>
+                                                                            <menuItem title="Low" tag="2" id="G8H-9m-z6M"/>
+                                                                            <menuItem title="Mid" state="on" tag="8" id="bYH-il-Qmy"/>
+                                                                            <menuItem title="High" tag="10" id="0dz-2g-WeP"/>
                                                                         </items>
                                                                     </menu>
                                                                 </popUpButtonCell>
-                                                                <popUpButtonCell type="push" title="-0.01V to +0.01V" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="11" imageScaling="proportionallyDown" inset="2" selectedItem="ltz-Ej-qrL" id="17j-we-k7C">
+                                                                <popUpButtonCell type="push" title="Mid" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="8" imageScaling="proportionallyDown" inset="2" selectedItem="qRy-Om-ecJ" id="avP-WL-5sr">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="miniSystem"/>
-                                                                    <menu key="menu" title="OtherViews" id="4cB-PP-Mul">
+                                                                    <menu key="menu" title="OtherViews" id="8eK-w0-SOK">
                                                                         <items>
-                                                                            <menuItem title="Auto" id="Cnf-Ao-QyX"/>
-                                                                            <menuItem title="-10V to +10V" tag="2" id="qkw-jR-lca"/>
-                                                                            <menuItem title="-1V to +1V" tag="8" id="h7A-mk-rH6"/>
-                                                                            <menuItem title="-0.1V to +0.1V" tag="10" id="WA0-cF-cr1"/>
-                                                                            <menuItem title="-0.01V to +0.01V" state="on" tag="11" id="ltz-Ej-qrL"/>
+                                                                            <menuItem title="Auto" id="pTa-Xh-wrS"/>
+                                                                            <menuItem title="Low" tag="2" id="1OY-Iz-Bmk"/>
+                                                                            <menuItem title="Mid" state="on" tag="8" id="qRy-Om-ecJ"/>
+                                                                            <menuItem title="High" tag="10" id="ikV-ph-kNk"/>
                                                                         </items>
                                                                     </menu>
                                                                 </popUpButtonCell>
-                                                                <popUpButtonCell type="push" title="-0.01V to +0.01V" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="11" imageScaling="proportionallyDown" inset="2" selectedItem="O0c-N8-dj4" id="y6q-Lu-S3K">
+                                                                <popUpButtonCell type="push" title="Mid" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="8" imageScaling="proportionallyDown" inset="2" selectedItem="FXa-90-GfV" id="iXT-9U-QOa">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="miniSystem"/>
-                                                                    <menu key="menu" title="OtherViews" id="9EB-d8-Ybi">
+                                                                    <menu key="menu" title="OtherViews" id="7JN-pJ-GWR">
                                                                         <items>
-                                                                            <menuItem title="Auto" id="zme-ID-gIh"/>
-                                                                            <menuItem title="-10V to +10V" tag="2" id="SrV-Vs-1Ty"/>
-                                                                            <menuItem title="-1V to +1V" tag="8" id="nTO-BV-e7i"/>
-                                                                            <menuItem title="-0.1V to +0.1V" tag="10" id="fsy-Pb-6VU"/>
-                                                                            <menuItem title="-0.01V to +0.01V" state="on" tag="11" id="O0c-N8-dj4"/>
+                                                                            <menuItem title="Auto" id="TJH-n0-vOZ"/>
+                                                                            <menuItem title="Low" tag="2" id="vbD-1c-bJY"/>
+                                                                            <menuItem title="Mid" state="on" tag="8" id="FXa-90-GfV"/>
+                                                                            <menuItem title="High" tag="10" id="ihq-Wp-SWD"/>
                                                                         </items>
                                                                     </menu>
                                                                 </popUpButtonCell>
-                                                                <popUpButtonCell type="push" title="-0.01V to +0.01V" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="11" imageScaling="proportionallyDown" inset="2" selectedItem="ZLh-2n-vSH" id="kSm-3E-snJ">
+                                                                <popUpButtonCell type="push" title="Mid" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="8" imageScaling="proportionallyDown" inset="2" selectedItem="5T1-Rq-sM3" id="02f-CS-aCr">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="miniSystem"/>
-                                                                    <menu key="menu" title="OtherViews" id="G7N-aR-QJl">
+                                                                    <menu key="menu" title="OtherViews" id="bBc-XA-iS9">
                                                                         <items>
-                                                                            <menuItem title="Auto" id="LeB-5I-dKF"/>
-                                                                            <menuItem title="-10V to +10V" tag="2" id="xNB-NN-mpM"/>
-                                                                            <menuItem title="-1V to +1V" tag="8" id="NeH-hR-SWo"/>
-                                                                            <menuItem title="-0.1V to +0.1V" tag="10" id="jkc-Wt-2Rr"/>
-                                                                            <menuItem title="-0.01V to +0.01V" state="on" tag="11" id="ZLh-2n-vSH"/>
+                                                                            <menuItem title="Auto" id="5Ys-0V-IG0"/>
+                                                                            <menuItem title="Low" tag="2" id="ivq-Ty-4yf"/>
+                                                                            <menuItem title="Mid" state="on" tag="8" id="5T1-Rq-sM3"/>
+                                                                            <menuItem title="High" tag="10" id="WZ9-YR-zOH"/>
                                                                         </items>
                                                                     </menu>
                                                                 </popUpButtonCell>
-                                                                <popUpButtonCell type="push" title="-0.01V to +0.01V" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="11" imageScaling="proportionallyDown" inset="2" selectedItem="aDH-Xu-K1U" id="0Vr-Jl-DCx">
+                                                                <popUpButtonCell type="push" title="Mid" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="8" imageScaling="proportionallyDown" inset="2" selectedItem="i5c-to-PJL" id="IZT-6L-ImN">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="miniSystem"/>
-                                                                    <menu key="menu" title="OtherViews" id="oup-bQ-DHG">
+                                                                    <menu key="menu" title="OtherViews" id="y2Q-U7-AcP">
                                                                         <items>
-                                                                            <menuItem title="Auto" id="dWF-WT-eIK"/>
-                                                                            <menuItem title="-10V to +10V" tag="2" id="690-WD-YBx"/>
-                                                                            <menuItem title="-1V to +1V" tag="8" id="JbJ-KB-shf"/>
-                                                                            <menuItem title="-0.1V to +0.1V" tag="10" id="Eq0-8P-1Ev"/>
-                                                                            <menuItem title="-0.01V to +0.01V" state="on" tag="11" id="aDH-Xu-K1U"/>
+                                                                            <menuItem title="Auto" id="X8d-hk-NLo"/>
+                                                                            <menuItem title="Low" tag="2" id="Iy1-ry-rUB"/>
+                                                                            <menuItem title="Mid" state="on" tag="8" id="i5c-to-PJL"/>
+                                                                            <menuItem title="High" tag="10" id="Qhh-zt-bcO"/>
                                                                         </items>
                                                                     </menu>
                                                                 </popUpButtonCell>
-                                                                <popUpButtonCell type="push" title="-0.01V to +0.01V" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="11" transparent="YES" imageScaling="proportionallyDown" inset="2" selectedItem="4mR-nY-Edp" id="rzG-oS-6FH">
+                                                                <popUpButtonCell type="push" title="Mid" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="borderAndBezel" tag="8" transparent="YES" imageScaling="proportionallyDown" inset="2" selectedItem="beq-10-abT" id="WfM-vC-vm4">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="miniSystem"/>
-                                                                    <menu key="menu" title="OtherViews" id="90P-zf-bga">
+                                                                    <menu key="menu" title="OtherViews" id="lSm-k4-GX0">
                                                                         <items>
-                                                                            <menuItem title="Auto" id="THs-0R-df7"/>
-                                                                            <menuItem title="-10V to +10V" tag="2" id="A77-eo-Pi6"/>
-                                                                            <menuItem title="-1V to +1V" tag="8" id="eeC-nV-FKB"/>
-                                                                            <menuItem title="-0.1V to +0.1V" tag="10" id="gp4-Wm-ldV"/>
-                                                                            <menuItem title="-0.01V to +0.01V" state="on" tag="11" id="4mR-nY-Edp"/>
+                                                                            <menuItem title="Auto" id="1Y9-MW-z0o"/>
+                                                                            <menuItem title="Low" tag="2" id="ed8-YF-xTP"/>
+                                                                            <menuItem title="Mid" state="on" tag="8" id="beq-10-abT"/>
+                                                                            <menuItem title="High" tag="10" id="aEN-Il-fCU"/>
                                                                         </items>
                                                                     </menu>
                                                                 </popUpButtonCell>
-                                                                <popUpButtonCell type="push" title="-0.01V to +0.01V" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="11" transparent="YES" imageScaling="proportionallyDown" inset="2" selectedItem="zkR-c7-t0g" id="Sb0-fi-z9h">
+                                                                <popUpButtonCell type="push" title="Mid" bezelStyle="rounded" alignment="center" controlSize="mini" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="borderAndBezel" tag="8" transparent="YES" imageScaling="proportionallyDown" inset="2" selectedItem="wXr-eM-hEO" id="QJ6-Gb-RoQ">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="miniSystem"/>
-                                                                    <menu key="menu" title="OtherViews" id="6S5-qs-xwn">
+                                                                    <menu key="menu" title="OtherViews" id="7bR-4O-CVu">
                                                                         <items>
-                                                                            <menuItem title="Auto" id="Tb1-vT-m8Q"/>
-                                                                            <menuItem title="-10V to +10V" tag="2" id="hiu-OL-lST"/>
-                                                                            <menuItem title="-1V to +1V" tag="8" id="VZo-In-3SD"/>
-                                                                            <menuItem title="-0.1V to +0.1V" tag="10" id="UkY-jy-BYt"/>
-                                                                            <menuItem title="-0.01V to +0.01V" state="on" tag="11" id="zkR-c7-t0g"/>
+                                                                            <menuItem title="Auto" id="nfE-oX-Sm4"/>
+                                                                            <menuItem title="Low" tag="2" id="s7i-jf-pkd"/>
+                                                                            <menuItem title="Mid" state="on" tag="8" id="wXr-eM-hEO"/>
+                                                                            <menuItem title="High" tag="10" id="LUh-xH-zxU"/>
                                                                         </items>
                                                                     </menu>
                                                                 </popUpButtonCell>
                                                             </column>
                                                         </cells>
                                                         <connections>
-                                                            <action selector="adcRangeAction:" target="-2" id="0tt-rU-gr0"/>
+                                                            <action selector="adcResAction:" target="-2" id="QmE-F6-wDe"/>
                                                         </connections>
                                                     </matrix>
                                                 </subviews>
@@ -1304,17 +1288,6 @@
                                                             <action selector="resetCounter0:" target="-2" id="hXW-I5-a4h"/>
                                                         </connections>
                                                     </button>
-                                                    <button verticalHuggingPriority="750" misplaced="YES" tag="1" id="yZI-bt-zvN">
-                                                        <rect key="frame" x="259" y="43" width="61" height="28"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="push" title="Reset" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Y0w-99-ReZ">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="smallSystem"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="resetCounter2:" target="-2" id="o5v-6l-v4c"/>
-                                                        </connections>
-                                                    </button>
                                                     <button verticalHuggingPriority="750" misplaced="YES" tag="1" id="Sbv-Hl-AIk">
                                                         <rect key="frame" x="259" y="62" width="61" height="28"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1324,6 +1297,17 @@
                                                         </buttonCell>
                                                         <connections>
                                                             <action selector="resetCounter1:" target="-2" id="m6i-96-P47"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button verticalHuggingPriority="750" misplaced="YES" tag="1" id="yZI-bt-zvN">
+                                                        <rect key="frame" x="259" y="43" width="61" height="28"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <buttonCell key="cell" type="push" title="Reset" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Y0w-99-ReZ">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="resetCounter2:" target="-2" id="o5v-6l-v4c"/>
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" misplaced="YES" tag="1" id="So4-2f-upq">
@@ -1337,7 +1321,7 @@
                                                             <action selector="resetCounter3:" target="-2" id="Nfg-pE-xee"/>
                                                         </connections>
                                                     </button>
-                                                    <button misplaced="YES" id="4HG-y0-Xvd">
+                                                    <button misplaced="YES" id="4HG-y0-Xvd" userLabel="Pwm Output Enabled">
                                                         <rect key="frame" x="343" y="65" width="135" height="35"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="Enable 10 kHz PWM" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="jUc-1o-tqK">
@@ -1345,7 +1329,7 @@
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
                                                         <connections>
-                                                            <action selector="pwnOutputEnabledAction:" target="-2" id="doj-e4-vfV"/>
+                                                            <action selector="pwmOutputEnabledAction:" target="-2" id="70d-Zf-fvI"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
@@ -2715,107 +2699,6 @@
                                     </subviews>
                                 </view>
                             </tabViewItem>
-                            <tabViewItem label="Info" identifier="3" id="G4T-gW-b0D">
-                                <view key="view" id="71i-IY-2O4">
-                                    <rect key="frame" x="10" y="25" width="625" height="481"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <subviews>
-                                        <box verticalHuggingPriority="750" misplaced="YES" boxType="separator" id="COE-pe-6us">
-                                            <rect key="frame" x="67" y="439" width="491" height="5"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        </box>
-                                        <matrix verticalHuggingPriority="750" misplaced="YES" mode="highlight" allowsEmptySelection="NO" autosizesCells="NO" id="YML-Wr-1xp">
-                                            <rect key="frame" x="93" y="78" width="106" height="335"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="cellSize" width="106" height="23"/>
-                                            <size key="intercellSpacing" width="0.0" height="1"/>
-                                            <textFieldCell key="prototype" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0" id="Amg-aG-eDk">
-                                                <font key="font" metaFont="smallSystem"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                            <cells>
-                                                <column>
-                                                    <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0" id="2vA-gK-fXo">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0" id="bDF-5v-FXI">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0" id="Fdi-00-HWT">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0" id="iPx-1F-KIu">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0" id="YKx-zZ-Jh3">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0" id="wKS-DS-PIi">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0" id="oBO-93-c1a">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0" id="fv1-0j-IIU">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0" id="G9z-KY-RPA">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0" id="eqf-kz-IUv">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0" id="UpH-iT-ooh">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0" id="E2O-eI-5Hs">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0" id="zfY-6a-jom">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0" id="9yr-1a-OJ1">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </column>
-                                            </cells>
-                                            <connections>
-                                                <action selector="channelNameAction:" target="-2" id="xST-xe-MCc"/>
-                                            </connections>
-                                        </matrix>
-                                    </subviews>
-                                </view>
-                            </tabViewItem>
                         </tabViewItems>
                         <connections>
                             <outlet property="delegate" destination="-2" id="1790"/>
@@ -3019,7 +2902,7 @@
         <customObject id="JK8-zF-g84" userLabel="OHexFormatter" customClass="OHexFormatter"/>
     </objects>
     <resources>
-        <image name="LabJackU6" width="123" height="50"/>
+        <image name="LabJackT7" width="162" height="76.800003051757812"/>
         <image name="Locked" width="33" height="36"/>
         <image name="Unlocked" width="33" height="36"/>
     </resources>

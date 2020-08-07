@@ -54,15 +54,16 @@ NSString* ORLabJackT7MaxValueChanged			= @"ORLabJackT7MaxValueChanged";
 NSString* ORLabJackT7EnabledChanged             = @"ORLabJackT7EnabledChanged";
 NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledChanged";
 NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
+NSString* ORLabJackT7CalibrationInfoChanged     = @"ORLabJackT7CalibrationInfoChanged";
 
 @interface ORLabJackT7Model (private)
 - (void) pollHardware;
 - (void) setUpCounters;
+- (void) setUpPwm;
 - (void) readCounters;
 - (void) writeDigitalIO;
 - (void) writeDacs;
 - (void) readAdcValues;
-- (void) setUpPwm;
 - (void) readRtcTime;
 - (void) addCurrentState:(NSMutableDictionary*)dictionary cArray:(int*)anArray forKey:(NSString*)aKey;
 @end
@@ -111,8 +112,7 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
 
 - (void) setUpImage
 {
-    //[self setImage:[NSImage imageNamed:@"LabJackT7"]];  // FIXME
-    [self setImage:[NSImage imageNamed:@"LabJackU6"]];
+    [self setImage:[NSImage imageNamed:@"LabJackT7"]];  // FIXME
 }
 
 - (NSString*) title 
@@ -416,6 +416,8 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
     [[[self undoManager] prepareWithInvocationTarget:self] setPwmOutputEnabled:pwmOutputEnabled];
     pwmOutputEnabled = aPwmOutputEnabled;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORLabJackT7PwmOutputEnabledChanged object:self];
+    
+    [self setUpPwm];
 }
 
 - (uint64_t) counter:(unsigned short)chan
@@ -740,8 +742,10 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
     if(h){
         [self setDeviceHandle:h];
         int error = getCalibration(deviceHandle, &caliInfo);
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORLabJackT7CalibrationInfoChanged object:self];
         
         [self setUpCounters];
+        [self setUpPwm];
         
         if(error!=0){
             NSLog(@"%@ return invalid calibration constants (error: %d)\n",[self fullID],error);
@@ -1081,10 +1085,12 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
     }
 }
 
--(int) adcConvertedResolution:(unsigned short)chan
+-(int) adcConvertedRes:(unsigned short)chan
 {
-    switch([self adcRes:chan]){
-        // TODO
+    switch([self adcRange:chan]){
+        case 0: return 4;
+        case 1: return 8;
+        case 2: return 12;  // only for T7-Pro
         default: return 0;
     }
 }
@@ -1105,15 +1111,30 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
 
 - (void) setUpPwm
 {
+    // TODO: channel, frequency, duty cycle could be parameters
+    
     if(deviceHandle){
         int error = 0;
+        int chan = 0;
         
-        // TODO
-        //error += setupClock();
-        //error += setupPwm();
+        if (pwmOutputEnabled){
+            // set up Clock0 with 1 kHz
+            long rollValue = 80000;  // 80MHz / 80000 = 1 kHz
+            error += setupClock(deviceHandle, 0, 1, 1, rollValue, 0);
+            
+            // set up DIO with 50% DC PWM output
+            error += setupPwm(deviceHandle, chan, 1, 0, rollValue/2);
+        }
+        else{
+            error += setupPwm(deviceHandle, 0, 0, 0, 0);
+            error += setupClock(deviceHandle, chan, 0, 0, 0, 0);
+        }
         
         if(error!=0){
-            NSLog(@"%@ return invalid counter constants (error: %d)\n",[self fullID],error);
+            NSLog(@"%@ return invalid clock/pwm constants (error: %d)\n",[self fullID],error);
+        }
+        else if (pwmOutputEnabled){
+            NSLog(@"%@ activated PWM output on DO#%d\n",[self fullID],chan);
         }
     }
 }
@@ -1163,25 +1184,24 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
 
 - (void) readAdcValues
 {
+    // TODO: option to change settling time
+    
     if(deviceHandle){
-        double dblVoltage = 0.0;
+        double dblVoltage = 0.0, dblTemp = 0.0;
         int i;
         int diffMask = [self adcDiff];  // bit mask for ADCss
         
         time_t	ut_Time;
         time(&ut_Time);
         timeMeasured = (uint32_t)ut_Time;
-        
-        // TODO: option to change resolution index
-        // TODO: option to change settling time
-        
+
         for(i=0;i<kNumT7AdcChannels;i++){
             if(!enabled[i]) continue;
             int chanP = i;
             if((chanP<14) && (diffMask & (0x1<<i/2))) {
                 //differential read
                 readAIN(deviceHandle, &caliInfo, chanP, chanP+1, &dblVoltage, NULL,
-                        [self adcConvertedRange:i], 0, 0, 0);
+                        [self adcConvertedRange:i], [self adcConvertedRes:i], 0, 0);
                 [self setAdc:i withValue:dblVoltage];
                 
                 // adjacent channel not used
@@ -1192,18 +1212,18 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
                 //single ended read
                 if (chanP<14) {
                     readAIN(deviceHandle, &caliInfo, chanP, -1, &dblVoltage, NULL,
-                            [self adcConvertedRange:i], 0, 0, 0);
+                            [self adcConvertedRange:i], [self adcConvertedRes:i], 0, 0);
                     [self setAdc:i withValue:dblVoltage];
                 }
                 else if (chanP==14) {
-                    readAIN(deviceHandle, &caliInfo, chanP, -1, NULL, &dblVoltage,
-                            0, 0, 0, 0);  // using auto-range
-                    [self setAdc:i withValue:dblVoltage];  // temperature in K
+                    readAIN(deviceHandle, &caliInfo, chanP, -1, NULL, &dblTemp,
+                            0, 0, 0, 0);  // using auto-range + auto-res
+                    [self setAdc:i withValue:dblTemp];  // temperature in K
                 }
                 else if (chanP==15) {
                     readAIN(deviceHandle, &caliInfo, chanP, -1, &dblVoltage, NULL,
-                            0, 0, 0, 0);  // using auto-range
-                    [self setAdc:i withValue:dblVoltage];
+                            0, 0, 0, 0);  // using auto-range + auro-res
+                    [self setAdc:i withValue:dblVoltage];  // noise level
                 }
                 else [self setAdc:i withValue:0];
             }
@@ -1232,8 +1252,8 @@ NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
                 if (result) doValueIn |= (1<<i);
                 else doValueIn &= ~(1<<i);
             }
-            else {
-                writeDO(deviceHandle, i, (doValueOut>>i)&0x1);
+            else if (i>0 || !pwmOutputEnabled){
+                writeDO(deviceHandle, i, (doValueOut>>i)&0x1);  // PWM uses DO#0
             }
         }
         if(doValueIn!=doValueInStart){

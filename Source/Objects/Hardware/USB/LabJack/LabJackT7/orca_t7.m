@@ -22,7 +22,7 @@
 //#define LJM_CHECK
 
 // Enable for additional output on read/write
-//#define LJM_DEBUG
+#define LJM_DEBUG
 
 #include "orca_t7.h"
 
@@ -640,13 +640,14 @@ int setupClock(int hDevice, int Clock, int Enable,
     }
 
     // Set up for configuring the clock
-    enum { NUM_FRAMES_CONFIG = 4 };
+    enum { NUM_FRAMES_CONFIG = 5 };
     int ADRESSES_CONFIG[NUM_FRAMES_CONFIG]= {44900 + Clock * 10,   // CL# enable:   44900, 44910, 44920
                                              44901 + Clock * 10,   // CL# divisor:  44901, 44911, 44921
                                              44902 + Clock * 10,   // CL# options:  44902, 44912, 44922
-                                             44904 + Clock * 10};  // CL# roll_val: 44904, 44914, 44924
-    int TYPES_CONFIG[NUM_FRAMES_CONFIG] = {LJM_UINT16, LJM_UINT16, LJM_UINT32, LJM_UINT32};
-    double aValuesConfig[NUM_FRAMES_CONFIG] = {Enable, Divisor, External, RollValue};
+                                             44904 + Clock * 10,   // CL# roll_val: 44904, 44914, 44924
+                                             44900 + Clock * 10};  // CL# enable:   44900, 44910, 44920
+    int TYPES_CONFIG[NUM_FRAMES_CONFIG] = {LJM_UINT16, LJM_UINT16, LJM_UINT32, LJM_UINT32, LJM_UINT16};
+    double aValuesConfig[NUM_FRAMES_CONFIG] = {0, Divisor, External, RollValue, Enable};
 
     err = LJM_eWriteAddresses(hDevice, NUM_FRAMES_CONFIG, ADRESSES_CONFIG, TYPES_CONFIG, aValuesConfig,
             &errorAddress);
@@ -656,7 +657,7 @@ int setupClock(int hDevice, int Clock, int Enable,
     
 #ifdef LJM_DEBUG
     printf("\nCL#%d configuration:\n", Clock);
-    printf("    ENABLED    : %.0f\n", aValuesConfig[0]);
+    printf("    ENABLED    : %.0f\n", aValuesConfig[4]);
     printf("    DIVISOR    : %f\n", aValuesConfig[1]);
     printf("    OPTIONS    : %f\n", aValuesConfig[2]);
     printf("    ROLL_VALUE : %f\n", aValuesConfig[3]);
@@ -695,7 +696,7 @@ int readClock(int hDevice, int Clock, long* Count)
 }
 
 int setupPwm(int hDevice, int Channel, int Enable,
-             int Clock, long DutyCycle)
+             int Clock, long RollValue)
 {
     if( Channel < 0 || Channel == 1 || Channel > 5 )
     {
@@ -720,7 +721,7 @@ int setupPwm(int hDevice, int Channel, int Enable,
                                              44300 + Channel * 2,   // DIO# config A:  44300, 44302, ...
                                              44100 + Channel * 2};  // DIO# enable:  44000, 44002, ...
     int TYPES_CONFIG[NUM_FRAMES_CONFIG] = {LJM_UINT32, LJM_UINT32, LJM_UINT32, LJM_UINT32, LJM_UINT32};
-    double aValuesConfig[NUM_FRAMES_CONFIG] = {0, 0, Clock, DutyCycle, Enable};
+    double aValuesConfig[NUM_FRAMES_CONFIG] = {0, 0, Clock, RollValue, Enable};
     
     err = LJM_eWriteAddresses(hDevice, NUM_FRAMES_CONFIG, ADRESSES_CONFIG, TYPES_CONFIG, aValuesConfig,
                               &errorAddress);
@@ -732,7 +733,7 @@ int setupPwm(int hDevice, int Channel, int Enable,
     printf("\nDIO#%d PWM configuration:\n", Channel);
     printf("    ENABLED    : %.0f\n", aValuesConfig[4]);
     printf("    CLOCK_SRC  : %f\n", aValuesConfig[2]);
-    printf("    DUTY_CYCLE : %f\n", aValuesConfig[3]);
+    printf("    ROLL_VALUE : %f\n", aValuesConfig[3]);
 #endif
     
     return err;

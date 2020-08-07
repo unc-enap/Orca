@@ -140,7 +140,7 @@
 - (float)adcConvertedRange:(unsigned short)chan;
 - (int) adcRange:(unsigned short)chan;
 - (void) setAdcRange:(unsigned short)chan withValue:(int)aValue;
-- (int)adcConvertedResolution:(unsigned short)chan;
+- (int)adcConvertedRes:(unsigned short)chan;
 - (int) adcRes:(unsigned short)chan;
 - (void) setAdcRes:(unsigned short)chan withValue:(int)aValue;
 - (float) lowLimit:(unsigned short)chan;
@@ -244,6 +244,7 @@ extern NSString* ORLabJackT7MinValueChanged;
 extern NSString* ORLabJackT7MaxValueChanged;
 extern NSString* ORLabJackT7CounterEnabledChanged;
 extern NSString* ORLabJackT7RtcTimeChanged;
+extern NSString* ORLabJackT7CalibrationInfoChanged;
 
 @interface ORLabJackT7Query : NSOperation
 {

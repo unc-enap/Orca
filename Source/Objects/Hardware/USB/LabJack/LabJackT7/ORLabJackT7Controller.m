@@ -49,6 +49,7 @@
         [[slopeMatrix cellAtRow:i column:0] setTag:i];
         [[interceptMatrix cellAtRow:i column:0] setTag:i];
         [[adcRangeMatrix cellAtRow:i column:0] setTag:i];
+        [[adcResMatrix cellAtRow:i column:0] setTag:i];
         
         [[hiLimitMatrix cellAtRow:i column:0] setTag:i];
         [[lowLimitMatrix cellAtRow:i column:0] setTag:i];
@@ -136,7 +137,12 @@
                          name : ORLabJackT7AdcRangeChanged
 						object: model];		
 	
-	[notifyCenter addObserver : self
+    [notifyCenter addObserver : self
+                     selector : @selector(adcResChanged:)
+                         name : ORLabJackT7AdcResChanged
+                        object: model];
+    
+    [notifyCenter addObserver : self
                      selector : @selector(doNameChanged:)
                          name : ORLabJackT7DoNameChanged
 						object: model];
@@ -165,7 +171,12 @@
                      selector : @selector(digitalOutputEnabledChanged:)
                          name : ORLabJackT7DigitalOutputEnabledChanged
 						object: model];
-
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(pwmOutputEnabledChanged:)
+                         name : ORLabJackT7PwmOutputEnabledChanged
+                        object: model];
+    
     [notifyCenter addObserver : self
                      selector : @selector(pollTimeChanged:)
                          name : ORLabJackT7PollTimeChanged
@@ -235,14 +246,13 @@
                      selector : @selector(rtcTimeChanged:)
                          name : ORLabJackT7RtcTimeChanged
                         object: model];
-    
-    [notifyCenter addObserver : self
-                     selector : @selector(pwmOutputEnabledChanged:)
-                         name : ORLabJackT7PwmOutputEnabledChanged
-                        object: model];
-    
-}
 
+    [notifyCenter addObserver : self
+                     selector : @selector(calibrationInfoChanged:)
+                         name : ORLabJackT7CalibrationInfoChanged
+                        object: model];
+
+}
 
 - (void) updateWindow
 {
@@ -258,10 +268,12 @@
 	[self doValueInChanged:nil];
 	[self adcChanged:nil];
 	[self adcRangeChanged:nil];
+    [self adcResChanged:nil];
     [self lockChanged:nil];
 	[self counterChanged:nil];
 	[self digitalOutputEnabledChanged:nil];
-	[self pollTimeChanged:nil];
+    [self pwmOutputEnabledChanged:nil];
+    [self pollTimeChanged:nil];
 	[self shipDataChanged:nil];
 	[self lowLimitChanged:nil];
 	[self hiLimitChanged:nil];
@@ -275,7 +287,7 @@
 	[self involvedInProcessChanged:nil];
 	[self deviceSerialNumberChanged:nil];
     [self rtcTimeChanged:nil];
-    [self pwmOutputChanged:nil];
+    [self calibrationInfoChanged:nil];
 }
 
 - (void) deviceSerialNumberChanged:(NSNotification*)aNote
@@ -476,9 +488,10 @@
 	[digitalOutputEnabledButton setState: [model digitalOutputEnabled]];
 }
 
-- (void) pwmOutputChanged:(NSNotification *)aNote
+- (void) pwmOutputEnabledChanged:(NSNotification *)aNote
 {
     [pwmOutputEnabledCB setState: [model pwmOutputEnabled]];
+    [self lockChanged:nil];
 }
 
 - (void) counterChanged:(NSNotification*)aNote
@@ -597,6 +610,14 @@
     }
 }
 
+- (void) adcResChanged:(NSNotification*)aNotification
+{
+    int chan;
+    for(chan=0;chan<kNumT7AdcChannels;chan++){
+        [[adcResMatrix cellAtRow:chan column:0] selectItemAtIndex:[model adcRes:chan]];
+    }
+}
+
 - (void) doNameChanged:(NSNotification*)aNotification
 {
 	if(!aNotification){
@@ -617,6 +638,10 @@
     [rtcTimeField setStringValue:[NSString stringWithFormat:@"%@",date]];
 }
 
+- (void) calibrationInfoChanged:(NSNotification*)aNote;
+{
+    // TODO
+}
 
 #pragma mark •••Notifications
 
@@ -655,14 +680,16 @@
     for(i=1;i<kNumT7AdcChannels;i+=2){
         BOOL diff = value&(0x1<<j);
         [[adcRangeMatrix cellAtRow:i column:0] setEnabled:!diff & !lockedOrRunningMaintenance];
+        [[adcResMatrix cellAtRow:i column:0] setEnabled:!diff & !lockedOrRunningMaintenance];
         j++;
     }
     for(i=0;i<kNumT7AdcChannels;i+=2){
         [[adcRangeMatrix cellAtRow:i column:0] setEnabled:!lockedOrRunningMaintenance];
+        [[adcResMatrix cellAtRow:i column:0] setEnabled:!lockedOrRunningMaintenance];
     }
     
     for(i=0;i<kNumT7IOChannels;i++){
-        if(i<kNumT7Counters){
+        if(i>16 && i<kNumT7Counters+16){  // T7 Pro: CIO0 = DIO16, ...
             if([model counterEnabled:i]){
                 [[doDirectionMatrix cellAtRow:i column:0] setEnabled:NO];
                 [[doValueOutMatrix cellAtRow:i  column:0] setEnabled:NO];
@@ -679,15 +706,18 @@
     }
     
     if([model pwmOutputEnabled]){
+        // Clock0 disabled Counter 0+1
         [[counterEnabledMatrix cellAtRow:0 column:0] setEnabled:NO];
+        [[counterEnabledMatrix cellAtRow:1 column:0] setEnabled:NO];
+        // PWM output on DO0
         [[doDirectionMatrix cellAtRow:0 column:0] setEnabled:NO];
         [[doValueOutMatrix cellAtRow:0  column:0] setEnabled:NO];
-        [[counterEnabledMatrix cellAtRow:1 column:0] setEnabled:NO];
-        [[doDirectionMatrix cellAtRow:1 column:0] setEnabled:NO];
-        [[doValueOutMatrix cellAtRow:1  column:0] setEnabled:NO];
+    }
+    else {
+        [[counterEnabledMatrix cellAtRow:0 column:0] setEnabled:!lockedOrRunningMaintenance];
+        [[counterEnabledMatrix cellAtRow:1 column:0] setEnabled:!lockedOrRunningMaintenance];
     }
 
-    
 }
 
 #pragma mark •••Actions
@@ -834,6 +864,11 @@
 - (IBAction) adcRangeAction:(id)sender
 {
     [model setAdcRange:(int)[sender selectedRow] withValue:(int)[[sender selectedCell] indexOfSelectedItem]];
+}
+
+- (IBAction) adcResAction:(id)sender
+{
+    [model setAdcRes:(int)[sender selectedRow] withValue:(int)[[sender selectedCell] indexOfSelectedItem]];
 }
 
 - (IBAction) slopeAction:(id)sender

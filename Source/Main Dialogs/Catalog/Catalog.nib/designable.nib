@@ -3533,7 +3533,7 @@ Relay</string>
         <image name="LC950Oscilloscope" width="100" height="66"/>
         <image name="LDA102" width="75" height="48"/>
         <image name="LabJack" width="75" height="100"/>
-        <image name="LabJackT7" width="162" height="76.800003051757812"/>
+        <image name="LabJackT7" width="162" height="76"/>
         <image name="LabJackU6" width="123" height="50"/>
         <image name="LabJackUE9" width="40" height="89"/>
         <image name="Label" width="74" height="14"/>

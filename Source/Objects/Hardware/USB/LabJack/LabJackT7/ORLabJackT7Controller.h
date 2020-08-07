@@ -53,6 +53,7 @@
 	IBOutlet NSMatrix*		interceptMatrix;
 	IBOutlet NSMatrix*		adcDiffMatrix;
 	IBOutlet NSMatrix*      adcRangeMatrix;
+    IBOutlet NSMatrix*      adcResMatrix;
 	IBOutlet NSSlider*		aOut0Slider;
 	IBOutlet NSSlider*		aOut1Slider;
 	IBOutlet NSMatrix*		minValueMatrix;
@@ -77,12 +78,14 @@
 - (void) aOut1Changed:(NSNotification*)aNote;
 - (void) aOut0Changed:(NSNotification*)aNote;
 - (void) adcRangeChanged:(NSNotification*)aNote;
+- (void) adcResChanged:(NSNotification*)aNote;
 - (void) adcDiffChanged:(NSNotification*)aNote;
 - (void) lowLimitChanged:(NSNotification*)aNote;
 - (void) hiLimitChanged:(NSNotification*)aNote;
 - (void) shipDataChanged:(NSNotification*)aNote;
 - (void) pollTimeChanged:(NSNotification*)aNote;
 - (void) digitalOutputEnabledChanged:(NSNotification*)aNote;
+- (void) pwmOutputEnabledChanged:(NSNotification*)aNote;
 - (void) counterChanged:(NSNotification*)aNote;
 - (void) channelNameChanged:(NSNotification*)aNote;
 - (void) channelUnitChanged:(NSNotification*)aNote;
@@ -97,7 +100,7 @@
 - (void) minValueChanged:(NSNotification*)aNote;
 - (void) maxValueChanged:(NSNotification*)aNote;
 - (void) rtcTimeChanged:(NSNotification*)aNote;
-- (void) pwmOutputChanged:(NSNotification*)aNote;
+- (void) calibrationInfoChanged:(NSNotification*)aNote;
 
 #pragma mark •••Actions
 - (IBAction) enabledAction:(id)sender;
@@ -111,11 +114,11 @@
 - (IBAction) pollTimeAction:(id)sender;
 - (IBAction) updateAllAction:(id)sender;
 - (IBAction) digitalOutputEnabledAction:(id)sender;
+- (IBAction) pwmOutputEnabledAction:(id)sender;
 - (IBAction) serialNumberAction:(id)sender;
 - (IBAction) settingLockAction:(id) sender;
 - (IBAction) channelNameAction:(id)sender;
 - (IBAction) channelUnitAction:(id)sender;
-- (IBAction) pwnOutputEnabledAction:(id)sender;
 
 - (IBAction) doNameAction:(id)sender;
 - (IBAction) doDirectionBitAction:(id)sender;
@@ -131,6 +134,7 @@
 - (IBAction) lowLimitAction:(id)sender;
 - (IBAction) hiLimitAction:(id)sender;
 - (IBAction) adcRangeAction:(id)sender;
+- (IBAction) adcResAction:(id)sender;
 - (IBAction) slopeAction:(id)sender;
 - (IBAction) interceptAction:(id)sender;
 
