@@ -436,7 +436,8 @@
 		7048C1CE24781688002A11AF /* orca_t7.h in Headers */ = {isa = PBXBuildFile; fileRef = 7048C1CC24781688002A11AF /* orca_t7.h */; };
 		7048C1D124781850002A11AF /* LabJackM.h in Headers */ = {isa = PBXBuildFile; fileRef = 7048C1D024781850002A11AF /* LabJackM.h */; };
 		7048C1D32478188F002A11AF /* LJM_Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 7048C1D22478188E002A11AF /* LJM_Utilities.h */; };
-		7048C1D5247819C3002A11AF /* libLabJackM.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7048C1D4247819C2002A11AF /* libLabJackM.dylib */; };
+		708077D524F435CB00F29EFE /* libLabJackM-1.20.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 708077D424F435CB00F29EFE /* libLabJackM-1.20.0.dylib */; };
+		708077D924F436EE00F29EFE /* libusb-1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 708077D824F436EE00F29EFE /* libusb-1.0.0.dylib */; };
 		70C600092469D45600400C83 /* ORLabJackT7Decoders.m in Sources */ = {isa = PBXBuildFile; fileRef = 70C600012469D45300400C83 /* ORLabJackT7Decoders.m */; };
 		70C6000A2469D45600400C83 /* ORLabJackT7Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 70C600022469D45300400C83 /* ORLabJackT7Controller.h */; };
 		70C6000B2469D45600400C83 /* ORLabJackT7Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 70C600032469D45400400C83 /* ORLabJackT7Controller.m */; };
@@ -4315,7 +4316,8 @@
 		7048C1CC24781688002A11AF /* orca_t7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = orca_t7.h; sourceTree = "<group>"; };
 		7048C1D024781850002A11AF /* LabJackM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LabJackM.h; sourceTree = "<group>"; };
 		7048C1D22478188E002A11AF /* LJM_Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LJM_Utilities.h; sourceTree = "<group>"; };
-		7048C1D4247819C2002A11AF /* libLabJackM.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libLabJackM.dylib; sourceTree = "<group>"; };
+		708077D424F435CB00F29EFE /* libLabJackM-1.20.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libLabJackM-1.20.0.dylib"; sourceTree = "<group>"; };
+		708077D824F436EE00F29EFE /* libusb-1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libusb-1.0.0.dylib"; sourceTree = "<group>"; };
 		70C600012469D45300400C83 /* ORLabJackT7Decoders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORLabJackT7Decoders.m; sourceTree = "<group>"; };
 		70C600022469D45300400C83 /* ORLabJackT7Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORLabJackT7Controller.h; sourceTree = "<group>"; };
 		70C600032469D45400400C83 /* ORLabJackT7Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORLabJackT7Controller.m; sourceTree = "<group>"; };
@@ -7348,7 +7350,7 @@
 		E6C2E7F123A9845700673DB8 /* ORFlashCamADCModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamADCModel.m; sourceTree = "<group>"; };
 		E6C2E7F323A9848E00673DB8 /* ORFlashCamADCController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORFlashCamADCController.h; sourceTree = "<group>"; };
 		E6C2E7F423A984B900673DB8 /* ORFlashCamADCController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamADCController.m; sourceTree = "<group>"; };
-		E6CC0768244405DD00D8DE0F /* Mail.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = Mail.app; path = ../../../../../../../../System/Applications/Mail.app; sourceTree = "<group>"; };
+		E6CC0768244405DD00D8DE0F /* Mail.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = Mail.app; path = ../../../../../../../Applications/Mail.app; sourceTree = "<group>"; };
 		E6DC1B49243A240400A559F0 /* ORURLSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORURLSession.m; sourceTree = "<group>"; };
 		E6DC1B4A243A240400A559F0 /* ORURLSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORURLSession.h; sourceTree = "<group>"; };
 		EF69C430116E5DC3008ABADC /* ORSNOCrateReadout.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ORSNOCrateReadout.cc; sourceTree = "<group>"; };
@@ -7465,6 +7467,7 @@
 			files = (
 				84EA918520FE5DF800110B85 /* libcrypto.1.0.0.dylib in Frameworks */,
 				84EA918320FE5DDF00110B85 /* libssl.1.0.0.dylib in Frameworks */,
+				708077D524F435CB00F29EFE /* libLabJackM-1.20.0.dylib in Frameworks */,
 				8434A359055B3287002D3102 /* Cocoa.framework in Frameworks */,
 				84EA918720FE5F7800110B85 /* libpq.dylib in Frameworks */,
 				84EA916820FE5A3700110B85 /* libmysqlclient.21.dylib in Frameworks */,
@@ -7472,9 +7475,9 @@
 				8439D5EF05BEFF3A0077EFF2 /* Carbon.framework in Frameworks */,
 				840F377B08F322F800FC4408 /* IOKit.framework in Frameworks */,
 				84F5E11B0A151E0B00707A0F /* OpenGL.framework in Frameworks */,
+				708077D924F436EE00F29EFE /* libusb-1.0.0.dylib in Frameworks */,
 				847599860B5FF26500123411 /* QuartzCore.framework in Frameworks */,
 				3620200E1CBD38EE0089296E /* libiconv.2.dylib in Frameworks */,
-				7048C1D5247819C3002A11AF /* libLabJackM.dylib in Frameworks */,
 				2DC1EE800F33724E00E93C75 /* WebKit.framework in Frameworks */,
 				840F5B191222C90000D49A75 /* QTKit.framework in Frameworks */,
 				84E6CD001E4247BD004D6978 /* libusb-1.0.a in Frameworks */,
@@ -8197,7 +8200,8 @@
 		7048C1CF24781832002A11AF /* labjack */ = {
 			isa = PBXGroup;
 			children = (
-				7048C1D4247819C2002A11AF /* libLabJackM.dylib */,
+				708077D824F436EE00F29EFE /* libusb-1.0.0.dylib */,
+				708077D424F435CB00F29EFE /* libLabJackM-1.20.0.dylib */,
 				7048C1D22478188E002A11AF /* LJM_Utilities.h */,
 				7048C1D024781850002A11AF /* LabJackM.h */,
 			);
