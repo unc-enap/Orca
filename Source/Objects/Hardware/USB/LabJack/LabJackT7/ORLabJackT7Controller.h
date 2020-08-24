@@ -18,54 +18,54 @@
 //-------------------------------------------------------------
 
 
-@interface ORLabJackT7Controller : OrcaObjectController 
+@interface ORLabJackT7Controller : OrcaObjectController
 {
-	IBOutlet NSTabView*		tabView;	
+    IBOutlet NSTabView*		tabView;
     IBOutlet NSTextField*   deviceSerialNumberField;
     IBOutlet NSTextField*   openCloseStatusField;
     IBOutlet NSButton*		probeButton;
     IBOutlet NSButton*		openCloseButton;
     IBOutlet NSTextField*   rtcTimeField;
-    
-	IBOutlet NSView*		totalView;
-	IBOutlet NSTextField*	aOut1Field;
-	IBOutlet NSTextField*	aOut0Field;
-	IBOutlet NSButton*		shipDataCB;
+
+    IBOutlet NSView*		totalView;
+    IBOutlet NSTextField*	aOut1Field;
+    IBOutlet NSTextField*	aOut0Field;
+    IBOutlet NSButton*		shipDataCB;
     IBOutlet NSButton*		resetCounter0Button;
     IBOutlet NSButton*		resetCounter1Button;
     IBOutlet NSButton*      resetCounter2Button;
     IBOutlet NSButton*      resetCounter3Button;
     IBOutlet NSButton*		digitalOutputEnabledButton;
-	IBOutlet NSButton*		lockButton;
+    IBOutlet NSButton*		lockButton;
     IBOutlet NSMatrix*		nameMatrix;
     IBOutlet NSMatrix*		nameMatrix1;
-	IBOutlet NSMatrix*		unitMatrix;
-	IBOutlet NSMatrix*		adcMatrix;
-	IBOutlet NSMatrix*		doNameMatrix;
-	IBOutlet NSMatrix*		doDirectionMatrix;
-	IBOutlet NSMatrix*		doValueOutMatrix;
-	IBOutlet NSMatrix*		doValueInMatrix;
-	IBOutlet NSPopUpButton* pollTimePopup;
+    IBOutlet NSMatrix*		unitMatrix;
+    IBOutlet NSMatrix*		adcMatrix;
+    IBOutlet NSMatrix*		doNameMatrix;
+    IBOutlet NSMatrix*		doDirectionMatrix;
+    IBOutlet NSMatrix*		doValueOutMatrix;
+    IBOutlet NSMatrix*		doValueInMatrix;
+    IBOutlet NSPopUpButton* pollTimePopup;
     IBOutlet NSButton*      pollNowButton;
     IBOutlet NSMatrix*		lowLimitMatrix;
-	IBOutlet NSMatrix*		hiLimitMatrix;
-	IBOutlet NSMatrix*		slopeMatrix;
-	IBOutlet NSMatrix*		interceptMatrix;
-	IBOutlet NSMatrix*		adcDiffMatrix;
-	IBOutlet NSMatrix*      adcRangeMatrix;
+    IBOutlet NSMatrix*		hiLimitMatrix;
+    IBOutlet NSMatrix*		slopeMatrix;
+    IBOutlet NSMatrix*		interceptMatrix;
+    IBOutlet NSMatrix*		adcDiffMatrix;
+    IBOutlet NSMatrix*      adcRangeMatrix;
     IBOutlet NSMatrix*      adcResMatrix;
-	IBOutlet NSSlider*		aOut0Slider;
-	IBOutlet NSSlider*		aOut1Slider;
-	IBOutlet NSMatrix*		minValueMatrix;
-	IBOutlet NSMatrix*		maxValueMatrix;
+    IBOutlet NSSlider*		aOut0Slider;
+    IBOutlet NSSlider*		aOut1Slider;
+    IBOutlet NSMatrix*		minValueMatrix;
+    IBOutlet NSMatrix*		maxValueMatrix;
     IBOutlet NSMatrix*		enabledMatrix;
     IBOutlet NSMatrix*      counterMatrix;
     IBOutlet NSMatrix*		counterEnabledMatrix;
     IBOutlet NSButton*      pwmOutputEnabledCB;
-    
+
     NSSize					ioSize;
-	NSSize					setupSize;
-	NSView*					blankView;
+    NSSize					setupSize;
+    NSView*					blankView;
 }
 
 #pragma mark •••Notifications
@@ -139,4 +139,3 @@
 - (IBAction) interceptAction:(id)sender;
 
 @end
-

@@ -89,58 +89,58 @@ static NSString* kLabJackT7Unit[kNumT7AdcChannels] = {
 - (NSString*) getUnitKey:(unsigned short)aUnit
 {
     if(aUnit<kNumT7AdcChannels) return kLabJackT7Unit[aUnit];
-    else return [NSString stringWithFormat:@"Unit %d",aUnit];			
+    else return [NSString stringWithFormat:@"Unit %d",aUnit];
 }
 
 - (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
-	uint32_t *dataPtr = (uint32_t*)someData;
-	union {
-		float asFloat;
-		uint32_t asLong;
-	}theAdcValue;
-	
-	int index = 2;  // skip first two dwords
+    uint32_t *dataPtr = (uint32_t*)someData;
+    union {
+        float asFloat;
+        uint32_t asLong;
+    }theAdcValue;
+
+    int index = 2;  // skip first two dwords
     int i;
 
-	uint32_t theTime = dataPtr[0x03E0];
-    
-	for(i=0;i<kNumT7AdcChannels;i++){
-		theAdcValue.asLong = dataPtr[index];  // encoded as float, use union to convert
-		[aDataSet loadTimeSeries:theAdcValue.asFloat										
-						  atTime:theTime
-						  sender:self 
-						withKeys:@"LabJackT7",
-								[self getUnitKey:dataPtr[1] & 0x0000ffff],
-								[self getChannelKey:i],
-								nil];
-		index++;
-	}
-    
+    uint32_t theTime = dataPtr[0x03E0];
+
+    for(i=0;i<kNumT7AdcChannels;i++){
+        theAdcValue.asLong = dataPtr[index];  // encoded as float, use union to convert
+        [aDataSet loadTimeSeries:theAdcValue.asFloat
+                          atTime:theTime
+                          sender:self
+                        withKeys:@"LabJackT7",
+                                [self getUnitKey:dataPtr[1] & 0x0000ffff],
+                                [self getChannelKey:i],
+                                nil];
+        index++;
+    }
+
     // TODO: what about counters and digital I/O
-	
-	return ExtractLength(dataPtr[0]);
+
+    return ExtractLength(dataPtr[0]);
 }
 
 - (NSString*) dataRecordDescription:(uint32_t*)dataPtr
 {
     NSString* title= @"LabJackT7 DataRecord\n\n";
-    NSString* theString =  [NSString stringWithFormat:@"%@\n",title];               
-	union {
-		float asFloat;
-		uint32_t asLong;
-	}theAdcValue;
-    
-	theString = [theString stringByAppendingFormat:@"HW ID = %u\n",dataPtr[1] & 0x0000ffff];
+    NSString* theString =  [NSString stringWithFormat:@"%@\n",title];
+    union {
+        float asFloat;
+        uint32_t asLong;
+    }theAdcValue;
+
+    theString = [theString stringByAppendingFormat:@"HW ID = %u\n",dataPtr[1] & 0x0000ffff];
 
     int index = 2;  // skip first two dwords
     int i;
-	
+
     for(i=0;i<kNumT7AdcChannels;i++){
-		theAdcValue.asLong = dataPtr[index++];
-		theString = [theString stringByAppendingFormat:@"%d: %.3f\n",i,theAdcValue.asFloat];
-	}
-    
+        theAdcValue.asLong = dataPtr[index++];
+        theString = [theString stringByAppendingFormat:@"%d: %.3f\n",i,theAdcValue.asFloat];
+    }
+
     theString = [theString stringByAppendingFormat:@"Counter0 lo = 0x%08x\n",dataPtr[index++]];
     theString = [theString stringByAppendingFormat:@"Counter0 hi = 0x%08x\n",dataPtr[index++]];
     theString = [theString stringByAppendingFormat:@"Counter1 lo = 0x%08x\n",dataPtr[index++]];
@@ -150,14 +150,12 @@ static NSString* kLabJackT7Unit[kNumT7AdcChannels] = {
     theString = [theString stringByAppendingFormat:@"Counter3 lo = 0x%08x\n",dataPtr[index++]];
     theString = [theString stringByAppendingFormat:@"Counter3 hi = 0x%08x\n",dataPtr[index++]];
     theString = [theString stringByAppendingFormat:@"I/O Dir = 0x%08x\n",dataPtr[index++] & 0x000fffff];
-	theString = [theString stringByAppendingFormat:@"I/O Out = 0x%08x\n",dataPtr[index++] & 0x000fffff];
-	theString = [theString stringByAppendingFormat:@"I/O In  = 0x%08x\n",dataPtr[index++] & 0x000fffff];
-	
-	NSDate* date = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)dataPtr[0x03E0]];
-	theString = [theString stringByAppendingFormat:@"%@\n",date];
-	
-	return theString;
+    theString = [theString stringByAppendingFormat:@"I/O Out = 0x%08x\n",dataPtr[index++] & 0x000fffff];
+    theString = [theString stringByAppendingFormat:@"I/O In  = 0x%08x\n",dataPtr[index++] & 0x000fffff];
+
+    NSDate* date = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)dataPtr[0x03E0]];
+    theString = [theString stringByAppendingFormat:@"%@\n",date];
+
+    return theString;
 }
 @end
-
-

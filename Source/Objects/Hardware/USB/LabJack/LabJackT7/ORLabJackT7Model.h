@@ -5,15 +5,15 @@
 //  Created by Mark Howe on Fri Jan 20,2017.
 //  Copyright (c) 2017 University of North Carolina. All rights reserved.
 //-----------------------------------------------------------
-//This program was prepared for the Regents of the University of 
-//North Carolina Physics and Department sponsored in part by the United States 
-//Department of Energy (DOE) under Grant #DE-FG02-97ER41020. 
-//The University has certain rights in the program pursuant to 
-//the contract and the program should not be copied or distributed 
-//outside your organization.  The DOE and the University of 
+//This program was prepared for the Regents of the University of
+//North Carolina Physics and Department sponsored in part by the United States
+//Department of Energy (DOE) under Grant #DE-FG02-97ER41020.
+//The University has certain rights in the program pursuant to
+//the contract and the program should not be copied or distributed
+//outside your organization.  The DOE and the University of
 //North Carolina reserve all rights in the program. Neither the authors,
-//University of North Carolina, or U.S. Government make any warranty, 
-//express or implied, or assume any liability or responsibility 
+//University of North Carolina, or U.S. Government make any warranty,
+//express or implied, or assume any liability or responsibility
 //for the use of this software.
 //-------------------------------------------------------------
 
@@ -54,51 +54,51 @@
 
 
 @interface ORLabJackT7Model : OrcaObject <ORAdcProcessing,ORBitProcessing> {
-	NSLock* localLock;
+    NSLock* localLock;
     BOOL  enabled[kNumT7AdcChannels];
-	double adc[kNumT7AdcChannels];
-	int    adcRange[kNumT7AdcChannels];
+    double adc[kNumT7AdcChannels];
+    int    adcRange[kNumT7AdcChannels];
     int    adcRes[kNumT7AdcChannels];
-	float  lowLimit[kNumT7AdcChannels];
-	float  hiLimit[kNumT7AdcChannels];
-	float  minValue[kNumT7AdcChannels];
-	float  maxValue[kNumT7AdcChannels];
-	float  slope[kNumT7AdcChannels];
-	float  intercept[kNumT7AdcChannels];
-	NSString* channelName[kNumT7AdcChannels];   //adc names
-	NSString* channelUnit[kNumT7AdcChannels];   //adc names
-	uint32_t timeMeasured;
+    float  lowLimit[kNumT7AdcChannels];
+    float  hiLimit[kNumT7AdcChannels];
+    float  minValue[kNumT7AdcChannels];
+    float  maxValue[kNumT7AdcChannels];
+    float  slope[kNumT7AdcChannels];
+    float  intercept[kNumT7AdcChannels];
+    NSString* channelName[kNumT7AdcChannels];   //adc names
+    NSString* channelUnit[kNumT7AdcChannels];   //adc names
+    uint32_t timeMeasured;
     NSString* doName[kNumT7IOChannels];  //dio names
-	uint32_t adcDiff;  // bitmask
-	uint32_t doDirection;  // bitmask
-	uint32_t doValueOut;  // bitmask
-	uint32_t doValueIn;  // bitmask
+    uint32_t adcDiff;  // bitmask
+    uint32_t doDirection;  // bitmask
+    uint32_t doValueOut;  // bitmask
+    uint32_t doValueIn;  // bitmask
     unsigned short aOut0;
     unsigned short aOut1;
-	BOOL	led;
+    BOOL	led;
     BOOL    counterEnabled[kNumT7Counters];
-	BOOL	doResetOfCounter[kNumT7Counters];
+    BOOL	doResetOfCounter[kNumT7Counters];
     //BOOL    clockEnabled[kNumT7Clocks];
     uint64_t counter[kNumT7Counters];
     BOOL digitalOutputEnabled;
     BOOL pwmOutputEnabled;
     uint32_t rtcTime;
     int pollTime;
-	uint32_t	dataId;
+    uint32_t	dataId;
     BOOL shipData;
     BOOL readOnce;
-	NSTimeInterval lastTime;
-	NSOperationQueue* queue;
-	
-	//bit processing variables
-	uint32_t processInputValue;  //snapshot of the inputs at start of process cycle
-	uint32_t processOutputValue; //outputs to be written at end of process cycle
-	uint32_t processOutputMask;  //controlls which bits are written
+    NSTimeInterval lastTime;
+    NSOperationQueue* queue;
+
+    //bit processing variables
+    uint32_t processInputValue;  //snapshot of the inputs at start of process cycle
+    uint32_t processOutputValue; //outputs to be written at end of process cycle
+    uint32_t processOutputMask;  //controlls which bits are written
     BOOL involvedInProcess;
     int   deviceHandle;
     int   deviceSerialNumber;
     DeviceCalibrationT7 caliInfo;
-    
+
 }
 
 #pragma mark ***Accessors
@@ -248,9 +248,8 @@ extern NSString* ORLabJackT7CalibrationInfoChanged;
 
 @interface ORLabJackT7Query : NSOperation
 {
-	id delegate;
+    id delegate;
 }
 - (id) initWithDelegate:(id)aDelegate;
 - (void) main;
 @end
-

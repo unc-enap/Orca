@@ -9,11 +9,11 @@
 #define LAB_JACK_M_HEADER
 
 #define LJM_VERSION 1.2000
-	// Format: xx.yyzz
-	// xx is the major version (left of the decimal).
-	// yy is the minor version (the two places to the right of the decimal).
-	// zz is the revision version (the two places to the right of the minor
-	//    version).
+    // Format: xx.yyzz
+    // xx is the major version (left of the decimal).
+    // yy is the minor version (the two places to the right of the decimal).
+    // zz is the revision version (the two places to the right of the minor
+    //    version).
 
 /******************************************************************************
  * How To Use This Library:
@@ -33,25 +33,25 @@ extern "C" {
 #endif
 
 #ifdef WIN32
-	#define LJM_ERROR_RETURN int __stdcall
-	#define LJM_LONG_LONG_RETURN long long __stdcall
-	#define LJM_VOID_RETURN void __stdcall
-	#define LJM_ERROR_STRING const char * __stdcall
-	#define LJM_DOUBLE_RETURN double __stdcall
+    #define LJM_ERROR_RETURN int __stdcall
+    #define LJM_LONG_LONG_RETURN long long __stdcall
+    #define LJM_VOID_RETURN void __stdcall
+    #define LJM_ERROR_STRING const char * __stdcall
+    #define LJM_DOUBLE_RETURN double __stdcall
 #else
-	#ifdef __APPLE__
-		#define LJM_ERROR_RETURN int
-		#define LJM_LONG_LONG_RETURN long long
-		#define LJM_VOID_RETURN void
-		#define LJM_ERROR_STRING const char *
-		#define LJM_DOUBLE_RETURN double
-	#else // Linux
-		#define LJM_ERROR_RETURN __attribute__((__visibility__("default"))) int
-		#define LJM_LONG_LONG_RETURN __attribute__((__visibility__("default"))) long long
-		#define LJM_VOID_RETURN __attribute__((__visibility__("default"))) void
-		#define LJM_ERROR_STRING __attribute__((__visibility__("default"))) const char *
-		#define LJM_DOUBLE_RETURN __attribute__((__visibility__("default"))) double
-	#endif
+    #ifdef __APPLE__
+        #define LJM_ERROR_RETURN int
+        #define LJM_LONG_LONG_RETURN long long
+        #define LJM_VOID_RETURN void
+        #define LJM_ERROR_STRING const char *
+        #define LJM_DOUBLE_RETURN double
+    #else // Linux
+        #define LJM_ERROR_RETURN __attribute__((__visibility__("default"))) int
+        #define LJM_LONG_LONG_RETURN __attribute__((__visibility__("default"))) long long
+        #define LJM_VOID_RETURN __attribute__((__visibility__("default"))) void
+        #define LJM_ERROR_STRING __attribute__((__visibility__("default"))) const char *
+        #define LJM_DOUBLE_RETURN __attribute__((__visibility__("default"))) double
+    #endif
 #endif
 
 
@@ -102,37 +102,37 @@ static const int LJM_BYTES_PER_REGISTER = 2;
 
 // Device types:
 enum {
-	LJM_dtANY = 0,
-	LJM_dtT4 = 4,
-	LJM_dtT7 = 7,
-	LJM_dtDIGIT = 200,
-	LJM_dtTSERIES = 84
+    LJM_dtANY = 0,
+    LJM_dtT4 = 4,
+    LJM_dtT7 = 7,
+    LJM_dtDIGIT = 200,
+    LJM_dtTSERIES = 84
 };
 
 // Connection types:
 enum {
-	LJM_ctANY = 0,
-	LJM_ctANY_TCP = LJM_ctANY,
+    LJM_ctANY = 0,
+    LJM_ctANY_TCP = LJM_ctANY,
 
-	LJM_ctUSB = 1,
+    LJM_ctUSB = 1,
 
-	// TCP
-	LJM_ctTCP = 2,
-	LJM_ctNETWORK_TCP = LJM_ctTCP,
-	LJM_ctETHERNET = 3,
-	LJM_ctETHERNET_TCP = LJM_ctETHERNET,
-	LJM_ctWIFI = 4,
-	LJM_ctWIFI_TCP = LJM_ctWIFI,
+    // TCP
+    LJM_ctTCP = 2,
+    LJM_ctNETWORK_TCP = LJM_ctTCP,
+    LJM_ctETHERNET = 3,
+    LJM_ctETHERNET_TCP = LJM_ctETHERNET,
+    LJM_ctWIFI = 4,
+    LJM_ctWIFI_TCP = LJM_ctWIFI,
 
-	// UDP
-	LJM_ctNETWORK_UDP = 5,
-	LJM_ctETHERNET_UDP = 6,
-	LJM_ctWIFI_UDP = 7,
+    // UDP
+    LJM_ctNETWORK_UDP = 5,
+    LJM_ctETHERNET_UDP = 6,
+    LJM_ctWIFI_UDP = 7,
 
-	// TCP or UDP
-	LJM_ctNETWORK_ANY = 8,
-	LJM_ctETHERNET_ANY = 9,
-	LJM_ctWIFI_ANY = 10
+    // TCP or UDP
+    LJM_ctNETWORK_ANY = 8,
+    LJM_ctETHERNET_ANY = 9,
+    LJM_ctWIFI_ANY = 10
 };
 
 // Network constants:
@@ -209,30 +209,30 @@ LJM_ERROR_CODE LJME_NOERROR = 0;
 LJM_ERROR_CODE LJME_WARNINGS_BEGIN = 200;
 LJM_ERROR_CODE LJME_WARNINGS_END = 399;
 LJM_ERROR_CODE LJME_FRAMES_OMITTED_DUE_TO_PACKET_SIZE = 201;
-	// Functions:
-	//     LJM_AddressesToMBFB:
-	//         Problem: This indicates that the length (in bytes) of the Feedback
-	//             command being created was greater than the value passed as
-	//             MaxBytesPerMBFB. As a result, the command returned is a valid
-	//             Feedback command that includes some of the frames originally
-	//             specified, but not all of them. You can check the NumFrames
-	//             pointer to find out how many frames were included.
-	//         Solutions:
-	//             1) Pass a larger value for MaxBytesPerMBFB and make sure
-	//                aMBFBCommand has memory allocated of size MaxBytesPerMBFB.
-	//                The default size for MaxBytesPerMBFB is 64.
-	//             2) Split the command into multiple commands.
-	//     Any other function that creates a Feedback command:
-	//         Problem: The Feedback command being created was too large for
-	//             the device to handle on this connection type.
-	//         Solution: Split the command into multiple commands.
+    // Functions:
+    //     LJM_AddressesToMBFB:
+    //         Problem: This indicates that the length (in bytes) of the Feedback
+    //             command being created was greater than the value passed as
+    //             MaxBytesPerMBFB. As a result, the command returned is a valid
+    //             Feedback command that includes some of the frames originally
+    //             specified, but not all of them. You can check the NumFrames
+    //             pointer to find out how many frames were included.
+    //         Solutions:
+    //             1) Pass a larger value for MaxBytesPerMBFB and make sure
+    //                aMBFBCommand has memory allocated of size MaxBytesPerMBFB.
+    //                The default size for MaxBytesPerMBFB is 64.
+    //             2) Split the command into multiple commands.
+    //     Any other function that creates a Feedback command:
+    //         Problem: The Feedback command being created was too large for
+    //             the device to handle on this connection type.
+    //         Solution: Split the command into multiple commands.
 
 LJM_ERROR_CODE LJME_DEBUG_LOG_FAILURE = 202;
 LJM_ERROR_CODE LJME_USING_DEFAULT_CALIBRATION = 203;
-	// Problem: LJM has detected the device has one or more invalid calibration
-	//     constants and is using the default calibration constants. Readings may
-	//     inaccurate.
-	// Solution: Contact LabJack support.
+    // Problem: LJM has detected the device has one or more invalid calibration
+    //     constants and is using the default calibration constants. Readings may
+    //     inaccurate.
+    // Solution: Contact LabJack support.
 
 LJM_ERROR_CODE LJME_DEBUG_LOG_FILE_NOT_OPEN = 204;
 
@@ -280,147 +280,147 @@ LJM_ERROR_CODE LJME_INVALID_ADDRESS = 1250;
 LJM_ERROR_CODE LJME_INVALID_CONNECTION_TYPE = 1251;
 LJM_ERROR_CODE LJME_INVALID_DIRECTION = 1252;
 LJM_ERROR_CODE LJME_INVALID_FUNCTION = 1253;
-	// Function: LJM_MBFBComm
-	//     Problem: The aMBFB buffer passed as an input parameter
-	//         did not have a function number corresponding to Feedback.
-	//     Solution: Make sure the 8th byte of your buffer is 76 (base 10).
-	//         (For example, aMBFB[7] == 76 should evaluate to true.)
+    // Function: LJM_MBFBComm
+    //     Problem: The aMBFB buffer passed as an input parameter
+    //         did not have a function number corresponding to Feedback.
+    //     Solution: Make sure the 8th byte of your buffer is 76 (base 10).
+    //         (For example, aMBFB[7] == 76 should evaluate to true.)
 
 LJM_ERROR_CODE LJME_INVALID_NUM_REGISTERS = 1254;
 LJM_ERROR_CODE LJME_INVALID_PARAMETER = 1255;
 LJM_ERROR_CODE LJME_INVALID_PROTOCOL_ID = 1256;
-	// Problem: The Protocol ID was not in the proper range.
+    // Problem: The Protocol ID was not in the proper range.
 
 LJM_ERROR_CODE LJME_INVALID_TRANSACTION_ID = 1257;
-	// Problem: The Transaction ID was not in the proper range.
+    // Problem: The Transaction ID was not in the proper range.
 
 LJM_ERROR_CODE LJME_UNKNOWN_VALUE_TYPE = 1259;
 
 LJM_ERROR_CODE LJME_MEMORY_ALLOCATION_FAILURE = 1260;
-	// Problem: A memory allocation attempt has failed, probably due to a
-	//     lack of available memory.
+    // Problem: A memory allocation attempt has failed, probably due to a
+    //     lack of available memory.
 
 LJM_ERROR_CODE LJME_NO_COMMAND_BYTES_SENT = 1261;
-	// Problem: No bytes could be sent to the device.
-	//     Possibilities:
-	//         * The device was previously connected, but was suddenly
-	//           disconnected.
+    // Problem: No bytes could be sent to the device.
+    //     Possibilities:
+    //         * The device was previously connected, but was suddenly
+    //           disconnected.
 
 LJM_ERROR_CODE LJME_INCORRECT_NUM_COMMAND_BYTES_SENT = 1262;
-	// Problem: The expected number of bytes could not be sent to the device.
-	//     Possibilities:
-	//         * The device was disconnected while bytes were being sent.
+    // Problem: The expected number of bytes could not be sent to the device.
+    //     Possibilities:
+    //         * The device was disconnected while bytes were being sent.
 
 LJM_ERROR_CODE LJME_NO_RESPONSE_BYTES_RECEIVED = 1263;
-	// Problem: No bytes could be received from the device.
-	//     Possibilities:
-	//         * The device was previously connected, but was suddenly
-	//           disconnected.
-	//         * The timeout length was too short for the device to respond.
+    // Problem: No bytes could be received from the device.
+    //     Possibilities:
+    //         * The device was previously connected, but was suddenly
+    //           disconnected.
+    //         * The timeout length was too short for the device to respond.
 
 LJM_ERROR_CODE LJME_INCORRECT_NUM_RESPONSE_BYTES_RECEIVED = 1264;
-	// Problem: The expected number of bytes could not be received from the
-	//          device.
-	//     Possibilities:
-	//         * The device was previously connected, but was suddenly
-	//           disconnected.
-	//         * The device needs a firmware update.
+    // Problem: The expected number of bytes could not be received from the
+    //          device.
+    //     Possibilities:
+    //         * The device was previously connected, but was suddenly
+    //           disconnected.
+    //         * The device needs a firmware update.
 
 LJM_ERROR_CODE LJME_MIXED_FORMAT_IP_ADDRESS = 1265;
-	// Functions: LJM_OpenS and LJM_Open
-	//     Problem: The string passed as an identifier contained an IP address
-	//         that was ambiguous.
-	//     Solution: Make sure the IP address is in either decimal format
-	//         (i.e. "192.168.1.25") or hex format (i.e. "0xC0.A8.0.19").
+    // Functions: LJM_OpenS and LJM_Open
+    //     Problem: The string passed as an identifier contained an IP address
+    //         that was ambiguous.
+    //     Solution: Make sure the IP address is in either decimal format
+    //         (i.e. "192.168.1.25") or hex format (i.e. "0xC0.A8.0.19").
 
 LJM_ERROR_CODE LJME_UNKNOWN_IDENTIFIER = 1266;
 LJM_ERROR_CODE LJME_NOT_IMPLEMENTED = 1267;
 LJM_ERROR_CODE LJME_INVALID_INDEX = 1268;
-	// Problem: An error internal to the LabJackM Library has occurred.
-	// Solution: Please report this error to LabJack.
+    // Problem: An error internal to the LabJackM Library has occurred.
+    // Solution: Please report this error to LabJack.
 
 LJM_ERROR_CODE LJME_INVALID_LENGTH = 1269;
 LJM_ERROR_CODE LJME_ERROR_BIT_SET = 1270;
 
 LJM_ERROR_CODE LJME_INVALID_MAXBYTESPERMBFB = 1271;
-	// Functions:
-	//     LJM_AddressesToMBFB:
-	//         Problem: This indicates the MaxBytesPerMBFB value was
-	//             insufficient for any Feedback command.
-	//         Solution: Pass a larger value for MaxBytesPerMBFB and make sure
-	//             aMBFBCommand has memory allocated of size MaxBytesPerMBFB.
-	//             The default size for MaxBytesPerMBFB is 64.
+    // Functions:
+    //     LJM_AddressesToMBFB:
+    //         Problem: This indicates the MaxBytesPerMBFB value was
+    //             insufficient for any Feedback command.
+    //         Solution: Pass a larger value for MaxBytesPerMBFB and make sure
+    //             aMBFBCommand has memory allocated of size MaxBytesPerMBFB.
+    //             The default size for MaxBytesPerMBFB is 64.
 
 LJM_ERROR_CODE LJME_NULL_POINTER = 1272;
-	// Problem: The Library has received an invalid pointer.
-	// Solution: Make sure that any functions that have pointers in their
-	//     parameter list are valid pointers that point to allocated memory.
+    // Problem: The Library has received an invalid pointer.
+    // Solution: Make sure that any functions that have pointers in their
+    //     parameter list are valid pointers that point to allocated memory.
 
 LJM_ERROR_CODE LJME_NULL_OBJ = 1273;
-	// Functions:
-	//     LJM_OpenS and LJM_Open:
-	//         Problem: The Library failed to parse the input parameters.
-	//         Solution: Check the validity of your inputs and if the problem
-	//             persists, please contact LabJack support.
+    // Functions:
+    //     LJM_OpenS and LJM_Open:
+    //         Problem: The Library failed to parse the input parameters.
+    //         Solution: Check the validity of your inputs and if the problem
+    //             persists, please contact LabJack support.
 
 LJM_ERROR_CODE LJME_RESERVED_NAME = 1274;
-	// LJM_OpenS and LJM_Open:
-	//     Problem: The string passed as Identifier was a reserved name.
-	//     Solution: Use a different name for your device. You can also connect
-	//         by passing the device's serial number or IP address, if
-	//         applicable.
+    // LJM_OpenS and LJM_Open:
+    //     Problem: The string passed as Identifier was a reserved name.
+    //     Solution: Use a different name for your device. You can also connect
+    //         by passing the device's serial number or IP address, if
+    //         applicable.
 
 LJM_ERROR_CODE LJME_UNPARSABLE_DEVICE_TYPE = 1275;
-	// LJM_OpenS:
-	//     Problem: This Library could not parse the DeviceType.
-	//     Solution: Check the LJM_OpenS documentation and make sure the
-	//         DeviceType does not contain any unusual characters.
+    // LJM_OpenS:
+    //     Problem: This Library could not parse the DeviceType.
+    //     Solution: Check the LJM_OpenS documentation and make sure the
+    //         DeviceType does not contain any unusual characters.
 
 LJM_ERROR_CODE LJME_UNPARSABLE_CONNECTION_TYPE = 1276;
-	// LJM_OpenS:
-	//     Problem: This Library could not parse the ConnectionType.
-	//     Solution: Check the LJM_OpenS documentation and make sure the
-	//         ConnectionType does not contain any unusual characters.
+    // LJM_OpenS:
+    //     Problem: This Library could not parse the ConnectionType.
+    //     Solution: Check the LJM_OpenS documentation and make sure the
+    //         ConnectionType does not contain any unusual characters.
 
 LJM_ERROR_CODE LJME_UNPARSABLE_IDENTIFIER = 1277;
-	// LJM_OpenS and LJM_Open:
-	//     Problem: This Library could not parse the Identifier.
-	//     Solution: Check the LJM_OpenS documentation and make sure the
-	//         Identifier does not contain any unusual characters.
+    // LJM_OpenS and LJM_Open:
+    //     Problem: This Library could not parse the Identifier.
+    //     Solution: Check the LJM_OpenS documentation and make sure the
+    //         Identifier does not contain any unusual characters.
 
 LJM_ERROR_CODE LJME_PACKET_SIZE_TOO_LARGE = 1278;
-	// Problems: The packet being sent to the device contained too many bytes.
-	// Note: Some LabJack devices need two bytes appended to any Modbus packets
-	//       sent to a device. The packet size plus these two appended bytes
-	//       could have exceeded the packet size limit.
-	// Solution: Send a smaller packet, i.e. break your packet up into multiple
-	//       packets.
+    // Problems: The packet being sent to the device contained too many bytes.
+    // Note: Some LabJack devices need two bytes appended to any Modbus packets
+    //       sent to a device. The packet size plus these two appended bytes
+    //       could have exceeded the packet size limit.
+    // Solution: Send a smaller packet, i.e. break your packet up into multiple
+    //       packets.
 
 
 LJM_ERROR_CODE LJME_TRANSACTION_ID_ERR = 1279;
-	// Problem: LJM received an unexpected Modbus Transaction ID.
+    // Problem: LJM received an unexpected Modbus Transaction ID.
 
 LJM_ERROR_CODE LJME_PROTOCOL_ID_ERR = 1280;
-	// Problem: LJM received an unexpected Modbus Protocol ID.
+    // Problem: LJM received an unexpected Modbus Protocol ID.
 
 LJM_ERROR_CODE LJME_LENGTH_ERR = 1281;
-	// Problem: LJM received a packet with an unexpected Modbus Length.
+    // Problem: LJM received a packet with an unexpected Modbus Length.
 
 LJM_ERROR_CODE LJME_UNIT_ID_ERR = 1282;
-	// Problem: LJM received a packet with an unexpected Modbus Unit ID.
+    // Problem: LJM received a packet with an unexpected Modbus Unit ID.
 
 LJM_ERROR_CODE LJME_FUNCTION_ERR = 1283;
-	// Problem: LJM received a packet with an unexpected Modbus Function.
+    // Problem: LJM received a packet with an unexpected Modbus Function.
 
 LJM_ERROR_CODE LJME_STARTING_REG_ERR = 1284;
-	// Problem: LJM received a packet with an unexpected Modbus address.
+    // Problem: LJM received a packet with an unexpected Modbus address.
 
 LJM_ERROR_CODE LJME_NUM_REGS_ERR = 1285;
-	// Problem: LJM received a packet with an unexpected Modbus number of
-	//     registers.
+    // Problem: LJM received a packet with an unexpected Modbus number of
+    //     registers.
 
 LJM_ERROR_CODE LJME_NUM_BYTES_ERR = 1286;
-	// Problem: LJM received a packet with an unexpected Modbus number of bytes.
+    // Problem: LJM received a packet with an unexpected Modbus number of bytes.
 
 LJM_ERROR_CODE LJME_CONFIG_FILE_NOT_FOUND = 1289;
 LJM_ERROR_CODE LJME_CONFIG_PARSING_ERROR = 1290;
@@ -429,17 +429,17 @@ LJM_ERROR_CODE LJME_INVALID_NUM_VALUES = 1291;
 LJM_ERROR_CODE LJME_CONSTANTS_FILE_NOT_FOUND = 1292;
 LJM_ERROR_CODE LJME_INVALID_CONSTANTS_FILE = 1293;
 LJM_ERROR_CODE LJME_INVALID_NAME = 1294;
-	// Problem: LJM received a name that was not found/matched in the constants
-	//          file or was otherwise an invalid name.
-	// Solution: Use LJM_ErrorToString to find the invalid name(s).
+    // Problem: LJM received a name that was not found/matched in the constants
+    //          file or was otherwise an invalid name.
+    // Solution: Use LJM_ErrorToString to find the invalid name(s).
 
 LJM_ERROR_CODE LJME_OVERSPECIFIED_PORT = 1296;
-	// Functions: LJM_Open, LJM_OpenS
-	//     Problem: LJM received an Identifier that specified a port/pipe, but
-	//              connection type was not specified.
+    // Functions: LJM_Open, LJM_OpenS
+    //     Problem: LJM received an Identifier that specified a port/pipe, but
+    //              connection type was not specified.
 
 LJM_ERROR_CODE LJME_INTENT_NOT_READY = 1297;
-	// Please contact LabJack support if the problem is not apparent.
+    // Please contact LabJack support if the problem is not apparent.
 
 LJM_ERROR_CODE LJME_ATTR_LOAD_COMM_FAILURE = 1298;
 /**
@@ -455,20 +455,20 @@ LJM_ERROR_CODE LJME_ATTR_LOAD_COMM_FAILURE = 1298;
 **/
 
 LJM_ERROR_CODE LJME_INVALID_CONFIG_NAME = 1299;
-	// Functions: LJM_WriteLibraryConfigS, LJM_WriteLibraryConfigStringS,
-	//            LJM_ReadLibraryConfigS, LJM_ReadLibraryConfigStringS
-	//     Problem: An unknown string has been passed in as Parameter.
-	//     Solution: Please check the documentation in this header file for the
-	//         configuration parameter you are trying to read or write. Not all
-	//         config parameters can be read, nor can all config parameters be
-	//         written.
+    // Functions: LJM_WriteLibraryConfigS, LJM_WriteLibraryConfigStringS,
+    //            LJM_ReadLibraryConfigS, LJM_ReadLibraryConfigStringS
+    //     Problem: An unknown string has been passed in as Parameter.
+    //     Solution: Please check the documentation in this header file for the
+    //         configuration parameter you are trying to read or write. Not all
+    //         config parameters can be read, nor can all config parameters be
+    //         written.
 
 LJM_ERROR_CODE LJME_ERROR_RETRIEVAL_FAILURE = 1300;
-	// Problem: A device has reported an error and LJM failed to to retrieve the
-	//     error code from the device.
-	// Solution: Please make sure the device has current firmware and that this
-	//     is a current of LJM. If the problem persists, please contact LabJack
-	//     support.
+    // Problem: A device has reported an error and LJM failed to to retrieve the
+    //     error code from the device.
+    // Solution: Please make sure the device has current firmware and that this
+    //     is a current of LJM. If the problem persists, please contact LabJack
+    //     support.
 
 LJM_ERROR_CODE LJME_LJM_BUFFER_FULL = 1301;
 LJM_ERROR_CODE LJME_COULD_NOT_START_STREAM = 1302;
@@ -483,15 +483,15 @@ LJM_ERROR_CODE LJME_TEMPERATURE_OUT_OF_RANGE = 1310;
 LJM_ERROR_CODE LJME_VOLTAGE_OUT_OF_RANGE = 1311;
 
 LJM_ERROR_CODE LJME_FUNCTION_DOES_NOT_SUPPORT_THIS_TYPE = 1312;
-	// Desc: The function does not support the given data type. For example,
-	//       LJM_eReadName and LJM_eReadAddress do not support reading
-	//       LJM_STRING values, which are too large.
+    // Desc: The function does not support the given data type. For example,
+    //       LJM_eReadName and LJM_eReadAddress do not support reading
+    //       LJM_STRING values, which are too large.
 
 LJM_ERROR_CODE LJME_INVALID_INFO_HANDLE = 1313;
 
 LJM_ERROR_CODE LJME_NO_DEVICES_FOUND = 1314;
-	// Desc: An Open/OpenS call was called - with any device type, any
-	//       connection type, and any identifier - but no devices were found.
+    // Desc: An Open/OpenS call was called - with any device type, any
+    //       connection type, and any identifier - but no devices were found.
 
 LJM_ERROR_CODE LJME_AUTO_IPS_FILE_NOT_FOUND = 1316;
 LJM_ERROR_CODE LJME_AUTO_IPS_FILE_INVALID = 1317;
@@ -501,28 +501,28 @@ LJM_ERROR_CODE LJME_INVALID_INTERVAL_HANDLE = 1318;
 LJM_ERROR_CODE LJME_NAMED_MUTEX_PERMISSION_DENIED = 1319;
 
 LJM_ERROR_CODE LJME_DIGITAL_AUTO_RECOVERY_ERROR_DETECTED = 1320;
-	// Desc: During stream, the device buffer overflowed, causing auto-recovery
-	// to occur. However, the first channel of stream was not compatible with
-	// auto-recovery. To avoid this error, either:
-	//   1. Use one of the following channels as the first stream channel:
-	//        An analog input (AIN0, AIN1, ...)
-	//        FIO_STATE
-	//        EIO_STATE
-	//        CIO_STATE
-	//        MIO_STATE
-	//        EIO_CIO_STATE
-	//        CIO_MIO_STATE
-	// or:
-	//   2. Ensure that the first stream channel cannot return 0xFFFF and set
-	//      LJM_STREAM_DIGITAL_AUTO_RECOVERY_ERROR_DETECTION_DISABLED to 1.
-	// See labjack.com/digital-auto-recovery-error-detection
+    // Desc: During stream, the device buffer overflowed, causing auto-recovery
+    // to occur. However, the first channel of stream was not compatible with
+    // auto-recovery. To avoid this error, either:
+    //   1. Use one of the following channels as the first stream channel:
+    //        An analog input (AIN0, AIN1, ...)
+    //        FIO_STATE
+    //        EIO_STATE
+    //        CIO_STATE
+    //        MIO_STATE
+    //        EIO_CIO_STATE
+    //        CIO_MIO_STATE
+    // or:
+    //   2. Ensure that the first stream channel cannot return 0xFFFF and set
+    //      LJM_STREAM_DIGITAL_AUTO_RECOVERY_ERROR_DETECTION_DISABLED to 1.
+    // See labjack.com/digital-auto-recovery-error-detection
 
 LJM_ERROR_CODE LJME_NEGATIVE_RECEIVE_BUFFER_SIZE = 1321;
-	// Problem: During stream, the receive buffer size
-	// was negative. This is probably because
-	// LJM_STREAM_TCP_RECEIVE_BUFFER_SIZE was set to too large a number to be represented
-	// by the signed data type being used, int.
-	// Solution: Use a smaller LJM_STREAM_TCP_RECEIVE_BUFFER_SIZE.
+    // Problem: During stream, the receive buffer size
+    // was negative. This is probably because
+    // LJM_STREAM_TCP_RECEIVE_BUFFER_SIZE was set to too large a number to be represented
+    // by the signed data type being used, int.
+    // Solution: Use a smaller LJM_STREAM_TCP_RECEIVE_BUFFER_SIZE.
 
 /*******************************
  * Device Management Functions *
@@ -556,12 +556,12 @@ LJM_ERROR_CODE LJME_NEGATIVE_RECEIVE_BUFFER_SIZE = 1321;
  * Note: These functions will ignore NULL pointers, except for NumFound.
 **/
 LJM_ERROR_RETURN LJM_ListAll(int DeviceType, int ConnectionType,
-	int * NumFound, int * aDeviceTypes, int * aConnectionTypes,
-	int * aSerialNumbers, int * aIPAddresses);
+    int * NumFound, int * aDeviceTypes, int * aConnectionTypes,
+    int * aSerialNumbers, int * aIPAddresses);
 
 LJM_ERROR_RETURN LJM_ListAllS(const char * DeviceType, const char * ConnectionType,
-	int * NumFound, int * aDeviceTypes, int * aConnectionTypes,
-	int * aSerialNumbers, int * aIPAddresses);
+    int * NumFound, int * aDeviceTypes, int * aConnectionTypes,
+    int * aSerialNumbers, int * aIPAddresses);
 
 /**
  * Name: LJM_ListAllExtended
@@ -604,9 +604,9 @@ LJM_ERROR_RETURN LJM_ListAllS(const char * DeviceType, const char * ConnectionTy
  *       aBytes.
 **/
 LJM_ERROR_RETURN LJM_ListAllExtended(int DeviceType, int ConnectionType,
-	int NumAddresses, const int * aAddresses, const int * aNumRegs,
-	int MaxNumFound, int * NumFound, int * aDeviceTypes, int * aConnectionTypes,
-	int * aSerialNumbers, int * aIPAddresses, unsigned char * aBytes);
+    int NumAddresses, const int * aAddresses, const int * aNumRegs,
+    int MaxNumFound, int * NumFound, int * aDeviceTypes, int * aConnectionTypes,
+    int * aSerialNumbers, int * aIPAddresses, unsigned char * aBytes);
 
 /**
  * Name: LJM_OpenS
@@ -630,7 +630,7 @@ LJM_ERROR_RETURN LJM_ListAllExtended(int DeviceType, int ConnectionType,
  *           respectively.
 **/
 LJM_ERROR_RETURN LJM_OpenS(const char * DeviceType, const char * ConnectionType,
-	const char * Identifier, int * Handle);
+    const char * Identifier, int * Handle);
 
 /**
  * Name: LJM_Open
@@ -642,7 +642,7 @@ LJM_ERROR_RETURN LJM_OpenS(const char * DeviceType, const char * ConnectionType,
  *           open, such as LJM_ctUSB, or LJM_ctANY.
 **/
 LJM_ERROR_RETURN LJM_Open(int DeviceType, int ConnectionType,
-	const char * Identifier, int * Handle);
+    const char * Identifier, int * Handle);
 
 /**
  * Name: LJM_GetHandleInfo
@@ -670,8 +670,8 @@ LJM_ERROR_RETURN LJM_Open(int DeviceType, int ConnectionType,
  * Warn: This function ignores null pointers
 **/
 LJM_ERROR_RETURN LJM_GetHandleInfo(int Handle, int * DeviceType,
-	int * ConnectionType, int * SerialNumber, int * IPAddress, int * Port,
-	int * MaxBytesPerMB);
+    int * ConnectionType, int * SerialNumber, int * IPAddress, int * Port,
+    int * MaxBytesPerMB);
 
 /**
  * Name: LJM_Close
@@ -748,16 +748,16 @@ LJM_ERROR_RETURN LJM_eReadName(int Handle, const char * Name, double * Value);
  *       sent/received, please see the LJM_WriteLibraryConfigS function.
 **/
 LJM_ERROR_RETURN LJM_eReadAddresses(int Handle, int NumFrames,
-	const int * aAddresses, const int * aTypes, double * aValues,
-	int * ErrorAddress);
+    const int * aAddresses, const int * aTypes, double * aValues,
+    int * ErrorAddress);
 LJM_ERROR_RETURN LJM_eReadNames(int Handle, int NumFrames,
-	const char ** aNames, double * aValues, int * ErrorAddress);
+    const char ** aNames, double * aValues, int * ErrorAddress);
 
 LJM_ERROR_RETURN LJM_eWriteAddresses(int Handle, int NumFrames,
-	const int * aAddresses, const int * aTypes, const double * aValues,
-	int * ErrorAddress);
+    const int * aAddresses, const int * aTypes, const double * aValues,
+    int * ErrorAddress);
 LJM_ERROR_RETURN LJM_eWriteNames(int Handle, int NumFrames,
-	const char ** aNames, const double * aValues, int * ErrorAddress);
+    const char ** aNames, const double * aValues, int * ErrorAddress);
 
 // Easy Functions: All type, reading and writing, multiple values to one address
 /**
@@ -780,14 +780,14 @@ LJM_ERROR_RETURN LJM_eWriteNames(int Handle, int NumFrames,
  *       in one function call is not supported.
 **/
 LJM_ERROR_RETURN LJM_eReadAddressArray(int Handle, int Address, int Type,
-	int NumValues, double * aValues, int * ErrorAddress);
+    int NumValues, double * aValues, int * ErrorAddress);
 LJM_ERROR_RETURN LJM_eReadNameArray(int Handle, const char * Name,
-	int NumValues, double * aValues, int * ErrorAddress);
+    int NumValues, double * aValues, int * ErrorAddress);
 
 LJM_ERROR_RETURN LJM_eWriteAddressArray(int Handle, int Address, int Type,
-	int NumValues, const double * aValues, int * ErrorAddress);
+    int NumValues, const double * aValues, int * ErrorAddress);
 LJM_ERROR_RETURN LJM_eWriteNameArray(int Handle, const char * Name,
-	int NumValues, const double * aValues, int * ErrorAddress);
+    int NumValues, const double * aValues, int * ErrorAddress);
 
 // Easy Functions: Reading and writing using bytes
 /**
@@ -812,14 +812,14 @@ LJM_ERROR_RETURN LJM_eWriteNameArray(int Handle, const char * Name,
  *       in one function call is not supported.
 **/
 LJM_ERROR_RETURN LJM_eReadAddressByteArray(int Handle, int Address,
-	int NumBytes, char * aBytes, int * ErrorAddress);
+    int NumBytes, char * aBytes, int * ErrorAddress);
 LJM_ERROR_RETURN LJM_eReadNameByteArray(int Handle, const char * Name,
-	int NumBytes, char * aBytes, int * ErrorAddress);
+    int NumBytes, char * aBytes, int * ErrorAddress);
 
 LJM_ERROR_RETURN LJM_eWriteAddressByteArray(int Handle, int Address,
-	int NumBytes, const char * aBytes, int * ErrorAddress);
+    int NumBytes, const char * aBytes, int * ErrorAddress);
 LJM_ERROR_RETURN LJM_eWriteNameByteArray(int Handle, const char * Name,
-	int NumBytes, const char * aBytes, int * ErrorAddress);
+    int NumBytes, const char * aBytes, int * ErrorAddress);
 
 // Easy Functions: All type, reading and writing, multiple addresses with
 //     multiple values for each
@@ -851,11 +851,11 @@ LJM_ERROR_RETURN LJM_eWriteNameByteArray(int Handle, const char * Name,
  *       sent/received, please see the LJM_WriteLibraryConfigS function.
 **/
 LJM_ERROR_RETURN LJM_eAddresses(int Handle, int NumFrames,
-	const int * aAddresses, const int * aTypes, const int * aWrites,
-	const int * aNumValues, double * aValues, int * ErrorAddress);
+    const int * aAddresses, const int * aTypes, const int * aWrites,
+    const int * aNumValues, double * aValues, int * ErrorAddress);
 LJM_ERROR_RETURN LJM_eNames(int Handle, int NumFrames, const char ** aNames,
-	const int * aWrites, const int * aNumValues, double * aValues,
-	int * ErrorAddress);
+    const int * aWrites, const int * aNumValues, double * aValues,
+    int * ErrorAddress);
 
 /**
  * Name: LJM_eReadNameString, LJM_eReadAddressString
@@ -873,9 +873,9 @@ LJM_ERROR_RETURN LJM_eNames(int Handle, int NumFrames, const char ** aNames,
  *       but LJM_eReadAddressString does not perform any data type checking.
 **/
 LJM_ERROR_RETURN LJM_eReadNameString(int Handle, const char * Name,
-	char * String);
+    char * String);
 LJM_ERROR_RETURN LJM_eReadAddressString(int Handle, int Address,
-	char * String);
+    char * String);
 
 /**
  * Name: LJM_eWriteNameString, LJM_eWriteAddressString
@@ -892,9 +892,9 @@ LJM_ERROR_RETURN LJM_eReadAddressString(int Handle, int Address,
  *       but LJM_eWriteAddressString does not perform any data type checking.
 **/
 LJM_ERROR_RETURN LJM_eWriteNameString(int Handle, const char * Name,
-	const char * String);
+    const char * String);
 LJM_ERROR_RETURN LJM_eWriteAddressString(int Handle, int Address,
-	const char * String);
+    const char * String);
 
 
 /*********************
@@ -920,7 +920,7 @@ LJM_ERROR_RETURN LJM_eWriteAddressString(int Handle, int Address,
  *       aScanList.
 **/
 LJM_ERROR_RETURN LJM_eStreamStart(int Handle, int ScansPerRead,
-	int NumAddresses, const int * aScanList, double * ScanRate);
+    int NumAddresses, const int * aScanList, double * ScanRate);
 
 /**
  * Name: LJM_eStreamRead
@@ -943,7 +943,7 @@ LJM_ERROR_RETURN LJM_eStreamStart(int Handle, int ScansPerRead,
  *       LJM_STREAM_SCANS_RETURN_ALL_OR_NONE.
 **/
 LJM_ERROR_RETURN LJM_eStreamRead(int Handle, double * aData,
-	int * DeviceScanBacklog, int * LJMScanBacklog);
+    int * DeviceScanBacklog, int * LJMScanBacklog);
 
 /**
  * Name: LJM_SetStreamCallback
@@ -963,7 +963,7 @@ LJM_ERROR_RETURN LJM_eStreamRead(int Handle, double * aData,
 **/
 typedef void (*LJM_StreamReadCallback)(void *);
 LJM_ERROR_RETURN LJM_SetStreamCallback(int Handle,
-	LJM_StreamReadCallback Callback, void * Arg);
+    LJM_StreamReadCallback Callback, void * Arg);
 
 /**
  * Name: LJM_eStreamStop
@@ -997,8 +997,8 @@ LJM_ERROR_RETURN LJM_eStreamStop(int Handle);
  * Note: This function will block for (NumScans / ScanRate) seconds or longer.
 **/
 LJM_ERROR_RETURN LJM_StreamBurst(int Handle, int NumAddresses,
-	const int * aScanList, double * ScanRate, unsigned int NumScans,
-	double * aData);
+    const int * aScanList, double * ScanRate, unsigned int NumScans,
+    double * aData);
 
 /**
  * Name: LJM_GetStreamTCPReceiveBufferStatus
@@ -1011,8 +1011,8 @@ LJM_ERROR_RETURN LJM_StreamBurst(int Handle, int NumAddresses,
  *           receive buffer.
 **/
 LJM_ERROR_RETURN LJM_GetStreamTCPReceiveBufferStatus(int Handle,
-	unsigned int * ReceiveBufferBytesSize,
-	unsigned int * ReceiveBufferBytesBacklog);
+    unsigned int * ReceiveBufferBytesSize,
+    unsigned int * ReceiveBufferBytesBacklog);
 
 /***************************************
  *  Byte-oriented Read/Write Functions *
@@ -1026,7 +1026,7 @@ LJM_ERROR_RETURN LJM_GetStreamTCPReceiveBufferStatus(int Handle,
  *       NumBytes, the size of Data.
 **/
 LJM_ERROR_RETURN LJM_WriteRaw(int Handle, const unsigned char * Data,
-	int NumBytes);
+    int NumBytes);
 
 /**
  * Name: LJM_ReadRaw
@@ -1080,8 +1080,8 @@ LJM_ERROR_RETURN LJM_ReadRaw(int Handle, unsigned char * Data, int NumBytes);
  *       frames that were included.
 **/
 LJM_ERROR_RETURN LJM_AddressesToMBFB(int MaxBytesPerMBFB, const int * aAddresses,
-	const int * aTypes, const int * aWrites, const int * aNumValues,
-	const double * aValues, int * NumFrames, unsigned char * aMBFBCommand);
+    const int * aTypes, const int * aWrites, const int * aNumValues,
+    const double * aValues, int * NumFrames, unsigned char * aMBFBCommand);
 
 /**
  * Name: LJM_MBFBComm
@@ -1103,7 +1103,7 @@ LJM_ERROR_RETURN LJM_AddressesToMBFB(int MaxBytesPerMBFB, const int * aAddresses
  *       Feedback response.
 **/
 LJM_ERROR_RETURN LJM_MBFBComm(int Handle, unsigned char UnitID,
-	unsigned char * aMBFB, int * ErrorAddress);
+    unsigned char * aMBFB, int * ErrorAddress);
 
 /**
  * Name: LJM_UpdateValues
@@ -1130,8 +1130,8 @@ LJM_ERROR_RETURN LJM_MBFBComm(int Handle, unsigned char UnitID,
  *           the data in aMBFBResponse, then do nothing with the last 2 values.
 **/
 LJM_ERROR_RETURN LJM_UpdateValues(unsigned char * aMBFBResponse,
-	const int * aTypes, const int * aWrites, const int * aNumValues,
-	int NumFrames, double * aValues);
+    const int * aTypes, const int * aWrites, const int * aNumValues,
+    int NumFrames, double * aValues);
 
 
 /****************************
@@ -1159,7 +1159,7 @@ LJM_ERROR_RETURN LJM_UpdateValues(unsigned char * aMBFBResponse,
  *       corresponding aAddresses value will be set to LJM_INVALID_NAME_ADDRESS.
 **/
 LJM_ERROR_RETURN LJM_NamesToAddresses(int NumFrames, const char ** aNames,
-	int * aAddresses, int * aTypes);
+    int * aAddresses, int * aTypes);
 
 /**
  * Name: LJM_NameToAddress
@@ -1188,7 +1188,7 @@ LJM_ERROR_RETURN LJM_NameToAddress(const char * Name, int * Address, int * Type)
  *       will return LJME_INVALID_ADDRESS.
 **/
 LJM_ERROR_RETURN LJM_AddressesToTypes(int NumAddresses, int * aAddresses,
-	int * aTypes);
+    int * aTypes);
 
 /**
  * Name: LJM_AddressToType
@@ -1211,7 +1211,7 @@ LJM_ERROR_RETURN LJM_AddressToType(int Address, int * Type);
  *           of Scope, if found.
 **/
 LJM_ERROR_RETURN LJM_LookupConstantValue(const char * Scope,
-	const char * ConstantName, double * ConstantValue);
+    const char * ConstantName, double * ConstantValue);
 
 /**
  * Name: LJM_LookupConstantName
@@ -1225,7 +1225,7 @@ LJM_ERROR_RETURN LJM_LookupConstantValue(const char * Scope,
  *           name.
 **/
 LJM_ERROR_RETURN LJM_LookupConstantName(const char * Scope,
-	double ConstantValue, char * ConstantName);
+    double ConstantValue, char * ConstantName);
 
 /**
  * Name: LJM_ErrorToString
@@ -1300,7 +1300,7 @@ static const long LJM_ttC = 6009;
  *       inaccurate.
 **/
 LJM_ERROR_RETURN LJM_TCVoltsToTemp(int TCType, double TCVolts, double CJTempK,
-	double * pTCTempK);
+    double * pTCTempK);
 
 
 /**
@@ -1509,9 +1509,9 @@ static const char * const LJM_OPEN_TCP_DEVICE_TIMEOUT_MS = "LJM_OPEN_TCP_DEVICE_
 **/
 static const char * const LJM_DEBUG_LOG_MODE = "LJM_DEBUG_LOG_MODE";
 enum {
-	LJM_DEBUG_LOG_MODE_NEVER = 1,
-	LJM_DEBUG_LOG_MODE_CONTINUOUS = 2,
-	LJM_DEBUG_LOG_MODE_ON_ERROR = 3
+    LJM_DEBUG_LOG_MODE_NEVER = 1,
+    LJM_DEBUG_LOG_MODE_CONTINUOUS = 2,
+    LJM_DEBUG_LOG_MODE_ON_ERROR = 3
 };
 
 /**
@@ -1525,15 +1525,15 @@ enum {
 **/
 static const char * const LJM_DEBUG_LOG_LEVEL = "LJM_DEBUG_LOG_LEVEL";
 enum {
-	LJM_STREAM_PACKET = 1,
-	LJM_TRACE = 2,
-	LJM_DEBUG = 4,
-	LJM_INFO = 6,
-	LJM_PACKET = 7,
-	LJM_WARNING = 8,
-	LJM_USER = 9,
-	LJM_ERROR = 10,
-	LJM_FATAL = 12
+    LJM_STREAM_PACKET = 1,
+    LJM_TRACE = 2,
+    LJM_DEBUG = 4,
+    LJM_INFO = 6,
+    LJM_PACKET = 7,
+    LJM_WARNING = 8,
+    LJM_USER = 9,
+    LJM_ERROR = 10,
+    LJM_FATAL = 12
 };
 
 /**
@@ -1713,7 +1713,7 @@ static const char * const LJM_STREAM_AIN_BINARY = "LJM_STREAM_AIN_BINARY";
  *           LJM_DUMMY_VALUE values.
 **/
 static const char * const LJM_STREAM_DIGITAL_AUTO_RECOVERY_ERROR_DETECTION_DISABLED =
-	"LJM_STREAM_DIGITAL_AUTO_RECOVERY_ERROR_DETECTION_DISABLED";
+    "LJM_STREAM_DIGITAL_AUTO_RECOVERY_ERROR_DETECTION_DISABLED";
 
 /**
  * Name: LJM_STREAM_SCANS_RETURN
@@ -1722,39 +1722,39 @@ static const char * const LJM_STREAM_DIGITAL_AUTO_RECOVERY_ERROR_DETECTION_DISAB
 **/
 static const char * const LJM_STREAM_SCANS_RETURN = "LJM_STREAM_SCANS_RETURN";
 enum {
-	/**
-	 * Name: LJM_STREAM_SCANS_RETURN_ALL
-	 * Desc: A mode that will cause LJM_eStreamRead to sleep until the full
-	 *       ScansPerRead scans are collected by LJM.
-	 * Note: ScansPerRead is a parameter of LJM_eStreamStart.
-	 * Note: This mode may not be appropriate for stream types that are not
-	 *       consistently timed, such as gate stream mode or external clock stream
-	 *       mode.
-	**/
-	LJM_STREAM_SCANS_RETURN_ALL = 1,
+    /**
+     * Name: LJM_STREAM_SCANS_RETURN_ALL
+     * Desc: A mode that will cause LJM_eStreamRead to sleep until the full
+     *       ScansPerRead scans are collected by LJM.
+     * Note: ScansPerRead is a parameter of LJM_eStreamStart.
+     * Note: This mode may not be appropriate for stream types that are not
+     *       consistently timed, such as gate stream mode or external clock stream
+     *       mode.
+    **/
+    LJM_STREAM_SCANS_RETURN_ALL = 1,
 
-	/**
-	 * Name: LJM_STREAM_SCANS_RETURN_ALL_OR_NONE
-	 * Desc: A mode that will cause LJM_eStreamRead to never sleep, and instead
-	 *       either:
-	 *           consume ScansPerRead scans and return LJME_NOERROR, or
-	 *           consume no scans and return LJME_NO_SCANS_RETURNED.
-	 *       LJM_eStreamRead will consume ScansPerRead if the LJM handle has
-	 *       received ScansPerRead or more scans, otherwise it will consume none.
-	 * Note: ScansPerRead is a parameter of LJM_eStreamStart.
-	**/
-	LJM_STREAM_SCANS_RETURN_ALL_OR_NONE = 2
+    /**
+     * Name: LJM_STREAM_SCANS_RETURN_ALL_OR_NONE
+     * Desc: A mode that will cause LJM_eStreamRead to never sleep, and instead
+     *       either:
+     *           consume ScansPerRead scans and return LJME_NOERROR, or
+     *           consume no scans and return LJME_NO_SCANS_RETURNED.
+     *       LJM_eStreamRead will consume ScansPerRead if the LJM handle has
+     *       received ScansPerRead or more scans, otherwise it will consume none.
+     * Note: ScansPerRead is a parameter of LJM_eStreamStart.
+    **/
+    LJM_STREAM_SCANS_RETURN_ALL_OR_NONE = 2
 
-	/**
-	 * Name: LJM_STREAM_SCANS_RETURN_AVAILABLE
-	 * Desc: A mode that will cause LJM_eStreamRead to never sleep, and always
-	 *       consume the number of scans that the LJM handle has received, up to
-	 *       a maximum of ScansPerRead. Fills the excess scan places in aData
-	 *       not read, if any, with LJM_SCAN_NOT_READ.
-	 * Note: ScansPerRead is a parameter of LJM_eStreamStart.
-	 * TODO: LJM_STREAM_SCANS_RETURN_AVAILABLE is not currently implemented.
-	**/
-	// LJM_STREAM_SCANS_RETURN_AVAILABLE = 3
+    /**
+     * Name: LJM_STREAM_SCANS_RETURN_AVAILABLE
+     * Desc: A mode that will cause LJM_eStreamRead to never sleep, and always
+     *       consume the number of scans that the LJM handle has received, up to
+     *       a maximum of ScansPerRead. Fills the excess scan places in aData
+     *       not read, if any, with LJM_SCAN_NOT_READ.
+     * Note: ScansPerRead is a parameter of LJM_eStreamStart.
+     * TODO: LJM_STREAM_SCANS_RETURN_AVAILABLE is not currently implemented.
+    **/
+    // LJM_STREAM_SCANS_RETURN_AVAILABLE = 3
 };
 
 /**
@@ -1764,21 +1764,21 @@ enum {
 **/
 static const char * const LJM_STREAM_RECEIVE_TIMEOUT_MODE = "LJM_STREAM_RECEIVE_TIMEOUT_MODE";
 enum {
-	/**
-	 * Name: LJM_STREAM_RECEIVE_TIMEOUT_MODE_CALCULATED
-	 * Desc: Calculates how long the stream timeout should be, according to the
-	 *       scan rate reported by the device.
-	 * Note: This is the default LJM_STREAM_RECEIVE_TIMEOUT_MODE.
-	**/
-	LJM_STREAM_RECEIVE_TIMEOUT_MODE_CALCULATED = 1,
+    /**
+     * Name: LJM_STREAM_RECEIVE_TIMEOUT_MODE_CALCULATED
+     * Desc: Calculates how long the stream timeout should be, according to the
+     *       scan rate reported by the device.
+     * Note: This is the default LJM_STREAM_RECEIVE_TIMEOUT_MODE.
+    **/
+    LJM_STREAM_RECEIVE_TIMEOUT_MODE_CALCULATED = 1,
 
-	/**
-	 * Name: LJM_STREAM_RECEIVE_TIMEOUT_MODE_MANUAL
-	 * Desc: Manually sets how long the stream timeout should be.
-	 * Note: The actual stream timeout value is set via
-	 *       LJM_STREAM_RECEIVE_TIMEOUT_MS.
-	**/
-	LJM_STREAM_RECEIVE_TIMEOUT_MODE_MANUAL = 2
+    /**
+     * Name: LJM_STREAM_RECEIVE_TIMEOUT_MODE_MANUAL
+     * Desc: Manually sets how long the stream timeout should be.
+     * Note: The actual stream timeout value is set via
+     *       LJM_STREAM_RECEIVE_TIMEOUT_MS.
+    **/
+    LJM_STREAM_RECEIVE_TIMEOUT_MODE_MANUAL = 2
 };
 
 /**
@@ -1852,18 +1852,18 @@ static const char * const LJM_USE_TCP_INIT_FOR_T7_WIFI_TCP = "LJM_USE_TCP_INIT_F
 **/
 static const char * const LJM_ZERO_LENGTH_ARRAY_MODE = "LJM_ZERO_LENGTH_ARRAY_MODE";
 enum {
-	/**
-	 * Name: LJM_ZERO_LENGTH_ARRAY_ERROR
-	 * Desc: Sets LJM to return an error when an array of size 0 is detected.
-	**/
-	LJM_ZERO_LENGTH_ARRAY_ERROR = 1,
+    /**
+     * Name: LJM_ZERO_LENGTH_ARRAY_ERROR
+     * Desc: Sets LJM to return an error when an array of size 0 is detected.
+    **/
+    LJM_ZERO_LENGTH_ARRAY_ERROR = 1,
 
-	/**
-	 * Name: LJM_ZERO_LENGTH_ARRAY_IGNORE_OPERATION
-	 * Desc: Sets LJM to ignore the operation when all arrays in the
-	 *       operation are of size 0.
-	**/
-	LJM_ZERO_LENGTH_ARRAY_IGNORE_OPERATION = 2
+    /**
+     * Name: LJM_ZERO_LENGTH_ARRAY_IGNORE_OPERATION
+     * Desc: Sets LJM to ignore the operation when all arrays in the
+     *       operation are of size 0.
+    **/
+    LJM_ZERO_LENGTH_ARRAY_IGNORE_OPERATION = 2
 };
 
 // Config functions
@@ -1895,7 +1895,7 @@ LJM_ERROR_RETURN LJM_WriteLibraryConfigS(const char * Parameter, double Value);
  *       valid Values.
 **/
 LJM_ERROR_RETURN LJM_WriteLibraryConfigStringS(const char * Parameter,
-	const char * String);
+    const char * String);
 
 /**
  * Name: LJM_ReadLibraryConfigS
@@ -2018,7 +2018,7 @@ typedef void (*LJM_DeviceReconnectCallback)(int);
  *       LJM_DeviceReconnectCallback.
 **/
 LJM_ERROR_RETURN LJM_RegisterDeviceReconnectCallback(int Handle,
-	LJM_DeviceReconnectCallback Callback);
+    LJM_DeviceReconnectCallback Callback);
 
 
 
