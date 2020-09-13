@@ -42,6 +42,7 @@
     id                   userResult;
     NSWindowController*  userDialogController;
     NSMutableDictionary* variableCheckDictionary;
+    NSMutableArray*      treeCheckArray;
     NSMutableArray*      statusDialogs;
 }
 
@@ -88,10 +89,11 @@
 #pragma mark •••Individual Evaluators
 - (id)		execute:(id) p container:(id)aContainer;
 - (id)		printNode:(id) p;
-- (void)	printAll:(NSArray*)someNodes;
+- (void)	printAll:(NSArray*)someNodes forFunction:(NSString*)fnKey;
 - (id)		sciString:(id) p precision:(id)thePrecision;
 - (id)		fixedString:(id) p precision:(id)thePrecision;
 - (void)    checkForCaseIssues;
+- (void)    checkReferenceCount:(NSString*)fnKey;
 
 @end
 

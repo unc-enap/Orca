@@ -419,10 +419,11 @@ int OrcaScriptYYINPUT(char* theBuffer,unsigned long maxSize)
 	}
 }
 
-- (void) printAll
+- (void) printAll:(NSMutableArray*)inputValues
 {
     BOOL printWholeTree = ([[NSApp currentEvent] modifierFlags] & 0x80000)>0; //option key is down
-
+    [eval setArgs:[NSArray arrayWithArray:inputValues]];
+    
 	NSLog(@"==================================\n");
 	if(printWholeTree)NSLog(@"Syntax Trees for [%@]\n",scriptName);
 	id aKey;
@@ -431,7 +432,7 @@ int OrcaScriptYYINPUT(char* theBuffer,unsigned long maxSize)
 		id someNodes = [functionTable objectForKey:aKey];
 		if(someNodes && ![aKey hasSuffix:@"_ArgNode"]){
 			NSLog(@"Parsing Function: %@\n",aKey);
-            [eval printAll:someNodes];
+            [eval printAll:someNodes forFunction:aKey];
 		}
 	}
 	NSLog(@"==================================\n");

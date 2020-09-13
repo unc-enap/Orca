@@ -107,7 +107,7 @@
 
 #pragma mark ¥¥¥Group Evaluators
 - (void)	evaluateAll:(id) args sender:(id)aSender;
-- (void)	printAll;
+- (void)	printAll:(NSMutableArray*)inputValues;
 
 #pragma mark ¥¥¥Yacc Input
 - (uint32_t)		 yyinputToBuffer:(char* )theBuffer withSize:(int)maxSize;

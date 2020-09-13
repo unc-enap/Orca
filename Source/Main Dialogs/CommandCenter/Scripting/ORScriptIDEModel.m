@@ -561,7 +561,7 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
 		[scriptRunner parse:script];
 		parsedOK = [scriptRunner parsedOK];
 		scriptExists = [scriptRunner scriptExists];
-        [scriptRunner printAll];
+        [scriptRunner printAll:inputValues];
         if(parsedOK)NSLog(@"%@ Parsed OK\n",scriptName);
 	}
 }
