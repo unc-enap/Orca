@@ -145,6 +145,7 @@
 - (void)encodeWithCoder:(NSCoder*)encoder;
 - (void) postCouchDBRecord:(NSDictionary*)aRecord;
 - (void) postCouchDBRecordToHistory:(NSDictionary*)aRecord;
+- (void) addScriptToDictionary:(NSMutableDictionary*)dict;
 
 #pragma mark ***Data ID
 - (uint32_t) dataId;

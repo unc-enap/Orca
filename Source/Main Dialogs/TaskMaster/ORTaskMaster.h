@@ -32,6 +32,7 @@
     @private
     IBOutlet NSView* taskContentView;
 	NSMutableArray*	 runningTasks;
+    bool postScriptsToCouchDB;
 }
 
 + (ORTaskMaster*) sharedTaskMaster;
@@ -40,6 +41,7 @@
 - (void) documentClosed:(NSNotification*)aNote;
 - (void) taskStarted:(NSNotification*)aNote;
 - (void) taskStopped:(NSNotification*)aNote;
+- (void) postRunningScriptsChanged:(NSNotification*)note;
 - (void) postRunningTaskList;
 
 #pragma mark ¥¥¥Accessors
@@ -47,6 +49,8 @@
 
 - (void)addTask:(ORTask*)aTask;
 - (void) removeTask:(ORTask*)aTask;
+
+- (NSString*) fullID;
 
 #pragma mark ¥¥¥Delegate Methods
 

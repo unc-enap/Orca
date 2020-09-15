@@ -42,6 +42,7 @@ NSString* ORCouchDBModelAlertMessageChanged       = @"ORCouchDBModelAlertMessage
 NSString* ORCouchDBModelReplicationRunningChanged = @"ORCouchDBModelReplicationRunningChanged";
 NSString* ORCouchDBModelKeepHistoryChanged		  = @"ORCouchDBModelKeepHistoryChanged";
 NSString* ORCouchDBModelStealthModeChanged		  = @"ORCouchDBModelStealthModeChanged";
+NSString* ORCouchDBModelPostRunningScriptsChanged = @"ORCouchDBModelPostRunningScriptsChanged";
 NSString* ORCouchDBPasswordChanged				  = @"ORCouchDBPasswordChanged";
 NSString* ORCouchDBPortNumberChanged              = @"ORCouchDBPortNumberChanged";
 NSString* ORCouchDBUserNameChanged				  = @"ORCouchDBUserNameChanged";
@@ -388,6 +389,19 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
         [self createDatabases];
     }
 	[[NSNotificationCenter defaultCenter] postNotificationName:ORCouchDBModelStealthModeChanged object:self];
+}
+
+- (BOOL) postRunningScripts
+{
+    return postRunningScripts;
+}
+
+- (void) setPostRunningScripts:(BOOL)postRunning
+{
+    if(postRunning == postRunningScripts) return;
+    [[[self undoManager] prepareWithInvocationTarget:self] setPostRunningScripts:postRunningScripts];
+    postRunningScripts = postRunning;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORCouchDBModelPostRunningScriptsChanged object:self];
 }
 
 - (id) nextObject
@@ -1650,6 +1664,7 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
     }
     replicationCheckCount = 0;
     [self setStealthMode:[decoder decodeBoolForKey:@"stealthMode"]];
+    [self setPostRunningScripts:[decoder decodeBoolForKey:@"postRunningScripts"]];
 
     [[self undoManager] enableUndoRegistration];
 	[self registerNotificationObservers];
@@ -1665,6 +1680,7 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
     [encoder encodeBool:keepHistory             forKey:@"keepHistory"];
     [encoder encodeBool:useHttps                forKey:@"useHttps"];
     [encoder encodeBool:stealthMode             forKey:@"stealthMode"];
+    [encoder encodeBool:postRunningScripts      forKey:@"postRunningScripts"];
     [encoder encodeObject:password              forKey:@"Password"];
     [encoder encodeInteger:portNumber           forKey:@"PortNumber"];
     [encoder encodeObject:userName              forKey:@"UserName"];

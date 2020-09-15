@@ -43,6 +43,7 @@
     IBOutlet NSPopUpButton* alertTypePU;
     IBOutlet NSButton*	  skipDataSetsCB;
     IBOutlet NSButton*    useHttpsCB;
+    IBOutlet NSButton*    postRunningScriptsCB;
 }
 
 #pragma mark ***Interface Management
@@ -63,6 +64,7 @@
 - (void) dataBaseInfoChanged:(NSNotification*)aNote;
 - (void) usingUpdateHandlerChanged:(NSNotification*)aNote;
 - (void) skipDataSetsChanged:(NSNotification*)aNote;
+- (void) postRunningScriptsChanged:(NSNotification*)aNote;
 
 #pragma mark •••Actions
 - (IBAction) startReplicationAction:(id)sender;
@@ -86,4 +88,6 @@
 - (IBAction) postAlertAction:(id)sender;
 - (IBAction) skipDataSetsAction:(id)sender;
 - (IBAction) useHttpsAction:(id)sender;
+- (IBAction) postRunningScriptsAction:(id)sender;
+
 @end
