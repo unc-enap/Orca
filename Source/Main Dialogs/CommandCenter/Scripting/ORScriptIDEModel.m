@@ -587,6 +587,30 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ORCouchDBAddHistoryAdcRecord" object:self userInfo:values];
 }
 
+- (void) addScriptToDictionary:(NSMutableDictionary*)dict
+{
+    if(!dict) return;
+    NSMutableDictionary* values = [NSMutableDictionary dictionary];
+    if(script)      [values setObject:script      forKey:@"script"];
+    else            [values setObject:@""         forKey:@"script"];
+    if(lastFile)    [values setObject:lastFile    forKey:@"lastFile"];
+    else            [values setObject:@""         forKey:@"lastFile"];
+    if(inputValues) [values setObject:inputValues forKey:@"inputValues"];
+    else            [values setObject:@[]         forKey:@"inputValues"];
+    if(comments)    [values setObject:comments    forKey:@"comments"];
+    else            [values setObject:@""         forKey:@"comments"];
+    if(breakpoints) [values setObject:breakpoints forKey:@"breakpoints"];
+    else            [values setObject:@{}         forKey:@"breakpoints"];
+    [values setObject:[NSNumber numberWithBool:breakChain]            forKey:@"breakChain"];
+    [values setObject:[NSNumber numberWithBool:autoStartWithDocument] forKey:@"autoStartWithDocument"];
+    [values setObject:[NSNumber numberWithBool:autoStartWithRun]      forKey:@"autoStartWithRun"];
+    [values setObject:[NSNumber numberWithBool:autoStopWithRun]       forKey:@"autoStopWithRun"];
+    [values setObject:[NSNumber numberWithBool:autoRunAtQuit]         forKey:@"autoRunAtQuit"];
+    [values setObject:[NSNumber numberWithBool:runPeriodically]       forKey:@"runPeriodically"];
+    [values setObject:[NSNumber numberWithInt:periodicRunInterval]    forKey:@"periodicRunInterval"];
+    [dict setObject:values forKey:scriptName];
+}
+
 - (BOOL) runScriptWithMessage:(NSString*) startMessage
 {
 	parsedOK = YES;

@@ -21,6 +21,10 @@
 
 #import "ORTaskMaster.h"
 #import "ORTask.h"
+#import "ORCouchDBModel.h"
+#import "ORScriptInterface.h"
+#import "ORScriptTaskModel.h"
+#import "ORScriptRunner.h"
 #import "SynthesizeSingleton.h"
 
 @implementation ORTaskMaster
@@ -31,6 +35,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(TaskMaster);
 {
     self = [super initWithWindowNibName:@"TaskMaster"];
 	[self setWindowFrameAutosaveName:@"TaskMaster"];
+    postScriptsToCouchDB = NO;
 	[self registerNotificationObservers];
     return self;
 }
@@ -70,6 +75,13 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(TaskMaster);
     }
     [[aTask view] removeFromSuperview];
     [self tileTaskViews];
+}
+
+// respond to fullID like OrcaObjects to allow posting to the CouchDB object if it is present
+// should only be one task master around, so no need to keep track of unique identifier
+- (NSString*) fullID
+{
+    return @"ORTaskMaster";
 }
 
 - (void) tileTaskViews
@@ -133,6 +145,10 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(TaskMaster);
                          name : ORTaskDidFinishNotification
                        object : nil];
     
+    [notifyCenter addObserver : self
+                     selector : @selector(postRunningScriptsChanged:)
+                         name : ORCouchDBModelPostRunningScriptsChanged
+                       object : nil];
 }
 
 - (void) taskStarted:(NSNotification*)aNote
@@ -152,17 +168,39 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(TaskMaster);
 	[self postRunningTaskList];
 }
 
+- (void) postRunningScriptsChanged:(NSNotification*)note
+{
+    id obj = [note object];
+    if(!obj) return;
+    if(![obj isKindOfClass:[ORCouchDBModel class]]) return;
+    postScriptsToCouchDB = [obj postRunningScripts];
+    if(postScriptsToCouchDB) [self postRunningTaskList];
+}
+
 - (void) postRunningTaskList
 {
 	NSString* taskList = [NSString string];
+    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+    NSMutableArray* scriptTasks = [NSMutableArray array];
 	for(id aTask in runningTasks){
 		taskList = [taskList stringByAppendingFormat:@"%@,",[aTask title]];
+        if(postScriptsToCouchDB && [aTask isKindOfClass:[ORScriptInterface class]]){
+            id script = [aTask delegate];
+            if(!script) continue;
+            if([script isKindOfClass:[ORScriptTaskModel class]]){
+                [scriptTasks addObject:[aTask title]];
+                [script addScriptToDictionary:dict];
+            }
+        }
 	}
 	//take off the trailing ','
 	taskList = [taskList stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@","]];
-    [[NSNotificationCenter defaultCenter]
-                postNotificationName:@"Running Tasks"
-							  object:taskList];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"Running Tasks" object:taskList];
+    // post the running script dictionaries to the database if option is set
+    if(postScriptsToCouchDB){
+        [dict setObject:scriptTasks forKey:@"runningTasks"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ORCouchDBAddObjectRecord" object:self userInfo:dict];
+    }
 }
 
 - (void) documentClosed:(NSNotification*)aNote

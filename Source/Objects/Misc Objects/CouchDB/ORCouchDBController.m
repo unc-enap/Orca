@@ -174,6 +174,10 @@
                          name : ORCouchDBModelSkipDataSetsChanged
                         object: model];
 
+    [notifyCenter addObserver : self
+                     selector : @selector(postRunningScriptsChanged:)
+                         name : ORCouchDBModelPostRunningScriptsChanged
+                       object : model];
 }
 
 - (void) updateWindow
@@ -194,6 +198,7 @@
 	[self replicationRunningChanged:nil];
     [self usingUpdateHandlerChanged:nil];
     [self skipDataSetsChanged:nil];
+    [self postRunningScriptsChanged:nil];
 }
 
 - (void) skipDataSetsChanged:(NSNotification*)aNote
@@ -272,6 +277,11 @@
 	[historyDataBaseNameField setStringValue:[model historyDatabaseName]];
 }
 
+- (void) postRunningScriptsChanged:(NSNotification*)aNote
+{
+    [postRunningScriptsCB setIntValue:[model postRunningScripts]];
+}
+
 - (void) couchDBLockChanged:(NSNotification*)aNote
 {
     BOOL locked = [gSecurity isLocked:ORCouchDBLock];
@@ -286,6 +296,7 @@
     [stealthModeButton   setEnabled:!locked];
     [skipDataSetsCB      setEnabled:!locked];
     [useHttpsCB          setEnabled:!locked];
+    [postRunningScriptsCB setEnabled:!locked];
 }
 
 - (void) checkGlobalSecurity
@@ -531,6 +542,12 @@
     [self endEditing];
     [model clearAlert];
 }
+
+- (IBAction) postRunningScriptsAction:(id)sender
+{
+    [model setPostRunningScripts:[sender intValue]];
+}
+
 @end
 
 #if !defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
