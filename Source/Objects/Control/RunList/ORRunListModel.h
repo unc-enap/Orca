@@ -84,6 +84,8 @@
 
 - (id)   initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
+
+- (void) postCouchDBRecord:(NSNotification*)note;
 @end
 
 extern NSString* ORRunListModelTimesToRepeatChanged;
