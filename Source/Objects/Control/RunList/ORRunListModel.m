@@ -274,6 +274,11 @@ static NSString* ORRunListDataOut1	= @"ORRunListDataOut1";
                      selector : @selector(runHalted:)
                          name : ORRunModelRunHalted
                        object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(postCouchDBRecord:)
+                         name : ORRunListRunStateChanged
+                       object : nil];
 }
 
 - (void)runHalted:(NSNotification*)aNote
@@ -370,6 +375,48 @@ static NSString* ORRunListDataOut1	= @"ORRunListDataOut1";
 	}
     [[NSNotificationCenter defaultCenter] postNotificationName:ORRunListModelReloadTable object:self];    
 }
+
+- (void) postCouchDBRecord:(NSNotification*)note
+{
+    if([note object] && [note object] != self) return;
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(postCouchDBRecord:) object:nil];
+    NSMutableDictionary* values = [NSMutableDictionary dictionary];
+    [values setObject:@"RunList" forKey:@"title"];
+    [values setObject:[self runStateName] forKey:@"runState"];
+    if(items)    [values setObject:items      forKey:@"items"];
+    if(lastFile) [values setObject:lastFile   forKey:@"lastFile"];
+    [values setObject:[NSNumber numberWithFloat:totalExpectedTime] forKey:@"totalExpectedTime"];
+    [values setObject:[NSNumber numberWithFloat:accumulatedTime]   forKey:@"accumulatedTime"];
+    [values setObject:[NSNumber numberWithFloat:runLength]         forKey:@"runLength"];
+    [values setObject:[NSNumber numberWithFloat:runTimeElapsed]    forKey:@"runTimeElapsed"];
+    [values setObject:[NSNumber numberWithFloat:skippedTime]       forKey:@"skippedTime"];
+    [values setObject:[NSNumber numberWithBool:randomize]          forKey:@"randomize"];
+    [values setObject:[NSNumber numberWithInt:runListState]        forKey:@"runListState"];
+    [values setObject:[NSNumber numberWithInt:nextState]           forKey:@"nextState"];
+    [values setObject:[NSNumber numberWithInt:timesToRepeat]       forKey:@"timesToRepeat"];
+    [values setObject:[NSNumber numberWithInt:executionCount]      forKey:@"executionCount"];
+    NSDateFormatter* dformat = [[NSDateFormatter alloc] init];
+    dformat.dateFormat = @"yyyy/MM/dd HH:mm:ss";
+    if(timeStarted)    [values setObject:[dformat stringFromDate:timeStarted]    forKey:@"timeStarted"];
+    if(timeRunStarted) [values setObject:[dformat stringFromDate:timeRunStarted] forKey:@"timeRunStarted"];
+    if(scriptAtStartModel){
+        NSMutableDictionary* startDict = [NSMutableDictionary dictionary];
+        [scriptAtStartModel addScriptToDictionary:startDict];
+        [values setObject:startDict forKey:@"scriptAtStartModel"];
+    }
+    if(scriptAtEndModel){
+        NSMutableDictionary* endDict = [NSMutableDictionary dictionary];
+        [scriptAtEndModel addScriptToDictionary:endDict];
+        [values setObject:endDict forKey:@"scriptAtEndModel"];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ORCouchDBAddObjectRecord"
+                                                        object:self
+                                                      userInfo:values];
+    if(runListState == kStartup       || runListState == kWaitForScript ||
+       runListState == kWaitForSubRun || runListState == kWaitForRunTime)
+        [self performSelector:@selector(postCouchDBRecord:) withObject:nil afterDelay:10];
+}
+
 
 - (NSString*) runStateName
 {
