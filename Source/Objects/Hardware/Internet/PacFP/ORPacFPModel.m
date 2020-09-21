@@ -519,7 +519,7 @@ NSString* ORPacFPLock						= @"ORPacFPLock";
 
 - (double) adcVoltage:(int)index
 {
-	if(index<0 && index>=8)return 0.0;
+	if(index<0 || index>=8)return 0.0;
 	else  return adc[index];
 	//else return 5.0 * adc[index]/65535.0;
 }
@@ -539,7 +539,7 @@ NSString* ORPacFPLock						= @"ORPacFPLock";
 {
 	float theValue = kBadPacFPValue; //a 'bad' value as default
 	@synchronized (self){
-		if(index<0 && index>=8) return 0.0;
+		if(index<0 || index>=8) return 0.0;
                 
 		float temperatureConstants[8][2] = {
 			{1.0	,	0.0}, //for PAC object this was 	 	{100.0	,	-50.0}, now we get already converted values from FP -tb-

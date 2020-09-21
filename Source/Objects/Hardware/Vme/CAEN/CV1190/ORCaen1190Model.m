@@ -550,7 +550,7 @@ NSString* ORCaen1190RateGroupChangedNotification    = @"ORCaen1190RateGroupChang
 				
 				//extract the chan info so the rates can be computed.
 				int i;
-				for(i=0;i<<wordCount;i++){
+				for(i=0;i<wordCount;i++){
 					if((dataBuffer[2+i] >> 27) == 0x00){
 						short chan = (dataBuffer[2+i]>>19) & 0x7f;
 						tdcCount[chan]++;
