@@ -50,6 +50,7 @@
     NSDate*					nextPeriodicRun;
     NSMutableDictionary*    persistantStore;
     NSMutableDictionary*    temporaryStore;
+    BOOL                    readOnly;
 }
 
 #pragma mark ***Initialization
@@ -90,6 +91,8 @@
 - (void) setAutoStartWithRun:(BOOL)aAutoStartWithRun;
 - (BOOL) autoStartWithDocument;
 - (void) setAutoStartWithDocument:(BOOL)aAutoStartWithDocument;
+- (BOOL) readOnly;
+- (void) setReadOnly:(BOOL)ronly;
 
 - (BOOL)	breakChain;
 - (void)	setBreakChain:(BOOL)aState;
@@ -179,6 +182,7 @@ extern NSString* ORScriptIDEModelLastFileChangedChanged;
 extern NSString* ORScriptIDEModelBreakpointsChanged;
 extern NSString* ORScriptIDEModelBreakChainChanged;
 extern NSString* ORScriptIDEModelGlobalsChanged;
+extern NSString* ORScriptIDEModelReadOnlyChanged;
 
 @interface ORScriptDecoderForState : ORBaseDecoder
 {}

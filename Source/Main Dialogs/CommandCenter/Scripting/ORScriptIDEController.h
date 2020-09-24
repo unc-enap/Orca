@@ -44,7 +44,10 @@
 	IBOutlet NSButton*			runButton;
 	IBOutlet NSMatrix*			argsMatrix;
 	IBOutlet id					loadSaveView;
+    IBOutlet id                 confirmReadOnlyView;
 	IBOutlet NSButton*			loadSaveButton;
+    IBOutlet NSButton*          loadFileButton;
+    IBOutlet NSButton*          loadFileReadOnlyButton;
 	IBOutlet NSTextView*		helpView;
 	IBOutlet NSDrawer*			helpDrawer;
 	IBOutlet NSDrawer*			debuggerDrawer;
@@ -98,6 +101,7 @@
 - (void) debuggingChanged:(NSNotification*)aNote;
 - (void) debuggerStateChanged:(NSNotification*)aNote;
 - (void) displayDictionaryChanged:(NSNotification*)aNote;
+- (void) readOnlyChanged:(NSNotification*)aNote;
 - (void) breakpointsAction:(NSNotification*)aNote;
 
 #pragma mark •••Actions
@@ -122,6 +126,9 @@
 - (IBAction) runScript:(id) sender;
 - (IBAction) nameAction:(id) sender;
 - (IBAction) loadFileAction:(id) sender;
+- (IBAction) loadFileReadOnlyAction:(id) sender;
+- (IBAction) confirmLoadFileReadOnlyAction:(id) sender;
+- (IBAction) cancelLoadFileReadOnlyAction:(id) sender;
 - (IBAction) saveAsFileAction:(id) sender;
 - (IBAction) saveFileAction:(id) sender;
 - (IBAction) addInput:(id)sender;
