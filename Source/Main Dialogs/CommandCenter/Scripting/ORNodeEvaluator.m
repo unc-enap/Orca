@@ -679,6 +679,7 @@
         if([[globalSymbolTable allKeys] indexOfObject:key] != NSNotFound) continue;
         if([key isEqualTo:@"main"]) continue;
         if([[functionTable allKeys] indexOfObject:key] != NSNotFound) continue;
+        if(NSClassFromString(key)) continue;
         // now check if this is an argument to a function
         id argNode = [functionTable objectForKey:[NSString stringWithFormat:@"%@_ArgNode", fnKey]];
         NSMutableArray* fnArgs = [NSMutableArray array];

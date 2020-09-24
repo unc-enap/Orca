@@ -46,6 +46,7 @@ NSString* ORScriptIDEModelLock						= @"ORScriptIDEModelLock";
 NSString* ORScriptIDEModelBreakpointsChanged		= @"ORScriptIDEModelBreakpointsChanged";
 NSString* ORScriptIDEModelBreakChainChanged			= @"ORScriptIDEModelBreakChainChanged";
 NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
+NSString* ORScriptIDEModelReadOnlyChanged           = @"ORScriptIDEModelReadOnlyChanged";
 
 @interface ORScriptIDEModel (private)
 - (void) scheduleNextPeriodicRun;
@@ -57,6 +58,7 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
 - (id) init
 {
 	self = [super init];
+    readOnly = NO;
 	[self registerNotificationObservers];
 	return self;
 }
@@ -340,6 +342,18 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
 
     [[NSNotificationCenter defaultCenter] postNotificationName:ORScriptIDEModelAutoStartWithDocumentChanged object:self];
 	[self setUpImage];
+}
+
+- (BOOL) readOnly
+{
+    return readOnly;
+}
+
+- (void) setReadOnly:(BOOL)ronly
+{
+    [[[self undoManager] prepareWithInvocationTarget:self] setReadOnly:readOnly];
+    readOnly = ronly;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORScriptIDEModelReadOnlyChanged object:self];
 }
 
 - (BOOL) breakChain
@@ -973,6 +987,7 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
     [self setAutoStartWithRun:		[decoder decodeBoolForKey:@"autoStartWithRun"]];
     [self setAutoStartWithDocument:	[decoder decodeBoolForKey:@"autoStartWithDocument"]];
 	[self setBreakChain:			[decoder decodeBoolForKey:@"breakChain"]];
+    [self setReadOnly:              [decoder decodeBoolForKey:@"readOnly"]];
 	[self setComments:				[decoder decodeObjectForKey:@"comments"]];
     [self setScript:				[decoder decodeObjectForKey:@"script"]];
     [self setScriptName:			[decoder decodeObjectForKey:@"scriptName"]];
@@ -999,6 +1014,7 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
     [encoder encodeBool:autoStartWithRun		forKey:@"autoStartWithRun"];
     [encoder encodeBool:autoStartWithDocument	forKey:@"autoStartWithDocument"];
     [encoder encodeBool:breakChain				forKey:@"breakChain"];
+    [encoder encodeBool:readOnly                forKey:@"readOnly"];
     [encoder encodeObject:comments				forKey:@"comments"];
     [encoder encodeObject:script				forKey:@"script"];
     [encoder encodeObject:scriptName			forKey:@"scriptName"];
