@@ -1,0 +1,11 @@
+//  Orca.xcconfig
+//  Orca
+//
+//  Created by Tom Caldwell on 10/24/20
+
+// Set the system applications directory, so that the Mail application can be found.
+// Starting with Catalina (10.15), this was moved.  Assume this is the default for
+// future releases, set the default for macos 10, and then add the exception for Catalina.
+APPLICATIONS_DIRECTORY[sdk=macosx*]     = /System/Applications
+APPLICATIONS_DIRECTORY[sdk=macosx10*]   = /Applications
+APPLICATIONS_DIRECTORY[sdk=macosx10.15] = /System/Applications

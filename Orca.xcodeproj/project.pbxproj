@@ -3545,6 +3545,8 @@
 		E6983CAE219DB45700029B9C /* ORCamacExceptions.h in Headers */ = {isa = PBXBuildFile; fileRef = E6983CAD219DB45600029B9C /* ORCamacExceptions.h */; };
 		E6C2E7F223A9845700673DB8 /* ORFlashCamADCModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E6C2E7F123A9845700673DB8 /* ORFlashCamADCModel.m */; };
 		E6C2E7F523A984B900673DB8 /* ORFlashCamADCController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6C2E7F423A984B900673DB8 /* ORFlashCamADCController.m */; };
+		E6C583252544CA2A00567B9A /* Orca.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E6C583242544CA2A00567B9A /* Orca.xcconfig */; };
+		E6C583262544CA2A00567B9A /* Orca.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E6C583242544CA2A00567B9A /* Orca.xcconfig */; };
 		E6CC0769244405DE00D8DE0F /* Mail.app in Resources */ = {isa = PBXBuildFile; fileRef = E6CC0768244405DD00D8DE0F /* Mail.app */; };
 		E6DC1B4B243A240500A559F0 /* ORURLSession.m in Sources */ = {isa = PBXBuildFile; fileRef = E6DC1B49243A240400A559F0 /* ORURLSession.m */; };
 		E6DC1B4C243A240500A559F0 /* ORURLSession.h in Headers */ = {isa = PBXBuildFile; fileRef = E6DC1B4A243A240400A559F0 /* ORURLSession.h */; };
@@ -7328,7 +7330,8 @@
 		E6C2E7F123A9845700673DB8 /* ORFlashCamADCModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamADCModel.m; sourceTree = "<group>"; };
 		E6C2E7F323A9848E00673DB8 /* ORFlashCamADCController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORFlashCamADCController.h; sourceTree = "<group>"; };
 		E6C2E7F423A984B900673DB8 /* ORFlashCamADCController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamADCController.m; sourceTree = "<group>"; };
-		E6CC0768244405DD00D8DE0F /* Mail.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = Mail.app; path = ../../../../../../../../Applications/Mail.app; sourceTree = "<group>"; };
+		E6C583242544CA2A00567B9A /* Orca.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Orca.xcconfig; sourceTree = "<group>"; };
+		E6CC0768244405DD00D8DE0F /* Mail.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = Mail.app; path = $APPLICATIONS_DIRECTORY/Mail.app; sourceTree = "<absolute>"; };
 		E6DC1B49243A240400A559F0 /* ORURLSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORURLSession.m; sourceTree = "<group>"; };
 		E6DC1B4A243A240400A559F0 /* ORURLSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORURLSession.h; sourceTree = "<group>"; };
 		EF69C430116E5DC3008ABADC /* ORSNOCrateReadout.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ORSNOCrateReadout.cc; sourceTree = "<group>"; };
@@ -7644,6 +7647,7 @@
 		2A37F4AAFDCFA73011CA2CEA /* Orca */ = {
 			isa = PBXGroup;
 			children = (
+				E6C583242544CA2A00567B9A /* Orca.xcconfig */,
 				846574BF1F9D449500B4BAA9 /* Orca.entitlements */,
 				F5AD34B203A7AEB8015F64B1 /* Readme.md */,
 				F51E693F03AE4775015F64B1 /* Source */,
@@ -16835,6 +16839,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6C583262544CA2A00567B9A /* Orca.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -17099,6 +17104,7 @@
 				A8175F88220D8D07003AC7E5 /* ADEIControl.png in Resources */,
 				84D0593F08FF39EA00A99A83 /* goBackPressed.tif in Resources */,
 				8408A4BB09071C6A004A3B34 /* HV2132.nib in Resources */,
+				E6C583252544CA2A00567B9A /* Orca.xcconfig in Resources */,
 				8408A4BC09071C6A004A3B34 /* HV2132Card.tif in Resources */,
 				845F745709296E1000A2F593 /* madeWithCocoa.tiff in Resources */,
 				840E00030944B29000049827 /* edu.washington.npl.orca.Process.plist in Resources */,
@@ -19162,6 +19168,7 @@
 /* Begin XCBuildConfiguration section */
 		369E73401C7B5E6400A7F89E /* Development */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E6C583242544CA2A00567B9A /* Orca.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -19212,6 +19219,7 @@
 		};
 		369E73411C7B5E6400A7F89E /* Deployment */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E6C583242544CA2A00567B9A /* Orca.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -19256,6 +19264,7 @@
 		};
 		369E73421C7B5E6400A7F89E /* Default */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E6C583242544CA2A00567B9A /* Orca.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -19300,6 +19309,7 @@
 		};
 		840C7FF11955CA5A00E36622 /* Development */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E6C583242544CA2A00567B9A /* Orca.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -19343,6 +19353,7 @@
 		};
 		840C7FF21955CA5A00E36622 /* Deployment */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E6C583242544CA2A00567B9A /* Orca.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -19380,6 +19391,7 @@
 		};
 		840C7FF31955CA5A00E36622 /* Default */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E6C583242544CA2A00567B9A /* Orca.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -19417,6 +19429,7 @@
 		};
 		84F201BB0B6531990084F4C3 /* Development */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E6C583242544CA2A00567B9A /* Orca.xcconfig */;
 			buildSettings = {
 				" CFBundlerHelpBookFolder" = OrcaHelp;
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -19501,6 +19514,7 @@
 		};
 		84F201BC0B6531990084F4C3 /* Deployment */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E6C583242544CA2A00567B9A /* Orca.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CFBundleHelpBookName = OrcaHelp;
@@ -19579,6 +19593,7 @@
 		};
 		84F201BD0B6531990084F4C3 /* Default */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E6C583242544CA2A00567B9A /* Orca.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_WEAK = YES;
