@@ -70,7 +70,7 @@
 {
 	[scriptView setSelectedRange: NSMakeRange(0,0)];
 	[super setModel:aModel];
-	[[self window] setTitle:[NSString stringWithFormat:@"Script: %@",[model identifier]]];
+    [self nameChanged:nil];
 	[[self window] makeFirstResponder:scriptView];
 	[breakChainButton setTransparent:[model nextScriptConnector]==nil];
     [inputVariablesTableView reloadData];
@@ -227,6 +227,10 @@
                          name : ORScriptIDEModelNextPeriodicRunChanged
 						object: model];
 
+    [notifyCenter addObserver : self
+                     selector : @selector(readOnlyChanged:)
+                         name : ORScriptIDEModelReadOnlyChanged
+                       object : model];
 }
 
 - (void) updateWindow
@@ -250,6 +254,7 @@
 	[self autoRunAtQuitChanged:nil];
 	[self runPeriodicallyChanged:nil];
 	[self periodicRunIntervalChanged:nil];
+    [self readOnlyChanged:[NSNotification notificationWithName:ORScriptIDEModelReadOnlyChanged object:model]];
 }
 
 - (void) checkGlobalSecurity
@@ -335,8 +340,8 @@
     BOOL    okToRunManually = ![[model guardian] isKindOfClass:NSClassFromString(@"ORRunModel")];
     [lockButton setState: locked];
 	
-    [addInputButton setEnabled:!locked];
-	[removeInputButton setEnabled:!locked && ([[inputVariablesTableView selectedRowIndexes] count] > 0)];
+    [addInputButton setEnabled:!locked && ![model readOnly]];
+	[removeInputButton setEnabled:!locked && ([[inputVariablesTableView selectedRowIndexes] count] > 0) && ![model readOnly]];
     [periodicRunIntervalField setEnabled:!locked && [model runPeriodically]];
     [runButton setEnabled:!locked  & okToRunManually];
     
@@ -348,7 +353,7 @@
     [autoStartWithDocumentCB setEnabled:!locked & okToRunManually];
     [debuggerButton setEnabled:!locked & okToRunManually];
     [nameField setEnabled:!locked];
-    [insertCodeButton setEnabled:!locked];
+    [insertCodeButton setEnabled:!locked && ![model readOnly]];
 }
 
 - (void) debuggerStateChanged:(NSNotification*)aNote
@@ -429,7 +434,10 @@
 - (void) nameChanged:(NSNotification*)aNote
 {
 	[nameField setStringValue:[model scriptName]];
-	[[self window] setTitle:[NSString stringWithFormat:@"Script: %@",[model scriptName]]];
+    if([model readOnly])
+        [[self window] setTitle:[NSString stringWithFormat:@"Script: %@ (READ ONLY)", [model scriptName]]];
+    else
+        [[self window] setTitle:[NSString stringWithFormat:@"Script: %@",[model scriptName]]];
 }
 
 - (void) errorChanged:(NSNotification*)aNote
@@ -470,6 +478,24 @@
 	[stepInButton setEnabled:NO];
 	[stepOutButton setEnabled:NO];
 	[pauseButton setEnabled:[[model scriptRunner] debugging] && [model running]];
+}
+
+- (void) readOnlyChanged:(NSNotification*)aNote
+{
+    id obj = nil;
+    if(aNote) obj = [aNote object];
+    bool nro = YES;
+    if(obj) nro = ![obj readOnly];
+    [loadFileButton           setEnabled:nro];
+    [loadFileReadOnlyButton   setEnabled:nro];
+    [scriptView               setEditable:nro];
+    [inputVariablesTableView  setEnabled:nro];
+    [outputVariablesTableView setEnabled:nro];
+    [addInputButton           setEnabled:nro];
+    [removeInputButton        setEnabled:nro];
+    [insertCodeButton         setEnabled:nro];
+    [codeHelperPU             setEnabled:nro];
+    [self nameChanged:aNote];
 }
 
 #pragma mark •••Actions
@@ -670,6 +696,61 @@
     }];
 }
 
+- (IBAction) loadFileReadOnlyAction:(id) sender
+{
+    [loadSaveView orderOut:self];
+#if defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
+    [[[NSApplication sharedApplication] keyWindow]  endSheet:loadSaveView];
+    [[self window] beginSheet:confirmReadOnlyView completionHandler:nil];
+#else
+    [[NSApplication sharedApplication] endSheet:loadSaveView];
+    [[NSApplication sharedApplication] beginSheet:confirmReadOnlyView
+                                   modalForWindow:[self window]
+                                    modalDelegate:self
+                                   didEndSelector:NULL
+                                      contextInfo:NULL];
+#endif
+}
+
+- (IBAction) confirmLoadFileReadOnlyAction:(id) sender
+{
+    [confirmReadOnlyView orderOut:self];
+#if defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
+    [[[NSApplication sharedApplication]keyWindow]  endSheet:confirmReadOnlyView];
+#else
+    [[NSApplication sharedApplication]  endSheet:confirmReadOnlyView];
+#endif
+    // setup the file selection panel
+    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+    [openPanel setCanChooseDirectories:NO];
+    [openPanel setCanChooseFiles:YES];
+    [openPanel setAllowsMultipleSelection:NO];
+    [openPanel setPrompt:@"Choose"];
+    NSString* startingDir;
+    NSString* fullPath = [[model lastFile] stringByExpandingTildeInPath];
+    if(fullPath) startingDir = [fullPath stringByDeletingLastPathComponent];
+    else         startingDir = NSHomeDirectory();
+    // load the file
+    [openPanel setDirectoryURL:[NSURL fileURLWithPath:startingDir]];
+    [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result){
+        if (result == NSFileHandlingPanelOKButton) {
+            [model loadScriptFromFile:[[openPanel URL]path]];
+        }
+    }];
+    // set the script task to be "read only" which just means that some editable fields will be disabled
+    [model setReadOnly:YES];
+}
+
+- (IBAction) cancelLoadFileReadOnlyAction:(id) sender
+{
+    [confirmReadOnlyView orderOut:self];
+#if defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
+
+    [[[NSApplication sharedApplication]keyWindow] endSheet:confirmReadOnlyView];
+#else
+    [[NSApplication sharedApplication] endSheet:confirmReadOnlyView];
+#endif
+}
 
 - (IBAction) saveAsFileAction:(id) sender
 {

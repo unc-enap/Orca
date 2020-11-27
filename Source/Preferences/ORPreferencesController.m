@@ -589,7 +589,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(PreferencesController);
     [setPassWordField setStringValue:@""];
     [confirmSetPassWordField setStringValue:@""];
     
-    [[self window] beginSheet:changePassWordPanel completionHandler:^(NSModalResponse returnCode){
+    [[self window] beginSheet:setPassWordPanel completionHandler:^(NSModalResponse returnCode){
         if(returnCode == NSModalResponseOK){
             if([[setPassWordField stringValue] length] == 0){
                 if(!disallowStateChange)[self setLockState:YES];

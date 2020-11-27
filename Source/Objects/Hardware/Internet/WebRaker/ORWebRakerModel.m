@@ -141,7 +141,7 @@ NSString* ORWebRakerMaxValueChanged        = @"ORWebRakerMaxValueChanged";
             theData = [[[data objectAtIndex:index]copy] autorelease];
         }
     }
-    return theData;;
+    return theData;
 }
 
 
@@ -384,20 +384,25 @@ NSString* ORWebRakerMaxValueChanged        = @"ORWebRakerMaxValueChanged";
 	return s;
 }
 
+- (float) rakerValue:(int)aChan
+{
+    float theValue = 0.0;
+    @synchronized(self){
+        if(aChan >= 0 && aChan < [data count])
+            theValue = [[[data objectAtIndex:aChan] objectForKey:@"value"] floatValue];
+    }
+    return theValue;
+}
+
 - (BOOL) processValue:(int)aChan
 {
-	BOOL theValue = 0;
-	@synchronized(self){
-        if(aChan>=0 && aChan<[data count]){
-            theValue = [[[data objectAtIndex:aChan]objectForKey:@"value"] floatValue];
-        }
-	}
-	return theValue;
+    if([self rakerValue:aChan] == 0.0) return NO;
+    else return YES;
 }
 
 - (double) convertedValue:(int)aChan
 {
-    return [self processValue:aChan];
+    return [self rakerValue:aChan];
 }
 
 - (void) setProcessOutput:(int)aChan value:(int)aValue

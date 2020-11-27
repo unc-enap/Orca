@@ -691,10 +691,11 @@ int32_t eAIN(HANDLE Handle, u6CalibrationInfo *CalibrationInfo, int32_t ChannelP
         return -1;
     }
 
-    if( Settling < 0 && Settling > 4 ){
+    // probably should be || in line below, but comment out since always evaluated to false
+    /*if( Settling < 0 && Settling > 4 ){
         NSLog(@"eAIN error: Invalid Settling value\n");
         return -1;
-    }
+    }*/
 
     /* Setting up Feedback command to read analog input */
     sendDataBuff[0] = 3;    //IOType is AIN24AR
@@ -818,10 +819,11 @@ int32_t eTCConfig(HANDLE Handle, int32_t *aEnableTimers, int32_t *aEnableCounter
     int sendDataBuffSize, i;
     int32_t error;
  
-    if( TCPinOffset < 0 && TCPinOffset > 8){
+    // probably should be || in line below, but comment out since always evaluated to false
+    /*if( TCPinOffset < 0 && TCPinOffset > 8){
         NSLog(@"eTCConfig error: Invalid TCPinOffset.\n");
         return -1;
-    }
+    }*/
 
     /* ConfigTimerClock */
     if( TimerClockBaseIndex == LJ_tc4MHZ || TimerClockBaseIndex ==  LJ_tc12MHZ || TimerClockBaseIndex == LJ_tc48MHZ ||

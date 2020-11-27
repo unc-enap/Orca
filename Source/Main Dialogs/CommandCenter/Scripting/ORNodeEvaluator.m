@@ -149,6 +149,7 @@
 	[symbolTableLock release];
 	[functionName release];
     [variableCheckDictionary release];
+    [treeCheckArray release];
     for(ORStatusController* aShowDialog in statusDialogs){
         [aShowDialog close];
     }
@@ -230,7 +231,7 @@
 }
 
 - (void) setArgs:(id)someArgs
-{	
+{
 	int i=0;
 	id anItem;
 	NSEnumerator* e = [someArgs objectEnumerator];
@@ -350,6 +351,9 @@
         if(!symbolTable)symbolTable = [[self makeSymbolTable] retain];
         aValue  = [symbolTable threadSafeObjectForKey:aKey usingLock:symbolTableLock];
         if(!aValue){
+            NSLogColor([NSColor blueColor],
+                       @"[%@] info: adding previously undefined symbol %@ with 0 value\n",
+                       [self scriptName], aKey);
             aValue = _zero;
             [self setValue:aValue forSymbol:aKey];
         }
@@ -602,14 +606,17 @@
 	return _zero;
 }
 
-- (void) printAll:(NSArray*)someNodes
+- (void) printAll:(NSArray*)someNodes forFunction:fnKey
 {
     [variableCheckDictionary release];
     variableCheckDictionary = nil;
+    [treeCheckArray release];
+    treeCheckArray = nil;
 	for(id aNode in someNodes){
 		[self printNode:aNode];
 	}
     [self checkForCaseIssues];
+    [self checkReferenceCount:fnKey];
 }
 
 - (void) checkForCaseIssues
@@ -627,6 +634,65 @@
     }
 }
 
+- (void) addFunctionArgs:(NSArray*)operands toArray:(NSMutableArray*)fnArgs
+{
+    for(id op in operands){
+        id nodeData = [op nodeData];
+        if([nodeData isKindOfClass:[NSString class]])
+            [fnArgs addObject:[NSString stringWithString:nodeData]];
+        else if([nodeData isKindOfClass:[OprNode class]])
+            [self addFunctionArgs:[nodeData operands] toArray:fnArgs];
+    }
+}
+
+- (void) checkReferenceCount:(NSString*)fnKey
+{
+    // count the references to each identifier in the collection of node trees
+    NSMutableDictionary* referenceCount = [NSMutableDictionary dictionary];
+    for(NSString* tree in treeCheckArray){
+        NSArray* lines = [tree componentsSeparatedByString:@"\n"];
+        for(NSString* line in lines){
+            // it shouldn't happen that there are multiple identifiers in a line, but allow for it anyway
+            NSRange r0 = [line rangeOfString:@"ident(" options:NSCaseInsensitiveSearch];
+            while(r0.location != NSNotFound){
+                NSRange r1 = NSMakeRange(r0.location+r0.length, line.length-r0.location-r0.length);
+                NSRange r2 = [line rangeOfString:@")" options:NSCaseInsensitiveSearch range:r1];
+                if(r2.location != NSNotFound){
+                    NSString* var = [line substringWithRange:NSMakeRange(r1.location, r2.location-r1.location)];
+                    id obj = [referenceCount objectForKey:var];
+                    if(obj) [referenceCount setObject:[NSNumber numberWithInt:[obj intValue]+1] forKey:var];
+                    else [referenceCount setObject:[NSNumber numberWithInt:0] forKey:var];
+                    NSRange r3 = NSMakeRange(r2.location+r2.length, line.length-r2.location-r2.length);
+                    r0 = [line rangeOfString:@"ident(" options:NSCaseInsensitiveSearch range:r3];
+                }
+                else r0 = NSMakeRange(NSNotFound, 0);
+            }
+        }
+    }
+    NSArray* ignoreSymbols = [NSArray arrayWithObjects:@"nil",@"NULL",@"FALSE",@"false",@"true",@"TRUE",
+                               @"no",@"NO",@"yes",@"YES",@"pointx",@"pointy",@"rectx",@"rectw",@"recth",
+                               @"rangeloc",@"rangelen",nil];
+    // print warnings for identifiers occurring only once, skip function names, special case for function arguments
+    for(id key in referenceCount){
+        if([[referenceCount objectForKey:key] intValue] > 0) continue;
+        if([ignoreSymbols indexOfObject:key] != NSNotFound) continue;
+        if([[globalSymbolTable allKeys] indexOfObject:key] != NSNotFound) continue;
+        if([key isEqualTo:@"main"]) continue;
+        if([[functionTable allKeys] indexOfObject:key] != NSNotFound) continue;
+        if(NSClassFromString(key)) continue;
+        // now check if this is an argument to a function
+        id argNode = [functionTable objectForKey:[NSString stringWithFormat:@"%@_ArgNode", fnKey]];
+        NSMutableArray* fnArgs = [NSMutableArray array];
+        if(argNode){
+            id nodeData = [argNode nodeData];
+            if([nodeData isKindOfClass:[NSString class]]) [fnArgs addObject:[NSString stringWithString:nodeData]];
+            else [self addFunctionArgs:[nodeData operands] toArray:fnArgs];
+        }
+        if([fnArgs indexOfObject:key] == NSNotFound)
+            NSLogColor([NSColor redColor], @"warning: unused symbol %@\n", key);
+    }
+}
+
 - (BOOL) exitNow
 {
 	return [delegate exitNow];
@@ -636,6 +702,8 @@
 {
     int level = 0;
     NSString* theTree = [self finalPass:[self printNode:p atLevel:level lastOne:NO]];
+    if(!treeCheckArray) treeCheckArray = [[NSMutableArray array] retain];
+    [treeCheckArray addObject:theTree];
     BOOL printWholeTree = ([[NSApp currentEvent] modifierFlags] & 0x80000)>0; //option key is down
 
     if(printWholeTree){

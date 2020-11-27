@@ -76,7 +76,8 @@
 - (void) processIsStopping;
 - (NSString*) identifier;
 - (NSString*) processingTitle;
-- (BOOL) processValue:(int)channel;
+- (float) rakerValue:(int)aChan;
+- (BOOL) processValue:(int)aChan;
 - (double) convertedValue:(int)aChan;
 - (void) setProcessOutput:(int)aChan value:(int)aValue;
 - (double) maxValueForChan:(int)aChan;

@@ -46,6 +46,7 @@ NSString* ORScriptIDEModelLock						= @"ORScriptIDEModelLock";
 NSString* ORScriptIDEModelBreakpointsChanged		= @"ORScriptIDEModelBreakpointsChanged";
 NSString* ORScriptIDEModelBreakChainChanged			= @"ORScriptIDEModelBreakChainChanged";
 NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
+NSString* ORScriptIDEModelReadOnlyChanged           = @"ORScriptIDEModelReadOnlyChanged";
 
 @interface ORScriptIDEModel (private)
 - (void) scheduleNextPeriodicRun;
@@ -57,6 +58,7 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
 - (id) init
 {
 	self = [super init];
+    readOnly = NO;
 	[self registerNotificationObservers];
 	return self;
 }
@@ -342,6 +344,18 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
 	[self setUpImage];
 }
 
+- (BOOL) readOnly
+{
+    return readOnly;
+}
+
+- (void) setReadOnly:(BOOL)ronly
+{
+    [[[self undoManager] prepareWithInvocationTarget:self] setReadOnly:readOnly];
+    readOnly = ronly;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORScriptIDEModelReadOnlyChanged object:self];
+}
+
 - (BOOL) breakChain
 {
 	return breakChain;
@@ -561,7 +575,7 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
 		[scriptRunner parse:script];
 		parsedOK = [scriptRunner parsedOK];
 		scriptExists = [scriptRunner scriptExists];
-        [scriptRunner printAll];
+        [scriptRunner printAll:inputValues];
         if(parsedOK)NSLog(@"%@ Parsed OK\n",scriptName);
 	}
 }
@@ -585,6 +599,30 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
     [values setObject:@"Scripts" forKey:@"title"];
     if([values objectForKey:@"scriptName"]==nil) [values setObject:scriptName forKey:@"scriptName"];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ORCouchDBAddHistoryAdcRecord" object:self userInfo:values];
+}
+
+- (void) addScriptToDictionary:(NSMutableDictionary*)dict
+{
+    if(!dict) return;
+    NSMutableDictionary* values = [NSMutableDictionary dictionary];
+    if(script)      [values setObject:script      forKey:@"script"];
+    else            [values setObject:@""         forKey:@"script"];
+    if(lastFile)    [values setObject:lastFile    forKey:@"lastFile"];
+    else            [values setObject:@""         forKey:@"lastFile"];
+    if(inputValues) [values setObject:inputValues forKey:@"inputValues"];
+    else            [values setObject:@[]         forKey:@"inputValues"];
+    if(comments)    [values setObject:comments    forKey:@"comments"];
+    else            [values setObject:@""         forKey:@"comments"];
+    if(breakpoints) [values setObject:breakpoints forKey:@"breakpoints"];
+    else            [values setObject:@{}         forKey:@"breakpoints"];
+    [values setObject:[NSNumber numberWithBool:breakChain]            forKey:@"breakChain"];
+    [values setObject:[NSNumber numberWithBool:autoStartWithDocument] forKey:@"autoStartWithDocument"];
+    [values setObject:[NSNumber numberWithBool:autoStartWithRun]      forKey:@"autoStartWithRun"];
+    [values setObject:[NSNumber numberWithBool:autoStopWithRun]       forKey:@"autoStopWithRun"];
+    [values setObject:[NSNumber numberWithBool:autoRunAtQuit]         forKey:@"autoRunAtQuit"];
+    [values setObject:[NSNumber numberWithBool:runPeriodically]       forKey:@"runPeriodically"];
+    [values setObject:[NSNumber numberWithInt:periodicRunInterval]    forKey:@"periodicRunInterval"];
+    [dict setObject:values forKey:scriptName];
 }
 
 - (BOOL) runScriptWithMessage:(NSString*) startMessage
@@ -949,6 +987,7 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
     [self setAutoStartWithRun:		[decoder decodeBoolForKey:@"autoStartWithRun"]];
     [self setAutoStartWithDocument:	[decoder decodeBoolForKey:@"autoStartWithDocument"]];
 	[self setBreakChain:			[decoder decodeBoolForKey:@"breakChain"]];
+    [self setReadOnly:              [decoder decodeBoolForKey:@"readOnly"]];
 	[self setComments:				[decoder decodeObjectForKey:@"comments"]];
     [self setScript:				[decoder decodeObjectForKey:@"script"]];
     [self setScriptName:			[decoder decodeObjectForKey:@"scriptName"]];
@@ -975,6 +1014,7 @@ NSString* ORScriptIDEModelGlobalsChanged			= @"ORScriptIDEModelGlobalsChanged";
     [encoder encodeBool:autoStartWithRun		forKey:@"autoStartWithRun"];
     [encoder encodeBool:autoStartWithDocument	forKey:@"autoStartWithDocument"];
     [encoder encodeBool:breakChain				forKey:@"breakChain"];
+    [encoder encodeBool:readOnly                forKey:@"readOnly"];
     [encoder encodeObject:comments				forKey:@"comments"];
     [encoder encodeObject:script				forKey:@"script"];
     [encoder encodeObject:scriptName			forKey:@"scriptName"];

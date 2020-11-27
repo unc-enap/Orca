@@ -51,6 +51,7 @@
     NSString*       thisHostAdress;
     BOOL            scheduledForRunInfoUpdate;
     BOOL            skipDataSets;
+    BOOL            postRunningScripts;
 }
 
 #pragma mark ***Initialization
@@ -92,6 +93,8 @@
 - (void) setUseHttps:(BOOL)aState;
 - (BOOL) stealthMode;
 - (void) setStealthMode:(BOOL)aStealthMode;
+- (BOOL) postRunningScripts;
+- (void) setPostRunningScripts:(BOOL)postRunning;
 - (NSString*) password;
 - (void) setPortNumber:(NSUInteger)aPort;
 - (NSUInteger) portNumber;
@@ -163,6 +166,7 @@ extern NSString* ORCouchDBPortNumberChanged;
 extern NSString* ORCouchDBUserNameChanged;
 extern NSString* ORCouchDBRemoteHostNameChanged;
 extern NSString* ORCouchDBModelStealthModeChanged;
+extern NSString* ORCouchDBModelPostRunningScriptsChanged;
 extern NSString* ORCouchDBModeUseHttpsChanged;
 extern NSString* ORCouchDBModelDBInfoChanged;
 extern NSString* ORCouchDBLocalHostNameChanged;
