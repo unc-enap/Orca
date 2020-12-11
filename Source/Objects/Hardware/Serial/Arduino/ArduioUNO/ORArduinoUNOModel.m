@@ -156,7 +156,7 @@ NSString* ORArduinoUNOModelControlValueChanged		= @"ORArduinoUNOModelControlValu
 	}		
 }
 
-- (void) setCustomValue:(unsigned short)aChan withValue:(unsigned short)aValue
+- (void) setCustomValue:(unsigned short)aChan withValue:(float)aValue
 {
 	if(aChan<kNumArduinoUNOCustomChannels){
 		customValue[aChan] = aValue;
@@ -517,10 +517,10 @@ NSString* ORArduinoUNOModelControlValueChanged		= @"ORArduinoUNOModelControlValu
 	else return 0;
 }
 
-- (unsigned short)  customValue:(unsigned short)aChan
+- (float)  customValue:(unsigned short)aChan
 {
 	if(aChan<kNumArduinoUNOCustomChannels)return customValue[aChan];
-	else return 0;
+	else return 0.0;
 }
 
 - (unsigned short)  controlValue:(unsigned short)aChan
@@ -863,7 +863,7 @@ NSString* ORArduinoUNOModelControlValueChanged		= @"ORArduinoUNOModelControlValu
 			if([parts count] >= 3){
 				unsigned int chan = [[parts objectAtIndex:1] shortValue];
 				if(chan<kNumArduinoUNOCustomChannels){
-					unsigned  value = [[parts objectAtIndex:2] unsignedShortValue];
+					float value = [[parts objectAtIndex:2] floatValue];
 					[self setCustomValue:chan withValue:value];
 				}
 			}

@@ -501,12 +501,12 @@
     if(aNote == nil){
         short i;
         for(i=0;i<kNumArduinoUNOCustomChannels;i++){
-            [[customValueMatrix cellWithTag:i] setIntValue:[model customValue:i]];
+            [[customValueMatrix cellWithTag:i] setFloatValue:[model customValue:i]];
         }
     }
     else {
         int i = [[[aNote userInfo] objectForKey:@"Channel"] intValue];
-        [[customValueMatrix cellWithTag:i] setIntValue:[model customValue:i]];
+        [[customValueMatrix cellWithTag:i] setFloatValue:[model customValue:i]];
     }
 }
 
