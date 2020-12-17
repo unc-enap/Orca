@@ -38,7 +38,7 @@
 		int				pollTime;
 		BOOL            delay;
 		float			adc[kNumArduinoUNOAdcChannels];
-		unsigned short	customValue[kNumArduinoUNOCustomChannels];
+		float       	customValue[kNumArduinoUNOCustomChannels];
 		unsigned short	controlValue[kNumArduinoUNOControlValues];
 		int				pinType[kNumArduinoUNOPins];
 		NSString*       pinName[kNumArduinoUNOPins];
@@ -69,8 +69,8 @@
 - (float)adc:(unsigned short)aChan;
 - (void) setAdc:(unsigned short)aChan withValue:(float)aValue;
 
-- (unsigned short)customValue:(unsigned short)aChan;
-- (void) setCustomValue:(unsigned short)aChan withValue:(unsigned short)aValue;
+- (float)customValue:(unsigned short)aChan;
+- (void) setCustomValue:(unsigned short)aChan withValue:(float)aValue;
 - (unsigned short) controlValue:(unsigned short)aChan;
 - (void) setControlValue:(unsigned short)aChan withValue:(unsigned short)aValue;
 
