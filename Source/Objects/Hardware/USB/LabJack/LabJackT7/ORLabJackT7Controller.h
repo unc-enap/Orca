@@ -3,7 +3,8 @@
 //  Orca
 //
 //  Created by Mark Howe on Fri Jan 20,2017.
-//  Copyright (c) 2017 University of North Carolina. All rights reserved.
+//  Updated by Jan Behrens on Dec 21, 2020.
+//  Copyright (c) 2017-2020 University of North Carolina. All rights reserved.
 //-----------------------------------------------------------
 //This program was prepared for the Regents of the University of
 //North Carolina Physics and Department sponsored in part by the United States

@@ -9,9 +9,9 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="ORLabJackT7Controller">
             <connections>
-                <outlet property="aOut0Field" destination="dyT-5c-T7x" id="aoA-Im-CuN"/>
+                <outlet property="aOut0Field" destination="CLb-Ac-MIo" id="loO-01-490"/>
                 <outlet property="aOut0Slider" destination="1Oz-20-6C6" id="Zhw-89-uVJ"/>
-                <outlet property="aOut1Field" destination="CLb-Ac-MIo" id="8CV-4h-WAD"/>
+                <outlet property="aOut1Field" destination="dyT-5c-T7x" id="XjL-tS-3Jf"/>
                 <outlet property="aOut1Slider" destination="54Z-uQ-DXu" id="KoR-Ms-n96"/>
                 <outlet property="adcDiffMatrix" destination="1525" id="1534"/>
                 <outlet property="adcMatrix" destination="1021" id="1039"/>
@@ -44,10 +44,8 @@
                 <outlet property="pwmOutputEnabledCB" destination="4HG-y0-Xvd" id="IBg-tH-tgT"/>
                 <outlet property="resetCounter0Button" destination="SHl-SK-qis" id="cfr-qa-iRc"/>
                 <outlet property="resetCounter1Button" destination="Sbv-Hl-AIk" id="1Us-FX-6tc"/>
-                <outlet property="resetCounter2Button" destination="yZI-bt-zvN" id="Pqh-qq-hhb"/>
-                <outlet property="resetCounter3" destination="yZI-bt-zvN" id="d9z-tC-jwH"/>
-                <outlet property="resetCounter3Button" destination="yZI-bt-zvN" id="n5Z-om-poX"/>
-                <outlet property="resetCounter4Button" destination="So4-2f-upq" id="JX3-DR-L7Q"/>
+                <outlet property="resetCounter2Button" destination="yZI-bt-zvN" id="miA-iV-GPm"/>
+                <outlet property="resetCounter3Button" destination="So4-2f-upq" id="Oh0-zX-GZ2"/>
                 <outlet property="rtcTimeField" destination="7TH-Yo-NDY" id="scA-Z4-omb"/>
                 <outlet property="shipDataCB" destination="1450" id="1452"/>
                 <outlet property="slopeMatrix" destination="1684" id="1727"/>
@@ -148,14 +146,14 @@
                         <tabViewItems>
                             <tabViewItem label="I/O" identifier="1" id="1457">
                                 <view key="view" id="1458">
-                                    <rect key="frame" x="10" y="25" width="727" height="500"/>
+                                    <rect key="frame" x="10" y="29" width="727" height="496"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <userGuides>
                                         <userLayoutGuide location="16" affinity="maxY"/>
                                     </userGuides>
                                     <subviews>
                                         <box autoresizesSubviews="NO" misplaced="YES" borderType="line" title="Analog I/O Pins" id="1262">
-                                            <rect key="frame" x="215" y="162" width="498" height="333"/>
+                                            <rect key="frame" x="215" y="158" width="498" height="333"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="ANA-Vc-5bX">
                                                 <rect key="frame" x="1" y="1" width="496" height="317"/>
@@ -1147,7 +1145,7 @@
                                             </view>
                                         </box>
                                         <box autoresizesSubviews="NO" misplaced="YES" borderType="line" title="Counter" id="4cD-ao-j4v">
-                                            <rect key="frame" x="215" y="13" width="498" height="138"/>
+                                            <rect key="frame" x="215" y="9" width="498" height="138"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="7tY-XS-GYG">
                                                 <rect key="frame" x="1" y="1" width="496" height="122"/>
@@ -1337,7 +1335,7 @@
                                             </view>
                                         </box>
                                         <box autoresizesSubviews="NO" misplaced="YES" borderType="line" title="DB25 Connector I/O Pins" id="1199">
-                                            <rect key="frame" x="14" y="13" width="191" height="481"/>
+                                            <rect key="frame" x="14" y="9" width="191" height="481"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="uL9-mg-x2v">
                                                 <rect key="frame" x="1" y="1" width="189" height="465"/>
@@ -2869,7 +2867,7 @@
                                     </textFieldCell>
                                 </textField>
                                 <button toolTip="Poll device once" verticalHuggingPriority="750" misplaced="YES" id="HG1-ZR-dEh">
-                                    <rect key="frame" x="286" y="10" width="69" height="28"/>
+                                    <rect key="frame" x="286" y="5" width="69" height="28"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="push" title="Poll now" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="G1e-Rp-1Bk">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2880,7 +2878,7 @@
                                     </connections>
                                 </button>
                                 <button misplaced="YES" id="1450">
-                                    <rect key="frame" x="171" y="11" width="85" height="18"/>
+                                    <rect key="frame" x="170" y="12" width="85" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="check" title="Ship Data" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="1451">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>

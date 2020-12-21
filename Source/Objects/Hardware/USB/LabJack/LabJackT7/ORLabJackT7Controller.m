@@ -3,7 +3,8 @@
 //  Orca
 //
 //  Created by Mark Howe on Fri Jan 20,2017.
-//  Copyright (c) 2017 University of North Carolina. All rights reserved.
+//  Updated by Jan Behrens on Dec 21, 2020.
+//  Copyright (c) 2017-2020 University of North Carolina. All rights reserved.
 //-----------------------------------------------------------
 //This program was prepared for the Regents of the University of
 //North Carolina Physics and Department sponsored in part by the United States
@@ -351,12 +352,12 @@
     }
     [self lockChanged:nil];
 }
+
 - (void) aOut1Changed:(NSNotification*)aNote
 {
     [aOut1Field setFloatValue: [model aOut1] * 5.0/65535.];
     [aOut1Slider setFloatValue:[model aOut1] * 5.0/65535.];
 }
-
 - (void) aOut0Changed:(NSNotification*)aNote
 {
     [aOut0Field setFloatValue: [model aOut0] * 5.0/65535.];
@@ -650,6 +651,7 @@
     BOOL lockedOrRunningMaintenance = [gSecurity runInProgressButNotType:eMaintenanceRunType orIsLocked:ORLabJackT7Lock];
     BOOL locked = [gSecurity isLocked:ORLabJackT7Lock];
     BOOL inProcess = [model involvedInProcess];
+    
     [lockButton setState: locked];
     [nameMatrix			setEnabled:!locked];
     [unitMatrix			setEnabled:!locked];
