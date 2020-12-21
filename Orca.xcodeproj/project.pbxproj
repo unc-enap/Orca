@@ -432,6 +432,22 @@
 		6B40D6661B2B79960000F7C1 /* ResistorDBWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B40D6601B2B79960000F7C1 /* ResistorDBWindow.xib */; };
 		6B5EFA481C4D76AF00B9A80B /* ORMultiStateBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 6B5EFA461C4D76AF00B9A80B /* ORMultiStateBox.h */; };
 		6B5EFA491C4D76AF00B9A80B /* ORMultiStateBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B5EFA471C4D76AF00B9A80B /* ORMultiStateBox.m */; };
+		7048C1CD24781688002A11AF /* orca_t7.m in Sources */ = {isa = PBXBuildFile; fileRef = 7048C1CB24781687002A11AF /* orca_t7.m */; };
+		7048C1CE24781688002A11AF /* orca_t7.h in Headers */ = {isa = PBXBuildFile; fileRef = 7048C1CC24781688002A11AF /* orca_t7.h */; };
+		7048C1D124781850002A11AF /* LabJackM.h in Headers */ = {isa = PBXBuildFile; fileRef = 7048C1D024781850002A11AF /* LabJackM.h */; };
+		7048C1D32478188F002A11AF /* LJM_Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 7048C1D22478188E002A11AF /* LJM_Utilities.h */; };
+		708077D524F435CB00F29EFE /* libLabJackM-1.20.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 708077D424F435CB00F29EFE /* libLabJackM-1.20.0.dylib */; };
+		708077D924F436EE00F29EFE /* libusb-1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 708077D824F436EE00F29EFE /* libusb-1.0.0.dylib */; };
+		70C600092469D45600400C83 /* ORLabJackT7Decoders.m in Sources */ = {isa = PBXBuildFile; fileRef = 70C600012469D45300400C83 /* ORLabJackT7Decoders.m */; };
+		70C6000A2469D45600400C83 /* ORLabJackT7Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 70C600022469D45300400C83 /* ORLabJackT7Controller.h */; };
+		70C6000B2469D45600400C83 /* ORLabJackT7Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 70C600032469D45400400C83 /* ORLabJackT7Controller.m */; };
+		70C6000C2469D45600400C83 /* ORLabJackT7Model.h in Headers */ = {isa = PBXBuildFile; fileRef = 70C600042469D45400400C83 /* ORLabJackT7Model.h */; };
+		70C6000E2469D45600400C83 /* LabJackT7.nib in Resources */ = {isa = PBXBuildFile; fileRef = 70C600062469D45500400C83 /* LabJackT7.nib */; };
+		70C6000F2469D45600400C83 /* ORLabJackT7Decoders.h in Headers */ = {isa = PBXBuildFile; fileRef = 70C600072469D45500400C83 /* ORLabJackT7Decoders.h */; };
+		70C600102469D45600400C83 /* ORLabJackT7Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 70C600082469D45500400C83 /* ORLabJackT7Model.m */; };
+		70CC889225756FDC004D7F81 /* libusb-1.0.0.dylib in Frameworks_Copy */ = {isa = PBXBuildFile; fileRef = 708077D824F436EE00F29EFE /* libusb-1.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		70CC889325756FDC004D7F81 /* libLabJackM-1.20.0.dylib in Frameworks_Copy */ = {isa = PBXBuildFile; fileRef = 708077D424F435CB00F29EFE /* libLabJackM-1.20.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		70F9D08A24DDA0C500E4BAEF /* LabJackT7.tif in Resources */ = {isa = PBXBuildFile; fileRef = 70F9D08924DDA0C400E4BAEF /* LabJackT7.tif */; };
 		8400D08D09AD40CE000C1DA4 /* ORcPCICard.h in Headers */ = {isa = PBXBuildFile; fileRef = 8400D08C09AD40CE000C1DA4 /* ORcPCICard.h */; };
 		8400D67A09AF96C5000C1DA4 /* ORTaskSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 8400D67809AF96C5000C1DA4 /* ORTaskSequence.h */; };
 		8400D67B09AF96C6000C1DA4 /* ORTaskSequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 8400D67909AF96C5000C1DA4 /* ORTaskSequence.m */; };
@@ -3583,8 +3599,6 @@
 			compilerSpec = com.apple.compilers.proxy.script;
 			filePatterns = "*.app";
 			fileType = pattern.proxy;
-			inputFiles = (
-			);
 			isEditable = 1;
 			outputFiles = (
 				"$(DERIVED_FILES_DIR)/$(INPUT_FILE_BASE).h",
@@ -3595,8 +3609,6 @@
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
 			fileType = sourcecode.lex;
-			inputFiles = (
-			);
 			isEditable = 1;
 			outputFiles = (
 				"${DERIVED_FILES_DIR}/lex.${INPUT_FILE_BASE}.m",
@@ -3607,8 +3619,6 @@
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
 			fileType = sourcecode.yacc;
-			inputFiles = (
-			);
 			isEditable = 1;
 			outputFiles = (
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.m",
@@ -3890,6 +3900,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				70CC889225756FDC004D7F81 /* libusb-1.0.0.dylib in Frameworks_Copy */,
+				70CC889325756FDC004D7F81 /* libLabJackM-1.20.0.dylib in Frameworks_Copy */,
 				84EA919420FF840F00110B85 /* libmysqlclient.21.dylib in Frameworks_Copy */,
 				84EA919520FF840F00110B85 /* libssl.1.0.0.dylib in Frameworks_Copy */,
 				84EA919620FF840F00110B85 /* libcrypto.1.0.0.dylib in Frameworks_Copy */,
@@ -4306,6 +4318,20 @@
 		6B40D6601B2B79960000F7C1 /* ResistorDBWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ResistorDBWindow.xib; sourceTree = "<group>"; };
 		6B5EFA461C4D76AF00B9A80B /* ORMultiStateBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORMultiStateBox.h; path = MultiStateBox/ORMultiStateBox.h; sourceTree = "<group>"; };
 		6B5EFA471C4D76AF00B9A80B /* ORMultiStateBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORMultiStateBox.m; path = MultiStateBox/ORMultiStateBox.m; sourceTree = "<group>"; };
+		7048C1CB24781687002A11AF /* orca_t7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = orca_t7.m; sourceTree = "<group>"; };
+		7048C1CC24781688002A11AF /* orca_t7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = orca_t7.h; sourceTree = "<group>"; };
+		7048C1D024781850002A11AF /* LabJackM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LabJackM.h; sourceTree = "<group>"; };
+		7048C1D22478188E002A11AF /* LJM_Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LJM_Utilities.h; sourceTree = "<group>"; };
+		708077D424F435CB00F29EFE /* libLabJackM-1.20.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libLabJackM-1.20.0.dylib"; sourceTree = "<group>"; };
+		708077D824F436EE00F29EFE /* libusb-1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libusb-1.0.0.dylib"; sourceTree = "<group>"; };
+		70C600012469D45300400C83 /* ORLabJackT7Decoders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORLabJackT7Decoders.m; sourceTree = "<group>"; };
+		70C600022469D45300400C83 /* ORLabJackT7Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORLabJackT7Controller.h; sourceTree = "<group>"; };
+		70C600032469D45400400C83 /* ORLabJackT7Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORLabJackT7Controller.m; sourceTree = "<group>"; };
+		70C600042469D45400400C83 /* ORLabJackT7Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORLabJackT7Model.h; sourceTree = "<group>"; };
+		70C600062469D45500400C83 /* LabJackT7.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = LabJackT7.nib; sourceTree = "<group>"; };
+		70C600072469D45500400C83 /* ORLabJackT7Decoders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORLabJackT7Decoders.h; sourceTree = "<group>"; };
+		70C600082469D45500400C83 /* ORLabJackT7Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORLabJackT7Model.m; sourceTree = "<group>"; };
+		70F9D08924DDA0C400E4BAEF /* LabJackT7.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = LabJackT7.tif; sourceTree = "<group>"; };
 		8400D08C09AD40CE000C1DA4 /* ORcPCICard.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORcPCICard.h; path = "Source/Objects/Hardware/CompactPCI/cPCI Base Classes/ORcPCICard.h"; sourceTree = SOURCE_ROOT; };
 		8400D67809AF96C5000C1DA4 /* ORTaskSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORTaskSequence.h; sourceTree = "<group>"; };
 		8400D67909AF96C5000C1DA4 /* ORTaskSequence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORTaskSequence.m; sourceTree = "<group>"; };
@@ -7448,6 +7474,7 @@
 			files = (
 				84EA918520FE5DF800110B85 /* libcrypto.1.0.0.dylib in Frameworks */,
 				84EA918320FE5DDF00110B85 /* libssl.1.0.0.dylib in Frameworks */,
+				708077D524F435CB00F29EFE /* libLabJackM-1.20.0.dylib in Frameworks */,
 				8434A359055B3287002D3102 /* Cocoa.framework in Frameworks */,
 				84EA918720FE5F7800110B85 /* libpq.dylib in Frameworks */,
 				84EA916820FE5A3700110B85 /* libmysqlclient.21.dylib in Frameworks */,
@@ -7455,6 +7482,7 @@
 				8439D5EF05BEFF3A0077EFF2 /* Carbon.framework in Frameworks */,
 				840F377B08F322F800FC4408 /* IOKit.framework in Frameworks */,
 				84F5E11B0A151E0B00707A0F /* OpenGL.framework in Frameworks */,
+				708077D924F436EE00F29EFE /* libusb-1.0.0.dylib in Frameworks */,
 				847599860B5FF26500123411 /* QuartzCore.framework in Frameworks */,
 				3620200E1CBD38EE0089296E /* libiconv.2.dylib in Frameworks */,
 				2DC1EE800F33724E00E93C75 /* WebKit.framework in Frameworks */,
@@ -8175,6 +8203,34 @@
 				6B5EFA471C4D76AF00B9A80B /* ORMultiStateBox.m */,
 			);
 			name = MultiStateBox;
+			sourceTree = "<group>";
+		};
+		7048C1CF24781832002A11AF /* labjack */ = {
+			isa = PBXGroup;
+			children = (
+				708077D824F436EE00F29EFE /* libusb-1.0.0.dylib */,
+				708077D424F435CB00F29EFE /* libLabJackM-1.20.0.dylib */,
+				7048C1D22478188E002A11AF /* LJM_Utilities.h */,
+				7048C1D024781850002A11AF /* LabJackM.h */,
+			);
+			path = labjack;
+			sourceTree = "<group>";
+		};
+		70C600002469D43D00400C83 /* LabJackT7 */ = {
+			isa = PBXGroup;
+			children = (
+				7048C1CC24781688002A11AF /* orca_t7.h */,
+				7048C1CB24781687002A11AF /* orca_t7.m */,
+				70C600062469D45500400C83 /* LabJackT7.nib */,
+				70F9D08924DDA0C400E4BAEF /* LabJackT7.tif */,
+				70C600022469D45300400C83 /* ORLabJackT7Controller.h */,
+				70C600032469D45400400C83 /* ORLabJackT7Controller.m */,
+				70C600072469D45500400C83 /* ORLabJackT7Decoders.h */,
+				70C600012469D45300400C83 /* ORLabJackT7Decoders.m */,
+				70C600042469D45400400C83 /* ORLabJackT7Model.h */,
+				70C600082469D45500400C83 /* ORLabJackT7Model.m */,
+			);
+			path = LabJackT7;
 			sourceTree = "<group>";
 		};
 		8402796907397B8700972B07 /* Bit3 Adaptor */ = {
@@ -10745,6 +10801,7 @@
 		8475EC251475A66F003A165D /* LabJack */ = {
 			isa = PBXGroup;
 			children = (
+				70C600002469D43D00400C83 /* LabJackT7 */,
 				84EB2DD41E32990D00C273AA /* LabJackU6 */,
 				8475EC261475A66F003A165D /* LabJackU12 */,
 				8475EC301475A66F003A165D /* LabJackUE9 */,
@@ -14408,6 +14465,7 @@
 		84F7FB520AE5558900A5AA4C /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				7048C1CF24781832002A11AF /* labjack */,
 				847C660F1E364196002696C3 /* exodriver */,
 				3620200C1CBD38EE0089296E /* libSNO+ */,
 				8475EC0414759D53003A165D /* libusb */,
@@ -15510,6 +15568,7 @@
 				8434A1CF055B3287002D3102 /* NcdMuxController.h in Headers */,
 				8434A1D1055B3287002D3102 /* NcdMuxModel.h in Headers */,
 				8434A1D2055B3287002D3102 /* NcdMuxHWModel.h in Headers */,
+				70C6000C2469D45600400C83 /* ORLabJackT7Model.h in Headers */,
 				846298BB20A369A90024C081 /* ORTDS2024Controller.h in Headers */,
 				8438C3731845092600A6F4D6 /* ORRegexConditionalStep.h in Headers */,
 				8434A1D3055B3287002D3102 /* ORVmeIPCard.h in Headers */,
@@ -15658,6 +15717,7 @@
 				842A63BC0700BDBD007536B6 /* ORTriggerDecoders.h in Headers */,
 				842A643B0700C01C007536B6 /* OROscDecoder.h in Headers */,
 				842A65740700D5FC007536B6 /* NcdDecoders.h in Headers */,
+				70C6000A2469D45600400C83 /* ORLabJackT7Controller.h in Headers */,
 				842A65BB0700E210007536B6 /* ORHPPulserDecoders.h in Headers */,
 				84AC14E41B70E2460071C4EF /* ORMjdDataScannerModel.h in Headers */,
 				84978A290701F02000B7887E /* ORDataGenDecoders.h in Headers */,
@@ -15778,6 +15838,7 @@
 				849DDE6308F466630052AFC6 /* ORAD3511Controller.h in Headers */,
 				84D29FE91843EAC800D320DB /* OROpSequenceController.h in Headers */,
 				849DDE6508F466630052AFC6 /* ORAD3511Decoders.h in Headers */,
+				7048C1D124781850002A11AF /* LabJackM.h in Headers */,
 				849DDE6708F466630052AFC6 /* ORAD3511Model.h in Headers */,
 				C65995B020529EE400FE5973 /* ORMotoGPSModel.h in Headers */,
 				849DE3EF08F597410052AFC6 /* ORK3655Controller.h in Headers */,
@@ -16118,6 +16179,7 @@
 				84D29FED1843EAC800D320DB /* ORTaskHandler.h in Headers */,
 				84F16AF518900D530074B787 /* ORXTR6Model.h in Headers */,
 				84D29FF21843EAC800D320DB /* OROpSeqStepViewItem.h in Headers */,
+				7048C1D32478188F002A11AF /* LJM_Utilities.h in Headers */,
 				84CEA3710EA4EB2E0060076A /* ORFec32Model.h in Headers */,
 				84CEA6E90EA623A50060076A /* ORFecDaughterCardController.h in Headers */,
 				84CEA6EB0EA623A50060076A /* ORFecDaughterCardModel.h in Headers */,
@@ -16337,7 +16399,9 @@
 				843175D01152766E005643AB /* HaloController.h in Headers */,
 				843175D21152766E005643AB /* HaloDetectorView.h in Headers */,
 				843175D41152766E005643AB /* HaloModel.h in Headers */,
+				70C6000F2469D45600400C83 /* ORLabJackT7Decoders.h in Headers */,
 				840DEA25115D7981006AF231 /* ORWindowSaveSet.h in Headers */,
+				7048C1CE24781688002A11AF /* orca_t7.h in Headers */,
 				84B7545F1160E01C00667631 /* ORCC4189Controller.h in Headers */,
 				84B754611160E01C00667631 /* ORCC4189Decoders.h in Headers */,
 				84B754631160E01C00667631 /* ORCC4189Model.h in Headers */,
@@ -17024,6 +17088,7 @@
 				84D980980795C5AC0074A035 /* AD811.nib in Resources */,
 				84D980990795C5AC0074A035 /* AD811Card.gif in Resources */,
 				84D98268079605CD0074A035 /* L2551Card.gif in Resources */,
+				70F9D08A24DDA0C500E4BAEF /* LabJackT7.tif in Resources */,
 				84D613E22017A9630038D662 /* TristanFLTCard.gif in Resources */,
 				84D98269079605CD0074A035 /* L2551.nib in Resources */,
 				84D435B70798851B003D089F /* NoCamacDriverHelp.plist in Resources */,
@@ -17258,6 +17323,7 @@
 				C65995B420529EE400FE5973 /* MotoGPS.nib in Resources */,
 				84F46F4E0CA44255007EFADA /* IpeSLT.nib in Resources */,
 				84D613E32017A9630038D662 /* TristanFLT.nib in Resources */,
+				70C6000E2469D45600400C83 /* LabJackT7.nib in Resources */,
 				84F46F4F0CA44255007EFADA /* IpeSLTCard.gif in Resources */,
 				84F46F560CA44255007EFADA /* KatrinFLT.nib in Resources */,
 				84F46F570CA44255007EFADA /* KatrinFLTCard.gif in Resources */,
@@ -17840,7 +17906,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# set the code version from svn or git\n# if using git, set the bundle version to the git tag\nversion=\"-\"\nif [ -d \".svn\" ]; then\n    if [ -x \"/usr/bin/svnversion\" ]; then\n        version=`/usr/bin/svnversion .`\n        if [ \"$version\" == \"Unversioned directory\" ]; then\n            version=\"-\"\n        fi\n    fi\nfi\nif [ -d \".git\" ]; then\n    if [ -x \"/usr/bin/git\" ]; then\n        version=`/usr/bin/git rev-list HEAD --count`\n        if [\"$version\" == \"fatal: not a git repository (or any of the parent directories): .git\" ]; then\n            version=\"-\"\n        fi\n        gitrev=`/usr/bin/git rev-parse HEAD`\n        echo \"$gitrev\" > $TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/gitrevhash\n        release=`/usr/bin/git describe --tags --always --abbrev=0`\n        target_plist=\"$TARGET_BUILD_DIR/$INFOPLIST_PATH\"\n        dsym_plist=\"$DWARF_DSYM_FOLDER_PATH/$DWARF_DSYM_FILE_NAME/Contents/Info.plist\"\n        for plist in \"$target_plist\" \"$dsym_plist\"; do\n          if [ -f \"$plist\" ]; then\n            /usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $release\" \"$plist\"\n          fi\n        done\n    fi\nfi\necho \"$version\" > $TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/orcaversion\n\n#\n# add dynamic libraries to the app bundle - PH\n#\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n\nexport DYLIB=libcrypto.1.0.0.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n# note: run \"otool -L\" on the library to get the source library name for \"-change\"\ninstall_name_tool -change $DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libmysqlclient.21.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change @rpath/$DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libpq.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change $DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libssl.1.0.0.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change $DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\n";
+			shellScript = "# set the code version from svn or git\n# if using git, set the bundle version to the git tag\nversion=\"-\"\nif [ -d \".svn\" ]; then\n    if [ -x \"/usr/bin/svnversion\" ]; then\n        version=`/usr/bin/svnversion .`\n        if [ \"$version\" == \"Unversioned directory\" ]; then\n            version=\"-\"\n        fi\n    fi\nfi\nif [ -d \".git\" ]; then\n    if [ -x \"/usr/bin/git\" ]; then\n        version=`/usr/bin/git rev-list HEAD --count`\n        if [\"$version\" == \"fatal: not a git repository (or any of the parent directories): .git\" ]; then\n            version=\"-\"\n        fi\n        gitrev=`/usr/bin/git rev-parse HEAD`\n        echo \"$gitrev\" > $TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/gitrevhash\n        release=`/usr/bin/git describe --tags --always --abbrev=0`\n        target_plist=\"$TARGET_BUILD_DIR/$INFOPLIST_PATH\"\n        dsym_plist=\"$DWARF_DSYM_FOLDER_PATH/$DWARF_DSYM_FILE_NAME/Contents/Info.plist\"\n        for plist in \"$target_plist\" \"$dsym_plist\"; do\n          if [ -f \"$plist\" ]; then\n            /usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $release\" \"$plist\"\n          fi\n        done\n    fi\nfi\necho \"$version\" > $TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/orcaversion\n\n#\n# add dynamic libraries to the app bundle - PH\n#\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n\nexport DYLIB=libcrypto.1.0.0.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n# note: run \"otool -L\" on the library to get the source library name for \"-change\"\ninstall_name_tool -change $DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libmysqlclient.21.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change @rpath/$DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libpq.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change $DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libssl.1.0.0.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change $DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libusb-1.0.0.dylib\ncp -f \"$SRCROOT/Libraries/labjack/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change @rpath/$DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -18095,6 +18161,7 @@
 				841DA60107820BB70099BBF6 /* ORCamacCrateController.m in Sources */,
 				841DA60307820BB70099BBF6 /* ORCamacCrateModel.m in Sources */,
 				841DA668078211E70099BBF6 /* ORCC32Controller.m in Sources */,
+				70C600102469D45600400C83 /* ORLabJackT7Model.m in Sources */,
 				841DA66A078211E70099BBF6 /* ORCC32Model.m in Sources */,
 				3672CF931C4EB15000870996 /* SNOCaenModel.m in Sources */,
 				362020231CBD390A0089296E /* WPStringUtils.m in Sources */,
@@ -18112,6 +18179,7 @@
 				84D98348079716E90074A035 /* TimedWorker.m in Sources */,
 				84607296079F015300C9F572 /* ORCamacCardDecoder.m in Sources */,
 				8408591507A1935D0056503B /* ORBaseDecoder.m in Sources */,
+				7048C1CD24781688002A11AF /* orca_t7.m in Sources */,
 				84FE07D007B403ED00E2CB0E /* NSString+Extensions.m in Sources */,
 				8446CE2207B847B8006CD9C4 /* ORAD413AController.m in Sources */,
 				8446CE2407B847B8006CD9C4 /* ORAD413ADecoders.m in Sources */,
@@ -18677,6 +18745,7 @@
 				84F50A31116B7151000275F2 /* ORCmdLabelModel.m in Sources */,
 				8490D2991177532C00D25B1F /* ORIpeV4MiniCrateController.m in Sources */,
 				849951771D5CE50700A6FA40 /* ORMJDBiasWatcherController.m in Sources */,
+				70C6000B2469D45600400C83 /* ORLabJackT7Controller.m in Sources */,
 				8490D29B1177532C00D25B1F /* ORIpeV4MiniCrateModel.m in Sources */,
 				EFCC4547117FD45E008DC12C /* ORSNOCrateDecoders.m in Sources */,
 				84B94F151EE73434001BB201 /* ORKatrinV4SLTRegisters.m in Sources */,
@@ -18910,6 +18979,7 @@
 				84BBE098153CB5110084E6B1 /* ORTPG256AController.m in Sources */,
 				84BBE09A153CB5110084E6B1 /* ORTPG256ADecoders.m in Sources */,
 				84BBE09C153CB5110084E6B1 /* ORTPG256AModel.m in Sources */,
+				70C600092469D45600400C83 /* ORLabJackT7Decoders.m in Sources */,
 				84F3085315483A4000663573 /* ORMks660BController.m in Sources */,
 				84F3085515483A4000663573 /* ORMks660BDecoders.m in Sources */,
 				84F3085715483A4000663573 /* ORMks660BModel.m in Sources */,
@@ -19489,6 +19559,7 @@
 					"$(PROJECT_DIR)/Libraries/exodriver",
 					"$(PROJECT_DIR)/Libraries/libusb",
 					"$(PROJECT_DIR)/Libraries/libUniversal",
+					"$(PROJECT_DIR)/Libraries/labjack",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/Libraries/libUniversal\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/Libraries\"";
@@ -19571,6 +19642,7 @@
 					"$(PROJECT_DIR)/Libraries/exodriver",
 					"$(PROJECT_DIR)/Libraries/libusb",
 					"$(PROJECT_DIR)/Libraries/libUniversal",
+					"$(PROJECT_DIR)/Libraries/labjack",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Libraries\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/Libraries/libUniversal\"";
@@ -19649,6 +19721,7 @@
 					"$(PROJECT_DIR)/Libraries/exodriver",
 					"$(PROJECT_DIR)/Libraries/libusb",
 					"$(PROJECT_DIR)/Libraries/libUniversal",
+					"$(PROJECT_DIR)/Libraries/labjack",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Libraries\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/Libraries/libUniversal\"";
