@@ -3162,11 +3162,9 @@
 		84EA918120FE5DB000110B85 /* errmsg.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA918020FE5DB000110B85 /* errmsg.h */; };
 		84EA918320FE5DDF00110B85 /* libssl.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA918220FE5DDE00110B85 /* libssl.1.0.0.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
 		84EA918520FE5DF800110B85 /* libcrypto.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA918420FE5DF800110B85 /* libcrypto.1.0.0.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
-		84EA918720FE5F7800110B85 /* libpq.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA918620FE5F7800110B85 /* libpq.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
 		84EA919420FF840F00110B85 /* libmysqlclient.21.dylib in Frameworks_Copy */ = {isa = PBXBuildFile; fileRef = 84EA916720FE5A3700110B85 /* libmysqlclient.21.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		84EA919520FF840F00110B85 /* libssl.1.0.0.dylib in Frameworks_Copy */ = {isa = PBXBuildFile; fileRef = 84EA918220FE5DDE00110B85 /* libssl.1.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		84EA919620FF840F00110B85 /* libcrypto.1.0.0.dylib in Frameworks_Copy */ = {isa = PBXBuildFile; fileRef = 84EA918420FE5DF800110B85 /* libcrypto.1.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		84EA919720FF840F00110B85 /* libpq.dylib in Frameworks_Copy */ = {isa = PBXBuildFile; fileRef = 84EA918620FE5F7800110B85 /* libpq.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		84EB2DDE1E32990D00C273AA /* LabJackU6.nib in Resources */ = {isa = PBXBuildFile; fileRef = 84EB2DD51E32990D00C273AA /* LabJackU6.nib */; };
 		84EB2DE11E32990D00C273AA /* ORLabJackU6Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EB2DD81E32990D00C273AA /* ORLabJackU6Controller.h */; };
 		84EB2DE21E32990D00C273AA /* ORLabJackU6Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EB2DD91E32990D00C273AA /* ORLabJackU6Controller.m */; };
@@ -3549,6 +3547,7 @@
 		E6653F9E23A8301C00A53678 /* ORFlashCamMiniCrateController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6653F9D23A8301C00A53678 /* ORFlashCamMiniCrateController.m */; };
 		E66DB72F23B42E17005CDB2C /* FlashCamADC.xib in Resources */ = {isa = PBXBuildFile; fileRef = E66DB72E23B42E17005CDB2C /* FlashCamADC.xib */; };
 		E67894D721E91CD500B66977 /* Messaging.tif in Resources */ = {isa = PBXBuildFile; fileRef = E67894D621E91CD400B66977 /* Messaging.tif */; };
+		E67BCDFA25998CF9007A7473 /* libpq.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E67BCDF925998CF8007A7473 /* libpq.5.dylib */; };
 		E681A79E23BA765A00F76977 /* flashcam.png in Resources */ = {isa = PBXBuildFile; fileRef = E61D05892307313E00140549 /* flashcam.png */; };
 		E681A7A023BA771F00F76977 /* FlashCamMiniCrate.nib in Resources */ = {isa = PBXBuildFile; fileRef = E681A79F23BA771F00F76977 /* FlashCamMiniCrate.nib */; };
 		E686441323BD249400EA43D1 /* FlashCamEthLink.xib in Resources */ = {isa = PBXBuildFile; fileRef = E686441223BD249400EA43D1 /* FlashCamEthLink.xib */; };
@@ -3599,6 +3598,8 @@
 			compilerSpec = com.apple.compilers.proxy.script;
 			filePatterns = "*.app";
 			fileType = pattern.proxy;
+			inputFiles = (
+			);
 			isEditable = 1;
 			outputFiles = (
 				"$(DERIVED_FILES_DIR)/$(INPUT_FILE_BASE).h",
@@ -3609,6 +3610,8 @@
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
 			fileType = sourcecode.lex;
+			inputFiles = (
+			);
 			isEditable = 1;
 			outputFiles = (
 				"${DERIVED_FILES_DIR}/lex.${INPUT_FILE_BASE}.m",
@@ -3619,6 +3622,8 @@
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
 			fileType = sourcecode.yacc;
+			inputFiles = (
+			);
 			isEditable = 1;
 			outputFiles = (
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.m",
@@ -3905,7 +3910,6 @@
 				84EA919420FF840F00110B85 /* libmysqlclient.21.dylib in Frameworks_Copy */,
 				84EA919520FF840F00110B85 /* libssl.1.0.0.dylib in Frameworks_Copy */,
 				84EA919620FF840F00110B85 /* libcrypto.1.0.0.dylib in Frameworks_Copy */,
-				84EA919720FF840F00110B85 /* libpq.dylib in Frameworks_Copy */,
 			);
 			name = Frameworks_Copy;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6945,7 +6949,6 @@
 		84EA918020FE5DB000110B85 /* errmsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = errmsg.h; sourceTree = "<group>"; };
 		84EA918220FE5DDE00110B85 /* libssl.1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libssl.1.0.0.dylib; sourceTree = "<group>"; };
 		84EA918420FE5DF800110B85 /* libcrypto.1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libcrypto.1.0.0.dylib; sourceTree = "<group>"; };
-		84EA918620FE5F7800110B85 /* libpq.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libpq.dylib; sourceTree = "<group>"; };
 		84EB2DD51E32990D00C273AA /* LabJackU6.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = LabJackU6.nib; sourceTree = "<group>"; };
 		84EB2DD81E32990D00C273AA /* ORLabJackU6Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORLabJackU6Controller.h; sourceTree = "<group>"; };
 		84EB2DD91E32990D00C273AA /* ORLabJackU6Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORLabJackU6Controller.m; sourceTree = "<group>"; };
@@ -7343,6 +7346,7 @@
 		E6653F9D23A8301C00A53678 /* ORFlashCamMiniCrateController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamMiniCrateController.m; sourceTree = "<group>"; };
 		E66DB72E23B42E17005CDB2C /* FlashCamADC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FlashCamADC.xib; sourceTree = "<group>"; };
 		E67894D621E91CD400B66977 /* Messaging.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Messaging.tif; sourceTree = "<group>"; };
+		E67BCDF925998CF8007A7473 /* libpq.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libpq.5.dylib; sourceTree = "<group>"; };
 		E681A79F23BA771F00F76977 /* FlashCamMiniCrate.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = FlashCamMiniCrate.nib; sourceTree = "<group>"; };
 		E686441223BD249400EA43D1 /* FlashCamEthLink.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FlashCamEthLink.xib; sourceTree = "<group>"; };
 		E686441423BD292B00EA43D1 /* flashcam_ethlink.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flashcam_ethlink.png; sourceTree = "<group>"; };
@@ -7476,7 +7480,6 @@
 				84EA918320FE5DDF00110B85 /* libssl.1.0.0.dylib in Frameworks */,
 				708077D524F435CB00F29EFE /* libLabJackM-1.20.0.dylib in Frameworks */,
 				8434A359055B3287002D3102 /* Cocoa.framework in Frameworks */,
-				84EA918720FE5F7800110B85 /* libpq.dylib in Frameworks */,
 				84EA916820FE5A3700110B85 /* libmysqlclient.21.dylib in Frameworks */,
 				8470D01518241FEE0054F7D4 /* Accelerate.framework in Frameworks */,
 				8439D5EF05BEFF3A0077EFF2 /* Carbon.framework in Frameworks */,
@@ -7488,6 +7491,7 @@
 				2DC1EE800F33724E00E93C75 /* WebKit.framework in Frameworks */,
 				840F5B191222C90000D49A75 /* QTKit.framework in Frameworks */,
 				84E6CD001E4247BD004D6978 /* libusb-1.0.a in Frameworks */,
+				E67BCDFA25998CF9007A7473 /* libpq.5.dylib in Frameworks */,
 				8458E91515DA8A2A005C43A9 /* ScriptingBridge.framework in Frameworks */,
 				8481E67917653766001AB905 /* SystemConfiguration.framework in Frameworks */,
 				4322E9B217830004008E78A4 /* GLUT.framework in Frameworks */,
@@ -7803,7 +7807,7 @@
 				84EA916720FE5A3700110B85 /* libmysqlclient.21.dylib */,
 				84EA918220FE5DDE00110B85 /* libssl.1.0.0.dylib */,
 				84EA918420FE5DF800110B85 /* libcrypto.1.0.0.dylib */,
-				84EA918620FE5F7800110B85 /* libpq.dylib */,
+				E67BCDF925998CF8007A7473 /* libpq.5.dylib */,
 			);
 			path = libUniversal;
 			sourceTree = "<group>";
@@ -17906,7 +17910,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# set the code version from svn or git\n# if using git, set the bundle version to the git tag\nversion=\"-\"\nif [ -d \".svn\" ]; then\n    if [ -x \"/usr/bin/svnversion\" ]; then\n        version=`/usr/bin/svnversion .`\n        if [ \"$version\" == \"Unversioned directory\" ]; then\n            version=\"-\"\n        fi\n    fi\nfi\nif [ -d \".git\" ]; then\n    if [ -x \"/usr/bin/git\" ]; then\n        version=`/usr/bin/git rev-list HEAD --count`\n        if [\"$version\" == \"fatal: not a git repository (or any of the parent directories): .git\" ]; then\n            version=\"-\"\n        fi\n        gitrev=`/usr/bin/git rev-parse HEAD`\n        echo \"$gitrev\" > $TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/gitrevhash\n        release=`/usr/bin/git describe --tags --always --abbrev=0`\n        target_plist=\"$TARGET_BUILD_DIR/$INFOPLIST_PATH\"\n        dsym_plist=\"$DWARF_DSYM_FOLDER_PATH/$DWARF_DSYM_FILE_NAME/Contents/Info.plist\"\n        for plist in \"$target_plist\" \"$dsym_plist\"; do\n          if [ -f \"$plist\" ]; then\n            /usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $release\" \"$plist\"\n          fi\n        done\n    fi\nfi\necho \"$version\" > $TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/orcaversion\n\n#\n# add dynamic libraries to the app bundle - PH\n#\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n\nexport DYLIB=libcrypto.1.0.0.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n# note: run \"otool -L\" on the library to get the source library name for \"-change\"\ninstall_name_tool -change $DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libmysqlclient.21.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change @rpath/$DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libpq.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change $DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libssl.1.0.0.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change $DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libusb-1.0.0.dylib\ncp -f \"$SRCROOT/Libraries/labjack/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change @rpath/$DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"";
+			shellScript = "# set the code version from svn or git\n# if using git, set the bundle version to the git tag\nversion=\"-\"\nif [ -d \".svn\" ]; then\n    if [ -x \"/usr/bin/svnversion\" ]; then\n        version=`/usr/bin/svnversion .`\n        if [ \"$version\" == \"Unversioned directory\" ]; then\n            version=\"-\"\n        fi\n    fi\nfi\nif [ -d \".git\" ]; then\n    if [ -x \"/usr/bin/git\" ]; then\n        version=`/usr/bin/git rev-list HEAD --count`\n        if [\"$version\" == \"fatal: not a git repository (or any of the parent directories): .git\" ]; then\n            version=\"-\"\n        fi\n        gitrev=`/usr/bin/git rev-parse HEAD`\n        echo \"$gitrev\" > $TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/gitrevhash\n        release=`/usr/bin/git describe --tags --always --abbrev=0`\n        target_plist=\"$TARGET_BUILD_DIR/$INFOPLIST_PATH\"\n        dsym_plist=\"$DWARF_DSYM_FOLDER_PATH/$DWARF_DSYM_FILE_NAME/Contents/Info.plist\"\n        for plist in \"$target_plist\" \"$dsym_plist\"; do\n          if [ -f \"$plist\" ]; then\n            /usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $release\" \"$plist\"\n          fi\n        done\n    fi\nfi\necho \"$version\" > $TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Resources/orcaversion\n\n#\n# add dynamic libraries to the app bundle - PH\n#\nmkdir -p \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n\nexport DYLIB=libcrypto.1.0.0.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\n# note: run \"otool -L\" on the library to get the source library name for \"-change\"\ninstall_name_tool -change $DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libssl.1.0.0.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change $DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libmysqlclient.21.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change @rpath/$DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libpq.5.dylib\ncp -f \"$SRCROOT/Libraries/libUniversal/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change $DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n\nexport DYLIB=libusb-1.0.0.dylib\ncp -f \"$SRCROOT/Libraries/labjack/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/Frameworks\"\ninstall_name_tool -change @rpath/$DYLIB @loader_path/../Frameworks/$DYLIB \"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents/MacOS/$PRODUCT_NAME\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
