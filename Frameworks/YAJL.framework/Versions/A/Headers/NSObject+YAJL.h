@@ -27,8 +27,8 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#import "YAJLGen.h"
-#import "YAJLParser.h"
+#import <YAJL/YAJLGen.h>
+#import <YAJL/YAJLParser.h>
 
 /*!
  Generate JSON string from NSArray, NSDictionary or custom object or parse JSON from NSString or custom object.

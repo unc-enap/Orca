@@ -27,7 +27,7 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#include "yajl_gen.h"
+#include <YAJL/yajl_gen.h>
 
 
 extern NSString *const YAJLGenInvalidObjectException; //! Exception type if we encounter invalid object
