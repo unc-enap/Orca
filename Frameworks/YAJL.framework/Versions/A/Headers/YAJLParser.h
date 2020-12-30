@@ -28,7 +28,7 @@
 //
 
 
-#include "yajl_parse.h"
+#include <YAJL/yajl_parse.h>
 
 
 extern NSString *const YAJLErrorDomain; //! Error domain for YAJL
