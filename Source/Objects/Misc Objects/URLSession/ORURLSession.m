@@ -44,7 +44,15 @@
         dispatch_semaphore_signal(sem);
     }] resume];
     
+    /*  This really should not be necessary, but about 1 in a million times without this small delay
+        the decrement below gives an EXC_BAD_INSTRUCTION exception due to the semaphore being unbalanced.
+        The 1 us delay is overkill, but will leave for now unless it becomes a problem since Orca crashes
+        if the exception is thrown. */
+    [NSThread sleepForTimeInterval:1.0e-6];
+
     dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+    dispatch_release(sem);
+
     return result;
 }
 
