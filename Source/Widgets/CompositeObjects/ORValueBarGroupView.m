@@ -148,5 +148,11 @@
 */
 - (void) setXLabel:(NSString*)aLabel { [xAxis setLabel:aLabel]; }
 
+- (void) setNeedsDisplay:(BOOL)needsDisplay
+{
+    [super setNeedsDisplay:needsDisplay];
+    for(id bar in valueBars) [bar setNeedsDisplay:needsDisplay];
+}
+
 - (IBAction) setLogX:(id)sender  { [xAxis setLog:[sender intValue]]; }
 @end
