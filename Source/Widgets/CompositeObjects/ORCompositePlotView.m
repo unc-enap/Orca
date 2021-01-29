@@ -246,6 +246,12 @@
 	[self adjustPositionsAndSizes];	
 }
 
+- (void) setNeedsDisplay:(BOOL)needsDisplay
+{
+    [super setNeedsDisplay:needsDisplay];
+    [[self plotView] setNeedsDisplay:needsDisplay];
+}
+
 #pragma mark •••Pass-thru Methods
 - (id)  plotWithTag:(int)aTag				  { return  [plotView plotWithTag:aTag]; }
 - (id)  plot:(int)aTag						  { return  [plotView plot:aTag]; }
