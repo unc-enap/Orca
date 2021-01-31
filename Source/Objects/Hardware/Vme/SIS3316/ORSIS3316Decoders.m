@@ -79,6 +79,32 @@
 
     int i;
     for(i=0;i<numRecords;i++){
+        // Histogram the MAW values if available.  If not use, the start/end energy if available.
+        uint32_t hskip = 2;
+        if(dataStartPtr[0] & (1 << 0)) hskip += 7;
+        if(dataStartPtr[0] & (1 << 1)) hskip += 2;
+        bool haveEnergy = false;
+        uint32_t startValue = 0, endValue = 0;
+        if(dataStartPtr[0] & (1 << 2)){
+            startValue = dataStartPtr[hskip+1];
+            endValue   = dataStartPtr[hskip+2];
+            haveEnergy = true;
+        }
+        else if(dataStartPtr[0] & (1 << 3)){
+            uint32_t nskip = hskip;
+            if(dataStartPtr[0] & (1 << 2)) nskip += 3;
+            startValue = dataStartPtr[nskip];
+            endValue   = dataStartPtr[nskip+1];
+            haveEnergy = true;
+        }
+        if(haveEnergy){
+            uint32_t energy = (uint32_t) ABS(((int)endValue) - ((int)startValue));
+            [aDataSet histogram:energy
+                        numBins:0x20000
+                         sender:self
+                       withKeys:@"SIS3316",@"Energy",crateKey,cardKey,channelKey,nil];
+        }
+
         uint32_t numLongs    = dataStartPtr[dataHeaderLen-1] & 0x3ffffff;
         uint32_t numSamples  = numLongs*2;
         uint32_t checkByte   = dataStartPtr[dataHeaderLen-1] >>28;
