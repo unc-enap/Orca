@@ -168,4 +168,18 @@
 	}
 }
 
+- (IBAction) userSetROIMin:(id)sender
+{
+    if((uint32_t) [sender intValue] < [model maxChannel])
+        [model setMinChannel:(uint32_t)[sender intValue]];
+    else [sender setIntValue:[model minChannel]];
+}
+
+- (IBAction) userSetROIMax:(id)sender
+{
+    if((uint32_t) [sender intValue] > [model minChannel])
+        [model setMaxChannel:(uint32_t)[sender intValue]];
+    else [sender setIntValue:[model maxChannel]];
+}
+
 @end

@@ -61,6 +61,8 @@
 - (void) analysisChanged:(NSNotification*)aNotification;
 - (void) roiMinChanged:(NSNotification*)aNotification;
 - (void) roiMaxChanged:(NSNotification*)aNotification;
+- (IBAction) userSetROIMin:(id)sender;
+- (IBAction) userSetROIMax:(id)sender;
 @end
 
 
