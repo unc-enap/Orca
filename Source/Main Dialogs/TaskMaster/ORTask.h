@@ -82,6 +82,9 @@
 - (void) addExtraPanel:(NSView*)aView;
 - (BOOL) isSlave;
 - (void) setIsSlave:(BOOL)state;
+- (NSButton*) getStartButton;
+- (NSTextField*) getRunStateField;
+- (NSTextField*) getNextRunTimeField;
 
 #pragma mark ¥¥¥Actions
 -(IBAction) startAction:(id)sender;
