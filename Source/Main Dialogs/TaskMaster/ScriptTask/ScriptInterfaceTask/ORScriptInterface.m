@@ -103,8 +103,14 @@
 
 - (void) runningChanged:(NSNotification*)aNote
 {
-	if([[delegate scriptRunner] running])[self setMessage:@"Running"];
-	else [self setMessage:@"Idle"];
+    if([[delegate scriptRunner] running]){
+        [self setMessage:@"Running"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORTaskDidStartNotification object:self];
+    }
+    else{
+        [self setMessage:@"Idle"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORTaskDidFinishNotification object:self];
+    }
 }
 
 #pragma mark ¥¥¥Actions

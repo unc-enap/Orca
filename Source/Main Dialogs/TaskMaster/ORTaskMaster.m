@@ -153,18 +153,36 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(TaskMaster);
 
 - (void) taskStarted:(NSNotification*)aNote
 {
+    // add task to list of running tasks
 	if(!runningTasks)runningTasks = [[NSMutableArray alloc] init];
 	[runningTasks addObject:[aNote object]];
+    // if this is an ORScriptInterface, it was started from the script GUI, make the view consistent with running status
+    if([[aNote object] isKindOfClass:[ORScriptInterface class]]){
+        ORScriptInterface* task = [aNote object];
+        [[task getStartButton] setTitle:@"Stop"];
+        [[task getRunStateField] setStringValue:@"Running"];
+        [[task getNextRunTimeField] setStringValue:@"Now"];
+    }
+    // update the running task list in the database if option is selected in couchdb
 	[self postRunningTaskList];
 }
 
 - (void) taskStopped:(NSNotification*)aNote
 {
+    // if this is an ORScriptInterface, it was started from the script GUI, make the view consistent with running status
+    if([[aNote object] isKindOfClass:[ORScriptInterface class]]){
+        ORScriptInterface* task = [aNote object];
+        [[task getStartButton] setTitle:@"Start"];
+        [[task getRunStateField] setStringValue:@"Stopped"];
+        [[task getNextRunTimeField] setStringValue:@"Not Scheduled"];
+    }
+    // remove object from list of running tasks
 	[runningTasks removeObject:[aNote object]];
 	if([runningTasks count] == 0){
 		[runningTasks release];
 		runningTasks = nil;
 	}
+    // update the running task list in the database if option is selected in couchdb
 	[self postRunningTaskList];
 }
 

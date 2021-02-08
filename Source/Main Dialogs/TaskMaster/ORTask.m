@@ -301,6 +301,21 @@ NSString* ORTaskDidFinishNotification   = @"ORTaskDidFinishNotification";
     }
 }
 
+- (NSButton*) getStartButton
+{
+    return startButton;
+}
+
+- (NSTextField*) getRunStateField
+{
+    return runStateField;
+}
+
+- (NSTextField*) getNextRunTimeField
+{
+    return nextRunTimeField;
+}
+
 #pragma mark •••Actions
 -(IBAction) detailsAction:(id)sender 
 {
