@@ -53,6 +53,9 @@
 	}
 	for(i=0;i<kNumArduinoUNOAdcChannels;i++){
 		[[adcMatrix cellAtRow:i column:0] setTag:i];
+        [[adcMatrix cellAtRow:i column:0] setFormatter:formatter];
+    }
+    for(i=0; i<kNumArduinoUNOProcessChannels; i++){
 		[[minValueMatrix cellAtRow:i column:0]	setTag:i];
 		[[maxValueMatrix cellAtRow:i column:0]	setTag:i];
 		[[slopeMatrix cellAtRow:i column:0]		setTag:i];
@@ -300,13 +303,13 @@
 {
 	if(!aNotification){
 		int i;
-		for(i=0;i<kNumArduinoUNOAdcChannels;i++){
+		for(i=0;i<kNumArduinoUNOProcessChannels;i++){
 			[[lowLimitMatrix cellWithTag:i] setFloatValue:[model lowLimit:i]];
 		}
 	}
 	else {
 		int chan = [[[aNotification userInfo] objectForKey:@"Channel"] floatValue];
-		if(chan<kNumArduinoUNOAdcChannels){
+		if(chan<kNumArduinoUNOProcessChannels){
 			[[lowLimitMatrix cellWithTag:chan] setFloatValue:[model lowLimit:chan]];
 		}
 	}
@@ -316,13 +319,13 @@
 {
 	if(!aNotification){
 		int i;
-		for(i=0;i<kNumArduinoUNOAdcChannels;i++){
+		for(i=0;i<kNumArduinoUNOProcessChannels;i++){
 			[[hiLimitMatrix cellWithTag:i] setFloatValue:[model hiLimit:i]];
 		}
 	}
 	else {
 		int chan = [[[aNotification userInfo] objectForKey:@"Channel"] floatValue];
-		if(chan<kNumArduinoUNOAdcChannels){
+		if(chan<kNumArduinoUNOProcessChannels){
 			[[hiLimitMatrix cellWithTag:chan] setFloatValue:[model hiLimit:chan]];
 		}
 	}
@@ -332,13 +335,13 @@
 {
 	if(!aNotification){
 		int i;
-		for(i=0;i<kNumArduinoUNOAdcChannels;i++){
+		for(i=0;i<kNumArduinoUNOProcessChannels;i++){
 			[[minValueMatrix cellWithTag:i] setFloatValue:[model minValue:i]];
 		}
 	}
 	else {
 		int chan = [[[aNotification userInfo] objectForKey:@"Channel"] floatValue];
-		if(chan<kNumArduinoUNOAdcChannels){
+		if(chan<kNumArduinoUNOProcessChannels){
 			[[minValueMatrix cellWithTag:chan] setFloatValue:[model minValue:chan]];
 		}
 	}
@@ -348,13 +351,13 @@
 {
 	if(!aNotification){
 		int i;
-		for(i=0;i<kNumArduinoUNOAdcChannels;i++){
+		for(i=0;i<kNumArduinoUNOProcessChannels;i++){
 			[[maxValueMatrix cellWithTag:i] setFloatValue:[model maxValue:i]];
 		}
 	}
 	else {
 		int chan = [[[aNotification userInfo] objectForKey:@"Channel"] floatValue];
-		if(chan<kNumArduinoUNOAdcChannels){
+		if(chan<kNumArduinoUNOProcessChannels){
 			[[maxValueMatrix cellWithTag:chan] setFloatValue:[model maxValue:chan]];
 		}
 	}
@@ -364,13 +367,13 @@
 {
 	if(!aNotification){
 		int i;
-		for(i=0;i<kNumArduinoUNOAdcChannels;i++){
+		for(i=0;i<kNumArduinoUNOProcessChannels;i++){
 			[[slopeMatrix cellWithTag:i] setFloatValue:[model slope:i]];
 		}
 	}
 	else {
 		int chan = [[[aNotification userInfo] objectForKey:@"Channel"] floatValue];
-		if(chan<kNumArduinoUNOAdcChannels){
+		if(chan<kNumArduinoUNOProcessChannels){
 			[[slopeMatrix cellWithTag:chan] setFloatValue:[model slope:chan]];
 		}
 	}
@@ -380,13 +383,13 @@
 {
 	if(!aNotification){
 		int i;
-		for(i=0;i<kNumArduinoUNOAdcChannels;i++){
+		for(i=0;i<kNumArduinoUNOProcessChannels;i++){
 			[[interceptMatrix cellWithTag:i] setFloatValue:[model intercept:i]];
 		}
 	}
 	else {
 		int chan = [[[aNotification userInfo] objectForKey:@"Channel"] floatValue];
-		if(chan<kNumArduinoUNOAdcChannels){
+		if(chan<kNumArduinoUNOProcessChannels){
 			[[interceptMatrix cellWithTag:chan] setFloatValue:[model intercept:chan]];
 		}
 	}
