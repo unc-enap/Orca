@@ -24,6 +24,7 @@
 
 #define kNumArduinoUNOAdcChannels		6
 #define kNumArduinoUNOCustomChannels	4
+#define kNumArduinoUNOProcessChannels   10 // ADC channels + custom channels
 #define kNumArduinoUNOControlValues		10
 #define kNumArduinoUNOPins				14 //first two are serial lines
 
@@ -49,12 +50,12 @@
 		//process stuff
 		unsigned int	oldProcessOutMask;
 		unsigned int	processOutMask;
-		float           lowLimit[kNumArduinoUNOAdcChannels];
-		float           hiLimit[kNumArduinoUNOAdcChannels];
-		float           minValue[kNumArduinoUNOAdcChannels];
-		float           maxValue[kNumArduinoUNOAdcChannels];
-		float           slope[kNumArduinoUNOAdcChannels];
-		float           intercept[kNumArduinoUNOAdcChannels];
+		float           lowLimit[kNumArduinoUNOProcessChannels];
+		float           hiLimit[kNumArduinoUNOProcessChannels];
+		float           minValue[kNumArduinoUNOProcessChannels];
+		float           maxValue[kNumArduinoUNOProcessChannels];
+		float           slope[kNumArduinoUNOProcessChannels];
+		float           intercept[kNumArduinoUNOProcessChannels];
 		float			sketchVersion;
 }
 
