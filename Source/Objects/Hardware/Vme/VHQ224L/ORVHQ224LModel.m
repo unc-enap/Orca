@@ -206,7 +206,9 @@ NSString* ORVHQ224LMaxCurrentChanged		= @"ORVHQ224LMaxCurrentChanged";
 {
 	if(aChan>=kNumVHQ224LChannels)return;
     [[[self undoManager] prepareWithInvocationTarget:self] setVoltage:aChan withValue:voltage[aChan]];
-	voltage[aChan] = aVoltage;
+    if(aVoltage >= 0 && aVoltage <= kVHQ224LMaxVoltage) voltage[aChan] = aVoltage;
+    if(aVoltage < 0) NSLogColor([NSColor redColor], @"ORVHQ224LModel: voltage must be > 0, polarity is set in hardware\n");
+    else if(aVoltage >= kVHQ224LMaxVoltage) NSLogColor([NSColor redColor], @"ORVHQ224LModel: maximum allowed voltage is 4000 V\n");
     [[NSNotificationCenter defaultCenter] postNotificationName:ORVHQ224LSetVoltageChanged object:self userInfo: nil];
 }
 

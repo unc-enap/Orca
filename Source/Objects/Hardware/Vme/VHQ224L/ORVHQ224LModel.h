@@ -48,6 +48,7 @@ enum {
 };
 
 #define kNumVHQ224LChannels 2
+#define kVHQ224LMaxVoltage 4000
 
 //status 1 word bits
 #define kError		0x80
