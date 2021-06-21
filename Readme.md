@@ -23,21 +23,22 @@ II. Notes
 III. Getting Started
 ---------------
 
-1.  Obtaining the source code
-If you do not plan to make changes to the source code, you can obtain a local copy of the code from a terminal with:
+1.  **Obtaining the source code**
+- If you do not plan to make changes to the source code, you can obtain a local copy of the code from a terminal with:
 ```bash
 git clone https://github.com/unc-enap/Orca
 ```
-Alternatively, you can launch a zip file download from the browser by selecting "Clone or download" from the URL.
+- Alternatively, you can launch a zip file download from the browser by selecting "Clone or download" from the URL.
 
-2.  Building the source code
+2.  **Building the source code**
+
 To launch the Xcode project builder and compile the code:
 - Point the finder to the base directory of the code
 - Double-click on Orca.xcodeproj
 - Alternatively, from a terminal: "open Orca.xcodeproj"
 - In the "Product" menu, select "Build"
 
-3.  Running Orca
+3.  **Running Orca**
 - In the Xcode "Project" menu, select "Run"
 - By default, this will be in debug mode
 - To leave debug mode, select "Detach from Orca" in the "Debug" menu of Xcode
@@ -45,15 +46,17 @@ To launch the Xcode project builder and compile the code:
 - Once Orca is running, Ctrl-click on the Orca icon in the dock and select "Options->Keep in Dock"
 - To later launch the version of Orca just compiled, select the icon in the dock
 
-4.  Updating Orca
+4.  **Updating Orca**
 - To update Orca from a terminal, go to the base directory of the source code, then:
 ```bash
 git pull
 ```
+- Then rebuild Orca from Xcode as above.
 - Alternatively, the "Source Control" menu in Xcode has a "Pull" option which will update the code from the selected source.
 The code must then be rebuilt in Xcode as above.  The icon in the dock will launch the most recently compiled version.
 
-5.  Orca notifications
+5.  **Orca notifications**
+
 To receive notifications when there are updates or other conversations related to the Orca code:
 - Go to https://github.com/unc-enap/Orca in a browser
 - Select the "Watch" icon near the top right
@@ -62,8 +65,9 @@ To receive notifications when there are updates or other conversations related t
 IV.  Orca Development
 ---------------------
 
-1.  Creating a fork
-If you plan to make changes to the source code, instead of obtaining the source directly from the master as above:
+1.  **Creating a fork**
+
+If you plan to make changes to the source code, instead of obtaining the source directly from the main branch as above:
 - In a browser, log into your GitHub account
 - Then go to: https://github.com/unc-enap/Orca
 - Select the "Fork" icon in the top right
@@ -72,18 +76,21 @@ If you plan to make changes to the source code, instead of obtaining the source 
 git clone https://github.com/YOUR_USERNAME/Orca
 ```
 
-2.  Updating your fork
+2.  **Updating your fork**
+
 To update your local fork from the base directory of the source code in a terminal (the first step only has to be done once):
 ```bash
-git remote add upstream master
+git remote add upstream https://gitbhub.com/unc-enap/Orca
 git pull upstream master
 ```
 
-3.  Committing changes
+3.  **Committing changes**
+
 As you edit your local copy of the code, make commits early and often as they are ready and tested with:
 ```bash
-git commit
+git commit [...]
 ```
+where the last part of the command is the path to a single file or a space separated list of files.  For larger numbers of changed files, the -a flag can be used in place of the file list to commit all changes to tracked files.
 
 This will automatically launch a text editor for you to enter a commit message.
 The code will not be committed until the message in the editor is saved and closed.
@@ -92,22 +99,24 @@ git config --global core.editor "emacs"
 
 For short commit messages, you can add them to the command line:
 ```bash
-git commit -m "Your message here."
+git commit -m "Your message here." [...]
 ```
 
-4.  Pushing changes
+4.  **Pushing changes**
+
 After you have made one or a series of commits, push the changes to your forked repository:
 ```bash
 git push
 ```
-Alternatively, you can pull, commit and push changes using the Xcode "Source Control" menu.
+*Alternatively, you can conveniently pull, review, commit, and push changes using the Xcode "Source Control" menu.*
 
-5.  Creating a pull request
-Now if you visit the URL for your repository in a browser, you will see your latest changes in the commit history.  If your changes are tested and ready to be incorporated into the master branch of Orca, then you can submit a pull request.  Before submitting a pull request, it is a good idea to update your fork and deal with any conflicts.  Then, from the URL of your fork of Orca:
+5.  **Creating a pull request**
+
+  Now if you visit the URL for your repository in a browser, you will see your latest changes in the commit history.  If your changes are tested and ready to be incorporated into the master branch of Orca, then you can submit a pull request.  Before submitting a pull request, it is a good idea to update your fork and deal with any conflicts.  Then, from the URL of your fork of Orca:
 - click on "New Pull Request"
 - set base repository to unc-enap/Orca
 - set the head repository to YOUR_USERNAME/Orca
-- compare the changes on the base master to the branch you want to pull changes from
+- compare the changes on the base branch you want to merge to against the branch you want to pull changes from
 - submit the pull request if the changes look good and there are no unresolved conflicts
 - to see the status of your pull request, choose the "Pull requests" tab at unc-enap/Orca
 - once your code is reviewed, the pull request may be accepted or changes will be suggested in the comments
@@ -124,8 +133,8 @@ Running the 32 bit version is no longer recommended unless required by your syst
 VI.  Obsolete SVN Instructions
 ------------------------------
 
-As mentioned above, the repository on the old svn server will no longer be updated, and the repository is read-only.
-If you are running a system that does
+As mentioned above, the repository on the old svn server will no longer be updated, and the repository is read-only.  Although it is not recommended, the out-of-date code can be obtained from the svn server.
+
 To obtain the entire code base, drivers, etc from the svn server:
 ```bash
 svn co svn://orca.physics.unc.edu
