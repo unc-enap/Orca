@@ -1,5 +1,5 @@
 //  Orca
-//  ORFlashCamMasterModel.h
+//  ORFlashCamTriggerModel.h
 //
 //  Created by Tom Caldwell on Monday Jan 1, 2020
 //  Copyright (c) 2020 University of North Carolina. All rights reserved.
@@ -20,14 +20,12 @@
 #import "ORFlashCamCard.h"
 #import "ORConnector.h"
 
-#define kFlashCamMasterConnections 12
+#define kFlashCamTriggerConnections 12
 
-@interface ORFlashCamMasterModel : ORFlashCamCard
+@interface ORFlashCamTriggerModel : ORFlashCamCard
 {
     @private
-    unsigned int boardAddress;
-    ORConnector* ethConnector;
-    ORConnector* trigConnector[kFlashCamMasterConnections];
+    ORConnector* trigConnector[kFlashCamTriggerConnections];
 }
 
 #pragma mark •••Initialization
@@ -40,10 +38,8 @@
 - (void) guardianAssumingDisplayOfConnectors:(id)aGuardian;
 
 #pragma mark •••Accessors
-- (unsigned int) boardAddress;
 - (ORConnector*) ethConnector;
 - (ORConnector*) trigConnector:(unsigned int)index;
-- (void) setBoardAddress:(unsigned int)address;
 - (void) setEthConnector:(ORConnector*)connector;
 - (void) setTrigConnector:(ORConnector*)connector atIndex:(unsigned int)index;
 
@@ -60,4 +56,4 @@
 @end
 
 #pragma mark •••Externals
-extern NSString* ORFlashCamMasterModelBoardAddressChanged;
+extern NSString* ORFlashCamTriggerModelBoardAddressChanged;

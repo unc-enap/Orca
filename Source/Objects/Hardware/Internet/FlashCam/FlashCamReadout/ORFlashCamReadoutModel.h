@@ -1,5 +1,5 @@
 //  Orca
-//  ORFlashCamRunModel.h
+//  ORFlashCamReadoutModel.h
 //
 //  Created by Tom Caldwell on Monday Dec 26,2019
 //  Copyright (c) 2019 University of North Carolina. All rights reserved.
@@ -17,43 +17,36 @@
 //for the use of this software.
 //-------------------------------------------------------------
 
-#import "OrcaObject.h"
+#import "ORReadOutList.h"
+#import "ORDataTaker.h"
 #import "ORTaskSequence.h"
 #import "ORConnector.h"
+#import "ORFlashCamListener.h"
+#import "ORFlashCamCard.h"
+#import "fcio.h"
 
 #define kFlashCamMaxEthInterfaces 4
+#define kFlashCamDefaultPort 4000
+#define kFlashCamDefaultBuffer 20000
+#define kFlashCamDefaultTimeout 2000 // ms
 
-@interface ORFlashCamRunModel : OrcaObject
+@interface ORFlashCamReadoutModel : OrcaObject <ORDataTakerReadOutList>
 {
     @private
     NSString* ipAddress;
     NSString* username;
     NSMutableArray* ethInterface;
+    NSMutableArray* ethListenerIndex;
     NSString* ethType;
-    int maxPayload;
-    int eventBuffer;
-    int phaseAdjust;
-    int baselineSlew;
-    int integratorLen;
-    int eventSamples;
-    int traceType;
-    float pileupRejection;
-    float logTime;
-    bool gpsEnabled;
-    bool includeBaseline;
-    NSString* additionalFlags;
-    NSString* overrideCmd;
-    bool runOverride;
-    NSString* remoteDataPath;
-    NSString* remoteFilename;
-    unsigned int runNumber;
-    unsigned int runCount;
-    unsigned int runLength;
-    bool runUpdate;
+    NSMutableDictionary* configParams;
     ORPingTask* pingTask;
     bool pingSuccess;
-    ORTaskSequence* runTasks;
+    ORTaskSequence* firmwareTasks;
+    NSMutableArray* firmwareQueue;
     bool runKilled;
+    NSMutableArray* fclistener;
+    ORReadOutList* readOutList;
+    //NSMutableArray* dataTakers;
 }
 
 #pragma mark •••Initialization
@@ -64,32 +57,22 @@
 
 #pragma mark •••Accessors
 - (NSString*) ipAddress;
+- (NSString*) username;
+- (bool) localMode;
 - (int) ethInterfaceCount;
 - (int) indexOfInterface:(NSString*)interface;
 - (NSString*) ethInterfaceAtIndex:(int)index;
+- (int) ethListenerIndex:(int)index;
 - (NSString*) ethType;
-- (int) maxPayload;
-- (int) eventBuffer;
-- (int) phaseAdjust;
-- (int) baselineSlew;
-- (int) integratorLen;
-- (int) eventSamples;
-- (int) traceType;
-- (float) pileupRejection;
-- (float) logTime;
-- (bool) gpsEnabled;
-- (bool) includeBaseline;
-- (NSString*) additionalFlags;
-- (NSString*) overrideCmd;
-- (bool) runOverride;
-- (NSString*) username;
-- (NSString*) remoteDataPath;
-- (NSString*) remoteFilename;
-- (unsigned int) runNumber;
-- (unsigned int) runCount;
-- (unsigned int) runLength;
-- (bool) runUpdate;
+- (NSNumber*) configParam:(NSString*)p;
 - (bool) pingSuccess;
+- (int) listenerCount;
+- (ORFlashCamListener*) getListenerAtIndex:(int)i;
+- (ORFlashCamListener*) getListener:(NSString*)eth atPort:(uint16_t)p;
+- (ORFlashCamListener*) getListenerForIP:(NSString*)ip atPort:(uint16_t)p;
+- (int) getIndexOfListener:(NSString*)eth atPort:(uint16_t)p;
+- (ORReadOutList*) readOutList;
+- (NSMutableArray*) children;
 
 - (void) setIPAddress:(NSString*)ip;
 - (void) setUsername:(NSString*)user;
@@ -97,39 +80,39 @@
 - (void) setEthInterface:(NSString*)eth atIndex:(int)index;
 - (void) removeEthInterface:(NSString*)eth;
 - (void) removeEthInterfaceAtIndex:(int)index;
+- (void) setEthListenerIndex:(int)lindex atIndex:(int)index;
 - (void) setEthType:(NSString*)etype;
-- (void) setMaxPayload:(int)payload;
-- (void) setEventBuffer:(int)buffer;
-- (void) setPhaseAdjust:(int)phase;
-- (void) setBaselineSlew:(int)slew;
-- (void) setIntegratorLen:(int)len;
-- (void) setEventSamples:(int)samples;
-- (void) setTraceType:(int)ttype;
-- (void) setPileupRejection:(float)rej;
-- (void) setLogTime:(float)time;
-- (void) setGPSEnabled:(bool)enable;
-- (void) setIncludeBaseline:(bool)inc;
-- (void) setAdditionalFlags:(NSString*)flags;
-- (void) setOverrideCmd:(NSString*)cmd;
-- (void) setRunOverride:(bool)runover;
-- (void) setRemoteDataPath:(NSString*)path;
-- (void) setRemoteFilename:(NSString*)fname;
-- (void) setRunNumber:(unsigned int)run;
-- (void) setRunCount:(unsigned int)count;
-- (void) setRunLength:(unsigned int)length;
-- (void) setRunUpdate:(bool)update;
+- (void) setConfigParam:(NSString*)p withValue:(NSNumber*)v;
+- (void) addListener:(NSString*)eth atPort:(uint16_t)p;
+- (void) setListener:(NSString*)eth atPort:(uint16_t)p forIndex:(int)i;
+- (void) removeListener:(NSString*)eth atPort:(uint16_t)p;
+- (void) removeListenerAtIndex:(int)i;
+- (void) setReadOutList:(ORReadOutList*)readList;
 
 #pragma mark •••Commands
+- (void) updateIPs;
 - (void) sendPing:(bool)verbose;
 - (bool) pingRunning;
 - (void) taskFinished:(id)task;
 - (void) tasksCompleted:(id)sender;
 - (void) taskData:(NSDictionary*)taskData;
+- (NSMutableArray*) ethInterfacesForListener:(int)index;
+- (int) listenerIndexForCard:(ORCard*)card;
+- (void) getFirmwareVersion:(ORFlashCamCard*)card;
+- (void) getFirmwareVersionAfterPing:(ORFlashCamCard*)card;
+- (int) ethIndexForCard:(ORCard*)card;
 - (NSMutableArray*) runFlags;
+- (NSMutableArray*) connectedObjects:(NSString*)cname toInterface:(NSString*)eth;
 - (NSMutableArray*) connectedObjects:(NSString*)cname;
 - (void) startRun;
 - (void) startRunAfterPing;
-- (void) killRun;
+//- (void) killRun;
+
+#pragma mark •••Data taker methods
+- (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
+- (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
+- (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
+- (void) reset;
 
 #pragma mark •••Archival
 - (id) initWithCoder:(NSCoder*)decoder;
@@ -138,33 +121,18 @@
 @end
 
 #pragma mark •••Externals
-extern NSString* ORFlashCamRunModelIPAddressChanged;
-extern NSString* ORFlashCamRunModelUsernameChanged;
-extern NSString* ORFlashCamRunModelEthInterfaceChanged;
-extern NSString* ORFlashCamRunModelEthInterfaceAdded;
-extern NSString* ORFlashCamRunModelEthInterfaceRemoved;
-extern NSString* ORFlashCamRunModelEthTypeChanged;
-extern NSString* ORFlashCamRunModelMaxPayloadChanged;
-extern NSString* ORFlashCamRunModelEventBufferChanged;
-extern NSString* ORFlashCamRunModelPhaseAdjustChanged;
-extern NSString* ORFlashCamRunModelBaselineSlewChanged;
-extern NSString* ORFlashCamRunModelIntegratorLenChanged;
-extern NSString* ORFlashCamRunModelEventSamplesChanged;
-extern NSString* ORFlashCamRunModelTraceTypeChanged;
-extern NSString* ORFlashCamRunModelPileupRejectionChanged;
-extern NSString* ORFlashCamRunModelLogTimeChanged;
-extern NSString* ORFlashCamRunModelGPSEnabledChanged;
-extern NSString* ORFlashCamRunModelIncludeBaselineChanged;
-extern NSString* ORFlashCamRunModelAdditionalFlagsChanged;
-extern NSString* ORFlashCamRunModelOverrideCmdChanged;
-extern NSString* ORFlashCamRunModelRunOverrideChanged;
-extern NSString* ORFlashCamRunModelRemoteDataPathChanged;
-extern NSString* ORFlashCamRunModelRemoteFilenameChanged;
-extern NSString* ORFlashCamRunModelRunNumberChanged;
-extern NSString* ORFlashCamRunModelRunCountChanged;
-extern NSString* ORFlashCamRunModelRunLengthChanged;
-extern NSString* ORFlashCamRunModelRunUpdateChanged;
-extern NSString* ORFlashCamRunModelPingStart;
-extern NSString* ORFlashCamRunModelPingEnd;
-extern NSString* ORFlashCamRunModelRunInProgress;
-extern NSString* ORFlashCamRunModelRunEnded;
+extern NSString* ORFlashCamReadoutModelIPAddressChanged;
+extern NSString* ORFlashCamReadoutModelUsernameChanged;
+extern NSString* ORFlashCamReadoutModelEthInterfaceChanged;
+extern NSString* ORFlashCamReadoutModelEthInterfaceAdded;
+extern NSString* ORFlashCamReadoutModelEthInterfaceRemoved;
+extern NSString* ORFlashCamReadoutModelEthTypeChanged;
+extern NSString* ORFlashCamReadoutModelConfigParamChanged;
+extern NSString* ORFlashCamReadoutModelPingStart;
+extern NSString* ORFlashCamReadoutModelPingEnd;
+extern NSString* ORFlashCamReadoutModelRunInProgress;
+extern NSString* ORFlashCamReadoutModelRunEnded;
+extern NSString* ORFlashCamReadoutModelListenerChanged;
+extern NSString* ORFlashCamReadoutModelListenerAdded;
+extern NSString* ORFlashCamReadoutModelListenerRemoved;
+extern NSString* ORFlashCamReadoutModelMonitoringUpdated;

@@ -18,19 +18,48 @@
 //-------------------------------------------------------------
 
 #import "ORCard.h"
+#import "ORConnector.h"
+
+#define kFlashCamFirmwareVerLen 4
 
 @interface ORFlashCamCard : ORCard {
+    unsigned int cardAddress;
+    ORConnector* ethConnector;
+    NSArray* firmwareVer;
+    NSMutableArray* taskdata;
+    uint32_t exceptionCount;
 }
 
 #pragma mark •••Accessors
+- (id) init;
+- (void) dealloc;
 - (id) adapter;
 - (Class) guardianClass;
 - (NSString*) cardSlotChangedNotification;
+- (unsigned int) cardAddress;
+- (NSArray*) firmwareVer;
+- (NSString*) firmwareVerType;
+- (NSString*) firmwareVerRev;
+- (NSString*) firmwareVerDate;
+- (NSString*) firmwareVerTag;
+- (void) setCardAddress:(unsigned int)addr;
+- (uint32_t) exceptionCount;
+- (void) incExceptionCount;
+- (void) clearExceptionCount;
+
+#pragma mark •••Commands
+- (void) requestFirmwareVersion;
+- (void) taskData:(NSDictionary*)taskData;
+- (void) taskFinished:(id)task;
 
 @end
 
 extern NSString* ORFlashCamCardSlotChangedNotification;
 extern NSString* ORFlashCamCardEthConnector;
+extern NSString* ORFlashCamCardAddressChanged;
+extern NSString* ORFlashCamCardFirmwareVerRequest;
+extern NSString* ORFlashCamCardFirmwareVerChanged;
+extern NSString* ORFlashCamCardExceptionCountChanged;
 
 @interface NSObject (ORFlashCamCard)
 - (void) postUpdateList:(NSArray*)cmds;

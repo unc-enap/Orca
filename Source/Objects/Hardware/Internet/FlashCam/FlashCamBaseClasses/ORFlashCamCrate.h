@@ -1,8 +1,8 @@
 //  Orca
-//  ORFlashCamTriggerController.h
+//  ORFlashCamCrate.h
 //
-//  Created by Tom Caldwell on Monday Jan 1, 2020
-//  Copyright (c) 2020 University of North Carolina. All rights reserved.
+//  Created by Tom Caldwell on Monday Dec 16,2019
+//  Copyright (c) 2019 University of North Carolina. All rights reserved.
 //-----------------------------------------------------------
 //This program was prepared for the Regents of the University of
 //North Carolina Department of Physics and Astrophysics
@@ -17,27 +17,25 @@
 //for the use of this software.
 //-------------------------------------------------------------
 
-#import "OrcaObjectController.h"
+#import "ORCrate.h"
 
-@interface ORFlashCamTriggerController : OrcaObjectController
-{
-    IBOutlet NSTextField* cardAddressTextField;
-    IBOutlet NSMatrix* connectedADCMatrix;
+@interface ORFlashCamCrate : ORCrate {
 }
 
 #pragma mark •••Initialization
-- (id) init;
-- (void) dealloc;
+- (void) makeConnectors;
+
+#pragma mark •••Accessors
+- (NSString*) adapterArchiveKey;
+- (NSString*) createAdapterConnectorKey;
+- (id) cardInSlot:(int)aSlot;
+
+#pragma mark •••Notifications
 - (void) registerNotificationObservers;
-- (void) awakeFromNib;
-- (void) updateWindow;
-
-#pragma mark •••Interface management
-- (void) cardAddressChanged:(NSNotification*)note;
-- (void) cardSlotChanged:(NSNotification*)note;
-- (void) connectionChanged:(NSNotification*)note;
-
-#pragma mark •••Actions
-- (IBAction) cardAddressAction:(id)sender;
-
 @end
+
+@interface ORFlashCamCrate (OROrderedObjHolding)
+- (int) maxNumberOfObjects;
+- (int) objWidth;
+@end
+

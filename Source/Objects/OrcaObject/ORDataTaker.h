@@ -22,6 +22,7 @@
 
 #import "ORDataPacket.h"
 #import "ORDataSet.h"
+#import "ORReadOutList.h"
 
 @class ORDecoder;
 
@@ -32,6 +33,14 @@
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) reset;
+@end
+
+@protocol ORDataTakerReadOutList
+- (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
+- (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
+- (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
+- (void) reset;
+- (ORReadOutList*) readOutList;
 @end
 
 @protocol ORFeraReadout

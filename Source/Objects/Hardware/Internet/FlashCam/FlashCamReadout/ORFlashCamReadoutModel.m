@@ -1,5 +1,5 @@
 //  Orca
-//  ORFlashCamRunModel.m
+//  ORFlashCamListener.m
 //
 //  Created by Tom Caldwell on Monday Dec 26,2019
 //  Copyright (c) 2019 University of North Carolina. All rights reserved.
@@ -17,46 +17,32 @@
 //for the use of this software.
 //-------------------------------------------------------------
 
-#import "ORFlashCamRunModel.h"
+#import "ORFlashCamReadoutModel.h"
 #import "ORFlashCamADCModel.h"
-#import "ORFlashCamMasterModel.h"
+#import "ORFlashCamTriggerModel.h"
+#import "bufio.h"
 
-NSString* ORFlashCamRunModelIPAddressChanged       = @"ORFlashCamRunModelIPAddressChanged";
-NSString* ORFlashCamRunModelUsernameChanged        = @"ORFlashCamRunModelUsernameChanged";
-NSString* ORFlashCamRunModelEthInterfaceChanged    = @"ORFlashCamRunModelEthInterfaceChanged";
-NSString* ORFlashCamRunModelEthInterfaceAdded      = @"ORFlashCamRunModelEthInterfaceAdded";
-NSString* ORFlashCamRunModelEthInterfaceRemoved    = @"ORFlashCamRunModelEthInterfaceRemoved";
-NSString* ORFlashCamRunModelEthTypeChanged         = @"ORFlashCamRunModelEthTypeChanged";
-NSString* ORFlashCamRunModelMaxPayloadChanged      = @"ORFlashCamRunModelMaxPayloadChanged";
-NSString* ORFlashCamRunModelEventBufferChanged     = @"ORFlashCamRunModelEventBufferChanged";
-NSString* ORFlashCamRunModelPhaseAdjustChanged     = @"ORFlashCamRunModelPhaseAdjustChanged";
-NSString* ORFlashCamRunModelBaselineSlewChanged    = @"ORFlashCamRunModelBaselineSlewChanged";
-NSString* ORFlashCamRunModelIntegratorLenChanged   = @"ORFlashCamRunModelIntegratorLenChanged";
-NSString* ORFlashCamRunModelEventSamplesChanged    = @"ORFlashCamRunModelEventSamplesChanged";
-NSString* ORFlashCamRunModelTraceTypeChanged       = @"ORFlashCamRunModelTraceTypeChanged";
-NSString* ORFlashCamRunModelPileupRejectionChanged = @"ORFlashCamRunModelPileupRejectionChanged";
-NSString* ORFlashCamRunModelLogTimeChanged         = @"ORFlashCamRunModelLogTimeChanged";
-NSString* ORFlashCamRunModelGPSEnabledChanged      = @"ORFlashCamRunModelGPSEnabledChanged";
-NSString* ORFlashCamRunModelIncludeBaselineChanged = @"ORFlashCamRunModelIncludeBaselineChanged";
-NSString* ORFlashCamRunModelAdditionalFlagsChanged = @"ORFlashCamRunModelAdditionalFlagsChanged";
-NSString* ORFlashCamRunModelOverrideCmdChanged     = @"ORFlashCamRunModelOverrideCmdChanged";
-NSString* ORFlashCamRunModelRunOverrideChanged     = @"ORFlashCamRunModelRunOverrideChanged";
-NSString* ORFlashCamRunModelRemoteDataPathChanged  = @"ORFlashCamRunModelRemoteDataPathChanged";
-NSString* ORFlashCamRunModelRemoteFilenameChanged  = @"ORFlashCamRunModelRemoteFilenameChanged";
-NSString* ORFlashCamRunModelRunNumberChanged       = @"ORFlashCamRunModelRunNumberChanged";
-NSString* ORFlashCamRunModelRunCountChanged        = @"ORFlashCamRunModelRunCountChanged";
-NSString* ORFlashCamRunModelRunLengthChanged       = @"ORFlashCamRunModelRunLengthChanged";
-NSString* ORFlashCamRunModelRunUpdateChanged       = @"ORFlashCamRunModelRunUpdateChanged";
-NSString* ORFlashCamRunModelPingStart              = @"ORFlashCamRunModelPingStart";
-NSString* ORFlashCamRunModelPingEnd                = @"ORFlashCamRunModelPingEnd";
-NSString* ORFlashCamRunModelRunInProgress          = @"ORFlashCamRunModelRunInProgress";
-NSString* ORFlashCamRunModelRunEnded               = @"ORFlashCamRunModelRunEnded";
+NSString* ORFlashCamReadoutModelIPAddressChanged    = @"ORFlashCamReadoutModelIPAddressChanged";
+NSString* ORFlashCamReadoutModelUsernameChanged     = @"ORFlashCamReadoutModelUsernameChanged";
+NSString* ORFlashCamReadoutModelEthInterfaceChanged = @"ORFlashCamReadoutModelEthInterfaceChanged";
+NSString* ORFlashCamReadoutModelEthInterfaceAdded   = @"ORFlashCamReadoutModelEthInterfaceAdded";
+NSString* ORFlashCamReadoutModelEthInterfaceRemoved = @"ORFlashCamReadoutModelEthInterfaceRemoved";
+NSString* ORFlashCamReadoutModelEthTypeChanged      = @"ORFlashCamReadoutModelEthTypeChanged";
+NSString* ORFlashCamReadoutModelConfigParamChanged  = @"ORFlashCamReadoutModelConfigParamChanged";
+NSString* ORFlashCamReadoutModelPingStart           = @"ORFlashCamReadoutModelPingStart";
+NSString* ORFlashCamReadoutModelPingEnd             = @"ORFlashCamReadoutModelPingEnd";
+NSString* ORFlashCamReadoutModelRunInProgress       = @"ORFlashCamReadoutModelRunInProgress";
+NSString* ORFlashCamReadoutModelRunEnded            = @"ORFlashCamReadoutModelRunEnded";
+NSString* ORFlashCamReadoutModelListenerChanged     = @"ORFlashCamReadoutModelListenerChanged";
+NSString* ORFlashCamReadoutModelListenerAdded       = @"ORFlashCamReadoutModelListenerAdded";
+NSString* ORFlashCamReadoutModelListenerRemoved     = @"ORFlashCamReadoutModelListenerRemoved";
+NSString* ORFlashCamReadoutModelMonitoringUpdated   = @"ORFlashCamReadoutModelMonitoringUpdated";
 
-static NSString* ORFlashCamRunModelEthConnectors[kFlashCamMaxEthInterfaces] =
+static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] =
 { @"FlashCamEthInterface0", @"FlashCamEthInterface1",
   @"FlashCamEthInterface2", @"FlashCamEthInterface3"};
 
-@implementation ORFlashCamRunModel
+@implementation ORFlashCamReadoutModel
 
 #pragma mark •••Initialization
 
@@ -66,32 +52,31 @@ static NSString* ORFlashCamRunModelEthConnectors[kFlashCamMaxEthInterfaces] =
     [[self undoManager] disableUndoRegistration];
     [self setIPAddress:@""];
     [self setUsername:@""];
-    ethInterface = [NSMutableArray array];
-    [self setEthType:@""];
-    [self setMaxPayload:0];
-    [self setEventBuffer:1000];
-    [self setPhaseAdjust:-1];
-    [self setBaselineSlew:0];
-    [self setIntegratorLen:7];
-    [self setEventSamples:2048];
-    [self setTraceType:1];
-    [self setPileupRejection:0.0];
-    [self setLogTime:1.0];
-    [self setGPSEnabled:NO];
-    [self setIncludeBaseline:YES];
-    [self setAdditionalFlags:@""];
-    [self setOverrideCmd:@""];
-    [self setRunOverride:NO];
-    [self setRemoteDataPath:@""];
-    [self setRemoteFilename:@""];
-    [self setRunNumber:0];
-    [self setRunCount:1];
-    [self setRunLength:600];
-    [self setRunUpdate:YES];
+    ethInterface     = [[NSMutableArray array] retain];
+    ethListenerIndex = [[NSMutableArray array] retain];
+    [self setEthType:@"efb1"];
+    configParams = [[NSMutableDictionary dictionary] retain];
+    [self setConfigParam:@"maxPayload"    withValue:[NSNumber numberWithInt:0]];
+    [self setConfigParam:@"eventBuffer"   withValue:[NSNumber numberWithInt:1000]];
+    [self setConfigParam:@"phaseAdjust"   withValue:[NSNumber numberWithInt:-1]];
+    [self setConfigParam:@"baselineSlew"  withValue:[NSNumber numberWithInt:0]];
+    [self setConfigParam:@"integratorLen" withValue:[NSNumber numberWithInt:7]];
+    [self setConfigParam:@"eventSamples"  withValue:[NSNumber numberWithInt:2048]];
+    [self setConfigParam:@"traceType"     withValue:[NSNumber numberWithInt:1]];
+    [self setConfigParam:@"pileupRej"     withValue:[NSNumber numberWithDouble:0.0]];
+    [self setConfigParam:@"logTime"       withValue:[NSNumber numberWithDouble:1000.0]];
+    [self setConfigParam:@"gpsEnabled"    withValue:[NSNumber numberWithBool:NO]];
+    [self setConfigParam:@"incBaseline"   withValue:[NSNumber numberWithBool:YES]];
     pingTask = nil;
     pingSuccess = NO;
-    runTasks = nil;
+    firmwareTasks = nil;
+    firmwareQueue = [[NSMutableArray array] retain];
     runKilled = NO;
+    fclistener = [[NSMutableArray array] retain];
+    ORReadOutList* readList = [[ORReadOutList alloc] initWithIdentifier:@"Listener List"];
+    [readList setAcceptedProtocol:@"ORReadOutList"];
+    [self setReadOutList:readList];
+    [readList release];
     [[self undoManager] enableUndoRegistration];
     return self;
 }
@@ -101,20 +86,24 @@ static NSString* ORFlashCamRunModelEthConnectors[kFlashCamMaxEthInterfaces] =
     [ipAddress release];
     [username release];
     if(ethInterface) [ethInterface release];
+    if(ethListenerIndex) [ethListenerIndex release];
     [ethType release];
-    [additionalFlags release];
-    [overrideCmd release];
-    [remoteDataPath release];
-    [remoteFilename release];
+    if(configParams) [configParams release];
     if(pingTask) [pingTask release];
-    if(runTasks) [runTasks release];
+    if(firmwareTasks) [firmwareTasks release];
+    if(firmwareQueue) [firmwareQueue release];
+    if(fclistener){
+        for(ORFlashCamListener* l in fclistener) [l release];
+        [fclistener release];
+    }
+    if(readOutList) [readOutList release];
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     [super dealloc];
 }
 
 - (void) makeMainController
 {
-    [self linkToController:@"ORFlashCamRunController"];
+    [self linkToController:@"ORFlashCamReadoutController"];
 }
 
 - (void) setUpImage
@@ -149,7 +138,7 @@ static NSString* ORFlashCamRunModelEthConnectors[kFlashCamMaxEthInterfaces] =
         [connector setOffColor:[NSColor colorWithCalibratedRed:1 green:1 blue:0.3 alpha:1]];
         [connector setOnColor:[NSColor colorWithCalibratedRed:0.1 green:0.1 blue:1 alpha:1]];
         if(i >= [self ethInterfaceCount]) [connector setHidden:YES];
-        [[self connectors] setObject:connector forKey:ORFlashCamRunModelEthConnectors[i]];
+        [[self connectors] setObject:connector forKey:ORFlashCamReadoutModelEthConnectors[i]];
         [connector release];
     }
 }
@@ -166,6 +155,12 @@ static NSString* ORFlashCamRunModelEthConnectors[kFlashCamMaxEthInterfaces] =
 {
     if(!username) return @"";
     return username;
+}
+
+- (bool) localMode
+{
+    if([ipAddress isEqualToString:@"localhost"] || [ipAddress isEqualToString:@"127.0.0.1"]) return true;
+    return false;
 }
 
 - (int) ethInterfaceCount
@@ -191,119 +186,92 @@ static NSString* ORFlashCamRunModelEthConnectors[kFlashCamMaxEthInterfaces] =
     return [[[ethInterface objectAtIndex:index] copy] autorelease];
 }
 
+- (int) ethListenerIndex:(int)index
+{
+    if(index < 0 || index >= [self ethInterfaceCount]) return -1;
+    return [[ethListenerIndex objectAtIndex:index] intValue];
+}
+
 - (NSString*) ethType
 {
     if(!ethType) return @"";
     return ethType;
 }
 
-- (int) maxPayload
+- (NSNumber*) configParam:(NSString*)p
 {
-    return maxPayload;
-}
-
-- (int) eventBuffer
-{
-    return eventBuffer;
-}
-
-- (int) phaseAdjust
-{
-    return phaseAdjust;
-}
-
-- (int) baselineSlew
-{
-    return baselineSlew;
-}
-
-- (int) integratorLen
-{
-    return integratorLen;
-}
-
-- (int) eventSamples
-{
-    return eventSamples;
-}
-
-- (int) traceType
-{
-    return traceType;
-}
-
-- (float) pileupRejection
-{
-    return pileupRejection;
-}
-
-- (float) logTime
-{
-    return logTime;
-}
-
-- (bool) gpsEnabled
-{
-    return gpsEnabled;
-}
-
-- (bool) includeBaseline
-{
-    return includeBaseline;
-}
-
-- (NSString*) additionalFlags
-{
-    if(!additionalFlags) return @"";
-    return additionalFlags;
-}
-
-- (NSString*) overrideCmd
-{
-    if(!overrideCmd) return @"";
-    return overrideCmd;
-}
-
-- (bool) runOverride
-{
-    return runOverride;
-}
-
-- (NSString*) remoteDataPath
-{
-    if(!remoteDataPath) return @"";
-    return remoteDataPath;
-}
-
-- (NSString*) remoteFilename
-{
-    if(!remoteFilename) return @"";
-    return remoteFilename;
-}
-
-- (unsigned int) runNumber
-{
-    return runNumber;
-}
-
-- (unsigned int) runCount
-{
-    return runCount;
-}
-
-- (unsigned int) runLength
-{
-    return runLength;
-}
-
-- (bool) runUpdate
-{
-    return runUpdate;
+    if([p isEqualToString:@"maxPayload"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"maxPayload"] intValue]];
+    else if([p isEqualToString:@"eventBuffer"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"eventBuffer"] intValue]];
+    else if([p isEqualToString:@"phaseAdjust"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"phaseAdjust"] intValue]];
+    else if([p isEqualToString:@"baselineSlew"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"baselineSlew"] intValue]];
+    else if([p isEqualToString:@"integratorLen"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"integratorLen"] intValue]];
+    else if([p isEqualToString:@"eventSamples"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"eventSamples"] intValue]];
+    else if([p isEqualToString:@"traceType"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"traceType"] intValue]];
+    else if([p isEqualToString:@"pileupRej"])
+        return [NSNumber numberWithDouble:[[configParams objectForKey:@"pileupRej"] doubleValue]];
+    else if([p isEqualToString:@"logTime"])
+        return [NSNumber numberWithDouble:[[configParams objectForKey:@"logTime"] doubleValue]];
+    else if([p isEqualToString:@"gpsEnabled"])
+        return [NSNumber numberWithBool:[[configParams objectForKey:@"gpsEnabled"] boolValue]];
+    else if([p isEqualToString:@"incBaseline"])
+        return [NSNumber numberWithBool:[[configParams objectForKey:@"incBaseline"] boolValue]];
+    else{
+        NSLog(@"ORFlashCamReadoutModel - unknown configuration parameter %@\n", p);
+        return nil;
+    }
 }
 
 - (bool) pingSuccess
 {
     return pingSuccess;
+}
+
+- (int) listenerCount
+{
+    if(!fclistener) return 0;
+    return (int) [fclistener count];
+}
+
+- (ORFlashCamListener*) getListenerAtIndex:(int)i
+{
+    if(i >= 0 && i < [fclistener count]) return [fclistener objectAtIndex:i];
+    return nil;
+}
+
+- (ORFlashCamListener*) getListener:(NSString *)eth atPort:(uint16_t)p
+{
+    for(ORFlashCamListener* l in fclistener) if([l sameIP:eth andPort:p]) return l;
+    return nil;
+}
+
+- (ORFlashCamListener*) getListenerForIP:(NSString*)ip atPort:(uint16_t)p
+{
+    for(ORFlashCamListener* l in fclistener) if([l sameIP:ip andPort:p]) return l;
+    return nil;
+}
+
+- (int) getIndexOfListener:(NSString *)eth atPort:(uint16_t)p
+{
+    for(int i=0; i<(int)[fclistener count]; i++)
+        if([[fclistener objectAtIndex:i] sameInterface:eth andPort:p]) return i;
+    return -1;
+}
+
+- (ORReadOutList*) readOutList
+{
+    return readOutList;
+}
+
+- (NSMutableArray*) children
+{
+    return [NSMutableArray arrayWithObject:readOutList];
 }
 
 - (void) setIPAddress:(NSString*)ip
@@ -313,7 +281,7 @@ static NSString* ORFlashCamRunModelEthConnectors[kFlashCamMaxEthInterfaces] =
     [[[self undoManager] prepareWithInvocationTarget:self] setIPAddress:[self ipAddress]];
     [ipAddress autorelease];
     ipAddress = [ip copy];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelIPAddressChanged object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelIPAddressChanged object:self];
 }
 
 - (void) setUsername:(NSString*)user
@@ -323,21 +291,23 @@ static NSString* ORFlashCamRunModelEthConnectors[kFlashCamMaxEthInterfaces] =
     [[[self undoManager] prepareWithInvocationTarget:self] setUsername:[self username]];
     [username autorelease];
     username = [user copy];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelUsernameChanged object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelUsernameChanged object:self];
 }
 
 - (void) addEthInterface:(NSString*)eth
 {
     if(!eth) return;
-    if(!ethInterface) ethInterface = [NSMutableArray array];
+    if(!ethInterface) ethInterface = [[NSMutableArray array] retain];
+    if(!ethListenerIndex) ethListenerIndex = [[NSMutableArray array] retain];
     if([self indexOfInterface:eth] >= 0) return;
     [ethInterface addObject:[eth copy]];
+    [ethListenerIndex addObject:[NSNumber numberWithInt:-1]];
     if([self ethInterfaceCount] <= kFlashCamMaxEthInterfaces){
         int i = [self ethInterfaceCount] - 1;
-        [[[self connectors] objectForKey:ORFlashCamRunModelEthConnectors[i]] setHidden:NO];
+        [[[self connectors] objectForKey:ORFlashCamReadoutModelEthConnectors[i]] setHidden:NO];
         [[NSNotificationCenter defaultCenter] postNotificationName:ORConnectionChanged object:self];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelEthInterfaceAdded object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelEthInterfaceAdded object:self];
 }
 
 - (void) setEthInterface:(NSString*)eth atIndex:(int)index
@@ -348,7 +318,7 @@ static NSString* ORFlashCamRunModelEthConnectors[kFlashCamMaxEthInterfaces] =
     if([self indexOfInterface:eth] < 0)
         [ethInterface setObject:[eth copy] atIndexedSubscript:index];
     else [ethInterface setObject:@"" atIndexedSubscript:index];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelEthInterfaceChanged object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelEthInterfaceChanged object:self];
 }
 
 - (void) removeEthInterface:(NSString*)eth
@@ -359,250 +329,148 @@ static NSString* ORFlashCamRunModelEthConnectors[kFlashCamMaxEthInterfaces] =
 - (void) removeEthInterfaceAtIndex:(int)index
 {
     if(index < 0 || index >= [self ethInterfaceCount]) return;
-    [[ethInterface objectAtIndex:index] autorelease];
+    //[[ethInterface objectAtIndex:index] autorelease];
     [ethInterface removeObjectAtIndex:index];
+    [ethListenerIndex removeObjectAtIndex:index];
     if([self ethInterfaceCount] < kFlashCamMaxEthInterfaces){
         int i = [self ethInterfaceCount];
-        [[[self connectors] objectForKey:ORFlashCamRunModelEthConnectors[i]] disconnect];
-        [[[self connectors] objectForKey:ORFlashCamRunModelEthConnectors[i]] setHidden:YES];
+        [[[self connectors] objectForKey:ORFlashCamReadoutModelEthConnectors[i]] disconnect];
+        [[[self connectors] objectForKey:ORFlashCamReadoutModelEthConnectors[i]] setHidden:YES];
         [[NSNotificationCenter defaultCenter] postNotificationName:ORConnectionChanged object:self];
     }
     NSDictionary* info = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:index] forKey:@"index"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelEthInterfaceRemoved object:self userInfo:info];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelEthInterfaceRemoved object:self userInfo:info];
+}
+
+- (void) setEthListenerIndex:(int)lindex atIndex:(int)index
+{
+    if(index < 0 || index >= [self ethInterfaceCount]) return;
+    if(lindex < -1 || lindex >= [self listenerCount]) lindex = -1;
+    [[ethListenerIndex objectAtIndex:index] release];
+    [ethListenerIndex setObject:[NSNumber numberWithInt:lindex] atIndexedSubscript:index];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelEthInterfaceChanged object:self];
 }
 
 - (void) setEthType:(NSString*)eth
 {
     if(!eth) return;
-    if(!ethType) ethType = @"";
+    if(!ethType) ethType = @"efb1";
     [[[self undoManager] prepareWithInvocationTarget:self] setEthType:[self ethType]];
-    [ethType autorelease];
-    ethType = [eth copy];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelEthTypeChanged object:self];
+    //[ethType autorelease];
+    for(int i=1; i<=5; i++) if([eth isEqualToString:[NSString stringWithFormat:@"efb%d",i]]) ethType = [eth copy];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelEthTypeChanged object:self];
 }
 
-- (void) setMaxPayload:(int)payload
+- (void) setConfigParam:(NSString*)p withValue:(NSNumber*)v
 {
-    [[[self undoManager] prepareWithInvocationTarget:self] setMaxPayload:[self maxPayload]];
-    maxPayload = payload;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelMaxPayloadChanged object:self];
+    // todo: put in limits on parameters below
+    if([p isEqualToString:@"maxPayload"])
+        [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:@"maxPayload"];
+    else if([p isEqualToString:@"eventBuffer"])
+        [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:@"eventBuffer"];
+    else if([p isEqualToString:@"phaseAdjust"])
+        [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:@"phaseAdjust"];
+    else if([p isEqualToString:@"baselineSlew"])
+        [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:@"baselineSlew"];
+    else if([p isEqualToString:@"integratorLen"])
+        [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:@"integratorLen"];
+    else if([p isEqualToString:@"eventSamples"])
+        [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:@"eventSamples"];
+    else if([p isEqualToString:@"traceType"])
+        [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:@"traceType"];
+    else if([p isEqualToString:@"pileupRej"])
+        [configParams setObject:[NSNumber numberWithDouble:[v doubleValue]] forKey:@"pileupRej"];
+    else if([p isEqualToString:@"logTime"])
+        [configParams setObject:[NSNumber numberWithDouble:[v doubleValue]] forKey:@"logTime"];
+    else if([p isEqualToString:@"gpsEnabled"])
+        [configParams setObject:[NSNumber numberWithBool:[v boolValue]] forKey:@"gpsEnabled"];
+    else if([p isEqualToString:@"incBaseline"])
+        [configParams setObject:[NSNumber numberWithBool:[v boolValue]] forKey:@"incBaseline"];
+    else{
+        NSLog(@"ORFlashCamReadoutModel - unknown configuration parameter %@\n", p);
+        return;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelConfigParamChanged object:self];
 }
 
-- (void) setEventBuffer:(int)buffer
+- (void) addListener:(NSString*)eth atPort:(uint16_t)p
 {
-    [[[self undoManager] prepareWithInvocationTarget:self] setEventBuffer:[self eventBuffer]];
-    eventBuffer = buffer;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelEventBufferChanged object:self];
+    if(!fclistener) fclistener = [[NSMutableArray array] retain];
+    if([self getListener:eth atPort:p]) return;
+    NSString* roi = [NSString stringWithFormat:@"ReadOut List %lu", [readOutList count]];
+    ORFlashCamListener* l = [[[ORFlashCamListener alloc] initWithInterface:eth
+                                                                      port:p
+                                                         readOutIdentifier:roi] retain];
+    [fclistener addObject:l];
+    [readOutList addObject:[l readOutList]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NSReadOutListChangedNotification object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelListenerAdded object:self];
 }
 
-- (void) setPhaseAdjust:(int)phase
+- (void) setListener:(NSString*)eth atPort:(uint16_t)p forIndex:(int)i
 {
-    [[[self undoManager] prepareWithInvocationTarget:self] setPhaseAdjust:[self phaseAdjust]];
-    phaseAdjust = phase;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelPhaseAdjustChanged object:self];
+    if(i >= [fclistener count]) return;
+    int j = [self getIndexOfListener:eth atPort:p];
+    if(i == j) return;
+    else if(j != -1){
+        NSLog(@"ORFlashCamReadoutModel: cannot set listener with identical interface %@ and port %d", eth, (int)p);
+        return;
+    }
+    ORFlashCamListener* l = [self getListenerAtIndex:i];
+    if(!l){
+        NSString* roi = [NSString stringWithFormat:@"ReadOut List %d", i];
+        l = [[[ORFlashCamListener alloc] initWithInterface:eth port:p readOutIdentifier:roi] retain];
+        [fclistener setObject:l atIndexedSubscript:i];
+        [readOutList removeObjectAtIndex:i];
+        [readOutList insertObject:[l readOutList] atIndex:i];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NSReadOutListChangedNotification object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelListenerAdded object:self];
+    }
+    else{
+        if([[l interface] isEqualToString:eth] && [l port] == p) return;
+        [l setInterface:eth andPort:p];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelListenerChanged object:self];
+    }
 }
 
-- (void) setBaselineSlew:(int)slew
+- (void) removeListener:(NSString*)eth atPort:(uint16_t)p
 {
-    [[[self undoManager] prepareWithInvocationTarget:self] setBaselineSlew:[self baselineSlew]];
-    baselineSlew = slew;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelBaselineSlewChanged object:self];
+    [self removeListenerAtIndex:[self getIndexOfListener:eth atPort:p]];
 }
 
-- (void) setIntegratorLen:(int)len
+- (void) removeListenerAtIndex:(int)i
 {
-    [[[self undoManager] prepareWithInvocationTarget:self] setIntegratorLen:[self integratorLen]];
-    integratorLen = len;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelIntegratorLenChanged object:self];
+    if(i < 0 || i >= [fclistener count]) return;
+    [[fclistener objectAtIndex:i] autorelease];
+    [fclistener removeObjectAtIndex:i];
+    [readOutList removeObjectAtIndex:i];
+    for(NSUInteger j=0; j<[ethListenerIndex count]; j++){
+        int k = [[ethListenerIndex objectAtIndex:j] intValue];
+        if(k == i) [ethListenerIndex setObject:[NSNumber numberWithInt:-1] atIndexedSubscript:j];
+        else if(k > i) [ethListenerIndex setObject:[NSNumber numberWithInt:k-1] atIndexedSubscript:j];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:NSReadOutListChangedNotification object:self];
+    NSDictionary* info = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:i] forKey:@"index"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelListenerRemoved object:info];
 }
 
-- (void) setEventSamples:(int)samples
+- (void) setReadOutList:(ORReadOutList*)readList
 {
-    [[[self undoManager] prepareWithInvocationTarget:self] setEventSamples:[self eventSamples]];
-    eventSamples = samples;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelEventSamplesChanged object:self];
-}
-
-- (void) setTraceType:(int)ttype
-{
-    [[[self undoManager] prepareWithInvocationTarget:self] setTraceType:[self traceType]];
-    traceType = ttype;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelTraceTypeChanged object:self];
-}
-
-- (void) setPileupRejection:(float)rej
-{
-    [[[self undoManager] prepareWithInvocationTarget:self] setPileupRejection:[self pileupRejection]];
-    pileupRejection = rej;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelPileupRejectionChanged object:self];
-}
-
-- (void) setLogTime:(float)time
-{
-    [[[self undoManager] prepareWithInvocationTarget:self] setLogTime:[self logTime]];
-    logTime = time;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelLogTimeChanged object:self];
-}
-
-- (void) setGPSEnabled:(bool)enable
-{
-    [[[self undoManager] prepareWithInvocationTarget:self] setGPSEnabled:[self gpsEnabled]];
-    gpsEnabled = enable;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelGPSEnabledChanged object:self];
-}
-
-- (void) setIncludeBaseline:(bool)inc
-{
-    [[[self undoManager] prepareWithInvocationTarget:self] setIncludeBaseline:[self includeBaseline]];
-    includeBaseline = inc;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelIncludeBaselineChanged object:self];
-}
-
-- (void) setAdditionalFlags:(NSString*)flags
-{
-    if(!flags) return;
-    if(!additionalFlags) additionalFlags = @"";
-    [[[self undoManager] prepareWithInvocationTarget:self] setAdditionalFlags:[self additionalFlags]];
-    [additionalFlags autorelease];
-    additionalFlags = [flags copy];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelAdditionalFlagsChanged object:self];
-}
-
-- (void) setOverrideCmd:(NSString *)cmd
-{
-    if(!cmd) return;
-    if(!overrideCmd) overrideCmd = @"";
-    [[[self undoManager] prepareWithInvocationTarget:self] setOverrideCmd:[self overrideCmd]];
-    [overrideCmd autorelease];
-    overrideCmd = [cmd copy];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelOverrideCmdChanged object:self];
-}
-
-- (void) setRunOverride:(bool)runover
-{
-    [[[self undoManager] prepareWithInvocationTarget:self] setRunOverride:[self runOverride]];
-    runOverride = runover;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelRunOverrideChanged object:self];
-}
-
-
-- (void) setRemoteDataPath:(NSString*)path
-{
-    if(!path) return;
-    if(!remoteDataPath) remoteDataPath = @"";
-    [[[self undoManager] prepareWithInvocationTarget:self] setRemoteDataPath:[self remoteDataPath]];
-    [remoteDataPath autorelease];
-    remoteDataPath = [path copy];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelRemoteDataPathChanged
-                                                        object:self];
-}
-
-- (void) setRemoteFilename:(NSString*)fname
-{
-    if(!fname) return;
-    if(!remoteFilename) remoteFilename = @"";
-    [[[self undoManager] prepareWithInvocationTarget:self] setRemoteFilename:[self remoteFilename]];
-    [remoteFilename autorelease];
-    remoteFilename = [fname copy];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelRemoteFilenameChanged
-                                                        object:self];
-}
-
-- (void) setRunNumber:(unsigned int)run
-{
-    [[[self undoManager] prepareWithInvocationTarget:self] setRunNumber:runNumber];
-    runNumber = run;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelRunNumberChanged object:self];
-}
-
-- (void) setRunCount:(unsigned int)count
-{
-    [[[self undoManager] prepareWithInvocationTarget:self] setRunCount:runCount];
-    runCount = count;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelRunCountChanged object:self];
-}
-
-- (void) setRunLength:(unsigned int)length
-{
-    [[[self undoManager] prepareWithInvocationTarget:self] setRunLength:runLength];
-    runLength = length;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelRunLengthChanged object:self];
-}
-
-- (void) setRunUpdate:(bool)update
-{
-    [[[self undoManager] prepareWithInvocationTarget:self] setRunUpdate:runUpdate];
-    runUpdate = update;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelRunUpdateChanged object:self];
-}
-
-#pragma mark •••Archival
-
-- (id) initWithCoder:(NSCoder*)decoder
-{
-    self = [super initWithCoder:decoder];
-    [[self undoManager] disableUndoRegistration];
-    [self setIPAddress:      [decoder decodeObjectForKey:@"ipAddress"]];
-    [self setUsername:       [decoder decodeObjectForKey:@"username"]];
-    ethInterface = [[decoder decodeObjectForKey:@"ethInterface"] retain];
-    [self setEthType:        [decoder decodeObjectForKey:@"ethType"]];
-    [self setMaxPayload:     [decoder decodeIntForKey:@"maxPayload"]];
-    [self setEventBuffer:    [decoder decodeIntForKey:@"eventBuffer"]];
-    [self setPhaseAdjust:    [decoder decodeIntForKey:@"phaseAdjust"]];
-    [self setBaselineSlew:   [decoder decodeIntForKey:@"baselineSlew"]];
-    [self setIntegratorLen:  [decoder decodeIntForKey:@"integratorLen"]];
-    [self setEventSamples:   [decoder decodeIntForKey:@"eventSamples"]];
-    [self setTraceType:      [decoder decodeIntForKey:@"traceType"]];
-    [self setPileupRejection:[decoder decodeFloatForKey:@"pileupRejection"]];
-    [self setLogTime:        [decoder decodeFloatForKey:@"logTime"]];
-    [self setGPSEnabled:     [decoder decodeBoolForKey:@"gpsEnabled"]];
-    [self setIncludeBaseline:[decoder decodeBoolForKey:@"includeBaseline"]];
-    [self setAdditionalFlags:[decoder decodeObjectForKey:@"additionalFlags"]];
-    [self setOverrideCmd:    [decoder decodeObjectForKey:@"overrideCmd"]];
-    [self setRunOverride:    [decoder decodeBoolForKey:@"runOverride"]];
-    [self setRemoteDataPath: [decoder decodeObjectForKey:@"remoteDataPath"]];
-    [self setRemoteFilename: [decoder decodeObjectForKey:@"remoteFilename"]];
-    [self setRunNumber:      [[decoder decodeObjectForKey:@"runNumber"] unsignedIntValue]];
-    [self setRunCount:       [[decoder decodeObjectForKey:@"runCount"]  unsignedIntValue]];
-    [self setRunLength:      [[decoder decodeObjectForKey:@"runLength"] unsignedIntValue]];
-    [self setRunUpdate:      [decoder decodeBoolForKey:@"runUpdate"]];
-    pingTask = nil;
-    pingSuccess = NO;
-    runTasks = nil;
-    runKilled = NO;
-    [[self undoManager] enableUndoRegistration];
-    return self;
-}
-
-- (void) encodeWithCoder:(NSCoder*)encoder
-{
-    [super encodeWithCoder:encoder];
-    [encoder encodeObject:ipAddress       forKey:@"ipAddress"];
-    [encoder encodeObject:username        forKey:@"username"];
-    [encoder encodeObject:ethInterface    forKey:@"ethInterface"];
-    [encoder encodeObject:ethType         forKey:@"ethType"];
-    [encoder encodeInt:maxPayload         forKey:@"maxPayload"];
-    [encoder encodeInt:eventBuffer        forKey:@"eventBuffer"];
-    [encoder encodeInt:phaseAdjust        forKey:@"phaseAdjust"];
-    [encoder encodeInt:baselineSlew       forKey:@"baselineSlew"];
-    [encoder encodeInt:integratorLen      forKey:@"integratorLen"];
-    [encoder encodeInt:eventSamples       forKey:@"eventSamples"];
-    [encoder encodeInt:traceType          forKey:@"traceType"];
-    [encoder encodeFloat:pileupRejection  forKey:@"pileupRejection"];
-    [encoder encodeFloat:logTime          forKey:@"logTime"];
-    [encoder encodeBool:gpsEnabled        forKey:@"gpsEnabled"];
-    [encoder encodeObject:additionalFlags forKey:@"additionalFlags"];
-    [encoder encodeObject:overrideCmd     forKey:@"overrideCmd"];
-    [encoder encodeBool:runOverride       forKey:@"runOverride"];
-    [encoder encodeObject:remoteDataPath  forKey:@"remoteDataPath"];
-    [encoder encodeObject:remoteFilename  forKey:@"remoteFilename"];
-    [encoder encodeObject:[NSNumber numberWithUnsignedInt:runNumber] forKey:@"runNumber"];
-    [encoder encodeObject:[NSNumber numberWithUnsignedInt:runCount]  forKey:@"runCount"];
-    [encoder encodeObject:[NSNumber numberWithUnsignedInt:runLength] forKey:@"runLength"];
-    [encoder encodeBool:runUpdate         forKey:@"runUpdate"];
+    if(readList == readOutList) return;
+    [readOutList autorelease];
+    readOutList = [readList retain];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NSReadOutListChangedNotification object:self];
 }
 
 #pragma mark •••Commands
+
+- (void) updateIPs
+{
+    for(int i=0; i<[self listenerCount]; i++){
+        ORFlashCamListener* l = [self getListenerAtIndex:i];
+        if(l) [l updateIP];
+    }
+}
 
 - (void) sendPing:(bool)verbose
 {
@@ -614,7 +482,7 @@ static NSString* ORFlashCamRunModelEthConnectors[kFlashCamMaxEthInterfaces] =
         pingTask.verbose = verbose;
         pingTask.textToDelegate = YES;
         [pingTask ping];
-        [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelPingStart object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelPingStart object:self];
     }
 }
 
@@ -628,69 +496,144 @@ static NSString* ORFlashCamRunModelEthConnectors[kFlashCamMaxEthInterfaces] =
     if(task == pingTask){
         [pingTask release];
         pingTask = nil;
-        [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelPingEnd object:self];
-    }
-    else if(task == runTasks){
-        if(runKilled){
-            [runTasks abortTasks];
-            runKilled = NO;
-        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelPingEnd object:self];
     }
 }
 
 - (void) tasksCompleted:(id)sender
 {
-    if(sender == runTasks){
-        runTasks = nil;
-        [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelRunEnded object:self];
+    if(sender == firmwareTasks){
+        [firmwareTasks release];
+        firmwareTasks = nil;
+        if([firmwareQueue count] > 0){
+            [self getFirmwareVersion:[firmwareQueue objectAtIndex:0]];
+            [firmwareQueue removeObjectAtIndex:0];
+        }
     }
 }
 
 - (void) taskData:(NSDictionary*)taskData
 {
-    id task        = [taskData objectForKey:@"Task"];
-    NSString* text = [taskData objectForKey:@"Text"];
+    id        task = [[taskData objectForKey:@"Task"] retain];
+    NSString* text = [[taskData objectForKey:@"Text"] retain];
     if(task == pingTask){
         if([text rangeOfString:@" 0.0% packet loss"].location != NSNotFound) pingSuccess = YES;
         else pingSuccess = NO;
     }
+    [task release];
+    [text release];
+}
+
+- (NSMutableArray*) ethInterfacesForListener:(int)index
+{
+    NSMutableArray* eth = [NSMutableArray array];
+    for(NSUInteger i=0; i<[ethInterface count]; i++)
+        if([[ethListenerIndex objectAtIndex:i] intValue] == index)
+            [eth addObject:[[ethInterface objectAtIndex:i] copy]];
+    return eth;
+}
+
+- (int) listenerIndexForCard:(ORCard*)card
+{
+    for(NSUInteger i=0; i<[fclistener count]; i++){
+        NSMutableArray* eth = [self ethInterfacesForListener:(int)i];
+        for(NSString* e in eth){
+            NSMutableArray* objs = [self connectedObjects:[card className] toInterface:e];
+            if([objs containsObject:card]) return (int) i;
+        }
+    }
+    return -1;
+}
+
+- (int) ethIndexForCard:(ORCard*)card
+{
+    for(int i=0; i<(int)[ethInterface count]; i++){
+        NSMutableArray* objs = [self connectedObjects:[card className] toInterface:[self ethInterfaceAtIndex:i]];
+        if([objs containsObject:card]) return i;
+    }
+    return -1;
 }
 
 - (NSMutableArray*) runFlags
 {
-    NSMutableArray* flags = [NSMutableArray array];
-    [flags addObject:@"-ei"];
-    [flags addObjectsFromArray:ethInterface];
-    [flags addObjectsFromArray:@[@"-et",    ethType]];
-    [flags addObjectsFromArray:@[@"-mt",    [NSString stringWithFormat:@"%d", runLength]]];
-    [flags addObjectsFromArray:@[@"-mpl",   [NSString stringWithFormat:@"%i", maxPayload]]];
-    [flags addObjectsFromArray:@[@"-slots", [NSString stringWithFormat:@"%i", eventBuffer]]];
-    [flags addObjectsFromArray:@[@"-aph",   [NSString stringWithFormat:@"%i", phaseAdjust]]];
-    [flags addObjectsFromArray:@[@"-bls",   [NSString stringWithFormat:@"%i", baselineSlew]]];
-    [flags addObjectsFromArray:@[@"-il",    [NSString stringWithFormat:@"%i", integratorLen]]];
-    [flags addObjectsFromArray:@[@"-es",    [NSString stringWithFormat:@"%i", eventSamples]]];
-    [flags addObjectsFromArray:@[@"-gt",    [NSString stringWithFormat:@"%i", traceType]]];
-    [flags addObjectsFromArray:@[@"-gpr",   [NSString stringWithFormat:@"%.2f", pileupRejection]]];
-    [flags addObjectsFromArray:@[@"-lt",    [NSString stringWithFormat:@"%.2f", logTime]]];
-    [flags addObjectsFromArray:@[@"-gps",   [NSString stringWithFormat:@"%i", (int)gpsEnabled]]];
-    [flags addObjectsFromArray:@[@"-blinc", [NSString stringWithFormat:@"%i", (int)includeBaseline]]];
-    return flags;
+    NSMutableArray* f = [NSMutableArray array];
+    //[f addObjectsFromArray:@[@"-mt",   [NSString stringWithFormat:@"%d", runLength]]];
+    [f addObjectsFromArray:@[@"-et",   [self ethType]]];
+    [f addObjectsFromArray:@[@"-mpl",  [NSString stringWithFormat:@"%d", [[self configParam:@"maxPayload"]    intValue]]]];
+    [f addObjectsFromArray:@[@"-slots",[NSString stringWithFormat:@"%d", [[self configParam:@"eventBuffer"]   intValue]]]];
+    [f addObjectsFromArray:@[@"-aph",  [NSString stringWithFormat:@"%d", [[self configParam:@"phaseAdjust"]   intValue]]]];
+    [f addObjectsFromArray:@[@"-bls",  [NSString stringWithFormat:@"%d", [[self configParam:@"baselineSlew"]  intValue]]]];
+    [f addObjectsFromArray:@[@"-il",   [NSString stringWithFormat:@"%d", [[self configParam:@"integratorLen"] intValue]]]];
+    [f addObjectsFromArray:@[@"-es",   [NSString stringWithFormat:@"%d", [[self configParam:@"eventSamples"]  intValue]]]];
+    [f addObjectsFromArray:@[@"-gt",   [NSString stringWithFormat:@"%d", [[self configParam:@"traceType"]     intValue]]]];
+    [f addObjectsFromArray:@[@"-gpr",[NSString stringWithFormat:@"%.2f", [[self configParam:@"pileupRej"]  doubleValue]]]];
+    //[f addObjectsFromArray:@[@"-lt", [NSString stringWithFormat:@"%.2f", [[self configParam:@"logTime"]    doubleValue]]]];
+    [f addObjectsFromArray:@[@"-gps",  [NSString stringWithFormat:@"%d", [[self configParam:@"gpsEnabled"]    intValue]]]];
+    [f addObjectsFromArray:@[@"-blinc",[NSString stringWithFormat:@"%d", [[self configParam:@"incBaseline"]   intValue]]]];
+    return f;
+}
+
+- (NSMutableArray*) connectedObjects:(NSString*)cname toInterface:(NSString*)eth
+{
+    NSMutableArray* objs = [NSMutableArray array];
+    if(!cname || !eth) return objs;
+    int index = [self indexOfInterface:eth];
+    if(index < 0 || index >= kFlashCamMaxEthInterfaces) return objs;
+    ORConnector* connector = [connectors objectForKey:ORFlashCamReadoutModelEthConnectors[index]];
+    if(!connector) return objs;
+    if(![connector isConnected]) return objs;
+    id obj = [connector connectedObject];
+    if(!obj) return objs;
+    if([[obj className] isEqualToString:cname])
+        [objs addObject:obj];
+    else if([[obj className] isEqualToString:@"ORFlashCamEthLinkModel"])
+        [obj addObjectsFromArray:[obj connectedObjects:cname]];
+    return objs;
 }
 
 - (NSMutableArray*) connectedObjects:(NSString*)cname
 {
     NSMutableArray* objs = [NSMutableArray array];
-    for(int ieth=0; ieth<MIN(kFlashCamMaxEthInterfaces, [self ethInterfaceCount]); ieth++){
-        ORConnector* connector = [connectors objectForKey:ORFlashCamRunModelEthConnectors[ieth]];
-        if(!connector) continue;
-        if(![connector isConnected]) continue;
-        id obj = [connector connectedObject];
-        if(!obj) continue;
-        if([[obj className] isEqualToString:cname]) [objs addObject:obj];
-        else if([[obj className] isEqualToString:@"ORFlashCamEthLinkModel"])
-            [objs addObjectsFromArray:[obj connectedObjects:cname]];
-    }
+    for(int i=0; i<MIN(kFlashCamMaxEthInterfaces, [self ethInterfaceCount]); i++)
+        [objs addObjectsFromArray:[self connectedObjects:cname toInterface:[self ethInterfaceAtIndex:i]]];
     return objs;
+}
+
+- (void) getFirmwareVersion:(ORFlashCamCard*)card
+{
+    if(!card) return;
+    [self sendPing:NO];
+    [self getFirmwareVersionAfterPing:card];
+}
+
+- (void) getFirmwareVersionAfterPing:(ORFlashCamCard*)card
+{
+    if(!card) return;
+    if(firmwareTasks) [firmwareQueue addObject:card];
+    if([self pingRunning]) [self performSelector:@selector(getFirmwareVersionAfterPing:) withObject:card afterDelay:0.05];
+    else{
+        if(!pingSuccess){
+            NSLog(@"ORFlashCamReadoutModel: ping failure, aborting firmware version check\n");
+            [card taskFinished:nil];
+            return;
+        }
+        NSMutableArray* args = [NSMutableArray array];
+        [args addObjectsFromArray:@[username, ipAddress, @"./fwl-fc250b"]];
+        int eindex = [self ethIndexForCard:card];
+        if(eindex < 0){
+            NSLog(@"ORFlashCamReadoutModel: cannot retrieve firmware version, card not connected\n");
+            return;
+        }
+        [args addObjectsFromArray:@[@"-ei", [self ethInterfaceAtIndex:eindex]]];
+        [args addObjectsFromArray:@[@"-et", ethType]];
+        [args addObjectsFromArray:@[[NSString stringWithFormat:@"%x", [card cardAddress]]]];
+        firmwareTasks = [[ORTaskSequence taskSequenceWithDelegate:card] retain];
+        [firmwareTasks setVerbose:NO];
+        [firmwareTasks setTextToDelegate:YES];
+        [firmwareTasks addTask:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"remote_run"]
+                     arguments:args];
+        [firmwareTasks launch];
+    }
 }
 
 - (void) startRun
@@ -704,83 +647,81 @@ static NSString* ORFlashCamRunModelEthConnectors[kFlashCamMaxEthInterfaces] =
 
 - (void) startRunAfterPing
 {
+    // if any firmware tasks are still running, wait
+    /*if(firmwareTasks){
+        [self performSelector:@selector(startRunAfterPing) withObject:self afterDelay:0.2];
+        return;
+    }*/
     // if the ping task is still running, wait
-    if([self pingRunning]) [self performSelector:@selector(startRunAfterPing) withObject:self afterDelay:0.1];
-    else{
-        // if the ping failed, don't attempt to start the runs
-        if(!pingSuccess){
-            NSLog(@"ORFlashCamRunModel: ping failure aborting remote run\n");
-            return;
-        }
-        NSLog(@"ping success\n");
-        NSMutableArray* args = [NSMutableArray array];
-        if(runOverride) [args addObjectsFromArray:[overrideCmd componentsSeparatedByString:@" "]];
-        else{
-            [args addObjectsFromArray:@[username, ipAddress, @"$FLASHCAMDIR/server/readout-fc250b"]];
-            [args addObjectsFromArray:[self runFlags]];
-            NSMutableArray* adcs = [self connectedObjects:@"ORFlashCamADCModel"];
-            NSMutableArray* masters = [self connectedObjects:@"ORFlashCamMasterModel"];
-            // get the list of board addresses
-            NSMutableString* addressList = [NSMutableString string];;
-            for(unsigned i=0; i<[adcs count]; i++){
-                ORFlashCamADCModel* adc = [adcs objectAtIndex:i];
-                if(i < [adcs count] - 1 || [masters count] > 0)
-                    [addressList appendString:[NSString stringWithFormat:@"%x,", [adc boardAddress]]];
-                else [addressList appendString:[NSString stringWithFormat:@"%x", [adc boardAddress]]];
+    if([self pingRunning]){
+        [self performSelector:@selector(startRunAfterPing) withObject:self afterDelay:0.2];
+        return;
+    }
+    // if the ping failed, don't attempt to start the runs
+    if(!pingSuccess){
+        NSLog(@"ORFlashCamReadoutModel: ping failure aborting remote run\n");
+        return;
+    }
+    NSString* resourcePath = [[NSBundle mainBundle] resourcePath];
+    NSMutableArray* args = [NSMutableArray array];
+    if(![self localMode]) [args addObjectsFromArray:@[username, ipAddress, @"readout-fc250b"]];
+    [args addObjectsFromArray:[self runFlags]];
+    for(NSUInteger lindex=0; lindex<[fclistener count]; lindex++){
+        ORFlashCamListener* listener = [fclistener objectAtIndex:lindex];
+        [listener updateIP];
+        NSMutableArray* readout = [(ORReadOutList*)[[readOutList children] objectAtIndex:lindex] children];
+        // get the card level arguments and build the address list for the adcs
+        NSMutableArray* argCard = [NSMutableArray array];
+        NSMutableString* addressList = [[NSMutableString string] retain];
+        NSMutableArray* chanMap = [NSMutableArray array];
+        for(ORReadOutObject* obj in readout){
+            if(![[[obj object] className] isEqualToString:@"ORFlashCamADCModel"]) continue;
+            ORCard* card = (ORCard*) [obj object];
+            if([[card className] isEqualToString:@"ORFlashCamADCModel"]){
+                ORFlashCamADCModel* adc = (ORFlashCamADCModel*) card;
+                [addressList appendString:[NSString stringWithFormat:@"%x,", [adc cardAddress]]];
+                [argCard addObjectsFromArray:[adc runFlagsForChannelOffset:(unsigned int)[chanMap count]]];
+                for(unsigned int ich=0; ich<kMaxFlashCamADCChannels; ich++){
+                    if([adc chanEnabled:ich]){
+                        NSDictionary* chDict = [NSDictionary dictionaryWithObjectsAndKeys:adc, @"adc", [NSNumber numberWithUnsignedInt:ich], @"channel", nil];
+                        [chanMap addObject:chDict];
+                    }
+                }
             }
-            for(unsigned i=0; i<[masters count]; i++){
-                ORFlashCamMasterModel* master = [masters objectAtIndex:i];
-                if(i < [masters count] - 1)
-                    [addressList appendString:[NSString stringWithFormat:@"%x,", [master boardAddress]]];
-                else [addressList appendString:[NSString stringWithFormat:@"%x",  [master boardAddress]]];
-            }
-            [args addObjectsFromArray:@[@"-a", addressList]];
-            // set the master card flag
-            if([masters count] > 0){
-                if([masters count] > 1) NSLog(@"ORFlashCamRunModel: multiple master cards assuming"
-                                              " first master card in configuration\n");
-                NSString* s = [NSString stringWithFormat:@"%x", [[masters objectAtIndex:0] boardAddress]];
-                [args addObjectsFromArray:@[@"-ma", s]];
-            }
-            // append the flags for each adc card
-            unsigned int chanOffset = 0;
-            for(unsigned int i=0; i<[adcs count]; i++){
-                ORFlashCamADCModel* adc = [adcs objectAtIndex:i];
-                [args addObjectsFromArray:@[@"-am", [NSString stringWithFormat:@"%x,%x,1", [adc chanMask], [adc boardAddress]]]];
-                [args addObjectsFromArray:[adc runFlagsForChannelOffset:chanOffset]];
-                chanOffset += [adc nChanEnabled];
-            }
-            // append any additional user-specified flags
-            if(additionalFlags)
-                [args addObjectsFromArray:[additionalFlags componentsSeparatedByString:@" "]];
         }
-        // setup the run tasks and set add the filename for each run
-        NSString* resourcePath = [[NSBundle mainBundle] resourcePath];
-        runTasks = [ORTaskSequence taskSequenceWithDelegate:self];
-        [runTasks setVerbose:YES];
-        for(int run=runNumber; run<runNumber+runCount; run++){
-            NSString* fname = [NSString stringWithFormat:@"%@/%@%i.fcio", [self remoteDataPath], [self remoteFilename], run];
-            NSMutableArray* argCopy = [[NSMutableArray alloc] initWithArray:args copyItems:YES];
-            [argCopy addObjectsFromArray:@[@"-o", fname]];
-            [argCopy addObject:[NSString stringWithFormat:@"%i", run]];
-            NSLog([NSString stringWithFormat:@"%@\n", [argCopy componentsJoinedByString:@" "]]);
-            [runTasks addTask:[resourcePath stringByAppendingPathComponent:@"remote_run"]
-                    arguments:[NSArray arrayWithArray:argCopy]];
-            [argCopy release];
+        [argCard addObjectsFromArray:@[@"-a", [addressList substringWithRange:NSMakeRange(0, [addressList length]-1)]]];
+        [listener setChanMap:chanMap];
+        // add the card level arguments and addresses for the triggers
+        NSMutableArray* eth = [self ethInterfacesForListener:(int)lindex];
+        bool foundTrigger = NO;
+        for(NSString* e in eth){
+            NSMutableArray* triggers = [self connectedObjects:@"ORFlashCamTriggerModel" toInterface:e];
+            if([triggers count] > 0){
+                ORFlashCamTriggerModel* trigger = [triggers objectAtIndex:0];
+                if([triggers count] > 1 || foundTrigger)
+                    NSLog(@"ORFlashCamReadoutModel: multiple trigger cards connected, assuming first"
+                            " trigger card in configuration 0x%x\n", [trigger cardAddress]);
+                [argCard addObjectsFromArray:@[@"-ma", [NSString stringWithFormat:@"%x", [trigger cardAddress]]]];
+                foundTrigger = YES;
+                // fixe - don't know if trigger addresses also need to be added to address list
+            }
         }
-        // launch the tasks to start the run(s)
-        [runTasks setTextToDelegate:YES];
-        [runTasks launch];
-        [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelRunInProgress object:self];
-        if(runUpdate){
-            [self setRunNumber:(runNumber+runCount)];
-            [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelRunNumberChanged
-                                                                object:self];
-        }
+        NSString* listen = [NSString stringWithFormat:@"tcp://connect/%d/%@", [listener port], [listener ip]];
+        NSMutableArray* argCopy = [NSMutableArray array];
+        [argCopy addObjectsFromArray:args];
+        [argCopy addObjectsFromArray:@[@"-ei", [eth componentsJoinedByString:@","]]];
+        [argCopy addObjectsFromArray:argCard];
+        [argCopy addObjectsFromArray:@[@"-o", listen]];
+        NSLog(@"%@\n", [argCopy componentsJoinedByString:@" "]);
+        if([self localMode]) [[listener runTask] addTask:@"/Users/tcald/Dev/fc250b-3.4/server/readout-fc250b"
+                                        arguments:[NSArray arrayWithArray:argCopy]];
+        else [[listener runTask] addTask:[resourcePath stringByAppendingFormat:@"remote_run"]
+                               arguments:[NSArray arrayWithArray:argCopy]];
+        [[listener runTask] launch];
     }
 }
 
-- (void) killRun
+/*- (void) killRun
 {
     // kill any flashcam readout processes running on the remote host
     NSString* resourcePath = [[NSBundle mainBundle] resourcePath];
@@ -794,7 +735,74 @@ static NSString* ORFlashCamRunModelEthConnectors[kFlashCamMaxEthInterfaces] =
     [tasks launch];
     // abort any remaining run tasks
     if(runTasks != nil) [runTasks abortTasks];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamRunModelRunEnded object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelRunEnded object:self];
+}*/
+
+#pragma mark •••Data taker methods
+
+- (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
+{
+
+}
+
+- (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
+{
+    [self startRunAfterPing];
+    for(id listener in fclistener) [listener connect];
+}
+
+- (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
+{
+    for(id listener in fclistener) [listener disconnect];
+}
+
+- (void) reset
+{
+    
+}
+
+#pragma mark •••Archival
+
+- (id) initWithCoder:(NSCoder*)decoder
+{
+    self = [super initWithCoder:decoder];
+    [[self undoManager] disableUndoRegistration];
+    [self setIPAddress:      [decoder decodeObjectForKey:@"ipAddress"]];
+    [self setUsername:       [decoder decodeObjectForKey:@"username"]];
+    ethInterface =     [[decoder decodeObjectForKey:@"ethInterface"] retain];
+    ethListenerIndex = [[decoder decodeObjectForKey:@"ethListenerIndex"] retain];
+    [self setEthType:        [decoder decodeObjectForKey:@"ethType"]];
+    configParams = [[decoder decodeObjectForKey:@"configParams"] retain];
+    fclistener = [[decoder decodeObjectForKey:@"fclistener"] retain];
+    [self setReadOutList:[decoder decodeObjectForKey:@"readOutList"]];
+    if(!readOutList){
+        ORReadOutList* readList = [[ORReadOutList alloc] initWithIdentifier:@"ReadOut List"];
+        [readList setAcceptedProtocol:@"ORDataTaker"];
+        [readList addAcceptedObjectName:@"ORFlashCamTriggerModel"];
+        [readList addAcceptedObjectName:@"ORFlashCamADCModel"];
+        [self setReadOutList:readList];
+        [readList release];
+    }
+    pingTask = nil;
+    pingSuccess = NO;
+    firmwareTasks = nil;
+    if(!firmwareQueue) firmwareQueue = [[NSMutableArray array] retain];
+    runKilled = NO;
+    [[self undoManager] enableUndoRegistration];
+    return self;
+}
+
+- (void) encodeWithCoder:(NSCoder*)encoder
+{
+    [super encodeWithCoder:encoder];
+    [encoder encodeObject:ipAddress        forKey:@"ipAddress"];
+    [encoder encodeObject:username         forKey:@"username"];
+    [encoder encodeObject:ethInterface     forKey:@"ethInterface"];
+    [encoder encodeObject:ethListenerIndex forKey:@"ethListenerIndex"];
+    [encoder encodeObject:ethType          forKey:@"ethType"];
+    [encoder encodeObject:configParams     forKey:@"configParams"];
+    [encoder encodeObject:fclistener       forKey:@"fclistener"];
+    [encoder encodeObject:readOutList      forKey:@"readOutList"];
 }
 
 @end

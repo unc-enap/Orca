@@ -19,10 +19,12 @@
 
 #import "ORFlashCamADCModel.h"
 #import "ORCrate.h"
+#import "ORFlashCamEthLinkModel.h"
+#import "ORFlashCamReadoutModel.h"
+#import "ORDataTypeAssigner.h"
 #import "ORHWWizParam.h"
 #import "ORHWWizSelection.h"
 
-NSString* ORFlashCamADCModelBoardAddressChanged = @"ORFlashCamADCModelBoardAddressChanged";
 NSString* ORFlashCamADCModelChanEnabledChanged  = @"ORFlashCamADCModelChanEnabledChanged";
 NSString* ORFlashCamADCModelBaselineChanged     = @"ORFlashCamADCModelBaselineChanged";
 NSString* ORFlashCamADCModelThresholdChanged    = @"ORFlashCamADCModelThresholdChanged";
@@ -31,6 +33,8 @@ NSString* ORFlashCamADCModelTrigGainChanged     = @"ORFlashCamADCModelTrigGainCh
 NSString* ORFlashCamADCModelShapeTimeChanged    = @"ORFlashCamADCModelShapeTimeChanged";
 NSString* ORFlashCamADCModelFilterTypeChanged   = @"ORFlashCamADCModelFilterTypeChanged";
 NSString* ORFlashCamADCModelPoleZeroTimeChanged = @"ORFlashCamADCModelPoleZeroTimeChanged";
+NSString* ORFlashCamADCModelRateGroupChanged    = @"ORFlashCamADCModelRateGroupChanged";
+NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull";
 
 @implementation ORFlashCamADCModel
 
@@ -38,7 +42,7 @@ NSString* ORFlashCamADCModelPoleZeroTimeChanged = @"ORFlashCamADCModelPoleZeroTi
 {
     self = [super init];
     [[self undoManager] disableUndoRegistration];
-    [self setBoardAddress:0];
+    cardAddress = 0;
     for(int i=0; i<kMaxFlashCamADCChannels; i++){
         [self setChanEnabled:i  withValue:NO];
         [self setBaseline:i     withValue:-1];
@@ -50,8 +54,16 @@ NSString* ORFlashCamADCModelPoleZeroTimeChanged = @"ORFlashCamADCModelPoleZeroTi
         [self setPoleZeroTime:i withValue:58000];
         [self setShapeTime:i    withValue:5000];
     }
-    ethConnector  = nil;
     trigConnector = nil;
+    isRunning = false;
+    wfBuffer = NULL;
+    bufferIndex = 0;
+    takeDataIndex = 0;
+    firstTakeData = true;
+    wfRates = nil;
+    timer = nil;
+    dataRecord = NULL;
+    [self setWFsamples:0];
     [[self undoManager] enableUndoRegistration];
     return self;
 }
@@ -61,6 +73,8 @@ NSString* ORFlashCamADCModelPoleZeroTimeChanged = @"ORFlashCamADCModelPoleZeroTi
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     if(ethConnector)  [ethConnector  release];
     if(trigConnector) [trigConnector release];
+    [self setWFsamples:0];
+    [wfRates release];
     [super dealloc];
 }
 
@@ -115,7 +129,7 @@ NSString* ORFlashCamADCModelPoleZeroTimeChanged = @"ORFlashCamADCModelPoleZeroTi
     float xscale = 1.0;
     float yscale = 1.0;
     if([[guardian className] isEqualToString:@"ORFlashCamCrateModel"]){
-        xoff = 40;
+        xoff = 30;
         yoff = 18;
         xscale = 0.595;
         yscale = 0.5;
@@ -170,12 +184,8 @@ NSString* ORFlashCamADCModelPoleZeroTimeChanged = @"ORFlashCamADCModelPoleZeroTi
     [aGuardian assumeDisplayOf:trigConnector];
 }
 
-#pragma mark •••Accessors
 
-- (unsigned int) boardAddress
-{
-    return boardAddress;
-}
+#pragma mark •••Accessors
 
 - (unsigned int) nChanEnabled
 {
@@ -241,19 +251,43 @@ NSString* ORFlashCamADCModelPoleZeroTimeChanged = @"ORFlashCamADCModelPoleZeroTi
     return trigConnector;
 }
 
+- (ORRateGroup*) wfRates
+{
+    return wfRates;
+}
+
+- (id) rateObject:(int)channel
+{
+    return [wfRates rateObject:channel];
+}
+
+- (uint32_t) wfCount:(int)channel
+{
+    return wfCount[channel];
+}
+
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
+{
+    if(groupTag == 0){
+        if(counterTag>=0 && counterTag<kMaxFlashCamADCChannels){
+            return wfCount[counterTag];
+        }
+        else return 0;
+    }
+    else return 0;
+}
+
+- (uint32_t) dataId
+{
+    return dataId;
+}
+
 - (void) setSlot:(int)aSlot
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setSlot:[self slot]];
     [self setTag:aSlot];
     [self guardian:guardian positionConnectorsForCard:self];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamCardSlotChangedNotification object:self];
-}
-
-- (void) setBoardAddress:(unsigned int)address
-{
-    [[[self undoManager] prepareWithInvocationTarget:self] setBoardAddress:boardAddress];
-    boardAddress = address;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelBoardAddressChanged object:self];
 }
 
 - (void) setChanEnabled:(unsigned int)chan withValue:(bool)enabled
@@ -358,6 +392,51 @@ NSString* ORFlashCamADCModelPoleZeroTimeChanged = @"ORFlashCamADCModelPoleZeroTi
     trigConnector = connector;
 }
 
+- (void) setWFsamples:(int)samples
+{
+    wfSamples = samples;
+    if(wfBuffer){
+        free(wfBuffer);
+        wfBuffer = NULL;
+    }
+    if(dataRecord) free(dataRecord);
+    dataRecordLength = 0;
+    if(wfSamples > 0){
+        wfBuffer = (unsigned short*) malloc(kFlashCamADCBufferLength * (wfSamples + 2));
+        // first 3 items in WF header get put into Orca header, then trace header gets moved to WF header
+        dataLengths = ((wfSamples&0xffff) << 6) | (((kFlashCamADCWFHeaderLength-3+1)&0x3f) << 22);
+        dataLengths = dataLengths | ((kFlashCamADCOrcaHeaderLength&0xf) << 28);
+        dataRecordLength = kFlashCamADCOrcaHeaderLength + (kFlashCamADCWFHeaderLength - 3 + 1) + wfSamples/2;
+        dataRecord = (uint32_t*) malloc(dataRecordLength * sizeof(uint32_t));
+        bufferIndex = 0;
+    }
+}
+
+- (void) setWFrates:(ORRateGroup*)rateGroup
+{
+    [rateGroup retain];
+    [wfRates release];
+    wfRates = rateGroup;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelRateGroupChanged object:self];
+}
+
+- (void) setRateIntTime:(double)intTime
+{
+    [[[self undoManager] prepareWithInvocationTarget:self] setRateIntTime:[wfRates integrationTime]];
+    [wfRates setIntegrationTime:intTime];
+}
+
+- (void) setDataId:(uint32_t)dId
+{
+    dataId = dId;
+}
+
+- (void) setDataIdsWith:(id)assigner
+{
+    dataId = [assigner assignDataIds:kLongForm];
+}
+
+
 #pragma mark •••Run control flags
 
 - (NSString*) chFlag:(unsigned int)ch withInt:(int)value
@@ -380,6 +459,7 @@ NSString* ORFlashCamADCModelPoleZeroTimeChanged = @"ORFlashCamADCModelPoleZeroTi
 - (NSMutableArray*) runFlagsForChannelOffset:(unsigned int)offset
 {
     NSMutableArray* flags = [NSMutableArray array];
+    [flags addObjectsFromArray:@[@"-am", [NSString stringWithFormat:@"%x,%x,1", [self chanMask], [self cardAddress]]]];
     for(unsigned int i=0; i<kMaxFlashCamADCChannels; i++){
         if(![self chanEnabled:i]) continue;
         unsigned int j = i + offset;
@@ -399,13 +479,135 @@ NSString* ORFlashCamADCModelPoleZeroTimeChanged = @"ORFlashCamADCModelPoleZeroTi
     NSLog(@"%@\n", [[self runFlagsForChannelOffset:offset] componentsJoinedByString:@" "]);
 }
 
+
+#pragma mark •••Data taker methods
+
+- (void) event:(fcio_event*)event withIndex:(int)index andChannel:(unsigned int)channel
+{
+    if(channel >= kMaxFlashCamADCChannels){
+        NSLog(@"ORFlashCamADCModel: invalid channel passed to event:withIndex:andChannel:, skipping packet\n");
+        return;
+    }
+    else wfCount[channel] ++;
+    // set the channel number and index to pass to takeData
+    wfHeaderBuffer[bufferIndex] = (int) channel;
+    wfHeaderBuffer[bufferIndex+1] = index;
+    // get the waveform header information from the fcio_event structure
+    wfHeaderBuffer[bufferIndex+2] = event->type;
+    unsigned int offset = bufferIndex + 3;
+    for(unsigned int i=0; i<kFlashCamADCTimeOffsetLength; i++) wfHeaderBuffer[offset+i] = event->timeoffset[i];
+    offset += kFlashCamADCTimeOffsetLength;
+    for(unsigned int i=0; i<kFlashCamADCDeadRegionLength; i++) wfHeaderBuffer[offset+i] = event->deadregion[i];
+    offset += kFlashCamADCDeadRegionLength;
+    for(unsigned int i=0; i<kFlashCamADCTimeStampLength; i++)  wfHeaderBuffer[offset+i] = event->timestamp[i];
+    // get the waveform for this channel at the index provided from the fcio_event structure
+    memcpy(wfHeaderBuffer+bufferIndex*(wfSamples+2), event->theader[index], (wfSamples+2)*sizeof(unsigned short));
+    // increment the buffer index
+    bufferIndex = (bufferIndex + 1) % kFlashCamADCBufferLength;
+    if(bufferIndex == takeDataIndex){
+        NSLog(@"ORFlashCamADCModel: buffer full for card ID 0x%x crate %d slot %d\n",
+              [self cardAddress], [self crate], [self slot]);
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelBufferFull object:self];
+    }
+}
+
+- (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
+{
+    @try{
+        if(firstTakeData){
+            timer = [[ORTimer alloc] init];
+            [timer start];
+            firstTakeData = false;
+        }
+        if(wfSamples == 0) return;
+        else{
+            isRunning = true;
+            uint32_t hindex = takeDataIndex * kFlashCamADCWFHeaderLength;
+            dataRecord[0] = dataId | (dataRecordLength&0x3ffff);
+            dataRecord[1] = dataLengths | (wfHeaderBuffer[hindex+2]&0x3f);
+            dataRecord[2] = location | ((wfHeaderBuffer[hindex]&0xf) << 10) | (wfHeaderBuffer[hindex+1]&0x3ff);
+            for(unsigned int i=3; i<kFlashCamADCWFHeaderLength; i++){
+                dataRecord[i] = (uint32_t) wfHeaderBuffer[hindex+i];
+            }
+            uint32_t windex = takeDataIndex * (wfSamples + 2);
+            dataRecord[kFlashCamADCWFHeaderLength] = (wfBuffer[windex+1] << 16) | wfBuffer[windex];
+            memcpy(dataRecord+kFlashCamADCWFHeaderLength+1, wfBuffer+windex+2, wfSamples*sizeof(unsigned short));
+            [aDataPacket addLongsToFrameBuffer:dataRecord length:dataRecordLength];
+            takeDataIndex = (takeDataIndex + 1) % kFlashCamADCBufferLength;
+        }
+    }
+    @catch(NSException* localException){
+        NSLogError(@"", @"ORFlashCamADCModel error", @"", nil);
+        [self incExceptionCount];
+        [localException raise];
+    }
+}
+
+- (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
+{
+    [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:@"ORFlashCamADCModel"];
+    location = (([self crateNumber]&0x1f) << 25) | (([self slot]&0x1f) << 22);
+    location = (([self cardAddress]&0xff) << 14);
+    [timer release];
+    timer = nil;
+    isRunning = false;
+    firstTakeData = true;
+    takeDataIndex = 0;
+}
+
+- (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
+{
+    // finish reading out buffer first
+    [timer stop];
+    [timer release];
+    timer = nil;
+    isRunning = false;
+    firstTakeData = true;
+    [wfRates stop];
+    [self setWFsamples:0];
+    takeDataIndex = 0;
+}
+
+- (void) reset
+{
+}
+
+-(void) startRates
+{
+    [self clearWFcounts];
+    [wfRates start:self];
+}
+
+- (void) clearWFcounts
+{
+    for(int i=0;i<kMaxFlashCamADCChannels;i++) wfCount[i] = 0;
+}
+
+- (void) syncDataIdsWith:(id)aCard
+{
+    [self setDataId:[aCard dataId]];
+}
+
+- (NSDictionary*) dataRecordDescription
+{
+    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+    NSDictionary* d = [NSDictionary dictionaryWithObjectsAndKeys:
+                       @"ORFlashCamADCDecoder",          @"decoder",
+                       [NSNumber numberWithLong:dataId], @"dataId",
+                       [NSNumber numberWithBool:YES],    @"variable",
+                       [NSNumber numberWithLong:-1],     @"length", nil];
+    [dict setObject:d forKey:@"Waveform"];
+    return dict;
+}
+
+
 #pragma mark •••Archival
 
 - (id) initWithCoder:(NSCoder*)decoder
 {
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
-    [self setBoardAddress:[[decoder decodeObjectForKey:@"boardAddress"] unsignedIntValue]];
+    [self setCardAddress:[[decoder decodeObjectForKey:@"cardAddress"] unsignedIntValue]];
     for(int i=0; i<kMaxFlashCamADCChannels; i++){
         [self setChanEnabled:i
                    withValue:[decoder decodeBoolForKey:[NSString stringWithFormat:@"chanEnabled%i", i]]];
@@ -426,6 +628,22 @@ NSString* ORFlashCamADCModelPoleZeroTimeChanged = @"ORFlashCamADCModelPoleZeroTi
     }
     [self setEthConnector: [decoder decodeObjectForKey:@"ethConnector"]];
     [self setTrigConnector:[decoder decodeObjectForKey:@"trigConnector"]];
+    firmwareVer = [[[NSArray alloc] init] retain];
+    isRunning = NO;
+    wfBuffer = NULL;
+    bufferIndex = 0;
+    takeDataIndex = 0;
+    firstTakeData = true;
+    taskdata = nil;
+    dataRecord = NULL;
+    [self setWFsamples:0];
+    [self setWFrates:[decoder decodeObjectForKey:@"wfRates"]];
+    if(!wfRates){
+        [self setWFrates:[[[ORRateGroup alloc] initGroup:kMaxFlashCamADCChannels groupTag:0] autorelease]];
+        [wfRates setIntegrationTime:5];
+    }
+    [wfRates resetRates];
+    [wfRates calcRates];
     [[self undoManager] enableUndoRegistration];
     return self;
 }
@@ -433,7 +651,7 @@ NSString* ORFlashCamADCModelPoleZeroTimeChanged = @"ORFlashCamADCModelPoleZeroTi
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeObject:[NSNumber numberWithUnsignedInt:boardAddress] forKey:@"boardAddress"];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInt:cardAddress] forKey:@"cardAddress"];
     for(int i=0; i<kMaxFlashCamADCChannels; i++){
         [encoder encodeBool:chanEnabled[i] forKey:[NSString stringWithFormat:@"chanEnabled%i", i]];
         [encoder encodeInt:baseline[i] forKey:[NSString stringWithFormat:@"baseline%i", i]];
@@ -446,6 +664,7 @@ NSString* ORFlashCamADCModelPoleZeroTimeChanged = @"ORFlashCamADCModelPoleZeroTi
     }
     [encoder encodeObject:ethConnector  forKey:@"ethConnector"];
     [encoder encodeObject:trigConnector forKey:@"trigConnector"];
+    [encoder encodeObject:wfRates       forKey:@"wfRates"];
 }
 
 #pragma mark •••HW Wizard

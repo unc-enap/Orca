@@ -19,14 +19,14 @@
 
 #import "OrcaObjectController.h"
 
-@interface ORFlashCamRunController : OrcaObjectController
+@interface ORFlashCamReadoutController : OrcaObjectController
 {
     IBOutlet NSTextField* ipAddressTextField;
     IBOutlet NSTextField* usernameTextField;
     IBOutlet NSTableView* ethInterfaceView;
     IBOutlet NSButton* addEthInterfaceButton;
     IBOutlet NSButton* removeEthInterfaeButton;
-    IBOutlet NSTextField* ethTypeTextField;
+    IBOutlet NSPopUpButton* ethTypePUButton;
     IBOutlet NSTextField* maxPayloadTextField;
     IBOutlet NSTextField* eventBufferTextField;
     IBOutlet NSTextField* phaseAdjustTextField;
@@ -34,22 +34,17 @@
     IBOutlet NSTextField* integratorLenTextField;
     IBOutlet NSTextField* eventSamplesTextField;
     IBOutlet NSPopUpButton* traceTypePUButton;
-    IBOutlet NSTextField* pileupRejectionTextField;
+    IBOutlet NSTextField* pileupRejTextField;
     IBOutlet NSTextField* logTimeTextField;
     IBOutlet NSButton* gpsEnabledButton;
-    IBOutlet NSButton* includeBaselineButton;
-    IBOutlet NSTextField* additionalFlagsTextField;
-    IBOutlet NSTextField* overrideCmdTextField;
-    IBOutlet NSButton* runOverrideButton;
-    IBOutlet NSTextField* remoteDataPathTextField;
-    IBOutlet NSTextField* remoteFilenameTextField;
-    IBOutlet NSTextField* runNumberTextField;
-    IBOutlet NSTextField* runCountTextField;
-    IBOutlet NSTextField* runLengthTextField;
-    IBOutlet NSButton* runUpdateButton;
+    IBOutlet NSButton* incBaselineButton;
     IBOutlet NSButton* sendPingButton;
-    IBOutlet NSButton* startRunButton;
-    IBOutlet NSButton* killRunButton;
+    IBOutlet NSTableView* listenerView;
+    IBOutlet NSButton* addListenerButton;
+    IBOutlet NSButton* removeListenerButton;
+    IBOutlet NSButton* updateIPButton;
+    IBOutlet NSButton* listInterfaceButton;
+    IBOutlet NSTableView* monitorView;
 }
 
 #pragma mark •••Initialization
@@ -66,30 +61,15 @@
 - (void) ethInterfaceAdded:(NSNotification*)note;
 - (void) ethInterfaceRemoved:(NSNotification*)note;
 - (void) ethTypeChanged:(NSNotification*)note;
-- (void) maxPayloadChanged:(NSNotification*)note;
-- (void) eventBufferChanged:(NSNotification*)note;
-- (void) phaseAdjustChanged:(NSNotification*)note;
-- (void) baselineSlewChanged:(NSNotification*)note;
-- (void) integratorLenChanged:(NSNotification*)note;
-- (void) eventSamplesChanged:(NSNotification*)note;
-- (void) traceTypeChanged:(NSNotification*)note;
-- (void) pileupRejectionChanged:(NSNotification*)note;
-- (void) logTimeChanged:(NSNotification*)note;
-- (void) gpsEnabledChanged:(NSNotification*)note;
-- (void) includeBaselineChanged:(NSNotification*)note;
-- (void) additionalFlagsChanged:(NSNotification*)note;
-- (void) overrideCmdChanged:(NSNotification*)note;
-- (void) runOverrideChanged:(NSNotification*)note;
-- (void) remoteDataPathChanged:(NSNotification*)note;
-- (void) remoteFilenameChanged:(NSNotification*)note;
-- (void) runNumberChanged:(NSNotification*)note;
-- (void) runCountChanged:(NSNotification*)note;
-- (void) runLengthChanged:(NSNotification*)note;
-- (void) runUpdateChanged:(NSNotification*)note;
+- (void) configParamChanged:(NSNotification*)note;
 - (void) pingStart:(NSNotification*)note;
 - (void) pingEnd:(NSNotification*)note;
 - (void) runInProgress:(NSNotification*)note;
 - (void) runEnded:(NSNotification*)note;
+- (void) listenerChanged:(NSNotification*)note;
+- (void) listenerAdded:(NSNotification*)note;
+- (void) listenerRemoved:(NSNotification*)note;
+- (void) monitoringUpdated:(NSNotification*)note;
 - (void) settingsLock:(bool)lock;
 
 #pragma mark •••Actions
@@ -107,22 +87,15 @@
 - (IBAction) integratorLenAction:(id)sender;
 - (IBAction) eventSamplesAction:(id)sender;
 - (IBAction) traceTypeAction:(id)sender;
-- (IBAction) pileupRejectionAction:(id)sender;
+- (IBAction) pileupRejAction:(id)sender;
 - (IBAction) logTimeAction:(id)sender;
 - (IBAction) gpsEnabledAction:(id)sender;
-- (IBAction) includeBaselineAction:(id)sender;
-- (IBAction) additionalFlagsAction:(id)sender;
-- (IBAction) overrideCmdAction:(id)sender;
-- (IBAction) runOverrideAction:(id)sender;
-- (IBAction) remoteDataPathAction:(id)sender;
-- (IBAction) remoteFilenameAction:(id)sender;
-- (IBAction) runNumberAction:(id)sender;
-- (IBAction) runCountAction:(id)sender;
-- (IBAction) runLengthAction:(id)sender;
-- (IBAction) runUpdateAction:(id)sender;
+- (IBAction) incBaselineAction:(id)sender;
 - (IBAction) sendPingAction:(id)sender;
-- (IBAction) startRunAction:(id)sender;
-- (IBAction) killRunAction:(id)sender;
+- (IBAction) addListenerAction:(id)sender;
+- (IBAction) removeListenerAction:(id)sender;
+- (IBAction) updateIPAction:(id)sender;
+- (IBAction) listInterfaceAction:(id)sender;
 
 #pragma mark •••Delegate Methods
 - (void) tableViewSelectionDidChange:(NSNotification*)note;

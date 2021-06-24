@@ -112,7 +112,6 @@ static NSString* ORFlashCamEthLinkOutputConnection = @"ORFlashCamEthLinkOutputCo
     [colorForData([[NSUserDefaults standardUserDefaults] objectForKey:ORLineColor]) set];
     [path stroke];
     [self drawConnections:aRect withTransparency:aTransparency];
-    if([self guardian]) [NSGraphicsContext restoreGraphicsState];
 }
 
 #pragma mark •••Accessors

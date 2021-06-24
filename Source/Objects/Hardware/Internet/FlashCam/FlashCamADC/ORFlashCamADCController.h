@@ -21,7 +21,9 @@
 
 @interface ORFlashCamADCController : OrcaObjectController
 {
-    IBOutlet NSTextField* boardAddressTextField;
+    IBOutlet NSTextField* cardAddressTextField;
+    IBOutlet NSTextField* firmwareVerTextField;
+    IBOutlet NSButton* getFirmwareVerButton;
     IBOutlet NSMatrix* chanEnabledMatrix;
     IBOutlet NSMatrix* baselineMatrix;
     IBOutlet NSMatrix* thresholdMatrix;
@@ -41,7 +43,9 @@
 - (void) updateWindow;
 
 #pragma mark •••Interface management
-- (void) boardAddressChanged:(NSNotification*)note;
+- (void) cardAddressChanged:(NSNotification*)note;
+- (void) firmwareVerRequest:(NSNotification*)note;
+- (void) firmwareVerChanged:(NSNotification*)note;
 - (void) cardSlotChanged:(NSNotification*)note;
 - (void) chanEnabledChanged:(NSNotification*)note;
 - (void) baselineChanged:(NSNotification*)note;
@@ -53,7 +57,8 @@
 - (void) poleZeroTimeChanged:(NSNotification*)note;
 
 #pragma mark •••Actions
-- (IBAction) boardAddressAction:(id)sender;
+- (IBAction) cardAddressAction:(id)sender;
+- (IBAction) firmwareVerAction:(id)sender;
 - (IBAction) chanEnabledAction:(id)sender;
 - (IBAction) baselineAction:(id)sender;
 - (IBAction) thresholdAction:(id)sender;

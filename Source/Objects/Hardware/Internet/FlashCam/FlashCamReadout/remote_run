@@ -15,8 +15,9 @@ set username [lrange $argv 0 0]
 set ipaddr [lrange $argv 1 1]
 set script [lrange $argv 2 2]
 set scriptname [regsub -all {\{|\}} $script ""]
+set larg [lrange $argv $nargs-2 $nargs-2]
 set run [lrange $argv $nargs-1 $nargs-1]
-set args [regsub -all {\{|\}} [lrange $argv 3 $nargs-2] ""]
+set args [regsub -all {\{|\}} [lrange $argv 3 $nargs-1] ""]
 set timeout -1
 
 # now connect to remote UNIX box (ipaddr) with given script to execute
@@ -39,8 +40,32 @@ expect {
     }
 }
 
-send "$scriptname $args\r"
+send "cd \$FLASHCAMDIR/server; ./efbprun $scriptname $args\r"
 expect {
+    "EfbpSearchDevice: found device address" {
+        #send_user "ORFlashCamCard: found device 0x$larg endl "
+        send "exit\r"
+    }
+    "EfbpSearchDevice: can not find address" {
+        send_user "ORFlashCamCard: cannot find device at addres 0x$larg endl "
+        send "exit\r"
+    }
+    "ERROR: can not init Efbp devices" {
+        send_user "ORFlashCamCard: cannot init interface at address 0x$larg endl "
+        send "exit\r"
+    }
+    "ERROR: can not init interface" {
+        send_user "ORFlashCamCard: cannot init interface at address 0xlarg endl "
+        send "exit\r"
+    }
+    "starting readout-fc250b" {
+        send_user "ORFlashCamRunModel: starting readout, writing to $run endl "
+        exp_continue
+    }
+    "OK/running" {
+        send_user "$run $expect_out(buffer)"
+        exp_continue
+    }
     "OK/terminated" {
         send_user "Completed flashcam run $run\n"
     }
@@ -65,9 +90,11 @@ expect {
     "must stop" {
         send_user "Run stopped due to errors\n"
     }
-    default {
+    eof {
         send_user "Failed to start flashcam readout for run $run\n"
+        exp_continue
     }
 }
+send_user "terminating expect script\n"
 send "exit\n\r"
 expect eof

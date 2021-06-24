@@ -1,5 +1,5 @@
 //  Orca
-//  ORFlashCamMasterModel.m
+//  ORFlashCamTriggerModel.m
 //
 //  Created by Tom Caldwell on Monday Jan 1, 2020
 //  Copyright (c) 2020 University of North Carolina. All rights reserved.
@@ -17,20 +17,18 @@
 //for the use of this software.
 //-------------------------------------------------------------
 
-#import "ORFlashCamMasterModel.h"
+#import "ORFlashCamTriggerModel.h"
 #import "ORCrate.h"
 
-NSString* ORFlashCamMasterModelBoardAddressChanged = @"ORFlashCamMasterModelBoardAddressChanged";
+NSString* ORFlashCamTriggerModelBoardAddressChanged = @"ORFlashCamTriggerModelBoardAddressChanged";
 
-@implementation ORFlashCamMasterModel
+@implementation ORFlashCamTriggerModel
 
 - (id) init
 {
     self = [super init];
     [[self undoManager] disableUndoRegistration];
-    [self setBoardAddress:0];
-    ethConnector = nil;
-    for(unsigned int i=0; i<kFlashCamMasterConnections; i++) trigConnector[i] = nil;
+    for(unsigned int i=0; i<kFlashCamTriggerConnections; i++) trigConnector[i] = nil;
     [[self undoManager] enableUndoRegistration];
     return self;
 }
@@ -39,14 +37,14 @@ NSString* ORFlashCamMasterModelBoardAddressChanged = @"ORFlashCamMasterModelBoar
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     if(ethConnector) [ethConnector release];
-    for(unsigned int i=0; i<kFlashCamMasterConnections; i++)
+    for(unsigned int i=0; i<kFlashCamTriggerConnections; i++)
         if(trigConnector[i]) [trigConnector[i] release];
     [super dealloc];
 }
 
 - (void) setUpImage
 {
-    NSImage* cimage = [NSImage imageNamed:@"flashcam_master"];
+    NSImage* cimage = [NSImage imageNamed:@"flashcam_trigger"];
     NSSize size = [cimage size];
     NSSize newsize;
     newsize.width  = 0.1675*5*size.width;
@@ -64,7 +62,7 @@ NSString* ORFlashCamMasterModelBoardAddressChanged = @"ORFlashCamMasterModelBoar
 
 - (void) makeMainController
 {
-    [self linkToController:@"ORFlashCamMasterController"];
+    [self linkToController:@"ORFlashCamTriggerController"];
 }
 
 - (void) makeConnectors
@@ -78,7 +76,7 @@ NSString* ORFlashCamMasterModelBoardAddressChanged = @"ORFlashCamMasterModelBoar
     [ethConnector setSameGuardianIsOK:YES];
     [ethConnector setOffColor:[NSColor colorWithCalibratedRed:1 green:1 blue:0.3 alpha:1]];
     [ethConnector setOnColor:[NSColor colorWithCalibratedRed:0.1 green:0.1 blue:1 alpha:1]];
-    for(unsigned int i=0; i<kFlashCamMasterConnections; i++){
+    for(unsigned int i=0; i<kFlashCamTriggerConnections; i++){
         [self setTrigConnector:[[[ORConnector alloc] initAt:NSZeroPoint
                                                withGuardian:self
                                              withObjectLink:self] autorelease] atIndex:i];
@@ -97,7 +95,7 @@ NSString* ORFlashCamMasterModelBoardAddressChanged = @"ORFlashCamMasterModelBoar
     float xscale = 1.0;
     float yscale = 1.0;
     if([[guardian className] isEqualToString:@"ORFlashCamCrateModel"]){
-        xoff = 40;
+        xoff = 30;
         yoff = 18;
         xscale = 0.595;
         yscale = 0.5;
@@ -114,9 +112,9 @@ NSString* ORFlashCamMasterModelBoardAddressChanged = @"ORFlashCamMasterModelBoar
     if(aConnector == ethConnector) y = yoff + [self frame].size.height * yscale * 0.9;
     else{
         bool found = NO;
-        for(unsigned int i=0; i<kFlashCamMasterConnections; i++){
+        for(unsigned int i=0; i<kFlashCamTriggerConnections; i++){
             if(aConnector == trigConnector[i]){
-                y = yoff + [self frame].size.height*yscale*(0.075+0.5*i/kFlashCamMasterConnections);
+                y = yoff + [self frame].size.height*yscale*(0.075+0.5*i/kFlashCamTriggerConnections);
                 if(i > 7) y += [self frame].size.height*yscale*0.175;
                 found = YES;
                 break;
@@ -131,7 +129,7 @@ NSString* ORFlashCamMasterModelBoardAddressChanged = @"ORFlashCamMasterModelBoar
 - (void) disconnect
 {
     [ethConnector disconnect];
-    for(unsigned int i=0; i<kFlashCamMasterConnections; i++) [trigConnector[i] disconnect];
+    for(unsigned int i=0; i<kFlashCamTriggerConnections; i++) [trigConnector[i] disconnect];
     [super disconnect];
 }
 
@@ -147,30 +145,25 @@ NSString* ORFlashCamMasterModelBoardAddressChanged = @"ORFlashCamMasterModelBoar
 - (void) guardian:(id)aGuardian positionConnectorsForCard:(id)aCard
 {
     [aGuardian positionConnector:ethConnector  forCard:self];
-    for(unsigned int i=0; i<kFlashCamMasterConnections; i++)
+    for(unsigned int i=0; i<kFlashCamTriggerConnections; i++)
         [aGuardian positionConnector:trigConnector[i] forCard:self];
 }
 
 - (void) guardianRemovingDisplayOfConnectors:(id)aGuardian
 {
     [aGuardian removeDisplayOf:ethConnector];
-    for(unsigned int i=0; i<kFlashCamMasterConnections; i++)
+    for(unsigned int i=0; i<kFlashCamTriggerConnections; i++)
         [aGuardian removeDisplayOf:trigConnector[i]];
 }
 
 - (void) guardianAssumingDisplayOfConnectors:(id)aGuardian
 {
     [aGuardian assumeDisplayOf:ethConnector];
-    for(unsigned int i=0; i<kFlashCamMasterConnections; i++)
+    for(unsigned int i=0; i<kFlashCamTriggerConnections; i++)
         [aGuardian assumeDisplayOf:trigConnector[i]];
 }
 
 #pragma mark •••Accessors
-
-- (unsigned int) boardAddress
-{
-    return boardAddress;
-}
 
 - (ORConnector*) ethConnector
 {
@@ -188,13 +181,6 @@ NSString* ORFlashCamMasterModelBoardAddressChanged = @"ORFlashCamMasterModelBoar
     [self setTag:aSlot];
     [self guardian:guardian positionConnectorsForCard:self];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamCardSlotChangedNotification object:self];
-}
-
-- (void) setBoardAddress:(unsigned int)address
-{
-    [[[self undoManager] prepareWithInvocationTarget:self] setBoardAddress:boardAddress];
-    boardAddress = address;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamMasterModelBoardAddressChanged object:self];
 }
 
 - (void) setEthConnector:(ORConnector*)connector
@@ -216,9 +202,9 @@ NSString* ORFlashCamMasterModelBoardAddressChanged = @"ORFlashCamMasterModelBoar
 - (NSMutableDictionary*) connectedADCAddresses
 {
     NSMutableDictionary* addresses = [NSMutableDictionary dictionary];
-    for(unsigned int i=0; i<kFlashCamMasterConnections; i++){
+    for(unsigned int i=0; i<kFlashCamTriggerConnections; i++){
         if([trigConnector[i] isConnected]){
-            unsigned int a = [[trigConnector[i] connectedObject] boardAddress];
+            unsigned int a = [[trigConnector[i] connectedObject] cardAddress];
             [addresses setObject:[NSNumber numberWithUnsignedInt:a]
                           forKey:[NSString stringWithFormat:@"trigConnection%d",i]];
         }
@@ -232,7 +218,7 @@ NSString* ORFlashCamMasterModelBoardAddressChanged = @"ORFlashCamMasterModelBoar
 {
     NSMutableArray* flags = [NSMutableArray array];
     if([[self connectedADCAddresses] count] > 0)
-        [flags addObjectsFromArray:@[@"-ma", [NSString stringWithFormat:@"%x", boardAddress]]];
+        [flags addObjectsFromArray:@[@"-ma", [NSString stringWithFormat:@"%x", cardAddress]]];
     return flags;
 }
 
@@ -242,10 +228,11 @@ NSString* ORFlashCamMasterModelBoardAddressChanged = @"ORFlashCamMasterModelBoar
 {
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
-    [self setBoardAddress:[[decoder decodeObjectForKey:@"boardAddress"] unsignedIntValue]];
+    [self setCardAddress:[[decoder decodeObjectForKey:@"cardAddress"] unsignedIntValue]];
     [self setEthConnector:[decoder decodeObjectForKey:@"ethConnector"]];
-    for(int i=0; i<kFlashCamMasterConnections; i++)
+    for(int i=0; i<kFlashCamTriggerConnections; i++)
         [self setTrigConnector:[decoder decodeObjectForKey:[NSString stringWithFormat:@"trigConnector%d",i]] atIndex:i];
+    firmwareVer = [[NSArray array] retain];
     [[self undoManager] enableUndoRegistration];
     return self;
 }
@@ -253,11 +240,10 @@ NSString* ORFlashCamMasterModelBoardAddressChanged = @"ORFlashCamMasterModelBoar
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeObject:[NSNumber numberWithUnsignedInt:boardAddress] forKey:@"boardAddress"];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInt:cardAddress]];
     [encoder encodeObject:ethConnector  forKey:@"ethConnector"];
-    for(unsigned int i=0; i<kFlashCamMasterConnections; i++)
+    for(unsigned int i=0; i<kFlashCamTriggerConnections; i++)
         [encoder encodeObject:trigConnector[i] forKey:[NSString stringWithFormat:@"trigConnector%d",i]];
-
 }
 
 @end

@@ -1,5 +1,5 @@
 //  Orca
-//  ORFlashCamMasterController.m
+//  ORFlashCamTriggerController.m
 //
 //  Created by Tom Caldwell on Monday Jan 1, 2020
 //  Copyright (c) 2020 University of North Carolina. All rights reserved.
@@ -18,17 +18,17 @@
 //-------------------------------------------------------------
 
 
-#import "ORFlashCamMasterController.h"
-#import "ORFlashCamMasterModel.h"
+#import "ORFlashCamTriggerController.h"
+#import "ORFlashCamTriggerModel.h"
 #import "ORFlashCamADCModel.h"
 
-@implementation ORFlashCamMasterController
+@implementation ORFlashCamTriggerController
 
 #pragma mark •••Initialization
 
 - (id) init
 {
-    self = [super initWithWindowNibName:@"FlashCamMaster"];
+    self = [super initWithWindowNibName:@"FlashCamTrigger"];
     return self;
 }
 
@@ -40,7 +40,7 @@
 - (void) setModel:(id)aModel
 {
     [super setModel:aModel];
-    [[self window] setTitle:[NSString stringWithFormat:@"FlasCam Master (%x Slot %d)", [model boardAddress], [model slot]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"FlasCam Trigger (%x Slot %d)", [model cardAddress], [model slot]]];
 }
 
 - (void) registerNotificationObservers
@@ -48,8 +48,8 @@
     NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
     [super registerNotificationObservers];
     [notifyCenter addObserver : self
-                     selector : @selector(boardAddressChanged:)
-                         name : ORFlashCamMasterModelBoardAddressChanged
+                     selector : @selector(cardAddressChanged:)
+                         name : ORFlashCamCardAddressChanged
                        object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(cardSlotChanged:)
@@ -57,7 +57,7 @@
                        object : nil];
     [notifyCenter addObserver : self
                      selector :@selector(connectionChanged:)
-                         name :ORFlashCamADCModelBoardAddressChanged
+                         name :ORFlashCamCardAddressChanged
                        object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(connectionChanged:)
@@ -73,28 +73,27 @@
 - (void) updateWindow
 {
     [super updateWindow];
-    [self boardAddressChanged:nil];
+    [self cardAddressChanged:nil];
     [self connectionChanged:nil];
 }
 
 #pragma mark •••Interface management
 
-- (void) boardAddressChanged:(NSNotification*)note
+- (void) cardAddressChanged:(NSNotification*)note
 {
-    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Master (0x%x, Slot %d)", [model boardAddress], [model slot]]];
-    [boardAddressTextField setIntValue:[model boardAddress]];
+    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Trigger (0x%x, Slot %d)", [model cardAddress], [model slot]]];
+    [cardAddressTextField setIntValue:[model cardAddress]];
 }
 
 - (void) cardSlotChanged:(NSNotification*)note
 {
-    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Master (0x%x, Slot %d)", [model boardAddress], [model slot]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Trigger (0x%x, Slot %d)", [model cardAddress], [model slot]]];
 }
 
 - (void) connectionChanged:(NSNotification*)note
 {
     NSMutableDictionary* addresses = [model connectedADCAddresses];
-    NSLog(@"%d addresses\n", [addresses count]);
-    for(unsigned int i=0; i<kFlashCamMasterConnections; i++){
+    for(unsigned int i=0; i<kFlashCamTriggerConnections; i++){
         NSNumber* a = [addresses objectForKey:[NSString stringWithFormat:@"trigConnection%d",i]];
         if(a) [[connectedADCMatrix cellWithTag:i] setIntValue:(int)[a unsignedIntValue]];
     }
@@ -102,9 +101,9 @@
 
 #pragma mark •••Actions
 
-- (IBAction) boardAddressAction:(id)sender
+- (IBAction) cardAddressAction:(id)sender
 {
-    [model setBoardAddress:[sender intValue]];
+    [model setCardAddress:[sender intValue]];
 }
 
 @end

@@ -19,6 +19,7 @@
 
 #import "ORFlashCamADCController.h"
 #import "ORFlashCamADCModel.h"
+#import "ORFlashCamReadoutModel.h"
 
 @implementation ORFlashCamADCController
 
@@ -38,7 +39,7 @@
 - (void) setModel:(id)aModel
 {
     [super setModel:aModel];
-    [[self window] setTitle:[NSString stringWithFormat:@"FlasCam ADC (%x Slot %d)", [model boardAddress], [model slot]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"FlasCam ADC (0x%x Slot %d)", [model cardAddress], [model slot]]];
 }
 
 - (void) registerNotificationObservers
@@ -46,13 +47,21 @@
     NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
     [super registerNotificationObservers];
     [notifyCenter addObserver : self
-                     selector : @selector(boardAddressChanged:)
-                         name : ORFlashCamADCModelBoardAddressChanged
+                     selector : @selector(cardAddressChanged:)
+                         name : ORFlashCamCardAddressChanged
                        object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(firmwareVerRequest:)
+                         name : ORFlashCamCardFirmwareVerRequest
+                       object : model];
+    [notifyCenter addObserver : self
+                     selector : @selector(firmwareVerChanged:)
+                         name : ORFlashCamCardFirmwareVerChanged
+                       object : model];
     [notifyCenter addObserver : self
                      selector : @selector(cardSlotChanged:)
                          name : ORFlashCamCardSlotChangedNotification
-                       object : nil];
+                       object : self];
     [notifyCenter addObserver : self
                      selector : @selector(chanEnabledChanged:)
                          name : ORFlashCamADCModelChanEnabledChanged
@@ -95,7 +104,8 @@
 - (void) updateWindow
 {
     [super updateWindow];
-    [self boardAddressChanged:nil];
+    [self cardAddressChanged:nil];
+    [self firmwareVerChanged:nil];
     [self chanEnabledChanged:nil];
     [self baselineChanged:nil];
     [self thresholdChanged:nil];
@@ -108,15 +118,29 @@
 
 #pragma mark •••Interface Management
 
-- (void) boardAddressChanged:(NSNotification *)note
+- (void) cardAddressChanged:(NSNotification *)note
 {
-    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam ADC (0x%x, Slot %d)", [model boardAddress], [model slot]]];
-    [boardAddressTextField setIntValue:[model boardAddress]];
+    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam ADC (0x%x, Slot %d)", [model cardAddress], [model slot]]];
+    [cardAddressTextField setIntValue:[model cardAddress]];
+    [model taskFinished:nil];
+}
+
+- (void) firmwareVerRequest:(NSNotification*)note
+{
+    [getFirmwareVerButton setEnabled:NO];
+}
+
+- (void) firmwareVerChanged:(NSNotification*)note
+{
+    if([model firmwareVer])
+        [firmwareVerTextField setStringValue:[[model firmwareVer] componentsJoinedByString:@" / "]];
+    else [firmwareVerTextField setStringValue:@""];
+    [getFirmwareVerButton setEnabled:YES];
 }
 
 - (void) cardSlotChanged:(NSNotification*)note
 {
-    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam ADC (0x%x, Slot %d)", [model boardAddress], [model slot]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam ADC (0x%x, Slot %d)", [model cardAddress], [model slot]]];
 }
 
 - (void) chanEnabledChanged:(NSNotification*)note
@@ -217,9 +241,14 @@
 
 #pragma mark •••Actions
 
-- (IBAction) boardAddressAction:(id)sender
+- (IBAction) cardAddressAction:(id)sender
 {
-    [model setBoardAddress:[sender intValue]];
+    [model setCardAddress:[sender intValue]];
+}
+
+- (IBAction) firmwareVerAction:(id)sender
+{
+    [model requestFirmwareVersion];
 }
 
 - (IBAction) chanEnabledAction:(id)sender

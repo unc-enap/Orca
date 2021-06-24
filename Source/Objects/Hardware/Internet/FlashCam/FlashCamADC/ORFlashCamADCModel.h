@@ -19,17 +19,25 @@
 
 #import "ORFlashCamCard.h"
 #import "ORConnector.h"
-//#import "ORDataTaker.h"
+#import "ORRateGroup.h"
+#import "ORTimer.h"
+#import "ORDataTaker.h"
 #import "ORHWWizard.h"
+#import "fcio.h"
 
 //@class ORRateGroup;
 
 #define kMaxFlashCamADCChannels 6
+#define kFlashCamADCBufferLength 300
+#define kFlashCamADCOrcaHeaderLength 3
+#define kFlashCamADCTimeOffsetLength 7
+#define kFlashCamADCDeadRegionLength 5
+#define kFlashCamADCTimeStampLength 4
+#define kFlashCamADCWFHeaderLength 19
 
-@interface ORFlashCamADCModel : ORFlashCamCard <ORHWWizard> //<ORDataTaker, ORHWWizard>
+@interface ORFlashCamADCModel : ORFlashCamCard <ORDataTaker, ORHWWizard>
 {
     @private
-    unsigned int boardAddress;
     bool chanEnabled[kMaxFlashCamADCChannels];
     int baseline[kMaxFlashCamADCChannels];       // bldac
     int threshold[kMaxFlashCamADCChannels];      // athr
@@ -38,8 +46,22 @@
     int shapeTime[kMaxFlashCamADCChannels];      // gs
     float filterType[kMaxFlashCamADCChannels];   // gf
     float poleZeroTime[kMaxFlashCamADCChannels]; // gpz
-    ORConnector* ethConnector;
     ORConnector* trigConnector;
+    bool isRunning;
+    unsigned int wfSamples;
+    int wfHeaderBuffer[kFlashCamADCBufferLength*kFlashCamADCWFHeaderLength];
+    unsigned short* wfBuffer;
+    unsigned int bufferIndex;
+    unsigned int takeDataIndex;
+    bool firstTakeData;
+    ORRateGroup* wfRates;
+    ORTimer* timer;
+    uint32_t wfCount[kMaxFlashCamADCChannels];
+    uint32_t dataId;
+    uint32_t location;
+    uint32_t dataLengths;
+    uint32_t* dataRecord;
+    uint32_t  dataRecordLength;
 }
 
 #pragma mark •••Initialization
@@ -52,7 +74,6 @@
 - (void) guardianAssumingDisplayOfConnectors:(id)aGuardian;
 
 #pragma mark •••Accessors
-- (unsigned int) boardAddress;
 - (unsigned int) nChanEnabled;
 - (bool) chanEnabled:(unsigned int)chan;
 - (int) baseline:(unsigned int)chan;
@@ -64,8 +85,12 @@
 - (float) poleZeroTime:(unsigned int)chan;
 - (ORConnector*) ethConnector;
 - (ORConnector*) trigConnector;
+- (ORRateGroup*) wfRates;
+- (id) rateObject:(int)channel;
+- (uint32_t) wfCount:(int)channel;
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag;
+- (uint32_t) dataId;
 
-- (void) setBoardAddress:(unsigned int)address;
 - (void) setChanEnabled:(unsigned int)chan  withValue:(bool)enabled;
 - (void) setBaseline:(unsigned int)chan     withValue:(int)base;
 - (void) setThreshold:(unsigned int)chan    withValue:(int)thresh;
@@ -76,6 +101,11 @@
 - (void) setPoleZeroTime:(unsigned int)chan withValue:(float)time;
 - (void) setEthConnector:(ORConnector*)connector;
 - (void) setTrigConnector:(ORConnector*)connector;
+- (void) setWFsamples:(int)samples;
+- (void) setWFrates:(ORRateGroup*)rateGroup;
+- (void) setRateIntTime:(double)intTime;
+- (void) setDataId:(uint32_t)dId;
+- (void) setDataIdsWith:(id)assigner;
 
 #pragma mark •••Run control flags
 - (NSString*) chFlag:(unsigned int)ch withInt:(int)value;
@@ -83,6 +113,17 @@
 - (unsigned int) chanMask;
 - (NSMutableArray*) runFlagsForChannelOffset:(unsigned int)offset;
 - (void) printRunFlagsForChannelOffset:(unsigned int)offset;
+
+#pragma mark •••Data taker methods
+- (void) event:(fcio_event*)event withIndex:(int)index andChannel:(unsigned int)channel;
+- (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
+- (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
+- (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
+- (void) reset;
+- (void) startRates;
+- (void) clearWFcounts;
+- (void) syncDataIdsWith:(id)aCard;
+- (NSDictionary*) dataRecordDescription;
 
 #pragma mark •••Archival
 - (id) initWithCoder:(NSCoder*)decoder;
@@ -97,7 +138,6 @@
 @end
 
 #pragma mark •••Externals
-extern NSString* ORFlashCamADCModelBoardAddressChanged;
 extern NSString* ORFlashCamADCModelChanEnabledChanged;
 extern NSString* ORFlashCamADCModelBaselineChanged;
 extern NSString* ORFlashCamADCModelThresholdChanged;
@@ -106,4 +146,6 @@ extern NSString* ORFlashCamADCModelTrigGainChanged;
 extern NSString* ORFlashCamADCModelShapeTimeChanged;
 extern NSString* ORFlashCamADCModelFilterTypeChanged;
 extern NSString* ORFlashCamADCModelPoleZeroTimeChanged;
+extern NSString* ORFlashCamADCModelRateGroupChanged;
+extern NSString* ORFlashCamADCModelBufferFull;
 

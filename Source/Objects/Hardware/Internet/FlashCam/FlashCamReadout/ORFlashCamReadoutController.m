@@ -17,16 +17,17 @@
 //for the use of this software.
 //-------------------------------------------------------------
 
-#import "ORFlashCamRunController.h"
-#import "ORFlashCamRunModel.h"
+#import "ORFlashCamReadoutController.h"
+#import "ORFlashCamReadoutModel.h"
+#import "Utilities.h"
 
-@implementation ORFlashCamRunController
+@implementation ORFlashCamReadoutController
 
 #pragma mark •••Initialization
 
 - (id) init
 {
-    self = [super initWithWindowNibName:@"FlashCamRun"];
+    self = [super initWithWindowNibName:@"FlashCamReadout"];
     return self;
 }
 
@@ -38,7 +39,7 @@
 - (void) setModel:(id)aModel
 {
     [super setModel:aModel];
-    [[self window] setTitle:[NSString stringWithFormat:@"FlasCam (%@)", [model ipAddress]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Readout Configuration (%@)", [model ipAddress]]];
 }
 
 - (void) registerNotificationObservers
@@ -47,23 +48,23 @@
     [super registerNotificationObservers];
     [notifyCenter addObserver : self
                      selector : @selector(ipAddressChanged:)
-                         name : ORFlashCamRunModelIPAddressChanged
+                         name : ORFlashCamReadoutModelIPAddressChanged
                        object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(usernameChanged:)
-                         name : ORFlashCamRunModelUsernameChanged
+                         name : ORFlashCamReadoutModelUsernameChanged
                        object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(ethInterfaceChanged:)
-                         name : ORFlashCamRunModelEthInterfaceChanged
+                         name : ORFlashCamReadoutModelEthInterfaceChanged
                        object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(ethInterfaceAdded:)
-                         name : ORFlashCamRunModelEthInterfaceAdded
+                         name : ORFlashCamReadoutModelEthInterfaceAdded
                        object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(ethInterfaceRemoved:)
-                         name : ORFlashCamRunModelEthInterfaceRemoved
+                         name : ORFlashCamReadoutModelEthInterfaceRemoved
                        object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(tableViewSelectionDidChange:)
@@ -71,104 +72,52 @@
                        object : ethInterfaceView];
     [notifyCenter addObserver : self
                      selector : @selector(ethTypeChanged:)
-                         name : ORFlashCamRunModelEthTypeChanged
+                         name : ORFlashCamReadoutModelEthTypeChanged
                        object : nil];
     [notifyCenter addObserver : self
-                     selector : @selector(maxPayloadChanged:)
-                         name : ORFlashCamRunModelMaxPayloadChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(eventBufferChanged:)
-                         name : ORFlashCamRunModelEventBufferChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(phaseAdjustChanged:)
-                         name : ORFlashCamRunModelPhaseAdjustChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(baselineSlewChanged:)
-                         name : ORFlashCamRunModelBaselineSlewChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(integratorLenChanged:)
-                         name : ORFlashCamRunModelIntegratorLenChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(eventSamplesChanged:)
-                         name : ORFlashCamRunModelEventSamplesChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(traceTypeChanged:)
-                         name : ORFlashCamRunModelTraceTypeChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(pileupRejectionChanged:)
-                         name : ORFlashCamRunModelPileupRejectionChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(logTimeChanged:)
-                         name : ORFlashCamRunModelLogTimeChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(gpsEnabledChanged:)
-                         name : ORFlashCamRunModelGPSEnabledChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(includeBaselineChanged:)
-                         name : ORFlashCamRunModelIncludeBaselineChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(additionalFlagsChanged:)
-                         name : ORFlashCamRunModelAdditionalFlagsChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(overrideCmdChanged:)
-                         name : ORFlashCamRunModelOverrideCmdChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(runOverrideChanged:)
-                         name : ORFlashCamRunModelRunOverrideChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(remoteDataPathChanged:)
-                         name : ORFlashCamRunModelRemoteDataPathChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(remoteFilenameChanged:)
-                         name : ORFlashCamRunModelRemoteFilenameChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(runNumberChanged:)
-                         name : ORFlashCamRunModelRunNumberChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(runCountChanged:)
-                         name : ORFlashCamRunModelRunCountChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(runLengthChanged:)
-                         name : ORFlashCamRunModelRunLengthChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(runUpdateChanged:)
-                         name : ORFlashCamRunModelRunUpdateChanged
+                     selector : @selector(configParamChanged:)
+                         name : ORFlashCamReadoutModelConfigParamChanged
                        object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(pingStart:)
-                         name : ORFlashCamRunModelPingStart
+                         name : ORFlashCamReadoutModelPingStart
                        object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(pingEnd:)
-                         name : ORFlashCamRunModelPingEnd
+                         name : ORFlashCamReadoutModelPingEnd
                        object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(runInProgress:)
-                         name : ORFlashCamRunModelRunInProgress
+                         name : ORFlashCamReadoutModelRunInProgress
                        object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(runEnded:)
-                          name : ORFlashCamRunModelRunEnded
+                          name : ORFlashCamReadoutModelRunEnded
                         object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(listenerChanged:)
+                         name : ORFlashCamReadoutModelListenerChanged
+                       object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(listenerAdded:)
+                         name : ORFlashCamReadoutModelListenerAdded
+                       object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(listenerRemoved:)
+                         name : ORFlashCamReadoutModelListenerRemoved
+                       object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(monitoringUpdated:)
+                         name : ORFlashCamListenerStatusChanged
+                       object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(tableViewSelectionDidChange:)
+                         name : NSTableViewSelectionDidChangeNotification
+                       object : listenerView];
+    [notifyCenter addObserver : self
+                      selector : @selector(tableViewSelectionDidChange:)
+                          name : NSTableViewSelectionDidChangeNotification
+                        object : monitorView];
 }
 
 - (void) awakeFromNib
@@ -184,33 +133,17 @@
     [self tableViewSelectionDidChange:nil];
     [ethInterfaceView reloadData];
     [self ethTypeChanged:nil];
-    [self maxPayloadChanged:nil];
-    [self eventBufferChanged:nil];
-    [self phaseAdjustChanged:nil];
-    [self baselineSlewChanged:nil];
-    [self integratorLenChanged:nil];
-    [self eventSamplesChanged:nil];
-    [self traceTypeChanged:nil];
-    [self pileupRejectionChanged:nil];
-    [self logTimeChanged:nil];
-    [self gpsEnabledChanged:nil];
-    [self includeBaselineChanged:nil];
-    [self additionalFlagsChanged:nil];
-    [self overrideCmdChanged:nil];
-    [self runOverrideChanged:nil];
-    [self remoteDataPathChanged:nil];
-    [self remoteFilenameChanged:nil];
-    [self runNumberChanged:nil];
-    [self runCountChanged:nil];
-    [self runLengthChanged:nil];
-    [self runUpdateChanged:nil];
+    [self configParamChanged:nil];
+    [listenerView reloadData];
+    [monitorView reloadData];
 }
 
 #pragma mark •••Interface Management
+
 - (void) ipAddressChanged:(NSNotification*)note
 {
     [ipAddressTextField setStringValue:[model ipAddress]];
-    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam (%@)", [model ipAddress]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Readout Configuration (%@)", [model ipAddress]]];
 }
 
 - (void) usernameChanged:(NSNotification*)note
@@ -241,123 +174,34 @@
 
 - (void) ethTypeChanged:(NSNotification*)note
 {
-    [ethTypeTextField setStringValue:[model ethType]];
+    [ethTypePUButton selectItemWithTitle:[model ethType]];
 }
 
-- (void) maxPayloadChanged:(NSNotification*)note
+- (void) configParamChanged:(NSNotification*)note
 {
-    [maxPayloadTextField setIntValue:[model maxPayload]];
-}
-
-- (void) eventBufferChanged:(NSNotification*)note
-{
-    [eventBufferTextField setIntValue:[model eventBuffer]];
-}
-
-- (void) phaseAdjustChanged:(NSNotification*)note
-{
-    [phaseAdjustTextField setIntValue:[model phaseAdjust]];
-}
-
-- (void) baselineSlewChanged:(NSNotification*)note
-{
-    [baselineSlewTextField setIntValue:[model baselineSlew]];
-}
-
-- (void) integratorLenChanged:(NSNotification*)note
-{
-    [integratorLenTextField setIntValue:[model integratorLen]];
-}
-
-- (void) eventSamplesChanged:(NSNotification*)note
-{
-    [eventSamplesTextField setIntValue:[model eventSamples]];
-}
-
-- (void) traceTypeChanged:(NSNotification*)note
-{
-    [traceTypePUButton setIntValue:[model traceType]];
-}
-
-- (void) pileupRejectionChanged:(NSNotification*)note
-{
-    [pileupRejectionTextField setFloatValue:[model pileupRejection]];
-}
-
-- (void) logTimeChanged:(NSNotification*)note
-{
-    [logTimeTextField setFloatValue:[model logTime]];
-}
-
-- (void) gpsEnabledChanged:(NSNotification*)note
-{
-    [gpsEnabledButton setIntValue:[model gpsEnabled]];
-}
-
-- (void) includeBaselineChanged:(NSNotification*)note
-{
-    [includeBaselineButton setIntValue:[model includeBaseline]];
-}
-
-- (void) additionalFlagsChanged:(NSNotification*)note
-{
-    [additionalFlagsTextField setStringValue:[model additionalFlags]];
-}
-
-- (void) overrideCmdChanged:(NSNotification*)note
-{
-    [overrideCmdTextField setStringValue:[model overrideCmd]];
-}
-
-- (void) runOverrideChanged:(NSNotification*)note
-{
-    [runOverrideButton setIntValue:[model runOverride]];
-}
-
-- (void) remoteDataPathChanged:(NSNotification*)note
-{
-    [remoteDataPathTextField setStringValue:[model remoteDataPath]];
-}
-
-- (void) remoteFilenameChanged:(NSNotification*) note
-{
-    [remoteFilenameTextField setStringValue:[model remoteFilename]];
-}
-
-- (void) runNumberChanged:(NSNotification*)note
-{
-    [runNumberTextField setIntValue:[model runNumber]];
-}
-
-- (void) runCountChanged:(NSNotification*)note
-{
-    [runCountTextField setIntValue:[model runCount]];
-}
-
-- (void) runLengthChanged:(NSNotification*)note
-{
-    [runLengthTextField setIntValue:[model runLength]];
-}
-
-- (void) runUpdateChanged:(NSNotification*)note
-{
-    [runUpdateButton setIntValue:[model runUpdate]];
+    [maxPayloadTextField    setIntValue:[[model   configParam:@"maxPayload"]    intValue]];
+    [eventBufferTextField   setIntValue:[[model   configParam:@"eventBuffer"]   intValue]];
+    [phaseAdjustTextField   setIntValue:[[model   configParam:@"phaseAdjust"]   intValue]];
+    [baselineSlewTextField  setIntValue:[[model   configParam:@"baselineSlew"]  intValue]];
+    [integratorLenTextField setIntValue:[[model   configParam:@"integratorLen"] intValue]];
+    [eventSamplesTextField  setIntValue:[[model   configParam:@"eventSamples"]  intValue]];
+    [traceTypePUButton      setIntValue:[[model   configParam:@"traceType"]     intValue]];
+    [pileupRejTextField     setFloatValue:[[model configParam:@"pileupRej"]     doubleValue]];
+    [logTimeTextField       setFloatValue:[[model configParam:@"logTime"]       doubleValue]];
+    [gpsEnabledButton       setIntValue:[[model   configParam:@"gpsEnabled"]    boolValue]];
+    [incBaselineButton      setIntValue:[[model   configParam:@"incBaseline"]   boolValue]];
 }
 
 - (void) pingStart:(NSNotification*)note
 {
     [ipAddressTextField setEnabled:NO];
     [sendPingButton setEnabled:NO];
-    [startRunButton setEnabled:NO];
-    [killRunButton setEnabled:NO];
 }
 
 - (void) pingEnd:(NSNotification*)note
 {
     [ipAddressTextField setEnabled:YES];
     [sendPingButton setEnabled:YES];
-    [startRunButton setEnabled:YES];
-    [killRunButton setEnabled:YES];
 }
 
 - (void) runInProgress:(NSNotification*)note
@@ -370,13 +214,43 @@
     [self settingsLock:NO];
 }
 
+- (void) listenerChanged:(NSNotification*)note
+{
+    [listenerView reloadData];
+    [monitorView  reloadData];
+}
+
+- (void) listenerAdded:(NSNotification*)note
+{
+    [listenerView reloadData];
+    NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:[model listenerCount]-1];
+    [listenerView selectRowIndexes:indexSet byExtendingSelection:NO];
+    [ethInterfaceView reloadData];
+    [monitorView reloadData];
+}
+
+- (void) listenerRemoved:(NSNotification*)note
+{
+    int index = [[[note userInfo] objectForKey:@"index"] intValue];
+    index = MAX(0, MIN(index, [model listenerCount]-1));
+    [listenerView reloadData];
+    NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:index];
+    [listenerView selectRowIndexes:indexSet byExtendingSelection:NO];
+    [ethInterfaceView reloadData];
+    [monitorView reloadData];
+}
+
+- (void) monitoringUpdated:(NSNotification*)note
+{
+    [monitorView reloadData];
+}
+
 - (void) settingsLock:(bool)lock
 {
     [ipAddressTextField       setEnabled:!lock];
     [usernameTextField        setEnabled:!lock];
     [ethInterfaceView         setEnabled:!lock];
-    [ethTypeTextField         setEnabled:!lock];
-    [ethTypeTextField         setEnabled:!lock];
+    [ethTypePUButton          setEnabled:!lock];
     [maxPayloadTextField      setEnabled:!lock];
     [eventBufferTextField     setEnabled:!lock];
     [phaseAdjustTextField     setEnabled:!lock];
@@ -384,21 +258,12 @@
     [integratorLenTextField   setEnabled:!lock];
     [eventSamplesTextField    setEnabled:!lock];
     [traceTypePUButton        setEnabled:!lock];
-    [pileupRejectionTextField setEnabled:!lock];
+    [pileupRejTextField       setEnabled:!lock];
     [logTimeTextField         setEnabled:!lock];
     [gpsEnabledButton         setEnabled:!lock];
-    [includeBaselineButton    setEnabled:!lock];
-    [additionalFlagsTextField setEnabled:!lock];
-    [overrideCmdTextField     setEnabled:!lock];
-    [runOverrideButton        setEnabled:!lock];
-    [remoteDataPathTextField  setEnabled:!lock];
-    [remoteFilenameTextField  setEnabled:!lock];
-    [runNumberTextField       setEnabled:!lock];
-    [runCountTextField        setEnabled:!lock];
-    [runLengthTextField       setEnabled:!lock];
-    [runUpdateButton          setEnabled:!lock];
+    [incBaselineButton        setEnabled:!lock];
     [sendPingButton           setEnabled:!lock];
-    [startRunButton           setEnabled:!lock];
+    [listenerView             setEnabled:!lock];
 }
 
 #pragma mark ***Actions
@@ -436,107 +301,62 @@
 
 - (IBAction) ethTypeAction:(id)sender
 {
-    [model setEthType:[sender stringValue]];
+    [model setEthType:[sender titleOfSelectedItem]];
 }
 
 - (IBAction) maxPayloadAction:(id)sender
 {
-    [model setMaxPayload:[sender intValue]];
+    [model setConfigParam:@"maxPayload" withValue:[NSNumber numberWithInt:[sender intValue]]];
 }
 
 - (IBAction) eventBufferAction:(id)sender
 {
-    [model setEventBuffer:[sender intValue]];
+    [model setConfigParam:@"eventBuffer" withValue:[NSNumber numberWithInt:[sender intValue]]];
 }
 
 - (IBAction) phaseAdjustAction:(id)sender
 {
-    [model setPhaseAdjust:[sender intValue]];
+    [model setConfigParam:@"phaseAdjust" withValue:[NSNumber numberWithInt:[sender intValue]]];
 }
 
 - (IBAction) baselineSlewAction:(id)sender
 {
-    [model setBaselineSlew:[sender intValue]];
+    [model setConfigParam:@"baselineSlew" withValue:[NSNumber numberWithInt:[sender intValue]]];
 }
 
 - (IBAction) integratorLenAction:(id)sender
 {
-    [model setIntegratorLen:[sender intValue]];
+    [model setConfigParam:@"integratorLen" withValue:[NSNumber numberWithInt:[sender intValue]]];
 }
 
 - (IBAction) eventSamplesAction:(id)sender
 {
-    [model setEventSamples:[sender intValue]];
+    [model setConfigParam:@"eventSamples" withValue:[NSNumber numberWithInt:[sender intValue]]];
 }
 
 - (IBAction) traceTypeAction:(id)sender
 {
-    [model setTraceType:(int)[sender indexOfSelectedItem]];
+    [model setConfigParam:@"traceType" withValue:[NSNumber numberWithInt:[sender intValue]]];
 }
 
-- (IBAction) pileupRejectionAction:(id)sender
+- (IBAction) pileupRejAction:(id)sender
 {
-    [model setPileupRejection:[sender floatValue]];
+    [model setConfigParam:@"pileupRej" withValue:[NSNumber numberWithDouble:[sender doubleValue]]];
 }
 
 - (IBAction) logTimeAction:(id)sender
 {
-    [model setLogTime:[sender floatValue]];
+    [model setConfigParam:@"logTime" withValue:[NSNumber numberWithDouble:[sender doubleValue]]];
 }
 
 - (IBAction) gpsEnabledAction:(id)sender
 {
-    [model setGPSEnabled:[sender intValue]];
+    [model setConfigParam:@"gpsEnabled" withValue:[NSNumber numberWithBool:[sender intValue]]];
 }
 
-- (IBAction) includeBaselineAction:(id)sender
+- (IBAction) incBaselineAction:(id)sender
 {
-    [model setIncludeBaseline:[sender intValue]];
-}
-
-- (IBAction) additionalFlagsAction:(id)sender
-{
-    [model setAdditionalFlags:[sender stringValue]];
-}
-
-- (IBAction) overrideCmdAction:(id)sender
-{
-    [model setOverrideCmd:[sender stringValue]];
-}
-
-- (IBAction) runOverrideAction:(id)sender
-{
-    [model setRunOverride:[sender intValue]];
-}
-
-- (IBAction) remoteDataPathAction:(id)sender
-{
-    [model setRemoteDataPath:[sender stringValue]];
-}
-
-- (IBAction) remoteFilenameAction:(id)sender
-{
-    [model setRemoteFilename:[sender stringValue]];
-}
-
-- (IBAction) runNumberAction:(id)sender
-{
-    [model setRunNumber:[sender intValue]];
-}
-
-- (IBAction) runCountAction:(id)sender
-{
-    [model setRunCount:[sender intValue]];
-}
-
-- (IBAction) runLengthAction:(id)sender
-{
-    [model setRunLength:[sender intValue]];
-}
-
-- (IBAction) runUpdateAction:(id)sender
-{
-    [model setRunUpdate:[sender intValue]];
+    [model setConfigParam:@"incBaseline" withValue:[NSNumber numberWithBool:[sender intValue]]];
 }
 
 - (IBAction) sendPingAction:(id)sender
@@ -544,14 +364,25 @@
     [model sendPing:YES];
 }
 
-- (IBAction) startRunAction:(id)sender
+- (IBAction) addListenerAction:(id)sender
 {
-    [model startRun];
+    [model addListener:@"" atPort:kFlashCamDefaultPort+1];
 }
 
-- (IBAction) killRunAction:(id)sender
+- (IBAction) removeListenerAction:(id)sender
 {
-    [model killRun];
+    NSUInteger index = [[listenerView selectedRowIndexes] firstIndex];
+    if(index != NSNotFound) [model removeListenerAtIndex:(int)index];
+}
+
+- (IBAction) updateIPAction:(id)sender
+{
+    [model updateIPs];
+}
+
+- (IBAction) listInterfaceAction:(id)sender
+{
+    ipAddressAndListInterfaces(@"", YES);
 }
 
 #pragma mark •••Delegate Methods
@@ -562,26 +393,76 @@
         NSInteger index = [ethInterfaceView selectedRow];
         [removeEthInterfaeButton setEnabled:index>=0];
     }
+    if([note object] == listenerView || note == nil){
+        NSInteger index = [listenerView selectedRow];
+        [removeListenerButton setEnabled:index>=0];
+    }
 }
 
 #pragma mark •••Data Source
 
 - (id) tableView:(NSTableView*)view objectValueForTableColumn:(NSTableColumn*)column row:(NSInteger)row
 {
-    if(view == ethInterfaceView)
-        return [model ethInterfaceAtIndex:(int)row];
-    else return nil;
+    NSUInteger col = [[view tableColumns] indexOfObject:column];
+    if(view == ethInterfaceView){
+        if(col == 0)      return [model ethInterfaceAtIndex:(int)row];
+        else if(col == 1) return [NSNumber numberWithInt:[model ethListenerIndex:(int)row]];
+    }
+    else if(view == listenerView || view == monitorView){
+        ORFlashCamListener* l = [model getListenerAtIndex:(int)row];
+        if(!l) return nil;
+        if(col == 0){
+            int i = [model getIndexOfListener:[l interface] atPort:[l port]];
+            return [NSNumber numberWithInt:i];
+        }
+        else if(view == listenerView){
+            if(col == 1)      return [l interface];
+            else if(col == 2) return [NSNumber numberWithInt:(int)[l port]];
+            else if(col == 3) return [l ip];
+            else if(col == 4) return [NSNumber numberWithInt:[l ioBuffer]];
+            else if(col == 5) return [NSNumber numberWithInt:[l stateBuffer]];
+            else if(col == 6) return [NSNumber numberWithInt:[l timeout]];
+        }
+        else if(view == monitorView){
+            if(col == 1){
+                NSString* s = [l status];
+                if(!s) s = @"Idle";
+                return s;
+            }
+            else if(col == 2) return [NSNumber numberWithDouble:[l runTime]];
+            else if(col == 3) return [NSNumber numberWithInt:(int)[l eventCount]];
+            else if(col == 4) return [NSNumber numberWithDouble:[l rateMB]];
+            else if(col == 5) return [NSNumber numberWithDouble:[l rateHz]];
+            else if(col == 6) return [NSNumber numberWithDouble:[l curDead]];
+            else if(col == 7) return [NSNumber numberWithInt:(int)[l bufferedRecords]];
+        }
+    }
+    return nil;
 }
 
 - (void) tableView:(NSTableView*)view setObjectValue:(id)object forTableColumn:(NSTableColumn*)column row:(NSInteger)row
 {
-    if(view == ethInterfaceView)
-        [model setEthInterface:object atIndex:(int)row];
+    NSUInteger col= [[view tableColumns] indexOfObject:column];
+    if(view == ethInterfaceView){
+        if(col == 0) [model setEthInterface:object atIndex:(int)row];
+        else if(col == 1) [model setEthListenerIndex:[object intValue] atIndex:(int)row];
+    }
+    else if(view == listenerView){
+        ORFlashCamListener* l = [model getListenerAtIndex:(int)row];
+        if(!l) return;
+        if(col == 1)      [model setListener:object atPort:[l port] forIndex:(int)row];
+        else if(col == 2) [model setListener:[l interface] atPort:(uint16_t)[object intValue] forIndex:(int)row];
+        else if(col == 4) [l     setIObuffer:[object intValue]];
+        else if(col == 5) [l  setStateBuffer:[object intValue]];
+        else if(col == 6) [l      setTimeout:[object intValue]];
+    }
 }
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView*)view
 {
-    if(view == ethInterfaceView) return [model ethInterfaceCount];
+    if(view == ethInterfaceView)  return [model ethInterfaceCount];
+    else if(view == listenerView) return [model listenerCount];
+    else if(view == monitorView)  return [model listenerCount];
     else return 0;
 }
 
