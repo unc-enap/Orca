@@ -1,0 +1,65 @@
+#!/bin/bash
+
+STATUS_FILE=${HOME}/ORCA/stat.txt
+
+#if [ "$(pidof -s OrcaReadout)" ] TODO: I commented this out as pidof is not Unix standard (e.g. does not exist on Darwin) -tb-
+#So now the user is responsible to stop a running OrcaReadout before starting it again. -tb-
+if false
+then
+	#Orca loop running
+	#output is logged if it includes "goscript:"
+	#any output is logged if the verbose flag is checked in the gui
+	#"error:" and/or "warning" and/or "min/avg/max/stddev" not allowed in any output
+	echo "goscript: Can not start the crate, the crate is running already."
+
+	if [ -r $STATUS_FILE ]
+	then
+		#we have the status file
+		while read line
+		do
+			ORCA_USER="$line"
+			read line
+			START="$line"
+		done < $STATUS_FILE
+		START="$((($(date +%s) - $START) / 60))"
+		echo "goscript: The crate was started by $ORCA_USER $START minutes ago."
+	else
+		echo "goscript: Status file not found."
+	fi
+
+	echo "goscript: You may kill the crate."
+else
+	#no Orca loop running
+	#any output is logged if the verbose flag is checked in the gui
+	#"goScript:" not allowed in any output
+	if [ "$SSH_CONNECTION" = "" ]
+	then
+		ORCA_USER="a local user"
+		echo "$ORCA_USER" > $STATUS_FILE
+	else
+		#ORCA? relies on a spawn ssh session
+		if [ "$SSH_TTY" = "" ]; then ORCA_USER="ORCA"
+		else ORCA_USER="a remote user, but not ORCA"
+		fi
+
+		#IP address
+		IP="$(echo $SSH_CONNECTION | cut -d' ' -f1)"
+
+		#hostname iff resolved
+		HST="$(host $IP)"
+		if [ "$(echo $HST | cut -d' ' -f3)" = "not" ]
+		then
+			HST=""
+		else
+			HST="($(echo $HST | cut -d' ' -f5 | sed -e 's/\(.*\)\./\1/'))"
+		fi
+
+		echo "$ORCA_USER from $IP $HST" > $STATUS_FILE
+	fi
+	
+	echo "$(date +%s)" >> $STATUS_FILE
+	
+	~/ORCA/OrcaReadout <port> &
+fi
+
+
