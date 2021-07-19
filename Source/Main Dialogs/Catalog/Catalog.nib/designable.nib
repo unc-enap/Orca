@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
         <capability name="box content view" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,7 +18,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="189" y="244" width="945" height="310"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="778"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
             <value key="minSize" type="size" width="213" height="107"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="945" height="310"/>
@@ -29,7 +29,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <tabViewItems>
                             <tabViewItem label="Data Flow" identifier="" id="70">
-                                <view key="view" ambiguous="YES" id="71">
+                                <view key="view" id="71">
                                     <rect key="frame" x="10" y="25" width="923" height="265"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -173,7 +173,7 @@
                                             <rect key="frame" x="163" y="137" width="281" height="121"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <view key="contentView" id="xAG-sc-127">
-                                                <rect key="frame" x="2" y="2" width="277" height="105"/>
+                                                <rect key="frame" x="3" y="3" width="275" height="104"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="288">
@@ -195,7 +195,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <button toolTip="OR617Model" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26439" customClass="ObjectFactory">
-                                                        <rect key="frame" x="18" y="51" width="99" height="40"/>
+                                                        <rect key="frame" x="18" y="50" width="99" height="40"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="bevel" title="617 Controller" bezelStyle="regularSquare" image="617Card" imagePosition="above" alignment="center" inset="2" id="26440">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -203,7 +203,7 @@
                                                         </buttonCell>
                                                     </button>
                                                     <button toolTip="OR620Model" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26441" customClass="ObjectFactory">
-                                                        <rect key="frame" x="18" y="6" width="99" height="40"/>
+                                                        <rect key="frame" x="18" y="5" width="99" height="40"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="bevel" title="620 Controller" bezelStyle="regularSquare" image="620Card" imagePosition="above" alignment="center" inset="2" id="26442">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -218,7 +218,7 @@
                                             <rect key="frame" x="163" y="58" width="281" height="74"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <view key="contentView" id="trB-4O-flk">
-                                                <rect key="frame" x="2" y="2" width="277" height="58"/>
+                                                <rect key="frame" x="3" y="3" width="275" height="57"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="290">
@@ -231,7 +231,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <button toolTip="ORPciBit3Model" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26443" customClass="ObjectFactory">
-                                                        <rect key="frame" x="20" y="2" width="99" height="40"/>
+                                                        <rect key="frame" x="20" y="1" width="99" height="40"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="bevel" title="Bit3 Controller" bezelStyle="regularSquare" image="PciBit3Card" imagePosition="above" alignment="center" inset="2" id="26444">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1014,7 +1014,7 @@
                             <tabViewItem label="CAMAC" identifier="" id="303">
                                 <view key="view" id="304">
                                     <rect key="frame" x="10" y="25" width="923" height="265"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tabView fixedFrame="YES" controlSize="mini" type="bottomTabsBezelBorder" translatesAutoresizingMaskIntoConstraints="NO" id="442">
                                             <rect key="frame" x="22" y="6" width="777" height="249"/>
@@ -1024,7 +1024,7 @@
                                                 <tabViewItem label="Crates / Controllers" identifier="1" id="445">
                                                     <view key="view" ambiguous="YES" id="446">
                                                         <rect key="frame" x="10" y="7" width="757" height="214"/>
-                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <button toolTip="ORCamacCrateModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26570" customClass="ObjectFactory">
                                                                 <rect key="frame" x="15" y="35" width="294" height="169"/>
@@ -1267,216 +1267,263 @@
                                     </subviews>
                                 </view>
                             </tabViewItem>
-                            <tabViewItem label="IPE-DAQ" identifier="" id="415">
-                                <view key="view" id="416">
+                            <tabViewItem label="IPE-DAQ" identifier="" id="AcB-nZ-j1B">
+                                <view key="view" ambiguous="YES" id="ogW-Pf-3Ob">
                                     <rect key="frame" x="10" y="25" width="923" height="265"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="5650">
-                                            <rect key="frame" x="280" y="29" width="5" height="223"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        </box>
-                                        <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="16564">
-                                            <rect key="frame" x="730" y="39" width="5" height="223"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        </box>
-                                        <button toolTip="ORIpeCrateModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26616" customClass="ObjectFactory">
-                                            <rect key="frame" x="-3" y="62" width="151" height="165"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="bevel" title="IPE-DAQ-V3 crate" bezelStyle="regularSquare" image="IpeCrate" imagePosition="above" alignment="center" inset="2" id="26617">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system" size="10"/>
-                                            </buttonCell>
-                                        </button>
-                                        <button toolTip="ORIpeV4CrateModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26632" customClass="ObjectFactory">
-                                            <rect key="frame" x="291" y="66" width="139" height="133"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="bevel" title="IPE-DAQ-V4 crate" bezelStyle="regularSquare" image="IpeV4Crate" imagePosition="above" alignment="center" inset="2" id="26633">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system" size="10"/>
-                                            </buttonCell>
-                                        </button>
-                                        <button toolTip="ORIpeV4MiniCrateModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26634" customClass="ObjectFactory">
-                                            <rect key="frame" x="427" y="54" width="68" height="147"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="bevel" title="V4 Mini crate" bezelStyle="regularSquare" image="IpeV4MiniCrate" imagePosition="above" alignment="center" inset="2" id="26635">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system" size="10"/>
-                                            </buttonCell>
-                                        </button>
-                                        <button toolTip="ORIpeSimulationModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26646" customClass="ObjectFactory">
-                                            <rect key="frame" x="732" y="99" width="120" height="79"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="bevel" title="IPE Simulation" bezelStyle="regularSquare" image="IpeSimulation" imagePosition="above" alignment="center" inset="2" id="26647">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system" size="10"/>
-                                            </buttonCell>
-                                        </button>
-                                        <button toolTip="ORAmptekDP5Model" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g03-7i-R1s" customClass="ObjectFactory">
-                                            <rect key="frame" x="756" y="17" width="83" height="74"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="bevel" title="Amptek DP5" bezelStyle="regularSquare" image="AmptekDP5Card" imagePosition="above" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="LRO-mH-TAf">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system" size="10"/>
-                                            </buttonCell>
-                                        </button>
-                                        <button toolTip="ORIpeSlowControlModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26648" customClass="ObjectFactory">
-                                            <rect key="frame" x="749" y="176" width="90" height="81"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="bevel" title="IPE Slow Control" bezelStyle="regularSquare" image="IpeSlowControl" imagePosition="above" alignment="center" inset="2" id="26649">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system" size="10"/>
-                                            </buttonCell>
-                                        </button>
-                                        <button toolTip="ORIpeSLTModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26618" customClass="ObjectFactory">
-                                            <rect key="frame" x="149" y="6" width="28" height="233"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="bevel" title="SLT" bezelStyle="regularSquare" image="IpeSLTCard" imagePosition="above" alignment="center" inset="2" id="26619">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system" size="10"/>
-                                            </buttonCell>
-                                        </button>
-                                        <button toolTip="ORIpeFLTModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26620" customClass="ObjectFactory">
-                                            <rect key="frame" x="181" y="6" width="29" height="233"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="bevel" title="FLT" bezelStyle="regularSquare" image="IpeFLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="26621">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system" size="10"/>
-                                            </buttonCell>
-                                        </button>
-                                        <button toolTip="ORKatrinSLTModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26622" customClass="ObjectFactory">
-                                            <rect key="frame" x="218" y="6" width="28" height="233"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="bevel" title="SLT" bezelStyle="regularSquare" image="KatrinSLTCard" imagePosition="above" alignment="center" inset="2" id="26623">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system" size="10"/>
-                                            </buttonCell>
-                                        </button>
-                                        <button toolTip="ORKatrinFLTModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26624" customClass="ObjectFactory">
-                                            <rect key="frame" x="250" y="6" width="30" height="233"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="bevel" title="FLT" bezelStyle="regularSquare" image="KatrinFLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="26625">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system" size="10"/>
-                                            </buttonCell>
-                                        </button>
-                                        <button toolTip="ORIpeV4SLTModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26636" customClass="ObjectFactory">
-                                            <rect key="frame" x="495" y="34" width="30" height="178"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="bevel" title="SLT" bezelStyle="regularSquare" image="IpeV4SLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="26637">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system" size="10"/>
-                                            </buttonCell>
-                                        </button>
-                                        <button toolTip="ORKatrinV4SLTModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BfE-ou-XXY" customClass="ObjectFactory">
-                                            <rect key="frame" x="556" y="34" width="30" height="178"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="bevel" title="SLT" bezelStyle="regularSquare" image="KatrinV4SLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="BvF-I6-1FS">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system" size="10"/>
-                                            </buttonCell>
-                                        </button>
-                                        <button toolTip="OREdelweissSLTModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26963" customClass="ObjectFactory">
-                                            <rect key="frame" x="616" y="34" width="30" height="178"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="bevel" title="SLT" bezelStyle="regularSquare" image="EdelweissSLTCard" imagePosition="above" alignment="center" inset="2" id="26964">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system" size="10"/>
-                                            </buttonCell>
-                                        </button>
-                                        <button toolTip="ORIpeV4FLTModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26642" customClass="ObjectFactory">
-                                            <rect key="frame" x="521" y="34" width="30" height="178"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="bevel" title="FLT" bezelStyle="regularSquare" image="IpeV4FLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="26643">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system" size="10"/>
-                                            </buttonCell>
-                                        </button>
-                                        <button toolTip="ORKatrinV4FLTModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26644" customClass="ObjectFactory">
-                                            <rect key="frame" x="582" y="34" width="30" height="178"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="bevel" title="FLT" bezelStyle="regularSquare" image="KatrinV4FLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="26645">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system" size="10"/>
-                                            </buttonCell>
-                                        </button>
-                                        <button toolTip="ORTristanFLTModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GVb-qZ-51i" customClass="ObjectFactory">
-                                            <rect key="frame" x="694" y="39" width="30" height="178"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="bevel" title="FLT" bezelStyle="regularSquare" image="TristanFLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="65i-tm-Wfz">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system" size="10"/>
-                                            </buttonCell>
-                                        </button>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26628">
-                                            <rect key="frame" x="172" y="245" width="22" height="14"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="IPE" id="26629">
-                                                <font key="font" metaFont="smallSystem"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26638">
-                                            <rect key="frame" x="506" y="218" width="37" height="14"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="IPE V4" id="26639">
-                                                <font key="font" metaFont="smallSystem"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26640">
-                                            <rect key="frame" x="564" y="218" width="44" height="14"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="KATRIN" id="26641">
-                                                <font key="font" metaFont="smallSystem"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26630">
-                                            <rect key="frame" x="223" y="245" width="44" height="14"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="KATRIN" id="26631">
-                                                <font key="font" metaFont="smallSystem"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <button toolTip="OREdelweissFLTModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26959" customClass="ObjectFactory">
-                                            <rect key="frame" x="639" y="34" width="30" height="178"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="bevel" title="FLT" bezelStyle="regularSquare" image="EdelweissFLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="26962">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system" size="10"/>
-                                            </buttonCell>
-                                        </button>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26960">
-                                            <rect key="frame" x="615" y="218" width="56" height="14"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Edelweiss" id="26961">
-                                                <font key="font" metaFont="smallSystem"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LJB-LW-v2j">
-                                            <rect key="frame" x="686" y="218" width="40" height="14"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Tristan" id="LWL-sF-A5c">
-                                                <font key="font" metaFont="smallSystem"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
+                                        <tabView fixedFrame="YES" controlSize="mini" type="bottomTabsBezelBorder" translatesAutoresizingMaskIntoConstraints="NO" id="L8w-rE-bnA" userLabel="(Pbus, MTCA, Misc)">
+                                            <rect key="frame" x="4" y="5" width="922" height="266"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <font key="font" metaFont="miniSystem"/>
+                                            <tabViewItems>
+                                                <tabViewItem label="Pbus" identifier="1" id="yNz-Lo-NCI" userLabel="Pbus">
+                                                    <view key="view" id="2rR-ZY-kuJ">
+                                                        <rect key="frame" x="10" y="7" width="902" height="240"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <subviews>
+                                                            <button toolTip="ORIpeCrateModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vZd-LQ-hDa" customClass="ObjectFactory">
+                                                                <rect key="frame" x="-3" y="39" width="151" height="165"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="bevel" title="IPE-DAQ-V3 crate" bezelStyle="regularSquare" image="IpeCrate" imagePosition="above" alignment="center" inset="2" id="vEd-Hc-ZQI">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system" size="10"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <button toolTip="ORIpeV4CrateModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MYB-w1-FGW" customClass="ObjectFactory">
+                                                                <rect key="frame" x="335" y="51" width="139" height="133"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="bevel" title="IPE-DAQ-V4 crate" bezelStyle="regularSquare" image="IpeV4Crate" imagePosition="above" alignment="center" inset="2" id="hoO-jx-Np2">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system" size="10"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <button toolTip="ORIpeV4MiniCrateModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="C0u-1D-YPa" customClass="ObjectFactory">
+                                                                <rect key="frame" x="482" y="40" width="68" height="147"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="bevel" title="V4 Mini crate" bezelStyle="regularSquare" image="IpeV4MiniCrate" imagePosition="above" alignment="center" inset="2" id="9lx-wO-W7a">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system" size="10"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <button toolTip="ORIpeSLTModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BKf-7b-EJv" customClass="ObjectFactory">
+                                                                <rect key="frame" x="158" y="1" width="28" height="233"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="bevel" title="SLT" bezelStyle="regularSquare" image="IpeSLTCard" imagePosition="above" alignment="center" inset="2" id="428-VH-4T7">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system" size="10"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <button toolTip="ORIpeFLTModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hNg-l5-Hde" customClass="ObjectFactory">
+                                                                <rect key="frame" x="183" y="1" width="29" height="233"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="bevel" title="FLT" bezelStyle="regularSquare" image="IpeFLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="IKu-f8-eOY">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system" size="10"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <button toolTip="ORKatrinSLTModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vk9-hV-xI6" customClass="ObjectFactory">
+                                                                <rect key="frame" x="220" y="1" width="28" height="233"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="bevel" title="SLT" bezelStyle="regularSquare" image="KatrinSLTCard" imagePosition="above" alignment="center" inset="2" id="c0D-ue-8Yq">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system" size="10"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <button toolTip="ORKatrinFLTModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LTI-oH-p4f" customClass="ObjectFactory">
+                                                                <rect key="frame" x="247" y="1" width="30" height="233"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="bevel" title="FLT" bezelStyle="regularSquare" image="KatrinFLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="qrw-tf-kMC">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system" size="10"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <button toolTip="ORIpeV4SLTModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GFS-PA-2Oj" customClass="ObjectFactory">
+                                                                <rect key="frame" x="558" y="28" width="30" height="178"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="bevel" title="SLT" bezelStyle="regularSquare" image="IpeV4SLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="xGH-Jm-9oe">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system" size="10"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <button toolTip="ORKatrinV4SLTModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NcI-Ee-MR9" customClass="ObjectFactory">
+                                                                <rect key="frame" x="632" y="29" width="30" height="178"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="bevel" title="SLT" bezelStyle="regularSquare" image="KatrinV4SLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="LYc-l0-H1P">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system" size="10"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <button toolTip="OREdelweissSLTModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JnC-m7-1qT" customClass="ObjectFactory">
+                                                                <rect key="frame" x="771" y="29" width="30" height="178"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="bevel" title="SLT" bezelStyle="regularSquare" image="EdelweissSLTCard" imagePosition="above" alignment="center" inset="2" id="ksU-po-veI">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system" size="10"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <button toolTip="ORIpeV4FLTModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qHm-Wt-yGn" customClass="ObjectFactory">
+                                                                <rect key="frame" x="584" y="28" width="30" height="178"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="bevel" title="FLT" bezelStyle="regularSquare" image="IpeV4FLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="wiE-6T-YzZ">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system" size="10"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <button toolTip="ORKatrinV4FLTModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r4f-go-HR7" customClass="ObjectFactory">
+                                                                <rect key="frame" x="658" y="28" width="30" height="178"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="bevel" title="FLT" bezelStyle="regularSquare" image="KatrinV4FLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="DKZ-ks-05e">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system" size="10"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ppq-TL-Ocl">
+                                                                <rect key="frame" x="576" y="214" width="22" height="14"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="IPE" id="Rv7-RG-wds">
+                                                                    <font key="font" metaFont="message" size="11"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3I0-Aj-KDM">
+                                                                <rect key="frame" x="636" y="214" width="44" height="14"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="KATRIN" id="iG7-lV-BLf">
+                                                                    <font key="font" metaFont="message" size="11"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1TN-3E-8UK">
+                                                                <rect key="frame" x="769" y="214" width="56" height="14"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Edelweiss" id="0rB-DV-l8q">
+                                                                    <font key="font" metaFont="message" size="11"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3dH-uB-6hH">
+                                                                <rect key="frame" x="702" y="214" width="40" height="14"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Tristan" id="XM1-Zd-ht4">
+                                                                    <font key="font" metaFont="message" size="11"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <button toolTip="OREdelweissFLTModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o81-de-QjL" customClass="ObjectFactory">
+                                                                <rect key="frame" x="801" y="29" width="30" height="178"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="bevel" title="FLT" bezelStyle="regularSquare" image="EdelweissFLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="bXQ-yw-zPc">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system" size="10"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <button toolTip="ORTristanFLTModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YtH-Fx-C2X" customClass="ObjectFactory">
+                                                                <rect key="frame" x="710" y="29" width="30" height="178"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="bevel" title="FLT" bezelStyle="regularSquare" image="TristanFLTCard" imagePosition="above" alignment="center" state="on" inset="2" id="4WG-c2-ds0">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system" size="10"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="FxG-uN-489">
+                                                                <rect key="frame" x="298" y="11" width="5" height="223"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            </box>
+                                                        </subviews>
+                                                    </view>
+                                                </tabViewItem>
+                                                <tabViewItem label="MTCA" identifier="2" id="72A-2a-lxi" userLabel="MTCA">
+                                                    <view key="view" id="9Vf-cs-dUD">
+                                                        <rect key="frame" x="10" y="7" width="902" height="240"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    </view>
+                                                </tabViewItem>
+                                                <tabViewItem label="Misc" identifier="2" id="CVB-Rr-hwe" userLabel="Misc">
+                                                    <view key="view" ambiguous="YES" id="Dty-hg-xZw">
+                                                        <rect key="frame" x="10" y="7" width="902" height="240"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <subviews>
+                                                            <button toolTip="ORIpeSlowControlModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pwT-bp-F1r" customClass="ObjectFactory">
+                                                                <rect key="frame" x="527" y="76" width="90" height="81"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="bevel" title="IPE Slow Control" bezelStyle="regularSquare" image="IpeSlowControl" imagePosition="above" alignment="center" inset="2" id="3YL-Oi-ogF">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system" size="10"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <button toolTip="ORAmptekDP5Model" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lht-dh-cwr" customClass="ObjectFactory">
+                                                                <rect key="frame" x="46" y="138" width="83" height="74"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="bevel" title="Amptek DP5" bezelStyle="regularSquare" image="AmptekDP5Card" imagePosition="above" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="XMQ-Ru-UnO">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system" size="10"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <button toolTip="ORADEIControlModel" fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mLo-S6-v5C" customClass="ObjectFactory">
+                                                                <rect key="frame" x="401" y="67" width="100" height="99"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="bevel" title="ADEIControl" bezelStyle="regularSquare" image="ADEIControl" imagePosition="above" alignment="center" controlSize="mini" state="on" imageScaling="proportionallyDown" inset="2" id="b7A-c9-b46">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="miniSystem"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <button toolTip="ORRefClockModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVR-NP-NbS" customClass="ObjectFactory">
+                                                                <rect key="frame" x="174" y="155" width="169" height="39"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="bevel" title="Ref Clock" bezelStyle="regularSquare" image="RefClock" imagePosition="above" alignment="center" state="on" inset="2" id="6Tg-qE-Y9K">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system" size="10"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <button toolTip="ORPacModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tYb-ZJ-KPh" customClass="ObjectFactory">
+                                                                <rect key="frame" x="33" y="36" width="124" height="65"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="bevel" title="PAC" bezelStyle="regularSquare" image="Pac" imagePosition="above" alignment="center" state="on" inset="2" id="ral-Uo-Tkc">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system" size="10"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <button toolTip="ORPacFPModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="96Y-WC-IqH" customClass="ObjectFactory">
+                                                                <rect key="frame" x="196" y="41" width="124" height="65"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="bevel" title="PAC (Field Point)" bezelStyle="regularSquare" image="PacFP" imagePosition="above" alignment="center" state="on" inset="2" id="dZM-8q-ulU">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system" size="10"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="2yz-4C-4OI">
+                                                                <rect key="frame" x="366" y="11" width="5" height="223"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            </box>
+                                                            <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="fUf-Tj-OWH">
+                                                                <rect key="frame" x="661" y="11" width="4" height="223"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            </box>
+                                                            <button toolTip="ORIpeSimulationModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RRw-4r-pJC" customClass="ObjectFactory">
+                                                                <rect key="frame" x="724" y="78" width="120" height="79"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="bevel" title="IPE Simulation" bezelStyle="regularSquare" image="IpeSimulation" imagePosition="above" alignment="center" inset="2" id="wk1-YK-X9h">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system" size="10"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                        </subviews>
+                                                    </view>
+                                                </tabViewItem>
+                                            </tabViewItems>
+                                        </tabView>
                                     </subviews>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="cPCI/PXI" identifier="" id="592">
                                 <view key="view" id="593">
                                     <rect key="frame" x="10" y="25" width="923" height="265"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button toolTip="ORcPCICrateModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26650" customClass="ObjectFactory">
                                             <rect key="frame" x="79" y="46" width="92" height="147"/>
@@ -1702,7 +1749,7 @@ Controller</string>
                             <tabViewItem label="GPIB" identifier="" id="135">
                                 <view key="view" id="137">
                                     <rect key="frame" x="10" y="25" width="923" height="265"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="10918">
                                             <rect key="frame" x="102" y="27" width="77" height="26"/>
@@ -2221,11 +2268,11 @@ Gauge Controller</string>
                                             <tabViewItems>
                                                 <tabViewItem label="Misc" identifier="" id="zjS-w0-TX6">
                                                     <view key="view" ambiguous="YES" id="B8u-T6-O0V">
-                                                        <rect key="frame" x="10" y="7" width="106" height="0.0"/>
+                                                        <rect key="frame" x="10" y="7" width="883" height="215"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <button autoresizesSubviews="NO" toolTip="ORTTCPX400DPModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26918" customClass="ObjectFactory">
-                                                                <rect key="frame" x="40" y="-103" width="109" height="93"/>
+                                                                <rect key="frame" x="40" y="112" width="109" height="93"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="TT CPX400DP" bezelStyle="regularSquare" image="TTCPX400DP" imagePosition="above" alignment="center" state="on" inset="2" id="26919">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2242,7 +2289,7 @@ Gauge Controller</string>
                                                                 </textFieldCell>
                                                             </textField>
                                                             <button toolTip="ORBootBarModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26930" customClass="ObjectFactory">
-                                                                <rect key="frame" x="257" y="-80" width="158" height="48"/>
+                                                                <rect key="frame" x="257" y="135" width="158" height="48"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="BootBar" bezelStyle="regularSquare" image="BootBar" imagePosition="above" alignment="center" state="on" inset="2" id="26931">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2250,7 +2297,7 @@ Gauge Controller</string>
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="ORLabJackUE9Model" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26942" customClass="ObjectFactory">
-                                                                <rect key="frame" x="429" y="-125" width="75" height="115"/>
+                                                                <rect key="frame" x="429" y="90" width="75" height="115"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="LabJack UE9" bezelStyle="regularSquare" image="LabJackUE9" imagePosition="above" alignment="center" inset="2" id="26943">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2258,7 +2305,7 @@ Gauge Controller</string>
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="ORCB37Model" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26951" customClass="ObjectFactory">
-                                                                <rect key="frame" x="506" y="-98" width="42" height="88"/>
+                                                                <rect key="frame" x="506" y="117" width="42" height="88"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="CB37" bezelStyle="regularSquare" image="CB37" imagePosition="above" alignment="center" inset="2" id="26952">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2266,7 +2313,7 @@ Gauge Controller</string>
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="ORPulser33500Model" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="27035" customClass="ObjectFactory">
-                                                                <rect key="frame" x="32" y="-183" width="124" height="67"/>
+                                                                <rect key="frame" x="32" y="32" width="124" height="67"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="Aglient 33500 Pulser" bezelStyle="regularSquare" image="Pulser33500Icon" imagePosition="above" alignment="center" state="on" inset="2" id="27036">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2274,7 +2321,7 @@ Gauge Controller</string>
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="ORPulser33220Model" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="27037" customClass="ObjectFactory">
-                                                                <rect key="frame" x="179" y="-183" width="124" height="67"/>
+                                                                <rect key="frame" x="179" y="32" width="124" height="67"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="Aglient 33220a Pulser" bezelStyle="regularSquare" image="Pulser33220Icon" imagePosition="above" alignment="center" inset="2" id="27038">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2282,7 +2329,7 @@ Gauge Controller</string>
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="ORLakeShore336Model" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="27051" customClass="ObjectFactory">
-                                                                <rect key="frame" x="332" y="-171" width="83" height="43"/>
+                                                                <rect key="frame" x="332" y="44" width="83" height="43"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="LakeShore336" bezelStyle="regularSquare" image="LakeShore336" imagePosition="above" alignment="center" state="on" inset="2" id="27052">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2290,7 +2337,7 @@ Gauge Controller</string>
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="ORApcUpsModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="27069" customClass="ObjectFactory">
-                                                                <rect key="frame" x="502" y="-209" width="100" height="96"/>
+                                                                <rect key="frame" x="502" y="6" width="100" height="96"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="APC UPS" bezelStyle="regularSquare" image="ApcUpsIcon" imagePosition="above" alignment="center" state="on" inset="2" id="27070">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2298,7 +2345,7 @@ Gauge Controller</string>
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="ORMJDDewarScaleModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Z1e-Wm-tIE" customClass="ObjectFactory">
-                                                                <rect key="frame" x="610" y="-210" width="100" height="122"/>
+                                                                <rect key="frame" x="610" y="5" width="100" height="122"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="MJD Dewar Scale" bezelStyle="regularSquare" image="MJDDewarScale" imagePosition="above" alignment="center" state="on" inset="2" id="anY-pa-Rhs">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2306,7 +2353,7 @@ Gauge Controller</string>
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="ORWebRakerModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XXx-WH-GGb" customClass="ObjectFactory">
-                                                                <rect key="frame" x="727" y="-210" width="100" height="98"/>
+                                                                <rect key="frame" x="727" y="5" width="100" height="98"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="Web Raker" bezelStyle="regularSquare" image="WebRaker" imagePosition="above" alignment="center" state="on" inset="2" id="C0T-4s-jK8">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2314,7 +2361,7 @@ Gauge Controller</string>
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="ORLanNetio230Model" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="27110" customClass="ObjectFactory">
-                                                                <rect key="frame" x="581" y="-58" width="158" height="48"/>
+                                                                <rect key="frame" x="581" y="157" width="158" height="48"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="LanNetio230" bezelStyle="regularSquare" image="LanNetio230" imagePosition="above" alignment="center" state="on" inset="2" id="27111">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
