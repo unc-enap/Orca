@@ -35,6 +35,15 @@
 #include <sys/time.h>
 #include <sys/ioctl.h>
 #include <net/if.h>   //ifreq
+
+#ifdef __APPLE__
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <net/if_dl.h>
+#include <ifaddrs.h>
+#endif
+
 #include "SBC_Readout.h"
 #include "HW_Readout.h"
 #include "ORVProcess.hh"
@@ -1222,9 +1231,12 @@ void processTimeDelay(SBC_Packet* aPacket,uint8_t reply)
 
 void processMacAddressRequest(SBC_Packet* aPacket)
 {
+    char *mac;
+    
     aPacket->cmdHeader.cmdID = kSBC_MacAddressRequest;
     SBC_MAC_AddressStruct* p = (SBC_MAC_AddressStruct*)aPacket->payload;
     
+#ifdef __linux__
     struct ifreq ifr;
     char* iface = "eth0";
     uint32_t fd    = socket(AF_INET, SOCK_DGRAM, 0);
@@ -1236,8 +1248,29 @@ void processMacAddressRequest(SBC_Packet* aPacket)
     
     close(fd);
     
-    char* mac = (char*)ifr.ifr_hwaddr.sa_data;
+    mac = (char*)ifr.ifr_hwaddr.sa_data;
+#endif
+    
+#ifdef __APPLE__
+    char mac_addr[6];
+    struct ifaddrs* iflist;
+    char* iface = "en0";
+    if (getifaddrs(&iflist) == 0) {
+        for (struct ifaddrs* cur = iflist; cur; cur = cur->ifa_next) {
+            if ((cur->ifa_addr->sa_family == AF_LINK) &&
+                (strcmp(cur->ifa_name, iface) == 0) &&
+                cur->ifa_addr) {
+                struct sockaddr_dl* sdl = (struct sockaddr_dl*)cur->ifa_addr;
+                memcpy(mac_addr, LLADDR(sdl), sdl->sdl_alen);
+                break;
+            }
+        }
         
+        freeifaddrs(iflist);
+    }
+    mac = mac_addr;
+#endif
+    
     p->macAddress[0] = mac[0];
     p->macAddress[1] = mac[1];
     p->macAddress[2] = mac[2];
