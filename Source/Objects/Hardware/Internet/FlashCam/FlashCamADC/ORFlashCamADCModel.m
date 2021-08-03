@@ -27,6 +27,7 @@
 
 NSString* ORFlashCamADCModelChanEnabledChanged  = @"ORFlashCamADCModelChanEnabledChanged";
 NSString* ORFlashCamADCModelBaselineChanged     = @"ORFlashCamADCModelBaselineChanged";
+NSString* ORFlashCamADCModelBaseCalibChanged    = @"ORFlashCamADCModelBaseCalibChanged";
 NSString* ORFlashCamADCModelThresholdChanged    = @"ORFlashCamADCModelThresholdChanged";
 NSString* ORFlashCamADCModelADCGainChanged      = @"ORFlashCamADCModelADCGainChanged";
 NSString* ORFlashCamADCModelTrigGainChanged     = @"ORFlashCamADCModelTrigGainChanged";
@@ -46,6 +47,7 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
     for(int i=0; i<kMaxFlashCamADCChannels; i++){
         [self setChanEnabled:i  withValue:NO];
         [self setBaseline:i     withValue:-1];
+        [self setBaseCalib:i    withValue:0.0];
         [self setThreshold:i    withValue:5000];
         [self setADCGain:i      withValue:0];
         [self setTrigGain:i     withValue:0.0];
@@ -53,15 +55,15 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
         [self setFilterType:i   withValue:0.0];
         [self setPoleZeroTime:i withValue:58000];
         [self setShapeTime:i    withValue:5000];
+        wfCount[i] = 0;
     }
     trigConnector = nil;
     isRunning = false;
     wfBuffer = NULL;
     bufferIndex = 0;
     takeDataIndex = 0;
-    firstTakeData = true;
+    bufferedWFcount = 0;
     wfRates = nil;
-    timer = nil;
     dataRecord = NULL;
     [self setWFsamples:0];
     [[self undoManager] enableUndoRegistration];
@@ -206,6 +208,12 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
     return baseline[chan];
 }
 
+- (float) baseCalib:(unsigned int)chan
+{
+    if(chan >= kMaxFlashCamADCChannels) return 0.0;
+    return baseCalib[chan];
+}
+
 - (int) threshold:(unsigned int)chan{
     if(chan >= kMaxFlashCamADCChannels) return 0;
     return threshold[chan];
@@ -256,7 +264,7 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
     return wfRates;
 }
 
-- (id) rateObject:(int)channel
+- (id) rateObject:(short)channel
 {
     return [wfRates rateObject:channel];
 }
@@ -269,12 +277,18 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
 - (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
 {
     if(groupTag == 0){
-        if(counterTag>=0 && counterTag<kMaxFlashCamADCChannels){
-            return wfCount[counterTag];
-        }
+        if(counterTag>=0 && counterTag<kMaxFlashCamADCChannels) return wfCount[counterTag];
         else return 0;
     }
     else return 0;
+}
+
+- (float) getRate:(short)channel
+{
+    if(channel>=0 && channel<kMaxFlashCamADCChannels){
+        return [[self rateObject:channel] rate];
+    }
+    return 0;
 }
 
 - (uint32_t) dataId
@@ -308,6 +322,17 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
     baseline[chan] = base;
     NSDictionary* info = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:chan] forKey:@"Channel"];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelBaselineChanged
+                                                        object:self
+                                                      userInfo:info];
+}
+
+- (void) setBaseCalib:(unsigned int)chan withValue:(float)calib
+{
+    if(chan >= kMaxFlashCamADCChannels) return;
+    [[[self undoManager] prepareWithInvocationTarget:self] setBaseCalib:chan withValue:baseCalib[chan]];
+    baseCalib[chan] = calib;
+    NSDictionary* info = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:chan] forKey:@"Channel"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelBaseCalibChanged
                                                         object:self
                                                       userInfo:info];
 }
@@ -431,9 +456,14 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
     dataId = dId;
 }
 
-- (void) setDataIdsWith:(id)assigner
+- (void) setDataIds:(id)assigner
 {
     dataId = [assigner assignDataIds:kLongForm];
+}
+
+- (void) syncDataIdsWith:(id)anotherCard
+{
+    [self setDataId:[anotherCard dataId]];
 }
 
 
@@ -461,10 +491,11 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
     NSMutableArray* flags = [NSMutableArray array];
     [flags addObjectsFromArray:@[@"-am", [NSString stringWithFormat:@"%x,%x,1", [self chanMask], [self cardAddress]]]];
     for(unsigned int i=0; i<kMaxFlashCamADCChannels; i++){
-        if(![self chanEnabled:i]) continue;
         unsigned int j = i + offset;
-        //[flags addObjectsFromArray:@[@"-bldac", [self chFlag:j withInt:baseline[i]]]];
         [flags addObjectsFromArray:@[@"-athr",  [self chFlag:j withInt:threshold[i]]]];
+        if(![self chanEnabled:i]) continue;
+        [flags addObjectsFromArray:@[@"-bldac", [self chFlag:j withInt:baseline[i]]]];
+        [flags addObjectsFromArray:@[@"-bl",    [self chFlag:j withInt:baseCalib[i]]]];
         //[flags addObjectsFromArray:@[@"-ag",    [self chFlag:j withInt:adcGain[i]]]];
         //[flags addObjectsFromArray:@[@"-tgm",   [self chFlag:j withFloat:trigGain[i]]]];
         [flags addObjectsFromArray:@[@"-gs",    [self chFlag:j withInt:shapeTime[i]]]];
@@ -490,21 +521,23 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
     }
     else wfCount[channel] ++;
     // set the channel number and index to pass to takeData
-    wfHeaderBuffer[bufferIndex] = (int) channel;
-    wfHeaderBuffer[bufferIndex+1] = index;
+    uint32_t hindex = bufferIndex * kFlashCamADCWFHeaderLength;
+    wfHeaderBuffer[hindex] = (int) channel;
+    wfHeaderBuffer[hindex+1] = index;
     // get the waveform header information from the fcio_event structure
-    wfHeaderBuffer[bufferIndex+2] = event->type;
-    unsigned int offset = bufferIndex + 3;
+    wfHeaderBuffer[hindex+2] = event->type;
+    unsigned int offset = hindex + 3;
     for(unsigned int i=0; i<kFlashCamADCTimeOffsetLength; i++) wfHeaderBuffer[offset+i] = event->timeoffset[i];
     offset += kFlashCamADCTimeOffsetLength;
     for(unsigned int i=0; i<kFlashCamADCDeadRegionLength; i++) wfHeaderBuffer[offset+i] = event->deadregion[i];
     offset += kFlashCamADCDeadRegionLength;
     for(unsigned int i=0; i<kFlashCamADCTimeStampLength; i++)  wfHeaderBuffer[offset+i] = event->timestamp[i];
     // get the waveform for this channel at the index provided from the fcio_event structure
-    memcpy(wfHeaderBuffer+bufferIndex*(wfSamples+2), event->theader[index], (wfSamples+2)*sizeof(unsigned short));
+    memcpy(wfBuffer+bufferIndex*(wfSamples+2), event->theader[index], (wfSamples+2)*sizeof(unsigned short));
     // increment the buffer index
     bufferIndex = (bufferIndex + 1) % kFlashCamADCBufferLength;
-    if(bufferIndex == takeDataIndex){
+    bufferedWFcount ++;
+    if(bufferedWFcount == kFlashCamDefaultBuffer){
         NSLog(@"ORFlashCamADCModel: buffer full for card ID 0x%x crate %d slot %d\n",
               [self cardAddress], [self crate], [self slot]);
         [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelBufferFull object:self];
@@ -514,12 +547,8 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
     @try{
-        if(firstTakeData){
-            timer = [[ORTimer alloc] init];
-            [timer start];
-            firstTakeData = false;
-        }
         if(wfSamples == 0) return;
+        else if(bufferIndex == takeDataIndex) return;
         else{
             isRunning = true;
             uint32_t hindex = takeDataIndex * kFlashCamADCWFHeaderLength;
@@ -534,6 +563,7 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
             memcpy(dataRecord+kFlashCamADCWFHeaderLength+1, wfBuffer+windex+2, wfSamples*sizeof(unsigned short));
             [aDataPacket addLongsToFrameBuffer:dataRecord length:dataRecordLength];
             takeDataIndex = (takeDataIndex + 1) % kFlashCamADCBufferLength;
+            bufferedWFcount --;
         }
     }
     @catch(NSException* localException){
@@ -548,21 +578,15 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
     [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:@"ORFlashCamADCModel"];
     location = (([self crateNumber]&0x1f) << 25) | (([self slot]&0x1f) << 22);
     location = (([self cardAddress]&0xff) << 14);
-    [timer release];
-    timer = nil;
+    [self startRates];
     isRunning = false;
-    firstTakeData = true;
     takeDataIndex = 0;
 }
 
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
     // finish reading out buffer first
-    [timer stop];
-    [timer release];
-    timer = nil;
     isRunning = false;
-    firstTakeData = true;
     [wfRates stop];
     [self setWFsamples:0];
     takeDataIndex = 0;
@@ -583,20 +607,15 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
     for(int i=0;i<kMaxFlashCamADCChannels;i++) wfCount[i] = 0;
 }
 
-- (void) syncDataIdsWith:(id)aCard
-{
-    [self setDataId:[aCard dataId]];
-}
-
 - (NSDictionary*) dataRecordDescription
 {
     NSMutableDictionary* dict = [NSMutableDictionary dictionary];
     NSDictionary* d = [NSDictionary dictionaryWithObjectsAndKeys:
-                       @"ORFlashCamADCDecoder",          @"decoder",
+                       @"ORFlashCamADCWaveformDecoder",  @"decoder",
                        [NSNumber numberWithLong:dataId], @"dataId",
                        [NSNumber numberWithBool:YES],    @"variable",
                        [NSNumber numberWithLong:-1],     @"length", nil];
-    [dict setObject:d forKey:@"Waveform"];
+    [dict setObject:d forKey:@"FlashCamADC"];
     return dict;
 }
 
@@ -613,6 +632,8 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
                    withValue:[decoder decodeBoolForKey:[NSString stringWithFormat:@"chanEnabled%i", i]]];
         [self setBaseline:i
                 withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"baseline%i", i]]];
+        [self setBaseCalib:i
+                 withValue:[decoder decodeFloatForKey:[NSString stringWithFormat:@"baseCalib%i", i]]];
         [self setThreshold:i
                  withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"threshold%i", i]]];
         [self setADCGain:i
@@ -633,7 +654,6 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
     wfBuffer = NULL;
     bufferIndex = 0;
     takeDataIndex = 0;
-    firstTakeData = true;
     taskdata = nil;
     dataRecord = NULL;
     [self setWFsamples:0];
@@ -655,6 +675,7 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
     for(int i=0; i<kMaxFlashCamADCChannels; i++){
         [encoder encodeBool:chanEnabled[i] forKey:[NSString stringWithFormat:@"chanEnabled%i", i]];
         [encoder encodeInt:baseline[i] forKey:[NSString stringWithFormat:@"baseline%i", i]];
+        [encoder encodeFloat:baseCalib[i] forKey:[NSString stringWithFormat:@"baseCalib%i", i]];
         [encoder encodeInt:threshold[i] forKey:[NSString stringWithFormat:@"threshold%i", i]];
         [encoder encodeInt:adcGain[i] forKey:[NSString stringWithFormat:@"adcGain%i", i]];
         [encoder encodeFloat:trigGain[i] forKey:[NSString stringWithFormat:@"trigGain%i", i]];
@@ -695,6 +716,13 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
     [p setName:@"Baseline"];
     [p setFormat:@"##0" upperLimit:1<<16 lowerLimit:0 stepSize:1 units:@""];
     [p setSetMethod:@selector(setBaseline:withValue:) getMethod:@selector(baseline:)];
+    [p setCanBeRamped:YES];
+    [a addObject:p];
+    
+    p = [[[ORHWWizParam alloc] init] autorelease];
+    [p setName:@"BaseCalib"];
+    [p setFormat:@"##0" upperLimit:4000.0 lowerLimit:0.0 stepSize:0.1 units:@""];
+    [p setSetMethod:@selector(setBaseCalib:withValue:) getMethod:@selector(baseCalib:)];
     [p setCanBeRamped:YES];
     [a addObject:p];
     

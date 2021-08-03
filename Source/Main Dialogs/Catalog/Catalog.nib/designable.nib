@@ -2390,7 +2390,16 @@ Gauge Controller</string>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eCC-j6-69Y">
                                                                 <rect key="frame" x="715" y="116" width="114" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Remote Run Control" id="ZX9-mE-T4m">
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Readout Control" id="ZX9-mE-T4m">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dOd-OO-aCA">
+                                                                <rect key="frame" x="591" y="118" width="114" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Readout Listener" id="ih2-SU-sWu">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -2434,6 +2443,14 @@ Gauge Controller</string>
                                                                 <rect key="frame" x="146" y="31" width="133" height="177"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="flashcam_crate" imagePosition="only" alignment="center" imageScaling="axesIndependently" inset="2" id="xtY-Ni-VIE">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <button toolTip="ORFlashCamListenerModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sCm-cP-P8C" customClass="ObjectFactory">
+                                                                <rect key="frame" x="624" y="142" width="48" height="45"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="flashcam_listener" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="bTR-gm-rcb">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
@@ -3687,6 +3704,7 @@ Relay</string>
         <image name="flashcam_adc" width="144" height="2855"/>
         <image name="flashcam_crate" width="586" height="496"/>
         <image name="flashcam_ethlink" width="238" height="133"/>
+        <image name="flashcam_listener" width="1200" height="1200"/>
         <image name="flashcam_minicrate" width="381" height="1934"/>
         <image name="flashcam_trigger" width="29" height="572"/>
         <image name="katrin" width="100" height="100"/>

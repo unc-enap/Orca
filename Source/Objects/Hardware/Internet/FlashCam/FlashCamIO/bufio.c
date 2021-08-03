@@ -185,7 +185,7 @@ static int bufio_lock(bufio_stream *s, int lock_type, int start, int length,
   if (with_timeout) {
     // Blocking mode
     timer.it_value.tv_sec = (time_t)(timeout / 1000);
-    timer.it_value.tv_usec = (timeout % 1000) * 1000;
+    timer.it_value.tv_usec = (long) ((timeout % 1000) * 1000);
     timerclear(&timer.it_interval);
     timerclear(&otimer.it_value);
     timerclear(&otimer.it_interval);
@@ -242,7 +242,7 @@ static inline int bufio_try_read_lock(bufio_stream *stream, size_t size)
   // fprintf(stderr, "bufio_try_read_lock(..., %zu)\n", size);
 
   if (stream->type == BUFIO_LOCKEDFILE) {
-    int rc = bufio_lock(stream, F_RDLCK, 0, (int) size, SEEK_CUR, 0);
+    int rc = bufio_lock(stream, F_RDLCK, 0, size, SEEK_CUR, 0);
     if (rc == -1) {
       // fprintf(stderr, "bufio_try_read_lock: lock failed -- %s\n", strerror(errno));
       stream->status = -errno;
@@ -265,7 +265,7 @@ static inline int bufio_acquire_read_lock(bufio_stream *stream, size_t size, int
   assert(!stream->has_read_lock);
 
   if (stream->type == BUFIO_LOCKEDFILE) {
-    int rc = bufio_lock(stream, F_RDLCK, 0, (int) size, SEEK_CUR, timeout);
+    int rc = bufio_lock(stream, F_RDLCK, 0, size, SEEK_CUR, timeout);
     if (rc == -1) {
       // fprintf(stderr, "bufio_acquire_read_lock: lock failed -- %s\n", strerror(errno));
       stream->status = -errno;
@@ -1237,7 +1237,7 @@ input buffers. If the value of timeout is -1, the poll blocks indefinitely.
   assert(stream->input_buffer_size > 0 &&
          stream->input_buffer_size - stream->input_buffer_tail > 0);
 
-  int read_size = (int) (stream->input_buffer_size - stream->input_buffer_tail);
+  int read_size = stream->input_buffer_size - stream->input_buffer_tail;
   while (1) {
     if (bufio_try_read_lock(stream, read_size) != 1) {
       int rc = bufio_acquire_read_lock(stream, 1, timeout);

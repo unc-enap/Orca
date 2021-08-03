@@ -1,5 +1,5 @@
 //  Orca
-//  ORFlashCamRunController.h
+//  ORFlashCamReadoutController.h
 //
 //  Created by Tom Caldwell on Monday Dec 26,2019
 //  Copyright (c) 2019 University of North Carolina. All rights reserved.
@@ -17,7 +17,7 @@
 //for the use of this software.
 //-------------------------------------------------------------
 
-#import "OrcaObjectController.h"
+#import "ORCardContainerView.h"
 
 @interface ORFlashCamReadoutController : OrcaObjectController
 {
@@ -40,11 +40,22 @@
     IBOutlet NSButton* incBaselineButton;
     IBOutlet NSButton* sendPingButton;
     IBOutlet NSTableView* listenerView;
-    IBOutlet NSButton* addListenerButton;
-    IBOutlet NSButton* removeListenerButton;
     IBOutlet NSButton* updateIPButton;
     IBOutlet NSButton* listInterfaceButton;
     IBOutlet NSTableView* monitorView;
+    IBOutlet ORCardContainerView* listenerContainer;
+    IBOutlet NSButton* addIfaceToListenerButton;
+    IBOutlet NSPanel* addIfaceToListenerPanel;
+    IBOutlet NSPopUpButton* addIfaceToListenerIfacePUButton;
+    IBOutlet NSPopUpButton* addIfaceToListenerListenerPUButton;
+    IBOutlet NSButton* addIfaceToListenerAddButton;
+    IBOutlet NSButton* addIfaceToListenerCloseButton;
+    IBOutlet NSButton* rmIfaceFromListenerButton;
+    IBOutlet NSPanel* rmIfaceFromListenerPanel;
+    IBOutlet NSPopUpButton* rmIfaceFromListenerIfacePUButton;
+    IBOutlet NSPopUpButton* rmIfaceFromListenerListenerPUButton;
+    IBOutlet NSButton* rmIfaceFromListenerRmButton;
+    IBOutlet NSButton* rmIfaceFromListenerCloseButton;
 }
 
 #pragma mark •••Initialization
@@ -70,7 +81,15 @@
 - (void) listenerAdded:(NSNotification*)note;
 - (void) listenerRemoved:(NSNotification*)note;
 - (void) monitoringUpdated:(NSNotification*)note;
+- (void) groupObjectAdded:(NSNotification*)note;
+- (void) groupObjectRemoved:(NSNotification*)note;
+- (void) groupObjectMoved:(NSNotification*)note;
+- (void) groupChanged:(NSNotification*)note;
 - (void) settingsLock:(bool)lock;
+- (void) updateAddIfaceToListenerIfacePUButton;
+- (void) updateAddIfaceToListenerListenerPUButton;
+- (void) updateRmIfaceFromListenerIfacePUButton;
+- (void) updateRmIfaceFromListenerListenerPUButton;
 
 #pragma mark •••Actions
 - (IBAction) ipAddressAction:(id)sender;
@@ -92,10 +111,18 @@
 - (IBAction) gpsEnabledAction:(id)sender;
 - (IBAction) incBaselineAction:(id)sender;
 - (IBAction) sendPingAction:(id)sender;
-- (IBAction) addListenerAction:(id)sender;
-- (IBAction) removeListenerAction:(id)sender;
 - (IBAction) updateIPAction:(id)sender;
 - (IBAction) listInterfaceAction:(id)sender;
+- (IBAction) addIfaceToListenerAction:(id)sender;
+- (IBAction) addIfaceToListenerIfaceAction:(id)sender;
+- (IBAction) addIfaceToListenerListenerAction:(id)sender;
+- (IBAction) addIfaceToListenerAddAction:(id)sender;
+- (IBAction) addIfaceToListenerCloseAction:(id)sender;
+- (IBAction) rmIfaceFromListenerAction:(id)sender;
+- (IBAction) rmIfaceFromListenerIfaceAction:(id)sender;
+- (IBAction) rmIfaceFromListenerListenerAction:(id)sender;
+- (IBAction) rmIfaceFromListenerRmAction:(id)sender;
+- (IBAction) rmIfaceFromListenerCloseAction:(id)sender;
 
 #pragma mark •••Delegate Methods
 - (void) tableViewSelectionDidChange:(NSNotification*)note;

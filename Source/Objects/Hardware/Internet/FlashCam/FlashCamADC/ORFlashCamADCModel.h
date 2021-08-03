@@ -20,7 +20,6 @@
 #import "ORFlashCamCard.h"
 #import "ORConnector.h"
 #import "ORRateGroup.h"
-#import "ORTimer.h"
 #import "ORDataTaker.h"
 #import "ORHWWizard.h"
 #import "fcio.h"
@@ -40,6 +39,7 @@
     @private
     bool chanEnabled[kMaxFlashCamADCChannels];
     int baseline[kMaxFlashCamADCChannels];       // bldac
+    float baseCalib[kMaxFlashCamADCChannels];    // bl
     int threshold[kMaxFlashCamADCChannels];      // athr
     int adcGain[kMaxFlashCamADCChannels];        // ag
     float trigGain[kMaxFlashCamADCChannels];     // tgm
@@ -53,9 +53,8 @@
     unsigned short* wfBuffer;
     unsigned int bufferIndex;
     unsigned int takeDataIndex;
-    bool firstTakeData;
+    unsigned int bufferedWFcount;
     ORRateGroup* wfRates;
-    ORTimer* timer;
     uint32_t wfCount[kMaxFlashCamADCChannels];
     uint32_t dataId;
     uint32_t location;
@@ -77,6 +76,7 @@
 - (unsigned int) nChanEnabled;
 - (bool) chanEnabled:(unsigned int)chan;
 - (int) baseline:(unsigned int)chan;
+- (float) baseCalib:(unsigned int)chan;
 - (int) threshold:(unsigned int)chan;
 - (int) adcGain:(unsigned int)chan;
 - (float) trigGain:(unsigned int)chan;
@@ -86,13 +86,15 @@
 - (ORConnector*) ethConnector;
 - (ORConnector*) trigConnector;
 - (ORRateGroup*) wfRates;
-- (id) rateObject:(int)channel;
+- (id) rateObject:(short)channel;
 - (uint32_t) wfCount:(int)channel;
 - (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag;
+- (float) getRate:(short)channel;
 - (uint32_t) dataId;
 
 - (void) setChanEnabled:(unsigned int)chan  withValue:(bool)enabled;
 - (void) setBaseline:(unsigned int)chan     withValue:(int)base;
+- (void) setBaseCalib:(unsigned int)chan    withValue:(float)calib;
 - (void) setThreshold:(unsigned int)chan    withValue:(int)thresh;
 - (void) setADCGain:(unsigned int)chan      withValue:(int)gain;
 - (void) setTrigGain:(unsigned int)chan     withValue:(float)gain;
@@ -105,7 +107,8 @@
 - (void) setWFrates:(ORRateGroup*)rateGroup;
 - (void) setRateIntTime:(double)intTime;
 - (void) setDataId:(uint32_t)dId;
-- (void) setDataIdsWith:(id)assigner;
+- (void) setDataIds:(id)assigner;
+- (void) syncDataIdsWith:(id)anotherCard;
 
 #pragma mark •••Run control flags
 - (NSString*) chFlag:(unsigned int)ch withInt:(int)value;
@@ -140,6 +143,7 @@
 #pragma mark •••Externals
 extern NSString* ORFlashCamADCModelChanEnabledChanged;
 extern NSString* ORFlashCamADCModelBaselineChanged;
+extern NSString* ORFlashCamADCModelBaseCalibChanged;
 extern NSString* ORFlashCamADCModelThresholdChanged;
 extern NSString* ORFlashCamADCModelADCGainChanged;
 extern NSString* ORFlashCamADCModelTrigGainChanged;

@@ -35,14 +35,6 @@
 - (void) reset;
 @end
 
-@protocol ORDataTakerReadOutList
-- (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
-- (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
-- (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
-- (void) reset;
-- (ORReadOutList*) readOutList;
-@end
-
 @protocol ORFeraReadout
 - (void) setVSN:(int)aVSN;
 - (void) setFeraEnable:(BOOL)aState;

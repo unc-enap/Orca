@@ -17,11 +17,12 @@
 //for the use of this software.
 //-------------------------------------------------------------
 
-#import "ORReadOutList.h"
+#import "ORGroup.h"
+#import "OROrderedObjHolding.h"
 #import "ORDataTaker.h"
 #import "ORTaskSequence.h"
 #import "ORConnector.h"
-#import "ORFlashCamListener.h"
+#import "ORFlashCamListenerModel.h"
 #import "ORFlashCamCard.h"
 #import "fcio.h"
 
@@ -30,13 +31,12 @@
 #define kFlashCamDefaultBuffer 20000
 #define kFlashCamDefaultTimeout 2000 // ms
 
-@interface ORFlashCamReadoutModel : OrcaObject <ORDataTakerReadOutList>
+@interface ORFlashCamReadoutModel : ORGroup <OROrderedObjHolding,ORDataTaker>
 {
     @private
     NSString* ipAddress;
     NSString* username;
     NSMutableArray* ethInterface;
-    NSMutableArray* ethListenerIndex;
     NSString* ethType;
     NSMutableDictionary* configParams;
     ORPingTask* pingTask;
@@ -44,9 +44,6 @@
     ORTaskSequence* firmwareTasks;
     NSMutableArray* firmwareQueue;
     bool runKilled;
-    NSMutableArray* fclistener;
-    ORReadOutList* readOutList;
-    //NSMutableArray* dataTakers;
 }
 
 #pragma mark •••Initialization
@@ -56,23 +53,21 @@
 - (void) makeMainController;
 
 #pragma mark •••Accessors
+- (NSString*) identifier;
 - (NSString*) ipAddress;
 - (NSString*) username;
 - (bool) localMode;
 - (int) ethInterfaceCount;
 - (int) indexOfInterface:(NSString*)interface;
 - (NSString*) ethInterfaceAtIndex:(int)index;
-- (int) ethListenerIndex:(int)index;
 - (NSString*) ethType;
 - (NSNumber*) configParam:(NSString*)p;
 - (bool) pingSuccess;
 - (int) listenerCount;
-- (ORFlashCamListener*) getListenerAtIndex:(int)i;
-- (ORFlashCamListener*) getListener:(NSString*)eth atPort:(uint16_t)p;
-- (ORFlashCamListener*) getListenerForIP:(NSString*)ip atPort:(uint16_t)p;
+- (ORFlashCamListenerModel*) getListenerAtIndex:(int)i;
+- (ORFlashCamListenerModel*) getListener:(NSString*)eth atPort:(uint16_t)p;
+- (ORFlashCamListenerModel*) getListenerForIP:(NSString*)ip atPort:(uint16_t)p;
 - (int) getIndexOfListener:(NSString*)eth atPort:(uint16_t)p;
-- (ORReadOutList*) readOutList;
-- (NSMutableArray*) children;
 
 - (void) setIPAddress:(NSString*)ip;
 - (void) setUsername:(NSString*)user;
@@ -80,14 +75,13 @@
 - (void) setEthInterface:(NSString*)eth atIndex:(int)index;
 - (void) removeEthInterface:(NSString*)eth;
 - (void) removeEthInterfaceAtIndex:(int)index;
-- (void) setEthListenerIndex:(int)lindex atIndex:(int)index;
 - (void) setEthType:(NSString*)etype;
 - (void) setConfigParam:(NSString*)p withValue:(NSNumber*)v;
+- (void) addListener:(ORFlashCamListenerModel*)listener;
 - (void) addListener:(NSString*)eth atPort:(uint16_t)p;
 - (void) setListener:(NSString*)eth atPort:(uint16_t)p forIndex:(int)i;
 - (void) removeListener:(NSString*)eth atPort:(uint16_t)p;
 - (void) removeListenerAtIndex:(int)i;
-- (void) setReadOutList:(ORReadOutList*)readList;
 
 #pragma mark •••Commands
 - (void) updateIPs;
@@ -96,8 +90,6 @@
 - (void) taskFinished:(id)task;
 - (void) tasksCompleted:(id)sender;
 - (void) taskData:(NSDictionary*)taskData;
-- (NSMutableArray*) ethInterfacesForListener:(int)index;
-- (int) listenerIndexForCard:(ORCard*)card;
 - (void) getFirmwareVersion:(ORFlashCamCard*)card;
 - (void) getFirmwareVersionAfterPing:(ORFlashCamCard*)card;
 - (int) ethIndexForCard:(ORCard*)card;
@@ -107,6 +99,21 @@
 - (void) startRun;
 - (void) startRunAfterPing;
 //- (void) killRun;
+
+#pragma mark •••OrOrderedObjHolding Protocol
+- (int) maxNumberOfObjects;
+- (int) objWidth;
+- (int) groupSeparation;
+- (int) numberSlotsNeededFor:(id)obj;
+- (NSString*) nameForSlot:(int)slot;
+- (NSRange) legalSlotsForObj:(id)obj;
+- (int) slotAtPoint:(NSPoint)point;
+- (NSPoint) pointForSlot:(int)slot;
+- (void) place:(id)obj intoSlot:(int)slot;
+- (int) slotForObj:(id)obj;
+- (BOOL) slot:(int)aSlot excludedFor:(id)anObj;
+- (void) drawSlotBoundaries;
+- (void) drawSlotLabels;
 
 #pragma mark •••Data taker methods
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;

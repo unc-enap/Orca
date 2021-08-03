@@ -92,9 +92,9 @@ and may be set before initialization of a context structure.
 
 #define FCIOReadInt(x,i)        FCIORead(x,sizeof(int),&i)
 #define FCIOReadFloat(x,f)      FCIORead(x,sizeof(float),&f)
-#define FCIOReadInts(x,s,i)     FCIORead(x,s*sizeof(int),(void*)(i))
-#define FCIOReadFloats(x,s,f)   FCIORead(x,s*sizeof(float),(void*)(f))
-#define FCIOReadUShorts(x,s,i)  FCIORead(x,s*sizeof(short int),(void*)(i))
+#define FCIOReadInts(x,s,i)     FCIORead(x,(s)*sizeof(int),(void*)(i))
+#define FCIOReadFloats(x,s,f)   FCIORead(x,(s)*sizeof(float),(void*)(f))
+#define FCIOReadUShorts(x,s,i)  FCIORead(x,(s)*sizeof(short int),(void*)(i))
 
 ////////////////////////////////////////////////////////////////////
 
@@ -138,12 +138,15 @@ readers of the FCIO files/streams
 
 /*--- Structures  -----------------------------------------------*/
 
-#define FCIOMaxChannels 2304  // the architectural limit for fc250b
-#define FCIOMaxSamples  4000  // for firmware v2, max trace length is 3900 samples
+#define FCIOMaxChannels 2400                     // the architectural limit for fc250b 12*8*24 adcch+ 12*8 trgch.  
+#define FCIOMaxSamples  10000                    // for firmware v2, max trace length is 8k samples ge 32K
 #define FCIOMaxPulses   (FCIOMaxChannels*11000)  // support up to 11,000 p.e. per channel
 
-typedef struct {  // Readout configuration (typically once at start of run)
-  int telid;                     // CTA-wide identifier of this camera
+#define FCIOMaxDWords   (FCIOMaxChannels*(FCIOMaxSamples+2)) 
+
+typedef struct {                 // Readout configuration (typically once at start of run)
+
+  int telid;                     // trace event list id ;-) 
   int adcs;                      // Number of FADC channels
   int triggers;                  // Number of trigger channels
   int eventsamples;              // Number of FADC samples per trace
@@ -154,9 +157,12 @@ typedef struct {  // Readout configuration (typically once at start of run)
   int triggercards;              // Number of trigger cards
   int adccards;                  // Number of FADC cards
   int gps;                       // GPS mode flag (0: not used, 1: sync PPS and 10 MHz)
+  unsigned int tracemap[FCIOMaxChannels]; // trace map idetifiers 
+
 } fcio_config;
 
-typedef struct {  // Raw event
+typedef struct {                  // Raw event
+
   int type;                       // 1: Generic event, 2: calibration event, 3: simtel traces
 
   float pulser;                   // Used pulser amplitude in case of calibration event
@@ -188,14 +194,15 @@ typedef struct {  // Raw event
   int num_traces;                                // number of traces written on sparse data
   unsigned short trace_list[FCIOMaxChannels+1];  // list of written traces on sparse data   
 
-  unsigned short *trace[FCIOMaxChannels];    // Accessors for trace samples
-  unsigned short *theader[FCIOMaxChannels];  // Accessors for traces incl. header bytes
-                                             // (FPGA baseline, FPGA integrator)
-  unsigned short traces[FCIOMaxChannels * (FCIOMaxSamples + 2)];  // internal trace storage
+  unsigned short *trace[FCIOMaxChannels];        // Accessors for trace samples
+  unsigned short *theader[FCIOMaxChannels];      // Accessors for traces incl. header bytes
+                                                 // (FPGA baseline, FPGA integrator)
+  unsigned short traces[FCIOMaxDWords];          // internal trace storage
 
 } fcio_event;
 
-typedef struct {  // Reconstructed event
+typedef struct {                  // Reconstructed event
+
   int type;                       // 1: Generic event, 2: calibration event, 3: simtel true p.e., 4: merged simtel true p.e.
 
   float pulser;                   // Used pulser amplitude in case of calibration event
@@ -231,9 +238,11 @@ typedef struct {  // Reconstructed event
   int flags[FCIOMaxPulses];
   float times[FCIOMaxPulses];
   float amplitudes[FCIOMaxPulses];
+
 } fcio_recevent;
 
-typedef struct {  // Readout status (~1 Hz, programmable)
+typedef struct {        // Readout status (~1 Hz, programmable)
+
   int status;           // 0: Errors occured, 1: no errors
   int statustime[10];   // fc250 seconds, microseconds, CPU seconds, microseconds, dummy, startsec startusec 
   int cards;            // Total number of cards (number of status data to follow)
@@ -256,17 +265,22 @@ typedef struct {  // Readout status (~1 Hz, programmable)
 
   // these values should be used as informational content and can be
   // changed in future versions
+
   struct {
+
     unsigned int reqid, status, eventno, pps, ticks, maxticks, numenv,
                   numctilinks, numlinks, dummy;
     unsigned int totalerrors, enverrors, ctierrors, linkerrors, othererrors[5];
     int          environment[16];
     unsigned int ctilinks[4];
     unsigned int linkstates[256];
+
   } data[256];
+
 } fcio_status;
 
-typedef struct { // FlashCam envelope structure
+typedef struct {                   // FlashCam envelope structure
+
   void *ptmio;                     // tmio stream
   int magic;                       // Magic number to validate structure
 
@@ -410,6 +424,7 @@ Returns 1 on success or 0 on error.
   FCIOWriteInt(output,input->config.triggercards);
   FCIOWriteInt(output,input->config.adccards);
   FCIOWriteInt(output,input->config.gps);
+  FCIOWriteInts(output,(input->config.adcs+input->config.triggers),input->config.tracemap);
   return FCIOFlush(output);
 }
 
@@ -569,11 +584,18 @@ static inline void fcio_get_config(FCIOStream stream, fcio_config *config)
   FCIOReadInt(stream,config->triggercards);
   FCIOReadInt(stream,config->adccards);
   FCIOReadInt(stream,config->gps);
+  FCIOReadInts(stream,config->adcs+config->triggers,config->tracemap);
 
   if (debug > 2 )
     fprintf(stderr,"FCIO/fcio_get_config: %d/%d/%d adcs %d triggers %d samples %d adcbits %d blprec %d sumlength %d gps %d\n",
       config->mastercards, config->triggercards, config->adccards,
       config->adcs,config->triggers,config->eventsamples,config->adcbits,config->blprecision,config->sumlength,config->gps);
+  if(debug > 3 ) 
+  {
+    int i; 
+    for(i=0;i<config->adcs+config->triggers;i++)     
+       fprintf(stderr,"FCIO/fcio_get_config: trace %d mapped to 0x%x \n",i,config->tracemap[i]);
+  }
 }
 
 static inline void fcio_get_status(FCIOStream stream, fcio_status *status)
@@ -1103,6 +1125,8 @@ FCIOStateReader *FCIOCreateStateReader(
 
 /*--- Description ------------------------------------------------//
 
+experimental.... 
+
 //----------------------------------------------------------------*/
 {
   FCIOStateReader *reader = (FCIOStateReader *) calloc(1, sizeof(FCIOStateReader));
@@ -1157,6 +1181,8 @@ int FCIODestroyStateReader(FCIOStateReader *reader)
 
 /*--- Description ------------------------------------------------//
 
+experimental.... 
+
 //----------------------------------------------------------------*/
 {
   if (!reader)
@@ -1180,6 +1206,8 @@ int FCIOSelectStateTag(FCIOStateReader *reader, int tag)
 
 /*--- Description ------------------------------------------------//
 
+experimental.... 
+
 //----------------------------------------------------------------*/
 {
   if (!tag)
@@ -1198,6 +1226,8 @@ int FCIOSelectStateTag(FCIOStateReader *reader, int tag)
 int FCIODeselectStateTag(FCIOStateReader *reader, int tag)
 
 /*--- Description ------------------------------------------------//
+
+experimental.... 
 
 //----------------------------------------------------------------*/
 {
@@ -1310,6 +1340,8 @@ FCIOState *FCIOGetState(FCIOStateReader *reader, int offset)
 
 /*--- Description ------------------------------------------------//
 
+experimental.... 
+
 //----------------------------------------------------------------*/
 {
   if (debug > 4)
@@ -1366,6 +1398,8 @@ FCIOState *FCIOGetState(FCIOStateReader *reader, int offset)
 FCIOState *FCIOGetNextState(FCIOStateReader *reader)
 
 /*--- Description ------------------------------------------------//
+
+experimental.... 
 
 //----------------------------------------------------------------*/
 {
