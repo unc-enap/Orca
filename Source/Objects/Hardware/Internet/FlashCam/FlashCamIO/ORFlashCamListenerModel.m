@@ -649,7 +649,6 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     [readOutArgs addObjectsFromArray:@[@"-ei", [[self remoteInterfaces] componentsJoinedByString:@","]]];
     [readOutArgs addObjectsFromArray:argCard];
     [readOutArgs addObjectsFromArray:@[@"-o", listen]];
-    NSLog(@"%@\n", [readOutArgs componentsJoinedByString:@" "]);
     if([guardian localMode]){
         // fixme:  set the paths below properly
         [readOutArgs insertObject:@"/Users/tcald/Dev/fc250b-3.4/server/readout-fc250b" atIndex:0];
@@ -663,7 +662,9 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     [[self runTask] launch];
     [self setChanMap:orcaChanMap];
     // may need to tune this or try multiple times before giving up
-    [self performSelector:@selector(connect) withObject:nil afterDelay:1];
+    int nattempts = 0;
+    while(nattempts++ < 10 && ![status isEqualToString:@"connected"])
+        [self performSelector:@selector(connect) withObject:nil afterDelay:0.1];
 }
 
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo

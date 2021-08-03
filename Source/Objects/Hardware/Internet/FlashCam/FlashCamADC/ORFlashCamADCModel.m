@@ -419,12 +419,16 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
 
 - (void) setWFsamples:(int)samples
 {
+    NSLog(@"set wf samples %d\n", samples);
     wfSamples = samples;
     if(wfBuffer){
         free(wfBuffer);
         wfBuffer = NULL;
     }
-    if(dataRecord) free(dataRecord);
+    if(dataRecord){
+        free(dataRecord);
+        dataRecord = NULL;
+    }
     dataRecordLength = 0;
     if(wfSamples > 0){
         wfBuffer = (unsigned short*) malloc(kFlashCamADCBufferLength * (wfSamples + 2));
@@ -547,7 +551,7 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
     @try{
-        if(wfSamples == 0) return;
+        if(wfSamples == 0 || !wfBuffer || !dataRecord) return;
         else if(bufferIndex == takeDataIndex) return;
         else{
             isRunning = true;
