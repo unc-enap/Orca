@@ -713,22 +713,34 @@
                                     <rect key="frame" x="10" y="33" width="691" height="550"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
+                                        <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3SU-MK-aBY" customClass="ORCompositeTimeLineView">
+                                            <rect key="frame" x="17" y="296" width="657" height="150"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        </customView>
+                                        <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pAZ-2D-hcy" customClass="ORCompositeTimeLineView">
+                                            <rect key="frame" x="17" y="148" width="657" height="150"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        </customView>
+                                        <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kdb-mG-iz2" customClass="ORCompositeTimeLineView">
+                                            <rect key="frame" x="17" y="-3" width="657" height="150"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        </customView>
                                         <scrollView autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="lLX-lE-OeB">
-                                            <rect key="frame" x="89" y="454" width="585" height="93"/>
+                                            <rect key="frame" x="114" y="454" width="560" height="93"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <clipView key="contentView" drawsBackground="NO" id="HOQ-y0-tFr">
-                                                <rect key="frame" x="1" y="1" width="583" height="76"/>
+                                                <rect key="frame" x="1" y="1" width="558" height="91"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="14" headerView="5to-HO-UkO" id="fsp-6o-wyI">
-                                                        <rect key="frame" x="0.0" y="0.0" width="619" height="48"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="558" height="63"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <size key="intercellSpacing" width="3" height="2"/>
                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         <tableViewGridLines key="gridStyleMask" vertical="YES" horizontal="YES"/>
                                                         <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                         <tableColumns>
-                                                            <tableColumn identifier="kPersonName" editable="NO" width="40" minWidth="40" maxWidth="1000" id="Ptg-mQ-YWP">
+                                                            <tableColumn identifier="kPersonName" editable="NO" width="46" minWidth="40" maxWidth="1000" id="Ptg-mQ-YWP">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Tag">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
@@ -812,7 +824,7 @@
                                                                 </textFieldCell>
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             </tableColumn>
-                                                            <tableColumn width="120" minWidth="10" maxWidth="3.4028234663852886e+38" id="6ZW-Dl-fYT">
+                                                            <tableColumn width="53" minWidth="10" maxWidth="3.4028234663852886e+38" id="6ZW-Dl-fYT">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Buffer">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -833,8 +845,8 @@
                                                 </subviews>
                                                 <nil key="backgroundColor"/>
                                             </clipView>
-                                            <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="JJx-DU-3DE">
-                                                <rect key="frame" x="1" y="77" width="583" height="15"/>
+                                            <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="JJx-DU-3DE">
+                                                <rect key="frame" x="1" y="77" width="558" height="15"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                             <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="kuq-VX-YRO">
@@ -842,22 +854,10 @@
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                             <tableHeaderView key="headerView" wantsLayer="YES" id="5to-HO-UkO">
-                                                <rect key="frame" x="0.0" y="0.0" width="619" height="28"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="558" height="28"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </tableHeaderView>
                                         </scrollView>
-                                        <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3SU-MK-aBY" customClass="ORCompositeTimeLineView">
-                                            <rect key="frame" x="17" y="306" width="657" height="140"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        </customView>
-                                        <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pAZ-2D-hcy" customClass="ORCompositeTimeLineView">
-                                            <rect key="frame" x="17" y="158" width="657" height="140"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        </customView>
-                                        <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kdb-mG-iz2" customClass="ORCompositeTimeLineView">
-                                            <rect key="frame" x="17" y="10" width="657" height="140"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        </customView>
                                     </subviews>
                                 </view>
                             </tabViewItem>

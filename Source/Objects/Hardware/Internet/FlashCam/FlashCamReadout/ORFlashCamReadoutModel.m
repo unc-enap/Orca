@@ -395,7 +395,10 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
         NSLog(@"ORFlashCamReadoutModel: maximum of 8 listeners currently supported\n");
     }
     [self addObject:[listener retain]];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelListenerAdded object:self];
+    NSDictionary* info = [NSDictionary dictionaryWithObjectsAndKeys:
+                          [NSNumber numberWithInt:[self listenerCount]-1],
+                          @"index", [NSNumber numberWithInt:(int)[listener tag]], @"tag", nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelListenerAdded object:info];
 }
 
 - (void) addListener:(NSString*)eth atPort:(uint16_t)p
@@ -406,7 +409,10 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     }
     ORFlashCamListenerModel* l = [[[ORFlashCamListenerModel alloc] initWithInterface:eth port:p] retain];
     [self addObject:l];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelListenerAdded object:self];
+    NSDictionary* info = [NSDictionary dictionaryWithObjectsAndKeys:
+                          [NSNumber numberWithInt:[self listenerCount]-1],
+                          @"index", [NSNumber numberWithInt:(int)[l tag]], @"tag", nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelListenerAdded object:info];
 }
 
 - (void) setListener:(NSString*)eth atPort:(uint16_t)p forIndex:(int)i
@@ -422,12 +428,16 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     if(!l){
         l = [[[ORFlashCamListenerModel alloc] initWithInterface:eth port:p] retain];
         [[self orcaObjects] setObject:l atIndexedSubscript:i];
-        [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelListenerAdded object:self];
+        NSDictionary* info = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:i],
+                              @"index", [NSNumber numberWithInt:(int)[l tag]], @"tag", nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelListenerAdded object:info];
     }
     else{
         if([[l interface] isEqualToString:eth] && [l port] == p) return;
         [l setInterface:eth andPort:p];
-        [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelListenerChanged object:self];
+        NSDictionary* info = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:i],
+                              @"index", [NSNumber numberWithInt:(int)[l tag]], @"tag", nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelListenerChanged object:info];
     }
 }
 
@@ -439,9 +449,11 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
 - (void) removeListenerAtIndex:(int)i
 {
     if(i < 0 || i >= [self listenerCount]) return;
+    int t = (int) [[self getListenerAtIndex:i] tag];
     [[[self orcaObjects] objectAtIndex:i] autorelease];
     [[self orcaObjects] removeObjectAtIndex:i];
-    NSDictionary* info = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:i] forKey:@"index"];
+    NSDictionary* info = [NSDictionary dictionaryWithObjectsAndKeys:
+                          [NSNumber numberWithInt:i], @"index", [NSNumber numberWithInt:t], @"tag", nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelListenerRemoved object:info];
 }
 

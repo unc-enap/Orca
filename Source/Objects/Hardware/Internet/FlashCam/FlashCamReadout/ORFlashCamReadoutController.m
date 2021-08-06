@@ -205,11 +205,10 @@
     [eventRateView setShowLegend:YES];
     
     [deadTimeView setPlotTitle:@"Dead Time (%)"];
-    //[deadTimeView setShowLegend:YES];
     [[deadTimeView xAxis] setRngLow:0.0 withHigh:10000.0];
     [[deadTimeView xAxis] setRngLimitsLow:0.0 withHigh:200000.0 withMinRng:200.0];
-    [[deadTimeView yAxis] setRngLow:0.0 withHigh:100.0];
-    [[deadTimeView yAxis] setRngLimitsLow:0.0 withHigh:100.0 withMinRng:5.0];
+    [[deadTimeView yAxis] setRngLow:-1.0 withHigh:100.0];
+    [[deadTimeView yAxis] setRngLimitsLow:-1.0 withHigh:100.0 withMinRng:5.0];
     for(int i=0; i<kFlashCamMaxListeners; i++){
         ORTimeLinePlot* plot = [[ORTimeLinePlot alloc] initWithTag:i andDataSource:self];
         [deadTimeView addPlot:plot];
@@ -329,7 +328,8 @@
 - (void) listenerAdded:(NSNotification*)note
 {
     [listenerView reloadData];
-    NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:[model listenerCount]-1];
+    int index = [[[note userInfo] objectForKey:@"index"] intValue];
+    NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:index];
     [listenerView selectRowIndexes:indexSet byExtendingSelection:NO];
     [ethInterfaceView reloadData];
     [monitorView reloadData];
@@ -809,9 +809,9 @@
 {
     ORFlashCamListenerModel* l = [model getListenerAtIndex:(int) [aPlotter tag]];
     if(!l) return 0;
-    if(aPlotter == dataRateView)       return (int) [[l dataRateHistory]  count];
-    else if(aPlotter == eventRateView) return (int) [[l eventRateHistory] count];
-    else if(aPlotter == deadTimeView)  return (int) [[l deadTimeHistory]  count];
+    if([aPlotter plotView]      == [dataRateView plotView])  return (int) [[l dataRateHistory]  count];
+    else if([aPlotter plotView] == [eventRateView plotView]) return (int) [[l eventRateHistory] count];
+    else if([aPlotter plotView] == [deadTimeView  plotView]) return (int) [[l deadTimeHistory]  count];
     return 0;
 }
 
@@ -819,20 +819,26 @@
 {
     ORFlashCamListenerModel* l = [model getListenerAtIndex:(int) [aPlotter tag]];
     if(!l) return;
-    if(aPlotter == dataRateView){
+    if([aPlotter plotView] == [dataRateView plotView]){
         int index = (int) [[l dataRateHistory] count] - i - 1;
-        *xValue = [[l dataRateHistory] timeSampledAtIndex:index];
-        *yValue = [[l dataRateHistory] valueAtIndex:index];
+        if(index >= 0){
+            *xValue = [[l dataRateHistory] timeSampledAtIndex:index];
+            *yValue = [[l dataRateHistory] valueAtIndex:index];
+        }
     }
-    else if(aPlotter == eventRateView){
+    else if([aPlotter plotView] == [eventRateView plotView]){
         int index = (int) [[l eventRateHistory] count] - i - 1;
-        *xValue = [[l eventRateHistory] timeSampledAtIndex:index];
-        *yValue = [[l eventRateHistory] valueAtIndex:index];
+        if(index >= 0){
+            *xValue = [[l eventRateHistory] timeSampledAtIndex:index];
+            *yValue = [[l eventRateHistory] valueAtIndex:index];
+        }
     }
-    else if(aPlotter == deadTimeView){
+    else if([aPlotter plotView] == [deadTimeView plotView]){
         int index = (int) [[l deadTimeHistory] count] - i - 1;
-        *xValue = [[l deadTimeHistory] timeSampledAtIndex:index];
-        *yValue = [[l deadTimeHistory] valueAtIndex:index];
+        if(index >= 0){
+            *xValue = [[l deadTimeHistory] timeSampledAtIndex:index];
+            *yValue = [[l deadTimeHistory] valueAtIndex:index];
+        }
     }
 }
 

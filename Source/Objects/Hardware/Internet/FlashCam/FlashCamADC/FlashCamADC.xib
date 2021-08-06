@@ -56,7 +56,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <font key="font" metaFont="label"/>
                         <tabViewItems>
-                            <tabViewItem label="Coniguration" identifier="" id="Zfo-J5-bWW">
+                            <tabViewItem label="Configuration" identifier="" id="Zfo-J5-bWW">
                                 <view key="view" id="y7N-M8-9gn">
                                     <rect key="frame" x="10" y="33" width="612" height="294"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
