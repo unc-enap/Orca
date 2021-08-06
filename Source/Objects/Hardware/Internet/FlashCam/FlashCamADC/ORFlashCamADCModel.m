@@ -419,7 +419,6 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
 
 - (void) setWFsamples:(int)samples
 {
-    NSLog(@"set wf samples %d\n", samples);
     wfSamples = samples;
     if(wfBuffer){
         free(wfBuffer);
@@ -580,8 +579,8 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
     [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:@"ORFlashCamADCModel"];
-    location = (([self crateNumber]&0x1f) << 25) | (([self slot]&0x1f) << 22);
-    location = (([self cardAddress]&0xff) << 14);
+    location = (([self crateNumber] & 0x1f) << 27) | (([self slot] & 0x1f) << 22);
+    location = location | (([self cardAddress] & 0xff) << 14);
     [self startRates];
     isRunning = false;
     takeDataIndex = 0;

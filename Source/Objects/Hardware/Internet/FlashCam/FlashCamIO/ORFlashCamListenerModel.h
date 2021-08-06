@@ -20,6 +20,7 @@
 #import "ORTaskSequence.h"
 #import "ORDataTaker.h"
 #import "ORReadOutList.h"
+#import "ORTimeRate.h"
 #import "fcio.h"
 #import "bufio.h"
 
@@ -47,6 +48,9 @@
     double deadTime;
     double totDead;
     double curDead;
+    ORTimeRate* dataRateHistory;
+    ORTimeRate* eventRateHistory;
+    ORTimeRate* deadTimeHistory;
     ORTaskSequence* runTask;
     ORReadOutList* readOutList;
     NSArray* dataTakers;
@@ -84,6 +88,9 @@
 - (double) deadTime;
 - (double) totDead;
 - (double) curDead;
+- (ORTimeRate*) dataRateHistory;
+- (ORTimeRate*) eventRateHistory;
+- (ORTimeRate*) deadTimeHistory;
 - (ORTaskSequence*) runTask;
 - (ORReadOutList*) readOutList;
 - (NSMutableArray*) readOutArgs;

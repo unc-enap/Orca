@@ -19,6 +19,10 @@
 
 #import "ORFlashCamReadoutController.h"
 #import "ORFlashCamReadoutModel.h"
+#import "ORTimeLinePlot.h"
+#import "ORCompositePlotView.h"
+#import "ORTimeAxis.h"
+#import "ORTimeRate.h"
 #import "Utilities.h"
 
 @implementation ORFlashCamReadoutController
@@ -28,6 +32,7 @@
 - (id) init
 {
     self = [super initWithWindowNibName:@"FlashCamReadout"];
+    scheduledToUpdatePlot = NO;
     return self;
 }
 
@@ -146,11 +151,73 @@
                      selector : @selector(groupObjectMoved:)
                          name : OROrcaObjectMoved
                        object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(scaleAction:)
+                         name : ORAxisRangeChangedNotification
+                       object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(miscAttributesChanged:)
+                         name : ORMiscAttributesChanged
+                       object : model];
+    [notifyCenter addObserver : self
+                     selector : @selector(updateTimePlot:)
+                         name : ORRateAverageChangedNotification
+                       object : nil];
 }
 
 - (void) awakeFromNib
 {
     [super awakeFromNib];
+    
+    NSColor* colors[kFlashCamMaxListeners] = {
+        [NSColor blueColor],   [NSColor redColor],   [NSColor greenColor],
+        [NSColor blackColor],  [NSColor brownColor], [NSColor purpleColor],
+        [NSColor orangeColor], [NSColor yellowColor] };
+    
+    [dataRateView setPlotTitle:@"Data Rates (MB/s)"];
+    [[dataRateView xAxis] setRngLow:0.0 withHigh:10000.0];
+    [[dataRateView xAxis] setRngLimitsLow:0.0 withHigh:200000.0 withMinRng:200.0];
+    [[dataRateView yAxis] setRngLow:0.0 withHigh:1500.0];
+    [[dataRateView yAxis] setRngLimitsLow:0.0 withHigh:10000.0 withMinRng:10.0];
+    for(int i=0; i<kFlashCamMaxListeners; i++){
+        ORTimeLinePlot* plot = [[ORTimeLinePlot alloc] initWithTag:i andDataSource:self];
+        [dataRateView addPlot:plot];
+        [plot setLineColor:colors[i]];
+        [plot setName:[NSString stringWithFormat:@"Listener %d", i]];
+        [(ORTimeAxis*) [dataRateView xAxis] setStartTime:[[NSDate date] timeIntervalSince1970]];
+        [plot release];
+    }
+    [dataRateView setShowLegend:YES];
+
+    
+    [eventRateView setPlotTitle:@"Event Rates (Hz)"];
+    [[eventRateView xAxis] setRngLow:0.0 withHigh:10000.0];
+    [[eventRateView xAxis] setRngLimitsLow:0.0 withHigh:200000.0 withMinRng:200.0];
+    [[eventRateView yAxis] setRngLow:0.0 withHigh:1500.0];
+    [[eventRateView yAxis] setRngLimitsLow:0.0 withHigh:10000.0 withMinRng:10.0];
+    for(int i=0; i<kFlashCamMaxListeners; i++){
+        ORTimeLinePlot* plot = [[ORTimeLinePlot alloc] initWithTag:i andDataSource:self];
+        [eventRateView addPlot:plot];
+        [plot setLineColor:colors[i]];
+        [plot setName:[NSString stringWithFormat:@"Listener %d", i]];
+        [(ORTimeAxis*) [eventRateView xAxis] setStartTime:[[NSDate date] timeIntervalSince1970]];
+    }
+    [eventRateView setShowLegend:YES];
+    
+    [deadTimeView setPlotTitle:@"Dead Time (%)"];
+    //[deadTimeView setShowLegend:YES];
+    [[deadTimeView xAxis] setRngLow:0.0 withHigh:10000.0];
+    [[deadTimeView xAxis] setRngLimitsLow:0.0 withHigh:200000.0 withMinRng:200.0];
+    [[deadTimeView yAxis] setRngLow:0.0 withHigh:100.0];
+    [[deadTimeView yAxis] setRngLimitsLow:0.0 withHigh:100.0 withMinRng:5.0];
+    for(int i=0; i<kFlashCamMaxListeners; i++){
+        ORTimeLinePlot* plot = [[ORTimeLinePlot alloc] initWithTag:i andDataSource:self];
+        [deadTimeView addPlot:plot];
+        [plot setLineColor:colors[i]];
+        [plot setName:[NSString stringWithFormat:@"Listener %d", i]];
+        [(ORTimeAxis*) [deadTimeView xAxis] setStartTime:[[NSDate date] timeIntervalSince1970]];
+    }
+    [deadTimeView setShowLegend:YES];
 }
 
 - (void) updateWindow
@@ -164,6 +231,7 @@
     [self configParamChanged:nil];
     [listenerView reloadData];
     [monitorView reloadData];
+    [self updateTimePlot:nil];
 }
 
 #pragma mark •••Interface Management
@@ -184,6 +252,7 @@
 {
     [ethInterfaceView reloadData];
     [self updateAddIfaceToListenerIfacePUButton];
+    [listenerView reloadData];
 }
 
 - (void) ethInterfaceAdded:(NSNotification*)note
@@ -203,6 +272,7 @@
     [ethInterfaceView selectRowIndexes:indexSet byExtendingSelection:NO];
     [self updateAddIfaceToListenerIfacePUButton];
     [self updateRmIfaceFromListenerIfacePUButton];
+    [listenerView reloadData];
 }
 
 - (void) ethTypeChanged:(NSNotification*)note
@@ -218,6 +288,7 @@
     [baselineSlewTextField  setIntValue:[[model   configParam:@"baselineSlew"]  intValue]];
     [integratorLenTextField setIntValue:[[model   configParam:@"integratorLen"] intValue]];
     [eventSamplesTextField  setIntValue:[[model   configParam:@"eventSamples"]  intValue]];
+    [signalDepthTextField   setIntValue:[[model   configParam:@"signalDepth"]   intValue]];
     [traceTypePUButton      setIntValue:[[model   configParam:@"traceType"]     intValue]];
     [pileupRejTextField     setFloatValue:[[model configParam:@"pileupRej"]     doubleValue]];
     [logTimeTextField       setFloatValue:[[model configParam:@"logTime"]       doubleValue]];
@@ -323,6 +394,68 @@
     if(note == nil || [note object] == model || [[note object] guardian] == model){
         [listenerContainer setNeedsDisplay:YES];
     }
+}
+
+- (void) scaleAction:(NSNotification*)note;
+{
+    if(note == nil || [note object] == [dataRateView xAxis])
+        [model setMiscAttributes:[(ORAxis*) [dataRateView xAxis] attributes] forKey:@"XAttrib0"];
+    if(note == nil || [note object] == [dataRateView yAxis])
+        [model setMiscAttributes:[(ORAxis*) [dataRateView yAxis] attributes] forKey:@"YAttrib0"];
+    if(note == nil || [note object] == [eventRateView xAxis])
+        [model setMiscAttributes:[(ORAxis*) [eventRateView xAxis] attributes] forKey:@"XAttrib1"];
+    if(note == nil || [note object] == [eventRateView yAxis])
+        [model setMiscAttributes:[(ORAxis*) [eventRateView yAxis] attributes] forKey:@"YAttrib1"];
+    if(note == nil || [note object] == [deadTimeView xAxis])
+        [model setMiscAttributes:[(ORAxis*) [deadTimeView xAxis] attributes] forKey:@"XAttrib2"];
+    if(note == nil || [note object] == [deadTimeView yAxis])
+        [model setMiscAttributes:[(ORAxis*) [deadTimeView yAxis] attributes] forKey:@"YAttrib2"];
+}
+
+- (void) miscAttributesChanged:(NSNotification*)note
+{
+    NSString* key = [[note userInfo] objectForKey:ORMiscAttributeKey];
+    NSMutableDictionary* attrib = [model miscAttributesForKey:key];
+    if(note == nil || [key isEqualToString:@"XAttrib0"]) [self setPlot:dataRateView  xAttributes:attrib];
+    if(note == nil || [key isEqualToString:@"YAttrib0"]) [self setPlot:dataRateView  yAttributes:attrib];
+    if(note == nil || [key isEqualToString:@"XAttrib1"]) [self setPlot:eventRateView xAttributes:attrib];
+    if(note == nil || [key isEqualToString:@"YAttrib1"]) [self setPlot:eventRateView yAttributes:attrib];
+    if(note == nil || [key isEqualToString:@"XAttrib2"]) [self setPlot:deadTimeView  xAttributes:attrib];
+    if(note == nil || [key isEqualToString:@"YAttrib2"]) [self setPlot:deadTimeView  yAttributes:attrib];
+}
+
+- (void) setPlot:(id)plotter xAttributes:(id)attrib
+{
+    if(attrib){
+        [(ORAxis*)[plotter xAxis] setAttributes:attrib];
+        [plotter setNeedsDisplay:YES];
+        [[plotter yAxis] setNeedsDisplay:YES];
+    }
+}
+- (void) setPlot:(id)plotter yAttributes:(id)attrib
+{
+    if(attrib){
+        [(ORAxis*)[plotter yAxis] setAttributes:attrib];
+        [plotter setNeedsDisplay:YES];
+        [[plotter yAxis] setNeedsDisplay:YES];
+    }
+}
+
+- (void) updateTimePlot:(NSNotification*)aNote
+{
+    if(!scheduledToUpdatePlot){
+        scheduledToUpdatePlot=YES;
+        [self performSelector:@selector(deferredPlotUpdate) withObject:nil afterDelay:2];
+    }
+}
+
+- (void) deferredPlotUpdate
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(deferredPlotUpdate) object:nil];
+    scheduledToUpdatePlot = NO;
+    [dataRateView setNeedsDisplay:YES];
+    [eventRateView setNeedsDisplay:YES];
+    [deadTimeView setNeedsDisplay:YES];
 }
 
 - (void) settingsLock:(bool)lock
@@ -459,6 +592,11 @@
 - (IBAction) eventSamplesAction:(id)sender
 {
     [model setConfigParam:@"eventSamples" withValue:[NSNumber numberWithInt:[sender intValue]]];
+}
+
+- (IBAction) signalDepthAction:(id)sender
+{
+    [model setConfigParam:@"signalDepth" withValue:[NSNumber numberWithInt:[sender intValue]]];
 }
 
 - (IBAction) traceTypeAction:(id)sender
@@ -665,6 +803,37 @@
     else if(view == listenerView) return [model listenerCount];
     else if(view == monitorView)  return [model listenerCount];
     else return 0;
+}
+
+- (int) numberPointsInPlot:(id)aPlotter
+{
+    ORFlashCamListenerModel* l = [model getListenerAtIndex:(int) [aPlotter tag]];
+    if(!l) return 0;
+    if(aPlotter == dataRateView)       return (int) [[l dataRateHistory]  count];
+    else if(aPlotter == eventRateView) return (int) [[l eventRateHistory] count];
+    else if(aPlotter == deadTimeView)  return (int) [[l deadTimeHistory]  count];
+    return 0;
+}
+
+- (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue
+{
+    ORFlashCamListenerModel* l = [model getListenerAtIndex:(int) [aPlotter tag]];
+    if(!l) return;
+    if(aPlotter == dataRateView){
+        int index = (int) [[l dataRateHistory] count] - i - 1;
+        *xValue = [[l dataRateHistory] timeSampledAtIndex:index];
+        *yValue = [[l dataRateHistory] valueAtIndex:index];
+    }
+    else if(aPlotter == eventRateView){
+        int index = (int) [[l eventRateHistory] count] - i - 1;
+        *xValue = [[l eventRateHistory] timeSampledAtIndex:index];
+        *yValue = [[l eventRateHistory] valueAtIndex:index];
+    }
+    else if(aPlotter == deadTimeView){
+        int index = (int) [[l deadTimeHistory] count] - i - 1;
+        *xValue = [[l deadTimeHistory] timeSampledAtIndex:index];
+        *yValue = [[l deadTimeHistory] valueAtIndex:index];
+    }
 }
 
 @end

@@ -36,7 +36,6 @@ NSString* ORFlashCamReadoutModelRunEnded            = @"ORFlashCamReadoutModelRu
 NSString* ORFlashCamReadoutModelListenerChanged     = @"ORFlashCamReadoutModelListenerChanged";
 NSString* ORFlashCamReadoutModelListenerAdded       = @"ORFlashCamReadoutModelListenerAdded";
 NSString* ORFlashCamReadoutModelListenerRemoved     = @"ORFlashCamReadoutModelListenerRemoved";
-NSString* ORFlashCamReadoutModelMonitoringUpdated   = @"ORFlashCamReadoutModelMonitoringUpdated";
 
 static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] =
 { @"FlashCamEthInterface0", @"FlashCamEthInterface1",
@@ -61,6 +60,7 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     [self setConfigParam:@"baselineSlew"  withValue:[NSNumber numberWithInt:0]];
     [self setConfigParam:@"integratorLen" withValue:[NSNumber numberWithInt:7]];
     [self setConfigParam:@"eventSamples"  withValue:[NSNumber numberWithInt:2048]];
+    [self setConfigParam:@"signalDepth"   withValue:[NSNumber numberWithInt:1024]];
     [self setConfigParam:@"traceType"     withValue:[NSNumber numberWithInt:1]];
     [self setConfigParam:@"pileupRej"     withValue:[NSNumber numberWithDouble:0.0]];
     [self setConfigParam:@"logTime"       withValue:[NSNumber numberWithDouble:1000.0]];
@@ -199,6 +199,8 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
         return [NSNumber numberWithInt:[[configParams objectForKey:@"integratorLen"] intValue]];
     else if([p isEqualToString:@"eventSamples"])
         return [NSNumber numberWithInt:[[configParams objectForKey:@"eventSamples"] intValue]];
+    else if([p isEqualToString:@"signalDepth"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"signalDepth"] intValue]];
     else if([p isEqualToString:@"traceType"])
         return [NSNumber numberWithInt:[[configParams objectForKey:@"traceType"] intValue]];
     else if([p isEqualToString:@"pileupRej"])
@@ -288,10 +290,31 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
 {
     if(!eth) return;
     if(index < 0 || index >= [self ethInterfaceCount]) return;
+    if([self indexOfInterface:eth] == index) return;
+    NSString* tmp = [[ethInterface objectAtIndex:index] copy];
     [[ethInterface objectAtIndex:index] autorelease];
-    if([self indexOfInterface:eth] < 0)
-        [ethInterface setObject:[eth copy] atIndexedSubscript:index];
-    else [ethInterface setObject:@"" atIndexedSubscript:index];
+    if([self indexOfInterface:eth] < 0){
+        [ethInterface setObject:eth atIndexedSubscript:index];
+        for(int i=0; i<[self listenerCount]; i++){
+            NSMutableArray* remoteInterfaces = [[self getListenerAtIndex:i] remoteInterfaces];
+            for(NSUInteger j=0; j<[remoteInterfaces count]; j++){
+                if([[remoteInterfaces objectAtIndex:j] isEqualToString:tmp])
+                    [remoteInterfaces setObject:eth atIndexedSubscript:j];
+            }
+            [[self getListenerAtIndex:i] setRemoteInterfaces:remoteInterfaces];
+        }
+    }
+    else{
+        [ethInterface setObject:@"" atIndexedSubscript:index];
+        for(int i=0; i<[self listenerCount]; i++){
+            NSMutableArray* remoteInterfaces = [[self getListenerAtIndex:i] remoteInterfaces];
+            for(NSUInteger j=0; j<[remoteInterfaces count]; j++){
+                if([[remoteInterfaces objectAtIndex:j] isEqualToString:tmp])
+                    [remoteInterfaces removeObjectAtIndex:j];
+            }
+            [[self getListenerAtIndex:i] setRemoteInterfaces:remoteInterfaces];
+        }
+    }
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelEthInterfaceChanged object:self];
 }
 
@@ -303,6 +326,14 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
 - (void) removeEthInterfaceAtIndex:(int)index
 {
     if(index < 0 || index >= [self ethInterfaceCount]) return;
+    for(int i=0; i<[self listenerCount]; i++){
+        NSMutableArray* remoteInterfaces = [[self getListenerAtIndex:i] remoteInterfaces];
+        for(NSUInteger j=0; j<[remoteInterfaces count]; j++){
+            if([[remoteInterfaces objectAtIndex:j] isEqualToString:[ethInterface objectAtIndex:index]])
+                [remoteInterfaces removeObjectAtIndex:j];
+        }
+        [[self getListenerAtIndex:i] setRemoteInterfaces:remoteInterfaces];
+    }
     [ethInterface removeObjectAtIndex:index];
     if([self ethInterfaceCount] < kFlashCamMaxEthInterfaces){
         int i = [self ethInterfaceCount];
@@ -338,6 +369,8 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
         [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:@"integratorLen"];
     else if([p isEqualToString:@"eventSamples"])
         [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:@"eventSamples"];
+    else if([p isEqualToString:@"signalDepth"])
+        [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:@"signalDepth"];
     else if([p isEqualToString:@"traceType"])
         [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:@"traceType"];
     else if([p isEqualToString:@"pileupRej"])
@@ -357,8 +390,10 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
 
 - (void) addListener:(ORFlashCamListenerModel*)listener
 {
-    NSLog(@"addListener %d\n", [self listenerCount]);
     for(int i=0; i<[self listenerCount]; i++) if(listener == [self getListenerAtIndex:i]) return;
+    if([self listenerCount] >= kFlashCamMaxListeners){
+        NSLog(@"ORFlashCamReadoutModel: maximum of 8 listeners currently supported\n");
+    }
     [self addObject:[listener retain]];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelListenerAdded object:self];
 }
@@ -376,7 +411,7 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
 
 - (void) setListener:(NSString*)eth atPort:(uint16_t)p forIndex:(int)i
 {
-    if(i >= [self listenerCount]) return;
+    if(i <0 || i >= [self listenerCount]) return;
     int j = [self getIndexOfListener:eth atPort:p];
     if(i == j) return;
     else if(j != -1){
@@ -493,6 +528,7 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     [f addObjectsFromArray:@[@"-bls",  [NSString stringWithFormat:@"%d", [[self configParam:@"baselineSlew"]  intValue]]]];
     [f addObjectsFromArray:@[@"-il",   [NSString stringWithFormat:@"%d", [[self configParam:@"integratorLen"] intValue]]]];
     [f addObjectsFromArray:@[@"-es",   [NSString stringWithFormat:@"%d", [[self configParam:@"eventSamples"]  intValue]]]];
+    [f addObjectsFromArray:@[@"-sd",   [NSString stringWithFormat:@"%d", [[self configParam:@"signalDepth"] intValue]]]];
     [f addObjectsFromArray:@[@"-gt",   [NSString stringWithFormat:@"%d", [[self configParam:@"traceType"]     intValue]]]];
     [f addObjectsFromArray:@[@"-gpr",[NSString stringWithFormat:@"%.2f", [[self configParam:@"pileupRej"]  doubleValue]]]];
     //[f addObjectsFromArray:@[@"-lt", [NSString stringWithFormat:@"%.2f", [[self configParam:@"logTime"]    doubleValue]]]];
@@ -692,7 +728,6 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
 
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
-
 }
 
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo

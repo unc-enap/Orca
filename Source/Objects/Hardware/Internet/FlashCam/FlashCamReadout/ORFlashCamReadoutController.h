@@ -19,6 +19,8 @@
 
 #import "ORCardContainerView.h"
 
+@class ORCompositeTimeLineView;
+
 @interface ORFlashCamReadoutController : OrcaObjectController
 {
     IBOutlet NSTextField* ipAddressTextField;
@@ -33,6 +35,7 @@
     IBOutlet NSTextField* baselineSlewTextField;
     IBOutlet NSTextField* integratorLenTextField;
     IBOutlet NSTextField* eventSamplesTextField;
+    IBOutlet NSTextField* signalDepthTextField;
     IBOutlet NSPopUpButton* traceTypePUButton;
     IBOutlet NSTextField* pileupRejTextField;
     IBOutlet NSTextField* logTimeTextField;
@@ -56,6 +59,10 @@
     IBOutlet NSPopUpButton* rmIfaceFromListenerListenerPUButton;
     IBOutlet NSButton* rmIfaceFromListenerRmButton;
     IBOutlet NSButton* rmIfaceFromListenerCloseButton;
+    IBOutlet ORCompositeTimeLineView* dataRateView;
+    IBOutlet ORCompositeTimeLineView* eventRateView;
+    IBOutlet ORCompositeTimeLineView* deadTimeView;
+    BOOL     scheduledToUpdatePlot;
 }
 
 #pragma mark •••Initialization
@@ -85,6 +92,11 @@
 - (void) groupObjectRemoved:(NSNotification*)note;
 - (void) groupObjectMoved:(NSNotification*)note;
 - (void) groupChanged:(NSNotification*)note;
+- (void) scaleAction:(NSNotification*)note;
+- (void) miscAttributesChanged:(NSNotification*)note;
+- (void) setPlot:(id)aPlotter xAttributes:(id)attrib;
+- (void) setPlot:(id)aPlotter yAttributes:(id)attrib;
+- (void) deferredPlotUpdate;
 - (void) settingsLock:(bool)lock;
 - (void) updateAddIfaceToListenerIfacePUButton;
 - (void) updateAddIfaceToListenerListenerPUButton;
@@ -105,6 +117,7 @@
 - (IBAction) baselineSlewAction:(id)sender;
 - (IBAction) integratorLenAction:(id)sender;
 - (IBAction) eventSamplesAction:(id)sender;
+- (IBAction) signalDepthAction:(id)sender;
 - (IBAction) traceTypeAction:(id)sender;
 - (IBAction) pileupRejAction:(id)sender;
 - (IBAction) logTimeAction:(id)sender;
@@ -131,5 +144,8 @@
 - (id) tableView:(NSTableView*)view objectValueForTableColumn:(NSTableColumn*)column row:(NSInteger)row;
 - (void) tableView:(NSTableView*)view setObjectValue:(id)object forTableColumn:(NSTableColumn*)column row:(NSInteger)row;
 - (NSInteger) numberOfRowsInTableView:(NSTableView*)view;
+
+- (int) numberPointsInPlot:(id)aPlotter;
+- (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 
 @end

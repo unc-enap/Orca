@@ -27,6 +27,7 @@
 #import "fcio.h"
 
 #define kFlashCamMaxEthInterfaces 4
+#define kFlashCamMaxListeners 8
 #define kFlashCamDefaultPort 4000
 #define kFlashCamDefaultBuffer 20000
 #define kFlashCamDefaultTimeout 2000 // ms
@@ -142,4 +143,3 @@ extern NSString* ORFlashCamReadoutModelRunEnded;
 extern NSString* ORFlashCamReadoutModelListenerChanged;
 extern NSString* ORFlashCamReadoutModelListenerAdded;
 extern NSString* ORFlashCamReadoutModelListenerRemoved;
-extern NSString* ORFlashCamReadoutModelMonitoringUpdated;

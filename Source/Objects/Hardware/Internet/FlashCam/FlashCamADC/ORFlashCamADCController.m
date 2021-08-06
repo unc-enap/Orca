@@ -166,6 +166,7 @@
     [self cardAddressChanged:nil];
     [self firmwareVerChanged:nil];
     [self chanEnabledChanged:nil];
+    [self cardSlotChanged:nil];
     [self baselineChanged:nil];
     [self baseCalibChanged:nil];
     [self thresholdChanged:nil];

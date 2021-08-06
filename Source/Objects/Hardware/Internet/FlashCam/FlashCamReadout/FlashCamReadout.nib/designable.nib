@@ -16,9 +16,12 @@
                 <outlet property="addIfaceToListenerListenerPUButton" destination="Gc4-eX-DdI" id="Nv2-2j-lz0"/>
                 <outlet property="addIfaceToListenerPanel" destination="aWV-UQ-7y5" id="TrG-FD-L6W"/>
                 <outlet property="baselineSlewTextField" destination="aqy-11-GCc" id="PeQ-Lz-dtx"/>
+                <outlet property="dataRateView" destination="3SU-MK-aBY" id="BoQ-12-3tX"/>
+                <outlet property="deadTimeView" destination="Kdb-mG-iz2" id="HEp-AM-qVI"/>
                 <outlet property="ethInterfaceView" destination="FLF-og-yOO" id="TBo-Y3-qIf"/>
                 <outlet property="ethTypePUButton" destination="igI-14-MeG" id="pY7-0p-7BT"/>
                 <outlet property="eventBufferTextField" destination="qdy-Wu-Ol5" id="CdG-Pa-hhe"/>
+                <outlet property="eventRateView" destination="pAZ-2D-hcy" id="YZ5-YY-6Lv"/>
                 <outlet property="eventSamplesTextField" destination="7IA-Yj-Swd" id="2tk-gg-EcM"/>
                 <outlet property="gpsEnabledButton" destination="BnD-nV-sqn" id="7dy-ul-wmL"/>
                 <outlet property="incBaselineButton" destination="z3G-aI-wIc" id="8Xt-Uw-0YH"/>
@@ -40,6 +43,7 @@
                 <outlet property="rmIfaceFromListenerPanel" destination="jLI-La-vxx" id="S0V-Wy-9X4"/>
                 <outlet property="rmIfaceFromListenerRmButton" destination="S6a-2b-8Fn" id="hJx-gW-ZXH"/>
                 <outlet property="sendPingButton" destination="pKq-kI-5m9" id="U4J-J9-oIR"/>
+                <outlet property="signalDepthTextField" destination="fuq-X9-hsY" id="TWn-1u-TiH"/>
                 <outlet property="traceTypePUButton" destination="zI3-JO-nYu" id="cuh-4y-G79"/>
                 <outlet property="updateIPButton" destination="ziH-u6-vRk" id="0OE-SM-Qll"/>
                 <outlet property="usernameTextField" destination="Rng-px-A9i" id="LVn-18-bXv"/>
@@ -57,6 +61,11 @@
                 <rect key="frame" x="0.0" y="0.0" width="734" height="601"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Mk-9z-FMJ">
+                        <rect key="frame" x="20" y="527" width="66" height="54"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="flashcam" id="VIJ-ZK-S9e"/>
+                    </imageView>
                     <tabView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zRS-IW-JkU">
                         <rect key="frame" x="10" y="2" width="711" height="596"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -522,7 +531,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DUf-F3-ObF">
-                                                        <rect key="frame" x="8" y="74" width="92" height="13"/>
+                                                        <rect key="frame" x="8" y="50" width="92" height="13"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Trace Type:" id="Qzi-1p-CLP">
                                                             <font key="font" metaFont="label"/>
@@ -582,8 +591,21 @@
                                                             <action selector="eventSamplesAction:" target="-2" id="7ak-Ze-ksw"/>
                                                         </connections>
                                                     </textField>
+                                                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fuq-X9-hsY">
+                                                        <rect key="frame" x="132" y="103" width="69" height="20"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="0" drawsBackground="YES" id="Hg3-vr-O0X">
+                                                            <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="0DD-t9-8KF"/>
+                                                            <font key="font" metaFont="label"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                        <connections>
+                                                            <action selector="signalDepthAction:" target="-2" id="ipP-73-318"/>
+                                                        </connections>
+                                                    </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wpB-Tt-u9M">
-                                                        <rect key="frame" x="132" y="102" width="69" height="20"/>
+                                                        <rect key="frame" x="132" y="76" width="69" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="0" drawsBackground="YES" id="NaH-ME-Fbg">
                                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="RQu-6v-eQy"/>
@@ -622,7 +644,7 @@
                                                         </connections>
                                                     </textField>
                                                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zI3-JO-nYu">
-                                                        <rect key="frame" x="100" y="69" width="134" height="21"/>
+                                                        <rect key="frame" x="100" y="45" width="134" height="21"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <popUpButtonCell key="cell" type="push" title="1 - Unfiltered trace" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="fVk-PG-yHR" id="h26-Co-fIc">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -641,7 +663,7 @@
                                                         </connections>
                                                     </popUpButton>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mmN-7R-Sb2">
-                                                        <rect key="frame" x="8" y="107" width="96" height="13"/>
+                                                        <rect key="frame" x="8" y="80" width="96" height="13"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Log Time (ms):" id="pMH-rH-pfL">
                                                             <font key="font" metaFont="label"/>
@@ -650,27 +672,36 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z3G-aI-wIc">
-                                                        <rect key="frame" x="35" y="33" width="169" height="18"/>
+                                                        <rect key="frame" x="35" y="25" width="169" height="18"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="radio" title="Include Baseline with Trace" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="liH-J2-QJo">
+                                                        <buttonCell key="cell" type="check" title="Include Baseline with Trace" bezelStyle="regularSquare" imagePosition="left" inset="2" id="liH-J2-QJo">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <font key="font" metaFont="label"/>
                                                         </buttonCell>
                                                         <connections>
                                                             <action selector="incBaselineAction:" target="-2" id="Yec-nU-CbL"/>
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BnD-nV-sqn">
-                                                        <rect key="frame" x="35" y="11" width="120" height="18"/>
+                                                        <rect key="frame" x="35" y="5" width="120" height="18"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="radio" title="Enable GPS Clock" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="faY-Qf-SNf">
+                                                        <buttonCell key="cell" type="check" title="Enable GPS Clock" bezelStyle="regularSquare" imagePosition="left" inset="2" id="faY-Qf-SNf">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <font key="font" metaFont="label"/>
                                                         </buttonCell>
                                                         <connections>
                                                             <action selector="gpsEnabledAction:" target="-2" id="TYt-ey-cKM"/>
                                                         </connections>
                                                     </button>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K6G-sL-y9o">
+                                                        <rect key="frame" x="8" y="106" width="96" height="13"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Signal Depth:" id="veQ-8H-kMx">
+                                                            <font key="font" metaFont="label"/>
+                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
                                                 </subviews>
                                             </view>
                                         </box>
@@ -683,14 +714,14 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <scrollView autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="lLX-lE-OeB">
-                                            <rect key="frame" x="-3" y="377" width="697" height="116"/>
+                                            <rect key="frame" x="89" y="454" width="585" height="93"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <clipView key="contentView" drawsBackground="NO" id="HOQ-y0-tFr">
-                                                <rect key="frame" x="1" y="1" width="695" height="99"/>
-                                                <autoresizingMask key="autoresizingMask"/>
+                                                <rect key="frame" x="1" y="1" width="583" height="76"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="14" headerView="5to-HO-UkO" id="fsp-6o-wyI">
-                                                        <rect key="frame" x="0.0" y="0.0" width="701" height="71"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="619" height="48"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <size key="intercellSpacing" width="3" height="2"/>
                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -721,7 +752,7 @@
                                                                 </textFieldCell>
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             </tableColumn>
-                                                            <tableColumn editable="NO" width="94" minWidth="10" maxWidth="3.4028234663852886e+38" id="zch-QF-znk">
+                                                            <tableColumn editable="NO" width="80" minWidth="10" maxWidth="3.4028234663852886e+38" id="zch-QF-znk">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Run TIme (s)">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -733,7 +764,7 @@
                                                                 </textFieldCell>
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             </tableColumn>
-                                                            <tableColumn editable="NO" width="96" minWidth="10" maxWidth="3.4028234663852886e+38" id="DaK-Lf-OrR">
+                                                            <tableColumn editable="NO" width="70" minWidth="10" maxWidth="3.4028234663852886e+38" id="DaK-Lf-OrR">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Events">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -745,8 +776,8 @@
                                                                 </textFieldCell>
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             </tableColumn>
-                                                            <tableColumn editable="NO" width="101" minWidth="10" maxWidth="3.4028234663852886e+38" id="Gam-iD-j2b">
-                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Rate (MB)">
+                                                            <tableColumn editable="NO" width="78" minWidth="10" maxWidth="3.4028234663852886e+38" id="Gam-iD-j2b">
+                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Rate (MB/s)">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
@@ -757,7 +788,7 @@
                                                                 </textFieldCell>
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             </tableColumn>
-                                                            <tableColumn editable="NO" width="103" minWidth="10" maxWidth="3.4028234663852886e+38" id="WVn-9G-nZf">
+                                                            <tableColumn editable="NO" width="67" minWidth="10" maxWidth="3.4028234663852886e+38" id="WVn-9G-nZf">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Rate (Hz)">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -769,7 +800,7 @@
                                                                 </textFieldCell>
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             </tableColumn>
-                                                            <tableColumn editable="NO" width="81" minWidth="10" maxWidth="3.4028234663852886e+38" id="X9K-jB-Efr">
+                                                            <tableColumn editable="NO" width="54" minWidth="10" maxWidth="3.4028234663852886e+38" id="X9K-jB-Efr">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Dead %">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -781,7 +812,7 @@
                                                                 </textFieldCell>
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             </tableColumn>
-                                                            <tableColumn width="56" minWidth="10" maxWidth="3.4028234663852886e+38" id="6ZW-Dl-fYT">
+                                                            <tableColumn width="120" minWidth="10" maxWidth="3.4028234663852886e+38" id="6ZW-Dl-fYT">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Buffer">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -803,7 +834,7 @@
                                                 <nil key="backgroundColor"/>
                                             </clipView>
                                             <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="JJx-DU-3DE">
-                                                <rect key="frame" x="1" y="100" width="695" height="15"/>
+                                                <rect key="frame" x="1" y="77" width="583" height="15"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                             <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="kuq-VX-YRO">
@@ -811,20 +842,27 @@
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                             <tableHeaderView key="headerView" wantsLayer="YES" id="5to-HO-UkO">
-                                                <rect key="frame" x="0.0" y="0.0" width="701" height="28"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="619" height="28"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </tableHeaderView>
                                         </scrollView>
+                                        <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3SU-MK-aBY" customClass="ORCompositeTimeLineView">
+                                            <rect key="frame" x="17" y="306" width="657" height="140"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        </customView>
+                                        <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pAZ-2D-hcy" customClass="ORCompositeTimeLineView">
+                                            <rect key="frame" x="17" y="158" width="657" height="140"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        </customView>
+                                        <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kdb-mG-iz2" customClass="ORCompositeTimeLineView">
+                                            <rect key="frame" x="17" y="10" width="657" height="140"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        </customView>
                                     </subviews>
                                 </view>
                             </tabViewItem>
                         </tabViewItems>
                     </tabView>
-                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Mk-9z-FMJ">
-                        <rect key="frame" x="20" y="527" width="66" height="54"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="flashcam" id="VIJ-ZK-S9e"/>
-                    </imageView>
                 </subviews>
             </view>
             <connections>

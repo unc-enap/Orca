@@ -57,6 +57,9 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     deadTime          = 0.0;
     totDead           = 0.0;
     curDead           = 0.0;
+    dataRateHistory   = [[[ORTimeRate alloc] init] retain];
+    eventRateHistory  = [[[ORTimeRate alloc] init] retain];
+    deadTimeHistory   = [[[ORTimeRate alloc] init] retain];
     runTask           = nil;
     chanMap           = nil;
     [self setRemoteInterfaces:[NSMutableArray array]];
@@ -85,6 +88,9 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     [remoteInterfaces release];
     [status release];
     if(reader) FCIODestroyStateReader(reader);
+    [dataRateHistory release];
+    [eventRateHistory release];
+    [deadTimeHistory release];
     [runTask release];
     [readOutList release];
     [readOutArgs release];
@@ -242,6 +248,21 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
 - (double) curDead
 {
     return curDead;
+}
+
+- (ORTimeRate*) dataRateHistory
+{
+    return dataRateHistory;
+}
+
+- (ORTimeRate*) eventRateHistory
+{
+    return eventRateHistory;
+}
+
+- (ORTimeRate*) deadTimeHistory
+{
+    return deadTimeHistory;
 }
 
 - (ORTaskSequence*) runTask
@@ -514,7 +535,6 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
                 NSLog(@"ORFlashCamListenerModel: unrecognized fcio state tag %d\n", state->last_tag);
                 break;
         }
-        bufferedRecords --;
         readerRecordCount ++;
     }
     else{
@@ -579,22 +599,10 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
             totDead = -1.0;
             curDead = -1.0;
         }
+        [dataRateHistory  addDataToTimeAverage:(float)rateMB];
+        [eventRateHistory addDataToTimeAverage:(float)rateHz];
+        [deadTimeHistory  addDataToTimeAverage:(float)curDead];
     }
-    /*else{
-         r0 = [text rangeOfString:@"ORFlashCamRunModel: starting readout, writing to"];
-         r1 = [text rangeOfString:@" endl "];
-         if(r0.location != NSNotFound && r1.location != NSNotFound){
-             NSString* s = [NSString stringWithFormat:@"tcp://listen/%d/%@", port, ip];
-             if(reader) FCIODestroyStateReader(reader);
-             reader = FCIOCreateStateReader([s UTF8String], timeout, ioBuffer, stateBuffer);
-             if(reader){
-                 NSLog(@"ORFlashCamListenerModel: connected to %@:%d on %@\n", ip, port, interface);
-                 [self read];
-             }
-             else NSLog(@"ORFlashCamListener: unable to connect to %@:%d on %@\n",
-                        ip, port, interface);
-         }
-    }*/
     // fixme: add updates for run termination, etc
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelStatusChanged object:self];
     [text release];
@@ -661,10 +669,10 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     }
     [[self runTask] launch];
     [self setChanMap:orcaChanMap];
-    // may need to tune this or try multiple times before giving up
-    int nattempts = 0;
-    while(nattempts++ < 10 && ![status isEqualToString:@"connected"])
-        [self performSelector:@selector(connect) withObject:nil afterDelay:0.1];
+    [self connect];
+    if(![status isEqualToString:@"connected"])
+        [NSException raise:@"Run Didn't Start"
+                    format:@"ORFlashCamListenerModel on %@ at %@:%d failed to start run",interface,ip,(int)port];
 }
 
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
@@ -694,6 +702,9 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
     [self disconnect];
+    [[self runTask] abortTasks];
+    [runTask release];
+    runTask = nil;
     [readOutArgs removeAllObjects];
     NSEnumerator* e = [dataTakers objectEnumerator];
     id obj;
