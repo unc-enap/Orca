@@ -87,10 +87,9 @@
     }
     
     // decode the waveform if this is the first one or the above conditions are satisfied
-    NSMutableData* tmpData = nil;
     if(lastTime == 0 || (fullDecode && someoneWatching)){
         ptr ++;
-        tmpData = [NSMutableData dataWithCapacity:wfSamples*sizeof(unsigned short)];
+        NSMutableData* tmpData = [NSMutableData dataWithCapacity:wfSamples*sizeof(unsigned short)];
         [tmpData setLength:wfSamples/2*sizeof(uint32_t)];
         memcpy((uint32_t*) [tmpData bytes], ptr, wfSamples*sizeof(unsigned short));
         [aDataSet loadWaveform:tmpData offset:0 unitSize:2 sender:self

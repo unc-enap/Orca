@@ -642,10 +642,10 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
             }
         }
     }
-    // check for no cards and no enabled channels here
+    // fixme: check for no cards and no enabled channels here
     [argCard addObjectsFromArray:@[@"-a", [addressList substringWithRange:NSMakeRange(0, [addressList length]-1)]]];
-    // check channel maps here
-    // add the card level arguments and the addresses for the trigger card(s)
+    // fixme: check channel maps here
+    // fixme: add the card level arguments and the addresses for the trigger card(s)
     bool foundTrigger = NO;
     for(NSString* e in [self remoteInterfaces]){
         NSMutableArray* triggers = [guardian connectedObjects:@"ORFlashCamTriggerModel" toInterface:e];

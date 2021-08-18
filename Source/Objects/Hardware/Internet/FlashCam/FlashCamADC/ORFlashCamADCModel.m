@@ -430,7 +430,7 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
     }
     dataRecordLength = 0;
     if(wfSamples > 0){
-        wfBuffer = (unsigned short*) malloc(kFlashCamADCBufferLength * (wfSamples + 2));
+        wfBuffer = (unsigned short*) malloc(kFlashCamADCBufferLength * (wfSamples+2) * sizeof(unsigned short));
         // first 3 items in WF header get put into Orca header, then trace header gets moved to WF header
         dataLengths = ((wfSamples&0xffff) << 6) | (((kFlashCamADCWFHeaderLength-3+1)&0x3f) << 22);
         dataLengths = dataLengths | ((kFlashCamADCOrcaHeaderLength&0xf) << 28);
