@@ -149,6 +149,10 @@
 	[aPlot1 release];
 	
 	[rate0 setNumber:16 height:10 spacing:5];
+    
+    [terminationPU removeAllItems];
+    [terminationPU addItemWithTitle:@"50 Ohm"];
+    [terminationPU addItemWithTitle:@"1k Ohm"];
 	
 	[super awakeFromNib];
 }
