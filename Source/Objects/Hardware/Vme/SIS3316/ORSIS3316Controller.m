@@ -2191,7 +2191,6 @@
 
 - (IBAction) terminationAction:(id)sender
 {
-    NSLog(@"%d\n", [sender indexOfSelectedItem]);
     [model setTermination:[sender indexOfSelectedItem]];
 }
 
