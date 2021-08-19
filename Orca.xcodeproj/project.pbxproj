@@ -3551,7 +3551,6 @@
 		E63BE5A723B5303C00D01696 /* ORFlashCamReadoutModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E63BE5A623B5303C00D01696 /* ORFlashCamReadoutModel.m */; };
 		E63BE5AA23B5308B00D01696 /* ORFlashCamReadoutController.m in Sources */ = {isa = PBXBuildFile; fileRef = E63BE5A923B5308B00D01696 /* ORFlashCamReadoutController.m */; };
 		E6653F8B23A7CCE400A53678 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1660FE840EACC02AAC07 /* InfoPlist.strings */; };
-		E6653F8F23A7E93700A53678 /* flashcam_adc.png in Resources */ = {isa = PBXBuildFile; fileRef = E6653F8E23A7E93700A53678 /* flashcam_adc.png */; };
 		E6653F9323A7EF9400A53678 /* ORFlashCamCrate.m in Sources */ = {isa = PBXBuildFile; fileRef = E6653F9223A7EF9400A53678 /* ORFlashCamCrate.m */; };
 		E6653F9623A7FA9100A53678 /* ORFlashCamCard.m in Sources */ = {isa = PBXBuildFile; fileRef = E6653F9523A7FA9100A53678 /* ORFlashCamCard.m */; };
 		E6653F9823A80BF900A53678 /* flashcam_minicrate.png in Resources */ = {isa = PBXBuildFile; fileRef = E6653F9723A80BF900A53678 /* flashcam_minicrate.png */; };
@@ -3564,7 +3563,6 @@
 		E681A7A023BA771F00F76977 /* FlashCamMiniCrate.nib in Resources */ = {isa = PBXBuildFile; fileRef = E681A79F23BA771F00F76977 /* FlashCamMiniCrate.nib */; };
 		E686441323BD249400EA43D1 /* FlashCamEthLink.xib in Resources */ = {isa = PBXBuildFile; fileRef = E686441223BD249400EA43D1 /* FlashCamEthLink.xib */; };
 		E686441523BD292B00EA43D1 /* flashcam_ethlink.png in Resources */ = {isa = PBXBuildFile; fileRef = E686441423BD292B00EA43D1 /* flashcam_ethlink.png */; };
-		E686441723BE414200EA43D1 /* flashcam_trigger.png in Resources */ = {isa = PBXBuildFile; fileRef = E686441623BE414100EA43D1 /* flashcam_trigger.png */; };
 		E686441923BE415800EA43D1 /* flashcam_crate.png in Resources */ = {isa = PBXBuildFile; fileRef = E686441823BE415800EA43D1 /* flashcam_crate.png */; };
 		E686441D23BE41DF00EA43D1 /* FlashCamTrigger.xib in Resources */ = {isa = PBXBuildFile; fileRef = E686441C23BE41DF00EA43D1 /* FlashCamTrigger.xib */; };
 		E686441F23BE475300EA43D1 /* FlashCamCrate.nib in Resources */ = {isa = PBXBuildFile; fileRef = E686441E23BE475300EA43D1 /* FlashCamCrate.nib */; };
@@ -3572,6 +3570,8 @@
 		E6983CAE219DB45700029B9C /* ORCamacExceptions.h in Headers */ = {isa = PBXBuildFile; fileRef = E6983CAD219DB45600029B9C /* ORCamacExceptions.h */; };
 		E6C2E7F223A9845700673DB8 /* ORFlashCamADCModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E6C2E7F123A9845700673DB8 /* ORFlashCamADCModel.m */; };
 		E6C2E7F523A984B900673DB8 /* ORFlashCamADCController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6C2E7F423A984B900673DB8 /* ORFlashCamADCController.m */; };
+		E6C7A5A326CE9089007E65AE /* flashcam_adc.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E6C7A5A226CE9088007E65AE /* flashcam_adc.jpg */; };
+		E6C7A5A726CE9094007E65AE /* flashcam_trigger.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E6C7A5A626CE9094007E65AE /* flashcam_trigger.jpg */; };
 		E6CC0769244405DE00D8DE0F /* Mail.app in Resources */ = {isa = PBXBuildFile; fileRef = E6CC0768244405DD00D8DE0F /* Mail.app */; };
 		E6DC1B4B243A240500A559F0 /* ORURLSession.m in Sources */ = {isa = PBXBuildFile; fileRef = E6DC1B49243A240400A559F0 /* ORURLSession.m */; };
 		E6DC1B4C243A240500A559F0 /* ORURLSession.h in Headers */ = {isa = PBXBuildFile; fileRef = E6DC1B4A243A240400A559F0 /* ORURLSession.h */; };
@@ -7356,7 +7356,6 @@
 		E63BE5A623B5303C00D01696 /* ORFlashCamReadoutModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamReadoutModel.m; sourceTree = "<group>"; };
 		E63BE5A823B5306300D01696 /* ORFlashCamReadoutController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORFlashCamReadoutController.h; sourceTree = "<group>"; };
 		E63BE5A923B5308B00D01696 /* ORFlashCamReadoutController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamReadoutController.m; sourceTree = "<group>"; };
-		E6653F8E23A7E93700A53678 /* flashcam_adc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flashcam_adc.png; sourceTree = "<group>"; };
 		E6653F9223A7EF9400A53678 /* ORFlashCamCrate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamCrate.m; sourceTree = "<group>"; };
 		E6653F9423A7FA6F00A53678 /* ORFlashCamCard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORFlashCamCard.h; sourceTree = "<group>"; };
 		E6653F9523A7FA9100A53678 /* ORFlashCamCard.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamCard.m; sourceTree = "<group>"; };
@@ -7371,7 +7370,6 @@
 		E681A79F23BA771F00F76977 /* FlashCamMiniCrate.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = FlashCamMiniCrate.nib; sourceTree = "<group>"; };
 		E686441223BD249400EA43D1 /* FlashCamEthLink.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FlashCamEthLink.xib; sourceTree = "<group>"; };
 		E686441423BD292B00EA43D1 /* flashcam_ethlink.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flashcam_ethlink.png; sourceTree = "<group>"; };
-		E686441623BE414100EA43D1 /* flashcam_trigger.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flashcam_trigger.png; sourceTree = "<group>"; };
 		E686441823BE415800EA43D1 /* flashcam_crate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flashcam_crate.png; sourceTree = "<group>"; };
 		E686441C23BE41DF00EA43D1 /* FlashCamTrigger.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FlashCamTrigger.xib; sourceTree = "<group>"; };
 		E686441E23BE475300EA43D1 /* FlashCamCrate.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = FlashCamCrate.nib; sourceTree = "<group>"; };
@@ -7382,6 +7380,8 @@
 		E6C2E7F323A9848E00673DB8 /* ORFlashCamADCController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORFlashCamADCController.h; sourceTree = "<group>"; };
 		E6C2E7F423A984B900673DB8 /* ORFlashCamADCController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamADCController.m; sourceTree = "<group>"; };
 		E6C583242544CA2A00567B9A /* Orca.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Orca.xcconfig; sourceTree = "<group>"; };
+		E6C7A5A226CE9088007E65AE /* flashcam_adc.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = flashcam_adc.jpg; sourceTree = "<group>"; };
+		E6C7A5A626CE9094007E65AE /* flashcam_trigger.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = flashcam_trigger.jpg; sourceTree = "<group>"; };
 		E6CC0768244405DD00D8DE0F /* Mail.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = Mail.app; path = $APPLICATIONS_DIRECTORY/Mail.app; sourceTree = "<absolute>"; };
 		E6DC1B49243A240400A559F0 /* ORURLSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORURLSession.m; sourceTree = "<group>"; };
 		E6DC1B4A243A240400A559F0 /* ORURLSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORURLSession.h; sourceTree = "<group>"; };
@@ -14919,12 +14919,12 @@
 		E631726D23BCF9050038EB18 /* FlashCamTrigger */ = {
 			isa = PBXGroup;
 			children = (
-				E686441623BE414100EA43D1 /* flashcam_trigger.png */,
 				E631727623BCFD1D0038EB18 /* ORFlashCamTriggerModel.h */,
 				E631727723BCFD2C0038EB18 /* ORFlashCamTriggerModel.m */,
 				E631727923BCFD3B0038EB18 /* ORFlashCamTriggerController.h */,
 				E631727A23BCFD4A0038EB18 /* ORFlashCamTriggerController.m */,
 				E686441C23BE41DF00EA43D1 /* FlashCamTrigger.xib */,
+				E6C7A5A626CE9094007E65AE /* flashcam_trigger.jpg */,
 			);
 			path = FlashCamTrigger;
 			sourceTree = "<group>";
@@ -15002,7 +15002,6 @@
 		E6653F8D23A7D96B00A53678 /* FlashCamADC */ = {
 			isa = PBXGroup;
 			children = (
-				E6653F8E23A7E93700A53678 /* flashcam_adc.png */,
 				E6C2E7F023A983FA00673DB8 /* ORFlashCamADCModel.h */,
 				E6C2E7F123A9845700673DB8 /* ORFlashCamADCModel.m */,
 				E6C2E7F323A9848E00673DB8 /* ORFlashCamADCController.h */,
@@ -15010,6 +15009,7 @@
 				E636382526B08F1200584B16 /* ORFlashCamADCDecoders.h */,
 				E636382926B08F1D00584B16 /* ORFlashCamADCDecoders.m */,
 				E66DB72E23B42E17005CDB2C /* FlashCamADC.xib */,
+				E6C7A5A226CE9088007E65AE /* flashcam_adc.jpg */,
 			);
 			path = FlashCamADC;
 			sourceTree = "<group>";
@@ -16964,7 +16964,6 @@
 				849415861B330FEB00ED42F8 /* onOffPendingBox.tif in Resources */,
 				840C80001955E1D300E36622 /* RelaunchOrca in Resources */,
 				8434A244055B3287002D3102 /* Credits.rtf in Resources */,
-				E686441723BE414200EA43D1 /* flashcam_trigger.png in Resources */,
 				848917781D6B73D300CF5AAF /* CytecVM8.gif in Resources */,
 				E6653F8B23A7CCE400A53678 /* InfoPlist.strings in Resources */,
 				8434A247055B3287002D3102 /* AboutBox.nib in Resources */,
@@ -17171,7 +17170,6 @@
 				E686441323BD249400EA43D1 /* FlashCamEthLink.xib in Resources */,
 				84B7F8D80820551F00721869 /* bigdotshadow.tif in Resources */,
 				844049D408353D47000D03DB /* MemoryWatcher.nib in Resources */,
-				E6653F8F23A7E93700A53678 /* flashcam_adc.png in Resources */,
 				54F5B708087206D9003AC228 /* Katrin.nib in Resources */,
 				84E9C358194F42140028B7E2 /* PacFP.tif in Resources */,
 				546D9DAF0874BDD60072A274 /* 2228A.nib in Resources */,
@@ -17667,6 +17665,7 @@
 				848822A11D2413910030B398 /* DT5725.nib in Resources */,
 				C6FAAAF11FBDD5320069E81C /* WG1220Pulser.nib in Resources */,
 				84BF43CC118793FA00F55216 /* Caen1785.gif in Resources */,
+				E6C7A5A726CE9094007E65AE /* flashcam_trigger.jpg in Resources */,
 				84BF43CD118793FA00F55216 /* Caen1785.nib in Resources */,
 				8476200E118CD53D00016A8D /* 1dFit.nib in Resources */,
 				8476200F118CD53D00016A8D /* 1dRoi.nib in Resources */,
@@ -17899,6 +17898,7 @@
 				B3808A8C1700F84B0019C27D /* CouchDBListener.nib in Resources */,
 				B3805611172BE4A100B5B134 /* Changesfeed.tif in Resources */,
 				43D7CB98177DD0C100ED4736 /* 3DScanPlatform.tiff in Resources */,
+				E6C7A5A326CE9089007E65AE /* flashcam_adc.jpg in Resources */,
 				432D17EC17820CD500557918 /* AngularComponent.mtl in Resources */,
 				432D17EE17820CDB00557918 /* AngularComponent.obj in Resources */,
 				E681A7A023BA771F00F76977 /* FlashCamMiniCrate.nib in Resources */,

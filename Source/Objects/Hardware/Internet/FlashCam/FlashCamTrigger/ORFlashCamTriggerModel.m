@@ -47,8 +47,8 @@ NSString* ORFlashCamTriggerModelBoardAddressChanged = @"ORFlashCamTriggerModelBo
     NSImage* cimage = [NSImage imageNamed:@"flashcam_trigger"];
     NSSize size = [cimage size];
     NSSize newsize;
-    newsize.width  = 0.1675*5*size.width;
-    newsize.height = 0.1475*5*size.height;
+    newsize.width  = 0.155*5*size.width;
+    newsize.height = 0.135*5*size.height;
     NSImage* image = [[NSImage alloc] initWithSize:newsize];
     [image lockFocus];
     NSRect rect;
@@ -96,26 +96,26 @@ NSString* ORFlashCamTriggerModelBoardAddressChanged = @"ORFlashCamTriggerModelBo
     float yscale = 1.0;
     if([[guardian className] isEqualToString:@"ORFlashCamCrateModel"]){
         xoff = 30;
-        yoff = 18;
+        yoff = 21;
         xscale = 0.595;
         yscale = 0.5;
     }
     else if([[guardian className] isEqualToString:@"ORFlashCamMiniCrateModel"]){
         xoff = 3;
-        yoff = 10;
+        yoff = 12;
         xscale = 0.6;
         yscale = 0.522;
     }
     NSRect frame = [aConnector localFrame];
-    float x = (xoff + ([self slot] + 0.5) * 25) * xscale - kConnectorSize/4;
+    float x = (xoff + ([self slot] + 0.5) * 25) * xscale - kConnectorSize/2;
     float y = 0.0;
     if(aConnector == ethConnector) y = yoff + [self frame].size.height * yscale * 0.9;
     else{
         bool found = NO;
         for(unsigned int i=0; i<kFlashCamTriggerConnections; i++){
             if(aConnector == trigConnector[i]){
-                y = yoff + [self frame].size.height*yscale*(0.075+0.5*i/kFlashCamTriggerConnections);
-                if(i > 7) y += [self frame].size.height*yscale*0.175;
+                y = yoff + [self frame].size.height*yscale*(0.07+0.5*i/kFlashCamTriggerConnections);
+                if(i > 7) y += [self frame].size.height*yscale*0.18;
                 found = YES;
                 break;
             }

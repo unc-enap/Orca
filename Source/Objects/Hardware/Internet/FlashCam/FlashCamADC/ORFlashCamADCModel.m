@@ -85,8 +85,8 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
     NSImage* cimage = [NSImage imageNamed:@"flashcam_adc"];
     NSSize size = [cimage size];
     NSSize newsize;
-    newsize.width  = 0.1675*size.width;
-    newsize.height = 0.1475*size.height;
+    newsize.width  = 0.155*5*size.width;
+    newsize.height = 0.135*5*size.height;
     NSImage* image = [[NSImage alloc] initWithSize:newsize];
     [image lockFocus];
     NSRect rect;

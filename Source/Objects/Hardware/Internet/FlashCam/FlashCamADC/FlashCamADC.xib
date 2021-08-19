@@ -11,7 +11,7 @@
                 <outlet property="adcGainMatrix" destination="Mjz-Yz-OAB" id="emj-B4-gxf"/>
                 <outlet property="baseCalibMatrix" destination="5dG-5A-4tn" id="ST8-Qh-0cb"/>
                 <outlet property="baselineMatrix" destination="ANn-i9-iRU" id="lBb-0v-xMc"/>
-                <outlet property="cardAddressTextField" destination="1at-DB-YNf" id="Kvt-7X-xIx"/>
+                <outlet property="cardAddressTextField" destination="rPe-yH-WU4" id="atP-qH-Qv1"/>
                 <outlet property="chanEnabledMatrix" destination="qFl-zx-6tR" id="zn7-4Q-gHn"/>
                 <outlet property="chanEnabledRateMatrix" destination="sb8-AH-mcW" id="23N-Eo-qam"/>
                 <outlet property="filterTypeMatrix" destination="tyC-Rj-v7B" id="OsQ-2J-qjS"/>
@@ -660,18 +660,6 @@
                                                 <action selector="printFlagsAction:" target="-2" id="L7f-Qq-h5x"/>
                                             </connections>
                                         </button>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1at-DB-YNf">
-                                            <rect key="frame" x="3" y="248" width="77" height="21"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="0x0" drawsBackground="YES" id="5hc-qV-S2S">
-                                                <font key="font" metaFont="smallSystem"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                            <connections>
-                                                <action selector="cardAddressAction:" target="-2" id="Lt2-gm-pKh"/>
-                                            </connections>
-                                        </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ouw-gb-NN4">
                                             <rect key="frame" x="1" y="277" width="81" height="14"/>
                                             <autoresizingMask key="autoresizingMask"/>
@@ -701,6 +689,19 @@
                                                 <action selector="firmwareVerAction:" target="-2" id="HYr-O3-Gv3"/>
                                             </connections>
                                         </button>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rPe-yH-WU4">
+                                            <rect key="frame" x="3" y="248" width="77" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="0x0" drawsBackground="YES" id="Why-Dp-R1c">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <connections>
+                                                <action selector="cardAddressAction:" target="-2" id="sVm-vx-JIu"/>
+                                                <outlet property="formatter" destination="zre-Qy-asR" id="V98-vS-uVS"/>
+                                            </connections>
+                                        </textField>
                                     </subviews>
                                 </view>
                             </tabViewItem>
@@ -1078,6 +1079,7 @@
             </connections>
             <point key="canvasLocation" x="66" y="107.5"/>
         </window>
+        <customObject id="zre-Qy-asR" customClass="OHexFormatter"/>
     </objects>
     <resources>
         <image name="flashcam_adc" width="144" height="2855"/>
