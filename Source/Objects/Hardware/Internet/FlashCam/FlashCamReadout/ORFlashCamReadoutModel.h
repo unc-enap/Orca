@@ -44,7 +44,7 @@
     bool pingSuccess;
     ORTaskSequence* firmwareTasks;
     NSMutableArray* firmwareQueue;
-    bool runKilled;
+    ORAlarm* runFailedAlarm;
 }
 
 #pragma mark •••Initialization
@@ -97,8 +97,8 @@
 - (NSMutableArray*) runFlags;
 - (NSMutableArray*) connectedObjects:(NSString*)cname toInterface:(NSString*)eth;
 - (NSMutableArray*) connectedObjects:(NSString*)cname;
-- (void) startRun;
 - (void) startRunAfterPing;
+- (void) runFailed;
 //- (void) killRun;
 
 #pragma mark •••OrOrderedObjHolding Protocol

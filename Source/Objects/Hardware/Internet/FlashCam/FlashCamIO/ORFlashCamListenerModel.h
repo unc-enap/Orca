@@ -39,6 +39,9 @@
     int readerRecordCount;
     int bufferedRecords;
     NSString* status;
+    ORAlarm* runFailedAlarm;
+    bool unrecognizedPacket;
+    NSMutableArray* unrecognizedStates;
     NSUInteger eventCount;
     double runTime;
     double readMB;
@@ -120,6 +123,7 @@
 - (bool) connect;
 - (void) disconnect;
 - (void) read;
+- (void) runFailed;
 
 #pragma mark •••Task methods
 - (void) taskFinished:(id)task;

@@ -37,37 +37,40 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
 {
     self = [super init];
     [[self undoManager] disableUndoRegistration];
-    interface         = @"";
-    port              = 4000;
-    ip                = @"";
-    timeout           = 2000;
-    ioBuffer          = BUFIO_BUFSIZE/1024;
-    stateBuffer       = 20000;
-    throttle          = 0.0;
-    reader            = NULL;
-    readerRecordCount = 0;
-    bufferedRecords   = 0;
-    status            = @"disconnected";
-    eventCount        = 0;
-    runTime           = 0.0;
-    readMB            = 0.0;
-    rateMB            = 0.0;
-    rateHz            = 0.0;
-    timeLock          = 0.0;
-    deadTime          = 0.0;
-    totDead           = 0.0;
-    curDead           = 0.0;
-    dataRateHistory   = [[[ORTimeRate alloc] init] retain];
-    [dataRateHistory  setLastAverageTime:[NSDate date]];
-    [dataRateHistory  setSampleTime:10];
-    eventRateHistory  = [[[ORTimeRate alloc] init] retain];
-    [eventRateHistory setLastAverageTime:[NSDate date]];
-    [eventRateHistory setSampleTime:10];
-    deadTimeHistory   = [[[ORTimeRate alloc] init] retain];
-    [deadTimeHistory  setLastAverageTime:[NSDate date]];
-    [deadTimeHistory  setSampleTime:10];
-    runTask           = nil;
-    chanMap           = nil;
+    interface          = @"";
+    port               = 4000;
+    ip                 = @"";
+    timeout            = 2000;
+    ioBuffer           = BUFIO_BUFSIZE/1024;
+    stateBuffer        = 20000;
+    throttle           = 0.0;
+    reader             = NULL;
+    readerRecordCount  = 0;
+    bufferedRecords    = 0;
+    runFailedAlarm     = nil;
+    unrecognizedPacket = false;
+    unrecognizedStates = nil;
+    status             = @"disconnected";
+    eventCount         = 0;
+    runTime            = 0.0;
+    readMB             = 0.0;
+    rateMB             = 0.0;
+    rateHz             = 0.0;
+    timeLock           = 0.0;
+    deadTime           = 0.0;
+    totDead            = 0.0;
+    curDead            = 0.0;
+    dataRateHistory    = [[[ORTimeRate alloc] init] retain];
+    [dataRateHistory   setLastAverageTime:[NSDate date]];
+    [dataRateHistory   setSampleTime:10];
+    eventRateHistory   = [[[ORTimeRate alloc] init] retain];
+    [eventRateHistory  setLastAverageTime:[NSDate date]];
+    [eventRateHistory  setSampleTime:10];
+    deadTimeHistory    = [[[ORTimeRate alloc] init] retain];
+    [deadTimeHistory   setLastAverageTime:[NSDate date]];
+    [deadTimeHistory   setSampleTime:10];
+    runTask            = nil;
+    chanMap            = nil;
     [self setRemoteInterfaces:[NSMutableArray array]];
     ORReadOutList* readList = [[ORReadOutList alloc] initWithIdentifier:@"ReadOut List"];
     [readList setAcceptedProtocol:@"ORDataTaker"];
@@ -93,6 +96,11 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     [ip release];
     [remoteInterfaces release];
     [status release];
+    if(runFailedAlarm){
+        [runFailedAlarm clearAlarm];
+        [runFailedAlarm release];
+    }
+    if(unrecognizedStates) [unrecognizedStates release];
     if(reader) FCIODestroyStateReader(reader);
     [dataRateHistory release];
     [eventRateHistory release];
@@ -453,7 +461,7 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
 - (bool) connect
 {
     if(!chanMap){
-        NSLog(@"ORFlashCamListenerModel: channel mapping has not been specified, aborting connection\n");
+        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: channel mapping has not been specified, aborting connection\n");
         [self setStatus:@"disconnected"];
         return NO;
     }
@@ -465,7 +473,7 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     [self setStatus:@"disconnected"];
     [self updateIP];
     if([ip isEqualToString:@""]){
-        NSLog(@"ORFlashCamListenerModel: unable to obtain IP address for interface %@\n", interface);
+        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: unable to obtain IP address for interface %@\n", interface);
         return NO;
     }
     NSString* s = [NSString stringWithFormat:@"tcp://listen/%d/%@", port, ip];
@@ -479,7 +487,8 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
         return YES;
     }
     else{
-        NSLog(@"ORFlashCamListenerModel: unable to connect to %@:%d on %@\n", ip, port, interface);
+        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: unable to connect to %@:%d on %@\n", ip, port, interface);
+        [self setStatus:@"disconnected"];
         return NO;
     }
 }
@@ -505,8 +514,9 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     // fixme: deal with nrecord roll overs - why is nrecords not an unsigned long?
     bufferedRecords = reader->nrecords - readerRecordCount;
     if(bufferedRecords > reader->max_states){
-        NSLog(@"ORFlashCamListenerModel: record buffer overflow, aborting stream listening\n");
+        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: record buffer overflow for %@:%d on %@, aborting stream listening\n", ip, port, interface);
         [self disconnect];
+        [self runFailed];
         return;
     }
     FCIOState* state = FCIOGetNextState(reader);
@@ -520,8 +530,9 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
             case FCIOEvent: {
                 int num_traces = state->event->num_traces;
                 if(num_traces != [chanMap count]){
-                    NSLog(@"ORFlashCamListenerModel: number of raw traces in event packet %d != channel map size %d, aborting\n", num_traces, [chanMap count]);
+                    NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: number of raw traces in event packet %d != channel map size %d, aborting\n", num_traces, [chanMap count]);
                     [self disconnect];
+                    [self runFailed];
                     return;
                 }
                 for(int itr=0; itr<num_traces; itr++){
@@ -533,22 +544,47 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
                 break;
             }
             case FCIORecEvent:
-                NSLog(@"ORFlashCamListenerModel: skipping received FCIORecEvent packet - packet type not supported\n");
+                if(!unrecognizedPacket){
+                    NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: skipping received FCIORecEvent packet - packet type not supported!\n");
+                    NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: WARNING - suppressing further instances of this message for this object in this run\n");
+                }
+                unrecognizedPacket = true;
                 break;
             case FCIOStatus:
                 break;
-            default:
-                NSLog(@"ORFlashCamListenerModel: unrecognized fcio state tag %d\n", state->last_tag);
+            default: {
+                bool found = false;
+                for(id n in unrecognizedStates) if((int) state->last_tag == [n intValue]) found = true;
+                if(!found){
+                    [unrecognizedStates addObject:[NSNumber numberWithInt:(int)state->last_tag]];
+                    NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: unrecognized fcio state tag %d\n", state->last_tag);
+                    NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: WARNING - suppressing further instances of this message for this object in this run\n");
+                }
                 break;
+            }
         }
         readerRecordCount ++;
     }
     else{
-        NSLog(@"ORFlashCamListenerModel: failed to read state\n");
+        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: failed to read state\n");
         [self disconnect];
         return;
     }
     [self performSelector:@selector(read) withObject:nil afterDelay:throttle];
+}
+
+- (void) runFailed
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORRequestRunHalt object:self];
+    if(!runFailedAlarm){
+        runFailedAlarm = [[ORAlarm alloc] initWithName:@"FlashCamListener run failed"
+                                              severity:kRunInhibitorAlarm];
+        [runFailedAlarm setSticky:NO];
+    }
+    if(![runFailedAlarm isPosted]){
+        [runFailedAlarm setAcknowledged:NO];
+        [runFailedAlarm postAlarm];
+    }
 }
 
 
@@ -676,9 +712,11 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     [[self runTask] launch];
     [self setChanMap:orcaChanMap];
     [self connect];
-    if(![status isEqualToString:@"connected"])
-        [NSException raise:@"Run Didn't Start"
-                    format:@"ORFlashCamListenerModel on %@ at %@:%d failed to start run",interface,ip,(int)port];
+    if(![status isEqualToString:@"connected"]){
+        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel on %@ at %@:%d failed to start run\n",
+                   interface, ip, (int) port);
+        [self runFailed];
+    }
 }
 
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
@@ -690,6 +728,10 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
 
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
+    if(runFailedAlarm) [runFailedAlarm clearAlarm];
+    unrecognizedPacket = false;
+    if(!unrecognizedStates) unrecognizedStates = [[NSMutableArray array] retain];
+    [unrecognizedStates removeAllObjects];
     [readOutArgs removeAllObjects];
     [self startReadoutAfterPing];
     dataTakers = [[readOutList allObjects] retain];

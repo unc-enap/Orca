@@ -70,7 +70,7 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     pingSuccess = NO;
     firmwareTasks = nil;
     firmwareQueue = [[NSMutableArray array] retain];
-    runKilled = NO;
+    runFailedAlarm = nil;
     [[self undoManager] enableUndoRegistration];
     return self;
 }
@@ -85,6 +85,10 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     if(pingTask) [pingTask release];
     if(firmwareTasks) [firmwareTasks release];
     if(firmwareQueue) [firmwareQueue release];
+    if(runFailedAlarm){
+        [runFailedAlarm clearAlarm];
+        [runFailedAlarm release];
+    }
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     [super dealloc];
 }
@@ -612,15 +616,6 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     }
 }
 
-- (void) startRun
-{
-    runKilled = NO;
-    // check that we can ping the remote host
-    [self sendPing:NO];
-    // now wait for the ping task and start the run if successful
-    [self startRunAfterPing];
-}
-
 - (void) startRunAfterPing
 {
     // if any firmware tasks are still running, wait
@@ -635,13 +630,28 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     }
     // if the ping failed, don't attempt to start the runs
     if(!pingSuccess){
-        NSLog(@"ORFlashCamReadoutModel: ping failure aborting remote run\n");
+        NSLogColor([NSColor redColor], @"ORFlashCamReadoutModel: ping failure aborting remote run\n");
+        [self runFailed];
         return;
     }
     NSMutableArray* args = [NSMutableArray array];
     if(![self localMode]) [args addObjectsFromArray:@[username, ipAddress, @"readout-fc250b"]];
     [args addObjectsFromArray:[self runFlags]];
     for(int i=0; i<[self listenerCount]; i++) [[self getListenerAtIndex:i] setReadOutArgs:args];
+}
+
+- (void) runFailed
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORRequestRunHalt object:self];
+    if(!runFailedAlarm){
+        runFailedAlarm = [[ORAlarm alloc] initWithName:@"FlashCam host failed to start run"
+                                              severity:kRunInhibitorAlarm];
+        [runFailedAlarm setSticky:NO];
+    }
+    if(![runFailedAlarm isPosted]){
+        [runFailedAlarm setAcknowledged:NO];
+        [runFailedAlarm postAlarm];
+    }
 }
 
 /*- (void) killRun
@@ -654,7 +664,6 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
          arguments:[NSArray arrayWithObjects:username, ipAddress,
                     @"/usr/bin/pkill", @"-c", @"readout-fc", nil]];
     [tasks setTextToDelegate:YES];
-    runKilled = YES;
     [tasks launch];
     // abort any remaining run tasks
     if(runTasks != nil) [runTasks abortTasks];
@@ -744,7 +753,11 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
 
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
-    [self startRun];
+    if(runFailedAlarm) [runFailedAlarm clearAlarm];
+    // check that we can ping the remote host
+    [self sendPing:NO];
+    // now wait for the ping task and start the run if successful
+    [self startRunAfterPing];
 }
 
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
@@ -770,7 +783,6 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     pingSuccess = NO;
     firmwareTasks = nil;
     if(!firmwareQueue) firmwareQueue = [[NSMutableArray array] retain];
-    runKilled = NO;
     [[self undoManager] enableUndoRegistration];
     return self;
 }
