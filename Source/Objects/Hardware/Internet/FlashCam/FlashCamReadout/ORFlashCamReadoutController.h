@@ -59,6 +59,8 @@
     IBOutlet NSPopUpButton* rmIfaceFromListenerListenerPUButton;
     IBOutlet NSButton* rmIfaceFromListenerRmButton;
     IBOutlet NSButton* rmIfaceFromListenerCloseButton;
+    IBOutlet NSButton* fcSourcePathButton;
+    IBOutlet NSTextField* fcSourcePathTextField;
     IBOutlet ORCompositeTimeLineView* dataRateView;
     IBOutlet ORCompositeTimeLineView* eventRateView;
     IBOutlet ORCompositeTimeLineView* deadTimeView;
@@ -82,6 +84,8 @@
 - (void) configParamChanged:(NSNotification*)note;
 - (void) pingStart:(NSNotification*)note;
 - (void) pingEnd:(NSNotification*)note;
+- (void) remotePathStart:(NSNotification*)note;
+- (void) remotePathEnd:(NSNotification*)note;
 - (void) runInProgress:(NSNotification*)note;
 - (void) runEnded:(NSNotification*)note;
 - (void) listenerChanged:(NSNotification*)note;
@@ -102,6 +106,7 @@
 - (void) updateAddIfaceToListenerListenerPUButton;
 - (void) updateRmIfaceFromListenerIfacePUButton;
 - (void) updateRmIfaceFromListenerListenerPUButton;
+- (void) fcSourcePathChanged:(NSNotification*)note;
 
 #pragma mark •••Actions
 - (IBAction) ipAddressAction:(id)sender;
@@ -136,6 +141,7 @@
 - (IBAction) rmIfaceFromListenerListenerAction:(id)sender;
 - (IBAction) rmIfaceFromListenerRmAction:(id)sender;
 - (IBAction) rmIfaceFromListenerCloseAction:(id)sender;
+- (IBAction) fcSourcePathAction:(id)sender;
 
 #pragma mark •••Delegate Methods
 - (void) tableViewSelectionDidChange:(NSNotification*)note;

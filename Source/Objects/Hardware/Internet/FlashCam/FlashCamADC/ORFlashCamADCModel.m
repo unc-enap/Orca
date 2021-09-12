@@ -489,10 +489,10 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
     return mask;
 }
 
-- (NSMutableArray*) runFlagsForChannelOffset:(unsigned int)offset
+- (NSMutableArray*) runFlagsForCardIndex:(unsigned int) index andChannelOffset:(unsigned int)offset
 {
     NSMutableArray* flags = [NSMutableArray array];
-    [flags addObjectsFromArray:@[@"-am", [NSString stringWithFormat:@"%x,%x,1", [self chanMask], [self cardAddress]]]];
+    [flags addObjectsFromArray:@[@"-am", [NSString stringWithFormat:@"%x,%x,1", [self chanMask], index]]];
     for(unsigned int i=0; i<kMaxFlashCamADCChannels; i++){
         unsigned int j = i + offset;
         [flags addObjectsFromArray:@[@"-athr",  [self chFlag:j withInt:threshold[i]]]];
@@ -510,7 +510,7 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
 
 - (void) printRunFlagsForChannelOffset:(unsigned int)offset
 {
-    NSLog(@"%@\n", [[self runFlagsForChannelOffset:offset] componentsJoinedByString:@" "]);
+    NSLog(@"%@\n", [[self runFlagsForCardIndex:0 andChannelOffset:offset] componentsJoinedByString:@" "]);
 }
 
 

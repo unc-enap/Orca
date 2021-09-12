@@ -114,7 +114,7 @@
 - (NSString*) chFlag:(unsigned int)ch withInt:(int)value;
 - (NSString*) chFlag:(unsigned int)ch withFloat:(float)value;
 - (unsigned int) chanMask;
-- (NSMutableArray*) runFlagsForChannelOffset:(unsigned int)offset;
+- (NSMutableArray*) runFlagsForCardIndex:(unsigned int) index andChannelOffset:(unsigned int)offset;
 - (void) printRunFlagsForChannelOffset:(unsigned int)offset;
 
 #pragma mark •••Data taker methods

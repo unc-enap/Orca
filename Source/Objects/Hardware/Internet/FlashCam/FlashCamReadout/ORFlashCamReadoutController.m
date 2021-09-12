@@ -53,6 +53,8 @@
     [self updateAddIfaceToListenerListenerPUButton];
     [self updateRmIfaceFromListenerIfacePUButton];
     [self updateRmIfaceFromListenerListenerPUButton];
+    if([model localMode]) [fcSourcePathButton setTitle:@"Set Path to FC Readout Source:"];
+    else [fcSourcePathButton setTitle:@"Get Path to FC Readout Source:"];
 }
 
 - (void) registerNotificationObservers
@@ -91,6 +93,10 @@
                      selector : @selector(configParamChanged:)
                          name : ORFlashCamReadoutModelConfigParamChanged
                        object : nil];
+    [notifyCenter addObserver :self
+                     selector : @selector(fcSourcePathChanged:)
+                         name : ORFlashCamReadoutModelFCSourcePathChanged
+                       object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(pingStart:)
                          name : ORFlashCamReadoutModelPingStart
@@ -98,6 +104,14 @@
     [notifyCenter addObserver : self
                      selector : @selector(pingEnd:)
                          name : ORFlashCamReadoutModelPingEnd
+                       object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(remotePathStart:)
+                         name : ORFlashCamReadoutModelRemotePathStart
+                       object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(remotePathEnd:)
+                         name : ORFlashCamReadoutModelRemotePathEnd
                        object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(runInProgress:)
@@ -240,6 +254,8 @@
     [ipAddressTextField setStringValue:[model ipAddress]];
     [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Readout Configuration %d (%@)",
                              [model uniqueIdNumber], [model ipAddress]]];
+    if([model localMode]) [fcSourcePathButton setTitle:@"Set Path to FC Readout Source:"];
+    else [fcSourcePathButton setTitle:@"Get Path to FC Readout Source:"];
 }
 
 - (void) usernameChanged:(NSNotification*)note
@@ -305,6 +321,20 @@
 {
     [ipAddressTextField setEnabled:YES];
     [sendPingButton setEnabled:YES];
+}
+
+- (void) remotePathStart:(NSNotification*)note
+{
+    [usernameTextField setEnabled:NO];
+    [ipAddressTextField setEnabled:NO];
+    [fcSourcePathButton setEnabled:NO];
+}
+
+- (void) remotePathEnd:(NSNotification*)note
+{
+    [usernameTextField setEnabled:YES];
+    [ipAddressTextField setEnabled:YES];
+    [fcSourcePathButton setEnabled:YES];
 }
 
 - (void) runInProgress:(NSNotification*)note
@@ -479,6 +509,7 @@
     [listenerView              setEnabled:!lock];
     [addIfaceToListenerButton  setEnabled:!lock];
     [rmIfaceFromListenerButton setEnabled:!lock];
+    [fcSourcePathButton        setEnabled:!lock];
 }
 
 - (void) updateAddIfaceToListenerIfacePUButton
@@ -524,6 +555,13 @@
         [title appendString:[NSString stringWithFormat:@"%d",     [[model getListenerAtIndex:i] port]]];
         [rmIfaceFromListenerListenerPUButton addItemWithTitle:title];
     }
+}
+
+- (void) fcSourcePathChanged:(NSNotification*)note
+{
+    [fcSourcePathTextField setStringValue:[model fcSourcePath]];
+    if([model validFCSourcePath]) [fcSourcePathTextField setTextColor:[NSColor systemGreenColor]];
+    else [fcSourcePathTextField setTextColor:[NSColor systemRedColor]];
 }
 
 #pragma mark ***Actions
@@ -726,6 +764,28 @@
 {
     [rmIfaceFromListenerPanel orderOut:nil];
     [NSApp endSheet:rmIfaceFromListenerPanel];
+}
+
+- (IBAction) fcSourcePathAction:(id)sender
+{
+    if([model localMode]){
+        NSOpenPanel* panel = [NSOpenPanel openPanel];
+        [panel setCanChooseDirectories:YES];
+        [panel setCanChooseFiles:NO];
+        [panel setAllowsMultipleSelection:NO];
+        NSString* startDir;
+        NSString* prevPath = [[model fcSourcePath] stringByExpandingTildeInPath];
+        if(prevPath) startDir = [prevPath stringByDeletingLastPathComponent];
+        else startDir = NSHomeDirectory();
+        [panel setDirectoryURL:[NSURL fileURLWithPath:startDir]];
+        [panel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result){
+            if(result == NSFileHandlingPanelOKButton){
+                [model setFCSourcePath:[[[panel URL] path] stringByAbbreviatingWithTildeInPath]];
+                [model checkFCSourcePath];
+            }
+        }];
+    }
+    else [model getRemotePath];
 }
 
 

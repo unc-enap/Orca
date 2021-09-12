@@ -663,19 +663,22 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     NSMutableArray* argCard      = [NSMutableArray array];
     NSMutableString* addressList = [NSMutableString string];
     NSMutableArray* orcaChanMap  = [NSMutableArray array];
+    unsigned int adcCount = 0;
     for(ORReadOutObject* obj in [readOutList children]){
         if(![[obj object] isKindOfClass:NSClassFromString(@"ORFlashCamCard")]) continue;
         ORFlashCamCard* card = (ORFlashCamCard*) [obj object];
         if([[card className] isEqualToString:@"ORFlashCamADCModel"]){
             ORFlashCamADCModel* adc = (ORFlashCamADCModel*) card;
             [addressList appendString:[NSString stringWithFormat:@"%x,", [adc cardAddress]]];
-            [argCard addObjectsFromArray:[adc runFlagsForChannelOffset:(unsigned int)[orcaChanMap count]]];
+            [argCard addObjectsFromArray:[adc runFlagsForCardIndex:adcCount
+                                                  andChannelOffset:(unsigned int)[orcaChanMap count]]];
             for(unsigned int ich=0; ich<kMaxFlashCamADCChannels; ich++){
                 if([adc chanEnabled:ich]){
                     NSDictionary* chDict = [NSDictionary dictionaryWithObjectsAndKeys:adc, @"adc", [NSNumber numberWithUnsignedInt:ich], @"channel", nil];
                     [orcaChanMap addObject:chDict];
                 }
             }
+            adcCount ++;
         }
     }
     // fixme: check for no cards and no enabled channels here
@@ -700,10 +703,9 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     [readOutArgs addObjectsFromArray:argCard];
     [readOutArgs addObjectsFromArray:@[@"-o", listen]];
     if([guardian localMode]){
-        // fixme:  set the paths below properly
-        [readOutArgs insertObject:@"/Users/tcald/Dev/fc250b-3.4/server/readout-fc250b" atIndex:0];
-        [[self runTask] addTask:@"/Users/tcald/Dev/fc250b-3.4/server/efbprun"
-                                           arguments:[NSArray arrayWithArray:readOutArgs]];
+        NSString* p = [[[guardian fcSourcePath] stringByExpandingTildeInPath] stringByAppendingString:@"/server/"];
+        [readOutArgs insertObject:[p stringByAppendingString:@"readout-fc250b"] atIndex:0];
+        [[self runTask] addTask:[p stringByAppendingString:@"efbprun"] arguments:[NSArray arrayWithArray:readOutArgs]];
     }
     else{
         [[self runTask] addTask:[[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/remote_run"]

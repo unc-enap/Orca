@@ -29,8 +29,11 @@ NSString* ORFlashCamReadoutModelEthInterfaceAdded   = @"ORFlashCamReadoutModelEt
 NSString* ORFlashCamReadoutModelEthInterfaceRemoved = @"ORFlashCamReadoutModelEthInterfaceRemoved";
 NSString* ORFlashCamReadoutModelEthTypeChanged      = @"ORFlashCamReadoutModelEthTypeChanged";
 NSString* ORFlashCamReadoutModelConfigParamChanged  = @"ORFlashCamReadoutModelConfigParamChanged";
+NSString* ORFlashCamReadoutModelFCSourcePathChanged = @"ORFlashCamReadoutModelFCSourcePathChanged";
 NSString* ORFlashCamReadoutModelPingStart           = @"ORFlashCamReadoutModelPingStart";
 NSString* ORFlashCamReadoutModelPingEnd             = @"ORFlashCamReadoutModelPingEnd";
+NSString* ORFlashCamReadoutModelRemotePathStart     = @"ORFlashCamReadoutModelRemotePathStart";
+NSString* ORFlashCamReadoutModelRemotePathEnd       = @"ORFlashCamReadoutModelRemotePathEnd";
 NSString* ORFlashCamReadoutModelRunInProgress       = @"ORFlashCamReadoutModelRunInProgress";
 NSString* ORFlashCamReadoutModelRunEnded            = @"ORFlashCamReadoutModelRunEnded";
 NSString* ORFlashCamReadoutModelListenerChanged     = @"ORFlashCamReadoutModelListenerChanged";
@@ -54,6 +57,9 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     ethInterface     = [[NSMutableArray array] retain];
     [self setEthType:@"efb1"];
     configParams = [[NSMutableDictionary dictionary] retain];
+    validFCSourcePath = false;
+    [self setFCSourcePath:@"--"];
+    checkedFCSourcePath = false;
     [self setConfigParam:@"maxPayload"    withValue:[NSNumber numberWithInt:0]];
     [self setConfigParam:@"eventBuffer"   withValue:[NSNumber numberWithInt:1000]];
     [self setConfigParam:@"phaseAdjust"   withValue:[NSNumber numberWithInt:-1]];
@@ -68,6 +74,7 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     [self setConfigParam:@"incBaseline"   withValue:[NSNumber numberWithBool:YES]];
     pingTask = nil;
     pingSuccess = NO;
+    remotePathTask = nil;
     firmwareTasks = nil;
     firmwareQueue = [[NSMutableArray array] retain];
     runFailedAlarm = nil;
@@ -83,6 +90,7 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     [ethType release];
     if(configParams) [configParams release];
     if(pingTask) [pingTask release];
+    if(remotePathTask) [remotePathTask release];
     if(firmwareTasks) [firmwareTasks release];
     if(firmwareQueue) [firmwareQueue release];
     if(runFailedAlarm){
@@ -221,9 +229,29 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     }
 }
 
+- (NSString*) fcSourcePath
+{
+    return fcSourcePath;
+}
+
+- (bool) validFCSourcePath
+{
+    return validFCSourcePath;
+}
+
 - (bool) pingSuccess
 {
     return pingSuccess;
+}
+
+- (ORTaskSequence*) remotePathTask
+{
+    if(!remotePathTask){
+        remotePathTask = [[ORTaskSequence taskSequenceWithDelegate:self] retain];
+        [remotePathTask setVerbose:NO];
+        [remotePathTask setTextToDelegate:YES];
+    }
+    return remotePathTask;
 }
 
 - (int) listenerCount
@@ -263,6 +291,7 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     [[[self undoManager] prepareWithInvocationTarget:self] setIPAddress:[self ipAddress]];
     [ipAddress autorelease];
     ipAddress = [ip copy];
+    [self checkFCSourcePath];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelIPAddressChanged object:self];
 }
 
@@ -273,6 +302,7 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     [[[self undoManager] prepareWithInvocationTarget:self] setUsername:[self username]];
     [username autorelease];
     username = [user copy];
+    [self checkFCSourcePath];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelUsernameChanged object:self];
 }
 
@@ -392,6 +422,13 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelConfigParamChanged object:self];
 }
 
+- (void) setFCSourcePath:(NSString*)path
+{
+    if(fcSourcePath) if([path isEqualToString:fcSourcePath]) return;
+    fcSourcePath = [path copy];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelFCSourcePathChanged object:self];
+}
+
 - (void) addListener:(ORFlashCamListenerModel*)listener
 {
     for(int i=0; i<[self listenerCount]; i++) if(listener == [self getListenerAtIndex:i]) return;
@@ -491,6 +528,45 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     return pingTask != nil;
 }
 
+- (void) getRemotePath
+{
+    [[self remotePathTask] addTask:[[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/remote_path"]
+                         arguments:[NSArray arrayWithObjects:username, ipAddress, @"printenv", @"|", @"grep", @"FLASHCAMDIR", nil]];
+    [[self remotePathTask] launch];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelRemotePathStart object:self];
+    checkedFCSourcePath = false;
+}
+
+- (void) checkFCSourcePath
+{
+    if([fcSourcePath isEqualToString:@""] || [fcSourcePath isEqualToString:@"--"] || !ipAddress || !username){
+        if(validFCSourcePath)
+            [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelFCSourcePathChanged object:self];
+        validFCSourcePath = false;
+        checkedFCSourcePath = true;
+        return;
+    }
+    if([self localMode]){
+        bool prev = validFCSourcePath;
+        NSString* p = [[fcSourcePath stringByExpandingTildeInPath] stringByAppendingString:@"/server/readout-fc250b"];
+        if([[NSFileManager defaultManager] fileExistsAtPath:p]) validFCSourcePath = true;
+        else{
+            validFCSourcePath = false;
+            NSLogColor([NSColor redColor], @"ORFlashCamReadoutModel: readout executable not found at %@\n", p);
+        }
+        if(prev != validFCSourcePath)
+            [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelFCSourcePathChanged object:self];
+    }
+    else{
+        NSString* readout = [fcSourcePath stringByAppendingString:@"/server/readout-fc250b"];
+        [[self remotePathTask] addTask:[[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/remote_path"]
+                             arguments:[NSArray arrayWithObjects:username, ipAddress, @"ls", readout, nil]];
+        [remotePathTask launch];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelRemotePathStart object:self];
+    }
+    checkedFCSourcePath = true;
+}
+
 - (void) taskFinished:(id)task
 {
     if(task == pingTask){
@@ -510,6 +586,14 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
             [firmwareQueue removeObjectAtIndex:0];
         }
     }
+    else if(sender == remotePathTask){
+        [remotePathTask release];
+        remotePathTask = nil;
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelRemotePathEnd object:self];
+        if(!checkedFCSourcePath) [self checkFCSourcePath];
+        else if(![self localMode] && !validFCSourcePath)
+            NSLogColor([NSColor redColor], @"ORFlashCamReadoutModel: readout executable not found on %@ at %@, check that $FLASHCAMDIR is set and contains server/readout-fc250b\n", ipAddress, fcSourcePath);
+    }
 }
 
 - (void) taskData:(NSDictionary*)taskData
@@ -519,6 +603,19 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     if(task == pingTask){
         if([text rangeOfString:@" 0.0% packet loss"].location != NSNotFound) pingSuccess = YES;
         else pingSuccess = NO;
+    }
+    else if(task == remotePathTask && text){
+        bool prev = validFCSourcePath;
+        NSRange r = [text rangeOfString:@"FLASHCAMDIR="];
+        if(r.location != NSNotFound){
+            NSString* tmp = [text substringWithRange:NSMakeRange(r.location+r.length,
+                                                                 [text length]-r.location-r.length)];
+            [self setFCSourcePath:[[tmp componentsSeparatedByString:@" "] objectAtIndex:0]];
+        }
+        else if([text rangeOfString:@"No such file or directory"].location != NSNotFound) validFCSourcePath = false;
+        else if([text rangeOfString:@"readout-fc250b"].location != NSNotFound) validFCSourcePath = true;
+        if(prev != validFCSourcePath)
+            [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelFCSourcePathChanged object:self];
     }
     [task release];
     [text release];
@@ -779,8 +876,14 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     ethInterface =     [[decoder decodeObjectForKey:@"ethInterface"] retain];
     [self setEthType:        [decoder decodeObjectForKey:@"ethType"]];
     configParams = [[decoder decodeObjectForKey:@"configParams"] retain];
+    validFCSourcePath = false;
+    [self setFCSourcePath:[decoder decodeObjectForKey:@"fcSourcePath"]];
+    if(!fcSourcePath) fcSourcePath = @"--";
+    checkedFCSourcePath = false;
+    if(ipAddress) if(![ipAddress isEqualToString:@""]) [self checkFCSourcePath];
     pingTask = nil;
     pingSuccess = NO;
+    remotePathTask = nil;
     firmwareTasks = nil;
     if(!firmwareQueue) firmwareQueue = [[NSMutableArray array] retain];
     [[self undoManager] enableUndoRegistration];
@@ -795,6 +898,7 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     [encoder encodeObject:ethInterface     forKey:@"ethInterface"];
     [encoder encodeObject:ethType          forKey:@"ethType"];
     [encoder encodeObject:configParams     forKey:@"configParams"];
+    [encoder encodeObject:fcSourcePath     forKey:@"fcSourcePath"];
 }
 
 @end

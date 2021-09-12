@@ -3575,6 +3575,7 @@
 		E6CC0769244405DE00D8DE0F /* Mail.app in Resources */ = {isa = PBXBuildFile; fileRef = E6CC0768244405DD00D8DE0F /* Mail.app */; };
 		E6DC1B4B243A240500A559F0 /* ORURLSession.m in Sources */ = {isa = PBXBuildFile; fileRef = E6DC1B49243A240400A559F0 /* ORURLSession.m */; };
 		E6DC1B4C243A240500A559F0 /* ORURLSession.h in Headers */ = {isa = PBXBuildFile; fileRef = E6DC1B4A243A240400A559F0 /* ORURLSession.h */; };
+		E6E20C9726EE4CB10081279D /* remote_path in Resources */ = {isa = PBXBuildFile; fileRef = E6E20C9626EE4CB00081279D /* remote_path */; };
 		EF69C433116E5DC3008ABADC /* ORSNOCrateReadout.hh in Headers */ = {isa = PBXBuildFile; fileRef = EF69C431116E5DC3008ABADC /* ORSNOCrateReadout.hh */; };
 		EF69C482116E6526008ABADC /* ORSNOCrateReadout.cc in VME_Copy */ = {isa = PBXBuildFile; fileRef = EF69C430116E5DC3008ABADC /* ORSNOCrateReadout.cc */; };
 		EF69C483116E6526008ABADC /* ORSNOCrateReadout.hh in VME_Copy */ = {isa = PBXBuildFile; fileRef = EF69C431116E5DC3008ABADC /* ORSNOCrateReadout.hh */; };
@@ -7385,6 +7386,7 @@
 		E6CC0768244405DD00D8DE0F /* Mail.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = Mail.app; path = $APPLICATIONS_DIRECTORY/Mail.app; sourceTree = "<absolute>"; };
 		E6DC1B49243A240400A559F0 /* ORURLSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORURLSession.m; sourceTree = "<group>"; };
 		E6DC1B4A243A240400A559F0 /* ORURLSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORURLSession.h; sourceTree = "<group>"; };
+		E6E20C9626EE4CB00081279D /* remote_path */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = remote_path; sourceTree = "<group>"; };
 		EF69C430116E5DC3008ABADC /* ORSNOCrateReadout.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ORSNOCrateReadout.cc; sourceTree = "<group>"; };
 		EF69C431116E5DC3008ABADC /* ORSNOCrateReadout.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ORSNOCrateReadout.hh; sourceTree = "<group>"; };
 		EF7722B211E813120064A1CF /* ORXL3Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORXL3Model.h; sourceTree = "<group>"; };
@@ -14981,6 +14983,7 @@
 				E63BE5A923B5308B00D01696 /* ORFlashCamReadoutController.m */,
 				E63637F526A2119700584B16 /* FlashCamReadout.nib */,
 				E61D05882307313E00140549 /* kill_run */,
+				E6E20C9626EE4CB00081279D /* remote_path */,
 				E61D05862307313E00140549 /* remote_run */,
 			);
 			path = FlashCamReadout;
@@ -17082,6 +17085,7 @@
 				84E5B30F0715E16700C7B798 /* NcdCableCheckTask.nib in Resources */,
 				843CDF58071C9CF4009D7D30 /* RandomPulser.nib in Resources */,
 				843CE013071CAB20009D7D30 /* RandomPulser.gif in Resources */,
+				E6E20C9726EE4CB10081279D /* remote_path in Resources */,
 				849191C70725B5DE00F454F1 /* edu.washington.npl.orca.Document.plist in Resources */,
 				849194460725CB6C00F454F1 /* edu.washington.npl.orca.Waveform.plist in Resources */,
 				E686441523BD292B00EA43D1 /* flashcam_ethlink.png in Resources */,
