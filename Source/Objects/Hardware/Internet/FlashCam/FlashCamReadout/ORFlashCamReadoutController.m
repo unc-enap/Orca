@@ -242,6 +242,7 @@
     [ethInterfaceView reloadData];
     [self ethTypeChanged:nil];
     [self configParamChanged:nil];
+    [self fcSourcePathChanged:nil];
     [listenerView reloadData];
     [monitorView reloadData];
     [self updateTimePlot:nil];
@@ -292,7 +293,9 @@
 
 - (void) ethTypeChanged:(NSNotification*)note
 {
-    [ethTypePUButton selectItemWithTitle:[model ethType]];
+    if(!note) return;
+    id d = [note userInfo];
+    if(!d) return;
 }
 
 - (void) configParamChanged:(NSNotification*)note
@@ -493,7 +496,6 @@
     [ipAddressTextField        setEnabled:!lock];
     [usernameTextField         setEnabled:!lock];
     [ethInterfaceView          setEnabled:!lock];
-    [ethTypePUButton           setEnabled:!lock];
     [maxPayloadTextField       setEnabled:!lock];
     [eventBufferTextField      setEnabled:!lock];
     [phaseAdjustTextField      setEnabled:!lock];
@@ -595,11 +597,6 @@
 - (IBAction) cut:(id)sender
 {
     [self removeEthInterfaceAction:nil];
-}
-
-- (IBAction) ethTypeAction:(id)sender
-{
-    [model setEthType:[sender titleOfSelectedItem]];
 }
 
 - (IBAction) maxPayloadAction:(id)sender
@@ -806,12 +803,17 @@
     NSUInteger col = [[view tableColumns] indexOfObject:column];
     if(view == ethInterfaceView){
         if(col == 0)      return [model ethInterfaceAtIndex:(int)row];
+        else if(col == 1){
+            for(int i=0; i<kFlashCamEthTypeCount; i++)
+                if([model ethTypeAtIndex:(int)row] == kFlashCamEthTypes[i])
+                    return [NSNumber numberWithInt:i];
+        }
     }
     else if(view == listenerView || view == monitorView){
         ORFlashCamListenerModel* l = [model getListenerAtIndex:(int)row];
         if(!l) return nil;
         if(col == 0){
-            NSUInteger i = [l tag];//[model getIndexOfListener:[l interface] atPort:[l port]];
+            NSUInteger i = [l tag];
             return [NSNumber numberWithUnsignedLong:i];
         }
         else if(view == listenerView){
@@ -844,7 +846,8 @@
 {
     NSUInteger col= [[view tableColumns] indexOfObject:column];
     if(view == ethInterfaceView){
-        if(col == 0) [model setEthInterface:object atIndex:(int)row];
+        if(col == 0)      [model setEthInterface:object atIndex:(int)row];
+        else if(col == 1) [model setEthType:kFlashCamEthTypes[[object intValue]] atIndex:(int)row];
     }
     else if(view == listenerView){
         ORFlashCamListenerModel* l = [model getListenerAtIndex:(int)row];

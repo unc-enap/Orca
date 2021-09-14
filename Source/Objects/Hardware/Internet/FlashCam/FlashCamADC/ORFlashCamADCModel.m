@@ -73,8 +73,6 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
 - (void) dealloc
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    if(ethConnector)  [ethConnector  release];
-    if(trigConnector) [trigConnector release];
     [self setWFsamples:0];
     [wfRates release];
     [super dealloc];
@@ -249,16 +247,6 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
     return poleZeroTime[chan];
 }
 
-- (ORConnector*) ethConnector
-{
-    return ethConnector;
-}
-
-- (ORConnector*) trigConnector
-{
-    return trigConnector;
-}
-
 - (ORRateGroup*) wfRates
 {
     return wfRates;
@@ -401,20 +389,6 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelPoleZeroTimeChanged
                                                         object:self
                                                       userInfo:info];
-}
-
-- (void) setEthConnector:(ORConnector*)connector
-{
-    [connector retain];
-    [ethConnector release];
-    ethConnector = connector;
-}
-
-- (void) setTrigConnector:(ORConnector*)connector
-{
-    [connector retain];
-    [trigConnector release];
-    trigConnector = connector;
 }
 
 - (void) setWFsamples:(int)samples
@@ -629,7 +603,6 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
 {
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
-    [self setCardAddress:[[decoder decodeObjectForKey:@"cardAddress"] unsignedIntValue]];
     for(int i=0; i<kMaxFlashCamADCChannels; i++){
         [self setChanEnabled:i
                    withValue:[decoder decodeBoolForKey:[NSString stringWithFormat:@"chanEnabled%i", i]]];
@@ -650,14 +623,10 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
         [self setPoleZeroTime:i
                     withValue:[decoder decodeFloatForKey:[NSString stringWithFormat:@"poleZeroTime%i",  i]]];
     }
-    [self setEthConnector: [decoder decodeObjectForKey:@"ethConnector"]];
-    [self setTrigConnector:[decoder decodeObjectForKey:@"trigConnector"]];
-    firmwareVer = [[[NSArray alloc] init] retain];
     isRunning = NO;
     wfBuffer = NULL;
     bufferIndex = 0;
     takeDataIndex = 0;
-    taskdata = nil;
     dataRecord = NULL;
     [self setWFsamples:0];
     [self setWFrates:[decoder decodeObjectForKey:@"wfRates"]];
@@ -674,7 +643,6 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeObject:[NSNumber numberWithUnsignedInt:cardAddress] forKey:@"cardAddress"];
     for(int i=0; i<kMaxFlashCamADCChannels; i++){
         [encoder encodeBool:chanEnabled[i] forKey:[NSString stringWithFormat:@"chanEnabled%i", i]];
         [encoder encodeInt:baseline[i] forKey:[NSString stringWithFormat:@"baseline%i", i]];
@@ -686,8 +654,6 @@ NSString* ORFlashCamADCModelBufferFull          = @"ORFlashCamADCModelBufferFull
         [encoder encodeFloat:filterType[i] forKey:[NSString stringWithFormat:@"filterType%i", i]];
         [encoder encodeFloat:poleZeroTime[i] forKey:[NSString stringWithFormat:@"poleZeroTime%i", i]];
     }
-    [encoder encodeObject:ethConnector  forKey:@"ethConnector"];
-    [encoder encodeObject:trigConnector forKey:@"trigConnector"];
     [encoder encodeObject:wfRates       forKey:@"wfRates"];
 }
 

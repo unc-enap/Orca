@@ -23,6 +23,7 @@
 NSString* ORFlashCamCardSlotChangedNotification = @"ORFlashCamCardSlotChangedNotification";
 NSString* ORFlashCamCardEthConnector            = @"ORFlashCamCardEthConnector";
 NSString* ORFlashCamCardAddressChanged          = @"ORFlashCamCardAddressChanged";
+NSString* ORFlashCamCardPROMSlotChanged         = @"ORFlashCamCardPROMSlotChanged";
 NSString* ORFlashCamCardFirmwareVerRequest      = @"ORFlashCamCardFirmwareVerRequest";
 NSString* ORFlashCamCardFirmwareVerChanged      = @"ORFlashCamCardFirmwareVerChanged";
 NSString* ORFlashCamCardExceptionCountChanged   = @"ORFlashCamCardExceptionCountChanged";
@@ -36,8 +37,10 @@ NSString* ORFlashCamCardExceptionCountChanged   = @"ORFlashCamCardExceptionCount
     [super init];
     [[self undoManager] disableUndoRegistration];
     [self setCardAddress:0];
-    ethConnector = nil;
-    firmwareVer = [[[NSMutableArray alloc] init] retain];
+    [self setPROMSlot:0];
+    ethConnector  = nil;
+    trigConnector = nil;
+    firmwareVer = [[NSMutableArray array] retain];
     taskdata = nil;
     [[self undoManager] enableUndoRegistration];
     return self;
@@ -56,6 +59,8 @@ NSString* ORFlashCamCardExceptionCountChanged   = @"ORFlashCamCardExceptionCount
 - (void) dealloc
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    if(ethConnector)  [ethConnector  release];
+    if(trigConnector) [trigConnector release];
     [self releaseFirmwareVer];
     if(taskdata) [taskdata release];
     [super dealloc];
@@ -84,6 +89,21 @@ NSString* ORFlashCamCardExceptionCountChanged   = @"ORFlashCamCardExceptionCount
 - (unsigned int) cardAddress
 {
     return cardAddress;
+}
+
+- (unsigned int) promSlot
+{
+    return promSlot;
+}
+
+- (ORConnector*) ethConnector
+{
+    return ethConnector;
+}
+
+- (ORConnector*) trigConnector
+{
+    return trigConnector;
 }
 
 - (NSArray*) firmwareVer
@@ -127,6 +147,29 @@ NSString* ORFlashCamCardExceptionCountChanged   = @"ORFlashCamCardExceptionCount
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamCardAddressChanged object:self];
 }
 
+- (void) setPROMSlot:(unsigned int)slot
+{
+    if(slot == promSlot || slot > 2) return;
+    [[[self undoManager] prepareWithInvocationTarget:self] setPROMSlot:promSlot];
+    promSlot = slot;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamCardPROMSlotChanged object:self];
+}
+
+- (void) setEthConnector:(ORConnector*)connector
+{
+    [connector retain];
+    [ethConnector release];
+    ethConnector = connector;
+}
+
+- (void) setTrigConnector:(ORConnector*)connector
+{
+    [connector retain];
+    [trigConnector release];
+    trigConnector = connector;
+}
+
+
 - (uint32_t) exceptionCount
 {
     return exceptionCount;
@@ -154,32 +197,66 @@ NSString* ORFlashCamCardExceptionCountChanged   = @"ORFlashCamCardExceptionCount
 {
     if(!ethConnector) return [self releaseFirmwareVer];
     else if(![ethConnector isConnected]){
-        NSLog(@"ORFlashCamCard - must connect to FlashCam object to get firmware version\n");
+        NSLog(@"ORFlashCamCard - must connect to FlashCamReadout object to get firmware version\n");
         return [self releaseFirmwareVer];
     }
     id obj = [ethConnector connectedObject];
     if(!obj){
-        NSLog(@"ORFlashCamCard - unable to get connected FlashCam OBject\n");
+        NSLog(@"ORFlashCamCard - unable to get connected FlashCam object\n");
         return [self releaseFirmwareVer];
     }
     if([[obj className] isEqualToString:@"ORFlashCamEthLinkModel"]){
         NSMutableArray* arr = [obj connectedObjects:@"ORFlashCamReadoutModel"];
         if([arr count] == 0){
-            NSLog(@"ORFlashCamCard - must connect to FlashCam object to get firmware version\n");
+            NSLog(@"ORFlashCamCard - must connect to FlashCamReadout object to get firmware version\n");
             return [self releaseFirmwareVer];
         }
         else if([arr count] > 1){
-            NSLog(@"ORFlashCamCard - error, multiple FlashCam objects connected\n");
+            NSLog(@"ORFlashCamCard - error, multiple FlashCamReadout objects connected\n");
             return [self releaseFirmwareVer];
         }
         obj = [arr objectAtIndex:0];
     }
     else if(![[obj className] isEqualToString:@"ORFlashCamReadoutModel"]){
-        NSLog(@"ORFlashCamCard - must connect to FlashCam object to get firmware version\n");
+        NSLog(@"ORFlashCamCard - must connect to FlashCamReadout object to get firmware version\n");
         return [self releaseFirmwareVer];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamCardFirmwareVerRequest object:self];
     [obj getFirmwareVersion:self];
+}
+
+// If this card is connected to an ORFlashCamReadoutModel object either directly or through
+// an ORFlashCamEthLink, get the object and run the firmware loading program with flags to reboot.
+- (void) requestReboot
+{
+    if(!ethConnector) return [self releaseFirmwareVer];
+    else if(![ethConnector isConnected]){
+        NSLog(@"ORFlashCamCard - must connect to FlashCamReadout object to reboot\n");
+        return;
+    }
+    id obj = [ethConnector connectedObject];
+    if(!obj){
+        NSLog(@"ORFlashCamCard - unable to get connected FlashCam object\n");
+        return;
+    }
+    if([[obj className] isEqualToString:@"ORFlashCamEthLinkModel"]){
+        NSMutableArray* arr = [obj connectedObjects:@"ORFlashCamReadoutModel"];
+        if([arr count] == 0){
+            NSLog(@"ORFlashCamCard - must connect to FlashCamReadout object to reboot\n");
+            return;
+        }
+        else if([arr count] > 1){
+            NSLog(@"ORFlashCamCard - error, multiple FlashCamReadout objects connected\n");
+            return;
+        }
+        obj = [arr objectAtIndex:0];
+    }
+    else if(![[obj className] isEqualToString:@"ORFlashCamReadoutModel"]){
+        NSLog(@"ORFlashCamCard - must connect to FlashCamReadout object to reboot\n");
+        return [self releaseFirmwareVer];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamCardFirmwareVerRequest object:self];
+    [obj rebootCard:self];
 }
 
 // Append any data from the firmware version request task to taskdata.  If the data contains
@@ -187,16 +264,17 @@ NSString* ORFlashCamCardExceptionCountChanged   = @"ORFlashCamCardExceptionCount
 - (void) taskData:(NSDictionary*)taskData
 {
     if(!taskData) return;
-    NSString* text = [taskData objectForKey:@"Text"];
+    NSString* text = [[taskData objectForKey:@"Text"] retain];
     if(!text) return;
-    if(!taskdata) taskdata = [[[NSMutableArray alloc] init] retain];
-    [taskdata addObject:[text copy]];
+    if(!taskdata) taskdata = [[NSMutableArray array] retain];
+    [taskdata addObject:[[NSString stringWithString:text] retain]];
     NSRange r = [text rangeOfString:@"ORFlashCamCard"];
     if(r.location != NSNotFound){
         NSString* s = [text substringWithRange:NSMakeRange(r.location, [text length]-r.location)];
         r = [s rangeOfString:@" endl "];
         if(r.location != NSNotFound) NSLog(@"%@\n", [s substringWithRange:NSMakeRange(0, r.location)]);
     }
+    [text release];
 }
 
 // Once the firmware version request task is complete, release the old firmware version
@@ -223,19 +301,52 @@ NSString* ORFlashCamCardExceptionCountChanged   = @"ORFlashCamCardExceptionCount
         [index enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL* stop){
             if([td count] <= idx+15) return;
             if([[td objectAtIndex:idx+1] isEqualToString:@"found"] &&
-                [[td objectAtIndex:idx+4] containsString:[NSString stringWithFormat:@"0x%x",cardAddress]]){
+                [[td objectAtIndex:idx+4] containsString:[NSString stringWithFormat:@"%d/0x",cardAddress]]){
                 NSString* fwt = [[NSString stringWithString:[td objectAtIndex:idx+7]] retain];
                 NSString* fwr = [[NSString stringWithString:[td objectAtIndex:idx+9]] retain];
                 NSString* fwd = [[NSString stringWithFormat:@"%@ %@ %@",
                                  [td objectAtIndex:idx+12], [td objectAtIndex:idx+11], [td objectAtIndex:idx+13]] retain];
                 NSString* fwg = [[NSString stringWithString:[td objectAtIndex:idx+15]] retain];
                 firmwareVer = [[NSArray arrayWithObjects:fwt, fwr, fwd, fwg, nil] retain];
+                if([td count] >= idx+17){
+                    if([[td objectAtIndex:idx+17] isEqualToString:@"Booting"]){
+                        NSLog(@"ORFlashCamCard: rebooting card at 0x%x from PROM slot %d\n", cardAddress, promSlot);
+                        NSLog(@"\t\tfirmware: %@\n", [firmwareVer componentsJoinedByString:@" / "]);
+                    }
+                }
                 *stop = YES;
             }
         }];
+        for(id obj in taskdata) [obj release];
         [taskdata removeAllObjects];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamCardFirmwareVerChanged object:self];
 }
+
+#pragma mark •••Archival
+- (id) initWithCoder:(NSCoder*)decoder
+{
+    self = [super initWithCoder:decoder];
+    [[self undoManager] disableUndoRegistration];
+    [self setCardAddress: [[decoder decodeObjectForKey:@"cardAddress"] unsignedIntValue]];
+    [self setPROMSlot:    [[decoder decodeObjectForKey:@"promSlot"] unsignedIntValue]];
+    [self setEthConnector: [decoder decodeObjectForKey:@"ethConnector"]];
+    [self setTrigConnector:[decoder decodeObjectForKey:@"trigConnector"]];
+    [[self undoManager] enableUndoRegistration];
+    return self;
+}
+
+- (void) encodeWithCoder:(NSCoder*)encoder
+{
+    [super encodeWithCoder:encoder];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInt:cardAddress] forKey:@"cardAddress"];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInt:promSlot]    forKey:@"promSlot"];
+    [encoder encodeObject:ethConnector  forKey:@"ethConnector"];
+    [encoder encodeObject:trigConnector forKey:@"trigConnector"];
+    taskdata = nil;
+    if(!firmwareVer) firmwareVer = [[NSMutableArray array] retain];
+
+}
+
 
 @end

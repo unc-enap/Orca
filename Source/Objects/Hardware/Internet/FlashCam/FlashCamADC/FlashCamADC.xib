@@ -21,9 +21,11 @@
                 <outlet property="integrationTextField" destination="vZF-7D-nej" id="KmT-7z-4pl"/>
                 <outlet property="poleZeroTimeMatrix" destination="Wxf-LP-I4Y" id="0U0-uv-Fx7"/>
                 <outlet property="printFlagsButton" destination="hdb-pQ-hgC" id="aJL-Oe-3HO"/>
+                <outlet property="promSlotPUButton" destination="hTb-5I-X8G" id="rv2-IX-tGS"/>
                 <outlet property="rateLogButton" destination="XtR-FA-qwz" id="qqG-v5-6DT"/>
                 <outlet property="rateTextFields" destination="9dn-Sl-QE6" id="1fz-sG-GCQ"/>
                 <outlet property="rateView" destination="0BE-Ro-cdg" id="Kv3-cV-uNQ"/>
+                <outlet property="rebootCardButton" destination="FNF-xL-usE" id="dwa-pz-Gge"/>
                 <outlet property="shapeTimeMatrix" destination="rxJ-5M-FFT" id="bXx-Tp-YHd"/>
                 <outlet property="thresholdMatrix" destination="Ghw-gN-Cyr" id="Ws7-aG-OpS"/>
                 <outlet property="timeRateLogButton" destination="0gZ-gj-6dP" id="kNU-pl-95y"/>
@@ -649,21 +651,19 @@
                                                 </subviews>
                                             </view>
                                         </box>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hdb-pQ-hgC">
-                                            <rect key="frame" x="138" y="263" width="96" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="push" title="Print Flags" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0IA-54-kSY">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="smallSystem"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="printFlagsAction:" target="-2" id="L7f-Qq-h5x"/>
-                                            </connections>
-                                        </button>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ouw-gb-NN4">
                                             <rect key="frame" x="1" y="277" width="81" height="14"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Board Address" id="bLc-fs-3cm">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="08G-UW-pDi">
+                                            <rect key="frame" x="96" y="276" width="64" height="14"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="PROM Slot:" id="jVx-KF-s6O">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -702,6 +702,46 @@
                                                 <outlet property="formatter" destination="zre-Qy-asR" id="V98-vS-uVS"/>
                                             </connections>
                                         </textField>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hTb-5I-X8G">
+                                            <rect key="frame" x="95" y="244" width="70" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="jmJ-lg-W4g" id="PET-o7-O4z">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="label"/>
+                                                <menu key="menu" id="bsi-yw-Da8">
+                                                    <items>
+                                                        <menuItem title="Item 1" state="on" id="jmJ-lg-W4g"/>
+                                                        <menuItem title="Item 2" id="OQs-bW-62e"/>
+                                                        <menuItem title="Item 3" id="p79-eF-baV"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="promSlotAction:" target="-2" id="m1s-qN-zhT"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FNF-xL-usE">
+                                            <rect key="frame" x="174" y="241" width="96" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Reboot Card" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eyo-1d-1FW">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="label"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="rebootCardAction:" target="-2" id="CVv-SI-ttL"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hdb-pQ-hgC">
+                                            <rect key="frame" x="268" y="241" width="130" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Print Readout Flags" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0IA-54-kSY">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="label"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="printFlagsAction:" target="-2" id="L7f-Qq-h5x"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                 </view>
                             </tabViewItem>
@@ -1082,6 +1122,6 @@
         <customObject id="zre-Qy-asR" customClass="OHexFormatter"/>
     </objects>
     <resources>
-        <image name="flashcam_adc" width="144" height="2855"/>
+        <image name="flashcam_adc" width="31" height="616"/>
     </resources>
 </document>

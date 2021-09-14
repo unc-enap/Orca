@@ -32,13 +32,16 @@
 #define kFlashCamDefaultBuffer 20000
 #define kFlashCamDefaultTimeout 2000 // ms
 
+#define kFlashCamEthTypeCount 5
+static NSString* kFlashCamEthTypes[kFlashCamEthTypeCount] = {@"efb1", @"efb2", @"efb3", @"efb4", @"efb5"};
+
 @interface ORFlashCamReadoutModel : ORGroup <OROrderedObjHolding,ORDataTaker>
 {
     @private
     NSString* ipAddress;
     NSString* username;
     NSMutableArray* ethInterface;
-    NSString* ethType;
+    NSMutableArray* ethType;
     NSMutableDictionary* configParams;
     NSString* fcSourcePath;
     bool validFCSourcePath;
@@ -48,6 +51,8 @@
     ORTaskSequence* remotePathTask;
     ORTaskSequence* firmwareTasks;
     NSMutableArray* firmwareQueue;
+    ORTaskSequence* rebootTasks;
+    NSMutableArray* rebootQueue;
     ORAlarm* runFailedAlarm;
 }
 
@@ -65,7 +70,7 @@
 - (int) ethInterfaceCount;
 - (int) indexOfInterface:(NSString*)interface;
 - (NSString*) ethInterfaceAtIndex:(int)index;
-- (NSString*) ethType;
+- (NSString*) ethTypeAtIndex:(int)index;
 - (NSNumber*) configParam:(NSString*)p;
 - (NSString*) fcSourcePath;
 - (bool) validFCSourcePath;
@@ -83,7 +88,7 @@
 - (void) setEthInterface:(NSString*)eth atIndex:(int)index;
 - (void) removeEthInterface:(NSString*)eth;
 - (void) removeEthInterfaceAtIndex:(int)index;
-- (void) setEthType:(NSString*)etype;
+- (void) setEthType:(NSString*)etype atIndex:(int)index;
 - (void) setConfigParam:(NSString*)p withValue:(NSNumber*)v;
 - (void) setFCSourcePath:(NSString*)path;
 - (void) checkFCSourcePath;
@@ -103,6 +108,8 @@
 - (void) taskData:(NSDictionary*)taskData;
 - (void) getFirmwareVersion:(ORFlashCamCard*)card;
 - (void) getFirmwareVersionAfterPing:(ORFlashCamCard*)card;
+- (void) rebootCard:(ORFlashCamCard*)card;
+- (void) rebootCardAfterPing:(ORFlashCamCard*)card;
 - (int) ethIndexForCard:(ORCard*)card;
 - (NSMutableArray*) runFlags;
 - (NSMutableArray*) connectedObjects:(NSString*)cname toInterface:(NSString*)eth;

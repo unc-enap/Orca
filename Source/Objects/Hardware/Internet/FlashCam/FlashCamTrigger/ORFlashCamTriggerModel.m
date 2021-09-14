@@ -28,7 +28,7 @@ NSString* ORFlashCamTriggerModelBoardAddressChanged = @"ORFlashCamTriggerModelBo
 {
     self = [super init];
     [[self undoManager] disableUndoRegistration];
-    for(unsigned int i=0; i<kFlashCamTriggerConnections; i++) trigConnector[i] = nil;
+    for(unsigned int i=0; i<kFlashCamTriggerConnections; i++) ctiConnector[i] = nil;
     [[self undoManager] enableUndoRegistration];
     return self;
 }
@@ -36,9 +36,7 @@ NSString* ORFlashCamTriggerModelBoardAddressChanged = @"ORFlashCamTriggerModelBo
 - (void) dealloc
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    if(ethConnector) [ethConnector release];
-    for(unsigned int i=0; i<kFlashCamTriggerConnections; i++)
-        if(trigConnector[i]) [trigConnector[i] release];
+    for(unsigned int i=0; i<kFlashCamTriggerConnections; i++) if(ctiConnector[i]) [ctiConnector[i] release];
     [super dealloc];
 }
 
@@ -77,14 +75,14 @@ NSString* ORFlashCamTriggerModelBoardAddressChanged = @"ORFlashCamTriggerModelBo
     [ethConnector setOffColor:[NSColor colorWithCalibratedRed:1 green:1 blue:0.3 alpha:1]];
     [ethConnector setOnColor:[NSColor colorWithCalibratedRed:0.1 green:0.1 blue:1 alpha:1]];
     for(unsigned int i=0; i<kFlashCamTriggerConnections; i++){
-        [self setTrigConnector:[[[ORConnector alloc] initAt:NSZeroPoint
-                                               withGuardian:self
-                                             withObjectLink:self] autorelease] atIndex:i];
-        [trigConnector[i] setConnectorImageType:kSmallDot];
-        [trigConnector[i] setConnectorType:'FCTO'];
-        [trigConnector[i] addRestrictedConnectionType:'FCTI'];
-        [trigConnector[i] setSameGuardianIsOK:YES];
-        [trigConnector[i] setOffColor:[NSColor colorWithCalibratedRed:1 green:0.3 blue:1 alpha:1]];
+        [self setCTIConnector:[[[ORConnector alloc] initAt:NSZeroPoint
+                                              withGuardian:self
+                                            withObjectLink:self] autorelease] atIndex:i];
+        [ctiConnector[i] setConnectorImageType:kSmallDot];
+        [ctiConnector[i] setConnectorType:'FCTO'];
+        [ctiConnector[i] addRestrictedConnectionType:'FCTI'];
+        [ctiConnector[i] setSameGuardianIsOK:YES];
+        [ctiConnector[i] setOffColor:[NSColor colorWithCalibratedRed:1 green:0.3 blue:1 alpha:1]];
     }
 }
 
@@ -113,7 +111,7 @@ NSString* ORFlashCamTriggerModelBoardAddressChanged = @"ORFlashCamTriggerModelBo
     else{
         bool found = NO;
         for(unsigned int i=0; i<kFlashCamTriggerConnections; i++){
-            if(aConnector == trigConnector[i]){
+            if(aConnector == ctiConnector[i]){
                 y = yoff + [self frame].size.height*yscale*(0.07+0.5*i/kFlashCamTriggerConnections);
                 if(i > 7) y += [self frame].size.height*yscale*0.18;
                 found = YES;
@@ -129,7 +127,7 @@ NSString* ORFlashCamTriggerModelBoardAddressChanged = @"ORFlashCamTriggerModelBo
 - (void) disconnect
 {
     [ethConnector disconnect];
-    for(unsigned int i=0; i<kFlashCamTriggerConnections; i++) [trigConnector[i] disconnect];
+    for(unsigned int i=0; i<kFlashCamTriggerConnections; i++) [ctiConnector[i] disconnect];
     [super disconnect];
 }
 
@@ -146,33 +144,28 @@ NSString* ORFlashCamTriggerModelBoardAddressChanged = @"ORFlashCamTriggerModelBo
 {
     [aGuardian positionConnector:ethConnector  forCard:self];
     for(unsigned int i=0; i<kFlashCamTriggerConnections; i++)
-        [aGuardian positionConnector:trigConnector[i] forCard:self];
+        [aGuardian positionConnector:ctiConnector[i] forCard:self];
 }
 
 - (void) guardianRemovingDisplayOfConnectors:(id)aGuardian
 {
     [aGuardian removeDisplayOf:ethConnector];
     for(unsigned int i=0; i<kFlashCamTriggerConnections; i++)
-        [aGuardian removeDisplayOf:trigConnector[i]];
+        [aGuardian removeDisplayOf:ctiConnector[i]];
 }
 
 - (void) guardianAssumingDisplayOfConnectors:(id)aGuardian
 {
     [aGuardian assumeDisplayOf:ethConnector];
     for(unsigned int i=0; i<kFlashCamTriggerConnections; i++)
-        [aGuardian assumeDisplayOf:trigConnector[i]];
+        [aGuardian assumeDisplayOf:ctiConnector[i]];
 }
 
 #pragma mark •••Accessors
 
-- (ORConnector*) ethConnector
+- (ORConnector*) ctiConnector:(unsigned int)index
 {
-    return ethConnector;
-}
-
-- (ORConnector*) trigConnector:(unsigned int)index
-{
-    return trigConnector[index];
+    return ctiConnector[index];
 }
 
 - (void) setSlot:(int)aSlot
@@ -183,18 +176,11 @@ NSString* ORFlashCamTriggerModelBoardAddressChanged = @"ORFlashCamTriggerModelBo
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamCardSlotChangedNotification object:self];
 }
 
-- (void) setEthConnector:(ORConnector*)connector
+- (void) setCTIConnector:(ORConnector*)connector atIndex:(unsigned int)index
 {
     [connector retain];
-    [ethConnector release];
-    ethConnector = connector;
-}
-
-- (void) setTrigConnector:(ORConnector*)connector atIndex:(unsigned int)index
-{
-    [connector retain];
-    [trigConnector[index] release];
-    trigConnector[index] = connector;
+    [ctiConnector[index] release];
+    ctiConnector[index] = connector;
 }
 
 #pragma mark •••Connection management
@@ -203,8 +189,8 @@ NSString* ORFlashCamTriggerModelBoardAddressChanged = @"ORFlashCamTriggerModelBo
 {
     NSMutableDictionary* addresses = [NSMutableDictionary dictionary];
     for(unsigned int i=0; i<kFlashCamTriggerConnections; i++){
-        if([trigConnector[i] isConnected]){
-            unsigned int a = [[trigConnector[i] connectedObject] cardAddress];
+        if([ctiConnector[i] isConnected]){
+            unsigned int a = [[ctiConnector[i] connectedObject] cardAddress];
             [addresses setObject:[NSNumber numberWithUnsignedInt:a]
                           forKey:[NSString stringWithFormat:@"trigConnection%d",i]];
         }
@@ -231,7 +217,7 @@ NSString* ORFlashCamTriggerModelBoardAddressChanged = @"ORFlashCamTriggerModelBo
     [self setCardAddress:[[decoder decodeObjectForKey:@"cardAddress"] unsignedIntValue]];
     [self setEthConnector:[decoder decodeObjectForKey:@"ethConnector"]];
     for(int i=0; i<kFlashCamTriggerConnections; i++)
-        [self setTrigConnector:[decoder decodeObjectForKey:[NSString stringWithFormat:@"trigConnector%d",i]] atIndex:i];
+        [self setCTIConnector:[decoder decodeObjectForKey:[NSString stringWithFormat:@"trigConnector%d",i]] atIndex:i];
     firmwareVer = [[NSArray array] retain];
     [[self undoManager] enableUndoRegistration];
     return self;
@@ -243,7 +229,7 @@ NSString* ORFlashCamTriggerModelBoardAddressChanged = @"ORFlashCamTriggerModelBo
     [encoder encodeObject:[NSNumber numberWithUnsignedInt:cardAddress]];
     [encoder encodeObject:ethConnector  forKey:@"ethConnector"];
     for(unsigned int i=0; i<kFlashCamTriggerConnections; i++)
-        [encoder encodeObject:trigConnector[i] forKey:[NSString stringWithFormat:@"trigConnector%d",i]];
+        [encoder encodeObject:ctiConnector[i] forKey:[NSString stringWithFormat:@"trigConnector%d",i]];
 }
 
 @end

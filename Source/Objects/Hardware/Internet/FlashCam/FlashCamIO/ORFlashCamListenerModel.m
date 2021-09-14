@@ -178,6 +178,20 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     else return [remoteInterfaces objectAtIndex:index];
 }
 
+- (NSString*) ethType
+{
+    NSString* type = @"";
+    for(int i=0; i<(int)[self remoteInterfaceCount]; i++){
+        NSString* t = [guardian ethTypeAtIndex:i];
+        if([type isEqualToString:@""]) type = [t copy];
+        else if(![t isEqualToString:type]){
+            NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: error getting ethernet type - all interfaces associated with the same listener must have identical type\n");
+            return @"";
+        }
+    }
+    return type;
+}
+
 - (int) timeout
 {
     return timeout;
@@ -700,12 +714,12 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     }
     NSString* listen = [NSString stringWithFormat:@"tcp://connect/%d/%@", port, ip];
     [readOutArgs addObjectsFromArray:@[@"-ei", [[self remoteInterfaces] componentsJoinedByString:@","]]];
+    [readOutArgs addObjectsFromArray:@[@"-et", [self ethType]]];
     [readOutArgs addObjectsFromArray:argCard];
     [readOutArgs addObjectsFromArray:@[@"-o", listen]];
     if([guardian localMode]){
         NSString* p = [[[guardian fcSourcePath] stringByExpandingTildeInPath] stringByAppendingString:@"/server/"];
-        [readOutArgs insertObject:[p stringByAppendingString:@"readout-fc250b"] atIndex:0];
-        [[self runTask] addTask:[p stringByAppendingString:@"efbprun"] arguments:[NSArray arrayWithArray:readOutArgs]];
+        [[self runTask] addTask:[p stringByAppendingString:@"readout-fc250b"] arguments:[NSArray arrayWithArray:readOutArgs]];
     }
     else{
         [[self runTask] addTask:[[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/remote_run"]

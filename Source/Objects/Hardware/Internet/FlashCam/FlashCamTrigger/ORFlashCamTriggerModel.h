@@ -25,7 +25,7 @@
 @interface ORFlashCamTriggerModel : ORFlashCamCard
 {
     @private
-    ORConnector* trigConnector[kFlashCamTriggerConnections];
+    ORConnector* ctiConnector[kFlashCamTriggerConnections];
 }
 
 #pragma mark •••Initialization
@@ -38,10 +38,8 @@
 - (void) guardianAssumingDisplayOfConnectors:(id)aGuardian;
 
 #pragma mark •••Accessors
-- (ORConnector*) ethConnector;
-- (ORConnector*) trigConnector:(unsigned int)index;
-- (void) setEthConnector:(ORConnector*)connector;
-- (void) setTrigConnector:(ORConnector*)connector atIndex:(unsigned int)index;
+- (ORConnector*) ctiConnector:(unsigned int)index;
+- (void) setCTIConnector:(ORConnector*)connector atIndex:(unsigned int)index;
 
 #pragma mark •••Connection management
 - (NSMutableDictionary*) connectedADCAddresses;

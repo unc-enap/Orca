@@ -36,6 +36,7 @@
 - (id) init
 {
     self = [super initWithWindowNibName:@"FlashCamADC"];
+    [promSlotPUButton removeAllItems];
     return self;
 }
 
@@ -48,6 +49,8 @@
 {
     [super setModel:aModel];
     [[self window] setTitle:[NSString stringWithFormat:@"FlasCam ADC (0x%x Slot %d)", [model cardAddress], [model slot]]];
+    [promSlotPUButton removeAllItems];
+    for(int i=0; i<3; i++) [promSlotPUButton addItemWithTitle:[NSString stringWithFormat:@"Slot %d", i]];
 }
 
 - (void) registerNotificationObservers
@@ -57,6 +60,10 @@
     [notifyCenter addObserver : self
                      selector : @selector(cardAddressChanged:)
                          name : ORFlashCamCardAddressChanged
+                       object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(promSlotChanged:)
+                         name : ORFlashCamCardPROMSlotChanged
                        object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(firmwareVerRequest:)
@@ -164,6 +171,7 @@
 {
     [super updateWindow];
     [self cardAddressChanged:nil];
+    [self promSlotChanged:nil];
     [self firmwareVerChanged:nil];
     [self chanEnabledChanged:nil];
     [self cardSlotChanged:nil];
@@ -185,11 +193,16 @@
 
 #pragma mark •••Interface Management
 
-- (void) cardAddressChanged:(NSNotification *)note
+- (void) cardAddressChanged:(NSNotification*)note
 {
     [[self window] setTitle:[NSString stringWithFormat:@"FlashCam ADC (0x%x, Slot %d)", [model cardAddress], [model slot]]];
     [cardAddressTextField setIntValue:[model cardAddress]];
     [model taskFinished:nil];
+}
+
+- (void) promSlotChanged:(NSNotification*)note
+{
+    [promSlotPUButton selectItemAtIndex:[model promSlot]];
 }
 
 - (void) firmwareVerRequest:(NSNotification*)note
@@ -410,11 +423,38 @@
     }
 }
 
+- (void) settingsLock:(bool)lock
+{
+    [cardAddressTextField setEnabled:!lock];
+    [promSlotPUButton     setEnabled:!lock];
+    [rebootCardButton     setEnabled:!lock];
+    [getFirmwareVerButton setEnabled:!lock];
+    [chanEnabledMatrix    setEnabled:!lock];
+    [baselineMatrix       setEnabled:!lock];
+    [baseCalibMatrix      setEnabled:!lock];
+    [thresholdMatrix      setEnabled:!lock];
+    [adcGainMatrix        setEnabled:!lock];
+    [trigGainMatrix       setEnabled:!lock];
+    [shapeTimeMatrix      setEnabled:!lock];
+    [filterTypeMatrix     setEnabled:!lock];
+    [poleZeroTimeMatrix   setEnabled:!lock];
+}
+
 #pragma mark •••Actions
 
 - (IBAction) cardAddressAction:(id)sender
 {
     [model setCardAddress:[sender intValue]];
+}
+
+- (IBAction) promSlotAction:(id)sender
+{
+    [model setPROMSlot:(unsigned int)[sender indexOfSelectedItem]];
+}
+
+- (IBAction) rebootCardAction:(id)sender
+{
+    [model requestReboot];
 }
 
 - (IBAction) firmwareVerAction:(id)sender

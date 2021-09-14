@@ -28,7 +28,6 @@
     IBOutlet NSTableView* ethInterfaceView;
     IBOutlet NSButton* addEthInterfaceButton;
     IBOutlet NSButton* removeEthInterfaeButton;
-    IBOutlet NSPopUpButton* ethTypePUButton;
     IBOutlet NSTextField* maxPayloadTextField;
     IBOutlet NSTextField* eventBufferTextField;
     IBOutlet NSTextField* phaseAdjustTextField;
@@ -115,7 +114,6 @@
 - (IBAction) removeEthInterfaceAction:(id)sender;
 - (IBAction) delete:(id)sender;
 - (IBAction) cut:(id)sender;
-- (IBAction) ethTypeAction:(id)sender;
 - (IBAction) maxPayloadAction:(id)sender;
 - (IBAction) eventBufferAction:(id)sender;
 - (IBAction) phaseAdjustAction:(id)sender;

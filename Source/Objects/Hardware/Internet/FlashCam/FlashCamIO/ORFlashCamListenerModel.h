@@ -74,6 +74,7 @@
 - (NSMutableArray*) remoteInterfaces;
 - (NSUInteger) remoteInterfaceCount;
 - (NSString*) remoteInterfaceAtIndex:(NSUInteger)index;
+- (NSString*) ethType;
 - (int) timeout;
 - (int) ioBuffer;
 - (int) stateBuffer;

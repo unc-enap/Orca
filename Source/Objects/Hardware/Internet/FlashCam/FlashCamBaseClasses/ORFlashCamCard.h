@@ -24,7 +24,9 @@
 
 @interface ORFlashCamCard : ORCard {
     unsigned int cardAddress;
+    unsigned int promSlot;
     ORConnector* ethConnector;
+    ORConnector* trigConnector;
     NSArray* firmwareVer;
     NSMutableArray* taskdata;
     uint32_t exceptionCount;
@@ -37,26 +39,38 @@
 - (Class) guardianClass;
 - (NSString*) cardSlotChangedNotification;
 - (unsigned int) cardAddress;
+- (unsigned int) promSlot;
+- (ORConnector*) ethConnector;
+- (ORConnector*) trigConnector;
 - (NSArray*) firmwareVer;
 - (NSString*) firmwareVerType;
 - (NSString*) firmwareVerRev;
 - (NSString*) firmwareVerDate;
 - (NSString*) firmwareVerTag;
 - (void) setCardAddress:(unsigned int)addr;
+- (void) setPROMSlot:(unsigned int)slot;
+- (void) setEthConnector:(ORConnector*)connector;
+- (void) setTrigConnector:(ORConnector*)connector;
 - (uint32_t) exceptionCount;
 - (void) incExceptionCount;
 - (void) clearExceptionCount;
 
 #pragma mark •••Commands
 - (void) requestFirmwareVersion;
+- (void) requestReboot;
 - (void) taskData:(NSDictionary*)taskData;
 - (void) taskFinished:(id)task;
+
+#pragma mark •••Archival
+- (id) initWithCoder:(NSCoder*)decoder;
+- (void) encodeWithCoder:(NSCoder*)encoder;
 
 @end
 
 extern NSString* ORFlashCamCardSlotChangedNotification;
 extern NSString* ORFlashCamCardEthConnector;
 extern NSString* ORFlashCamCardAddressChanged;
+extern NSString* ORFlashCamCardPROMSlotChanged;
 extern NSString* ORFlashCamCardFirmwareVerRequest;
 extern NSString* ORFlashCamCardFirmwareVerChanged;
 extern NSString* ORFlashCamCardExceptionCountChanged;

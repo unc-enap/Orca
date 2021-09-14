@@ -46,7 +46,6 @@
     int shapeTime[kMaxFlashCamADCChannels];      // gs
     float filterType[kMaxFlashCamADCChannels];   // gf
     float poleZeroTime[kMaxFlashCamADCChannels]; // gpz
-    ORConnector* trigConnector;
     bool isRunning;
     unsigned int wfSamples;
     int wfHeaderBuffer[kFlashCamADCBufferLength*kFlashCamADCWFHeaderLength];
@@ -83,8 +82,6 @@
 - (int) shapeTime:(unsigned int)chan;
 - (float) filterType:(unsigned int)chan;
 - (float) poleZeroTime:(unsigned int)chan;
-- (ORConnector*) ethConnector;
-- (ORConnector*) trigConnector;
 - (ORRateGroup*) wfRates;
 - (id) rateObject:(short)channel;
 - (uint32_t) wfCount:(int)channel;
@@ -101,8 +98,6 @@
 - (void) setShapeTime:(unsigned int)chan    withValue:(int)time;
 - (void) setFilterType:(unsigned int)chan   withValue:(float)type;
 - (void) setPoleZeroTime:(unsigned int)chan withValue:(float)time;
-- (void) setEthConnector:(ORConnector*)connector;
-- (void) setTrigConnector:(ORConnector*)connector;
 - (void) setWFsamples:(int)samples;
 - (void) setWFrates:(ORRateGroup*)rateGroup;
 - (void) setRateIntTime:(double)intTime;

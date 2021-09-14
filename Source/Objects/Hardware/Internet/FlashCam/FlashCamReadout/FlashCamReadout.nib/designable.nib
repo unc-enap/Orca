@@ -19,7 +19,6 @@
                 <outlet property="dataRateView" destination="3SU-MK-aBY" id="BoQ-12-3tX"/>
                 <outlet property="deadTimeView" destination="Kdb-mG-iz2" id="HEp-AM-qVI"/>
                 <outlet property="ethInterfaceView" destination="FLF-og-yOO" id="TBo-Y3-qIf"/>
-                <outlet property="ethTypePUButton" destination="igI-14-MeG" id="pY7-0p-7BT"/>
                 <outlet property="eventBufferTextField" destination="qdy-Wu-Ol5" id="CdG-Pa-hhe"/>
                 <outlet property="eventRateView" destination="pAZ-2D-hcy" id="YZ5-YY-6Lv"/>
                 <outlet property="eventSamplesTextField" destination="7IA-Yj-Swd" id="2tk-gg-EcM"/>
@@ -560,22 +559,22 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <scrollView autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="GXD-ve-AcC">
-                                                        <rect key="frame" x="7" y="68" width="150" height="118"/>
+                                                        <rect key="frame" x="7" y="68" width="167" height="118"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" drawsBackground="NO" id="YzZ-jF-wwj">
-                                                            <rect key="frame" x="1" y="1" width="148" height="116"/>
+                                                            <rect key="frame" x="1" y="1" width="165" height="116"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="14" headerView="kfg-b7-sVf" id="FLF-og-yOO">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="148" height="88"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="165" height="88"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                     <tableViewGridLines key="gridStyleMask" vertical="YES" horizontal="YES"/>
                                                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                                     <tableColumns>
-                                                                        <tableColumn identifier="kPersonName" width="136.188720703125" minWidth="40" maxWidth="1000" id="pAL-wi-7Aw">
-                                                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Ethernet Interfaces">
+                                                                        <tableColumn identifier="kPersonName" width="106.188720703125" minWidth="40" maxWidth="1000" id="pAL-wi-7Aw">
+                                                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Ethernet Interface">
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
                                                                             </tableHeaderCell>
@@ -584,6 +583,30 @@
                                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
+                                                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                                                        </tableColumn>
+                                                                        <tableColumn width="44" minWidth="10" maxWidth="3.4028234663852886e+38" id="8wz-en-cm3">
+                                                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Type">
+                                                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            </tableHeaderCell>
+                                                                            <popUpButtonCell key="dataCell" type="bevel" title="efb1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="bezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="nxB-Z2-Ckh" id="gVw-9j-T0x">
+                                                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                                                <font key="font" metaFont="smallSystem"/>
+                                                                                <menu key="menu" id="cuw-ec-6O9">
+                                                                                    <items>
+                                                                                        <menuItem title="efb1" state="on" id="nxB-Z2-Ckh"/>
+                                                                                        <menuItem title="efb2" id="1tI-Zk-T7i"/>
+                                                                                        <menuItem title="efb3" id="8iP-OK-3sm"/>
+                                                                                        <menuItem title="efb4" id="G86-py-F7u">
+                                                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                                                        </menuItem>
+                                                                                        <menuItem title="efb5" id="KUi-X9-Ge9">
+                                                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                                                        </menuItem>
+                                                                                    </items>
+                                                                                </menu>
+                                                                            </popUpButtonCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
                                                                     </tableColumns>
@@ -604,7 +627,7 @@
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                         <tableHeaderView key="headerView" wantsLayer="YES" id="kfg-b7-sVf">
-                                                            <rect key="frame" x="0.0" y="0.0" width="148" height="28"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="165" height="28"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </tableHeaderView>
                                                     </scrollView>
@@ -629,7 +652,7 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jno-pg-UCP">
-                                                        <rect key="frame" x="149" y="81" width="37" height="32"/>
+                                                        <rect key="frame" x="167" y="81" width="37" height="32"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="push" title="+" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vOC-ff-niy">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -655,9 +678,6 @@
                                                                 </items>
                                                             </menu>
                                                         </popUpButtonCell>
-                                                        <connections>
-                                                            <action selector="ethTypeAction:" target="-2" id="fWg-7X-KW7"/>
-                                                        </connections>
                                                     </popUpButton>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rng-px-A9i">
                                                         <rect key="frame" x="69" y="203" width="69" height="18"/>
@@ -693,17 +713,6 @@
                                                             <action selector="rmIfaceFromListenerAction:" target="-2" id="Bgt-iK-dXJ"/>
                                                         </connections>
                                                     </button>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Ob-QD-fct">
-                                                        <rect key="frame" x="149" y="61" width="37" height="32"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="push" title="-" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1nB-d7-wAs">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="smallSystem"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="removeEthInterfaceAction:" target="-2" id="CFk-mv-muU"/>
-                                                        </connections>
-                                                    </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G0j-eE-taO">
                                                         <rect key="frame" x="2" y="29" width="186" height="32"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -724,6 +733,17 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Ob-QD-fct">
+                                                        <rect key="frame" x="167" y="61" width="37" height="32"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <buttonCell key="cell" type="push" title="-" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1nB-d7-wAs">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="removeEthInterfaceAction:" target="-2" id="CFk-mv-muU"/>
+                                                        </connections>
+                                                    </button>
                                                 </subviews>
                                             </view>
                                         </box>

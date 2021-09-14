@@ -34,7 +34,7 @@ expect {
     }
 }
 
-send "cd \$FLASHCAMDIR/server; ./efbprun $scriptname $args\r"
+send "\$FLASHCAMDIR/server/efbprun \$FLASHCAMDIR/server/$scriptname $args\r"
 expect {
     "EfbpSearchDevice: found device address" {
         #send_user "ORFlashCamCard: found device 0x$larg endl "
