@@ -17,18 +17,13 @@
 //for the use of this software.
 //-------------------------------------------------------------
 
-#import "OrcaObjectController.h"
+#import "ORFlashCamCardController.h"
 
 @class ORValueBarGroupView;
 @class ORCompositeTimeLineView;
 
-@interface ORFlashCamADCController : OrcaObjectController
+@interface ORFlashCamADCController : ORFlashCamCardController
 {
-    IBOutlet NSTextField* cardAddressTextField;
-    IBOutlet NSPopUpButton* promSlotPUButton;
-    IBOutlet NSButton* rebootCardButton;
-    IBOutlet NSTextField* firmwareVerTextField;
-    IBOutlet NSButton* getFirmwareVerButton;
     IBOutlet NSMatrix* chanEnabledMatrix;
     IBOutlet NSMatrix* baselineMatrix;
     IBOutlet NSMatrix* baseCalibMatrix;
@@ -38,7 +33,6 @@
     IBOutlet NSMatrix* shapeTimeMatrix;
     IBOutlet NSMatrix* filterTypeMatrix;
     IBOutlet NSMatrix* poleZeroTimeMatrix;
-    IBOutlet NSButton* printFlagsButton;
     IBOutlet NSMatrix* chanEnabledRateMatrix;
     IBOutlet NSMatrix* rateTextFields;
     IBOutlet NSTextField* totalRateTextField;
@@ -62,9 +56,6 @@
 
 #pragma mark •••Interface management
 - (void) cardAddressChanged:(NSNotification*)note;
-- (void) promSlotChanged:(NSNotification*)note;
-- (void) firmwareVerRequest:(NSNotification*)note;
-- (void) firmwareVerChanged:(NSNotification*)note;
 - (void) cardSlotChanged:(NSNotification*)note;
 - (void) chanEnabledChanged:(NSNotification*)note;
 - (void) baselineChanged:(NSNotification*)note;
@@ -84,12 +75,7 @@
 - (void) miscAttributesChanged:(NSNotification*)note;
 - (void) settingsLock:(bool)lock;
 
-
 #pragma mark •••Actions
-- (IBAction) cardAddressAction:(id)sender;
-- (IBAction) promSlotAction:(id)sender;
-- (IBAction) rebootCardAction:(id)sender;
-- (IBAction) firmwareVerAction:(id)sender;
 - (IBAction) chanEnabledAction:(id)sender;
 - (IBAction) baselineAction:(id)sender;
 - (IBAction) baseCalibAction:(id)sender;

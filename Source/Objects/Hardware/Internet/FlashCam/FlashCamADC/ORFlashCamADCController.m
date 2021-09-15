@@ -36,7 +36,6 @@
 - (id) init
 {
     self = [super initWithWindowNibName:@"FlashCamADC"];
-    [promSlotPUButton removeAllItems];
     return self;
 }
 
@@ -49,34 +48,12 @@
 {
     [super setModel:aModel];
     [[self window] setTitle:[NSString stringWithFormat:@"FlasCam ADC (0x%x Slot %d)", [model cardAddress], [model slot]]];
-    [promSlotPUButton removeAllItems];
-    for(int i=0; i<3; i++) [promSlotPUButton addItemWithTitle:[NSString stringWithFormat:@"Slot %d", i]];
 }
 
 - (void) registerNotificationObservers
 {
     NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
     [super registerNotificationObservers];
-    [notifyCenter addObserver : self
-                     selector : @selector(cardAddressChanged:)
-                         name : ORFlashCamCardAddressChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(promSlotChanged:)
-                         name : ORFlashCamCardPROMSlotChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(firmwareVerRequest:)
-                         name : ORFlashCamCardFirmwareVerRequest
-                       object : model];
-    [notifyCenter addObserver : self
-                     selector : @selector(firmwareVerChanged:)
-                         name : ORFlashCamCardFirmwareVerChanged
-                       object : model];
-    [notifyCenter addObserver : self
-                     selector : @selector(cardSlotChanged:)
-                         name : ORFlashCamCardSlotChangedNotification
-                       object : self];
     [notifyCenter addObserver : self
                      selector : @selector(chanEnabledChanged:)
                          name : ORFlashCamADCModelChanEnabledChanged
@@ -171,10 +148,8 @@
 {
     [super updateWindow];
     [self cardAddressChanged:nil];
-    [self promSlotChanged:nil];
-    [self firmwareVerChanged:nil];
-    [self chanEnabledChanged:nil];
     [self cardSlotChanged:nil];
+    [self chanEnabledChanged:nil];
     [self baselineChanged:nil];
     [self baseCalibChanged:nil];
     [self thresholdChanged:nil];
@@ -195,31 +170,13 @@
 
 - (void) cardAddressChanged:(NSNotification*)note
 {
+    [super cardAddressChanged:note];
     [[self window] setTitle:[NSString stringWithFormat:@"FlashCam ADC (0x%x, Slot %d)", [model cardAddress], [model slot]]];
-    [cardAddressTextField setIntValue:[model cardAddress]];
-    [model taskFinished:nil];
-}
-
-- (void) promSlotChanged:(NSNotification*)note
-{
-    [promSlotPUButton selectItemAtIndex:[model promSlot]];
-}
-
-- (void) firmwareVerRequest:(NSNotification*)note
-{
-    [getFirmwareVerButton setEnabled:NO];
-}
-
-- (void) firmwareVerChanged:(NSNotification*)note
-{
-    if([model firmwareVer])
-        [firmwareVerTextField setStringValue:[[model firmwareVer] componentsJoinedByString:@" / "]];
-    else [firmwareVerTextField setStringValue:@""];
-    [getFirmwareVerButton setEnabled:YES];
 }
 
 - (void) cardSlotChanged:(NSNotification*)note
 {
+    [super cardSlotChanged:note];
     [[self window] setTitle:[NSString stringWithFormat:@"FlashCam ADC (0x%x, Slot %d)", [model cardAddress], [model slot]]];
 }
 
@@ -425,10 +382,7 @@
 
 - (void) settingsLock:(bool)lock
 {
-    [cardAddressTextField setEnabled:!lock];
-    [promSlotPUButton     setEnabled:!lock];
-    [rebootCardButton     setEnabled:!lock];
-    [getFirmwareVerButton setEnabled:!lock];
+    [super settingsLock:lock];
     [chanEnabledMatrix    setEnabled:!lock];
     [baselineMatrix       setEnabled:!lock];
     [baseCalibMatrix      setEnabled:!lock];
@@ -440,27 +394,8 @@
     [poleZeroTimeMatrix   setEnabled:!lock];
 }
 
+
 #pragma mark •••Actions
-
-- (IBAction) cardAddressAction:(id)sender
-{
-    [model setCardAddress:[sender intValue]];
-}
-
-- (IBAction) promSlotAction:(id)sender
-{
-    [model setPROMSlot:(unsigned int)[sender indexOfSelectedItem]];
-}
-
-- (IBAction) rebootCardAction:(id)sender
-{
-    [model requestReboot];
-}
-
-- (IBAction) firmwareVerAction:(id)sender
-{
-    [model requestFirmwareVersion];
-}
 
 - (IBAction) chanEnabledAction:(id)sender
 {
@@ -518,6 +453,7 @@
 
 - (IBAction) printFlagsAction:(id)sender
 {
+    [super printFlagsAction:sender];
     [model printRunFlagsForChannelOffset:0];
 }
 
@@ -528,7 +464,9 @@
         [model setRateIntTime:[sender doubleValue]];
 }
 
+
 #pragma mark •••Data Source
+
 - (double) getBarValue:(int)tag
 {
     return [[[[model wfRates] rates] objectAtIndex:tag] rate];

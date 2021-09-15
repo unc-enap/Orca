@@ -1,8 +1,8 @@
 //  Orca
-//  ORFlashCamTriggerController.h
+//  ORFlashCamCardController.h
 //
-//  Created by Tom Caldwell on Monday Jan 1, 2020
-//  Copyright (c) 2020 University of North Carolina. All rights reserved.
+//  Created by Tom Caldwell on Wednesday, Sep 15,2021
+//  Copyright (c) 2021 University of North Carolina. All rights reserved.
 //-----------------------------------------------------------
 //This program was prepared for the Regents of the University of
 //North Carolina Department of Physics and Astrophysics
@@ -17,11 +17,16 @@
 //for the use of this software.
 //-------------------------------------------------------------
 
-#import "ORFlashCamCardController.h"
+#import "OrcaObjectController.h"
 
-@interface ORFlashCamTriggerController : ORFlashCamCardController
+@interface ORFlashCamCardController : OrcaObjectController
 {
-    IBOutlet NSMatrix* connectedADCMatrix;
+    IBOutlet NSTextField* cardAddressTextField;
+    IBOutlet NSPopUpButton* promSlotPUButton;
+    IBOutlet NSButton* rebootCardButton;
+    IBOutlet NSTextField* firmwareVerTextField;
+    IBOutlet NSButton* getFirmwareVerButton;
+    IBOutlet NSButton* printFlagsButton;
 }
 
 #pragma mark •••Initialization
@@ -32,8 +37,18 @@
 - (void) updateWindow;
 
 #pragma mark •••Interface management
-- (void) connectionChanged:(NSNotification*)note;
+- (void) cardAddressChanged:(NSNotification*)note;
+- (void) promSlotChanged:(NSNotification*)note;
+- (void) firmwareVerRequest:(NSNotification*)note;
+- (void) firmwareVerChanged:(NSNotification*)note;
+- (void) cardSlotChanged:(NSNotification*)note;
+- (void) settingsLock:(bool)lock;
 
 #pragma mark •••Actions
+- (IBAction) cardAddressAction:(id)sender;
+- (IBAction) promSlotAction:(id)sender;
+- (IBAction) rebootCardAction:(id)sender;
+- (IBAction) firmwareVerAction:(id)sender;
+- (IBAction) printFlagsAction:(id)sender;
 
 @end

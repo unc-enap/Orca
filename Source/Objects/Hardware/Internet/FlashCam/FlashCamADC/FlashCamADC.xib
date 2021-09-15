@@ -11,21 +11,21 @@
                 <outlet property="adcGainMatrix" destination="Mjz-Yz-OAB" id="emj-B4-gxf"/>
                 <outlet property="baseCalibMatrix" destination="5dG-5A-4tn" id="ST8-Qh-0cb"/>
                 <outlet property="baselineMatrix" destination="ANn-i9-iRU" id="lBb-0v-xMc"/>
-                <outlet property="cardAddressTextField" destination="rPe-yH-WU4" id="atP-qH-Qv1"/>
+                <outlet property="cardAddressTextField" destination="rPe-yH-WU4" id="aMH-xS-eVf"/>
                 <outlet property="chanEnabledMatrix" destination="qFl-zx-6tR" id="zn7-4Q-gHn"/>
                 <outlet property="chanEnabledRateMatrix" destination="sb8-AH-mcW" id="23N-Eo-qam"/>
                 <outlet property="filterTypeMatrix" destination="tyC-Rj-v7B" id="OsQ-2J-qjS"/>
-                <outlet property="firmwareVerTextField" destination="72t-Pm-o9f" id="oig-if-XPQ"/>
-                <outlet property="getFirmwareVerButton" destination="aKr-Tv-bpN" id="nrz-3E-zpc"/>
+                <outlet property="firmwareVerTextField" destination="72t-Pm-o9f" id="28d-EP-2Hf"/>
+                <outlet property="getFirmwareVerButton" destination="aKr-Tv-bpN" id="eP8-CC-hnA"/>
                 <outlet property="integrationStepper" destination="flD-xP-esU" id="Uyy-Yg-cdY"/>
                 <outlet property="integrationTextField" destination="vZF-7D-nej" id="KmT-7z-4pl"/>
                 <outlet property="poleZeroTimeMatrix" destination="Wxf-LP-I4Y" id="0U0-uv-Fx7"/>
-                <outlet property="printFlagsButton" destination="hdb-pQ-hgC" id="aJL-Oe-3HO"/>
-                <outlet property="promSlotPUButton" destination="hTb-5I-X8G" id="rv2-IX-tGS"/>
+                <outlet property="printFlagsButton" destination="hdb-pQ-hgC" id="DsD-4f-Pnx"/>
+                <outlet property="promSlotPUButton" destination="hTb-5I-X8G" id="H1p-4I-ZXd"/>
                 <outlet property="rateLogButton" destination="XtR-FA-qwz" id="qqG-v5-6DT"/>
                 <outlet property="rateTextFields" destination="9dn-Sl-QE6" id="1fz-sG-GCQ"/>
                 <outlet property="rateView" destination="0BE-Ro-cdg" id="Kv3-cV-uNQ"/>
-                <outlet property="rebootCardButton" destination="FNF-xL-usE" id="dwa-pz-Gge"/>
+                <outlet property="rebootCardButton" destination="FNF-xL-usE" id="HXe-EA-QIx"/>
                 <outlet property="shapeTimeMatrix" destination="rxJ-5M-FFT" id="bXx-Tp-YHd"/>
                 <outlet property="thresholdMatrix" destination="Ghw-gN-Cyr" id="Ws7-aG-OpS"/>
                 <outlet property="timeRateLogButton" destination="0gZ-gj-6dP" id="kNU-pl-95y"/>
@@ -686,7 +686,7 @@
                                                 <font key="font" metaFont="label"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="firmwareVerAction:" target="-2" id="HYr-O3-Gv3"/>
+                                                <action selector="firmwareVerAction:" target="-2" id="6Vz-C6-5jh"/>
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rPe-yH-WU4">
@@ -698,7 +698,7 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
-                                                <action selector="cardAddressAction:" target="-2" id="sVm-vx-JIu"/>
+                                                <action selector="cardAddressAction:" target="-2" id="c4w-0X-CGd"/>
                                                 <outlet property="formatter" destination="zre-Qy-asR" id="V98-vS-uVS"/>
                                             </connections>
                                         </textField>
@@ -717,7 +717,7 @@
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="promSlotAction:" target="-2" id="m1s-qN-zhT"/>
+                                                <action selector="promSlotAction:" target="-2" id="xVE-kv-Xkr"/>
                                             </connections>
                                         </popUpButton>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FNF-xL-usE">
@@ -728,7 +728,7 @@
                                                 <font key="font" metaFont="label"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="rebootCardAction:" target="-2" id="CVv-SI-ttL"/>
+                                                <action selector="rebootCardAction:" target="-2" id="EsE-8Q-eM8"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hdb-pQ-hgC">
@@ -739,7 +739,7 @@
                                                 <font key="font" metaFont="label"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="printFlagsAction:" target="-2" id="L7f-Qq-h5x"/>
+                                                <action selector="printFlagsAction:" target="-2" id="zJF-c8-m6x"/>
                                             </connections>
                                         </button>
                                     </subviews>

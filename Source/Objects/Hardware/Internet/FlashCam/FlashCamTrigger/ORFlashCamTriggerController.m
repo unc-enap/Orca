@@ -48,14 +48,6 @@
     NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
     [super registerNotificationObservers];
     [notifyCenter addObserver : self
-                     selector : @selector(cardAddressChanged:)
-                         name : ORFlashCamCardAddressChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(cardSlotChanged:)
-                         name : ORFlashCamCardSlotChangedNotification
-                       object : nil];
-    [notifyCenter addObserver : self
                      selector :@selector(connectionChanged:)
                          name :ORFlashCamCardAddressChanged
                        object : nil];
@@ -73,7 +65,6 @@
 - (void) updateWindow
 {
     [super updateWindow];
-    [self cardAddressChanged:nil];
     [self connectionChanged:nil];
 }
 
@@ -81,12 +72,13 @@
 
 - (void) cardAddressChanged:(NSNotification*)note
 {
+    [super cardAddressChanged:note];
     [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Trigger (0x%x, Slot %d)", [model cardAddress], [model slot]]];
-    [cardAddressTextField setIntValue:[model cardAddress]];
 }
 
 - (void) cardSlotChanged:(NSNotification*)note
 {
+    [super cardSlotChanged:note];
     [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Trigger (0x%x, Slot %d)", [model cardAddress], [model slot]]];
 }
 
@@ -100,10 +92,5 @@
 }
 
 #pragma mark •••Actions
-
-- (IBAction) cardAddressAction:(id)sender
-{
-    [model setCardAddress:[sender intValue]];
-}
 
 @end

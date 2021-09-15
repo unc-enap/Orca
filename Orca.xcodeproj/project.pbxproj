@@ -3576,6 +3576,7 @@
 		E6DC1B4B243A240500A559F0 /* ORURLSession.m in Sources */ = {isa = PBXBuildFile; fileRef = E6DC1B49243A240400A559F0 /* ORURLSession.m */; };
 		E6DC1B4C243A240500A559F0 /* ORURLSession.h in Headers */ = {isa = PBXBuildFile; fileRef = E6DC1B4A243A240400A559F0 /* ORURLSession.h */; };
 		E6E20C9726EE4CB10081279D /* remote_path in Resources */ = {isa = PBXBuildFile; fileRef = E6E20C9626EE4CB00081279D /* remote_path */; };
+		E6E9A77126F2155C004A247D /* ORFlashCamCardController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6E9A77026F2155C004A247D /* ORFlashCamCardController.m */; };
 		EF69C433116E5DC3008ABADC /* ORSNOCrateReadout.hh in Headers */ = {isa = PBXBuildFile; fileRef = EF69C431116E5DC3008ABADC /* ORSNOCrateReadout.hh */; };
 		EF69C482116E6526008ABADC /* ORSNOCrateReadout.cc in VME_Copy */ = {isa = PBXBuildFile; fileRef = EF69C430116E5DC3008ABADC /* ORSNOCrateReadout.cc */; };
 		EF69C483116E6526008ABADC /* ORSNOCrateReadout.hh in VME_Copy */ = {isa = PBXBuildFile; fileRef = EF69C431116E5DC3008ABADC /* ORSNOCrateReadout.hh */; };
@@ -7387,6 +7388,8 @@
 		E6DC1B49243A240400A559F0 /* ORURLSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORURLSession.m; sourceTree = "<group>"; };
 		E6DC1B4A243A240400A559F0 /* ORURLSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORURLSession.h; sourceTree = "<group>"; };
 		E6E20C9626EE4CB00081279D /* remote_path */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = remote_path; sourceTree = "<group>"; };
+		E6E9A76F26F21542004A247D /* ORFlashCamCardController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORFlashCamCardController.h; sourceTree = "<group>"; };
+		E6E9A77026F2155C004A247D /* ORFlashCamCardController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamCardController.m; sourceTree = "<group>"; };
 		EF69C430116E5DC3008ABADC /* ORSNOCrateReadout.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ORSNOCrateReadout.cc; sourceTree = "<group>"; };
 		EF69C431116E5DC3008ABADC /* ORSNOCrateReadout.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ORSNOCrateReadout.hh; sourceTree = "<group>"; };
 		EF7722B211E813120064A1CF /* ORXL3Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORXL3Model.h; sourceTree = "<group>"; };
@@ -15024,6 +15027,8 @@
 				E6653F9223A7EF9400A53678 /* ORFlashCamCrate.m */,
 				E6653F9423A7FA6F00A53678 /* ORFlashCamCard.h */,
 				E6653F9523A7FA9100A53678 /* ORFlashCamCard.m */,
+				E6E9A76F26F21542004A247D /* ORFlashCamCardController.h */,
+				E6E9A77026F2155C004A247D /* ORFlashCamCardController.m */,
 			);
 			path = FlashCamBaseClasses;
 			sourceTree = "<group>";
@@ -18660,6 +18665,7 @@
 				84B28D810F4C658500E2B056 /* ORNplpCMeterModel.m in Sources */,
 				84CD6BFC1A1E34D90089026F /* ORGretina4AModel.m in Sources */,
 				84B28D8D0F4C66BE00E2B056 /* ORVXMController.m in Sources */,
+				E6E9A77126F2155C004A247D /* ORFlashCamCardController.m in Sources */,
 				84B28D8F0F4C66BE00E2B056 /* ORVXMDecoders.m in Sources */,
 				84B28D910F4C66BE00E2B056 /* ORVXMModel.m in Sources */,
 				84B28DA20F4C684200E2B056 /* ORMotorController.m in Sources */,
