@@ -19,6 +19,7 @@
 
 #import "ORFlashCamReadoutController.h"
 #import "ORFlashCamReadoutModel.h"
+#import "ORFlashCamListenerModel.h"
 #import "ORTimeLinePlot.h"
 #import "ORCompositePlotView.h"
 #import "ORTimeAxis.h"
@@ -91,7 +92,7 @@
                        object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(configParamChanged:)
-                         name : ORFlashCamReadoutModelConfigParamChanged
+                         name : ORFlashCamListenerModelConfigChanged
                        object : nil];
     [notifyCenter addObserver :self
                      selector : @selector(fcSourcePathChanged:)
@@ -145,6 +146,14 @@
                      selector : @selector(tableViewSelectionDidChange:)
                          name : NSTableViewSelectionDidChangeNotification
                        object : listenerView];
+    [notifyCenter addObserver : self
+                     selector : @selector(tableViewSelectionDidChange:)
+                         name : NSTableViewSelectionDidChangeNotification
+                       object : listenerConfigView0];
+    [notifyCenter addObserver : self
+                     selector : @selector(tableViewSelectionDidChange:)
+                         name : NSTableViewSelectionDidChangeNotification
+                       object : listenerConfigView1];
     [notifyCenter addObserver : self
                      selector : @selector(tableViewSelectionDidChange:)
                          name : NSTableViewSelectionDidChangeNotification
@@ -243,7 +252,7 @@
     [self ethTypeChanged:nil];
     [self configParamChanged:nil];
     [self fcSourcePathChanged:nil];
-    [listenerView reloadData];
+    [self reloadListenerData];
     [monitorView reloadData];
     [self updateTimePlot:nil];
 }
@@ -268,7 +277,7 @@
 {
     [ethInterfaceView reloadData];
     [self updateAddIfaceToListenerIfacePUButton];
-    [listenerView reloadData];
+    [self reloadListenerData];
 }
 
 - (void) ethInterfaceAdded:(NSNotification*)note
@@ -288,7 +297,7 @@
     [ethInterfaceView selectRowIndexes:indexSet byExtendingSelection:NO];
     [self updateAddIfaceToListenerIfacePUButton];
     [self updateRmIfaceFromListenerIfacePUButton];
-    [listenerView reloadData];
+    [self reloadListenerData];
 }
 
 - (void) ethTypeChanged:(NSNotification*)note
@@ -300,18 +309,14 @@
 
 - (void) configParamChanged:(NSNotification*)note
 {
-    [maxPayloadTextField    setIntValue:[[model   configParam:@"maxPayload"]    intValue]];
-    [eventBufferTextField   setIntValue:[[model   configParam:@"eventBuffer"]   intValue]];
-    [phaseAdjustTextField   setIntValue:[[model   configParam:@"phaseAdjust"]   intValue]];
-    [baselineSlewTextField  setIntValue:[[model   configParam:@"baselineSlew"]  intValue]];
-    [integratorLenTextField setIntValue:[[model   configParam:@"integratorLen"] intValue]];
-    [eventSamplesTextField  setIntValue:[[model   configParam:@"eventSamples"]  intValue]];
-    [signalDepthTextField   setIntValue:[[model   configParam:@"signalDepth"]   intValue]];
-    [traceTypePUButton      setIntValue:[[model   configParam:@"traceType"]     intValue]];
-    [pileupRejTextField     setFloatValue:[[model configParam:@"pileupRej"]     doubleValue]];
-    [logTimeTextField       setFloatValue:[[model configParam:@"logTime"]       doubleValue]];
-    [gpsEnabledButton       setIntValue:[[model   configParam:@"gpsEnabled"]    boolValue]];
-    [incBaselineButton      setIntValue:[[model   configParam:@"incBaseline"]   boolValue]];
+    [self reloadListenerData];
+}
+
+- (void) reloadListenerData
+{
+    [listenerView        reloadData];
+    [listenerConfigView0 reloadData];
+    [listenerConfigView1 reloadData];
 }
 
 - (void) pingStart:(NSNotification*)note
@@ -352,7 +357,7 @@
 
 - (void) listenerChanged:(NSNotification*)note
 {
-    [listenerView reloadData];
+    [self reloadListenerData];
     [monitorView  reloadData];
     [self updateAddIfaceToListenerListenerPUButton];
     [self updateRmIfaceFromListenerListenerPUButton];
@@ -360,10 +365,12 @@
 
 - (void) listenerAdded:(NSNotification*)note
 {
-    [listenerView reloadData];
+    [self reloadListenerData];
     int index = [[[note userInfo] objectForKey:@"index"] intValue];
     NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:index];
     [listenerView selectRowIndexes:indexSet byExtendingSelection:NO];
+    [listenerConfigView0 selectRowIndexes:indexSet byExtendingSelection:NO];
+    [listenerConfigView1 selectRowIndexes:indexSet byExtendingSelection:NO];
     [ethInterfaceView reloadData];
     [monitorView reloadData];
     [self updateAddIfaceToListenerListenerPUButton];
@@ -374,9 +381,11 @@
 {
     int index = [[[note userInfo] objectForKey:@"index"] intValue];
     index = MAX(0, MIN(index, [model listenerCount]-1));
-    [listenerView reloadData];
+    [self reloadListenerData];
     NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:index];
     [listenerView selectRowIndexes:indexSet byExtendingSelection:NO];
+    [listenerConfigView0 selectRowIndexes:indexSet byExtendingSelection:NO];
+    [listenerConfigView1 selectRowIndexes:indexSet byExtendingSelection:NO];
     [ethInterfaceView reloadData];
     [monitorView reloadData];
     [self updateAddIfaceToListenerListenerPUButton];
@@ -496,19 +505,10 @@
     [ipAddressTextField        setEnabled:!lock];
     [usernameTextField         setEnabled:!lock];
     [ethInterfaceView          setEnabled:!lock];
-    [maxPayloadTextField       setEnabled:!lock];
-    [eventBufferTextField      setEnabled:!lock];
-    [phaseAdjustTextField      setEnabled:!lock];
-    [baselineSlewTextField     setEnabled:!lock];
-    [integratorLenTextField    setEnabled:!lock];
-    [eventSamplesTextField     setEnabled:!lock];
-    [traceTypePUButton         setEnabled:!lock];
-    [pileupRejTextField        setEnabled:!lock];
-    [logTimeTextField          setEnabled:!lock];
-    [gpsEnabledButton          setEnabled:!lock];
-    [incBaselineButton         setEnabled:!lock];
     [sendPingButton            setEnabled:!lock];
     [listenerView              setEnabled:!lock];
+    [listenerConfigView0       setEnabled:!lock];
+    [listenerConfigView1       setEnabled:!lock];
     [addIfaceToListenerButton  setEnabled:!lock];
     [rmIfaceFromListenerButton setEnabled:!lock];
     [fcSourcePathButton        setEnabled:!lock];
@@ -597,66 +597,6 @@
 - (IBAction) cut:(id)sender
 {
     [self removeEthInterfaceAction:nil];
-}
-
-- (IBAction) maxPayloadAction:(id)sender
-{
-    [model setConfigParam:@"maxPayload" withValue:[NSNumber numberWithInt:[sender intValue]]];
-}
-
-- (IBAction) eventBufferAction:(id)sender
-{
-    [model setConfigParam:@"eventBuffer" withValue:[NSNumber numberWithInt:[sender intValue]]];
-}
-
-- (IBAction) phaseAdjustAction:(id)sender
-{
-    [model setConfigParam:@"phaseAdjust" withValue:[NSNumber numberWithInt:[sender intValue]]];
-}
-
-- (IBAction) baselineSlewAction:(id)sender
-{
-    [model setConfigParam:@"baselineSlew" withValue:[NSNumber numberWithInt:[sender intValue]]];
-}
-
-- (IBAction) integratorLenAction:(id)sender
-{
-    [model setConfigParam:@"integratorLen" withValue:[NSNumber numberWithInt:[sender intValue]]];
-}
-
-- (IBAction) eventSamplesAction:(id)sender
-{
-    [model setConfigParam:@"eventSamples" withValue:[NSNumber numberWithInt:[sender intValue]]];
-}
-
-- (IBAction) signalDepthAction:(id)sender
-{
-    [model setConfigParam:@"signalDepth" withValue:[NSNumber numberWithInt:[sender intValue]]];
-}
-
-- (IBAction) traceTypeAction:(id)sender
-{
-    [model setConfigParam:@"traceType" withValue:[NSNumber numberWithInt:[sender intValue]]];
-}
-
-- (IBAction) pileupRejAction:(id)sender
-{
-    [model setConfigParam:@"pileupRej" withValue:[NSNumber numberWithDouble:[sender doubleValue]]];
-}
-
-- (IBAction) logTimeAction:(id)sender
-{
-    [model setConfigParam:@"logTime" withValue:[NSNumber numberWithDouble:[sender doubleValue]]];
-}
-
-- (IBAction) gpsEnabledAction:(id)sender
-{
-    [model setConfigParam:@"gpsEnabled" withValue:[NSNumber numberWithBool:[sender intValue]]];
-}
-
-- (IBAction) incBaselineAction:(id)sender
-{
-    [model setConfigParam:@"incBaseline" withValue:[NSNumber numberWithBool:[sender intValue]]];
 }
 
 - (IBAction) sendPingAction:(id)sender
@@ -809,7 +749,8 @@
                     return [NSNumber numberWithInt:i];
         }
     }
-    else if(view == listenerView || view == monitorView){
+    else if(view == listenerView        || view == listenerConfigView0 ||
+            view == listenerConfigView1 || view == monitorView){
         ORFlashCamListenerModel* l = [model getListenerAtIndex:(int)row];
         if(!l) return nil;
         if(col == 0){
@@ -824,6 +765,25 @@
             else if(col == 5) return [NSNumber numberWithInt:[l stateBuffer]];
             else if(col == 6) return [NSNumber numberWithInt:[l timeout]];
             else if(col == 7) return [[l remoteInterfaces] componentsJoinedByString:@","];
+        }
+        else if(view == listenerConfigView0){
+            if(col == 1) return [NSString stringWithFormat:@"%@:%d", [l ip], [l port]];
+            else if(col == 2) return [l configParam:@"maxPayload"];
+            else if(col == 3) return [l configParam:@"eventBuffer"];
+            else if(col == 4) return [l configParam:@"phaseAdjust"];
+            else if(col == 5) return [l configParam:@"baselineSlew"];
+            else if(col == 6) return [l configParam:@"integratorLen"];
+            else if(col == 7) return [l configParam:@"pileupRej"];
+            else if(col == 8) return [l configParam:@"logTime"];
+        }
+        else if(view == listenerConfigView1){
+            if(col == 1) return [NSString stringWithFormat:@"%@:%d", [l ip], [l port]];
+            else if(col == 2) return [l configParam:@"eventSamples"];
+            else if(col == 3) return [l configParam:@"signalDepth"];
+            else if(col == 4) return [l configParam:@"resetMode"];
+            else if(col == 5) return [NSNumber numberWithInt:[[l configParam:@"traceType"] intValue]-1];
+            else if(col == 6) return [l configParam:@"gpsEnabled"];
+            else if(col == 7) return [l configParam:@"incBaseline"];
         }
         else if(view == monitorView){
             if(col == 1){
@@ -849,22 +809,56 @@
         if(col == 0)      [model setEthInterface:object atIndex:(int)row];
         else if(col == 1) [model setEthType:kFlashCamEthTypes[[object intValue]] atIndex:(int)row];
     }
-    else if(view == listenerView){
+    else{
         ORFlashCamListenerModel* l = [model getListenerAtIndex:(int)row];
         if(!l) return;
-        if(col == 1)      [model setListener:object atPort:[l port] forIndex:(int)row];
-        else if(col == 2) [model setListener:[l interface] atPort:(uint16_t)[object intValue] forIndex:(int)row];
-        else if(col == 4) [l     setIObuffer:[object intValue]];
-        else if(col == 5) [l  setStateBuffer:[object intValue]];
-        else if(col == 6) [l      setTimeout:[object intValue]];
+        if(view == listenerView){
+            if(col == 1)      [model setListener:object atPort:[l port] forIndex:(int)row];
+            else if(col == 2) [model setListener:[l interface] atPort:(uint16_t)[object intValue] forIndex:(int)row];
+            else if(col == 4) [l     setIObuffer:[object intValue]];
+            else if(col == 5) [l  setStateBuffer:[object intValue]];
+            else if(col == 6) [l      setTimeout:[object intValue]];
+        }
+        else if(view == listenerConfigView0){
+            if(col == 2)      [l setConfigParam:@"maxPayload"
+                                      withValue:[NSNumber numberWithInt:[object intValue]]];
+            else if(col == 3) [l setConfigParam:@"eventBuffer"
+                                      withValue:[NSNumber numberWithInt:[object intValue]]];
+            else if(col == 4) [l setConfigParam:@"phaseAdjust"
+                                      withValue:[NSNumber numberWithInt:[object intValue]]];
+            else if(col == 5) [l setConfigParam:@"baselineSlew"
+                                      withValue:[NSNumber numberWithInt:[object intValue]]];
+            else if(col == 6) [l setConfigParam:@"integratorLen"
+                                      withValue:[NSNumber numberWithInt:[object intValue]]];
+            else if(col == 7) [l setConfigParam:@"pileupRej"
+                                      withValue:[NSNumber numberWithDouble:[object doubleValue]]];
+            else if(col == 8) [l setConfigParam:@"logTime"
+                                      withValue:[NSNumber numberWithDouble:[object doubleValue]]];
+        }
+        else if(view == listenerConfigView1){
+            if(col == 2)      [l setConfigParam:@"eventSamples"
+                                      withValue:[NSNumber numberWithInt:[object intValue]]];
+            else if(col == 3) [l setConfigParam:@"signalDepth"
+                                      withValue:[NSNumber numberWithInt:[object intValue]]];
+            else if(col == 4) [l setConfigParam:@"resetMode"
+                                      withValue:[NSNumber numberWithInt:[object intValue]]];
+            else if(col == 5) [l setConfigParam:@"traceType"
+                                      withValue:[NSNumber numberWithInt:[object intValue]+1]];
+            else if(col == 6) [l setConfigParam:@"gpsEnabled"
+                                      withValue:[NSNumber numberWithBool:[object boolValue]]];
+            else if(col == 7) [l setConfigParam:@"incBaseline"
+                                      withValue:[NSNumber numberWithBool:[object boolValue]]];
+        }
     }
 }
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView*)view
 {
-    if(view == ethInterfaceView)  return [model ethInterfaceCount];
-    else if(view == listenerView) return [model listenerCount];
-    else if(view == monitorView)  return [model listenerCount];
+    if(view == ethInterfaceView)         return [model ethInterfaceCount];
+    else if(view == listenerView)        return [model listenerCount];
+    else if(view == listenerConfigView0) return [model listenerCount];
+    else if(view == listenerConfigView1) return [model listenerCount];
+    else if(view == monitorView)         return [model listenerCount];
     else return 0;
 }
 

@@ -42,7 +42,6 @@ static NSString* kFlashCamEthTypes[kFlashCamEthTypeCount] = {@"efb1", @"efb2", @
     NSString* username;
     NSMutableArray* ethInterface;
     NSMutableArray* ethType;
-    NSMutableDictionary* configParams;
     NSString* fcSourcePath;
     bool validFCSourcePath;
     bool checkedFCSourcePath;
@@ -71,7 +70,6 @@ static NSString* kFlashCamEthTypes[kFlashCamEthTypeCount] = {@"efb1", @"efb2", @
 - (int) indexOfInterface:(NSString*)interface;
 - (NSString*) ethInterfaceAtIndex:(int)index;
 - (NSString*) ethTypeAtIndex:(int)index;
-- (NSNumber*) configParam:(NSString*)p;
 - (NSString*) fcSourcePath;
 - (bool) validFCSourcePath;
 - (bool) pingSuccess;
@@ -89,7 +87,6 @@ static NSString* kFlashCamEthTypes[kFlashCamEthTypeCount] = {@"efb1", @"efb2", @
 - (void) removeEthInterface:(NSString*)eth;
 - (void) removeEthInterfaceAtIndex:(int)index;
 - (void) setEthType:(NSString*)etype atIndex:(int)index;
-- (void) setConfigParam:(NSString*)p withValue:(NSNumber*)v;
 - (void) setFCSourcePath:(NSString*)path;
 - (void) checkFCSourcePath;
 - (void) addListener:(ORFlashCamListenerModel*)listener;
@@ -152,7 +149,6 @@ extern NSString* ORFlashCamReadoutModelEthInterfaceChanged;
 extern NSString* ORFlashCamReadoutModelEthInterfaceAdded;
 extern NSString* ORFlashCamReadoutModelEthInterfaceRemoved;
 extern NSString* ORFlashCamReadoutModelEthTypeChanged;
-extern NSString* ORFlashCamReadoutModelConfigParamChanged;
 extern NSString* ORFlashCamReadoutModelFCSourcePathChanged;
 extern NSString* ORFlashCamReadoutModelPingStart;
 extern NSString* ORFlashCamReadoutModelPingEnd;

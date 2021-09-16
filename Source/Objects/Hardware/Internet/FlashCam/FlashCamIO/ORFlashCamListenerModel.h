@@ -32,6 +32,7 @@
     NSString* ip;
     NSMutableArray* remoteInterfaces;
     int timeout;
+    NSMutableDictionary* configParams;
     int ioBuffer;
     int stateBuffer;
     double throttle;
@@ -75,6 +76,8 @@
 - (NSUInteger) remoteInterfaceCount;
 - (NSString*) remoteInterfaceAtIndex:(NSUInteger)index;
 - (NSString*) ethType;
+- (NSNumber*) configParam:(NSString*)p;
+- (NSMutableArray*) runFlags:(bool)print;
 - (int) timeout;
 - (int) ioBuffer;
 - (int) stateBuffer;
@@ -108,6 +111,7 @@
 - (void) addRemoteInterface:(NSString*)iface;
 - (void) removeRemoteInterface:(NSString*)iface;
 - (void) removeRemoteInterfaceAtIndex:(NSUInteger)index;
+- (void) setConfigParam:(NSString*)p withValue:(NSNumber*)v;
 - (void) setTimeout:(int)to;
 - (void) setIObuffer:(int)io;
 - (void) setStateBuffer:(int)sb;

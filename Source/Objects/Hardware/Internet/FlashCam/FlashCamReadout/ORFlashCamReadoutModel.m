@@ -28,7 +28,6 @@ NSString* ORFlashCamReadoutModelEthInterfaceChanged = @"ORFlashCamReadoutModelEt
 NSString* ORFlashCamReadoutModelEthInterfaceAdded   = @"ORFlashCamReadoutModelEthInterfaceAdded";
 NSString* ORFlashCamReadoutModelEthInterfaceRemoved = @"ORFlashCamReadoutModelEthInterfaceRemoved";
 NSString* ORFlashCamReadoutModelEthTypeChanged      = @"ORFlashCamReadoutModelEthTypeChanged";
-NSString* ORFlashCamReadoutModelConfigParamChanged  = @"ORFlashCamReadoutModelConfigParamChanged";
 NSString* ORFlashCamReadoutModelFCSourcePathChanged = @"ORFlashCamReadoutModelFCSourcePathChanged";
 NSString* ORFlashCamReadoutModelPingStart           = @"ORFlashCamReadoutModelPingStart";
 NSString* ORFlashCamReadoutModelPingEnd             = @"ORFlashCamReadoutModelPingEnd";
@@ -56,22 +55,9 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     [self setUsername:@""];
     ethInterface = [[NSMutableArray array] retain];
     ethType      = [[NSMutableArray array] retain];
-    configParams = [[NSMutableDictionary dictionary] retain];
     validFCSourcePath = false;
     [self setFCSourcePath:@"--"];
     checkedFCSourcePath = false;
-    [self setConfigParam:@"maxPayload"    withValue:[NSNumber numberWithInt:0]];
-    [self setConfigParam:@"eventBuffer"   withValue:[NSNumber numberWithInt:1000]];
-    [self setConfigParam:@"phaseAdjust"   withValue:[NSNumber numberWithInt:-1]];
-    [self setConfigParam:@"baselineSlew"  withValue:[NSNumber numberWithInt:0]];
-    [self setConfigParam:@"integratorLen" withValue:[NSNumber numberWithInt:7]];
-    [self setConfigParam:@"eventSamples"  withValue:[NSNumber numberWithInt:2048]];
-    [self setConfigParam:@"signalDepth"   withValue:[NSNumber numberWithInt:1024]];
-    [self setConfigParam:@"traceType"     withValue:[NSNumber numberWithInt:1]];
-    [self setConfigParam:@"pileupRej"     withValue:[NSNumber numberWithDouble:0.0]];
-    [self setConfigParam:@"logTime"       withValue:[NSNumber numberWithDouble:1000.0]];
-    [self setConfigParam:@"gpsEnabled"    withValue:[NSNumber numberWithBool:NO]];
-    [self setConfigParam:@"incBaseline"   withValue:[NSNumber numberWithBool:YES]];
     pingTask = nil;
     pingSuccess = NO;
     remotePathTask = nil;
@@ -90,7 +76,6 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     [username release];
     if(ethInterface) [ethInterface release];
     if(ethType) [ethType release];
-    if(configParams) [configParams release];
     if(pingTask) [pingTask release];
     if(remotePathTask) [remotePathTask release];
     if(firmwareTasks) [firmwareTasks release];
@@ -201,38 +186,6 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     if(!ethType) return nil;
     if(index < 0 || index >= [self ethInterfaceCount]) return nil;
     return [[[ethType objectAtIndex:index] copy] autorelease];
-}
-
-- (NSNumber*) configParam:(NSString*)p
-{
-    if([p isEqualToString:@"maxPayload"])
-        return [NSNumber numberWithInt:[[configParams objectForKey:@"maxPayload"] intValue]];
-    else if([p isEqualToString:@"eventBuffer"])
-        return [NSNumber numberWithInt:[[configParams objectForKey:@"eventBuffer"] intValue]];
-    else if([p isEqualToString:@"phaseAdjust"])
-        return [NSNumber numberWithInt:[[configParams objectForKey:@"phaseAdjust"] intValue]];
-    else if([p isEqualToString:@"baselineSlew"])
-        return [NSNumber numberWithInt:[[configParams objectForKey:@"baselineSlew"] intValue]];
-    else if([p isEqualToString:@"integratorLen"])
-        return [NSNumber numberWithInt:[[configParams objectForKey:@"integratorLen"] intValue]];
-    else if([p isEqualToString:@"eventSamples"])
-        return [NSNumber numberWithInt:[[configParams objectForKey:@"eventSamples"] intValue]];
-    else if([p isEqualToString:@"signalDepth"])
-        return [NSNumber numberWithInt:[[configParams objectForKey:@"signalDepth"] intValue]];
-    else if([p isEqualToString:@"traceType"])
-        return [NSNumber numberWithInt:[[configParams objectForKey:@"traceType"] intValue]];
-    else if([p isEqualToString:@"pileupRej"])
-        return [NSNumber numberWithDouble:[[configParams objectForKey:@"pileupRej"] doubleValue]];
-    else if([p isEqualToString:@"logTime"])
-        return [NSNumber numberWithDouble:[[configParams objectForKey:@"logTime"] doubleValue]];
-    else if([p isEqualToString:@"gpsEnabled"])
-        return [NSNumber numberWithBool:[[configParams objectForKey:@"gpsEnabled"] boolValue]];
-    else if([p isEqualToString:@"incBaseline"])
-        return [NSNumber numberWithBool:[[configParams objectForKey:@"incBaseline"] boolValue]];
-    else{
-        NSLog(@"ORFlashCamReadoutModel - unknown configuration parameter %@\n", p);
-        return nil;
-    }
 }
 
 - (NSString*) fcSourcePath
@@ -396,40 +349,6 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
             [ethType setObject:[eth copy] atIndexedSubscript:index];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelEthTypeChanged object:self];
-}
-
-- (void) setConfigParam:(NSString*)p withValue:(NSNumber*)v
-{
-    // fixme: put in limits on parameters below
-    if([p isEqualToString:@"maxPayload"])
-        [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:@"maxPayload"];
-    else if([p isEqualToString:@"eventBuffer"])
-        [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:@"eventBuffer"];
-    else if([p isEqualToString:@"phaseAdjust"])
-        [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:@"phaseAdjust"];
-    else if([p isEqualToString:@"baselineSlew"])
-        [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:@"baselineSlew"];
-    else if([p isEqualToString:@"integratorLen"])
-        [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:@"integratorLen"];
-    else if([p isEqualToString:@"eventSamples"])
-        [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:@"eventSamples"];
-    else if([p isEqualToString:@"signalDepth"])
-        [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:@"signalDepth"];
-    else if([p isEqualToString:@"traceType"])
-        [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:@"traceType"];
-    else if([p isEqualToString:@"pileupRej"])
-        [configParams setObject:[NSNumber numberWithDouble:[v doubleValue]] forKey:@"pileupRej"];
-    else if([p isEqualToString:@"logTime"])
-        [configParams setObject:[NSNumber numberWithDouble:[v doubleValue]] forKey:@"logTime"];
-    else if([p isEqualToString:@"gpsEnabled"])
-        [configParams setObject:[NSNumber numberWithBool:[v boolValue]] forKey:@"gpsEnabled"];
-    else if([p isEqualToString:@"incBaseline"])
-        [configParams setObject:[NSNumber numberWithBool:[v boolValue]] forKey:@"incBaseline"];
-    else{
-        NSLog(@"ORFlashCamReadoutModel - unknown configuration parameter %@\n", p);
-        return;
-    }
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelConfigParamChanged object:self];
 }
 
 - (void) setFCSourcePath:(NSString*)path
@@ -951,7 +870,6 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     [self setUsername: [decoder decodeObjectForKey:@"username"]];
     ethInterface =    [[decoder decodeObjectForKey:@"ethInterface"] retain];
     ethType =         [[decoder decodeObjectForKey:@"ethType"] retain];
-    configParams =    [[decoder decodeObjectForKey:@"configParams"] retain];
     validFCSourcePath = false;
     [self setFCSourcePath:[decoder decodeObjectForKey:@"fcSourcePath"]];
     if(!fcSourcePath) [self setFCSourcePath:@"--"];
@@ -975,7 +893,6 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     [encoder encodeObject:username         forKey:@"username"];
     [encoder encodeObject:ethInterface     forKey:@"ethInterface"];
     [encoder encodeObject:ethType          forKey:@"ethType"];
-    [encoder encodeObject:configParams     forKey:@"configParams"];
     [encoder encodeObject:fcSourcePath     forKey:@"fcSourcePath"];
 }
 

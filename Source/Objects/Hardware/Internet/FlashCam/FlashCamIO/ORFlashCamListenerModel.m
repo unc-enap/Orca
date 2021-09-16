@@ -43,6 +43,20 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     timeout            = 2000;
     ioBuffer           = BUFIO_BUFSIZE/1024;
     stateBuffer        = 20000;
+    configParams       = [[NSMutableDictionary dictionary] retain];
+    [self setConfigParam:@"maxPayload"    withValue:[NSNumber numberWithInt:2000000]];
+    [self setConfigParam:@"eventBuffer"   withValue:[NSNumber numberWithInt:1024]];
+    [self setConfigParam:@"phaseAdjust"   withValue:[NSNumber numberWithInt:0]];
+    [self setConfigParam:@"baselineSlew"  withValue:[NSNumber numberWithInt:0]];
+    [self setConfigParam:@"integratorLen" withValue:[NSNumber numberWithInt:7]];
+    [self setConfigParam:@"eventSamples"  withValue:[NSNumber numberWithInt:2048]];
+    [self setConfigParam:@"signalDepth"   withValue:[NSNumber numberWithInt:1024]];
+    [self setConfigParam:@"traceType"     withValue:[NSNumber numberWithInt:1]];
+    [self setConfigParam:@"resetMode"     withValue:[NSNumber numberWithInt:1]];
+    [self setConfigParam:@"pileupRej"     withValue:[NSNumber numberWithDouble:0.0]];
+    [self setConfigParam:@"logTime"       withValue:[NSNumber numberWithDouble:1.0]];
+    [self setConfigParam:@"gpsEnabled"    withValue:[NSNumber numberWithBool:NO]];
+    [self setConfigParam:@"incBaseline"   withValue:[NSNumber numberWithBool:YES]];
     throttle           = 0.0;
     reader             = NULL;
     readerRecordCount  = 0;
@@ -95,6 +109,7 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     [interface release];
     [ip release];
     [remoteInterfaces release];
+    [configParams release];
     [status release];
     if(runFailedAlarm){
         [runFailedAlarm clearAlarm];
@@ -190,6 +205,60 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
         }
     }
     return type;
+}
+
+- (NSNumber*) configParam:(NSString*)p
+{
+    if([p isEqualToString:@"maxPayload"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"maxPayload"] intValue]];
+    else if([p isEqualToString:@"eventBuffer"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"eventBuffer"] intValue]];
+    else if([p isEqualToString:@"phaseAdjust"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"phaseAdjust"] intValue]];
+    else if([p isEqualToString:@"baselineSlew"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"baselineSlew"] intValue]];
+    else if([p isEqualToString:@"integratorLen"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"integratorLen"] intValue]];
+    else if([p isEqualToString:@"eventSamples"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"eventSamples"] intValue]];
+    else if([p isEqualToString:@"signalDepth"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"signalDepth"] intValue]];
+    else if([p isEqualToString:@"traceType"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"traceType"] intValue]];
+    else if([p isEqualToString:@"resetMode"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"resetMode"] intValue]];
+    else if([p isEqualToString:@"pileupRej"])
+        return [NSNumber numberWithDouble:[[configParams objectForKey:@"pileupRej"] doubleValue]];
+    else if([p isEqualToString:@"logTime"])
+        return [NSNumber numberWithDouble:[[configParams objectForKey:@"logTime"] doubleValue]];
+    else if([p isEqualToString:@"gpsEnabled"])
+        return [NSNumber numberWithBool:[[configParams objectForKey:@"gpsEnabled"] boolValue]];
+    else if([p isEqualToString:@"incBaseline"])
+        return [NSNumber numberWithBool:[[configParams objectForKey:@"incBaseline"] boolValue]];
+    else{
+        NSLog(@"ORFlashCamListenerModel: unknown configuration parameter %@\n", p);
+        return nil;
+    }
+}
+
+- (NSMutableArray*) runFlags:(bool)print
+{
+    NSMutableArray* f = [NSMutableArray array];
+    [f addObjectsFromArray:@[@"-mpl",  [NSString stringWithFormat:@"%d", [[self configParam:@"maxPayload"]    intValue]]]];
+    [f addObjectsFromArray:@[@"-slots",[NSString stringWithFormat:@"%d", [[self configParam:@"eventBuffer"]   intValue]]]];
+    [f addObjectsFromArray:@[@"-aph",  [NSString stringWithFormat:@"%d", [[self configParam:@"phaseAdjust"]   intValue]]]];
+    [f addObjectsFromArray:@[@"-bls",  [NSString stringWithFormat:@"%d", [[self configParam:@"baselineSlew"]  intValue]]]];
+    [f addObjectsFromArray:@[@"-il",   [NSString stringWithFormat:@"%d", [[self configParam:@"integratorLen"] intValue]]]];
+    [f addObjectsFromArray:@[@"-es",   [NSString stringWithFormat:@"%d", [[self configParam:@"eventSamples"]  intValue]]]];
+    [f addObjectsFromArray:@[@"-sd",   [NSString stringWithFormat:@"%d", [[self configParam:@"signalDepth"] intValue]]]];
+    [f addObjectsFromArray:@[@"-gt",   [NSString stringWithFormat:@"%d", [[self configParam:@"traceType"]     intValue]]]];
+    [f addObjectsFromArray:@[@"-rst",  [NSString stringWithFormat:@"%d", [[self configParam:@"resetMode"] intValue]]]];
+    [f addObjectsFromArray:@[@"-gpr",[NSString stringWithFormat:@"%.2f", [[self configParam:@"pileupRej"]  doubleValue]]]];
+    [f addObjectsFromArray:@[@"-lt", [NSString stringWithFormat:@"%.2f", [[self configParam:@"logTime"]    doubleValue]]]];
+    [f addObjectsFromArray:@[@"-gps",  [NSString stringWithFormat:@"%d", [[self configParam:@"gpsEnabled"]    intValue]]]];
+    [f addObjectsFromArray:@[@"-blinc",[NSString stringWithFormat:@"%d", [[self configParam:@"incBaseline"]   intValue]]]];
+    if(print) NSLog(@"%@\n", [f componentsJoinedByString:@" "]);
+    return f;
 }
 
 - (int) timeout
@@ -400,6 +469,41 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     if(!remoteInterfaces) return;
     if(index >= [remoteInterfaces count]) return;
     [remoteInterfaces removeObjectAtIndex:index];
+}
+
+- (void) setConfigParam:(NSString*)p withValue:(NSNumber*)v
+{
+    if([p isEqualToString:@"maxPayload"])
+        [configParams setObject:[NSNumber numberWithInt:MAX(0, [v intValue])] forKey:p];
+    else if([p isEqualToString:@"eventBuffer"])
+        [configParams setObject:[NSNumber numberWithInt:MAX(0, [v intValue])] forKey:p];
+    else if([p isEqualToString:@"phaseAdjust"])
+        [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:p];
+    else if([p isEqualToString:@"baselineSlew"])
+        [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:p];
+    else if([p isEqualToString:@"integratorLen"])
+        [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0, [v intValue]), 32)] forKey:p];
+    else if([p isEqualToString:@"eventSamples"])
+        [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0, [v intValue]), 8192)] forKey:p];
+    else if([p isEqualToString:@"signalDepth"])
+        [configParams setObject:[NSNumber numberWithInt:MAX(0, [v intValue])] forKey:p];
+    else if([p isEqualToString:@"traceType"])
+        [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0, [v intValue]), 4)] forKey:p];
+    else if([p isEqualToString:@"resetMode"])
+        [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0, [v intValue]), 2)] forKey:p];
+    else if([p isEqualToString:@"pileupRej"])
+        [configParams setObject:[NSNumber numberWithDouble:MIN(MAX(0., [v doubleValue]), 65536.)] forKey:p];
+    else if([p isEqualToString:@"logTime"])
+        [configParams setObject:[NSNumber numberWithDouble:MAX(0, [v doubleValue])] forKey:p];
+    else if([p isEqualToString:@"gpsEnabled"])
+        [configParams setObject:[NSNumber numberWithBool:[v boolValue]] forKey:p];
+    else if([p isEqualToString:@"incBaseline"])
+        [configParams setObject:[NSNumber numberWithBool:[v boolValue]] forKey:p];
+    else{
+        NSLog(@"ORFlashCamListenerModel: unknown configuration parameter %@\n", p);
+        return;
+    }
+     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelConfigChanged object:self];
 }
 
 - (void) setTimeout:(int)to
@@ -808,6 +912,8 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     [self setIObuffer:        [decoder decodeIntForKey:@"ioBuffer"]];
     [self setStateBuffer:     [decoder decodeIntForKey:@"stateBuffer"]];
     [self setThrottle:        [decoder decodeDoubleForKey:@"throttle"]];
+    if(configParams) [configParams release];
+    configParams = [[decoder decodeObjectForKey:@"configParams"] retain];
     reader            = NULL;
     readerRecordCount = 0;
     bufferedRecords   = 0;
@@ -846,6 +952,7 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     [encoder encodeObject:interface        forKey:@"interface"];
     [encoder encodeInt:(int)port           forKey:@"port"];
     [encoder encodeObject:remoteInterfaces forKey:@"remoteInterfaces"];
+    [encoder encodeObject:configParams     forKey:@"configParams"];
     [encoder encodeInt:timeout             forKey:@"timeout"];
     [encoder encodeInt:ioBuffer            forKey:@"ioBuffer"];
     [encoder encodeInt:stateBuffer         forKey:@"stateBuffer"];
