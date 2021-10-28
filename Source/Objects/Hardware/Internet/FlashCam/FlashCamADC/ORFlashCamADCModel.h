@@ -38,6 +38,7 @@
     bool chanEnabled[kMaxFlashCamADCChannels];    // am
     bool trigOutEnabled[kMaxFlashCamADCChannels]; // altm
     int baseline[kMaxFlashCamADCChannels];        // bldac
+    int baseBias[kMaxFlashCamADCChannels];        // blbias
     int threshold[kMaxFlashCamADCChannels];       // athr
     int adcGain[kMaxFlashCamADCChannels];         // ag
     float trigGain[kMaxFlashCamADCChannels];      // tgm
@@ -80,6 +81,7 @@
 - (bool) trigOutEnable;
 - (bool) trigOutEnabled:(unsigned int)chan;
 - (int) baseline:(unsigned int)chan;
+- (int) baseBias:(unsigned int)chan;
 - (int) threshold:(unsigned int)chan;
 - (int) adcGain:(unsigned int)chan;
 - (float) trigGain:(unsigned int)chan;
@@ -100,6 +102,7 @@
 - (void) setChanEnabled:(unsigned int)chan    withValue:(bool)enabled;
 - (void) setTrigOutEnabled:(unsigned int)chan withValue:(bool)enabled;
 - (void) setBaseline:(unsigned int)chan       withValue:(int)base;
+- (void) setBaseBias:(unsigned int)chan       withValue:(int)bias;
 - (void) setThreshold:(unsigned int)chan      withValue:(int)thresh;
 - (void) setADCGain:(unsigned int)chan        withValue:(int)gain;
 - (void) setTrigGain:(unsigned int)chan       withValue:(float)gain;
@@ -153,6 +156,7 @@
 extern NSString* ORFlashCamADCModelChanEnabledChanged;
 extern NSString* ORFlashCamADCModelTrigOutEnabledChanged;
 extern NSString* ORFlashCamADCModelBaselineChanged;
+extern NSString* ORFlashCamADCModelBaseBiasChanged;
 extern NSString* ORFlashCamADCModelThresholdChanged;
 extern NSString* ORFlashCamADCModelADCGainChanged;
 extern NSString* ORFlashCamADCModelTrigGainChanged;

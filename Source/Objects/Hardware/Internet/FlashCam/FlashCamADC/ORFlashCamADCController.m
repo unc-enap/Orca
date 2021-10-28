@@ -71,6 +71,10 @@
                          name : ORFlashCamADCModelBaselineChanged
                        object : nil];
     [notifyCenter addObserver : self
+                     selector : @selector(baseBiasChanged:)
+                         name : ORFlashCamADCModelBaseBiasChanged
+                       object : nil];
+    [notifyCenter addObserver : self
                      selector : @selector(thresholdChanged:)
                          name : ORFlashCamADCModelThresholdChanged
                        object : nil];
@@ -172,6 +176,7 @@
     [self chanEnabledChanged:nil];
     [self trigOutEnabledChanged:nil];
     [self baselineChanged:nil];
+    [self baseBiasChanged:nil];
     [self thresholdChanged:nil];
     [self adcGainChanged:nil];
     [self trigGainChanged:nil];
@@ -243,6 +248,18 @@
     else{
         int chan = [[[note userInfo] objectForKey:@"Channel"] intValue];
         [[baselineMatrix cellWithTag:chan] setIntValue:[model baseline:chan]];
+    }
+}
+
+- (void) baseBiasChanged:(NSNotification*)note
+{
+    if(note == nil){
+        for(int i=0; i<kMaxFlashCamADCChannels; i++)
+            [[baseBiasMatrix cellWithTag:i] setIntValue:[model baseBias:i]];
+    }
+    else{
+        int chan = [[[note userInfo] objectForKey:@"Channel"] intValue];
+        [[baseBiasMatrix cellWithTag:chan] setIntValue:[model baseBias:chan]];
     }
 }
 
@@ -456,6 +473,7 @@
     [chanEnabledMatrix      setEnabled:!lock];
     [trigOutEnabledMatrix   setEnabled:!lock];
     [baselineMatrix         setEnabled:!lock];
+    [baseBiasMatrix         setEnabled:!lock];
     [thresholdMatrix        setEnabled:!lock];
     [adcGainMatrix          setEnabled:!lock];
     [trigGainMatrix         setEnabled:!lock];
@@ -488,6 +506,12 @@
 {
     if([sender intValue] != [model baseline:(unsigned int)[[sender selectedCell] tag]])
         [model setBaseline:(unsigned int)[[sender selectedCell] tag] withValue:[sender intValue]];
+}
+
+- (IBAction) baseBiasAction:(id)sender
+{
+    if([sender intValue] != [model baseBias:(unsigned int)[[sender selectedCell] tag]])
+        [model setBaseBias:(unsigned int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 - (IBAction) thresholdAction:(id)sender

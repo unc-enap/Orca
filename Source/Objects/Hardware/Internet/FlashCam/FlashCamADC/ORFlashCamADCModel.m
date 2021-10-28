@@ -29,6 +29,7 @@
 NSString* ORFlashCamADCModelChanEnabledChanged    = @"ORFlashCamADCModelChanEnabledChanged";
 NSString* ORFlashCamADCModelTrigOutEnabledChanged = @"ORFlashCamADCModelTrigOutEnabledChanged";
 NSString* ORFlashCamADCModelBaselineChanged       = @"ORFlashCamADCModelBaselineChanged";
+NSString* ORFlashCamADCModelBaseBiasChanged       = @"ORFlashCamADCModelBaseBiasChanged";
 NSString* ORFlashCamADCModelThresholdChanged      = @"ORFlashCamADCModelThresholdChanged";
 NSString* ORFlashCamADCModelADCGainChanged        = @"ORFlashCamADCModelADCGainChanged";
 NSString* ORFlashCamADCModelTrigGainChanged       = @"ORFlashCamADCModelTrigGainChanged";
@@ -53,6 +54,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
         [self setChanEnabled:i    withValue:NO];
         [self setTrigOutEnabled:i withValue:NO];
         [self setBaseline:i       withValue:-1];
+        [self setBaseBias:i       withValue:0];
         [self setThreshold:i      withValue:5000];
         [self setADCGain:i        withValue:0];
         [self setTrigGain:i       withValue:0.0];
@@ -226,6 +228,12 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     return baseline[chan];
 }
 
+- (int) baseBias:(unsigned int)chan
+{
+    if(chan >= kMaxFlashCamADCChannels) return 0;
+    return baseBias[chan];
+}
+
 - (int) threshold:(unsigned int)chan{
     if(chan >= kMaxFlashCamADCChannels) return 0;
     return threshold[chan];
@@ -357,6 +365,17 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     baseline[chan] = base;
     NSDictionary* info = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:chan] forKey:@"Channel"];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelBaselineChanged
+                                                        object:self
+                                                      userInfo:info];
+}
+
+- (void) setBaseBias:(unsigned int)chan withValue:(int)bias
+{
+    if(chan >= kMaxFlashCamADCChannels) return;
+    [[[self undoManager] prepareWithInvocationTarget:self] setBaseBias:chan withValue:baseBias[chan]];
+    baseBias[chan] = bias;
+    NSDictionary* info = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:chan] forKey:@"Channel"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelBaseBiasChanged
                                                         object:self
                                                       userInfo:info];
 }
@@ -569,6 +588,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
         if(trigAll || [self chanEnabled:i]) [flags addObjectsFromArray:@[@"-athr",  [self chFlag:j withInt:threshold[i]]]];
         if(![self chanEnabled:i]) continue;
         [flags addObjectsFromArray:@[@"-bldac",  [self chFlag:j withInt:baseline[i]]]];
+        [flags addObjectsFromArray:@[@"-blbias", [self chFlag:j withInt:baseBias[i]]]];
         [flags addObjectsFromArray:@[@"-ag",     [self chFlag:j withInt:adcGain[i]]]];
         [flags addObjectsFromArray:@[@"-tgm",    [self chFlag:j withFloat:trigGain[i]]]];
         [flags addObjectsFromArray:@[@"-gs",     [self chFlag:j withInt:shapeTime[i]]]];
@@ -712,6 +732,8 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
                       withValue:[decoder decodeBoolForKey:[NSString stringWithFormat:@"trigOutEnabled%i", i]]];
         [self setBaseline:i
                 withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"baseline%i", i]]];
+        [self setBaseBias:i
+                withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"baseBias%i", i]]];
         [self setThreshold:i
                  withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"threshold%i", i]]];
         [self setADCGain:i
@@ -756,6 +778,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
         [encoder encodeBool:chanEnabled[i]    forKey:[NSString stringWithFormat:@"chanEnabled%i",     i]];
         [encoder encodeBool:trigOutEnabled[i] forKey:[NSString stringWithFormat:@"trigOutEnabled:%i", i]];
         [encoder encodeInt:baseline[i]        forKey:[NSString stringWithFormat:@"baseline%i",        i]];
+        [encoder encodeInt:baseBias[i]        forKey:[NSString stringWithFormat:@"baseBias%i",        i]];
         [encoder encodeInt:threshold[i]       forKey:[NSString stringWithFormat:@"threshold%i",       i]];
         [encoder encodeInt:adcGain[i]         forKey:[NSString stringWithFormat:@"adcGain%i",         i]];
         [encoder encodeFloat:trigGain[i]      forKey:[NSString stringWithFormat:@"trigGain%i",        i]];
@@ -799,6 +822,13 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     [p setName:@"Baseline"];
     [p setFormat:@"##0" upperLimit:1<<16 lowerLimit:0 stepSize:1 units:@""];
     [p setSetMethod:@selector(setBaseline:withValue:) getMethod:@selector(baseline:)];
+    [p setCanBeRamped:YES];
+    [a addObject:p];
+    
+    p = [[[ORHWWizParam alloc] init] autorelease];
+    [p setName:@"Baseline Bias"];
+    [p setFormat:@"##0" upperLimit:4096 lowerLimit:-4096 stepSize:1 units:@""];
+    [p setSetMethod:@selector(setBaseBias:withValue:) getMethod:@selector(baseBias:)];
     [p setCanBeRamped:YES];
     [a addObject:p];
     

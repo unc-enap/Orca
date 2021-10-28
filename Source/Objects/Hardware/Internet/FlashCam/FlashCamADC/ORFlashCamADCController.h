@@ -27,6 +27,7 @@
     IBOutlet NSMatrix* chanEnabledMatrix;
     IBOutlet NSMatrix* trigOutEnabledMatrix;
     IBOutlet NSMatrix* baselineMatrix;
+    IBOutlet NSMatrix* baseBiasMatrix;
     IBOutlet NSMatrix* thresholdMatrix;
     IBOutlet NSMatrix* adcGainMatrix;
     IBOutlet NSMatrix* trigGainMatrix;
@@ -65,6 +66,7 @@
 - (void) cardSlotChanged:(NSNotification*)note;
 - (void) chanEnabledChanged:(NSNotification*)note;
 - (void) baselineChanged:(NSNotification*)note;
+- (void) baseBiasChanged:(NSNotification*)note;
 - (void) thresholdChanged:(NSNotification*)note;
 - (void) adcGainChanged:(NSNotification*)note;
 - (void) trigGainChanged:(NSNotification*)note;
@@ -88,6 +90,7 @@
 - (IBAction) chanEnabledAction:(id)sender;
 - (IBAction) trigOutEnabledAction:(id)sender;
 - (IBAction) baselineAction:(id)sender;
+- (IBAction) baseBiasAction:(id)sender;
 - (IBAction) thresholdAction:(id)sender;
 - (IBAction) adcGainAction:(id)sender;
 - (IBAction) trigGainAction:(id)sender;
