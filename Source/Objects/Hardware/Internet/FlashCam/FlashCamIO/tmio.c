@@ -426,14 +426,14 @@ TMIO_EPROTO     Protocols do not match
 {
   tmio_close(stream);
 
-  //if(stream->debug > 2)
+  if(stream->debug > 2)
     fprintf(stderr, "tmio_open: opening stream %s\n", name);
 
   buftcpfile *fp = buftcpopen(name, "r", connect_timeout, stream->iobufsize,
                               stream->debug > 2 ? "tmio_open/buftcpopen" : 0);
   if (fp == NULL) {
     stream->status = TMIO_ENOTCONN;
-    //if (stream->debug)
+    if (stream->debug)
       fprintf(stderr,"tmio_open: can not connect peer/file %s\n",name);
 
     return -1;
@@ -449,7 +449,7 @@ TMIO_EPROTO     Protocols do not match
       protocol_tag != TMIO_PROTOCOL_TAG ||
       buftcpread(protocol, TMIO_PROTOCOL_SIZE, fp) != TMIO_PROTOCOL_SIZE) {
     stream->status = TMIO_EHANDSHAKE;
-    //if (stream->debug)
+    if (stream->debug)
       fprintf(stderr, "tmio_open: protocol handshake failed\n");
 
     tmio_close(stream);
@@ -465,7 +465,7 @@ TMIO_EPROTO     Protocols do not match
                   ? strlen(stream->protocol)
                   : TMIO_PROTOCOL_SIZE) != 0) {
     stream->status = TMIO_EPROTO;
-    //if (stream->debug)
+    if (stream->debug)
       fprintf(stderr, "tmio_open: peer/file has wrong protocol %s\n", protocol);
 
     tmio_close(stream);
@@ -475,7 +475,7 @@ TMIO_EPROTO     Protocols do not match
   // Copy protocol from peer
   strncpy(stream->protocol, protocol, TMIO_PROTOCOL_SIZE); //  strlen(protocol));
 
-  //if (stream->debug > 1)
+  if (stream->debug > 1)
     fprintf(stderr, "tmio_open: connected file/peer %s\n", name);
 
   return stream->type;

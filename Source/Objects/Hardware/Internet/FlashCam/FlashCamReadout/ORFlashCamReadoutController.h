@@ -29,9 +29,13 @@
     IBOutlet NSButton* addEthInterfaceButton;
     IBOutlet NSButton* removeEthInterfaeButton;
     IBOutlet NSButton* sendPingButton;
-    IBOutlet NSTableView* listenerView;
-    IBOutlet NSTableView* listenerConfigView0;
-    IBOutlet NSTableView* listenerConfigView1;
+    IBOutlet NSTableView* listenerView;    
+    IBOutlet NSTableView* listenerGPSView;
+    IBOutlet NSTableView* listenerDAQView;
+    IBOutlet NSTableView* listenerWFView;
+    IBOutlet NSTableView* listenerTrigView;
+    IBOutlet NSTableView* listenerBaseView;
+    IBOutlet NSTableView* listenerReadoutView;
     IBOutlet NSButton* updateIPButton;
     IBOutlet NSButton* listInterfaceButton;
     IBOutlet NSTableView* monitorView;
@@ -50,6 +54,8 @@
     IBOutlet NSButton* rmIfaceFromListenerCloseButton;
     IBOutlet NSButton* fcSourcePathButton;
     IBOutlet NSTextField* fcSourcePathTextField;
+    IBOutlet NSButton* printListenerFlagsButton;
+    IBOutlet NSPopUpButton* printListenerFlagsPUButton;
     IBOutlet ORCompositeTimeLineView* dataRateView;
     IBOutlet ORCompositeTimeLineView* eventRateView;
     IBOutlet ORCompositeTimeLineView* deadTimeView;
@@ -119,6 +125,7 @@
 - (IBAction) rmIfaceFromListenerRmAction:(id)sender;
 - (IBAction) rmIfaceFromListenerCloseAction:(id)sender;
 - (IBAction) fcSourcePathAction:(id)sender;
+- (IBAction) printListenerFlagsAction:(id)sender;
 
 #pragma mark •••Delegate Methods
 - (void) tableViewSelectionDidChange:(NSNotification*)note;

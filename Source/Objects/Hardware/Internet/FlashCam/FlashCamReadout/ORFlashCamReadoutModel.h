@@ -76,6 +76,7 @@ static NSString* kFlashCamEthTypes[kFlashCamEthTypeCount] = {@"efb1", @"efb2", @
 - (ORTaskSequence*) remotePathTask;
 - (int) listenerCount;
 - (ORFlashCamListenerModel*) getListenerAtIndex:(int)i;
+- (ORFlashCamListenerModel*) getListenerForTag:(int)t;
 - (ORFlashCamListenerModel*) getListener:(NSString*)eth atPort:(uint16_t)p;
 - (ORFlashCamListenerModel*) getListenerForIP:(NSString*)ip atPort:(uint16_t)p;
 - (int) getIndexOfListener:(NSString*)eth atPort:(uint16_t)p;
@@ -108,7 +109,6 @@ static NSString* kFlashCamEthTypes[kFlashCamEthTypeCount] = {@"efb1", @"efb2", @
 - (void) rebootCard:(ORFlashCamCard*)card;
 - (void) rebootCardAfterPing:(ORFlashCamCard*)card;
 - (int) ethIndexForCard:(ORCard*)card;
-- (NSMutableArray*) runFlags;
 - (NSMutableArray*) connectedObjects:(NSString*)cname toInterface:(NSString*)eth;
 - (NSMutableArray*) connectedObjects:(NSString*)cname;
 - (void) startRunAfterPing;

@@ -21,6 +21,7 @@
 #import "ORFlashCamReadoutModel.h"
 #import "ORFlashCamADCModel.h"
 #import "ORFlashCamTriggerModel.h"
+#import "FlashCamUtils.h"
 #import "Utilities.h"
 
 NSString* ORFlashCamListenerModelConfigChanged = @"ORFlashCamListenerModelConfigChanged";
@@ -44,19 +45,32 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     ioBuffer           = BUFIO_BUFSIZE/1024;
     stateBuffer        = 20000;
     configParams       = [[NSMutableDictionary dictionary] retain];
-    [self setConfigParam:@"maxPayload"    withValue:[NSNumber numberWithInt:2000000]];
-    [self setConfigParam:@"eventBuffer"   withValue:[NSNumber numberWithInt:1024]];
-    [self setConfigParam:@"phaseAdjust"   withValue:[NSNumber numberWithInt:0]];
-    [self setConfigParam:@"baselineSlew"  withValue:[NSNumber numberWithInt:0]];
-    [self setConfigParam:@"integratorLen" withValue:[NSNumber numberWithInt:7]];
-    [self setConfigParam:@"eventSamples"  withValue:[NSNumber numberWithInt:2048]];
-    [self setConfigParam:@"signalDepth"   withValue:[NSNumber numberWithInt:1024]];
-    [self setConfigParam:@"traceType"     withValue:[NSNumber numberWithInt:1]];
-    [self setConfigParam:@"resetMode"     withValue:[NSNumber numberWithInt:1]];
-    [self setConfigParam:@"pileupRej"     withValue:[NSNumber numberWithDouble:0.0]];
-    [self setConfigParam:@"logTime"       withValue:[NSNumber numberWithDouble:1.0]];
-    [self setConfigParam:@"gpsEnabled"    withValue:[NSNumber numberWithBool:NO]];
-    [self setConfigParam:@"incBaseline"   withValue:[NSNumber numberWithBool:YES]];
+    [self setConfigParam:@"maxPayload"      withValue:[NSNumber numberWithInt:0]];
+    [self setConfigParam:@"eventBuffer"     withValue:[NSNumber numberWithInt:1024]];
+    [self setConfigParam:@"phaseAdjust"     withValue:[NSNumber numberWithInt:0]];
+    [self setConfigParam:@"baselineSlew"    withValue:[NSNumber numberWithInt:0]];
+    [self setConfigParam:@"integratorLen"   withValue:[NSNumber numberWithInt:7]];
+    [self setConfigParam:@"eventSamples"    withValue:[NSNumber numberWithInt:2048]];
+    [self setConfigParam:@"signalDepth"     withValue:[NSNumber numberWithInt:1024]];
+    [self setConfigParam:@"traceType"       withValue:[NSNumber numberWithInt:1]];
+    [self setConfigParam:@"resetMode"       withValue:[NSNumber numberWithInt:2]];
+    [self setConfigParam:@"timeout"         withValue:[NSNumber numberWithInt:1000]];
+    [self setConfigParam:@"evPerRequest"    withValue:[NSNumber numberWithInt:1]];
+    [self setConfigParam:@"daqMode"         withValue:[NSNumber numberWithInt:0]];
+    [self setConfigParam:@"nonsparseStart"  withValue:[NSNumber numberWithInt:-1]];
+    [self setConfigParam:@"nonsparseEnd"    withValue:[NSNumber numberWithInt:-1]];
+    [self setConfigParam:@"sparseOverwrite" withValue:[NSNumber numberWithInt:-1]];
+    [self setConfigParam:@"gpsMode"         withValue:[NSNumber numberWithInt:0]];
+    [self setConfigParam:@"gpsusClockAlarm" withValue:[NSNumber numberWithInt:0]];
+    [self setConfigParam:@"baselineCalib"   withValue:[NSNumber numberWithInt:0]];
+    [self setConfigParam:@"trigTimer1Addr"  withValue:[NSNumber numberWithInt:0]];
+    [self setConfigParam:@"trigTimer1Sec"   withValue:[NSNumber numberWithInt:1]];
+    [self setConfigParam:@"trigTimer2Addr"  withValue:[NSNumber numberWithInt:0]];
+    [self setConfigParam:@"trigTimer2Sec"   withValue:[NSNumber numberWithInt:1]];
+    [self setConfigParam:@"pileupRej"       withValue:[NSNumber numberWithDouble:0.0]];
+    [self setConfigParam:@"logTime"         withValue:[NSNumber numberWithDouble:1.0]];
+    [self setConfigParam:@"incBaseline"     withValue:[NSNumber numberWithBool:YES]];
+    [self setConfigParam:@"trigAllEnable"   withValue:[NSNumber numberWithBool:YES]];
     throttle           = 0.0;
     reader             = NULL;
     readerRecordCount  = 0;
@@ -227,14 +241,40 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
         return [NSNumber numberWithInt:[[configParams objectForKey:@"traceType"] intValue]];
     else if([p isEqualToString:@"resetMode"])
         return [NSNumber numberWithInt:[[configParams objectForKey:@"resetMode"] intValue]];
+    else if([p isEqualToString:@"timeout"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"timeout"] intValue]];
+    else if([p isEqualToString:@"evPerRequest"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"evPerRequest"] intValue]];
+    else if([p isEqualToString:@"daqMode"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"daqMode"] intValue]];
+    else if([p isEqualToString:@"nonsparseStart"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"nonsparseStart"] intValue]];
+    else if([p isEqualToString:@"nonsparseEnd"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"nonsparseEnd"] intValue]];
+    else if([p isEqualToString:@"sparseOverwrite"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"sparseOverwrite"] intValue]];
+    else if([p isEqualToString:@"gpsMode"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"gpsMode"] intValue]];
+    else if([p isEqualToString:@"gpsusClockAlarm"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"gpsusClockAlarm"] intValue]];
+    else if([p isEqualToString:@"baselineCalib"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"baselineCalib"] intValue]];
+    else if([p isEqualToString:@"trigTimer1Addr"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"trigTimer1Addr"] intValue]];
+    else if([p isEqualToString:@"trigTimer1Sec"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"trigTimer1Sec"] intValue]];
+    else if([p isEqualToString:@"trigTimer2Addr"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"trigTimer2Addr"] intValue]];
+    else if([p isEqualToString:@"trigTimer2Sec"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"trigTimer2Sec"] intValue]];
     else if([p isEqualToString:@"pileupRej"])
         return [NSNumber numberWithDouble:[[configParams objectForKey:@"pileupRej"] doubleValue]];
     else if([p isEqualToString:@"logTime"])
         return [NSNumber numberWithDouble:[[configParams objectForKey:@"logTime"] doubleValue]];
-    else if([p isEqualToString:@"gpsEnabled"])
-        return [NSNumber numberWithBool:[[configParams objectForKey:@"gpsEnabled"] boolValue]];
     else if([p isEqualToString:@"incBaseline"])
         return [NSNumber numberWithBool:[[configParams objectForKey:@"incBaseline"] boolValue]];
+    else if([p isEqualToString:@"trigAllEnable"])
+        return [NSNumber numberWithBool:[[configParams objectForKey:@"trigAllEnable"] boolValue]];
     else{
         NSLog(@"ORFlashCamListenerModel: unknown configuration parameter %@\n", p);
         return nil;
@@ -250,13 +290,38 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     [f addObjectsFromArray:@[@"-bls",  [NSString stringWithFormat:@"%d", [[self configParam:@"baselineSlew"]  intValue]]]];
     [f addObjectsFromArray:@[@"-il",   [NSString stringWithFormat:@"%d", [[self configParam:@"integratorLen"] intValue]]]];
     [f addObjectsFromArray:@[@"-es",   [NSString stringWithFormat:@"%d", [[self configParam:@"eventSamples"]  intValue]]]];
-    [f addObjectsFromArray:@[@"-sd",   [NSString stringWithFormat:@"%d", [[self configParam:@"signalDepth"] intValue]]]];
+    [f addObjectsFromArray:@[@"-sd",   [NSString stringWithFormat:@"%d", [[self configParam:@"signalDepth"]   intValue]]]];
     [f addObjectsFromArray:@[@"-gt",   [NSString stringWithFormat:@"%d", [[self configParam:@"traceType"]     intValue]]]];
-    [f addObjectsFromArray:@[@"-rst",  [NSString stringWithFormat:@"%d", [[self configParam:@"resetMode"] intValue]]]];
+    [f addObjectsFromArray:@[@"-rst",  [NSString stringWithFormat:@"%d", [[self configParam:@"resetMode"]     intValue]]]];
+    [f addObjectsFromArray:@[@"-tmo",  [NSString stringWithFormat:@"%d", [[self configParam:@"timeout"]       intValue]]]];
+    [f addObjectsFromArray:@[@"-re",   [NSString stringWithFormat:@"%d", [[self configParam:@"evPerRequest"]  intValue]]]];
+    [f addObjectsFromArray:@[@"-bl",   [NSString stringWithFormat:@"%d", [[self configParam:@"baselineCalib"] intValue]]]];
     [f addObjectsFromArray:@[@"-gpr",[NSString stringWithFormat:@"%.2f", [[self configParam:@"pileupRej"]  doubleValue]]]];
     [f addObjectsFromArray:@[@"-lt", [NSString stringWithFormat:@"%.2f", [[self configParam:@"logTime"]    doubleValue]]]];
-    [f addObjectsFromArray:@[@"-gps",  [NSString stringWithFormat:@"%d", [[self configParam:@"gpsEnabled"]    intValue]]]];
     [f addObjectsFromArray:@[@"-blinc",[NSString stringWithFormat:@"%d", [[self configParam:@"incBaseline"]   intValue]]]];
+    if([[self configParam:@"gpsMode"] intValue] == 0)
+        [f addObjectsFromArray:@[@"-gps", @"0"]];
+    else
+        [f addObjectsFromArray:@[@"-gps", [NSString stringWithFormat:@"%d,%d",
+                                           [[self configParam:@"gpsusClockAlarm"] intValue],
+                                           [[self configParam:@"gpsMode"] intValue]]]];
+    if([[self configParam:@"daqMode"] intValue] != 11)
+        [f addObjectsFromArray:@[@"-dm", [NSString stringWithFormat:@"%d", [[self configParam:@"daqMode"] intValue]]]];
+    else
+        [f addObjectsFromArray:@[@"-dm", [NSString stringWithFormat:@"%d,%d,%d,%d",
+                                          [[self configParam:@"daqMode"] intValue],
+                                          [[self configParam:@"nonsparseStart"] intValue],
+                                          [[self configParam:@"nonsparseEnd"] intValue],
+                                          [[self configParam:@"sparseOverwrite"] intValue]]]];
+    if(![self configParam:@"trigAllEnable"]) [f addObjectsFromArray:@[@"-athr", @"0"]];
+    if([[self configParam:@"trigTimer1Addr"] intValue] > 0)
+        [f addObjectsFromArray:@[@"-t1", [NSString stringWithFormat:@"%x,%d",
+                                          [[self configParam:@"trigTimer1Addr"] intValue],
+                                          [[self configParam:@"trigTimer1Sec"]  intValue]]]];
+    if([[self configParam:@"trigTimer2Addr"] intValue] > 0)
+        [f addObjectsFromArray:@[@"-t2", [NSString stringWithFormat:@"%x,%d",
+                                          [[self configParam:@"trigTimer2Addr"] intValue],
+                                          [[self configParam:@"trigTimer2Sec"]  intValue]]]];
     if(print) NSLog(@"%@\n", [f componentsJoinedByString:@" "]);
     return f;
 }
@@ -491,19 +556,62 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
         [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0, [v intValue]), 4)] forKey:p];
     else if([p isEqualToString:@"resetMode"])
         [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0, [v intValue]), 2)] forKey:p];
+    else if([p isEqualToString:@"timeout"])
+        [configParams setObject:[NSNumber numberWithInt:MAX(0, [v intValue])] forKey:p];
+    else if([p isEqualToString:@"evPerRequest"])
+        [configParams setObject:[NSNumber numberWithInt:MAX(0, [v intValue])] forKey:p];
+    else if([p isEqualToString:@"daqMode"])
+        [configParams setObject:[NSNumber numberWithInt:MAX(0, [v intValue])] forKey:p];
+    else if([p isEqualToString:@"baselineCalib"])
+        [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0, [v intValue]), 65536)]  forKey:p];
+    else if([p isEqualToString:@"trigTimer1Addr"])
+        [configParams setObject:[NSNumber numberWithInt:MAX(0, [v intValue])] forKey:p];
+    else if([p isEqualToString:@"trigTimer1Sec"])
+        [configParams setObject:[NSNumber numberWithInt:MAX(0, [v intValue])] forKey:p];
+    else if([p isEqualToString:@"trigTimer2Addr"])
+        [configParams setObject:[NSNumber numberWithInt:MAX(0, [v intValue])] forKey:p];
+    else if([p isEqualToString:@"trigTimer2Sec"])
+        [configParams setObject:[NSNumber numberWithInt:MAX(0, [v intValue])] forKey:p];
     else if([p isEqualToString:@"pileupRej"])
         [configParams setObject:[NSNumber numberWithDouble:MIN(MAX(0., [v doubleValue]), 65536.)] forKey:p];
     else if([p isEqualToString:@"logTime"])
         [configParams setObject:[NSNumber numberWithDouble:MAX(0, [v doubleValue])] forKey:p];
-    else if([p isEqualToString:@"gpsEnabled"])
-        [configParams setObject:[NSNumber numberWithBool:[v boolValue]] forKey:p];
     else if([p isEqualToString:@"incBaseline"])
         [configParams setObject:[NSNumber numberWithBool:[v boolValue]] forKey:p];
+    else if([p isEqualToString:@"trigAllEnable"])
+        [configParams setObject:[NSNumber numberWithBool:[v boolValue]] forKey:p];
+    else if([p isEqualToString:@"gpsEnabled"]){
+        BOOL enabled = [v boolValue];
+        [configParams setObject:[NSNumber numberWithBool:enabled] forKey:p];
+        if(!enabled) [configParams setObject:[NSNumber numberWithInt:0] forKey:p];
+    }
+    else if([p isEqualToString:@"gpsMode"])
+        [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0, [v intValue]), 5)] forKey:p];
+    else if([p isEqualToString:@"gpsusClockAlarm"]){
+        int mode = [[self configParam:@"gpsMode"] intValue];
+        if(mode == 3 || mode == 4) [configParams setObject:[NSNumber numberWithInt:0] forKey:p];
+        else [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:p];
+    }
+    else if([p isEqualToString:@"daqMode"]){
+        int m = MIN(MAX(0, [v intValue]), 12);
+        if(m <= 2 || m >= 10) [configParams setObject:[NSNumber numberWithInt:m] forKey:p];
+    }
+    else if([p isEqualToString:@"nonsparseStart"] || [p isEqualToString:@"nonsparseEnd"] || [p isEqualToString:@"sparseOverwrite"]){
+        if([[self configParam:@"daqMode"] intValue] < 10) [configParams setObject:[NSNumber numberWithInt:-1] forKey:p];
+        else{
+            if([p isEqualToString:@"nonsparseStart"])
+                [configParams setObject:[NSNumber numberWithInt:MAX(0, [v intValue])] forKey:p];
+            else if([p isEqualToString:@"nonsparseEnd"])
+                [configParams setObject:[NSNumber numberWithInt:MAX([[self configParam:@"nonsparseStart"] intValue], [v intValue])] forKey:p];
+            else if([p isEqualToString:@"sparseOverwrite"])
+                [configParams setObject:[NSNumber numberWithInt:MIN(MAX(-1, [v intValue]), 1)] forKey:p];
+        }
+    }
     else{
         NSLog(@"ORFlashCamListenerModel: unknown configuration parameter %@\n", p);
         return;
     }
-     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelConfigChanged object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelConfigChanged object:self];
 }
 
 - (void) setTimeout:(int)to
@@ -773,11 +881,12 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
 
 - (void) startReadoutAfterPing
 {
-    if([guardian pingRunning] || [readOutArgs count] == 0){
+    if([guardian pingRunning]){
         [self performSelector:@selector(startReadoutAfterPing) withObject:self afterDelay:0.01];
         return;
     }
     [self updateIP];
+    
     NSMutableArray* argCard      = [NSMutableArray array];
     NSMutableString* addressList = [NSMutableString string];
     NSMutableArray* orcaChanMap  = [NSMutableArray array];
@@ -789,7 +898,8 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
             ORFlashCamADCModel* adc = (ORFlashCamADCModel*) card;
             [addressList appendString:[NSString stringWithFormat:@"%x,", [adc cardAddress]]];
             [argCard addObjectsFromArray:[adc runFlagsForCardIndex:adcCount
-                                                  andChannelOffset:(unsigned int)[orcaChanMap count]]];
+                                                  andChannelOffset:(unsigned int)[orcaChanMap count]
+                                                       withTrigAll:[[self configParam:@"trigAllEnable"] boolValue]]];
             for(unsigned int ich=0; ich<kMaxFlashCamADCChannels; ich++){
                 if([adc chanEnabled:ich]){
                     NSDictionary* chDict = [NSDictionary dictionaryWithObjectsAndKeys:adc, @"adc", [NSNumber numberWithUnsignedInt:ich], @"channel", nil];
@@ -799,6 +909,7 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
             adcCount ++;
         }
     }
+    mergeRunFlags(argCard);
     // fixme: check for no cards and no enabled channels here
     [argCard addObjectsFromArray:@[@"-a", [addressList substringWithRange:NSMakeRange(0, [addressList length]-1)]]];
     // fixme: check channel maps here
@@ -819,6 +930,7 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     NSString* listen = [NSString stringWithFormat:@"tcp://connect/%d/%@", port, ip];
     [readOutArgs addObjectsFromArray:@[@"-ei", [[self remoteInterfaces] componentsJoinedByString:@","]]];
     [readOutArgs addObjectsFromArray:@[@"-et", [self ethType]]];
+    [readOutArgs addObjectsFromArray:[self runFlags:NO]];
     [readOutArgs addObjectsFromArray:argCard];
     [readOutArgs addObjectsFromArray:@[@"-o", listen]];
     if([guardian localMode]){

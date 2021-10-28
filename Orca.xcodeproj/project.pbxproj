@@ -3572,6 +3572,7 @@
 		E6C2E7F523A984B900673DB8 /* ORFlashCamADCController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6C2E7F423A984B900673DB8 /* ORFlashCamADCController.m */; };
 		E6C7A5AB26D0400A007E65AE /* flashcam_adc.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E6C7A5AA26D04009007E65AE /* flashcam_adc.jpg */; };
 		E6C7A5B126D0407C007E65AE /* flashcam_trigger.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E6C7A5B026D0407B007E65AE /* flashcam_trigger.jpg */; };
+		E6C9759D26FE3F3300D6F792 /* FlashCamUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E6C9759C26FE3F3300D6F792 /* FlashCamUtils.m */; };
 		E6CC0769244405DE00D8DE0F /* Mail.app in Resources */ = {isa = PBXBuildFile; fileRef = E6CC0768244405DD00D8DE0F /* Mail.app */; };
 		E6DC1B4B243A240500A559F0 /* ORURLSession.m in Sources */ = {isa = PBXBuildFile; fileRef = E6DC1B49243A240400A559F0 /* ORURLSession.m */; };
 		E6DC1B4C243A240500A559F0 /* ORURLSession.h in Headers */ = {isa = PBXBuildFile; fileRef = E6DC1B4A243A240400A559F0 /* ORURLSession.h */; };
@@ -7384,6 +7385,8 @@
 		E6C583242544CA2A00567B9A /* Orca.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Orca.xcconfig; sourceTree = "<group>"; };
 		E6C7A5AA26D04009007E65AE /* flashcam_adc.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = flashcam_adc.jpg; sourceTree = "<group>"; };
 		E6C7A5B026D0407B007E65AE /* flashcam_trigger.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = flashcam_trigger.jpg; sourceTree = "<group>"; };
+		E6C9759B26FE3F1300D6F792 /* FlashCamUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlashCamUtils.h; sourceTree = "<group>"; };
+		E6C9759C26FE3F3300D6F792 /* FlashCamUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlashCamUtils.m; sourceTree = "<group>"; };
 		E6CC0768244405DD00D8DE0F /* Mail.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = Mail.app; path = $APPLICATIONS_DIRECTORY/Mail.app; sourceTree = "<absolute>"; };
 		E6DC1B49243A240400A559F0 /* ORURLSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORURLSession.m; sourceTree = "<group>"; };
 		E6DC1B4A243A240400A559F0 /* ORURLSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORURLSession.h; sourceTree = "<group>"; };
@@ -14911,6 +14914,8 @@
 				E63085FD2688CCEC00687A6D /* flashcam_listener.jpg */,
 				E63085D12681057800687A6D /* ORFlashCamListenerModel.h */,
 				E63085D22681057800687A6D /* ORFlashCamListenerModel.m */,
+				E6C9759B26FE3F1300D6F792 /* FlashCamUtils.h */,
+				E6C9759C26FE3F3300D6F792 /* FlashCamUtils.m */,
 				E63085CF2681057700687A6D /* bufio.h */,
 				E63085D32681057800687A6D /* bufio.c */,
 				E63085CE2681057700687A6D /* fcio.h */,
@@ -18161,6 +18166,7 @@
 				840C7FE11955CA0000E36622 /* NSApplication+Extensions.m in Sources */,
 				847F8B36063DB29E00A8597A /* ORTimer.m in Sources */,
 				8467E6AD06480F0A00A35E6A /* ORTrigger32Controller.m in Sources */,
+				E6C9759D26FE3F3300D6F792 /* FlashCamUtils.m in Sources */,
 				842FCCB4197849C700B89723 /* OREHS8260pDecoders.m in Sources */,
 				8467E6AF06480F0A00A35E6A /* ORTrigger32Model.m in Sources */,
 				844514870674DF9600A19654 /* ORLC950Controller.m in Sources */,

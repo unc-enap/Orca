@@ -47,7 +47,7 @@
 - (void) setModel:(id)aModel
 {
     [super setModel:aModel];
-    [[self window] setTitle:[NSString stringWithFormat:@"FlasCam ADC (0x%x Slot %d)", [model cardAddress], [model slot]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam ADC (0x%x Slot %d)", [model cardAddress], [model slot]]];
 }
 
 - (void) registerNotificationObservers
@@ -55,16 +55,20 @@
     NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
     [super registerNotificationObservers];
     [notifyCenter addObserver : self
+                     selector : @selector(settingsLock:)
+                         name : ORRunStatusChangedNotification
+                       object : nil];
+    [notifyCenter addObserver : self
                      selector : @selector(chanEnabledChanged:)
                          name : ORFlashCamADCModelChanEnabledChanged
                        object : nil];
     [notifyCenter addObserver : self
-                     selector : @selector(baselineChanged:)
-                         name : ORFlashCamADCModelBaselineChanged
+                     selector : @selector(trigOutEnabledChanged:)
+                         name : ORFlashCamADCModelTrigOutEnabledChanged
                        object : nil];
     [notifyCenter addObserver : self
-                     selector : @selector(baseCalibChanged:)
-                         name : ORFlashCamADCModelBaseCalibChanged
+                     selector : @selector(baselineChanged:)
+                         name : ORFlashCamADCModelBaselineChanged
                        object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(thresholdChanged:)
@@ -87,8 +91,24 @@
                          name : ORFlashCamADCModelFilterTypeChanged
                        object : nil];
     [notifyCenter addObserver : self
+                     selector : @selector(flatTopTimeChanged:)
+                         name : ORFlashCamADCModelFlatTopTimeChanged
+                       object : nil];
+    [notifyCenter addObserver : self
                      selector : @selector(poleZeroTimeChanged:)
                          name : ORFlashCamADCModelPoleZeroTimeChanged
+                       object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(postTriggerChanged:)
+                         name : ORFlashCamADCModelPostTriggerChanged
+                       object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(majorityLevelChanged:)
+                         name : ORFlashCamADCModelMajorityLevelChanged
+                       object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(majorityWidthChanged:)
+                         name : ORFlashCamADCModelMajorityWidthChanged
                        object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(rateGroupChanged:)
@@ -150,14 +170,18 @@
     [self cardAddressChanged:nil];
     [self cardSlotChanged:nil];
     [self chanEnabledChanged:nil];
+    [self trigOutEnabledChanged:nil];
     [self baselineChanged:nil];
-    [self baseCalibChanged:nil];
     [self thresholdChanged:nil];
     [self adcGainChanged:nil];
     [self trigGainChanged:nil];
     [self shapeTimeChanged:nil];
     [self filterTypeChanged:nil];
+    [self flatTopTimeChanged:nil];
     [self poleZeroTimeChanged:nil];
+    [self postTriggerChanged:nil];
+    [self majorityLevelChanged:nil];
+    [self majorityWidthChanged:nil];
     [self rateGroupChanged:nil];
     [self updateTimePlot:nil];
     [self waveformRateChanged:nil];
@@ -195,6 +219,21 @@
     }
 }
 
+- (void) trigOutEnabledChanged:(NSNotification*)note
+{
+    if(note == nil){
+        for(int i=0; i<kMaxFlashCamADCChannels; i++)
+            [[trigOutEnabledMatrix cellWithTag:i] setState:[model trigOutEnabled:i]];
+    }
+    else{
+        int chan = [[[note userInfo] objectForKey:@"Channel"] intValue];
+        [[trigOutEnabledMatrix cellWithTag:chan] setState:[model trigOutEnabled:chan]];
+    }
+    [trigOutEnableButton setIntValue:[model trigOutEnable]];
+    if([model trigOutEnable]) [trigOutEnabledMatrix setEnabled:YES];
+    else [trigOutEnabledMatrix setEnabled:NO];
+}
+
 - (void) baselineChanged:(NSNotification*)note
 {
     if(note == nil){
@@ -204,18 +243,6 @@
     else{
         int chan = [[[note userInfo] objectForKey:@"Channel"] intValue];
         [[baselineMatrix cellWithTag:chan] setIntValue:[model baseline:chan]];
-    }
-}
-
-- (void) baseCalibChanged:(NSNotification*)note
-{
-    if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++)
-            [[baseCalibMatrix cellWithTag:i] setIntValue:[model baseCalib:i]];
-    }
-    else{
-        int chan = [[[note userInfo] objectForKey:@"Channel"] intValue];
-        [[baseCalibMatrix cellWithTag:chan] setIntValue:[model baseCalib:chan]];
     }
 }
 
@@ -270,12 +297,29 @@
 - (void) filterTypeChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++)
-            [[filterTypeMatrix cellWithTag:i] setFloatValue:[model filterType:i]];
+        for(int i=0; i<kMaxFlashCamADCChannels; i++){
+            [[filterTypeMatrix cellWithTag:i] setIntValue:[model filterType:i]];
+            if([model filterType:i] == 0) [[flatTopTimeMatrix cellWithTag:i] setEnabled:NO];
+            else [[flatTopTimeMatrix cellWithTag:i] setEnabled:YES];
+        }
     }
     else{
         int chan = [[[note userInfo] objectForKey:@"Channel"] intValue];
-        [[filterTypeMatrix cellWithTag:chan] setFloatValue:[model filterType:chan]];
+        [[filterTypeMatrix cellWithTag:chan] setIntValue:[model filterType:chan]];
+        if([model filterType:chan] == 0) [[flatTopTimeMatrix cellWithTag:chan] setEnabled:NO];
+        else [[flatTopTimeMatrix cellWithTag:chan] setEnabled:YES];
+    }
+}
+
+- (void) flatTopTimeChanged:(NSNotification*)note
+{
+    if(note == nil){
+        for(int i=0; i<kMaxFlashCamADCChannels; i++)
+        [[flatTopTimeMatrix cellWithTag:i] setFloatValue:[model flatTopTime:i]];
+    }
+    else{
+        int chan = [[[note userInfo] objectForKey:@"Channel"] intValue];
+        [[flatTopTimeMatrix cellWithTag:chan] setFloatValue:[model flatTopTime:chan]];
     }
 }
 
@@ -289,6 +333,28 @@
         int chan = [[[note userInfo] objectForKey:@"Channel"] intValue];
         [[poleZeroTimeMatrix cellWithTag:chan] setFloatValue:[model poleZeroTime:chan]];
     }
+}
+
+- (void) postTriggerChanged:(NSNotification*)note
+{
+    if(note == nil){
+        for(int i=0; i<kMaxFlashCamADCChannels; i++)
+        [[postTriggerMatrix cellWithTag:i] setFloatValue:[model postTrigger:i]];
+    }
+    else{
+        int chan = [[[note userInfo] objectForKey:@"Channel"] intValue];
+        [[postTriggerMatrix cellWithTag:chan] setFloatValue:[model postTrigger:chan]];
+    }
+}
+
+- (void) majorityLevelChanged:(NSNotification*)note
+{
+    [majorityLevelPUButton selectItemAtIndex:[model majorityLevel]-1];
+}
+
+- (void) majorityWidthChanged:(NSNotification*)note
+{
+    [majorityWidthTextField setIntValue:[model majorityLevel]];
 }
 
 - (void) waveformRateChanged:(NSNotification*)note
@@ -382,16 +448,25 @@
 
 - (void) settingsLock:(bool)lock
 {
+    BOOL run = [gOrcaGlobals runInProgress];
+    //BOOL lock = [gSecurity runInProgressButNotType:eMaintenanceRunType orIsLocked:ORGretina4MSettingsLock];
+    lock = lock || run;
+    
     [super settingsLock:lock];
-    [chanEnabledMatrix    setEnabled:!lock];
-    [baselineMatrix       setEnabled:!lock];
-    [baseCalibMatrix      setEnabled:!lock];
-    [thresholdMatrix      setEnabled:!lock];
-    [adcGainMatrix        setEnabled:!lock];
-    [trigGainMatrix       setEnabled:!lock];
-    [shapeTimeMatrix      setEnabled:!lock];
-    [filterTypeMatrix     setEnabled:!lock];
-    [poleZeroTimeMatrix   setEnabled:!lock];
+    [chanEnabledMatrix      setEnabled:!lock];
+    [trigOutEnabledMatrix   setEnabled:!lock];
+    [baselineMatrix         setEnabled:!lock];
+    [thresholdMatrix        setEnabled:!lock];
+    [adcGainMatrix          setEnabled:!lock];
+    [trigGainMatrix         setEnabled:!lock];
+    [shapeTimeMatrix        setEnabled:!lock];
+    [filterTypeMatrix       setEnabled:!lock];
+    [flatTopTimeMatrix      setEnabled:!lock];
+    [poleZeroTimeMatrix     setEnabled:!lock];
+    [postTriggerMatrix      setEnabled:!lock];
+    [majorityLevelPUButton  setEnabled:!lock];
+    [majorityWidthTextField setEnabled:!lock];
+    [trigOutEnableButton    setEnabled:!lock];
 }
 
 
@@ -399,20 +474,20 @@
 
 - (IBAction) chanEnabledAction:(id)sender
 {
-    if([sender intValue] != [model chanEnabled:(unsigned int)[[sender selectedCell] tag]])
+    if((bool) [sender intValue] != [model chanEnabled:(unsigned int)[[sender selectedCell] tag]])
         [model setChanEnabled:(unsigned int)[[sender selectedCell] tag] withValue:[sender intValue]];
+}
+
+- (IBAction) trigOutEnabledAction:(id)sender
+{
+    if((bool) [sender intValue] != [model trigOutEnabled:(unsigned int)[[sender selectedCell] tag]])
+        [model setTrigOutEnabled:(unsigned int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 - (IBAction) baselineAction:(id)sender
 {
     if([sender intValue] != [model baseline:(unsigned int)[[sender selectedCell] tag]])
         [model setBaseline:(unsigned int)[[sender selectedCell] tag] withValue:[sender intValue]];
-}
-
-- (IBAction) baseCalibAction:(id)sender
-{
-    if([sender floatValue] != [model baseCalib:(unsigned int)[[sender selectedCell] tag]])
-        [model setBaseCalib:(unsigned int)[[sender selectedCell] tag] withValue:[sender floatValue]];
 }
 
 - (IBAction) thresholdAction:(id)sender
@@ -435,20 +510,47 @@
 
 - (IBAction) shapeTimeAction:(id)sender
 {
-    if([sender intValue] != [model shapeTime:(int)[[sender selectedCell] tag]])
+    if([sender intValue] != [model shapeTime:(unsigned int)[[sender selectedCell] tag]])
         [model setShapeTime:(unsigned int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 - (IBAction) filterTypeAction:(id)sender
 {
-    if([sender floatValue] != [model filterType:(unsigned int)[[sender selectedCell] tag]])
-        [model setFilterType:(unsigned int)[[sender selectedCell] tag] withValue:[sender floatValue]];
+    if([sender intValue] != [model filterType:(unsigned int)[[sender selectedCell] tag]])
+        [model setFilterType:(unsigned int)[[sender selectedCell] tag] withValue:[sender intValue]];
+}
+
+- (IBAction) flatTopTimeAction:(id)sender
+{
+    if([sender floatValue] != [model flatTopTime:(unsigned int)[[sender selectedCell] tag]])
+        [model setFlatTopTime:(unsigned int)[[sender selectedCell] tag] withValue:[sender floatValue]];
 }
 
 - (IBAction) poleZeroTimeAction:(id)sender
 {
     if([sender floatValue] != [model poleZeroTime:(unsigned int)[[sender selectedCell] tag]])
         [model setPoleZeroTime:(unsigned int)[[sender selectedCell] tag] withValue:[sender floatValue]];
+}
+
+- (IBAction) postTriggerAction:(id)sender
+{
+    if([sender floatValue] != [model postTrigger:(unsigned int)[[sender selectedCell] tag]])
+        [model setPostTrigger:(unsigned int)[[sender selectedCell] tag] withValue:[sender floatValue]];
+}
+
+- (IBAction) majorityLevelAction:(id)sender
+{
+    [model setMajorityLevel:(int)[sender indexOfSelectedItem]+1];
+}
+
+- (IBAction) majorityWidthAction:(id)sender
+{
+    [model setMajorityWidth:[sender intValue]];
+}
+
+- (IBAction) trigOutEnableAction:(id)sender
+{
+    [model setTrigOutEnable:(bool)[sender intValue]];
 }
 
 - (IBAction) printFlagsAction:(id)sender

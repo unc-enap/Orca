@@ -224,6 +224,12 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     return nil;
 }
 
+- (ORFlashCamListenerModel*) getListenerForTag:(int)t
+{
+    for(ORFlashCamListenerModel* l in [self orcaObjects]) if((int) [l tag] == t) return l;
+    return nil;
+}
+
 - (ORFlashCamListenerModel*) getListener:(NSString *)eth atPort:(uint16_t)p
 {
     for(ORFlashCamListenerModel* l in [self orcaObjects]) if([l sameIP:eth andPort:p]) return l;
@@ -574,25 +580,6 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     return -1;
 }
 
-- (NSMutableArray*) runFlags
-{
-    NSMutableArray* f = [NSMutableArray array];
-    //[f addObjectsFromArray:@[@"-mt",   [NSString stringWithFormat:@"%d", runLength]]];
-    [f addObjectsFromArray:@[@"-mpl",  [NSString stringWithFormat:@"%d", [[self configParam:@"maxPayload"]    intValue]]]];
-    [f addObjectsFromArray:@[@"-slots",[NSString stringWithFormat:@"%d", [[self configParam:@"eventBuffer"]   intValue]]]];
-    [f addObjectsFromArray:@[@"-aph",  [NSString stringWithFormat:@"%d", [[self configParam:@"phaseAdjust"]   intValue]]]];
-    [f addObjectsFromArray:@[@"-bls",  [NSString stringWithFormat:@"%d", [[self configParam:@"baselineSlew"]  intValue]]]];
-    [f addObjectsFromArray:@[@"-il",   [NSString stringWithFormat:@"%d", [[self configParam:@"integratorLen"] intValue]]]];
-    [f addObjectsFromArray:@[@"-es",   [NSString stringWithFormat:@"%d", [[self configParam:@"eventSamples"]  intValue]]]];
-    [f addObjectsFromArray:@[@"-sd",   [NSString stringWithFormat:@"%d", [[self configParam:@"signalDepth"] intValue]]]];
-    [f addObjectsFromArray:@[@"-gt",   [NSString stringWithFormat:@"%d", [[self configParam:@"traceType"]     intValue]]]];
-    [f addObjectsFromArray:@[@"-gpr",[NSString stringWithFormat:@"%.2f", [[self configParam:@"pileupRej"]  doubleValue]]]];
-    //[f addObjectsFromArray:@[@"-lt", [NSString stringWithFormat:@"%.2f", [[self configParam:@"logTime"]    doubleValue]]]];
-    [f addObjectsFromArray:@[@"-gps",  [NSString stringWithFormat:@"%d", [[self configParam:@"gpsEnabled"]    intValue]]]];
-    [f addObjectsFromArray:@[@"-blinc",[NSString stringWithFormat:@"%d", [[self configParam:@"incBaseline"]   intValue]]]];
-    return f;
-}
-
 - (NSMutableArray*) connectedObjects:(NSString*)cname toInterface:(NSString*)eth
 {
     NSMutableArray* objs = [NSMutableArray array];
@@ -728,7 +715,6 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     }
     NSMutableArray* args = [NSMutableArray array];
     if(![self localMode]) [args addObjectsFromArray:@[username, ipAddress, @"readout-fc250b"]];
-    [args addObjectsFromArray:[self runFlags]];
     for(int i=0; i<[self listenerCount]; i++) [[self getListenerAtIndex:i] setReadOutArgs:args];
 }
 

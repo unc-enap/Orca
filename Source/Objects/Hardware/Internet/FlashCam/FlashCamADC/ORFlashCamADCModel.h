@@ -24,8 +24,6 @@
 #import "ORHWWizard.h"
 #import "fcio.h"
 
-//@class ORRateGroup;
-
 #define kMaxFlashCamADCChannels 6
 #define kFlashCamADCBufferLength 300
 #define kFlashCamADCOrcaHeaderLength 3
@@ -37,15 +35,20 @@
 @interface ORFlashCamADCModel : ORFlashCamCard <ORDataTaker, ORHWWizard>
 {
     @private
-    bool chanEnabled[kMaxFlashCamADCChannels];
-    int baseline[kMaxFlashCamADCChannels];       // bldac
-    float baseCalib[kMaxFlashCamADCChannels];    // bl
-    int threshold[kMaxFlashCamADCChannels];      // athr
-    int adcGain[kMaxFlashCamADCChannels];        // ag
-    float trigGain[kMaxFlashCamADCChannels];     // tgm
-    int shapeTime[kMaxFlashCamADCChannels];      // gs
-    float filterType[kMaxFlashCamADCChannels];   // gf
-    float poleZeroTime[kMaxFlashCamADCChannels]; // gpz
+    bool chanEnabled[kMaxFlashCamADCChannels];    // am
+    bool trigOutEnabled[kMaxFlashCamADCChannels]; // altm
+    int baseline[kMaxFlashCamADCChannels];        // bldac
+    int threshold[kMaxFlashCamADCChannels];       // athr
+    int adcGain[kMaxFlashCamADCChannels];         // ag
+    float trigGain[kMaxFlashCamADCChannels];      // tgm
+    int shapeTime[kMaxFlashCamADCChannels];       // gs
+    int filterType[kMaxFlashCamADCChannels];
+    float flatTopTime[kMaxFlashCamADCChannels];   // gf
+    float poleZeroTime[kMaxFlashCamADCChannels];  // gpz
+    float postTrigger[kMaxFlashCamADCChannels];   // pthr
+    int majorityLevel;                            // majl
+    int majorityWidth;                            // majw
+    bool trigOutEnable;
     bool isRunning;
     unsigned int wfSamples;
     int wfHeaderBuffer[kFlashCamADCBufferLength*kFlashCamADCWFHeaderLength];
@@ -74,14 +77,19 @@
 #pragma mark •••Accessors
 - (unsigned int) nChanEnabled;
 - (bool) chanEnabled:(unsigned int)chan;
+- (bool) trigOutEnable;
+- (bool) trigOutEnabled:(unsigned int)chan;
 - (int) baseline:(unsigned int)chan;
-- (float) baseCalib:(unsigned int)chan;
 - (int) threshold:(unsigned int)chan;
 - (int) adcGain:(unsigned int)chan;
 - (float) trigGain:(unsigned int)chan;
 - (int) shapeTime:(unsigned int)chan;
-- (float) filterType:(unsigned int)chan;
+- (int) filterType:(unsigned int)chan;
+- (float) flatTopTime:(unsigned int)chan;
 - (float) poleZeroTime:(unsigned int)chan;
+- (float) postTrigger:(unsigned int)chan;
+- (int) majorityLevel;
+- (int) majorityWidth;
 - (ORRateGroup*) wfRates;
 - (id) rateObject:(short)channel;
 - (uint32_t) wfCount:(int)channel;
@@ -89,15 +97,20 @@
 - (float) getRate:(short)channel;
 - (uint32_t) dataId;
 
-- (void) setChanEnabled:(unsigned int)chan  withValue:(bool)enabled;
-- (void) setBaseline:(unsigned int)chan     withValue:(int)base;
-- (void) setBaseCalib:(unsigned int)chan    withValue:(float)calib;
-- (void) setThreshold:(unsigned int)chan    withValue:(int)thresh;
-- (void) setADCGain:(unsigned int)chan      withValue:(int)gain;
-- (void) setTrigGain:(unsigned int)chan     withValue:(float)gain;
-- (void) setShapeTime:(unsigned int)chan    withValue:(int)time;
-- (void) setFilterType:(unsigned int)chan   withValue:(float)type;
-- (void) setPoleZeroTime:(unsigned int)chan withValue:(float)time;
+- (void) setChanEnabled:(unsigned int)chan    withValue:(bool)enabled;
+- (void) setTrigOutEnabled:(unsigned int)chan withValue:(bool)enabled;
+- (void) setBaseline:(unsigned int)chan       withValue:(int)base;
+- (void) setThreshold:(unsigned int)chan      withValue:(int)thresh;
+- (void) setADCGain:(unsigned int)chan        withValue:(int)gain;
+- (void) setTrigGain:(unsigned int)chan       withValue:(float)gain;
+- (void) setShapeTime:(unsigned int)chan      withValue:(int)time;
+- (void) setFilterType:(unsigned int)chan     withValue:(int)type;
+- (void) setFlatTopTime:(unsigned int)chan    withValue:(float)time;
+- (void) setPoleZeroTime:(unsigned int)chan   withValue:(float)time;
+- (void) setPostTrigger:(unsigned int)chan    withValue:(float)time;
+- (void) setMajorityLevel:(int)level;
+- (void) setMajorityWidth:(int)width;
+- (void) setTrigOutEnable:(bool)enabled;
 - (void) setWFsamples:(int)samples;
 - (void) setWFrates:(ORRateGroup*)rateGroup;
 - (void) setRateIntTime:(double)intTime;
@@ -109,7 +122,8 @@
 - (NSString*) chFlag:(unsigned int)ch withInt:(int)value;
 - (NSString*) chFlag:(unsigned int)ch withFloat:(float)value;
 - (unsigned int) chanMask;
-- (NSMutableArray*) runFlagsForCardIndex:(unsigned int) index andChannelOffset:(unsigned int)offset;
+- (unsigned int) trigOutMask;
+- (NSMutableArray*) runFlagsForCardIndex:(unsigned int) index andChannelOffset:(unsigned int)offset withTrigAll:(BOOL)trigAll;
 - (void) printRunFlagsForChannelOffset:(unsigned int)offset;
 
 #pragma mark •••Data taker methods
@@ -137,14 +151,18 @@
 
 #pragma mark •••Externals
 extern NSString* ORFlashCamADCModelChanEnabledChanged;
+extern NSString* ORFlashCamADCModelTrigOutEnabledChanged;
 extern NSString* ORFlashCamADCModelBaselineChanged;
-extern NSString* ORFlashCamADCModelBaseCalibChanged;
 extern NSString* ORFlashCamADCModelThresholdChanged;
 extern NSString* ORFlashCamADCModelADCGainChanged;
 extern NSString* ORFlashCamADCModelTrigGainChanged;
 extern NSString* ORFlashCamADCModelShapeTimeChanged;
 extern NSString* ORFlashCamADCModelFilterTypeChanged;
+extern NSString* ORFlashCamADCModelFlatTopTimeChanged;
 extern NSString* ORFlashCamADCModelPoleZeroTimeChanged;
+extern NSString* ORFlashCamADCModelPostTriggerChanged;
+extern NSString* ORFlashCamADCModelMajorityLevelChanged;
+extern NSString* ORFlashCamADCModelMajorityWidthChanged;
 extern NSString* ORFlashCamADCModelRateGroupChanged;
 extern NSString* ORFlashCamADCModelBufferFull;
 

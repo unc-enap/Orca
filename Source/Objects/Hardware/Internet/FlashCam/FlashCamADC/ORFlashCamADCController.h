@@ -25,14 +25,19 @@
 @interface ORFlashCamADCController : ORFlashCamCardController
 {
     IBOutlet NSMatrix* chanEnabledMatrix;
+    IBOutlet NSMatrix* trigOutEnabledMatrix;
     IBOutlet NSMatrix* baselineMatrix;
-    IBOutlet NSMatrix* baseCalibMatrix;
     IBOutlet NSMatrix* thresholdMatrix;
     IBOutlet NSMatrix* adcGainMatrix;
     IBOutlet NSMatrix* trigGainMatrix;
     IBOutlet NSMatrix* shapeTimeMatrix;
     IBOutlet NSMatrix* filterTypeMatrix;
+    IBOutlet NSMatrix* flatTopTimeMatrix;
     IBOutlet NSMatrix* poleZeroTimeMatrix;
+    IBOutlet NSMatrix* postTriggerMatrix;
+    IBOutlet NSPopUpButton* majorityLevelPUButton;
+    IBOutlet NSTextField* majorityWidthTextField;
+    IBOutlet NSButton* trigOutEnableButton;
     IBOutlet NSMatrix* chanEnabledRateMatrix;
     IBOutlet NSMatrix* rateTextFields;
     IBOutlet NSTextField* totalRateTextField;
@@ -56,16 +61,20 @@
 
 #pragma mark •••Interface management
 - (void) cardAddressChanged:(NSNotification*)note;
+- (void) trigOutEnabledChanged:(NSNotification*)note;
 - (void) cardSlotChanged:(NSNotification*)note;
 - (void) chanEnabledChanged:(NSNotification*)note;
 - (void) baselineChanged:(NSNotification*)note;
-- (void) baseCalibChanged:(NSNotification*)note;
 - (void) thresholdChanged:(NSNotification*)note;
 - (void) adcGainChanged:(NSNotification*)note;
 - (void) trigGainChanged:(NSNotification*)note;
 - (void) shapeTimeChanged:(NSNotification*)note;
 - (void) filterTypeChanged:(NSNotification*)note;
+- (void) flatTopTimeChanged:(NSNotification*)note;
 - (void) poleZeroTimeChanged:(NSNotification*)note;
+- (void) postTriggerChanged:(NSNotification*)note;
+- (void) majorityLevelChanged:(NSNotification*)note;
+- (void) majorityWidthChanged:(NSNotification*)note;
 - (void) rateGroupChanged:(NSNotification*)note;
 - (void) waveformRateChanged:(NSNotification*)note;
 - (void) totalRateChanged:(NSNotification*)note;
@@ -77,14 +86,19 @@
 
 #pragma mark •••Actions
 - (IBAction) chanEnabledAction:(id)sender;
+- (IBAction) trigOutEnabledAction:(id)sender;
 - (IBAction) baselineAction:(id)sender;
-- (IBAction) baseCalibAction:(id)sender;
 - (IBAction) thresholdAction:(id)sender;
 - (IBAction) adcGainAction:(id)sender;
 - (IBAction) trigGainAction:(id)sender;
 - (IBAction) shapeTimeAction:(id)sender;
 - (IBAction) filterTypeAction:(id)sender;
+- (IBAction) flatTopTimeAction:(id)sender;
 - (IBAction) poleZeroTimeAction:(id)sender;
+- (IBAction) postTriggerAction:(id)sender;
+- (IBAction) majorityLevelAction:(id)sender;
+- (IBAction) majorityWidthAction:(id)sender;
+- (IBAction) trigOutEnableAction:(id)sender;
 - (IBAction) printFlagsAction:(id)sender;
 - (IBAction) rateIntegrationAction:(id)sender;
 
