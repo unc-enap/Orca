@@ -48,13 +48,13 @@ void mergeRunFlags(NSMutableArray* flags)
         merged = NO;
         for(NSUInteger i=0; i<[opts count]; i++){
             NSMutableDictionary* d0 = [opts objectAtIndex:i];
-            unsigned int s0 = [[d0 objectForKey:@"start"] unsignedIntValue];
-            unsigned int e0 = [[d0 objectForKey:@"end"]   unsignedIntValue];
             for(NSUInteger j=0; j<[opts count]; j++){
                 NSMutableDictionary* d1 = [opts objectAtIndex:j];
                 if(d0 == d1) continue;
-                if(![[d0 objectForKey:@"flag"]  isEqualToString:@"flag"])  continue;
-                if(![[d0 objectForKey:@"value"] isEqualToString:@"value"]) continue;
+                if(![[d0 objectForKey:@"flag"] isEqualToString:[d1 objectForKey:@"flag"]])  continue;
+                if([[d0 objectForKey:@"value"] doubleValue] != [[d1 objectForKey:@"value"] doubleValue]) continue;
+                unsigned int s0 = [[d0 objectForKey:@"start"] unsignedIntValue];
+                unsigned int e0 = [[d0 objectForKey:@"end"]   unsignedIntValue];
                 unsigned int s1 = [[d1 objectForKey:@"start"] unsignedIntValue];
                 unsigned int e1 = [[d1 objectForKey:@"end"]   unsignedIntValue];
                 if((s0 > 0 && e1 < s0-1) || s1 > e0+1) continue;
@@ -64,6 +64,8 @@ void mergeRunFlags(NSMutableArray* flags)
                 [removed addObject:[NSNumber numberWithUnsignedInteger:[[d1 objectForKey:@"index"] unsignedIntegerValue]]];
                 [removed addObject:[NSNumber numberWithUnsignedInteger:[[d1 objectForKey:@"index"] unsignedIntegerValue]+1]];
                 [opts removeObjectAtIndex:j];
+                j --;
+                if(j < i) i --;
                 merged = YES;
             }
         }
@@ -76,8 +78,16 @@ void mergeRunFlags(NSMutableArray* flags)
         unsigned int start = [[d objectForKey:@"start"] unsignedIntValue];
         unsigned int count = [[d objectForKey:@"end"] unsignedIntValue] - start + 1;
         [flags setObject:[NSString stringWithFormat:@"%@,%d,%d", value, start, count] atIndexedSubscript:index];
-        
     }
     // finally, remove the items that were merged with others
-    for(NSNumber* n in removed) [flags removeObjectAtIndex:[n unsignedIntegerValue]];
+    for(NSUInteger i=0; i<[removed count]; i++){
+        NSNumber* n = [removed objectAtIndex:i];
+        [flags removeObjectAtIndex:[n unsignedIntegerValue]];
+        for(NSUInteger j=i+1; j<[removed count]; j++){
+            NSNumber* m = [removed objectAtIndex:j];
+            if([n unsignedIntegerValue] < [m unsignedIntegerValue])
+                [removed setObject:[NSNumber numberWithUnsignedInteger:[m unsignedIntegerValue]-1]
+                atIndexedSubscript:j];
+        }
+    }
 }
