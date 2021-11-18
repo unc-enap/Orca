@@ -47,7 +47,7 @@
     NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
     [super registerNotificationObservers];
     [notifyCenter addObserver : self
-                     selector : @selector(connectionChanged:)
+                     selector : @selector(cardAddressChanged:)
                          name : ORFlashCamCardAddressChanged
                        object : nil];
     [notifyCenter addObserver : self
