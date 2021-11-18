@@ -1,7 +1,7 @@
 //  Orca
-//  ORFlashCamTriggerController.m
+//  ORFlashCamGlobalTriggerController.m
 //
-//  Created by Tom Caldwell on Monday Jan 1, 2020
+//  Created by Tom Caldwell on Sunday, November 7, 2021
 //  Copyright (c) 2020 University of North Carolina. All rights reserved.
 //-----------------------------------------------------------
 //This program was prepared for the Regents of the University of
@@ -17,17 +17,16 @@
 //for the use of this software.
 //-------------------------------------------------------------
 
-#import "ORFlashCamTriggerController.h"
-#import "ORFlashCamTriggerModel.h"
-#import "ORFlashCamADCModel.h"
+#import "ORFlashCamGlobalTriggerController.h"
+#import "ORFlashCamGlobalTriggerModel.h"
 
-@implementation ORFlashCamTriggerController
+@implementation ORFlashCamGlobalTriggerController
 
 #pragma mark •••Initialization
 
 - (id) init
 {
-    self = [super initWithWindowNibName:@"FlashCamTrigger"];
+    self = [super initWithWindowNibName:@"FlashCamGlobalTrigger"];
     return self;
 }
 
@@ -39,7 +38,7 @@
 - (void) setModel:(id)aModel
 {
     [super setModel:aModel];
-    [[self window] setTitle:[NSString stringWithFormat:@"FlasCam Trigger (%x Slot %d)", [model cardAddress], [model slot]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"FlasCam Global Trigger (%x Slot %d)", [model cardAddress], [model slot]]];
 }
 
 - (void) registerNotificationObservers
@@ -72,13 +71,13 @@
 - (void) cardAddressChanged:(NSNotification*)note
 {
     [super cardAddressChanged:note];
-    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Trigger (0x%x, Slot %d)", [model cardAddress], [model slot]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Global Trigger (0x%x, Slot %d)", [model cardAddress], [model slot]]];
 }
 
 - (void) cardSlotChanged:(NSNotification*)note
 {
     [super cardSlotChanged:note];
-    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Trigger (0x%x, Slot %d)", [model cardAddress], [model slot]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Global Trigger (0x%x, Slot %d)", [model cardAddress], [model slot]]];
 }
 
 - (void) connectionChanged:(NSNotification*)note
@@ -86,7 +85,7 @@
     NSMutableDictionary* addresses = [model connectedAddresses];
     for(unsigned int i=0; i<kFlashCamTriggerConnections; i++){
         NSNumber* a = [addresses objectForKey:[NSString stringWithFormat:@"trigConnection%d",i]];
-        if(a) [[connectedADCMatrix cellWithTag:i] setIntValue:(int)[a unsignedIntValue]];
+        if(a) [[connectedAddressMatrix cellWithTag:i] setIntValue:(int)[a unsignedIntValue]];
     }
 }
 

@@ -131,6 +131,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     [trigConnector addRestrictedConnectionType:'FCTO'];
     [trigConnector setSameGuardianIsOK:YES];
     [trigConnector setOffColor:[NSColor colorWithCalibratedRed:1 green:0.3 blue:1 alpha:1]];
+    [trigConnector setOnColor:[NSColor colorWithCalibratedRed:0.1 green:0.1 blue:1 alpha:1]];
 }
 
 - (void) positionConnector:(ORConnector*)aConnector
@@ -163,8 +164,8 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 
 - (void) disconnect
 {
-    [ethConnector disconnect];
-    [trigConnector disconnect];
+    if(ethConnector)  [ethConnector  disconnect];
+    if(trigConnector) [trigConnector disconnect];
     [super disconnect];
 }
 

@@ -871,15 +871,6 @@
                                                                     <font key="font" metaFont="system" size="10"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZU9-BS-FgZ">
-                                                                <rect key="frame" x="379" y="27" width="64" height="25"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="center" id="8Mm-KU-qBz">
-                                                                    <font key="font" metaFont="miniSystem"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
                                                         </subviews>
                                                     </view>
                                                 </tabViewItem>
@@ -2363,7 +2354,7 @@ Gauge Controller</string>
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="ORFlashCamADCModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i68-D8-oUs" customClass="ObjectFactory">
-                                                                <rect key="frame" x="421" y="34" width="21" height="172"/>
+                                                                <rect key="frame" x="333" y="34" width="21" height="172"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="flashcam_adc" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="SIZ-Jy-BRz">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2371,7 +2362,7 @@ Gauge Controller</string>
                                                                 </buttonCell>
                                                             </button>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EYj-sJ-2MS">
-                                                                <rect key="frame" x="398" y="7" width="66" height="16"/>
+                                                                <rect key="frame" x="310" y="7" width="66" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="ADC Card" id="JXh-Tw-jWj">
                                                                     <font key="font" metaFont="smallSystem"/>
@@ -2423,7 +2414,7 @@ Gauge Controller</string>
                                                                 </buttonCell>
                                                             </button>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c4C-Zf-chJ">
-                                                                <rect key="frame" x="501" y="7" width="74" height="16"/>
+                                                                <rect key="frame" x="413" y="9" width="74" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Trigger Card" id="4P7-wh-dA1">
                                                                     <font key="font" metaFont="smallSystem"/>
@@ -2448,13 +2439,30 @@ Gauge Controller</string>
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="ORFlashCamTriggerModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7r7-Bs-lS8" customClass="ObjectFactory">
-                                                                <rect key="frame" x="523" y="33" width="31" height="174"/>
+                                                                <rect key="frame" x="435" y="35" width="31" height="174"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="flashcam_trigger" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="ebe-NE-rom">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
                                                             </button>
+                                                            <button toolTip="ORFlashCamGlobalTriggerModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DFJ-fg-2Ba" customClass="ObjectFactory">
+                                                                <rect key="frame" x="535" y="35" width="31" height="174"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="flashcam_trigger" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="9PD-4J-COz">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OoQ-LC-3Cw">
+                                                                <rect key="frame" x="512" y="3" width="76" height="28"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <textFieldCell key="cell" selectable="YES" alignment="center" title="Global Trigger Card" id="51s-Jz-3Fr">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
                                                         </subviews>
                                                     </view>
                                                 </tabViewItem>
@@ -3706,7 +3714,7 @@ Relay</string>
         <image name="flashcam_ethlink" width="238" height="133"/>
         <image name="flashcam_listener" width="1200" height="1200"/>
         <image name="flashcam_minicrate" width="381" height="1934"/>
-        <image name="flashcam_trigger" width="31" height="608"/>
+        <image name="flashcam_trigger" width="30" height="617"/>
         <image name="katrin" width="100" height="100"/>
         <image name="monspectrometer" width="79.578948974609375" height="40.872180938720703"/>
         <image name="nEDMCoil" width="150" height="136"/>

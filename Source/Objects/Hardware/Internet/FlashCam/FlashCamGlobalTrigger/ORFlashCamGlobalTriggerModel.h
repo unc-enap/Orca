@@ -1,7 +1,7 @@
 //  Orca
-//  ORFlashCamTriggerModel.h
+//  ORFlashCamGlobalTriggerModel.h
 //
-//  Created by Tom Caldwell on Monday Jan 1, 2020
+//  Created by Tom Caldwell on Sunday, November 7, 2021
 //  Copyright (c) 2020 University of North Carolina. All rights reserved.
 //-----------------------------------------------------------
 //This program was prepared for the Regents of the University of
@@ -17,15 +17,11 @@
 //for the use of this software.
 //-------------------------------------------------------------
 
-#import "ORFlashCamCard.h"
-#import "ORConnector.h"
+#import "ORFlashCamTriggerModel.h"
 
-#define kFlashCamTriggerConnections 12
-
-@interface ORFlashCamTriggerModel : ORFlashCamCard
+@interface ORFlashCamGlobalTriggerModel : ORFlashCamTriggerModel
 {
     @private
-    ORConnector* ctiConnector[kFlashCamTriggerConnections];
 }
 
 #pragma mark •••Initialization
@@ -36,13 +32,6 @@
 - (void) guardian:(id)aGuardian positionConnectorsForCard:(id)aCard;
 - (void) guardianRemovingDisplayOfConnectors:(id)aGuardian;
 - (void) guardianAssumingDisplayOfConnectors:(id)aGuardian;
-
-#pragma mark •••Accessors
-- (ORConnector*) ctiConnector:(unsigned int)index;
-- (void) setCTIConnector:(ORConnector*)connector atIndex:(unsigned int)index;
-
-#pragma mark •••Connection management
-- (NSMutableDictionary*) connectedAddresses;
 
 #pragma mark •••Run control flags
 - (NSMutableArray*) runFlags;
