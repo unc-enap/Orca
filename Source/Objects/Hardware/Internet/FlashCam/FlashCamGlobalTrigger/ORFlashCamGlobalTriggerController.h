@@ -34,6 +34,4 @@
 #pragma mark •••Interface management
 - (void) connectionChanged:(NSNotification*)note;
 
-#pragma mark •••Actions
-
 @end

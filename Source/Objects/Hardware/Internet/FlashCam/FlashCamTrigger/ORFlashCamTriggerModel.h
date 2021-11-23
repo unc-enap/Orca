@@ -45,7 +45,7 @@
 - (NSMutableDictionary*) connectedAddresses;
 
 #pragma mark •••Run control flags
-- (NSMutableArray*) runFlags;
+- (NSMutableArray*) runFlagsForCardIndex:(unsigned int)index;
 
 #pragma mark •••Archival
 - (id) initWithCoder:(NSCoder*)decoder;

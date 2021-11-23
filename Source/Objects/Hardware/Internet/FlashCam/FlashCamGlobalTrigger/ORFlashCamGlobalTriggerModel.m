@@ -62,10 +62,12 @@
     [trigConnector release];
     trigConnector = NULL;
     for(unsigned int i=0; i<kFlashCamTriggerConnections; i++){
-        [[self ctiConnector:i] setConnectorType:'FCTI'];
+        [[self ctiConnector:i] setConnectorType:'FCGO'];
         [[[self ctiConnector:i] restrictedList] removeAllObjects];
-        [[self ctiConnector:i] addRestrictedConnectionType:'FCTO'];
-        [[self ctiConnector:i] setOffColor:[NSColor colorWithCalibratedRed:0.1 green:1 blue:0.1 alpha:1]];
+        [[self ctiConnector:i] addRestrictedConnectionType:'FCTI'];
+        [[self ctiConnector:i] addRestrictedConnectionType:'FCGI'];
+        [[self ctiConnector:i] setOffColor:[NSColor colorWithCalibratedRed:0.1 green:0.5 blue:0.5 alpha:1]];
+        [[self ctiConnector:i] setOnColor:[NSColor  colorWithCalibratedRed:0.1 green:0.1 blue:1   alpha:1]];
     }
 }
 
@@ -104,9 +106,14 @@
 
 - (NSMutableArray*) runFlags
 {
+    unsigned int mask = 0;
+    for(unsigned int i=0; i<kFlashCamTriggerConnections; i++){
+        ORConnector* cti = [self ctiConnector:i];
+        if(!cti) continue;
+        if([cti isConnected]) mask += 1 << i;
+    }
     NSMutableArray* flags = [NSMutableArray array];
-    if([[self connectedAddresses] count] > 0)
-        [flags addObjectsFromArray:@[@"-ma", [NSString stringWithFormat:@"%x", cardAddress]]];
+    [flags addObjectsFromArray:@[@"-mm", [NSString stringWithFormat:@"%x", mask]]];
     return flags;
 }
 

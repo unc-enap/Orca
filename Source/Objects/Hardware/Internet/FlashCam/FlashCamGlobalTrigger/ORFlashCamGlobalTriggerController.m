@@ -38,7 +38,7 @@
 - (void) setModel:(id)aModel
 {
     [super setModel:aModel];
-    [[self window] setTitle:[NSString stringWithFormat:@"FlasCam Global Trigger (%x Slot %d)", [model cardAddress], [model slot]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Global Trigger (0x%x, Crate %d, Slot %d)", [model cardAddress], [model crateNumber], [model slot]]];
 }
 
 - (void) registerNotificationObservers
@@ -71,13 +71,13 @@
 - (void) cardAddressChanged:(NSNotification*)note
 {
     [super cardAddressChanged:note];
-    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Global Trigger (0x%x, Slot %d)", [model cardAddress], [model slot]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Global Trigger (0x%x, Crate %d, Slot %d)", [model cardAddress], [model crateNumber], [model slot]]];
 }
 
 - (void) cardSlotChanged:(NSNotification*)note
 {
     [super cardSlotChanged:note];
-    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Global Trigger (0x%x, Slot %d)", [model cardAddress], [model slot]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Global Trigger (0x%x, Crate %d, Slot %d)", [model cardAddress], [model crateNumber], [model slot]]];
 }
 
 - (void) connectionChanged:(NSNotification*)note
@@ -88,7 +88,5 @@
         if(a) [[connectedAddressMatrix cellWithTag:i] setIntValue:(int)[a unsignedIntValue]];
     }
 }
-
-#pragma mark •••Actions
 
 @end

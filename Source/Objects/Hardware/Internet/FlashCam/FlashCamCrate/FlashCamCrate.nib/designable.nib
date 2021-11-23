@@ -17,20 +17,21 @@
         <window title="Vme Crate" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="5" userLabel="Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="426" y="419" width="380" height="488"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1025"/>
-            <value key="minSize" type="size" width="213" height="107"/>
+            <rect key="contentRect" x="426" y="419" width="405" height="488"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
+            <value key="minSize" type="size" width="405" height="488"/>
+            <value key="maxSize" type="size" width="405" height="488"/>
             <view key="contentView" id="6">
-                <rect key="frame" x="0.0" y="0.0" width="380" height="488"/>
+                <rect key="frame" x="0.0" y="0.0" width="405" height="488"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="32">
-                        <rect key="frame" x="0.0" y="-6" width="380" height="494"/>
+                        <rect key="frame" x="0.0" y="-6" width="405" height="494"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" image="flashcam_crate" id="46"/>
                     </imageView>
                     <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="22" customClass="ORCardContainerView">
-                        <rect key="frame" x="29" y="31" width="326" height="420"/>
+                        <rect key="frame" x="29" y="31" width="350" height="420"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </customView>
                 </subviews>
@@ -38,7 +39,7 @@
             <connections>
                 <outlet property="delegate" destination="-2" id="24"/>
             </connections>
-            <point key="canvasLocation" x="-68" y="166"/>
+            <point key="canvasLocation" x="-68.5" y="166"/>
         </window>
     </objects>
     <resources>

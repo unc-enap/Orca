@@ -299,6 +299,7 @@
 		4398E7CD11B81B8B00FC4DDE /* ORCaen775Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 4398E7CC11B81B8B00FC4DDE /* ORCaen775Controller.m */; };
 		4398E7E011B81BBD00FC4DDE /* ORCaen775Decoders.h in Headers */ = {isa = PBXBuildFile; fileRef = 4398E7DE11B81BBD00FC4DDE /* ORCaen775Decoders.h */; };
 		4398E7E111B81BBD00FC4DDE /* ORCaen775Decoders.m in Sources */ = {isa = PBXBuildFile; fileRef = 4398E7DF11B81BBD00FC4DDE /* ORCaen775Decoders.m */; };
+		439C8A27274B4D0700719245 /* FlashCamGlobalTrigger.xib in Resources */ = {isa = PBXBuildFile; fileRef = E6443C23273803C900F74788 /* FlashCamGlobalTrigger.xib */; };
 		43ADFE3F10B6DAF90044617C /* readout_code.h in Headers */ = {isa = PBXBuildFile; fileRef = 43ADFE3B10B6DAF90044617C /* readout_code.h */; };
 		43ADFE4010B6DAF90044617C /* ORVCard.hh in Headers */ = {isa = PBXBuildFile; fileRef = 43ADFE3C10B6DAF90044617C /* ORVCard.hh */; };
 		43ADFE5110B6DB240044617C /* readout_code.h in SBC_Code Copy */ = {isa = PBXBuildFile; fileRef = 43ADFE3B10B6DAF90044617C /* readout_code.h */; };
@@ -16993,6 +16994,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				439C8A27274B4D0700719245 /* FlashCamGlobalTrigger.xib in Resources */,
 				E681A79E23BA765A00F76977 /* flashcam.png in Resources */,
 				849415861B330FEB00ED42F8 /* onOffPendingBox.tif in Resources */,
 				840C80001955E1D300E36622 /* RelaunchOrca in Resources */,

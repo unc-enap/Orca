@@ -126,8 +126,6 @@ static NSString* ORFlashCamEthLinkOutputConnection = @"ORFlashCamEthLinkOutputCo
     if(nconnections == n || n < 2) return;
     [self setFrame:NSMakeRect([self frame].origin.x, [self frame].origin.y,
                               n*1.5*kConnectorSize, 3*kConnectorSize)];
-    [[[self connectors] objectForKey:ORFlashCamEthLinkOutputConnection] disconnect];
-    [[self connectors] removeObjectForKey:ORFlashCamEthLinkOutputConnection];
     for(unsigned int i=0; i<nconnections; i++){
         NSString* s = [NSString stringWithFormat:@"%@%d", ORFlashCamEthLinkInputConnection,i];
         ORConnector* connector = [[self connectors] objectForKey:s];
@@ -143,9 +141,8 @@ static NSString* ORFlashCamEthLinkOutputConnection = @"ORFlashCamEthLinkOutputCo
 - (NSMutableArray*) connectedObjects:(NSString*)cname
 {
     NSMutableArray* objs = [NSMutableArray array];
-    for(unsigned int i=0; i<nconnections; i++){
-        NSString* s = [NSString stringWithFormat:@"%@%d",ORFlashCamEthLinkInputConnection,i];
-        ORConnector* connector = [connectors objectForKey:s];
+    for(id key in connectors){
+        ORConnector* connector = [connectors objectForKey:key];
         if(!connector) continue;
         if(![connector isConnected]) continue;
         id obj = [connector connectedObject];

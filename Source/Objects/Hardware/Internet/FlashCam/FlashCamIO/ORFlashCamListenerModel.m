@@ -21,6 +21,7 @@
 #import "ORFlashCamReadoutModel.h"
 #import "ORFlashCamADCModel.h"
 #import "ORFlashCamTriggerModel.h"
+#import "ORFlashCamGlobalTriggerModel.h"
 #import "FlashCamUtils.h"
 #import "Utilities.h"
 
@@ -887,9 +888,12 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     }
     [self updateIP];
     
-    NSMutableArray* argCard      = [NSMutableArray array];
-    NSMutableString* addressList = [NSMutableString string];
-    NSMutableArray* orcaChanMap  = [NSMutableArray array];
+    NSMutableString* addressList   = [NSMutableString string];
+    NSMutableArray*  argCard       = [NSMutableArray  array];
+    NSMutableArray*  orcaChanMap   = [NSMutableArray  array];
+    NSMutableSet*    triggerCards  = [NSMutableSet    set];
+    NSMutableSet*    gtriggerCards = [NSMutableSet    set];
+    // add the adc cards to the address list and their arguments to the list
     unsigned int adcCount = 0;
     for(ORReadOutObject* obj in [readOutList children]){
         if(![[obj object] isKindOfClass:NSClassFromString(@"ORFlashCamCard")]) continue;
@@ -907,26 +911,54 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
                 }
             }
             adcCount ++;
+            // if this adc is connected to a trigger card, add to the respective set
+            if([[card trigConnector] isConnected]){
+                id conobj = [[card trigConnector] connectedObject];
+                NSString* cname = [conobj className];
+                if([cname isEqualToString:@"ORFlashCamGlobalTriggerModel"]) [gtriggerCards addObject:conobj];
+                else if([cname isEqualToString:@"ORFlashCamTriggerModel"])  [triggerCards  addObject:conobj];
+            }
         }
     }
+    // if the trigger cards are connected to any global trigger cards, add those to the set
+    for(id card in triggerCards){
+        id conobj = [[card trigConnector] connectedObject];
+        NSString* cname = [conobj className];
+        if([cname isEqualToString:@"ORFlashCamGlobalTriggerModel"]) [gtriggerCards addObject:conobj];
+        else if([cname isEqualToString:@"ORFlashCamGlobalTriggerModel"]) [triggerCards addObject:conobj];
+    }
+    // check that the trigger  ards are connected to one of the remote interfaces
+    NSMutableSet* gtriggers = [NSMutableSet set];
+    NSMutableSet* triggers  = [NSMutableSet set];
+    for(NSString* e in [self remoteInterfaces]){
+        [gtriggers addObjectsFromArray:[guardian connectedObjects:@"ORFlashCamGlobalTriggerModel" toInterface:e]];
+        [triggers  addObjectsFromArray:[guardian connectedObjects:@"ORFlashCamTriggerModel"       toInterface:e]];
+    }
+    [gtriggerCards intersectSet:gtriggers];
+    [triggerCards  intersectSet:triggers];
+    // add the trigger cards to the address list
+    unsigned int ntrig = 0;
+    for(id card in triggerCards){
+        [addressList insertString:[NSString stringWithFormat:@"%x,", [card cardAddress]] atIndex:0];
+        [readOutArgs addObjectsFromArray:[card runFlagsForCardIndex:ntrig]];
+        ntrig ++;
+    }
     mergeRunFlags(argCard);
+    // make sure there is at most one global trigger card
+    if([gtriggerCards count] > 1){
+        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel on %@ at %@:%d failed to start run due to multiple connected global trigger cards\n", interface, ip, (int) port);
+        [self runFailed];
+    }
+    else if([gtriggerCards count] == 1){
+        for(id card in gtriggerCards){
+            [addressList insertString:[NSString stringWithFormat:@"%x,", [card cardAddress]] atIndex:0];
+            [readOutArgs addObjectsFromArray:[card runFlags]];
+        }
+    }
     // fixme: check for no cards and no enabled channels here
     [argCard addObjectsFromArray:@[@"-a", [addressList substringWithRange:NSMakeRange(0, [addressList length]-1)]]];
     // fixme: check channel maps here
     // fixme: add the card level arguments and the addresses for the trigger card(s)
-    bool foundTrigger = NO;
-    for(NSString* e in [self remoteInterfaces]){
-        NSMutableArray* triggers = [guardian connectedObjects:@"ORFlashCamTriggerModel" toInterface:e];
-        if([triggers count] > 0){
-            ORFlashCamTriggerModel* trigger = [triggers objectAtIndex:0];
-            if([triggers count] > 1 || foundTrigger)
-                NSLog(@"ORFlashCamReadoutModel: multiple trigger cards connected, assuming first"
-                        " trigger card in configuration 0x%x\n", [trigger cardAddress]);
-            [argCard addObjectsFromArray:@[@"-ma", [NSString stringWithFormat:@"%x", [trigger cardAddress]]]];
-            foundTrigger = YES;
-            // fixme - don't know if trigger addresses also need to be added to address list
-        }
-    }
     NSString* listen = [NSString stringWithFormat:@"tcp://connect/%d/%@", port, ip];
     [readOutArgs addObjectsFromArray:@[@"-ei", [[self remoteInterfaces] componentsJoinedByString:@","]]];
     [readOutArgs addObjectsFromArray:@[@"-et", [self ethType]]];
@@ -936,6 +968,7 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     if([guardian localMode]){
         NSString* p = [[[guardian fcSourcePath] stringByExpandingTildeInPath] stringByAppendingString:@"/server/"];
         [[self runTask] addTask:[p stringByAppendingString:@"readout-fc250b"] arguments:[NSArray arrayWithArray:readOutArgs]];
+        NSLog(@"%@readout-fc250b %@\n", p, [readOutArgs componentsJoinedByString:@" "]);
     }
     else{
         [[self runTask] addTask:[[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/remote_run"]

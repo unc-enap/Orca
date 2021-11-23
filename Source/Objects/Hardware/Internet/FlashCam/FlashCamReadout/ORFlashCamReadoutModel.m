@@ -594,7 +594,7 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     if([[obj className] isEqualToString:cname])
         [objs addObject:obj];
     else if([[obj className] isEqualToString:@"ORFlashCamEthLinkModel"])
-        [obj addObjectsFromArray:[obj connectedObjects:cname]];
+        [objs addObjectsFromArray:[obj connectedObjects:cname]];
     return objs;
 }
 

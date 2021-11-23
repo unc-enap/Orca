@@ -76,8 +76,8 @@
                                            withGuardian:self
                                          withObjectLink:self] autorelease]];
     [trigConnector setConnectorImageType:kSmallDot];
-    [trigConnector setConnectorType:'FCTO'];
-    [trigConnector addRestrictedConnectionType:'FCTI'];
+    [trigConnector setConnectorType:'FCGI'];
+    [trigConnector addRestrictedConnectionType:'FCGO'];
     [trigConnector setSameGuardianIsOK:YES];
     [trigConnector setOffColor:[NSColor colorWithCalibratedRed:0.1 green:1 blue:0.1 alpha:1]];
     [trigConnector setOnColor:[NSColor colorWithCalibratedRed:0.1 green:0.1 blue:1 alpha:1]];
@@ -102,13 +102,13 @@
     float yscale = 1.0;
     if([[guardian className] isEqualToString:@"ORFlashCamCrateModel"]){
         xoff = 30;
-        yoff = 21;
+        yoff = 18;
         xscale = 0.595;
         yscale = 0.5;
     }
     else if([[guardian className] isEqualToString:@"ORFlashCamMiniCrateModel"]){
         xoff = 3;
-        yoff = 12;
+        yoff = 10;
         xscale = 0.6;
         yscale = 0.522;
     }
@@ -121,8 +121,8 @@
         bool found = NO;
         for(unsigned int i=0; i<kFlashCamTriggerConnections; i++){
             if(aConnector == ctiConnector[i]){
-                y = yoff + [self frame].size.height*yscale*(0.07+0.5*i/kFlashCamTriggerConnections);
-                if(i > 7) y += [self frame].size.height*yscale*0.18;
+                y = yoff + [self frame].size.height*yscale*(0.07+0.5*(1-(i+1)/(float)kFlashCamTriggerConnections));
+                if(i < 4) y += [self frame].size.height*yscale*0.18;
                 found = YES;
                 break;
             }
@@ -212,11 +212,16 @@
 
 #pragma mark •••Run control flags
 
-- (NSMutableArray*) runFlags
+- (NSMutableArray*) runFlagsForCardIndex:(unsigned int)index
 {
+    unsigned int mask = 0;
+    for(unsigned int i=0; i<kFlashCamTriggerConnections; i++){
+        ORConnector* cti = [self ctiConnector:i];
+        if(!cti) continue;
+        if([cti isConnected]) mask += 1 << i;
+    }
     NSMutableArray* flags = [NSMutableArray array];
-    if([[self connectedAddresses] count] > 0)
-        [flags addObjectsFromArray:@[@"-ma", [NSString stringWithFormat:@"%x", cardAddress]]];
+    [flags addObjectsFromArray:@[@"-smm", [NSString stringWithFormat:@"%x,%d,1", mask, index]]];
     return flags;
 }
 

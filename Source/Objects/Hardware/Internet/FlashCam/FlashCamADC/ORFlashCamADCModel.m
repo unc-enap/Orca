@@ -129,6 +129,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     [trigConnector setConnectorImageType:kSmallDot];
     [trigConnector setConnectorType:'FCTI'];
     [trigConnector addRestrictedConnectionType:'FCTO'];
+    [trigConnector addRestrictedConnectionType:'FCGO'];
     [trigConnector setSameGuardianIsOK:YES];
     [trigConnector setOffColor:[NSColor colorWithCalibratedRed:1 green:0.3 blue:1 alpha:1]];
     [trigConnector setOnColor:[NSColor colorWithCalibratedRed:0.1 green:0.1 blue:1 alpha:1]];
