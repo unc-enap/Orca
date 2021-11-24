@@ -106,7 +106,7 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     [readList addAcceptedObjectName:@"ORFlashCamADCModel"];
     [self setReadOutList:readList];
     [readList release];
-    [self setReadOutArgs:[NSMutableArray array]];
+    [self setReadOutArgs:[[NSMutableArray alloc] init]];
     [[self undoManager] enableUndoRegistration];
     return self;
 }
@@ -211,9 +211,9 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
 - (NSString*) ethType
 {
     NSString* type = @"";
-    for(int i=0; i<(int)[self remoteInterfaceCount]; i++){
-        NSString* t = [guardian ethTypeAtIndex:i];
-        if([type isEqualToString:@""]) type = [t copy];
+    for(NSString* eth in remoteInterfaces){
+        NSString* t = [guardian ethTypeAtIndex:[guardian indexOfInterface:eth]];
+        if([type isEqualToString:@""]) type = [NSString stringWithString:t];
         else if(![t isEqualToString:type]){
             NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: error getting ethernet type - all interfaces associated with the same listener must have identical type\n");
             return @"";
@@ -649,20 +649,23 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
 
 - (void) setReadOutList:(ORReadOutList*)newList
 {
-    [readOutList autorelease];
-    readOutList = [newList retain];
+    [newList retain];
+    [readOutList release];
+    readOutList = newList;
 }
 
 - (void) setReadOutArgs:(NSMutableArray*)args
 {
-    [readOutArgs autorelease];
-    readOutArgs = [args retain];
+    [args retain];
+    [readOutArgs release];
+    readOutArgs = args;
 }
 
 - (void) setChanMap:(NSMutableArray*)chMap
 {
-    [chanMap autorelease];
-    chanMap = [chMap retain];
+    [chMap retain];
+    [chanMap release];
+    chanMap = chMap;
 }
 
 
@@ -888,6 +891,8 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     }
     [self updateIP];
     
+    NSMutableArray*  readoutArgs   = [NSMutableArray array];
+    [readoutArgs addObjectsFromArray:[self readOutArgs]];
     NSMutableString* addressList   = [NSMutableString string];
     NSMutableArray*  argCard       = [NSMutableArray  array];
     NSMutableArray*  orcaChanMap   = [NSMutableArray  array];
@@ -940,7 +945,7 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     unsigned int ntrig = 0;
     for(id card in triggerCards){
         [addressList insertString:[NSString stringWithFormat:@"%x,", [card cardAddress]] atIndex:0];
-        [readOutArgs addObjectsFromArray:[card runFlagsForCardIndex:ntrig]];
+        [readoutArgs addObjectsFromArray:[card runFlagsForCardIndex:ntrig]];
         ntrig ++;
     }
     mergeRunFlags(argCard);
@@ -952,7 +957,7 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     else if([gtriggerCards count] == 1){
         for(id card in gtriggerCards){
             [addressList insertString:[NSString stringWithFormat:@"%x,", [card cardAddress]] atIndex:0];
-            [readOutArgs addObjectsFromArray:[card runFlags]];
+            [readoutArgs addObjectsFromArray:[card runFlags]];
         }
     }
     // fixme: check for no cards and no enabled channels here
@@ -960,20 +965,21 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     // fixme: check channel maps here
     // fixme: add the card level arguments and the addresses for the trigger card(s)
     NSString* listen = [NSString stringWithFormat:@"tcp://connect/%d/%@", port, ip];
-    [readOutArgs addObjectsFromArray:@[@"-ei", [[self remoteInterfaces] componentsJoinedByString:@","]]];
-    [readOutArgs addObjectsFromArray:@[@"-et", [self ethType]]];
-    [readOutArgs addObjectsFromArray:[self runFlags:NO]];
-    [readOutArgs addObjectsFromArray:argCard];
-    [readOutArgs addObjectsFromArray:@[@"-o", listen]];
+    [readoutArgs addObjectsFromArray:@[@"-ei", [[self remoteInterfaces] componentsJoinedByString:@","]]];
+    [readoutArgs addObjectsFromArray:@[@"-et", [self ethType]]];
+    [readoutArgs addObjectsFromArray:[self runFlags:NO]];
+    [readoutArgs addObjectsFromArray:argCard];
+    [readoutArgs addObjectsFromArray:@[@"-o", listen]];
     if([guardian localMode]){
         NSString* p = [[[guardian fcSourcePath] stringByExpandingTildeInPath] stringByAppendingString:@"/server/"];
-        [[self runTask] addTask:[p stringByAppendingString:@"readout-fc250b"] arguments:[NSArray arrayWithArray:readOutArgs]];
-        NSLog(@"%@readout-fc250b %@\n", p, [readOutArgs componentsJoinedByString:@" "]);
+        [[self runTask] addTask:[p stringByAppendingString:@"readout-fc250b"] arguments:[NSArray arrayWithArray:readoutArgs]];
+        NSLog(@"%@readout-fc250b %@\n", p, [readoutArgs componentsJoinedByString:@" "]);
     }
     else{
         [[self runTask] addTask:[[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/remote_run"]
-                      arguments:[NSArray arrayWithArray:readOutArgs]];
+                      arguments:[NSArray arrayWithArray:readoutArgs]];
     }
+    [self setReadOutArgs:readoutArgs];
     [[self runTask] launch];
     [self setChanMap:orcaChanMap];
     [self connect];
@@ -1086,7 +1092,7 @@ NSString* ORFlashCamListenerChanMapChanged = @"ORFlashCamListenerModelChanMapCha
     runTask           = nil;
     chanMap           = nil;
     [self setReadOutList:[decoder decodeObjectForKey:@"readOutList"]];
-    [self setReadOutArgs:[NSMutableArray array]];
+    [self setReadOutArgs:[[NSMutableArray alloc] init]];
     [[self undoManager] enableUndoRegistration];
     return self;
 }

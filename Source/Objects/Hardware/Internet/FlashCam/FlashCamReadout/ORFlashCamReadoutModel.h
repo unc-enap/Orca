@@ -83,6 +83,8 @@ static NSString* kFlashCamEthTypes[kFlashCamEthTypeCount] = {@"efb1", @"efb2", @
 
 - (void) setIPAddress:(NSString*)ip;
 - (void) setUsername:(NSString*)user;
+- (void) setEthInterface:(NSMutableArray*)eth;
+- (void) setEthType:(NSMutableArray*)eth;
 - (void) addEthInterface:(NSString*)eth;
 - (void) setEthInterface:(NSString*)eth atIndex:(int)index;
 - (void) removeEthInterface:(NSString*)eth;

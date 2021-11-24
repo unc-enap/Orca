@@ -322,9 +322,7 @@
 
 - (void) ethTypeChanged:(NSNotification*)note
 {
-    if(!note) return;
-    id d = [note userInfo];
-    if(!d) return;
+    [ethInterfaceView reloadData];
 }
 
 - (void) configParamChanged:(NSNotification*)note
@@ -793,9 +791,10 @@
     if(view == ethInterfaceView){
         if(col == 0)      return [model ethInterfaceAtIndex:(int)row];
         else if(col == 1){
-            for(int i=0; i<kFlashCamEthTypeCount; i++)
-                if([model ethTypeAtIndex:(int)row] == kFlashCamEthTypes[i])
+            for(int i=0; i<kFlashCamEthTypeCount; i++){
+                if([[model ethTypeAtIndex:(int)row] isEqualToString:kFlashCamEthTypes[i]])
                     return [NSNumber numberWithInt:i];
+            }
         }
     }
     else if(view == listenerView        || view == listenerGPSView  || view == listenerDAQView  ||

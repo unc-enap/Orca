@@ -53,8 +53,8 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     [[self undoManager] disableUndoRegistration];
     [self setIPAddress:@""];
     [self setUsername:@""];
-    ethInterface = [[NSMutableArray array] retain];
-    ethType      = [[NSMutableArray array] retain];
+    [self setEthInterface:[NSMutableArray array]];
+    [self setEthType:[NSMutableArray array]];
     validFCSourcePath = false;
     [self setFCSourcePath:@"--"];
     checkedFCSourcePath = false;
@@ -178,14 +178,14 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
 {
     if(!ethInterface) return nil;
     if(index < 0 || index >= [self ethInterfaceCount]) return nil;
-    return [[[ethInterface objectAtIndex:index] copy] autorelease];
+    return [ethInterface objectAtIndex:index];
 }
 
 - (NSString*) ethTypeAtIndex:(int)index;
 {
     if(!ethType) return nil;
     if(index < 0 || index >= [self ethInterfaceCount]) return nil;
-    return [[[ethType objectAtIndex:index] copy] autorelease];
+    return [ethType objectAtIndex:index];
 }
 
 - (NSString*) fcSourcePath
@@ -271,6 +271,22 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelUsernameChanged object:self];
 }
 
+- (void) setEthInterface:(NSMutableArray*)eth
+{
+    [eth retain];
+    [ethInterface release];
+    ethInterface = eth;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelEthInterfaceChanged object:self];
+}
+
+- (void) setEthType:(NSMutableArray*)eth
+{
+    [eth retain];
+    [ethType release];
+    ethType = eth;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelEthTypeChanged object:self];
+}
+
 - (void) addEthInterface:(NSString*)eth
 {
     if(!eth) return;
@@ -351,10 +367,12 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     if(!eth) return;
     if(index < 0 || index >= [self ethInterfaceCount]) return;
     for(int i=1; i<=kFlashCamEthTypeCount; i++){
-        if([eth isEqualToString:[NSString stringWithFormat:@"efb%d",i]])
+        if([eth isEqualToString:[NSString stringWithFormat:@"efb%d",i]]){
             [ethType setObject:[eth copy] atIndexedSubscript:index];
+            [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelEthTypeChanged object:self];
+            break;
+        }
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelEthTypeChanged object:self];
 }
 
 - (void) setFCSourcePath:(NSString*)path
@@ -852,10 +870,10 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
 {
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
-    [self setIPAddress:[decoder decodeObjectForKey:@"ipAddress"]];
-    [self setUsername: [decoder decodeObjectForKey:@"username"]];
-    ethInterface =    [[decoder decodeObjectForKey:@"ethInterface"] retain];
-    ethType =         [[decoder decodeObjectForKey:@"ethType"] retain];
+    [self setIPAddress:   [decoder decodeObjectForKey:@"ipAddress"]];
+    [self setUsername:    [decoder decodeObjectForKey:@"username"]];
+    [self setEthInterface:[decoder decodeObjectForKey:@"ethInterface"]];
+    [self setEthType:     [decoder decodeObjectForKey:@"ethType"]];
     validFCSourcePath = false;
     [self setFCSourcePath:[decoder decodeObjectForKey:@"fcSourcePath"]];
     if(!fcSourcePath) [self setFCSourcePath:@"--"];
