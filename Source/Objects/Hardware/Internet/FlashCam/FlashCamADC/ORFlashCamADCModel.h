@@ -35,6 +35,7 @@
 @interface ORFlashCamADCModel : ORFlashCamCard <ORDataTaker, ORHWWizard>
 {
     @private
+    unsigned int fwType;
     bool chanEnabled[kMaxFlashCamADCChannels];    // am
     bool trigOutEnabled[kMaxFlashCamADCChannels]; // altm
     int baseline[kMaxFlashCamADCChannels];        // bldac
@@ -76,6 +77,7 @@
 - (void) guardianAssumingDisplayOfConnectors:(id)aGuardian;
 
 #pragma mark •••Accessors
+- (unsigned int) fwType;
 - (unsigned int) nChanEnabled;
 - (bool) chanEnabled:(unsigned int)chan;
 - (bool) trigOutEnable;
@@ -99,6 +101,7 @@
 - (float) getRate:(short)channel;
 - (uint32_t) dataId;
 
+- (void) setFWtype:(unsigned int)fw;
 - (void) setChanEnabled:(unsigned int)chan    withValue:(bool)enabled;
 - (void) setTrigOutEnabled:(unsigned int)chan withValue:(bool)enabled;
 - (void) setBaseline:(unsigned int)chan       withValue:(int)base;
@@ -153,6 +156,7 @@
 @end
 
 #pragma mark •••Externals
+extern NSString* ORFlashCamADCModelFWTypeChanged;
 extern NSString* ORFlashCamADCModelChanEnabledChanged;
 extern NSString* ORFlashCamADCModelTrigOutEnabledChanged;
 extern NSString* ORFlashCamADCModelBaselineChanged;

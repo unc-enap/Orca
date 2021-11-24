@@ -16,7 +16,9 @@
                 <outlet property="chanEnabledRateMatrix" destination="sb8-AH-mcW" id="23N-Eo-qam"/>
                 <outlet property="filterTypeMatrix" destination="IHD-bx-CaS" id="bvm-mC-SJA"/>
                 <outlet property="firmwareVerTextField" destination="72t-Pm-o9f" id="28d-EP-2Hf"/>
+                <outlet property="flatTopLabel" destination="oAc-uL-LRz" id="eyI-Q1-DLe"/>
                 <outlet property="flatTopTimeMatrix" destination="tyC-Rj-v7B" id="KTV-05-TZB"/>
+                <outlet property="fwTypePUButton" destination="u4l-kv-Ju1" id="cSj-Ec-auG"/>
                 <outlet property="getFirmwareVerButton" destination="aKr-Tv-bpN" id="eP8-CC-hnA"/>
                 <outlet property="integrationStepper" destination="flD-xP-esU" id="Uyy-Yg-cdY"/>
                 <outlet property="integrationTextField" destination="vZF-7D-nej" id="KmT-7z-4pl"/>
@@ -31,6 +33,7 @@
                 <outlet property="rateView" destination="0BE-Ro-cdg" id="Kv3-cV-uNQ"/>
                 <outlet property="rebootCardButton" destination="FNF-xL-usE" id="HXe-EA-QIx"/>
                 <outlet property="shapeTimeMatrix" destination="rxJ-5M-FFT" id="bXx-Tp-YHd"/>
+                <outlet property="shapingLabel" destination="PXu-Xr-PWK" id="wd7-Wv-FxI"/>
                 <outlet property="thresholdMatrix" destination="Ghw-gN-Cyr" id="Ws7-aG-OpS"/>
                 <outlet property="timeRateLogButton" destination="0gZ-gj-6dP" id="kNU-pl-95y"/>
                 <outlet property="timeRateView" destination="Ke1-kw-2lR" id="tyL-tx-Xnz"/>
@@ -728,18 +731,9 @@
                                                         </connections>
                                                     </matrix>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PXu-Xr-PWK">
-                                                        <rect key="frame" x="431" y="191" width="55" height="26"/>
+                                                        <rect key="frame" x="426" y="191" width="66" height="26"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" selectable="YES" alignment="center" title="Shaping Time (ns)" id="Xp2-U9-ur7">
-                                                            <font key="font" metaFont="label"/>
-                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                    </textField>
-                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oAc-uL-LRz">
-                                                        <rect key="frame" x="574" y="191" width="48" height="26"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" selectable="YES" alignment="center" title="Flat Top (ns)" id="p4K-d7-o8j">
                                                             <font key="font" metaFont="label"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -863,6 +857,15 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
+                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oAc-uL-LRz">
+                                                        <rect key="frame" x="565" y="191" width="66" height="26"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" selectable="YES" alignment="center" title="Flat Top (ns)" id="p4K-d7-o8j">
+                                                            <font key="font" metaFont="label"/>
+                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
                                                 </subviews>
                                             </view>
                                         </box>
@@ -876,7 +879,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="72t-Pm-o9f">
-                                            <rect key="frame" x="477" y="229" width="193" height="36"/>
+                                            <rect key="frame" x="563" y="229" width="187" height="36"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" drawsBackground="YES" id="nyU-dt-x5u">
                                                 <font key="font" metaFont="label"/>
@@ -885,7 +888,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aKr-Tv-bpN">
-                                            <rect key="frame" x="471" y="259" width="204" height="32"/>
+                                            <rect key="frame" x="556" y="259" width="199" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="Get Firmware Version" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="i8w-2S-nct">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1026,6 +1029,32 @@
                                                 <action selector="trigOutEnableAction:" target="-2" id="5gQ-bn-8Ah"/>
                                             </connections>
                                         </button>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u4l-kv-Ju1">
+                                            <rect key="frame" x="457" y="232" width="102" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="Standard FW" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="a61-iM-30j" id="DMB-ee-L7g">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="label"/>
+                                                <menu key="menu" id="HBk-Op-S7e">
+                                                    <items>
+                                                        <menuItem title="Standard FW" state="on" id="a61-iM-30j"/>
+                                                        <menuItem title="Ge FW" id="HRL-U1-tl7"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="fwTypeAction:" target="-2" id="9yb-bx-jRv"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IbG-nL-OLQ">
+                                            <rect key="frame" x="465" y="259" width="84" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" selectable="YES" alignment="center" title="Use Shaping Parameters for:" id="oqb-3G-rkf">
+                                                <font key="font" metaFont="label"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                     </subviews>
                                 </view>
                             </tabViewItem>

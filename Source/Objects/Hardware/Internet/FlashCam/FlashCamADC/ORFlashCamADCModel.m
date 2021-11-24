@@ -26,6 +26,7 @@
 #import "ORHWWizParam.h"
 #import "ORHWWizSelection.h"
 
+NSString* ORFlashCamADCModelFWTypeChanged         = @"ORFlashCamADCModelFWTypeChanged";
 NSString* ORFlashCamADCModelChanEnabledChanged    = @"ORFlashCamADCModelChanEnabledChanged";
 NSString* ORFlashCamADCModelTrigOutEnabledChanged = @"ORFlashCamADCModelTrigOutEnabledChanged";
 NSString* ORFlashCamADCModelBaselineChanged       = @"ORFlashCamADCModelBaselineChanged";
@@ -50,6 +51,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     self = [super init];
     [[self undoManager] disableUndoRegistration];
     cardAddress = 0;
+    fwType = 1;
     for(int i=0; i<kMaxFlashCamADCChannels; i++){
         [self setChanEnabled:i    withValue:NO];
         [self setTrigOutEnabled:i withValue:NO];
@@ -200,6 +202,11 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 
 #pragma mark •••Accessors
 
+- (unsigned int) fwType
+{
+    return fwType;
+}
+
 - (unsigned int) nChanEnabled
 {
     unsigned int n=0;
@@ -336,6 +343,17 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     [self setTag:aSlot];
     [self guardian:guardian positionConnectorsForCard:self];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamCardSlotChangedNotification object:self];
+}
+
+- (void) setFWtype:(unsigned int)fw
+{
+    if(fw > 1){
+        NSLog(@"ORFlashCamADCModel: unrecognized firmware type %d, failed to set\n", (int) fw);
+        return;
+    }
+    [[[self undoManager] prepareWithInvocationTarget:self] setFWtype:fwType];
+    fwType = fw;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelFWTypeChanged object:self];
 }
 
 - (void) setChanEnabled:(unsigned int)chan withValue:(bool)enabled
@@ -593,14 +611,21 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
         [flags addObjectsFromArray:@[@"-blbias", [self chFlag:j withInt:baseBias[i]]]];
         [flags addObjectsFromArray:@[@"-ag",     [self chFlag:j withInt:adcGain[i]]]];
         [flags addObjectsFromArray:@[@"-tgm",    [self chFlag:j withFloat:trigGain[i]]]];
-        [flags addObjectsFromArray:@[@"-gs",     [self chFlag:j withInt:shapeTime[i]]]];
-        [flags addObjectsFromArray:@[@"-gf",     [self chFlag:j withInt:filterType[i]]]];
-        [flags addObjectsFromArray:@[@"-gpz",    [self chFlag:j withFloat:poleZeroTime[i]]]];
         [flags addObjectsFromArray:@[@"-pthr",   [self chFlag:j withFloat:postTrigger[i]]]];
-        if([self filterType:i] == 0)
-            [flags addObjectsFromArray:@[@"-gf", [self chFlag:j withFloat:0.0]]];
-        else
-            [flags addObjectsFromArray:@[@"-gf", [self chFlag:j withFloat:flatTopTime[i]*pow(-1, 1+[self filterType:i])]]];
+        if(fwType == 0){
+            [flags addObjectsFromArray:@[@"-fs", [self chFlag:j withInt:shapeTime[i]]]];
+            [flags addObjectsFromArray:@[@"-ss", [self chFlag:j withInt:flatTopTime[i]]]];
+            [flags addObjectsFromArray:@[@"-pz", [self chFlag:j withFloat:poleZeroTime[i]]]];
+        }
+        else if(fwType == 1){
+            [flags addObjectsFromArray:@[@"-gs",     [self chFlag:j withInt:shapeTime[i]]]];
+            [flags addObjectsFromArray:@[@"-gf",     [self chFlag:j withInt:filterType[i]]]];
+            [flags addObjectsFromArray:@[@"-gpz",    [self chFlag:j withFloat:poleZeroTime[i]]]];
+            if([self filterType:i] == 0)
+                [flags addObjectsFromArray:@[@"-gf", [self chFlag:j withFloat:0.0]]];
+            else
+                [flags addObjectsFromArray:@[@"-gf", [self chFlag:j withFloat:flatTopTime[i]*pow(-1, 1+[self filterType:i])]]];
+        }
     }
     mergeRunFlags(flags);
     return flags;
@@ -727,6 +752,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 {
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
+    [self setFWtype:[[decoder decodeObjectForKey:@"fwType"] unsignedIntValue]];
     for(int i=0; i<kMaxFlashCamADCChannels; i++){
         [self setChanEnabled:i
                    withValue:[decoder decodeBoolForKey:[NSString stringWithFormat:@"chanEnabled%i", i]]];
@@ -776,6 +802,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInt:fwType] forKey:@"fwType"];
     for(int i=0; i<kMaxFlashCamADCChannels; i++){
         [encoder encodeBool:chanEnabled[i]    forKey:[NSString stringWithFormat:@"chanEnabled%i",     i]];
         [encoder encodeBool:trigOutEnabled[i] forKey:[NSString stringWithFormat:@"trigOutEnabled:%i", i]];

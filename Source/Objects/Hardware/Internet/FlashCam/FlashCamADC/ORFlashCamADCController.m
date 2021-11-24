@@ -59,6 +59,10 @@
                          name : ORRunStatusChangedNotification
                        object : nil];
     [notifyCenter addObserver : self
+                     selector : @selector(fwTypeChanged:)
+                         name : ORFlashCamADCModelFWTypeChanged
+                       object : nil];
+    [notifyCenter addObserver : self
                      selector : @selector(chanEnabledChanged:)
                          name : ORFlashCamADCModelChanEnabledChanged
                        object : nil];
@@ -172,6 +176,7 @@
 {
     [super updateWindow];
     [self cardAddressChanged:nil];
+    [self fwTypeChanged:nil];
     [self cardSlotChanged:nil];
     [self chanEnabledChanged:nil];
     [self trigOutEnabledChanged:nil];
@@ -207,6 +212,31 @@
 {
     [super cardSlotChanged:note];
     [[self window] setTitle:[NSString stringWithFormat:@"FlashCam ADC (0x%x, Crate %d, Slot %d)", [model cardAddress], [model crateNumber], [model slot]]];
+}
+
+- (void) fwTypeChanged:(NSNotification*)note
+{
+    [fwTypePUButton selectItemAtIndex:[model fwType]];
+    if([model fwType] == 0){
+        [shapingLabel setStringValue:@"Fast Shape (ns)"];
+        [flatTopLabel setStringValue:@"Slow Shape (ns)"];
+        for(unsigned int i=0; i<kMaxFlashCamADCChannels; i++){
+            id cell = [filterTypeMatrix cellWithTag:i];
+            for(unsigned int j=0; j<3; j++) [[cell itemAtIndex:j] setTitle:@"N/A"];
+        }
+        [filterTypeMatrix setEnabled:NO];
+    }
+    else if([model fwType] == 1){
+        [shapingLabel setStringValue:@"Shaping Time (ns)"];
+        [flatTopLabel setStringValue:@"Flat Top (ns)"];
+        for(unsigned int i=0; i<kMaxFlashCamADCChannels; i++){
+            id cell = [filterTypeMatrix cellWithTag:i];
+            [[cell itemAtIndex:0] setTitle:@"Gauss"];
+            [[cell itemAtIndex:1] setTitle:@"Trap"];
+            [[cell itemAtIndex:2] setTitle:@"Cusp"];
+        }
+        [filterTypeMatrix setEnabled:YES];
+    }
 }
 
 - (void) chanEnabledChanged:(NSNotification*)note
@@ -470,6 +500,7 @@
     lock = lock || run;
     
     [super settingsLock:lock];
+    [fwTypePUButton         setEnabled:!lock];
     [chanEnabledMatrix      setEnabled:!lock];
     [trigOutEnabledMatrix   setEnabled:!lock];
     [baselineMatrix         setEnabled:!lock];
@@ -489,6 +520,12 @@
 
 
 #pragma mark •••Actions
+
+- (IBAction) fwTypeAction:(id)sender
+{
+    if((unsigned int)[sender indexOfSelectedItem] != [model fwType])
+        [model setFWtype:(unsigned int)[sender indexOfSelectedItem]];
+}
 
 - (IBAction) chanEnabledAction:(id)sender
 {
