@@ -1,7 +1,7 @@
 //  Orca
-//  ORFlashCamADCDecoders.h
+//  ORFlashCamListenerDecoders.h
 //
-//  Created by Tom Caldwell on Saturday Feb 13,2021
+//  Created by Tom Caldwell on November 28, 2021
 //  Copyright (c) 2019 University of North Carolina. All rights reserved.
 //-----------------------------------------------------------
 //This program was prepared for the Regents of the University of
@@ -18,11 +18,9 @@
 //-------------------------------------------------------------
 
 #import "ORBaseDecoder.h"
+#import "ORDataSet.h"
 
-@class ORDataPacket;
-@class ORDataSet;
-
-@interface ORFlashCamADCWaveformDecoder : ORBaseDecoder {
+@interface ORFlashCamListenerConfigDecoder : ORBaseDecoder {
     @private
 }
 - (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;

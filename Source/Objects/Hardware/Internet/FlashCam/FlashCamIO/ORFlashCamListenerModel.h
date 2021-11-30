@@ -24,6 +24,8 @@
 #import "fcio.h"
 #import "bufio.h"
 
+#define kFlashCamConfigBufferLength 256
+
 @interface ORFlashCamListenerModel : OrcaObject <ORDataTaker>
 {
     @private
@@ -39,6 +41,11 @@
     FCIOStateReader* reader;
     int readerRecordCount;
     int bufferedRecords;
+    uint32_t  dataId;
+    uint32_t* configBuffer;
+    uint32_t  configBufferIndex;
+    uint32_t  takeDataIndex;
+    uint32_t  bufferedConfigCount;
     NSString* status;
     ORAlarm* runFailedAlarm;
     bool unrecognizedPacket;
@@ -85,6 +92,7 @@
 - (FCIOStateReader*) reader;
 - (int) readerRecordCount;
 - (int) bufferedRecords;
+- (uint32_t) dataId;
 - (NSString*) status;
 - (NSUInteger) eventCount;
 - (double) runTime;
@@ -116,6 +124,9 @@
 - (void) setIObuffer:(int)io;
 - (void) setStateBuffer:(int)sb;
 - (void) setThrottle:(double)t;
+- (void) setDataId:(uint32_t)dId;
+- (void) setDataIds:(id)assigner;
+- (void) syncDataIdsWith:(id)anotherListener;
 - (void) setReadOutList:(ORReadOutList*)newList;
 - (void) setReadOutArgs:(NSMutableArray*)args;
 - (void) setChanMap:(NSMutableArray*)chMap;
@@ -136,6 +147,7 @@
 - (void) taskData:(NSMutableDictionary*)taskData;
 
 #pragma mark •••Data taker methods
+- (void) readConfig:(fcio_config*)config;
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runIsStopping:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
@@ -143,6 +155,7 @@
 - (void) saveReadOutList:(NSFileHandle*)aFile;
 - (void) loadReadOutList:(NSFileHandle*)aFile;
 - (void) reset;
+- (NSDictionary*) dataRecordDescription;
 
 #pragma mark •••Archival
 - (id) initWithCoder:(NSCoder*)decoder;
@@ -159,3 +172,4 @@ extern NSString* ORFlashCamListenerModelStatusChanged;
 //extern NSString* ORFlashCamListenerModelConnected;
 //extern NSString* ORFlashCamListenerModelDisconnected;
 extern NSString* ORFlashCamListenerModelChanMapChanged;
+extern NSString* ORFlashCamListenerModelConfigBufferFull;

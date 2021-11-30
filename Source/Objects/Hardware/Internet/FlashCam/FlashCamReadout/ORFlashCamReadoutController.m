@@ -430,7 +430,8 @@
 
 - (void) monitoringUpdated:(NSNotification*)note
 {
-    [monitorView reloadData];
+    if([NSThread isMainThread]) [monitorView reloadData];
+    else dispatch_async(dispatch_get_main_queue(), ^{[monitorView reloadData];});
 }
 
 - (void) groupObjectAdded:(NSNotification*)note

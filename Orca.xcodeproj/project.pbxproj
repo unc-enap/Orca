@@ -3577,6 +3577,7 @@
 		E6CC0769244405DE00D8DE0F /* Mail.app in Resources */ = {isa = PBXBuildFile; fileRef = E6CC0768244405DD00D8DE0F /* Mail.app */; };
 		E6CFCB952738807900685CC7 /* ORFlashCamGlobalTriggerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E6443C132737FA1000F74788 /* ORFlashCamGlobalTriggerModel.m */; };
 		E6CFCB982738809200685CC7 /* ORFlashCamGlobalTriggerController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6443C152737FA4800F74788 /* ORFlashCamGlobalTriggerController.m */; };
+		E6CFCBAB2753DE4700685CC7 /* ORFlashCamListenerDecoders.m in Sources */ = {isa = PBXBuildFile; fileRef = E6CFCBAA2753DE4700685CC7 /* ORFlashCamListenerDecoders.m */; };
 		E6DC1B4B243A240500A559F0 /* ORURLSession.m in Sources */ = {isa = PBXBuildFile; fileRef = E6DC1B49243A240400A559F0 /* ORURLSession.m */; };
 		E6DC1B4C243A240500A559F0 /* ORURLSession.h in Headers */ = {isa = PBXBuildFile; fileRef = E6DC1B4A243A240400A559F0 /* ORURLSession.h */; };
 		E6E20C9726EE4CB10081279D /* remote_path in Resources */ = {isa = PBXBuildFile; fileRef = E6E20C9626EE4CB00081279D /* remote_path */; };
@@ -7396,6 +7397,8 @@
 		E6C9759B26FE3F1300D6F792 /* FlashCamUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlashCamUtils.h; sourceTree = "<group>"; };
 		E6C9759C26FE3F3300D6F792 /* FlashCamUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlashCamUtils.m; sourceTree = "<group>"; };
 		E6CC0768244405DD00D8DE0F /* Mail.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = Mail.app; path = $APPLICATIONS_DIRECTORY/Mail.app; sourceTree = "<absolute>"; };
+		E6CFCBA92753DE2C00685CC7 /* ORFlashCamListenerDecoders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORFlashCamListenerDecoders.h; sourceTree = "<group>"; };
+		E6CFCBAA2753DE4700685CC7 /* ORFlashCamListenerDecoders.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamListenerDecoders.m; sourceTree = "<group>"; };
 		E6DC1B49243A240400A559F0 /* ORURLSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORURLSession.m; sourceTree = "<group>"; };
 		E6DC1B4A243A240400A559F0 /* ORURLSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORURLSession.h; sourceTree = "<group>"; };
 		E6E20C9626EE4CB00081279D /* remote_path */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = remote_path; sourceTree = "<group>"; };
@@ -14920,9 +14923,10 @@
 		E63085C52681036B00687A6D /* FlashCamIO */ = {
 			isa = PBXGroup;
 			children = (
-				E63085FD2688CCEC00687A6D /* flashcam_listener.jpg */,
 				E63085D12681057800687A6D /* ORFlashCamListenerModel.h */,
 				E63085D22681057800687A6D /* ORFlashCamListenerModel.m */,
+				E6CFCBA92753DE2C00685CC7 /* ORFlashCamListenerDecoders.h */,
+				E6CFCBAA2753DE4700685CC7 /* ORFlashCamListenerDecoders.m */,
 				E6C9759B26FE3F1300D6F792 /* FlashCamUtils.h */,
 				E6C9759C26FE3F3300D6F792 /* FlashCamUtils.m */,
 				E63085CF2681057700687A6D /* bufio.h */,
@@ -14931,6 +14935,7 @@
 				E63085D02681057700687A6D /* fcio.c */,
 				E63085C62681055800687A6D /* tmio.h */,
 				E63085CA2681056300687A6D /* tmio.c */,
+				E63085FD2688CCEC00687A6D /* flashcam_listener.jpg */,
 			);
 			path = FlashCamIO;
 			sourceTree = "<group>";
@@ -18195,6 +18200,7 @@
 				8467E6AF06480F0A00A35E6A /* ORTrigger32Model.m in Sources */,
 				844514870674DF9600A19654 /* ORLC950Controller.m in Sources */,
 				844514890674DF9600A19654 /* ORLC950Data.m in Sources */,
+				E6CFCBAB2753DE4700685CC7 /* ORFlashCamListenerDecoders.m in Sources */,
 				8445148B0674DF9600A19654 /* ORLC950Model.m in Sources */,
 				844514980674E10D00A19654 /* ZFlowLayout.m in Sources */,
 				84200CA306764C120048DFB4 /* ORSubPlotController.m in Sources */,

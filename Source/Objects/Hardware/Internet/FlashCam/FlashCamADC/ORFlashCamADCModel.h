@@ -136,11 +136,11 @@
 - (void) event:(fcio_event*)event withIndex:(int)index andChannel:(unsigned int)channel;
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
+- (void) runIsStopping:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) reset;
 - (void) startRates;
 - (void) clearWFcounts;
-- (void) syncDataIdsWith:(id)aCard;
 - (NSDictionary*) dataRecordDescription;
 
 #pragma mark •••Archival
