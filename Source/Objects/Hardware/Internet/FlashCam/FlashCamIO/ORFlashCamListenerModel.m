@@ -23,6 +23,7 @@
 #import "ORFlashCamTriggerModel.h"
 #import "ORFlashCamGlobalTriggerModel.h"
 #import "FlashCamUtils.h"
+#import "tmio.h"
 #import "Utilities.h"
 #import "ORDataTypeAssigner.h"
 
@@ -751,30 +752,35 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
     }
 }
 
-- (void) disconnect
+- (void) disconnect:(bool)destroy
 {
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(read) object:nil];
-    if(reader) FCIODestroyStateReader(reader);
-    reader = NULL;
-    if(![[self status] isEqualToString:@"disconnected"])
-        NSLog(@"ORFlashCamListenerModel: disconnected from %@:%d on %@\n", ip, port, interface);
-    [self setStatus:@"disconnected"];
-    [self setChanMap:nil];
-    readerRecordCount = 0;
-    bufferedRecords   = 0;
+    @synchronized(self){
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(read) object:nil];
+        if(reader) tmio_close(reader->stream);
+        [self setStatus:@"disconnected"];
+        if(destroy){
+            if(reader) FCIODestroyStateReader(reader);
+            reader = NULL;
+        }
+        if(![[self status] isEqualToString:@"disconnected"])
+            NSLog(@"ORFlashCamListenerModel: disconnected from %@:%d on %@\n", ip, port, interface);
+        [self setChanMap:nil];
+        readerRecordCount = 0;
+        bufferedRecords   = 0;
+    }
 }
 
 - (void) read
 {
     if(!reader){
-        [self disconnect];
+        [self disconnect:false];
         return;
     }
     // fixme: deal with nrecord roll overs - why is nrecords not an unsigned long?
     bufferedRecords = reader->nrecords - readerRecordCount;
     if(bufferedRecords > reader->max_states){
         NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: record buffer overflow for %@:%d on %@, aborting stream listening\n", ip, port, interface);
-        [self disconnect];
+        [self disconnect:true];
         [self runFailed];
         return;
     }
@@ -791,7 +797,7 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
                 int num_traces = state->event->num_traces;
                 if(num_traces != [chanMap count]){
                     NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: number of raw traces in event packet %d != channel map size %d, aborting\n", num_traces, [chanMap count]);
-                    [self disconnect];
+                    [self disconnect:true];
                     [self runFailed];
                     return;
                 }
@@ -826,8 +832,11 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
         readerRecordCount ++;
     }
     else{
-        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: failed to read state\n");
-        [self disconnect];
+        if(![[self status] isEqualToString:@"disconnected"]){
+            NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: failed to read state\n");
+            [self disconnect:true];
+            [self runFailed];
+        }
         return;
     }
     [self performSelector:@selector(read) withObject:nil afterDelay:throttle];
@@ -955,6 +964,12 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
             }
         }
     }
+    if([orcaChanMap count] > FCIOMaxChannels){
+        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel on %@ at %@:%d failed to start run due to number "
+                   "of enabled channels %d exceeding the FCIO architectural limit of %d\n",
+                   interface, ip, (int) port, [orcaChanMap count], FCIOMaxChannels);
+        [self runFailed];
+    }
     // if the trigger cards are connected to any global trigger cards, add those to the set
     for(id card in triggerCards){
         id conobj = [[card trigConnector] connectedObject];
@@ -992,8 +1007,6 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
     }
     // fixme: check for no cards and no enabled channels here
     [argCard addObjectsFromArray:@[@"-a", [addressList substringWithRange:NSMakeRange(0, [addressList length]-1)]]];
-    // fixme: check channel maps here
-    // fixme: add the card level arguments and the addresses for the trigger card(s)
     NSString* listen = [NSString stringWithFormat:@"tcp://connect/%d/%@", port, ip];
     [readoutArgs addObjectsFromArray:@[@"-ei", [[self remoteInterfaces] componentsJoinedByString:@","]]];
     [readoutArgs addObjectsFromArray:@[@"-et", [self ethType]]];
@@ -1045,6 +1058,33 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
             [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelConfigBufferFull
                                                                 object:self];
         }
+        // validate the channel map
+        bool fail = false;
+        for(unsigned int i=0; i<FCIOMaxChannels; i++){
+            uint32_t addr  = (config->tracemap[i] & 0xffff0000) >> 16;
+            uint32_t input =  config->tracemap[i] & 0x0000ffff;
+            if(i >= (unsigned int) [chanMap count]){
+                if(config->tracemap[i] == 0) continue;
+                else{
+                    NSLogColor([NSColor redColor], @"ORFlashCamListenerModel on %@ at %@:%d failed to start run due to "
+                               "FCIO channel map entry (index %u card 0x%x input %u) not found in Orca channel map\n",
+                               interface, ip, (int) port, i, addr, input);
+                    fail = true;
+                    continue;
+                }
+            }
+            NSDictionary* dict = [chanMap objectAtIndex:i];
+            if([[dict objectForKey:@"adc"]          cardAddress] != addr ||
+               [[dict objectForKey:@"channel"] unsignedIntValue] != input){
+                NSLogColor([NSColor redColor], @"ORFlashCamListenerModel on %@ at %@:%d failed to start run due to "
+                           "inconsistent channel map entry at index %u: FCIO - card 0x%x input %u, ORCA - card 0x%x input %u\n",
+                           interface, ip, (int) port, i, addr, input,
+                           [[dict objectForKey:@"adc"] cardAddress], [[dict objectForKey:@"channel"] unsignedIntValue]);
+                fail = true;
+            }
+        }
+        if(fail) [self runFailed];
+        else NSLog(@"ORFlashCamListenerModel on %@ at %@:%d successfully validated channel map\n", interface, ip, (int) port);
     }
 }
 
@@ -1091,7 +1131,7 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
 
 - (void) runIsStopping:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
-    [self disconnect];
+    [self disconnect:false];
     [[self runTask] abortTasks];
     [runTask release];
     runTask = nil;
@@ -1110,6 +1150,8 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
 
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
+    if(reader) FCIODestroyStateReader(reader);
+    reader = NULL;
     NSEnumerator* e = [dataTakers objectEnumerator];
     id obj;
     while(obj = [e nextObject]) [obj runTaskStopped:aDataPacket userInfo:userInfo];

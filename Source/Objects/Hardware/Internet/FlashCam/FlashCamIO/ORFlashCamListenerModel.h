@@ -137,7 +137,7 @@
 
 #pragma mark •••FCIO methods
 - (bool) connect;
-- (void) disconnect;
+- (void) disconnect:(bool)destroy;
 - (void) read;
 - (void) runFailed;
 
