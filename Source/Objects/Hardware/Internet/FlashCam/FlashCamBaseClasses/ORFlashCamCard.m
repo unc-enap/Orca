@@ -27,6 +27,7 @@ NSString* ORFlashCamCardPROMSlotChanged         = @"ORFlashCamCardPROMSlotChange
 NSString* ORFlashCamCardFirmwareVerRequest      = @"ORFlashCamCardFirmwareVerRequest";
 NSString* ORFlashCamCardFirmwareVerChanged      = @"ORFlashCamCardFirmwareVerChanged";
 NSString* ORFlashCamCardExceptionCountChanged   = @"ORFlashCamCardExceptionCountChanged";
+NSString* ORFlashCamCardStatusChanged           = @"ORFlashCamCardStatusChanged";
 
 @implementation ORFlashCamCard
 
@@ -42,6 +43,32 @@ NSString* ORFlashCamCardExceptionCountChanged   = @"ORFlashCamCardExceptionCount
     trigConnector = nil;
     firmwareVer = [[NSMutableArray array] retain];
     taskdata = nil;
+    fcioID      = 0;
+    status      = 0;
+    statusEvent = 0;
+    statusPPS   = 0;
+    statusTicks = 0;
+    totalErrors = 0;
+    envErrors   = 0;
+    ctiErrors   = 0;
+    linkErrors  = 0;
+    otherErrors = 0;
+    for(unsigned int i=0; i<kFlashCamCardNTemps; i++){
+        tempHistory[i] = [[[ORTimeRate alloc] init] retain];
+        [tempHistory[i] setLastAverageTime:[NSDate date]];
+        [tempHistory[i] setSampleTime:10];
+    }
+    for(unsigned int i=0; i<kFlashCamCardNVoltages; i++){
+        voltageHistory[i] = [[[ORTimeRate alloc] init] retain];
+        [voltageHistory[i] setLastAverageTime:[NSDate date]];
+        [voltageHistory[i] setSampleTime:10];
+    }
+    currentHistory = [[[ORTimeRate alloc] init] retain];
+    [currentHistory setLastAverageTime:[NSDate date]];
+    [currentHistory setSampleTime:10];
+    humidityHistory = [[[ORTimeRate alloc] init] retain];
+    [humidityHistory setLastAverageTime:[NSDate date]];
+    [humidityHistory setSampleTime:10];
     [[self undoManager] enableUndoRegistration];
     return self;
 }
@@ -63,6 +90,10 @@ NSString* ORFlashCamCardExceptionCountChanged   = @"ORFlashCamCardExceptionCount
     if(trigConnector) [trigConnector release];
     [self releaseFirmwareVer];
     if(taskdata) [taskdata release];
+    for(unsigned int i=0; i<kFlashCamCardNTemps;    i++) [tempHistory[i]    release];
+    for(unsigned int i=0; i<kFlashCamCardNVoltages; i++) [voltageHistory[i] release];
+    [currentHistory  release];
+    [humidityHistory release];
     [super dealloc];
 }
 
@@ -139,6 +170,88 @@ NSString* ORFlashCamCardExceptionCountChanged   = @"ORFlashCamCardExceptionCount
     return [firmwareVer objectAtIndex:3];
 }
 
+- (unsigned int) fcioID
+{
+    return fcioID;
+}
+
+- (unsigned int) status
+{
+    return status;
+}
+
+- (unsigned int) statusEvent
+{
+    return statusEvent;
+}
+
+- (unsigned int) statusPPS
+{
+    return statusPPS;
+}
+
+- (unsigned int) statusTicks
+{
+    return statusTicks;
+}
+
+- (unsigned int) totalErrors
+{
+    return totalErrors;
+}
+
+- (unsigned int) envErrors
+{
+    return envErrors;
+}
+
+- (unsigned int) ctiErrors
+{
+    return ctiErrors;
+}
+
+- (unsigned int) linkErrors
+{
+    return linkErrors;
+}
+
+- (unsigned int) otherErrors
+{
+    return otherErrors;
+}
+
+- (unsigned int) nTempHistories
+{
+    return kFlashCamCardNTemps;
+}
+
+- (unsigned int) nVoltageHistories
+{
+    return kFlashCamCardNVoltages;
+}
+
+- (ORTimeRate*) tempHistory:(unsigned int)index
+{
+    if(index >= kFlashCamCardNTemps) return nil;
+    return tempHistory[index];
+}
+
+- (ORTimeRate*) voltageHistory:(unsigned int)index
+{
+    if(index >= kFlashCamCardNVoltages) return nil;
+    return voltageHistory[index];
+}
+
+- (ORTimeRate*) currentHistory
+{
+    return currentHistory;
+}
+
+- (ORTimeRate*) humidityHistory
+{
+    return humidityHistory;
+}
+
 - (void) setCardAddress:(unsigned int)addr
 {
     if(addr == cardAddress) return;
@@ -185,6 +298,12 @@ NSString* ORFlashCamCardExceptionCountChanged   = @"ORFlashCamCardExceptionCount
 {
     ++exceptionCount;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamCardExceptionCountChanged object:self];
+}
+
+- (void) setFCIOID:(unsigned int)fcid
+{
+    fcioID = fcid;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamCardStatusChanged object:self];
 }
 
 
@@ -257,6 +376,31 @@ NSString* ORFlashCamCardExceptionCountChanged   = @"ORFlashCamCardExceptionCount
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamCardFirmwareVerRequest object:self];
     [obj rebootCard:self];
+}
+
+- (void) readStatus:(fcio_status*)fcstatus atIndex:(unsigned int)index
+{
+    @synchronized(self){
+        fcio_status fc_status = *fcstatus;
+        status      = fc_status.data[index].status;
+        statusEvent = fc_status.data[index].eventno;
+        statusPPS   = fc_status.data[index].pps;
+        statusTicks = fc_status.data[index].ticks;
+        totalErrors = fc_status.data[index].totalerrors;
+        envErrors   = fc_status.data[index].enverrors;
+        ctiErrors   = fc_status.data[index].ctierrors;
+        linkErrors  = fc_status.data[index].linkerrors;
+        unsigned int nother = 0;
+        for(unsigned int i=0; i<5; i++) nother += fc_status.data[index].othererrors[i];
+        otherErrors = nother;
+        for(unsigned int i=0; i<kFlashCamCardNTemps; i++)
+            [tempHistory[i] addDataToTimeAverage:fc_status.data[index].environment[(i<5)?i:i+8]];
+        for(unsigned int i=0; i<kFlashCamCardNVoltages; i++)
+            [voltageHistory[i] addDataToTimeAverage:fc_status.data[index].environment[i+5]];
+        [currentHistory  addDataToTimeAverage:fc_status.data[index].environment[11]];
+        [humidityHistory addDataToTimeAverage:fc_status.data[index].environment[12]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamCardStatusChanged object:self];
+    }
 }
 
 // Append any data from the firmware version request task to taskdata.  If the data contains
@@ -332,6 +476,36 @@ NSString* ORFlashCamCardExceptionCountChanged   = @"ORFlashCamCardExceptionCount
     [self setPROMSlot:    [[decoder decodeObjectForKey:@"promSlot"] unsignedIntValue]];
     [self setEthConnector: [decoder decodeObjectForKey:@"ethConnector"]];
     [self setTrigConnector:[decoder decodeObjectForKey:@"trigConnector"]];
+    fcioID      = 0;
+    status      = 0;
+    statusEvent = 0;
+    statusPPS   = 0;
+    statusTicks = 0;
+    totalErrors = 0;
+    envErrors   = 0;
+    ctiErrors   = 0;
+    linkErrors  = 0;
+    otherErrors = 0;
+    for(unsigned int i=0; i<kFlashCamCardNTemps; i++){
+        [tempHistory[i] release];
+        tempHistory[i] = [[[ORTimeRate alloc] init] retain];
+        [tempHistory[i] setLastAverageTime:[NSDate date]];
+        [tempHistory[i] setSampleTime:1];
+    }
+    for(unsigned int i=0; i<kFlashCamCardNVoltages; i++){
+        [voltageHistory[i] release];
+        voltageHistory[i] = [[[ORTimeRate alloc] init] retain];
+        [voltageHistory[i] setLastAverageTime:[NSDate date]];
+        [voltageHistory[i] setSampleTime:1];
+    }
+    [currentHistory release];
+    currentHistory = [[[ORTimeRate alloc] init] retain];
+    [currentHistory setLastAverageTime:[NSDate date]];
+    [currentHistory setSampleTime:1];
+    [humidityHistory release];
+    humidityHistory = [[[ORTimeRate alloc] init] retain];
+    [humidityHistory setLastAverageTime:[NSDate date]];
+    [humidityHistory setSampleTime:1];
     [[self undoManager] enableUndoRegistration];
     return self;
 }

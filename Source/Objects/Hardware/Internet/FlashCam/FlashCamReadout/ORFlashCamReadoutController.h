@@ -96,6 +96,7 @@
 - (void) miscAttributesChanged:(NSNotification*)note;
 - (void) setPlot:(id)aPlotter xAttributes:(id)attrib;
 - (void) setPlot:(id)aPlotter yAttributes:(id)attrib;
+- (void) updateTimePlot:(NSNotification*)aNote;
 - (void) deferredPlotUpdate;
 - (void) settingsLock:(bool)lock;
 - (void) updateAddIfaceToListenerIfacePUButton;

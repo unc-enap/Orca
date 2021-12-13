@@ -91,6 +91,10 @@ int32_t roundToLong(double x);
 - (float) highOffset;
 - (NSFont*) textFont;
 - (void) setTextFont:(NSFont*) font;
+- (NSColor*) textColor;
+- (void) setTextColor:(NSColor*)color;
+- (NSNumber*) textStrokeWidth;
+- (void) setTextStrokeWidth:(NSNumber*)width;
 - (NSColor*) color;
 - (void) setColor:(NSColor*)aColor;
 - (void) saveRng;
@@ -201,6 +205,8 @@ extern NSString* ORAxisMarkers; //new, mulitple markers
 
 extern NSString* ORAxisAllowShifts;
 extern NSString* ORAxisAllowNegative;
+extern NSString* ORAxisTextColor;
+extern NSString* ORAxisTextStrokeWidth;
 extern NSString* ORAxisFont;
 extern NSString* ORAxisIsOpposite;
 

@@ -19,6 +19,8 @@
 
 #import "OrcaObjectController.h"
 
+@class ORCompositeTimeLineView;
+
 @interface ORFlashCamCardController : OrcaObjectController
 {
     IBOutlet NSTextField* cardAddressTextField;
@@ -27,6 +29,19 @@
     IBOutlet NSTextField* firmwareVerTextField;
     IBOutlet NSButton* getFirmwareVerButton;
     IBOutlet NSButton* printFlagsButton;
+    IBOutlet NSTextField* fcioIDTextField;
+    IBOutlet NSTextField* statusEventTextField;
+    IBOutlet NSTextField* statusPPSTextField;
+    IBOutlet NSTextField* statusTicksTextField;
+    IBOutlet NSTextField* totalErrorsTextField;
+    IBOutlet NSTextField* envErrorsTextField;
+    IBOutlet NSTextField* ctiErrorsTextField;
+    IBOutlet NSTextField* linkErrorsTextField;
+    IBOutlet ORCompositeTimeLineView* tempView;
+    IBOutlet ORCompositeTimeLineView* voltageView;
+    IBOutlet ORCompositeTimeLineView* currentView;
+    IBOutlet ORCompositeTimeLineView* humidityView;
+    BOOL     scheduledToUpdatePlot;
 }
 
 #pragma mark •••Initialization
@@ -42,6 +57,13 @@
 - (void) firmwareVerRequest:(NSNotification*)note;
 - (void) firmwareVerChanged:(NSNotification*)note;
 - (void) cardSlotChanged:(NSNotification*)note;
+- (void) statusChanged:(NSNotification*)note;
+- (void) scaleAction:(NSNotification*)note;
+- (void) miscAttributesChanged:(NSNotification*)note;
+- (void) setPlot:(id)aPlotter xAttributes:(id)attrib;
+- (void) setPlot:(id)aPlotter yAttributes:(id)attrib;
+- (void) updateTimePlot:(NSNotification*)note;
+- (void) deferredPlotUpdate;
 - (void) settingsLock:(bool)lock;
 
 #pragma mark •••Actions
@@ -50,5 +72,9 @@
 - (IBAction) rebootCardAction:(id)sender;
 - (IBAction) firmwareVerAction:(id)sender;
 - (IBAction) printFlagsAction:(id)sender;
+
+#pragma mark •••Data Source
+- (int) numberPointsInPlot:(id)aPlotter;
+- (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 
 @end

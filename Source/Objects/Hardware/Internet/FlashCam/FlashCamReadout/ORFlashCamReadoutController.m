@@ -227,9 +227,9 @@
         [dataRateView addPlot:plot];
         [plot setLineColor:colors[i]];
         [plot setName:[NSString stringWithFormat:@"Listener %d", i]];
-        [(ORTimeAxis*) [dataRateView xAxis] setStartTime:[[NSDate date] timeIntervalSince1970]];
         [plot release];
     }
+    [(ORTimeAxis*) [dataRateView xAxis] setStartTime:[[NSDate date] timeIntervalSince1970]];
     [dataRateView setShowLegend:YES];
 
     
@@ -243,8 +243,9 @@
         [eventRateView addPlot:plot];
         [plot setLineColor:colors[i]];
         [plot setName:[NSString stringWithFormat:@"Listener %d", i]];
-        [(ORTimeAxis*) [eventRateView xAxis] setStartTime:[[NSDate date] timeIntervalSince1970]];
+        [plot release];
     }
+    [(ORTimeAxis*) [eventRateView xAxis] setStartTime:[[NSDate date] timeIntervalSince1970]];
     [eventRateView setShowLegend:YES];
     
     [deadTimeView setPlotTitle:@"Dead Time (%)"];
@@ -257,8 +258,9 @@
         [deadTimeView addPlot:plot];
         [plot setLineColor:colors[i]];
         [plot setName:[NSString stringWithFormat:@"Listener %d", i]];
-        [(ORTimeAxis*) [deadTimeView xAxis] setStartTime:[[NSDate date] timeIntervalSince1970]];
+        [plot release];
     }
+    [(ORTimeAxis*) [deadTimeView xAxis] setStartTime:[[NSDate date] timeIntervalSince1970]];
     [deadTimeView setShowLegend:YES];
 }
 

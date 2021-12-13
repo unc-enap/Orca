@@ -22,6 +22,14 @@
 @interface ORFlashCamTriggerController : ORFlashCamCardController
 {
     IBOutlet NSMatrix* connectedADCMatrix;
+    IBOutlet NSTextField* fcioIDTextField1;
+    IBOutlet NSTextField* statusEventTextField1;
+    IBOutlet NSTextField* statusPPSTextField1;
+    IBOutlet NSTextField* statusTicksTextField1;
+    IBOutlet NSTextField* totalErrorsTextField1;
+    IBOutlet NSTextField* envErrorsTextField1;
+    IBOutlet NSTextField* ctiErrorsTextField1;
+    IBOutlet NSTextField* linkErrorsTextField1;
 }
 
 #pragma mark •••Initialization

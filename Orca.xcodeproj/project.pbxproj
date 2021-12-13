@@ -14998,7 +14998,6 @@
 		E63BE5A223B5135800D01696 /* FlashCamReadout */ = {
 			isa = PBXGroup;
 			children = (
-				E61D05892307313E00140549 /* flashcam.png */,
 				E63BE5A323B513BF00D01696 /* ORFlashCamReadoutModel.h */,
 				E63BE5A623B5303C00D01696 /* ORFlashCamReadoutModel.m */,
 				E63BE5A823B5306300D01696 /* ORFlashCamReadoutController.h */,
@@ -15007,6 +15006,7 @@
 				E61D05882307313E00140549 /* kill_run */,
 				E6E20C9626EE4CB00081279D /* remote_path */,
 				E61D05862307313E00140549 /* remote_run */,
+				E61D05892307313E00140549 /* flashcam.png */,
 			);
 			path = FlashCamReadout;
 			sourceTree = "<group>";

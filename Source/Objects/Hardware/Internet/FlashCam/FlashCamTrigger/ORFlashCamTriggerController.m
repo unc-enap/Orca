@@ -65,6 +65,7 @@
 {
     [super updateWindow];
     [self connectionChanged:nil];
+    [self statusChanged:nil];
 }
 
 #pragma mark •••Interface management
@@ -88,6 +89,19 @@
         NSNumber* a = [addresses objectForKey:[NSString stringWithFormat:@"trigConnection%d",i]];
         if(a) [[connectedADCMatrix cellWithTag:i] setIntValue:(int)[a unsignedIntValue]];
     }
+}
+
+- (void) statusChanged:(NSNotification*)note
+{
+    [super statusChanged:note];
+    [fcioIDTextField1      setIntValue:[fcioIDTextField      intValue]];
+    [statusEventTextField1 setIntValue:[statusEventTextField intValue]];
+    [statusPPSTextField1   setIntValue:[statusPPSTextField   intValue]];
+    [statusTicksTextField1 setIntValue:[statusTicksTextField intValue]];
+    [totalErrorsTextField1 setIntValue:[totalErrorsTextField intValue]];
+    [envErrorsTextField1   setIntValue:[envErrorsTextField   intValue]];
+    [ctiErrorsTextField1   setIntValue:[ctiErrorsTextField   intValue]];
+    [linkErrorsTextField1  setIntValue:[linkErrorsTextField  intValue]];
 }
 
 @end

@@ -24,7 +24,8 @@
 #import "fcio.h"
 #import "bufio.h"
 
-#define kFlashCamConfigBufferLength 256
+#define kFlashCamConfigBufferLength 64
+#define kFlashCamStatusBufferLength 256
 
 @interface ORFlashCamListenerModel : OrcaObject <ORDataTaker>
 {
@@ -41,11 +42,16 @@
     FCIOStateReader* reader;
     int readerRecordCount;
     int bufferedRecords;
-    uint32_t  dataId;
+    uint32_t  configId;
     uint32_t* configBuffer;
     uint32_t  configBufferIndex;
-    uint32_t  takeDataIndex;
+    uint32_t  takeDataConfigIndex;
     uint32_t  bufferedConfigCount;
+    uint32_t  statusId;
+    uint32_t* statusBuffer;
+    uint32_t  statusBufferIndex;
+    uint32_t  takeDataStatusIndex;
+    uint32_t  bufferedStatusCount;
     NSString* status;
     ORAlarm* runFailedAlarm;
     bool unrecognizedPacket;
@@ -67,6 +73,7 @@
     NSArray* dataTakers;
     NSMutableArray* readOutArgs;
     NSMutableArray* chanMap;
+    NSMutableArray* cardMap;
 }
 
 #pragma mark •••Initialization
@@ -92,7 +99,8 @@
 - (FCIOStateReader*) reader;
 - (int) readerRecordCount;
 - (int) bufferedRecords;
-- (uint32_t) dataId;
+- (uint32_t) configId;
+- (uint32_t) statusId;
 - (NSString*) status;
 - (NSUInteger) eventCount;
 - (double) runTime;
@@ -124,12 +132,14 @@
 - (void) setIObuffer:(int)io;
 - (void) setStateBuffer:(int)sb;
 - (void) setThrottle:(double)t;
-- (void) setDataId:(uint32_t)dId;
+- (void) setConfigId:(uint32_t)cId;
+- (void) setStatusId:(uint32_t)sId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherListener;
 - (void) setReadOutList:(ORReadOutList*)newList;
 - (void) setReadOutArgs:(NSMutableArray*)args;
 - (void) setChanMap:(NSMutableArray*)chMap;
+- (void) setCardMap:(NSMutableArray*)map;
 
 #pragma mark •••Comparison methods
 - (BOOL) sameInterface:(NSString*)iface andPort:(uint16_t)p;
@@ -148,6 +158,7 @@
 
 #pragma mark •••Data taker methods
 - (void) readConfig:(fcio_config*)config;
+- (void) readStatus:(fcio_status*)fcstatus;
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runIsStopping:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
@@ -172,4 +183,6 @@ extern NSString* ORFlashCamListenerModelStatusChanged;
 //extern NSString* ORFlashCamListenerModelConnected;
 //extern NSString* ORFlashCamListenerModelDisconnected;
 extern NSString* ORFlashCamListenerModelChanMapChanged;
+extern NSString* ORFlashCamListenerModelCardMapChanged;
 extern NSString* ORFlashCamListenerModelConfigBufferFull;
+extern NSString* ORFlashCamListenerModelStatusBufferFull;

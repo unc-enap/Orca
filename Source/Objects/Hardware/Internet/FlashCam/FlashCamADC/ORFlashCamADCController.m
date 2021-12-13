@@ -637,15 +637,19 @@
 
 - (int) numberPointsInPlot:(id)aPlotter
 {
-    return (int) [[[model wfRates]timeRate] count];
+    if([aPlotter plotView] == [timeRateView plotView]) return (int) [[[model wfRates] timeRate] count];
+    else return [super numberPointsInPlot:aPlotter];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 {
-    int count = (int)[[[model wfRates] timeRate] count];
-    int index = count-i-1;
-    *yValue = [[[model wfRates] timeRate] valueAtIndex:index];
-    *xValue = [[[model wfRates] timeRate] timeSampledAtIndex:index];
+    if([aPlotter plotView] == [timeRateView plotView]){
+        int count = (int)[[[model wfRates] timeRate] count];
+        int index = count-i-1;
+        *yValue = [[[model wfRates] timeRate] valueAtIndex:index];
+        *xValue = [[[model wfRates] timeRate] timeSampledAtIndex:index];
+    }
+    else [super plotter:aPlotter index:i x:xValue y:yValue];
 }
 
 @end

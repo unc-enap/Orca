@@ -32,7 +32,9 @@ NSString* ORFlashCamListenerModelStatusChanged = @"ORFlashCamListenerModelStatus
 //NSString* ORFlashCamListenerModelConnected     = @"ORFlashCamListenerModelConnected";
 //NSString* ORFlashCamListenerModelDisconnected  = @"ORFlashCamListenerModelDisconnected";
 NSString* ORFlashCamListenerModelChanMapChanged   = @"ORFlashCamListenerModelChanMapChanged";
+NSString* ORFlashCamListenerModelCardMapChanged   = @"ORFlashCamListenerModelCardMapChanged";
 NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelConfigBufferFull";
+NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelStatusBufferFull";
 
 @implementation ORFlashCamListenerModel
 
@@ -47,7 +49,7 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
     ip                 = @"";
     timeout            = 2000;
     ioBuffer           = BUFIO_BUFSIZE/1024;
-    stateBuffer        = 20000;
+    stateBuffer        = 20;
     configParams       = [[NSMutableDictionary dictionary] retain];
     [self setConfigParam:@"maxPayload"      withValue:[NSNumber numberWithInt:0]];
     [self setConfigParam:@"eventBuffer"     withValue:[NSNumber numberWithInt:1024]];
@@ -81,8 +83,12 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
     bufferedRecords    = 0;
     configBuffer       = (uint32_t*) malloc((2*sizeof(uint32_t) + sizeof(fcio_config)) * kFlashCamConfigBufferLength);
     configBufferIndex  = 0;
-    takeDataIndex      = 0;
+    takeDataConfigIndex= 0;
     bufferedConfigCount= 0;
+    statusBuffer       = (uint32_t*) malloc((2*sizeof(uint32_t) + sizeof(fcio_status)) * kFlashCamStatusBufferLength);
+    statusBufferIndex  = 0;
+    takeDataStatusIndex= 0;
+    bufferedStatusCount= 0;
     runFailedAlarm     = nil;
     unrecognizedPacket = false;
     unrecognizedStates = nil;
@@ -107,6 +113,7 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
     [deadTimeHistory   setSampleTime:10];
     runTask            = nil;
     chanMap            = nil;
+    cardMap            = nil;
     [self setRemoteInterfaces:[NSMutableArray array]];
     ORReadOutList* readList = [[ORReadOutList alloc] initWithIdentifier:@"ReadOut List"];
     [readList setAcceptedProtocol:@"ORDataTaker"];
@@ -141,6 +148,8 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
     if(reader) FCIODestroyStateReader(reader);
     free(configBuffer);
     configBuffer = NULL;
+    free(statusBuffer);
+    statusBuffer = NULL;
     [dataRateHistory release];
     [eventRateHistory release];
     [deadTimeHistory release];
@@ -371,9 +380,14 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
     return bufferedRecords;
 }
 
-- (uint32_t) dataId
+- (uint32_t) configId
 {
-    return dataId;
+    return configId;
+}
+
+- (uint32_t) statusId
+{
+    return statusId;
 }
 
 - (NSString*) status
@@ -661,19 +675,26 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
                                                         object:self];
 }
 
-- (void) setDataId:(uint32_t)dId
+- (void) setConfigId:(uint32_t)cId
 {
-    dataId = dId;
+    configId = cId;
+}
+
+- (void) setStatusId:(uint32_t)sId
+{
+    statusId = sId;
 }
 
 - (void) setDataIds:(id)assigner
 {
-    dataId = [assigner assignDataIds:kLongForm];
+    configId = [assigner assignDataIds:kLongForm];
+    statusId = [assigner assignDataIds:kLongForm];
 }
 
 - (void) syncDataIdsWith:(id)anotherListener
 {
-    [self setDataId:[anotherListener dataId]];
+    [self setConfigId:[anotherListener configId]];
+    [self setStatusId:[anotherListener statusId]];
 }
 
 - (void) setReadOutList:(ORReadOutList*)newList
@@ -695,6 +716,13 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
     [chMap retain];
     [chanMap release];
     chanMap = chMap;
+}
+
+- (void) setCardMap:(NSMutableArray*)map
+{
+    [map retain];
+    [cardMap release];
+    cardMap = map;
 }
 
 
@@ -765,8 +793,7 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
         if(![[self status] isEqualToString:@"disconnected"])
             NSLog(@"ORFlashCamListenerModel: disconnected from %@:%d on %@\n", ip, port, interface);
         [self setChanMap:nil];
-        readerRecordCount = 0;
-        bufferedRecords   = 0;
+        [self setCardMap:nil];
     }
 }
 
@@ -817,6 +844,7 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
                 unrecognizedPacket = true;
                 break;
             case FCIOStatus:
+                [self readStatus:state->status];
                 break;
             default: {
                 bool found = false;
@@ -935,6 +963,8 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
     NSMutableString* addressList   = [NSMutableString string];
     NSMutableArray*  argCard       = [NSMutableArray  array];
     NSMutableArray*  orcaChanMap   = [NSMutableArray  array];
+    NSMutableArray*  orcaCardMap   = [NSMutableArray  array];
+    NSMutableArray*  adcCards      = [NSMutableArray  array];
     NSMutableSet*    triggerCards  = [NSMutableSet    set];
     NSMutableSet*    gtriggerCards = [NSMutableSet    set];
     // add the adc cards to the address list and their arguments to the list
@@ -945,6 +975,7 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
         if([[card className] isEqualToString:@"ORFlashCamADCModel"]){
             ORFlashCamADCModel* adc = (ORFlashCamADCModel*) card;
             [addressList appendString:[NSString stringWithFormat:@"%x,", [adc cardAddress]]];
+            [adcCards addObject:adc];
             [argCard addObjectsFromArray:[adc runFlagsForCardIndex:adcCount
                                                   andChannelOffset:(unsigned int)[orcaChanMap count]
                                                        withTrigAll:[[self configParam:@"trigAllEnable"] boolValue]]];
@@ -1005,6 +1036,23 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
             [readoutArgs addObjectsFromArray:[card runFlags]];
         }
     }
+    // construct the card mapping
+    for(id card in gtriggerCards){
+        NSNumber* index = [NSNumber numberWithUnsignedLong:[orcaCardMap count]];
+        [orcaCardMap addObject:[NSDictionary dictionaryWithObjectsAndKeys:card, @"card", index, @"fcioID", nil]];
+        [card setFCIOID:[index unsignedIntValue]];
+    }
+    for(id card in triggerCards){
+        NSNumber* index = [NSNumber numberWithUnsignedLong:[orcaCardMap count]];
+        [orcaCardMap addObject:[NSDictionary dictionaryWithObjectsAndKeys:card, @"card", index, @"fcioID", nil]];
+        [card setFCIOID:[index unsignedIntValue]];
+    }
+    for(id card in adcCards){
+        NSNumber* index = [NSNumber numberWithUnsignedLong:[orcaCardMap count]];
+        [orcaCardMap addObject:[NSDictionary dictionaryWithObjectsAndKeys:card, @"card", index, @"fcioID", nil]];
+        [card setFCIOID:[index unsignedIntValue]];
+    }
+    [self setCardMap:orcaCardMap];
     // fixme: check for no cards and no enabled channels here
     [argCard addObjectsFromArray:@[@"-a", [addressList substringWithRange:NSMakeRange(0, [addressList length]-1)]]];
     NSString* listen = [NSString stringWithFormat:@"tcp://connect/%d/%@", port, ip];
@@ -1051,10 +1099,10 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
         configBuffer[offset++] = (uint32_t) config->triggercards;
         configBuffer[offset++] = (uint32_t) config->adccards;
         configBuffer[offset++] = (uint32_t) config->gps;
-        memcpy(configBuffer + offset, config->tracemap, FCIOMaxChannels);
+        memcpy(configBuffer + offset, config->tracemap, FCIOMaxChannels*sizeof(uint32_t));
         if(bufferedConfigCount == kFlashCamConfigBufferLength){
             NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: error config buffer full on %@ at %@:%d\n",
-                       interface, ip, port);
+                       interface, ip, (int) port);
             [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelConfigBufferFull
                                                                 object:self];
         }
@@ -1088,19 +1136,82 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
     }
 }
 
+- (void) readStatus:(fcio_status*)fcstatus
+{
+    @synchronized(self){
+        uint32_t index = statusBufferIndex;
+        statusBufferIndex = (statusBufferIndex + 1) % kFlashCamStatusBufferLength;
+        bufferedStatusCount ++;
+        uint32_t offset = 2 + (2 + sizeof(fcio_status)/sizeof(uint32_t)) * index;
+        statusBuffer[offset++] = (uint32_t) fcstatus->status;
+        memcpy(configBuffer+offset, fcstatus->statustime, 10*sizeof(uint32_t));
+        offset += 10;
+        statusBuffer[offset++] = fcstatus->cards;
+        statusBuffer[offset++] = fcstatus->size;
+        for(int i=0; i<fcstatus->cards; i++){
+            statusBuffer[offset++] = (fcstatus->data+i)->reqid;
+            statusBuffer[offset++] = (fcstatus->data+i)->status;
+            statusBuffer[offset++] = (fcstatus->data+i)->eventno;
+            statusBuffer[offset++] = (fcstatus->data+i)->pps;
+            statusBuffer[offset++] = (fcstatus->data+i)->ticks;
+            statusBuffer[offset++] = (fcstatus->data+i)->maxticks;
+            statusBuffer[offset++] = (fcstatus->data+i)->numenv;
+            statusBuffer[offset++] = (fcstatus->data+i)->numctilinks;
+            statusBuffer[offset++] = (fcstatus->data+i)->numlinks;
+            statusBuffer[offset++] = (fcstatus->data+i)->dummy;
+            statusBuffer[offset++] = (fcstatus->data+i)->totalerrors;
+            statusBuffer[offset++] = (fcstatus->data+i)->enverrors;
+            statusBuffer[offset++] = (fcstatus->data+i)->ctierrors;
+            statusBuffer[offset++] = (fcstatus->data+i)->linkerrors;
+            memcpy(statusBuffer+offset, (fcstatus->data+i)->othererrors, 5*sizeof(uint32_t));
+            offset += 5;
+            memcpy(statusBuffer+offset, (fcstatus->data+i)->environment, 16*sizeof(uint32_t));
+            offset += 16;
+            memcpy(statusBuffer+offset, (fcstatus->data+i)->ctilinks, 4*sizeof(uint32_t));
+            offset += 4;
+            memcpy(statusBuffer+offset, (fcstatus->data+i)->linkstates, fcstatus->cards*sizeof(uint32_t));
+            unsigned int ID = (fcstatus->data+i)->reqid;
+            for(id dict in cardMap){
+                if([[dict objectForKey:@"fcioID"] unsignedIntValue] == ID){
+                    [[dict objectForKey:@"card"] readStatus:fcstatus atIndex:i];
+                    break;
+                }
+            }
+        }
+        if(bufferedStatusCount == kFlashCamStatusBufferLength){
+            NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: error status buffer full on %@ at %@:%d\n",
+                       interface, ip, (int) port);
+        }
+    }
+}
+
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
     @synchronized(self){
         // add a single configuration packet to the data
         if(bufferedConfigCount > 0){
             uint32_t length = 2 + sizeof(fcio_config) / sizeof(uint32_t);
-            uint32_t index = length * takeDataIndex;
-            takeDataIndex = (takeDataIndex + 1) % kFlashCamConfigBufferLength;
+            uint32_t index = length * takeDataConfigIndex;
+            takeDataConfigIndex = (takeDataConfigIndex + 1) % kFlashCamConfigBufferLength;
             bufferedConfigCount --;
-            configBuffer[index]    = dataId | (length & 0x3ffff);
+            configBuffer[index]    = configId | (length & 0x3ffff);
             configBuffer[index+1]  = ((unsigned short) [guardian uniqueIdNumber]) << 16;
-            configBuffer[index+1] |= ((unsigned short) [self uniqueIdNumber]);
-            [aDataPacket addLongsToFrameBuffer:configBuffer+index*sizeof(uint32_t) length:length];
+            configBuffer[index+1] |=  (unsigned short) [self uniqueIdNumber];
+            [aDataPacket addLongsToFrameBuffer:configBuffer+index length:length];
+        }
+        // add a single status packet to the data
+        if(bufferedStatusCount > 0){
+            uint32_t index = (2 + sizeof(fcio_status) / sizeof(uint32_t)) * takeDataStatusIndex;
+            takeDataStatusIndex = (takeDataStatusIndex + 1) % kFlashCamStatusBufferLength;
+            bufferedStatusCount --;
+            int cards = (int) statusBuffer[index+13];
+            int dsize = (int) statusBuffer[index+14];
+            uint32_t length = 2 + (sizeof(fcio_status) -
+                                   (256-cards)*(dsize+sizeof(uint32_t))) / sizeof(uint32_t);
+            statusBuffer[index]    = statusId | (length & 0x3ffff);
+            statusBuffer[index+1]  = ((unsigned short) [guardian uniqueIdNumber]) << 16;
+            statusBuffer[index+1] |=  (unsigned short) [self uniqueIdNumber];
+            [aDataPacket addLongsToFrameBuffer:statusBuffer+index length:length];
         }
         // allow all connected data takers to add to the data packet
         NSEnumerator* e = [dataTakers objectEnumerator];
@@ -1118,10 +1229,13 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
     [readOutArgs removeAllObjects];
     memset(configBuffer, 0, kFlashCamConfigBufferLength * (2 + sizeof(fcio_config)/sizeof(uint32_t)));
     configBufferIndex = 0;
-    takeDataIndex = 0;
+    takeDataConfigIndex = 0;
     bufferedConfigCount = 0;
+    memset(statusBuffer, 0, kFlashCamStatusBufferLength * (2 + sizeof(fcio_status)/sizeof(uint32_t)));
+    statusBufferIndex = 0;
+    takeDataStatusIndex = 0;
+    bufferedStatusCount = 0;
     [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:@"ORFlashCamListenerModel"];
-
     [self startReadoutAfterPing];
     dataTakers = [[readOutList allObjects] retain];
     NSEnumerator* e = [dataTakers objectEnumerator];
@@ -1138,10 +1252,14 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
     [readOutArgs removeAllObjects];
     memset(configBuffer, 0, kFlashCamConfigBufferLength * (2 + sizeof(fcio_config)/sizeof(uint32_t)));
     configBufferIndex = 0;
-    takeDataIndex = 0;
+    takeDataConfigIndex = 0;
     bufferedConfigCount = 0;
-    // write the remaining config packets
-    while(bufferedConfigCount > 0) [self takeData:aDataPacket userInfo:userInfo];
+    memset(statusBuffer, 0, kFlashCamStatusBufferLength * (2 + sizeof(fcio_status)/sizeof(uint32_t)));
+    statusBufferIndex = 0;
+    takeDataStatusIndex = 0;
+    bufferedStatusCount = 0;
+    // write the remaining config and status packets
+    while(bufferedConfigCount > 0 || bufferedStatusCount > 0) [self takeData:aDataPacket userInfo:userInfo];
     // allow the connected data takers to write any remaining data
     NSEnumerator* e = [dataTakers objectEnumerator];
     id obj;
@@ -1179,12 +1297,18 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
 - (NSDictionary*) dataRecordDescription
 {
     NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-    NSDictionary* d = [NSDictionary dictionaryWithObjectsAndKeys:
-                       @"ORFlashCamListenerConfigDecoder",              @"decoder",
-                       [NSNumber numberWithLong:dataId],                @"dataId",
-                       [NSNumber numberWithBool:NO],                    @"variable",
-                       [NSNumber numberWithLong:sizeof(fcio_config)+1], @"length", nil];
-    [dict setObject:d forKey:@"FlashCamConfig"];
+    NSDictionary* dc = [NSDictionary dictionaryWithObjectsAndKeys:
+                        @"ORFlashCamListenerConfigDecoder",              @"decoder",
+                        [NSNumber numberWithLong:configId],              @"dataId",
+                        [NSNumber numberWithBool:NO],                    @"variable",
+                        [NSNumber numberWithLong:sizeof(fcio_config)+2], @"length", nil];
+    NSDictionary* ds = [NSDictionary dictionaryWithObjectsAndKeys:
+                        @"ORFlashCamListenerStatusDecoder",              @"decoder",
+                        [NSNumber numberWithLong:statusId],              @"dataId",
+                        [NSNumber numberWithBool:YES],                   @"variable",
+                        [NSNumber numberWithLong:-1],                    @"length", nil];
+    [dict setObject:dc forKey:@"FlashCamConfig"];
+    [dict setObject:ds forKey:@"FlashCamStatus"];
     return dict;
 }
 
@@ -1209,8 +1333,12 @@ NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelCon
     bufferedRecords   = 0;
     if(!configBuffer) configBuffer = (uint32_t*) malloc((2*sizeof(uint32_t) + sizeof(fcio_config)) * kFlashCamConfigBufferLength);
     configBufferIndex = 0;
-    takeDataIndex     = 0;
+    takeDataConfigIndex=0;
     bufferedConfigCount=0;
+    if(!statusBuffer) statusBuffer = (uint32_t*) malloc((2*sizeof(uint32_t) + sizeof(fcio_status)) * kFlashCamStatusBufferLength);
+    statusBufferIndex = 0;
+    takeDataStatusIndex=0;
+    bufferedStatusCount=0;
     eventCount        = 0;
     runTime           = 0.0;
     readMB            = 0.0;
