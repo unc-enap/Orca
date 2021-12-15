@@ -1144,7 +1144,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
         bufferedStatusCount ++;
         uint32_t offset = 2 + (2 + sizeof(fcio_status)/sizeof(uint32_t)) * index;
         statusBuffer[offset++] = (uint32_t) fcstatus->status;
-        memcpy(configBuffer+offset, fcstatus->statustime, 10*sizeof(uint32_t));
+        memcpy(statusBuffer+offset, fcstatus->statustime, 10*sizeof(uint32_t));
         offset += 10;
         statusBuffer[offset++] = fcstatus->cards;
         statusBuffer[offset++] = fcstatus->size;
@@ -1207,7 +1207,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
             int cards = (int) statusBuffer[index+13];
             int dsize = (int) statusBuffer[index+14];
             uint32_t length = 2 + (sizeof(fcio_status) -
-                                   (256-cards)*(dsize+sizeof(uint32_t))) / sizeof(uint32_t);
+                                   (256-cards)*(dsize+cards*sizeof(uint32_t))) / sizeof(uint32_t);
             statusBuffer[index]    = statusId | (length & 0x3ffff);
             statusBuffer[index+1]  = ((unsigned short) [guardian uniqueIdNumber]) << 16;
             statusBuffer[index+1] |=  (unsigned short) [self uniqueIdNumber];
