@@ -110,20 +110,17 @@
     NSString* chan  = [NSString stringWithFormat:@"Channel    = %u\n", (dataPtr[2] & 0x00003c00) >> 10];
     NSString* index = [NSString stringWithFormat:@"Ch Index   = %u\n",  dataPtr[2] & 0x000003ff];
     NSString* type  = [NSString stringWithFormat:@"Event type = %u\n",  dataPtr[1] & 0x0000003f];
-    dataPtr += orcaHeaderLength + fcwfHeaderLength - 1;
-    NSString* base = [NSString stringWithFormat:@"Baseline    = %u\n",  dataPtr[0] & 0x0000ffff];
-    NSString* fint = [NSString stringWithFormat:@"Integerator = %u\n", (dataPtr[0] & 0xffff0000) >> 16];
-    dataPtr ++;
+    uint32_t offset = orcaHeaderLength + fcwfHeaderLength - 1;
+    NSString* base = [NSString stringWithFormat:@"Baseline    = %u\n",  dataPtr[offset] & 0x0000ffff];
+    NSString* fint = [NSString stringWithFormat:@"Integerator = %u\n", (dataPtr[offset] & 0xffff0000) >> 16];
+    offset -= fcwfHeaderLength - 1;
     NSString* header = @"Raw waveform header:\n";
-    uint32_t offset = 0;
     for(int i=0; i<kFlashCamADCTimeOffsetLength; i++)
-        header = [header stringByAppendingFormat:@"timeoffset[%d]: %d\n", i, (int) dataPtr[i]];
-    offset += kFlashCamADCTimeOffsetLength;
+        header = [header stringByAppendingFormat:@"timeoffset[%d]: %d\n", i, (int) dataPtr[offset++]];
     for(int i=0; i<kFlashCamADCDeadRegionLength; i++)
-        header = [header stringByAppendingFormat:@"deadregion[%d]: %d\n", i, (int) dataPtr[offset+i]];
-    offset += kFlashCamADCDeadRegionLength;
+        header = [header stringByAppendingFormat:@"deadregion[%d]: %d\n", i, (int) dataPtr[offset++]];
     for(int i=0; i<kFlashCamADCTimeStampLength; i++)
-        header = [header stringByAppendingFormat:@"timestamp[%d]:  %d\n", i, (int) dataPtr[offset+i]];
+        header = [header stringByAppendingFormat:@"timestamp[%d]:  %d\n", i, (int) dataPtr[offset++]];
     
     return [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@", title, crate, card, chan, index, type, base, fint, header];
 }

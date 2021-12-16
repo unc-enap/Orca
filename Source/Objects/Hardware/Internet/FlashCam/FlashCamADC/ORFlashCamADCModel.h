@@ -27,10 +27,10 @@
 #define kMaxFlashCamADCChannels 6
 #define kFlashCamADCBufferLength 300
 #define kFlashCamADCOrcaHeaderLength 3
-#define kFlashCamADCTimeOffsetLength 5
+#define kFlashCamADCTimeOffsetLength 7
 #define kFlashCamADCDeadRegionLength 5
 #define kFlashCamADCTimeStampLength 4
-#define kFlashCamADCWFHeaderLength 17
+#define kFlashCamADCWFHeaderLength 19
 
 @interface ORFlashCamADCModel : ORFlashCamCard <ORDataTaker, ORHWWizard>
 {

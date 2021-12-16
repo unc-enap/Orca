@@ -658,11 +658,9 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
         // get the waveform header information from the fcio_event structure
         wfHeaderBuffer[hindex+2] = event->type;
         unsigned int offset = hindex + 3;
-        for(unsigned int i=0; i<kFlashCamADCTimeOffsetLength; i++) wfHeaderBuffer[offset+i] = event->timeoffset[i];
-        offset += kFlashCamADCTimeOffsetLength;
-        for(unsigned int i=0; i<kFlashCamADCDeadRegionLength; i++) wfHeaderBuffer[offset+i] = event->deadregion[i];
-        offset += kFlashCamADCDeadRegionLength;
-        for(unsigned int i=0; i<kFlashCamADCTimeStampLength; i++)  wfHeaderBuffer[offset+i] = event->timestamp[i];
+        for(unsigned int i=0; i<kFlashCamADCTimeOffsetLength; i++) wfHeaderBuffer[offset++] = event->timeoffset[i];
+        for(unsigned int i=0; i<kFlashCamADCDeadRegionLength; i++) wfHeaderBuffer[offset++] = event->deadregion[i];
+        for(unsigned int i=0; i<kFlashCamADCTimeStampLength;  i++) wfHeaderBuffer[offset++] = event->timestamp[i];
         // get the waveform for this channel at the index provided from the fcio_event structure
         memcpy(wfBuffer+bindex*(wfSamples+2), event->theader[index], (wfSamples+2)*sizeof(unsigned short));
         if(bufferedWFcount == kFlashCamADCBufferLength){
@@ -688,9 +686,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
                 dataRecord[0] = dataId | (dataRecordLength&0x3ffff);
                 dataRecord[1] = dataLengths | (wfHeaderBuffer[hindex+2]&0x3f);
                 dataRecord[2] = location | ((wfHeaderBuffer[hindex]&0xf) << 10) | (wfHeaderBuffer[hindex+1]&0x3ff);
-                for(unsigned int i=3; i<kFlashCamADCWFHeaderLength; i++){
-                    dataRecord[i] = (uint32_t) wfHeaderBuffer[hindex+i];
-                }
+                memcpy(dataRecord+3, wfHeaderBuffer+hindex+3, (kFlashCamADCWFHeaderLength-3)*sizeof(uint32_t));
                 uint32_t windex = index * (wfSamples + 2);
                 dataRecord[kFlashCamADCWFHeaderLength] = (wfBuffer[windex+1] << 16) | wfBuffer[windex];
                 memcpy(dataRecord+kFlashCamADCWFHeaderLength+1, wfBuffer+windex+2, wfSamples*sizeof(unsigned short));
