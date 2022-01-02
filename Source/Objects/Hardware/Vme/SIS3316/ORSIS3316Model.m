@@ -508,7 +508,7 @@ static uint32_t addressCounterOffset[4][2]={ //group,bank
         [self setAccGate8Start:iadc withValue:100+7*100];
      }
     [self setEventConfigMask:0x5];
-    [self setTermination:1];
+    [self setTermination:0];
     [self setGain:1];
     [self setEnabledMask:0xFFFF];
     [self setFormatMask:0xF];
@@ -2512,7 +2512,7 @@ static uint32_t addressCounterOffset[4][2]={ //group,bank
         @"1.9 V",
         @"1.9 V"
     };
-    NSString* term[2] = {@"1K Ohm",@"50 Ohm"};
+    NSString* term[2] = {@"50 Ohm", @"1k Ohm"};
     int group;
     for(group=0;group<kNumSIS3316Groups;group++){
         addr   = [self groupRegister:kAdcGainTermCntrlReg group:group];
