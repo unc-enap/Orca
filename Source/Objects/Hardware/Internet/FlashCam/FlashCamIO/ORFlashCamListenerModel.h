@@ -17,6 +17,7 @@
 //for the use of this software.
 //-------------------------------------------------------------
 
+#import "ORAuxHw.h"
 #import "ORTaskSequence.h"
 #import "ORDataTaker.h"
 #import "ORReadOutList.h"
@@ -27,7 +28,7 @@
 #define kFlashCamConfigBufferLength 64
 #define kFlashCamStatusBufferLength 256
 
-@interface ORFlashCamListenerModel : OrcaObject <ORDataTaker>
+@interface ORFlashCamListenerModel : ORAuxHw <ORDataTaker>
 {
     @private
     NSString* interface;
@@ -171,6 +172,7 @@
 #pragma mark •••Archival
 - (id) initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
+- (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary;
 
 @end
 

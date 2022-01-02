@@ -522,5 +522,12 @@ NSString* ORFlashCamCardStatusChanged           = @"ORFlashCamCardStatusChanged"
 
 }
 
+- (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary
+{
+    NSMutableDictionary* dict = [super addParametersToDictionary:dictionary];
+    [dict setObject:[NSNumber numberWithInt:cardAddress] forKey:@"CardAddress"];
+    return dict;
+}
+
 
 @end

@@ -481,14 +481,6 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     return [NSMutableArray arrayWithObject:readOutList];
 }
 
-- (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary
-{
-    NSMutableDictionary* dict = [super addParametersToDictionary:dictionary];
-    [dict setObject:interface forKey:@"interface"];
-    [dict setObject:[NSNumber numberWithUnsignedInt:port] forKey:@"port"];
-    return dict;
-}
-
 - (void) setInterface:(NSString*)iface andPort:(uint16_t)p
 {
     if(!iface) return;
@@ -1381,6 +1373,17 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     [encoder encodeDouble:throttle         forKey:@"throttle"];
     [encoder encodeObject:readOutList      forKey:@"readOutList"];
 }
+
+- (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary
+{
+    [dictionary setObject:[self className] forKey:@"Class Name"];
+    [dictionary setObject:[NSNumber numberWithUnsignedInt:[self uniqueIdNumber]] forKey:@"uniqueID"];
+    [dictionary setObject:interface forKey:@"interface"];
+    [dictionary setObject:[NSNumber numberWithUnsignedInt:port] forKey:@"port"];
+    for(id key in configParams) [dictionary setObject:[[configParams objectForKey:key] copy] forKey:key];
+    return dictionary;
+}
+
 
 @end
 

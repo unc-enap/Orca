@@ -832,6 +832,49 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     [encoder encodeObject:wfRates     forKey:@"wfRates"];
 }
 
+- (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary
+{
+    NSMutableDictionary* dict = [super addParametersToDictionary:dictionary];
+    [dict setObject:[NSNumber numberWithUnsignedInt:fwType]  forKey:@"FWType"];
+    [self addCurrentState:dict boolArray:chanEnabled         forKey:@"Enabled"];
+    [self addCurrentState:dict boolArray:trigOutEnabled      forKey:@"TrigOutEnabled"];
+    [self addCurrentState:dict intArray:baseline             forKey:@"Baseline"];
+    [self addCurrentState:dict intArray:baseBias             forKey:@"BaseBias"];
+    [self addCurrentState:dict intArray:threshold            forKey:@"Threshold"];
+    [self addCurrentState:dict intArray:adcGain              forKey:@"ADCGain"];
+    [self addCurrentState:dict floatArray:trigGain           forKey:@"TrigGain"];
+    [self addCurrentState:dict intArray:shapeTime            forKey:@"ShapeTime"];
+    [self addCurrentState:dict intArray:filterType           forKey:@"FilterType"];
+    [self addCurrentState:dict floatArray:flatTopTime        forKey:@"FlatTopTime"];
+    [self addCurrentState:dict floatArray:poleZeroTime       forKey:@"PoleZeroTime"];
+    [self addCurrentState:dict floatArray:postTrigger        forKey:@"PostTrigger"];
+    [dict setObject:[NSNumber numberWithInt:majorityLevel]   forKey:@"MajorityLevel"];
+    [dict setObject:[NSNumber numberWithInt:majorityWidth]   forKey:@"MajorityWidth"];
+    [dict setObject:[NSNumber numberWithBool:trigOutEnable]  forKey:@"TrigOutEnable"];
+    return dict;
+}
+
+- (void) addCurrentState:(NSMutableDictionary*)dictionary intArray:(int*)array forKey:(NSString*)key
+{
+    NSMutableArray* a = [NSMutableArray array];
+    for(int i=0; i<kMaxFlashCamADCChannels; i++) [a addObject:[NSNumber numberWithInt:array[i]]];
+    [dictionary setObject:a forKey:key];
+}
+
+- (void) addCurrentState:(NSMutableDictionary*)dictionary boolArray:(bool*)array forKey:(NSString*)key
+{
+    NSMutableArray* a = [NSMutableArray array];
+    for(int i=0; i<kMaxFlashCamADCChannels; i++) [a addObject:[NSNumber numberWithBool:array[i]]];
+    [dictionary setObject:a forKey:key];
+}
+
+- (void) addCurrentState:(NSMutableDictionary*)dictionary floatArray:(float*)array forKey:(NSString*)key
+{
+    NSMutableArray* a = [NSMutableArray array];
+    for(int i=0; i<kMaxFlashCamADCChannels; i++) [a addObject:[NSNumber numberWithFloat:array[i]]];
+    [dictionary setObject:a forKey:key];
+}
+
 #pragma mark •••HW Wizard
 
 - (bool) hasParametersToRamp
