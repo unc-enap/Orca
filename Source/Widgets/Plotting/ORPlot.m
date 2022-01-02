@@ -96,6 +96,11 @@
 	plotView = aPlotView;
 }
 
+- (id) plotView
+{
+    return plotView;
+}
+
 - (void) setDefaults
 {
     if(!attributes){

@@ -1,7 +1,7 @@
 //  Orca
-//  ORFlashCamMasterModel.h
+//  ORFlashCamGlobalTriggerModel.h
 //
-//  Created by Tom Caldwell on Monday Jan 1, 2020
+//  Created by Tom Caldwell on Sunday, November 7, 2021
 //  Copyright (c) 2020 University of North Carolina. All rights reserved.
 //-----------------------------------------------------------
 //This program was prepared for the Regents of the University of
@@ -17,17 +17,11 @@
 //for the use of this software.
 //-------------------------------------------------------------
 
-#import "ORFlashCamCard.h"
-#import "ORConnector.h"
+#import "ORFlashCamTriggerModel.h"
 
-#define kFlashCamMasterConnections 12
-
-@interface ORFlashCamMasterModel : ORFlashCamCard
+@interface ORFlashCamGlobalTriggerModel : ORFlashCamTriggerModel
 {
     @private
-    unsigned int boardAddress;
-    ORConnector* ethConnector;
-    ORConnector* trigConnector[kFlashCamMasterConnections];
 }
 
 #pragma mark •••Initialization
@@ -39,17 +33,6 @@
 - (void) guardianRemovingDisplayOfConnectors:(id)aGuardian;
 - (void) guardianAssumingDisplayOfConnectors:(id)aGuardian;
 
-#pragma mark •••Accessors
-- (unsigned int) boardAddress;
-- (ORConnector*) ethConnector;
-- (ORConnector*) trigConnector:(unsigned int)index;
-- (void) setBoardAddress:(unsigned int)address;
-- (void) setEthConnector:(ORConnector*)connector;
-- (void) setTrigConnector:(ORConnector*)connector atIndex:(unsigned int)index;
-
-#pragma mark •••Connection management
-- (NSMutableDictionary*) connectedADCAddresses;
-
 #pragma mark •••Run control flags
 - (NSMutableArray*) runFlags;
 
@@ -58,6 +41,3 @@
 - (void) encodeWithCoder:(NSCoder*)encoder;
 
 @end
-
-#pragma mark •••Externals
-extern NSString* ORFlashCamMasterModelBoardAddressChanged;

@@ -1,0 +1,51 @@
+#!/usr/bin/expect -f
+
+# Expect script to supply username for remote ssh server and execute command.
+# Currently this assumes that valid ssh keys are exist between the host
+# and the remote server.
+
+set nargs [llength $argv]
+set username [lrange $argv 0 0]
+set ipaddr [lrange $argv 1 1]
+set scriptname [lrange $argv 2 2]
+set farg [lrange $argv 3 3]
+set larg [lrange $argv $nargs-1 $nargs-1]
+set timeout 5
+
+# now connect to remote UNIX box (ipaddr) with given script to execute
+match_max 100000
+send_user "Connecting to flashcam with user $username on $ipaddr\n"
+spawn -noecho ssh -X $username@$ipaddr
+
+expect {
+    "*>* " { }
+    "*$* " { }
+    "*#* " { }
+    "*%* " { }
+    "assword:" {
+        send_user "SSH keys not valid for user $username on $ipaddr\n"
+        exit 1
+    }
+    default {
+        send_user "Login to $ipaddr failed\n"
+        exit 1
+    }
+}
+
+send "$scriptname [lrange $argv 3 $nargs-1]\r"
+expect {
+    $farg {
+        send_user "$expect_out(buffer)\n"
+    }
+    "No such file or directory" {
+        send_user "$expect_out(buffer)\n"
+    }
+    "${larg}=" {
+        send_user "$expect_out(buffer)\n"
+    }
+    default {
+        send_user "$expect_out(buffer)\n"
+    }
+}
+send "exit\n\r"
+expect eof

@@ -18,19 +18,100 @@
 //-------------------------------------------------------------
 
 #import "ORCard.h"
+#import "ORConnector.h"
+#import "ORTimeRate.h"
+#import "fcio.h"
+
+#define kFlashCamFirmwareVerLen 4
+#define kFlashCamCardNTemps     7
+#define kFlashCamCardNVoltages  6
 
 @interface ORFlashCamCard : ORCard {
+    unsigned int cardAddress;
+    unsigned int promSlot;
+    ORConnector* ethConnector;
+    ORConnector* trigConnector;
+    NSArray* firmwareVer;
+    NSMutableArray* taskdata;
+    uint32_t exceptionCount;
+    unsigned int fcioID;
+    unsigned int status;
+    unsigned int statusEvent;
+    unsigned int statusPPS;
+    unsigned int statusTicks;
+    unsigned int totalErrors;
+    unsigned int envErrors;
+    unsigned int ctiErrors;
+    unsigned int linkErrors;
+    unsigned int otherErrors;
+    ORTimeRate* tempHistory[kFlashCamCardNTemps];
+    ORTimeRate* voltageHistory[kFlashCamCardNVoltages];
+    ORTimeRate* currentHistory;
+    ORTimeRate* humidityHistory;
 }
 
 #pragma mark •••Accessors
+- (id) init;
+- (void) dealloc;
 - (id) adapter;
 - (Class) guardianClass;
 - (NSString*) cardSlotChangedNotification;
+- (unsigned int) cardAddress;
+- (unsigned int) promSlot;
+- (ORConnector*) ethConnector;
+- (ORConnector*) trigConnector;
+- (NSArray*) firmwareVer;
+- (NSString*) firmwareVerType;
+- (NSString*) firmwareVerRev;
+- (NSString*) firmwareVerDate;
+- (NSString*) firmwareVerTag;
+- (unsigned int) fcioID;
+- (unsigned int) status;
+- (unsigned int) statusEvent;
+- (unsigned int) statusPPS;
+- (unsigned int) statusTicks;
+- (unsigned int) totalErrors;
+- (unsigned int) envErrors;
+- (unsigned int) ctiErrors;
+- (unsigned int) linkErrors;
+- (unsigned int) otherErrors;
+- (unsigned int) nTempHistories;
+- (unsigned int) nVoltageHistories;
+- (ORTimeRate*) tempHistory:(unsigned int)index;
+- (ORTimeRate*) voltageHistory:(unsigned int)index;
+- (ORTimeRate*) currentHistory;
+- (ORTimeRate*) humidityHistory;
+- (void) setCardAddress:(unsigned int)addr;
+- (void) setPROMSlot:(unsigned int)slot;
+- (void) setEthConnector:(ORConnector*)connector;
+- (void) setTrigConnector:(ORConnector*)connector;
+- (uint32_t) exceptionCount;
+- (void) incExceptionCount;
+- (void) clearExceptionCount;
+- (void) setFCIOID:(unsigned int)fcid;
+
+#pragma mark •••Commands
+- (void) requestFirmwareVersion;
+- (void) requestReboot;
+- (void) readStatus:(fcio_status*)fcstatus atIndex:(unsigned int)index;
+- (void) taskData:(NSDictionary*)taskData;
+- (void) taskFinished:(id)task;
+
+#pragma mark •••Archival
+- (id) initWithCoder:(NSCoder*)decoder;
+- (void) encodeWithCoder:(NSCoder*)encoder;
+- (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary;
 
 @end
 
 extern NSString* ORFlashCamCardSlotChangedNotification;
 extern NSString* ORFlashCamCardEthConnector;
+extern NSString* ORFlashCamCardAddressChanged;
+extern NSString* ORFlashCamCardPROMSlotChanged;
+extern NSString* ORFlashCamCardFirmwareVerRequest;
+extern NSString* ORFlashCamCardFirmwareVerChanged;
+extern NSString* ORFlashCamCardExceptionCountChanged;
+extern NSString* ORFlashCamCardStatusChanged;
 
 @interface NSObject (ORFlashCamCard)
 - (void) postUpdateList:(NSArray*)cmds;

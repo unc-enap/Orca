@@ -19,27 +19,52 @@
 
 #import "ORFlashCamCard.h"
 #import "ORConnector.h"
-//#import "ORDataTaker.h"
+#import "ORRateGroup.h"
+#import "ORDataTaker.h"
 #import "ORHWWizard.h"
-
-//@class ORRateGroup;
+#import "fcio.h"
 
 #define kMaxFlashCamADCChannels 6
+#define kFlashCamADCBufferLength 300
+#define kFlashCamADCOrcaHeaderLength 3
+#define kFlashCamADCTimeOffsetLength 7
+#define kFlashCamADCDeadRegionLength 5
+#define kFlashCamADCTimeStampLength 4
+#define kFlashCamADCWFHeaderLength 19
 
-@interface ORFlashCamADCModel : ORFlashCamCard <ORHWWizard> //<ORDataTaker, ORHWWizard>
+@interface ORFlashCamADCModel : ORFlashCamCard <ORDataTaker, ORHWWizard>
 {
     @private
-    unsigned int boardAddress;
-    bool chanEnabled[kMaxFlashCamADCChannels];
-    int baseline[kMaxFlashCamADCChannels];       // bldac
-    int threshold[kMaxFlashCamADCChannels];      // athr
-    int adcGain[kMaxFlashCamADCChannels];        // ag
-    float trigGain[kMaxFlashCamADCChannels];     // tgm
-    int shapeTime[kMaxFlashCamADCChannels];      // gs
-    float filterType[kMaxFlashCamADCChannels];   // gf
-    float poleZeroTime[kMaxFlashCamADCChannels]; // gpz
-    ORConnector* ethConnector;
-    ORConnector* trigConnector;
+    unsigned int fwType;
+    bool chanEnabled[kMaxFlashCamADCChannels];    // am
+    bool trigOutEnabled[kMaxFlashCamADCChannels]; // altm
+    int baseline[kMaxFlashCamADCChannels];        // bldac
+    int baseBias[kMaxFlashCamADCChannels];        // blbias
+    int threshold[kMaxFlashCamADCChannels];       // athr
+    int adcGain[kMaxFlashCamADCChannels];         // ag
+    float trigGain[kMaxFlashCamADCChannels];      // tgm
+    int shapeTime[kMaxFlashCamADCChannels];       // gs
+    int filterType[kMaxFlashCamADCChannels];
+    float flatTopTime[kMaxFlashCamADCChannels];   // gf
+    float poleZeroTime[kMaxFlashCamADCChannels];  // gpz
+    float postTrigger[kMaxFlashCamADCChannels];   // pthr
+    int majorityLevel;                            // majl
+    int majorityWidth;                            // majw
+    bool trigOutEnable;
+    bool isRunning;
+    unsigned int wfSamples;
+    int wfHeaderBuffer[kFlashCamADCBufferLength*kFlashCamADCWFHeaderLength];
+    unsigned short* wfBuffer;
+    unsigned int bufferIndex;
+    unsigned int takeDataIndex;
+    unsigned int bufferedWFcount;
+    ORRateGroup* wfRates;
+    uint32_t wfCount[kMaxFlashCamADCChannels];
+    uint32_t dataId;
+    uint32_t location;
+    uint32_t dataLengths;
+    uint32_t* dataRecord;
+    uint32_t  dataRecordLength;
 }
 
 #pragma mark •••Initialization
@@ -52,41 +77,79 @@
 - (void) guardianAssumingDisplayOfConnectors:(id)aGuardian;
 
 #pragma mark •••Accessors
-- (unsigned int) boardAddress;
+- (unsigned int) fwType;
 - (unsigned int) nChanEnabled;
 - (bool) chanEnabled:(unsigned int)chan;
+- (bool) trigOutEnable;
+- (bool) trigOutEnabled:(unsigned int)chan;
 - (int) baseline:(unsigned int)chan;
+- (int) baseBias:(unsigned int)chan;
 - (int) threshold:(unsigned int)chan;
 - (int) adcGain:(unsigned int)chan;
 - (float) trigGain:(unsigned int)chan;
 - (int) shapeTime:(unsigned int)chan;
-- (float) filterType:(unsigned int)chan;
+- (int) filterType:(unsigned int)chan;
+- (float) flatTopTime:(unsigned int)chan;
 - (float) poleZeroTime:(unsigned int)chan;
-- (ORConnector*) ethConnector;
-- (ORConnector*) trigConnector;
+- (float) postTrigger:(unsigned int)chan;
+- (int) majorityLevel;
+- (int) majorityWidth;
+- (ORRateGroup*) wfRates;
+- (id) rateObject:(short)channel;
+- (uint32_t) wfCount:(int)channel;
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag;
+- (float) getRate:(short)channel;
+- (uint32_t) dataId;
 
-- (void) setBoardAddress:(unsigned int)address;
-- (void) setChanEnabled:(unsigned int)chan  withValue:(bool)enabled;
-- (void) setBaseline:(unsigned int)chan     withValue:(int)base;
-- (void) setThreshold:(unsigned int)chan    withValue:(int)thresh;
-- (void) setADCGain:(unsigned int)chan      withValue:(int)gain;
-- (void) setTrigGain:(unsigned int)chan     withValue:(float)gain;
-- (void) setShapeTime:(unsigned int)chan    withValue:(int)time;
-- (void) setFilterType:(unsigned int)chan   withValue:(float)type;
-- (void) setPoleZeroTime:(unsigned int)chan withValue:(float)time;
-- (void) setEthConnector:(ORConnector*)connector;
-- (void) setTrigConnector:(ORConnector*)connector;
+- (void) setFWtype:(unsigned int)fw;
+- (void) setChanEnabled:(unsigned int)chan    withValue:(bool)enabled;
+- (void) setTrigOutEnabled:(unsigned int)chan withValue:(bool)enabled;
+- (void) setBaseline:(unsigned int)chan       withValue:(int)base;
+- (void) setBaseBias:(unsigned int)chan       withValue:(int)bias;
+- (void) setThreshold:(unsigned int)chan      withValue:(int)thresh;
+- (void) setADCGain:(unsigned int)chan        withValue:(int)gain;
+- (void) setTrigGain:(unsigned int)chan       withValue:(float)gain;
+- (void) setShapeTime:(unsigned int)chan      withValue:(int)time;
+- (void) setFilterType:(unsigned int)chan     withValue:(int)type;
+- (void) setFlatTopTime:(unsigned int)chan    withValue:(float)time;
+- (void) setPoleZeroTime:(unsigned int)chan   withValue:(float)time;
+- (void) setPostTrigger:(unsigned int)chan    withValue:(float)time;
+- (void) setMajorityLevel:(int)level;
+- (void) setMajorityWidth:(int)width;
+- (void) setTrigOutEnable:(bool)enabled;
+- (void) setWFsamples:(int)samples;
+- (void) setWFrates:(ORRateGroup*)rateGroup;
+- (void) setRateIntTime:(double)intTime;
+- (void) setDataId:(uint32_t)dId;
+- (void) setDataIds:(id)assigner;
+- (void) syncDataIdsWith:(id)anotherCard;
 
 #pragma mark •••Run control flags
 - (NSString*) chFlag:(unsigned int)ch withInt:(int)value;
 - (NSString*) chFlag:(unsigned int)ch withFloat:(float)value;
 - (unsigned int) chanMask;
-- (NSMutableArray*) runFlagsForChannelOffset:(unsigned int)offset;
+- (unsigned int) trigOutMask;
+- (NSMutableArray*) runFlagsForCardIndex:(unsigned int) index andChannelOffset:(unsigned int)offset withTrigAll:(BOOL)trigAll;
 - (void) printRunFlagsForChannelOffset:(unsigned int)offset;
+
+#pragma mark •••Data taker methods
+- (void) event:(fcio_event*)event withIndex:(int)index andChannel:(unsigned int)channel;
+- (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
+- (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
+- (void) runIsStopping:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
+- (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
+- (void) reset;
+- (void) startRates;
+- (void) clearWFcounts;
+- (NSDictionary*) dataRecordDescription;
 
 #pragma mark •••Archival
 - (id) initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
+- (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary;
+- (void) addCurrentState:(NSMutableDictionary*)dictionary intArray:(int*)array forKey:(NSString*)key;
+- (void) addCurrentState:(NSMutableDictionary*)dictionary boolArray:(bool*)array forKey:(NSString*)key;
+- (void) addCurrentState:(NSMutableDictionary*)dictionary floatArray:(float*)array forKey:(NSString*)key;
 
 #pragma mark •••HW Wizard
 - (int) numberOfChannels;
@@ -97,13 +160,21 @@
 @end
 
 #pragma mark •••Externals
-extern NSString* ORFlashCamADCModelBoardAddressChanged;
+extern NSString* ORFlashCamADCModelFWTypeChanged;
 extern NSString* ORFlashCamADCModelChanEnabledChanged;
+extern NSString* ORFlashCamADCModelTrigOutEnabledChanged;
 extern NSString* ORFlashCamADCModelBaselineChanged;
+extern NSString* ORFlashCamADCModelBaseBiasChanged;
 extern NSString* ORFlashCamADCModelThresholdChanged;
 extern NSString* ORFlashCamADCModelADCGainChanged;
 extern NSString* ORFlashCamADCModelTrigGainChanged;
 extern NSString* ORFlashCamADCModelShapeTimeChanged;
 extern NSString* ORFlashCamADCModelFilterTypeChanged;
+extern NSString* ORFlashCamADCModelFlatTopTimeChanged;
 extern NSString* ORFlashCamADCModelPoleZeroTimeChanged;
+extern NSString* ORFlashCamADCModelPostTriggerChanged;
+extern NSString* ORFlashCamADCModelMajorityLevelChanged;
+extern NSString* ORFlashCamADCModelMajorityWidthChanged;
+extern NSString* ORFlashCamADCModelRateGroupChanged;
+extern NSString* ORFlashCamADCModelBufferFull;
 

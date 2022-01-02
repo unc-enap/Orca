@@ -1,5 +1,5 @@
 //  Orca
-//  ORFlashCamMasterController.h
+//  ORFlashCamTriggerController.h
 //
 //  Created by Tom Caldwell on Monday Jan 1, 2020
 //  Copyright (c) 2020 University of North Carolina. All rights reserved.
@@ -17,12 +17,19 @@
 //for the use of this software.
 //-------------------------------------------------------------
 
-#import "OrcaObjectController.h"
+#import "ORFlashCamCardController.h"
 
-@interface ORFlashCamMasterController : OrcaObjectController
+@interface ORFlashCamTriggerController : ORFlashCamCardController
 {
-    IBOutlet NSTextField* boardAddressTextField;
     IBOutlet NSMatrix* connectedADCMatrix;
+    IBOutlet NSTextField* fcioIDTextField1;
+    IBOutlet NSTextField* statusEventTextField1;
+    IBOutlet NSTextField* statusPPSTextField1;
+    IBOutlet NSTextField* statusTicksTextField1;
+    IBOutlet NSTextField* totalErrorsTextField1;
+    IBOutlet NSTextField* envErrorsTextField1;
+    IBOutlet NSTextField* ctiErrorsTextField1;
+    IBOutlet NSTextField* linkErrorsTextField1;
 }
 
 #pragma mark •••Initialization
@@ -33,11 +40,6 @@
 - (void) updateWindow;
 
 #pragma mark •••Interface management
-- (void) boardAddressChanged:(NSNotification*)note;
-- (void) cardSlotChanged:(NSNotification*)note;
 - (void) connectionChanged:(NSNotification*)note;
-
-#pragma mark •••Actions
-- (IBAction) boardAddressAction:(id)sender;
 
 @end
