@@ -1,5 +1,5 @@
 //  Orca
-//  ORFlashCamMasterController.m
+//  ORFlashCamTriggerController.m
 //
 //  Created by Tom Caldwell on Monday Jan 1, 2020
 //  Copyright (c) 2020 University of North Carolina. All rights reserved.
@@ -17,18 +17,17 @@
 //for the use of this software.
 //-------------------------------------------------------------
 
-
-#import "ORFlashCamMasterController.h"
-#import "ORFlashCamMasterModel.h"
+#import "ORFlashCamTriggerController.h"
+#import "ORFlashCamTriggerModel.h"
 #import "ORFlashCamADCModel.h"
 
-@implementation ORFlashCamMasterController
+@implementation ORFlashCamTriggerController
 
 #pragma mark •••Initialization
 
 - (id) init
 {
-    self = [super initWithWindowNibName:@"FlashCamMaster"];
+    self = [super initWithWindowNibName:@"FlashCamTrigger"];
     return self;
 }
 
@@ -40,7 +39,7 @@
 - (void) setModel:(id)aModel
 {
     [super setModel:aModel];
-    [[self window] setTitle:[NSString stringWithFormat:@"FlasCam Master (%x Slot %d)", [model boardAddress], [model slot]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Trigger (0x%x, Crate %d, Slot %d)", [model cardAddress], [model crateNumber], [model slot]]];
 }
 
 - (void) registerNotificationObservers
@@ -48,16 +47,8 @@
     NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
     [super registerNotificationObservers];
     [notifyCenter addObserver : self
-                     selector : @selector(boardAddressChanged:)
-                         name : ORFlashCamMasterModelBoardAddressChanged
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(cardSlotChanged:)
-                         name : ORFlashCamCardSlotChangedNotification
-                       object : nil];
-    [notifyCenter addObserver : self
-                     selector :@selector(connectionChanged:)
-                         name :ORFlashCamADCModelBoardAddressChanged
+                     selector : @selector(connectionChanged:)
+                         name : ORFlashCamCardAddressChanged
                        object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(connectionChanged:)
@@ -73,38 +64,44 @@
 - (void) updateWindow
 {
     [super updateWindow];
-    [self boardAddressChanged:nil];
     [self connectionChanged:nil];
+    [self statusChanged:nil];
 }
 
 #pragma mark •••Interface management
 
-- (void) boardAddressChanged:(NSNotification*)note
+- (void) cardAddressChanged:(NSNotification*)note
 {
-    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Master (0x%x, Slot %d)", [model boardAddress], [model slot]]];
-    [boardAddressTextField setIntValue:[model boardAddress]];
+    [super cardAddressChanged:note];
+    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Trigger (0x%x, Crate %d, Slot %d)", [model cardAddress], [model crateNumber], [model slot]]];
 }
 
 - (void) cardSlotChanged:(NSNotification*)note
 {
-    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Master (0x%x, Slot %d)", [model boardAddress], [model slot]]];
+    [super cardSlotChanged:note];
+    [[self window] setTitle:[NSString stringWithFormat:@"FlashCam Trigger (0x%x, Crate %d, Slot %d)", [model cardAddress], [model crateNumber], [model slot]]];
 }
 
 - (void) connectionChanged:(NSNotification*)note
 {
-    NSMutableDictionary* addresses = [model connectedADCAddresses];
-    NSLog(@"%d addresses\n", [addresses count]);
-    for(unsigned int i=0; i<kFlashCamMasterConnections; i++){
+    NSMutableDictionary* addresses = [model connectedAddresses];
+    for(unsigned int i=0; i<kFlashCamTriggerConnections; i++){
         NSNumber* a = [addresses objectForKey:[NSString stringWithFormat:@"trigConnection%d",i]];
         if(a) [[connectedADCMatrix cellWithTag:i] setIntValue:(int)[a unsignedIntValue]];
     }
 }
 
-#pragma mark •••Actions
-
-- (IBAction) boardAddressAction:(id)sender
+- (void) statusChanged:(NSNotification*)note
 {
-    [model setBoardAddress:[sender intValue]];
+    [super statusChanged:note];
+    [fcioIDTextField1      setIntValue:[fcioIDTextField      intValue]];
+    [statusEventTextField1 setIntValue:[statusEventTextField intValue]];
+    [statusPPSTextField1   setIntValue:[statusPPSTextField   intValue]];
+    [statusTicksTextField1 setIntValue:[statusTicksTextField intValue]];
+    [totalErrorsTextField1 setIntValue:[totalErrorsTextField intValue]];
+    [envErrorsTextField1   setIntValue:[envErrorsTextField   intValue]];
+    [ctiErrorsTextField1   setIntValue:[ctiErrorsTextField   intValue]];
+    [linkErrorsTextField1  setIntValue:[linkErrorsTextField  intValue]];
 }
 
 @end

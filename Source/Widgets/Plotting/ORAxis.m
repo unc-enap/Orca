@@ -102,6 +102,8 @@ NSString* ORAxisMaxSave				= @"ORAxisMaxSave";
 NSString* ORAxisAllowShifts			= @"ORAxisAllowShifts";
 NSString* ORAxisAllowNegative		= @"ORAxisAllowNegative";
 
+NSString* ORAxisTextColor           = @"ORAxisTextColor";
+NSString* ORAxisTextStrokeWidth     = @"ORAxisTextStrokeWidth";
 NSString* ORAxisFont				= @"ORAxisFont";
 NSString* ORAxisLabel				= @"ORAxisLabel";
 NSString* ORAxisMarker				= @"kMarker";
@@ -204,6 +206,8 @@ enum {
     if([self isXAxis])[self setAllowShifts:NO];
 	else [self setAllowShifts:YES];
     [self setTextFont:[NSFont fontWithName:kDefFont size:kDefFontSize]];
+    [self setTextColor:[NSColor textColor]];
+    [self setTextStrokeWidth:[NSNumber numberWithFloat:-0.5]];
     [self setInteger:YES];
     [self setIgnoreMouse:NO];
     
@@ -213,7 +217,7 @@ enum {
         
     [self calcFrameOffsets];
 
-    [self setColor:[NSColor blackColor]];    
+    [self setColor:[NSColor textColor]];
     
    // [[self undoManager] enableUndoRegistration];
     
@@ -232,7 +236,7 @@ enum {
 	NSData* theColorData = [attributes objectForKey:ORAxisColor];
 	if(theColorData) return [NSUnarchiver unarchiveObjectWithData:theColorData];
 	else {
-		return [NSColor blackColor];
+		return [NSColor textColor];
 	}
 }
 
@@ -252,6 +256,41 @@ enum {
 {
     [attributes setObject:[NSNumber numberWithBool:state] forKey:ORAxisIsOpposite];
     [self setNeedsDisplay: YES];
+}
+
+- (NSColor*) textColor
+{
+    return [NSUnarchiver unarchiveObjectWithData:[attributes objectForKey:ORAxisTextColor]];
+}
+
+- (void) setTextColor:(NSColor*)color{
+    [attributes setObject:[NSArchiver archivedDataWithRootObject:color] forKey:ORAxisTextColor];
+    NSDictionary* oldLabelAttributes = [labelAttributes copy];
+    if(!labelAttributes) labelAttributes = [[NSMutableDictionary dictionary] retain];
+    [labelAttributes setObject:color forKey:NSForegroundColorAttributeName];
+    [labelAttributes setObject:color forKey:NSStrokeColorAttributeName];
+    [labelAttributes setObject:[NSNumber numberWithFloat:-0.5] forKey:NSStrokeWidthAttributeName];
+    [self adjustSize:oldLabelAttributes];
+    [oldLabelAttributes release];
+    [self setNeedsDisplay:YES];
+    [viewToScale setNeedsDisplay:YES];
+}
+
+- (NSNumber*) textStrokeWidth
+{
+    return [NSUnarchiver unarchiveObjectWithData:[attributes objectForKey:ORAxisTextStrokeWidth]];
+}
+
+- (void) setTextStrokeWidth:(NSNumber*)width
+{
+    [attributes setObject:[NSArchiver archivedDataWithRootObject:width] forKey:ORAxisTextStrokeWidth];
+    NSDictionary* oldLabelAttributes = [labelAttributes copy];
+    if(!labelAttributes) labelAttributes = [[NSMutableDictionary dictionary] retain];
+    [labelAttributes setObject:width forKey:NSStrokeWidthAttributeName];
+    [self adjustSize:oldLabelAttributes];
+    [oldLabelAttributes release];
+    [self setNeedsDisplay:YES];
+    [viewToScale setNeedsDisplay:YES];
 }
 
 - (NSFont*) textFont
@@ -1361,7 +1400,7 @@ enum {
 
 - (void) drawTitle
 {
-	[[NSColor blackColor] set];
+	[[NSColor textColor] set];
 	NSString* label;
 	NSString* tempLabel = [attributes objectForKey:ORAxisTempLabel];
 	if([tempLabel length])label = tempLabel;

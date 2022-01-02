@@ -12,7 +12,8 @@
 //for the use of this software.
 //-------------------------------------------------------------
 
-
+#import <ifaddrs.h>
+#import <arpa/inet.h>
 #if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
 #import <objc/objc-class.h>
 #import <objc/Protocol.h>
@@ -413,6 +414,41 @@ NSString* macAddress(void)
 	
 	(void) IOObjectRelease(intfIterator);	// Release the iterator.
 	return theResult;
+}
+
+// get the IP address for an interface if the family is AF_INET, do not print interfaces to log
+NSString* ipAddress(NSString* interface)
+{
+    return ipAddressAndListInterfaces(interface, NO);
+}
+        
+// get the IP address for an interface, and optionally list all AF_INET interfaces in the log
+NSString* ipAddressAndListInterfaces(NSString* interface, BOOL listAvailable)
+{
+    NSString* address = @"";
+    if(!interface && !listAvailable) return address;
+    else if(listAvailable) NSLog(@"ORFlashCamRunModel - available interfaces:\n");
+    struct ifaddrs* interfaces = NULL;
+    struct ifaddrs* temp_addr = NULL;
+    int success = getifaddrs(&interfaces);
+    if(success == 0){
+        temp_addr = interfaces;
+        while(temp_addr != NULL){
+            if(temp_addr->ifa_addr->sa_family == AF_INET){
+                if(listAvailable) NSLog(@"\t%@\t%@\n",
+                                        [NSString stringWithUTF8String:temp_addr->ifa_name],
+                                        [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in*)temp_addr->ifa_addr)->sin_addr)]);
+                if(!interface) continue;
+                if([[NSString stringWithUTF8String:temp_addr->ifa_name] isEqualToString:interface]){
+                    address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in*)temp_addr->ifa_addr)->sin_addr)];
+                    break;
+                }
+            }
+            temp_addr = temp_addr->ifa_next;
+        }
+    }
+    freeifaddrs(interfaces);
+    return address;
 }
 
 

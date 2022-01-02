@@ -42,6 +42,8 @@ NSString* listMethodWithExtendedOptions(Class aClass,BOOL verbose,BOOL includeSu
 NSString* hexToString(uint32_t aHexValue);
 const char* decodeType(const char* aType);
 NSString* macAddress(void);
+NSString* ipAddress(NSString* interface);
+NSString* ipAddressAndListInterfaces(NSString* interface, BOOL listAvailable);
 NSString* computerName(void);
 NSString* appPath(void);
 NSString* launchPath(void);

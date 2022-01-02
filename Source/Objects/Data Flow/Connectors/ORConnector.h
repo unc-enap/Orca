@@ -110,7 +110,6 @@
 - (void)		addRestrictedConnectionType:(uint32_t)type;
 - (NSRect)      lineBounds;
 - (BOOL)		acceptsIoType:(uint32_t)aType;
-- (BOOL)		acceptsIoType:(uint32_t)aType;
 
 #pragma mark ¥¥¥Undoable Actions
 - (void) 		setConnection: (ORConnector*)aConnection;

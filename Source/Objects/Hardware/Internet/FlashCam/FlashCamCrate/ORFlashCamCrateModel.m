@@ -29,7 +29,7 @@
     NSImage* aCachedImage = [NSImage imageNamed:@"flashcam_crate"];
     NSSize size = [aCachedImage size];
     NSSize newsize;
-    newsize.width  = 0.595*size.width;
+    newsize.width  = 0.595*size.width*14./20;
     newsize.height = 0.5*size.height;
     // create the new image and a box to draw it in
     NSImage* i = [[NSImage alloc] initWithSize:newsize];
@@ -53,7 +53,7 @@
     // draw the crate objects
     if([[self orcaObjects] count]){
         NSAffineTransform* transform = [NSAffineTransform transform];
-        [transform translateXBy:25 yBy:18];
+        [transform translateXBy:17 yBy:18];
         [transform scaleXBy:0.6 yBy:0.5];
         [transform concat];
         NSEnumerator* e  = [[self orcaObjects] objectEnumerator];
@@ -61,7 +61,7 @@
         while(anObject = [e nextObject]){
             BOOL oldHighlightState = [anObject highlighted];
             [anObject setHighlighted:NO];
-            [anObject drawSelf:NSMakeRect(0,0,500,[[self image] size].height)];
+            [anObject drawSelf:NSMakeRect(0,0,350,[[self image] size].height)];
             [anObject setHighlighted:oldHighlightState];
         }
     }
@@ -101,6 +101,6 @@
 @end
 
 @implementation ORFlashCamCrateModel (OROrderedObjHolding)
-- (int) maxNumberOfObjects { return 20; }
+- (int) maxNumberOfObjects { return 14; }
 - (int) objWidth { return 25; }
 @end

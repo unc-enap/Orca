@@ -62,6 +62,7 @@
 - (id)	 dataSource;
 - (BOOL) dataSourceIsSetupToAllowDrawing;
 - (void) setPlotView:(ORPlotView*)aPlotView;
+- (id) plotView;
 - (void) drawData;
 - (void) drawExtras;
 - (void) saveColor;
