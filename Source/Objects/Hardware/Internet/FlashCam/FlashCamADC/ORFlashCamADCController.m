@@ -54,10 +54,10 @@
 {
     NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
     [super registerNotificationObservers];
-    [notifyCenter addObserver : self
-                     selector : @selector(settingsLock:)
-                         name : ORRunStatusChangedNotification
-                       object : nil];
+    //[notifyCenter addObserver : self
+    //                 selector : @selector(settingsLock:)
+    //                     name : ORRunStatusChangedNotification
+    //                   object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(fwTypeChanged:)
                          name : ORFlashCamADCModelFWTypeChanged
@@ -495,10 +495,7 @@
 
 - (void) settingsLock:(bool)lock
 {
-    BOOL run = [gOrcaGlobals runInProgress];
-    //BOOL lock = [gSecurity runInProgressButNotType:eMaintenanceRunType orIsLocked:ORGretina4MSettingsLock];
-    lock = lock || run;
-    
+    lock |= [gOrcaGlobals runInProgress] || [gSecurity isLocked:ORFlashCamCardSettingsLock];
     [super settingsLock:lock];
     [fwTypePUButton         setEnabled:!lock];
     [chanEnabledMatrix      setEnabled:!lock];

@@ -112,6 +112,7 @@ extern NSString* ORFlashCamCardFirmwareVerRequest;
 extern NSString* ORFlashCamCardFirmwareVerChanged;
 extern NSString* ORFlashCamCardExceptionCountChanged;
 extern NSString* ORFlashCamCardStatusChanged;
+extern NSString* ORFlashCamCardSettingsLock;
 
 @interface NSObject (ORFlashCamCard)
 - (void) postUpdateList:(NSArray*)cmds;

@@ -25,6 +25,7 @@
                 <outlet property="printFlagsButton" destination="o9x-Cj-gSU" id="0Df-KO-nlO"/>
                 <outlet property="promSlotPUButton" destination="x1c-U2-dlK" id="KtG-hD-9mI"/>
                 <outlet property="rebootCardButton" destination="aw8-tR-nvC" id="7Uh-Nc-FOT"/>
+                <outlet property="settingsLockButton" destination="cho-oz-VAr" id="Tqi-yg-RAD"/>
                 <outlet property="statusEventTextField" destination="xb3-pT-7bI" id="mnl-h6-Cax"/>
                 <outlet property="statusEventTextField1" destination="HSs-cG-QqD" id="5YN-OC-C4W"/>
                 <outlet property="statusPPSTextField" destination="0EA-PP-uFa" id="IaN-42-NIK"/>
@@ -43,8 +44,10 @@
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="383" height="447"/>
+            <rect key="contentRect" x="823" y="0.0" width="383" height="447"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1025"/>
+            <value key="minSize" type="size" width="383" height="447"/>
+            <value key="maxSize" type="size" width="383" height="447"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="383" height="447"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -361,7 +364,7 @@
                                             </connections>
                                         </button>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U3z-eT-Gxu">
-                                            <rect key="frame" x="44" y="385" width="85" height="14"/>
+                                            <rect key="frame" x="44" y="397" width="85" height="14"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Board Address:" id="8w3-Aj-SyB">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -370,7 +373,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vs5-pg-gAs">
-                                            <rect key="frame" x="65" y="356" width="64" height="14"/>
+                                            <rect key="frame" x="65" y="368" width="64" height="14"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="PROM Slot:" id="1d5-SW-4mo">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -378,6 +381,17 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
+                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cho-oz-VAr">
+                                            <rect key="frame" x="5" y="5" width="33" height="36"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="Unlocked" imagePosition="only" alignment="center" alternateImage="Locked" state="on" inset="2" id="60U-hJ-XzR">
+                                                <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="label"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="settingsLockAction:" target="-2" id="Ape-qO-mAB"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                 </view>
                             </tabViewItem>
@@ -749,6 +763,8 @@
         <customObject id="BS8-o3-7PB" customClass="OHexFormatter"/>
     </objects>
     <resources>
+        <image name="Locked" width="33" height="36"/>
+        <image name="Unlocked" width="33" height="36"/>
         <image name="flashcam_trigger" width="30" height="617"/>
     </resources>
 </document>

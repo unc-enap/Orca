@@ -86,6 +86,14 @@
                      selector : @selector(updateTimePlot:)
                          name : ORRateAverageChangedNotification
                        object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(settingsLock:)
+                         name : ORRunStatusChangedNotification
+                       object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(settingsLock:)
+                         name : ORFlashCamCardSettingsLock
+                        object: nil];
 }
 
 - (void) awakeFromNib
@@ -156,6 +164,7 @@
     [self firmwareVerChanged:nil];
     [self statusChanged:nil];
     [self updateTimePlot:nil];
+    [self settingsLock:nil];
 }
 
 
@@ -236,8 +245,18 @@
     if(note == nil || [key isEqualToString:@"YAttrib3"]) [self setPlot:humidityView yAttributes:attrib];
 }
 
+- (void) checkGlobalSecurity
+{
+    BOOL secure = [[[NSUserDefaults standardUserDefaults] objectForKey:OROrcaSecurityEnabled] boolValue];
+    [gSecurity setLock:ORFlashCamCardSettingsLock to:secure];
+    [settingsLockButton setEnabled:secure];
+}
+
 - (void) settingsLock:(bool)lock
 {
+    BOOL locked = [gSecurity isLocked:ORFlashCamCardSettingsLock];
+    [settingsLockButton   setState:locked];
+    lock |= locked || [gOrcaGlobals runInProgress];
     [cardAddressTextField setEnabled:!lock];
     [promSlotPUButton     setEnabled:!lock];
     [rebootCardButton     setEnabled:!lock];
@@ -303,6 +322,11 @@
 
 - (IBAction) printFlagsAction:(id)sender
 {
+}
+
+- (IBAction) settingLockAction:(id) sender
+{
+    [gSecurity tryToSetLock:ORFlashCamCardSettingsLock to:[sender intValue] forWindow:[self window]];
 }
 
 

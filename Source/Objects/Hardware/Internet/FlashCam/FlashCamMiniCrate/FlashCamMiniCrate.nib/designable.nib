@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,21 +18,30 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="426" y="419" width="169" height="503"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="3840" height="2137"/>
-            <value key="minSize" type="size" width="213" height="107"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1025"/>
+            <value key="minSize" type="size" width="169" height="503"/>
+            <value key="maxSize" type="size" width="169" height="503"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="169" height="503"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="32">
-                        <rect key="frame" x="33" y="28" width="102" height="455"/>
+                        <rect key="frame" x="33" y="38" width="102" height="455"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="flashcam_minicrate" id="46"/>
                     </imageView>
                     <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="22" customClass="ORCardContainerView">
-                        <rect key="frame" x="47" y="45" width="75" height="420"/>
+                        <rect key="frame" x="47" y="55" width="75" height="420"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </customView>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="atU-DH-yi0">
+                        <rect key="frame" x="24" y="8" width="119" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" title="Lock cards in place" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="fCg-qe-cBi">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="label"/>
+                        </buttonCell>
+                    </button>
                 </subviews>
             </view>
             <connections>

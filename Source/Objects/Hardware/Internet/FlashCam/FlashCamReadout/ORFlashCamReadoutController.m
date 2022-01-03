@@ -34,6 +34,7 @@
 {
     self = [super initWithWindowNibName:@"FlashCamReadout"];
     scheduledToUpdatePlot = NO;
+    isLocked = NO;
     return self;
 }
 
@@ -65,6 +66,10 @@
     [notifyCenter addObserver : self
                      selector : @selector(settingsLock:)
                          name : ORRunStatusChangedNotification
+                       object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(settingsLock:)
+                         name : ORFlashCamReadoutSettingsLock
                        object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(ipAddressChanged:)
@@ -277,6 +282,7 @@
     [self reloadListenerData];
     [monitorView reloadData];
     [self updateTimePlot:nil];
+    [self settingsLock:nil];
 }
 
 #pragma mark •••Interface Management
@@ -351,8 +357,8 @@
 
 - (void) pingEnd:(NSNotification*)note
 {
-    [ipAddressTextField setEnabled:YES];
-    [sendPingButton setEnabled:YES];
+    [ipAddressTextField setEnabled:!isLocked];
+    [sendPingButton setEnabled:!isLocked];
 }
 
 - (void) remotePathStart:(NSNotification*)note
@@ -364,9 +370,9 @@
 
 - (void) remotePathEnd:(NSNotification*)note
 {
-    [usernameTextField setEnabled:YES];
-    [ipAddressTextField setEnabled:YES];
-    [fcSourcePathButton setEnabled:YES];
+    [usernameTextField setEnabled:!isLocked];
+    [ipAddressTextField setEnabled:!isLocked];
+    [fcSourcePathButton setEnabled:!isLocked];
 }
 
 - (void) runInProgress:(NSNotification*)note
@@ -539,24 +545,6 @@
     [deadTimeView setNeedsDisplay:YES];
 }
 
-- (void) settingsLock:(bool)lock
-{
-    [ipAddressTextField        setEnabled:!lock];
-    [usernameTextField         setEnabled:!lock];
-    [ethInterfaceView          setEnabled:!lock];
-    [sendPingButton            setEnabled:!lock];
-    [listenerView              setEnabled:!lock];
-    [listenerGPSView           setEnabled:!lock];
-    [listenerDAQView           setEnabled:!lock];
-    [listenerWFView            setEnabled:!lock];
-    [listenerTrigView          setEnabled:!lock];
-    [listenerBaseView          setEnabled:!lock];
-    [listenerReadoutView       setEnabled:!lock];
-    [addIfaceToListenerButton  setEnabled:!lock];
-    [rmIfaceFromListenerButton setEnabled:!lock];
-    [fcSourcePathButton        setEnabled:!lock];
-}
-
 - (void) updateAddIfaceToListenerIfacePUButton
 {
     [addIfaceToListenerIfacePUButton removeAllItems];
@@ -600,6 +588,37 @@
         [title appendString:[NSString stringWithFormat:@"%d",     [[model getListenerAtIndex:i] port]]];
         [rmIfaceFromListenerListenerPUButton addItemWithTitle:title];
     }
+}
+
+- (void) checkGlobalSecurity
+{
+    BOOL secure = [[[NSUserDefaults standardUserDefaults] objectForKey:OROrcaSecurityEnabled] boolValue];
+    [gSecurity setLock:ORFlashCamReadoutSettingsLock to:secure];
+    [settingsLockButton setEnabled:secure];
+}
+
+- (void) settingsLock:(bool)lock
+{
+    BOOL locked = [gSecurity isLocked:ORFlashCamReadoutSettingsLock];
+    [settingsLockButton        setState:locked];
+    lock |= locked || [gOrcaGlobals runInProgress];
+    [ipAddressTextField        setEnabled:!lock];
+    [usernameTextField         setEnabled:!lock];
+    [ethInterfaceView          setEnabled:!lock];
+    [addEthInterfaceButton     setEnabled:!lock];
+    [removeEthInterfaeButton  setEnabled:!lock];
+    [sendPingButton            setEnabled:!lock];
+    [listenerView              setEnabled:!lock];
+    [listenerGPSView           setEnabled:!lock];
+    [listenerDAQView           setEnabled:!lock];
+    [listenerWFView            setEnabled:!lock];
+    [listenerTrigView          setEnabled:!lock];
+    [listenerBaseView          setEnabled:!lock];
+    [listenerReadoutView       setEnabled:!lock];
+    [addIfaceToListenerButton  setEnabled:!lock];
+    [rmIfaceFromListenerButton setEnabled:!lock];
+    [fcSourcePathButton        setEnabled:!lock];
+    isLocked = lock;
 }
 
 - (void) fcSourcePathChanged:(NSNotification*)note
@@ -670,7 +689,7 @@
     int i = (int) [addIfaceToListenerListenerPUButton indexOfSelectedItem] - 1;
     int j = (int) [addIfaceToListenerIfacePUButton indexOfSelectedItem] - 1;
     if(i >= 0 && i < [model listenerCount] && j >= 0 && j < [model ethInterfaceCount])
-        [addIfaceToListenerAddButton setEnabled:YES];
+        [addIfaceToListenerAddButton setEnabled:!isLocked];
     else [addIfaceToListenerAddButton setEnabled:NO];
 }
 
@@ -680,7 +699,7 @@
     int i = (int) [addIfaceToListenerListenerPUButton indexOfSelectedItem] - 1;
     int j = (int) [addIfaceToListenerIfacePUButton indexOfSelectedItem] - 1;
     if(i >= 0 && i < [model listenerCount] && j >= 0 && j < [model ethInterfaceCount])
-        [addIfaceToListenerAddButton setEnabled:YES];
+        [addIfaceToListenerAddButton setEnabled:!isLocked];
     else [addIfaceToListenerAddButton setEnabled:NO];
 }
 
@@ -714,7 +733,7 @@
     int i = (int) [rmIfaceFromListenerListenerPUButton indexOfSelectedItem] - 1;
     int j = (int) [rmIfaceFromListenerIfacePUButton indexOfSelectedItem] - 1;
     if(i >= 0 && i < [model listenerCount] && j >= 0 && j < [model ethInterfaceCount])
-        [rmIfaceFromListenerRmButton setEnabled:YES];
+        [rmIfaceFromListenerRmButton setEnabled:!isLocked];
     else [rmIfaceFromListenerRmButton setEnabled:NO];
 }
 
@@ -725,7 +744,7 @@
     int i = (int) [rmIfaceFromListenerListenerPUButton indexOfSelectedItem] - 1;
     int j = (int) [rmIfaceFromListenerIfacePUButton indexOfSelectedItem] - 1;
     if(i >= 0 && i < [model listenerCount] && j >= 0 && j < [model ethInterfaceCount])
-        [rmIfaceFromListenerRmButton setEnabled:YES];
+        [rmIfaceFromListenerRmButton setEnabled:!isLocked];
     else [rmIfaceFromListenerRmButton setEnabled:NO];
 }
 
@@ -767,12 +786,18 @@
     }
     else [model getRemotePath];
 }
+
 - (IBAction) printListenerFlagsAction:(id)sender
 {
     int tag = (int) [[printListenerFlagsPUButton selectedItem] tag];
     ORFlashCamListenerModel* l = [model getListenerForTag:tag];
     if(l) [l runFlags:YES];
     else NSLog(@"ORFlashCamReadoutModel: listener tag %d not found\n", tag);
+}
+
+- (IBAction) settingsLockAction:(id)sender
+{
+    [gSecurity tryToSetLock:ORFlashCamReadoutSettingsLock to:[sender intValue] forWindow:[self window]];
 }
 
 
