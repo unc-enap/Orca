@@ -859,7 +859,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
         }
         return;
     }
-    [self performSelector:@selector(read) withObject:nil afterDelay:throttle];
+    if([gOrcaGlobals runInProgress]) [self performSelector:@selector(read) withObject:nil afterDelay:throttle];
 }
 
 - (void) runFailed
