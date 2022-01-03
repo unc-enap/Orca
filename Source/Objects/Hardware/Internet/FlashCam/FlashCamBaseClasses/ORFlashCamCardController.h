@@ -41,6 +41,7 @@
     IBOutlet ORCompositeTimeLineView* voltageView;
     IBOutlet ORCompositeTimeLineView* currentView;
     IBOutlet ORCompositeTimeLineView* humidityView;
+    IBOutlet NSButton* settingsLockButton;
     BOOL     scheduledToUpdatePlot;
 }
 
@@ -64,6 +65,7 @@
 - (void) setPlot:(id)aPlotter yAttributes:(id)attrib;
 - (void) updateTimePlot:(NSNotification*)note;
 - (void) deferredPlotUpdate;
+- (void) checkGlobalSecurity;
 - (void) settingsLock:(bool)lock;
 
 #pragma mark •••Actions
@@ -72,6 +74,7 @@
 - (IBAction) rebootCardAction:(id)sender;
 - (IBAction) firmwareVerAction:(id)sender;
 - (IBAction) printFlagsAction:(id)sender;
+- (IBAction) settingsLockAction:(id)sender;
 
 #pragma mark •••Data Source
 - (int) numberPointsInPlot:(id)aPlotter;

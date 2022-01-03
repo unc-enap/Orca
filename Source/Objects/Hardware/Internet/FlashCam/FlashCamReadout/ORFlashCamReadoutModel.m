@@ -38,6 +38,7 @@ NSString* ORFlashCamReadoutModelRunEnded            = @"ORFlashCamReadoutModelRu
 NSString* ORFlashCamReadoutModelListenerChanged     = @"ORFlashCamReadoutModelListenerChanged";
 NSString* ORFlashCamReadoutModelListenerAdded       = @"ORFlashCamReadoutModelListenerAdded";
 NSString* ORFlashCamReadoutModelListenerRemoved     = @"ORFlashCamReadoutModelListenerRemoved";
+NSString* ORFlashCamReadoutSettingsLock             = @"ORFlashCamReadoutSettingsLock";
 
 static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] =
 { @"FlashCamEthInterface0", @"FlashCamEthInterface1",

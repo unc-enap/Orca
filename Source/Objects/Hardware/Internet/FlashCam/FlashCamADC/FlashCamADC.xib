@@ -38,6 +38,7 @@
                 <outlet property="rateTextFields" destination="9dn-Sl-QE6" id="1fz-sG-GCQ"/>
                 <outlet property="rateView" destination="0BE-Ro-cdg" id="Kv3-cV-uNQ"/>
                 <outlet property="rebootCardButton" destination="FNF-xL-usE" id="HXe-EA-QIx"/>
+                <outlet property="settingsLockButton" destination="GRr-Jb-kNS" id="qYN-HX-Rkn"/>
                 <outlet property="shapeTimeMatrix" destination="rxJ-5M-FFT" id="bXx-Tp-YHd"/>
                 <outlet property="shapingLabel" destination="PXu-Xr-PWK" id="wd7-Wv-FxI"/>
                 <outlet property="statusEventTextField" destination="cMx-13-WyA" id="O6q-uG-ivf"/>
@@ -63,8 +64,10 @@
         <window title="FlashCam ADC" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="823" height="343"/>
+            <rect key="contentRect" x="0.0" y="0.0" width="823" height="343"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1025"/>
+            <value key="minSize" type="size" width="823" height="343"/>
+            <value key="maxSize" type="size" width="823" height="343"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="823" height="343"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -1620,6 +1623,17 @@
                             </tabViewItem>
                         </tabViewItems>
                     </tabView>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GRr-Jb-kNS">
+                        <rect key="frame" x="5" y="5" width="33" height="36"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="Unlocked" imagePosition="only" alignment="center" alternateImage="Locked" state="on" inset="2" id="IrK-V1-2uB">
+                            <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="label"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="settingsLockAction:" target="-2" id="xtN-5P-HfA"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <connections>
@@ -1630,6 +1644,8 @@
         <customObject id="zre-Qy-asR" customClass="OHexFormatter"/>
     </objects>
     <resources>
+        <image name="Locked" width="33" height="36"/>
+        <image name="Unlocked" width="33" height="36"/>
         <image name="flashcam_adc" width="31" height="616"/>
     </resources>
 </document>

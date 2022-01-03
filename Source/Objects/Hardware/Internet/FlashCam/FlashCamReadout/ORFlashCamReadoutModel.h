@@ -161,3 +161,4 @@ extern NSString* ORFlashCamReadoutModelRunEnded;
 extern NSString* ORFlashCamReadoutModelListenerChanged;
 extern NSString* ORFlashCamReadoutModelListenerAdded;
 extern NSString* ORFlashCamReadoutModelListenerRemoved;
+extern NSString* ORFlashCamReadoutSettingsLock;

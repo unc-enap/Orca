@@ -59,7 +59,9 @@
     IBOutlet ORCompositeTimeLineView* dataRateView;
     IBOutlet ORCompositeTimeLineView* eventRateView;
     IBOutlet ORCompositeTimeLineView* deadTimeView;
+    IBOutlet NSButton* settingsLockButton;
     BOOL     scheduledToUpdatePlot;
+    BOOL     isLocked;
 }
 
 #pragma mark •••Initialization
@@ -98,12 +100,13 @@
 - (void) setPlot:(id)aPlotter yAttributes:(id)attrib;
 - (void) updateTimePlot:(NSNotification*)aNote;
 - (void) deferredPlotUpdate;
-- (void) settingsLock:(bool)lock;
 - (void) updateAddIfaceToListenerIfacePUButton;
 - (void) updateAddIfaceToListenerListenerPUButton;
 - (void) updateRmIfaceFromListenerIfacePUButton;
 - (void) updateRmIfaceFromListenerListenerPUButton;
 - (void) fcSourcePathChanged:(NSNotification*)note;
+- (void) checkGlobalSecurity;
+- (void) settingsLock:(bool)lock;
 
 #pragma mark •••Actions
 - (IBAction) ipAddressAction:(id)sender;
@@ -127,6 +130,7 @@
 - (IBAction) rmIfaceFromListenerCloseAction:(id)sender;
 - (IBAction) fcSourcePathAction:(id)sender;
 - (IBAction) printListenerFlagsAction:(id)sender;
+- (IBAction) settingsLockAction:(id)sender;
 
 #pragma mark •••Delegate Methods
 - (void) tableViewSelectionDidChange:(NSNotification*)note;

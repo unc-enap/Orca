@@ -28,6 +28,7 @@ NSString* ORFlashCamCardFirmwareVerRequest      = @"ORFlashCamCardFirmwareVerReq
 NSString* ORFlashCamCardFirmwareVerChanged      = @"ORFlashCamCardFirmwareVerChanged";
 NSString* ORFlashCamCardExceptionCountChanged   = @"ORFlashCamCardExceptionCountChanged";
 NSString* ORFlashCamCardStatusChanged           = @"ORFlashCamCardStatusChanged";
+NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
 
 @implementation ORFlashCamCard
 
