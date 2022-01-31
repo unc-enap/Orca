@@ -1485,10 +1485,19 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
 				runNumber=0;
 				subRunNumber=0;
 			}
+            
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            dateFormatter.dateFormat = @"yyyy/MM/dd HH:mm:ss";
+            
+            NSTimeZone* gmt = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+            [dateFormatter setTimeZone:gmt];
+            NSString *lastTimeStamp = [dateFormatter stringFromDate:[NSDate date]];
+
             [runInfo setObject:@"runinfo" forKey:@"_id"];
 			[runInfo setObject:@"runinfo" forKey:@"type"];
 			[runInfo setObject:experimentName forKey:@"experiment"];
-			
+            [runInfo setObject:lastTimeStamp forKey:@"timestamp"];
+            
 			[[self statusDBRef] updateDocument:runInfo documentId:@"runinfo" tag:kDocumentUpdated];
 			
 			int runState = [[runInfo objectForKey:@"state"] intValue];

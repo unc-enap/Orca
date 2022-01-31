@@ -19,7 +19,7 @@
 //-------------------------------------------------------------
 
 
-#pragma mark •••Imported Files
+#pragma mark \[Bullet]\[Bullet]\[Bullet]Imported Files
 #import "ORBurstMonitorModel.h"
 #import "ORDataSet.h"
 #import "ORDecoder.h"
@@ -27,6 +27,7 @@
 #import "ORDataTypeAssigner.h"
 #import "NSData+Extensions.h"
 #import "ORMailer.h"
+#import "ORTaskSequence.h"
 
 NSString* ORBurstMonitorModelNumBurstsNeededChanged = @"ORBurstMonitorModelNumBurstsNeededChanged";
 static NSString* ORBurstMonitorInConnector          = @"BurstMonitor In Connector";
@@ -35,7 +36,7 @@ static NSString* ORBurstMonitorBurstConnector       = @"BurstMonitored Burst Con
 
 //========================================================================
 
-#pragma mark •••Notification Strings
+#pragma mark \[Bullet]\[Bullet]\[Bullet]Notification Strings
 NSString* ORBurstMonitorTimeWindowChanged           = @"ORBurstMonitorTimeWindowChangedNotification";
 NSString* ORBurstMonitorNHitChanged                 = @"ORBurstMonitorNHitChangedNotification";
 NSString* ORBurstMonitorMinimumEnergyAllowedChanged = @"ORBurstMonitorMinimumEnergyAllowedChangedNotification";
@@ -46,6 +47,8 @@ NSDate* burstStart = NULL;
 
 #define kBurstRecordLength 12
 
+
+
 @interface ORBurstMonitorModel (private)
 - (void) deleteQueues;
 - (void) monitorQueues;
@@ -53,7 +56,7 @@ NSDate* burstStart = NULL;
 @end
 
 @implementation ORBurstMonitorModel
-#pragma mark •••Initialization
+#pragma mark \[Bullet]\[Bullet]\[Bullet]Initialization
 - (id) init //designated initializer
 {
 	self = [super init];
@@ -76,6 +79,13 @@ NSDate* burstStart = NULL;
     [burstString release];
     
     [super dealloc];
+}
+
+- (void) taskData:(NSDictionary*)taskData
+{
+    NSString* text = [[taskData objectForKey:@"Text"] retain];
+    NSLog(@"Burstcommand Response:\n%@\n",text);
+    [text release];
 }
 
 - (void) makeConnectors
@@ -106,7 +116,7 @@ NSDate* burstStart = NULL;
     [self linkToController:@"ORBurstMonitorController"];
 }
 
-#pragma mark •••Accessors
+#pragma mark \[Bullet]\[Bullet]\[Bullet]Accessors
 - (NSArray*) collectConnectedObjectsOfClass:(Class)aClass
 {
     NSMutableArray* collection = [NSMutableArray arrayWithCapacity:256];
@@ -409,7 +419,7 @@ double facto(uint64_t num)
     }
 }
 
-#pragma mark •••Data Handling
+#pragma mark \[Bullet]\[Bullet]\[Bullet]Data Handling
 - (void) processData:(NSArray*)dataArray decoder:(ORDecoder*)aDecoder;
 {
     //pass it on
@@ -710,7 +720,7 @@ double facto(uint64_t num)
                                                     //uint64_t allfac = facto(peakN+lowN-n);
                                                     //int nummy = peakN+lowN-n;
                                                     //NSLog(@"n!, (peak+low-n)!, nummy!, denom is %i, %i, %i, %i \n", facto(n), facto(peakN + lowN - n), facto(nummy), (facto(n)*facto(peakN + lowN - n)));
-                                                    //double partP = ( facto(peakN + lowN)/(facto(n)*facto(nummy)) )*pow(peakP,n)*pow((1-peakP),(peakN + lowN - n));
+                                                    //double partP = ( facto (peakN + lowN)/(facto(n)*facto(nummy)) )*pow(peakP,n)*pow((1-peakP),(peakN + lowN - n));
                                                     double partPtop = facto(peakN + lowN);
                                                     double partPbot = facto(n)*facto(peakN + lowN - n);
                                                     double partPpow = pow(peakP,n)*pow((1-peakP),(peakN + lowN - n));
@@ -780,13 +790,13 @@ double facto(uint64_t num)
                                                     {
                                                         if(fabs(n-egamma) < fabs(numgamma - egamma))
                                                         {
-                                                            inprob = inprob + (pow(egamma,n)/(pow(2.7182818284,egamma)*facto(n)));
+                                                            inprob = inprob + (pow (egamma,n)/(pow(2.7182818284,egamma)*facto(n)));
                                                         }
                                                     }
                                                 }
                                                 else //normal will work
                                                 {
-                                                    inprob =erf(fabs(errgamma)/sqrt(2.0));
+                                                    inprob =erf(fabs (errgamma)/sqrt(2.0));
                                                 }
                                                 gammaP = 1 - inprob;
                                                 inprob = 0;
@@ -794,7 +804,7 @@ double facto(uint64_t num)
                                                 {
                                                     if(fabs(n-ealpha) < fabs(numalpha - ealpha))
                                                     {
-                                                        inprob = inprob + (pow(ealpha,n)/(pow(2.7182818284,ealpha)*facto(n)));
+                                                        inprob = inprob + (pow (ealpha,n)/(pow(2.7182818284,ealpha)*facto(n)));
                                                     }
                                                 }
                                                 alphaP = 1 - inprob;
@@ -1116,7 +1126,7 @@ double facto(uint64_t num)
 {
 }
 
-#pragma mark •••Archival
+#pragma mark \[Bullet]\[Bullet]\[Bullet]Archival
 static NSString* ORBurstMonitorTimeWindow			 = @"ORBurstMonitor Time Window";
 static NSString* ORBurstMonitorNHit                  = @"ORBurstMonitor N Hit";
 static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum Energy Allowed";
@@ -1148,7 +1158,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
 	[encoder encodeObject:emailList                  forKey:@"emailList"];
 }
 
-#pragma mark •••EMail
+#pragma mark \[Bullet]\[Bullet]\[Bullet]EMail
 - (void) mailSent:(NSString*)address
 {
 	NSLog(@"Process Center status was sent to:\n%@\n",address);
@@ -1317,7 +1327,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
     if(burstState == 1){
         quietSec++;
         //loudSec = 1; //temp
-        loudSec=(int)([[Nsecs objectAtIndex:1] longValue] - [[Nsecs objectAtIndex:(Nsecs.count-1)] longValue]);  //CB crash source??? use Bsecs?  can't, not writen yet
+        loudSec=(int)([[Nsecs objectAtIndex:1] longValue] - [[Nsecs objectAtIndex:(Nsecs.count-1)] longValue]);  //CB crash source ??? use Bsecs?  can't, not writen yet
         if(quietSec > 10){
             burstForce=1;
             [theBurstMonitoredObject processData:[NSArray arrayWithObject:header] decoder:theDecoder];
@@ -1341,7 +1351,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
     int novaState = 0;
     if(multInBurst > 3 && rSec > 0.01 && adcP > 0.001 && (gammaP > 0.00001 || isgammalow) && alphaP > 0.00001)
     {
-        novaState = 3;
+        novaState = 3; //SN-Candidate
     }
     else
     {
@@ -1361,6 +1371,20 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
     }
     NSLog(@"Novastate set to %i \n", novaState);
     NSLog(@"isgammalow? %i \n", isgammalow);
+
+    // rhill: Move the determination of the p value here so I can access it to snews.
+    // It is a class variable that is calculated later on but I believe it can be done now
+    // as all the appropriate variables are defined. 
+    if(countsInBurst < 20)
+    {
+        exChan = 64.0*(1.0-exp(-(countsInBurst/64.0)));
+        chanpvalue = [self diffprob:countsInBurst Channels:countsInBurst Expect:exChan Found:numBurstChan];
+    }
+    else{
+        chanpvalue = 999.999;
+    }
+
+
     if(novaState == 3) //Send a cping somewhere if the burst is good enough
     {
         NSLog(@"Supdernova candidate, send ping if SNEWS run\n");
@@ -1407,12 +1431,12 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
             NSLog(@"Pulse sent to SNEWS\n");
             [Cping setLaunchPath: @"/usr/bin/ssh"];  //@"/usr/bin/ssh"
             [Cping setArguments: [NSArray arrayWithObjects: @"halo@142.51.71.223", burstcommand, nil]];  //.223 only for ug
-            //[Cping setArguments: [NSArray arrayWithObjects: @"halo@142.51.71.225", @"cd snews/coinccode/ ; mkdir AAASNEWSPINGTEST", nil]];
+            //[Cping setArguments: [NSArray arrayWithObjects: @"halo@142.51.71.223", @"cd snews/coinccode/ ; mkdir AAASNEWSPINGTEST", nil]];
         }  // -c successfully made directories in home
         NSLog(@"end2\n");
         [Cping launch]; //Send the ping!
         NSLog(@"end3\n");
-        //system("ssh halo@142.51.71.225 'cd snews/coinccode/ && ./cping all 0 0 0 3'"); freezes orca for about 30 seconds but works
+        //system("ssh halo@142.51.71.223 'cd snews/coinccode/ && ./cping all 0 0 0 3'"); freezes orca for about 30 seconds but works
         
         //NSData* pingdata;
         //pingdata = [pingfile readDataToEndOfFile]; //dont do this, it freezes orca
@@ -1420,15 +1444,81 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
         //pingstring =[[NSString alloc] initWithData:pingdata encoding:NSUTF8StringEncoding];
         //NSLog(@"pingstring is %@ \n", pingstring);
     }
+    if((novaState == 1)||(novaState == 2)) //Send a cping somewhere if the burst is good enough
+    {
+        NSLog(@"Low-threshold candidate, send ping if SNEWS run\n");
+        //make the time into a sendable string
+        NSDate* burstdate = [NSDate dateWithTimeIntervalSince1970:numSecTillBurst];
+        NSCalendar* cal = [NSCalendar currentCalendar];
+        [cal setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+        NSDateComponents* burstcomp = [cal components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond) fromDate:burstdate];
+        NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSDate* now = [NSDate date];
+        NSString* burstDateString = [dateFormatter stringFromDate:burstdate];
+        NSString* nowDateString = [dateFormatter stringFromDate:now];
+        NSInteger century = ([burstcomp year]/100);
+        NSInteger yy = [burstcomp year] - (100*century);
+        NSInteger mmo = 100*[burstcomp month];
+        NSInteger dd = 10000*[burstcomp day];
+        NSInteger hh = 10000*[burstcomp hour];
+        NSInteger mmi = 100*[burstcomp minute];
+        NSInteger ss = [burstcomp second];
+        NSInteger dateint = yy + mmo + dd;
+        NSInteger timeint = ss + mmi + hh;
+        NSString* burstcommand = @"";
+        // rhill: I added this stuff for the SNEWS 2.0 alarm. 
+        // We will leave the SNEWS 1.0 alarm stuff as is. 
+        NSString* snews2burstcommand = @"";
+        NSInteger level = 1; //Good alarm, auto.  0=test 1=possible 2=good 3=confirmed -1=retraction
+        NSInteger signif = (multInBurst*0.5)+3; //cbmod current background and best (round) fit with likelyhood as of dec 2016 with logaritmic rounding
+        burstcommand = [burstcommand stringByAppendingFormat:@"/home/halo/snews/testserver/ctestgcli %i %i 0 %i %i 9; ", (int32_t)dateint, (int)timeint, (int)level, (int)signif];  //maybe add nanoseconds? 9 is halo
+         // rhill: Here we will define the snews2burstcommand. Just use the timeint as the message id.
+	 // Should be little to no concern about two messages sharing an id. 
+	snews2burstcommand = [snews2burstcommand stringByAppendingFormat:@"/home/halosim/remington/snews-venv/submit-halo-sn-candidate.sh %i halo \"%@\" \"%@\" \"%@\" \"Sudbury,ON\" %f ON \"alert test - coincidence or spallation observed\"; ", (int)timeint, nowDateString, burstDateString, nowDateString, (double)chanpvalue];
+        NSLog(@"burstcommand witha a space on each side: | %@ |\n", burstcommand);
+        // rhill: Add my stuff to the log if it does any good. 
+        NSLog(@"snews2burstcommand with a space on each side: | %@ |\n", snews2burstcommand);
+// NSTask* Cping;
+  //      Cping =[[NSTask alloc] init];
+        ORTaskSequence* tasks=[[ORTaskSequence taskSequenceWithDelegate:self] retain];
+        [tasks setVerbose:NO];
+        [tasks setTextToDelegate:YES];
+        [tasks addTask:@"/usr/bin/ssh" arguments:[NSArray arrayWithObjects:@"halo@142.51.71.223", burstcommand, nil]];
+        
+        ORTaskSequence* tasks2=[[ORTaskSequence taskSequenceWithDelegate:self] retain];
+        [tasks2 setVerbose:NO];
+        [tasks2 setTextToDelegate:YES];
+        // rhill: Here we will add our task for the SNEWS 2.0 alert.
+        [tasks addTask:@"/usr/bin/ssh" arguments:[NSArray arrayWithObjects:@"halosim@142.51.71.223", snews2burstcommand, nil]];
+        NSLog(@"end1\n");
+        if(1-[[runbits objectAtIndex:6] intValue])  //Send to local machine  //mod change to ping again
+        {
+            NSLog(@"No pulse sent to snews because run type is not 'SNEWS'\n");
+            NSLog(@"Parameters (d,t,l,s) were %i %i %i %i\n", dateint, timeint, level, signif);
+   //         [Cping setLaunchPath: @"/usr/bin/printf"];
+   //         [Cping setArguments: [NSArray arrayWithObjects: @"test string one\n", nil]];
+        }
+        else{ //Send to halo shift
+            NSLog(@"Pulse sent to SNEWS Test Server\n");
+     //       [Cping setLaunchPath: @"/usr/bin/ssh"];  //@"/usr/bin/ssh"
+    //        [Cping setArguments: [NSArray arrayWithObjects: @"halo@142.51.71.223", burstcommand, nil]];  //.223 only for ug
+        }  // -c successfully made directories in home
+        NSLog(@"end2\n");
+        [tasks launch]; //snews1.0 ping
+        [tasks2 launch]; //snews2.0 ping
+    //    [Cping launch]; //Send the ping!
+        NSLog(@"end3\n");
+    }
     if(countsInBurst < 20)
     {
-        exChan = 64.0*(1.0-exp(-(countsInBurst/64.0)));
-        chanpvalue = [self diffprob:countsInBurst Channels:countsInBurst Expect:exChan Found:numBurstChan];
+        //exChan = 64.0*(1.0-exp(-(countsInBurst/64.0)));
+        //chanpvalue = [self diffprob:countsInBurst Channels:countsInBurst Expect:exChan Found:numBurstChan];
         NSLog(@"chanpvalue is %f, expected is %f \n", chanpvalue, exChan);
     }
-    else{
-        chanpvalue = 999.999;
-    }
+    //else{
+    //    chanpvalue = 999.999;
+    //}
     //make runtype string
     NSString* theRuntypes = @"[";
     if([[runbits objectAtIndex:0] intValue] == 1) theRuntypes = [theRuntypes stringByAppendingString:@"\"Maintenance\""];
@@ -1589,7 +1679,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
         NSLog(@"look for the file at %@\n", currentDir);
     }
     //send the file to couchdb
-    system("Users/daq/burstcouch.sh");
+    system("/Users/daq/burstcouch.sh");
     /*
     NSTask* sendrev;
     NSFileHandle* sendfile;
