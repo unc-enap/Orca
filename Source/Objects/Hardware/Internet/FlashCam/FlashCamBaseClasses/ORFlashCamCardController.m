@@ -160,6 +160,7 @@
 - (void) updateWindow
 {
     [super updateWindow];
+    [self cardAddressChanged:nil];
     [self promSlotChanged:nil];
     [self firmwareVerChanged:nil];
     [self statusChanged:nil];
@@ -324,7 +325,7 @@
 {
 }
 
-- (IBAction) settingLockAction:(id) sender
+- (IBAction) settingsLockAction:(id) sender
 {
     [gSecurity tryToSetLock:ORFlashCamCardSettingsLock to:[sender intValue] forWindow:[self window]];
 }
