@@ -619,7 +619,6 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
         }
         else if(fwType == 1){
             [flags addObjectsFromArray:@[@"-gs",     [self chFlag:j withInt:shapeTime[i]]]];
-            [flags addObjectsFromArray:@[@"-gf",     [self chFlag:j withInt:filterType[i]]]];
             [flags addObjectsFromArray:@[@"-gpz",    [self chFlag:j withFloat:poleZeroTime[i]]]];
             if([self filterType:i] == 0)
                 [flags addObjectsFromArray:@[@"-gf", [self chFlag:j withFloat:0.0]]];

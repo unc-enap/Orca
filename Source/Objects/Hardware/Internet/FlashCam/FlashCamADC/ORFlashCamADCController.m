@@ -54,10 +54,6 @@
 {
     NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
     [super registerNotificationObservers];
-    //[notifyCenter addObserver : self
-    //                 selector : @selector(settingsLock:)
-    //                     name : ORRunStatusChangedNotification
-    //                   object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(fwTypeChanged:)
                          name : ORFlashCamADCModelFWTypeChanged
