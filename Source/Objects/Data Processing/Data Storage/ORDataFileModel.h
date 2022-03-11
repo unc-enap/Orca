@@ -49,6 +49,7 @@
         BOOL			processedCloseRun;
 
         ORSmartFolder*	dataFolder;
+        ORSmartFolder*  gzipFolder;
         ORSmartFolder*	statusFolder;
         ORSmartFolder*	configFolder;
         
@@ -74,6 +75,7 @@
 		float			percentFull;
 		float			processLimitHigh;
         BOOL            generateMD5;
+        BOOL            generateGzip;
         NSOperationQueue* md5Queue;
         NSDate*         startTime;
 }
@@ -81,6 +83,9 @@
 #pragma mark ¥¥¥Accessors
 - (BOOL) generateMD5;
 - (void) setGenerateMD5:(BOOL)aGenerateMD5;
+- (BOOL) generateGzip;
+- (void) setGenerateGzip:(BOOL)aGenerateGzip;
+- (void) setGenerateMD5:(bool)aGenerateMD5 generateGzip:(bool)aGenerateGzip;
 - (float) processLimitHigh;
 - (void) setProcessLimitHigh:(float)aProcessLimitHigh;
 - (BOOL) useDatedFileNames;
@@ -99,6 +104,8 @@
 - (void) setLimitSize:(BOOL)aLimitSize;
 - (ORSmartFolder *)dataFolder;
 - (void)setDataFolder:(ORSmartFolder *)aDataFolder;
+- (ORSmartFolder *)gzipFolder;
+- (void)setGzipFolder:(ORSmartFolder *)aGzipFolder;
 - (ORSmartFolder *)statusFolder;
 - (void)setStatusFolder:(ORSmartFolder *)aStatusFolder;
 - (ORSmartFolder *)configFolder;
@@ -153,6 +160,7 @@
 
 #pragma mark ¥¥¥External String Definitions
 extern NSString* ORDataFileModelGenerateMD5Changed;
+extern NSString* ORDataFileModelGenerateGzipChanged;
 extern NSString* ORDataFileModelProcessLimitHighChanged;
 extern NSString* ORDataFileModelUseDatedFileNamesChanged;
 extern NSString* ORDataFileModelUseFolderStructureChanged;
@@ -171,6 +179,15 @@ extern NSString* ORDataFileModelSizeLimitReachedActionChanged;
 @interface ORMD5Op : NSOperation
 {
 	id delegate;
+    NSString* filePath;
+}
+- (id) initWithFilePath:(NSString*)aPath delegate:(id)aDelegate;
+- (void) main;
+@end
+
+@interface ORGzipOp : NSOperation
+{
+    id delegate;
     NSString* filePath;
 }
 - (id) initWithFilePath:(NSString*)aPath delegate:(id)aDelegate;

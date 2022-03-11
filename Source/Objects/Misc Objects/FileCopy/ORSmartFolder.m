@@ -62,11 +62,13 @@ NSString* ORFolderPercentDoneChanged                = @"ORFolderPercentDoneChang
 
     }
     
+    [view retain];
+    
     [self setDirectoryName:@"~"];
     [self setRemoteHost:@""];
     [self setRemoteUserName:@""];
     [self setPassWord:@""];
-        
+
     return self;
 }
 

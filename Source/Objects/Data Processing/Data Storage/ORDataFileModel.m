@@ -28,6 +28,7 @@
 
 #pragma mark ¥¥¥Notification Strings
 NSString* ORDataFileModelGenerateMD5Changed             = @"ORDataFileModelGenerateMD5Changed";
+NSString* ORDataFileModelGenerateGzipChanged            = @"ORDataFileModelGenerateGzipChanged";
 NSString* ORDataFileModelProcessLimitHighChanged        = @"ORDataFileModelProcessLimitHighChanged";
 NSString* ORDataFileModelUseDatedFileNamesChanged       = @"ORDataFileModelUseDatedFileNamesChanged";
 NSString* ORDataFileModelUseFolderStructureChanged      = @"ORDataFileModelUseFolderStructureChanged";
@@ -60,7 +61,7 @@ static const int currentVersion = 1;           // Current version
 {
     if ([self class] == [ORDataFileModel class]) {
         [[self class] setVersion: currentVersion];
-    }    
+    }
 }
 
 - (id) init //designated initializer
@@ -70,6 +71,7 @@ static const int currentVersion = 1;           // Current version
     [[self undoManager] disableUndoRegistration];
     ignoreMode = YES;
     [self setDataFolder:[[[ORSmartFolder alloc]init]autorelease]];
+    [self setGzipFolder:[[[ORSmartFolder alloc]init]autorelease]];
     [self setStatusFolder:[[[ORSmartFolder alloc]init]autorelease]];
     [self setConfigFolder:[[[ORSmartFolder alloc]init]autorelease]];
     
@@ -93,6 +95,7 @@ static const int currentVersion = 1;           // Current version
     [filePointer release];
     [fileName release];
     [dataFolder release];
+    [gzipFolder release];
     [statusFolder release];
     [configFolder release];
     [md5Queue cancelAllOperations];
@@ -117,7 +120,7 @@ static const int currentVersion = 1;           // Current version
     //arghhh....NSImage caches one image. The NSImage setCachMode:NSImageNeverCache appears to not work.
     //so, we cache the image here so we can draw into it.
     //---------------------------------------------------------------------------------------------------
-    
+
     NSImage* aCachedImage = [NSImage imageNamed:@"DataFile"];
     NSImage* i = [[NSImage alloc] initWithSize:[aCachedImage size]];
     [i lockFocus];
@@ -145,6 +148,7 @@ static const int currentVersion = 1;           // Current version
 - (void)setTitles
 {
     [dataFolder setTitle:@"Data Files"];
+    [gzipFolder setTitle:@"gzip Files"];
     [statusFolder setTitle:@"Status Logs"];
     [configFolder setTitle:@"Config Files"];
 }
@@ -162,7 +166,6 @@ static const int currentVersion = 1;           // Current version
                          name : ORStatusFlushedNotification
                        object : nil];
     
-    
     [notifyCenter addObserver : self
                      selector : @selector(runAboutToStart:)
                          name : ORRunAboutToStartNotification
@@ -172,8 +175,6 @@ static const int currentVersion = 1;           // Current version
                      selector : @selector(closeOutLogFiles:)
                          name : ORFlushLogsNotification
                        object : nil];
-    
-    
 }
 
 - (void) runAboutToStart:(NSNotification*)aNotification
@@ -221,6 +222,28 @@ static const int currentVersion = 1;           // Current version
     [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileModelGenerateMD5Changed object:self];
 }
 
+- (BOOL) generateGzip
+{
+    return generateGzip;
+}
+
+- (void) setGenerateGzip:(BOOL)aGenerateGzip
+{
+    [[[self undoManager] prepareWithInvocationTarget:self] setGenerateGzip:generateGzip];
+    generateGzip = aGenerateGzip;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileModelGenerateGzipChanged object:self];
+}
+
+- (void) setGenerateMD5:(bool)aGenerateMD5 generateGzip:(bool)aGenerateGzip
+{
+    [[[self undoManager] prepareWithInvocationTarget:self] setGenerateMD5:generateMD5];
+    [[[self undoManager] prepareWithInvocationTarget:self] setGenerateGzip:generateGzip];
+    generateMD5 = aGenerateMD5;
+    generateGzip = aGenerateGzip;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileModelGenerateMD5Changed object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileModelGenerateGzipChanged object:self];
+}
+
 - (float) processLimitHigh
 {
 	if(processLimitHigh<50)processLimitHigh=50;
@@ -262,6 +285,7 @@ static const int currentVersion = 1;           // Current version
     
     useFolderStructure = aUseFolderStructure;
 	[dataFolder setUseFolderStructure:aUseFolderStructure];
+    [gzipFolder setUseFolderStructure:aUseFolderStructure];
 	[configFolder setUseFolderStructure:aUseFolderStructure];
 	[statusFolder setUseFolderStructure:aUseFolderStructure];
 	
@@ -364,6 +388,19 @@ static const int currentVersion = 1;           // Current version
     [dataFolder release];
     dataFolder = aDataFolder;
 	[dataFolder setDefaultLastPathComponent:@"Data"];
+}
+
+- (ORSmartFolder *)gzipFolder
+{
+    return gzipFolder;
+}
+
+- (void)setGzipFolder:(ORSmartFolder *)aGzipFolder
+{
+    [aGzipFolder retain];
+    [gzipFolder release];
+    gzipFolder = aGzipFolder;
+    [gzipFolder setDefaultLastPathComponent:@"Data"];
 }
 
 - (ORSmartFolder *)statusFolder 
@@ -596,16 +633,21 @@ static const int currentVersion = 1;           // Current version
                 NSLogColor([NSColor redColor],@"%d file%@ failed to copy out of the openFiles folder. You will have to move %@ manually\n",failedCount,failedCount>1?@"s":@"",failedCount>1?@"them":@"it");
             }
         }
-        if([dataFolder copyEnabled]){
+        if([dataFolder copyEnabled] || generateGzip){
             NSString* fullFileName = [[[dataFolder finalDirectoryName]stringByExpandingTildeInPath] stringByAppendingPathComponent:[self fileName]];
-            if(generateMD5){
+            if(generateMD5 || generateGzip){
                 //the md5 op will send the file after generating the checksum
                 ORMD5Op* md5Op = [[ORMD5Op alloc] initWithFilePath:fullFileName delegate:self];
                 if(!md5Queue)md5Queue = [[NSOperationQueue alloc] init];
                 [md5Queue addOperation:md5Op];
                 [md5Op release];
+                if(generateGzip){
+                    ORGzipOp* gzipOp = [[ORGzipOp alloc] initWithFilePath:fullFileName delegate:self];
+                    [md5Queue addOperation:gzipOp];
+                    [gzipOp release];
+                }
             }
-            else {
+            else if([dataFolder copyEnabled] && !generateMD5){
                 //no md5 to be done, so just send it.
                 [self sendFile:fullFileName];
             }
@@ -775,6 +817,7 @@ static NSString* ORDataPassWord             = @"ORData PassWord";
 static NSString* ORDataVerbose              = @"ORData Verbose";
 //-------------------------------------------------------------------------------
 static NSString* ORDataDataFolderName       = @"ORDataDataFolderName";
+static NSString* ORDataGzipFolderName       = @"ORDataGzipFolderName";
 static NSString* ORDataStatusFolderName     = @"ORDataStatusFolderName";
 static NSString* ORDataConfigFolderName     = @"ORDataConfigFolderName";
 static NSString* ORDataVersion		    = @"ORDataVersion";
@@ -788,6 +831,7 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
     [[self undoManager] disableUndoRegistration];
     
     [self setGenerateMD5:[decoder decodeBoolForKey:@"ORDataFileModelGenerateMD5"]];
+    [self setGenerateGzip:[decoder decodeBoolForKey:@"ORDataFileModelGenerateGzip"]];
     [self setProcessLimitHigh:[decoder decodeFloatForKey:@"processLimitHigh"]];
     [self setUseDatedFileNames:	[decoder decodeBoolForKey:@"ORDataFileModelUseDatedFileNames"]];
     [self setMaxFileSize:		[decoder decodeFloatForKey:@"ORDataFileModelMaxFileSize"]];
@@ -800,6 +844,7 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
     //version 0 stuff
     if (version < currentVersion){
         [self setDataFolder:[[[ORSmartFolder alloc]init] autorelease]];
+        [self setGzipFolder:[[[ORSmartFolder alloc]init] autorelease]];
         [self setStatusFolder:[[[ORSmartFolder alloc]init] autorelease]];
         [self setConfigFolder:[[[ORSmartFolder alloc]init] autorelease]];
         [dataFolder setDirectoryName:[decoder decodeObjectForKey:ORDataDirName]];
@@ -823,9 +868,12 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
     //-------------------------------------------------------------------------------
     else {
         [self setDataFolder:[decoder decodeObjectForKey:ORDataDataFolderName]];
+        [self setGzipFolder:[decoder decodeObjectForKey:ORDataGzipFolderName]];
         [self setStatusFolder:[decoder decodeObjectForKey:ORDataStatusFolderName]];
         [self setConfigFolder:[decoder decodeObjectForKey:ORDataConfigFolderName]];
     }
+    
+    if(!gzipFolder) [self setGzipFolder:[[[ORSmartFolder alloc]init] autorelease]];
     
 	[self setFilePrefix:[decoder decodeObjectForKey:@"ORDataFileModelFilePrefix"]];
 	[self setUseFolderStructure:[decoder decodeBoolForKey:@"ORDataFileModelUseFolderStructure"]];
@@ -836,7 +884,6 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
     
     ignoreMode = NO;
     [self registerNotificationObservers];
-    
     return self;
 }
 
@@ -844,14 +891,16 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeBool:generateMD5 forKey:@"ORDataFileModelGenerateMD5"];
+    [encoder encodeBool:generateGzip forKey:@"ORDataFileModelGenerateGzip"];
     [encoder encodeFloat:processLimitHigh forKey:@"processLimitHigh"];
     [encoder encodeBool:useDatedFileNames	forKey:@"ORDataFileModelUseDatedFileNames"];
     [encoder encodeBool:useFolderStructure	forKey:@"ORDataFileModelUseFolderStructure"];
     [encoder encodeObject:filePrefix		forKey:@"ORDataFileModelFilePrefix"];
     [encoder encodeFloat:maxFileSize		forKey:@"ORDataFileModelMaxFileSize"];
     [encoder encodeBool:limitSize			forKey:@"ORDataFileModelLimitSize"];
-    [encoder encodeInteger:currentVersion		forKey:ORDataVersion];
+    [encoder encodeInteger:currentVersion   forKey:ORDataVersion];
     [encoder encodeObject:dataFolder		forKey:ORDataDataFolderName];
+    [encoder encodeObject:gzipFolder        forKey:ORDataGzipFolderName];
     [encoder encodeObject:statusFolder		forKey:ORDataStatusFolderName];
     [encoder encodeObject:configFolder		forKey:ORDataConfigFolderName];
     [encoder encodeBool:saveConfiguration	forKey:ORDataSaveConfiguration];
@@ -862,6 +911,7 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
 {
 	NSMutableDictionary* objDictionary = [NSMutableDictionary dictionary];
     [objDictionary setObject:[dataFolder addParametersToDictionary:[NSMutableDictionary dictionary]] forKey:@"DataFolder"];
+    [objDictionary setObject:[gzipFolder addParametersToDictionary:[NSMutableDictionary dictionary]] forKey:@"gzipFolder"];
     [objDictionary setObject:[statusFolder addParametersToDictionary:[NSMutableDictionary dictionary]] forKey:@"StatusFolder"];
     [objDictionary setObject:[configFolder addParametersToDictionary:[NSMutableDictionary dictionary]] forKey:@"ConfigFolder"];
     [objDictionary setObject:[NSNumber numberWithInt:saveConfiguration] forKey:@"SaveConfiguration"];
@@ -1036,5 +1086,51 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
     @finally {
         [thePool release];
     }
+}
+@end
+
+@implementation ORGzipOp
+- (id) initWithFilePath:(NSString*)aPath delegate:(id)aDelegate
+{
+    self       = [super init];
+    delegate   = aDelegate;
+    filePath   = [aPath copy];
+    return self;
+}
+
+- (void) dealloc
+{
+    [filePath release];
+    [super dealloc];
+}
+
+- (void) main
+{
+    NSAutoreleasePool* thePool = [[NSAutoreleasePool alloc] init];
+    @try{
+        if(filePath && ![self isCancelled]){
+            NSTask* task = [[NSTask alloc] init];
+            [task setLaunchPath:@"/usr/bin/gzip"];
+            [task setArguments:[NSArray arrayWithObjects:@"-c", filePath, nil]];
+            NSPipe* pipe = [NSPipe pipe];
+            [task setStandardOutput: pipe];
+            NSFileHandle* file = [pipe fileHandleForReading];
+            NSLog(@"gzip task: %@\n", filePath);
+            [task launch];
+            NSData* data = [file readDataToEndOfFile];
+            NSMutableString* gzfile = [NSMutableString string];
+            if(data){
+                [gzfile appendString:[[[delegate gzipFolder] finalDirectoryName] stringByExpandingTildeInPath]];
+                [gzfile appendString:[NSString stringWithFormat:@"/%@.gz", [filePath lastPathComponent]]];
+                [data writeToFile:gzfile atomically:NO];
+                [delegate performSelectorOnMainThread:@selector(sendFile:) withObject:gzfile waitUntilDone:NO];
+            }
+            [task release];
+            [file closeFile];
+            NSLog(@"gzip task complete: %@\n", gzfile);
+        }
+    }
+    @catch(NSException*){ }
+    @finally{ [thePool release]; }
 }
 @end

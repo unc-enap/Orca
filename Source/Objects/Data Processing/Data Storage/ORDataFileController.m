@@ -26,6 +26,7 @@
 
 enum {
     kData,
+    kGzip,
     kStatus,
     kConfig
 };
@@ -53,15 +54,18 @@ enum {
     [tabView selectTabViewItemAtIndex: index];
 	
     [[tabView tabViewItemAtIndex:kData] setView:[[model dataFolder]view]];
+    [[tabView tabViewItemAtIndex:kGzip] setView:[[model gzipFolder]view]];
     [[tabView tabViewItemAtIndex:kStatus] setView:[[model statusFolder]view]];
     [[tabView tabViewItemAtIndex:kConfig] setView:[[model configFolder]view]];
 	
     [model setTitles];
     [[model dataFolder] setWindow:[self window]];
+    [[model gzipFolder] setWindow:[self window]];
     [[model statusFolder] setWindow:[self window]];
     [[model configFolder] setWindow:[self window]];
 	
 	[[model dataFolder] updateWindow];
+    [[model gzipFolder] updateWindow];
 	[[model statusFolder] updateWindow];
 	[[model configFolder] updateWindow];
 	
@@ -72,9 +76,9 @@ enum {
 
 #pragma  mark ¥¥¥Actions
 
-- (void) generateMD5Action:(id)sender
+- (void) generateAuxDataFileAction:(id)sender
 {
-	[model setGenerateMD5:[sender intValue]];
+    [model setGenerateMD5:[[sender selectedItem] tag]&0x1 generateGzip:[[sender selectedItem] tag]&0x2];
 }
 
 - (IBAction) processLimitHighAction:(id)sender
@@ -140,6 +144,7 @@ enum {
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if(result == NSAlertFirstButtonReturn){
             [[model dataFolder] stopTheQueue];
+            [[model gzipFolder] stopTheQueue];
             [[model statusFolder] stopTheQueue];
             [[model configFolder] stopTheQueue];
         }
@@ -161,6 +166,7 @@ enum {
 {
 	if(returnCode == NSAlertFirstButtonReturn){
 		[[model dataFolder] stopTheQueue];
+        [[model gzipFolder] stopTheQueue];
 		[[model statusFolder] stopTheQueue];
 		[[model configFolder] stopTheQueue];
     }
@@ -172,7 +178,20 @@ enum {
 
 - (void) generateMD5Changed:(NSNotification*)aNote
 {
-	[generateMD5CB setIntValue: [model generateMD5]];
+    if([model generateMD5]){
+        if([model generateGzip]) [generateAuxDataFilePU selectItemWithTag:0x3];
+        else [generateAuxDataFilePU selectItemWithTag:0x1];
+    }
+    else [generateAuxDataFilePU selectItemWithTag:0x0];
+}
+
+- (void) generateGzipChanged:(NSNotification*)aNote
+{
+    if([model generateGzip] && [model generateMD5]) [generateAuxDataFilePU selectItemWithTag:0x3];
+    else{
+        if([model generateMD5]) [generateAuxDataFilePU selectItemWithTag:0x1];
+        else [generateAuxDataFilePU selectItemWithTag:0x0];
+    }
 }
 
 - (void) processLimitHighChanged:(NSNotification*)aNote
@@ -210,7 +229,6 @@ enum {
     NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
 	
     [super registerNotificationObservers];
-    
 	
     [notifyCenter addObserver : self
 					 selector : @selector(fileChanged:)
@@ -241,6 +259,11 @@ enum {
 					 selector : @selector(dirChanged:)
 						 name : ORFolderDirectoryNameChangedNotification
 						object: [model dataFolder]];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(dirChanged:)
+                         name : ORFolderDirectoryNameChangedNotification
+                       object : [model gzipFolder]];
  
 	[notifyCenter addObserver : self
 					 selector : @selector(dirChanged:)
@@ -256,7 +279,6 @@ enum {
 					 selector : @selector(dirChanged:)
 						 name : ORDataFileModelUseFolderStructureChanged
 						object: model];
-
 	
     [notifyCenter addObserver : self
 					 selector : @selector(copyEnabledChanged:)
@@ -318,7 +340,6 @@ enum {
                          name : ORDataFileModelUseDatedFileNamesChanged
 						object: model];
 
-
     [notifyCenter addObserver : self
                      selector : @selector(sizeLimitReachedActionChanged:)
                          name : ORDataFileModelSizeLimitReachedActionChanged
@@ -333,6 +354,11 @@ enum {
                      selector : @selector(generateMD5Changed:)
                          name : ORDataFileModelGenerateMD5Changed
 						object: model];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(generateGzipChanged:)
+                         name : ORDataFileModelGenerateGzipChanged
+                       object : model];
 
 }
 
@@ -362,6 +388,7 @@ enum {
 - (void) drawerDidOpen:(NSNotification *)note
 {
 	[[model dataFolder]	updateButtons];
+    [[model gzipFolder] updateButtons];
 	[[model statusFolder] updateButtons];
 	[[model configFolder] updateButtons];
 	[openLocationDrawerButton setTitle:@"Close Drawer"];
@@ -417,6 +444,9 @@ enum {
     if(note == nil || [note object] == [model dataFolder]){
 		[copyDataField setStringValue:[[model dataFolder]copyEnabled]?@"YES":@"NO"];
     }
+    if(note == nil || [note object] == [model gzipFolder]){
+        [copyGzipField setStringValue:[[model gzipFolder]copyEnabled]?@"YES":@"NO"];
+    }
     if(note == nil || [note object] == [model statusFolder]){
 		[copyStatusField setStringValue:[[model statusFolder]copyEnabled]?@"YES":@"NO"];
     }
@@ -429,6 +459,9 @@ enum {
 {
     if(note == nil || [note object] == [model dataFolder]){
 		[deleteDataField setStringValue:[[model dataFolder]deleteWhenCopied]?@"YES":@"NO"];
+    }
+    if(note == nil || [note object] == [model gzipFolder]){
+        [deleteGzipField setStringValue:[[model gzipFolder]deleteWhenCopied]?@"YES":@"NO"];
     }
     if(note == nil || [note object] == [model statusFolder]){
 		[deleteStatusField setStringValue:[[model statusFolder]deleteWhenCopied]?@"YES":@"NO"];
@@ -443,6 +476,9 @@ enum {
     if(note == nil || [note object] == [model dataFolder]){
 		[queueDataField setStringValue:[[model dataFolder]queueStatusString]];
     }
+    if(note == nil || [note object] == [model gzipFolder]){
+        [queueGzipField setStringValue:[[model gzipFolder]queueStatusString]];
+    }
     if(note == nil || [note object] == [model statusFolder]){
 		[queueStatusField setStringValue:[[model statusFolder]queueStatusString]];
     }
@@ -450,7 +486,8 @@ enum {
 		[queueConfigField setStringValue:[[model configFolder]queueStatusString]];
     }
     
-    [stopSendingButton setEnabled: [[model dataFolder]queueIsRunning] || 
+    [stopSendingButton setEnabled: [[model dataFolder]queueIsRunning] ||
+        [[model gzipFolder]queueIsRunning]   ||
 		[[model statusFolder]queueIsRunning] ||
 		[[model configFolder]queueIsRunning]];
 }
@@ -462,6 +499,11 @@ enum {
     ORSmartFolder* theDataFolder   = [model dataFolder];
     if(note==nil || [note object] == theDataFolder || [note object] == model){
 		if([theDataFolder finalDirectoryName]!=nil)[dirTextField setStringValue: [theDataFolder finalDirectoryName]];
+    }
+    
+    ORSmartFolder* theGzipFolder = [model gzipFolder];
+    if(note==nil || [note object] == theGzipFolder || [note object] == model){
+        if([theGzipFolder finalDirectoryName]!=nil)[gzipTextField setStringValue:[theGzipFolder finalDirectoryName]];
     }
 	
 	ORSmartFolder* theStatusFolder = [model statusFolder];
