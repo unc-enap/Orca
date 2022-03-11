@@ -277,18 +277,6 @@
     }
 }
 
-- (void) baseBiasChanged:(NSNotification*)note
-{
-    if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++)
-            [[baseBiasMatrix cellWithTag:i] setIntValue:[model baseBias:i]];
-    }
-    else{
-        int chan = [[[note userInfo] objectForKey:@"Channel"] intValue];
-        [[baseBiasMatrix cellWithTag:chan] setIntValue:[model baseBias:chan]];
-    }
-}
-
 - (void) thresholdChanged:(NSNotification*)note
 {
     if(note == nil){
@@ -388,6 +376,11 @@
         int chan = [[[note userInfo] objectForKey:@"Channel"] intValue];
         [[postTriggerMatrix cellWithTag:chan] setFloatValue:[model postTrigger:chan]];
     }
+}
+
+- (void) baseBiasChanged:(NSNotification*)note
+{
+    [baseBiasTextField setIntValue:[model baseBias]];
 }
 
 - (void) majorityLevelChanged:(NSNotification*)note
@@ -497,7 +490,6 @@
     [chanEnabledMatrix      setEnabled:!lock];
     [trigOutEnabledMatrix   setEnabled:!lock];
     [baselineMatrix         setEnabled:!lock];
-    [baseBiasMatrix         setEnabled:!lock];
     [thresholdMatrix        setEnabled:!lock];
     [adcGainMatrix          setEnabled:!lock];
     [trigGainMatrix         setEnabled:!lock];
@@ -506,6 +498,7 @@
     [flatTopTimeMatrix      setEnabled:!lock];
     [poleZeroTimeMatrix     setEnabled:!lock];
     [postTriggerMatrix      setEnabled:!lock];
+    [baseBiasTextField      setEnabled:!lock];
     [majorityLevelPUButton  setEnabled:!lock];
     [majorityWidthTextField setEnabled:!lock];
     [trigOutEnableButton    setEnabled:!lock];
@@ -536,12 +529,6 @@
 {
     if([sender intValue] != [model baseline:(unsigned int)[[sender selectedCell] tag]])
         [model setBaseline:(unsigned int)[[sender selectedCell] tag] withValue:[sender intValue]];
-}
-
-- (IBAction) baseBiasAction:(id)sender
-{
-    if([sender intValue] != [model baseBias:(unsigned int)[[sender selectedCell] tag]])
-        [model setBaseBias:(unsigned int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 - (IBAction) thresholdAction:(id)sender
@@ -590,6 +577,11 @@
 {
     if([sender floatValue] != [model postTrigger:(unsigned int)[[sender selectedCell] tag]])
         [model setPostTrigger:(unsigned int)[[sender selectedCell] tag] withValue:[sender floatValue]];
+}
+
+- (IBAction) baseBiasAction:(id)sender
+{
+    [model setBaseBias:[sender intValue]];
 }
 
 - (IBAction) majorityLevelAction:(id)sender

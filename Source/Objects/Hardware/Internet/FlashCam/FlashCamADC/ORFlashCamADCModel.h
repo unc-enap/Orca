@@ -39,7 +39,6 @@
     bool chanEnabled[kMaxFlashCamADCChannels];    // am
     bool trigOutEnabled[kMaxFlashCamADCChannels]; // altm
     int baseline[kMaxFlashCamADCChannels];        // bldac
-    int baseBias[kMaxFlashCamADCChannels];        // blbias
     int threshold[kMaxFlashCamADCChannels];       // athr
     int adcGain[kMaxFlashCamADCChannels];         // ag
     float trigGain[kMaxFlashCamADCChannels];      // tgm
@@ -48,6 +47,7 @@
     float flatTopTime[kMaxFlashCamADCChannels];   // gf
     float poleZeroTime[kMaxFlashCamADCChannels];  // gpz
     float postTrigger[kMaxFlashCamADCChannels];   // pthr
+    int baseBias;                                 // blbias
     int majorityLevel;                            // majl
     int majorityWidth;                            // majw
     bool trigOutEnable;
@@ -83,7 +83,6 @@
 - (bool) trigOutEnable;
 - (bool) trigOutEnabled:(unsigned int)chan;
 - (int) baseline:(unsigned int)chan;
-- (int) baseBias:(unsigned int)chan;
 - (int) threshold:(unsigned int)chan;
 - (int) adcGain:(unsigned int)chan;
 - (float) trigGain:(unsigned int)chan;
@@ -92,6 +91,7 @@
 - (float) flatTopTime:(unsigned int)chan;
 - (float) poleZeroTime:(unsigned int)chan;
 - (float) postTrigger:(unsigned int)chan;
+- (int) baseBias;
 - (int) majorityLevel;
 - (int) majorityWidth;
 - (ORRateGroup*) wfRates;
@@ -105,7 +105,6 @@
 - (void) setChanEnabled:(unsigned int)chan    withValue:(bool)enabled;
 - (void) setTrigOutEnabled:(unsigned int)chan withValue:(bool)enabled;
 - (void) setBaseline:(unsigned int)chan       withValue:(int)base;
-- (void) setBaseBias:(unsigned int)chan       withValue:(int)bias;
 - (void) setThreshold:(unsigned int)chan      withValue:(int)thresh;
 - (void) setADCGain:(unsigned int)chan        withValue:(int)gain;
 - (void) setTrigGain:(unsigned int)chan       withValue:(float)gain;
@@ -114,6 +113,7 @@
 - (void) setFlatTopTime:(unsigned int)chan    withValue:(float)time;
 - (void) setPoleZeroTime:(unsigned int)chan   withValue:(float)time;
 - (void) setPostTrigger:(unsigned int)chan    withValue:(float)time;
+- (void) setBaseBias:(int)bias;
 - (void) setMajorityLevel:(int)level;
 - (void) setMajorityWidth:(int)width;
 - (void) setTrigOutEnable:(bool)enabled;

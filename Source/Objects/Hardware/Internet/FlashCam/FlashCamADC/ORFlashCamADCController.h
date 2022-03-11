@@ -28,7 +28,6 @@
     IBOutlet NSMatrix* chanEnabledMatrix;
     IBOutlet NSMatrix* trigOutEnabledMatrix;
     IBOutlet NSMatrix* baselineMatrix;
-    IBOutlet NSMatrix* baseBiasMatrix;
     IBOutlet NSMatrix* thresholdMatrix;
     IBOutlet NSMatrix* adcGainMatrix;
     IBOutlet NSMatrix* trigGainMatrix;
@@ -37,6 +36,7 @@
     IBOutlet NSMatrix* flatTopTimeMatrix;
     IBOutlet NSMatrix* poleZeroTimeMatrix;
     IBOutlet NSMatrix* postTriggerMatrix;
+    IBOutlet NSTextField* baseBiasTextField;
     IBOutlet NSTextField* shapingLabel;
     IBOutlet NSTextField* flatTopLabel;
     IBOutlet NSPopUpButton* majorityLevelPUButton;
@@ -70,7 +70,6 @@
 - (void) cardSlotChanged:(NSNotification*)note;
 - (void) chanEnabledChanged:(NSNotification*)note;
 - (void) baselineChanged:(NSNotification*)note;
-- (void) baseBiasChanged:(NSNotification*)note;
 - (void) thresholdChanged:(NSNotification*)note;
 - (void) adcGainChanged:(NSNotification*)note;
 - (void) trigGainChanged:(NSNotification*)note;
@@ -79,6 +78,7 @@
 - (void) flatTopTimeChanged:(NSNotification*)note;
 - (void) poleZeroTimeChanged:(NSNotification*)note;
 - (void) postTriggerChanged:(NSNotification*)note;
+- (void) baseBiasChanged:(NSNotification*)note;
 - (void) majorityLevelChanged:(NSNotification*)note;
 - (void) majorityWidthChanged:(NSNotification*)note;
 - (void) rateGroupChanged:(NSNotification*)note;
@@ -95,7 +95,6 @@
 - (IBAction) chanEnabledAction:(id)sender;
 - (IBAction) trigOutEnabledAction:(id)sender;
 - (IBAction) baselineAction:(id)sender;
-- (IBAction) baseBiasAction:(id)sender;
 - (IBAction) thresholdAction:(id)sender;
 - (IBAction) adcGainAction:(id)sender;
 - (IBAction) trigGainAction:(id)sender;
@@ -104,6 +103,7 @@
 - (IBAction) flatTopTimeAction:(id)sender;
 - (IBAction) poleZeroTimeAction:(id)sender;
 - (IBAction) postTriggerAction:(id)sender;
+- (IBAction) baseBiasAction:(id)sender;
 - (IBAction) majorityLevelAction:(id)sender;
 - (IBAction) majorityWidthAction:(id)sender;
 - (IBAction) trigOutEnableAction:(id)sender;
