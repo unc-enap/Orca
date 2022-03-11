@@ -22,7 +22,7 @@
 @interface ORDataFileController : OrcaObjectController  {
     @private
 	IBOutlet NSTextField* 	dirTextField;
-	IBOutlet NSButton*      generateMD5CB;
+	IBOutlet NSPopUpButton* generateAuxDataFilePU;
 	IBOutlet NSTextField* 	logTextField;
 	IBOutlet NSTextField* 	configTextField;
 	IBOutlet NSTextField*   processLimitHighField;
@@ -32,6 +32,7 @@
 	IBOutlet NSTextField*	maxFileSizeTextField;
 	IBOutlet NSButton*		limitSizeCB;
 	IBOutlet NSTextField* 	fileTextField;
+    IBOutlet NSTextField*   gzipTextField;
 	IBOutlet NSTextField* 	statusTextField;
 	IBOutlet NSTextField* 	sizeTextField;
 	IBOutlet NSButton*      saveConfigurationCB;
@@ -40,6 +41,9 @@
 
 	IBOutlet NSTextField* 	copyDataField;
 	IBOutlet NSTextField* 	deleteDataField;
+    
+    IBOutlet NSTextField*   copyGzipField;
+    IBOutlet NSTextField*   deleteGzipField;
 
 	IBOutlet NSTextField* 	copyStatusField;
 	IBOutlet NSTextField* 	deleteStatusField;
@@ -49,6 +53,7 @@
 
 	IBOutlet NSButton*      stopSendingButton;
 	IBOutlet NSTextField* 	queueDataField;
+    IBOutlet NSTextField*   queueGzipField;
 	IBOutlet NSTextField* 	queueStatusField;
 	IBOutlet NSTextField* 	queueConfigField;
 
@@ -62,7 +67,7 @@
 #pragma mark ¥¥¥Accessors
 
 #pragma  mark ¥¥¥Actions
-- (IBAction) generateMD5Action:(id)sender;
+- (IBAction) generateAuxDataFileAction:(id)sender;
 - (IBAction) processLimitHighAction:(id)sender;
 - (IBAction) useDatedFileNamesAction:(id)sender;
 - (IBAction) useFolderStructureAction:(id)sender;
@@ -77,6 +82,7 @@
 
 #pragma mark ¥¥¥Interface Management
 - (void) generateMD5Changed:(NSNotification*)aNote;
+- (void) generateGzipChanged:(NSNotification*)aNote;
 - (void) processLimitHighChanged:(NSNotification*)aNote;
 - (void) useDatedFileNamesChanged:(NSNotification*)aNote;
 - (void) useFolderStructureChanged:(NSNotification*)aNote;
