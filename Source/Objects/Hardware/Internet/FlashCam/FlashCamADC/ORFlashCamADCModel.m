@@ -382,6 +382,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     if(chan >= kMaxFlashCamADCChannels) return;
     [[[self undoManager] prepareWithInvocationTarget:self] setBaseline:chan withValue:baseline[chan]];
     baseline[chan] = MAX(-1, MIN(4096, base));
+    if(baseline[chan] == 0) baseline[chan] = -1;
     NSDictionary* info = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:chan] forKey:@"Channel"];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelBaselineChanged
                                                         object:self
@@ -403,7 +404,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 {
     if(chan >= kMaxFlashCamADCChannels) return;
     [[[self undoManager] prepareWithInvocationTarget:self] setADCGain:chan withValue:adcGain[chan]];
-    adcGain[chan] = gain;
+    adcGain[chan] = MAX(-15, MIN(16, gain));
     NSDictionary* info = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:chan] forKey:@"Channel"];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelADCGainChanged
                                                         object:self
@@ -425,7 +426,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 {
     if(chan >= kMaxFlashCamADCChannels) return;
     [[[self undoManager] prepareWithInvocationTarget:self] setShapeTime:chan withValue:shapeTime[chan]];
-    shapeTime[chan] = MAX(0.0, time);
+    shapeTime[chan] = MAX(1.0, 40000.0);
     NSDictionary* info = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:chan] forKey:@"Channel"];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelShapeTimeChanged
                                                         object:self
@@ -460,7 +461,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 {
     if(chan >= kMaxFlashCamADCChannels) return;
     [[[self undoManager] prepareWithInvocationTarget:self] setPoleZeroTime:chan withValue:poleZeroTime[chan]];
-    poleZeroTime[chan] = MAX(0.0, time);
+    poleZeroTime[chan] = MAX(1.0, time);
     NSDictionary* info = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:chan] forKey:@"Channel"];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelPoleZeroTimeChanged
                                                         object:self
@@ -482,7 +483,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 {
     if(bias == baseBias) return;
     [[[self undoManager] prepareWithInvocationTarget:self] setBaseBias:baseBias];
-    baseBias = MAX(-4096, MIN(4069, bias));
+    baseBias = MAX(-2047, MIN(2048, bias));
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelBaseBiasChanged object:self];
 }
 

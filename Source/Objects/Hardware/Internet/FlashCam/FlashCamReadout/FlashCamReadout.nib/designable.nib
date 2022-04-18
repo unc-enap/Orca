@@ -924,7 +924,7 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
-                                                                        <tableColumn editable="NO" width="80" minWidth="40" maxWidth="1000" id="CL5-TX-QtL">
+                                                                        <tableColumn width="80" minWidth="40" maxWidth="1000" id="CL5-TX-QtL">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Baseline Calib">
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
