@@ -38,6 +38,7 @@
 - (void) setModel:(id)aModel
 {
     [super setModel:aModel];
+    [[self window] setTitle:[NSString stringWithFormat:@"Eth Link %d", [model uniqueIdNumber]]];
 }
 
 - (void) registerNotificationObservers

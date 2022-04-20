@@ -63,33 +63,51 @@ static NSString* ORFlashCamEthLinkOutputConnection = @"ORFlashCamEthLinkOutputCo
     float dx = (width-kConnectorSize) / (nconnections - 1);
     // create the output connector
     ORConnector* connector = [[self connectors] objectForKey:ORFlashCamEthLinkOutputConnection];
-    if(!connector){
-        connector = [[ORConnector alloc] initAt:NSMakePoint(width/2-kConnectorSize/3,
-                                                            height-kConnectorSize)
-                                   withGuardian:self withObjectLink:self];
-        [connector setConnectorImageType:kSmallDot];
-        [connector setConnectorType:'FCEO'];
-        [connector addRestrictedConnectionType:'FCEI'];
-        [connector setOffColor:[NSColor colorWithCalibratedRed:1 green:1 blue:0.3 alpha:1]];
-        [connector setOnColor:[NSColor colorWithCalibratedRed:0.1 green:0.1 blue:1 alpha:1]];
-        [[self connectors] setObject:connector forKey:ORFlashCamEthLinkOutputConnection];
-        [connector release];
+    id obj = nil, connection = nil;
+    if(connector){
+        obj = [connector objectLink];
+        connection = [connector connector];
+        [connector disconnect];
     }
+    NSPoint point = NSMakePoint(width/2-kConnectorSize/3, height-kConnectorSize);
+    if(obj) connector = [[ORConnector alloc] initAt:point withGuardian:self withObjectLink:obj];
+    else connector = [[ORConnector alloc] initAt:point withGuardian:self];
+    if(connection){
+        [connector setConnection:connection];
+        [connection setConnection:connector];
+    }
+    [connector setConnectorImageType:kSmallDot];
+    [connector setConnectorType:'FCEO'];
+    [connector addRestrictedConnectionType:'FCEI'];
+    [connector setOffColor:[NSColor colorWithCalibratedRed:1 green:1 blue:0.3 alpha:1]];
+    [connector setOnColor:[NSColor colorWithCalibratedRed:0.1 green:0.1 blue:1 alpha:1]];
+    [[self connectors] setObject:connector forKey:ORFlashCamEthLinkOutputConnection];
+    [connector release];
     // create the input connectors
     for(unsigned int i=0; i<nconnections; i++){
         NSString* s = [NSString stringWithFormat:@"%@%d",ORFlashCamEthLinkInputConnection,i];
         connector = [[self connectors] objectForKey:s];
-        if(!connector){
-            connector = [[ORConnector alloc] initAt:NSMakePoint(i*dx+kConnectorSize/4, 0.0)
-                                       withGuardian:self withObjectLink:self];
-            [connector setConnectorImageType:kSmallDot];
-            [connector setConnectorType:'FCEI'];
-            [connector addRestrictedConnectionType:'FCEO'];
-            [connector setOffColor:[NSColor colorWithCalibratedRed:1 green:1 blue:0.3 alpha:1]];
-            [connector setOnColor:[NSColor colorWithCalibratedRed:0.1 green:0.1 blue:1 alpha:1]];
-            [[self connectors] setObject:connector forKey:s];
-            [connector release];
+        obj = nil;
+        connection = nil;
+        if(connector){
+            obj = [connector objectLink];
+            connection = [connector connector];
+            [connector disconnect];
         }
+        point = NSMakePoint(i*dx+kConnectorSize/4, 0.0);
+        if(obj) connector = [[ORConnector alloc] initAt:point withGuardian:self withObjectLink:obj];
+        else connector = [[ORConnector alloc] initAt:point withGuardian:self];
+        if(connection){
+            [connector setConnection:connection];
+            [connection setConnection:connector];
+        }
+        [connector setConnectorImageType:kSmallDot];
+        [connector setConnectorType:'FCEI'];
+        [connector addRestrictedConnectionType:'FCEO'];
+        [connector setOffColor:[NSColor colorWithCalibratedRed:1 green:1 blue:0.3 alpha:1]];
+        [connector setOnColor:[NSColor colorWithCalibratedRed:0.1 green:0.1 blue:1 alpha:1]];
+        [[self connectors] setObject:connector forKey:s];
+        [connector release];
     }
 }
 
@@ -112,6 +130,7 @@ static NSString* ORFlashCamEthLinkOutputConnection = @"ORFlashCamEthLinkOutputCo
     [colorForData([[NSUserDefaults standardUserDefaults] objectForKey:ORLineColor]) set];
     [path stroke];
     [self drawConnections:aRect withTransparency:aTransparency];
+    [self makeConnectors];
 }
 
 #pragma mark •••Accessors
@@ -126,7 +145,7 @@ static NSString* ORFlashCamEthLinkOutputConnection = @"ORFlashCamEthLinkOutputCo
     if(nconnections == n || n < 2) return;
     [self setFrame:NSMakeRect([self frame].origin.x, [self frame].origin.y,
                               n*1.5*kConnectorSize, 3*kConnectorSize)];
-    for(unsigned int i=0; i<nconnections; i++){
+    for(unsigned int i=n; i<nconnections; i++){
         NSString* s = [NSString stringWithFormat:@"%@%d", ORFlashCamEthLinkInputConnection,i];
         ORConnector* connector = [[self connectors] objectForKey:s];
         if(connector) [connector disconnect];
@@ -158,7 +177,7 @@ static NSString* ORFlashCamEthLinkOutputConnection = @"ORFlashCamEthLinkOutputCo
 {
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
-    [self setNConnections:[[decoder decodeObjectForKey:@"nconnections"] unsignedIntValue]];
+    nconnections = [[decoder decodeObjectForKey:@"nconnections"] unsignedIntValue];
     [[self undoManager] enableUndoRegistration];
     return self;
 }
@@ -168,7 +187,5 @@ static NSString* ORFlashCamEthLinkOutputConnection = @"ORFlashCamEthLinkOutputCo
     [super encodeWithCoder:encoder];
     [encoder encodeObject:[NSNumber numberWithUnsignedInt:nconnections] forKey:@"nconnections"];
 }
-
-
 
 @end

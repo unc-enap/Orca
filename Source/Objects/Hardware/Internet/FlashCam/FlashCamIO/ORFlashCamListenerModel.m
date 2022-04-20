@@ -566,11 +566,11 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     else if([p isEqualToString:@"phaseAdjust"])
         [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:p];
     else if([p isEqualToString:@"baselineSlew"])
-        [configParams setObject:[NSNumber numberWithInt:[v intValue]] forKey:p];
+        [configParams setObject:[NSNumber numberWithInt:MIN(MAX(1, [v intValue]), 255)] forKey:p];
     else if([p isEqualToString:@"integratorLen"])
-        [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0, [v intValue]), 32)] forKey:p];
+        [configParams setObject:[NSNumber numberWithInt:MIN(MAX(1, [v intValue]), 7)] forKey:p];
     else if([p isEqualToString:@"eventSamples"])
-        [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0, [v intValue]), 8192)] forKey:p];
+        [configParams setObject:[NSNumber numberWithInt:MIN(MAX(1, [v intValue]), 4*8192)] forKey:p];
     else if([p isEqualToString:@"signalDepth"])
         [configParams setObject:[NSNumber numberWithInt:MAX(0, [v intValue])] forKey:p];
     else if([p isEqualToString:@"traceType"])
