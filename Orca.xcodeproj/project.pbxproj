@@ -3621,6 +3621,12 @@
 		E686441F23BE475300EA43D1 /* FlashCamCrate.nib in Resources */ = {isa = PBXBuildFile; fileRef = E686441E23BE475300EA43D1 /* FlashCamCrate.nib */; };
 		E6983CAC219DB3EA00029B9C /* SNOP_Run_Constants.h in Headers */ = {isa = PBXBuildFile; fileRef = E6983CAB219DB3E900029B9C /* SNOP_Run_Constants.h */; };
 		E6983CAE219DB45700029B9C /* ORCamacExceptions.h in Headers */ = {isa = PBXBuildFile; fileRef = E6983CAD219DB45600029B9C /* ORCamacExceptions.h */; };
+		E6B8BB7827E9071A000D17AC /* L200.png in Resources */ = {isa = PBXBuildFile; fileRef = E6B8BB7727E9071A000D17AC /* L200.png */; };
+		E6B8BB7D27E90798000D17AC /* ORL200Model.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B8BB7C27E90798000D17AC /* ORL200Model.m */; };
+		E6B8BB8427E907C1000D17AC /* ORL200Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B8BB8327E907C1000D17AC /* ORL200Controller.m */; };
+		E6B8BB8A27E907E1000D17AC /* L200.xib in Resources */ = {isa = PBXBuildFile; fileRef = E6B8BB8927E907E1000D17AC /* L200.xib */; };
+		E6B8BB9327E90C4A000D17AC /* ORL200SegmentGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B8BB9227E90C4A000D17AC /* ORL200SegmentGroup.m */; };
+		E6BD38D92818143900F9200B /* ORL200DetectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = E6BD38D82818143900F9200B /* ORL200DetectorView.m */; };
 		E6C2E7F223A9845700673DB8 /* ORFlashCamADCModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E6C2E7F123A9845700673DB8 /* ORFlashCamADCModel.m */; };
 		E6C2E7F523A984B900673DB8 /* ORFlashCamADCController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6C2E7F423A984B900673DB8 /* ORFlashCamADCController.m */; };
 		E6C7A5AB26D0400A007E65AE /* flashcam_adc.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E6C7A5AA26D04009007E65AE /* flashcam_adc.jpg */; };
@@ -3666,6 +3672,8 @@
 			compilerSpec = com.apple.compilers.proxy.script;
 			filePatterns = "*.app";
 			fileType = pattern.proxy;
+			inputFiles = (
+			);
 			isEditable = 1;
 			outputFiles = (
 				"$(DERIVED_FILES_DIR)/$(INPUT_FILE_BASE).h",
@@ -3676,6 +3684,8 @@
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
 			fileType = sourcecode.lex;
+			inputFiles = (
+			);
 			isEditable = 1;
 			outputFiles = (
 				"${DERIVED_FILES_DIR}/lex.${INPUT_FILE_BASE}.m",
@@ -3686,6 +3696,8 @@
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
 			fileType = sourcecode.yacc;
+			inputFiles = (
+			);
 			isEditable = 1;
 			outputFiles = (
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.m",
@@ -7497,6 +7509,16 @@
 		E686441E23BE475300EA43D1 /* FlashCamCrate.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = FlashCamCrate.nib; sourceTree = "<group>"; };
 		E6983CAB219DB3E900029B9C /* SNOP_Run_Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SNOP_Run_Constants.h; sourceTree = "<group>"; };
 		E6983CAD219DB45600029B9C /* ORCamacExceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORCamacExceptions.h; sourceTree = "<group>"; };
+		E6B8BB7727E9071A000D17AC /* L200.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = L200.png; sourceTree = "<group>"; };
+		E6B8BB7B27E90767000D17AC /* ORL200Model.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORL200Model.h; sourceTree = "<group>"; };
+		E6B8BB7C27E90798000D17AC /* ORL200Model.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORL200Model.m; sourceTree = "<group>"; };
+		E6B8BB8227E907AC000D17AC /* ORL200Controller.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORL200Controller.h; sourceTree = "<group>"; };
+		E6B8BB8327E907C1000D17AC /* ORL200Controller.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORL200Controller.m; sourceTree = "<group>"; };
+		E6B8BB8927E907E1000D17AC /* L200.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = L200.xib; sourceTree = "<group>"; };
+		E6B8BB9127E90C35000D17AC /* ORL200SegmentGroup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORL200SegmentGroup.h; sourceTree = "<group>"; };
+		E6B8BB9227E90C4A000D17AC /* ORL200SegmentGroup.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORL200SegmentGroup.m; sourceTree = "<group>"; };
+		E6BD38D72818141700F9200B /* ORL200DetectorView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORL200DetectorView.h; sourceTree = "<group>"; };
+		E6BD38D82818143900F9200B /* ORL200DetectorView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORL200DetectorView.m; sourceTree = "<group>"; };
 		E6C2E7F023A983FA00673DB8 /* ORFlashCamADCModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORFlashCamADCModel.h; sourceTree = "<group>"; };
 		E6C2E7F123A9845700673DB8 /* ORFlashCamADCModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamADCModel.m; sourceTree = "<group>"; };
 		E6C2E7F323A9848E00673DB8 /* ORFlashCamADCController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORFlashCamADCController.h; sourceTree = "<group>"; };
@@ -13242,6 +13264,7 @@
 				84E966C611848BEF008D9119 /* Majorana */,
 				843175C31152766E005643AB /* Halo */,
 				54F5B6F9087206D9003AC228 /* Katrin */,
+				E6B8BB7427E8C2B4000D17AC /* LEGEND */,
 				84D8565012B1702400660530 /* Monspectrometer */,
 				849B25E30B2F34F90007484F /* Prespectrometer */,
 				84B8B99404DB33F8005F64B1 /* Ncd */,
@@ -15245,6 +15268,31 @@
 				E6E9A77026F2155C004A247D /* ORFlashCamCardController.m */,
 			);
 			path = FlashCamBaseClasses;
+			sourceTree = "<group>";
+		};
+		E6B8BB7427E8C2B4000D17AC /* LEGEND */ = {
+			isa = PBXGroup;
+			children = (
+				E6BD38E02835B61200F9200B /* L200 */,
+			);
+			path = LEGEND;
+			sourceTree = "<group>";
+		};
+		E6BD38E02835B61200F9200B /* L200 */ = {
+			isa = PBXGroup;
+			children = (
+				E6B8BB7B27E90767000D17AC /* ORL200Model.h */,
+				E6B8BB7C27E90798000D17AC /* ORL200Model.m */,
+				E6B8BB8227E907AC000D17AC /* ORL200Controller.h */,
+				E6B8BB8327E907C1000D17AC /* ORL200Controller.m */,
+				E6B8BB9127E90C35000D17AC /* ORL200SegmentGroup.h */,
+				E6B8BB9227E90C4A000D17AC /* ORL200SegmentGroup.m */,
+				E6BD38D72818141700F9200B /* ORL200DetectorView.h */,
+				E6BD38D82818143900F9200B /* ORL200DetectorView.m */,
+				E6B8BB8927E907E1000D17AC /* L200.xib */,
+				E6B8BB7727E9071A000D17AC /* L200.png */,
+			);
+			path = L200;
 			sourceTree = "<group>";
 		};
 		E6DC1B48243A240400A559F0 /* URLSession */ = {
@@ -17892,6 +17940,7 @@
 				848283C1112B14F100BA30ED /* OnSwitch.tif in Resources */,
 				848285B8112C5AD700BA30ED /* VHS4030.nib in Resources */,
 				848285B9112C5AD700BA30ED /* VHS4030.tif in Resources */,
+				E6B8BB7827E9071A000D17AC /* L200.png in Resources */,
 				2D158EB511359F5800EA1552 /* KatrinV4FLT.nib in Resources */,
 				2D158EB611359F5800EA1552 /* KatrinV4FLTCard.gif in Resources */,
 				2D159238113EE62C00EA1552 /* IpeV4SLTScript in Resources */,
@@ -17928,6 +17977,7 @@
 				84E2064B11AD7841007D757F /* SIS3800.nib in Resources */,
 				84E2064C11AD7841007D757F /* SIS3800Card.gif in Resources */,
 				8457BE3B11B0183500C4082D /* SIS3820.nib in Resources */,
+				E6B8BB8A27E907E1000D17AC /* L200.xib in Resources */,
 				8457BE3C11B0183500C4082D /* SIS3820Card.gif in Resources */,
 				E6653F9823A80BF900A53678 /* flashcam_minicrate.png in Resources */,
 				848822A21D2413910030B398 /* DT5725.tif in Resources */,
@@ -18388,6 +18438,7 @@
 				8439D65C05BF31480077EFF2 /* SubviewTableViewController.m in Sources */,
 				8439D66605BF315E0077EFF2 /* ORHWizSelectionController.m in Sources */,
 				8439D66805BF315E0077EFF2 /* ORHWizActionController.m in Sources */,
+				E6B8BB9327E90C4A000D17AC /* ORL200SegmentGroup.m in Sources */,
 				5423A1B126A5A450009BA7CF /* ORKatrinHgfAmcModel.m in Sources */,
 				84954B8405C87518004EBD3D /* ORHWWizParam.m in Sources */,
 				84B3EE2405CAFF150059BB49 /* ORHWWizSelection.m in Sources */,
@@ -18885,6 +18936,7 @@
 				8419227E0F0BC18800EF1C1C /* ORScriptIDEController.m in Sources */,
 				84499B7A0F13BB6E004B855B /* ORMksPdr2000Controller.m in Sources */,
 				84499B7C0F13BB6E004B855B /* ORMksPdr2000Decoders.m in Sources */,
+				E6B8BB8427E907C1000D17AC /* ORL200Controller.m in Sources */,
 				84499B7E0F13BB6E004B855B /* ORMksPdr2000Model.m in Sources */,
 				3602C15C1C4EC291006B50B3 /* anet.c in Sources */,
 				84499CC90F13E457004B855B /* ORCTITempController.m in Sources */,
@@ -18970,6 +19022,7 @@
 				842FCCB6197849C700B89723 /* OREHS8260pModel.m in Sources */,
 				84BC89130F9CDDAC00336DF1 /* ORSerialPortModel.m in Sources */,
 				84F16AF618900D530074B787 /* ORXTR6Model.m in Sources */,
+				E6B8BB7D27E90798000D17AC /* ORL200Model.m in Sources */,
 				840823CD0F9F83DC007E6061 /* ORFlippedView.m in Sources */,
 				84D2586D0FA7340B00626276 /* ORMotionNodeController.m in Sources */,
 				84D2586F0FA7340B00626276 /* ORMotionNodeModel.m in Sources */,
@@ -19136,6 +19189,7 @@
 				845B14091227E7DC0022F207 /* ORPxi6289Decoders.m in Sources */,
 				845B140B1227E7DC0022F207 /* ORPxi6289Model.m in Sources */,
 				EFCE3AE0123DD9A2009AEBA8 /* ORXL3Decoders.m in Sources */,
+				E6BD38D92818143900F9200B /* ORL200DetectorView.m in Sources */,
 				8449CC84123E85DA009C8AA2 /* ORVHSC040nController.m in Sources */,
 				8449CC86123E85DA009C8AA2 /* ORVHSC040nDecoders.m in Sources */,
 				8449CC88123E85DA009C8AA2 /* ORVHSC040nModel.m in Sources */,

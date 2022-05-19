@@ -44,7 +44,9 @@
     IBOutlet NSButton* trigOutEnableButton;
     IBOutlet NSMatrix* chanEnabledRateMatrix;
     IBOutlet NSMatrix* rateTextFields;
+    IBOutlet NSMatrix* trigRateTextFields;
     IBOutlet NSTextField* totalRateTextField;
+    IBOutlet NSTextField* totalTrigRateTextField;
     IBOutlet NSTextField* integrationTextField;
     IBOutlet NSButton* rateLogButton;
     IBOutlet NSButton* totalRateLogButton;
@@ -112,6 +114,7 @@
 
 #pragma mark •••Data Source
 - (double) getBarValue:(int)tag;
+- (double) getSecondaryBarValue:(int)tag;
 - (int) numberPointsInPlot:(id)aPlotter;
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 

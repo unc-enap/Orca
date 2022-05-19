@@ -64,7 +64,8 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
         [self setFlatTopTime:i    withValue:16.0*128];
         [self setPoleZeroTime:i   withValue:16.0*4096*6];
         [self setPostTrigger:i    withValue:0.0];
-        wfCount[i] = 0;
+        wfCount[i]   = 0;
+        trigCount[i] = 0;
     }
     baseBias      = 0;
     majorityLevel = 1;
@@ -77,6 +78,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     takeDataIndex = 0;
     bufferedWFcount = 0;
     wfRates = nil;
+    trigRates = nil;
     dataRecord = NULL;
     [self setWFsamples:0];
     [[self undoManager] enableUndoRegistration];
@@ -88,6 +90,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     [self setWFsamples:0];
     [wfRates release];
+    [trigRates release];
     [super dealloc];
 }
 
@@ -304,7 +307,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     return wfRates;
 }
 
-- (id) rateObject:(short)channel
+- (id) wfRateObject:(short)channel
 {
     return [wfRates rateObject:channel];
 }
@@ -314,19 +317,43 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     return wfCount[channel];
 }
 
-- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
-{
-    if(groupTag == 0){
-        if(counterTag>=0 && counterTag<kMaxFlashCamADCChannels) return wfCount[counterTag];
-        else return 0;
-    }
-    else return 0;
-}
-
-- (float) getRate:(short)channel
+- (float) getWFrate:(short)channel
 {
     if(channel>=0 && channel<kMaxFlashCamADCChannels){
-        return [[self rateObject:channel] rate];
+        return [[self wfRateObject:channel] rate];
+    }
+    return 0;
+}
+
+- (ORRateGroup*) trigRates
+{
+    return trigRates;
+}
+
+- (id) rateObject:(short)channel
+{
+    return [trigRates rateObject:channel];
+}
+
+- (uint32_t) trigCount:(int)channel
+{
+    return trigCount[channel];
+}
+
+- (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
+{
+    if(counterTag >= 0 && counterTag < kMaxFlashCamADCChannels){
+        if(groupTag == 0)      return trigCount[counterTag];
+        else if(groupTag == 1) return wfCount[counterTag];
+    }
+    return 0;
+}
+
+- (float) getRate:(short)channel forGroup:(int)groupTag
+{
+    if(channel>=0 && channel<kMaxFlashCamADCChannels){
+        if(groupTag == 0)      return [[self rateObject:channel]   rate];
+        else if(groupTag == 1) return [[self wfRateObject:channel] rate];
     }
     return 0;
 }
@@ -364,6 +391,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelChanEnabledChanged
                                                         object:self
                                                       userInfo:info];
+    [self postAdcInfoProvidingValueChanged];
 }
 
 - (void) setTrigOutEnabled:(unsigned int)chan withValue:(bool)enabled
@@ -398,6 +426,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelThresholdChanged
                                                         object:self
                                                       userInfo:info];
+    [self postAdcInfoProvidingValueChanged];
 }
 
 - (void) setADCGain:(unsigned int)chan withValue:(int)gain
@@ -542,6 +571,14 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelRateGroupChanged object:self];
 }
 
+- (void) setTrigRates:(ORRateGroup*)rateGroup
+{
+    [rateGroup retain];
+    [trigRates release];
+    trigRates = rateGroup;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelRateGroupChanged object:self];
+}
+
 - (void) setRateIntTime:(double)intTime
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setRateIntTime:[wfRates integrationTime]];
@@ -642,7 +679,10 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
             NSLog(@"ORFlashCamADCModel: invalid channel passed to event:withIndex:andChannel:, skipping packet\n");
             return;
         }
-        else wfCount[channel] ++;
+        else{
+            wfCount[channel] ++;
+            if(event->theader[index][1] > 0) trigCount[channel] ++;
+        }
         // increment the buffer index
         unsigned int bindex = bufferIndex;
         bufferIndex = (bufferIndex + 1) % kFlashCamADCBufferLength;
@@ -718,7 +758,8 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
     isRunning = false;
-    [wfRates stop];
+    [wfRates   stop];
+    [trigRates stop];
     [self setWFsamples:0];
     takeDataIndex = 0;
 }
@@ -729,13 +770,17 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 
 -(void) startRates
 {
-    [self clearWFcounts];
-    [wfRates start:self];
+    [self clearCounts];
+    [wfRates   start:self];
+    [trigRates start:self];
 }
 
-- (void) clearWFcounts
+- (void) clearCounts
 {
-    for(int i=0;i<kMaxFlashCamADCChannels;i++) wfCount[i] = 0;
+    for(int i=0;i<kMaxFlashCamADCChannels;i++){
+        wfCount[i]   = 0;
+        trigCount[i] = 0;
+    }
 }
 
 - (NSDictionary*) dataRecordDescription
@@ -748,6 +793,50 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
                        [NSNumber numberWithLong:-1],     @"length", nil];
     [dict setObject:d forKey:@"FlashCamADC"];
     return dict;
+}
+
+
+#pragma mark •••AdcProviding Protocol
+- (BOOL) onlineMaskBit:(int)bit
+{
+    return [self chanEnabled:bit];
+}
+
+- (BOOL) partOfEvent:(unsigned short)aChannel
+{
+    return NO;
+}
+
+- (uint32_t) eventCount:(int)aChannel
+{
+    if(aChannel >= 0 && aChannel<kMaxFlashCamADCChannels) return wfCount[aChannel];
+    else return 0;
+}
+
+- (void) clearEventCounts
+{
+    [self clearCounts];
+}
+
+- (uint32_t) thresholdForDisplay:(unsigned short)aChan
+{
+    return [self threshold:aChan];
+}
+
+- (unsigned short) gainForDisplay:(unsigned short)aChan
+{
+    return [self adcGain:aChan];
+}
+
+- (void) initBoard
+{
+}
+
+- (void) postAdcInfoProvidingValueChanged
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORAdcInfoProvidingValueChanged
+                                                        object:self
+                                                      userInfo: nil];
 }
 
 
@@ -786,15 +875,22 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     [self setMajorityLevel:[decoder decodeIntForKey:@"majorityLevel"]];
     [self setMajorityWidth:[decoder decodeIntForKey:@"majorityWidth"]];
     [self setTrigOutEnable:[decoder decodeBoolForKey:@"trigOutEnable"]];
+    [self setWFsamples:0];
     isRunning = NO;
     wfBuffer = NULL;
     bufferIndex = 0;
     takeDataIndex = 0;
     dataRecord = NULL;
-    [self setWFsamples:0];
+    [self setTrigRates:[decoder decodeObjectForKey:@"trigRates"]];
+    if(!trigRates){
+        [self setTrigRates:[[[ORRateGroup alloc] initGroup:kMaxFlashCamADCChannels groupTag:0] autorelease]];
+        [trigRates setIntegrationTime:5];
+    }
+    [trigRates resetRates];
+    [trigRates calcRates];
     [self setWFrates:[decoder decodeObjectForKey:@"wfRates"]];
     if(!wfRates){
-        [self setWFrates:[[[ORRateGroup alloc] initGroup:kMaxFlashCamADCChannels groupTag:0] autorelease]];
+        [self setWFrates:[[[ORRateGroup alloc] initGroup:kMaxFlashCamADCChannels groupTag:1] autorelease]];
         [wfRates setIntegrationTime:5];
     }
     [wfRates resetRates];
@@ -825,6 +921,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     [encoder encodeInt:majorityWidth  forKey:@"majorityWidth"];
     [encoder encodeBool:trigOutEnable forKey:@"trigOutEnable"];
     [encoder encodeObject:wfRates     forKey:@"wfRates"];
+    [encoder encodeObject:trigRates   forKey:@"trigRates"];
 }
 
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary
