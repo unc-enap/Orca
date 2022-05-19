@@ -27,11 +27,14 @@
 	
 	IBOutlet id 		chainedView;
 	IBOutlet id 		dataSource;
+    IBOutlet id         secondaryDataSource;
     IBOutlet id         mXScale;
 	NSColor* 			backgroundColor;
 	NSColor* 			barColor;
+    NSColor*            secondaryBarColor;
 	NSUInteger			tag;
 	NSGradient*			gradient;
+    NSGradient*         secondaryGradient;
 }
 
 #pragma mark ¥¥¥Accessors
@@ -39,9 +42,12 @@
 - (NSColor*) backgroundColor;
 - (void) setBarColor:(NSColor*)aColor;
 - (NSColor*) barColor;
+- (void) setSecondaryBarColor:(NSColor*)aColor;
+- (NSColor*) secondaryBarColor;
 - (ORAxis*) xScale;
 - (void) setXScale:(id)aScale;
 - (void) setDataSource:(id)aSource;
+- (void) setSecondaryDataSource:(id)aSource;
 - (void) setChainedView:(id)aView;
 - (ORValueBar*) chainedView;
 - (NSUInteger) tag;
@@ -52,5 +58,6 @@
 @end
 
 @interface NSObject (ORValueBar_Catagory)
-	- (double) getBarValue:(int)tag;
+- (double) getBarValue:(int)tag;
+- (double) getSecondaryBarValue:(int)tag;
 @end

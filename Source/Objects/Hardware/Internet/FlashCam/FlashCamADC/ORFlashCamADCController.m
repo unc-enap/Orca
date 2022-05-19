@@ -127,6 +127,10 @@
                          name : ORRateAverageChangedNotification
                        object : [[model wfRates] timeRate]];
     [notifyCenter addObserver : self
+                     selector : @selector(updateTimePlot:)
+                         name : ORRateAverageChangedNotification
+                       object : [[model trigRates] timeRate]];
+    [notifyCenter addObserver : self
                      selector : @selector(rateIntegrationChanged:)
                          name : ORRateGroupIntegrationChangedNotification
                        object : nil];
@@ -154,14 +158,29 @@
                              name : ORRateChangedNotification
                            object : obj];
     }
+    e = [[[model trigRates] rates] objectEnumerator];
+    while(obj = [e nextObject]){
+        [notifyCenter removeObserver:self name:ORRateChangedNotification object:obj];
+        [notifyCenter addObserver : self
+                         selector : @selector(waveformRateChanged:)
+                             name : ORRateChangedNotification
+                           object : obj];
+    }
 }
 
 - (void) awakeFromNib
 {
     ORTimeLinePlot* plot = [[ORTimeLinePlot alloc] initWithTag:0 andDataSource:self];
+    [plot setLineColor:[NSColor systemGreenColor]];
+    [plot setName:@"Trig"];
     [timeRateView addPlot:plot];
-    [(ORTimeAxis*) [timeRateView xAxis] setStartTime:[[NSDate date] timeIntervalSince1970]];
     [plot release];
+    plot = [[ORTimeLinePlot alloc] initWithTag:1 andDataSource:self];
+    [plot setLineColor:[NSColor systemBlueColor]];
+    [plot setName:@"Total"];
+    [timeRateView addPlot:plot];
+    [plot release];
+    [(ORTimeAxis*) [timeRateView xAxis] setStartTime:[[NSDate date] timeIntervalSince1970]];
     
     [rateView setNumber:6 height:10 spacing:5];
     
@@ -396,8 +415,19 @@
 - (void) waveformRateChanged:(NSNotification*)note
 {
     ORRate* rateObj = [note object];
-    [[rateTextFields cellWithTag:[rateObj tag]] setFloatValue:[rateObj rate]];
-    [rateView setNeedsDisplay:YES];
+    for(NSUInteger i=0; i<[[[model wfRates] rates] count]; i++){
+        ORRate* rate = [[[model wfRates] rates] objectAtIndex:i];
+        if(rateObj != rate) continue;
+        [[rateTextFields cellWithTag:[rateObj tag]] setFloatValue:[rateObj rate]];
+        [rateView setNeedsDisplay:YES];
+        return;
+    }
+    for(NSUInteger i=0; i<[[[model trigRates] rates] count]; i++){
+        ORRate* rate = [[[model trigRates] rates] objectAtIndex:i];
+        if(rateObj != rate) continue;
+        [[trigRateTextFields cellWithTag:[rateObj tag]] setFloatValue:[rateObj rate]];
+        [rateView setNeedsDisplay:YES];
+    }
 }
 
 - (void) totalRateChanged:(NSNotification*)note
@@ -405,6 +435,10 @@
     ORRateGroup* rateObj = [note object];
     if(note == nil || [model wfRates] == rateObj){
         [totalRateTextField setFloatValue:[rateObj totalRate]];
+        [totalRateView setNeedsDisplay:YES];
+    }
+    if(note == nil || [model trigRates] == rateObj){
+        [totalTrigRateTextField setFloatValue:[rateObj totalRate]];
         [totalRateView setNeedsDisplay:YES];
     }
 }
@@ -417,7 +451,8 @@
 - (void) rateIntegrationChanged:(NSNotification*)note
 {
     ORRateGroup* rateObj = [note object];
-    if(note == nil || [model wfRates] == rateObj || [note object] == model){
+    if(note == nil || [note object] == model ||
+       [model wfRates] == rateObj || [model trigRates] == rateObj){
         double value = [[model wfRates] integrationTime];
         [integrationStepper setDoubleValue:value];
         [integrationTextField setDoubleValue:value];
@@ -426,7 +461,8 @@
 
 - (void) updateTimePlot:(NSNotification*)note
 {
-    if(!note || [note object] == [[model wfRates] timeRate]) [timeRateView setNeedsDisplay:YES];
+    if([note object] == [[model wfRates] timeRate]   ||
+       [note object] == [[model trigRates] timeRate] || note == nil) [timeRateView setNeedsDisplay:YES];
 }
 
 - (void) scaleAction:(NSNotification*)note
@@ -617,6 +653,11 @@
 
 - (double) getBarValue:(int)tag
 {
+    return [[[[model trigRates] rates] objectAtIndex:tag] rate];
+}
+
+- (double) getSecondaryBarValue:(int)tag
+{
     return [[[[model wfRates] rates] objectAtIndex:tag] rate];
 }
 
@@ -629,10 +670,18 @@
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 {
     if([aPlotter plotView] == [timeRateView plotView]){
-        int count = (int)[[[model wfRates] timeRate] count];
-        int index = count-i-1;
-        *yValue = [[[model wfRates] timeRate] valueAtIndex:index];
-        *xValue = [[[model wfRates] timeRate] timeSampledAtIndex:index];
+        if([aPlotter tag] == 0){
+            int count = (int) [[[model trigRates] timeRate] count];
+            int index = count-i-1;
+            *yValue = [[[model trigRates] timeRate] valueAtIndex:index];
+            *xValue = [[[model trigRates] timeRate] timeSampledAtIndex:index];
+        }
+        else if([aPlotter tag] == 1){
+            int count = (int) [[[model wfRates] timeRate] count];
+            int index = count-i-1;
+            *yValue = [[[model wfRates] timeRate] valueAtIndex:index];
+            *xValue = [[[model wfRates] timeRate] timeSampledAtIndex:index];
+        }
     }
     else [super plotter:aPlotter index:i x:xValue y:yValue];
 }

@@ -133,6 +133,18 @@ NSString* ExperimentModelCustomColor2Changed             = @"ExperimentModelCust
     
 	return mapEntries;
 }
+- (void) setCrateIndex:(int)aValue forGroup:(int)index
+{
+    if(index>=0 && index<[segmentGroups count]) [[self segmentGroup:index] setCrateIndex:aValue];
+}
+- (void) setCardIndex:(int)aValue forGroup:(int)index
+{
+    if(index>=0 && index<[segmentGroups count]) [[self segmentGroup:index] setCardIndex:aValue];
+}
+- (void) setChannelIndex:(int)aValue forGroup:(int)index
+{
+    if(index>=0 &&index<[segmentGroups count]) [[self segmentGroup:index] setChannelIndex:aValue];
+}
 - (void) setCrateIndex:(int)aValue
 {
     for(id aGroup in segmentGroups)[aGroup setCrateIndex:aValue];
@@ -574,16 +586,8 @@ NSString* ExperimentModelCustomColor2Changed             = @"ExperimentModelCust
     else [self setCustomColor2:[NSColor whiteColor]];
     
 	segmentGroups = [[decoder decodeObjectForKey:       @"ExperimentSegmentGroups"] retain];
-	if([segmentGroups count] == 1)[[segmentGroups objectAtIndex:0] setMapEntries:[self setupMapEntries:0]];
-	else if([segmentGroups count] == 2){
-		[[segmentGroups objectAtIndex:0] setMapEntries:[self setupMapEntries:0]];
-		[[segmentGroups objectAtIndex:1] setMapEntries:[self setupMapEntries:1]];
-	}
-	else if([segmentGroups count] == 3){
-		[[segmentGroups objectAtIndex:0] setMapEntries:[self setupMapEntries:0]];
-		[[segmentGroups objectAtIndex:1] setMapEntries:[self setupMapEntries:1]];
-		[[segmentGroups objectAtIndex:2] setMapEntries:[self setupMapEntries:2]];
-	}
+    for(NSUInteger i=0; i<[segmentGroups count]; i++)
+        [[segmentGroups objectAtIndex:i] setMapEntries:[self setupMapEntries:(int)i]];
     [self setupSegmentIds];
     
     [[self undoManager] enableUndoRegistration];

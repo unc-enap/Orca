@@ -127,6 +127,9 @@
 - (void) histogram;
 - (void) initHardware;
 - (NSString*) dataSetNameGroup:(int)aGroup segment:(int)index;
+- (void) setCrateIndex:(int)aValue forGroup:(int)index;
+- (void) setCardIndex:(int)aValue forGroup:(int)index;
+- (void) setChannelIndex:(int)aValue forGroup:(int)index;
 - (void) setCrateIndex:(int)aValue;
 - (void) setCardIndex:(int)aValue;
 - (void) setChannelIndex:(int)aValue;

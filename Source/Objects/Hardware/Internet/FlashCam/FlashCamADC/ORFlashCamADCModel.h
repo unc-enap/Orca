@@ -22,6 +22,7 @@
 #import "ORRateGroup.h"
 #import "ORDataTaker.h"
 #import "ORHWWizard.h"
+#import "ORAdcInfoProviding.h"
 #import "fcio.h"
 
 #define kMaxFlashCamADCChannels 6
@@ -32,7 +33,7 @@
 #define kFlashCamADCTimeStampLength 4
 #define kFlashCamADCWFHeaderLength 19
 
-@interface ORFlashCamADCModel : ORFlashCamCard <ORDataTaker, ORHWWizard>
+@interface ORFlashCamADCModel : ORFlashCamCard <ORDataTaker, ORHWWizard, ORAdcInfoProviding>
 {
     @private
     unsigned int fwType;
@@ -59,7 +60,9 @@
     unsigned int takeDataIndex;
     unsigned int bufferedWFcount;
     ORRateGroup* wfRates;
+    ORRateGroup* trigRates;
     uint32_t wfCount[kMaxFlashCamADCChannels];
+    uint32_t trigCount[kMaxFlashCamADCChannels];
     uint32_t dataId;
     uint32_t location;
     uint32_t dataLengths;
@@ -95,10 +98,14 @@
 - (int) majorityLevel;
 - (int) majorityWidth;
 - (ORRateGroup*) wfRates;
-- (id) rateObject:(short)channel;
+- (id) wfRateObject:(short)channel;
 - (uint32_t) wfCount:(int)channel;
+- (float) getWFrate:(short)channel;
+- (ORRateGroup*) trigRates;
+- (id) rateObject:(short)channel;
+- (uint32_t) trigCount:(int)channel;
 - (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag;
-- (float) getRate:(short)channel;
+- (float) getRate:(short)channel forGroup:(int)groupTag;
 - (uint32_t) dataId;
 
 - (void) setFWtype:(unsigned int)fw;
@@ -119,6 +126,7 @@
 - (void) setTrigOutEnable:(bool)enabled;
 - (void) setWFsamples:(int)samples;
 - (void) setWFrates:(ORRateGroup*)rateGroup;
+- (void) setTrigRates:(ORRateGroup*)rateGroup;
 - (void) setRateIntTime:(double)intTime;
 - (void) setDataId:(uint32_t)dId;
 - (void) setDataIds:(id)assigner;
@@ -140,8 +148,18 @@
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) reset;
 - (void) startRates;
-- (void) clearWFcounts;
+- (void) clearCounts;
 - (NSDictionary*) dataRecordDescription;
+
+#pragma mark •••AdcProviding Protocol
+- (BOOL) onlineMaskBit:(int)bit;
+- (BOOL) partOfEvent:(unsigned short)aChannel;
+- (uint32_t) eventCount:(int)aChannel;
+- (void) clearEventCounts;
+- (uint32_t) thresholdForDisplay:(unsigned short)aChan;
+- (unsigned short) gainForDisplay:(unsigned short)aChan;
+- (void) initBoard;
+- (void) postAdcInfoProvidingValueChanged;
 
 #pragma mark •••Archival
 - (id) initWithCoder:(NSCoder*)decoder;

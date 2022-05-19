@@ -26,6 +26,7 @@
 	float 				barHeight;
 	float 				barSpacing;
 	id					dataSource;
+    id                  secondaryDataSource;
 	ORValueBar*			chainedView;
 }
 - (void) setUpViews;
@@ -41,5 +42,6 @@
 @property (assign) float			barHeight;
 @property (assign) float			barSpacing;
 @property (assign) IBOutlet id		dataSource;
+@property (assign) IBOutlet id      secondaryDataSource;
 @property (assign) IBOutlet ORValueBar*		chainedView;
 @end
