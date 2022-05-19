@@ -68,7 +68,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     [self setConfigParam:@"sparseOverwrite" withValue:[NSNumber numberWithInt:-1]];
     [self setConfigParam:@"gpsMode"         withValue:[NSNumber numberWithInt:0]];
     [self setConfigParam:@"gpsusClockAlarm" withValue:[NSNumber numberWithInt:0]];
-    [self setConfigParam:@"baselineCalib"   withValue:[NSNumber numberWithInt:0]];
+    [self setConfigParam:@"baselineCalib"   withValue:[NSNumber numberWithInt:-1]];
     [self setConfigParam:@"trigTimer1Addr"  withValue:[NSNumber numberWithInt:0]];
     [self setConfigParam:@"trigTimer1Sec"   withValue:[NSNumber numberWithInt:1]];
     [self setConfigParam:@"trigTimer2Addr"  withValue:[NSNumber numberWithInt:0]];
