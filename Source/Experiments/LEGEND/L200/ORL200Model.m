@@ -339,7 +339,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     else return 0;
 }
 
-- (void) showDataSetForSet:(int)aSet segment:(int)index
+- (void) showDataSet:(NSString*)name forSet:(int)aSet segment:(int)index
 {
     if(aSet >= 0 && aSet < [segmentGroups count]){
         ORSegmentGroup* group = [segmentGroups objectAtIndex:aSet];
@@ -357,12 +357,13 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
                 NSString* objName = [self objectNameForCrate:crate andCard:card];
                 if(objName){
                     id hist = [hists objectAtIndex:0];
-                    dataSet = [hist objectForKeyArray:[NSMutableArray arrayWithObjects:objName, @"Energy",
+                    dataSet = [hist objectForKeyArray:[NSMutableArray arrayWithObjects:objName, name,
                                                        [NSString stringWithFormat:@"Crate %2d",  [crate intValue]],
                                                        [NSString stringWithFormat:@"Card %2d",   [card intValue]],
                                                        [NSString stringWithFormat:@"Channel %2d",[chan intValue]],
                                                        nil]];
                     [dataSet doDoubleClick:nil];
+
                 }
             }
         }

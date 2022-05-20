@@ -47,6 +47,7 @@
 - (void) runTypeChanged:(NSNotification*) aNote;
 
 #pragma mark •••Segment Group Methods
+- (void) showDataSet:(NSString*)name forSet:(int)aSet segment:(int)index;
 - (NSString*) objectNameForCrate:(NSString*)crateName andCard:(NSString*)cardName;
 - (BOOL) validateDetector:(int)index;
 - (BOOL) validateSiPM:(int)index;

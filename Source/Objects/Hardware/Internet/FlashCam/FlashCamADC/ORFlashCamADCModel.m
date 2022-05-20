@@ -809,7 +809,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 
 - (uint32_t) eventCount:(int)aChannel
 {
-    if(aChannel >= 0 && aChannel<kMaxFlashCamADCChannels) return wfCount[aChannel];
+    if(aChannel >= 0 && aChannel<kMaxFlashCamADCChannels) return trigCount[aChannel];
     else return 0;
 }
 
