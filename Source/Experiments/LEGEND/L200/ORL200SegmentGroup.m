@@ -49,15 +49,52 @@
         [segment setHwPresent:NO];
         [segment setParams:nil];
     }
-    // get the list of serial numbers indices and sort
+    // get the list of string number/position or serial number and sort
     NSMutableArray* channels = [NSMutableArray array];
-    for(id key in dict) [channels addObject:[NSString stringWithString:key]];
-    NSArray* chans = [NSArray array];
-    chans = [channels sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    NSArray* chans;
+    if(type == kL200DetType){
+        for(id key in dict){
+            NSMutableDictionary* d = [NSMutableDictionary dictionary];
+            [d setObject:key forKey:@"key"];
+            [d setObject:[[dict objectForKey:key] objectForKey:@"string"] forKey:@"value"];
+            [channels addObject:d];
+        }
+        chans = [channels sortedArrayUsingComparator:^NSComparisonResult(id obj0, id obj1) {
+            NSString* s0 = [[obj0 objectForKey:@"value"] objectForKey:@"number"];
+            NSString* s1 = [[obj1 objectForKey:@"value"] objectForKey:@"number"];
+            if([s0 intValue] == [s1 intValue]){
+                NSString* p0 = [[obj0 objectForKey:@"value"] objectForKey:@"position"];
+                NSString* p1 = [[obj1 objectForKey:@"value"] objectForKey:@"position"];
+                if([p0 intValue] == [p1 intValue])
+                    return [[obj0 objectForKey:@"key"] compare:[obj1 objectForKey:@"key"]
+                                                       options:NSCaseInsensitiveSearch];
+                int vp0 = 0, vp1 = 0;
+                NSScanner* sp0 = [NSScanner scannerWithString:p0];
+                if(![sp0 scanInt:&vp0] || ![sp0 isAtEnd]) return 1;
+                NSScanner* sp1 = [NSScanner scannerWithString:p1];
+                if(![sp1 scanInt:&vp1] || ![sp1 isAtEnd]) return -1;
+                return vp0 > vp1;
+            }
+            int vs0 = 0, vs1 = 0;
+            NSScanner* ss0 = [NSScanner scannerWithString:s0];
+            if(![ss0 scanInt:&vs0] || ![ss0 isAtEnd]) return 1;
+            NSScanner* ss1 = [NSScanner scannerWithString:s1];
+            if(![ss1 scanInt:&vs1] || ![ss1 isAtEnd]) return -1;
+            return vs0 > vs1;
+        }];
+    }
+    else{
+        for(id key in dict) [channels addObject:[NSString stringWithString:key]];
+        chans = [NSArray array];
+        chans = [channels sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    }
     // get the parameters from the json data
     int index = -1;
-    for(id key in chans){
+    for(id chan in chans){
         index ++;
+        NSString* key;
+        if(type == kL200DetType) key = [chan objectForKey:@"key"];
+        else key = [NSString stringWithString:chan];
         NSDictionary*  ch_dict = [dict    objectForKey:key];
         NSDictionary* daq_dict = [ch_dict objectForKey:@"daq"];
         NSString* ch  = [NSString stringWithFormat:@"%@,%@,", key,
