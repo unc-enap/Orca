@@ -49,22 +49,18 @@
         [segment setHwPresent:NO];
         [segment setParams:nil];
     }
-    // get the list of channel indices and sort
+    // get the list of serial numbers indices and sort
     NSMutableArray* channels = [NSMutableArray array];
-    for(id key in dict) [channels addObject:[NSNumber numberWithUnsignedInt:[key unsignedIntValue]]];
-    NSSortDescriptor* sd = [[NSSortDescriptor alloc] initWithKey:nil ascending:YES];
+    for(id key in dict) [channels addObject:[NSString stringWithString:key]];
     NSArray* chans = [NSArray array];
-    chans = [channels sortedArrayUsingDescriptors:@[sd]];
+    chans = [channels sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     // get the parameters from the json data
     int index = -1;
-    for(id chan in chans){
+    for(id key in chans){
         index ++;
-        NSString* key = [chan stringValue];
         NSDictionary*  ch_dict = [dict    objectForKey:key];
         NSDictionary* daq_dict = [ch_dict objectForKey:@"daq"];
-        NSString* ch  = [NSString stringWithFormat:@"%@,%@,",
-                         //[ch_dict  objectForKey:@"system"],
-                         [ch_dict  objectForKey:@"det_name"],
+        NSString* ch  = [NSString stringWithFormat:@"%@,%@,", key,
                          [ch_dict  objectForKey:@"det_type"]];
         NSString* daq = [NSString stringWithFormat:@"%@,%@,%@,%@,",
                          [daq_dict objectForKey:@"crate"],
