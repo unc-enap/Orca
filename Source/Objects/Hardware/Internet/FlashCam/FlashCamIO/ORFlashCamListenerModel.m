@@ -303,6 +303,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 - (NSMutableArray*) runFlags:(bool)print
 {
     NSMutableArray* f = [NSMutableArray array];
+    [f addObjectsFromArray:@[@"-blbias", @"0", @"-bldac", @"2000"]];
     [f addObjectsFromArray:@[@"-mpl",  [NSString stringWithFormat:@"%d", [[self configParam:@"maxPayload"]    intValue]]]];
     [f addObjectsFromArray:@[@"-slots",[NSString stringWithFormat:@"%d", [[self configParam:@"eventBuffer"]   intValue]]]];
     [f addObjectsFromArray:@[@"-aph",  [NSString stringWithFormat:@"%d", [[self configParam:@"phaseAdjust"]   intValue]]]];
@@ -969,7 +970,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
             [addressList appendString:[NSString stringWithFormat:@"%x,", [adc cardAddress]]];
             [adcCards addObject:adc];
             [argCard addObjectsFromArray:[adc runFlagsForCardIndex:adcCount
-                                                  andChannelOffset:(unsigned int)[orcaChanMap count]
+                                                  andChannelOffset:adcCount*kMaxFlashCamADCChannels
                                                        withTrigAll:[[self configParam:@"trigAllEnable"] boolValue]]];
             for(unsigned int ich=0; ich<kMaxFlashCamADCChannels; ich++){
                 if([adc chanEnabled:ich]){

@@ -349,7 +349,7 @@
     [savePanel setNameFieldLabel:defaultFile];
     [savePanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result){
         if (result == NSFileHandlingPanelOKButton){
-            [(ORL200SegmentGroup*) [model segmentGroup:sg] saveMapFileAs:[[savePanel URL] path] forType:sg];
+            [(ORL200SegmentGroup*) [model segmentGroup:sg] saveMapFileAs:[[savePanel URL] path]];
         }
     }];
 }
@@ -368,7 +368,7 @@
     [openPanel setDirectoryURL:[NSURL fileURLWithPath:startingDir]];
     [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result){
         if (result == NSFileHandlingPanelOKButton){
-            [(ORL200SegmentGroup*) [model segmentGroup:sg] readMap:[[openPanel URL] path] forType:sg];
+            [(ORL200SegmentGroup*) [model segmentGroup:sg] readMap:[[openPanel URL] path]];
             [view reloadData];
         }
     }];

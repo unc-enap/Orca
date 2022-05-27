@@ -105,6 +105,10 @@
 
 - (void) drawRect:(NSRect)rect
 {
+    if([self selectedSet] >= 0){
+        if(selectedSet >= [segmentPathSet count]) [self clrSelection];
+        else if(selectedPath >= [[segmentPathSet objectAtIndex:selectedSet] count]) [self clrSelection];
+    }
     [[NSColor colorWithCalibratedRed:0.88 green:0.88 blue:0.88 alpha:1] set];
     [NSBezierPath fillRect:rect];
     
@@ -190,6 +194,38 @@
     if(n == 0) return;
     selectedPath --;
     if(selectedSet == 0 && selectedPath < 0) selectedPath = n-1;
+}
+
+- (void) mouseDown:(NSEvent*)anEvent
+{
+    NSPoint localPoint = [self convertPoint:[anEvent locationInWindow] fromView:nil];
+    selectedSet  = -1;
+    selectedPath = -1;
+    for(int setIndex = 0;setIndex<[segmentPathSet count];setIndex++){
+        int segmentIndex;
+        NSArray* arrayOfPaths = [segmentPathSet objectAtIndex:setIndex];
+        for(segmentIndex = 0;segmentIndex<[arrayOfPaths count];segmentIndex++){
+            NSBezierPath* aPath = [arrayOfPaths objectAtIndex:segmentIndex];
+            if([aPath containsPoint:localPoint]){
+                selectedSet  = setIndex;
+                selectedPath = segmentIndex;
+                break;
+            }
+        }
+        if(selectedSet >=0 ) break;
+    }
+    [delegate selectedSet:selectedSet segment:selectedPath];
+    if(selectedSet >= 0 && selectedPath >= 0 && [anEvent clickCount] >= 2){
+        if([anEvent modifierFlags] & NSEventModifierFlagControl)
+            [delegate showDataSet:@"Waveforms" forSet:selectedSet segment:selectedPath];
+        else if([anEvent modifierFlags] & NSEventModifierFlagOption)
+            [delegate showDataSet:@"Baseline" forSet:selectedSet segment:selectedPath];
+        else if([anEvent modifierFlags] & NSEventModifierFlagCommand)
+            [delegate showDataSet:@"Energy" forSet:selectedSet segment:selectedPath];
+        else
+            [delegate showDialogForSet:selectedSet segment:selectedPath];
+    }
+    [self setNeedsDisplay:YES];
 }
 
 @end
