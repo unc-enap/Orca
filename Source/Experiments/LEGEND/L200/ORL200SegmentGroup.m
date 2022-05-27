@@ -24,7 +24,20 @@
 
 #pragma mark •••Map Methods
 
-- (void) readMap:(NSString*)aPath forType:(int)type
+- (unsigned int) type
+{
+    return type;
+}
+
+- (void) setType:(unsigned int)segType
+{
+    if(segType < kL200SegmentTypeCount) type = segType;
+}
+
+
+#pragma mark •••Map Methods
+
+- (void) readMap:(NSString*)aPath
 {
     // get the json dictionary
     [self setMapFile:aPath];
@@ -49,8 +62,8 @@
         NSString* key = [chan stringValue];
         NSDictionary*  ch_dict = [dict    objectForKey:key];
         NSDictionary* daq_dict = [ch_dict objectForKey:@"daq"];
-        NSString* ch  = [NSString stringWithFormat:@"%@,%@,%@,",
-                         [ch_dict  objectForKey:@"system"],
+        NSString* ch  = [NSString stringWithFormat:@"%@,%@,",
+                         //[ch_dict  objectForKey:@"system"],
                          [ch_dict  objectForKey:@"det_name"],
                          [ch_dict  objectForKey:@"det_type"]];
         NSString* daq = [NSString stringWithFormat:@"%@,%@,%@,%@,",
@@ -105,14 +118,14 @@
         else return;
         ORDetectorSegment* segment = [segments objectAtIndex:index];
         if(type == kL200DetType){
-            [segment setCrateIndex:5];
-            [segment setCardIndex:7];
-            [segment setChannelIndex:8];
+            [segment setCrateIndex:4];
+            [segment setCardIndex:6];
+            [segment setChannelIndex:7];
         }
         else{
-            [segment setCrateIndex:3];
-            [segment setCardIndex:5];
-            [segment setChannelIndex:6];
+            [segment setCrateIndex:2];
+            [segment setCardIndex:4];
+            [segment setChannelIndex:5];
         }
         [segment decodeLine:line];
         [segment setObject:[NSNumber numberWithInt:index] forKey:@"kSegmentNumber"];
@@ -122,7 +135,19 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:ORSegmentGroupMapReadNotification object:self];
 }
 
-- (void) saveMapFileAs:(NSString*)newFileName forType:(int)type
+- (void) saveMapFileAs:(NSString*)newFileName
+{
+    NSData* data = [self jsonMap];
+    if(data){
+        NSFileManager* fmanager = [NSFileManager defaultManager];
+        if([fmanager fileExistsAtPath:newFileName]) [fmanager removeItemAtPath:newFileName error:nil];
+        [fmanager createFileAtPath:newFileName contents:data attributes:nil];
+        [self setMapFile:newFileName];
+    }
+    else NSLogColor([NSColor redColor], @"ORL200SegmentGroup: failed to save map file %d\n", type);
+}
+
+- (NSData*) jsonMap
 {
     // build the json data
     NSMutableDictionary* dict = [NSMutableDictionary dictionary];
@@ -135,67 +160,62 @@
         NSDictionary* ch_dict = nil;
         if(type == kL200DetType){
             NSDictionary* str_dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      [params objectAtIndex:3], @"number",
-                                      [params objectAtIndex:4], @"position", nil];
+                                      [params objectAtIndex:2], @"number",
+                                      [params objectAtIndex:3], @"position", nil];
             NSDictionary* daq_dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      [params objectAtIndex:5], @"crate",
-                                      [params objectAtIndex:6], @"board_id",
-                                      [params objectAtIndex:7], @"board_slot",
-                                      [params objectAtIndex:8], @"board_ch", nil];
+                                      [params objectAtIndex:4], @"crate",
+                                      [params objectAtIndex:5], @"board_id",
+                                      [params objectAtIndex:6], @"board_slot",
+                                      [params objectAtIndex:7], @"board_ch", nil];
             NSDictionary* hv_dict  = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      [params objectAtIndex:9], @"crate",
-                                      [params objectAtIndex:10], @"board_slot",
-                                      [params objectAtIndex:11], @"board_chan",
-                                      [params objectAtIndex:12], @"cable",
-                                      [params objectAtIndex:13], @"flange_id",
-                                      [params objectAtIndex:14], @"flange_pos", nil];
+                                      [params objectAtIndex:8], @"crate",
+                                      [params objectAtIndex:9], @"board_slot",
+                                      [params objectAtIndex:10], @"board_chan",
+                                      [params objectAtIndex:11], @"cable",
+                                      [params objectAtIndex:12], @"flange_id",
+                                      [params objectAtIndex:13], @"flange_pos", nil];
             NSDictionary* fe_dict  = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      [params objectAtIndex:15], @"cc4_ch",
-                                      [params objectAtIndex:16], @"head_card_ana",
-                                      [params objectAtIndex:17], @"head_card_dig",
-                                      [params objectAtIndex:18], @"fanout_card",
-                                      [params objectAtIndex:19], @"raspberrypi",
-                                      [params objectAtIndex:20], @"lmfe_id", nil];
+                                      [params objectAtIndex:14], @"cc4_ch",
+                                      [params objectAtIndex:15], @"head_card_ana",
+                                      [params objectAtIndex:16], @"head_card_dig",
+                                      [params objectAtIndex:17], @"fanout_card",
+                                      [params objectAtIndex:18], @"raspberrypi",
+                                      [params objectAtIndex:19], @"lmfe_id", nil];
             ch_dict  = [NSDictionary dictionaryWithObjectsAndKeys:
                         @"ged", @"system",
-                        [params objectAtIndex:1], @"det_name",
-                        [params objectAtIndex:2], @"det_type",
+                        [params objectAtIndex:1], @"det_type",
                         str_dict, @"string",       daq_dict, @"daq",
                         hv_dict,  @"high_voltage", fe_dict,  @"electronics", nil];
         }
         else if(type >= 0 && type < kL200SegmentTypeCount){
             NSDictionary* daq_dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      [params objectAtIndex:3], @"crate",
-                                      [params objectAtIndex:4], @"board_id",
-                                      [params objectAtIndex:5], @"board_slot",
-                                      [params objectAtIndex:6], @"board_ch", nil];
+                                      [params objectAtIndex:2], @"crate",
+                                      [params objectAtIndex:3], @"board_id",
+                                      [params objectAtIndex:4], @"board_slot",
+                                      [params objectAtIndex:5], @"board_ch", nil];
             if(type == kL200SiPMType || type == kL200PMTType){
                 NSDictionary* v_dict  = [NSDictionary dictionaryWithObjectsAndKeys:
-                                         [params objectAtIndex:7], @"crate",
-                                         [params objectAtIndex:8], @"board_slot",
-                                         [params objectAtIndex:9], @"board_chan", nil];
+                                         [params objectAtIndex:6], @"crate",
+                                         [params objectAtIndex:7], @"board_slot",
+                                         [params objectAtIndex:8], @"board_chan", nil];
                 if(type == kL200SiPMType)
                     ch_dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                @"spm", @"system",
-                               [params objectAtIndex:1], @"det_name",
-                               [params objectAtIndex:2], @"det_type",
+                               [params objectAtIndex:1], @"det_type",
                                daq_dict, @"daq", v_dict, @"low_voltage", nil];
                 else if(type == kL200PMTType)
                     ch_dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                @"pmt", @"system",
-                               [params objectAtIndex:1], @"det_name",
-                               [params objectAtIndex:2], @"det_type",
+                               [params objectAtIndex:1], @"det_type",
                                daq_dict, @"daq", v_dict, @"high_voltage", nil];
             }
             else if(type == kL200AuxType)
                 ch_dict = [NSDictionary dictionaryWithObjectsAndKeys:
                            @"aux", @"system",
-                           [params objectAtIndex:1], @"det_name",
-                           [params objectAtIndex:2], @"det_type",
+                           [params objectAtIndex:1], @"det_type",
                            daq_dict, @"daq", nil];
         }
-        if(ch_dict) [dict setObject:ch_dict
-                             forKey:[NSString stringWithFormat:@"%d", [[params objectAtIndex:0] intValue]]];
+        if(ch_dict) [dict setObject:ch_dict forKey:[params objectAtIndex:0]];
     }
     // write the dictionary to the specified filename
     if([NSJSONSerialization isValidJSONObject:dict]){
@@ -204,53 +224,40 @@
                                                        options:NSJSONWritingPrettyPrinted
                                                          error:&error];
         if(error) NSLogColor([NSColor redColor],
-                             @"ORL200SegmentGroup error saving map file:\n%@\n",
-                             [error localizedDescription]);
-        NSFileManager* fmanager = [NSFileManager defaultManager];
-        if([fmanager fileExistsAtPath:newFileName])
-            [fmanager removeItemAtPath:newFileName error:nil];
-        [fmanager createFileAtPath:newFileName contents:data attributes:nil];
-        [self setMapFile:newFileName];
+                             @"ORL200SegmentGroup error converting map %d to json:\n%@\n",
+                             type, [error localizedDescription]);
+        return data;
     }
-    else NSLogColor([NSColor redColor], @"ORL200SegmentGroup: error saving map file, invalid JSON data\n");
+    else{
+        NSLogColor([NSColor redColor], @"ORL200SegmentGroup: error converting map, invalid JSON data\n");
+        return nil;
+    }
 }
 
-- (NSString*) segmentLocation:(int)aSegmentIndex forType:(int)type
+- (NSString*) segmentLocation:(int)aSegmentIndex
 {
     ORDetectorSegment* segment = [segments objectAtIndex:aSegmentIndex];
     NSArray* params = [[segment paramsAsString] componentsSeparatedByString:@","];
     if(type == kL200DetType){
         return [NSString stringWithFormat:@"%@,%@,%@",
-                [params objectAtIndex:5],   // flashcam crate
-                [params objectAtIndex:7],   // flashcam board slot
-                [params objectAtIndex:8]];  // flashcam board channel
+                [params objectAtIndex:4],   // flashcam crate
+                [params objectAtIndex:6],   // flashcam board slot
+                [params objectAtIndex:7]];  // flashcam board channel
     }
     else if(type > kL200DetType && type < kL200SegmentTypeCount){
         return [NSString stringWithFormat:@"%@,%@,%@",
-                [params objectAtIndex:3],   // flashcam crate
-                [params objectAtIndex:5],   // flashcam board slot
-                [params objectAtIndex:6]];  // flashcam board channel
+                [params objectAtIndex:2],   // flashcam crate
+                [params objectAtIndex:4],   // flashcam board slot
+                [params objectAtIndex:5]];  // flashcam board channel
     }
     else return @"-1,-1,-1";
 }
 
 - (NSString*) paramsAsString
 {
-    NSMutableString* params = [NSMutableString string];
-    bool header = false;
-    for(ORDetectorSegment* segment in segments){
-        if(!header){
-            [params appendString:[segment paramHeader]];
-            header = true;
-        }
-        [params appendString:[NSString stringWithFormat:@"%@\n", [segment paramsAsString]]];
-    }
-    if([params length] >= 2){
-        if([[params substringWithRange:NSMakeRange([params length]-2, 2)] isEqualToString:@"\n"])
-            return [params substringWithRange:NSMakeRange([params length]-2, 2)];
-        else return params;
-    }
-    else return params;
+    NSData* data = [self jsonMap];
+    if(!data) return @"";
+    return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
 }
 
 - (void) registerForRates
@@ -270,6 +277,24 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:ORSegmentGroupConfiguationChanged
                                                             object:self];
     }
+}
+
+
+#pragma mark •••Archival
+
+- (id) initWithCoder:(NSCoder*)decoder
+{
+    self = [super initWithCoder:decoder];
+    [[self undoManager] disableUndoRegistration];
+    [self setType:[[decoder decodeObjectForKey:@"segmentType"] unsignedIntValue]];
+    [[self undoManager] enableUndoRegistration];
+    return self;
+}
+
+- (void) encodeWithCoder:(NSCoder*)encoder
+{
+    [super encodeWithCoder:encoder];
+    [encoder encodeObject:[NSNumber numberWithUnsignedInt:type] forKey:@"segmentType"];
 }
 
 @end

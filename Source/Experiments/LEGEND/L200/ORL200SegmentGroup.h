@@ -21,11 +21,18 @@
 
 enum ORL200SegmentType{ kL200DetType, kL200SiPMType, kL200PMTType, kL200AuxType, kL200SegmentTypeCount };
 
-@interface ORL200SegmentGroup : ORSegmentGroup { }
+@interface ORL200SegmentGroup : ORSegmentGroup {
+    unsigned int type;
+}
+
+#pragma mark •••Accessors
+- (unsigned int) type;
+- (void) setType:(unsigned int)segType;
 
 #pragma mark •••Map Methods
-- (void) readMap:(NSString*)aPath forType:(int)type;
-- (void) saveMapFileAs:(NSString*)newFileName forType:(int)type;
-- (NSString*) segmentLocation:(int)aSegmentIndex forType:(int)type;
+- (void) readMap:(NSString*)aPath;
+- (void) saveMapFileAs:(NSString*)newFileName;
+- (NSData*) jsonMap;
+- (NSString*) segmentLocation:(int)aSegmentIndex;
 
 @end

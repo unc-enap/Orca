@@ -105,6 +105,10 @@
 
 - (void) drawRect:(NSRect)rect
 {
+    if([self selectedSet] >= 0){
+        if(selectedSet >= [segmentPathSet count]) [self clrSelection];
+        else if(selectedPath >= [[segmentPathSet objectAtIndex:selectedSet] count]) [self clrSelection];
+    }
     [[NSColor colorWithCalibratedRed:0.88 green:0.88 blue:0.88 alpha:1] set];
     [NSBezierPath fillRect:rect];
     
