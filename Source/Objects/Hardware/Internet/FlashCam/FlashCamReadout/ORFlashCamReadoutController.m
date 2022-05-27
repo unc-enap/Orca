@@ -983,7 +983,7 @@
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
             else if(col == 5) [l setConfigParam:@"resetMode"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
-            else if(col == 6) [l setConfigParam:@"pileupRej"
+            else if(col == 6) [l setConfigParam:@"evPerRequest"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
         }
     }

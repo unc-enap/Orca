@@ -970,7 +970,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
             [addressList appendString:[NSString stringWithFormat:@"%x,", [adc cardAddress]]];
             [adcCards addObject:adc];
             [argCard addObjectsFromArray:[adc runFlagsForCardIndex:adcCount
-                                                  andChannelOffset:(unsigned int)[orcaChanMap count]
+                                                  andChannelOffset:adcCount*kMaxFlashCamADCChannels
                                                        withTrigAll:[[self configParam:@"trigAllEnable"] boolValue]]];
             for(unsigned int ich=0; ich<kMaxFlashCamADCChannels; ich++){
                 if([adc chanEnabled:ich]){
