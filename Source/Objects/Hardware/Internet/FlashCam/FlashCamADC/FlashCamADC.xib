@@ -22,7 +22,6 @@
                 <outlet property="firmwareVerTextField" destination="72t-Pm-o9f" id="28d-EP-2Hf"/>
                 <outlet property="flatTopLabel" destination="oAc-uL-LRz" id="eyI-Q1-DLe"/>
                 <outlet property="flatTopTimeMatrix" destination="tyC-Rj-v7B" id="KTV-05-TZB"/>
-                <outlet property="fwTypePUButton" destination="u4l-kv-Ju1" id="cSj-Ec-auG"/>
                 <outlet property="getFirmwareVerButton" destination="aKr-Tv-bpN" id="eP8-CC-hnA"/>
                 <outlet property="humidityView" destination="PWu-bB-UJ6" id="Ol2-O1-T0i"/>
                 <outlet property="integrationStepper" destination="flD-xP-esU" id="Uyy-Yg-cdY"/>
@@ -977,23 +976,6 @@
                                                 <action selector="promSlotAction:" target="-2" id="xVE-kv-Xkr"/>
                                             </connections>
                                         </popUpButton>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u4l-kv-Ju1">
-                                            <rect key="frame" x="457" y="232" width="102" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Standard FW" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="a61-iM-30j" id="DMB-ee-L7g">
-                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="label"/>
-                                                <menu key="menu" id="HBk-Op-S7e">
-                                                    <items>
-                                                        <menuItem title="Standard FW" state="on" id="a61-iM-30j"/>
-                                                        <menuItem title="Ge FW" id="HRL-U1-tl7"/>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="fwTypeAction:" target="-2" id="9yb-bx-jRv"/>
-                                            </connections>
-                                        </popUpButton>
                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9UV-JX-TKi">
                                             <rect key="frame" x="98" y="235" width="56" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1488,6 +1470,9 @@
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
+                                                        <connections>
+                                                            <action selector="rateIntegrationAction:" target="-2" id="o9w-JT-Jdp"/>
+                                                        </connections>
                                                     </textField>
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="flD-xP-esU">
                                                         <rect key="frame" x="226" y="0.0" width="19" height="27"/>

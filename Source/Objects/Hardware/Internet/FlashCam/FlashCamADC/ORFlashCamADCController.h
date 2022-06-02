@@ -24,7 +24,6 @@
 
 @interface ORFlashCamADCController : ORFlashCamCardController
 {
-    IBOutlet NSPopUpButton* fwTypePUButton;
     IBOutlet NSMatrix* chanEnabledMatrix;
     IBOutlet NSMatrix* trigOutEnabledMatrix;
     IBOutlet NSMatrix* baselineMatrix;
@@ -66,7 +65,6 @@
 - (void) updateWindow;
 
 #pragma mark •••Interface management
-- (void) fwTypeChanged:(NSNotification*)note;
 - (void) cardAddressChanged:(NSNotification*)note;
 - (void) trigOutEnabledChanged:(NSNotification*)note;
 - (void) cardSlotChanged:(NSNotification*)note;
@@ -93,7 +91,6 @@
 - (void) settingsLock:(bool)lock;
 
 #pragma mark •••Actions
-- (IBAction) fwTypeAction:(id)sender;
 - (IBAction) chanEnabledAction:(id)sender;
 - (IBAction) trigOutEnabledAction:(id)sender;
 - (IBAction) baselineAction:(id)sender;
@@ -118,5 +115,8 @@
 - (int) numberPointsInPlot:(id)aPlotter;
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 
+@end
 
+
+@interface ORFlashCamADCStdController : ORFlashCamADCController { }
 @end

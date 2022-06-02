@@ -2428,7 +2428,7 @@ Gauge Controller</string>
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BQc-SX-sf9">
-                                                                <rect key="frame" x="181" y="5" width="62" height="16"/>
+                                                                <rect key="frame" x="153" y="5" width="62" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Crate" id="rl3-Ff-YdW">
                                                                     <font key="font" metaFont="smallSystem"/>
@@ -2445,22 +2445,21 @@ Gauge Controller</string>
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="ORFlashCamADCModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i68-D8-oUs" customClass="ObjectFactory">
-                                                                <rect key="frame" x="333" y="34" width="21" height="172"/>
+                                                                <rect key="frame" x="298" y="36" width="21" height="172"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="flashcam_adc" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="SIZ-Jy-BRz">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EYj-sJ-2MS">
-                                                                <rect key="frame" x="310" y="7" width="66" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="ADC Card" id="JXh-Tw-jWj">
-                                                                    <font key="font" metaFont="smallSystem"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
+                                                            <button toolTip="ORFlashCamADCStdModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K7Y-4z-7k5" customClass="ObjectFactory">
+                                                                <rect key="frame" x="378" y="37" width="21" height="172"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="flashcam_adc" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="2ko-Mo-Zr2">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                            </button>
                                                             <button toolTip="ORFlashCamReadoutModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sl9-7i-LSr" customClass="ObjectFactory">
                                                                 <rect key="frame" x="733" y="142" width="79" height="67"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -2504,17 +2503,8 @@ Gauge Controller</string>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c4C-Zf-chJ">
-                                                                <rect key="frame" x="413" y="9" width="74" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Trigger Card" id="4P7-wh-dA1">
-                                                                    <font key="font" metaFont="smallSystem"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
                                                             <button toolTip="ORFlashCamCrateModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HRS-Ov-bBL" customClass="ObjectFactory">
-                                                                <rect key="frame" x="146" y="31" width="133" height="177"/>
+                                                                <rect key="frame" x="118" y="31" width="133" height="177"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="flashcam_crate" imagePosition="only" alignment="center" imageScaling="axesIndependently" inset="2" id="xtY-Ni-VIE">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2530,7 +2520,7 @@ Gauge Controller</string>
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="ORFlashCamTriggerModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7r7-Bs-lS8" customClass="ObjectFactory">
-                                                                <rect key="frame" x="435" y="35" width="31" height="174"/>
+                                                                <rect key="frame" x="456" y="34" width="31" height="174"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="flashcam_trigger" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="ebe-NE-rom">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2549,6 +2539,33 @@ Gauge Controller</string>
                                                                 <rect key="frame" x="512" y="3" width="76" height="28"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" selectable="YES" alignment="center" title="Global Trigger Card" id="51s-Jz-3Fr">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="72" translatesAutoresizingMaskIntoConstraints="NO" id="y6P-JY-MOR">
+                                                                <rect key="frame" x="270" y="3" width="76" height="28"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <textFieldCell key="cell" selectable="YES" alignment="center" title="ADC Card     6 Ch, 16 bit" id="qIG-0V-asb">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="72" translatesAutoresizingMaskIntoConstraints="NO" id="Tjp-xq-u8h">
+                                                                <rect key="frame" x="350" y="3" width="76" height="28"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <textFieldCell key="cell" selectable="YES" alignment="center" title="ADC Card     24 Ch, 12 bit" id="SI4-CX-Y8P">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c4C-Zf-chJ">
+                                                                <rect key="frame" x="434" y="9" width="74" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Trigger Card" id="4P7-wh-dA1">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -3117,11 +3134,11 @@ Relay</string>
                                             <tabViewItems>
                                                 <tabViewItem label="SNO/Ncd" identifier="" id="179">
                                                     <view key="view" id="181">
-                                                        <rect key="frame" x="10" y="7" width="817" height="209"/>
+                                                        <rect key="frame" x="10" y="7" width="817" height="205"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <button toolTip="NcdModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26766" customClass="ObjectFactory">
-                                                                <rect key="frame" x="25" y="29" width="101" height="153"/>
+                                                                <rect key="frame" x="25" y="25" width="101" height="153"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="Ncd" imagePosition="above" alignment="center" state="on" inset="2" id="26767">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -3131,7 +3148,7 @@ Relay</string>
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="ORPulserDistribModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26768" customClass="ObjectFactory">
-                                                                <rect key="frame" x="260" y="113" width="100" height="76"/>
+                                                                <rect key="frame" x="260" y="109" width="100" height="76"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="Pulser Distribution" bezelStyle="regularSquare" image="ORPulserDistrib" imagePosition="above" alignment="center" state="on" inset="2" id="26769">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -3139,7 +3156,7 @@ Relay</string>
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="NcdMuxBoxModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26772" customClass="ObjectFactory">
-                                                                <rect key="frame" x="400" y="121" width="100" height="62"/>
+                                                                <rect key="frame" x="400" y="117" width="100" height="62"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="Ncd Mux Box" bezelStyle="regularSquare" image="NcdMuxBox" imagePosition="above" alignment="center" inset="2" id="26773">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -3147,7 +3164,7 @@ Relay</string>
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="NcdMuxModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26776" customClass="ObjectFactory">
-                                                                <rect key="frame" x="568" y="80" width="100" height="62"/>
+                                                                <rect key="frame" x="568" y="76" width="100" height="62"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="Ncd Multiplexer" bezelStyle="regularSquare" image="NcdMux" imagePosition="above" alignment="center" inset="2" id="26777">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -3155,7 +3172,7 @@ Relay</string>
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="ORHVRampModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26774" customClass="ObjectFactory">
-                                                                <rect key="frame" x="418" y="37" width="64" height="70"/>
+                                                                <rect key="frame" x="418" y="33" width="64" height="70"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="HVRamp" imagePosition="above" alignment="center" state="on" inset="2" id="26775">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -3165,7 +3182,7 @@ Relay</string>
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="ORRandomPulserModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26770" customClass="ObjectFactory">
-                                                                <rect key="frame" x="245" y="36" width="130" height="50"/>
+                                                                <rect key="frame" x="245" y="32" width="130" height="50"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="bevel" title="Random Pulser" bezelStyle="regularSquare" image="RandomPulser" imagePosition="above" alignment="center" inset="2" id="26771">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>

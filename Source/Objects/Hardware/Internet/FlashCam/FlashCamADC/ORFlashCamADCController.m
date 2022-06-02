@@ -48,16 +48,45 @@
 {
     [super setModel:aModel];
     [[self window] setTitle:[NSString stringWithFormat:@"FlashCam ADC (0x%x, Crate %d, Slot %d)", [model cardAddress], [model crateNumber], [model slot]]];
+    [shapingLabel setStringValue:@"Shaping Time (ns)"];
+    [flatTopLabel setStringValue:@"Flat Top (ns)"];
+    for(unsigned int i=0; i<[model numberOfChannels]; i++){
+        id cell = [filterTypeMatrix cellWithTag:i];
+        [[cell itemAtIndex:0] setTitle:@"Gauss"];
+        [[cell itemAtIndex:1] setTitle:@"Trap"];
+        [[cell itemAtIndex:2] setTitle:@"Cusp"];
+    }
+    [filterTypeMatrix setEnabled:YES];
+    NSArray* m = [NSArray arrayWithObjects:baselineMatrix, thresholdMatrix, adcGainMatrix, trigGainMatrix,
+                  shapeTimeMatrix, flatTopTimeMatrix, poleZeroTimeMatrix, postTriggerMatrix, rateTextFields,
+                  trigRateTextFields, nil];
+    for(NSMatrix* matrix in m){
+        for(NSUInteger i=0; i<[matrix numberOfRows]; i++)
+            [[matrix cellAtRow:i column:0] setFormatter:[[[NSNumberFormatter alloc] init] autorelease]];
+    }
+    m = [NSArray arrayWithObjects:rateTextFields, trigRateTextFields, nil];
+    for(NSMatrix* matrix in m){
+        for(NSUInteger i=0; i<[matrix numberOfRows]; i++){
+            NSNumberFormatter* nf = [[matrix cellAtRow:i column:0] formatter];
+            nf.usesSignificantDigits = YES;
+            nf.minimumSignificantDigits = 3;
+            nf.maximumSignificantDigits = 6;
+        }
+    }
+    m = [NSArray arrayWithObjects:totalRateTextField, totalTrigRateTextField, nil];
+    for(NSTextField* tf in m){
+        NSNumberFormatter* nf = [[[NSNumberFormatter alloc] init] autorelease];
+        nf.usesSignificantDigits = YES;
+        nf.minimumSignificantDigits = 3;
+        nf.maximumSignificantDigits = 6;
+        [tf setFormatter:nf];
+    }
 }
 
 - (void) registerNotificationObservers
 {
     NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
     [super registerNotificationObservers];
-    [notifyCenter addObserver : self
-                     selector : @selector(fwTypeChanged:)
-                         name : ORFlashCamADCModelFWTypeChanged
-                       object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(chanEnabledChanged:)
                          name : ORFlashCamADCModelChanEnabledChanged
@@ -182,8 +211,7 @@
     [plot release];
     [(ORTimeAxis*) [timeRateView xAxis] setStartTime:[[NSDate date] timeIntervalSince1970]];
     
-    [rateView setNumber:6 height:10 spacing:5];
-    
+    [rateView setNumber:[model numberOfChannels] height:10 spacing:5];
     [super awakeFromNib];
 }
 
@@ -191,7 +219,6 @@
 {
     [super updateWindow];
     [self cardAddressChanged:nil];
-    [self fwTypeChanged:nil];
     [self cardSlotChanged:nil];
     [self chanEnabledChanged:nil];
     [self trigOutEnabledChanged:nil];
@@ -229,35 +256,10 @@
     [[self window] setTitle:[NSString stringWithFormat:@"FlashCam ADC (0x%x, Crate %d, Slot %d)", [model cardAddress], [model crateNumber], [model slot]]];
 }
 
-- (void) fwTypeChanged:(NSNotification*)note
-{
-    [fwTypePUButton selectItemAtIndex:[model fwType]];
-    if([model fwType] == 0){
-        [shapingLabel setStringValue:@"Fast Shape (ns)"];
-        [flatTopLabel setStringValue:@"Slow Shape (ns)"];
-        for(unsigned int i=0; i<kMaxFlashCamADCChannels; i++){
-            id cell = [filterTypeMatrix cellWithTag:i];
-            for(unsigned int j=0; j<3; j++) [[cell itemAtIndex:j] setTitle:@"N/A"];
-        }
-        [filterTypeMatrix setEnabled:NO];
-    }
-    else if([model fwType] == 1){
-        [shapingLabel setStringValue:@"Shaping Time (ns)"];
-        [flatTopLabel setStringValue:@"Flat Top (ns)"];
-        for(unsigned int i=0; i<kMaxFlashCamADCChannels; i++){
-            id cell = [filterTypeMatrix cellWithTag:i];
-            [[cell itemAtIndex:0] setTitle:@"Gauss"];
-            [[cell itemAtIndex:1] setTitle:@"Trap"];
-            [[cell itemAtIndex:2] setTitle:@"Cusp"];
-        }
-        [filterTypeMatrix setEnabled:YES];
-    }
-}
-
 - (void) chanEnabledChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++){
+        for(int i=0; i<[model numberOfChannels]; i++){
             [[chanEnabledMatrix cellWithTag:i] setState:[model chanEnabled:i]];
             [[chanEnabledRateMatrix cellWithTag:i] setState:[model chanEnabled:i]];
         }
@@ -272,7 +274,7 @@
 - (void) trigOutEnabledChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++)
+        for(int i=0; i<[model numberOfChannels]; i++)
             [[trigOutEnabledMatrix cellWithTag:i] setState:[model trigOutEnabled:i]];
     }
     else{
@@ -287,7 +289,7 @@
 - (void) baselineChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++)
+        for(int i=0; i<[model numberOfChannels]; i++)
             [[baselineMatrix cellWithTag:i] setIntValue:[model baseline:i]];
     }
     else{
@@ -299,7 +301,7 @@
 - (void) thresholdChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++)
+        for(int i=0; i<[model numberOfChannels]; i++)
             [[thresholdMatrix cellWithTag:i] setIntValue:[model threshold:i]];
     }
     else{
@@ -311,7 +313,7 @@
 - (void) adcGainChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++)
+        for(int i=0; i<[model numberOfChannels]; i++)
             [[adcGainMatrix cellWithTag:i] setIntValue:[model adcGain:i]];
     }
     else{
@@ -323,7 +325,7 @@
 - (void) trigGainChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++)
+        for(int i=0; i<[model numberOfChannels]; i++)
             [[trigGainMatrix cellWithTag:i] setFloatValue:[model trigGain:i]];
     }
     else{
@@ -335,7 +337,7 @@
 - (void) shapeTimeChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++)
+        for(int i=0; i<[model numberOfChannels]; i++)
             [[shapeTimeMatrix cellWithTag:i] setIntValue:[model shapeTime:i]];
     }
     else{
@@ -347,7 +349,7 @@
 - (void) filterTypeChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++){
+        for(int i=0; i<[model numberOfChannels]; i++){
             [[filterTypeMatrix cellWithTag:i] setIntValue:[model filterType:i]];
             if([model filterType:i] == 0) [[flatTopTimeMatrix cellWithTag:i] setEnabled:NO];
             else [[flatTopTimeMatrix cellWithTag:i] setEnabled:YES];
@@ -364,7 +366,7 @@
 - (void) flatTopTimeChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++)
+        for(int i=0; i<[model numberOfChannels]; i++)
         [[flatTopTimeMatrix cellWithTag:i] setFloatValue:[model flatTopTime:i]];
     }
     else{
@@ -376,7 +378,7 @@
 - (void) poleZeroTimeChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++)
+        for(int i=0; i<[model numberOfChannels]; i++)
             [[poleZeroTimeMatrix cellWithTag:i] setFloatValue:[model poleZeroTime:i]];
     }
     else{
@@ -388,7 +390,7 @@
 - (void) postTriggerChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++)
+        for(int i=0; i<[model numberOfChannels]; i++)
         [[postTriggerMatrix cellWithTag:i] setFloatValue:[model postTrigger:i]];
     }
     else{
@@ -522,7 +524,6 @@
 {
     lock |= [gOrcaGlobals runInProgress] || [gSecurity isLocked:ORFlashCamCardSettingsLock];
     [super settingsLock:lock];
-    [fwTypePUButton         setEnabled:!lock];
     [chanEnabledMatrix      setEnabled:!lock];
     [trigOutEnabledMatrix   setEnabled:!lock];
     [baselineMatrix         setEnabled:!lock];
@@ -542,12 +543,6 @@
 
 
 #pragma mark •••Actions
-
-- (IBAction) fwTypeAction:(id)sender
-{
-    if((unsigned int)[sender indexOfSelectedItem] != [model fwType])
-        [model setFWtype:(unsigned int)[sender indexOfSelectedItem]];
-}
 
 - (IBAction) chanEnabledAction:(id)sender
 {
@@ -684,6 +679,29 @@
         }
     }
     else [super plotter:aPlotter index:i x:xValue y:yValue];
+}
+
+@end
+
+
+@implementation ORFlashCamADCStdController
+
+- (id) init
+{
+    self = [super initWithWindowNibName:@"FlashCamADCStd"];
+    return self;
+}
+
+- (void) setModel:(id)aModel
+{
+    [super setModel:aModel];
+    [shapingLabel setStringValue:@"Fast Shape (ns)"];
+    [flatTopLabel setStringValue:@"Slow Shape (ns)"];
+    for(unsigned int i=0; i<[model numberOfChannels]; i++){
+        id cell = [filterTypeMatrix cellWithTag:i];
+        for(unsigned int j=0; j<3; j++) [[cell itemAtIndex:j] setTitle:@"N/A"];
+    }
+    [filterTypeMatrix setEnabled:NO];
 }
 
 @end
