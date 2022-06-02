@@ -19,6 +19,7 @@
 
 #import "ORL200DetectorView.h"
 #import "ORL200SegmentGroup.h"
+#import "ORFlashCamADCModel.h"
 #import "ORDetectorSegment.h"
 #import "ORColorScale.h"
 #import "ORAxis.h"
@@ -241,7 +242,8 @@
         [self makeCrateImage];
         float dx = kL200CrateInsideWidth / 14;
         for(int iset=0; iset<[delegate numberOfSegmentGroups]; iset++){
-            float dy = kL200CrateInsideHeight / 6;
+            float dy = kL200CrateInsideHeight / kFlashCamADCChannels;
+            if(iset == kL200PMTType) dy = kL200CrateInsideHeight / kFlashCamADCStdChannels;
             NSMutableArray* segmentPaths = [NSMutableArray array];
             NSMutableArray* errorPaths   = [NSMutableArray array];
             ORSegmentGroup* group = [delegate segmentGroup:iset];

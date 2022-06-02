@@ -25,7 +25,9 @@
 #import "ORAdcInfoProviding.h"
 #import "fcio.h"
 
-#define kMaxFlashCamADCChannels 6
+#define kMaxFlashCamADCChannels 24
+#define kFlashCamADCChannels 6
+#define kFlashCamADCStdChannels 24
 #define kFlashCamADCBufferLength 300
 #define kFlashCamADCOrcaHeaderLength 3
 #define kFlashCamADCTimeOffsetLength 7
@@ -36,7 +38,6 @@
 @interface ORFlashCamADCModel : ORFlashCamCard <ORDataTaker, ORHWWizard, ORAdcInfoProviding>
 {
     @private
-    unsigned int fwType;
     bool chanEnabled[kMaxFlashCamADCChannels];    // am
     bool trigOutEnabled[kMaxFlashCamADCChannels]; // altm
     int baseline[kMaxFlashCamADCChannels];        // bldac
@@ -108,7 +109,6 @@
 - (float) getRate:(short)channel forGroup:(int)groupTag;
 - (uint32_t) dataId;
 
-- (void) setFWtype:(unsigned int)fw;
 - (void) setChanEnabled:(unsigned int)chan    withValue:(bool)enabled;
 - (void) setTrigOutEnabled:(unsigned int)chan withValue:(bool)enabled;
 - (void) setBaseline:(unsigned int)chan       withValue:(int)base;
@@ -177,8 +177,12 @@
 
 @end
 
+
+@interface ORFlashCamADCStdModel : ORFlashCamADCModel { }
+@end
+
+
 #pragma mark •••Externals
-extern NSString* ORFlashCamADCModelFWTypeChanged;
 extern NSString* ORFlashCamADCModelChanEnabledChanged;
 extern NSString* ORFlashCamADCModelTrigOutEnabledChanged;
 extern NSString* ORFlashCamADCModelBaselineChanged;

@@ -3589,6 +3589,7 @@
 		E631727B23BCFD4A0038EB18 /* ORFlashCamTriggerController.m in Sources */ = {isa = PBXBuildFile; fileRef = E631727A23BCFD4A0038EB18 /* ORFlashCamTriggerController.m */; };
 		E631727E23BCFDAA0038EB18 /* ORFlashCamEthLinkModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E631727D23BCFDAA0038EB18 /* ORFlashCamEthLinkModel.m */; };
 		E631728123BCFDE00038EB18 /* ORFlashCamEthLinkController.m in Sources */ = {isa = PBXBuildFile; fileRef = E631728023BCFDE00038EB18 /* ORFlashCamEthLinkController.m */; };
+		E631B97E2847D797003143D6 /* FlashCamADCStd.xib in Resources */ = {isa = PBXBuildFile; fileRef = E631B97D2847D797003143D6 /* FlashCamADCStd.xib */; };
 		E635F3B523799E2200CDAAC4 /* ORVHS4060nModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E635F3AD23799E2200CDAAC4 /* ORVHS4060nModel.m */; };
 		E635F3B623799E2200CDAAC4 /* ORVHS4060nController.m in Sources */ = {isa = PBXBuildFile; fileRef = E635F3AE23799E2200CDAAC4 /* ORVHS4060nController.m */; };
 		E635F3B723799E2200CDAAC4 /* ORVHS4060nDecoders.h in Headers */ = {isa = PBXBuildFile; fileRef = E635F3AF23799E2200CDAAC4 /* ORVHS4060nDecoders.h */; };
@@ -7469,6 +7470,7 @@
 		E631727D23BCFDAA0038EB18 /* ORFlashCamEthLinkModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamEthLinkModel.m; sourceTree = "<group>"; };
 		E631727F23BCFDCD0038EB18 /* ORFlashCamEthLinkController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORFlashCamEthLinkController.h; sourceTree = "<group>"; };
 		E631728023BCFDE00038EB18 /* ORFlashCamEthLinkController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamEthLinkController.m; sourceTree = "<group>"; };
+		E631B97D2847D797003143D6 /* FlashCamADCStd.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FlashCamADCStd.xib; sourceTree = "<group>"; };
 		E635F3AD23799E2200CDAAC4 /* ORVHS4060nModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORVHS4060nModel.m; sourceTree = "<group>"; };
 		E635F3AE23799E2200CDAAC4 /* ORVHS4060nController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORVHS4060nController.m; sourceTree = "<group>"; };
 		E635F3AF23799E2200CDAAC4 /* ORVHS4060nDecoders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORVHS4060nDecoders.h; sourceTree = "<group>"; };
@@ -15252,6 +15254,7 @@
 				E636382526B08F1200584B16 /* ORFlashCamADCDecoders.h */,
 				E636382926B08F1D00584B16 /* ORFlashCamADCDecoders.m */,
 				E66DB72E23B42E17005CDB2C /* FlashCamADC.xib */,
+				E631B97D2847D797003143D6 /* FlashCamADCStd.xib */,
 				E6C7A5AA26D04009007E65AE /* flashcam_adc.jpg */,
 			);
 			path = FlashCamADC;
@@ -17943,6 +17946,7 @@
 				E6B8BB7827E9071A000D17AC /* L200.png in Resources */,
 				2D158EB511359F5800EA1552 /* KatrinV4FLT.nib in Resources */,
 				2D158EB611359F5800EA1552 /* KatrinV4FLTCard.gif in Resources */,
+				E631B97E2847D797003143D6 /* FlashCamADCStd.xib in Resources */,
 				2D159238113EE62C00EA1552 /* IpeV4SLTScript in Resources */,
 				843175CD1152766E005643AB /* Halo.gif in Resources */,
 				843175CE1152766E005643AB /* Halo.nib in Resources */,

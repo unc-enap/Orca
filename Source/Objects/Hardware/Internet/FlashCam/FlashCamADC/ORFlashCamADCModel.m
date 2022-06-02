@@ -26,7 +26,6 @@
 #import "ORHWWizParam.h"
 #import "ORHWWizSelection.h"
 
-NSString* ORFlashCamADCModelFWTypeChanged         = @"ORFlashCamADCModelFWTypeChanged";
 NSString* ORFlashCamADCModelChanEnabledChanged    = @"ORFlashCamADCModelChanEnabledChanged";
 NSString* ORFlashCamADCModelTrigOutEnabledChanged = @"ORFlashCamADCModelTrigOutEnabledChanged";
 NSString* ORFlashCamADCModelBaselineChanged       = @"ORFlashCamADCModelBaselineChanged";
@@ -50,9 +49,10 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 {
     self = [super init];
     [[self undoManager] disableUndoRegistration];
-    cardAddress = 0;
-    fwType = 1;
-    for(int i=0; i<kMaxFlashCamADCChannels; i++){
+    [self setCardAddress:0];
+    wfRates   = nil;
+    trigRates = nil;
+    for(int i=0; i<[self numberOfChannels]; i++){
         [self setChanEnabled:i    withValue:NO];
         [self setTrigOutEnabled:i withValue:NO];
         [self setBaseline:i       withValue:-1];
@@ -77,8 +77,6 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     bufferIndex = 0;
     takeDataIndex = 0;
     bufferedWFcount = 0;
-    wfRates = nil;
-    trigRates = nil;
     dataRecord = NULL;
     [self setWFsamples:0];
     [[self undoManager] enableUndoRegistration];
@@ -207,19 +205,19 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 
 - (unsigned int) fwType
 {
-    return fwType;
+    return 1;
 }
 
 - (unsigned int) nChanEnabled
 {
     unsigned int n=0;
-    for(unsigned int i=0; i<kMaxFlashCamADCChannels; i++) if(chanEnabled[i]) n++;
+    for(unsigned int i=0; i<[self numberOfChannels]; i++) if(chanEnabled[i]) n++;
     return n;
 }
 
 - (bool) chanEnabled:(unsigned int)chan
 {
-    if(chan >= kMaxFlashCamADCChannels) return false;
+    if(chan >= [self numberOfChannels]) return false;
     return chanEnabled[chan];
 }
 
@@ -230,60 +228,60 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 
 - (bool) trigOutEnabled:(unsigned int)chan
 {
-    if(chan >= kMaxFlashCamADCChannels) return false;
+    if(chan >= [self numberOfChannels]) return false;
     return trigOutEnabled[chan];
 }
 
 - (int) baseline:(unsigned int)chan
 {
-    if(chan >= kMaxFlashCamADCChannels) return 0;
+    if(chan >= [self numberOfChannels]) return 0;
     return baseline[chan];
 }
 
 - (int) threshold:(unsigned int)chan{
-    if(chan >= kMaxFlashCamADCChannels) return 0;
+    if(chan >= [self numberOfChannels]) return 0;
     return threshold[chan];
 }
 
 - (int) adcGain:(unsigned int)chan
 {
-    if(chan >= kMaxFlashCamADCChannels) return 0;
+    if(chan >= [self numberOfChannels]) return 0;
     return adcGain[chan];
 }
 
 - (float) trigGain:(unsigned int)chan
 {
-    if(chan >= kMaxFlashCamADCChannels) return 0.0;
+    if(chan >= [self numberOfChannels]) return 0.0;
     return trigGain[chan];
 }
 
 - (int) shapeTime:(unsigned int)chan
 {
-    if(chan >= kMaxFlashCamADCChannels) return 0;
+    if(chan >= [self numberOfChannels]) return 0;
     return shapeTime[chan];
 }
 
 - (int) filterType:(unsigned int)chan
 {
-    if(chan >= kMaxFlashCamADCChannels) return 0;
+    if(chan >= [self numberOfChannels]) return 0;
     return filterType[chan];
 }
 
 - (float) flatTopTime:(unsigned int)chan
 {
-    if(chan >= kMaxFlashCamADCChannels) return 0.0;
+    if(chan >= [self numberOfChannels]) return 0.0;
     return flatTopTime[chan];
 }
 
 - (float) poleZeroTime:(unsigned int)chan
 {
-    if(chan >= kMaxFlashCamADCChannels) return 0.0;
+    if(chan >= [self numberOfChannels]) return 0.0;
     return poleZeroTime[chan];
 }
 
 - (float) postTrigger:(unsigned int)chan
 {
-    if(chan >= kMaxFlashCamADCChannels) return 0.0;
+    if(chan >= [self numberOfChannels]) return 0.0;
     return postTrigger[chan];
 }
 
@@ -319,7 +317,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 
 - (float) getWFrate:(short)channel
 {
-    if(channel>=0 && channel<kMaxFlashCamADCChannels){
+    if(channel>=0 && channel<[self numberOfChannels]){
         return [[self wfRateObject:channel] rate];
     }
     return 0;
@@ -342,7 +340,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 
 - (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
 {
-    if(counterTag >= 0 && counterTag < kMaxFlashCamADCChannels){
+    if(counterTag >= 0 && counterTag < [self numberOfChannels]){
         if(groupTag == 0)      return trigCount[counterTag];
         else if(groupTag == 1) return wfCount[counterTag];
     }
@@ -351,7 +349,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 
 - (float) getRate:(short)channel forGroup:(int)groupTag
 {
-    if(channel>=0 && channel<kMaxFlashCamADCChannels){
+    if(channel>=0 && channel<[self numberOfChannels]){
         if(groupTag == 0)      return [[self rateObject:channel]   rate];
         else if(groupTag == 1) return [[self wfRateObject:channel] rate];
     }
@@ -371,20 +369,9 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamCardSlotChangedNotification object:self];
 }
 
-- (void) setFWtype:(unsigned int)fw
-{
-    if(fw > 1){
-        NSLog(@"ORFlashCamADCModel: unrecognized firmware type %d, failed to set\n", (int) fw);
-        return;
-    }
-    [[[self undoManager] prepareWithInvocationTarget:self] setFWtype:fwType];
-    fwType = fw;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelFWTypeChanged object:self];
-}
-
 - (void) setChanEnabled:(unsigned int)chan withValue:(bool)enabled
 {
-    if(chan >= kMaxFlashCamADCChannels) return;
+    if(chan >= [self numberOfChannels]) return;
     [[[self undoManager] prepareWithInvocationTarget:self] setChanEnabled:chan withValue:chanEnabled[chan]];
     chanEnabled[chan] = enabled;
     NSDictionary* info = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:chan] forKey:@"Channel"];
@@ -396,7 +383,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 
 - (void) setTrigOutEnabled:(unsigned int)chan withValue:(bool)enabled
 {
-    if(chan >= kMaxFlashCamADCChannels) return;
+    if(chan >= [self numberOfChannels]) return;
     [[[self undoManager] prepareWithInvocationTarget:self] setTrigOutEnabled:chan withValue:trigOutEnabled[chan]];
     trigOutEnabled[chan] = enabled;
     NSDictionary* info = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:chan] forKey:@"channel"];
@@ -407,7 +394,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 
 - (void) setBaseline:(unsigned int)chan withValue:(int)base
 {
-    if(chan >= kMaxFlashCamADCChannels) return;
+    if(chan >= [self numberOfChannels]) return;
     [[[self undoManager] prepareWithInvocationTarget:self] setBaseline:chan withValue:baseline[chan]];
     baseline[chan] = MAX(-1, MIN(4096, base));
     if(baseline[chan] == 0) baseline[chan] = -1;
@@ -419,7 +406,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 
 - (void) setThreshold:(unsigned int)chan withValue:(int)thresh
 {
-    if(chan >= kMaxFlashCamADCChannels) return;
+    if(chan >= [self numberOfChannels]) return;
     [[[self undoManager] prepareWithInvocationTarget:self] setThreshold:chan withValue:threshold[chan]];
     threshold[chan] = MAX(0, thresh);
     NSDictionary* info = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:chan] forKey:@"Channel"];
@@ -431,7 +418,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 
 - (void) setADCGain:(unsigned int)chan withValue:(int)gain
 {
-    if(chan >= kMaxFlashCamADCChannels) return;
+    if(chan >= [self numberOfChannels]) return;
     [[[self undoManager] prepareWithInvocationTarget:self] setADCGain:chan withValue:adcGain[chan]];
     adcGain[chan] = MAX(-15, MIN(16, gain));
     NSDictionary* info = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:chan] forKey:@"Channel"];
@@ -442,7 +429,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 
 - (void) setTrigGain:(unsigned int)chan withValue:(float)gain
 {
-    if(chan >= kMaxFlashCamADCChannels) return;
+    if(chan >= [self numberOfChannels]) return;
     [[[self undoManager] prepareWithInvocationTarget:self] setTrigGain:chan withValue:trigGain[chan]];
     trigGain[chan] = MIN(MAX(0.0, gain), 1.0);
     NSDictionary* info = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:chan] forKey:@"Channel"];
@@ -453,7 +440,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 
 - (void) setShapeTime:(unsigned int)chan withValue:(int)time
 {
-    if(chan >= kMaxFlashCamADCChannels) return;
+    if(chan >= [self numberOfChannels]) return;
     [[[self undoManager] prepareWithInvocationTarget:self] setShapeTime:chan withValue:shapeTime[chan]];
     shapeTime[chan] = MAX(1.0, 40000.0);
     NSDictionary* info = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:chan] forKey:@"Channel"];
@@ -464,7 +451,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 
 - (void) setFilterType:(unsigned int)chan withValue:(int)type
 {
-    if(chan >= kMaxFlashCamADCChannels) return;
+    if(chan >= [self numberOfChannels]) return;
     [[[self undoManager] prepareWithInvocationTarget:self] setFilterType:chan withValue:filterType[chan]];
     filterType[chan] = MIN(MAX(0, type), 2);
     NSDictionary* info = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:chan] forKey:@"Channel"];
@@ -476,7 +463,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 
 - (void) setFlatTopTime:(unsigned int)chan withValue:(float)time
 {
-    if(chan >= kMaxFlashCamADCChannels) return;
+    if(chan >= [self numberOfChannels]) return;
     [[[self undoManager] prepareWithInvocationTarget:self] setFlatTopTime:chan withValue:flatTopTime[chan]];
     if([self filterType:chan] == 0) flatTopTime[chan] = 0.0;
     else flatTopTime[chan] = MAX(0.0, time);
@@ -488,7 +475,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 
 - (void) setPoleZeroTime:(unsigned int)chan withValue:(float)time
 {
-    if(chan >= kMaxFlashCamADCChannels) return;
+    if(chan >= [self numberOfChannels]) return;
     [[[self undoManager] prepareWithInvocationTarget:self] setPoleZeroTime:chan withValue:poleZeroTime[chan]];
     poleZeroTime[chan] = MAX(1.0, time);
     NSDictionary* info = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:chan] forKey:@"Channel"];
@@ -499,7 +486,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 
 - (void) setPostTrigger:(unsigned int)chan withValue:(float)time
 {
-    if(chan >= kMaxFlashCamADCChannels) return;
+    if(chan >= [self numberOfChannels]) return;
     [[[self undoManager] prepareWithInvocationTarget:self] setPostTrigger:chan withValue:postTrigger[chan]];
     postTrigger[chan] = MAX(0.0, time);
     NSDictionary* info = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:chan] forKey:@"Channel"];
@@ -520,7 +507,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 {
     if(level == majorityLevel) return;
     [[[self undoManager] prepareWithInvocationTarget:self] setMajorityLevel:majorityLevel];
-    if(level > 0 || level <= kMaxFlashCamADCChannels) majorityLevel = level;
+    majorityLevel = MIN(MAX(1, level), [self numberOfChannels]);
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelMajorityLevelChanged object:self];
 }
 
@@ -581,8 +568,8 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 
 - (void) setRateIntTime:(double)intTime
 {
-    [[[self undoManager] prepareWithInvocationTarget:self] setRateIntTime:[wfRates integrationTime]];
     [wfRates setIntegrationTime:intTime];
+    [trigRates setIntegrationTime:intTime];
 }
 
 - (void) setDataId:(uint32_t)dId
@@ -616,14 +603,14 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 - (unsigned int) chanMask
 {
     unsigned int mask = 0;
-    for(unsigned int i=0; i<kMaxFlashCamADCChannels; i++) if(chanEnabled[i]) mask += 1 << i;
+    for(unsigned int i=0; i<[self numberOfChannels]; i++) if(chanEnabled[i]) mask += 1 << i;
     return mask;
 }
 
 - (unsigned int) trigOutMask
 {
     unsigned int mask = 0;
-    for(unsigned int i=0; i<kMaxFlashCamADCChannels; i++) if(trigOutEnabled[i]) mask += 1 << i;
+    for(unsigned int i=0; i<[self numberOfChannels]; i++) if(trigOutEnabled[i]) mask += 1 << i;
     return mask;
 }
 
@@ -638,7 +625,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
         [flags addObjectsFromArray:@[@"-altm", [NSString stringWithFormat:@"-1,%d,1", index]]];
     [flags addObjectsFromArray:@[@"-amajl", [NSString stringWithFormat:@"%x,%d,1", [self majorityLevel], index]]];
     [flags addObjectsFromArray:@[@"-amajw", [NSString stringWithFormat:@"%x,%d,1", [self majorityWidth], index]]];
-    for(unsigned int i=0; i<kMaxFlashCamADCChannels; i++){
+    for(unsigned int i=0; i<[self numberOfChannels]; i++){
         unsigned int j = i + offset;
         if(trigAll || [self chanEnabled:i]) [flags addObjectsFromArray:@[@"-athr",  [self chFlag:j withInt:threshold[i]]]];
         if(![self chanEnabled:i]) continue;
@@ -646,12 +633,12 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
         [flags addObjectsFromArray:@[@"-ag",     [self chFlag:j withInt:adcGain[i]]]];
         [flags addObjectsFromArray:@[@"-tgm",    [self chFlag:j withFloat:trigGain[i]]]];
         [flags addObjectsFromArray:@[@"-pthr",   [self chFlag:j withFloat:postTrigger[i]]]];
-        if(fwType == 0){
+        if([self fwType] == 0){
             [flags addObjectsFromArray:@[@"-fs", [self chFlag:j withInt:shapeTime[i]]]];
             [flags addObjectsFromArray:@[@"-ss", [self chFlag:j withInt:flatTopTime[i]]]];
             [flags addObjectsFromArray:@[@"-pz", [self chFlag:j withFloat:poleZeroTime[i]]]];
         }
-        else if(fwType == 1){
+        else if([self fwType] == 1){
             [flags addObjectsFromArray:@[@"-gs",     [self chFlag:j withInt:shapeTime[i]]]];
             [flags addObjectsFromArray:@[@"-gpz",    [self chFlag:j withFloat:poleZeroTime[i]]]];
             if([self filterType:i] == 0)
@@ -675,7 +662,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 - (void) event:(fcio_event*)event withIndex:(int)index andChannel:(unsigned int)channel
 {
     @synchronized(self){
-        if(channel >= kMaxFlashCamADCChannels){
+        if(channel >= [self numberOfChannels]){
             NSLog(@"ORFlashCamADCModel: invalid channel passed to event:withIndex:andChannel:, skipping packet\n");
             return;
         }
@@ -791,7 +778,8 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
                        [NSNumber numberWithLong:dataId], @"dataId",
                        [NSNumber numberWithBool:YES],    @"variable",
                        [NSNumber numberWithLong:-1],     @"length", nil];
-    [dict setObject:d forKey:@"FlashCamADC"];
+    if([self fwType] == 0)      [dict setObject:d forKey:@"FlashCamADCStd"];
+    else if([self fwType] == 1) [dict setObject:d forKey:@"FlashCamADC"];
     return dict;
 }
 
@@ -809,7 +797,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 
 - (uint32_t) eventCount:(int)aChannel
 {
-    if(aChannel >= 0 && aChannel<kMaxFlashCamADCChannels) return trigCount[aChannel];
+    if(aChannel >= 0 && aChannel<[self numberOfChannels]) return trigCount[aChannel];
     else return 0;
 }
 
@@ -846,8 +834,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 {
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
-    [self setFWtype:[[decoder decodeObjectForKey:@"fwType"] unsignedIntValue]];
-    for(int i=0; i<kMaxFlashCamADCChannels; i++){
+    for(int i=0; i<[self numberOfChannels]; i++){
         [self setChanEnabled:i
                    withValue:[decoder decodeBoolForKey:[NSString stringWithFormat:@"chanEnabled%i", i]]];
         [self setTrigOutEnabled:i
@@ -883,14 +870,14 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     dataRecord = NULL;
     [self setTrigRates:[decoder decodeObjectForKey:@"trigRates"]];
     if(!trigRates){
-        [self setTrigRates:[[[ORRateGroup alloc] initGroup:kMaxFlashCamADCChannels groupTag:0] autorelease]];
+        [self setTrigRates:[[[ORRateGroup alloc] initGroup:[self numberOfChannels] groupTag:0] autorelease]];
         [trigRates setIntegrationTime:5];
     }
     [trigRates resetRates];
     [trigRates calcRates];
     [self setWFrates:[decoder decodeObjectForKey:@"wfRates"]];
     if(!wfRates){
-        [self setWFrates:[[[ORRateGroup alloc] initGroup:kMaxFlashCamADCChannels groupTag:1] autorelease]];
+        [self setWFrates:[[[ORRateGroup alloc] initGroup:[self numberOfChannels] groupTag:1] autorelease]];
         [wfRates setIntegrationTime:5];
     }
     [wfRates resetRates];
@@ -902,8 +889,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeObject:[NSNumber numberWithUnsignedInt:fwType] forKey:@"fwType"];
-    for(int i=0; i<kMaxFlashCamADCChannels; i++){
+    for(int i=0; i<[self numberOfChannels]; i++){
         [encoder encodeBool:chanEnabled[i]    forKey:[NSString stringWithFormat:@"chanEnabled%i",     i]];
         [encoder encodeBool:trigOutEnabled[i] forKey:[NSString stringWithFormat:@"trigOutEnabled:%i", i]];
         [encoder encodeInt:baseline[i]        forKey:[NSString stringWithFormat:@"baseline%i",        i]];
@@ -927,7 +913,6 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary
 {
     NSMutableDictionary* dict = [super addParametersToDictionary:dictionary];
-    [dict setObject:[NSNumber numberWithUnsignedInt:fwType]  forKey:@"FWType"];
     [self addCurrentState:dict boolArray:chanEnabled         forKey:@"Enabled"];
     [self addCurrentState:dict boolArray:trigOutEnabled      forKey:@"TrigOutEnabled"];
     [self addCurrentState:dict intArray:baseline             forKey:@"Baseline"];
@@ -949,21 +934,21 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 - (void) addCurrentState:(NSMutableDictionary*)dictionary intArray:(int*)array forKey:(NSString*)key
 {
     NSMutableArray* a = [NSMutableArray array];
-    for(int i=0; i<kMaxFlashCamADCChannels; i++) [a addObject:[NSNumber numberWithInt:array[i]]];
+    for(int i=0; i<[self numberOfChannels]; i++) [a addObject:[NSNumber numberWithInt:array[i]]];
     [dictionary setObject:a forKey:key];
 }
 
 - (void) addCurrentState:(NSMutableDictionary*)dictionary boolArray:(bool*)array forKey:(NSString*)key
 {
     NSMutableArray* a = [NSMutableArray array];
-    for(int i=0; i<kMaxFlashCamADCChannels; i++) [a addObject:[NSNumber numberWithBool:array[i]]];
+    for(int i=0; i<[self numberOfChannels]; i++) [a addObject:[NSNumber numberWithBool:array[i]]];
     [dictionary setObject:a forKey:key];
 }
 
 - (void) addCurrentState:(NSMutableDictionary*)dictionary floatArray:(float*)array forKey:(NSString*)key
 {
     NSMutableArray* a = [NSMutableArray array];
-    for(int i=0; i<kMaxFlashCamADCChannels; i++) [a addObject:[NSNumber numberWithFloat:array[i]]];
+    for(int i=0; i<[self numberOfChannels]; i++) [a addObject:[NSNumber numberWithFloat:array[i]]];
     [dictionary setObject:a forKey:key];
 }
 
@@ -976,7 +961,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 
 - (int) numberOfChannels
 {
-    return kMaxFlashCamADCChannels;
+    return kFlashCamADCChannels;
 }
 
 - (NSArray*) wizardParameters
@@ -1078,6 +1063,26 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     NSDictionary* cardDictionary = [self findCardDictionaryInHeader:fileHeader];
     if([param isEqualToString:@"Enabled"]) return [[cardDictionary objectForKey:@"chanEnabled"] objectAtIndex:aChannel];
     else return nil;
+}
+
+@end
+
+
+@implementation ORFlashCamADCStdModel
+
+- (void) makeMainController
+{
+    [self linkToController:@"ORFlashCamADCStdController"];
+}
+
+- (int) numberOfChannels
+{
+    return kFlashCamADCStdChannels;
+}
+
+- (unsigned int) fwType
+{
+    return 0;
 }
 
 @end
