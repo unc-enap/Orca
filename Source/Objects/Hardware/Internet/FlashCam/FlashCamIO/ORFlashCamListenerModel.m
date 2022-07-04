@@ -831,6 +831,23 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
                 }
                 break;
             }
+            case FCIOSparseEvent: {
+                int num_traces = state->event->num_traces;
+                if(num_traces > [chanMap count]){
+                    NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: number of raw traces in event packet %d > channel map size %d, aborting\n", num_traces, [chanMap count]);
+                    [self disconnect:true];
+                    [self runFailed];
+                    return;
+                }
+                for(int itr=0; itr<num_traces; itr++){
+                    NSDictionary* dict = [chanMap objectAtIndex:itr];
+                    ORFlashCamADCModel* card = [dict objectForKey:@"adc"];
+                    unsigned int chan = [[dict objectForKey:@"channel"] unsignedIntValue];
+                    [card event:state->event withIndex:state->event->trace_list[itr] andChannel:chan];
+                }
+                break;
+            }
+
             case FCIORecEvent:
                 if(!unrecognizedPacket){
                     NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: skipping received FCIORecEvent packet - packet type not supported!\n");

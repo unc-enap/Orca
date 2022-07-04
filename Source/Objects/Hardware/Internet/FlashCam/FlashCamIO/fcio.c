@@ -1289,6 +1289,24 @@ static int get_next_record(FCIOStateReader *reader)
     reader->cur_event = (reader->cur_event + 1) % reader->max_states;
     reader->nevents++;
     break;
+          
+  case FCIOSparseEvent:
+    event = &reader->events[reader->cur_event];
+    fcio_get_sparseevent(stream, event, config->eventsamples + 2);
+          
+    if (config) {
+      int i; int j; for (i = 0; i < event->num_traces; i++) {
+        j = event->trace_list[i];
+        event->trace[j] = &event->traces[2 + j * (config->eventsamples + 2)];
+        event->theader[j] = &event->traces[j * (config->eventsamples + 2)];
+      }
+    } else {
+      fprintf(stderr, "[WARNING] Received event without known configuration. Unable to adjust trace pointers.\n");
+    }
+          
+    reader->cur_event = (reader->cur_event + 1) % reader->max_states;
+    reader->nevents++;
+    break;
 
   case FCIORecEvent:
     recevent = &reader->recevents[reader->cur_recevent];
