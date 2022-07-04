@@ -760,6 +760,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     }
     NSString* s = [NSString stringWithFormat:@"tcp://listen/%d/%@", port, ip];
     reader = FCIOCreateStateReader([s UTF8String], timeout, ioBuffer, stateBuffer);
+    FCIOSelectStateTag(reader, 0);
     if(reader){
         NSLog(@"ORFlashCamListenerModel: connected to %@:%d on %@\n", ip, port, interface);
         [self setStatus:@"connected"];
@@ -840,14 +841,13 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
                     return;
                 }
                 for(int itr=0; itr<num_traces; itr++){
-                    NSDictionary* dict = [chanMap objectAtIndex:itr];
+                    NSDictionary* dict = [chanMap objectAtIndex:state->event->trace_list[itr]];
                     ORFlashCamADCModel* card = [dict objectForKey:@"adc"];
                     unsigned int chan = [[dict objectForKey:@"channel"] unsignedIntValue];
                     [card event:state->event withIndex:state->event->trace_list[itr] andChannel:chan];
                 }
                 break;
             }
-
             case FCIORecEvent:
                 if(!unrecognizedPacket){
                     NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: skipping received FCIORecEvent packet - packet type not supported!\n");

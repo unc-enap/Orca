@@ -1212,7 +1212,7 @@ experimental....
 {
   if (!tag)
     reader->selected_tags = 0xffffffff;
-  else if (tag >= FCIOConfig && tag <= FCIORecEvent)
+  else if (tag >= FCIOConfig && tag <= FCIOSparseEvent)
     reader->selected_tags |= (1 << tag);
   else
     return -1;
@@ -1233,7 +1233,7 @@ experimental....
 {
   if (!tag)
     reader->selected_tags = 0;
-  else if (tag > 0 && tag <= FCIORecEvent)
+  else if (tag > 0 && tag <= FCIOSparseEvent)
     reader->selected_tags &= ~(1 << tag);
   else
     return -1;
@@ -1244,7 +1244,7 @@ experimental....
 
 static int tag_selected(FCIOStateReader *reader, int tag)
 {
-  if (tag <= 0 || tag >= FCIORecEvent)
+  if (tag <= 0 || tag > FCIOSparseEvent)
     return 0;
 
   return reader->selected_tags & (1 << tag);
