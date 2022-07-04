@@ -442,7 +442,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 {
     if(chan >= [self numberOfChannels]) return;
     [[[self undoManager] prepareWithInvocationTarget:self] setShapeTime:chan withValue:shapeTime[chan]];
-    shapeTime[chan] = MAX(1.0, 40000.0);
+    shapeTime[chan] = MIN(MAX(1.0, time), 40000.0);
     NSDictionary* info = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:chan] forKey:@"Channel"];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelShapeTimeChanged
                                                         object:self
@@ -1083,6 +1083,15 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
 - (unsigned int) fwType
 {
     return 0;
+}
+
+- (NSArray*) wizardSelections
+{
+    NSMutableArray* a = [NSMutableArray array];
+    [a addObject:[ORHWWizSelection itemAtLevel:kContainerLevel  name:@"Crate"   className:@"ORFlashCamCrate"]];
+    [a addObject:[ORHWWizSelection itemAtLevel:kObjectLevel     name:@"Card"    className:@"ORFlashCamADCStdModel"]];
+    [a addObject:[ORHWWizSelection itemAtLevel:kChannelLevel    name:@"Channel" className:@"ORFlashCamADCStdModel"]];
+    return a;
 }
 
 @end
