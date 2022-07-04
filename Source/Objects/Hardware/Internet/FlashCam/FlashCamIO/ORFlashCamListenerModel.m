@@ -570,8 +570,10 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
         [configParams setObject:[NSNumber numberWithInt:MIN(MAX(1, [v intValue]), 255)] forKey:p];
     else if([p isEqualToString:@"integratorLen"])
         [configParams setObject:[NSNumber numberWithInt:MIN(MAX(1, [v intValue]), 7)] forKey:p];
-    else if([p isEqualToString:@"eventSamples"])
-        [configParams setObject:[NSNumber numberWithInt:MIN(MAX(1, [v intValue]), 4*8192)] forKey:p];
+    else if([p isEqualToString:@"eventSamples"]){
+        int val = MIN(MAX(2, [v intValue]), 4*8192);
+        [configParams setObject:[NSNumber numberWithInt:val+(val%2)] forKey:p];
+    }
     else if([p isEqualToString:@"signalDepth"])
         [configParams setObject:[NSNumber numberWithInt:MAX(0, [v intValue])] forKey:p];
     else if([p isEqualToString:@"traceType"])
@@ -962,6 +964,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     NSMutableSet*    gtriggerCards = [NSMutableSet    set];
     // add the adc cards to the address list and their arguments to the list
     unsigned int adcCount = 0;
+    int maxShapeTime = 0;
     for(ORReadOutObject* obj in [readOutList children]){
         if(![[obj object] isKindOfClass:NSClassFromString(@"ORFlashCamCard")]) continue;
         ORFlashCamCard* card = (ORFlashCamCard*) [obj object];
@@ -976,6 +979,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
                 if([adc chanEnabled:ich]){
                     NSDictionary* chDict = [NSDictionary dictionaryWithObjectsAndKeys:adc, @"adc", [NSNumber numberWithUnsignedInt:ich], @"channel", nil];
                     [orcaChanMap addObject:chDict];
+                    maxShapeTime = MAX(maxShapeTime, [adc shapeTime:ich]);
                 }
             }
             adcCount ++;
@@ -988,11 +992,23 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
             }
         }
     }
+    // check if the number of channels exceeds the hardware limit for flashcam
     if([orcaChanMap count] > FCIOMaxChannels){
         NSLogColor([NSColor redColor], @"ORFlashCamListenerModel on %@ at %@:%d failed to start run due to number "
                    "of enabled channels %d exceeding the FCIO architectural limit of %d\n",
                    interface, ip, (int) port, [orcaChanMap count], FCIOMaxChannels);
         [self runFailed];
+        return;
+    }
+    // make sure the shaping time and event samples are such that flashcam will silently change the waveform length
+    if(MIN(8000, 20+maxShapeTime*2.5/16) > [[self configParam:@"eventSamples"] intValue]){
+        int samples = [[self configParam:@"eventSamples"] intValue];
+        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel on %@ at %@:%d failed to start run due to max shaping "
+                   "time of %d ns with event samples set to %d. Set the shaping time for all channels <= %d ns or "
+                   "set the event samples >= %d\n", interface, ip, (int) port, maxShapeTime, samples,
+                   (int) ((samples-20)*16/2.5), (int) (20+maxShapeTime*2.5/16));
+        [self runFailed];
+        return;
     }
     // if the trigger cards are connected to any global trigger cards, add those to the set
     for(id card in triggerCards){
@@ -1022,6 +1038,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     if([gtriggerCards count] > 1){
         NSLogColor([NSColor redColor], @"ORFlashCamListenerModel on %@ at %@:%d failed to start run due to multiple connected global trigger cards\n", interface, ip, (int) port);
         [self runFailed];
+        return;
     }
     else if([gtriggerCards count] == 1){
         for(id card in gtriggerCards){
@@ -1077,6 +1094,14 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 - (void) readConfig:(fcio_config*)config
 {
     @synchronized(self){
+        // validate the number of waveform samples
+        if(config->eventsamples != [[self configParam:@"eventSamples"] intValue]){
+            NSLogColor([NSColor redColor], @"ORFlashCamListenerModel on %@ at %@:%d user defined waveform length %d "
+                       " != waveform length from configuration packet %d\n", interface, ip, (int) port,
+                       [[self configParam:@"eventSamples"] intValue], config->eventsamples);
+            [self runFailed];
+        }
+        // read the configuration packet
         uint32_t index = configBufferIndex;
         configBufferIndex = (configBufferIndex + 1) % kFlashCamConfigBufferLength;
         bufferedConfigCount ++;

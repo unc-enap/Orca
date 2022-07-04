@@ -411,7 +411,7 @@
 
 - (void) majorityWidthChanged:(NSNotification*)note
 {
-    [majorityWidthTextField setIntValue:[model majorityLevel]];
+    [majorityWidthTextField setIntValue:[model majorityWidth]];
 }
 
 - (void) waveformRateChanged:(NSNotification*)note

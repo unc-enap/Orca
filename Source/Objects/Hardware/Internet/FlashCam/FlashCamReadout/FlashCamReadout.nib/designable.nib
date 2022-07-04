@@ -1061,6 +1061,9 @@
                                                                                 <font key="font" metaFont="label"/>
                                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                                <connections>
+                                                                                    <outlet property="formatter" destination="a9V-2T-6XQ" id="Lwl-Au-PBv"/>
+                                                                                </connections>
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
@@ -1085,6 +1088,9 @@
                                                                                 <font key="font" metaFont="label"/>
                                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                                <connections>
+                                                                                    <outlet property="formatter" destination="a9V-2T-6XQ" id="LZh-VZ-Lle"/>
+                                                                                </connections>
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
@@ -1562,6 +1568,7 @@
             </view>
             <point key="canvasLocation" x="267" y="552"/>
         </window>
+        <customFormatter id="a9V-2T-6XQ" customClass="OHexFormatter"/>
     </objects>
     <resources>
         <image name="Locked" width="33" height="36"/>

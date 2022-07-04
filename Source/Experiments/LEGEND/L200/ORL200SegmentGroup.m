@@ -220,7 +220,7 @@
                         str_dict, @"string",       daq_dict, @"daq",
                         hv_dict,  @"high_voltage", fe_dict,  @"electronics", nil];
         }
-        else if(type >= 0 && type < kL200SegmentTypeCount){
+        else if(type > kL200DetType && type < kL200SegmentTypeCount){
             NSDictionary* daq_dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                       [params objectAtIndex:2], @"crate",
                                       [params objectAtIndex:3], @"board_id",

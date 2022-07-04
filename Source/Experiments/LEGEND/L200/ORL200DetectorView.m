@@ -242,8 +242,9 @@
         [self makeCrateImage];
         float dx = kL200CrateInsideWidth / 14;
         for(int iset=0; iset<[delegate numberOfSegmentGroups]; iset++){
-            float dy = kL200CrateInsideHeight / kFlashCamADCChannels;
-            if(iset == kL200PMTType) dy = kL200CrateInsideHeight / kFlashCamADCStdChannels;
+            int nchan = kFlashCamADCChannels;
+            if(iset == kL200PMTType) nchan = kFlashCamADCStdChannels;
+            float dy = kL200CrateInsideHeight / nchan;
             NSMutableArray* segmentPaths = [NSMutableArray array];
             NSMutableArray* errorPaths   = [NSMutableArray array];
             ORSegmentGroup* group = [delegate segmentGroup:iset];
@@ -261,7 +262,7 @@
                     yoffset = (crate/2)*([crateImage imageRect].size.height+kL200CrateYSpacing) +
                                 kL200CrateYSpacing + kL200CrateInsideY + 2;
                 }
-                NSRect chanRect = NSMakeRect(xoffset+cardSlot*dx, yoffset+channel*dy, dx-4, dy-4);
+                NSRect chanRect = NSMakeRect(xoffset+cardSlot*dx, yoffset+(nchan-1-channel)*dy, dx-4, dy-4);
                 [segmentPaths addObject:[NSBezierPath bezierPathWithRect:chanRect]];
                 [errorPaths addObject:[NSBezierPath bezierPathWithRect:NSInsetRect(chanRect, 4, 4)]];
             }

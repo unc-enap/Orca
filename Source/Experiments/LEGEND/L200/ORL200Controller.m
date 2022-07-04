@@ -67,6 +67,10 @@
 {
     [super awakeFromNib];
     
+    [self populateClassNamePopup:sipmAdcClassNamePopup];
+    [self populateClassNamePopup:pmtAdcClassNamePopup];
+    [self populateClassNamePopup:auxChanAdcClassNamePopup];
+    
     [(ORPlot*) [ratePlot plotWithTag:kL200DetType] setLineColor:[NSColor systemBlueColor]];
     ORTimeLinePlot* sipmPlot = [[ORTimeLinePlot alloc] initWithTag:kL200SiPMType andDataSource:self];
     [sipmPlot setLineColor:[NSColor systemGreenColor]];
@@ -454,6 +458,14 @@
     else if(view == pmtTableView)     return kL200PMTType;
     else if(view == auxChanTableView) return kL200AuxType;
     else return -1;
+}
+
+- (void) newTotalRateAvailable:(NSNotification*)aNotification
+{
+    [sipmRateField setFloatValue:[[model segmentGroup:kL200SiPMType] rate]];
+    [pmtRateField setFloatValue:[[model segmentGroup:kL200PMTType] rate]];
+    [auxChanRateField setFloatValue:[[model segmentGroup:kL200AuxType] rate]];
+    [super newTotalRateAvailable:aNotification];
 }
 
 
