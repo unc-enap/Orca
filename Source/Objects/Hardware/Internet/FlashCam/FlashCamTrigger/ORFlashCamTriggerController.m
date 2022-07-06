@@ -104,4 +104,13 @@
     [linkErrorsTextField1  setIntValue:[linkErrorsTextField  intValue]];
 }
 
+
+#pragma mark •••Actions
+
+- (IBAction) printFlagsAction:(id)sender
+{
+    [super printFlagsAction:sender];
+    [model printRunFlagsForCardIndex:0];
+}
+
 @end

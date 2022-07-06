@@ -22,6 +22,8 @@
                 <outlet property="humidityView" destination="E6l-qy-vrH" id="KN6-kf-efo"/>
                 <outlet property="linkErrorsTextField" destination="njQ-UT-0Jj" id="HsE-Zi-Hf3"/>
                 <outlet property="linkErrorsTextField1" destination="Xq0-Wg-Y6q" id="UQj-eM-QXU"/>
+                <outlet property="majorityLevelTextField" destination="LCZ-pQ-002" id="FPf-zG-rv7"/>
+                <outlet property="majorityWidthTextField" destination="Az3-Nl-qbF" id="gzP-d8-kcE"/>
                 <outlet property="printFlagsButton" destination="LB5-uL-eXA" id="Xr7-gN-X6u"/>
                 <outlet property="promSlotPUButton" destination="Cgo-ff-XP1" id="4oN-Od-k6l"/>
                 <outlet property="rebootCardButton" destination="5aP-nZ-s7v" id="cnp-su-lUe"/>
@@ -349,7 +351,7 @@
                                                 <font key="font" metaFont="label"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="printFlagsAction:" target="-2" id="thX-kx-b5d"/>
+                                                <action selector="printFlagsAction:" target="-2" id="V3X-Rs-X3k"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5aP-nZ-s7v">
@@ -381,6 +383,15 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IRO-3g-z3d">
+                                            <rect key="frame" x="45" y="157" width="84" height="14"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Majority Width:" id="5Ut-xY-ERJ">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DQA-jq-E5e">
                                             <rect key="frame" x="5" y="5" width="33" height="36"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
@@ -392,6 +403,41 @@
                                                 <action selector="settingsLockAction:" target="-2" id="wu9-iV-1GJ"/>
                                             </connections>
                                         </button>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LCZ-pQ-002">
+                                            <rect key="frame" x="141" y="184" width="55" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="9wh-eb-6C9">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <connections>
+                                                <action selector="majorityLevelAction:" target="-2" id="YaJ-QG-UPG"/>
+                                                <outlet property="formatter" destination="Tr7-JI-o34" id="f0I-Ba-6rL"/>
+                                            </connections>
+                                        </textField>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Az3-Nl-qbF">
+                                            <rect key="frame" x="141" y="153" width="55" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="cwO-Np-dWp">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <connections>
+                                                <action selector="majorityWidthAction:" target="-2" id="ti6-z3-RWt"/>
+                                                <outlet property="formatter" destination="Tr7-JI-o34" id="vEc-8u-zPV"/>
+                                            </connections>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qES-Cb-KpD">
+                                            <rect key="frame" x="46" y="188" width="81" height="14"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Majority Level:" id="FEc-MX-ad8">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                     </subviews>
                                 </view>
                             </tabViewItem>
@@ -761,6 +807,7 @@
             <point key="canvasLocation" x="-8.5" y="204.5"/>
         </window>
         <customObject id="dNE-kG-83p" customClass="OHexFormatter"/>
+        <numberFormatter formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="Tr7-JI-o34"/>
     </objects>
     <resources>
         <image name="Locked" width="33" height="36"/>
