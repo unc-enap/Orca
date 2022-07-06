@@ -225,6 +225,12 @@
     return flags;
 }
 
+- (void) printRunFlagsForCardIndex:(unsigned int)index
+{
+    NSLog(@"%@\n", [[self runFlagsForCardIndex:0] componentsJoinedByString:@" "]);
+}
+
+
 #pragma mark •••Archival
 
 - (id) initWithCoder:(NSCoder*)decoder
