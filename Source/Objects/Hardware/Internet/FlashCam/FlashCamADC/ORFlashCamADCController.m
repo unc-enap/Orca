@@ -171,6 +171,14 @@
                      selector : @selector(miscAttributesChanged:)
                          name : ORMiscAttributesChanged
                        object : model];
+    [notifyCenter addObserver : self
+                     selector : @selector(enableBaselineHistoryChanged:)
+                         name : ORFlashCamADCModelEnableBaselineHistoryChanged
+                       object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(baselineSampleTimeChanged:)
+                         name : ORFlashCamADCModelBaselineSampleTimeChanged
+                       object : nil];
     [self registerRates];
 }
 
@@ -212,6 +220,29 @@
     [(ORTimeAxis*) [timeRateView xAxis] setStartTime:[[NSDate date] timeIntervalSince1970]];
     
     [rateView setNumber:[model numberOfChannels] height:10 spacing:5];
+    
+    ORCompositeTimeLineView* baseViews[4] = {baselineView0, baselineView1, baselineView2, baselineView3};
+    NSColor* colors[6] = {[NSColor blueColor], [NSColor redColor], [NSColor greenColor],
+                          [NSColor blackColor], [NSColor brownColor], [NSColor purpleColor]};
+    for(int i=0; i<4; i++){
+        if(i*6 >= [model numberOfChannels]) continue;
+        [baseViews[i] setPlotTitle:@"Baseline (ADC)"];
+        [[baseViews[i] xAxis] setRngLow:0 withHigh:10000];
+        [[baseViews[i] xAxis] setRngLimitsLow:0 withHigh:200000 withMinRng:200];
+        [[baseViews[i] yAxis] setRngLow:-1 withHigh:1+(1<<16)];
+        [[baseViews[i] yAxis] setRngLimitsLow:-1 withHigh:1+(1<<16) withMinRng:10];
+        for(int j=0; j<6; j++){
+            int k = i*6 + j;
+            ORTimeLinePlot* plot = [[ORTimeLinePlot alloc] initWithTag:k andDataSource:self];
+            [baseViews[i] addPlot:plot];
+            [plot setLineColor:colors[j]];
+            [plot setName:[NSString stringWithFormat:@"Ch %d", k]];
+            [plot release];
+        }
+        [(ORTimeAxis*)[baseViews[i] xAxis] setStartTime:[[NSDate date] timeIntervalSince1970]];
+        [baseViews[i] setShowLegend:YES];
+    }
+    
     [super awakeFromNib];
 }
 
@@ -240,6 +271,8 @@
     [self totalRateChanged:nil];
     [self rateIntegrationChanged:nil];
     [self miscAttributesChanged:nil];
+    [self enableBaselineHistoryChanged:nil];
+    [self baselineSampleTimeChanged:nil];
 }
 
 #pragma mark •••Interface Management
@@ -465,6 +498,18 @@
 {
     if([note object] == [[model wfRates] timeRate]   ||
        [note object] == [[model trigRates] timeRate] || note == nil) [timeRateView setNeedsDisplay:YES];
+    [super updateTimePlot:note];
+}
+
+- (void) deferredPlotUpdate
+{
+    [super deferredPlotUpdate];
+    [baselineView0 setNeedsDisplay:YES];
+    if([model numberOfChannels] > kFlashCamADCChannels){
+        [baselineView1 setNeedsDisplay:YES];
+        [baselineView2 setNeedsDisplay:YES];
+        [baselineView3 setNeedsDisplay:YES];
+    }
 }
 
 - (void) scaleAction:(NSNotification*)note
@@ -474,9 +519,25 @@
     if(note == nil || [note object] == [totalRateView xAxis])
         [model setMiscAttributes:[[totalRateView xAxis] attributes] forKey:@"TotalRateXAttributes"];
     if(note == nil || [note object] == [timeRateView xAxis])
-        [model setMiscAttributes:[(ORAxis*)[timeRateView xAxis]attributes] forKey:@"TimeRateXAttributes"];
+        [model setMiscAttributes:[(ORAxis*)[timeRateView xAxis] attributes] forKey:@"TimeRateXAttributes"];
     if(note == nil || [note object] == [timeRateView yAxis])
-        [model setMiscAttributes:[(ORAxis*)[timeRateView yAxis]attributes] forKey:@"TimeRateYAttributes"];
+        [model setMiscAttributes:[(ORAxis*)[timeRateView yAxis] attributes] forKey:@"TimeRateYAttributes"];
+    if(note == nil || [note object] == [baselineView0 xAxis])
+        [model setMiscAttributes:[(ORAxis*)[baselineView0 xAxis] attributes] forKey:@"BaseView0XAttributes"];
+    if(note == nil || [note object] == [baselineView0 yAxis])
+        [model setMiscAttributes:[(ORAxis*)[baselineView0 yAxis] attributes] forKey:@"BaseView0YAttributes"];
+    if(note == nil || [note object] == [baselineView1 xAxis])
+        [model setMiscAttributes:[(ORAxis*)[baselineView1 xAxis] attributes] forKey:@"BaseView1XAttributes"];
+    if(note == nil || [note object] == [baselineView1 yAxis])
+        [model setMiscAttributes:[(ORAxis*)[baselineView1 yAxis] attributes] forKey:@"BaseView1YAttributes"];
+    if(note == nil || [note object] == [baselineView2 xAxis])
+        [model setMiscAttributes:[(ORAxis*)[baselineView2 xAxis] attributes] forKey:@"BaseView2XAttributes"];
+    if(note == nil || [note object] == [baselineView2 yAxis])
+        [model setMiscAttributes:[(ORAxis*)[baselineView2 yAxis] attributes] forKey:@"BaseView2YAttributes"];
+    if(note == nil || [note object] == [baselineView3 xAxis])
+        [model setMiscAttributes:[(ORAxis*)[baselineView3 xAxis] attributes] forKey:@"BaseView3XAttributes"];
+    if(note == nil || [note object] == [baselineView3 yAxis])
+        [model setMiscAttributes:[(ORAxis*)[baselineView3 yAxis] attributes] forKey:@"BaseView3YAttributes"];
 }
 
 - (void) miscAttributesChanged:(NSNotification*)note
@@ -518,6 +579,40 @@
             [timeRateLogButton setState:[[attrib objectForKey:ORAxisUseLog] boolValue]];
         }
     }
+    if(note == nil || [key isEqualToString:@"BaseView0XAttributes"]){
+        if(note == nil) attrib = [model miscAttributesForKey:@"BaseView0XAttributes"];
+        if(attrib) [self setPlot:baselineView0 xAttributes:attrib];
+    }
+    if(note == nil || [key isEqualToString:@"BaseView0YAttributes"]){
+        if(note == nil) attrib = [model miscAttributesForKey:@"BaseView0YAttributes"];
+        if(attrib) [self setPlot:baselineView0 yAttributes:attrib];
+    }
+    if(note == nil || [key isEqualToString:@"BaseView1XAttributes"]){
+        if(note == nil) attrib = [model miscAttributesForKey:@"BaseView1XAttributes"];
+        if(attrib) [self setPlot:baselineView1 xAttributes:attrib];
+    }
+    if(note == nil || [key isEqualToString:@"BaseView1YAttributes"]){
+        if(note == nil) attrib = [model miscAttributesForKey:@"BaseView1YAttributes"];
+        if(attrib) [self setPlot:baselineView1 yAttributes:attrib];
+    }
+    if(note == nil || [key isEqualToString:@"BaseView2XAttributes"]){
+        if(note == nil) attrib = [model miscAttributesForKey:@"BaseView2XAttributes"];
+        if(attrib) [self setPlot:baselineView2 xAttributes:attrib];
+    }
+    if(note == nil || [key isEqualToString:@"BaseView3YAttributes"]){
+        if(note == nil) attrib = [model miscAttributesForKey:@"BaseView3YAttributes"];
+        if(attrib) [self setPlot:baselineView3 yAttributes:attrib];
+    }
+}
+
+- (void) enableBaselineHistoryChanged:(NSNotification*)note
+{
+    [enableBaselineHistoryButton setIntValue:(int)[model enableBaselineHistory]];
+}
+
+- (void) baselineSampleTimeChanged:(NSNotification*)note
+{
+    [baselineSampleTimeTextField setDoubleValue:[model baselineSampleTime]];
 }
 
 - (void) settingsLock:(bool)lock
@@ -643,6 +738,16 @@
         [model setRateIntTime:[sender doubleValue]];
 }
 
+- (IBAction) enableBaselineHistoryAction:(id)sender
+{
+    [model setEnableBaselineHistory:(bool)[sender intValue]];
+}
+
+- (IBAction) baselineSampleTimeAction:(id)sender
+{
+    [model setBaselineSampleTime:[sender doubleValue]];
+}
+
 
 #pragma mark •••Data Source
 
@@ -658,24 +763,38 @@
 
 - (int) numberPointsInPlot:(id)aPlotter
 {
+    unsigned int tag = (unsigned int) [aPlotter tag];
     if([aPlotter plotView] == [timeRateView plotView]) return (int) [[[model wfRates] timeRate] count];
+    else if([aPlotter plotView] == [baselineView0 plotView]) return (int) [[model baselineHistory:tag] count];
+    else if([aPlotter plotView] == [baselineView1 plotView]) return (int) [[model baselineHistory:tag] count];
+    else if([aPlotter plotView] == [baselineView2 plotView]) return (int) [[model baselineHistory:tag] count];
+    else if([aPlotter plotView] == [baselineView3 plotView]) return (int) [[model baselineHistory:tag] count];
     else return [super numberPointsInPlot:aPlotter];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 {
+    unsigned int tag = (unsigned int) [aPlotter tag];
     if([aPlotter plotView] == [timeRateView plotView]){
-        if([aPlotter tag] == 0){
+        if(tag == 0){
             int count = (int) [[[model trigRates] timeRate] count];
             int index = count-i-1;
             *yValue = [[[model trigRates] timeRate] valueAtIndex:index];
             *xValue = [[[model trigRates] timeRate] timeSampledAtIndex:index];
         }
-        else if([aPlotter tag] == 1){
+        else if(tag == 1){
             int count = (int) [[[model wfRates] timeRate] count];
             int index = count-i-1;
             *yValue = [[[model wfRates] timeRate] valueAtIndex:index];
             *xValue = [[[model wfRates] timeRate] timeSampledAtIndex:index];
+        }
+    }
+    else if([aPlotter plotView] == [baselineView0 plotView] || [aPlotter plotView] == [baselineView0 plotView] ||
+            [aPlotter plotView] == [baselineView2 plotView] || [aPlotter plotView] == [baselineView3 plotView]){
+        int index = (int) [[model baselineHistory:tag] count] - i - 1;
+        if(index >= 0){
+            *xValue = [[model baselineHistory:tag] timeSampledAtIndex:index];
+            *yValue = [[model baselineHistory:tag] valueAtIndex:index];
         }
     }
     else [super plotter:aPlotter index:i x:xValue y:yValue];

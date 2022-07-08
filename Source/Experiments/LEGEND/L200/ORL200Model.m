@@ -539,7 +539,8 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     return dictionary;
 }
 
-- (id) initWithCoder:(NSCoder*)decoder{
+- (id) initWithCoder:(NSCoder*)decoder
+{
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
     [self setViewType:[decoder decodeIntForKey:@"viewType"]];
@@ -547,7 +548,8 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     return self;
 }
 
-- (void) encodeWithCoder:(NSCoder*)encoder{
+- (void) encodeWithCoder:(NSCoder*)encoder
+{
     [super encodeWithCoder:encoder];
     [encoder encodeInteger:viewType forKey:@"viewType"];
 }

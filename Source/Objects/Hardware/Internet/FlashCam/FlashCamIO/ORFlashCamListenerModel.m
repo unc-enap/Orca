@@ -1045,11 +1045,13 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     [triggerCards  intersectSet:triggers];
     // add the trigger cards to the address list
     unsigned int ntrig = 0;
+    NSMutableString* trigAddr = [NSMutableString string];
     for(id card in triggerCards){
-        [addressList insertString:[NSString stringWithFormat:@"%x,", [card cardAddress]] atIndex:0];
+        [trigAddr appendString:[NSString stringWithFormat:@"%x,", [card cardAddress]]];
         [readoutArgs addObjectsFromArray:[card runFlagsForCardIndex:ntrig]];
         ntrig ++;
     }
+    [addressList insertString:trigAddr atIndex:0];
     mergeRunFlags(argCard);
     // make sure there is at most one global trigger card
     if([gtriggerCards count] > 1){

@@ -11,11 +11,14 @@
                 <outlet property="adcGainMatrix" destination="Mjz-Yz-OAB" id="emj-B4-gxf"/>
                 <outlet property="baseBiasTextField" destination="NJ4-cP-VrM" id="oLy-Ru-vDg"/>
                 <outlet property="baselineMatrix" destination="ANn-i9-iRU" id="Lvn-P7-pN9"/>
+                <outlet property="baselineSampleTimeTextField" destination="LQF-1e-LKC" id="hnx-tp-pPM"/>
+                <outlet property="baselineView0" destination="736-GW-Gzc" id="v0a-52-Vc9"/>
                 <outlet property="cardAddressTextField" destination="rPe-yH-WU4" id="aMH-xS-eVf"/>
                 <outlet property="chanEnabledMatrix" destination="qFl-zx-6tR" id="zn7-4Q-gHn"/>
                 <outlet property="chanEnabledRateMatrix" destination="sb8-AH-mcW" id="23N-Eo-qam"/>
                 <outlet property="ctiErrorsTextField" destination="0lH-ka-aSR" id="ytd-AA-Puw"/>
                 <outlet property="currentView" destination="16i-6Y-MFA" id="zpk-e8-hoa"/>
+                <outlet property="enableBaselineHistoryButton" destination="drF-3w-6CU" id="1fn-cQ-pww"/>
                 <outlet property="envErrorsTextField" destination="t8h-78-SQ3" id="9HV-j1-R00"/>
                 <outlet property="fcioIDTextField" destination="x6c-Q4-18y" id="9UI-K8-ley"/>
                 <outlet property="filterTypeMatrix" destination="IHD-bx-CaS" id="bvm-mC-SJA"/>
@@ -1687,6 +1690,50 @@
                                         </customView>
                                         <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="drr-6s-OtJ" customClass="ORCompositeTimeLineView">
                                             <rect key="frame" x="380" y="148" width="380" height="150"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        </customView>
+                                    </subviews>
+                                </view>
+                            </tabViewItem>
+                            <tabViewItem label="Baselines" identifier="" id="6R1-Sq-FCO">
+                                <view key="view" id="ZB1-dz-Vc0">
+                                    <rect key="frame" x="10" y="33" width="759" height="294"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LQF-1e-LKC">
+                                            <rect key="frame" x="485" y="3" width="43" height="18"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="RRC-JK-jZp">
+                                                <font key="font" metaFont="label"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <connections>
+                                                <action selector="baselineSampleTimeAction:" target="-2" id="OAI-tP-EgH"/>
+                                            </connections>
+                                        </textField>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j3y-dl-0y2">
+                                            <rect key="frame" x="372" y="5" width="107" height="14"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Integration TIme (s):" id="Src-3w-6Jz">
+                                                <font key="font" metaFont="label"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="drF-3w-6CU">
+                                            <rect key="frame" x="186" y="3" width="140" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="Enable Baseline History" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="BAD-xJ-jcX">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="label"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="enableBaselineHistoryAction:" target="-2" id="28v-z7-Ggj"/>
+                                            </connections>
+                                        </button>
+                                        <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="736-GW-Gzc" customClass="ORCompositeTimeLineView">
+                                            <rect key="frame" x="17" y="29" width="700" height="262"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         </customView>
                                     </subviews>

@@ -11,6 +11,11 @@
                 <outlet property="adcGainMatrix" destination="r1Z-RF-Y9H" id="Skj-ZN-edi"/>
                 <outlet property="baseBiasTextField" destination="lAN-kE-v21" id="HN5-Zz-c9d"/>
                 <outlet property="baselineMatrix" destination="HZa-nl-WwH" id="Wrq-d3-pFQ"/>
+                <outlet property="baselineSampleTimeTextField" destination="d96-BM-dn6" id="O3p-cf-8L4"/>
+                <outlet property="baselineView0" destination="vay-92-hPk" id="Bxi-Dk-wRL"/>
+                <outlet property="baselineView1" destination="gB6-Rb-tXX" id="d7d-HG-iHs"/>
+                <outlet property="baselineView2" destination="n5H-ve-Y5m" id="y7L-To-S5Q"/>
+                <outlet property="baselineView3" destination="lfd-ZL-ESY" id="lq6-MM-VFm"/>
                 <outlet property="cardAddressTextField" destination="anm-Kz-l8D" id="y3F-HQ-4cK"/>
                 <outlet property="chanEnabledMatrix" destination="R9Z-wq-qSB" id="QFW-dj-4zV"/>
                 <outlet property="chanEnabledRateMatrix" destination="s53-3h-TYD" id="MHn-m6-fJM"/>
@@ -2324,109 +2329,109 @@
                                                                     <color key="textColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="6" title="0.00" id="Ain-qr-jc2">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="6" title="0" id="Ain-qr-jc2">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="lff-4c-oLV"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="7" title="0.00" id="ftk-Yu-gXC">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="7" title="0" id="ftk-Yu-gXC">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="8X1-fB-vd0"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="8" title="0.00" id="TvB-zG-8Yx">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="8" title="0" id="TvB-zG-8Yx">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="cf1-oz-0hB"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="9" title="0.00" id="6ZI-n8-iSI">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="9" title="0" id="6ZI-n8-iSI">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="I2r-Wb-WTd"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="10" title="0.00" id="1oc-tK-OOe">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="10" title="0" id="1oc-tK-OOe">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="bze-Da-xxO"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="11" title="0.00" id="RHa-u3-Ia5">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="11" title="0" id="RHa-u3-Ia5">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="CgX-Uz-dLW"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="12" title="0.00" id="i56-cX-bjo">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="12" title="0" id="i56-cX-bjo">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="DhJ-Br-AIl"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="13" title="0.00" id="tJ0-jR-y89">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="13" title="0" id="tJ0-jR-y89">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="fJd-MG-yxY"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="14" title="0.00" id="fo3-i6-n9f">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="14" title="0" id="fo3-i6-n9f">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="KNU-Bz-0YZ"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="15" title="0.00" id="6k7-GY-VF4">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="15" title="0" id="6k7-GY-VF4">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="K6Z-Kx-QAn"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="16" title="0.00" id="ZNJ-BZ-5fT">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="16" title="0" id="ZNJ-BZ-5fT">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="hYA-Ul-fOY"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="17" title="0.00" id="Aby-hG-cff">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="17" title="0" id="Aby-hG-cff">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="DrS-Ef-eHf"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="18" title="0.00" id="uAZ-CR-MGJ">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="18" title="0" id="uAZ-CR-MGJ">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="gM2-2c-Tdc"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="19" title="0.00" id="ld0-oo-DSd">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="19" title="0" id="ld0-oo-DSd">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="RTm-ET-Mgo"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="20" title="0.00" id="hzS-iN-geB">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="20" title="0" id="hzS-iN-geB">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="21f-z0-3AL"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="21" title="0.00" id="Cyj-kg-xXX">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="21" title="0" id="Cyj-kg-xXX">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="5td-un-vhj"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="22" title="0.00" id="qqk-ay-Zng">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="22" title="0" id="qqk-ay-Zng">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="e3l-ZB-mXk"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="23" title="0.00" id="77e-BV-VgQ">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="right" tag="23" title="0" id="77e-BV-VgQ">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="1I3-dS-o0D"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
@@ -2523,109 +2528,109 @@
                                                                     <color key="textColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="6" title="0.00" id="UnR-wv-20z">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="6" title="0" id="UnR-wv-20z">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="ewG-tG-WHk"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="7" title="0.00" id="EdH-3x-Cuf">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="7" title="0" id="EdH-3x-Cuf">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="mbv-If-W09"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="8" title="0.00" id="7o5-k8-9ik">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="8" title="0" id="7o5-k8-9ik">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="evG-Lm-KUT"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="9" title="0.00" id="lAP-Zm-Y1u">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="9" title="0" id="lAP-Zm-Y1u">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="5bX-tG-d4t"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="10" title="0.00" id="V9r-eL-NWN">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="10" title="0" id="V9r-eL-NWN">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="lQ8-Kc-7kA"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="11" title="0.00" id="8bx-Vl-sA9">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="11" title="0" id="8bx-Vl-sA9">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="wBL-xR-4kI"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="12" title="0.00" id="IZo-QY-3eW">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="12" title="0" id="IZo-QY-3eW">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="lDo-IP-U0p"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="13" title="0.00" id="juR-F5-HV8">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="13" title="0" id="juR-F5-HV8">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="ZFH-Ex-EZn"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="14" title="0.00" id="cjd-i7-i7i">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="14" title="0" id="cjd-i7-i7i">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="mc8-s2-YGf"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="15" title="0.00" id="49l-Gp-fyH">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="15" title="0" id="49l-Gp-fyH">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="xxX-9t-ioq"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="16" title="0.00" id="YiN-RD-N8y">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="16" title="0" id="YiN-RD-N8y">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="cku-TJ-hqT"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="17" title="0.00" id="LFh-BS-bps">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="17" title="0" id="LFh-BS-bps">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="T8n-wj-x3v"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="18" title="0.00" id="IYZ-7M-tZX">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="18" title="0" id="IYZ-7M-tZX">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="Msc-t9-MCW"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="19" title="0.00" id="qSP-A5-P5N">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="19" title="0" id="qSP-A5-P5N">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="jj3-4v-oMu"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="20" title="0.00" id="rnI-Dl-ElQ">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="20" title="0" id="rnI-Dl-ElQ">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="NSM-rR-Cea"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="21" title="0.00" id="4u0-xX-Y0H">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="21" title="0" id="4u0-xX-Y0H">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="KWa-3Q-xgj"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="22" title="0.00" id="Gbl-sz-4FO">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="22" title="0" id="Gbl-sz-4FO">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="tnG-ow-guF"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
-                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="23" title="0.00" id="9Sx-Qi-ZaF">
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="23" title="0" id="9Sx-Qi-ZaF">
                                                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="ZEz-Cw-qCy"/>
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
@@ -3229,6 +3234,59 @@
                                                 </subviews>
                                             </view>
                                         </box>
+                                    </subviews>
+                                </view>
+                            </tabViewItem>
+                            <tabViewItem label="Baselines" identifier="" id="I3b-LH-CVM">
+                                <view key="view" id="ucc-Zr-pPT">
+                                    <rect key="frame" x="10" y="33" width="759" height="796"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vay-92-hPk" customClass="ORCompositeTimeLineView">
+                                            <rect key="frame" x="17" y="600" width="703" height="180"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        </customView>
+                                        <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gB6-Rb-tXX" customClass="ORCompositeTimeLineView">
+                                            <rect key="frame" x="17" y="412" width="703" height="180"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        </customView>
+                                        <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n5H-ve-Y5m" customClass="ORCompositeTimeLineView">
+                                            <rect key="frame" x="17" y="224" width="703" height="180"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        </customView>
+                                        <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lfd-ZL-ESY" customClass="ORCompositeTimeLineView">
+                                            <rect key="frame" x="17" y="36" width="703" height="180"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        </customView>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d96-BM-dn6">
+                                            <rect key="frame" x="508" y="10" width="43" height="18"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="nUQ-j3-a0I">
+                                                <font key="font" metaFont="label"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <connections>
+                                                <action selector="baselineSampleTimeAction:" target="-2" id="IGj-YS-bUb"/>
+                                            </connections>
+                                        </textField>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6q6-ZK-6np">
+                                            <rect key="frame" x="395" y="12" width="107" height="14"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Integration TIme (s):" id="qi3-UQ-dCg">
+                                                <font key="font" metaFont="label"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tac-22-83P">
+                                            <rect key="frame" x="205" y="10" width="140" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="Enable Baseline History" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Y2g-6z-I2p">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="label"/>
+                                            </buttonCell>
+                                        </button>
                                     </subviews>
                                 </view>
                             </tabViewItem>
