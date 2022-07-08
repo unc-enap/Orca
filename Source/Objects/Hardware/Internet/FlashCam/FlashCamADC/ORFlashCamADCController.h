@@ -54,6 +54,12 @@
     IBOutlet ORValueBarGroupView* rateView;
     IBOutlet ORValueBarGroupView* totalRateView;
     IBOutlet ORCompositeTimeLineView* timeRateView;
+    IBOutlet NSButton* enableBaselineHistoryButton;
+    IBOutlet NSTextField* baselineSampleTimeTextField;
+    IBOutlet ORCompositeTimeLineView* baselineView0;
+    IBOutlet ORCompositeTimeLineView* baselineView1;
+    IBOutlet ORCompositeTimeLineView* baselineView2;
+    IBOutlet ORCompositeTimeLineView* baselineView3;
 }
 
 #pragma mark •••Initialization
@@ -88,6 +94,8 @@
 - (void) updateTimePlot:(NSNotification*)note;
 - (void) scaleAction:(NSNotification*)note;
 - (void) miscAttributesChanged:(NSNotification*)note;
+- (void) enableBaselineHistoryChanged:(NSNotification*)note;
+- (void) baselineSampleTimeChanged:(NSNotification*)note;
 - (void) settingsLock:(bool)lock;
 
 #pragma mark •••Actions
@@ -108,6 +116,8 @@
 - (IBAction) trigOutEnableAction:(id)sender;
 - (IBAction) printFlagsAction:(id)sender;
 - (IBAction) rateIntegrationAction:(id)sender;
+- (IBAction) enableBaselineHistoryAction:(id)sender;
+- (IBAction) baselineSampleTimeAction:(id)sender;
 
 #pragma mark •••Data Source
 - (double) getBarValue:(int)tag;

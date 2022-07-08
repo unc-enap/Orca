@@ -69,6 +69,9 @@
     uint32_t dataLengths;
     uint32_t* dataRecord;
     uint32_t  dataRecordLength;
+    bool enableBaselineHistory;
+    double baselineSampleTime;
+    ORTimeRate* baselineHistory[kMaxFlashCamADCChannels];
 }
 
 #pragma mark •••Initialization
@@ -108,6 +111,9 @@
 - (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag;
 - (float) getRate:(short)channel forGroup:(int)groupTag;
 - (uint32_t) dataId;
+- (bool) enableBaselineHistory;
+- (double) baselineSampleTime;
+- (ORTimeRate*) baselineHistory:(unsigned int)chan;
 
 - (void) setChanEnabled:(unsigned int)chan    withValue:(bool)enabled;
 - (void) setTrigOutEnabled:(unsigned int)chan withValue:(bool)enabled;
@@ -131,6 +137,9 @@
 - (void) setDataId:(uint32_t)dId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherCard;
+- (void) setEnableBaselineHistory:(bool)enable;
+- (void) setBaselineSampleTime:(double)time;
+- (void) setBaselineHistory:(unsigned int)chan withTimeRate:(ORTimeRate*)baseHist;
 
 #pragma mark •••Run control flags
 - (NSString*) chFlag:(unsigned int)ch withInt:(int)value;
@@ -199,4 +208,6 @@ extern NSString* ORFlashCamADCModelMajorityLevelChanged;
 extern NSString* ORFlashCamADCModelMajorityWidthChanged;
 extern NSString* ORFlashCamADCModelRateGroupChanged;
 extern NSString* ORFlashCamADCModelBufferFull;
-
+extern NSString* ORFlashCamADCModelEnableBaselineHistoryChanged;
+extern NSString* ORFlashCamADCModelBaselineHistoryChanged;
+extern NSString* ORFlashCamADCModelBaselineSampleTimeChanged;

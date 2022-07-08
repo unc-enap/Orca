@@ -26,22 +26,25 @@
 #import "ORHWWizParam.h"
 #import "ORHWWizSelection.h"
 
-NSString* ORFlashCamADCModelChanEnabledChanged    = @"ORFlashCamADCModelChanEnabledChanged";
-NSString* ORFlashCamADCModelTrigOutEnabledChanged = @"ORFlashCamADCModelTrigOutEnabledChanged";
-NSString* ORFlashCamADCModelBaselineChanged       = @"ORFlashCamADCModelBaselineChanged";
-NSString* ORFlashCamADCModelBaseBiasChanged       = @"ORFlashCamADCModelBaseBiasChanged";
-NSString* ORFlashCamADCModelThresholdChanged      = @"ORFlashCamADCModelThresholdChanged";
-NSString* ORFlashCamADCModelADCGainChanged        = @"ORFlashCamADCModelADCGainChanged";
-NSString* ORFlashCamADCModelTrigGainChanged       = @"ORFlashCamADCModelTrigGainChanged";
-NSString* ORFlashCamADCModelShapeTimeChanged      = @"ORFlashCamADCModelShapeTimeChanged";
-NSString* ORFlashCamADCModelFilterTypeChanged     = @"ORFlashCamADCModelFilterTypeChanged";
-NSString* ORFlashCamADCModelFlatTopTimeChanged    = @"ORFlashCamADCModelFlatTopTimeChanged";
-NSString* ORFlashCamADCModelPoleZeroTimeChanged   = @"ORFlashCamADCModelPoleZeroTimeChanged";
-NSString* ORFlashCamADCModelPostTriggerChanged    = @"ORFlashCamADCModelPostTriggerChanged";
-NSString* ORFlashCamADCModelMajorityLevelChanged  = @"ORFLashCamADCModelMajorityLevelChanged";
-NSString* ORFlashCamADCModelMajorityWidthChanged  = @"ORFlashCamADCModelMajorityWidthChanged";
-NSString* ORFlashCamADCModelRateGroupChanged      = @"ORFlashCamADCModelRateGroupChanged";
-NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFull";
+NSString* ORFlashCamADCModelChanEnabledChanged           = @"ORFlashCamADCModelChanEnabledChanged";
+NSString* ORFlashCamADCModelTrigOutEnabledChanged        = @"ORFlashCamADCModelTrigOutEnabledChanged";
+NSString* ORFlashCamADCModelBaselineChanged              = @"ORFlashCamADCModelBaselineChanged";
+NSString* ORFlashCamADCModelBaseBiasChanged              = @"ORFlashCamADCModelBaseBiasChanged";
+NSString* ORFlashCamADCModelThresholdChanged             = @"ORFlashCamADCModelThresholdChanged";
+NSString* ORFlashCamADCModelADCGainChanged               = @"ORFlashCamADCModelADCGainChanged";
+NSString* ORFlashCamADCModelTrigGainChanged              = @"ORFlashCamADCModelTrigGainChanged";
+NSString* ORFlashCamADCModelShapeTimeChanged             = @"ORFlashCamADCModelShapeTimeChanged";
+NSString* ORFlashCamADCModelFilterTypeChanged            = @"ORFlashCamADCModelFilterTypeChanged";
+NSString* ORFlashCamADCModelFlatTopTimeChanged           = @"ORFlashCamADCModelFlatTopTimeChanged";
+NSString* ORFlashCamADCModelPoleZeroTimeChanged          = @"ORFlashCamADCModelPoleZeroTimeChanged";
+NSString* ORFlashCamADCModelPostTriggerChanged           = @"ORFlashCamADCModelPostTriggerChanged";
+NSString* ORFlashCamADCModelMajorityLevelChanged         = @"ORFLashCamADCModelMajorityLevelChanged";
+NSString* ORFlashCamADCModelMajorityWidthChanged         = @"ORFlashCamADCModelMajorityWidthChanged";
+NSString* ORFlashCamADCModelRateGroupChanged             = @"ORFlashCamADCModelRateGroupChanged";
+NSString* ORFlashCamADCModelBufferFull                   = @"ORFlashCamADCModelBufferFull";
+NSString* ORFlashCamADCModelEnableBaselineHistoryChanged = @"ORFlashCamADCModelEnableBaselineHistoryChanged";
+NSString* ORFlashCamADCModelBaselineHistoryChanged       = @"ORFlashCamADCModelBaselineHistoryChanged";
+NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelBaselineSampleTimeChanged";
 
 @implementation ORFlashCamADCModel
 
@@ -52,6 +55,8 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     [self setCardAddress:0];
     wfRates   = nil;
     trigRates = nil;
+    enableBaselineHistory = true;
+    baselineSampleTime = 10.0;
     for(int i=0; i<[self numberOfChannels]; i++){
         [self setChanEnabled:i    withValue:NO];
         [self setTrigOutEnabled:i withValue:NO];
@@ -66,7 +71,11 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
         [self setPostTrigger:i    withValue:0.0];
         wfCount[i]   = 0;
         trigCount[i] = 0;
+        baselineHistory[i] = [[[ORTimeRate alloc] init] retain];
+        [baselineHistory[i] setLastAverageTime:[NSDate date]];
+        [baselineHistory[i] setSampleTime:baselineSampleTime];
     }
+    for(int i=[self numberOfChannels]; i<kMaxFlashCamADCChannels; i++) baselineHistory[i] = nil;
     baseBias      = 0;
     majorityLevel = 1;
     majorityWidth = 1;
@@ -89,6 +98,7 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     [self setWFsamples:0];
     [wfRates release];
     [trigRates release];
+    for(int i=0; i<[self numberOfChannels]; i++) [baselineHistory[i] release];
     [super dealloc];
 }
 
@@ -361,6 +371,22 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     return dataId;
 }
 
+- (bool) enableBaselineHistory
+{
+    return enableBaselineHistory;
+}
+
+- (double) baselineSampleTime
+{
+    return baselineSampleTime;
+}
+
+- (ORTimeRate*) baselineHistory:(unsigned int)chan
+{
+    if(chan >= [self numberOfChannels]) return nil;
+    return baselineHistory[chan];
+}
+
 - (void) setSlot:(int)aSlot
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setSlot:[self slot]];
@@ -587,6 +613,33 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
     [self setDataId:[anotherCard dataId]];
 }
 
+- (void) setEnableBaselineHistory:(bool)enable
+{
+    if(enable == enableBaselineHistory) return;
+    [[[self undoManager] prepareWithInvocationTarget:self] setEnableBaselineHistory:enableBaselineHistory];
+    enableBaselineHistory = enable;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelEnableBaselineHistoryChanged object:self];
+}
+
+- (void) setBaselineSampleTime:(double)time
+{
+    if(time == baselineSampleTime) return;
+    [[[self undoManager] prepareWithInvocationTarget:self] setBaselineSampleTime:baselineSampleTime];
+    baselineSampleTime = MAX(1.0, time);
+    for(unsigned int i=0; i<[self numberOfChannels]; i++) if(baselineHistory[i]) [baselineHistory[i] setSampleTime:time];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelBaselineSampleTimeChanged object:self];
+}
+
+- (void) setBaselineHistory:(unsigned int)chan withTimeRate:(ORTimeRate*)baseHist
+{
+    if(chan >= [self numberOfChannels]) return;
+    if(baseHist == baselineHistory[chan]) return;
+    [baseHist retain];
+    [baselineHistory[chan] release];
+    baselineHistory[chan] = baseHist;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelBaselineHistoryChanged object:self];
+}
+
 
 #pragma mark •••Run control flags
 
@@ -714,6 +767,10 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
                 dataRecord[kFlashCamADCWFHeaderLength] = (wfBuffer[windex+1] << 16) | wfBuffer[windex];
                 memcpy(dataRecord+kFlashCamADCWFHeaderLength+1, wfBuffer+windex+2, wfSamples*sizeof(unsigned short));
                 [aDataPacket addLongsToFrameBuffer:dataRecord length:dataRecordLength];
+                if(enableBaselineHistory){
+                    if(baselineHistory[wfHeaderBuffer[hindex]])
+                        [baselineHistory[wfHeaderBuffer[hindex]] addDataToTimeAverage:(float)wfBuffer[windex]];
+                }
             }
         }
         @catch(NSException* localException){
@@ -857,11 +914,18 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
                     withValue:[decoder decodeFloatForKey:[NSString stringWithFormat:@"poleZeroTime%i",  i]]];
         [self setPostTrigger:i
                    withValue:[decoder decodeFloatForKey:[NSString stringWithFormat:@"postTrigger%i", i]]];
+        if(!baselineHistory[i]){
+            baselineHistory[i] = [[[ORTimeRate alloc] init] retain];
+            [baselineHistory[i] setLastAverageTime:[NSDate date]];
+            [baselineHistory[i] setSampleTime:baselineSampleTime];
+        }
     }
     [self setBaseBias:[decoder decodeIntForKey:@"baseBias"]];
     [self setMajorityLevel:[decoder decodeIntForKey:@"majorityLevel"]];
     [self setMajorityWidth:[decoder decodeIntForKey:@"majorityWidth"]];
     [self setTrigOutEnable:[decoder decodeBoolForKey:@"trigOutEnable"]];
+    [self setEnableBaselineHistory:[decoder decodeBoolForKey:@"enableBaselineHistory"]];
+    [self setBaselineSampleTime:[decoder decodeDoubleForKey:@"baselineSampleTime"]];
     [self setWFsamples:0];
     isRunning = NO;
     wfBuffer = NULL;
@@ -902,12 +966,14 @@ NSString* ORFlashCamADCModelBufferFull            = @"ORFlashCamADCModelBufferFu
         [encoder encodeFloat:poleZeroTime[i]  forKey:[NSString stringWithFormat:@"poleZeroTime%i",    i]];
         [encoder encodeFloat:postTrigger[i]   forKey:[NSString stringWithFormat:@"postTrigger%i",     i]];
     }
-    [encoder encodeInt:baseBias       forKey:@"baseBias"];
-    [encoder encodeInt:majorityLevel  forKey:@"majorityLevel"];
-    [encoder encodeInt:majorityWidth  forKey:@"majorityWidth"];
-    [encoder encodeBool:trigOutEnable forKey:@"trigOutEnable"];
-    [encoder encodeObject:wfRates     forKey:@"wfRates"];
-    [encoder encodeObject:trigRates   forKey:@"trigRates"];
+    [encoder encodeInt:baseBias               forKey:@"baseBias"];
+    [encoder encodeInt:majorityLevel          forKey:@"majorityLevel"];
+    [encoder encodeInt:majorityWidth          forKey:@"majorityWidth"];
+    [encoder encodeBool:trigOutEnable         forKey:@"trigOutEnable"];
+    [encoder encodeObject:wfRates             forKey:@"wfRates"];
+    [encoder encodeObject:trigRates           forKey:@"trigRates"];
+    [encoder encodeBool:enableBaselineHistory forKey:@"enableBaselineHistory"];
+    [encoder encodeDouble:baselineSampleTime  forKey:@"baselineSampleTime"];
 }
 
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary
