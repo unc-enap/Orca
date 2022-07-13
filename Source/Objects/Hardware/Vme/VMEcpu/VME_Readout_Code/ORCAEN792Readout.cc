@@ -27,7 +27,7 @@ bool ORCAEN792Readout::Readout(SBC_LAM_Data* lamData)
     
     uint32_t locationMask       = ((GetCrate() & 0x0f)<<21) | ((GetSlot() & 0x0000001f)<<16) | (shipTimeStamp & 0x1);
 	
-    uint32_t addressModifier = 0x09;
+    uint32_t addressModifier = 0x39;
 	
 	result = VMERead(status2Address, addressModifier, sizeof(status2),status2);
     if (result != sizeof(status2)) {
