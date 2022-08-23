@@ -928,7 +928,7 @@
                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3834">
                                             <rect key="frame" x="8" y="481" width="116" height="18"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Positive Polarity" id="3835">
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Negative Polarity" id="3835">
                                                 <font key="font" metaFont="menu" size="14"/>
                                                 <color key="textColor" red="0.74489795920000001" green="0.02494625428" blue="0.049201006530000001" alpha="1" colorSpace="calibratedRGB"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

@@ -242,31 +242,18 @@ NSString* OREHSF040nSettingsLock				= @"OREHSF040nSettingsLock";
 - (void) loadValues:(short)channel
 {
 	if([self channelInBounds:channel]){
-        
-        //[self writeFallTime:channel];
-        //[self writeRiseTime:channel];
+    
         [self writeTripTime:channel];
         [self writeSupervisorBehaviour:channel];
         [self writeMaxCurrent:channel];
         
         [self commitTargetToHwGoal:channel];
         [self writeVoltage:channel];
-        
-        //if(![[self ramper:channel] enabled]){
-        //    [self commitTargetToHwGoal:channel];
-        //    [self writeVoltage:channel];
-        //}
-       // else {
-         //   [[self ramper:channel] setTarget:[self target:channel]];
-         //   if(![[self ramper:channel] running])[[self ramper:channel] startRamping];
-       // }
     }
 }
 
 - (void) loadAllValues
-{
-	[self writeFallTime];
-	int i;
+{	int i;
 	for(i=0;i<16;i++){
 		[self writeTripTime:i];
 		[self writeSupervisorBehaviour:i];
