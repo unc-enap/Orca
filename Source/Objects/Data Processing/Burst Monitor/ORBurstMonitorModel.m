@@ -1402,7 +1402,14 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
         NSInteger ss = [burstcomp second];
         NSInteger dateint = yy + mmo + dd;
         NSInteger timeint = ss + mmi + hh;
+        NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSDate* now = [NSDate date];
+        NSString* burstDateString = [dateFormatter stringFromDate:burstdate];
+        NSString* nowDateString = [dateFormatter stringFromDate:now];
+
         NSString* burstcommand = @"";
+        NSString* snews2burstcommand = @"";
         NSInteger level = 2; //Good alarm, auto.  0=test 1=possible 2=good 3=confirmed -1=retraction
         if([[runbits objectAtIndex:5] intValue] || adcP<0.01 || gammaP<0.01 || alphaP<0.01 || Rrms<453)
         {
@@ -1410,31 +1417,40 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
             NSLog(@"Level reduced to 1 (possible)\n");
         }
         NSInteger signif = (multInBurst*0.5)+3; //cbmod current background and best (round) fit with likelyhood as of dec 2016 with logaritmic rounding
-        burstcommand = [burstcommand stringByAppendingFormat:@"cd snews/coinccode/ ; ./ctestgcli %i %i 0 %i %i 9", (int32_t)dateint, (int)timeint, (int)level, (int)signif];  //maybe add nanoseconds? 9 is halo
+        burstcommand = [burstcommand stringByAppendingFormat:@"/users/halo/snews/coinccode/ctestgcli %i %i 0 %i %i 9", (int32_t)dateint, (int)timeint, (int)level, (int)signif];  //maybe add nanoseconds? 9 is halo
         NSLog(@"burstcommand witha a space on each side: | %@ |\n", burstcommand);
-        NSTask* Cping;
-        Cping =[[NSTask alloc] init];
-        //NSPipe* pipe;
-        //pipe = [NSPipe pipe];
-        //[Cping setStandardOutput: pipe];
-        //NSFileHandle* pingfile;
-        //pingfile =[pipe fileHandleForReading];
+        snews2burstcommand = [snews2burstcommand stringByAppendingFormat:@"/home/halosim/remington/snews-venv/submit-halo-sn-candidate.sh %i halo \"%@\" \"%@\" \"%@\" \"Sudbury,ON\" %f ON \"supernova triggered\"; ", (int)timeint, nowDateString, burstDateString, nowDateString, (double)chanpvalue];
+        NSLog(@"snews2burstcommand with a space on each side: | %@ |\n", snews2burstcommand);
+//        NSTask* Cping;
+//        Cping =[[NSTask alloc] init];
+        ORTaskSequence* tasks=[[ORTaskSequence taskSequenceWithDelegate:self] retain];
+        [tasks setVerbose:NO];
+        [tasks setTextToDelegate:YES];
+        [tasks addTask:@"/usr/bin/ssh" arguments:[NSArray arrayWithObjects:@"halo@142.51.71.223", burstcommand, nil]];
+        
+        ORTaskSequence* tasks2=[[ORTaskSequence taskSequenceWithDelegate:self] retain];
+        [tasks2 setVerbose:NO];
+        [tasks2 setTextToDelegate:YES];
+        // rhill: Here we will add our task for the SNEWS 2.0 alert.
+        [tasks addTask:@"/usr/bin/ssh" arguments:[NSArray arrayWithObjects:@"halosim@142.51.71.223", snews2burstcommand, nil]];
         NSLog(@"end1\n");
         if(1-[[runbits objectAtIndex:6] intValue])  //Send to local machine  //mod change to ping again
         {
             NSLog(@"No pulse sent to snews because run type is not 'SNEWS'\n");
             NSLog(@"Parameters (d,t,l,s) were %i %i %i %i\n", dateint, timeint, level, signif);
-            [Cping setLaunchPath: @"/usr/bin/printf"];
-            [Cping setArguments: [NSArray arrayWithObjects: @"test string one\n", nil]];
+//            [Cping setLaunchPath: @"/usr/bin/printf"];
+ //           [Cping setArguments: [NSArray arrayWithObjects: @"test string one\n", nil]];
         }
         else{ //Send to halo shift
             NSLog(@"Pulse sent to SNEWS\n");
-            [Cping setLaunchPath: @"/usr/bin/ssh"];  //@"/usr/bin/ssh"
-            [Cping setArguments: [NSArray arrayWithObjects: @"halo@142.51.71.223", burstcommand, nil]];  //.223 only for ug
+ //           [Cping setLaunchPath: @"/usr/bin/ssh"];  //@"/usr/bin/ssh"
+   //         [Cping setArguments: [NSArray arrayWithObjects: @"halo@142.51.71.223", burstcommand, nil]];  //.223 only for ug
             //[Cping setArguments: [NSArray arrayWithObjects: @"halo@142.51.71.223", @"cd snews/coinccode/ ; mkdir AAASNEWSPINGTEST", nil]];
         }  // -c successfully made directories in home
         NSLog(@"end2\n");
-        [Cping launch]; //Send the ping!
+//        [Cping launch]; //Send the ping!
+        [tasks launch]; //snews1.0 ping
+        [tasks2 launch]; //snews2.0 ping
         NSLog(@"end3\n");
         //system("ssh halo@142.51.71.223 'cd snews/coinccode/ && ./cping all 0 0 0 3'"); freezes orca for about 30 seconds but works
         
