@@ -1418,8 +1418,9 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
         }
         NSInteger signif = (multInBurst*0.5)+3; //cbmod current background and best (round) fit with likelyhood as of dec 2016 with logaritmic rounding
         burstcommand = [burstcommand stringByAppendingFormat:@"/users/halo/snews/coinccode/ctestgcli %i %i 0 %i %i 9", (int32_t)dateint, (int)timeint, (int)level, (int)signif];  //maybe add nanoseconds? 9 is halo
+//        burstcommand = [burstcommand stringByAppendingFormat:@"/users/halo/snews/testserver/ctestgcli %i %i 5 %i %i 9", (int32_t)dateint, (int)timeint, (int)level, (int)signif];  //maybe add nanoseconds? 9 is halo
         NSLog(@"burstcommand witha a space on each side: | %@ |\n", burstcommand);
-        snews2burstcommand = [snews2burstcommand stringByAppendingFormat:@"/home/halosim/remington/snews-venv/submit-halo-sn-candidate.sh %i halo \"%@\" \"%@\" \"%@\" \"Sudbury,ON\" %f ON \"supernova triggered\"; ", (int)timeint, nowDateString, burstDateString, nowDateString, (double)chanpvalue];
+        snews2burstcommand = [snews2burstcommand stringByAppendingFormat:@"/home/halosim/remington/snews-venv/submit-halo-sn-candidate.sh %i halo \"%@\" \"%@\" \"%@\" \"Sudbury,ON\" %f ON \"alert\"; ", (int)timeint, nowDateString, burstDateString, nowDateString, (double)chanpvalue];
         NSLog(@"snews2burstcommand with a space on each side: | %@ |\n", snews2burstcommand);
 //        NSTask* Cping;
 //        Cping =[[NSTask alloc] init];
