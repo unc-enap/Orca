@@ -113,6 +113,7 @@
 - (void)		setScriptNoNote:(NSString*)aString;
 - (NSString*)	scriptName;
 - (void)		setScriptName:(NSString*)aString;
+- (NSString*)   scriptTitle;
 - (BOOL)		parsedOK;
 - (BOOL)		scriptExists;
 - (ORScriptRunner*)	scriptRunner;

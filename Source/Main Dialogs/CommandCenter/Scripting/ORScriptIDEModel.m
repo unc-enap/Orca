@@ -497,6 +497,11 @@ NSString* ORScriptIDEModelReadOnlyChanged           = @"ORScriptIDEModelReadOnly
 	[self setUpImage];
 }
 
+- (NSString*) scriptTitle
+{
+    return [NSString stringWithFormat:@"%@ (%@,%u)", [self scriptName], [self className], [self uniqueIdNumber]];
+}
+
 - (NSString*) identifier
 {
     if([[self scriptName] isEqualToString:@"OrcaScript"])return [NSString stringWithFormat:@"%@ %u",[self scriptName],[self uniqueIdNumber]];

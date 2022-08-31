@@ -35,7 +35,7 @@ void mergeRunFlags(NSMutableArray* flags)
         [d setObject:f forKey:@"flag"];
         [d setObject:[NSNumber numberWithUnsignedInteger:i] forKey:@"index"];
         [d setObject:[NSNumber numberWithBool:NO] forKey:@"merge"];
-        [d setObject:[a objectAtIndex:0] forKey:@"value"];
+        [d setObject:[[a objectAtIndex:0] lowercaseString] forKey:@"value"];
         [d setObject:[NSNumber numberWithUnsignedInt:[[a objectAtIndex:1] unsignedIntValue]] forKey:@"start"];
         [d setObject:[NSNumber numberWithUnsignedInt:[[a objectAtIndex:2] unsignedIntValue] +
                       [[d objectForKey:@"start"] unsignedIntValue] - 1] forKey:@"end"];
@@ -52,7 +52,20 @@ void mergeRunFlags(NSMutableArray* flags)
                 NSMutableDictionary* d1 = [opts objectAtIndex:j];
                 if(d0 == d1) continue;
                 if(![[d0 objectForKey:@"flag"] isEqualToString:[d1 objectForKey:@"flag"]])  continue;
-                if([[d0 objectForKey:@"value"] doubleValue] != [[d1 objectForKey:@"value"] doubleValue]) continue;
+                NSCharacterSet* chars = [NSCharacterSet characterSetWithCharactersInString:@"abcdef"];
+                NSString* value = [d0 objectForKey:@"value"];
+                if([value rangeOfCharacterFromSet:chars].location == NSNotFound &&
+                   [[d1 objectForKey:@"value"] rangeOfCharacterFromSet:chars].location == NSNotFound){
+                    if([value doubleValue] != [[d1 objectForKey:@"value"] doubleValue]) continue;
+                }
+                else{
+                    NSScanner* scan0 = [NSScanner scannerWithString:value];
+                    NSScanner* scan1 = [NSScanner scannerWithString:[d1 objectForKey:@"value"]];
+                    unsigned int val0 = 0, val1 = 0;
+                    [scan0 scanHexInt:&val0];
+                    [scan1 scanHexInt:&val1];
+                    if(val0 != val1) continue;
+                }
                 unsigned int s0 = [[d0 objectForKey:@"start"] unsignedIntValue];
                 unsigned int e0 = [[d0 objectForKey:@"end"]   unsignedIntValue];
                 unsigned int s1 = [[d1 objectForKey:@"start"] unsignedIntValue];

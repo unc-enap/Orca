@@ -25,12 +25,13 @@
 
 @implementation ORValueBarGroupView
 
-@synthesize xAxis,dataSource,numberBars,barHeight,barSpacing,chainedView;
+@synthesize xAxis,dataSource,secondaryDataSource,numberBars,barHeight,barSpacing,chainedView;
 
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
 	}
+    secondaryDataSource = nil;
     return self;
 }
 
@@ -96,6 +97,7 @@
 		[aValueBar setXScale:xAxis];
 		[aValueBar setTag:i];
 		[aValueBar setDataSource:dataSource];
+        [aValueBar setSecondaryDataSource:secondaryDataSource];
 		i++;
 	}
 	i = 0;

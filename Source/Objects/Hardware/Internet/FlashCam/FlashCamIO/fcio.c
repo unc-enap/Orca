@@ -1212,7 +1212,7 @@ experimental....
 {
   if (!tag)
     reader->selected_tags = 0xffffffff;
-  else if (tag >= FCIOConfig && tag <= FCIORecEvent)
+  else if (tag >= FCIOConfig && tag <= FCIOSparseEvent)
     reader->selected_tags |= (1 << tag);
   else
     return -1;
@@ -1233,7 +1233,7 @@ experimental....
 {
   if (!tag)
     reader->selected_tags = 0;
-  else if (tag > 0 && tag <= FCIORecEvent)
+  else if (tag > 0 && tag <= FCIOSparseEvent)
     reader->selected_tags &= ~(1 << tag);
   else
     return -1;
@@ -1244,7 +1244,7 @@ experimental....
 
 static int tag_selected(FCIOStateReader *reader, int tag)
 {
-  if (tag <= 0 || tag >= FCIORecEvent)
+  if (tag <= 0 || tag > FCIOSparseEvent)
     return 0;
 
   return reader->selected_tags & (1 << tag);
@@ -1286,6 +1286,24 @@ static int get_next_record(FCIOStateReader *reader)
       fprintf(stderr, "[WARNING] Received event without known configuration. Unable to adjust trace pointers.\n");
     }
 
+    reader->cur_event = (reader->cur_event + 1) % reader->max_states;
+    reader->nevents++;
+    break;
+          
+  case FCIOSparseEvent:
+    event = &reader->events[reader->cur_event];
+    fcio_get_sparseevent(stream, event, config->eventsamples + 2);
+          
+    if (config) {
+      int i; int j; for (i = 0; i < event->num_traces; i++) {
+        j = event->trace_list[i];
+        event->trace[j] = &event->traces[2 + j * (config->eventsamples + 2)];
+        event->theader[j] = &event->traces[j * (config->eventsamples + 2)];
+      }
+    } else {
+      fprintf(stderr, "[WARNING] Received event without known configuration. Unable to adjust trace pointers.\n");
+    }
+          
     reader->cur_event = (reader->cur_event + 1) % reader->max_states;
     reader->nevents++;
     break;

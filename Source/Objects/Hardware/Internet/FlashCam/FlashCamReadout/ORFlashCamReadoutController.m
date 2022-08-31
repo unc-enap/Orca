@@ -865,7 +865,7 @@
         }
         else if(view == listenerTrigView){
             if(col == 1)      return [l configParam:@"trigAllEnable"];
-            else if(col == 2) return [l configParam:@"trigTimer2Addr"];
+            else if(col == 2) return [l configParam:@"trigTimer1Addr"];
             else if(col == 3) return [l configParam:@"trigTimer1Sec"];
             else if(col == 4) return [l configParam:@"trigTimer2Addr"];
             else if(col == 5) return [l configParam:@"trigTimer2Sec"];
@@ -983,7 +983,7 @@
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
             else if(col == 5) [l setConfigParam:@"resetMode"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
-            else if(col == 6) [l setConfigParam:@"pileupRej"
+            else if(col == 6) [l setConfigParam:@"evPerRequest"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
         }
     }

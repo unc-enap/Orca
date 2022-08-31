@@ -46,6 +46,7 @@
 
 #pragma mark •••Run control flags
 - (NSMutableArray*) runFlagsForCardIndex:(unsigned int)index;
+- (void) printRunFlagsForCardIndex:(unsigned int)index;
 
 #pragma mark •••Archival
 - (id) initWithCoder:(NSCoder*)decoder;

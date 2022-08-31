@@ -435,9 +435,9 @@
 {
 	[nameField setStringValue:[model scriptName]];
     if([model readOnly])
-        [[self window] setTitle:[NSString stringWithFormat:@"Script: %@ (READ ONLY)", [model scriptName]]];
+        [[self window] setTitle:[NSString stringWithFormat:@"Script: %@ (READ ONLY)", [model scriptTitle]]];
     else
-        [[self window] setTitle:[NSString stringWithFormat:@"Script: %@",[model scriptName]]];
+        [[self window] setTitle:[NSString stringWithFormat:@"Script: %@",[model scriptTitle]]];
 }
 
 - (void) errorChanged:(NSNotification*)aNote

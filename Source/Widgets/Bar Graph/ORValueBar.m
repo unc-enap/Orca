@@ -37,6 +37,7 @@
     if (self) {
         [self setBackgroundColor:[NSColor whiteColor]];
         [self setBarColor:[NSColor greenColor]];
+        [self setSecondaryBarColor:[NSColor blueColor]];
     }
     return self;
 }
@@ -44,8 +45,10 @@
 - (void) dealloc
 {
 	[gradient release];
+    [secondaryGradient release];
 	[backgroundColor release];
 	[barColor release];
+    [secondaryBarColor release];
 	[super dealloc];
 }
 
@@ -53,6 +56,7 @@
 {
 	if(!backgroundColor)[self setBackgroundColor:[NSColor whiteColor]];
 	if(!barColor)[self setBarColor:[NSColor greenColor]];
+    if(!secondaryBarColor)[self setSecondaryBarColor:[NSColor blueColor]];
 }
 
 #pragma mark ¥¥¥Accessors
@@ -69,6 +73,11 @@
 - (void) setDataSource:(id)aSource
 {
 	dataSource = aSource;
+}
+
+- (void) setSecondaryDataSource:(id)aSource
+{
+    secondaryDataSource = aSource;
 }
 
 - (ORValueBar*) chainedView
@@ -97,29 +106,50 @@
 
 - (void) setBarColor:(NSColor*)aColor
 {
-	[aColor retain];
-	[barColor release];
-	barColor = aColor;
-	
-	CGFloat red,green,blue,alpha;
-	[barColor getRed:&red green:&green blue:&blue alpha:&alpha];
-	
-	red *= .5;
-	green *= .5;
-	blue *= .5;
-	//alpha = .75;
-	
-	NSColor* endingColor = [NSColor colorWithCalibratedRed:red green:green blue:blue alpha:alpha];
-	
-	[gradient release];
-	gradient = [[NSGradient alloc] initWithStartingColor:barColor endingColor:endingColor];
+    [aColor retain];
+    [barColor release];
+    barColor = aColor;
+    
+    CGFloat red,green,blue,alpha;
+    [barColor getRed:&red green:&green blue:&blue alpha:&alpha];
+    red *= .5;
+    green *= .5;
+    blue *= .5;
+    //alpha = .75;
+    NSColor* endingColor = [NSColor colorWithCalibratedRed:red green:green blue:blue alpha:alpha];
+    
+    [gradient release];
+    gradient = [[[NSGradient alloc] initWithStartingColor:barColor endingColor:endingColor] retain];
+    [self setNeedsDisplay: YES];
+}
 
-    [self setNeedsDisplay: YES];	
+- (void) setSecondaryBarColor:(NSColor*)aColor
+{
+    [aColor retain];
+    [secondaryBarColor release];
+    secondaryBarColor = aColor;
+    
+    CGFloat red,green,blue,alpha;
+    [secondaryBarColor getRed:&red green:&green blue:&blue alpha:&alpha];
+    red *= .5;
+    green *= .5;
+    blue *= .5;
+    //alpha = .75;
+    NSColor* endingColor = [NSColor colorWithCalibratedRed:red green:green blue:blue alpha:alpha];
+    
+    [secondaryGradient release];
+    secondaryGradient = [[[NSGradient alloc] initWithStartingColor:secondaryBarColor endingColor:endingColor] retain];
+    [self setNeedsDisplay: YES];
 }
 
 - (NSColor*) barColor
 {
 	return barColor;
+}
+
+- (NSColor*) secondaryBarColor
+{
+    return secondaryBarColor;
 }
 
 - (NSUInteger) tag
@@ -158,7 +188,18 @@
 		else theValue = [dataSource doubleValue];
 		
 		float x = [mXScale getPixAbs:theValue];
-		[gradient drawInRect:NSMakeRect(1,1,x,b.size.height-2) angle:180.];
+        if(secondaryDataSource){
+            [gradient drawInRect:NSMakeRect(1,b.size.height/2+1,x,b.size.height-2) angle:180.];
+
+            double secondaryValue;
+            if([secondaryDataSource isKindOfClass:[NSMatrix class]])
+                secondaryValue = [[secondaryDataSource cellWithTag:[self tag]] doubleValue];
+            else secondaryValue = [secondaryDataSource doubleValue];
+            
+            x = [mXScale getPixAbs:secondaryValue];
+            [secondaryGradient drawInRect:NSMakeRect(1,1,x,b.size.height/2) angle:180.];            
+        }
+        else [gradient drawInRect:NSMakeRect(1,1,x,b.size.height-2) angle:180.];
 
 	}
 	else {
@@ -173,11 +214,15 @@
     self = [super initWithCoder:decoder];
     if([decoder allowsKeyedCoding]){
         [self setBackgroundColor:[decoder decodeObjectForKey:@"backgroundColor"]]; 
-        [self setBarColor:[decoder decodeObjectForKey:@"barColor"]]; 
+        [self setBarColor:[decoder decodeObjectForKey:@"barColor"]];
+        id color = [decoder decodeObjectForKey:@"secondaryBarColor"];
+        if(color) [self setSecondaryBarColor:color];
+        else if(!secondaryBarColor) [self setSecondaryBarColor:[NSColor blueColor]];
 	}
 	else {
         [self setBackgroundColor:[decoder decodeObject]]; 
-        [self setBarColor:[decoder decodeObject]]; 
+        [self setBarColor:[decoder decodeObject]];
+        [self setSecondaryBarColor:[decoder decodeObject]];
 	}
     return self;
 }
@@ -188,10 +233,12 @@
     if([encoder allowsKeyedCoding]){
         [encoder encodeObject:backgroundColor forKey:@"backgroundColor"];
         [encoder encodeObject:barColor forKey:@"barColor"];
+        [encoder encodeObject:secondaryBarColor forKey:@"secondaryBarColor"];
 	}
 	else {
         [encoder encodeObject:backgroundColor];
         [encoder encodeObject:barColor];
+        [encoder encodeObject:secondaryBarColor];
 	}
 }
 

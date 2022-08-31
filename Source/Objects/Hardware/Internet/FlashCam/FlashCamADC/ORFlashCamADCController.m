@@ -48,20 +48,45 @@
 {
     [super setModel:aModel];
     [[self window] setTitle:[NSString stringWithFormat:@"FlashCam ADC (0x%x, Crate %d, Slot %d)", [model cardAddress], [model crateNumber], [model slot]]];
+    [shapingLabel setStringValue:@"Shaping Time (ns)"];
+    [flatTopLabel setStringValue:@"Flat Top (ns)"];
+    for(unsigned int i=0; i<[model numberOfChannels]; i++){
+        id cell = [filterTypeMatrix cellWithTag:i];
+        [[cell itemAtIndex:0] setTitle:@"Gauss"];
+        [[cell itemAtIndex:1] setTitle:@"Trap"];
+        [[cell itemAtIndex:2] setTitle:@"Cusp"];
+    }
+    [filterTypeMatrix setEnabled:YES];
+    NSArray* m = [NSArray arrayWithObjects:baselineMatrix, thresholdMatrix, adcGainMatrix, trigGainMatrix,
+                  shapeTimeMatrix, flatTopTimeMatrix, poleZeroTimeMatrix, postTriggerMatrix, rateTextFields,
+                  trigRateTextFields, nil];
+    for(NSMatrix* matrix in m){
+        for(NSUInteger i=0; i<[matrix numberOfRows]; i++)
+            [[matrix cellAtRow:i column:0] setFormatter:[[[NSNumberFormatter alloc] init] autorelease]];
+    }
+    m = [NSArray arrayWithObjects:rateTextFields, trigRateTextFields, nil];
+    for(NSMatrix* matrix in m){
+        for(NSUInteger i=0; i<[matrix numberOfRows]; i++){
+            NSNumberFormatter* nf = [[matrix cellAtRow:i column:0] formatter];
+            nf.usesSignificantDigits = YES;
+            nf.minimumSignificantDigits = 3;
+            nf.maximumSignificantDigits = 6;
+        }
+    }
+    m = [NSArray arrayWithObjects:totalRateTextField, totalTrigRateTextField, nil];
+    for(NSTextField* tf in m){
+        NSNumberFormatter* nf = [[[NSNumberFormatter alloc] init] autorelease];
+        nf.usesSignificantDigits = YES;
+        nf.minimumSignificantDigits = 3;
+        nf.maximumSignificantDigits = 6;
+        [tf setFormatter:nf];
+    }
 }
 
 - (void) registerNotificationObservers
 {
     NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
     [super registerNotificationObservers];
-    //[notifyCenter addObserver : self
-    //                 selector : @selector(settingsLock:)
-    //                     name : ORRunStatusChangedNotification
-    //                   object : nil];
-    [notifyCenter addObserver : self
-                     selector : @selector(fwTypeChanged:)
-                         name : ORFlashCamADCModelFWTypeChanged
-                       object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(chanEnabledChanged:)
                          name : ORFlashCamADCModelChanEnabledChanged
@@ -131,6 +156,10 @@
                          name : ORRateAverageChangedNotification
                        object : [[model wfRates] timeRate]];
     [notifyCenter addObserver : self
+                     selector : @selector(updateTimePlot:)
+                         name : ORRateAverageChangedNotification
+                       object : [[model trigRates] timeRate]];
+    [notifyCenter addObserver : self
                      selector : @selector(rateIntegrationChanged:)
                          name : ORRateGroupIntegrationChangedNotification
                        object : nil];
@@ -142,6 +171,14 @@
                      selector : @selector(miscAttributesChanged:)
                          name : ORMiscAttributesChanged
                        object : model];
+    [notifyCenter addObserver : self
+                     selector : @selector(enableBaselineHistoryChanged:)
+                         name : ORFlashCamADCModelEnableBaselineHistoryChanged
+                       object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(baselineSampleTimeChanged:)
+                         name : ORFlashCamADCModelBaselineSampleTimeChanged
+                       object : nil];
     [self registerRates];
 }
 
@@ -158,16 +195,53 @@
                              name : ORRateChangedNotification
                            object : obj];
     }
+    e = [[[model trigRates] rates] objectEnumerator];
+    while(obj = [e nextObject]){
+        [notifyCenter removeObserver:self name:ORRateChangedNotification object:obj];
+        [notifyCenter addObserver : self
+                         selector : @selector(waveformRateChanged:)
+                             name : ORRateChangedNotification
+                           object : obj];
+    }
 }
 
 - (void) awakeFromNib
 {
     ORTimeLinePlot* plot = [[ORTimeLinePlot alloc] initWithTag:0 andDataSource:self];
+    [plot setLineColor:[NSColor systemGreenColor]];
+    [plot setName:@"Trig"];
     [timeRateView addPlot:plot];
-    [(ORTimeAxis*) [timeRateView xAxis] setStartTime:[[NSDate date] timeIntervalSince1970]];
     [plot release];
+    plot = [[ORTimeLinePlot alloc] initWithTag:1 andDataSource:self];
+    [plot setLineColor:[NSColor systemBlueColor]];
+    [plot setName:@"Total"];
+    [timeRateView addPlot:plot];
+    [plot release];
+    [(ORTimeAxis*) [timeRateView xAxis] setStartTime:[[NSDate date] timeIntervalSince1970]];
     
-    [rateView setNumber:6 height:10 spacing:5];
+    [rateView setNumber:[model numberOfChannels] height:10 spacing:5];
+    
+    ORCompositeTimeLineView* baseViews[4] = {baselineView0, baselineView1, baselineView2, baselineView3};
+    NSColor* colors[6] = {[NSColor blueColor], [NSColor redColor], [NSColor greenColor],
+                          [NSColor blackColor], [NSColor brownColor], [NSColor purpleColor]};
+    for(int i=0; i<4; i++){
+        if(i*6 >= [model numberOfChannels]) continue;
+        [baseViews[i] setPlotTitle:@"Baseline (ADC)"];
+        [[baseViews[i] xAxis] setRngLow:0 withHigh:10000];
+        [[baseViews[i] xAxis] setRngLimitsLow:0 withHigh:200000 withMinRng:200];
+        [[baseViews[i] yAxis] setRngLow:-1 withHigh:1+(1<<16)];
+        [[baseViews[i] yAxis] setRngLimitsLow:-1 withHigh:1+(1<<16) withMinRng:10];
+        for(int j=0; j<6; j++){
+            int k = i*6 + j;
+            ORTimeLinePlot* plot = [[ORTimeLinePlot alloc] initWithTag:k andDataSource:self];
+            [baseViews[i] addPlot:plot];
+            [plot setLineColor:colors[j]];
+            [plot setName:[NSString stringWithFormat:@"Ch %d", k]];
+            [plot release];
+        }
+        [(ORTimeAxis*)[baseViews[i] xAxis] setStartTime:[[NSDate date] timeIntervalSince1970]];
+        [baseViews[i] setShowLegend:YES];
+    }
     
     [super awakeFromNib];
 }
@@ -176,7 +250,6 @@
 {
     [super updateWindow];
     [self cardAddressChanged:nil];
-    [self fwTypeChanged:nil];
     [self cardSlotChanged:nil];
     [self chanEnabledChanged:nil];
     [self trigOutEnabledChanged:nil];
@@ -198,6 +271,8 @@
     [self totalRateChanged:nil];
     [self rateIntegrationChanged:nil];
     [self miscAttributesChanged:nil];
+    [self enableBaselineHistoryChanged:nil];
+    [self baselineSampleTimeChanged:nil];
 }
 
 #pragma mark •••Interface Management
@@ -214,35 +289,10 @@
     [[self window] setTitle:[NSString stringWithFormat:@"FlashCam ADC (0x%x, Crate %d, Slot %d)", [model cardAddress], [model crateNumber], [model slot]]];
 }
 
-- (void) fwTypeChanged:(NSNotification*)note
-{
-    [fwTypePUButton selectItemAtIndex:[model fwType]];
-    if([model fwType] == 0){
-        [shapingLabel setStringValue:@"Fast Shape (ns)"];
-        [flatTopLabel setStringValue:@"Slow Shape (ns)"];
-        for(unsigned int i=0; i<kMaxFlashCamADCChannels; i++){
-            id cell = [filterTypeMatrix cellWithTag:i];
-            for(unsigned int j=0; j<3; j++) [[cell itemAtIndex:j] setTitle:@"N/A"];
-        }
-        [filterTypeMatrix setEnabled:NO];
-    }
-    else if([model fwType] == 1){
-        [shapingLabel setStringValue:@"Shaping Time (ns)"];
-        [flatTopLabel setStringValue:@"Flat Top (ns)"];
-        for(unsigned int i=0; i<kMaxFlashCamADCChannels; i++){
-            id cell = [filterTypeMatrix cellWithTag:i];
-            [[cell itemAtIndex:0] setTitle:@"Gauss"];
-            [[cell itemAtIndex:1] setTitle:@"Trap"];
-            [[cell itemAtIndex:2] setTitle:@"Cusp"];
-        }
-        [filterTypeMatrix setEnabled:YES];
-    }
-}
-
 - (void) chanEnabledChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++){
+        for(int i=0; i<[model numberOfChannels]; i++){
             [[chanEnabledMatrix cellWithTag:i] setState:[model chanEnabled:i]];
             [[chanEnabledRateMatrix cellWithTag:i] setState:[model chanEnabled:i]];
         }
@@ -257,7 +307,7 @@
 - (void) trigOutEnabledChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++)
+        for(int i=0; i<[model numberOfChannels]; i++)
             [[trigOutEnabledMatrix cellWithTag:i] setState:[model trigOutEnabled:i]];
     }
     else{
@@ -272,7 +322,7 @@
 - (void) baselineChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++)
+        for(int i=0; i<[model numberOfChannels]; i++)
             [[baselineMatrix cellWithTag:i] setIntValue:[model baseline:i]];
     }
     else{
@@ -281,22 +331,10 @@
     }
 }
 
-- (void) baseBiasChanged:(NSNotification*)note
-{
-    if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++)
-            [[baseBiasMatrix cellWithTag:i] setIntValue:[model baseBias:i]];
-    }
-    else{
-        int chan = [[[note userInfo] objectForKey:@"Channel"] intValue];
-        [[baseBiasMatrix cellWithTag:chan] setIntValue:[model baseBias:chan]];
-    }
-}
-
 - (void) thresholdChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++)
+        for(int i=0; i<[model numberOfChannels]; i++)
             [[thresholdMatrix cellWithTag:i] setIntValue:[model threshold:i]];
     }
     else{
@@ -308,7 +346,7 @@
 - (void) adcGainChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++)
+        for(int i=0; i<[model numberOfChannels]; i++)
             [[adcGainMatrix cellWithTag:i] setIntValue:[model adcGain:i]];
     }
     else{
@@ -320,7 +358,7 @@
 - (void) trigGainChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++)
+        for(int i=0; i<[model numberOfChannels]; i++)
             [[trigGainMatrix cellWithTag:i] setFloatValue:[model trigGain:i]];
     }
     else{
@@ -332,7 +370,7 @@
 - (void) shapeTimeChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++)
+        for(int i=0; i<[model numberOfChannels]; i++)
             [[shapeTimeMatrix cellWithTag:i] setIntValue:[model shapeTime:i]];
     }
     else{
@@ -344,7 +382,7 @@
 - (void) filterTypeChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++){
+        for(int i=0; i<[model numberOfChannels]; i++){
             [[filterTypeMatrix cellWithTag:i] setIntValue:[model filterType:i]];
             if([model filterType:i] == 0) [[flatTopTimeMatrix cellWithTag:i] setEnabled:NO];
             else [[flatTopTimeMatrix cellWithTag:i] setEnabled:YES];
@@ -361,7 +399,7 @@
 - (void) flatTopTimeChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++)
+        for(int i=0; i<[model numberOfChannels]; i++)
         [[flatTopTimeMatrix cellWithTag:i] setFloatValue:[model flatTopTime:i]];
     }
     else{
@@ -373,7 +411,7 @@
 - (void) poleZeroTimeChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++)
+        for(int i=0; i<[model numberOfChannels]; i++)
             [[poleZeroTimeMatrix cellWithTag:i] setFloatValue:[model poleZeroTime:i]];
     }
     else{
@@ -385,13 +423,18 @@
 - (void) postTriggerChanged:(NSNotification*)note
 {
     if(note == nil){
-        for(int i=0; i<kMaxFlashCamADCChannels; i++)
+        for(int i=0; i<[model numberOfChannels]; i++)
         [[postTriggerMatrix cellWithTag:i] setFloatValue:[model postTrigger:i]];
     }
     else{
         int chan = [[[note userInfo] objectForKey:@"Channel"] intValue];
         [[postTriggerMatrix cellWithTag:chan] setFloatValue:[model postTrigger:chan]];
     }
+}
+
+- (void) baseBiasChanged:(NSNotification*)note
+{
+    [baseBiasTextField setIntValue:[model baseBias]];
 }
 
 - (void) majorityLevelChanged:(NSNotification*)note
@@ -401,14 +444,25 @@
 
 - (void) majorityWidthChanged:(NSNotification*)note
 {
-    [majorityWidthTextField setIntValue:[model majorityLevel]];
+    [majorityWidthTextField setIntValue:[model majorityWidth]];
 }
 
 - (void) waveformRateChanged:(NSNotification*)note
 {
     ORRate* rateObj = [note object];
-    [[rateTextFields cellWithTag:[rateObj tag]] setFloatValue:[rateObj rate]];
-    [rateView setNeedsDisplay:YES];
+    for(NSUInteger i=0; i<[[[model wfRates] rates] count]; i++){
+        ORRate* rate = [[[model wfRates] rates] objectAtIndex:i];
+        if(rateObj != rate) continue;
+        [[rateTextFields cellWithTag:[rateObj tag]] setFloatValue:[rateObj rate]];
+        [rateView setNeedsDisplay:YES];
+        return;
+    }
+    for(NSUInteger i=0; i<[[[model trigRates] rates] count]; i++){
+        ORRate* rate = [[[model trigRates] rates] objectAtIndex:i];
+        if(rateObj != rate) continue;
+        [[trigRateTextFields cellWithTag:[rateObj tag]] setFloatValue:[rateObj rate]];
+        [rateView setNeedsDisplay:YES];
+    }
 }
 
 - (void) totalRateChanged:(NSNotification*)note
@@ -416,6 +470,10 @@
     ORRateGroup* rateObj = [note object];
     if(note == nil || [model wfRates] == rateObj){
         [totalRateTextField setFloatValue:[rateObj totalRate]];
+        [totalRateView setNeedsDisplay:YES];
+    }
+    if(note == nil || [model trigRates] == rateObj){
+        [totalTrigRateTextField setFloatValue:[rateObj totalRate]];
         [totalRateView setNeedsDisplay:YES];
     }
 }
@@ -428,7 +486,8 @@
 - (void) rateIntegrationChanged:(NSNotification*)note
 {
     ORRateGroup* rateObj = [note object];
-    if(note == nil || [model wfRates] == rateObj || [note object] == model){
+    if(note == nil || [note object] == model ||
+       [model wfRates] == rateObj || [model trigRates] == rateObj){
         double value = [[model wfRates] integrationTime];
         [integrationStepper setDoubleValue:value];
         [integrationTextField setDoubleValue:value];
@@ -437,7 +496,20 @@
 
 - (void) updateTimePlot:(NSNotification*)note
 {
-    if(!note || [note object] == [[model wfRates] timeRate]) [timeRateView setNeedsDisplay:YES];
+    if([note object] == [[model wfRates] timeRate]   ||
+       [note object] == [[model trigRates] timeRate] || note == nil) [timeRateView setNeedsDisplay:YES];
+    [super updateTimePlot:note];
+}
+
+- (void) deferredPlotUpdate
+{
+    [super deferredPlotUpdate];
+    [baselineView0 setNeedsDisplay:YES];
+    if([model numberOfChannels] > kFlashCamADCChannels){
+        [baselineView1 setNeedsDisplay:YES];
+        [baselineView2 setNeedsDisplay:YES];
+        [baselineView3 setNeedsDisplay:YES];
+    }
 }
 
 - (void) scaleAction:(NSNotification*)note
@@ -447,9 +519,25 @@
     if(note == nil || [note object] == [totalRateView xAxis])
         [model setMiscAttributes:[[totalRateView xAxis] attributes] forKey:@"TotalRateXAttributes"];
     if(note == nil || [note object] == [timeRateView xAxis])
-        [model setMiscAttributes:[(ORAxis*)[timeRateView xAxis]attributes] forKey:@"TimeRateXAttributes"];
+        [model setMiscAttributes:[(ORAxis*)[timeRateView xAxis] attributes] forKey:@"TimeRateXAttributes"];
     if(note == nil || [note object] == [timeRateView yAxis])
-        [model setMiscAttributes:[(ORAxis*)[timeRateView yAxis]attributes] forKey:@"TimeRateYAttributes"];
+        [model setMiscAttributes:[(ORAxis*)[timeRateView yAxis] attributes] forKey:@"TimeRateYAttributes"];
+    if(note == nil || [note object] == [baselineView0 xAxis])
+        [model setMiscAttributes:[(ORAxis*)[baselineView0 xAxis] attributes] forKey:@"BaseView0XAttributes"];
+    if(note == nil || [note object] == [baselineView0 yAxis])
+        [model setMiscAttributes:[(ORAxis*)[baselineView0 yAxis] attributes] forKey:@"BaseView0YAttributes"];
+    if(note == nil || [note object] == [baselineView1 xAxis])
+        [model setMiscAttributes:[(ORAxis*)[baselineView1 xAxis] attributes] forKey:@"BaseView1XAttributes"];
+    if(note == nil || [note object] == [baselineView1 yAxis])
+        [model setMiscAttributes:[(ORAxis*)[baselineView1 yAxis] attributes] forKey:@"BaseView1YAttributes"];
+    if(note == nil || [note object] == [baselineView2 xAxis])
+        [model setMiscAttributes:[(ORAxis*)[baselineView2 xAxis] attributes] forKey:@"BaseView2XAttributes"];
+    if(note == nil || [note object] == [baselineView2 yAxis])
+        [model setMiscAttributes:[(ORAxis*)[baselineView2 yAxis] attributes] forKey:@"BaseView2YAttributes"];
+    if(note == nil || [note object] == [baselineView3 xAxis])
+        [model setMiscAttributes:[(ORAxis*)[baselineView3 xAxis] attributes] forKey:@"BaseView3XAttributes"];
+    if(note == nil || [note object] == [baselineView3 yAxis])
+        [model setMiscAttributes:[(ORAxis*)[baselineView3 yAxis] attributes] forKey:@"BaseView3YAttributes"];
 }
 
 - (void) miscAttributesChanged:(NSNotification*)note
@@ -491,17 +579,49 @@
             [timeRateLogButton setState:[[attrib objectForKey:ORAxisUseLog] boolValue]];
         }
     }
+    if(note == nil || [key isEqualToString:@"BaseView0XAttributes"]){
+        if(note == nil) attrib = [model miscAttributesForKey:@"BaseView0XAttributes"];
+        if(attrib) [self setPlot:baselineView0 xAttributes:attrib];
+    }
+    if(note == nil || [key isEqualToString:@"BaseView0YAttributes"]){
+        if(note == nil) attrib = [model miscAttributesForKey:@"BaseView0YAttributes"];
+        if(attrib) [self setPlot:baselineView0 yAttributes:attrib];
+    }
+    if(note == nil || [key isEqualToString:@"BaseView1XAttributes"]){
+        if(note == nil) attrib = [model miscAttributesForKey:@"BaseView1XAttributes"];
+        if(attrib) [self setPlot:baselineView1 xAttributes:attrib];
+    }
+    if(note == nil || [key isEqualToString:@"BaseView1YAttributes"]){
+        if(note == nil) attrib = [model miscAttributesForKey:@"BaseView1YAttributes"];
+        if(attrib) [self setPlot:baselineView1 yAttributes:attrib];
+    }
+    if(note == nil || [key isEqualToString:@"BaseView2XAttributes"]){
+        if(note == nil) attrib = [model miscAttributesForKey:@"BaseView2XAttributes"];
+        if(attrib) [self setPlot:baselineView2 xAttributes:attrib];
+    }
+    if(note == nil || [key isEqualToString:@"BaseView3YAttributes"]){
+        if(note == nil) attrib = [model miscAttributesForKey:@"BaseView3YAttributes"];
+        if(attrib) [self setPlot:baselineView3 yAttributes:attrib];
+    }
+}
+
+- (void) enableBaselineHistoryChanged:(NSNotification*)note
+{
+    [enableBaselineHistoryButton setIntValue:(int)[model enableBaselineHistory]];
+}
+
+- (void) baselineSampleTimeChanged:(NSNotification*)note
+{
+    [baselineSampleTimeTextField setDoubleValue:[model baselineSampleTime]];
 }
 
 - (void) settingsLock:(bool)lock
 {
     lock |= [gOrcaGlobals runInProgress] || [gSecurity isLocked:ORFlashCamCardSettingsLock];
     [super settingsLock:lock];
-    [fwTypePUButton         setEnabled:!lock];
     [chanEnabledMatrix      setEnabled:!lock];
     [trigOutEnabledMatrix   setEnabled:!lock];
     [baselineMatrix         setEnabled:!lock];
-    [baseBiasMatrix         setEnabled:!lock];
     [thresholdMatrix        setEnabled:!lock];
     [adcGainMatrix          setEnabled:!lock];
     [trigGainMatrix         setEnabled:!lock];
@@ -510,6 +630,7 @@
     [flatTopTimeMatrix      setEnabled:!lock];
     [poleZeroTimeMatrix     setEnabled:!lock];
     [postTriggerMatrix      setEnabled:!lock];
+    [baseBiasTextField      setEnabled:!lock];
     [majorityLevelPUButton  setEnabled:!lock];
     [majorityWidthTextField setEnabled:!lock];
     [trigOutEnableButton    setEnabled:!lock];
@@ -517,12 +638,6 @@
 
 
 #pragma mark •••Actions
-
-- (IBAction) fwTypeAction:(id)sender
-{
-    if((unsigned int)[sender indexOfSelectedItem] != [model fwType])
-        [model setFWtype:(unsigned int)[sender indexOfSelectedItem]];
-}
 
 - (IBAction) chanEnabledAction:(id)sender
 {
@@ -540,12 +655,6 @@
 {
     if([sender intValue] != [model baseline:(unsigned int)[[sender selectedCell] tag]])
         [model setBaseline:(unsigned int)[[sender selectedCell] tag] withValue:[sender intValue]];
-}
-
-- (IBAction) baseBiasAction:(id)sender
-{
-    if([sender intValue] != [model baseBias:(unsigned int)[[sender selectedCell] tag]])
-        [model setBaseBias:(unsigned int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 - (IBAction) thresholdAction:(id)sender
@@ -596,6 +705,11 @@
         [model setPostTrigger:(unsigned int)[[sender selectedCell] tag] withValue:[sender floatValue]];
 }
 
+- (IBAction) baseBiasAction:(id)sender
+{
+    [model setBaseBias:[sender intValue]];
+}
+
 - (IBAction) majorityLevelAction:(id)sender
 {
     [model setMajorityLevel:(int)[sender indexOfSelectedItem]+1];
@@ -624,29 +738,89 @@
         [model setRateIntTime:[sender doubleValue]];
 }
 
+- (IBAction) enableBaselineHistoryAction:(id)sender
+{
+    [model setEnableBaselineHistory:(bool)[sender intValue]];
+}
+
+- (IBAction) baselineSampleTimeAction:(id)sender
+{
+    [model setBaselineSampleTime:[sender doubleValue]];
+}
+
 
 #pragma mark •••Data Source
 
 - (double) getBarValue:(int)tag
+{
+    return [[[[model trigRates] rates] objectAtIndex:tag] rate];
+}
+
+- (double) getSecondaryBarValue:(int)tag
 {
     return [[[[model wfRates] rates] objectAtIndex:tag] rate];
 }
 
 - (int) numberPointsInPlot:(id)aPlotter
 {
+    unsigned int tag = (unsigned int) [aPlotter tag];
     if([aPlotter plotView] == [timeRateView plotView]) return (int) [[[model wfRates] timeRate] count];
+    else if([aPlotter plotView] == [baselineView0 plotView]) return (int) [[model baselineHistory:tag] count];
+    else if([aPlotter plotView] == [baselineView1 plotView]) return (int) [[model baselineHistory:tag] count];
+    else if([aPlotter plotView] == [baselineView2 plotView]) return (int) [[model baselineHistory:tag] count];
+    else if([aPlotter plotView] == [baselineView3 plotView]) return (int) [[model baselineHistory:tag] count];
     else return [super numberPointsInPlot:aPlotter];
 }
 
 - (void) plotter:(id)aPlotter index:(int)i x:(double*)xValue y:(double*)yValue;
 {
+    unsigned int tag = (unsigned int) [aPlotter tag];
     if([aPlotter plotView] == [timeRateView plotView]){
-        int count = (int)[[[model wfRates] timeRate] count];
-        int index = count-i-1;
-        *yValue = [[[model wfRates] timeRate] valueAtIndex:index];
-        *xValue = [[[model wfRates] timeRate] timeSampledAtIndex:index];
+        if(tag == 0){
+            int count = (int) [[[model trigRates] timeRate] count];
+            int index = count-i-1;
+            *yValue = [[[model trigRates] timeRate] valueAtIndex:index];
+            *xValue = [[[model trigRates] timeRate] timeSampledAtIndex:index];
+        }
+        else if(tag == 1){
+            int count = (int) [[[model wfRates] timeRate] count];
+            int index = count-i-1;
+            *yValue = [[[model wfRates] timeRate] valueAtIndex:index];
+            *xValue = [[[model wfRates] timeRate] timeSampledAtIndex:index];
+        }
+    }
+    else if([aPlotter plotView] == [baselineView0 plotView] || [aPlotter plotView] == [baselineView0 plotView] ||
+            [aPlotter plotView] == [baselineView2 plotView] || [aPlotter plotView] == [baselineView3 plotView]){
+        int index = (int) [[model baselineHistory:tag] count] - i - 1;
+        if(index >= 0){
+            *xValue = [[model baselineHistory:tag] timeSampledAtIndex:index];
+            *yValue = [[model baselineHistory:tag] valueAtIndex:index];
+        }
     }
     else [super plotter:aPlotter index:i x:xValue y:yValue];
+}
+
+@end
+
+
+@implementation ORFlashCamADCStdController
+
+- (id) init
+{
+    self = [super initWithWindowNibName:@"FlashCamADCStd"];
+    return self;
+}
+
+- (void) setModel:(id)aModel
+{
+    [super setModel:aModel];
+    [shapingLabel setStringValue:@"Fast Shape (ns)"];
+    [flatTopLabel setStringValue:@"Slow Shape (ns)"];
+    for(unsigned int i=0; i<[model numberOfChannels]; i++){
+        id cell = [filterTypeMatrix cellWithTag:i];
+        for(unsigned int j=0; j<3; j++) [[cell itemAtIndex:j] setTitle:@"N/A"];
+    }
+    [filterTypeMatrix setEnabled:NO];
 }
 
 @end

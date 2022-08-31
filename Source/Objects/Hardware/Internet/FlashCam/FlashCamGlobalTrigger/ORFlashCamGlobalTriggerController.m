@@ -53,6 +53,14 @@
                      selector : @selector(connectionChanged:)
                          name : ORConnectionChanged
                        object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(majorityLevelChanged:)
+                         name : ORFlashCamGlobalTriggerModelMajorityLevelChanged
+                       object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(majorityWidthChanged:)
+                         name : ORFlashCamGlobalTriggerModelMajorityWidthChanged
+                       object : nil];
 }
 
 - (void) awakeFromNib
@@ -65,6 +73,8 @@
     [super updateWindow];
     [self connectionChanged:nil];
     [self statusChanged:nil];
+    [self majorityLevelChanged:nil];
+    [self majorityWidthChanged:nil];
 }
 
 #pragma mark •••Interface management
@@ -101,6 +111,42 @@
     [envErrorsTextField1   setIntValue:[envErrorsTextField   intValue]];
     [ctiErrorsTextField1   setIntValue:[ctiErrorsTextField   intValue]];
     [linkErrorsTextField1  setIntValue:[linkErrorsTextField  intValue]];
+}
+
+- (void) majorityLevelChanged:(NSNotification*)note
+{
+    [majorityLevelTextField setIntValue:[model majorityLevel]];
+}
+
+- (void) majorityWidthChanged:(NSNotification*)note
+{
+    [majorityWidthTextField setIntValue:[model majorityWidth]];
+}
+
+- (void) settingsLock:(bool)lock
+{
+    lock |= [gOrcaGlobals runInProgress] || [gSecurity isLocked:ORFlashCamCardSettingsLock];
+    [super settingsLock:lock];
+    [majorityLevelTextField setEnabled:!lock];
+    [majorityWidthTextField setEnabled:!lock];
+}
+
+#pragma mark •••Actions
+
+- (IBAction) printFlagsAction:(id)sender
+{
+    [super printFlagsAction:sender];
+    [model printRunFlags];
+}
+
+- (IBAction) majorityLevelAction:(id)sender
+{
+    [model setMajorityLevel:[sender intValue]];
+}
+
+- (IBAction) majorityWidthAction:(id)sender
+{
+    [model setMajorityWidth:[sender intValue]];
 }
 
 @end

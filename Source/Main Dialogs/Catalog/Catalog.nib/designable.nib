@@ -175,7 +175,7 @@
                                                 <rect key="frame" x="3" y="3" width="275" height="104"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="288">
+                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="128" translatesAutoresizingMaskIntoConstraints="NO" id="288">
                                                         <rect key="frame" x="130" y="76" width="132" height="13"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="&lt;---Requires 617 Driver" id="25801">
@@ -184,7 +184,7 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="289">
+                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="128" translatesAutoresizingMaskIntoConstraints="NO" id="289">
                                                         <rect key="frame" x="130" y="31" width="132" height="13"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="&lt;---Requires 620 Driver" id="25802">
@@ -220,7 +220,7 @@
                                                 <rect key="frame" x="3" y="3" width="275" height="57"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="290">
+                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="128" translatesAutoresizingMaskIntoConstraints="NO" id="290">
                                                         <rect key="frame" x="130" y="27" width="132" height="13"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="&lt;---Requires Bit3 Driver" id="25806">
@@ -241,7 +241,7 @@
                                             </view>
                                             <font key="titleFont" metaFont="label"/>
                                         </box>
-                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="295">
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="146" translatesAutoresizingMaskIntoConstraints="NO" id="295">
                                             <rect key="frame" x="593" y="223" width="150" height="13"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="&lt;---Requires Camac Driver" id="25808">
@@ -250,7 +250,7 @@
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="296">
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="162" translatesAutoresizingMaskIntoConstraints="NO" id="296">
                                             <rect key="frame" x="590" y="73" width="166" height="13"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="&lt;---Drag into Controller Dialog" id="25809">
@@ -259,7 +259,7 @@
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26230">
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="146" translatesAutoresizingMaskIntoConstraints="NO" id="26230">
                                             <rect key="frame" x="598" y="143" width="150" height="17"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="&lt;---Requires PXI Driver" id="26233">
@@ -703,7 +703,7 @@
                                                         <rect key="frame" x="10" y="7" width="840" height="231"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1076">
+                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="201" translatesAutoresizingMaskIntoConstraints="NO" id="1076">
                                                                 <rect key="frame" x="351" y="138" width="205" height="32"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Obsolete -- Requires code compiled with 'Think-C'. " id="25851">
@@ -728,7 +728,7 @@
                                                         <rect key="frame" x="10" y="7" width="840" height="231"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="12971">
+                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="144" translatesAutoresizingMaskIntoConstraints="NO" id="12971">
                                                                 <rect key="frame" x="619" y="205" width="148" height="18"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="(VME64 Only)" id="25858">
@@ -879,7 +879,7 @@
                                                         <rect key="frame" x="10" y="7" width="840" height="231"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26193">
+                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="54" translatesAutoresizingMaskIntoConstraints="NO" id="26193">
                                                                 <rect key="frame" x="297" y="39" width="58" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Scalers" id="26194">
@@ -1627,7 +1627,7 @@ Digitizer</string>
                                             <font key="font" metaFont="miniSystem"/>
                                             <tabViewItems>
                                                 <tabViewItem label="Univ" identifier="1" id="26998">
-                                                    <view key="view" ambiguous="YES" id="26999">
+                                                    <view key="view" id="26999">
                                                         <rect key="frame" x="10" y="7" width="787" height="231"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
@@ -1647,7 +1647,7 @@ Digitizer</string>
                                                                     <font key="font" metaFont="system" size="10"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26402">
+                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="153" translatesAutoresizingMaskIntoConstraints="NO" id="26402">
                                                                 <rect key="frame" x="295" y="26" width="157" height="14"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="May not be fully functional" id="26403">
@@ -1785,7 +1785,7 @@ Controller</string>
                                     <rect key="frame" x="10" y="25" width="923" height="265"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="10918">
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="73" translatesAutoresizingMaskIntoConstraints="NO" id="10918">
                                             <rect key="frame" x="102" y="27" width="77" height="26"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="&lt;--Not Fully Functional" id="25911">
@@ -1962,7 +1962,7 @@ Controller</string>
                                                 <font key="font" metaFont="system" size="10"/>
                                             </buttonCell>
                                         </button>
-                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26724">
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="73" translatesAutoresizingMaskIntoConstraints="NO" id="26724">
                                             <rect key="frame" x="765" y="215" width="77" height="26"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="&lt;--Not Fully Functional" id="26727">
@@ -2313,7 +2313,7 @@ Gauge Controller</string>
                                                                     <font key="font" metaFont="system" size="10"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26920">
+                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="73" translatesAutoresizingMaskIntoConstraints="NO" id="26920">
                                                                 <rect key="frame" x="148" y="146" width="77" height="26"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="&lt;--Not Fully Functional" id="26921">
@@ -2428,7 +2428,7 @@ Gauge Controller</string>
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BQc-SX-sf9">
-                                                                <rect key="frame" x="181" y="5" width="62" height="16"/>
+                                                                <rect key="frame" x="153" y="5" width="62" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Crate" id="rl3-Ff-YdW">
                                                                     <font key="font" metaFont="smallSystem"/>
@@ -2445,22 +2445,21 @@ Gauge Controller</string>
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="ORFlashCamADCModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i68-D8-oUs" customClass="ObjectFactory">
-                                                                <rect key="frame" x="333" y="34" width="21" height="172"/>
+                                                                <rect key="frame" x="298" y="36" width="21" height="172"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="flashcam_adc" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="SIZ-Jy-BRz">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EYj-sJ-2MS">
-                                                                <rect key="frame" x="310" y="7" width="66" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="ADC Card" id="JXh-Tw-jWj">
-                                                                    <font key="font" metaFont="smallSystem"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
+                                                            <button toolTip="ORFlashCamADCStdModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K7Y-4z-7k5" customClass="ObjectFactory">
+                                                                <rect key="frame" x="378" y="37" width="21" height="172"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="flashcam_adc" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="2ko-Mo-Zr2">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                            </button>
                                                             <button toolTip="ORFlashCamReadoutModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sl9-7i-LSr" customClass="ObjectFactory">
                                                                 <rect key="frame" x="733" y="142" width="79" height="67"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -2504,17 +2503,8 @@ Gauge Controller</string>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c4C-Zf-chJ">
-                                                                <rect key="frame" x="413" y="9" width="74" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Trigger Card" id="4P7-wh-dA1">
-                                                                    <font key="font" metaFont="smallSystem"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
                                                             <button toolTip="ORFlashCamCrateModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HRS-Ov-bBL" customClass="ObjectFactory">
-                                                                <rect key="frame" x="146" y="31" width="133" height="177"/>
+                                                                <rect key="frame" x="118" y="31" width="133" height="177"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="flashcam_crate" imagePosition="only" alignment="center" imageScaling="axesIndependently" inset="2" id="xtY-Ni-VIE">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2530,7 +2520,7 @@ Gauge Controller</string>
                                                                 </buttonCell>
                                                             </button>
                                                             <button toolTip="ORFlashCamTriggerModel" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7r7-Bs-lS8" customClass="ObjectFactory">
-                                                                <rect key="frame" x="435" y="35" width="31" height="174"/>
+                                                                <rect key="frame" x="456" y="34" width="31" height="174"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="flashcam_trigger" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="ebe-NE-rom">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2545,10 +2535,37 @@ Gauge Controller</string>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OoQ-LC-3Cw">
+                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="72" translatesAutoresizingMaskIntoConstraints="NO" id="OoQ-LC-3Cw">
                                                                 <rect key="frame" x="512" y="3" width="76" height="28"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" selectable="YES" alignment="center" title="Global Trigger Card" id="51s-Jz-3Fr">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="72" translatesAutoresizingMaskIntoConstraints="NO" id="y6P-JY-MOR">
+                                                                <rect key="frame" x="270" y="3" width="76" height="28"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <textFieldCell key="cell" selectable="YES" alignment="center" title="ADC Card     6 Ch, 16 bit" id="qIG-0V-asb">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="72" translatesAutoresizingMaskIntoConstraints="NO" id="Tjp-xq-u8h">
+                                                                <rect key="frame" x="350" y="3" width="76" height="28"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <textFieldCell key="cell" selectable="YES" alignment="center" title="ADC Card     24 Ch, 12 bit" id="SI4-CX-Y8P">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c4C-Zf-chJ">
+                                                                <rect key="frame" x="434" y="9" width="74" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Trigger Card" id="4P7-wh-dA1">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -2567,7 +2584,7 @@ Gauge Controller</string>
                                     <rect key="frame" x="10" y="25" width="923" height="265"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="434">
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="125" translatesAutoresizingMaskIntoConstraints="NO" id="434">
                                             <rect key="frame" x="563" y="88" width="129" height="67"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" id="26021">
@@ -2578,7 +2595,7 @@ Can only be used with the M21 M-Module controller.</string>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="435">
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="47" translatesAutoresizingMaskIntoConstraints="NO" id="435">
                                             <rect key="frame" x="518" y="141" width="51" height="17"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="&lt;----" id="26022">
@@ -3116,7 +3133,7 @@ Relay</string>
                                             <font key="font" metaFont="label"/>
                                             <tabViewItems>
                                                 <tabViewItem label="SNO/Ncd" identifier="" id="179">
-                                                    <view key="view" ambiguous="YES" id="181">
+                                                    <view key="view" id="181">
                                                         <rect key="frame" x="10" y="7" width="817" height="205"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
@@ -3499,6 +3516,22 @@ Relay</string>
                                                         </subviews>
                                                     </view>
                                                 </tabViewItem>
+                                                <tabViewItem label="LEGEND" identifier="" id="Vg7-2T-Ht5">
+                                                    <view key="view" id="Hg0-s4-Ez9">
+                                                        <rect key="frame" x="10" y="7" width="817" height="209"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <subviews>
+                                                            <button toolTip="ORL200Model" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5pZ-ja-Wsi" customClass="ObjectFactory">
+                                                                <rect key="frame" x="29" y="21" width="131" height="157"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="square" title="LEGEND-200" bezelStyle="shadowlessSquare" image="L200" imagePosition="above" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="1Jb-T7-CXf">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system" size="10"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                        </subviews>
+                                                    </view>
+                                                </tabViewItem>
                                             </tabViewItems>
                                         </tabView>
                                     </subviews>
@@ -3643,6 +3676,7 @@ Relay</string>
         <image name="KatrinV4FLTCard" width="12" height="152"/>
         <image name="KatrinV4SLTCard" width="12" height="152"/>
         <image name="Keithley6487" width="100" height="46"/>
+        <image name="L200" width="799" height="799"/>
         <image name="L2301Card" width="16" height="128"/>
         <image name="L2551Card" width="16" height="128"/>
         <image name="L4532" width="16" height="128"/>
