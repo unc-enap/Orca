@@ -75,9 +75,9 @@ Followed by the rest of the channel values
 	int theChan;
 	for(theChan=0;theChan<numChannels;theChan++){
 		theString = [theString stringByAppendingFormat:@"Channel %d (%@)\n",theChan,(onMask & (0x1<<theChan))?@"ON":@"OFF"];
-		theData.asLong = ptr[5+theChan]; //act Voltage
+		theData.asLong = ptr[5+theChan*2]; //act Voltage
 		theString = [theString stringByAppendingFormat:@"Voltage: %c%.2f V\n",polarity?'+':'-',theData.asFloat];
-		theData.asLong = ptr[6+theChan]; //act Current
+		theData.asLong = ptr[6+theChan*2]; //act Current
 		theString = [theString stringByAppendingFormat:@"Current: %.3f mA\n",theData.asFloat*1000000.];
 	}
 	return theString;
