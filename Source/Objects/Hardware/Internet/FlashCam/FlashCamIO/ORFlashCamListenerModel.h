@@ -69,12 +69,14 @@
     ORTimeRate* dataRateHistory;
     ORTimeRate* eventRateHistory;
     ORTimeRate* deadTimeHistory;
-    ORTaskSequence* runTask;
+    ORTaskSequence* taskSequencer;  //changed name MAH 9/17/22
+    NSTask*     runTask;            //added. MAH 9/17/22
     ORReadOutList* readOutList;
     NSArray* dataTakers;
     NSMutableArray* readOutArgs;
     NSMutableArray* chanMap;
     NSMutableArray* cardMap;
+    NSLock* readStateLock; //MAH 9/18/22
 }
 
 #pragma mark •••Initialization
@@ -115,7 +117,7 @@
 - (ORTimeRate*) dataRateHistory;
 - (ORTimeRate*) eventRateHistory;
 - (ORTimeRate*) deadTimeHistory;
-- (ORTaskSequence*) runTask;
+- (ORTaskSequence*) taskSequencer;
 - (ORReadOutList*) readOutList;
 - (NSMutableArray*) readOutArgs;
 - (NSMutableArray*) children;
