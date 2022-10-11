@@ -102,13 +102,13 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     deadTime           = 0.0;
     totDead            = 0.0;
     curDead            = 0.0;
-    dataRateHistory    = [[[ORTimeRate alloc] init] retain];
+    dataRateHistory    = [[ORTimeRate alloc] init]; //MAH 10/2/22 removed retain
     [dataRateHistory   setLastAverageTime:[NSDate date]];
     [dataRateHistory   setSampleTime:10];
-    eventRateHistory   = [[[ORTimeRate alloc] init] retain];
+    eventRateHistory   = [[ORTimeRate alloc] init]; //MAH 10/2/22 removed retain
     [eventRateHistory  setLastAverageTime:[NSDate date]];
     [eventRateHistory  setSampleTime:10];
-    deadTimeHistory    = [[[ORTimeRate alloc] init] retain];
+    deadTimeHistory    = [[ORTimeRate alloc] init]; //MAH 10/2/22 removed retain
     [deadTimeHistory   setLastAverageTime:[NSDate date]];
     [deadTimeHistory   setSampleTime:10];
     taskSequencer            = nil;
@@ -630,7 +630,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
         if([[self configParam:@"daqMode"] intValue] < 10) [configParams setObject:[NSNumber numberWithInt:-1] forKey:p];
         else{
             if([p isEqualToString:@"nonsparseStart"])
-                [configParams setObject:[NSNumber numberWithInt:MAX(-1, [v intValue])] forKey:p];  //jfw MAX -1 consistent with Tom's L200 code (not repository)
+                [configParams setObject:[NSNumber numberWithInt:MAX(-1, [v intValue])] forKey:p]; //jfw MAX -1 consistent with Tom's L200 code
             else if([p isEqualToString:@"nonsparseEnd"])
                 [configParams setObject:[NSNumber numberWithInt:MAX([[self configParam:@"nonsparseStart"] intValue], [v intValue])] forKey:p];
             else if([p isEqualToString:@"sparseOverwrite"])
@@ -899,7 +899,9 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
             [readStateLock unlock]; //MAH. early return must release
             return;
         }
-        if([gOrcaGlobals runRunning]) [self performSelector:@selector(read) withObject:nil afterDelay:throttle];
+        // next line, original code by Tom with Throttle commented out (MAH and JFW)  10/11/22
+ //     if([gOrcaGlobals runRunning]) [self performSelector:@selector(read) withObject:nil afterDelay:throttle];
+        if([gOrcaGlobals runRunning]) [self performSelector:@selector(read) withObject:nil afterDelay:.01];
         [readStateLock unlock]; //MAH
     }
     
@@ -1342,7 +1344,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:@"ORFlashCamListenerModel"];
     [self startReadoutAfterPing];
     dataTakers = [[readOutList allObjects] retain];
-    NSEnumerator* e = [dataTakers objectEnumerator];
+    NSEnumerator* e = [[readOutList allObjects] objectEnumerator];
     id obj;
     while(obj = [e nextObject]) [obj runTaskStarted:aDataPacket userInfo:userInfo];
 }
@@ -1476,15 +1478,15 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     deadTime          = 0.0;
     totDead           = 0.0;
     curDead           = 0.0;
-    [dataRateHistory autorelease];
+   // [dataRateHistory autorelease]; //MAH 10/5/22 not needed
     dataRateHistory   = [[ORTimeRate alloc] init];
     [dataRateHistory  setLastAverageTime:[NSDate date]];
     [dataRateHistory  setSampleTime:10];
-    [eventRateHistory autorelease];
+   // [eventRateHistory autorelease];//MAH 10/5/22 not needed
     eventRateHistory  = [[ORTimeRate alloc] init];
     [eventRateHistory setLastAverageTime:[NSDate date]];
     [eventRateHistory setSampleTime:10];
-    [deadTimeHistory autorelease];
+  //  [deadTimeHistory autorelease];//MAH 10/5/22 not needed
     deadTimeHistory   = [[ORTimeRate alloc] init];
     [deadTimeHistory  setLastAverageTime:[NSDate date]];
     [deadTimeHistory  setSampleTime:10];

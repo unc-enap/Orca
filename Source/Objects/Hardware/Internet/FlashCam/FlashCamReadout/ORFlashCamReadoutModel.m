@@ -394,7 +394,7 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     if([self listenerCount] >= kFlashCamMaxListeners){
         NSLog(@"ORFlashCamReadoutModel: maximum of 8 listeners currently supported\n");
     }
-    [self addObject:[listener retain]];
+    [self addObject:listener]; //MAH 10/5/22 removed retain
     NSDictionary* info = [NSDictionary dictionaryWithObjectsAndKeys:
                           [NSNumber numberWithInt:[self listenerCount]-1],
                           @"index", [NSNumber numberWithInt:(int)[listener tag]], @"tag", nil];
