@@ -55,19 +55,19 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
     linkErrors  = 0;
     otherErrors = 0;
     for(unsigned int i=0; i<kFlashCamCardNTemps; i++){
-        tempHistory[i] = [[[ORTimeRate alloc] init] retain];
+        tempHistory[i] = [[ORTimeRate alloc] init]; //MAH 10/1/22 removed retain
         [tempHistory[i] setLastAverageTime:[NSDate date]];
         [tempHistory[i] setSampleTime:10];
     }
     for(unsigned int i=0; i<kFlashCamCardNVoltages; i++){
-        voltageHistory[i] = [[[ORTimeRate alloc] init] retain];
+        voltageHistory[i] = [[ORTimeRate alloc] init]; //MAH 10/1/22 removed retain
         [voltageHistory[i] setLastAverageTime:[NSDate date]];
         [voltageHistory[i] setSampleTime:10];
     }
-    currentHistory = [[[ORTimeRate alloc] init] retain];
+    currentHistory = [[ORTimeRate alloc] init];//MAH 10/1/22 removed retain
     [currentHistory setLastAverageTime:[NSDate date]];
     [currentHistory setSampleTime:10];
-    humidityHistory = [[[ORTimeRate alloc] init] retain];
+    humidityHistory = [[ORTimeRate alloc] init];//MAH 10/1/22 removed retain
     [humidityHistory setLastAverageTime:[NSDate date]];
     [humidityHistory setSampleTime:10];
     [[self undoManager] enableUndoRegistration];
@@ -493,22 +493,22 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
     otherErrors = 0;
     for(unsigned int i=0; i<kFlashCamCardNTemps; i++){
         [tempHistory[i] release];
-        tempHistory[i] = [[[ORTimeRate alloc] init] retain];
+        tempHistory[i] = [[ORTimeRate alloc] init]; //MAH 10/1/22 removed retain
         [tempHistory[i] setLastAverageTime:[NSDate date]];
         [tempHistory[i] setSampleTime:1];
     }
     for(unsigned int i=0; i<kFlashCamCardNVoltages; i++){
-        [voltageHistory[i] release];
-        voltageHistory[i] = [[[ORTimeRate alloc] init] retain];
+       // [voltageHistory[i] release]; //MAH 10/5/22 unneeded release
+        voltageHistory[i] = [[ORTimeRate alloc] init];//MAH 10/1/22 removed retain
         [voltageHistory[i] setLastAverageTime:[NSDate date]];
         [voltageHistory[i] setSampleTime:1];
     }
-    [currentHistory release];
-    currentHistory = [[[ORTimeRate alloc] init] retain];
+    //[currentHistory release]; //MAH 10/5/22 unneeded release
+    currentHistory = [[ORTimeRate alloc] init];//MAH 10/1/22 removed retain
     [currentHistory setLastAverageTime:[NSDate date]];
     [currentHistory setSampleTime:1];
-    [humidityHistory release];
-    humidityHistory = [[[ORTimeRate alloc] init] retain];
+    //[humidityHistory release]; //MAH 10/5/22 unneeded release
+    humidityHistory = [[ORTimeRate alloc] init];//MAH 10/1/22 removed retain
     [humidityHistory setLastAverageTime:[NSDate date]];
     [humidityHistory setSampleTime:1];
     [[self undoManager] enableUndoRegistration];
