@@ -17,10 +17,11 @@
                 <outlet property="baselineView2" destination="n5H-ve-Y5m" id="y7L-To-S5Q"/>
                 <outlet property="baselineView3" destination="lfd-ZL-ESY" id="lq6-MM-VFm"/>
                 <outlet property="cardAddressTextField" destination="anm-Kz-l8D" id="y3F-HQ-4cK"/>
-                <outlet property="chanEnabledMatrix" destination="R9Z-wq-qSB" id="QFW-dj-4zV"/>
+                <outlet property="chanEnabledMatrix" destination="R9Z-wq-qSB" id="8uT-xa-g8U"/>
                 <outlet property="chanEnabledRateMatrix" destination="s53-3h-TYD" id="MHn-m6-fJM"/>
                 <outlet property="ctiErrorsTextField" destination="dll-Qg-8S0" id="U9y-6e-JXN"/>
                 <outlet property="currentView" destination="kCS-A6-hgd" id="uzY-HL-0nb"/>
+                <outlet property="enableBaselineHistoryButton" destination="Tac-22-83P" id="xaw-Qm-vge"/>
                 <outlet property="envErrorsTextField" destination="RpO-y1-lco" id="x84-RY-foB"/>
                 <outlet property="fcioIDTextField" destination="iBa-1L-S8j" id="ZU7-z2-Ar3"/>
                 <outlet property="filterTypeMatrix" destination="r1n-vu-Nre" id="4TB-wz-eQr"/>
@@ -59,7 +60,7 @@
                 <outlet property="totalTrigRateTextField" destination="zBA-SG-gVy" id="oay-1m-t6y"/>
                 <outlet property="trigGainMatrix" destination="vIr-wA-7FR" id="C5N-7p-WX5"/>
                 <outlet property="trigOutEnableButton" destination="FHK-J4-nMW" id="zNz-xB-ZCZ"/>
-                <outlet property="trigOutEnabledMatrix" destination="R9Z-wq-qSB" id="uM8-9T-lZh"/>
+                <outlet property="trigOutEnabledMatrix" destination="GNe-do-ws0" id="dz1-eZ-fDr"/>
                 <outlet property="trigRateTextFields" destination="oqp-xa-l3x" id="rov-WW-xue"/>
                 <outlet property="voltageView" destination="R1N-1j-QpF" id="eJ9-QJ-Z4N"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="rRb-7V-ZAn"/>
@@ -515,7 +516,7 @@
                                                             </column>
                                                         </cells>
                                                         <connections>
-                                                            <action selector="trigOutEnabledAction:" target="-2" id="Qar-fn-JUs"/>
+                                                            <action selector="trigOutEnabledAction:" target="-2" id="QAS-wG-8LV"/>
                                                         </connections>
                                                     </matrix>
                                                     <matrix toolTip="Baseline DAC" verticalHuggingPriority="750" fixedFrame="YES" mode="track" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HZa-nl-WwH">
@@ -1860,7 +1861,7 @@
                                                             </column>
                                                         </cells>
                                                         <connections>
-                                                            <action selector="chanEnabledAction:" target="-2" id="5P7-Nh-K86"/>
+                                                            <action selector="chanEnabledAction:" target="-2" id="LoX-6T-TNb"/>
                                                         </connections>
                                                     </matrix>
                                                     <matrix toolTip="Input Number" verticalHuggingPriority="750" fixedFrame="YES" mode="track" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bvY-dS-rcX">
@@ -2075,6 +2076,60 @@
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                         <menuItem title="6" id="jBg-Nx-uMD">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="7" id="eHE-EP-XTD">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="8" id="pRL-82-Z3E">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="9" id="iss-wy-o0O">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="10" id="OJT-Tb-mcl">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="11" id="KDb-5o-fXZ">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="12" id="1NZ-2t-o4d">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="13" id="e48-FT-D3g">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="14" id="p4u-65-je9">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="15" id="KMK-bI-onE">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="16" id="vdU-dS-shM">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="17" id="Oja-Zs-n8x">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="18" id="pw3-cS-o5j">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="19" id="bC5-jV-8Xk">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="20" id="vkZ-M5-5ad">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="21" id="w6t-fn-dcm">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="22" id="aqb-JX-tOR">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="23" id="d5W-VC-qhN">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="24" id="z8z-GB-u7j">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>

@@ -118,6 +118,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     ORReadOutList* readList = [[ORReadOutList alloc] initWithIdentifier:@"ReadOut List"];
     [readList setAcceptedProtocol:@"ORDataTaker"];
     [readList addAcceptedObjectName:@"ORFlashCamADCModel"];
+    [readList addAcceptedObjectName:@"ORFlashCamADCStdModel"];
     [self setReadOutList:readList];
     [readList release];
     //[self setReadOutArgs:[[NSMutableArray alloc] init]]; //MAH 9/12/22 commented out. Caused double retain
