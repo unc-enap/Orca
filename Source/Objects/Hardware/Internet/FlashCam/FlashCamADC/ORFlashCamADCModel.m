@@ -757,7 +757,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
                 uint32_t hindex = index * kFlashCamADCWFHeaderLength;
                 dataRecord[0] = dataId | (dataRecordLength&0x3ffff);
                 dataRecord[1] = dataLengths | (wfHeaderBuffer[hindex+2]&0x3f);
-                dataRecord[2] = location | ((wfHeaderBuffer[hindex]&0xf) << 9) | (wfHeaderBuffer[hindex+1]&0x1ff);
+                dataRecord[2] = location | ((wfHeaderBuffer[hindex]&0x1f) << 9) | (wfHeaderBuffer[hindex+1]&0x1ff);
                 memcpy(dataRecord+3, wfHeaderBuffer+hindex+3, (kFlashCamADCWFHeaderLength-3)*sizeof(uint32_t));
                 uint32_t windex = index * (wfSamples + 2);
                 dataRecord[kFlashCamADCWFHeaderLength] = (wfBuffer[windex+1] << 16) | wfBuffer[windex];
