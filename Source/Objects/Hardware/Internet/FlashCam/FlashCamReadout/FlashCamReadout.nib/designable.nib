@@ -1192,12 +1192,13 @@
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
-                                                                            <popUpButtonCell key="dataCell" type="bevel" title="Unfiltered" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="bezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="OyL-Ex-93G" id="QRe-bc-NLr">
+                                                                            <popUpButtonCell key="dataCell" type="bevel" title="Std Firmware" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="bezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="OyL-Ex-93G" id="QRe-bc-NLr">
                                                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                                 <font key="font" metaFont="label"/>
                                                                                 <menu key="menu" id="w6y-fv-sGh">
                                                                                     <items>
-                                                                                        <menuItem title="Unfiltered" state="on" id="OyL-Ex-93G"/>
+                                                                                        <menuItem title="Std Firmware" id="OyL-Ex-93G"/>
+                                                                                        <menuItem title="Unfiltered" state="on" id="E8H-Mi-Jxb"/>
                                                                                         <menuItem title="1 x LP Filter" id="V3Q-9E-pFO"/>
                                                                                         <menuItem title="PZ + 1 x LP Filter + Derivative" id="c3z-s4-8VQ"/>
                                                                                         <menuItem title="Above item + 3 x LP Shaping" id="lEe-Ng-qS7">
@@ -1412,7 +1413,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" utility="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="2105" y="294" width="336" height="157"/>
-            <rect key="screenRect" x="1680" y="0.0" width="3840" height="2135"/>
+            <rect key="screenRect" x="1680" y="-210" width="3840" height="2135"/>
             <view key="contentView" id="8IV-mt-jha">
                 <rect key="frame" x="0.0" y="0.0" width="336" height="157"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -1492,7 +1493,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" utility="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="2105" y="294" width="336" height="157"/>
-            <rect key="screenRect" x="1680" y="0.0" width="3840" height="2135"/>
+            <rect key="screenRect" x="1680" y="-210" width="3840" height="2135"/>
             <view key="contentView" id="Kgl-6a-rkb">
                 <rect key="frame" x="0.0" y="0.0" width="336" height="157"/>
                 <autoresizingMask key="autoresizingMask"/>

@@ -837,7 +837,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
                 case FCIOEvent: {
                     int num_traces = state->event->num_traces;
                     if(num_traces != [chanMap count]){
-                        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: number of raw traces in event packet %d != channel map size %d, aborting\n", num_traces, [chanMap count]);
+                        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: number of raw traces in event packet %d != channel map size %d, aborting on %@:%d on %@\n", num_traces, [chanMap count], ip, port, interface);
                         [self disconnect:true];
                         [self runFailed];
                         [readStateLock unlock]; //MAH. early return must release
@@ -854,7 +854,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
                 case FCIOSparseEvent: {
                     int num_traces = state->event->num_traces;
                     if(num_traces > [chanMap count]){
-                        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: number of raw traces in event packet %d > channel map size %d, aborting\n", num_traces, [chanMap count]);
+                        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: number of raw traces in event packet %d > channel map size %d, aborting on %@:%d on %@\n", num_traces, [chanMap count], ip, port, interface);
                         [self disconnect:true];
                         [self runFailed];
                         [readStateLock unlock]; //MAH. early return must release
@@ -870,7 +870,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
                 }
                 case FCIORecEvent:
                     if(!unrecognizedPacket){
-                        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: skipping received FCIORecEvent packet - packet type not supported!\n");
+                        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: skipping received FCIORecEvent packet on %@:%d on %@ - packet type not supported!\n", ip, port, interface);
                         NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: WARNING - suppressing further instances of this message for this object in this run\n");
                     }
                     unrecognizedPacket = true;
@@ -883,7 +883,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
                     for(id n in unrecognizedStates) if((int) state->last_tag == [n intValue]) found = true;
                     if(!found){
                         [unrecognizedStates addObject:[NSNumber numberWithInt:(int)state->last_tag]];
-                        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: unrecognized fcio state tag %d\n", state->last_tag);
+                        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: unrecognized fcio state tag %d on %@:%d on %@\n", state->last_tag, ip, port, interface);
                         NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: WARNING - suppressing further instances of this message for this object in this run\n");
                     }
                     break;
@@ -893,7 +893,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
         }
         else{
             if(![[self status] isEqualToString:@"disconnected"]){
-                NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: failed to read state\n");
+                NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: failed to read state on %@:%d on %@\n", ip, port, interface);
                 [self disconnect:true];
                 [self runFailed];
             }
@@ -1011,7 +1011,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     for(ORReadOutObject* obj in [readOutList children]){
         if(![[obj object] isKindOfClass:NSClassFromString(@"ORFlashCamCard")]) continue;
         ORFlashCamCard* card = (ORFlashCamCard*) [obj object];
-        if([[card className] isEqualToString:@"ORFlashCamADCModel"]){
+        if([card isKindOfClass:NSClassFromString(@"ORFlashCamADCModel")]){
             ORFlashCamADCModel* adc = (ORFlashCamADCModel*) card;
             [addressList appendString:[NSString stringWithFormat:@"%x,", [adc cardAddress]]];
             [adcCards addObject:adc];
