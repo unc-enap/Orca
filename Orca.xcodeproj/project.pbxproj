@@ -20036,7 +20036,10 @@
 				PRODUCT_NAME = Orca;
 				SDKROOT = "";
 				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = "-Wmost";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-deprecated-declarations",
+				);
 				WRAPPER_EXTENSION = app;
 				YACCFLAGS = "";
 				YACC_SEPARATE_CODE_FILE = NO;
@@ -20119,7 +20122,10 @@
 				PRODUCT_NAME = Orca;
 				SDKROOT = "";
 				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = "-Wmost";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-deprecated-declarations",
+				);
 				WRAPPER_EXTENSION = app;
 				YACCFLAGS = "";
 				ZERO_LINK = NO;
@@ -20199,7 +20205,10 @@
 				PRODUCT_NAME = Orca;
 				SDKROOT = "";
 				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = "-Wmost";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-deprecated-declarations",
+				);
 				WRAPPER_EXTENSION = app;
 				YACCFLAGS = "";
 				ZERO_LINK = NO;

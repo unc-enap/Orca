@@ -772,7 +772,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
         [self setStatus:@"connected"];
         readerRecordCount = 0;
         bufferedRecords   = 0;
-        //[self read];
+        //[self read]; //now in takedata thread
         return YES;
     }
     else{
@@ -784,8 +784,8 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 
 - (void) disconnect:(bool)destroy
 {
-    @synchronized(self){ //MAH not needed??
-        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(read) object:nil];
+    @synchronized(self){
+        //[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(read) object:nil];
         if(reader) tmio_close(reader->stream);
         [self setStatus:@"disconnected"];
         if(destroy){
