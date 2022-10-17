@@ -748,6 +748,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 
 - (bool) connect
 {
+
     if(!chanMap){
         NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: channel mapping has not been specified, aborting connection\n");
         [self setStatus:@"disconnected"];
@@ -784,7 +785,8 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 
 - (void) disconnect:(bool)destroy
 {
-    @synchronized(self){
+
+//    @synchronized(self){ //MAH not needed now that "read" is in takeData thread
         //[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(read) object:nil];
         if(reader) tmio_close(reader->stream);
         [self setStatus:@"disconnected"];
@@ -796,11 +798,12 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
             NSLog(@"ORFlashCamListenerModel: disconnected from %@:%d on %@\n", ip, port, interface);
         [self setChanMap:nil];
         [self setCardMap:nil];
-    }
+  //  }
 }
 
 - (void) read
 {
+
     //-----------------------------------------------------------------------------------
     //MAH 9/18/22 
     //reading the status must not be done if the FC is being shutdown. If we get the lock
@@ -1172,6 +1175,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 
 - (void) readConfig:(fcio_config*)config
 {
+    
    // @synchronized(self){ //MAH not needed now that "read" is in takeData thread
         // validate the number of waveform samples
         if(config->eventsamples != [[self configParam:@"eventSamples"] intValue]){
@@ -1235,7 +1239,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 
 - (void) readStatus:(fcio_status*)fcstatus
 {
-//@synchronized(self){ //MAH not needed??
+//@synchronized(self){ //MAH not needed now that "read" is in takeData thread
         uint32_t index = statusBufferIndex;
         statusBufferIndex = (statusBufferIndex + 1) % kFlashCamStatusBufferLength;
         bufferedStatusCount ++;
@@ -1284,9 +1288,9 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
-    @synchronized(self){
+//    @synchronized(self){ //MAH not needed now that "read" is in takeData thread
         @try {
-            if(reader)[self read]; //MAH 10/17/22
+            if(reader)[self read]; //MAH 10/17/22 added so read calld in this thread instead of GUI thread
             // add a single configuration packet to the data
             if(bufferedConfigCount > 0){
                 uint32_t length = 2 + sizeof(fcio_config) / sizeof(uint32_t);
@@ -1321,7 +1325,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
             NSLogError(@"",@"FlashCamListener Error",@"");
             [e raise];
         }
-    }
+//    }
 }
 
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
@@ -1354,7 +1358,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     //The periodic status read will be not be repeated if the global
     //running flag is clear, but there might one pending.
     //this next line will ensure it doesn't get rescheduled at all after this point
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(read) object:nil];
+//    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(read) object:nil];
     @try { //MAH just in case an exception is thrown in the following block
         //If there is a read status in flight, we will block here until it is done
         [readStateLock lock];
