@@ -39,7 +39,7 @@
     NSMutableDictionary* configParams;
     int ioBuffer;
     int stateBuffer;
-    double throttle;
+    //double throttle; //MAH 10/17/22 removed
     FCIOStateReader* reader;
     int readerRecordCount;
     int bufferedRecords;
@@ -98,7 +98,7 @@
 - (int) timeout;
 - (int) ioBuffer;
 - (int) stateBuffer;
-- (double) throttle;
+//- (double) throttle; //MAH 10/17/22 removed
 - (FCIOStateReader*) reader;
 - (int) readerRecordCount;
 - (int) bufferedRecords;
@@ -134,7 +134,7 @@
 - (void) setTimeout:(int)to;
 - (void) setIObuffer:(int)io;
 - (void) setStateBuffer:(int)sb;
-- (void) setThrottle:(double)t;
+//- (void) setThrottle:(double)t; //MAH 10/17/22 removed
 - (void) setConfigId:(uint32_t)cId;
 - (void) setStatusId:(uint32_t)sId;
 - (void) setDataIds:(id)assigner;

@@ -77,7 +77,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     [self setConfigParam:@"logTime"         withValue:[NSNumber numberWithDouble:1.0]];
     [self setConfigParam:@"incBaseline"     withValue:[NSNumber numberWithBool:YES]];
     [self setConfigParam:@"trigAllEnable"   withValue:[NSNumber numberWithBool:YES]];
-    throttle           = 0.0;
+//    throttle           = 0.0; //MAH 10/17/22 removed
     reader             = NULL;
     readerRecordCount  = 0;
     bufferedRecords    = 0;
@@ -365,10 +365,10 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     return stateBuffer;
 }
 
-- (double) throttle
-{
-    return throttle;
-}
+//- (double) throttle //MAH 10/17/22 removed
+//{
+//    return throttle;
+//}
 
 - (FCIOStateReader*) reader
 {
@@ -668,13 +668,13 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
                                                         object:self];
 }
 
-- (void) setThrottle:(double)t
-{
-    if(throttle == t) return;
-    throttle = t;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelConfigChanged
-                                                        object:self];
-}
+//- (void) setThrottle:(double)t //MAH 10/17/22 removed
+//{
+//    if(throttle == t) return;
+//    throttle = t;
+//    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelConfigChanged
+//                                                        object:self];
+//}
 
 - (void) setConfigId:(uint32_t)cId
 {
@@ -1457,7 +1457,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     [self setTimeout:         [decoder decodeIntForKey:@"timeout"]];
     [self setIObuffer:        [decoder decodeIntForKey:@"ioBuffer"]];
     [self setStateBuffer:     [decoder decodeIntForKey:@"stateBuffer"]];
-    [self setThrottle:        [decoder decodeDoubleForKey:@"throttle"]];
+//    [self setThrottle:        [decoder decodeDoubleForKey:@"throttle"]];//MAH 10/17/22 removed
     if(configParams) [configParams release];
     configParams = [[decoder decodeObjectForKey:@"configParams"] retain];
     reader            = NULL;
@@ -1511,7 +1511,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     [encoder encodeInt:timeout             forKey:@"timeout"];
     [encoder encodeInt:ioBuffer            forKey:@"ioBuffer"];
     [encoder encodeInt:stateBuffer         forKey:@"stateBuffer"];
-    [encoder encodeDouble:throttle         forKey:@"throttle"];
+//    [encoder encodeDouble:throttle         forKey:@"throttle"];//MAH 10/17/22 removed
     [encoder encodeObject:readOutList      forKey:@"readOutList"];
 }
 
