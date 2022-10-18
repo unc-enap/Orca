@@ -715,7 +715,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
 
 - (void) event:(fcio_event*)event withIndex:(int)index andChannel:(unsigned int)channel
 {
-    @synchronized(self){
+    //@synchronized(self){ //MAH. 10/17/22 not needed
         if(channel >= [self numberOfChannels]){
             NSLog(@"ORFlashCamADCModel: invalid channel passed to event:withIndex:andChannel:, skipping packet\n");
             return;
@@ -745,12 +745,12 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
                        [self cardAddress], [self crate], [self slot]);
             [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelBufferFull object:self];
         }
-    }
+    //}
 }
 
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
-    @synchronized(self){
+//    @synchronized(self){  //MAH. 10/17/22 not needed
         @try{
             if(wfSamples == 0 || !wfBuffer || !dataRecord) return;
             else if(bufferIndex == takeDataIndex) return;
@@ -779,7 +779,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
             [self incExceptionCount];
             [localException raise];
         }
-    }
+//    }
 }
 
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
