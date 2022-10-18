@@ -78,9 +78,9 @@ xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  actual Current encoded as a float (chan
 	int theChan;
 	for(theChan=0;theChan<8;theChan++){
 		theString = [theString stringByAppendingFormat:@"Channel %d\n",theChan];
-		theData.asLong = ptr[5+theChan]; //act Voltage
+		theData.asLong = ptr[5+theChan*2]; //act Voltage
 		theString = [theString stringByAppendingFormat:@"Act Voltage (%d): %.2f V\n",theChan,theData.asFloat];
-		theData.asLong = ptr[6+theChan]; //act Current
+		theData.asLong = ptr[6+theChan*2]; //act Current
 		theString = [theString stringByAppendingFormat:@"Act Current (%d): %.3f mA\n",theChan,theData.asFloat*1000.];
 	}
 	return theString;

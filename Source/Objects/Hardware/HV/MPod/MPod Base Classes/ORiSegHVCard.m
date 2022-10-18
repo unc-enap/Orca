@@ -1128,10 +1128,10 @@ NSString* ORiSegHVCardCustomInfoChanged         = @"ORiSegHVCardCustomInfoChange
 		}theData;
 		for(i=0;i<[self numberOfChannels];i++){
 			theData.asFloat = [self channel:i readParamAsFloat:@"outputMeasurementSenseVoltage"];
-			data[5+i] = theData.asLong;
+			data[5+i*2] = theData.asLong;
 			
 			theData.asFloat = [self channel:i readParamAsFloat:@"outputMeasurementCurrent"];
-			data[6+i] = theData.asLong;
+			data[6+i*2] = theData.asLong;
 		}
         [[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification
                                                             object:[NSData dataWithBytes:data length:sizeof(int32_t)*n]];	}

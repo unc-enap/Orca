@@ -36,7 +36,7 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
 
 - (id) init
 {
-    [super init];
+    self = [super init]; //MAH 9/18/22 need to assign self to init 
     [[self undoManager] disableUndoRegistration];
     [self setCardAddress:0];
     [self setPROMSlot:0];
@@ -55,19 +55,19 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
     linkErrors  = 0;
     otherErrors = 0;
     for(unsigned int i=0; i<kFlashCamCardNTemps; i++){
-        tempHistory[i] = [[[ORTimeRate alloc] init] retain];
+        tempHistory[i] = [[ORTimeRate alloc] init]; //MAH 10/1/22 removed retain
         [tempHistory[i] setLastAverageTime:[NSDate date]];
         [tempHistory[i] setSampleTime:10];
     }
     for(unsigned int i=0; i<kFlashCamCardNVoltages; i++){
-        voltageHistory[i] = [[[ORTimeRate alloc] init] retain];
+        voltageHistory[i] = [[ORTimeRate alloc] init]; //MAH 10/1/22 removed retain
         [voltageHistory[i] setLastAverageTime:[NSDate date]];
         [voltageHistory[i] setSampleTime:10];
     }
-    currentHistory = [[[ORTimeRate alloc] init] retain];
+    currentHistory = [[ORTimeRate alloc] init];//MAH 10/1/22 removed retain
     [currentHistory setLastAverageTime:[NSDate date]];
     [currentHistory setSampleTime:10];
-    humidityHistory = [[[ORTimeRate alloc] init] retain];
+    humidityHistory = [[ORTimeRate alloc] init];//MAH 10/1/22 removed retain
     [humidityHistory setLastAverageTime:[NSDate date]];
     [humidityHistory setSampleTime:10];
     [[self undoManager] enableUndoRegistration];
@@ -76,10 +76,12 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
 
 - (void) releaseFirmwareVer
 {
-    if(firmwareVer){
-        for(NSUInteger i=0; i<[firmwareVer count]; i++) [[firmwareVer objectAtIndex:i] release];
-        [firmwareVer release];
-    }
+//    if(firmwareVer){
+//        for(NSUInteger i=0; i<[firmwareVer count]; i++) [[firmwareVer objectAtIndex:i] release];
+//        [firmwareVer release];
+//    }
+    
+    [firmwareVer release]; //MAH 9/18/22 no need to release each object in array
     firmwareVer = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamCardFirmwareVerChanged object:self];
 }
@@ -409,17 +411,17 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
 - (void) taskData:(NSDictionary*)taskData
 {
     if(!taskData) return;
-    NSString* text = [[taskData objectForKey:@"Text"] retain];
+    NSString* text = [taskData objectForKey:@"Text"]; //MAH 9/18/22 no need for the retain??
     if(!text) return;
-    if(!taskdata) taskdata = [[NSMutableArray array] retain];
-    [taskdata addObject:[[NSString stringWithString:text] retain]];
+    //if(!taskdata) taskdata = [[NSMutableArray array] retain];//MAH 9/18/22 if taskData==nil won't get here
+    [taskdata addObject:[NSString stringWithString:text]]; //MAH 9/18/22 no need for retain
     NSRange r = [text rangeOfString:@"ORFlashCamCard"];
     if(r.location != NSNotFound){
         NSString* s = [text substringWithRange:NSMakeRange(r.location, [text length]-r.location)];
         r = [s rangeOfString:@" endl "];
         if(r.location != NSNotFound) NSLog(@"%@\n", [s substringWithRange:NSMakeRange(0, r.location)]);
     }
-    [text release];
+    //[text release];//MAH 9/18/22 no longer retained above
 }
 
 // Once the firmware version request task is complete, release the old firmware version
@@ -432,10 +434,11 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
         [self releaseFirmwareVer];
         return;
     }
-    if(firmwareVer){
-        for(NSUInteger i=0; i<[firmwareVer count]; i++) [[firmwareVer objectAtIndex:i] release];
-        [firmwareVer release];
-    }
+//    if(firmwareVer){
+//        for(NSUInteger i=0; i<[firmwareVer count]; i++) [[firmwareVer objectAtIndex:i] release];
+//        [firmwareVer release];
+//    }
+    [firmwareVer release]; //MAH 9/18/22 no need to release each object, just the array
     firmwareVer = nil;
     if(taskdata){
         NSString* s = [taskdata componentsJoinedByString:@" "];
@@ -447,11 +450,12 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
             if([td count] <= idx+15) return;
             if([[td objectAtIndex:idx+1] isEqualToString:@"found"] &&
                 [[td objectAtIndex:idx+4] containsString:[NSString stringWithFormat:@"%d/0x",cardAddress]]){
-                NSString* fwt = [[NSString stringWithString:[td objectAtIndex:idx+7]] retain];
-                NSString* fwr = [[NSString stringWithString:[td objectAtIndex:idx+9]] retain];
-                NSString* fwd = [[NSString stringWithFormat:@"%@ %@ %@",
-                                 [td objectAtIndex:idx+12], [td objectAtIndex:idx+11], [td objectAtIndex:idx+13]] retain];
-                NSString* fwg = [[NSString stringWithString:[td objectAtIndex:idx+15]] retain];
+                NSString* fwt = [NSString stringWithString:[td objectAtIndex:idx+7]];//MAH 9/18/22 no need for retain
+                NSString* fwr = [NSString stringWithString:[td objectAtIndex:idx+9]];//MAH 9/18/22 no need for retain
+                NSString* fwd = [NSString stringWithFormat:@"%@ %@ %@",
+                                 [td objectAtIndex:idx+12], [td objectAtIndex:idx+11], [td objectAtIndex:idx+13]];//MAH 9/18/22 no need for retain
+                NSString* fwg = [NSString stringWithString:[td objectAtIndex:idx+15]];//MAH 9/18/22 no need for retain
+                [firmwareVer release];
                 firmwareVer = [[NSArray arrayWithObjects:fwt, fwr, fwd, fwg, nil] retain];
                 if([td count] >= idx+17){
                     if([[td objectAtIndex:idx+17] isEqualToString:@"Booting"]){
@@ -489,22 +493,22 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
     otherErrors = 0;
     for(unsigned int i=0; i<kFlashCamCardNTemps; i++){
         [tempHistory[i] release];
-        tempHistory[i] = [[[ORTimeRate alloc] init] retain];
+        tempHistory[i] = [[ORTimeRate alloc] init]; //MAH 10/1/22 removed retain
         [tempHistory[i] setLastAverageTime:[NSDate date]];
         [tempHistory[i] setSampleTime:1];
     }
     for(unsigned int i=0; i<kFlashCamCardNVoltages; i++){
-        [voltageHistory[i] release];
-        voltageHistory[i] = [[[ORTimeRate alloc] init] retain];
+       // [voltageHistory[i] release]; //MAH 10/5/22 unneeded release
+        voltageHistory[i] = [[ORTimeRate alloc] init];//MAH 10/1/22 removed retain
         [voltageHistory[i] setLastAverageTime:[NSDate date]];
         [voltageHistory[i] setSampleTime:1];
     }
-    [currentHistory release];
-    currentHistory = [[[ORTimeRate alloc] init] retain];
+    //[currentHistory release]; //MAH 10/5/22 unneeded release
+    currentHistory = [[ORTimeRate alloc] init];//MAH 10/1/22 removed retain
     [currentHistory setLastAverageTime:[NSDate date]];
     [currentHistory setSampleTime:1];
-    [humidityHistory release];
-    humidityHistory = [[[ORTimeRate alloc] init] retain];
+    //[humidityHistory release]; //MAH 10/5/22 unneeded release
+    humidityHistory = [[ORTimeRate alloc] init];//MAH 10/1/22 removed retain
     [humidityHistory setLastAverageTime:[NSDate date]];
     [humidityHistory setSampleTime:1];
     [[self undoManager] enableUndoRegistration];

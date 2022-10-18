@@ -112,6 +112,7 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     [cimage drawInRect:rect fromRect:NSZeroRect operation:NSCompositingOperationSourceOver fraction:1.0];
     [image unlockFocus];
     [self setImage:image];
+    [image release]; //MAH 2/18/22
 }
 
 - (void) makeConnectors
@@ -293,7 +294,7 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     if(!eth) return;
     if(!ethInterface) ethInterface = [[NSMutableArray array] retain];
     if([self indexOfInterface:eth] >= 0) return;
-    [ethInterface addObject:[eth copy]];
+    [ethInterface addObject:[[eth copy]autorelease]];
     [ethType addObject:@"efb1"];
     if([self ethInterfaceCount] <= kFlashCamMaxEthInterfaces){
         int i = [self ethInterfaceCount] - 1;
@@ -308,8 +309,9 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     if(!eth) return;
     if(index < 0 || index >= [self ethInterfaceCount]) return;
     if([self indexOfInterface:eth] == index) return;
-    NSString* tmp = [[ethInterface objectAtIndex:index] copy];
-    [[ethInterface objectAtIndex:index] autorelease];
+    NSString* tmp = [ethInterface objectAtIndex:index];
+    //[[ethInterface objectAtIndex:index] autorelease];//MAH 9/18/22 no need for this
+    [ethInterface removeObjectAtIndex:index];//MAH 9/18/22 this should do it  
     if([self indexOfInterface:eth] < 0){
         [ethInterface setObject:eth atIndexedSubscript:index];
         for(int i=0; i<[self listenerCount]; i++){
@@ -369,7 +371,7 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     if(index < 0 || index >= [self ethInterfaceCount]) return;
     for(int i=1; i<=kFlashCamEthTypeCount; i++){
         if([eth isEqualToString:[NSString stringWithFormat:@"efb%d",i]]){
-            [ethType setObject:[eth copy] atIndexedSubscript:index];
+            [ethType setObject:[[eth copy]autorelease] atIndexedSubscript:index];
             [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelEthTypeChanged object:self];
             break;
         }
@@ -392,7 +394,7 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     if([self listenerCount] >= kFlashCamMaxListeners){
         NSLog(@"ORFlashCamReadoutModel: maximum of 8 listeners currently supported\n");
     }
-    [self addObject:[listener retain]];
+    [self addObject:listener]; //MAH 10/5/22 removed retain
     NSDictionary* info = [NSDictionary dictionaryWithObjectsAndKeys:
                           [NSNumber numberWithInt:[self listenerCount]-1],
                           @"index", [NSNumber numberWithInt:(int)[listener tag]], @"tag", nil];
@@ -405,11 +407,12 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
         NSLog(@"ORFlashCamReadoutModel: cannot add listener with identical interface %@ and port %d\n", eth, (int)p);
         return;
     }
-    ORFlashCamListenerModel* l = [[[ORFlashCamListenerModel alloc] initWithInterface:eth port:p] retain];
+    ORFlashCamListenerModel* l = [[ORFlashCamListenerModel alloc] initWithInterface:eth port:p];
     [self addObject:l];
     NSDictionary* info = [NSDictionary dictionaryWithObjectsAndKeys:
                           [NSNumber numberWithInt:[self listenerCount]-1],
                           @"index", [NSNumber numberWithInt:(int)[l tag]], @"tag", nil];
+    [l release]; //MAH 9/18/22
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelListenerAdded object:info];
 }
 
@@ -424,7 +427,7 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     }
     ORFlashCamListenerModel* l = [self getListenerAtIndex:i];
     if(!l){
-        l = [[[ORFlashCamListenerModel alloc] initWithInterface:eth port:p] retain];
+        l = [[[ORFlashCamListenerModel alloc] initWithInterface:eth port:p]autorelease];
         [[self orcaObjects] setObject:l atIndexedSubscript:i];
         NSDictionary* info = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:i],
                               @"index", [NSNumber numberWithInt:(int)[l tag]], @"tag", nil];
@@ -448,7 +451,7 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
 {
     if(i < 0 || i >= [self listenerCount]) return;
     int t = (int) [[self getListenerAtIndex:i] tag];
-    [[[self orcaObjects] objectAtIndex:i] autorelease];
+    //[[[self orcaObjects] objectAtIndex:i] autorelease];//MAH 9/18/22 removing the object in the next line will release
     [[self orcaObjects] removeObjectAtIndex:i];
     NSDictionary* info = [NSDictionary dictionaryWithObjectsAndKeys:
                           [NSNumber numberWithInt:i], @"index", [NSNumber numberWithInt:t], @"tag", nil];
@@ -567,8 +570,8 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
 
 - (void) taskData:(NSDictionary*)taskData
 {
-    id        task = [[taskData objectForKey:@"Task"] retain];
-    NSString* text = [[taskData objectForKey:@"Text"] retain];
+    id        task = [taskData objectForKey:@"Task"];//MAH 9/18/22 no need for retain??
+    NSString* text = [taskData objectForKey:@"Text"];//MAH 9/18/22 no need for retain??
     if(task == pingTask){
         if([text rangeOfString:@" 0.0% packet loss"].location != NSNotFound) pingSuccess = YES;
         else pingSuccess = NO;
@@ -586,8 +589,7 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
         if(prev != validFCSourcePath)
             [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamReadoutModelFCSourcePathChanged object:self];
     }
-    [task release];
-    [text release];
+    //MAH 9/18/22 removed releases
 }
 
 - (int) ethIndexForCard:(ORCard*)card

@@ -103,6 +103,8 @@ NSString* ORConnectionChanged = @"OR Connection Changed";
     [connector release];
     [onColor release];
     [offColor release];
+    [offImage_Highlighted release];//MAH 9/29/22 added this release
+    [onImage_Highlighted release]; //MAH 9/29/22 added this release
 	
     [super dealloc];
 }
@@ -213,6 +215,7 @@ NSString* ORConnectionChanged = @"OR Connection Changed";
     [anImage retain];
     [onImage release];
     onImage = anImage;
+    [onImage_Highlighted release]; //MAH 9/29/22 added the release
 	
 	onImage_Highlighted = [[NSImage alloc] initWithSize:[onImage size]];
 	[onImage_Highlighted lockFocus];
@@ -234,6 +237,7 @@ NSString* ORConnectionChanged = @"OR Connection Changed";
     [anImage retain];
     [offImage release];
     offImage = anImage;
+    [offImage_Highlighted release];//MAH  9/29/22 added the release;
 	
 	offImage_Highlighted = [[NSImage alloc] initWithSize:[offImage size]];
 	[offImage_Highlighted lockFocus];

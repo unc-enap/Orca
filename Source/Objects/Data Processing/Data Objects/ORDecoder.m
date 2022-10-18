@@ -99,7 +99,7 @@
 {
 	[aHeader retain];
 	[fileHeader release];
-	fileHeader = [aHeader retain];
+    fileHeader = aHeader; //MAH 9/27/22 removed the retain.
 	[self generateObjectLookup];
 	uint32_t headerLength = (uint32_t)[[self headerAsData] length]; 
 	[fileHeader setObject:[NSNumber numberWithLong:headerLength] forKey:@"Header Length"];

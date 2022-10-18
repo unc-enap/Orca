@@ -71,7 +71,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
         [self setPostTrigger:i    withValue:0.0];
         wfCount[i]   = 0;
         trigCount[i] = 0;
-        baselineHistory[i] = [[[ORTimeRate alloc] init] retain];
+        baselineHistory[i] = [[ORTimeRate alloc] init]; //MAH 10/5/22 removed retain
         [baselineHistory[i] setLastAverageTime:[NSDate date]];
         [baselineHistory[i] setSampleTime:baselineSampleTime];
     }
@@ -118,6 +118,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     [cimage drawInRect:rect fromRect:NSZeroRect operation:NSCompositingOperationSourceOver fraction:1.0];
     [image unlockFocus];
     [self setImage:image];
+    [image release]; //MAH 9/18/22
 }
 
 - (void) makeMainController
@@ -915,7 +916,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
         [self setPostTrigger:i
                    withValue:[decoder decodeFloatForKey:[NSString stringWithFormat:@"postTrigger%i", i]]];
         if(!baselineHistory[i]){
-            baselineHistory[i] = [[[ORTimeRate alloc] init] retain];
+            baselineHistory[i] = [[ORTimeRate alloc] init];//MAH 10/5/22 removed retain
             [baselineHistory[i] setLastAverageTime:[NSDate date]];
             [baselineHistory[i] setSampleTime:baselineSampleTime];
         }
