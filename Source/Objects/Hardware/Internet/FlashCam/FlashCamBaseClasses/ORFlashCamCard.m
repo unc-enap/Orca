@@ -383,7 +383,7 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
 
 - (void) readStatus:(fcio_status*)fcstatus atIndex:(unsigned int)index
 {
-    @synchronized(self){
+    //@synchronized(self){ //MAH 10/24 shouldn't be needed now
         fcio_status fc_status = *fcstatus;
         status      = fc_status.data[index].status;
         statusEvent = fc_status.data[index].eventno;
@@ -402,8 +402,9 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
             [voltageHistory[i] addDataToTimeAverage:fc_status.data[index].environment[i+5]];
         [currentHistory  addDataToTimeAverage:fc_status.data[index].environment[11]];
         [humidityHistory addDataToTimeAverage:fc_status.data[index].environment[12]];
-        [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamCardStatusChanged object:self];
-    }
+        [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORFlashCamCardStatusChanged object:self userInfo:nil waitUntilDone:NO];//MAH 10/24/22 GUI update have to be on main thread
+        //[[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamCardStatusChanged object:self];
+    //}
 }
 
 // Append any data from the firmware version request task to taskdata.  If the data contains
