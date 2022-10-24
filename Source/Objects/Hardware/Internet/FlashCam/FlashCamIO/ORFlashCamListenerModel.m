@@ -909,6 +909,11 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 
 - (void) runFailed
 {
+    [self performSelectorOnMainThread:@selector(runFailedMainThread) withObject:nil waitUntilDone:NO];
+}
+
+- (void) runFailedMainThread
+{
     [[NSNotificationCenter defaultCenter] postNotificationName:ORRequestRunHalt object:self];
     if(!runFailedAlarm){
         runFailedAlarm = [[ORAlarm alloc] initWithName:@"FlashCamListener run failed"

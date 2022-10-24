@@ -154,6 +154,7 @@
 - (void) read;
 - (void) runFailed;
 
+
 #pragma mark •••Task methods
 - (void) taskFinished:(id)task;
 - (void) tasksCompleted:(id)sender;
@@ -175,6 +176,8 @@
 - (id) initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary;
+
+- (void) runFailedMainThread;
 
 @end
 
