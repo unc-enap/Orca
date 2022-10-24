@@ -801,7 +801,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
   //  }
 }
 
-- (void) read
+- (void) read:(ORDataPacket*) aDataPacket
 {
 
     //-----------------------------------------------------------------------------------
@@ -848,7 +848,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
                         NSDictionary* dict = [chanMap objectAtIndex:itr];
                         ORFlashCamADCModel* card = [dict objectForKey:@"adc"];
                         unsigned int chan = [[dict objectForKey:@"channel"] unsignedIntValue];
-                        [card event:state->event withIndex:itr andChannel:chan];
+                        [card event:state->event withIndex:itr andChannel:chan use:aDataPacket];
                     }
                     break;
                 }
@@ -865,7 +865,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
                         NSDictionary* dict = [chanMap objectAtIndex:state->event->trace_list[itr]];
                         ORFlashCamADCModel* card = [dict objectForKey:@"adc"];
                         unsigned int chan = [[dict objectForKey:@"channel"] unsignedIntValue];
-                        [card event:state->event withIndex:state->event->trace_list[itr] andChannel:chan];
+                        [card event:state->event withIndex:state->event->trace_list[itr] andChannel:chan use:aDataPacket];
                     }
                     break;
                 }
@@ -1247,7 +1247,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 //@synchronized(self){ //MAH not needed now that "read" is in takeData thread
         uint32_t index = statusBufferIndex;
         statusBufferIndex = (statusBufferIndex + 1) % kFlashCamStatusBufferLength;
-        bufferedStatusCount ++;
+        bufferedStatusCount++;
         uint32_t offset = 2 + (2 + sizeof(fcio_status)/sizeof(uint32_t)) * index;
         statusBuffer[offset++] = (uint32_t) fcstatus->status;
         memcpy(statusBuffer+offset, fcstatus->statustime, 10*sizeof(uint32_t));
@@ -1295,7 +1295,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 {
 //    @synchronized(self){ //MAH not needed now that "read" is in takeData thread
         @try {
-            if(reader)[self read]; //MAH 10/17/22 added so read calld in this thread instead of GUI thread
+            if(reader)[self read:aDataPacket]; //MAH 10/17/22 added so read calld in this thread instead of GUI thread
             // add a single configuration packet to the data
             if(bufferedConfigCount > 0){
                 uint32_t length = 2 + sizeof(fcio_config) / sizeof(uint32_t);
@@ -1322,9 +1322,9 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
                 [aDataPacket addLongsToFrameBuffer:statusBuffer+index length:length];
             }
             // allow all connected data takers to add to the data packet
-            NSEnumerator* e = [dataTakers objectEnumerator];
-            id obj;
-            while(obj = [e nextObject]) [obj takeData:aDataPacket userInfo:userInfo];
+            //NSEnumerator* e = [dataTakers objectEnumerator];
+            //id obj;
+            //while(obj = [e nextObject]) [obj takeData:aDataPacket userInfo:userInfo];
         }
         @catch(NSException* e){
             NSLogError(@"",@"FlashCamListener Error",@"");

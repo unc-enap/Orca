@@ -151,7 +151,7 @@
 #pragma mark •••FCIO methods
 - (bool) connect;
 - (void) disconnect:(bool)destroy;
-- (void) read;
+- (void) read:(ORDataPacket*)aDataPacket;
 - (void) runFailed;
 
 
