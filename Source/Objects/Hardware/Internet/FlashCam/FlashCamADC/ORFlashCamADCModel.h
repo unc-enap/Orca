@@ -55,11 +55,6 @@
     bool trigOutEnable;
     bool isRunning;
     unsigned int wfSamples;
-    int wfHeaderBuffer[kFlashCamADCBufferLength*kFlashCamADCWFHeaderLength];
-    unsigned short* wfBuffer;
-    unsigned int bufferIndex;
-    unsigned int takeDataIndex;
-    unsigned int bufferedWFcount;
     ORRateGroup* wfRates;
     ORRateGroup* trigRates;
     uint32_t wfCount[kMaxFlashCamADCChannels];
@@ -150,8 +145,8 @@
 - (void) printRunFlagsForChannelOffset:(unsigned int)offset;
 
 #pragma mark •••Data taker methods
-- (void) event:(fcio_event*)event withIndex:(int)index andChannel:(unsigned int)channel;
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
+- (void) shipEvent:(fcio_event*)event withIndex:(int)index andChannel:(unsigned int)channel use:(ORDataPacket*)aDataPacket;
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runIsStopping:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;

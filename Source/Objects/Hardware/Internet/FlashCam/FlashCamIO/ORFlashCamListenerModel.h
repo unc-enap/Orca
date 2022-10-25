@@ -39,7 +39,6 @@
     NSMutableDictionary* configParams;
     int ioBuffer;
     int stateBuffer;
-    //double throttle; //MAH 10/17/22 removed
     FCIOStateReader* reader;
     int readerRecordCount;
     int bufferedRecords;
@@ -98,7 +97,6 @@
 - (int) timeout;
 - (int) ioBuffer;
 - (int) stateBuffer;
-//- (double) throttle; //MAH 10/17/22 removed
 - (FCIOStateReader*) reader;
 - (int) readerRecordCount;
 - (int) bufferedRecords;
@@ -134,7 +132,6 @@
 - (void) setTimeout:(int)to;
 - (void) setIObuffer:(int)io;
 - (void) setStateBuffer:(int)sb;
-//- (void) setThrottle:(double)t; //MAH 10/17/22 removed
 - (void) setConfigId:(uint32_t)cId;
 - (void) setStatusId:(uint32_t)sId;
 - (void) setDataIds:(id)assigner;
@@ -151,8 +148,9 @@
 #pragma mark •••FCIO methods
 - (bool) connect;
 - (void) disconnect:(bool)destroy;
-- (void) read;
+- (void) read:(ORDataPacket*)aDataPacket;
 - (void) runFailed;
+
 
 #pragma mark •••Task methods
 - (void) taskFinished:(id)task;
@@ -175,6 +173,8 @@
 - (id) initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary;
+
+- (void) runFailedMainThread;
 
 @end
 
