@@ -1029,14 +1029,16 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
         return;
     }
     // make sure the shaping time and event samples are such that flashcam will silently change the waveform length
-    if(MIN(8000, 20+maxShapeTime*2.5/16) > [[self configParam:@"eventSamples"] intValue]){
-        int samples = [[self configParam:@"eventSamples"] intValue];
-        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel on %@ at %@:%d failed to start run due to max shaping "
-                   "time of %d ns with event samples set to %d. Set the shaping time for all channels <= %d ns or "
-                   "set the event samples >= %d\n", interface, ip, (int) port, maxShapeTime, samples,
-                   (int) ((samples-20)*16/2.5), (int) (20+maxShapeTime*2.5/16));
-        [self runFailed];
-        return;
+    if([[self configParam:@"traceType"] intValue] != 0){
+        if(MIN(8000, 20+maxShapeTime*2.5/16) > [[self configParam:@"eventSamples"] intValue]){
+            int samples = [[self configParam:@"eventSamples"] intValue];
+            NSLogColor([NSColor redColor], @"ORFlashCamListenerModel on %@ at %@:%d failed to start run due to max shaping "
+                       "time of %d ns with event samples set to %d. Set the shaping time for all channels <= %d ns or "
+                       "set the event samples >= %d\n", interface, ip, (int) port, maxShapeTime, samples,
+                       (int) ((samples-20)*16/2.5), (int) (20+maxShapeTime*2.5/16));
+            [self runFailed];
+            return;
+        }
     }
     // if the trigger cards are connected to any global trigger cards, add those to the set
     for(id card in triggerCards){
@@ -1126,7 +1128,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     NSString* taskPath;
     if([guardian localMode]){
         taskPath = [[[guardian fcSourcePath] stringByExpandingTildeInPath] stringByAppendingString:@"/server/readout-fc250b"];
-        NSLog(@"%@readout-fc250b %@\n", taskPath, [readoutArgs componentsJoinedByString:@" "]);
+        NSLog(@"%@ %@\n", taskPath, [readoutArgs componentsJoinedByString:@" "]);
     }
     else {
         taskPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/remote_run"];

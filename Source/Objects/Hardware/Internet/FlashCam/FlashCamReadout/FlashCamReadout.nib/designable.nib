@@ -1413,7 +1413,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" utility="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="2105" y="294" width="336" height="157"/>
-            <rect key="screenRect" x="1680" y="-210" width="3840" height="2135"/>
+            <rect key="screenRect" x="1680" y="0.0" width="3840" height="2135"/>
             <view key="contentView" id="8IV-mt-jha">
                 <rect key="frame" x="0.0" y="0.0" width="336" height="157"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -1493,7 +1493,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" utility="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="2105" y="294" width="336" height="157"/>
-            <rect key="screenRect" x="1680" y="-210" width="3840" height="2135"/>
+            <rect key="screenRect" x="1680" y="0.0" width="3840" height="2135"/>
             <view key="contentView" id="Kgl-6a-rkb">
                 <rect key="frame" x="0.0" y="0.0" width="336" height="157"/>
                 <autoresizingMask key="autoresizingMask"/>
