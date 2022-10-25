@@ -197,8 +197,8 @@ static NSString* HaloDbConnector		= @"HaloDbConnector";
     //Red
     if ([[sentryValues valueForKey: @"RemoteDaqStatus"] isEqualToString:@"Unreachable"]
         || [[sentryValues valueForKey: @"RunningState"] isEqualToString:@"NOT Connected"]
-        || [haloSentry sbcSocketDropCount]  !=0
-        || [haloSentry restartCount]        !=0)
+        || [haloSentry sbcSocketDropCount]  !=0)
+//        || [haloSentry restartCount]        !=0)
         [sentryValues setObject:@"Red" forKey:@"ComputedStatus"];
     
     

@@ -71,7 +71,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
         [self setPostTrigger:i    withValue:0.0];
         wfCount[i]   = 0;
         trigCount[i] = 0;
-        baselineHistory[i] = [[ORTimeRate alloc] init]; //MAH 10/5/22 removed retain
+        baselineHistory[i] = [[ORTimeRate alloc] init];
         [baselineHistory[i] setLastAverageTime:[NSDate date]];
         [baselineHistory[i] setSampleTime:baselineSampleTime];
     }
@@ -81,12 +81,8 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     majorityWidth = 1;
     trigOutEnable = false;
     trigConnector = nil;
-    isRunning = false;
-    wfBuffer = NULL;
-    bufferIndex = 0;
-    takeDataIndex = 0;
-    bufferedWFcount = 0;
-    dataRecord = NULL;
+    isRunning     = false;
+    dataRecord    = NULL;
     [self setWFsamples:0];
     [[self undoManager] enableUndoRegistration];
     return self;
@@ -118,7 +114,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     [cimage drawInRect:rect fromRect:NSZeroRect operation:NSCompositingOperationSourceOver fraction:1.0];
     [image unlockFocus];
     [self setImage:image];
-    [image release]; //MAH 9/18/22
+    [image release];
 }
 
 - (void) makeMainController
@@ -557,23 +553,23 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
 - (void) setWFsamples:(int)samples
 {
     wfSamples = samples;
-    if(wfBuffer){
-        free(wfBuffer);
-        wfBuffer = NULL;
-    }
+//    if(wfBuffer){
+//        free(wfBuffer);
+//        wfBuffer = NULL;
+//    }
     if(dataRecord){
         free(dataRecord);
         dataRecord = NULL;
     }
     dataRecordLength = 0;
     if(wfSamples > 0){
-        wfBuffer = (unsigned short*) malloc(kFlashCamADCBufferLength * (wfSamples+2) * sizeof(unsigned short));
+      //  wfBuffer = (unsigned short*) malloc(kFlashCamADCBufferLength * (wfSamples+2) * sizeof(unsigned short));
         // first 3 items in WF header get put into Orca header, then trace header gets moved to WF header
         dataLengths = ((wfSamples&0xffff) << 6) | (((kFlashCamADCWFHeaderLength-3+1)&0x3f) << 22);
         dataLengths = dataLengths | ((kFlashCamADCOrcaHeaderLength&0xf) << 28);
         dataRecordLength = kFlashCamADCOrcaHeaderLength + (kFlashCamADCWFHeaderLength - 3 + 1) + wfSamples/2;
         dataRecord = (uint32_t*) malloc(dataRecordLength * sizeof(uint32_t));
-        bufferIndex = 0;
+     //   bufferIndex = 0;
     }
 }
 
@@ -705,77 +701,37 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     NSLog(@"%@\n", [[self runFlagsForCardIndex:0 andChannelOffset:offset withTrigAll:YES] componentsJoinedByString:@" "]);
 }
 
-
 #pragma mark •••Data taker methods
-
-- (void) event:(fcio_event*)event withIndex:(int)index andChannel:(unsigned int)channel
-{
-    @synchronized(self){
-        if(channel >= [self numberOfChannels]){
-            NSLog(@"ORFlashCamADCModel: invalid channel passed to event:withIndex:andChannel:, skipping packet\n");
-            return;
-        }
-        else{
-            wfCount[channel] ++;
-            if(event->theader[index][1] > 0) trigCount[channel] ++;
-        }
-        // increment the buffer index
-        unsigned int bindex = bufferIndex;
-        bufferIndex = (bufferIndex + 1) % kFlashCamADCBufferLength;
-        bufferedWFcount ++;
-        // set the channel number and index to pass to takeData
-        uint32_t hindex = bindex * kFlashCamADCWFHeaderLength;
-        wfHeaderBuffer[hindex] = (int) channel;
-        wfHeaderBuffer[hindex+1] = index;
-        // get the waveform header information from the fcio_event structure
-        wfHeaderBuffer[hindex+2] = event->type;
-        unsigned int offset = hindex + 3;
-        for(unsigned int i=0; i<kFlashCamADCTimeOffsetLength; i++) wfHeaderBuffer[offset++] = event->timeoffset[i];
-        for(unsigned int i=0; i<kFlashCamADCDeadRegionLength; i++) wfHeaderBuffer[offset++] = event->deadregion[i];
-        for(unsigned int i=0; i<kFlashCamADCTimeStampLength;  i++) wfHeaderBuffer[offset++] = event->timestamp[i];
-        // get the waveform for this channel at the index provided from the fcio_event structure
-        memcpy(wfBuffer+bindex*(wfSamples+2), event->theader[index], (wfSamples+2)*sizeof(unsigned short));
-        if(bufferedWFcount == kFlashCamADCBufferLength){
-            NSLogColor([NSColor redColor], @"ORFlashCamADCModel: buffer full for card ID 0x%x crate %d slot %d\n",
-                       [self cardAddress], [self crate], [self slot]);
-            [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelBufferFull object:self];
-        }
-    }
-}
-
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
-    @synchronized(self){
-        @try{
-            if(wfSamples == 0 || !wfBuffer || !dataRecord) return;
-            else if(bufferIndex == takeDataIndex) return;
-            else{
-                unsigned int index = takeDataIndex;
-                takeDataIndex = (takeDataIndex + 1) % kFlashCamADCBufferLength;
-                bufferedWFcount --;
-                isRunning = true;
-                uint32_t hindex = index * kFlashCamADCWFHeaderLength;
-                dataRecord[0] = dataId | (dataRecordLength&0x3ffff);
-                dataRecord[1] = dataLengths | (wfHeaderBuffer[hindex+2]&0x3f);
-                dataRecord[2] = location | ((wfHeaderBuffer[hindex]&0x1f) << 9) | (wfHeaderBuffer[hindex+1]&0x1ff);
-                memcpy(dataRecord+3, wfHeaderBuffer+hindex+3, (kFlashCamADCWFHeaderLength-3)*sizeof(uint32_t));
-                uint32_t windex = index * (wfSamples + 2);
-                dataRecord[kFlashCamADCWFHeaderLength] = (wfBuffer[windex+1] << 16) | wfBuffer[windex];
-                memcpy(dataRecord+kFlashCamADCWFHeaderLength+1, wfBuffer+windex+2, wfSamples*sizeof(unsigned short));
-                [aDataPacket addLongsToFrameBuffer:dataRecord length:dataRecordLength];
-                if(enableBaselineHistory){
-                    if(baselineHistory[wfHeaderBuffer[hindex]])
-                        [baselineHistory[wfHeaderBuffer[hindex]] addDataToTimeAverage:(float)wfBuffer[windex]];
-                }
-            }
-        }
-        @catch(NSException* localException){
-            NSLogError(@"", @"ORFlashCamADCModel error", @"", nil);
-            [self incExceptionCount];
-            [localException raise];
-        }
-    }
+    //nothing to yet. A call from the Listener ships the data.
 }
+
+- (void) shipEvent:(fcio_event*)event withIndex:(int)index andChannel:(unsigned int)channel use:(ORDataPacket*)aDataPacket
+{
+    if(channel >= [self numberOfChannels]){
+        NSLog(@"ORFlashCamADCModel: invalid channel passed to event:withIndex:andChannel:, skipping packet\n");
+        return;
+    }
+    else{
+        wfCount[channel] ++;
+        if(event->theader[index][1] > 0) trigCount[channel] ++;
+    }
+    
+    //ship the data
+    dataRecord[0] = dataId | (dataRecordLength&0x3ffff);
+    dataRecord[1] = dataLengths | (event->type&0x3f);
+    dataRecord[2] = location | ((channel&0xf) << 10) | (index&0x3ff);
+    int offset = 3;
+    for(unsigned int i=0; i<kFlashCamADCTimeOffsetLength; i++) dataRecord[offset++] = event->timeoffset[i];
+    for(unsigned int i=0; i<kFlashCamADCDeadRegionLength; i++) dataRecord[offset++] = event->deadregion[i];
+    for(unsigned int i=0; i<kFlashCamADCTimeStampLength;  i++) dataRecord[offset++] = event->timestamp[i];
+    dataRecord[kFlashCamADCWFHeaderLength]  = (unsigned int)(*(event->theader[index]+1) << 16);
+    dataRecord[kFlashCamADCWFHeaderLength] |= (unsigned int)(*event->theader[index]);
+    memcpy(dataRecord+kFlashCamADCWFHeaderLength+1, event->theader[index]+2, wfSamples*sizeof(unsigned short));
+    [aDataPacket addLongsToFrameBuffer:dataRecord length:dataRecordLength];
+}
+
 
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
@@ -784,16 +740,11 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     location = location | (([self cardAddress] & 0xff) << 14);
     [self startRates];
     isRunning = false;
-    takeDataIndex   = 0;
-    bufferIndex     = 0;
-    bufferedWFcount = 0;
 }
 
 - (void) runIsStopping:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
-    while(bufferedWFcount > 0) [self takeData:aDataPacket userInfo:userInfo];
 }
-
 
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
@@ -801,7 +752,6 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     [wfRates   stop];
     [trigRates stop];
     [self setWFsamples:0];
-    takeDataIndex = 0;
 }
 
 - (void) reset
@@ -911,7 +861,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
         [self setPostTrigger:i
                    withValue:[decoder decodeFloatForKey:[NSString stringWithFormat:@"postTrigger%i", i]]];
         if(!baselineHistory[i]){
-            baselineHistory[i] = [[ORTimeRate alloc] init];//MAH 10/5/22 removed retain
+            baselineHistory[i] = [[ORTimeRate alloc] init];
             [baselineHistory[i] setLastAverageTime:[NSDate date]];
             [baselineHistory[i] setSampleTime:baselineSampleTime];
         }
@@ -924,9 +874,6 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     [self setBaselineSampleTime:[decoder decodeDoubleForKey:@"baselineSampleTime"]];
     [self setWFsamples:0];
     isRunning = NO;
-    wfBuffer = NULL;
-    bufferIndex = 0;
-    takeDataIndex = 0;
     dataRecord = NULL;
     [self setTrigRates:[decoder decodeObjectForKey:@"trigRates"]];
     if(!trigRates){
