@@ -164,14 +164,13 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 - (void) setUpImage
 {
     NSImage* cimage = [NSImage imageNamed:@"flashcam_listener"];
-    //NSSize size = [cimage size];
     NSSize newsize;
-    newsize.height = 45;
+    newsize.height = 44;
     newsize.width  = newsize.height;
     NSImage* image = [[NSImage alloc] initWithSize:newsize];
     [image lockFocus];
     NSRect rect;
-    rect.origin = NSZeroPoint;
+    rect.origin = NSMakePoint(1,1);
     rect.size.width = newsize.width;
     rect.size.height = newsize.height;
     [cimage drawInRect:rect fromRect:NSZeroRect operation:NSCompositingOperationSourceOver fraction:1.0];
@@ -189,28 +188,22 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
                            [NSFont fontWithName:@"Helvetica" size:20.0],NSFontAttributeName,
                                          [NSColor greenColor],NSForegroundColorAttributeName,nil];
         NSAttributedString* s = [[NSAttributedString alloc] initWithString:@")" attributes:attrsDictionary];
-        NSSize labelSize = [s size];
-        float height = iconSize.height;
-        [s drawAtPoint:NSMakePoint(labelSize.width/2,height/2-labelSize.height/2)];
+        [s drawAtPoint:NSMakePoint([s size].width/2,iconSize.height/2-[s size].height/2)];
         [s release];
 
         attrsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                            [NSFont fontWithName:@"Helvetica" size:30.0],NSFontAttributeName,
                            [NSColor greenColor],NSForegroundColorAttributeName,nil];
         s = [[NSAttributedString alloc] initWithString:@")" attributes:attrsDictionary];
-        labelSize = [s size];
-        height    = iconSize.height;
-        [s drawAtPoint:NSMakePoint(labelSize.width/2+5,height/2-labelSize.height/2)];
+        [s drawAtPoint:NSMakePoint([s size].width/2+5,iconSize.height/2-[s size].height/2)];
         [s release];
     }
     else {
         NSDictionary* attrsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                           [NSFont fontWithName:@"Helvetica" size:20.0],NSFontAttributeName,
+                           [NSFont fontWithName:@"Helvetica" size:25.0],NSFontAttributeName,
                                          [NSColor redColor],NSForegroundColorAttributeName,nil];
         NSAttributedString* s = [[NSAttributedString alloc] initWithString:@"x" attributes:attrsDictionary];
-        NSSize labelSize = [s size];
-        float height = iconSize.height;
-        [s drawAtPoint:NSMakePoint(labelSize.width/2,height/2-labelSize.height/2)];
+        [s drawAtPoint:NSMakePoint([s size].width/2,iconSize.height/2-[s size].height/2)];
         [s release];
     }
 }
