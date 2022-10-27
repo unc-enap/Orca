@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment version="1050" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
-        <capability name="box content view" minToolsVersion="7.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -29,24 +28,24 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="26" y="431" width="656" height="560"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1025"/>
             <value key="minSize" type="size" width="656" height="471"/>
             <value key="maxSize" type="size" width="656" height="800"/>
-            <view key="contentView" misplaced="YES" id="6">
+            <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="656" height="560"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <imageView id="347">
+                    <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="347">
                         <rect key="frame" x="6" y="483" width="83" height="75"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" image="OnCallList" id="348"/>
                     </imageView>
-                    <imageView id="381">
+                    <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="381">
                         <rect key="frame" x="541" y="483" width="83" height="75"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" image="OnCallList" id="382"/>
                     </imageView>
-                    <textField verticalHuggingPriority="750" id="349">
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="349">
                         <rect key="frame" x="95" y="497" width="440" height="47"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="On Call List" id="350">
@@ -55,16 +54,16 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <scrollView misplaced="YES" autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="351">
+                    <scrollView appearanceType="aqua" fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="351">
                         <rect key="frame" x="20" y="280" width="604" height="200"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="NvA-nP-dox">
-                            <rect key="frame" x="1" y="0.0" width="602" height="199"/>
+                            <rect key="frame" x="1" y="1" width="602" height="198"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="14" headerView="355" id="354">
-                                    <rect key="frame" x="0.0" y="0.0" width="602" height="176"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="602" height="175"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" red="0.83608351828139305" green="0.89462780203446424" blue="0.90588235294117647" alpha="1" colorSpace="calibratedRGB"/>
                                     <tableViewGridLines key="gridStyleMask" vertical="YES" horizontal="YES"/>
@@ -72,7 +71,6 @@
                                     <tableColumns>
                                         <tableColumn identifier="kPersonRole" width="85.03515625" minWidth="40" maxWidth="1000" id="356">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Role">
-                                                <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
                                             </tableHeaderCell>
@@ -92,7 +90,6 @@
                                         </tableColumn>
                                         <tableColumn identifier="kPersonName" width="141.72265625" minWidth="40" maxWidth="1000" id="357">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Name">
-                                                <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
                                             </tableHeaderCell>
@@ -105,7 +102,6 @@
                                         </tableColumn>
                                         <tableColumn identifier="kPersonAddress" width="173.27734375" minWidth="10" maxWidth="3.4028234663852886e+38" id="420">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Text or Email address">
-                                                <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                             </tableHeaderCell>
@@ -116,9 +112,8 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="kPersonStatus" editable="NO" width="188.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="0QW-wN-azc">
+                                        <tableColumn identifier="kPersonStatus" editable="NO" width="159.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="0QW-wN-azc">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Status">
-                                                <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </tableHeaderCell>
@@ -146,12 +141,12 @@
                             <rect key="frame" x="395" y="0.0" width="15" height="0.0"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <tableHeaderView key="headerView" id="355">
+                        <tableHeaderView key="headerView" wantsLayer="YES" id="355">
                             <rect key="frame" x="0.0" y="0.0" width="602" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
-                    <button misplaced="YES" id="410">
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="410">
                         <rect key="frame" x="593" y="255" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" alignment="center" borderStyle="border" inset="2" id="413">
@@ -162,7 +157,7 @@
                             <action selector="addPersonAction:" target="-2" id="tQT-0E-FYR"/>
                         </connections>
                     </button>
-                    <button misplaced="YES" id="411">
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="411">
                         <rect key="frame" x="608" y="255" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" alignment="center" borderStyle="border" inset="2" id="412">
@@ -173,16 +168,16 @@
                             <action selector="removePersonAction:" target="-2" id="U8H-ZX-CWz"/>
                         </connections>
                     </button>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" id="Jwk-EZ-oMx">
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jwk-EZ-oMx">
                         <rect key="frame" x="21" y="255" width="558" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Acknowledge alarms to prevent on-call people from being contacted" id="Emh-Te-FYc">
-                            <font key="font" metaFont="titleBar"/>
+                            <font key="font" usesAppearanceFont="YES"/>
                             <color key="textColor" red="0.094335184177500531" green="0.11914703919637251" blue="0.7775811464088398" alpha="0.84999999999999998" colorSpace="calibratedRGB"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button id="344">
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="344">
                         <rect key="frame" x="20" y="17" width="36" height="33"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="Unlocked" imagePosition="above" alignment="center" alternateImage="Locked" inset="2" id="345">
@@ -193,7 +188,7 @@
                             <action selector="listLockAction:" target="-2" id="346"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" id="433">
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="433">
                         <rect key="frame" x="59" y="17" width="121" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Save List To File..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="434">
@@ -204,7 +199,7 @@
                             <action selector="saveFileAction:" target="-2" id="441"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" id="435">
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="435">
                         <rect key="frame" x="175" y="17" width="136" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Read List From File..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="436">
@@ -215,11 +210,11 @@
                             <action selector="loadFileAction:" target="-2" id="440"/>
                         </connections>
                     </button>
-                    <box verticalHuggingPriority="750" misplaced="YES" boxType="separator" id="437">
+                    <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="437">
                         <rect key="frame" x="20" y="217" width="609" height="5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     </box>
-                    <textField verticalHuggingPriority="750" id="442">
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="442">
                         <rect key="frame" x="312" y="27" width="52" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Last File:" id="443">
@@ -228,26 +223,26 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <box autoresizesSubviews="NO" borderType="line" title="Message Top Person On Call" id="xbp-g3-0PL">
+                    <box autoresizesSubviews="NO" fixedFrame="YES" borderType="line" title="Message Top Person On Call" translatesAutoresizingMaskIntoConstraints="NO" id="xbp-g3-0PL">
                         <rect key="frame" x="20" y="59" width="610" height="88"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <view key="contentView" id="UC9-pu-hVD">
-                            <rect key="frame" x="1" y="1" width="608" height="72"/>
+                            <rect key="frame" x="3" y="3" width="604" height="70"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textField verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" id="p3S-k5-cAV">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p3S-k5-cAV">
                                     <rect key="frame" x="17" y="13" width="388" height="49"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <textFieldCell key="cell" selectable="YES" editable="YES" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="KrZ-2G-NDt">
                                         <font key="font" metaFont="system"/>
-                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                     <connections>
                                         <action selector="messageAction:" target="-2" id="SLN-Mo-rz8"/>
                                     </connections>
                                 </textField>
-                                <button verticalHuggingPriority="750" id="iF5-Gu-fhP">
+                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iF5-Gu-fhP">
                                     <rect key="frame" x="429" y="12" width="162" height="49"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <buttonCell key="cell" type="square" title="Send To On-Call Person" bezelStyle="shadowlessSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cq3-dD-WtO">
@@ -261,7 +256,7 @@
                             </subviews>
                         </view>
                     </box>
-                    <textField verticalHuggingPriority="750" id="444">
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="444">
                         <rect key="frame" x="368" y="27" width="277" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Label" id="445">
@@ -270,20 +265,20 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" id="3Tr-5x-Cd2">
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Tr-5x-Cd2">
                         <rect key="frame" x="21" y="228" width="558" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="iMessages addresses assume a gmail service exists with this machine name as the user" id="qyZ-8v-oKg">
-                            <font key="font" metaFont="titleBar"/>
+                            <font key="font" usesAppearanceFont="YES"/>
                             <color key="textColor" red="0.094335184180000003" green="0.1191470392" blue="0.77758114639999998" alpha="0.84999999999999998" colorSpace="calibratedRGB"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <box verticalHuggingPriority="750" misplaced="YES" boxType="separator" id="cS1-XR-Mbf">
+                    <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="cS1-XR-Mbf">
                         <rect key="frame" x="20" y="153" width="609" height="5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     </box>
-                    <button verticalHuggingPriority="750" misplaced="YES" id="4r3-TG-VcS">
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4r3-TG-VcS">
                         <rect key="frame" x="21" y="195" width="563" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Enable sending on-call messages to Slack (must have valid webhook in user preferences)" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="HeJ-Hg-uga">
@@ -294,7 +289,7 @@
                             <action selector="slackAction:" target="-2" id="Dm6-KE-iMT"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" misplaced="YES" id="x5f-mg-fTX">
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x5f-mg-fTX">
                         <rect key="frame" x="21" y="162" width="616" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Enable sending on-call messages to RocketChat (must have login information in user preferences)" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="aKn-ZQ-yzt">

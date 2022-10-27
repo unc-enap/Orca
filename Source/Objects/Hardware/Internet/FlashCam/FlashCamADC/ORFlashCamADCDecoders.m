@@ -34,7 +34,6 @@
 
 - (void) dealloc
 {
-    //[flashCamCards release];
     [super dealloc];
 }
 
@@ -55,7 +54,7 @@
     uint32_t location = *(ptr+2);
     uint32_t crate   = (location & 0xf8000000) >> 27;
     uint32_t card    = (location & 0x07c00000) >> 22;
-    uint32_t channel = (location & 0x00003c00) >> 10;
+    uint32_t channel = [self getChannel:location];
     NSString* crateKey   = [self getCrateKey:crate];
     NSString* cardKey    = [self getCardKey:card];
     NSString* channelKey = [self getChannelKey:channel];
@@ -107,8 +106,8 @@
     NSString* title = @"FlashCamADC Waveform Record\n\n";
     NSString* crate = [NSString stringWithFormat:@"Crate      = %U\n", (dataPtr[2] & 0xf8000000) >> 27];
     NSString* card  = [NSString stringWithFormat:@"Card       = %u\n", (dataPtr[2] & 0x07c00000) >> 22];
-    NSString* chan  = [NSString stringWithFormat:@"Channel    = %u\n", (dataPtr[2] & 0x00003c00) >> 10];
-    NSString* index = [NSString stringWithFormat:@"Ch Index   = %u\n",  dataPtr[2] & 0x000003ff];
+    NSString* chan  = [NSString stringWithFormat:@"Channel    = %u\n", [self getChannel:dataPtr[2]]];
+    NSString* index = [NSString stringWithFormat:@"Ch Index   = %u\n", [self getIndex:dataPtr[2]]];
     NSString* type  = [NSString stringWithFormat:@"Event type = %u\n",  dataPtr[1] & 0x0000003f];
     uint32_t offset = orcaHeaderLength + fcwfHeaderLength - 1;
     NSString* base = [NSString stringWithFormat:@"Baseline    = %u\n",  dataPtr[offset] & 0x0000ffff];
@@ -123,6 +122,42 @@
         header = [header stringByAppendingFormat:@"timestamp[%d]:  %d\n", i, (int) dataPtr[offset++]];
     
     return [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@", title, crate, card, chan, index, type, base, fint, header];
+}
+
+- (uint32_t) getChannel:(uint32_t)dataWord
+{
+    return (dataWord & 0x00003c00) >> 10;
+}
+
+- (uint32_t) getIndex:(uint32_t)dataWord
+{
+    return dataWord & 0x000003ff;
+}
+
+@end
+
+
+@implementation ORFlashCamWaveformDecoder
+
+- (id) init
+{
+    self = [super init];
+    return self;
+}
+
+- (void) dealloc
+{
+    [super dealloc];
+}
+
+- (uint32_t) getChannel:(uint32_t)dataWord
+{
+    return (dataWord & 0x00003e00) >> 9;
+}
+
+- (uint32_t) getIndex:(uint32_t)dataWord
+{
+    return dataWord & 0x000001ff;
 }
 
 @end

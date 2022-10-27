@@ -27,4 +27,13 @@
 }
 - (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
 - (NSString*) dataRecordDescription:(uint32_t*)dataPtr;
+- (uint32_t) getChannel:(uint32_t)dataWord;
+- (uint32_t) getIndex:(uint32_t)dataWord;
+@end
+
+@interface ORFlashCamWaveformDecoder : ORFlashCamADCWaveformDecoder {
+    @private
+}
+- (uint32_t) getChannel:(uint32_t)dataWord;
+- (uint32_t) getIndex:(uint32_t)dataWord;
 @end

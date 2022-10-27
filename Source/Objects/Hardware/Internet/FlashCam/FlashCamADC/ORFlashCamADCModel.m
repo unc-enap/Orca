@@ -673,8 +673,8 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
         [flags addObjectsFromArray:@[@"-altm", [NSString stringWithFormat:@"%x,%d,1",[self trigOutMask], index]]];
     else
         [flags addObjectsFromArray:@[@"-altm", [NSString stringWithFormat:@"-1,%d,1", index]]];
-    [flags addObjectsFromArray:@[@"-amajl", [NSString stringWithFormat:@"%x,%d,1", [self majorityLevel], index]]];
-    [flags addObjectsFromArray:@[@"-amajw", [NSString stringWithFormat:@"%x,%d,1", [self majorityWidth], index]]];
+    [flags addObjectsFromArray:@[@"-amajl", [NSString stringWithFormat:@"%d,%d,1", [self majorityLevel], index]]];
+    [flags addObjectsFromArray:@[@"-amajw", [NSString stringWithFormat:@"%d,%d,1", [self majorityWidth], index]]];
     for(unsigned int i=0; i<[self numberOfChannels]; i++){
         unsigned int j = i + offset;
         if(trigAll || [self chanEnabled:i]) [flags addObjectsFromArray:@[@"-athr",  [self chFlag:j withInt:threshold[i]]]];
@@ -683,12 +683,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
         [flags addObjectsFromArray:@[@"-ag",     [self chFlag:j withInt:adcGain[i]]]];
         [flags addObjectsFromArray:@[@"-tgm",    [self chFlag:j withFloat:trigGain[i]]]];
         [flags addObjectsFromArray:@[@"-pthr",   [self chFlag:j withFloat:postTrigger[i]]]];
-        if([self fwType] == 0){
-            [flags addObjectsFromArray:@[@"-fs", [self chFlag:j withInt:shapeTime[i]]]];
-            [flags addObjectsFromArray:@[@"-ss", [self chFlag:j withInt:flatTopTime[i]]]];
-            [flags addObjectsFromArray:@[@"-pz", [self chFlag:j withFloat:poleZeroTime[i]]]];
-        }
-        else if([self fwType] == 1){
+        if([self fwType] == 1){
             [flags addObjectsFromArray:@[@"-gs",     [self chFlag:j withInt:shapeTime[i]]]];
             [flags addObjectsFromArray:@[@"-gpz",    [self chFlag:j withFloat:poleZeroTime[i]]]];
             if([self filterType:i] == 0)
@@ -726,7 +721,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     //ship the data
     dataRecord[0] = dataId | (dataRecordLength&0x3ffff);
     dataRecord[1] = dataLengths | (event->type&0x3f);
-    dataRecord[2] = location | ((channel&0xf) << 10) | (index&0x3ff);
+    dataRecord[2] = location | ((channel&0x1f) << 9) | (index&0x1ff);
     int offset = 3;
     for(unsigned int i=0; i<kFlashCamADCTimeOffsetLength; i++) dataRecord[offset++] = event->timeoffset[i];
     for(unsigned int i=0; i<kFlashCamADCDeadRegionLength; i++) dataRecord[offset++] = event->deadregion[i];
@@ -740,7 +735,10 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
 
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
-    [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:@"ORFlashCamADCModel"];
+    if([self fwType] == 0)
+        [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:@"ORFlashCamADCStdModel"];
+    else
+        [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:@"ORFlashCamADCModel"];
     location = (([self crateNumber] & 0x1f) << 27) | (([self slot] & 0x1f) << 22);
     location = location | (([self cardAddress] & 0xff) << 14);
     [self startRates];
@@ -782,7 +780,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
 {
     NSMutableDictionary* dict = [NSMutableDictionary dictionary];
     NSDictionary* d = [NSDictionary dictionaryWithObjectsAndKeys:
-                       @"ORFlashCamADCWaveformDecoder",  @"decoder",
+                       @"ORFlashCamWaveformDecoder",     @"decoder",
                        [NSNumber numberWithLong:dataId], @"dataId",
                        [NSNumber numberWithBool:YES],    @"variable",
                        [NSNumber numberWithLong:-1],     @"length", nil];

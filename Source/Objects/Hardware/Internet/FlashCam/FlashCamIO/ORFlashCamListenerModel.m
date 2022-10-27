@@ -117,6 +117,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     ORReadOutList* readList = [[ORReadOutList alloc] initWithIdentifier:@"ReadOut List"];
     [readList setAcceptedProtocol:@"ORDataTaker"];
     [readList addAcceptedObjectName:@"ORFlashCamADCModel"];
+    [readList addAcceptedObjectName:@"ORFlashCamADCStdModel"];
     [self setReadOutList:readList];
     [readList release];
     [[self undoManager] enableUndoRegistration];
@@ -845,7 +846,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
                 case FCIOEvent: {
                     int num_traces = state->event->num_traces;
                     if(num_traces != [chanMap count]){
-                        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: number of raw traces in event packet %d != channel map size %d, aborting\n", num_traces, [chanMap count]);
+                        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: number of raw traces in event packet %d != channel map size %d, aborting on %@:%d on %@\n", num_traces, [chanMap count], ip, port, interface);
                         [self disconnect:true];
                         [self runFailed];
                         [readStateLock unlock]; //MAH. early return must release
@@ -862,7 +863,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
                 case FCIOSparseEvent: {
                     int num_traces = state->event->num_traces;
                     if(num_traces > [chanMap count]){
-                        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: number of raw traces in event packet %d > channel map size %d, aborting\n", num_traces, [chanMap count]);
+                        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: number of raw traces in event packet %d > channel map size %d, aborting on %@:%d on %@\n", num_traces, [chanMap count], ip, port, interface);
                         [self disconnect:true];
                         [self runFailed];
                         [readStateLock unlock]; //MAH. early return must release
@@ -878,7 +879,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
                 }
                 case FCIORecEvent:
                     if(!unrecognizedPacket){
-                        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: skipping received FCIORecEvent packet - packet type not supported!\n");
+                        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: skipping received FCIORecEvent packet on %@:%d on %@ - packet type not supported!\n", ip, port, interface);
                         NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: WARNING - suppressing further instances of this message for this object in this run\n");
                     }
                     unrecognizedPacket = true;
@@ -891,7 +892,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
                     for(id n in unrecognizedStates) if((int) state->last_tag == [n intValue]) found = true;
                     if(!found){
                         [unrecognizedStates addObject:[NSNumber numberWithInt:(int)state->last_tag]];
-                        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: unrecognized fcio state tag %d\n", state->last_tag);
+                        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: unrecognized fcio state tag %d on %@:%d on %@\n", state->last_tag, ip, port, interface);
                         NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: WARNING - suppressing further instances of this message for this object in this run\n");
                     }
                     break;
@@ -901,7 +902,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
         }
         else{
             if(![[self status] isEqualToString:@"disconnected"]){
-                NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: failed to read state\n");
+                NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: failed to read state on %@:%d on %@\n", ip, port, interface);
                 [self disconnect:true];
                 [self runFailed];
             }
@@ -1017,7 +1018,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     for(ORReadOutObject* obj in [readOutList children]){
         if(![[obj object] isKindOfClass:NSClassFromString(@"ORFlashCamCard")]) continue;
         ORFlashCamCard* card = (ORFlashCamCard*) [obj object];
-        if([[card className] isEqualToString:@"ORFlashCamADCModel"]){
+        if([card isKindOfClass:NSClassFromString(@"ORFlashCamADCModel")]){
             ORFlashCamADCModel* adc = (ORFlashCamADCModel*) card;
             [addressList appendString:[NSString stringWithFormat:@"%x,", [adc cardAddress]]];
             [adcCards addObject:adc];
@@ -1050,14 +1051,16 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
         return;
     }
     // make sure the shaping time and event samples are such that flashcam will silently change the waveform length
-    if(MIN(8000, 20+maxShapeTime*2.5/16) > [[self configParam:@"eventSamples"] intValue]){
-        int samples = [[self configParam:@"eventSamples"] intValue];
-        NSLogColor([NSColor redColor], @"ORFlashCamListenerModel on %@ at %@:%d failed to start run due to max shaping "
-                   "time of %d ns with event samples set to %d. Set the shaping time for all channels <= %d ns or "
-                   "set the event samples >= %d\n", interface, ip, (int) port, maxShapeTime, samples,
-                   (int) ((samples-20)*16/2.5), (int) (20+maxShapeTime*2.5/16));
-        [self runFailed];
-        return;
+    if([[self configParam:@"traceType"] intValue] != 0){
+        if(MIN(8000, 20+maxShapeTime*2.5/16) > [[self configParam:@"eventSamples"] intValue]){
+            int samples = [[self configParam:@"eventSamples"] intValue];
+            NSLogColor([NSColor redColor], @"ORFlashCamListenerModel on %@ at %@:%d failed to start run due to max shaping "
+                       "time of %d ns with event samples set to %d. Set the shaping time for all channels <= %d ns or "
+                       "set the event samples >= %d\n", interface, ip, (int) port, maxShapeTime, samples,
+                       (int) ((samples-20)*16/2.5), (int) (20+maxShapeTime*2.5/16));
+            [self runFailed];
+            return;
+        }
     }
     // if the trigger cards are connected to any global trigger cards, add those to the set
     for(id card in triggerCards){
@@ -1147,7 +1150,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     NSString* taskPath;
     if([guardian localMode]){
         taskPath = [[[guardian fcSourcePath] stringByExpandingTildeInPath] stringByAppendingString:@"/server/readout-fc250b"];
-        NSLog(@"%@readout-fc250b %@\n", taskPath, [readoutArgs componentsJoinedByString:@" "]);
+        NSLog(@"%@ %@\n", taskPath, [readoutArgs componentsJoinedByString:@" "]);
     }
     else {
         taskPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/remote_run"];
