@@ -76,7 +76,7 @@
     NSMutableArray* chanMap;
     NSMutableArray* cardMap;
     NSLock* readStateLock; //MAH 9/18/22
-    NSThread* readoutThread;
+    bool timeToQuitReadoutThread;
 }
 
 #pragma mark •••Initialization
@@ -170,8 +170,6 @@
 - (void) reset;
 - (NSDictionary*) dataRecordDescription;
 - (void) readThread:(ORDataPacket*)aDataPacket;
-- (void) startReadout;
-- (void) stopReadout;
 
 #pragma mark •••Archival
 - (id) initWithCoder:(NSCoder*)decoder;

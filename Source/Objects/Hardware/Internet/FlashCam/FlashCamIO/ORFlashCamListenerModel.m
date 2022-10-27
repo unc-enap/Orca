@@ -178,6 +178,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     [self decorateIcon:image];
     [image unlockFocus];
     [self setImage:image];
+    
     [image release];
 }
 
@@ -207,6 +208,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
         [s drawAtPoint:NSMakePoint([s size].width/2,iconSize.height/2-[s size].height/2)];
         [s release];
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORGroupSelectionChanged object:self];
 }
 
 - (BOOL) acceptsGuardian:(OrcaObject*)aGuardian
@@ -782,11 +784,12 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     reader = FCIOCreateStateReader([s UTF8String], timeout, ioBuffer, stateBuffer);
     FCIOSelectStateTag(reader, 0);
     if(reader){
+        [self setUpImage];
+
         NSLog(@"ORFlashCamListenerModel: connected to %@:%d on %@\n", ip, port, interface);
         [self setStatus:@"connected"];
         readerRecordCount = 0;
         bufferedRecords   = 0;
-        //[self read]; //now in takedata thread
         return YES;
     }
     else{
@@ -801,8 +804,10 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     if(reader) tmio_close(reader->stream);
     [self setStatus:@"disconnected"];
     if(destroy){
-        if(reader) FCIODestroyStateReader(reader);
-        reader = NULL;
+        @synchronized (self) {
+            if(reader) FCIODestroyStateReader(reader);
+            reader = NULL;
+        }
     }
     if(![[self status] isEqualToString:@"disconnected"])
         NSLog(@"ORFlashCamListenerModel: disconnected from %@:%d on %@\n", ip, port, interface);
@@ -1345,18 +1350,18 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:@"ORFlashCamListenerModel"];
     [self startReadoutAfterPing];
     dataTakers = [[readOutList allObjects] retain];
-    if(!readoutThread){
-        readoutThread = [[NSThread alloc] initWithTarget:self selector:@selector(readThread:) object:aDataPacket];
-        [self startReadOut];
-    }
+    
+    timeToQuitReadoutThread = NO;
+    [NSThread detachNewThreadSelector:@selector(readThread:) toTarget:self withObject:aDataPacket];
+
     id obj;
     NSEnumerator* e = [[readOutList allObjects] objectEnumerator];
     while(obj = [e nextObject]) [obj runTaskStarted:aDataPacket userInfo:userInfo];
-    [self setUpImage];
 }
-
 - (void) runIsStopping:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
+    timeToQuitReadoutThread = YES;
+
     //-----------------------------------------------------
     //MAH 9/17/22... shut down the FlashCAM by sending an EOL
     //The periodic status read will be not be repeated if the global
@@ -1379,7 +1384,6 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
         [readStateLock unlock];
     }
     //-----------------------------------------------------
-
     [self disconnect:false];
     [[self taskSequencer] abortTasks];
     [taskSequencer release];
@@ -1402,6 +1406,9 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     while(obj = [e nextObject]) [obj runIsStopping:aDataPacket userInfo:userInfo];
 }
 
+
+
+
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
     if(reader) FCIODestroyStateReader(reader);
@@ -1412,26 +1419,16 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     while(obj = [e nextObject]) [obj runTaskStopped:aDataPacket userInfo:userInfo];
     [dataTakers release];
     dataTakers = nil;
-    [self stopReadout];
 }
 
-- (void)startReadout {
-    if (![readoutThread isExecuting]) {
-        [readoutThread start];
-    }
-}
-
-- (void)stopReadout {
-    if ([readoutThread isExecuting]) {
-        [readoutThread cancel];
-    }
-}
 - (void) readThread:(ORDataPacket*)aDataPacket
 {
-    while(![readoutThread isCancelled]){
+    do {
         NSAutoreleasePool *pool = [[NSAutoreleasePool allocWithZone:nil] init];
         @try {
-            if(reader)[self read:aDataPacket];
+            @synchronized (self) {
+                if(reader)[self read:aDataPacket];
+            }
         }
         @catch (NSException* e){
             //stop run???
@@ -1439,9 +1436,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
         @finally {
             [pool release];
         }
-    }
-    [readoutThread release];
-    readoutThread = nil;
+    }while(!timeToQuitReadoutThread);
 }
 
 - (void) saveReadOutList:(NSFileHandle*)aFile
