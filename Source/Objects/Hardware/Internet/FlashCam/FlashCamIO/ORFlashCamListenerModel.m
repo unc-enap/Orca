@@ -1294,6 +1294,10 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
     @try {
+        if(!readerThread){
+            readerThread = [[NSThread alloc] initWithTarget:self selector:@selector(readThread:) object:aDataPacket];
+            [readerThread start];
+        }
         // add a single configuration packet to the data
         if(bufferedConfigCount > 0){
             uint32_t length = 2 + sizeof(fcio_config) / sizeof(uint32_t);
@@ -1344,9 +1348,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:@"ORFlashCamListenerModel"];
     [self startReadoutAfterPing];
     dataTakers = [[readOutList allObjects] retain];
-    
-    [NSThread detachNewThreadSelector:@selector(readThread:) toTarget:self withObject:aDataPacket];
-    
+        
     id obj;
     NSEnumerator* e = [[readOutList allObjects] objectEnumerator];
     while(obj = [e nextObject]) [obj runTaskStarted:aDataPacket userInfo:userInfo];
@@ -1404,6 +1406,8 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 {
     if(reader) FCIODestroyStateReader(reader);
     reader = NULL;
+    [readerThread release];
+    readerThread = nil;
     [self setUpImage];
     NSEnumerator* e = [dataTakers objectEnumerator];
     id obj;
@@ -1415,10 +1419,9 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 - (void) readThread:(ORDataPacket*)aDataPacket
 {
     do {
-        if(reader){
             NSAutoreleasePool *pool = [[NSAutoreleasePool allocWithZone:nil] init];
             @try {
-                [self read:aDataPacket];
+                if(reader)[self read:aDataPacket];
             }
             @catch (NSException* e){
                 //stop run???
@@ -1426,10 +1429,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
             @finally {
                 [pool release];
             }
-        }
-        else {
-            break;
-        }
+
     } while(true);
 }
 

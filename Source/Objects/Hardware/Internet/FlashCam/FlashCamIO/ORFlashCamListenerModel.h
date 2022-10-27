@@ -76,6 +76,7 @@
     NSMutableArray* chanMap;
     NSMutableArray* cardMap;
     NSLock* readStateLock; //MAH 9/18/22
+    NSThread* readerThread;
 }
 
 #pragma mark •••Initialization
