@@ -734,7 +734,6 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 
 - (bool) connect
 {
-
     if(!chanMap){
         NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: channel mapping has not been specified, aborting connection\n");
         [self setStatus:@"disconnected"];
@@ -884,7 +883,6 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
         }
         [readStateLock unlock]; //MAH
     }
-    
 }
 
 - (void) runFailed
@@ -906,9 +904,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     }
 }
 
-
 #pragma mark •••Task methods
-
 - (void) taskFinished:(id)task
 {
 }
@@ -1295,10 +1291,6 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
                 statusBuffer[index+1] |=  (unsigned short) [self uniqueIdNumber];
                 [aDataPacket addLongsToFrameBuffer:statusBuffer+index length:length];
             }
-            // allow all connected data takers to add to the data packet
-            //NSEnumerator* e = [dataTakers objectEnumerator];
-            //id obj;
-            //while(obj = [e nextObject]) [obj takeData:aDataPacket userInfo:userInfo];
         }
         @catch(NSException* e){
             NSLogError(@"",@"FlashCamListener Error",@"");
@@ -1324,8 +1316,11 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:@"ORFlashCamListenerModel"];
     [self startReadoutAfterPing];
     dataTakers = [[readOutList allObjects] retain];
-    NSEnumerator* e = [[readOutList allObjects] objectEnumerator];
+    
+    [NSThread detachNewThreadSelector:@selector(readThread:) toTarget:self withObject:aDataPacket];
+    
     id obj;
+    NSEnumerator* e = [[readOutList allObjects] objectEnumerator];
     while(obj = [e nextObject]) [obj runTaskStarted:aDataPacket userInfo:userInfo];
 }
 
@@ -1385,6 +1380,27 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     while(obj = [e nextObject]) [obj runTaskStopped:aDataPacket userInfo:userInfo];
     [dataTakers release];
     dataTakers = nil;
+}
+
+- (void) readThread:(ORDataPacket*)aDataPacket
+{
+    do {
+        if(reader){
+            NSAutoreleasePool *pool = [[NSAutoreleasePool allocWithZone:nil] init];
+            @try {
+                [self read:aDataPacket];
+            }
+            @catch (NSException* e){
+                //stop run???
+            }
+            @finally {
+                [pool release];
+            }
+        }
+        else {
+            break;
+        }
+    } while(true);
 }
 
 - (void) saveReadOutList:(NSFileHandle*)aFile

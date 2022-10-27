@@ -158,6 +158,7 @@
 - (void) taskData:(NSMutableDictionary*)taskData;
 
 #pragma mark •••Data taker methods
+- (void) readThread:(ORDataPacket*)aDataPacket;
 - (void) readConfig:(fcio_config*)config;
 - (void) readStatus:(fcio_status*)fcstatus;
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
