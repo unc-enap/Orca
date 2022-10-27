@@ -1294,10 +1294,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
     @try {
-        if(!readerThread){
-            readerThread = [[NSThread alloc] initWithTarget:self selector:@selector(readThread:) object:aDataPacket];
-            [readerThread start];
-        }
+
         // add a single configuration packet to the data
         if(bufferedConfigCount > 0){
             uint32_t length = 2 + sizeof(fcio_config) / sizeof(uint32_t);
@@ -1348,7 +1345,10 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:@"ORFlashCamListenerModel"];
     [self startReadoutAfterPing];
     dataTakers = [[readOutList allObjects] retain];
-        
+    if(!readoutThread){
+        readoutThread = [[NSThread alloc] initWithTarget:self selector:@selector(readThread:) object:aDataPacket];
+        [self startReadOut];
+    }
     id obj;
     NSEnumerator* e = [[readOutList allObjects] objectEnumerator];
     while(obj = [e nextObject]) [obj runTaskStarted:aDataPacket userInfo:userInfo];
@@ -1406,31 +1406,42 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 {
     if(reader) FCIODestroyStateReader(reader);
     reader = NULL;
-    [readerThread release];
-    readerThread = nil;
     [self setUpImage];
     NSEnumerator* e = [dataTakers objectEnumerator];
     id obj;
     while(obj = [e nextObject]) [obj runTaskStopped:aDataPacket userInfo:userInfo];
     [dataTakers release];
     dataTakers = nil;
+    [self stopReadout];
 }
 
+- (void)startReadout {
+    if (![readoutThread isExecuting]) {
+        [readoutThread start];
+    }
+}
+
+- (void)stopReadout {
+    if ([readoutThread isExecuting]) {
+        [readoutThread cancel];
+    }
+}
 - (void) readThread:(ORDataPacket*)aDataPacket
 {
-    do {
-            NSAutoreleasePool *pool = [[NSAutoreleasePool allocWithZone:nil] init];
-            @try {
-                if(reader)[self read:aDataPacket];
-            }
-            @catch (NSException* e){
-                //stop run???
-            }
-            @finally {
-                [pool release];
-            }
-
-    } while(true);
+    while(![readoutThread isCancelled]){
+        NSAutoreleasePool *pool = [[NSAutoreleasePool allocWithZone:nil] init];
+        @try {
+            if(reader)[self read:aDataPacket];
+        }
+        @catch (NSException* e){
+            //stop run???
+        }
+        @finally {
+            [pool release];
+        }
+    }
+    [readoutThread release];
+    readoutThread = nil;
 }
 
 - (void) saveReadOutList:(NSFileHandle*)aFile

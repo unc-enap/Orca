@@ -76,7 +76,7 @@
     NSMutableArray* chanMap;
     NSMutableArray* cardMap;
     NSLock* readStateLock; //MAH 9/18/22
-    NSThread* readerThread;
+    NSThread* readoutThread;
 }
 
 #pragma mark •••Initialization
@@ -159,7 +159,6 @@
 - (void) taskData:(NSMutableDictionary*)taskData;
 
 #pragma mark •••Data taker methods
-- (void) readThread:(ORDataPacket*)aDataPacket;
 - (void) readConfig:(fcio_config*)config;
 - (void) readStatus:(fcio_status*)fcstatus;
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
@@ -170,6 +169,9 @@
 - (void) loadReadOutList:(NSFileHandle*)aFile;
 - (void) reset;
 - (NSDictionary*) dataRecordDescription;
+- (void) readThread:(ORDataPacket*)aDataPacket;
+- (void) startReadout;
+- (void) stopReadout;
 
 #pragma mark •••Archival
 - (id) initWithCoder:(NSCoder*)decoder;
