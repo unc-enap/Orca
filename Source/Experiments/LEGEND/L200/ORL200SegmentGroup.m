@@ -296,7 +296,7 @@
 - (void) registerForRates
 {
     id document = [(ORAppDelegate*) [NSApp delegate] document];
-    NSArray* adcs = [document collectObjectsOfClass:NSClassFromString(@"ORFlashCamADCModel")];
+    NSArray* adcs = [document collectObjectsOfClass:NSClassFromString([self adcClassName])];
     [segments makeObjectsPerformSelector:@selector(registerForRates:) withObject:adcs];
 }
 
@@ -304,7 +304,7 @@
 {
     if(!aNote || [[aNote object] isKindOfClass:NSClassFromString(@"ORGroup")]){
         id document = [(ORAppDelegate*) [NSApp delegate] document];
-        NSArray* adcs = [document collectObjectsOfClass:NSClassFromString(@"ORFlashCamADCModel")];
+        NSArray* adcs = [document collectObjectsOfClass:NSClassFromString([self adcClassName])];
         [segments makeObjectsPerformSelector:@selector(configurationChanged:) withObject:adcs];
         [self registerForRates];
         [[NSNotificationCenter defaultCenter] postNotificationName:ORSegmentGroupConfiguationChanged
