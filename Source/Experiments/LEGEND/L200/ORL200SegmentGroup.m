@@ -19,10 +19,11 @@
 
 #import "ORL200SegmentGroup.h"
 #import "ORDetectorSegment.h"
+#import "ORFlashCamADCModel.h"
 
 @implementation ORL200SegmentGroup
 
-#pragma mark •••Map Methods
+#pragma mark •••Accessors
 
 - (unsigned int) type
 {
@@ -32,6 +33,32 @@
 - (void) setType:(unsigned int)segType
 {
     if(segType < kL200SegmentTypeCount) type = segType;
+}
+
+- (float) waveformRate
+{
+    float rate = 0.0;
+    for(int i=0; i<[segments count]; i++) rate += [self getWaveformRate:i];
+    return rate;
+}
+
+- (float) getWaveformRate:(int)index
+{
+    if(index < 0 || index >= [segments count]) return 0.0;
+    ORDetectorSegment* segment = [segments objectAtIndex:index];
+    id card = [segment hardwareCard];
+    if(![card respondsToSelector:@selector(getWFrate:)]) return 0.0;
+    return [card getWFrate:[segment channel]];
+    
+}
+
+- (float) getWaveformCounts:(int)index
+{
+    if(index < 0 || index >= [segments count]) return 0.0;
+    ORDetectorSegment* segment = [segments objectAtIndex:index];
+    id card = [segment hardwareCard];
+    if(![card respondsToSelector:@selector(wfCount:)]) return 0.0;
+    return [card wfCount:[segment channel]];
 }
 
 
@@ -180,7 +207,7 @@
     else NSLogColor([NSColor redColor], @"ORL200SegmentGroup: failed to save map file %d\n", type);
 }
 
-- (NSData*) jsonMap
+- (NSDictionary*) dictMap
 {
     // build the json data
     NSMutableDictionary* dict = [NSMutableDictionary dictionary];
@@ -250,7 +277,12 @@
         }
         if(ch_dict) [dict setObject:ch_dict forKey:[params objectAtIndex:0]];
     }
-    // write the dictionary to the specified filename
+    return [NSDictionary dictionaryWithDictionary:dict];
+}
+
+- (NSData*) jsonMap
+{
+    NSDictionary* dict = [self dictMap];
     if([NSJSONSerialization isValidJSONObject:dict]){
         NSError* error = nil;
         NSData* data = [NSJSONSerialization dataWithJSONObject:dict
