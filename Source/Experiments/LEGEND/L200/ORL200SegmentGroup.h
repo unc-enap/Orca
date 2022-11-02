@@ -31,6 +31,7 @@ enum ORL200SegmentType{ kL200DetType, kL200SiPMType, kL200PMTType, kL200AuxType,
 - (float) waveformRate;
 - (float) getWaveformRate:(int)index;
 - (float) getWaveformCounts:(int)index;
+- (double) getBaseline:(int)index;
 
 #pragma mark •••Map Methods
 - (void) readMap:(NSString*)aPath;
