@@ -98,6 +98,14 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     [super dealloc];
 }
 
+- (void) awakeAfterDocumentLoaded
+{
+    @try{
+        [self performSelector:@selector(postConfig) withObject:nil afterDelay:3];
+    }
+    @catch(NSException* localException){ }
+}
+
 - (void) setUpImage
 {
     NSImage* cimage = [NSImage imageNamed:@"flashcam_adc"];
@@ -305,6 +313,11 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
 - (int) majorityWidth
 {
     return majorityWidth;
+}
+
+- (bool) isRunning
+{
+    return isRunning;
 }
 
 - (ORRateGroup*) wfRates
@@ -742,7 +755,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     location = (([self crateNumber] & 0x1f) << 27) | (([self slot] & 0x1f) << 22);
     location = location | (([self cardAddress] & 0xff) << 14);
     [self startRates];
-    isRunning = false;
+    isRunning = true;
 }
 
 - (void) runIsStopping:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
@@ -876,7 +889,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     [self setEnableBaselineHistory:[decoder decodeBoolForKey:@"enableBaselineHistory"]];
     [self setBaselineSampleTime:[decoder decodeDoubleForKey:@"baselineSampleTime"]];
     [self setWFsamples:0];
-    isRunning = NO;
+    isRunning = false;
     dataRecord = NULL;
     [self setTrigRates:[decoder decodeObjectForKey:@"trigRates"]];
     if(!trigRates){
@@ -1075,6 +1088,59 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     NSDictionary* cardDictionary = [self findCardDictionaryInHeader:fileHeader];
     if([param isEqualToString:@"Enabled"]) return [[cardDictionary objectForKey:@"chanEnabled"] objectAtIndex:aChannel];
     else return nil;
+}
+
+@end
+
+
+@implementation ORFlashCamADCModel (private)
+
+- (void) postConfig
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(postConfig) object:nil];
+    [self postCouchDBRecord];
+    [self performSelector:@selector(postConfig) withObject:nil afterDelay:60];
+}
+
+- (void) postCouchDBRecord
+{
+    NSMutableDictionary* values = [NSMutableDictionary dictionary];
+    [values setObject:[NSNumber numberWithInt:[self crateNumber]]          forKey:@"crate"];
+    [values setObject:[NSNumber numberWithInt:[self slot]]                 forKey:@"slot"];
+    [values setObject:[NSNumber numberWithUnsignedInt:[self cardAddress]]  forKey:@"cardAddress"];
+    [values setObject:[NSNumber numberWithUnsignedInt:[self fcioID]]       forKey:@"fcioID"];
+    [values setObject:[NSNumber numberWithUnsignedInt:[self status]]       forKey:@"status"];
+    [values setObject:[NSNumber numberWithUnsignedInt:[self totalErrors]]  forKey:@"totalErrors"];
+    [values setObject:[NSNumber numberWithInt:[self baseBias]]             forKey:@"baseBias"];
+    [values setObject:[NSNumber numberWithInt:[self majorityLevel]]        forKey:@"majorityLevel"];
+    [values setObject:[NSNumber numberWithInt:[self majorityWidth]]        forKey:@"majorityWidth"];
+    [values setObject:[NSNumber numberWithBool:[self trigOutEnable]]       forKey:@"trigOutEnable"];
+    [values setObject:[NSNumber numberWithBool:isRunning]                  forKey:@"isRunning"];
+    for(int i=0; i<[self numberOfChannels]; i++){
+        NSMutableDictionary* chval = [NSMutableDictionary dictionary];
+        [chval setObject:[NSNumber numberWithBool:[self chanEnabled:i]]    forKey:@"chanEnabled"];
+        [chval setObject:[NSNumber numberWithBool:[self trigOutEnabled:i]] forKey:@"trigOutEnabled"];
+        [chval setObject:[NSNumber numberWithInt:[self baseline:i]]        forKey:@"baseline"];
+        [chval setObject:[NSNumber numberWithInt:[self threshold:i]]       forKey:@"threshold"];
+        [chval setObject:[NSNumber numberWithInt:[self shapeTime:i]]       forKey:@"shapeTime"];
+        [chval setObject:[NSNumber numberWithInt:[self filterType:i]]      forKey:@"filterType"];
+        [chval setObject:[NSNumber numberWithInt:[self adcGain:i]]         forKey:@"adcGain"];
+        [chval setObject:[NSNumber numberWithFloat:[self trigGain:i]]      forKey:@"trigGain"];
+        [chval setObject:[NSNumber numberWithFloat:[self flatTopTime:i]]   forKey:@"flatTopTime"];
+        [chval setObject:[NSNumber numberWithFloat:[self poleZeroTime:i]]  forKey:@"poleZeroTime"];
+        [chval setObject:[NSNumber numberWithFloat:[self postTrigger:i]]   forKey:@"postTrigger"];
+        if([self enableBaselineHistory]){
+            NSArray* baselines = [[self baselineHistory:i] ratesAsArray];
+            int start = MAX(0, (int) [baselines count]-1024);
+            int length = MIN((int) [baselines count], 1024);
+            [chval setObject:[baselines subarrayWithRange:NSMakeRange(start, length)]
+                      forKey:@"baselineHistory"];
+        }
+        [values setObject:chval forKey:[NSString stringWithFormat:@"channel_%d", i]];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ORCouchDBAddObjectRecord"
+                                                        object:self
+                                                      userInfo:values];
 }
 
 @end

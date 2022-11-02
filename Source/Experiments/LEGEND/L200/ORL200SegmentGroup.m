@@ -61,6 +61,17 @@
     return [card wfCount:[segment channel]];
 }
 
+- (double) getBaseline:(int)index
+{
+    if(index < 0 || index >= [segments count]) return 0.0;
+    ORDetectorSegment* segment = [segments objectAtIndex:index];
+    id card = [segment hardwareCard];
+    if(![card respondsToSelector:@selector(baselineHistory:)]) return 0.0;
+    if(![card enableBaselineHistory] || ![card isRunning]) return 0.0;
+    ORTimeRate* baseHistory = [card baselineHistory:[segment channel]];
+    return [baseHistory valueAtIndex:[baseHistory count]-1];
+}
+
 
 #pragma mark •••Map Methods
 

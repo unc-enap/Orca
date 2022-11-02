@@ -96,6 +96,7 @@
 - (int) baseBias;
 - (int) majorityLevel;
 - (int) majorityWidth;
+- (bool) isRunning;
 - (ORRateGroup*) wfRates;
 - (id) wfRateObject:(short)channel;
 - (uint32_t) wfCount:(int)channel;
@@ -179,6 +180,12 @@
 - (NSArray*) wizardSelections;
 - (NSNumber*) extractParam:(NSString*)param from:(NSDictionary*)fileHeader forChannel:(int)aChannel;
 
+@end
+
+
+@interface ORFlashCamADCModel (private)
+- (void) postConfig;
+- (void) postCouchDBRecord;
 @end
 
 

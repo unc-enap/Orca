@@ -170,6 +170,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="setLogY:" target="Fz7-aT-wMd" id="BjM-fv-CbA"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </view>
@@ -392,13 +395,13 @@
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U3q-vA-WZd">
                                             <rect key="frame" x="1024" y="652" width="120" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Rates" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="h6L-kI-KjG" id="OU1-oF-vGI">
+                                            <popUpButtonCell key="cell" type="push" title="Rates" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="1" imageScaling="proportionallyDown" inset="2" selectedItem="h6L-kI-KjG" id="OU1-oF-vGI">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <menu key="menu" id="TPB-E6-K5i">
                                                     <items>
-                                                        <menuItem title="Rates" state="on" id="h6L-kI-KjG"/>
-                                                        <menuItem title="Thresholds" id="fqt-Ub-t2F"/>
+                                                        <menuItem title="Rates" state="on" tag="1" id="h6L-kI-KjG"/>
+                                                        <menuItem title="Thresholds" tag="2" id="fqt-Ub-t2F"/>
                                                         <menuItem title="Total Counts" id="67o-vH-ZTV"/>
                                                     </items>
                                                 </menu>
@@ -494,10 +497,10 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <clipView key="contentView" id="mgc-pR-Pfa">
                                                 <rect key="frame" x="1" y="1" width="1163" height="614"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" headerView="4Tn-VY-npu" id="RKF-26-UZQ">
-                                                        <rect key="frame" x="0.0" y="0.0" width="1163" height="586"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="1183" height="586"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <size key="intercellSpacing" width="17" height="0.0"/>
                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -762,7 +765,7 @@
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                             <tableHeaderView key="headerView" wantsLayer="YES" id="4Tn-VY-npu">
-                                                <rect key="frame" x="0.0" y="0.0" width="1163" height="28"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="1183" height="28"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </tableHeaderView>
                                         </scrollView>

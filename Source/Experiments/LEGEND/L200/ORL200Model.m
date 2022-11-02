@@ -556,15 +556,21 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 
 - (void) postCouchDBRecord
 {
-    NSMutableDictionary* values = [NSMutableDictionary dictionary];
+    NSMutableDictionary* values  = [NSMutableDictionary dictionary];
+    NSMutableDictionary* history = [NSMutableDictionary dictionary];
+    NSString* s = [NSString stringWithFormat:@"%@,%u", [self className], [self uniqueIdNumber]];
+    [history setObject:s forKey:@"name"];
+    [history setObject:s forKey:@"title"];
     for(int itype=0; itype<kL200SegmentTypeCount; itype++){
         NSMutableDictionary* dict        = [NSMutableDictionary dictionary];
+        NSMutableDictionary* hist        = [NSMutableDictionary dictionary];
         NSMutableDictionary* id_to_index = [NSMutableDictionary dictionary];
         NSMutableArray* thresholds = [NSMutableArray array];
         NSMutableArray* trigCounts = [NSMutableArray array];
         NSMutableArray* trigRates  = [NSMutableArray array];
         NSMutableArray* wfCounts   = [NSMutableArray array];
         NSMutableArray* wfRates    = [NSMutableArray array];
+        NSMutableArray* baseline   = [NSMutableArray array];
         NSMutableArray* online     = [NSMutableArray array];
         ORL200SegmentGroup* group = (ORL200SegmentGroup*) [self segmentGroup:itype];
         NSDictionary* chanMap = [group dictMap];
@@ -582,6 +588,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
             [trigRates  addObject:[NSNumber numberWithFloat:[group getRate:iseg]]];
             [wfCounts   addObject:[NSNumber numberWithFloat:[group getWaveformCounts:iseg]]];
             [wfRates    addObject:[NSNumber numberWithFloat:[group getWaveformRate:iseg]]];
+            [baseline   addObject:[NSNumber numberWithDouble:[group getBaseline:iseg]]];
             [online     addObject:[NSNumber numberWithFloat:[group online:iseg]]];
         }
         [dict setObject:id_to_index forKey:@"serialToIndex"];
@@ -592,12 +599,21 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         if([trigRates  count]) [dict setObject:trigRates  forKey:@"trigRates"];
         if([wfCounts   count]) [dict setObject:wfCounts   forKey:@"wfCounts"];
         if([wfRates    count]) [dict setObject:wfRates    forKey:@"wfRates"];
+        if([baseline   count]) [dict setObject:baseline   forKey:@"baseline"];
         if([online     count]) [dict setObject:online     forKey:@"online"];
         [values setObject:dict forKey:[group groupName]];
+        [hist setObject:id_to_index forKey:@"serialToIndex"];
+        if([trigRates  count]) [hist setObject:trigRates  forKey:@"trigRates"];
+        if([wfRates    count]) [hist setObject:wfRates    forKey:@"wfRates"];
+        if([baseline   count]) [hist setObject:baseline   forKey:@"baseline"];
+        [history setObject:hist forKey:[group groupName]];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ORCouchDBAddObjectRecord"
                                                         object:self
                                                       userInfo:values];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ORCouchDBAddHistoryAdcRecord"
+                                                        object:self
+                                                      userInfo:history];
 }
 
 @end
