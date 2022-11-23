@@ -544,7 +544,7 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
         BOOL doInit = [[[aNote userInfo] objectForKey:@"doinit"] boolValue];
         if(doInit){
             uint32_t aValue = [self readRegister:kMiscCtl1];
-            [self writeRegister:kMiscCtl1 withValue:aValue |= (0x1<<6)]; //set the Imp Syn
+            [self writeRegister:kMiscCtl1 withValue:aValue | (0x1<<6)]; //set the Imp Syn
             [self setMiscCtl1Reg:       [self readRegister:kMiscCtl1]];  //display it
         }
      }
@@ -570,9 +570,9 @@ static GretinaTriggerStateInfo router_state_info[kNumRouterTriggerStates] = {
     //Since there is just a couple of operations here and we want to be fast just
     //send the commands without going thru a state machine.
     uint32_t aValue = [self readRegister:kMiscCtl1];
-    [self writeRegister:kMiscCtl1 withValue:aValue |= (0x1<<6)];//set imp sync to hold clocks in reset
+    [self writeRegister:kMiscCtl1 withValue:aValue | (0x1<<6)];//set imp sync to hold clocks in reset
     [self resetScalerTimeStamps];
-    [self writeRegister:kMiscCtl1 withValue:aValue &= ~(0x1<<6)];//release imp sync
+    [self writeRegister:kMiscCtl1 withValue:aValue & ~(0x1<<6)];//release imp sync
 
     //    [self writeRegister:kPulsedCtl2 withValue:0x1000]; //send one imp syn
     [self readDisplayRegs];
