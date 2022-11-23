@@ -2774,7 +2774,7 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
         if(DEBUG_SPECTRUM_READOUT) 
         if(hasStatus){
             uint32_t var32=0;
-            uint16_t var16=0; var16=0;
+            uint16_t var16=0;
             uint8_t var8=0;
             NSLog(@"STATUS:    (statusOffset: %i)\n",statusOffset);
             var32=*( (uint32_t*) (&(dp5Packet[statusOffset + kFastCountOffset])) );
@@ -2802,7 +2802,7 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
         //update status display
         if(hasStatus){
             uint32_t var32=0;
-            uint16_t var16=0; var16=0;
+            uint16_t var16=0;
             uint8_t var8=0;
             int8_t var8signed=0;
             //NSLog(@"STATUS:    (statusOffset: %i)\n",statusOffset);
