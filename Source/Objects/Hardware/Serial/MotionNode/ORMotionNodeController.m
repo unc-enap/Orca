@@ -537,7 +537,6 @@
     else {
         double aValue = 0;
         NSUInteger set = [aPlotter tag];
- set = [aPlotter tag];
         if([model showDeltaFromAve]){
             if(set == 0)		aValue =  [model axDeltaAveAt:i];
             else if(set == 1)	aValue =  [model ayDeltaAveAt:i];
