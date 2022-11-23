@@ -67,7 +67,7 @@
         NSArray *           setPointList;
         NSArray *           measuredValueList;
         //int                 kNumToShip;
-        NSString **         itemsToShip;
+        //NSString **         itemsToShip;
         NSArray *           itemsToShipList;
 
         int                 localControlIndex;
