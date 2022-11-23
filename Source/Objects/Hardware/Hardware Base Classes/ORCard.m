@@ -202,12 +202,12 @@
 						NSDictionary* aCardDictionary = [cards objectAtIndex:card];
 						NSString* testClassName = [aCardDictionary objectForKey:@"Class Name"];
 						if([testClassName isEqualToString:[self className]]){
-							int testSlot = [[aCardDictionary objectForKey:@"Card"] intValue] + firstSlot;
-							int slotWeAreLookingFor;
+							NSInteger testSlot = [[aCardDictionary objectForKey:@"Card"] intValue] + firstSlot;
+                            NSInteger slotWeAreLookingFor;
 							SEL selector = NSSelectorFromString(@"stationNumber");
 							if([self respondsToSelector:selector]){
 								//this avoids a compiler warning
-								slotWeAreLookingFor = (int)[self performSelector:selector];
+								slotWeAreLookingFor = (NSInteger)[self performSelector:selector];
 							}
 							else slotWeAreLookingFor = [self slot];
 							if(testSlot == slotWeAreLookingFor){
