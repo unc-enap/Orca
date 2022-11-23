@@ -130,7 +130,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 {
     if(!globalWatchers)globalWatchers = [[NSMutableDictionary dictionary]retain];
     if([aNote object]){
-        id watcherKey   = [NSNumber numberWithLong:(uint32_t)[aNote object]];
+        id watcherKey   = [NSNumber numberWithLong:(NSInteger)[aNote object]];
         if(watcherKey!=nil){
             [globalWatchers setObject:watcherKey forKey:watcherKey]; //just care if an entry exists
         }
@@ -139,7 +139,7 @@ NSString* ORForceLimitsMaxYChanged = @"ORForceLimitsMaxYChanged";
 - (void) removeGlobalWatcher:(NSNotification*) aNote
 {
     if([aNote object]){
-        id watcherKey   = [NSNumber numberWithLong:(uint32_t)[aNote object]];
+        id watcherKey   = [NSNumber numberWithLong:(NSInteger)[aNote object]];
         [globalWatchers removeObjectForKey:watcherKey]; //just care if an entry exists
     }
     if([globalWatchers count]==0){
