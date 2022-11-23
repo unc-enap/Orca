@@ -18,9 +18,6 @@
 //-------------------------------------------------------------
 #import "ORMJDPumpCartView.h"
 @interface ORMJDTestCryoView : ORMJDPumpCartView {
-	NSUInteger tag;
 }
-- (NSUInteger) tag;
-- (void) setTag:(NSUInteger)aValue;
 - (void) drawString:(NSString*)aString atPoint:(NSPoint)aPoint;
 @end
