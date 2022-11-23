@@ -343,7 +343,7 @@
     NSInteger value = ~[model linkLockedReg];
 	short i;
 	for(i=0;i<[linkLockedMatrix numberOfColumns];i++){
-		[[linkLockedMatrix cellWithTag:i] setIntValue:(value & 1L<<i)];
+		[[linkLockedMatrix cellWithTag:i] setIntValue:(value & 0x1<<i)];
 	}
 }
 
@@ -352,7 +352,7 @@
     NSInteger value = [model linkLruCrlReg];
 	short i;
 	for(i=0;i<[linkLruCrlMatrix numberOfColumns];i++){
-		[[linkLruCrlMatrix cellWithTag:i] setIntValue:(value & 1L<<i)];
+		[[linkLruCrlMatrix cellWithTag:i] setIntValue:(value & 0x1<<i)];
 	}
 }
 
@@ -361,7 +361,7 @@
     NSInteger value = [model miscCtl1Reg];
 	short i;
 	for(i=0;i<[miscCtl1Matrix numberOfColumns];i++){
-		[[miscCtl1Matrix cellWithTag:i] setIntValue:(value & 1L<<i)];
+		[[miscCtl1Matrix cellWithTag:i] setIntValue:(value & 0x1<<i)];
 	}
 }
 
@@ -372,34 +372,34 @@
 
 - (void) inputLinkMaskChanged:(NSNotification*)aNote
 {
-    NSInteger value = ~[model inputLinkMask];
-	short i;
+    int value = ~[model inputLinkMask];
+	int i;
 	for(i=0;i<[inputLinkMaskMatrix numberOfColumns];i++){
-		[[inputLinkMaskMatrix cellWithTag:i] setIntValue:(value & 1L<<i)];
+		[[inputLinkMaskMatrix cellWithTag:i] setIntValue:(value & 0x1<<i)];
 	}
 }
 
 - (void) serDesTPowerMaskChanged:(NSNotification*)aNote
 {
-    NSInteger value = [model serdesTPowerMask];
-	short i;
+    int value = [model serdesTPowerMask];
+	int i;
 	for(i=0;i<[serDesTPowerMasMatrix numberOfColumns];i++){
-		[[serDesTPowerMasMatrix cellWithTag:i] setIntValue:(value & 1L<<i)];
+		[[serDesTPowerMasMatrix cellWithTag:i] setIntValue:(value & 0x1<<i)];
 	}
 }
 
 - (void) lvdsPreemphasisCtlChanged:(NSNotification*)aNote
 {
-    NSInteger value = [model lvdsPreemphasisCtlMask];
-	short i;
+    int value = [model lvdsPreemphasisCtlMask];
+	int i;
 	for(i=0;i<[lvdsPreemphasisCtlMatrix numberOfColumns];i++){
-		[[lvdsPreemphasisCtlMatrix cellWithTag:i] setIntValue:(value & 1L<<i)];
+		[[lvdsPreemphasisCtlMatrix cellWithTag:i] setIntValue:(value & 0x1<<i)];
 	}
 }
 
 - (void) serDesRPowerMaskChanged:(NSNotification*)aNote
 {
-    NSInteger value = [model serdesRPowerMask];
+    int value = [model serdesRPowerMask];
 	short i;
 	for(i=0;i<[serDesRPowerMasMatrix numberOfColumns];i++){
 		[[serDesRPowerMasMatrix cellWithTag:i] setIntValue:(value & 1L<<i)];
