@@ -3560,7 +3560,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     
     uint32_t writeData = 0;    // 16 bit value written to ADC chip
     uint32_t addr = 0x10;    // calibration control reg
-    uint32_t RWcmd = 0x1;    // Read/write command (0 = read, 1 = write)
+    //uint32_t RWcmd = 0x1;    // Read/write command (0 = read, 1 = write)
     
     [self checkADCCalibrationMailboxReady:adc];
 
