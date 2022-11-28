@@ -2120,7 +2120,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 
 - (void) writeLed1:(BOOL)state
 {
-    state = state << 0;
+    state ^= state;
     uint32_t aValue = CSRMask(state,kSISLed1);
     [[self adapter] writeLongBlock:&aValue
                          atAddress:[self baseAddress] + kSIS3305ControlStatus
@@ -2476,13 +2476,11 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     writeValue = (data>>0) | (addr>>16) | (command>>24);
 
     
-    BOOL read,write,erase,writeEnable,writeDisable;
-    
-    read        = (command & 0x1);
-    write       = (command & 0x2);
-    erase       = (command & 0x4);
-    writeEnable = (command & 0x8);
-    writeDisable= (command & 0x10);
+//    BOOL read        = (command & 0x1);
+//    BOOL write       = (command & 0x2);
+//    BOOL erase       = (command & 0x4);
+//    BOOL writeEnable = (command & 0x8);
+//    BOOL writeDisable= (command & 0x10);
     
     // check that a command has been issued at all
     if (command == 0)
@@ -3094,7 +3092,7 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
             unsigned short standby =    ((packet.control[adc] >> 4) & 0x3);
             unsigned short adcMode =    ((packet.control[adc]       & 0xF));
             
-            BOOL fourChannel, twoChannel,oneChannel, chanA, chanB, chanC, chanD;
+            //BOOL fourChannel, twoChannel,oneChannel, chanA, chanB, chanC, chanD;
             
             NSMutableString* mode = [[NSMutableString alloc]init]; // FIX does this need to be released? (--MAH--YES. I fixed by adding a release at the bottom. 10/12/15)
             
@@ -3104,27 +3102,27 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
                 case 2:
                 case 3:
                     [mode setString:@"Four-channel mode (1.25 Gsps per channel)"];
-                    oneChannel = NO;
-                    twoChannel = NO;
-                    fourChannel = YES;
-                    chanA = YES;
-                    chanB = YES;
-                    chanC = YES;
-                    chanD = YES;
+                    //oneChannel = NO;
+                    //twoChannel = NO;
+                    //fourChannel = YES;
+                    //chanA = YES;
+                    //chanB = YES;
+                    //chanC = YES;
+                    //chanD = YES;
                     break;
                 case 0x4:
                     [mode setString:@"Two-channel mode (Channel A and Channel C, 2.5 Gsps per channel)"];
-                    chanA = YES;
-                    chanB = NO;
-                    chanC = YES;
-                    chanD = NO;
+//                    chanA = YES;
+//                    chanB = NO;
+//                    chanC = YES;
+//                    chanD = NO;
                     break;
                 case 0x5:
                     [mode setString:@"Two-channel mode (Channel B and Channel C, 2.5 Gsps per channel)"];
-                    chanA = NO;
-                    chanB = YES;
-                    chanC = YES;
-                    chanD = NO;
+//                    chanA = NO;
+//                    chanB = YES;
+//                    chanC = YES;
+//                    chanD = NO;
                     break;
                 case 0x6:
                     // FIX: fill the rest of this out...
@@ -3341,12 +3339,12 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
     uint32_t writeData = 0;
     
     uint32_t addr, adc;
-    uint32_t RWcmd;        // Read/write command (0 = read, 1 = write)
+    //uint32_t RWcmd;        // Read/write command (0 = read, 1 = write)
     
     unsigned short adcChan,chan;
 
     addr = 0x20;    // External Offset register
-    RWcmd = 0x1;    // write command
+    //RWcmd = 0x1;    // write command
     
     // 16-bit value written to the SPI chip
     for (chan = 0; chan<kNumSIS3305Channels; chan++) {
@@ -3383,12 +3381,12 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
 - (void) writeADCGains
 {
     uint32_t writeData = 0;
-    uint32_t gainExtAddr, gainIntAddr, chanSelectAddr, calAddr;
+    uint32_t gainExtAddr, calAddr;
     unsigned short adc,chan;
     
     gainExtAddr = 0x22;    // External Gain register
-    gainIntAddr = 0x23;
-    chanSelectAddr = 0xF;
+    //uint32_t gainIntAddr = 0x23;
+    //uint32_t chanSelectAddr = 0xF;
     calAddr = 0x10;
     
 //    unsigned short bigChan;
@@ -3561,15 +3559,9 @@ static SIS3305GammaRegisterInformation register_information[kNumSIS3305ReadRegs]
      */
     
     uint32_t writeData = 0;    // 16 bit value written to ADC chip
+    uint32_t addr = 0x10;    // calibration control reg
+    //uint32_t RWcmd = 0x1;    // Read/write command (0 = read, 1 = write)
     
-    uint32_t addr;         // address in ADC chip
-    uint32_t RWcmd;        // Read/write command (0 = read, 1 = write)
-    
-    
-    addr = 0x10;    // calibration control reg
-    RWcmd = 0x1;    // write
-    
-
     [self checkADCCalibrationMailboxReady:adc];
 
     writeData = 0x8;    // force external offset adjust for selected channel

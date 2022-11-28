@@ -146,7 +146,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(Security);
     if(anObj){
         if(!superUnlockMaskRequests)superUnlockMaskRequests = [[NSMutableDictionary dictionary]retain];
         NSNumber* theMask = [NSNumber numberWithUnsignedLong:aMask];
-        NSNumber* aKey = [NSNumber numberWithUnsignedLong:(uint32_t)anObj];
+        NSNumber* aKey = [NSNumber numberWithUnsignedLong:(NSUInteger)anObj];
         [superUnlockMaskRequests setObject:theMask forKey:aKey];
         [self _formSuperUnlockMask];
     }
@@ -155,7 +155,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(Security);
 - (void) removeSuperUnlockMaskForObject:(id)anObj
 {
     if(anObj){
-        NSNumber* aKey = [NSNumber numberWithUnsignedLong:(uint32_t)anObj];
+        NSNumber* aKey = [NSNumber numberWithUnsignedLong:(NSUInteger)anObj];
         [superUnlockMaskRequests removeObjectForKey:aKey];
         [self _formSuperUnlockMask];
     }

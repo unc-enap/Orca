@@ -3372,8 +3372,8 @@
 {
     //gapMatrix
     //DEBUG: OUTPUT:  	    NSLog(@"%@::%@: UNDER CONSTRUCTION! sender: %@, col is %i, row is %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),sender,[sender selectedColumn],[sender selectedRow]);//TODO : DEBUG testing ...-tb-
-    NSUInteger col, row, state;
-    col=[gapMatrix selectedColumn];
+    NSUInteger  row, state;
+    //col=[gapMatrix selectedColumn];
     row=[gapMatrix selectedRow];
     //state = [[gapMatrix selectedCell] intValue];
     state = [[gapMatrix selectedCell] indexOfSelectedItem];
@@ -3386,8 +3386,8 @@
 {
     //downSamplingMatrix
     //DEBUG: OUTPUT:  	    NSLog(@"%@::%@: UNDER CONSTRUCTION!  col is %i, row is %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[downSamplingMatrix selectedColumn],[downSamplingMatrix selectedRow]);//TODO : DEBUG testing ...-tb-
-    NSUInteger col, row, state;
-    col=[downSamplingMatrix selectedColumn];
+    NSUInteger  row, state;
+    //col=[downSamplingMatrix selectedColumn];
     row=[downSamplingMatrix selectedRow];
     //state = [[gapMatrix selectedCell] intValue];
     state = [[downSamplingMatrix selectedCell] indexOfSelectedItem];
@@ -3401,8 +3401,8 @@
 {
     //downSamplingMatrix
     //DEBUG: OUTPUT:  	       NSLog(@"%@::%@: UNDER CONSTRUCTION!  col is %i, row is %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[shapingLengthMatrix selectedColumn],[shapingLengthMatrix selectedRow]);//TODO : DEBUG testing ...-tb-
-    NSUInteger col, row, state;
-    col=[shapingLengthMatrix selectedColumn];
+    NSUInteger  row, state;
+    //col=[shapingLengthMatrix selectedColumn];
     row=[shapingLengthMatrix selectedRow];
     //state = [[gapMatrix selectedCell] intValue];
     state = [[shapingLengthMatrix selectedCell] intValue];
@@ -3414,10 +3414,10 @@
 - (IBAction) heatWindowStartMatrixAction:(id)sender
 {
     //DEBUG: OUTPUT:      	       NSLog(@"%@::%@: UNDER CONSTRUCTION!  col is %i, row is %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[heatWindowStartMatrix selectedColumn],[heatWindowStartMatrix selectedRow]);//TODO : DEBUG testing ...-tb-
-    NSUInteger col, row;
+    NSUInteger  row;
     int state;
     
-    col=[sender selectedColumn];
+    //col=[sender selectedColumn];
     row=[sender selectedRow];
     state = [[sender selectedCell] intValue];
     //DEBUG: OUTPUT:      	       NSLog(@"%@::%@: UNDER CONSTRUCTION!    selectedCell %@ , state %i ,col is %i, row is %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[sender selectedCell],state,col,row);//TODO : DEBUG testing ...-tb-
@@ -3438,8 +3438,8 @@
 - (IBAction) heatWindowEndMatrixAction:(id)sender
 {
     //DEBUG: OUTPUT:      	       NSLog(@"%@::%@: UNDER CONSTRUCTION!  col is %i, row is %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[heatWindowEndMatrix selectedColumn],[heatWindowEndMatrix selectedRow]);//TODO : DEBUG testing ...-tb-
-    NSUInteger col, row, state;
-    col=[heatWindowEndMatrix selectedColumn];
+    NSUInteger  row, state;
+    //col=[heatWindowEndMatrix selectedColumn];
     row=[heatWindowEndMatrix selectedRow];
     //state = [[gapMatrix selectedCell] intValue];
     state = [[heatWindowEndMatrix selectedCell] intValue];
@@ -3761,8 +3761,8 @@
 //		[[self undoManager] setActionName: @"Set Threshold"];
 //		[model setThreshold:[[sender selectedCell] tag] withValue:[sender intValue]];
 //	}
-    NSUInteger col, row, state;
-    col=[sender selectedColumn];
+    NSUInteger  row, state;
+    //col=[sender selectedColumn];
     row=[sender selectedRow];
     state = [[sender selectedCell] intValue];
     //DEBUG: OUTPUT:      	       NSLog(@"%@::%@: UNDER CONSTRUCTION!    selectedCell %@ , state %i ,col is %i, row is %i \n",NSStringFromClass([self class]),NSStringFromSelector(_cmd),[sender selectedCell],state,col,row);//TODO : DEBUG testing ...-tb-

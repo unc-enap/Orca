@@ -396,7 +396,7 @@
         [request setAllHTTPHeaderFields:[NSDictionary dictionaryWithObject:@"application/json" forKey:@"Content-Type"]];
         [request setHTTPMethod:@"POST"];
         [self _updateAuthentication:request];
-        NSData *data = [[ORURLSession sendSynchronousRequest:request returningResponse:&response error:nil] autorelease];
+        NSData *data = [ORURLSession sendSynchronousRequest:request returningResponse:&response error:nil];
         //YAJLDocument *document = nil;
         if (data) {
             //document = [[[YAJLDocument alloc] initWithData:data parserOptions:YAJLParserOptionsNone error:nil] autorelease];
@@ -607,7 +607,7 @@
         //NSString* s = [aBody yajl_JSONString];
         //NSData* asData = [s dataUsingEncoding:NSASCIIStringEncoding];
         [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:aBody options:NSJSONWritingPrettyPrinted error:nil]];
-        NSData *data = [[ORURLSession sendSynchronousRequest:request returningResponse:&response error:nil] autorelease];
+        NSData *data = [ORURLSession sendSynchronousRequest:request returningResponse:&response error:nil];
         
         id result = nil;
         if (data) {
@@ -701,7 +701,7 @@
 		[request setHTTPMethod:@"PUT"];
 		[request setHTTPBody:attachmentData];
 		
-		NSData *data = [[ORURLSession sendSynchronousRequest:request returningResponse:&response error:nil] autorelease];
+		NSData *data = [ORURLSession sendSynchronousRequest:request returningResponse:&response error:nil];
 		
 		
 		if (data) {

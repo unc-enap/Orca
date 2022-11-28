@@ -255,9 +255,9 @@
     }
     else {
 		BOOL userRainBowFlag;
-        [decoder decodeValueOfObjCType:@encode(short) at: &numColors];
-        [decoder decodeValueOfObjCType:@encode(float) at: &spectrumRange];
-        [decoder decodeValueOfObjCType:@encode(BOOL) at: &userRainBowFlag];
+        [decoder decodeValueOfObjCType:@encode(short) at: &numColors size:sizeof(short)];
+        [decoder decodeValueOfObjCType:@encode(float) at: &spectrumRange size:sizeof(float)];
+        [decoder decodeValueOfObjCType:@encode(BOOL) at: &userRainBowFlag size:sizeof(BOOL)];
 		[self setUseRainBow:userRainBowFlag];
         [self setStartColor:[decoder decodeObject]]; 
         [self setEndColor:[decoder decodeObject]]; 

@@ -101,13 +101,13 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     deadTime           = 0.0;
     totDead            = 0.0;
     curDead            = 0.0;
-    dataRateHistory    = [[ORTimeRate alloc] init]; //MAH 10/2/22 removed retain
+    dataRateHistory    = [[ORTimeRate alloc] init];
     [dataRateHistory   setLastAverageTime:[NSDate date]];
     [dataRateHistory   setSampleTime:10];
-    eventRateHistory   = [[ORTimeRate alloc] init]; //MAH 10/2/22 removed retain
+    eventRateHistory   = [[ORTimeRate alloc] init];
     [eventRateHistory  setLastAverageTime:[NSDate date]];
     [eventRateHistory  setSampleTime:10];
-    deadTimeHistory    = [[ORTimeRate alloc] init]; //MAH 10/2/22 removed retain
+    deadTimeHistory    = [[ORTimeRate alloc] init];
     [deadTimeHistory   setLastAverageTime:[NSDate date]];
     [deadTimeHistory   setSampleTime:10];
     taskSequencer            = nil;
@@ -120,14 +120,13 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     [readList addAcceptedObjectName:@"ORFlashCamADCStdModel"];
     [self setReadOutList:readList];
     [readList release];
-    //[self setReadOutArgs:[[NSMutableArray alloc] init]]; //MAH 9/12/22 commented out. Caused double retain
     [[self undoManager] enableUndoRegistration];
     return self;
 }
 
 - (id) initWithInterface:(NSString*)iface port:(uint16_t)p
 {
-    self = [self init]; //MAH 9/18/22. didn't assign self from result of init
+    self = [self init];
     [interface release];
     interface   = [iface copy];
     port        = p;
@@ -155,7 +154,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     [eventRateHistory release];
     [deadTimeHistory release];
     [taskSequencer release];
-    [runTask release]; //MAH 9/17/22
+    [runTask release];
     [readOutList release];
     [readOutArgs release];
     [readStateLock release];
@@ -166,20 +165,50 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 - (void) setUpImage
 {
     NSImage* cimage = [NSImage imageNamed:@"flashcam_listener"];
-    //NSSize size = [cimage size];
     NSSize newsize;
-    newsize.height = 45;
+    newsize.height = 44;
     newsize.width  = newsize.height;
     NSImage* image = [[NSImage alloc] initWithSize:newsize];
     [image lockFocus];
     NSRect rect;
-    rect.origin = NSZeroPoint;
+    rect.origin = NSMakePoint(1,1);
     rect.size.width = newsize.width;
     rect.size.height = newsize.height;
     [cimage drawInRect:rect fromRect:NSZeroRect operation:NSCompositingOperationSourceOver fraction:1.0];
+    [self decorateIcon:image];
     [image unlockFocus];
     [self setImage:image];
-    [image release]; //MAH 2/18/22
+    
+    [image release];
+}
+
+- (void) decorateIcon:(NSImage*)anImage
+{
+    NSSize iconSize = [anImage size];
+    if(reader){
+        NSDictionary* attrsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                           [NSFont fontWithName:@"Helvetica" size:20.0],NSFontAttributeName,
+                                         [NSColor greenColor],NSForegroundColorAttributeName,nil];
+        NSAttributedString* s = [[NSAttributedString alloc] initWithString:@")" attributes:attrsDictionary];
+        [s drawAtPoint:NSMakePoint([s size].width/2,iconSize.height/2-[s size].height/2)];
+        [s release];
+
+        attrsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                           [NSFont fontWithName:@"Helvetica" size:30.0],NSFontAttributeName,
+                           [NSColor greenColor],NSForegroundColorAttributeName,nil];
+        s = [[NSAttributedString alloc] initWithString:@")" attributes:attrsDictionary];
+        [s drawAtPoint:NSMakePoint([s size].width/2+5,iconSize.height/2-[s size].height/2)];
+        [s release];
+    }
+    else {
+        NSDictionary* attrsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                           [NSFont fontWithName:@"Helvetica" size:25.0],NSFontAttributeName,
+                                         [NSColor redColor],NSForegroundColorAttributeName,nil];
+        NSAttributedString* s = [[NSAttributedString alloc] initWithString:@"x" attributes:attrsDictionary];
+        [s drawAtPoint:NSMakePoint([s size].width/2,iconSize.height/2-[s size].height/2)];
+        [s release];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORGroupSelectionChanged object:self];
 }
 
 - (BOOL) acceptsGuardian:(OrcaObject*)aGuardian
@@ -735,7 +764,6 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 
 - (bool) connect
 {
-
     if(!chanMap){
         NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: channel mapping has not been specified, aborting connection\n");
         [self setStatus:@"disconnected"];
@@ -756,11 +784,12 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     reader = FCIOCreateStateReader([s UTF8String], timeout, ioBuffer, stateBuffer);
     FCIOSelectStateTag(reader, 0);
     if(reader){
+        [self setUpImage];
+
         NSLog(@"ORFlashCamListenerModel: connected to %@:%d on %@\n", ip, port, interface);
         [self setStatus:@"connected"];
         readerRecordCount = 0;
         bufferedRecords   = 0;
-        //[self read]; //now in takedata thread
         return YES;
     }
     else{
@@ -775,8 +804,10 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     if(reader) tmio_close(reader->stream);
     [self setStatus:@"disconnected"];
     if(destroy){
-        if(reader) FCIODestroyStateReader(reader);
-        reader = NULL;
+        @synchronized (self) {
+            if(reader) FCIODestroyStateReader(reader);
+            reader = NULL;
+        }
     }
     if(![[self status] isEqualToString:@"disconnected"])
         NSLog(@"ORFlashCamListenerModel: disconnected from %@:%d on %@\n", ip, port, interface);
@@ -883,9 +914,8 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
             [readStateLock unlock]; //MAH. early return must release
             return;
         }
-        [readStateLock unlock]; //MAH
+        [readStateLock unlock];
     }
-    
 }
 
 - (void) runFailed
@@ -907,9 +937,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     }
 }
 
-
 #pragma mark •••Task methods
-
 - (void) taskFinished:(id)task
 {
 }
@@ -967,7 +995,6 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     }
     // fixme: add updates for run termination, etc
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelStatusChanged object:self];
-    //[text release]; //MAH 9/18/22 text leaked on early returns. Use autorelease above instead
 }
 
 
@@ -1271,42 +1298,38 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
-        @try {
-            if(reader)[self read:aDataPacket];
-            // add a single configuration packet to the data
-            if(bufferedConfigCount > 0){
-                uint32_t length = 2 + sizeof(fcio_config) / sizeof(uint32_t);
-                uint32_t index = length * takeDataConfigIndex;
-                takeDataConfigIndex = (takeDataConfigIndex + 1) % kFlashCamConfigBufferLength;
-                bufferedConfigCount --;
-                configBuffer[index]    = configId | (length & 0x3ffff);
-                configBuffer[index+1]  = ((unsigned short) [guardian uniqueIdNumber]) << 16;
-                configBuffer[index+1] |=  (unsigned short) [self uniqueIdNumber];
-                [aDataPacket addLongsToFrameBuffer:configBuffer+index length:length];
-            }
-            // add a single status packet to the data
-            if(bufferedStatusCount > 0){
-                uint32_t index = (2 + sizeof(fcio_status) / sizeof(uint32_t)) * takeDataStatusIndex;
-                takeDataStatusIndex = (takeDataStatusIndex + 1) % kFlashCamStatusBufferLength;
-                bufferedStatusCount --;
-                int cards = (int) statusBuffer[index+13];
-                int dsize = (int) statusBuffer[index+14];
-                uint32_t length = 2 + (sizeof(fcio_status) -
-                                       (256-cards)*(dsize+cards*sizeof(uint32_t))) / sizeof(uint32_t);
-                statusBuffer[index]    = statusId | (length & 0x3ffff);
-                statusBuffer[index+1]  = ((unsigned short) [guardian uniqueIdNumber]) << 16;
-                statusBuffer[index+1] |=  (unsigned short) [self uniqueIdNumber];
-                [aDataPacket addLongsToFrameBuffer:statusBuffer+index length:length];
-            }
-            // allow all connected data takers to add to the data packet
-            //NSEnumerator* e = [dataTakers objectEnumerator];
-            //id obj;
-            //while(obj = [e nextObject]) [obj takeData:aDataPacket userInfo:userInfo];
+    @try {
+
+        // add a single configuration packet to the data
+        if(bufferedConfigCount > 0){
+            uint32_t length = 2 + sizeof(fcio_config) / sizeof(uint32_t);
+            uint32_t index = length * takeDataConfigIndex;
+            takeDataConfigIndex = (takeDataConfigIndex + 1) % kFlashCamConfigBufferLength;
+            bufferedConfigCount --;
+            configBuffer[index]    = configId | (length & 0x3ffff);
+            configBuffer[index+1]  = ((unsigned short) [guardian uniqueIdNumber]) << 16;
+            configBuffer[index+1] |=  (unsigned short) [self uniqueIdNumber];
+            [aDataPacket addLongsToFrameBuffer:configBuffer+index length:length];
         }
-        @catch(NSException* e){
-            NSLogError(@"",@"FlashCamListener Error",@"");
-            [e raise];
+        // add a single status packet to the data
+        if(bufferedStatusCount > 0){
+            uint32_t index = (2 + sizeof(fcio_status) / sizeof(uint32_t)) * takeDataStatusIndex;
+            takeDataStatusIndex = (takeDataStatusIndex + 1) % kFlashCamStatusBufferLength;
+            bufferedStatusCount --;
+            int cards = (int) statusBuffer[index+13];
+            int dsize = (int) statusBuffer[index+14];
+            uint32_t length = 2 + (sizeof(fcio_status) -
+                                   (256-cards)*(dsize+cards*sizeof(uint32_t))) / sizeof(uint32_t);
+            statusBuffer[index]    = statusId | (length & 0x3ffff);
+            statusBuffer[index+1]  = ((unsigned short) [guardian uniqueIdNumber]) << 16;
+            statusBuffer[index+1] |=  (unsigned short) [self uniqueIdNumber];
+            [aDataPacket addLongsToFrameBuffer:statusBuffer+index length:length];
         }
+    }
+    @catch(NSException* e){
+        NSLogError(@"",@"FlashCamListener Error",@"");
+        [e raise];
+    }
 }
 
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
@@ -1327,13 +1350,18 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:@"ORFlashCamListenerModel"];
     [self startReadoutAfterPing];
     dataTakers = [[readOutList allObjects] retain];
-    NSEnumerator* e = [[readOutList allObjects] objectEnumerator];
+    
+    timeToQuitReadoutThread = NO;
+    [NSThread detachNewThreadSelector:@selector(readThread:) toTarget:self withObject:aDataPacket];
+
     id obj;
+    NSEnumerator* e = [[readOutList allObjects] objectEnumerator];
     while(obj = [e nextObject]) [obj runTaskStarted:aDataPacket userInfo:userInfo];
 }
-
 - (void) runIsStopping:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
+    timeToQuitReadoutThread = YES;
+
     //-----------------------------------------------------
     //MAH 9/17/22... shut down the FlashCAM by sending an EOL
     //The periodic status read will be not be repeated if the global
@@ -1356,7 +1384,6 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
         [readStateLock unlock];
     }
     //-----------------------------------------------------
-
     [self disconnect:false];
     [[self taskSequencer] abortTasks];
     [taskSequencer release];
@@ -1379,15 +1406,37 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     while(obj = [e nextObject]) [obj runIsStopping:aDataPacket userInfo:userInfo];
 }
 
+
+
+
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
     if(reader) FCIODestroyStateReader(reader);
     reader = NULL;
+    [self setUpImage];
     NSEnumerator* e = [dataTakers objectEnumerator];
     id obj;
     while(obj = [e nextObject]) [obj runTaskStopped:aDataPacket userInfo:userInfo];
     [dataTakers release];
     dataTakers = nil;
+}
+
+- (void) readThread:(ORDataPacket*)aDataPacket
+{
+    do {
+        NSAutoreleasePool *pool = [[NSAutoreleasePool allocWithZone:nil] init];
+        @try {
+            @synchronized (self) {
+                if(reader)[self read:aDataPacket];
+            }
+        }
+        @catch (NSException* e){
+            //stop run???
+        }
+        @finally {
+            [pool release];
+        }
+    }while(!timeToQuitReadoutThread);
 }
 
 - (void) saveReadOutList:(NSFileHandle*)aFile
@@ -1475,7 +1524,6 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     taskSequencer           = nil;
     chanMap           = nil;
     [self setReadOutList:[decoder decodeObjectForKey:@"readOutList"]];
-    //[self setReadOutArgs:[[NSMutableArray alloc] init]]; //MAH 9/12/22 commented out. Caused double retain
     readStateLock = [[NSLock alloc]init]; //MAH added some thread safety
     [[self undoManager] enableUndoRegistration];
     return self;
@@ -1500,7 +1548,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     [dictionary setObject:[NSNumber numberWithUnsignedInt:[self uniqueIdNumber]] forKey:@"uniqueID"];
     [dictionary setObject:interface forKey:@"interface"];
     [dictionary setObject:[NSNumber numberWithUnsignedInt:port] forKey:@"port"];
-    for(id key in configParams) [dictionary setObject:[configParams objectForKey:key] forKey:key]; //MAH 9/18/22 no need to retain
+    for(id key in configParams) [dictionary setObject:[configParams objectForKey:key] forKey:key];
 
     return dictionary;
 }

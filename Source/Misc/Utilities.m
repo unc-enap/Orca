@@ -145,7 +145,7 @@ void convertTimeLongToChar( time_t anTime, char *asTime )
 //-----------------------------------------------------------------------------
 id		ORKeyFromId(id anObj)
 {
-	return [NSNumber numberWithLong:(int32_t)anObj];
+	return [NSNumber numberWithLong:(NSInteger)anObj];
 }
 
 int random_range(int lowest_number, int highest_number)

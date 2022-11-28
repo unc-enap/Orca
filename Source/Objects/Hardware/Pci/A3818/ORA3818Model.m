@@ -1976,23 +1976,23 @@ static NSString *ORA3818ReadWriteAddSpace		= @"A3818 Read/Write Address Space";
 {
     unsigned char cdata;
     
-    NSString* progressString;
+    //NSString* progressString;
     
     @try {
-        progressString = @"Checking Status";
+        //NSString* progressString = @"Checking Status";
         [self checkStatusErrors];
         
         // check A3818 status
         NSLog(@"Clearing %@ Status Register & PR Interrupt\n",deviceName);
         cdata = 0xc0;
-        progressString = @"Writing CSR";
+        //progressString = @"Writing CSR";
         [self writeCSRRegister:A3818_CSR_LOCAL_COMMAND_OFFSET withData:cdata];
         
-        progressString = @"Reading CSR";
+        //progressString = @"Reading CSR";
         [self readCSRRegister:A3818_CSR_LOCAL_STATUS_OFFSET withDataPtr:&cdata];
         
         NSLog(@"Local %@ CSR Status Register Offset: 0x%02x, Data: 0x%02x\n",deviceName,A3818_CSR_LOCAL_STATUS_OFFSET,cdata);
-        progressString = @"Checking Status";
+        //progressString = @"Checking Status";
         
         NSLog(@"*** VME Bus Power On ***\n");
         cdata = [self getAdapterID];
