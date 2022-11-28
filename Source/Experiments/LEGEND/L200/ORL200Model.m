@@ -554,6 +554,68 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     [encoder encodeInteger:viewType forKey:@"viewType"];
 }
 
+- (void) postCouchDBRecord
+{
+    NSMutableDictionary* values  = [NSMutableDictionary dictionary];
+    NSMutableDictionary* history = [NSMutableDictionary dictionary];
+    NSString* s = [NSString stringWithFormat:@"%@,%u", [self className], [self uniqueIdNumber]];
+    [history setObject:s forKey:@"name"];
+    [history setObject:s forKey:@"title"];
+    for(int itype=0; itype<kL200SegmentTypeCount; itype++){
+        NSMutableDictionary* dict        = [NSMutableDictionary dictionary];
+        NSMutableDictionary* hist        = [NSMutableDictionary dictionary];
+        NSMutableDictionary* id_to_index = [NSMutableDictionary dictionary];
+        NSMutableArray* thresholds = [NSMutableArray array];
+        NSMutableArray* trigCounts = [NSMutableArray array];
+        NSMutableArray* trigRates  = [NSMutableArray array];
+        NSMutableArray* wfCounts   = [NSMutableArray array];
+        NSMutableArray* wfRates    = [NSMutableArray array];
+        NSMutableArray* baseline   = [NSMutableArray array];
+        NSMutableArray* online     = [NSMutableArray array];
+        ORL200SegmentGroup* group = (ORL200SegmentGroup*) [self segmentGroup:itype];
+        NSDictionary* chanMap = [group dictMap];
+        NSArray* totalRate = [[group totalRate] ratesAsArray];
+        for(int iseg=0; iseg<[self numberSegmentsInGroup:itype]; iseg++){
+            ORDetectorSegment* segment = [group segment:iseg];
+            NSArray* params = [[segment paramsAsString] componentsSeparatedByString:@","];
+            if([params count] == 0) continue;
+            if([[params objectAtIndex:0] isEqualToString:@""] ||
+               [[params objectAtIndex:0] hasPrefix:@"-"]) continue;
+            [id_to_index setObject:[NSNumber numberWithUnsignedLong:[thresholds count]]
+                            forKey:[params objectAtIndex:0]];
+            [thresholds addObject:[NSNumber numberWithFloat:[group getThreshold:iseg]]];
+            [trigCounts addObject:[NSNumber numberWithFloat:[group getTotalCounts:iseg]]];
+            [trigRates  addObject:[NSNumber numberWithFloat:[group getRate:iseg]]];
+            [wfCounts   addObject:[NSNumber numberWithFloat:[group getWaveformCounts:iseg]]];
+            [wfRates    addObject:[NSNumber numberWithFloat:[group getWaveformRate:iseg]]];
+            [baseline   addObject:[NSNumber numberWithDouble:[group getBaseline:iseg]]];
+            [online     addObject:[NSNumber numberWithFloat:[group online:iseg]]];
+        }
+        [dict setObject:id_to_index forKey:@"serialToIndex"];
+        if(chanMap)             [dict setObject:chanMap   forKey:@"chanMap"];
+        if(totalRate)           [dict setObject:totalRate forKey:@"totalRate"];
+        if([thresholds count]) [dict setObject:thresholds forKey:@"thresholds"];
+        if([trigCounts count]) [dict setObject:trigCounts forKey:@"trigCounts"];
+        if([trigRates  count]) [dict setObject:trigRates  forKey:@"trigRates"];
+        if([wfCounts   count]) [dict setObject:wfCounts   forKey:@"wfCounts"];
+        if([wfRates    count]) [dict setObject:wfRates    forKey:@"wfRates"];
+        if([baseline   count]) [dict setObject:baseline   forKey:@"baseline"];
+        if([online     count]) [dict setObject:online     forKey:@"online"];
+        [values setObject:dict forKey:[group groupName]];
+        [hist setObject:id_to_index forKey:@"serialToIndex"];
+        if([trigRates  count]) [hist setObject:trigRates  forKey:@"trigRates"];
+        if([wfRates    count]) [hist setObject:wfRates    forKey:@"wfRates"];
+        if([baseline   count]) [hist setObject:baseline   forKey:@"baseline"];
+        [history setObject:hist forKey:[group groupName]];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ORCouchDBAddObjectRecord"
+                                                        object:self
+                                                      userInfo:values];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ORCouchDBAddHistoryAdcRecord"
+                                                        object:self
+                                                      userInfo:history];
+}
+
 @end
 
 @implementation ORL200HeaderRecordID

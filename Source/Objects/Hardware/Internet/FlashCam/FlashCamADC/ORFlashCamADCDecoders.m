@@ -34,7 +34,21 @@
 
 - (void) dealloc
 {
+    [fcCards release];
     [super dealloc];
+}
+
+- (void) addToObjectList:(NSMutableDictionary*)dict
+{
+    NSString* cname = [dict objectForKey:@"className"];
+    if([cname isEqualToString:@""]) return;
+    NSMutableArray* objs = [dict objectForKey:@"objects"];
+    if(!objs){
+        objs = [NSMutableArray array];
+        [dict setObject:objs forKey:@"objects"];
+    }
+    [objs addObjectsFromArray:[[(ORAppDelegate*)[NSApp delegate] document]
+                            collectObjectsOfClass:NSClassFromString(cname)]];
 }
 
 - (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
@@ -67,6 +81,31 @@
                withKeys:@"FlashCamADC", @"Baseline", crateKey, cardKey, channelKey, nil];
     [aDataSet histogram:fpga_integrator numBins:0xffff sender:self
                withKeys:@"FlashCamADC", @"Energy", crateKey, cardKey, channelKey, nil];
+    
+    // get the flashcam card to add to the baseline history
+    NSString* key = [crateKey stringByAppendingString:cardKey];
+    if(!fcCards) fcCards = [[NSMutableDictionary alloc] init];
+    id obj = [fcCards objectForKey:key];
+    if(!obj){
+        NSMutableDictionary* dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"ORFlashCamADCModel",
+                                                                                      @"className", nil];
+        [self performSelectorOnMainThread:@selector(addToObjectList:) withObject:dict waitUntilDone:YES];
+        [dict setObject:@"ORFlashCamADCStdModel" forKey:@"className"];
+        [self performSelectorOnMainThread:@selector(addToObjectList:) withObject:dict waitUntilDone:YES];
+        NSMutableArray* listOfCards = [dict objectForKey:@"objects"];
+        NSEnumerator* e = [listOfCards objectEnumerator];
+        id fccard;
+        while(fccard = [e nextObject]){
+            if([fccard slot] == card && [fccard crateNumber] == crate){
+                [fcCards setObject:fccard forKey:key];
+                obj = fccard;
+                break;
+            }
+        }
+    }
+    if(obj)
+        if(channel>=0 && channel<[obj numberOfChannels])
+            [[obj baselineHistory:channel] addDataToTimeAverage:(float)fpga_baseline];
     
     // only decode the waveform if it has been 100 ms since the last decoded waveform and the plotting window is open
     BOOL fullDecode = NO;
