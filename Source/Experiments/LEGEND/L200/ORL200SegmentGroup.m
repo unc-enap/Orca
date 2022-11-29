@@ -19,10 +19,11 @@
 
 #import "ORL200SegmentGroup.h"
 #import "ORDetectorSegment.h"
+#import "ORFlashCamADCModel.h"
 
 @implementation ORL200SegmentGroup
 
-#pragma mark •••Map Methods
+#pragma mark •••Accessors
 
 - (unsigned int) type
 {
@@ -32,6 +33,43 @@
 - (void) setType:(unsigned int)segType
 {
     if(segType < kL200SegmentTypeCount) type = segType;
+}
+
+- (float) waveformRate
+{
+    float rate = 0.0;
+    for(int i=0; i<[segments count]; i++) rate += [self getWaveformRate:i];
+    return rate;
+}
+
+- (float) getWaveformRate:(int)index
+{
+    if(index < 0 || index >= [segments count]) return 0.0;
+    ORDetectorSegment* segment = [segments objectAtIndex:index];
+    id card = [segment hardwareCard];
+    if(![card respondsToSelector:@selector(getWFrate:)]) return 0.0;
+    return [card getWFrate:[segment channel]];
+    
+}
+
+- (float) getWaveformCounts:(int)index
+{
+    if(index < 0 || index >= [segments count]) return 0.0;
+    ORDetectorSegment* segment = [segments objectAtIndex:index];
+    id card = [segment hardwareCard];
+    if(![card respondsToSelector:@selector(wfCount:)]) return 0.0;
+    return [card wfCount:[segment channel]];
+}
+
+- (double) getBaseline:(int)index
+{
+    if(index < 0 || index >= [segments count]) return 0.0;
+    ORDetectorSegment* segment = [segments objectAtIndex:index];
+    id card = [segment hardwareCard];
+    if(![card respondsToSelector:@selector(baselineHistory:)]) return 0.0;
+    if(![card enableBaselineHistory] || ![card isRunning]) return 0.0;
+    ORTimeRate* baseHistory = [card baselineHistory:[segment channel]];
+    return [baseHistory valueAtIndex:[baseHistory count]-1];
 }
 
 
@@ -180,7 +218,7 @@
     else NSLogColor([NSColor redColor], @"ORL200SegmentGroup: failed to save map file %d\n", type);
 }
 
-- (NSData*) jsonMap
+- (NSDictionary*) dictMap
 {
     // build the json data
     NSMutableDictionary* dict = [NSMutableDictionary dictionary];
@@ -250,7 +288,12 @@
         }
         if(ch_dict) [dict setObject:ch_dict forKey:[params objectAtIndex:0]];
     }
-    // write the dictionary to the specified filename
+    return [NSDictionary dictionaryWithDictionary:dict];
+}
+
+- (NSData*) jsonMap
+{
+    NSDictionary* dict = [self dictMap];
     if([NSJSONSerialization isValidJSONObject:dict]){
         NSError* error = nil;
         NSData* data = [NSJSONSerialization dataWithJSONObject:dict
@@ -296,7 +339,7 @@
 - (void) registerForRates
 {
     id document = [(ORAppDelegate*) [NSApp delegate] document];
-    NSArray* adcs = [document collectObjectsOfClass:NSClassFromString(@"ORFlashCamADCModel")];
+    NSArray* adcs = [document collectObjectsOfClass:NSClassFromString([self adcClassName])];
     [segments makeObjectsPerformSelector:@selector(registerForRates:) withObject:adcs];
 }
 
@@ -304,7 +347,7 @@
 {
     if(!aNote || [[aNote object] isKindOfClass:NSClassFromString(@"ORGroup")]){
         id document = [(ORAppDelegate*) [NSApp delegate] document];
-        NSArray* adcs = [document collectObjectsOfClass:NSClassFromString(@"ORFlashCamADCModel")];
+        NSArray* adcs = [document collectObjectsOfClass:NSClassFromString([self adcClassName])];
         [segments makeObjectsPerformSelector:@selector(configurationChanged:) withObject:adcs];
         [self registerForRates];
         [[NSNotificationCenter defaultCenter] postNotificationName:ORSegmentGroupConfiguationChanged

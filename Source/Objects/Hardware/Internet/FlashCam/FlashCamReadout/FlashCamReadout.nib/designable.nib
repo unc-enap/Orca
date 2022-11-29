@@ -197,7 +197,7 @@
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
-                                                                            <textFieldCell key="dataCell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="Rcx-fq-BXh">
+                                                                            <textFieldCell key="dataCell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" alignment="left" title="Text Cell" id="Rcx-fq-BXh">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1192,13 +1192,15 @@
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
-                                                                            <popUpButtonCell key="dataCell" type="bevel" title="Std Firmware" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="bezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="OyL-Ex-93G" id="QRe-bc-NLr">
+                                                                            <popUpButtonCell key="dataCell" type="bevel" title="Std Firmware" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="bezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="USV-KJ-Nop" id="QRe-bc-NLr">
                                                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                                 <font key="font" metaFont="label"/>
                                                                                 <menu key="menu" id="w6y-fv-sGh">
                                                                                     <items>
-                                                                                        <menuItem title="Std Firmware" id="OyL-Ex-93G"/>
-                                                                                        <menuItem title="Unfiltered" state="on" id="E8H-Mi-Jxb"/>
+                                                                                        <menuItem title="Std Firmware" state="on" id="USV-KJ-Nop">
+                                                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                                                        </menuItem>
+                                                                                        <menuItem title="Unfiltered" id="E8H-Mi-Jxb"/>
                                                                                         <menuItem title="1 x LP Filter" id="V3Q-9E-pFO"/>
                                                                                         <menuItem title="PZ + 1 x LP Filter + Derivative" id="c3z-s4-8VQ"/>
                                                                                         <menuItem title="Above item + 3 x LP Shaping" id="lEe-Ng-qS7">

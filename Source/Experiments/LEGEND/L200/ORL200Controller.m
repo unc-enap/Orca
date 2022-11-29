@@ -322,6 +322,7 @@
         switch([model displayType]){
             case kDisplayRates:       val = [[model segmentGroup:sg] getRate:i];        break;
             case kDisplayTotalCounts: val = [[model segmentGroup:sg] getTotalCounts:i]; break;
+            case kDisplayThresholds:  val = [[model segmentGroup:sg] getThreshold:i];   break;
             default: break;
         }
         maxVal = MAX(maxVal, val);
