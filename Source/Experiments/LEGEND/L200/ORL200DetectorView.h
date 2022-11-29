@@ -24,16 +24,19 @@
 
 #define kL200CrateView    0
 #define kL200DetectorView 1
+#define kL200PreAmpView   2
+
 #define kL200SiPMRings    4
 #define kL200PMTRings     7
 #define kL200AuxLabels    2
+#define kNumPreAmps       12
 
 @interface ORL200DetectorView : ORDetectorView {
     IBOutlet ORColorScale* detColorScale;
     IBOutlet ORColorScale* sipmColorScale;
     IBOutlet ORColorScale* pmtColorScale;
     IBOutlet ORColorScale* auxChanColorScale;
-    BOOL viewType;
+    int viewType;
     NSMutableArray* detOutlines;
     NSString* strLabel[kL200DetectorStrings];
     NSString* sipmLabel[kL200SiPMRings];
@@ -48,7 +51,5 @@
     NSDictionary* pmtLabelAttr;
     NSDictionary* auxLabelAttr;
 }
-
 - (void) setViewType:(int)type;
-
 @end

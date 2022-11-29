@@ -28,7 +28,7 @@
 #import "ORCouchDBModel.h"
 #import "ORFlashCamCrateModel.h"
 
-static NSString* L200DBConnector = @"L200DBConnector";
+static NSString* L200DBConnector     = @"L200DBConnector";
 NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 
 @implementation ORL200Model
@@ -152,8 +152,8 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         NSString* pos = [[group segment:i] objectForKey:@"str_position"];
         NSString* strName = @"-";
         if(pos && str){
-            if(![str isEqualToString:@"--"] && ![str isEqualToString:@""] ||
-               ![pos isEqualToString:@"--"] && ![pos isEqualToString:@""])
+            if((![str isEqualToString:@"--"] && ![str isEqualToString:@""]) ||
+               (![pos isEqualToString:@"--"] && ![pos isEqualToString:@""]))
                 strName = [NSString stringWithFormat:@"Ge%@", str];
         }
         [group setSegment:i object:strName forKey:@"kStringName"];

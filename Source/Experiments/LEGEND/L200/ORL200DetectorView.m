@@ -169,6 +169,64 @@
         for(id det in detOutlines) [det fill];
         [self drawLabels];
     }
+    else if(viewType == kL200PreAmpView){
+        
+        NSMutableArray* segmentPaths = [NSMutableArray arrayWithCapacity:kNumPreAmps];
+        float xc         = [self bounds].size.width/2;
+        float yc         = [self bounds].size.height/2;
+        float startAngle = 90;
+        int   w          = 22;
+        int   h          = 22;
+        int   offset     = 55;
+        float innerR     = 105;
+        float outerR     = innerR+2*w*7+15;
+        
+        for(int i=0;i<kNumPreAmps;i++){
+            NSRect             segRect;
+            NSBezierPath*      segPath;
+            NSAffineTransform* transform;
+            for(int chan=0;chan<7;chan++){
+                segRect   = NSMakeRect(offset+w*chan,-h,w,h);
+                segPath   = [NSBezierPath bezierPathWithRect:segRect];
+                transform = [NSAffineTransform transform];
+                [transform translateXBy:xc yBy:yc];
+                [transform rotateByDegrees:startAngle + i*360/7.];
+                [segPath transformUsingAffineTransform: transform];
+                [segmentPaths addObject:segPath];
+            }
+            for(int chan=0;chan<7;chan++){
+                segRect   = NSMakeRect(offset+w*chan,0,w,h);
+                segPath   = [NSBezierPath bezierPathWithRect:segRect];
+                transform = [NSAffineTransform transform];
+                [transform translateXBy:xc yBy:yc];
+                [transform rotateByDegrees:startAngle + i*360/7.];
+                [segPath transformUsingAffineTransform: transform];
+                [segmentPaths addObject:segPath];
+            }
+            [segmentPathSet addObject:segmentPaths];
+            
+            [[NSColor lightGrayColor]set];
+            segPath = [NSBezierPath bezierPathWithOvalInRect:NSMakeRect(-innerR/2,-innerR/2,innerR,innerR)];
+            [segPath appendBezierPath:[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(-outerR/2,-outerR/2,outerR,outerR)]];
+            transform = [NSAffineTransform transform];
+            [transform translateXBy:xc yBy:yc];
+            [segPath transformUsingAffineTransform: transform];
+            [segPath stroke];
+            
+            float angle = 90+360/7./2.;
+            for(int i=0;i<7;i++){
+                NSBezierPath* aLineSeg = [NSBezierPath bezierPath];
+                [aLineSeg moveToPoint:NSMakePoint(innerR/2,0)];
+                [aLineSeg lineToPoint:NSMakePoint(outerR/2,0)];
+                transform = [NSAffineTransform transform];
+                [transform translateXBy:xc yBy:yc];
+                [transform rotateByDegrees:angle];
+                [aLineSeg transformUsingAffineTransform: transform];
+                [aLineSeg stroke];
+                angle += 360/7.;
+            }
+        }
+    }
     [super drawRect:rect];
 }
 
@@ -275,6 +333,8 @@
         [self makeSIPMs];
         [self makePMTs];
         [self makeAuxChans];
+    }
+    else if(viewType == kL200PreAmpView){
     }
     [self setNeedsDisplay:YES];
 }
