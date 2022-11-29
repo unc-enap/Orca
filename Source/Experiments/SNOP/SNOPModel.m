@@ -2640,7 +2640,7 @@ static NSComparisonResult compareXL3s(ORXL3Model *xl3_1, ORXL3Model *xl3_2, void
     data = [[ORURLSession sendSynchronousRequest:request returningResponse:&response error:&error] autorelease];
     if (error != nil) {
         NSLogColor([NSColor redColor], @"Error reading standard runs from "
-                   "database: %@\n", [error localizedDescription]);
+                   "database: %@\n", error);
         goto err;
     }
     ret = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
@@ -2648,7 +2648,7 @@ static NSComparisonResult compareXL3s(ORXL3Model *xl3_1, ORXL3Model *xl3_2, void
     // JSON formatting error
     if (error != nil) {
         NSLogColor([NSColor redColor], @"Error reading standard runs from "
-                   "database: %@\n", [error localizedDescription]);
+                   "database: %@\n", error);
         goto err;
     }
 
