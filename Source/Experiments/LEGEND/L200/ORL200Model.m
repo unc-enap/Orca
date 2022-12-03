@@ -260,44 +260,52 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     }
 }
 
-
 #pragma mark •••Segment Group Methods
 
 - (NSMutableArray*) setupMapEntries:(int)groupIndex
 {
     NSArray* keys = nil;
-    if(groupIndex == kL200DetType){
-        [self setCrateIndex:4   forGroup:groupIndex];
-        [self setCardIndex:6    forGroup:groupIndex];
-        [self setChannelIndex:7 forGroup:groupIndex];
-        keys = [NSArray arrayWithObjects:@"serial", @"det_type",
-                @"str_number",     @"str_position",
-                @"daq_crate",      @"daq_board_id",     @"daq_board_slot",   @"daq_board_ch",
-                @"hv_crate",       @"hv_board_slot",    @"hv_board_chan",    @"hv_cable",
-                @"hv_flange_id",   @"hv_flange_pos",
-                @"fe_cc4_ch",      @"fe_head_card_ana", @"fe_head_card_dig", @"fe_fanout_card",
-                @"fe_raspberrypi", @"fe_lmfe_id", nil];
+    if(groupIndex == kL200CC4Type){
+        keys = [NSArray arrayWithObjects:@"cc4_position", @"cc4_slota",@"cc4_slotb",nil];
     }
-    else if(groupIndex > kL200DetType && groupIndex < kL200SegmentTypeCount){
-        [self setCrateIndex:2   forGroup:groupIndex];
-        [self setCardIndex:4    forGroup:groupIndex];
-        [self setChannelIndex:5 forGroup:groupIndex];
-        if(groupIndex == kL200SiPMType)
-            keys = [NSArray arrayWithObjects:@"serial",  @"det_type",
-                    @"daq_crate", @"daq_board_id",  @"daq_board_slot", @"daq_board_ch",
-                    @"lv_crate",  @"lv_board_slot", @"lv_board_chan", nil];
-        else if(groupIndex == kL200PMTType)
-            keys = [NSArray arrayWithObjects:@"serial",  @"det_type",
-                    @"daq_crate", @"daq_board_id",  @"daq_board_slot", @"daq_board_ch",
-                    @"hv_crate",  @"hv_board_slot", @"hv_baord_chan", nil];
-        else if(groupIndex == kL200AuxType)
+    else {
+        if(groupIndex == kL200DetType){
+            [self setCrateIndex:4   forGroup:groupIndex];
+            [self setCardIndex:6    forGroup:groupIndex];
+            [self setChannelIndex:7 forGroup:groupIndex];
             keys = [NSArray arrayWithObjects:@"serial", @"det_type",
-                    @"daq_crate", @"daq_board_id",  @"daq_board_slot", @"daq_board_ch", nil];
+                    @"str_number",     @"str_position",
+                    @"daq_crate",      @"daq_board_id",     @"daq_board_slot",   @"daq_board_ch",
+                    @"hv_crate",       @"hv_board_slot",    @"hv_board_chan",    @"hv_cable",
+                    @"hv_flange_id",   @"hv_flange_pos",
+                    @"fe_cc4_ch",      @"fe_head_card_ana", @"fe_head_card_dig", @"fe_fanout_card",
+                    @"fe_raspberrypi", @"fe_lmfe_id", nil];
+        }
+        else if(groupIndex > kL200DetType && groupIndex < kL200CC4Type){
+            [self setCrateIndex:2   forGroup:groupIndex];
+            [self setCardIndex:4    forGroup:groupIndex];
+            [self setChannelIndex:5 forGroup:groupIndex];
+            if(groupIndex == kL200SiPMType)
+                keys = [NSArray arrayWithObjects:@"serial",  @"det_type",
+                        @"daq_crate", @"daq_board_id",  @"daq_board_slot", @"daq_board_ch",
+                        @"lv_crate",  @"lv_board_slot", @"lv_board_chan", nil];
+            else if(groupIndex == kL200PMTType)
+                keys = [NSArray arrayWithObjects:@"serial",  @"det_type",
+                        @"daq_crate", @"daq_board_id",  @"daq_board_slot", @"daq_board_ch",
+                        @"hv_crate",  @"hv_board_slot", @"hv_baord_chan", nil];
+            else if(groupIndex == kL200AuxType)
+                keys = [NSArray arrayWithObjects:@"serial", @"det_type",
+                        @"daq_crate", @"daq_board_id",  @"daq_board_slot", @"daq_board_ch", nil];
+            else if(groupIndex == kL200CC4Type)
+                keys = [NSArray arrayWithObjects:@"serial", @"det_type",
+                        @"daq_cc4_slot", @"daq_cc4_name", nil];
+        }
     }
     NSMutableArray* mapEntries = [NSMutableArray array];
     if(keys) for(id key in keys) [mapEntries addObject:[NSDictionary dictionaryWithObjectsAndKeys:
                                                         key, @"key",
                                                         [NSNumber numberWithInt:0], @"sortType", nil]];
+    
     return mapEntries;
 }
 
@@ -309,24 +317,35 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     [dets setType:kL200DetType];
     [self addGroup:dets];
     [dets release];
+    
     ORL200SegmentGroup* sipms = [[ORL200SegmentGroup alloc] initWithName:@"SiPMs"
                                                              numSegments:kL200SiPMInnerChans+kL200SiPMOuterChans
                                                               mapEntries:[self setupMapEntries:kL200SiPMType]];
     [sipms setType:kL200SiPMType];
     [self addGroup:sipms];
     [sipms release];
+    
     ORL200SegmentGroup* pmts = [[ORL200SegmentGroup alloc] initWithName:@"PMTs"
                                                             numSegments:kL200MuonVetoChans
                                                              mapEntries:[self setupMapEntries:kL200PMTType]];
     [pmts setType:kL200PMTType];
     [self addGroup:pmts];
     [pmts release];
+    
     ORL200SegmentGroup* aux = [[ORL200SegmentGroup alloc] initWithName:@"AuxChans"
                                                            numSegments:kL200MaxAuxChans
                                                             mapEntries:[self setupMapEntries:kL200AuxType]];
     [aux setType:kL200AuxType];
     [self addGroup:aux];
     [aux release];
+    
+    ORL200SegmentGroup* cc4 = [[ORL200SegmentGroup alloc] initWithName:@"CC4Chans"
+                                                           numSegments:kL200MaxCC4s
+                                                            mapEntries:[self setupMapEntries:kL200CC4Type]];
+    [cc4 setType:kL200CC4Type];
+    [self addGroup:cc4];
+    [cc4 release];
+    
 }
 
 - (int) maxNumSegments
@@ -340,6 +359,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     else if(aGroup == kL200SiPMType) return kL200SiPMInnerChans+kL200SiPMOuterChans;
     else if(aGroup == kL200PMTType) return kL200MuonVetoChans;
     else if(aGroup == kL200AuxType) return kL200MaxAuxChans;
+    else if(aGroup == kL200CC4Type) return kL200MaxCC4s;
     else return 0;
 }
 
@@ -462,6 +482,21 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     return YES;
 }
 
+- (BOOL) validateCC4:(int)cc4Position slot:(int)slotAorB
+{
+    if(cc4Position < 0 || cc4Position >= [self numberSegmentsInGroup:kL200CC4Type]/2) return NO;
+    NSDictionary* params = [[[self segmentGroup:kL200CC4Type] segment:cc4Position] params];
+    if(!params) return NO;
+    NSString* position  = [params objectForKey:@"cc4_position"];
+    NSString* slot;
+    if(slotAorB == 0)slot = [params objectForKey:@"cc4_slota"];
+    else             slot = [params objectForKey:@"cc4_slotb"];
+    if(!position || !slot ) return NO;
+    if([position length]  == 0 || [position  rangeOfString:@"-"].location != NSNotFound) return NO;
+    if([slot length]     == 0 || [slot     rangeOfString:@"-"].location != NSNotFound) return NO;
+    return YES;
+}
+
 - (NSString*) reformatSelectionString:(NSString*)aString forSet:(int)aSet
 {
     if([aString length] == 0) return @"Not mapped";
@@ -471,6 +506,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     else if(aSet == kL200SiPMType) [s appendString:@"SiPM\n"];
     else if(aSet == kL200PMTType)  [s appendString:@"PMT\n"];
     else if(aSet == kL200AuxType)  [s appendString:@"Aux Chan\n"];
+    else if(aSet == kL200CC4Type)  [s appendString:@"CC4\n"];
     [s appendFormat:@"            ID: %@\n",     [self valueForLabel:@"Segment"        fromParts:parts]];
     [s appendFormat:@"        Serial: %@\n",     [self valueForLabel:@"erial"          fromParts:parts]];
     if(aSet == kL200DetType){
@@ -498,7 +534,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         [s appendFormat:@"           Slot: %@\n", [self valueForLabel:@"v_board_slot"   fromParts:parts]];
         [s appendFormat:@"           Chan: %@\n", [self valueForLabel:@"v_board_chan"   fromParts:parts]];
     }
-    if(aSet == kL200DetType){
+    else if(aSet == kL200DetType){
         [s appendFormat:@"         Cable: %@\n", [self valueForLabel:@"v_cable"         fromParts:parts]];
         [s appendFormat:@"   HV Flange\n"];
         [s appendFormat:@"            ID: %@\n", [self valueForLabel:@"v_flange_id"     fromParts:parts]];
@@ -535,6 +571,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     [[self segmentGroup:kL200SiPMType] addParametersToDictionary:dict useName:@"SiPMMap"     addInGroupName:NO];
     [[self segmentGroup:kL200PMTType]  addParametersToDictionary:dict useName:@"PMTMap"      addInGroupName:NO];
     [[self segmentGroup:kL200AuxType]  addParametersToDictionary:dict useName:@"AuxChanMap"  addInGroupName:NO];
+    [[self segmentGroup:kL200CC4Type]  addParametersToDictionary:dict useName:@"CC4Map"  addInGroupName:NO];
     [dictionary setObject:dict forKey:[self className]];
     return dictionary;
 }

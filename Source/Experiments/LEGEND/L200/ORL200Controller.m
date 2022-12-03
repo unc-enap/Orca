@@ -62,7 +62,10 @@
 {
     return @"~/L200AuxChanMap.json";
 }
-
+- (NSString*) defaultCC4MapFilePath
+{
+    return @"~/L200CC4ChanMap.json";
+}
 - (void) awakeFromNib
 {
     [super awakeFromNib];
@@ -180,6 +183,11 @@
                      selector : @selector(auxChanMapFileChanged:)
                          name : ORSegmentGroupMapFileChanged
                         object: [model segmentGroup:kL200AuxType]];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(cc4ChanMapFileChanged:)
+                         name : ORSegmentGroupMapFileChanged
+                        object: [model segmentGroup:kL200CC4Type]];
 }
 
 - (void) updateWindow
@@ -196,6 +204,8 @@
     [self auxChanColorAxisAttributesChanged:nil];
     [self auxChanAdcClassNameChanged:nil];
     [self auxChanMapFileChanged:nil];
+    [self cc4ChanMapFileChanged:nil];
+
 }
 
 -(void) groupChanged:(NSNotification*)note
@@ -204,7 +214,6 @@
     //    [subComponentsView setNeedsDisplay:YES];
     //}
 }
-
 -(void) segmentGroupChanged:(NSNotification*)note
 {
     [super segmentGroupChanged:note];
@@ -305,6 +314,12 @@
     [auxChanMapFileTextField setStringValue:s];
 }
 
+- (void) cc4ChanMapFileChanged:(NSNotification*)note
+{
+    NSString* s = [[[model segmentGroup:kL200CC4Type] mapFile] stringByAbbreviatingWithTildeInPath];
+    if(!s) s = @"--";
+    [cc4ChanMapFileTextField setStringValue:s];
+}
 
 #pragma mark •••Actions
 
@@ -404,6 +419,16 @@
     [self readMapFile:kL200SiPMType intoTable:sipmTableView];
 }
 
+- (IBAction) saveCC4ChanMapFileAction:(id)sender
+{
+    [self saveMapFile:kL200CC4Type withDefaultPath:[self defaultCC4MapFilePath]];
+}
+
+- (IBAction) readCC4ChanMapFileAction:(id)sender
+{
+    [self readMapFile:kL200CC4Type intoTable:cc4TableView];
+}
+
 - (IBAction) autoscaleSIPMColorScale:(id)sender
 {
     [self autoscale:sipmColorScale forSegmentGroup:kL200SiPMType];
@@ -458,6 +483,7 @@
     else if(view == sipmTableView)    return kL200SiPMType;
     else if(view == pmtTableView)     return kL200PMTType;
     else if(view == auxChanTableView) return kL200AuxType;
+    else if(view == cc4TableView)     return kL200CC4Type;
     else return -1;
 }
 
@@ -475,7 +501,12 @@
 - (NSInteger) numberOfRowsInTableView:(NSTableView*)aTableView
 {
     int type = [self segmentTypeFromTableView:aTableView];
-    if(type >= 0 && type < kL200SegmentTypeCount) return [[model segmentGroup:type] numSegments];
+    if(type >= 0 && type < kL200CC4Type){
+        return [[model segmentGroup:type] numSegments];
+    }
+    else if(type==kL200CC4Type){
+        return [[model segmentGroup:type] numSegments]/2;
+    }
     else if(aTableView == stringMapTableView) return kL200MaxDetsPerString;
     else return 0;
 }
@@ -483,8 +514,12 @@
 - (id) tableView:(NSTableView*)aTableView objectValueForTableColumn:(NSTableColumn*)aTableColumn row:(NSInteger)aRowIndex
 {
     int type = [self segmentTypeFromTableView:aTableView];
-    if(type >= 0 || type < kL200SegmentTypeCount)
-        return [[model segmentGroup:type] segment:(int)aRowIndex objectForKey:[aTableColumn identifier]];
+    if(type >= 0 || type < kL200SegmentTypeCount){
+        if(type == kL200CC4Type && [[aTableColumn identifier] isEqualToString:@"cc4_position"]){
+            return [NSNumber numberWithLong:aRowIndex+1];
+        }
+        else return [[model segmentGroup:type] segment:(int)aRowIndex objectForKey:[aTableColumn identifier]];
+    }
     else if(aTableView == stringMapTableView) return nil;
     else return nil;
 }
