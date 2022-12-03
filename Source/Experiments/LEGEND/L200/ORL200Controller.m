@@ -515,6 +515,9 @@
 {
     int type = [self segmentTypeFromTableView:aTableView];
     if(type >= 0 || type < kL200SegmentTypeCount){
+        if(type==kL200CC4Type && [[aTableColumn identifier]isEqualToString:@"cc4_position"]){
+            return [NSString stringWithFormat:@"%ld",aRowIndex];
+        }
         return [[model segmentGroup:type] segment:(int)aRowIndex objectForKey:[aTableColumn identifier]];
     }
     else if(aTableView == stringMapTableView) return nil;
@@ -527,6 +530,9 @@
     int type = [self segmentTypeFromTableView:aTableView];
     if(type >= 0 || type < kL200SegmentTypeCount){
         ORDetectorSegment* segment = [[model segmentGroup:type] segment:(int)aRowIndex];
+        if(type==kL200CC4Type){
+            [segment setObject:[NSString stringWithFormat:@"%ld",aRowIndex] forKey:@"cc4_position"];
+        }
         [segment setObject:anObject forKey:[aTableColumn identifier]];
         [[model segmentGroup:type] configurationChanged:nil];
     }
