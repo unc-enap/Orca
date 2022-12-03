@@ -139,7 +139,7 @@
             NSString* line     = [NSString stringWithFormat:@"%@,%@,%@", position, slotA,slotB];
             ORDetectorSegment* segment = [segments objectAtIndex:index];
             [segment decodeLine:line];
-            [segment setObject:[NSNumber numberWithInt:index] forKey:@"kSegmentNumber"];
+            [segment setObject:[NSNumber numberWithInt:index] forKey:@"cc4_position"];
             //[segment setObject:key forKey:@"kCC4"];
         }
         else {
@@ -379,7 +379,6 @@
                                                             object:self];
     }
 }
-
 
 #pragma mark •••Archival
 

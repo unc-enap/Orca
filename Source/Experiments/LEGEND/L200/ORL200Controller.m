@@ -515,10 +515,7 @@
 {
     int type = [self segmentTypeFromTableView:aTableView];
     if(type >= 0 || type < kL200SegmentTypeCount){
-        if(type == kL200CC4Type && [[aTableColumn identifier] isEqualToString:@"cc4_position"]){
-            return [NSNumber numberWithLong:aRowIndex+1];
-        }
-        else return [[model segmentGroup:type] segment:(int)aRowIndex objectForKey:[aTableColumn identifier]];
+        return [[model segmentGroup:type] segment:(int)aRowIndex objectForKey:[aTableColumn identifier]];
     }
     else if(aTableView == stringMapTableView) return nil;
     else return nil;

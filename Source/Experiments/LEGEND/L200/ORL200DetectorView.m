@@ -52,6 +52,7 @@
 - (void) makePMTs;
 - (void) makeCC4s;
 - (void) makeAuxChans;
+- (void) makeDummySet;
 - (void) drawLabels;
 - (void) drawGeDetectorLabels;
 - (void) drawSiPMabels;
@@ -259,7 +260,7 @@
     [super makeAllSegments];
     
     if(detOutlines) [detOutlines removeAllObjects];
-    detOutlines = [[NSMutableArray array] retain];
+    else detOutlines = [[NSMutableArray array] retain];
     if(viewType == kL200CrateView){
         [self makeCrateImage];
         float dx = kL200CrateInsideWidth / 14;
@@ -297,11 +298,14 @@
         [self makeSIPMs];
         [self makePMTs];
         [self makeAuxChans];
+        [self makeDummySet]; //place holder for CC4s
     }
     else if(viewType == kL200CC4View){
-        [self makeCC4s];
+        [self makeDummySet];//place holder for Dets
         [self makeSIPMs];
         [self makePMTs];
+        [self makeDummySet];//place holder for AuxChans
+        [self makeCC4s];
     }
     [self setNeedsDisplay:YES];
 }
@@ -736,12 +740,16 @@
     NSMutableArray* segmentPaths = [NSMutableArray array];
     NSMutableArray* errorPaths   = [NSMutableArray array];
     ORSegmentGroup* group        = [delegate segmentGroup:kL200CC4Type];
-
     float xc     = [self bounds].size.width/2+kL200CC4XOffset;
     float yc     = [self bounds].size.height/2;
     int sIndex = 0;
+    //[delegate setCC4ChanPositions];
+    for(int i=0;i<kNumCC4s;i++){
+        [cc4Label[i]  release];
+        cc4Label[i] = nil;
+    }
     for(int cc4=0; cc4<[group numSegments]/2; cc4++){
-        if([delegate validateCC4:cc4 slot:0]){
+         if([delegate validateCC4:cc4 slot:0]){
             NSDictionary* params = [[[group segments]objectAtIndex:cc4] params];
             cc4Label[sIndex+1] = [[params objectForKey:@"cc4_slota"]copy];
             
@@ -773,7 +781,6 @@
             }
         }
         sIndex +=2;
-        [segmentPathSet addObject:segmentPaths];
     }
     [segmentPathSet addObject:segmentPaths];
     [errorPathSet   addObject:errorPaths];
@@ -813,6 +820,15 @@
             }
         }
     }
+    [segmentPathSet addObject:segmentPaths];
+    [errorPathSet addObject:errorPaths];
+    [detOutlines addObjectsFromArray:errorPaths];
+    [self setNeedsDisplay:YES];
+}
+- (void) makeDummySet
+{
+    NSMutableArray* segmentPaths = [NSMutableArray array];
+    NSMutableArray* errorPaths   = [NSMutableArray array];
     [segmentPathSet addObject:segmentPaths];
     [errorPathSet addObject:errorPaths];
     [detOutlines addObjectsFromArray:errorPaths];

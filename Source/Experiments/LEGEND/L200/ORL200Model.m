@@ -493,7 +493,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     else             slot = [params objectForKey:@"cc4_slotb"];
     if(!position || !slot ) return NO;
     if([position length]  == 0 || [position  rangeOfString:@"-"].location != NSNotFound) return NO;
-    if([slot length]     == 0 || [slot     rangeOfString:@"-"].location != NSNotFound) return NO;
+    if([slot length]      == 0 || [slot      rangeOfString:@"-"].location != NSNotFound) return NO;
     return YES;
 }
 
