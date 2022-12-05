@@ -89,6 +89,7 @@
 - (void) auxChanMapFileChanged:(NSNotification*)note;
 
 - (void) cc4ChanMapFileChanged:(NSNotification*)note;
+- (NSString*) getCC4Name:(int)aPosition slot:(int)aSlot;
 
 #pragma mark •••Actions
 - (IBAction) viewTypeAction:(id)sender;

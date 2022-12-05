@@ -88,7 +88,7 @@
     }
     // get the list of string number/position or serial number and sort
     NSMutableArray* channels = [NSMutableArray array];
-    NSArray* chans;
+    NSArray* chans = nil;
     if(type == kL200DetType){
         for(id key in dict){
             NSMutableDictionary* d = [NSMutableDictionary dictionary];
@@ -120,29 +120,43 @@
             return vs0 > vs1;
         }];
     }
-    else{
-        for(id key in dict) [channels addObject:[NSString stringWithString:key]];
-        chans = [NSArray array];
-        chans = [channels sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    else if(type==kL200CC4Type){
+        NSMutableArray* positions = [NSMutableArray array];
+        for(id key in dict) [positions addObject:[NSString stringWithString:key]];
+        NSArray* sortedPositions = [positions sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+        for(id aPosition in sortedPositions){
+            NSDictionary* segInfo = [[dict objectForKey:aPosition]objectForKey:@"cc4"];
+            int pos  = [[segInfo objectForKey:@"cc4_position"] intValue];
+            int slot = [[segInfo objectForKey:@"cc4_slot"]     intValue];
+            int segNum;
+            if(slot==0)segNum = pos*14;
+            else       segNum = pos*14+7;
+            
+            for(int chan=0;chan<7;chan++){
+                NSString* line = [NSString stringWithFormat:@"%@,%@,%@,%@",
+                                  [segInfo objectForKey:@"cc4_position"],
+                                  [segInfo objectForKey:@"cc4_name"],
+                                  [segInfo objectForKey:@"cc4_slot"],
+                                  [NSString stringWithFormat:@"%d",chan]
+                                ];
+                ORDetectorSegment* segment = [segments objectAtIndex:segNum+chan];
+                
+                [segment decodeLine:line];
+            }
+        }
+    }
+    else {
+            for(id key in dict) [channels addObject:[NSString stringWithString:key]];
+            chans = [NSArray array];
+            chans = [channels sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     }
     // get the parameters from the json data
-    int index = -1;
-    for(id chan in chans){
-        index++;
-        NSString* key;
-        if(type == kL200CC4Type){
-            key = [NSString stringWithString:chan];
-            NSDictionary*  ch_dict = [[dict    objectForKey:key]objectForKey:@"cc4"];
-            NSString* position = [ch_dict objectForKey:@"cc4_position"];
-            NSString* slotA    = [ch_dict objectForKey:@"cc4_slota"];
-            NSString* slotB    = [ch_dict objectForKey:@"cc4_slotb"];
-            NSString* line     = [NSString stringWithFormat:@"%@,%@,%@", position, slotA,slotB];
-            ORDetectorSegment* segment = [segments objectAtIndex:index];
-            [segment decodeLine:line];
-            [segment setObject:[NSNumber numberWithInt:index] forKey:@"cc4_position"];
-            //[segment setObject:key forKey:@"kCC4"];
-        }
-        else {
+    if(type != kL200CC4Type){
+        int index = -1;
+        for(id chan in chans){
+            index++;
+            NSString* key;
+            
             if(type == kL200DetType) key = [chan objectForKey:@"key"];
             else key = [NSString stringWithString:chan];
             NSDictionary*  ch_dict = [dict    objectForKey:key];
@@ -235,24 +249,35 @@
 {
     // build the json data
     NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-    for(NSUInteger i=0; i<[segments count]; i++){
-        ORDetectorSegment* segment = [segments objectAtIndex:i];
-        NSArray* params = [[segment paramsAsString] componentsSeparatedByString:@","];
-        if([params count] == 0) continue;
-        if([[params objectAtIndex:0] isEqualToString:@""] ||
-           [[params objectAtIndex:0] hasPrefix:@"-"]) continue;
-        NSDictionary* ch_dict = nil;
-        if(type == kL200CC4Type){
+    if(type == kL200CC4Type){
+        int index = 0;
+        for(NSUInteger i=0; i<[segments count]; i+=7){
+            ORDetectorSegment* segment = [segments objectAtIndex:i];
+            NSArray* params = [[segment paramsAsString] componentsSeparatedByString:@","];
+            if([params count] == 0) continue;
+            if([[params objectAtIndex:0] isEqualToString:@""] ||
+               [[params objectAtIndex:0] hasPrefix:@"-"]) continue;
+            NSDictionary* ch_dict = nil;
             NSDictionary* daq_dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                       [params objectAtIndex:0], @"cc4_position",
-                                      [params objectAtIndex:1], @"cc4_slota",
-                                      [params objectAtIndex:2], @"cc4_slotb",
+                                      [params objectAtIndex:1], @"cc4_name",
+                                      [params objectAtIndex:2], @"cc4_slot",
                                       nil];
             ch_dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                        @"cc4", @"system",
-                        daq_dict, @"cc4", nil];
+                       @"cc4", @"system",
+                       daq_dict, @"cc4", nil];
+            if(ch_dict) [dict setObject:ch_dict forKey:[NSString stringWithFormat:@"%d",index++]];
         }
-        else {
+    }
+    else {
+        for(NSUInteger i=0; i<[segments count]; i++){
+            ORDetectorSegment* segment = [segments objectAtIndex:i];
+            NSArray* params = [[segment paramsAsString] componentsSeparatedByString:@","];
+            if([params count] == 0) continue;
+            if([[params objectAtIndex:0] isEqualToString:@""] ||
+               [[params objectAtIndex:0] hasPrefix:@"-"]) continue;
+            NSDictionary* ch_dict = nil;
+            
             if(type == kL200DetType){
                 NSDictionary* str_dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                           [params objectAtIndex:2], @"number",
@@ -310,10 +335,36 @@
                                [params objectAtIndex:1], @"det_type",
                                daq_dict, @"daq", nil];
             }
+            
+            if(ch_dict) [dict setObject:ch_dict forKey:[params objectAtIndex:0]];
         }
-        if(ch_dict) [dict setObject:ch_dict forKey:[params objectAtIndex:0]];
     }
     return [NSDictionary dictionaryWithDictionary:dict];
+}
+- (NSString*) selectedSegementInfo:(int)aSegmentIndex
+{
+    if(type==kL200CC4Type){
+        if(aSegmentIndex<0)return @"<nothing selected>";
+        else if(aSegmentIndex>=[segments count]) return @"";
+        else {
+            ORDetectorSegment* segment = [segments objectAtIndex:aSegmentIndex];
+            NSString* string = [NSString stringWithFormat:@"%@\n",groupName];
+            NSDictionary* params = [segment params];
+            NSString* pos   = [params objectForKey:@"cc4_position"]; //0..11
+            NSString* name  = [params objectForKey:@"cc4_name"];
+            NSString* slot  = [params objectForKey:@"cc4_slot"]; //1,2
+            NSString* chan  = [params objectForKey:@"cc4_chan"]; //0..7
+            NSString* line = @"CC4\n\n";
+            line = [line stringByAppendingFormat:@"Position: %d\n",[pos intValue]+1];
+            line = [line stringByAppendingFormat:@"Name    : %@\n",name];
+            line = [line stringByAppendingFormat:@"Slot    : %@\n",slot];
+            line = [line stringByAppendingFormat:@"Channel : %@-%@\n",name,chan];
+            return line;
+        }
+    }
+    else {
+        return [super selectedSegementInfo:aSegmentIndex];
+    }
 }
 
 - (NSData*) jsonMap

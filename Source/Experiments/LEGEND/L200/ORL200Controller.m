@@ -20,6 +20,7 @@
 #import "ORL200Controller.h"
 #import "ORL200Model.h"
 #import "ORL200SegmentGroup.h"
+#import "ORDetectorSegment.h"
 #import "ORDetectorView.h"
 #import "ORTimeLinePlot.h"
 #import "ORCompositePlotView.h"
@@ -505,7 +506,7 @@
         return [[model segmentGroup:type] numSegments];
     }
     else if(type==kL200CC4Type){
-        return [[model segmentGroup:type] numSegments]/2;
+        return [[model segmentGroup:type] numSegments]/14;
     }
     else if(aTableView == stringMapTableView) return kL200MaxDetsPerString;
     else return 0;
@@ -515,10 +516,19 @@
 {
     int type = [self segmentTypeFromTableView:aTableView];
     if(type >= 0 || type < kL200SegmentTypeCount){
-        if(type==kL200CC4Type && [[aTableColumn identifier]isEqualToString:@"cc4_position"]){
-            return [NSString stringWithFormat:@"%ld",aRowIndex];
+        if(type==kL200CC4Type){
+            if([[aTableColumn identifier]isEqualToString:@"cc4_position"]){
+                return [NSString stringWithFormat:@"%ld",aRowIndex+1];
+            }
+            else if([[aTableColumn identifier]isEqualToString:@"cc4_slota"]){
+                return [self getCC4Name:(int)aRowIndex slot:0];
+            }
+            else if([[aTableColumn identifier]isEqualToString:@"cc4_slotb"]){
+                return [self getCC4Name:(int)aRowIndex slot:1];
+            }
+            else return nil;
         }
-        return [[model segmentGroup:type] segment:(int)aRowIndex objectForKey:[aTableColumn identifier]];
+        else return [[model segmentGroup:type] segment:(int)aRowIndex objectForKey:[aTableColumn identifier]];
     }
     else if(aTableView == stringMapTableView) return nil;
     else return nil;
@@ -529,11 +539,16 @@
     if(!anObject) anObject = @"--";
     int type = [self segmentTypeFromTableView:aTableView];
     if(type >= 0 || type < kL200SegmentTypeCount){
-        ORDetectorSegment* segment = [[model segmentGroup:type] segment:(int)aRowIndex];
         if(type==kL200CC4Type){
-            [segment setObject:[NSString stringWithFormat:@"%ld",aRowIndex] forKey:@"cc4_position"];
+            int aSlot;
+            if([[aTableColumn identifier] isEqualToString:@"cc4_slota"])aSlot = 0;
+            else aSlot = 1;
+            [self setCC4:(int)aRowIndex slot:aSlot name:anObject];
         }
-        [segment setObject:anObject forKey:[aTableColumn identifier]];
+        else {
+            ORDetectorSegment* segment = [[model segmentGroup:type] segment:(int)aRowIndex];
+            [segment setObject:anObject forKey:[aTableColumn identifier]];
+        }
         [[model segmentGroup:type] configurationChanged:nil];
     }
 }
@@ -544,5 +559,44 @@
     return sourceIndexPath;
 }
 
+- (void) setCC4:(int)aPosition slot:(int)aSlot name:(NSString*)aName
+{
+    ORSegmentGroup* group = [model segmentGroup:kL200CC4Type];
+    int segNum;
+    if(aSlot==0)segNum = aPosition*14;
+    else        segNum = aPosition*14+7;
+    if([aName length]){
+        for(int i=0;i<7;i++){
+            NSMutableDictionary* params = [NSMutableDictionary dictionary];
+            [params setObject:aName                                       forKey:@"cc4_name"];
+            [params setObject:[NSString stringWithFormat:@"%d",aPosition] forKey:@"cc4_position"];
+            [params setObject:[NSString stringWithFormat:@"%d",i]         forKey:@"cc4_channel"];
+            [params setObject:[NSString stringWithFormat:@"%d",aSlot]     forKey:@"cc4_slot"];
+            [[group segment:segNum+i] setParams:params];
+        }
+    }
+    else {
+        for(int i=0;i<7;i++){
+            [[group segment:segNum+i] setParams:nil];
+        }
+    }
+}
+
+- (NSString*) getCC4Name:(int)aPosition slot:(int)aSlot
+{
+    ORSegmentGroup* group = [model segmentGroup:kL200CC4Type];
+    NSArray* segments = [group segments];
+    NSString* name = @"";
+    NSInteger n = [segments count];
+    for(int i=0;i<n;i++){
+        NSDictionary* params = [[group segment:i] params];
+        int pos   = [[params objectForKey:@"cc4_position"]intValue];
+        int slot  = [[params objectForKey:@"cc4_slot"]intValue];
+        if(pos == aPosition && slot==aSlot){
+            return [params objectForKey:@"cc4_name"];
+        }
+    }
+    return name;
+}
 
 @end

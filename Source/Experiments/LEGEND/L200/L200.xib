@@ -1671,7 +1671,7 @@
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </tableColumn>
-                                                            <tableColumn identifier="cc4_slotb" width="64" minWidth="10" maxWidth="3.4028234663852886e+38" id="WLN-FK-iiV">
+                                                            <tableColumn identifier="cc4_slota" width="64" minWidth="10" maxWidth="3.4028234663852886e+38" id="WLN-FK-iiV">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Slot A">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1683,7 +1683,7 @@
                                                                 </textFieldCell>
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             </tableColumn>
-                                                            <tableColumn identifier="cc4_slota" width="60" minWidth="10" maxWidth="3.4028234663852886e+38" id="zlj-2y-XUE">
+                                                            <tableColumn identifier="cc4_slotb" width="60" minWidth="10" maxWidth="3.4028234663852886e+38" id="zlj-2y-XUE">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Slot B">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

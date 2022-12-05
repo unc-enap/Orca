@@ -433,14 +433,14 @@
     
     //----------draw the CC4 position labels-----------------
     if(!cc4LabelAttr){
-        NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        NSMutableParagraphStyle* style = [[[NSParagraphStyle defaultParagraphStyle] mutableCopy] autorelease ];
         style.alignment = NSTextAlignmentCenter;
         NSFont* font = [NSFont fontWithName:@"Geneva" size:8];
         cc4LabelAttr = [[NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName,
                           [NSColor blueColor], NSForegroundColorAttributeName,style,NSParagraphStyleAttributeName,nil] retain];
     }
     if(!cc4LabelAttr1){
-        NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        NSMutableParagraphStyle *style = [[[NSParagraphStyle defaultParagraphStyle] mutableCopy] autorelease];
         style.alignment = NSTextAlignmentCenter;
         NSFont* font = [NSFont fontWithName:@"Geneva" size:10];
         cc4LabelAttr1 = [[NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName,
@@ -677,6 +677,7 @@
                 int iring = [[segment objectForKey:@"kRing"] intValue];
                 if([sipmLabel[iring] isEqualToString:@""]){
                     sipmLabelY[iring] = y + sy/2;
+                    [sipmLabel[iring] release];
                     sipmLabel[iring] = [[segment objectForKey:@"kRingLabel"] copy];
                 }
             }
@@ -743,44 +744,61 @@
     float xc     = [self bounds].size.width/2+kL200CC4XOffset;
     float yc     = [self bounds].size.height/2;
     int sIndex = 0;
-    //[delegate setCC4ChanPositions];
     for(int i=0;i<kNumCC4s;i++){
         [cc4Label[i]  release];
         cc4Label[i] = nil;
     }
-    for(int cc4=0; cc4<[group numSegments]/2; cc4++){
-         if([delegate validateCC4:cc4 slot:0]){
-            NSDictionary* params = [[[group segments]objectAtIndex:cc4] params];
-            cc4Label[sIndex+1] = [[params objectForKey:@"cc4_slota"]copy];
-            
+    int cc4=0;
+    NSArray* segments = [group segments];
+    NSInteger nPositions = 12;
+    for(int position=0; position<nPositions; position++){
+        if([delegate validateCC4:cc4 position:position slot:0]){
             for(int chan=0;chan<7;chan++){
-                NSRect        segRect   = NSMakeRect(kL200CC4Offset+kL200CC4Size*chan,0,kL200CC4Size,kL200CC4Size);
-                NSBezierPath* segPath   = [NSBezierPath bezierPathWithRect:segRect];
+                NSMutableDictionary* params = [[segments objectAtIndex:cc4] params];
+                if(chan==0){
+                    [cc4Label[sIndex] release];
+                    cc4Label[sIndex] = [[params objectForKey:@"cc4_name"] copy];
+                }
+                [params setObject:[NSString stringWithFormat:@"%d",chan] forKey:@"cc4_chan"];
+                NSRect             segRect   = NSMakeRect(kL200CC4Offset+kL200CC4Size*chan,0,kL200CC4Size,kL200CC4Size);
+                NSBezierPath*      segPath   = [NSBezierPath bezierPathWithRect:segRect];
                 NSAffineTransform* transform = [NSAffineTransform transform];
                 [transform translateXBy:xc yBy:yc];
-                [transform rotateByDegrees:kL200CC4StartAngle - cc4*kL200CC4DeltaAngle];
+                [transform rotateByDegrees:kL200CC4StartAngle - position*kL200CC4DeltaAngle];
                 [segPath   transformUsingAffineTransform: transform];
                 [segmentPaths addObject:segPath];
                 [errorPaths   addObject:[NSBezierPath bezierPathWithRect:NSInsetRect(segRect, -1, -1)]];
-                [detOutlines addObjectsFromArray:errorPaths];
+                [detOutlines  addObjectsFromArray:errorPaths];
+                cc4++;
             }
         }
-        if([delegate validateCC4:cc4 slot:1]){
-            NSDictionary* params = [[[group segments]objectAtIndex:cc4] params];
-            cc4Label[sIndex] = [[params objectForKey:@"cc4_slotb"]copy];
+        else cc4+=7;
+        sIndex++;
+
+        if([delegate validateCC4:cc4 position:position slot:1]){
             for(int chan=0;chan<7;chan++){
-                NSRect        segRect = NSMakeRect(kL200CC4Offset+kL200CC4Size*chan,-kL200CC4Size,kL200CC4Size,kL200CC4Size);
-                NSBezierPath* segPath = [NSBezierPath bezierPathWithRect:segRect];
+                NSMutableDictionary* params = [[segments objectAtIndex:cc4] params];
+                if(chan==0){
+                    [cc4Label[sIndex] release];
+                    cc4Label[sIndex] = [[params objectForKey:@"cc4_name"] copy];
+                }
+                [params setObject:[NSString stringWithFormat:@"%d",chan] forKey:@"cc4_chan"];
+                NSRect             segRect = NSMakeRect(kL200CC4Offset+kL200CC4Size*chan,-kL200CC4Size,kL200CC4Size,kL200CC4Size);
+                NSBezierPath*      segPath = [NSBezierPath bezierPathWithRect:segRect];
                 NSAffineTransform* transform = [NSAffineTransform transform];
                 [transform translateXBy:xc yBy:yc];
-                [transform rotateByDegrees:kL200CC4StartAngle - cc4*kL200CC4DeltaAngle];
+                [transform rotateByDegrees:kL200CC4StartAngle - position*kL200CC4DeltaAngle];
                 [segPath   transformUsingAffineTransform: transform];
                 [segmentPaths addObject:segPath];
                 [errorPaths   addObject:[NSBezierPath bezierPathWithRect:NSInsetRect(segRect, -1, -1)]];
-                [detOutlines addObjectsFromArray:errorPaths];
+                [detOutlines  addObjectsFromArray:errorPaths];
+                cc4++;
             }
         }
-        sIndex +=2;
+        else cc4+=7;
+
+        sIndex++;
+
     }
     [segmentPathSet addObject:segmentPaths];
     [errorPathSet   addObject:errorPaths];
@@ -832,7 +850,6 @@
     [segmentPathSet addObject:segmentPaths];
     [errorPathSet addObject:errorPaths];
     [detOutlines addObjectsFromArray:errorPaths];
-    [self setNeedsDisplay:YES];
 }
 
 - (NSColor*) outlineColor:(int)aSet
