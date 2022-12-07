@@ -6,7 +6,7 @@
 #define DEBUG   if(debug)
 #define MEGABYTE ( 1024 * 1024 ) /* USed as the default buffer sizes */
 
-@interface ORInfluxDB : NSObject {
+@interface ORInFluxDB : NSObject {
         int debug; /* 0=off, 1=on basic, 2=trace like output */
         char influx_hostname[1024 + 1];/* details of the influxdb server or telegraf */
         char influx_ip[16 + 1];
@@ -44,4 +44,24 @@
 
     -(void) ic_push;
     -(void) ic_debug:(int) level;
+@end
+//a thin wrapper around NSOperationQueue to make a shared queue for InFlux access
+@interface ORInFluxDBQueue : NSObject {
+    NSOperationQueue* queue;
+    NSOperationQueue* lowPriorityQueue;
+}
++ (ORInFluxDBQueue*) sharedInFluxDBQueue;
++ (void) addOperation:(NSOperation*)anOp;
++ (void) addLowPriorityOperation:(NSOperation*)anOp;
++ (NSOperationQueue*) queue;
++ (NSOperationQueue*) lowPriorityQueue;
++ (NSUInteger) operationCount;
++ (void) cancelAllOperations;
+- (void) addOperation:(NSOperation*)anOp;
+- (void) addLowPriorityOperation:(NSOperation*)anOp;
+- (NSOperationQueue*) queue;
+- (NSOperationQueue*) lowPriorityQueue;
+- (void) cancelAllOperations;
+- (NSInteger) operationCount;
+- (NSInteger) lowPriorityOperationCount;
 @end

@@ -33,9 +33,10 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#include <inFluxDB.h>
+#include <ORInFluxDB.h>
+#import "SynthesizeSingleton.h"
 
-@implementation ORInfluxDB
+@implementation ORInFluxDB
 
 -(void) error:(char*)buf
 {
@@ -291,4 +292,51 @@
     output[0] = 0;
     output_char = 0;
 }
+@end
+//-----------------------------------------------------------
+//ORInFluxQueue: A shared queue for InFluxdb access. You should
+//never have to use this object directly. It will be created
+//on demand when a InFluxDB op is called.
+//-----------------------------------------------------------
+@implementation ORInFluxDBQueue
+SYNTHESIZE_SINGLETON_FOR_ORCLASS(InFluxDBQueue);
++ (NSOperationQueue*) queue             { return [[ORInFluxDBQueue sharedInFluxDBQueue] queue];              }
++ (NSOperationQueue*) lowPriorityQueue  { return [[ORInFluxDBQueue sharedInFluxDBQueue] lowPriorityQueue];   }
++ (void) addOperation:(NSOperation*)anOp{ [[ORInFluxDBQueue sharedInFluxDBQueue] addOperation:anOp];         }
++ (void) addLowPriorityOperation:(NSOperation*)anOp              { [[ORInFluxDBQueue sharedInFluxDBQueue] addLowPriorityOperation:anOp];   }
++ (NSUInteger) operationCount            { return     [[ORInFluxDBQueue sharedInFluxDBQueue] operationCount];  }
++ (NSUInteger) lowPriorityOperationCount { return     [[ORInFluxDBQueue sharedInFluxDBQueue] lowPriorityOperationCount];}
++ (void)       cancelAllOperations       { [[ORInFluxDBQueue sharedInFluxDBQueue] cancelAllOperations]; }
+
+//don't call this unless you're using this class in a special, non-global way.
+- (id) init
+{
+    self = [super init];
+    queue = [[NSOperationQueue alloc] init];
+    [queue setMaxConcurrentOperationCount:4];
+
+    lowPriorityQueue = [[NSOperationQueue alloc] init];
+    [lowPriorityQueue setMaxConcurrentOperationCount:1];
+
+    return self;
+}
+
+- (NSOperationQueue*) queue                         { return queue;             }
+- (NSOperationQueue*) lowPriorityQueue              { return lowPriorityQueue;  }
+- (void) addOperation:(NSOperation*)anOp            { [queue addOperation:anOp];}
+- (void) addLowPriorityOperation:(NSOperation*)anOp
+{
+    [anOp setQueuePriority:NSOperationQueuePriorityVeryLow];
+    [lowPriorityQueue addOperation:anOp];
+}
+
+- (void) cancelAllOperations
+{
+    [queue cancelAllOperations];
+    [lowPriorityQueue cancelAllOperations];
+}
+             
+- (NSInteger) operationCount            { return [[queue operations]count];            }
+- (NSInteger) lowPriorityOperationCount { return [[lowPriorityQueue operations]count]; }
+
 @end
