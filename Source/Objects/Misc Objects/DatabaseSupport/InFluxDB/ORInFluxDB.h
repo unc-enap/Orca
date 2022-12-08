@@ -28,6 +28,7 @@
         char saved_sub[64];
         int  sockfd;            /* file desciptor for socket connection */
     }
+
     -(void) ic_influxHost:(char*)host port:(long) port dataBase:(char*) db;
     -(void) ic_User:(char*)user pw:(char*)pw;
     -(void) ic_tags:(char*)tags;
