@@ -1,7 +1,8 @@
 //-------------------------------------------------------------------------
 //  ORInFluxDBModel.h
 //
-//  Created by Mark A. Howe on Wednesday 10/18/2006.
+// Created by Mark Howe on 12/7/2022.
+
 //  Copyright (c) 2006 CENPA, University of Washington. All rights reserved.
 //-----------------------------------------------------------
 //This program was prepared for the Regents of the University of 
@@ -28,30 +29,9 @@
     NSString*       userName;
     NSString*       password;
     NSString*       localHostName;
-    BOOL            useHttps;
-	BOOL            stealthMode;
     NSUInteger      portNumber;
-	NSDictionary*   dBInfo;
-	NSDictionary*   dBHistoryInfo;
-	NSMutableArray* dataMonitors;
-	BOOL            historyUpdateScheduled;
-    BOOL            keepHistory;
 	//cache
-	uint32_t   runNumber;
-	uint32_t   subRunNumber;
-    BOOL            replicationRunning;
-	NSDictionary*   docList;
-    BOOL            wasReplicationRunning;
-    int             replicationCheckCount;
-    ORAlarm*        replicationAlarm;
-    NSMutableDictionary* customDataBases;
-    BOOL            usingUpdateHandler;
-    NSString*       alertMessage;
-    int             alertType;
     NSString*       thisHostAdress;
-    BOOL            scheduledForRunInfoUpdate;
-    BOOL            skipDataSets;
-    BOOL            postRunningScripts;
 }
 
 #pragma mark ***Initialization
@@ -61,40 +41,9 @@
 #pragma mark ***Notifications
 - (void) registerNotificationObservers;
 - (void) applicationIsTerminating:(NSNotification*)aNote;
-- (void) runOptionsOrTimeChanged:(NSNotification*)aNote;
-- (void) runStatusChanged:(NSNotification*)aNote;
-- (void) alarmsChanged:(NSNotification*)aNote;
-- (void) runStarted:(NSNotification*)aNote;
-- (void) runStopped:(NSNotification*)aNote;
-- (void) addObjectValueRecord:(NSNotification*)aNote;
-- (void) addObject:(OrcaObject*)anObj valueDictionary:(NSDictionary*)aDictionary;
-- (void) addObject:(OrcaObject*)anObj valueDictionary:(NSDictionary*)aDictionary dataBaseRef:(ORInFluxDB*)aDataBaseRef;
-- (void) addAdcsToHistoryRecord:(NSNotification*)aNote;
-- (void) addObject:(OrcaObject*)anObj adcDictionary:(NSDictionary*)aDictionary;
-- (void) addObject:(OrcaObject*)anObj adcDictionary:(NSDictionary*)aDictionary dataBaseRef:(ORInFluxDB*)aDataBaseRef;
-- (void) postOrPutCustomRecord:(NSNotification*)aNote;
-- (void) postOrPutCustomRecord:(NSDictionary*)aRecord toAddress:(NSString*)anAddr withDelegate:(id)del;
-- (void) postOrPutCustomRecord:(NSDictionary*)aRecord dataBaseRef:(ORInFluxDB*)aDataBaseRef;
+
 
 #pragma mark ***Accessors
-- (BOOL) skipDataSets;
-- (void) setSkipDataSets:(BOOL)aSkipDataSets;
-- (int) alertType;
-- (void) setAlertType:(int)aAlertType;
-- (NSString*) alertMessage;
-- (void) setAlertMessage:(NSString*)aAlertMessage;
-- (BOOL) usingUpdateHandler;
-- (void) setUsingUpdateHandler:(BOOL)aState;
-- (BOOL) replicationRunning;
-- (void) setReplicationRunning:(BOOL)aState;
-- (BOOL) keepHistory;
-- (void) setKeepHistory:(BOOL)aKeepHistory;
-- (BOOL) useHttps;
-- (void) setUseHttps:(BOOL)aState;
-- (BOOL) stealthMode;
-- (void) setStealthMode:(BOOL)aStealthMode;
-- (BOOL) postRunningScripts;
-- (void) setPostRunningScripts:(BOOL)postRunning;
 - (NSString*) password;
 - (void) setPortNumber:(NSUInteger)aPort;
 - (NSUInteger) portNumber;
@@ -107,70 +56,22 @@
 - (void) setLocalHostName:(NSString*)aHostName;
 - (id) nextObject;
 - (NSString*) databaseName;
-- (NSString*) historyDatabaseName;
-- (NSString*) machineName;
-- (void) setDBInfo:(NSDictionary*)someInfo;
-- (void) setDBHistoryInfo:(NSDictionary*)someInfo;
-- (NSDictionary*) dBHistoryInfo;
-- (NSDictionary*) dBInfo;
-- (void) checkReplication;
-- (void) recordEvent:(NSString*)eventName document:aDocument;
-- (void) checkDataBaseExists:(ORInFluxDB*)aDataBase;
 
 #pragma mark ***DB Access
-- (ORInFluxDB*) statusDBRef;
-- (ORInFluxDB*) historyDBRef;
-- (ORInFluxDB*) statusDBRef:(NSString*)aName;
-- (ORInFluxDB*) historyDBRef:(NSString*)aName;
-
 - (ORInFluxDB*) remoteDBRef:(NSString*)aDatabaseName;
 - (ORInFluxDB*) remoteDBRef;
-- (ORInFluxDB*) remoteHistoryDBRef;
-- (ORInFluxDB*) remoteHistoryDBRef:(NSString*)aDatabaseName;
-- (void) createDatabases;
-- (void) createDatabase:(ORInFluxDB*)aDBRef;
-- (void) deleteDatabases;
-- (void) deleteDatabase:(ORInFluxDB*)aDBRef;
-- (void) addUpdateHandler;
-- (void) addUpdateHandler:(ORInFluxDB*)aDBRef;
-- (void) startReplication;
-- (void) createHistoryDatabase:(ORInFluxDB*)aDBRef;
-- (void) createHistoryDatabase;
-- (void) createRemoteDataBases;
-- (void) InFluxDBResult:(id)aResult tag:(NSString*)aTag op:(id)anOp;
-//test functions
-- (void) databaseInfo:(BOOL)toStatusWindow;
-- (void) listDatabases;
-- (void) getRemoteInfo:(BOOL)verbose;
-- (void) processRemoteTaskList:(NSArray*)aList verbose:(BOOL)verbose;
-- (void) compactDatabase;
-- (void) updateDatabaseStats;
-- (void) updateRunInfo;
-- (void) replicate:(BOOL)continuously;
-- (void) replicate:(BOOL)continuously restart:(BOOL)aRestart;
-- (void) postAlert;
-- (void) clearAlert;
 
 #pragma mark ***Archival
 - (id)   initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
 @end
 
-extern NSString* ORInFluxDBModelSkipDataSetsChanged;
-extern NSString* ORInFluxDBModelAlertTypeChanged;
-extern NSString* ORInFluxDBModelAlertMessageChanged;
-extern NSString* ORInFluxDBModelReplicationRunningChanged;
-extern NSString* ORInFluxDBModelKeepHistoryChanged;
 extern NSString* ORInFluxDBPasswordChanged;
 extern NSString* ORInFluxDBPortNumberChanged;
 extern NSString* ORInFluxDBUserNameChanged;
 extern NSString* ORInFluxDBRemoteHostNameChanged;
-extern NSString* ORInFluxDBModelStealthModeChanged;
-extern NSString* ORInFluxDBModelPostRunningScriptsChanged;
-extern NSString* ORInFluxDBModeUseHttpsChanged;
 extern NSString* ORInFluxDBModelDBInfoChanged;
 extern NSString* ORInFluxDBLocalHostNameChanged;
-extern NSString* ORInFluxDBModelUsingUpdateHandleChanged;
 extern NSString* ORInFluxDBLock;
 
 
