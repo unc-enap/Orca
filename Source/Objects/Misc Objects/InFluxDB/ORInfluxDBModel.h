@@ -19,19 +19,22 @@
 //-------------------------------------------------------------
 
 #pragma mark ***Imported Files
+
 @class ORInFluxDB;
 @class ORAlarm;
 
-@interface ORInFluxDBModel : OrcaObject
+@interface ORInFluxDBModel : OrcaObject <NSURLConnectionDelegate>
 {
 @private
-	NSString*       remoteHostName;
-    NSString*       userName;
-    NSString*       password;
-    NSString*       localHostName;
-    NSUInteger      portNumber;
-	//cache
-    NSString*       thisHostAdress;
+    NSMutableData *_responseData;
+	NSString*  hostName;
+    NSUInteger portNumber;
+    NSString*  authToken;
+    NSString*  org;
+    NSString*  bucket;
+    NSDate*    timeConnected;
+    uint32_t   amountInBuffer;
+    uint32_t   totalSent;
 }
 
 #pragma mark ***Initialization
@@ -42,36 +45,47 @@
 - (void) registerNotificationObservers;
 - (void) applicationIsTerminating:(NSNotification*)aNote;
 
-
 #pragma mark ***Accessors
-- (NSString*) password;
-- (void) setPortNumber:(NSUInteger)aPort;
-- (NSUInteger) portNumber;
-- (void) setPassword:(NSString*)aPassword;
-- (NSString*) userName;
-- (void) setUserName:(NSString*)aUserName;
-- (NSString*) remoteHostName;
-- (void) setRemoteHostName:(NSString*)aHostName;
-- (NSString*) localHostName;
-- (void) setLocalHostName:(NSString*)aHostName;
-- (id) nextObject;
-- (NSString*) databaseName;
-
-#pragma mark ***DB Access
-- (ORInFluxDB*) remoteDBRef:(NSString*)aDatabaseName;
-- (ORInFluxDB*) remoteDBRef;
+- (void)        setPortNumber:(NSUInteger)aPort;
+- (NSUInteger)  portNumber;
+- (NSString*)   hostName;
+- (void)        setHostName:(NSString*)aHostName;
+- (NSString*)   authToken;
+- (void)        setAuthToken:(NSString*)aToken;
+- (NSString*)   org;
+- (void)        setBucket:(NSString*)anOrg;
+- (NSString*)   bucket;
+- (void)        setOrg:(NSString*)anOrg;
+- (id)          nextObject;
 
 #pragma mark ***Archival
 - (id)   initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
+
+- (void) testPost;
+
+@end
+//a thin wrapper around NSOperationQueue to make a shared queue for InFlux access
+@interface ORInFluxDBQueue : NSObject {
+    NSOperationQueue* queue;
+}
++ (ORInFluxDBQueue*) sharedInFluxDBQueue;
++ (void) addOperation:(NSOperation*)anOp;
++ (NSOperationQueue*) queue;
++ (NSUInteger) operationCount;
++ (void) cancelAllOperations;
+- (void) addOperation:(NSOperation*)anOp;
+- (NSOperationQueue*) queue;
+- (void) cancelAllOperations;
+- (NSInteger) operationCount;
 @end
 
-extern NSString* ORInFluxDBPasswordChanged;
 extern NSString* ORInFluxDBPortNumberChanged;
-extern NSString* ORInFluxDBUserNameChanged;
-extern NSString* ORInFluxDBRemoteHostNameChanged;
-extern NSString* ORInFluxDBModelDBInfoChanged;
-extern NSString* ORInFluxDBLocalHostNameChanged;
+extern NSString* ORInFluxDBHostNameChanged;
+extern NSString* ORInFluxDBAuthTokenChanged;
+extern NSString* ORInFluxDBOrgChanged;
+extern NSString* ORInFluxDBBucketChanged;
+extern NSString* ORInFluxDBTimeConnectedChanged;
 extern NSString* ORInFluxDBLock;
 
 

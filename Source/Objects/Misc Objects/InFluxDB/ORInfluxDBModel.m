@@ -21,26 +21,18 @@
 
 #import "ORInFluxDBModel.h"
 #import "ORInFluxDB.h"
-#import "MemoryWatcher.h"
 #import "NSNotifications+Extensions.h"
+#import "SynthesizeSingleton.h"
 #import "Utilities.h"
-#import "ORRunModel.h"
-#import "ORStatusController.h"
-#import "ORProcessModel.h"
-#import "ORProcessElementModel.h"
-#import <sys/socket.h>
-#import <ifaddrs.h>
-#import <arpa/inet.h>
 
-NSString* ORInFluxDBPasswordChanged				  = @"ORInFluxDBPasswordChanged";
-NSString* ORInFluxDBPortNumberChanged              = @"ORInFluxDBPortNumberChanged";
-NSString* ORInFluxDBUserNameChanged				  = @"ORInFluxDBUserNameChanged";
-NSString* ORInFluxDBRemoteHostNameChanged		  = @"ORInFluxDBRemoteHostNameChanged";
-NSString* ORInFluxDBModelDBInfoChanged			  = @"ORInFluxDBModelDBInfoChanged";
-NSString* ORInFluxDBLock							  = @"ORInFluxDBLock";
-NSString* ORInFluxDBLocalHostNameChanged           = @"ORInFluxDBLocalHostNameChanged";
-
-#define kInFluxDBPort            5984
+NSString* ORInFluxDBPortNumberChanged           = @"ORInFluxDBPortNumberChanged";
+NSString* ORInFluxDBAuthTokenChanged            = @"ORInFluxDBAuthTokenChanged";
+NSString* ORInFluxDBOrgChanged                  = @"ORInFluxDBOrgChanged";
+NSString* ORInFluxDBBucketChanged               = @"ORInFluxDBBucketChanged";
+NSString* ORInFluxDBHostNameChanged             = @"ORInFluxDBHostNameChanged";
+NSString* ORInFluxDBModelDBInfoChanged	        = @"ORInFluxDBModelDBInfoChanged";
+NSString* ORInFluxDBTimeConnectedChanged        = @"ORInFluxDBTimeConnectedChanged";
+NSString* ORInFluxDBLock				        = @"ORInFluxDBLock";
 
 static NSString* ORInFluxDBModelInConnector 	= @"ORInFluxDBModelInConnector";
 
@@ -54,7 +46,6 @@ static NSString* ORInFluxDBModelInConnector 	= @"ORInFluxDBModelInConnector";
 - (id) init
 {
     self = [super init];
-    [self setPortNumber:kInFluxDBPort];
     return self;
 }
 
@@ -62,12 +53,7 @@ static NSString* ORInFluxDBModelInConnector 	= @"ORInFluxDBModelInConnector";
 {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [password       release];
-    [userName       release];
-    [localHostName  release];
-    [remoteHostName release];
-    [thisHostAdress   release];
-
+    [hostName           release];
 	[super dealloc];
 }
 
@@ -96,7 +82,7 @@ static NSString* ORInFluxDBModelInConnector 	= @"ORInFluxDBModelInConnector";
 
 - (void) setUpImage
 {
-    [self setImage:[NSImage imageNamed:@"InFluxDB"]];
+    [self setImage:[NSImage imageNamed:@"InFlux"]];
 }
 
 - (void) makeMainController
@@ -126,11 +112,6 @@ static NSString* ORInFluxDBModelInConnector 	= @"ORInFluxDBModelInConnector";
                      selector : @selector(applicationIsTerminating:)
                          name : @"ORAppTerminating"
                        object : (ORAppDelegate*)[NSApp delegate]];
-
-    [notifyCenter addObserver : self
-					 selector : @selector(addObjectValueRecord:)
-						 name : @"ORInFluxDBAddObjectRecord"
-					   object : nil];
 }
 
 - (void) applicationIsTerminating:(NSNotification*)aNote
@@ -144,28 +125,9 @@ static NSString* ORInFluxDBModelInConnector 	= @"ORInFluxDBModelInConnector";
 }
 
 #pragma mark ***Accessors
-
-
 - (id) nextObject
 {
 	return [self objectConnectedTo:ORInFluxDBModelInConnector];
-}
-
-- (NSString*) password
-{
-    return password;
-}
-
-- (void) setPassword:(NSString*)aPassword
-{
-	if(aPassword){
-		[[[self undoManager] prepareWithInvocationTarget:self] setPassword:password];
-		
-		[password autorelease];
-		password = ([aPassword length] == 0) ? nil : [aPassword copy];
-		
-		[[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBPasswordChanged object:self];
-	}
 }
 
 - (NSUInteger) portNumber
@@ -183,86 +145,67 @@ static NSString* ORInFluxDBModelInConnector 	= @"ORInFluxDBModelInConnector";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBPortNumberChanged object:self];
 }
 
-- (NSString*) userName
+- (NSString*) hostName
 {
-    return userName;
+    return hostName;
 }
 
-- (void) setUserName:(NSString*)aUserName
+- (void) setHostName:(NSString*)aHostName
 {
-	if(aUserName){
-		[[[self undoManager] prepareWithInvocationTarget:self] setUserName:userName];
-		
-		[userName autorelease];
-		userName = ([aUserName length] == 0) ? nil : [aUserName copy];
-		
-		[[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBUserNameChanged object:self];
-	}
+    if(!aHostName)aHostName = @"";
+    [[[self undoManager] prepareWithInvocationTarget:self] setHostName:hostName];
+    
+    [hostName autorelease];
+    hostName = [aHostName copy];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBHostNameChanged object:self];	
 }
-
-- (NSString*) remoteHostName
+- (NSString*)   authToken
 {
-    return remoteHostName;
+    return authToken;
 }
 
-- (void) setRemoteHostName:(NSString*)aHostName
+- (void) setAuthToken:(NSString*)aAuthToken
 {
-	if(aHostName){
-		[[[self undoManager] prepareWithInvocationTarget:self] setRemoteHostName:remoteHostName];
-		
-		[remoteHostName autorelease];
-		remoteHostName = [aHostName copy];    
-		
-		[[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBRemoteHostNameChanged object:self];
-	}
+    if(!aAuthToken)aAuthToken = @"";
+    [[[self undoManager] prepareWithInvocationTarget:self] setAuthToken:authToken ];
+    
+    [authToken autorelease];
+    authToken = [aAuthToken copy];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBAuthTokenChanged object:self];
 }
-
-- (NSString*) localHostName
+- (NSString*)   org
 {
-    return localHostName;
+    return org;
 }
 
-- (void) setLocalHostName:(NSString*)aHostName
+- (void) setOrg:(NSString*)anOrg
 {
-	if(aHostName){
-		[[[self undoManager] prepareWithInvocationTarget:self] setLocalHostName:localHostName];
-		
-		[localHostName autorelease];
-		localHostName = [aHostName copy];
-		
-		[[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBLocalHostNameChanged object:self];
-	}
+    if(!anOrg)anOrg = @"";
+    [[[self undoManager] prepareWithInvocationTarget:self] setOrg:org ];
+    
+    [org autorelease];
+    org = [anOrg copy];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBOrgChanged object:self];
 }
 
-- (NSString*) databaseName
-{		
-	return [self machineName];
-}
-
-
-- (NSString*) machineName
-{		
-	NSString* machineName = [NSString stringWithFormat:@"%@",computerName()];
-	machineName = [machineName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-	return [machineName lowercaseString];
-}
-
-- (ORInFluxDB*) remoteDBRef
+- (NSString*)   bucket
 {
-    return [self remoteDBRef:[self databaseName]];
-
+    return bucket;
 }
-- (ORInFluxDB*) remoteDBRef:(NSString*)aDatabaseName
+
+- (void) setBucket:(NSString*)aBucket
 {
-    if([remoteHostName length]==0)return nil;
-    else return nil;
-	//else return [ORInFluxDB inFluxHost:remoteHostName port:portNumber username:userName pwd:password database:aDatabaseName delegate:self];
+    if(!aBucket)aBucket = @"";
+    [[[self undoManager] prepareWithInvocationTarget:self] setBucket:bucket ];
+    
+    [bucket autorelease];
+    bucket = [aBucket copy];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBBucketChanged object:self];
 }
-
-- (void) addObjectValueRecord:(NSNotification*)aNote
-{
-}
-
 - (void) _cancelAllPeriodicOperations
 {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
@@ -277,11 +220,11 @@ static NSString* ORInFluxDBModelInConnector 	= @"ORInFluxDBModelInConnector";
 {    
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
-    [self setPassword:      [decoder decodeObjectForKey: @"Password"]];
-    [self setLocalHostName: [decoder decodeObjectForKey: @"LocalHostName"]];
-    [self setUserName:      [decoder decodeObjectForKey: @"UserName"]];
-    [self setRemoteHostName:[decoder decodeObjectForKey: @"RemoteHostName"]];
-    [self setPortNumber:    [decoder decodeIntegerForKey:@"PortNumber"]];
+    [self setHostName:     [decoder decodeObjectForKey: @"HostName"]];
+    [self setPortNumber:   [decoder decodeIntegerForKey:@"PortNumber"]];
+    [self setAuthToken:    [decoder decodeObjectForKey:@"Token"]];
+    [self setOrg:          [decoder decodeObjectForKey:@"Org"]];
+    [self setBucket:       [decoder decodeObjectForKey:@"Bucket"]];
     [[self undoManager] enableUndoRegistration];
 	[self registerNotificationObservers];
    return self;
@@ -290,12 +233,119 @@ static NSString* ORInFluxDBModelInConnector 	= @"ORInFluxDBModelInConnector";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeObject:password              forKey:@"Password"];
-    [encoder encodeInteger:portNumber           forKey:@"PortNumber"];
-    [encoder encodeObject:userName              forKey:@"UserName"];
-    [encoder encodeObject:localHostName         forKey:@"LocalHostName"];
-    [encoder encodeObject:remoteHostName        forKey:@"RemoteHostName"];
+    [encoder encodeInteger:portNumber   forKey:@"PortNumber"];
+    [encoder encodeObject:hostName      forKey:@"HostName"];
+    [encoder encodeObject:authToken     forKey:@"Token"];
+    [encoder encodeObject:org           forKey:@"Org"];
+    [encoder encodeObject:bucket        forKey:@"Bucket"];
+}
 
+- (void) testPost
+{
+    // Create the request.
+    NSString* tokenHeader   = [NSString stringWithFormat:@"Token %@",[self authToken]];
+    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/write?org=%@&bucket=%@&precision=ns",hostName,portNumber,org,bucket];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
+        
+    // Specify that it will be a POST request
+    request.HTTPMethod = @"POST";
+        
+    // This is how we set header fields
+    [request setValue:@"text/plain; charset=utf-8"    forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"text/plain; application/json" forHTTPHeaderField:@"Accept"];
+    [request setValue:tokenHeader                     forHTTPHeaderField:@"Authorization"];
+
+    // Convert your data and set your request's HTTPBody property
+    NSString *stringData = @"airSensors,sensor_id=TLM0202 temperature=0,humidity=100";
+    NSData *requestBodyData = [stringData dataUsingEncoding:NSUTF8StringEncoding];
+    request.HTTPBody = requestBodyData;
+        
+    // Create url connection and fire request
+    [[[NSURLConnection alloc] initWithRequest:request delegate:self]autorelease];
+}
+
+- (void) clearCounts
+{
+    [self setTotalSent:0];
+    [self setAmountInBuffer:0];
+}
+- (uint32_t)amountInBuffer
+{
+    return amountInBuffer;
+}
+
+- (void)setAmountInBuffer:(uint32_t)anAmountInBuffer
+{
+    amountInBuffer = anAmountInBuffer;
+}
+- (uint64_t)totalSent
+{
+    return totalSent;
+}
+
+- (void)setTotalSent:(uint64_t)aTotalSent
+{
+    totalSent = (uint32_t)aTotalSent;
+}
+
+#pragma mark NSURLConnection Delegate Methods
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+    // A response has been received, this is where we initialize the instance var you created
+    // so that we can append data to it in the didReceiveData method
+    // Furthermore, this method is called each time there is a redirect so reinitializing it
+    // also serves to clear it
+    _responseData = [[NSMutableData alloc] init];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    // Append the new data to the instance variable you declared
+    [_responseData appendData:data];
+    NSLog(@"%@",[[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding]);
+}
+
+- (NSCachedURLResponse *)connection:(NSURLConnection *)connection
+                  willCacheResponse:(NSCachedURLResponse*)cachedResponse {
+    // Return nil to indicate not necessary to store a cached response for this connection
+    return nil;
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    // The request is complete and data has been received
+    // You can parse the stuff in your instance variable now
+    
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    // The request has failed for some reason!
+    // Check the error var
 }
 @end
 
+//-----------------------------------------------------------
+//ORInFluxQueue: A shared queue for InFluxdb access. You should
+//never have to use this object directly. It will be created
+//on demand when a InFluxDB op is called.
+//-----------------------------------------------------------
+@implementation ORInFluxDBQueue
+SYNTHESIZE_SINGLETON_FOR_ORCLASS(InFluxDBQueue);
++ (NSOperationQueue*) queue             { return [[ORInFluxDBQueue sharedInFluxDBQueue] queue];              }
++ (void) addOperation:(NSOperation*)anOp{ [[ORInFluxDBQueue sharedInFluxDBQueue] addOperation:anOp];         }
++ (NSUInteger) operationCount            { return     [[ORInFluxDBQueue sharedInFluxDBQueue] operationCount];  }
++ (void)       cancelAllOperations       { [[ORInFluxDBQueue sharedInFluxDBQueue] cancelAllOperations]; }
+
+//don't call this unless you're using this class in a special, non-global way.
+- (id) init
+{
+    self = [super init];
+    queue = [[NSOperationQueue alloc] init];
+    [queue setMaxConcurrentOperationCount:4];
+
+    return self;
+}
+
+- (NSOperationQueue*) queue                 { return queue;                     }
+- (void) addOperation:(NSOperation*)anOp    { [queue addOperation:anOp];        }
+- (void) cancelAllOperations                {[queue cancelAllOperations];       }
+- (NSInteger) operationCount                { return [[queue operations]count]; }
+
+@end

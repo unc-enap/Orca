@@ -37,37 +37,30 @@
 #pragma mark •••Initialization
 -(id)init
 {
-    self = [super initWithWindowNibName:@"InFluxDB"];
+    self = [super initWithWindowNibName:@"InFlux"];
     return self;
 }
 
 - (void) dealloc
 {
     [[[ORInFluxDBQueue sharedInFluxDBQueue] queue]            removeObserver:self forKeyPath:@"operationCount"];
-    [[[ORInFluxDBQueue sharedInFluxDBQueue] lowPriorityQueue] removeObserver:self forKeyPath:@"operationCount"];
-	[super dealloc];
+ 	[super dealloc];
 }
 
 -(void) awakeFromNib
 {
 	[super awakeFromNib];
     [[[ORInFluxDBQueue sharedInFluxDBQueue]queue]            addObserver:self forKeyPath:@"operationCount" options:0 context:NULL];
-    [[[ORInFluxDBQueue sharedInFluxDBQueue]lowPriorityQueue] addObserver:self forKeyPath:@"operationCount" options:0 context:NULL];
-    [queueValueBars setNumber:2 height:10 spacing:5];
+    [queueValueBars setNumber:1 height:10 spacing:5];
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object 
                          change:(NSDictionary *)change context:(void *)context
 {
 	NSOperationQueue* queue = [[ORInFluxDBQueue sharedInFluxDBQueue] queue];
-    NSOperationQueue* lowPriorityQueue = [[ORInFluxDBQueue sharedInFluxDBQueue] lowPriorityQueue];
     if (object == queue && [keyPath isEqual:@"operationCount"]) {
 		NSNumber* n = [NSNumber numberWithInteger:[[[ORInFluxDBQueue queue] operations] count]];
 		[self performSelectorOnMainThread:@selector(setQueCount:) withObject:n waitUntilDone:NO];
-    }
-    else if (object == lowPriorityQueue && [keyPath isEqual:@"operationCount"]) {
-        NSNumber* n = [NSNumber numberWithInteger:[[[ORInFluxDBQueue lowPriorityQueue] operations] count]];
-        [self performSelectorOnMainThread:@selector(setLowPriorityQueCount:) withObject:n waitUntilDone:NO];
     }
     else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -94,28 +87,28 @@
     [super registerNotificationObservers];
     
     [notifyCenter addObserver : self
-                     selector : @selector(remoteHostNameChanged:)
-                         name : ORInFluxDBRemoteHostNameChanged
+                     selector : @selector(hostNameChanged:)
+                         name : ORInFluxDBHostNameChanged
                        object : model];
-    
-    [notifyCenter addObserver : self
-                     selector : @selector(localHostNameChanged:)
-                         name : ORInFluxDBLocalHostNameChanged
-                       object : model];
-    
-    [notifyCenter addObserver : self
-                     selector : @selector(userNameChanged:)
-                         name : ORInFluxDBUserNameChanged
-                       object : model];
-	
-    [notifyCenter addObserver : self
-                     selector : @selector(passwordChanged:)
-                         name : ORInFluxDBPasswordChanged
-                       object : model];
-
+    	
     [notifyCenter addObserver : self
                      selector : @selector(portChanged:)
                          name : ORInFluxDBPortNumberChanged
+                       object : model];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(authTokenChanged:)
+                         name : ORInFluxDBAuthTokenChanged
+                       object : model];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(orgChanged:)
+                         name : ORInFluxDBOrgChanged
+                       object : model];
+ 
+    [notifyCenter addObserver : self
+                     selector : @selector(bucketChanged:)
+                         name : ORInFluxDBBucketChanged
                        object : model];
     
     [notifyCenter addObserver : self
@@ -132,55 +125,45 @@
 - (void) updateWindow
 {
     [super updateWindow];
-    [self remoteHostNameChanged:nil];
-	[self localHostNameChanged:nil];
-	[self userNameChanged:nil];
-	[self passwordChanged:nil];
-	[self portChanged:nil];
-	[self dataBaseNameChanged:nil];
+    [self hostNameChanged:nil];
+    [self portChanged:nil];
+    [self authTokenChanged:nil];
+    [self orgChanged:nil];
+    [self bucketChanged:nil];
     [self InFluxDBLockChanged:nil];
 }
 
-- (void) remoteHostNameChanged:(NSNotification*)aNote
+- (void) hostNameChanged:(NSNotification*)aNote
 {
-	if([model remoteHostName])[remoteHostNameField setStringValue:[model remoteHostName]];
-}
-
-- (void) localHostNameChanged:(NSNotification*)aNote
-{
-	if([model localHostName])[localHostNameField   setStringValue:[model localHostName]];
-}
-
-- (void) userNameChanged:(NSNotification*)aNote
-{
-	if([model userName])[userNameField setStringValue:[model userName]];
-}
-
-- (void) passwordChanged:(NSNotification*)aNote
-{
-	if([model password])[passwordField setStringValue:[model password]];
+	[hostNameField setStringValue:[model hostName]];
 }
 
 - (void) portChanged:(NSNotification*)aNote
 {
     [portField setIntegerValue:[model portNumber]];
 }
-
-- (void) dataBaseNameChanged:(NSNotification*)aNote
+- (void) orgChanged:(NSNotification*)aNote
 {
-	[dataBaseNameField setStringValue:[model databaseName]];
+    [orgField setStringValue:[model org]];
+}
+- (void) bucketChanged:(NSNotification*)aNote
+{
+    [bucketField setStringValue:[model bucket]];
+}
+- (void) authTokenChanged:(NSNotification*)aNote
+{
+    [authTokenField setStringValue:[model authToken]];
 }
 
 - (void) InFluxDBLockChanged:(NSNotification*)aNote
 {
     BOOL locked = [gSecurity isLocked:ORInFluxDBLock];
     [InFluxDBLockButton   setState: locked];
-    
-    [remoteHostNameField setEnabled:!locked];
-    [localHostNameField  setEnabled:!locked];
-    [userNameField       setEnabled:!locked];
-    [passwordField       setEnabled:!locked];
-    [portField           setEnabled:!locked];
+    [hostNameField        setEnabled:!locked];
+    [portField            setEnabled:!locked];
+    [authTokenField       setEnabled:!locked];
+    [orgField             setEnabled:!locked];
+    [bucketField          setEnabled:!locked];
 }
 
 - (void) checkGlobalSecurity
@@ -197,24 +180,9 @@
     [gSecurity tryToSetLock:ORInFluxDBLock to:[sender intValue] forWindow:[self window]];
 }
 
-- (IBAction) remoteHostNameAction:(id)sender
+- (IBAction) hostNameAction:(id)sender
 {
-	[model setRemoteHostName:[sender stringValue]];
-}
-
-- (IBAction) localHostNameAction:(id)sender
-{
-	[model setLocalHostName:[sender stringValue]];
-}
-
-- (IBAction) userNameAction:(id)sender
-{
-	[model setUserName:[sender stringValue]];
-}
-
-- (IBAction) passwordAction:(id)sender
-{
-	[model setPassword:[sender stringValue]];
+	[model setHostName:[sender stringValue]];
 }
 
 - (IBAction) portAction:(id)sender
@@ -222,6 +190,25 @@
 	[model setPortNumber:[sender integerValue]];
 }
 
+- (IBAction) authTokenAction:(id)sender
+{
+    [model setAuthToken:[sender stringValue]];
+}
+
+- (IBAction) orgAction:(id)sender
+{
+    [model setOrg:[sender stringValue]];
+}
+
+- (IBAction) bucketAction:(id)sender
+{
+    [model setBucket:[sender stringValue]];
+}
+
+- (IBAction) testAction:(id)sender
+{
+    [model testPost];
+}
 
 @end
 

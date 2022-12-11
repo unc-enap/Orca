@@ -21,12 +21,11 @@
 
 @interface ORInFluxDBController : OrcaObjectController
 {	
-	IBOutlet NSTextField* remoteHostNameField;
-	IBOutlet NSTextField* localHostNameField;
-	IBOutlet NSTextField* userNameField;
-	IBOutlet NSTextField* passwordField;
-	IBOutlet NSTextField* portField;
-	IBOutlet NSTextField* dataBaseNameField;
+	IBOutlet NSTextField* hostNameField;
+    IBOutlet NSTextField* portField;
+    IBOutlet NSTextField* orgField;
+    IBOutlet NSTextField* bucketField;
+    IBOutlet NSTextField* authTokenField;
     IBOutlet NSButton*    InFluxDBLockButton;
     IBOutlet NSMatrix*    queueCountsMatrix;
     IBOutlet ORValueBarGroupView*  queueValueBars;
@@ -36,21 +35,21 @@
 
 #pragma mark ***Interface Management
 - (void) registerNotificationObservers;
-- (void) remoteHostNameChanged:(NSNotification*)aNote;
-- (void) localHostNameChanged:(NSNotification*)aNote;
-- (void) userNameChanged:(NSNotification*)aNote;
-- (void) passwordChanged:(NSNotification*)aNote;
+- (void) hostNameChanged:(NSNotification*)aNote;
 - (void) portChanged:(NSNotification*)aNote;
-- (void) dataBaseNameChanged:(NSNotification*)aNote;
+- (void) authTokenChanged:(NSNotification*)aNote;
+- (void) orgChanged:(NSNotification*)aNote;
+- (void) bucketChanged:(NSNotification*)aNote;
 - (void) InFluxDBLockChanged:(NSNotification*)aNote;
 - (void) setQueCount:(NSNumber*)n;
 
 #pragma mark •••Actions
-- (IBAction) remoteHostNameAction:(id)sender;
-- (IBAction) localHostNameAction:(id)sender;
-- (IBAction) userNameAction:(id)sender;
-- (IBAction) passwordAction:(id)sender;
+- (IBAction) hostNameAction:(id)sender;
 - (IBAction) portAction:(id)sender;
+- (IBAction) authTokenAction:(id)sender;
+- (IBAction) orgAction:(id)sender;
+- (IBAction) bucketAction:(id)sender;
+- (IBAction) testAction:(id)sender;
 - (IBAction) InFluxDBLockAction:(id)sender;
 
 @end
