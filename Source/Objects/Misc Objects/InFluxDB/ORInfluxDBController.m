@@ -21,7 +21,6 @@
 
 #import "ORInFluxDBController.h"
 #import "ORInFluxDBModel.h"
-#import "ORInFluxDB.h"
 #import "ORValueBarGroupView.h"
 
 @interface ORInFluxDBController (private)

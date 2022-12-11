@@ -20,7 +20,6 @@
 
 
 #import "ORInFluxDBModel.h"
-#import "ORInFluxDB.h"
 #import "NSNotifications+Extensions.h"
 #import "SynthesizeSingleton.h"
 #import "Utilities.h"
