@@ -2927,8 +2927,6 @@
 		84CA8B0614608A340072BB24 /* ORTimeRoi.h in Headers */ = {isa = PBXBuildFile; fileRef = 84CA8B0114608A340072BB24 /* ORTimeRoi.h */; };
 		84CA8B0714608A340072BB24 /* ORTimeRoiController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CA8B0214608A340072BB24 /* ORTimeRoiController.m */; };
 		84CA8B0814608A340072BB24 /* ORTimeRoiController.h in Headers */ = {isa = PBXBuildFile; fileRef = 84CA8B0314608A340072BB24 /* ORTimeRoiController.h */; };
-		84CAB5492936AD40002571F6 /* ORInFluxDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 84CAB5472936AD3F002571F6 /* ORInFluxDB.h */; };
-		84CAB54A2936AD40002571F6 /* ORInFluxDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CAB5482936AD40002571F6 /* ORInFluxDB.m */; };
 		84CC16CD0FAF157000CEE642 /* MCA927.nib in Resources */ = {isa = PBXBuildFile; fileRef = 84CC16C60FAF157000CEE642 /* MCA927.nib */; };
 		84CC16CE0FAF157000CEE642 /* MCA927.tif in Resources */ = {isa = PBXBuildFile; fileRef = 84CC16C70FAF157000CEE642 /* MCA927.tif */; };
 		84CC16D00FAF157000CEE642 /* ORMCA927Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 84CC16C90FAF157000CEE642 /* ORMCA927Controller.h */; };
@@ -6776,10 +6774,6 @@
 		84CA8B0114608A340072BB24 /* ORTimeRoi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORTimeRoi.h; path = Source/Widgets/Plotting/AnalysisSupport/ORTimeRoi.h; sourceTree = SOURCE_ROOT; };
 		84CA8B0214608A340072BB24 /* ORTimeRoiController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORTimeRoiController.m; path = Source/Widgets/Plotting/AnalysisSupport/ORTimeRoiController.m; sourceTree = SOURCE_ROOT; };
 		84CA8B0314608A340072BB24 /* ORTimeRoiController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORTimeRoiController.h; path = Source/Widgets/Plotting/AnalysisSupport/ORTimeRoiController.h; sourceTree = SOURCE_ROOT; };
-		84CAB5442936ACEB002571F6 /* ic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ic.h; sourceTree = "<group>"; };
-		84CAB5452936ACEB002571F6 /* ic.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ic.c; sourceTree = "<group>"; };
-		84CAB5472936AD3F002571F6 /* ORInFluxDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORInFluxDB.h; sourceTree = "<group>"; };
-		84CAB5482936AD40002571F6 /* ORInFluxDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORInFluxDB.m; sourceTree = "<group>"; };
 		84CC16C60FAF157000CEE642 /* MCA927.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = MCA927.nib; path = Source/Objects/Hardware/USB/MCA927/MCA927.nib; sourceTree = SOURCE_ROOT; };
 		84CC16C70FAF157000CEE642 /* MCA927.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = MCA927.tif; path = Source/Objects/Hardware/USB/MCA927/MCA927.tif; sourceTree = SOURCE_ROOT; };
 		84CC16C90FAF157000CEE642 /* ORMCA927Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORMCA927Controller.h; path = Source/Objects/Hardware/USB/MCA927/ORMCA927Controller.h; sourceTree = SOURCE_ROOT; };
@@ -7902,7 +7896,6 @@
 		2A37F4AAFDCFA73011CA2CEA /* Orca */ = {
 			isa = PBXGroup;
 			children = (
-				84CAB5432936ACEB002571F6 /* InFluxDB */,
 				E6C583242544CA2A00567B9A /* Orca.xcconfig */,
 				846574BF1F9D449500B4BAA9 /* Orca.entitlements */,
 				F5AD34B203A7AEB8015F64B1 /* Readme.md */,
@@ -11998,7 +11991,6 @@
 		8494C12E1317E2E200151E7B /* DatabaseSupport */ = {
 			isa = PBXGroup;
 			children = (
-				84CAB5462936AD3F002571F6 /* InFluxDB */,
 				8494C12F1317E2E200151E7B /* CouchDB */,
 				8494C1321317E2E200151E7B /* mySQL */,
 				4AB9E5361DE5D955007C75E0 /* PostgreSQL */,
@@ -13838,25 +13830,6 @@
 			name = "Histogram Objects";
 			path = "Source/Objects/Data Processing/Histogram Objects";
 			sourceTree = SOURCE_ROOT;
-		};
-		84CAB5432936ACEB002571F6 /* InFluxDB */ = {
-			isa = PBXGroup;
-			children = (
-				84CAB5442936ACEB002571F6 /* ic.h */,
-				84CAB5452936ACEB002571F6 /* ic.c */,
-			);
-			name = InFluxDB;
-			path = "Source/Objects/Misc Objects/DatabaseSupport/InFluxDB";
-			sourceTree = "<group>";
-		};
-		84CAB5462936AD3F002571F6 /* InFluxDB */ = {
-			isa = PBXGroup;
-			children = (
-				84CAB5472936AD3F002571F6 /* ORInFluxDB.h */,
-				84CAB5482936AD40002571F6 /* ORInFluxDB.m */,
-			);
-			path = InFluxDB;
-			sourceTree = "<group>";
 		};
 		84CC16C50FAF157000CEE642 /* MCA927 */ = {
 			isa = PBXGroup;
@@ -16497,7 +16470,6 @@
 				0F16E33E1C493AD7003C9EC9 /* libuv.h in Headers */,
 				84D967770CA03E50000C0C76 /* ORScriptController.h in Headers */,
 				84D153651BD53D2A005EC269 /* OROnCallListModel.h in Headers */,
-				84CAB5492936AD40002571F6 /* ORInFluxDB.h in Headers */,
 				84D967790CA03E50000C0C76 /* ORScriptModel.h in Headers */,
 				84F46F370CA44255007EFADA /* ORIpeCard.h in Headers */,
 				84F46F390CA44255007EFADA /* ORIpeCardDecoder.h in Headers */,
@@ -18677,7 +18649,6 @@
 				84D613E62017A9630038D662 /* ORTristanFLTController.m in Sources */,
 				84D98266079605CD0074A035 /* ORL2551Decoders.m in Sources */,
 				84D98267079605CD0074A035 /* ORL2551Controller.m in Sources */,
-				84CAB54A2936AD40002571F6 /* ORInFluxDB.m in Sources */,
 				84D98348079716E90074A035 /* TimedWorker.m in Sources */,
 				84607296079F015300C9F572 /* ORCamacCardDecoder.m in Sources */,
 				8408591507A1935D0056503B /* ORBaseDecoder.m in Sources */,
