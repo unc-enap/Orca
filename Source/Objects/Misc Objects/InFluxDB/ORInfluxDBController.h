@@ -17,20 +17,18 @@
 //express or implied, or assume any liability or responsibility 
 //for the use of this software.
 //-------------------------------------------------------------
-@class ORValueBarGroupView;
 
 @interface ORInFluxDBController : OrcaObjectController
 {	
-	IBOutlet NSTextField* hostNameField;
-    IBOutlet NSTextField* portField;
-    IBOutlet NSTextField* orgField;
-    IBOutlet NSTextField* bucketField;
-    IBOutlet NSTextField* authTokenField;
-    IBOutlet NSButton*    InFluxDBLockButton;
-    IBOutlet NSMatrix*    queueCountsMatrix;
-    IBOutlet ORValueBarGroupView*  queueValueBars;
-	IBOutlet NSTextField* dbSizeField;
-	IBOutlet NSTextField* dbStatusField;
+    IBOutlet NSTextField*       hostNameField;
+    IBOutlet NSTextField*       portField;
+    IBOutlet NSTextField*       orgField;
+    IBOutlet NSTextField*       bucketField;
+    IBOutlet NSTextField*       authTokenField;
+    IBOutlet NSTextField*       socketStatusField;
+    IBOutlet NSTextField*       rateField;
+    IBOutlet NSMatrix*          accessTypeMatrix;
+    IBOutlet NSButton*          InFluxDBLockButton;
 }
 
 #pragma mark ***Interface Management
@@ -40,8 +38,10 @@
 - (void) authTokenChanged:(NSNotification*)aNote;
 - (void) orgChanged:(NSNotification*)aNote;
 - (void) bucketChanged:(NSNotification*)aNote;
-- (void) InFluxDBLockChanged:(NSNotification*)aNote;
-- (void) setQueCount:(NSNumber*)n;
+- (void) inFluxDBLockChanged:(NSNotification*)aNote;
+- (void) accessTypeChanged:(NSNotification*)aNote;
+- (void) socketStatusChanged:(NSNotification*)aNote;
+- (void) rateChanged:(NSNotification*)aNote;
 
 #pragma mark •••Actions
 - (IBAction) hostNameAction:(id)sender;
@@ -51,5 +51,6 @@
 - (IBAction) bucketAction:(id)sender;
 - (IBAction) testAction:(id)sender;
 - (IBAction) InFluxDBLockAction:(id)sender;
+- (IBAction) accessTypeMatrixAction:(id)sender;
 
 @end
