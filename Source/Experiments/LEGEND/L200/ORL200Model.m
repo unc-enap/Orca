@@ -44,7 +44,37 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 - (void) awakeAfterDocumentLoaded
 {
     [self getRunType:nil];
+    [self findInFluxDB];
     [super awakeAfterDocumentLoaded];
+}
+
+- (void) findInFluxDB
+{
+    influxDB = [[self document] findObjectWithFullID:@"ORInFluxDBModel,1"];
+}
+
+- (void) testInFluxDB;
+{
+    [self performSelector:@selector(updateMachineRecord) withObject:nil afterDelay:1];
+
+}
+
+- (void) updateMachineRecord
+{
+    influxIndex++;
+    [influxDB setTags:@"host=MarksLaptop"];
+    [influxDB startMeasurement:@"L200Data"];
+    [influxDB addDouble:@"Test1" withValue:random_range(0,100)];
+    [influxDB addDouble:@"Test2" withValue:random_range(0,100)];
+    [influxDB endMeasurement];
+    
+    [self performSelector:@selector(updateMachineRecord) withObject:nil afterDelay:.1];
+
+//    [self startMeasurement:@"CPU1"];
+//    [self addLong:@"Memory" withValue:12];
+//    [self addLong:@"RamUsed" withValue:200.2];
+//    [self endMeasurement];
+    [influxDB push];
 }
 
 /*- (void) wakeUp
@@ -100,6 +130,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
                      selector : @selector(awakeAfterDocumentLoaded)
                          name : ORGroupObjectsRemoved
                        object : nil];
+    
 }
 
 - (void) runTypeChanged:(NSNotification*) aNote

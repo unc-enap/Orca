@@ -110,6 +110,7 @@
 
 - (IBAction) saveCC4ChanMapFileAction:(id)sender;
 - (IBAction) readCC4ChanMapFileAction:(id)sender;
+- (IBAction) testInfluxAction:(id)sender;
 
 #pragma mark •••Interface Management
 - (int) segmentTypeFromTableView:(NSTableView*)view;

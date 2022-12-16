@@ -323,7 +323,10 @@
 }
 
 #pragma mark •••Actions
-
+- (IBAction) testInfluxAction:(id)sender;
+{
+    [model testInFluxDB];
+}
 - (IBAction) viewTypeAction:(id)sender
 {
     [model setViewType:(int)[sender indexOfSelectedItem]];
