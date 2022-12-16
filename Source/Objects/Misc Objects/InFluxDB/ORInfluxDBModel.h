@@ -22,23 +22,46 @@
 
 @class ORInFluxDB;
 @class ORAlarm;
+@class ORSafeQueue;
 
-@interface ORInFluxDBModel : OrcaObject <NSURLConnectionDelegate>
+enum {
+    kUseInFluxHttpProtocol,
+    kUseTelegrafLineProtocol,
+};
+@interface ORInFluxDBModel : OrcaObject <NSURLConnectionDelegate,NSStreamDelegate>
 {
 @private
-    NSMutableData *_responseData;
-	NSString*  hostName;
-    NSUInteger portNumber;
-    NSString*  authToken;
-    NSString*  org;
-    NSString*  bucket;
-    NSDate*    timeConnected;
-    uint32_t   amountInBuffer;
-    uint32_t   totalSent;
+    NSMutableString* outputBuffer;
+    NSString*      hostName;
+    NSInteger      portNumber;
+    NSInteger      accessType;
+    NSString*      tags;
+    NSTimer*       timer;
+    NSInteger      totalSent;
+    NSInteger      messageRate;
+    //----queue thread--------
+    bool           canceled;
+    NSThread*      processThread;
+    ORSafeQueue*   messageQueue;
+    
+    //----telegraf vars--------
+    CFReadStreamRef readStream;
+    CFWriteStreamRef writeStream;
+
+    NSInputStream*  inputStream;
+    NSOutputStream* outputStream;
+    short socketStatus;
+    
+    //----http vars--------
+    NSMutableData* responseData;
+    bool           isConnected;
+    NSString*      authToken;
+    NSString*      org;
+    NSString*      bucket;
 }
 
 #pragma mark ***Initialization
-- (id) init;
+- (id)   init;
 - (void) dealloc;
 
 #pragma mark ***Notifications
@@ -48,8 +71,10 @@
 #pragma mark ***Accessors
 - (void)        setPortNumber:(NSUInteger)aPort;
 - (NSUInteger)  portNumber;
+- (void)        setAccessType:(NSInteger)aType;
+- (NSInteger)   accessType;
 - (NSString*)   hostName;
-- (void)        setHostName:(NSString*)aHostName;
+- (void)        setHostName:(NSString*)aHost;
 - (NSString*)   authToken;
 - (void)        setAuthToken:(NSString*)aToken;
 - (NSString*)   org;
@@ -57,6 +82,21 @@
 - (NSString*)   bucket;
 - (void)        setOrg:(NSString*)anOrg;
 - (id)          nextObject;
+- (short)       socketStatus;
+- (BOOL)        isConnected;
+- (void)        setIsConnected:(BOOL)aState;
+- (uint32_t)    queueMaxSize;
+- (NSInteger)   messageRate;
+
+#pragma mark ***Measurements
+- (void) setTags:(NSString*) someTags;
+- (void) startMeasurement:(NSString*)aSection;
+- (void) endMeasurement;
+
+- (void) addLong:(NSString*)aValueName withValue:(long)aValue;
+- (void) addDouble:(NSString*)aValueName withValue:(double)aValue;
+- (void) addString:(NSString*)aValueName withValue:(NSString*)aValue;
+- (void) push;
 
 #pragma mark ***Archival
 - (id)   initWithCoder:(NSCoder*)decoder;
@@ -65,27 +105,17 @@
 - (void) testPost;
 
 @end
-//a thin wrapper around NSOperationQueue to make a shared queue for InFlux access
-@interface ORInFluxDBQueue : NSObject {
-    NSOperationQueue* queue;
-}
-+ (ORInFluxDBQueue*) sharedInFluxDBQueue;
-+ (void) addOperation:(NSOperation*)anOp;
-+ (NSOperationQueue*) queue;
-+ (NSUInteger) operationCount;
-+ (void) cancelAllOperations;
-- (void) addOperation:(NSOperation*)anOp;
-- (NSOperationQueue*) queue;
-- (void) cancelAllOperations;
-- (NSInteger) operationCount;
-@end
 
 extern NSString* ORInFluxDBPortNumberChanged;
 extern NSString* ORInFluxDBHostNameChanged;
+extern NSString* ORInFluxDBRateChanged;
 extern NSString* ORInFluxDBAuthTokenChanged;
 extern NSString* ORInFluxDBOrgChanged;
 extern NSString* ORInFluxDBBucketChanged;
 extern NSString* ORInFluxDBTimeConnectedChanged;
+extern NSString* ORInFluxDBAccessTypeChanged;
+extern NSString* ORInFluxDBSocketStatusChanged;
+
 extern NSString* ORInFluxDBLock;
 
 
