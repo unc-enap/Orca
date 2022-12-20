@@ -25,6 +25,7 @@
 
 @interface ORL200Controller : ORExperimentController {
     IBOutlet NSPopUpButton* viewTypePopup;
+    
     IBOutlet NSTableView*   sipmTableView;
     IBOutlet NSTextField*   sipmMapFileTextField;
     IBOutlet NSPopUpButton* sipmAdcClassNamePopup;
@@ -33,6 +34,7 @@
     IBOutlet ORColorScale*  sipmColorScale;
     IBOutlet NSButton*      sipmColorAxisLogCB;
     IBOutlet NSTextField*   sipmRateField;
+    
     IBOutlet NSTableView*   pmtTableView;
     IBOutlet NSTextField*   pmtMapFileTextField;
     IBOutlet NSPopUpButton* pmtAdcClassNamePopup;
@@ -41,6 +43,12 @@
     IBOutlet ORColorScale*  pmtColorScale;
     IBOutlet NSButton*      pmtColorAxisLogCB;
     IBOutlet NSTextField*   pmtRateField;
+
+    IBOutlet NSTableView*   cc4TableView;
+    IBOutlet NSButton*      cc4ReadMapFileButton;
+    IBOutlet NSButton*      cc4SaveMapFileButton;
+    IBOutlet NSTextField*   cc4ChanMapFileTextField;
+    
     IBOutlet NSTableView*   auxChanTableView;
     IBOutlet NSTextField*   auxChanMapFileTextField;
     IBOutlet NSPopUpButton* auxChanAdcClassNamePopup;
@@ -49,6 +57,7 @@
     IBOutlet ORColorScale*  auxChanColorScale;
     IBOutlet NSButton*      auxChanColorAxisLogCB;
     IBOutlet NSTextField*   auxChanRateField;
+    
     IBOutlet NSTableView*   stringMapTableView;
 }
 
@@ -56,23 +65,31 @@
 - (NSString*) defaultSiPMMapFilePath;
 - (NSString*) defaultPMTMapFilePath;
 - (NSString*) defaultAuxChanMapFilePath;
+- (NSString*) defaultCC4MapFilePath;
 
 #pragma mark •••Notifications
 - (void) updateWindow;
 - (void) groupChanged:(NSNotification*)note;
 - (void) viewTypeChanged:(NSNotification*)note;
+
 - (void) colorScaleTypeChanged:(NSNotification*)note;
 - (void) customColor1Changed:(NSNotification*)note;
 - (void) customColor2Changed:(NSNotification*)note;
+
 - (void) sipmColorAxisAttributesChanged:(NSNotification*)note;
 - (void) sipmAdcClassNameChanged:(NSNotification*)note;
 - (void) sipmMapFileChanged:(NSNotification*)note;
+
 - (void) pmtColorAxisAttributesChanged:(NSNotification*)note;
 - (void) pmtAdcClassNameChanged:(NSNotification*)note;
 - (void) pmtMapFileChanged:(NSNotification*)note;
+
 - (void) auxChanColorAxisAttributesChanged:(NSNotification*)note;
 - (void) auxChanAdcClassNameChanged:(NSNotification*)note;
 - (void) auxChanMapFileChanged:(NSNotification*)note;
+
+- (void) cc4ChanMapFileChanged:(NSNotification*)note;
+- (NSString*) getCC4Name:(int)aPosition slot:(int)aSlot;
 
 #pragma mark •••Actions
 - (IBAction) viewTypeAction:(id)sender;
@@ -80,14 +97,19 @@
 - (IBAction) saveSIPMMapFileAction:(id)sender;
 - (IBAction) readSIPMMapFileAction:(id)sender;
 - (IBAction) autoscaleSIPMColorScale:(id)sender;
+
 - (IBAction) pmtAdcClassNameAction:(id)sender;
 - (IBAction) savePMTMapFileAction:(id)sender;
 - (IBAction) readPMTMapFileAction:(id)sender;
 - (IBAction) autoscalePMTColorScale:(id)sender;
+
 - (IBAction) auxChanAdcClassNameAction:(id)sender;
 - (IBAction) saveAuxChanMapFileAction:(id)sender;
 - (IBAction) readAuxChanMapFileAction:(id)sender;
 - (IBAction) autoscaleAuxChanColorScale:(id)sender;
+
+- (IBAction) saveCC4ChanMapFileAction:(id)sender;
+- (IBAction) readCC4ChanMapFileAction:(id)sender;
 
 #pragma mark •••Interface Management
 - (int) segmentTypeFromTableView:(NSTableView*)view;

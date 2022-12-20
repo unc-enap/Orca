@@ -27,6 +27,7 @@
 #define kL200SiPMOuterChans   40
 #define kL200MuonVetoChans    66
 #define kL200MaxAuxChans       6
+#define kL200MaxCC4s          24*7
 
 @interface ORL200Model : ORExperimentModel
 {
@@ -53,6 +54,7 @@
 - (BOOL) validateSiPM:(int)index;
 - (BOOL) validatePMT:(int)index;
 - (BOOL) validateAuxChan:(int)index;
+- (BOOL) validateCC4:(int)cc4Segment position:(int)cc4Position slot:(int)cc4Slot;
 - (NSString*) valueForLabel:(NSString*)label fromParts:(NSArray*)parts;
 
 #pragma mark •••Archival

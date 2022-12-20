@@ -164,21 +164,14 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 
 - (void) setUpImage
 {
-    NSImage* cimage = [NSImage imageNamed:@"flashcam_listener"];
-    NSSize newsize;
-    newsize.height = 44;
-    newsize.width  = newsize.height;
-    NSImage* image = [[NSImage alloc] initWithSize:newsize];
+    NSRect aRect = NSMakeRect(0,0,44,44);
+    NSImage* image = [[NSImage alloc] initWithSize:aRect.size];
     [image lockFocus];
-    NSRect rect;
-    rect.origin = NSMakePoint(1,1);
-    rect.size.width = newsize.width;
-    rect.size.height = newsize.height;
-    [cimage drawInRect:rect fromRect:NSZeroRect operation:NSCompositingOperationSourceOver fraction:1.0];
+    NSImage* cimage = [NSImage imageNamed:@"flashcam_listener"];
+    [cimage drawInRect:aRect fromRect:NSZeroRect operation:NSCompositingOperationSourceOver fraction:1.0];
     [self decorateIcon:image];
     [image unlockFocus];
     [self setImage:image];
-    
     [image release];
 }
 
