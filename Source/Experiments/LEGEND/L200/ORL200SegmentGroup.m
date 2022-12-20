@@ -341,31 +341,6 @@
     }
     return [NSDictionary dictionaryWithDictionary:dict];
 }
-- (NSString*) selectedSegementInfo:(int)aSegmentIndex
-{
-    if(type==kL200CC4Type){
-        if(aSegmentIndex<0)return @"<nothing selected>";
-        else if(aSegmentIndex>=[segments count]) return @"";
-        else {
-            ORDetectorSegment* segment = [segments objectAtIndex:aSegmentIndex];
-            NSString* string = [NSString stringWithFormat:@"%@\n",groupName];
-            NSDictionary* params = [segment params];
-            NSString* pos   = [params objectForKey:@"cc4_position"]; //0..11
-            NSString* name  = [params objectForKey:@"cc4_name"];
-            NSString* slot  = [params objectForKey:@"cc4_slot"]; //1,2
-            NSString* chan  = [params objectForKey:@"cc4_chan"]; //0..7
-            NSString* line = @"CC4\n\n";
-            line = [line stringByAppendingFormat:@"Position: %d\n",[pos intValue]+1];
-            line = [line stringByAppendingFormat:@"Name    : %@\n",name];
-            line = [line stringByAppendingFormat:@"Slot    : %@\n",slot];
-            line = [line stringByAppendingFormat:@"Channel : %@-%@\n",name,chan];
-            return line;
-        }
-    }
-    else {
-        return [super selectedSegementInfo:aSegmentIndex];
-    }
-}
 
 - (NSData*) jsonMap
 {

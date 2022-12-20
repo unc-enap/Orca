@@ -522,56 +522,64 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     if([aString length] == 0) return @"Not mapped";
     NSArray* parts = [aString componentsSeparatedByString:@"\n"];
     NSMutableString* s = [NSMutableString string];
-    if(aSet == kL200CC4Type){
-        return aString;
-    }
-    else {
-        if(aSet == kL200DetType)       [s appendString:@"Detector\n"];
-        else if(aSet == kL200SiPMType) [s appendString:@"SiPM\n"];
-        else if(aSet == kL200PMTType)  [s appendString:@"PMT\n"];
-        else if(aSet == kL200AuxType)  [s appendString:@"Aux Chan\n"];
+
+    if(aSet == kL200DetType)       [s appendString:@"Detector\n"];
+    else if(aSet == kL200SiPMType) [s appendString:@"SiPM\n"];
+    else if(aSet == kL200PMTType)  [s appendString:@"PMT\n"];
+    else if(aSet == kL200AuxType)  [s appendString:@"Aux Chan\n"];
+    else if(aSet == kL200CC4Type)  [s appendString:@"CC4\n"];
+
+    if(aSet != kL200CC4Type){
         [s appendFormat:@"            ID: %@\n",     [self valueForLabel:@"Segment"        fromParts:parts]];
         [s appendFormat:@"        Serial: %@\n",     [self valueForLabel:@"erial"          fromParts:parts]];
-        if(aSet == kL200DetType){
-            [s appendString:@"   String\n"];
-            [s appendFormat:@"           Num: %@\n", [self valueForLabel:@"tr_number"      fromParts:parts]];
-            [s appendFormat:@"           Pos: %@\n", [self valueForLabel:@"tr_pos"         fromParts:parts]];
-        }
-        else if(aSet == kL200SiPMType || aSet == kL200PMTType){
-            [s appendFormat:@"           Pos: %@\n", [self valueForLabel:@"RingName"        fromParts:parts]];
-        }
+    }
+    if(aSet == kL200DetType){
+        [s appendString:@"   String\n"];
+        [s appendFormat:@"           Num: %@\n", [self valueForLabel:@"tr_number"      fromParts:parts]];
+        [s appendFormat:@"           Pos: %@\n", [self valueForLabel:@"tr_pos"         fromParts:parts]];
+    }
+    else if(aSet == kL200SiPMType || aSet == kL200PMTType){
+        [s appendFormat:@"           Pos: %@\n", [self valueForLabel:@"RingName"        fromParts:parts]];
+    }
+    if(aSet != kL200CC4Type){
         [s appendString:@"   DAQ\n"];
         [s appendFormat:@"         Crate: %@\n",     [self valueForLabel:@"aq_crate"        fromParts:parts]];
         [s appendFormat:@"         Board: %@\n",     [self valueForLabel:@"aq_board_id"     fromParts:parts]];
         [s appendFormat:@"          Slot: %@\n",     [self valueForLabel:@"aq_board_slot"   fromParts:parts]];
         [s appendFormat:@"          Chan: %@\n",     [self valueForLabel:@"aq_board_ch"     fromParts:parts]];
-        if(aSet == kL200DetType || aSet == kL200PMTType){
-            [s appendString:@"   HV\n"];
-            [s appendFormat:@"         Crate: %@\n", [self valueForLabel:@"v_crate"         fromParts:parts]];
-            [s appendFormat:@"          Slot: %@\n", [self valueForLabel:@"v_board_slot"    fromParts:parts]];
-            [s appendFormat:@"          Chan: %@\n", [self valueForLabel:@"v_board_chan"    fromParts:parts]];
-        }
-        else if(aSet == kL200SiPMType){
-            [s appendString:@"   LV\n"];
-            [s appendFormat:@"          Crate: %@\n", [self valueForLabel:@"v_crate"        fromParts:parts]];
-            [s appendFormat:@"           Slot: %@\n", [self valueForLabel:@"v_board_slot"   fromParts:parts]];
-            [s appendFormat:@"           Chan: %@\n", [self valueForLabel:@"v_board_chan"   fromParts:parts]];
-        }
-        else if(aSet == kL200DetType){
-            [s appendFormat:@"         Cable: %@\n", [self valueForLabel:@"v_cable"         fromParts:parts]];
-            [s appendFormat:@"   HV Flange\n"];
-            [s appendFormat:@"            ID: %@\n", [self valueForLabel:@"v_flange_id"     fromParts:parts]];
-            [s appendFormat:@"           Pos: %@\n", [self valueForLabel:@"v_flange_pos"    fromParts:parts]];
-            [s appendString:@"   Front-End\n"];
-            [s appendFormat:@"        CC4 Ch: %@\n", [self valueForLabel:@"e_cc4_ch"        fromParts:parts]];
-            [s appendFormat:@"      Head Ana: %@\n", [self valueForLabel:@"e_head_card_ana" fromParts:parts]];
-            [s appendFormat:@"      Head Dig: %@\n", [self valueForLabel:@"e_head_card_dig" fromParts:parts]];
-            [s appendFormat:@"        Fanout: %@\n", [self valueForLabel:@"e_fanout_card"   fromParts:parts]];
-            [s appendFormat:@"           RPi: %@\n", [self valueForLabel:@"e_raspberrypi"   fromParts:parts]];
-            [s appendFormat:@"          LMFE: %@\n", [self valueForLabel:@"e_lmfe_id"       fromParts:parts]];
-        }
-        return s;
     }
+    if(aSet == kL200DetType || aSet == kL200PMTType){
+        [s appendString:@"   HV\n"];
+        [s appendFormat:@"         Crate: %@\n", [self valueForLabel:@"v_crate"         fromParts:parts]];
+        [s appendFormat:@"          Slot: %@\n", [self valueForLabel:@"v_board_slot"    fromParts:parts]];
+        [s appendFormat:@"          Chan: %@\n", [self valueForLabel:@"v_board_chan"    fromParts:parts]];
+    }
+    if(aSet == kL200SiPMType){
+        [s appendString:@"   LV\n"];
+        [s appendFormat:@"          Crate: %@\n", [self valueForLabel:@"v_crate"        fromParts:parts]];
+        [s appendFormat:@"           Slot: %@\n", [self valueForLabel:@"v_board_slot"   fromParts:parts]];
+        [s appendFormat:@"           Chan: %@\n", [self valueForLabel:@"v_board_chan"   fromParts:parts]];
+    }
+    else if(aSet == kL200DetType){
+        [s appendFormat:@"         Cable: %@\n", [self valueForLabel:@"v_cable"         fromParts:parts]];
+        [s appendFormat:@"   HV Flange\n"];
+        [s appendFormat:@"            ID: %@\n", [self valueForLabel:@"v_flange_id"     fromParts:parts]];
+        [s appendFormat:@"           Pos: %@\n", [self valueForLabel:@"v_flange_pos"    fromParts:parts]];
+        [s appendString:@"   Front-End\n"];
+        [s appendFormat:@"        CC4 Ch: %@\n", [self valueForLabel:@"e_cc4_ch"        fromParts:parts]];
+        [s appendFormat:@"      Head Ana: %@\n", [self valueForLabel:@"e_head_card_ana" fromParts:parts]];
+        [s appendFormat:@"      Head Dig: %@\n", [self valueForLabel:@"e_head_card_dig" fromParts:parts]];
+        [s appendFormat:@"        Fanout: %@\n", [self valueForLabel:@"e_fanout_card"   fromParts:parts]];
+        [s appendFormat:@"           RPi: %@\n", [self valueForLabel:@"e_raspberrypi"   fromParts:parts]];
+        [s appendFormat:@"          LMFE: %@\n", [self valueForLabel:@"e_lmfe_id"       fromParts:parts]];
+    }
+    else if(aSet==kL200CC4Type){
+        [s appendFormat:@"      Position: %@\n",   [self valueForLabel:@"c4_position"   fromParts:parts]];
+        [s appendFormat:@"          Slot: %@\n",   [self valueForLabel:@"c4_slot"       fromParts:parts]];
+        [s appendFormat:@"          Name: %@-%@\n",[self valueForLabel:@"c4_name"       fromParts:parts],
+                                                   [self valueForLabel:@"c4_chan"       fromParts:parts]];
+    }
+    return s;
 }
 
 - (NSString*) valueForLabel:(NSString*)label fromParts:(NSArray*)parts
@@ -579,7 +587,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     for(id line in parts){
         if([line rangeOfString:label].location != NSNotFound){
             NSArray* subParts = [line componentsSeparatedByString:@":"];
-            if([subParts count] >= 2) return [subParts objectAtIndex:1];
+            if([subParts count] >= 2) return [[subParts objectAtIndex:1]trimSpacesFromEnds];
         }
     }
     return @"";
