@@ -74,7 +74,8 @@
     [self populateClassNamePopup:sipmAdcClassNamePopup];
     [self populateClassNamePopup:pmtAdcClassNamePopup];
     [self populateClassNamePopup:auxChanAdcClassNamePopup];
-    
+    [self populateClassNamePopup:cc4AdcClassNamePopup];
+
     [(ORPlot*) [ratePlot plotWithTag:kL200DetType] setLineColor:[NSColor systemBlueColor]];
     ORTimeLinePlot* sipmPlot = [[ORTimeLinePlot alloc] initWithTag:kL200SiPMType andDataSource:self];
     [sipmPlot setLineColor:[NSColor systemGreenColor]];
@@ -184,11 +185,15 @@
                      selector : @selector(auxChanMapFileChanged:)
                          name : ORSegmentGroupMapFileChanged
                         object: [model segmentGroup:kL200AuxType]];
-    
     [notifyCenter addObserver : self
                      selector : @selector(cc4ChanMapFileChanged:)
                          name : ORSegmentGroupMapFileChanged
                         object: [model segmentGroup:kL200CC4Type]];
+    [notifyCenter addObserver : self
+                     selector : @selector(cc4ChanAdcClassNameChanged:)
+                         name : ORSegmentGroupAdcClassNameChanged
+                        object: [model segmentGroup:kL200CC4Type]];
+
 }
 
 - (void) updateWindow
@@ -206,7 +211,7 @@
     [self auxChanAdcClassNameChanged:nil];
     [self auxChanMapFileChanged:nil];
     [self cc4ChanMapFileChanged:nil];
-
+    [self cc4ChanAdcClassNameChanged:nil];
 }
 
 -(void) groupChanged:(NSNotification*)note
@@ -306,6 +311,11 @@
 - (void) auxChanAdcClassNameChanged:(NSNotification*)note
 {
     [auxChanAdcClassNamePopup selectItemWithTitle:[[model segmentGroup:kL200AuxType] adcClassName]];
+}
+
+- (void) cc4ChanAdcClassNameChanged:(NSNotification*)note
+{
+    [cc4AdcClassNamePopup selectItemWithTitle:[[model segmentGroup:kL200CC4Type] adcClassName]];
 }
 
 - (void) auxChanMapFileChanged:(NSNotification*)note
@@ -463,6 +473,11 @@
     [[model segmentGroup:kL200AuxType] setAdcClassName:[sender titleOfSelectedItem]];
 }
 
+- (IBAction) cc4AdcClassNameAction:(id)sender
+{
+    [[model segmentGroup:kL200CC4Type] setAdcClassName:[sender titleOfSelectedItem]];
+}
+
 - (IBAction) saveAuxChanMapFileAction:(id)sender
 {
     [self saveMapFile:kL200AuxType withDefaultPath:[self defaultAuxChanMapFilePath]];
@@ -498,7 +513,6 @@
     [auxChanRateField setFloatValue:[[model segmentGroup:kL200AuxType] rate]];
     [super newTotalRateAvailable:aNotification];
 }
-
 
 #pragma mark •••Table Data Source
 

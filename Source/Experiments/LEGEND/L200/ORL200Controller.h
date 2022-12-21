@@ -48,7 +48,8 @@
     IBOutlet NSButton*      cc4ReadMapFileButton;
     IBOutlet NSButton*      cc4SaveMapFileButton;
     IBOutlet NSTextField*   cc4ChanMapFileTextField;
-    
+    IBOutlet NSPopUpButton* cc4AdcClassNamePopup;
+
     IBOutlet NSTableView*   auxChanTableView;
     IBOutlet NSTextField*   auxChanMapFileTextField;
     IBOutlet NSPopUpButton* auxChanAdcClassNamePopup;
@@ -89,6 +90,7 @@
 - (void) auxChanMapFileChanged:(NSNotification*)note;
 
 - (void) cc4ChanMapFileChanged:(NSNotification*)note;
+- (void) cc4ChanAdcClassNameChanged:(NSNotification*)note;
 - (NSString*) getCC4Name:(int)aPosition slot:(int)aSlot;
 
 #pragma mark •••Actions
@@ -111,6 +113,7 @@
 - (IBAction) saveCC4ChanMapFileAction:(id)sender;
 - (IBAction) readCC4ChanMapFileAction:(id)sender;
 - (IBAction) testInfluxAction:(id)sender;
+- (IBAction) cc4AdcClassNameAction:(id)sender;
 
 #pragma mark •••Interface Management
 - (int) segmentTypeFromTableView:(NSTableView*)view;

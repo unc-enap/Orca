@@ -21,6 +21,8 @@
 #import "ORDetectorSegment.h"
 #import "ORFlashCamADCModel.h"
 
+NSString* ORRelinkSegments   = @"ORRelinkSegments";
+
 @implementation ORL200SegmentGroup
 
 #pragma mark •••Accessors
@@ -389,6 +391,7 @@
 
 - (void) registerForRates
 {
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORRelinkSegments object:self];
     id document = [(ORAppDelegate*) [NSApp delegate] document];
     NSArray* adcs = [document collectObjectsOfClass:NSClassFromString([self adcClassName])];
     [segments makeObjectsPerformSelector:@selector(registerForRates:) withObject:adcs];

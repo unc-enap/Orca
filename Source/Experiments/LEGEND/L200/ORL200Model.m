@@ -126,6 +126,12 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
                      selector : @selector(awakeAfterDocumentLoaded)
                          name : ORGroupObjectsAdded
                        object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(linkCC4sToDetectors)
+                         name : ORRelinkSegments
+                       object : nil];
+
     [notifyCenter addObserver : self
                      selector : @selector(awakeAfterDocumentLoaded)
                          name : ORGroupObjectsRemoved
@@ -285,14 +291,15 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 {
     NSArray* keys = nil;
     if(groupIndex == kL200CC4Type){
-        keys = [NSArray arrayWithObjects:@"cc4_position",@"cc4_name",@"cc4_slot",@"cc4_chan",nil];
+        keys = [NSArray arrayWithObjects:@"cc4_position",@"cc4_name", @"cc4_slot", @"cc4_chan",
+                                         @"daq_crate",   @"daq_slot", @"daq_chan", nil];
     }
     else {
         if(groupIndex == kL200DetType){
             [self setCrateIndex:4   forGroup:groupIndex];
             [self setCardIndex:6    forGroup:groupIndex];
             [self setChannelIndex:7 forGroup:groupIndex];
-            keys = [NSArray arrayWithObjects:@"serial", @"det_type",
+            keys = [NSArray arrayWithObjects:@"serial",     @"det_type",
                     @"str_number",     @"str_position",
                     @"daq_crate",      @"daq_board_id",     @"daq_board_slot",   @"daq_board_ch",
                     @"hv_crate",       @"hv_board_slot",    @"hv_board_chan",    @"hv_cable",
@@ -324,7 +331,6 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     if(keys) for(id key in keys) [mapEntries addObject:[NSDictionary dictionaryWithObjectsAndKeys:
                                                         key, @"key",
                                                         [NSNumber numberWithInt:0], @"sortType", nil]];
-    
     return mapEntries;
 }
 
@@ -364,7 +370,31 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     [cc4 setType:kL200CC4Type];
     [self addGroup:cc4];
     [cc4 release];
-    
+}
+
+- (void) linkCC4sToDetectors
+{
+    ORSegmentGroup* cc4Group = [segmentGroups objectAtIndex:kL200CC4Type];
+    ORSegmentGroup* detGroup = [segmentGroups objectAtIndex:kL200DetType];
+    for(int cc4Index=0;cc4Index<[[cc4Group segments] count];cc4Index++){
+        
+        NSString* name    = [cc4Group segment:cc4Index objectForKey:@"cc4_name"];
+        NSString* chan    = [cc4Group segment:cc4Index objectForKey:@"cc4_chan"];
+        NSString* cc4Name = [NSString stringWithFormat:@"%@-%@",name,[chan removeSpaces]];
+        
+        for(int detIndex=0;detIndex<[[detGroup segments] count];detIndex++){
+            NSString* detcc4Chan  = [[detGroup segment:detIndex objectForKey:@"fe_cc4_ch"] removeSpaces];
+            if([detcc4Chan isEqualToString:cc4Name]){
+                NSString* crate = [detGroup segment:detIndex objectForKey:@"daq_crate"];
+                NSString* slot  = [detGroup segment:detIndex objectForKey:@"daq_board_slot"];
+                NSString* chan  = [detGroup segment:detIndex objectForKey:@"daq_board_ch"];
+                [[cc4Group segment:cc4Index] setObject:crate forKey:@"daq_crate"];
+                [[cc4Group segment:cc4Index] setObject:slot  forKey:@"daq_slot"];
+                [[cc4Group segment:cc4Index] setObject:chan  forKey:@"daq_chan"];
+                break;
+            }
+        }
+    }
 }
 
 - (int) maxNumSegments
@@ -513,7 +543,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     if(cc4Slot!=[slot intValue])  return NO;
     if(!position || !slot ) return NO;
     if([position length]  == 0 || [position  rangeOfString:@"-"].location != NSNotFound) return NO;
-    if([slot length]      == 0 || [slot   rangeOfString:@"-"].location != NSNotFound) return NO;
+    if([slot length]      == 0 || [slot      rangeOfString:@"-"].location != NSNotFound) return NO;
     return YES;
 }
 
@@ -578,6 +608,18 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         [s appendFormat:@"          Slot: %@\n",   [self valueForLabel:@"c4_slot"       fromParts:parts]];
         [s appendFormat:@"          Name: %@-%@\n",[self valueForLabel:@"c4_name"       fromParts:parts],
                                                    [self valueForLabel:@"c4_chan"       fromParts:parts]];
+        [s appendString:@"      DAQ\n"];
+        if([[self valueForLabel:@"aq_crate"    fromParts:parts] length]){
+            [s appendFormat:@"         Crate: %@\n",     [self valueForLabel:@"aq_crate"    fromParts:parts]];
+            [s appendFormat:@"          Slot: %@\n",     [self valueForLabel:@"aq_slot"     fromParts:parts]];
+            [s appendFormat:@"          Chan: %@\n",     [self valueForLabel:@"aq_chan"     fromParts:parts]];
+        }
+        else {
+            [s appendFormat:@"         Crate: -\n"];
+            [s appendFormat:@"          Slot: -\n"];
+            [s appendFormat:@"          Chan: -\n"];
+        }
+
     }
     return s;
 }
