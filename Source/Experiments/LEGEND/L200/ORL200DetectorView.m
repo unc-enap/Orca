@@ -38,8 +38,8 @@
 #define kL200SiPMViewHeight     (0.4 * ([self bounds].size.height - kL200DetViewHeight) / 2)
 #define kL200PMTViewHeight      (0.6 * ([self bounds].size.height - kL200DetViewHeight) / 2)
 #define kL200CC4XOffset         0
-#define kL200CC4Size            12
-#define kL200CC4StartAngle      90
+#define kL200CC4Size            11
+#define kL200CC4StartAngle      105
 #define kL200CC4Offset          60
 #define kL200CC4InnerR          (kL200CC4Offset*2-5)
 #define kL200CC4OuterR          (kL200CC4Offset*2 + 2*kL200CC4Size*7+10)
@@ -418,7 +418,7 @@
     [circPaths transformUsingAffineTransform: transform];
     [circPaths stroke];
 
-    float angle = 90+kL200CC4DeltaAngle/2.;
+    float angle = kL200CC4StartAngle+kL200CC4DeltaAngle/2.;
     for(int i=0;i<kNumCC4s;i++){
         NSBezierPath* aLineSeg = [NSBezierPath bezierPath];
         [aLineSeg moveToPoint:NSMakePoint(kL200CC4InnerR/2,0)];
@@ -447,10 +447,11 @@
                           [NSColor redColor], NSForegroundColorAttributeName,style,NSParagraphStyleAttributeName,nil] retain];
     }
 
-    angle = 90+15;
+    angle = kL200CC4StartAngle+15;
     float tRadius = kL200CC4OuterR+15;
     float nRadius = kL200CC4OuterR-20;
     for(int i=0; i<kNumCC4s; i++){
+        //----outer ring numbers
         NSAttributedString* s = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d",i+1] attributes:cc4LabelAttr];
         float rad = angle * M_PI/180.;
         NSRect tRect = NSMakeRect(xc + tRadius/2*cosf(rad)-[s size].width/2,
@@ -460,6 +461,24 @@
         [s drawInRect:tRect];
         [s release];
         
+        if(i==9){
+            float radN2 = (angle-25) * M_PI/180.;
+            s = [[NSAttributedString alloc] initWithString:@"North" attributes:cc4LabelAttr];
+            tRect = NSMakeRect( xc + nRadius/2*cosf(radN2)-50,
+                               yc + nRadius/2*sinf(radN2)+13,
+                               [s size].width,
+                               [s size].height);
+            [s drawInRect:tRect];
+            [s release];
+            s = [[NSAttributedString alloc] initWithString:@"(LVD)" attributes:cc4LabelAttr];
+            tRect = NSMakeRect( xc + nRadius/2*cosf(radN2)-50,
+                               yc + nRadius/2*sinf(radN2)+3,
+                               [s size].width,
+                               [s size].height);
+            [s drawInRect:tRect];
+            [s release];
+        }
+        //----------Inner labels-----------
         float radN1 = (angle-5) * M_PI/180.;
         NSString* label = cc4Label[i*2];
         if(label){
@@ -752,6 +771,7 @@
     NSArray* segments = [group segments];
     NSInteger nPositions = 12;
     for(int position=0; position<nPositions; position++){
+        
         if([delegate validateCC4:cc4 position:position slot:0]){
             for(int chan=0;chan<7;chan++){
                 NSMutableDictionary* params = [[segments objectAtIndex:cc4] params];
@@ -774,7 +794,6 @@
         }
         else cc4+=7;
         sIndex++;
-
         if([delegate validateCC4:cc4 position:position slot:1]){
             for(int chan=0;chan<7;chan++){
                 NSMutableDictionary* params = [[segments objectAtIndex:cc4] params];
@@ -796,9 +815,7 @@
             }
         }
         else cc4+=7;
-
         sIndex++;
-
     }
     [segmentPathSet addObject:segmentPaths];
     [errorPathSet   addObject:errorPaths];
