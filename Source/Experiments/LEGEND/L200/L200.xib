@@ -16,6 +16,7 @@
                 <outlet property="auxChanReadMapFileButton" destination="hZw-qA-L9R" id="fVA-Ap-euR"/>
                 <outlet property="auxChanSaveMapFileButton" destination="594-ko-JkF" id="FVJ-JT-01q"/>
                 <outlet property="auxChanTableView" destination="5Bk-ys-AJw" id="jjl-o8-l7n"/>
+                <outlet property="cc4AdcClassNamePopup" destination="C6E-t7-KaU" id="4yj-Mi-iKp"/>
                 <outlet property="cc4ChanMapFileTextField" destination="xeg-2I-a9c" id="6ib-34-aFd"/>
                 <outlet property="cc4ReadMapFileButton" destination="TFS-cJ-ijP" id="F1b-8O-Qdf"/>
                 <outlet property="cc4SaveMapFileButton" destination="kqx-yb-VaV" id="qJ6-C3-cXj"/>
@@ -510,7 +511,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <clipView key="contentView" id="mgc-pR-Pfa">
                                                 <rect key="frame" x="1" y="1" width="1178" height="629"/>
-                                                <autoresizingMask key="autoresizingMask"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" headerView="4Tn-VY-npu" id="RKF-26-UZQ">
                                                         <rect key="frame" x="0.0" y="0.0" width="1178" height="601"/>
@@ -1737,6 +1738,33 @@
                                                 <action selector="testInfluxAction:" target="-2" id="kNR-98-AHa"/>
                                             </connections>
                                         </button>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dmk-r0-VIK">
+                                            <rect key="frame" x="51" y="92" width="129" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" alignment="right" title="Ge Detector Digitizer:" id="3xL-Hr-RHS">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="C6E-t7-KaU">
+                                            <rect key="frame" x="183" y="88" width="169" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="4f1-wV-uEb" id="RiA-sY-k0w">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <menu key="menu" id="O9e-mI-JAO">
+                                                    <items>
+                                                        <menuItem title="Item 1" state="on" id="4f1-wV-uEb"/>
+                                                        <menuItem title="Item 2" id="9ci-eM-Syr"/>
+                                                        <menuItem title="Item 3" id="lpY-3q-gtg"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="cc4AdcClassNameAction:" target="-2" id="K8a-9k-Iub"/>
+                                            </connections>
+                                        </popUpButton>
                                     </subviews>
                                 </view>
                             </tabViewItem>
