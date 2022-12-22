@@ -43,7 +43,7 @@
 #define kL200CC4Offset          60
 #define kL200CC4InnerR          (kL200CC4Offset*2-5)
 #define kL200CC4OuterR          (kL200CC4Offset*2 + 2*kL200CC4Size*7+10)
-#define kL200CC4DeltaAngle      (360/kNumCC4s)
+#define kL200CC4DeltaAngle      (360/kNumCC4Positions)
 
 @interface ORL200DetectorView (private)
 - (void) makeAllSegments;
@@ -70,7 +70,7 @@
     for(int i=0; i<kL200SiPMRings; i++)      sipmLabel[i] = nil;
     for(int i=0; i<kL200PMTRings; i++)        pmtLabel[i] = nil;
     for(int i=0; i<kL200AuxLabels; i++)       auxLabel[i] = nil;
-    for(int i=0; i<kL200CC4Labels; i++)       cc4Label[i] = nil;
+    for(int i=0; i<kL200NumCC4s; i++)       cc4Label[i] = nil;
     strLabelAttr  = nil;
     sipmLabelAttr = nil;
     pmtLabelAttr  = nil;
@@ -86,7 +86,7 @@
     for(int i=0; i<kL200SiPMRings; i++)       [sipmLabel[i] release];
     for(int i=0; i<kL200PMTRings; i++)        [pmtLabel[i]  release];
     for(int i=0; i<kL200AuxLabels; i++)       [auxLabel[i]  release];
-    for(int i=0; i<kL200CC4Labels; i++)       [cc4Label[i]  release];
+    for(int i=0; i<kL200NumCC4s; i++)       [cc4Label[i]  release];
     [strLabelAttr  release];
     [sipmLabelAttr release];
     [pmtLabelAttr  release];
@@ -419,7 +419,7 @@
     [circPaths stroke];
 
     float angle = kL200CC4StartAngle+kL200CC4DeltaAngle/2.;
-    for(int i=0;i<kNumCC4s;i++){
+    for(int i=0;i<kNumCC4Positions;i++){
         NSBezierPath* aLineSeg = [NSBezierPath bezierPath];
         [aLineSeg moveToPoint:NSMakePoint(kL200CC4InnerR/2,0)];
         [aLineSeg lineToPoint:NSMakePoint(kL200CC4OuterR/2,0)];
@@ -450,7 +450,7 @@
     angle = kL200CC4StartAngle+15;
     float tRadius = kL200CC4OuterR+15;
     float nRadius = kL200CC4OuterR-20;
-    for(int i=0; i<kNumCC4s; i++){
+    for(int i=0; i<kNumCC4Positions; i++){
         //----outer ring numbers
         NSAttributedString* s = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d",i+1] attributes:cc4LabelAttr];
         float rad = angle * M_PI/180.;
@@ -763,59 +763,32 @@
     float xc     = [self bounds].size.width/2+kL200CC4XOffset;
     float yc     = [self bounds].size.height/2;
     int sIndex = 0;
-    for(int i=0;i<kNumCC4s;i++){
+    for(int i=0;i<kNumCC4Positions;i++){
         [cc4Label[i]  release];
         cc4Label[i] = nil;
     }
-    int cc4=0;
+    int cc4           = 0;
     NSArray* segments = [group segments];
-    NSInteger nPositions = 12;
-    for(int position=0; position<nPositions; position++){
-        
-        if([delegate validateCC4:cc4 position:position slot:0]){
-            for(int chan=0;chan<7;chan++){
-                NSMutableDictionary* params = [[segments objectAtIndex:cc4] params];
-                if(chan==0){
-                    [cc4Label[sIndex] release];
-                    cc4Label[sIndex] = [[params objectForKey:@"cc4_name"] copy];
-                }
-                [params setObject:[NSString stringWithFormat:@"%d",chan] forKey:@"cc4_chan"];
-                NSRect             segRect   = NSMakeRect(kL200CC4Offset+kL200CC4Size*chan,0,kL200CC4Size,kL200CC4Size);
-                NSBezierPath*      segPath   = [NSBezierPath bezierPathWithRect:segRect];
-                NSAffineTransform* transform = [NSAffineTransform transform];
-                [transform translateXBy:xc yBy:yc];
-                [transform rotateByDegrees:kL200CC4StartAngle - position*kL200CC4DeltaAngle];
-                [segPath   transformUsingAffineTransform: transform];
-                [segmentPaths addObject:segPath];
-                [errorPaths   addObject:[NSBezierPath bezierPathWithRect:NSInsetRect(segRect, -1, -1)]];
-                [detOutlines  addObjectsFromArray:errorPaths];
-                cc4++;
-            }
-        }
-        else cc4+=7;
+    for(int aPos=0; aPos<kL200NumCC4s; aPos++){
+        NSMutableDictionary* params = [[segments objectAtIndex:cc4] params];
+        [cc4Label[sIndex] release];
+        cc4Label[sIndex] = [[params objectForKey:@"cc4_name"] copy];
         sIndex++;
-        if([delegate validateCC4:cc4 position:position slot:1]){
-            for(int chan=0;chan<7;chan++){
-                NSMutableDictionary* params = [[segments objectAtIndex:cc4] params];
-                if(chan==0){
-                    [cc4Label[sIndex] release];
-                    cc4Label[sIndex] = [[params objectForKey:@"cc4_name"] copy];
-                }
-                [params setObject:[NSString stringWithFormat:@"%d",chan] forKey:@"cc4_chan"];
-                NSRect             segRect = NSMakeRect(kL200CC4Offset+kL200CC4Size*chan,-kL200CC4Size,kL200CC4Size,kL200CC4Size);
-                NSBezierPath*      segPath = [NSBezierPath bezierPathWithRect:segRect];
-                NSAffineTransform* transform = [NSAffineTransform transform];
-                [transform translateXBy:xc yBy:yc];
-                [transform rotateByDegrees:kL200CC4StartAngle - position*kL200CC4DeltaAngle];
-                [segPath   transformUsingAffineTransform: transform];
-                [segmentPaths addObject:segPath];
-                [errorPaths   addObject:[NSBezierPath bezierPathWithRect:NSInsetRect(segRect, -1, -1)]];
-                [detOutlines  addObjectsFromArray:errorPaths];
-                cc4++;
-            }
+        for(int chan=0;chan<7;chan++){
+            [[segments objectAtIndex:cc4] setHwPresent:[delegate validateCC4:cc4]];
+            [params setObject:[NSString stringWithFormat:@"%d",cc4] forKey:@"cc4_idNum"];
+            [params setObject:[NSString stringWithFormat:@"%d",chan] forKey:@"cc4_chan"];
+            NSRect        segRect   = NSMakeRect(kL200CC4Offset+kL200CC4Size*chan,aPos%2==0?0:-kL200CC4Size,kL200CC4Size,kL200CC4Size);
+            NSBezierPath* segPath   = [NSBezierPath bezierPathWithRect:segRect];
+            NSAffineTransform* transform = [NSAffineTransform transform];
+            [transform translateXBy:xc yBy:yc];
+            [transform rotateByDegrees:kL200CC4StartAngle - aPos/2*kL200CC4DeltaAngle];
+            [segPath   transformUsingAffineTransform: transform];
+            [segmentPaths addObject:segPath];
+            [errorPaths   addObject:[NSBezierPath bezierPathWithRect:NSInsetRect(segRect, -1, -1)]];
+            [detOutlines  addObjectsFromArray:errorPaths];
+            cc4++;
         }
-        else cc4+=7;
-        sIndex++;
     }
     [segmentPathSet addObject:segmentPaths];
     [errorPathSet   addObject:errorPaths];

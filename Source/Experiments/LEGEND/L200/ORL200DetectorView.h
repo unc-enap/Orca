@@ -28,9 +28,9 @@
 
 #define kL200SiPMRings    4
 #define kL200PMTRings     7
-#define kNumCC4s          12
+#define kNumCC4Positions 12
 #define kL200AuxLabels    2
-#define kL200CC4Labels    24
+#define kL200NumCC4s     24
 
 @interface ORL200DetectorView : ORDetectorView {
     IBOutlet ORColorScale* detColorScale;
@@ -43,7 +43,7 @@
     NSString* sipmLabel[kL200SiPMRings];
     NSString* pmtLabel[kL200PMTRings];
     NSString* auxLabel[kL200AuxLabels];
-    NSString* cc4Label[kL200CC4Labels];
+    NSString* cc4Label[kL200NumCC4s];
     float strLabelX[kL200DetectorStrings];
     float sipmLabelY[kL200SiPMRings];
     float pmtLabelY[kL200PMTRings];

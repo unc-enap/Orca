@@ -578,6 +578,7 @@
 
 - (void) setCC4:(int)aPosition slot:(int)aSlot name:(NSString*)aName
 {
+    //-----map entry changed
     ORSegmentGroup* group = [model segmentGroup:kL200CC4Type];
     int segNum;
     if(aSlot==0)segNum = aPosition*14;
@@ -587,7 +588,7 @@
             NSMutableDictionary* params = [NSMutableDictionary dictionary];
             [params setObject:aName                                       forKey:@"cc4_name"];
             [params setObject:[NSString stringWithFormat:@"%d",aPosition] forKey:@"cc4_position"];
-            [params setObject:[NSString stringWithFormat:@"%d",i]         forKey:@"cc4_channel"];
+            [params setObject:[NSString stringWithFormat:@"%d",i]         forKey:@"cc4_chan"];
             [params setObject:[NSString stringWithFormat:@"%d",aSlot]     forKey:@"cc4_slot"];
             [[group segment:segNum+i] setParams:params];
         }
@@ -601,6 +602,7 @@
 
 - (NSString*) getCC4Name:(int)aPosition slot:(int)aSlot
 {
+    //map asking for update. Have to put the entries in the right columns
     ORSegmentGroup* group = [model segmentGroup:kL200CC4Type];
     NSArray* segments = [group segments];
     NSString* name = @"";

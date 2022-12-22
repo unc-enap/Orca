@@ -58,7 +58,7 @@
 - (BOOL) validateSiPM:(int)index;
 - (BOOL) validatePMT:(int)index;
 - (BOOL) validateAuxChan:(int)index;
-- (BOOL) validateCC4:(int)cc4Segment position:(int)cc4Position slot:(int)cc4Slot;
+- (BOOL) validateCC4:(int)index;
 - (NSString*) valueForLabel:(NSString*)label fromParts:(NSArray*)parts;
 
 #pragma mark •••Archival

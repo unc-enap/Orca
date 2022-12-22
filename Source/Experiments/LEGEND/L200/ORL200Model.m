@@ -291,8 +291,8 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 {
     NSArray* keys = nil;
     if(groupIndex == kL200CC4Type){
-        keys = [NSArray arrayWithObjects:@"cc4_position",@"cc4_name", @"cc4_slot", @"cc4_chan",
-                                         @"daq_crate",   @"daq_slot", @"daq_chan", nil];
+        keys = [NSArray arrayWithObjects:@"cc4_name",  @"cc4_position", @"cc4_slot", @"cc4_chan",
+                                         @"daq_crate", @"daq_slot",     @"daq_chan", nil];
     }
     else {
         if(groupIndex == kL200DetType){
@@ -531,17 +531,16 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     return YES;
 }
 
-- (BOOL) validateCC4:(int)cc4Segment position:(int)cc4Position slot:(int)cc4Slot
+- (BOOL) validateCC4:(int)cc4Segment
 {
     if(cc4Segment < 0 || cc4Segment >= [self numberSegmentsInGroup:kL200CC4Type]) return NO;
     NSDictionary* params = [[[self segmentGroup:kL200CC4Type] segment:cc4Segment] params];
-    if(!params)
-        return NO;
+    if(!params) return NO;
+    NSString* name      = [params objectForKey:@"cc4_name"];     //1...12
     NSString* position  = [params objectForKey:@"cc4_position"]; //1...12
     NSString* slot      = [params objectForKey:@"cc4_slot"];     //0,1
-    if(cc4Slot!=[slot intValue])  return NO;
-    if(cc4Slot!=[slot intValue])  return NO;
     if(!position || !slot ) return NO;
+    if([name length]      == 0 || [name      rangeOfString:@"-"].location != NSNotFound) return NO;
     if([position length]  == 0 || [position  rangeOfString:@"-"].location != NSNotFound) return NO;
     if([slot length]      == 0 || [slot      rangeOfString:@"-"].location != NSNotFound) return NO;
     return YES;
@@ -559,10 +558,6 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     else if(aSet == kL200AuxType)  [s appendString:@"Aux Chan\n"];
     else if(aSet == kL200CC4Type)  [s appendString:@"CC4\n"];
 
-    if(aSet != kL200CC4Type){
-        [s appendFormat:@"            ID: %@\n",     [self valueForLabel:@"Segment"        fromParts:parts]];
-        [s appendFormat:@"        Serial: %@\n",     [self valueForLabel:@"erial"          fromParts:parts]];
-    }
     if(aSet == kL200DetType){
         [s appendString:@"   String\n"];
         [s appendFormat:@"           Num: %@\n", [self valueForLabel:@"tr_number"      fromParts:parts]];
@@ -572,6 +567,8 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         [s appendFormat:@"           Pos: %@\n", [self valueForLabel:@"RingName"        fromParts:parts]];
     }
     if(aSet != kL200CC4Type){
+        [s appendFormat:@"            ID: %@\n",     [self valueForLabel:@"Segment"        fromParts:parts]];
+        [s appendFormat:@"        Serial: %@\n",     [self valueForLabel:@"erial"          fromParts:parts]];
         [s appendString:@"   DAQ\n"];
         [s appendFormat:@"         Crate: %@\n",     [self valueForLabel:@"aq_crate"        fromParts:parts]];
         [s appendFormat:@"         Board: %@\n",     [self valueForLabel:@"aq_board_id"     fromParts:parts]];
@@ -604,22 +601,27 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         [s appendFormat:@"          LMFE: %@\n", [self valueForLabel:@"e_lmfe_id"       fromParts:parts]];
     }
     else if(aSet==kL200CC4Type){
-        [s appendFormat:@"      Position: %@\n",   [self valueForLabel:@"c4_position"   fromParts:parts]];
-        [s appendFormat:@"          Slot: %@\n",   [self valueForLabel:@"c4_slot"       fromParts:parts]];
-        [s appendFormat:@"          Name: %@-%@\n",[self valueForLabel:@"c4_name"       fromParts:parts],
-                                                   [self valueForLabel:@"c4_chan"       fromParts:parts]];
-        [s appendString:@"      DAQ\n"];
-        if([[self valueForLabel:@"aq_crate"    fromParts:parts] length]){
-            [s appendFormat:@"         Crate: %@\n",     [self valueForLabel:@"aq_crate"    fromParts:parts]];
-            [s appendFormat:@"          Slot: %@\n",     [self valueForLabel:@"aq_slot"     fromParts:parts]];
-            [s appendFormat:@"          Chan: %@\n",     [self valueForLabel:@"aq_chan"     fromParts:parts]];
+        if([[self valueForLabel:@"c4_position"   fromParts:parts]length]){
+            [s appendFormat:@"      Position: %@\n",   [self valueForLabel:@"c4_position"   fromParts:parts]];
+            [s appendFormat:@"          Slot: %@\n",   [self valueForLabel:@"c4_slot"       fromParts:parts]];
+            [s appendFormat:@"          Chan: %@\n",   [self valueForLabel:@"c4_chan"       fromParts:parts]];
+            [s appendFormat:@"          Name: %@-%@\n",[self valueForLabel:@"c4_name"       fromParts:parts],
+                                                       [self valueForLabel:@"c4_chan"       fromParts:parts]];
+            
+            //NSString* name = [self valueForLabel:@"c4_name" fromParts:parts];
+            [s appendString:@"      DAQ\n"];
+            if([[self valueForLabel:@"aq_crate"    fromParts:parts] length]){
+                [s appendFormat:@"         Crate: %@\n",     [self valueForLabel:@"aq_crate"    fromParts:parts]];
+                [s appendFormat:@"          Slot: %@\n",     [self valueForLabel:@"aq_slot"     fromParts:parts]];
+                [s appendFormat:@"          Chan: %@\n",     [self valueForLabel:@"aq_chan"     fromParts:parts]];
+            }
+            else {
+                [s appendFormat:@"         Crate: -\n"];
+                [s appendFormat:@"          Slot: -\n"];
+                [s appendFormat:@"          Chan: -\n"];
+            }
         }
-        else {
-            [s appendFormat:@"         Crate: -\n"];
-            [s appendFormat:@"          Slot: -\n"];
-            [s appendFormat:@"          Chan: -\n"];
-        }
-
+        else  [s appendFormat:@"Not Mapped\n"];
     }
     return s;
 }
