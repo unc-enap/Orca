@@ -130,17 +130,15 @@ NSString* ORRelinkSegments   = @"ORRelinkSegments";
             NSDictionary* segInfo = [[dict objectForKey:aPosition]objectForKey:@"cc4"];
             int pos  = [[segInfo objectForKey:@"cc4_position"] intValue];
             int slot = [[segInfo objectForKey:@"cc4_slot"]     intValue];
-            int segNum;
-            if(slot==0)segNum = pos*14;
-            else       segNum = pos*14+7;
+            int segNum = pos*14;
+            if(slot==1)  segNum+=7;
             
             for(int chan=0;chan<7;chan++){
-                NSString* line = [NSString stringWithFormat:@"%@,%@,%@,%@",
-                                  [segInfo objectForKey:@"cc4_position"],
+                NSString* line = [NSString stringWithFormat:@"%@,%@,%@,%d",
                                   [segInfo objectForKey:@"cc4_name"],
+                                  [segInfo objectForKey:@"cc4_position"],
                                   [segInfo objectForKey:@"cc4_slot"],
-                                  [NSString stringWithFormat:@"%d",chan]
-                                ];
+                                  chan];
                 ORDetectorSegment* segment = [segments objectAtIndex:segNum+chan];
                 
                 [segment decodeLine:line];
@@ -261,8 +259,8 @@ NSString* ORRelinkSegments   = @"ORRelinkSegments";
                [[params objectAtIndex:0] hasPrefix:@"-"]) continue;
             NSDictionary* ch_dict = nil;
             NSDictionary* daq_dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      [params objectAtIndex:0], @"cc4_position",
-                                      [params objectAtIndex:1], @"cc4_name",
+                                      [params objectAtIndex:0], @"cc4_name",
+                                      [params objectAtIndex:1], @"cc4_position",
                                       [params objectAtIndex:2], @"cc4_slot",
                                       nil];
             ch_dict = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -391,7 +389,6 @@ NSString* ORRelinkSegments   = @"ORRelinkSegments";
 
 - (void) registerForRates
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORRelinkSegments object:self];
     id document = [(ORAppDelegate*) [NSApp delegate] document];
     NSArray* adcs = [document collectObjectsOfClass:NSClassFromString([self adcClassName])];
     [segments makeObjectsPerformSelector:@selector(registerForRates:) withObject:adcs];
@@ -401,6 +398,7 @@ NSString* ORRelinkSegments   = @"ORRelinkSegments";
 {
     if(!aNote || [[aNote object] isKindOfClass:NSClassFromString(@"ORGroup")]){
         id document = [(ORAppDelegate*) [NSApp delegate] document];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORRelinkSegments object:self];
         NSArray* adcs = [document collectObjectsOfClass:NSClassFromString([self adcClassName])];
         [segments makeObjectsPerformSelector:@selector(configurationChanged:) withObject:adcs];
         [self registerForRates];

@@ -333,10 +333,7 @@
 }
 
 #pragma mark •••Actions
-- (IBAction) testInfluxAction:(id)sender;
-{
-    [model testInFluxDB];
-}
+
 - (IBAction) viewTypeAction:(id)sender
 {
     [model setViewType:(int)[sender indexOfSelectedItem]];
@@ -580,23 +577,15 @@
 {
     //-----map entry changed
     ORSegmentGroup* group = [model segmentGroup:kL200CC4Type];
-    int segNum;
-    if(aSlot==0)segNum = aPosition*14;
-    else        segNum = aPosition*14+7;
-    if([aName length]){
-        for(int i=0;i<7;i++){
-            NSMutableDictionary* params = [NSMutableDictionary dictionary];
-            [params setObject:aName                                       forKey:@"cc4_name"];
-            [params setObject:[NSString stringWithFormat:@"%d",aPosition] forKey:@"cc4_position"];
-            [params setObject:[NSString stringWithFormat:@"%d",i]         forKey:@"cc4_chan"];
-            [params setObject:[NSString stringWithFormat:@"%d",aSlot]     forKey:@"cc4_slot"];
-            [[group segment:segNum+i] setParams:params];
-        }
-    }
-    else {
-        for(int i=0;i<7;i++){
-            [[group segment:segNum+i] setParams:nil];
-        }
+    int segNum = aPosition*14;
+    if(aSlot==1) segNum+=7;
+    for(int i=0;i<7;i++){
+        NSMutableDictionary* params = [NSMutableDictionary dictionary];
+        [params setObject:aName                                       forKey:@"cc4_name"];
+        [params setObject:[NSString stringWithFormat:@"%d",aPosition] forKey:@"cc4_position"];
+        [params setObject:[NSString stringWithFormat:@"%d",i]         forKey:@"cc4_chan"];
+        [params setObject:[NSString stringWithFormat:@"%d",aSlot]     forKey:@"cc4_slot"];
+        [[group segment:segNum+i] setParams:params];
     }
 }
 
@@ -604,18 +593,12 @@
 {
     //map asking for update. Have to put the entries in the right columns
     ORSegmentGroup* group = [model segmentGroup:kL200CC4Type];
-    NSArray* segments = [group segments];
-    NSString* name = @"";
-    NSInteger n = [segments count];
-    for(int i=0;i<n;i++){
-        NSDictionary* params = [[group segment:i] params];
-        int pos   = [[params objectForKey:@"cc4_position"]intValue];
-        int slot  = [[params objectForKey:@"cc4_slot"]intValue];
-        if(pos == aPosition && slot==aSlot){
-            return [params objectForKey:@"cc4_name"];
-        }
-    }
-    return name;
+//    NSArray* segments = [group segments];
+//    NSString* name = @"";
+    int segNum = aPosition*14;
+    if(aSlot==1) segNum+=7;
+    NSDictionary* params = [[group segment:segNum] params];
+    return [params objectForKey:@"cc4_name"];
 }
 
 @end

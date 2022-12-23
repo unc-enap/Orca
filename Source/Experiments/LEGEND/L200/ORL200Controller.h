@@ -112,7 +112,6 @@
 
 - (IBAction) saveCC4ChanMapFileAction:(id)sender;
 - (IBAction) readCC4ChanMapFileAction:(id)sender;
-- (IBAction) testInfluxAction:(id)sender;
 - (IBAction) cc4AdcClassNameAction:(id)sender;
 
 #pragma mark •••Interface Management

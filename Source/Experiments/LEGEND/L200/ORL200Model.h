@@ -48,7 +48,6 @@
 - (void) setPMTPositions;
 - (void) setAuxChanPositions;
 - (void) findInFluxDB;
-- (void) testInFluxDB;
 - (void) runTypeChanged:(NSNotification*) aNote;
 
 #pragma mark •••Segment Group Methods
