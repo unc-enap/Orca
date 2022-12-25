@@ -171,8 +171,8 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         NSString* pos = [[group segment:i] objectForKey:@"str_position"];
         NSString* strName = @"-";
         if(pos && str){
-            if((![str isEqualToString:@"--"] && ![str isEqualToString:@""]) ||
-               (![pos isEqualToString:@"--"] && ![pos isEqualToString:@""]))
+            if((![str hasPrefix:@"-"] && ![str isEqualToString:@""]) ||
+               (![pos hasPrefix:@"-"] && ![pos isEqualToString:@""]))
                 strName = [NSString stringWithFormat:@"Ge%@", str];
         }
         [group setSegment:i object:strName forKey:@"kStringName"];
@@ -289,7 +289,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         [self setCardIndex:5    forGroup:groupIndex];
         [self setChannelIndex:6 forGroup:groupIndex];
         keys = [NSArray arrayWithObjects:@"cc4_name",  @"cc4_position", @"cc4_slot", @"cc4_chan",
-                                         @"daq_crate", @"daq_slot",     @"daq_chan", nil];
+                                         @"daq_crate", @"daq_board_slot",     @"daq_board_ch", nil];
     }
     else {
         if(groupIndex == kL200DetType){
@@ -319,9 +319,6 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
             else if(groupIndex == kL200AuxType)
                 keys = [NSArray arrayWithObjects:@"serial", @"det_type",
                         @"daq_crate", @"daq_board_id",  @"daq_board_slot", @"daq_board_ch", nil];
-            else if(groupIndex == kL200CC4Type)
-                keys = [NSArray arrayWithObjects:@"serial", @"det_type",
-                        @"daq_cc4_slot", @"daq_cc4_name", nil];
         }
     }
     NSMutableArray* mapEntries = [NSMutableArray array];
@@ -373,23 +370,26 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 {
     ORSegmentGroup* cc4Group = [segmentGroups objectAtIndex:kL200CC4Type];
     ORSegmentGroup* detGroup = [segmentGroups objectAtIndex:kL200DetType];
+    //make a look up table of the detector segments to speed up the linking
+    NSMutableDictionary* detDict = [NSMutableDictionary dictionary];
+    for(int detIndex=0;detIndex<[[detGroup segments] count];detIndex++){
+        NSString* name          = [detGroup segment:detIndex objectForKey:@"fe_cc4_ch"];
+        ORDetectorSegment* aSeg = [detGroup segment:detIndex];
+        if(name)[detDict setObject:aSeg forKey:name];
+    }
+    //ok have the lookup table, do the linkage. Now it's O(n) instead of O(n^2)
     for(int cc4Index=0;cc4Index<[[cc4Group segments] count];cc4Index++){
-        
         NSString* name    = [cc4Group segment:cc4Index objectForKey:@"cc4_name"];
         NSString* chan    = [cc4Group segment:cc4Index objectForKey:@"cc4_chan"];
         NSString* cc4Name = [NSString stringWithFormat:@"%@-%@",name,[chan removeSpaces]];
-        
-        for(int detIndex=0;detIndex<[[detGroup segments] count];detIndex++){
-            NSString* detcc4Chan  = [[detGroup segment:detIndex objectForKey:@"fe_cc4_ch"] removeSpaces];
-            if([detcc4Chan isEqualToString:cc4Name]){
-                NSString* crate = [detGroup segment:detIndex objectForKey:@"daq_crate"];
-                NSString* slot  = [detGroup segment:detIndex objectForKey:@"daq_board_slot"];
-                NSString* chan  = [detGroup segment:detIndex objectForKey:@"daq_board_ch"];
-                [[cc4Group segment:cc4Index] setObject:crate forKey:@"daq_crate"];
-                [[cc4Group segment:cc4Index] setObject:slot  forKey:@"daq_slot"];
-                [[cc4Group segment:cc4Index] setObject:chan  forKey:@"daq_chan"];
-                break;
-            }
+        ORDetectorSegment* detSeg = [detDict objectForKey:cc4Name];
+        if(detSeg){
+            NSString* crate = [detSeg objectForKey:@"daq_crate"];
+            NSString* slot  = [detSeg objectForKey:@"daq_board_slot"];
+            NSString* chan  = [detSeg objectForKey:@"daq_board_ch"];
+            [[cc4Group segment:cc4Index] setObject:crate forKey:@"daq_crate"];
+            [[cc4Group segment:cc4Index] setObject:slot  forKey:@"daq_board_slot"];
+            [[cc4Group segment:cc4Index] setObject:chan  forKey:@"daq_board_ch"];
         }
     }
 }
@@ -528,12 +528,12 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     return YES;
 }
 
-- (BOOL) validateCC4:(int)cc4Segment
+- (BOOL) validateCC4:(int)index
 {
-    if(cc4Segment < 0 || cc4Segment >= [self numberSegmentsInGroup:kL200CC4Type]) return NO;
-    NSDictionary* params = [[[self segmentGroup:kL200CC4Type] segment:cc4Segment] params];
+    if(index < 0 || index >= [self numberSegmentsInGroup:kL200CC4Type]) return NO;
+    NSDictionary* params = [[[self segmentGroup:kL200CC4Type] segment:index] params];
     if(!params) return NO;
-    NSString* name      = [params objectForKey:@"cc4_name"];     //1...12
+    NSString* name      = [params objectForKey:@"cc4_name"];
     NSString* position  = [params objectForKey:@"cc4_position"]; //1...12
     NSString* slot      = [params objectForKey:@"cc4_slot"];     //0,1
     if(!position || !slot ) return NO;
@@ -609,8 +609,8 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
             [s appendString:@"      DAQ\n"];
             if([[self valueForLabel:@"aq_crate"    fromParts:parts] length]){
                 [s appendFormat:@"         Crate: %@\n",     [self valueForLabel:@"aq_crate"    fromParts:parts]];
-                [s appendFormat:@"          Slot: %@\n",     [self valueForLabel:@"aq_slot"     fromParts:parts]];
-                [s appendFormat:@"          Chan: %@\n",     [self valueForLabel:@"aq_chan"     fromParts:parts]];
+                [s appendFormat:@"          Slot: %@\n",     [self valueForLabel:@"aq_board_slot"     fromParts:parts]];
+                [s appendFormat:@"          Chan: %@\n",     [self valueForLabel:@"aq_board_ch"     fromParts:parts]];
             }
             else {
                 [s appendFormat:@"         Crate: -\n"];
@@ -644,7 +644,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     [[self segmentGroup:kL200SiPMType] addParametersToDictionary:dict useName:@"SiPMMap"     addInGroupName:NO];
     [[self segmentGroup:kL200PMTType]  addParametersToDictionary:dict useName:@"PMTMap"      addInGroupName:NO];
     [[self segmentGroup:kL200AuxType]  addParametersToDictionary:dict useName:@"AuxChanMap"  addInGroupName:NO];
-    [[self segmentGroup:kL200CC4Type]  addParametersToDictionary:dict useName:@"CC4Map"  addInGroupName:NO];
+    [[self segmentGroup:kL200CC4Type]  addParametersToDictionary:dict useName:@"CC4Map"      addInGroupName:NO];
     [dictionary setObject:dict forKey:[self className]];
     return dictionary;
 }
@@ -725,7 +725,6 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
                                                         object:self
                                                       userInfo:history];
 }
-
 @end
 
 @implementation ORL200HeaderRecordID

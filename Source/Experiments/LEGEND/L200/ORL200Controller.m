@@ -516,13 +516,9 @@
 - (NSInteger) numberOfRowsInTableView:(NSTableView*)aTableView
 {
     int type = [self segmentTypeFromTableView:aTableView];
-    if(type >= 0 && type < kL200CC4Type){
-        return [[model segmentGroup:type] numSegments];
-    }
-    else if(type==kL200CC4Type){
-        return [[model segmentGroup:type] numSegments]/14;
-    }
-    else if(aTableView == stringMapTableView) return kL200MaxDetsPerString;
+    if(type >= 0 && type < kL200CC4Type)        return [[model segmentGroup:type] numSegments];
+    else if(type==kL200CC4Type)                 return kNumCC4Positions;
+    else if(aTableView == stringMapTableView)   return kL200MaxDetsPerString;
     else return 0;
 }
 
@@ -554,9 +550,7 @@
     int type = [self segmentTypeFromTableView:aTableView];
     if(type >= 0 || type < kL200SegmentTypeCount){
         if(type==kL200CC4Type){
-            int aSlot;
-            if([[aTableColumn identifier] isEqualToString:@"cc4_slota"])aSlot = 0;
-            else aSlot = 1;
+            int aSlot= [[aTableColumn identifier] isEqualToString:@"cc4_slota"]?0:1;
             [self setCC4:(int)aRowIndex slot:aSlot name:anObject];
         }
         else {
@@ -591,10 +585,8 @@
 
 - (NSString*) getCC4Name:(int)aPosition slot:(int)aSlot
 {
-    //map asking for update. Have to put the entries in the right columns
+    //this is a map table request
     ORSegmentGroup* group = [model segmentGroup:kL200CC4Type];
-//    NSArray* segments = [group segments];
-//    NSString* name = @"";
     int segNum = aPosition*14;
     if(aSlot==1) segNum+=7;
     NSDictionary* params = [[group segment:segNum] params];

@@ -263,9 +263,7 @@ NSString* ORRelinkSegments   = @"ORRelinkSegments";
                                       [params objectAtIndex:1], @"cc4_position",
                                       [params objectAtIndex:2], @"cc4_slot",
                                       nil];
-            ch_dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                       @"cc4", @"system",
-                       daq_dict, @"cc4", nil];
+            ch_dict = [NSDictionary dictionaryWithObjectsAndKeys: @"cc4", @"system", daq_dict, @"cc4", nil];
             if(ch_dict) [dict setObject:ch_dict forKey:[NSString stringWithFormat:@"%d",index++]];
         }
     }
@@ -398,9 +396,9 @@ NSString* ORRelinkSegments   = @"ORRelinkSegments";
 {
     if(!aNote || [[aNote object] isKindOfClass:NSClassFromString(@"ORGroup")]){
         id document = [(ORAppDelegate*) [NSApp delegate] document];
-        [[NSNotificationCenter defaultCenter] postNotificationName:ORRelinkSegments object:self];
         NSArray* adcs = [document collectObjectsOfClass:NSClassFromString([self adcClassName])];
         [segments makeObjectsPerformSelector:@selector(configurationChanged:) withObject:adcs];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORRelinkSegments object:self];
         [self registerForRates];
         [[NSNotificationCenter defaultCenter] postNotificationName:ORSegmentGroupConfiguationChanged
                                                             object:self];

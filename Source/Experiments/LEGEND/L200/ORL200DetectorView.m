@@ -207,7 +207,7 @@
 {
     int n = (int) [detOutlines count];
     if(n == 0) return;
-    selectedPath ++;
+    selectedPath++;
     if(selectedSet == 0) selectedPath %= n;
 }
 
@@ -767,7 +767,7 @@
         [cc4Label[i]  release];
         cc4Label[i] = nil;
     }
-    int cc4           = 0;
+    int cc4 = 0;
     NSArray* segments = [group segments];
     for(int aPos=0; aPos<kL200NumCC4s; aPos++){
         NSMutableDictionary* params = [[segments objectAtIndex:cc4] params];
@@ -776,8 +776,6 @@
         sIndex++;
         for(int chan=0;chan<7;chan++){
             [[segments objectAtIndex:cc4] setHwPresent:[delegate validateCC4:cc4]];
-            [params setObject:[NSString stringWithFormat:@"%d",cc4] forKey:@"cc4_idNum"];
-            [params setObject:[NSString stringWithFormat:@"%d",chan] forKey:@"cc4_chan"];
             NSRect        segRect   = NSMakeRect(kL200CC4Offset+kL200CC4Size*chan,aPos%2==0?0:-kL200CC4Size,kL200CC4Size,kL200CC4Size);
             NSBezierPath* segPath   = [NSBezierPath bezierPathWithRect:segRect];
             NSAffineTransform* transform = [NSAffineTransform transform];
@@ -785,14 +783,14 @@
             [transform rotateByDegrees:kL200CC4StartAngle - aPos/2*kL200CC4DeltaAngle];
             [segPath   transformUsingAffineTransform: transform];
             [segmentPaths addObject:segPath];
-            [errorPaths   addObject:[NSBezierPath bezierPathWithRect:NSInsetRect(segRect, -1, -1)]];
-            [detOutlines  addObjectsFromArray:errorPaths];
+            NSBezierPath* errPath = [NSBezierPath bezierPathWithRect:NSInsetRect(segRect, -1, -1)];
+            [errorPaths   addObject:errPath];
+            [detOutlines  addObject:errPath];
             cc4++;
         }
     }
     [segmentPathSet addObject:segmentPaths];
     [errorPathSet   addObject:errorPaths];
-    [detOutlines    addObjectsFromArray:errorPaths];
     [self setNeedsDisplay:YES];
 }
 
