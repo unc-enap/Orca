@@ -5,30 +5,22 @@
 // Created by Mark Howe on 12/7/2022.
 //  Copyright 2006 CENPA, University of Washington. All rights reserved.
 //-----------------------------------------------------------
-//This program was prepared for the Regents of the University of 
-//Washington at the Center for Experimental Nuclear Physics and 
-//Astrophysics (CENPA) sponsored in part by the United States 
-//Department of Energy (DOE) under Grant #DE-FG02-97ER41020. 
-//The University has certain rights in the program pursuant to 
-//the contract and the program should not be copied or distributed 
-//outside your organization.  The DOE and the University of 
+//This program was prepared for the Regents of the University of
+//Washington at the Center for Experimental Nuclear Physics and
+//Astrophysics (CENPA) sponsored in part by the United States
+//Department of Energy (DOE) under Grant #DE-FG02-97ER41020.
+//The University has certain rights in the program pursuant to
+//the contract and the program should not be copied or distributed
+//outside your organization.  The DOE and the University of
 //Washington reserve all rights in the program. Neither the authors,
-//University of Washington, or U.S. Government make any warranty, 
-//express or implied, or assume any liability or responsibility 
+//University of Washington, or U.S. Government make any warranty,
+//express or implied, or assume any liability or responsibility
 //for the use of this software.
 //-------------------------------------------------------------
 
 
 #import "ORInFluxDBController.h"
 #import "ORInFluxDBModel.h"
-
-@interface ORInFluxDBController (private)
-#if !defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
-- (void) createActionDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)gInfo;
-- (void) deleteActionDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo;
-- (void) stealthActionDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo;
-#endif
-@end
 
 @implementation ORInFluxDBController
 
@@ -41,12 +33,12 @@
 
 - (void) dealloc
 {
- 	[super dealloc];
+     [super dealloc];
 }
 
 -(void) awakeFromNib
 {
-	[super awakeFromNib];
+    [super awakeFromNib];
 }
 
 
@@ -86,7 +78,7 @@
                      selector : @selector(inFluxDBLockChanged:)
                          name : ORInFluxDBLock
                        object : nil];
-	
+    
     [notifyCenter addObserver : self
                      selector : @selector(inFluxDBLockChanged:)
                          name : ORRunStatusChangedNotification
@@ -107,6 +99,10 @@
                          name : ORInFluxDBRateChanged
                        object : model];
     
+    [notifyCenter addObserver : self
+                     selector : @selector(stealthModeChanged:)
+                         name : ORInFluxDBStealthModeChanged
+                        object: model];
 }
 
 - (void) updateWindow
@@ -121,8 +117,14 @@
     [self accessTypeChanged:nil];
     [self socketStatusChanged:nil];
     [self rateChanged:nil];
-}
+    [self stealthModeChanged:nil];
 
+}
+- (void) stealthModeChanged:(NSNotification*)aNote
+{
+    [stealthModeButton setIntValue: [model stealthMode]];
+    [dbStatusField setStringValue:![model stealthMode]?@"":@"Disabled"];
+}
 - (void) rateChanged:(NSNotification*)aNote
 {
     [rateField setStringValue:[NSString stringWithFormat:@"%ld/s",[model messageRate]]];
@@ -145,7 +147,7 @@
 
 - (void) hostNameChanged:(NSNotification*)aNote
 {
-	[hostNameField setStringValue:[model hostName]];
+    [hostNameField setStringValue:[model hostName]];
 }
 
 - (void) portChanged:(NSNotification*)aNote
@@ -189,6 +191,7 @@
     [orgField             setEnabled:!locked];
     [bucketField          setEnabled:!locked];
     [accessTypeMatrix     setEnabled:!locked];
+    [stealthModeButton    setEnabled:!locked];
 }
 
 - (void) checkGlobalSecurity
@@ -200,17 +203,38 @@
 
 
 #pragma mark •••Actions
+- (IBAction) stealthModeAction:(id)sender
+{
+    if(![model stealthMode]){
+        NSString* s = [NSString stringWithFormat:@"Really disable the database?\n"];
+        NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+        [alert setMessageText:s];
+        [alert setInformativeText:@"There will be NO values automatically put in to the database if you activate this option."];
+        [alert addButtonWithTitle:@"Cancel"];
+        [alert addButtonWithTitle:@"Yes, Disable Database"];
+        [alert setAlertStyle:NSAlertStyleWarning];
+        
+        [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
+            if(result == NSAlertSecondButtonReturn){
+                [model setStealthMode:YES];
+            }
+            else [model setStealthMode:NO];
+
+        }];
+    }
+    else [model setStealthMode:NO];
+}
 - (IBAction) InFluxDBLockAction:(id)sender
 {
     [gSecurity tryToSetLock:ORInFluxDBLock to:[sender intValue] forWindow:[self window]];
 }
 - (IBAction) hostNameAction:(id)sender
 {
-	[model setHostName:[sender stringValue]];
+    [model setHostName:[sender stringValue]];
 }
 - (IBAction) portAction:(id)sender
 {
-	[model setPortNumber:[sender integerValue]];
+    [model setPortNumber:[sender integerValue]];
 }
 
 - (IBAction) authTokenAction:(id)sender
@@ -241,21 +265,4 @@
 
 @end
 
-#if !defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
-@implementation ORInFluxDBController (private)
-- (void) createActionDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
-{
-	if(returnCode == NSAlertAlternateReturn){		
-		[model createDatabases];
-	}
-}
-
-- (void) deleteActionDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
-{
-	if(returnCode == NSAlertAlternateReturn){		
-		[model deleteDatabases];
-	}
-}
-@end
-#endif
 
