@@ -911,6 +911,7 @@
 		8421608A094F8910002E68B7 /* ORAdcController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84216087094F8910002E68B7 /* ORAdcController.m */; };
 		8421608B094F8910002E68B7 /* Adc.nib in Resources */ = {isa = PBXBuildFile; fileRef = 84216088094F8910002E68B7 /* Adc.nib */; };
 		84216094094F8B90002E68B7 /* ORAdcProcessing.h in Headers */ = {isa = PBXBuildFile; fileRef = 84216093094F8B90002E68B7 /* ORAdcProcessing.h */; };
+		84222B3E295B867200B0D121 /* ORInFluxDBController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84222B3D295B867200B0D121 /* ORInFluxDBController.m */; };
 		842251330D8845390048D331 /* IpeV4SLTCard.gif in Resources */ = {isa = PBXBuildFile; fileRef = 842251250D8845390048D331 /* IpeV4SLTCard.gif */; };
 		842251340D8845390048D331 /* ORIpeV4SLTController.h in Headers */ = {isa = PBXBuildFile; fileRef = 842251260D8845390048D331 /* ORIpeV4SLTController.h */; };
 		842251350D8845390048D331 /* ORIpeV4SLTController.m in Sources */ = {isa = PBXBuildFile; fileRef = 842251270D8845390048D331 /* ORIpeV4SLTController.m */; };
@@ -960,7 +961,6 @@
 		8427BF78294170E800C1C70A /* ORInFluxDBModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8427BF74294170E700C1C70A /* ORInFluxDBModel.m */; };
 		8427BF79294170E800C1C70A /* ORInFluxDBController.h in Headers */ = {isa = PBXBuildFile; fileRef = 8427BF75294170E700C1C70A /* ORInFluxDBController.h */; };
 		8427BF7A294170E800C1C70A /* ORInFluxDBModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 8427BF76294170E800C1C70A /* ORInFluxDBModel.h */; };
-		8427BF7B294170E800C1C70A /* ORInFluxDBController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8427BF77294170E800C1C70A /* ORInFluxDBController.m */; };
 		84281C7E0D7E19C50021B820 /* ORIP320Decoders.h in Headers */ = {isa = PBXBuildFile; fileRef = 84281C7C0D7E19C50021B820 /* ORIP320Decoders.h */; };
 		84281C7F0D7E19C50021B820 /* ORIP320Decoders.m in Sources */ = {isa = PBXBuildFile; fileRef = 84281C7D0D7E19C50021B820 /* ORIP320Decoders.m */; };
 		8428ADE00D7CACD00093D35E /* HeaderExplorer.gif in Resources */ = {isa = PBXBuildFile; fileRef = 8428ADD40D7CACD00093D35E /* HeaderExplorer.gif */; };
@@ -4925,6 +4925,7 @@
 		842162F7043E6317005F64B1 /* ORSelectionTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORSelectionTask.m; sourceTree = "<group>"; };
 		842162FA043E6317005F64B1 /* NetSocket.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = NetSocket.h; sourceTree = "<group>"; };
 		842162FB043E6317005F64B1 /* NetSocket.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = NetSocket.m; sourceTree = "<group>"; };
+		84222B3D295B867200B0D121 /* ORInFluxDBController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORInFluxDBController.m; path = "Source/Objects/Misc Objects/InFluxDB copy 2/ORInFluxDBController.m"; sourceTree = SOURCE_ROOT; };
 		842251250D8845390048D331 /* IpeV4SLTCard.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = IpeV4SLTCard.gif; path = "Source/Objects/Hardware/IPE/IpeV4 SLT/IpeV4SLTCard.gif"; sourceTree = SOURCE_ROOT; };
 		842251260D8845390048D331 /* ORIpeV4SLTController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORIpeV4SLTController.h; path = "Source/Objects/Hardware/IPE/IpeV4 SLT/ORIpeV4SLTController.h"; sourceTree = SOURCE_ROOT; };
 		842251270D8845390048D331 /* ORIpeV4SLTController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORIpeV4SLTController.m; path = "Source/Objects/Hardware/IPE/IpeV4 SLT/ORIpeV4SLTController.m"; sourceTree = SOURCE_ROOT; };
@@ -4969,7 +4970,6 @@
 		8427BF74294170E700C1C70A /* ORInFluxDBModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORInFluxDBModel.m; sourceTree = "<group>"; };
 		8427BF75294170E700C1C70A /* ORInFluxDBController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORInFluxDBController.h; sourceTree = "<group>"; };
 		8427BF76294170E800C1C70A /* ORInFluxDBModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORInFluxDBModel.h; sourceTree = "<group>"; };
-		8427BF77294170E800C1C70A /* ORInFluxDBController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORInFluxDBController.m; sourceTree = "<group>"; };
 		84281C7C0D7E19C50021B820 /* ORIP320Decoders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORIP320Decoders.h; path = Source/Objects/Hardware/Vme/IPCarrier/IP320/ORIP320Decoders.h; sourceTree = SOURCE_ROOT; };
 		84281C7D0D7E19C50021B820 /* ORIP320Decoders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORIP320Decoders.m; path = Source/Objects/Hardware/Vme/IPCarrier/IP320/ORIP320Decoders.m; sourceTree = SOURCE_ROOT; };
 		8428ADD40D7CACD00093D35E /* HeaderExplorer.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = HeaderExplorer.gif; path = "Source/Objects/Data Processing/HeaderExplorer/HeaderExplorer.gif"; sourceTree = SOURCE_ROOT; };
@@ -9813,7 +9813,7 @@
 			isa = PBXGroup;
 			children = (
 				8427BF75294170E700C1C70A /* ORInFluxDBController.h */,
-				8427BF77294170E800C1C70A /* ORInFluxDBController.m */,
+				84222B3D295B867200B0D121 /* ORInFluxDBController.m */,
 				8427BF76294170E800C1C70A /* ORInFluxDBModel.h */,
 				8427BF74294170E700C1C70A /* ORInFluxDBModel.m */,
 				8427BF6B2941343300C1C70A /* InFlux.png */,
@@ -18630,7 +18630,6 @@
 				841DA0F30781F09B0099BBF6 /* OR1DHisto.m in Sources */,
 				841DA0F50781F09B0099BBF6 /* OR1DHistoController.m in Sources */,
 				841DA60107820BB70099BBF6 /* ORCamacCrateController.m in Sources */,
-				8427BF7B294170E800C1C70A /* ORInFluxDBController.m in Sources */,
 				F8C54371287F05F9005C2873 /* OREHS8240nController.m in Sources */,
 				841DA60307820BB70099BBF6 /* ORCamacCrateModel.m in Sources */,
 				841DA668078211E70099BBF6 /* ORCC32Controller.m in Sources */,
@@ -18985,6 +18984,7 @@
 				847A46D90D9C3C18002125DE /* ORJAMFDecoders.m in Sources */,
 				847A48540D9C5D30002125DE /* ORFilterPluginBaseClass.m in Sources */,
 				841C6CCF0DA1557A007BE1E9 /* ORCaen1720Controller.m in Sources */,
+				84222B3E295B867200B0D121 /* ORInFluxDBController.m in Sources */,
 				841C6CD30DA155AF007BE1E9 /* ORCaen1720Model.m in Sources */,
 				84E743450DAD5EF00099CAEE /* ORMailer.m in Sources */,
 				8489177B1D6B73D300CF5AAF /* ORCytecVM8Controller.m in Sources */,
