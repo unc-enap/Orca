@@ -239,6 +239,10 @@ enum {
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ORCouchDBAddObjectRecord"     object:self userInfo:aRecord];
 }
+- (unsigned long) orcaMemory
+{
+    return orcaMemory;
+}
 - (NSString*) fullID
 {
     return @"MemoryWatcher";

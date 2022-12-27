@@ -56,6 +56,7 @@
 - (NSUInteger) timeRateCount:(int)rateIndex;
 - (float) timeRate:(int)rateIndex value:(int)valueIndex;
 - (void) setUpQueue;
+- (unsigned long) orcaMemory;
 
 - (void) launchTask;
 - (void) processTopResult:(NSString*)taskResult;
