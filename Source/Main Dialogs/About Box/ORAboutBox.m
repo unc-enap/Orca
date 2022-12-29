@@ -55,7 +55,7 @@
         NSString* appName = [localInfoDict objectForKey:@"CFBundleName"];
         [appNameField setStringValue:appName];
         [theWindow setTitle:[NSString stringWithFormat:@"About %@", appName]];
-        NSString* versionString = [infoDictionary objectForKey:@"CFBundleVersion"];
+        NSString* versionString = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
 		
 		NSFileManager* fm = [NSFileManager defaultManager];
 		NSString* orcaVersionPath = [[NSBundle mainBundle] pathForResource:@"orcaversion"ofType:nil];

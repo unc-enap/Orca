@@ -56,7 +56,7 @@
 	}
 
 
-	NSString* versionString = [infoDictionary objectForKey:@"CFBundleVersion"];
+	NSString* versionString = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
 	[versionField setStringValue:[NSString stringWithFormat:@"Version %@%@%@",
 		versionString,[orcaVersion length]?@":":@"",[orcaVersion length]?orcaVersion:@""]];
 

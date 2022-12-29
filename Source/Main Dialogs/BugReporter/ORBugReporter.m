@@ -83,7 +83,7 @@
 	
 	CFBundleGetLocalInfoDictionary( localInfoBundle );
 	
-	NSString* versionString = [infoDictionary objectForKey:@"CFBundleVersion"];
+	NSString* versionString = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
 
 	s = [s stringByAppendingFormat:@"\n\n-----------------------------------------\n"];
 	switch([[categoryMatrix selectedCell] tag]){
