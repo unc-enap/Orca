@@ -18,12 +18,11 @@
 //for the use of this software.
 //-------------------------------------------------------------
 
-
 #import "ORInFluxDBModel.h"
+#import "ORInFluxDBCmd.h"
 #import "MemoryWatcher.h"
 #import "ORAppDelegate.h"
 #import "NSNotifications+Extensions.h"
-#import "SynthesizeSingleton.h"
 #import "Utilities.h"
 #import "ORSafeQueue.h"
 #import "ORExperimentModel.h"
@@ -33,7 +32,6 @@
 #import "ORProcessModel.h"
 #import "ORProcessElementModel.h"
 #import "ORRunModel.h"
-#import "ORInFluxDBCmd.h"
 #import <ifaddrs.h>
 #import <arpa/inet.h>
 
@@ -42,26 +40,19 @@ NSString* ORInFluxDBAuthTokenChanged       = @"ORInFluxDBAuthTokenChanged";
 NSString* ORInFluxDBOrgChanged             = @"ORInFluxDBOrgChanged";
 NSString* ORInFluxDBBucketChanged          = @"ORInFluxDBBucketChanged";
 NSString* ORInFluxDBHostNameChanged        = @"ORInFluxDBHostNameChanged";
-NSString* ORInFluxDBModelDBInfoChanged       = @"ORInFluxDBModelDBInfoChanged";
+NSString* ORInFluxDBModelDBInfoChanged     = @"ORInFluxDBModelDBInfoChanged";
 NSString* ORInFluxDBTimeConnectedChanged   = @"ORInFluxDBTimeConnectedChanged";
-NSString* ORInFluxDBAccessTypeChanged      = @"ORInFluxDBAccessTypeChanged";
-NSString* ORInFluxDBSocketStatusChanged    = @"ORInFluxDBSocketStatusChanged";
 NSString* ORInFluxDBRateChanged            = @"ORInFluxDBRateChanged";
 NSString* ORInFluxDBStealthModeChanged     = @"ORInFluxDBStealthModeChanged";
+NSString* ORInFluxDBBucketArrayChanged     = @"ORInFluxDBBucketArrayChanged";
+NSString* ORInFluxDBOrgArrayChanged        = @"ORInFluxDBOrgArrayChanged";
+NSString* ORInFluxDBBucketNameChanged      = @"ORInFluxDBBucketNameChanged";
 
 NSString* ORInFluxDBLock                   = @"ORInFluxDBLock";
 
 static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
 @interface ORInFluxDBModel (private)
-//only for the telegraf socket mode with inFluxDB line format
-- (void) setUpInFluxSocket;
-- (void) openInFluxSocket;
-- (void) closeInFluxSocket;
-- (void) stream:(NSStream *)stream handleEvent:(NSStreamEvent)event;
-- (void) readIn:(NSString *)s;
-- (void) writeOut:(NSString *)s;
-
 - (void) updateProcesses;
 - (void) updateExperiment;
 - (void) updateHistory;
@@ -75,6 +66,8 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) updateDataSets;
 - (void) _cancelAllPeriodicOperations;
 - (void) _startAllPeriodicOperations;
+- (void) decodeBucketList:(NSDictionary*)result;
+- (void) decodeOrgList   :(NSDictionary*)result;
 @end
 
 @implementation ORInFluxDBModel
@@ -91,20 +84,18 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [responseData  release];
-    [hostName      release];
-    [processThread release];
-    [timer         invalidate];
-    [timer         release];
-
-    [authToken      release];;
-    [org            release];
-    [bucket         release];
-
-    [self closeInFluxSocket];
-    [inputStream    release];
-    [outputStream   release];
+    [responseData    release];
+    [hostName        release];
+    [processThread   release];
+    [authToken       release];;
+    [org             release];
+    [bucketName      release];
     [thisHostAddress release];
+    [bucketArray     release];
+    [orgArray        release];
+    [timer           invalidate];
+    [timer           release];
+
     [super dealloc];
 }
 
@@ -261,29 +252,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBAuthTokenChanged object:self];
 }
 
-- (NSInteger) accessType
-{
-    return accessType;
-}
-
-- (void) setAccessType:(NSInteger)anAccessType
-{
-    [[[self undoManager] prepareWithInvocationTarget:self] setAccessType:accessType ];
-    if(accessType != anAccessType){
-        if(accessType==kUseInFluxHttpProtocol){
-            if(inputStream)[self closeInFluxSocket];
-            [self setPortNumber:8094];
-            [self setUpInFluxSocket];
-        }
-        else {
-            [self setPortNumber:8086];
-            [self closeInFluxSocket];
-        }
-    }
-    accessType = anAccessType;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBAccessTypeChanged object:self];
-}
-
 - (NSString*) org
 {
     return org;
@@ -300,20 +268,20 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBOrgChanged object:self];
 }
 
-- (NSString*)   bucket
+- (NSString*)   bucketName
 {
-    return bucket;
+    return bucketName;
 }
 
-- (void) setBucket:(NSString*)aBucket
+- (void) setBucketName:(NSString*)aName
 {
-    if(!aBucket)aBucket = @"";
-    [[[self undoManager] prepareWithInvocationTarget:self] setBucket:bucket ];
+    if(!aName)aName = @"";
+    [[[self undoManager] prepareWithInvocationTarget:self] setBucketName:bucketName ];
     
-    [bucket autorelease];
-    bucket = [aBucket copy];
+    [bucketName autorelease];
+    bucketName = [aName copy];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBBucketChanged object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBBucketNameChanged object:self];
 }
 
 - (BOOL) isConnected
@@ -373,30 +341,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [messageQueue enqueue:aCmd];
 }
 
-//- (void) removeEndingComma
-//{
-//    NSRange lastComma = [outputBuffer rangeOfString:@"," options:NSBackwardsSearch];
-//
-//    if(lastComma.location == [outputBuffer length]-1) {
-//        [outputBuffer replaceCharactersInRange:lastComma
-//                                           withString: @""];
-//    }
-//}
-//
-//- (void) addLong:(NSString*)aValueName withValue:(long)aValue
-//{
-//    [outputBuffer appendFormat:@"%@=%ld,",aValueName,aValue];
-//}
-//
-//- (void) addDouble:(NSString*)aValueName withValue:(double)aValue
-//{
-//    [outputBuffer appendFormat:@"%@=%f,",aValueName,aValue];
-//}
-//
-//- (void) addString:(NSString*)aValueName withValue:(NSString*)aValue
-//{
-//    [outputBuffer appendFormat:@"%@=\"%@\",",aValueName,aValue];
-//}
 - (void) alarmsChanged:(NSNotification*)aNote
 {
     if(!stealthMode){
@@ -535,6 +479,13 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     }
 }
 
+- (void) executeDBCmd:(int)aCmdID
+{
+    ORInFluxDBCmd* aCmd = [[ORInFluxDBCmd alloc] initWithCmdType:aCmdID];
+    [aCmd end:self];
+    [aCmd release];
+}
+
 #pragma mark ***Archival
 - (id)initWithCoder:(NSCoder*)decoder
 {
@@ -542,7 +493,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [[self undoManager]  disableUndoRegistration];
     [self setHostName:   [decoder decodeObjectForKey: @"HostName"]];
     [self setPortNumber: [decoder decodeIntegerForKey:@"PortNumber"]];
-    [self setAccessType: [decoder decodeIntegerForKey:@"AccessType"]];
     [self setAuthToken:  [decoder decodeObjectForKey:@"Token"]];
     [self setOrg:        [decoder decodeObjectForKey:@"Org"]];
     [self setBucket:     [decoder decodeObjectForKey:@"Bucket"]];
@@ -555,25 +505,17 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 {
     [super encodeWithCoder:encoder];
     [encoder encodeInteger:portNumber   forKey:@"PortNumber"];
-    [encoder encodeInteger:accessType   forKey:@"AccessType"];
     [encoder encodeObject:hostName      forKey:@"HostName"];
     [encoder encodeObject:authToken     forKey:@"Token"];
     [encoder encodeObject:org           forKey:@"Org"];
-    [encoder encodeObject:bucket        forKey:@"Bucket"];
+    [encoder encodeObject:bucketName    forKey:@"Bucket"];
 }
-
-- (void) executeDBCmd:(int)aCmdID
-{
-    ORInFluxDBCmd* aCmd = [[ORInFluxDBCmd alloc] initWithCmdType:aCmdID];
-    [aCmd end:self];
-    [aCmd release];
-}
-
 
 - (uint32_t) queueMaxSize
 {
     return 1000;
 }
+
 - (void) _cancelAllPeriodicOperations
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
@@ -679,6 +621,16 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     }
 }
 
+- (NSArray*) bucketArray
+{
+    return bucketArray;
+}
+
+- (NSArray*) orgArray
+{
+    return orgArray;
+}
+
 #pragma mark ***Thread
 - (void)sendMeasurments
 {
@@ -693,223 +645,139 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         if(aCmd){
             NSString*            requestString = nil;
             NSMutableURLRequest* request       = nil;
-            if(accessType == kUseInFluxHttpProtocol){
-                //-----access type is via inFluxDB http format-----
-                switch([aCmd cmdType]){
-                    case kInfluxDBMeasurement:
-                        requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/write?org=%@&bucket=%@&precision=ns",hostName,portNumber,org,bucket];
-                        request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
-                        
-                        request.HTTPMethod = @"POST";
-                        [request setValue:@"text/plain; charset=utf-8"    forHTTPHeaderField:@"Content-Type"];
-                        [request setValue:@"text/plain; application/json" forHTTPHeaderField:@"Accept"];
-                        [request setValue:[NSString stringWithFormat:@"Token %@",[self authToken]]                     forHTTPHeaderField:@"Authorization"];
-                        request.HTTPBody = [aCmd payload];
-                        break;
-                        
-                    case kInFluxDBListBuckets:
-                        requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/buckets",hostName,portNumber];
-                        request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
-                        request.HTTPMethod = @"GET";
-                        [request setValue:[NSString stringWithFormat:@"Token %@",[self authToken]]                     forHTTPHeaderField:@"Authorization"];
-                        break;
-                        
-                    case kInFluxDBListOrgs:
-                        requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/orgs",hostName,portNumber];
-                        request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
-                        
-                        request.HTTPMethod = @"GET";
-                        [request setValue:[NSString stringWithFormat:@"Token %@",[self authToken]] forHTTPHeaderField:@"Authorization"];
+            //-----access type is via inFluxDB http format-----
+            switch([aCmd cmdType]){
+                case kInfluxDBMeasurement:
+                    requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/write?org=%@&bucket=%@&precision=ns",hostName,portNumber,org,bucketName];
+                    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
+                    
+                    request.HTTPMethod = @"POST";
+                    [request setValue:@"text/plain; charset=utf-8"    forHTTPHeaderField:@"Content-Type"];
+                    [request setValue:@"text/plain; application/json" forHTTPHeaderField:@"Accept"];
+                    [request setValue:[NSString stringWithFormat:@"Token %@",[self authToken]]                     forHTTPHeaderField:@"Authorization"];
+                    request.HTTPBody = [aCmd payload];
+                    break;
+                    
+                case kInFluxDBListBuckets:
+                    requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/buckets",hostName,portNumber];
+                    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
+                    request.HTTPMethod = @"GET";
+                    [request setValue:[NSString stringWithFormat:@"Token %@",[self authToken]]                     forHTTPHeaderField:@"Authorization"];
+                    break;
+                    
+                case kInFluxDBListOrgs:
+                    requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/orgs",hostName,portNumber];
+                    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
+                    
+                    request.HTTPMethod = @"GET";
+                    [request setValue:[NSString stringWithFormat:@"Token %@",[self authToken]] forHTTPHeaderField:@"Authorization"];
+                    break;
+                    
+                case kInFluxDBDeleteBucket:
+                    requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/buckets/4e45adc849642b28",hostName,portNumber];
+                    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
+                    request.HTTPMethod = @"DELETE";
+                    [request setValue:[NSString stringWithFormat:@"Token %@",[self authToken]]                     forHTTPHeaderField:@"Authorization"];
+                    [request setValue:@"text/plain; application/json" forHTTPHeaderField:@"Accept"];
+                    break;
+                    
+                case kInFluxDBCreateBuckets:
+                {
+                    requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/buckets",hostName,portNumber];
+                    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
+                    request.HTTPMethod = @"POST";
+                    [request setValue:[NSString stringWithFormat:@"Token %@",[self authToken]] forHTTPHeaderField:@"Authorization"];
+                    [request setValue:@"text/plain; application/json" forHTTPHeaderField:@"Accept"];
 
-//                        NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-//                        [dict setObject:@"UNC"  forKey:@"org"];
-//                        [dict setObject:@"L200" forKey:@"name"];
-//                        NSMutableDictionary* ret = [NSMutableDictionary dictionary];
-//                        [ret setObject:@"expire" forKey:@"type"];
-//                        [ret setObject:[NSNumber numberWithInt:86400] forKey:@"everySeconds"];
-//                        [ret setObject:[NSNumber numberWithInt:0] forKey:@"shardGroupDurationSeconds"];
-//                        NSArray* retArray = [NSArray arrayWithObject:ret];
-//                        [dict setObject:retArray forKey:@"retentionRules"];
-                        
-//                        NSError *error;
-//                        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
-//                                                                           options:0 // Pass 0 if you don't care about the readability of the generated string
-//                                                                             error:&error];
-//
-//
-//
-//                       // NSData* d =[s dataUsingEncoding:NSASCIIStringEncoding];
-//                        request.HTTPBody = jsonData;
-
-                        break;
+                    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+                    [dict setObject:@"6a6774cef6c9eb70"  forKey:@"orgID"];
+                    [dict setObject:@"L200" forKey:@"name"];
+                    NSMutableDictionary* ret = [NSMutableDictionary dictionary];
+                    [ret setObject:@"expire" forKey:@"type"];
+                    [ret setObject:[NSNumber numberWithInt:86400] forKey:@"everySeconds"];
+                    [ret setObject:[NSNumber numberWithInt:0] forKey:@"shardGroupDurationSeconds"];
+                    NSArray* retArray = [NSArray arrayWithObject:ret];
+                    [dict setObject:retArray forKey:@"retentionRules"];
+                    
+                    NSError* error;
+                    NSData*  jsonData = [NSJSONSerialization dataWithJSONObject:dict
+                                                                        options:0 // Pass 0 if you don't care about the readability of the generated string
+                                                                          error:&error];
+                    request.HTTPBody = jsonData;
                 }
-                
-                if(requestString){
-                    NSURLSessionConfiguration* config = [NSURLSessionConfiguration defaultSessionConfiguration];
-                    NSURLSession*             session = [NSURLSession sessionWithConfiguration:config];
-                    
-                    NSURLSessionDataTask* dbTask = [session dataTaskWithRequest:request completionHandler:^(NSData* data, NSURLResponse* response, NSError* error) {
-                        if (!error) {
-                            NSHTTPURLResponse* httpResp = (NSHTTPURLResponse*) response;
-                            NSDictionary* json = [NSJSONSerialization JSONObjectWithData: data
-                                                                                 options: kNilOptions
-                                                                                   error: &error];
-                            switch([aCmd cmdType]){
-                                case kInFluxDBListOrgs:
-                                    //if (httpResp.statusCode == 200) {
-                                    NSLog(@"Orgs: %d\n",[aCmd cmdType]);
-                                    NSLog(@"code: %d\n%@\n",httpResp.statusCode,[json allKeys]);
-                                    break;
-                                case kInFluxDBListBuckets:
-                                    //if (httpResp.statusCode == 200) {
-                                    NSLog(@"Buckets: %d\n",[aCmd cmdType]);
-                                    NSLog(@"code: %d\n%@\n",httpResp.statusCode,[json allKeys]);
-                                    break;
 
-                            }
-                        }
-                    }];
-                    
-                    [dbTask resume]; //task is created in paused state, so start it
-                    
-                    totalSent += [[aCmd payload] length];
-                }
+                    break;
             }
-            else {
-                //-----access type is via telegraf socket-----
-                if(!inputStream) [self setUpInFluxSocket];
-                [self writeOut:[aCmd outputBuffer]];
+            
+            if(requestString){
+                NSURLSessionConfiguration* config = [NSURLSessionConfiguration defaultSessionConfiguration];
+                NSURLSession*             session = [NSURLSession sessionWithConfiguration:config];
+                NSURLSessionDataTask*      dbTask = [session dataTaskWithRequest:request completionHandler:^(NSData* data, NSURLResponse* response, NSError* error) {
+                    if (!error) {
+                        NSDictionary* result = [NSJSONSerialization JSONObjectWithData: data
+                                                                               options: kNilOptions
+                                                                                 error: &error];
+                        switch([aCmd cmdType]){
+                            case kInFluxDBCreateBuckets: NSLog(@"%@\n",result);          break;
+                            case kInFluxDBDeleteBucket:  NSLog(@"%@\n",result);          break;
+                            case kInFluxDBListOrgs:      [self decodeOrgList:result];    break;
+                            case kInFluxDBListBuckets:   [self decodeBucketList:result]; break;
+                            default: break;
+                        }
+                    }
+                }];
+                
+                [dbTask resume]; //task is created in paused state, so start it
+                
+                totalSent += [[aCmd payload] length];
             }
         }
         [NSThread sleepForTimeInterval:.01];
         [pool release];
     }while(!canceled);
-    [self closeInFluxSocket];
     [outerPool release];
 }
 
-#pragma mark ***Access Via Telegraf thread
-//-------------------------------------------
-//------telegraf stuff.... may not use.....
-//-------------------------------------------
-- (short) socketStatus
+- (void) decodeBucketList:(NSDictionary*)result
 {
-    return socketStatus;
-}
-- (void) setSocketStatus:(short)aState
-{
-    socketStatus = aState;
-    if( socketStatus == NSStreamStatusNotOpen ||
-        socketStatus == NSStreamStatusOpening ||
-        socketStatus == NSStreamStatusClosed  ||
-        socketStatus == NSStreamStatusError) {
-            [self setIsConnected:NO];
-    }
-    else [self setIsConnected:YES];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBSocketStatusChanged object:self];
-}
-
-- (void) setUpInFluxSocket
-{
-    NSString* finalHost = [[hostName copy]autorelease];
-    if(![finalHost hasPrefix:@"http://"]){
-        finalHost = [NSString stringWithFormat:@"http://%@",finalHost];
-    }
-    NSURL *url = [NSURL URLWithString:finalHost];
-    
-    NSLog(@"Setting up connection to Telegraf at %@ : %d\n", [url absoluteString], portNumber);
-    
-    CFStreamCreatePairWithSocketToHost(kCFAllocatorDefault, (CFStringRef)[url host], (uint32_t)portNumber, &readStream, &writeStream);
-    
-    if(!CFWriteStreamOpen(writeStream)) {
-        NSLog(@"Error, telegraf writeStream not open\n");
-        return;
-    }
-    [self openInFluxSocket];
-    [self setSocketStatus:[outputStream streamStatus]];
-}
-
-- (void)openInFluxSocket
-{
-    inputStream  = (NSInputStream *)readStream;
-    outputStream = (NSOutputStream *)writeStream;
-    
-    [inputStream retain];
-    [outputStream retain];
-    
-    [inputStream setDelegate:self];
-    [outputStream setDelegate:self];
-    
-    [inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    [outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    
-    [inputStream open];
-    [outputStream open];
-    [self setSocketStatus:[outputStream streamStatus]];
-}
-
-- (void)closeInFluxSocket
-{
-    [inputStream  close];
-    [outputStream close];
-    
-    [inputStream  removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    [outputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    
-    [inputStream setDelegate:nil];
-    [outputStream setDelegate:nil];
-    
-    [inputStream release];
-    [outputStream release];
-    
-    inputStream  = nil;
-    outputStream = nil;
-    [self setSocketStatus:NSStreamStatusClosed];
-}
-
-- (void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)event
-{
-    switch(event) {
-        case NSStreamEventHasSpaceAvailable: {
-            if(stream == outputStream) {
-            }
-            break;
+    NSLog(@"Buckets:\n");
+    NSArray* anArray = [result objectForKey:@"buckets"];
+    for(id aBucket in anArray){
+        if(![[aBucket objectForKey:@"name"] hasPrefix:@"_"]){
+            NSLog(@"ORCA bucket:   %@ : ID = %@\n",[aBucket objectForKey:@"name"],[aBucket objectForKey:@"id"] );
         }
-        case NSStreamEventHasBytesAvailable: {
-            if(stream == inputStream) {
-                uint8_t buf[1024];
-                NSInteger len = [inputStream read:buf maxLength:1024];
-                
-                if(len > 0) {
-                    NSMutableData* data=[[NSMutableData alloc] initWithLength:0];
-                    [data appendBytes: (const void *)buf length:len];
-                    NSString *s = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-                    
-                    [self readIn:s];
-                    [data release];
-                }
-            }
-            break;
-        }
-        default: {
-            [self setSocketStatus:[outputStream streamStatus]];
-            break;
+        else  {
+            NSLog(@"System bucket: %@\n",[aBucket objectForKey:@"name"] );
         }
     }
+    if([anArray count]){
+        [bucketArray release];
+        bucketArray = [anArray retain];
+    }
+    else {
+        [bucketArray release];
+        bucketArray = nil;;
+    }
 }
 
-- (void)readIn:(NSString *)s
+- (void) decodeOrgList:(NSDictionary*)result
 {
-    NSLog(@"InFluxDB Socket: %@\n", s);
+    NSArray* anArray = [result objectForKey:@"orgs"];
+    NSLog(@"Orgs:\n");
+    for(id anOrg in anArray){
+        NSLog(@"%@ : ID = %@\n",[anOrg objectForKey:@"name"],[anOrg objectForKey:@"id"] );
+    }
+    if([anArray count]){
+        [orgArray release];
+        orgArray = [orgArray retain];
+    }
+    else {
+        [orgArray release];
+        orgArray = nil;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORInFluxDBOrgArrayChanged
+                                                                        object:self
+                                                                      userInfo:nil
+                                                                 waitUntilDone:NO];
 }
-
-- (void)writeOut:(NSString *)s
-{
-    uint8_t *buf = (uint8_t *)[s UTF8String];
-    [outputStream write:buf maxLength:strlen((char *)buf)];
-    totalSent += [s length];
-    //NSLog(@"%@", s);
-}
-//-------------------------------------------
-
 @end

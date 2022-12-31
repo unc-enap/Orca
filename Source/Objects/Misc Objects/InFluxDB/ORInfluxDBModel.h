@@ -23,18 +23,14 @@
 @class ORInFluxDB;
 @class ORAlarm;
 @class ORSafeQueue;
-@class ORInFluxDBCmd;
 
-enum {
-    kUseInFluxHttpProtocol,
-    kUseTelegrafLineProtocol,
-};
-@interface ORInFluxDBModel : OrcaObject <NSStreamDelegate>
+#import "ORInFluxDBCmd.h"
+
+@interface ORInFluxDBModel : OrcaObject
 {
 @private
     NSString*      hostName;
     NSInteger      portNumber;
-    NSInteger      accessType;
     NSTimer*       timer;
     NSInteger      totalSent;
     NSInteger      messageRate;
@@ -43,25 +39,21 @@ enum {
     NSString*      alertMessage;
     int            alertType;
     NSString*      thisHostAddress;
+    
     //----queue thread--------
     bool           canceled;
     NSThread*      processThread;
     ORSafeQueue*   messageQueue;
     
-    //----telegraf vars--------
-    CFReadStreamRef readStream;
-    CFWriteStreamRef writeStream;
-
-    NSInputStream*  inputStream;
-    NSOutputStream* outputStream;
-    short socketStatus;
+    NSArray*       bucketArray;
+    NSArray*       orgArray;
+    NSString*      org;
+    NSString*      bucketName;
     
     //----http vars--------
     NSMutableData* responseData;
     bool           isConnected;
     NSString*      authToken;
-    NSString*      org;
-    NSString*      bucket;
 }
 
 #pragma mark ***Initialization
@@ -78,22 +70,22 @@ enum {
 #pragma mark ***Accessors
 - (void)        setPortNumber:(NSUInteger)aPort;
 - (NSUInteger)  portNumber;
-- (void)        setAccessType:(NSInteger)aType;
-- (NSInteger)   accessType;
 - (NSString*)   hostName;
 - (void)        setHostName:(NSString*)aHost;
 - (NSString*)   authToken;
 - (void)        setAuthToken:(NSString*)aToken;
 - (NSString*)   org;
-- (void)        setBucket:(NSString*)anOrg;
-- (NSString*)   bucket;
+- (void)        setBucketName:(NSString*)anOrg;
+- (NSString*)   bucketName;
 - (void)        setOrg:(NSString*)anOrg;
 - (id)          nextObject;
 - (uint32_t)    queueMaxSize;
 - (NSInteger)   messageRate;
 - (BOOL)        stealthMode;
 - (void)        setStealthMode:(BOOL)aStealthMode;
-
+- (void)        executeDBCmd:(int)aCmdID;
+- (NSArray*)    bucketArray;
+- (NSArray*)    orgArray;
 
 #pragma mark ***Thread
 - (void) sendCmd:(ORInFluxDBCmd*)aCmd;
@@ -102,28 +94,20 @@ enum {
 #pragma mark ***Archival
 - (id)   initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
-
-- (void) executeDBCmd:(int)aCmdID;
-
-//-------------------------------------------
-//------telegraf stuff.... may not use.....
-- (short)       socketStatus;
-- (BOOL)        isConnected;
-- (void)        setIsConnected:(BOOL)aState;
-//-------------------------------------------
-
 @end
 
+
+extern NSString* ORInFluxDBOrgArrayChanged;
+extern NSString* ORInFluxDBBucketArrayChanged;
 extern NSString* ORInFluxDBPortNumberChanged;
 extern NSString* ORInFluxDBHostNameChanged;
 extern NSString* ORInFluxDBRateChanged;
 extern NSString* ORInFluxDBAuthTokenChanged;
 extern NSString* ORInFluxDBOrgChanged;
-extern NSString* ORInFluxDBBucketChanged;
+extern NSString* ORInFluxDBBucketNameChanged;
 extern NSString* ORInFluxDBTimeConnectedChanged;
-extern NSString* ORInFluxDBAccessTypeChanged;
-extern NSString* ORInFluxDBSocketStatusChanged;
 extern NSString* ORInFluxDBStealthModeChanged;
+extern NSString* ORInFluxDBBucketChanged;
 
 extern NSString* ORInFluxDBLock;
 

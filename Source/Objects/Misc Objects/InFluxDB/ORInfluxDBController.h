@@ -17,21 +17,18 @@
 //express or implied, or assume any liability or responsibility
 //for the use of this software.
 //-------------------------------------------------------------
-
 @interface ORInFluxDBController : OrcaObjectController
 {
     IBOutlet NSTextField*       hostNameField;
     IBOutlet NSTextField*       portField;
     IBOutlet NSTextField*       orgField;
-    IBOutlet NSTextField*       bucketField;
+    IBOutlet NSTextField*       bucketNameField;
     IBOutlet NSTextField*       authTokenField;
-    IBOutlet NSTextField*       socketStatusField;
     IBOutlet NSTextField*       rateField;
-    IBOutlet NSMatrix*          accessTypeMatrix;
     IBOutlet NSButton*          InFluxDBLockButton;
     IBOutlet NSButton*          stealthModeButton;
     IBOutlet NSTextField*       dbStatusField;
-
+    IBOutlet NSTableView*       bucketTableView;
 }
 
 #pragma mark ***Interface Management
@@ -40,25 +37,26 @@
 - (void) portChanged:(NSNotification*)aNote;
 - (void) authTokenChanged:(NSNotification*)aNote;
 - (void) orgChanged:(NSNotification*)aNote;
-- (void) bucketChanged:(NSNotification*)aNote;
+- (void) bucketNameChanged:(NSNotification*)aNote;
 - (void) inFluxDBLockChanged:(NSNotification*)aNote;
-- (void) accessTypeChanged:(NSNotification*)aNote;
-- (void) socketStatusChanged:(NSNotification*)aNote;
 - (void) rateChanged:(NSNotification*)aNote;
 - (void) stealthModeChanged:(NSNotification*)aNote;
+- (void) bucketArrayChanged:(NSNotification*)aNote;
 
 #pragma mark •••Actions
 - (IBAction) hostNameAction:(id)sender;
 - (IBAction) authTokenAction:(id)sender;
 - (IBAction) orgAction:(id)sender;
-- (IBAction) bucketAction:(id)sender;
+- (IBAction) bucketNameAction:(id)sender;
 - (IBAction) listBucketsAction:(id)sender;
 - (IBAction) deleteBucketsAction:(id)sender;
 - (IBAction) InFluxDBLockAction:(id)sender;
-- (IBAction) accessTypeMatrixAction:(id)sender;
 - (IBAction) stealthModeAction:(id)sender;
 - (IBAction) listBucketsAction:(id)sender;
 - (IBAction) listOrgsAction:(id)sender;
+- (IBAction) createBucketsAction:(id)sender;
 
+- (NSInteger)numberOfRowsInTableView:(NSTableView*)aTableView;
+- (id) tableView:(NSTableView*) aTableView objectValueForTableColumn:(NSTableColumn*) aTableColumn row:(NSInteger) rowIndex;
 @end
 

@@ -19,12 +19,13 @@
 
 
 NS_ASSUME_NONNULL_BEGIN
-
+@class ORInFluxDBModel;
 enum {
     kInfluxDBMeasurement,
+    kInFluxDBCreateBuckets,
+    kInFluxDBDeleteBucket,
     kInFluxDBListBuckets,
-    kInFluxDBListOrgs,
-    kInFluxDBDeleteBuckets
+    kInFluxDBListOrgs
 };
 
 @interface ORInFluxDBCmd : NSObject
@@ -40,7 +41,7 @@ enum {
 - (void) addLong:(NSString*)aValueName withValue:(long)aValue;
 - (void) addDouble:(NSString*)aValueName withValue:(double)aValue;
 - (void) addString:(NSString*)aValueName withValue:(NSString*)aValue;
-- (void) end:(id)aSender;
+- (void) end:(ORInFluxDBModel*)aSender;
 - (NSData*)   payload;
 - (NSString*) outputBuffer;
 @end

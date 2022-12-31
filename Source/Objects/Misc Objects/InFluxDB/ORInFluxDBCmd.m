@@ -15,10 +15,8 @@
 //for the use of this software.
 //-------------------------------------------------------------
 
-#import "ORInFluxDBModel.h"
-
 #import "ORInFluxDBCmd.h"
-
+#import "ORInFluxDBModel.h"
 @implementation ORInFluxDBCmd
 
 - (id) initWithCmdType:(int)aType;
@@ -68,7 +66,7 @@
 {
     [outputBuffer appendFormat:@"%@=\"%@\",",aValueName,aValue];
 }
-- (void) end:(id)aSender
+- (void) end:(ORInFluxDBModel*)aSender
 {
     [self removeEndingComma];
     [outputBuffer appendFormat:@"   \n"];
