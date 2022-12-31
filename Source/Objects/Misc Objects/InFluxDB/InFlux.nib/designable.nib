@@ -12,11 +12,13 @@
                 <outlet property="accessTypeMatrix" destination="zKG-rn-RWf" id="4ab-5M-wqw"/>
                 <outlet property="authTokenField" destination="FiJ-gQ-jaN" id="naQ-VU-YbE"/>
                 <outlet property="bucketField" destination="2cn-HB-mZ6" id="4sW-Rg-d7l"/>
+                <outlet property="dbStatusField" destination="wNe-OK-JOD" id="pd0-xK-gRb"/>
                 <outlet property="hostNameField" destination="chN-yb-ic0" id="EAw-tH-3LU"/>
                 <outlet property="orgField" destination="oys-xN-748" id="3qa-Do-IaJ"/>
                 <outlet property="portField" destination="G5V-GP-Xrv" id="4bf-qK-Ic1"/>
                 <outlet property="rateField" destination="m37-Xf-9aI" id="pJO-t1-4xG"/>
                 <outlet property="socketStatusField" destination="tfi-1m-38o" id="FVX-dq-hjX"/>
+                <outlet property="stealthModeButton" destination="vti-d6-RIQ" id="W01-0I-sZ7"/>
                 <outlet property="window" destination="19" id="we3-bk-q7z"/>
             </connections>
         </customObject>
@@ -126,14 +128,25 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </box>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bet-6w-VxP">
-                        <rect key="frame" x="249" y="42" width="161" height="28"/>
+                        <rect key="frame" x="249" y="122" width="161" height="28"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <buttonCell key="cell" type="push" title="Test" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="emB-HA-B2N">
+                        <buttonCell key="cell" type="push" title="List Buckets" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="emB-HA-B2N">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
                         <connections>
-                            <action selector="testAction:" target="-2" id="z3s-Rm-Ixx"/>
+                            <action selector="listBucketsAction:" target="-2" id="ns3-Xz-ebE"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WsM-R8-FOV">
+                        <rect key="frame" x="50" y="42" width="161" height="28"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <buttonCell key="cell" type="push" title="Delete All Buckets" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="cj8-SO-frB">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="deleteBucketsAction:" target="-2" id="J7g-R5-UsS"/>
                         </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9hO-XY-4Yj">
@@ -271,21 +284,35 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wNe-OK-JOD">
-                        <rect key="frame" x="149" y="125" width="90" height="16"/>
+                        <rect key="frame" x="281" y="325" width="90" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="Lps-WR-fWW">
-                            <font key="font" usesAppearanceFont="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vti-d6-RIQ">
-                        <rect key="frame" x="41" y="124" width="69" height="18"/>
+                        <rect key="frame" x="173" y="324" width="63" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Stealth" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="K6Z-Al-7dM">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
+                        <connections>
+                            <action selector="stealthModeAction:" target="-2" id="c1E-1M-KEN"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TdE-SP-kv3">
+                        <rect key="frame" x="249" y="95" width="161" height="28"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <buttonCell key="cell" type="push" title="List Orgs" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="4Ir-yh-GQs">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="listOrgsAction:" target="-2" id="5Ft-R6-BHC"/>
+                        </connections>
                     </button>
                 </subviews>
             </view>

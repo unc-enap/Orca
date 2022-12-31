@@ -49,14 +49,16 @@
 
 #pragma mark •••Actions
 - (IBAction) hostNameAction:(id)sender;
-- (IBAction) portAction:(id)sender;
 - (IBAction) authTokenAction:(id)sender;
 - (IBAction) orgAction:(id)sender;
 - (IBAction) bucketAction:(id)sender;
-- (IBAction) testAction:(id)sender;
+- (IBAction) listBucketsAction:(id)sender;
+- (IBAction) deleteBucketsAction:(id)sender;
 - (IBAction) InFluxDBLockAction:(id)sender;
 - (IBAction) accessTypeMatrixAction:(id)sender;
 - (IBAction) stealthModeAction:(id)sender;
+- (IBAction) listBucketsAction:(id)sender;
+- (IBAction) listOrgsAction:(id)sender;
 
 @end
 

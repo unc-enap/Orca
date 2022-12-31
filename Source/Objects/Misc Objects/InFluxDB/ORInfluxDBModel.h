@@ -23,15 +23,15 @@
 @class ORInFluxDB;
 @class ORAlarm;
 @class ORSafeQueue;
+@class ORInFluxDBCmd;
 
 enum {
     kUseInFluxHttpProtocol,
     kUseTelegrafLineProtocol,
 };
-@interface ORInFluxDBModel : OrcaObject <NSURLConnectionDelegate,NSStreamDelegate>
+@interface ORInFluxDBModel : OrcaObject <NSStreamDelegate>
 {
 @private
-    NSMutableString* outputBuffer;
     NSString*      hostName;
     NSInteger      portNumber;
     NSInteger      accessType;
@@ -74,8 +74,6 @@ enum {
 - (void) runOptionsOrTimeChanged:(NSNotification*)aNote;
 - (void) runStatusChanged:(NSNotification*)aNote;
 - (void) alarmsChanged:(NSNotification*)aNote;
-- (void) runStarted:(NSNotification*)aNote;
-- (void) runStopped:(NSNotification*)aNote;
 
 #pragma mark ***Accessors
 - (void)        setPortNumber:(NSUInteger)aPort;
@@ -91,28 +89,28 @@ enum {
 - (NSString*)   bucket;
 - (void)        setOrg:(NSString*)anOrg;
 - (id)          nextObject;
-- (short)       socketStatus;
-- (BOOL)        isConnected;
-- (void)        setIsConnected:(BOOL)aState;
 - (uint32_t)    queueMaxSize;
 - (NSInteger)   messageRate;
 - (BOOL)        stealthMode;
 - (void)        setStealthMode:(BOOL)aStealthMode;
 
-#pragma mark ***Measurements
-- (void) startDBChunk:(NSString*)aSection withTags:(NSString*)someTags;
-- (void) endDBChunk;
-- (void) sendAllChunksToDB;
 
-- (void) addLong:(NSString*)aValueName withValue:(long)aValue;
-- (void) addDouble:(NSString*)aValueName withValue:(double)aValue;
-- (void) addString:(NSString*)aValueName withValue:(NSString*)aValue;
+#pragma mark ***Thread
+- (void) sendCmd:(ORInFluxDBCmd*)aCmd;
+- (void) sendMeasurments;
 
 #pragma mark ***Archival
 - (id)   initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
 
-- (void) testPost;
+- (void) executeDBCmd:(int)aCmdID;
+
+//-------------------------------------------
+//------telegraf stuff.... may not use.....
+- (short)       socketStatus;
+- (BOOL)        isConnected;
+- (void)        setIsConnected:(BOOL)aState;
+//-------------------------------------------
 
 @end
 

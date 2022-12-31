@@ -33,6 +33,7 @@
 #import "ORProcessModel.h"
 #import "ORProcessElementModel.h"
 #import "ORRunModel.h"
+#import "ORInFluxDBCmd.h"
 #import <ifaddrs.h>
 #import <arpa/inet.h>
 
@@ -162,16 +163,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
                          name : ORRunStatusChangedNotification
                        object : nil];
 
-    [notifyCenter addObserver : self
-                     selector : @selector(runStarted:)
-                         name : ORRunStartedNotification
-                       object : nil];
-
-    [notifyCenter addObserver : self
-                     selector : @selector(runStopped:)
-                         name : ORRunStoppedNotification
-                       object : nil];
-    
     [notifyCenter addObserver : self
                      selector : @selector(runOptionsOrTimeChanged:)
                          name : ORRunElapsedTimesChangedNotification
@@ -370,25 +361,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
 
 #pragma mark ***Measurements
-- (void) startDBChunk:(NSString*)section withTags:(NSString*)someTags
-{
-    if(!outputBuffer) outputBuffer = [[NSMutableString alloc]init];
-    if(!someTags){someTags = @"";}
-    [outputBuffer appendFormat:@"%@,%@ ",section,someTags];
- }
-
-//----------------measurement format----------------------
-// airSensors,sensor_id=TLM0201 temperature=90.0,humidity=40.2
-// airSensors,sensor_id=TLM0202 temperature=20,humidity=30.6
-//--------------------------------------------------------
-
-- (void) endDBChunk
-{
-    [self removeEndingComma];
-    [outputBuffer appendFormat:@"   \n"];
-}
-
-- (void) sendAllChunksToDB
+- (void) sendCmd:(ORInFluxDBCmd*)aCmd
 {
     if(!processThread){
         processThread = [[NSThread alloc] initWithTarget:self selector:@selector(sendMeasurments) object:nil];
@@ -397,36 +370,33 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     if(!messageQueue){
         messageQueue = [[ORSafeQueue alloc] init];
     }
-    [messageQueue enqueue:[outputBuffer dataUsingEncoding:NSASCIIStringEncoding]];
-
-    [outputBuffer release];
-    outputBuffer = nil;
+    [messageQueue enqueue:aCmd];
 }
 
-- (void) removeEndingComma
-{
-    NSRange lastComma = [outputBuffer rangeOfString:@"," options:NSBackwardsSearch];
-
-    if(lastComma.location == [outputBuffer length]-1) {
-        [outputBuffer replaceCharactersInRange:lastComma
-                                           withString: @""];
-    }
-}
-
-- (void) addLong:(NSString*)aValueName withValue:(long)aValue
-{
-    [outputBuffer appendFormat:@"%@=%ld,",aValueName,aValue];
-}
-
-- (void) addDouble:(NSString*)aValueName withValue:(double)aValue
-{
-    [outputBuffer appendFormat:@"%@=%f,",aValueName,aValue];
-}
-
-- (void) addString:(NSString*)aValueName withValue:(NSString*)aValue
-{
-    [outputBuffer appendFormat:@"%@=\"%@\",",aValueName,aValue];
-}
+//- (void) removeEndingComma
+//{
+//    NSRange lastComma = [outputBuffer rangeOfString:@"," options:NSBackwardsSearch];
+//
+//    if(lastComma.location == [outputBuffer length]-1) {
+//        [outputBuffer replaceCharactersInRange:lastComma
+//                                           withString: @""];
+//    }
+//}
+//
+//- (void) addLong:(NSString*)aValueName withValue:(long)aValue
+//{
+//    [outputBuffer appendFormat:@"%@=%ld,",aValueName,aValue];
+//}
+//
+//- (void) addDouble:(NSString*)aValueName withValue:(double)aValue
+//{
+//    [outputBuffer appendFormat:@"%@=%f,",aValueName,aValue];
+//}
+//
+//- (void) addString:(NSString*)aValueName withValue:(NSString*)aValue
+//{
+//    [outputBuffer appendFormat:@"%@=\"%@\",",aValueName,aValue];
+//}
 - (void) alarmsChanged:(NSNotification*)aNote
 {
     if(!stealthMode){
@@ -453,6 +423,21 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) updateRunState:(ORRunModel*)rc
 {
     if(!stealthMode){
+        NSDictionary* info          = [rc runInfo];
+        uint32_t runNumberLocal     = (uint32_t)[[info objectForKey:@"kRunNumber"] unsignedLongValue];
+        uint32_t subRunNumberLocal  = (uint32_t)[[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
+        uint32_t runStatus          = (uint32_t)[[info objectForKey:@"ORRunStatusValue"]unsignedLongValue];
+        uint32_t runMask            = (uint32_t)[[info objectForKey:@"ORRunTypeMask"]unsignedLongValue];
+        uint32_t runPaused          = (uint32_t)[[info objectForKey:@"ORRunPaused"]unsignedLongValue];
+        ORInFluxDBCmd* aCmd = [[ORInFluxDBCmd alloc] initWithCmdType:kInfluxDBMeasurement];
+        [aCmd start:@"RunInfo" withTags:@"Type=Run"];
+        [aCmd addLong:@"RunNumber"    withValue:runNumberLocal];
+        [aCmd addLong:@"SubRunNumber" withValue:subRunNumberLocal];
+        [aCmd addLong:@"RunStatus"    withValue:runStatus];
+        [aCmd addLong:@"RunMask"      withValue:runMask];
+        [aCmd addLong:@"RunPaused"    withValue:runPaused];
+        [aCmd end:self];
+        [aCmd release];
     }
 }
 
@@ -468,11 +453,20 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     if([[info objectForKey:@"kRunMode"] intValue]==kNormalRun){
         uint32_t runNumberLocal     = (uint32_t)[[info objectForKey:@"kRunNumber"] unsignedLongValue];
         uint32_t subRunNumberLocal  = (uint32_t)[[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
-        [self startDBChunk:@"RunInfo" withTags:@"Type=StartRun"];
-        [self addLong:@"RunNumber"    withValue:runNumberLocal];
-        [self addLong:@"SubRunNumber" withValue:subRunNumberLocal];
-        [self endDBChunk];
-        [self sendAllChunksToDB];
+ 
+        ORInFluxDBCmd* aCmd = [[ORInFluxDBCmd alloc] initWithCmdType:kInfluxDBMeasurement];
+        [aCmd start:@"RunInfo" withTags:[NSString stringWithFormat:@"Type=StartRun"]];
+        [aCmd addLong:@"RunNumber"    withValue:runNumberLocal];
+        [aCmd addLong:@"SubRunNumber" withValue:subRunNumberLocal];
+        [aCmd end:self];
+        [aCmd release];
+
+        
+//        [self startDBMeasurement:@"RunInfo" withTags:@"Type=StartRun"];
+//        [self addLong:@"RunNumber"    withValue:runNumberLocal];
+//        [self addLong:@"SubRunNumber" withValue:subRunNumberLocal];
+//        [self endDBMeasurement];
+//        [self sendMeasurementsToDB];
     }
 }
 
@@ -483,12 +477,12 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         uint32_t runNumberLocal     = (uint32_t)[[info objectForKey:@"kRunNumber"] unsignedLongValue];
         uint32_t subRunNumberLocal  = (uint32_t)[[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
         float elapsedTimeLocal      = [[info objectForKey:@"kElapsedTime"]floatValue];
-        [self startDBChunk:@"RunInfo" withTags:@"Type=EndRun"];
-        [self addLong:@"RunNumber"     withValue:runNumberLocal];
-        [self addLong:@"SubRunNumber"  withValue:subRunNumberLocal];
-        [self addDouble:@"ElapsedTime" withValue:elapsedTimeLocal];
-        [self endDBChunk];
-        [self sendAllChunksToDB];
+//        [self startDBMeasurement:@"RunInfo" withTags:@"Type=EndRun"];
+//        [self addLong:@"RunNumber"     withValue:runNumberLocal];
+//        [self addLong:@"SubRunNumber"  withValue:subRunNumberLocal];
+//        [self addDouble:@"ElapsedTime" withValue:elapsedTimeLocal];
+//        [self endDBMeasurement];
+//        [self sendMeasurementsToDB];
     }
 }
 
@@ -499,24 +493,26 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
                                             @"",                        @"alertMessage",
                                             [NSNumber numberWithInt:0], @"alertMessageType",
                                             nil];
-//    [self addObject:self valueDictionary:alertMessageDictionary];
-    NSLog(@"Database operator message cleared from database\n");
-
+//    [self startDBMeasurement:@"ORCA" withTags:@"alarm=cleared"];
+//    [self addString:@"alertMessage"   withValue:@""];
+//    [self addLong:@"alertMessageType" withValue:0];
+//    [self endDBMeasurement];
+//    [self sendMeasurementsToDB];
 }
+
 - (void) postAlert
 {
     NSString* messageToPost;
     if([alertMessage length]==0)messageToPost = @"";
     else messageToPost = alertMessage;
     
-    NSDictionary* alertMessageDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            messageToPost,                      @"alertMessage",
-                                            [NSNumber numberWithInt:alertType], @"alertMessageType",
-                                            nil];
-//    [self addObject:self valueDictionary:alertMessageDictionary];
-    NSLog(@"Operator message posted To database: %@\n",messageToPost);
-
+//    [self startDBMeasurement:@"ORCA" withTags:@"alarm=posted"];
+//    [self addString:@"alertMessage"   withValue:messageToPost];
+//    [self addLong:@"alertMessageType" withValue:alertType];
+//    [self endDBMeasurement];
+//    [self sendMeasurementsToDB];
 }
+
 - (NSString*) alertMessage
 {
     if(!alertMessage)return @"";
@@ -529,9 +525,8 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     
     [alertMessage autorelease];
     alertMessage = [aAlertMessage copy];
-
-//    [[NSNotificationCenter defaultCenter] postNotificationName:ORCouchDBModelAlertMessageChanged object:self];
 }
+
 - (void) runOptionsOrTimeChanged:(NSNotification*)aNote
 {
     if(!scheduledForRunInfoUpdate){
@@ -567,47 +562,13 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [encoder encodeObject:bucket        forKey:@"Bucket"];
 }
 
-- (void) testPost
+- (void) executeDBCmd:(int)aCmdID
 {
-    [self startDBChunk:@"CPU" withTags:@"host=MarksLaptop,type=Mac"];
-    [self addDouble:@"Val1" withValue:random_range(0,100)];
-    [self addDouble:@"Val2" withValue:random_range(0,100)];
-    [self endDBChunk];
-    [self sendAllChunksToDB];
+    ORInFluxDBCmd* aCmd = [[ORInFluxDBCmd alloc] initWithCmdType:aCmdID];
+    [aCmd end:self];
+    [aCmd release];
 }
 
-
-
-#pragma mark NSURLConnection Delegate Methods
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-    [responseData release];
-    responseData = [[NSMutableData alloc] init];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{
-    // Append the new data to the instance variable you declared
-    [responseData appendData:data];
-    NSLog(@"%@\n",[[[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding]autorelease]);
-}
-
-- (NSCachedURLResponse *)connection:(NSURLConnection *)connection
-                  willCacheResponse:(NSCachedURLResponse*)cachedResponse
-{
-    return nil; // Not need to cache response
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-    [responseData release];
-    responseData = nil;
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
-{
-    NSLog(@"%@\n",error);
-}
 
 - (uint32_t) queueMaxSize
 {
@@ -662,15 +623,22 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
                 }
             }
             if(!thisHostAddress)thisHostAddress = @"";
-            [self startDBChunk:@"CPU" withTags:[NSString stringWithFormat:@"name=%@",computerName()]];
-            [self addString:@"hwAddress" withValue:macAddress()];
-            [self addString:@"ipAddress" withValue:thisHostAddress];
-            [self endDBChunk];
-            [self startDBChunk:@"ORCA" withTags:[NSString stringWithFormat:@"name=%@",computerName()]];
-            [self addLong:  @"uptime" withValue:[[(ORAppDelegate*)(ORAppDelegate*)[NSApp delegate] memoryWatcher] accurateUptime]];
-            [self addLong:  @"memory" withValue:[[(ORAppDelegate*)(ORAppDelegate*)[NSApp delegate] memoryWatcher] orcaMemory]];
-            [self addString:@"version" withValue:fullVersion()];
-            [self endDBChunk];
+            ORInFluxDBCmd* aMeasurement = [[ORInFluxDBCmd alloc] initWithCmdType:kInfluxDBMeasurement];
+            [aMeasurement start:@"CPU" withTags:[NSString stringWithFormat:@"name=%@",computerName()]];
+            [aMeasurement addString:@"hwAddress" withValue:macAddress()];
+            [aMeasurement addString:@"ipAddress" withValue:thisHostAddress];
+            [aMeasurement end:self];
+            [aMeasurement release];
+
+            long uptime = [[(ORAppDelegate*)(ORAppDelegate*)[NSApp delegate] memoryWatcher] accurateUptime];
+            long memory = [[(ORAppDelegate*)(ORAppDelegate*)[NSApp delegate] memoryWatcher] orcaMemory];
+
+            aMeasurement = [[ORInFluxDBCmd alloc] initWithCmdType:kInfluxDBMeasurement];
+            [aMeasurement start:@"ORCA" withTags:@"type=stats"];
+            [aMeasurement addLong:@"uptime" withValue:uptime];
+            [aMeasurement addLong:@"memory" withValue:memory];
+            [aMeasurement end:self];
+            [aMeasurement release];
 
             NSFileManager* fm = [NSFileManager defaultManager];
             NSArray* diskInfo = [fm mountedVolumeURLsIncludingResourceValuesForKeys:0 options:NSVolumeEnumerationSkipHiddenVolumes];
@@ -681,17 +649,19 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
                 
                 if (fsDictionary != nil){
                     //if([aVolume rangeOfString:@"Volumes"].location !=NSNotFound){
-                       // aVolume = [aVolume substringFromIndex:9];
-                        [self startDBChunk:@"DiskInfo" withTags:[NSString stringWithFormat:@"disk=%@",aVolume]];
-                        double freeSpace   = [[fsDictionary objectForKey:@"NSFileSystemFreeSize"] doubleValue]/1E9;
-                        double totalSpace  = [[fsDictionary objectForKey:@"NSFileSystemSize"] doubleValue]/1E9;
-                        double percentUsed = 100*(totalSpace-freeSpace)/totalSpace;
-                        [self addDouble:@"freeSpace"   withValue:freeSpace];
-                        [self addDouble:@"totalSpace"  withValue:totalSpace];
-                        [self addDouble:@"percentUsed" withValue:percentUsed];
-                        [self endDBChunk];
-                   // }
-                 }
+                    // aVolume = [aVolume substringFromIndex:9];
+                    double freeSpace   = [[fsDictionary objectForKey:@"NSFileSystemFreeSize"] doubleValue]/1E9;
+                    double totalSpace  = [[fsDictionary objectForKey:@"NSFileSystemSize"] doubleValue]/1E9;
+                    double percentUsed = 100*(totalSpace-freeSpace)/totalSpace;
+                    
+                    ORInFluxDBCmd* aCmd = [[ORInFluxDBCmd alloc] initWithCmdType:kInfluxDBMeasurement];
+                    [aCmd start:@"DiskInfo" withTags:[NSString stringWithFormat:@"disk=%@",aVolume]];
+                    [aCmd addDouble:@"freeSpace"   withValue:freeSpace];
+                    [aCmd addDouble:@"totalSpace"  withValue:totalSpace];
+                    [aCmd addDouble:@"percentUsed" withValue:percentUsed];
+                    [aCmd end:self];
+                    [aCmd release];
+                }
             }
         }
         @catch (NSException* e){
@@ -699,15 +669,16 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         }
         @finally {
             [self performSelector:@selector(updateMachineRecord) withObject:nil afterDelay:60];
-            [self sendAllChunksToDB];
         }
     }
 }
+
 - (void) updateExperiment
 {
     if(!stealthMode){
     }
 }
+
 #pragma mark ***Thread
 - (void)sendMeasurments
 {
@@ -718,34 +689,99 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
     do {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        NSData* theData = [messageQueue dequeue];
-        if(theData){
-            NSString* measurements = [[[NSString alloc] initWithData:theData encoding:NSASCIIStringEncoding]autorelease];
+        ORInFluxDBCmd*     aCmd = [messageQueue dequeue];
+        if(aCmd){
+            NSString*            requestString = nil;
+            NSMutableURLRequest* request       = nil;
             if(accessType == kUseInFluxHttpProtocol){
                 //-----access type is via inFluxDB http format-----
-                NSString* tokenHeader   = [NSString stringWithFormat:@"Token %@",[self authToken]];
-                NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/write?org=%@&bucket=%@&precision=ns",hostName,portNumber,org,bucket];
-                NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
-                request.HTTPMethod = @"POST";
-                [request setValue:@"text/plain; charset=utf-8"    forHTTPHeaderField:@"Content-Type"];
-                [request setValue:@"text/plain; application/json" forHTTPHeaderField:@"Accept"];
-                [request setValue:tokenHeader                     forHTTPHeaderField:@"Authorization"];
+                switch([aCmd cmdType]){
+                    case kInfluxDBMeasurement:
+                        requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/write?org=%@&bucket=%@&precision=ns",hostName,portNumber,org,bucket];
+                        request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
+                        
+                        request.HTTPMethod = @"POST";
+                        [request setValue:@"text/plain; charset=utf-8"    forHTTPHeaderField:@"Content-Type"];
+                        [request setValue:@"text/plain; application/json" forHTTPHeaderField:@"Accept"];
+                        [request setValue:[NSString stringWithFormat:@"Token %@",[self authToken]]                     forHTTPHeaderField:@"Authorization"];
+                        request.HTTPBody = [aCmd payload];
+                        break;
+                        
+                    case kInFluxDBListBuckets:
+                        requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/buckets",hostName,portNumber];
+                        request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
+                        request.HTTPMethod = @"GET";
+                        [request setValue:[NSString stringWithFormat:@"Token %@",[self authToken]]                     forHTTPHeaderField:@"Authorization"];
+                        break;
+                        
+                    case kInFluxDBListOrgs:
+                        requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/orgs",hostName,portNumber];
+                        request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
+                        
+                        request.HTTPMethod = @"GET";
+                        [request setValue:[NSString stringWithFormat:@"Token %@",[self authToken]] forHTTPHeaderField:@"Authorization"];
+
+//                        NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+//                        [dict setObject:@"UNC"  forKey:@"org"];
+//                        [dict setObject:@"L200" forKey:@"name"];
+//                        NSMutableDictionary* ret = [NSMutableDictionary dictionary];
+//                        [ret setObject:@"expire" forKey:@"type"];
+//                        [ret setObject:[NSNumber numberWithInt:86400] forKey:@"everySeconds"];
+//                        [ret setObject:[NSNumber numberWithInt:0] forKey:@"shardGroupDurationSeconds"];
+//                        NSArray* retArray = [NSArray arrayWithObject:ret];
+//                        [dict setObject:retArray forKey:@"retentionRules"];
+                        
+//                        NSError *error;
+//                        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
+//                                                                           options:0 // Pass 0 if you don't care about the readability of the generated string
+//                                                                             error:&error];
+//
+//
+//
+//                       // NSData* d =[s dataUsingEncoding:NSASCIIStringEncoding];
+//                        request.HTTPBody = jsonData;
+
+                        break;
+                }
                 
-                NSData *requestBodyData = [measurements dataUsingEncoding:NSUTF8StringEncoding];
-                request.HTTPBody = requestBodyData;
+                if(requestString){
+                    NSURLSessionConfiguration* config = [NSURLSessionConfiguration defaultSessionConfiguration];
+                    NSURLSession*             session = [NSURLSession sessionWithConfiguration:config];
+                    
+                    NSURLSessionDataTask* dbTask = [session dataTaskWithRequest:request completionHandler:^(NSData* data, NSURLResponse* response, NSError* error) {
+                        if (!error) {
+                            NSHTTPURLResponse* httpResp = (NSHTTPURLResponse*) response;
+                            NSDictionary* json = [NSJSONSerialization JSONObjectWithData: data
+                                                                                 options: kNilOptions
+                                                                                   error: &error];
+                            switch([aCmd cmdType]){
+                                case kInFluxDBListOrgs:
+                                    //if (httpResp.statusCode == 200) {
+                                    NSLog(@"Orgs: %d\n",[aCmd cmdType]);
+                                    NSLog(@"code: %d\n%@\n",httpResp.statusCode,[json allKeys]);
+                                    break;
+                                case kInFluxDBListBuckets:
+                                    //if (httpResp.statusCode == 200) {
+                                    NSLog(@"Buckets: %d\n",[aCmd cmdType]);
+                                    NSLog(@"code: %d\n%@\n",httpResp.statusCode,[json allKeys]);
+                                    break;
 
-                // Create url connection and fire request
-                [[[NSURLConnection alloc] initWithRequest:request delegate:self]autorelease];
-                totalSent += [measurements length];
-
+                            }
+                        }
+                    }];
+                    
+                    [dbTask resume]; //task is created in paused state, so start it
+                    
+                    totalSent += [[aCmd payload] length];
+                }
             }
             else {
                 //-----access type is via telegraf socket-----
                 if(!inputStream) [self setUpInFluxSocket];
-                [self writeOut:measurements];
+                [self writeOut:[aCmd outputBuffer]];
             }
         }
-        [NSThread sleepForTimeInterval:.001];
+        [NSThread sleepForTimeInterval:.01];
         [pool release];
     }while(!canceled);
     [self closeInFluxSocket];
@@ -753,6 +789,9 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 }
 
 #pragma mark ***Access Via Telegraf thread
+//-------------------------------------------
+//------telegraf stuff.... may not use.....
+//-------------------------------------------
 - (short) socketStatus
 {
     return socketStatus;
@@ -792,7 +831,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
 - (void)openInFluxSocket
 {
-    inputStream = (NSInputStream *)readStream;
+    inputStream  = (NSInputStream *)readStream;
     outputStream = (NSOutputStream *)writeStream;
     
     [inputStream retain];
@@ -811,8 +850,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
 - (void)closeInFluxSocket
 {
-    NSLog(@"Closing InFluxDB\n");
-    
     [inputStream  close];
     [outputStream close];
     
@@ -873,7 +910,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     totalSent += [s length];
     //NSLog(@"%@", s);
 }
+//-------------------------------------------
 
 @end
-
-
