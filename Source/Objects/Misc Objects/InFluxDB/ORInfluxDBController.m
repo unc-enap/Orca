@@ -20,7 +20,6 @@
 
 #import "ORInFluxDBController.h"
 #import "ORInFluxDBModel.h"
-#import "ORInFluxDBCmd.h"
 
 @implementation ORInFluxDBController
 
@@ -33,12 +32,15 @@
 
 - (void) dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
  	[super dealloc];
 }
 
 -(void) awakeFromNib
 {
 	[super awakeFromNib];
+    [self registerNotificationObservers];
+    [self tableViewSelectionDidChange:nil];
 }
 
 
@@ -68,11 +70,6 @@
                      selector : @selector(orgChanged:)
                          name : ORInFluxDBOrgChanged
                        object : model];
- 
-    [notifyCenter addObserver : self
-                     selector : @selector(bucketNameChanged:)
-                         name : ORInFluxDBBucketNameChanged
-                       object : model];
     
     [notifyCenter addObserver : self
                      selector : @selector(inFluxDBLockChanged:)
@@ -98,6 +95,12 @@
                      selector : @selector(bucketArrayChanged:)
                          name : ORInFluxDBBucketArrayChanged
                         object: model];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(tableViewSelectionDidChange:)
+                         name : NSTableViewSelectionDidChangeNotification
+                       object : bucketTableView];
+
 }
 
 - (void) updateWindow
@@ -107,11 +110,9 @@
     [self portChanged:nil];
     [self authTokenChanged:nil];
     [self orgChanged:nil];
-    [self bucketNameChanged:nil];
     [self inFluxDBLockChanged:nil];
     [self rateChanged:nil];
     [self stealthModeChanged:nil];
-    [self bucketNameChanged:nil];
     [self bucketArrayChanged:nil];
 
 }
@@ -123,7 +124,7 @@
 
 - (void) bucketArrayChanged:(NSNotification*)aNote
 {
-    [bucketTableView setNeedsDisplay:YES];
+    [bucketTableView reloadData];
 }
 
 - (void) rateChanged:(NSNotification*)aNote
@@ -146,11 +147,6 @@
     [orgField setStringValue:[model org]];
 }
 
-- (void) bucketNameChanged:(NSNotification*)aNote
-{
-    [bucketNameField setStringValue:[model bucketName]];
-}
-
 - (void) authTokenChanged:(NSNotification*)aNote
 {
     [authTokenField setStringValue:[model authToken]];
@@ -164,7 +160,6 @@
     [portField            setEnabled:!locked];
     [authTokenField       setEnabled:!locked];
     [orgField             setEnabled:!locked];
-    [bucketNameField      setEnabled:!locked];
     [stealthModeButton    setEnabled:!locked];
 }
 
@@ -174,7 +169,6 @@
     [gSecurity setLock:ORInFluxDBLock to:secure];
     [InFluxDBLockButton setEnabled: secure];
 }
-
 
 #pragma mark •••Actions
 - (IBAction) stealthModeAction:(id)sender
@@ -219,31 +213,28 @@
     [model setOrg:[sender stringValue]];
 }
 
-- (IBAction) bucketNameAction:(id)sender
+- (IBAction) refreshInfoAction:(id)sender
 {
-    [model setBucketName:[sender stringValue]];
-}
-
-- (IBAction) listBucketsAction:(id)sender
-{
-    [model executeDBCmd:kInFluxDBListBuckets];
+    [model executeDBCmd:[ORInFluxDBListBuckets inFluxDBListBuckets]];
+    [model executeDBCmd:[ORInFluxDBListOrgs inFluxDBListOrgs]];
 }
 
 - (IBAction) listOrgsAction:(id)sender;
 {
-    [model executeDBCmd:kInFluxDBListOrgs];
+    [model executeDBCmd:[ORInFluxDBListOrgs inFluxDBListOrgs]];
 }
 
 - (IBAction) deleteBucketsAction:(id)sender
 {
-    [model executeDBCmd:kInFluxDBDeleteBucket];
+    [model deleteBucket:[bucketTableView selectedRow]];
 }
 
 - (IBAction) createBucketsAction:(id)sender
 {
-    [model executeDBCmd:kInFluxDBCreateBuckets];
+    [model createBuckets];
 }
 
+#pragma mark •••Table View Delegate Methods
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
     return [[model bucketArray] count];
@@ -252,9 +243,29 @@
 - (id) tableView:(NSTableView*) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
     NSArray* anArray = [model bucketArray];
-    if(anArray){
-        return [[anArray objectAtIndex:rowIndex] objectForKey:[aTableColumn identifier]];
+    if([[aTableColumn identifier] isEqualToString:@"retention"]){
+        NSArray* rules = [[anArray objectAtIndex:rowIndex] objectForKey:@"retentionRules"];
+        long time = [[[rules objectAtIndex:0] objectForKey:@"everySeconds"] longValue];
+        NSString* suffix;
+        float     div;
+        if(!rules) return @"Never";
+        else {
+            if(time>60*60*24*7)     { suffix = @"wks" ;  div = 60*60*24*7; }
+            else  if(time>60*60*24) { suffix = @"days";  div = 60*60*24;   }
+            else  if(time>60*60)    { suffix = @"hrs" ;  div = 60*60;      }
+            else  if(time>60*60)    { suffix = @"mins";  div = 60;         }
+            else                    { suffix = @"secs";  div = 1;          }
+            return [NSString stringWithFormat:@"%.0f %@",time/div,suffix];
+        }
     }
-    return @"";
+    else return [[anArray objectAtIndex:rowIndex] objectForKey:[aTableColumn identifier]];
+}
+
+- (void) tableViewSelectionDidChange:(NSNotification *)aNotification
+{
+    if([aNotification object] == bucketTableView || aNotification == nil){
+        int selectedIndex = (int)[bucketTableView selectedRow];
+        [deleteBucketButton setEnabled:(selectedIndex>=0)];
+    }
 }
 @end

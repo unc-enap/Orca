@@ -41,12 +41,10 @@ NSString* ORInFluxDBOrgChanged             = @"ORInFluxDBOrgChanged";
 NSString* ORInFluxDBBucketChanged          = @"ORInFluxDBBucketChanged";
 NSString* ORInFluxDBHostNameChanged        = @"ORInFluxDBHostNameChanged";
 NSString* ORInFluxDBModelDBInfoChanged     = @"ORInFluxDBModelDBInfoChanged";
-NSString* ORInFluxDBTimeConnectedChanged   = @"ORInFluxDBTimeConnectedChanged";
 NSString* ORInFluxDBRateChanged            = @"ORInFluxDBRateChanged";
 NSString* ORInFluxDBStealthModeChanged     = @"ORInFluxDBStealthModeChanged";
 NSString* ORInFluxDBBucketArrayChanged     = @"ORInFluxDBBucketArrayChanged";
 NSString* ORInFluxDBOrgArrayChanged        = @"ORInFluxDBOrgArrayChanged";
-NSString* ORInFluxDBBucketNameChanged      = @"ORInFluxDBBucketNameChanged";
 
 NSString* ORInFluxDBLock                   = @"ORInFluxDBLock";
 
@@ -89,7 +87,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [processThread   release];
     [authToken       release];;
     [org             release];
-    [bucketName      release];
     [thisHostAddress release];
     [bucketArray     release];
     [orgArray        release];
@@ -102,8 +99,11 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) wakeUp
 {
     if(![self aWake]){
+        
         [self _startAllPeriodicOperations];
         [self registerNotificationObservers];
+        [self executeDBCmd:[ORInFluxDBListBuckets inFluxDBListBuckets]];
+        [self executeDBCmd:[ORInFluxDBListOrgs    inFluxDBListOrgs]];
     }
     [super wakeUp];
 }
@@ -132,8 +132,8 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [[self connectors] setObject:aConnector forKey:ORInFluxDBModelInConnector];
     [aConnector setOffColor:[NSColor brownColor]];
     [aConnector setOnColor:[NSColor magentaColor]];
-    [ aConnector setConnectorType: 'DB I' ];
-    [ aConnector addRestrictedConnectionType: 'DB O' ]; //can only connect to DB outputs
+    [aConnector setConnectorType: 'DB I' ];
+    [aConnector addRestrictedConnectionType: 'DB O' ]; //can only connect to DB outputs
     
     [aConnector release];
 }
@@ -268,32 +268,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBOrgChanged object:self];
 }
 
-- (NSString*)   bucketName
-{
-    return bucketName;
-}
-
-- (void) setBucketName:(NSString*)aName
-{
-    if(!aName)aName = @"";
-    [[[self undoManager] prepareWithInvocationTarget:self] setBucketName:bucketName ];
-    
-    [bucketName autorelease];
-    bucketName = [aName copy];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBBucketNameChanged object:self];
-}
-
-- (BOOL) isConnected
-{
-    return isConnected;
-}
-
-- (void) setIsConnected:(BOOL)aNewIsConnected
-{
-    isConnected = aNewIsConnected;
-}
-
 - (BOOL) stealthMode
 {
     return stealthMode;
@@ -373,15 +347,15 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         uint32_t runStatus          = (uint32_t)[[info objectForKey:@"ORRunStatusValue"]unsignedLongValue];
         uint32_t runMask            = (uint32_t)[[info objectForKey:@"ORRunTypeMask"]unsignedLongValue];
         uint32_t runPaused          = (uint32_t)[[info objectForKey:@"ORRunPaused"]unsignedLongValue];
-        ORInFluxDBCmd* aCmd = [[ORInFluxDBCmd alloc] initWithCmdType:kInfluxDBMeasurement];
+        
+        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement inFluxDBMeasurement:@"L200" org:org];
         [aCmd start:@"RunInfo" withTags:@"Type=Run"];
         [aCmd addLong:@"RunNumber"    withValue:runNumberLocal];
         [aCmd addLong:@"SubRunNumber" withValue:subRunNumberLocal];
         [aCmd addLong:@"RunStatus"    withValue:runStatus];
         [aCmd addLong:@"RunMask"      withValue:runMask];
         [aCmd addLong:@"RunPaused"    withValue:runPaused];
-        [aCmd end:self];
-        [aCmd release];
+        [self executeDBCmd:aCmd];
     }
 }
 
@@ -398,12 +372,11 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         uint32_t runNumberLocal     = (uint32_t)[[info objectForKey:@"kRunNumber"] unsignedLongValue];
         uint32_t subRunNumberLocal  = (uint32_t)[[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
  
-        ORInFluxDBCmd* aCmd = [[ORInFluxDBCmd alloc] initWithCmdType:kInfluxDBMeasurement];
+        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement inFluxDBMeasurement:@"L200" org:org];
         [aCmd start:@"RunInfo" withTags:[NSString stringWithFormat:@"Type=StartRun"]];
         [aCmd addLong:@"RunNumber"    withValue:runNumberLocal];
         [aCmd addLong:@"SubRunNumber" withValue:subRunNumberLocal];
-        [aCmd end:self];
-        [aCmd release];
+        [self executeDBCmd:aCmd];
 
         
 //        [self startDBMeasurement:@"RunInfo" withTags:@"Type=StartRun"];
@@ -479,11 +452,40 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     }
 }
 
-- (void) executeDBCmd:(int)aCmdID
+- (void) executeDBCmd:(id)aCmd
 {
-    ORInFluxDBCmd* aCmd = [[ORInFluxDBCmd alloc] initWithCmdType:aCmdID];
-    [aCmd end:self];
-    [aCmd release];
+    [aCmd executeCmd:self];
+}
+
+- (NSString*) orgId
+{
+    for(id anOrg in orgArray){
+        if([[anOrg objectForKey:@"name"] isEqualToString:org]){
+            return [anOrg objectForKey:@"id"];
+        }
+    }
+    return @"";
+}
+
+- (void) deleteBucket:(NSInteger)index
+{
+    NSDictionary* bucketInfo   = [bucketArray objectAtIndex:index];
+    NSString*      aBucketId   = [bucketInfo objectForKey:@"id"];
+    if(aBucketId){
+        ORInFluxDBDeleteBucket* aCmd = [ORInFluxDBDeleteBucket inFluxDBDeleteBucket];
+        [aCmd setBucketId:[bucketInfo objectForKey:@"id"]];
+        [self executeDBCmd:aCmd];
+        [self performSelector:@selector(executeDBCmd:) withObject:[ORInFluxDBListBuckets inFluxDBListBuckets] afterDelay:2];
+    }
+}
+
+- (void) createBuckets
+{
+    [self executeDBCmd:[ORInFluxDBCreateBucket inFluxDBCreateBucket:@"L200"    orgId:[self orgId] expireTime:60*60]];
+    [self executeDBCmd:[ORInFluxDBCreateBucket inFluxDBCreateBucket:@"ORCA"    orgId:[self orgId] expireTime:60*60]];
+    [self executeDBCmd:[ORInFluxDBCreateBucket inFluxDBCreateBucket:@"Sensors" orgId:[self orgId] expireTime:60*60]];
+
+    [self performSelector:@selector(executeDBCmd:) withObject:[ORInFluxDBListBuckets inFluxDBListBuckets] afterDelay:1];
 }
 
 #pragma mark ***Archival
@@ -495,7 +497,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [self setPortNumber: [decoder decodeIntegerForKey:@"PortNumber"]];
     [self setAuthToken:  [decoder decodeObjectForKey:@"Token"]];
     [self setOrg:        [decoder decodeObjectForKey:@"Org"]];
-    [self setBucket:     [decoder decodeObjectForKey:@"Bucket"]];
     [[self undoManager]  enableUndoRegistration];
     [self registerNotificationObservers];
    return self;
@@ -508,7 +509,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [encoder encodeObject:hostName      forKey:@"HostName"];
     [encoder encodeObject:authToken     forKey:@"Token"];
     [encoder encodeObject:org           forKey:@"Org"];
-    [encoder encodeObject:bucketName    forKey:@"Bucket"];
 }
 
 - (uint32_t) queueMaxSize
@@ -565,22 +565,20 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
                 }
             }
             if(!thisHostAddress)thisHostAddress = @"";
-            ORInFluxDBCmd* aMeasurement = [[ORInFluxDBCmd alloc] initWithCmdType:kInfluxDBMeasurement];
+            ORInFluxDBMeasurement* aMeasurement = [ORInFluxDBMeasurement inFluxDBMeasurement:@"Sensors" org:org];
             [aMeasurement start:@"CPU" withTags:[NSString stringWithFormat:@"name=%@",computerName()]];
             [aMeasurement addString:@"hwAddress" withValue:macAddress()];
             [aMeasurement addString:@"ipAddress" withValue:thisHostAddress];
-            [aMeasurement end:self];
-            [aMeasurement release];
+            [self executeDBCmd:aMeasurement];
 
             long uptime = [[(ORAppDelegate*)(ORAppDelegate*)[NSApp delegate] memoryWatcher] accurateUptime];
             long memory = [[(ORAppDelegate*)(ORAppDelegate*)[NSApp delegate] memoryWatcher] orcaMemory];
 
-            aMeasurement = [[ORInFluxDBCmd alloc] initWithCmdType:kInfluxDBMeasurement];
+            aMeasurement  = [ORInFluxDBMeasurement inFluxDBMeasurement:@"Sensors" org:org];
             [aMeasurement start:@"ORCA" withTags:@"type=stats"];
             [aMeasurement addLong:@"uptime" withValue:uptime];
             [aMeasurement addLong:@"memory" withValue:memory];
-            [aMeasurement end:self];
-            [aMeasurement release];
+            [self executeDBCmd:aMeasurement];
 
             NSFileManager* fm = [NSFileManager defaultManager];
             NSArray* diskInfo = [fm mountedVolumeURLsIncludingResourceValuesForKeys:0 options:NSVolumeEnumerationSkipHiddenVolumes];
@@ -596,13 +594,12 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
                     double totalSpace  = [[fsDictionary objectForKey:@"NSFileSystemSize"] doubleValue]/1E9;
                     double percentUsed = 100*(totalSpace-freeSpace)/totalSpace;
                     
-                    ORInFluxDBCmd* aCmd = [[ORInFluxDBCmd alloc] initWithCmdType:kInfluxDBMeasurement];
-                    [aCmd start:@"DiskInfo" withTags:[NSString stringWithFormat:@"disk=%@",aVolume]];
-                    [aCmd addDouble:@"freeSpace"   withValue:freeSpace];
-                    [aCmd addDouble:@"totalSpace"  withValue:totalSpace];
-                    [aCmd addDouble:@"percentUsed" withValue:percentUsed];
-                    [aCmd end:self];
-                    [aCmd release];
+                    aMeasurement  = [ORInFluxDBMeasurement inFluxDBMeasurement:@"ORCA" org:org];
+                    [aMeasurement start:@"DiskInfo" withTags:[NSString stringWithFormat:@"disk=%@",aVolume]];
+                    [aMeasurement addDouble:@"freeSpace"   withValue:freeSpace];
+                    [aMeasurement addDouble:@"totalSpace"  withValue:totalSpace];
+                    [aMeasurement addDouble:@"percentUsed" withValue:percentUsed];
+                    [self executeDBCmd:aMeasurement];
                 }
             }
         }
@@ -643,94 +640,21 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         ORInFluxDBCmd*     aCmd = [messageQueue dequeue];
         if(aCmd){
-            NSString*            requestString = nil;
-            NSMutableURLRequest* request       = nil;
-            //-----access type is via inFluxDB http format-----
-            switch([aCmd cmdType]){
-                case kInfluxDBMeasurement:
-                    requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/write?org=%@&bucket=%@&precision=ns",hostName,portNumber,org,bucketName];
-                    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
-                    
-                    request.HTTPMethod = @"POST";
-                    [request setValue:@"text/plain; charset=utf-8"    forHTTPHeaderField:@"Content-Type"];
-                    [request setValue:@"text/plain; application/json" forHTTPHeaderField:@"Accept"];
-                    [request setValue:[NSString stringWithFormat:@"Token %@",[self authToken]]                     forHTTPHeaderField:@"Authorization"];
-                    request.HTTPBody = [aCmd payload];
-                    break;
-                    
-                case kInFluxDBListBuckets:
-                    requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/buckets",hostName,portNumber];
-                    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
-                    request.HTTPMethod = @"GET";
-                    [request setValue:[NSString stringWithFormat:@"Token %@",[self authToken]]                     forHTTPHeaderField:@"Authorization"];
-                    break;
-                    
-                case kInFluxDBListOrgs:
-                    requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/orgs",hostName,portNumber];
-                    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
-                    
-                    request.HTTPMethod = @"GET";
-                    [request setValue:[NSString stringWithFormat:@"Token %@",[self authToken]] forHTTPHeaderField:@"Authorization"];
-                    break;
-                    
-                case kInFluxDBDeleteBucket:
-                    requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/buckets/4e45adc849642b28",hostName,portNumber];
-                    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
-                    request.HTTPMethod = @"DELETE";
-                    [request setValue:[NSString stringWithFormat:@"Token %@",[self authToken]]                     forHTTPHeaderField:@"Authorization"];
-                    [request setValue:@"text/plain; application/json" forHTTPHeaderField:@"Accept"];
-                    break;
-                    
-                case kInFluxDBCreateBuckets:
-                {
-                    requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/buckets",hostName,portNumber];
-                    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
-                    request.HTTPMethod = @"POST";
-                    [request setValue:[NSString stringWithFormat:@"Token %@",[self authToken]] forHTTPHeaderField:@"Authorization"];
-                    [request setValue:@"text/plain; application/json" forHTTPHeaderField:@"Accept"];
-
-                    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-                    [dict setObject:@"6a6774cef6c9eb70"  forKey:@"orgID"];
-                    [dict setObject:@"L200" forKey:@"name"];
-                    NSMutableDictionary* ret = [NSMutableDictionary dictionary];
-                    [ret setObject:@"expire" forKey:@"type"];
-                    [ret setObject:[NSNumber numberWithInt:86400] forKey:@"everySeconds"];
-                    [ret setObject:[NSNumber numberWithInt:0] forKey:@"shardGroupDurationSeconds"];
-                    NSArray* retArray = [NSArray arrayWithObject:ret];
-                    [dict setObject:retArray forKey:@"retentionRules"];
-                    
-                    NSError* error;
-                    NSData*  jsonData = [NSJSONSerialization dataWithJSONObject:dict
-                                                                        options:0 // Pass 0 if you don't care about the readability of the generated string
-                                                                          error:&error];
-                    request.HTTPBody = jsonData;
+            NSMutableURLRequest* request = [aCmd requestFrom:self];
+            NSURLSessionConfiguration* config = [NSURLSessionConfiguration defaultSessionConfiguration];
+            NSURLSession*             session = [NSURLSession sessionWithConfiguration:config];
+            NSURLSessionDataTask*      dbTask = [session dataTaskWithRequest:request completionHandler:^(NSData* data, NSURLResponse* response, NSError* error) {
+                if (!error) {
+                    NSDictionary* result = [NSJSONSerialization JSONObjectWithData: data
+                                                                           options: kNilOptions
+                                                                             error: &error];
+                    [aCmd logResult:result delegate:self];
                 }
-
-                    break;
-            }
+            }];
             
-            if(requestString){
-                NSURLSessionConfiguration* config = [NSURLSessionConfiguration defaultSessionConfiguration];
-                NSURLSession*             session = [NSURLSession sessionWithConfiguration:config];
-                NSURLSessionDataTask*      dbTask = [session dataTaskWithRequest:request completionHandler:^(NSData* data, NSURLResponse* response, NSError* error) {
-                    if (!error) {
-                        NSDictionary* result = [NSJSONSerialization JSONObjectWithData: data
-                                                                               options: kNilOptions
-                                                                                 error: &error];
-                        switch([aCmd cmdType]){
-                            case kInFluxDBCreateBuckets: NSLog(@"%@\n",result);          break;
-                            case kInFluxDBDeleteBucket:  NSLog(@"%@\n",result);          break;
-                            case kInFluxDBListOrgs:      [self decodeOrgList:result];    break;
-                            case kInFluxDBListBuckets:   [self decodeBucketList:result]; break;
-                            default: break;
-                        }
-                    }
-                }];
-                
-                [dbTask resume]; //task is created in paused state, so start it
-                
-                totalSent += [[aCmd payload] length];
-            }
+            [dbTask resume]; //task is created in paused state, so start it
+            
+            totalSent += [aCmd requestSize];
         }
         [NSThread sleepForTimeInterval:.01];
         [pool release];
@@ -740,36 +664,28 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
 - (void) decodeBucketList:(NSDictionary*)result
 {
-    NSLog(@"Buckets:\n");
     NSArray* anArray = [result objectForKey:@"buckets"];
-    for(id aBucket in anArray){
-        if(![[aBucket objectForKey:@"name"] hasPrefix:@"_"]){
-            NSLog(@"ORCA bucket:   %@ : ID = %@\n",[aBucket objectForKey:@"name"],[aBucket objectForKey:@"id"] );
-        }
-        else  {
-            NSLog(@"System bucket: %@\n",[aBucket objectForKey:@"name"] );
-        }
-    }
     if([anArray count]){
         [bucketArray release];
         bucketArray = [anArray retain];
     }
     else {
         [bucketArray release];
-        bucketArray = nil;;
+        bucketArray = nil;
     }
+    [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORInFluxDBBucketArrayChanged
+                                    object:self
+                                  userInfo:nil
+                             waitUntilDone:NO];
+
 }
 
 - (void) decodeOrgList:(NSDictionary*)result
 {
     NSArray* anArray = [result objectForKey:@"orgs"];
-    NSLog(@"Orgs:\n");
-    for(id anOrg in anArray){
-        NSLog(@"%@ : ID = %@\n",[anOrg objectForKey:@"name"],[anOrg objectForKey:@"id"] );
-    }
     if([anArray count]){
         [orgArray release];
-        orgArray = [orgArray retain];
+        orgArray = [anArray retain];
     }
     else {
         [orgArray release];

@@ -48,11 +48,9 @@
     NSArray*       bucketArray;
     NSArray*       orgArray;
     NSString*      org;
-    NSString*      bucketName;
     
     //----http vars--------
     NSMutableData* responseData;
-    bool           isConnected;
     NSString*      authToken;
 }
 
@@ -75,17 +73,20 @@
 - (NSString*)   authToken;
 - (void)        setAuthToken:(NSString*)aToken;
 - (NSString*)   org;
-- (void)        setBucketName:(NSString*)anOrg;
-- (NSString*)   bucketName;
 - (void)        setOrg:(NSString*)anOrg;
+- (NSString*)   orgId:(NSString*)aBucket;
 - (id)          nextObject;
 - (uint32_t)    queueMaxSize;
 - (NSInteger)   messageRate;
 - (BOOL)        stealthMode;
 - (void)        setStealthMode:(BOOL)aStealthMode;
-- (void)        executeDBCmd:(int)aCmdID;
+- (void)        executeDBCmd:(id)aCmd;
 - (NSArray*)    bucketArray;
 - (NSArray*)    orgArray;
+- (void)        deleteBucket:(NSInteger)index;
+- (void)        createBuckets;
+- (void)        decodeOrgList:(NSDictionary*)result;
+- (void)        decodeBucketList:(NSDictionary*)result;
 
 #pragma mark ***Thread
 - (void) sendCmd:(ORInFluxDBCmd*)aCmd;
@@ -104,8 +105,6 @@ extern NSString* ORInFluxDBHostNameChanged;
 extern NSString* ORInFluxDBRateChanged;
 extern NSString* ORInFluxDBAuthTokenChanged;
 extern NSString* ORInFluxDBOrgChanged;
-extern NSString* ORInFluxDBBucketNameChanged;
-extern NSString* ORInFluxDBTimeConnectedChanged;
 extern NSString* ORInFluxDBStealthModeChanged;
 extern NSString* ORInFluxDBBucketChanged;
 
