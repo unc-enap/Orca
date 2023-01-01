@@ -21,29 +21,86 @@
 NS_ASSUME_NONNULL_BEGIN
 @class ORInFluxDBModel;
 enum {
-    kInfluxDBMeasurement,
-    kInFluxDBCreateBuckets,
-    kInFluxDBDeleteBucket,
-    kInFluxDBListBuckets,
-    kInFluxDBListOrgs
+    kFluxMeasurement,
+    kFluxCreateBucket,
+    kFluxDeleteBucket,
+    kFluxListBuckets,
+    kFluxListOrgs
 };
 
+//----------------------------------------------------------------
+//  Base Class
+//----------------------------------------------------------------
 @interface ORInFluxDBCmd : NSObject
 {
     int cmdType;
-    NSMutableString* outputBuffer;
+    long requestSize;
 }
-- (id) initWithCmdType:(int)aType;
++ (ORInFluxDBCmd*) inFluxDBCmd:(int)aType;
+- (id) init:(int)aType;
 - (void) dealloc;
-- (int) cmdType;
+- (int)  cmdType;
+- (long) requestSize;
+- (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate;
+- (void) executeCmd:(ORInFluxDBModel*)aSender;
+- (void) logResult:(id)aResult delegate:(ORInFluxDBModel*)delegate;
+@end
+
+//----------------------------------------------------------------
+//  Delete bucket
+//----------------------------------------------------------------
+@interface ORInFluxDBDeleteBucket : ORInFluxDBCmd
+{
+    NSString* bucketId;
+}
++ (ORInFluxDBDeleteBucket*) inFluxDBDeleteBucket;
+- (void) dealloc;
+- (void) setBucketId:(NSString*) anId;
+@end
+
+//----------------------------------------------------------------
+//  List buckets
+//----------------------------------------------------------------
+@interface ORInFluxDBListBuckets : ORInFluxDBCmd
++ (ORInFluxDBListBuckets*) inFluxDBListBuckets;
+@end
+
+//----------------------------------------------------------------
+//  List Orgs
+//----------------------------------------------------------------
+@interface ORInFluxDBListOrgs : ORInFluxDBCmd
++ (ORInFluxDBListOrgs*) inFluxDBListOrgs;
+@end
+
+//----------------------------------------------------------------
+//  create bucket
+//----------------------------------------------------------------
+@interface ORInFluxDBCreateBucket : ORInFluxDBCmd
+{
+    NSString* bucket;
+    NSString* orgId;
+    long      expireTime;
+}
++ (ORInFluxDBCreateBucket*) inFluxDBCreateBucket:(NSString*)aName orgId:(NSString*)anId expireTime:(long)seconds;
+- (id) init:(int)aType bucket:(NSString*) aBucket orgId:(NSString*)anId expireTime:(long)seconds;
+@end
+
+//----------------------------------------------------------------
+//  Measurements
+//----------------------------------------------------------------
+@interface ORInFluxDBMeasurement : ORInFluxDBCmd
+{
+    NSMutableString* outputBuffer;
+    NSString* bucket;
+    NSString* org;
+}
++ (ORInFluxDBMeasurement*)inFluxDBMeasurement:(NSString*)aBucket org:(NSString*)anOrg;
+- (id) init:(int)aType bucket:(NSString*)aBucket org:(NSString*)anOrg;
 - (void) start:(NSString*)section withTags:(NSString*)someTags;
 - (void) removeEndingComma;
 - (void) addLong:(NSString*)aValueName withValue:(long)aValue;
 - (void) addDouble:(NSString*)aValueName withValue:(double)aValue;
 - (void) addString:(NSString*)aValueName withValue:(NSString*)aValue;
-- (void) end:(ORInFluxDBModel*)aSender;
-- (NSData*)   payload;
-- (NSString*) outputBuffer;
 @end
 
 NS_ASSUME_NONNULL_END
