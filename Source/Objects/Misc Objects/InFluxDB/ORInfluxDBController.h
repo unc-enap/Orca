@@ -22,9 +22,9 @@
     IBOutlet NSTextField*       hostNameField;
     IBOutlet NSTextField*       portField;
     IBOutlet NSTextField*       orgField;
-    IBOutlet NSTextField*       bucketNameField;
     IBOutlet NSTextField*       authTokenField;
     IBOutlet NSTextField*       rateField;
+    IBOutlet NSButton*          deleteBucketButton;
     IBOutlet NSButton*          InFluxDBLockButton;
     IBOutlet NSButton*          stealthModeButton;
     IBOutlet NSTextField*       dbStatusField;
@@ -37,7 +37,6 @@
 - (void) portChanged:(NSNotification*)aNote;
 - (void) authTokenChanged:(NSNotification*)aNote;
 - (void) orgChanged:(NSNotification*)aNote;
-- (void) bucketNameChanged:(NSNotification*)aNote;
 - (void) inFluxDBLockChanged:(NSNotification*)aNote;
 - (void) rateChanged:(NSNotification*)aNote;
 - (void) stealthModeChanged:(NSNotification*)aNote;
@@ -47,16 +46,16 @@
 - (IBAction) hostNameAction:(id)sender;
 - (IBAction) authTokenAction:(id)sender;
 - (IBAction) orgAction:(id)sender;
-- (IBAction) bucketNameAction:(id)sender;
-- (IBAction) listBucketsAction:(id)sender;
+- (IBAction) refreshInfoAction:(id)sender;
 - (IBAction) deleteBucketsAction:(id)sender;
 - (IBAction) InFluxDBLockAction:(id)sender;
 - (IBAction) stealthModeAction:(id)sender;
-- (IBAction) listBucketsAction:(id)sender;
-- (IBAction) listOrgsAction:(id)sender;
 - (IBAction) createBucketsAction:(id)sender;
 
+#pragma mark •••Data Source Methods
 - (NSInteger)numberOfRowsInTableView:(NSTableView*)aTableView;
 - (id) tableView:(NSTableView*) aTableView objectValueForTableColumn:(NSTableColumn*) aTableColumn row:(NSInteger) rowIndex;
+- (void) tableViewSelectionDidChange:(NSNotification *)aNotification;
+- (void) tableViewSelectionDidChange:(NSNotification *)aNotification;
 @end
 
