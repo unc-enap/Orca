@@ -129,7 +129,7 @@
 
 - (void) rateChanged:(NSNotification*)aNote
 {
-    [rateField setStringValue:[NSString stringWithFormat:@"%ld/s",[model messageRate]]];
+    [rateField setStringValue:[NSString stringWithFormat:@"%ld B/s",[model messageRate]]];
 }
 
 - (void) hostNameChanged:(NSNotification*)aNote

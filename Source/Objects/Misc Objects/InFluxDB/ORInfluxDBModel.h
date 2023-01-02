@@ -39,13 +39,14 @@
     NSString*      alertMessage;
     int            alertType;
     NSString*      thisHostAddress;
-    
+    NSString*      experimentName;
+
     //----queue thread--------
     bool           canceled;
     NSThread*      processThread;
     ORSafeQueue*   messageQueue;
     
-    NSArray*       bucketArray;
+    NSMutableArray* bucketArray;
     NSArray*       orgArray;
     NSString*      org;
     
@@ -68,13 +69,14 @@
 #pragma mark ***Accessors
 - (void)        setPortNumber:(NSUInteger)aPort;
 - (NSUInteger)  portNumber;
+- (NSString*)   experimentName;
+- (void)        setExperimentName:(NSString*)aName;
 - (NSString*)   hostName;
 - (void)        setHostName:(NSString*)aHost;
 - (NSString*)   authToken;
 - (void)        setAuthToken:(NSString*)aToken;
 - (NSString*)   org;
 - (void)        setOrg:(NSString*)anOrg;
-- (NSString*)   orgId:(NSString*)aBucket;
 - (id)          nextObject;
 - (uint32_t)    queueMaxSize;
 - (NSInteger)   messageRate;

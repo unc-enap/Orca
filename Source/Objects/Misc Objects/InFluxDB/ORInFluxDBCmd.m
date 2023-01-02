@@ -64,6 +64,7 @@
 {
     if(aResult) NSLog(@"%@\n",aResult);
 }
+
 - (NSString*)uniqueName:(NSString*)aName
 {
     NSString* suffix = computerName();
@@ -228,6 +229,7 @@
     return request;
 }
 @end
+
 //----------------------------------------------------------------
 //  Measurements
 //----------------------------------------------------------------

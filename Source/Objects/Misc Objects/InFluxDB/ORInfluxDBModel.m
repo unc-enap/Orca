@@ -92,14 +92,14 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [orgArray        release];
     [timer           invalidate];
     [timer           release];
-
+    [experimentName  release];
     [super dealloc];
 }
 
 - (void) wakeUp
 {
     if(![self aWake]){
-        
+        [self connectionChanged];
         [self _startAllPeriodicOperations];
         [self registerNotificationObservers];
         [self executeDBCmd:[ORInFluxDBListBuckets inFluxDBListBuckets]];
@@ -138,6 +138,11 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [aConnector release];
 }
 
+- (void) connectionChanged
+{
+    [self setExperimentName: [[self nextObject] objectName]];
+}
+
 - (void) registerNotificationObservers
 {
     NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
@@ -149,6 +154,16 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
                          name : @"ORAppTerminating"
                        object : (ORAppDelegate*)[NSApp delegate]];
     
+    [notifyCenter addObserver : self
+                     selector : @selector(runStarted:)
+                         name : ORRunStartedNotification
+                       object : nil];
+
+    [notifyCenter addObserver : self
+                     selector : @selector(runStopped:)
+                         name : ORRunStoppedNotification
+                       object : nil];
+
     [notifyCenter addObserver : self
                      selector : @selector(runStatusChanged:)
                          name : ORRunStatusChangedNotification
@@ -206,6 +221,16 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (id) nextObject
 {
     return [self objectConnectedTo:ORInFluxDBModelInConnector];
+}
+- (NSString*) experimentName
+{
+    return experimentName;
+}
+
+- (void) setExperimentName:(NSString*)aName
+{
+    [experimentName autorelease];
+    experimentName = [aName copy];
 }
 
 - (NSUInteger) portNumber
@@ -352,12 +377,11 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         NSString* startTime         = [info objectForKey:@"startTime"];
         long    elapsedTime         = [[info objectForKey:@"elapsedTime"]longValue];
 
-        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement inFluxDBMeasurement:@"L200" org:org];
-        [aCmd start:@"Run" withTags:@"Type=Status"];
+        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement inFluxDBMeasurement:@"ORCA" org:org];
+        [aCmd   start:@"RunInfo"          withTags:@"Type=Status"];
         [aCmd addLong:@"RunNumber"    withValue:runNumberLocal];
         [aCmd addLong:@"SubRunNumber" withValue:subRunNumberLocal];
         [aCmd addLong:@"RunStatus"    withValue:runStatus];
-        [aCmd addString:@"StartTime"  withValue:startTime];
         [aCmd addLong:@"RunMask"      withValue:runMask];
         [aCmd addLong:@"ElapsedTime"  withValue:elapsedTime];
         [self executeDBCmd:aCmd];
@@ -372,39 +396,36 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
 - (void) runStarted:(NSNotification*)aNote
 {
-    NSDictionary* info = [aNote userInfo];
-    if([[info objectForKey:@"kRunMode"] intValue]==kNormalRun){
-//        uint32_t runNumberLocal     = (uint32_t)[[info objectForKey:@"kRunNumber"] unsignedLongValue];
-//        uint32_t subRunNumberLocal  = (uint32_t)[[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
-//
-//        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement inFluxDBMeasurement:@"L200" org:org];
-//        [aCmd start:@"Run" withTags:[NSString stringWithFormat:@"Type=Status"]];
-//        [aCmd addLong:@"RunNumber"    withValue:runNumberLocal];
-//        [aCmd addLong:@"SubRunNumber" withValue:subRunNumberLocal];
-//        [self executeDBCmd:aCmd];
-
-        
-//        [self startDBMeasurement:@"RunInfo" withTags:@"Type=StartRun"];
-//        [self addLong:@"RunNumber"    withValue:runNumberLocal];
-//        [self addLong:@"SubRunNumber" withValue:subRunNumberLocal];
-//        [self endDBMeasurement];
-//        [self sendMeasurementsToDB];
+    if(!stealthMode){
+        NSDictionary* info = [aNote userInfo];
+        if([[info objectForKey:@"kRunMode"] intValue]==kNormalRun){
+            
+            long runNumber     = (uint32_t)[[info objectForKey:@"kRunNumber"] unsignedLongValue];
+            long subRunNumber  = (uint32_t)[[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
+ 
+            ORInFluxDBMeasurement* aMeasurement  = [ORInFluxDBMeasurement inFluxDBMeasurement:@"ORCA" org:org];
+            [aMeasurement start:@"RunInfo" withTags:@"type=runStart"];
+            [aMeasurement addLong:@"RunNumber"    withValue:runNumber];
+            [aMeasurement addLong:@"SubRunNumber" withValue:subRunNumber];
+            [self executeDBCmd:aMeasurement];
+        }
     }
 }
-
 - (void) runStopped:(NSNotification*)aNote
 {
-    NSDictionary* info = [aNote userInfo];
-    if([[info objectForKey:@"kRunMode"] intValue]==kNormalRun){
-//        uint32_t runNumberLocal     = (uint32_t)[[info objectForKey:@"kRunNumber"] unsignedLongValue];
-//        uint32_t subRunNumberLocal  = (uint32_t)[[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
-//        float elapsedTimeLocal      = [[info objectForKey:@"kElapsedTime"]floatValue];
-//        [self startDBMeasurement:@"RunInfo" withTags:@"Type=EndRun"];
-//        [self addLong:@"RunNumber"     withValue:runNumberLocal];
-//        [self addLong:@"SubRunNumber"  withValue:subRunNumberLocal];
-//        [self addDouble:@"ElapsedTime" withValue:elapsedTimeLocal];
-//        [self endDBMeasurement];
-//        [self sendMeasurementsToDB];
+    if(!stealthMode){
+        NSDictionary* info = [aNote userInfo];
+        if([[info objectForKey:@"kRunMode"] intValue]==kNormalRun){
+            
+            long runNumber     = (uint32_t)[[info objectForKey:@"kRunNumber"] unsignedLongValue];
+            long subRunNumber  = (uint32_t)[[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
+ 
+            ORInFluxDBMeasurement* aMeasurement  = [ORInFluxDBMeasurement inFluxDBMeasurement:@"ORCA" org:org];
+            [aMeasurement start:@"RunInfo" withTags:@"type=runStop"];
+            [aMeasurement addLong:@"RunNumber" withValue:runNumber];
+            [aMeasurement addLong:@"SubRunNumber" withValue:subRunNumber];
+            [self executeDBCmd:aMeasurement];
+        }
     }
 }
 
@@ -486,8 +507,10 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
 - (void) createBuckets
 {
-    [self executeDBCmd:[ORInFluxDBCreateBucket inFluxDBCreateBucket:@"L200"
-                                                              orgId:[self orgId] expireTime:60*60]];
+    if(experimentName){
+        [self executeDBCmd:[ORInFluxDBCreateBucket inFluxDBCreateBucket:experimentName
+                                                                  orgId:[self orgId] expireTime:60*60]];
+    }
     [self executeDBCmd:[ORInFluxDBCreateBucket inFluxDBCreateBucket:@"ORCA"
                                                               orgId:[self orgId] expireTime:60*60]];
     [self executeDBCmd:[ORInFluxDBCreateBucket inFluxDBCreateBucket:@"Sensors"
@@ -507,6 +530,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [self setPortNumber: [decoder decodeIntegerForKey:@"PortNumber"]];
     [self setAuthToken:  [decoder decodeObjectForKey:@"Token"]];
     [self setOrg:        [decoder decodeObjectForKey:@"Org"]];
+    [self setExperimentName: [decoder decodeObjectForKey:@"experimentName"]];
     [[self undoManager]  enableUndoRegistration];
     [self registerNotificationObservers];
    return self;
@@ -519,6 +543,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [encoder encodeObject:hostName      forKey:@"HostName"];
     [encoder encodeObject:authToken     forKey:@"Token"];
     [encoder encodeObject:org           forKey:@"Org"];
+    [encoder encodeObject:experimentName           forKey:@"experimentName"];
 }
 
 - (uint32_t) queueMaxSize
@@ -543,75 +568,10 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     if(!stealthMode){
         @try {
             [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateMachineRecord) object:nil];
-            if([thisHostAddress length]==0){
-                //only have to get this once
-                struct ifaddrs *ifaddr, *ifa;
-                if (getifaddrs(&ifaddr) == 0) {
-                    // Successfully received the structs of addresses.
-                    char tempInterAddr[INET_ADDRSTRLEN];
-                    NSMutableArray* names = [NSMutableArray array];
-                    // The following is a replacement for [[NSHost currentHost] addresses].  The problem is
-                    // that the NSHost call can do reverse DNS calls which block and are *very* slow.  The
-                    // following is much faster.
-                    for (ifa = ifaddr; ifa != nil; ifa = ifa->ifa_next) {
-                        // skip IPv6 addresses
-                        if (ifa->ifa_addr->sa_family != AF_INET) continue;
-                        inet_ntop(AF_INET,
-                                  &((struct sockaddr_in *)ifa->ifa_addr)->sin_addr,
-                                  tempInterAddr,
-                                  sizeof(tempInterAddr));
-                        [names addObject:[NSString stringWithCString:tempInterAddr encoding:NSASCIIStringEncoding]];
-                    }
-                    freeifaddrs(ifaddr);
-                    // Now enumerate and find the first non-loop-back address.
-                    NSEnumerator* e = [names objectEnumerator];
-                    id aName;
-                    while(aName = [e nextObject]){
-                        if([aName rangeOfString:@".0.0."].location == NSNotFound){
-                            thisHostAddress = [aName copy];
-                            break;
-                        }
-                    }
-                }
-            }
-            if(!thisHostAddress)thisHostAddress = @"";
-            ORInFluxDBMeasurement* aMeasurement = [ORInFluxDBMeasurement inFluxDBMeasurement:@"Computer" org:org];
-            [aMeasurement start:@"Identity" withTags:[NSString stringWithFormat:@"name=%@",computerName()]];
-            [aMeasurement addString:@"hwAddress" withValue:macAddress()];
-            [aMeasurement addString:@"ipAddress" withValue:thisHostAddress];
-            [self executeDBCmd:aMeasurement];
-
-            long uptime = [[(ORAppDelegate*)(ORAppDelegate*)[NSApp delegate] memoryWatcher] accurateUptime];
-            long memory = [[(ORAppDelegate*)(ORAppDelegate*)[NSApp delegate] memoryWatcher] orcaMemory];
-
-            aMeasurement  = [ORInFluxDBMeasurement inFluxDBMeasurement:@"ORCA" org:org];
-            [aMeasurement start:@"resources" withTags:@"type=runTime"];
-            [aMeasurement addLong:@"uptime" withValue:uptime];
-            [aMeasurement addLong:@"memory" withValue:memory];
-            [self executeDBCmd:aMeasurement];
-
-            NSFileManager* fm = [NSFileManager defaultManager];
-            NSArray* diskInfo = [fm mountedVolumeURLsIncludingResourceValuesForKeys:0 options:NSVolumeEnumerationSkipHiddenVolumes];
-            for(id aVolume in diskInfo){
-                NSError *fsError = nil;
-                aVolume = [aVolume relativePath];
-                NSDictionary *fsDictionary = [fm attributesOfFileSystemForPath:aVolume error:&fsError];
-                
-                if (fsDictionary != nil){
-                    //if([aVolume rangeOfString:@"Volumes"].location !=NSNotFound){
-                    // aVolume = [aVolume substringFromIndex:9];
-                    double freeSpace   = [[fsDictionary objectForKey:@"NSFileSystemFreeSize"] doubleValue]/1E9;
-                    double totalSpace  = [[fsDictionary objectForKey:@"NSFileSystemSize"] doubleValue]/1E9;
-                    double percentUsed = 100*(totalSpace-freeSpace)/totalSpace;
-                    
-                    aMeasurement  = [ORInFluxDBMeasurement inFluxDBMeasurement:@"Computer" org:org];
-                    [aMeasurement start:@"DiskInfo" withTags:[NSString stringWithFormat:@"disk=%@",aVolume]];
-                    [aMeasurement addDouble:@"freeSpace"   withValue:freeSpace];
-                    [aMeasurement addDouble:@"totalSpace"  withValue:totalSpace];
-                    [aMeasurement addDouble:@"percentUsed" withValue:percentUsed];
-                    [self executeDBCmd:aMeasurement];
-                }
-            }
+ 
+            [self updateMachineAddress];
+            [self updateOrcaResources];
+            [self updateDiskInfo];
         }
         @catch (NSException* e){
             NSLog(@"%@ %@ Exception: %@\n",[self fullID],NSStringFromSelector(_cmd),e);
@@ -619,6 +579,85 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         @finally {
             [self performSelector:@selector(updateMachineRecord) withObject:nil afterDelay:60];
         }
+    }
+}
+
+- (void) updateOrcaResources
+{
+    long uptime = [[(ORAppDelegate*)(ORAppDelegate*)[NSApp delegate] memoryWatcher] accurateUptime];
+    long memory = [[(ORAppDelegate*)(ORAppDelegate*)[NSApp delegate] memoryWatcher] orcaMemory];
+    
+    ORInFluxDBMeasurement* aMeasurement;
+    aMeasurement  = [ORInFluxDBMeasurement inFluxDBMeasurement:@"ORCA" org:org];
+    [aMeasurement start:@"status" withTags:@"type=resources"];
+    [aMeasurement addLong:@"uptime" withValue:uptime];
+    [aMeasurement addLong:@"memory" withValue:memory];
+    [self executeDBCmd:aMeasurement];
+}
+
+- (void) updateDiskInfo
+{
+    NSFileManager* fm = [NSFileManager defaultManager];
+    NSArray* diskInfo = [fm mountedVolumeURLsIncludingResourceValuesForKeys:0 options:NSVolumeEnumerationSkipHiddenVolumes];
+    for(id aVolume in diskInfo){
+        NSError *fsError = nil;
+        aVolume = [aVolume relativePath];
+        NSDictionary *fsDictionary = [fm attributesOfFileSystemForPath:aVolume error:&fsError];
+        
+        if (fsDictionary != nil){
+            //if([aVolume rangeOfString:@"Volumes"].location !=NSNotFound){
+            // aVolume = [aVolume substringFromIndex:9];
+            double freeSpace   = [[fsDictionary objectForKey:@"NSFileSystemFreeSize"] doubleValue]/1E9;
+            double totalSpace  = [[fsDictionary objectForKey:@"NSFileSystemSize"] doubleValue]/1E9;
+            double percentUsed = 100*(totalSpace-freeSpace)/totalSpace;
+            ORInFluxDBMeasurement* aMeasurement  = [ORInFluxDBMeasurement inFluxDBMeasurement:@"Computer" org:org];
+            [aMeasurement start:@"DiskInfo" withTags:[NSString stringWithFormat:@"disk=%@",aVolume]];
+            [aMeasurement addDouble:@"freeSpace"   withValue:freeSpace];
+            [aMeasurement addDouble:@"totalSpace"  withValue:totalSpace];
+            [aMeasurement addDouble:@"percentUsed" withValue:percentUsed];
+            [self executeDBCmd:aMeasurement];
+        }
+    }
+}
+
+- (void) updateMachineAddress
+{
+    //only have to get this once
+    struct ifaddrs *ifaddr, *ifa;
+    if (getifaddrs(&ifaddr) == 0) {
+        // Successfully received the structs of addresses.
+        char tempInterAddr[INET_ADDRSTRLEN];
+        NSMutableArray* names = [NSMutableArray array];
+        // The following is a replacement for [[NSHost currentHost] addresses].  The problem is
+        // that the NSHost call can do reverse DNS calls which block and are *very* slow.  The
+        // following is much faster.
+        for (ifa = ifaddr; ifa != nil; ifa = ifa->ifa_next) {
+            // skip IPv6 addresses
+            if (ifa->ifa_addr->sa_family != AF_INET) continue;
+            inet_ntop(AF_INET,
+                      &((struct sockaddr_in *)ifa->ifa_addr)->sin_addr,
+                      tempInterAddr,
+                      sizeof(tempInterAddr));
+            [names addObject:[NSString stringWithCString:tempInterAddr encoding:NSASCIIStringEncoding]];
+        }
+        freeifaddrs(ifaddr);
+        // Now enumerate and find the first non-loop-back address.
+        NSEnumerator* e = [names objectEnumerator];
+        id aName;
+        while(aName = [e nextObject]){
+            if([aName rangeOfString:@".0.0."].location == NSNotFound){
+                thisHostAddress = [aName copy];
+                break;
+            }
+        }
+    }
+    
+    if(thisHostAddress){
+        ORInFluxDBMeasurement* aMeasurement = [ORInFluxDBMeasurement inFluxDBMeasurement:@"Computer" org:org];
+        [aMeasurement start:@"Identity" withTags:[NSString stringWithFormat:@"name=%@",computerName()]];
+        [aMeasurement addString:@"hwAddress" withValue:macAddress()];
+        [aMeasurement addString:@"ipAddress" withValue:thisHostAddress];
+        [self executeDBCmd:aMeasurement];
     }
 }
 
@@ -636,6 +675,42 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (NSArray*) orgArray
 {
     return orgArray;
+}
+
+
+
+- (void) decodeBucketList:(NSDictionary*)result
+{
+    NSArray* anArray = [result objectForKey:@"buckets"];
+    [bucketArray release];
+    bucketArray = [[NSMutableArray array] retain];
+    for(NSDictionary* aBucket in anArray){
+        if(![[aBucket objectForKey:@"name"] hasPrefix:@"_"]){
+            [bucketArray addObject:aBucket];
+        }
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORInFluxDBBucketArrayChanged
+                                    object:self
+                                  userInfo:nil
+                             waitUntilDone:NO];
+
+}
+
+- (void) decodeOrgList:(NSDictionary*)result
+{
+    NSArray* anArray = [result objectForKey:@"orgs"];
+    if([anArray count]){
+        [orgArray release];
+        orgArray = [anArray retain];
+    }
+    else {
+        [orgArray release];
+        orgArray = nil;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORInFluxDBOrgArrayChanged
+                                                                        object:self
+                                                                      userInfo:nil
+                                                                 waitUntilDone:NO];
 }
 
 #pragma mark ***Thread
@@ -671,39 +746,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     }while(!canceled);
     [outerPool release];
 }
-
-- (void) decodeBucketList:(NSDictionary*)result
-{
-    NSArray* anArray = [result objectForKey:@"buckets"];
-    if([anArray count]){
-        [bucketArray release];
-        bucketArray = [anArray retain];
-    }
-    else {
-        [bucketArray release];
-        bucketArray = nil;
-    }
-    [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORInFluxDBBucketArrayChanged
-                                    object:self
-                                  userInfo:nil
-                             waitUntilDone:NO];
-
-}
-
-- (void) decodeOrgList:(NSDictionary*)result
-{
-    NSArray* anArray = [result objectForKey:@"orgs"];
-    if([anArray count]){
-        [orgArray release];
-        orgArray = [anArray retain];
-    }
-    else {
-        [orgArray release];
-        orgArray = nil;
-    }
-    [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORInFluxDBOrgArrayChanged
-                                                                        object:self
-                                                                      userInfo:nil
-                                                                 waitUntilDone:NO];
-}
 @end
+
+
