@@ -188,6 +188,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
                      selector : @selector(processElementStateChanged:)
                          name : ORProcessElementStateChangedNotification
                        object : nil];
+    
 
 }
 
@@ -340,21 +341,25 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
 - (void) updateRunState:(ORRunModel*)rc
 {
+    scheduledForRunInfoUpdate = NO;
+
     if(!stealthMode){
-        NSDictionary* info          = [rc runInfo];
-        uint32_t runNumberLocal     = (uint32_t)[[info objectForKey:@"kRunNumber"] unsignedLongValue];
-        uint32_t subRunNumberLocal  = (uint32_t)[[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
-        uint32_t runStatus          = (uint32_t)[[info objectForKey:@"ORRunStatusValue"]unsignedLongValue];
-        uint32_t runMask            = (uint32_t)[[info objectForKey:@"ORRunTypeMask"]unsignedLongValue];
-        uint32_t runPaused          = (uint32_t)[[info objectForKey:@"ORRunPaused"]unsignedLongValue];
-        
+        NSDictionary* info          = [rc fullRunInfo];
+        uint32_t runNumberLocal     = (uint32_t)[[info objectForKey:@"run"] unsignedLongValue];
+        uint32_t subRunNumberLocal  = (uint32_t)[[info objectForKey:@"subRun"]unsignedLongValue];
+        uint32_t runStatus          = (uint32_t)[[info objectForKey:@"state"]unsignedLongValue];
+        uint32_t runMask            = (uint32_t)[[info objectForKey:@"runType"]unsignedLongValue];
+        NSString* startTime         = [info objectForKey:@"startTime"];
+        long    elapsedTime         = [[info objectForKey:@"elapsedTime"]longValue];
+
         ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement inFluxDBMeasurement:@"L200" org:org];
         [aCmd start:@"Run" withTags:@"Type=Status"];
         [aCmd addLong:@"RunNumber"    withValue:runNumberLocal];
         [aCmd addLong:@"SubRunNumber" withValue:subRunNumberLocal];
         [aCmd addLong:@"RunStatus"    withValue:runStatus];
+        [aCmd addString:@"StartTime"  withValue:startTime];
         [aCmd addLong:@"RunMask"      withValue:runMask];
-        [aCmd addLong:@"RunPaused"    withValue:runPaused];
+        [aCmd addLong:@"ElapsedTime"  withValue:elapsedTime];
         [self executeDBCmd:aCmd];
     }
 }
@@ -369,14 +374,14 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 {
     NSDictionary* info = [aNote userInfo];
     if([[info objectForKey:@"kRunMode"] intValue]==kNormalRun){
-        uint32_t runNumberLocal     = (uint32_t)[[info objectForKey:@"kRunNumber"] unsignedLongValue];
-        uint32_t subRunNumberLocal  = (uint32_t)[[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
- 
-        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement inFluxDBMeasurement:@"L200" org:org];
-        [aCmd start:@"Run" withTags:[NSString stringWithFormat:@"Type=Status"]];
-        [aCmd addLong:@"RunNumber"    withValue:runNumberLocal];
-        [aCmd addLong:@"SubRunNumber" withValue:subRunNumberLocal];
-        [self executeDBCmd:aCmd];
+//        uint32_t runNumberLocal     = (uint32_t)[[info objectForKey:@"kRunNumber"] unsignedLongValue];
+//        uint32_t subRunNumberLocal  = (uint32_t)[[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
+//
+//        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement inFluxDBMeasurement:@"L200" org:org];
+//        [aCmd start:@"Run" withTags:[NSString stringWithFormat:@"Type=Status"]];
+//        [aCmd addLong:@"RunNumber"    withValue:runNumberLocal];
+//        [aCmd addLong:@"SubRunNumber" withValue:subRunNumberLocal];
+//        [self executeDBCmd:aCmd];
 
         
 //        [self startDBMeasurement:@"RunInfo" withTags:@"Type=StartRun"];
@@ -391,9 +396,9 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 {
     NSDictionary* info = [aNote userInfo];
     if([[info objectForKey:@"kRunMode"] intValue]==kNormalRun){
-        uint32_t runNumberLocal     = (uint32_t)[[info objectForKey:@"kRunNumber"] unsignedLongValue];
-        uint32_t subRunNumberLocal  = (uint32_t)[[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
-        float elapsedTimeLocal      = [[info objectForKey:@"kElapsedTime"]floatValue];
+//        uint32_t runNumberLocal     = (uint32_t)[[info objectForKey:@"kRunNumber"] unsignedLongValue];
+//        uint32_t subRunNumberLocal  = (uint32_t)[[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
+//        float elapsedTimeLocal      = [[info objectForKey:@"kElapsedTime"]floatValue];
 //        [self startDBMeasurement:@"RunInfo" withTags:@"Type=EndRun"];
 //        [self addLong:@"RunNumber"     withValue:runNumberLocal];
 //        [self addLong:@"SubRunNumber"  withValue:subRunNumberLocal];
