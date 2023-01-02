@@ -226,7 +226,12 @@
 
 - (IBAction) deleteBucketsAction:(id)sender
 {
-    [model deleteBucket:[bucketTableView selectedRow]];
+    NSInteger index = [bucketTableView selectedRow];
+    NSArray*  bucketArray = [model bucketArray];
+    NSString* bucketName = [[bucketArray objectAtIndex:index] objectForKey:@"name"];
+    NSString* confirmString = [NSString stringWithFormat:@"This will delete bucket:\n%@",bucketName];
+    BOOL cancel = ORRunAlertPanel(confirmString,@"Is this really what you want?\nALL data will be lost",@"Cancel",@"Yes, Delete It",nil);
+    if(!cancel)[model deleteBucket:index];
 }
 
 - (IBAction) createBucketsAction:(id)sender

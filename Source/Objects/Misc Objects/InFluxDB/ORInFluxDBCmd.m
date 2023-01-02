@@ -33,6 +33,7 @@
     cmdType = aType;
     return self;
 }
+
 - (void) dealloc
 {
     [super dealloc];
@@ -52,7 +53,6 @@
 - (long) requestSize
 {
     return requestSize;
-
 }
 
 - (void) executeCmd:(ORInFluxDBModel*)aSender
@@ -63,6 +63,11 @@
 - (void) logResult:(id)aResult delegate:(ORInFluxDBModel*)delegate
 {
     if(aResult) NSLog(@"%@\n",aResult);
+}
+- (NSString*)uniqueName:(NSString*)aName
+{
+    NSString* suffix = computerName();
+    return [NSString stringWithFormat:@"%@_%@",aName,suffix];
 }
 
 @end
@@ -118,6 +123,7 @@
 
     return request;
 }
+
 - (void) logResult:(id)result delegate:(ORInFluxDBModel*)delegate
 {
     NSLog(@"Buckets:\n");
@@ -176,10 +182,11 @@
 {
     return [[[self alloc] init:kFluxCreateBucket bucket:aName orgId:anId expireTime:seconds] autorelease];
 }
+
 - (id) init:(int)aType bucket:(NSString*) aBucket orgId:(NSString*)anId expireTime:(long)seconds
 {
     self        = [super init:aType];
-    bucket      = [aBucket copy];
+    bucket      = [[self uniqueName:aBucket] copy];
     orgId       = [anId copy];
     expireTime  = seconds;
     return self;
@@ -233,8 +240,8 @@
 - (id) init:(int)aType bucket:(NSString*) aBucket  org:(NSString*)anOrg
 {
     self   = [super init:aType];
-    bucket = [aBucket copy];
-    org  = [anOrg copy];
+    bucket = [[self uniqueName:aBucket] copy];
+    org    = [anOrg copy];
     return self;
 }
 

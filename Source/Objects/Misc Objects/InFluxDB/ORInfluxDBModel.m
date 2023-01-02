@@ -349,7 +349,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         uint32_t runPaused          = (uint32_t)[[info objectForKey:@"ORRunPaused"]unsignedLongValue];
         
         ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement inFluxDBMeasurement:@"L200" org:org];
-        [aCmd start:@"RunInfo" withTags:@"Type=Run"];
+        [aCmd start:@"Run" withTags:@"Type=Status"];
         [aCmd addLong:@"RunNumber"    withValue:runNumberLocal];
         [aCmd addLong:@"SubRunNumber" withValue:subRunNumberLocal];
         [aCmd addLong:@"RunStatus"    withValue:runStatus];
@@ -373,7 +373,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         uint32_t subRunNumberLocal  = (uint32_t)[[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
  
         ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement inFluxDBMeasurement:@"L200" org:org];
-        [aCmd start:@"RunInfo" withTags:[NSString stringWithFormat:@"Type=StartRun"]];
+        [aCmd start:@"Run" withTags:[NSString stringWithFormat:@"Type=Status"]];
         [aCmd addLong:@"RunNumber"    withValue:runNumberLocal];
         [aCmd addLong:@"SubRunNumber" withValue:subRunNumberLocal];
         [self executeDBCmd:aCmd];
@@ -481,9 +481,14 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
 - (void) createBuckets
 {
-    [self executeDBCmd:[ORInFluxDBCreateBucket inFluxDBCreateBucket:@"L200"    orgId:[self orgId] expireTime:60*60]];
-    [self executeDBCmd:[ORInFluxDBCreateBucket inFluxDBCreateBucket:@"ORCA"    orgId:[self orgId] expireTime:60*60]];
-    [self executeDBCmd:[ORInFluxDBCreateBucket inFluxDBCreateBucket:@"Sensors" orgId:[self orgId] expireTime:60*60]];
+    [self executeDBCmd:[ORInFluxDBCreateBucket inFluxDBCreateBucket:@"L200"
+                                                              orgId:[self orgId] expireTime:60*60]];
+    [self executeDBCmd:[ORInFluxDBCreateBucket inFluxDBCreateBucket:@"ORCA"
+                                                              orgId:[self orgId] expireTime:60*60]];
+    [self executeDBCmd:[ORInFluxDBCreateBucket inFluxDBCreateBucket:@"Sensors"
+                                                              orgId:[self orgId] expireTime:60*60]];
+    [self executeDBCmd:[ORInFluxDBCreateBucket inFluxDBCreateBucket:@"Computer"
+                                                              orgId:[self orgId] expireTime:60*60]];
 
     [self performSelector:@selector(executeDBCmd:) withObject:[ORInFluxDBListBuckets inFluxDBListBuckets] afterDelay:1];
 }
@@ -565,8 +570,8 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
                 }
             }
             if(!thisHostAddress)thisHostAddress = @"";
-            ORInFluxDBMeasurement* aMeasurement = [ORInFluxDBMeasurement inFluxDBMeasurement:@"Sensors" org:org];
-            [aMeasurement start:@"CPU" withTags:[NSString stringWithFormat:@"name=%@",computerName()]];
+            ORInFluxDBMeasurement* aMeasurement = [ORInFluxDBMeasurement inFluxDBMeasurement:@"Computer" org:org];
+            [aMeasurement start:@"Identity" withTags:[NSString stringWithFormat:@"name=%@",computerName()]];
             [aMeasurement addString:@"hwAddress" withValue:macAddress()];
             [aMeasurement addString:@"ipAddress" withValue:thisHostAddress];
             [self executeDBCmd:aMeasurement];
@@ -574,8 +579,8 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
             long uptime = [[(ORAppDelegate*)(ORAppDelegate*)[NSApp delegate] memoryWatcher] accurateUptime];
             long memory = [[(ORAppDelegate*)(ORAppDelegate*)[NSApp delegate] memoryWatcher] orcaMemory];
 
-            aMeasurement  = [ORInFluxDBMeasurement inFluxDBMeasurement:@"Sensors" org:org];
-            [aMeasurement start:@"ORCA" withTags:@"type=stats"];
+            aMeasurement  = [ORInFluxDBMeasurement inFluxDBMeasurement:@"ORCA" org:org];
+            [aMeasurement start:@"resources" withTags:@"type=runTime"];
             [aMeasurement addLong:@"uptime" withValue:uptime];
             [aMeasurement addLong:@"memory" withValue:memory];
             [self executeDBCmd:aMeasurement];
@@ -594,7 +599,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
                     double totalSpace  = [[fsDictionary objectForKey:@"NSFileSystemSize"] doubleValue]/1E9;
                     double percentUsed = 100*(totalSpace-freeSpace)/totalSpace;
                     
-                    aMeasurement  = [ORInFluxDBMeasurement inFluxDBMeasurement:@"ORCA" org:org];
+                    aMeasurement  = [ORInFluxDBMeasurement inFluxDBMeasurement:@"Computer" org:org];
                     [aMeasurement start:@"DiskInfo" withTags:[NSString stringWithFormat:@"disk=%@",aVolume]];
                     [aMeasurement addDouble:@"freeSpace"   withValue:freeSpace];
                     [aMeasurement addDouble:@"totalSpace"  withValue:totalSpace];
