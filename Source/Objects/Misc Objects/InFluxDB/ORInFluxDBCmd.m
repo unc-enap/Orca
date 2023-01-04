@@ -127,17 +127,20 @@
 
 - (void) logResult:(id)result delegate:(ORInFluxDBModel*)delegate
 {
-    NSLog(@"Buckets:\n");
     NSArray* anArray = [result objectForKey:@"buckets"];
-    for(id aBucket in anArray){
-        if(![[aBucket objectForKey:@"name"] hasPrefix:@"_"]){
-            NSLog(@"ORCA bucket:   %@ : ID = %@\n",[aBucket objectForKey:@"name"],[aBucket objectForKey:@"id"] );
+    if([anArray count]){
+        NSLog(@"%d InFluxDB Buckets:\n",[anArray count]);
+        for(id aBucket in anArray){
+            if(![[aBucket objectForKey:@"name"] hasPrefix:@"_"]){
+                NSLog(@"ORCA bucket:   %@ : ID = %@\n",[aBucket objectForKey:@"name"],[aBucket objectForKey:@"id"] );
+            }
+            else  {
+                NSLog(@"System bucket: %@\n",[aBucket objectForKey:@"name"] );
+            }
         }
-        else  {
-            NSLog(@"System bucket: %@\n",[aBucket objectForKey:@"name"] );
-        }
+        [delegate decodeBucketList:result];
     }
-    [delegate decodeBucketList:result];
+    else NSLog(@"No InfluxDB buckets found");
 }
 @end
 
@@ -165,11 +168,15 @@
 - (void) logResult:(id)result delegate:(ORInFluxDBModel*)delegate
 {
     NSArray* anArray = [result objectForKey:@"orgs"];
-    NSLog(@"Orgs:\n");
-    for(id anOrg in anArray){
-        NSLog(@"%@ : ID = %@\n",[anOrg objectForKey:@"name"],[anOrg objectForKey:@"id"] );
+    if([anArray count]){
+        NSLog(@"InFluxDB Orgs:\n");
+        for(id anOrg in anArray){
+            NSLog(@"%@ : ID = %@\n",[anOrg objectForKey:@"name"],[anOrg objectForKey:@"id"] );
+        }
+        [delegate decodeOrgList:result];
     }
-    [delegate decodeOrgList:result];
+    else  NSLog(@"InFluxDB Organization not defined\n");
+
 
 }
 @end
@@ -257,8 +264,10 @@
 
 - (void) start:(NSString*)section withTags:(NSString*)someTags
 {
-    if(!outputBuffer) outputBuffer = [[NSMutableString alloc]init];
+    if(!outputBuffer) outputBuffer = [[NSMutableString alloc] init];
     if(!someTags){someTags = @"";}
+    someTags = [someTags stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+
     [outputBuffer appendFormat:@"%@,%@ ",section,someTags];
  }
 
@@ -320,25 +329,25 @@
 
 + (ORInFluxDBDeleteAllData*) inFluxDBDeleteAllData:(NSString*)aName org:(NSString*)anOrg  start:(NSString*)aStart  stop:(NSString*)aStop
 {
-    return [[[self alloc] init:kFluxDeleteAllData bucket:aName  org:anOrg start:aStart stop:aStop] autorelease];
+    return [[[self alloc] init:kFluxDeleteData bucket:aName  org:anOrg start:aStart stop:aStop] autorelease];
 }
 
 - (id) init:(int)aType bucket:(NSString*) aBucket  org:(NSString*)anOrg  start:(NSString*)aStart  stop:(NSString*)aStop
 {
     self    = [super init:aType];
     bucket  = [[self uniqueName:aBucket] copy];
-    start  = [aStart copy];
-    stop  = [aStop copy];
-    org  = [anOrg copy];
+    start   = [aStart copy];
+    stop    = [aStop copy];
+    org     = [anOrg copy];
     return self;
 }
 
 - (void) dealloc
 {
-    [start release];
-    [stop release];
+    [start  release];
+    [stop   release];
     [bucket release];
-    [org release];
+    [org    release];
     [super dealloc];
 }
 
@@ -354,6 +363,53 @@
     [dict setObject:start forKey:@"start"];
     [dict setObject:stop forKey:@"stop"];
     
+    NSError* error;
+    NSData*  jsonData = [NSJSONSerialization dataWithJSONObject:dict
+                                                        options:0 //because don't care about readability
+                                                          error:&error];
+    request.HTTPBody = jsonData;
+    requestSize = [requestString length];
+
+    return request;
+}
+@end
+
+//----------------------------------------------------------------
+//  Delete Selected Data
+//----------------------------------------------------------------
+@implementation ORInFluxDBDeleteSelectedData
+
++ (ORInFluxDBDeleteSelectedData*) inFluxDBDeleteSelectedData:(NSString*)aName org:(NSString*)anOrg  start:(NSString*)aStart stop:(NSString*)aStop  predicate:(NSString*)aPredicate
+{
+    return [[[self alloc] init:kFluxDeleteData bucket:aName  org:anOrg start:aStart stop:aStop  predicate:aPredicate] autorelease];
+}
+
+- (id) init:(int)aType bucket:(NSString*) aBucket  org:(NSString*)anOrg  start:(NSString*)aStart  stop:(NSString*)aStop  predicate:(NSString*)aPredicate
+{
+    self    = [super init:aType bucket:aBucket org:anOrg start:aStart stop:aStop];
+    predicate   = [aPredicate copy];
+    return self;
+}
+
+- (void) dealloc
+{
+    [predicate dealloc];
+    [super dealloc];
+}
+
+- (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
+{
+    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/delete?org=%@&bucket=%@",[delegate hostName],[delegate portNumber],org,bucket];
+    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
+    request.HTTPMethod = @"POST";
+    [request setValue:[NSString stringWithFormat:@"Token %@",[delegate authToken]] forHTTPHeaderField:@"Authorization"];
+    [request setValue:@"text/plain; application/json" forHTTPHeaderField:@"Accept"];
+
+    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+    [dict setObject:start       forKey:@"start"];
+    [dict setObject:stop        forKey:@"stop"];
+    [dict setObject:predicate   forKey:@"predicate"];
+
     NSError* error;
     NSData*  jsonData = [NSJSONSerialization dataWithJSONObject:dict
                                                         options:0 //because don't care about readability

@@ -25,7 +25,7 @@ enum {
     kFluxCreateBucket,
     kFluxDeleteBucket,
     kFluxListBuckets,
-    kFluxDeleteAllData,
+    kFluxDeleteData,
     kFluxListOrgs
 };
 
@@ -104,6 +104,7 @@ enum {
 - (void) addDouble:(NSString*)aValueName withValue:(double)aValue;
 - (void) addString:(NSString*)aValueName withValue:(NSString*)aValue;
 @end
+
 //----------------------------------------------------------------
 //  Delete All Data
 //----------------------------------------------------------------
@@ -116,5 +117,16 @@ enum {
 }
 + (ORInFluxDBDeleteAllData*)inFluxDBDeleteAllData:(NSString*)aBucket org:(NSString*)anOrg start:(NSString*)aStart  stop:(NSString*)aStop;
 - (id) init:(int)aType bucket:(NSString*)aBucket org:(NSString*)anOrg start:(NSString*)aStart  stop:(NSString*)aStop;
+@end
+
+//----------------------------------------------------------------
+//  Delete Data using a predicate
+//----------------------------------------------------------------
+@interface ORInFluxDBDeleteSelectedData : ORInFluxDBDeleteAllData
+{
+    NSString* predicate;
+}
++ (ORInFluxDBDeleteSelectedData*)inFluxDBDeleteSelectedData:(NSString*)aBucket org:(NSString*)anOrg start:(NSString*)aStart  stop:(NSString*)aStop predicate:(NSString*)aPredicate;
+- (id) init:(int)aType bucket:(NSString*)aBucket org:(NSString*)anOrg start:(NSString*)aStart stop:(NSString*)aStop predicate:(NSString*)aPredicate;
 @end
 NS_ASSUME_NONNULL_END

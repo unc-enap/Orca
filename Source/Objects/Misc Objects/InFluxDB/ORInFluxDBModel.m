@@ -344,7 +344,10 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) alarmsChanged:(NSNotification*)aNote
 {
     if(!stealthMode){
-        ORInFluxDBDeleteAllData* aCmd = [ORInFluxDBDeleteAllData inFluxDBDeleteAllData:@"Alarms" org:org start:@"2023-01-01T23:00:00Z" stop:@"2024-01-05T23:00:00Z"];
+        //make a stop time
+
+        NSString* stopTime = [NSDate dateInRFC3339Format:[NSDate dateWithTimeIntervalSinceNow:60]];//use a slightly future date
+        ORInFluxDBDeleteAllData* aCmd = [ORInFluxDBDeleteAllData inFluxDBDeleteAllData:@"Alarms" org:org start:@"2023-01-01T23:00:00Z" stop:stopTime];
         [self executeDBCmd:aCmd];
 
         ORAlarmCollection* alarmCollection = [ORAlarmCollection sharedAlarmCollection];
@@ -353,15 +356,16 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
             for(id anAlarm in theAlarms){
                 NSDictionary* alarmDic = [anAlarm alarmInfo];
                 ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement inFluxDBMeasurement:@"Alarms" org:org];
-                [aCmd     start:@"Alarm"        withTags: @"id=AlarmInfo"];
-                [aCmd addString:@"name"   withValue:[alarmDic objectForKey:@"name"]];
-                [aCmd addString:@"timePosted"   withValue:[[alarmDic objectForKey:@"timePosted"] description]];
-                [aCmd addLong:  @"severity"     withValue:[[alarmDic objectForKey:@"severity"]longValue]];
+                NSString* tags = [NSString stringWithFormat:@"Name=%@",[alarmDic objectForKey:@"name"]];
+                [aCmd     start:@"Alarm"        withTags:tags];
+                [aCmd addString:@"Name"   withValue:[alarmDic objectForKey:@"name"]];
+                [aCmd addString:@"TimePosted"   withValue:[[alarmDic objectForKey:@"timePosted"] description]];
+                [aCmd addLong:  @"Severity"     withValue:[[alarmDic objectForKey:@"severity"]longValue]];
                 NSString* help = [alarmDic objectForKey:@"helpString"];
                 if([help length])[aCmd addString:@"help"withValue:help];
-                [aCmd addString:@"timestamp"    withValue:[alarmDic objectForKey:@"timestamp"]];
-                [aCmd addString:@"time"         withValue:[alarmDic objectForKey:@"time"]];
-                [aCmd addLong:  @"acknowledged" withValue:[[alarmDic objectForKey:@"acknowledged"]longValue]];
+                [aCmd addString:@"Timestamp"    withValue:[alarmDic objectForKey:@"timestamp"]];
+                [aCmd addString:@"Time"         withValue:[alarmDic objectForKey:@"time"]];
+                [aCmd addLong:  @"Acknowledged" withValue:[[alarmDic objectForKey:@"acknowledged"]longValue]];
                 [self executeDBCmd:aCmd];
             }
         }
@@ -383,22 +387,22 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     scheduledForRunInfoUpdate = NO;
 
     if(!stealthMode){
-        NSDictionary* info          = [rc fullRunInfo];
-        uint32_t runNumberLocal     = (uint32_t)[[info objectForKey:@"run"] unsignedLongValue];
-        uint32_t subRunNumberLocal  = (uint32_t)[[info objectForKey:@"subRun"]unsignedLongValue];
-        uint32_t runStatus          = (uint32_t)[[info objectForKey:@"state"]unsignedLongValue];
-        uint32_t runMask            = (uint32_t)[[info objectForKey:@"runType"]unsignedLongValue];
-        NSString* startTime         = [info objectForKey:@"startTime"];
-        long    elapsedTime         = [[info objectForKey:@"elapsedTime"]longValue];
+        NSDictionary* info     = [rc fullRunInfo];
+        uint32_t runNumber     = (uint32_t)[[info objectForKey:@"run"] unsignedLongValue];
+        uint32_t subRunNumber  = (uint32_t)[[info objectForKey:@"subRun"]unsignedLongValue];
+        uint32_t runStatus     = (uint32_t)[[info objectForKey:@"state"]unsignedLongValue];
+        uint32_t runMask       = (uint32_t)[[info objectForKey:@"runType"]unsignedLongValue];
+        NSString* startTime    = [info objectForKey:@"startTime"];
+        long    elapsedTime    = [[info objectForKey:@"elapsedTime"]longValue];
+
+        NSString* tags = [NSString stringWithFormat:@"State=Running,RunNumber=%d",runNumber];
+        if(subRunNumber>0)tags = [tags stringByAppendingFormat:@".%d",subRunNumber];
 
         ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement inFluxDBMeasurement:@"ORCA" org:org];
-        [aCmd   start:@"RunInfo"          withTags:@"Type=Status"];
-        [aCmd addLong:@"RunNumber"    withValue:runNumberLocal];
-        [aCmd addLong:@"SubRunNumber" withValue:subRunNumberLocal];
-        [aCmd addLong:@"RunStatus"    withValue:runStatus];
-        [aCmd addLong:@"RunMask"      withValue:runMask];
-        [aCmd addLong:@"ElapsedTime"  withValue:elapsedTime];
-        [aCmd addString:@"StartTime"  withValue:startTime];
+        [aCmd   start:  @"Run"         withTags:tags];
+        [aCmd addLong:  @"RunMask"     withValue:runMask];
+        [aCmd addLong:  @"ElapsedTime" withValue:elapsedTime];
+        [aCmd addString:@"StartTime"   withValue:startTime];
         [self executeDBCmd:aCmd];
     }
 }
@@ -412,16 +416,19 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) runStarted:(NSNotification*)aNote
 {
     if(!stealthMode){
-        NSDictionary* info = [aNote userInfo];
-        if([[info objectForKey:@"kRunMode"] intValue]==kNormalRun){
-            
-            long runNumber     = (uint32_t)[[info objectForKey:@"kRunNumber"] unsignedLongValue];
-            long subRunNumber  = (uint32_t)[[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
- 
+        ORRunModel* rc         = [aNote object];
+        NSDictionary* info     = [rc fullRunInfo];
+        uint32_t runNumber     = (uint32_t)[[info objectForKey:@"run"] unsignedLongValue];
+        uint32_t subRunNumber  = (uint32_t)[[info objectForKey:@"subRun"]unsignedLongValue];
+        uint32_t runState      = (uint32_t)[[info objectForKey:@"state"]unsignedLongValue];
+        uint32_t runMask       = (uint32_t)[[info objectForKey:@"runType"]unsignedLongValue];
+
+        if(runState == kNormalRun){
+            NSString* tags = [NSString stringWithFormat:@"State=Started,RunNumber=%d",runNumber];
+            if(subRunNumber>0)tags = [tags stringByAppendingFormat:@".%d",subRunNumber];
             ORInFluxDBMeasurement* aMeasurement  = [ORInFluxDBMeasurement inFluxDBMeasurement:@"ORCA" org:org];
-            [aMeasurement start:@"RunInfo" withTags:@"type=runStart"];
-            [aMeasurement addLong:@"RunNumber"    withValue:runNumber];
-            [aMeasurement addLong:@"SubRunNumber" withValue:subRunNumber];
+            [aMeasurement start:@"Run" withTags:tags];
+            [aMeasurement addLong:@"RunType" withValue:runMask];
             [self executeDBCmd:aMeasurement];
         }
     }
@@ -431,15 +438,24 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     if(!stealthMode){
         NSDictionary* info = [aNote userInfo];
         if([[info objectForKey:@"kRunMode"] intValue]==kNormalRun){
-            
-            long runNumber     = (uint32_t)[[info objectForKey:@"kRunNumber"] unsignedLongValue];
-            long subRunNumber  = (uint32_t)[[info objectForKey:@"kSubRunNumber"]unsignedLongValue];
- 
-            ORInFluxDBMeasurement* aMeasurement  = [ORInFluxDBMeasurement inFluxDBMeasurement:@"ORCA" org:org];
-            [aMeasurement start:@"RunInfo" withTags:@"type=runStop"];
-            [aMeasurement addLong:@"RunNumber" withValue:runNumber];
-            [aMeasurement addLong:@"SubRunNumber" withValue:subRunNumber];
-            [self executeDBCmd:aMeasurement];
+            if(!stealthMode){
+                ORRunModel* rc         = [aNote object];
+                NSDictionary* info     = [rc fullRunInfo];
+                uint32_t runNumber     = (uint32_t)[[info objectForKey:@"run"] unsignedLongValue];
+                uint32_t subRunNumber  = (uint32_t)[[info objectForKey:@"subRun"]unsignedLongValue];
+                uint32_t runState      = (uint32_t)[[info objectForKey:@"state"]unsignedLongValue];
+                uint32_t runMask       = (uint32_t)[[info objectForKey:@"runType"]unsignedLongValue];
+                NSString* elapsedTime  = [info objectForKey:@"elapsedTime"];
+                if(runState == kNormalRun){
+                    NSString* tags = [NSString stringWithFormat:@"State=Stopped,RunNumber=%d",runNumber];
+                    if(subRunNumber>0)tags = [tags stringByAppendingFormat:@".%d",subRunNumber];
+                    ORInFluxDBMeasurement* aMeasurement  = [ORInFluxDBMeasurement inFluxDBMeasurement:@"ORCA" org:org];
+                    [aMeasurement start:@"Run" withTags:tags];
+                    [aMeasurement addLong:@"RunType"       withValue:runMask];
+                    [aMeasurement addString:@"Elapsedtime" withValue:elapsedTime];
+                    [self executeDBCmd:aMeasurement];
+                }
+            }
         }
     }
 }
@@ -576,9 +592,9 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     
     ORInFluxDBMeasurement* aMeasurement;
     aMeasurement  = [ORInFluxDBMeasurement inFluxDBMeasurement:@"ORCA" org:org];
-    [aMeasurement start:@"status" withTags:@"type=resources"];
-    [aMeasurement addLong:@"uptime" withValue:uptime];
-    [aMeasurement addLong:@"memory" withValue:memory];
+    [aMeasurement start:@"Status" withTags:@"Type=Resources"];
+    [aMeasurement addLong:@"Uptime" withValue:uptime];
+    [aMeasurement addLong:@"Memory" withValue:memory];
     [self executeDBCmd:aMeasurement];
 }
 
@@ -598,10 +614,10 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
             double totalSpace  = [[fsDictionary objectForKey:@"NSFileSystemSize"] doubleValue]/1E9;
             double percentUsed = 100*(totalSpace-freeSpace)/totalSpace;
             ORInFluxDBMeasurement* aMeasurement  = [ORInFluxDBMeasurement inFluxDBMeasurement:@"Computer" org:org];
-            [aMeasurement start:@"DiskInfo" withTags:[NSString stringWithFormat:@"disk=%@",aVolume]];
-            [aMeasurement addDouble:@"freeSpace"   withValue:freeSpace];
-            [aMeasurement addDouble:@"totalSpace"  withValue:totalSpace];
-            [aMeasurement addDouble:@"percentUsed" withValue:percentUsed];
+            [aMeasurement start:@"DiskInfo" withTags:[NSString stringWithFormat:@"Disk=%@",aVolume]];
+            [aMeasurement addDouble:@"FreeSpace"   withValue:freeSpace];
+            [aMeasurement addDouble:@"TotalSpace"  withValue:totalSpace];
+            [aMeasurement addDouble:@"PercentUsed" withValue:percentUsed];
             [self executeDBCmd:aMeasurement];
         }
     }
@@ -641,7 +657,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     
     if(thisHostAddress){
         ORInFluxDBMeasurement* aMeasurement = [ORInFluxDBMeasurement inFluxDBMeasurement:@"Computer" org:org];
-        [aMeasurement start:@"Identity" withTags:[NSString stringWithFormat:@"name=%@",computerName()]];
+        [aMeasurement start:@"Identity" withTags:[NSString stringWithFormat:@"Name=%@",computerName()]];
         [aMeasurement addString:@"hwAddress" withValue:macAddress()];
         [aMeasurement addString:@"ipAddress" withValue:thisHostAddress];
         [self executeDBCmd:aMeasurement];
