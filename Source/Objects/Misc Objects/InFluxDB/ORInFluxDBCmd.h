@@ -25,6 +25,7 @@ enum {
     kFluxCreateBucket,
     kFluxDeleteBucket,
     kFluxListBuckets,
+    kFluxDeleteAllData,
     kFluxListOrgs
 };
 
@@ -103,5 +104,17 @@ enum {
 - (void) addDouble:(NSString*)aValueName withValue:(double)aValue;
 - (void) addString:(NSString*)aValueName withValue:(NSString*)aValue;
 @end
-
+//----------------------------------------------------------------
+//  Delete All Data
+//----------------------------------------------------------------
+@interface ORInFluxDBDeleteAllData : ORInFluxDBCmd
+{
+    NSString* start;
+    NSString* stop;
+    NSString* bucket;
+    NSString* org;
+}
++ (ORInFluxDBDeleteAllData*)inFluxDBDeleteAllData:(NSString*)aBucket org:(NSString*)anOrg start:(NSString*)aStart  stop:(NSString*)aStop;
+- (id) init:(int)aType bucket:(NSString*)aBucket org:(NSString*)anOrg start:(NSString*)aStart  stop:(NSString*)aStop;
+@end
 NS_ASSUME_NONNULL_END

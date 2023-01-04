@@ -311,3 +311,56 @@
     return request;
 }
 @end
+
+
+//----------------------------------------------------------------
+//  Delete Data
+//----------------------------------------------------------------
+@implementation ORInFluxDBDeleteAllData
+
++ (ORInFluxDBDeleteAllData*) inFluxDBDeleteAllData:(NSString*)aName org:(NSString*)anOrg  start:(NSString*)aStart  stop:(NSString*)aStop
+{
+    return [[[self alloc] init:kFluxDeleteAllData bucket:aName  org:anOrg start:aStart stop:aStop] autorelease];
+}
+
+- (id) init:(int)aType bucket:(NSString*) aBucket  org:(NSString*)anOrg  start:(NSString*)aStart  stop:(NSString*)aStop
+{
+    self    = [super init:aType];
+    bucket  = [[self uniqueName:aBucket] copy];
+    start  = [aStart copy];
+    stop  = [aStop copy];
+    org  = [anOrg copy];
+    return self;
+}
+
+- (void) dealloc
+{
+    [start release];
+    [stop release];
+    [bucket release];
+    [org release];
+    [super dealloc];
+}
+
+- (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
+{
+    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/delete?org=%@&bucket=%@",[delegate hostName],[delegate portNumber],org,bucket];
+    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
+    request.HTTPMethod = @"POST";
+    [request setValue:[NSString stringWithFormat:@"Token %@",[delegate authToken]] forHTTPHeaderField:@"Authorization"];
+    [request setValue:@"text/plain; application/json" forHTTPHeaderField:@"Accept"];
+
+    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+    [dict setObject:start forKey:@"start"];
+    [dict setObject:stop forKey:@"stop"];
+    
+    NSError* error;
+    NSData*  jsonData = [NSJSONSerialization dataWithJSONObject:dict
+                                                        options:0 //because don't care about readability
+                                                          error:&error];
+    request.HTTPBody = jsonData;
+    requestSize = [requestString length];
+
+    return request;
+}
+@end

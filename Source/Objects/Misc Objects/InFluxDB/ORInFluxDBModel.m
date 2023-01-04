@@ -344,13 +344,27 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) alarmsChanged:(NSNotification*)aNote
 {
     if(!stealthMode){
+        ORInFluxDBDeleteAllData* aCmd = [ORInFluxDBDeleteAllData inFluxDBDeleteAllData:@"Alarms" org:org start:@"2023-01-01T23:00:00Z" stop:@"2024-01-05T23:00:00Z"];
+        [self executeDBCmd:aCmd];
+
         ORAlarmCollection* alarmCollection = [ORAlarmCollection sharedAlarmCollection];
         NSArray* theAlarms = [[[alarmCollection alarms] retain] autorelease];
-        NSMutableArray* arrayForDoc = [NSMutableArray array];
         if([theAlarms count]){
-            for(id anAlarm in theAlarms)[arrayForDoc addObject:[anAlarm alarmInfo]];
+            for(id anAlarm in theAlarms){
+                NSDictionary* alarmDic = [anAlarm alarmInfo];
+                ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement inFluxDBMeasurement:@"Alarms" org:org];
+                [aCmd     start:@"Alarm"        withTags: @"id=AlarmInfo"];
+                [aCmd addString:@"name"   withValue:[alarmDic objectForKey:@"name"]];
+                [aCmd addString:@"timePosted"   withValue:[[alarmDic objectForKey:@"timePosted"] description]];
+                [aCmd addLong:  @"severity"     withValue:[[alarmDic objectForKey:@"severity"]longValue]];
+                NSString* help = [alarmDic objectForKey:@"helpString"];
+                if([help length])[aCmd addString:@"help"withValue:help];
+                [aCmd addString:@"timestamp"    withValue:[alarmDic objectForKey:@"timestamp"]];
+                [aCmd addString:@"time"         withValue:[alarmDic objectForKey:@"time"]];
+                [aCmd addLong:  @"acknowledged" withValue:[[alarmDic objectForKey:@"acknowledged"]longValue]];
+                [self executeDBCmd:aCmd];
+            }
         }
-        NSDictionary* alarmInfo  = [NSDictionary dictionaryWithObjectsAndKeys:@"alarms",@"_id",@"alarms",@"name",arrayForDoc,@"alarmlist",@"alarms",@"type",nil];
      }
 }
 - (void) updateRunInfo
@@ -384,6 +398,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         [aCmd addLong:@"RunStatus"    withValue:runStatus];
         [aCmd addLong:@"RunMask"      withValue:runMask];
         [aCmd addLong:@"ElapsedTime"  withValue:elapsedTime];
+        [aCmd addString:@"StartTime"  withValue:startTime];
         [self executeDBCmd:aCmd];
     }
 }
@@ -429,47 +444,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     }
 }
 
-- (void) clearAlert
-{
-    [self setAlertMessage:@""];
-    NSDictionary* alertMessageDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            @"",                        @"alertMessage",
-                                            [NSNumber numberWithInt:0], @"alertMessageType",
-                                            nil];
-//    [self startDBMeasurement:@"ORCA" withTags:@"alarm=cleared"];
-//    [self addString:@"alertMessage"   withValue:@""];
-//    [self addLong:@"alertMessageType" withValue:0];
-//    [self endDBMeasurement];
-//    [self sendMeasurementsToDB];
-}
-
-- (void) postAlert
-{
-    NSString* messageToPost;
-    if([alertMessage length]==0)messageToPost = @"";
-    else messageToPost = alertMessage;
-    
-//    [self startDBMeasurement:@"ORCA" withTags:@"alarm=posted"];
-//    [self addString:@"alertMessage"   withValue:messageToPost];
-//    [self addLong:@"alertMessageType" withValue:alertType];
-//    [self endDBMeasurement];
-//    [self sendMeasurementsToDB];
-}
-
-- (NSString*) alertMessage
-{
-    if(!alertMessage)return @"";
-    else             return alertMessage;
-}
-
-- (void) setAlertMessage:(NSString*)aAlertMessage
-{
-    [[[self undoManager] prepareWithInvocationTarget:self] setAlertMessage:alertMessage];
-    
-    [alertMessage autorelease];
-    alertMessage = [aAlertMessage copy];
-}
-
 - (void) runOptionsOrTimeChanged:(NSNotification*)aNote
 {
     if(!scheduledForRunInfoUpdate){
@@ -505,6 +479,17 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     }
 }
 
+- (void) deleteBucketByName:(NSString*)aName
+{
+    for(id aBucket in bucketArray){
+        if([[aBucket objectForKey:@"name"]isEqualToString:aName]){
+            ORInFluxDBDeleteBucket* aCmd = [ORInFluxDBDeleteBucket inFluxDBDeleteBucket];
+            [aCmd setBucketId:[aBucket objectForKey:@"id"]];
+            [self executeDBCmd:aCmd];
+            [self performSelector:@selector(executeDBCmd:) withObject:[ORInFluxDBListBuckets inFluxDBListBuckets] afterDelay:2];
+        }
+    }
+}
 - (void) createBuckets
 {
     if(experimentName){
@@ -516,6 +501,8 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [self executeDBCmd:[ORInFluxDBCreateBucket inFluxDBCreateBucket:@"Sensors"
                                                               orgId:[self orgId] expireTime:60*60]];
     [self executeDBCmd:[ORInFluxDBCreateBucket inFluxDBCreateBucket:@"Computer"
+                                                              orgId:[self orgId] expireTime:60*60]];
+    [self executeDBCmd:[ORInFluxDBCreateBucket inFluxDBCreateBucket:@"Alarms"
                                                               orgId:[self orgId] expireTime:60*60]];
 
     [self performSelector:@selector(executeDBCmd:) withObject:[ORInFluxDBListBuckets inFluxDBListBuckets] afterDelay:1];
