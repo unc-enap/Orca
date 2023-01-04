@@ -419,7 +419,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         uint32_t runState      = (uint32_t)[[info objectForKey:@"state"]unsignedLongValue];
         uint32_t runMask       = (uint32_t)[[info objectForKey:@"runType"]unsignedLongValue];
 
-        if(runState == kNormalRun){
+        if([[ORGlobal sharedGlobal] runMode] == kNormalRun){
             NSString* runString = [NSString stringWithFormat:@"RunNumber=%d",runNumber];
             if(subRunNumber>0)runString = [runString stringByAppendingFormat:@".%d",subRunNumber];
 
@@ -428,6 +428,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
             [aMeasurement addString:@"RunNumber"   withValue:runString];
             [aMeasurement addLong:  @"RunType"     withValue:runMask];
             [aMeasurement addLong:  @"Status"      withValue:runState];
+            [aMeasurement addDouble:@"StartTime"   withValue:[[NSDate date] timeIntervalSince1970]];
             [self executeDBCmd:aMeasurement];
         }
     }
@@ -435,8 +436,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) runStopped:(NSNotification*)aNote
 {
     if(!stealthMode){
-        NSDictionary* info = [aNote userInfo];
-        if([[info objectForKey:@"kRunMode"] intValue]==kNormalRun){
+        if([[ORGlobal sharedGlobal] runMode] == kNormalRun){
             if(!stealthMode){
                 ORRunModel* rc         = [aNote object];
                 NSDictionary* info     = [rc fullRunInfo];
@@ -454,6 +454,8 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
                     [aMeasurement addLong:  @"RunType"     withValue:runMask];
                     [aMeasurement addString:@"Elapsedtime" withValue:elapsedTime];
                     [aMeasurement addLong:  @"Status"      withValue:runState];
+                    [aMeasurement addDouble:  @"StopTime"   withValue:[[NSDate date] timeIntervalSince1970]];
+
                     [self executeDBCmd:aMeasurement];
                 }
             }
