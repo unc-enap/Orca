@@ -353,8 +353,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
             for(id anAlarm in theAlarms){
                 NSDictionary* alarmDic = [anAlarm alarmInfo];
                 ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement inFluxDBMeasurement:@"Alarms" org:org];
-                NSString* tags = [NSString stringWithFormat:@"Name=%@",[alarmDic objectForKey:@"name"]];
-                [aCmd     start:@"Alarm"        withTags:tags];
+                [aCmd     start:@"Alarms"        withTags:@"Type=Info"];
                 [aCmd addString:@"Name"   withValue:[alarmDic objectForKey:@"name"]];
                 [aCmd addString:@"TimePosted"   withValue:[[alarmDic objectForKey:@"timePosted"] description]];
                 [aCmd addLong:  @"Severity"     withValue:[[alarmDic objectForKey:@"severity"]longValue]];
@@ -392,13 +391,14 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         NSString* startTime    = [info objectForKey:@"startTime"];
         long    elapsedTime    = [[info objectForKey:@"elapsedTime"]longValue];
 
-        NSString* tags = [NSString stringWithFormat:@"RunNumber=%d",runNumber];
-        if(subRunNumber>0)tags = [tags stringByAppendingFormat:@".%d",subRunNumber];
+        NSString* runString = [NSString stringWithFormat:@"RunNumber=%d",runNumber];
+        if(subRunNumber>0)runString = [runString stringByAppendingFormat:@".%d",subRunNumber];
 
         ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement inFluxDBMeasurement:@"ORCA" org:org];
-        [aCmd   start:  @"Run"         withTags:tags];
+        [aCmd   start:  @"RunInfo"   withTags:@"Type=Status"];
+        [aCmd addString:@"RunNumber"   withValue:runString];
         [aCmd addLong:  @"ElapsedTime" withValue:elapsedTime];
-        [aCmd addLong:@"Status"      withValue:runStatus];
+        [aCmd addLong:  @"Status"      withValue:runStatus];
         [self executeDBCmd:aCmd];
     }
 }
@@ -420,12 +420,14 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         uint32_t runMask       = (uint32_t)[[info objectForKey:@"runType"]unsignedLongValue];
 
         if(runState == kNormalRun){
-            NSString* tags = [NSString stringWithFormat:@"RunNumber=%d",runNumber];
-            if(subRunNumber>0)tags = [tags stringByAppendingFormat:@".%d",subRunNumber];
-            ORInFluxDBMeasurement* aMeasurement  = [ORInFluxDBMeasurement inFluxDBMeasurement:@"ORCA" org:org];
-            [aMeasurement start:@"Run" withTags:tags];
-            [aMeasurement addLong:@"RunType" withValue:runMask];
-            [aMeasurement addLong:@"Status" withValue:runState];
+            NSString* runString = [NSString stringWithFormat:@"RunNumber=%d",runNumber];
+            if(subRunNumber>0)runString = [runString stringByAppendingFormat:@".%d",subRunNumber];
+
+            ORInFluxDBMeasurement* aMeasurement = [ORInFluxDBMeasurement inFluxDBMeasurement:@"ORCA" org:org];
+            [aMeasurement start:@"Runs" withTags:@"Type=Info"];
+            [aMeasurement addString:@"RunNumber"   withValue:runString];
+            [aMeasurement addLong:  @"RunType"     withValue:runMask];
+            [aMeasurement addLong:  @"Status"      withValue:runState];
             [self executeDBCmd:aMeasurement];
         }
     }
@@ -444,13 +446,14 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
                 uint32_t runMask       = (uint32_t)[[info objectForKey:@"runType"]unsignedLongValue];
                 NSString* elapsedTime  = [info objectForKey:@"elapsedTime"];
                 if(runState == kNormalRun){
-                    NSString* tags = [NSString stringWithFormat:@"RunNumber=%d",runNumber];
-                    if(subRunNumber>0)tags = [tags stringByAppendingFormat:@".%d",subRunNumber];
+                    NSString* runString = [NSString stringWithFormat:@"RunNumber=%d",runNumber];
+                    if(subRunNumber>0)runString = [runString stringByAppendingFormat:@".%d",subRunNumber];
                     ORInFluxDBMeasurement* aMeasurement  = [ORInFluxDBMeasurement inFluxDBMeasurement:@"ORCA" org:org];
-                    [aMeasurement start:@"Run" withTags:tags];
-                    [aMeasurement addLong:@"RunType"       withValue:runMask];
+                    [aMeasurement start:@"Runs" withTags:@"Type=Info"];
+                    [aMeasurement addString:@"RunNumber"   withValue:runString];
+                    [aMeasurement addLong:  @"RunType"     withValue:runMask];
                     [aMeasurement addString:@"Elapsedtime" withValue:elapsedTime];
-                    [aMeasurement addLong:@"Status" withValue:runState];
+                    [aMeasurement addLong:  @"Status"      withValue:runState];
                     [self executeDBCmd:aMeasurement];
                 }
             }
