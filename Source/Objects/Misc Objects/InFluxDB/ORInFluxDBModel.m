@@ -425,10 +425,12 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
             ORInFluxDBMeasurement* aMeasurement = [ORInFluxDBMeasurement inFluxDBMeasurement:@"ORCA" org:org];
             [aMeasurement start:@"Runs" withTags:@"Type=Info"];
-            [aMeasurement addString:@"RunNumber"   withValue:runString];
-            [aMeasurement addLong:  @"RunType"     withValue:runMask];
-            [aMeasurement addLong:  @"Status"      withValue:runState];
-            [aMeasurement addDouble:@"StartTime"   withValue:[[NSDate date] timeIntervalSince1970]];
+            [aMeasurement addString: @"RunNumber"   withValue:runString];
+            [aMeasurement addLong:   @"RunType"     withValue:runMask];
+            [aMeasurement addLong:   @"Status"      withValue:runState];
+            [aMeasurement addDouble: @"StartTime"   withValue:[[NSDate date] timeIntervalSince1970]];
+            [aMeasurement addDouble: @"StopTime"    withValue:0];
+
             [self executeDBCmd:aMeasurement];
         }
     }
@@ -436,28 +438,27 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) runStopped:(NSNotification*)aNote
 {
     if(!stealthMode){
-        if([[ORGlobal sharedGlobal] runMode] == kNormalRun){
-            if(!stealthMode){
-                ORRunModel* rc         = [aNote object];
-                NSDictionary* info     = [rc fullRunInfo];
-                uint32_t runNumber     = (uint32_t)[[info objectForKey:@"run"] unsignedLongValue];
-                uint32_t subRunNumber  = (uint32_t)[[info objectForKey:@"subRun"]unsignedLongValue];
-                uint32_t runState      = (uint32_t)[[info objectForKey:@"state"]unsignedLongValue];
-                uint32_t runMask       = (uint32_t)[[info objectForKey:@"runType"]unsignedLongValue];
-                NSString* elapsedTime  = [info objectForKey:@"elapsedTime"];
-                if(runState == kNormalRun){
-                    NSString* runString = [NSString stringWithFormat:@"RunNumber=%d",runNumber];
-                    if(subRunNumber>0)runString = [runString stringByAppendingFormat:@".%d",subRunNumber];
-                    ORInFluxDBMeasurement* aMeasurement  = [ORInFluxDBMeasurement inFluxDBMeasurement:@"ORCA" org:org];
-                    [aMeasurement start:@"Runs" withTags:@"Type=Info"];
-                    [aMeasurement addString:@"RunNumber"   withValue:runString];
-                    [aMeasurement addLong:  @"RunType"     withValue:runMask];
-                    [aMeasurement addString:@"Elapsedtime" withValue:elapsedTime];
-                    [aMeasurement addLong:  @"Status"      withValue:runState];
-                    [aMeasurement addDouble:  @"StopTime"   withValue:[[NSDate date] timeIntervalSince1970]];
+        if(!stealthMode){
+            ORRunModel* rc         = [aNote object];
+            NSDictionary* info     = [rc fullRunInfo];
+            uint32_t runNumber     = (uint32_t)[[info objectForKey:@"run"] unsignedLongValue];
+            uint32_t subRunNumber  = (uint32_t)[[info objectForKey:@"subRun"]unsignedLongValue];
+            uint32_t runState      = (uint32_t)[[info objectForKey:@"state"]unsignedLongValue];
+            uint32_t runMask       = (uint32_t)[[info objectForKey:@"runType"]unsignedLongValue];
+            NSString* elapsedTime  = [info objectForKey:@"elapsedTime"];
+            if([[ORGlobal sharedGlobal] runMode] == kNormalRun){
+                NSString* runString = [NSString stringWithFormat:@"RunNumber=%d",runNumber];
+                if(subRunNumber>0)runString = [runString stringByAppendingFormat:@".%d",subRunNumber];
+                ORInFluxDBMeasurement* aMeasurement  = [ORInFluxDBMeasurement inFluxDBMeasurement:@"ORCA" org:org];
+                [aMeasurement start:@"Runs" withTags:@"Type=Info"];
+                [aMeasurement addString: @"RunNumber"   withValue:runString];
+                [aMeasurement addLong:   @"RunType"     withValue:runMask];
+                [aMeasurement addString: @"Elapsedtime" withValue:elapsedTime];
+                [aMeasurement addLong:   @"Status"      withValue:runState];
+                [aMeasurement addDouble: @"StartTime" withValue:0];
+                [aMeasurement addDouble: @"StopTime"  withValue:[[NSDate date] timeIntervalSince1970]];
 
-                    [self executeDBCmd:aMeasurement];
-                }
+                [self executeDBCmd:aMeasurement];
             }
         }
     }
