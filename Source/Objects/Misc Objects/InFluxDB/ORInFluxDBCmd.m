@@ -65,12 +65,6 @@
     if(aResult) NSLog(@"%@\n",aResult);
 }
 
-- (NSString*)uniqueName:(NSString*)aName
-{
-    NSString* suffix = computerName();
-    return [NSString stringWithFormat:@"%@_%@",aName,suffix];
-}
-
 @end
 
 //----------------------------------------------------------------
@@ -116,31 +110,17 @@
 
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
 {
-    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/buckets",[delegate hostName],[delegate portNumber]];
+    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/buckets?org=%@",[delegate hostName],[delegate portNumber],[delegate org]];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
     request.HTTPMethod = @"GET";
     [request setValue:[NSString stringWithFormat:@"Token %@",[delegate authToken]]                     forHTTPHeaderField:@"Authorization"];
     requestSize = [requestString length];
-
     return request;
 }
 
 - (void) logResult:(id)result delegate:(ORInFluxDBModel*)delegate
 {
-    NSArray* anArray = [result objectForKey:@"buckets"];
-    if([anArray count]){
-        NSLog(@"%d InFluxDB Buckets:\n",[anArray count]);
-        for(id aBucket in anArray){
-            if(![[aBucket objectForKey:@"name"] hasPrefix:@"_"]){
-                NSLog(@"ORCA bucket:   %@ : ID = %@\n",[aBucket objectForKey:@"name"],[aBucket objectForKey:@"id"] );
-            }
-            else  {
-                NSLog(@"System bucket: %@\n",[aBucket objectForKey:@"name"] );
-            }
-        }
-        [delegate decodeBucketList:result];
-    }
-    else NSLog(@"No InfluxDB buckets found");
+    [delegate decodeBucketList:result];
 }
 @end
 
@@ -167,17 +147,7 @@
 
 - (void) logResult:(id)result delegate:(ORInFluxDBModel*)delegate
 {
-    NSArray* anArray = [result objectForKey:@"orgs"];
-    if([anArray count]){
-        NSLog(@"InFluxDB Orgs:\n");
-        for(id anOrg in anArray){
-            NSLog(@"%@ : ID = %@\n",[anOrg objectForKey:@"name"],[anOrg objectForKey:@"id"] );
-        }
-        [delegate decodeOrgList:result];
-    }
-    else  NSLog(@"InFluxDB Organization not defined\n");
-
-
+    [delegate decodeOrgList:result];
 }
 @end
 
@@ -194,7 +164,7 @@
 - (id) init:(int)aType bucket:(NSString*) aBucket orgId:(NSString*)anId expireTime:(long)seconds
 {
     self        = [super init:aType];
-    bucket      = [[self uniqueName:aBucket] copy];
+    bucket      = [aBucket copy];
     orgId       = [anId copy];
     expireTime  = seconds;
     return self;
@@ -232,6 +202,7 @@
                                                           error:&error];
     request.HTTPBody = jsonData;
     requestSize = [requestString length];
+    requestSize += [jsonData length];
 
     return request;
 }
@@ -249,7 +220,7 @@
 - (id) init:(int)aType bucket:(NSString*) aBucket  org:(NSString*)anOrg
 {
     self   = [super init:aType];
-    bucket = [[self uniqueName:aBucket] copy];
+    bucket = [aBucket copy];
     org    = [anOrg copy];
     return self;
 }
@@ -335,7 +306,7 @@
 - (id) init:(int)aType bucket:(NSString*) aBucket  org:(NSString*)anOrg  start:(NSString*)aStart  stop:(NSString*)aStop
 {
     self    = [super init:aType];
-    bucket  = [[self uniqueName:aBucket] copy];
+    bucket  = [aBucket copy];
     start   = [aStart copy];
     stop    = [aStop copy];
     org     = [anOrg copy];
@@ -369,6 +340,7 @@
                                                           error:&error];
     request.HTTPBody = jsonData;
     requestSize = [requestString length];
+    requestSize += [jsonData length];
 
     return request;
 }
@@ -416,6 +388,7 @@
                                                           error:&error];
     request.HTTPBody = jsonData;
     requestSize = [requestString length];
+    requestSize += [jsonData length];
 
     return request;
 }

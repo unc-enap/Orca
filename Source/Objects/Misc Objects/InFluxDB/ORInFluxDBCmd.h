@@ -45,7 +45,6 @@ enum {
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate;
 - (void) executeCmd:(ORInFluxDBModel*)aSender;
 - (void) logResult:(id)aResult delegate:(ORInFluxDBModel*)delegate;
-- (NSString*)uniqueName:(NSString*)aName;
 @end
 
 //----------------------------------------------------------------

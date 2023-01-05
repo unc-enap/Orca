@@ -76,6 +76,7 @@
 - (NSString*)   authToken;
 - (void)        setAuthToken:(NSString*)aToken;
 - (NSString*)   org;
+- (NSString*)   orgId;
 - (void)        setOrg:(NSString*)anOrg;
 - (id)          nextObject;
 - (uint32_t)    queueMaxSize;
