@@ -426,6 +426,11 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
     return runNumber;
 }
 
+- (NSString*)fullRunNumber
+{
+    return [NSString stringWithFormat:@"%d.%d",runNumber,subRunNumber];
+}
+
 - (uint32_t)runNumber
 {
     return runNumber;

@@ -140,7 +140,8 @@
 - (void) setRunTypeNames:(NSMutableArray*)aRunTypeNames;
 - (uint32_t)   getCurrentRunNumber; //file access
 - (uint32_t)   runNumber;
-- (void)	    setRunNumber:(uint32_t)aRunNumber;
+- (void)	   setRunNumber:(uint32_t)aRunNumber;
+- (NSString*)     fullRunNumber;
 - (NSString*) startTimeAsString;
 - (NSDate*) subRunStartTime;
 - (void)	setSubRunStartTime:(NSDate*) aDate;
