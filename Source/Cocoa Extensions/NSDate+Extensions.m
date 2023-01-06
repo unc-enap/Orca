@@ -141,4 +141,13 @@
     return [components year];
 #endif
 }
+
++ (NSString*) dateInRFC3339Format:(NSDate*)aDate
+{
+    NSCalendar* cal = [NSCalendar currentCalendar];
+    [cal setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
+    NSDateComponents* dateComponents = [cal components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond) fromDate:aDate];
+    return [NSString stringWithFormat:@"%d-%02d-%02dT%02d:%02d:%02dZ", (int32_t)[dateComponents year], (int)[dateComponents month], (int)[dateComponents day], (int)[dateComponents hour], (int32_t)[dateComponents minute], (int32_t)[dateComponents second]];
+
+}
 @end

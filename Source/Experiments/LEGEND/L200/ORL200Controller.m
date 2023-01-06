@@ -74,7 +74,8 @@
     [self populateClassNamePopup:sipmAdcClassNamePopup];
     [self populateClassNamePopup:pmtAdcClassNamePopup];
     [self populateClassNamePopup:auxChanAdcClassNamePopup];
-    
+    [self populateClassNamePopup:cc4AdcClassNamePopup];
+
     [(ORPlot*) [ratePlot plotWithTag:kL200DetType] setLineColor:[NSColor systemBlueColor]];
     ORTimeLinePlot* sipmPlot = [[ORTimeLinePlot alloc] initWithTag:kL200SiPMType andDataSource:self];
     [sipmPlot setLineColor:[NSColor systemGreenColor]];
@@ -184,11 +185,15 @@
                      selector : @selector(auxChanMapFileChanged:)
                          name : ORSegmentGroupMapFileChanged
                         object: [model segmentGroup:kL200AuxType]];
-    
     [notifyCenter addObserver : self
                      selector : @selector(cc4ChanMapFileChanged:)
                          name : ORSegmentGroupMapFileChanged
                         object: [model segmentGroup:kL200CC4Type]];
+    [notifyCenter addObserver : self
+                     selector : @selector(cc4ChanAdcClassNameChanged:)
+                         name : ORSegmentGroupAdcClassNameChanged
+                        object: [model segmentGroup:kL200CC4Type]];
+
 }
 
 - (void) updateWindow
@@ -206,7 +211,7 @@
     [self auxChanAdcClassNameChanged:nil];
     [self auxChanMapFileChanged:nil];
     [self cc4ChanMapFileChanged:nil];
-
+    [self cc4ChanAdcClassNameChanged:nil];
 }
 
 -(void) groupChanged:(NSNotification*)note
@@ -306,6 +311,11 @@
 - (void) auxChanAdcClassNameChanged:(NSNotification*)note
 {
     [auxChanAdcClassNamePopup selectItemWithTitle:[[model segmentGroup:kL200AuxType] adcClassName]];
+}
+
+- (void) cc4ChanAdcClassNameChanged:(NSNotification*)note
+{
+    [cc4AdcClassNamePopup selectItemWithTitle:[[model segmentGroup:kL200CC4Type] adcClassName]];
 }
 
 - (void) auxChanMapFileChanged:(NSNotification*)note
@@ -460,6 +470,11 @@
     [[model segmentGroup:kL200AuxType] setAdcClassName:[sender titleOfSelectedItem]];
 }
 
+- (IBAction) cc4AdcClassNameAction:(id)sender
+{
+    [[model segmentGroup:kL200CC4Type] setAdcClassName:[sender titleOfSelectedItem]];
+}
+
 - (IBAction) saveAuxChanMapFileAction:(id)sender
 {
     [self saveMapFile:kL200AuxType withDefaultPath:[self defaultAuxChanMapFilePath]];
@@ -496,19 +511,14 @@
     [super newTotalRateAvailable:aNotification];
 }
 
-
 #pragma mark •••Table Data Source
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView*)aTableView
 {
     int type = [self segmentTypeFromTableView:aTableView];
-    if(type >= 0 && type < kL200CC4Type){
-        return [[model segmentGroup:type] numSegments];
-    }
-    else if(type==kL200CC4Type){
-        return [[model segmentGroup:type] numSegments]/14;
-    }
-    else if(aTableView == stringMapTableView) return kL200MaxDetsPerString;
+    if(type >= 0 && type < kL200CC4Type)        return [[model segmentGroup:type] numSegments];
+    else if(type==kL200CC4Type)                 return kNumCC4Positions;
+    else if(aTableView == stringMapTableView)   return kL200MaxDetsPerString;
     else return 0;
 }
 
@@ -540,9 +550,7 @@
     int type = [self segmentTypeFromTableView:aTableView];
     if(type >= 0 || type < kL200SegmentTypeCount){
         if(type==kL200CC4Type){
-            int aSlot;
-            if([[aTableColumn identifier] isEqualToString:@"cc4_slota"])aSlot = 0;
-            else aSlot = 1;
+            int aSlot= [[aTableColumn identifier] isEqualToString:@"cc4_slota"]?0:1;
             [self setCC4:(int)aRowIndex slot:aSlot name:anObject];
         }
         else {
@@ -561,42 +569,28 @@
 
 - (void) setCC4:(int)aPosition slot:(int)aSlot name:(NSString*)aName
 {
+    //-----map entry changed
     ORSegmentGroup* group = [model segmentGroup:kL200CC4Type];
-    int segNum;
-    if(aSlot==0)segNum = aPosition*14;
-    else        segNum = aPosition*14+7;
-    if([aName length]){
-        for(int i=0;i<7;i++){
-            NSMutableDictionary* params = [NSMutableDictionary dictionary];
-            [params setObject:aName                                       forKey:@"cc4_name"];
-            [params setObject:[NSString stringWithFormat:@"%d",aPosition] forKey:@"cc4_position"];
-            [params setObject:[NSString stringWithFormat:@"%d",i]         forKey:@"cc4_channel"];
-            [params setObject:[NSString stringWithFormat:@"%d",aSlot]     forKey:@"cc4_slot"];
-            [[group segment:segNum+i] setParams:params];
-        }
-    }
-    else {
-        for(int i=0;i<7;i++){
-            [[group segment:segNum+i] setParams:nil];
-        }
+    int segNum = aPosition*14;
+    if(aSlot==1) segNum+=7;
+    for(int i=0;i<7;i++){
+        NSMutableDictionary* params = [NSMutableDictionary dictionary];
+        [params setObject:aName                                       forKey:@"cc4_name"];
+        [params setObject:[NSString stringWithFormat:@"%d",aPosition] forKey:@"cc4_position"];
+        [params setObject:[NSString stringWithFormat:@"%d",i]         forKey:@"cc4_chan"];
+        [params setObject:[NSString stringWithFormat:@"%d",aSlot]     forKey:@"cc4_slot"];
+        [[group segment:segNum+i] setParams:params];
     }
 }
 
 - (NSString*) getCC4Name:(int)aPosition slot:(int)aSlot
 {
+    //this is a map table request
     ORSegmentGroup* group = [model segmentGroup:kL200CC4Type];
-    NSArray* segments = [group segments];
-    NSString* name = @"";
-    NSInteger n = [segments count];
-    for(int i=0;i<n;i++){
-        NSDictionary* params = [[group segment:i] params];
-        int pos   = [[params objectForKey:@"cc4_position"]intValue];
-        int slot  = [[params objectForKey:@"cc4_slot"]intValue];
-        if(pos == aPosition && slot==aSlot){
-            return [params objectForKey:@"cc4_name"];
-        }
-    }
-    return name;
+    int segNum = aPosition*14;
+    if(aSlot==1) segNum+=7;
+    NSDictionary* params = [[group segment:segNum] params];
+    return [params objectForKey:@"cc4_name"];
 }
 
 @end

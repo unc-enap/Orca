@@ -33,17 +33,8 @@ NSString* fullVersion(void)
     
     CFBundleGetLocalInfoDictionary( localInfoBundle );
 	
-	NSString* versionString = [infoDictionary objectForKey:@"CFBundleVersion"];
-	NSFileManager* fm = [NSFileManager defaultManager];
-	NSString* orcaVersionPath = [[NSBundle mainBundle] pathForResource:@"orcaversion"ofType:nil];
-	NSMutableString* orcaVersion = [NSMutableString stringWithString:@""];
-	if([fm fileExistsAtPath:orcaVersionPath]){
-		orcaVersion = [NSMutableString stringWithContentsOfFile:orcaVersionPath encoding:NSASCIIStringEncoding error:nil];
-		if([orcaVersion hasSuffix:@"\n"]){
-			[orcaVersion replaceCharactersInRange:NSMakeRange([orcaVersion length]-1, 1) withString:@""];
-		}
-	}
-	return [NSString stringWithFormat:@"%@%@%@",versionString,[orcaVersion length]?@":":@"",[orcaVersion length]?orcaVersion:@""];
+	NSString* versionString = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+	return [NSString stringWithFormat:@"%@",versionString];
 }
 
 NSString* gitRevHash(void)

@@ -21,6 +21,8 @@
 #import "ORDetectorSegment.h"
 #import "ORFlashCamADCModel.h"
 
+NSString* ORRelinkSegments   = @"ORRelinkSegments";
+
 @implementation ORL200SegmentGroup
 
 #pragma mark •••Accessors
@@ -128,17 +130,15 @@
             NSDictionary* segInfo = [[dict objectForKey:aPosition]objectForKey:@"cc4"];
             int pos  = [[segInfo objectForKey:@"cc4_position"] intValue];
             int slot = [[segInfo objectForKey:@"cc4_slot"]     intValue];
-            int segNum;
-            if(slot==0)segNum = pos*14;
-            else       segNum = pos*14+7;
+            int segNum = pos*14;
+            if(slot==1)  segNum+=7;
             
             for(int chan=0;chan<7;chan++){
-                NSString* line = [NSString stringWithFormat:@"%@,%@,%@,%@",
-                                  [segInfo objectForKey:@"cc4_position"],
+                NSString* line = [NSString stringWithFormat:@"%@,%@,%@,%d",
                                   [segInfo objectForKey:@"cc4_name"],
+                                  [segInfo objectForKey:@"cc4_position"],
                                   [segInfo objectForKey:@"cc4_slot"],
-                                  [NSString stringWithFormat:@"%d",chan]
-                                ];
+                                  chan];
                 ORDetectorSegment* segment = [segments objectAtIndex:segNum+chan];
                 
                 [segment decodeLine:line];
@@ -259,13 +259,11 @@
                [[params objectAtIndex:0] hasPrefix:@"-"]) continue;
             NSDictionary* ch_dict = nil;
             NSDictionary* daq_dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      [params objectAtIndex:0], @"cc4_position",
-                                      [params objectAtIndex:1], @"cc4_name",
+                                      [params objectAtIndex:0], @"cc4_name",
+                                      [params objectAtIndex:1], @"cc4_position",
                                       [params objectAtIndex:2], @"cc4_slot",
                                       nil];
-            ch_dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                       @"cc4", @"system",
-                       daq_dict, @"cc4", nil];
+            ch_dict = [NSDictionary dictionaryWithObjectsAndKeys: @"cc4", @"system", daq_dict, @"cc4", nil];
             if(ch_dict) [dict setObject:ch_dict forKey:[NSString stringWithFormat:@"%d",index++]];
         }
     }
@@ -341,31 +339,6 @@
     }
     return [NSDictionary dictionaryWithDictionary:dict];
 }
-- (NSString*) selectedSegementInfo:(int)aSegmentIndex
-{
-    if(type==kL200CC4Type){
-        if(aSegmentIndex<0)return @"<nothing selected>";
-        else if(aSegmentIndex>=[segments count]) return @"";
-        else {
-            ORDetectorSegment* segment = [segments objectAtIndex:aSegmentIndex];
-            NSString* string = [NSString stringWithFormat:@"%@\n",groupName];
-            NSDictionary* params = [segment params];
-            NSString* pos   = [params objectForKey:@"cc4_position"]; //0..11
-            NSString* name  = [params objectForKey:@"cc4_name"];
-            NSString* slot  = [params objectForKey:@"cc4_slot"]; //1,2
-            NSString* chan  = [params objectForKey:@"cc4_chan"]; //0..7
-            NSString* line = @"CC4\n\n";
-            line = [line stringByAppendingFormat:@"Position: %d\n",[pos intValue]+1];
-            line = [line stringByAppendingFormat:@"Name    : %@\n",name];
-            line = [line stringByAppendingFormat:@"Slot    : %@\n",slot];
-            line = [line stringByAppendingFormat:@"Channel : %@-%@\n",name,chan];
-            return line;
-        }
-    }
-    else {
-        return [super selectedSegementInfo:aSegmentIndex];
-    }
-}
 
 - (NSData*) jsonMap
 {
@@ -425,6 +398,7 @@
         id document = [(ORAppDelegate*) [NSApp delegate] document];
         NSArray* adcs = [document collectObjectsOfClass:NSClassFromString([self adcClassName])];
         [segments makeObjectsPerformSelector:@selector(configurationChanged:) withObject:adcs];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORRelinkSegments object:self];
         [self registerForRates];
         [[NSNotificationCenter defaultCenter] postNotificationName:ORSegmentGroupConfiguationChanged
                                                             object:self];

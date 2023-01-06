@@ -18,6 +18,7 @@
 //-------------------------------------------------------------
 
 #import "ORExperimentModel.h"
+#import "ORInFluxDBModel.h"
 
 @class ORRunModel;
 
@@ -33,6 +34,8 @@
 {
     int viewType;
     uint32_t runType;
+    ORInFluxDBModel* influxDB;
+    int influxIndex;
 }
 
 #pragma mark •••Accessors
@@ -44,7 +47,7 @@
 - (void) setSiPMPositions;
 - (void) setPMTPositions;
 - (void) setAuxChanPositions;
-
+- (void) findInFluxDB;
 - (void) runTypeChanged:(NSNotification*) aNote;
 
 #pragma mark •••Segment Group Methods
@@ -54,7 +57,7 @@
 - (BOOL) validateSiPM:(int)index;
 - (BOOL) validatePMT:(int)index;
 - (BOOL) validateAuxChan:(int)index;
-- (BOOL) validateCC4:(int)cc4Segment position:(int)cc4Position slot:(int)cc4Slot;
+- (BOOL) validateCC4:(int)index;
 - (NSString*) valueForLabel:(NSString*)label fromParts:(NSArray*)parts;
 
 #pragma mark •••Archival

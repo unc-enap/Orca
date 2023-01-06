@@ -42,3 +42,5 @@ enum ORL200SegmentType{ kL200DetType, kL200SiPMType, kL200PMTType, kL200AuxType,
 - (NSString*) segmentLocation:(int)aSegmentIndex;
 
 @end
+
+extern NSString* ORRelinkSegments;
