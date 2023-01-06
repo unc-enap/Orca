@@ -71,7 +71,7 @@
 //  Delete Bucket
 //----------------------------------------------------------------
 @implementation ORInFluxDBDeleteBucket
-+ (ORInFluxDBDeleteBucket *)inFluxDBDeleteBucket
++ (ORInFluxDBDeleteBucket *)deleteBucket
 {
     return [[[self alloc] init:kFluxDeleteBucket] autorelease];
 }
@@ -103,7 +103,7 @@
 //  List Buckets
 //----------------------------------------------------------------
 @implementation ORInFluxDBListBuckets
-+ (ORInFluxDBListBuckets *)inFluxDBListBuckets
++ (ORInFluxDBListBuckets *)listBuckets
 {
     return [[[self alloc] init:kFluxListBuckets] autorelease];
 }
@@ -128,7 +128,7 @@
 //  List Orgs
 //----------------------------------------------------------------
 @implementation ORInFluxDBListOrgs
-+ (ORInFluxDBListOrgs *)inFluxDBListOrgs
++ (ORInFluxDBListOrgs *)listOrgs
 {
     return [[[self alloc] init:kFluxListOrgs] autorelease];
 }
@@ -156,7 +156,7 @@
 //----------------------------------------------------------------
 @implementation ORInFluxDBCreateBucket
 
-+ (ORInFluxDBCreateBucket*) inFluxDBCreateBucket:(NSString*)aName orgId:(NSString*)anId expireTime:(long)seconds
++ (ORInFluxDBCreateBucket*) createBucket:(NSString*)aName orgId:(NSString*)anId expireTime:(long)seconds
 {
     return [[[self alloc] init:kFluxCreateBucket bucket:aName orgId:anId expireTime:seconds] autorelease];
 }
@@ -212,7 +212,7 @@
 //  Measurements
 //----------------------------------------------------------------
 @implementation ORInFluxDBMeasurement
-+ (ORInFluxDBMeasurement *)inFluxDBMeasurement:(NSString*)aBucket org:(NSString*)anOrg
++ (ORInFluxDBMeasurement *)measurementForBucket:(NSString*)aBucket org:(NSString*)anOrg
 {
     return [[[self alloc] init:kFluxMeasurement bucket:aBucket org:anOrg]autorelease];
 }
@@ -315,10 +315,10 @@
 
 - (void) dealloc
 {
-    [start  release];
-    [stop   release];
     [bucket release];
     [org    release];
+    [start  release];
+    [stop   release];
     [super dealloc];
 }
 
@@ -351,7 +351,7 @@
 //----------------------------------------------------------------
 @implementation ORInFluxDBDeleteSelectedData
 
-+ (ORInFluxDBDeleteSelectedData*) inFluxDBDeleteSelectedData:(NSString*)aName org:(NSString*)anOrg  start:(NSString*)aStart stop:(NSString*)aStop  predicate:(NSString*)aPredicate
++ (ORInFluxDBDeleteSelectedData*) deleteSelectedData:(NSString*)aName org:(NSString*)anOrg  start:(NSString*)aStart stop:(NSString*)aStop  predicate:(NSString*)aPredicate
 {
     return [[[self alloc] init:kFluxDeleteData bucket:aName  org:anOrg start:aStart stop:aStop  predicate:aPredicate] autorelease];
 }
@@ -365,7 +365,7 @@
 
 - (void) dealloc
 {
-    [predicate dealloc];
+    [predicate release];
     [super dealloc];
 }
 
