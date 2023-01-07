@@ -100,6 +100,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         [self _startAllPeriodicOperations];
         [self registerNotificationObservers];
         [self executeDBCmd:[ORInFluxDBListOrgs    listOrgs]];
+        [self executeDBCmd:[ORInFluxDBDelayCmd    delay:2]];
         [self executeDBCmd:[ORInFluxDBListBuckets listBuckets]];
         [self cleanUpRunStatus];
 
@@ -489,7 +490,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         [aCmd setBucketId:[bucketInfo objectForKey:@"id"]];
         [self executeDBCmd:aCmd];
         [self performSelector:@selector(executeDBCmd:) withObject:[ORInFluxDBListBuckets listBuckets] afterDelay:2];
-        NSLog(@"Delete Bucket %@:%@\n",[bucketInfo objectForKey:@"name"],[self org]);
+        NSLog(@"Posting Delete Bucket %@:%@\n",[bucketInfo objectForKey:@"name"],[self org]);
     }
 }
 
@@ -508,16 +509,16 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 {
     if(experimentName){
         [self executeDBCmd:[ORInFluxDBCreateBucket createBucket:experimentName
-                                                                  orgId:[self orgId] expireTime:60*60]];
+                                                                  orgId:[self orgId] expireTime:0]];
     }
     [self executeDBCmd:[ORInFluxDBCreateBucket createBucket:@"ORCA"
-                                                              orgId:[self orgId] expireTime:60*60]];
+                                                              orgId:[self orgId] expireTime:60*60*24*60]];
     [self executeDBCmd:[ORInFluxDBCreateBucket createBucket:@"Sensors"
-                                                              orgId:[self orgId] expireTime:60*60]];
+                                                              orgId:[self orgId] expireTime:60*60*24*60]];
     [self executeDBCmd:[ORInFluxDBCreateBucket createBucket:@"Computer"
-                                                              orgId:[self orgId] expireTime:60*60]];
+                                                              orgId:[self orgId] expireTime:60*60*24*10]];
     [self executeDBCmd:[ORInFluxDBCreateBucket createBucket:@"Alarms"
-                                                              orgId:[self orgId] expireTime:60*60]];
+                                                              orgId:[self orgId] expireTime:60*60*24*30]];
 
     [self performSelector:@selector(executeDBCmd:) withObject:[ORInFluxDBListBuckets listBuckets] afterDelay:1];
 }
@@ -748,8 +749,11 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
     do {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        ORInFluxDBCmd*     aCmd = [messageQueue dequeue];
-        if(aCmd){
+        id     aCmd = [messageQueue dequeue];
+        if([aCmd isKindOfClass:NSClassFromString(@"ORInFluxDBDelayCmd")]){
+            [ORTimer delay:[(ORInFluxDBDelayCmd*)aCmd delayTime]];
+        }
+        else if(aCmd){
             NSMutableURLRequest* request = [aCmd requestFrom:self];
             NSURLSessionConfiguration* config = [NSURLSessionConfiguration defaultSessionConfiguration];
             NSURLSession*             session = [NSURLSession sessionWithConfiguration:config];
@@ -758,7 +762,8 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
                     NSDictionary* result = [NSJSONSerialization JSONObjectWithData: data
                                                                            options: kNilOptions
                                                                              error: &error];
-                    [aCmd logResult:result delegate:self];
+                    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+                    [aCmd logResult:result code:(int)[httpResponse statusCode] delegate:self];
                 }
             }];
             

@@ -215,13 +215,13 @@
 
 - (IBAction) refreshInfoAction:(id)sender
 {
-    [model executeDBCmd:[ORInFluxDBListBuckets inFluxDBListBuckets]];
-    [model executeDBCmd:[ORInFluxDBListOrgs inFluxDBListOrgs]];
+    [model executeDBCmd:[ORInFluxDBListBuckets listBuckets]];
+    [model executeDBCmd:[ORInFluxDBListOrgs listOrgs]];
 }
 
 - (IBAction) listOrgsAction:(id)sender;
 {
-    [model executeDBCmd:[ORInFluxDBListOrgs inFluxDBListOrgs]];
+    [model executeDBCmd:[ORInFluxDBListOrgs listOrgs]];
 }
 
 - (IBAction) deleteBucketsAction:(id)sender
@@ -255,7 +255,8 @@
         float     div;
         if(!rules) return @"Never";
         else {
-            if(time>60*60*24*7)     { suffix = @"wks" ;  div = 60*60*24*7; }
+            if(time==0)return @"infinite";
+            else if(time>60*60*24*7){ suffix = @"wks" ;  div = 60*60*24*7; }
             else  if(time>60*60*24) { suffix = @"days";  div = 60*60*24;   }
             else  if(time>60*60)    { suffix = @"hrs" ;  div = 60*60;      }
             else  if(time>60*60)    { suffix = @"mins";  div = 60;         }

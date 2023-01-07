@@ -60,9 +60,16 @@
     [aSender sendCmd:self];
 }
 
-- (void) logResult:(id)aResult delegate:(ORInFluxDBModel*)delegate
+- (void) logResult:(id)result code:(int)aCode delegate:(ORInFluxDBModel*)delegate
 {
-    if(aResult) NSLog(@"%@\n",aResult);
+    if(aCode == 200){/*success*/}
+    else if(aCode==400)NSLog(@"Bad Request\n");
+    else if(aCode==401)NSLog(@"Unauthorized Access\n");
+    else if(aCode==413)NSLog(@"Request too large\n");
+    else if(aCode==422)NSLog(@"Request unprocessable\n");
+    else if(aCode==429)NSLog(@"Too many requests\n");
+    else if(aCode==500)NSLog(@"Service error\n");
+    else if(aCode==503)NSLog(@"Service unavailable\n");
 }
 
 @end
@@ -97,6 +104,16 @@
     requestSize = [requestString length];
     return request;
 }
+
+- (void) logResult:(id)result code:(int)aCode delegate:(ORInFluxDBModel*)delegate
+{
+    if(aCode == 204)NSLog(@"Deleted Bucket (id:%@)\n",bucketId);
+    else if(aCode==400)NSLog(@"Delete Bucket: Bad Request\n");
+    else if(aCode==401)NSLog(@"Delete Bucket: Unauthorized access\n");
+    else if(aCode==404)NSLog(@"Delete Bucket: BucketID: %d not found\n",bucketId);
+    else [super logResult:result code:aCode delegate:delegate];
+
+}
 @end
 
 //----------------------------------------------------------------
@@ -118,12 +135,50 @@
     return request;
 }
 
-- (void) logResult:(id)result delegate:(ORInFluxDBModel*)delegate
+- (void) logResult:(id)aResult code:(int)aCode delegate:(ORInFluxDBModel*)delegate;
 {
-    [delegate decodeBucketList:result];
+    if(aCode == 200)[delegate decodeBucketList:aResult];
+    else [super logResult:aResult code:aCode delegate:delegate];
 }
 @end
+//----------------------------------------------------------------
+//  Delay
+//----------------------------------------------------------------
+@implementation ORInFluxDBDelayCmd
++ (ORInFluxDBDelayCmd*) delay:(int)aSeconds
+{
+    return [[[self alloc] init:kFluxDelay delay:aSeconds] autorelease];
+}
 
+- (id) init:(int)aType delay:(int)aSeconds
+{
+    self        = [super init:aType];
+    delayTime   = aSeconds;
+    return self;
+}
+
+- (int) delayTime
+{
+    return delayTime;
+}
+
+- (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
+{
+    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/orgs",[delegate hostName],[delegate portNumber]];
+    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
+    
+    request.HTTPMethod = @"GET";
+    [request setValue:[NSString stringWithFormat:@"Token %@",[delegate authToken]] forHTTPHeaderField:@"Authorization"];
+    requestSize = [requestString length];
+
+    return request;
+}
+
+- (void) logResult:(id)aResult code:(int)aCode delegate:(ORInFluxDBModel*)delegate;
+{
+}
+
+@end
 //----------------------------------------------------------------
 //  List Orgs
 //----------------------------------------------------------------
@@ -145,9 +200,11 @@
     return request;
 }
 
-- (void) logResult:(id)result delegate:(ORInFluxDBModel*)delegate
+- (void) logResult:(id)result code:(int)aCode delegate:(ORInFluxDBModel*)delegate
 {
-    [delegate decodeOrgList:result];
+    if(aCode == 200)[delegate decodeOrgList:result];
+    else if(aCode==400)NSLog(@"List Orgs: Bad Request\n");
+    else [super logResult:result code:aCode delegate:delegate];
 }
 @end
 
@@ -205,6 +262,15 @@
     requestSize += [jsonData length];
 
     return request;
+}
+- (void) logResult:(id)result code:(int)aCode delegate:(ORInFluxDBModel*)delegate
+{
+    if(aCode == 201)   NSLog(@"Created Bucket: %@\n",bucket);
+    else if(aCode==400)NSLog(@"Create Bucket: Bad Request\n");
+    else if(aCode==401)NSLog(@"Create Bucket: Unauthorized access\n");
+    else if(aCode==403)NSLog(@"Create Bucket: Quota exceeded\n");
+    else if(aCode==422){/*exists*/}
+    else [super logResult:result code:aCode delegate:delegate];
 }
 @end
 
@@ -280,7 +346,7 @@
 
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
 {
-    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/write?org=%@&bucket=%@&precision=ns",[delegate hostName],[delegate portNumber],org,bucket];
+    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/write?org=%@&bucket=%@&precision=s",[delegate hostName],[delegate portNumber],org,bucket];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
     
     request.HTTPMethod = @"POST";

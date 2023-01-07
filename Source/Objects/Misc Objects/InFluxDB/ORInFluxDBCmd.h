@@ -26,7 +26,8 @@ enum {
     kFluxDeleteBucket,
     kFluxListBuckets,
     kFluxDeleteData,
-    kFluxListOrgs
+    kFluxListOrgs,
+    kFluxDelay,
 };
 
 //----------------------------------------------------------------
@@ -44,7 +45,19 @@ enum {
 - (long) requestSize;
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate;
 - (void) executeCmd:(ORInFluxDBModel*)aSender;
-- (void) logResult:(id)aResult delegate:(ORInFluxDBModel*)delegate;
+- (void) logResult:(id)aResult code:(int)aCode delegate:(ORInFluxDBModel*)delegate;
+@end
+
+//----------------------------------------------------------------
+//  Delay Command
+//----------------------------------------------------------------
+@interface ORInFluxDBDelayCmd : ORInFluxDBCmd
+{
+    int delayTime;
+}
++ (ORInFluxDBDelayCmd*) delay:(int)seconds;
+- (id) init:(int)aType delay:(int)seconds;
+- (int) delayTime;
 @end
 
 //----------------------------------------------------------------

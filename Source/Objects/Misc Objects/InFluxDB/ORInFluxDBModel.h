@@ -61,10 +61,10 @@
 
 #pragma mark ***Notifications
 - (void) registerNotificationObservers;
-- (void) applicationIsTerminating:(NSNotification*)aNote;
-- (void) runOptionsOrTimeChanged:(NSNotification*)aNote;
-- (void) runStatusChanged:(NSNotification*)aNote;
-- (void) alarmsChanged:(NSNotification*)aNote;
+- (void) applicationIsTerminating : (NSNotification*)aNote;
+- (void) runElapsedTimeChanged    : (NSNotification*)aNote;
+- (void) runStatusChanged         : (NSNotification*)aNote;
+- (void) alarmsChanged            : (NSNotification*)aNote;
 
 #pragma mark ***Accessors
 - (void)        setPortNumber:(NSUInteger)aPort;
@@ -79,7 +79,6 @@
 - (NSString*)   orgId;
 - (void)        setOrg:(NSString*)anOrg;
 - (id)          nextObject;
-- (uint32_t)    queueMaxSize;
 - (NSInteger)   messageRate;
 - (BOOL)        stealthMode;
 - (void)        setStealthMode:(BOOL)aStealthMode;
@@ -90,6 +89,7 @@
 - (void)        createBuckets;
 - (void)        decodeOrgList:(NSDictionary*)result;
 - (void)        decodeBucketList:(NSDictionary*)result;
+- (void)        cleanUpRunStatus;
 
 #pragma mark ***Thread
 - (void) sendCmd:(ORInFluxDBCmd*)aCmd;
