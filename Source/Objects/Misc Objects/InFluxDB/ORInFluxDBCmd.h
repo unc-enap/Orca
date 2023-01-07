@@ -26,7 +26,8 @@ enum {
     kFluxDeleteBucket,
     kFluxListBuckets,
     kFluxDeleteData,
-    kFluxListOrgs
+    kFluxListOrgs,
+    kFluxDelay,
 };
 
 //----------------------------------------------------------------
@@ -44,8 +45,19 @@ enum {
 - (long) requestSize;
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate;
 - (void) executeCmd:(ORInFluxDBModel*)aSender;
-- (void) logResult:(id)aResult delegate:(ORInFluxDBModel*)delegate;
-- (NSString*)uniqueName:(NSString*)aName;
+- (void) logResult:(id)aResult code:(int)aCode delegate:(ORInFluxDBModel*)delegate;
+@end
+
+//----------------------------------------------------------------
+//  Delay Command
+//----------------------------------------------------------------
+@interface ORInFluxDBDelayCmd : ORInFluxDBCmd
+{
+    int delayTime;
+}
++ (ORInFluxDBDelayCmd*) delay:(int)seconds;
+- (id) init:(int)aType delay:(int)seconds;
+- (int) delayTime;
 @end
 
 //----------------------------------------------------------------
@@ -55,7 +67,7 @@ enum {
 {
     NSString* bucketId;
 }
-+ (ORInFluxDBDeleteBucket*) inFluxDBDeleteBucket;
++ (ORInFluxDBDeleteBucket*) deleteBucket;
 - (void) dealloc;
 - (void) setBucketId:(NSString*) anId;
 @end
@@ -64,14 +76,14 @@ enum {
 //  List buckets
 //----------------------------------------------------------------
 @interface ORInFluxDBListBuckets : ORInFluxDBCmd
-+ (ORInFluxDBListBuckets*) inFluxDBListBuckets;
++ (ORInFluxDBListBuckets*) listBuckets;
 @end
 
 //----------------------------------------------------------------
 //  List Orgs
 //----------------------------------------------------------------
 @interface ORInFluxDBListOrgs : ORInFluxDBCmd
-+ (ORInFluxDBListOrgs*) inFluxDBListOrgs;
++ (ORInFluxDBListOrgs*) listOrgs;
 @end
 
 //----------------------------------------------------------------
@@ -83,7 +95,7 @@ enum {
     NSString* orgId;
     long      expireTime;
 }
-+ (ORInFluxDBCreateBucket*) inFluxDBCreateBucket:(NSString*)aName orgId:(NSString*)anId expireTime:(long)seconds;
++ (ORInFluxDBCreateBucket*) createBucket:(NSString*)aName orgId:(NSString*)anId expireTime:(long)seconds;
 - (id) init:(int)aType bucket:(NSString*) aBucket orgId:(NSString*)anId expireTime:(long)seconds;
 @end
 
@@ -96,7 +108,7 @@ enum {
     NSString* bucket;
     NSString* org;
 }
-+ (ORInFluxDBMeasurement*)inFluxDBMeasurement:(NSString*)aBucket org:(NSString*)anOrg;
++ (ORInFluxDBMeasurement*)measurementForBucket:(NSString*)aBucket org:(NSString*)anOrg;
 - (id) init:(int)aType bucket:(NSString*)aBucket org:(NSString*)anOrg;
 - (void) start:(NSString*)section withTags:(NSString*)someTags;
 - (void) removeEndingComma;
@@ -126,7 +138,7 @@ enum {
 {
     NSString* predicate;
 }
-+ (ORInFluxDBDeleteSelectedData*)inFluxDBDeleteSelectedData:(NSString*)aBucket org:(NSString*)anOrg start:(NSString*)aStart  stop:(NSString*)aStop predicate:(NSString*)aPredicate;
++ (ORInFluxDBDeleteSelectedData*)deleteSelectedData:(NSString*)aBucket org:(NSString*)anOrg start:(NSString*)aStart stop:(NSString*)aStop predicate:(NSString*)aPredicate;
 - (id) init:(int)aType bucket:(NSString*)aBucket org:(NSString*)anOrg start:(NSString*)aStart stop:(NSString*)aStop predicate:(NSString*)aPredicate;
 @end
 NS_ASSUME_NONNULL_END

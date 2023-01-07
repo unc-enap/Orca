@@ -60,15 +60,16 @@
     [aSender sendCmd:self];
 }
 
-- (void) logResult:(id)aResult delegate:(ORInFluxDBModel*)delegate
+- (void) logResult:(id)result code:(int)aCode delegate:(ORInFluxDBModel*)delegate
 {
-    if(aResult) NSLog(@"%@\n",aResult);
-}
-
-- (NSString*)uniqueName:(NSString*)aName
-{
-    NSString* suffix = computerName();
-    return [NSString stringWithFormat:@"%@_%@",aName,suffix];
+    if(aCode == 200){/*success*/}
+    else if(aCode==400)NSLog(@"Bad Request\n");
+    else if(aCode==401)NSLog(@"Unauthorized Access\n");
+    else if(aCode==413)NSLog(@"Request too large\n");
+    else if(aCode==422)NSLog(@"Request unprocessable\n");
+    else if(aCode==429)NSLog(@"Too many requests\n");
+    else if(aCode==500)NSLog(@"Service error\n");
+    else if(aCode==503)NSLog(@"Service unavailable\n");
 }
 
 @end
@@ -77,7 +78,7 @@
 //  Delete Bucket
 //----------------------------------------------------------------
 @implementation ORInFluxDBDeleteBucket
-+ (ORInFluxDBDeleteBucket *)inFluxDBDeleteBucket
++ (ORInFluxDBDeleteBucket *)deleteBucket
 {
     return [[[self alloc] init:kFluxDeleteBucket] autorelease];
 }
@@ -103,52 +104,86 @@
     requestSize = [requestString length];
     return request;
 }
+
+- (void) logResult:(id)result code:(int)aCode delegate:(ORInFluxDBModel*)delegate
+{
+    if(aCode == 204)NSLog(@"Deleted Bucket (id:%@)\n",bucketId);
+    else if(aCode==400)NSLog(@"Delete Bucket: Bad Request\n");
+    else if(aCode==401)NSLog(@"Delete Bucket: Unauthorized access\n");
+    else if(aCode==404)NSLog(@"Delete Bucket: BucketID: %d not found\n",bucketId);
+    else [super logResult:result code:aCode delegate:delegate];
+
+}
 @end
 
 //----------------------------------------------------------------
 //  List Buckets
 //----------------------------------------------------------------
 @implementation ORInFluxDBListBuckets
-+ (ORInFluxDBListBuckets *)inFluxDBListBuckets
++ (ORInFluxDBListBuckets *)listBuckets
 {
     return [[[self alloc] init:kFluxListBuckets] autorelease];
 }
 
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
 {
-    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/buckets",[delegate hostName],[delegate portNumber]];
+    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/buckets?org=%@",[delegate hostName],[delegate portNumber],[delegate org]];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
     request.HTTPMethod = @"GET";
     [request setValue:[NSString stringWithFormat:@"Token %@",[delegate authToken]]                     forHTTPHeaderField:@"Authorization"];
+    requestSize = [requestString length];
+    return request;
+}
+
+- (void) logResult:(id)aResult code:(int)aCode delegate:(ORInFluxDBModel*)delegate;
+{
+    if(aCode == 200)[delegate decodeBucketList:aResult];
+    else [super logResult:aResult code:aCode delegate:delegate];
+}
+@end
+//----------------------------------------------------------------
+//  Delay
+//----------------------------------------------------------------
+@implementation ORInFluxDBDelayCmd
++ (ORInFluxDBDelayCmd*) delay:(int)aSeconds
+{
+    return [[[self alloc] init:kFluxDelay delay:aSeconds] autorelease];
+}
+
+- (id) init:(int)aType delay:(int)aSeconds
+{
+    self        = [super init:aType];
+    delayTime   = aSeconds;
+    return self;
+}
+
+- (int) delayTime
+{
+    return delayTime;
+}
+
+- (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
+{
+    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/orgs",[delegate hostName],[delegate portNumber]];
+    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
+    
+    request.HTTPMethod = @"GET";
+    [request setValue:[NSString stringWithFormat:@"Token %@",[delegate authToken]] forHTTPHeaderField:@"Authorization"];
     requestSize = [requestString length];
 
     return request;
 }
 
-- (void) logResult:(id)result delegate:(ORInFluxDBModel*)delegate
+- (void) logResult:(id)aResult code:(int)aCode delegate:(ORInFluxDBModel*)delegate;
 {
-    NSArray* anArray = [result objectForKey:@"buckets"];
-    if([anArray count]){
-        NSLog(@"%d InFluxDB Buckets:\n",[anArray count]);
-        for(id aBucket in anArray){
-            if(![[aBucket objectForKey:@"name"] hasPrefix:@"_"]){
-                NSLog(@"ORCA bucket:   %@ : ID = %@\n",[aBucket objectForKey:@"name"],[aBucket objectForKey:@"id"] );
-            }
-            else  {
-                NSLog(@"System bucket: %@\n",[aBucket objectForKey:@"name"] );
-            }
-        }
-        [delegate decodeBucketList:result];
-    }
-    else NSLog(@"No InfluxDB buckets found");
 }
-@end
 
+@end
 //----------------------------------------------------------------
 //  List Orgs
 //----------------------------------------------------------------
 @implementation ORInFluxDBListOrgs
-+ (ORInFluxDBListOrgs *)inFluxDBListOrgs
++ (ORInFluxDBListOrgs *)listOrgs
 {
     return [[[self alloc] init:kFluxListOrgs] autorelease];
 }
@@ -165,19 +200,11 @@
     return request;
 }
 
-- (void) logResult:(id)result delegate:(ORInFluxDBModel*)delegate
+- (void) logResult:(id)result code:(int)aCode delegate:(ORInFluxDBModel*)delegate
 {
-    NSArray* anArray = [result objectForKey:@"orgs"];
-    if([anArray count]){
-        NSLog(@"InFluxDB Orgs:\n");
-        for(id anOrg in anArray){
-            NSLog(@"%@ : ID = %@\n",[anOrg objectForKey:@"name"],[anOrg objectForKey:@"id"] );
-        }
-        [delegate decodeOrgList:result];
-    }
-    else  NSLog(@"InFluxDB Organization not defined\n");
-
-
+    if(aCode == 200)[delegate decodeOrgList:result];
+    else if(aCode==400)NSLog(@"List Orgs: Bad Request\n");
+    else [super logResult:result code:aCode delegate:delegate];
 }
 @end
 
@@ -186,7 +213,7 @@
 //----------------------------------------------------------------
 @implementation ORInFluxDBCreateBucket
 
-+ (ORInFluxDBCreateBucket*) inFluxDBCreateBucket:(NSString*)aName orgId:(NSString*)anId expireTime:(long)seconds
++ (ORInFluxDBCreateBucket*) createBucket:(NSString*)aName orgId:(NSString*)anId expireTime:(long)seconds
 {
     return [[[self alloc] init:kFluxCreateBucket bucket:aName orgId:anId expireTime:seconds] autorelease];
 }
@@ -194,7 +221,7 @@
 - (id) init:(int)aType bucket:(NSString*) aBucket orgId:(NSString*)anId expireTime:(long)seconds
 {
     self        = [super init:aType];
-    bucket      = [[self uniqueName:aBucket] copy];
+    bucket      = [aBucket copy];
     orgId       = [anId copy];
     expireTime  = seconds;
     return self;
@@ -232,8 +259,18 @@
                                                           error:&error];
     request.HTTPBody = jsonData;
     requestSize = [requestString length];
+    requestSize += [jsonData length];
 
     return request;
+}
+- (void) logResult:(id)result code:(int)aCode delegate:(ORInFluxDBModel*)delegate
+{
+    if(aCode == 201)   NSLog(@"Created Bucket: %@\n",bucket);
+    else if(aCode==400)NSLog(@"Create Bucket: Bad Request\n");
+    else if(aCode==401)NSLog(@"Create Bucket: Unauthorized access\n");
+    else if(aCode==403)NSLog(@"Create Bucket: Quota exceeded\n");
+    else if(aCode==422){/*exists*/}
+    else [super logResult:result code:aCode delegate:delegate];
 }
 @end
 
@@ -241,7 +278,7 @@
 //  Measurements
 //----------------------------------------------------------------
 @implementation ORInFluxDBMeasurement
-+ (ORInFluxDBMeasurement *)inFluxDBMeasurement:(NSString*)aBucket org:(NSString*)anOrg
++ (ORInFluxDBMeasurement *)measurementForBucket:(NSString*)aBucket org:(NSString*)anOrg
 {
     return [[[self alloc] init:kFluxMeasurement bucket:aBucket org:anOrg]autorelease];
 }
@@ -249,7 +286,7 @@
 - (id) init:(int)aType bucket:(NSString*) aBucket  org:(NSString*)anOrg
 {
     self   = [super init:aType];
-    bucket = [[self uniqueName:aBucket] copy];
+    bucket = [aBucket copy];
     org    = [anOrg copy];
     return self;
 }
@@ -309,7 +346,7 @@
 
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
 {
-    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/write?org=%@&bucket=%@&precision=ns",[delegate hostName],[delegate portNumber],org,bucket];
+    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/write?org=%@&bucket=%@&precision=s",[delegate hostName],[delegate portNumber],org,bucket];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
     
     request.HTTPMethod = @"POST";
@@ -335,7 +372,7 @@
 - (id) init:(int)aType bucket:(NSString*) aBucket  org:(NSString*)anOrg  start:(NSString*)aStart  stop:(NSString*)aStop
 {
     self    = [super init:aType];
-    bucket  = [[self uniqueName:aBucket] copy];
+    bucket  = [aBucket copy];
     start   = [aStart copy];
     stop    = [aStop copy];
     org     = [anOrg copy];
@@ -344,10 +381,10 @@
 
 - (void) dealloc
 {
-    [start  release];
-    [stop   release];
     [bucket release];
     [org    release];
+    [start  release];
+    [stop   release];
     [super dealloc];
 }
 
@@ -369,6 +406,7 @@
                                                           error:&error];
     request.HTTPBody = jsonData;
     requestSize = [requestString length];
+    requestSize += [jsonData length];
 
     return request;
 }
@@ -379,7 +417,7 @@
 //----------------------------------------------------------------
 @implementation ORInFluxDBDeleteSelectedData
 
-+ (ORInFluxDBDeleteSelectedData*) inFluxDBDeleteSelectedData:(NSString*)aName org:(NSString*)anOrg  start:(NSString*)aStart stop:(NSString*)aStop  predicate:(NSString*)aPredicate
++ (ORInFluxDBDeleteSelectedData*) deleteSelectedData:(NSString*)aName org:(NSString*)anOrg  start:(NSString*)aStart stop:(NSString*)aStop  predicate:(NSString*)aPredicate
 {
     return [[[self alloc] init:kFluxDeleteData bucket:aName  org:anOrg start:aStart stop:aStop  predicate:aPredicate] autorelease];
 }
@@ -393,7 +431,7 @@
 
 - (void) dealloc
 {
-    [predicate dealloc];
+    [predicate release];
     [super dealloc];
 }
 
@@ -416,6 +454,7 @@
                                                           error:&error];
     request.HTTPBody = jsonData;
     requestSize = [requestString length];
+    requestSize += [jsonData length];
 
     return request;
 }
