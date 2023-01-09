@@ -63,13 +63,13 @@
 - (void) logResult:(id)result code:(int)aCode delegate:(ORInFluxDBModel*)delegate
 {
     if(aCode == 200){/*success*/}
-    else if(aCode==400)NSLog(@"Bad Request\n");
-    else if(aCode==401)NSLog(@"Unauthorized Access\n");
-    else if(aCode==413)NSLog(@"Request too large\n");
-    else if(aCode==422)NSLog(@"Request unprocessable\n");
-    else if(aCode==429)NSLog(@"Too many requests\n");
-    else if(aCode==500)NSLog(@"Service error\n");
-    else if(aCode==503)NSLog(@"Service unavailable\n");
+    else if(aCode==400)NSLog(@"Influx: Bad Request\n%@\n",result);
+    else if(aCode==401)NSLog(@"Influx: Unauthorized Access\n");
+    else if(aCode==413)NSLog(@"Influx: Request too large\n");
+    else if(aCode==422)NSLog(@"Influx: Request unprocessable\n");
+    else if(aCode==429)NSLog(@"Influx: Too many requests\n");
+    else if(aCode==500)NSLog(@"Influx: Service error\n");
+    else if(aCode==503)NSLog(@"Influx: Service unavailable\n");
 }
 
 @end
@@ -108,9 +108,9 @@
 - (void) logResult:(id)result code:(int)aCode delegate:(ORInFluxDBModel*)delegate
 {
     if(aCode == 204)NSLog(@"Deleted Bucket (id:%@)\n",bucketId);
-    else if(aCode==400)NSLog(@"Delete Bucket: Bad Request\n");
-    else if(aCode==401)NSLog(@"Delete Bucket: Unauthorized access\n");
-    else if(aCode==404)NSLog(@"Delete Bucket: BucketID: %d not found\n",bucketId);
+    else if(aCode==400)NSLog(@"Influx: Delete Bucket: Bad Request\n%@\n",result);
+    else if(aCode==401)NSLog(@"Influx: Delete Bucket: Unauthorized access\n");
+    else if(aCode==404)NSLog(@"Influx: Delete Bucket: BucketID: %d not found\n",bucketId);
     else [super logResult:result code:aCode delegate:delegate];
 
 }
@@ -203,7 +203,7 @@
 - (void) logResult:(id)result code:(int)aCode delegate:(ORInFluxDBModel*)delegate
 {
     if(aCode == 200)[delegate decodeOrgList:result];
-    else if(aCode==400)NSLog(@"List Orgs: Bad Request\n");
+    else if(aCode==400)NSLog(@"Influx: List Orgs: Bad Request\n%@\n",result);
     else [super logResult:result code:aCode delegate:delegate];
 }
 @end
@@ -265,10 +265,10 @@
 }
 - (void) logResult:(id)result code:(int)aCode delegate:(ORInFluxDBModel*)delegate
 {
-    if(aCode == 201)   NSLog(@"Created Bucket: %@\n",bucket);
-    else if(aCode==400)NSLog(@"Create Bucket: Bad Request\n");
-    else if(aCode==401)NSLog(@"Create Bucket: Unauthorized access\n");
-    else if(aCode==403)NSLog(@"Create Bucket: Quota exceeded\n");
+    if(aCode == 201)   NSLog(@"Influx: Created Bucket: %@\n",bucket);
+    else if(aCode==400)NSLog(@"Influx: Create Bucket: Bad Request\n%@\n",result);
+    else if(aCode==401)NSLog(@"Influx: Create Bucket: Unauthorized access\n");
+    else if(aCode==403)NSLog(@"Influx: Create Bucket: Quota exceeded\n");
     else if(aCode==422){/*exists*/}
     else [super logResult:result code:aCode delegate:delegate];
 }
@@ -302,11 +302,16 @@
 - (void) start:(NSString*)section withTags:(NSString*)someTags
 {
     if(!outputBuffer) outputBuffer = [[NSMutableString alloc] init];
-    if(!someTags){someTags = @"";}
     someTags = [someTags stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-
     [outputBuffer appendFormat:@"%@,%@ ",section,someTags];
- }
+}
+
+- (void) start:(NSString*)section
+{
+    //optional -- no tags
+    if(!outputBuffer) outputBuffer = [[NSMutableString alloc] init];
+    [outputBuffer appendFormat:@"%@ ",section];
+}
 
 - (void) removeEndingComma
 {
@@ -332,6 +337,7 @@
 {
     [outputBuffer appendFormat:@"%@=\"%@\",",aValueName,aValue];
 }
+
 - (void) executeCmd:(ORInFluxDBModel*)aSender
 {
     [self removeEndingComma];
