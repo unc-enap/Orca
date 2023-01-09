@@ -111,6 +111,7 @@ enum {
 + (ORInFluxDBMeasurement*)measurementForBucket:(NSString*)aBucket org:(NSString*)anOrg;
 - (id) init:(int)aType bucket:(NSString*)aBucket org:(NSString*)anOrg;
 - (void) start:(NSString*)section withTags:(NSString*)someTags;
+- (void) start:(NSString*)section;
 - (void) removeEndingComma;
 - (void) addLong:(NSString*)aValueName withValue:(long)aValue;
 - (void) addDouble:(NSString*)aValueName withValue:(double)aValue;

@@ -336,6 +336,13 @@ NSString* KSegmentChangedNotification	  =	@"KSegmentChangedNotification";
 	return [(NSObject*)hardwareCard className];
 }
 
+- (int) crateNumber
+{
+    NSNumber* num = [self objectForKey:mapKey(crateIndex)];
+    if(!num)return -1;
+    else return [num intValue];
+}
+
 - (int) cardSlot
 {
 	NSNumber* num = [self objectForKey:mapKey(cardIndex)];

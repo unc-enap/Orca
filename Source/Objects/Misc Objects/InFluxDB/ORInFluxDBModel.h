@@ -40,7 +40,7 @@
     int            alertType;
     NSString*      thisHostAddress;
     NSString*      experimentName;
-
+    NSString*      runNumberString;
     //----queue thread--------
     bool           canceled;
     NSThread*      processThread;
@@ -51,7 +51,6 @@
     NSString*      org;
     
     //----http vars--------
-    NSMutableData* responseData;
     NSString*      authToken;
 }
 
@@ -64,7 +63,9 @@
 - (void) applicationIsTerminating : (NSNotification*)aNote;
 - (void) runElapsedTimeChanged    : (NSNotification*)aNote;
 - (void) runStatusChanged         : (NSNotification*)aNote;
-- (void) alarmsChanged            : (NSNotification*)aNote;
+- (void) alarmPosted              : (NSNotification*)aNote;
+- (void) alarmCleared             : (NSNotification*)aNote;
+- (void) alarmAcknowledged        : (NSNotification*)aNote;
 
 #pragma mark ***Accessors
 - (void)        setPortNumber:(NSUInteger)aPort;

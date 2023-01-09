@@ -98,6 +98,7 @@
 - (void) rateChanged:(NSNotification*)note;
 - (void) showDialog;
 - (NSString*) hardwareClassName;
+- (int) crateNumber;
 - (int) cardSlot;
 - (int) channel;
 - (void) configurationChanged:(NSArray*)adcCards;
