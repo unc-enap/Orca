@@ -1105,6 +1105,9 @@ void NSLogError(NSString* aString,...)
         i += range.length;
     }
     [s1 release];
-    
+    NSString* aNoteName;
+    if(![(ORAppDelegate*)[NSApp delegate]readyToSendLogsToDB]) aNoteName = @"ORDBDeferedLogMessage";
+    else                                                       aNoteName = @"ORDBPostLogMessage";
+    [[NSNotificationCenter defaultCenter] postNotificationName:aNoteName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:s1 ,@"Log",nil]];
 }
 @end

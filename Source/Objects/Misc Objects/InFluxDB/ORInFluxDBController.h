@@ -17,6 +17,7 @@
 //express or implied, or assume any liability or responsibility
 //for the use of this software.
 //-------------------------------------------------------------
+#import "ORValueBarGroupView.h"
 @interface ORInFluxDBController : OrcaObjectController
 {
     IBOutlet NSTextField*       hostNameField;
@@ -29,6 +30,8 @@
     IBOutlet NSButton*          stealthModeButton;
     IBOutlet NSTextField*       dbStatusField;
     IBOutlet NSTableView*       bucketTableView;
+    IBOutlet ORValueBarGroupView* rate0;
+
 }
 
 #pragma mark ***Interface Management

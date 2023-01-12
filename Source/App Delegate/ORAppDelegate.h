@@ -27,18 +27,22 @@
 @class ORWindowSaveSet;
 
 @interface ORAppDelegate : NSObject {
-    id					document;
-    ORAlarmCollection*	alarmCollection;
-    MemoryWatcher*		memoryWatcher;
-    ORSplashWindowController* theSplashController;
-	IBOutlet ORHelpCenter*	  helpCenter;
-	IBOutlet ORWindowSaveSet* windowSaveSet;
-	NSString* ethernetHardwareAddress;
-	BOOL configLoadedOK;
-	NSOperationQueue* queue;
-	uint32_t heartbeatCount;
-	BOOL delayTermination;
+    id					        document;
+    ORAlarmCollection*	        alarmCollection;
+    MemoryWatcher*		        memoryWatcher;
+    ORSplashWindowController*   theSplashController;
+	IBOutlet ORHelpCenter*	    helpCenter;
+	IBOutlet ORWindowSaveSet*   windowSaveSet;
+	NSString*                   ethernetHardwareAddress;
+	BOOL                        configLoadedOK;
+	NSOperationQueue*           queue;
+	uint32_t                    heartbeatCount;
+	BOOL                        delayTermination;
+    NSMutableArray*             deferredLogPostsForDB;
+    BOOL                        readyToSendLogsToDB;
 }
+- (BOOL) readyToSendLogsToDB;
+- (void) sendDeferredLogs;
 
 - (BOOL)   inDebugger;
 - (MemoryWatcher*) memoryWatcher;

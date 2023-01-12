@@ -20,6 +20,9 @@
 
 #import "ORInFluxDBController.h"
 #import "ORInFluxDBModel.h"
+#import "ORValueBarGroupView.h"
+#import "ORValueBar.h"
+#import "ORAxis.h"
 
 @implementation ORInFluxDBController
 
@@ -41,6 +44,16 @@
 	[super awakeFromNib];
     [self registerNotificationObservers];
     [self tableViewSelectionDidChange:nil];
+    [[rate0 xAxis] setRngLimitsLow:0 withHigh:100000 withMinRng:1000];
+    [[rate0 xAxis] setDefaultRangeHigh:6000];
+    [[rate0 xAxis] setLog:YES];
+    [rate0 setNumber:1 height:10 spacing:4];
+    [[rate0 xAxis] setRngLow:1 withHigh:10000];
+
+    for(id aBar in [rate0 valueBars]){
+        [aBar setBackgroundColor:[NSColor whiteColor]];
+        [aBar setBarColor:[NSColor greenColor]];
+    }
 }
 
 
@@ -100,6 +113,17 @@
                      selector : @selector(tableViewSelectionDidChange:)
                          name : NSTableViewSelectionDidChangeNotification
                        object : bucketTableView];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(scaleAction:)
+                         name : ORAxisRangeChangedNotification
+                       object : nil];
+    
+   [notifyCenter addObserver : self
+                     selector : @selector(miscAttributesChanged:)
+                         name : ORMiscAttributesChanged
+                       object : model];
+
 
 }
 
@@ -116,6 +140,28 @@
     [self bucketArrayChanged:nil];
 
 }
+//a fake action from the scale object so we can store the state
+- (void) scaleAction:(NSNotification*)aNotification
+{
+    if(aNotification == nil || [aNotification object] == [rate0 xAxis]){
+        [model setMiscAttributes:[[rate0 xAxis]attributes] forKey:@"Rate0XAttributes"];
+    }
+}
+- (void) miscAttributesChanged:(NSNotification*)aNote
+{
+    NSString*               key = [[aNote userInfo] objectForKey:ORMiscAttributeKey];
+    NSMutableDictionary* attrib = [model miscAttributesForKey:key];
+    
+    if(aNote == nil || [key isEqualToString:@"Rate0XAttributes"]){
+        if(aNote==nil)attrib = [model miscAttributesForKey:@"Rate0XAttributes"];
+        if(attrib){
+            [[rate0 xAxis] setAttributes:attrib];
+            [rate0 setNeedsDisplay:YES];
+            [[rate0 xAxis] setNeedsDisplay:YES];
+        }
+    }
+}
+
 - (void) stealthModeChanged:(NSNotification*)aNote
 {
     [stealthModeButton setIntValue: [model stealthMode]];
@@ -129,7 +175,8 @@
 
 - (void) rateChanged:(NSNotification*)aNote
 {
-    [rateField setStringValue:[NSString stringWithFormat:@"%ld B/s",[model messageRate]]];
+    [rateField setStringValue:[NSString stringWithFormat:@"%ld",[model messageRate]]];
+    [rate0 setNeedsDisplay:YES];
 }
 
 - (void) hostNameChanged:(NSNotification*)aNote

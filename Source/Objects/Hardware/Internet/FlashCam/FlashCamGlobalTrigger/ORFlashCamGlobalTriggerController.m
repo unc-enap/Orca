@@ -55,12 +55,12 @@
                        object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(majorityLevelChanged:)
-                         name : ORFlashCamGlobalTriggerModelMajorityLevelChanged
-                       object : nil];
+                         name : ORFlashCamTriggerModelMajorityLevelChanged
+                       object : model];
     [notifyCenter addObserver : self
                      selector : @selector(majorityWidthChanged:)
-                         name : ORFlashCamGlobalTriggerModelMajorityWidthChanged
-                       object : nil];
+                         name : ORFlashCamTriggerModelMajorityWidthChanged
+                       object : model];
 }
 
 - (void) awakeFromNib
@@ -115,7 +115,7 @@
 
 - (void) majorityLevelChanged:(NSNotification*)note
 {
-    [majorityLevelTextField setIntValue:[model majorityLevel]];
+    [majorityLevelPU selectItemAtIndex:[model majorityLevel]-1];
 }
 
 - (void) majorityWidthChanged:(NSNotification*)note
@@ -127,7 +127,7 @@
 {
     lock |= [gOrcaGlobals runInProgress] || [gSecurity isLocked:ORFlashCamCardSettingsLock];
     [super settingsLock:lock];
-    [majorityLevelTextField setEnabled:!lock];
+    [majorityLevelPU setEnabled:!lock];
     [majorityWidthTextField setEnabled:!lock];
 }
 
@@ -141,7 +141,7 @@
 
 - (IBAction) majorityLevelAction:(id)sender
 {
-    [model setMajorityLevel:[sender intValue]];
+    [model setMajorityLevel:(int)[sender indexOfSelectedItem]+1];
 }
 
 - (IBAction) majorityWidthAction:(id)sender
