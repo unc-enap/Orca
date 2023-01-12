@@ -368,7 +368,20 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 
 - (void) linkCC4sToDetectors
 {
-    ORSegmentGroup* cc4Group = [segmentGroups objectAtIndex:kL200CC4Type];
+    ORSegmentGroup* cc4Group;
+    if([segmentGroups count]>kL200CC4Type){
+        cc4Group = [segmentGroups objectAtIndex:kL200CC4Type];
+    }
+    else {
+        ORL200SegmentGroup* cc4 = [[ORL200SegmentGroup alloc] initWithName:@"CC4Chans"
+                                                               numSegments:kL200MaxCC4s
+                                                                mapEntries:[self setupMapEntries:kL200CC4Type]];
+        [cc4 setType:kL200CC4Type];
+        [self addGroup:cc4];
+        cc4Group = cc4;
+        [cc4 release];
+
+    }
     ORSegmentGroup* detGroup = [segmentGroups objectAtIndex:kL200DetType];
     //make a look up table of the detector segments to speed up the linking
     NSMutableDictionary* detDict = [NSMutableDictionary dictionary];
