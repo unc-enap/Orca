@@ -22,7 +22,7 @@
                 <outlet property="humidityView" destination="E6l-qy-vrH" id="KN6-kf-efo"/>
                 <outlet property="linkErrorsTextField" destination="njQ-UT-0Jj" id="HsE-Zi-Hf3"/>
                 <outlet property="linkErrorsTextField1" destination="Xq0-Wg-Y6q" id="UQj-eM-QXU"/>
-                <outlet property="majorityLevelTextField" destination="LCZ-pQ-002" id="FPf-zG-rv7"/>
+                <outlet property="majorityLevelPU" destination="IwN-fA-PTJ" id="Wxs-iq-tyD"/>
                 <outlet property="majorityWidthTextField" destination="Az3-Nl-qbF" id="gzP-d8-kcE"/>
                 <outlet property="printFlagsButton" destination="LB5-uL-eXA" id="Xr7-gN-X6u"/>
                 <outlet property="promSlotPUButton" destination="Cgo-ff-XP1" id="4oN-Od-k6l"/>
@@ -403,23 +403,10 @@
                                                 <action selector="settingsLockAction:" target="-2" id="wu9-iV-1GJ"/>
                                             </connections>
                                         </button>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LCZ-pQ-002">
-                                            <rect key="frame" x="141" y="184" width="55" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="9wh-eb-6C9">
-                                                <font key="font" metaFont="smallSystem"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                            <connections>
-                                                <action selector="majorityLevelAction:" target="-2" id="YaJ-QG-UPG"/>
-                                                <outlet property="formatter" destination="Tr7-JI-o34" id="f0I-Ba-6rL"/>
-                                            </connections>
-                                        </textField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Az3-Nl-qbF">
                                             <rect key="frame" x="141" y="153" width="55" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="cwO-Np-dWp">
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="right" drawsBackground="YES" id="cwO-Np-dWp">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -438,6 +425,33 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IwN-fA-PTJ">
+                                            <rect key="frame" x="138" y="181" width="60" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="1" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="TDJ-6V-PXJ" id="DGc-M3-0HE">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="label"/>
+                                                <menu key="menu" id="Tof-4x-qEG">
+                                                    <items>
+                                                        <menuItem title="1" state="on" id="TDJ-6V-PXJ"/>
+                                                        <menuItem title="2" id="VI1-sB-Ej6"/>
+                                                        <menuItem title="3" id="MNd-Gy-vLp"/>
+                                                        <menuItem title="4" id="XXZ-DC-CRU">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="5" id="7Vo-oK-WqY">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="6" id="Kos-H7-9ab">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="majorityLevelAction:" target="-2" id="JWt-9Z-0Z0"/>
+                                            </connections>
+                                        </popUpButton>
                                     </subviews>
                                 </view>
                             </tabViewItem>

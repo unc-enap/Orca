@@ -20,8 +20,6 @@
 #import "ORFlashCamGlobalTriggerModel.h"
 #import "ORCrate.h"
 
-NSString* ORFlashCamGlobalTriggerModelMajorityLevelChanged = @"ORFlashCamGlobalTriggerModelMajorityLevelChanged";
-NSString* ORFlashCamGlobalTriggerModelMajorityWidthChanged = @"ORFlashCamGlobalTriggerModelMajorityWidthChanged";
 
 @implementation ORFlashCamGlobalTriggerModel
 
@@ -30,8 +28,6 @@ NSString* ORFlashCamGlobalTriggerModelMajorityWidthChanged = @"ORFlashCamGlobalT
 - (id) init
 {
     self = [super init];
-    majorityLevel = 1;
-    majorityWidth = 1;
     return self;
 }
 
@@ -112,31 +108,6 @@ NSString* ORFlashCamGlobalTriggerModelMajorityWidthChanged = @"ORFlashCamGlobalT
 
 #pragma mark •••Accessors
 
-- (int) majorityLevel
-{
-    return majorityLevel;
-}
-
-- (int) majorityWidth
-{
-    return majorityWidth;
-}
-
-- (void) setMajorityLevel:(int)level
-{
-    if(majorityLevel == level) return;
-    [[[self undoManager] prepareWithInvocationTarget:self] setMajorityLevel:majorityLevel];
-    majorityLevel = MAX(1, level);
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamGlobalTriggerModelMajorityLevelChanged object:self];
-}
-
-- (void) setMajorityWidth:(int)width
-{
-    if(majorityWidth == width) return;
-    [[[self undoManager] prepareWithInvocationTarget:self] setMajorityWidth:majorityWidth];
-    majorityWidth = MAX(1, width);
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamGlobalTriggerModelMajorityWidthChanged object:self];
-}
 
 
 #pragma mark •••Run control flags
@@ -167,8 +138,6 @@ NSString* ORFlashCamGlobalTriggerModelMajorityWidthChanged = @"ORFlashCamGlobalT
 {
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
-    [self setMajorityLevel:[decoder decodeIntForKey:@"majorityLevel"]];
-    [self setMajorityWidth:[decoder decodeIntForKey:@"majorityWidth"]];
     [[self undoManager] enableUndoRegistration];
     return self;
 }
@@ -176,16 +145,8 @@ NSString* ORFlashCamGlobalTriggerModelMajorityWidthChanged = @"ORFlashCamGlobalT
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInt:majorityLevel forKey:@"majorityLevel"];
-    [encoder encodeInt:majorityWidth forKey:@"majorityWidth"];
 }
 
-- (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary
-{
-    NSMutableDictionary* dict = [super addParametersToDictionary:dictionary];
-    [dict setObject:[NSNumber numberWithInt:majorityLevel]   forKey:@"MajorityLevel"];
-    [dict setObject:[NSNumber numberWithInt:majorityWidth]   forKey:@"MajorityWidth"];
-    return dict;
-}
+
 
 @end

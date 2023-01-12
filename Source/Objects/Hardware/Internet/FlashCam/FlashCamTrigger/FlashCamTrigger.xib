@@ -22,6 +22,8 @@
                 <outlet property="humidityView" destination="IYm-F1-kPF" id="t4i-xf-Uhd"/>
                 <outlet property="linkErrorsTextField" destination="ZOs-qa-Sok" id="dlN-3l-epY"/>
                 <outlet property="linkErrorsTextField1" destination="rY0-cX-715" id="UXv-Yb-oR6"/>
+                <outlet property="majorityLevelPU" destination="Vtv-Ys-au1" id="osv-W0-Y8s"/>
+                <outlet property="majorityWidthTextField" destination="uvm-q1-RHc" id="oxu-YL-fQ6"/>
                 <outlet property="printFlagsButton" destination="o9x-Cj-gSU" id="0Df-KO-nlO"/>
                 <outlet property="promSlotPUButton" destination="x1c-U2-dlK" id="KtG-hD-9mI"/>
                 <outlet property="rebootCardButton" destination="aw8-tR-nvC" id="7Uh-Nc-FOT"/>
@@ -392,6 +394,63 @@
                                                 <action selector="settingsLockAction:" target="-2" id="Ape-qO-mAB"/>
                                             </connections>
                                         </button>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Txn-Hl-x32">
+                                            <rect key="frame" x="44" y="137" width="84" height="14"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Majority Width:" id="J2k-67-28u">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uvm-q1-RHc">
+                                            <rect key="frame" x="140" y="133" width="55" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="right" drawsBackground="YES" id="k7H-zR-fx7">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <connections>
+                                                <action selector="majorityWidthAction:" target="-2" id="K8P-Op-cSA"/>
+                                            </connections>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j3Y-aV-leu">
+                                            <rect key="frame" x="45" y="168" width="81" height="14"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Majority Level:" id="ff6-4D-Ope">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vtv-Ys-au1">
+                                            <rect key="frame" x="137" y="161" width="60" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="1" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="fF4-Jh-CR8" id="5Cy-GS-Qxj">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="label"/>
+                                                <menu key="menu" id="VVb-Eb-rFS">
+                                                    <items>
+                                                        <menuItem title="1" state="on" id="fF4-Jh-CR8"/>
+                                                        <menuItem title="2" id="N0N-FD-Blv"/>
+                                                        <menuItem title="3" id="bTd-yV-HP6"/>
+                                                        <menuItem title="4" id="O79-o1-MMk">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="5" id="l5F-TW-NwP">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="6" id="MYN-x0-L3y">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="majorityLevelAction:" target="-2" id="JMP-bG-lB8"/>
+                                            </connections>
+                                        </popUpButton>
                                     </subviews>
                                 </view>
                             </tabViewItem>

@@ -30,6 +30,8 @@
     IBOutlet NSTextField* envErrorsTextField1;
     IBOutlet NSTextField* ctiErrorsTextField1;
     IBOutlet NSTextField* linkErrorsTextField1;
+    IBOutlet NSPopUpButton* majorityLevelPU;
+    IBOutlet NSTextField* majorityWidthTextField;
 }
 
 #pragma mark •••Initialization
@@ -41,8 +43,12 @@
 
 #pragma mark •••Interface management
 - (void) connectionChanged:(NSNotification*)note;
+- (void) majorityLevelChanged:(NSNotification*)note;
+- (void) majorityWidthChanged:(NSNotification*)note;
 
 #pragma mark •••Actions
 - (IBAction) printFlagsAction:(id)sender;
+- (IBAction) majorityLevelAction:(id)sender;
+- (IBAction) majorityWidthAction:(id)sender;
 
 @end

@@ -21,10 +21,7 @@
 
 @interface ORFlashCamGlobalTriggerModel : ORFlashCamTriggerModel
 {
-    @private
-    int majorityLevel;
-    int majorityWidth;
-}
+ }
 
 #pragma mark •••Initialization
 - (id) init;
@@ -36,10 +33,6 @@
 - (void) guardianAssumingDisplayOfConnectors:(id)aGuardian;
 
 #pragma mark •••Accessors
-- (int) majorityLevel;
-- (int) majorityWidth;
-- (void) setMajorityLevel:(int)level;
-- (void) setMajorityWidth:(int)width;
 
 #pragma mark •••Run control flags
 - (NSMutableArray*) runFlags;
@@ -48,10 +41,7 @@
 #pragma mark •••Archival
 - (id) initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
-- (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary;
 
 @end
 
-extern NSString* ORFlashCamGlobalTriggerModelMajorityLevelChanged;
-extern NSString* ORFlashCamGlobalTriggerModelMajorityWidthChanged;
 

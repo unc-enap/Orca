@@ -50,10 +50,22 @@
                      selector : @selector(connectionChanged:)
                          name : ORFlashCamCardAddressChanged
                        object : nil];
+    
     [notifyCenter addObserver : self
                      selector : @selector(connectionChanged:)
                          name : ORConnectionChanged
                        object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(majorityLevelChanged:)
+                         name : ORFlashCamTriggerModelMajorityLevelChanged
+                       object : model];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(majorityWidthChanged:)
+                         name : ORFlashCamTriggerModelMajorityWidthChanged
+                       object : model];
+
 }
 
 - (void) awakeFromNib
@@ -66,9 +78,30 @@
     [super updateWindow];
     [self connectionChanged:nil];
     [self statusChanged:nil];
+    [self majorityLevelChanged:nil];
+    [self majorityWidthChanged:nil];
+
 }
 
 #pragma mark •••Interface management
+
+- (void) settingsLock:(bool)lock
+{
+    lock |= [gOrcaGlobals runInProgress] || [gSecurity isLocked:ORFlashCamCardSettingsLock];
+    [super settingsLock:lock];
+    [majorityLevelPU setEnabled:!lock];
+    [majorityWidthTextField setEnabled:!lock];
+}
+
+- (void) majorityLevelChanged:(NSNotification*)note
+{
+    [majorityLevelPU selectItemAtIndex:[model majorityLevel]-1];
+}
+
+- (void) majorityWidthChanged:(NSNotification*)note
+{
+    [majorityWidthTextField setIntValue:[model majorityWidth]];
+}
 
 - (void) cardAddressChanged:(NSNotification*)note
 {
@@ -112,5 +145,13 @@
     [super printFlagsAction:sender];
     [model printRunFlagsForCardIndex:0];
 }
+- (IBAction) majorityLevelAction:(id)sender
+{
+    [model setMajorityLevel:(int)[sender indexOfSelectedItem]+1];
+}
 
+- (IBAction) majorityWidthAction:(id)sender
+{
+    [model setMajorityWidth:[sender intValue]];
+}
 @end
