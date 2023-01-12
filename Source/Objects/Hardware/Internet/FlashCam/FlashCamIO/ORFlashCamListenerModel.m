@@ -775,8 +775,8 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     }
     NSString* s = [NSString stringWithFormat:@"tcp://listen/%d/%@", port, ip];
     reader = FCIOCreateStateReader([s UTF8String], timeout, ioBuffer, stateBuffer);
-    FCIOSelectStateTag(reader, 0);
     if(reader){
+        FCIOSelectStateTag(reader, 0);
         [self setUpImage];
 
         NSLog(@"ORFlashCamListenerModel: connected to %@:%d on %@\n", ip, port, interface);
