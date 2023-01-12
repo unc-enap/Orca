@@ -66,6 +66,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) _startAllPeriodicOperations;
 - (void) decodeBucketList:(NSDictionary*)result;
 - (void) decodeOrgList   :(NSDictionary*)result;
+- (void) postStatusLogMessage:(NSNotification*)aNote;
 @end
 
 @implementation ORInFluxDBModel
@@ -212,6 +213,11 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
                      selector : @selector(processElementStateChanged:)
                          name : ORProcessElementStateChangedNotification
                        object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(postStatusLogMessage:)
+                         name : @"ORDBPostLogMessage"
+                       object : nil];
 }
 
 - (void) applicationIsTerminating:(NSNotification*)aNote
@@ -346,6 +352,29 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         messageQueue = [[ORSafeQueue alloc] init];
     }
     [messageQueue enqueue:aCmd];
+}
+
+- (void) postStatusLogMessage:(NSNotification*)aNote
+{
+    NSAttributedString* s = [[aNote userInfo] objectForKey:@"Log"];
+             
+    [s enumerateAttribute:(NSString *) NSForegroundColorAttributeName
+                                     inRange:NSMakeRange(0, [s length])
+    options:NSAttributedStringEnumerationLongestEffectiveRangeNotRequired
+                                  usingBlock:^(id value, NSRange range, BOOL *stop) {
+        
+        if([[value className] isEqualToString:@"_NSTaggedPointerColor"]){
+            
+  //          printf("got it\n");
+        }
+                                  }];
+     
+
+
+    ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"ORCA" org:org];
+    [aCmd   start  : @"StatusLog" withTags:@"Type=List"];
+    [aCmd addString: @"Log"     withValue:[s string]];
+    [self executeDBCmd:aCmd];
 }
 
 - (void) alarmPosted:(NSNotification*)aNote
@@ -703,8 +732,8 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
                 ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:experimentName org:org];
                 for(int i = 0; i<numSegments; i++){
                     ORDetectorSegment* aSegment = [segmentGroup segment:i];
-                    NSString* tags = [NSString stringWithFormat:@"groupName = %@,runNumber=%@,crate=%d,card=%d,chan=%d",
-                                      [segmentGroup groupName],runNumberString,[aSegment crateNumber],[aSegment cardSlot],[aSegment channel]];
+                    NSString* tags = [NSString stringWithFormat:@"groupName = %@,crate=%d,card=%d,chan=%d",
+                                      [segmentGroup groupName],[aSegment crateNumber],[aSegment cardSlot],[aSegment channel]];
                     [aCmd start  :@"Metrics"      withTags:tags];
                     [aCmd addLong:@"Threshold"  withValue:[segmentGroup getThreshold:i]];
                     [aCmd addLong:@"Online"     withValue:[segmentGroup online:i]];

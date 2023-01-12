@@ -123,6 +123,7 @@ NSString* OROrcaFinalQuitNotice      = @"OROrcaFinalQuitNotice";
 - (id) init
 {
 	self = [super init];
+    readyToSendLogsToDB = NO;
 	theSplashController = [[ORSplashWindowController alloc] init];
 	[theSplashController showWindow:self];
 	
@@ -161,6 +162,8 @@ NSString* OROrcaFinalQuitNotice      = @"OROrcaFinalQuitNotice";
     [self setAlarmCollection:[[[ORAlarmCollection alloc] init] autorelease]];
     [self setMemoryWatcher:[[[MemoryWatcher alloc] init] autorelease]];
 }
+
+- (BOOL) readyToSendLogsToDB {return readyToSendLogsToDB;}
 
 - (BOOL) inDebugger
 {
@@ -232,11 +235,22 @@ NSString* OROrcaFinalQuitNotice      = @"OROrcaFinalQuitNotice";
                          name : ORPrefPostLogEnabledChanged
                        object : nil];
 	
-	
     [notifyCenter addObserver : self
                      selector : @selector(heartbeatEnabledChanged:)
                          name : ORPrefHeartBeatPathChanged
                        object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(storeDeferedLogMessages:)
+                         name : @"ORDBDeferedLogMessage"
+                       object : nil];
+
+}
+
+- (void)storeDeferedLogMessages:(NSNotification*)aNotification
+{
+    if(!deferredLogPostsForDB)deferredLogPostsForDB = [[NSMutableArray array]retain];
+    [deferredLogPostsForDB addObject:[[aNotification userInfo] objectForKey:@"Log"]];
 }
 
 - (void) heartbeatEnabledChanged:(NSNotification *)aNotification
@@ -527,6 +541,7 @@ NSString* OROrcaFinalQuitNotice      = @"OROrcaFinalQuitNotice";
 			}
 		}
 		configLoadedOK = YES;
+
 	}
 	@catch(NSException* localException) {
 		NSLogColor([NSColor redColor],@"There was an exception thrown during load... configuration may not be complete!\n");
@@ -581,8 +596,22 @@ NSString* OROrcaFinalQuitNotice      = @"OROrcaFinalQuitNotice";
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:debugging] forKey:ORWasInDebuggerFlag];
     [[NSUserDefaults standardUserDefaults] synchronize];
     //NSLog(@"%@\n",1);
-
 }
+- (void) sendDeferredLogs
+{
+    //-----------------data base objects are not up until now-------------------------------
+    //                 send the defered log messages now
+    //---------------------------------------------------------------------------------------
+    for(NSString* aStr in deferredLogPostsForDB){
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ORDBPostLogMessage" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:aStr ,@"Log",nil]];
+    }
+    [deferredLogPostsForDB release];
+    deferredLogPostsForDB = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"ORDBDeferedLogMessage" object:nil];
+    readyToSendLogsToDB   = YES;
+    //---------------------------------------------------------------------------------------
+}
+
 
 - (void) closeSplashWindow
 {

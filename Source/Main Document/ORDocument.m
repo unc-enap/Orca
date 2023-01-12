@@ -545,6 +545,7 @@ static NSString* ORDocumentScaleFactor  = @"ORDocumentScaleFactor";
 		@try {
 			//[[ORUSB sharedUSB] awakeAfterDocumentLoaded];
 			[group awakeAfterDocumentLoaded];
+            [[NSApp delegate] sendDeferredLogs];
 		}
 		@catch(NSException* localException) {
 		}
