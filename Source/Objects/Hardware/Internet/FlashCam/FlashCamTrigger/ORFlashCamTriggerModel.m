@@ -255,8 +255,9 @@ NSString* ORFlashCamTriggerModelMajorityWidthChanged = @"ORFlashCamTriggerModelM
     [flags addObjectsFromArray:@[@"-smm", [NSString stringWithFormat:@"%x,%d,1", mask, index]]];
     
     //-----------------*****Double check these flags******-----------------------------------
-    [flags addObjectsFromArray:@[@"-mm",   [NSString stringWithFormat:@"%x", mask]]];
-    [flags addObjectsFromArray:@[@"-mmaj", [NSString stringWithFormat:@"%d,%d", majorityLevel, majorityWidth]]];
+//    [flags addObjectsFromArray:@[@"-mm",   [NSString stringWithFormat:@"%x", mask]]];
+    [flags addObjectsFromArray:@[@"-smmajl", [NSString stringWithFormat:@"%d", majorityLevel]]];
+    [flags addObjectsFromArray:@[@"-smmajw", [NSString stringWithFormat:@"%d", majorityWidth]]];
     //---------------------------------------------------------------------------------------
 
     return flags;
