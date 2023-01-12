@@ -352,7 +352,7 @@
 
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
 {
-    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/write?org=%@&bucket=%@&precision=s",[delegate hostName],[delegate portNumber],org,bucket];
+    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/write?org=%@&bucket=%@&precision=ns",[delegate hostName],[delegate portNumber],org,bucket];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
     
     request.HTTPMethod = @"POST";
