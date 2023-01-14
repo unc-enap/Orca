@@ -253,12 +253,16 @@ NSString* ORFlashCamTriggerModelMajorityWidthChanged = @"ORFlashCamTriggerModelM
     }
     NSMutableArray* flags = [NSMutableArray array];
     [flags addObjectsFromArray:@[@"-smm", [NSString stringWithFormat:@"%x,%d,1", mask, index]]];
-    
-    //-----------------*****Double check these flags******-----------------------------------
+
+//---------------------------------------------------------------------------------------
+    //jfw and mah  temp hard code of board order. Will talk to Tom to figure out how this is determined
+    int add = 2;
+    if([self cardAddress]      == 0x3f0) add = 0;
+    else if([self cardAddress] == 0x2f0) add = 1;
+
 //    [flags addObjectsFromArray:@[@"-mm",   [NSString stringWithFormat:@"%x", mask]]];
-    [flags addObjectsFromArray:@[@"-smmajl", [NSString stringWithFormat:@"%d", majorityLevel]]];
-    [flags addObjectsFromArray:@[@"-smmajw", [NSString stringWithFormat:@"%d", majorityWidth]]];
-    //---------------------------------------------------------------------------------------
+    [flags addObjectsFromArray:@[@"-smmajl", [NSString stringWithFormat:@"%d,%d,1", majorityLevel,add]]];
+    [flags addObjectsFromArray:@[@"-smmajw", [NSString stringWithFormat:@"%d,%d,1", majorityWidth,add]]];
 
     return flags;
 }
