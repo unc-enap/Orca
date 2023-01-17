@@ -13,6 +13,7 @@
                 <outlet property="bucketTableView" destination="6x5-c3-cB1" id="UXj-yK-FAD"/>
                 <outlet property="dbStatusField" destination="wNe-OK-JOD" id="T7Q-xq-i5o"/>
                 <outlet property="deleteBucketButton" destination="WsM-R8-FOV" id="5u6-27-ztt"/>
+                <outlet property="errorField" destination="HRY-yp-UsG" id="Lla-MU-h4b"/>
                 <outlet property="hostNameField" destination="chN-yb-ic0" id="zOJ-nr-zbc"/>
                 <outlet property="orgField" destination="oys-xN-748" id="pbn-fG-SZc"/>
                 <outlet property="portField" destination="G5V-GP-Xrv" id="upa-Hz-Z0N"/>
@@ -283,14 +284,23 @@
                         </textFieldCell>
                     </textField>
                     <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6P9-gw-pEQ" customClass="ORValueBarGroupView">
-                        <rect key="frame" x="100" y="72" width="302" height="29"/>
+                        <rect key="frame" x="93" y="72" width="309" height="29"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <connections>
                             <outlet property="dataSource" destination="m37-Xf-9aI" id="NhD-E4-oXK"/>
                         </connections>
                     </customView>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HRY-yp-UsG" customClass="ORTimedTextField">
+                        <rect key="frame" x="100" y="20" width="302" height="36"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="WHX-te-5qP">
+                            <font key="font" metaFont="system" size="11"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m37-Xf-9aI">
-                        <rect key="frame" x="20" y="86" width="57" height="14"/>
+                        <rect key="frame" x="13" y="86" width="57" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="8086" id="CKd-ee-vl9">
                             <font key="font" metaFont="smallSystem"/>
@@ -299,7 +309,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zXz-yR-ISR">
-                        <rect key="frame" x="74" y="85" width="31" height="16"/>
+                        <rect key="frame" x="67" y="85" width="26" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" title="/sec" id="KyQ-on-kyM">
                             <font key="font" metaFont="smallSystem"/>

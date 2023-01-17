@@ -23,6 +23,7 @@
 #import "ORValueBarGroupView.h"
 #import "ORValueBar.h"
 #import "ORAxis.h"
+#import "ORTimedTextField.h"
 
 @implementation ORInFluxDBController
 
@@ -49,6 +50,7 @@
     [[rate0 xAxis] setLog:YES];
     [rate0 setNumber:1 height:10 spacing:4];
     [[rate0 xAxis] setRngLow:1 withHigh:10000];
+    [errorField setTimeOut:1.5];
 
     for(id aBar in [rate0 valueBars]){
         [aBar setBackgroundColor:[NSColor whiteColor]];
@@ -124,7 +126,10 @@
                          name : ORMiscAttributesChanged
                        object : model];
 
-
+    [notifyCenter addObserver : self
+                      selector : @selector(errorStringChanged:)
+                          name : ORInFluxDBErrorChanged
+                        object : model];
 }
 
 - (void) updateWindow
@@ -138,6 +143,7 @@
     [self rateChanged:nil];
     [self stealthModeChanged:nil];
     [self bucketArrayChanged:nil];
+    [self errorStringChanged:nil];
 
 }
 //a fake action from the scale object so we can store the state
@@ -160,6 +166,11 @@
             [[rate0 xAxis] setNeedsDisplay:YES];
         }
     }
+}
+
+- (void) errorStringChanged:(NSNotification*)aNote
+{
+    [errorField setStringValue:[model errorString]];
 }
 
 - (void) stealthModeChanged:(NSNotification*)aNote

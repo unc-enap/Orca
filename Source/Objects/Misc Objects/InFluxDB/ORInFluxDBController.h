@@ -30,6 +30,7 @@
     IBOutlet NSButton*          stealthModeButton;
     IBOutlet NSTextField*       dbStatusField;
     IBOutlet NSTableView*       bucketTableView;
+    IBOutlet ORTimedTextField*  errorField;
     IBOutlet ORValueBarGroupView* rate0;
 
 }
@@ -44,6 +45,7 @@
 - (void) rateChanged:(NSNotification*)aNote;
 - (void) stealthModeChanged:(NSNotification*)aNote;
 - (void) bucketArrayChanged:(NSNotification*)aNote;
+- (void) errorStringChanged:(NSNotification*)aNote;
 
 #pragma mark •••Actions
 - (IBAction) hostNameAction:(id)sender;
