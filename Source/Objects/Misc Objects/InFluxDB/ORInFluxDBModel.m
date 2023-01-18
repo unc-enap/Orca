@@ -66,7 +66,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) _startAllPeriodicOperations;
 - (void) decodeBucketList:(NSDictionary*)result;
 - (void) decodeOrgList   :(NSDictionary*)result;
-- (void) postStatusLogMessage:(NSNotification*)aNote;
+- (void) processStatusLogLine:(NSNotification*)aNote;
 @end
 
 @implementation ORInFluxDBModel
@@ -216,9 +216,15 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
                        object : nil];
     
     [notifyCenter addObserver : self
-                     selector : @selector(postStatusLogMessage:)
+                     selector : @selector(processStatusLogLine:)
                          name : @"ORDBPostLogMessage"
                        object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(processGenericDBRecord:)
+                         name : @"ORGenericDBObjectRecord"
+                       object : nil];
+    
 }
 
 - (void) applicationIsTerminating:(NSNotification*)aNote
@@ -355,7 +361,36 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [messageQueue enqueue:aCmd];
 }
 
-- (void) postStatusLogMessage:(NSNotification*)aNote
+- (void) processGenericDBRecord:(NSNotification*)aNote
+{
+    //we'll grab posts from the couchdb object since that's all the stuff
+    //we want to go into influxdb
+    //for now we'll just process the experiment stuff.... more later
+    if(![[[aNote object]className] isEqualToString:@"ORStatusController"] ){
+        NSDictionary* dict = [aNote userInfo];
+        for(id aKey in [dict allKeys]){
+            
+            id anObj = [dict objectForKey:aKey];
+            
+            NSError* error;
+            NSData* jsonData = [NSJSONSerialization dataWithJSONObject:anObj
+                                                               options:NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string
+                                                                 error:&error];
+            if (jsonData) {
+                NSString* measurement = [NSString stringWithFormat:@"%@",aKey];
+                measurement = [measurement stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+                NSString* jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+                ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:experimentName org:org];
+                NSString* tags = [NSString stringWithFormat:@"Class=%@",[[aNote object]className]];
+                [aCmd   start  : measurement withTags:tags];
+                [aCmd addString: aKey        withValue:jsonString];
+                [self executeDBCmd:aCmd];
+            }
+        }
+    }
+}
+
+- (void) processStatusLogLine:(NSNotification*)aNote
 {
     NSAttributedString* s = [[aNote userInfo] objectForKey:@"Log"];
     __block NSString* tags = @"level=0";
@@ -678,7 +713,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) _startAllPeriodicOperations
 {
     [self performSelector:@selector(updateMachineRecord)   withObject:nil afterDelay:2];
-    [self performSelector:@selector(updateExperimentRates) withObject:nil afterDelay:3];
     [self performSelector:@selector(updateRunInfo)         withObject:nil afterDelay:4];
 }
 
@@ -788,42 +822,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     if(!stealthMode && runNumberString!=nil){
         @try {
             ORExperimentModel* experiment = [self nextObject];
-            int numGroups = [experiment numberOfSegmentGroups];
-            for(int aSet=0;aSet<numGroups;aSet++){
-                ORSegmentGroup* segmentGroup = [experiment segmentGroup:aSet];
-                int numSegments = [experiment numberSegmentsInGroup:aSet];
-                ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:experimentName org:org];
-                for(int i = 0; i<numSegments; i++){
-                    ORDetectorSegment* aSegment = [segmentGroup segment:i];
-                    NSString* tags = [NSString stringWithFormat:@"groupName = %@,crate=%d,card=%d,chan=%d",
-                                      [segmentGroup groupName],[aSegment crateNumber],[aSegment cardSlot],[aSegment channel]];
-                    [aCmd start  :@"Metrics"      withTags:tags];
-                    [aCmd addLong:@"Threshold"  withValue:[segmentGroup getThreshold:i]];
-                    [aCmd addLong:@"Online"     withValue:[segmentGroup online:i]];
-                    [aCmd addLong:@"Gain"       withValue:[segmentGroup getGain:i]];
-                    [self executeDBCmd:aCmd];
-                }
-                
-                //NSArray* mapEntries = [[segmentGroup paramsAsString] componentsSeparatedByString:@"\n"];
-                //if([mapEntries count])      [aDictionary setObject:mapEntries       forKey: @"geometry"];
-                
-                
-                
-                //            NSArray* totalRateArray = [[[experiment segmentGroup:aSet] totalRate] ratesAsArray];
-                //            if(totalRateArray)[aDictionary setObject:totalRateArray forKey:@"totalRate"];
-                //
-                //            [values setObject:aDictionary forKey:[segmentGroup groupName]];
-            }
-            
-            //        NSMutableDictionary* aDictionary= [NSMutableDictionary dictionary];
-            //        NSArray* stringMapEntries = [[self stringMapFileAsString] componentsSeparatedByString:@"\n"];
-            //        [aDictionary setObject:stringMapEntries forKey: @"geometry"];
-            //        [values setObject:aDictionary           forKey:@"Strings"];
-            //
-            //        aDictionary= [NSMutableDictionary dictionary];
-            //        NSArray* specialMapEntries = [[self specialMapFileAsString] componentsSeparatedByString:@"\n"];
-            //        [aDictionary setObject:specialMapEntries forKey: @"list"];
-            //        [values setObject:aDictionary           forKey:@"SpecialChannels"];
+            [experiment postCouchDBRecord];
         }
         @catch(NSException* e){
             
@@ -831,35 +830,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     }
 }
 
-- (void) updateExperimentRates
-{
-    if(!stealthMode && runNumberString!=nil){
-        @try {
-            ORExperimentModel* experiment = [self nextObject];
-            int numGroups = [experiment numberOfSegmentGroups];
-            for(int aSet=0;aSet<numGroups;aSet++){
-                ORSegmentGroup* segmentGroup = [experiment segmentGroup:aSet];
-                int numSegments = [experiment numberSegmentsInGroup:aSet];
-                ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:experimentName org:org];
-                for(int i = 0; i<numSegments; i++){
-                    ORDetectorSegment* aSegment = [segmentGroup segment:i];
-                    NSString* tags = [NSString stringWithFormat:@"groupName = %@,runNumber=%@,crate=%d,card=%d,chan=%d",
-                                      [segmentGroup groupName],runNumberString,[aSegment crateNumber],[aSegment cardSlot],[aSegment channel]];
-                    [aCmd start:@"Metrics"      withTags:tags];
-                    [aCmd addLong:@"TotalCount" withValue:[segmentGroup getTotalCounts:i]];
-                    [aCmd addLong:@"Rate"       withValue:[segmentGroup getRate:i]];
-                    [self executeDBCmd:aCmd];
-                }
-            }
-        }
-        @catch(NSException* e){
-            
-        }
-        @finally{
-            [self performSelector:@selector(updateExperimentRates) withObject:nil afterDelay:60];
-        }
-    }
-}
 - (NSArray*) bucketArray
 {
     return bucketArray;
