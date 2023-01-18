@@ -814,7 +814,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(StatusController);
                               @"StatusLog",		@"type",
                               nil];
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ORCouchDBAddObjectRecord" object:self userInfo:dbRecord];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ORCouchDBBlockStatusLogRecord" object:self userInfo:dbRecord];
 
     
 }
