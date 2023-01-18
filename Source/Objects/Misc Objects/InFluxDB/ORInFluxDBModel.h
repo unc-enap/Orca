@@ -30,7 +30,6 @@
 {
 @private
     NSString*      hostName;
-    NSInteger      portNumber;
     NSTimer*       timer;
     NSInteger      totalSent;
     NSInteger      messageRate;
@@ -69,8 +68,6 @@
 - (void) alarmAcknowledged        : (NSNotification*)aNote;
 
 #pragma mark ***Accessors
-- (void)        setPortNumber:(NSUInteger)aPort;
-- (NSUInteger)  portNumber;
 - (NSString*)   experimentName;
 - (void)        setExperimentName:(NSString*)aName;
 - (NSString*)   hostName;

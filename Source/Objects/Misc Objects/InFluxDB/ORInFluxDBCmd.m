@@ -98,7 +98,7 @@
 }
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
 {
-    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/buckets/%@",[delegate hostName],[delegate portNumber],bucketId];
+    NSString* requestString = [NSString stringWithFormat:@"%@/api/v2/buckets/%@",[delegate hostName],bucketId];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
     request.HTTPMethod = @"DELETE";
     [request setValue:[NSString stringWithFormat:@"Token %@",[delegate authToken]]                     forHTTPHeaderField:@"Authorization"];
@@ -135,7 +135,7 @@
 
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
 {
-    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/buckets?org=%@",[delegate hostName],[delegate portNumber],[delegate org]];
+    NSString* requestString = [NSString stringWithFormat:@"%@/api/v2/buckets?org=%@",[delegate hostName],[delegate org]];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
     request.HTTPMethod = @"GET";
     [request setValue:[NSString stringWithFormat:@"Token %@",[delegate authToken]]                     forHTTPHeaderField:@"Authorization"];
@@ -172,7 +172,7 @@
 
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
 {
-    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/orgs",[delegate hostName],[delegate portNumber]];
+    NSString* requestString = [NSString stringWithFormat:@"%@/api/v2/orgs",[delegate hostName]];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
     
     request.HTTPMethod = @"GET";
@@ -198,7 +198,7 @@
 
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
 {
-    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/orgs",[delegate hostName],[delegate portNumber]];
+    NSString* requestString = [NSString stringWithFormat:@"%@/api/v2/orgs",[delegate hostName]];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
     
     request.HTTPMethod = @"GET";
@@ -246,7 +246,7 @@
 
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
 {
-    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/buckets",[delegate hostName],[delegate portNumber]];
+    NSString* requestString = [NSString stringWithFormat:@"%@/api/v2/buckets",[delegate hostName]];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
     request.HTTPMethod = @"POST";
     [request setValue:[NSString stringWithFormat:@"Token %@",[delegate authToken]] forHTTPHeaderField:@"Authorization"];
@@ -364,7 +364,7 @@
 
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
 {
-    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/write?org=%@&bucket=%@&precision=ns",[delegate hostName],[delegate portNumber],org,bucket];
+    NSString* requestString = [NSString stringWithFormat:@"%@/api/v2/write?org=%@&bucket=%@&precision=ns",[delegate hostName],org,bucket];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
     
     request.HTTPMethod = @"POST";
@@ -408,7 +408,7 @@
 
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
 {
-    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/delete?org=%@&bucket=%@",[delegate hostName],[delegate portNumber],org,bucket];
+    NSString* requestString = [NSString stringWithFormat:@"%@/api/v2/delete?org=%@&bucket=%@",[delegate hostName],org,bucket];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
     request.HTTPMethod = @"POST";
     [request setValue:[NSString stringWithFormat:@"Token %@",[delegate authToken]] forHTTPHeaderField:@"Authorization"];
@@ -455,7 +455,7 @@
 
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
 {
-    NSString* requestString = [NSString stringWithFormat:@"http://%@:%ld/api/v2/delete?org=%@&bucket=%@",[delegate hostName],[delegate portNumber],org,bucket];
+    NSString* requestString = [NSString stringWithFormat:@"%@/api/v2/delete?org=%@&bucket=%@",[delegate hostName],org,bucket];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
     request.HTTPMethod = @"POST";
     [request setValue:[NSString stringWithFormat:@"Token %@",[delegate authToken]] forHTTPHeaderField:@"Authorization"];

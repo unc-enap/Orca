@@ -21,7 +21,6 @@
 @interface ORInFluxDBController : OrcaObjectController
 {
     IBOutlet NSTextField*       hostNameField;
-    IBOutlet NSTextField*       portField;
     IBOutlet NSTextField*       orgField;
     IBOutlet NSTextField*       authTokenField;
     IBOutlet NSTextField*       rateField;
@@ -38,7 +37,6 @@
 #pragma mark ***Interface Management
 - (void) registerNotificationObservers;
 - (void) hostNameChanged:(NSNotification*)aNote;
-- (void) portChanged:(NSNotification*)aNote;
 - (void) authTokenChanged:(NSNotification*)aNote;
 - (void) orgChanged:(NSNotification*)aNote;
 - (void) inFluxDBLockChanged:(NSNotification*)aNote;

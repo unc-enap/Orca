@@ -72,11 +72,6 @@
                        object : model];
     
     [notifyCenter addObserver : self
-                     selector : @selector(portChanged:)
-                         name : ORInFluxDBPortNumberChanged
-                       object : model];
-    
-    [notifyCenter addObserver : self
                      selector : @selector(authTokenChanged:)
                          name : ORInFluxDBAuthTokenChanged
                        object : model];
@@ -136,7 +131,6 @@
 {
     [super updateWindow];
     [self hostNameChanged:nil];
-    [self portChanged:nil];
     [self authTokenChanged:nil];
     [self orgChanged:nil];
     [self inFluxDBLockChanged:nil];
@@ -195,11 +189,6 @@
 	[hostNameField setStringValue:[model hostName]];
 }
 
-- (void) portChanged:(NSNotification*)aNote
-{
-    [portField setIntegerValue:[model portNumber]];
-}
-
 - (void) orgChanged:(NSNotification*)aNote
 {
     [orgField setStringValue:[model org]];
@@ -215,7 +204,6 @@
     BOOL locked = [gSecurity isLocked:ORInFluxDBLock];
     [InFluxDBLockButton   setState: locked];
     [hostNameField        setEnabled:!locked];
-    [portField            setEnabled:!locked];
     [authTokenField       setEnabled:!locked];
     [orgField             setEnabled:!locked];
     [stealthModeButton    setEnabled:!locked];

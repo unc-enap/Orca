@@ -38,7 +38,6 @@
 #import <ifaddrs.h>
 #import <arpa/inet.h>
 
-NSString* ORInFluxDBPortNumberChanged      = @"ORInFluxDBPortNumberChanged";
 NSString* ORInFluxDBAuthTokenChanged       = @"ORInFluxDBAuthTokenChanged";
 NSString* ORInFluxDBOrgChanged             = @"ORInFluxDBOrgChanged";
 NSString* ORInFluxDBBucketChanged          = @"ORInFluxDBBucketChanged";
@@ -218,13 +217,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [notifyCenter addObserver : self
                      selector : @selector(processStatusLogLine:)
                          name : @"ORDBPostLogMessage"
-                       object : nil];
-    
-    [notifyCenter addObserver : self
-                     selector : @selector(processGenericDBRecord:)
-                         name : @"ORGenericDBObjectRecord"
-                       object : nil];
-    
+                       object : nil];    
 }
 
 - (void) applicationIsTerminating:(NSNotification*)aNote
@@ -251,19 +244,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 {
     [experimentName autorelease];
     experimentName = [aName copy];
-}
-
-- (NSUInteger) portNumber
-{
-    return portNumber;
-}
-
-- (void) setPortNumber:(NSUInteger)aPort
-{
-    [[[self undoManager] prepareWithInvocationTarget:self] setPortNumber:portNumber];
-    if(aPort == 0)aPort = 8086;
-    portNumber = aPort;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBPortNumberChanged object:self];
 }
 
 - (NSString*) hostName
@@ -686,7 +666,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     self = [super initWithCoder:decoder];
     [[self undoManager]  disableUndoRegistration];
     [self setHostName:   [decoder decodeObjectForKey    : @"HostName"]];
-    [self setPortNumber: [decoder decodeIntegerForKey   : @"PortNumber"]];
     [self setAuthToken:  [decoder decodeObjectForKey    : @"Token"]];
     [self setOrg:        [decoder decodeObjectForKey    : @"Org"]];
     [self setExperimentName: [decoder decodeObjectForKey: @"experimentName"]];
@@ -698,7 +677,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInteger:portNumber    forKey: @"PortNumber"];
     [encoder encodeObject:hostName       forKey: @"HostName"];
     [encoder encodeObject:authToken      forKey: @"Token"];
     [encoder encodeObject:org            forKey: @"Org"];
