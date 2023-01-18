@@ -731,11 +731,9 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         if([baseline   count]) [hist setObject:baseline   forKey:@"baseline"];
         [history setObject:hist forKey:[group groupName]];
     }
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ORGenericDBObjectRecord"
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ORCouchDBAddObjectRecord"
                                                         object:self
                                                       userInfo:values];
-    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ORCouchDBAddHistoryAdcRecord"
                                                         object:self
                                                       userInfo:history];
