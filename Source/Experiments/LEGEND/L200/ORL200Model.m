@@ -151,57 +151,24 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 }
 - (void) runStarted:(NSNotification*) aNote
 {
-    
-    /*
-     ## measurement:ADCChannel
-     ### tags:
-     card.address=,
-     card.id=,
-     crate=,
-     slot=,
-     channel=,
-     fcid=,
-     location.string=,
-     location.position=,
-     system=,
-     name=
-      
-     ### fields:
-
-     subset at readout start:
-     enabled (-am )
-     trig_out_enabled ( -atlm )
-     baseline_dac (-bldac)
-     adc_threshold (-athr)
-     adc_gain (-ag )
-     trigger_gain_multi (-tgm )
-     shaping_time ( -gs )
-     filter_type ( -gf )
-     flat_top ( -gf )
-     pz_time ( -gpz )
-     post_trigger ( -pt )
-     adc_phase_shift ( -aph )
-     
-     
-     keys = [NSArray arrayWithObjects:@"serial",     @"det_type",
-             @"str_number",     @"str_position",
-             @"daq_crate",      @"daq_board_id",     @"daq_board_slot",   @"daq_board_ch",
-             @"hv_crate",       @"hv_board_slot",    @"hv_board_chan",    @"hv_cable",
-             @"hv_flange_id",   @"hv_flange_pos",
-             @"fe_cc4_ch",      @"fe_head_card_ana", @"fe_head_card_dig", @"fe_fanout_card",
-             @"fe_raspberrypi", @"fe_lmfe_id", nil];
-
-*/
-    //put all channel info into data base at run start
-    ORSegmentGroup* group = [self segmentGroup:kL200DetType];
     uint32_t aTimeStamp = (uint32_t)[[NSDate date]timeIntervalSince1970];
-    for(int i=0; i<[self numberSegmentsInGroup:kL200DetType]; i++){
+    [self postFCAdcSettingsToFluxDB:@"Det"      groupIndex:kL200DetType  timeStamp:aTimeStamp];
+    [self postFCAdcSettingsToFluxDB:@"SiPM"     groupIndex:kL200SiPMType timeStamp:aTimeStamp];
+    [self postFCAdcSettingsToFluxDB:@"VetoPMT"  groupIndex:kL200PMTType  timeStamp:aTimeStamp];
+    [self postFCAdcSettingsToFluxDB:@"Aux"      groupIndex:kL200AuxType  timeStamp:aTimeStamp];
+}
+
+- (void) postFCAdcSettingsToFluxDB:(NSString*)groupName groupIndex:(int)groupIndex timeStamp:(uint32_t)aTimeStamp
+{
+    //put all channel info into data base at run start
+    ORSegmentGroup* group = [self segmentGroup:groupIndex];
+    for(int i=0; i<[self numberSegmentsInGroup:groupIndex]; i++){
         id aDet = [group segment:i];
         ORFlashCamADCModel* hw = [aDet hardwareCard];
         if(hw){
             int channel = [[aDet objectForKey:@"daq_board_ch"]intValue];
             ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:[self objectName] org:[influxDB org]];
-            [aCmd start  :@"GE_Setup"];
+            [aCmd start  :[NSString stringWithFormat:@"%@_Setup",groupName]];
             [aCmd addTag :@"serial"         value:[aDet objectForKey:@"serial"]];
             [aCmd addTag :@"det_type"       value:[aDet objectForKey:@"det_type"]];
             [aCmd addTag :@"str_number"     value:[aDet objectForKey:@"str_number"]];
@@ -227,7 +194,6 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
             [aCmd setTimeStamp:aTimeStamp];
             [influxDB executeDBCmd:aCmd];
         }
-        
     }
 }
 
