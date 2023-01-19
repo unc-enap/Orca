@@ -300,6 +300,8 @@
     self   = [super init:aType];
     bucket = [aBucket copy];
     org    = [anOrg copy];
+    firstValue = YES;
+    firstTag   = YES;
     return self;
 }
 
@@ -310,19 +312,29 @@
     [outputBuffer release];
     [super dealloc];
 }
+- (void) setTimeStamp:(unsigned long)aTimeStamp
+{
+    timeStamp = aTimeStamp;
+}
 
 - (void) start:(NSString*)section withTags:(NSString*)someTags
 {
     if(!outputBuffer) outputBuffer = [[NSMutableString alloc] init];
     someTags = [someTags stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-    [outputBuffer appendFormat:@"%@,%@ ",section,someTags];
+    [outputBuffer appendFormat:@"%@,%@",section,someTags];
 }
 
 - (void) start:(NSString*)section
 {
-    //optional -- no tags
     if(!outputBuffer) outputBuffer = [[NSMutableString alloc] init];
-    [outputBuffer appendFormat:@"%@ ",section];
+    [outputBuffer appendFormat:@"%@",section];
+}
+
+- (void) addTag:(NSString*)aLabel value:(NSString*)aValue
+{
+    if([aValue length] && ![aValue hasPrefix:@"-"]){
+        [outputBuffer appendFormat:@",%@=%@",aLabel,aValue];
+    }
 }
 
 - (void) removeEndingComma
@@ -337,23 +349,36 @@
 
 - (void) addLong:(NSString*)aValueName withValue:(long)aValue
 {
-    [outputBuffer appendFormat:@"%@=%ld,",aValueName,aValue];
+    if(firstValue){
+        [outputBuffer appendFormat:@" %@=%ld",aValueName,aValue];
+        firstValue = NO;
+    }
+    else [outputBuffer appendFormat:@",%@=%ld",aValueName,aValue];
 }
 
 - (void) addDouble:(NSString*)aValueName withValue:(double)aValue
 {
-    [outputBuffer appendFormat:@"%@=%f,",aValueName,aValue];
+    if(firstValue){
+        [outputBuffer appendFormat:@" %@=%f",aValueName,aValue];
+        firstValue = NO;
+    }
+   else [outputBuffer appendFormat:@",%@=%f",aValueName,aValue];
 }
 
 - (void) addString:(NSString*)aValueName withValue:(NSString*)aValue
 {
-    [outputBuffer appendFormat:@"%@=\"%@\",",aValueName,aValue];
+    if(firstValue){
+        [outputBuffer appendFormat:@" %@=\"%@\"",aValueName,aValue];
+        firstValue = NO;
+    }
+    else [outputBuffer appendFormat:@",%@=\"%@\"",aValueName,aValue];
 }
 
 - (void) executeCmd:(ORInFluxDBModel*)aSender
 {
     [self removeEndingComma];
-    [outputBuffer appendFormat:@"   \n"];
+    if(!timeStamp) [outputBuffer appendFormat:@"   \n"];
+    else          [outputBuffer appendFormat:@" %ld\n",timeStamp];
     [aSender sendCmd:self];
 }
 
@@ -364,7 +389,7 @@
 
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
 {
-    NSString* requestString = [NSString stringWithFormat:@"%@/api/v2/write?org=%@&bucket=%@&precision=ns",[delegate hostName],org,bucket];
+    NSString* requestString = [NSString stringWithFormat:@"%@/api/v2/write?org=%@&bucket=%@&precision=s",[delegate hostName],org,bucket];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
     
     request.HTTPMethod = @"POST";

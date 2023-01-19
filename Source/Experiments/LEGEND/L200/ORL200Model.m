@@ -116,6 +116,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
                      selector : @selector(runTypeChanged:)
                          name : ORRunTypeChangedNotification
                        object : nil];
+    
     [notifyCenter addObserver : self
                      selector : @selector(awakeAfterDocumentLoaded)
                          name : ORGroupObjectsAdded
@@ -131,16 +132,108 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
                          name : ORGroupObjectsRemoved
                        object : nil];
     
+    [notifyCenter addObserver : self
+                     selector : @selector(runStarted:)
+                         name : ORRunStartedNotification
+                       object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(runStarted:)
+                         name : ORRunStartSubRunNotification
+                       object : nil];
+
+    
 }
 
 - (void) runTypeChanged:(NSNotification*) aNote
 {
     [self getRunType:[aNote object]];
 }
+- (void) runStarted:(NSNotification*) aNote
+{
+    
+    /*
+     ## measurement:ADCChannel
+     ### tags:
+     card.address=,
+     card.id=,
+     crate=,
+     slot=,
+     channel=,
+     fcid=,
+     location.string=,
+     location.position=,
+     system=,
+     name=
+      
+     ### fields:
+
+     subset at readout start:
+     enabled (-am )
+     trig_out_enabled ( -atlm )
+     baseline_dac (-bldac)
+     adc_threshold (-athr)
+     adc_gain (-ag )
+     trigger_gain_multi (-tgm )
+     shaping_time ( -gs )
+     filter_type ( -gf )
+     flat_top ( -gf )
+     pz_time ( -gpz )
+     post_trigger ( -pt )
+     adc_phase_shift ( -aph )
+     
+     
+     keys = [NSArray arrayWithObjects:@"serial",     @"det_type",
+             @"str_number",     @"str_position",
+             @"daq_crate",      @"daq_board_id",     @"daq_board_slot",   @"daq_board_ch",
+             @"hv_crate",       @"hv_board_slot",    @"hv_board_chan",    @"hv_cable",
+             @"hv_flange_id",   @"hv_flange_pos",
+             @"fe_cc4_ch",      @"fe_head_card_ana", @"fe_head_card_dig", @"fe_fanout_card",
+             @"fe_raspberrypi", @"fe_lmfe_id", nil];
+
+*/
+    //put all channel info into data base at run start
+    ORSegmentGroup* group = [self segmentGroup:kL200DetType];
+    uint32_t aTimeStamp = (uint32_t)[[NSDate date]timeIntervalSince1970];
+    for(int i=0; i<[self numberSegmentsInGroup:kL200DetType]; i++){
+        id aDet = [group segment:i];
+        ORFlashCamADCModel* hw = [aDet hardwareCard];
+        if(hw){
+            int channel = [[aDet objectForKey:@"daq_board_ch"]intValue];
+            ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:[self objectName] org:[influxDB org]];
+            [aCmd start  :@"GE_Setup"];
+            [aCmd addTag :@"serial"         value:[aDet objectForKey:@"serial"]];
+            [aCmd addTag :@"det_type"       value:[aDet objectForKey:@"det_type"]];
+            [aCmd addTag :@"str_number"     value:[aDet objectForKey:@"str_number"]];
+            [aCmd addTag :@"str_position"   value:[aDet objectForKey:@"str_position"]];
+            [aCmd addTag :@"daq_crate"      value:[aDet objectForKey:@"daq_crate"]];
+            [aCmd addTag :@"daq_board_id"   value:[aDet objectForKey:@"daq_board_id"]];
+            [aCmd addTag :@"daq_board_slot" value:[aDet objectForKey:@"daq_board_slot"]];
+            [aCmd addTag :@"daq_board_ch"   value:[aDet objectForKey:@"daq_board_ch"]];
+            [aCmd addTag :@"fcioID"         value:[aDet objectForKey:@"fcioID"]];
+            
+            [aCmd addLong:@"enabled"        withValue:[hw chanEnabled:channel]];
+            [aCmd addLong:@"trigOutEnabled" withValue:[hw trigOutEnabled:channel]];
+            [aCmd addLong:@"threshold"      withValue:[hw threshold:channel]];
+            [aCmd addLong:@"adcGain"        withValue:[hw adcGain:channel]];
+            [aCmd addLong:@"triggerGain"    withValue:[hw trigGain:channel]];
+            [aCmd addLong:@"baseline"       withValue:[hw baseline:channel]];
+            [aCmd addLong:@"shapingTime"    withValue:[hw shapeTime:channel]];
+            [aCmd addLong:@"filterType"     withValue:[hw filterType:channel]];
+            [aCmd addLong:@"flatTop"        withValue:[hw flatTopTime:channel]];
+            [aCmd addLong:@"poleZeroTime"   withValue:[hw poleZeroTime:channel]];
+            [aCmd addLong:@"postTrigger"    withValue:[hw postTrigger:channel]];
+
+            [aCmd setTimeStamp:aTimeStamp];
+            [influxDB executeDBCmd:aCmd];
+        }
+        
+    }
+}
+
 
 
 #pragma mark •••Accessors
-
 - (int) viewType
 {
     return viewType;

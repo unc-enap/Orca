@@ -107,11 +107,16 @@ enum {
     NSMutableString* outputBuffer;
     NSString* bucket;
     NSString* org;
+    bool firstTag;
+    bool firstValue;
+    unsigned long timeStamp;
 }
 + (ORInFluxDBMeasurement*)measurementForBucket:(NSString*)aBucket org:(NSString*)anOrg;
 - (id) init:(int)aType bucket:(NSString*)aBucket org:(NSString*)anOrg;
+- (void) setTimeStamp:(unsigned long)aTimeStamp;
 - (void) start:(NSString*)section withTags:(NSString*)someTags;
 - (void) start:(NSString*)section;
+- (void) addTag:(NSString*)aLabel value:(NSString*)aValue;
 - (void) removeEndingComma;
 - (void) addLong:(NSString*)aValueName withValue:(long)aValue;
 - (void) addDouble:(NSString*)aValueName withValue:(double)aValue;
