@@ -152,13 +152,13 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 - (void) runStarted:(NSNotification*) aNote
 {
     uint32_t aTimeStamp = (uint32_t)[[NSDate date]timeIntervalSince1970];
-    [self postFCAdcSettingsToFluxDB:@"Det"      groupIndex:kL200DetType  timeStamp:aTimeStamp];
-    [self postFCAdcSettingsToFluxDB:@"SiPM"     groupIndex:kL200SiPMType timeStamp:aTimeStamp];
-    [self postFCAdcSettingsToFluxDB:@"VetoPMT"  groupIndex:kL200PMTType  timeStamp:aTimeStamp];
-    [self postFCAdcSettingsToFluxDB:@"Aux"      groupIndex:kL200AuxType  timeStamp:aTimeStamp];
+    [self postFCAdcChanSettingsToFluxDB:@"Ge"       groupIndex:kL200DetType  timeStamp:aTimeStamp];
+    [self postFCAdcChanSettingsToFluxDB:@"SiPM"     groupIndex:kL200SiPMType timeStamp:aTimeStamp];
+    [self postFCAdcChanSettingsToFluxDB:@"VetoPMT"  groupIndex:kL200PMTType  timeStamp:aTimeStamp];
+    [self postFCAdcChanSettingsToFluxDB:@"Aux"      groupIndex:kL200AuxType  timeStamp:aTimeStamp];
 }
 
-- (void) postFCAdcSettingsToFluxDB:(NSString*)groupName groupIndex:(int)groupIndex timeStamp:(uint32_t)aTimeStamp
+- (void) postFCAdcChanSettingsToFluxDB:(NSString*)groupName groupIndex:(int)groupIndex timeStamp:(uint32_t)aTimeStamp
 {
     //put all channel info into data base at run start
     ORSegmentGroup* group = [self segmentGroup:groupIndex];
@@ -166,6 +166,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         id aDet = [group segment:i];
         ORFlashCamADCModel* hw = [aDet hardwareCard];
         if(hw){
+            //channel-level stuff
             int channel = [[aDet objectForKey:@"daq_board_ch"]intValue];
             ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:[self objectName] org:[influxDB org]];
             [aCmd start  :[NSString stringWithFormat:@"%@_Setup",groupName]];
@@ -193,6 +194,31 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 
             [aCmd setTimeStamp:aTimeStamp];
             [influxDB executeDBCmd:aCmd];
+            
+            //board-level stuff
+            if(channel==0){
+                ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:[self objectName] org:[influxDB org]];
+                [aCmd start  :[NSString stringWithFormat:@"%@_Setup",groupName]];
+                [aCmd addTag :@"serial"         value:[aDet objectForKey:@"serial"]];
+                [aCmd addTag :@"det_type"       value:[aDet objectForKey:@"det_type"]];
+                [aCmd addTag :@"str_number"     value:[aDet objectForKey:@"str_number"]];
+                [aCmd addTag :@"str_position"   value:[aDet objectForKey:@"str_position"]];
+                [aCmd addTag :@"daq_crate"      value:[aDet objectForKey:@"daq_crate"]];
+                [aCmd addTag :@"daq_board_id"   value:[aDet objectForKey:@"daq_board_id"]];
+                [aCmd addTag :@"daq_board_slot" value:[aDet objectForKey:@"daq_board_slot"]];
+                [aCmd addTag :@"daq_board_ch"   value:[aDet objectForKey:@"daq_board_ch"]];
+                [aCmd addTag :@"fcioID"         value:[aDet objectForKey:@"fcioID"]];
+
+                [aCmd addLong :@"boardAddress"   withValue:[hw cardAddress]];
+                [aCmd addLong :@"prom_Slot"      withValue:[hw promSlot]];
+                [aCmd addLong :@"baseline_bias"  withValue:[hw baseBias]];
+                [aCmd addLong :@"majority_level" withValue:[hw majorityLevel]];
+                [aCmd addLong :@"majority_width" withValue:[hw majorityWidth]];
+                [aCmd addLong :@"trigOut_enable" withValue:[hw trigOutEnable]];
+                
+                [aCmd setTimeStamp:aTimeStamp];
+                [influxDB executeDBCmd:aCmd];
+            }
         }
     }
 }
