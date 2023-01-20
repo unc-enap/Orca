@@ -104,23 +104,26 @@ enum {
 //----------------------------------------------------------------
 @interface ORInFluxDBMeasurement : ORInFluxDBCmd
 {
-    NSMutableString* outputBuffer;
-    NSString* bucket;
-    NSString* org;
-    bool firstTag;
-    bool firstValue;
-    unsigned long timeStamp;
+    NSMutableArray* tags;
+    NSMutableArray* measurements;
+    NSString*       measurement;
+    NSString*       bucket;
+    NSString*       org;
+    unsigned long   timeStamp;
 }
 + (ORInFluxDBMeasurement*)measurementForBucket:(NSString*)aBucket org:(NSString*)anOrg;
 - (id) init:(int)aType bucket:(NSString*)aBucket org:(NSString*)anOrg;
 - (void) setTimeStamp:(unsigned long)aTimeStamp;
 - (void) start:(NSString*)section withTags:(NSString*)someTags;
 - (void) start:(NSString*)section;
-- (void) addTag:(NSString*)aLabel value:(NSString*)aValue;
-- (void) removeEndingComma;
-- (void) addLong:(NSString*)aValueName withValue:(long)aValue;
-- (void) addDouble:(NSString*)aValueName withValue:(double)aValue;
-- (void) addString:(NSString*)aValueName withValue:(NSString*)aValue;
+
+- (void) addTag:(NSString*)aLabel withLong:(long)aValue;
+- (void) addTag:(NSString*)aLabel withDouble:(double)aValue;
+- (void) addTag:(NSString*)aLabel withString:(NSString*)aValue;
+
+- (void) addField:(NSString*)aValueName withLong:(long)aValue;
+- (void) addField:(NSString*)aValueName withDouble:(double)aValue;
+- (void) addField:(NSString*)aValueName withString:(NSString*)aValue;
 @end
 
 //----------------------------------------------------------------

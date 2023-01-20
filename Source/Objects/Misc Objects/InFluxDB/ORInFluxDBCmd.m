@@ -300,8 +300,8 @@
     self   = [super init:aType];
     bucket = [aBucket copy];
     org    = [anOrg copy];
-    firstValue = YES;
-    firstTag   = YES;
+    tags   = [[NSMutableArray array] retain];
+    measurements = [[NSMutableArray array]retain];
     return self;
 }
 
@@ -309,7 +309,9 @@
 {
     [bucket release];
     [org release];
-    [outputBuffer release];
+    [tags release];
+    [measurement release];
+    [measurements release];
     [super dealloc];
 }
 - (void) setTimeStamp:(unsigned long)aTimeStamp
@@ -317,74 +319,51 @@
     timeStamp = aTimeStamp;
 }
 
-- (void) start:(NSString*)section withTags:(NSString*)someTags
+- (void) start:(NSString*)aMeasurement withTags:(NSString*)someTags
 {
-    if(!outputBuffer) outputBuffer = [[NSMutableString alloc] init];
-    someTags = [someTags stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-    [outputBuffer appendFormat:@"%@,%@",section,someTags];
+    measurement = [aMeasurement copy];
+    [tags addObject:someTags];
 }
 
-- (void) start:(NSString*)section
+- (void) start:(NSString*)aMeasurement
 {
-    if(!outputBuffer) outputBuffer = [[NSMutableString alloc] init];
-    [outputBuffer appendFormat:@"%@",section];
+    measurement = [aMeasurement copy];
 }
 
-- (void) addTag:(NSString*)aLabel value:(NSString*)aValue
+- (void) addTag:(NSString*)aLabel withString:(NSString*)aValue
 {
-    if([aValue length] && ![aValue hasPrefix:@"-"]){
-        [outputBuffer appendFormat:@",%@=%@",aLabel,aValue];
-    }
+    [tags addObject:[NSString stringWithFormat:@"%@=%@",aLabel,aValue]];
 }
 
-- (void) removeEndingComma
+- (void) addTag:(NSString*)aLabel withLong:(long)aValue
 {
-    NSRange lastComma = [outputBuffer rangeOfString:@"," options:NSBackwardsSearch];
-
-    if(lastComma.location == [outputBuffer length]-1) {
-        [outputBuffer replaceCharactersInRange:lastComma
-                                           withString: @""];
-    }
+    [tags addObject:[NSString stringWithFormat:@"%@=%ld",aLabel,aValue]];
 }
 
-- (void) addLong:(NSString*)aValueName withValue:(long)aValue
+- (void) addTag:(NSString*)aLabel withDouble:(double)aValue
 {
-    if(firstValue){
-        [outputBuffer appendFormat:@" %@=%ld",aValueName,aValue];
-        firstValue = NO;
-    }
-    else [outputBuffer appendFormat:@",%@=%ld",aValueName,aValue];
+    [tags addObject:[NSString stringWithFormat:@"%@=%f",aLabel,aValue]];
 }
 
-- (void) addDouble:(NSString*)aValueName withValue:(double)aValue
+- (void) addField:(NSString*)aValueName withLong:(long)aValue
 {
-    if(firstValue){
-        [outputBuffer appendFormat:@" %@=%f",aValueName,aValue];
-        firstValue = NO;
-    }
-   else [outputBuffer appendFormat:@",%@=%f",aValueName,aValue];
+    [measurements addObject:[NSString stringWithFormat:@"%@=%ld",aValueName,aValue]];
 }
 
-- (void) addString:(NSString*)aValueName withValue:(NSString*)aValue
+- (void) addField:(NSString*)aValueName withDouble:(double)aValue
 {
-    if(firstValue){
-        [outputBuffer appendFormat:@" %@=\"%@\"",aValueName,aValue];
-        firstValue = NO;
-    }
-    else [outputBuffer appendFormat:@",%@=\"%@\"",aValueName,aValue];
+    [measurements addObject:[NSString stringWithFormat:@"%@=%f",aValueName,aValue]];
+}
+
+- (void) addField:(NSString*)aValueName withString:(NSString*)aValue
+{
+    aValueName = [aValueName removeNLandCRs];
+    [measurements addObject:[NSString stringWithFormat:@"%@=\"%@\"",aValueName,aValue]];
 }
 
 - (void) executeCmd:(ORInFluxDBModel*)aSender
 {
-    [self removeEndingComma];
-    if(!timeStamp) [outputBuffer appendFormat:@"   \n"];
-    else          [outputBuffer appendFormat:@" %ld\n",timeStamp];
     [aSender sendCmd:self];
-}
-
-- (NSString*) outputBuffer
-{
-    return outputBuffer;
 }
 
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
@@ -395,6 +374,13 @@
     request.HTTPMethod = @"POST";
     [request setValue:@"text/plain; application/json" forHTTPHeaderField:@"Accept"];
     [request setValue:[NSString stringWithFormat:@"Token %@",[delegate authToken]]                     forHTTPHeaderField:@"Authorization"];
+    
+    NSString* outputBuffer = [NSString stringWithFormat:@"%@,%@ %@ %@",
+                              measurement,
+                              [tags componentsJoinedByString:@","],
+                              [measurements componentsJoinedByString:@","],
+                              timeStamp?[NSString stringWithFormat:@" %ld\n",timeStamp]:@"   \n"];
+    
     request.HTTPBody = [outputBuffer dataUsingEncoding:NSASCIIStringEncoding];
     requestSize = [requestString length];
     return request;
