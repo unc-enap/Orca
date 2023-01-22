@@ -179,7 +179,8 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
             [aCmd addTag :@"daq_board_slot" withString:[aDet objectForKey:@"daq_board_slot"]];
             [aCmd addTag :@"daq_board_ch"   withString:[aDet objectForKey:@"daq_board_ch"]];
             [aCmd addTag :@"fcioID"         withString:[aDet objectForKey:@"fcioID"]];
-            
+            [aCmd addTag :@"segmentID"      withLong:i];
+
             [aCmd addField:@"enabled"        withLong:[hw chanEnabled:channel]];
             [aCmd addField:@"trigOutEnabled" withLong:[hw trigOutEnabled:channel]];
             [aCmd addField:@"threshold"      withLong:[hw threshold:channel]];
