@@ -357,7 +357,6 @@
 
 - (void) addField:(NSString*)aValueName withString:(NSString*)aValue
 {
-    aValueName = [aValueName removeNLandCRs];
     [measurements addObject:[NSString stringWithFormat:@"%@=\"%@\"",aValueName,aValue]];
 }
 

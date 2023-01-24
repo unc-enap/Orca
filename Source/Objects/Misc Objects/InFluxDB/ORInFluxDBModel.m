@@ -34,6 +34,7 @@
 #import "ORRunModel.h"
 #import "ORSegmentGroup.h"
 #import "ORDetectorSegment.h"
+#import "OROnCallListModel.h"
 #import "ORTimeRate.h"
 #import <ifaddrs.h>
 #import <arpa/inet.h>
@@ -217,7 +218,18 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [notifyCenter addObserver : self
                      selector : @selector(processStatusLogLine:)
                          name : @"ORDBPostLogMessage"
-                       object : nil];    
+                       object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(getOnCallChanges:)
+                         name : @"OROnCallListModelEdited"
+                       object : nil];
+    
+}
+
+- (void) getOnCallChanges:(NSNotification*)aNote
+{
+    [(OROnCallListModel*)[aNote object] loadBucket:experimentName inFluxDB:self];
 }
 
 - (void) applicationIsTerminating:(NSNotification*)aNote
@@ -339,35 +351,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         messageQueue = [[ORSafeQueue alloc] init];
     }
     [messageQueue enqueue:aCmd];
-}
-
-- (void) processGenericDBRecord:(NSNotification*)aNote
-{
-    //we'll grab posts from the couchdb object since that's all the stuff
-    //we want to go into influxdb
-    //for now we'll just process the experiment stuff.... more later
-    if(![[[aNote object]className] isEqualToString:@"ORStatusController"] ){
-        NSDictionary* dict = [aNote userInfo];
-        for(id aKey in [dict allKeys]){
-            
-            id anObj = [dict objectForKey:aKey];
-            
-            NSError* error;
-            NSData* jsonData = [NSJSONSerialization dataWithJSONObject:anObj
-                                                               options:NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string
-                                                                 error:&error];
-            if (jsonData) {
-                NSString* measurement = [NSString stringWithFormat:@"%@",aKey];
-                measurement = [measurement stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-                NSString* jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-                ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:experimentName org:org];
-                [aCmd    start: measurement];
-                [aCmd   addTag: @"Class" withString:[[aNote object]className]];
-                [aCmd addField: aKey     withString:jsonString];
-                [self executeDBCmd:aCmd];
-            }
-        }
-    }
 }
 
 - (void) processStatusLogLine:(NSNotification*)aNote
