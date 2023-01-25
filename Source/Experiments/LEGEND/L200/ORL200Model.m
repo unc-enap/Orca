@@ -174,6 +174,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
             [aCmd addTag :@"detType"        withString:[aDet objectForKey:@"det_type"]];
             [aCmd addTag :@"strNumber"      withString:[aDet objectForKey:@"str_number"]];
             [aCmd addTag :@"strPosition"    withString:[aDet objectForKey:@"str_position"]];
+            [aCmd addTag :@"cc4Chan"        withString:[aDet objectForKey:@"fe_cc4_ch"]];
             [aCmd addTag :@"crate"          withLong:[[aDet objectForKey:@"daq_crate"]intValue]];
             [aCmd addTag :@"boardId"        withString:[aDet objectForKey:@"daq_board_id"]];
             [aCmd addTag :@"slot"           withLong:[[aDet objectForKey:@"daq_board_slot"]intValue]];
