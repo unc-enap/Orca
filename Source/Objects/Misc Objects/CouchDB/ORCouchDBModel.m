@@ -237,6 +237,11 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
 					 selector : @selector(addObjectValueRecord:)
 						 name : @"ORCouchDBAddObjectRecord"
 					   object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(addObjectValueRecord:)
+                         name : @"ORGenericObjectDBRecord"
+                       object : nil];
 
     [notifyCenter addObserver : self
 					 selector : @selector(addAdcsToHistoryRecord:)
