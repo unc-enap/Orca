@@ -71,6 +71,7 @@
 	uint32_t queAddCount;
 	uint32_t lastqueAddCount;
     int refreshRate;
+    NSLock* shipLock;
 }
 
 -(void)registerNotificationObservers;

@@ -23,14 +23,15 @@
 
 #pragma mark •••Forward Declarations
 @class ORDataSet;
+@class ORDataTaskModel;
 
 #define kMaxReservedPoolSize 2045
 #define kFastLoopupCacheSize 16384
 
 @interface ORDataPacket : NSObject {
     @private
-		uint32_t        runNumber;				//current run number for this data
-		uint32_t        subRunNumber;           //current subrun number for this data
+		uint32_t            runNumber;				//current run number for this data
+		uint32_t            subRunNumber;           //current subrun number for this data
 		NSString*            filePrefix;             //name for file prefix (i.e. Run, R_Run, etc..)
 		NSMutableArray*  	 dataArray;             //data records
 		NSMutableArray*  	 cacheArray;			//data records that are to be cached for later inclusion into data
@@ -38,20 +39,23 @@
 		NSMutableDictionary* fileHeader;
 		ORDecoder*			 currentDecoder;
 		NSMutableData*		 frameBuffer;			//accumulator for data
-		uint32_t		 frameIndex;
+		uint32_t		     frameIndex;
 		NSRecursiveLock*     theDataLock;
-		uint32_t		 reserveIndex;
-        uint32_t        reservePool[kMaxReservedPoolSize];
-        uint32_t        lastFrameBufferSize;
-		BOOL				 dataAvailable;
+		uint32_t		    reserveIndex;
+        uint32_t            reservePool[kMaxReservedPoolSize];
+        uint32_t            lastFrameBufferSize;
+		BOOL				dataAvailable;
 
-		int             version;
-        BOOL            addedData;
-		int32_t			frameCounter;
-		int32_t			oldFrameCounter;
+		int                 version;
+        BOOL                addedData;
+		int32_t			    frameCounter;
+		int32_t			    oldFrameCounter;
+        ORDataTaskModel*    dataTask;
 }
 
 #pragma mark •••Accessors
+- (void) setDataTask:(ORDataTaskModel*)aDataTask;
+- (ORDataTaskModel*) dataTask;
 - (int)  version;
 - (void)  setVersion:(int)aVersion;
 - (void) setRunNumber:(uint32_t)aRunNumber;

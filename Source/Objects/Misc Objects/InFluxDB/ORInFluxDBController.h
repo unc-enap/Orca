@@ -21,7 +21,6 @@
 @interface ORInFluxDBController : OrcaObjectController
 {
     IBOutlet NSTextField*       hostNameField;
-    IBOutlet NSTextField*       portField;
     IBOutlet NSTextField*       orgField;
     IBOutlet NSTextField*       authTokenField;
     IBOutlet NSTextField*       rateField;
@@ -30,6 +29,7 @@
     IBOutlet NSButton*          stealthModeButton;
     IBOutlet NSTextField*       dbStatusField;
     IBOutlet NSTableView*       bucketTableView;
+    IBOutlet ORTimedTextField*  errorField;
     IBOutlet ORValueBarGroupView* rate0;
 
 }
@@ -37,13 +37,13 @@
 #pragma mark ***Interface Management
 - (void) registerNotificationObservers;
 - (void) hostNameChanged:(NSNotification*)aNote;
-- (void) portChanged:(NSNotification*)aNote;
 - (void) authTokenChanged:(NSNotification*)aNote;
 - (void) orgChanged:(NSNotification*)aNote;
 - (void) inFluxDBLockChanged:(NSNotification*)aNote;
 - (void) rateChanged:(NSNotification*)aNote;
 - (void) stealthModeChanged:(NSNotification*)aNote;
 - (void) bucketArrayChanged:(NSNotification*)aNote;
+- (void) errorStringChanged:(NSNotification*)aNote;
 
 #pragma mark •••Actions
 - (IBAction) hostNameAction:(id)sender;

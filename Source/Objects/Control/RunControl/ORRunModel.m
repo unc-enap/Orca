@@ -415,6 +415,26 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
     runTypeNames = aRunTypeNames;
 }
 
+- (NSString*) runTypesMaskString
+{
+    NSMutableString* selectedTypes = [NSMutableString stringWithFormat:@"0x%x ",runType];
+    for(int i=0;i<32;i++){
+        if(runType&(0x1<<i)){
+            NSString* s;
+            if(i==0)s = @"Maintenance"; //special case-- user can't redefine
+            else    s = [runTypeNames objectAtIndex:i];
+            if(s)[selectedTypes appendFormat:@"%@, ",s];
+            else [selectedTypes appendFormat:@"Bit%d, ",i];
+        }
+    }
+    NSRange lastComma = [selectedTypes rangeOfString:@", " options:NSBackwardsSearch];
+    if(lastComma.location == [selectedTypes length]-2) {
+        [selectedTypes replaceCharactersInRange:lastComma
+                                     withString: @""];
+    }
+     return selectedTypes;
+}
+
 - (uint32_t)getCurrentRunNumber
 {
     if(!remoteControl || remoteInterface){

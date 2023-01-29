@@ -137,6 +137,7 @@
 - (BOOL) remoteInterface;
 - (void) setRemoteInterface:(BOOL)aRemoteInterface;
 - (NSArray*) runTypeNames;
+- (NSString*) runTypesMaskString;
 - (void) setRunTypeNames:(NSMutableArray*)aRunTypeNames;
 - (uint32_t)   getCurrentRunNumber; //file access
 - (uint32_t)   runNumber;

@@ -164,8 +164,10 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(Global);
             [runModeAlarm setSticky:YES];
             [runModeAlarm setHelpStringFromFile:@"OfflineRunHelp"];
         }
-        [runModeAlarm setAcknowledged:NO];
-        [runModeAlarm postAlarm];
+        else {
+            [runModeAlarm setAcknowledged:NO];
+            [runModeAlarm postAlarm];
+        }
     }
     [[NSNotificationCenter defaultCenter] postNotificationName: ORRunModeChangedNotification object:self userInfo:nil];
     

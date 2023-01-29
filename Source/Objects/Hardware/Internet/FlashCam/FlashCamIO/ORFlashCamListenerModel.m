@@ -26,6 +26,7 @@
 #import "tmio.h"
 #import "Utilities.h"
 #import "ORDataTypeAssigner.h"
+#import  "ORDataTaskModel.h"
 
 NSString* ORFlashCamListenerModelConfigChanged = @"ORFlashCamListenerModelConfigChanged";
 NSString* ORFlashCamListenerModelStatusChanged = @"ORFlashCamListenerModelStatusChanged";
@@ -140,6 +141,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     [remoteInterfaces release];
     [configParams release];
     [status release];
+    [dataPacketForThread release];
     if(runFailedAlarm){
         [runFailedAlarm clearAlarm];
         [runFailedAlarm release];
@@ -1193,7 +1195,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     // read the configuration packet
     uint32_t index = configBufferIndex;
     configBufferIndex = (configBufferIndex + 1) % kFlashCamConfigBufferLength;
-    bufferedConfigCount ++;
+    bufferedConfigCount++;
     uint32_t offset = 2 + (2 + sizeof(fcio_config)/sizeof(uint32_t)) * index;
     configBuffer[offset++] = (uint32_t) config->telid;
     configBuffer[offset++] = (uint32_t) config->adcs;
@@ -1291,38 +1293,8 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
-    @try {
-
-        // add a single configuration packet to the data
-        if(bufferedConfigCount > 0){
-            uint32_t length = 2 + sizeof(fcio_config) / sizeof(uint32_t);
-            uint32_t index = length * takeDataConfigIndex;
-            takeDataConfigIndex = (takeDataConfigIndex + 1) % kFlashCamConfigBufferLength;
-            bufferedConfigCount --;
-            configBuffer[index]    = configId | (length & 0x3ffff);
-            configBuffer[index+1]  = ((unsigned short) [guardian uniqueIdNumber]) << 16;
-            configBuffer[index+1] |=  (unsigned short) [self uniqueIdNumber];
-            [aDataPacket addLongsToFrameBuffer:configBuffer+index length:length];
-        }
-        // add a single status packet to the data
-        if(bufferedStatusCount > 0){
-            uint32_t index = (2 + sizeof(fcio_status) / sizeof(uint32_t)) * takeDataStatusIndex;
-            takeDataStatusIndex = (takeDataStatusIndex + 1) % kFlashCamStatusBufferLength;
-            bufferedStatusCount --;
-            int cards = (int) statusBuffer[index+13];
-            int dsize = (int) statusBuffer[index+14];
-            uint32_t length = 2 + (sizeof(fcio_status) -
-                                   (256-cards)*(dsize+cards*sizeof(uint32_t))) / sizeof(uint32_t);
-            statusBuffer[index]    = statusId | (length & 0x3ffff);
-            statusBuffer[index+1]  = ((unsigned short) [guardian uniqueIdNumber]) << 16;
-            statusBuffer[index+1] |=  (unsigned short) [self uniqueIdNumber];
-            [aDataPacket addLongsToFrameBuffer:statusBuffer+index length:length];
-        }
-    }
-    @catch(NSException* e){
-        NSLogError(@"",@"FlashCamListener Error",@"");
-        [e raise];
-    }
+    //nothing to do... look at the readout thread. Put all the listeners in separate threads for
+    //efficiency and use a separate datapacket
 }
 
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
@@ -1345,12 +1317,15 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     dataTakers = [[readOutList allObjects] retain];
     
     timeToQuitReadoutThread = NO;
-    [NSThread detachNewThreadSelector:@selector(readThread:) toTarget:self withObject:aDataPacket];
+    if(!dataPacketForThread)dataPacketForThread = [[ORDataPacket alloc]init];
+    [dataPacketForThread setDataTask:[aDataPacket dataTask]];
+    [NSThread detachNewThreadSelector:@selector(readThread:) toTarget:self withObject:dataPacketForThread];
 
     id obj;
     NSEnumerator* e = [[readOutList allObjects] objectEnumerator];
     while(obj = [e nextObject]) [obj runTaskStarted:aDataPacket userInfo:userInfo];
 }
+
 - (void) runIsStopping:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
     timeToQuitReadoutThread = YES;
@@ -1399,9 +1374,6 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     while(obj = [e nextObject]) [obj runIsStopping:aDataPacket userInfo:userInfo];
 }
 
-
-
-
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
     if(reader) FCIODestroyStateReader(reader);
@@ -1420,7 +1392,35 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
         NSAutoreleasePool *pool = [[NSAutoreleasePool allocWithZone:nil] init];
         @try {
             @synchronized (self) {
-                if(reader)[self read:aDataPacket];
+                if(reader){
+                    [self read:aDataPacket];
+                    // add a single configuration packet to the data
+                    if(bufferedConfigCount > 0){
+                        uint32_t length = 2 + sizeof(fcio_config) / sizeof(uint32_t);
+                        uint32_t index = length * takeDataConfigIndex;
+                        takeDataConfigIndex = (takeDataConfigIndex + 1) % kFlashCamConfigBufferLength;
+                        bufferedConfigCount --;
+                        configBuffer[index]    = configId | (length & 0x3ffff);
+                        configBuffer[index+1]  = ((unsigned short) [guardian uniqueIdNumber]) << 16;
+                        configBuffer[index+1] |=  (unsigned short) [self uniqueIdNumber];
+                        [aDataPacket addLongsToFrameBuffer:configBuffer+index length:length];
+                    }
+                    // add a single status packet to the data
+                    if(bufferedStatusCount > 0){
+                        uint32_t index = (2 + sizeof(fcio_status) / sizeof(uint32_t)) * takeDataStatusIndex;
+                        takeDataStatusIndex = (takeDataStatusIndex + 1) % kFlashCamStatusBufferLength;
+                        bufferedStatusCount --;
+                        int cards = (int) statusBuffer[index+13];
+                        int dsize = (int) statusBuffer[index+14];
+                        uint32_t length = 2 + (sizeof(fcio_status) -
+                                               (256-cards)*(dsize+cards*sizeof(uint32_t))) / sizeof(uint32_t);
+                        statusBuffer[index]    = statusId | (length & 0x3ffff);
+                        statusBuffer[index+1]  = ((unsigned short) [guardian uniqueIdNumber]) << 16;
+                        statusBuffer[index+1] |=  (unsigned short) [self uniqueIdNumber];
+                        [aDataPacket addLongsToFrameBuffer:statusBuffer+index length:length];
+                    }
+                }
+                [[aDataPacket dataTask] putDataInQueue:aDataPacket force:YES];
             }
         }
         @catch (NSException* e){

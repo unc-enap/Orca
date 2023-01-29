@@ -30,7 +30,6 @@
 {
 @private
     NSString*      hostName;
-    NSInteger      portNumber;
     NSTimer*       timer;
     NSInteger      totalSent;
     NSInteger      messageRate;
@@ -41,6 +40,7 @@
     NSString*      thisHostAddress;
     NSString*      experimentName;
     NSString*      runNumberString;
+    NSString*      errorString;
     //----queue thread--------
     bool           canceled;
     NSThread*      processThread;
@@ -68,8 +68,6 @@
 - (void) alarmAcknowledged        : (NSNotification*)aNote;
 
 #pragma mark ***Accessors
-- (void)        setPortNumber:(NSUInteger)aPort;
-- (NSUInteger)  portNumber;
 - (NSString*)   experimentName;
 - (void)        setExperimentName:(NSString*)aName;
 - (NSString*)   hostName;
@@ -91,6 +89,8 @@
 - (void)        decodeOrgList:(NSDictionary*)result;
 - (void)        decodeBucketList:(NSDictionary*)result;
 - (void)        cleanUpRunStatus;
+- (NSString*)   errorString;
+- (void)        setErrorString:(NSString*)anError;
 
 #pragma mark ***Thread
 - (void) sendCmd:(ORInFluxDBCmd*)aCmd;
@@ -111,7 +111,7 @@ extern NSString* ORInFluxDBAuthTokenChanged;
 extern NSString* ORInFluxDBOrgChanged;
 extern NSString* ORInFluxDBStealthModeChanged;
 extern NSString* ORInFluxDBBucketChanged;
-
+extern NSString* ORInFluxDBErrorChanged;
 extern NSString* ORInFluxDBLock;
 
 
