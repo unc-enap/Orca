@@ -26,6 +26,7 @@
 #import "tmio.h"
 #import "Utilities.h"
 #import "ORDataTypeAssigner.h"
+#import  "ORDataTaskModel.h"
 
 NSString* ORFlashCamListenerModelConfigChanged = @"ORFlashCamListenerModelConfigChanged";
 NSString* ORFlashCamListenerModelStatusChanged = @"ORFlashCamListenerModelStatusChanged";
@@ -140,6 +141,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     [remoteInterfaces release];
     [configParams release];
     [status release];
+    [dataPacketForThread release];
     if(runFailedAlarm){
         [runFailedAlarm clearAlarm];
         [runFailedAlarm release];
@@ -1292,7 +1294,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
     //nothing to do... look at the readout thread. Put all the listeners in separate threads for
-    //efficiency
+    //efficiency and use a separate datapacket
 }
 
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
@@ -1315,12 +1317,15 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     dataTakers = [[readOutList allObjects] retain];
     
     timeToQuitReadoutThread = NO;
-    [NSThread detachNewThreadSelector:@selector(readThread:) toTarget:self withObject:aDataPacket];
+    if(!dataPacketForThread)dataPacketForThread = [[ORDataPacket alloc]init];
+    [dataPacketForThread setDataTask:[aDataPacket dataTask]];
+    [NSThread detachNewThreadSelector:@selector(readThread:) toTarget:self withObject:dataPacketForThread];
 
     id obj;
     NSEnumerator* e = [[readOutList allObjects] objectEnumerator];
     while(obj = [e nextObject]) [obj runTaskStarted:aDataPacket userInfo:userInfo];
 }
+
 - (void) runIsStopping:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
     timeToQuitReadoutThread = YES;
@@ -1415,6 +1420,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
                         [aDataPacket addLongsToFrameBuffer:statusBuffer+index length:length];
                     }
                 }
+                [[aDataPacket dataTask] putDataInQueue:aDataPacket force:YES];
             }
         }
         @catch (NSException* e){

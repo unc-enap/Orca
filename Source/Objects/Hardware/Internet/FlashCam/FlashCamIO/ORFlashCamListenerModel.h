@@ -77,6 +77,7 @@
     NSMutableArray* cardMap;
     NSLock* readStateLock; //MAH 9/18/22
     bool timeToQuitReadoutThread;
+    ORDataPacket* dataPacketForThread;
 }
 
 #pragma mark •••Initialization

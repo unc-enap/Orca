@@ -53,6 +53,7 @@
     [filePrefix release];
     [fileHeader release];
     [frameBuffer release];
+    [dataTask release];
     [super dealloc];
 }
 
@@ -63,6 +64,15 @@
 
 
 #pragma mark •••Accessors
+- (void) setDataTask:(ORDataTaskModel*)aDataTask
+{
+    [dataTask release];
+    dataTask = [aDataTask retain];
+}
+- (ORDataTaskModel*) dataTask
+{
+    return dataTask;
+}
 - (void) setRunNumber:(uint32_t)aRunNumber
 {
     runNumber = aRunNumber;
