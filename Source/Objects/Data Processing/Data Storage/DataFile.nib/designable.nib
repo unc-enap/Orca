@@ -520,9 +520,9 @@
                         </connections>
                     </button>
                     <button toolTip="If checked, new files will be created when file size limit is exceeded" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="492">
-                        <rect key="frame" x="261" y="316" width="95" height="18"/>
+                        <rect key="frame" x="261" y="316" width="132" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Prepend Date" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="587">
+                        <buttonCell key="cell" type="check" title="Add Std Date &amp; Run#" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="587">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
@@ -533,7 +533,7 @@
                     <button toolTip="If checked, new files will be created when file size limit is exceeded" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4fj-SC-tY4">
                         <rect key="frame" x="261" y="297" width="141" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Expanded Date Format" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="MS4-VG-xk4">
+                        <buttonCell key="cell" type="check" title="Add Full Date/No Run#" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="MS4-VG-xk4">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>

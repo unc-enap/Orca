@@ -266,13 +266,14 @@ static const int currentVersion = 1;           // Current version
     return useDatedFileNames;
 }
 
-- (void) setUseDatedFileNames:(BOOL)aUseDatedFileNames
+- (void) setUseDatedFileNames:(BOOL)aBool
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setUseDatedFileNames:useDatedFileNames];
     
-    useDatedFileNames = aUseDatedFileNames;
-	
+    useDatedFileNames = aBool;
+    useDatedFileNamesV2= !aBool;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileModelUseDatedFileNamesChanged object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileModelUseDatedFileNamesV2Changed object:self];
 }
 
 - (BOOL) useDatedFileNamesV2
@@ -285,7 +286,8 @@ static const int currentVersion = 1;           // Current version
     [[[self undoManager] prepareWithInvocationTarget:self] setUseDatedFileNamesV2:useDatedFileNames];
     
     useDatedFileNamesV2 = aBool;
-    
+    useDatedFileNames   = !aBool;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileModelUseDatedFileNamesChanged object:self];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileModelUseDatedFileNamesV2Changed object:self];
 }
 
