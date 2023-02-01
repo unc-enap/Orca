@@ -55,6 +55,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
 @interface ORInFluxDBModel (private)
 - (void) updateProcesses;
+- (void) updateExperiment;
 - (void) updateExperimentMetrics;
 - (void) updateHistory;
 - (void) updateMachineRecord;
@@ -240,6 +241,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) awakeAfterDocumentLoaded
 {
     [self startTimer];
+    [self updateExperiment];
 }
 
 #pragma mark ***Accessors
@@ -675,6 +677,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 {
     [self performSelector:@selector(updateMachineRecord)   withObject:nil afterDelay:2];
     [self performSelector:@selector(updateRunInfo)         withObject:nil afterDelay:4];
+    [self performSelector:@selector(updateExperiment)      withObject:nil afterDelay:3];
 }
 
 - (void) updateMachineRecord
@@ -791,6 +794,22 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     }
 }
 
+- (void) updateExperiment
+{
+    if(!stealthMode){
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateExperiment) object:nil];
+        @try {
+            ORExperimentModel* experiment = [self nextObject];
+            [experiment postInFluxDbRecord];
+        }
+        @catch (NSException* e){
+            NSLog(@"%@ %@ Exception: %@\n",[self fullID],NSStringFromSelector(_cmd),e);
+        }
+        @finally {
+            [self performSelector:@selector(updateExperiment) withObject:nil afterDelay:30];
+        }
+    }
+}
 - (NSArray*) bucketArray
 {
     return bucketArray;

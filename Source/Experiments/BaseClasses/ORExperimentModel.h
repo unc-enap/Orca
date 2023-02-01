@@ -134,6 +134,7 @@
 - (void) setCardIndex:(int)aValue;
 - (void) setChannelIndex:(int)aValue;
 - (void) postCouchDBRecord;
+- (void) postInFluxDbRecord;
 
 #pragma mark •••Specific Dialog Lock Methods
 - (NSString*) experimentMapLock;
