@@ -1172,7 +1172,11 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     //-------added extra, manually entered Flags--------
     //-------MAH 02/1/22--------------------------------
     NSString* extraFlags = [self configParamString:@"extraFlags"];
-    if(extraFlags)[readoutArgs addObject:extraFlags];
+    if([extraFlags length]>0){
+        extraFlags = [extraFlags removeExtraSpaces];
+        extraFlags = [extraFlags removeNLandCRs];
+        [readoutArgs addObject:extraFlags];
+    }
     //-----------------------------------------------
     
     [readoutArgs addObjectsFromArray:@[@"-o", listen]];
