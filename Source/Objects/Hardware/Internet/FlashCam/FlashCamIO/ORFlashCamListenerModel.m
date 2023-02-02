@@ -125,6 +125,8 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     [readList addAcceptedObjectName:@"ORFlashCamADCStdModel"];
     [self setReadOutList:readList];
     [readList release];
+    [self registerNotificationObservers];
+
     [[self undoManager] enableUndoRegistration];
     return self;
 }
@@ -166,6 +168,8 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     [readStateLock release];
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     [extraFileName release];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
     [super dealloc];
 }
 
@@ -1575,6 +1579,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     chanMap           = nil;
     [self setReadOutList:[decoder decodeObjectForKey:@"readOutList"]];
     readStateLock = [[NSLock alloc]init]; //MAH added some thread safety
+    [self registerNotificationObservers];
     [[self undoManager] enableUndoRegistration];
     return self;
 }
