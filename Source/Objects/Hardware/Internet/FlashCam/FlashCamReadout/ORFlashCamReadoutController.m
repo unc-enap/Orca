@@ -827,12 +827,19 @@
     }
     else if(view == listenerView        || view == listenerGPSView  || view == listenerDAQView  ||
             view == listenerWFView      || view == listenerTrigView || view == listenerBaseView ||
-            view == listenerReadoutView || view == monitorView){
+            view == listenerReadoutView || view == monitorView      || view == listenerExtraFilesView ||
+            view == listenerExtraFlagsView){
         ORFlashCamListenerModel* l = [model getListenerAtIndex:(int)row];
         if(!l) return nil;
         if(col == 0){
             NSUInteger i = [l tag];
             return [NSNumber numberWithUnsignedLong:i];
+        }
+        else if(view == listenerExtraFilesView){
+            if(col == 1) return [l configParam:@"extraFiles"];
+        }
+        else if(view == listenerExtraFlagsView){
+            if(col == 1) return [l configParam:@"extraFlags"];
         }
         else if(view == listenerView){
             if(col == 1)      return [l interface];
@@ -919,12 +926,21 @@
             else if(col == 5) [l  setStateBuffer:[object intValue]];
             else if(col == 6) [l      setTimeout:[object intValue]];
         }
+        else if(view == listenerExtraFilesView){
+            if(col == 1) [l setConfigParam:@"extraFiles"
+                                 withValue:[NSNumber numberWithBool:[object boolValue]]];
+        }
+        else if(view == listenerExtraFlagsView){
+            if(col == 1) [l setConfigParam:@"extraFlags"
+                                withString:object];
+        }
         else if(view == listenerGPSView){
             if(col == 1)      [l setConfigParam:@"gpsMode"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
             else if(col == 2) [l setConfigParam:@"gpsusClockAlarm"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
         }
+        
         else if(view == listenerDAQView){
             if(col == 1){
                 int i = [object intValue];
@@ -998,6 +1014,8 @@
     else if(view == listenerWFView)      return [model listenerCount];
     else if(view == listenerTrigView)    return [model listenerCount];
     else if(view == listenerBaseView)    return [model listenerCount];
+    else if(view == listenerExtraFilesView) return [model listenerCount];
+    else if(view == listenerExtraFlagsView) return [model listenerCount];
     else if(view == listenerReadoutView) return [model listenerCount];
     else if(view == monitorView)         return [model listenerCount];
     else return 0;

@@ -26,16 +26,17 @@
 #import "tmio.h"
 #import "Utilities.h"
 #import "ORDataTypeAssigner.h"
-#import  "ORDataTaskModel.h"
+#import "ORDataTaskModel.h"
+#import "ORDataFileModel.h"
 
-NSString* ORFlashCamListenerModelConfigChanged = @"ORFlashCamListenerModelConfigChanged";
-NSString* ORFlashCamListenerModelStatusChanged = @"ORFlashCamListenerModelStatusChanged";
-//NSString* ORFlashCamListenerModelConnected     = @"ORFlashCamListenerModelConnected";
-//NSString* ORFlashCamListenerModelDisconnected  = @"ORFlashCamListenerModelDisconnected";
-NSString* ORFlashCamListenerModelChanMapChanged   = @"ORFlashCamListenerModelChanMapChanged";
-NSString* ORFlashCamListenerModelCardMapChanged   = @"ORFlashCamListenerModelCardMapChanged";
-NSString* ORFlashCamListenerModelConfigBufferFull = @"ORFlashCamListenerModelConfigBufferFull";
-NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelStatusBufferFull";
+NSString* ORFlashCamListenerModelConfigChanged       = @"ORFlashCamListenerModelConfigChanged";
+NSString* ORFlashCamListenerModelStatusChanged       = @"ORFlashCamListenerModelStatusChanged";
+//NSString* ORFlashCamListenerModelConnected         = @"ORFlashCamListenerModelConnected";
+//NSString* ORFlashCamListenerModelDisconnected      = @"ORFlashCamListenerModelDisconnected";
+NSString* ORFlashCamListenerModelChanMapChanged      = @"ORFlashCamListenerModelChanMapChanged";
+NSString* ORFlashCamListenerModelCardMapChanged      = @"ORFlashCamListenerModelCardMapChanged";
+NSString* ORFlashCamListenerModelConfigBufferFull    = @"ORFlashCamListenerModelConfigBufferFull";
+NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModelStatusBufferFull";
 
 @implementation ORFlashCamListenerModel
 
@@ -78,6 +79,9 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     [self setConfigParam:@"logTime"         withValue:[NSNumber numberWithDouble:1.0]];
     [self setConfigParam:@"incBaseline"     withValue:[NSNumber numberWithBool:YES]];
     [self setConfigParam:@"trigAllEnable"   withValue:[NSNumber numberWithBool:YES]];
+    [self setConfigParam:@"extraFlags"      withString:@""];
+    [self setConfigParam:@"extraFiles"      withValue:[NSNumber numberWithBool:NO]];
+    
     reader             = NULL;
     readerRecordCount  = 0;
     bufferedRecords    = 0;
@@ -161,6 +165,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     [readOutArgs release];
     [readStateLock release];
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    [extraFileName release];
     [super dealloc];
 }
 
@@ -212,7 +217,22 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     return NO;
 }
 
+- (void) registerNotificationObservers
+{
+    NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
+    [notifyCenter addObserver : self
+                     selector : @selector(dataFileNameChanged:)
+                         name : ORDataFileChangedNotification
+                       object : nil];
+}
+
 #pragma mark •••Accessors
+
+- (void) dataFileNameChanged:(NSNotification*) aNote
+{
+    [extraFileName release];
+    extraFileName = [[[aNote object] fileName] copy];
+}
 
 - (NSString*) identifier
 {
@@ -322,6 +342,10 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
         return [NSNumber numberWithBool:[[configParams objectForKey:@"incBaseline"] boolValue]];
     else if([p isEqualToString:@"trigAllEnable"])
         return [NSNumber numberWithBool:[[configParams objectForKey:@"trigAllEnable"] boolValue]];
+    else if([p isEqualToString:@"extraFlags"])
+        return [configParams objectForKey:@"extraFlags"];
+    else if([p isEqualToString:@"extraFiles"])
+        return [NSNumber numberWithBool:[[configParams objectForKey:@"extraFiles"] boolValue]];
     else{
         NSLog(@"ORFlashCamListenerModel: unknown configuration parameter %@\n", p);
         return nil;
@@ -583,10 +607,27 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     [remoteInterfaces removeObjectAtIndex:index];
 }
 
+- (NSString*) configParamString:(NSString*)aKey
+{
+    //sanity check
+    id aVal = [configParams objectForKey:aKey];
+    if([aVal isKindOfClass:[NSString class]])return aVal;
+    else return @"";
+}
+
+- (void) setConfigParam:(NSString*)p withString:(NSString*)aString
+{
+    if(!aString)aString=@"";
+    [configParams setObject:aString forKey:p];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelConfigChanged object:self];
+}
+
 - (void) setConfigParam:(NSString*)p withValue:(NSNumber*)v
 {
     if([p isEqualToString:@"maxPayload"])
         [configParams setObject:[NSNumber numberWithInt:MAX(0, [v intValue])] forKey:p];
+    else if([p isEqualToString:@"extraFiles"])
+        [configParams setObject:v forKey:p];
     else if([p isEqualToString:@"eventBuffer"])
         [configParams setObject:[NSNumber numberWithInt:MAX(0, [v intValue])] forKey:p];
     else if([p isEqualToString:@"phaseAdjust"])
@@ -660,7 +701,6 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
         NSLog(@"ORFlashCamListenerModel: unknown configuration parameter %@\n", p);
         return;
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelConfigChanged object:self];
 }
 
 - (void) setTimeout:(int)to
@@ -1124,7 +1164,24 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     [readoutArgs addObjectsFromArray:@[@"-et", [self ethType]]];
     [readoutArgs addObjectsFromArray:[self runFlags:NO]];
     [readoutArgs addObjectsFromArray:argCard];
+    
+    //-------added extra, manually entered Flags--------
+    //-------MAH 02/1/22--------------------------------
+    NSString* extraFlags = [self configParamString:@"extraFlags"];
+    if(extraFlags)[readoutArgs addObject:extraFlags];
+    //-----------------------------------------------
+    
     [readoutArgs addObjectsFromArray:@[@"-o", listen]];
+
+    //-------added extra, manually entered Flags--------
+    //-------MAH 02/1/22--------------------------------
+    if(extraFileName){
+        NSString* fileName = [NSString stringWithFormat:@"%@_FCIO_%lu",extraFileName,(unsigned long)[self tag]];
+        NSLog(@"FC file name: %@\n",fileName);
+        //[readoutArgs addObjectsFromArray:@[@"-o", fileName]];
+    }
+    //--------------------------------------------------
+    
     [self setReadOutArgs:readoutArgs];
 //*******************************************************
 //MAH 9/17/22 commented out this block. launching the readout doen't have to use the taskSequence object dirctly. Can just use NSTask. See below
