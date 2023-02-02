@@ -194,61 +194,97 @@
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    <connections>
+                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="RBe-3B-eDW"/>
+                                                                    </connections>
                                                                 </textFieldCell>
                                                                 <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="1" title="--" id="wl9-yq-6Yq">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    <connections>
+                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="xOy-Zb-a90"/>
+                                                                    </connections>
                                                                 </textFieldCell>
                                                                 <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="2" title="--" id="IGR-NB-0PR">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    <connections>
+                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="W5W-Os-Mq8"/>
+                                                                    </connections>
                                                                 </textFieldCell>
                                                                 <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="3" title="--" id="SDL-rz-yxd">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    <connections>
+                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="25T-st-IZy"/>
+                                                                    </connections>
                                                                 </textFieldCell>
                                                                 <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="4" title="--" id="1Ec-GA-hhA">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    <connections>
+                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="vbV-c3-eca"/>
+                                                                    </connections>
                                                                 </textFieldCell>
                                                                 <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="5" title="--" id="sMy-2s-Agy">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    <connections>
+                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="2aZ-b6-BBX"/>
+                                                                    </connections>
                                                                 </textFieldCell>
                                                                 <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="-1" title="--" id="7bX-ow-dzO">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    <connections>
+                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="Hye-Yf-ZBn"/>
+                                                                    </connections>
                                                                 </textFieldCell>
                                                                 <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="-1" title="--" id="gyp-La-lmW">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    <connections>
+                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="LMf-ao-fiM"/>
+                                                                    </connections>
                                                                 </textFieldCell>
                                                                 <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="-1" title="--" id="fqp-xP-HHW">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    <connections>
+                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="TvO-SR-EEA"/>
+                                                                    </connections>
                                                                 </textFieldCell>
                                                                 <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="-1" title="--" id="ZVT-qP-idv">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    <connections>
+                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="MsD-22-l4j"/>
+                                                                    </connections>
                                                                 </textFieldCell>
                                                                 <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="-1" title="--" id="uMi-hT-wuv">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    <connections>
+                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="waY-7F-F2x"/>
+                                                                    </connections>
                                                                 </textFieldCell>
                                                                 <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="-1" title="--" id="zkB-gs-wh2">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    <connections>
+                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="dJQ-CD-81q"/>
+                                                                    </connections>
                                                                 </textFieldCell>
                                                             </column>
                                                         </cells>
