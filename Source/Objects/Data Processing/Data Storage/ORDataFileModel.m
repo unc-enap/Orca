@@ -31,6 +31,7 @@ NSString* ORDataFileModelGenerateMD5Changed             = @"ORDataFileModelGener
 NSString* ORDataFileModelGenerateGzipChanged            = @"ORDataFileModelGenerateGzipChanged";
 NSString* ORDataFileModelProcessLimitHighChanged        = @"ORDataFileModelProcessLimitHighChanged";
 NSString* ORDataFileModelUseDatedFileNamesChanged       = @"ORDataFileModelUseDatedFileNamesChanged";
+NSString* ORDataFileModelUseDatedFileNamesV2Changed     = @"ORDataFileModelUseDatedFileNamesV2Changed";
 NSString* ORDataFileModelUseFolderStructureChanged      = @"ORDataFileModelUseFolderStructureChanged";
 NSString* ORDataFileModelFilePrefixChanged              = @"ORDataFileModelFilePrefixChanged";
 NSString* ORDataFileModelFileSegmentChanged             = @"ORDataFileModelFileSegmentChanged";
@@ -265,14 +266,31 @@ static const int currentVersion = 1;           // Current version
     return useDatedFileNames;
 }
 
-- (void) setUseDatedFileNames:(BOOL)aUseDatedFileNames
+- (void) setUseDatedFileNames:(BOOL)aBool
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setUseDatedFileNames:useDatedFileNames];
     
-    useDatedFileNames = aUseDatedFileNames;
-	
+    useDatedFileNames = aBool;
+    useDatedFileNamesV2= !aBool;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileModelUseDatedFileNamesChanged object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileModelUseDatedFileNamesV2Changed object:self];
 }
+
+- (BOOL) useDatedFileNamesV2
+{
+    return useDatedFileNamesV2;
+}
+
+- (void) setUseDatedFileNamesV2:(BOOL)aBool
+{
+    [[[self undoManager] prepareWithInvocationTarget:self] setUseDatedFileNamesV2:useDatedFileNames];
+    
+    useDatedFileNamesV2 = aBool;
+    useDatedFileNames   = !aBool;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileModelUseDatedFileNamesChanged object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileModelUseDatedFileNamesV2Changed object:self];
+}
+
 
 - (BOOL) useFolderStructure
 {
@@ -833,7 +851,8 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
     [self setGenerateMD5:[decoder decodeBoolForKey:@"ORDataFileModelGenerateMD5"]];
     [self setGenerateGzip:[decoder decodeBoolForKey:@"ORDataFileModelGenerateGzip"]];
     [self setProcessLimitHigh:[decoder decodeFloatForKey:@"processLimitHigh"]];
-    [self setUseDatedFileNames:	[decoder decodeBoolForKey:@"ORDataFileModelUseDatedFileNames"]];
+    [self setUseDatedFileNames:    [decoder decodeBoolForKey:@"ORDataFileModelUseDatedFileNames"]];
+    [self setUseDatedFileNamesV2:    [decoder decodeBoolForKey:@"ORDataFileModelUseDatedFileNamesV2"]];
     [self setMaxFileSize:		[decoder decodeFloatForKey:@"ORDataFileModelMaxFileSize"]];
     [self setLimitSize:			[decoder decodeBoolForKey:@"ORDataFileModelLimitSize"]];
     [self setSizeLimitReachedAction:[decoder decodeIntForKey:@"sizeLimitReachedAction"]];
@@ -893,7 +912,8 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
     [encoder encodeBool:generateMD5 forKey:@"ORDataFileModelGenerateMD5"];
     [encoder encodeBool:generateGzip forKey:@"ORDataFileModelGenerateGzip"];
     [encoder encodeFloat:processLimitHigh forKey:@"processLimitHigh"];
-    [encoder encodeBool:useDatedFileNames	forKey:@"ORDataFileModelUseDatedFileNames"];
+    [encoder encodeBool:useDatedFileNames    forKey:@"ORDataFileModelUseDatedFileNames"];
+    [encoder encodeBool:useDatedFileNamesV2    forKey:@"ORDataFileModelUseDatedFileNamesV2"];
     [encoder encodeBool:useFolderStructure	forKey:@"ORDataFileModelUseFolderStructure"];
     [encoder encodeObject:filePrefix		forKey:@"ORDataFileModelFilePrefix"];
     [encoder encodeFloat:maxFileSize		forKey:@"ORDataFileModelMaxFileSize"];
@@ -1014,7 +1034,14 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
 		if([filePrefix rangeOfString:@"Run"].location != NSNotFound){
 			s = [NSString stringWithFormat:@"%@%@%d%@",filePrefix,fileSuffix,runNumber,fileStaticSuffix];
 		}
-		else s = [NSString stringWithFormat:@"%@%@Run%@%d%@",filePrefix,[filePrefix length]?@"_":@"",fileSuffix,runNumber,fileStaticSuffix];
+        else {
+            if(useDatedFileNamesV2){
+                s = [NSString stringWithFormat:@"%@%@%@",filePrefix,[filePrefix length]?@"-":@"",fileSuffix];
+            }
+            else {
+                s = [NSString stringWithFormat:@"%@%@Run%@%d%@",filePrefix,[filePrefix length]?@"_":@"",fileSuffix,runNumber,fileStaticSuffix];
+            }
+        }
     }
 	else s = [NSString stringWithFormat:@"Run%@%d%@",fileSuffix,runNumber,fileStaticSuffix];
 	if(subRunNumber!=0)s = [s stringByAppendingFormat:@".%d",subRunNumber];
@@ -1024,6 +1051,17 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
         else          theDate = [NSDate date];
 		s = [NSString stringWithFormat:@"%d-%d-%d-%@",(int32_t)[theDate yearOfCommonEra], (int32_t)[theDate monthOfYear], (int32_t)[theDate dayOfMonth],s];
 	}
+    else if(useDatedFileNamesV2){
+        NSDate* theDate;
+        if(startTime) theDate = startTime;
+        else          theDate = [NSDate date];
+        NSDateFormatter* dformatter = [[[NSDateFormatter alloc] init] autorelease];
+        dformatter.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease];
+        dformatter.dateFormat = @"yyyyMMdd'T'HHmmss'Z'";
+        dformatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+        NSString* ts = [dformatter stringFromDate:theDate];
+        s = [NSString stringWithFormat:@"%@%@%@",s,ts,fileStaticSuffix];
+    }
 	return s;
 }
 @end

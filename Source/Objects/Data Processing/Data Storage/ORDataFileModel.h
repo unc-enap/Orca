@@ -62,7 +62,8 @@
 		NSString*		filePrefix;
         NSString*		fileStaticSuffix;
 		BOOL			useFolderStructure;
-		BOOL			useDatedFileNames;
+        BOOL            useDatedFileNames;
+        BOOL            useDatedFileNamesV2;
 		int				sizeLimitReachedAction;
         ORAlarm*		diskFullAlarm;
         ORAlarm*		diskFillingAlarm;
@@ -89,7 +90,9 @@
 - (float) processLimitHigh;
 - (void) setProcessLimitHigh:(float)aProcessLimitHigh;
 - (BOOL) useDatedFileNames;
-- (void) setUseDatedFileNames:(BOOL)aUseDatedFileNames;
+- (void) setUseDatedFileNames:(BOOL)aBool;
+- (BOOL) useDatedFileNamesV2;
+- (void) setUseDatedFileNamesV2:(BOOL)aBool;
 - (BOOL) useFolderStructure;
 - (void) setUseFolderStructure:(BOOL)aUseFolderStructure;
 - (NSString*) filePrefix;
@@ -163,6 +166,7 @@ extern NSString* ORDataFileModelGenerateMD5Changed;
 extern NSString* ORDataFileModelGenerateGzipChanged;
 extern NSString* ORDataFileModelProcessLimitHighChanged;
 extern NSString* ORDataFileModelUseDatedFileNamesChanged;
+extern NSString* ORDataFileModelUseDatedFileNamesV2Changed;
 extern NSString* ORDataFileModelUseFolderStructureChanged;
 extern NSString* ORDataFileModelFilePrefixChanged;
 extern NSString* ORDataFileModelFileSegmentChanged;

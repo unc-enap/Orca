@@ -819,6 +819,46 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
                                                         object:self
                                                       userInfo:history];
 }
+- (void) postInFluxDbRecord
+{
+    uint32_t aTimeStamp = (uint32_t)[[NSDate date]timeIntervalSince1970];
+    [self postInFluxDbRecord:@"Ge"       groupIndex:kL200DetType  timeStamp:aTimeStamp];
+    [self postInFluxDbRecord:@"SiPM"     groupIndex:kL200SiPMType timeStamp:aTimeStamp];
+    [self postInFluxDbRecord:@"VetoPMT"  groupIndex:kL200PMTType  timeStamp:aTimeStamp];
+    [self postInFluxDbRecord:@"Aux"      groupIndex:kL200AuxType  timeStamp:aTimeStamp];
+}
+
+- (void) postInFluxDbRecord:(NSString*)groupName groupIndex:(int)groupIndex timeStamp:(uint32_t)aTimeStamp
+{
+    ORL200SegmentGroup* group = (ORL200SegmentGroup*)[self segmentGroup:groupIndex];
+    for(int i=0; i<[self numberSegmentsInGroup:groupIndex]; i++){
+        id aDet = [group segment:i];
+        ORFlashCamADCModel* hw = [aDet hardwareCard];
+        if(hw){
+            ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:[self objectName] org:[influxDB org]];
+            [aCmd start  :[NSString stringWithFormat:@"%@_RunTime",groupName]];
+            [aCmd addTag :@"serial"         withString:[aDet objectForKey:@"serial"]];
+            [aCmd addTag :@"detType"        withString:[aDet objectForKey:@"det_type"]];
+            [aCmd addTag :@"strNumber"      withString:[aDet objectForKey:@"str_number"]];
+            [aCmd addTag :@"strPosition"    withString:[aDet objectForKey:@"str_position"]];
+            [aCmd addTag :@"cc4Chan"        withString:[aDet objectForKey:@"fe_cc4_ch"]];
+            [aCmd addTag :@"crate"          withLong: [[aDet objectForKey:@"daq_crate"]intValue]];
+            [aCmd addTag :@"boardId"        withString:[aDet objectForKey:@"daq_board_id"]];
+            [aCmd addTag :@"slot"           withLong: [[aDet objectForKey:@"daq_board_slot"]intValue]];
+            [aCmd addTag :@"channel"        withLong: [[aDet objectForKey:@"daq_board_ch"]intValue]];
+            [aCmd addTag :@"fcioID"         withString:[aDet objectForKey:@"fcioID"]];
+            [aCmd addTag :@"segmentId"      withString:[NSString stringWithFormat:@"%@%d",groupName,i]];
+
+            [aCmd addField :@"trigCounts"   withLong:   [group getTotalCounts:i]];
+            [aCmd addField :@"trigRates"    withDouble: [group getRate:i]];
+            [aCmd addField :@"wfCounts"     withLong:   [group getWaveformCounts:i]];
+            [aCmd addField :@"wfRates"      withDouble: [group getWaveformRate:i]];
+            [aCmd addField :@"baseline"     withDouble: [group getBaseline:i]];
+            [aCmd setTimeStamp:aTimeStamp];
+            [influxDB executeDBCmd:aCmd];
+        }
+    }
+}
 @end
 
 @implementation ORL200HeaderRecordID

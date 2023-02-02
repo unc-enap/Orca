@@ -9,7 +9,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="ORFlashCamGlobalTriggerController">
             <connections>
                 <outlet property="cardAddressTextField" destination="nXM-cz-GBr" id="HQX-T2-Lg2"/>
-                <outlet property="connectedAddressMatrix" destination="ipK-Rk-1na" id="61t-z9-z9O"/>
+                <outlet property="connectedAddressMatrix" destination="Y2x-BT-2wM" id="dDu-OI-fLx"/>
                 <outlet property="ctiErrorsTextField" destination="94q-3r-ph5" id="5bK-eD-prO"/>
                 <outlet property="ctiErrorsTextField1" destination="GxD-tT-OMV" id="AKd-oA-i2q"/>
                 <outlet property="currentView" destination="0px-TY-bLS" id="hHI-Vu-Gz5"/>
@@ -75,118 +75,6 @@
                                                 <rect key="frame" x="4" y="5" width="138" height="369"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <matrix verticalHuggingPriority="750" fixedFrame="YES" mode="track" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ipK-Rk-1na">
-                                                        <rect key="frame" x="70" y="10" width="50" height="328"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                        <size key="cellSize" width="50" height="20"/>
-                                                        <size key="intercellSpacing" width="8" height="8"/>
-                                                        <textFieldCell key="prototype" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" tag="-1" title="88" drawsBackground="YES" id="C9y-Gi-eqs">
-                                                            <font key="font" metaFont="label"/>
-                                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                        <cells>
-                                                            <column>
-                                                                <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="0" drawsBackground="YES" id="zex-ic-EiI">
-                                                                    <font key="font" metaFont="label"/>
-                                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    <connections>
-                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="jHf-ap-ZHT"/>
-                                                                    </connections>
-                                                                </textFieldCell>
-                                                                <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" tag="1" title="0" drawsBackground="YES" id="biv-w5-6Vm">
-                                                                    <font key="font" metaFont="label"/>
-                                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    <connections>
-                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="ubL-VG-WBk"/>
-                                                                    </connections>
-                                                                </textFieldCell>
-                                                                <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" tag="2" title="0" drawsBackground="YES" id="g6D-BQ-yt9">
-                                                                    <font key="font" metaFont="label"/>
-                                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    <connections>
-                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="hnQ-xc-rTm"/>
-                                                                    </connections>
-                                                                </textFieldCell>
-                                                                <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" tag="3" title="0" drawsBackground="YES" id="hfq-1c-KZj">
-                                                                    <font key="font" metaFont="label"/>
-                                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    <connections>
-                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="K54-zX-DDa"/>
-                                                                    </connections>
-                                                                </textFieldCell>
-                                                                <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" tag="4" title="0" drawsBackground="YES" id="ICQ-vJ-bJh">
-                                                                    <font key="font" metaFont="label"/>
-                                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    <connections>
-                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="rXo-Or-EUe"/>
-                                                                    </connections>
-                                                                </textFieldCell>
-                                                                <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" tag="5" title="0" drawsBackground="YES" id="pAG-dT-AFJ">
-                                                                    <font key="font" metaFont="label"/>
-                                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    <connections>
-                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="RdY-H8-n2d"/>
-                                                                    </connections>
-                                                                </textFieldCell>
-                                                                <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" tag="6" title="0" drawsBackground="YES" id="DiK-i9-JdB">
-                                                                    <font key="font" metaFont="label"/>
-                                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    <connections>
-                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="xCd-6u-3q9"/>
-                                                                    </connections>
-                                                                </textFieldCell>
-                                                                <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" tag="7" title="0" drawsBackground="YES" id="Jvi-Fy-WLp">
-                                                                    <font key="font" metaFont="label"/>
-                                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    <connections>
-                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="rmd-Cb-JTa"/>
-                                                                    </connections>
-                                                                </textFieldCell>
-                                                                <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" tag="8" title="0" drawsBackground="YES" id="vx3-X2-7ex">
-                                                                    <font key="font" metaFont="label"/>
-                                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    <connections>
-                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="R1o-xQ-dtf"/>
-                                                                    </connections>
-                                                                </textFieldCell>
-                                                                <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" tag="9" title="0" drawsBackground="YES" id="lHk-Li-vJ2">
-                                                                    <font key="font" metaFont="label"/>
-                                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    <connections>
-                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="bXh-DB-niE"/>
-                                                                    </connections>
-                                                                </textFieldCell>
-                                                                <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" tag="10" title="0" drawsBackground="YES" id="PZD-DZ-yjl">
-                                                                    <font key="font" metaFont="label"/>
-                                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    <connections>
-                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="Klm-M1-toq"/>
-                                                                    </connections>
-                                                                </textFieldCell>
-                                                                <textFieldCell controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" tag="11" title="0" drawsBackground="YES" id="BWF-2A-Tt9">
-                                                                    <font key="font" metaFont="label"/>
-                                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    <connections>
-                                                                        <outlet property="formatter" destination="dNE-kG-83p" id="bxF-ha-NPk"/>
-                                                                    </connections>
-                                                                </textFieldCell>
-                                                            </column>
-                                                        </cells>
-                                                    </matrix>
                                                     <matrix verticalHuggingPriority="750" fixedFrame="YES" mode="track" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VPg-wh-3oW">
                                                         <rect key="frame" x="39" y="10" width="23" height="328"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
@@ -289,6 +177,82 @@
                                                         <rect key="frame" x="59" y="10" width="5" height="350"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     </box>
+                                                    <matrix verticalHuggingPriority="750" fixedFrame="YES" mode="track" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y2x-BT-2wM">
+                                                        <rect key="frame" x="77" y="10" width="37" height="328"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        <size key="cellSize" width="37" height="20"/>
+                                                        <size key="intercellSpacing" width="8" height="8"/>
+                                                        <textFieldCell key="prototype" sendsActionOnEndEditing="YES" alignment="left" tag="-1" title="0" id="xJa-X3-MIp">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                        <cells>
+                                                            <column>
+                                                                <textFieldCell sendsActionOnEndEditing="YES" state="on" alignment="left" title="--" id="vtg-gX-DPV">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="1" title="--" id="wl9-yq-6Yq">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="2" title="--" id="IGR-NB-0PR">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="3" title="--" id="SDL-rz-yxd">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="4" title="--" id="1Ec-GA-hhA">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="5" title="--" id="sMy-2s-Agy">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="-1" title="--" id="7bX-ow-dzO">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="-1" title="--" id="gyp-La-lmW">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="-1" title="--" id="fqp-xP-HHW">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="-1" title="--" id="ZVT-qP-idv">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="-1" title="--" id="uMi-hT-wuv">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                                <textFieldCell sendsActionOnEndEditing="YES" alignment="left" tag="-1" title="--" id="zkB-gs-wh2">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </column>
+                                                        </cells>
+                                                    </matrix>
                                                 </subviews>
                                             </view>
                                         </box>
