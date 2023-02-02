@@ -189,6 +189,7 @@ static const int currentVersion = 1;           // Current version
                 [[self document] copyDocumentTo:[[configFolder finalDirectoryName]stringByExpandingTildeInPath] append:[NSString stringWithFormat:@"%u",runNumber]];
                 savedFirstTime = YES;
                 [[ORGlobal sharedGlobal] setDocumentWasEdited:NO];
+                [self setFileName:[self formRunName:[aNotification userInfo]]];
             }
 		}
 	}
