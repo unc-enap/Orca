@@ -1180,9 +1180,11 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     //-------added extra, manually entered Flags--------
     //-------MAH 02/1/22--------------------------------
     if(extraFileName){
-        NSString* fileName = [NSString stringWithFormat:@"%@_FCIO_%lu",extraFileName,(unsigned long)[self tag]];
-        NSLog(@"FC file name: %@\n",fileName);
-        //[readoutArgs addObjectsFromArray:@[@"-o", fileName]];
+        if([[ORGlobal sharedGlobal] runMode] == kNormalRun){
+            NSString* fileName = [NSString stringWithFormat:@"%@_FCIO_%lu",extraFileName,(unsigned long)[self tag]];
+            NSLog(@"FC file name: %@\n",fileName);
+            //[readoutArgs addObjectsFromArray:@[@"-o", fileName]];
+        }
     }
     //--------------------------------------------------
     

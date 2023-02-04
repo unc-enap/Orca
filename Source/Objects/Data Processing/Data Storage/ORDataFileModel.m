@@ -557,7 +557,7 @@ static const int currentVersion = 1;           // Current version
         //open file and write headers
         [startTime release];
         startTime = [[NSDate date] retain];
-        [self setFileName:[self formRunName:userInfo]];
+        if(!fileName)[self setFileName:[self formRunName:userInfo]];
 		
         if(fileName){
 			NSString* fullFileName = [[self tempDir] stringByAppendingPathComponent:[self fileName]];
