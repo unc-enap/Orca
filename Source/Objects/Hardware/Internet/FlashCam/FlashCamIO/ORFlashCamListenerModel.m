@@ -1186,8 +1186,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     if(extraFileName){
         if([[ORGlobal sharedGlobal] runMode] == kNormalRun){
             NSString* fileName = [NSString stringWithFormat:@"%@_FCIO_%lu",extraFileName,(unsigned long)[self tag]];
-            NSLog(@"FC file name: %@\n",fileName);
-            //[readoutArgs addObjectsFromArray:@[@"-o", fileName]];
+            [readoutArgs addObjectsFromArray:@[@"-o", fileName]];
         }
     }
     //--------------------------------------------------
