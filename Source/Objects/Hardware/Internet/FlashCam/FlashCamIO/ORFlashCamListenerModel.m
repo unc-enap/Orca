@@ -167,7 +167,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     [readOutArgs release];
     [readStateLock release];
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    [extraFileName release];
+    [writeDataToFile release];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 
     [super dealloc];
@@ -234,8 +234,8 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
 
 - (void) dataFileNameChanged:(NSNotification*) aNote
 {
-    [extraFileName release];
-    extraFileName = [[[aNote object] fileName] copy];
+    [writeDataToFile release];
+    writeDataToFile = [[[aNote object] fileName] copy];
 }
 
 - (NSString*) identifier
@@ -1163,7 +1163,6 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     [self setCardMap:orcaCardMap];
     // fixme: check for no cards and no enabled channels here
     [argCard addObjectsFromArray:@[@"-a", [addressList substringWithRange:NSMakeRange(0, [addressList length]-1)]]];
-    NSString* listen = [NSString stringWithFormat:@"tcp://connect/%d/%@", port, ip];
     [readoutArgs addObjectsFromArray:@[@"-ei", [[self remoteInterfaces] componentsJoinedByString:@","]]];
     [readoutArgs addObjectsFromArray:@[@"-et", [self ethType]]];
     [readoutArgs addObjectsFromArray:[self runFlags:NO]];
@@ -1178,17 +1177,20 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
         [readoutArgs addObject:extraFlags];
     }
     //-----------------------------------------------
-    
-    [readoutArgs addObjectsFromArray:@[@"-o", listen]];
 
     //-------added extra, manually entered Flags--------
     //-------MAH 02/1/22--------------------------------
-    if(extraFileName){
+    if(writeDataToFile){
         if([[ORGlobal sharedGlobal] runMode] == kNormalRun){
-            NSString* fileName = [NSString stringWithFormat:@"%@_FCIO_%lu",extraFileName,(unsigned long)[self tag]];
+            NSString* fileName = [NSString stringWithFormat:@"%@_FCIO_%lu",writeDataToFile,(unsigned long)[self tag]];
             [readoutArgs addObjectsFromArray:@[@"-o", fileName]];
         }
     }
+    else {
+        NSString* listen = [NSString stringWithFormat:@"tcp://connect/%d/%@", port, ip];
+        [readoutArgs addObjectsFromArray:@[@"-o", listen]];
+    }
+
     //--------------------------------------------------
     
     [self setReadOutArgs:readoutArgs];

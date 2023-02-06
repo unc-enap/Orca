@@ -78,7 +78,7 @@
     NSLock* readStateLock; //MAH 9/18/22
     bool timeToQuitReadoutThread;
     ORDataPacket* dataPacketForThread;
-    NSString* extraFileName;
+    NSString* writeDataToFile;
 }
 
 #pragma mark •••Initialization
