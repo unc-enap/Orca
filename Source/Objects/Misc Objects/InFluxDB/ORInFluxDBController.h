@@ -24,6 +24,7 @@
     IBOutlet NSTextField*       orgField;
     IBOutlet NSTextField*       authTokenField;
     IBOutlet NSTextField*       rateField;
+    IBOutlet NSTextField*       connectionErrField;
     IBOutlet NSButton*          deleteBucketButton;
     IBOutlet NSButton*          InFluxDBLockButton;
     IBOutlet NSButton*          stealthModeButton;
@@ -44,6 +45,7 @@
 - (void) stealthModeChanged:(NSNotification*)aNote;
 - (void) bucketArrayChanged:(NSNotification*)aNote;
 - (void) errorStringChanged:(NSNotification*)aNote;
+- (void) connectionStatusChanged:(NSNotification*)aNote;
 
 #pragma mark •••Actions
 - (IBAction) hostNameAction:(id)sender;

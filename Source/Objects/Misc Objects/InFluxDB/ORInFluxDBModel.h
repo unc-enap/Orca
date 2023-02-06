@@ -52,6 +52,7 @@
     
     //----http vars--------
     NSString*      authToken;
+    bool           connectionOK;
 }
 
 #pragma mark ***Initialization
@@ -68,6 +69,9 @@
 - (void) alarmAcknowledged        : (NSNotification*)aNote;
 
 #pragma mark ***Accessors
+- (void)        setConnectionStatusBad;
+- (void)        setConnectionStatusOK;
+- (bool)        connectionOK;
 - (NSString*)   experimentName;
 - (void)        setExperimentName:(NSString*)aName;
 - (NSString*)   hostName;
@@ -112,6 +116,7 @@ extern NSString* ORInFluxDBOrgChanged;
 extern NSString* ORInFluxDBStealthModeChanged;
 extern NSString* ORInFluxDBBucketChanged;
 extern NSString* ORInFluxDBErrorChanged;
+extern NSString* ORInFluxDBConnectionStatusChanged;
 extern NSString* ORInFluxDBLock;
 
 
