@@ -367,7 +367,7 @@
 
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
 {
-    NSString* requestString = [NSString stringWithFormat:@"%@/api/v2/write?org=%@&bucket=%@&precision=s",[delegate hostName],org,bucket];
+    NSString* requestString = [NSString stringWithFormat:@"%@/api/v2/write?org=%@&bucket=%@&precision=ns",[delegate hostName],org,bucket];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
     
     request.HTTPMethod = @"POST";
@@ -378,7 +378,7 @@
                               measurement,
                               [tags componentsJoinedByString:@","],
                               [measurements componentsJoinedByString:@","],
-                              timeStamp?[NSString stringWithFormat:@" %ld\n",timeStamp]:@"   \n"];
+                              timeStamp?[NSString stringWithFormat:@" %ld000000\n",timeStamp]:@"   \n"];
     
     request.HTTPBody = [outputBuffer dataUsingEncoding:NSASCIIStringEncoding];
     requestSize = [requestString length];

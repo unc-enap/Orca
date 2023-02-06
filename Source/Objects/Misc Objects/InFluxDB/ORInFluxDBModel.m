@@ -251,6 +251,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) setConnectionStatusBad
 {
     connectionOK = NO;
+    [self setErrorString:@"No Connection"];
     [self performSelector:@selector(setConnectionStatusOK) withObject:nil afterDelay:60];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBConnectionStatusChanged object:self];
 }
@@ -416,8 +417,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [aCmd addField: @"Line"     withString:[s string]];
     [self executeDBCmd:aCmd];
 }
-
-
 
 - (NSString*) errorString
 {
