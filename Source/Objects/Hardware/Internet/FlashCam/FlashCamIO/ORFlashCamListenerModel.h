@@ -125,6 +125,7 @@
 - (NSMutableArray*) readOutArgs;
 - (NSMutableArray*) children;
 - (void) dataFileNameChanged:(NSNotification*) aNote;
+- (NSString*) streamDescription;
 
 - (void) setInterface:(NSString*)iface andPort:(uint16_t)p;
 - (void) setInterface:(NSString*)iface;
