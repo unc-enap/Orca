@@ -607,11 +607,16 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
         [configParams setObject:[NSNumber numberWithInt:MAX(0, [v intValue])] forKey:p];
     else if([p isEqualToString:@"retriggerLength"]){
         int maxval = [[self configParam:@"eventSamples"] intValue];
-        if([self configParam:@"traceType"] > 0) maxval *= 4;
+        if([[self configParam:@"traceType"] intValue] > 0) maxval *= 4;
         [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0, [v intValue]), maxval)] forKey:p];
     }
-    else if([p isEqualToString:@"traceType"])
+    else if([p isEqualToString:@"traceType"]){
+        int prevType = [[self configParam:p] intValue];
         [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0, [v intValue]), 4)] forKey:p];
+        int newType = [[self configParam:p] intValue];
+        if(prevType > 0 && newType == 0)
+            [self setConfigParam:@"retriggerLength" withValue:[self configParam:@"retriggerLength"]];
+    }
     else if([p isEqualToString:@"resetMode"])
         [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0, [v intValue]), 2)] forKey:p];
     else if([p isEqualToString:@"timeout"])
