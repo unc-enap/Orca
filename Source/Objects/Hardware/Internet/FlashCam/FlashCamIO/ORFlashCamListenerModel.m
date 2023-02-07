@@ -606,7 +606,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull = @"ORFlashCamListenerModelSta
     else if([p isEqualToString:@"signalDepth"])
         [configParams setObject:[NSNumber numberWithInt:MAX(0, [v intValue])] forKey:p];
     else if([p isEqualToString:@"retriggerLength"])
-        [configParams setObject:[NSNumber numberWithInt:MAX(0, [[self configParam:@"eventSamples"] intValue])] forKey:p];
+        [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0, [v intValue]), [[self configParam:@"eventSamples"] intValue])] forKey:p];
     else if([p isEqualToString:@"traceType"])
         [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0, [v intValue]), 4)] forKey:p];
     else if([p isEqualToString:@"resetMode"])
