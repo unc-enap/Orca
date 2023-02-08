@@ -181,7 +181,6 @@ static const int currentVersion = 1;           // Current version
 - (void) runAboutToStart:(NSNotification*)aNotification
 {
     uint32_t runNumber = (uint32_t)[[[aNotification userInfo] objectForKey:@"kRunNumber"] longValue];
-    [self setFileName:[self formRunName:[aNotification userInfo]]];
 
 	if([[self document] isDocumentEdited])[[self document] saveDocument:nil];
     if(saveConfiguration){
@@ -557,7 +556,7 @@ static const int currentVersion = 1;           // Current version
         //open file and write headers
         [startTime release];
         startTime = [[NSDate date] retain];
-        if(!fileName)[self setFileName:[self formRunName:userInfo]];
+        [self setFileName:[self formRunName:userInfo]];
 		
         if(fileName){
 			NSString* fullFileName = [[self tempDir] stringByAppendingPathComponent:[self fileName]];
