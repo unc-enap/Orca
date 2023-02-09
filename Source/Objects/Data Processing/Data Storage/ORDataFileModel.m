@@ -180,12 +180,13 @@ static const int currentVersion = 1;           // Current version
 
 - (void) runAboutToStart:(NSNotification*)aNotification
 {
+    uint32_t runNumber = (uint32_t)[[[aNotification userInfo] objectForKey:@"kRunNumber"] longValue];
+
 	if([[self document] isDocumentEdited])[[self document] saveDocument:nil];
     if(saveConfiguration){
 		[configFolder ensureExists:[configFolder finalDirectoryName]]; 
 		if([[ORGlobal sharedGlobal] documentWasEdited] || !savedFirstTime){
             if([[ORGlobal sharedGlobal] runMode] != kOfflineRun){
-                uint32_t runNumber = (uint32_t)[[[aNotification userInfo] objectForKey:@"kRunNumber"] longValue];
                 [[self document] copyDocumentTo:[[configFolder finalDirectoryName]stringByExpandingTildeInPath] append:[NSString stringWithFormat:@"%u",runNumber]];
                 savedFirstTime = YES;
                 [[ORGlobal sharedGlobal] setDocumentWasEdited:NO];

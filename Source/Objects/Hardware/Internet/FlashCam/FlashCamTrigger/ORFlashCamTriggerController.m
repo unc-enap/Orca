@@ -120,7 +120,8 @@
     NSMutableDictionary* addresses = [model connectedAddresses];
     for(unsigned int i=0; i<kFlashCamTriggerConnections; i++){
         NSNumber* a = [addresses objectForKey:[NSString stringWithFormat:@"trigConnection%d",i]];
-        if(a) [[connectedADCMatrix cellWithTag:i] setStringValue:[NSString stringWithFormat:@"0x%0x",[a intValue]]];
+        if(a) [[connectedADCMatrix cellWithTag:i] setIntValue:[a intValue]];
+        else [[connectedADCMatrix cellWithTag:i] setIntValue:0];
     }
 }
 

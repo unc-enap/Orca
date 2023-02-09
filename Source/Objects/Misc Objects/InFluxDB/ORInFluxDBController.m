@@ -125,6 +125,13 @@
                       selector : @selector(errorStringChanged:)
                           name : ORInFluxDBErrorChanged
                         object : model];
+    
+    [notifyCenter addObserver : self
+                      selector : @selector(connectionStatusChanged:)
+                          name : ORInFluxDBConnectionStatusChanged
+                        object : model];
+    
+    
 }
 
 - (void) updateWindow
@@ -138,6 +145,8 @@
     [self stealthModeChanged:nil];
     [self bucketArrayChanged:nil];
     [self errorStringChanged:nil];
+    [self connectionStatusChanged:nil];
+    
 
 }
 //a fake action from the scale object so we can store the state
@@ -160,6 +169,14 @@
             [[rate0 xAxis] setNeedsDisplay:YES];
         }
     }
+}
+
+- (void) connectionStatusChanged:(NSNotification*)aNote
+{
+    NSString* s;
+    if([model connectionOK])s = @"";
+    else                    s = @"NO Connection -- trying again soon";
+    [connectionErrField setStringValue:s];
 }
 
 - (void) errorStringChanged:(NSNotification*)aNote

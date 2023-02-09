@@ -78,6 +78,7 @@
     NSLock* readStateLock; //MAH 9/18/22
     bool timeToQuitReadoutThread;
     ORDataPacket* dataPacketForThread;
+    NSString* writeDataToFile;
 }
 
 #pragma mark •••Initialization
@@ -94,7 +95,9 @@
 - (NSUInteger) remoteInterfaceCount;
 - (NSString*) remoteInterfaceAtIndex:(NSUInteger)index;
 - (NSString*) ethType;
-- (NSNumber*) configParam:(NSString*)p;
+- (NSNumber*) configParam:(NSString*)aKey;
+- (NSString*) configParamString:(NSString*)aKey;
+
 - (NSMutableArray*) runFlags:(bool)print;
 - (int) timeout;
 - (int) ioBuffer;
@@ -121,6 +124,8 @@
 - (ORReadOutList*) readOutList;
 - (NSMutableArray*) readOutArgs;
 - (NSMutableArray*) children;
+- (void) dataFileNameChanged:(NSNotification*) aNote;
+- (NSString*) streamDescription;
 
 - (void) setInterface:(NSString*)iface andPort:(uint16_t)p;
 - (void) setInterface:(NSString*)iface;
@@ -131,6 +136,7 @@
 - (void) removeRemoteInterface:(NSString*)iface;
 - (void) removeRemoteInterfaceAtIndex:(NSUInteger)index;
 - (void) setConfigParam:(NSString*)p withValue:(NSNumber*)v;
+- (void) setConfigParam:(NSString*)p withString:(NSString*)aString;
 - (void) setTimeout:(int)to;
 - (void) setIObuffer:(int)io;
 - (void) setStateBuffer:(int)sb;
@@ -142,7 +148,6 @@
 - (void) setReadOutArgs:(NSMutableArray*)args;
 - (void) setChanMap:(NSMutableArray*)chMap;
 - (void) setCardMap:(NSMutableArray*)map;
-
 #pragma mark •••Comparison methods
 - (BOOL) sameInterface:(NSString*)iface andPort:(uint16_t)p;
 - (BOOL) sameIP:(NSString*)address andPort:(uint16_t)p;
@@ -152,7 +157,6 @@
 - (void) disconnect:(bool)destroy;
 - (void) read:(ORDataPacket*)aDataPacket;
 - (void) runFailed;
-
 
 #pragma mark •••Task methods
 - (void) taskFinished:(id)task;
