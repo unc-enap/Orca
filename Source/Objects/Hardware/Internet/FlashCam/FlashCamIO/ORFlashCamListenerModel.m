@@ -237,8 +237,14 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
 - (void) dataFileNameChanged:(NSNotification*) aNote
 {
     [writeDataToFile release];
+    NSString* filename = [[aNote object] fileName];
+    NSString* extension = [[aNote object] fileStaticSuffix];
+    if(![extension isEqualToString:@""]){
+        NSRange r = [filename rangeOfString:extension options:NSBackwardsSearch];
+        filename = [filename substringWithRange:NSMakeRange(0, r.location)];
+    }
     writeDataToFile = [[[NSString stringWithFormat:@"%@/openFiles/%@",
-                       [[[aNote object] dataFolder] finalDirectoryName], [[aNote object] fileName]] stringByExpandingTildeInPath] retain];
+                       [[[aNote object] dataFolder] finalDirectoryName], filename] stringByExpandingTildeInPath] retain];
 }
 
 - (NSString*) streamDescription
