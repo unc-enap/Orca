@@ -340,13 +340,15 @@
 
 - (void) reloadListenerData
 {
-    [listenerView        reloadData];
-    [listenerGPSView     reloadData];
-    [listenerDAQView     reloadData];
-    [listenerWFView      reloadData];
-    [listenerTrigView    reloadData];
-    [listenerBaseView    reloadData];
-    [listenerReadoutView reloadData];
+    [listenerView           reloadData];
+    [listenerGPSView        reloadData];
+    [listenerDAQView        reloadData];
+    [listenerWFView         reloadData];
+    [listenerTrigView       reloadData];
+    [listenerBaseView       reloadData];
+    [listenerReadoutView    reloadData];
+    [listenerExtraFilesView reloadData];
+    [listenerExtraFlagsView reloadData];
 }
 
 - (void) pingStart:(NSNotification*)note
