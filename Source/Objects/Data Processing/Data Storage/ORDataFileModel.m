@@ -34,6 +34,7 @@ NSString* ORDataFileModelUseDatedFileNamesChanged       = @"ORDataFileModelUseDa
 NSString* ORDataFileModelUseDatedFileNamesV2Changed     = @"ORDataFileModelUseDatedFileNamesV2Changed";
 NSString* ORDataFileModelUseFolderStructureChanged      = @"ORDataFileModelUseFolderStructureChanged";
 NSString* ORDataFileModelFilePrefixChanged              = @"ORDataFileModelFilePrefixChanged";
+NSString* ORDataFileModelFileStaticSuffixChanged        = @"ORDataFileModelFileStaticSuffixChanged";
 NSString* ORDataFileModelFileSegmentChanged             = @"ORDataFileModelFileSegmentChanged";
 NSString* ORDataFileModelMaxFileSizeChanged             = @"ORDataFileModelMaxFileSizeChanged";
 NSString* ORDataFileModelLimitSizeChanged               = @"ORDataFileModelLimitSizeChanged";
@@ -338,6 +339,7 @@ static const int currentVersion = 1;           // Current version
     if(aFileSuffix == nil)aFileSuffix = @"";
     [fileStaticSuffix autorelease];
     fileStaticSuffix = [aFileSuffix copy];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileModelFileStaticSuffixChanged object:self];
 }
 
 - (int) fileSegment

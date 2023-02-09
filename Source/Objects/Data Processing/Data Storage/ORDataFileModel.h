@@ -169,6 +169,7 @@ extern NSString* ORDataFileModelUseDatedFileNamesChanged;
 extern NSString* ORDataFileModelUseDatedFileNamesV2Changed;
 extern NSString* ORDataFileModelUseFolderStructureChanged;
 extern NSString* ORDataFileModelFilePrefixChanged;
+extern NSString* ORDataFileModelFileStaticSuffixChanged;
 extern NSString* ORDataFileModelFileSegmentChanged;
 extern NSString* ORDataFileModelMaxFileSizeChanged;
 extern NSString* ORDataFileModelLimitSizeChanged;
