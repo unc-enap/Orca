@@ -96,6 +96,12 @@ enum {
     [model setUseDatedFileNamesV2:[sender intValue]];
 }
 
+- (IBAction) useFileExtensionAction:(id)sender
+{
+    if([sender intValue]) [model setFileStaticSuffix:@".orca"];
+    else [model setFileStaticSuffix:@""];
+}
+
 - (IBAction) useFolderStructureAction:(id)sender
 {
 	[model setUseFolderStructure:[sender intValue]];	
@@ -214,6 +220,11 @@ enum {
     [useDatedFileNamesV2CB setIntValue: [model useDatedFileNamesV2]];
 }
 
+- (void) useFileExtensionChanged:(NSNotification*)aNote
+{
+    if([[model fileStaticSuffix] isEqualToString:@".orca"]) [useFileExtension setIntValue:YES];
+    else [useFileExtension setIntValue:NO];
+}
 
 - (void) useFolderStructureChanged:(NSNotification*)aNote
 {
@@ -356,7 +367,10 @@ enum {
                          name : ORDataFileModelUseDatedFileNamesV2Changed
                         object: model];
 
-    
+    [notifyCenter addObserver : self
+                     selector : @selector(useFileExtensionChanged:)
+                         name : ORDataFileModelFileStaticSuffixChanged
+                       object : model];
     
     [notifyCenter addObserver : self
                      selector : @selector(sizeLimitReachedActionChanged:)
@@ -397,6 +411,7 @@ enum {
 	[self useFolderStructureChanged:nil];
     [self useDatedFileNamesChanged:nil];
     [self useDatedFileNamesV2Changed:nil];
+    [self useFileExtensionChanged:nil];
 	[self sizeLimitReachedActionChanged:nil];
 	[self processLimitHighChanged:nil];
 	[self generateMD5Changed:nil];
