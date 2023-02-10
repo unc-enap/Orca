@@ -61,6 +61,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     [self setConfigParam:@"integratorLen"   withValue:[NSNumber numberWithInt:7]];
     [self setConfigParam:@"eventSamples"    withValue:[NSNumber numberWithInt:2048]];
     [self setConfigParam:@"signalDepth"     withValue:[NSNumber numberWithInt:1024]];
+    [self setConfigParam:@"retriggerLength" withValue:[NSNumber numberWithInt:0]];
     [self setConfigParam:@"traceType"       withValue:[NSNumber numberWithInt:1]];
     [self setConfigParam:@"resetMode"       withValue:[NSNumber numberWithInt:2]];
     [self setConfigParam:@"timeout"         withValue:[NSNumber numberWithInt:1000]];
@@ -316,6 +317,8 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
         return [NSNumber numberWithInt:[[configParams objectForKey:@"eventSamples"] intValue]];
     else if([p isEqualToString:@"signalDepth"])
         return [NSNumber numberWithInt:[[configParams objectForKey:@"signalDepth"] intValue]];
+    else if([p isEqualToString:@"retriggerLength"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:@"retriggerLength"] intValue]];
     else if([p isEqualToString:@"traceType"])
         return [NSNumber numberWithInt:[[configParams objectForKey:@"traceType"] intValue]];
     else if([p isEqualToString:@"resetMode"])
@@ -375,6 +378,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     [f addObjectsFromArray:@[@"-il",   [NSString stringWithFormat:@"%d", [[self configParam:@"integratorLen"] intValue]]]];
     [f addObjectsFromArray:@[@"-es",   [NSString stringWithFormat:@"%d", [[self configParam:@"eventSamples"]  intValue]]]];
     [f addObjectsFromArray:@[@"-sd",   [NSString stringWithFormat:@"%d", [[self configParam:@"signalDepth"]   intValue]]]];
+    [f addObjectsFromArray:@[@"-tl",   [NSString stringWithFormat:@"%d", [[self configParam:@"retriggerLength"]intValue]]]];
     [f addObjectsFromArray:@[@"-gt",   [NSString stringWithFormat:@"%d", [[self configParam:@"traceType"]     intValue]]]];
     [f addObjectsFromArray:@[@"-rst",  [NSString stringWithFormat:@"%d", [[self configParam:@"resetMode"]     intValue]]]];
     [f addObjectsFromArray:@[@"-tmo",  [NSString stringWithFormat:@"%d", [[self configParam:@"timeout"]       intValue]]]];
@@ -654,8 +658,18 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     }
     else if([p isEqualToString:@"signalDepth"])
         [configParams setObject:[NSNumber numberWithInt:MAX(0, [v intValue])] forKey:p];
-    else if([p isEqualToString:@"traceType"])
+    else if([p isEqualToString:@"retriggerLength"]){
+        int maxval = [[self configParam:@"eventSamples"] intValue];
+        if([[self configParam:@"traceType"] intValue] > 0) maxval *= 4;
+        [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0, [v intValue]), maxval)] forKey:p];
+    }
+    else if([p isEqualToString:@"traceType"]){
+        int prevType = [[self configParam:p] intValue];
         [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0, [v intValue]), 4)] forKey:p];
+        int newType = [[self configParam:p] intValue];
+        if(prevType > 0 && newType == 0)
+            [self setConfigParam:@"retriggerLength" withValue:[self configParam:@"retriggerLength"]];
+    }
     else if([p isEqualToString:@"resetMode"])
         [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0, [v intValue]), 2)] forKey:p];
     else if([p isEqualToString:@"timeout"])
