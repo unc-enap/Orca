@@ -378,7 +378,7 @@
                               measurement,
                               [tags componentsJoinedByString:@","],
                               [measurements componentsJoinedByString:@","],
-                              timeStamp?[NSString stringWithFormat:@" %ld000000\n",timeStamp]:@"   \n"];
+                              timeStamp?[NSString stringWithFormat:@" %ld000000000\n",timeStamp]:@"   \n"];
     
     request.HTTPBody = [outputBuffer dataUsingEncoding:NSASCIIStringEncoding];
     requestSize = [requestString length];
