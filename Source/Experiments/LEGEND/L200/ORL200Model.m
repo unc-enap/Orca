@@ -201,6 +201,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
                 ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:[self objectName] org:[influxDB org]];
                 [aCmd start  :[NSString stringWithFormat:@"%@_Setup",groupName]];
                 [aCmd addTag :@"boardId"        withString:[aDet objectForKey:@"daq_board_id"]];
+                [aCmd addTag :@"segmentId"      withString:[NSString stringWithFormat:@"%@%d",groupName,i]];
 
                 [aCmd addField :@"cardAddress"   withLong:[hw cardAddress]];
                 [aCmd addField :@"promSlot"      withLong:[hw promSlot]];
