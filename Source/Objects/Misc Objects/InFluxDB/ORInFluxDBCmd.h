@@ -109,11 +109,11 @@ enum {
     NSString*       measurement;
     NSString*       bucket;
     NSString*       org;
-    unsigned long   timeStamp;
+    double          timeStamp;
 }
 + (ORInFluxDBMeasurement*)measurementForBucket:(NSString*)aBucket org:(NSString*)anOrg;
 - (id) init:(int)aType bucket:(NSString*)aBucket org:(NSString*)anOrg;
-- (void) setTimeStamp:(unsigned long)aTimeStamp;
+- (void) setTimeStamp:(double)aTimeStamp;
 - (void) start:(NSString*)section withTags:(NSString*)someTags;
 - (void) start:(NSString*)section;
 

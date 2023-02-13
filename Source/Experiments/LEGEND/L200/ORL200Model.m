@@ -151,14 +151,14 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 }
 - (void) runStarted:(NSNotification*) aNote
 {
-    uint32_t aTimeStamp = (uint32_t)[[NSDate date]timeIntervalSince1970];
+    double aTimeStamp = [[NSDate date]timeIntervalSince1970];
     [self postFCAdcChanSettingsToFluxDB:@"Ge"       groupIndex:kL200DetType  timeStamp:aTimeStamp];
     [self postFCAdcChanSettingsToFluxDB:@"SiPM"     groupIndex:kL200SiPMType timeStamp:aTimeStamp];
     [self postFCAdcChanSettingsToFluxDB:@"VetoPMT"  groupIndex:kL200PMTType  timeStamp:aTimeStamp];
     [self postFCAdcChanSettingsToFluxDB:@"Aux"      groupIndex:kL200AuxType  timeStamp:aTimeStamp];
 }
 
-- (void) postFCAdcChanSettingsToFluxDB:(NSString*)groupName groupIndex:(int)groupIndex timeStamp:(uint32_t)aTimeStamp
+- (void) postFCAdcChanSettingsToFluxDB:(NSString*)groupName groupIndex:(int)groupIndex timeStamp:(double)aTimeStamp
 {
     //put all channel info into data base at run start
     ORSegmentGroup* group = [self segmentGroup:groupIndex];
@@ -193,29 +193,18 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
             [aCmd addField:@"flatTopTime"    withLong:[hw flatTopTime:channel]];
             [aCmd addField:@"poleZeroTime"   withLong:[hw poleZeroTime:channel]];
             [aCmd addField:@"postTrigger"    withLong:[hw postTrigger:channel]];
+            [aCmd addField :@"cardAddress"   withLong:[hw cardAddress]];
+            [aCmd addField :@"promSlot"      withLong:[hw promSlot]];
+            [aCmd addField :@"baseBias"      withLong:[hw baseBias]];
+            [aCmd addField :@"majorityLevel" withLong:[hw majorityLevel]];
+            [aCmd addField :@"majorityWidth" withLong:[hw majorityWidth]];
+            [aCmd addField :@"trigOutEnabled" withLong:[hw trigOutEnable]];
+            [aCmd addField :@"status"        withLong:[hw status]];
+            [aCmd addField :@"totalErrors"   withLong:[hw totalErrors]];
+
             [aCmd setTimeStamp:aTimeStamp];
             [influxDB executeDBCmd:aCmd];
             
-            //board-level stuff
-            if(channel==0){
-                ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:[self objectName] org:[influxDB org]];
-                [aCmd start  :[NSString stringWithFormat:@"%@_Setup",groupName]];
-                [aCmd addTag :@"boardId"        withString:[aDet objectForKey:@"daq_board_id"]];
-                [aCmd addTag :@"segmentId"      withString:[NSString stringWithFormat:@"%@%d",groupName,i]];
-
-                [aCmd addField :@"cardAddress"   withLong:[hw cardAddress]];
-                [aCmd addField :@"promSlot"      withLong:[hw promSlot]];
-                [aCmd addField :@"baseBias"      withLong:[hw baseBias]];
-                [aCmd addField :@"majorityLevel" withLong:[hw majorityLevel]];
-                [aCmd addField :@"majorityWidth" withLong:[hw majorityWidth]];
-                [aCmd addField :@"trigOutEnabled" withLong:[hw trigOutEnable]];
-                [aCmd addField :@"status"        withLong:[hw status]];
-                [aCmd addField :@"totalErrors"   withLong:[hw totalErrors]];
-                [aCmd addField :@"isRunning"     withLong:[hw isRunning]];
-
-                [aCmd setTimeStamp:aTimeStamp];
-                [influxDB executeDBCmd:aCmd];
-            }
         }
     }
 }
@@ -822,14 +811,14 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 }
 - (void) postInFluxDbRecord
 {
-    uint32_t aTimeStamp = (uint32_t)[[NSDate date]timeIntervalSince1970];
+    double aTimeStamp = (double)[[NSDate date]timeIntervalSince1970];
     [self postInFluxDbRecord:@"Ge"       groupIndex:kL200DetType  timeStamp:aTimeStamp];
     [self postInFluxDbRecord:@"SiPM"     groupIndex:kL200SiPMType timeStamp:aTimeStamp];
     [self postInFluxDbRecord:@"VetoPMT"  groupIndex:kL200PMTType  timeStamp:aTimeStamp];
     [self postInFluxDbRecord:@"Aux"      groupIndex:kL200AuxType  timeStamp:aTimeStamp];
 }
 
-- (void) postInFluxDbRecord:(NSString*)groupName groupIndex:(int)groupIndex timeStamp:(uint32_t)aTimeStamp
+- (void) postInFluxDbRecord:(NSString*)groupName groupIndex:(int)groupIndex timeStamp:(double)aTimeStamp
 {
     ORL200SegmentGroup* group = (ORL200SegmentGroup*)[self segmentGroup:groupIndex];
     for(int i=0; i<[self numberSegmentsInGroup:groupIndex]; i++){
@@ -849,6 +838,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
             [aCmd addTag :@"channel"        withLong: [[aDet objectForKey:@"daq_board_ch"]intValue]];
             [aCmd addTag :@"fcioID"         withString:[aDet objectForKey:@"fcioID"]];
             [aCmd addTag :@"segmentId"      withString:[NSString stringWithFormat:@"%@%d",groupName,i]];
+            [aCmd addField :@"isRunning"     withLong:[hw isRunning]];
 
             [aCmd addField :@"trigCounts"   withLong:   [group getTotalCounts:i]];
             [aCmd addField :@"trigRates"    withDouble: [group getRate:i]];
