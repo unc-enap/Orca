@@ -1014,13 +1014,13 @@ static NSString* itemsToShip[kNumToShip*2] = {
 {
     NSNumber* oldValue = [[setPoints objectAtIndex:aIndex] objectForKey:@"setPoint"];
     [[[self undoManager] prepareWithInvocationTarget:self] setSetPoint:aIndex withValue:[oldValue floatValue]];
-    [[setPoints objectAtIndex:aIndex] setObject:[NSString stringWithFormat:@"%.6f",value] forKey:@"setPoint"];
+    [[setPoints objectAtIndex:aIndex] setObject:[NSString stringWithFormat:@"%.8f",value] forKey:@"setPoint"];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORHVcRIOModelSetPointChanged object:self];
 }
 
 - (void) setSetPointReadback: (int)aIndex withValue: (double)value
 {
-    [[setPoints objectAtIndex:aIndex] setObject:[NSString stringWithFormat:@"%.6f",value] forKey:@"readBack"];
+    [[setPoints objectAtIndex:aIndex] setObject:[NSString stringWithFormat:@"%.8f",value] forKey:@"readBack"];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORHVcRIOModelSetPointChanged object:self];
 }
 
