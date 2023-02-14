@@ -314,7 +314,7 @@
     [measurements release];
     [super dealloc];
 }
-- (void) setTimeStamp:(unsigned long)aTimeStamp
+- (void) setTimeStamp:(double)aTimeStamp
 {
     timeStamp = aTimeStamp;
 }
@@ -378,8 +378,7 @@
                               measurement,
                               [tags componentsJoinedByString:@","],
                               [measurements componentsJoinedByString:@","],
-                              timeStamp?[NSString stringWithFormat:@" %ld000000000\n",timeStamp]:@"   \n"];
-    
+                              timeStamp?[NSString stringWithFormat:@" %ld\n",(long)(timeStamp*1E9)]:@"   \n"];
     request.HTTPBody = [outputBuffer dataUsingEncoding:NSASCIIStringEncoding];
     requestSize = [requestString length];
     return request;

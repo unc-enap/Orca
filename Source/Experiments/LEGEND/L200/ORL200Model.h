@@ -59,7 +59,6 @@
 - (BOOL) validateAuxChan:(int)index;
 - (BOOL) validateCC4:(int)index;
 - (NSString*) valueForLabel:(NSString*)label fromParts:(NSArray*)parts;
-- (void) postInFluxRecord;
 
 #pragma mark •••Archival
 - (id)   initWithCoder:(NSCoder*)decoder;
