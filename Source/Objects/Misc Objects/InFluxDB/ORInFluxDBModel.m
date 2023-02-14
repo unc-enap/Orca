@@ -946,7 +946,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
                 totalSent += [aCmd requestSize];
             }
         }
-        [NSThread sleepForTimeInterval:.01];
         [pool release];
     }while(!canceled);
     [outerPool release];
