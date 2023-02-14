@@ -149,67 +149,11 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 {
     [self getRunType:[aNote object]];
 }
+
 - (void) runStarted:(NSNotification*) aNote
 {
-    double aTimeStamp = [[NSDate date]timeIntervalSince1970];
-    [self postFCAdcChanSettingsToFluxDB:@"Ge"       groupIndex:kL200DetType  timeStamp:aTimeStamp];
-    [self postFCAdcChanSettingsToFluxDB:@"SiPM"     groupIndex:kL200SiPMType timeStamp:aTimeStamp];
-    [self postFCAdcChanSettingsToFluxDB:@"VetoPMT"  groupIndex:kL200PMTType  timeStamp:aTimeStamp];
-    [self postFCAdcChanSettingsToFluxDB:@"Aux"      groupIndex:kL200AuxType  timeStamp:aTimeStamp];
+    [self postInFluxDbRecord];
 }
-
-- (void) postFCAdcChanSettingsToFluxDB:(NSString*)groupName groupIndex:(int)groupIndex timeStamp:(double)aTimeStamp
-{
-    //put all channel info into data base at run start
-    ORSegmentGroup* group = [self segmentGroup:groupIndex];
-    for(int i=0; i<[self numberSegmentsInGroup:groupIndex]; i++){
-        id aDet = [group segment:i];
-        ORFlashCamADCModel* hw = [aDet hardwareCard];
-        if(hw){
-            //channel-level stuff
-            int channel = [[aDet objectForKey:@"daq_board_ch"]intValue];
-            ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:[self objectName] org:[influxDB org]];
-            [aCmd start  :[NSString stringWithFormat:@"%@_Setup",groupName]];
-            [aCmd addTag :@"serial"         withString:[aDet objectForKey:@"serial"]];
-            [aCmd addTag :@"detType"        withString:[aDet objectForKey:@"det_type"]];
-            [aCmd addTag :@"strNumber"      withString:[aDet objectForKey:@"str_number"]];
-            [aCmd addTag :@"strPosition"    withString:[aDet objectForKey:@"str_position"]];
-            [aCmd addTag :@"cc4Chan"        withString:[aDet objectForKey:@"fe_cc4_ch"]];
-            [aCmd addTag :@"crate"          withLong:[[aDet objectForKey:@"daq_crate"]intValue]];
-            [aCmd addTag :@"boardId"        withString:[aDet objectForKey:@"daq_board_id"]];
-            [aCmd addTag :@"slot"           withLong:[[aDet objectForKey:@"daq_board_slot"]intValue]];
-            [aCmd addTag :@"channel"        withLong:[[aDet objectForKey:@"daq_board_ch"]intValue]];
-            [aCmd addTag :@"fcioID"         withString:[aDet objectForKey:@"fcioID"]];
-            [aCmd addTag :@"segmentId"      withString:[NSString stringWithFormat:@"%@%d",groupName,i]];
-
-            [aCmd addField:@"chanEnabled"    withLong:[hw chanEnabled:channel]];
-            [aCmd addField:@"trigOutEnable"  withLong:[hw trigOutEnabled:channel]];
-            [aCmd addField:@"threshold"      withLong:[hw threshold:channel]];
-            [aCmd addField:@"adcGain"        withLong:[hw adcGain:channel]];
-            [aCmd addField:@"trigGain"       withLong:[hw trigGain:channel]];
-            [aCmd addField:@"baseline"       withLong:[hw baseline:channel]];
-            [aCmd addField:@"shapeTime"      withLong:[hw shapeTime:channel]];
-            [aCmd addField:@"filterType"     withLong:[hw filterType:channel]];
-            [aCmd addField:@"flatTopTime"    withLong:[hw flatTopTime:channel]];
-            [aCmd addField:@"poleZeroTime"   withLong:[hw poleZeroTime:channel]];
-            [aCmd addField:@"postTrigger"    withLong:[hw postTrigger:channel]];
-            [aCmd addField :@"cardAddress"   withLong:[hw cardAddress]];
-            [aCmd addField :@"promSlot"      withLong:[hw promSlot]];
-            [aCmd addField :@"baseBias"      withLong:[hw baseBias]];
-            [aCmd addField :@"majorityLevel" withLong:[hw majorityLevel]];
-            [aCmd addField :@"majorityWidth" withLong:[hw majorityWidth]];
-            [aCmd addField :@"trigOutEnabled" withLong:[hw trigOutEnable]];
-            [aCmd addField :@"status"        withLong:[hw status]];
-            [aCmd addField :@"totalErrors"   withLong:[hw totalErrors]];
-
-            [aCmd setTimeStamp:aTimeStamp];
-            [influxDB executeDBCmd:aCmd];
-            
-        }
-    }
-}
-
-
 
 #pragma mark •••Accessors
 - (int) viewType
@@ -811,45 +755,109 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 }
 - (void) postInFluxDbRecord
 {
-    double aTimeStamp = (double)[[NSDate date]timeIntervalSince1970];
-    [self postInFluxDbRecord:@"Ge"       groupIndex:kL200DetType  timeStamp:aTimeStamp];
-    [self postInFluxDbRecord:@"SiPM"     groupIndex:kL200SiPMType timeStamp:aTimeStamp];
-    [self postInFluxDbRecord:@"VetoPMT"  groupIndex:kL200PMTType  timeStamp:aTimeStamp];
-    [self postInFluxDbRecord:@"Aux"      groupIndex:kL200AuxType  timeStamp:aTimeStamp];
-}
+    //called from the InFlux model
+    double aTimeStamp = [[NSDate date]timeIntervalSince1970];
+    NSMutableDictionary* allTags   = [NSMutableDictionary dictionary];
+    NSMutableDictionary* allFields = [NSMutableDictionary dictionary];
+    [self load:@"Ge"      groupIndex:kL200DetType   tags:allTags fields:allFields];
+    [self load:@"SiPM"    groupIndex:kL200SiPMType  tags:allTags fields:allFields];
+    [self load:@"VetoPMT" groupIndex:kL200PMTType   tags:allTags fields:allFields];
+    [self load:@"Aux"     groupIndex:kL200AuxType   tags:allTags fields:allFields];
 
-- (void) postInFluxDbRecord:(NSString*)groupName groupIndex:(int)groupIndex timeStamp:(double)aTimeStamp
+    //ship the items -- break up into ids
+    for(id anId in allTags){ //will be the same ids in both allTags and allFields
+        NSDictionary* someTags = [allTags objectForKey:anId];
+        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:[self objectName] org:[influxDB org]];
+        [aCmd start : @"RunTime"];
+        for(id aKey in [someTags allKeys]){
+            [aCmd addTag:aKey  withString:[someTags objectForKey:aKey]];
+        }
+        NSDictionary* someFields = [allFields objectForKey:anId];
+        for(id aKey in [someFields allKeys]){
+            [aCmd addField:aKey withDouble:[[someFields objectForKey:aKey]doubleValue]];
+        }
+        [aCmd setTimeStamp:aTimeStamp];
+        [influxDB executeDBCmd:aCmd];
+    }
+ }
+- (void) load:(NSString*)name groupIndex:(int)groupIndex tags:(NSMutableDictionary*)tags fields:(NSMutableDictionary*)fields
 {
     ORL200SegmentGroup* group = (ORL200SegmentGroup*)[self segmentGroup:groupIndex];
     for(int i=0; i<[self numberSegmentsInGroup:groupIndex]; i++){
         id aDet = [group segment:i];
         ORFlashCamADCModel* hw = [aDet hardwareCard];
         if(hw){
-            ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:[self objectName] org:[influxDB org]];
-            [aCmd start  :[NSString stringWithFormat:@"%@_RunTime",groupName]];
-            [aCmd addTag :@"serial"         withString:[aDet objectForKey:@"serial"]];
-            [aCmd addTag :@"detType"        withString:[aDet objectForKey:@"det_type"]];
-            [aCmd addTag :@"strNumber"      withString:[aDet objectForKey:@"str_number"]];
-            [aCmd addTag :@"strPosition"    withString:[aDet objectForKey:@"str_position"]];
-            [aCmd addTag :@"cc4Chan"        withString:[aDet objectForKey:@"fe_cc4_ch"]];
-            [aCmd addTag :@"crate"          withLong: [[aDet objectForKey:@"daq_crate"]intValue]];
-            [aCmd addTag :@"boardId"        withString:[aDet objectForKey:@"daq_board_id"]];
-            [aCmd addTag :@"slot"           withLong: [[aDet objectForKey:@"daq_board_slot"]intValue]];
-            [aCmd addTag :@"channel"        withLong: [[aDet objectForKey:@"daq_board_ch"]intValue]];
-            [aCmd addTag :@"fcioID"         withString:[aDet objectForKey:@"fcioID"]];
-            [aCmd addTag :@"segmentId"      withString:[NSString stringWithFormat:@"%@%d",groupName,i]];
-            [aCmd addField :@"isRunning"     withLong:[hw isRunning]];
-
-            [aCmd addField :@"trigCounts"   withLong:   [group getTotalCounts:i]];
-            [aCmd addField :@"trigRates"    withDouble: [group getRate:i]];
-            [aCmd addField :@"wfCounts"     withLong:   [group getWaveformCounts:i]];
-            [aCmd addField :@"wfRates"      withDouble: [group getWaveformRate:i]];
-            [aCmd addField :@"baseline"     withDouble: [group getBaseline:i]];
-            [aCmd setTimeStamp:aTimeStamp];
-            [influxDB executeDBCmd:aCmd];
+            short crate = [[aDet objectForKey:@"daq_crate"]intValue];
+            short slot  = [[aDet objectForKey:@"daq_board_slot"]intValue];
+            short chan  = [[aDet objectForKey:@"daq_board_ch"]intValue];
+            
+            NSString* iden = [NSString stringWithFormat:@"%02d_%02d_%02d",crate,slot,chan];
+            if(!tags[iden])tags[iden] = [NSMutableDictionary dictionary];
+            [tags[iden] setObject:iden  forKey:@"segmentId"];
+            [tags[iden] setObject:[aDet objectForKey:@"serial"]         forKey:@"serial"];
+            [tags[iden] setObject:[aDet objectForKey:@"det_type"]       forKey:@"detType"];
+            [tags[iden] setObject:[aDet objectForKey:@"str_number"]     forKey:@"strNumber"];
+            [tags[iden] setObject:[aDet objectForKey:@"str_position"]   forKey:@"strPosition"];
+            [tags[iden] setObject:[aDet objectForKey:@"fe_cc4_ch"]      forKey:@"cc4Chan"];
+            [tags[iden] setObject:[aDet objectForKey:@"daq_crate"]      forKey:@"crate"];
+            [tags[iden] setObject:[aDet objectForKey:@"daq_board_id"]   forKey:@"boardId"];
+            [tags[iden] setObject:[aDet objectForKey:@"daq_board_slot"] forKey:@"slot"];
+            [tags[iden] setObject:[aDet objectForKey:@"daq_board_ch"]   forKey:@"channel"];
+            [tags[iden] setObject:[aDet objectForKey:@"fcioID"]         forKey:@"fcioID"];
+            NSString* segId;
+            switch(groupIndex){
+                case kL200DetType:
+                    segId       = [NSString stringWithFormat:@"Ge%d",i];
+                    [tags[iden] setObject:segId forKey:@"geSegmentId"];
+                    break;
+                case kL200SiPMType:
+                    segId       = [NSString stringWithFormat:@"SiPM%d",i];
+                    [tags[iden] setObject:segId forKey:@"sipmSegmentId"];
+                    break;
+                case kL200PMTType:
+                    segId       = [NSString stringWithFormat:@"PM%d",i];
+                    [tags[iden] setObject:segId forKey:@"pmSegmentId"];
+                    break;
+                case kL200AuxType:
+                    segId       = [NSString stringWithFormat:@"Aux%d",i];
+                    [tags[iden] setObject:segId forKey:@"auxSegmentId"];
+                    break;
+            }
+            
+            if(!fields[iden])fields[iden] = [NSMutableDictionary dictionary];
+            //run time stats
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw isRunning]]              forKey:@"isRunning"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[group getTotalCounts:i]]    forKey:@"trigCounts"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[group getRate:i]]           forKey:@"trigRates"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[group getWaveformCounts:i]] forKey:@"wfCounts"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[group getWaveformRate:i]]   forKey:@"wfRates"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[group getBaseline:i]]       forKey:@"baseline"];
+            //channel level values
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw chanEnabled:chan]]       forKey:@"chanEnabled"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw trigOutEnabled:chan]]    forKey:@"trigOutEnable"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw threshold:chan]]         forKey:@"threshold"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw adcGain:chan]]           forKey:@"adcGain"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw trigGain:chan]]          forKey:@"trigGain"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw baseline:chan]]          forKey:@"baseline"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw shapeTime:chan]]         forKey:@"shapeTime"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw filterType:chan]]        forKey:@"filterType"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw flatTopTime:chan]]       forKey:@"flatTopTime"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw poleZeroTime:chan]]      forKey:@"poleZeroTime"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw postTrigger:chan]]       forKey:@"postTrigger"];
+            //card level settings
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw promSlot]]               forKey:@"promSlot"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw cardAddress]]            forKey:@"cardAddress"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw promSlot]]               forKey:@"promSlot"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw baseBias]]               forKey:@"baseBias"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw majorityLevel]]          forKey:@"majorityLevel"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw majorityWidth]]          forKey:@"majorityWidth"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw status]]                 forKey:@"status"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw totalErrors]]            forKey:@"totalErrors"];
         }
     }
 }
+
+
 @end
 
 @implementation ORL200HeaderRecordID
