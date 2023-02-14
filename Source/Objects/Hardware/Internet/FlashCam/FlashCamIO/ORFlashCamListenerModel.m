@@ -72,14 +72,14 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     [self setConfigParam:@"sparseOverwrite" withValue:[NSNumber numberWithInt:-1]];
     [self setConfigParam:@"gpsMode"         withValue:[NSNumber numberWithInt:0]];
     [self setConfigParam:@"gpsusClockAlarm" withValue:[NSNumber numberWithInt:0]];
-    [self setConfigParam:@"baselineCalib"   withValue:[NSNumber numberWithInt:-1]];
+    [self setConfigParam:@"baselineCalib"   withValue:[NSNumber numberWithInt:0]];
     [self setConfigParam:@"trigTimer1Addr"  withValue:[NSNumber numberWithInt:0]];
     [self setConfigParam:@"trigTimer1Sec"   withValue:[NSNumber numberWithInt:1]];
     [self setConfigParam:@"trigTimer2Addr"  withValue:[NSNumber numberWithInt:0]];
     [self setConfigParam:@"trigTimer2Sec"   withValue:[NSNumber numberWithInt:1]];
     [self setConfigParam:@"pileupRej"       withValue:[NSNumber numberWithDouble:0.0]];
     [self setConfigParam:@"logTime"         withValue:[NSNumber numberWithDouble:1.0]];
-    [self setConfigParam:@"incBaseline"     withValue:[NSNumber numberWithBool:YES]];
+    [self setConfigParam:@"incBaseline"     withValue:[NSNumber numberWithBool:NO]];
     [self setConfigParam:@"trigAllEnable"   withValue:[NSNumber numberWithBool:YES]];
     [self setConfigParam:@"extraFlags"      withString:@""];
     [self setConfigParam:@"extraFiles"      withValue:[NSNumber numberWithBool:NO]];
