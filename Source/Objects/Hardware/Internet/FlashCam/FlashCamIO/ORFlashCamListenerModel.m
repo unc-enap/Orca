@@ -913,8 +913,10 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
             int cur_records = reader->nrecords;
             while(reader->nrecords == cur_records && readWait &&
                   !timeToQuitReadoutThread) state = FCIOGetNextState(reader);
-            [readStateLock unlock];
-            if(!state) return;
+            if(!state){
+                [readStateLock unlock];
+                return;
+            }
         }
         if(state){
             if(![status isEqualToString:@"OK/running"]) [self setStatus:@"connected"];
@@ -1450,10 +1452,10 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     //this next line will ensure it doesn't get rescheduled at all after this point
 //    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(read) object:nil];
     @try { //MAH just in case an exception is thrown in the following block
+        readWait = true;
         NSFileHandle*  fh = [[runTask standardInput] fileHandleForWriting];
         [fh writeData:[@"\n" dataUsingEncoding: NSASCIIStringEncoding]];
-        readWait = true;
-        [ORTimer delay:2]; //been told we have to wait 2 seconds
+        [ORTimer delay:1.9]; //been told we have to wait 2 seconds
         readWait = false;
         [readStateLock lock];
         timeToQuitReadoutThread = YES;
@@ -1471,6 +1473,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     //-----------------------------------------------------
     [self disconnect:false];
     [[self taskSequencer] abortTasks];
+    [ORTimer delay:0.1];
     [taskSequencer release];
     taskSequencer = nil;
     [readOutArgs removeAllObjects];
