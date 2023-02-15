@@ -72,14 +72,14 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     [self setConfigParam:@"sparseOverwrite" withValue:[NSNumber numberWithInt:-1]];
     [self setConfigParam:@"gpsMode"         withValue:[NSNumber numberWithInt:0]];
     [self setConfigParam:@"gpsusClockAlarm" withValue:[NSNumber numberWithInt:0]];
-    [self setConfigParam:@"baselineCalib"   withValue:[NSNumber numberWithInt:-1]];
+    [self setConfigParam:@"baselineCalib"   withValue:[NSNumber numberWithInt:0]];
     [self setConfigParam:@"trigTimer1Addr"  withValue:[NSNumber numberWithInt:0]];
     [self setConfigParam:@"trigTimer1Sec"   withValue:[NSNumber numberWithInt:1]];
     [self setConfigParam:@"trigTimer2Addr"  withValue:[NSNumber numberWithInt:0]];
     [self setConfigParam:@"trigTimer2Sec"   withValue:[NSNumber numberWithInt:1]];
     [self setConfigParam:@"pileupRej"       withValue:[NSNumber numberWithDouble:0.0]];
     [self setConfigParam:@"logTime"         withValue:[NSNumber numberWithDouble:1.0]];
-    [self setConfigParam:@"incBaseline"     withValue:[NSNumber numberWithBool:YES]];
+    [self setConfigParam:@"incBaseline"     withValue:[NSNumber numberWithBool:NO]];
     [self setConfigParam:@"trigAllEnable"   withValue:[NSNumber numberWithBool:YES]];
     [self setConfigParam:@"extraFlags"      withString:@""];
     [self setConfigParam:@"extraFiles"      withValue:[NSNumber numberWithBool:NO]];
@@ -117,7 +117,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     deadTimeHistory    = [[ORTimeRate alloc] init];
     [deadTimeHistory   setLastAverageTime:[NSDate date]];
     [deadTimeHistory   setSampleTime:10];
-    taskSequencer            = nil;
+    taskSequencer      = nil;
     chanMap            = nil;
     cardMap            = nil;
     [self setRemoteInterfaces:[NSMutableArray array]];
@@ -909,9 +909,14 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
             return;
         }
         FCIOState* state = FCIOGetNextState(reader);
-        if(!state){
+        if(!state && readWait && !timeToQuitReadoutThread){
             int cur_records = reader->nrecords;
-            while(reader->nrecords == cur_records) state = FCIOGetNextState(reader);
+            while(reader->nrecords == cur_records && readWait &&
+                  !timeToQuitReadoutThread) state = FCIOGetNextState(reader);
+            if(!state){
+                [readStateLock unlock];
+                return;
+            }
         }
         if(state){
             if(![status isEqualToString:@"OK/running"]) [self setStatus:@"connected"];
@@ -979,7 +984,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
             readerRecordCount ++;
         }
         else{
-            if(![[self status] isEqualToString:@"disconnected"]){
+            if((![[self status] isEqualToString:@"disconnected"]) && !timeToQuitReadoutThread){
                 NSLogColor([NSColor redColor], @"ORFlashCamListenerModel: failed to read state on %@\n", [self streamDescription]);
                 [self disconnect:true];
                 [self runFailed];
@@ -1427,6 +1432,8 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     dataTakers = [[readOutList allObjects] retain];
     
     timeToQuitReadoutThread = NO;
+    if([[self configParam:@"extraFiles"] boolValue]) readWait = true;
+    else readWait = false;
     if(!dataPacketForThread)dataPacketForThread = [[ORDataPacket alloc]init];
     [dataPacketForThread setDataTask:[aDataPacket dataTask]];
     [NSThread detachNewThreadSelector:@selector(readThread:) toTarget:self withObject:dataPacketForThread];
@@ -1438,8 +1445,6 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
 
 - (void) runIsStopping:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
-    if(![[self configParam:@"extraFiles"] boolValue]) timeToQuitReadoutThread = YES;
-
     //-----------------------------------------------------
     //MAH 9/17/22... shut down the FlashCAM by sending an EOL
     //The periodic status read will be not be repeated if the global
@@ -1447,17 +1452,20 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     //this next line will ensure it doesn't get rescheduled at all after this point
 //    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(read) object:nil];
     @try { //MAH just in case an exception is thrown in the following block
-        //If there is a read status in flight, we will block here until it is done
-        [readStateLock lock];
+        readWait = true;
         NSFileHandle*  fh = [[runTask standardInput] fileHandleForWriting];
         [fh writeData:[@"\n" dataUsingEncoding: NSASCIIStringEncoding]];
-        [ORTimer delay:2]; //been told we have to wait 2 seconds
-        if([[self configParam:@"extraFiles"] boolValue]) timeToQuitReadoutThread = YES;
+        [ORTimer delay:1.9]; //been told we have to wait 2 seconds
+        readWait = false;
+        [readStateLock lock];
+        timeToQuitReadoutThread = YES;
         [runTask terminate];
         [runTask release]; //optional release here, could leave to the next run start???
         runTask = nil;     //make sure it can't be used
     }
     @catch(NSException* e){
+        readWait = false;
+        timeToQuitReadoutThread = YES;
     }
     @finally {
         [readStateLock unlock];
@@ -1465,6 +1473,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     //-----------------------------------------------------
     [self disconnect:false];
     [[self taskSequencer] abortTasks];
+    [ORTimer delay:0.1];
     [taskSequencer release];
     taskSequencer = nil;
     [readOutArgs removeAllObjects];
@@ -1540,7 +1549,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
         @finally {
             [pool release];
         }
-    }while(!timeToQuitReadoutThread);
+    }while(!timeToQuitReadoutThread || bufferedConfigCount > 0 || bufferedStatusCount > 0);
 }
 
 - (void) saveReadOutList:(NSFileHandle*)aFile

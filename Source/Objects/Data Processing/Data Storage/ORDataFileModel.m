@@ -898,9 +898,9 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
     if(!gzipFolder) [self setGzipFolder:[[[ORSmartFolder alloc]init] autorelease]];
     
 	[self setFilePrefix:[decoder decodeObjectForKey:@"ORDataFileModelFilePrefix"]];
+    [self setFileStaticSuffix:[decoder decodeObjectForKey:@"ORDataFileModelFileStaticSuffix"]];
 	[self setUseFolderStructure:[decoder decodeBoolForKey:@"ORDataFileModelUseFolderStructure"]];
     [self setSaveConfiguration:[decoder decodeBoolForKey:ORDataSaveConfiguration]];
-    [self setFileStaticSuffix:@""];
     
     [[self undoManager] enableUndoRegistration];
     
@@ -919,6 +919,7 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
     [encoder encodeBool:useDatedFileNamesV2    forKey:@"ORDataFileModelUseDatedFileNamesV2"];
     [encoder encodeBool:useFolderStructure	forKey:@"ORDataFileModelUseFolderStructure"];
     [encoder encodeObject:filePrefix		forKey:@"ORDataFileModelFilePrefix"];
+    [encoder encodeObject:fileStaticSuffix  forKey:@"ORDataFileModelFileStaticSuffix"];
     [encoder encodeFloat:maxFileSize		forKey:@"ORDataFileModelMaxFileSize"];
     [encoder encodeBool:limitSize			forKey:@"ORDataFileModelLimitSize"];
     [encoder encodeInteger:currentVersion   forKey:ORDataVersion];
