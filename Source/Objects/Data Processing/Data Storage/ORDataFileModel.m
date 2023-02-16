@@ -408,7 +408,7 @@ static const int currentVersion = 1;           // Current version
     [aDataFolder retain];
     [dataFolder release];
     dataFolder = aDataFolder;
-	[dataFolder setDefaultLastPathComponent:@"Data"];
+    if(![dataFolder defaultLastPathComponent]) [dataFolder setDefaultLastPathComponent:@"Data"];
 }
 
 - (ORSmartFolder *)gzipFolder
@@ -421,7 +421,7 @@ static const int currentVersion = 1;           // Current version
     [aGzipFolder retain];
     [gzipFolder release];
     gzipFolder = aGzipFolder;
-    [gzipFolder setDefaultLastPathComponent:@"Data"];
+    if(![gzipFolder defaultLastPathComponent]) [gzipFolder setDefaultLastPathComponent:@"Data"];
 }
 
 - (ORSmartFolder *)statusFolder 
@@ -434,7 +434,7 @@ static const int currentVersion = 1;           // Current version
     [aStatusFolder retain];
     [statusFolder release];
     statusFolder = aStatusFolder;
-	[statusFolder setDefaultLastPathComponent:@"Logs"];
+	if(![statusFolder defaultLastPathComponent]) [statusFolder setDefaultLastPathComponent:@"Logs"];
 }
 
 - (ORSmartFolder *)configFolder 
@@ -447,7 +447,7 @@ static const int currentVersion = 1;           // Current version
     [aConfigFolder retain];
     [configFolder release];
     configFolder = aConfigFolder;
-	[configFolder setDefaultLastPathComponent:@"Configurations"];
+	if(![configFolder defaultLastPathComponent]) [configFolder setDefaultLastPathComponent:@"Configurations"];
 }
 
 - (void) setFileName:(NSString*)aFileName

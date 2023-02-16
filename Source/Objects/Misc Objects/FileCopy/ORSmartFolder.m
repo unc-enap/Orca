@@ -68,6 +68,7 @@ NSString* ORFolderPercentDoneChanged                = @"ORFolderPercentDoneChang
     [self setRemoteHost:@""];
     [self setRemoteUserName:@""];
     [self setPassWord:@""];
+    defaultLastPathComponent = nil;
 
     return self;
 }
@@ -818,6 +819,7 @@ static NSString* ORFolderRemoteUserName   = @"ORFolderRemoteUserName";
 static NSString* ORFolderPassWord         = @"ORFolderPassWord";
 static NSString* ORFolderVerbose	  = @"ORFolderVerbose";
 static NSString* ORFolderDirectoryName    = @"ORFolderDirectoryName";
+static NSString* ORFolderDefaultLastPathComponent = @"ORFolderDefaultLastPathComponent";
 
 - (id) initWithCoder:(NSCoder*)decoder
 {
@@ -840,6 +842,8 @@ static NSString* ORFolderDirectoryName    = @"ORFolderDirectoryName";
     [self setDirectoryName:[decoder decodeObjectForKey:ORFolderDirectoryName]];
     [self setTitle:[decoder decodeObjectForKey:ORFolderTitle]];
     [self setTransferType:[decoder decodeIntForKey:@"transferType"]];
+    id obj = [decoder decodeObjectForKey:ORFolderDefaultLastPathComponent];
+    if(obj) [self setDefaultLastPathComponent:(NSString*)obj];
     [[self undoManager] enableUndoRegistration];
     
     [self registerNotificationObservers];
@@ -859,6 +863,8 @@ static NSString* ORFolderDirectoryName    = @"ORFolderDirectoryName";
     [encoder encodeObject:directoryName forKey:ORFolderDirectoryName];
     [encoder encodeObject:title forKey:ORFolderTitle];
     [encoder encodeInteger:transferType forKey:@"transferType"];
+    if(defaultLastPathComponent)
+        [encoder encodeObject:defaultLastPathComponent forKey:ORFolderDefaultLastPathComponent];
 }
 
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary
