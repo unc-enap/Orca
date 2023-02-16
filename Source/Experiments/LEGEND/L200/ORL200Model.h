@@ -36,6 +36,7 @@
     uint32_t runType;
     ORInFluxDBModel* influxDB;
     int influxIndex;
+    bool updateDataFilePath;
 }
 
 #pragma mark •••Accessors
@@ -49,6 +50,7 @@
 - (void) setAuxChanPositions;
 - (void) findInFluxDB;
 - (void) runTypeChanged:(NSNotification*) aNote;
+- (void) updateDataFilePath:(NSNotification*)aNote;
 
 #pragma mark •••Segment Group Methods
 - (void) showDataSet:(NSString*)name forSet:(int)aSet segment:(int)index;

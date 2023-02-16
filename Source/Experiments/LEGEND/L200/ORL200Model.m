@@ -27,6 +27,9 @@
 #import "ORRunModel.h"
 #import "ORCouchDBModel.h"
 #import "ORFlashCamCrateModel.h"
+#import "ORDataFileModel.h"
+#import "ORSmartFolder.h"
+#import "ORAppDelegate.h"
 
 static NSString* L200DBConnector     = @"L200DBConnector";
 NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
@@ -142,7 +145,15 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
                          name : ORRunStartSubRunNotification
                        object : nil];
 
+    [notifyCenter addObserver : self
+                     selector : @selector(updateDataFilePath:)
+                         name : ORDataFileModelFilePrefixChanged
+                       object : nil];
     
+    [notifyCenter addObserver : self
+                     selector : @selector(updateDataFilePath:)
+                         name : ORFolderDirectoryNameChangedNotification
+                       object : nil];
 }
 
 - (void) runTypeChanged:(NSNotification*) aNote
@@ -153,6 +164,97 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 - (void) runStarted:(NSNotification*) aNote
 {
     [self postInFluxDbRecord];
+}
+
+- (void) updateDataFilePath:(NSNotification*)aNote
+{
+    // update the data file path if the file prefix was changed or the data directory was changed
+    ORDataFileModel* dfm = nil;
+    if([[aNote object] isKindOfClass:NSClassFromString(@"ORDataFileModel")]){
+        dfm = (ORDataFileModel*) [aNote object];
+    }
+    else if([[aNote object] isKindOfClass:NSClassFromString(@"ORSmartFolder")] && updateDataFilePath){
+        NSArray* obj = [[(ORAppDelegate*)[NSApp delegate] document]
+                        collectObjectsWithClassName:@"ORDataFileModel"];
+        for(id df in obj)
+            if([(ORDataFileModel*)df dataFolder] == (ORSmartFolder*) [aNote object]) dfm = (ORDataFileModel*) df;
+    }
+    if(!dfm) return;
+    // if there is no file prefix, nothing to do
+    NSString* prefix = [dfm filePrefix];
+    if(!prefix) return;
+    // get the current full path
+    NSString* path = @"";
+    NSString* dfmdir = [[dfm dataFolder] directoryName];
+    if([dfmdir rangeOfString:@"/" options:NSBackwardsSearch].location == [dfmdir length]-1)
+        path = [NSString stringWithFormat:@"%@%@", dfmdir, [[dfm dataFolder] defaultLastPathComponent]];
+    else
+        path = [NSString stringWithFormat:@"%@/%@", dfmdir, [[dfm dataFolder] defaultLastPathComponent]];
+    if(!path) return;
+    // search for period/run pattern in the file prefix
+    NSError* error = NULL;
+    NSRegularExpression* regex0 = [NSRegularExpression regularExpressionWithPattern:@"p\\d\\d-r\\d\\d\\d"
+                                                                            options:0
+                                                                              error:&error];
+    if(error) return;
+    NSArray* matches0 = [regex0 matchesInString:prefix options:0 range:NSMakeRange(0, [prefix length])];
+    NSArray* pr;
+    if([matches0 count] > 1 || [matches0 count] == 0) pr = nil;
+    else{
+        NSRange range0 = [[matches0 objectAtIndex:0] range];
+        pr = [[prefix substringWithRange:range0] componentsSeparatedByString:@"-"];
+    }
+    // search for period/run pattern matches in the current path
+    NSRegularExpression* regex1 = [NSRegularExpression regularExpressionWithPattern:@"p\\d\\d/r\\d\\d\\d"
+                                                                            options:0
+                                                                              error:&error];
+    if(error) return;
+    NSArray* matches1 = [regex1 matchesInString:path options:0 range:NSMakeRange(0, [path length])];
+    NSMutableString* dir = [NSMutableString string];
+    NSRange range1 = NSMakeRange(0, 0);
+    if([matches1 count] == 0) [dir appendString:path];
+    else if([matches1 count] == 1){
+        range1 = [[matches1 objectAtIndex:0] range];
+        [dir appendString:[path substringWithRange:NSMakeRange(0, range1.location)]];
+    }
+    else return;
+    // if there was a match in the file prefix, append the period/run. otherwise revert to base path.
+    if(pr){
+        if([dir rangeOfString:@"/" options:NSBackwardsSearch].location != [dir length]-1) [dir appendString:@"/"];
+        if([[aNote object] isKindOfClass:NSClassFromString(@"ORSmartFolder")] && [matches1 count] == 0)
+            [dir appendString:@"Data/"];
+        [dir appendString:[NSString stringWithFormat:@"%@/", [pr objectAtIndex:0]]];
+        [dir appendString:[pr objectAtIndex:1]];
+        if(range1.length > 0)
+            [dir appendString:[path substringWithRange:NSMakeRange(range1.location+range1.length,
+                                                                   [path length]-range1.location-range1.length)]];
+        [[dfm dataFolder] setDefaultLastPathComponent:@""];
+        updateDataFilePath = false;
+        [[dfm dataFolder] setDirectoryName:dir];
+    }
+    else{
+        [[dfm dataFolder] setDefaultLastPathComponent:@"Data"];
+        NSRange range2 = [dir rangeOfString:@"/Data" options:NSBackwardsSearch];
+        if(range2.location + range2.length == [dir length])
+            dir = [NSMutableString stringWithString:[dir substringWithRange:NSMakeRange(0, range2.location)]];
+        range2 = [dir rangeOfString:@"/Data/" options:NSBackwardsSearch];
+        if(range2.location + range2.length == [dir length])
+            dir = [NSMutableString stringWithString:[dir substringWithRange:NSMakeRange(0, range2.location)]];
+    }
+    // make sure the directory we will now write to exists
+    BOOL isdir;
+    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:[dir stringByExpandingTildeInPath]
+                                                       isDirectory:&isdir];
+    if(!exists || !isdir){
+        NSLogColor([NSColor redColor], @"ORL200Model: data directory %@ does not exist, defaulting to ~/\n", dir);
+        dir = [NSMutableString stringWithString:@"~/"];
+    }
+    // if defaulting to the base path, set the dir name after the above check to ensure correct default behavior
+    if(!pr){
+        updateDataFilePath = false;
+        [[dfm dataFolder] setDirectoryName:dir];
+    }
+    updateDataFilePath = true;
 }
 
 #pragma mark •••Accessors
@@ -683,6 +785,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     [[self undoManager] disableUndoRegistration];
     [self setViewType:[decoder decodeIntForKey:@"viewType"]];
     [[self undoManager] enableUndoRegistration];
+    updateDataFilePath = true;
     return self;
 }
 
