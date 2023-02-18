@@ -58,7 +58,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 @interface ORInFluxDBModel (private)
 - (void) updateProcesses;
 - (void) updateExperiment;
-- (void) updateExperimentMetrics;
 - (void) updateHistory;
 - (void) updateMachineRecord;
 - (void) updateRunState:(ORRunModel*)rc;
@@ -570,7 +569,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         [self updateRunState:rc];
         [runNumberString release];
         runNumberString = [rc fullRunNumberString];
-        [self updateExperimentMetrics];
+        [self updateExperiment];
     }
 }
 
@@ -802,19 +801,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         [aMeasurement addField:@"HwAddress"    withString:macAddress()];
         [aMeasurement addField:@"IPAddress"    withString:thisHostAddress];
         [self executeDBCmd:aMeasurement];
-    }
-}
-
-- (void) updateExperimentMetrics
-{
-    if(!stealthMode && runNumberString!=nil){
-        @try {
-            ORExperimentModel* experiment = [self nextObject];
-            [experiment postCouchDBRecord];
-        }
-        @catch(NSException* e){
-            
-        }
     }
 }
 
