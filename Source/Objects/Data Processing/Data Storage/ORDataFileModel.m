@@ -34,6 +34,7 @@ NSString* ORDataFileModelUseDatedFileNamesChanged       = @"ORDataFileModelUseDa
 NSString* ORDataFileModelUseDatedFileNamesV2Changed     = @"ORDataFileModelUseDatedFileNamesV2Changed";
 NSString* ORDataFileModelUseFolderStructureChanged      = @"ORDataFileModelUseFolderStructureChanged";
 NSString* ORDataFileModelFilePrefixChanged              = @"ORDataFileModelFilePrefixChanged";
+NSString* ORDataFileModelFileStaticSuffixChanged        = @"ORDataFileModelFileStaticSuffixChanged";
 NSString* ORDataFileModelFileSegmentChanged             = @"ORDataFileModelFileSegmentChanged";
 NSString* ORDataFileModelMaxFileSizeChanged             = @"ORDataFileModelMaxFileSizeChanged";
 NSString* ORDataFileModelLimitSizeChanged               = @"ORDataFileModelLimitSizeChanged";
@@ -338,6 +339,7 @@ static const int currentVersion = 1;           // Current version
     if(aFileSuffix == nil)aFileSuffix = @"";
     [fileStaticSuffix autorelease];
     fileStaticSuffix = [aFileSuffix copy];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileModelFileStaticSuffixChanged object:self];
 }
 
 - (int) fileSegment
@@ -406,7 +408,7 @@ static const int currentVersion = 1;           // Current version
     [aDataFolder retain];
     [dataFolder release];
     dataFolder = aDataFolder;
-	[dataFolder setDefaultLastPathComponent:@"Data"];
+    if(![dataFolder defaultLastPathComponent]) [dataFolder setDefaultLastPathComponent:@"Data"];
 }
 
 - (ORSmartFolder *)gzipFolder
@@ -419,7 +421,7 @@ static const int currentVersion = 1;           // Current version
     [aGzipFolder retain];
     [gzipFolder release];
     gzipFolder = aGzipFolder;
-    [gzipFolder setDefaultLastPathComponent:@"Data"];
+    if(![gzipFolder defaultLastPathComponent]) [gzipFolder setDefaultLastPathComponent:@"Data"];
 }
 
 - (ORSmartFolder *)statusFolder 
@@ -432,7 +434,7 @@ static const int currentVersion = 1;           // Current version
     [aStatusFolder retain];
     [statusFolder release];
     statusFolder = aStatusFolder;
-	[statusFolder setDefaultLastPathComponent:@"Logs"];
+	if(![statusFolder defaultLastPathComponent]) [statusFolder setDefaultLastPathComponent:@"Logs"];
 }
 
 - (ORSmartFolder *)configFolder 
@@ -445,7 +447,7 @@ static const int currentVersion = 1;           // Current version
     [aConfigFolder retain];
     [configFolder release];
     configFolder = aConfigFolder;
-	[configFolder setDefaultLastPathComponent:@"Configurations"];
+	if(![configFolder defaultLastPathComponent]) [configFolder setDefaultLastPathComponent:@"Configurations"];
 }
 
 - (void) setFileName:(NSString*)aFileName
@@ -896,9 +898,9 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
     if(!gzipFolder) [self setGzipFolder:[[[ORSmartFolder alloc]init] autorelease]];
     
 	[self setFilePrefix:[decoder decodeObjectForKey:@"ORDataFileModelFilePrefix"]];
+    [self setFileStaticSuffix:[decoder decodeObjectForKey:@"ORDataFileModelFileStaticSuffix"]];
 	[self setUseFolderStructure:[decoder decodeBoolForKey:@"ORDataFileModelUseFolderStructure"]];
     [self setSaveConfiguration:[decoder decodeBoolForKey:ORDataSaveConfiguration]];
-    [self setFileStaticSuffix:@""];
     
     [[self undoManager] enableUndoRegistration];
     
@@ -917,6 +919,7 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
     [encoder encodeBool:useDatedFileNamesV2    forKey:@"ORDataFileModelUseDatedFileNamesV2"];
     [encoder encodeBool:useFolderStructure	forKey:@"ORDataFileModelUseFolderStructure"];
     [encoder encodeObject:filePrefix		forKey:@"ORDataFileModelFilePrefix"];
+    [encoder encodeObject:fileStaticSuffix  forKey:@"ORDataFileModelFileStaticSuffix"];
     [encoder encodeFloat:maxFileSize		forKey:@"ORDataFileModelMaxFileSize"];
     [encoder encodeBool:limitSize			forKey:@"ORDataFileModelLimitSize"];
     [encoder encodeInteger:currentVersion   forKey:ORDataVersion];
