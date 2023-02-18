@@ -828,7 +828,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
             [fields[iden] setObject:[NSNumber numberWithDouble:[hw threshold:chan]]         forKey:@"threshold"];
             [fields[iden] setObject:[NSNumber numberWithDouble:[hw adcGain:chan]]           forKey:@"adcGain"];
             [fields[iden] setObject:[NSNumber numberWithDouble:[hw trigGain:chan]]          forKey:@"trigGain"];
-            [fields[iden] setObject:[NSNumber numberWithDouble:[hw baseline:chan]]          forKey:@"baselineBias"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw baseline:chan]]          forKey:@"baseline"];
             [fields[iden] setObject:[NSNumber numberWithDouble:[hw shapeTime:chan]]         forKey:@"shapeTime"];
             [fields[iden] setObject:[NSNumber numberWithDouble:[hw filterType:chan]]        forKey:@"filterType"];
             [fields[iden] setObject:[NSNumber numberWithDouble:[hw flatTopTime:chan]]       forKey:@"flatTopTime"];
