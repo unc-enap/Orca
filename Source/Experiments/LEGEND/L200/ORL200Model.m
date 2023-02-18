@@ -838,7 +838,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
             [fields[iden] setObject:[NSNumber numberWithDouble:[hw promSlot]]               forKey:@"promSlot"];
             [fields[iden] setObject:[NSNumber numberWithDouble:[hw cardAddress]]            forKey:@"cardAddress"];
             [fields[iden] setObject:[NSNumber numberWithDouble:[hw promSlot]]               forKey:@"promSlot"];
-            [fields[iden] setObject:[NSNumber numberWithDouble:[hw baseBias]]               forKey:@"baseBias"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw baseLineBias]]               forKey:@"baseBias"];
             [fields[iden] setObject:[NSNumber numberWithDouble:[hw majorityLevel]]          forKey:@"majorityLevel"];
             [fields[iden] setObject:[NSNumber numberWithDouble:[hw majorityWidth]]          forKey:@"majorityWidth"];
             [fields[iden] setObject:[NSNumber numberWithDouble:[hw status]]                 forKey:@"status"];
