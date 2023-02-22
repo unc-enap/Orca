@@ -914,13 +914,13 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
                 break;
         }
         //run time stats
-        if([[ORGlobal sharedGlobal]runInProgress]){
+        //if([[ORGlobal sharedGlobal]runInProgress]){
             [fields[iden] setObject:[NSNumber numberWithDouble:[group getTotalCounts:i]]    forKey:@"trigCounts"];
             [fields[iden] setObject:[NSNumber numberWithDouble:[group getRate:i]]           forKey:@"trigRates"];
             [fields[iden] setObject:[NSNumber numberWithDouble:[group getWaveformCounts:i]] forKey:@"wfCounts"];
             [fields[iden] setObject:[NSNumber numberWithDouble:[group getWaveformRate:i]]   forKey:@"wfRates"];
             [fields[iden] setObject:[NSNumber numberWithDouble:[group getBaseline:i]]       forKey:@"Baseline"];
-        }
+       // }
         [fields[iden] setObject:[NSNumber numberWithDouble:hw!=nil]                     forKey:@"HwPresent"];
         if(hw){
             //channel level values
@@ -945,7 +945,6 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
             [fields[iden] setObject:[NSNumber numberWithDouble:[hw majorityLevel]]          forKey:@"majorityLevel"];
             [fields[iden] setObject:[NSNumber numberWithDouble:[hw majorityWidth]]          forKey:@"majorityWidth"];
             [fields[iden] setObject:[NSNumber numberWithDouble:[hw status]]                 forKey:@"status"];
-            [fields[iden] setObject:[NSNumber numberWithDouble:[hw totalErrors]]            forKey:@"totalErrors"];
             [fields[iden] setObject:[NSNumber numberWithDouble:[hw totalErrors]]            forKey:@"totalErrors"];
         }
     }
