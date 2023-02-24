@@ -753,7 +753,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     else
         [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:@"ORFlashCamADCModel"];
     location = (([self crateNumber] & 0x1f) << 27) | (([self slot] & 0x1f) << 22);
-    location = location | (([self cardAddress] & 0xff) << 14);
+    location = location | ((([self cardAddress] & 0xff0) >> 4) << 14);
     [self startRates];
     isRunning = true;
 }
