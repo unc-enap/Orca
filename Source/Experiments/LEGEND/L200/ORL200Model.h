@@ -36,7 +36,6 @@
     uint32_t runType;
     ORInFluxDBModel* influxDB;
     int influxIndex;
-    BOOL linked;
     bool updateDataFilePath;
 }
 
