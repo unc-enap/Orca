@@ -97,6 +97,9 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [experimentName  release];
     [runNumberString release];
     [errorString     release];
+    [connectionAlarm clearAlarm];
+    [connectionAlarm release];
+
     [super dealloc];
 }
 
@@ -251,6 +254,15 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 {
     connectionOK = NO;
     [self setErrorString:@"No Connection"];
+    if(!connectionAlarm){
+        NSString* s = [NSString stringWithFormat:@"InFlux (%u) Unable to Connect",[self uniqueIdNumber]];
+        connectionAlarm = [[ORAlarm alloc] initWithName:s severity:kImportantAlarm];
+        [connectionAlarm setSticky:YES];
+        [connectionAlarm setHelpString:@"No InfluxDB connection.\nORCA has tried repeatedly and has been unable to reconnect. Intervention is required. Contact your database manager.\n\nThis alarm will not go away until the problem is cleared. Acknowledging the alarm will silence it."];
+        [connectionAlarm postAlarm];
+    }
+    
+    
     [self performSelector:@selector(setConnectionStatusOK) withObject:nil afterDelay:60];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBConnectionStatusChanged object:self];
 }
@@ -258,6 +270,10 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) setConnectionStatusOK
 {
     connectionOK = YES;
+    [connectionAlarm clearAlarm];
+    [connectionAlarm release];
+    connectionAlarm = nil;
+
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(setConnectionStatusOK) object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBConnectionStatusChanged object:self];
 }
