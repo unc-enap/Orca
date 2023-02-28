@@ -362,7 +362,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     for(int i=0; i<[self numberSegmentsInGroup:kL200AuxType]; i++){
         NSString* serial = [[group segment:i] objectForKey:@"serial"];
         NSString* name = @"-";
-        if([serial length] > 4 && [[serial lowercaseString] hasPrefix:@"Aux-"]){
+        if([serial length] > 4 && [[serial lowercaseString] hasPrefix:@"Aux_"]){
             name = [serial substringWithRange:NSMakeRange(4, [serial length]-4)];
             while([name length] > 1 && [name hasPrefix:@"0"])
                 name = [name substringWithRange:NSMakeRange(1, [name length]-1)];
