@@ -35,6 +35,7 @@
     IBOutlet NSMatrix* flatTopTimeMatrix;
     IBOutlet NSMatrix* poleZeroTimeMatrix;
     IBOutlet NSMatrix* postTriggerMatrix;
+    IBOutlet NSMatrix* baselineSlewMatrix;;
     IBOutlet NSTextField* baseBiasTextField;
     IBOutlet NSTextField* shapingLabel;
     IBOutlet NSTextField* flatTopLabel;
@@ -84,6 +85,7 @@
 - (void) flatTopTimeChanged:(NSNotification*)note;
 - (void) poleZeroTimeChanged:(NSNotification*)note;
 - (void) postTriggerChanged:(NSNotification*)note;
+- (void) baselineSlewChanged:(NSNotification*)note;
 - (void) baseBiasChanged:(NSNotification*)note;
 - (void) majorityLevelChanged:(NSNotification*)note;
 - (void) majorityWidthChanged:(NSNotification*)note;
@@ -110,6 +112,7 @@
 - (IBAction) flatTopTimeAction:(id)sender;
 - (IBAction) poleZeroTimeAction:(id)sender;
 - (IBAction) postTriggerAction:(id)sender;
+- (IBAction) baselineSlewAction:(id)sender;
 - (IBAction) baseBiasAction:(id)sender;
 - (IBAction) majorityLevelAction:(id)sender;
 - (IBAction) majorityWidthAction:(id)sender;
