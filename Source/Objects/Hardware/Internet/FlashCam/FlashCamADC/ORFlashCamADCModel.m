@@ -715,12 +715,10 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
         [flags addObjectsFromArray:@[@"-ag",     [self chFlag:j withInt:adcGain[i]]]];
         [flags addObjectsFromArray:@[@"-tgm",    [self chFlag:j withFloat:trigGain[i]]]];
         [flags addObjectsFromArray:@[@"-pthr",   [self chFlag:j withFloat:postTrigger[i]]]];
-        if([self fwType] == 0){
-            [flags addObjectsFromArray:@[@"-gbs",    [self chFlag:j withInt:baselineSlew[i]]]];
-        }
-        else if([self fwType] == 1){
+        if([self fwType] == 1){
             [flags addObjectsFromArray:@[@"-gs",     [self chFlag:j withInt:shapeTime[i]]]];
             [flags addObjectsFromArray:@[@"-gpz",    [self chFlag:j withFloat:poleZeroTime[i]]]];
+            [flags addObjectsFromArray:@[@"-gbs",    [self chFlag:j withInt:baselineSlew[i]]]];
             if([self filterType:i] == 0)
                 [flags addObjectsFromArray:@[@"-gf", [self chFlag:j withFloat:0.0]]];
             else
@@ -948,7 +946,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
         [encoder encodeFloat:flatTopTime[i]   forKey:[NSString stringWithFormat:@"flatTopTime%i",     i]];
         [encoder encodeFloat:poleZeroTime[i]  forKey:[NSString stringWithFormat:@"poleZeroTime%i",    i]];
         [encoder encodeFloat:postTrigger[i]   forKey:[NSString stringWithFormat:@"postTrigger%i",     i]];
-        [encoder encodeFloat:baselineSlew[i]  forKey:[NSString stringWithFormat:@"baselineSlew%i",    i]];
+        [encoder encodeInt:baselineSlew[i]  forKey:[NSString stringWithFormat:@"baselineSlew%i",    i]];
     }
     [encoder encodeInt:baseBias               forKey:@"baseBias"];
     [encoder encodeInt:majorityLevel          forKey:@"majorityLevel"];
