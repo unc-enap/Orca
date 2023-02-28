@@ -550,13 +550,13 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
 - (void) cleanUpRunStatus
 {
-    //delete/cleanup the running status records. No need to keep.
+    //delete/cleanup the running status records. No need to keep around forever.
     ORInFluxDBDeleteSelectedData* aDeleteCmd;
-    NSDate* slightlyInFuture = [NSDate dateWithTimeIntervalSinceNow:+2];
+    NSDate* inThePast = [NSDate dateWithTimeIntervalSinceNow:-120];
     aDeleteCmd = [ORInFluxDBDeleteSelectedData deleteSelectedData:@"ORCA"
                                                               org:org
                                                             start:@"2023-01-01T00:00:00Z"
-                                                             stop:[NSDate dateInRFC3339Format:slightlyInFuture]
+                                                             stop:[NSDate dateInRFC3339Format:inThePast]
                                                         predicate:@"_measurement=\"CurrentRun\""];
       [self executeDBCmd:aDeleteCmd];
 }
