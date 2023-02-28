@@ -53,6 +53,8 @@
     //----http vars--------
     NSString*      authToken;
     bool           connectionOK;
+    ORAlarm*       connectionAlarm;
+
 }
 
 #pragma mark ***Initialization

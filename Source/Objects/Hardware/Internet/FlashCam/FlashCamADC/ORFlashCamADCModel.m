@@ -38,6 +38,7 @@ NSString* ORFlashCamADCModelFilterTypeChanged            = @"ORFlashCamADCModelF
 NSString* ORFlashCamADCModelFlatTopTimeChanged           = @"ORFlashCamADCModelFlatTopTimeChanged";
 NSString* ORFlashCamADCModelPoleZeroTimeChanged          = @"ORFlashCamADCModelPoleZeroTimeChanged";
 NSString* ORFlashCamADCModelPostTriggerChanged           = @"ORFlashCamADCModelPostTriggerChanged";
+NSString* ORFlashCamADCModelBaselineSlewChanged          = @"ORFlashCamADCModelBaselineSlewChanged";
 NSString* ORFlashCamADCModelMajorityLevelChanged         = @"ORFLashCamADCModelMajorityLevelChanged";
 NSString* ORFlashCamADCModelMajorityWidthChanged         = @"ORFlashCamADCModelMajorityWidthChanged";
 NSString* ORFlashCamADCModelRateGroupChanged             = @"ORFlashCamADCModelRateGroupChanged";
@@ -69,6 +70,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
         [self setFlatTopTime:i    withValue:16.0*128];
         [self setPoleZeroTime:i   withValue:16.0*4096*6];
         [self setPostTrigger:i    withValue:0.0];
+        [self setBaselineSlew:i   withValue:0];
         wfCount[i]   = 0;
         trigCount[i] = 0;
         baselineHistory[i] = [[ORTimeRate alloc] init];
@@ -298,6 +300,12 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
 {
     if(chan >= [self numberOfChannels]) return 0.0;
     return postTrigger[chan];
+}
+
+- (int) baselineSlew:(unsigned int)chan
+{
+    if(chan >= [self numberOfChannels]) return 0;
+    return baselineSlew[chan];
 }
 
 - (int) baseBias
@@ -531,6 +539,17 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
                                                       userInfo:info];
 }
 
+- (void) setBaselineSlew:(unsigned int)chan withValue:(int)slew
+{
+    if(chan >= [self numberOfChannels]) return;
+    [[[self undoManager] prepareWithInvocationTarget:self] setBaselineSlew:chan withValue:baselineSlew[chan]];
+    baselineSlew[chan] = MIN(MAX(-8, slew), 8);
+    NSDictionary* info = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:chan] forKey:@"Channel"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamADCModelBaselineSlewChanged
+                                                        object:self
+                                                      userInfo:info];
+}
+
 - (void) setBaseBias:(int)bias
 {
     if(bias == baseBias) return;
@@ -696,7 +715,10 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
         [flags addObjectsFromArray:@[@"-ag",     [self chFlag:j withInt:adcGain[i]]]];
         [flags addObjectsFromArray:@[@"-tgm",    [self chFlag:j withFloat:trigGain[i]]]];
         [flags addObjectsFromArray:@[@"-pthr",   [self chFlag:j withFloat:postTrigger[i]]]];
-        if([self fwType] == 1){
+        if([self fwType] == 0){
+            [flags addObjectsFromArray:@[@"-gbs",    [self chFlag:j withInt:baselineSlew[i]]]];
+        }
+        else if([self fwType] == 1){
             [flags addObjectsFromArray:@[@"-gs",     [self chFlag:j withInt:shapeTime[i]]]];
             [flags addObjectsFromArray:@[@"-gpz",    [self chFlag:j withFloat:poleZeroTime[i]]]];
             if([self filterType:i] == 0)
@@ -876,6 +898,8 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
                     withValue:[decoder decodeFloatForKey:[NSString stringWithFormat:@"poleZeroTime%i",  i]]];
         [self setPostTrigger:i
                    withValue:[decoder decodeFloatForKey:[NSString stringWithFormat:@"postTrigger%i", i]]];
+        [self setBaselineSlew:i
+                    withValue:[decoder decodeIntForKey:[NSString stringWithFormat:@"baselineSlew%i", i]]];
         if(!baselineHistory[i]){
             baselineHistory[i] = [[ORTimeRate alloc] init];
             [baselineHistory[i] setLastAverageTime:[NSDate date]];
@@ -924,6 +948,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
         [encoder encodeFloat:flatTopTime[i]   forKey:[NSString stringWithFormat:@"flatTopTime%i",     i]];
         [encoder encodeFloat:poleZeroTime[i]  forKey:[NSString stringWithFormat:@"poleZeroTime%i",    i]];
         [encoder encodeFloat:postTrigger[i]   forKey:[NSString stringWithFormat:@"postTrigger%i",     i]];
+        [encoder encodeFloat:baselineSlew[i]  forKey:[NSString stringWithFormat:@"baselineSlew%i",    i]];
     }
     [encoder encodeInt:baseBias               forKey:@"baseBias"];
     [encoder encodeInt:majorityLevel          forKey:@"majorityLevel"];
@@ -949,6 +974,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     [self addCurrentState:dict floatArray:flatTopTime        forKey:@"FlatTopTime"];
     [self addCurrentState:dict floatArray:poleZeroTime       forKey:@"PoleZeroTime"];
     [self addCurrentState:dict floatArray:postTrigger        forKey:@"PostTrigger"];
+    [self addCurrentState:dict intArray:baselineSlew         forKey:@"BaselineSlew"];
     [dict setObject:[NSNumber numberWithInt:baseBias]        forKey:@"BaseBias"];
     [dict setObject:[NSNumber numberWithInt:majorityLevel]   forKey:@"MajorityLevel"];
     [dict setObject:[NSNumber numberWithInt:majorityWidth]   forKey:@"MajorityWidth"];
@@ -1071,6 +1097,13 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     [p setCanBeRamped:YES];
     [a addObject:p];
     
+    p = [[[ORHWWizParam alloc] init] autorelease];
+    [p setName:@"Baseline Slew"];
+    [p setFormat:@"##0" upperLimit:8 lowerLimit:-8 stepSize:1 units:@""];
+    [p setSetMethod:@selector(setBaselineSlew:withValue:) getMethod:@selector(baselineSlew:)];
+    [p setCanBeRamped:YES];
+    [a addObject:p];
+    
     return a;
 }
 
@@ -1129,6 +1162,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
         [chval setObject:[NSNumber numberWithFloat:[self flatTopTime:i]]   forKey:@"flatTopTime"];
         [chval setObject:[NSNumber numberWithFloat:[self poleZeroTime:i]]  forKey:@"poleZeroTime"];
         [chval setObject:[NSNumber numberWithFloat:[self postTrigger:i]]   forKey:@"postTrigger"];
+        [chval setObject:[NSNumber numberWithInt:[self baselineSlew:i]]    forKey:@"baselineSlew"];
         if([self enableBaselineHistory]){
             NSArray* baselines = [[self baselineHistory:i] ratesAsArray];
             int start = MAX(0, (int) [baselines count]-1024);

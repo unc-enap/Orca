@@ -97,6 +97,9 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [experimentName  release];
     [runNumberString release];
     [errorString     release];
+    [connectionAlarm clearAlarm];
+    [connectionAlarm release];
+
     [super dealloc];
 }
 
@@ -251,6 +254,15 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 {
     connectionOK = NO;
     [self setErrorString:@"No Connection"];
+    if(!connectionAlarm){
+        NSString* s = [NSString stringWithFormat:@"InFlux (%u) Unable to Connect",[self uniqueIdNumber]];
+        connectionAlarm = [[ORAlarm alloc] initWithName:s severity:kImportantAlarm];
+        [connectionAlarm setSticky:YES];
+        [connectionAlarm setHelpString:@"No InfluxDB connection.\nORCA has tried repeatedly and has been unable to reconnect. Intervention is required. Contact your database manager.\n\nThis alarm will not go away until the problem is cleared. Acknowledging the alarm will silence it."];
+        [connectionAlarm postAlarm];
+    }
+    
+    
     [self performSelector:@selector(setConnectionStatusOK) withObject:nil afterDelay:60];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBConnectionStatusChanged object:self];
 }
@@ -258,6 +270,10 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) setConnectionStatusOK
 {
     connectionOK = YES;
+    [connectionAlarm clearAlarm];
+    [connectionAlarm release];
+    connectionAlarm = nil;
+
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(setConnectionStatusOK) object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBConnectionStatusChanged object:self];
 }
@@ -550,13 +566,13 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
 - (void) cleanUpRunStatus
 {
-    //delete/cleanup the running status records. No need to keep.
+    //delete/cleanup the running status records. No need to keep around forever.
     ORInFluxDBDeleteSelectedData* aDeleteCmd;
-    NSDate* slightlyInFuture = [NSDate dateWithTimeIntervalSinceNow:+2];
+    NSDate* inThePast = [NSDate dateWithTimeIntervalSinceNow:-120];
     aDeleteCmd = [ORInFluxDBDeleteSelectedData deleteSelectedData:@"ORCA"
                                                               org:org
                                                             start:@"2023-01-01T00:00:00Z"
-                                                             stop:[NSDate dateInRFC3339Format:slightlyInFuture]
+                                                             stop:[NSDate dateInRFC3339Format:inThePast]
                                                         predicate:@"_measurement=\"CurrentRun\""];
       [self executeDBCmd:aDeleteCmd];
 }
