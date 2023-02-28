@@ -49,7 +49,6 @@
     float flatTopTime[kMaxFlashCamADCChannels];   // gf
     float poleZeroTime[kMaxFlashCamADCChannels];  // gpz
     float postTrigger[kMaxFlashCamADCChannels];   // pthr
-    int baselineSlew[kMaxFlashCamADCChannels];    // gbs
     int baseBias;                                 // blbias
     int majorityLevel;                            // majl
     int majorityWidth;                            // majw
@@ -94,7 +93,6 @@
 - (float) flatTopTime:(unsigned int)chan;
 - (float) poleZeroTime:(unsigned int)chan;
 - (float) postTrigger:(unsigned int)chan;
-- (int) baselineSlew:(unsigned int)chan;
 - (int) baseBias;
 - (int) majorityLevel;
 - (int) majorityWidth;
@@ -124,7 +122,6 @@
 - (void) setFlatTopTime:(unsigned int)chan    withValue:(float)time;
 - (void) setPoleZeroTime:(unsigned int)chan   withValue:(float)time;
 - (void) setPostTrigger:(unsigned int)chan    withValue:(float)time;
-- (void) setBaselineSlew:(unsigned int) chan  withValue:(int)slew;
 - (void) setBaseBias:(int)bias;
 - (void) setMajorityLevel:(int)level;
 - (void) setMajorityWidth:(int)width;
@@ -209,7 +206,6 @@ extern NSString* ORFlashCamADCModelFilterTypeChanged;
 extern NSString* ORFlashCamADCModelFlatTopTimeChanged;
 extern NSString* ORFlashCamADCModelPoleZeroTimeChanged;
 extern NSString* ORFlashCamADCModelPostTriggerChanged;
-extern NSString* ORFlashCamADCModelBaselineSlewChanged;
 extern NSString* ORFlashCamADCModelMajorityLevelChanged;
 extern NSString* ORFlashCamADCModelMajorityWidthChanged;
 extern NSString* ORFlashCamADCModelRateGroupChanged;
