@@ -68,6 +68,7 @@
     ORTimeRate* dataRateHistory;
     ORTimeRate* eventRateHistory;
     ORTimeRate* deadTimeHistory;
+    ORTaskSequence* taskSequencer;  //changed name MAH 9/17/22
     NSTask*     runTask;            //added. MAH 9/17/22
     ORReadOutList* readOutList;
     NSArray* dataTakers;
@@ -120,6 +121,7 @@
 - (ORTimeRate*) dataRateHistory;
 - (ORTimeRate*) eventRateHistory;
 - (ORTimeRate*) deadTimeHistory;
+- (ORTaskSequence*) taskSequencer;
 - (ORReadOutList*) readOutList;
 - (NSMutableArray*) readOutArgs;
 - (NSMutableArray*) children;
@@ -158,9 +160,9 @@
 - (void) runFailed;
 
 #pragma mark •••Task methods
-- (void) taskDataAvailable:(NSNotification*)note;
-- (void) taskData:(NSDictionary*)taskData;
-- (void) taskCompleted:(NSNotification*)note;
+- (void) taskFinished:(id)task;
+- (void) tasksCompleted:(id)sender;
+- (void) taskData:(NSMutableDictionary*)taskData;
 
 #pragma mark •••Data taker methods
 - (void) readConfig:(fcio_config*)config;

@@ -460,43 +460,46 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 
 - (void) linkCC4sToDetectors
 {
-    //If we don't have a CC4 group, make one.
-    ORSegmentGroup* cc4Group;
-    if([segmentGroups count]>kL200CC4Type){
-        cc4Group = [segmentGroups objectAtIndex:kL200CC4Type];
-    }
-    else {
-        ORL200SegmentGroup* cc4 = [[ORL200SegmentGroup alloc] initWithName:@"CC4Chans"
-                                                               numSegments:kL200MaxCC4s
-                                                            mapEntries:[self setupMapEntries:kL200CC4Type]];
-        [cc4 setType:kL200CC4Type];
-        [self addGroup:cc4];
-        cc4Group = cc4;
-        [cc4 release];
-            
-    }
-    ORSegmentGroup* detGroup = [segmentGroups objectAtIndex:kL200DetType];
-    //make a look up table of the detector segments to speed up the linking
-    NSMutableDictionary* detDict = [NSMutableDictionary dictionary];
-    for(int detIndex=0;detIndex<[[detGroup segments] count];detIndex++){
-        NSString* name          = [detGroup segment:detIndex objectForKey:@"fe_cc4_ch"];
-        ORDetectorSegment* aSeg = [detGroup segment:detIndex];
-        if(name && aSeg)[detDict setObject:aSeg forKey:name];
-    }
-    //ok have the lookup table, do the linkage. Now it's O(n) instead of O(n^2)
-    for(int cc4Index=0;cc4Index<[[cc4Group segments] count];cc4Index++){
-        NSString* name    = [cc4Group segment:cc4Index objectForKey:@"cc4_name"];
-        NSString* chan    = [cc4Group segment:cc4Index objectForKey:@"cc4_chan"];
-        NSString* cc4Name = [NSString stringWithFormat:@"%@-%@",name,[chan removeSpaces]];
-        ORDetectorSegment* detSeg = [detDict objectForKey:cc4Name];
-        if(detSeg){
-            NSString* crate = [detSeg objectForKey:@"daq_crate"];
-            NSString* slot  = [detSeg objectForKey:@"daq_board_slot"];
-            NSString* chan  = [detSeg objectForKey:@"daq_board_ch"];
-            [[cc4Group segment:cc4Index] setObject:crate forKey:@"daq_crate"];
-            [[cc4Group segment:cc4Index] setObject:slot  forKey:@"daq_board_slot"];
-            [[cc4Group segment:cc4Index] setObject:chan  forKey:@"daq_board_ch"];
+    if(!linked){
+        //If we don't have a CC4 group, make one.
+        ORSegmentGroup* cc4Group;
+        if([segmentGroups count]>kL200CC4Type){
+            cc4Group = [segmentGroups objectAtIndex:kL200CC4Type];
         }
+        else {
+            ORL200SegmentGroup* cc4 = [[ORL200SegmentGroup alloc] initWithName:@"CC4Chans"
+                                                                   numSegments:kL200MaxCC4s
+                                                                    mapEntries:[self setupMapEntries:kL200CC4Type]];
+            [cc4 setType:kL200CC4Type];
+            [self addGroup:cc4];
+            cc4Group = cc4;
+            [cc4 release];
+            
+        }
+        ORSegmentGroup* detGroup = [segmentGroups objectAtIndex:kL200DetType];
+        //make a look up table of the detector segments to speed up the linking
+        NSMutableDictionary* detDict = [NSMutableDictionary dictionary];
+        for(int detIndex=0;detIndex<[[detGroup segments] count];detIndex++){
+            NSString* name          = [detGroup segment:detIndex objectForKey:@"fe_cc4_ch"];
+            ORDetectorSegment* aSeg = [detGroup segment:detIndex];
+            if(name && aSeg)[detDict setObject:aSeg forKey:name];
+        }
+        //ok have the lookup table, do the linkage. Now it's O(n) instead of O(n^2)
+        for(int cc4Index=0;cc4Index<[[cc4Group segments] count];cc4Index++){
+            NSString* name    = [cc4Group segment:cc4Index objectForKey:@"cc4_name"];
+            NSString* chan    = [cc4Group segment:cc4Index objectForKey:@"cc4_chan"];
+            NSString* cc4Name = [NSString stringWithFormat:@"%@-%@",name,[chan removeSpaces]];
+            ORDetectorSegment* detSeg = [detDict objectForKey:cc4Name];
+            if(detSeg){
+                NSString* crate = [detSeg objectForKey:@"daq_crate"];
+                NSString* slot  = [detSeg objectForKey:@"daq_board_slot"];
+                NSString* chan  = [detSeg objectForKey:@"daq_board_ch"];
+                [[cc4Group segment:cc4Index] setObject:crate forKey:@"daq_crate"];
+                [[cc4Group segment:cc4Index] setObject:slot  forKey:@"daq_board_slot"];
+                [[cc4Group segment:cc4Index] setObject:chan  forKey:@"daq_board_ch"];
+            }
+        }
+        linked = YES;
     }
 }
 

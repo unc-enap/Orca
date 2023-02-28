@@ -117,6 +117,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     deadTimeHistory    = [[ORTimeRate alloc] init];
     [deadTimeHistory   setLastAverageTime:[NSDate date]];
     [deadTimeHistory   setSampleTime:10];
+    taskSequencer      = nil;
     chanMap            = nil;
     cardMap            = nil;
     [self setRemoteInterfaces:[NSMutableArray array]];
@@ -162,6 +163,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     [dataRateHistory release];
     [eventRateHistory release];
     [deadTimeHistory release];
+    [taskSequencer release];
     [runTask release];
     [readOutList release];
     [readOutArgs release];
@@ -522,6 +524,16 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
 - (ORTimeRate*) deadTimeHistory
 {
     return deadTimeHistory;
+}
+
+- (ORTaskSequence*) taskSequencer
+{
+    if(!taskSequencer){
+        taskSequencer = [[ORTaskSequence taskSequenceWithDelegate:self] retain];
+        [taskSequencer setVerbose:NO];
+        [taskSequencer setTextToDelegate:YES];
+    }
+    return taskSequencer;
 }
 
 - (ORReadOutList*) readOutList
@@ -1003,8 +1015,14 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     }
 }
 
-
 #pragma mark •••Task methods
+- (void) taskFinished:(id)task
+{
+}
+
+- (void) tasksCompleted:(id)sender
+{
+}
 
 - (double) parseValueFromFCLog:(NSString*)text withIdentifier:(NSString*)ident andBreak:(NSString*)brk
 {
@@ -1021,21 +1039,9 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     return [self parseValueFromFCLog:text withIdentifier:ident andBreak:@""];
 }
 
-- (void) taskDataAvailable:(NSNotification*)note
+- (void) taskData:(NSMutableDictionary*)taskData
 {
-    NSData* incomingData   = [[note userInfo] valueForKey:NSFileHandleNotificationDataItem];
-    if(incomingData && [incomingData length]){
-        NSString *incomingText = [[[NSString alloc] initWithData:incomingData encoding:NSASCIIStringEncoding] autorelease];
-        incomingText = [incomingText removeNLandCRs];
-        NSDictionary* taskData = [NSDictionary dictionaryWithObjectsAndKeys:self,@"Task",incomingText,@"Text",nil];
-        [self taskData:taskData];
-    }
-    [[note object] readInBackgroundAndNotify];  // go back for more.
-}
-
-- (void) taskData:(NSDictionary*)taskData
-{
-    NSString* text = [[[taskData objectForKey:@"Text"] retain] autorelease];
+    NSString* text = [[[taskData objectForKey:@"Text"] retain]autorelease];
     NSRange r0 = [text rangeOfString:@"event"];
     NSRange r1 = [text rangeOfString:@"OK/running"];
     if(r0.location != NSNotFound && r1.location != NSNotFound){
@@ -1069,9 +1075,6 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelStatusChanged object:self];
 }
 
-- (void) taskCompleted:(NSNotification*)note
-{
-}
 
 #pragma mark •••Data taker methods
 
@@ -1226,12 +1229,28 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
         NSString* listen = [NSString stringWithFormat:@"tcp://connect/%d/%@", port, ip];
         [readoutArgs addObjectsFromArray:@[@"-o", listen]];
     }
+
     //--------------------------------------------------
     
     [self setReadOutArgs:readoutArgs];
+//*******************************************************
+//MAH 9/17/22 commented out this block. launching the readout doen't have to use the taskSequence object dirctly. Can just use NSTask. See below
+//but keep the [self taskSequencer] code around in case Tom wants to use it for something else
+//    if([guardian localMode]){
+//        NSString* p = [[[guardian fcSourcePath] stringByExpandingTildeInPath] stringByAppendingString:@"/server/"];
+//        [[self taskSequencer] addTask:[p stringByAppendingString:@"readout-fc250b"] arguments:[NSArray arrayWithArray:readoutArgs]];
+//        NSLog(@"%@readout-fc250b %@\n", p, [readoutArgs componentsJoinedByString:@" "]);
+//    }
+//    else {
+//        [[self taskSequencer] addTask:[[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/remote_run"]
+//                      arguments:[NSArray arrayWithArray:readoutArgs]];
+//    }
+//  [[self taskSequencer] launch]; //MAH part of old way
 
-    //----------------------------------------------------------------------
-    //MAH 9/17/22. Using just NSTask directly so we can get hold of the standard input pipe
+//*******************************************************
+
+//----------------------------------------------------------------------
+//MAH 9/17/22. Using just NSTask directly so we can get hold of the standard input pipe
     [runTask release];
     runTask = [[NSTask alloc] init];
     
@@ -1246,21 +1265,7 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     
     [runTask setLaunchPath:taskPath];
     [runTask setArguments: [NSArray arrayWithArray:readoutArgs]];
-    NSPipe* inpipe = [NSPipe pipe];
-    NSPipe* outpipe = [NSPipe pipe];
-    NSNotificationCenter* nc = [NSNotificationCenter defaultCenter];
-    [nc addObserver : self
-           selector : @selector(taskDataAvailable:)
-               name : NSFileHandleReadCompletionNotification
-             object : [outpipe fileHandleForReading]];
-    [nc addObserver : self
-           selector : @selector(taskCompleted:)
-               name : NSTaskDidTerminateNotification
-             object : runTask];
-    [[outpipe fileHandleForReading] readInBackgroundAndNotify];
-    [runTask setStandardInput:inpipe];
-    [runTask setStandardOutput:outpipe];
-    [runTask setStandardError:outpipe];
+    [runTask setStandardInput:[NSPipe pipe]];
     if(@available(macOS 10.13,*)){
         NSError *error =nil;
         if(![runTask launchAndReturnError:(&error)]){
@@ -1457,9 +1462,6 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
         [runTask terminate];
         [runTask release]; //optional release here, could leave to the next run start???
         runTask = nil;     //make sure it can't be used
-        NSNotificationCenter* nc = [NSNotificationCenter defaultCenter];
-        [nc removeObserver:self name:NSFileHandleReadCompletionNotification object:nil];
-        [nc removeObserver:self name:NSTaskDidTerminateNotification object:nil];
     }
     @catch(NSException* e){
         readWait = false;
@@ -1470,7 +1472,10 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     }
     //-----------------------------------------------------
     [self disconnect:false];
+    [[self taskSequencer] abortTasks];
     [ORTimer delay:0.1];
+    [taskSequencer release];
+    taskSequencer = nil;
     [readOutArgs removeAllObjects];
     
     memset(configBuffer, 0, kFlashCamConfigBufferLength * (2 + sizeof(fcio_config)/sizeof(uint32_t)));
@@ -1617,15 +1622,19 @@ NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModel
     deadTime          = 0.0;
     totDead           = 0.0;
     curDead           = 0.0;
+   // [dataRateHistory autorelease]; //MAH 10/5/22 not needed
     dataRateHistory   = [[ORTimeRate alloc] init];
     [dataRateHistory  setLastAverageTime:[NSDate date]];
     [dataRateHistory  setSampleTime:10];
+   // [eventRateHistory autorelease];//MAH 10/5/22 not needed
     eventRateHistory  = [[ORTimeRate alloc] init];
     [eventRateHistory setLastAverageTime:[NSDate date]];
     [eventRateHistory setSampleTime:10];
+  //  [deadTimeHistory autorelease];//MAH 10/5/22 not needed
     deadTimeHistory   = [[ORTimeRate alloc] init];
     [deadTimeHistory  setLastAverageTime:[NSDate date]];
     [deadTimeHistory  setSampleTime:10];
+    taskSequencer           = nil;
     chanMap           = nil;
     [self setReadOutList:[decoder decodeObjectForKey:@"readOutList"]];
     readStateLock = [[NSLock alloc]init]; //MAH added some thread safety
