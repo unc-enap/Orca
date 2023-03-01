@@ -237,6 +237,10 @@ NSString* ORFlashCamListenerModelFCLogChanged        = @"ORFlashCamListenerModel
                      selector : @selector(dataFileNameChanged:)
                          name : ORDataFileChangedNotification
                        object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(writeFCIOLog:)
+                         name : ORDataFileModelLogWrittenNotification
+                       object : nil];
 }
 
 #pragma mark •••Accessors
@@ -374,6 +378,8 @@ NSString* ORFlashCamListenerModelFCLogChanged        = @"ORFlashCamListenerModel
         return [configParams objectForKey:@"extraFlags"];
     else if([p isEqualToString:@"extraFiles"])
         return [NSNumber numberWithBool:[[configParams objectForKey:@"extraFiles"] boolValue]];
+    else if([p isEqualToString:@"writeFCIOLog"])
+        return [NSNumber numberWithBool:[[configParams objectForKey:@"writeFCIOLog"] boolValue]];
     else{
         NSLog(@"ORFlashCamListenerModel: unknown configuration parameter %@\n", p);
         return nil;
@@ -675,6 +681,8 @@ NSString* ORFlashCamListenerModelFCLogChanged        = @"ORFlashCamListenerModel
     if([p isEqualToString:@"maxPayload"])
         [configParams setObject:[NSNumber numberWithInt:MAX(0, [v intValue])] forKey:p];
     else if([p isEqualToString:@"extraFiles"])
+        [configParams setObject:v forKey:p];
+    else if([p isEqualToString:@"writeFCIOLog"])
         [configParams setObject:v forKey:p];
     else if([p isEqualToString:@"eventBuffer"])
         [configParams setObject:[NSNumber numberWithInt:MAX(0, [v intValue])] forKey:p];
@@ -1856,6 +1864,23 @@ NSString* ORFlashCamListenerModelFCLogChanged        = @"ORFlashCamListenerModel
 
     return dictionary;
 }
+
+- (void) writeFCIOLog:(NSNotification*)note
+{
+    if(![[self configParam:@"writeFCIOLog"] boolValue]) return;
+    NSString* fname = [NSString stringWithFormat:@"%@_FCIO_%lu.log",
+                       [[note userInfo] objectForKey:@"statusFileNameBase"], (unsigned long)[self tag]];
+    NSString* fullName = [[[[[note object] statusFolder] finalDirectoryName]
+                           stringByExpandingTildeInPath] stringByAppendingPathComponent:fname];
+    [[NSFileManager defaultManager] createFileAtPath:fullName contents:nil attributes:nil];
+    NSFileHandle* handle = [NSFileHandle fileHandleForWritingAtPath:fullName];
+    @try{
+        for(NSString* line in fcrunlog) [handle writeData:[line dataUsingEncoding:NSASCIIStringEncoding]];
+    }
+    @catch(NSException* exception){ }
+    [handle closeFile];
+}
+
 @end
 
 @implementation ORFlashCamListenerModel (private)

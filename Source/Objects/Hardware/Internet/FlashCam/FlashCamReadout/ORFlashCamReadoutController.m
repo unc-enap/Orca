@@ -838,7 +838,8 @@
             return [NSNumber numberWithUnsignedLong:i];
         }
         else if(view == listenerExtraFilesView){
-            if(col == 1) return [l configParam:@"extraFiles"];
+            if(col == 1)      return [l configParam:@"writeFCIOLog"];
+            else if(col == 2) return [l configParam:@"extraFiles"];
         }
         else if(view == listenerExtraFlagsView){
             if(col == 1) return [l configParam:@"extraFlags"];
@@ -930,8 +931,10 @@
             else if(col == 6) [l      setTimeout:[object intValue]];
         }
         else if(view == listenerExtraFilesView){
-            if(col == 1) [l setConfigParam:@"extraFiles"
-                                 withValue:[NSNumber numberWithBool:[object boolValue]]];
+            if(col == 1)      [l setConfigParam:@"writeFCIOLog"
+                                      withValue:[NSNumber numberWithBool:[object boolValue]]];
+            else if(col == 2) [l setConfigParam:@"extraFiles"
+                                      withValue:[NSNumber numberWithBool:[object boolValue]]];
         }
         else if(view == listenerExtraFlagsView){
             if(col == 1) [l setConfigParam:@"extraFlags"

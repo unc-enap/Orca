@@ -192,6 +192,7 @@
 - (id) initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary;
+- (void) writeFCIOLog:(NSNotification*)note;
 
 - (void) runFailedMainThread;
 
