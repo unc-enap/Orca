@@ -79,6 +79,9 @@
     bool readWait;
     ORDataPacket* dataPacketForThread;
     NSString* writeDataToFile;
+    NSUInteger fclogIndex;
+    NSMutableArray* fclog;
+    NSMutableArray* fcrunlog;
 }
 
 #pragma mark •••Initialization
@@ -97,6 +100,7 @@
 - (NSString*) ethType;
 - (NSNumber*) configParam:(NSString*)aKey;
 - (NSString*) configParamString:(NSString*)aKey;
+- (uint32_t) maxADCCards;
 
 - (NSMutableArray*) runFlags:(bool)print;
 - (int) timeout;
@@ -125,6 +129,10 @@
 - (NSMutableArray*) children;
 - (void) dataFileNameChanged:(NSNotification*) aNote;
 - (NSString*) streamDescription;
+- (NSUInteger) fclogLines;
+- (NSString*) fclog:(NSUInteger)nprev;
+- (NSUInteger) fcrunlogLines;
+- (NSString*) fcrunlog:(NSUInteger)nprev;
 
 - (void) setInterface:(NSString*)iface andPort:(uint16_t)p;
 - (void) setInterface:(NSString*)iface;
@@ -147,6 +155,11 @@
 - (void) setReadOutArgs:(NSMutableArray*)args;
 - (void) setChanMap:(NSMutableArray*)chMap;
 - (void) setCardMap:(NSMutableArray*)map;
+- (void) setFCLogLines:(NSUInteger)nlines;
+- (void) appendToFCLog:(NSString*)line andNotify:(BOOL)notify;
+- (void) clearFCLog;
+- (void) appendToFCRunLog:(NSString*)line;
+
 #pragma mark •••Comparison methods
 - (BOOL) sameInterface:(NSString*)iface andPort:(uint16_t)p;
 - (BOOL) sameIP:(NSString*)address andPort:(uint16_t)p;
@@ -196,3 +209,4 @@ extern NSString* ORFlashCamListenerModelChanMapChanged;
 extern NSString* ORFlashCamListenerModelCardMapChanged;
 extern NSString* ORFlashCamListenerModelConfigBufferFull;
 extern NSString* ORFlashCamListenerModelStatusBufferFull;
+extern NSString* ORFlashCamListenerModelFCLogChanged;

@@ -84,6 +84,7 @@ extern NSString* ORTaskStateName[eMaxTaskState];
 - (BOOL) runInProgress;
 - (BOOL) runStopped;
 - (BOOL) runRunning;
+- (uint32_t) runState;
 - (BOOL) testInProgress;
 - (BOOL) forcedHalt;
 - (BOOL) inProductionMode;
