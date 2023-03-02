@@ -40,6 +40,8 @@ NSString* ORFlashCamListenerModelCardMapChanged      = @"ORFlashCamListenerModel
 NSString* ORFlashCamListenerModelConfigBufferFull    = @"ORFlashCamListenerModelConfigBufferFull";
 NSString* ORFlashCamListenerModelStatusBufferFull    = @"ORFlashCamListenerModelStatusBufferFull";
 NSString* ORFlashCamListenerModelFCLogChanged        = @"ORFlashCamListenerModelFCLogChanged";
+NSString* ORFlashCamListenerModelFCRunLogChanged     = @"ORFlashCamListenerModelFCRunLogChanged";
+NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModelFCRunLogFlushed";
 
 @implementation ORFlashCamListenerModel
 
@@ -193,6 +195,11 @@ NSString* ORFlashCamListenerModelFCLogChanged        = @"ORFlashCamListenerModel
     [image unlockFocus];
     [self setImage:image];
     [image release];
+}
+
+- (void) makeMainController
+{
+    [self linkToController:@"ORFlashCamListenerController"];
 }
 
 - (void) decorateIcon:(NSImage*)anImage
@@ -873,22 +880,29 @@ NSString* ORFlashCamListenerModelFCLogChanged        = @"ORFlashCamListenerModel
 
 - (void) appendToFCLog:(NSString*)line andNotify:(BOOL)notify
 {
-    fclogIndex = (fclogIndex + 1) % [self fclogLines];
-    [fclog setObject:[line copy] atIndexedSubscript:fclogIndex];
+    @synchronized(self){
+        fclogIndex = (fclogIndex + 1) % [self fclogLines];
+        [fclog setObject:[line copy] atIndexedSubscript:fclogIndex];
+    }
     if(notify)
         [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelFCLogChanged object:self];
 }
 
 - (void) clearFCLog
 {
-    for(NSUInteger i=0; i<[self fclogLines]; i++) [fclog setObject:@"" atIndexedSubscript:i];
-    fclogIndex = 0;
+    @synchronized(self){
+        for(NSUInteger i=0; i<[self fclogLines]; i++) [fclog setObject:@"" atIndexedSubscript:i];
+        fclogIndex = 0;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelFCLogChanged object:self];
 }
 
 - (void) appendToFCRunLog:(NSString*)line
 {
-    [fcrunlog addObject:[line copy]];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelFCLogChanged object:self];
+    @synchronized(self){
+        [fcrunlog addObject:[line copy]];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelFCRunLogChanged object:self];
 }
 
 
@@ -1133,7 +1147,11 @@ NSString* ORFlashCamListenerModelFCLogChanged        = @"ORFlashCamListenerModel
     NSArray* incomingLines = [incomingText componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     for(NSString* text in incomingLines){
         if([text isEqualToString:@""]) continue;
-        [self appendToFCRunLog:[NSString stringWithFormat:@"%@\n", text]];
+        NSDateFormatter* formatter = [[[NSDateFormatter alloc] init] autorelease];
+        formatter.locale = [NSLocale currentLocale];
+        [formatter setLocalizedDateFormatFromTemplate:@"MM/dd/yy HH:mm:ss"];
+        [self appendToFCRunLog:[NSString stringWithFormat:@"%@ %@\n",
+                                [formatter stringFromDate:[NSDate now]], text]];
         if([text rangeOfString:@"error"   options:NSCaseInsensitiveSearch].location != NSNotFound ||
            [text rangeOfString:@"warning" options:NSCaseInsensitiveSearch].location != NSNotFound){
             ANSIEscapeHelper* helper = [[[ANSIEscapeHelper alloc] init] autorelease];
@@ -1399,9 +1417,6 @@ NSString* ORFlashCamListenerModelFCLogChanged        = @"ORFlashCamListenerModel
     NSString* taskPath;
     if([guardian localMode]){
         taskPath = [[[guardian fcSourcePath] stringByExpandingTildeInPath] stringByAppendingString:@"/server/readout-fc250b"];
-        NSString* cmd = [NSString stringWithFormat:@"%@ %@\n", taskPath, [readoutArgs componentsJoinedByString:@" "]];
-        NSLog(cmd);
-        [self appendToFCRunLog:cmd];
     }
     else {
         taskPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/remote_run"];
@@ -1412,8 +1427,15 @@ NSString* ORFlashCamListenerModelFCLogChanged        = @"ORFlashCamListenerModel
 
     for(NSString* line in fcrunlog) [self appendToFCLog:line andNotify:NO];
     [fcrunlog removeAllObjects];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelFCLogChanged object:self];
-
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelFCLogChanged    object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelFCRunLogFlushed object:self];
+    NSString* cmd = [NSString stringWithFormat:@"%@ %@\n", taskPath, [readoutArgs componentsJoinedByString:@" "]];
+    NSLog(cmd);
+    NSDateFormatter* formatter = [[[NSDateFormatter alloc] init] autorelease];
+    formatter.locale = [NSLocale currentLocale];
+    [formatter setLocalizedDateFormatFromTemplate:@"MM/dd/yy HH:mm:ss"];
+    [self appendToFCRunLog:[NSString stringWithFormat:@"%@ %@\n", [formatter stringFromDate:[NSDate now]], cmd]];
+    
     NSPipe* inpipe  = [NSPipe pipe];
     NSPipe* outpipe = [NSPipe pipe];
     NSNotificationCenter* nc = [NSNotificationCenter defaultCenter];

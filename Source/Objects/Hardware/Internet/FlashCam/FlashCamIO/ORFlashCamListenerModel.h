@@ -211,3 +211,5 @@ extern NSString* ORFlashCamListenerModelCardMapChanged;
 extern NSString* ORFlashCamListenerModelConfigBufferFull;
 extern NSString* ORFlashCamListenerModelStatusBufferFull;
 extern NSString* ORFlashCamListenerModelFCLogChanged;
+extern NSString* ORFlashCamListenerModelFCRunLogChanged;
+extern NSString* ORFlashCamListenerModelFCRunLogFlushed;
