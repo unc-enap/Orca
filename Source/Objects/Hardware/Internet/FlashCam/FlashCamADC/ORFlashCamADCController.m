@@ -58,7 +58,7 @@
     }
     [filterTypeMatrix setEnabled:YES];
     NSArray* m = [NSArray arrayWithObjects:baselineMatrix, thresholdMatrix, adcGainMatrix, trigGainMatrix,
-                  shapeTimeMatrix, flatTopTimeMatrix, poleZeroTimeMatrix, postTriggerMatrix, rateTextFields,
+                  shapeTimeMatrix, flatTopTimeMatrix, poleZeroTimeMatrix, postTriggerMatrix, baselineSlewMatrix, rateTextFields,
                   trigRateTextFields, nil];
     for(NSMatrix* matrix in m){
         for(NSUInteger i=0; i<[matrix numberOfRows]; i++)
@@ -134,6 +134,10 @@
     [notifyCenter addObserver : self
                      selector : @selector(postTriggerChanged:)
                          name : ORFlashCamADCModelPostTriggerChanged
+                       object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(baselineSlewChanged:)
+                         name : ORFlashCamADCModelBaselineSlewChanged
                        object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(majorityLevelChanged:)
@@ -263,6 +267,7 @@
     [self flatTopTimeChanged:nil];
     [self poleZeroTimeChanged:nil];
     [self postTriggerChanged:nil];
+    [self baselineSlewChanged:nil];
     [self majorityLevelChanged:nil];
     [self majorityWidthChanged:nil];
     [self rateGroupChanged:nil];
@@ -429,6 +434,18 @@
     else{
         int chan = [[[note userInfo] objectForKey:@"Channel"] intValue];
         [[postTriggerMatrix cellWithTag:chan] setFloatValue:[model postTrigger:chan]];
+    }
+}
+
+- (void) baselineSlewChanged:(NSNotification*)note
+{
+    if(note == nil){
+        for(int i=0; i<[model numberOfChannels]; i++)
+        [[baselineSlewMatrix cellWithTag:i] setIntValue:[model baselineSlew:i]];
+    }
+    else{
+        int chan = [[[note userInfo] objectForKey:@"Channel"] intValue];
+        [[baselineSlewMatrix cellWithTag:chan] setIntValue:[model baselineSlew:chan]];
     }
 }
 
@@ -630,6 +647,7 @@
     [flatTopTimeMatrix      setEnabled:!lock];
     [poleZeroTimeMatrix     setEnabled:!lock];
     [postTriggerMatrix      setEnabled:!lock];
+    [baselineSlewMatrix     setEnabled:!lock];
     [baseBiasTextField      setEnabled:!lock];
     [majorityLevelPUButton  setEnabled:!lock];
     [majorityWidthTextField setEnabled:!lock];
@@ -703,6 +721,12 @@
 {
     if([sender floatValue] != [model postTrigger:(unsigned int)[[sender selectedCell] tag]])
         [model setPostTrigger:(unsigned int)[[sender selectedCell] tag] withValue:[sender floatValue]];
+}
+
+- (IBAction) baselineSlewAction:(id)sender
+{
+    if([sender intValue] != [model baselineSlew:(unsigned int)[[sender selectedCell] tag]])
+        [model setBaselineSlew:(unsigned int)[[sender selectedCell] tag] withValue:[sender intValue]];
 }
 
 - (IBAction) baseBiasAction:(id)sender

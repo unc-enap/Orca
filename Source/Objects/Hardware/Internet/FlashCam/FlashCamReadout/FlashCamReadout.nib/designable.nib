@@ -229,14 +229,14 @@
                                                         </tableHeaderView>
                                                     </scrollView>
                                                     <scrollView autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="8ES-F0-dof">
-                                                        <rect key="frame" x="20" y="73" width="127" height="63"/>
+                                                        <rect key="frame" x="20" y="73" width="281" height="63"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" drawsBackground="NO" id="SIl-yp-xn5">
-                                                            <rect key="frame" x="1" y="0.0" width="125" height="62"/>
+                                                            <rect key="frame" x="1" y="0.0" width="279" height="62"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="14" headerView="ad3-tJ-JRv" id="WZQ-lC-LTw">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="125" height="34"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="279" height="34"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -255,12 +255,23 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
-                                                                        <tableColumn width="68" minWidth="10" maxWidth="3.4028234663852886e+38" id="M55-qO-u75">
-                                                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Use File">
+                                                                        <tableColumn width="92" minWidth="10" maxWidth="3.4028234663852886e+38" id="pJm-HO-63B">
+                                                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Write FCIO Log">
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
-                                                                            <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="only" alignment="center" controlSize="small" inset="2" id="jdV-qg-Xsp">
+                                                                            <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="only" alignment="center" controlSize="small" inset="2" id="7Zk-5n-vS3">
+                                                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                                <font key="font" metaFont="smallSystem"/>
+                                                                            </buttonCell>
+                                                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                                                        </tableColumn>
+                                                                        <tableColumn width="127" minWidth="10" maxWidth="3.4028234663852886e+38" id="M55-qO-u75">
+                                                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Use File Stream Mode">
+                                                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            </tableHeaderCell>
+                                                                            <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="overlaps" alignment="center" controlSize="small" inset="2" id="jdV-qg-Xsp">
                                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                             </buttonCell>
@@ -276,7 +287,7 @@
                                                             <nil key="backgroundColor"/>
                                                         </clipView>
                                                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="oUy-Vw-DCj">
-                                                            <rect key="frame" x="1" y="47" width="110" height="15"/>
+                                                            <rect key="frame" x="1" y="47" width="267" height="15"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="o8I-iy-9qb">
@@ -284,21 +295,10 @@
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                         <tableHeaderView key="headerView" wantsLayer="YES" id="ad3-tJ-JRv">
-                                                            <rect key="frame" x="0.0" y="0.0" width="125" height="28"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="279" height="28"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </tableHeaderView>
                                                     </scrollView>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ziH-u6-vRk">
-                                                        <rect key="frame" x="510" y="35" width="144" height="32"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="push" title="Update IP Addresses" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="slA-tb-Hkv">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="label"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="updateIPAction:" target="-2" id="cw7-W0-lEs"/>
-                                                        </connections>
-                                                    </button>
                                                     <box fixedFrame="YES" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="UQ2-4h-49W">
                                                         <rect key="frame" x="17" y="6" width="360" height="49"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -325,24 +325,35 @@
                                                         </connections>
                                                     </button>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DHD-it-8E4">
-                                                        <rect key="frame" x="18" y="134" width="250" height="16"/>
+                                                        <rect key="frame" x="307" y="128" width="250" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Write data to file instead of using TCP/IP" id="8xP-U8-Em5">
-                                                            <font key="font" metaFont="smallSystem"/>
+                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Note on File Stream Mode:" id="8xP-U8-Em5">
+                                                            <font key="font" metaFont="systemBold" size="11"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gxw-wd-tzW">
-                                                        <rect key="frame" x="153" y="84" width="271" height="42"/>
+                                                        <rect key="frame" x="307" y="71" width="331" height="56"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" id="cCz-Lb-l2O">
                                                             <font key="font" metaFont="smallSystem"/>
-                                                            <string key="title">For debugging and validation only!  Files will have same name as the ORCA file with FCIO_n.fcio appended, where 'n' is the Listener tag number.</string>
+                                                            <string key="title">This mode writes and then streams a file instead of streaming the data over TCP/IP.  For debugging and validation only!  Files will have same name as the ORCA file with FCIO_n.fcio appended, where 'n' is the Listener tag number.</string>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ziH-u6-vRk">
+                                                        <rect key="frame" x="510" y="35" width="144" height="32"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <buttonCell key="cell" type="push" title="Update IP Addresses" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="slA-tb-Hkv">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="label"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="updateIPAction:" target="-2" id="cw7-W0-lEs"/>
+                                                        </connections>
+                                                    </button>
                                                 </subviews>
                                             </view>
                                         </box>
@@ -389,7 +400,7 @@
                                                                     <tableViewGridLines key="gridStyleMask" vertical="YES" horizontal="YES"/>
                                                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                                     <tableColumns>
-                                                                        <tableColumn identifier="kPersonName" width="110" minWidth="40" maxWidth="1000" id="pAL-wi-7Aw">
+                                                                        <tableColumn identifier="kPersonName" width="113" minWidth="40" maxWidth="1000" id="pAL-wi-7Aw">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Ethernet Interface">
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>

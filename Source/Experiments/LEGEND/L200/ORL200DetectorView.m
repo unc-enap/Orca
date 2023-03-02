@@ -200,6 +200,7 @@
     else if(setIndex == kL200SiPMType) return [sipmColorScale    getColorForValue:aValue];
     else if(setIndex == kL200PMTType)  return [pmtColorScale     getColorForValue:aValue];
     else if(setIndex == kL200AuxType)  return [auxChanColorScale getColorForValue:aValue];
+    else if(setIndex == kL200CC4Type)  return [detColorScale     getColorForValue:aValue];
     else return [NSColor darkGrayColor];
 }
 

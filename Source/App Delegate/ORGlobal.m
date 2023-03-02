@@ -280,6 +280,11 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(Global);
     return runState == eRunInProgress;
 }
 
+- (uint32_t) runState
+{
+    return runState;
+}
+
 - (void) setRunState:(int)state
 {
     runState = state;

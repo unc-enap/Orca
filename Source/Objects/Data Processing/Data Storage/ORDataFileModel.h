@@ -176,6 +176,7 @@ extern NSString* ORDataFileModelLimitSizeChanged;
 extern NSString* ORDataFileChangedNotification;
 extern NSString* ORDataFileStatusChangedNotification;
 extern NSString* ORDataFileSizeChangedNotification;
+extern NSString* ORDataFileModelLogWrittenNotification;
 extern NSString* ORDataFileLock;
 extern NSString* ORDataSaveConfigurationChangedNotification;
 extern NSString* ORDataFileModelSizeLimitReachedActionChanged;
