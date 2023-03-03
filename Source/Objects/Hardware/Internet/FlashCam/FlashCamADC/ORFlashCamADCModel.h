@@ -50,6 +50,7 @@
     float poleZeroTime[kMaxFlashCamADCChannels];  // gpz
     float postTrigger[kMaxFlashCamADCChannels];   // pthr
     int baselineSlew[kMaxFlashCamADCChannels];    // gbs
+    bool swTrigInclude[kMaxFlashCamADCChannels];
     int baseBias;                                 // blbias
     int majorityLevel;                            // majl
     int majorityWidth;                            // majw
@@ -95,6 +96,7 @@
 - (float) poleZeroTime:(unsigned int)chan;
 - (float) postTrigger:(unsigned int)chan;
 - (int) baselineSlew:(unsigned int)chan;
+- (bool) swTrigInclude:(unsigned int)chan;
 - (int) baseBias;
 - (int) majorityLevel;
 - (int) majorityWidth;
@@ -124,7 +126,8 @@
 - (void) setFlatTopTime:(unsigned int)chan    withValue:(float)time;
 - (void) setPoleZeroTime:(unsigned int)chan   withValue:(float)time;
 - (void) setPostTrigger:(unsigned int)chan    withValue:(float)time;
-- (void) setBaselineSlew:(unsigned int) chan  withValue:(int)slew;
+- (void) setBaselineSlew:(unsigned int)chan   withValue:(int)slew;
+- (void) setSWTrigInclude:(unsigned int)chan  withValue:(bool)include;
 - (void) setBaseBias:(int)bias;
 - (void) setMajorityLevel:(int)level;
 - (void) setMajorityWidth:(int)width;
@@ -150,7 +153,8 @@
 
 #pragma mark •••Data taker methods
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
-- (void) shipEvent:(fcio_event*)event withIndex:(int)index andChannel:(unsigned int)channel use:(ORDataPacket*)aDataPacket;
+- (void) shipEvent:(fcio_event*)event withIndex:(int)index
+        andChannel:(unsigned int)channel    use:(ORDataPacket*)aDataPacket includeWF:(bool) includeWF;
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runIsStopping:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
@@ -210,10 +214,10 @@ extern NSString* ORFlashCamADCModelFlatTopTimeChanged;
 extern NSString* ORFlashCamADCModelPoleZeroTimeChanged;
 extern NSString* ORFlashCamADCModelPostTriggerChanged;
 extern NSString* ORFlashCamADCModelBaselineSlewChanged;
+extern NSString* ORFlashCamADCModelSWTrigIncludeChanged;
 extern NSString* ORFlashCamADCModelMajorityLevelChanged;
 extern NSString* ORFlashCamADCModelMajorityWidthChanged;
 extern NSString* ORFlashCamADCModelRateGroupChanged;
-extern NSString* ORFlashCamADCModelBufferFull;
 extern NSString* ORFlashCamADCModelEnableBaselineHistoryChanged;
 extern NSString* ORFlashCamADCModelBaselineHistoryChanged;
 extern NSString* ORFlashCamADCModelBaselineSampleTimeChanged;
