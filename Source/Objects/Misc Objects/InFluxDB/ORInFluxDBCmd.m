@@ -335,6 +335,11 @@
     [tags addObject:[NSString stringWithFormat:@"%@=%@",aLabel,aValue]];
 }
 
+- (void) addTag:(NSString*)aLabel withBoolean:(BOOL)aValue
+{
+    [tags addObject:[NSString stringWithFormat:@"%@=%d",aLabel,aValue]];
+}
+
 - (void) addTag:(NSString*)aLabel withLong:(long)aValue
 {
     [tags addObject:[NSString stringWithFormat:@"%@=%ld",aLabel,aValue]];
@@ -343,6 +348,11 @@
 - (void) addTag:(NSString*)aLabel withDouble:(double)aValue
 {
     [tags addObject:[NSString stringWithFormat:@"%@=%f",aLabel,aValue]];
+}
+
+- (void) addField:(NSString*)aValueName withBoolean:(BOOL)aValue
+{
+    [measurements addObject:[NSString stringWithFormat:@"%@=%d",aValueName,aValue]];
 }
 
 - (void) addField:(NSString*)aValueName withLong:(long)aValue
