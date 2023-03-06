@@ -60,7 +60,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) updateExperiment;
 - (void) updateHistory;
 - (void) updateMachineRecord;
-- (void) updateRunState:(ORRunModel*)rc;
+- (void) updateRunState:(ORRunModel*)rc running:(BOOL)isRunning;
 - (void) processElementStateChanged:(NSNotification*)aNote;
 - (void) periodicCompact;
 - (void) updateDataSets;
@@ -113,7 +113,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         [self executeDBCmd:[ORInFluxDBListOrgs    listOrgs]];
         [self executeDBCmd:[ORInFluxDBDelayCmd    delay:2]];
         [self executeDBCmd:[ORInFluxDBListBuckets listBuckets]];
-        [self cleanUpRunStatus];
+        //[self cleanUpRunStatus];
 
     }
     [super wakeUp];
@@ -186,15 +186,15 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
                          name : ORRunStoppedNotification
                        object : nil];
 
-    [notifyCenter addObserver : self
-                     selector : @selector(runStatusChanged:)
-                         name : ORRunStatusChangedNotification
-                       object : nil];
+//    [notifyCenter addObserver : self
+//                     selector : @selector(runStatusChanged:)
+//                         name : ORRunStatusChangedNotification
+//                       object : nil];
 
-    [notifyCenter addObserver : self
-                     selector : @selector(runElapsedTimeChanged:)
-                         name : ORRunElapsedTimesChangedNotification
-                       object : nil];
+//    [notifyCenter addObserver : self
+//                     selector : @selector(runElapsedTimeChanged:)
+//                         name : ORRunElapsedTimesChangedNotification
+//                       object : nil];
     
     [notifyCenter addObserver : self
                      selector : @selector(alarmPosted:)
@@ -378,10 +378,9 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORInFluxDBRateChanged object:self];
 }
 
-- (NSInteger) messageRate        { return messageRate; }
+- (NSInteger) messageRate     { return messageRate; }
 - (BOOL)      cancelled       { return canceled; }
 - (void)      markAsCanceled  { canceled = YES;  }
-
 
 #pragma mark ***Measurements
 - (void) sendCmd:(ORInFluxDBCmd*)aCmd
@@ -463,8 +462,8 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
             [aCmd     start: @"CurrentAlarms" withTags:@"Type=List"];
             [aCmd addField: @"Alarm"         withString:alarmName];
             [aCmd addField: @"Severity"      withString:[anAlarm severityName]];
-            [aCmd addField: @"Acknowledged"  withString:@"NO"];
-            [aCmd addField: @"Posted"        withString:[anAlarm timePosted]];
+            [aCmd addField: @"Acknowledged"  withBoolean:NO];
+            [aCmd addField: @"Posted"        withLong:[anAlarm timePostedUnixTimestamp]];
             [aCmd addField: @"Help"          withString:help];
             [self executeDBCmd:aCmd];
         }
@@ -502,11 +501,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [aCmd    start: @"AlarmHistory"  withTags:@"Type=History"];
     [aCmd addField: @"Severity"      withString:[alarm severityName]];
     [aCmd addField: @"Alarm"         withString:alarmName];
-    NSString* postTime;
-    if([alarm timePosted])postTime = [alarm timePosted];
-    else postTime = @"on ORCA start";
-    [aCmd addField: @"Posted"        withString:postTime];
-    [aCmd addField: @"Cleared"       withString:[[NSDate date]stdDescription]];
+    [aCmd addField: @"Cleared"       withLong:[[NSDate date]timeIntervalSince1970]];
     [self executeDBCmd:aCmd];
 }
 
@@ -522,18 +517,18 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [self executeDBCmd:[ORInFluxDBDelayCmd    delay:2]];
 }
 
-- (void) updateRunInfo
-{
-    if(!stealthMode){
-        NSArray* runObjects = [[self document] collectObjectsOfClass:NSClassFromString(@"ORRunModel")];
-        if([runObjects count]){
-            ORRunModel* rc = [runObjects objectAtIndex:0];
-            if(rc)[self updateRunState:rc];
-        }
-    }
-}
+//- (void) updateRunInfo
+//{
+//    if(!stealthMode){
+//        NSArray* runObjects = [[self document] collectObjectsOfClass:NSClassFromString(@"ORRunModel")];
+//        if([runObjects count]){
+//            ORRunModel* rc = [runObjects objectAtIndex:0];
+//            if(rc)[self updateRunState:rc];
+//        }
+//    }
+//}
 
-- (void) updateRunState:(ORRunModel*)rc
+- (void) updateRunState:(ORRunModel*)rc running:(BOOL)isRunning
 {
     scheduledForRunInfoUpdate = NO;
 
@@ -541,28 +536,28 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"ORCA" org:org];
         [aCmd    start: @"CurrentRun"  withTags:@"Type=Status"];
         [aCmd addField: @"Number"      withString:[rc fullRunNumberString]];
-        [aCmd addField: @"State"       withString:[rc shortStatus]];
+        [aCmd addField: @"Running"     withBoolean:isRunning];
         [aCmd addField: @"ElapsedTime" withLong:[rc elapsedRunTime]];
         [aCmd addField: @"TimeToGo"    withLong:(long)[rc timeToGo]];
         [aCmd addField: @"RunType"     withLong:[rc runType]];
-        [aCmd addField: @"TimedRun"    withString:[rc timedRun]?@"YES":@"NO"];
+        [aCmd addField: @"TimedRun"    withBoolean:[rc timedRun]];
         [aCmd addField: @"RunMode"     withString:[[ORGlobal sharedGlobal] runMode] == kNormalRun?@"Normal":@"OffLine"];
-        [aCmd addField: @"Repeating"   withString:[rc repeatRun]?@"YES":@"NO"];
+        [aCmd addField: @"Repeating"   withBoolean:[rc repeatRun]];
         if([rc timedRun])[aCmd addField: @"Length"  withLong:[rc timeLimit]];
         else             [aCmd addField: @"Length"  withLong:0];
 
         
-        [aCmd addField:   @"StartTime"  withString:[[rc startTime]stdDescription]];
+        [aCmd addField:   @"StartTime"  withLong:[[rc startTime]timeIntervalSince1970]];
         [aCmd addField:   @"RunModeDesc" withString:[rc runTypesMaskString]];
         [self executeDBCmd:aCmd];
     }
 }
 
-- (void) runStatusChanged:(NSNotification*)aNote
-{
-    [self updateRunState:[aNote object]];
-    //[self updateDataSets];
-}
+//- (void) runStatusChanged:(NSNotification*)aNote
+//{
+//    [self updateRunState:[aNote object]];
+//    //[self updateDataSets];
+//}
 
 - (void) cleanUpRunStatus
 {
@@ -580,9 +575,9 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) runStarted:(NSNotification*)aNote
 {
     if(!stealthMode){
-        [self cleanUpRunStatus];
+        //[self cleanUpRunStatus];
         ORRunModel* rc  = [aNote object];
-        [self updateRunState:rc];
+        [self updateRunState:rc running:YES];
         [runNumberString release];
         runNumberString = [rc fullRunNumberString];
         [self updateExperiment];
@@ -595,29 +590,30 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     runNumberString = nil;
 
     if(!stealthMode){
-        [self updateRunState:[aNote object]];
-        ORRunModel* rc  = [aNote object];
-        //keep a record of all runs
-        if([[ORGlobal sharedGlobal] runMode] == kNormalRun){
-            ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"ORCA" org:org];
-            [aCmd     start: @"RunHistory"  withTags:@"Type=List"];
-            [aCmd addField:  @"Number"      withString:[rc fullRunNumberString]];
-            [aCmd addField:  @"RunType"     withLong:[rc runType]];
-            [aCmd addField:  @"Length"      withDouble:[rc elapsedRunTime]];
-            [aCmd addField:  @"StopTime"    withString:[[NSDate date] stdDescription]];
-            [aCmd addField:  @"StartTime"   withString:[[rc startTime]stdDescription]];
-            [self executeDBCmd:aCmd];
-        }
+        [self updateRunState:[aNote object] running:NO];
+//  Simon doesn't want to use a run history so for now commented out
+//        ORRunModel* rc  = [aNote object];
+//        //keep a record of all runs
+//        if([[ORGlobal sharedGlobal] runMode] == kNormalRun){
+//            ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"ORCA" org:org];
+//            [aCmd     start: @"RunHistory"  withTags:@"Type=List"];
+//            [aCmd addField:  @"Number"      withString:[rc fullRunNumberString]];
+//            [aCmd addField:  @"RunType"     withLong:[rc runType]];
+//            [aCmd addField:  @"Length"      withDouble:[rc elapsedRunTime]];
+//            [aCmd addField:  @"StopTime"    withString:[[NSDate date] stdDescription]];
+//            [aCmd addField:  @"StartTime"   withString:[[rc startTime]stdDescription]];
+//            [self executeDBCmd:aCmd];
+//        }
     }
 }
 
-- (void) runElapsedTimeChanged:(NSNotification*)aNote
-{
-    if(!scheduledForRunInfoUpdate){
-        scheduledForRunInfoUpdate = YES;
-        [self performSelector:@selector(updateRunState:) withObject:[aNote object] afterDelay:5];
-    }
-}
+//- (void) runElapsedTimeChanged:(NSNotification*)aNote
+//{
+//    if(!scheduledForRunInfoUpdate){
+//        scheduledForRunInfoUpdate = YES;
+//        [self performSelector:@selector(updateRunState:) withObject:[aNote object] afterDelay:5];
+//    }
+//}
 
 - (void) executeDBCmd:(id)aCmd
 {
@@ -715,7 +711,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) _startAllPeriodicOperations
 {
     [self performSelector:@selector(updateMachineRecord)   withObject:nil afterDelay:2];
-    [self performSelector:@selector(updateRunInfo)         withObject:nil afterDelay:4];
+    //[self performSelector:@selector(updateRunInfo)         withObject:nil afterDelay:4]; //trial removal
     [self performSelector:@selector(updateExperiment)      withObject:nil afterDelay:3];
 }
 
