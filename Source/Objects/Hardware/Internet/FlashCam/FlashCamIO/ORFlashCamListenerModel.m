@@ -880,28 +880,22 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
 
 - (void) appendToFCLog:(NSString*)line andNotify:(BOOL)notify
 {
-    @synchronized(self){
-        fclogIndex = (fclogIndex + 1) % [self fclogLines];
-        [fclog setObject:[line copy] atIndexedSubscript:fclogIndex];
-    }
+    fclogIndex = (fclogIndex + 1) % [self fclogLines];
+    [fclog setObject:[line copy] atIndexedSubscript:fclogIndex];
     if(notify)
         [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelFCLogChanged object:self];
 }
 
 - (void) clearFCLog
 {
-    @synchronized(self){
-        for(NSUInteger i=0; i<[self fclogLines]; i++) [fclog setObject:@"" atIndexedSubscript:i];
-        fclogIndex = 0;
-    }
+    for(NSUInteger i=0; i<[self fclogLines]; i++) [fclog setObject:@"" atIndexedSubscript:i];
+    fclogIndex = 0;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelFCLogChanged object:self];
 }
 
 - (void) appendToFCRunLog:(NSString*)line
 {
-    @synchronized(self){
-        [fcrunlog addObject:[line copy]];
-    }
+    [fcrunlog addObject:[line copy]];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelFCRunLogChanged object:self];
 }
 
