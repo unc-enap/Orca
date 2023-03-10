@@ -845,7 +845,6 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     [self influxLoadSetUp:@"PMT"  segmentId: kL200PMTType   timeStamp:aTimeStamp];
     [self influxLoadSetUp:@"Aux"  segmentId: kL200AuxType   timeStamp:aTimeStamp];
     [self influxLoadSetUp:@"CC4"  segmentId: kL200CC4Type   timeStamp:aTimeStamp];
-
 }
 
 - (void) postInFluxRunTime
@@ -884,7 +883,6 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         [aCmd addTag:@"segmentId"       withString:[NSString stringWithFormat:@"%@_%d",name,i]];
         [aCmd addTag:@"segmentGroupNum" withLong:groupIndex];
         
-            
         [aCmd addTag:@"serial"          withString:[aDet objectForKey:@"serial"]];
         [aCmd addTag:@"detType"         withString:[aDet objectForKey:@"det_type"]];
         [aCmd addTag:@"strNumber"       withString:[aDet objectForKey:@"str_number"]];
@@ -894,20 +892,18 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         [aCmd addTag:@"boardId"         withString:[aDet objectForKey:@"daq_board_id"]];
         [aCmd addTag:@"slot"            withString:[aDet objectForKey:@"daq_board_slot"]];
         [aCmd addTag:@"channel"         withString:[aDet objectForKey:@"daq_board_ch"]];
-        [aCmd addTag:@"fcioID"          withString:[aDet objectForKey:@"fcioID"]];
-        
+
         [aCmd addField: @"HwPresent"    withBoolean:hw!=nil];
 
         if(hw!=nil){
             //channel level values
-            [aCmd addField: @"numChans"      withLong:[hw numberOfChannels]];
-            [aCmd addField: @"isRunning"     withBoolean:[hw isRunning]];
+            [aCmd addField: @"numChans"      withLong:[hw numberOfChannels]]; //make it a tag
             [aCmd addField: @"chanEnabled"   withBoolean:[hw chanEnabled:chan]];
             [aCmd addField: @"trigOutEnable" withBoolean:[hw trigOutEnabled:chan]];
             [aCmd addField: @"threshold"     withLong:[hw threshold:chan]];
             [aCmd addField: @"adcGain"       withLong:[hw adcGain:chan]];
             [aCmd addField: @"trigGain"      withLong:[hw trigGain:chan]];
-            [aCmd addField: @"baseline"      withLong:[hw baseline:chan]];
+            [aCmd addField: @"baseLineDAC"   withLong:[hw baseline:chan]];
             [aCmd addField: @"shapeTime"     withLong:[hw shapeTime:chan]];
             [aCmd addField: @"filterType"    withLong:[hw filterType:chan]];
             [aCmd addField: @"flatTopTime"   withLong:[hw flatTopTime:chan]];
@@ -916,13 +912,9 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
             
             //card level settings
             [aCmd addField: @"promSlot"       withLong:[hw promSlot]];
-            [aCmd addField: @"cardAddress"    withLong:[hw cardAddress]];
-            [aCmd addField: @"promSlot"       withLong:[hw promSlot]];
             [aCmd addField: @"baseLineBias"   withLong:[hw baseBias]];
             [aCmd addField: @"majorityLevel"  withLong:[hw majorityLevel]];
             [aCmd addField: @"majorityWidth"  withLong:[hw majorityWidth]];
-            [aCmd addField: @"status"         withLong:[hw status]];
-            [aCmd addField: @"totalErrors"    withLong:[hw totalErrors]];
         }
 
         [aCmd setTimeStamp:aTimeStamp];
@@ -963,7 +955,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         [aCmd addField: @"trigRates"   withDouble:chan];
         [aCmd addField: @"wfCounts"    withDouble:[group getWaveformCounts:i]];
         [aCmd addField: @"wfRates"     withDouble:[group getWaveformRate:i]];
-        [aCmd addField: @"Baseline"    withDouble:[group getBaseline:i]];
+        [aCmd addField: @"baselines"    withDouble:[group getBaseline:i]];
         
         [aCmd setTimeStamp:aTimeStamp];
         [influxDB executeDBCmd:aCmd];
