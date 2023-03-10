@@ -246,6 +246,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) awakeAfterDocumentLoaded
 {
     [self startTimer];
+    [self deleteCurrentAlarms];
     [[self nextObject] postInFluxSetUp];
 }
 
@@ -451,7 +452,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) alarmPosted:(NSNotification*)aNote
 {
     if(!stealthMode){
-         [self deleteCurrentAlarms];
+         //[self deleteCurrentAlarms];
         ORAlarmCollection* alarmCollection = [ORAlarmCollection sharedAlarmCollection];
         for(id anAlarm in [alarmCollection alarms]){
             NSString* alarmName = [[anAlarm name]stringByReplacingOccurrencesOfString:@" " withString:@"_"];
@@ -465,6 +466,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
             [aCmd addField: @"Acknowledged"  withBoolean:NO];
             [aCmd addField: @"Posted"        withDouble:[anAlarm timePostedUnixTimestamp]];
             [aCmd addField: @"Help"          withString:help];
+            [aCmd setTimeStamp:[anAlarm timePostedUnixTimestamp]];
             [self executeDBCmd:aCmd];
         }
      }
@@ -473,7 +475,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) alarmAcknowledged:(NSNotification*)aNote
 {
     if(!stealthMode){
-         [self deleteCurrentAlarms];
+         //[self deleteCurrentAlarms];
         ORAlarmCollection* alarmCollection = [ORAlarmCollection sharedAlarmCollection];
         for(id anAlarm in [alarmCollection alarms]){
             NSString* alarmName = [[anAlarm name]stringByReplacingOccurrencesOfString:@" " withString:@"_"];
@@ -487,6 +489,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
             [aCmd addField: @"Acknowledged"  withBoolean:YES];
             [aCmd addField: @"Posted"        withDouble:[anAlarm timePostedUnixTimestamp]];
             [aCmd addField: @"Help"          withString:help];
+            [aCmd setTimeStamp:[anAlarm timePostedUnixTimestamp]];
             [self executeDBCmd:aCmd];
         }
     }
@@ -496,7 +499,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 {
     ORAlarm* anAlarm = [aNote object];
     NSString* alarmName = [[anAlarm name]stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-    [self deleteCurrentAlarms];
+    //[self deleteCurrentAlarms];
     ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"Alarms" org:org];
     [aCmd    start: @"AlarmHistory"  withTags:@"Type=History"];
     [aCmd addField: @"Severity"      withString:[anAlarm severityName]];
@@ -534,7 +537,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         [aCmd addField: @"TimedRun"    withBoolean:[rc timedRun]];
         [aCmd addField: @"RunMode"     withString:[[ORGlobal sharedGlobal] runMode] == kNormalRun?@"Normal":@"OffLine"];
         [aCmd addField: @"Repeating"   withBoolean:[rc repeatRun]];
-        [aCmd addField: @"FileName"    withString:[rc fileName]];
+ //       [aCmd addField: @"FileName"    withString:[rc fileName]];
         if([rc timedRun])[aCmd addField: @"Length"  withLong:[rc timeLimit]];
         else             [aCmd addField: @"Length"  withLong:0];
 
