@@ -949,7 +949,16 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         [aCmd addTag:@"name"            withString:name];
         [aCmd addTag:@"segmentId"       withString:[NSString stringWithFormat:@"%@_%d",name,i]];
         [aCmd addTag:@"segmentGroupNum" withLong:groupIndex];
-        
+        [aCmd addTag:@"serial"          withString:[aDet objectForKey:@"serial"]];
+        [aCmd addTag:@"detType"         withString:[aDet objectForKey:@"det_type"]];
+        [aCmd addTag:@"strNumber"       withString:[aDet objectForKey:@"str_number"]];
+        [aCmd addTag:@"strPosition"     withString:[aDet objectForKey:@"str_position"]];
+        [aCmd addTag:@"cc4Chan"         withString:[aDet objectForKey:@"fe_cc4_ch"]];
+        [aCmd addTag:@"crate"           withString:[aDet objectForKey:@"daq_crate"]];
+        [aCmd addTag:@"boardId"         withString:[aDet objectForKey:@"daq_board_id"]];
+        [aCmd addTag:@"slot"            withString:[aDet objectForKey:@"daq_board_slot"]];
+        [aCmd addTag:@"channel"         withString:[aDet objectForKey:@"daq_board_ch"]];
+
         [aCmd addField: @"trigCounts"  withDouble:[group getTotalCounts:i]];
         [aCmd addField: @"trigRates"   withDouble:chan];
         [aCmd addField: @"wfCounts"    withDouble:[group getWaveformCounts:i]];
