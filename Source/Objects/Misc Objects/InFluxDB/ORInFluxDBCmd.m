@@ -63,6 +63,7 @@
 - (void) logResult:(id)result code:(int)aCode delegate:(ORInFluxDBModel*)delegate
 {
     if(aCode == 200){/*success*/}
+
     else if(aCode==400){
         [delegate setErrorString:[NSString stringWithFormat:@"Bad Request:%@",result]];
     }

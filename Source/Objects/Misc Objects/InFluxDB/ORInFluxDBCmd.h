@@ -117,7 +117,7 @@ enum {
 - (void) start:(NSString*)section withTags:(NSString*)someTags;
 - (void) start:(NSString*)section;
 
-- (void) addTag:(NSString*)aLabel withBoolen:(BOOL)aValue;
+- (void) addTag:(NSString*)aLabel withBoolean:(BOOL)aValue;
 - (void) addTag:(NSString*)aLabel withLong:(long)aValue;
 - (void) addTag:(NSString*)aLabel withDouble:(double)aValue;
 - (void) addTag:(NSString*)aLabel withString:(NSString*)aValue;

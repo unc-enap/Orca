@@ -57,7 +57,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
 @interface ORInFluxDBModel (private)
 - (void) updateProcesses;
-- (void) updateExperiment;
+- (void) updateExperimentDuringRun;
 - (void) updateHistory;
 - (void) updateMachineRecord;
 - (void) updateRunState:(ORRunModel*)rc running:(BOOL)isRunning;
@@ -246,7 +246,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) awakeAfterDocumentLoaded
 {
     [self startTimer];
-    [self updateExperiment];
+    [[self nextObject] postInFluxSetUp];
 }
 
 #pragma mark ***Accessors
@@ -517,17 +517,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [self executeDBCmd:[ORInFluxDBDelayCmd    delay:2]];
 }
 
-//- (void) updateRunInfo
-//{
-//    if(!stealthMode){
-//        NSArray* runObjects = [[self document] collectObjectsOfClass:NSClassFromString(@"ORRunModel")];
-//        if([runObjects count]){
-//            ORRunModel* rc = [runObjects objectAtIndex:0];
-//            if(rc)[self updateRunState:rc];
-//        }
-//    }
-//}
-
 - (void) updateRunState:(ORRunModel*)rc running:(BOOL)isRunning
 {
     scheduledForRunInfoUpdate = NO;
@@ -553,12 +542,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     }
 }
 
-//- (void) runStatusChanged:(NSNotification*)aNote
-//{
-//    [self updateRunState:[aNote object]];
-//    //[self updateDataSets];
-//}
-
 - (void) cleanUpRunStatus
 {
     //delete/cleanup the running status records. No need to keep around forever.
@@ -575,12 +558,11 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) runStarted:(NSNotification*)aNote
 {
     if(!stealthMode){
-        //[self cleanUpRunStatus];
         ORRunModel* rc  = [aNote object];
         [self updateRunState:rc running:YES];
         [runNumberString release];
         runNumberString = [rc fullRunNumberString];
-        [self updateExperiment];
+        [[self nextObject] postInFluxRunTime];
     }
 }
 
@@ -591,29 +573,9 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
     if(!stealthMode){
         [self updateRunState:[aNote object] running:NO];
-//  Simon doesn't want to use a run history so for now commented out
-//        ORRunModel* rc  = [aNote object];
-//        //keep a record of all runs
-//        if([[ORGlobal sharedGlobal] runMode] == kNormalRun){
-//            ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"ORCA" org:org];
-//            [aCmd     start: @"RunHistory"  withTags:@"Type=List"];
-//            [aCmd addField:  @"Number"      withString:[rc fullRunNumberString]];
-//            [aCmd addField:  @"RunType"     withLong:[rc runType]];
-//            [aCmd addField:  @"Length"      withDouble:[rc elapsedRunTime]];
-//            [aCmd addField:  @"StopTime"    withString:[[NSDate date] stdDescription]];
-//            [aCmd addField:  @"StartTime"   withString:[[rc startTime]stdDescription]];
-//            [self executeDBCmd:aCmd];
-//        }
+//        [self performSelector:@selector(updateExperiment) withObject:nil afterDelay:1];
     }
 }
-
-//- (void) runElapsedTimeChanged:(NSNotification*)aNote
-//{
-//    if(!scheduledForRunInfoUpdate){
-//        scheduledForRunInfoUpdate = YES;
-//        [self performSelector:@selector(updateRunState:) withObject:[aNote object] afterDelay:5];
-//    }
-//}
 
 - (void) executeDBCmd:(id)aCmd
 {
@@ -711,8 +673,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) _startAllPeriodicOperations
 {
     [self performSelector:@selector(updateMachineRecord)   withObject:nil afterDelay:2];
-    //[self performSelector:@selector(updateRunInfo)         withObject:nil afterDelay:4]; //trial removal
-    [self performSelector:@selector(updateExperiment)      withObject:nil afterDelay:3];
+    [self performSelector:@selector(updateExperimentDuringRun)      withObject:nil afterDelay:3];
 }
 
 - (void) updateMachineRecord
@@ -816,19 +777,20 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     }
 }
 
-- (void) updateExperiment
+- (void) updateExperimentDuringRun
 {
     if(!stealthMode){
-        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateExperiment) object:nil];
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateExperimentDuringRun) object:nil];
         @try {
-            ORExperimentModel* experiment = [self nextObject];
-            [experiment postInFluxDbRecord];
+            if([[ORGlobal sharedGlobal] runMode]==eRunInProgress){
+                [[self nextObject] postInFluxRunTime];
+            }
         }
         @catch (NSException* e){
             NSLog(@"%@ %@ Exception: %@\n",[self fullID],NSStringFromSelector(_cmd),e);
         }
         @finally {
-            [self performSelector:@selector(updateExperiment) withObject:nil afterDelay:30];
+            [self performSelector:@selector(updateExperimentDuringRun) withObject:nil afterDelay:30];
         }
     }
 }

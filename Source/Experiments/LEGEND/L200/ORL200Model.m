@@ -138,7 +138,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 
 - (void) runStarted:(NSNotification*) aNote
 {
-    [self postInFluxDbRecord];
+    [self postInFluxRunTime];
 }
 
 - (void) updateDataFilePath:(NSNotification*)aNote
@@ -836,35 +836,55 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
                                                       userInfo:history];
 }
 
-- (void) postInFluxDbRecord
+- (void) postInFluxSetUp
 {
     //called from the InFlux model
     double aTimeStamp = [[NSDate date]timeIntervalSince1970];
-    [self influxLoad:@"Ge"   segmentId: kL200DetType   timeStamp:aTimeStamp];
-    [self influxLoad:@"SiPM" segmentId: kL200SiPMType  timeStamp:aTimeStamp];
-    [self influxLoad:@"PMT"  segmentId: kL200PMTType   timeStamp:aTimeStamp];
-    [self influxLoad:@"Aux"  segmentId: kL200AuxType   timeStamp:aTimeStamp];
-    [self influxLoad:@"CC4"   segmentId: kL200CC4Type   timeStamp:aTimeStamp];
- }
-- (void) influxLoad:(NSString*)name segmentId:(int)groupIndex timeStamp:(NSTimeInterval)aTimeStamp
+    [self influxLoadSetUp:@"Ge"   segmentId: kL200DetType   timeStamp:aTimeStamp];
+    [self influxLoadSetUp:@"SiPM" segmentId: kL200SiPMType  timeStamp:aTimeStamp];
+    [self influxLoadSetUp:@"PMT"  segmentId: kL200PMTType   timeStamp:aTimeStamp];
+    [self influxLoadSetUp:@"Aux"  segmentId: kL200AuxType   timeStamp:aTimeStamp];
+    [self influxLoadSetUp:@"CC4"  segmentId: kL200CC4Type   timeStamp:aTimeStamp];
+
+}
+
+- (void) postInFluxRunTime
 {
- 
+    //called from the InFlux model
+    double aTimeStamp = [[NSDate date]timeIntervalSince1970];
+    [self influxLoadRunning:@"Ge"   segmentId: kL200DetType   timeStamp:aTimeStamp];
+    [self influxLoadRunning:@"SiPM" segmentId: kL200SiPMType  timeStamp:aTimeStamp];
+    [self influxLoadRunning:@"PMT"  segmentId: kL200PMTType   timeStamp:aTimeStamp];
+    [self influxLoadRunning:@"Aux"  segmentId: kL200AuxType   timeStamp:aTimeStamp];
+    [self influxLoadRunning:@"CC4"  segmentId: kL200CC4Type   timeStamp:aTimeStamp];
+}
+
+- (void) influxLoadSetUp:(NSString*)name segmentId:(int)groupIndex timeStamp:(NSTimeInterval)aTimeStamp
+{
+    //-------------------------------------------------------------------------------------------
+    // this should be called once at start of run to record the setup
+    //-------------------------------------------------------------------------------------------
     ORL200SegmentGroup* group = (ORL200SegmentGroup*)[self segmentGroup:groupIndex];
     for(int i=0; i<[self numberSegmentsInGroup:groupIndex]; i++){
         ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:[self objectName] org:[influxDB org]];
-        [aCmd start : @"RunTime"];
+        [aCmd start : @"SetUp"];
 
+        //-----------------------------------------
+        //-------------setup only------------------
+        //-----------------------------------------
         id aDet = [group segment:i];
         ORFlashCamADCModel* hw = [aDet hardwareCard];
-        short crate    = [[aDet objectForKey:@"daq_crate"]intValue];
-        short slot     = [[aDet objectForKey:@"daq_board_slot"]intValue];
-        short chan     = [[aDet objectForKey:@"daq_board_ch"]intValue];
+        short crate   = [[aDet objectForKey:@"daq_crate"]intValue];
+        short slot    = [[aDet objectForKey:@"daq_board_slot"]intValue];
+        short chan    = [[aDet objectForKey:@"daq_board_ch"]intValue];
         NSString* loc = [NSString stringWithFormat:@"%02d_%02d_%02d",crate,slot,chan];
 
         [aCmd addTag:@"location"        withString:loc];
         [aCmd addTag:@"name"            withString:name];
         [aCmd addTag:@"segmentId"       withString:[NSString stringWithFormat:@"%@_%d",name,i]];
         [aCmd addTag:@"segmentGroupNum" withLong:groupIndex];
+        
+            
         [aCmd addTag:@"serial"          withString:[aDet objectForKey:@"serial"]];
         [aCmd addTag:@"detType"         withString:[aDet objectForKey:@"det_type"]];
         [aCmd addTag:@"strNumber"       withString:[aDet objectForKey:@"str_number"]];
@@ -876,20 +896,9 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         [aCmd addTag:@"channel"         withString:[aDet objectForKey:@"daq_board_ch"]];
         [aCmd addTag:@"fcioID"          withString:[aDet objectForKey:@"fcioID"]];
         
-        //run time stats
-        //if([[ORGlobal sharedGlobal]runInProgress]){
-        [aCmd addField: @"trigCounts"  withDouble:[group getTotalCounts:i]];
-        [aCmd addField: @"trigRates"   withDouble:[group getRate:i]];
-        [aCmd addField: @"wfCounts"    withDouble:[group getWaveformCounts:i]];
-        [aCmd addField: @"wfRates"     withDouble:[group getWaveformRate:i]];
-        [aCmd addField: @"Baseline"    withDouble:[group getBaseline:i]];
-        [aCmd addField: @"Baseline"    withDouble:[group getBaseline:i]];
+        [aCmd addField: @"HwPresent"    withBoolean:hw!=nil];
 
-       // }
-        
-        if(hw){
-            [aCmd addField: @"HwPresent"    withBoolean:hw!=nil];
-
+        if(hw!=nil){
             //channel level values
             [aCmd addField: @"numChans"      withLong:[hw numberOfChannels]];
             [aCmd addField: @"isRunning"     withBoolean:[hw isRunning]];
@@ -904,7 +913,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
             [aCmd addField: @"flatTopTime"   withLong:[hw flatTopTime:chan]];
             [aCmd addField: @"poleZeroTime"  withLong:[hw poleZeroTime:chan]];
             [aCmd addField: @"postTrigger"   withLong:[hw postTrigger:chan]];
-
+            
             //card level settings
             [aCmd addField: @"promSlot"       withLong:[hw promSlot]];
             [aCmd addField: @"cardAddress"    withLong:[hw cardAddress]];
@@ -915,13 +924,42 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
             [aCmd addField: @"status"         withLong:[hw status]];
             [aCmd addField: @"totalErrors"    withLong:[hw totalErrors]];
         }
+
         [aCmd setTimeStamp:aTimeStamp];
         [influxDB executeDBCmd:aCmd];
     }
-
 }
+- (void) influxLoadRunning:(NSString*)name segmentId:(int)groupIndex timeStamp:(NSTimeInterval)aTimeStamp
+{
+    ORL200SegmentGroup* group = (ORL200SegmentGroup*)[self segmentGroup:groupIndex];
+    for(int i=0; i<[self numberSegmentsInGroup:groupIndex]; i++){
+        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:[self objectName] org:[influxDB org]];
+        [aCmd start : @"RunTime"];
 
+        //-----------------------------------------
+        //-------------run time only---------------
+        //-----------------------------------------
+        id aDet = [group segment:i];
+        short crate   = [[aDet objectForKey:@"daq_crate"]intValue];
+        short slot    = [[aDet objectForKey:@"daq_board_slot"]intValue];
+        short chan    = [[aDet objectForKey:@"daq_board_ch"]intValue];
+        NSString* loc = [NSString stringWithFormat:@"%02d_%02d_%02d",crate,slot,chan];
 
+        [aCmd addTag:@"location"        withString:loc];
+        [aCmd addTag:@"name"            withString:name];
+        [aCmd addTag:@"segmentId"       withString:[NSString stringWithFormat:@"%@_%d",name,i]];
+        [aCmd addTag:@"segmentGroupNum" withLong:groupIndex];
+        
+        [aCmd addField: @"trigCounts"  withDouble:[group getTotalCounts:i]];
+        [aCmd addField: @"trigRates"   withDouble:chan];
+        [aCmd addField: @"wfCounts"    withDouble:[group getWaveformCounts:i]];
+        [aCmd addField: @"wfRates"     withDouble:[group getWaveformRate:i]];
+        [aCmd addField: @"Baseline"    withDouble:[group getBaseline:i]];
+        
+        [aCmd setTimeStamp:aTimeStamp];
+        [influxDB executeDBCmd:aCmd];
+    }
+}
 @end
 
 @implementation ORL200HeaderRecordID
