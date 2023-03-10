@@ -122,33 +122,43 @@ NSString* ORRelinkSegments   = @"ORRelinkSegments";
             return vs0 > vs1;
         }];
     }
-    else if(type==kL200CC4Type){
-        NSMutableArray* positions = [NSMutableArray array];
-        for(id key in dict) [positions addObject:[NSString stringWithString:key]];
-        NSArray* sortedPositions = [positions sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-        for(id aPosition in sortedPositions){
-            NSDictionary* segInfo = [[dict objectForKey:aPosition]objectForKey:@"cc4"];
-            int pos  = [[segInfo objectForKey:@"cc4_position"] intValue];
-            int slot = [[segInfo objectForKey:@"cc4_slot"]     intValue];
-            int segNum = pos*14;
-            if(slot==1)  segNum+=7;
-            
-            for(int chan=0;chan<7;chan++){
-                NSString* line = [NSString stringWithFormat:@"%@,%@,%@,%d",
-                                  [segInfo objectForKey:@"cc4_name"],
-                                  [segInfo objectForKey:@"cc4_position"],
-                                  [segInfo objectForKey:@"cc4_slot"],
-                                  chan];
-                ORDetectorSegment* segment = [segments objectAtIndex:segNum+chan];
-                
+    else{
+        for(id key in dict) [channels addObject:[NSString stringWithString:key]];
+        chans = [NSArray array];
+        chans = [channels sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+        if(type == kL200CC4Type){
+            for(id aPosition in chans){
+                NSDictionary* segInfo = [[dict objectForKey:aPosition]objectForKey:@"cc4"];
+                int pos  = [[segInfo objectForKey:@"cc4_position"] intValue];
+                int slot = [[segInfo objectForKey:@"cc4_slot"]     intValue];
+                int segNum = pos*14;
+                if(slot==1)  segNum+=7;
+                for(int chan=0;chan<7;chan++){
+                    NSString* line = [NSString stringWithFormat:@"%@,%@,%@,%d",
+                                      [segInfo objectForKey:@"cc4_name"],
+                                      [segInfo objectForKey:@"cc4_position"],
+                                      [segInfo objectForKey:@"cc4_slot"],
+                                      chan];
+                    ORDetectorSegment* segment = [segments objectAtIndex:segNum+chan];
+                    [segment decodeLine:line];
+                }
+            }
+        }
+        else if(type == kL200ADCType){
+            int index = -1;
+            for(id adc in chans){
+                index ++;
+                NSDictionary* adcInfo = [[dict objectForKey:adc] objectForKey:@"daq"];
+                NSString* line = [NSString stringWithFormat:@"%@,%@,%@,%@,%@",
+                                  [adcInfo objectForKey:@"daq_crate"],
+                                  [adcInfo objectForKey:@"daq_board_id"],
+                                  [adcInfo objectForKey:@"daq_board_slot"],
+                                  [adcInfo objectForKey:@"adc_serial_0"],
+                                  [adcInfo objectForKey:@"adc_serial_1"]];
+                ORDetectorSegment* segment = [segments objectAtIndex:index];
                 [segment decodeLine:line];
             }
         }
-    }
-    else {
-            for(id key in dict) [channels addObject:[NSString stringWithString:key]];
-            chans = [NSArray array];
-            chans = [channels sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     }
     // get the parameters from the json data
     if(type != kL200CC4Type){
@@ -163,11 +173,14 @@ NSString* ORRelinkSegments   = @"ORRelinkSegments";
             NSDictionary* daq_dict = [ch_dict objectForKey:@"daq"];
             NSString* ch  = [NSString stringWithFormat:@"%@,%@,", key,
                              [ch_dict  objectForKey:@"det_type"]];
-            NSString* daq = [NSString stringWithFormat:@"%@,%@,%@,%@,",
+            NSMutableString* daq = [NSMutableString stringWithFormat:@"%@,%@,%@,%@,",
                              [daq_dict objectForKey:@"crate"],
                              [daq_dict objectForKey:@"board_id"],
                              [daq_dict objectForKey:@"board_slot"],
                              [daq_dict objectForKey:@"board_ch"]];
+            if([daq_dict objectForKey:@"adc_serial"])
+                [daq appendFormat:@"%@,", [daq_dict objectForKey:@"adc_serial"]];
+            else [daq appendString:@"--,"];
             NSString* line = @"";
             if(type == kL200DetType){
                 NSDictionary* str_dict = [ch_dict objectForKey:@"string"];
@@ -280,25 +293,26 @@ NSString* ORRelinkSegments   = @"ORRelinkSegments";
                 NSDictionary* str_dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                           [params objectAtIndex:2], @"number",
                                           [params objectAtIndex:3], @"position", nil];
-                NSDictionary* daq_dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                          [params objectAtIndex:4], @"crate",
-                                          [params objectAtIndex:5], @"board_id",
-                                          [params objectAtIndex:6], @"board_slot",
-                                          [params objectAtIndex:7], @"board_ch", nil];
+                NSMutableDictionary* daq_dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                                 [params objectAtIndex:4], @"crate",
+                                                 [params objectAtIndex:5], @"board_id",
+                                                 [params objectAtIndex:6], @"board_slot",
+                                                 [params objectAtIndex:7], @"board_ch",
+                                                 [params objectAtIndex:8], @"adc_serial", nil];
                 NSDictionary* hv_dict  = [NSDictionary dictionaryWithObjectsAndKeys:
-                                          [params objectAtIndex:8], @"crate",
-                                          [params objectAtIndex:9], @"board_slot",
-                                          [params objectAtIndex:10], @"board_chan",
-                                          [params objectAtIndex:11], @"cable",
-                                          [params objectAtIndex:12], @"flange_id",
-                                          [params objectAtIndex:13], @"flange_pos", nil];
+                                          [params objectAtIndex:9], @"crate",
+                                          [params objectAtIndex:10], @"board_slot",
+                                          [params objectAtIndex:11], @"board_chan",
+                                          [params objectAtIndex:12], @"cable",
+                                          [params objectAtIndex:13], @"flange_id",
+                                          [params objectAtIndex:14], @"flange_pos", nil];
                 NSDictionary* fe_dict  = [NSDictionary dictionaryWithObjectsAndKeys:
-                                          [params objectAtIndex:14], @"cc4_ch",
-                                          [params objectAtIndex:15], @"head_card_ana",
-                                          [params objectAtIndex:16], @"head_card_dig",
-                                          [params objectAtIndex:17], @"fanout_card",
-                                          [params objectAtIndex:18], @"raspberrypi",
-                                          [params objectAtIndex:19], @"lmfe_id", nil];
+                                          [params objectAtIndex:15], @"cc4_ch",
+                                          [params objectAtIndex:16], @"head_card_ana",
+                                          [params objectAtIndex:17], @"head_card_dig",
+                                          [params objectAtIndex:18], @"fanout_card",
+                                          [params objectAtIndex:19], @"raspberrypi",
+                                          [params objectAtIndex:20], @"lmfe_id", nil];
                 ch_dict  = [NSDictionary dictionaryWithObjectsAndKeys:
                             @"ged", @"system",
                             [params objectAtIndex:1], @"det_type",
@@ -306,16 +320,24 @@ NSString* ORRelinkSegments   = @"ORRelinkSegments";
                             hv_dict,  @"high_voltage", fe_dict,  @"electronics", nil];
             }
             else if(type > kL200DetType && type < kL200SegmentTypeCount){
-                NSDictionary* daq_dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                          [params objectAtIndex:2], @"crate",
-                                          [params objectAtIndex:3], @"board_id",
-                                          [params objectAtIndex:4], @"board_slot",
-                                          [params objectAtIndex:5], @"board_ch", nil];
+                NSDictionary* daq_dict;
+                if(type == kL200ADCType) daq_dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                     [params objectAtIndex:0], @"crate",
+                                                     [params objectAtIndex:1], @"board_id",
+                                                     [params objectAtIndex:2], @"board_slot",
+                                                     [params objectAtIndex:3], @"adc_serial_0",
+                                                     [params objectAtIndex:4], @"adc_serial_1", nil];
+                else daq_dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 [params objectAtIndex:2], @"crate",
+                                 [params objectAtIndex:3], @"board_id",
+                                 [params objectAtIndex:4], @"board_slot",
+                                 [params objectAtIndex:5], @"board_ch",
+                                 [params objectAtIndex:6], @"adc_serial", nil];
                 if(type == kL200SiPMType || type == kL200PMTType){
                     NSDictionary* v_dict  = [NSDictionary dictionaryWithObjectsAndKeys:
-                                             [params objectAtIndex:6], @"crate",
-                                             [params objectAtIndex:7], @"board_slot",
-                                             [params objectAtIndex:8], @"board_chan", nil];
+                                             [params objectAtIndex:7], @"crate",
+                                             [params objectAtIndex:8], @"board_slot",
+                                             [params objectAtIndex:9], @"board_chan", nil];
                     if(type == kL200SiPMType)
                         ch_dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                    @"spm", @"system",
@@ -332,6 +354,11 @@ NSString* ORRelinkSegments   = @"ORRelinkSegments";
                                @"aux", @"system",
                                [params objectAtIndex:1], @"det_type",
                                daq_dict, @"daq", nil];
+                else if(type == kL200ADCType)
+                    ch_dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                @"adc", @"system",
+                                @"FlashCamADC", @"det_type",
+                                daq_dict, @"adc", nil];
             }
             
             if(ch_dict) [dict setObject:ch_dict forKey:[params objectAtIndex:0]];
