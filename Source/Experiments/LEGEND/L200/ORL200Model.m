@@ -955,7 +955,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         [aCmd addField: @"trigRates"   withDouble:chan];
         [aCmd addField: @"wfCounts"    withDouble:[group getWaveformCounts:i]];
         [aCmd addField: @"wfRates"     withDouble:[group getWaveformRate:i]];
-        [aCmd addField: @"baselines"    withDouble:[group getBaseline:i]];
+        [aCmd addField: @"baselines"   withDouble:[group getBaseline:i]];
         
         [aCmd setTimeStamp:aTimeStamp];
         [influxDB executeDBCmd:aCmd];

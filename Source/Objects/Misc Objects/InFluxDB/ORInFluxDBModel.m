@@ -463,7 +463,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
             [aCmd addField: @"Alarm"         withString:alarmName];
             [aCmd addField: @"Severity"      withString:[anAlarm severityName]];
             [aCmd addField: @"Acknowledged"  withBoolean:NO];
-            [aCmd addField: @"Posted"        withLong:[anAlarm timePostedUnixTimestamp]];
+            [aCmd addField: @"Posted"        withDouble:[anAlarm timePostedUnixTimestamp]];
             [aCmd addField: @"Help"          withString:help];
             [self executeDBCmd:aCmd];
         }
@@ -484,8 +484,8 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
             [aCmd   start  : @"CurrentAlarms" withTags:@"Type=List"];
             [aCmd addField: @"Alarm"         withString:alarmName];
             [aCmd addField: @"Severity"      withString:[anAlarm severityName]];
-            [aCmd addField: @"Acknowledged"  withString:@"NO"];
-            [aCmd addField: @"Posted"        withString:[anAlarm timePosted]];
+            [aCmd addField: @"Acknowledged"  withBoolean:YES];
+            [aCmd addField: @"Posted"        withDouble:[anAlarm timePostedUnixTimestamp]];
             [aCmd addField: @"Help"          withString:help];
             [self executeDBCmd:aCmd];
         }
@@ -501,7 +501,8 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [aCmd    start: @"AlarmHistory"  withTags:@"Type=History"];
     [aCmd addField: @"Severity"      withString:[alarm severityName]];
     [aCmd addField: @"Alarm"         withString:alarmName];
-    [aCmd addField: @"Cleared"       withLong:[[NSDate date]timeIntervalSince1970]];
+    [aCmd addField: @"Posted"        withDouble:[alarm timePostedUnixTimestamp]];
+    [aCmd addField: @"Cleared"       withDouble:[[NSDate date]timeIntervalSince1970]];
     [self executeDBCmd:aCmd];
 }
 
@@ -524,7 +525,8 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     if(!stealthMode){
         ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"ORCA" org:org];
         [aCmd    start: @"CurrentRun"  withTags:@"Type=Status"];
-        [aCmd addField: @"Number"      withString:[rc fullRunNumberString]];
+        [aCmd addField: @"RunNumber"   withLong:[rc runNumber]];
+        [aCmd addField: @"SubRunNumber" withLong:[rc subRunNumber]];
         [aCmd addField: @"Running"     withBoolean:isRunning];
         [aCmd addField: @"ElapsedTime" withLong:[rc elapsedRunTime]];
         [aCmd addField: @"TimeToGo"    withLong:(long)[rc timeToGo]];
@@ -532,11 +534,10 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         [aCmd addField: @"TimedRun"    withBoolean:[rc timedRun]];
         [aCmd addField: @"RunMode"     withString:[[ORGlobal sharedGlobal] runMode] == kNormalRun?@"Normal":@"OffLine"];
         [aCmd addField: @"Repeating"   withBoolean:[rc repeatRun]];
+        [aCmd addField: @"FileName"    withString:[rc fileName]]; xxxxxxAdd
         if([rc timedRun])[aCmd addField: @"Length"  withLong:[rc timeLimit]];
         else             [aCmd addField: @"Length"  withLong:0];
 
-        
-        [aCmd addField:   @"StartTime"  withLong:[[rc startTime]timeIntervalSince1970]];
         [aCmd addField:   @"RunModeDesc" withString:[rc runTypesMaskString]];
         [self executeDBCmd:aCmd];
     }
