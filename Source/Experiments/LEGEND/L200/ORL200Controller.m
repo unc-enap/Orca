@@ -20,6 +20,7 @@
 #import "ORL200Controller.h"
 #import "ORL200Model.h"
 #import "ORL200SegmentGroup.h"
+#import "ORFlashCamADCModel.h"
 #import "ORDetectorSegment.h"
 #import "ORDetectorView.h"
 #import "ORTimeLinePlot.h"
@@ -67,6 +68,12 @@
 {
     return @"~/L200CC4ChanMap.json";
 }
+
+- (NSString*) defaultADCSerialMapFilePath
+{
+    return @"~/L200ADCSerialMap.json";
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];
@@ -193,6 +200,10 @@
                      selector : @selector(cc4ChanAdcClassNameChanged:)
                          name : ORSegmentGroupAdcClassNameChanged
                         object: [model segmentGroup:kL200CC4Type]];
+    [notifyCenter addObserver : self
+                     selector : @selector(adcSerialMapFileChanged:)
+                         name : ORSegmentGroupMapFileChanged
+                       object : self];
 
 }
 
@@ -212,6 +223,7 @@
     [self auxChanMapFileChanged:nil];
     [self cc4ChanMapFileChanged:nil];
     [self cc4ChanAdcClassNameChanged:nil];
+    [self adcSerialMapFileChanged:nil];
 }
 
 -(void) groupChanged:(NSNotification*)note
@@ -330,6 +342,13 @@
     NSString* s = [[[model segmentGroup:kL200CC4Type] mapFile] stringByAbbreviatingWithTildeInPath];
     if(!s) s = @"--";
     [cc4ChanMapFileTextField setStringValue:s];
+}
+
+- (void) adcSerialMapFileChanged:(NSNotification*)note
+{
+    NSString* s = [[[model segmentGroup:kL200ADCType] mapFile] stringByAbbreviatingWithTildeInPath];
+    if(!s) s = @"--";
+    [adcSerialFileTextView setStringValue:s];
 }
 
 #pragma mark •••Actions
@@ -490,16 +509,27 @@
     [self autoscale:auxChanColorScale forSegmentGroup:kL200AuxType];
 }
 
+- (IBAction) saveADCSerialMapFileAction:(id)sender
+{
+    [self saveMapFile:kL200ADCType withDefaultPath:[self defaultADCSerialMapFilePath]];
+}
+
+- (IBAction) readADCSerialMapFileAction:(id)sender
+{
+    [self readMapFile:kL200ADCType intoTable:adcSerialTableView];
+}
+
 
 #pragma mark •••Interface Management
 
 - (int) segmentTypeFromTableView:(NSTableView*)view
 {
-    if(view == primaryTableView)      return kL200DetType;
-    else if(view == sipmTableView)    return kL200SiPMType;
-    else if(view == pmtTableView)     return kL200PMTType;
-    else if(view == auxChanTableView) return kL200AuxType;
-    else if(view == cc4TableView)     return kL200CC4Type;
+    if(view == primaryTableView)        return kL200DetType;
+    else if(view == sipmTableView)      return kL200SiPMType;
+    else if(view == pmtTableView)       return kL200PMTType;
+    else if(view == auxChanTableView)   return kL200AuxType;
+    else if(view == cc4TableView)       return kL200CC4Type;
+    else if(view == adcSerialTableView) return kL200ADCType;
     else return -1;
 }
 
@@ -516,9 +546,10 @@
 - (NSInteger) numberOfRowsInTableView:(NSTableView*)aTableView
 {
     int type = [self segmentTypeFromTableView:aTableView];
-    if(type >= 0 && type < kL200CC4Type)        return [[model segmentGroup:type] numSegments];
-    else if(type==kL200CC4Type)                 return kNumCC4Positions;
-    else if(aTableView == stringMapTableView)   return kL200MaxDetsPerString;
+    if(type >= 0 && type < kL200CC4Type) return [[model segmentGroup:type] numSegments];
+    else if(type == kL200CC4Type)        return kNumCC4Positions;
+    else if(type == kL200ADCType)        return [[model segmentGroup:type] numSegments];
+    else if(aTableView)                  return kL200MaxDetsPerString;
     else return 0;
 }
 
@@ -540,7 +571,6 @@
         }
         else return [[model segmentGroup:type] segment:(int)aRowIndex objectForKey:[aTableColumn identifier]];
     }
-    else if(aTableView == stringMapTableView) return nil;
     else return nil;
 }
 
@@ -556,6 +586,46 @@
         else {
             ORDetectorSegment* segment = [[model segmentGroup:type] segment:(int)aRowIndex];
             [segment setObject:anObject forKey:[aTableColumn identifier]];
+            // add the ADC daughter card serial numbers to the channel maps
+            if(type == kL200ADCType){
+                NSString* identifier = [aTableColumn identifier];
+                if([identifier isEqualTo:@"adc_serial_0"] || [identifier isEqualTo:@"adc_serial_1"]){
+                    NSString* serial = (NSString*) anObject;
+                    if(serial){
+                        if([serial length] > 0 && [serial rangeOfString:@"-"].location == NSNotFound){
+                            id crate = [self tableView:aTableView
+                             objectValueForTableColumn:[aTableView tableColumnWithIdentifier:@"daq_crate"]
+                                                   row:aRowIndex];
+                            id addr =  [self tableView:aTableView
+                             objectValueForTableColumn:[aTableView tableColumnWithIdentifier:@"daq_board_id"]
+                                                   row:aRowIndex];
+                            id slot  = [self tableView:aTableView
+                             objectValueForTableColumn:[aTableView tableColumnWithIdentifier:@"daq_board_slot"]
+                                                   row:aRowIndex];
+                            id ser0  = [self tableView:aTableView
+                             objectValueForTableColumn:[aTableView tableColumnWithIdentifier:@"adc_serial_0"]
+                                                   row:aRowIndex];
+                            id ser1 = [self tableView:aTableView
+                            objectValueForTableColumn:[aTableView tableColumnWithIdentifier:@"adc_serial_1"]
+                                                  row:aRowIndex];
+                            for(int itype=kL200DetType; itype<=kL200AuxType; itype++){
+                                int nchan = (itype == kL200PMTType) ? kFlashCamADCStdChannels/2 : kFlashCamADCChannels/2;
+                                for(int iseg=0; iseg<[[model segmentGroup:itype] numSegments]; iseg++){
+                                    ORDetectorSegment* segment = [[model segmentGroup:itype] segment:iseg];
+                                    if([[segment objectForKey:@"daq_crate"]        isEqualToString:crate] &&
+                                       [[segment objectForKey:@"daq_board_id"]     isEqualToString:addr]  &&
+                                       [[segment objectForKey:@"daq_board_slot"]   isEqualToString:slot]){
+                                        if([[segment objectForKey:@"daq_board_ch"] intValue]  < nchan)
+                                            [segment  setObject:ser0 forKey:@"adc_serial"];
+                                        else [segment setObject:ser1 forKey:@"adc_serial"];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                }
+            }
         }
         [[model segmentGroup:type] configurationChanged:nil];
     }

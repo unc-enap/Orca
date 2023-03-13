@@ -59,7 +59,10 @@
     IBOutlet NSButton*      auxChanColorAxisLogCB;
     IBOutlet NSTextField*   auxChanRateField;
     
-    IBOutlet NSTableView*   stringMapTableView;
+    IBOutlet NSTableView* adcSerialTableView;
+    IBOutlet NSTextField* adcSerialFileTextView;
+    IBOutlet NSButton*    adcSerialReadMapFileButton;
+    IBOutlet NSButton*    adcSerialSaveMapFileButton;
 }
 
 #pragma mark •••Initialization
@@ -67,6 +70,7 @@
 - (NSString*) defaultPMTMapFilePath;
 - (NSString*) defaultAuxChanMapFilePath;
 - (NSString*) defaultCC4MapFilePath;
+- (NSString*) defaultADCSerialMapFilePath;
 
 #pragma mark •••Notifications
 - (void) updateWindow;
@@ -93,6 +97,8 @@
 - (void) cc4ChanAdcClassNameChanged:(NSNotification*)note;
 - (NSString*) getCC4Name:(int)aPosition slot:(int)aSlot;
 
+- (void) adcSerialMapFileChanged:(NSNotification*)note;
+
 #pragma mark •••Actions
 - (IBAction) viewTypeAction:(id)sender;
 - (IBAction) sipmAdcClassNameAction:(id)sender;
@@ -113,6 +119,9 @@
 - (IBAction) saveCC4ChanMapFileAction:(id)sender;
 - (IBAction) readCC4ChanMapFileAction:(id)sender;
 - (IBAction) cc4AdcClassNameAction:(id)sender;
+
+- (IBAction) saveADCSerialMapFileAction:(id)sender;
+- (IBAction) readADCSerialMapFileAction:(id)sender;
 
 #pragma mark •••Interface Management
 - (int) segmentTypeFromTableView:(NSTableView*)view;

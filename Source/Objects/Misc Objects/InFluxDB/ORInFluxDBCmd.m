@@ -174,7 +174,7 @@
 {
     NSString* requestString = [NSString stringWithFormat:@"%@/api/v2/orgs",[delegate hostName]];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
-    
+
     request.HTTPMethod = @"GET";
     [request setValue:[NSString stringWithFormat:@"Token %@",[delegate authToken]] forHTTPHeaderField:@"Authorization"];
     requestSize = [requestString length];
@@ -200,7 +200,7 @@
 {
     NSString* requestString = [NSString stringWithFormat:@"%@/api/v2/orgs",[delegate hostName]];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
-    
+
     request.HTTPMethod = @"GET";
     [request setValue:[NSString stringWithFormat:@"Token %@",[delegate authToken]] forHTTPHeaderField:@"Authorization"];
     requestSize = [requestString length];
@@ -335,6 +335,11 @@
     [tags addObject:[NSString stringWithFormat:@"%@=%@",aLabel,aValue]];
 }
 
+- (void) addTag:(NSString*)aLabel withBoolean:(BOOL)aValue
+{
+    [tags addObject:[NSString stringWithFormat:@"%@=%@",aLabel,aValue?@"true":@"false"]];
+}
+
 - (void) addTag:(NSString*)aLabel withLong:(long)aValue
 {
     [tags addObject:[NSString stringWithFormat:@"%@=%ld",aLabel,aValue]];
@@ -345,9 +350,14 @@
     [tags addObject:[NSString stringWithFormat:@"%@=%f",aLabel,aValue]];
 }
 
+- (void) addField:(NSString*)aValueName withBoolean:(BOOL)aValue
+{
+    [measurements addObject:[NSString stringWithFormat:@"%@=%@",aValueName,aValue?@"true":@"false"]];
+}
+
 - (void) addField:(NSString*)aValueName withLong:(long)aValue
 {
-    [measurements addObject:[NSString stringWithFormat:@"%@=%ld",aValueName,aValue]];
+    [measurements addObject:[NSString stringWithFormat:@"%@=%ldi",aValueName,aValue]];
 }
 
 - (void) addField:(NSString*)aValueName withDouble:(double)aValue
@@ -369,11 +379,11 @@
 {
     NSString* requestString = [NSString stringWithFormat:@"%@/api/v2/write?org=%@&bucket=%@&precision=ns",[delegate hostName],org,bucket];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
-    
+
     request.HTTPMethod = @"POST";
     [request setValue:@"text/plain; application/json" forHTTPHeaderField:@"Accept"];
     [request setValue:[NSString stringWithFormat:@"Token %@",[delegate authToken]]                     forHTTPHeaderField:@"Authorization"];
-    
+
     NSString* outputBuffer = [NSString stringWithFormat:@"%@,%@ %@ %@",
                               measurement,
                               [tags componentsJoinedByString:@","],
@@ -426,7 +436,7 @@
     NSMutableDictionary* dict = [NSMutableDictionary dictionary];
     [dict setObject:start forKey:@"start"];
     [dict setObject:stop forKey:@"stop"];
-    
+
     NSError* error;
     NSData*  jsonData = [NSJSONSerialization dataWithJSONObject:dict
                                                         options:0 //because don't care about readability

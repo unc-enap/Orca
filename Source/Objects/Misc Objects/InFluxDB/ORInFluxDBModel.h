@@ -64,8 +64,6 @@
 #pragma mark ***Notifications
 - (void) registerNotificationObservers;
 - (void) applicationIsTerminating : (NSNotification*)aNote;
-- (void) runElapsedTimeChanged    : (NSNotification*)aNote;
-- (void) runStatusChanged         : (NSNotification*)aNote;
 - (void) alarmPosted              : (NSNotification*)aNote;
 - (void) alarmCleared             : (NSNotification*)aNote;
 - (void) alarmAcknowledged        : (NSNotification*)aNote;

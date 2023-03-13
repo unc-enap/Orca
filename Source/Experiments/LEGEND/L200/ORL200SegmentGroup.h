@@ -20,7 +20,7 @@
 #import "ORSegmentGroup.h"
 
 enum ORL200SegmentType{ kL200DetType, kL200SiPMType, kL200PMTType, kL200AuxType,
-    kL200CC4Type,kL200SegmentTypeCount};
+    kL200CC4Type, kL200ADCType, kL200SegmentTypeCount};
 
 @interface ORL200SegmentGroup : ORSegmentGroup {
     unsigned int type;
