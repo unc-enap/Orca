@@ -116,8 +116,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         [self registerNotificationObservers];
         [self executeDBCmd:[ORInFluxDBListOrgs    listOrgs]];
         [self executeDBCmd:[ORInFluxDBListBuckets listBuckets]];
-        //[self cleanUpRunStatus];
-
     }
     [super wakeUp];
 }
@@ -258,7 +256,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) awakeAfterDocumentLoaded
 {
     [self startTimer];
-    [self deleteCurrentAlarms];
+//    [self deleteCurrentAlarms];
     [[self nextObject] postInFluxSetUp];
 }
 
@@ -536,69 +534,64 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) alarmPosted:(NSNotification*)aNote
 {
     if(!stealthMode){
-         [self deleteCurrentAlarms];
-        ORAlarmCollection* alarmCollection = [ORAlarmCollection sharedAlarmCollection];
-        for(id anAlarm in [alarmCollection alarms]){
-            NSString* alarmName = [[anAlarm name]stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-            NSString* help = [anAlarm helpString];
-            NSInteger firstLF = [help rangeOfString:@"\n"].location;
-            help = [help substringFromIndex:firstLF];
-            ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"Alarms" org:org];
-            [aCmd     start: @"CurrentAlarms" withTags:@"Type=List"];
-            [aCmd addField: @"Alarm"         withString:alarmName];
-            [aCmd addField: @"Severity"      withString:[anAlarm severityName]];
-            [aCmd addField: @"Acknowledged"  withBoolean:NO];
-            [aCmd addField: @"Posted"        withDouble:[anAlarm timePostedUnixTimestamp]];
-            [aCmd addField: @"Help"          withString:help];
-            [self executeDBCmd:aCmd];
-        }
-     }
+        ORRunModel*   rc    = [[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORRunModel,1"];
+        ORAlarm* anAlarm    = [aNote object];
+        NSString* alarmName = [[anAlarm name]stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+        NSString* help      = [anAlarm helpString];
+        NSInteger firstLF   = [help rangeOfString:@"\n"].location;
+        help                = [help substringFromIndex:firstLF];
+        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"Alarms" org:org];
+        [aCmd    start: @"Alarm"];
+        [aCmd addTag:@"Type" withString: @"CurrentAlarm"]; //have to a tag
+        [aCmd addField: @"Alarm"         withString:alarmName];
+        [aCmd addField: @"Severity"      withString:[anAlarm severityName]];
+        [aCmd addField: @"Acknowledged"  withBoolean:NO];
+        [aCmd addField: @"Posted"        withDouble:[anAlarm timePostedUnixTimestamp]];
+        [aCmd addField: @"Help"          withString:help];
+        [aCmd addField: @"RunNumber"    withLong:[rc runNumber]];
+        [aCmd addField: @"SubRunNumber" withLong:[rc subRunNumber]];
+
+        [self executeDBCmd:aCmd];
+    }
 }
 
 - (void) alarmAcknowledged:(NSNotification*)aNote
 {
     if(!stealthMode){
-         [self deleteCurrentAlarms];
-        ORAlarmCollection* alarmCollection = [ORAlarmCollection sharedAlarmCollection];
-        for(id anAlarm in [alarmCollection alarms]){
-            NSString* alarmName = [[anAlarm name]stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-            NSString* help = [anAlarm helpString];
-            NSInteger firstLF = [help rangeOfString:@"\n"].location;
-            help = [help substringFromIndex:firstLF];
-            ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"Alarms" org:org];
-            [aCmd   start : @"CurrentAlarms" withTags:@"Type=List"];
-            [aCmd addField: @"Alarm"         withString:alarmName];
-            [aCmd addField: @"Severity"      withString:[anAlarm severityName]];
-            [aCmd addField: @"Acknowledged"  withBoolean:YES];
-            [aCmd addField: @"Posted"        withDouble:[anAlarm timePostedUnixTimestamp]];
-            [aCmd addField: @"Help"          withString:help];
-            [self executeDBCmd:aCmd];
-        }
+        ORRunModel*   rc    = [[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORRunModel,1"];
+        ORAlarm* anAlarm    = [aNote object];
+        NSString* alarmName = [[anAlarm name]stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+        NSString* help      = [anAlarm helpString];
+        NSInteger firstLF   = [help rangeOfString:@"\n"].location;
+        help = [help substringFromIndex:firstLF];
+        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"Alarms" org:org];
+        [aCmd    start: @"Alarm"];
+        [aCmd addTag  :@"Type" withString: @"CurrentAlarm"];   //have to a tag
+        [aCmd addField: @"Alarm"         withString:alarmName];
+        [aCmd addField: @"Severity"      withString:[anAlarm severityName]];
+        [aCmd addField: @"Acknowledged"  withBoolean:YES];
+        [aCmd addField: @"Posted"        withDouble:[anAlarm timePostedUnixTimestamp]];
+        [aCmd addField: @"Help"          withString:help];
+        [aCmd addField: @"RunNumber"    withLong:[rc runNumber]];
+        [aCmd addField: @"SubRunNumber" withLong:[rc subRunNumber]];
+        [self executeDBCmd:aCmd];
     }
 }
 
 - (void) alarmCleared:(NSNotification*)aNote
 {
-    ORAlarm* anAlarm = [aNote object];
+    ORAlarm* anAlarm    = [aNote object];
+    ORRunModel*      rc = [[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORRunModel,1"];
     NSString* alarmName = [[anAlarm name]stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-    [self deleteCurrentAlarms];
     ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"Alarms" org:org];
-    [aCmd    start: @"AlarmHistory"  withTags:@"Type=History"];
-    [aCmd addField: @"Severity"      withString:[anAlarm severityName]];
-    [aCmd addField: @"Alarm"         withString:alarmName];
-    [aCmd addField: @"Posted"        withDouble:[anAlarm timePostedUnixTimestamp]];
-    [aCmd addField: @"Cleared"       withDouble:[[NSDate date]timeIntervalSince1970]];
-    [self executeDBCmd:aCmd];
-}
-
-- (void) deleteCurrentAlarms
-{
-    NSDate* slightlyInPast = [NSDate dateWithTimeIntervalSinceNow:-5];
-    ORInFluxDBDeleteSelectedData* aCmd = [ORInFluxDBDeleteSelectedData deleteSelectedData:@"Alarms"
-                                                                                      org:org
-                                                                                    start:@"2023-01-01T00:00:00Z"
-                                                                                     stop:[NSDate dateInRFC3339Format:slightlyInPast]
-                                                                                                predicate:@"_measurement=\"CurrentAlarms\""];
+    [aCmd    start: @"Alarm"];
+    [aCmd addTag:@"Type" withString: @"CurrentAlarm"];  //have to a tag
+    [aCmd addField: @"Severity"       withString:[anAlarm severityName]];
+    [aCmd addField: @"Alarm"          withString:alarmName];
+    [aCmd addField: @"Posted"         withDouble:[anAlarm timePostedUnixTimestamp]];
+    [aCmd addField: @"Cleared"        withDouble:[[NSDate date]timeIntervalSince1970]];
+    [aCmd addField: @"RunNumber"      withLong:[rc runNumber]];
+    [aCmd addField: @"SubRunNumber"   withLong:[rc subRunNumber]];
     [self executeDBCmd:aCmd];
 }
 
@@ -625,19 +618,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         [self executeDBCmd:aCmd];
     }
 }
-
-//- (void) cleanUpRunStatus
-//{
-//    //delete/cleanup the running status records. No need to keep around forever.
-//    ORInFluxDBDeleteSelectedData* aDeleteCmd;
-//    NSDate* inThePast = [NSDate dateWithTimeIntervalSinceNow:-120];
-//    aDeleteCmd = [ORInFluxDBDeleteSelectedData deleteSelectedData:@"ORCA"
-//                                                              org:org
-//                                                            start:@"2023-01-01T00:00:00Z"
-//                                                             stop:[NSDate dateInRFC3339Format:inThePast]
-//                                                        predicate:@"_measurement=\"CurrentRun\""];
-//      [self executeDBCmd:aDeleteCmd];
-//}
 
 - (void) runStarted:(NSNotification*)aNote
 {

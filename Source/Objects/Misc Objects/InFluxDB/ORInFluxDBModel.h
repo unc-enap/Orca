@@ -94,7 +94,6 @@
 - (void)        createBuckets;
 - (void)        decodeOrgList:(NSDictionary*)result;
 - (void)        decodeBucketList:(NSDictionary*)result;
-//- (void)        cleanUpRunStatus;
 - (NSString*)   errorString;
 - (void)        setErrorString:(NSString*)anError;
 - (short)       measurementTimeOut;
