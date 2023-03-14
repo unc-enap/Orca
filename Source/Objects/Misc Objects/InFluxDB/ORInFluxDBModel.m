@@ -234,10 +234,11 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 {
     ORDataFileModel* df = [aNote object];
     ORRunModel* rc = [[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORRunModel,1"];
-
+    
     ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"ORCA" org:org];
     [aCmd start   : @"DataFile"];
-    [aCmd addField: @"Name" withString:[df fileName]];
+    [aCmd addTag:@"Run" withLong:[rc runNumber]];
+    [aCmd addField: @"FileName" withString:[df fileName]];
     [aCmd addField: @"RunNumber"    withLong:[rc runNumber]];
     [aCmd addField: @"SubRunNumber" withLong:[rc subRunNumber]];
     [aCmd setTimeStamp: [[NSDate date]timeIntervalSince1970] ];
