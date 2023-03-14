@@ -392,7 +392,7 @@
                         measurement,
                         [tags componentsJoinedByString:@","],
                         [measurements componentsJoinedByString:@","],
-                        timeStamp?[NSString stringWithFormat:@" %ld\n",(long)(timeStamp*1E9)]:@"   \n"];
+                        timeStamp?[NSString stringWithFormat:@"%ld\n",(long)(timeStamp*1E9)]:@"\n"];
 }
 
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
@@ -406,7 +406,7 @@
     [request setValue:@"text/plain; application/json" forHTTPHeaderField:@"Accept"];
     [request setValue:[NSString stringWithFormat:@"Token %@",[delegate authToken]]                     forHTTPHeaderField:@"Authorization"];
     
-    request.HTTPBody = [[self cmdLine] dataUsingEncoding:NSASCIIStringEncoding];
+    request.HTTPBody = [cmdLine dataUsingEncoding:NSASCIIStringEncoding];
     requestSize = [cmdLine length];
     
     return request;
@@ -449,7 +449,6 @@
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
 {
     NSString* cmdLine = [self line];
-            
     NSString* requestString = [NSString stringWithFormat:@"%@/api/v2/write?org=%@&bucket=%@&precision=ns",[delegate hostName],org,bucket];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
     
@@ -462,6 +461,7 @@
     
     return request;
 }
+
 @end
 //----------------------------------------------------------------
 //  Delete Data

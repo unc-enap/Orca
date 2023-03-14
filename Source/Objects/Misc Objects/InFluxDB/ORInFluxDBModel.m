@@ -71,7 +71,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) decodeBucketList:(NSDictionary*)result;
 - (void) decodeOrgList   :(NSDictionary*)result;
 - (void) processStatusLogLine:(NSNotification*)aNote;
-- (void) queueFlush:(NSString*)aBucket;
 
 @end
 
@@ -393,7 +392,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setMaxLineCount:maxLineCount];
     if(aValue<0)aValue=0;
-    if(aValue>5000)aValue=5000;
+    if(aValue>200)aValue=200;
     maxLineCount = aValue;
     [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORInFluxDBMaxLineCountChanged object:self];
 }
@@ -451,19 +450,20 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         }
     }
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(cmdFlush) object:nil];
-    [self performSelector:@selector(cmdFlush) withObject:nil afterDelay:2];
-
+    [self performSelector:@selector(cmdFlush) withObject:nil afterDelay:measurementTimeOut];
 }
 
 - (void) consolidateAndSendCmdArray:(NSMutableArray*)cmds
 {
+    if([cmds count]==0)return;
     ORInFluxDBMeasurement* firstCmd = [cmds firstObject]; //need the bucket and org. will be same for all here
     ORInFluxDBCmdLineMode* aCombinedCmd = [ORInFluxDBCmdLineMode lineModeForBucket:[firstCmd bucket] org:[firstCmd org]];
     for(ORInFluxDBMeasurement* aCmd in cmds){
         [aCombinedCmd appendLine:[aCmd cmdLine]];
     }
-    [self executeDBCmd:aCombinedCmd];
     [cmds removeAllObjects];
+
+    [self executeDBCmd:aCombinedCmd];
 }
 
 - (void) sendCmd:(ORInFluxDBCmd*)aCmd
@@ -645,7 +645,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         [self updateRunState:rc running:YES];
         [runNumberString release];
         runNumberString = [rc fullRunNumberString];
-        [[self nextObject] postInFluxRunTime];
         [[self nextObject] postInFluxSetUp];
     }
 }
@@ -871,7 +870,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     if(!stealthMode){
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateExperimentDuringRun) object:nil];
         @try {
-            if([[ORGlobal sharedGlobal] runMode]==eRunInProgress){
+            if([[ORGlobal sharedGlobal] runRunning]){
                 [[self nextObject] postInFluxRunTime];
             }
         }
@@ -977,7 +976,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     do {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         id     aCmd = [messageQueue dequeue];
-        if(aCmd){
+        if(aCmd!=nil){
             if([self connectionOK]){
                 NSMutableURLRequest* request = [aCmd requestFrom:self];
                 if(request){

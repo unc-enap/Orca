@@ -878,20 +878,20 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         short chan    = [[aDet objectForKey:@"daq_board_ch"]intValue];
         NSString* loc = [NSString stringWithFormat:@"%02d_%02d_%02d",crate,slot,chan];
 
+
+        [aCmd addTag:@"boardId"         withString:[aDet objectForKey:@"daq_board_id"]];
+        [aCmd addTag:@"cc4Chan"         withString:[aDet objectForKey:@"fe_cc4_ch"]];
+        [aCmd addTag:@"channel"         withString:[aDet objectForKey:@"daq_board_ch"]];
+        [aCmd addTag:@"crate"           withString:[aDet objectForKey:@"daq_crate"]];
+        [aCmd addTag:@"detType"         withString:[aDet objectForKey:@"det_type"]];
         [aCmd addTag:@"location"        withString:loc];
         [aCmd addTag:@"name"            withString:name];
-        [aCmd addTag:@"segmentId"       withString:[NSString stringWithFormat:@"%@_%d",name,i]];
         [aCmd addTag:@"segmentGroupNum" withLong:groupIndex];
-        
+        [aCmd addTag:@"segmentId"       withString:[NSString stringWithFormat:@"%@_%d",name,i]];
         [aCmd addTag:@"serial"          withString:[aDet objectForKey:@"serial"]];
-        [aCmd addTag:@"detType"         withString:[aDet objectForKey:@"det_type"]];
+        [aCmd addTag:@"slot"            withString:[aDet objectForKey:@"daq_board_slot"]];
         [aCmd addTag:@"strNumber"       withString:[aDet objectForKey:@"str_number"]];
         [aCmd addTag:@"strPosition"     withString:[aDet objectForKey:@"str_position"]];
-        [aCmd addTag:@"cc4Chan"         withString:[aDet objectForKey:@"fe_cc4_ch"]];
-        [aCmd addTag:@"crate"           withString:[aDet objectForKey:@"daq_crate"]];
-        [aCmd addTag:@"boardId"         withString:[aDet objectForKey:@"daq_board_id"]];
-        [aCmd addTag:@"slot"            withString:[aDet objectForKey:@"daq_board_slot"]];
-        [aCmd addTag:@"channel"         withString:[aDet objectForKey:@"daq_board_ch"]];
 
         [aCmd addField: @"HwPresent"    withBoolean:hw!=nil];
 
@@ -937,19 +937,19 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         short chan    = [[aDet objectForKey:@"daq_board_ch"]intValue];
         NSString* loc = [NSString stringWithFormat:@"%02d_%02d_%02d",crate,slot,chan];
 
-        [aCmd addTag:@"location"        withString:loc];
-        [aCmd addTag:@"name"            withString:name];
-        [aCmd addTag:@"segmentId"       withString:[NSString stringWithFormat:@"%@_%d",name,i]];
-        [aCmd addTag:@"segmentGroupNum" withLong:groupIndex];
-        [aCmd addTag:@"serial"          withString:[aDet objectForKey:@"serial"]];
-        [aCmd addTag:@"detType"         withString:[aDet objectForKey:@"det_type"]];
-        [aCmd addTag:@"strNumber"       withString:[aDet objectForKey:@"str_number"]];
-        [aCmd addTag:@"strPosition"     withString:[aDet objectForKey:@"str_position"]];
+        [aCmd addTag:@"boardId"         withString:[aDet objectForKey:@"daq_board_id"]];
         [aCmd addTag:@"cc4Chan"         withString:[aDet objectForKey:@"fe_cc4_ch"]];
         [aCmd addTag:@"crate"           withString:[aDet objectForKey:@"daq_crate"]];
-        [aCmd addTag:@"boardId"         withString:[aDet objectForKey:@"daq_board_id"]];
-        [aCmd addTag:@"slot"            withString:[aDet objectForKey:@"daq_board_slot"]];
         [aCmd addTag:@"channel"         withString:[aDet objectForKey:@"daq_board_ch"]];
+        [aCmd addTag:@"detType"         withString:[aDet objectForKey:@"det_type"]];
+        [aCmd addTag:@"location"        withString:loc];
+        [aCmd addTag:@"name"            withString:name];
+        [aCmd addTag:@"segmentGroupNum" withLong:groupIndex];
+        [aCmd addTag:@"segmentId"       withString:[NSString stringWithFormat:@"%@_%d",name,i]];
+        [aCmd addTag:@"serial"          withString:[aDet objectForKey:@"serial"]];
+        [aCmd addTag:@"slot"            withString:[aDet objectForKey:@"daq_board_slot"]];
+        [aCmd addTag:@"strNumber"       withString:[aDet objectForKey:@"str_number"]];
+        [aCmd addTag:@"strPosition"     withString:[aDet objectForKey:@"str_position"]];
 
         [aCmd addField: @"trigCounts"  withDouble:[group getTotalCounts:i]];
         [aCmd addField: @"trigRates"   withDouble:chan];

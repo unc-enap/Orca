@@ -23,7 +23,6 @@
 @class ORInFluxDB;
 @class ORAlarm;
 @class ORSafeQueue;
-
 #import "ORInFluxDBCmd.h"
 
 @interface ORInFluxDBModel : OrcaObject
