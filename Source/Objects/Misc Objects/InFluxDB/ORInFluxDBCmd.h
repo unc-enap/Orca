@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class ORInFluxDBModel;
 enum {
     kFluxMeasurement,
+    kFluxLineMode,
     kFluxCreateBucket,
     kFluxDeleteBucket,
     kFluxListBuckets,
@@ -114,6 +115,9 @@ enum {
 + (ORInFluxDBMeasurement*)measurementForBucket:(NSString*)aBucket org:(NSString*)anOrg;
 - (id) init:(int)aType bucket:(NSString*)aBucket org:(NSString*)anOrg;
 - (void) setTimeStamp:(double)aTimeStamp;
+- (NSString*) bucket;
+- (NSString*) org;
+- (NSString*) cmdLine;
 - (void) start:(NSString*)section withTags:(NSString*)someTags;
 - (void) start:(NSString*)section;
 
@@ -127,6 +131,18 @@ enum {
 - (void) addField:(NSString*)aValueName withDouble:(double)aValue;
 - (void) addField:(NSString*)aValueName withString:(NSString*)aValue;
 @end
+
+@interface ORInFluxDBCmdLineMode : ORInFluxDBCmd
+{
+    NSMutableString*    line;
+    NSString*           bucket;
+    NSString*           org;
+}
++ (ORInFluxDBCmdLineMode*)lineModeForBucket:(NSString*)aBucket org:(NSString*)anOrg;
+- (id) init:(int)aType bucket:(NSString*)aBucket org:(NSString*)anOrg;
+- (void) appendLine:(NSString*)aLine;
+@end
+
 
 //----------------------------------------------------------------
 //  Delete All Data

@@ -298,20 +298,20 @@
 
 - (id) init:(int)aType bucket:(NSString*) aBucket  org:(NSString*)anOrg
 {
-    self   = [super init:aType];
-    bucket = [aBucket copy];
-    org    = [anOrg copy];
-    tags   = [[NSMutableArray array] retain];
+    self         = [super init:aType];
+    bucket       = [aBucket copy];
+    org          = [anOrg copy];
+    tags         = [[NSMutableArray array] retain];
     measurements = [[NSMutableArray array]retain];
     return self;
 }
 
 - (void) dealloc
 {
-    [bucket release];
-    [org release];
-    [tags release];
-    [measurement release];
+    [bucket       release];
+    [org          release];
+    [tags         release];
+    [measurement  release];
     [measurements release];
     [super dealloc];
 }
@@ -329,6 +329,16 @@
 - (void) start:(NSString*)aMeasurement
 {
     measurement = [aMeasurement copy];
+}
+
+- (NSString*) bucket
+{
+    return bucket;
+}
+
+- (NSString*) org
+{
+    return org;
 }
 
 - (void) addTag:(NSString*)aLabel withString:(NSString*)aValue
@@ -373,11 +383,22 @@
 
 - (void) executeCmd:(ORInFluxDBModel*)aSender
 {
-    [aSender sendCmd:self];
+    [aSender bufferMeasurement:self];
+}
+
+- (NSString*) cmdLine
+{
+    return [NSString stringWithFormat:@"%@,%@ %@ %@",
+                        measurement,
+                        [tags componentsJoinedByString:@","],
+                        [measurements componentsJoinedByString:@","],
+                        timeStamp?[NSString stringWithFormat:@" %ld\n",(long)(timeStamp*1E9)]:@"   \n"];
 }
 
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
 {
+    NSString* cmdLine = [self cmdLine];
+            
     NSString* requestString = [NSString stringWithFormat:@"%@/api/v2/write?org=%@&bucket=%@&precision=ns",[delegate hostName],org,bucket];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
     
@@ -385,18 +406,63 @@
     [request setValue:@"text/plain; application/json" forHTTPHeaderField:@"Accept"];
     [request setValue:[NSString stringWithFormat:@"Token %@",[delegate authToken]]                     forHTTPHeaderField:@"Authorization"];
     
-    NSString* outputBuffer = [NSString stringWithFormat:@"%@,%@ %@ %@",
-                              measurement,
-                              [tags componentsJoinedByString:@","],
-                              [measurements componentsJoinedByString:@","],
-                              timeStamp?[NSString stringWithFormat:@" %ld\n",(long)(timeStamp*1E9)]:@"   \n"];
-    request.HTTPBody = [outputBuffer dataUsingEncoding:NSASCIIStringEncoding];
-    requestSize = [requestString length];
+    request.HTTPBody = [[self cmdLine] dataUsingEncoding:NSASCIIStringEncoding];
+    requestSize = [cmdLine length];
+    
     return request;
 }
 @end
 
+@implementation ORInFluxDBCmdLineMode
++ (ORInFluxDBCmdLineMode*)lineModeForBucket:(NSString*)aBucket org:(NSString*)anOrg
+{
+    return [[[self alloc] init:kFluxLineMode bucket:aBucket org:anOrg]autorelease];
+}
 
+- (id) init:(int)aType bucket:(NSString*) aBucket  org:(NSString*)anOrg
+{
+    self         = [super init:aType];
+    bucket       = [aBucket copy];
+    org          = [anOrg copy];
+    line         = [[NSMutableString stringWithCapacity:5000] retain];
+    return self;
+}
+
+- (void) dealloc
+{
+    [bucket release];
+    [org    release];
+    [line   release];
+    [super dealloc];
+}
+
+- (void) appendLine:(NSString*)aLine
+{
+    [line appendString:aLine];
+}
+
+- (NSString*) line
+{
+    return line;
+}
+
+- (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
+{
+    NSString* cmdLine = [self line];
+            
+    NSString* requestString = [NSString stringWithFormat:@"%@/api/v2/write?org=%@&bucket=%@&precision=ns",[delegate hostName],org,bucket];
+    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
+    
+    request.HTTPMethod = @"POST";
+    [request setValue:@"text/plain; application/json" forHTTPHeaderField:@"Accept"];
+    [request setValue:[NSString stringWithFormat:@"Token %@",[delegate authToken]]                     forHTTPHeaderField:@"Authorization"];
+    
+    request.HTTPBody = [cmdLine dataUsingEncoding:NSASCIIStringEncoding];
+    requestSize = [cmdLine length];
+    
+    return request;
+}
+@end
 //----------------------------------------------------------------
 //  Delete Data
 //----------------------------------------------------------------
