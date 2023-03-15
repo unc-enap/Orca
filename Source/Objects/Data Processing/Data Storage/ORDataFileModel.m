@@ -41,6 +41,7 @@ NSString* ORDataFileModelLimitSizeChanged               = @"ORDataFileModelLimit
 NSString* ORDataFileChangedNotification                 = @"The DataFile File Has Changed";
 NSString* ORDataFileStatusChangedNotification           = @"The DataFile Status Has Changed";
 NSString* ORDataFileSizeChangedNotification             = @"The DataFile Size Has Changed";
+NSString* ORDataFileModelLogWrittenNotification         = @"ORDataFileModelLogWrittenNotification";
 NSString* ORDataSaveConfigurationChangedNotification    = @"ORDataSaveConfigurationChangedNotification";
 NSString* ORDataFileModelSizeLimitReachedActionChanged	= @"ORDataFileModelSizeLimitReachedActionChanged";
 
@@ -688,8 +689,21 @@ static const int currentVersion = 1;           // Current version
     if(runMode == kNormalRun){
         
         //start a copy of the Status File
-        NSString* statusFileName = [NSString stringWithFormat:@"%@.log",[self formRunName:userInfo]];
-        
+        NSMutableString* statusFileName = [NSMutableString stringWithString:[self formRunName:userInfo]];
+        if(![[self fileStaticSuffix] isEqualToString:@""]){
+            NSRange r0 = [fileStaticSuffix rangeOfString:@"." options:NSBackwardsSearch];
+            if(r0.location != NSNotFound){
+                NSRange r1 = [statusFileName rangeOfString:[self fileStaticSuffix]
+                                                   options:NSBackwardsSearch];
+                if(r1.location != NSNotFound){
+                    NSRange r2 = NSMakeRange(0, r0.location+r1.location);
+                    statusFileName = [NSMutableString stringWithString:[statusFileName substringWithRange:r2]];
+                }
+            }
+        }
+        [userInfo setValue:[statusFileName copy] forKey:@"statusFileNameBase"];
+        [statusFileName appendString:@".log"];
+
         [statusFolder ensureExists:[statusFolder finalDirectoryName]];
         NSString* fullStatusFileName = [[[statusFolder finalDirectoryName]stringByExpandingTildeInPath] stringByAppendingPathComponent:statusFileName];
         NSFileManager* fm = [NSFileManager defaultManager];
@@ -722,7 +736,9 @@ static const int currentVersion = 1;           // Current version
     }
     statusStart = statusEnd; 
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileStatusChangedNotification object: self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileModelLogWrittenNotification
+                                                        object:self
+                                                      userInfo:userInfo];
 
 }
 

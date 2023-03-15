@@ -40,6 +40,7 @@
     NSString* readid   = [NSString stringWithFormat:@"Readout Object ID:    %u\n", readout];
     NSString* listenid = [NSString stringWithFormat:@"Listener Object ID:   %u\n", listener];
     NSString* evlist   = [NSString stringWithFormat:@"Event List ID:        %d\n", (int) dataPtr[offset++]];
+    uint32_t nchan = dataPtr[offset];
     NSString* adcchan  = [NSString stringWithFormat:@"ADC  Channels:        %d\n", (int) dataPtr[offset++]];
     NSString* trigchan = [NSString stringWithFormat:@"Trig Channels:        %d\n", (int) dataPtr[offset++]];
     NSString* samples  = [NSString stringWithFormat:@"WF Samples:           %d\n", (int) dataPtr[offset++]];
@@ -48,22 +49,34 @@
     NSString* blprec   = [NSString stringWithFormat:@"Baseline Precision:   %d\n", (int) dataPtr[offset++]];
     NSString* globals  = [NSString stringWithFormat:@"Global Trigger Cards: %d\n", (int) dataPtr[offset++]];
     NSString* triggers = [NSString stringWithFormat:@"Trigger Cards:        %d\n", (int) dataPtr[offset++]];
+    uint32_t nadc = dataPtr[offset];
     NSString* adcs     = [NSString stringWithFormat:@"ADC Cards:            %d\n", (int) dataPtr[offset++]];
     NSString* gps      = [NSString stringWithFormat:@"GPS Mode:             %d\n", (int) dataPtr[offset++]];
     
     NSMutableString* tracemap = [NSMutableString string];
     [tracemap appendString:@"Trace Map (addr:chan):\n"];
-    for(unsigned int i=0; i<FCIOMaxChannels; i++){
-        uint32_t val = dataPtr[13+i];
+    for(unsigned int i=0; i<nchan; i++){
+        uint32_t val = dataPtr[offset+i];
         if(val == 0) continue;
         uint32_t addr = (val & 0xffff0000) >> 16;
         uint32_t chan =  val & 0x0000ffff;
         [tracemap appendString:[NSString stringWithFormat:@"0x%x:%u,", addr, chan]];
     }
+    offset += nchan;
     
-    return [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@%@", readid, listenid,
+    NSMutableString* boardid = [NSMutableString string];
+    [boardid appendString:@"ADC Main Board HW IDs:\n"];
+    for(unsigned int i=0; i<nadc; i++){
+        uint8_t boardRev = (uint8_t) ((dataPtr[offset+(i/4)] & (0xFF << (8*(i%4)))) >> (8*i%4));
+        uint64_t hwID = (uint64_t)(dataPtr[offset+(uint32_t)ceil(nadc/4.0)+2*i]) << 32;
+        hwID |= dataPtr[offset+(uint32_t)ceil(nadc/4.0)+2*i+1];
+        [boardid appendString:[NSString stringWithFormat:@"%hhx-%llx,", boardRev, hwID]];
+    }
+    
+    return [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@%@\n%@", readid, listenid,
             evlist, adcchan, trigchan, samples, adcbits, sumlen, blprec, globals, triggers, adcs, gps,
-            [tracemap substringWithRange:NSMakeRange(0, [tracemap length]-1)]];
+            [tracemap substringWithRange:NSMakeRange(0, [tracemap length]-1)],
+            [boardid substringWithRange:NSMakeRange(0, [boardid length]-1)]];
 }
 
 @end
