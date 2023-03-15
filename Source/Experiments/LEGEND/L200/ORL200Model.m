@@ -952,7 +952,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         [aCmd addTag:@"strPosition"     withString:[aDet objectForKey:@"str_position"]];
 
         [aCmd addField: @"trigCounts"  withDouble:[group getTotalCounts:i]];
-        [aCmd addField: @"trigRates"   withDouble:chan];
+        [aCmd addField: @"trigRates"   withDouble:[group getRate:i]];
         [aCmd addField: @"wfCounts"    withDouble:[group getWaveformCounts:i]];
         [aCmd addField: @"wfRates"     withDouble:[group getWaveformRate:i]];
         [aCmd addField: @"baselines"   withDouble:[group getBaseline:i]];
