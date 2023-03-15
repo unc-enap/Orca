@@ -764,10 +764,10 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     }
     
     //ship the data
-    bool lengths = dataLengths;
+    uint32_t lengths = dataLengths;
     if(!includeWF) lengths &= 0xFFFC0003F;
-    dataRecord[0] = dataId | (dataRecordLength&0x3ffff);
-    dataRecord[1] = lengths | (event->type&0x3f);
+    dataRecord[0] = dataId   | (dataRecordLength&0x3ffff);
+    dataRecord[1] = lengths  | (event->type&0x3f);
     dataRecord[2] = location | ((channel&0x1f) << 9) | (index&0x1ff);
     int offset = 3;
     for(unsigned int i=0; i<kFlashCamADCTimeOffsetLength; i++) dataRecord[offset++] = event->timeoffset[i];
