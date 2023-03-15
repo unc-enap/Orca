@@ -130,8 +130,16 @@
                       selector : @selector(connectionStatusChanged:)
                           name : ORInFluxDBConnectionStatusChanged
                         object : model];
-    
-    
+  
+    [notifyCenter addObserver : self
+                      selector : @selector(maxLineCountChanged:)
+                          name : ORInFluxDBMaxLineCountChanged
+                        object : model];
+ 
+    [notifyCenter addObserver : self
+                      selector : @selector(measurementTimeOutChanged:)
+                          name : ORInFluxDBMeasurementTimeOutChanged
+                        object : model];
 }
 
 - (void) updateWindow
@@ -146,7 +154,8 @@
     [self bucketArrayChanged:nil];
     [self errorStringChanged:nil];
     [self connectionStatusChanged:nil];
-    
+    [self maxLineCountChanged:nil];
+    [self measurementTimeOutChanged:nil];
 
 }
 //a fake action from the scale object so we can store the state
@@ -177,6 +186,16 @@
     if([model connectionOK])s = @"";
     else                    s = @"NO Connection -- trying again soon";
     [connectionErrField setStringValue:s];
+}
+
+- (void) maxLineCountChanged:(NSNotification*)aNote
+{
+    [maxLineCountField setIntValue:[model maxLineCount]];
+}
+
+- (void) measurementTimeOutChanged:(NSNotification*)aNote
+{
+    [measurementTimeOutField setIntValue:[model measurementTimeOut]];
 }
 
 - (void) errorStringChanged:(NSNotification*)aNote
@@ -254,6 +273,15 @@
         }];
     }
     else [model setStealthMode:NO];
+}
+
+- (IBAction) measurementTimeOutAction:(id)sender
+{
+    [model setMeasurementTimeOut:[sender intValue]];
+}
+- (IBAction) maxLineCountAction:(id)sender
+{
+    [model setMaxLineCount:[sender intValue]];
 }
 
 - (IBAction) InFluxDBLockAction:(id)sender
