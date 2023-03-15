@@ -542,7 +542,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         help                = [help substringFromIndex:firstLF];
         ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"Alarms" org:org];
         [aCmd    start: @"Alarm"];
-        [aCmd addTag:@"Type" withString: @"CurrentAlarm"]; //have to a tag
         [aCmd addField: @"Alarm"         withString:alarmName];
         [aCmd addField: @"Severity"      withString:[anAlarm severityName]];
         [aCmd addField: @"Acknowledged"  withBoolean:NO];
@@ -566,7 +565,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         help = [help substringFromIndex:firstLF];
         ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"Alarms" org:org];
         [aCmd    start: @"Alarm"];
-        [aCmd addTag  :@"Type" withString: @"CurrentAlarm"];   //have to a tag
         [aCmd addField: @"Alarm"         withString:alarmName];
         [aCmd addField: @"Severity"      withString:[anAlarm severityName]];
         [aCmd addField: @"Acknowledged"  withBoolean:YES];
@@ -585,7 +583,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     NSString* alarmName = [[anAlarm name]stringByReplacingOccurrencesOfString:@" " withString:@"_"];
     ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"Alarms" org:org];
     [aCmd    start: @"Alarm"];
-    [aCmd addTag:@"Type" withString: @"CurrentAlarm"];  //have to a tag
     [aCmd addField: @"Severity"       withString:[anAlarm severityName]];
     [aCmd addField: @"Alarm"          withString:alarmName];
     [aCmd addField: @"Posted"         withDouble:[anAlarm timePostedUnixTimestamp]];
@@ -702,7 +699,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
                                                       orgId:[self orgId] expireTime:60*60*24*10]];
     
     [self executeDBCmd:[ORInFluxDBCreateBucket createBucket:@"Alarms"
-                                                      orgId:[self orgId] expireTime:14]];
+                                                      orgId:[self orgId] expireTime:60*60*24*10]];
 
     [self performSelector:@selector(executeDBCmd:) withObject:[ORInFluxDBListBuckets listBuckets] afterDelay:1];
 }

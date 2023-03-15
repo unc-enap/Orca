@@ -388,11 +388,16 @@
 
 - (NSString*) cmdLine
 {
-    return [NSString stringWithFormat:@"%@,%@ %@ %@",
+    if([tags count]>0)return [NSString stringWithFormat:@"%@,%@ %@ %@",
+                              measurement,
+                              [tags componentsJoinedByString:@","],
+                              [measurements componentsJoinedByString:@","],
+                              timeStamp?[NSString stringWithFormat:@"%ld\n",(long)(timeStamp*1E9)]:@"\n"];
+    else return [NSString stringWithFormat:@"%@ %@ %@",
                         measurement,
-                        [tags componentsJoinedByString:@","],
                         [measurements componentsJoinedByString:@","],
                         timeStamp?[NSString stringWithFormat:@"%ld\n",(long)(timeStamp*1E9)]:@"\n"];
+
 }
 
 - (NSMutableURLRequest*) requestFrom:(ORInFluxDBModel*)delegate
