@@ -21,13 +21,14 @@
 
 
 @class MemoryWatcher;
-@class ORCompositePlotView;
+@class ORCompositeTimeLineView;
 @class ORAxis;
 
 @interface MemoryWatcherController : NSWindowController {
     MemoryWatcher* watcher;
-    IBOutlet ORCompositePlotView* plotView;
+    IBOutlet ORCompositeTimeLineView* plotView;
     IBOutlet NSTextField* upTimeField;
+    IBOutlet NSTextField* taskIntervalField;
 }
 
 + (MemoryWatcherController*) sharedMemoryWatcherController;
@@ -35,6 +36,7 @@
 - (void) memoryStatsChanged:(NSNotification*)aNote;
 - (void) upTimeChanged:(NSNotification*)aNote;
 - (void) taskIntervalChanged:(NSNotification*)aNote;
+- (IBAction) taskIntervalAction:(id)sender;
 
 #pragma mark ***Accessors
 - (void) setMemoryWatcher:(MemoryWatcher*)aWatcher;
