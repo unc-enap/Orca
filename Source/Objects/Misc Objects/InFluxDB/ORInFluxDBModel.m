@@ -235,7 +235,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     
     ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"ORCA" org:org];
     [aCmd start   : @"DataFile"];
-    [aCmd addTag:@"Run" withLong:[rc runNumber]];
     [aCmd addField: @"FileName" withString:[df fileName]];
     [aCmd addField: @"RunNumber"    withLong:[rc runNumber]];
     [aCmd addField: @"SubRunNumber" withLong:[rc subRunNumber]];
