@@ -965,6 +965,8 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
             [fields[iden] setObject:[NSNumber numberWithDouble:[hw flatTopTime:chan]]       forKey:@"flatTopTime"];
             [fields[iden] setObject:[NSNumber numberWithDouble:[hw poleZeroTime:chan]]      forKey:@"poleZeroTime"];
             [fields[iden] setObject:[NSNumber numberWithDouble:[hw postTrigger:chan]]       forKey:@"postTrigger"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw baselineSlew:chan]]      forKey:@"baselineSlew"];
+            [fields[iden] setObject:[NSNumber numberWithDouble:[hw swTrigInclude:chan]]     forKey:@"swTrigInclude"];
             //card level settings
             [fields[iden] setObject:[NSNumber numberWithDouble:[hw promSlot]]               forKey:@"promSlot"];
             [fields[iden] setObject:[NSNumber numberWithDouble:[hw cardAddress]]            forKey:@"cardAddress"];

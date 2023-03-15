@@ -107,6 +107,9 @@
         if(channel>=0 && channel<[obj numberOfChannels])
             [[obj baselineHistory:channel] addDataToTimeAverage:(float)fpga_baseline];
     
+    // return if the waveform is not included in this packet
+    if(wfSamples == 0) return length;
+    
     // only decode the waveform if it has been 100 ms since the last decoded waveform and the plotting window is open
     BOOL fullDecode = NO;
     struct timeval tv;

@@ -114,8 +114,12 @@ enum {
 
 - (void) setTaskInterval:(NSTimeInterval)aTaskInterval
 {
-    if(aTaskInterval<1)aTaskInterval = 1;
-    taskInterval = aTaskInterval;
+    if(aTaskInterval == taskInterval) return;
+    taskInterval = MAX(1.0, MIN(1800.0, aTaskInterval));
+    for(int i=0;i<kNumWatchedValues;i++) [timeRate[i] setSampleTime:[self taskInterval]];
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(launchTask) object:nil];
+    [self performSelector:@selector(launchTask) withObject:nil afterDelay:taskInterval];
     
     [[NSNotificationCenter defaultCenter]
      postNotificationName:MemoryWatcherTaskIntervalNotification
@@ -124,14 +128,20 @@ enum {
 
 - (NSUInteger) timeRateCount:(int)rateIndex
 {
-    if(rateIndex<kNumWatchedValues)return [timeRate[rateIndex] count];
+    if(rateIndex>=0 && rateIndex<kNumWatchedValues)return [timeRate[rateIndex] count];
     else return 0;
 }
 
 - (float) timeRate:(int)rateIndex value:(int)valueIndex
 {
-    if(rateIndex<kNumWatchedValues)return [timeRate[rateIndex] valueAtIndex:valueIndex];
+    if(rateIndex>=0 &&rateIndex<kNumWatchedValues)return [timeRate[rateIndex] valueAtIndex:valueIndex];
     else return 0;
+}
+
+- (ORTimeRate*) timeRateObject:(int)rateIndex
+{
+    if(rateIndex>=0 && rateIndex<kNumWatchedValues)return timeRate[rateIndex];
+    else return nil;
 }
 
 - (void) launchTask
@@ -140,7 +150,11 @@ enum {
     [opQueue cancelAllOperations];
     int i;
     for(i=0;i<kNumWatchedValues;i++){
-        if(!timeRate[i])timeRate[i] = [[ORTimeRate alloc] init];
+        if(!timeRate[i]){
+            timeRate[i] = [[ORTimeRate alloc] init];
+            [timeRate[i] setLastAverageTime:[NSDate date]];
+            [timeRate[i] setSampleTime:(uint32_t)[self taskInterval]];
+        }
     }
     
     ORTopShellOp* anOp = [[ORTopShellOp alloc] initWithDelegate:self];
@@ -157,7 +171,8 @@ enum {
 
 - (float) convertValue:(float)aValue withMultiplier:(NSString*)aMultiplier
 {
-    if([aMultiplier hasPrefix:@"M"])return aValue;
+    if([aMultiplier hasPrefix:@"G"])return aValue*1000.;
+    else if([aMultiplier hasPrefix:@"M"])return aValue;
     else if([aMultiplier hasPrefix:@"K"])return aValue/1000.;
     else return aValue/1000000.;
 }

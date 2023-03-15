@@ -1029,7 +1029,7 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
                         NSDictionary* dict = [chanMap objectAtIndex:itr];
                         ORFlashCamADCModel* card = [dict objectForKey:@"adc"];
                         unsigned int chan = [[dict objectForKey:@"channel"] unsignedIntValue];
-                        [card shipEvent:state->event withIndex:itr andChannel:chan use:aDataPacket];
+                        [card shipEvent:state->event withIndex:itr andChannel:chan use:aDataPacket includeWF:true];
                     }
                     break;
                 }
@@ -1046,7 +1046,8 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
                         NSDictionary* dict = [chanMap objectAtIndex:state->event->trace_list[itr]];
                         ORFlashCamADCModel* card = [dict objectForKey:@"adc"];
                         unsigned int chan = [[dict objectForKey:@"channel"] unsignedIntValue];
-                        [card shipEvent:state->event withIndex:state->event->trace_list[itr] andChannel:chan use:aDataPacket];
+                        [card shipEvent:state->event withIndex:state->event->trace_list[itr]
+                             andChannel:chan use:aDataPacket includeWF:true];
                     }
                     break;
                 }
