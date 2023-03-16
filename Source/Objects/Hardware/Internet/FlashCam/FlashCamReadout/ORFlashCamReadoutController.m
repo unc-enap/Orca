@@ -608,7 +608,7 @@
     [usernameTextField         setEnabled:!lock];
     [ethInterfaceView          setEnabled:!lock];
     [addEthInterfaceButton     setEnabled:!lock];
-    [removeEthInterfaeButton  setEnabled:!lock];
+    [removeEthInterfaeButton   setEnabled:!lock];
     [sendPingButton            setEnabled:!lock];
     [listenerView              setEnabled:!lock];
     [listenerGPSView           setEnabled:!lock];
@@ -617,6 +617,8 @@
     [listenerTrigView          setEnabled:!lock];
     [listenerBaseView          setEnabled:!lock];
     [listenerReadoutView       setEnabled:!lock];
+    [listenerExtraFilesView    setEnabled:!lock];
+    [listenerExtraFlagsView    setEnabled:!lock];
     [addIfaceToListenerButton  setEnabled:!lock];
     [rmIfaceFromListenerButton setEnabled:!lock];
     [fcSourcePathButton        setEnabled:!lock];

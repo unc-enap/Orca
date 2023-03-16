@@ -128,15 +128,14 @@
                 NSInteger exitCode = task.terminationStatus;
                 
                 if (exitCode != 0){
-                    NSLog(@"Mail Script Error!");
+                    NSLogColor([NSColor redColor], @"Mail Script Error!\n");
                 }
                 
                //NSString* s = [[[NSString alloc] initWithBytes: data.bytes length:data.length encoding: NSUTF8StringEncoding] autorelease];
                // NSLog(@"%@\n",s);
             }
             @catch (NSException* e){
-                NSLog(@"Python script sending mail exception\n");
-                NSLog(@"%@\n");
+                NSLogColor([NSColor redColor], @"Python script sending mail exception\n");
             }
         }
         else {

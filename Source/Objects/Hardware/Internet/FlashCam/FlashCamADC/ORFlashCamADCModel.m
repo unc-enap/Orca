@@ -764,10 +764,10 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     }
     
     //ship the data
-    bool lengths = dataLengths;
+    uint32_t lengths = dataLengths;
     if(!includeWF) lengths &= 0xFFFC0003F;
-    dataRecord[0] = dataId | (dataRecordLength&0x3ffff);
-    dataRecord[1] = lengths | (event->type&0x3f);
+    dataRecord[0] = dataId   | (dataRecordLength&0x3ffff);
+    dataRecord[1] = lengths  | (event->type&0x3f);
     dataRecord[2] = location | ((channel&0x1f) << 9) | (index&0x1ff);
     int offset = 3;
     for(unsigned int i=0; i<kFlashCamADCTimeOffsetLength; i++) dataRecord[offset++] = event->timeoffset[i];
@@ -953,7 +953,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     [super encodeWithCoder:encoder];
     for(int i=0; i<[self numberOfChannels]; i++){
         [encoder encodeBool:chanEnabled[i]    forKey:[NSString stringWithFormat:@"chanEnabled%i",     i]];
-        [encoder encodeBool:trigOutEnabled[i] forKey:[NSString stringWithFormat:@"trigOutEnabled:%i", i]];
+        [encoder encodeBool:trigOutEnabled[i] forKey:[NSString stringWithFormat:@"trigOutEnabled%i", i]];
         [encoder encodeInt:baseline[i]        forKey:[NSString stringWithFormat:@"baseline%i",        i]];
         [encoder encodeInt:threshold[i]       forKey:[NSString stringWithFormat:@"threshold%i",       i]];
         [encoder encodeInt:adcGain[i]         forKey:[NSString stringWithFormat:@"adcGain%i",         i]];

@@ -881,6 +881,7 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
 - (void) appendToFCLog:(NSString*)line andNotify:(BOOL)notify
 {
     fclogIndex = (fclogIndex + 1) % [self fclogLines];
+    [[fclog objectAtIndex:fclogIndex] release];
     [fclog setObject:[line copy] atIndexedSubscript:fclogIndex];
     if(notify)
         [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelFCLogChanged object:self];
@@ -1126,13 +1127,14 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
 
 - (void) taskDataAvailable:(NSNotification*)note
 {
+    if([note object] != [[runTask standardOutput] fileHandleForReading]) return;
     NSData* incomingData   = [[note userInfo] valueForKey:NSFileHandleNotificationDataItem];
     if(incomingData && [incomingData length]){
         NSString *incomingText = [[[NSString alloc] initWithData:incomingData encoding:NSASCIIStringEncoding] autorelease];
         NSDictionary* taskData = [NSDictionary dictionaryWithObjectsAndKeys:runTask,@"Task",incomingText,@"Text",nil];
         [self taskData:taskData];
     }
-    [[note object] readInBackgroundAndNotify];
+    if([runTask isRunning]) [[note object] readInBackgroundAndNotify];
 }
 
 - (void) taskData:(NSDictionary*)taskData
@@ -1236,6 +1238,15 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
                 [obj setHardwareID:0];
             }
         }
+        // read to the end of the run task's standard output
+        NSData* data = [[[runTask standardOutput] fileHandleForReading] readDataToEndOfFile];
+        if(data && [data length]){
+            NSString *text = [[[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding] autorelease];
+            NSDictionary* taskData = [NSDictionary dictionaryWithObjectsAndKeys:runTask,@"Task",text,@"Text",nil];
+            [self taskData:taskData];
+        }
+        [[[runTask standardInput]  fileHandleForWriting] closeFile];
+        [[[runTask standardOutput] fileHandleForReading] closeFile];
     }
     // if the readout process stops for some reason other than it being terminated in the run stopping,
     // there were errors, so stop the run
