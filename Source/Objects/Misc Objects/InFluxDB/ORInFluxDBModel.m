@@ -548,7 +548,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         [aCmd addField: @"Help"          withString:help];
         [aCmd addField: @"RunNumber"    withLong:[rc runNumber]];
         [aCmd addField: @"SubRunNumber" withLong:[rc subRunNumber]];
-
+        [aCmd setTimeStamp:[anAlarm timePostedUnixTimestamp]];
         [self executeDBCmd:aCmd];
     }
 }
@@ -571,6 +571,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         [aCmd addField: @"Help"          withString:help];
         [aCmd addField: @"RunNumber"    withLong:[rc runNumber]];
         [aCmd addField: @"SubRunNumber" withLong:[rc subRunNumber]];
+        [aCmd setTimeStamp:[anAlarm timePostedUnixTimestamp]];
         [self executeDBCmd:aCmd];
     }
 }
@@ -582,8 +583,8 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     NSString* alarmName = [[anAlarm name]stringByReplacingOccurrencesOfString:@" " withString:@"_"];
     ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"Alarms" org:org];
     [aCmd    start: @"Alarm"];
-    [aCmd addField: @"Severity"       withString:[anAlarm severityName]];
     [aCmd addField: @"Alarm"          withString:alarmName];
+    [aCmd addField: @"Severity"       withString:[anAlarm severityName]];
     [aCmd addField: @"Posted"         withDouble:[anAlarm timePostedUnixTimestamp]];
     [aCmd addField: @"Cleared"        withDouble:[[NSDate date]timeIntervalSince1970]];
     [aCmd addField: @"RunNumber"      withLong:[rc runNumber]];
