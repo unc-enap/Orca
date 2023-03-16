@@ -881,6 +881,7 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
 - (void) appendToFCLog:(NSString*)line andNotify:(BOOL)notify
 {
     fclogIndex = (fclogIndex + 1) % [self fclogLines];
+    [[fclog objectAtIndex:fclogIndex] release];
     [fclog setObject:[line copy] atIndexedSubscript:fclogIndex];
     if(notify)
         [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelFCLogChanged object:self];
