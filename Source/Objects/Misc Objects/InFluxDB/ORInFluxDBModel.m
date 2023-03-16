@@ -265,10 +265,10 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     connectionOK = NO;
     [self setErrorString:@"No Connection"];
     if(!connectionAlarm){
-        NSString* s = [NSString stringWithFormat:@"InFlux (%u) Unable to Connect",[self uniqueIdNumber]];
+        NSString* s = [NSString stringWithFormat:@"InFlux (%u) had a failed connection",[self uniqueIdNumber]];
         connectionAlarm = [[ORAlarm alloc] initWithName:s severity:kImportantAlarm];
         [connectionAlarm setSticky:YES];
-        [connectionAlarm setHelpString:@"No InfluxDB connection.\nORCA has tried repeatedly and has been unable to reconnect. Intervention is required. Contact your database manager.\n\nThis alarm will not go away until the problem is cleared. Acknowledging the alarm will silence it."];
+        [connectionAlarm setHelpString:@"Failed InfluxDB connection.\nORCA had a failed connection. Intervention is required. Contact your database manager.\n\nAcknowledging the alarm will silence it and alarm will go away if connection is restored."];
         [connectionAlarm postAlarm];
     }
     
@@ -280,9 +280,6 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) setConnectionStatusOK
 {
     connectionOK = YES;
-    [connectionAlarm clearAlarm];
-    [connectionAlarm release];
-    connectionAlarm = nil;
 
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(setConnectionStatusOK) object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBConnectionStatusChanged object:self];
@@ -474,6 +471,12 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         messageQueue = [[ORSafeQueue alloc] init];
     }
     [messageQueue enqueue:aCmd];
+    
+    if([connectionAlarm isPosted] && [connectionAlarm acknowledged]){
+        [connectionAlarm clearAlarm];
+        [connectionAlarm release];
+        connectionAlarm = nil;
+    }
 }
 
 - (void) processStatusLogLine:(NSNotification*)aNote
