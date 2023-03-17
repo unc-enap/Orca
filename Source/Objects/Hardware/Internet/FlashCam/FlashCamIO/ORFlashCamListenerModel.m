@@ -27,7 +27,6 @@
 #import "Utilities.h"
 #import "ORDataTypeAssigner.h"
 #import "ORDataTaskModel.h"
-#import "ORDataFileModel.h"
 #import "ORSmartFolder.h"
 #import "ANSIEscapeHelper.h"
 
@@ -136,6 +135,7 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
     fclog = nil;
     [self setFCLogLines:10000];
     fcrunlog = [[NSMutableArray arrayWithCapacity:[self fclogLines]] retain];
+    dataFileObject = nil;
     [self registerNotificationObservers];
 
     [[self undoManager] enableUndoRegistration];
@@ -247,6 +247,10 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
     [notifyCenter addObserver : self
                      selector : @selector(writeFCIOLog:)
                          name : ORDataFileModelLogWrittenNotification
+                       object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(fileLimitExceeded:)
+                         name : ORDataFileLimitExceededNotification
                        object : nil];
 }
 
@@ -1674,7 +1678,19 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
         readWait = true;
         NSFileHandle*  fh = [[runTask standardInput] fileHandleForWriting];
         [fh writeData:[@"\n" dataUsingEncoding: NSASCIIStringEncoding]];
-        [ORTimer delay:[[self configParam:@"logTime"] doubleValue]*2.1];
+        NSTimeInterval dfinterval = 0.0;
+        if(dataFileObject) dfinterval = [dataFileObject fileCheckTimeInterval];
+        for(int i=0; i<30; i++){
+            if([[self fcrunlog:0] rangeOfString:@"clean termination done"].location != NSNotFound) break;
+            if(dataFileObject){
+                while([[self configParam:@"logTime"] doubleValue]*i*0.101+1 > [dataFileObject fileCheckTimeInterval])
+                    [dataFileObject setFileCheckTimeInterval:[dataFileObject fileCheckTimeInterval]+1];
+            }
+            [ORTimer delay:[[self configParam:@"logTime"] doubleValue] * 0.101];
+        }
+        if(dataFileObject)
+            if(dfinterval != [dataFileObject fileCheckTimeInterval])
+                [dataFileObject setFileCheckTimeInterval:dfinterval];
         readWait = false;
         [readStateLock lock];
         timeToQuitReadoutThread = YES;
@@ -1863,6 +1879,7 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
     fclog = nil;
     [self setFCLogLines:[decoder decodeIntForKey:@"fclogLines"]];
     fcrunlog = [[NSMutableArray arrayWithCapacity:[self fclogLines]] retain];
+    dataFileObject = nil;
     [self registerNotificationObservers];
     [[self undoManager] enableUndoRegistration];
     return self;
@@ -1907,6 +1924,11 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
     }
     @catch(NSException* exception){ }
     [handle closeFile];
+}
+
+- (void) fileLimitExceeded:(NSNotification*)note
+{
+    dataFileObject = [note object];
 }
 
 @end
