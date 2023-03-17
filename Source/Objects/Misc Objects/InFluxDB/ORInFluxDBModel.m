@@ -854,6 +854,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         id aName;
         while(aName = [e nextObject]){
             if([aName rangeOfString:@".0.0."].location == NSNotFound){
+                [thisHostAddress release];
                 thisHostAddress = [aName copy];
                 break;
             }
