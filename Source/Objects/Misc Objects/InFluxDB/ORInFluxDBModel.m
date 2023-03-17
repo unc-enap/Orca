@@ -262,35 +262,55 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 #pragma mark ***Accessors
 - (void) setConnectionStatusBad
 {
-    connectionOK = NO;
-    [self setErrorString:@"No Connection"];
-    if(!connectionAlarm){
-        NSString* s = [NSString stringWithFormat:@"InFlux (%u) Unable to Connect",[self uniqueIdNumber]];
-        connectionAlarm = [[ORAlarm alloc] initWithName:s severity:kImportantAlarm];
-        [connectionAlarm setSticky:YES];
-        [connectionAlarm setHelpString:@"No InfluxDB connection.\nORCA has tried repeatedly and has been unable to reconnect. Intervention is required. Contact your database manager.\n\nThis alarm will not go away until the problem is cleared. Acknowledging the alarm will silence it."];
-        [connectionAlarm postAlarm];
-    }
-    
-    
-    [self performSelector:@selector(setConnectionStatusOK) withObject:nil afterDelay:60];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBConnectionStatusChanged object:self];
+    [self setConnectionStatus:kInFluxDBConnectionBad];
 }
 
 - (void) setConnectionStatusOK
 {
-    connectionOK = YES;
-    [connectionAlarm clearAlarm];
-    [connectionAlarm release];
-    connectionAlarm = nil;
-
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(setConnectionStatusOK) object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBConnectionStatusChanged object:self];
+    [self setConnectionStatus:kInFluxDBConnectionOK];
 }
 
-- (bool)        connectionOK
+- (void) setConnectionStatusUnknown
 {
-    return connectionOK;
+    [self setConnectionStatus:kInFluxDBConnectionUnknown];
+}
+
+- (ORInFluxDBConnectionStatus) connectionStatus
+{
+    return connectionStatus;
+}
+
+- (void) setConnectionStatus:(ORInFluxDBConnectionStatus)status
+{
+    switch(status){
+        case kInFluxDBConnectionBad:
+            [self setErrorString:@"No Connection"];
+            if(!connectionAlarm){
+                NSString* s = [NSString stringWithFormat:@"InFlux (%u) Unable to Connect",[self uniqueIdNumber]];
+                connectionAlarm = [[ORAlarm alloc] initWithName:s severity:kImportantAlarm];
+                [connectionAlarm setSticky:YES];
+                [connectionAlarm setHelpString:@"No InfluxDB connection.\nORCA has tried repeatedly and has been unable to reconnect. Intervention is required. Contact your database manager.\n\nThis alarm will not go away until the problem is cleared. Acknowledging the alarm will silence it."];
+                [connectionAlarm postAlarm];
+            }
+            break;
+            
+        case kInFluxDBConnectionOK:
+            [connectionAlarm clearAlarm];
+            [connectionAlarm release];
+            connectionAlarm = nil;
+            [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBConnectionStatusChanged object:self];
+            break;
+            
+        case kInFluxDBConnectionUnknown:
+            [self setErrorString:@"Connection status unknown"];
+            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(setConnectionStatusUnknown) object:nil];
+            break;
+            
+        default:
+            return;
+    }
+    connectionStatus = status;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBConnectionStatusChanged object:self];
 }
 
 - (id) nextObject
@@ -321,7 +341,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     
     [hostName autorelease];
     hostName = [aHostName copy];
-    [self setConnectionStatusOK];
+    [self setConnectionStatusUnknown];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBHostNameChanged object:self];
 }
 
@@ -337,7 +357,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     
     [authToken autorelease];
     authToken = [aAuthToken copy];
-    [self setConnectionStatusOK];
+    [self setConnectionStatusUnknown];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBAuthTokenChanged object:self];
 }
 
@@ -354,7 +374,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [org autorelease];
     org = [anOrg copy];
     
-    [self setConnectionStatusOK];
+    [self setConnectionStatusUnknown];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:ORInFluxDBOrgChanged object:self];
 }
@@ -957,28 +977,34 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         id     aCmd = [messageQueue dequeue];
         if(aCmd!=nil){
-            if([self connectionOK]){
-                NSMutableURLRequest* request = [aCmd requestFrom:self];
-                if(request){
-                    NSURLSessionConfiguration* config = [NSURLSessionConfiguration defaultSessionConfiguration];
-                    NSURLSession*             session = [NSURLSession sessionWithConfiguration:config];
-                    NSURLSessionDataTask*      dbTask = [session dataTaskWithRequest:request completionHandler:^(NSData* data, NSURLResponse* response, NSError* error) {
-                        if (!error) {
-                            NSDictionary* result = [NSJSONSerialization JSONObjectWithData: data
-                                                                                   options: kNilOptions
-                                                                                     error: &error];
-                            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
-                            [aCmd logResult:result code:(int)[httpResponse statusCode] delegate:self];
-                        }
-                        else {
-                            [self performSelectorOnMainThread:@selector(setConnectionStatusBad) withObject:nil waitUntilDone:NO];
-                        }
-                    }];
+            NSMutableURLRequest* request = [aCmd requestFrom:self];
+            if(request){
+                NSURLSessionConfiguration* config = [NSURLSessionConfiguration defaultSessionConfiguration];
+                NSURLSession*             session = [NSURLSession sessionWithConfiguration:config];
+                NSURLSessionDataTask*      dbTask = [session dataTaskWithRequest:request
+                                                               completionHandler:^(NSData* data,
+                                                                                   NSURLResponse* response,
+                                                                                   NSError* error) {
+                    if (!error) {
+                        NSDictionary* result = [NSJSONSerialization JSONObjectWithData: data
+                                                                               options: kNilOptions
+                                                                                 error: &error];
+                        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+                        [aCmd logResult:result code:(int)[httpResponse statusCode] delegate:self];
+                        [self performSelectorOnMainThread:@selector(setConnectionStatusOK)
+                                               withObject:nil
+                                            waitUntilDone:NO];
+                    }
+                    else {
+                        [self performSelectorOnMainThread:@selector(setConnectionStatusBad)
+                                               withObject:nil
+                                            waitUntilDone:NO];
+                    }
+                }];
                     
-                    [dbTask resume]; //task is created in paused state, so start it
+                [dbTask resume]; //task is created in paused state, so start it
                     
-                    totalSent += [aCmd requestSize];
-                }
+                totalSent += [aCmd requestSize];
             }
         }
         [pool release];

@@ -1674,7 +1674,7 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
         readWait = true;
         NSFileHandle*  fh = [[runTask standardInput] fileHandleForWriting];
         [fh writeData:[@"\n" dataUsingEncoding: NSASCIIStringEncoding]];
-        [ORTimer delay:1.9]; //been told we have to wait 2 seconds
+        [ORTimer delay:[[self configParam:@"logTime"] doubleValue]*2.1];
         readWait = false;
         [readStateLock lock];
         timeToQuitReadoutThread = YES;

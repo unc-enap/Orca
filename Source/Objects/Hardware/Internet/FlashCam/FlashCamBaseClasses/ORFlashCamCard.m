@@ -467,7 +467,8 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
     if(!taskData) return;
     NSString* text = [taskData objectForKey:@"Text"]; //MAH 9/18/22 no need for the retain??
     if(!text) return;
-    [taskdata addObject:[NSString stringWithString:text]]; //MAH 9/18/22 no need for retain
+    if(!taskdata) taskdata = [[[NSMutableArray alloc] init] retain];
+    [taskdata addObject:[NSString stringWithString:text]];
     NSRange r = [text rangeOfString:@"ORFlashCamCard"];
     if(r.location != NSNotFound){
         NSString* s = [text substringWithRange:NSMakeRange(r.location, [text length]-r.location)];
@@ -514,8 +515,8 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
                 *stop = YES;
             }
         }];
-        for(id obj in taskdata) [obj release];
-        [taskdata removeAllObjects];
+        [taskdata release];
+        taskdata = nil;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamCardFirmwareVerChanged object:self];
 }
