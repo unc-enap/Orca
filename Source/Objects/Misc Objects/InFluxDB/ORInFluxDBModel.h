@@ -61,6 +61,7 @@ typedef enum { kInFluxDBConnectionBad,
     NSString*      authToken;
     ORInFluxDBConnectionStatus connectionStatus;
     ORAlarm*                   connectionAlarm;
+    NSDate*                    lastAlarmDate;
 }
 
 #pragma mark ***Initialization

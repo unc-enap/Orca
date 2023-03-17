@@ -22,6 +22,7 @@
 #import "ORDataTaker.h"
 #import "ORReadOutList.h"
 #import "ORTimeRate.h"
+#import "ORDataFileModel.h"
 #import "fcio.h"
 #import "bufio.h"
 
@@ -82,6 +83,7 @@
     NSUInteger fclogIndex;
     NSMutableArray* fclog;
     NSMutableArray* fcrunlog;
+    ORDataFileModel* dataFileObject;
 }
 
 #pragma mark •••Initialization
@@ -193,6 +195,7 @@
 - (void) encodeWithCoder:(NSCoder*)encoder;
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary;
 - (void) writeFCIOLog:(NSNotification*)note;
+- (void) fileLimitExceeded:(NSNotification*)note;
 
 - (void) runFailedMainThread;
 

@@ -102,6 +102,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [errorString     release];
     [connectionAlarm clearAlarm];
     [connectionAlarm release];
+    [lastAlarmDate   release];
     [cmdBuffer       release];
 
     [super dealloc];
@@ -257,6 +258,8 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [self startTimer];
 //    [self deleteCurrentAlarms];
     [[self nextObject] postInFluxSetUp];
+    connectionAlarm = nil;
+    lastAlarmDate   = nil;
 }
 
 #pragma mark ***Accessors
@@ -286,11 +289,14 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         case kInFluxDBConnectionBad:
             [self setErrorString:@"No Connection"];
             if(!connectionAlarm){
+                if(lastAlarmDate) if(ABS([lastAlarmDate timeIntervalSinceNow]) < 1.0) break;
                 NSString* s = [NSString stringWithFormat:@"InFlux (%u) Unable to Connect",[self uniqueIdNumber]];
                 connectionAlarm = [[ORAlarm alloc] initWithName:s severity:kImportantAlarm];
                 [connectionAlarm setSticky:YES];
                 [connectionAlarm setHelpString:@"No InfluxDB connection.\nORCA has tried repeatedly and has been unable to reconnect. Intervention is required. Contact your database manager.\n\nThis alarm will not go away until the problem is cleared. Acknowledging the alarm will silence it."];
                 [connectionAlarm postAlarm];
+                [lastAlarmDate release];
+                lastAlarmDate = [[NSDate now] retain];
             }
             break;
             
@@ -1008,7 +1014,8 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
             }
         }
         [pool release];
-        [NSThread sleepForTimeInterval:.01];
+        if([self connectionStatus] == kInFluxDBConnectionBad) [NSThread sleepForTimeInterval:1.0];
+        else [NSThread sleepForTimeInterval:.01];
     }while(!canceled);
     [outerPool release];
 }

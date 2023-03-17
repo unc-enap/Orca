@@ -70,6 +70,7 @@
 		int				checkCount;
 		int				runMode;
 		NSTimeInterval	lastFileCheckTime;
+        NSTimeInterval  fileCheckTimeInterval;
 		NSString*		openFilePath;
 		BOOL			savedFirstTime; //use to force a config save
 		BOOL			processCheckedOnce;
@@ -124,6 +125,8 @@
 - (void) setDataFileSize:(uint64_t)aSize;
 - (void) getDataFileSize;
 - (void) checkDiskStatus;
+- (NSTimeInterval) fileCheckTimeInterval;
+- (void) setFileCheckTimeInterval:(NSTimeInterval)interval;
 
 - (BOOL)saveConfiguration;
 - (void)setSaveConfiguration:(BOOL)flag;
@@ -176,6 +179,7 @@ extern NSString* ORDataFileModelLimitSizeChanged;
 extern NSString* ORDataFileChangedNotification;
 extern NSString* ORDataFileStatusChangedNotification;
 extern NSString* ORDataFileSizeChangedNotification;
+extern NSString* ORDataFileLimitExceededNotification;
 extern NSString* ORDataFileModelLogWrittenNotification;
 extern NSString* ORDataFileLock;
 extern NSString* ORDataSaveConfigurationChangedNotification;
