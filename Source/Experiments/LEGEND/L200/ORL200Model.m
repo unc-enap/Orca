@@ -1015,7 +1015,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
             NSString* objName = [self objectNameForCrate:[aDet objectForKey:@"daq_crate"] andCard:[aDet objectForKey:@"daq_board_slot"]];
             if(objName){
                 ORHistoModel* hist = (ORHistoModel*)[hists objectAtIndex:0];
-                aHistogram = [hist objectForKeyArray:[NSMutableArray arrayWithObjects:objName, @"Energy",
+                aHistogram = [hist objectForKeyArray:[NSMutableArray arrayWithObjects:objName, @"fpgaEnergyHist",
                                                      [NSString stringWithFormat:@"Crate %2d",  crate],
                                                      [NSString stringWithFormat:@"Card %2d",   slot],
                                                      [NSString stringWithFormat:@"Channel %2d",chan],
@@ -1042,6 +1042,8 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
             [aCmd addTag:@"binStart"        withLong:0];
             [aCmd addTag:@"binUnit"         withString:@"ADC"];
             [aCmd addTag:@"binWidth"        withLong:1];
+            [aCmd addTag:@"runNumber"       withLong:[rc runNumber]];
+            [aCmd addTag:@"subRunNumber"    withLong:[rc subRunNumber]];
 
             for(int bin =0;bin<[aHistogram numberBins];bin++){
                 uint32_t aValue = [aHistogram value:bin];
