@@ -481,7 +481,15 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
 - (void) processStatusLogLine:(NSNotification*)aNote
 {
+    BOOL userMessage = NO;
     NSAttributedString* s = [[aNote userInfo] objectForKey:@"Log"];
+    
+    //could be a user entered message
+    if(!s){
+        userMessage = YES;
+        s = [[aNote userInfo]objectForKey:@"UserMessage"];
+    }
+        
     __block NSString* tags = @"level=0";
 
     [s enumerateAttribute:(NSString *) NSForegroundColorAttributeName
@@ -515,6 +523,14 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [aCmd addField: @"Line"     withString:[s string]];
     [aCmd setTimeStamp: [[NSDate date]timeIntervalSince1970] ];
     [self executeDBCmd:aCmd];
+    
+    if(userMessage){
+        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"Logs" org:org];
+        [aCmd   start  : @"UserMessage" withTags:tags];
+        [aCmd addField: @"Line"     withString:[s string]];
+        [aCmd setTimeStamp: [[NSDate date]timeIntervalSince1970] ];
+        [self executeDBCmd:aCmd];
+    }
 }
 
 - (NSString*) errorString
