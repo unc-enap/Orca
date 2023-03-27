@@ -1022,7 +1022,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         OR1DHisto* aHistogram = nil;
         if(connectedHisto){
             NSString* objName = [self objectNameForCrate:[aDet objectForKey:@"daq_crate"] andCard:[aDet objectForKey:@"daq_board_slot"]];
-                aHistogram = [connectedHisto objectForKeyArray:[NSMutableArray arrayWithObjects:objName, @"fpgaEnergyHist",
+                aHistogram = [connectedHisto objectForKeyArray:[NSMutableArray arrayWithObjects:objName, @"Energy",
                                                      [NSString stringWithFormat:@"Crate %2d",  crate],
                                                      [NSString stringWithFormat:@"Card %2d",   slot],
                                                      [NSString stringWithFormat:@"Channel %2d",chan],
