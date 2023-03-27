@@ -44,6 +44,8 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 - (void) dealloc
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    [connectedHisto release];
+    [influxDB release];
     [super dealloc];
 }
 
@@ -56,7 +58,8 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 
 - (void) findInFluxDB
 {
-    influxDB = [[self document] findObjectWithFullID:@"ORInFluxDBModel,1"];
+    [influxDB release];
+    influxDB = [[[self document] findObjectWithFullID:@"ORInFluxDBModel,1"]retain];
 }
 
 
@@ -141,6 +144,15 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 
 - (void) runStarted:(NSNotification*) aNote
 {
+    NSArray* objects = [[(ORAppDelegate*)[NSApp delegate]  document] collectObjectsOfClass:NSClassFromString(@"OrcaObject")];
+    [objects makeObjectsPerformSelector:@selector(clearLoopChecked) withObject:nil];
+
+    [connectedHisto release];
+    [rc release];
+    rc = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORRunModel,1"] retain];
+    NSArray* hists = [rc collectConnectedObjectsOfClass:NSClassFromString(@"ORHistoModel")];
+    connectedHisto = [[hists objectAtIndex:0]retain];
+
     [self postInFluxRunTime];
 }
 
@@ -997,9 +1009,6 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     
 - (void) influxHistograms:(NSString*)name segmentId:(int)groupIndex timeStamp:(NSTimeInterval)aTimeStamp
 {
-    ORRunModel* rc = [[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORRunModel,1"];
-    NSArray* hists = [rc collectConnectedObjectsOfClass:NSClassFromString(@"ORHistoModel")];
-
     ORL200SegmentGroup* group = (ORL200SegmentGroup*)[self segmentGroup:groupIndex];
     for(int i=0; i<[self numberSegmentsInGroup:groupIndex]; i++){
         id aDet = [group segment:i];
@@ -1011,16 +1020,13 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         short chan    = [[aDet objectForKey:@"daq_board_ch"]intValue];
         NSString* loc = [NSString stringWithFormat:@"%02d_%02d_%02d",crate,slot,chan];
         OR1DHisto* aHistogram = nil;
-        if([hists count]){
+        if(connectedHisto){
             NSString* objName = [self objectNameForCrate:[aDet objectForKey:@"daq_crate"] andCard:[aDet objectForKey:@"daq_board_slot"]];
-            if(objName){
-                ORHistoModel* hist = (ORHistoModel*)[hists objectAtIndex:0];
-                aHistogram = [hist objectForKeyArray:[NSMutableArray arrayWithObjects:objName, @"fpgaEnergyHist",
+                aHistogram = [connectedHisto objectForKeyArray:[NSMutableArray arrayWithObjects:objName, @"fpgaEnergyHist",
                                                      [NSString stringWithFormat:@"Crate %2d",  crate],
                                                      [NSString stringWithFormat:@"Card %2d",   slot],
                                                      [NSString stringWithFormat:@"Channel %2d",chan],
                                                       nil]];
-            }
         }
         if(aHistogram){
             ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:[self objectName] org:[influxDB org]];
