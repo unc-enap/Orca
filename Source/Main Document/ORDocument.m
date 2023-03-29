@@ -287,7 +287,7 @@ NSString* ORDocumentLock					= @"ORDocumentLock";
 	//add in the document parameters
 	NSMutableDictionary* docDict = [NSMutableDictionary dictionary];
     [docDict setObject:[[self fileURL]path] forKey:@"documentName"];
-    [docDict setObject:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"OrcaVersion"];
+    [docDict setObject:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"OrcaVersion"];
 	
 	NSFileManager* fm			= [NSFileManager defaultManager];
 	NSString* orcaVersionPath	= [[NSBundle mainBundle] pathForResource:@"orcaversion"ofType:nil];
@@ -545,6 +545,7 @@ static NSString* ORDocumentScaleFactor  = @"ORDocumentScaleFactor";
 		@try {
 			//[[ORUSB sharedUSB] awakeAfterDocumentLoaded];
 			[group awakeAfterDocumentLoaded];
+            [[NSApp delegate] sendDeferredLogs];
 		}
 		@catch(NSException* localException) {
 		}

@@ -18,6 +18,7 @@
 //-------------------------------------------------------------
 
 #import "ORExperimentModel.h"
+#import "ORInFluxDBModel.h"
 
 @class ORRunModel;
 
@@ -27,11 +28,17 @@
 #define kL200SiPMOuterChans   40
 #define kL200MuonVetoChans    66
 #define kL200MaxAuxChans       6
+#define kL200MaxCC4s          24*7
+#define kL200MaxADCCards      14*4
 
 @interface ORL200Model : ORExperimentModel
 {
     int viewType;
     uint32_t runType;
+    ORInFluxDBModel* influxDB;
+    int influxIndex;
+    BOOL linked;
+    bool updateDataFilePath;
 }
 
 #pragma mark •••Accessors
@@ -43,8 +50,9 @@
 - (void) setSiPMPositions;
 - (void) setPMTPositions;
 - (void) setAuxChanPositions;
-
+- (void) findInFluxDB;
 - (void) runTypeChanged:(NSNotification*) aNote;
+- (void) updateDataFilePath:(NSNotification*)aNote;
 
 #pragma mark •••Segment Group Methods
 - (void) showDataSet:(NSString*)name forSet:(int)aSet segment:(int)index;
@@ -53,6 +61,8 @@
 - (BOOL) validateSiPM:(int)index;
 - (BOOL) validatePMT:(int)index;
 - (BOOL) validateAuxChan:(int)index;
+- (BOOL) validateCC4:(int)index;
+- (BOOL) validateADC:(int)index;
 - (NSString*) valueForLabel:(NSString*)label fromParts:(NSArray*)parts;
 
 #pragma mark •••Archival

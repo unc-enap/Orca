@@ -26,7 +26,9 @@
 	IBOutlet NSTextField* 	logTextField;
 	IBOutlet NSTextField* 	configTextField;
 	IBOutlet NSTextField*   processLimitHighField;
-	IBOutlet NSButton*		useDatedFileNamesCB;
+    IBOutlet NSButton*      useDatedFileNamesCB;
+    IBOutlet NSButton*      useDatedFileNamesV2CB;
+    IBOutlet NSButton*      useFileExtension;
 	IBOutlet NSButton*		useFolderStructureCB;
 	IBOutlet NSTextField*	filePrefixTextField;
 	IBOutlet NSTextField*	maxFileSizeTextField;
@@ -70,6 +72,8 @@
 - (IBAction) generateAuxDataFileAction:(id)sender;
 - (IBAction) processLimitHighAction:(id)sender;
 - (IBAction) useDatedFileNamesAction:(id)sender;
+- (IBAction) useDatedFileNamesV2Action:(id)sender;
+- (IBAction) useFileExtensionAction:(id)sender;
 - (IBAction) useFolderStructureAction:(id)sender;
 - (IBAction) filePrefixTextFieldAction:(id)sender;
 - (IBAction) maxFileSizeTextFieldAction:(id)sender;
@@ -85,6 +89,8 @@
 - (void) generateGzipChanged:(NSNotification*)aNote;
 - (void) processLimitHighChanged:(NSNotification*)aNote;
 - (void) useDatedFileNamesChanged:(NSNotification*)aNote;
+- (void) useDatedFileNamesV2Changed:(NSNotification*)aNote;
+- (void) useFileExtensionChanged:(NSNotification*)aNote;
 - (void) useFolderStructureChanged:(NSNotification*)aNote;
 - (void) filePrefixChanged:(NSNotification*)aNote;
 - (void) maxFileSizeChanged:(NSNotification*)aNote;

@@ -30,7 +30,7 @@
     IBOutlet NSTextField* envErrorsTextField1;
     IBOutlet NSTextField* ctiErrorsTextField1;
     IBOutlet NSTextField* linkErrorsTextField1;
-    IBOutlet NSTextField* majorityLevelTextField;
+    IBOutlet NSPopUpButton* majorityLevelPU;
     IBOutlet NSTextField* majorityWidthTextField;
 }
 

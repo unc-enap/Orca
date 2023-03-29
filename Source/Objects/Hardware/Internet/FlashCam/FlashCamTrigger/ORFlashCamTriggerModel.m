@@ -20,6 +20,9 @@
 #import "ORFlashCamTriggerModel.h"
 #import "ORCrate.h"
 
+NSString* ORFlashCamTriggerModelMajorityLevelChanged = @"ORFlashCamTriggerModelMajorityLevelChanged";
+NSString* ORFlashCamTriggerModelMajorityWidthChanged = @"ORFlashCamTriggerModelMajorityWidthChanged";
+
 @implementation ORFlashCamTriggerModel
 
 - (id) init
@@ -27,6 +30,8 @@
     self = [super init];
     [[self undoManager] disableUndoRegistration];
     for(unsigned int i=0; i<kFlashCamTriggerConnections; i++) ctiConnector[i] = nil;
+    majorityLevel = 1;
+    majorityWidth = 1;
     [[self undoManager] enableUndoRegistration];
     return self;
 }
@@ -175,6 +180,31 @@
 }
 
 #pragma mark •••Accessors
+- (int) majorityLevel
+{
+    return majorityLevel;
+}
+
+- (int) majorityWidth
+{
+    return majorityWidth;
+}
+
+- (void) setMajorityLevel:(int)level
+{
+    if(majorityLevel == level) return;
+    [[[self undoManager] prepareWithInvocationTarget:self] setMajorityLevel:majorityLevel];
+    majorityLevel = MAX(1, level);
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamTriggerModelMajorityLevelChanged object:self];
+}
+
+- (void) setMajorityWidth:(int)width
+{
+    if(majorityWidth == width) return;
+    [[[self undoManager] prepareWithInvocationTarget:self] setMajorityWidth:majorityWidth];
+    majorityWidth = MAX(1, width);
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamTriggerModelMajorityWidthChanged object:self];
+}
 
 - (ORConnector*) ctiConnector:(unsigned int)index
 {
@@ -223,6 +253,11 @@
     }
     NSMutableArray* flags = [NSMutableArray array];
     [flags addObjectsFromArray:@[@"-smm", [NSString stringWithFormat:@"%x,%d,1", mask, index]]];
+
+// jfw and mah added support for sm majority settings ------
+    [flags addObjectsFromArray:@[@"-smmajl", [NSString stringWithFormat:@"%d,%d,1", majorityLevel,index]]];
+    [flags addObjectsFromArray:@[@"-smmajw", [NSString stringWithFormat:@"%d,%d,1", majorityWidth,index]]];
+
     return flags;
 }
 
@@ -230,7 +265,6 @@
 {
     NSLog(@"%@\n", [[self runFlagsForCardIndex:0] componentsJoinedByString:@" "]);
 }
-
 
 #pragma mark •••Archival
 
@@ -240,6 +274,8 @@
     [[self undoManager] disableUndoRegistration];
     for(int i=0; i<kFlashCamTriggerConnections; i++)
         [self setCTIConnector:[decoder decodeObjectForKey:[NSString stringWithFormat:@"trigConnector%d",i]] atIndex:i];
+    [self setMajorityLevel:[decoder decodeIntForKey:@"majorityLevel"]];
+    [self setMajorityWidth:[decoder decodeIntForKey:@"majorityWidth"]];
     [[self undoManager] enableUndoRegistration];
     return self;
 }
@@ -249,6 +285,15 @@
     [super encodeWithCoder:encoder];
     for(unsigned int i=0; i<kFlashCamTriggerConnections; i++)
         [encoder encodeObject:ctiConnector[i] forKey:[NSString stringWithFormat:@"trigConnector%d",i]];
+    [encoder encodeInt:majorityLevel forKey:@"majorityLevel"];
+    [encoder encodeInt:majorityWidth forKey:@"majorityWidth"];
 }
 
+- (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary
+{
+    NSMutableDictionary* dict = [super addParametersToDictionary:dictionary];
+    [dict setObject:[NSNumber numberWithInt:majorityLevel]   forKey:@"MajorityLevel"];
+    [dict setObject:[NSNumber numberWithInt:majorityWidth]   forKey:@"MajorityWidth"];
+    return dict;
+}
 @end

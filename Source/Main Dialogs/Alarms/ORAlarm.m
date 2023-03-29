@@ -76,7 +76,11 @@ NSString* severityName[kNumAlarmSeverityTypes] = {
 - (NSString*) timePosted
 {
    return [timePosted stdDescription];
+}
 
+- (NSTimeInterval) timePostedUnixTimestamp;
+{
+    return [timePosted timeIntervalSince1970];
 }
 
 - (NSString*) timePostedUTC

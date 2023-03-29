@@ -433,7 +433,7 @@
 
 - (void) nameChanged:(NSNotification*)aNote
 {
-	[nameField setStringValue:[model scriptName]];
+	if(model)[nameField setStringValue:[model scriptName]];
     if([model readOnly])
         [[self window] setTitle:[NSString stringWithFormat:@"Script: %@ (READ ONLY)", [model scriptTitle]]];
     else

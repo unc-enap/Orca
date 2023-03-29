@@ -22,6 +22,7 @@
 #import "ORDataTaker.h"
 #import "ORReadOutList.h"
 #import "ORTimeRate.h"
+#import "ORDataFileModel.h"
 #import "fcio.h"
 #import "bufio.h"
 
@@ -68,7 +69,6 @@
     ORTimeRate* dataRateHistory;
     ORTimeRate* eventRateHistory;
     ORTimeRate* deadTimeHistory;
-    ORTaskSequence* taskSequencer;  //changed name MAH 9/17/22
     NSTask*     runTask;            //added. MAH 9/17/22
     ORReadOutList* readOutList;
     NSArray* dataTakers;
@@ -77,6 +77,13 @@
     NSMutableArray* cardMap;
     NSLock* readStateLock; //MAH 9/18/22
     bool timeToQuitReadoutThread;
+    bool readWait;
+    ORDataPacket* dataPacketForThread;
+    NSString* writeDataToFile;
+    NSUInteger fclogIndex;
+    NSMutableArray* fclog;
+    NSMutableArray* fcrunlog;
+    ORDataFileModel* dataFileObject;
 }
 
 #pragma mark •••Initialization
@@ -93,7 +100,10 @@
 - (NSUInteger) remoteInterfaceCount;
 - (NSString*) remoteInterfaceAtIndex:(NSUInteger)index;
 - (NSString*) ethType;
-- (NSNumber*) configParam:(NSString*)p;
+- (NSNumber*) configParam:(NSString*)aKey;
+- (NSString*) configParamString:(NSString*)aKey;
+- (uint32_t) maxADCCards;
+
 - (NSMutableArray*) runFlags:(bool)print;
 - (int) timeout;
 - (int) ioBuffer;
@@ -116,10 +126,15 @@
 - (ORTimeRate*) dataRateHistory;
 - (ORTimeRate*) eventRateHistory;
 - (ORTimeRate*) deadTimeHistory;
-- (ORTaskSequence*) taskSequencer;
 - (ORReadOutList*) readOutList;
 - (NSMutableArray*) readOutArgs;
 - (NSMutableArray*) children;
+- (void) dataFileNameChanged:(NSNotification*) aNote;
+- (NSString*) streamDescription;
+- (NSUInteger) fclogLines;
+- (NSString*) fclog:(NSUInteger)nprev;
+- (NSUInteger) fcrunlogLines;
+- (NSString*) fcrunlog:(NSUInteger)nprev;
 
 - (void) setInterface:(NSString*)iface andPort:(uint16_t)p;
 - (void) setInterface:(NSString*)iface;
@@ -130,6 +145,7 @@
 - (void) removeRemoteInterface:(NSString*)iface;
 - (void) removeRemoteInterfaceAtIndex:(NSUInteger)index;
 - (void) setConfigParam:(NSString*)p withValue:(NSNumber*)v;
+- (void) setConfigParam:(NSString*)p withString:(NSString*)aString;
 - (void) setTimeout:(int)to;
 - (void) setIObuffer:(int)io;
 - (void) setStateBuffer:(int)sb;
@@ -141,6 +157,10 @@
 - (void) setReadOutArgs:(NSMutableArray*)args;
 - (void) setChanMap:(NSMutableArray*)chMap;
 - (void) setCardMap:(NSMutableArray*)map;
+- (void) setFCLogLines:(NSUInteger)nlines;
+- (void) appendToFCLog:(NSString*)line andNotify:(BOOL)notify;
+- (void) clearFCLog;
+- (void) appendToFCRunLog:(NSString*)line;
 
 #pragma mark •••Comparison methods
 - (BOOL) sameInterface:(NSString*)iface andPort:(uint16_t)p;
@@ -152,11 +172,10 @@
 - (void) read:(ORDataPacket*)aDataPacket;
 - (void) runFailed;
 
-
 #pragma mark •••Task methods
-- (void) taskFinished:(id)task;
-- (void) tasksCompleted:(id)sender;
-- (void) taskData:(NSMutableDictionary*)taskData;
+- (void) taskDataAvailable:(NSNotification*)note;
+- (void) taskData:(NSDictionary*)taskData;
+- (void) taskCompleted:(NSNotification*)note;
 
 #pragma mark •••Data taker methods
 - (void) readConfig:(fcio_config*)config;
@@ -175,6 +194,8 @@
 - (id) initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary;
+- (void) writeFCIOLog:(NSNotification*)note;
+- (void) fileLimitExceeded:(NSNotification*)note;
 
 - (void) runFailedMainThread;
 
@@ -192,3 +213,6 @@ extern NSString* ORFlashCamListenerModelChanMapChanged;
 extern NSString* ORFlashCamListenerModelCardMapChanged;
 extern NSString* ORFlashCamListenerModelConfigBufferFull;
 extern NSString* ORFlashCamListenerModelStatusBufferFull;
+extern NSString* ORFlashCamListenerModelFCLogChanged;
+extern NSString* ORFlashCamListenerModelFCRunLogChanged;
+extern NSString* ORFlashCamListenerModelFCRunLogFlushed;

@@ -27,8 +27,11 @@
 #import "ORRunModel.h"
 #import "ORCouchDBModel.h"
 #import "ORFlashCamCrateModel.h"
+#import "ORDataFileModel.h"
+#import "ORSmartFolder.h"
+#import "ORAppDelegate.h"
 
-static NSString* L200DBConnector = @"L200DBConnector";
+static NSString* L200DBConnector     = @"L200DBConnector";
 NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 
 @implementation ORL200Model
@@ -44,16 +47,15 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 - (void) awakeAfterDocumentLoaded
 {
     [self getRunType:nil];
+    [self findInFluxDB];
     [super awakeAfterDocumentLoaded];
 }
 
-/*- (void) wakeUp
+- (void) findInFluxDB
 {
-    [super wakeUp];
-    if(pollTime){
-        [self checkConstraints];
-    }
-}*/
+    influxDB = [[self document] findObjectWithFullID:@"ORInFluxDBModel,1"];
+}
+
 
 - (void) sleep
 {
@@ -62,19 +64,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 }
 
 - (void) setUpImage {
-    NSImage* cimage = [NSImage imageNamed:@"L200"];
-    NSSize size = [cimage size];
-    NSSize newsize;
-    newsize.width  = 0.125 * size.width;
-    newsize.height = 0.125 * size.height;
-    NSImage* image = [[NSImage alloc] initWithSize:newsize];
-    [image lockFocus];
-    NSRect rect;
-    rect.origin = NSZeroPoint;
-    rect.size.width  = newsize.width;
-    rect.size.height = newsize.height;
-    [cimage drawInRect:rect fromRect:NSZeroRect operation:NSCompositingOperationSourceOver fraction:1.0];
-    [image unlockFocus];
+    NSImage* image = [NSImage imageNamed:@"L200"];
     [self setImage:image];
 }
 
@@ -104,13 +94,40 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
                      selector : @selector(runTypeChanged:)
                          name : ORRunTypeChangedNotification
                        object : nil];
+    
     [notifyCenter addObserver : self
                      selector : @selector(awakeAfterDocumentLoaded)
                          name : ORGroupObjectsAdded
                        object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(linkCC4sToDetectors)
+                         name : ORRelinkSegments
+                       object : nil];
+
     [notifyCenter addObserver : self
                      selector : @selector(awakeAfterDocumentLoaded)
                          name : ORGroupObjectsRemoved
+                       object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(runStarted:)
+                         name : ORRunStartedNotification
+                       object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(runStarted:)
+                         name : ORRunStartSubRunNotification
+                       object : nil];
+
+    [notifyCenter addObserver : self
+                     selector : @selector(updateDataFilePath:)
+                         name : ORDataFileModelFilePrefixChanged
+                       object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(updateDataFilePath:)
+                         name : ORFolderDirectoryNameChangedNotification
                        object : nil];
 }
 
@@ -119,9 +136,103 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     [self getRunType:[aNote object]];
 }
 
+- (void) runStarted:(NSNotification*) aNote
+{
+    [self postInFluxRunTime];
+}
+
+- (void) updateDataFilePath:(NSNotification*)aNote
+{
+    // update the data file path if the file prefix was changed or the data directory was changed
+    ORDataFileModel* dfm = nil;
+    if([[aNote object] isKindOfClass:NSClassFromString(@"ORDataFileModel")]){
+        dfm = (ORDataFileModel*) [aNote object];
+    }
+    else if([[aNote object] isKindOfClass:NSClassFromString(@"ORSmartFolder")] && updateDataFilePath){
+        NSArray* obj = [[(ORAppDelegate*)[NSApp delegate] document]
+                        collectObjectsWithClassName:@"ORDataFileModel"];
+        for(id df in obj)
+            if([(ORDataFileModel*)df dataFolder] == (ORSmartFolder*) [aNote object]) dfm = (ORDataFileModel*) df;
+    }
+    if(!dfm) return;
+    // if there is no file prefix, nothing to do
+    NSString* prefix = [dfm filePrefix];
+    if(!prefix) return;
+    // get the current full path
+    NSString* path = @"";
+    NSString* dfmdir = [[dfm dataFolder] directoryName];
+    if([dfmdir rangeOfString:@"/" options:NSBackwardsSearch].location == [dfmdir length]-1)
+        path = [NSString stringWithFormat:@"%@%@", dfmdir, [[dfm dataFolder] defaultLastPathComponent]];
+    else
+        path = [NSString stringWithFormat:@"%@/%@", dfmdir, [[dfm dataFolder] defaultLastPathComponent]];
+    if(!path) return;
+    // search for period/run pattern in the file prefix
+    NSError* error = NULL;
+    NSRegularExpression* regex0 = [NSRegularExpression regularExpressionWithPattern:@"p\\d\\d-r\\d\\d\\d"
+                                                                            options:0
+                                                                              error:&error];
+    if(error) return;
+    NSArray* matches0 = [regex0 matchesInString:prefix options:0 range:NSMakeRange(0, [prefix length])];
+    NSArray* pr;
+    if([matches0 count] > 1 || [matches0 count] == 0) pr = nil;
+    else{
+        NSRange range0 = [[matches0 objectAtIndex:0] range];
+        pr = [[prefix substringWithRange:range0] componentsSeparatedByString:@"-"];
+    }
+    // search for period/run pattern matches in the current path
+    NSRegularExpression* regex1 = [NSRegularExpression regularExpressionWithPattern:@"p\\d\\d/r\\d\\d\\d"
+                                                                            options:0
+                                                                              error:&error];
+    if(error) return;
+    NSArray* matches1 = [regex1 matchesInString:path options:0 range:NSMakeRange(0, [path length])];
+    NSMutableString* dir = [NSMutableString string];
+    NSRange range1 = NSMakeRange(0, 0);
+    if([matches1 count] == 0) [dir appendString:path];
+    else if([matches1 count] == 1){
+        range1 = [[matches1 objectAtIndex:0] range];
+        [dir appendString:[path substringWithRange:NSMakeRange(0, range1.location)]];
+    }
+    else return;
+    // if there was a match in the file prefix, append the period/run. otherwise revert to base path.
+    if(pr){
+        if([dir rangeOfString:@"/" options:NSBackwardsSearch].location != [dir length]-1) [dir appendString:@"/"];
+        if([[aNote object] isKindOfClass:NSClassFromString(@"ORSmartFolder")] && [matches1 count] == 0)
+            [dir appendString:@"Data/"];
+        [dir appendString:[NSString stringWithFormat:@"%@/", [pr objectAtIndex:0]]];
+        [dir appendString:[pr objectAtIndex:1]];
+        if(range1.length > 0)
+            [dir appendString:[path substringWithRange:NSMakeRange(range1.location+range1.length,
+                                                                   [path length]-range1.location-range1.length)]];
+        [[dfm dataFolder] setDefaultLastPathComponent:@""];
+        updateDataFilePath = false;
+        [[dfm dataFolder] setDirectoryName:dir];
+    }
+    else{
+        [[dfm dataFolder] setDefaultLastPathComponent:@"Data"];
+        NSRange range2 = [dir rangeOfString:@"/Data" options:NSBackwardsSearch];
+        if(range2.location + range2.length == [dir length])
+            dir = [NSMutableString stringWithString:[dir substringWithRange:NSMakeRange(0, range2.location)]];
+        range2 = [dir rangeOfString:@"/Data/" options:NSBackwardsSearch];
+        if(range2.location + range2.length == [dir length])
+            dir = [NSMutableString stringWithString:[dir substringWithRange:NSMakeRange(0, range2.location)]];
+    }
+    // make sure the directory we will now write to exists
+    BOOL isdir;
+    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:[dir stringByExpandingTildeInPath]
+                                                       isDirectory:&isdir];
+    if(!exists || !isdir){
+        NSLogColor([NSColor redColor], @"ORL200Model: data directory %@ does not exist, defaulting to ~/\n", dir);
+        dir = [NSMutableString stringWithString:@"~/"];
+    }
+    // if defaulting to the base path, set the dir name after the above check to ensure correct default behavior
+    if(!pr){
+        updateDataFilePath = false;
+        [[dfm dataFolder] setDirectoryName:dir];
+    }
+    updateDataFilePath = true;
+}
 
 #pragma mark •••Accessors
-
 - (int) viewType
 {
     return viewType;
@@ -152,9 +263,9 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         NSString* pos = [[group segment:i] objectForKey:@"str_position"];
         NSString* strName = @"-";
         if(pos && str){
-            if(![str isEqualToString:@"--"] && ![str isEqualToString:@""] ||
-               ![pos isEqualToString:@"--"] && ![pos isEqualToString:@""])
-                strName = [NSString stringWithFormat:@"Ge%@", str];
+            if((![str hasPrefix:@"-"] && ![str isEqualToString:@""]) ||
+               (![pos hasPrefix:@"-"] && ![pos isEqualToString:@""]))
+                strName = [NSString stringWithFormat:@"Ge_%@", str];
         }
         [group setSegment:i object:strName forKey:@"kStringName"];
     }
@@ -251,7 +362,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     for(int i=0; i<[self numberSegmentsInGroup:kL200AuxType]; i++){
         NSString* serial = [[group segment:i] objectForKey:@"serial"];
         NSString* name = @"-";
-        if([serial length] > 4 && [[serial lowercaseString] hasPrefix:@"aux-"]){
+        if([serial length] > 4 && [[serial lowercaseString] hasPrefix:@"Aux_"]){
             name = [serial substringWithRange:NSMakeRange(4, [serial length]-4)];
             while([name length] > 1 && [name hasPrefix:@"0"])
                 name = [name substringWithRange:NSMakeRange(1, [name length]-1)];
@@ -259,7 +370,6 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         [group setSegment:i object:name forKey:@"kStringName"];
     }
 }
-
 
 #pragma mark •••Segment Group Methods
 
@@ -270,29 +380,42 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         [self setCrateIndex:4   forGroup:groupIndex];
         [self setCardIndex:6    forGroup:groupIndex];
         [self setChannelIndex:7 forGroup:groupIndex];
-        keys = [NSArray arrayWithObjects:@"serial", @"det_type",
+        keys = [NSArray arrayWithObjects:@"serial",     @"det_type",
                 @"str_number",     @"str_position",
-                @"daq_crate",      @"daq_board_id",     @"daq_board_slot",   @"daq_board_ch",
+                @"daq_crate",      @"daq_board_id",     @"daq_board_slot",   @"daq_board_ch", @"adc_serial",
                 @"hv_crate",       @"hv_board_slot",    @"hv_board_chan",    @"hv_cable",
                 @"hv_flange_id",   @"hv_flange_pos",
                 @"fe_cc4_ch",      @"fe_head_card_ana", @"fe_head_card_dig", @"fe_fanout_card",
                 @"fe_raspberrypi", @"fe_lmfe_id", nil];
     }
-    else if(groupIndex > kL200DetType && groupIndex < kL200SegmentTypeCount){
+    else if(groupIndex > kL200DetType && groupIndex < kL200CC4Type){
         [self setCrateIndex:2   forGroup:groupIndex];
         [self setCardIndex:4    forGroup:groupIndex];
         [self setChannelIndex:5 forGroup:groupIndex];
         if(groupIndex == kL200SiPMType)
             keys = [NSArray arrayWithObjects:@"serial",  @"det_type",
-                    @"daq_crate", @"daq_board_id",  @"daq_board_slot", @"daq_board_ch",
+                    @"daq_crate", @"daq_board_id",  @"daq_board_slot", @"daq_board_ch", @"adc_serial",
                     @"lv_crate",  @"lv_board_slot", @"lv_board_chan", nil];
         else if(groupIndex == kL200PMTType)
             keys = [NSArray arrayWithObjects:@"serial",  @"det_type",
-                    @"daq_crate", @"daq_board_id",  @"daq_board_slot", @"daq_board_ch",
+                    @"daq_crate", @"daq_board_id",  @"daq_board_slot", @"daq_board_ch", @"adc_serial",
                     @"hv_crate",  @"hv_board_slot", @"hv_baord_chan", nil];
         else if(groupIndex == kL200AuxType)
             keys = [NSArray arrayWithObjects:@"serial", @"det_type",
-                    @"daq_crate", @"daq_board_id",  @"daq_board_slot", @"daq_board_ch", nil];
+                    @"daq_crate", @"daq_board_id",  @"daq_board_slot", @"daq_board_ch", @"adc_serial", nil];
+    }
+    else if(groupIndex == kL200CC4Type){
+        [self setCrateIndex:4   forGroup:groupIndex];
+        [self setCardIndex:5    forGroup:groupIndex];
+        [self setChannelIndex:6 forGroup:groupIndex];
+        keys = [NSArray arrayWithObjects:@"cc4_name",  @"cc4_position", @"cc4_slot", @"cc4_chan",
+                                            @"daq_crate", @"daq_board_slot",     @"daq_board_ch", nil];
+    }
+    else if(groupIndex == kL200ADCType){
+        [self setCrateIndex:0   forGroup:groupIndex];
+        [self setCardIndex:2    forGroup:groupIndex];
+        keys = [NSArray arrayWithObjects:@"daq_crate", @"daq_board_id", @"daq_board_slot",
+                                         @"adc_serial_0", @"adc_serial_1", nil];
     }
     NSMutableArray* mapEntries = [NSMutableArray array];
     if(keys) for(id key in keys) [mapEntries addObject:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -309,24 +432,86 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     [dets setType:kL200DetType];
     [self addGroup:dets];
     [dets release];
+    
     ORL200SegmentGroup* sipms = [[ORL200SegmentGroup alloc] initWithName:@"SiPMs"
                                                              numSegments:kL200SiPMInnerChans+kL200SiPMOuterChans
                                                               mapEntries:[self setupMapEntries:kL200SiPMType]];
     [sipms setType:kL200SiPMType];
     [self addGroup:sipms];
     [sipms release];
+    
     ORL200SegmentGroup* pmts = [[ORL200SegmentGroup alloc] initWithName:@"PMTs"
                                                             numSegments:kL200MuonVetoChans
                                                              mapEntries:[self setupMapEntries:kL200PMTType]];
     [pmts setType:kL200PMTType];
     [self addGroup:pmts];
     [pmts release];
+    
     ORL200SegmentGroup* aux = [[ORL200SegmentGroup alloc] initWithName:@"AuxChans"
                                                            numSegments:kL200MaxAuxChans
                                                             mapEntries:[self setupMapEntries:kL200AuxType]];
     [aux setType:kL200AuxType];
     [self addGroup:aux];
     [aux release];
+    
+    ORL200SegmentGroup* cc4 = [[ORL200SegmentGroup alloc] initWithName:@"CC4Chans"
+                                                           numSegments:kL200MaxCC4s
+                                                            mapEntries:[self setupMapEntries:kL200CC4Type]];
+    [cc4 setType:kL200CC4Type];
+    [self addGroup:cc4];
+    [cc4 release];
+    
+    ORL200SegmentGroup* adc = [[ORL200SegmentGroup alloc] initWithName:@"ADCSerial"
+                                                           numSegments:kL200MaxADCCards
+                                                            mapEntries:[self setupMapEntries:kL200ADCType]];
+    [adc setType:kL200ADCType];
+    [self addGroup:adc];
+    [adc release];
+}
+
+- (void) linkCC4sToDetectors
+{
+    if(!linked){
+        //If we don't have a CC4 group, make one.
+        ORSegmentGroup* cc4Group;
+        if([segmentGroups count]>kL200CC4Type){
+            cc4Group = [segmentGroups objectAtIndex:kL200CC4Type];
+        }
+        else {
+            ORL200SegmentGroup* cc4 = [[ORL200SegmentGroup alloc] initWithName:@"CC4Chans"
+                                                                   numSegments:kL200MaxCC4s
+                                                                    mapEntries:[self setupMapEntries:kL200CC4Type]];
+            [cc4 setType:kL200CC4Type];
+            [self addGroup:cc4];
+            cc4Group = cc4;
+            [cc4 release];
+            
+        }
+        ORSegmentGroup* detGroup = [segmentGroups objectAtIndex:kL200DetType];
+        //make a look up table of the detector segments to speed up the linking
+        NSMutableDictionary* detDict = [NSMutableDictionary dictionary];
+        for(int detIndex=0;detIndex<[[detGroup segments] count];detIndex++){
+            NSString* name          = [detGroup segment:detIndex objectForKey:@"fe_cc4_ch"];
+            ORDetectorSegment* aSeg = [detGroup segment:detIndex];
+            if(name && aSeg)[detDict setObject:aSeg forKey:name];
+        }
+        //ok have the lookup table, do the linkage. Now it's O(n) instead of O(n^2)
+        for(int cc4Index=0;cc4Index<[[cc4Group segments] count];cc4Index++){
+            NSString* name    = [cc4Group segment:cc4Index objectForKey:@"cc4_name"];
+            NSString* chan    = [cc4Group segment:cc4Index objectForKey:@"cc4_chan"];
+            NSString* cc4Name = [NSString stringWithFormat:@"%@-%@",name,[chan removeSpaces]];
+            ORDetectorSegment* detSeg = [detDict objectForKey:cc4Name];
+            if(detSeg){
+                NSString* crate = [detSeg objectForKey:@"daq_crate"];
+                NSString* slot  = [detSeg objectForKey:@"daq_board_slot"];
+                NSString* chan  = [detSeg objectForKey:@"daq_board_ch"];
+                [[cc4Group segment:cc4Index] setObject:crate forKey:@"daq_crate"];
+                [[cc4Group segment:cc4Index] setObject:slot  forKey:@"daq_board_slot"];
+                [[cc4Group segment:cc4Index] setObject:chan  forKey:@"daq_board_ch"];
+            }
+        }
+        linked = YES;
+    }
 }
 
 - (int) maxNumSegments
@@ -340,6 +525,8 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     else if(aGroup == kL200SiPMType) return kL200SiPMInnerChans+kL200SiPMOuterChans;
     else if(aGroup == kL200PMTType) return kL200MuonVetoChans;
     else if(aGroup == kL200AuxType) return kL200MaxAuxChans;
+    else if(aGroup == kL200CC4Type) return kL200MaxCC4s;
+    else if(aGroup == kL200ADCType) return kL200MaxADCCards;
     else return 0;
 }
 
@@ -462,17 +649,48 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     return YES;
 }
 
+- (BOOL) validateCC4:(int)index
+{
+    if(index < 0 || index >= [self numberSegmentsInGroup:kL200CC4Type]) return NO;
+    NSDictionary* params = [[[self segmentGroup:kL200CC4Type] segment:index] params];
+    if(!params) return NO;
+    NSString* name      = [params objectForKey:@"cc4_name"];
+    NSString* position  = [params objectForKey:@"cc4_position"]; //1...12
+    NSString* slot      = [params objectForKey:@"cc4_slot"];     //0,1
+    if(!position || !slot ) return NO;
+    if([name length]      == 0 || [name      rangeOfString:@"-"].location != NSNotFound) return NO;
+    if([position length]  == 0 || [position  rangeOfString:@"-"].location != NSNotFound) return NO;
+    if([slot length]      == 0 || [slot      rangeOfString:@"-"].location != NSNotFound) return NO;
+    return YES;
+}
+
+- (BOOL) validateADC:(int)index
+{
+    if(index < 0 || index >= [self numberSegmentsInGroup:kL200ADCType]) return NO;
+    NSDictionary* params = [[[self segmentGroup:kL200ADCType] segment:index] params];
+    if(!params) return NO;
+    NSString* crate   = [params objectForKey:@"crate"];
+    NSString* address = [params objectForKey:@"board_id"];
+    NSString* slot    = [params objectForKey:@"board_slot"];
+    if(!crate || !address || !slot) return NO;
+    if([crate   length] == 0 || [crate   rangeOfString:@"-"].location != NSNotFound) return NO;
+    if([address length] == 0 || [address rangeOfString:@"-"].location != NSNotFound) return NO;
+    if([slot    length] == 0 || [slot    rangeOfString:@"-"].location != NSNotFound) return NO;
+    return YES;
+}
+
 - (NSString*) reformatSelectionString:(NSString*)aString forSet:(int)aSet
 {
     if([aString length] == 0) return @"Not mapped";
     NSArray* parts = [aString componentsSeparatedByString:@"\n"];
     NSMutableString* s = [NSMutableString string];
+
     if(aSet == kL200DetType)       [s appendString:@"Detector\n"];
     else if(aSet == kL200SiPMType) [s appendString:@"SiPM\n"];
     else if(aSet == kL200PMTType)  [s appendString:@"PMT\n"];
     else if(aSet == kL200AuxType)  [s appendString:@"Aux Chan\n"];
-    [s appendFormat:@"            ID: %@\n",     [self valueForLabel:@"Segment"        fromParts:parts]];
-    [s appendFormat:@"        Serial: %@\n",     [self valueForLabel:@"erial"          fromParts:parts]];
+    else if(aSet == kL200CC4Type)  [s appendString:@"CC4\n"];
+
     if(aSet == kL200DetType){
         [s appendString:@"   String\n"];
         [s appendFormat:@"           Num: %@\n", [self valueForLabel:@"tr_number"      fromParts:parts]];
@@ -481,24 +699,28 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     else if(aSet == kL200SiPMType || aSet == kL200PMTType){
         [s appendFormat:@"           Pos: %@\n", [self valueForLabel:@"RingName"        fromParts:parts]];
     }
-    [s appendString:@"   DAQ\n"];
-    [s appendFormat:@"         Crate: %@\n",     [self valueForLabel:@"aq_crate"        fromParts:parts]];
-    [s appendFormat:@"         Board: %@\n",     [self valueForLabel:@"aq_board_id"     fromParts:parts]];
-    [s appendFormat:@"          Slot: %@\n",     [self valueForLabel:@"aq_board_slot"   fromParts:parts]];
-    [s appendFormat:@"          Chan: %@\n",     [self valueForLabel:@"aq_board_ch"     fromParts:parts]];
+    if(aSet != kL200CC4Type){
+        [s appendFormat:@"            ID: %@\n",     [self valueForLabel:@"Segment"        fromParts:parts]];
+        [s appendFormat:@"        Serial: %@\n",     [self valueForLabel:@"erial"          fromParts:parts]];
+        [s appendString:@"   DAQ\n"];
+        [s appendFormat:@"         Crate: %@\n",     [self valueForLabel:@"aq_crate"        fromParts:parts]];
+        [s appendFormat:@"         Board: %@\n",     [self valueForLabel:@"aq_board_id"     fromParts:parts]];
+        [s appendFormat:@"          Slot: %@\n",     [self valueForLabel:@"aq_board_slot"   fromParts:parts]];
+        [s appendFormat:@"          Chan: %@\n",     [self valueForLabel:@"aq_board_ch"     fromParts:parts]];
+    }
     if(aSet == kL200DetType || aSet == kL200PMTType){
         [s appendString:@"   HV\n"];
         [s appendFormat:@"         Crate: %@\n", [self valueForLabel:@"v_crate"         fromParts:parts]];
         [s appendFormat:@"          Slot: %@\n", [self valueForLabel:@"v_board_slot"    fromParts:parts]];
         [s appendFormat:@"          Chan: %@\n", [self valueForLabel:@"v_board_chan"    fromParts:parts]];
     }
-    else if(aSet == kL200SiPMType){
+    if(aSet == kL200SiPMType){
         [s appendString:@"   LV\n"];
         [s appendFormat:@"          Crate: %@\n", [self valueForLabel:@"v_crate"        fromParts:parts]];
         [s appendFormat:@"           Slot: %@\n", [self valueForLabel:@"v_board_slot"   fromParts:parts]];
         [s appendFormat:@"           Chan: %@\n", [self valueForLabel:@"v_board_chan"   fromParts:parts]];
     }
-    if(aSet == kL200DetType){
+    else if(aSet == kL200DetType){
         [s appendFormat:@"         Cable: %@\n", [self valueForLabel:@"v_cable"         fromParts:parts]];
         [s appendFormat:@"   HV Flange\n"];
         [s appendFormat:@"            ID: %@\n", [self valueForLabel:@"v_flange_id"     fromParts:parts]];
@@ -511,6 +733,29 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         [s appendFormat:@"           RPi: %@\n", [self valueForLabel:@"e_raspberrypi"   fromParts:parts]];
         [s appendFormat:@"          LMFE: %@\n", [self valueForLabel:@"e_lmfe_id"       fromParts:parts]];
     }
+    else if(aSet==kL200CC4Type){
+        if([[self valueForLabel:@"c4_position"   fromParts:parts]length]){
+            [s appendFormat:@"      Position: %@\n",   [self valueForLabel:@"c4_position"   fromParts:parts]];
+            [s appendFormat:@"          Slot: %@\n",   [self valueForLabel:@"c4_slot"       fromParts:parts]];
+            [s appendFormat:@"          Chan: %@\n",   [self valueForLabel:@"c4_chan"       fromParts:parts]];
+            [s appendFormat:@"          Name: %@-%@\n",[self valueForLabel:@"c4_name"       fromParts:parts],
+                                                       [self valueForLabel:@"c4_chan"       fromParts:parts]];
+            
+            //NSString* name = [self valueForLabel:@"c4_name" fromParts:parts];
+            [s appendString:@"      DAQ\n"];
+            if([[self valueForLabel:@"aq_crate"    fromParts:parts] length]){
+                [s appendFormat:@"         Crate: %@\n",     [self valueForLabel:@"aq_crate"    fromParts:parts]];
+                [s appendFormat:@"          Slot: %@\n",     [self valueForLabel:@"aq_board_slot"     fromParts:parts]];
+                [s appendFormat:@"          Chan: %@\n",     [self valueForLabel:@"aq_board_ch"     fromParts:parts]];
+            }
+            else {
+                [s appendFormat:@"         Crate: -\n"];
+                [s appendFormat:@"          Slot: -\n"];
+                [s appendFormat:@"          Chan: -\n"];
+            }
+        }
+        else  [s appendFormat:@"Not Mapped\n"];
+    }
     return s;
 }
 
@@ -519,7 +764,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     for(id line in parts){
         if([line rangeOfString:label].location != NSNotFound){
             NSArray* subParts = [line componentsSeparatedByString:@":"];
-            if([subParts count] >= 2) return [subParts objectAtIndex:1];
+            if([subParts count] >= 2) return [[subParts objectAtIndex:1]trimSpacesFromEnds];
         }
     }
     return @"";
@@ -535,6 +780,8 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     [[self segmentGroup:kL200SiPMType] addParametersToDictionary:dict useName:@"SiPMMap"     addInGroupName:NO];
     [[self segmentGroup:kL200PMTType]  addParametersToDictionary:dict useName:@"PMTMap"      addInGroupName:NO];
     [[self segmentGroup:kL200AuxType]  addParametersToDictionary:dict useName:@"AuxChanMap"  addInGroupName:NO];
+    [[self segmentGroup:kL200CC4Type]  addParametersToDictionary:dict useName:@"CC4Map"      addInGroupName:NO];
+    [[self segmentGroup:kL200ADCType]  addParametersToDictionary:dict useName:@"ADCMap"      addInGroupName:NO];
     [dictionary setObject:dict forKey:[self className]];
     return dictionary;
 }
@@ -545,6 +792,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     [[self undoManager] disableUndoRegistration];
     [self setViewType:[decoder decodeIntForKey:@"viewType"]];
     [[self undoManager] enableUndoRegistration];
+    updateDataFilePath = true;
     return self;
 }
 
@@ -616,6 +864,133 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
                                                       userInfo:history];
 }
 
+- (void) postInFluxSetUp
+{
+    //called from the InFlux model
+    double aTimeStamp = [[NSDate date]timeIntervalSince1970];
+    [self influxLoadSetUp:@"Ge"   segmentId: kL200DetType   timeStamp:aTimeStamp];
+    [self influxLoadSetUp:@"SiPM" segmentId: kL200SiPMType  timeStamp:aTimeStamp];
+    [self influxLoadSetUp:@"PMT"  segmentId: kL200PMTType   timeStamp:aTimeStamp];
+    [self influxLoadSetUp:@"Aux"  segmentId: kL200AuxType   timeStamp:aTimeStamp];
+    [self influxLoadSetUp:@"CC4"  segmentId: kL200CC4Type   timeStamp:aTimeStamp];
+}
+
+- (void) postInFluxRunTime
+{
+    //called from the InFlux model
+    double aTimeStamp = [[NSDate date]timeIntervalSince1970];
+    [self influxLoadRunning:@"Ge"   segmentId: kL200DetType   timeStamp:aTimeStamp];
+    [self influxLoadRunning:@"SiPM" segmentId: kL200SiPMType  timeStamp:aTimeStamp];
+    [self influxLoadRunning:@"PMT"  segmentId: kL200PMTType   timeStamp:aTimeStamp];
+    [self influxLoadRunning:@"Aux"  segmentId: kL200AuxType   timeStamp:aTimeStamp];
+    [self influxLoadRunning:@"CC4"  segmentId: kL200CC4Type   timeStamp:aTimeStamp];
+}
+
+- (void) influxLoadSetUp:(NSString*)name segmentId:(int)groupIndex timeStamp:(NSTimeInterval)aTimeStamp
+{
+    //-------------------------------------------------------------------------------------------
+    // this should be called once at start of run to record the setup
+    //-------------------------------------------------------------------------------------------
+    ORL200SegmentGroup* group = (ORL200SegmentGroup*)[self segmentGroup:groupIndex];
+    for(int i=0; i<[self numberSegmentsInGroup:groupIndex]; i++){
+        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:[self objectName] org:[influxDB org]];
+        [aCmd start : @"SetUp"];
+
+        //-----------------------------------------
+        //-------------setup only------------------
+        //-----------------------------------------
+        id aDet = [group segment:i];
+        ORFlashCamADCModel* hw = [aDet hardwareCard];
+        short crate   = [[aDet objectForKey:@"daq_crate"]intValue];
+        short slot    = [[aDet objectForKey:@"daq_board_slot"]intValue];
+        short chan    = [[aDet objectForKey:@"daq_board_ch"]intValue];
+        NSString* loc = [NSString stringWithFormat:@"%02d_%02d_%02d",crate,slot,chan];
+
+
+        [aCmd addTag:@"boardId"         withString:[aDet objectForKey:@"daq_board_id"]];
+        [aCmd addTag:@"cc4Chan"         withString:[aDet objectForKey:@"fe_cc4_ch"]];
+        [aCmd addTag:@"channel"         withString:[aDet objectForKey:@"daq_board_ch"]];
+        [aCmd addTag:@"crate"           withString:[aDet objectForKey:@"daq_crate"]];
+        [aCmd addTag:@"detType"         withString:[aDet objectForKey:@"det_type"]];
+        [aCmd addTag:@"location"        withString:loc];
+        [aCmd addTag:@"name"            withString:name];
+        [aCmd addTag:@"segmentGroupNum" withLong:groupIndex];
+        [aCmd addTag:@"segmentId"       withString:[NSString stringWithFormat:@"%@_%d",name,i]];
+        [aCmd addTag:@"serial"          withString:[aDet objectForKey:@"serial"]];
+        [aCmd addTag:@"slot"            withString:[aDet objectForKey:@"daq_board_slot"]];
+        [aCmd addTag:@"strNumber"       withString:[aDet objectForKey:@"str_number"]];
+        [aCmd addTag:@"strPosition"     withString:[aDet objectForKey:@"str_position"]];
+
+        [aCmd addField: @"HwPresent"    withBoolean:hw!=nil];
+
+        if(hw!=nil){
+            //channel level values
+            [aCmd addField: @"numChans"      withLong:[hw numberOfChannels]]; //make it a tag
+            [aCmd addField: @"chanEnabled"   withBoolean:[hw chanEnabled:chan]];
+            [aCmd addField: @"trigOutEnable" withBoolean:[hw trigOutEnabled:chan]];
+            [aCmd addField: @"threshold"     withLong:[hw threshold:chan]];
+            [aCmd addField: @"adcGain"       withLong:[hw adcGain:chan]];
+            [aCmd addField: @"trigGain"      withLong:[hw trigGain:chan]];
+            [aCmd addField: @"baseLineDAC"   withLong:[hw baseline:chan]];
+            [aCmd addField: @"shapeTime"     withLong:[hw shapeTime:chan]];
+            [aCmd addField: @"filterType"    withLong:[hw filterType:chan]];
+            [aCmd addField: @"flatTopTime"   withLong:[hw flatTopTime:chan]];
+            [aCmd addField: @"poleZeroTime"  withLong:[hw poleZeroTime:chan]];
+            [aCmd addField: @"postTrigger"   withLong:[hw postTrigger:chan]];
+            [aCmd addField: @"baselineSlew"  withLong:[hw baselineSlew:chan]];
+            [aCmd addField: @"swTrigInclude" withLong:[hw swTrigInclude:chan]];
+            
+            //card level settings
+            [aCmd addField: @"promSlot"       withLong:[hw promSlot]];
+            [aCmd addField: @"baseLineBias"   withLong:[hw baseBias]];
+            [aCmd addField: @"majorityLevel"  withLong:[hw majorityLevel]];
+            [aCmd addField: @"majorityWidth"  withLong:[hw majorityWidth]];
+        }
+
+        [aCmd setTimeStamp:aTimeStamp];
+        [influxDB executeDBCmd:aCmd];
+    }
+}
+- (void) influxLoadRunning:(NSString*)name segmentId:(int)groupIndex timeStamp:(NSTimeInterval)aTimeStamp
+{
+    ORL200SegmentGroup* group = (ORL200SegmentGroup*)[self segmentGroup:groupIndex];
+    for(int i=0; i<[self numberSegmentsInGroup:groupIndex]; i++){
+        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:[self objectName] org:[influxDB org]];
+        [aCmd start : @"RunTime"];
+
+        //-----------------------------------------
+        //-------------run time only---------------
+        //-----------------------------------------
+        id aDet = [group segment:i];
+        short crate   = [[aDet objectForKey:@"daq_crate"]intValue];
+        short slot    = [[aDet objectForKey:@"daq_board_slot"]intValue];
+        short chan    = [[aDet objectForKey:@"daq_board_ch"]intValue];
+        NSString* loc = [NSString stringWithFormat:@"%02d_%02d_%02d",crate,slot,chan];
+
+        [aCmd addTag:@"boardId"         withString:[aDet objectForKey:@"daq_board_id"]];
+        [aCmd addTag:@"cc4Chan"         withString:[aDet objectForKey:@"fe_cc4_ch"]];
+        [aCmd addTag:@"crate"           withString:[aDet objectForKey:@"daq_crate"]];
+        [aCmd addTag:@"channel"         withString:[aDet objectForKey:@"daq_board_ch"]];
+        [aCmd addTag:@"detType"         withString:[aDet objectForKey:@"det_type"]];
+        [aCmd addTag:@"location"        withString:loc];
+        [aCmd addTag:@"name"            withString:name];
+        [aCmd addTag:@"segmentGroupNum" withLong:groupIndex];
+        [aCmd addTag:@"segmentId"       withString:[NSString stringWithFormat:@"%@_%d",name,i]];
+        [aCmd addTag:@"serial"          withString:[aDet objectForKey:@"serial"]];
+        [aCmd addTag:@"slot"            withString:[aDet objectForKey:@"daq_board_slot"]];
+        [aCmd addTag:@"strNumber"       withString:[aDet objectForKey:@"str_number"]];
+        [aCmd addTag:@"strPosition"     withString:[aDet objectForKey:@"str_position"]];
+
+        [aCmd addField: @"trigCounts"  withDouble:[group getTotalCounts:i]];
+        [aCmd addField: @"trigRates"   withDouble:[group getRate:i]];
+        [aCmd addField: @"wfCounts"    withDouble:[group getWaveformCounts:i]];
+        [aCmd addField: @"wfRates"     withDouble:[group getWaveformRate:i]];
+        [aCmd addField: @"baselines"   withDouble:[group getBaseline:i]];
+        
+        [aCmd setTimeStamp:aTimeStamp];
+        [influxDB executeDBCmd:aCmd];
+    }
+}
 @end
 
 @implementation ORL200HeaderRecordID

@@ -36,6 +36,8 @@
     IBOutlet NSTableView* listenerTrigView;
     IBOutlet NSTableView* listenerBaseView;
     IBOutlet NSTableView* listenerReadoutView;
+    IBOutlet NSTableView* listenerExtraFlagsView;
+    IBOutlet NSTableView* listenerExtraFilesView;
     IBOutlet NSButton* updateIPButton;
     IBOutlet NSButton* listInterfaceButton;
     IBOutlet NSTableView* monitorView;

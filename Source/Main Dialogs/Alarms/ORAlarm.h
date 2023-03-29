@@ -69,6 +69,7 @@ typedef enum AlarmEmailDelayTime {
 - (void) setMailDelay:(int)aTime;
 
 - (NSString*) timePosted;
+- (NSTimeInterval) timePostedUnixTimestamp;
 - (NSString*) timePostedUTC;
 - (void) setTimePosted:(NSDate*)aDate;
 - (NSTimeInterval) timeSincePosted;

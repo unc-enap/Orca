@@ -25,7 +25,10 @@
 @interface ORFlashCamTriggerModel : ORFlashCamCard
 {
     @private
-    ORConnector* ctiConnector[kFlashCamTriggerConnections];
+        ORConnector* ctiConnector[kFlashCamTriggerConnections];
+    @protected
+        int majorityLevel;
+        int majorityWidth;
 }
 
 #pragma mark •••Initialization
@@ -40,6 +43,10 @@
 #pragma mark •••Accessors
 - (ORConnector*) ctiConnector:(unsigned int)index;
 - (void) setCTIConnector:(ORConnector*)connector atIndex:(unsigned int)index;
+- (int) majorityLevel;
+- (int) majorityWidth;
+- (void) setMajorityLevel:(int)level;
+- (void) setMajorityWidth:(int)width;
 
 #pragma mark •••Connection management
 - (NSMutableDictionary*) connectedAddresses;
@@ -51,5 +58,9 @@
 #pragma mark •••Archival
 - (id) initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
+- (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary;
 
 @end
+
+extern NSString* ORFlashCamTriggerModelMajorityLevelChanged;
+extern NSString* ORFlashCamTriggerModelMajorityWidthChanged;

@@ -23,6 +23,7 @@
 #import "ORAlarmCollection.h"
 #import "ORMailer.h"
 #import "ORPreferencesController.h"
+#import "ORInFluxDBModel.h"
 
 #pragma mark •••Local Strings
 NSString* OROnCallListModelLastFileChanged	= @"OROnCallListModelLastFileChanged";
@@ -655,6 +656,13 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
     return success;
 }
 
+- (void) loadBucket:(NSString*)aBucket inFluxDB:(ORInFluxDBModel*)influx
+{
+    for(OROnCallPerson* person in onCallList){
+        [person loadBucket:aBucket inFluxDB:influx];
+    }
+}
+
 @end
 
 //--------------------------------------------------------------------------------------
@@ -696,6 +704,21 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
 {
     self.data = nil;
     [super dealloc];
+}
+
+- (void) loadBucket:(NSString*)aBucket inFluxDB:(ORInFluxDBModel*)influx
+{
+    ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:aBucket org:[influx org]];
+    NSString*                  role = @"OffDuty";
+    if([self isPrimary])       role = @"Primary";
+    else if([self isSecondary])role = @"Secondary";
+    else if([self isTertiary]) role = @"Tertiary";
+    [aCmd start   : @"OnCallList"];
+    [aCmd addTag  : @"Role"     withString:role];
+    [aCmd addField: @"Name"     withString:[self name]];
+    [aCmd addField: @"Contact"  withString:[self address]];
+    [aCmd addField: @"Status"   withString:[self status]];
+    [influx executeDBCmd:aCmd];
 }
 
 - (BOOL) hasSameRoleAs:(OROnCallPerson*)anOtherPerson
@@ -862,6 +885,7 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
     copy.data = [[data copyWithZone:zone] autorelease];
     return copy;
 }
+
 @end
 
 @implementation OROnCallListModel (private)
@@ -883,4 +907,5 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
         if(alsoToHistory)[[NSNotificationCenter defaultCenter] postNotificationName:@"ORCouchDBAddHistoryAdcRecord" object:self userInfo:record];
     }
 }
+
 @end

@@ -91,6 +91,17 @@ enum {
 	[model setUseDatedFileNames:[sender intValue]];	
 }
 
+- (IBAction) useDatedFileNamesV2Action:(id)sender
+{
+    [model setUseDatedFileNamesV2:[sender intValue]];
+}
+
+- (IBAction) useFileExtensionAction:(id)sender
+{
+    if([sender intValue]) [model setFileStaticSuffix:@".orca"];
+    else [model setFileStaticSuffix:@""];
+}
+
 - (IBAction) useFolderStructureAction:(id)sender
 {
 	[model setUseFolderStructure:[sender intValue]];	
@@ -202,6 +213,17 @@ enum {
 - (void) useDatedFileNamesChanged:(NSNotification*)aNote
 {
 	[useDatedFileNamesCB setIntValue: [model useDatedFileNames]];
+}
+
+- (void) useDatedFileNamesV2Changed:(NSNotification*)aNote
+{
+    [useDatedFileNamesV2CB setIntValue: [model useDatedFileNamesV2]];
+}
+
+- (void) useFileExtensionChanged:(NSNotification*)aNote
+{
+    if([[model fileStaticSuffix] isEqualToString:@".orca"]) [useFileExtension setIntValue:YES];
+    else [useFileExtension setIntValue:NO];
 }
 
 - (void) useFolderStructureChanged:(NSNotification*)aNote
@@ -341,6 +363,16 @@ enum {
 						object: model];
 
     [notifyCenter addObserver : self
+                     selector : @selector(useDatedFileNamesV2Changed:)
+                         name : ORDataFileModelUseDatedFileNamesV2Changed
+                        object: model];
+
+    [notifyCenter addObserver : self
+                     selector : @selector(useFileExtensionChanged:)
+                         name : ORDataFileModelFileStaticSuffixChanged
+                       object : model];
+    
+    [notifyCenter addObserver : self
                      selector : @selector(sizeLimitReachedActionChanged:)
                          name : ORDataFileModelSizeLimitReachedActionChanged
 						object: model];
@@ -377,7 +409,9 @@ enum {
 	[self maxFileSizeChanged:nil];
 	[self filePrefixChanged:nil];
 	[self useFolderStructureChanged:nil];
-	[self useDatedFileNamesChanged:nil];
+    [self useDatedFileNamesChanged:nil];
+    [self useDatedFileNamesV2Changed:nil];
+    [self useFileExtensionChanged:nil];
 	[self sizeLimitReachedActionChanged:nil];
 	[self processLimitHighChanged:nil];
 	[self generateMD5Changed:nil];

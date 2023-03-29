@@ -55,12 +55,12 @@
                        object : nil];
     [notifyCenter addObserver : self
                      selector : @selector(majorityLevelChanged:)
-                         name : ORFlashCamGlobalTriggerModelMajorityLevelChanged
-                       object : nil];
+                         name : ORFlashCamTriggerModelMajorityLevelChanged
+                       object : model];
     [notifyCenter addObserver : self
                      selector : @selector(majorityWidthChanged:)
-                         name : ORFlashCamGlobalTriggerModelMajorityWidthChanged
-                       object : nil];
+                         name : ORFlashCamTriggerModelMajorityWidthChanged
+                       object : model];
 }
 
 - (void) awakeFromNib
@@ -96,7 +96,8 @@
     NSMutableDictionary* addresses = [model connectedAddresses];
     for(unsigned int i=0; i<kFlashCamTriggerConnections; i++){
         NSNumber* a = [addresses objectForKey:[NSString stringWithFormat:@"trigConnection%d",i]];
-        if(a) [[connectedAddressMatrix cellWithTag:i] setIntValue:(int)[a unsignedIntValue]];
+        if(a) [[connectedAddressMatrix cellWithTag:i] setIntValue:[a intValue]];
+        else [[connectedAddressMatrix cellWithTag:i] setIntValue:0];
     }
 }
 
@@ -115,7 +116,7 @@
 
 - (void) majorityLevelChanged:(NSNotification*)note
 {
-    [majorityLevelTextField setIntValue:[model majorityLevel]];
+    [majorityLevelPU selectItemAtIndex:[model majorityLevel]-1];
 }
 
 - (void) majorityWidthChanged:(NSNotification*)note
@@ -127,7 +128,7 @@
 {
     lock |= [gOrcaGlobals runInProgress] || [gSecurity isLocked:ORFlashCamCardSettingsLock];
     [super settingsLock:lock];
-    [majorityLevelTextField setEnabled:!lock];
+    [majorityLevelPU setEnabled:!lock];
     [majorityWidthTextField setEnabled:!lock];
 }
 
@@ -141,7 +142,7 @@
 
 - (IBAction) majorityLevelAction:(id)sender
 {
-    [model setMajorityLevel:[sender intValue]];
+    [model setMajorityLevel:(int)[sender indexOfSelectedItem]+1];
 }
 
 - (IBAction) majorityWidthAction:(id)sender

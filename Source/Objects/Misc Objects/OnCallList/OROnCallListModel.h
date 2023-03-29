@@ -16,14 +16,13 @@
 //express or implied, or assume any liability or responsibility 
 //for the use of this software.
 //-------------------------------------------------------------
-
 #define kPersonRole      @"kPersonRole"
 #define kPersonName      @"kPersonName"
 #define kPersonAddress   @"kPersonAddress"
 #define kPersonStatus    @"kPersonStatus"
 
 @class OROnCallPerson;
-
+@class ORInFluxDBModel;
 @interface OROnCallListModel : OrcaObject  {
     NSMutableArray* onCallList;
     NSString*       lastFile;
@@ -46,6 +45,7 @@
 - (void) alarmAcknowledged: (NSNotification*)aNote;
 - (void) resetAll;
 - (void) postAGlobalNotification;
+- (void) loadBucket:(NSString*)aBucket inFluxDB:(ORInFluxDBModel*)influx;
 
 #pragma mark •••Accessors
 - (void) addPerson;
@@ -121,6 +121,7 @@ extern NSString* OROnCallListModelEdited;
 - (id)   initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
 - (void) mailSent:(NSString*)to;
+- (void) loadBucket:(NSString*)aBucket inFluxDB:(ORInFluxDBModel*)influx;
 
 @property   (retain) NSMutableDictionary* data;
 

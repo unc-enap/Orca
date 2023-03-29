@@ -857,6 +857,15 @@ NSString* ExperimentModelCustomColor2Changed             = @"ExperimentModelCust
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ORCouchDBAddObjectRecord" object:self userInfo:values];
 }
 
+- (void) postInFluxRunTime
+{
+    //subclasses should override
+}
+- (void) postInFluxSetUp
+{
+    //subclasses should override
+}
+
 - (NSMutableData*) gainDataForSet:(int)aSet
 {
 	NSMutableData* theData;

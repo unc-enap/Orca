@@ -61,8 +61,10 @@
     uint32_t orcaHeaderLength = (dataLengths & 0xf0000000) >> 28;
     uint32_t fcwfHeaderLength = (dataLengths & 0x0fc00000) >> 22;
     uint32_t wfSamples        = (dataLengths & 0x003fffc0) >>  6;
-    if(length != orcaHeaderLength + fcwfHeaderLength + wfSamples/2)
-        NSLog(@"ORFlashCamADCWaveformDecoder: sum of orca header length %u, FCWF header length %u, and WF smaples length/2 %u != data record length $u\n, skipping record!", orcaHeaderLength, fcwfHeaderLength, wfSamples/2, length);
+    if(length != orcaHeaderLength + fcwfHeaderLength + wfSamples/2){
+        NSLog(@"ORFlashCamADCWaveformDecoder: sum of orca header length %u, FCWF header length %u, and WF smaples length/2 %u != data record length %u, skipping record!\n", orcaHeaderLength, fcwfHeaderLength, wfSamples/2, length);
+        return length;
+    }
     
     // get the crate, card, and channel plus key strings
     uint32_t location = *(ptr+2);
@@ -106,6 +108,9 @@
     if(obj)
         if(channel>=0 && channel<[obj numberOfChannels])
             [[obj baselineHistory:channel] addDataToTimeAverage:(float)fpga_baseline];
+    
+    // return if the waveform is not included in this packet
+    if(wfSamples == 0) return length;
     
     // only decode the waveform if it has been 100 ms since the last decoded waveform and the plotting window is open
     BOOL fullDecode = NO;

@@ -40,6 +40,8 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
     [[self undoManager] disableUndoRegistration];
     [self setCardAddress:0];
     [self setPROMSlot:0];
+    boardRevision = 0;
+    hardwareID    = 0;
     ethConnector  = nil;
     trigConnector = nil;
     firmwareVer = [[NSMutableArray array] retain];
@@ -128,6 +130,21 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
 - (unsigned int) promSlot
 {
     return promSlot;
+}
+
+- (uint8_t) boardRevision
+{
+    return boardRevision;
+}
+
+- (uint64_t) hardwareID
+{
+    return hardwareID;
+}
+
+- (NSString*) uniqueHWID
+{
+    return [NSString stringWithFormat:@"%hhx-%llx", [self boardRevision], [self hardwareID]];
 }
 
 - (ORConnector*) ethConnector
@@ -271,6 +288,43 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamCardPROMSlotChanged object:self];
 }
 
+- (void) setBoardRevision:(uint8_t)revision
+{
+    boardRevision = revision;
+}
+
+- (void) setHardwareID:(uint64_t)hwid
+{
+    hardwareID = hwid;
+}
+
+- (void) setUniqueHWID:(NSString*)uid
+{
+    NSArray* a = [uid componentsSeparatedByString:@"-"];
+    bool success = true;
+    if([a count] == 2){
+        if([[a objectAtIndex:0] length]  !=  2 ||
+           [[a objectAtIndex:1] length]  != 16) success = false;
+        else{
+            @try{
+                unsigned int br;
+                NSScanner* scan = [NSScanner scannerWithString:[a objectAtIndex:0]];
+                [scan scanHexInt:&br];
+                boardRevision = (uint8_t) (br & 0xFF);
+                scan = [NSScanner scannerWithString:[a objectAtIndex:1]];
+                [scan scanHexLongLong:&hardwareID];
+            }
+            @catch(NSException* e){
+                success = false;
+            }
+        }
+    }
+    else success = false;
+    if(!success)
+        NSLogColor([NSColor redColor], @"ORFlashCamCard: could not parse unique hw id %@"
+                   " for card address 0x%x\n", uid, cardAddress);
+}
+
 - (void) setEthConnector:(ORConnector*)connector
 {
     [connector retain];
@@ -403,7 +457,6 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
         [currentHistory  addDataToTimeAverage:fc_status.data[index].environment[11]];
         [humidityHistory addDataToTimeAverage:fc_status.data[index].environment[12]];
         [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORFlashCamCardStatusChanged object:self userInfo:nil waitUntilDone:NO];//MAH 10/24/22 GUI update have to be on main thread
-        //[[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamCardStatusChanged object:self];
     //}
 }
 
@@ -414,15 +467,14 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
     if(!taskData) return;
     NSString* text = [taskData objectForKey:@"Text"]; //MAH 9/18/22 no need for the retain??
     if(!text) return;
-    //if(!taskdata) taskdata = [[NSMutableArray array] retain];//MAH 9/18/22 if taskData==nil won't get here
-    [taskdata addObject:[NSString stringWithString:text]]; //MAH 9/18/22 no need for retain
+    if(!taskdata) taskdata = [[[NSMutableArray alloc] init] retain];
+    [taskdata addObject:[NSString stringWithString:text]];
     NSRange r = [text rangeOfString:@"ORFlashCamCard"];
     if(r.location != NSNotFound){
         NSString* s = [text substringWithRange:NSMakeRange(r.location, [text length]-r.location)];
         r = [s rangeOfString:@" endl "];
         if(r.location != NSNotFound) NSLog(@"%@\n", [s substringWithRange:NSMakeRange(0, r.location)]);
     }
-    //[text release];//MAH 9/18/22 no longer retained above
 }
 
 // Once the firmware version request task is complete, release the old firmware version
@@ -435,10 +487,6 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
         [self releaseFirmwareVer];
         return;
     }
-//    if(firmwareVer){
-//        for(NSUInteger i=0; i<[firmwareVer count]; i++) [[firmwareVer objectAtIndex:i] release];
-//        [firmwareVer release];
-//    }
     [firmwareVer release]; //MAH 9/18/22 no need to release each object, just the array
     firmwareVer = nil;
     if(taskdata){
@@ -467,8 +515,8 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
                 *stop = YES;
             }
         }];
-        for(id obj in taskdata) [obj release];
-        [taskdata removeAllObjects];
+        [taskdata release];
+        taskdata = nil;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamCardFirmwareVerChanged object:self];
 }
@@ -482,16 +530,18 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
     [self setPROMSlot:    [[decoder decodeObjectForKey:@"promSlot"] unsignedIntValue]];
     [self setEthConnector: [decoder decodeObjectForKey:@"ethConnector"]];
     [self setTrigConnector:[decoder decodeObjectForKey:@"trigConnector"]];
-    fcioID      = 0;
-    status      = 0;
-    statusEvent = 0;
-    statusPPS   = 0;
-    statusTicks = 0;
-    totalErrors = 0;
-    envErrors   = 0;
-    ctiErrors   = 0;
-    linkErrors  = 0;
-    otherErrors = 0;
+    boardRevision = 0;
+    hardwareID    = 0;
+    fcioID        = 0;
+    status        = 0;
+    statusEvent   = 0;
+    statusPPS     = 0;
+    statusTicks   = 0;
+    totalErrors   = 0;
+    envErrors     = 0;
+    ctiErrors     = 0;
+    linkErrors    = 0;
+    otherErrors   = 0;
     for(unsigned int i=0; i<kFlashCamCardNTemps; i++){
         [tempHistory[i] release];
         tempHistory[i] = [[ORTimeRate alloc] init]; //MAH 10/1/22 removed retain
@@ -499,16 +549,13 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
         [tempHistory[i] setSampleTime:1];
     }
     for(unsigned int i=0; i<kFlashCamCardNVoltages; i++){
-       // [voltageHistory[i] release]; //MAH 10/5/22 unneeded release
         voltageHistory[i] = [[ORTimeRate alloc] init];//MAH 10/1/22 removed retain
         [voltageHistory[i] setLastAverageTime:[NSDate date]];
         [voltageHistory[i] setSampleTime:1];
     }
-    //[currentHistory release]; //MAH 10/5/22 unneeded release
     currentHistory = [[ORTimeRate alloc] init];//MAH 10/1/22 removed retain
     [currentHistory setLastAverageTime:[NSDate date]];
     [currentHistory setSampleTime:1];
-    //[humidityHistory release]; //MAH 10/5/22 unneeded release
     humidityHistory = [[ORTimeRate alloc] init];//MAH 10/1/22 removed retain
     [humidityHistory setLastAverageTime:[NSDate date]];
     [humidityHistory setSampleTime:1];

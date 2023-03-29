@@ -19,7 +19,8 @@
 
 #import "ORSegmentGroup.h"
 
-enum ORL200SegmentType{ kL200DetType, kL200SiPMType, kL200PMTType, kL200AuxType, kL200SegmentTypeCount };
+enum ORL200SegmentType{ kL200DetType, kL200SiPMType, kL200PMTType, kL200AuxType,
+    kL200CC4Type, kL200ADCType, kL200SegmentTypeCount};
 
 @interface ORL200SegmentGroup : ORSegmentGroup {
     unsigned int type;
@@ -41,3 +42,5 @@ enum ORL200SegmentType{ kL200DetType, kL200SiPMType, kL200PMTType, kL200AuxType,
 - (NSString*) segmentLocation:(int)aSegmentIndex;
 
 @end
+
+extern NSString* ORRelinkSegments;

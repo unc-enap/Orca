@@ -23,7 +23,7 @@
 
 
 @class ORTimeRate;
-#define kNumWatchedValues 3
+#define kNumWatchedValues 2
 
 @interface MemoryWatcher : NSObject
 {
@@ -55,7 +55,9 @@
 - (float) convertValue:(float)aValue withMultiplier:(NSString*)aMultiplier;
 - (NSUInteger) timeRateCount:(int)rateIndex;
 - (float) timeRate:(int)rateIndex value:(int)valueIndex;
+- (ORTimeRate*) timeRateObject:(int)rateIndex;
 - (void) setUpQueue;
+- (unsigned long) orcaMemory;
 
 - (void) launchTask;
 - (void) processTopResult:(NSString*)taskResult;

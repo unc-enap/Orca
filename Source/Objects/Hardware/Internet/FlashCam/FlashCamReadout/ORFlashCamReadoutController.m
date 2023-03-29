@@ -340,13 +340,15 @@
 
 - (void) reloadListenerData
 {
-    [listenerView        reloadData];
-    [listenerGPSView     reloadData];
-    [listenerDAQView     reloadData];
-    [listenerWFView      reloadData];
-    [listenerTrigView    reloadData];
-    [listenerBaseView    reloadData];
-    [listenerReadoutView reloadData];
+    [listenerView           reloadData];
+    [listenerGPSView        reloadData];
+    [listenerDAQView        reloadData];
+    [listenerWFView         reloadData];
+    [listenerTrigView       reloadData];
+    [listenerBaseView       reloadData];
+    [listenerReadoutView    reloadData];
+    [listenerExtraFilesView reloadData];
+    [listenerExtraFlagsView reloadData];
 }
 
 - (void) pingStart:(NSNotification*)note
@@ -606,7 +608,7 @@
     [usernameTextField         setEnabled:!lock];
     [ethInterfaceView          setEnabled:!lock];
     [addEthInterfaceButton     setEnabled:!lock];
-    [removeEthInterfaeButton  setEnabled:!lock];
+    [removeEthInterfaeButton   setEnabled:!lock];
     [sendPingButton            setEnabled:!lock];
     [listenerView              setEnabled:!lock];
     [listenerGPSView           setEnabled:!lock];
@@ -615,6 +617,8 @@
     [listenerTrigView          setEnabled:!lock];
     [listenerBaseView          setEnabled:!lock];
     [listenerReadoutView       setEnabled:!lock];
+    [listenerExtraFilesView    setEnabled:!lock];
+    [listenerExtraFlagsView    setEnabled:!lock];
     [addIfaceToListenerButton  setEnabled:!lock];
     [rmIfaceFromListenerButton setEnabled:!lock];
     [fcSourcePathButton        setEnabled:!lock];
@@ -827,12 +831,20 @@
     }
     else if(view == listenerView        || view == listenerGPSView  || view == listenerDAQView  ||
             view == listenerWFView      || view == listenerTrigView || view == listenerBaseView ||
-            view == listenerReadoutView || view == monitorView){
+            view == listenerReadoutView || view == monitorView      || view == listenerExtraFilesView ||
+            view == listenerExtraFlagsView){
         ORFlashCamListenerModel* l = [model getListenerAtIndex:(int)row];
         if(!l) return nil;
         if(col == 0){
             NSUInteger i = [l tag];
             return [NSNumber numberWithUnsignedLong:i];
+        }
+        else if(view == listenerExtraFilesView){
+            if(col == 1)      return [l configParam:@"writeFCIOLog"];
+            else if(col == 2) return [l configParam:@"extraFiles"];
+        }
+        else if(view == listenerExtraFlagsView){
+            if(col == 1) return [l configParam:@"extraFlags"];
         }
         else if(view == listenerView){
             if(col == 1)      return [l interface];
@@ -860,8 +872,9 @@
         else if(view == listenerWFView){
             if(col == 1)      return [l configParam:@"eventSamples"];
             else if(col == 2) return [l configParam:@"signalDepth"];
-            else if(col == 3) return [NSNumber numberWithInt:[[l configParam:@"traceType"] intValue]];
-            else if(col == 4) return [l configParam:@"incBaseline"];
+            else if(col == 3) return [l configParam:@"retriggerLength"];
+            else if(col == 4) return [NSNumber numberWithInt:[[l configParam:@"traceType"] intValue]];
+            else if(col == 5) return [l configParam:@"incBaseline"];
         }
         else if(view == listenerTrigView){
             if(col == 1)      return [l configParam:@"trigAllEnable"];
@@ -919,12 +932,23 @@
             else if(col == 5) [l  setStateBuffer:[object intValue]];
             else if(col == 6) [l      setTimeout:[object intValue]];
         }
+        else if(view == listenerExtraFilesView){
+            if(col == 1)      [l setConfigParam:@"writeFCIOLog"
+                                      withValue:[NSNumber numberWithBool:[object boolValue]]];
+            else if(col == 2) [l setConfigParam:@"extraFiles"
+                                      withValue:[NSNumber numberWithBool:[object boolValue]]];
+        }
+        else if(view == listenerExtraFlagsView){
+            if(col == 1) [l setConfigParam:@"extraFlags"
+                                withString:object];
+        }
         else if(view == listenerGPSView){
             if(col == 1)      [l setConfigParam:@"gpsMode"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
             else if(col == 2) [l setConfigParam:@"gpsusClockAlarm"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
         }
+        
         else if(view == listenerDAQView){
             if(col == 1){
                 int i = [object intValue];
@@ -943,9 +967,11 @@
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
             else if(col == 2) [l setConfigParam:@"signalDepth"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
-            else if(col == 3) [l setConfigParam:@"traceType"
+            else if(col == 3) [l setConfigParam:@"retriggerLength"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
-            else if(col == 4) [l setConfigParam:@"incBaseline"
+            else if(col == 4) [l setConfigParam:@"traceType"
+                                      withValue:[NSNumber numberWithInt:[object intValue]]];
+            else if(col == 5) [l setConfigParam:@"incBaseline"
                                       withValue:[NSNumber numberWithBool:[object boolValue]]];
         }
         else if(view == listenerTrigView){
@@ -998,6 +1024,8 @@
     else if(view == listenerWFView)      return [model listenerCount];
     else if(view == listenerTrigView)    return [model listenerCount];
     else if(view == listenerBaseView)    return [model listenerCount];
+    else if(view == listenerExtraFilesView) return [model listenerCount];
+    else if(view == listenerExtraFlagsView) return [model listenerCount];
     else if(view == listenerReadoutView) return [model listenerCount];
     else if(view == monitorView)         return [model listenerCount];
     else return 0;

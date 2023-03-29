@@ -29,6 +29,8 @@
 @interface ORFlashCamCard : ORCard {
     unsigned int cardAddress;
     unsigned int promSlot;
+    uint8_t boardRevision;
+    uint64_t hardwareID;
     ORConnector* ethConnector;
     ORConnector* trigConnector;
     NSArray* firmwareVer;
@@ -58,6 +60,9 @@
 - (NSString*) cardSlotChangedNotification;
 - (unsigned int) cardAddress;
 - (unsigned int) promSlot;
+- (uint8_t) boardRevision;
+- (uint64_t) hardwareID;
+- (NSString*) uniqueHWID;
 - (ORConnector*) ethConnector;
 - (ORConnector*) trigConnector;
 - (NSArray*) firmwareVer;
@@ -83,6 +88,9 @@
 - (ORTimeRate*) humidityHistory;
 - (void) setCardAddress:(unsigned int)addr;
 - (void) setPROMSlot:(unsigned int)slot;
+- (void) setBoardRevision:(uint8_t)revision;
+- (void) setHardwareID:(uint64_t)hwid;
+- (void) setUniqueHWID:(NSString*)uid;
 - (void) setEthConnector:(ORConnector*)connector;
 - (void) setTrigConnector:(ORConnector*)connector;
 - (uint32_t) exceptionCount;

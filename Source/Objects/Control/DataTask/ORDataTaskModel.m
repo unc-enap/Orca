@@ -61,6 +61,7 @@ NSString* ORDataTaskModelTimerEnableChanged			= @"ORDataTaskModelTimerEnableChan
     [self setReadOutList:[[[ORReadOutList alloc] initWithIdentifier:@"Data Task ReadOut"]autorelease]];
     [[self undoManager] enableUndoRegistration];
 	timerLock = [[NSLock alloc] init];
+    shipLock  = [[NSLock alloc] init];
     [self registerNotificationObservers];
     return self;
 }
@@ -69,7 +70,8 @@ NSString* ORDataTaskModelTimerEnableChanged			= @"ORDataTaskModelTimerEnableChan
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [timerLock release];
-    	
+    [shipLock release];
+
     if(transferQueue){
         [transferQueue release];
         transferQueue = nil;
@@ -289,7 +291,11 @@ NSString* ORDataTaskModelTimerEnableChanged			= @"ORDataTaskModelTimerEnableChan
 #pragma mark ¥¥¥Run Management
 - (void) runTaskStarted:(NSDictionary*)userInfo
 {
+    if(!timerLock)timerLock = [[NSLock alloc] init];
+    if(!shipLock)shipLock  = [[NSLock alloc] init];
+
 	ORDataPacket* aDataPacket = [userInfo objectForKey:kDataPacket];
+    [aDataPacket setDataTask:self];
 	if(processThreadRunning){
 		NSLogColor([NSColor redColor],@"Processing Thread still running from last run\n");
 	}
@@ -384,24 +390,26 @@ NSString* ORDataTaskModelTimerEnableChanged			= @"ORDataTaskModelTimerEnableChan
 
 //-------------------------------------------------------------------------
 //putDataInQueue -- operates out of the data taking thread it should not be
-//called from anywhere else.
+//called from anywhere else unless you you what you're doing
 //-------------------------------------------------------------------------
 - (void) putDataInQueue:(ORDataPacket*)aDataPacket force:(BOOL)forceAdd
 {
-	[aDataPacket addFrameBuffer:forceAdd];
+    [shipLock lock];
     
+    [aDataPacket addFrameBuffer:forceAdd];
+        
     if([aDataPacket dataCount]){
         if([transferQueue count] < kQueueHighWater){
-			BOOL result = [transferQueue tryEnqueueArray:[aDataPacket dataArray]];
-			if(result) [aDataPacket clearData]; //remove old data
-			else if(forceAdd){
-				[transferQueue enqueueArray:[aDataPacket dataArray]];
+            BOOL result = [transferQueue tryEnqueueArray:[aDataPacket dataArray]];
+            if(result) [aDataPacket clearData]; //remove old data
+            else if(forceAdd){
+                [transferQueue enqueueArray:[aDataPacket dataArray]];
                 [aDataPacket clearData]; //remove old data
             }
         }
-		else  [aDataPacket clearData]; //que is full throw it away.
-		
+        else  [aDataPacket clearData]; //que is full throw it away.
     }
+    [shipLock unlock];
 }
 //-------------------------------------------------------------------------
 

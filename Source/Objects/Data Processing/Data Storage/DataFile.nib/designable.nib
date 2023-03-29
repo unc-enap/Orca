@@ -40,6 +40,8 @@
                 <outlet property="stopSendingButton" destination="241" id="242"/>
                 <outlet property="tabView" destination="329" id="336"/>
                 <outlet property="useDatedFileNamesCB" destination="492" id="494"/>
+                <outlet property="useDatedFileNamesV2CB" destination="4fj-SC-tY4" id="EQn-Ij-TXt"/>
+                <outlet property="useFileExtension" destination="HWd-fN-EVa" id="8wA-ly-s37"/>
                 <outlet property="useFolderStructureCB" destination="448" id="451"/>
                 <outlet property="window" destination="5" id="48"/>
             </connections>
@@ -49,10 +51,10 @@
         <window title="Data File" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="5" userLabel="Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="282" y="181" width="420" height="413"/>
+            <rect key="contentRect" x="282" y="181" width="420" height="432"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1025"/>
             <view key="contentView" id="6">
-                <rect key="frame" x="0.0" y="0.0" width="420" height="413"/>
+                <rect key="frame" x="0.0" y="0.0" width="420" height="432"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="246">
@@ -78,7 +80,7 @@
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="595">
-                        <rect key="frame" x="260" y="136" width="84" height="14"/>
+                        <rect key="frame" x="260" y="120" width="84" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="Process Limit:" id="596">
                             <font key="font" metaFont="smallSystem"/>
@@ -87,7 +89,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="107">
-                        <rect key="frame" x="17" y="111" width="89" height="14"/>
+                        <rect key="frame" x="17" y="98" width="89" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="Data Folder:" id="560">
                             <font key="font" metaFont="smallSystem"/>
@@ -96,7 +98,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eTU-kw-OxF">
-                        <rect key="frame" x="17" y="95" width="89" height="14"/>
+                        <rect key="frame" x="17" y="81" width="89" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="gzip Folder:" id="006-Fl-SLP">
                             <font key="font" metaFont="smallSystem"/>
@@ -105,7 +107,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="599">
-                        <rect key="frame" x="17" y="74" width="89" height="17"/>
+                        <rect key="frame" x="17" y="60" width="89" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="Logs Folder:" id="602">
                             <font key="font" metaFont="smallSystem"/>
@@ -114,7 +116,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="603">
-                        <rect key="frame" x="17" y="59" width="89" height="14"/>
+                        <rect key="frame" x="17" y="43" width="89" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="Config Folder:" id="606">
                             <font key="font" metaFont="smallSystem"/>
@@ -123,11 +125,11 @@
                         </textFieldCell>
                     </textField>
                     <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="322">
-                        <rect key="frame" x="31" y="158" width="291" height="5"/>
+                        <rect key="frame" x="31" y="150" width="291" height="5"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </box>
                     <textField toolTip="If the disk object is connected in a process, this is the point where the alarm will go off" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="590">
-                        <rect key="frame" x="348" y="134" width="29" height="19"/>
+                        <rect key="frame" x="349" y="117" width="29" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="100" drawsBackground="YES" id="593">
                             <font key="font" metaFont="smallSystem"/>
@@ -139,7 +141,7 @@
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="591">
-                        <rect key="frame" x="383" y="133" width="20" height="17"/>
+                        <rect key="frame" x="383" y="117" width="20" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="left" title="%" id="592">
                             <font key="font" metaFont="smallSystem"/>
@@ -148,7 +150,7 @@
                         </textFieldCell>
                     </textField>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="230">
-                        <rect key="frame" x="24" y="135" width="180" height="18"/>
+                        <rect key="frame" x="24" y="119" width="180" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="Save Configuration Snapshot" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="568">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -158,17 +160,8 @@
                             <action selector="saveConfigurationAction:" target="-2" id="343"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="607">
-                        <rect key="frame" x="106" y="111" width="296" height="14"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="---" id="608">
-                            <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ha8-ms-n0i">
-                        <rect key="frame" x="106" y="95" width="296" height="14"/>
+                        <rect key="frame" x="107" y="81" width="296" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="---" id="zvQ-CP-5FB">
                             <font key="font" metaFont="smallSystem"/>
@@ -177,7 +170,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="609">
-                        <rect key="frame" x="106" y="77" width="296" height="14"/>
+                        <rect key="frame" x="107" y="63" width="296" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="---" id="610">
                             <font key="font" metaFont="smallSystem"/>
@@ -186,7 +179,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="611">
-                        <rect key="frame" x="106" y="59" width="296" height="14"/>
+                        <rect key="frame" x="107" y="43" width="296" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="---" id="612">
                             <font key="font" metaFont="smallSystem"/>
@@ -195,12 +188,12 @@
                         </textFieldCell>
                     </textField>
                     <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="95">
-                        <rect key="frame" x="16" y="344" width="54" height="58"/>
+                        <rect key="frame" x="15" y="365" width="54" height="58"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="DataFile" id="553"/>
                     </imageView>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="99">
-                        <rect key="frame" x="95" y="359" width="46" height="14"/>
+                        <rect key="frame" x="95" y="388" width="46" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="Status:" id="554">
                             <font key="font" metaFont="smallSystem"/>
@@ -209,7 +202,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100">
-                        <rect key="frame" x="95" y="343" width="46" height="14"/>
+                        <rect key="frame" x="95" y="372" width="46" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="Size:" id="555">
                             <font key="font" metaFont="smallSystem"/>
@@ -218,7 +211,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="543">
-                        <rect key="frame" x="28" y="316" width="205" height="17"/>
+                        <rect key="frame" x="28" y="338" width="205" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="If size limited and limit reached then:" id="588">
                             <font key="font" metaFont="smallSystem"/>
@@ -226,8 +219,17 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gHU-7y-ARX">
+                        <rect key="frame" x="316" y="365" width="23" height="17"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="~" id="nhQ-vJ-KiP">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="101">
-                        <rect key="frame" x="77" y="373" width="64" height="17"/>
+                        <rect key="frame" x="77" y="402" width="64" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="FileName:" id="556">
                             <font key="font" metaFont="smallSystem"/>
@@ -236,7 +238,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="102">
-                        <rect key="frame" x="143" y="376" width="242" height="14"/>
+                        <rect key="frame" x="143" y="405" width="242" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="left" title="----" id="557">
                             <font key="font" metaFont="smallSystem"/>
@@ -245,7 +247,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="103">
-                        <rect key="frame" x="143" y="359" width="242" height="14"/>
+                        <rect key="frame" x="143" y="388" width="242" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="left" title="----" id="558">
                             <font key="font" metaFont="smallSystem"/>
@@ -254,7 +256,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="104">
-                        <rect key="frame" x="143" y="340" width="68" height="17"/>
+                        <rect key="frame" x="143" y="369" width="68" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="left" title="----" id="559">
                             <font key="font" metaFont="smallSystem"/>
@@ -263,7 +265,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="172">
-                        <rect key="frame" x="72" y="244" width="36" height="14"/>
+                        <rect key="frame" x="72" y="236" width="36" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="Copy" id="563">
                             <font key="font" metaFont="smallSystem"/>
@@ -272,7 +274,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="619">
-                        <rect key="frame" x="115" y="244" width="38" height="14"/>
+                        <rect key="frame" x="115" y="236" width="38" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="Delete" id="620">
                             <font key="font" metaFont="smallSystem"/>
@@ -281,7 +283,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="173">
-                        <rect key="frame" x="78" y="223" width="34" height="14"/>
+                        <rect key="frame" x="78" y="215" width="34" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" title="----" id="564">
                             <font key="font" metaFont="smallSystem"/>
@@ -290,7 +292,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Jb-5h-Xdf">
-                        <rect key="frame" x="78" y="204" width="34" height="14"/>
+                        <rect key="frame" x="78" y="196" width="34" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" title="----" id="0TD-Ni-p4I">
                             <font key="font" metaFont="smallSystem"/>
@@ -299,7 +301,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="175">
-                        <rect key="frame" x="115" y="223" width="34" height="14"/>
+                        <rect key="frame" x="115" y="215" width="34" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="---" id="565">
                             <font key="font" metaFont="smallSystem"/>
@@ -308,7 +310,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xUq-Zu-YGb">
-                        <rect key="frame" x="115" y="204" width="34" height="14"/>
+                        <rect key="frame" x="115" y="196" width="34" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="---" id="5nE-22-d2m">
                             <font key="font" metaFont="smallSystem"/>
@@ -317,11 +319,11 @@
                         </textFieldCell>
                     </textField>
                     <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="176">
-                        <rect key="frame" x="31" y="258" width="291" height="5"/>
+                        <rect key="frame" x="31" y="250" width="291" height="5"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </box>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="207">
-                        <rect key="frame" x="78" y="185" width="34" height="14"/>
+                        <rect key="frame" x="78" y="177" width="34" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" title="----" id="566">
                             <font key="font" metaFont="smallSystem"/>
@@ -330,7 +332,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="209">
-                        <rect key="frame" x="115" y="185" width="34" height="14"/>
+                        <rect key="frame" x="115" y="177" width="34" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="---" id="567">
                             <font key="font" metaFont="smallSystem"/>
@@ -339,7 +341,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="234">
-                        <rect key="frame" x="167" y="244" width="151" height="14"/>
+                        <rect key="frame" x="167" y="236" width="151" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" title="Send Queue:" id="569">
                             <font key="font" metaFont="smallSystem"/>
@@ -348,7 +350,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="236">
-                        <rect key="frame" x="167" y="223" width="151" height="14"/>
+                        <rect key="frame" x="167" y="215" width="151" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Working on 12/12" id="570">
                             <font key="font" metaFont="smallSystem"/>
@@ -357,7 +359,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LXj-ne-mct">
-                        <rect key="frame" x="167" y="204" width="151" height="14"/>
+                        <rect key="frame" x="167" y="196" width="151" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Working on 12/12" id="zg3-pk-2mv">
                             <font key="font" metaFont="smallSystem"/>
@@ -366,7 +368,7 @@
                         </textFieldCell>
                     </textField>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="241">
-                        <rect key="frame" x="326" y="153" width="80" height="28"/>
+                        <rect key="frame" x="326" y="145" width="80" height="28"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="push" title="Stop All..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="571">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -377,7 +379,7 @@
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="317">
-                        <rect key="frame" x="115" y="166" width="34" height="14"/>
+                        <rect key="frame" x="115" y="158" width="34" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="---" id="573">
                             <font key="font" metaFont="smallSystem"/>
@@ -386,7 +388,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="320">
-                        <rect key="frame" x="78" y="166" width="34" height="14"/>
+                        <rect key="frame" x="78" y="158" width="34" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" title="----" id="574">
                             <font key="font" metaFont="smallSystem"/>
@@ -395,7 +397,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="346">
-                        <rect key="frame" x="42" y="223" width="29" height="14"/>
+                        <rect key="frame" x="42" y="215" width="29" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" id="576">
                             <font key="font" metaFont="smallSystem"/>
@@ -406,7 +408,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mIb-4X-9he">
-                        <rect key="frame" x="44" y="204" width="27" height="14"/>
+                        <rect key="frame" x="44" y="196" width="27" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="gzip" id="2JA-LH-sbx">
                             <font key="font" metaFont="smallSystem"/>
@@ -415,7 +417,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="347">
-                        <rect key="frame" x="27" y="185" width="44" height="14"/>
+                        <rect key="frame" x="27" y="177" width="44" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="Status" id="577">
                             <font key="font" metaFont="smallSystem"/>
@@ -424,7 +426,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="348">
-                        <rect key="frame" x="27" y="166" width="44" height="14"/>
+                        <rect key="frame" x="27" y="158" width="44" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="Config" id="578">
                             <font key="font" metaFont="smallSystem"/>
@@ -433,31 +435,31 @@
                         </textFieldCell>
                     </textField>
                     <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="349">
-                        <rect key="frame" x="31" y="237" width="291" height="5"/>
+                        <rect key="frame" x="31" y="229" width="291" height="5"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </box>
                     <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="351">
-                        <rect key="frame" x="319" y="160" width="5" height="101"/>
+                        <rect key="frame" x="319" y="152" width="5" height="101"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </box>
                     <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="356">
-                        <rect key="frame" x="110" y="160" width="5" height="101"/>
+                        <rect key="frame" x="110" y="152" width="5" height="101"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </box>
                     <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="357">
-                        <rect key="frame" x="72" y="160" width="5" height="101"/>
+                        <rect key="frame" x="72" y="152" width="5" height="101"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </box>
                     <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="359">
-                        <rect key="frame" x="28" y="160" width="5" height="101"/>
+                        <rect key="frame" x="28" y="152" width="5" height="101"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </box>
                     <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="362">
-                        <rect key="frame" x="154" y="160" width="5" height="101"/>
+                        <rect key="frame" x="154" y="152" width="5" height="101"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </box>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="363">
-                        <rect key="frame" x="167" y="185" width="151" height="14"/>
+                        <rect key="frame" x="167" y="177" width="151" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Working on 12/12" id="579">
                             <font key="font" metaFont="smallSystem"/>
@@ -466,7 +468,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="364">
-                        <rect key="frame" x="167" y="166" width="151" height="14"/>
+                        <rect key="frame" x="167" y="158" width="151" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Working on 12/12" id="580">
                             <font key="font" metaFont="smallSystem"/>
@@ -475,7 +477,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="399">
-                        <rect key="frame" x="342" y="341" width="36" height="19"/>
+                        <rect key="frame" x="339" y="366" width="36" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="3000" drawsBackground="YES" id="582">
                             <font key="font" metaFont="smallSystem"/>
@@ -487,7 +489,7 @@
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="401">
-                        <rect key="frame" x="383" y="340" width="35" height="17"/>
+                        <rect key="frame" x="375" y="365" width="35" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="left" title="MB" id="583">
                             <font key="font" metaFont="smallSystem"/>
@@ -496,7 +498,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="442">
-                        <rect key="frame" x="91" y="289" width="138" height="19"/>
+                        <rect key="frame" x="92" y="297" width="138" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="Run" drawsBackground="YES" id="584">
                             <font key="font" metaFont="smallSystem"/>
@@ -508,7 +510,7 @@
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="444">
-                        <rect key="frame" x="19" y="288" width="69" height="18"/>
+                        <rect key="frame" x="19" y="295" width="69" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="File Prefix:" id="585">
                             <font key="font" metaFont="smallSystem"/>
@@ -517,7 +519,7 @@
                         </textFieldCell>
                     </textField>
                     <button toolTip="If checked, new files will be created when file size limit is exceeded" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="448">
-                        <rect key="frame" x="235" y="267" width="173" height="18"/>
+                        <rect key="frame" x="234" y="257" width="173" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Use YY/MM Folder Structure" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="586">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -528,9 +530,9 @@
                         </connections>
                     </button>
                     <button toolTip="If checked, new files will be created when file size limit is exceeded" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="492">
-                        <rect key="frame" x="234" y="289" width="95" height="18"/>
+                        <rect key="frame" x="261" y="316" width="132" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Prepend Date" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="587">
+                        <buttonCell key="cell" type="check" title="Add Std Date &amp; Run#" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="587">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
@@ -538,10 +540,21 @@
                             <action selector="useDatedFileNamesAction:" target="-2" id="495"/>
                         </connections>
                     </button>
-                    <button toolTip="If checked, new files will be created when file size limit is exceeded" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="397">
-                        <rect key="frame" x="233" y="341" width="106" height="18"/>
+                    <button toolTip="If checked, new files will be created when file size limit is exceeded" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4fj-SC-tY4">
+                        <rect key="frame" x="261" y="297" width="141" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Limit Size to:  ~" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="581">
+                        <buttonCell key="cell" type="check" title="Add Full Date/No Run#" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="MS4-VG-xk4">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="useDatedFileNamesV2Action:" target="-2" id="Uhe-2R-OQi"/>
+                        </connections>
+                    </button>
+                    <button toolTip="If checked, new files will be created when file size limit is exceeded" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="397">
+                        <rect key="frame" x="311" y="385" width="89" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" title="Limit Size to:" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="581">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
@@ -550,10 +563,10 @@
                         </connections>
                     </button>
                     <matrix verticalHuggingPriority="750" fixedFrame="YES" allowsEmptySelection="NO" translatesAutoresizingMaskIntoConstraints="NO" id="537">
-                        <rect key="frame" x="236" y="316" width="179" height="18"/>
+                        <rect key="frame" x="236" y="339" width="171" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        <size key="cellSize" width="95" height="18"/>
+                        <size key="cellSize" width="91" height="18"/>
                         <size key="intercellSpacing" width="-11" height="2"/>
                         <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" controlSize="small" inset="2" id="589">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -578,7 +591,7 @@
                         </connections>
                     </matrix>
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yUW-Lg-NY8">
-                        <rect key="frame" x="26" y="262" width="207" height="25"/>
+                        <rect key="frame" x="26" y="252" width="207" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" title="No auxillary data files" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="JBC-AM-mdt" id="2Wg-wb-Ooj">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -595,12 +608,40 @@
                             <action selector="generateAuxDataFileAction:" target="-2" id="gRw-lu-hds"/>
                         </connections>
                     </popUpButton>
+                    <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="ajX-F1-mnu">
+                        <rect key="frame" x="235" y="303" width="19" height="5"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </box>
+                    <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="8xG-rk-9pJ">
+                        <rect key="frame" x="252" y="279" width="5" height="54"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </box>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="607">
+                        <rect key="frame" x="106" y="98" width="296" height="14"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="---" id="608">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button toolTip="If checked, new files will be created when file size limit is exceeded" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HWd-fN-EVa">
+                        <rect key="frame" x="261" y="278" width="141" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" title="Add .orca extension" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="ywf-oZ-nli">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="useFileExtensionAction:" target="-2" id="7fm-LX-3gr"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="97"/>
             </connections>
-            <point key="canvasLocation" x="148" y="171.5"/>
+            <point key="canvasLocation" x="148" y="181"/>
         </window>
         <drawer preferredEdge="minY" leadingOffset="10" trailingOffset="10" id="133" userLabel="Drawer">
             <size key="contentSize" width="376" height="320"/>

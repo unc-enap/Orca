@@ -21,8 +21,9 @@
 #import "MemoryWatcherController.h"
 #import "MemoryWatcher.h"
 #import "ORCompositePlotView.h"
-#import "ORPlot.h"
 #import "ORAxis.h"
+#import "ORTimeRate.h"
+#import "ORTimeLinePlot.h"
 #import "SynthesizeSingleton.h"
 
 @implementation MemoryWatcherController
@@ -49,18 +50,17 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MemoryWatcherController);
     [self upTimeChanged:nil];
 	[self taskIntervalChanged:nil];
 	
-    [[plotView xAxis] setRngLow:0.0 withHigh:200.];
-    [[plotView yAxis] setRngLow:0.0 withHigh:300.];
+    [[plotView xAxis] setRngLow:0.0 withHigh:3600.];
+    [[plotView yAxis] setRngLow:0.0 withHigh:2000.];
 
-	[[plotView xAxis] setRngLimitsLow:0.0 withHigh:4096. withMinRng:50.];
-	[[plotView yAxis] setRngLimitsLow:0.0 withHigh:10000. withMinRng:50.];
-	
+	[[plotView xAxis] setRngLimitsLow:0.0 withHigh:172800. withMinRng:60.];
+	[[plotView yAxis] setRngLimitsLow:0.0 withHigh:100000. withMinRng:50.];
 	
 	[plotView setBackgroundColor:[NSColor colorWithCalibratedRed:.9 green:1.0 blue:.9 alpha:1]];
 	
-	ORPlot* thePlot;
+	ORTimeLinePlot* thePlot;
 	
-	thePlot = [[ORPlot alloc] initWithTag:0 andDataSource:self];
+	thePlot = [[ORTimeLinePlot alloc] initWithTag:0 andDataSource:self];
 	[thePlot setLineWidth:1];
 	[thePlot setLineColor:[NSColor colorWithCalibratedRed:0 green:.5 blue:0 alpha:1]];
 	[thePlot setUseConstantColor:YES];
@@ -68,7 +68,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MemoryWatcherController);
 	[plotView addPlot: thePlot];
 	[thePlot release];
 	
-	thePlot = [[ORPlot alloc] initWithTag:1 andDataSource:self];
+	thePlot = [[ORTimeLinePlot alloc] initWithTag:1 andDataSource:self];
 	[thePlot setLineWidth:1];
 	[thePlot setLineColor:[NSColor redColor]];
 	[thePlot setUseConstantColor:YES];
@@ -113,11 +113,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MemoryWatcherController);
 - (void) taskIntervalChanged:(NSNotification*)aNote
 {
     if(aNote == nil || [aNote object] == watcher){
-		NSTimeInterval interval = [watcher taskInterval];
-		NSString* s;
-		if(interval == 1.0) s = @"Max 4096 Samples @ 1 Hz Shown";
-		else s = [NSString stringWithFormat:@"Max 4096 Samples @ 1/%.0f Hz Shown",[watcher taskInterval]];
-		[plotView setXLabel:s];
+        [taskIntervalField setIntValue:[watcher taskInterval]];
     }
 }
 
@@ -142,6 +138,11 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MemoryWatcherController);
     }
 }
 
+- (IBAction) taskIntervalAction:(id)sender
+{
+    [watcher setTaskInterval:[sender intValue]];
+}
+
 #pragma mark ***Accessors
 - (void) setMemoryWatcher:(MemoryWatcher*)aWatcher
 {
@@ -158,9 +159,10 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MemoryWatcherController);
 - (void) plotter:(id)aPlot index:(int)i x:(double*)xValue y:(double*)yValue;
 {
 	int theTag = (int)[aPlot tag];
-	if(theTag < kNumWatchedValues) *yValue =  [watcher timeRate:theTag value:i];
+    int index =  -1 - i + (int) [watcher timeRateCount:theTag];
+	if(theTag < kNumWatchedValues) *yValue =  [watcher timeRate:theTag value:index];
 	else *yValue = 0;
-    *xValue = i;
+    *xValue = [[watcher timeRateObject:theTag] timeSampledAtIndex:index];
 }
 
 @end
