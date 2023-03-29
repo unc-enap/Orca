@@ -860,7 +860,7 @@
         else if(view == listenerWFView){
             if(col == 1)      return [l configParam:@"eventSamples"];
             else if(col == 2) return [l configParam:@"signalDepth"];
-            else if(col == 3) return [NSNumber numberWithInt:[[l configParam:@"traceType"] intValue]-1];
+            else if(col == 3) return [NSNumber numberWithInt:[[l configParam:@"traceType"] intValue]];
             else if(col == 4) return [l configParam:@"incBaseline"];
         }
         else if(view == listenerTrigView){
@@ -944,7 +944,7 @@
             else if(col == 2) [l setConfigParam:@"signalDepth"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
             else if(col == 3) [l setConfigParam:@"traceType"
-                                      withValue:[NSNumber numberWithInt:[object intValue]+1]];
+                                      withValue:[NSNumber numberWithInt:[object intValue]]];
             else if(col == 4) [l setConfigParam:@"incBaseline"
                                       withValue:[NSNumber numberWithBool:[object boolValue]]];
         }

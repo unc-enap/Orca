@@ -28,10 +28,15 @@ enum ORL200SegmentType{ kL200DetType, kL200SiPMType, kL200PMTType, kL200AuxType,
 #pragma mark •••Accessors
 - (unsigned int) type;
 - (void) setType:(unsigned int)segType;
+- (float) waveformRate;
+- (float) getWaveformRate:(int)index;
+- (float) getWaveformCounts:(int)index;
+- (double) getBaseline:(int)index;
 
 #pragma mark •••Map Methods
 - (void) readMap:(NSString*)aPath;
 - (void) saveMapFileAs:(NSString*)newFileName;
+- (NSDictionary*) dictMap;
 - (NSData*) jsonMap;
 - (NSString*) segmentLocation:(int)aSegmentIndex;
 

@@ -21,7 +21,7 @@ ORBasicOpenGLView * gTrackingViewInfo = NULL;
     NSOpenGLPixelFormatAttribute attributes [] = {
         NSOpenGLPFADoubleBuffer,	// double buffered
         NSOpenGLPFADepthSize, (NSOpenGLPixelFormatAttribute)16, // 16 bit depth buffer
-        (NSOpenGLPixelFormatAttribute)nil
+        (NSOpenGLPixelFormatAttribute)0
     };
     return [[[NSOpenGLPixelFormat alloc] initWithAttributes:attributes] autorelease];
 }

@@ -55,11 +55,6 @@
     bool trigOutEnable;
     bool isRunning;
     unsigned int wfSamples;
-    int wfHeaderBuffer[kFlashCamADCBufferLength*kFlashCamADCWFHeaderLength];
-    unsigned short* wfBuffer;
-    unsigned int bufferIndex;
-    unsigned int takeDataIndex;
-    unsigned int bufferedWFcount;
     ORRateGroup* wfRates;
     ORRateGroup* trigRates;
     uint32_t wfCount[kMaxFlashCamADCChannels];
@@ -101,6 +96,7 @@
 - (int) baseBias;
 - (int) majorityLevel;
 - (int) majorityWidth;
+- (bool) isRunning;
 - (ORRateGroup*) wfRates;
 - (id) wfRateObject:(short)channel;
 - (uint32_t) wfCount:(int)channel;
@@ -150,8 +146,8 @@
 - (void) printRunFlagsForChannelOffset:(unsigned int)offset;
 
 #pragma mark •••Data taker methods
-- (void) event:(fcio_event*)event withIndex:(int)index andChannel:(unsigned int)channel;
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
+- (void) shipEvent:(fcio_event*)event withIndex:(int)index andChannel:(unsigned int)channel use:(ORDataPacket*)aDataPacket;
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runIsStopping:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
@@ -184,6 +180,12 @@
 - (NSArray*) wizardSelections;
 - (NSNumber*) extractParam:(NSString*)param from:(NSDictionary*)fileHeader forChannel:(int)aChannel;
 
+@end
+
+
+@interface ORFlashCamADCModel (private)
+- (void) postConfig;
+- (void) postCouchDBRecord;
 @end
 
 

@@ -1763,6 +1763,7 @@
 		846F4D4209900F2B00BF0031 /* RunVetoed.tif in Resources */ = {isa = PBXBuildFile; fileRef = 846F4D4109900F2B00BF0031 /* RunVetoed.tif */; };
 		84701ACA0E0342F200195E3E /* ORCARoot.tif in Resources */ = {isa = PBXBuildFile; fileRef = 84701AC90E0342F200195E3E /* ORCARoot.tif */; };
 		84701AD40E0344CF00195E3E /* ORCARootService.tif in Resources */ = {isa = PBXBuildFile; fileRef = 84701AD30E0344CF00195E3E /* ORCARootService.tif */; };
+		84707A1E290AC228008D33C2 /* flashcam_listener.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 84707A1D290AC228008D33C2 /* flashcam_listener.jpg */; };
 		8470D01518241FEE0054F7D4 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8470D01418241FEE0054F7D4 /* Accelerate.framework */; };
 		84716E3020D2BBD400649339 /* ORMultiplierModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 84716E2A20D2BBD400649339 /* ORMultiplierModel.h */; };
 		84716E3120D2BBD400649339 /* Multiplier.nib in Resources */ = {isa = PBXBuildFile; fileRef = 84716E2B20D2BBD400649339 /* Multiplier.nib */; };
@@ -3582,7 +3583,6 @@
 		E63085D82681057800687A6D /* ORFlashCamListenerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E63085D22681057800687A6D /* ORFlashCamListenerModel.m */; };
 		E63085D92681057800687A6D /* bufio.c in Sources */ = {isa = PBXBuildFile; fileRef = E63085D32681057800687A6D /* bufio.c */; };
 		E63085E926822B2300687A6D /* ORFlashCamCrate.h in Headers */ = {isa = PBXBuildFile; fileRef = E63085E826822B2300687A6D /* ORFlashCamCrate.h */; };
-		E63085FE2688CCED00687A6D /* flashcam_listener.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E63085FD2688CCEC00687A6D /* flashcam_listener.jpg */; };
 		E631727223BCFC400038EB18 /* ORFlashCamCrateModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E631727123BCFC400038EB18 /* ORFlashCamCrateModel.m */; };
 		E631727523BCFC620038EB18 /* ORFlashCamCrateController.m in Sources */ = {isa = PBXBuildFile; fileRef = E631727423BCFC620038EB18 /* ORFlashCamCrateController.m */; };
 		E631727823BCFD2C0038EB18 /* ORFlashCamTriggerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E631727723BCFD2C0038EB18 /* ORFlashCamTriggerModel.m */; };
@@ -3665,6 +3665,22 @@
 		EFEBD8951327588F00C96C86 /* ORXLGPSModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBD88F1327588F00C96C86 /* ORXLGPSModel.m */; };
 		EFEBD8961327588F00C96C86 /* XLGPS.nib in Resources */ = {isa = PBXBuildFile; fileRef = EFEBD8901327588F00C96C86 /* XLGPS.nib */; };
 		EFEBD8971327588F00C96C86 /* XLGPSIcon.tif in Resources */ = {isa = PBXBuildFile; fileRef = EFEBD8911327588F00C96C86 /* XLGPSIcon.tif */; };
+		F8C54370287F05F9005C2873 /* OREHS8240nController.h in Headers */ = {isa = PBXBuildFile; fileRef = F8C54368287F05F6005C2873 /* OREHS8240nController.h */; };
+		F8C54371287F05F9005C2873 /* OREHS8240nController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C54369287F05F6005C2873 /* OREHS8240nController.m */; };
+		F8C54372287F05F9005C2873 /* EHS8240n.nib in Resources */ = {isa = PBXBuildFile; fileRef = F8C5436A287F05F7005C2873 /* EHS8240n.nib */; };
+		F8C54373287F05F9005C2873 /* OREHS8240nDecoders.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C5436B287F05F7005C2873 /* OREHS8240nDecoders.m */; };
+		F8C54374287F05F9005C2873 /* EHS8240n.tif in Resources */ = {isa = PBXBuildFile; fileRef = F8C5436C287F05F7005C2873 /* EHS8240n.tif */; };
+		F8C54375287F05F9005C2873 /* OREHS8240nModel.h in Headers */ = {isa = PBXBuildFile; fileRef = F8C5436D287F05F8005C2873 /* OREHS8240nModel.h */; };
+		F8C54376287F05F9005C2873 /* OREHS8240nModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C5436E287F05F8005C2873 /* OREHS8240nModel.m */; };
+		F8C54377287F05F9005C2873 /* OREHS8240nDecoders.h in Headers */ = {isa = PBXBuildFile; fileRef = F8C5436F287F05F9005C2873 /* OREHS8240nDecoders.h */; };
+		F8C54381287F0668005C2873 /* EHSF040n.tif in Resources */ = {isa = PBXBuildFile; fileRef = F8C54379287F0665005C2873 /* EHSF040n.tif */; };
+		F8C54382287F0668005C2873 /* OREHSF040nModel.h in Headers */ = {isa = PBXBuildFile; fileRef = F8C5437A287F0666005C2873 /* OREHSF040nModel.h */; };
+		F8C54383287F0668005C2873 /* EHSF040n.nib in Resources */ = {isa = PBXBuildFile; fileRef = F8C5437B287F0666005C2873 /* EHSF040n.nib */; };
+		F8C54384287F0668005C2873 /* OREHSF040nDecoders.h in Headers */ = {isa = PBXBuildFile; fileRef = F8C5437C287F0666005C2873 /* OREHSF040nDecoders.h */; };
+		F8C54385287F0668005C2873 /* OREHSF040nDecoders.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C5437D287F0667005C2873 /* OREHSF040nDecoders.m */; };
+		F8C54386287F0668005C2873 /* OREHSF040nModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C5437E287F0667005C2873 /* OREHSF040nModel.m */; };
+		F8C54387287F0668005C2873 /* OREHSF040nController.h in Headers */ = {isa = PBXBuildFile; fileRef = F8C5437F287F0667005C2873 /* OREHSF040nController.h */; };
+		F8C54388287F0668005C2873 /* OREHSF040nController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C54380287F0668005C2873 /* OREHSF040nController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -5513,6 +5529,7 @@
 		846F4D4109900F2B00BF0031 /* RunVetoed.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = RunVetoed.tif; path = Source/Objects/ProcessLogic/ProcessElements/Outputs/RunVeto/RunVetoed.tif; sourceTree = SOURCE_ROOT; };
 		84701AC90E0342F200195E3E /* ORCARoot.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = ORCARoot.tif; path = "Source/Main Dialogs/ORCARootService/ORCARoot.tif"; sourceTree = SOURCE_ROOT; };
 		84701AD30E0344CF00195E3E /* ORCARootService.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = ORCARootService.tif; path = "Source/Main Document/ORCARootService.tif"; sourceTree = SOURCE_ROOT; };
+		84707A1D290AC228008D33C2 /* flashcam_listener.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = flashcam_listener.jpg; sourceTree = "<group>"; };
 		8470D01418241FEE0054F7D4 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = ../../../../System/Library/Frameworks/Accelerate.framework; sourceTree = "<group>"; };
 		84716E2A20D2BBD400649339 /* ORMultiplierModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORMultiplierModel.h; sourceTree = "<group>"; };
 		84716E2B20D2BBD400649339 /* Multiplier.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = Multiplier.nib; sourceTree = "<group>"; };
@@ -7457,7 +7474,6 @@
 		E63085D22681057800687A6D /* ORFlashCamListenerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamListenerModel.m; sourceTree = "<group>"; };
 		E63085D32681057800687A6D /* bufio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bufio.c; sourceTree = "<group>"; };
 		E63085E826822B2300687A6D /* ORFlashCamCrate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORFlashCamCrate.h; sourceTree = "<group>"; };
-		E63085FD2688CCEC00687A6D /* flashcam_listener.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = flashcam_listener.jpg; sourceTree = "<group>"; };
 		E631727023BCFC2C0038EB18 /* ORFlashCamCrateModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORFlashCamCrateModel.h; sourceTree = "<group>"; };
 		E631727123BCFC400038EB18 /* ORFlashCamCrateModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamCrateModel.m; sourceTree = "<group>"; };
 		E631727323BCFC500038EB18 /* ORFlashCamCrateController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORFlashCamCrateController.h; sourceTree = "<group>"; };
@@ -7624,6 +7640,22 @@
 		F5B1802C03B297FD015F64B1 /* ORCaen775Model.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORCaen775Model.m; sourceTree = "<group>"; };
 		F5B1802D03B297FD015F64B1 /* ORCaen775Controller.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ORCaen775Controller.h; sourceTree = "<group>"; };
 		F5B1803C03B299AD015F64B1 /* 775Card.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = 775Card.gif; path = Source/Objects/Hardware/Vme/CAEN/CV775/775Card.gif; sourceTree = SOURCE_ROOT; };
+		F8C54368287F05F6005C2873 /* OREHS8240nController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OREHS8240nController.h; sourceTree = "<group>"; };
+		F8C54369287F05F6005C2873 /* OREHS8240nController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OREHS8240nController.m; sourceTree = "<group>"; };
+		F8C5436A287F05F7005C2873 /* EHS8240n.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = EHS8240n.nib; sourceTree = "<group>"; };
+		F8C5436B287F05F7005C2873 /* OREHS8240nDecoders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OREHS8240nDecoders.m; sourceTree = "<group>"; };
+		F8C5436C287F05F7005C2873 /* EHS8240n.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = EHS8240n.tif; sourceTree = "<group>"; };
+		F8C5436D287F05F8005C2873 /* OREHS8240nModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OREHS8240nModel.h; sourceTree = "<group>"; };
+		F8C5436E287F05F8005C2873 /* OREHS8240nModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OREHS8240nModel.m; sourceTree = "<group>"; };
+		F8C5436F287F05F9005C2873 /* OREHS8240nDecoders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OREHS8240nDecoders.h; sourceTree = "<group>"; };
+		F8C54379287F0665005C2873 /* EHSF040n.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = EHSF040n.tif; sourceTree = "<group>"; };
+		F8C5437A287F0666005C2873 /* OREHSF040nModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OREHSF040nModel.h; sourceTree = "<group>"; };
+		F8C5437B287F0666005C2873 /* EHSF040n.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = EHSF040n.nib; sourceTree = "<group>"; };
+		F8C5437C287F0666005C2873 /* OREHSF040nDecoders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OREHSF040nDecoders.h; sourceTree = "<group>"; };
+		F8C5437D287F0667005C2873 /* OREHSF040nDecoders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OREHSF040nDecoders.m; sourceTree = "<group>"; };
+		F8C5437E287F0667005C2873 /* OREHSF040nModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OREHSF040nModel.m; sourceTree = "<group>"; };
+		F8C5437F287F0667005C2873 /* OREHSF040nController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OREHSF040nController.h; sourceTree = "<group>"; };
+		F8C54380287F0668005C2873 /* OREHSF040nController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OREHSF040nController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -10900,6 +10932,8 @@
 		8472AA4A12DB44B300DEEB02 /* MPod */ = {
 			isa = PBXGroup;
 			children = (
+				F8C54378287F0610005C2873 /* EHSF040n */,
+				F8C54367287F05AE005C2873 /* EHS8240n */,
 				8472AA5412DB44B400DEEB02 /* MPod Base Classes */,
 				842FCCB719784AA900B89723 /* EDSF130p */,
 				842FCCA6197849C700B89723 /* EHS8260p */,
@@ -15133,6 +15167,7 @@
 			children = (
 				E63085D12681057800687A6D /* ORFlashCamListenerModel.h */,
 				E63085D22681057800687A6D /* ORFlashCamListenerModel.m */,
+				84707A1D290AC228008D33C2 /* flashcam_listener.jpg */,
 				E6CFCBA92753DE2C00685CC7 /* ORFlashCamListenerDecoders.h */,
 				E6CFCBAA2753DE4700685CC7 /* ORFlashCamListenerDecoders.m */,
 				E6C9759B26FE3F1300D6F792 /* FlashCamUtils.h */,
@@ -15143,7 +15178,6 @@
 				E63085D02681057700687A6D /* fcio.c */,
 				E63085C62681055800687A6D /* tmio.h */,
 				E63085CA2681056300687A6D /* tmio.c */,
-				E63085FD2688CCEC00687A6D /* flashcam_listener.jpg */,
 			);
 			path = FlashCamIO;
 			sourceTree = "<group>";
@@ -15819,6 +15853,36 @@
 			path = CV775;
 			sourceTree = "<group>";
 		};
+		F8C54367287F05AE005C2873 /* EHS8240n */ = {
+			isa = PBXGroup;
+			children = (
+				F8C5436A287F05F7005C2873 /* EHS8240n.nib */,
+				F8C5436C287F05F7005C2873 /* EHS8240n.tif */,
+				F8C54368287F05F6005C2873 /* OREHS8240nController.h */,
+				F8C54369287F05F6005C2873 /* OREHS8240nController.m */,
+				F8C5436F287F05F9005C2873 /* OREHS8240nDecoders.h */,
+				F8C5436B287F05F7005C2873 /* OREHS8240nDecoders.m */,
+				F8C5436D287F05F8005C2873 /* OREHS8240nModel.h */,
+				F8C5436E287F05F8005C2873 /* OREHS8240nModel.m */,
+			);
+			path = EHS8240n;
+			sourceTree = "<group>";
+		};
+		F8C54378287F0610005C2873 /* EHSF040n */ = {
+			isa = PBXGroup;
+			children = (
+				F8C5437B287F0666005C2873 /* EHSF040n.nib */,
+				F8C54379287F0665005C2873 /* EHSF040n.tif */,
+				F8C5437F287F0667005C2873 /* OREHSF040nController.h */,
+				F8C54380287F0668005C2873 /* OREHSF040nController.m */,
+				F8C5437C287F0666005C2873 /* OREHSF040nDecoders.h */,
+				F8C5437D287F0667005C2873 /* OREHSF040nDecoders.m */,
+				F8C5437A287F0666005C2873 /* OREHSF040nModel.h */,
+				F8C5437E287F0667005C2873 /* OREHSF040nModel.m */,
+			);
+			path = EHSF040n;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -16219,6 +16283,8 @@
 				840E00470944B29000049827 /* ORProcessPulserController.h in Headers */,
 				840E00490944B29000049827 /* ORProcessPulserModel.h in Headers */,
 				840E004D0944B29000049827 /* ORProcessThread.h in Headers */,
+				F8C54387287F0668005C2873 /* OREHSF040nController.h in Headers */,
+				F8C54384287F0668005C2873 /* OREHSF040nDecoders.h in Headers */,
 				84B489370944E63800DFC618 /* ORCountDownController.h in Headers */,
 				84B489390944E63800DFC618 /* ORCountDownModel.h in Headers */,
 				84EA918120FE5DB000110B85 /* errmsg.h in Headers */,
@@ -16267,6 +16333,7 @@
 				84C135600997F5CD006F2901 /* ORcPCICrateController.h in Headers */,
 				84C135620997F5CD006F2901 /* ORcPCICrateModel.h in Headers */,
 				84C1356A0997F6B4006F2901 /* ORcPCIControllerCard.h in Headers */,
+				F8C54375287F05F9005C2873 /* OREHS8240nModel.h in Headers */,
 				84716E3720D2FA3900649339 /* ORHVcRIODecoders.h in Headers */,
 				84751A2D09A5057100253B57 /* ORSafeCircularBuffer.h in Headers */,
 				8498069D09A6584200086E71 /* ORSocketThreadedClient.h in Headers */,
@@ -16338,6 +16405,7 @@
 				842538550BC6E006004C8065 /* ORHP6622aModel.h in Headers */,
 				842539FA0BCD7BFE004C8065 /* ORCARootService.h in Headers */,
 				842539FD0BCD7BFE004C8065 /* ORCARootServiceController.h in Headers */,
+				F8C54377287F05F9005C2873 /* OREHS8240nDecoders.h in Headers */,
 				84D852E60BE171AF00290BDC /* ORCARootServiceDefs.h in Headers */,
 				0F16E3401C493AD7003C9EC9 /* qt.h in Headers */,
 				9CD6DD890BE83F1B007096CE /* ORPlotFFT.h in Headers */,
@@ -16671,6 +16739,7 @@
 				848BF510107255F8005779A2 /* PMC_Link.h in Headers */,
 				84716E3520D2BBD400649339 /* ORMultiplierController.h in Headers */,
 				CE85B6B71BBD1BEC0093ECD0 /* ORThread.hh in Headers */,
+				F8C54370287F05F9005C2873 /* OREHS8240nController.h in Headers */,
 				8421064D1085A28E00C3AA81 /* ORAdeiLoader.h in Headers */,
 				84D34B0410B1D6C90013473E /* ORSIS3302Controller.h in Headers */,
 				84D34B0610B1D6C90013473E /* ORSIS3302Decoders.h in Headers */,
@@ -16998,6 +17067,7 @@
 				84184821157FA478004EC81F /* ORCV830Decoders.h in Headers */,
 				84184823157FA478004EC81F /* ORCV830Model.h in Headers */,
 				844EEAB215827AA100E1D7C1 /* ORCAEN830Readout.hh in Headers */,
+				F8C54382287F0668005C2873 /* OREHSF040nModel.h in Headers */,
 				8471D4791588DF3C0039894D /* ORRemoteSocketController.h in Headers */,
 				8471D47B1588DF3C0039894D /* ORRemoteSocketModel.h in Headers */,
 				84F021361D8ADC2E00FEB304 /* ORSyncCenterController.h in Headers */,
@@ -17310,6 +17380,7 @@
 				8434A296055B3287002D3102 /* UnderConstruction.gif in Resources */,
 				8434A297055B3287002D3102 /* NcdElectronics.gif in Resources */,
 				8434A298055B3287002D3102 /* 775Card.gif in Resources */,
+				84707A1E290AC228008D33C2 /* flashcam_listener.jpg in Resources */,
 				8434A299055B3287002D3102 /* Caen775.nib in Resources */,
 				8434A29A055B3287002D3102 /* C785.gif in Resources */,
 				0F16E3371C493AD7003C9EC9 /* .gitignore in Resources */,
@@ -17389,7 +17460,6 @@
 				848481B70729799F009EDCE2 /* vrectshadow.tif in Resources */,
 				848481E207297DDB009EDCE2 /* hrecttopmask.tif in Resources */,
 				848481E307297DDB009EDCE2 /* hrectshadow.tif in Resources */,
-				E63085FE2688CCED00687A6D /* flashcam_listener.jpg in Resources */,
 				848481E407297DDB009EDCE2 /* hrectcolormask.tif in Resources */,
 				847946CE07330E5300C5E1FA /* PciBit3.nib in Resources */,
 				847946CF07330E5300C5E1FA /* PciBit3Card.gif in Resources */,
@@ -17514,6 +17584,7 @@
 				84D0592E08FF367A00A99A83 /* goBack.tif in Resources */,
 				A8175F88220D8D07003AC7E5 /* ADEIControl.png in Resources */,
 				84D0593F08FF39EA00A99A83 /* goBackPressed.tif in Resources */,
+				F8C54372287F05F9005C2873 /* EHS8240n.nib in Resources */,
 				8408A4BB09071C6A004A3B34 /* HV2132.nib in Resources */,
 				8408A4BC09071C6A004A3B34 /* HV2132Card.tif in Resources */,
 				845F745709296E1000A2F593 /* madeWithCocoa.tiff in Resources */,
@@ -17632,6 +17703,7 @@
 				A8175F8B220D8D07003AC7E5 /* ADEIControl.nib in Resources */,
 				844357550B5AC9E00033B918 /* Stop.tif in Resources */,
 				84519C6C0B5C0B0900B08915 /* GoToLine.nib in Resources */,
+				F8C54383287F0668005C2873 /* EHSF040n.nib in Resources */,
 				842702810B5EE938009176B4 /* katrin.gif in Resources */,
 				847597520B5EF26500123411 /* Sql.nib in Resources */,
 				3672CF8D1C4EB15000870996 /* SNOCaen1720Card.gif in Resources */,
@@ -18056,6 +18128,7 @@
 				8459AD30138D93240029C5B6 /* CouchHistoryAveReduce.txt in Resources */,
 				84AAD80A139A87A600C88F71 /* AlarmIcon.tif in Resources */,
 				8483D2E2139EAB8B000C8901 /* CV812.gif in Resources */,
+				F8C54374287F05F9005C2873 /* EHS8240n.tif in Resources */,
 				8483D2E3139EAB8B000C8901 /* CV812.nib in Resources */,
 				8483D3B8139FAAB8000C8901 /* CV895.gif in Resources */,
 				8483D3B9139FAAB8000C8901 /* CV895.nib in Resources */,
@@ -18136,6 +18209,7 @@
 				E635F3B823799E2200CDAAC4 /* VHS4060n.tif in Resources */,
 				84D29FE01843EAC800D320DB /* warn.png in Resources */,
 				8491303C15334EAA00597004 /* TwoBitProcessor.tif in Resources */,
+				F8C54381287F0668005C2873 /* EHSF040n.tif in Resources */,
 				84913CA61538698000597004 /* OutputCallBack.nib in Resources */,
 				842FCCB0197849C700B89723 /* EHS8260p.tif in Resources */,
 				84913CA71538698000597004 /* OutputCallBack.tif in Resources */,
@@ -18355,6 +18429,7 @@
 				8434A2FC055B3287002D3102 /* ORDataSet.m in Sources */,
 				8434A2FD055B3287002D3102 /* ORDataTaskController.m in Sources */,
 				8434A2FF055B3287002D3102 /* ORDataTaskModel.m in Sources */,
+				F8C54373287F05F9005C2873 /* OREHS8240nDecoders.m in Sources */,
 				8434A300055B3287002D3102 /* ORDataFileModel.m in Sources */,
 				84D29FEE1843EAC800D320DB /* ORTaskHandler.m in Sources */,
 				8434A301055B3287002D3102 /* ORDataFileController.m in Sources */,
@@ -18415,6 +18490,7 @@
 				8434A347055B3287002D3102 /* ORHWWizardController.m in Sources */,
 				8438C3741845092600A6F4D6 /* ORRegexConditionalStep.m in Sources */,
 				8434A349055B3287002D3102 /* ORDataSetModel.m in Sources */,
+				F8C54385287F0668005C2873 /* OREHSF040nDecoders.m in Sources */,
 				8434A34A055B3287002D3102 /* ORPulserDistribController.m in Sources */,
 				8434A34C055B3287002D3102 /* ORPulserDistribModel.m in Sources */,
 				8434A34D055B3287002D3102 /* NSData+Extensions.m in Sources */,
@@ -18492,6 +18568,7 @@
 				842A643C0700C01C007536B6 /* OROscDecoder.m in Sources */,
 				842A65750700D5FC007536B6 /* NcdDecoders.m in Sources */,
 				0F16E3451C493AD7003C9EC9 /* dict.c in Sources */,
+				F8C54386287F0668005C2873 /* OREHSF040nModel.m in Sources */,
 				842A65BC0700E210007536B6 /* ORHPPulserDecoders.m in Sources */,
 				84978A2A0701F02000B7887E /* ORDataGenDecoders.m in Sources */,
 				84978B4D0702190100B7887E /* ORDataTypeAssigner.m in Sources */,
@@ -18522,6 +18599,7 @@
 				841DA0F30781F09B0099BBF6 /* OR1DHisto.m in Sources */,
 				841DA0F50781F09B0099BBF6 /* OR1DHistoController.m in Sources */,
 				841DA60107820BB70099BBF6 /* ORCamacCrateController.m in Sources */,
+				F8C54371287F05F9005C2873 /* OREHS8240nController.m in Sources */,
 				841DA60307820BB70099BBF6 /* ORCamacCrateModel.m in Sources */,
 				841DA668078211E70099BBF6 /* ORCC32Controller.m in Sources */,
 				70C600102469D45600400C83 /* ORLabJackT7Model.m in Sources */,
@@ -19156,6 +19234,7 @@
 				5423A1BA26A5A450009BA7CF /* ORKatrinMchModel.m in Sources */,
 				84D29FE61843EAC800D320DB /* ORShellStep.m in Sources */,
 				84762032118CD53D00016A8D /* ORPlotAttributeStrings.m in Sources */,
+				F8C54388287F0668005C2873 /* OREHSF040nController.m in Sources */,
 				84762034118CD53D00016A8D /* ORPlotView.m in Sources */,
 				84762036118CD53D00016A8D /* ORPlotWithROI.m in Sources */,
 				84762038118CD53D00016A8D /* ORTimeAxis.m in Sources */,
@@ -19312,6 +19391,7 @@
 				848F6CAD14C75F690093E502 /* ORSIS3150Model.m in Sources */,
 				8407398314CDD91F00BAD105 /* ORMet637Controller.m in Sources */,
 				84F16AF418900D530074B787 /* ORXTR6Controller.m in Sources */,
+				F8C54376287F05F9005C2873 /* OREHS8240nModel.m in Sources */,
 				8407398514CDD91F00BAD105 /* ORMet637Model.m in Sources */,
 				B38DEE4B14E02B40003914FF /* ORADVME1314Controller.m in Sources */,
 				B38DEE4D14E02B40003914FF /* ORADVME1314Model.m in Sources */,
@@ -19885,6 +19965,7 @@
 				" CFBundlerHelpBookFolder" = OrcaHelp;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CFBundleHelpBookName = OrcaHelp;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = NO;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = NO;
 				CODE_SIGN_IDENTITY = "";
@@ -19944,6 +20025,7 @@
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/Libraries/libUniversal\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/Libraries\"";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_CFLAGS = "";
 				OTHER_CPLUSPLUSFLAGS = "";
 				OTHER_LDFLAGS = (
@@ -19955,7 +20037,10 @@
 				PRODUCT_NAME = Orca;
 				SDKROOT = "";
 				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = "-Wmost";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-deprecated-declarations",
+				);
 				WRAPPER_EXTENSION = app;
 				YACCFLAGS = "";
 				YACC_SEPARATE_CODE_FILE = NO;
@@ -19971,6 +20056,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CFBundleHelpBookName = OrcaHelp;
 				CFBundlerHelpBookFolder = OrcaHelp;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = NO;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = NO;
 				CODE_SIGN_IDENTITY = "Don't Code Sign";
@@ -20027,6 +20113,7 @@
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Libraries\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/Libraries/libUniversal\"";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_CFLAGS = "";
 				OTHER_CPLUSPLUSFLAGS = "";
 				OTHER_LDFLAGS = (
@@ -20037,7 +20124,10 @@
 				PRODUCT_NAME = Orca;
 				SDKROOT = "";
 				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = "-Wmost";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-deprecated-declarations",
+				);
 				WRAPPER_EXTENSION = app;
 				YACCFLAGS = "";
 				ZERO_LINK = NO;
@@ -20049,6 +20139,7 @@
 			baseConfigurationReference = E6C583242544CA2A00567B9A /* Orca.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = NO;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = NO;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -20106,6 +20197,7 @@
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Libraries\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/Libraries/libUniversal\"";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_CFLAGS = "";
 				OTHER_CPLUSPLUSFLAGS = "";
 				OTHER_LDFLAGS = (
@@ -20116,7 +20208,10 @@
 				PRODUCT_NAME = Orca;
 				SDKROOT = "";
 				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = "-Wmost";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-deprecated-declarations",
+				);
 				WRAPPER_EXTENSION = app;
 				YACCFLAGS = "";
 				ZERO_LINK = NO;
@@ -20176,7 +20271,7 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LINK_WITH_STANDARD_LIBRARIES = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				SDKROOT = "";
@@ -20222,7 +20317,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				SDKROOT = "";
@@ -20268,7 +20363,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				SDKROOT = "";

@@ -995,12 +995,13 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
 
 - (void) restartRun
 {
-    [self setNextRunWillQuickStart:YES];
+// [self setNextRunWillQuickStart:YES]; //MAH 10/8/22 commented out
     if([self isRunning]){
         _forceRestart = YES;
        [self stopRun];
     }
-    else [self startRun:!quickStart];
+//  else [self startRun:!quickStart];
+    else [self startRun]; //MAH 10/8/22 appears to fix memory leak
 }
 
 - (void) remoteStartRun:(uint32_t)aRunNumber
@@ -1340,7 +1341,7 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
 		//now declare the thread directly so we can set the stack size.
 		//[NSThread detachNewThreadSelector:@selector(takeData) toTarget:self withObject:nil];
         readoutThread = [[NSThread alloc] initWithTarget:self selector:@selector(takeData) object:nil];
-		[readoutThread setStackSize:5*1024*1024];
+		[readoutThread setStackSize:10*1024*1024]; //JFW change from 5 to 10 to be consistent with L200 code
 		[readoutThread start];
 		 
         [self setStartTime:[NSDate date]];

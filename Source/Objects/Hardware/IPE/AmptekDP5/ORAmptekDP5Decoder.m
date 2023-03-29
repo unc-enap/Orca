@@ -622,7 +622,7 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
 					  mask:	0xFFFF							// when displayed all values will be masked with this value
 					sender: self 
 				  withKeys: @"IPE-SLT-EW", @"UDP-Raw",crateKey,stationKey,fiberKey,channelKey,nil];
-}else if((eventFlags4bit == 0x2)){//FLT event
+}else if(eventFlags4bit == 0x2){//FLT event
 	[aDataSet loadWaveform: waveFormdata					//pass in the whole data set
 					offset: 9*sizeof(int32_t)					// Offset in bytes (past header words)
 				  unitSize: sizeof(short)					// unit size in bytes
@@ -735,7 +735,7 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
     NSString* secStr    = 0;//[NSString stringWithFormat:@"Sec        = %d\n", sec];
     NSString* subsecStr = 0;//[NSString stringWithFormat:@"SubSec     = %d\n", subsec];
     NSString* energyStr = 0;//[NSString stringWithFormat:@"NumFIFO     = %d\n", numfifo];
-    if((eventFlags4bit == 0x2)){//FLT event
+    if(eventFlags4bit == 0x2){//FLT event
         secStr    = [NSString stringWithFormat:@"Time 0..31 = 0x%08x\n", sec];
         subsecStr = [NSString stringWithFormat:@"Time32..47 = 0x%08x\n", subsec];
         energyStr = [NSString stringWithFormat:@"Energy     = 0x%08x\n", energy];
@@ -1106,7 +1106,7 @@ if((eventFlags4bit == 0x1) || (eventFlags4bit == 0x3)){//raw UDP packet
     NSString* secStr    = 0;//[NSString stringWithFormat:@"Sec        = %d\n", sec];
     NSString* subsecStr = 0;//[NSString stringWithFormat:@"SubSec     = %d\n", subsec];
     NSString* energyStr = 0;//[NSString stringWithFormat:@"NumFIFO     = %d\n", numfifo];
-    if((eventFlags4bit == 0x2)){//FLT event
+    if(eventFlags4bit == 0x2){//FLT event
     }
         secStr    = [NSString stringWithFormat:@"Time 0..31 = 0x%08x\n", sec];
         subsecStr = [NSString stringWithFormat:@"Time32..47 = 0x%08x\n", subsec];

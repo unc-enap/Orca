@@ -328,7 +328,6 @@ void* receiveFromDataReplyServerThreadFunctionXXX (void* p)
 			doRunLoop=false;//finish for loop
 		}
 		//init
-		retval=-1;
 		socklen_t  sockaddr_data_fromLength = sizeof(dataReplyThreadData->sockaddr_data_from);
 		
 		
@@ -2774,7 +2773,6 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
         if(DEBUG_SPECTRUM_READOUT) 
         if(hasStatus){
             uint32_t var32=0;
-            uint16_t var16=0; var16=0;
             uint8_t var8=0;
             NSLog(@"STATUS:    (statusOffset: %i)\n",statusOffset);
             var32=*( (uint32_t*) (&(dp5Packet[statusOffset + kFastCountOffset])) );
@@ -2802,7 +2800,6 @@ NSString* ORAmptekDP5V4cpuLock							= @"ORAmptekDP5V4cpuLock";
         //update status display
         if(hasStatus){
             uint32_t var32=0;
-            uint16_t var16=0; var16=0;
             uint8_t var8=0;
             int8_t var8signed=0;
             //NSLog(@"STATUS:    (statusOffset: %i)\n",statusOffset);
@@ -5442,11 +5439,6 @@ NSLog(@"     %@::%@: takeUDPstreamData: savedUDPSocketState is %i \n",NSStringFr
         // -------TIMER-VARIABLES-----------
         static struct timeval starttime, /*stoptime,*/ currtime;//    struct timezone tz; is obsolete ... -tb-
         //struct timezone	timeZone;
-	    static double currDiffTime=0.0, lastDiffTime=0.0, elapsedTime = 0.0;
-
-
-
-
 	if(!first){
 		//event readout controlled by the SLT cpu now. ORCA reads out 
 		//the resulting data from a generic circular buffer in the pmc code.
@@ -5463,16 +5455,17 @@ NSLog(@"     %@::%@: takeUDPstreamData: savedUDPSocketState is %i \n",NSStringFr
         //TIMER - do something every x seconds:
         //-----------------------
 		//gettimeofday(&starttime,NULL);
-        gettimeofday(&currtime,NULL);
-        currDiffTime =      (  (double)(currtime.tv_sec  - starttime.tv_sec)  ) +
-                    ( ((double)(currtime.tv_usec - starttime.tv_usec)) * 0.000001 );
-        elapsedTime = currDiffTime - lastDiffTime;
         
         
         //if takeUDPstreamData is checked, check every 0.5 sec. the UDP buffer ...
         //if(takeUDPstreamData) 
         #if 0
         {
+            static double  lastDiffTime=0.0;
+            gettimeofday(&currtime,NULL);
+            double currDiffTime =      (  (double)(currtime.tv_sec  - starttime.tv_sec)  ) +
+                        ( ((double)(currtime.tv_usec - starttime.tv_usec)) * 0.000001 );
+            double elapsedTime = currDiffTime - lastDiffTime;
         if(elapsedTime >= 1.5){// ----> x= this value (e.g. 1.0/0.5 ...)
 		    //code to be executed every x seconds -BEGIN
 		    //
@@ -5585,7 +5578,7 @@ NSLog(@"     %@::%@: takeUDPstreamData: savedUDPSocketState is %i \n",NSStringFr
 		first = NO;
         
         //init timer
-        currDiffTime=0.0; lastDiffTime=0.0;
+        //currDiffTime=0.0; lastDiffTime=0.0;
         //start timer -------TIMER------------
         //timing
         //see below ... gettimeofday(&starttime,NULL);

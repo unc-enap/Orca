@@ -218,23 +218,23 @@ typedef struct{
 		uint32_t	spectrumEventId;
 		uint32_t	waveFormId;
 		uint32_t	fltEventId;
-		uint32_t   eventCounter;
-		int				actualPageIndex;
+		//uint32_t   eventCounter;
+		//int				actualPageIndex;
         TimedWorker*    poller;
-		BOOL			pollingWasRunning;
+		//BOOL			pollingWasRunning;
 		ORReadOutList*	readOutGroup;
-		NSArray*		dataTakers;			//cache of data takers.   //TODO: remove   -tb-   2014 
+		//NSArray*		dataTakers;			//cache of data takers.   //TODO: remove   -tb-   2014
 		BOOL			first;
         BOOL            accessAllowedToHardwareAndSBC;                //TODO: remove -tb-
 
 
 		BOOL            displayTrigger;    //< Display pixel and timing view of trigger data
 		BOOL            displayEventLoop;  //< Display the event loop parameter
-		uint32_t   lastDisplaySec;
-		uint32_t   lastDisplayCounter;
-		double          lastDisplayRate;
+		//uint32_t   lastDisplaySec;
+		//uint32_t   lastDisplayCounter;
+		//double          lastDisplayRate;
 		
-		uint32_t   lastSimSec;
+		//uint32_t   lastSimSec;
 		uint32_t   pageSize; //< Length of the ADC data (0..100us)
 
 		// PMC_Link*		pmcLink;  //TODO: remove SLT stuff -tb-   2014 
@@ -257,16 +257,16 @@ typedef struct{
         NSString* textCommand;//TODO: rename -tb-
 
 
-		    //sender connection (client)
+        //sender connection (client)
 	    int      UDP_COMMAND_CLIENT_SOCKET;
-	    uint32_t UDP_COMMAND_CLIENT_IP;
+	    //uint32_t UDP_COMMAND_CLIENT_IP;
         struct sockaddr_in UDP_COMMAND_sockaddrin_to;
         socklen_t  sockaddrin_to_len;//=sizeof(GLOBAL_sockin_to);
-        struct sockaddr sock_to;
-        int sock_to_len;//=sizeof(si_other);
+        //struct sockaddr sock_to;
+        //int sock_to_len;//=sizeof(si_other);
 		    //reply connection (server/listener)
 	    int                UDP_REPLY_SERVER_SOCKET;//=-1;
-        struct sockaddr_in UDP_REPLY_servaddr;
+        //struct sockaddr_in UDP_REPLY_servaddr;
         struct sockaddr_in sockaddr_from;
         socklen_t sockaddr_fromLength;
 		int isListeningOnServerSocket;
@@ -296,12 +296,12 @@ typedef struct{
 		    //reply connection (server/listener)
 //TODO: from SLT  	    int                UDP_DATA_REPLY_SERVER_SOCKET;//=-1;
 //TODO: from SLT          struct sockaddr_in UDP_DATA_REPLY_servaddr;
-        struct sockaddr_in sockaddr_data_from;
-        socklen_t sockaddr_data_fromLength;
+        //struct sockaddr_in sockaddr_data_from;
+        //socklen_t sockaddr_data_fromLength;
 		    //sender connection (client)
 //TODO: from SLT          	    int      UDP_DATA_COMMAND_CLIENT_SOCKET;
-	    uint32_t UDP_DATA_COMMAND_CLIENT_IP;
-       struct sockaddr_in UDP_DATA_COMMAND_sockaddrin_to;
+	   // uint32_t UDP_DATA_COMMAND_CLIENT_IP;
+       //struct sockaddr_in UDP_DATA_COMMAND_sockaddrin_to;
     int isListeningOnDataServerSocket;
     int requestStoppingDataServerSocket;
 //TODO: from SLT        int numRequestedUDPPackets;
@@ -327,7 +327,7 @@ typedef struct{
     int takeADCChannelData;
     int takeEventData;
     int savedUDPSocketState;
-    uint32_t partOfRunFLTMask;//TODO: remove SLT stuff -tb-   2014 
+    //uint32_t partOfRunFLTMask;//TODO: remove SLT stuff -tb-   2014
     
     //BB interface
 //TODO: from SLT         int idBBforWCommand;
@@ -350,8 +350,8 @@ typedef struct{
 
     //thread and UDP handling
       //pthread handling
-    pthread_t dataReplyThread;
-    pthread_mutex_t dataReplyThread_mutex;
+    //pthread_t dataReplyThread;
+    //pthread_mutex_t dataReplyThread_mutex;
     THREAD_DATA dataReplyThreadData;
 
 

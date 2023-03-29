@@ -852,9 +852,6 @@ int readCounter(int hDevice, int Channel, int Reset, long* Count)
         printf("readCounter error: Invalid Channel.\n");
         return 255;
     }
-
-    int err = 0;
-
     // Set up for reading (and resetting) the counter
     int ch = Channel + 16;  // CIO#0=DIO#16, ...
     int ADDRESS = 3000 + ch * 2;  // CIO#: 3032, 3034, ...
@@ -863,10 +860,13 @@ int readCounter(int hDevice, int Channel, int Reset, long* Count)
     int TYPE = LJM_UINT32;
     double value = 0;
 
-    err = LJM_eReadAddress(hDevice, ADDRESS, TYPE, &value);
 #ifdef LJM_CHECK
+    int err = LJM_eReadAddress(hDevice, ADDRESS, TYPE, &value);
     ErrorCheck(err, "LJM_eReadAddress");
+#else
+    LJM_eReadAddress(hDevice, ADDRESS, TYPE, &value);
 #endif
+    
 
 #ifdef LJM_DEBUG
     printf("\nCIO#%d state : %f\n", Channel, value);

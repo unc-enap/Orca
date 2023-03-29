@@ -29,10 +29,6 @@ NSString* ORCamacCardSlotChangedNotification 	= @"ORCamacCardSlotChangedNotifica
 @implementation ORCamacCard
 #pragma mark ¥¥¥accessors
 
-- (NSUInteger) tagBase
-{
-    return 1;
-}
 
 - (NSString*) fullID
 {

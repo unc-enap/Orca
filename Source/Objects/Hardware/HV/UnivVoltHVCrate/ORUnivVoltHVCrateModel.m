@@ -477,7 +477,7 @@ NSString* HVkErrorMsg = @"ErrorMsg";
 	bool		f_NotFound = YES;
 	int			retSlotNum;
 	int			retChnlNum;
-	NSUInteger			scanLoc;
+	//NSUInteger			scanLoc;
 //	int			j;
 	int			i;
 
@@ -565,7 +565,7 @@ NSString* HVkErrorMsg = @"ErrorMsg";
 							[scannerForSlotAndChnl setScanLocation: 1];
 							[scannerForSlotAndChnl scanInt: &retSlotNum];
 							retSlot = [NSNumber numberWithInt: retSlotNum];
-							scanLoc = [scannerForSlotAndChnl scanLocation];
+							//scanLoc = [scannerForSlotAndChnl scanLocation];
 //						[scannerForSlotAndChnl setScanLocation: scanLoc + 1];
 
 

@@ -340,28 +340,28 @@
 
 - (void) linkLockedRegChanged:(NSNotification*)aNote
 {
-    int value = ~[model linkLockedReg];
+    NSInteger value = ~[model linkLockedReg];
 	short i;
 	for(i=0;i<[linkLockedMatrix numberOfColumns];i++){
-		[[linkLockedMatrix cellWithTag:i] setIntValue:(value & 1L<<i)];
+		[[linkLockedMatrix cellWithTag:i] setIntValue:(value & 0x1<<i)];
 	}
 }
 
 - (void) linkLruCrlRegChanged:(NSNotification*)aNote
 {
-    int value = [model linkLruCrlReg];
+    NSInteger value = [model linkLruCrlReg];
 	short i;
 	for(i=0;i<[linkLruCrlMatrix numberOfColumns];i++){
-		[[linkLruCrlMatrix cellWithTag:i] setIntValue:(value & 1L<<i)];
+		[[linkLruCrlMatrix cellWithTag:i] setIntValue:(value & 0x1<<i)];
 	}
 }
 
 - (void) miscCtl1RegChanged:(NSNotification*)aNote
 {
-    int value = [model miscCtl1Reg];
+    NSInteger value = [model miscCtl1Reg];
 	short i;
 	for(i=0;i<[miscCtl1Matrix numberOfColumns];i++){
-		[[miscCtl1Matrix cellWithTag:i] setIntValue:(value & 1L<<i)];
+		[[miscCtl1Matrix cellWithTag:i] setIntValue:(value & 0x1<<i)];
 	}
 }
 
@@ -373,27 +373,27 @@
 - (void) inputLinkMaskChanged:(NSNotification*)aNote
 {
     int value = ~[model inputLinkMask];
-	short i;
+	int i;
 	for(i=0;i<[inputLinkMaskMatrix numberOfColumns];i++){
-		[[inputLinkMaskMatrix cellWithTag:i] setIntValue:(value & 1L<<i)];
+		[[inputLinkMaskMatrix cellWithTag:i] setIntValue:(value & 0x1<<i)];
 	}
 }
 
 - (void) serDesTPowerMaskChanged:(NSNotification*)aNote
 {
     int value = [model serdesTPowerMask];
-	short i;
+	int i;
 	for(i=0;i<[serDesTPowerMasMatrix numberOfColumns];i++){
-		[[serDesTPowerMasMatrix cellWithTag:i] setIntValue:(value & 1L<<i)];
+		[[serDesTPowerMasMatrix cellWithTag:i] setIntValue:(value & 0x1<<i)];
 	}
 }
 
 - (void) lvdsPreemphasisCtlChanged:(NSNotification*)aNote
 {
     int value = [model lvdsPreemphasisCtlMask];
-	short i;
+	int i;
 	for(i=0;i<[lvdsPreemphasisCtlMatrix numberOfColumns];i++){
-		[[lvdsPreemphasisCtlMatrix cellWithTag:i] setIntValue:(value & 1L<<i)];
+		[[lvdsPreemphasisCtlMatrix cellWithTag:i] setIntValue:(value & 0x1<<i)];
 	}
 }
 

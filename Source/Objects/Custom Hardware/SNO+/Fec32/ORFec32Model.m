@@ -2289,7 +2289,7 @@ static int              sChannelsNotChangedCount = 0;
 		short channel_index;
 		for(channel_index = 0; channel_index < 16; channel_index++){
 			if ( cmosShiftRegisterValue[channel_index].cmos_shift_item[cmosRegItem] & (1UL << bit_mask) ) {
-				writeValue |= (1UL << channel_index + 2);
+                writeValue |= (1UL << (channel_index + 2));
 			}
 		}
 		
@@ -2318,7 +2318,7 @@ static int              sChannelsNotChangedCount = 0;
 		short channel_index;
 		for(channel_index = 0; channel_index < 16; channel_index++){
 			if ( cmosShiftRegisterValue[channel_index].cmos_shift_item[cmosRegItem] & (1UL << bit_mask) ) {
-				writeValue |= (1UL << channel_index + 2);
+                writeValue |= (1UL << (channel_index + 2));
 			}
 		}
 		
@@ -2510,7 +2510,7 @@ static int              sChannelsNotChangedCount = 0;
 			for (j = 8; j >= 1; j--){					// 8 bits of data per channel
 				writeValue = 0UL;
 				for (k = 2; k<= 18; k++){				// 17 octal DACs
-					if ( (1UL << j-1 ) & dacValues[numChannels - i][k-2] ) {
+                    if ( (1UL << (j-1) ) & dacValues[numChannels - i][k-2] ) {
 						writeValue |= 1UL << k;
 					}
 				}
@@ -2715,7 +2715,7 @@ static int              sChannelsNotChangedCount = 0;
 			for (j = 8; j >= 1; j--){					// 8 bits of data per channel
 				writeValue = 0UL;
 				for (k = 2; k<= 18; k++){				// 17 octal DACs
-					if ( (1UL << j-1 ) & dacValues[numChannels - i][k-2] ) {
+                    if ( (1UL << (j-1) ) & dacValues[numChannels - i][k-2] ) {
 						writeValue |= 1UL << k;
 					}
 				}

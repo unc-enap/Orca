@@ -36,7 +36,7 @@
     int             fifoFD;
     
     NSString*       readerPath;
-    pid_t           readerPid;
+    //pid_t           readerPid;
     NSString*       pipeName;
     BOOL            readerIsRunning;
     int32_t            numberBytesSent;

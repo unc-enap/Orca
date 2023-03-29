@@ -39,7 +39,6 @@
     NSMutableDictionary* configParams;
     int ioBuffer;
     int stateBuffer;
-    double throttle;
     FCIOStateReader* reader;
     int readerRecordCount;
     int bufferedRecords;
@@ -69,12 +68,15 @@
     ORTimeRate* dataRateHistory;
     ORTimeRate* eventRateHistory;
     ORTimeRate* deadTimeHistory;
-    ORTaskSequence* runTask;
+    ORTaskSequence* taskSequencer;  //changed name MAH 9/17/22
+    NSTask*     runTask;            //added. MAH 9/17/22
     ORReadOutList* readOutList;
     NSArray* dataTakers;
     NSMutableArray* readOutArgs;
     NSMutableArray* chanMap;
     NSMutableArray* cardMap;
+    NSLock* readStateLock; //MAH 9/18/22
+    bool timeToQuitReadoutThread;
 }
 
 #pragma mark •••Initialization
@@ -96,7 +98,6 @@
 - (int) timeout;
 - (int) ioBuffer;
 - (int) stateBuffer;
-- (double) throttle;
 - (FCIOStateReader*) reader;
 - (int) readerRecordCount;
 - (int) bufferedRecords;
@@ -115,7 +116,7 @@
 - (ORTimeRate*) dataRateHistory;
 - (ORTimeRate*) eventRateHistory;
 - (ORTimeRate*) deadTimeHistory;
-- (ORTaskSequence*) runTask;
+- (ORTaskSequence*) taskSequencer;
 - (ORReadOutList*) readOutList;
 - (NSMutableArray*) readOutArgs;
 - (NSMutableArray*) children;
@@ -132,7 +133,6 @@
 - (void) setTimeout:(int)to;
 - (void) setIObuffer:(int)io;
 - (void) setStateBuffer:(int)sb;
-- (void) setThrottle:(double)t;
 - (void) setConfigId:(uint32_t)cId;
 - (void) setStatusId:(uint32_t)sId;
 - (void) setDataIds:(id)assigner;
@@ -149,8 +149,9 @@
 #pragma mark •••FCIO methods
 - (bool) connect;
 - (void) disconnect:(bool)destroy;
-- (void) read;
+- (void) read:(ORDataPacket*)aDataPacket;
 - (void) runFailed;
+
 
 #pragma mark •••Task methods
 - (void) taskFinished:(id)task;
@@ -168,11 +169,14 @@
 - (void) loadReadOutList:(NSFileHandle*)aFile;
 - (void) reset;
 - (NSDictionary*) dataRecordDescription;
+- (void) readThread:(ORDataPacket*)aDataPacket;
 
 #pragma mark •••Archival
 - (id) initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary;
+
+- (void) runFailedMainThread;
 
 @end
 

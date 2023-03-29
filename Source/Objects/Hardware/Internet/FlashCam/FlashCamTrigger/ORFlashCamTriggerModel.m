@@ -54,6 +54,7 @@
     [cimage drawInRect:rect fromRect:NSZeroRect operation:NSCompositingOperationSourceOver fraction:1.0];
     [image unlockFocus];
     [self setImage:image];
+    [image release]; //MAH 2/18/22
 }
 
 - (void) makeMainController
