@@ -136,7 +136,7 @@
             }
             @catch (NSException* e){
                 NSLog(@"Python script sending mail exception\n");
-                NSLog(@"%@\n");
+ //               NSLog(@"%@\n");
             }
         }
         else {
