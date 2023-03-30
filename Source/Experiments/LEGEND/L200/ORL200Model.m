@@ -899,7 +899,11 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     [self influxLoadRunning:@"Aux"  segmentId: kL200AuxType   timeStamp:aTimeStamp];
     [self influxLoadRunning:@"CC4"  segmentId: kL200CC4Type   timeStamp:aTimeStamp];
     
-    [self influxHistograms:@"Ge"    segmentId: kL200DetType   timeStamp:aTimeStamp];
+    //---------------------------------------------------------------------------------
+    // commented out for now (04/30/2023) move functionality into the FlashCamAdc card
+    //[self influxHistograms:@"Ge"    segmentId: kL200DetType   timeStamp:aTimeStamp];
+    //---------------------------------------------------------------------------------
+
 }
 
 - (void) influxLoadSetUp:(NSString*)name segmentId:(int)groupIndex timeStamp:(NSTimeInterval)aTimeStamp

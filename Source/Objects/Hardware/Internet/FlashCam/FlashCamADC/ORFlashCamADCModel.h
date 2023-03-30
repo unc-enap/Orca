@@ -24,6 +24,7 @@
 #import "ORHWWizard.h"
 #import "ORAdcInfoProviding.h"
 #import "fcio.h"
+#import "ORInFluxDBModel.h"
 
 #define kMaxFlashCamADCChannels 24
 #define kFlashCamADCChannels 6
@@ -69,6 +70,7 @@
     bool enableBaselineHistory;
     double baselineSampleTime;
     ORTimeRate* baselineHistory[kMaxFlashCamADCChannels];
+    ORInFluxDBModel* inFlux;
 }
 
 #pragma mark •••Initialization
@@ -114,6 +116,7 @@
 - (bool) enableBaselineHistory;
 - (double) baselineSampleTime;
 - (ORTimeRate*) baselineHistory:(unsigned int)chan;
+- (void) shipToInflux:(int)aChan energy:(int)anEnergy baseline:(int)aBaseline;
 
 - (void) setChanEnabled:(unsigned int)chan    withValue:(bool)enabled;
 - (void) setTrigOutEnabled:(unsigned int)chan withValue:(bool)enabled;
