@@ -18,7 +18,7 @@
 //for the use of this software.
 //-------------------------------------------------------------
 
-
+#import "ORBurstMonitorModel.h"
 #import "ORCouchDBModel.h"
 #import "ORCouchDB.h"
 #import "MemoryWatcher.h"
@@ -763,8 +763,30 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
 - (void) updateMachineRecord
 {
         if(!stealthMode){
+
+            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateMachineRecord) object:nil];
+
+            // HALO Update Apr 4, 2023
             @try {
-                [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateMachineRecord) object:nil];
+                NSArray* theBurstMonitor = [[[[self document] collectObjectsOfClass:NSClassFromString(@"ORBurstMonitorModel")] retain] autorelease];
+                if([theBurstMonitor count]){
+                    for(id aMonitor in theBurstMonitor){
+                        NSDictionary* burstInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                   @"burstinfo", @"_id",
+                                                   @"burstinfo", @"type",
+                                                   [NSNumber numberWithUnsignedShort:[aMonitor minimumEnergyAllowed]],@"minimumADC",nil];
+                        [[self statusDBRef] updateDocument:burstInfo  documentId:@"burstinfo" tag:kDocumentUpdated];
+                    }
+                }
+            }
+            @catch (NSException* e){
+                NSLog(@"%@ %@ Exception: %@\n",[self fullID],NSStringFromSelector(_cmd),e);
+            }
+            @finally{
+            }
+
+            // Original MachineInfo
+            @try {
                 if([thisHostAdress length]==0){
                     //only have to get this once
                     struct ifaddrs *ifaddr, *ifa;
@@ -1569,6 +1591,7 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
 {
 	if(!stealthMode && !skipDataSets){
 		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateDataSets) object:nil];
+        
         @try {
             if([[ORCouchDBQueue sharedCouchDBQueue]lowPriorityOperationCount]<10){
                 NSMutableArray* dataSetNames = [NSMutableArray array];
