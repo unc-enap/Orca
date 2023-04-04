@@ -81,6 +81,7 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
 - (void) updateProcesses;
 - (void) updateExperiment;
 - (void) updateHistory;
+- (void) updateBurstRecord;
 - (void) updateMachineRecord;
 - (void) postRunState:(NSNotification*)aNote;
 - (void) postRunTime:(NSNotification*)aNote;
@@ -760,14 +761,11 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
 	}
 }
 
-- (void) updateMachineRecord
+- (void) updateBurstRecord
 {
         if(!stealthMode){
-
-            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateMachineRecord) object:nil];
-
-            // HALO Update Apr 4, 2023
             @try {
+                [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateBurstRecord) object:nil];
                 NSArray* theBurstMonitor = [[[[self document] collectObjectsOfClass:NSClassFromString(@"ORBurstMonitorModel")] retain] autorelease];
                 if([theBurstMonitor count]){
                     for(id aMonitor in theBurstMonitor){
@@ -783,10 +781,18 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
                 NSLog(@"%@ %@ Exception: %@\n",[self fullID],NSStringFromSelector(_cmd),e);
             }
             @finally{
+                [self performSelector:@selector(updateBurstRecord) withObject:nil afterDelay:60];
+
             }
 
-            // Original MachineInfo
+        }
+}
+
+- (void) updateMachineRecord
+{
+        if(!stealthMode){
             @try {
+                [NSObject  cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateMachineRecord) object:nil];
                 if([thisHostAdress length]==0){
                     //only have to get this once
                     struct ifaddrs *ifaddr, *ifa;
@@ -1678,6 +1684,8 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
     [self performSelector:@selector(updateExperiment)    withObject:nil afterDelay:3];
     [self performSelector:@selector(updateRunInfo)       withObject:nil afterDelay:4];
     [self performSelector:@selector(updateDatabaseStats) withObject:nil afterDelay:5];
+    [self performSelector:@selector(updateBurstRecord)
+        withObject:nil afterDelay:6];
     [self performSelector:@selector(periodicCompact)     withObject:nil afterDelay:60*60];
 }
 
