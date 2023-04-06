@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import email
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -75,3 +77,4 @@ if __name__ == '__main__':
     send_mail(options.user, options.password, options.server, options.fromaddr,
               options.to, options.subject, options.message, options.attachments,
               options.filename)
+
