@@ -285,15 +285,15 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
     NSMutableArray* rlist = [[[NSMutableArray alloc] init] autorelease];
     if(primary){
         [primary sendMessage:message];
-        [rlist addObject:[[primary name] copy]];
+        [rlist addObject:[[[primary name] copy]autorelease]];
     }
     else if(secondary){
         [secondary sendMessage:message];
-        [rlist addObject:[[secondary name] copy]];
+        [rlist addObject:[[[secondary name] copy]autorelease]];
     }
     else if(tertiary){
         [tertiary sendMessage:message];
-        [rlist addObject:[[tertiary name] copy]];
+        [rlist addObject:[[[tertiary name] copy]autorelease]];
     }
     else NSLog(@"No on call person to send message to!\n");
     if([rlist count]) [self sendChatMessage:message withList:rlist];
@@ -306,9 +306,9 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
         [[self secondaryPerson] sendMessage:aMessage];
         [[self tertiaryPerson]  sendMessage:aMessage];
         NSMutableArray* rlist = [[[NSMutableArray alloc] init] autorelease];
-        if([[[self primaryPerson] address]   length]) [rlist addObject:[[[self primaryPerson]   name] copy]];
-        if([[[self secondaryPerson] address] length]) [rlist addObject:[[[self secondaryPerson] name] copy]];
-        if([[[self tertiaryPerson] address]  length]) [rlist addObject:[[[self tertiaryPerson]  name] copy]];
+        if([[[self primaryPerson] address]   length]) [rlist addObject: [[[[self primaryPerson]   name] copy]autorelease]];
+        if([[[self secondaryPerson] address] length]) [rlist addObject:[[[[self secondaryPerson] name] copy]autorelease]];
+        if([[[self tertiaryPerson] address]  length]) [rlist addObject: [[[[self tertiaryPerson]  name] copy]autorelease]];
         if([rlist count]) [self sendChatMessage:aMessage withList:rlist];
     }
 }

@@ -425,7 +425,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(Archive);
 
 				NSData* data = [file readDataToEndOfFile];
 				if(data){
-					NSString* result = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
+					NSString* result = [[[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding]autorelease];
 					if([result length]) NSLog(@"tar returned:\n%@\n", result);
 				}
 				[delegate updateStatus:@"Archiving Done"];
@@ -525,7 +525,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(Archive);
 		
 		NSData* data = [file readDataToEndOfFile];
 		if(data){
-			NSString* result = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
+			NSString* result = [[[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding]autorelease];
 			if([result length]) NSLog(@"tar returned:\n%@", result);
 		}
 		[delegate updateStatus:@"Archiving Done"];
@@ -622,7 +622,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(Archive);
 			
 			NSData* data = [file readDataToEndOfFile];
 			if(data){
-				NSString* result = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
+				NSString* result = [[[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding]autorelease];
 				if([result length]) NSLog(@"svn returned:\n%@", result);
 			}
 			[delegate updateStatus:@"Update Finished"];

@@ -1402,7 +1402,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
         NSInteger ss = [burstcomp second];
         NSInteger dateint = yy + mmo + dd;
         NSInteger timeint = ss + mmi + hh;
-        NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+        NSDateFormatter* dateFormatter = [[[NSDateFormatter alloc] init]autorelease];
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSDate* now = [NSDate date];
         NSString* burstDateString = [dateFormatter stringFromDate:burstdate];
