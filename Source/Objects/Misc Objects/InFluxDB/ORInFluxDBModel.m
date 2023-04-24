@@ -589,15 +589,15 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     help                = [help substringFromIndex:firstLF];
     
     NSString* stateName ;
-    if ([anAlarm acknowledged])
-        stateName = @"ack";
-    else {
-        if ([anAlarm isPosted])
+    if ([anAlarm isPosted]) {
+        if ([anAlarm acknowledged]) {
+            stateName = @"ack";
+        } else {
             stateName = [anAlarm severityName];
-        else
-            stateName = @"clear";
+        }
+    } else {
+        stateName = @"clear";
     }
-       
     
     ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"Alarms" org:org];
     [aCmd start:    @"Alarm"];
