@@ -19,6 +19,7 @@
 
 #import "ORExperimentModel.h"
 #import "ORInFluxDBModel.h"
+#import "ORHistoModel.h"
 
 @class ORRunModel;
 
@@ -35,7 +36,9 @@
 {
     int viewType;
     uint32_t runType;
+    ORHistoModel*    connectedHisto;
     ORInFluxDBModel* influxDB;
+    ORRunModel*      rc;
     int influxIndex;
     BOOL linked;
     bool updateDataFilePath;

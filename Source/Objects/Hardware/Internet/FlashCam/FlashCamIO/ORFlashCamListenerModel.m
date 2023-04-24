@@ -885,8 +885,7 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
 - (void) appendToFCLog:(NSString*)line andNotify:(BOOL)notify
 {
     fclogIndex = (fclogIndex + 1) % [self fclogLines];
-    [[fclog objectAtIndex:fclogIndex] release];
-    [fclog setObject:[line copy] atIndexedSubscript:fclogIndex];
+    [fclog setObject:line atIndexedSubscript:fclogIndex];
     if(notify)
         [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelFCLogChanged object:self];
 }
@@ -900,7 +899,7 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
 
 - (void) appendToFCRunLog:(NSString*)line
 {
-    [fcrunlog addObject:[line copy]];
+    [fcrunlog addObject:line];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelFCRunLogChanged object:self];
 }
 
@@ -1179,7 +1178,7 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
                     for(id obj in [readOutList children]){
                         if([[obj object] respondsToSelector:@selector(cardAddress)] &&
                            [[obj object] respondsToSelector:@selector(setUniqueHWID:)]){
-                            if(address = [[obj object] cardAddress]){
+                            if((address = [[obj object] cardAddress])){
                                 [[obj object] setUniqueHWID:hwid];
                                 success = true;
                                 break;

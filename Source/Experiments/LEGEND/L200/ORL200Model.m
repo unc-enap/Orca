@@ -30,6 +30,9 @@
 #import "ORDataFileModel.h"
 #import "ORSmartFolder.h"
 #import "ORAppDelegate.h"
+#import "ORHistoModel.h"
+#import "ORDataSet.h"
+#import "OR1dHisto.h"
 
 static NSString* L200DBConnector     = @"L200DBConnector";
 NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
@@ -41,6 +44,8 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 - (void) dealloc
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    [connectedHisto release];
+    [influxDB release];
     [super dealloc];
 }
 
@@ -53,7 +58,8 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 
 - (void) findInFluxDB
 {
-    influxDB = [[self document] findObjectWithFullID:@"ORInFluxDBModel,1"];
+    [influxDB release];
+    influxDB = [[[self document] findObjectWithFullID:@"ORInFluxDBModel,1"]retain];
 }
 
 
@@ -138,6 +144,15 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 
 - (void) runStarted:(NSNotification*) aNote
 {
+    NSArray* objects = [[(ORAppDelegate*)[NSApp delegate]  document] collectObjectsOfClass:NSClassFromString(@"OrcaObject")];
+    [objects makeObjectsPerformSelector:@selector(clearLoopChecked) withObject:nil];
+
+    [connectedHisto release];
+    [rc release];
+    rc = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORRunModel,1"] retain];
+    NSArray* hists = [rc collectConnectedObjectsOfClass:NSClassFromString(@"ORHistoModel")];
+    connectedHisto = [[hists objectAtIndex:0]retain];
+
     [self postInFluxRunTime];
 }
 
@@ -863,7 +878,6 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
                                                         object:self
                                                       userInfo:history];
 }
-
 - (void) postInFluxSetUp
 {
     //called from the InFlux model
@@ -884,6 +898,12 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     [self influxLoadRunning:@"PMT"  segmentId: kL200PMTType   timeStamp:aTimeStamp];
     [self influxLoadRunning:@"Aux"  segmentId: kL200AuxType   timeStamp:aTimeStamp];
     [self influxLoadRunning:@"CC4"  segmentId: kL200CC4Type   timeStamp:aTimeStamp];
+    
+    //---------------------------------------------------------------------------------
+    // commented out for now (04/30/2023) move functionality into the FlashCamAdc card
+    //[self influxHistograms:@"Ge"    segmentId: kL200DetType   timeStamp:aTimeStamp];
+    //---------------------------------------------------------------------------------
+
 }
 
 - (void) influxLoadSetUp:(NSString*)name segmentId:(int)groupIndex timeStamp:(NSTimeInterval)aTimeStamp
@@ -905,7 +925,6 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         short slot    = [[aDet objectForKey:@"daq_board_slot"]intValue];
         short chan    = [[aDet objectForKey:@"daq_board_ch"]intValue];
         NSString* loc = [NSString stringWithFormat:@"%02d_%02d_%02d",crate,slot,chan];
-
 
         [aCmd addTag:@"boardId"         withString:[aDet objectForKey:@"daq_board_id"]];
         [aCmd addTag:@"cc4Chan"         withString:[aDet objectForKey:@"fe_cc4_ch"]];
@@ -957,7 +976,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     for(int i=0; i<[self numberSegmentsInGroup:groupIndex]; i++){
         ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:[self objectName] org:[influxDB org]];
         [aCmd start : @"RunTime"];
-
+        
         //-----------------------------------------
         //-------------run time only---------------
         //-----------------------------------------
@@ -966,7 +985,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         short slot    = [[aDet objectForKey:@"daq_board_slot"]intValue];
         short chan    = [[aDet objectForKey:@"daq_board_ch"]intValue];
         NSString* loc = [NSString stringWithFormat:@"%02d_%02d_%02d",crate,slot,chan];
-
+        
         [aCmd addTag:@"boardId"         withString:[aDet objectForKey:@"daq_board_id"]];
         [aCmd addTag:@"cc4Chan"         withString:[aDet objectForKey:@"fe_cc4_ch"]];
         [aCmd addTag:@"crate"           withString:[aDet objectForKey:@"daq_crate"]];
@@ -980,7 +999,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         [aCmd addTag:@"slot"            withString:[aDet objectForKey:@"daq_board_slot"]];
         [aCmd addTag:@"strNumber"       withString:[aDet objectForKey:@"str_number"]];
         [aCmd addTag:@"strPosition"     withString:[aDet objectForKey:@"str_position"]];
-
+        
         [aCmd addField: @"trigCounts"  withDouble:[group getTotalCounts:i]];
         [aCmd addField: @"trigRates"   withDouble:[group getRate:i]];
         [aCmd addField: @"wfCounts"    withDouble:[group getWaveformCounts:i]];
@@ -991,6 +1010,63 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
         [influxDB executeDBCmd:aCmd];
     }
 }
+    
+- (void) influxHistograms:(NSString*)name segmentId:(int)groupIndex timeStamp:(NSTimeInterval)aTimeStamp
+{
+    ORL200SegmentGroup* group = (ORL200SegmentGroup*)[self segmentGroup:groupIndex];
+    for(int i=0; i<[self numberSegmentsInGroup:groupIndex]; i++){
+        id aDet = [group segment:i];
+        ORFlashCamADCModel* hw = [aDet hardwareCard];
+        if(hw==nil)continue;
+        
+        short crate   = [[aDet objectForKey:@"daq_crate"]intValue];
+        short slot    = [[aDet objectForKey:@"daq_board_slot"]intValue];
+        short chan    = [[aDet objectForKey:@"daq_board_ch"]intValue];
+        NSString* loc = [NSString stringWithFormat:@"%02d_%02d_%02d",crate,slot,chan];
+        OR1DHisto* aHistogram = nil;
+        if(connectedHisto){
+            NSString* objName = [self objectNameForCrate:[aDet objectForKey:@"daq_crate"] andCard:[aDet objectForKey:@"daq_board_slot"]];
+                aHistogram = [connectedHisto objectForKeyArray:[NSMutableArray arrayWithObjects:objName, @"Energy",
+                                                     [NSString stringWithFormat:@"Crate %2d",  crate],
+                                                     [NSString stringWithFormat:@"Card %2d",   slot],
+                                                     [NSString stringWithFormat:@"Channel %2d",chan],
+                                                      nil]];
+        }
+        if(aHistogram){
+            ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:[self objectName] org:[influxDB org]];
+            [aCmd start : @"fpgaEnergyHist"];
+            
+            [aCmd addTag:@"boardId"         withString:[aDet objectForKey:@"daq_board_id"]];
+            [aCmd addTag:@"cc4Chan"         withString:[aDet objectForKey:@"fe_cc4_ch"]];
+            [aCmd addTag:@"crate"           withString:[aDet objectForKey:@"daq_crate"]];
+            [aCmd addTag:@"channel"         withString:[aDet objectForKey:@"daq_board_ch"]];
+            [aCmd addTag:@"detType"         withString:[aDet objectForKey:@"det_type"]];
+            [aCmd addTag:@"location"        withString:loc];
+            [aCmd addTag:@"name"            withString:name];
+            [aCmd addTag:@"segmentGroupNum" withLong:groupIndex];
+            [aCmd addTag:@"segmentId"       withString:[NSString stringWithFormat:@"%@_%d",name,i]];
+            [aCmd addTag:@"serial"          withString:[aDet objectForKey:@"serial"]];
+            [aCmd addTag:@"slot"            withString:[aDet objectForKey:@"daq_board_slot"]];
+            [aCmd addTag:@"strNumber"       withString:[aDet objectForKey:@"str_number"]];
+            [aCmd addTag:@"strPosition"     withString:[aDet objectForKey:@"str_position"]];
+            [aCmd addTag:@"binStart"        withLong:0];
+            [aCmd addTag:@"binUnit"         withString:@"ADC"];
+            [aCmd addTag:@"binWidth"        withLong:1];
+            [aCmd addTag:@"runNumber"       withLong:[rc runNumber]];
+            [aCmd addTag:@"subRunNumber"    withLong:[rc subRunNumber]];
+
+            for(int bin =0;bin<[aHistogram numberBins];bin++){
+                uint32_t aValue = [aHistogram value:bin];
+                if(aValue || bin==0){ //have to have at least one field, but ship anyway
+                    [aCmd addField:[NSString stringWithFormat:@"%d",bin] withLong:aValue];
+                }
+            }
+            [aCmd setTimeStamp:aTimeStamp];
+            [influxDB executeDBCmd:aCmd];
+        }
+    }
+}
+
 @end
 
 @implementation ORL200HeaderRecordID

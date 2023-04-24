@@ -273,6 +273,7 @@
             }
         }
     }
+    [scanner release];
     return allStrings;
 }
 
