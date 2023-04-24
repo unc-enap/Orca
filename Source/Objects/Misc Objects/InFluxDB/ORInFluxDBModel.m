@@ -529,10 +529,10 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
                                   usingBlock:^(id value, NSRange range, BOOL *stop) {
         
         if([[value description] isEqualToString:@"_NSTaggedPointerColor"]){
-            NSString* s = [value description];
+            NSString* subString = [value description];
             //sRGB IEC61966-2.1 colorspace 1 0 0 1
  //           if([s rangeOfString:@"sRGB"].location != NSNotFound){
-                NSArray* parts = [s componentsSeparatedByString:@" "];
+                NSArray* parts = [subString componentsSeparatedByString:@" "];
                 //sRGB IEC61966-2.1 colorspace 1 0 0 1
                 if([parts count]>=6){
                     if([[parts objectAtIndex:3]intValue]==1 &&
@@ -549,19 +549,19 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
             }
 //        }
         }];
+
+    NSString* measurementName;
+    if (userMessage)
+        measurementName = @"UserMessage";
+    else
+        measurementName = @"StatusLog";
+
     ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"Logs" org:org];
-    [aCmd   start  : @"StatusLog" withTags:tags];
+    [aCmd   start  : measurementName withTags:tags];
     [aCmd addField: @"Line"     withString:[s string]];
     [aCmd setTimeStamp: [[NSDate date]timeIntervalSince1970] ];
     [self executeDBCmd:aCmd];
-    
-    if(userMessage){
-        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"Logs" org:org];
-        [aCmd   start  : @"UserMessage" withTags:tags];
-        [aCmd addField: @"Line"     withString:[s string]];
-        [aCmd setTimeStamp: [[NSDate date]timeIntervalSince1970] ];
-        [self executeDBCmd:aCmd];
-    }
+
 }
 
 - (NSString*) errorString
@@ -587,7 +587,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     NSString* help      = [anAlarm helpString];
     NSInteger firstLF   = [help rangeOfString:@"\n"].location;
     help                = [help substringFromIndex:firstLF];
-    
+
     NSString* stateName ;
     if ([anAlarm isPosted]) {
         if ([anAlarm acknowledged]) {
@@ -598,7 +598,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     } else {
         stateName = @"clear";
     }
-    
+
     ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"Alarms" org:org];
     [aCmd start:    @"Alarm"];
     [aCmd addTag:   @"Severity"      withString:[anAlarm severityName]];
