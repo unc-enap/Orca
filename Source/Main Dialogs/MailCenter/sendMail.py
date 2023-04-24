@@ -1,8 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import email
-from email.MIMEMultipart import MIMEMultipart
-from email.MIMEText import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 import smtplib
 import optparse
@@ -35,7 +35,7 @@ def send_mail(user, password, server, fromaddr, to, subject,
         if not fname:
             continue
         if not os.path.exists(fname):
-            print 'Attachment ' + fname + ' not found'
+            print('Attachment ' + fname + ' not found')
             continue
         with open(fname, 'rb') as f:
             part = MIMEApplication(f.read(), Name=basename(fname))
@@ -77,3 +77,4 @@ if __name__ == '__main__':
     send_mail(options.user, options.password, options.server, options.fromaddr,
               options.to, options.subject, options.message, options.attachments,
               options.filename)
+

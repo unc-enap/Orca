@@ -41,6 +41,7 @@ NSString* ORDataFileModelLimitSizeChanged               = @"ORDataFileModelLimit
 NSString* ORDataFileChangedNotification                 = @"The DataFile File Has Changed";
 NSString* ORDataFileStatusChangedNotification           = @"The DataFile Status Has Changed";
 NSString* ORDataFileSizeChangedNotification             = @"The DataFile Size Has Changed";
+NSString* ORDataFileLimitExceededNotification           = @"ORDataFileLimitExceededNotification";
 NSString* ORDataFileModelLogWrittenNotification         = @"ORDataFileModelLogWrittenNotification";
 NSString* ORDataSaveConfigurationChangedNotification    = @"ORDataSaveConfigurationChangedNotification";
 NSString* ORDataFileModelSizeLimitReachedActionChanged	= @"ORDataFileModelSizeLimitReachedActionChanged";
@@ -502,7 +503,7 @@ static const int currentVersion = 1;           // Current version
 {
     if(filePointer && runMode == kNormalRun){
 		NSTimeInterval thisTime = [NSDate timeIntervalSinceReferenceDate];
-		if(fabs(lastFileCheckTime - thisTime) > 3){
+		if(fabs(lastFileCheckTime - thisTime) > fileCheckTimeInterval){
 			lastFileCheckTime = thisTime;
 			[self performSelectorOnMainThread:@selector(getDataFileSize) withObject:nil waitUntilDone:NO];
 		}
@@ -516,6 +517,9 @@ static const int currentVersion = 1;           // Current version
         }
 		
 		if(fileLimitExceeded){
+            [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileLimitExceededNotification
+                                                                object:self
+                                                              userInfo:nil];
 			NSString* reason = [NSString stringWithFormat:@"File size exceeded %.1f MB",maxFileSize];
 			
 			if(sizeLimitReachedAction == kStopOnLimit){
@@ -837,6 +841,16 @@ static const int currentVersion = 1;           // Current version
 		}
 	}
 
+}
+
+- (NSTimeInterval) fileCheckTimeInterval
+{
+    return fileCheckTimeInterval;
+}
+
+- (void) setFileCheckTimeInterval:(NSTimeInterval)interval
+{
+    fileCheckTimeInterval = MIN(30.0, MAX(0.1, interval));
 }
 
 #pragma mark ¥¥¥Archival

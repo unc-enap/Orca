@@ -183,8 +183,16 @@
 - (void) connectionStatusChanged:(NSNotification*)aNote
 {
     NSString* s;
-    if([model connectionOK])s = @"";
-    else                    s = @"NO Connection -- trying again soon";
+    if([model connectionStatus] == kInFluxDBConnectionOK) s = @"";
+    else if([model connectionStatus] == kInFluxDBConnectionBad){
+        [connectionErrField setTextColor:[NSColor redColor]];
+        s = @"NO Connection -- trying again soon";
+    }
+    else if([model connectionStatus] == kInFluxDBConnectionUnknown){
+        [connectionErrField setTextColor:[NSColor blackColor]];
+        s = @"Unknown connection stauts";
+    }
+    else return;
     [connectionErrField setStringValue:s];
 }
 

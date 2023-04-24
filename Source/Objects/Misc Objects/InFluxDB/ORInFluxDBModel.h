@@ -25,6 +25,10 @@
 @class ORSafeQueue;
 #import "ORInFluxDBCmd.h"
 
+typedef enum { kInFluxDBConnectionBad,
+               kInFluxDBConnectionOK,
+               kInFluxDBConnectionUnknown } ORInFluxDBConnectionStatus;
+
 @interface ORInFluxDBModel : OrcaObject
 {
 @private
@@ -34,8 +38,8 @@
     NSInteger      messageRate;
     BOOL           stealthMode;
     BOOL           scheduledForRunInfoUpdate;
-    NSString*      alertMessage;
-    int            alertType;
+    //NSString*      alertMessage;
+    //int            alertType;
     NSString*      thisHostAddress;
     NSString*      experimentName;
     NSString*      runNumberString;
@@ -55,8 +59,9 @@
     
     //----http vars--------
     NSString*      authToken;
-    bool           connectionOK;
-    ORAlarm*       connectionAlarm;
+    ORInFluxDBConnectionStatus connectionStatus;
+    ORAlarm*                   connectionAlarm;
+    NSDate*                    lastAlarmDate;
 }
 
 #pragma mark ***Initialization
@@ -71,9 +76,11 @@
 - (void) alarmAcknowledged        : (NSNotification*)aNote;
 
 #pragma mark ***Accessors
+- (ORInFluxDBConnectionStatus) connectionStatus;
+- (void)        setConnectionStatus:(ORInFluxDBConnectionStatus)status;
 - (void)        setConnectionStatusBad;
 - (void)        setConnectionStatusOK;
-- (bool)        connectionOK;
+- (void)        setConnectionStatusUnknown;
 - (NSString*)   experimentName;
 - (void)        setExperimentName:(NSString*)aName;
 - (NSString*)   hostName;
