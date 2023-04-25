@@ -22,8 +22,10 @@
 
 @class ORColorScale;
 @class ORSegmentGroup;
+@class ORRunModel;
 
 @interface ORL200Controller : ORExperimentController {
+    ORRunModel* rc;
     IBOutlet NSPopUpButton* viewTypePopup;
     
     IBOutlet NSTableView*   sipmTableView;
@@ -63,6 +65,13 @@
     IBOutlet NSTextField* adcSerialFileTextView;
     IBOutlet NSButton*    adcSerialReadMapFileButton;
     IBOutlet NSButton*    adcSerialSaveMapFileButton;
+    
+    IBOutlet NSTextField* dataCycleField;
+    IBOutlet NSTextField* dataPeriodField;
+    IBOutlet NSTextField* customTypeLabel;
+    IBOutlet NSTextField* customTypeField;
+    IBOutlet NSPopUpButton* dataTypePopup;
+    IBOutlet NSTextField*   l200FileNameField;
 }
 
 #pragma mark •••Initialization
@@ -99,6 +108,12 @@
 
 - (void) adcSerialMapFileChanged:(NSNotification*)note;
 
+- (void) dataCycleChanged:(NSNotification*) aNote;
+- (void) dataPeriodChanged:(NSNotification*) aNote;
+- (void) dataTypeChanged:(NSNotification*) aNote;
+- (void) customTypeChanged:(NSNotification*) aNote;
+- (void) l200FileNameChanged:(NSNotification*) aNote;
+
 #pragma mark •••Actions
 - (IBAction) viewTypeAction:(id)sender;
 - (IBAction) sipmAdcClassNameAction:(id)sender;
@@ -122,6 +137,12 @@
 
 - (IBAction) saveADCSerialMapFileAction:(id)sender;
 - (IBAction) readADCSerialMapFileAction:(id)sender;
+
+- (IBAction) dataCycleField:(id)sender;
+- (IBAction) dataPeriodField:(id)sender;
+- (IBAction) dataTypePopup:(id)sender;
+- (IBAction) customTypeField:(id)sender;
+
 
 #pragma mark •••Interface Management
 - (int) segmentTypeFromTableView:(NSTableView*)view;
