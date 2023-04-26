@@ -690,7 +690,9 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
 - (void) executeDBCmd:(id)aCmd
 {
-    [aCmd executeCmd:self];
+    @synchronized (self) {
+        [aCmd executeCmd:self];
+    }
 }
 
 - (NSString*) orgId
