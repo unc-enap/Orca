@@ -501,7 +501,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     }
     [messageQueue enqueue:aCmd];
     
-    if([self connectionOK] && connectionAlarm && [connectionAlarm acknowledged]){
+    if(([self connectionStatus]==kInFluxDBConnectionOK) && connectionAlarm && [connectionAlarm acknowledged]){
         [connectionAlarm clearAlarm];
         [connectionAlarm release];
         connectionAlarm = nil;
