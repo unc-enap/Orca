@@ -72,6 +72,8 @@
     IBOutlet NSTextField* customTypeField;
     IBOutlet NSPopUpButton* dataTypePopup;
     IBOutlet NSTextField*   l200FileNameField;
+    IBOutlet NSStepper*   cycleStepper;
+    IBOutlet NSStepper*   periodStepper;
 }
 
 #pragma mark •••Initialization
@@ -138,10 +140,12 @@
 - (IBAction) saveADCSerialMapFileAction:(id)sender;
 - (IBAction) readADCSerialMapFileAction:(id)sender;
 
-- (IBAction) dataCycleField:(id)sender;
-- (IBAction) dataPeriodField:(id)sender;
-- (IBAction) dataTypePopup:(id)sender;
-- (IBAction) customTypeField:(id)sender;
+- (IBAction) dataCycleAction:(id)sender;
+- (IBAction) dataPeriodAction:(id)sender;
+- (IBAction) dataTypePopupAction:(id)sender;
+- (IBAction) customTypeAction:(id)sender;
+- (IBAction) bumpDataPeriod:(id)sender;
+- (IBAction) bumpDataCycle:(id)sender;
 
 
 #pragma mark •••Interface Management

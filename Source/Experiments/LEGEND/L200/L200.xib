@@ -31,12 +31,14 @@
                 <outlet property="customTypeLabel" destination="MuI-Nb-zxg" id="kw8-zh-UZh"/>
                 <outlet property="custumColorWell1" destination="vjx-sa-pXY" id="RxC-I2-Lig"/>
                 <outlet property="custumColorWell2" destination="9GE-WQ-HYT" id="Amr-zM-1Zt"/>
+                <outlet property="cycleStepper" destination="hv8-Mp-s6O" id="haH-TY-Nwp"/>
                 <outlet property="dataCycleField" destination="e81-Mn-noQ" id="7qq-Py-c2z"/>
                 <outlet property="dataPeriodField" destination="HhX-2q-kGS" id="TEQ-47-0gE"/>
                 <outlet property="dataTypePopup" destination="YTS-dl-9yV" id="VQl-cJ-9wg"/>
                 <outlet property="detectorView" destination="liF-1e-M6o" id="fR0-Zn-otC"/>
                 <outlet property="displayTypePU" destination="U3q-vA-WZd" id="cEA-6f-fe0"/>
                 <outlet property="l200FileNameField" destination="dTw-Xq-8kd" id="2jc-iC-ztZ"/>
+                <outlet property="periodStepper" destination="hv8-Mp-s6O" id="YCh-qz-PVm"/>
                 <outlet property="pmtAdcClassNamePopup" destination="DaS-Gr-2wY" id="GVR-1Y-Vpd"/>
                 <outlet property="pmtColorAxisLogCB" destination="f3n-zp-hIw" id="FbS-x3-eiw"/>
                 <outlet property="pmtColorScale" destination="Cbt-hY-cL3" id="K4p-Gg-hlo"/>
@@ -216,7 +218,7 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <action selector="dataPeriodField:" target="-2" id="wJz-8Q-Igo"/>
+                                                            <action selector="dataPeriodAction:" target="-2" id="GRH-bu-1uP"/>
                                                         </connections>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e81-Mn-noQ">
@@ -228,7 +230,7 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <action selector="dataCycleField:" target="-2" id="1fx-qp-0WX"/>
+                                                            <action selector="dataCycleAction:" target="-2" id="2jc-Mj-Tk8"/>
                                                         </connections>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XB2-gF-rYR">
@@ -240,7 +242,7 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <action selector="customTypeField:" target="-2" id="peb-o2-sCS"/>
+                                                            <action selector="customTypeAction:" target="-2" id="5rG-gK-wtq"/>
                                                             <outlet property="delegate" destination="-2" id="w0K-CG-Mbj"/>
                                                         </connections>
                                                     </textField>
@@ -274,12 +276,18 @@
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4kp-eR-S7J">
                                                         <rect key="frame" x="106" y="183" width="21" height="30"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                                        <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="ozR-ur-ZBn"/>
+                                                        <stepperCell key="cell" continuous="YES" alignment="left" maxValue="1" id="ozR-ur-ZBn"/>
+                                                        <connections>
+                                                            <action selector="bumpDataPeriod:" target="-2" id="7Lb-fh-yvE"/>
+                                                        </connections>
                                                     </stepper>
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hv8-Mp-s6O">
                                                         <rect key="frame" x="107" y="148" width="19" height="28"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                                        <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="c3h-qJ-C7L"/>
+                                                        <stepperCell key="cell" continuous="YES" alignment="left" maxValue="1" id="c3h-qJ-C7L"/>
+                                                        <connections>
+                                                            <action selector="bumpDataCycle:" target="-2" id="VcB-B2-JDe"/>
+                                                        </connections>
                                                     </stepper>
                                                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YTS-dl-9yV">
                                                         <rect key="frame" x="69" y="114" width="136" height="22"/>
@@ -296,7 +304,7 @@
                                                             </menu>
                                                         </popUpButtonCell>
                                                         <connections>
-                                                            <action selector="dataTypePopup:" target="-2" id="TUL-U4-gG4"/>
+                                                            <action selector="dataTypePopupAction:" target="-2" id="XGh-kn-rul"/>
                                                         </connections>
                                                     </popUpButton>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5ur-zx-tH7">

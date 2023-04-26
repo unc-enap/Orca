@@ -273,8 +273,9 @@
 {
     //called after document is loaded or configchanged
     [dataTypePopup removeAllItems];
-    [rc release];
-    rc = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORRunModel,1"] retain];
+    if(!rc){
+        rc = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORRunModel,1"] retain];
+    }
     NSArray* types = [rc runTypeNames];
     int count = 0;
     for(int i=0;i<32;i++){
@@ -620,14 +621,28 @@
     [self readMapFile:kL200ADCType intoTable:adcSerialTableView];
 }
 
-- (IBAction) dataCycleField:(id)sender
+- (IBAction) dataCycleAction:(id)sender
 {
     [model setDataCycle:[sender intValue]];
 }
 
-- (IBAction) dataPeriodField:(id)sender
+- (IBAction) dataPeriodAction:(id)sender
 {
     [model setDataPeriod:[sender intValue]];
+}
+- (IBAction) bumpDataPeriod:(id)sender
+{
+    int aValue = [model dataPeriod];
+    if([sender intValue]==1)aValue++;
+    else aValue--;
+    [model setDataPeriod:aValue];
+}
+- (IBAction) bumpDataCycle:(id)sender
+{
+    int aValue = [model dataCycle];
+    if([sender intValue]==1)aValue++;
+    else aValue--;
+    [model setDataCycle:aValue];
 }
 
 - (void) controlTextDidChange: (NSNotification *)note {
@@ -637,12 +652,12 @@
     }
 }
 
-- (IBAction) customTypeField:(id)sender
+- (IBAction) customTypeAction:(id)sender
 {
     [model setCustomType:[sender stringValue]];
 }
 
-- (IBAction) dataTypePopup:(id)sender
+- (IBAction) dataTypePopupAction:(id)sender
 {
     [model setDataType:(int)[sender selectedTag]];
 }

@@ -51,6 +51,7 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     [influxDB release];
+    [rc release];
     [super dealloc];
 }
 
@@ -276,7 +277,8 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
 - (void) setDataPeriod:(int)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setDataPeriod:dataPeriod];
-    dataPeriod = aValue;
+    if(aValue<0)aValue=0;
+    else if(aValue>99)aValue=99;    dataPeriod = aValue;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORL200ModelDataPeriodChanged object:self userInfo:nil];
     [self makeL200FileName];
 }
@@ -289,6 +291,8 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
 - (void) setDataCycle:(int)aValue
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setDataCycle:dataCycle];
+    if(aValue<0)aValue=0;
+    else if(aValue>999)aValue=999;
     dataCycle = aValue;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORL200ModelDataCycleChanged object:self userInfo:nil];
     [self makeL200FileName];
@@ -304,9 +308,9 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setDataType:dataType];
     dataType = aValue;
-    if(!rc){
-        rc = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORRunModel,1"] retain];
-    }
+    [rc release];
+    rc = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORRunModel,1"] retain];
+    
     uint32_t aMask = [rc runType] & 0x00000003;
     aMask |= (0x1<<aValue);
     [rc setRunType:aMask];
