@@ -20,6 +20,7 @@
 #define kPersonName      @"kPersonName"
 #define kPersonAddress   @"kPersonAddress"
 #define kPersonStatus    @"kPersonStatus"
+#define kPersonTimeZone  @"kPersonTimeZone"
 
 @class OROnCallPerson;
 @class ORInFluxDBModel;
@@ -101,7 +102,7 @@ extern NSString* OROnCallListModelEdited;
     NSMutableDictionary* data;
 }
 + (id) onCallPerson;
-+ (id) onCallPerson:(NSString*)aName address:(NSString*)contactInfo role:(int)aRole;
++ (id) onCallPerson:(NSString*)aName address:(NSString*)contactInfo role:(int)aRole timeZone:(NSString*)timeZone;
 - (id)copyWithZone:(NSZone *)zone;
 - (void) setValue:(id)anObject forKey:(id)aKey;
 - (id)   valueForKey:(id)aKey;
@@ -122,6 +123,7 @@ extern NSString* OROnCallListModelEdited;
 - (void) encodeWithCoder:(NSCoder*)encoder;
 - (void) mailSent:(NSString*)to;
 - (void) loadBucket:(NSString*)aBucket inFluxDB:(ORInFluxDBModel*)influx;
+- (BOOL) checkTimeZone:(BOOL)check;
 
 @property   (retain) NSMutableDictionary* data;
 
