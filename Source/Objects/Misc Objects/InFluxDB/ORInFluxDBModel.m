@@ -466,15 +466,17 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
 - (void) cmdFlush
 {
-    for(id aBucket in cmdBuffer){
-        NSMutableDictionary* dict = [cmdBuffer objectForKey:aBucket];
-        NSDate* timeStamp = [dict objectForKey:@"kTimeStamp"];
-        if(fabs([timeStamp timeIntervalSinceNow])>measurementTimeOut){
-            [self consolidateAndSendCmdArray:[dict objectForKey:@"kCmdArray"]];
+    @synchronized (self) {
+        for(id aBucket in cmdBuffer){
+            NSMutableDictionary* dict = [cmdBuffer objectForKey:aBucket];
+            NSDate* timeStamp = [dict objectForKey:@"kTimeStamp"];
+            if(fabs([timeStamp timeIntervalSinceNow])>measurementTimeOut){
+                [self consolidateAndSendCmdArray:[dict objectForKey:@"kCmdArray"]];
+            }
         }
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(cmdFlush) object:nil];
+        [self performSelector:@selector(cmdFlush) withObject:nil afterDelay:measurementTimeOut];
     }
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(cmdFlush) object:nil];
-    [self performSelector:@selector(cmdFlush) withObject:nil afterDelay:measurementTimeOut];
 }
 
 - (void) consolidateAndSendCmdArray:(NSMutableArray*)cmds
