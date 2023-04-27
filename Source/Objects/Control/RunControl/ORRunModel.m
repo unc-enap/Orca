@@ -1365,8 +1365,8 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
 		[readoutThread start];
 		 
         [self setStartTime:[NSDate date]];
-	[self setSubRunStartTime:[NSDate date]];
-	[self setElapsedRunTime:0];
+        [self setSubRunStartTime:[NSDate date]];
+        [self setElapsedRunTime:0];
         [self setElapsedSubRunTime:0];
 
         [self startTimer];

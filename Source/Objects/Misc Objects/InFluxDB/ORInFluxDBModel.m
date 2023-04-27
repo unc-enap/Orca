@@ -416,7 +416,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setMaxLineCount:maxLineCount];
     if(aValue<0)aValue=0;
-    if(aValue>200)aValue=200;
+    if(aValue>5000)aValue=5000;
     maxLineCount = aValue;
     [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORInFluxDBMaxLineCountChanged object:self];
 }
@@ -529,10 +529,10 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
                                   usingBlock:^(id value, NSRange range, BOOL *stop) {
         
         if([[value description] isEqualToString:@"_NSTaggedPointerColor"]){
-            NSString* s = [value description];
+            NSString* subString = [value description];
             //sRGB IEC61966-2.1 colorspace 1 0 0 1
  //           if([s rangeOfString:@"sRGB"].location != NSNotFound){
-                NSArray* parts = [s componentsSeparatedByString:@" "];
+                NSArray* parts = [subString componentsSeparatedByString:@" "];
                 //sRGB IEC61966-2.1 colorspace 1 0 0 1
                 if([parts count]>=6){
                     if([[parts objectAtIndex:3]intValue]==1 &&
@@ -549,19 +549,19 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
             }
 //        }
         }];
+
+    NSString* measurementName;
+    if (userMessage)
+        measurementName = @"UserMessage";
+    else
+        measurementName = @"StatusLog";
+
     ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"Logs" org:org];
-    [aCmd   start  : @"StatusLog" withTags:tags];
+    [aCmd   start  : measurementName withTags:tags];
     [aCmd addField: @"Line"     withString:[s string]];
     [aCmd setTimeStamp: [[NSDate date]timeIntervalSince1970] ];
     [self executeDBCmd:aCmd];
-    
-    if(userMessage){
-        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"Logs" org:org];
-        [aCmd   start  : @"UserMessage" withTags:tags];
-        [aCmd addField: @"Line"     withString:[s string]];
-        [aCmd setTimeStamp: [[NSDate date]timeIntervalSince1970] ];
-        [self executeDBCmd:aCmd];
-    }
+
 }
 
 - (NSString*) errorString
@@ -580,68 +580,56 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
 }
 
+- (void) updateAlarmState:(ORAlarm*)anAlarm
+{
+    ORRunModel*   rc    = [[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORRunModel,1"];
+    NSString* alarmName = [[anAlarm name]stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+    NSString* help      = [anAlarm helpString];
+    NSInteger firstLF   = [help rangeOfString:@"\n"].location;
+    help                = [help substringFromIndex:firstLF];
+
+    NSString* stateName ;
+    if ([anAlarm isPosted]) {
+        if ([anAlarm acknowledged]) {
+            stateName = @"ack";
+        } else {
+            stateName = [anAlarm severityName];
+        }
+    } else {
+        stateName = @"clear";
+    }
+
+    ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"Alarms" org:org];
+    [aCmd start:    @"Alarm"];
+    [aCmd addTag:   @"Severity"      withString:[anAlarm severityName]];
+    [aCmd addField: alarmName         withString:stateName];
+//        [aCmd addTag: @"Help"          withString:help];
+    [aCmd addTag: @"RunNumber"    withLong:[rc runNumber]];
+    [aCmd addTag: @"SubRunNumber" withLong:[rc subRunNumber]];
+//        [aCmd setTimeStamp:[anAlarm timePostedUnixTimestamp]];
+    [aCmd setTimeStamp:[[NSDate date]timeIntervalSince1970]];
+    [self executeDBCmd:aCmd];
+}
+
 - (void) alarmPosted:(NSNotification*)aNote
 {
     if(!stealthMode){
-        ORRunModel*   rc    = [[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORRunModel,1"];
-        ORAlarm* anAlarm    = [aNote object];
-        NSString* alarmName = [[anAlarm name]stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-        NSString* help      = [anAlarm helpString];
-        NSInteger firstLF   = [help rangeOfString:@"\n"].location;
-        help                = [help substringFromIndex:firstLF];
-        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"Alarms" org:org];
-        [aCmd start:    @"Alarm"];
-        [aCmd addTag:   @"Severity"      withString:[anAlarm severityName]];
-        [aCmd addField: @"Alarm"         withString:alarmName];
-        [aCmd addField: @"isAcknowledged"  withBoolean:[anAlarm acknowledged]];
-        [aCmd addField: @"isPosted"       withBoolean:[anAlarm isPosted]];
-        [aCmd addField: @"Help"          withString:help];
-        [aCmd addField: @"RunNumber"    withLong:[rc runNumber]];
-        [aCmd addField: @"SubRunNumber" withLong:[rc subRunNumber]];
-        [aCmd setTimeStamp:[anAlarm timePostedUnixTimestamp]];
-        [self executeDBCmd:aCmd];
+        [self updateAlarmState:[aNote object]];
     }
 }
 
 - (void) alarmAcknowledged:(NSNotification*)aNote
 {
     if(!stealthMode){
-        ORRunModel*   rc    = [[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORRunModel,1"];
-        ORAlarm* anAlarm    = [aNote object];
-        NSString* alarmName = [[anAlarm name]stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-        NSString* help      = [anAlarm helpString];
-        NSInteger firstLF   = [help rangeOfString:@"\n"].location;
-        help = [help substringFromIndex:firstLF];
-        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"Alarms" org:org];
-        [aCmd start:    @"Alarm"];
-        [aCmd addTag:   @"Severity"      withString:[anAlarm severityName]];
-        [aCmd addField: @"Alarm"         withString:alarmName];
-        [aCmd addField: @"isAcknowledged"  withBoolean:[anAlarm acknowledged]];
-        [aCmd addField: @"isPosted"       withBoolean:[anAlarm isPosted]];
-        [aCmd addField: @"Acknowledged"  withDouble:[[NSDate date]timeIntervalSince1970]];
-        [aCmd addField: @"RunNumber"    withLong:[rc runNumber]];
-        [aCmd addField: @"SubRunNumber" withLong:[rc subRunNumber]];
-        [aCmd setTimeStamp:[anAlarm timePostedUnixTimestamp]];
-        [self executeDBCmd:aCmd];
+        [self updateAlarmState:[aNote object]];
     }
 }
 
 - (void) alarmCleared:(NSNotification*)aNote
 {
-    ORAlarm* anAlarm    = [aNote object];
-    ORRunModel*      rc = [[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORRunModel,1"];
-    NSString* alarmName = [[anAlarm name]stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-    ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"Alarms" org:org];
-    [aCmd start:    @"Alarm"];
-    [aCmd addTag:   @"Severity"         withString:[anAlarm severityName]];
-    [aCmd addField: @"Alarm"          withString:alarmName];
-    [aCmd addField: @"isAcknowledged" withBoolean:[anAlarm acknowledged]];
-    [aCmd addField: @"isPosted"       withBoolean:[anAlarm isPosted]];
-    [aCmd addField: @"Cleared"        withDouble:[[NSDate date]timeIntervalSince1970]];
-    [aCmd addField: @"RunNumber"    withLong:[rc runNumber]];
-    [aCmd addField: @"SubRunNumber" withLong:[rc subRunNumber]];
-    [aCmd setTimeStamp:[anAlarm timePostedUnixTimestamp]];
-    [self executeDBCmd:aCmd];
+    if(!stealthMode){
+        [self updateAlarmState:[aNote object]];
+    }
 }
 
 - (void) updateRunState:(ORRunModel*)rc running:(BOOL)isRunning
@@ -807,7 +795,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
             [self updateDiskInfo];
         }
         @catch (NSException* e){
-            NSLog(@"%@ %@ Exception: %@\n",[self fullID],NSStringFromSelector(_cmd),e);
+            NSLog(@"%@ %@ updateMachineRecord Exception: %@\n",[self fullID],NSStringFromSelector(_cmd),e);
         }
         @finally {
             [self performSelector:@selector(updateMachineRecord) withObject:nil afterDelay:60];
@@ -908,7 +896,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
             }
         }
         @catch (NSException* e){
-            NSLog(@"%@ %@ Exception: %@\n",[self fullID],NSStringFromSelector(_cmd),e);
+            NSLog(@"%@ %@ updateExperimentDuringRun Exception: %@\n",[self fullID],NSStringFromSelector(_cmd),e);
         }
         @finally {
             [self performSelector:@selector(updateExperimentDuringRun) withObject:nil afterDelay:30];
