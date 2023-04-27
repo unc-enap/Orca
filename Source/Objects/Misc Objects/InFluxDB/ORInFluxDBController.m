@@ -190,7 +190,7 @@
     }
     else if([model connectionStatus] == kInFluxDBConnectionUnknown){
         [connectionErrField setTextColor:[NSColor blackColor]];
-        s = @"Unknown connection stauts";
+        s = @"Unknown connection status";
     }
     else return;
     [connectionErrField setStringValue:s];

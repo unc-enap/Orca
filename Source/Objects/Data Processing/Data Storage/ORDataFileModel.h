@@ -184,7 +184,7 @@ extern NSString* ORDataFileModelLogWrittenNotification;
 extern NSString* ORDataFileLock;
 extern NSString* ORDataSaveConfigurationChangedNotification;
 extern NSString* ORDataFileModelSizeLimitReachedActionChanged;
-
+extern NSString* ORDataFileModelSpecialFilePrefixChanged;
 
 @interface ORMD5Op : NSOperation
 {
@@ -202,4 +202,6 @@ extern NSString* ORDataFileModelSizeLimitReachedActionChanged;
 }
 - (id) initWithFilePath:(NSString*)aPath delegate:(id)aDelegate;
 - (void) main;
+- (void) setPrefixSpecial:(NSNotification*)aNote;
+
 @end

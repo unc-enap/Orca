@@ -36,12 +36,17 @@
 {
     int viewType;
     uint32_t runType;
-    ORHistoModel*    connectedHisto;
     ORInFluxDBModel* influxDB;
     ORRunModel*      rc;
     int influxIndex;
     BOOL linked;
     bool updateDataFilePath;
+    //----------------------
+    int dataPeriod;
+    int dataCycle;
+    int dataType;
+    NSString* customType;
+    NSString* l200FileName;
 }
 
 #pragma mark •••Accessors
@@ -56,6 +61,17 @@
 - (void) findInFluxDB;
 - (void) runTypeChanged:(NSNotification*) aNote;
 - (void) updateDataFilePath:(NSNotification*)aNote;
+//----------------------
+- (int)       dataPeriod;
+- (void)      setDataPeriod:(int)aValue;
+- (int)       dataCycle;
+- (void)      setDataCycle:(int)aValue;
+- (int)       dataType;
+- (void)      setDataType:(int)aValue;
+- (NSString*) customType;
+- (void)      setCustomType:(NSString*)aType;
+- (NSString*) l200FileName;
+- (void) setL200FileName:(NSString*)s;
 
 #pragma mark •••Segment Group Methods
 - (void) showDataSet:(NSString*)name forSet:(int)aSet segment:(int)index;
@@ -75,6 +91,11 @@
 @end
 
 extern NSString* ORL200ModelViewTypeChanged;
+extern NSString* ORL200ModelDataCycleChanged;
+extern NSString* ORL200ModelDataPeriodChanged;
+extern NSString* ORL200ModelDataTypeChanged;
+extern NSString* ORL200ModelCustomTypeChanged;
+extern NSString* ORL200ModelL200FileNameChanged;
 
 @interface ORL200HeaderRecordID : NSObject
 - (NSString*) fullID;

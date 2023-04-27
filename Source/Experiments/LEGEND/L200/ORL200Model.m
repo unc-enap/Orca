@@ -33,9 +33,15 @@
 #import "ORHistoModel.h"
 #import "ORDataSet.h"
 #import "OR1dHisto.h"
+#import "NSNotifications+Extensions.h"
 
-static NSString* L200DBConnector     = @"L200DBConnector";
-NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
+static NSString* L200DBConnector         = @"L200DBConnector";
+NSString* ORL200ModelViewTypeChanged     = @"ORL200ModelViewTypeChanged";
+NSString* ORL200ModelDataCycleChanged    = @"ORL200ModelDataCycleChanged";
+NSString* ORL200ModelDataPeriodChanged   = @"ORL200ModelDataPeriodChanged";
+NSString* ORL200ModelDataTypeChanged     = @"ORL200ModelDataTypeChanged";
+NSString* ORL200ModelCustomTypeChanged   = @"ORL200ModelCustomTypeChanged";
+NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
 
 @implementation ORL200Model
 
@@ -44,8 +50,8 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 - (void) dealloc
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    [connectedHisto release];
     [influxDB release];
+    [rc release];
     [super dealloc];
 }
 
@@ -118,7 +124,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     
     [notifyCenter addObserver : self
                      selector : @selector(runStarted:)
-                         name : ORRunStartedNotification
+                         name : ORRunAboutToStartNotification
                        object : nil];
     
     [notifyCenter addObserver : self
@@ -144,16 +150,10 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 
 - (void) runStarted:(NSNotification*) aNote
 {
-    NSArray* objects = [[(ORAppDelegate*)[NSApp delegate]  document] collectObjectsOfClass:NSClassFromString(@"OrcaObject")];
-    [objects makeObjectsPerformSelector:@selector(clearLoopChecked) withObject:nil];
-
-    [connectedHisto release];
-    [rc release];
-    rc = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORRunModel,1"] retain];
-    NSArray* hists = [rc collectConnectedObjectsOfClass:NSClassFromString(@"ORHistoModel")];
-    connectedHisto = [[hists objectAtIndex:0]retain];
-
     [self postInFluxRunTime];
+    [[NSNotificationCenter defaultCenter]
+        postNotificationName:ORDataFileModelSpecialFilePrefixChanged object:nil
+        userInfo:[NSDictionary dictionaryWithObject:l200FileName forKey:@"SpecialPrefix"]];
 }
 
 - (void) updateDataFilePath:(NSNotification*)aNote
@@ -270,6 +270,104 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORL200ModelViewTypeChanged object:self userInfo:nil];
 }
 
+- (int) dataPeriod
+{
+    return dataPeriod;
+}
+- (void) setDataPeriod:(int)aValue
+{
+    [[[self undoManager] prepareWithInvocationTarget:self] setDataPeriod:dataPeriod];
+    if(aValue<0)aValue=0;
+    else if(aValue>99)aValue=99;    dataPeriod = aValue;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORL200ModelDataPeriodChanged object:self userInfo:nil];
+    [self makeL200FileName];
+}
+
+- (int) dataCycle
+{
+    return dataCycle;
+}
+
+- (void) setDataCycle:(int)aValue
+{
+    [[[self undoManager] prepareWithInvocationTarget:self] setDataCycle:dataCycle];
+    if(aValue<0)aValue=0;
+    else if(aValue>999)aValue=999;
+    dataCycle = aValue;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORL200ModelDataCycleChanged object:self userInfo:nil];
+    [self makeL200FileName];
+
+}
+
+- (int) dataType
+{
+    return dataType;
+}
+
+- (void) setDataType:(int)aValue
+{
+    [[[self undoManager] prepareWithInvocationTarget:self] setDataType:dataType];
+    dataType = aValue;
+    [rc release];
+    rc = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORRunModel,1"] retain];
+    
+    uint32_t aMask = [rc runType] & 0x00000003;
+    aMask |= (0x1<<aValue);
+    [rc setRunType:aMask];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORL200ModelDataTypeChanged object:self userInfo:nil];
+    [self makeL200FileName];
+
+}
+
+- (NSString*) customType
+{
+    return customType;
+}
+
+- (void) setCustomType:(NSString*)aType
+{
+    //limit length to 3 letters.
+    if(!aType)aType = @"";
+    if([aType length]>3)aType = [aType substringToIndex:3];
+
+    NSCharacterSet *validChars = [NSCharacterSet letterCharacterSet] ;
+    validChars = [validChars invertedSet];
+    NSRange  range = [aType rangeOfCharacterFromSet:validChars];
+    if (range.location != NSNotFound) aType = [aType substringToIndex:[aType length]-1];
+    
+    [[[self undoManager] prepareWithInvocationTarget:self] setCustomType:customType];
+    [customType autorelease];
+    customType = [aType copy];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORL200ModelCustomTypeChanged object:self userInfo:nil];
+    [self makeL200FileName];
+}
+
+- (void) makeL200FileName
+{
+    NSString* dt = customType;
+    if(dataType<32){
+        if(!rc){
+            rc = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORRunModel,1"] retain];
+        }
+        dt = [[rc runTypeNames]objectAtIndex:dataType];
+    }
+    //{experiment}-{data period}-{data run}-{data type}-{timestamp}
+    [self setL200FileName:[NSString stringWithFormat:@"l200-%02d-%03d-%@",dataPeriod,dataCycle,dt]];
+}
+
+- (NSString*) l200FileName
+{
+    return l200FileName;
+}
+
+- (void) setL200FileName:(NSString*)s
+{
+    [[[self undoManager] prepareWithInvocationTarget:self] setCustomType:customType];
+    [l200FileName autorelease];
+    l200FileName = [s copy];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORL200ModelL200FileNameChanged object:self userInfo:nil];
+    
+}
 - (void) setDetectorStringPositions
 {
     ORSegmentGroup* group = [self segmentGroup:kL200DetType];
@@ -805,7 +903,11 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 {
     self = [super initWithCoder:decoder];
     [[self undoManager] disableUndoRegistration];
-    [self setViewType:[decoder decodeIntForKey:@"viewType"]];
+    [self setViewType:      [decoder decodeIntForKey:   @"viewType"]];
+    [self setDataCycle:     [decoder decodeIntForKey:   @"DataCycle"]];
+    [self setDataPeriod:    [decoder decodeIntForKey:   @"DataPeriod"]];
+    [self setDataType:      [decoder decodeIntForKey:   @"DataType"]];
+    [self setCustomType:    [decoder decodeObjectForKey:@"CustomType"]];
     [[self undoManager] enableUndoRegistration];
     updateDataFilePath = true;
     return self;
@@ -814,7 +916,11 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInteger:viewType forKey:@"viewType"];
+    [encoder encodeInteger:viewType     forKey:@"viewType"];
+    [encoder encodeInteger:dataCycle    forKey:@"DataCycle"];
+    [encoder encodeInteger:dataPeriod   forKey:@"DataPeriod"];
+    [encoder encodeInteger:dataType     forKey:@"DataType"];
+    [encoder encodeObject:customType    forKey:@"CustomType"];
 }
 
 - (void) postCouchDBRecord
@@ -1011,61 +1117,7 @@ NSString* ORL200ModelViewTypeChanged = @"ORL200ModelViewTypeChanged";
     }
 }
     
-- (void) influxHistograms:(NSString*)name segmentId:(int)groupIndex timeStamp:(NSTimeInterval)aTimeStamp
-{
-    ORL200SegmentGroup* group = (ORL200SegmentGroup*)[self segmentGroup:groupIndex];
-    for(int i=0; i<[self numberSegmentsInGroup:groupIndex]; i++){
-        id aDet = [group segment:i];
-        ORFlashCamADCModel* hw = [aDet hardwareCard];
-        if(hw==nil)continue;
-        
-        short crate   = [[aDet objectForKey:@"daq_crate"]intValue];
-        short slot    = [[aDet objectForKey:@"daq_board_slot"]intValue];
-        short chan    = [[aDet objectForKey:@"daq_board_ch"]intValue];
-        NSString* loc = [NSString stringWithFormat:@"%02d_%02d_%02d",crate,slot,chan];
-        OR1DHisto* aHistogram = nil;
-        if(connectedHisto){
-            NSString* objName = [self objectNameForCrate:[aDet objectForKey:@"daq_crate"] andCard:[aDet objectForKey:@"daq_board_slot"]];
-                aHistogram = [connectedHisto objectForKeyArray:[NSMutableArray arrayWithObjects:objName, @"Energy",
-                                                     [NSString stringWithFormat:@"Crate %2d",  crate],
-                                                     [NSString stringWithFormat:@"Card %2d",   slot],
-                                                     [NSString stringWithFormat:@"Channel %2d",chan],
-                                                      nil]];
-        }
-        if(aHistogram){
-            ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:[self objectName] org:[influxDB org]];
-            [aCmd start : @"fpgaEnergyHist"];
-            
-            [aCmd addTag:@"boardId"         withString:[aDet objectForKey:@"daq_board_id"]];
-            [aCmd addTag:@"cc4Chan"         withString:[aDet objectForKey:@"fe_cc4_ch"]];
-            [aCmd addTag:@"crate"           withString:[aDet objectForKey:@"daq_crate"]];
-            [aCmd addTag:@"channel"         withString:[aDet objectForKey:@"daq_board_ch"]];
-            [aCmd addTag:@"detType"         withString:[aDet objectForKey:@"det_type"]];
-            [aCmd addTag:@"location"        withString:loc];
-            [aCmd addTag:@"name"            withString:name];
-            [aCmd addTag:@"segmentGroupNum" withLong:groupIndex];
-            [aCmd addTag:@"segmentId"       withString:[NSString stringWithFormat:@"%@_%d",name,i]];
-            [aCmd addTag:@"serial"          withString:[aDet objectForKey:@"serial"]];
-            [aCmd addTag:@"slot"            withString:[aDet objectForKey:@"daq_board_slot"]];
-            [aCmd addTag:@"strNumber"       withString:[aDet objectForKey:@"str_number"]];
-            [aCmd addTag:@"strPosition"     withString:[aDet objectForKey:@"str_position"]];
-            [aCmd addTag:@"binStart"        withLong:0];
-            [aCmd addTag:@"binUnit"         withString:@"ADC"];
-            [aCmd addTag:@"binWidth"        withLong:1];
-            [aCmd addTag:@"runNumber"       withLong:[rc runNumber]];
-            [aCmd addTag:@"subRunNumber"    withLong:[rc subRunNumber]];
 
-            for(int bin =0;bin<[aHistogram numberBins];bin++){
-                uint32_t aValue = [aHistogram value:bin];
-                if(aValue || bin==0){ //have to have at least one field, but ship anyway
-                    [aCmd addField:[NSString stringWithFormat:@"%d",bin] withLong:aValue];
-                }
-            }
-            [aCmd setTimeStamp:aTimeStamp];
-            [influxDB executeDBCmd:aCmd];
-        }
-    }
-}
 
 @end
 

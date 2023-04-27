@@ -466,15 +466,17 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
 - (void) cmdFlush
 {
-    for(id aBucket in cmdBuffer){
-        NSMutableDictionary* dict = [cmdBuffer objectForKey:aBucket];
-        NSDate* timeStamp = [dict objectForKey:@"kTimeStamp"];
-        if(fabs([timeStamp timeIntervalSinceNow])>measurementTimeOut){
-            [self consolidateAndSendCmdArray:[dict objectForKey:@"kCmdArray"]];
+    @synchronized (self) {
+        for(id aBucket in cmdBuffer){
+            NSMutableDictionary* dict = [cmdBuffer objectForKey:aBucket];
+            NSDate* timeStamp = [dict objectForKey:@"kTimeStamp"];
+            if(fabs([timeStamp timeIntervalSinceNow])>measurementTimeOut){
+                [self consolidateAndSendCmdArray:[dict objectForKey:@"kCmdArray"]];
+            }
         }
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(cmdFlush) object:nil];
+        [self performSelector:@selector(cmdFlush) withObject:nil afterDelay:measurementTimeOut];
     }
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(cmdFlush) object:nil];
-    [self performSelector:@selector(cmdFlush) withObject:nil afterDelay:measurementTimeOut];
 }
 
 - (void) consolidateAndSendCmdArray:(NSMutableArray*)cmds
@@ -501,7 +503,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     }
     [messageQueue enqueue:aCmd];
     
-    if([self connectionOK] && connectionAlarm && [connectionAlarm acknowledged]){
+    if(([self connectionStatus]==kInFluxDBConnectionOK) && connectionAlarm && [connectionAlarm acknowledged]){
         [connectionAlarm clearAlarm];
         [connectionAlarm release];
         connectionAlarm = nil;
@@ -690,7 +692,9 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 
 - (void) executeDBCmd:(id)aCmd
 {
-    [aCmd executeCmd:self];
+    @synchronized (self) {
+        [aCmd executeCmd:self];
+    }
 }
 
 - (NSString*) orgId
