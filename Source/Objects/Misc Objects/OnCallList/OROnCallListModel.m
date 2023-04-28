@@ -652,16 +652,52 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
         [messageToSend appendFormat:@"The On-list has been changed.\n"];
         [messageToSend appendString:@"Here are the new shift responsibilities:\n\n"];
         
-        if([self primaryPerson])[messageToSend appendFormat:@"Primary: %@\n",[[self primaryPerson] name]];
+        if([self primaryPerson]){
+            [messageToSend appendFormat:@"Primary: %@",[[self primaryPerson] name]];
+            if([NSTimeZone timeZoneWithName:[[self primaryPerson] timezone]]){
+                [messageToSend appendFormat:@", Time Zone: %@\n",[[self primaryPerson] timezone]];
+            }
+            else if ([[[self primaryPerson] timezone] length] > 0) {
+                [messageToSend appendString:@", Time Zone: INVALID\n"];
+            }
+            else [messageToSend appendString:@", Time Zone: NOT SPECIFIED\n"];
+        }
         else [messageToSend appendString:@"Primary: NO ONE\n"];
         
-        if([self secondaryPerson])[messageToSend appendFormat:@"Secondary: %@\n",[[self secondaryPerson] name]];
+        if([self secondaryPerson]){
+            [messageToSend appendFormat:@"Secondary: %@",[[self secondaryPerson] name]];
+            if([NSTimeZone timeZoneWithName:[[self secondaryPerson] timezone]]){
+                [messageToSend appendFormat:@", Time Zone: %@\n",[[self secondaryPerson] timezone]];
+            }
+            else if ([[[self secondaryPerson] timezone] length] > 0) {
+                [messageToSend appendString:@", Time Zone: INVALID\n"];
+            }
+            else [messageToSend appendString:@", Time Zone: NOT SPECIFIED\n"];
+        }
         else [messageToSend appendString:@"Secondary: NO ONE\n"];
         
-        if([self tertiaryPerson])[messageToSend appendFormat:@"Tertiary: %@\n",[[self tertiaryPerson] name]];
+        if([self tertiaryPerson]){
+            [messageToSend appendFormat:@"Tertiary: %@",[[self tertiaryPerson] name]];
+            if([NSTimeZone timeZoneWithName:[[self tertiaryPerson] timezone]]){
+                [messageToSend appendFormat:@", Time Zone: %@\n",[[self tertiaryPerson] timezone]];
+            }
+            else if ([[[self tertiaryPerson] timezone] length] > 0) {
+                [messageToSend appendString:@", Time Zone: INVALID\n"];
+            }
+            else [messageToSend appendString:@", Time Zone: NOT SPECIFIED\n"];
+        }
         else [messageToSend appendString:@"Tertiary: NO ONE\n"];
         
-        if([self quaternaryPerson])[messageToSend appendFormat:@"Quaternary: %@\n",[[self quaternaryPerson] name]];
+        if([self quaternaryPerson]){
+            [messageToSend appendFormat:@"Quaternary: %@",[[self quaternaryPerson] name]];
+            if([NSTimeZone timeZoneWithName:[[self quaternaryPerson] timezone]]){
+                [messageToSend appendFormat:@", Time Zone: %@\n",[[self quaternaryPerson] timezone]];
+            }
+            else if ([[[self quaternaryPerson] timezone] length] > 0) {
+                [messageToSend appendString:@", Time Zone: INVALID\n"];
+            }
+            else [messageToSend appendString:@", Time Zone: NOT SPECIFIED\n"];
+        }
         else [messageToSend appendString:@"Quaternary: NO ONE\n"];
         [messageToSend appendString:@"\nThis message was sent to the entire list.\n"];
 
