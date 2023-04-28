@@ -57,9 +57,9 @@
 - (void) personTakingNewRole:(id)aPerson;
 - (void) startContactProcess;
 - (uint32_t) onCallListCount;
-- (OROnCallPerson*) primaryPerson;
-- (OROnCallPerson*) secondaryPerson;
-- (OROnCallPerson*) tertiaryPerson;
+- (OROnCallPerson*) primaryPerson:(BOOL)check;
+- (OROnCallPerson*) secondaryPerson:(BOOL)check;
+- (OROnCallPerson*) tertiaryPerson:(BOOL)check;
 - (BOOL) notificationScheduled;
 - (void) sendMessageToOnCallPerson;
 - (void) broadcastMessage:(NSString*)aMessage;

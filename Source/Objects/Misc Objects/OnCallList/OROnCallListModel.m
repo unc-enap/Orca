@@ -260,9 +260,9 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
 
 - (void) startContactProcess
 {
-    OROnCallPerson* primary     = [self primaryPerson];
-    OROnCallPerson* secondary   = [self secondaryPerson];
-    OROnCallPerson* tertiary    = [self tertiaryPerson];
+    OROnCallPerson* primary     = [self primaryPerson:YES];
+    OROnCallPerson* secondary   = [self secondaryPerson:YES];
+    OROnCallPerson* tertiary    = [self tertiaryPerson:YES];
 
     if(!notificationTimer && (primary || secondary || tertiary)){
         notificationTimer = [[NSTimer scheduledTimerWithTimeInterval:kOnCallAlarmWaitTime target:self selector:@selector(notifyPrimary:) userInfo:nil repeats:NO] retain];
@@ -320,27 +320,43 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
     }
 }
 
-- (OROnCallPerson*) primaryPerson
+- (OROnCallPerson*) primaryPerson:(BOOL)check
 {
     for(OROnCallPerson* aPerson in onCallList){
-        if([aPerson isPrimary])return aPerson;
+        if([aPerson isPrimary] && [aPerson checkTimeZone:check])return aPerson;
     }
     return nil;
 }
-- (OROnCallPerson*) secondaryPerson
+
+- (OROnCallPerson*) primaryPerson
+{
+    return [self primaryPerson:NO];
+}
+
+- (OROnCallPerson*) secondaryPerson:(BOOL)check
 {
     for(OROnCallPerson* aPerson in onCallList){
-        if([aPerson isSecondary])return aPerson;
+        if([aPerson isSecondary] && [aPerson checkTimeZone:check])return aPerson;
+    }
+    return nil;
+}
+
+- (OROnCallPerson*) secondaryPerson
+{
+    return [self secondaryPerson:NO];
+}
+
+- (OROnCallPerson*) tertiaryPerson:(BOOL)check
+{
+    for(OROnCallPerson* aPerson in onCallList){
+        if([aPerson isTertiary] && [aPerson checkTimeZone:check])return aPerson;
     }
     return nil;
 }
 
 - (OROnCallPerson*) tertiaryPerson
 {
-    for(OROnCallPerson* aPerson in onCallList){
-        if([aPerson isTertiary])return aPerson;
-    }
-    return nil;
+    return [self tertiaryPerson:NO];
 }
 
 - (void) resetAll
@@ -389,17 +405,18 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
     }
  }
 
-- (void) notifyPrimary:(NSTimer*)aTimer force:(BOOL)force
+- (void) notifyPrimary:(NSTimer*)aTimer
 {
     [notificationTimer invalidate];
     [notificationTimer release];
     notificationTimer = nil;
-    OROnCallPerson* primary     = [self primaryPerson];
-    OROnCallPerson* secondary   = [self secondaryPerson];
-    OROnCallPerson* tertiary    = [self tertiaryPerson];
+
+    OROnCallPerson* primary     = [self primaryPerson:YES];
+    OROnCallPerson* secondary   = [self secondaryPerson:YES];
+    OROnCallPerson* tertiary    = [self tertiaryPerson:YES];
 
     // check here if primary is in time zone, if not then go to else statement
-    if(primary && [primary checkTimeZone:!force]){
+    if(primary){
         NSString* report = [primary sendAlarmReport];
         if(report){
             NSMutableArray* rlist = [NSMutableArray arrayWithObjects:[[[primary name] copy] autorelease], nil];
@@ -424,17 +441,12 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
     }
 }
 
-- (void) notifyPrimary:(NSTimer*)aTimer
-{
-    [self notifyPrimary:aTimer force:NO];
-}
-
 - (void) notifySecondary:(NSTimer*)aTimer
 {
-    OROnCallPerson* secondary   = [self secondaryPerson];
-    OROnCallPerson* tertiary    = [self tertiaryPerson];
+    OROnCallPerson* secondary   = [self secondaryPerson:YES];
+    OROnCallPerson* tertiary    = [self tertiaryPerson:YES];
     // check here if secondary is in time zone, if not then go to else statement
-    if(secondary && [secondary checkTimeZone:YES]){
+    if(secondary){
         [notificationTimer invalidate];
         [notificationTimer release];
         notificationTimer = nil;
@@ -466,8 +478,9 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
     [notificationTimer release];
     notificationTimer = nil;
     
-    OROnCallPerson* tertiary    = [self tertiaryPerson];
-    if(tertiary && [tertiary checkTimeZone:YES]){
+    OROnCallPerson* primary     = [self primaryPerson:NO];
+    OROnCallPerson* tertiary    = [self tertiaryPerson:YES];
+    if(tertiary){
         NSString* report = [tertiary sendAlarmReport];
         if(report){
             NSMutableArray* rlist = [NSMutableArray arrayWithObjects:[[[tertiary name] copy] autorelease], nil];
@@ -475,14 +488,40 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
         }
         self.tertiaryNotified       = YES;
         self.timeTertiaryNotified   = [NSDate date];
+        if(!notificationTimer && !self.primaryNotified){
+            notificationTimer = [[NSTimer scheduledTimerWithTimeInterval:kOnCallAcknowledgeWaitTime target:self selector:@selector(forceNotifyPrimary:) userInfo:nil repeats:NO] retain];
+            if(primary){
+                NSDate* contactDate = [[NSDate date] dateByAddingTimeInterval:kOnCallAcknowledgeWaitTime];
+               [primary setStatus:[NSString stringWithFormat:@"Will Contact: %@",[contactDate descriptionFromTemplate:@"HH:mm:ss"]]];
+            }
+        }
         [[NSNotificationCenter defaultCenter] postNotificationName:OROnCallListPeopleNotifiedChanged object:self];
     }
     else {
-        // else force-notify primary
-        [self notifyPrimary:nil force:YES];
+        // else force-notify primary, if hasn't been notified
+        [self forceNotifyPrimary:nil];
     }
 }
 
+- (void) forceNotifyPrimary:(NSTimer*)aTimer
+{
+    [notificationTimer invalidate];
+    [notificationTimer release];
+    notificationTimer = nil;
+
+    OROnCallPerson* primary     = [self primaryPerson:NO];
+
+    if(primary){
+        NSString* report = [primary sendAlarmReport];
+        if(report){
+            NSMutableArray* rlist = [NSMutableArray arrayWithObjects:[[[primary name] copy] autorelease], nil];
+            [self sendChatMessage:report withList:rlist isAlarm:YES];
+        }
+        self.primaryNotified        = YES;
+        self.timePrimaryNotified    = [NSDate date];
+        [[NSNotificationCenter defaultCenter] postNotificationName:OROnCallListPeopleNotifiedChanged object:self];
+    }
+}
 
 #pragma mark •••Archival
 - (id) initWithCoder:(NSCoder*)decoder
@@ -930,8 +969,11 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
         NSDate *today = [NSDate date];
         NSCalendar *calendar = [NSCalendar currentCalendar];
 
-        NSTimeZone *user = [NSTimeZone timeZoneWithName:tz];
-        NSDateComponents *comps_test = [calendar componentsInTimeZone:user fromDate:today];
+        NSTimeZone *user_tz = [NSTimeZone timeZoneWithName:tz];
+        if(user_tz == nil){
+            NSLog(@"The time zone %@ is invalid, assuming no time zone.\n", tz);
+        }
+        NSDateComponents *comps_test = [calendar componentsInTimeZone:user_tz fromDate:today];
 
         long hour = [comps_test hour];
 
