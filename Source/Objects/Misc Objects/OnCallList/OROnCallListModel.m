@@ -457,7 +457,6 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
     OROnCallPerson* tertiary    = [self tertiaryPerson:YES];
     OROnCallPerson* quaternary  = [self quaternaryPerson:YES];
 
-    // check here if primary is in time zone, if not then go to else statement
     if(primary){
         NSString* report = [primary sendAlarmReport];
         if(report){
