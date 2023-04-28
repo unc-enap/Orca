@@ -42,8 +42,10 @@
 - (void) setModel:(id)aModel
 {
     [super setModel:aModel];
+    NSInteger currentIndex = [promSlotPUButton indexOfSelectedItem];
     [promSlotPUButton removeAllItems];
     for(int i=0; i<3; i++) [promSlotPUButton addItemWithTitle:[NSString stringWithFormat:@"Slot %d", i]];
+    [promSlotPUButton selectItemAtIndex:currentIndex];
 }
 
 - (void) registerNotificationObservers
