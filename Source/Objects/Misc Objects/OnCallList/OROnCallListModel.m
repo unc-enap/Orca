@@ -271,15 +271,15 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
 
 - (void) startContactProcess
 {
-    OROnCallPerson* primary     = [self primaryPerson:YES];
-    OROnCallPerson* secondary   = [self secondaryPerson:YES];
-    OROnCallPerson* tertiary    = [self tertiaryPerson:YES];
-    OROnCallPerson* quaternary  = [self quaternaryPerson:YES];
+    OROnCallPerson* primary      = [self primaryPerson:NO];
+    OROnCallPerson* secondary    = [self secondaryPerson:YES];
+    OROnCallPerson* tertiary     = [self tertiaryPerson:YES];
+    OROnCallPerson* quaternary   = [self quaternaryPerson:YES];
 
     if(!notificationTimer && (primary || secondary || tertiary || quaternary)){
         notificationTimer = [[NSTimer scheduledTimerWithTimeInterval:kOnCallAlarmWaitTime target:self selector:@selector(notifyPrimary:) userInfo:nil repeats:NO] retain];
          NSDate* contactDate = [[NSDate date] dateByAddingTimeInterval:kOnCallAcknowledgeWaitTime];
-        if(primary){
+        if([self primaryPerson:YES]){
             [primary setStatus:[NSString stringWithFormat:@"Will Contact: %@",[contactDate descriptionFromTemplate:@"HH:mm:ss"]]];
             if(secondary)         [secondary setStatus:@"Next on deck"];
             else if(tertiary)     [tertiary  setStatus:@"Next on deck"];
