@@ -50,6 +50,7 @@
 - (void) dealloc;
 - (void) registerNotificationObservers;
 - (void) awakeFromNib;
+- (void) populatePromSlotPopup;
 - (void) updateWindow;
 
 #pragma mark •••Interface management
