@@ -130,6 +130,7 @@ extern NSString* OROnCallListModelEdited;
 - (void) mailSent:(NSString*)to;
 - (void) loadBucket:(NSString*)aBucket inFluxDB:(ORInFluxDBModel*)influx;
 - (BOOL) checkTimeZone:(BOOL)check;
+- (NSString*) timezone;
 
 @property   (retain) NSMutableDictionary* data;
 
