@@ -48,8 +48,8 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
 
 @implementation OROnCallListModel
 
-@synthesize onCallList,lastFile,primaryNotified,secondaryNotified,tertiaryNotified;
-@synthesize timePrimaryNotified,timeSecondaryNotified,timeTertiaryNotified,message;
+@synthesize onCallList,lastFile,primaryNotified,secondaryNotified,tertiaryNotified,quaternaryNotified;
+@synthesize timePrimaryNotified,timeSecondaryNotified,timeTertiaryNotified,timeQuaternaryNotified,message;
 @synthesize slackEnabled,rocketChatEnabled;
 
 #pragma mark •••initialization
@@ -66,6 +66,7 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
     self.timePrimaryNotified    = nil;
     self.timeSecondaryNotified  = nil;
     self.timeTertiaryNotified   = nil;
+    self.timeQuaternaryNotified   = nil;
     
     [notificationTimer invalidate];
     [notificationTimer release];
@@ -127,10 +128,17 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
     [[NSNotificationCenter defaultCenter] postNotificationName:OROnCallListModelReloadTable object:self];
 }
 
-- (void) add:(NSString*)aName contact:(NSString*)contactInfo role:(int)aRole
+- (void) add:(NSString*)aName contact:(NSString*)contactInfo role:(int)aRole timeZone:(NSString*)timeZone
 {
     if(!onCallList)self.onCallList = [NSMutableArray array];
-    OROnCallPerson* aPerson = [OROnCallPerson onCallPerson:aName address:contactInfo role:aRole];    
+    OROnCallPerson* aPerson = [OROnCallPerson onCallPerson:aName address:contactInfo role:aRole timeZone:timeZone];
+    [onCallList addObject:aPerson];
+    [[NSNotificationCenter defaultCenter] postNotificationName:OROnCallListPersonAdded object:self];
+}
+
+- (void)add:(NSString *)aName contact:(NSString *)contactInfo role:(int)aRole {
+    if(!onCallList)self.onCallList = [NSMutableArray array];
+    OROnCallPerson* aPerson = [OROnCallPerson onCallPerson:aName address:contactInfo role:aRole timeZone:@""];
     [onCallList addObject:aPerson];
     [[NSNotificationCenter defaultCenter] postNotificationName:OROnCallListPersonAdded object:self];
 }
@@ -177,20 +185,30 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
         [newPerson takeOffCall];
     }
     //now the roles are:
-    OROnCallPerson* primary     = [self primaryPerson];
-    OROnCallPerson* secondary   = [self secondaryPerson];
-    OROnCallPerson* tertiary    = [self tertiaryPerson];
+    OROnCallPerson* primary       = [self primaryPerson];
+    OROnCallPerson* secondary     = [self secondaryPerson];
+    OROnCallPerson* tertiary      = [self tertiaryPerson];
+    OROnCallPerson* quaternary    = [self quaternaryPerson];
     //find new primary
-    if(!primary && (secondary || tertiary)){
-        if(secondary)   [secondary setValue:[NSNumber numberWithInt:1] forKey:kPersonRole];
-        else            [tertiary  setValue:[NSNumber numberWithInt:1] forKey:kPersonRole];
+    if(!primary && (secondary || tertiary || quaternary)){
+        if(secondary)       [secondary   setValue:[NSNumber numberWithInt:1] forKey:kPersonRole];
+        else if(tertiary)   [tertiary    setValue:[NSNumber numberWithInt:1] forKey:kPersonRole];
+        else                [quaternary  setValue:[NSNumber numberWithInt:1] forKey:kPersonRole];
     }
     
     //find new secondary
-    secondary   = [self secondaryPerson];
-    tertiary    = [self tertiaryPerson];
-    if(!secondary && tertiary){
+    secondary     = [self secondaryPerson];
+    tertiary      = [self tertiaryPerson];
+    quaternary    = [self quaternaryPerson];
+    if(!secondary && (tertiary || quaternary)){
         [tertiary  setValue:[NSNumber numberWithInt:2] forKey:kPersonRole];
+    }
+    
+    //find new tertiary
+    tertiary      = [self tertiaryPerson];
+    quaternary    = [self quaternaryPerson];
+    if(!tertiary && quaternary){
+        [quaternary  setValue:[NSNumber numberWithInt:3] forKey:kPersonRole];
     }
     
     //with a new role(s) we reset the notification if needed
@@ -253,24 +271,31 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
 
 - (void) startContactProcess
 {
-    OROnCallPerson* primary     = [self primaryPerson];
-    OROnCallPerson* secondary   = [self secondaryPerson];
-    OROnCallPerson* tertiary    = [self tertiaryPerson];
+    OROnCallPerson* primary      = [self primaryPerson:NO];
+    OROnCallPerson* secondary    = [self secondaryPerson:YES];
+    OROnCallPerson* tertiary     = [self tertiaryPerson:YES];
+    OROnCallPerson* quaternary   = [self quaternaryPerson:YES];
 
-    if(!notificationTimer && (primary || secondary || tertiary)){
+    if(!notificationTimer && (primary || secondary || tertiary || quaternary)){
         notificationTimer = [[NSTimer scheduledTimerWithTimeInterval:kOnCallAlarmWaitTime target:self selector:@selector(notifyPrimary:) userInfo:nil repeats:NO] retain];
          NSDate* contactDate = [[NSDate date] dateByAddingTimeInterval:kOnCallAcknowledgeWaitTime];
-        if(primary){
+        if([self primaryPerson:YES]){
             [primary setStatus:[NSString stringWithFormat:@"Will Contact: %@",[contactDate descriptionFromTemplate:@"HH:mm:ss"]]];
-            if(secondary)       [secondary setStatus:@"Next on deck"];
-            else if(tertiary)   [tertiary  setStatus:@"Next on deck"];
+            if(secondary)         [secondary setStatus:@"Next on deck"];
+            else if(tertiary)     [tertiary  setStatus:@"Next on deck"];
+            else if(quaternary)   [quaternary  setStatus:@"Next on deck"];
         }
         else if(secondary){
             [secondary setStatus:[NSString stringWithFormat:@"Will Contact: %@",[contactDate descriptionFromTemplate:@"HH:mm:ss"]]];
-            if(tertiary)   [tertiary  setStatus:@"Next on deck"];
+            if(tertiary)          [tertiary  setStatus:@"Next on deck"];
+            else if(quaternary)   [quaternary  setStatus:@"Next on deck"];
         }
         else if(tertiary){
             [tertiary setStatus:[NSString stringWithFormat:@"Will Contact: %@",[contactDate descriptionFromTemplate:@"HH:mm:ss"]]];
+            if(quaternary)   [quaternary  setStatus:@"Next on deck"];
+        }
+        else if(quaternary){
+            [quaternary setStatus:[NSString stringWithFormat:@"Will Contact: %@",[contactDate descriptionFromTemplate:@"HH:mm:ss"]]];
         }
     }
     [self postCouchDBRecord];
@@ -282,6 +307,7 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
     OROnCallPerson* primary     = [self primaryPerson];
     OROnCallPerson* secondary   = [self secondaryPerson];
     OROnCallPerson* tertiary    = [self tertiaryPerson];
+    OROnCallPerson* quaternary  = [self quaternaryPerson];
     NSMutableArray* rlist = [[[NSMutableArray alloc] init] autorelease];
     if(primary){
         [primary sendMessage:message];
@@ -295,6 +321,10 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
         [tertiary sendMessage:message];
         [rlist addObject:[[[tertiary name] copy]autorelease]];
     }
+    else if(quaternary){
+        [quaternary sendMessage:message];
+        [rlist addObject:[[[quaternary name] copy]autorelease]];
+    }
     else NSLog(@"No on call person to send message to!\n");
     if([rlist count]) [self sendChatMessage:message withList:rlist];
 }
@@ -302,38 +332,69 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
 - (void) broadcastMessage:(NSString*)aMessage
 {
     if([aMessage length]){
-        [[self primaryPerson]   sendMessage:aMessage];
-        [[self secondaryPerson] sendMessage:aMessage];
-        [[self tertiaryPerson]  sendMessage:aMessage];
+        [[self primaryPerson]     sendMessage:aMessage];
+        [[self secondaryPerson]   sendMessage:aMessage];
+        [[self tertiaryPerson]    sendMessage:aMessage];
+        [[self quaternaryPerson]  sendMessage:aMessage];
         NSMutableArray* rlist = [[[NSMutableArray alloc] init] autorelease];
         if([[[self primaryPerson] address]   length]) [rlist addObject: [[[[self primaryPerson]   name] copy]autorelease]];
         if([[[self secondaryPerson] address] length]) [rlist addObject:[[[[self secondaryPerson] name] copy]autorelease]];
         if([[[self tertiaryPerson] address]  length]) [rlist addObject: [[[[self tertiaryPerson]  name] copy]autorelease]];
+        if([[[self quaternaryPerson] address]  length]) [rlist addObject: [[[[self quaternaryPerson]  name] copy]autorelease]];
         if([rlist count]) [self sendChatMessage:aMessage withList:rlist];
     }
 }
 
-- (OROnCallPerson*) primaryPerson
+- (OROnCallPerson*) primaryPerson:(BOOL)check
 {
     for(OROnCallPerson* aPerson in onCallList){
-        if([aPerson isPrimary])return aPerson;
+        if([aPerson isPrimary] && [aPerson checkTimeZone:check])return aPerson;
     }
     return nil;
 }
-- (OROnCallPerson*) secondaryPerson
+
+- (OROnCallPerson*) primaryPerson
+{
+    return [self primaryPerson:NO];
+}
+
+- (OROnCallPerson*) secondaryPerson:(BOOL)check
 {
     for(OROnCallPerson* aPerson in onCallList){
-        if([aPerson isSecondary])return aPerson;
+        if([aPerson isSecondary] && [aPerson checkTimeZone:check])return aPerson;
+    }
+    return nil;
+}
+
+- (OROnCallPerson*) secondaryPerson
+{
+    return [self secondaryPerson:NO];
+}
+
+- (OROnCallPerson*) tertiaryPerson:(BOOL)check
+{
+    for(OROnCallPerson* aPerson in onCallList){
+        if([aPerson isTertiary] && [aPerson checkTimeZone:check])return aPerson;
     }
     return nil;
 }
 
 - (OROnCallPerson*) tertiaryPerson
 {
+    return [self tertiaryPerson:NO];
+}
+
+- (OROnCallPerson*) quaternaryPerson:(BOOL)check
+{
     for(OROnCallPerson* aPerson in onCallList){
-        if([aPerson isTertiary])return aPerson;
+        if([aPerson isQuaternary] && [aPerson checkTimeZone:check])return aPerson;
     }
     return nil;
+}
+
+- (OROnCallPerson*) quaternaryPerson
+{
+    return [self quaternaryPerson:NO];
 }
 
 - (void) resetAll
@@ -342,9 +403,10 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
     [notificationTimer release];
     notificationTimer   = nil;
     
-    self.primaryNotified     = NO;
-    self.secondaryNotified   = NO;
-    self.tertiaryNotified    = NO;
+    self.primaryNotified       = NO;
+    self.secondaryNotified     = NO;
+    self.tertiaryNotified      = NO;
+    self.quaternaryNotified    = NO;
     for(OROnCallPerson* aPerson in onCallList){
         [aPerson setStatus:@""];
     }
@@ -387,11 +449,13 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
     [notificationTimer invalidate];
     [notificationTimer release];
     notificationTimer = nil;
-    OROnCallPerson* primary     = [self primaryPerson];
-    OROnCallPerson* secondary   = [self secondaryPerson];
-    OROnCallPerson* tertiary    = [self tertiaryPerson];
+
+    OROnCallPerson* primary     = [self primaryPerson:YES];
+    OROnCallPerson* secondary   = [self secondaryPerson:YES];
+    OROnCallPerson* tertiary    = [self tertiaryPerson:YES];
+    OROnCallPerson* quaternary  = [self quaternaryPerson:YES];
+
     if(primary){
-        
         NSString* report = [primary sendAlarmReport];
         if(report){
             NSMutableArray* rlist = [NSMutableArray arrayWithObjects:[[[primary name] copy] autorelease], nil];
@@ -405,9 +469,14 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
             
             if(secondary){
                 [secondary setStatus:[NSString stringWithFormat:@"Will Contact: %@",[contactDate descriptionFromTemplate:@"HH:mm:ss"]]];
-                if(tertiary)   [tertiary  setStatus:@"Next on deck"];
+                if(tertiary)     [tertiary  setStatus:@"Next on deck"];
+                else if(quaternary)   [quaternary  setStatus:@"Next on deck"];
             }
-            else if(tertiary)[tertiary setStatus:[NSString stringWithFormat:@"Will Contact: %@",[contactDate descriptionFromTemplate:@"HH:mm:ss"]]];
+            else if(tertiary){
+                [tertiary setStatus:[NSString stringWithFormat:@"Will Contact: %@",[contactDate descriptionFromTemplate:@"HH:mm:ss"]]];
+                if(quaternary)   [quaternary  setStatus:@"Next on deck"];
+            }
+            else if(quaternary)[quaternary setStatus:[NSString stringWithFormat:@"Will Contact: %@",[contactDate descriptionFromTemplate:@"HH:mm:ss"]]];
         }
         [[NSNotificationCenter defaultCenter] postNotificationName:OROnCallListPeopleNotifiedChanged object:self];
     }
@@ -418,8 +487,9 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
 
 - (void) notifySecondary:(NSTimer*)aTimer
 {
-    OROnCallPerson* secondary   = [self secondaryPerson];
-    OROnCallPerson* tertiary    = [self tertiaryPerson];
+    OROnCallPerson* secondary   = [self secondaryPerson:YES];
+    OROnCallPerson* tertiary    = [self tertiaryPerson:YES];
+    OROnCallPerson* quaternary  = [self quaternaryPerson:YES];
     if(secondary){
         [notificationTimer invalidate];
         [notificationTimer release];
@@ -434,10 +504,13 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
         self.timeSecondaryNotified = [NSDate date];
         if(!notificationTimer){
             notificationTimer = [[NSTimer scheduledTimerWithTimeInterval:kOnCallAcknowledgeWaitTime target:self selector:@selector(notifyTertiary:) userInfo:nil repeats:NO] retain];
+            NSDate* contactDate = [[NSDate date] dateByAddingTimeInterval:kOnCallAcknowledgeWaitTime];
+            
             if(tertiary){
-                NSDate* contactDate = [[NSDate date] dateByAddingTimeInterval:kOnCallAcknowledgeWaitTime];
-               [tertiary setStatus:[NSString stringWithFormat:@"Will Contact: %@",[contactDate descriptionFromTemplate:@"HH:mm:ss"]]];
+                [tertiary setStatus:[NSString stringWithFormat:@"Will Contact: %@",[contactDate descriptionFromTemplate:@"HH:mm:ss"]]];
+                if(quaternary)   [quaternary  setStatus:@"Next on deck"];
             }
+            else if(quaternary)[quaternary setStatus:[NSString stringWithFormat:@"Will Contact: %@",[contactDate descriptionFromTemplate:@"HH:mm:ss"]]];
         }
         [[NSNotificationCenter defaultCenter] postNotificationName:OROnCallListPeopleNotifiedChanged object:self];
     }
@@ -448,23 +521,83 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
 
 - (void) notifyTertiary:(NSTimer*)aTimer
 {
-    [notificationTimer invalidate];
-    [notificationTimer release];
-    notificationTimer = nil;
-    
-    OROnCallPerson* tertiary    = [self tertiaryPerson];
+    OROnCallPerson* tertiary    = [self tertiaryPerson:YES];
+    OROnCallPerson* quaternary  = [self quaternaryPerson:YES];
     if(tertiary){
+        [notificationTimer invalidate];
+        [notificationTimer release];
+        notificationTimer = nil;
+
         NSString* report = [tertiary sendAlarmReport];
         if(report){
             NSMutableArray* rlist = [NSMutableArray arrayWithObjects:[[[tertiary name] copy] autorelease], nil];
             [self sendChatMessage:report withList:rlist isAlarm:YES];
         }
-        self.tertiaryNotified       = YES;
-        self.timeTertiaryNotified   = [NSDate date];
+        self.tertiaryNotified = YES;
+        self.timeTertiaryNotified = [NSDate date];
+        if(!notificationTimer){
+            notificationTimer = [[NSTimer scheduledTimerWithTimeInterval:kOnCallAcknowledgeWaitTime target:self selector:@selector(notifyQuaternary:) userInfo:nil repeats:NO] retain];
+            NSDate* contactDate = [[NSDate date] dateByAddingTimeInterval:kOnCallAcknowledgeWaitTime];
+            
+            if(quaternary)[quaternary setStatus:[NSString stringWithFormat:@"Will Contact: %@",[contactDate descriptionFromTemplate:@"HH:mm:ss"]]];
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:OROnCallListPeopleNotifiedChanged object:self];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:OROnCallListPeopleNotifiedChanged object:self];
+    else {
+        [self notifyQuaternary:nil];
+    }
 }
 
+- (void) notifyQuaternary:(NSTimer*)aTimer
+{
+    [notificationTimer invalidate];
+    [notificationTimer release];
+    notificationTimer = nil;
+    
+    OROnCallPerson* primary     = [self primaryPerson:NO];
+    OROnCallPerson* quaternary  = [self quaternaryPerson:YES];
+    if(quaternary){
+        NSString* report = [quaternary sendAlarmReport];
+        if(report){
+            NSMutableArray* rlist = [NSMutableArray arrayWithObjects:[[[quaternary name] copy] autorelease], nil];
+            [self sendChatMessage:report withList:rlist isAlarm:YES];
+        }
+        self.quaternaryNotified       = YES;
+        self.timeQuaternaryNotified   = [NSDate date];
+        if(!notificationTimer && !self.primaryNotified){
+            notificationTimer = [[NSTimer scheduledTimerWithTimeInterval:kOnCallAcknowledgeWaitTime target:self selector:@selector(forceNotifyPrimary:) userInfo:nil repeats:NO] retain];
+            if(primary){
+                NSDate* contactDate = [[NSDate date] dateByAddingTimeInterval:kOnCallAcknowledgeWaitTime];
+               [primary setStatus:[NSString stringWithFormat:@"Will Force Contact: %@",[contactDate descriptionFromTemplate:@"HH:mm:ss"]]];
+            }
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:OROnCallListPeopleNotifiedChanged object:self];
+    }
+    else {
+        // else force-notify primary, if hasn't been notified
+        [self forceNotifyPrimary:nil];
+    }
+}
+
+- (void) forceNotifyPrimary:(NSTimer*)aTimer
+{
+    [notificationTimer invalidate];
+    [notificationTimer release];
+    notificationTimer = nil;
+
+    OROnCallPerson* primary     = [self primaryPerson:NO];
+
+    if(primary){
+        NSString* report = [primary sendAlarmReport];
+        if(report){
+            NSMutableArray* rlist = [NSMutableArray arrayWithObjects:[[[primary name] copy] autorelease], nil];
+            [self sendChatMessage:report withList:rlist isAlarm:YES];
+        }
+        self.primaryNotified        = YES;
+        self.timePrimaryNotified    = [NSDate date];
+        [[NSNotificationCenter defaultCenter] postNotificationName:OROnCallListPeopleNotifiedChanged object:self];
+    }
+}
 
 #pragma mark •••Archival
 - (id) initWithCoder:(NSCoder*)decoder
@@ -514,7 +647,7 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
 - (void) sendShiftChangeMessage
 {
     NSMutableString* messageToSend = [NSMutableString stringWithString:@""];
-    if([self primaryPerson] || [self secondaryPerson] || [self tertiaryPerson]){
+    if([self primaryPerson] || [self secondaryPerson] || [self tertiaryPerson] || [self quaternaryPerson]){
         
         [messageToSend appendFormat:@"The On-list has been changed.\n"];
         [messageToSend appendString:@"Here are the new shift responsibilities:\n\n"];
@@ -527,6 +660,9 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
         
         if([self tertiaryPerson])[messageToSend appendFormat:@"Tertiary: %@\n",[[self tertiaryPerson] name]];
         else [messageToSend appendString:@"Tertiary: NO ONE\n"];
+        
+        if([self quaternaryPerson])[messageToSend appendFormat:@"Quaternary: %@\n",[[self quaternaryPerson] name]];
+        else [messageToSend appendString:@"Quaternary: NO ONE\n"];
         [messageToSend appendString:@"\nThis message was sent to the entire list.\n"];
 
     }
@@ -670,10 +806,11 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
 @implementation OROnCallPerson
 @synthesize data;
 
-#define kOffCall    0
-#define kPrimary    1
-#define kSecondary  2
-#define kTertiary   3
+#define kOffCall      0
+#define kPrimary      1
+#define kSecondary    2
+#define kTertiary     3
+#define kQuaternary   4
 
 + (id) onCallPerson
 {
@@ -683,6 +820,7 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
     [data setObject:@"" forKey:kPersonName];
     [data setObject:@"" forKey:kPersonAddress];
     [data setObject:@"" forKey:kPersonStatus];
+    [data setObject:@"" forKey:kPersonTimeZone];
     aPerson.data = data;
     return [aPerson autorelease];
 }
@@ -695,6 +833,21 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
     [data setObject:contactInfo forKey:kPersonAddress];
     [data setObject:[NSNumber numberWithInt:aRole] forKey:kPersonRole];
     [data setObject:@"" forKey:kPersonStatus];
+    [data setObject:@"" forKey:kPersonTimeZone];
+    aPerson.data = data;
+    return [aPerson autorelease];
+
+}
+
++ (id) onCallPerson:(NSString*)aName address:(NSString*)contactInfo role:(int)aRole timeZone:(NSString*)timeZone
+{
+    OROnCallPerson* aPerson = [[OROnCallPerson alloc] init];
+    NSMutableDictionary* data        = [NSMutableDictionary dictionary];
+    [data setObject:aName forKey:kPersonName];
+    [data setObject:contactInfo forKey:kPersonAddress];
+    [data setObject:[NSNumber numberWithInt:aRole] forKey:kPersonRole];
+    [data setObject:@"" forKey:kPersonStatus];
+    [data setObject:timeZone forKey:kPersonTimeZone];
     aPerson.data = data;
     return [aPerson autorelease];
 
@@ -709,10 +862,11 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
 - (void) loadBucket:(NSString*)aBucket inFluxDB:(ORInFluxDBModel*)influx
 {
     ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:aBucket org:[influx org]];
-    NSString*                  role = @"OffDuty";
-    if([self isPrimary])       role = @"Primary";
-    else if([self isSecondary])role = @"Secondary";
-    else if([self isTertiary]) role = @"Tertiary";
+    NSString*                    role = @"OffDuty";
+    if([self isPrimary])         role = @"Primary";
+    else if([self isSecondary])  role = @"Secondary";
+    else if([self isTertiary])   role = @"Tertiary";
+    else if([self isQuaternary]) role = @"Quaternary";
     [aCmd start   : @"OnCallList"];
     [aCmd addTag  : @"Role"     withString:role];
     [aCmd addField: @"Name"     withString:[self name]];
@@ -750,9 +904,11 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
 - (BOOL)      isPrimary      { return [[self valueForKey:kPersonRole] intValue] == kPrimary;     }
 - (BOOL)      isSecondary    { return [[self valueForKey:kPersonRole] intValue] == kSecondary;   }
 - (BOOL)      isTertiary     { return [[self valueForKey:kPersonRole] intValue] == kTertiary;    }
+- (BOOL)      isQuaternary   { return [[self valueForKey:kPersonRole] intValue] == kQuaternary;  }
 - (NSString*) name           { return [self valueForKey:kPersonName];                            }
 - (NSString*) address        { return [self valueForKey:kPersonAddress];                         }
 - (NSString*) status         { return [self valueForKey:kPersonStatus];                          }
+- (NSString*) timezone       { return [self valueForKey:kPersonTimeZone];                        }
 
 - (void) setStatus:(NSString*)aString
 {
@@ -886,6 +1042,35 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
     return copy;
 }
 
+- (BOOL) checkTimeZone:(BOOL)check
+{
+    NSString *tz = [self timezone];
+    if([tz length] > 0 && check)
+    {
+        // get current date/time
+        NSDate *today = [NSDate date];
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+
+        NSTimeZone *user_tz = [NSTimeZone timeZoneWithName:tz];
+        if(user_tz == nil){
+            NSLog(@"The time zone %@ is invalid, assuming no time zone.\n", tz);
+        }
+        NSDateComponents *comps_test = [calendar componentsInTimeZone:user_tz fromDate:today];
+
+        long hour = [comps_test hour];
+
+        // assume working hours are 9am to 5pm
+        if (hour > 8 && hour < 18) {
+            return YES;
+        } else {
+            return NO;
+        }
+    }
+    else
+    {
+        return YES;
+    }
+}
 @end
 
 @implementation OROnCallListModel (private)
@@ -899,6 +1084,7 @@ NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
     if([self primaryPerson])[record setObject:[[self primaryPerson] data] forKey:@"Primary"];
     if([self secondaryPerson])[record setObject:[[self secondaryPerson] data] forKey:@"Secondary"];
     if([self tertiaryPerson])[record setObject:[[self tertiaryPerson] data] forKey:@"Tertiary"];
+    if([self quaternaryPerson])[record setObject:[[self quaternaryPerson] data] forKey:@"Quaternary"];
     
     if([[record allKeys] count]){
         [record setObject:@"OnCall" forKey:@"title"];
