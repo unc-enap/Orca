@@ -32,9 +32,11 @@
     BOOL            primaryNotified;
     BOOL            secondaryNotified;
     BOOL            tertiaryNotified;
+    BOOL            quaternaryNotified;
     NSDate*         timePrimaryNotified;
     NSDate*         timeSecondaryNotified;
     NSDate*         timeTertiaryNotified;
+    NSDate*         timeQuaternaryNotified;
     BOOL            slackEnabled;
     BOOL            rocketChatEnabled;
 }
@@ -60,6 +62,7 @@
 - (OROnCallPerson*) primaryPerson:(BOOL)check;
 - (OROnCallPerson*) secondaryPerson:(BOOL)check;
 - (OROnCallPerson*) tertiaryPerson:(BOOL)check;
+- (OROnCallPerson*) quaternaryPerson:(BOOL)check;
 - (BOOL) notificationScheduled;
 - (void) sendMessageToOnCallPerson;
 - (void) broadcastMessage:(NSString*)aMessage;
@@ -80,9 +83,11 @@
 @property   (retain) NSDate*         timePrimaryNotified;
 @property   (retain) NSDate*         timeSecondaryNotified;
 @property   (retain) NSDate*         timeTertiaryNotified;
+@property   (retain) NSDate*         timeQuaternaryNotified;
 @property   (assign) BOOL            primaryNotified;
 @property   (assign) BOOL            secondaryNotified;
 @property   (assign) BOOL            tertiaryNotified;
+@property   (assign) BOOL            quaternaryNotified;
 @property   (assign,nonatomic) BOOL  slackEnabled;
 @property   (assign,nonatomic) BOOL  rocketChatEnabled;
 @end
@@ -112,6 +117,7 @@ extern NSString* OROnCallListModelEdited;
 - (BOOL) isPrimary;
 - (BOOL) isSecondary;
 - (BOOL) isTertiary;
+- (BOOL) isQuaternary;
 - (NSString*) name;
 - (NSString*) address;
 - (void)      setStatus:(NSString*)aString;

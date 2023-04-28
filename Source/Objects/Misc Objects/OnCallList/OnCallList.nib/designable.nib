@@ -74,7 +74,7 @@
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
                                             </tableHeaderCell>
-                                            <popUpButtonCell key="dataCell" type="bevel" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="bezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="wmX-Wr-iTI">
+                                            <popUpButtonCell key="dataCell" type="bevel" title="Off Duty" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="bezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="kBN-0a-Mbp" id="wmX-Wr-iTI">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <menu key="menu" id="HAy-WJ-IDN">
@@ -83,6 +83,7 @@
                                                         <menuItem title="Primary" tag="1" id="hdv-j2-plD"/>
                                                         <menuItem title="Secondary" tag="2" id="YYo-ng-sr1"/>
                                                         <menuItem title="Tertiary" tag="3" id="uc0-ah-IkU"/>
+                                                        <menuItem title="Quaternary" tag="4" id="9MS-Lv-H4d" userLabel="Quaternary"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
