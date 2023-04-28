@@ -37,10 +37,8 @@ NSString* OROnCallListSlackChanged          = @"OROnCallListSlackChanged";
 NSString* OROnCallListRocketChatChanged     = @"OROnCallListRocketChatChanged";
 NSString* OROnCallListModelEdited           = @"OROnCallListModelEdited";
 
-//#define kOnCallAlarmWaitTime        3*60
-//#define kOnCallAcknowledgeWaitTime 10*60
-#define kOnCallAlarmWaitTime        5
-#define kOnCallAcknowledgeWaitTime 10
+#define kOnCallAlarmWaitTime        3*60
+#define kOnCallAcknowledgeWaitTime 10*60
 
 @interface OROnCallListModel (private)
 - (void) postCouchDBRecord;
