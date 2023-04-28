@@ -352,7 +352,7 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
         dt = [[rc runTypeNames]objectAtIndex:dataType];
     }
     //{experiment}-{data period}-{data run}-{data type}-{timestamp}
-    [self setL200FileName:[NSString stringWithFormat:@"l200-%02d-%03d-%@",dataPeriod,dataCycle,dt]];
+    [self setL200FileName:[NSString stringWithFormat:@"l200-p%02d-r%03d-%@",dataPeriod,dataCycle,dt]];
 }
 
 - (NSString*) l200FileName
