@@ -45,7 +45,7 @@ NSString* ORDataFileLimitExceededNotification           = @"ORDataFileLimitExcee
 NSString* ORDataFileModelLogWrittenNotification         = @"ORDataFileModelLogWrittenNotification";
 NSString* ORDataSaveConfigurationChangedNotification    = @"ORDataSaveConfigurationChangedNotification";
 NSString* ORDataFileModelSizeLimitReachedActionChanged	= @"ORDataFileModelSizeLimitReachedActionChanged";
-
+NSString* ORDataFileModelSpecialFilePrefixChanged       = @"ORDataFileModelSpecialFilePrefixChanged";
 NSString* ORDataFileLock					= @"ORDataFileLock";
 
 #pragma mark ¥¥¥Definitions
@@ -179,6 +179,12 @@ static const int currentVersion = 1;           // Current version
                      selector : @selector(closeOutLogFiles:)
                          name : ORFlushLogsNotification
                        object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(setPrefixSpecial:)
+                         name : ORDataFileModelSpecialFilePrefixChanged
+                       object : nil];
+    
 }
 
 - (void) runAboutToStart:(NSNotification*)aNotification
@@ -328,6 +334,11 @@ static const int currentVersion = 1;           // Current version
     filePrefix = [aFilePrefix copy];    
 	
     [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileModelFilePrefixChanged object:self];
+}
+
+- (void) setPrefixSpecial:(NSNotification*)aNote
+{
+    [self setFilePrefix:[[aNote userInfo]objectForKey:@"SpecialPrefix"]];
 }
 
 - (NSString*) fileStaticSuffix
