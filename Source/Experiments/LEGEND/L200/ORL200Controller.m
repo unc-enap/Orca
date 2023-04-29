@@ -111,9 +111,9 @@
     [pmtHist setName:@"PMTs"];
     [valueHistogramsPlot addPlot:pmtHist];
     [pmtHist release];
-    OR1DHistoPlot* auxHist = [[OR1DHistoPlot alloc] initWithTag:10+kL200AuxType andDataSource:self];
-    [auxHist setLineColor:[NSColor systemOrangeColor]];
-    [auxHist setName:@"AuxChans"];
+//    OR1DHistoPlot* auxHist = [[OR1DHistoPlot alloc] initWithTag:10+kL200AuxType andDataSource:self];
+//    [auxHist setLineColor:[NSColor systemOrangeColor]];
+//    [auxHist setName:@"AuxChans"];
     
     [primaryColorScale setSpectrumRange:0.7];
     [sipmColorScale    setSpectrumRange:0.7];

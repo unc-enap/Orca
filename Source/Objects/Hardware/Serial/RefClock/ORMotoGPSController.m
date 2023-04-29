@@ -206,7 +206,7 @@
     // assume speed of light divided by 1.5 to get approximate cable signal speed
     // (see for instance https://electronics.stackexchange.com/questions/178173/true-gps-location-at-the-antenna-or-receiver-chip/178190 )
     float approxCableLength = 0.3/1.5*[model cableDelay];
-    NSString* cableLengthString = [[[NSString alloc]init]stringByAppendingFormat:@"%.1f m", approxCableLength];
+    NSString* cableLengthString = [[[[NSString alloc]init]stringByAppendingFormat:@"%.1f m", approxCableLength]autorelease];
     [approxCableLengthField setStringValue:cableLengthString];
     [model cableDelayCorrection:[model cableDelay]];
 }

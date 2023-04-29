@@ -716,7 +716,7 @@ static const int currentVersion = 1;           // Current version
                 }
             }
         }
-        [userInfo setValue:[statusFileName copy] forKey:@"statusFileNameBase"];
+        [userInfo setValue:[[statusFileName copy]autorelease] forKey:@"statusFileNameBase"];
         [statusFileName appendString:@".log"];
 
         [statusFolder ensureExists:[statusFolder finalDirectoryName]];

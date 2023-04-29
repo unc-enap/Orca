@@ -873,7 +873,7 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
     if(fclog){
         n = MIN([self fclogLines]-1, nlines-1);
         for(NSUInteger i=n; i<[fclog count]; i--)
-            [log setObject:[[self fclog:i] copy] atIndexedSubscript:n-i];
+            [log setObject:[self fclog:i] atIndexedSubscript:n-i];
     }
     [log retain];
     [fclog release];
@@ -1147,11 +1147,12 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
     NSArray* incomingLines = [incomingText componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     for(NSString* text in incomingLines){
         if([text isEqualToString:@""]) continue;
-        NSDateFormatter* formatter = [[[NSDateFormatter alloc] init] autorelease];
+        NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
         formatter.locale = [NSLocale currentLocale];
         [formatter setLocalizedDateFormatFromTemplate:@"MM/dd/yy HH:mm:ss"];
         [self appendToFCRunLog:[NSString stringWithFormat:@"%@ %@\n",
                                 [formatter stringFromDate:[NSDate now]], text]];
+        [formatter release];
         if([text rangeOfString:@"error"   options:NSCaseInsensitiveSearch].location != NSNotFound ||
            [text rangeOfString:@"warning" options:NSCaseInsensitiveSearch].location != NSNotFound){
             ANSIEscapeHelper* helper = [[[ANSIEscapeHelper alloc] init] autorelease];
@@ -1244,9 +1245,10 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
         // read to the end of the run task's standard output
         NSData* data = [[[runTask standardOutput] fileHandleForReading] readDataToEndOfFile];
         if(data && [data length]){
-            NSString *text = [[[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding] autorelease];
+            NSString *text = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
             NSDictionary* taskData = [NSDictionary dictionaryWithObjectsAndKeys:runTask,@"Task",text,@"Text",nil];
             [self taskData:taskData];
+            [text release];
         }
         [[[runTask standardInput]  fileHandleForWriting] closeFile];
         [[[runTask standardOutput] fileHandleForReading] closeFile];
@@ -1440,10 +1442,11 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelFCRunLogFlushed object:self];
     NSString* cmd = [NSString stringWithFormat:@"%@ %@\n", taskPath, [readoutArgs componentsJoinedByString:@" "]];
     NSLog(cmd);
-    NSDateFormatter* formatter = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     formatter.locale = [NSLocale currentLocale];
     [formatter setLocalizedDateFormatFromTemplate:@"MM/dd/yy HH:mm:ss"];
     [self appendToFCRunLog:[NSString stringWithFormat:@"%@ %@\n", [formatter stringFromDate:[NSDate now]], cmd]];
+    [formatter release];
     
     NSPipe* inpipe  = [NSPipe pipe];
     NSPipe* outpipe = [NSPipe pipe];

@@ -614,7 +614,7 @@ err:
     //Deep copy the array so that we don't modify the original
     NSMutableArray *used_pedestal_mask = [[NSMutableArray alloc] initWithCapacity:[aPedestal_mask count]];
     for (id element in aPedestal_mask){
-        [used_pedestal_mask addObject:[element mutableCopy]];
+        [used_pedestal_mask addObject:[[element mutableCopy]autorelease]];
     }
 
     BOOL triggersSetOK = TRUE;
@@ -632,6 +632,7 @@ err:
                     [[used_pedestal_mask objectAtIndex:crate] replaceObjectAtIndex:islot withObject:temp];
                 }
                 [xl3 loadTriggersWithCrateMask:[used_pedestal_mask objectAtIndex:crate]];
+                [used_pedestal_mask release];
             }
             @catch (NSException *exception) {
                 NSLogColor([NSColor redColor], @"ECA: triggers could not be disabled for crate %d \n",crate);
