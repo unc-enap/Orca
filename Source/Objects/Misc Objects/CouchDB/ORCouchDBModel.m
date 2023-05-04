@@ -772,7 +772,11 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
                         NSDictionary* burstInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                                                    @"burstinfo", @"_id",
                                                    @"burstinfo", @"type",
-                                                   [NSNumber numberWithUnsignedShort:[aMonitor minimumEnergyAllowed]],@"minimumADC",nil];
+                                                   [NSNumber numberWithUnsignedShort:[aMonitor minimumEnergyAllowed]],@"minimumADC",
+                                                   [NSNumber numberWithUnsignedShort:[aMonitor nHit]], @"nHit",
+                                                   [NSNumber numberWithUnsignedShort:[aMonitor numBurstsNeeded]], @"numBurstsNeeded",
+                                                   [NSNumber numberWithDouble:[aMonitor timeWindow]], @"timeWindow",
+                                                   nil];
                         [[self statusDBRef] updateDocument:burstInfo  documentId:@"burstinfo" tag:kDocumentUpdated];
                     }
                 }
