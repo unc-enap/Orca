@@ -1131,13 +1131,15 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
 - (void) taskDataAvailable:(NSNotification*)note
 {
     if([note object] != [[runTask standardOutput] fileHandleForReading]) return;
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
     NSData* incomingData   = [[note userInfo] valueForKey:NSFileHandleNotificationDataItem];
     if(incomingData && [incomingData length]){
-        NSString *incomingText = [[[NSString alloc] initWithData:incomingData encoding:NSASCIIStringEncoding] autorelease];
+        NSString* incomingText = [[[NSString alloc] initWithData:incomingData encoding:NSASCIIStringEncoding]autorelease];
         NSDictionary* taskData = [NSDictionary dictionaryWithObjectsAndKeys:runTask,@"Task",incomingText,@"Text",nil];
         [self taskData:taskData];
     }
     if([runTask isRunning]) [[note object] readInBackgroundAndNotify];
+    [pool release];
 }
 
 - (void) taskData:(NSDictionary*)taskData
@@ -1145,14 +1147,14 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
     if([taskData objectForKey:@"Task"] != runTask) return;
     NSString* incomingText = [taskData objectForKey:@"Text"];
     NSArray* incomingLines = [incomingText componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+    formatter.locale = [NSLocale currentLocale];
+    [formatter setLocalizedDateFormatFromTemplate:@"MM/dd/yy HH:mm:ss"];
+
     for(NSString* text in incomingLines){
         if([text isEqualToString:@""]) continue;
-        NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
-        formatter.locale = [NSLocale currentLocale];
-        [formatter setLocalizedDateFormatFromTemplate:@"MM/dd/yy HH:mm:ss"];
-        [self appendToFCRunLog:[NSString stringWithFormat:@"%@ %@\n",
+         [self appendToFCRunLog:[NSString stringWithFormat:@"%@ %@\n",
                                 [formatter stringFromDate:[NSDate now]], text]];
-        [formatter release];
         if([text rangeOfString:@"error"   options:NSCaseInsensitiveSearch].location != NSNotFound ||
            [text rangeOfString:@"warning" options:NSCaseInsensitiveSearch].location != NSNotFound){
             ANSIEscapeHelper* helper = [[[ANSIEscapeHelper alloc] init] autorelease];
@@ -1228,6 +1230,7 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
             [deadTimeHistory  addDataToTimeAverage:(float)curDead];
         }
     }
+    [formatter release];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelStatusChanged object:self];
 }
 
