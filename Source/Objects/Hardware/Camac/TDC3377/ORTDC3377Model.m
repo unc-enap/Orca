@@ -1399,12 +1399,14 @@ NSString* ORTDC3377SettingsLock					= @"ORTDC3377SettingsLock";
 				id result = [[NSAttributedString alloc] initWithString:@"FAILED" 
 															attributes:[NSDictionary dictionaryWithObject:[NSColor failedColor] forKey:NSForegroundColorAttributeName]];
 				[self runningTest:testNumber status:result];
+                [result release];
 			}
 			else {
 				NSLog(@"CAMAC pattern test for 3377TDC station %d Passed.\n",cachedStation);
 				id result = [[NSAttributedString alloc] initWithString:@"Passed" 
 															attributes:[NSDictionary dictionaryWithObject:[NSColor passedColor] forKey:NSForegroundColorAttributeName]];
 				[self runningTest:testNumber status:result];
+                [result release];
 			}
 			controlMode = savedControlMode;
 			[self loadTheMode];

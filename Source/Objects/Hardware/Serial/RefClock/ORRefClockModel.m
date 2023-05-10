@@ -361,7 +361,7 @@ NSString* ORMotoGPS                             = @"ORMotoGPS";
             else if ([senderDevice isEqualToString:ORMotoGPS]){
                 [motoGPSModel processResponse:inComingData forRequest:lastRequest];
             }
-            
+            [incomingStr release];
             [inComingData release];
             inComingData = nil;
             

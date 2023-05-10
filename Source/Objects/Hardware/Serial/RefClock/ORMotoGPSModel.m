@@ -272,7 +272,7 @@ extern NSString* ORMotoGPS;
 }
 
 - (NSString*) bytesToPrintable:(unsigned char *)bytes length:(unsigned short)aLength{
-    NSString* printable = [[NSString alloc]init];
+    NSString* printable = [NSString string];
     char c;
     for(int i = 0; i < aLength; ++i){
         c = bytes[i];
