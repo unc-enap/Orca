@@ -205,7 +205,7 @@ double Thresh_Finder(unsigned int* Trace, double Tau, double* FF, double* FF2, i
 }
 
 
-int32_t RandomSwap() {
+int32_t RandomSwap(void) {
 	
 	int32_t rshift,Ncards;
 	int32_t k,MixLevel,imin,imax;
