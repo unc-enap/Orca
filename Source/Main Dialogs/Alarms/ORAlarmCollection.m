@@ -562,7 +562,7 @@ NSString* ORAlarmAddressChanged			  = @"ORAlarmAddressChanged";
 			if(!hostAddress){
 				NSArray* names =  [[NSHost currentHost] addresses];
 				id aName;
-				int index = 0;
+				//int index = 0;
 				NSUInteger n = [names count];
 				for(i=0;i<n;i++){
 					aName = [names objectAtIndex:i];
@@ -571,7 +571,7 @@ NSString* ORAlarmAddressChanged			  = @"ORAlarmAddressChanged";
 							hostAddress = [aName copy];
 							break;
 						}
-						index++;
+						//index++;
 					}
 				}
 			}
