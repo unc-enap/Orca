@@ -202,7 +202,7 @@
                                                 </subviews>
                                             </view>
                                         </box>
-                                        <box fixedFrame="YES" title="Run Period/Cycle Info" translatesAutoresizingMaskIntoConstraints="NO" id="e2p-yh-H9G">
+                                        <box fixedFrame="YES" title="Data Period/Run Info" translatesAutoresizingMaskIntoConstraints="NO" id="e2p-yh-H9G">
                                             <rect key="frame" x="966" y="3" width="234" height="247"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="HI3-ke-Exv">
@@ -247,9 +247,9 @@
                                                         </connections>
                                                     </textField>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LlX-Ue-dZv">
-                                                        <rect key="frame" x="30" y="154" width="37" height="14"/>
+                                                        <rect key="frame" x="39" y="154" width="28" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Cycle:" id="6zG-t6-lxS">
+                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Run:" id="6zG-t6-lxS">
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
