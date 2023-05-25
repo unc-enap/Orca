@@ -117,7 +117,7 @@ int yywrap(void) {
     return 1;
 }
 
-void fsComment()
+void fsComment(void)
 {
 	//just eat comments, carefully counting lines as needed
 	char c, c1;
@@ -132,7 +132,7 @@ loop:
 	}
 }
 
-void fsSingleLineComment()
+void fsSingleLineComment(void)
 {
 	//just eat comments, carefully counting lines as needed
 	char c;
@@ -145,7 +145,7 @@ void fsSingleLineComment()
 }
 
 
-void resetFilterState()
+void resetFilterState(void)
 {
 	BEGIN(INITIAL);
 }
