@@ -125,6 +125,7 @@
 - (void) resetAndClear;
 - (void) pollHardware;
 - (void) queryAll;
+- (void) queryEverything;
 - (void) loadHeaterParameters;
 - (void) loadInputParameters;
 

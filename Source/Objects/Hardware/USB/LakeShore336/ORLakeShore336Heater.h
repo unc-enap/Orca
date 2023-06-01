@@ -27,6 +27,7 @@
     int             maxCurrent;
     float           maxUserCurrent;
     int             currentOrPower;
+    int             heaterRange;
     double          lowLimit;
     double          highLimit;
     double          minValue;
@@ -54,8 +55,10 @@
 - (NSUInteger)  numberPointsInTimeRate;
 - (void) timeRateAtIndex:(int)i x:(double*)xValue y:(double*)yValue;
 - (NSString*) heaterSetupString;
+- (NSString*) heaterRangeSetupString;
 - (NSString*) pidSetupString;
 - (NSString*) outputSetupString;
+- (NSString*) setPointString:(float) aTemperature;
 
 @property (copy,nonatomic)   NSString*      label;
 @property (assign,nonatomic) int            channel;
@@ -68,6 +71,7 @@
 @property (assign,nonatomic) double         minValue;
 @property (assign,nonatomic) double         maxValue;
 @property (assign,nonatomic) int            currentOrPower;
+@property (assign,nonatomic) int            heaterRange;
 @property (assign,nonatomic) BOOL           userMaxCurrentEnabled;
 @property (assign,nonatomic) int            opMode;
 @property (assign,nonatomic) int            input;

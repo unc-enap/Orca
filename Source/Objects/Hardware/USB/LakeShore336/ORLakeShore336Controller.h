@@ -73,6 +73,7 @@
 - (IBAction) resetAction:(id)sender;
 - (IBAction) sendCommandAction:(id)sender;
 - (IBAction) connectAction: (id) aSender;
+- (IBAction) getParamsAction:(id)sender;
 - (IBAction) loadParamsAction:(id)sender;
 - (IBAction) lockAction:(id)sender;
 - (IBAction) pollTimeAction:(id)sender;

@@ -260,10 +260,10 @@ NSString* ORLakeShore336InputTemperatureChanged  = @"ORLakeShore336InputTemperat
     return [NSString stringWithFormat:@"INTYPE %c,%d,%d,%d,%d,%d",'A'+channel,sensorType,autoRange,range,compensation,units];
 }
 
-- (NSString*) setPointString;
-{
-    return [NSString stringWithFormat:@"SETP %d,%@%f.2",channel+1,setPoint>0?@"+":@"-",setPoint];
-}
+//- (NSString*) setPointString;
+//{
+//    return [NSString stringWithFormat:@"SETP %d,%@%3.2f",channel+1,setPoint>0?@"+":@"-",setPoint];
+//}
 
 
 - (NSUInteger) numberPointsInTimeRate

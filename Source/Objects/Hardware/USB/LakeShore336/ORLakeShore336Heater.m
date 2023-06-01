@@ -25,7 +25,7 @@ NSString* ORLakeShore336InputChanged  = @"ORLakeShore336InputChanged";
 
 @implementation ORLakeShore336Heater
 
-@synthesize label,channel,output,resistance, maxCurrent, maxUserCurrent, currentOrPower;
+@synthesize label,channel,output,resistance, maxCurrent, maxUserCurrent, currentOrPower, heaterRange;
 @synthesize lowLimit,highLimit,minValue,maxValue,timeRate,timeMeasured,userMaxCurrentEnabled;
 @synthesize iValue,pValue,dValue,opMode,input,powerUpEnable;
 
@@ -50,14 +50,27 @@ NSString* ORLakeShore336InputChanged  = @"ORLakeShore336InputChanged";
 {
     return [NSString stringWithFormat:@"HTRSET %d,%d,%d,+%5.3f,%d",channel+1,resistance+1,maxCurrent,maxUserCurrent,currentOrPower+1];
 }
+
+- (NSString*) heaterRangeSetupString;
+{
+    return [NSString stringWithFormat:@"RANGE %d,%d",channel+1,heaterRange];
+}
+
 - (NSString*) pidSetupString;
 {
     return [NSString stringWithFormat:@"PID %d,+%.1f,+%.1f,%d",channel+1,pValue,iValue,dValue];
 }
+
 - (NSString*) outputSetupString;
 {
-    return [NSString stringWithFormat:@"OUTMODE %d,%d,%d,%d",channel+1,opMode,input,powerUpEnable];
+    return [NSString stringWithFormat:@"OUTMODE %d,%d,%d,%d",channel+1,opMode,input+1,powerUpEnable];
 }
+
+- (NSString*) setPointString:(float)aTemperature;
+{
+    return [NSString stringWithFormat:@"SETP %d,%@%3.2f",channel+1,aTemperature>0?@"+":@"-",aTemperature];
+}
+
 
 - (void) setOutput:(float)aValue
 {
@@ -101,6 +114,11 @@ NSString* ORLakeShore336InputChanged  = @"ORLakeShore336InputChanged";
     currentOrPower = aValue;
 }
 
+- (void) setHeaterRange:(int)aValue
+{
+    [[[self undoManager] prepareWithInvocationTarget:self] setHeaterRange:heaterRange];
+    heaterRange = aValue;
+}
 
 - (void) setLowLimit:(double)aValue
 {
@@ -178,13 +196,14 @@ NSString* ORLakeShore336InputChanged  = @"ORLakeShore336InputChanged";
 	//[self setMaxCurrent:    [decoder decodeIntegerForKey:   @"maxCurrent"]];
     [self setMaxUserCurrent:[decoder decodeIntegerForKey:   @"maxUserCurrent"]];
     [self setCurrentOrPower:[decoder decodeBoolForKey:  @"currentOrPower"]];
+    [self setHeaterRange:   [decoder decodeIntegerForKey:   @"heaterRange"]];
     [self setLowLimit:      [decoder decodeFloatForKey: @"lowLimit"]];
     [self setHighLimit:     [decoder decodeFloatForKey: @"highLimit"]];
     [self setMinValue:      [decoder decodeFloatForKey: @"minValue"]];
     [self setMaxValue:      [decoder decodeFloatForKey: @"maxValue"]];
     [self setPValue:        [decoder decodeFloatForKey: @"pValue"]];
     [self setIValue:        [decoder decodeFloatForKey: @"iValue"]];
-    [self setDValue:        [decoder decodeIntegerForKey:   @"dValue"]];
+    [self setDValue:        [decoder decodeIntegerForKey: @"dValue"]];
     [self setLabel:         [decoder decodeObjectForKey:@"label"]];
     [self setOpMode:          [decoder decodeIntForKey:   @"mode"]];
     [self setInput:         [decoder decodeIntForKey:   @"input"]];
@@ -208,6 +227,7 @@ NSString* ORLakeShore336InputChanged  = @"ORLakeShore336InputChanged";
     [encoder encodeInteger:maxCurrent       forKey:@"maxCurrent"];
     [encoder encodeInteger:maxUserCurrent   forKey:@"maxUserCurrent"];
     [encoder encodeBool:currentOrPower  forKey:@"currentOrPower"];
+    [encoder encodeInteger:heaterRange   forKey:@"heaterRange"];
     [encoder encodeFloat:lowLimit       forKey:@"lowLimit"];
     [encoder encodeFloat:highLimit      forKey:@"highLimit"];
     [encoder encodeFloat:minValue       forKey:@"minValue"];
