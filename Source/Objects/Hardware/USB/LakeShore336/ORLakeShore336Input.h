@@ -44,7 +44,7 @@
 - (void) timeRateAtIndex:(int)i x:(double*)xValue y:(double*)yValue;
 - (BOOL) sensorEnabled;
 - (NSString*) inputSetupString;
-- (NSString*) setPointString;
+//- (NSString*) setPointString;
 
 #pragma mark ***Archival
 - (id)initWithCoder:(NSCoder*)decoder;

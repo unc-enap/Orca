@@ -328,6 +328,7 @@
 	@try {
 		[model loadHeaterParameters];
 		[model loadInputParameters];
+        NSLog(@"LakeShore336 New parameters loaded.\n");
 	}
 	@catch(NSException* localException) {
         NSLog( [ localException reason ] );
@@ -338,6 +339,12 @@
 						nil,	// other button
                         [localException reason ]);
 	}
+}
+
+-(IBAction) getParamsAction:(id)sender
+{
+    [model queryAll]; //do a poll (temp and heat%)
+    [model queryEverything]; //all the extra stuff
 }
 
 - (IBAction) connectionProtocolAction:(id)sender

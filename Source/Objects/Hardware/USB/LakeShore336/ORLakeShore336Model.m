@@ -322,6 +322,23 @@ NSString* ORLakeShore336PollTimeChanged         = @"ORLakeShore336PollTimeChange
     [self addCmdToQueue:@"HTR? 2"];    
 }
 
+- (void) queryEverything
+{
+    NSLog(@"LakeShore336 Retriving current settings.\n");
+    [self addCmdToQueue:@"OUTMODE? 1"];
+    [self addCmdToQueue:@"OUTMODE? 2"];
+    [self addCmdToQueue:@"SETP? 1"];
+    [self addCmdToQueue:@"SETP? 2"];
+    [self addCmdToQueue:@"RANGE? 1"];
+    [self addCmdToQueue:@"RANGE? 2"];
+    [self addCmdToQueue:@"HTRSET? 1"];
+    [self addCmdToQueue:@"HTRSET? 2"];
+    [self addCmdToQueue:@"INTYPE? A"];
+    [self addCmdToQueue:@"INTYPE? B"];
+    [self addCmdToQueue:@"INTYPE? C"];
+    [self addCmdToQueue:@"INTYPE? D"];
+}
+
 - (int) timeoutCount
 {
 	return timeoutCount;
@@ -587,6 +604,7 @@ NSString* ORLakeShore336PollTimeChanged         = @"ORLakeShore336PollTimeChange
 	if(!ipConnected){
 		[self setSocket:[NetSocket netsocketConnectedToHost:ipAddress port:kLakeShore336Port]];	
 	}
+    
 }
 
 #pragma mark ***Delegate Methods
@@ -663,6 +681,7 @@ NSString* ORLakeShore336PollTimeChanged         = @"ORLakeShore336PollTimeChange
 
 - (void) resetAndClear
 {
+    [self setLastRequest:nil];  //clear also the queue
     [self writeToDevice:@"*RST;*CLS"];
 }
 
@@ -670,6 +689,9 @@ NSString* ORLakeShore336PollTimeChanged         = @"ORLakeShore336PollTimeChange
 {
     for(id aHeater in heaters){
         [self writeToDevice:[aHeater heaterSetupString]];
+        //grabs from the right inout the setp temp:
+        [self writeToDevice:[aHeater setPointString:[inputs[[aHeater input]] setPoint]]];
+        [self writeToDevice:[aHeater heaterRangeSetupString]]; //also start the heater
         [self writeToDevice:[aHeater pidSetupString]];
         [self writeToDevice:[aHeater outputSetupString]];
     }
@@ -679,7 +701,7 @@ NSString* ORLakeShore336PollTimeChanged         = @"ORLakeShore336PollTimeChange
 {
     for(id anInput in inputs){
         [self writeToDevice:[anInput inputSetupString]];
-        [self writeToDevice:[anInput setPointString]];
+        //[self writeToDevice:[anInput setPointString]]; //move to heater
     }
     
 }
@@ -802,6 +824,7 @@ NSString* ORLakeShore336PollTimeChanged         = @"ORLakeShore336PollTimeChange
 {
     if(![self isConnected])return;
     
+    if(![aCommand hasSuffix:@"\n"])aCommand = [aCommand stringByAppendingString:@"\n"]; //just to be safe
     if(![aCommand hasSuffix:@"\r"])aCommand = [aCommand stringByAppendingString:@"\r"];
 
 	switch(connectionProtocol){
@@ -1006,7 +1029,8 @@ NSString* ORLakeShore336PollTimeChanged         = @"ORLakeShore336PollTimeChange
  	@synchronized(self){
         NSString* aCmd = [self nextCmd];
         if(aCmd){
-            if(![aCmd hasSuffix:@"\n"]) aCmd = [aCmd stringByAppendingString:@"\n"];
+            //move it to the write
+            //if(![aCmd hasSuffix:@"\n"]) aCmd = [aCmd stringByAppendingString:@"\n"];
             
             [self writeToDevice: aCmd];
             if([aCmd rangeOfString:@"?"].length != NSNotFound){
@@ -1040,8 +1064,64 @@ NSString* ORLakeShore336PollTimeChanged         = @"ORLakeShore336PollTimeChange
         if([channel hasPrefix:@"1"])[[heaters objectAtIndex:0] setOutput:[theResponse floatValue]];
         else if([channel hasPrefix:@"2"])[[heaters objectAtIndex:1] setOutput:[theResponse floatValue]];
     }
-    else if([lastRequest hasPrefix:@"INTYPE"]){
-       // int i = [NSString ]
+    else if([lastRequest hasPrefix:@"OUTMODE?"]){
+        NSString* channel = [lastRequest substringFromIndex:9];
+        NSArray *items = [theResponse componentsSeparatedByString:@","];
+        int lineNo = -1;
+        if([channel hasPrefix:@"1"]) lineNo=0;
+        else if([channel hasPrefix:@"2"]) lineNo=1;
+        if(lineNo >=0){
+            [[heaters objectAtIndex:lineNo] setInput:([items[1] intValue]-1)];
+            [[heaters objectAtIndex:lineNo] setOpMode:[items[0] intValue]];
+            [[heaters objectAtIndex:lineNo] setPowerUpEnable:[items[2] boolValue]];
+        }
+    }
+    else if([lastRequest hasPrefix:@"SETP?"]){
+        NSString* channel = [lastRequest substringFromIndex:6];
+        if([channel hasPrefix:@"1"]){
+            [inputs[[[heaters objectAtIndex:0] input]] setSetPoint:[theResponse floatValue]];
+        }
+        else if([channel hasPrefix:@"2"]){
+            [inputs[[[heaters objectAtIndex:1] input]] setSetPoint:[theResponse floatValue]];
+        }
+    }
+    else if([lastRequest hasPrefix:@"RANGE?"]){
+        NSString* channel = [lastRequest substringFromIndex:7];
+        if([channel hasPrefix:@"1"]){
+            [[heaters objectAtIndex:0] setHeaterRange:[theResponse intValue]];
+        }
+        else if([channel hasPrefix:@"2"]){
+            [[heaters objectAtIndex:1] setHeaterRange:[theResponse intValue]];
+        }
+    }
+    else if([lastRequest hasPrefix:@"HTRSET?"]){
+        NSString* channel = [lastRequest substringFromIndex:8];
+        NSArray *items = [theResponse componentsSeparatedByString:@","];
+        int lineNo = -1;
+        if([channel hasPrefix:@"1"]) lineNo=0;
+        else if([channel hasPrefix:@"2"]) lineNo=1;
+        if(lineNo >=0){
+            [[heaters objectAtIndex:lineNo] setResistance:([items[0] intValue]-1)];
+            [[heaters objectAtIndex:lineNo] setMaxCurrent:[items[1] intValue]];
+            [[heaters objectAtIndex:lineNo] setMaxUserCurrent:[items[2] floatValue]];
+            [[heaters objectAtIndex:lineNo] setCurrentOrPower:([items[3] intValue]-1)];
+        }
+    }
+    else if([lastRequest hasPrefix:@"INTYPE?"]){
+        NSString* channel = [lastRequest substringFromIndex:8];
+        NSArray *items = [theResponse componentsSeparatedByString:@","];
+        int lineNo = -1;
+        if([channel hasPrefix:@"A"]) lineNo=0;
+        else if([channel hasPrefix:@"B"]) lineNo=1;
+        else if([channel hasPrefix:@"C"]) lineNo=2;
+        else if([channel hasPrefix:@"D"]) lineNo=3;
+        if(lineNo>=0){
+            [[inputs objectAtIndex:lineNo] setSensorType:[items[0] intValue]];
+            [[inputs objectAtIndex:lineNo] setAutoRange:[items[1] boolValue]];
+            [[inputs objectAtIndex:lineNo] setRange:[items[2] intValue]];
+            [[inputs objectAtIndex:lineNo] setCompensation:[items[3] boolValue]];
+            [[inputs objectAtIndex:lineNo] setUnits:([items[4] intValue]-1)];
+        }
         
     }
     if([lastRequest rangeOfString:@"?"].location!=NSNotFound){
