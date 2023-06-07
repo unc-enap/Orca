@@ -65,6 +65,11 @@
                         object: model];
     
     [notifyCenter addObserver : self
+                     selector : @selector(cmdPathChanged:)
+                         name : ORL200SlowControlsCmdPathChanged
+                        object: model];
+    
+    [notifyCenter addObserver : self
                      selector : @selector(ipAddressChanged:)
                          name : ORL200SlowControlsIPAddressChanged
                         object: model];
@@ -75,6 +80,7 @@
     [ super updateWindow ];
     [self lockChanged:nil];
     [self userNameChanged:nil];
+    [self cmdPathChanged:nil];
     [self pollTimeChanged:nil];
     [self ipAddressChanged:nil];
 	[self dataIsValidChanged:nil];
@@ -115,6 +121,11 @@
     [userNameField setStringValue:[model userName]];
 }
 
+- (void) cmdPathChanged:(NSNotification*)aNote
+{
+    [cmdPathField setStringValue:[model cmdPath]];
+}
+
 - (void) ipAddressChanged:(NSNotification*)aNote
 {
     [ipAddressField setStringValue:[model ipAddress]];
@@ -130,6 +141,7 @@
     [lockButton setState: locked];
 	
     [userNameField      setEnabled: !locked];
+    [cmdPathField       setEnabled: !locked];
     [ipAddressField     setEnabled: !locked];
     [pollTimePopup      setEnabled: !locked];
     [pollNowButton      setEnabled: !locked];
@@ -159,6 +171,11 @@
 - (IBAction) userNameAction:(id)sender
 {
     [model setUserName:[userNameField stringValue]];
+}
+
+- (IBAction) cmdPathAction:(id)sender
+{
+    [model setCmdPath:[cmdPathField stringValue]];
 }
 
 - (IBAction) ipAddressAction:(id)sender

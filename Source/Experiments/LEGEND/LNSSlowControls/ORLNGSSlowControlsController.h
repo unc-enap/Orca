@@ -30,6 +30,7 @@
 	IBOutlet NSPopUpButton*         pollTimePopup;
 	IBOutlet NSButton*              pollNowButton;
     IBOutlet NSTextField*           userNameField;
+    IBOutlet NSTextField*           cmdPathField;
     IBOutlet NSTextField*           ipAddressField;
 }
 
@@ -46,6 +47,7 @@
 - (IBAction) pollTimeAction:(id)sender;
 - (IBAction) pollNowAction:(id)sender;
 - (IBAction) userNameAction:(id)sender;
+- (IBAction) cmdPathAction:(id)sender;
 - (IBAction) ipAddressAction:(id)sender;
 @end
 

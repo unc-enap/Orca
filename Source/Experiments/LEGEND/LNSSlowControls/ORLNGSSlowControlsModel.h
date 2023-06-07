@@ -27,7 +27,9 @@
     NSString*           lastRequest;
     NSString*           ipAddress;
     NSString*           userName;
+    NSString*           cmdPath;
 	int					pollTime;
+    
     int32_t             errorCount;
     
     //----queue thread--------
@@ -45,6 +47,8 @@
 - (void) setIPAddress:(NSString*)anIP;
 - (NSString*) userName;
 - (void) setUserName:(NSString*)aName;
+- (NSString*) cmdPath;
+- (void) setCmdPath:(NSString*)aPath;
 
 #pragma mark •••HW Commands
 - (void) dataReceived:(NSNotification*)note;
@@ -67,6 +71,7 @@ extern NSString* ORLNGSSlowControlsPollTimeChanged;
 extern NSString* ORLNGSSlowControlsModelDataIsValidChanged;
 extern NSString* ORL200SlowControlsIPAddressChanged;
 extern NSString* ORL200SlowControlsUserNameChanged;
+extern NSString* ORL200SlowControlsCmdPathChanged;
 extern NSString* ORLNGSSlowControlsLock;
 
 

@@ -28,6 +28,7 @@ NSString* ORLNGSSlowControlsModelTimeout			= @"ORLNGSSlowControlsModelTimeout";
 NSString* ORLNGSSlowControlsModelDataIsValidChanged = @"ORLNGSSlowControlsModelDataIsValidChanged";
 NSString* ORL200SlowControlsErrorCountChanged       = @"ORL200SlowControlsErrorCountChanged";
 NSString* ORL200SlowControlsUserNameChanged         = @"ORL200SlowControlsUserNameChanged";
+NSString* ORL200SlowControlsCmdPathChanged          = @"ORL200SlowControlsCmdPathChanged";
 NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddressChanged";
 
 @implementation ORLNGSSlowControlsModel
@@ -41,6 +42,7 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
 	[lastRequest    release];
     [processThread  release];
     [userName       release];
+    [cmdPath        release];
     [super dealloc];
 }
 - (void) sleep
@@ -95,7 +97,18 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
     userName = [aName copy];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORL200SlowControlsUserNameChanged object:self];
 }
-
+- (NSString*) cmdPath
+{
+    return cmdPath!=nil?cmdPath:@"";
+}
+- (void) setCmdPath:(NSString*)aPath
+{
+    if(!aPath)aPath = @"";
+    [[[self undoManager] prepareWithInvocationTarget:self] setCmdPath:cmdPath];
+    [cmdPath autorelease];
+    cmdPath = [aPath copy];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORL200SlowControlsCmdPathChanged object:self];
+}
 - (int) pollTime
 {
     return pollTime;
@@ -133,6 +146,7 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
 
     [self setPollTime:        [decoder decodeIntForKey: @"pollTime"]];
     [self setUserName:        [decoder decodeObjectForKey: @"userName"]];
+    [self setCmdPath:         [decoder decodeObjectForKey: @"cmdPath"]];
     [self setIPAddress:       [decoder decodeObjectForKey: @"ipAddress"]];
     [[self undoManager] enableUndoRegistration];
     [self registerNotificationObservers];
@@ -145,6 +159,7 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
     [super encodeWithCoder:encoder];
     [encoder encodeInteger:pollTime           forKey: @"pollTime"];
     [encoder encodeObject:userName            forKey: @"userName"];
+    [encoder encodeObject:cmdPath            forKey: @"cmdPath"];
     [encoder encodeObject:ipAddress           forKey: @"ipAddress"];
 }
 
