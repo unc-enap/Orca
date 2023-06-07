@@ -28,9 +28,7 @@ NSString* ORLNGSSlowControlsModelTimeout			= @"ORLNGSSlowControlsModelTimeout";
 NSString* ORLNGSSlowControlsModelDataIsValidChanged = @"ORLNGSSlowControlsModelDataIsValidChanged";
 NSString* ORL200SlowControlsErrorCountChanged       = @"ORL200SlowControlsErrorCountChanged";
 NSString* ORL200SlowControlsUserNameChanged         = @"ORL200SlowControlsUserNameChanged";
-NSString* ORL200SlowControlsPassWordChanged         = @"ORL200SlowControlsPassWordChanged";
 NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddressChanged";
-
 
 @implementation ORLNGSSlowControlsModel
 
@@ -42,7 +40,6 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
 	[cmdQueue       release];
 	[lastRequest    release];
     [processThread  release];
-    [passWord       release];
     [userName       release];
     [super dealloc];
 }
@@ -75,8 +72,8 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
 
 - (NSString*) ipAddress
 {
-    if(!ipAddress)return @"";
-    return ipAddress;
+    return ipAddress!=nil?ipAddress:@"";
+
 }
 - (void) setIPAddress:(NSString*)anIP
 {
@@ -88,7 +85,7 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
 }
 - (NSString*) userName
 {
-    return userName;
+    return userName!=nil?userName:@"";
 }
 - (void) setUserName:(NSString*)aName
 {
@@ -97,19 +94,6 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
     [userName autorelease];
     userName = [aName copy];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORL200SlowControlsUserNameChanged object:self];
-}
-
-- (NSString*) passWord
-{
-    return passWord;
-}
-
-- (void) setPassWord:(NSString*)aPassword;
-{
-    [[[self undoManager] prepareWithInvocationTarget:self] setPassWord:passWord];
-    [passWord autorelease];
-    passWord = [aPassword copy];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORL200SlowControlsPassWordChanged object:self];
 }
 
 - (int) pollTime
@@ -126,12 +110,12 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
     if(pollTime)[self performSelector:@selector(pollHardware) withObject:nil afterDelay:pollTime];
 }
 
-- (void)pollHardware
+- (void) pollHardware
 {
-    ORL200SCCmd* aCmd = [[ORL200SCCmd alloc]init];
-    [aCmd setRequest:@"Test"];
-    //[self putRequestInQueue:aCmd];
-    [aCmd release];
+    if([cmdQueue count]==0){
+        [self putRequestInQueue:@"ls"];
+        [self putRequestInQueue:@"df"];
+    }
     if(pollTime)[self performSelector:@selector(pollHardware) withObject:nil afterDelay:pollTime];
 }
 
@@ -149,7 +133,6 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
 
     [self setPollTime:        [decoder decodeIntForKey: @"pollTime"]];
     [self setUserName:        [decoder decodeObjectForKey: @"userName"]];
-    [self setPassWord:        [decoder decodeObjectForKey: @"passWord"]];
     [self setIPAddress:       [decoder decodeObjectForKey: @"ipAddress"]];
     [[self undoManager] enableUndoRegistration];
     [self registerNotificationObservers];
@@ -162,7 +145,6 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
     [super encodeWithCoder:encoder];
     [encoder encodeInteger:pollTime           forKey: @"pollTime"];
     [encoder encodeObject:userName            forKey: @"userName"];
-    [encoder encodeObject:passWord            forKey: @"passWord"];
     [encoder encodeObject:ipAddress           forKey: @"ipAddress"];
 }
 
@@ -188,7 +170,7 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
 {
 }
 
-- (void) putRequestInQueue:(ORL200SCCmd*)aCmd
+- (void) putRequestInQueue:(NSString*)aCmd
 {
     if(!processThread){
         processThread = [[NSThread alloc] initWithTarget:self selector:@selector(processQueue) object:nil];
@@ -210,9 +192,28 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
 
     do {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        id     aCmd = [cmdQueue dequeue];
+        id aCmd = [cmdQueue dequeue];
         if(aCmd!=nil){
-            NSLog(@"%@\n",[aCmd request]);
+            NSTask * task = [[NSTask alloc] init];
+            [task setLaunchPath:@"/usr/bin/ssh"];
+
+            NSArray *arguments;
+            arguments = [NSArray arrayWithObjects:
+                         [NSString stringWithFormat:@"%@@%@",userName,ipAddress],
+                         aCmd, nil];
+            [task setArguments: arguments];
+
+            NSPipe * out = [NSPipe pipe];
+            [task setStandardOutput:out];
+
+            [task launch];
+            [task waitUntilExit];
+            [task release];
+
+            NSFileHandle* read = [out fileHandleForReading];
+            NSData*       dataRead = [read readDataToEndOfFile];
+            NSString*     stringRead = [[[NSString alloc] initWithData:dataRead encoding:NSUTF8StringEncoding] autorelease];
+            NSLog(@"output: %@\n", stringRead);
         }
         [pool release];
         [NSThread sleepForTimeInterval:.01];
@@ -240,19 +241,3 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
 
 @end
 
-@implementation ORL200SCCmd
-- (void) dealloc
-{
-    [request release];
-    [super dealloc];
-}
-- (void) setRequest:(NSString*)aRequest
-{
-    [request release];
-    request = [aRequest copy];
-}
-- (NSString*)request
-{
-    return request;
-}
-@end

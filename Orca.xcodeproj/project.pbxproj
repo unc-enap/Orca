@@ -1385,6 +1385,7 @@
 		8435AAD410C6D0EF00E03F7F /* VarianTPS.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8435AACA10C6D0EF00E03F7F /* VarianTPS.nib */; };
 		8435AAD510C6D0EF00E03F7F /* VarianTPS.tif in Resources */ = {isa = PBXBuildFile; fileRef = 8435AACB10C6D0EF00E03F7F /* VarianTPS.tif */; };
 		8435AD2610C6F0F400E03F7F /* Varian.gif in Resources */ = {isa = PBXBuildFile; fileRef = 8435AD2510C6F0F400E03F7F /* Varian.gif */; };
+		843790CC2A3105560079C23A /* LNGSSlowControls.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843790CB2A3105560079C23A /* LNGSSlowControls.xib */; };
 		8438002F0AB23EC20069C0BA /* ORRangeTimerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 843800290AB23EC20069C0BA /* ORRangeTimerController.h */; };
 		843800300AB23EC20069C0BA /* ORRangeTimerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8438002A0AB23EC20069C0BA /* ORRangeTimerController.m */; };
 		843800310AB23EC20069C0BA /* ORRangeTimerModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 8438002B0AB23EC20069C0BA /* ORRangeTimerModel.h */; };
@@ -1789,7 +1790,6 @@
 		8471D47D1588DF3C0039894D /* RemoteSocket.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8471D4771588DF3C0039894D /* RemoteSocket.nib */; };
 		8471D47E1588DF3C0039894D /* RemoteSocket.tif in Resources */ = {isa = PBXBuildFile; fileRef = 8471D4781588DF3C0039894D /* RemoteSocket.tif */; };
 		847274272A2BBBCC00916220 /* ORLNGSSlowControlsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 847274212A2BBBCC00916220 /* ORLNGSSlowControlsController.m */; };
-		847274292A2BBBCC00916220 /* LNGSSlowControls.nib in Resources */ = {isa = PBXBuildFile; fileRef = 847274232A2BBBCC00916220 /* LNGSSlowControls.nib */; };
 		8472742A2A2BBBCC00916220 /* ORLNGSSlowControlsController.h in Headers */ = {isa = PBXBuildFile; fileRef = 847274242A2BBBCC00916220 /* ORLNGSSlowControlsController.h */; };
 		8472742B2A2BBBCC00916220 /* ORLNGSSlowControlsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 847274252A2BBBCC00916220 /* ORLNGSSlowControlsModel.m */; };
 		8472742C2A2BBBCC00916220 /* ORLNGSSlowControlsModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 847274262A2BBBCC00916220 /* ORLNGSSlowControlsModel.h */; };
@@ -5129,6 +5129,7 @@
 		8435AACB10C6D0EF00E03F7F /* VarianTPS.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = VarianTPS.tif; path = Source/Objects/Hardware/Serial/VarianTPS/VarianTPS.tif; sourceTree = SOURCE_ROOT; };
 		8435AD2510C6F0F400E03F7F /* Varian.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = Varian.gif; path = Source/Objects/Hardware/Serial/VarianTPS/Varian.gif; sourceTree = SOURCE_ROOT; };
 		84368AD10471AACA005F64B1 /* HPPulser.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = HPPulser.nib; path = Source/Objects/Hardware/GPIB/HPPulser/HPPulser.nib; sourceTree = SOURCE_ROOT; };
+		843790CB2A3105560079C23A /* LNGSSlowControls.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LNGSSlowControls.xib; sourceTree = "<group>"; };
 		843800290AB23EC20069C0BA /* ORRangeTimerController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORRangeTimerController.h; path = Source/Objects/ProcessLogic/ProcessElements/analog/rangeTimer/ORRangeTimerController.h; sourceTree = SOURCE_ROOT; };
 		8438002A0AB23EC20069C0BA /* ORRangeTimerController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = ORRangeTimerController.m; path = Source/Objects/ProcessLogic/ProcessElements/analog/rangeTimer/ORRangeTimerController.m; sourceTree = SOURCE_ROOT; };
 		8438002B0AB23EC20069C0BA /* ORRangeTimerModel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORRangeTimerModel.h; path = Source/Objects/ProcessLogic/ProcessElements/analog/rangeTimer/ORRangeTimerModel.h; sourceTree = SOURCE_ROOT; };
@@ -5570,7 +5571,6 @@
 		8471D4771588DF3C0039894D /* RemoteSocket.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = RemoteSocket.nib; path = "Source/Objects/Misc Objects/RemoteSocket/RemoteSocket.nib"; sourceTree = SOURCE_ROOT; };
 		8471D4781588DF3C0039894D /* RemoteSocket.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = RemoteSocket.tif; path = "Source/Objects/Misc Objects/RemoteSocket/RemoteSocket.tif"; sourceTree = SOURCE_ROOT; };
 		847274212A2BBBCC00916220 /* ORLNGSSlowControlsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORLNGSSlowControlsController.m; sourceTree = "<group>"; };
-		847274232A2BBBCC00916220 /* LNGSSlowControls.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = LNGSSlowControls.nib; sourceTree = "<group>"; };
 		847274242A2BBBCC00916220 /* ORLNGSSlowControlsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORLNGSSlowControlsController.h; sourceTree = "<group>"; };
 		847274252A2BBBCC00916220 /* ORLNGSSlowControlsModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORLNGSSlowControlsModel.m; sourceTree = "<group>"; };
 		847274262A2BBBCC00916220 /* ORLNGSSlowControlsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORLNGSSlowControlsModel.h; sourceTree = "<group>"; };
@@ -10985,7 +10985,7 @@
 				847274262A2BBBCC00916220 /* ORLNGSSlowControlsModel.h */,
 				847274212A2BBBCC00916220 /* ORLNGSSlowControlsController.m */,
 				847274242A2BBBCC00916220 /* ORLNGSSlowControlsController.h */,
-				847274232A2BBBCC00916220 /* LNGSSlowControls.nib */,
+				843790CB2A3105560079C23A /* LNGSSlowControls.xib */,
 				8472742F2A2BCDE300916220 /* LNGSSlowControls.png */,
 			);
 			path = LNSSlowControls;
@@ -17521,7 +17521,6 @@
 				84E5B30F0715E16700C7B798 /* NcdCableCheckTask.nib in Resources */,
 				843CDF58071C9CF4009D7D30 /* RandomPulser.nib in Resources */,
 				843CE013071CAB20009D7D30 /* RandomPulser.gif in Resources */,
-				847274292A2BBBCC00916220 /* LNGSSlowControls.nib in Resources */,
 				E6E20C9726EE4CB10081279D /* remote_path in Resources */,
 				849191C70725B5DE00F454F1 /* edu.washington.npl.orca.Document.plist in Resources */,
 				849194460725CB6C00F454F1 /* edu.washington.npl.orca.Waveform.plist in Resources */,
@@ -18098,6 +18097,7 @@
 				843175CD1152766E005643AB /* Halo.gif in Resources */,
 				843175CE1152766E005643AB /* Halo.nib in Resources */,
 				84EA1FB120E28F810099F3DF /* RefClock.gif in Resources */,
+				843790CC2A3105560079C23A /* LNGSSlowControls.xib in Resources */,
 				844CD8FF18CA986F00F47A5B /* CouchHistoryEventsMap.txt in Resources */,
 				840DEA27115D7981006AF231 /* WindowSaveSet.nib in Resources */,
 				84B7545E1160E01C00667631 /* CC4189.nib in Resources */,

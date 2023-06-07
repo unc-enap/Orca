@@ -65,11 +65,6 @@
                         object: model];
     
     [notifyCenter addObserver : self
-                     selector : @selector(passWordChanged:)
-                         name : ORL200SlowControlsPassWordChanged
-                        object: model];
-    
-    [notifyCenter addObserver : self
                      selector : @selector(ipAddressChanged:)
                          name : ORL200SlowControlsIPAddressChanged
                         object: model];
@@ -80,7 +75,6 @@
     [ super updateWindow ];
     [self lockChanged:nil];
     [self userNameChanged:nil];
-    [self passWordChanged:nil];
     [self pollTimeChanged:nil];
     [self ipAddressChanged:nil];
 	[self dataIsValidChanged:nil];
@@ -121,11 +115,6 @@
     [userNameField setStringValue:[model userName]];
 }
 
-- (void) passWordChanged:(NSNotification*)aNote
-{
-    [passWordField setStringValue:[model passWord]];
-}
-
 - (void) ipAddressChanged:(NSNotification*)aNote
 {
     [ipAddressField setStringValue:[model ipAddress]];
@@ -141,10 +130,9 @@
     [lockButton setState: locked];
 	
     [userNameField      setEnabled: !locked];
-    [passWordField      setEnabled: !locked];
     [ipAddressField     setEnabled: !locked];
     [pollTimePopup      setEnabled: !locked];
-	[pollNowButton		setEnabled: !locked];
+    [pollNowButton      setEnabled: !locked];
 }
 
 - (NSString*) windowNibName
@@ -163,20 +151,16 @@
     [gSecurity tryToSetLock:ORLNGSSlowControlsLock to:[sender intValue] forWindow:[self window]];
 }
 
-
 - (IBAction) pollNowAction:(id)sender
 {
-	//[model getAllValues];
+	[model pollHardware];
 }
+
 - (IBAction) userNameAction:(id)sender
 {
     [model setUserName:[userNameField stringValue]];
 }
 
-- (IBAction) passWordAction:(id)sender
-{
-    [model setPassWord:[passWordField stringValue]];
-}
 - (IBAction) ipAddressAction:(id)sender
 {
     [model setIPAddress:[ipAddressField stringValue]];

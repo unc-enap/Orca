@@ -22,19 +22,11 @@
 
 @class ORSafeQueue;
 
-@interface ORL200SCCmd : NSObject{
-    NSString* request;
-}
-- (void)setRequest:(NSString*)aRequest;
-- (NSString*)request;
-@end
-
 @interface ORLNGSSlowControlsModel : OrcaObject
 {
     NSString*           lastRequest;
     NSString*           ipAddress;
     NSString*           userName;
-    NSString*           passWord;
 	int					pollTime;
     int32_t             errorCount;
     
@@ -53,14 +45,13 @@
 - (void) setIPAddress:(NSString*)anIP;
 - (NSString*) userName;
 - (void) setUserName:(NSString*)aName;
-- (NSString*) passWord;
-- (void) setPassWord:(NSString*)aPassword;
 
 #pragma mark •••HW Commands
 - (void) dataReceived:(NSNotification*)note;
+- (void) pollHardware;
 
 #pragma mark ***Thread
-- (void) putRequestInQueue:(ORL200SCCmd*)aCmd;
+- (void) putRequestInQueue:(NSString*)aCmd;
 - (void) processQueue;
 
 - (void) timeout;
@@ -76,7 +67,6 @@ extern NSString* ORLNGSSlowControlsPollTimeChanged;
 extern NSString* ORLNGSSlowControlsModelDataIsValidChanged;
 extern NSString* ORL200SlowControlsIPAddressChanged;
 extern NSString* ORL200SlowControlsUserNameChanged;
-extern NSString* ORL200SlowControlsPassWordChanged;
 extern NSString* ORLNGSSlowControlsLock;
 
 

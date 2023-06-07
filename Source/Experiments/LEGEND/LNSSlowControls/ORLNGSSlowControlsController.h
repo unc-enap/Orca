@@ -22,16 +22,15 @@
 
 @interface ORLNGSSlowControlsController : OrcaObjectController
 {
-	IBOutlet NSButton*		    lockButton;
-	IBOutlet NSButton*		    sendButton;
-	IBOutlet ORTimedTextField*	timeoutField;
+	IBOutlet NSButton*		        lockButton;
+	IBOutlet NSButton*		        sendButton;
+	IBOutlet ORTimedTextField*	    timeoutField;
 
-	IBOutlet NSProgressIndicator* pollingProgress;
-	IBOutlet NSPopUpButton*     pollTimePopup;
-	IBOutlet NSButton*          pollNowButton;
-    IBOutlet NSSecureTextField* passWordField;
-    IBOutlet NSTextField*       userNameField;
-    IBOutlet NSTextField*       ipAddressField;
+	IBOutlet NSProgressIndicator*   pollingProgress;
+	IBOutlet NSPopUpButton*         pollTimePopup;
+	IBOutlet NSButton*              pollNowButton;
+    IBOutlet NSTextField*           userNameField;
+    IBOutlet NSTextField*           ipAddressField;
 }
 
 #pragma mark ***Interface Management
@@ -40,7 +39,6 @@
 - (void) pollTimeChanged:(NSNotification*)aNote;
 - (void) dataIsValidChanged:(NSNotification*)aNote;
 - (void) userNameChanged:(NSNotification*)aNote;
-- (void) passWordChanged:(NSNotification*)aNote;
 - (void) ipAddressChanged:(NSNotification*)aNote;
 
 #pragma mark •••Actions
@@ -48,7 +46,6 @@
 - (IBAction) pollTimeAction:(id)sender;
 - (IBAction) pollNowAction:(id)sender;
 - (IBAction) userNameAction:(id)sender;
-- (IBAction) passWordAction:(id)sender;
 - (IBAction) ipAddressAction:(id)sender;
 @end
 
