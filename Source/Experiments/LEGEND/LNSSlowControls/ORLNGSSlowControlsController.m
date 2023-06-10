@@ -34,6 +34,7 @@
 
 - (void) awakeFromNib
 {
+    [statusTable reloadData];
 	[super awakeFromNib];
 }
 
@@ -55,11 +56,6 @@
                         object: model];
     
     [notifyCenter addObserver : self
-                     selector : @selector(dataIsValidChanged:)
-                         name : ORLNGSSlowControlsModelDataIsValidChanged
-                        object: model];
-    
-    [notifyCenter addObserver : self
                      selector : @selector(userNameChanged:)
                          name : ORL200SlowControlsUserNameChanged
                         object: model];
@@ -73,22 +69,28 @@
                      selector : @selector(ipAddressChanged:)
                          name : ORL200SlowControlsIPAddressChanged
                         object: model];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(statusChanged:)
+                         name : ORL200SlowControlsStatusChanged
+                        object: model];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(inFluxAvailablityChanged:)
+                         name : ORL200SlowControlsInFluxChanged
+                       object : nil];
 }
 
 - (void) updateWindow
 {
-    [ super updateWindow ];
+    [super updateWindow];
     [self lockChanged:nil];
     [self userNameChanged:nil];
     [self cmdPathChanged:nil];
     [self pollTimeChanged:nil];
     [self ipAddressChanged:nil];
-	[self dataIsValidChanged:nil];
-	[self updateButtons];
-}
-
-- (void) dataIsValidChanged:(NSNotification*)aNote
-{
+    [self statusChanged:nil];
+    [self inFluxAvailablityChanged:nil];
 	[self updateButtons];
 }
 
@@ -109,11 +111,23 @@
 	[self updateButtons];
 }
 
+- (void) inFluxAvailablityChanged:(NSNotification*)aNote
+{
+    bool influxDBAvailable = [model inFluxDBAvailable];
+    [inFluxAvailableField setStringValue:influxDBAvailable?@"Available":@"Not in Config"];
+    [inFluxAvailableField setTextColor:influxDBAvailable?[NSColor blackColor]:[NSColor redColor]];
+}
+
 - (void) pollTimeChanged:(NSNotification*)aNote
 {
 	[pollTimePopup selectItemWithTag: [model pollTime]];
 	if([model pollTime])[pollingProgress startAnimation:self];
 	else [pollingProgress stopAnimation:self];
+}
+
+- (void) statusChanged:(NSNotification*)aNote
+{
+    [statusTable reloadData];
 }
 
 - (void) userNameChanged:(NSNotification*)aNote
@@ -181,6 +195,22 @@
 - (IBAction) ipAddressAction:(id)sender
 {
     [model setIPAddress:[ipAddressField stringValue]];
+}
+
+- (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
+{
+    id aCmd = [model cmdAtIndex:rowIndex];
+    if([[aTableColumn identifier] isEqualToString:@"name"]){
+        return aCmd;
+    }
+    else {
+        return [model cmdValue:aCmd key:[aTableColumn identifier]];
+    }
+}
+
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView
+{
+    return [model cmdListCount];
 }
 @end
 

@@ -21,17 +21,16 @@
 #import "ORLNGSSlowControlsModel.h"
 #import "ORSafeQueue.h"
 
-NSString* ORLNGSSlowControlsPollTimeChanged			= @"ORLNGSSlowControlsPollTimeChanged";
-NSString* ORLNGSSlowControlsModelTimeOutErrorChanged= @"ORLNGSSlowControlsModelTimeOutErrorChanged";
-NSString* ORLNGSSlowControlsLock					= @"ORLNGSSlowControlsLock";
-NSString* ORLNGSSlowControlsModelTimeout			= @"ORLNGSSlowControlsModelTimeout";
-NSString* ORLNGSSlowControlsModelDataIsValidChanged = @"ORLNGSSlowControlsModelDataIsValidChanged";
-NSString* ORL200SlowControlsErrorCountChanged       = @"ORL200SlowControlsErrorCountChanged";
-NSString* ORL200SlowControlsUserNameChanged         = @"ORL200SlowControlsUserNameChanged";
-NSString* ORL200SlowControlsCmdPathChanged          = @"ORL200SlowControlsCmdPathChanged";
-NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddressChanged";
+NSString* ORLNGSSlowControlsPollTimeChanged	 = @"ORLNGSSlowControlsPollTimeChanged";
+NSString* ORLNGSSlowControlsLock			 = @"ORLNGSSlowControlsLock";
+NSString* ORL200SlowControlsUserNameChanged  = @"ORL200SlowControlsUserNameChanged";
+NSString* ORL200SlowControlsCmdPathChanged   = @"ORL200SlowControlsCmdPathChanged";
+NSString* ORL200SlowControlsIPAddressChanged = @"ORL200SlowControlsIPAddressChanged";
+NSString* ORL200SlowControlsStatusChanged    = @"ORL200SlowControlsStatusChanged";
+NSString* ORL200SlowControlsInFluxChanged    = @"ORL200SlowControlsInFluxChanged";
 
 @implementation ORLNGSSlowControlsModel
+
 
 - (void) dealloc
 {
@@ -39,17 +38,30 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     canceled = YES;
 	[cmdQueue       release];
-	[lastRequest    release];
     [processThread  release];
     [userName       release];
     [cmdPath        release];
+    [cmdStatus      release];
+    [cmdList        release];
+    [inFlux         release];
     [super dealloc];
 }
+
 - (void) sleep
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     [super sleep];
 }
+
+- (void) awakeAfterDocumentLoaded
+{
+    @try{
+        [self registerNotificationObservers];
+        [self findInfluxDB];
+    }
+    @catch(NSException* localException){ }
+}
+
 - (void) makeMainController
 {
     [self linkToController:@"ORLNGSSlowControlsController"];
@@ -62,21 +74,45 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
 
 - (void) registerNotificationObservers
 {
-//	NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
+    NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(configurationChanged:)
+                         name : ORGroupObjectsAdded
+                       object : nil];
 
-//    [notifyCenter addObserver : self
-//                     selector : @selector(dataReceived:)
-//                         name : ORSerialPortDataReceived
-//                       object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(configurationChanged:)
+                         name : ORGroupObjectsRemoved
+                       object : nil];
+}
+
+- (void) configurationChanged:(NSNotification*)aNote
+{
+    [self findInfluxDB];
+}
+
+- (void) findInfluxDB
+{
+    [inFlux release];
+    inFlux = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORInFluxDBModel,1"]retain];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORL200SlowControlsInFluxChanged object:self];
+    
+}
+
+- (bool) inFluxDBAvailable
+{
+    return inFlux != nil;
 }
 
 #pragma mark ***Accessors
-
 - (NSString*) ipAddress
 {
     return ipAddress!=nil?ipAddress:@"";
 
 }
+
 - (void) setIPAddress:(NSString*)anIP
 {
     if(!anIP)anIP = @"";
@@ -85,10 +121,12 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
     ipAddress = [anIP copy];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORL200SlowControlsIPAddressChanged object:self];
 }
+
 - (NSString*) userName
 {
     return userName!=nil?userName:@"";
 }
+
 - (void) setUserName:(NSString*)aName
 {
     if(!aName)aName = @"";
@@ -97,10 +135,12 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
     userName = [aName copy];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORL200SlowControlsUserNameChanged object:self];
 }
+
 - (NSString*) cmdPath
 {
     return cmdPath!=nil?cmdPath:@"";
 }
+
 - (void) setCmdPath:(NSString*)aPath
 {
     if(!aPath)aPath = @"";
@@ -109,6 +149,7 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
     cmdPath = [aPath copy];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORL200SlowControlsCmdPathChanged object:self];
 }
+
 - (int) pollTime
 {
     return pollTime;
@@ -121,13 +162,17 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
     [[NSNotificationCenter defaultCenter] postNotificationName:ORLNGSSlowControlsPollTimeChanged object:self];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(pollHardware) object:nil];
     if(pollTime)[self performSelector:@selector(pollHardware) withObject:nil afterDelay:pollTime];
+    [self pollHardware];
 }
 
 - (void) pollHardware
 {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(pollHardware) object:nil];
     if([cmdQueue count]==0){
-        [self putRequestInQueue:@"ls"];
-        [self putRequestInQueue:@"df"];
+        [self setUpCmdStatus];
+        for(id aCmd in cmdStatus){
+            [self putRequestInQueue:aCmd];
+        }
     }
     if(pollTime)[self performSelector:@selector(pollHardware) withObject:nil afterDelay:pollTime];
 }
@@ -142,14 +187,16 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
 {
     self = [super initWithCoder:decoder];
     
+    [self setUpCmdStatus];
+    
     [[self undoManager] disableUndoRegistration];
 
-    [self setPollTime:        [decoder decodeIntForKey: @"pollTime"]];
-    [self setUserName:        [decoder decodeObjectForKey: @"userName"]];
-    [self setCmdPath:         [decoder decodeObjectForKey: @"cmdPath"]];
-    [self setIPAddress:       [decoder decodeObjectForKey: @"ipAddress"]];
+    [self setPollTime:    [decoder decodeIntForKey:    @"pollTime"]];
+    [self setUserName:    [decoder decodeObjectForKey: @"userName"]];
+    [self setCmdPath:     [decoder decodeObjectForKey: @"cmdPath"]];
+    [self setIPAddress:   [decoder decodeObjectForKey: @"ipAddress"]];
+    
     [[self undoManager] enableUndoRegistration];
-    [self registerNotificationObservers];
 		
     return self;
 }
@@ -157,32 +204,10 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInteger:pollTime           forKey: @"pollTime"];
-    [encoder encodeObject:userName            forKey: @"userName"];
-    [encoder encodeObject:cmdPath            forKey: @"cmdPath"];
-    [encoder encodeObject:ipAddress           forKey: @"ipAddress"];
-}
-
-
-- (NSString*) lastRequest
-{
-	return lastRequest;
-}
-
-- (void) setLastRequest:(NSString*)aRequest
-{
-	[aRequest retain];
-	[lastRequest release];
-	lastRequest = aRequest;    
-}
-
-- (BOOL) allDataIsValid:(unsigned short)aChan
-{
-    return YES;
-}
-
-- (void) dataReceived:(NSNotification*)note
-{
+    [encoder encodeInteger:pollTime   forKey: @"pollTime"];
+    [encoder encodeObject:userName    forKey: @"userName"];
+    [encoder encodeObject:cmdPath     forKey: @"cmdPath"];
+    [encoder encodeObject:ipAddress   forKey: @"ipAddress"];
 }
 
 - (void) putRequestInQueue:(NSString*)aCmd
@@ -197,61 +222,125 @@ NSString* ORL200SlowControlsIPAddressChanged        = @"ORL200SlowControlsIPAddr
     [cmdQueue enqueue:aCmd];
 }
 
+#pragma mark ***Cmds and Status
+- (void) setUpCmdStatus
+{
+    if(!cmdList){
+        cmdList = [@[@"ls",@"df"] retain];
+    }
+    if(!cmdStatus){
+        cmdStatus = [[NSMutableDictionary dictionary]retain];
+        for(id aCmd in cmdList){
+            [cmdStatus setObject: [NSMutableDictionary dictionaryWithObjectsAndKeys:@"?",kCmdStatus,
+                                             @"?",kCmdTime,
+                                             @"?",kCmdData,
+                                             nil]
+                          forKey:aCmd];
+        }
+    }
+}
+
+- (void) setCmd:(NSString*)aCmd key:(id)aKey value:(id)aValue
+{
+    @synchronized (self) {
+        [[cmdStatus objectForKey:aCmd] setObject:aValue forKey:aKey];
+    }
+}
+
+- (id) cmdValue:(id)aCmd key:(id)aKey
+{
+    id aValue = @"";
+    @synchronized (self) {
+        aValue = [[cmdStatus objectForKey:aCmd]  objectForKey:aKey];
+    }
+    return aValue;
+}
+
+- (NSString*) cmdAtIndex:(NSInteger)i
+{
+    return [cmdList objectAtIndex:i];
+}
+
+- (NSInteger) cmdListCount
+{
+    return [cmdList count];
+}
+
 #pragma mark ***Thread
-- (void)processQueue
+- (void) processQueue
 {
     NSAutoreleasePool* outerPool = [[NSAutoreleasePool alloc] init];
-    if(!cmdQueue){
-        cmdQueue = [[ORSafeQueue alloc] init];
-    }
+    
+    if(!cmdQueue) cmdQueue = [[ORSafeQueue alloc] init];
+    ORTimer* timer = [[ORTimer alloc]init];
 
     do {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         id aCmd = [cmdQueue dequeue];
         if(aCmd!=nil){
-            NSTask * task = [[NSTask alloc] init];
+            [self setCmd:aCmd key:kCmdStatus value:@"Execute"];
+            [self setCmd:aCmd key:kCmdTime   value:@"-"];
+            [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORL200SlowControlsStatusChanged object:self userInfo:nil waitUntilDone:YES];
+            
+            [timer reset];
+            [timer start];
+            NSTask* task = [[NSTask alloc] init];
             [task setLaunchPath:@"/usr/bin/ssh"];
 
-            NSArray *arguments;
-            arguments = [NSArray arrayWithObjects:
+            NSArray* arguments = [NSArray arrayWithObjects:
                          [NSString stringWithFormat:@"%@@%@",userName,ipAddress],
                          aCmd, nil];
             [task setArguments: arguments];
 
-            NSPipe * out = [NSPipe pipe];
+            NSPipe* out = [NSPipe pipe];
             [task setStandardOutput:out];
 
+
             [task launch];
+            
+            NSFileHandle* read   = [out fileHandleForReading];
+            NSData*  dataRead    = [read readDataToEndOfFile];
             [task waitUntilExit];
             [task release];
-
-            NSFileHandle* read = [out fileHandleForReading];
-            NSData*       dataRead = [read readDataToEndOfFile];
-            NSString*     stringRead = [[[NSString alloc] initWithData:dataRead encoding:NSUTF8StringEncoding] autorelease];
-            NSLog(@"output: %@\n", stringRead);
+        
+            NSString* result = [[[NSString alloc] initWithData:dataRead encoding:NSUTF8StringEncoding] autorelease];
+            [timer stop];
+            [self setCmd:aCmd key:kCmdTime   value:[NSString stringWithFormat:@"%.2f",[timer seconds]]];
+            if([result length]){//<<======add extra error checking
+                [self setCmd:aCmd key:kCmdStatus value:@"OK"];
+                [self setCmd:aCmd key:kCmdData value:result];
+                //[self handle:aCmd data:result];
+            }
+            else {
+                [self setCmd:aCmd key:kCmdStatus value:@"?"];
+                [self setCmd:aCmd key:kCmdData value:@""];
+                //[self handle:aCmd data:result];
+            }
+            [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORL200SlowControlsStatusChanged object:self userInfo:nil waitUntilDone:YES];
         }
         [pool release];
-        [NSThread sleepForTimeInterval:.01];
-    }while(!canceled);
+        [NSThread sleepForTimeInterval:.1];
+    } while(!canceled);
+    [timer release];
     [outerPool release];
 }
 
-- (void) resetDataValid
+- (void) handle:(NSString*)aCmd data:(NSString*)result
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:ORLNGSSlowControlsModelDataIsValidChanged object:self];
-}
-
-- (void) setDataValid:(unsigned short)aChan bit:(BOOL)aMask
-{
-}
-
-- (void) timeout
-{
-	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(timeout) object:nil];
-	NSLogError(@"command timeout",@"LNGSSlowControls",nil);
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORLNGSSlowControlsModelTimeout object:self];
-	[self setLastRequest:nil];
-	[cmdQueue removeAllObjects];
+    //TBD -- parse into chunks and send to influx
+    NSString* s = [self cmdValue:aCmd key:kCmdData];
+    if([self inFluxDBAvailable] && [s length]){
+        if([aCmd isEqualToString:@"getMuon"]){
+            //form is "slot,channel,vSet"s
+            NSArray* lines = [s componentsSeparatedByString:@"\n"];
+            for(NSString* aLine in lines){
+                NSArray* fields = [aLine componentsSeparatedByString:@","];
+                if([fields count]==3){
+                    
+                }
+            }
+        }
+    }
 }
 
 @end

@@ -24,7 +24,6 @@
 {
 	IBOutlet NSButton*		        lockButton;
 	IBOutlet NSButton*		        sendButton;
-	IBOutlet ORTimedTextField*	    timeoutField;
 
 	IBOutlet NSProgressIndicator*   pollingProgress;
 	IBOutlet NSPopUpButton*         pollTimePopup;
@@ -32,15 +31,17 @@
     IBOutlet NSTextField*           userNameField;
     IBOutlet NSTextField*           cmdPathField;
     IBOutlet NSTextField*           ipAddressField;
+    IBOutlet NSTextField*           inFluxAvailableField;
+    IBOutlet NSTableView*           statusTable;
 }
 
 #pragma mark ***Interface Management
-//- (void) timedOut:(NSNotification*)aNote;
 - (void) lockChanged:(NSNotification*)aNote;
 - (void) pollTimeChanged:(NSNotification*)aNote;
-- (void) dataIsValidChanged:(NSNotification*)aNote;
 - (void) userNameChanged:(NSNotification*)aNote;
 - (void) ipAddressChanged:(NSNotification*)aNote;
+- (void) statusChanged:(NSNotification*)aNote;
+- (void) inFluxAvailablityChanged:(NSNotification*)aNote;
 
 #pragma mark •••Actions
 - (IBAction) lockAction:(id) sender;

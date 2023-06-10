@@ -9,11 +9,13 @@
         <customObject id="-2" userLabel="File's Owner" customClass="ORLNGSSlowControlsController">
             <connections>
                 <outlet property="cmdPathField" destination="ycR-Bm-oDo" id="7nf-7w-S1G"/>
+                <outlet property="inFluxAvailableField" destination="1N5-w3-SDX" id="v4J-5E-UKM"/>
                 <outlet property="ipAddressField" destination="LrC-z6-EBM" id="Lrx-X6-khG"/>
                 <outlet property="lockButton" destination="nBC-AK-Pfa" id="OgY-qh-KJp"/>
                 <outlet property="pollNowButton" destination="YWq-ol-WMz" id="Jpq-gc-A9J"/>
                 <outlet property="pollTimePopup" destination="dOR-Rl-ZsA" id="F1U-bY-Dt5"/>
                 <outlet property="pollingProgress" destination="D3q-lG-BsQ" id="apb-5E-yla"/>
+                <outlet property="statusTable" destination="Ohb-wV-jab" id="Sfx-oE-aDM"/>
                 <outlet property="userNameField" destination="29F-CA-dG3" id="LqA-om-nRf"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="Oew-Kx-B4p"/>
             </connections>
@@ -30,7 +32,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <box fixedFrame="YES" borderType="line" title="Slow Control Host" translatesAutoresizingMaskIntoConstraints="NO" id="gEJ-wn-85v">
-                        <rect key="frame" x="151" y="265" width="231" height="211"/>
+                        <rect key="frame" x="136" y="265" width="231" height="211"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="A5a-dS-qfI">
                             <rect key="frame" x="4" y="5" width="223" height="191"/>
@@ -112,7 +114,7 @@
                         </view>
                     </box>
                     <imageView identifier="LNGSSlowControls" toolTip="LNGSSlowControls" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FMC-4N-FlB">
-                        <rect key="frame" x="28" y="367" width="118" height="100"/>
+                        <rect key="frame" x="20" y="368" width="118" height="100"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="LNGSSlowControls" id="ykY-W5-fhT"/>
                     </imageView>
@@ -127,30 +129,28 @@
                             <action selector="lockAction:" target="-2" id="0K4-0x-ZTX"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nRS-1K-3Ab">
-                        <rect key="frame" x="80" y="38" width="171" height="14"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="-----" id="uiW-2Z-JZ3">
-                            <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <box autoresizesSubviews="NO" fixedFrame="YES" borderType="line" title="Polling Rate" translatesAutoresizingMaskIntoConstraints="NO" id="xUc-P7-Wqh">
-                        <rect key="frame" x="423" y="375" width="188" height="92"/>
+                    <box autoresizesSubviews="NO" fixedFrame="YES" borderType="line" title="Polling and Status" translatesAutoresizingMaskIntoConstraints="NO" id="xUc-P7-Wqh">
+                        <rect key="frame" x="369" y="202" width="258" height="274"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="E7S-F5-OTb">
-                            <rect key="frame" x="4" y="5" width="180" height="72"/>
+                            <rect key="frame" x="4" y="5" width="250" height="254"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <progressIndicator horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" minValue="16" maxValue="100" doubleValue="16" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="D3q-lG-BsQ">
-                                    <rect key="frame" x="18" y="9" width="16" height="16"/>
+                                <button verticalHuggingPriority="750" fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YWq-ol-WMz">
+                                    <rect key="frame" x="0.0" y="191" width="244" height="28"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                </progressIndicator>
+                                    <buttonCell key="cell" type="push" title="Poll Now" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="53d-Tk-sxa">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="smallSystem"/>
+                                    </buttonCell>
+                                    <connections>
+                                        <action selector="pollNowAction:" target="-2" id="L30-aK-a2e"/>
+                                    </connections>
+                                </button>
                                 <popUpButton verticalHuggingPriority="750" fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dOR-Rl-ZsA">
-                                    <rect key="frame" x="9" y="45" width="162" height="22"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <popUpButtonCell key="cell" type="push" title="Never Poll" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="t5O-E8-NrV" id="LMS-2Q-0ol">
+                                    <rect key="frame" x="2" y="225" width="192" height="22"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <popUpButtonCell key="cell" type="push" title="Never Poll" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="t5O-E8-NrV" id="LMS-2Q-0ol">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="smallSystem"/>
                                         <menu key="menu" title="OtherViews" id="zlu-qD-ThT">
@@ -166,29 +166,111 @@
                                         <action selector="pollTimeAction:" target="-2" id="9fZ-yi-jaQ"/>
                                     </connections>
                                 </popUpButton>
-                                <button verticalHuggingPriority="750" fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YWq-ol-WMz">
-                                    <rect key="frame" x="101" y="1" width="72" height="28"/>
+                                <scrollView fixedFrame="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="15" horizontalPageScroll="10" verticalLineScroll="15" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pkz-yF-XI5">
+                                    <rect key="frame" x="6" y="20" width="239" height="135"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="push" title="Poll Now" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="53d-Tk-sxa">
-                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <clipView key="contentView" drawsBackground="NO" id="7Sg-54-KpE">
+                                        <rect key="frame" x="0.0" y="0.0" width="239" height="135"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <subviews>
+                                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="tu8-Wt-zYq" id="Ohb-wV-jab">
+                                                <rect key="frame" x="0.0" y="0.0" width="239" height="107"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <size key="intercellSpacing" width="17" height="0.0"/>
+                                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                                <tableColumns>
+                                                    <tableColumn identifier="name" width="40" minWidth="40" maxWidth="1000" id="EiV-oe-sH0">
+                                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Cmd">
+                                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                                        </tableHeaderCell>
+                                                        <textFieldCell key="dataCell" controlSize="small" lineBreakMode="truncatingTail" allowsUndo="NO" alignment="center" title="Text Cell" id="W3X-Jc-TrD">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                                    </tableColumn>
+                                                    <tableColumn identifier="status" width="59" minWidth="40" maxWidth="1000" id="XYr-va-jUC">
+                                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Status">
+                                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                                        </tableHeaderCell>
+                                                        <textFieldCell key="dataCell" controlSize="small" lineBreakMode="truncatingTail" allowsUndo="NO" alignment="center" title="Text Cell" id="Q7S-kO-S3R">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                                    </tableColumn>
+                                                    <tableColumn identifier="time" width="74" minWidth="40" maxWidth="1000" id="uDU-by-3ZK">
+                                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Time (secs)">
+                                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                                        </tableHeaderCell>
+                                                        <textFieldCell key="dataCell" controlSize="small" lineBreakMode="truncatingTail" allowsUndo="NO" alignment="center" title="Text Cell" id="OFg-CM-D2L">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                                    </tableColumn>
+                                                </tableColumns>
+                                                <connections>
+                                                    <outlet property="dataSource" destination="-2" id="Ujg-JB-Sfd"/>
+                                                    <outlet property="delegate" destination="-2" id="Ug2-Vw-50H"/>
+                                                </connections>
+                                            </tableView>
+                                        </subviews>
+                                    </clipView>
+                                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="rzB-cE-k1f">
+                                        <rect key="frame" x="0.0" y="119" width="239" height="16"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                    </scroller>
+                                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="z5G-h8-Xja">
+                                        <rect key="frame" x="224" y="17" width="15" height="102"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                    </scroller>
+                                    <tableHeaderView key="headerView" wantsLayer="YES" id="tu8-Wt-zYq">
+                                        <rect key="frame" x="0.0" y="0.0" width="239" height="28"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                    </tableHeaderView>
+                                </scrollView>
+                                <progressIndicator horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" minValue="16" maxValue="100" doubleValue="16" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="D3q-lG-BsQ">
+                                    <rect key="frame" x="207" y="229" width="16" height="16"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                </progressIndicator>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dE9-Yw-TCR">
+                                    <rect key="frame" x="4" y="170" width="95" height="14"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="InFlux Database: " id="tOk-c7-XNS">
                                         <font key="font" metaFont="smallSystem"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="pollNowAction:" target="-2" id="L30-aK-a2e"/>
-                                    </connections>
-                                </button>
-                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="58" translatesAutoresizingMaskIntoConstraints="NO" id="FSm-zS-7QM" customClass="ORTimedTextField">
-                                    <rect key="frame" x="39" y="7" width="62" height="18"/>
+                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1N5-w3-SDX">
+                                    <rect key="frame" x="103" y="170" width="108" height="14"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="justified" id="A8X-oH-dK1">
-                                        <font key="font" metaFont="label"/>
-                                        <color key="textColor" red="0.48469388000000002" green="0.027539428000000001" blue="0.027539428000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="--" id="VPR-nK-m6b">
+                                        <font key="font" metaFont="smallSystem"/>
+                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
                             </subviews>
                         </view>
                     </box>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nRS-1K-3Ab">
+                        <rect key="frame" x="79" y="30" width="171" height="14"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="-----" id="uiW-2Z-JZ3">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
             </view>
             <point key="canvasLocation" x="162" y="214"/>

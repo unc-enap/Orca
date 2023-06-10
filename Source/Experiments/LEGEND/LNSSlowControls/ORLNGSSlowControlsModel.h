@@ -19,19 +19,24 @@
 #pragma mark •••Imported Files
 
 #import "OrcaObject.h"
+#import "ORInFluxDBModel.h"
 
 @class ORSafeQueue;
 
+#define kCmdStatus @"status"
+#define kCmdTime   @"time"
+#define kCmdData   @"data"
+
 @interface ORLNGSSlowControlsModel : OrcaObject
 {
-    NSString*           lastRequest;
     NSString*           ipAddress;
     NSString*           userName;
     NSString*           cmdPath;
 	int					pollTime;
-    
-    int32_t             errorCount;
-    
+    NSMutableDictionary* cmdStatus;
+    NSArray*            cmdList;
+    ORInFluxDBModel*    inFlux;
+
     //----queue thread--------
     bool                canceled;
     NSThread*           processThread;
@@ -39,8 +44,6 @@
 }
 
 #pragma mark ***Accessors
-- (BOOL) allDataIsValid:(unsigned short)aChan;
-
 - (int) pollTime;
 - (void) setPollTime:(int)aPollTime;
 - (NSString*) ipAddress;
@@ -49,18 +52,18 @@
 - (void) setUserName:(NSString*)aName;
 - (NSString*) cmdPath;
 - (void) setCmdPath:(NSString*)aPath;
+- (bool) inFluxDBAvailable;
 
 #pragma mark •••HW Commands
-- (void) dataReceived:(NSNotification*)note;
 - (void) pollHardware;
+- (NSInteger) cmdListCount;
+- (NSString*) cmdAtIndex:(NSInteger)i;
+- (id) cmdValue:(id)aCmd key:(id)aKey;
 
 #pragma mark ***Thread
 - (void) putRequestInQueue:(NSString*)aCmd;
 - (void) processQueue;
-
-- (void) timeout;
-- (void) setDataValid:(unsigned short)aChan bit:(BOOL)aValue;
-- (void) resetDataValid;
+- (void) handle:(NSString*)aCmd data:(NSString*)result;
 
 #pragma mark ***Archival
 - (id)   initWithCoder:(NSCoder*)decoder;
@@ -68,11 +71,9 @@
 @end
 
 extern NSString* ORLNGSSlowControlsPollTimeChanged;
-extern NSString* ORLNGSSlowControlsModelDataIsValidChanged;
 extern NSString* ORL200SlowControlsIPAddressChanged;
 extern NSString* ORL200SlowControlsUserNameChanged;
 extern NSString* ORL200SlowControlsCmdPathChanged;
+extern NSString* ORL200SlowControlsStatusChanged;
+extern NSString* ORL200SlowControlsInFluxChanged;
 extern NSString* ORLNGSSlowControlsLock;
-
-
-
