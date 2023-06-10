@@ -36,6 +36,8 @@
 #define kFlashCamADCTimeStampLength 4
 #define kFlashCamADCWFHeaderLength 19
 
+#define kDeadBandTime 5
+
 @interface ORFlashCamADCModel : ORFlashCamCard <ORDataTaker, ORHWWizard, ORAdcInfoProviding>
 {
     @private
@@ -71,6 +73,7 @@
     double baselineSampleTime;
     ORTimeRate* baselineHistory[kMaxFlashCamADCChannels];
     ORInFluxDBModel* inFlux;
+    NSDate* startTime; 
 }
 
 #pragma mark •••Initialization

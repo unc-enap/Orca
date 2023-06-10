@@ -814,6 +814,10 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
 - (void) shipToInflux:(int)aChan energy:(int)anEnergy baseline:(int)aBaseline
 {
     if(inFlux){
+        //don't send to inFlux for a few seconds to avoid 'start of run' zeros
+        NSTimeInterval dt = [startTime timeIntervalSinceNow];
+        if(fabs(dt) < kDeadBandTime)return;
+        
         ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"L200" org:[inFlux org]];
         [aCmd start   : @"flashCamADC"];
         [aCmd addTag  : @"location"     withString:[NSString stringWithFormat:@"%02d_%02d_%02d",[self crateNumber],[self slot],aChan]];
@@ -826,6 +830,8 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
 
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
+    [startTime release];
+    startTime = [[NSDate date]retain];
     if([self fwType] == 0)
         [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:@"ORFlashCamADCStdModel"];
     else
@@ -846,6 +852,8 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     [wfRates   stop];
     [trigRates stop];
     [self setWFsamples:0];
+    [startTime release];
+    startTime = nil;
 }
 
 - (void) reset

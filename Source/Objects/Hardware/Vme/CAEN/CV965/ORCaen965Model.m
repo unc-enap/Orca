@@ -261,7 +261,7 @@ NSString* ORCaen965WriteValueChanged		= @"ORCaen965WriteValueChanged";
         
         // If user selected the output buffer then read it.
         else if (theRegIndex == [self getOutputBufferIndex]){
-            ORDataPacket* tempDataPacket = [[ORDataPacket alloc]init];
+            ORDataPacket* tempDataPacket = [[[ORDataPacket alloc]init]autorelease];
 			
 			statusAddress		= [self baseAddress]+reg[kStatusRegister1].addressOffset;
 			dataBufferAddress   = [self baseAddress]+[self getBufferOffset];;
