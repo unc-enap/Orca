@@ -226,7 +226,14 @@ NSString* ORL200SlowControlsInFluxChanged    = @"ORL200SlowControlsInFluxChanged
 - (void) setUpCmdStatus
 {
     if(!cmdList){
-        cmdList = [@[@"ls",@"df"] retain];
+        cmdList = [@[@"getDiode",
+                     @"getMuon",
+                     @"getSiPM",
+                     @"getHeadVoltage",
+                     @"getLlama",
+                     @"getSource",
+                     @"getSource"
+                   ] retain];
     }
     if(!cmdStatus){
         cmdStatus = [[NSMutableDictionary dictionary]retain];
@@ -309,12 +316,12 @@ NSString* ORL200SlowControlsInFluxChanged    = @"ORL200SlowControlsInFluxChanged
             if([result length]){//<<======add extra error checking
                 [self setCmd:aCmd key:kCmdStatus value:@"OK"];
                 [self setCmd:aCmd key:kCmdData value:result];
-                //[self handle:aCmd data:result];
+                [self handle:aCmd data:result];
             }
             else {
                 [self setCmd:aCmd key:kCmdStatus value:@"?"];
                 [self setCmd:aCmd key:kCmdData value:@""];
-                //[self handle:aCmd data:result];
+                [self handle:aCmd data:result];
             }
             [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORL200SlowControlsStatusChanged object:self userInfo:nil waitUntilDone:YES];
         }
@@ -330,16 +337,15 @@ NSString* ORL200SlowControlsInFluxChanged    = @"ORL200SlowControlsInFluxChanged
     //TBD -- parse into chunks and send to influx
     NSString* s = [self cmdValue:aCmd key:kCmdData];
     if([self inFluxDBAvailable] && [s length]){
-        if([aCmd isEqualToString:@"getMuon"]){
-            //form is "slot,channel,vSet"s
-            NSArray* lines = [s componentsSeparatedByString:@"\n"];
-            for(NSString* aLine in lines){
-                NSArray* fields = [aLine componentsSeparatedByString:@","];
-                if([fields count]==3){
-                    
-                }
-            }
-        }
+//        if([aCmd isEqualToString:@"getMuon"]){
+//            //form is "slot,channel,vSet"s
+//            NSArray* lines = [s componentsSeparatedByString:@"\n"];
+//            for(NSString* aLine in lines){
+//                NSArray* fields = [aLine componentsSeparatedByString:@","];
+//                if([fields count]==3){
+//                }
+//            }
+//        }
     }
 }
 
