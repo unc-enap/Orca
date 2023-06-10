@@ -295,7 +295,7 @@ NSString* ORL200SlowControlsInFluxChanged    = @"ORL200SlowControlsInFluxChanged
             [task setLaunchPath:@"/usr/bin/ssh"];
 
             NSArray* arguments = [NSArray arrayWithObjects:
-                         [NSString stringWithFormat:@"%@@%@",userName,ipAddress],
+                         [NSString stringWithFormat:@"%@%@@%@",cmdPath,userName,ipAddress],
                          aCmd, nil];
             [task setArguments: arguments];
 
