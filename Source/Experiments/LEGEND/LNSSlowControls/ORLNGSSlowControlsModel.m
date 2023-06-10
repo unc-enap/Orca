@@ -231,7 +231,6 @@ NSString* ORL200SlowControlsInFluxChanged    = @"ORL200SlowControlsInFluxChanged
                      @"getSiPM",
                      @"getHeadVoltage",
                      @"getLlama",
-                     @"getSource",
                      @"getSource"
                    ] retain];
     }
