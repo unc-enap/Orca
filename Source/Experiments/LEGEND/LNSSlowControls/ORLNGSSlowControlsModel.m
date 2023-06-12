@@ -229,12 +229,11 @@ NSString* ORL200SlowControlsInFluxChanged    = @"ORL200SlowControlsInFluxChanged
         cmdList = [@[@"Diode",       //crate,slot,channel,status,vSet,vMon,rampUp,rampDown,iMon,iSet
                      @"Muon",        //slot,chan,vset
                      @"SiPM",        //board,channel,status,progress,voltage
-                     @"HeadVoltage", //raspberry,address,name,vSet,vMon,iMon
-                     @"HeadBuffer",     //raspberry,address,channel,vCom,vTerm+,vTerm-,vMon+,vMon-,iMon+,iMon-,age
-                     @"Llama",
-                     @"Source"
+                     @"Llama",       //status
+                     @"Source"       //source,status,position
                    ] retain];
     }
+    
     if(!cmdStatus){
         cmdStatus = [[NSMutableDictionary dictionary]retain];
         for(id aCmd in cmdList){
@@ -302,11 +301,10 @@ NSString* ORL200SlowControlsInFluxChanged    = @"ORL200SlowControlsInFluxChanged
             NSPipe* out = [NSPipe pipe];
             [task setStandardOutput:out];
 
-
             [task launch];
             
             NSFileHandle* read   = [out fileHandleForReading];
-            NSData*  dataRead    = [read readDataToEndOfFile];
+            NSData*   dataRead   = [read readDataToEndOfFile];
             [task waitUntilExit];
             [task release];
         
@@ -334,20 +332,29 @@ NSString* ORL200SlowControlsInFluxChanged    = @"ORL200SlowControlsInFluxChanged
 
 - (void) handle:(NSString*)aCmd data:(NSString*)result
 {
-    //TBD -- parse into chunks and send to influx
-    NSString* s = [self cmdValue:aCmd key:kCmdData];
-    if([self inFluxDBAvailable] && [s length]){
-//        if([aCmd isEqualToString:@"getMuon"]){
-//            //form is "slot,channel,vSet"s
-//            NSArray* lines = [s componentsSeparatedByString:@"\n"];
-//            for(NSString* aLine in lines){
-//                NSArray* fields = [aLine componentsSeparatedByString:@","];
-//                if([fields count]==3){
-//                }
-//            }
-//        }
+    [[cmdStatus objectForKey:aCmd] removeObjectForKey:kCmdData]; //delete the old data
+
+    if([result length]){
+        int expectedNumArgs = 0;
+        
+        if(     [aCmd isEqualToString:@"getMuon"])  expectedNumArgs =  3; //slot,cha,vSet
+        else if([aCmd isEqualToString:@"getDiode"]) expectedNumArgs = 10; //crate,slot,chan,status,vSet,vMon,rmpUp,rmpDown,iMon,iSet
+        else if([aCmd isEqualToString:@"getSiPM"])  expectedNumArgs =  5; //board,chan,status,progress,voltage
+        else if([aCmd isEqualToString:@"getLlama"]) expectedNumArgs =  1; //state
+        else if([aCmd isEqualToString:@"getSource"])expectedNumArgs =  3; //source,status,position
+
+        if(expectedNumArgs){
+            NSMutableArray* data  = [NSMutableArray array];
+            NSArray*        lines = [result componentsSeparatedByString:@"\n"];
+            for(NSString* aLine in lines){
+                NSArray* fields = [aLine componentsSeparatedByString:@","];
+                if([fields count] == expectedNumArgs){
+                    [data addObject:fields];
+                }
+            }
+            [[cmdStatus objectForKey:aCmd] setObject:data forKey:kCmdData];
+        }
     }
 }
 
 @end
-
