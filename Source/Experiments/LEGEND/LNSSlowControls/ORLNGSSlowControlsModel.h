@@ -25,6 +25,7 @@
 
 #define kCmdStatus     @"status"
 #define kCmdTime       @"time"
+#define kNumArgs       @"numArgs"
 #define kCmdData       @"data"
 
 @interface ORLNGSSlowControlsModel : OrcaObject
@@ -35,7 +36,7 @@
 	int					pollTime;
     NSMutableDictionary* cmdStatus;
     NSArray*            cmdList;
-    ORInFluxDBModel*    inFlux;
+    ORInFluxDBModel*    inFluxDB;
 
     //----queue thread--------
     bool                canceled;
@@ -65,6 +66,7 @@
 - (void) putRequestInQueue:(NSString*)aCmd;
 - (void) processQueue;
 - (void) handle:(NSString*)aCmd data:(NSString*)result;
+- (void) sendToInFlux:(NSString*)aCmd;
 
 #pragma mark ***Archival
 - (id)   initWithCoder:(NSCoder*)decoder;

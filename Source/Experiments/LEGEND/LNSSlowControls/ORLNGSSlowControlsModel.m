@@ -44,7 +44,7 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
     [cmdPath        release];
     [cmdStatus      release];
     [cmdList        release];
-    [inFlux         release];
+    [inFluxDB       release];
     [super dealloc];
 }
 
@@ -95,8 +95,8 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
 
 - (void) findInfluxDB
 {
-    [inFlux release];
-    inFlux = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORInFluxDBModel,1"]retain];
+    [inFluxDB release];
+    inFluxDB = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORInFluxDBModel,1"]retain];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:ORL200SlowControlsInFluxChanged object:self];
     
@@ -104,7 +104,7 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
 
 - (bool) inFluxDBAvailable
 {
-    return inFlux != nil;
+    return inFluxDB != nil;
 }
 
 #pragma mark ***Accessors
@@ -226,6 +226,7 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
 #pragma mark ***Cmds and Status
 - (void) setUpCmdStatus
 {
+    NSArray* expectedArgCounts = @[@10,@3,@5,@1,@3]; //must be same order as below
     if(!cmdList){
         cmdList = [@[@"Diode",       //crate,slot,channel,status,vSet,vMon,rampUp,rampDown,iMon,iSet
                      @"Muon",        //slot,chan,vset
@@ -237,12 +238,16 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
     
     if(!cmdStatus){
         cmdStatus = [[NSMutableDictionary dictionary]retain];
+        int i = 0;
         for(id aCmd in cmdList){
-            [cmdStatus setObject: [NSMutableDictionary dictionaryWithObjectsAndKeys:@"?",kCmdStatus,
-                                             @"?",kCmdTime,
+            [cmdStatus setObject: [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                             @"?",                  kCmdStatus,
+                                             @"?",                  kCmdTime,
                                              [NSMutableArray array],kCmdData,
+                                             [expectedArgCounts objectAtIndex:i],   kNumArgs,
                                              nil]
                           forKey:aCmd];
+            i++;
         }
     }
 }
@@ -346,14 +351,7 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
     [[cmdStatus objectForKey:aCmd] removeObjectForKey:kCmdData]; //delete the old data
 
     if([result length]){
-        int expectedNumArgs = 0;
-        
-        if(     [aCmd isEqualToString:@"Muon"])  expectedNumArgs =  3; //slot,cha,vSet
-        else if([aCmd isEqualToString:@"Diode"]) expectedNumArgs = 10; //crate,slot,chan,status,vSet,vMon,rmpUp,rmpDown,iMon,iSet
-        else if([aCmd isEqualToString:@"SiPM"])  expectedNumArgs =  5; //board,chan,status,progress,voltage
-        else if([aCmd isEqualToString:@"Llama"]) expectedNumArgs =  1; //state
-        else if([aCmd isEqualToString:@"Source"])expectedNumArgs =  3; //source,status,position
-
+        int expectedNumArgs = [[[cmdStatus objectForKey:aCmd] objectForKey:kNumArgs] intValue];
         if(expectedNumArgs){
             NSMutableArray* data  = [NSMutableArray array];
             NSArray*        lines = [result componentsSeparatedByString:@"\n"];
@@ -369,4 +367,103 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
     [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORL200SlowControlsDataChanged object:self userInfo:nil waitUntilDone:YES];
 }
 
+- (void) sendToInFlux:(NSString*)aDataCmd
+{
+
+    NSArray* data = [[cmdStatus objectForKey:aDataCmd] objectForKey:kCmdData];
+    if(!data)return;
+    
+    double aTimeStamp = [[NSDate date]timeIntervalSince1970];
+    ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"SlowControls" org:[inFluxDB org]];
+    
+    if([aDataCmd isEqualToString:@"Muon"]){
+        //slot,chan,vSet
+        [aCmd addTag:@"slot"     withString:[data objectAtIndex:0]];
+        [aCmd addTag:@"chan"     withString:[data objectAtIndex:1]];
+        [aCmd addField: @"vSet"  withDouble:[[data objectAtIndex:2] doubleValue]];
+        [aCmd setTimeStamp:aTimeStamp];
+        [inFluxDB executeDBCmd:aCmd];
+    }
+    else if([aDataCmd isEqualToString:@"Diode"]){
+        //crate,slot,chan,status,vSet,vMon,rmpUp,rmpDown,iMon,iSet
+        [aCmd addTag:@"crate"      withString:[data objectAtIndex:0]];
+        [aCmd addTag:@"slot"       withString:[data objectAtIndex:1]];
+        [aCmd addTag:@"chan"       withString:[data objectAtIndex:2]];
+        [aCmd addField:@"status"   withDouble:[[data objectAtIndex:3] doubleValue]];
+        [aCmd addField:@"vSet"     withDouble:[[data objectAtIndex:4] doubleValue]];
+        [aCmd addField:@"vMon"     withDouble:[[data objectAtIndex:5] doubleValue]];
+        [aCmd addField:@"rampUp"   withDouble:[[data objectAtIndex:6] doubleValue]];
+        [aCmd addField:@"rampDown" withDouble:[[data objectAtIndex:7] doubleValue]];
+        [aCmd addField:@"iMon"     withDouble:[[data objectAtIndex:8] doubleValue]];
+        [aCmd addField:@"iSet"     withDouble:[[data objectAtIndex:39] doubleValue]];
+        [aCmd setTimeStamp:aTimeStamp];
+        [inFluxDB executeDBCmd:aCmd];
+    }
+    else if([aDataCmd isEqualToString:@"SiPM"]){
+        //board,chan,status,progress,voltage
+        [aCmd addTag:@"board"      withString:[data objectAtIndex:0]];
+        [aCmd addTag:@"chan"       withString:[data objectAtIndex:1]];
+        [aCmd addField:@"status"   withDouble:[[data objectAtIndex:2] doubleValue]];
+        [aCmd addField:@"progress" withDouble:[[data objectAtIndex:3] doubleValue]];
+        [aCmd addField:@"voltage"  withDouble:[[data objectAtIndex:4] doubleValue]];
+        [aCmd setTimeStamp:aTimeStamp];
+        [inFluxDB executeDBCmd:aCmd];
+
+    }
+    else if([aDataCmd isEqualToString:@"Source"]){
+        //source,status,position
+        [aCmd addTag:@"source"      withString:[data objectAtIndex:0]];
+        [aCmd addTag:@"status"      withString:[data objectAtIndex:1]];
+        [aCmd addField:@"position"  withDouble:[[data objectAtIndex:2] doubleValue]];
+        [aCmd setTimeStamp:aTimeStamp];
+        [inFluxDB executeDBCmd:aCmd];
+    }
+    else if([aDataCmd isEqualToString:@"Llama"]){
+        //state
+        [aCmd addField:@"state" withBoolean:[[data objectAtIndex:0] boolValue]];
+        [aCmd setTimeStamp:aTimeStamp];
+        [inFluxDB executeDBCmd:aCmd];
+    }
+}
 @end
+
+
+/*
+ ORL200SegmentGroup* group = (ORL200SegmentGroup*)[self segmentGroup:groupIndex];
+ for(int i=0; i<[self numberSegmentsInGroup:groupIndex]; i++){
+     ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:[self objectName] org:[influxDB org]];
+     [aCmd start : @"RunTime"];
+     
+     //-----------------------------------------
+     //-------------run time only---------------
+     //-----------------------------------------
+     id aDet = [group segment:i];
+     short crate   = [[aDet objectForKey:@"daq_crate"]intValue];
+     short slot    = [[aDet objectForKey:@"daq_board_slot"]intValue];
+     short chan    = [[aDet objectForKey:@"daq_board_ch"]intValue];
+     NSString* loc = [NSString stringWithFormat:@"%02d_%02d_%02d",crate,slot,chan];
+     
+     [aCmd addTag:@"boardId"         withString:[aDet objectForKey:@"daq_board_id"]];
+     [aCmd addTag:@"cc4Chan"         withString:[aDet objectForKey:@"fe_cc4_ch"]];
+     [aCmd addTag:@"crate"           withString:[aDet objectForKey:@"daq_crate"]];
+     [aCmd addTag:@"channel"         withString:[aDet objectForKey:@"daq_board_ch"]];
+     [aCmd addTag:@"detType"         withString:[aDet objectForKey:@"det_type"]];
+     [aCmd addTag:@"location"        withString:loc];
+     [aCmd addTag:@"name"            withString:name];
+     [aCmd addTag:@"segmentGroupNum" withLong:groupIndex];
+     [aCmd addTag:@"segmentId"       withString:[NSString stringWithFormat:@"%@_%d",name,i]];
+     [aCmd addTag:@"serial"          withString:[aDet objectForKey:@"serial"]];
+     [aCmd addTag:@"slot"            withString:[aDet objectForKey:@"daq_board_slot"]];
+     [aCmd addTag:@"strNumber"       withString:[aDet objectForKey:@"str_number"]];
+     [aCmd addTag:@"strPosition"     withString:[aDet objectForKey:@"str_position"]];
+     
+     [aCmd addField: @"trigCounts"  withDouble:[group getTotalCounts:i]];
+     [aCmd addField: @"trigRates"   withDouble:[group getRate:i]];
+     [aCmd addField: @"wfCounts"    withDouble:[group getWaveformCounts:i]];
+     [aCmd addField: @"wfRates"     withDouble:[group getWaveformRate:i]];
+     [aCmd addField: @"baselines"   withDouble:[group getBaseline:i]];
+     
+     [aCmd setTimeStamp:aTimeStamp];
+     [influxDB executeDBCmd:aCmd];
+ }
+ */

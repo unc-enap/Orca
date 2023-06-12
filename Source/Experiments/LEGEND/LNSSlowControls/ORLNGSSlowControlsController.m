@@ -45,6 +45,8 @@
     [siPMTable   reloadData];
     [diodeTable  reloadData];
     [sourceTable reloadData];
+    
+    [LlamaField setStringValue:[model cmd:@"Llama"   dataAtRow:0 column:0]];
 }
 
 - (void) registerNotificationObservers
