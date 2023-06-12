@@ -35,18 +35,18 @@
 - (void) awakeFromNib
 {
     [statusTable reloadData];
-    [self reloadDataTables];
+    [self reloadDataTables:nil];
 	[super awakeFromNib];
 }
 
-- (void) reloadDataTables
+- (void) reloadDataTables:(NSNotification*)aNote
 {
     [muonTable   reloadData];
     [siPMTable   reloadData];
     [diodeTable  reloadData];
     [sourceTable reloadData];
     
-    [LlamaField setStringValue:[model cmd:@"Llama"   dataAtRow:0 column:0]];
+    [LlamaField setStringValue:[[model cmd:@"Llama"   dataAtRow:0 column:0] isEqualToString:@"1"]?@"ON":@"OFF"];
 }
 
 - (void) registerNotificationObservers
@@ -87,7 +87,7 @@
                         object: model];
  
     [notifyCenter addObserver : self
-                     selector : @selector(reloadDataTables)
+                     selector : @selector(reloadDataTables:)
                          name : ORL200SlowControlsDataChanged
                         object: model];
     
