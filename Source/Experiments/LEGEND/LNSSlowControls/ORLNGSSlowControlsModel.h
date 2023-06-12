@@ -23,9 +23,9 @@
 
 @class ORSafeQueue;
 
-#define kCmdStatus @"status"
-#define kCmdTime   @"time"
-#define kCmdData   @"data"
+#define kCmdStatus     @"status"
+#define kCmdTime       @"time"
+#define kCmdData       @"data"
 
 @interface ORLNGSSlowControlsModel : OrcaObject
 {
@@ -59,6 +59,7 @@
 - (NSInteger) cmdListCount;
 - (NSString*) cmdAtIndex:(NSInteger)i;
 - (id) cmdValue:(id)aCmd key:(id)aKey;
+- (id) cmd:(id)aCmd dataAtRow:(int)row column:(int)col;
 
 #pragma mark ***Thread
 - (void) putRequestInQueue:(NSString*)aCmd;

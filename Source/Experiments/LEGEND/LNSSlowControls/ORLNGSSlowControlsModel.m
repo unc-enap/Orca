@@ -262,6 +262,16 @@ NSString* ORL200SlowControlsInFluxChanged    = @"ORL200SlowControlsInFluxChanged
     return aValue;
 }
 
+- (id) cmd:(id)aCmd dataAtRow:(int)row column:(int)col
+{
+    NSString* aValue = @"";
+    @synchronized (self) {
+        NSArray* dataArray = [[cmdStatus objectForKey:aCmd]  objectForKey:kCmdData];
+        NSArray* aRow      = [dataArray objectAtIndex:row];
+        NSString* aValue   = [aRow objectAtIndex:col];
+    }
+    return aValue;
+}
 - (NSString*) cmdAtIndex:(NSInteger)i
 {
     return [cmdList objectAtIndex:i];
