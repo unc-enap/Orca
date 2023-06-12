@@ -165,9 +165,9 @@
                                         <menu key="menu" title="OtherViews" id="zlu-qD-ThT">
                                             <items>
                                                 <menuItem title="Never Poll" state="on" id="t5O-E8-NrV"/>
-                                                <menuItem title="10 sec Poll" tag="10" id="Z3w-fB-WM1"/>
-                                                <menuItem title="30 sec Poll" tag="30" id="B1J-dQ-Of2"/>
-                                                <menuItem title="60 sec Poll" tag="60" id="8Gw-Ak-ADW"/>
+                                                <menuItem title=" 1 per Min" tag="60" id="Z3w-fB-WM1"/>
+                                                <menuItem title="Every 5 Min" tag="300" id="B1J-dQ-Of2"/>
+                                                <menuItem title="Every 10 Min" tag="600" id="8Gw-Ak-ADW"/>
                                             </items>
                                         </menu>
                                     </popUpButtonCell>
