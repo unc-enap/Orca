@@ -48,7 +48,7 @@
 - (void) ipAddressChanged:(NSNotification*)aNote;
 - (void) statusChanged:(NSNotification*)aNote;
 - (void) inFluxAvailablityChanged:(NSNotification*)aNote;
-- (void) reloadDataTables;
+- (void) reloadDataTables:(NSNotification*)aNote;;
 
 #pragma mark •••Actions
 - (IBAction) lockAction:(id) sender;
