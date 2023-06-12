@@ -385,49 +385,62 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
     
     if([aDataCmd isEqualToString:@"Muon"]){
         //slot,chan,vSet
-        [aCmd addTag:@"slot"     withString:[data objectAtIndex:0]];
-        [aCmd addTag:@"chan"     withString:[data objectAtIndex:1]];
-        [aCmd addField: @"vSet"  withDouble:[[data objectAtIndex:2] doubleValue]];
-        [aCmd setTimeStamp:aTimeStamp];
-        [inFluxDB executeDBCmd:aCmd];
+        for(id aRow in data){
+            ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"SlowControls" org:[inFluxDB org]];
+            [aCmd addTag:@"slot"     withString:[aRow objectAtIndex:0]];
+            [aCmd addTag:@"chan"     withString:[aRow objectAtIndex:1]];
+            [aCmd addField: @"vSet"  withDouble:[[aRow objectAtIndex:2] doubleValue]];
+            [aCmd setTimeStamp:aTimeStamp];
+            [inFluxDB executeDBCmd:aCmd];
+        }
     }
     else if([aDataCmd isEqualToString:@"Diode"]){
         //crate,slot,chan,status,vSet,vMon,rmpUp,rmpDown,iMon,iSet
-        [aCmd addTag:@"crate"      withString:[data objectAtIndex:0]];
-        [aCmd addTag:@"slot"       withString:[data objectAtIndex:1]];
-        [aCmd addTag:@"chan"       withString:[data objectAtIndex:2]];
-        [aCmd addField:@"status"   withDouble:[[data objectAtIndex:3] doubleValue]];
-        [aCmd addField:@"vSet"     withDouble:[[data objectAtIndex:4] doubleValue]];
-        [aCmd addField:@"vMon"     withDouble:[[data objectAtIndex:5] doubleValue]];
-        [aCmd addField:@"rampUp"   withDouble:[[data objectAtIndex:6] doubleValue]];
-        [aCmd addField:@"rampDown" withDouble:[[data objectAtIndex:7] doubleValue]];
-        [aCmd addField:@"iMon"     withDouble:[[data objectAtIndex:8] doubleValue]];
-        [aCmd addField:@"iSet"     withDouble:[[data objectAtIndex:39] doubleValue]];
-        [aCmd setTimeStamp:aTimeStamp];
-        [inFluxDB executeDBCmd:aCmd];
+        for(id aRow in data){
+            ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"SlowControls" org:[inFluxDB org]];
+            [aCmd addTag:@"crate"      withString:[aRow objectAtIndex:0]];
+            [aCmd addTag:@"slot"       withString:[aRow objectAtIndex:1]];
+            [aCmd addTag:@"chan"       withString:[aRow objectAtIndex:2]];
+            [aCmd addField:@"status"   withDouble:[[aRow objectAtIndex:3] doubleValue]];
+            [aCmd addField:@"vSet"     withDouble:[[aRow objectAtIndex:4] doubleValue]];
+            [aCmd addField:@"vMon"     withDouble:[[aRow objectAtIndex:5] doubleValue]];
+            [aCmd addField:@"rampUp"   withDouble:[[aRow objectAtIndex:6] doubleValue]];
+            [aCmd addField:@"rampDown" withDouble:[[aRow objectAtIndex:7] doubleValue]];
+            [aCmd addField:@"iMon"     withDouble:[[aRow objectAtIndex:8] doubleValue]];
+            [aCmd addField:@"iSet"     withDouble:[[aRow objectAtIndex:39] doubleValue]];
+            [aCmd setTimeStamp:aTimeStamp];
+            [inFluxDB executeDBCmd:aCmd];
+        }
     }
     else if([aDataCmd isEqualToString:@"SiPM"]){
-        //board,chan,status,progress,voltage
-        [aCmd addTag:@"board"      withString:[data objectAtIndex:0]];
-        [aCmd addTag:@"chan"       withString:[data objectAtIndex:1]];
-        [aCmd addField:@"status"   withDouble:[[data objectAtIndex:2] doubleValue]];
-        [aCmd addField:@"progress" withDouble:[[data objectAtIndex:3] doubleValue]];
-        [aCmd addField:@"voltage"  withDouble:[[data objectAtIndex:4] doubleValue]];
-        [aCmd setTimeStamp:aTimeStamp];
-        [inFluxDB executeDBCmd:aCmd];
-
+        for(id aRow in data){
+            ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"SlowControls" org:[inFluxDB org]];
+            //board,chan,status,progress,voltage
+            [aCmd addTag:@"board"      withString:[aRow objectAtIndex:0]];
+            [aCmd addTag:@"chan"       withString:[data objectAtIndex:1]];
+            [aCmd addField:@"status"   withDouble:[[aRow objectAtIndex:2] doubleValue]];
+            [aCmd addField:@"progress" withDouble:[[aRow objectAtIndex:3] doubleValue]];
+            [aCmd addField:@"voltage"  withDouble:[[aRow objectAtIndex:4] doubleValue]];
+            [aCmd setTimeStamp:aTimeStamp];
+            [inFluxDB executeDBCmd:aCmd];
+        }
     }
     else if([aDataCmd isEqualToString:@"Source"]){
-        //source,status,position
-        [aCmd addTag:@"source"      withString:[data objectAtIndex:0]];
-        [aCmd addTag:@"status"      withString:[data objectAtIndex:1]];
-        [aCmd addField:@"position"  withDouble:[[data objectAtIndex:2] doubleValue]];
-        [aCmd setTimeStamp:aTimeStamp];
-        [inFluxDB executeDBCmd:aCmd];
+        for(id aRow in data){
+            ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"SlowControls" org:[inFluxDB org]];
+            //source,status,position
+            [aCmd addTag:@"source"      withString:[aRow objectAtIndex:0]];
+            [aCmd addTag:@"status"      withString:[aRow objectAtIndex:1]];
+            [aCmd addField:@"position"  withDouble:[[aRow objectAtIndex:2] doubleValue]];
+            [aCmd setTimeStamp:aTimeStamp];
+            [inFluxDB executeDBCmd:aCmd];
+        }
     }
     else if([aDataCmd isEqualToString:@"Llama"]){
+        //just one entry for this one
+        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"SlowControls" org:[inFluxDB org]];
         //state
-        [aCmd addField:@"state" withBoolean:[[data objectAtIndex:0] boolValue]];
+        [aCmd addField:@"state" withBoolean:[[[data objectAtIndex:0] objectAtIndex:0] boolValue]];
         [aCmd setTimeStamp:aTimeStamp];
         [inFluxDB executeDBCmd:aCmd];
     }
