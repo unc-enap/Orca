@@ -219,7 +219,7 @@ NSString* ORL200SlowControlsInFluxChanged    = @"ORL200SlowControlsInFluxChanged
     if(!cmdQueue){
         cmdQueue = [[ORSafeQueue alloc] init];
     }
-    [cmdQueue enqueue:[NSString stringWithFormat:@"get%@",aCmd]];
+    [cmdQueue enqueue:[NSString stringWithFormat:@"%@",aCmd]];
 }
 
 #pragma mark ***Cmds and Status
@@ -305,7 +305,7 @@ NSString* ORL200SlowControlsInFluxChanged    = @"ORL200SlowControlsInFluxChanged
 
             NSArray* arguments = [NSArray arrayWithObjects:
                         [NSString stringWithFormat:@"%@@%@",userName,ipAddress],
-                        [NSString stringWithFormat:@"%@%@",cmdPath,aCmd], nil];
+                        [NSString stringWithFormat:@"%@get%@",cmdPath,aCmd], nil];
             [task setArguments: arguments];
 
             NSPipe* out = [NSPipe pipe];
