@@ -332,7 +332,9 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
             NSString* result = [[[NSString alloc] initWithData:dataRead encoding:NSUTF8StringEncoding] autorelease];
             [timer stop];
             [self setCmd:aCmd key:kCmdTime   value:[NSString stringWithFormat:@"%.2f",[timer seconds]]];
-            if([result length]){//<<======TBD add extra error checking
+            if([result length] &&
+               [result rangeOfString: @"No"].location==NSNotFound &&
+               [result rangeOfString:@"Err"].location==NSNotFound ){
                 [self setCmd:aCmd key:kCmdStatus value:@"OK"];
                 [self setCmd:aCmd key:kCmdData value:result];
                 [self handle:aCmd data:result];
@@ -432,43 +434,3 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
 }
 @end
 
-
-/*
- ORL200SegmentGroup* group = (ORL200SegmentGroup*)[self segmentGroup:groupIndex];
- for(int i=0; i<[self numberSegmentsInGroup:groupIndex]; i++){
-     ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:[self objectName] org:[influxDB org]];
-     [aCmd start : @"RunTime"];
-     
-     //-----------------------------------------
-     //-------------run time only---------------
-     //-----------------------------------------
-     id aDet = [group segment:i];
-     short crate   = [[aDet objectForKey:@"daq_crate"]intValue];
-     short slot    = [[aDet objectForKey:@"daq_board_slot"]intValue];
-     short chan    = [[aDet objectForKey:@"daq_board_ch"]intValue];
-     NSString* loc = [NSString stringWithFormat:@"%02d_%02d_%02d",crate,slot,chan];
-     
-     [aCmd addTag:@"boardId"         withString:[aDet objectForKey:@"daq_board_id"]];
-     [aCmd addTag:@"cc4Chan"         withString:[aDet objectForKey:@"fe_cc4_ch"]];
-     [aCmd addTag:@"crate"           withString:[aDet objectForKey:@"daq_crate"]];
-     [aCmd addTag:@"channel"         withString:[aDet objectForKey:@"daq_board_ch"]];
-     [aCmd addTag:@"detType"         withString:[aDet objectForKey:@"det_type"]];
-     [aCmd addTag:@"location"        withString:loc];
-     [aCmd addTag:@"name"            withString:name];
-     [aCmd addTag:@"segmentGroupNum" withLong:groupIndex];
-     [aCmd addTag:@"segmentId"       withString:[NSString stringWithFormat:@"%@_%d",name,i]];
-     [aCmd addTag:@"serial"          withString:[aDet objectForKey:@"serial"]];
-     [aCmd addTag:@"slot"            withString:[aDet objectForKey:@"daq_board_slot"]];
-     [aCmd addTag:@"strNumber"       withString:[aDet objectForKey:@"str_number"]];
-     [aCmd addTag:@"strPosition"     withString:[aDet objectForKey:@"str_position"]];
-     
-     [aCmd addField: @"trigCounts"  withDouble:[group getTotalCounts:i]];
-     [aCmd addField: @"trigRates"   withDouble:[group getRate:i]];
-     [aCmd addField: @"wfCounts"    withDouble:[group getWaveformCounts:i]];
-     [aCmd addField: @"wfRates"     withDouble:[group getWaveformRate:i]];
-     [aCmd addField: @"baselines"   withDouble:[group getBaseline:i]];
-     
-     [aCmd setTimeStamp:aTimeStamp];
-     [influxDB executeDBCmd:aCmd];
- }
- */
