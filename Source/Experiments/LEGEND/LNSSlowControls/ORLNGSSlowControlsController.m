@@ -132,7 +132,7 @@
 {
     bool influxDBAvailable = [model inFluxDBAvailable];
     [inFluxAvailableField setStringValue:influxDBAvailable?@"Available":@"Not in Config"];
-    [inFluxAvailableField setTextColor:influxDBAvailable?[NSColor blackColor]:[NSColor redColor]];
+    [inFluxAvailableField setTextColor:influxDBAvailable?[NSColor greenColor]:[NSColor redColor]];
 }
 
 - (void) pollTimeChanged:(NSNotification*)aNote
