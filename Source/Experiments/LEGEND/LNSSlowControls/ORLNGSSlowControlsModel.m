@@ -268,7 +268,7 @@ NSString* ORL200SlowControlsInFluxChanged    = @"ORL200SlowControlsInFluxChanged
     @synchronized (self) {
         NSArray* dataArray = [[cmdStatus objectForKey:aCmd]  objectForKey:kCmdData];
         NSArray* aRow      = [dataArray objectAtIndex:row];
-        NSString* aValue   = [aRow objectAtIndex:col];
+        aValue   = [aRow objectAtIndex:col];
     }
     return aValue;
 }
