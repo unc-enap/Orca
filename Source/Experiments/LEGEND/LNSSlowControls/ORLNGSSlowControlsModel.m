@@ -239,7 +239,7 @@ NSString* ORL200SlowControlsInFluxChanged    = @"ORL200SlowControlsInFluxChanged
         for(id aCmd in cmdList){
             [cmdStatus setObject: [NSMutableDictionary dictionaryWithObjectsAndKeys:@"?",kCmdStatus,
                                              @"?",kCmdTime,
-                                             @"?",kCmdData,
+                                             [NSMutableArray array],kCmdData,
                                              nil]
                           forKey:aCmd];
         }
