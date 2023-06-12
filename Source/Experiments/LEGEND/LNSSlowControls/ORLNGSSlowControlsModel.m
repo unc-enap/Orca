@@ -377,7 +377,6 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
 
 - (void) sendToInFlux:(NSString*)aDataCmd
 {
-
     NSArray* data = [[cmdStatus objectForKey:aDataCmd] objectForKey:kCmdData];
     if(!data)return;
     
@@ -387,6 +386,7 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
         //slot,chan,vSet
         for(id aRow in data){
             ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"SlowControls" org:[inFluxDB org]];
+            [aCmd start : aDataCmd];
             [aCmd addTag:@"slot"     withString:[aRow objectAtIndex:0]];
             [aCmd addTag:@"chan"     withString:[aRow objectAtIndex:1]];
             [aCmd addField: @"vSet"  withDouble:[[aRow objectAtIndex:2] doubleValue]];
@@ -398,6 +398,7 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
         //crate,slot,chan,status,vSet,vMon,rmpUp,rmpDown,iMon,iSet
         for(id aRow in data){
             ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"SlowControls" org:[inFluxDB org]];
+            [aCmd start : aDataCmd];
             [aCmd addTag:@"crate"      withString:[aRow objectAtIndex:0]];
             [aCmd addTag:@"slot"       withString:[aRow objectAtIndex:1]];
             [aCmd addTag:@"chan"       withString:[aRow objectAtIndex:2]];
@@ -413,9 +414,10 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
         }
     }
     else if([aDataCmd isEqualToString:@"SiPM"]){
+        //board,chan,status,progress,voltage
         for(id aRow in data){
             ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"SlowControls" org:[inFluxDB org]];
-            //board,chan,status,progress,voltage
+            [aCmd start : aDataCmd];
             [aCmd addTag:@"board"      withString:[aRow objectAtIndex:0]];
             [aCmd addTag:@"chan"       withString:[data objectAtIndex:1]];
             [aCmd addField:@"status"   withDouble:[[aRow objectAtIndex:2] doubleValue]];
@@ -426,9 +428,10 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
         }
     }
     else if([aDataCmd isEqualToString:@"Source"]){
+        //source,status,position
         for(id aRow in data){
             ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"SlowControls" org:[inFluxDB org]];
-            //source,status,position
+            [aCmd start : aDataCmd];
             [aCmd addTag:@"source"      withString:[aRow objectAtIndex:0]];
             [aCmd addTag:@"status"      withString:[aRow objectAtIndex:1]];
             [aCmd addField:@"position"  withDouble:[[aRow objectAtIndex:2] doubleValue]];
@@ -438,8 +441,9 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
     }
     else if([aDataCmd isEqualToString:@"Llama"]){
         //just one entry for this one
-        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"SlowControls" org:[inFluxDB org]];
         //state
+        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"SlowControls" org:[inFluxDB org]];
+        [aCmd start : aDataCmd];
         [aCmd addField:@"state" withBoolean:[[[data objectAtIndex:0] objectAtIndex:0] boolValue]];
         [aCmd setTimeStamp:aTimeStamp];
         [inFluxDB executeDBCmd:aCmd];
