@@ -204,6 +204,9 @@
         if([[aTableColumn identifier] isEqualToString:@"name"]){
             return aCmd;
         }
+        else {
+            return [model cmdValue:aCmd key:[aTableColumn identifier]];
+        }
     }
     else {
         int col = (int)[[aTableView tableColumns] indexOfObject:aTableColumn];
@@ -219,10 +222,10 @@
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView
 {
     if(aTableView == statusTable)      return [model cmdListCount];
-    else if(aTableView == muonTable)   return 3;
-    else if(aTableView == diodeTable)  return 10;
-    else if(aTableView == siPMTable)   return 5;
-    else if(aTableView == sourceTable) return 3;
+    else if(aTableView == muonTable)   return [[model cmdValue:@"Muon"   key:kCmdData]count];
+    else if(aTableView == diodeTable)  return [[model cmdValue:@"Diode"  key:kCmdData]count];
+    else if(aTableView == siPMTable)   return [[model cmdValue:@"SiPM"   key:kCmdData]count];
+    else if(aTableView == sourceTable) return [[model cmdValue:@"Source" key:kCmdData]count];
     return 0;
 }
 @end
