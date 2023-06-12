@@ -219,19 +219,20 @@ NSString* ORL200SlowControlsInFluxChanged    = @"ORL200SlowControlsInFluxChanged
     if(!cmdQueue){
         cmdQueue = [[ORSafeQueue alloc] init];
     }
-    [cmdQueue enqueue:aCmd];
+    [cmdQueue enqueue:[NSString stringWithFormat:@"get%@",aCmd]];
 }
 
 #pragma mark ***Cmds and Status
 - (void) setUpCmdStatus
 {
     if(!cmdList){
-        cmdList = [@[@"getDiode",
-                     @"getMuon",
-                     @"getSiPM",
-                     @"getHeadVoltage",
-                     @"getLlama",
-                     @"getSource"
+        cmdList = [@[@"Diode",       //crate,slot,channel,status,vSet,vMon,rampUp,rampDown,iMon,iSet
+                     @"Muon",        //slot,chan,vset
+                     @"SiPM",        //board,channel,status,progress,voltage
+                     @"HeadVoltage", //raspberry,address,name,vSet,vMon,iMon
+                     @"HeadBuffer",     //raspberry,address,channel,vCom,vTerm+,vTerm-,vMon+,vMon-,iMon+,iMon-,age
+                     @"Llama",
+                     @"Source"
                    ] retain];
     }
     if(!cmdStatus){

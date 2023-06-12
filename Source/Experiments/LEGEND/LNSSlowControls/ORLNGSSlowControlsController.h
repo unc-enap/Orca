@@ -32,7 +32,13 @@
     IBOutlet NSTextField*           cmdPathField;
     IBOutlet NSTextField*           ipAddressField;
     IBOutlet NSTextField*           inFluxAvailableField;
+    IBOutlet NSTextField*           LlamaField;
+
     IBOutlet NSTableView*           statusTable;
+    IBOutlet NSTableView*           muonTable;
+    IBOutlet NSTableView*           siPMTable;
+    IBOutlet NSTableView*           diodeTable;
+    IBOutlet NSTableView*           sourceTable;
 }
 
 #pragma mark ***Interface Management
