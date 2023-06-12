@@ -338,6 +338,7 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
                 [self setCmd:aCmd key:kCmdStatus value:@"OK"];
                 [self setCmd:aCmd key:kCmdData value:result];
                 [self handle:aCmd data:result];
+                [self sendToInFlux:aCmd];
             }
             else {
                 [self setCmd:aCmd key:kCmdStatus value:@"?"];
