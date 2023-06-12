@@ -382,7 +382,6 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
     if(!data)return;
     
     double aTimeStamp = [[NSDate date]timeIntervalSince1970];
-    ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"SlowControls" org:[inFluxDB org]];
     
     if([aDataCmd isEqualToString:@"Muon"]){
         //slot,chan,vSet
