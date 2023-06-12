@@ -347,11 +347,11 @@ NSString* ORL200SlowControlsInFluxChanged    = @"ORL200SlowControlsInFluxChanged
     if([result length]){
         int expectedNumArgs = 0;
         
-        if(     [aCmd isEqualToString:@"getMuon"])  expectedNumArgs =  3; //slot,cha,vSet
-        else if([aCmd isEqualToString:@"getDiode"]) expectedNumArgs = 10; //crate,slot,chan,status,vSet,vMon,rmpUp,rmpDown,iMon,iSet
-        else if([aCmd isEqualToString:@"getSiPM"])  expectedNumArgs =  5; //board,chan,status,progress,voltage
-        else if([aCmd isEqualToString:@"getLlama"]) expectedNumArgs =  1; //state
-        else if([aCmd isEqualToString:@"getSource"])expectedNumArgs =  3; //source,status,position
+        if(     [aCmd isEqualToString:@"Muon"])  expectedNumArgs =  3; //slot,cha,vSet
+        else if([aCmd isEqualToString:@"Diode"]) expectedNumArgs = 10; //crate,slot,chan,status,vSet,vMon,rmpUp,rmpDown,iMon,iSet
+        else if([aCmd isEqualToString:@"SiPM"])  expectedNumArgs =  5; //board,chan,status,progress,voltage
+        else if([aCmd isEqualToString:@"Llama"]) expectedNumArgs =  1; //state
+        else if([aCmd isEqualToString:@"Source"])expectedNumArgs =  3; //source,status,position
 
         if(expectedNumArgs){
             NSMutableArray* data  = [NSMutableArray array];
