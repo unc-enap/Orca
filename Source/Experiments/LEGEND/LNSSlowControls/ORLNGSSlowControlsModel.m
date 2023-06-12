@@ -28,6 +28,7 @@ NSString* ORL200SlowControlsCmdPathChanged   = @"ORL200SlowControlsCmdPathChange
 NSString* ORL200SlowControlsIPAddressChanged = @"ORL200SlowControlsIPAddressChanged";
 NSString* ORL200SlowControlsStatusChanged    = @"ORL200SlowControlsStatusChanged";
 NSString* ORL200SlowControlsInFluxChanged    = @"ORL200SlowControlsInFluxChanged";
+NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
 
 @implementation ORLNGSSlowControlsModel
 
@@ -321,14 +322,14 @@ NSString* ORL200SlowControlsInFluxChanged    = @"ORL200SlowControlsInFluxChanged
             NSString* result = [[[NSString alloc] initWithData:dataRead encoding:NSUTF8StringEncoding] autorelease];
             [timer stop];
             [self setCmd:aCmd key:kCmdTime   value:[NSString stringWithFormat:@"%.2f",[timer seconds]]];
-            if([result length]){//<<======add extra error checking
+            if([result length]){//<<======TBD add extra error checking
                 [self setCmd:aCmd key:kCmdStatus value:@"OK"];
                 [self setCmd:aCmd key:kCmdData value:result];
                 [self handle:aCmd data:result];
             }
             else {
                 [self setCmd:aCmd key:kCmdStatus value:@"?"];
-                [self setCmd:aCmd key:kCmdData value:@""];
+                [self setCmd:aCmd key:kCmdData   value:@""];
                 [self handle:aCmd data:result];
             }
             [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORL200SlowControlsStatusChanged object:self userInfo:nil waitUntilDone:YES];
@@ -365,6 +366,7 @@ NSString* ORL200SlowControlsInFluxChanged    = @"ORL200SlowControlsInFluxChanged
             [[cmdStatus objectForKey:aCmd] setObject:data forKey:kCmdData];
         }
     }
+    [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORL200SlowControlsDataChanged object:self userInfo:nil waitUntilDone:YES];
 }
 
 @end

@@ -77,4 +77,5 @@ extern NSString* ORL200SlowControlsUserNameChanged;
 extern NSString* ORL200SlowControlsCmdPathChanged;
 extern NSString* ORL200SlowControlsStatusChanged;
 extern NSString* ORL200SlowControlsInFluxChanged;
+extern NSString* ORL200SlowControlsDataChanged;
 extern NSString* ORLNGSSlowControlsLock;

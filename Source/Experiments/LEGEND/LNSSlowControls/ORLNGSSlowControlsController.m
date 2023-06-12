@@ -35,7 +35,16 @@
 - (void) awakeFromNib
 {
     [statusTable reloadData];
+    [self reloadDataTables];
 	[super awakeFromNib];
+}
+
+- (void) reloadDataTables
+{
+    [muonTable   reloadData];
+    [siPMTable   reloadData];
+    [diodeTable  reloadData];
+    [sourceTable reloadData];
 }
 
 - (void) registerNotificationObservers
@@ -74,6 +83,12 @@
                      selector : @selector(statusChanged:)
                          name : ORL200SlowControlsStatusChanged
                         object: model];
+ 
+    [notifyCenter addObserver : self
+                     selector : @selector(reloadDataTables)
+                         name : ORL200SlowControlsDataChanged
+                        object: model];
+    
     
     [notifyCenter addObserver : self
                      selector : @selector(inFluxAvailablityChanged:)
