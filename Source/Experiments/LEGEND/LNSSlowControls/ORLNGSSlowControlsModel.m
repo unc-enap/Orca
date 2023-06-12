@@ -273,11 +273,16 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
     NSString* aValue = @"";
     @synchronized (self) {
         NSArray* dataArray = [[cmdStatus objectForKey:aCmd]  objectForKey:kCmdData];
-        NSArray* aRow      = [dataArray objectAtIndex:row];
-        aValue   = [aRow objectAtIndex:col];
+        if([dataArray count]>0 && [dataArray count]<row){
+            NSArray* aRow  = [dataArray objectAtIndex:row];
+            if([aRow count]>0 && [aRow count]<col){
+                aValue         = [aRow objectAtIndex:col];
+            }
+        }
     }
     return aValue;
 }
+
 - (NSString*) cmdAtIndex:(NSInteger)i
 {
     return [cmdList objectAtIndex:i];
