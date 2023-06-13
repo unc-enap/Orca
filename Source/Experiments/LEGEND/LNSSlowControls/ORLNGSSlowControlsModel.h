@@ -23,9 +23,10 @@
 
 @class ORSafeQueue;
 
-#define kCmdStatus @"status"
-#define kCmdTime   @"time"
-#define kCmdData   @"data"
+#define kCmdStatus     @"status"
+#define kCmdTime       @"time"
+#define kNumArgs       @"numArgs"
+#define kCmdData       @"data"
 
 @interface ORLNGSSlowControlsModel : OrcaObject
 {
@@ -35,7 +36,7 @@
 	int					pollTime;
     NSMutableDictionary* cmdStatus;
     NSArray*            cmdList;
-    ORInFluxDBModel*    inFlux;
+    ORInFluxDBModel*    inFluxDB;
 
     //----queue thread--------
     bool                canceled;
@@ -59,11 +60,13 @@
 - (NSInteger) cmdListCount;
 - (NSString*) cmdAtIndex:(NSInteger)i;
 - (id) cmdValue:(id)aCmd key:(id)aKey;
+- (id) cmd:(id)aCmd dataAtRow:(int)row column:(int)col;
 
 #pragma mark ***Thread
 - (void) putRequestInQueue:(NSString*)aCmd;
 - (void) processQueue;
 - (void) handle:(NSString*)aCmd data:(NSString*)result;
+- (void) sendToInFlux:(NSString*)aCmd;
 
 #pragma mark ***Archival
 - (id)   initWithCoder:(NSCoder*)decoder;
@@ -76,4 +79,5 @@ extern NSString* ORL200SlowControlsUserNameChanged;
 extern NSString* ORL200SlowControlsCmdPathChanged;
 extern NSString* ORL200SlowControlsStatusChanged;
 extern NSString* ORL200SlowControlsInFluxChanged;
+extern NSString* ORL200SlowControlsDataChanged;
 extern NSString* ORLNGSSlowControlsLock;

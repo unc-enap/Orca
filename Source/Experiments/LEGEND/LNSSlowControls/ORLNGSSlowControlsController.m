@@ -35,7 +35,18 @@
 - (void) awakeFromNib
 {
     [statusTable reloadData];
+    [self reloadDataTables:nil];
 	[super awakeFromNib];
+}
+
+- (void) reloadDataTables:(NSNotification*)aNote
+{
+    [muonTable   reloadData];
+    [siPMTable   reloadData];
+    [diodeTable  reloadData];
+    [sourceTable reloadData];
+    
+    [LlamaField setStringValue:[[model cmd:@"Llama"   dataAtRow:0 column:0] isEqualToString:@"1"]?@"ON":@"OFF"];
 }
 
 - (void) registerNotificationObservers
@@ -74,6 +85,12 @@
                      selector : @selector(statusChanged:)
                          name : ORL200SlowControlsStatusChanged
                         object: model];
+ 
+    [notifyCenter addObserver : self
+                     selector : @selector(reloadDataTables:)
+                         name : ORL200SlowControlsDataChanged
+                        object: model];
+    
     
     [notifyCenter addObserver : self
                      selector : @selector(inFluxAvailablityChanged:)
@@ -115,7 +132,7 @@
 {
     bool influxDBAvailable = [model inFluxDBAvailable];
     [inFluxAvailableField setStringValue:influxDBAvailable?@"Available":@"Not in Config"];
-    [inFluxAvailableField setTextColor:influxDBAvailable?[NSColor blackColor]:[NSColor redColor]];
+    [inFluxAvailableField setTextColor:influxDBAvailable?[NSColor greenColor]:[NSColor redColor]];
 }
 
 - (void) pollTimeChanged:(NSNotification*)aNote
@@ -199,20 +216,33 @@
 
 - (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
-    id aCmd = [model cmdAtIndex:rowIndex];
-    if([[aTableColumn identifier] isEqualToString:@"name"]){
-        return aCmd;
+    if(aTableView == statusTable){
+        id aCmd = [model cmdAtIndex:rowIndex];
+        if([[aTableColumn identifier] isEqualToString:@"name"]){
+            return aCmd;
+        }
+        else {
+            return [model cmdValue:aCmd key:[aTableColumn identifier]];
+        }
     }
     else {
-        return [model cmdValue:aCmd key:[aTableColumn identifier]];
+        int col = (int)[[aTableView tableColumns] indexOfObject:aTableColumn];
+        if(     aTableView == muonTable)   return [model cmd:@"Muon"   dataAtRow:(int)rowIndex column:col];
+        else if(aTableView == diodeTable)  return [model cmd:@"Diode"  dataAtRow:(int)rowIndex column:col];
+        else if(aTableView == siPMTable)   return [model cmd:@"SiPM"   dataAtRow:(int)rowIndex column:col];
+        else if(aTableView == sourceTable) return [model cmd:@"Source" dataAtRow:(int)rowIndex column:col];
+        else return @"";
     }
+    return @"";
 }
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView
 {
-    return [model cmdListCount];
+    if(aTableView == statusTable)      return [model cmdListCount];
+    else if(aTableView == muonTable)   return [[model cmdValue:@"Muon"   key:kCmdData]count];
+    else if(aTableView == diodeTable)  return [[model cmdValue:@"Diode"  key:kCmdData]count];
+    else if(aTableView == siPMTable)   return [[model cmdValue:@"SiPM"   key:kCmdData]count];
+    else if(aTableView == sourceTable) return [[model cmdValue:@"Source" key:kCmdData]count];
+    return 0;
 }
 @end
-
-
-

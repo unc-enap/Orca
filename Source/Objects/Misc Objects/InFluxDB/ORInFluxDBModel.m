@@ -743,6 +743,10 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [self executeDBCmd:[ORInFluxDBCreateBucket createBucket:@"Alarms"
                                                       orgId:[self orgId] expireTime:60*60*24*10]];
 
+    [self executeDBCmd:[ORInFluxDBCreateBucket createBucket:@"SlowControls"
+                                                      orgId:[self orgId] expireTime:60*60*24*10]];
+
+    
     [self performSelector:@selector(executeDBCmd:) withObject:[ORInFluxDBListBuckets listBuckets] afterDelay:1];
 }
 
