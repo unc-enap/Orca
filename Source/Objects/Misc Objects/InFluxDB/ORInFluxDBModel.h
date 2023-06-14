@@ -114,6 +114,10 @@ typedef enum { kInFluxDBConnectionBad,
 - (void) bufferMeasurement:(ORInFluxDBCmd*)aCmd;
 - (void) sendMeasurments;
 
+#pragma mark ***Scripting
+-(ORInFluxDBMeasurement*) cmdForBucket:(NSString*)aBucket;
+
+
 #pragma mark ***Archival
 - (id)   initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
