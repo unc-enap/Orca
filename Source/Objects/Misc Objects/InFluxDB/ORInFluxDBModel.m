@@ -243,6 +243,11 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [self executeDBCmd:aCmd];
 }
 
+-(ORInFluxDBMeasurement*) cmdForBucket:(NSString*)aBucket
+{
+    return [ORInFluxDBMeasurement measurementForBucket:aBucket org:org];
+}
+
 - (void) getOnCallChanges:(NSNotification*)aNote
 {
     [(OROnCallListModel*)[aNote object] loadBucket:experimentName inFluxDB:self];
