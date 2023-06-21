@@ -38,7 +38,7 @@
 	IBOutlet NSTextField* 	statusTextField;
 	IBOutlet NSTextField* 	sizeTextField;
 	IBOutlet NSButton*      saveConfigurationCB;
-	
+    IBOutlet NSTextField*   fileCheckIntervalField;
 	IBOutlet NSDrawer*      copyDrawer;
 
 	IBOutlet NSTextField* 	copyDataField;
@@ -80,11 +80,13 @@
 - (IBAction) limitSizeAction:(id)sender;
 - (IBAction) sizeLimitReachedAction:(NSMatrix*)sender;
 - (IBAction) saveConfigurationAction:(NSButton*)sender;
+- (IBAction) dataFileCheckIntervalAction:(id)sender;
 
 - (IBAction) stopSendingAction:(id)sender;
 - (IBAction) lockButtonAction:(id)sender;
 
 #pragma mark ¥¥¥Interface Management
+- (void) dataFileCheckIntervalChanged:(NSNotification*)aNote;
 - (void) generateMD5Changed:(NSNotification*)aNote;
 - (void) generateGzipChanged:(NSNotification*)aNote;
 - (void) processLimitHighChanged:(NSNotification*)aNote;
@@ -111,6 +113,5 @@
 - (void) deleteWhenCopiedChanged:(NSNotification*)note;
 - (void) fileQueueStatusChanged:(NSNotification*)note;
 - (void) drawerDidOpen:(NSNotification *)notification;
-
 
 @end

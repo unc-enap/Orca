@@ -46,6 +46,8 @@ NSString* ORDataFileModelLogWrittenNotification         = @"ORDataFileModelLogWr
 NSString* ORDataSaveConfigurationChangedNotification    = @"ORDataSaveConfigurationChangedNotification";
 NSString* ORDataFileModelSizeLimitReachedActionChanged	= @"ORDataFileModelSizeLimitReachedActionChanged";
 NSString* ORDataFileModelSpecialFilePrefixChanged       = @"ORDataFileModelSpecialFilePrefixChanged";
+NSString* ORDataFileCheckIntervalChanged                = @"ORDataFileCheckIntervalChanged";
+
 NSString* ORDataFileLock					= @"ORDataFileLock";
 
 #pragma mark ¥¥¥Definitions
@@ -851,17 +853,18 @@ static const int currentVersion = 1;           // Current version
 			NSLogColor([NSColor redColor],@"failed to get file system free space\nerror: %@\n", [diskError localizedDescription]);
 		}
 	}
-
 }
 
-- (NSTimeInterval) fileCheckTimeInterval
+- (int) fileCheckTimeInterval
 {
     return fileCheckTimeInterval;
 }
 
-- (void) setFileCheckTimeInterval:(NSTimeInterval)interval
+- (void) setFileCheckTimeInterval:(int)interval
 {
-    fileCheckTimeInterval = MIN(30.0, MAX(0.1, interval));
+    [[[self undoManager] prepareWithInvocationTarget:self] setFileCheckTimeInterval:fileCheckTimeInterval];
+    fileCheckTimeInterval = MIN(20, MAX(1, interval));
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileCheckIntervalChanged object:self];
 }
 
 #pragma mark ¥¥¥Archival
@@ -882,7 +885,7 @@ static NSString* ORDataDataFolderName       = @"ORDataDataFolderName";
 static NSString* ORDataGzipFolderName       = @"ORDataGzipFolderName";
 static NSString* ORDataStatusFolderName     = @"ORDataStatusFolderName";
 static NSString* ORDataConfigFolderName     = @"ORDataConfigFolderName";
-static NSString* ORDataVersion		    = @"ORDataVersion";
+static NSString* ORDataVersion		         = @"ORDataVersion";
 
 static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
 
@@ -900,7 +903,8 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
     [self setMaxFileSize:		[decoder decodeFloatForKey:@"ORDataFileModelMaxFileSize"]];
     [self setLimitSize:			[decoder decodeBoolForKey:@"ORDataFileModelLimitSize"]];
     [self setSizeLimitReachedAction:[decoder decodeIntForKey:@"sizeLimitReachedAction"]];
-	
+    [self setFileCheckTimeInterval:[decoder decodeIntForKey:@"fileCheckTimeInterval"]];
+
     int  version =				[decoder decodeIntForKey:ORDataVersion];
     
     //-------------------------------------------------------------------------------
@@ -970,6 +974,8 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
     [encoder encodeObject:configFolder		forKey:ORDataConfigFolderName];
     [encoder encodeBool:saveConfiguration	forKey:ORDataSaveConfiguration];
     [encoder encodeInteger:sizeLimitReachedAction forKey:@"sizeLimitReachedAction"];
+    [encoder encodeInteger:fileCheckTimeInterval forKey:@"fileCheckTimeInterval"];
+
 }
 
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary
@@ -1028,7 +1034,6 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
 
 - (double) convertedValue:(int)aChan
 {
-	
 	NSTimeInterval thisTime = [NSDate timeIntervalSinceReferenceDate];
 	if(fabs(lastFileCheckTime - thisTime) > 30){
 		lastFileCheckTime = thisTime;
