@@ -296,6 +296,7 @@
         @catch(NSException* e){
         }
     }
+    [scanner release];//added to fix memory leak MAH 6/28/23
     return scanString;
 }
 @end
