@@ -227,7 +227,8 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
 
 - (void)sendCmd:(NSString*)aCmd
 {
-    [self putRequestInQueue:aCmd];
+    //special command structure so the response can be handled differently
+    [self putRequestInQueue:[NSString stringWithFormat:@"$%@",aCmd]];
 }
 
 - (NSString*) lockName
@@ -360,6 +361,12 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         id aCmd = [cmdQueue dequeue];
         if(aCmd!=nil){
+            bool scriptCmd = NO;
+            if([aCmd rangeOfString:@"$"].location != NSNotFound ){
+                aCmd = [aCmd substringFromIndex:1];
+                scriptCmd = YES;
+            }
+                
             NSTask* task = [[NSTask alloc] init];
             [task setLaunchPath:@"/usr/bin/ssh"];
             [self setCmd:aCmd key:kCmdStatus value:@"Execute"];
@@ -387,19 +394,26 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
         
             NSString* result = [[[NSString alloc] initWithData:dataRead encoding:NSUTF8StringEncoding] autorelease];
             [timer stop];
-            [self setCmd:aCmd key:kCmdTime   value:[NSString stringWithFormat:@"%.2f",[timer seconds]]];
-            if([result length] &&
-               [result rangeOfString: @"No"].location==NSNotFound &&
-               [result rangeOfString:@"Err"].location==NSNotFound ){
-                [self setCmd:aCmd key:kCmdStatus value:@"OK"];
-                [self setCmd:aCmd key:kCmdData value:result];
-                [self handle:aCmd data:result];
-                [self sendToInFlux:aCmd];
+            if(!scriptCmd){
+                [self setCmd:aCmd key:kCmdTime   value:[NSString stringWithFormat:@"%.2f",[timer seconds]]];
+                if([result length] &&
+                   [result rangeOfString: @"No"].location==NSNotFound &&
+                   [result rangeOfString:@"Err"].location==NSNotFound ){
+                    [self setCmd:aCmd key:kCmdStatus value:@"OK"];
+                    [self setCmd:aCmd key:kCmdData value:result];
+                    [self handle:aCmd data:result];
+                    [self sendToInFlux:aCmd];
+                }
+                else {
+                    [self setCmd:aCmd key:kCmdStatus value:@"?"];
+                    [self setCmd:aCmd key:kCmdData   value:@""];
+                    [self handle:aCmd data:result];
+                }
             }
             else {
-                [self setCmd:aCmd key:kCmdStatus value:@"?"];
-                [self setCmd:aCmd key:kCmdData   value:@""];
-                [self handle:aCmd data:result];
+                if([result length]){
+                    NSLog(@"%@\n",result);
+                }
             }
             [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORL200SlowControlsStatusChanged object:self userInfo:nil waitUntilDone:YES];
         }
