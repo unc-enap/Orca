@@ -250,6 +250,8 @@
 
 - (IBAction) moveSourceAction:(id)sender
 {
+    [self endEditing];
+
     //setSource -x MOVE -p 100 -s 1
     int source = [model sourceNumber]+1;
     int height = [model sourceHeight:[model sourceNumber]];
@@ -270,6 +272,8 @@
 
 - (IBAction) turnSiPmsOnAction:(id)sender
 {
+    [self endEditing];
+
     NSString* aCmd = @"setSiPM -x ON";
     NSAlert *alert = [[[NSAlert alloc] init] autorelease];
     [alert setMessageText:@"Turn SiPMs On"];
@@ -287,6 +291,8 @@
 
 - (IBAction) turnSiPmsOffAction:(id)sender;
 {
+    [self endEditing];
+
     NSString* aCmd = @"setSiPM -x OFF";
     NSAlert *alert = [[[NSAlert alloc] init] autorelease];
     [alert setMessageText:@"Turn SiPMs Off"];
