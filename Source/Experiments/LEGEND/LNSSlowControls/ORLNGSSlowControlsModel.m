@@ -219,7 +219,7 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
     if([cmdQueue count]==0){
         [self setUpCmdStatus];
         for(id aCmd in cmdStatus){
-            [self putRequestInQueue:aCmd];
+            [self putRequestInQueue:[NSString stringWithFormat:@"get%@",aCmd]];
         }
     }
     if(pollTime)[self performSelector:@selector(pollHardware) withObject:nil afterDelay:pollTime];
@@ -360,29 +360,19 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         id aCmd = [cmdQueue dequeue];
         if(aCmd!=nil){
-            
             NSTask* task = [[NSTask alloc] init];
             [task setLaunchPath:@"/usr/bin/ssh"];
-            NSArray* arguments = nil;
-            if([aCmd rangeOfString:@"setSiPM"].location != NSNotFound ||
-               [aCmd rangeOfString:@"setSource"].location != NSNotFound){
-                arguments = [NSArray arrayWithObjects:
-                                        [NSString stringWithFormat:@"%@@%@",userName,ipAddress],
-                                        [NSString stringWithFormat:@"%@%@",cmdPath,aCmd], nil];
+            [self setCmd:aCmd key:kCmdStatus value:@"Execute"];
+            [self setCmd:aCmd key:kCmdTime   value:@"-"];
+            [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORL200SlowControlsStatusChanged object:self userInfo:nil waitUntilDone:YES];
+            
+            [timer reset];
+            [timer start];
 
-            }
-            else {
-                [self setCmd:aCmd key:kCmdStatus value:@"Execute"];
-                [self setCmd:aCmd key:kCmdTime   value:@"-"];
-                [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORL200SlowControlsStatusChanged object:self userInfo:nil waitUntilDone:YES];
-                
-                [timer reset];
-                [timer start];
-
-              arguments = [NSArray arrayWithObjects:
+            NSArray* arguments = [NSArray arrayWithObjects:
                                       [NSString stringWithFormat:@"%@@%@",userName,ipAddress],
-                                      [NSString stringWithFormat:@"%@get%@",cmdPath,aCmd], nil];
-            }
+                                      [NSString stringWithFormat:@"%@%@",cmdPath,aCmd], nil];
+            
             [task setArguments: arguments];
 
             NSPipe* out = [NSPipe pipe];
@@ -443,6 +433,8 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
 
 - (void) sendToInFlux:(NSString*)aDataCmd
 {
+    if(![self inFluxDBAvailable])return;
+    
     NSArray* data = [[cmdStatus objectForKey:aDataCmd] objectForKey:kCmdData];
     if(!data)return;
     
