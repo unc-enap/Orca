@@ -864,7 +864,8 @@ static const int currentVersion = 1;           // Current version
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setFileCheckTimeInterval:fileCheckTimeInterval];
     fileCheckTimeInterval = MIN(20, MAX(1, interval));
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileCheckIntervalChanged object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORDataFileCheckIntervalChanged object:self userInfo:nil waitUntilDone:NO]; //MAH 07/28/23 this was getting called from the run thread... gui can be update only from the main thread
+   // [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileCheckIntervalChanged object:self];
 }
 
 #pragma mark ¥¥¥Archival
