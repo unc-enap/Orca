@@ -480,7 +480,7 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
             [aCmd addField:@"rampUp"   withDouble:[[aRow objectAtIndex:6] doubleValue]];
             [aCmd addField:@"rampDown" withDouble:[[aRow objectAtIndex:7] doubleValue]];
             [aCmd addField:@"iMon"     withDouble:[[aRow objectAtIndex:8] doubleValue]];
-            [aCmd addField:@"iSet"     withDouble:[[aRow objectAtIndex:39] doubleValue]];
+            [aCmd addField:@"iSet"     withDouble:[[aRow objectAtIndex:9] doubleValue]];
             [aCmd setTimeStamp:aTimeStamp];
             [inFluxDB executeDBCmd:aCmd];
         }
