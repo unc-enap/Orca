@@ -18,7 +18,6 @@
 //for the use of this software.
 //-------------------------------------------------------------
 
-
 #pragma mark ¥¥¥Imported Files
 #import "ORDataFileController.h"
 #import "ORDataFileModel.h"
@@ -75,10 +74,13 @@ enum {
 
 
 #pragma  mark ¥¥¥Actions
-
 - (void) generateAuxDataFileAction:(id)sender
 {
     [model setGenerateMD5:[[sender selectedItem] tag]&0x1 generateGzip:[[sender selectedItem] tag]&0x2];
+}
+- (IBAction) dataFileCheckIntervalAction:(id)sender
+{
+    [model setFileCheckTimeInterval:[sender intValue]];
 }
 
 - (IBAction) processLimitHighAction:(id)sender
@@ -391,12 +393,19 @@ enum {
                      selector : @selector(generateGzipChanged:)
                          name : ORDataFileModelGenerateGzipChanged
                        object : model];
+ 
+    [notifyCenter addObserver : self
+                     selector : @selector(dataFileCheckIntervalChanged:)
+                         name : ORDataFileCheckIntervalChanged
+                       object : model];
+    
 
 }
 
 - (void) updateWindow
 {
     [super updateWindow];
+    [self dataFileCheckIntervalChanged:nil];
     [self copyEnabledChanged:nil];
     [self deleteWhenCopiedChanged:nil];
     [self fileQueueStatusChanged:nil];
@@ -465,6 +474,11 @@ enum {
 - (void) sizeLimitReachedActionChanged:(NSNotification*)note
 {
 	[sizeLimitActionMatrix selectCellWithTag:[model sizeLimitReachedAction]];
+}
+
+- (void) dataFileCheckIntervalChanged:(NSNotification*)note
+{
+    [fileCheckIntervalField setFloatValue:[model fileCheckTimeInterval]];
 }
 
 - (void) fileChanged:(NSNotification*)note

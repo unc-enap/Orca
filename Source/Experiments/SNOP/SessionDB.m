@@ -251,7 +251,7 @@ sessionKey = _sessionKey;
         NSLogColor([NSColor redColor], @"Error posting session start to DB: \"%@\"\n", e.reason);
     }
 
-    [self setSessionKey:[key copy]];
+    [self setSessionKey:key];
 }
 
 

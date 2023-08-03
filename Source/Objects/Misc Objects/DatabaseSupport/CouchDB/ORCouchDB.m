@@ -67,6 +67,7 @@
 - (void) version:(id)aDelegate tag:(NSString*)aTag
 {
 	ORCouchDBVersionOp* anOp = [[ORCouchDBVersionOp alloc] initWithHost:host username:username pwd:pwd port:port database:nil delegate:aDelegate tag:aTag];
+    [self setHttpTypeForOp:anOp delegate:delegate];
 	[ORCouchDBQueue addOperation:anOp];
 	[anOp release];
 }
@@ -177,6 +178,7 @@
 {
     ORCouchDBUpdateDocumentOp* anOp = [[ORCouchDBUpdateDocumentOp alloc] initWithHost:host username:username pwd:pwd port:port database:database delegate:delegate tag:aTag];
     [anOp setDocument:aDict documentID:anId];
+    [self setHttpTypeForOp:anOp delegate:delegate];
     [ORCouchDBQueue addLowPriorityOperation:anOp];
     [anOp release];
 }
@@ -246,6 +248,7 @@
     [anOp setListeningMode:mode];
     [anOp setHeartbeat:heartbeat];
     [anOp setFilter:filter];
+    [self setHttpTypeForOp:anOp delegate:delegate];
 	[ORCouchDBQueue addChangeFeedOperation:anOp];
 	return anOp;
 }

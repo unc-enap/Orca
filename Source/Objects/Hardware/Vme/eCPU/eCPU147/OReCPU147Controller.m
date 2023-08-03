@@ -293,7 +293,7 @@
 		uint32_t offset = 0;
 		const unsigned char* p = (const unsigned char*)[buffer bytes];
 		while(1){
-			NSMutableString* lineString = [[NSMutableString alloc] initWithCapacity:256];
+			NSMutableString* lineString = [[[NSMutableString alloc] initWithCapacity:256]autorelease];
 			[lineString setString:[NSString stringWithFormat:@"%0x: ",startAddress+offset]];
 			for(i=0;i<0x10;i++){
 				[lineString appendFormat:@"%02x ",*(p+offset)];				

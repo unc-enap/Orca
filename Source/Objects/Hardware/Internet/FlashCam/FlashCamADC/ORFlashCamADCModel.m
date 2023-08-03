@@ -93,11 +93,13 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
 
 - (void) dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     [self setWFsamples:0];
     [wfRates release];
     [trigRates release];
     for(int i=0; i<[self numberOfChannels]; i++) [baselineHistory[i] release];
+    [inFlux release];
     [super dealloc];
 }
 
@@ -105,8 +107,33 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
 {
     @try{
         [self performSelector:@selector(postConfig) withObject:nil afterDelay:3];
+        [self registerNotificationObservers];
+        inFlux = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORInFluxDBModel,1"]retain];
     }
     @catch(NSException* localException){ }
+}
+
+- (void) registerNotificationObservers
+{
+    NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+           
+    [notifyCenter addObserver : self
+                     selector : @selector(configurationChanged:)
+                         name : ORGroupObjectsAdded
+                       object : nil];
+
+    [notifyCenter addObserver : self
+                     selector : @selector(configurationChanged:)
+                         name : ORGroupObjectsRemoved
+                       object : nil];
+}
+
+- (void) configurationChanged:(NSNotification*)aNote
+{
+    [inFlux release];
+    inFlux = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORInFluxDBModel,1"]retain];
 }
 
 - (void) setUpImage
@@ -760,7 +787,11 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     }
     else{
         if(includeWF) wfCount[channel] ++;
-        if(event->theader[index][1] > 0) trigCount[channel] ++;
+        int fpgaEnergy = event->theader[index][1];
+        if(fpgaEnergy > 0){
+            trigCount[channel]++;
+            [self shipToInflux:channel energy:fpgaEnergy baseline:event->theader[index][0]];
+        }
     }
     
     //ship the data
@@ -780,9 +811,27 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     [aDataPacket addLongsToFrameBuffer:dataRecord length:dataRecordLength];
 }
 
+- (void) shipToInflux:(int)aChan energy:(int)anEnergy baseline:(int)aBaseline
+{
+    if(inFlux){
+        //don't send to inFlux for a few seconds to avoid 'start of run' zeros
+        NSTimeInterval dt = [startTime timeIntervalSinceNow];
+        if(fabs(dt) < kDeadBandTime)return;
+        
+        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"L200" org:[inFlux org]];
+        [aCmd start   : @"flashCamADC"];
+        [aCmd addTag  : @"location"     withString:[NSString stringWithFormat:@"%02d_%02d_%02d",[self crateNumber],[self slot],aChan]];
+        [aCmd addField: @"fpgaEnergy"   withLong:anEnergy];
+        [aCmd addField: @"fpgaBaseline" withLong:aBaseline];
+        [aCmd setTimeStamp:[NSDate timeIntervalSinceReferenceDate]];
+        [inFlux executeDBCmd:aCmd];
+    }
+}
 
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
+    [startTime release];
+    startTime = [[NSDate date]retain];
     if([self fwType] == 0)
         [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:@"ORFlashCamADCStdModel"];
     else
@@ -803,6 +852,8 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     [wfRates   stop];
     [trigRates stop];
     [self setWFsamples:0];
+    [startTime release];
+    startTime = nil;
 }
 
 - (void) reset

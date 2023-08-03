@@ -245,7 +245,9 @@
 	if([[model fieldlineImageFileName] length]<2) return;
 	@try {
 		//[fieldlineImageView setImage: [NSImage imageNamed:[model fieldlineImageFileName]]];
-		[fieldlineImageView setImage: [[NSImage alloc] initWithContentsOfFile:[model fieldlineImageFileName]]];
+        NSImage* anImage = [[NSImage alloc] initWithContentsOfFile:[model fieldlineImageFileName]];
+		[fieldlineImageView setImage: anImage];
+        [anImage release];
 	}
 	@catch(NSException* localException) {
 		NSLog(@"Called %@::%@ - no image found!\n",NSStringFromClass([self class]),NSStringFromSelector(_cmd));//TODO: DEBUG -tb-

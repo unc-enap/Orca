@@ -65,7 +65,7 @@
             dataToProcess = [[NSMutableData dataWithCapacity:kAmountToRead] retain];
             [dataToProcess appendData:[fh readDataOfLength:kAmountToRead]];
             if([delegate respondsToSelector:@selector(setFileToReplay:)]){
-                [delegate setFileToReplay:filePath];
+                [delegate performSelectorOnMainThread:@selector(setFileToReplay:) withObject:filePath waitUntilDone:NO];
             }
             dataArray = [[NSMutableArray arrayWithCapacity:1024*1024] retain];
 

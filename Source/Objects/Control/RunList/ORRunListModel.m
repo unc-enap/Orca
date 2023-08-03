@@ -395,7 +395,7 @@ static NSString* ORRunListDataOut1	= @"ORRunListDataOut1";
     [values setObject:[NSNumber numberWithInt:nextState]           forKey:@"nextState"];
     [values setObject:[NSNumber numberWithInt:timesToRepeat]       forKey:@"timesToRepeat"];
     [values setObject:[NSNumber numberWithInt:executionCount]      forKey:@"executionCount"];
-    NSDateFormatter* dformat = [[NSDateFormatter alloc] init];
+    NSDateFormatter* dformat = [[[NSDateFormatter alloc] init]autorelease];
     dformat.dateFormat = @"yyyy/MM/dd HH:mm:ss";
     if(timeStarted)    [values setObject:[dformat stringFromDate:timeStarted]    forKey:@"timeStarted"];
     if(timeRunStarted) [values setObject:[dformat stringFromDate:timeRunStarted] forKey:@"timeRunStarted"];

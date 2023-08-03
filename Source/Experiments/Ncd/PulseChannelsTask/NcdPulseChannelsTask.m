@@ -322,7 +322,7 @@ enum {
 		tubeIndex = 0;
 		lastTime = [[NSDate date] retain];
 		onlineTubes       = [[NSMutableArray array] retain];
-		NSArray* allTubes = [[[delegate detector] tubes] retain];
+		NSArray* allTubes = [[[[delegate detector] tubes] retain]autorelease];
 		NSArray* shaperCards = [[(ORAppDelegate*)[NSApp delegate]  document] collectObjectsOfClass:NSClassFromString(@"ORShaperModel")];
 		NSEnumerator* e = [allTubes objectEnumerator];
 		id tube;

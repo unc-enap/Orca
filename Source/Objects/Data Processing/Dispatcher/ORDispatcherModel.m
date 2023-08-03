@@ -424,7 +424,7 @@ NSString* ORDispatcherLock                      = @"ORDispatcherLock";
 	runInProgress = YES;
     ignoreBlock = NO;
 	[currentHeader release];
-	currentHeader = [userInfo objectForKey:kHeader];
+    currentHeader = [[userInfo objectForKey:kHeader]retain]; //07/03/23 MAH added missing retain.
 	//[clients makeObjectsPerformSelector:@selector(writeData:) withObject:dataHeader];
 	[clients makeObjectsPerformSelector:@selector(clearCounts)];
 }
