@@ -14,7 +14,7 @@ from os.path import basename
 def send_mail(user, password, server, fromaddr, to, subject,
               message, attachments, filename):
     msg = MIMEMultipart()
-    fromaddr = 'daq@haloN.halo-r.snolab.ca'
+    fromaddr = 'daq@daqN.halo-r.snolab.ca'
     if fromaddr == '':
         fromaddr = user + '@' + server
     msg['From'] = fromaddr
