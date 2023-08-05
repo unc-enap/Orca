@@ -91,11 +91,21 @@
                          name : ORL200SlowControlsDataChanged
                         object: model];
     
-    
     [notifyCenter addObserver : self
                      selector : @selector(inFluxAvailablityChanged:)
                          name : ORL200SlowControlsInFluxChanged
                        object : nil];
+  
+    [notifyCenter addObserver : self
+                     selector : @selector(sourceHeightChanged:)
+                         name : ORL200SlowControlsSourceHeightChanged
+                       object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(sourceNumberChanged:)
+                         name : ORL200SlowControlsSourceNumberChanged
+                       object : nil];
+    
 }
 
 - (void) updateWindow
@@ -108,6 +118,8 @@
     [self ipAddressChanged:nil];
     [self statusChanged:nil];
     [self inFluxAvailablityChanged:nil];
+    [self sourceHeightChanged:nil];
+    [self sourceNumberChanged:nil];
 	[self updateButtons];
 }
 
@@ -126,6 +138,16 @@
 - (void) lockChanged:(NSNotification*)aNotification
 {
 	[self updateButtons];
+}
+
+- (void) sourceHeightChanged:(NSNotification*)aNote
+{
+    [sourceHeightField setIntValue:[model sourceHeight:[model sourceNumber]]];
+}
+
+- (void) sourceNumberChanged:(NSNotification*)aNote
+{
+    [sourceSelectPopup selectItemAtIndex:[model sourceNumber]];
 }
 
 - (void) inFluxAvailablityChanged:(NSNotification*)aNote
@@ -212,6 +234,78 @@
 - (IBAction) ipAddressAction:(id)sender
 {
     [model setIPAddress:[ipAddressField stringValue]];
+}
+
+- (IBAction) sourceSelectAction:(id)sender
+{
+    int i = (int)[sourceSelectPopup indexOfSelectedItem];
+    [model setSourceNumber:i];
+    [sourceHeightField setIntValue:[model sourceHeight:i]];
+}
+
+- (IBAction) sourceHeightAction:(id)sender
+{
+    [model setSource:(int)[sourceSelectPopup indexOfSelectedItem] height:[sourceHeightField intValue]];
+}
+
+- (IBAction) moveSourceAction:(id)sender
+{
+    [self endEditing];
+
+    //setSource -x MOVE -p 100 -s 1
+    int source = [model sourceNumber]+1;
+    int height = [model sourceHeight:[model sourceNumber]];
+    NSString* aCmd = [NSString stringWithFormat:@"setSource -x MOVE -p %d -s %d",height,source];
+    NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+    [alert setMessageText:[NSString stringWithFormat:@"Move Source %d?",source]];
+    [alert setInformativeText:aCmd];
+    [alert addButtonWithTitle:[NSString stringWithFormat:@"Yes, Move Source %d",source]];
+    [alert addButtonWithTitle:@"Cancel"];
+    [alert setAlertStyle:NSAlertStyleWarning];
+    
+    [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
+        if (result == NSAlertFirstButtonReturn){
+            [model sendCmd:aCmd];
+       }
+    }];
+}
+
+- (IBAction) turnSiPmsOnAction:(id)sender
+{
+    [self endEditing];
+
+    NSString* aCmd = @"setSiPM -x ON";
+    NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+    [alert setMessageText:@"Turn SiPMs On"];
+    [alert setInformativeText:aCmd];
+    [alert addButtonWithTitle:@"Yes, Turn SiPMs On"];
+    [alert addButtonWithTitle:@"Cancel"];
+    [alert setAlertStyle:NSAlertStyleWarning];
+    
+    [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
+        if (result == NSAlertFirstButtonReturn){
+            [model sendCmd:aCmd];
+       }
+    }];
+}
+
+- (IBAction) turnSiPmsOffAction:(id)sender;
+{
+    [self endEditing];
+
+    NSString* aCmd = @"setSiPM -x OFF";
+    NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+    [alert setMessageText:@"Turn SiPMs Off"];
+    [alert setInformativeText:aCmd];
+    [alert addButtonWithTitle:@"Yes, Turn SiPMs Off"];
+    [alert addButtonWithTitle:@"Cancel"];
+    [alert setAlertStyle:NSAlertStyleWarning];
+    
+    [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
+        if (result == NSAlertFirstButtonReturn){
+            [model sendCmd:aCmd];
+       }
+    }];
 }
 
 - (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex

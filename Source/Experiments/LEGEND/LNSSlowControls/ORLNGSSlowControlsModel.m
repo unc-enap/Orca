@@ -29,6 +29,8 @@ NSString* ORL200SlowControlsIPAddressChanged = @"ORL200SlowControlsIPAddressChan
 NSString* ORL200SlowControlsStatusChanged    = @"ORL200SlowControlsStatusChanged";
 NSString* ORL200SlowControlsInFluxChanged    = @"ORL200SlowControlsInFluxChanged";
 NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
+NSString* ORL200SlowControlsSourceNumberChanged = @"ORL200SlowControlsSourceNumberChanged";
+NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeightChanged";
 
 @implementation ORLNGSSlowControlsModel
 
@@ -45,6 +47,7 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
     [cmdStatus      release];
     [cmdList        release];
     [inFluxDB       release];
+    [sourceHeight   release];
     [super dealloc];
 }
 
@@ -97,9 +100,7 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
 {
     [inFluxDB release];
     inFluxDB = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORInFluxDBModel,1"]retain];
-    
     [[NSNotificationCenter defaultCenter] postNotificationName:ORL200SlowControlsInFluxChanged object:self];
-    
 }
 
 - (bool) inFluxDBAvailable
@@ -108,10 +109,56 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
 }
 
 #pragma mark ***Accessors
+- (int)sourceNumber
+{
+    return sourceNumber;
+}
+- (void)setSourceNumber:(int)num
+{
+    [[[self undoManager] prepareWithInvocationTarget:self] setSourceNumber:sourceNumber];
+    sourceNumber = num;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORL200SlowControlsSourceNumberChanged object:self];
+}
+
+- (int)  sourceHeight:(int)i
+{
+    if(!sourceHeight){
+        sourceHeight = [[NSMutableArray array]retain];
+        for(i=0;i<4;i++){
+            [sourceHeight addObject:[NSNumber numberWithInt:0]];
+        }
+    }
+
+    if(i>=0 && i<4)return [[sourceHeight objectAtIndex:i]intValue];
+    else return 0;
+}
+
+- (void) setSourceArray:(NSMutableArray*)anArray
+{
+    [[[self undoManager] prepareWithInvocationTarget:self] setSourceArray:sourceHeight];
+    [sourceHeight release];
+    sourceHeight = [anArray mutableCopy];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORL200SlowControlsSourceHeightChanged object:self];
+}
+
+- (void) setSource:(int)i height:(int)aHeight
+{
+    if(!sourceHeight){
+        sourceHeight = [[NSMutableArray array]retain];
+        for(i=0;i<4;i++){
+            [sourceHeight addObject:[NSNumber numberWithInt:0]];
+        }
+    }
+    
+    if(aHeight<0)        aHeight=0;
+    else if(aHeight>8890)aHeight = 8890;
+    
+    if(i>=0 && i<4)[sourceHeight setObject:[NSNumber numberWithInt:aHeight] atIndexedSubscript:i];
+}
+
 - (NSString*) ipAddress
 {
     return ipAddress!=nil?ipAddress:@"";
-
 }
 
 - (void) setIPAddress:(NSString*)anIP
@@ -172,10 +219,16 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
     if([cmdQueue count]==0){
         [self setUpCmdStatus];
         for(id aCmd in cmdStatus){
-            [self putRequestInQueue:aCmd];
+            [self putRequestInQueue:[NSString stringWithFormat:@"get%@",aCmd]];
         }
     }
     if(pollTime)[self performSelector:@selector(pollHardware) withObject:nil afterDelay:pollTime];
+}
+
+- (void)sendCmd:(NSString*)aCmd
+{
+    //special command structure so the response can be handled differently
+    [self putRequestInQueue:[NSString stringWithFormat:@"$%@",aCmd]];
 }
 
 - (NSString*) lockName
@@ -196,7 +249,8 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
     [self setUserName:    [decoder decodeObjectForKey: @"userName"]];
     [self setCmdPath:     [decoder decodeObjectForKey: @"cmdPath"]];
     [self setIPAddress:   [decoder decodeObjectForKey: @"ipAddress"]];
-    
+    [self setSourceNumber:[decoder decodeIntForKey:    @"sourceNumber"]];
+    [self setSourceArray: [decoder decodeObjectForKey: @"sourceHeight"]];
     [[self undoManager] enableUndoRegistration];
 		
     return self;
@@ -205,10 +259,12 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
 - (void)encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeInteger:pollTime   forKey: @"pollTime"];
-    [encoder encodeObject:userName    forKey: @"userName"];
-    [encoder encodeObject:cmdPath     forKey: @"cmdPath"];
-    [encoder encodeObject:ipAddress   forKey: @"ipAddress"];
+    [encoder encodeInteger:pollTime    forKey: @"pollTime"];
+    [encoder encodeObject:userName     forKey: @"userName"];
+    [encoder encodeObject:cmdPath      forKey: @"cmdPath"];
+    [encoder encodeObject:ipAddress    forKey: @"ipAddress"];
+    [encoder encodeInt:sourceNumber    forKey: @"sourceNumber"];
+    [encoder encodeObject:sourceHeight forKey: @"sourceHeight"];
 }
 
 - (void) putRequestInQueue:(NSString*)aCmd
@@ -305,18 +361,25 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         id aCmd = [cmdQueue dequeue];
         if(aCmd!=nil){
+            bool scriptCmd = NO;
+            if([aCmd rangeOfString:@"$"].location != NSNotFound ){
+                aCmd = [aCmd substringFromIndex:1];
+                scriptCmd = YES;
+            }
+                
+            NSTask* task = [[NSTask alloc] init];
+            [task setLaunchPath:@"/usr/bin/ssh"];
             [self setCmd:aCmd key:kCmdStatus value:@"Execute"];
             [self setCmd:aCmd key:kCmdTime   value:@"-"];
             [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORL200SlowControlsStatusChanged object:self userInfo:nil waitUntilDone:YES];
             
             [timer reset];
             [timer start];
-            NSTask* task = [[NSTask alloc] init];
-            [task setLaunchPath:@"/usr/bin/ssh"];
 
             NSArray* arguments = [NSArray arrayWithObjects:
-                        [NSString stringWithFormat:@"%@@%@",userName,ipAddress],
-                        [NSString stringWithFormat:@"%@get%@",cmdPath,aCmd], nil];
+                                      [NSString stringWithFormat:@"%@@%@",userName,ipAddress],
+                                      [NSString stringWithFormat:@"%@%@",cmdPath,aCmd], nil];
+            
             [task setArguments: arguments];
 
             NSPipe* out = [NSPipe pipe];
@@ -331,19 +394,26 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
         
             NSString* result = [[[NSString alloc] initWithData:dataRead encoding:NSUTF8StringEncoding] autorelease];
             [timer stop];
-            [self setCmd:aCmd key:kCmdTime   value:[NSString stringWithFormat:@"%.2f",[timer seconds]]];
-            if([result length] &&
-               [result rangeOfString: @"No"].location==NSNotFound &&
-               [result rangeOfString:@"Err"].location==NSNotFound ){
-                [self setCmd:aCmd key:kCmdStatus value:@"OK"];
-                [self setCmd:aCmd key:kCmdData value:result];
-                [self handle:aCmd data:result];
-                [self sendToInFlux:aCmd];
+            if(!scriptCmd){
+                [self setCmd:aCmd key:kCmdTime   value:[NSString stringWithFormat:@"%.2f",[timer seconds]]];
+                if([result length] &&
+                   [result rangeOfString: @"No"].location==NSNotFound &&
+                   [result rangeOfString:@"Err"].location==NSNotFound ){
+                    [self setCmd:aCmd key:kCmdStatus value:@"OK"];
+                    [self setCmd:aCmd key:kCmdData value:result];
+                    [self handle:aCmd data:result];
+                    [self sendToInFlux:aCmd];
+                }
+                else {
+                    [self setCmd:aCmd key:kCmdStatus value:@"?"];
+                    [self setCmd:aCmd key:kCmdData   value:@""];
+                    [self handle:aCmd data:result];
+                }
             }
             else {
-                [self setCmd:aCmd key:kCmdStatus value:@"?"];
-                [self setCmd:aCmd key:kCmdData   value:@""];
-                [self handle:aCmd data:result];
+                if([result length]){
+                    NSLog(@"%@\n",result);
+                }
             }
             [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORL200SlowControlsStatusChanged object:self userInfo:nil waitUntilDone:YES];
         }
@@ -377,6 +447,8 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
 
 - (void) sendToInFlux:(NSString*)aDataCmd
 {
+    if(![self inFluxDBAvailable])return;
+    
     NSArray* data = [[cmdStatus objectForKey:aDataCmd] objectForKey:kCmdData];
     if(!data)return;
     
@@ -408,7 +480,7 @@ NSString* ORL200SlowControlsDataChanged      = @"ORL200SlowControlsDataChanged";
             [aCmd addField:@"rampUp"   withDouble:[[aRow objectAtIndex:6] doubleValue]];
             [aCmd addField:@"rampDown" withDouble:[[aRow objectAtIndex:7] doubleValue]];
             [aCmd addField:@"iMon"     withDouble:[[aRow objectAtIndex:8] doubleValue]];
-            [aCmd addField:@"iSet"     withDouble:[[aRow objectAtIndex:39] doubleValue]];
+            [aCmd addField:@"iSet"     withDouble:[[aRow objectAtIndex:9] doubleValue]];
             [aCmd setTimeStamp:aTimeStamp];
             [inFluxDB executeDBCmd:aCmd];
         }

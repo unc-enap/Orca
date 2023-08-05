@@ -39,6 +39,9 @@
     IBOutlet NSTableView*           siPMTable;
     IBOutlet NSTableView*           diodeTable;
     IBOutlet NSTableView*           sourceTable;
+    
+    IBOutlet NSPopUpButton*         sourceSelectPopup;
+    IBOutlet NSTextField*           sourceHeightField;    
 }
 
 #pragma mark ***Interface Management
@@ -47,6 +50,9 @@
 - (void) userNameChanged:(NSNotification*)aNote;
 - (void) ipAddressChanged:(NSNotification*)aNote;
 - (void) statusChanged:(NSNotification*)aNote;
+- (void) sourceHeightChanged:(NSNotification*)aNote;
+- (void) sourceNumberChanged:(NSNotification*)aNote;
+
 - (void) inFluxAvailablityChanged:(NSNotification*)aNote;
 - (void) reloadDataTables:(NSNotification*)aNote;;
 
@@ -57,5 +63,12 @@
 - (IBAction) userNameAction:(id)sender;
 - (IBAction) cmdPathAction:(id)sender;
 - (IBAction) ipAddressAction:(id)sender;
+
+- (IBAction) sourceSelectAction:(id)sender;
+- (IBAction) sourceHeightAction:(id)sender;
+- (IBAction) moveSourceAction:(id)sender;
+- (IBAction) turnSiPmsOnAction:(id)sender;
+- (IBAction) turnSiPmsOffAction:(id)sender;
+
 @end
 

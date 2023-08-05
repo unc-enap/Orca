@@ -227,6 +227,12 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
                      selector : @selector(dataFileNameChanged:)
                          name : ORDataFileChangedNotification
                        object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(addRemoteMeasurement:)
+                         name : @"ORInFluxAddMeasurement"
+                       object : nil];
+    
 }
 
 - (void) dataFileNameChanged:(NSNotification*)aNote
@@ -241,6 +247,35 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
     [aCmd addField: @"SubRunNumber" withLong:[rc subRunNumber]];
     [aCmd setTimeStamp: [[NSDate date]timeIntervalSince1970] ];
     [self executeDBCmd:aCmd];
+}
+
+- (void) addRemoteMeasurement:(NSNotification*)aNote
+{
+    NSDictionary* record = [aNote userInfo];
+    if(record){
+        //get bucket
+        ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:[record objectForKey:@"bucket"] org:org];
+        [aCmd start: [record objectForKey:@"measurement"]];
+         NSDictionary* tags = [record objectForKey:@"tags"];
+        if(tags){
+            for(id aKey in [tags allKeys]) {
+                [aCmd addTag: aKey withString:[tags objectForKey:aKey]];
+            }
+        }
+        NSDictionary* fields = [record objectForKey:@"fields"];
+
+        for(id aKey in fields){
+            id aValue = [fields objectForKey:aKey];
+            if([aValue isKindOfClass:[NSNumber class]]){
+                 [aCmd addField: aKey withDouble:[aValue doubleValue]];
+            }
+            else if([aValue isKindOfClass:[NSString class]]){
+                [aCmd addField: aKey withString:aValue];
+            }
+        }
+        [aCmd setTimeStamp: [[NSDate date]timeIntervalSince1970] ];
+        [self executeDBCmd:aCmd];
+    }
 }
 
 -(ORInFluxDBMeasurement*) cmdForBucket:(NSString*)aBucket

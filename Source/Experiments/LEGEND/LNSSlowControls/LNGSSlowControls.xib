@@ -19,6 +19,8 @@
                 <outlet property="pollTimePopup" destination="dOR-Rl-ZsA" id="F1U-bY-Dt5"/>
                 <outlet property="pollingProgress" destination="D3q-lG-BsQ" id="apb-5E-yla"/>
                 <outlet property="siPMTable" destination="hbc-KQ-WSn" id="XjD-hl-UOI"/>
+                <outlet property="sourceHeightField" destination="esB-cN-YNr" id="WPN-vf-ZLe"/>
+                <outlet property="sourceSelectPopup" destination="XTI-1w-aq8" id="DhE-Vj-8Gi"/>
                 <outlet property="sourceTable" destination="2QK-ah-c4Z" id="gHa-bg-cK8"/>
                 <outlet property="statusTable" destination="Ohb-wV-jab" id="Sfx-oE-aDM"/>
                 <outlet property="userNameField" destination="29F-CA-dG3" id="LqA-om-nRf"/>
@@ -119,7 +121,7 @@
                         </view>
                     </box>
                     <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nBC-AK-Pfa">
-                        <rect key="frame" x="20" y="14" width="53" height="62"/>
+                        <rect key="frame" x="20" y="14" width="45" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="Unlocked" imagePosition="only" alignment="center" alternateImage="Locked" inset="2" id="Nz1-Zc-bKI">
                             <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
@@ -279,11 +281,11 @@
                         <tabViewItems>
                             <tabViewItem label="Muon Veto, SiPMs" identifier="1" id="M7y-Ft-Scc">
                                 <view key="view" id="c34-Nx-4Xx">
-                                    <rect key="frame" x="10" y="25" width="698" height="364"/>
+                                    <rect key="frame" x="10" y="29" width="698" height="360"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TUL-GP-5ha">
-                                            <rect key="frame" x="17" y="347" width="80" height="14"/>
+                                            <rect key="frame" x="17" y="343" width="80" height="14"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Muon Veto HV" id="g2V-I0-F6Q">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -292,7 +294,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <scrollView fixedFrame="YES" borderType="line" horizontalLineScroll="15" horizontalPageScroll="10" verticalLineScroll="15" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mZp-XE-2UR">
-                                            <rect key="frame" x="17" y="25" width="214" height="314"/>
+                                            <rect key="frame" x="17" y="21" width="214" height="314"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="uxU-0I-sRi">
                                                 <rect key="frame" x="1" y="1" width="212" height="312"/>
@@ -365,7 +367,7 @@
                                             </tableHeaderView>
                                         </scrollView>
                                         <scrollView fixedFrame="YES" borderType="line" horizontalLineScroll="15" horizontalPageScroll="10" verticalLineScroll="15" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OOZ-mG-cso">
-                                            <rect key="frame" x="258" y="25" width="417" height="314"/>
+                                            <rect key="frame" x="258" y="21" width="417" height="314"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="5Ck-Jq-BW9">
                                                 <rect key="frame" x="1" y="1" width="415" height="312"/>
@@ -462,7 +464,7 @@
                                             </tableHeaderView>
                                         </scrollView>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kW5-gj-r6b">
-                                            <rect key="frame" x="262" y="347" width="37" height="14"/>
+                                            <rect key="frame" x="262" y="343" width="37" height="14"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="SiPMs" id="e9K-OF-mlO">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -483,10 +485,10 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="Kgz-YS-Hsg">
                                                 <rect key="frame" x="1" y="1" width="676" height="312"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="Z9v-rf-YVz" id="Smh-7V-FGD">
-                                                        <rect key="frame" x="0.0" y="0.0" width="677" height="284"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="676.5" height="284"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <size key="intercellSpacing" width="17" height="0.0"/>
                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -631,7 +633,7 @@
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                             <tableHeaderView key="headerView" wantsLayer="YES" id="Z9v-rf-YVz">
-                                                <rect key="frame" x="0.0" y="0.0" width="677" height="28"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="676.5" height="28"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </tableHeaderView>
                                         </scrollView>
@@ -734,6 +736,107 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
+                                        <box fixedFrame="YES" borderType="line" title="Outgoing Commands" translatesAutoresizingMaskIntoConstraints="NO" id="Gra-sk-CwV">
+                                            <rect key="frame" x="308" y="120" width="153" height="211"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <view key="contentView" id="n3S-bL-ebR">
+                                                <rect key="frame" x="4" y="5" width="145" height="191"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QOs-cC-9f0">
+                                                        <rect key="frame" x="14" y="148" width="116" height="27"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <buttonCell key="cell" type="push" title="Turn SiPMs On..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="wnN-l0-T6T">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="turnSiPmsOnAction:" target="-2" id="s60-za-wbX"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lk8-Vl-93I">
+                                                        <rect key="frame" x="14" y="122" width="117" height="27"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <buttonCell key="cell" type="push" title="Turn SiPMs Off..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Bbq-xT-e3t">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="turnSiPmsOffAction:" target="-2" id="fjT-kc-2BQ"/>
+                                                        </connections>
+                                                    </button>
+                                                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XTI-1w-aq8">
+                                                        <rect key="frame" x="70" y="69" width="41" height="22"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <popUpButtonCell key="cell" type="push" title="1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Q0o-NA-GJO" id="Rg6-Cn-Tef">
+                                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <menu key="menu" id="j46-Wo-Zrr">
+                                                                <items>
+                                                                    <menuItem title="1" state="on" id="Q0o-NA-GJO"/>
+                                                                    <menuItem title="2" id="qHQ-DA-kMm"/>
+                                                                    <menuItem title="3" id="JN1-KD-p4e"/>
+                                                                    <menuItem title="4" id="5Ty-gs-wN2"/>
+                                                                </items>
+                                                            </menu>
+                                                        </popUpButtonCell>
+                                                        <connections>
+                                                            <action selector="sourceSelectAction:" target="-2" id="v98-Rw-8HU"/>
+                                                        </connections>
+                                                    </popUpButton>
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Aa9-t5-KXC">
+                                                        <rect key="frame" x="19" y="13" width="107" height="27"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <buttonCell key="cell" type="push" title="Move Source..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UnZ-hd-cVO">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="moveSourceAction:" target="-2" id="TFa-a2-zVa"/>
+                                                        </connections>
+                                                    </button>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sh9-3M-64Y">
+                                                        <rect key="frame" x="25" y="74" width="45" height="14"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Source:" id="MCk-th-gSP">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FTr-vk-VpR">
+                                                        <rect key="frame" x="25" y="49" width="43" height="14"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Height:" id="PIc-tl-FoZ">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="esB-cN-YNr">
+                                                        <rect key="frame" x="74" y="46" width="37" height="19"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="fVN-6L-0tm">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                        <connections>
+                                                            <action selector="sourceHeightAction:" target="-2" id="VGB-sG-sv9"/>
+                                                        </connections>
+                                                    </textField>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OxR-NP-ZYT">
+                                                        <rect key="frame" x="23" y="96" width="99" height="14"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Source Movement" id="4Gs-Od-M9B">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                </subviews>
+                                            </view>
+                                        </box>
                                     </subviews>
                                 </view>
                             </tabViewItem>

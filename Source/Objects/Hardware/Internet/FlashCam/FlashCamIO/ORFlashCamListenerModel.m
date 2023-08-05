@@ -409,7 +409,16 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
     [f addObjectsFromArray:@[@"-es",   [NSString stringWithFormat:@"%d", [[self configParam:@"eventSamples"]  intValue]]]];
     [f addObjectsFromArray:@[@"-sd",   [NSString stringWithFormat:@"%d", [[self configParam:@"signalDepth"]   intValue]]]];
     [f addObjectsFromArray:@[@"-tl",   [NSString stringWithFormat:@"%d", [[self configParam:@"retriggerLength"]intValue]]]];
-    [f addObjectsFromArray:@[@"-gt",   [NSString stringWithFormat:@"%d", [[self configParam:@"traceType"]     intValue]]]];
+    
+    //--------------------------------------------------------------
+    //MAH 7/24/23
+    //special case... traceType popup index 5 --> make the output value 501
+    int gtVal = [[self configParam:@"traceType"] intValue];
+    if(gtVal == 5)gtVal = 501;
+    [f addObjectsFromArray:@[@"-gt",   [NSString stringWithFormat:@"%d", gtVal]]];
+    //--------------------------------------------------------------
+
+     
     [f addObjectsFromArray:@[@"-rst",  [NSString stringWithFormat:@"%d", [[self configParam:@"resetMode"]     intValue]]]];
     [f addObjectsFromArray:@[@"-tmo",  [NSString stringWithFormat:@"%d", [[self configParam:@"timeout"]       intValue]]]];
     [f addObjectsFromArray:@[@"-re",   [NSString stringWithFormat:@"%d", [[self configParam:@"evPerRequest"]  intValue]]]];
@@ -716,7 +725,7 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
     }
     else if([p isEqualToString:@"traceType"]){
         int prevType = [[self configParam:p] intValue];
-        [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0, [v intValue]), 4)] forKey:p];
+        [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0, [v intValue]), 5)] forKey:p];
         int newType = [[self configParam:p] intValue];
         if(prevType > 0 && newType == 0)
             [self setConfigParam:@"retriggerLength" withValue:[self configParam:@"retriggerLength"]];

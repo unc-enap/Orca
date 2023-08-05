@@ -33,9 +33,12 @@ NSString* ORWebRakerLowLimitChanged		   = @"ORWebRakerLowLimitChanged";
 NSString* ORWebRakerValueChanged           = @"ORWebRakerValueChanged";
 NSString* ORWebRakerMinValueChanged        = @"ORWebRakerMinValueChanged";
 NSString* ORWebRakerMaxValueChanged        = @"ORWebRakerMaxValueChanged";
+NSString* ORWebRakerNameIdChanged          = @"ORWebRakerNameIdChanged";
 
 @interface ORWebRakerModel (private)
+- (void) postDBRecords;
 - (void) postCouchDBRecord;
+- (void) postInFluxRecord;
 @end
 
 @implementation ORWebRakerModel
@@ -58,6 +61,7 @@ NSString* ORWebRakerMaxValueChanged        = @"ORWebRakerMaxValueChanged";
     [minValues release];
     [maxValues release];
     [timeRates release];
+    [nameId    release];
     [data release];
     //release the properties (newer code)
     self.lastTimePolled         = nil;
@@ -124,6 +128,22 @@ NSString* ORWebRakerMaxValueChanged        = @"ORWebRakerMaxValueChanged";
         [[NSNotificationCenter defaultCenter] postNotificationName:ORWebRakerIpAddressChanged object:self];
     }
 }
+
+- (NSString*) nameId
+{
+    if(nameId!=nil)return nameId;
+    else return @"";
+}
+
+- (void)  setNameId:(NSString*)aName
+{
+    if(aName==nil)aName = @"";
+    [[[self undoManager] prepareWithInvocationTarget:self] setNameId:nameId];
+    [nameId release];
+    nameId = [aName copy];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORWebRakerNameIdChanged object:self];
+}
+
 - (NSInteger) numDataItems
 {
     NSInteger count = 0;
@@ -213,6 +233,8 @@ NSString* ORWebRakerMaxValueChanged        = @"ORWebRakerMaxValueChanged";
             NSString* s= [[[NSString alloc] initWithData:theData
                                                   encoding:NSUTF8StringEncoding] autorelease];
             s = [s stringByReplacingOccurrencesOfString:@"'" withString:@"\""];
+            s = [s stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+            s = [s stringByReplacingOccurrencesOfString:@"\n" withString:@""];
             NSData* test = [s dataUsingEncoding:NSASCIIStringEncoding];
         
             NSArray* theNewData = [[NSJSONSerialization JSONObjectWithData:test options:0 error:&error]retain];
@@ -256,7 +278,7 @@ NSString* ORWebRakerMaxValueChanged        = @"ORWebRakerMaxValueChanged";
                     [[timeRates objectAtIndex:i] addDataToTimeAverage:theValue];
                 }
                 [self setDataValid:YES];
-                [self postCouchDBRecord];
+                [self postDBRecords];
             }
             else [self setDataValid:NO];
         }
@@ -449,6 +471,7 @@ NSString* ORWebRakerMaxValueChanged        = @"ORWebRakerMaxValueChanged";
     hiLimits   = [[decoder decodeObjectForKey:@"hiLimits"]retain];
     minValues  = [[decoder decodeObjectForKey:@"minValues"]retain];
     maxValues  = [[decoder decodeObjectForKey:@"maxValues"]retain];
+    nameId  = [[decoder decodeObjectForKey:@"nameId"]retain];
 
     if(!lowLimits)lowLimits     = [[NSMutableArray alloc] init];
     if(!hiLimits) hiLimits      = [[NSMutableArray alloc] init];
@@ -468,11 +491,43 @@ NSString* ORWebRakerMaxValueChanged        = @"ORWebRakerMaxValueChanged";
     [encoder encodeObject:hiLimits  forKey:@"hiLimits"];
     [encoder encodeObject:minValues forKey:@"minValues"];
     [encoder encodeObject:maxValues forKey:@"maxValues"];
+    [encoder encodeObject:nameId    forKey:@"nameId"];
 }
 
 @end
 
 @implementation ORWebRakerModel (private)
+- (void) postDBRecords
+{
+    [self postCouchDBRecord];
+    [self postInFluxRecord];
+}
+
+- (void) postInFluxRecord
+{
+    for(NSDictionary* set in data){
+        NSMutableDictionary* inFluxRecord = [NSMutableDictionary dictionary];
+        NSMutableDictionary* tags         = [NSMutableDictionary dictionary];
+        NSMutableDictionary* fields       = [NSMutableDictionary dictionary];
+        
+        [inFluxRecord setObject:@"SlowControls" forKey:@"bucket"];          //bucket assumed to exist
+        [inFluxRecord setObject:@"measurement"  forKey:@"WebRakerValues"];  //the measurement  name
+        
+        [tags setObject: [self nameId] forKey:@"name"];
+        [tags setObject: [set objectForKey:@"description"] forKey:@"description"];
+        
+        for(NSString* aKey in [set allKeys]){
+            if([aKey isEqualToString:@"description"])continue;  //skip since it's in the tags
+            [fields setObject: [set objectForKey:aKey] forKey:aKey];
+        }
+        
+        [inFluxRecord setObject:tags    forKey:@"tags"];      //add tag dictionary
+        [inFluxRecord setObject:fields  forKey:@"fields"];    //add field dictionary
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ORInFluxAddMeasurement" object:self userInfo:inFluxRecord];
+    }
+}
+
 - (void) postCouchDBRecord
 {
    	@synchronized(self){

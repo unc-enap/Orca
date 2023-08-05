@@ -38,13 +38,23 @@
     NSArray*            cmdList;
     ORInFluxDBModel*    inFluxDB;
 
+    //----Source Movement-----
+    int sourceNumber;
+    NSMutableArray* sourceHeight;
+    
     //----queue thread--------
     bool                canceled;
     NSThread*           processThread;
     ORSafeQueue*        cmdQueue;
+    
 }
 
 #pragma mark ***Accessors
+- (int)  sourceNumber;
+- (void) setSourceNumber:(int)num;
+- (int)  sourceHeight:(int)i;
+- (void) setSource:(int)i height:(int)aHeight;
+- (void) setSourceArray:(NSMutableArray*)anArray;
 - (int) pollTime;
 - (void) setPollTime:(int)aPollTime;
 - (NSString*) ipAddress;
@@ -54,6 +64,7 @@
 - (NSString*) cmdPath;
 - (void) setCmdPath:(NSString*)aPath;
 - (bool) inFluxDBAvailable;
+- (void)sendCmd:(NSString*)aCmd;
 
 #pragma mark •••HW Commands
 - (void) pollHardware;
@@ -80,4 +91,6 @@ extern NSString* ORL200SlowControlsCmdPathChanged;
 extern NSString* ORL200SlowControlsStatusChanged;
 extern NSString* ORL200SlowControlsInFluxChanged;
 extern NSString* ORL200SlowControlsDataChanged;
+extern NSString* ORL200SlowControlsSourceNumberChanged;
+extern NSString* ORL200SlowControlsSourceHeightChanged;
 extern NSString* ORLNGSSlowControlsLock;

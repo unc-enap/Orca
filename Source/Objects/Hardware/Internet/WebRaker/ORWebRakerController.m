@@ -125,6 +125,12 @@
                      selector : @selector(tableViewSelectionDidChange:)
                          name : NSTableViewSelectionDidChangeNotification
                         object: nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(nameIdChanged:)
+                         name : ORWebRakerNameIdChanged
+                        object: nil];
+    
 }
 
 - (void) setModel:(id)aModel
@@ -143,6 +149,7 @@
 	[self updateTimePlot:nil];
     [self refreshProcessTable:nil];
     [self valuesChanged:nil];
+    [self nameIdChanged:nil];
 }
 
 - (void) tableViewSelectionDidChange:(NSNotification*)aNote
@@ -227,6 +234,11 @@
     [self tableViewSelectionDidChange:nil];
 }
 
+- (void) nameIdChanged:(NSNotification*)aNote
+{
+    [nameIdField setStringValue:[model nameId]];
+}
+
 - (void) dataValidChanged:(NSNotification*)aNote
 {
     if([model dataValid]){
@@ -304,6 +316,11 @@
 - (IBAction) ipAddressAction:(id)sender
 {
 	[model setIpAddress:[sender stringValue]];	
+}
+- (IBAction) nameIdAction:(id)sender
+{
+    [model setNameId:[sender stringValue]];
+
 }
 
 - (IBAction) dialogLockAction:(id)sender
