@@ -3155,6 +3155,12 @@
 		84DF4CA1162F1B2100261144 /* ORArduinoUNOController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DF4C9B162F1B2100261144 /* ORArduinoUNOController.m */; };
 		84DF4CA2162F1B2100261144 /* ORArduinoUNOModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 84DF4C9C162F1B2100261144 /* ORArduinoUNOModel.h */; };
 		84DF4CA3162F1B2100261144 /* ORArduinoUNOModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DF4C9D162F1B2100261144 /* ORArduinoUNOModel.m */; };
+		84DF729C2A7A928600BB72DC /* ORSensorPushModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DF72922A7A928600BB72DC /* ORSensorPushModel.m */; };
+		84DF729D2A7A928600BB72DC /* SensorPush.nib in Resources */ = {isa = PBXBuildFile; fileRef = 84DF72932A7A928600BB72DC /* SensorPush.nib */; };
+		84DF729E2A7A928600BB72DC /* ORSensorPushController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DF72942A7A928600BB72DC /* ORSensorPushController.m */; };
+		84DF72A12A7A928600BB72DC /* ORSensorPushModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 84DF72972A7A928600BB72DC /* ORSensorPushModel.h */; };
+		84DF72A22A7A928600BB72DC /* ORSensorPushController.h in Headers */ = {isa = PBXBuildFile; fileRef = 84DF72982A7A928600BB72DC /* ORSensorPushController.h */; };
+		84DF72A52A7A928600BB72DC /* SensorPush.gif in Resources */ = {isa = PBXBuildFile; fileRef = 84DF729B2A7A928600BB72DC /* SensorPush.gif */; };
 		84E0968609F44E3200EFE044 /* ORTek754DModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C493B204059AEA005F64B1 /* ORTek754DModel.m */; };
 		84E099620CC934CC00EFBC8F /* play.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 84E099600CC934CB00EFBC8F /* play.tiff */; };
 		84E099630CC934CC00EFBC8F /* stop.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 84E099610CC934CB00EFBC8F /* stop.tiff */; };
@@ -7035,6 +7041,12 @@
 		84DF4C9B162F1B2100261144 /* ORArduinoUNOController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORArduinoUNOController.m; sourceTree = "<group>"; };
 		84DF4C9C162F1B2100261144 /* ORArduinoUNOModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORArduinoUNOModel.h; sourceTree = "<group>"; };
 		84DF4C9D162F1B2100261144 /* ORArduinoUNOModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORArduinoUNOModel.m; sourceTree = "<group>"; };
+		84DF72922A7A928600BB72DC /* ORSensorPushModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORSensorPushModel.m; sourceTree = "<group>"; };
+		84DF72932A7A928600BB72DC /* SensorPush.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = SensorPush.nib; sourceTree = "<group>"; };
+		84DF72942A7A928600BB72DC /* ORSensorPushController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORSensorPushController.m; sourceTree = "<group>"; };
+		84DF72972A7A928600BB72DC /* ORSensorPushModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORSensorPushModel.h; sourceTree = "<group>"; };
+		84DF72982A7A928600BB72DC /* ORSensorPushController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORSensorPushController.h; sourceTree = "<group>"; };
+		84DF729B2A7A928600BB72DC /* SensorPush.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = SensorPush.gif; sourceTree = "<group>"; };
 		84DF917204D6D53C005F64B1 /* ORFileMover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORFileMover.h; sourceTree = "<group>"; };
 		84DF917304D6D53C005F64B1 /* ORFileMover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORFileMover.m; sourceTree = "<group>"; };
 		84E099600CC934CB00EFBC8F /* play.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = play.tiff; path = Source/Objects/Control/RunControl/play.tiff; sourceTree = SOURCE_ROOT; };
@@ -12954,6 +12966,7 @@
 		84B28D4C0F4C651C00E2B056 /* Internet */ = {
 			isa = PBXGroup;
 			children = (
+				84DF72912A7A928600BB72DC /* SensorPush */,
 				E61D05842307313E00140549 /* FlashCam */,
 				A8175F7A220D8D06003AC7E5 /* ADEIControl */,
 				543BF1FA1E548158003E4582 /* HVcRIO */,
@@ -14384,6 +14397,19 @@
 			name = ArduinoUNO;
 			path = Source/Objects/Hardware/Serial/Arduino/ArduioUNO;
 			sourceTree = SOURCE_ROOT;
+		};
+		84DF72912A7A928600BB72DC /* SensorPush */ = {
+			isa = PBXGroup;
+			children = (
+				84DF72922A7A928600BB72DC /* ORSensorPushModel.m */,
+				84DF72972A7A928600BB72DC /* ORSensorPushModel.h */,
+				84DF72932A7A928600BB72DC /* SensorPush.nib */,
+				84DF72942A7A928600BB72DC /* ORSensorPushController.m */,
+				84DF72982A7A928600BB72DC /* ORSensorPushController.h */,
+				84DF729B2A7A928600BB72DC /* SensorPush.gif */,
+			);
+			path = SensorPush;
+			sourceTree = "<group>";
 		};
 		84DF917104D6D51E005F64B1 /* FileMover */ = {
 			isa = PBXGroup;
@@ -16316,6 +16342,7 @@
 				8408A4BD09071C6A004A3B34 /* ORHV2132Controller.h in Headers */,
 				8408A4BF09071C6A004A3B34 /* ORHV2132Model.h in Headers */,
 				84178D500923C4B100C15D2B /* ORSocketClient.h in Headers */,
+				84DF72A22A7A928600BB72DC /* ORSensorPushController.h in Headers */,
 				84E24F42093E703100E963DF /* ORBitProcessing.h in Headers */,
 				5B5A40551A79385C00543633 /* ORSISRegisterDefs.h in Headers */,
 				840E00040944B29000049827 /* ORProcessController.h in Headers */,
@@ -16628,6 +16655,7 @@
 				9C7CE7E60E2FC22500F63679 /* ORCaen260Controller.h in Headers */,
 				9C7CE7E80E2FC22500F63679 /* ORCaen260Decoders.h in Headers */,
 				9C7CE7EA0E2FC22500F63679 /* ORCaen260Model.h in Headers */,
+				84DF72A12A7A928600BB72DC /* ORSensorPushModel.h in Headers */,
 				844445790E81311500A1440D /* ORIpeV4FLTController.h in Headers */,
 				8444457B0E81311500A1440D /* ORIpeV4FLTDecoder.h in Headers */,
 				0F16E33D1C493AD7003C9EC9 /* libevent.h in Headers */,
@@ -18121,6 +18149,7 @@
 				8476200F118CD53D00016A8D /* 1dRoi.nib in Resources */,
 				84762010118CD53D00016A8D /* 2dRoi.nib in Resources */,
 				84762011118CD53D00016A8D /* FFT.nib in Resources */,
+				84DF72A52A7A928600BB72DC /* SensorPush.gif in Resources */,
 				84762043118CD53D00016A8D /* xAxisMarker.gif in Resources */,
 				84762044118CD53D00016A8D /* xAxisMarkerOpposite.gif in Resources */,
 				84762045118CD53D00016A8D /* yAxisMarker.gif in Resources */,
@@ -18306,6 +18335,7 @@
 				84FEAD6D1594A4DF005D798C /* ProXR16SSRBig.tif in Resources */,
 				84FEB88815A31F42005D798C /* L2301.nib in Resources */,
 				84FEB88915A31F42005D798C /* L2301Card.gif in Resources */,
+				84DF729D2A7A928600BB72DC /* SensorPush.nib in Resources */,
 				2D51C60A15B5A115000F0ACD /* EdelweissFLT.nib in Resources */,
 				2D51C60B15B5A115000F0ACD /* EdelweissFLTCard.gif in Resources */,
 				5B5A40561A79385C00543633 /* SIS3305.nib in Resources */,
@@ -18511,6 +18541,7 @@
 				84D29FEE1843EAC800D320DB /* ORTaskHandler.m in Sources */,
 				8434A301055B3287002D3102 /* ORDataFileController.m in Sources */,
 				8434A303055B3287002D3102 /* OReCPU147Model.m in Sources */,
+				84DF729C2A7A928600BB72DC /* ORSensorPushModel.m in Sources */,
 				8434A305055B3287002D3102 /* OReCPU147Controller.m in Sources */,
 				8434A306055B3287002D3102 /* ORQueueView.m in Sources */,
 				8434A307055B3287002D3102 /* ORCircularBuffer.m in Sources */,
@@ -18911,6 +18942,7 @@
 				849B25F30B2F34FA0007484F /* PrespectrometerModel.m in Sources */,
 				84F69CF80B331BBA000BE0CA /* ORSegmentGroup.m in Sources */,
 				84A5A22A0B35D8B0002EC2AA /* ORDetectorView.m in Sources */,
+				84DF729E2A7A928600BB72DC /* ORSensorPushController.m in Sources */,
 				84760CC30B370E0A00512F67 /* ORExperimentModel.m in Sources */,
 				84760D580B37437400512F67 /* ORExperimentController.m in Sources */,
 				84080D2C0B3C7FBF009D3704 /* ORScriptRunner.m in Sources */,
