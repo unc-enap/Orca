@@ -34,6 +34,7 @@
     BOOL                 dataValid;
     ORAlarm*             dataInValidAlarm;
     NSArray*             data;
+    NSString*            nameId;
     NSMutableArray*      lowLimits;
     NSMutableArray*      hiLimits;
     NSMutableArray*      minValues;
@@ -49,6 +50,8 @@
 - (void) setIpAddress:(NSString*)aIpAddress;
 - (ORTimeRate*)timeRate:(int)aChannel;
 - (void) setDataValid:(BOOL)aState;
+- (NSString*) nameId;
+- (void)      setNameId:(NSString*)aName;
 
 #pragma mark ***Utilities
 - (void) pollHardware;
@@ -102,4 +105,5 @@ extern NSString* ORWebRakerLowLimitChanged;
 extern NSString* ORWebRakerValueChanged;
 extern NSString* ORWebRakerMinValueChanged;
 extern NSString* ORWebRakerMaxValueChanged;
+extern NSString* ORWebRakerNameIdChanged;
 

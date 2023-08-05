@@ -30,7 +30,8 @@
     IBOutlet NSTextField*   dataValidField;
     IBOutlet NSTableView*   dataTableView;
     IBOutlet NSTextView*    detailsView;
-
+    IBOutlet NSTextField*   nameIdField;
+    
 	IBOutlet ORCompositeTimeLineView*   plotter0;
 }
 
@@ -43,11 +44,13 @@
 - (void) updateTimePlot:(NSNotification*)aNote;
 - (void) scaleAction:(NSNotification*)aNote;
 - (void) miscAttributesChanged:(NSNotification*)aNote;
+- (void) nameIdChanged:(NSNotification*)aNote;
 
 #pragma mark •••Actions
 - (IBAction) ipAddressAction:(id)sender;
 - (IBAction) dialogLockAction:(id)sender;
 - (IBAction) pollNowAction:(id)sender;
+- (IBAction) nameIdAction:(id)sender;
 
 #pragma mark •••Data Source
 - (int) numberPointsInPlot:(id)aPlotter;
