@@ -35,6 +35,8 @@
 - (NSInteger) machineCount;
 - (void) checkMachines:(NSTimer*)aTimer;
 - (void) setUpQueue;
+- (void) startTimer;
+
 
 #pragma mark •••Save/Restore
 - (void) saveToFile:        (NSString*)aPath;
