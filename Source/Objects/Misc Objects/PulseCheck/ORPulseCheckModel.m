@@ -44,6 +44,12 @@ NSString* ORPulseCheckModelReloadTable      = @"ORPulseCheckModelReloadTable";
 @synthesize lastFile,machines;
 
 #pragma mark •••initialization
+- (id)init
+{
+    self = [super init];
+    [self startTimer];
+    return self;
+}
 - (void) dealloc
 {
     [notificationTimer invalidate];
@@ -64,10 +70,16 @@ NSString* ORPulseCheckModelReloadTable      = @"ORPulseCheckModelReloadTable";
 
 - (void) awakeAfterDocumentLoaded
 {
+    [self startTimer];
+}
+
+- (void) startTimer
+{
     if(!notificationTimer){
         notificationTimer   = [[NSTimer scheduledTimerWithTimeInterval:kCheckMachineTime target:self selector:@selector(checkMachines:) userInfo:nil repeats:YES] retain];
     }
 }
+
 #pragma mark ***Accessors
 
 - (void) setLastFile:(NSString*)aPath

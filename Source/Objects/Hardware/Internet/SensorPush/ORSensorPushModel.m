@@ -281,8 +281,6 @@ NSString* ORSensorPushLock             = @"ORSensorPushLock";
     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
     NSDate* date = [dateFormatter dateFromString:aTimeStamp];
     NSString *localDateString      = [dateFormatter stringFromDate:date];
-     
-    NSLog(@"%@", localDateString);
     return localDateString;
 }
 
