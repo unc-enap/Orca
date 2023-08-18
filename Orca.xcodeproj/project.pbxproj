@@ -2940,6 +2940,7 @@
 		84CC16D10FAF157000CEE642 /* ORMCA927Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CC16CA0FAF157000CEE642 /* ORMCA927Controller.m */; };
 		84CC16D20FAF157000CEE642 /* ORMCA927Model.h in Headers */ = {isa = PBXBuildFile; fileRef = 84CC16CB0FAF157000CEE642 /* ORMCA927Model.h */; };
 		84CC16D30FAF157000CEE642 /* ORMCA927Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CC16CC0FAF157000CEE642 /* ORMCA927Model.m */; };
+		84CD53192A8FC90F0099144F /* Bt610.png in Resources */ = {isa = PBXBuildFile; fileRef = 84CD53182A8FC90F0099144F /* Bt610.png */; };
 		84CD6BF41A1E34D90089026F /* Gretina4A.nib in Resources */ = {isa = PBXBuildFile; fileRef = 84CD6BE91A1E34D90089026F /* Gretina4A.nib */; };
 		84CD6BF51A1E34D90089026F /* Gretina4ACard.gif in Resources */ = {isa = PBXBuildFile; fileRef = 84CD6BEA1A1E34D90089026F /* Gretina4ACard.gif */; };
 		84CD6BF71A1E34D90089026F /* ORGretina4AController.h in Headers */ = {isa = PBXBuildFile; fileRef = 84CD6BEC1A1E34D90089026F /* ORGretina4AController.h */; };
@@ -3161,6 +3162,11 @@
 		84DF72A12A7A928600BB72DC /* ORSensorPushModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 84DF72972A7A928600BB72DC /* ORSensorPushModel.h */; };
 		84DF72A22A7A928600BB72DC /* ORSensorPushController.h in Headers */ = {isa = PBXBuildFile; fileRef = 84DF72982A7A928600BB72DC /* ORSensorPushController.h */; };
 		84DF72A52A7A928600BB72DC /* SensorPush.gif in Resources */ = {isa = PBXBuildFile; fileRef = 84DF729B2A7A928600BB72DC /* SensorPush.gif */; };
+		84E01B612A8FC81000EC712F /* ORBt610Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E01B5B2A8FC80F00EC712F /* ORBt610Controller.m */; };
+		84E01B622A8FC81000EC712F /* Bt610.nib in Resources */ = {isa = PBXBuildFile; fileRef = 84E01B5C2A8FC80F00EC712F /* Bt610.nib */; };
+		84E01B632A8FC81000EC712F /* ORBt610Model.h in Headers */ = {isa = PBXBuildFile; fileRef = 84E01B5D2A8FC80F00EC712F /* ORBt610Model.h */; };
+		84E01B642A8FC81000EC712F /* ORBt610Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 84E01B5E2A8FC80F00EC712F /* ORBt610Controller.h */; };
+		84E01B652A8FC81000EC712F /* ORBt610Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E01B5F2A8FC80F00EC712F /* ORBt610Model.m */; };
 		84E0968609F44E3200EFE044 /* ORTek754DModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C493B204059AEA005F64B1 /* ORTek754DModel.m */; };
 		84E099620CC934CC00EFBC8F /* play.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 84E099600CC934CB00EFBC8F /* play.tiff */; };
 		84E099630CC934CC00EFBC8F /* stop.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 84E099610CC934CB00EFBC8F /* stop.tiff */; };
@@ -6803,6 +6809,7 @@
 		84CC16CA0FAF157000CEE642 /* ORMCA927Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORMCA927Controller.m; path = Source/Objects/Hardware/USB/MCA927/ORMCA927Controller.m; sourceTree = SOURCE_ROOT; };
 		84CC16CB0FAF157000CEE642 /* ORMCA927Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORMCA927Model.h; path = Source/Objects/Hardware/USB/MCA927/ORMCA927Model.h; sourceTree = SOURCE_ROOT; };
 		84CC16CC0FAF157000CEE642 /* ORMCA927Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORMCA927Model.m; path = Source/Objects/Hardware/USB/MCA927/ORMCA927Model.m; sourceTree = SOURCE_ROOT; };
+		84CD53182A8FC90F0099144F /* Bt610.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bt610.png; sourceTree = "<group>"; };
 		84CD6BE91A1E34D90089026F /* Gretina4A.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = Gretina4A.nib; sourceTree = "<group>"; };
 		84CD6BEA1A1E34D90089026F /* Gretina4ACard.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Gretina4ACard.gif; sourceTree = "<group>"; };
 		84CD6BEC1A1E34D90089026F /* ORGretina4AController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORGretina4AController.h; sourceTree = "<group>"; };
@@ -7049,6 +7056,11 @@
 		84DF729B2A7A928600BB72DC /* SensorPush.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = SensorPush.gif; sourceTree = "<group>"; };
 		84DF917204D6D53C005F64B1 /* ORFileMover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORFileMover.h; sourceTree = "<group>"; };
 		84DF917304D6D53C005F64B1 /* ORFileMover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORFileMover.m; sourceTree = "<group>"; };
+		84E01B5B2A8FC80F00EC712F /* ORBt610Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORBt610Controller.m; sourceTree = "<group>"; };
+		84E01B5C2A8FC80F00EC712F /* Bt610.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = Bt610.nib; sourceTree = "<group>"; };
+		84E01B5D2A8FC80F00EC712F /* ORBt610Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORBt610Model.h; sourceTree = "<group>"; };
+		84E01B5E2A8FC80F00EC712F /* ORBt610Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORBt610Controller.h; sourceTree = "<group>"; };
+		84E01B5F2A8FC80F00EC712F /* ORBt610Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORBt610Model.m; sourceTree = "<group>"; };
 		84E099600CC934CB00EFBC8F /* play.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = play.tiff; path = Source/Objects/Control/RunControl/play.tiff; sourceTree = SOURCE_ROOT; };
 		84E099610CC934CB00EFBC8F /* stop.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = stop.tiff; path = Source/Objects/Control/RunControl/stop.tiff; sourceTree = SOURCE_ROOT; };
 		84E09A200CCD1AA400EFBC8F /* dec.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = dec.tif; path = Source/Objects/OrcaObject/dec.tif; sourceTree = SOURCE_ROOT; };
@@ -10385,6 +10397,7 @@
 				84B6CD3B14B37E9700386BE1 /* RGA300 */,
 				8407397914CDD91F00BAD105 /* Met637 */,
 				841C4DEE141FA72800F95B50 /* Met237 */,
+				84E01B592A8FC80F00EC712F /* Bt610 */,
 				8497E5EB1808605F00CE974A /* GT521 */,
 				847F947213D4AA31006B06B4 /* Rad7 */,
 				8435AAC110C6D0EF00E03F7F /* VarianTPS */,
@@ -14431,6 +14444,19 @@
 			path = "Source/Objects/Misc Objects/FileCopy";
 			sourceTree = SOURCE_ROOT;
 		};
+		84E01B592A8FC80F00EC712F /* Bt610 */ = {
+			isa = PBXGroup;
+			children = (
+				84E01B5F2A8FC80F00EC712F /* ORBt610Model.m */,
+				84E01B5D2A8FC80F00EC712F /* ORBt610Model.h */,
+				84E01B5B2A8FC80F00EC712F /* ORBt610Controller.m */,
+				84E01B5E2A8FC80F00EC712F /* ORBt610Controller.h */,
+				84E01B5C2A8FC80F00EC712F /* Bt610.nib */,
+				84CD53182A8FC90F0099144F /* Bt610.png */,
+			);
+			path = Bt610;
+			sourceTree = "<group>";
+		};
 		84E2063C11AD7841007D757F /* SIS3800 */ = {
 			isa = PBXGroup;
 			children = (
@@ -17160,6 +17186,7 @@
 				84F3085415483A4000663573 /* ORMks660BDecoders.h in Headers */,
 				84F3085615483A4000663573 /* ORMks660BModel.h in Headers */,
 				8418301D156153D2004EC81F /* ORTM700Controller.h in Headers */,
+				84E01B642A8FC81000EC712F /* ORBt610Controller.h in Headers */,
 				84183021156153D2004EC81F /* ORTM700Model.h in Headers */,
 				8418376C156FC7AF004EC81F /* ORDetectorRamper.h in Headers */,
 				8418481F157FA478004EC81F /* ORCV830Controller.h in Headers */,
@@ -17195,6 +17222,7 @@
 				84DF4A0E162DCE6B00261144 /* ORGretina4MModel.h in Headers */,
 				84DF4CA0162F1B2100261144 /* ORArduinoUNOController.h in Headers */,
 				84DF4CA2162F1B2100261144 /* ORArduinoUNOModel.h in Headers */,
+				84E01B632A8FC81000EC712F /* ORBt610Model.h in Headers */,
 				84F909891638383C00E9FD24 /* ORPulser33500Controller.h in Headers */,
 				84F9098B1638383C00E9FD24 /* ORPulser33500Model.h in Headers */,
 				842BB6AA1639746300393470 /* ORPulser33500Chan.h in Headers */,
@@ -17874,6 +17902,7 @@
 				CEC7C6ED0D0DCB73008BA8FE /* NoNI488DriversHelp.plist in Resources */,
 				9C086CE90D10AB6200524F47 /* mainFocalPlaneDetector.tif in Resources */,
 				84AB8BC30D2314CD00EC39F2 /* C111C.nib in Resources */,
+				84E01B622A8FC81000EC712F /* Bt610.nib in Resources */,
 				84AB8BC40D2314CD00EC39F2 /* C111C.tif in Resources */,
 				E686441F23BE475300EA43D1 /* FlashCamCrate.nib in Resources */,
 				84AB8BD00D2314DD00EC39F2 /* JAMF.gif in Resources */,
@@ -18004,6 +18033,7 @@
 				84B28E1F0F4C718400E2B056 /* HV4032.nib in Resources */,
 				84B28E200F4C718400E2B056 /* HV4032.tif in Resources */,
 				84B28E210F4C718400E2B056 /* HV4032Off.tif in Resources */,
+				84CD53192A8FC90F0099144F /* Bt610.png in Resources */,
 				84B28E220F4C718400E2B056 /* HV4032On.tif in Resources */,
 				84B28E320F4C7FD400E2B056 /* LDA102.nib in Resources */,
 				84B28E330F4C7FD400E2B056 /* LDA102.tif in Resources */,
@@ -18976,6 +19006,7 @@
 				849DA7120BF4DB3000044320 /* ORPlotTimeSeriesController.m in Sources */,
 				849DA7170BF4DB5300044320 /* ORTimeSeries.m in Sources */,
 				84A4E82C0C187A3E00CBC222 /* ORIP220Controller.m in Sources */,
+				84E01B652A8FC81000EC712F /* ORBt610Model.m in Sources */,
 				84A4E82E0C187A3E00CBC222 /* ORIP220Model.m in Sources */,
 				84A4EE720C2C5D0A00CBC222 /* ORAcqirisDC440Controller.m in Sources */,
 				84A4EE740C2C5D0A00CBC222 /* ORAcqirisDC440Model.m in Sources */,
@@ -19000,6 +19031,7 @@
 				84F46F420CA44255007EFADA /* ORIpeCrateModel.m in Sources */,
 				84F46F480CA44255007EFADA /* ORIpeFLTController.m in Sources */,
 				84F46F4A0CA44255007EFADA /* ORIpeFLTDecoder.m in Sources */,
+				84E01B612A8FC81000EC712F /* ORBt610Controller.m in Sources */,
 				B86F08781FC517DE0076A269 /* SessionDB.m in Sources */,
 				84F46F4D0CA44255007EFADA /* ORIpeFLTModel.m in Sources */,
 				84F46F520CA44255007EFADA /* ORIpeSLTController.m in Sources */,
