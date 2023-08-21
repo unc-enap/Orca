@@ -113,9 +113,8 @@
 	
 	blankView = [[NSView alloc] init];
     basicOpsSize	= NSMakeSize(422,528);
-    processOpsSize	= NSMakeSize(385,370);
+    processOpsSize	= NSMakeSize(422,370);
     historyOpsSize	= NSMakeSize(422,480);
-    summaryOpsSize	= NSMakeSize(400,270);
 	
 	NSString* key = [NSString stringWithFormat: @"orca.ORRad7%u.selectedtab",[model uniqueIdNumber]];
     NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey: key];
@@ -161,18 +160,13 @@
                         object: nil];
 
     [notifyCenter addObserver : self
-                     selector : @selector(measurementDateChanged:)
-                         name : ORBt610ModelMeasurementDateChanged
-						object: model];
-
-    [notifyCenter addObserver : self
                      selector : @selector(countChanged:)
                          name : ORBt610ModelCountChanged
 						object: model];
 
     [notifyCenter addObserver : self
-                     selector : @selector(countingModeChanged:)
-                         name : ORBt610ModelCountingModeChanged
+                     selector : @selector(numSamplesChanged:)
+                         name : ORBt610ModelNumSamplesChanged
 						object: model];
 
     [notifyCenter addObserver : self
@@ -188,11 +182,6 @@
     [notifyCenter addObserver : self
                      selector : @selector(cycleStartedChanged:)
                          name : ORBt610ModelCycleStartedChanged
-						object: model];
-
-    [notifyCenter addObserver : self
-                     selector : @selector(cycleWillEndChanged:)
-                         name : ORBt610ModelCycleWillEndChanged
 						object: model];
 
     [notifyCenter addObserver : self
@@ -279,7 +268,17 @@
                      selector : @selector(dumpCountChanged:)
                          name : ORBt610ModelDumpCountChanged
 						object: model];
-     
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(opTimerChanged:)
+                         name : ORBt610ModelOpTimerChanged
+                        object: model];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(measurementDateChanged:)
+                         name : ORBt610ModelMeasurementDateChanged
+                        object: model];
+    
 	[serialPortController registerNotificationObservers];
 	
 }
@@ -288,13 +287,13 @@
 {
     [super updateWindow];
     [self lockChanged:nil];
-	[self measurementDateChanged:nil];
 	[self countChanged:nil];
-	[self countingModeChanged:nil];
+    [self opTimerChanged:nil];
+	[self numSamplesChanged:nil];
 	[self cycleDurationChanged:nil];
+    [self measurementDateChanged:nil];
 	[self runningChanged:nil];
 	[self cycleStartedChanged:nil];
-	[self cycleWillEndChanged:nil];
 	[self cycleNumberChanged:nil];
 	[self updateTimePlot:nil];
     [self miscAttributesChanged:nil];
@@ -312,6 +311,15 @@
 	[self dumpInProgressChanged:nil];
 	[self dumpCountChanged:nil];
 	[serialPortController updateWindow];
+}
+- (void) opTimerChanged:(NSNotification*)aNote
+{
+    [opTimerField setStringValue:[model opTimer]];
+}
+
+- (void) measurementDateChanged:(NSNotification*)aNote
+{
+    [measurementDateField setStringValue: [model measurementDate]];
 }
 
 - (void) dumpCountChanged:(NSNotification*)aNote
@@ -344,13 +352,11 @@
 - (void) actualDurationChanged:(NSNotification*)aNote
 {
 	[actualDurationField setIntValue: [model actualDuration]];
-	[actualDuration2Field setIntValue: [model actualDuration]];
 }
 
 - (void) tempUnitsChanged:(NSNotification*)aNote
 {
 	[tempUnitsField setStringValue: [model tempUnits]==0?@"C":@"F"];
-	[tempUnits2Field setStringValue: [model tempUnits]==0?@"C":@"F"];
 	[tempUnitsPU selectItemAtIndex: [model tempUnits]];
 }
 
@@ -359,10 +365,10 @@
 	[countUnitsPU selectItemAtIndex: [model countUnits]]; 
 	NSString* s = @"";
 	if([model countUnits]==0)		s = @"Counts/Ft^3";
-	else if([model countUnits]==1)	s = @"Counts/L^3";
-	else if([model countUnits]==2)	s = @"Total Counts";
+	else if([model countUnits]==1)	s = @"Counts/L";
+    else if([model countUnits]==2)  s = @"Total Counts";
+    else if([model countUnits]==3)  s = @"Counts/M^3";
 	[unitsField setStringValue:s];
-	[units2Field setStringValue:s];
 	[plotter0 setYLabel:s];
 }
 
@@ -371,22 +377,16 @@
 	int bits = [model statusBits];
 	[batteryStatusField setStringValue: (bits & 0x10) ? @"BAD":@"OK"];
 	[sensorStatusField  setStringValue:	(bits & 0x20) ? @"BAD":@"OK"];
-	[flowStatusField    setStringValue:	(bits & 0x40) ? @"BAD":@"OK"];
-	[batteryStatus2Field setStringValue: (bits & 0x10) ? @"BAD":@"OK"];
-	[sensorStatus2Field  setStringValue:	(bits & 0x20) ? @"BAD":@"OK"];
-	[flowStatus2Field    setStringValue:	(bits & 0x40) ? @"BAD":@"OK"];
 }
 
 - (void) humidityChanged:(NSNotification*)aNote
 {
 	[humidityField setFloatValue: [model humidity]];
-	[humidity2Field setFloatValue: [model humidity]];
 }
 
 - (void) temperatureChanged:(NSNotification*)aNote
 {
 	[temperatureField setFloatValue: [model temperature]];
-	[temperature2Field setFloatValue: [model temperature]];
 }
 
 - (void) countAlarmLimitChanged:(NSNotification*)aNote
@@ -465,27 +465,10 @@
 
 - (void) cycleStartedChanged:(NSNotification*)aNote
 {	
-	NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-	NSString* startDateString = [dateFormatter stringFromDate:[model cycleStarted]];
+	NSString* startDateString = [[model cycleStarted] stdDescription];
 	
-	[dateFormatter release];
 	if(startDateString && [model running]) [cycleStartedField setStringValue:startDateString];
 	else [cycleStartedField setStringValue:@"---"];
-}
-
-- (void) cycleWillEndChanged:(NSNotification*)aNote
-{
-	NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-	NSString* endDateString   = [dateFormatter stringFromDate:[model cycleWillEnd]];
-	[dateFormatter release];
-	NSString* s;
-	if(endDateString && [model running]) {
-		if([model countingMode] == kBt610Manual)s = @"--";
-		else s = endDateString;
-	}
-	else s = @"---";
-	[cycleWillEndField setStringValue:s];
-	[cycleWillEnd2Field setStringValue:s];
 }
 
 - (void) cycleNumberChanged:(NSNotification*)aNote
@@ -496,10 +479,15 @@
 - (void) runningChanged:(NSNotification*)aNote
 {
 	[self updateButtons];
-	[runningField setStringValue:[model running]?@"Counting":@"Idle"];
-	[running2Field setStringValue:[model running]?@"Counting":@"Idle"];
-	[self cycleStartedChanged:nil];
-	[self cycleWillEndChanged:nil];
+    BOOL running  = [model running];
+    BOOL holding  = [model holding];
+    NSString* s = @"";
+    if(running){
+        if(holding)s = @"Holding";
+        else s = @"Running";
+    }
+    else s = @"Idle";
+    [cycleStateField setStringValue:s];
 }
 
 - (void) cycleDurationChanged:(NSNotification*)aNote
@@ -507,9 +495,9 @@
 	[cycleDurationField setIntValue: [model cycleDuration]];
 }
 
-- (void) countingModeChanged:(NSNotification*)aNote
+- (void) numSamplesChanged:(NSNotification*)aNote
 {
-	[countingModePU selectItemAtIndex: [model countingMode]];
+	[numSamplesField setIntValue: [model numSamples]];
 	[self updateButtons];
 }
 
@@ -518,14 +506,7 @@
 	int i;
 	for(i=0;i<6;i++){
 		[[countMatrix cellAtRow:i column:0] setIntValue:[model count:i]];
-		[[count2Matrix cellAtRow:i column:0] setIntValue:[model count:i]];
 	}
-}
-
-- (void) measurementDateChanged:(NSNotification*)aNote
-{
-	[measurementDateField setStringValue: [model measurementDate]];
-	[measurementDate2Field setStringValue: [model measurementDate]];
 }
 
 - (void) checkGlobalSecurity
@@ -556,9 +537,9 @@
 		[startCycleButton setEnabled:NO];
 		[stopCycleButton setEnabled:NO];
 	}
-	[holdTimeField setEnabled:![model running] && !locked && ([model countingMode]==kBt610Auto)];
+    [holdTimeField setEnabled:![model running] && !locked];
 	[cycleDurationField setEnabled:![model running] && !locked];
-	[countingModePU setEnabled:![model running] && !locked];
+	[numSamplesField setEnabled:![model running] && !locked];
 	[countUnitsPU setEnabled:![model running] && !locked];
 	[tempUnitsPU setEnabled:![model running] && !locked];
 	[clearAllButton setEnabled:![model running] && !locked];
@@ -585,7 +566,7 @@
 			[[self window] setStyleMask: style | NSWindowStyleMaskResizable];
 			break;
 		default: 
-			[self resizeWindowToSize:summaryOpsSize];     
+			[self resizeWindowToSize:basicOpsSize];
 			[[self window] setStyleMask: style & ~NSWindowStyleMaskResizable];
 			break;
 	}
@@ -615,9 +596,10 @@
 	[model setHoldTime:[sender intValue]];	
 }
 
-- (IBAction) countingModeAction:(id)sender
+- (IBAction) numSamplesAction:(id)sender
 {
-	[model setCountingMode:(int)[sender indexOfSelectedItem]];
+	[model setNumSamples:[sender intValue]];
+    [self updateButtons];
 }
 
 - (IBAction) tempUnitsAction:(id)sender
@@ -673,6 +655,7 @@
 {
 	[model sendNewData];
 }
+
 
 - (IBAction) clearAllAction:(id)sender
 {

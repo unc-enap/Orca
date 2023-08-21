@@ -33,13 +33,13 @@
 	IBOutlet NSTextField*	holdTimeField;
 	IBOutlet NSTextField*	tempUnitsField;
 	IBOutlet NSPopUpButton* tempUnitsPU;
-	IBOutlet NSPopUpButton* countingModePU;
+	IBOutlet NSTextField*   numSamplesField;
 	IBOutlet NSPopUpButton* countUnitsPU;
 	IBOutlet NSTextField*	humidityField;
-	IBOutlet NSTextField*	temperatureField;
-	
+    IBOutlet NSTextField*   temperatureField;
+    IBOutlet NSTextField*   cycleTypeField;
+
 	IBOutlet NSMatrix*		countMatrix;
-	IBOutlet NSTextField*	measurementDateField;
 
     IBOutlet NSButton*      lockButton;
     IBOutlet NSButton*      clearAllButton;
@@ -50,38 +50,23 @@
     IBOutlet NSButton*      startCycleButton;
     IBOutlet NSButton*      stopCycleButton;
     IBOutlet NSTextField*   cycleNumberField;
-	IBOutlet NSTextField*	cycleWillEndField;
 	IBOutlet NSTextField*	cycleStartedField;
-	IBOutlet NSTextField*	runningField;
+	IBOutlet NSTextField*	cycleStateField;
 	IBOutlet NSTextField*	unitsField;
 	IBOutlet NSTextField*	batteryStatusField;
 	IBOutlet NSTextField*	sensorStatusField;
-	IBOutlet NSTextField*	flowStatusField;
 	IBOutlet NSTextField*   actualDurationField;
-	
+    IBOutlet NSTextField*   opTimerField;
+    IBOutlet NSTextField*   measurementDateField;
 	IBOutlet ORCompositeTimeLineView*   plotter0;
 	IBOutlet NSMatrix* countAlarmLimitMatrix;
 	IBOutlet NSMatrix* maxCountsMatrix;
 
-	IBOutlet NSMatrix*		count2Matrix;
-	IBOutlet NSTextField*	measurementDate2Field;
-	IBOutlet NSTextField*	tempUnits2Field;
-	IBOutlet NSTextField*	cycleWillEnd2Field;
-	IBOutlet NSTextField*	running2Field;
-	IBOutlet NSTextField*	units2Field;
-	IBOutlet NSTextField*	batteryStatus2Field;
-	IBOutlet NSTextField*	sensorStatus2Field;
-	IBOutlet NSTextField*	flowStatus2Field;
-	IBOutlet NSTextField*   actualDuration2Field;
-	IBOutlet NSTextField*	humidity2Field;
-	IBOutlet NSTextField*	temperature2Field;
 
-	
     IBOutlet ORSerialPortController* serialPortController;
 
 	NSSize					basicOpsSize;
 	NSSize					processOpsSize;
-	NSSize					summaryOpsSize;
 	NSSize					historyOpsSize;
 	NSView*					blankView;
 	
@@ -97,6 +82,8 @@
 - (void) updateWindow;
 
 #pragma mark ***Interface Management
+- (void) measurementDateChanged:(NSNotification*)aNote;
+- (void) opTimerChanged:(NSNotification*)aNote;
 - (void) dumpCountChanged:(NSNotification*)aNote;
 - (void) dumpInProgressChanged:(NSNotification*)aNote;
 - (void) timedOutChanged:(NSNotification*)aNote;
@@ -111,13 +98,11 @@
 - (void) countAlarmLimitChanged:(NSNotification*)aNote;
 - (void) maxCountsChanged:(NSNotification*)aNote;
 - (void) cycleNumberChanged:(NSNotification*)aNote;
-- (void) cycleWillEndChanged:(NSNotification*)aNote;
 - (void) cycleStartedChanged:(NSNotification*)aNote;
 - (void) runningChanged:(NSNotification*)aNote;
 - (void) cycleDurationChanged:(NSNotification*)aNote;
-- (void) countingModeChanged:(NSNotification*)aNote;
+- (void) numSamplesChanged:(NSNotification*)aNote;
 - (void) countChanged:(NSNotification*)aNote;
-- (void) measurementDateChanged:(NSNotification*)aNote;
 - (void) updateButtons;
 - (void) lockChanged:(NSNotification*)aNote;
 - (void) updateTimePlot:(NSNotification*)aNote;
@@ -137,7 +122,7 @@
 - (IBAction) startCycleAction:(id)sender;
 - (IBAction) stopCycleAction:(id)sender;
 - (IBAction) countUnitsAction:(id)sender;
-- (IBAction) countingModeAction:(id)sender;
+- (IBAction) numSamplesAction:(id)sender;
 - (IBAction) dumpAllDataAction:(id)sender;
 - (IBAction) dumpNewDataAction:(id)sender;
 - (IBAction) clearAllAction:(id)sender;

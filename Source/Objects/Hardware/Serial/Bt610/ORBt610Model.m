@@ -27,28 +27,28 @@
 #import "ORAlarm.h"
 
 #pragma mark ***External Strings
-NSString* ORBt610ModelDumpCountChanged		  = @"ORBt610ModelDumpCountChanged";
-NSString* ORBt610ModelDumpInProgressChanged  = @"ORBt610ModelDumpInProgressChanged";
-NSString* ORBt610ModelIsLogChanged			  = @"ORBt610ModelIsLogChanged";
-NSString* ORBt610ModelHoldTimeChanged		  = @"ORBt610ModelHoldTimeChanged";
-NSString* ORBt610ModelTempUnitsChanged		  = @"ORBt610ModelTempUnitsChanged";
-NSString* ORBt610ModelCountUnitsChanged	  = @"ORBt610ModelCountUnitsChanged";
-NSString* ORBt610ModelStatusBitsChanged	  = @"ORBt610ModelStatusBitsChanged";
-NSString* ORBt610ModelLocationChanged		  = @"ORBt610ModelLocationChanged";
-NSString* ORBt610ModelHumidityChanged		  = @"ORBt610ModelHumidityChanged";
-NSString* ORBt610ModelTemperatureChanged	  = @"ORBt610ModelTemperatureChanged";
-NSString* ORBt610ModelActualDurationChanged  = @"ORBt610ModelActualDurationChanged";
-NSString* ORBt610ModelCountAlarmLimitChanged = @"ORBt610ModelCountAlarmLimitChanged";
-NSString* ORBt610ModelMaxCountsChanged		  = @"ORBt610ModelMaxCountsChanged";
-NSString* ORBt610ModelCycleNumberChanged	  = @"ORBt610ModelCycleNumberChanged";
-NSString* ORBt610ModelCycleWillEndChanged	  = @"ORBt610ModelCycleWillEndChanged";
-NSString* ORBt610ModelCycleStartedChanged	  = @"ORBt610ModelCycleStartedChanged";
-NSString* ORBt610ModelRunningChanged		  = @"ORBt610ModelRunningChanged";
-NSString* ORBt610ModelCycleDurationChanged   = @"ORBt610ModelCycleDurationChanged";
-NSString* ORBt610ModelCountingModeChanged	  = @"ORBt610ModelCountingModeChanged";
-NSString* ORBt610ModelCountChanged			  = @"ORBt610ModelCount2Changed";
-NSString* ORBt610ModelMeasurementDateChanged = @"ORBt610ModelMeasurementDateChanged";
-NSString* ORBt610ModelMissedCountChanged   = @"ORBt610ModelMissedCountChanged";
+NSString* ORBt610ModelDumpCountChanged		    = @"ORBt610ModelDumpCountChanged";
+NSString* ORBt610ModelDumpInProgressChanged     = @"ORBt610ModelDumpInProgressChanged";
+NSString* ORBt610ModelIsLogChanged			    = @"ORBt610ModelIsLogChanged";
+NSString* ORBt610ModelHoldTimeChanged		    = @"ORBt610ModelHoldTimeChanged";
+NSString* ORBt610ModelTempUnitsChanged		    = @"ORBt610ModelTempUnitsChanged";
+NSString* ORBt610ModelCountUnitsChanged	        = @"ORBt610ModelCountUnitsChanged";
+NSString* ORBt610ModelStatusBitsChanged	        = @"ORBt610ModelStatusBitsChanged";
+NSString* ORBt610ModelLocationChanged		    = @"ORBt610ModelLocationChanged";
+NSString* ORBt610ModelHumidityChanged		    = @"ORBt610ModelHumidityChanged";
+NSString* ORBt610ModelTemperatureChanged	    = @"ORBt610ModelTemperatureChanged";
+NSString* ORBt610ModelActualDurationChanged     = @"ORBt610ModelActualDurationChanged";
+NSString* ORBt610ModelCountAlarmLimitChanged    = @"ORBt610ModelCountAlarmLimitChanged";
+NSString* ORBt610ModelMaxCountsChanged		    = @"ORBt610ModelMaxCountsChanged";
+NSString* ORBt610ModelCycleNumberChanged	    = @"ORBt610ModelCycleNumberChanged";
+NSString* ORBt610ModelCycleStartedChanged	    = @"ORBt610ModelCycleStartedChanged";
+NSString* ORBt610ModelRunningChanged		    = @"ORBt610ModelRunningChanged";
+NSString* ORBt610ModelCycleDurationChanged      = @"ORBt610ModelCycleDurationChanged";
+NSString* ORBt610ModelNumSamplesChanged	        = @"ORBt610ModelNumberSamplesChanged";
+NSString* ORBt610ModelCountChanged			    = @"ORBt610ModelCount2Changed";
+NSString* ORBt610ModelMissedCountChanged        = @"ORBt610ModelMissedCountChanged";
+NSString* ORBt610ModelOpTimerChanged            = @"ORBt610ModelOpTimerChanged";
+NSString* ORBt610ModelMeasurementDateChanged    = @"ORBt610ModelMeasurementDateChanged";
 
 NSString* ORBt610Lock = @"ORBt610Lock";
 
@@ -56,10 +56,11 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 - (void) addCmdToQueue:(NSString*)aCmd;
 - (void) process_response:(NSString*)theResponse;
 - (void) checkCycle;
+- (void) cancelCycleCheck;
+
 - (void) dumpTimeout;
 - (void) clearDelay;
 - (void) processOneCommandFromQueue;
-- (void) checkDate;
 - (void) startDataArrivalTimeout;
 - (void) cancelDataArrivalTimeout;
 - (void) doCycleKick;
@@ -83,13 +84,13 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 
 - (void) dealloc
 {
-    [cycleWillEnd release];
     [cycleStarted release];
-    [measurementDate release];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     [buffer release];
-	
+    [opTimer release];
+    [measurementDate release];
+
 	int i;
 	for(i=0;i<8;i++){
 		[timeRates[i] release];
@@ -101,8 +102,12 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 	[lowBatteryAlarm release];
 	[lowBatteryAlarm clearAlarm];
 
-	[flowErrorAlarm release];
-	[flowErrorAlarm clearAlarm];
+	[countSize1Alarm release];
+	[countSize1Alarm clearAlarm];
+  
+    [countSize2Alarm release];
+    [countSize2Alarm clearAlarm];
+ 
     
 	[missingCyclesAlarm release];
 	[missingCyclesAlarm clearAlarm];
@@ -142,7 +147,8 @@ NSString* ORBt610Lock = @"ORBt610Lock";
         NSString* theString = [[[[NSString alloc] initWithData:[[note userInfo] objectForKey:@"data"] 
 												      encoding:NSASCIIStringEncoding] autorelease] uppercaseString];
 	
-		//the serial port may break the data up into small chunks, so we have to accumulate the chunks until
+		
+        //the serial port may break the data up into small chunks, so we have to accumulate the chunks until
 		//we get a full piece.
 				
         if(!buffer)buffer = [[NSMutableString string] retain];
@@ -178,13 +184,13 @@ NSString* ORBt610Lock = @"ORBt610Lock";
     missedCycleCount = aValue;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORBt610ModelMissedCountChanged object:self];
     
-	if(((missedCycleCount >= 3) && (countingMode == kBt610Auto)) ||
-       ((missedCycleCount > 0) && (countingMode == kBt610Manual))){
+	if(((missedCycleCount >= 3) && (numSamples==0)) ||
+       ((missedCycleCount > 0) && (numSamples>0))){
 		if(!missingCyclesAlarm){
 			NSString* s = [NSString stringWithFormat:@"Bt610 (Unit %u) Missing Cycles",[self uniqueIdNumber]];
 			missingCyclesAlarm = [[ORAlarm alloc] initWithName:s severity:kHardwareAlarm];
 			[missingCyclesAlarm setSticky:YES];
-            if(countingMode == kBt610Manual)[missingCyclesAlarm setHelpString:@"The particle counter did not report counts at the end of its last single cycle.\n\nThis alarm will not go away until the problem is cleared. Acknowledging the alarm will silence it."];
+            if(numSamples>0)[missingCyclesAlarm setHelpString:@"The particle counter did not report counts at the end of its last cycle.\n\nThis alarm will not go away until the problem is cleared. Acknowledging the alarm will silence it."];
             else [missingCyclesAlarm setHelpString:@"The particle counter is not reporting counts at the end of its cycle. ORCA tried to kick start it at least three times.\n\nThis alarm will not go away until the problem is cleared. Acknowledging the alarm will silence it."];
 			[missingCyclesAlarm postAlarm];
 		}
@@ -194,7 +200,6 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 		[missingCyclesAlarm release];
 		missingCyclesAlarm = nil;
 	}
-    
 }
 
 - (int) dumpCount
@@ -241,10 +246,23 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 - (void) setHoldTime:(int)aHoldTime
 {
 	if(aHoldTime<0)aHoldTime = 0;
-	if(aHoldTime>999)aHoldTime = 99;
+	if(aHoldTime>9999)aHoldTime = 9999;
     [[[self undoManager] prepareWithInvocationTarget:self] setHoldTime:holdTime];
     holdTime = aHoldTime;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORBt610ModelHoldTimeChanged object:self];
+}
+- (void) setOpTimer:(NSString*)aValue
+{
+    [opTimer release];
+    opTimer = nil;
+    opTimer = [aValue copy];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORBt610ModelOpTimerChanged object:self];
+}
+
+- (NSString*) opTimer
+{
+    if(opTimer)return opTimer;
+    else return @"";
 }
 
 - (int) tempUnits
@@ -317,20 +335,35 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 		sensorErrorAlarm = nil;
 	}
 	
-	if(statusBits & 0x40){
-		if(!flowErrorAlarm){
+	if(statusBits & 0x02){
+		if(!countSize1Alarm){
 			NSString* s = [NSString stringWithFormat:@"Bt610 (Unit %u)",[self uniqueIdNumber]];
-			flowErrorAlarm = [[ORAlarm alloc] initWithName:s severity:kHardwareAlarm];
-			[flowErrorAlarm setSticky:YES];
-			[flowErrorAlarm setHelpString:@"The particle counter is reporting a flow error.\n\nThis alarm will not go away until the problem is cleared. Acknowledging the alarm will silence it."];
-			[flowErrorAlarm postAlarm];
+			countSize1Alarm = [[ORAlarm alloc] initWithName:s severity:kRangeAlarm];
+			[countSize1Alarm setSticky:YES];
+			[countSize1Alarm setHelpString:@"The particle counter is reporting a count size 1 Alarm.\n\nThis alarm will not go away until the problem is cleared. Acknowledging the alarm will silence it."];
+			[countSize1Alarm postAlarm];
 		}
 	}
 	else {
-		[flowErrorAlarm clearAlarm];
-		[flowErrorAlarm release];
-		flowErrorAlarm = nil;
+		[countSize1Alarm clearAlarm];
+		[countSize1Alarm release];
+		countSize1Alarm = nil;
 	}
+    
+    if(statusBits & 0x04){
+        if(!countSize2Alarm){
+            NSString* s = [NSString stringWithFormat:@"Bt610 (Unit %u)",[self uniqueIdNumber]];
+            countSize2Alarm = [[ORAlarm alloc] initWithName:s severity:kRangeAlarm];
+            [countSize2Alarm setSticky:YES];
+            [countSize2Alarm setHelpString:@"The particle counter is reporting a count size 2.\n\nThis alarm will not go away until the problem is cleared. Acknowledging the alarm will silence it."];
+            [countSize2Alarm postAlarm];
+        }
+    }
+    else {
+        [countSize2Alarm clearAlarm];
+        [countSize2Alarm release];
+        countSize2Alarm = nil;
+    }
 }
 
 - (int) location
@@ -370,6 +403,19 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 	if(timeRates[6] == nil) timeRates[6] = [[ORTimeRate alloc] init];
 	[timeRates[6] addDataToTimeAverage:temperature];
 
+}
+- (NSString*) measurementDate
+{
+    if(!measurementDate)return @"";
+    else return measurementDate;
+}
+
+- (void) setMeasurementDate:(NSString*)aMeasurementDate
+{
+    [measurementDate autorelease];
+    measurementDate = [aMeasurementDate copy];
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORBt610ModelMeasurementDateChanged object:self];
 }
 
 - (int) actualDuration
@@ -433,20 +479,6 @@ NSString* ORBt610Lock = @"ORBt610Lock";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORBt610ModelCycleNumberChanged object:self];
 }
 
-- (NSDate*) cycleWillEnd
-{
-    return cycleWillEnd;
-}
-
-- (void) setCycleWillEnd:(NSDate*)aCycleWillEnd
-{
-    [aCycleWillEnd retain];
-    [cycleWillEnd release];
-    cycleWillEnd = aCycleWillEnd;
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORBt610ModelCycleWillEndChanged object:self];
-}
-
 - (NSDate*) cycleStarted
 {
     return cycleStarted;
@@ -457,14 +489,6 @@ NSString* ORBt610Lock = @"ORBt610Lock";
     [aCycleStarted retain];
     [cycleStarted release];
     cycleStarted = aCycleStarted;
-
-	int totalTime = [self cycleDuration]; //approx start time added.
-	if(countingMode==kBt610Auto){
-		if(cycleNumber>1) totalTime += holdTime;
-		else			  totalTime += 6;
-	}
-	NSDate* endTime = [aCycleStarted dateByAddingTimeInterval:totalTime];
-	[self setCycleWillEnd:endTime]; 
 	
     [[NSNotificationCenter defaultCenter] postNotificationName:ORBt610ModelCycleStartedChanged object:self];
 }
@@ -476,7 +500,24 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 
 - (void) setRunning:(BOOL)aRunning
 {
+    bool changed = NO;
+    if(aRunning!=running)changed=YES;
     running = aRunning;
+    
+    if(changed)[self setCycleStarted:[NSDate date]];
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORBt610ModelRunningChanged object:self];
+}
+
+- (BOOL) holding
+{
+    return holding;
+}
+
+- (void) setHolding:(BOOL)aState
+{
+    holding = aState;
+
     [[NSNotificationCenter defaultCenter] postNotificationName:ORBt610ModelRunningChanged object:self];
 }
 
@@ -496,25 +537,22 @@ NSString* ORBt610Lock = @"ORBt610Lock";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORBt610ModelCycleDurationChanged object:self];
 }
 
-- (int) countingMode
+- (int) numSamples
 {
-    return countingMode;
+    return numSamples;
 }
 
-- (void) setCountingMode:(int)aCountingMode
+- (void) setNumSamples:(int)aNum
 {
-    countingMode = aCountingMode;
+    numSamples = aNum;
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORBt610ModelCountingModeChanged object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORBt610ModelNumSamplesChanged object:self];
 }
 
 - (NSString*) countingModeString
 {
-	switch ([self countingMode]) {
-		case kBt610Manual: return @"Single Cycle";
-		case kBt610Auto:   return @"Repeating";
-		default: return @"--";
-	}
+    if([self numSamples]>0)return [NSString stringWithFormat:@"%d Samples",numSamples];
+    else                   return @"Repeating";
 }
 
 - (void) setCount:(int)index value:(int)aValue
@@ -531,20 +569,6 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 {
 	if(index>=0 && index<6)return count[index];
 	else return 0;
-}
-
-- (NSString*) measurementDate
-{
-	if(!measurementDate)return @"";
-    else return measurementDate;
-}
-
-- (void) setMeasurementDate:(NSString*)aMeasurementDate
-{
-    [measurementDate autorelease];
-    measurementDate = [aMeasurementDate copy];    
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:ORBt610ModelMeasurementDateChanged object:self];
 }
 
 - (void) setUpPort
@@ -572,7 +596,7 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 	[self setLocation:			[decoder decodeIntForKey:   @"location"]];
 	wasRunning =				[decoder decodeBoolForKey:  @"wasRunning"];
 	[self setCycleDuration:		[decoder decodeIntForKey:   @"cycleDuration"]];
-	[self setCountingMode:		[decoder decodeIntForKey:   @"countingMode"]];
+	[self setNumSamples:		[decoder decodeIntForKey:   @"numSamples"]];
 
 	int i; 
 	for(i=0;i<8;i++){
@@ -588,13 +612,13 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeBool:	isLog			forKey:@"isLog"];
-    [encoder encodeInteger:		holdTime		forKey: @"holdTime"];
-    [encoder encodeInteger:		tempUnits		forKey: @"tempUnits"];
-    [encoder encodeInteger:		countUnits		forKey: @"countUnits"];
-    [encoder encodeInteger:		location		forKey: @"location"];
-    [encoder encodeInteger:		cycleDuration	forKey: @"cycleDuration"];
-    [encoder encodeInteger:		countingMode	forKey: @"countingMode"];
+    [encoder encodeBool:	isLog			forKey: @"isLog"];
+    [encoder encodeInteger:	holdTime		forKey: @"holdTime"];
+    [encoder encodeInteger:	tempUnits		forKey: @"tempUnits"];
+    [encoder encodeInteger:	countUnits		forKey: @"countUnits"];
+    [encoder encodeInteger:	location		forKey: @"location"];
+    [encoder encodeInteger:	cycleDuration	forKey: @"cycleDuration"];
+    [encoder encodeInteger:	numSamples	    forKey: @"numSamples"];
     [encoder encodeBool:	wasRunning		forKey:	@"wasRunning"];
 	int i; 
 	for(i=0;i<8;i++){
@@ -607,8 +631,7 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 - (void) sendNewData
 {
 	if([serialPort isOpen]){
-		NSLog(@"Bt610 (%d): Starting print of new data\n",[self uniqueIdNumber]);
-		NSLog(@"Any subsequent cmd will abort the print\n");
+		NSLog(@"Bt610 (%d): Starting dump of new data since last dump\n",[self uniqueIdNumber]);
 	}
 	[self addCmdToQueue:@"3"]; 
 }
@@ -616,8 +639,7 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 - (void) sendAllData 
 { 
 	if([serialPort isOpen]){
-		NSLog(@"Bt610 (%d): Starting print of all data\n",[self uniqueIdNumber]);
-		NSLog(@"Any subsequent cmd will abort the print\n");
+		NSLog(@"Bt610 (%d): Starting dump of all data\n",[self uniqueIdNumber]);
 	}
 	[self addCmdToQueue:@"2"]; 
 }
@@ -641,16 +663,17 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 - (void) sendStart					{ [self addCmdToQueue:@"S"]; }
 - (void) sendEnd					{ [self addCmdToQueue:@"E"]; }
 - (void) getSampleTime				{ [self addCmdToQueue:@"ST"]; }
-- (void) getSampleMode				{ [self addCmdToQueue:@"SM"]; }
 - (void) getLocation				{ [self addCmdToQueue:@"ID"]; }
-- (void) getHoldTime				{ [self addCmdToQueue:@"SH"]; }
-- (void) getUnits					{ [self addCmdToQueue:@"CU\rTU"]; }
+- (void) getHoldTime                { [self addCmdToQueue:@"SH"]; }
+- (void) getUnits                   { [self addCmdToQueue:@"CU\rTU"]; }
+
+- (void) sendNumSamples:(int)aValue { [self addCmdToQueue:[NSString stringWithFormat:@"SN %d",aValue]]; }
 - (void) sendCountingTime:(int)aValue { [self addCmdToQueue:[NSString stringWithFormat:@"ST %d",aValue]]; }
-- (void) sendCountingMode:(BOOL)aValue{ [self addCmdToQueue:[NSString stringWithFormat:@"SM %d",aValue]]; }
 - (void) sendID:(int)aValue			{ [self addCmdToQueue:[NSString stringWithFormat:@"ID %d",aValue]]; }
 - (void) sendHoldTime:(int)aValue	{ [self addCmdToQueue:[NSString stringWithFormat:@"SH %d",aValue]]; }
-- (void) sendTempUnit:(int)aTempUnit countUnits:(int)aCountUnit		{ [self addCmdToQueue:[NSString stringWithFormat:@"CU %d\rTU %d",aTempUnit,aCountUnit]]; }
-- (void) probe						{ probing = YES; [self getSampleTime]; }
+- (void) sendTempUnit:(int)aTempUnit countUnits:(int)aCountUnit		{ int esc = 27; [self addCmdToQueue:[NSString stringWithFormat:@"CU %d\r%cTU %d",aTempUnit,esc,aCountUnit]]; }
+- (void) probe						{ probing = YES; [self getOpStatus]; }
+- (void) getOpStatus                { [self addCmdToQueue:@"OP"]; }
 
 #pragma mark ***Polling and Cycles
 - (void) startCycle
@@ -663,27 +686,28 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 		[self sendEnd];
         [self enqueueCmd:@"++Delay"];
 		[self setCycleNumber:1];
-		NSDate* now = [NSDate date];
-		[self setCycleStarted:now];
-		[self sendCountingMode:countingMode];
+
 		[self sendHoldTime:holdTime];
+        [self sendNumSamples:numSamples];
 		[self sendTempUnit:tempUnits countUnits:countUnits];
 		[self sendCountingTime:cycleDuration];
         [self enqueueCmd:@"++Delay"];
+        
 		[self sendStart];
+        [self enqueueCmd:@"++Delay"];
         [self startDataArrivalTimeout];
-		NSLog(@"Bt610(%d) Starting particle counter in %@ mode\n",[self uniqueIdNumber], [self countingModeString]);
+		NSLog(@"Bt610(%d) Starting particle counter: %@ \n",[self uniqueIdNumber], [self countingModeString]);
+        [self checkCycle];
 	}
 }
 
 - (void) stopCycle
 {
 	if([self running] && [serialPort isOpen]){
-		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(checkCycle) object:nil];
 		[self setCycleNumber:0];
 		[self sendEnd];
         [self cancelDataArrivalTimeout];
-		NSLog(@"Bt610(%d) Stopping particle counter. Was in %@ mode\n",[self uniqueIdNumber], [self countingModeString]);
+		NSLog(@"Bt610(%d) Stopping particle counter. Number of Cycles %d\n",[self uniqueIdNumber], [self cycleNumber]);
 	}
 }
 
@@ -832,18 +856,21 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 
 - (void) checkCycle
 {
-	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(checkCycle) object:nil];
 	if([serialPort isOpen]){ 
-        [self probe];
-        if(running){
-            [self performSelector:@selector(checkCycle) withObject:nil afterDelay:kBt610ProbeTime];
-        }
+        if(!dumpInProgress)[self probe];
+        [self cancelCycleCheck];
+        [self performSelector:@selector(checkCycle) withObject:nil afterDelay:1];
     }
 }
+- (void) cancelCycleCheck
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(checkCycle) object:nil];
+}
+
 - (void) startDataArrivalTimeout
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(doCycleKick) object:nil];
-    [self performSelector:@selector(doCycleKick)  withObject:nil afterDelay:(cycleDuration+120)];
+    [self performSelector:@selector(doCycleKick)  withObject:nil afterDelay:(cycleDuration+20)];
 }
 
 - (void) cancelDataArrivalTimeout
@@ -855,7 +882,7 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 {
     [self setMissedCycleCount:missedCycleCount+1];
     NSLogColor([NSColor redColor],@"%@ data did not arrive at end of cycle (missed %d)\n",[self fullID],missedCycleCount);
-    if(countingMode == kBt610Auto){
+    if(numSamples==0){ //repeating mode
         NSLogColor([NSColor redColor],@"Kickstarting %@\n",[self fullID]);
         [self setCount:0 value:0];
         [self setCount:1 value:0];
@@ -876,8 +903,11 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 - (void) addCmdToQueue:(NSString*)aCmd
 {
 	if([serialPort isOpen]){ 
-		aCmd = [aCmd stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-		if(![aCmd hasSuffix:@"\r"])aCmd = [aCmd stringByAppendingFormat:@"\r"];
+        aCmd = [aCmd stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+        aCmd = [aCmd stringByReplacingOccurrencesOfString:@"\r" withString:@""];
+        int esc = 27;
+
+        aCmd = [NSString stringWithFormat:@"%c%@\r",esc,aCmd];
 		
 		[self enqueueCmd:aCmd];
 		[self enqueueCmd:@"++Delay"];
@@ -892,41 +922,38 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 - (void) process_response:(NSString*)theResponse
 {
 	[self setIsValid:YES];
-	theResponse = [theResponse stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    theResponse = [theResponse stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    theResponse = [theResponse stringByTrimmingCharactersInSet:[NSCharacterSet controlCharacterSet]];
 	NSArray* partsByComma = [theResponse componentsSeparatedByString:@","];
-	if([partsByComma count] >= 14 && ![theResponse hasPrefix:@"TIME"]){
+	if([partsByComma count] >= 14 && (![lastRequest hasPrefix:@"2"] && ![lastRequest hasPrefix:@"3"])){
 		if(!dumpInProgress){
-			[self setMeasurementDate: [partsByComma objectAtIndex:0]];
-		
-			[self setCount:0 value:[[partsByComma objectAtIndex:1] intValue]];
-			[self setCount:1 value:[[partsByComma objectAtIndex:2] intValue]];
-			[self setCount:2 value:[[partsByComma objectAtIndex:3] intValue]];
-			[self setCount:3 value:[[partsByComma objectAtIndex:4] intValue]];
-			[self setCount:4 value:[[partsByComma objectAtIndex:5] intValue]];
-			[self setCount:5 value:[[partsByComma objectAtIndex:6] intValue]];
+            [self setMeasurementDate:[partsByComma objectAtIndex:0]];
+			[self setCount:0 value:[[partsByComma objectAtIndex:2] intValue]];
+			[self setCount:1 value:[[partsByComma objectAtIndex:4] intValue]];
+			[self setCount:2 value:[[partsByComma objectAtIndex:6] intValue]];
+			[self setCount:3 value:[[partsByComma objectAtIndex:8] intValue]];
+			[self setCount:4 value:[[partsByComma objectAtIndex:10] intValue]];
+			[self setCount:5 value:[[partsByComma objectAtIndex:12] intValue]];
 			
-			[self setTemperature:[[partsByComma objectAtIndex:7] floatValue]];
-			[self setHumidity:[[partsByComma objectAtIndex:8] floatValue]];
-			[self setLocation:[[partsByComma objectAtIndex:9] floatValue]];
-			[self setActualDuration:[[partsByComma objectAtIndex:10] intValue]];
-			[self setStatusBits:[[partsByComma objectAtIndex:13] intValue]];
+			[self setTemperature:[[partsByComma objectAtIndex:13] floatValue]];
+			[self setHumidity:[[partsByComma objectAtIndex:14] floatValue]];
+			[self setLocation:[[partsByComma objectAtIndex:15] floatValue]];
+
+			[self setActualDuration:[[partsByComma objectAtIndex:16] intValue]];
+            
+            NSString* statusString = [[partsByComma objectAtIndex:19] stringByReplacingOccurrencesOfString:@"*" withString:@""]; //remove the leading '*'
+			[self setStatusBits:[statusString intValue]];
             
             [self setMissedCycleCount:0];
             [self cancelDataArrivalTimeout];
         
             [self postCouchDBRecord];
             
-            if(countingMode == kBt610Manual){
-                [self stopCycle];
-            }
-            else {
-                [self startDataArrivalTimeout];
-                int theCount = [self cycleNumber];
-                [self setCycleNumber:theCount+1];
-                [self setCycleStarted:[NSDate date]];
-            }
+            [self startDataArrivalTimeout];
+            int theCount = [self cycleNumber];
+            [self setCycleNumber:theCount+1];
 			
-            [self checkDate];
+            [self probe];
 		}
 		else {
 			theResponse = [theResponse stringByReplacingOccurrencesOfString:@"\n" withString:@""];
@@ -934,7 +961,7 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 			//put in a unix time stamp for convenience
 			NSString* aDate = [partsByComma objectAtIndex:0];
 			
-			NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+			NSDateFormatter* dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
 			[dateFormatter setDateFormat:@"dd-MMM-yyyy HH:mm:ss"];
 			NSDate* gmtTime = [dateFormatter dateFromString:aDate];
 			NSNumber *timestamp=[[[NSNumber alloc] initWithDouble:[gmtTime timeIntervalSince1970]] autorelease];
@@ -946,13 +973,13 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 		}
 	}
 	else {
-		if(([theResponse length]==1) && ([lastRequest hasPrefix:@"2"] || [lastRequest hasPrefix:@"3"])){
+		if([lastRequest hasPrefix:@"2"] || [lastRequest hasPrefix:@"3"]){
 			[self setDumpInProgress:YES];
 			[self setDumpCount:0];
 			[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(dumpTimeout) object:nil];
 			[self performSelector:@selector(dumpTimeout) withObject:nil afterDelay:.5];
 		}
-		else if([lastRequest hasPrefix:@"CU"]){
+		else if([theResponse hasPrefix:@"CU"]){
 			if([partsByComma count] == 2){
 				NSString* theUnits = [partsByComma objectAtIndex:1];
 				if([theUnits hasPrefix:@"CF"])[self setCountUnits:0];
@@ -960,63 +987,56 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 				else if([theUnits hasPrefix:@"TC"])[self setCountUnits:2];
 			}
 		}
-		else if([lastRequest hasPrefix:@"ST"]){
+		else if([theResponse hasPrefix:@"ST"]){
 			NSArray* partsBySpaces = [theResponse componentsSeparatedByString:@" "];
 			if([partsBySpaces count]==2){
 				NSString* st = [partsBySpaces objectAtIndex:1];
 				[self setCycleDuration:[st intValue]];
 			}
 		}
-		else if([lastRequest hasPrefix:@"TU"]){
+		else if([theResponse hasPrefix:@"TU"]){
 			NSArray* partsBySpaces = [theResponse componentsSeparatedByString:@" "];
 			if([partsBySpaces count]==2){
 				NSString* st = [partsBySpaces objectAtIndex:1];
 				[self setTempUnits:[st intValue]];
 			}
 		}
-        else if([theResponse rangeOfString:@"COUNTING STOPPED" options:NSCaseInsensitiveSearch].location != NSNotFound){
-			[self setRunning:NO];
-		}
-		else if([theResponse rangeOfString:@"COUNTING STARTED" options:NSCaseInsensitiveSearch].location != NSNotFound){
-			[self setRunning:YES];
-			[self checkCycle];
-		}
-        else if([theResponse rangeOfString:@"CANNOT CHANGE WHILE" options:NSCaseInsensitiveSearch].location != NSNotFound){
-			if(probing){
-				probing = NO;
-			}
-			[self setRunning:YES];
-		}
-		else if([theResponse hasPrefix:@"CLEAR"]){
-			NSLog(@"Bt610(%d) Clearing ALL data.",[self uniqueIdNumber]);
-		}	
+        else if([theResponse  isEqualToString:@"S"]){
+            [self setRunning:YES];
+        }
+        else if([theResponse isEqualToString:@"E"]){
+            [self setRunning:NO];
+        }
+        else if([theResponse hasPrefix:@"OP"]){
+            NSArray* partsBySpaces = [theResponse componentsSeparatedByString:@" "];
+            if([partsBySpaces count]>1){
+                NSString* state = [partsBySpaces objectAtIndex:1];
+                if([state hasPrefix:@"R"]){ //running
+                    [self setHolding:NO];
+                    [self setRunning:YES];
+                    if([partsBySpaces count]>2){
+                        [self setOpTimer:[partsBySpaces objectAtIndex:2]];
+                    }
+                }
+                else if([state hasPrefix:@"H"]){ //holding
+                    [self setHolding:YES];
+                    if([partsBySpaces count]>2){
+                        [self setOpTimer:[partsBySpaces objectAtIndex:2]];
+                    }
+                }
+                else if([state hasPrefix:@"S"]){ //stopped
+                    [self setRunning:NO];
+                    [self setHolding:NO];
+                    [self setOpTimer:@""];
+                    [self cancelCycleCheck];
+                }
+            }
+        }
 	}
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(timeout) object:nil];
 }
 
-- (void) checkDate
-{
-    if([measurementDate length]){
-        NSDateFormatter* dateFormat = [[[NSDateFormatter alloc] init] autorelease];
-        [dateFormat setDateFormat:@"dd-MMM-yyyy HH:mm:ss"];
-        NSDate* measuredDate = [dateFormat dateFromString:measurementDate];
-        NSTimeInterval delta = fabs((double)[measuredDate timeIntervalSinceNow]);
-        if(delta > kBt610AllowedTimeDelta){
-            NSLog(@"Stopping %@ to sync the time (time error: %.0f secs)\n",[self fullID],delta);
-            [self stopCycle];
-            int i;
-            for(i=0;i<5/kBt610DelayTime;i++){
-                [self enqueueCmd:@"++Delay"];
-            }
-            [self setDate];
-            if(countingMode == kBt610Auto){
-                NSLog(@"Restarting %@ after sync'ing the date\n",[self fullID]);
-                [self startCycle:YES];
-            }
-            
-        }
-    }
-}
+
 
 - (void) clearDelay
 {
@@ -1047,7 +1067,10 @@ NSString* ORBt610Lock = @"ORBt610Lock";
 		}
 		else {
 			[self startTimeout:3];
-			[self setLastRequest:aCmd];
+            NSString* s = [aCmd stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            s = [aCmd stringByTrimmingCharactersInSet:[NSCharacterSet controlCharacterSet]];
+
+			[self setLastRequest:s];
 			[serialPort writeString:aCmd];
 		}
 	}

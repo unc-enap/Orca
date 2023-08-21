@@ -26,29 +26,28 @@
 #define kBt610CmdTimeout           2
 #define kBt610DelayTime            0.1
 #define kBt610ProbeTime            13
-#define kBt610AllowedTimeDelta     (5*60)
-
-#define kBt610Manual  0
-#define kBt610Auto    1
 
 @interface ORBt610Model : ORSerialPortWithQueueModel <ORAdcProcessing>
 {
     @private
 		BOOL            delay;
         NSMutableString* buffer;
-		NSString*		measurementDate;
 		ORTimeRate*		timeRates[8];
 		int				count[6];
 		float			maxCounts[8];
 		float			countAlarmLimit[8];
-		int				countingMode;
+		int				numSamples;
 		int				cycleDuration;
-		BOOL			running;
+
+        BOOL            running;
+        BOOL            holding;
+        NSString*       opTimer;
 		NSDate*			cycleStarted;
-		NSDate*			cycleWillEnd;
 		int				cycleNumber;
 		BOOL			wasRunning;
 		int				actualDuration;
+        NSString*       measurementDate;
+
 		float			temperature;
 		float			humidity;
 		int				location;
@@ -62,7 +61,8 @@
 		int				dumpCount;
 		ORAlarm*		sensorErrorAlarm;
 		ORAlarm*		lowBatteryAlarm;
-        ORAlarm*		flowErrorAlarm;
+        ORAlarm*        countSize1Alarm;
+        ORAlarm*        countSize2Alarm;
         ORAlarm*		missingCyclesAlarm;
 		BOOL			sentStartOnce;
 		BOOL			sentStopOnce;
@@ -85,6 +85,8 @@
 - (void) setIsLog:(BOOL)aIsLog;
 - (int) holdTime;
 - (void) setHoldTime:(int)aHoldTime;
+- (void) setOpTimer:(NSString*)aValue;
+- (NSString*) opTimer;
 - (int) tempUnits;
 - (void) setTempUnits:(int)aTempUnits;
 - (int) countUnits;
@@ -99,23 +101,23 @@
 - (void) setTemperature:(float)aTemperature;
 - (int) actualDuration;
 - (void) setActualDuration:(int)aActualDuration;
+- (NSString*) measurementDate;
+- (void) setMeasurementDate:(NSString*)aMeasurementDate;
 - (ORTimeRate*)timeRate:(int)index;
 - (int) cycleNumber;
 - (void) setCycleNumber:(int)aCycleNumber;
-- (NSDate*) cycleWillEnd;
-- (void) setCycleWillEnd:(NSDate*)aCycleWillEnd;
 - (NSDate*) cycleStarted;
 - (void) setCycleStarted:(NSDate*)aCycleStarted;
 - (BOOL) running;
 - (void) setRunning:(BOOL)aRunning;
+- (BOOL) holding;
+- (void) setHolding:(BOOL)aState;
 - (int) cycleDuration;
 - (void) setCycleDuration:(int)aCycleDuration;
-- (int) countingMode;
-- (void) setCountingMode:(int)aCountingMode;
+- (int) numSamples;
+- (void) setNumSamples:(int)aValue;
 - (void) setCount:(int)index value:(int)aValue;
 - (int) count:(int)index;
-- (NSString*) measurementDate;
-- (void) setMeasurementDate:(NSString*)aMeasurementDate;
 - (NSString*) countingModeString;
 - (float) countAlarmLimit:(int)index;
 - (void) setIndex:(int)index countAlarmLimit:(float)aCountAlarmLimit;
@@ -123,7 +125,7 @@
 - (void) setIndex:(int)index maxCounts:(float)aMaxCounts;
 - (void) setMissedCycleCount:(int)aValue;
 - (int) missedCycleCount;
-
+- (void) getOpStatus;
 #pragma mark ***Polling
 - (void) startCycle:(BOOL)force;
 - (void) startCycle;
@@ -137,12 +139,11 @@
 - (void) sendStart;
 - (void) sendEnd;
 - (void) getSampleTime;
-- (void) getSampleMode;
 - (void) getLocation;
 - (void) getHoldTime;
 - (void) getUnits;	
 - (void) sendCountingTime:(int)aValue;
-- (void) sendCountingMode:(BOOL)aValue;
+- (void) sendNumSamples:(int)aValue;
 - (void) sendID:(int)aValue;
 - (void) sendHoldTime:(int)aValue;
 - (void) sendTempUnit:(int)aTempUnit countUnits:(int)aCountUnit;
@@ -181,15 +182,15 @@ extern NSString* ORBt610ModelActualDurationChanged;
 extern NSString* ORBt610ModelCountAlarmLimitChanged;
 extern NSString* ORBt610ModelMaxCountsChanged;
 extern NSString* ORBt610ModelCycleNumberChanged;
-extern NSString* ORBt610ModelCycleWillEndChanged;
 extern NSString* ORBt610ModelCycleStartedChanged;
 extern NSString* ORBt610ModelRunningChanged;
 extern NSString* ORBt610ModelCycleDurationChanged;
-extern NSString* ORBt610ModelCountingModeChanged;
+extern NSString* ORBt610ModelNumSamplesChanged;
 extern NSString* ORBt610ModelCountChanged;
-extern NSString* ORBt610ModelMeasurementDateChanged;
 extern NSString* ORBt610ModelPollTimeChanged;
 extern NSString* ORBt610ModelMissedCountChanged;
+extern NSString* ORBt610ModelOpTimerChanged;
+extern NSString* ORBt610ModelMeasurementDateChanged;
 
 extern NSString* ORBt610Lock;
 
