@@ -240,7 +240,6 @@
 		3611E9631E9DBD2A00136785 /* triggers_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 3611E9611E9DBD2A00136785 /* triggers_off.png */; };
 		3611E9641E9DBD2A00136785 /* triggers_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 3611E9621E9DBD2A00136785 /* triggers_on.png */; };
 		36148E3A1C6046610088C93E /* Fec32.xib in Resources */ = {isa = PBXBuildFile; fileRef = 36148E391C6046610088C93E /* Fec32.xib */; };
-		3620200E1CBD38EE0089296E /* libiconv.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3620200D1CBD38EE0089296E /* libiconv.2.dylib */; };
 		362020201CBD390A0089296E /* WPBase64Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 362020101CBD390A0089296E /* WPBase64Utils.h */; };
 		362020211CBD390A0089296E /* WPBase64Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 362020111CBD390A0089296E /* WPBase64Utils.m */; };
 		362020221CBD390A0089296E /* WPStringUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 362020121CBD390A0089296E /* WPStringUtils.h */; };
@@ -3172,6 +3171,7 @@
 		84E099630CC934CC00EFBC8F /* stop.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 84E099610CC934CB00EFBC8F /* stop.tiff */; };
 		84E09A220CCD1AA400EFBC8F /* dec.tif in Resources */ = {isa = PBXBuildFile; fileRef = 84E09A200CCD1AA400EFBC8F /* dec.tif */; };
 		84E09A230CCD1AA400EFBC8F /* inc.tif in Resources */ = {isa = PBXBuildFile; fileRef = 84E09A210CCD1AA400EFBC8F /* inc.tif */; };
+		84E14BCB2AC1C72000614110 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 84E14BCA2AC1C72000614110 /* libiconv.tbd */; };
 		84E18C3A0F0A5D3B0096F0F3 /* NSNotifications+Extensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 84E18C380F0A5D3B0096F0F3 /* NSNotifications+Extensions.h */; };
 		84E18C3B0F0A5D3B0096F0F3 /* NSNotifications+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E18C390F0A5D3B0096F0F3 /* NSNotifications+Extensions.m */; };
 		84E18C560F0A640C0096F0F3 /* ORLineMarker.h in Headers */ = {isa = PBXBuildFile; fileRef = 84E18C540F0A640C0096F0F3 /* ORLineMarker.h */; };
@@ -4137,7 +4137,6 @@
 		2A178EBA08DB3F66001D78BC /* ORFireWireInterface.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORFireWireInterface.m; sourceTree = "<group>"; };
 		2A3728F708BCE51A00CA18E5 /* NoDispatcherHelp.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; name = NoDispatcherHelp.plist; path = Source/Experiments/Ncd/NoDispatcherHelp.plist; sourceTree = SOURCE_ROOT; };
 		2A3728F808BCE51A00CA18E5 /* BuilderConnectHelp.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; name = BuilderConnectHelp.plist; path = Source/Experiments/Ncd/BuilderConnectHelp.plist; sourceTree = SOURCE_ROOT; };
-		2A37F4BAFDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
 		2A41A2B3089AB2A0003D77DD /* ORScalerSum.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORScalerSum.h; path = "Source/Objects/Data Processing/Histogram Objects/ScalerSum/ORScalerSum.h"; sourceTree = SOURCE_ROOT; };
 		2A41A2B4089AB2A0003D77DD /* ORScalerSum.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = ORScalerSum.m; path = "Source/Objects/Data Processing/Histogram Objects/ScalerSum/ORScalerSum.m"; sourceTree = SOURCE_ROOT; };
 		2A4553DB08BCE9A3004BB15E /* ORTDC3377Controller.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ORTDC3377Controller.h; sourceTree = "<group>"; };
@@ -4672,7 +4671,6 @@
 		840B4BB603D876A0005F64B1 /* ORAlarmController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORAlarmController.h; sourceTree = "<group>"; };
 		840B4BB703D876A0005F64B1 /* ORAlarmController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORAlarmController.m; sourceTree = "<group>"; };
 		840B4BBA03D8814A005F64B1 /* AlarmWindow.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = AlarmWindow.nib; sourceTree = "<group>"; };
-		840B721F0948AE3900B1B135 /* English */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = English; path = English.lproj/smallLock.tif; sourceTree = "<group>"; };
 		840B78F6094A47AF00B1B135 /* Inverter.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Inverter.tif; path = Source/Objects/ProcessLogic/ProcessElements/Logic/Inverter/Inverter.tif; sourceTree = SOURCE_ROOT; };
 		840B78F7094A47AF00B1B135 /* ORInverterModel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORInverterModel.h; path = Source/Objects/ProcessLogic/ProcessElements/Logic/Inverter/ORInverterModel.h; sourceTree = SOURCE_ROOT; };
 		840B7957094A564E00B1B135 /* NandGate.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = NandGate.tif; path = Source/Objects/ProcessLogic/ProcessElements/Logic/NandGate/NandGate.tif; sourceTree = SOURCE_ROOT; };
@@ -5188,7 +5186,6 @@
 		843A54D607BBE7A500534C27 /* OR4ChanTriggerModel.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OR4ChanTriggerModel.m; sourceTree = "<group>"; };
 		843A781D0711B10E00B9FAA1 /* NSDictionary+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Extensions.h"; sourceTree = "<group>"; };
 		843A781E0711B10E00B9FAA1 /* NSDictionary+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Extensions.m"; sourceTree = "<group>"; };
-		843CA9BE053E011B005F64B1 /* English */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = English; path = English.lproj/notice.gif; sourceTree = "<group>"; };
 		843CDEBC03BE2B2D00C39F5F /* ORPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ORPreferencesController.h; sourceTree = "<group>"; };
 		843CDEBD03BE2B2D00C39F5F /* ORPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORPreferencesController.m; sourceTree = "<group>"; };
 		843CDEDC03BE307400C39F5F /* ORPreferences.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = ORPreferences.nib; sourceTree = "<group>"; };
@@ -5670,7 +5667,6 @@
 		8475EC371475A66F003A165D /* ORLabJackUE9Decoders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORLabJackUE9Decoders.m; path = Source/Objects/Hardware/USB/LabJack/LabJackUE9/ORLabJackUE9Decoders.m; sourceTree = SOURCE_ROOT; };
 		8475EC381475A66F003A165D /* ORLabJackUE9Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORLabJackUE9Model.h; path = Source/Objects/Hardware/USB/LabJack/LabJackUE9/ORLabJackUE9Model.h; sourceTree = SOURCE_ROOT; };
 		8475EC391475A66F003A165D /* ORLabJackUE9Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORLabJackUE9Model.m; path = Source/Objects/Hardware/USB/LabJack/LabJackUE9/ORLabJackUE9Model.m; sourceTree = SOURCE_ROOT; };
-		8476004B18DF1EB40097E790 /* English */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = English; path = English.lproj/warning.tif; sourceTree = "<group>"; };
 		84760CC00B370E0A00512F67 /* ORExperimentModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORExperimentModel.h; sourceTree = "<group>"; };
 		84760CC10B370E0A00512F67 /* ORExperimentModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORExperimentModel.m; sourceTree = "<group>"; };
 		84760D340B3728DF00512F67 /* KatrinConstants.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = KatrinConstants.h; sourceTree = "<group>"; };
@@ -5732,7 +5728,6 @@
 		84762009118CD53C00016A8D /* xAxisMarkerOpposite.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = xAxisMarkerOpposite.gif; path = Source/Widgets/Plotting/xAxisMarkerOpposite.gif; sourceTree = SOURCE_ROOT; };
 		8476200A118CD53C00016A8D /* yAxisMarker.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = yAxisMarker.gif; path = Source/Widgets/Plotting/yAxisMarker.gif; sourceTree = SOURCE_ROOT; };
 		8476200B118CD53C00016A8D /* yAxisMarkerOpposite.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = yAxisMarkerOpposite.gif; path = Source/Widgets/Plotting/yAxisMarkerOpposite.gif; sourceTree = SOURCE_ROOT; };
-		84764CC105055A32005F64B1 /* English */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = English; path = English.lproj/UnderConstruction.gif; sourceTree = "<group>"; };
 		8477DF41166A4023000144BA /* HaloSentry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HaloSentry.h; sourceTree = "<group>"; };
 		8477DF42166A4023000144BA /* HaloSentry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HaloSentry.m; sourceTree = "<group>"; };
 		84789FD70528A49E005F64B1 /* ORDataSetModel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ORDataSetModel.h; sourceTree = "<group>"; };
@@ -5758,8 +5753,6 @@
 		847A48530D9C5D30002125DE /* ORFilterPluginBaseClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORFilterPluginBaseClass.h; path = "Source/Objects/Data Processing/Filter/ORFilterPluginBaseClass.h"; sourceTree = SOURCE_ROOT; };
 		847A5AFD1190D88D00094181 /* ORWaveformSpecialBitsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORWaveformSpecialBitsController.h; path = "Source/Objects/Data Processing/Histogram Objects/Waveform/ORWaveformSpecialBitsController.h"; sourceTree = SOURCE_ROOT; };
 		847A5AFE1190D88D00094181 /* ORWaveformSpecialBitsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORWaveformSpecialBitsController.m; path = "Source/Objects/Data Processing/Histogram Objects/Waveform/ORWaveformSpecialBitsController.m"; sourceTree = SOURCE_ROOT; };
-		847BC82F05E293E80054841E /* English */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = English; path = English.lproj/Unlocked.tif; sourceTree = "<group>"; };
-		847BC83105E293E80054841E /* English */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = English; path = English.lproj/Locked.tif; sourceTree = "<group>"; };
 		847BC83405E2940D0054841E /* ORHWUndoSet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORHWUndoSet.h; path = "Source/Main Dialogs/HardwareWizard/ORHWUndoSet.h"; sourceTree = SOURCE_ROOT; };
 		847BC83505E2940D0054841E /* ORHWUndoManager.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = ORHWUndoManager.m; path = "Source/Main Dialogs/HardwareWizard/ORHWUndoManager.m"; sourceTree = SOURCE_ROOT; };
 		847BC83605E2940D0054841E /* ORHWUndoSet.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = ORHWUndoSet.m; path = "Source/Main Dialogs/HardwareWizard/ORHWUndoSet.m"; sourceTree = SOURCE_ROOT; };
@@ -5788,7 +5781,6 @@
 		847E6C170CFF4C3200E963C6 /* OReGunController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OReGunController.m; path = "Source/Objects/Custom Hardware/KATRIN Hardware/eGun/OReGunController.m"; sourceTree = SOURCE_ROOT; };
 		847E6C180CFF4C3200E963C6 /* OReGunModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OReGunModel.h; path = "Source/Objects/Custom Hardware/KATRIN Hardware/eGun/OReGunModel.h"; sourceTree = SOURCE_ROOT; };
 		847E6C190CFF4C3200E963C6 /* OReGunModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OReGunModel.m; path = "Source/Objects/Custom Hardware/KATRIN Hardware/eGun/OReGunModel.m"; sourceTree = SOURCE_ROOT; };
-		847EA30C0545C0F8005F64B1 /* English */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = English; path = English.lproj/NetConnect.gif; sourceTree = "<group>"; };
 		847F59EA0450CB61005F64B1 /* TriggerCard.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = TriggerCard.gif; path = Source/Objects/Hardware/Vme/Trigger/TriggerCard.gif; sourceTree = SOURCE_ROOT; };
 		847F8B33063DB29E00A8597A /* ORTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORTimer.h; sourceTree = "<group>"; };
 		847F8B34063DB29E00A8597A /* ORTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORTimer.m; sourceTree = "<group>"; };
@@ -5904,7 +5896,6 @@
 		848A148610BAE40E002A80D0 /* ORDecoderOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORDecoderOperation.m; path = "Source/Objects/Data Processing/BaseClasses/ORDecoderOperation.m"; sourceTree = SOURCE_ROOT; };
 		848A149B10BAE43A002A80D0 /* ORDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORDecoder.h; path = "Source/Objects/Data Processing/Data Objects/ORDecoder.h"; sourceTree = SOURCE_ROOT; };
 		848A149C10BAE43A002A80D0 /* ORDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORDecoder.m; path = "Source/Objects/Data Processing/Data Objects/ORDecoder.m"; sourceTree = SOURCE_ROOT; };
-		848B03070D6505C6007FDEBD /* English */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = English; path = English.lproj/OrcaFilterScript.icns; sourceTree = "<group>"; };
 		848BF50D107255F8005779A2 /* PMC_Link.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMC_Link.m; sourceTree = "<group>"; };
 		848BF50E107255F8005779A2 /* PMC_Link.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMC_Link.h; sourceTree = "<group>"; };
 		848CD35A08FB511B0046CD9D /* NSSplitView+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = "NSSplitView+Extensions.h"; path = "Source/Cocoa Extensions/NSSplitView+Extensions.h"; sourceTree = SOURCE_ROOT; };
@@ -6190,8 +6181,6 @@
 		8499FFE10DC9102700E82DB4 /* ORXL2Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORXL2Model.h; path = "Source/Objects/Custom Hardware/SNO+/XL2/ORXL2Model.h"; sourceTree = SOURCE_ROOT; };
 		8499FFE20DC9102700E82DB4 /* ORXL2Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORXL2Model.m; path = "Source/Objects/Custom Hardware/SNO+/XL2/ORXL2Model.m"; sourceTree = SOURCE_ROOT; };
 		8499FFE30DC9102700E82DB4 /* XL2Card.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = XL2Card.gif; path = "Source/Objects/Custom Hardware/SNO+/XL2/XL2Card.gif"; sourceTree = SOURCE_ROOT; };
-		849A47181ECDE8DD00876389 /* English */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = English; path = English.lproj/offToggleSwitch.tif; sourceTree = "<group>"; };
-		849A471A1ECDE8DD00876389 /* English */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = English; path = English.lproj/onToggleSwitch.tif; sourceTree = "<group>"; };
 		849B25E40B2F34F90007484F /* Prespectrometer.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Prespectrometer.nib; path = Source/Experiments/Prespectrometer/Prespectrometer.nib; sourceTree = SOURCE_ROOT; };
 		849B25E50B2F34F90007484F /* prespectrometer.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = prespectrometer.tif; path = Source/Experiments/Prespectrometer/prespectrometer.tif; sourceTree = SOURCE_ROOT; };
 		849B25E60B2F34F90007484F /* PrespectrometerController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = PrespectrometerController.h; path = Source/Experiments/Prespectrometer/PrespectrometerController.h; sourceTree = SOURCE_ROOT; };
@@ -6790,7 +6779,6 @@
 		84C494950405A0C0005F64B1 /* NcdMuxModel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = NcdMuxModel.h; sourceTree = "<group>"; };
 		84C494960405A0C0005F64B1 /* NcdMuxModel.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = NcdMuxModel.m; sourceTree = "<group>"; };
 		84C4CB6E0FB071BC00725AC3 /* M927.rbf */ = {isa = PBXFileReference; lastKnownFileType = file; name = M927.rbf; path = Source/Objects/Hardware/USB/MCA927/M927.rbf; sourceTree = SOURCE_ROOT; };
-		84C533290652BA6B00E4731F /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		84C5FD20050E740A005F64B1 /* ORTimeRate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORTimeRate.h; sourceTree = "<group>"; };
 		84C5FD21050E740A005F64B1 /* ORTimeRate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORTimeRate.m; sourceTree = "<group>"; };
 		84C859040665624C00FBAF9C /* Bugs.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Bugs.tif; path = Source/Preferences/Bugs.tif; sourceTree = SOURCE_ROOT; };
@@ -6872,8 +6860,6 @@
 		84CFB099042A80BE005F64B1 /* ORDataFileModel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORDataFileModel.h; path = "Source/Objects/Data Processing/Data Storage/ORDataFileModel.h"; sourceTree = SOURCE_ROOT; };
 		84CFB09A042A80BE005F64B1 /* DataFile.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = DataFile.nib; path = "Source/Objects/Data Processing/Data Storage/DataFile.nib"; sourceTree = SOURCE_ROOT; };
 		84CFB09B042A80BE005F64B1 /* ORDataFileController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = ORDataFileController.m; path = "Source/Objects/Data Processing/Data Storage/ORDataFileController.m"; sourceTree = SOURCE_ROOT; };
-		84D0592D08FF367A00A99A83 /* English */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = English; path = English.lproj/goBack.tif; sourceTree = "<group>"; };
-		84D0593E08FF39EA00A99A83 /* English */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = English; path = English.lproj/goBackPressed.tif; sourceTree = "<group>"; };
 		84D1535B1BD53D2A005EC269 /* OnCallList.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = OnCallList.nib; sourceTree = "<group>"; };
 		84D1535C1BD53D2A005EC269 /* OnCallList.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = OnCallList.tif; sourceTree = "<group>"; };
 		84D1535D1BD53D2A005EC269 /* OROnCallListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OROnCallListController.h; sourceTree = "<group>"; };
@@ -7065,6 +7051,24 @@
 		84E099610CC934CB00EFBC8F /* stop.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = stop.tiff; path = Source/Objects/Control/RunControl/stop.tiff; sourceTree = SOURCE_ROOT; };
 		84E09A200CCD1AA400EFBC8F /* dec.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = dec.tif; path = Source/Objects/OrcaObject/dec.tif; sourceTree = SOURCE_ROOT; };
 		84E09A210CCD1AA400EFBC8F /* inc.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = inc.tif; path = Source/Objects/OrcaObject/inc.tif; sourceTree = SOURCE_ROOT; };
+		84E14BCA2AC1C72000614110 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		84E14BCC2AC1CB2000614110 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		84E14BCD2AC1CB2000614110 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = en; path = en.lproj/Locked.tif; sourceTree = "<group>"; };
+		84E14BCF2AC1CB2000614110 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = en; path = en.lproj/NetConnect.gif; sourceTree = "<group>"; };
+		84E14BD02AC1CB2100614110 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = en; path = en.lproj/Orca.icns; sourceTree = "<group>"; };
+		84E14BD12AC1CB2100614110 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = en; path = en.lproj/OrcaDoc.icns; sourceTree = "<group>"; };
+		84E14BD22AC1CB2100614110 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = en; path = en.lproj/OrcaFilterScript.icns; sourceTree = "<group>"; };
+		84E14BD32AC1CB2100614110 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = en; path = en.lproj/UnderConstruction.gif; sourceTree = "<group>"; };
+		84E14BD42AC1CB2100614110 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = en; path = en.lproj/Unlocked.tif; sourceTree = "<group>"; };
+		84E14BD52AC1CB2100614110 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = en; path = en.lproj/dashMark.tif; sourceTree = "<group>"; };
+		84E14BD62AC1CB2100614110 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = en; path = en.lproj/goBack.tif; sourceTree = "<group>"; };
+		84E14BD72AC1CB2100614110 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = en; path = en.lproj/goBackPressed.tif; sourceTree = "<group>"; };
+		84E14BD82AC1CB2200614110 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = en; path = en.lproj/notice.gif; sourceTree = "<group>"; };
+		84E14BD92AC1CB2200614110 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = en; path = en.lproj/offToggleSwitch.tif; sourceTree = "<group>"; };
+		84E14BDA2AC1CB2200614110 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = en; path = en.lproj/onToggleSwitch.tif; sourceTree = "<group>"; };
+		84E14BDB2AC1CB2200614110 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = en; path = en.lproj/smallLock.tif; sourceTree = "<group>"; };
+		84E14BDC2AC1CB2200614110 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = en; path = en.lproj/warning.tif; sourceTree = "<group>"; };
+		84E14BDD2AC1CB5D00614110 /* Base */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Base; path = Base.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		84E151F10551D88A00503E02 /* ORDataSetController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORDataSetController.h; path = "Source/Objects/Data Processing/Data Objects/ORDataSetController.h"; sourceTree = SOURCE_ROOT; };
 		84E151F20551D88A00503E02 /* ORDataSetController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = ORDataSetController.m; path = "Source/Objects/Data Processing/Data Objects/ORDataSetController.m"; sourceTree = SOURCE_ROOT; };
 		84E1520B0551D95200503E02 /* DataSet.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = DataSet.nib; path = "Source/Objects/Data Processing/Data Objects/DataSet.nib"; sourceTree = SOURCE_ROOT; };
@@ -7136,7 +7140,6 @@
 		84E9C34E194F42140028B7E2 /* ORPacFPModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORPacFPModel.m; sourceTree = "<group>"; };
 		84E9C34F194F42140028B7E2 /* PacFP.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = PacFP.nib; sourceTree = "<group>"; };
 		84E9C350194F42140028B7E2 /* PacFP.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = PacFP.tif; sourceTree = "<group>"; };
-		84E9C35B19535BA60028B7E2 /* English */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = English; path = English.lproj/dashMark.tif; sourceTree = "<group>"; };
 		84E9F692123FE4D600116607 /* NHQ226L.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = NHQ226L.nib; path = Source/Objects/Hardware/HV/NHQ226L/NHQ226L.nib; sourceTree = SOURCE_ROOT; };
 		84E9F693123FE4D600116607 /* NHQ226L.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = NHQ226L.tif; path = Source/Objects/Hardware/HV/NHQ226L/NHQ226L.tif; sourceTree = SOURCE_ROOT; };
 		84E9F694123FE4D600116607 /* ORNHQ226LController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORNHQ226LController.h; path = Source/Objects/Hardware/HV/NHQ226L/ORNHQ226LController.h; sourceTree = SOURCE_ROOT; };
@@ -7682,8 +7685,6 @@
 		F51E6AAB03AE4C4D015F64B1 /* ORPciCard.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ORPciCard.h; sourceTree = "<group>"; };
 		F51E6AAC03AE4C4D015F64B1 /* ORPciCard.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORPciCard.m; sourceTree = "<group>"; };
 		F539C97C03A7C80D015F64B1 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
-		F54577F203AFCD1C015F64B1 /* English */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = English; path = English.lproj/Orca.icns; sourceTree = "<group>"; };
-		F54577F403AFCD1C015F64B1 /* English */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = English; path = English.lproj/OrcaDoc.icns; sourceTree = "<group>"; };
 		F576B07F03B12320015F64B1 /* ORShaperModel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ORShaperModel.h; sourceTree = "<group>"; };
 		F576B08003B12320015F64B1 /* ORShaperModel.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORShaperModel.m; sourceTree = "<group>"; };
 		F576B08203B12320015F64B1 /* ORShaperController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORShaperController.m; sourceTree = "<group>"; };
@@ -7738,6 +7739,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84E14BCB2AC1C72000614110 /* libiconv.tbd in Frameworks */,
 				84EA918520FE5DF800110B85 /* libcrypto.1.0.0.dylib in Frameworks */,
 				84EA918320FE5DDF00110B85 /* libssl.1.0.0.dylib in Frameworks */,
 				708077D524F435CB00F29EFE /* libLabJackM-1.20.0.dylib in Frameworks */,
@@ -7749,7 +7751,6 @@
 				84F5E11B0A151E0B00707A0F /* OpenGL.framework in Frameworks */,
 				708077D924F436EE00F29EFE /* libusb-1.0.0.dylib in Frameworks */,
 				847599860B5FF26500123411 /* QuartzCore.framework in Frameworks */,
-				3620200E1CBD38EE0089296E /* libiconv.2.dylib in Frameworks */,
 				2DC1EE800F33724E00E93C75 /* WebKit.framework in Frameworks */,
 				840F5B191222C90000D49A75 /* QTKit.framework in Frameworks */,
 				84E6CD001E4247BD004D6978 /* libusb-1.0.a in Frameworks */,
@@ -7983,6 +7984,7 @@
 		2A37F4C3FDCFA73011CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				84E14BCA2AC1C72000614110 /* libiconv.tbd */,
 				369E734B1C7B64FF00A7F89E /* Accelerate.framework */,
 				841491F11958AD03009F5E40 /* Cocoa.framework */,
 				8439D5EE05BEFF3A0077EFF2 /* Carbon.framework */,
@@ -17419,11 +17421,11 @@
 			};
 			buildConfigurationList = 84F201BE0B6531990084F4C3 /* Build configuration list for PBXProject "Orca" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				en,
-				English,
+				Base,
 			);
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* Orca */;
 			projectDirPath = "";
@@ -19707,7 +19709,7 @@
 		2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */ = {
 			isa = PBXVariantGroup;
 			children = (
-				2A37F4BAFDCFA73011CA2CEA /* English */,
+				84E14BCC2AC1CB2000614110 /* en */,
 			);
 			name = Credits.rtf;
 			sourceTree = "<group>";
@@ -19715,7 +19717,7 @@
 		840B721E0948AE3900B1B135 /* smallLock.tif */ = {
 			isa = PBXVariantGroup;
 			children = (
-				840B721F0948AE3900B1B135 /* English */,
+				84E14BDB2AC1CB2200614110 /* en */,
 			);
 			name = smallLock.tif;
 			sourceTree = SOURCE_ROOT;
@@ -19723,7 +19725,7 @@
 		843CA9BD053E011B005F64B1 /* notice.gif */ = {
 			isa = PBXVariantGroup;
 			children = (
-				843CA9BE053E011B005F64B1 /* English */,
+				84E14BD82AC1CB2200614110 /* en */,
 			);
 			name = notice.gif;
 			sourceTree = SOURCE_ROOT;
@@ -19731,7 +19733,7 @@
 		8476004A18DF1EB40097E790 /* warning.tif */ = {
 			isa = PBXVariantGroup;
 			children = (
-				8476004B18DF1EB40097E790 /* English */,
+				84E14BDC2AC1CB2200614110 /* en */,
 			);
 			name = warning.tif;
 			sourceTree = "<group>";
@@ -19739,7 +19741,7 @@
 		84764CC005055A32005F64B1 /* UnderConstruction.gif */ = {
 			isa = PBXVariantGroup;
 			children = (
-				84764CC105055A32005F64B1 /* English */,
+				84E14BD32AC1CB2100614110 /* en */,
 			);
 			name = UnderConstruction.gif;
 			sourceTree = SOURCE_ROOT;
@@ -19747,7 +19749,7 @@
 		847BC82E05E293E80054841E /* Unlocked.tif */ = {
 			isa = PBXVariantGroup;
 			children = (
-				847BC82F05E293E80054841E /* English */,
+				84E14BD42AC1CB2100614110 /* en */,
 			);
 			name = Unlocked.tif;
 			sourceTree = SOURCE_ROOT;
@@ -19755,7 +19757,7 @@
 		847BC83005E293E80054841E /* Locked.tif */ = {
 			isa = PBXVariantGroup;
 			children = (
-				847BC83105E293E80054841E /* English */,
+				84E14BCD2AC1CB2000614110 /* en */,
 			);
 			name = Locked.tif;
 			sourceTree = SOURCE_ROOT;
@@ -19763,7 +19765,7 @@
 		847EA30B0545C0F8005F64B1 /* NetConnect.gif */ = {
 			isa = PBXVariantGroup;
 			children = (
-				847EA30C0545C0F8005F64B1 /* English */,
+				84E14BCF2AC1CB2000614110 /* en */,
 			);
 			name = NetConnect.gif;
 			sourceTree = SOURCE_ROOT;
@@ -19771,7 +19773,7 @@
 		848B03060D6505C6007FDEBD /* OrcaFilterScript.icns */ = {
 			isa = PBXVariantGroup;
 			children = (
-				848B03070D6505C6007FDEBD /* English */,
+				84E14BD22AC1CB2100614110 /* en */,
 			);
 			name = OrcaFilterScript.icns;
 			sourceTree = SOURCE_ROOT;
@@ -19779,7 +19781,7 @@
 		849A47171ECDE8DD00876389 /* offToggleSwitch.tif */ = {
 			isa = PBXVariantGroup;
 			children = (
-				849A47181ECDE8DD00876389 /* English */,
+				84E14BD92AC1CB2200614110 /* en */,
 			);
 			name = offToggleSwitch.tif;
 			sourceTree = "<group>";
@@ -19787,7 +19789,7 @@
 		849A47191ECDE8DD00876389 /* onToggleSwitch.tif */ = {
 			isa = PBXVariantGroup;
 			children = (
-				849A471A1ECDE8DD00876389 /* English */,
+				84E14BDA2AC1CB2200614110 /* en */,
 			);
 			name = onToggleSwitch.tif;
 			sourceTree = "<group>";
@@ -19795,7 +19797,7 @@
 		84C533280652BA6B00E4731F /* MainMenu.nib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				84C533290652BA6B00E4731F /* English */,
+				84E14BDD2AC1CB5D00614110 /* Base */,
 			);
 			name = MainMenu.nib;
 			sourceTree = SOURCE_ROOT;
@@ -19803,7 +19805,7 @@
 		84D0592C08FF367A00A99A83 /* goBack.tif */ = {
 			isa = PBXVariantGroup;
 			children = (
-				84D0592D08FF367A00A99A83 /* English */,
+				84E14BD62AC1CB2100614110 /* en */,
 			);
 			name = goBack.tif;
 			sourceTree = SOURCE_ROOT;
@@ -19811,7 +19813,7 @@
 		84D0593D08FF39EA00A99A83 /* goBackPressed.tif */ = {
 			isa = PBXVariantGroup;
 			children = (
-				84D0593E08FF39EA00A99A83 /* English */,
+				84E14BD72AC1CB2100614110 /* en */,
 			);
 			name = goBackPressed.tif;
 			sourceTree = SOURCE_ROOT;
@@ -19819,7 +19821,7 @@
 		84E9C35A19535BA60028B7E2 /* dashMark.tif */ = {
 			isa = PBXVariantGroup;
 			children = (
-				84E9C35B19535BA60028B7E2 /* English */,
+				84E14BD52AC1CB2100614110 /* en */,
 			);
 			name = dashMark.tif;
 			sourceTree = "<group>";
@@ -19827,7 +19829,7 @@
 		F54577F103AFCD1C015F64B1 /* Orca.icns */ = {
 			isa = PBXVariantGroup;
 			children = (
-				F54577F203AFCD1C015F64B1 /* English */,
+				84E14BD02AC1CB2100614110 /* en */,
 			);
 			name = Orca.icns;
 			sourceTree = SOURCE_ROOT;
@@ -19835,7 +19837,7 @@
 		F54577F303AFCD1C015F64B1 /* OrcaDoc.icns */ = {
 			isa = PBXVariantGroup;
 			children = (
-				F54577F403AFCD1C015F64B1 /* English */,
+				84E14BD12AC1CB2100614110 /* en */,
 			);
 			name = OrcaDoc.icns;
 			sourceTree = SOURCE_ROOT;
@@ -20172,6 +20174,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/Libraries/libUniversal\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/Libraries\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "";
 				OTHER_CPLUSPLUSFLAGS = "";
 				OTHER_LDFLAGS = (
@@ -20260,6 +20263,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Libraries\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/Libraries/libUniversal\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "";
 				OTHER_CPLUSPLUSFLAGS = "";
 				OTHER_LDFLAGS = (
@@ -20344,6 +20348,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Libraries\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/Libraries/libUniversal\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "";
 				OTHER_CPLUSPLUSFLAGS = "";
 				OTHER_LDFLAGS = (
@@ -20417,7 +20422,7 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LINK_WITH_STANDARD_LIBRARIES = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				SDKROOT = "";
@@ -20463,7 +20468,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				SDKROOT = "";
@@ -20509,7 +20514,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				SDKROOT = "";
