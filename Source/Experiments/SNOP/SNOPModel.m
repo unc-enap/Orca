@@ -78,7 +78,7 @@ NSString* ORSNOPStillWaitingForBuffersNotification = @"ORSNOPStillWaitingForBuff
 NSString* ORSNOPNotWaitingForBuffersNotification = @"ORSNOPNotWaitingForBuffersNotification";
 NSString* ORRoutineChangedNotification = @"ORRoutineChangedNotification";
 
-BOOL isNotRunningOrIsInMaintenance()
+BOOL isNotRunningOrIsInMaintenance(void)
 {
     return (![gOrcaGlobals runInProgress] ||
             (([gOrcaGlobals runType] & kMaintenanceRun) ||

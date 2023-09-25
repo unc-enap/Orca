@@ -514,7 +514,7 @@ ssize_t csock_sendrecvline_t(SOCKET sck, char *cmd, char* response, int size, in
 ////////////////////////////////////////////
 //	FindFreeId
 ////////////////////////////////////////////
-short FindFreeId()
+short FindFreeId(void)
 {
 	short i;
 	for (i = 0; i < MAX_CRATE; i++) {
