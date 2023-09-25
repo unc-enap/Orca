@@ -2236,23 +2236,23 @@ static NSString *ORPciBit3ErrorRateYAttributes  = @"Bit3 ErrorRateYAttributes";
 {
     unsigned char cdata;
     
-    NSString* progressString;
+    //NSString* progressString;
     
     @try {
-        progressString = @"Checking Status";
+        //progressString = @"Checking Status";
         [self checkStatusErrors];
         
         // check Bit3 status
         NSLog(@"Clearing %@ Status Register & PR Interrupt\n",deviceName);
         cdata = 0xc0;
-        progressString = @"Writing CSR";
+        //progressString = @"Writing CSR";
         [self writeCSRRegister:PCIVME_CSR_LOCAL_COMMAND_OFFSET withData:cdata];
         
-        progressString = @"Reading CSR";
+        //progressString = @"Reading CSR";
         [self readCSRRegister:PCIVME_CSR_LOCAL_STATUS_OFFSET withDataPtr:&cdata];
         
         NSLog(@"Local %@ CSR Status Register Offset: 0x%02x, Data: 0x%02x\n",deviceName,PCIVME_CSR_LOCAL_STATUS_OFFSET,cdata);
-        progressString = @"Checking Status";
+        //progressString = @"Checking Status";
         
         NSLog(@"*** VME Bus Power On ***\n");
         cdata = [self getAdapterID];

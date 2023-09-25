@@ -184,7 +184,7 @@
 		NSPoint thePoint = NSMakePoint([[xy objectAtIndex:0] floatValue], [[xy objectAtIndex:1] floatValue]);
 		[self setArgument:&thePoint atIndex:argIndex];
 	}
-	else if(!strncmp(theArg,"{_NSRa",6) | !strncmp(theArg,"{CGRan",6)){
+    else if(!strncmp(theArg,"{_NSRa",6) || !strncmp(theArg,"{CGRan",6)){
 		aVal = [aVal substringFromIndex:2];
 		aVal = [aVal substringToIndex:[aVal length]-1];
 		NSArray* xy = [aVal componentsSeparatedByString:@","];

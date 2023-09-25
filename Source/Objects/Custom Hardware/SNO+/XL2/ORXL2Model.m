@@ -622,7 +622,7 @@ uint32_t xl2_register_offsets[] =
 	//
 	//----------------------------------------------------------------------------------------------
 	
-	uint32_t bitCount		= 0UL;
+    //uint32_t bitCount		= 0UL; //not used so commented out -- MAH 09/25/2023
 	uint32_t writeValue	= 0UL;
 	uint32_t mc_SelectBits	= 0;						
 	Boolean firstPass			= TRUE;
@@ -713,7 +713,7 @@ uint32_t xl2_register_offsets[] =
 				charData++;
 			}
 			else {
-				bitCount++;
+				//bitCount++;
 				
 				if ( *charData == '1' ) {
 					writeValue = XL2_CONTROL_BIT11 | XL2_CONTROL_DATA;	// bit set in data to load

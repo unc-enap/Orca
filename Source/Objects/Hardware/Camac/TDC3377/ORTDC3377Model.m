@@ -1369,7 +1369,7 @@ NSString* ORTDC3377SettingsLock					= @"ORTDC3377SettingsLock";
 			[self loadRegisters];
 			cachedStation = [self stationNumber];
 			unsigned short dummy;
-			unsigned short wordCount = 0;
+			//unsigned short wordCount = 0;
 			unsigned short eventCount = 0;
 			unsigned short breakoutCount = 0;
 			[[self adapter] camacShortNAF:cachedStation a:0 f:26 data:&dummy]; //Enable LAM
@@ -1383,7 +1383,7 @@ NSString* ORTDC3377SettingsLock					= @"ORTDC3377SettingsLock";
 						statusWord = [[self adapter] camacShortNAF:cachedStation a:0 f:0 data:&dummy]; //read data
 						if(isQbitSet(statusWord)){
 							if(dummy & 0x8000)eventCount++;
-							else wordCount++;
+							//else wordCount++;
 						}
 						else break;
 						breakoutCount++;

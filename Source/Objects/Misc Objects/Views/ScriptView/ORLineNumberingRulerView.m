@@ -310,11 +310,11 @@ NSString* ORBreakpointsAction = @"ORBreakpointsAction";
         lineIndices = [[NSMutableArray alloc] init];
         
         NSUInteger index = 0;
-        NSUInteger numberOfLines = 0;
+        //NSUInteger numberOfLines = 0;
         do {
             [lineIndices addObject:[NSNumber numberWithUnsignedLong:index]];
             index = NSMaxRange([text lineRangeForRange:NSMakeRange(index, 0)]);
-            numberOfLines++;
+            //numberOfLines++;
         } while (index < stringLength);
 		
         // Check if text ends with a new line.
