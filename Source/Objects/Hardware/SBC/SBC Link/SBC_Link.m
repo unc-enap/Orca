@@ -106,7 +106,7 @@ NSString* SBC_LinkSbcDisableThrottleChanged = @"SBC_LinkSbcDisableThrottleChange
 @end
 
 static OSQueueHead gSBCPacketWrapperHead = OS_ATOMIC_QUEUE_INIT;
-static id GetSBCPacketFromCache()
+static id GetSBCPacketFromCache(void)
 {
     return OSAtomicDequeue(&gSBCPacketWrapperHead, offsetof(struct objc_object,isa));
 }

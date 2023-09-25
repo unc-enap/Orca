@@ -520,7 +520,7 @@
 		840463C4183515AC00F69B23 /* ORGretinaTriggerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 840463BC183515AC00F69B23 /* ORGretinaTriggerController.m */; };
 		840463CA183515FF00F69B23 /* GretinaTrigger.gif in Resources */ = {isa = PBXBuildFile; fileRef = 840463C9183515FF00F69B23 /* GretinaTrigger.gif */; };
 		8404EB771E3F818F00370C33 /* LabJackU6.tif in Resources */ = {isa = PBXBuildFile; fileRef = 8404EB761E3F818F00370C33 /* LabJackU6.tif */; };
-		8404EB7A1E3F836B00370C33 /* u6.m in Sources */ = {isa = PBXBuildFile; fileRef = 8404EB781E3F836B00370C33 /* u6.m */; };
+		8404EB7A1E3F836B00370C33 /* u6.m in Sources */ = {isa = PBXBuildFile; fileRef = 8404EB781E3F836B00370C33 /* u6.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		8404EB7B1E3F836B00370C33 /* u6.h in Headers */ = {isa = PBXBuildFile; fileRef = 8404EB791E3F836B00370C33 /* u6.h */; };
 		84052A2C13106B65007607A4 /* CouchDB.nib in Resources */ = {isa = PBXBuildFile; fileRef = 84052A2613106B65007607A4 /* CouchDB.nib */; };
 		84052A2D13106B65007607A4 /* CouchDB.tif in Resources */ = {isa = PBXBuildFile; fileRef = 84052A2713106B65007607A4 /* CouchDB.tif */; };
@@ -3572,8 +3572,8 @@
 		CE6CCDCF14672BD80099238D /* patch_vxi11_h.sh in Resources */ = {isa = PBXBuildFile; fileRef = CE6CCDCD14672BD80099238D /* patch_vxi11_h.sh */; };
 		CE6CCDD314672C670099238D /* vxi11_user.h in Headers */ = {isa = PBXBuildFile; fileRef = CE6CCDD014672C670099238D /* vxi11_user.h */; };
 		CE6CCDD514672C670099238D /* vxi11.x in Resources */ = {isa = PBXBuildFile; fileRef = CE6CCDD214672C670099238D /* vxi11.x */; };
-		CE6CCDDE146732D90099238D /* vxi11_clnt.c in Sources */ = {isa = PBXBuildFile; fileRef = CE6CCDD9146732D80099238D /* vxi11_clnt.c */; };
-		CE6CCDE1146732D90099238D /* vxi11_xdr.c in Sources */ = {isa = PBXBuildFile; fileRef = CE6CCDDC146732D90099238D /* vxi11_xdr.c */; };
+		CE6CCDDE146732D90099238D /* vxi11_clnt.c in Sources */ = {isa = PBXBuildFile; fileRef = CE6CCDD9146732D80099238D /* vxi11_clnt.c */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		CE6CCDE1146732D90099238D /* vxi11_xdr.c in Sources */ = {isa = PBXBuildFile; fileRef = CE6CCDDC146732D90099238D /* vxi11_xdr.c */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		CE6CCDE2146732D90099238D /* vxi11.h in Headers */ = {isa = PBXBuildFile; fileRef = CE6CCDDD146732D90099238D /* vxi11.h */; };
 		CE7328AE1466EEDE00A50AE9 /* ORVXI11HardwareFinder.h in Headers */ = {isa = PBXBuildFile; fileRef = CE7328A91466EEDE00A50AE9 /* ORVXI11HardwareFinder.h */; };
 		CE7328AF1466EEDE00A50AE9 /* ORVXI11HardwareFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = CE7328AA1466EEDE00A50AE9 /* ORVXI11HardwareFinder.m */; };
