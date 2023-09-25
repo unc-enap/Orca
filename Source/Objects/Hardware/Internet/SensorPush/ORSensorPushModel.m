@@ -73,7 +73,8 @@ NSString* ORSensorPushLock             = @"ORSensorPushLock";
     [sensorData release];
     [sensorList release];
     [sensorTree release];
-
+    [lastTimePolled release];
+    [nextPollScheduled release];
     [super dealloc];
 }
 
@@ -277,10 +278,11 @@ NSString* ORSensorPushLock             = @"ORSensorPushLock";
 {
     //2023-08-03T21:05:32.000Z to local time
     aTimeStamp = [aTimeStamp stringByReplacingOccurrencesOfString:@"...Z" withString:@" GMT"];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
     NSDate* date = [dateFormatter dateFromString:aTimeStamp];
     NSString *localDateString      = [dateFormatter stringFromDate:date];
+    [dateFormatter release];
     return localDateString;
 }
 
@@ -357,6 +359,7 @@ NSString* ORSensorPushLock             = @"ORSensorPushLock";
         [dict removeObjectForKey:aKey];
     }
     [sensorTree addDictionary:dict];
+    [dict release];
 }
 
 //----------------------------Thread Stuff-----------------------
@@ -627,6 +630,7 @@ NSString* ORSensorPushLock             = @"ORSensorPushLock";
             if(!children)children = [[NSMutableArray array]retain];
             [children addObject:aNode];
             [aNode addDictionary:obj];
+            [aNode release];
         }
         else {
             //leaf node
@@ -635,6 +639,7 @@ NSString* ORSensorPushLock             = @"ORSensorPushLock";
             [aNode setName:aKey];
             [aNode setDescription:obj];
             [children addObject:aNode];
+            [aNode release];
         }
     }
     return self;

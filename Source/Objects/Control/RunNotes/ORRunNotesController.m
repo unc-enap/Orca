@@ -168,7 +168,7 @@
 - (void) itemsAdded:(NSNotification*)aNote
 {
 	int index = [[[aNote userInfo] objectForKey:@"Index"] intValue];
-	index = MIN(index,(int)[model itemCount]);
+	index = MIN(index,(int)[(ORRunNotesModel*)model itemCount]);
 	index = MAX(index,0);
 	[notesListView reloadData];
 	NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:index];
@@ -180,7 +180,7 @@
 - (void) itemsRemoved:(NSNotification*)aNote
 {
 	int index = [[[aNote userInfo] objectForKey:@"Index"] intValue];
-	index = MIN(index,(int)[model itemCount]-1);
+	index = MIN(index,(int)[(ORRunNotesModel*)model itemCount]-1);
 	index = MAX(index,0);
 	[notesListView reloadData];
 	NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:index];
@@ -400,7 +400,7 @@
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView
 {
 	if(aTableView == notesListView){
-		return [model itemCount];
+		return [(ORRunNotesModel*)model itemCount];
 	}
 	else return 0;
 }
