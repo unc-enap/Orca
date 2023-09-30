@@ -329,7 +329,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
         case kInFluxDBConnectionBad:
             [self setErrorString:@"No Connection"];
             if(!connectionAlarm){
-                if(lastAlarmDate) if(ABS([lastAlarmDate timeIntervalSinceNow]) < 1.0) break;
+                if(lastAlarmDate) if(ABS([lastAlarmDate timeIntervalSinceNow]) < 20.0) break;
                 NSString* s = [NSString stringWithFormat:@"InFlux (%u) Unable to Connect",[self uniqueIdNumber]];
                 connectionAlarm = [[ORAlarm alloc] initWithName:s severity:kImportantAlarm];
                 [connectionAlarm setSticky:YES];
