@@ -3496,6 +3496,7 @@
 		A8175F8A220D8D07003AC7E5 /* ORADEIControlModel.h in Headers */ = {isa = PBXBuildFile; fileRef = A8175F81220D8D06003AC7E5 /* ORADEIControlModel.h */; };
 		A8175F8B220D8D07003AC7E5 /* ADEIControl.nib in Resources */ = {isa = PBXBuildFile; fileRef = A8175F82220D8D06003AC7E5 /* ADEIControl.nib */; };
 		A8175F8C220D8D07003AC7E5 /* ORADEIControlController.h in Headers */ = {isa = PBXBuildFile; fileRef = A8175F83220D8D06003AC7E5 /* ORADEIControlController.h */; };
+		A826786D2AE817D900C6A5EA /* rsyncExpectScript in Resources */ = {isa = PBXBuildFile; fileRef = A826786C2AE817D900C6A5EA /* rsyncExpectScript */; };
 		A86253F3221217E7005D26EC /* ORADEIControlDefs.h in Headers */ = {isa = PBXBuildFile; fileRef = A86253F2221217E6005D26EC /* ORADEIControlDefs.h */; };
 		B322A309146D64D000491347 /* ORTcpIpProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = B322A308146D64D000491347 /* ORTcpIpProtocol.h */; };
 		B33FBC93146F2A6A0046A733 /* edu.washington.npl.orca.VXIHardware.plist in Resources */ = {isa = PBXBuildFile; fileRef = B33FBC92146F2A6A0046A733 /* edu.washington.npl.orca.VXIHardware.plist */; };
@@ -7420,6 +7421,7 @@
 		A8175F81220D8D06003AC7E5 /* ORADEIControlModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORADEIControlModel.h; sourceTree = "<group>"; };
 		A8175F82220D8D06003AC7E5 /* ADEIControl.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = ADEIControl.nib; sourceTree = "<group>"; };
 		A8175F83220D8D06003AC7E5 /* ORADEIControlController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORADEIControlController.h; sourceTree = "<group>"; };
+		A826786C2AE817D900C6A5EA /* rsyncExpectScript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rsyncExpectScript; sourceTree = "<group>"; };
 		A86253F2221217E6005D26EC /* ORADEIControlDefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORADEIControlDefs.h; sourceTree = "<group>"; };
 		B322A308146D64D000491347 /* ORTcpIpProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORTcpIpProtocol.h; sourceTree = "<group>"; };
 		B33FBC92146F2A6A0046A733 /* edu.washington.npl.orca.VXIHardware.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = edu.washington.npl.orca.VXIHardware.plist; sourceTree = "<group>"; };
@@ -14439,6 +14441,7 @@
 				848463A60625D65F00128299 /* ORSmartFolder.m */,
 				845498C310628DF400F8DE1C /* scpExpectScript */,
 				84B74ACF0FEAAB460033E658 /* ftpExpectScript */,
+				A826786C2AE817D900C6A5EA /* rsyncExpectScript */,
 				84F50E13116CCAEE000275F2 /* loginExpectScript */,
 				848463B70625D76A00128299 /* SmartFolder.nib */,
 			);
@@ -18219,6 +18222,7 @@
 				84E9F69F123FE4D600116607 /* NHQ226L.tif in Resources */,
 				2D24A8D0126F516D00BA2E2E /* IpeSimulation.nib in Resources */,
 				2D24A8D1126F516D00BA2E2E /* IpeSimulation.tif in Resources */,
+				A826786D2AE817D900C6A5EA /* rsyncExpectScript in Resources */,
 				84AC14DE1B70E2460071C4EF /* MjdDataScanner.gif in Resources */,
 				2D24A8D8126F516D00BA2E2E /* SimStart.tif in Resources */,
 				2D24A8D9126F516D00BA2E2E /* SimStop.tif in Resources */,
