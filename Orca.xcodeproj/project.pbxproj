@@ -3191,11 +3191,7 @@
 		84EA917D20FE5D5800110B85 /* mysql_version.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA917C20FE5D5700110B85 /* mysql_version.h */; };
 		84EA917F20FE5D8700110B85 /* mysql_time.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA917E20FE5D8700110B85 /* mysql_time.h */; };
 		84EA918120FE5DB000110B85 /* errmsg.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA918020FE5DB000110B85 /* errmsg.h */; };
-		84EA918320FE5DDF00110B85 /* libssl.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA918220FE5DDE00110B85 /* libssl.1.0.0.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
-		84EA918520FE5DF800110B85 /* libcrypto.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA918420FE5DF800110B85 /* libcrypto.1.0.0.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
 		84EA919420FF840F00110B85 /* libmysqlclient.21.dylib in Frameworks_Copy */ = {isa = PBXBuildFile; fileRef = 84EA916720FE5A3700110B85 /* libmysqlclient.21.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		84EA919520FF840F00110B85 /* libssl.1.0.0.dylib in Frameworks_Copy */ = {isa = PBXBuildFile; fileRef = 84EA918220FE5DDE00110B85 /* libssl.1.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		84EA919620FF840F00110B85 /* libcrypto.1.0.0.dylib in Frameworks_Copy */ = {isa = PBXBuildFile; fileRef = 84EA918420FE5DF800110B85 /* libcrypto.1.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		84EBBE681282E2B700234313 /* Archive.nib in Resources */ = {isa = PBXBuildFile; fileRef = 84EBBE641282E2B700234313 /* Archive.nib */; };
 		84EBBE6A1282E2B700234313 /* ORArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EBBE661282E2B700234313 /* ORArchive.h */; };
 		84EBBE6B1282E2B700234313 /* ORArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EBBE671282E2B700234313 /* ORArchive.m */; };
@@ -3443,6 +3439,11 @@
 		A8175F8C220D8D07003AC7E5 /* ORADEIControlController.h in Headers */ = {isa = PBXBuildFile; fileRef = A8175F83220D8D06003AC7E5 /* ORADEIControlController.h */; };
 		A826786D2AE817D900C6A5EA /* rsyncExpectScript in Resources */ = {isa = PBXBuildFile; fileRef = A826786C2AE817D900C6A5EA /* rsyncExpectScript */; };
 		A86253F3221217E7005D26EC /* ORADEIControlDefs.h in Headers */ = {isa = PBXBuildFile; fileRef = A86253F2221217E6005D26EC /* ORADEIControlDefs.h */; };
+		A8AF8CEE2B02692200747645 /* libssl.1.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A8AF8CED2B02692200747645 /* libssl.1.1.dylib */; };
+		A8AF8CF02B026E8800747645 /* libcrypto.1.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A8AF8CEF2B026E8800747645 /* libcrypto.1.1.dylib */; };
+		A8AF8CF12B026EC000747645 /* libcrypto.1.1.dylib in Frameworks_Copy */ = {isa = PBXBuildFile; fileRef = A8AF8CEF2B026E8800747645 /* libcrypto.1.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		A8AF8CF22B026EC300747645 /* libpq.5.dylib in Frameworks_Copy */ = {isa = PBXBuildFile; fileRef = E67BCDF925998CF8007A7473 /* libpq.5.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		A8AF8CF32B026EC500747645 /* libssl.1.1.dylib in Frameworks_Copy */ = {isa = PBXBuildFile; fileRef = A8AF8CED2B02692200747645 /* libssl.1.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		B322A309146D64D000491347 /* ORTcpIpProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = B322A308146D64D000491347 /* ORTcpIpProtocol.h */; };
 		B33FBC93146F2A6A0046A733 /* edu.washington.npl.orca.VXIHardware.plist in Resources */ = {isa = PBXBuildFile; fileRef = B33FBC92146F2A6A0046A733 /* edu.washington.npl.orca.VXIHardware.plist */; };
 		B3805611172BE4A100B5B134 /* Changesfeed.tif in Resources */ = {isa = PBXBuildFile; fileRef = B3805610172BE4A100B5B134 /* Changesfeed.tif */; };
@@ -3992,9 +3993,10 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				A8AF8CF22B026EC300747645 /* libpq.5.dylib in Frameworks_Copy */,
+				A8AF8CF32B026EC500747645 /* libssl.1.1.dylib in Frameworks_Copy */,
 				84EA919420FF840F00110B85 /* libmysqlclient.21.dylib in Frameworks_Copy */,
-				84EA919520FF840F00110B85 /* libssl.1.0.0.dylib in Frameworks_Copy */,
-				84EA919620FF840F00110B85 /* libcrypto.1.0.0.dylib in Frameworks_Copy */,
+				A8AF8CF12B026EC000747645 /* libcrypto.1.1.dylib in Frameworks_Copy */,
 			);
 			name = Frameworks_Copy;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7058,8 +7060,6 @@
 		84EA917C20FE5D5700110B85 /* mysql_version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_version.h; sourceTree = "<group>"; };
 		84EA917E20FE5D8700110B85 /* mysql_time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_time.h; sourceTree = "<group>"; };
 		84EA918020FE5DB000110B85 /* errmsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = errmsg.h; sourceTree = "<group>"; };
-		84EA918220FE5DDE00110B85 /* libssl.1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libssl.1.0.0.dylib; sourceTree = "<group>"; };
-		84EA918420FE5DF800110B85 /* libcrypto.1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libcrypto.1.0.0.dylib; sourceTree = "<group>"; };
 		84EBBE641282E2B700234313 /* Archive.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Archive.nib; path = "Source/Main Dialogs/Archive/Archive.nib"; sourceTree = SOURCE_ROOT; };
 		84EBBE661282E2B700234313 /* ORArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORArchive.h; path = "Source/Main Dialogs/Archive/ORArchive.h"; sourceTree = SOURCE_ROOT; };
 		84EBBE671282E2B700234313 /* ORArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORArchive.m; path = "Source/Main Dialogs/Archive/ORArchive.m"; sourceTree = SOURCE_ROOT; };
@@ -7313,6 +7313,8 @@
 		A8175F83220D8D06003AC7E5 /* ORADEIControlController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORADEIControlController.h; sourceTree = "<group>"; };
 		A826786C2AE817D900C6A5EA /* rsyncExpectScript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rsyncExpectScript; sourceTree = "<group>"; };
 		A86253F2221217E6005D26EC /* ORADEIControlDefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORADEIControlDefs.h; sourceTree = "<group>"; };
+		A8AF8CED2B02692200747645 /* libssl.1.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libssl.1.1.dylib; sourceTree = "<group>"; };
+		A8AF8CEF2B026E8800747645 /* libcrypto.1.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libcrypto.1.1.dylib; sourceTree = "<group>"; };
 		B322A308146D64D000491347 /* ORTcpIpProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORTcpIpProtocol.h; sourceTree = "<group>"; };
 		B33FBC92146F2A6A0046A733 /* edu.washington.npl.orca.VXIHardware.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = edu.washington.npl.orca.VXIHardware.plist; sourceTree = "<group>"; };
 		B3805610172BE4A100B5B134 /* Changesfeed.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Changesfeed.tif; path = CouchDBListener/Changesfeed.tif; sourceTree = "<group>"; };
@@ -7631,9 +7633,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8AF8CEE2B02692200747645 /* libssl.1.1.dylib in Frameworks */,
 				84E14BCB2AC1C72000614110 /* libiconv.tbd in Frameworks */,
-				84EA918520FE5DF800110B85 /* libcrypto.1.0.0.dylib in Frameworks */,
-				84EA918320FE5DDF00110B85 /* libssl.1.0.0.dylib in Frameworks */,
 				8434A359055B3287002D3102 /* Cocoa.framework in Frameworks */,
 				84EA916820FE5A3700110B85 /* libmysqlclient.21.dylib in Frameworks */,
 				8470D01518241FEE0054F7D4 /* Accelerate.framework in Frameworks */,
@@ -7643,6 +7644,7 @@
 				847599860B5FF26500123411 /* QuartzCore.framework in Frameworks */,
 				2DC1EE800F33724E00E93C75 /* WebKit.framework in Frameworks */,
 				840F5B191222C90000D49A75 /* QTKit.framework in Frameworks */,
+				A8AF8CF02B026E8800747645 /* libcrypto.1.1.dylib in Frameworks */,
 				E67BCDFA25998CF9007A7473 /* libpq.5.dylib in Frameworks */,
 				8458E91515DA8A2A005C43A9 /* ScriptingBridge.framework in Frameworks */,
 				8481E67917653766001AB905 /* SystemConfiguration.framework in Frameworks */,
@@ -7958,8 +7960,8 @@
 			isa = PBXGroup;
 			children = (
 				84EA916720FE5A3700110B85 /* libmysqlclient.21.dylib */,
-				84EA918220FE5DDE00110B85 /* libssl.1.0.0.dylib */,
-				84EA918420FE5DF800110B85 /* libcrypto.1.0.0.dylib */,
+				A8AF8CED2B02692200747645 /* libssl.1.1.dylib */,
+				A8AF8CEF2B026E8800747645 /* libcrypto.1.1.dylib */,
 				E67BCDF925998CF8007A7473 /* libpq.5.dylib */,
 			);
 			path = libUniversal;
