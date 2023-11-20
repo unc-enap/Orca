@@ -25,6 +25,7 @@
 #import "ORDataFileModel.h"
 #import "fcio.h"
 #import "bufio.h"
+#import "ANSIEscapeHelper.h"
 
 #define kFlashCamConfigBufferLength 64
 #define kFlashCamStatusBufferLength 256
@@ -84,6 +85,10 @@
     NSMutableArray* fclog;
     NSMutableArray* fcrunlog;
     ORDataFileModel* dataFileObject;
+    
+    //new
+    NSDateFormatter*  logDateFormatter;
+    ANSIEscapeHelper* ansieHelper;
 }
 
 #pragma mark •••Initialization
@@ -161,6 +166,10 @@
 - (void) appendToFCLog:(NSString*)line andNotify:(BOOL)notify;
 - (void) clearFCLog;
 - (void) appendToFCRunLog:(NSString*)line;
+
+#pragma mark ***Formaters
+- (NSDateFormatter*) logDateFormatter;
+- (ANSIEscapeHelper*) ansieHelper;
 
 #pragma mark •••Comparison methods
 - (BOOL) sameInterface:(NSString*)iface andPort:(uint16_t)p;

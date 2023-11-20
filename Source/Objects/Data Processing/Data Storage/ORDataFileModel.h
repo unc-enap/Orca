@@ -67,6 +67,8 @@
 		int				sizeLimitReachedAction;
         ORAlarm*		diskFullAlarm;
         ORAlarm*		diskFillingAlarm;
+        ORAlarm*        openFileFailAlarm;
+
 		int				checkCount;
 		int				runMode;
 		NSTimeInterval	lastFileCheckTime;
