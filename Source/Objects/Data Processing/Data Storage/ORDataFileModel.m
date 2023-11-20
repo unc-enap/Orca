@@ -98,6 +98,8 @@ static const int currentVersion = 1;           // Current version
     [diskFullAlarm release];
 	[diskFillingAlarm clearAlarm];
     [diskFillingAlarm release];
+    [openFileFailAlarm clearAlarm];
+    [openFileFailAlarm release];
     [filePointer release];
     [fileName release];
     [dataFolder release];
@@ -587,12 +589,32 @@ static const int currentVersion = 1;           // Current version
 			NSFileManager* fm = [NSFileManager defaultManager];
 			[fm createFileAtPath:fullFileName contents:nil attributes:nil];
 			NSFileHandle* fp = [NSFileHandle fileHandleForWritingAtPath:fullFileName];
-			[fp seekToEndOfFile];
+            [fp seekToEndOfFile];
             [self setFilePointer:fp];
-			processCheckedOnce	= NO;
-
+            if(!fp){
+                //Couldn't open the data file. Must stop the run
+                if(!openFileFailAlarm){
+                    NSLogColor([NSColor redColor],@"Could not open dataFile: %@\n",[fullFileName stringByAbbreviatingWithTildeInPath]);
+                    openFileFailAlarm = [[ORAlarm alloc] initWithName:[NSString stringWithFormat:@"Could not open Data File"] severity:kHardwareAlarm];
+                    [openFileFailAlarm setSticky:YES];
+                    [openFileFailAlarm postAlarm];
+                    [openFileFailAlarm setHelpString:[NSString stringWithFormat:@"Data File Didn't Open. You can acknowledge this alarm, but it will not be cleared until more a data file can be opened at run start"]];
+                }
+                NSString* reason = [NSString stringWithFormat:@"Could not open %@" ,[fullFileName stringByAbbreviatingWithTildeInPath]];
+                
+                [[NSNotificationCenter defaultCenter]
+                    postNotificationName:ORRequestRunHalt
+                                  object:self
+                                userInfo:[NSDictionary dictionaryWithObjectsAndKeys:reason,@"Reason",nil]];
+            }
+            else {
+                [openFileFailAlarm clearAlarm];
+                [openFileFailAlarm release];
+                openFileFailAlarm = nil;
+            }
 		}
-        
+        processCheckedOnce    = NO;
+
         [[NSNotificationCenter defaultCenter]
 		 postNotificationName:ORDataFileStatusChangedNotification
 		 object: self];
