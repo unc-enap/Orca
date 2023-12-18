@@ -251,6 +251,8 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
     [self setIPAddress:   [decoder decodeObjectForKey: @"ipAddress"]];
     [self setSourceNumber:[decoder decodeIntForKey:    @"sourceNumber"]];
     [self setSourceArray: [decoder decodeObjectForKey: @"sourceHeight"]];
+    [self registerNotificationObservers];
+
     [[self undoManager] enableUndoRegistration];
 		
     return self;

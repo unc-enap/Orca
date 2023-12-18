@@ -595,7 +595,7 @@ static const int currentVersion = 1;           // Current version
                 //Couldn't open the data file. Must stop the run
                 if(!openFileFailAlarm){
                     NSLogColor([NSColor redColor],@"Could not open dataFile: %@\n",[fullFileName stringByAbbreviatingWithTildeInPath]);
-                    openFileFailAlarm = [[ORAlarm alloc] initWithName:[NSString stringWithFormat:@"Could not open Data File"] severity:kHardwareAlarm];
+                    openFileFailAlarm = [[ORAlarm alloc] initWithName:[NSString stringWithFormat:@"Could not open Data File"] severity:kDataFlowAlarm];
                     [openFileFailAlarm setSticky:YES];
                     [openFileFailAlarm postAlarm];
                     [openFileFailAlarm setHelpString:[NSString stringWithFormat:@"Data File Didn't Open. You can acknowledge this alarm, but it will not be cleared until more a data file can be opened at run start"]];
