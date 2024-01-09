@@ -46,6 +46,7 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
     [cmdPath        release];
     [cmdStatus      release];
     [cmdList        release];
+    [cmdExe         release];
     [inFluxDB       release];
     [sourceHeight   release];
     [super dealloc];
@@ -219,7 +220,7 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
     if([cmdQueue count]==0){
         [self setUpCmdStatus];
         for(id aCmd in cmdStatus){
-            [self putRequestInQueue:[NSString stringWithFormat:@"get%@",aCmd]];
+            [self putRequestInQueue:[NSString stringWithFormat:@"%@",aCmd]];
         }
     }
     if(pollTime)[self performSelector:@selector(pollHardware) withObject:nil afterDelay:pollTime];
@@ -292,6 +293,14 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
                      @"Llama",       //status
                      @"Source"       //source,status,position
                    ] retain];
+    }
+    if(!cmdExe){
+        cmdExe = [@{ @"Diode" : @"getDiode",
+                     @"Muon" : @"getMuon",
+                     @"SiPM" : @"getSiPM",
+                     @"Llama" : @"getLlama",
+                     @"Source" : @"getSource"
+        } retain];
     }
     
     if(!cmdStatus){
@@ -368,6 +377,8 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
                 aCmd = [aCmd substringFromIndex:1];
                 scriptCmd = YES;
             }
+            // Not a special command (via sendCmd), but known, so we get it from the executable lookup
+            NSString* aCmdExe = scriptCmd ? aCmd : [cmdExe objectForKey: aCmd];
                 
             NSTask* task = [[NSTask alloc] init];
             [task setLaunchPath:@"/usr/bin/ssh"];
@@ -380,7 +391,7 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
 
             NSArray* arguments = [NSArray arrayWithObjects:
                                       [NSString stringWithFormat:@"%@@%@",userName,ipAddress],
-                                      [NSString stringWithFormat:@"%@%@",cmdPath,aCmd], nil];
+                                      [NSString stringWithFormat:@"%@%@",cmdPath,aCmdExe], nil];
             
             [task setArguments: arguments];
 

@@ -36,6 +36,7 @@
 	int					pollTime;
     NSMutableDictionary* cmdStatus;
     NSArray*            cmdList;
+    NSDictionary*       cmdExe;
     ORInFluxDBModel*    inFluxDB;
 
     //----Source Movement-----
