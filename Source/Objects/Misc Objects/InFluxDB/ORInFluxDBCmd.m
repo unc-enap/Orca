@@ -343,7 +343,8 @@
 
 - (void) addTag:(NSString*)aLabel withString:(NSString*)aValue
 {
-    [tags addObject:[NSString stringWithFormat:@"%@=%@",aLabel,aValue]];
+    NSString* newTag = [aValue stringByReplacingOccurrencesOfString:@" " withString:@"\\ "];
+    [tags addObject:[NSString stringWithFormat:@"%@=%@",aLabel,newTag]];
 }
 
 - (void) addTag:(NSString*)aLabel withBoolean:(BOOL)aValue

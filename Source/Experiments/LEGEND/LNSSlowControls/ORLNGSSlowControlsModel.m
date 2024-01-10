@@ -493,7 +493,7 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
             ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:@"SlowControls" org:[inFluxDB org]];
             [aCmd start : aDataCmd];
             [aCmd addTag:@"board"      withString:[aRow objectAtIndex:0]];
-            [aCmd addTag:@"chan"       withString:[data objectAtIndex:1]];
+            [aCmd addTag:@"chan"       withString:[aRow objectAtIndex:1]];
             [aCmd addField:@"status"   withDouble:[[aRow objectAtIndex:2] doubleValue]];
             [aCmd addField:@"progress" withDouble:[[aRow objectAtIndex:3] doubleValue]];
             [aCmd addField:@"voltage"  withDouble:[[aRow objectAtIndex:4] doubleValue]];
