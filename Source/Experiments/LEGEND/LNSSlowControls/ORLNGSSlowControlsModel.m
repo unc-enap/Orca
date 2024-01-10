@@ -5,15 +5,15 @@
 //  Created by Mark Howe on Thursday, Aug 20,2009
 //  Copyright (c) 2009 Univerisy of North Carolina. All rights reserved.
 //-----------------------------------------------------------
-//This program was prepared for the Regents of the Univerisy of 
-//North Carolina sponsored in part by the United States 
-//Department of Energy (DOE) under Grant #DE-FG02-97ER41020. 
-//The University has certain rights in the program pursuant to 
-//the contract and the program should not be copied or distributed 
-//outside your organization.  The DOE and the Univerisy of North 
+//This program was prepared for the Regents of the Univerisy of
+//North Carolina sponsored in part by the United States
+//Department of Energy (DOE) under Grant #DE-FG02-97ER41020.
+//The University has certain rights in the program pursuant to
+//the contract and the program should not be copied or distributed
+//outside your organization.  The DOE and the Univerisy of North
 //Carolina reserve all rights in the program. Neither the authors,
-//Univerisy of North Carolina, or U.S. Government make any warranty, 
-//express or implied, or assume any liability or responsibility 
+//Univerisy of North Carolina, or U.S. Government make any warranty,
+//express or implied, or assume any liability or responsibility
 //for the use of this software.
 //-------------------------------------------------------------
 
@@ -21,8 +21,8 @@
 #import "ORLNGSSlowControlsModel.h"
 #import "ORSafeQueue.h"
 
-NSString* ORLNGSSlowControlsPollTimeChanged	 = @"ORLNGSSlowControlsPollTimeChanged";
-NSString* ORLNGSSlowControlsLock			 = @"ORLNGSSlowControlsLock";
+NSString* ORLNGSSlowControlsPollTimeChanged     = @"ORLNGSSlowControlsPollTimeChanged";
+NSString* ORLNGSSlowControlsLock             = @"ORLNGSSlowControlsLock";
 NSString* ORL200SlowControlsUserNameChanged  = @"ORL200SlowControlsUserNameChanged";
 NSString* ORL200SlowControlsCmdPathChanged   = @"ORL200SlowControlsCmdPathChanged";
 NSString* ORL200SlowControlsIPAddressChanged = @"ORL200SlowControlsIPAddressChanged";
@@ -40,12 +40,13 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     canceled = YES;
-	[cmdQueue       release];
+    [cmdQueue       release];
     [processThread  release];
     [userName       release];
     [cmdPath        release];
     [cmdStatus      release];
     [cmdList        release];
+    [cmdExe         release];
     [inFluxDB       release];
     [sourceHeight   release];
     [super dealloc];
@@ -219,7 +220,7 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
     if([cmdQueue count]==0){
         [self setUpCmdStatus];
         for(id aCmd in cmdStatus){
-            [self putRequestInQueue:[NSString stringWithFormat:@"get%@",aCmd]];
+            [self putRequestInQueue:[NSString stringWithFormat:@"%@",aCmd]];
         }
     }
     if(pollTime)[self performSelector:@selector(pollHardware) withObject:nil afterDelay:pollTime];
@@ -233,7 +234,7 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
 
 - (NSString*) lockName
 {
-	return ORLNGSSlowControlsLock;
+    return ORLNGSSlowControlsLock;
 }
 
 #pragma mark ***Archival
@@ -254,7 +255,7 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
     [self registerNotificationObservers];
 
     [[self undoManager] enableUndoRegistration];
-		
+        
     return self;
 }
 
@@ -292,6 +293,14 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
                      @"Llama",       //status
                      @"Source"       //source,status,position
                    ] retain];
+    }
+    if(!cmdExe){
+        cmdExe = [@{ @"Diode" : @"getDiode",
+                     @"Muon" : @"getMuon",
+                     @"SiPM" : @"getSiPM",
+                     @"Llama" : @"getLlama",
+                     @"Source" : @"getSource"
+        } retain];
     }
     
     if(!cmdStatus){
@@ -368,6 +377,8 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
                 aCmd = [aCmd substringFromIndex:1];
                 scriptCmd = YES;
             }
+            // Not a special command (via sendCmd), but known, so we get it from the executable lookup
+            NSString* aCmdExe = scriptCmd ? aCmd : [cmdExe objectForKey: aCmd];
                 
             NSTask* task = [[NSTask alloc] init];
             [task setLaunchPath:@"/usr/bin/ssh"];
@@ -380,7 +391,7 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
 
             NSArray* arguments = [NSArray arrayWithObjects:
                                       [NSString stringWithFormat:@"%@@%@",userName,ipAddress],
-                                      [NSString stringWithFormat:@"%@%@",cmdPath,aCmd], nil];
+                                      [NSString stringWithFormat:@"%@%@",cmdPath,aCmdExe], nil];
             
             [task setArguments: arguments];
 
@@ -524,4 +535,5 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
     }
 }
 @end
+
 
