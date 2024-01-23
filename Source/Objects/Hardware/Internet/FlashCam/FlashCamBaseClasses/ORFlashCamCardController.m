@@ -39,13 +39,6 @@
     [super dealloc];
 }
 
-- (void) setModel:(id)aModel
-{
-    [super setModel:aModel];
-    [promSlotPUButton removeAllItems];
-    for(int i=0; i<3; i++) [promSlotPUButton addItemWithTitle:[NSString stringWithFormat:@"Slot %d", i]];
-}
-
 - (void) registerNotificationObservers
 {
     NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
@@ -155,7 +148,17 @@
     [hplot setLineColor:colors[0]];
     [(ORTimeAxis*) [humidityView xAxis] setStartTime:[[NSDate date] timeIntervalSince1970]];
     [hplot release];
+    
+    [self populatePromSlotPopup];
 }
+
+
+- (void) populatePromSlotPopup
+{
+    [promSlotPUButton removeAllItems];
+    for(int i=0; i<3; i++) [promSlotPUButton addItemWithTitle:[NSString stringWithFormat:@"Slot %d", i]];
+}
+
 
 - (void) updateWindow
 {

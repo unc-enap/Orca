@@ -295,11 +295,11 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
                    ] retain];
     }
     if(!cmdExe){
-        cmdExe = [@{ @"Diode"   : @"getDiode",
-                     @"Muon"    : @"getMuon",
-                     @"SiPM"    : @"getSiPM",
-                     @"Llama"   : @"getLlama",
-                     @"Source"  : @"getSource"
+        cmdExe = [@{ @"Diode" : @"getDiode",
+                     @"Muon" : @"getMuon",
+                     @"SiPM" : @"getSiPM",
+                     @"Llama" : @"getLlama",
+                     @"Source" : @"getSource"
         } retain];
     }
     
