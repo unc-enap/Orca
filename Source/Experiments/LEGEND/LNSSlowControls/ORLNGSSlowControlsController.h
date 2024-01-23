@@ -69,6 +69,9 @@
 - (IBAction) moveSourceAction:(id)sender;
 - (IBAction) turnSiPmsOnAction:(id)sender;
 - (IBAction) turnSiPmsOffAction:(id)sender;
+- (IBAction) turnLlamaOnAction:(id)sender;
+- (IBAction) turnLlamaOffAction:(id)sender;
+- (IBAction) readHeadBufferAction:(id)sender;
 
 @end
 
