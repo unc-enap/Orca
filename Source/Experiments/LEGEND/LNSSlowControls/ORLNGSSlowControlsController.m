@@ -308,6 +308,62 @@
     }];
 }
 
+- (IBAction) turnLlamaOnAction:(id)sender
+{
+    [self endEditing];
+
+    NSString* aCmd = @"setLlama -x ON";
+    NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+    [alert setMessageText:@"Turn Llama On"];
+    [alert setInformativeText:aCmd];
+    [alert addButtonWithTitle:@"Yes, Turn Llama On"];
+    [alert addButtonWithTitle:@"Cancel"];
+    [alert setAlertStyle:NSAlertStyleWarning];
+    
+    [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
+        if (result == NSAlertFirstButtonReturn){
+            [model sendCmd:aCmd];
+       }
+    }];
+}
+- (IBAction) turnLlamaOffAction:(id)sender
+{
+    [self endEditing];
+
+    NSString* aCmd = @"setLlama -x OFF";
+    NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+    [alert setMessageText:@"Turn Llama Off"];
+    [alert setInformativeText:aCmd];
+    [alert addButtonWithTitle:@"Yes, Turn Llama Off"];
+    [alert addButtonWithTitle:@"Cancel"];
+    [alert setAlertStyle:NSAlertStyleWarning];
+    
+    [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
+        if (result == NSAlertFirstButtonReturn){
+            [model sendCmd:aCmd];
+       }
+    }];
+}
+
+- (IBAction) readHeadBufferAction:(id)sender
+{
+    NSString* aCmd = @"readHeadBuffer";
+    [self endEditing];
+    NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+    [alert setMessageText:@"Read H.E Buffer"];
+    [alert setInformativeText:aCmd];
+    [alert addButtonWithTitle:@"Yes, Read H.E Buffer. NOTE this will impact data taking!!"];
+    [alert addButtonWithTitle:@"Cancel"];
+    [alert setAlertStyle:NSAlertStyleWarning];
+    
+    [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
+        if (result == NSAlertFirstButtonReturn){
+            [model sendCmd:aCmd];
+       }
+    }];
+}
+
+
 - (id) tableView:(NSTableView *) aTableView objectValueForTableColumn:(NSTableColumn *) aTableColumn row:(NSInteger) rowIndex
 {
     if(aTableView == statusTable){

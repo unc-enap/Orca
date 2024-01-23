@@ -492,8 +492,8 @@ NSString* ORDataTaskModelTimerEnableChanged			= @"ORDataTaskModelTimerEnableChan
     while([transferQueue count]){
 		[ORTimer delay:1];
 		totalTime += 1;
-		if(totalTime > 8){
-			NSLogColor([NSColor redColor], @"Continuing after data que didn't flush after 8 seconds.\n");
+		if(totalTime > 12){
+			NSLogColor([NSColor redColor], @"Continuing after data que didn't flush after 12 seconds.\n");
 			break;
 		}
 	}	
@@ -535,8 +535,8 @@ NSString* ORDataTaskModelTimerEnableChanged			= @"ORDataTaskModelTimerEnableChan
     while([transferQueue count]){
 		[ORTimer delay:.1];
 		totalTime += .1;
-		if(totalTime > 8){
-			NSLogColor([NSColor redColor], @"Continuing after data que didn't flush after 8 seconds.\n");
+		if(totalTime > 12){
+			NSLogColor([NSColor redColor], @"Continuing after data que didn't flush after 12 seconds.\n");
 			break;
 		}
 	}	
