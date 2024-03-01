@@ -53,6 +53,7 @@ static NSString* kFlashCamEthTypes[kFlashCamEthTypeCount] = {@"efb1", @"efb2", @
     ORTaskSequence* rebootTasks;
     NSMutableArray* rebootQueue;
     ORAlarm* runFailedAlarm;
+    bool readoutReady;
 }
 
 #pragma mark •••Initialization
@@ -62,6 +63,7 @@ static NSString* kFlashCamEthTypes[kFlashCamEthTypeCount] = {@"efb1", @"efb2", @
 - (void) makeMainController;
 
 #pragma mark •••Accessors
+- (bool) readoutReady;
 - (NSString*) identifier;
 - (NSString*) ipAddress;
 - (NSString*) username;
