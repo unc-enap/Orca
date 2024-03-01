@@ -1,8 +1,16 @@
+/*
+ * tmio: tagged message I/O for Unix streams
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * Contact:
+ * - main authors: felix.werner@mpi-hd.mpg.de
+ * - upstream URL: https://www.mpi-hd.mpg.de/hinton/software
+ */
 
-/*========================================================//
-date:    Fri Jul 23 16:41:43 CEST 2021
-sources: Libs-fc/tmio-0.93/tmio.c
-//========================================================*/
+
 #ifndef INCLUDED_tmio_h
 #define INCLUDED_tmio_h
 

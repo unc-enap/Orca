@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -3511,6 +3511,8 @@
 		A8175F8B220D8D07003AC7E5 /* ADEIControl.nib in Resources */ = {isa = PBXBuildFile; fileRef = A8175F82220D8D06003AC7E5 /* ADEIControl.nib */; };
 		A8175F8C220D8D07003AC7E5 /* ORADEIControlController.h in Headers */ = {isa = PBXBuildFile; fileRef = A8175F83220D8D06003AC7E5 /* ORADEIControlController.h */; };
 		A86253F3221217E7005D26EC /* ORADEIControlDefs.h in Headers */ = {isa = PBXBuildFile; fileRef = A86253F2221217E6005D26EC /* ORADEIControlDefs.h */; };
+		A8E6695B2A710BB200A9775A /* time_utils.c in Sources */ = {isa = PBXBuildFile; fileRef = A8E669592A710BB200A9775A /* time_utils.c */; };
+		A8E6695C2A710BB200A9775A /* time_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = A8E6695A2A710BB200A9775A /* time_utils.h */; };
 		B322A309146D64D000491347 /* ORTcpIpProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = B322A308146D64D000491347 /* ORTcpIpProtocol.h */; };
 		B33FBC93146F2A6A0046A733 /* edu.washington.npl.orca.VXIHardware.plist in Resources */ = {isa = PBXBuildFile; fileRef = B33FBC92146F2A6A0046A733 /* edu.washington.npl.orca.VXIHardware.plist */; };
 		B3805611172BE4A100B5B134 /* Changesfeed.tif in Resources */ = {isa = PBXBuildFile; fileRef = B3805610172BE4A100B5B134 /* Changesfeed.tif */; };
@@ -7450,6 +7452,8 @@
 		A8175F82220D8D06003AC7E5 /* ADEIControl.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = ADEIControl.nib; sourceTree = "<group>"; };
 		A8175F83220D8D06003AC7E5 /* ORADEIControlController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORADEIControlController.h; sourceTree = "<group>"; };
 		A86253F2221217E6005D26EC /* ORADEIControlDefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORADEIControlDefs.h; sourceTree = "<group>"; };
+		A8E669592A710BB200A9775A /* time_utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = time_utils.c; sourceTree = "<group>"; };
+		A8E6695A2A710BB200A9775A /* time_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = time_utils.h; sourceTree = "<group>"; };
 		B322A308146D64D000491347 /* ORTcpIpProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORTcpIpProtocol.h; sourceTree = "<group>"; };
 		B33FBC92146F2A6A0046A733 /* edu.washington.npl.orca.VXIHardware.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = edu.washington.npl.orca.VXIHardware.plist; sourceTree = "<group>"; };
 		B3805610172BE4A100B5B134 /* Changesfeed.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Changesfeed.tif; path = CouchDBListener/Changesfeed.tif; sourceTree = "<group>"; };
@@ -15206,6 +15210,21 @@
 			path = ADEIControl;
 			sourceTree = "<group>";
 		};
+		A8E6693F2A702DD700A9775A /* fcio */ = {
+			isa = PBXGroup;
+			children = (
+				A8E669592A710BB200A9775A /* time_utils.c */,
+				A8E6695A2A710BB200A9775A /* time_utils.h */,
+				E63085CF2681057700687A6D /* bufio.h */,
+				E63085D32681057800687A6D /* bufio.c */,
+				E63085CE2681057700687A6D /* fcio.h */,
+				E63085D02681057700687A6D /* fcio.c */,
+				E63085C62681055800687A6D /* tmio.h */,
+				E63085CA2681056300687A6D /* tmio.c */,
+			);
+			path = fcio;
+			sourceTree = "<group>";
+		};
 		B3808A931700F85C0019C27D /* CouchDBListener */ = {
 			isa = PBXGroup;
 			children = (
@@ -15358,12 +15377,7 @@
 				E6C9759C26FE3F3300D6F792 /* FlashCamUtils.m */,
 				E684347929AFB666009067E2 /* FlashCamListener.xib */,
 				84707A1D290AC228008D33C2 /* flashcam_listener.jpg */,
-				E63085CF2681057700687A6D /* bufio.h */,
-				E63085D32681057800687A6D /* bufio.c */,
-				E63085CE2681057700687A6D /* fcio.h */,
-				E63085D02681057700687A6D /* fcio.c */,
-				E63085C62681055800687A6D /* tmio.h */,
-				E63085CA2681056300687A6D /* tmio.c */,
+				A8E6693F2A702DD700A9775A /* fcio */,
 			);
 			path = FlashCamIO;
 			sourceTree = "<group>";
@@ -16794,6 +16808,7 @@
 				84C37E250EF8408F00E77E09 /* ORPSUPTubePosition.h in Headers */,
 				5B5A404F1A79385C00543633 /* ORSIS3305Controller.h in Headers */,
 				84E18C3A0F0A5D3B0096F0F3 /* NSNotifications+Extensions.h in Headers */,
+				A8E6695C2A710BB200A9775A /* time_utils.h in Headers */,
 				84E18C560F0A640C0096F0F3 /* ORLineMarker.h in Headers */,
 				8419221F0F0BBE8000EF1C1C /* ORScriptIDEModel.h in Headers */,
 				8419227F0F0BC18800EF1C1C /* ORScriptIDEController.h in Headers */,
@@ -17477,7 +17492,8 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1230;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					369E73371C7B5E6400A7F89E = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -19259,6 +19275,7 @@
 				8493D6C20F21315300BCD331 /* ORCMC203Model.m in Sources */,
 				9C880EDA0F2B5B2500394AEC /* ORVmeCrate.m in Sources */,
 				840D56E10F39E9BF00F9A274 /* ORPacController.m in Sources */,
+				A8E6695B2A710BB200A9775A /* time_utils.c in Sources */,
 				840D56E30F39E9BF00F9A274 /* ORPacDecoders.m in Sources */,
 				840D56E50F39E9BF00F9A274 /* ORPacModel.m in Sources */,
 				84B28CE10F4C597900E2B056 /* ORBocTIC3Controller.m in Sources */,
@@ -19968,8 +19985,12 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = OrcaTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -20014,8 +20035,12 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = OrcaTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -20059,8 +20084,12 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = OrcaTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -20104,7 +20133,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = "";
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = RelaunchOrca;
 				SDKROOT = "";
@@ -20143,7 +20172,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = "";
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				PRODUCT_NAME = RelaunchOrca;
 				SDKROOT = "";
 				VALID_ARCHS = x86_64;
@@ -20181,7 +20210,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = "";
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				PRODUCT_NAME = RelaunchOrca;
 				SDKROOT = "";
 				VALID_ARCHS = x86_64;
