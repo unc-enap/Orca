@@ -104,6 +104,7 @@
 - (void) readStatus:(fcio_status*)fcstatus atIndex:(unsigned int)index;
 - (void) taskData:(NSDictionary*)taskData;
 - (void) taskFinished:(id)task;
+- (void) tasksCompleted:(id)sender;
 
 #pragma mark •••Archival
 - (id) initWithCoder:(NSCoder*)decoder;
