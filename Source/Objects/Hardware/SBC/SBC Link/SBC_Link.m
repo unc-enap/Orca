@@ -460,7 +460,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 								  passWord:passWord];
 		[driverScriptFileMover setVerbose:YES];
 		[driverScriptFileMover doNotMoveFilesToSentFolder];
-		[driverScriptFileMover setTransferType:eUseSCP];
+		[driverScriptFileMover setTransferType:eUseRSYNC];
 		[aSequence addTaskObj:driverScriptFileMover];
 
 		//since we made the task sequence the filemover's delegate, 
@@ -1240,7 +1240,7 @@ static void AddSBCPacketWrapperToCache(SBCPacketWrapper *sbc)
 							   passWord:passWord];
 		[SBCFileMover setVerbose:verbose];//TODO: was NO; for testing I would like to see this output; this takes the CB state from the GUI -tb-
 		[SBCFileMover doNotMoveFilesToSentFolder];
-		[SBCFileMover setTransferType:eUseSCP];
+		[SBCFileMover setTransferType:eUseRSYNC];
 		[aSequence addTaskObj:SBCFileMover];
 
 		//since we made the task sequence the filemover's delegate, 
