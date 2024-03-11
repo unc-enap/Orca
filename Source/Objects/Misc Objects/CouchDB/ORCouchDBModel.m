@@ -769,9 +769,13 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
                 NSArray* theBurstMonitor = [[[[self document] collectObjectsOfClass:NSClassFromString(@"ORBurstMonitorModel")] retain] autorelease];
                 if([theBurstMonitor count]){
                     for(id aMonitor in theBurstMonitor){
+                        NSDate *currentDate = [NSDate date];
+                        NSTimeInterval Timestamp = [currentDate timeIntervalSince1970];
+                                
                         NSDictionary* burstInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                                                    @"burstinfo", @"_id",
                                                    @"burstinfo", @"type",
+                                                   [NSNumber numberWithInteger:Timestamp],@"time",
                                                    [NSNumber numberWithUnsignedShort:[aMonitor minimumEnergyAllowed]],@"minimumADC",
                                                    [NSNumber numberWithUnsignedShort:[aMonitor nHit]], @"nHit",
                                                    [NSNumber numberWithUnsignedShort:[aMonitor numBurstsNeeded]], @"numBurstsNeeded",
@@ -786,7 +790,6 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
             }
             @finally{
                 [self performSelector:@selector(updateBurstRecord) withObject:nil afterDelay:60];
-
             }
 
         }
