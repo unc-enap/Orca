@@ -184,7 +184,7 @@
 
 - (NSAttributedString *)makeAttributedString:(NSString*)str
 {
-    NSString* s = [str copy];
+    NSString* s = [[str copy]autorelease];
     NSMutableAttributedString* attstr = [[[NSMutableAttributedString alloc] init] autorelease];
     if([s length] >= 18){
         NSString* date = [s substringWithRange:NSMakeRange(0, 18)];
@@ -195,10 +195,8 @@
         s = [s substringWithRange:NSMakeRange(18, [s length]-18)];
     }
     NSColor* color = [NSColor blackColor];
-    bool error = false;
     if([s rangeOfString:@"error"   options:NSCaseInsensitiveSearch].location != NSNotFound ||
        [s rangeOfString:@"warning" options:NSCaseInsensitiveSearch].location != NSNotFound){
-        error = true;
         color = [NSColor redColor];
     }
     NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSFont fontWithName:@"Courier New" size:10],

@@ -873,7 +873,7 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
     if(fclog){
         n = MIN([self fclogLines]-1, nlines-1);
         for(NSUInteger i=n; i<[fclog count]; i--)
-            [log setObject:[[self fclog:i] copy] atIndexedSubscript:n-i];
+            [log setObject:[self fclog:i] atIndexedSubscript:n-i];
     }
     [log retain];
     [fclog release];
@@ -885,8 +885,7 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
 - (void) appendToFCLog:(NSString*)line andNotify:(BOOL)notify
 {
     fclogIndex = (fclogIndex + 1) % [self fclogLines];
-    [[fclog objectAtIndex:fclogIndex] release];
-    [fclog setObject:[line copy] atIndexedSubscript:fclogIndex];
+    [fclog setObject:line atIndexedSubscript:fclogIndex];
     if(notify)
         [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelFCLogChanged object:self];
 }
@@ -900,7 +899,7 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
 
 - (void) appendToFCRunLog:(NSString*)line
 {
-    [fcrunlog addObject:[line copy]];
+    [fcrunlog addObject:line];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelFCRunLogChanged object:self];
 }
 
@@ -1132,13 +1131,15 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
 - (void) taskDataAvailable:(NSNotification*)note
 {
     if([note object] != [[runTask standardOutput] fileHandleForReading]) return;
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
     NSData* incomingData   = [[note userInfo] valueForKey:NSFileHandleNotificationDataItem];
     if(incomingData && [incomingData length]){
-        NSString *incomingText = [[[NSString alloc] initWithData:incomingData encoding:NSASCIIStringEncoding] autorelease];
+        NSString* incomingText = [[[NSString alloc] initWithData:incomingData encoding:NSASCIIStringEncoding]autorelease];
         NSDictionary* taskData = [NSDictionary dictionaryWithObjectsAndKeys:runTask,@"Task",incomingText,@"Text",nil];
         [self taskData:taskData];
     }
     if([runTask isRunning]) [[note object] readInBackgroundAndNotify];
+    [pool release];
 }
 
 - (void) taskData:(NSDictionary*)taskData
@@ -1146,12 +1147,13 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
     if([taskData objectForKey:@"Task"] != runTask) return;
     NSString* incomingText = [taskData objectForKey:@"Text"];
     NSArray* incomingLines = [incomingText componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+    formatter.locale = [NSLocale currentLocale];
+    [formatter setLocalizedDateFormatFromTemplate:@"MM/dd/yy HH:mm:ss"];
+
     for(NSString* text in incomingLines){
         if([text isEqualToString:@""]) continue;
-        NSDateFormatter* formatter = [[[NSDateFormatter alloc] init] autorelease];
-        formatter.locale = [NSLocale currentLocale];
-        [formatter setLocalizedDateFormatFromTemplate:@"MM/dd/yy HH:mm:ss"];
-        [self appendToFCRunLog:[NSString stringWithFormat:@"%@ %@\n",
+         [self appendToFCRunLog:[NSString stringWithFormat:@"%@ %@\n",
                                 [formatter stringFromDate:[NSDate now]], text]];
         if([text rangeOfString:@"error"   options:NSCaseInsensitiveSearch].location != NSNotFound ||
            [text rangeOfString:@"warning" options:NSCaseInsensitiveSearch].location != NSNotFound){
@@ -1179,7 +1181,7 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
                     for(id obj in [readOutList children]){
                         if([[obj object] respondsToSelector:@selector(cardAddress)] &&
                            [[obj object] respondsToSelector:@selector(setUniqueHWID:)]){
-                            if(address = [[obj object] cardAddress]){
+                            if((address = [[obj object] cardAddress])){
                                 [[obj object] setUniqueHWID:hwid];
                                 success = true;
                                 break;
@@ -1228,6 +1230,7 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
             [deadTimeHistory  addDataToTimeAverage:(float)curDead];
         }
     }
+    [formatter release];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelStatusChanged object:self];
 }
 
@@ -1245,9 +1248,10 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
         // read to the end of the run task's standard output
         NSData* data = [[[runTask standardOutput] fileHandleForReading] readDataToEndOfFile];
         if(data && [data length]){
-            NSString *text = [[[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding] autorelease];
+            NSString *text = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
             NSDictionary* taskData = [NSDictionary dictionaryWithObjectsAndKeys:runTask,@"Task",text,@"Text",nil];
             [self taskData:taskData];
+            [text release];
         }
         [[[runTask standardInput]  fileHandleForWriting] closeFile];
         [[[runTask standardOutput] fileHandleForReading] closeFile];
@@ -1441,10 +1445,11 @@ NSString* ORFlashCamListenerModelFCRunLogFlushed     = @"ORFlashCamListenerModel
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelFCRunLogFlushed object:self];
     NSString* cmd = [NSString stringWithFormat:@"%@ %@\n", taskPath, [readoutArgs componentsJoinedByString:@" "]];
     NSLog(cmd);
-    NSDateFormatter* formatter = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     formatter.locale = [NSLocale currentLocale];
     [formatter setLocalizedDateFormatFromTemplate:@"MM/dd/yy HH:mm:ss"];
     [self appendToFCRunLog:[NSString stringWithFormat:@"%@ %@\n", [formatter stringFromDate:[NSDate now]], cmd]];
+    [formatter release];
     
     NSPipe* inpipe  = [NSPipe pipe];
     NSPipe* outpipe = [NSPipe pipe];

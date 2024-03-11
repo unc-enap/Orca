@@ -31,7 +31,7 @@ NSString* ORDataChainObjectInvolvedInCurrentRun = @"ORDataChainObjectInvolvedInC
 - (void) setInvolvedInCurrentRun:(BOOL)state
 {
 	involvedInCurrentRun = state;
-	[[NSNotificationCenter defaultCenter] postNotificationName:ORDataChainObjectInvolvedInCurrentRun object: self];
+    [[NSNotificationCenter defaultCenter] postNotificationOnMainThreadWithName:ORDataChainObjectInvolvedInCurrentRun object:self];
 }
 
 

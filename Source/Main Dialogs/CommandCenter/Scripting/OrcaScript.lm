@@ -173,7 +173,7 @@ void OrcaScripterror(char* s)
 	functionList = nil;
 }
 
-void grabString()
+    void grabString(void)
 {
 	int i=0;
 	char c;
@@ -198,7 +198,7 @@ void grabString()
 	OrcaScriptlval.cString[i] = '\0';
 }
 
-void comment()
+    void comment(void)
 {
 	//just eat comments, carefully counting lines as needed
 	char c, c1;
@@ -213,7 +213,7 @@ loop:
 	}
 }
 
-void singleLineComment()
+    void singleLineComment(void)
 {
 	//just eat comments, carefully counting lines as needed
 	char c;
@@ -225,7 +225,7 @@ void singleLineComment()
 	}
 }
 
-void yyreset_state()
+    void yyreset_state(void)
 {
 	num_lines = 0;
 	[nodeList release];

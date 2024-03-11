@@ -28,6 +28,7 @@
 #import "OR1DHistoPlot.h"
 #import "ORTimeAxis.h"
 #import "ORColorScale.h"
+#import "ORRunModel.h"
 
 
 @implementation ORL200Controller
@@ -42,6 +43,7 @@
 
 - (void) dealloc
 {
+    [rc release];
     [super dealloc];
 }
 
@@ -82,7 +84,7 @@
     [self populateClassNamePopup:pmtAdcClassNamePopup];
     [self populateClassNamePopup:auxChanAdcClassNamePopup];
     [self populateClassNamePopup:cc4AdcClassNamePopup];
-
+    
     [(ORPlot*) [ratePlot plotWithTag:kL200DetType] setLineColor:[NSColor systemBlueColor]];
     ORTimeLinePlot* sipmPlot = [[ORTimeLinePlot alloc] initWithTag:kL200SiPMType andDataSource:self];
     [sipmPlot setLineColor:[NSColor systemGreenColor]];
@@ -109,9 +111,9 @@
     [pmtHist setName:@"PMTs"];
     [valueHistogramsPlot addPlot:pmtHist];
     [pmtHist release];
-    OR1DHistoPlot* auxHist = [[OR1DHistoPlot alloc] initWithTag:10+kL200AuxType andDataSource:self];
-    [auxHist setLineColor:[NSColor systemOrangeColor]];
-    [auxHist setName:@"AuxChans"];
+//    OR1DHistoPlot* auxHist = [[OR1DHistoPlot alloc] initWithTag:10+kL200AuxType andDataSource:self];
+//    [auxHist setLineColor:[NSColor systemOrangeColor]];
+//    [auxHist setName:@"AuxChans"];
     
     [primaryColorScale setSpectrumRange:0.7];
     [sipmColorScale    setSpectrumRange:0.7];
@@ -136,6 +138,27 @@
 {
     NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
     [super registerNotificationObservers];
+
+    [notifyCenter addObserver : self
+                     selector : @selector(populateDataTypePopup)
+                         name : ORDocumentLoadedNotification
+                       object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(populateDataTypePopup)
+                         name : ORGroupObjectsAdded
+                       object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(populateDataTypePopup)
+                         name : ORGroupObjectsRemoved
+                       object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(l200FileNameChanged:)
+                         name : ORL200ModelL200FileNameChanged
+                       object : nil];
+
     [notifyCenter addObserver : self
                      selector : @selector(groupChanged:)
                          name : ORGroupObjectsAdded
@@ -204,7 +227,22 @@
                      selector : @selector(adcSerialMapFileChanged:)
                          name : ORSegmentGroupMapFileChanged
                        object : self];
-
+    [notifyCenter addObserver : self
+                     selector : @selector(dataCycleChanged:)
+                         name : ORL200ModelDataCycleChanged
+                       object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(dataPeriodChanged:)
+                         name : ORL200ModelDataPeriodChanged
+                       object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(dataTypeChanged:)
+                         name : ORL200ModelDataTypeChanged
+                       object : nil];
+    [notifyCenter addObserver : self
+                     selector : @selector(customTypeChanged:)
+                         name : ORL200ModelCustomTypeChanged
+                       object : nil];
 }
 
 - (void) updateWindow
@@ -224,7 +262,71 @@
     [self cc4ChanMapFileChanged:nil];
     [self cc4ChanAdcClassNameChanged:nil];
     [self adcSerialMapFileChanged:nil];
+    [self dataCycleChanged:nil];
+    [self dataPeriodChanged:nil];
+    [self dataTypeChanged:nil];
+    [self customTypeChanged:nil];
+    [self l200FileNameChanged:nil];
 }
+
+- (void) populateDataTypePopup
+{
+    //called after document is loaded or configchanged
+    [dataTypePopup removeAllItems];
+    if(!rc){
+        rc = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORRunModel,1"] retain];
+    }
+    NSArray* types = [rc runTypeNames];
+    int count = 0;
+    for(int i=0;i<32;i++){
+        NSString* anItem = [types objectAtIndex:i];
+        if(i<[types count] &&
+           i>=2            &&
+           [anItem length] <= 3 ){
+            [dataTypePopup addItemWithTitle:anItem];
+            [[dataTypePopup itemAtIndex:count] setTag:i];
+            count++;
+        }
+    }
+    //special case
+    [dataTypePopup addItemWithTitle:@"Custom"];
+    [[dataTypePopup itemAtIndex:count] setTag:32];
+    [self dataTypeChanged:nil];
+}
+
+- (void) l200FileNameChanged:(NSNotification*) aNote
+{
+    [l200FileNameField setStringValue:[model l200FileName]];
+}
+
+- (void) dataCycleChanged:(NSNotification*) aNote
+{
+    [dataCycleField setIntValue:[model dataCycle]];
+}
+
+- (void) dataPeriodChanged:(NSNotification*) aNote
+{
+    [dataPeriodField setIntValue:[model dataPeriod]];
+}
+
+- (void) dataTypeChanged:(NSNotification*) aNote
+{
+    [dataTypePopup selectItemWithTag:[model dataType]];
+    if([dataTypePopup selectedTag]==32){
+        [customTypeLabel setHidden:NO];
+        [customTypeField setHidden:NO];
+    }
+    else {
+        [customTypeLabel setHidden:YES];
+        [customTypeField setHidden:YES];
+    }
+}
+
+- (void) customTypeChanged:(NSNotification*) aNote
+{
+    [customTypeField setStringValue:[model customType]];
+}
+
 
 -(void) groupChanged:(NSNotification*)note
 {
@@ -519,6 +621,46 @@
     [self readMapFile:kL200ADCType intoTable:adcSerialTableView];
 }
 
+- (IBAction) dataCycleAction:(id)sender
+{
+    [model setDataCycle:[sender intValue]];
+}
+
+- (IBAction) dataPeriodAction:(id)sender
+{
+    [model setDataPeriod:[sender intValue]];
+}
+- (IBAction) bumpDataPeriod:(id)sender
+{
+    int aValue = [model dataPeriod];
+    if([sender intValue]==1)aValue++;
+    else aValue--;
+    [model setDataPeriod:aValue];
+}
+- (IBAction) bumpDataCycle:(id)sender
+{
+    int aValue = [model dataCycle];
+    if([sender intValue]==1)aValue++;
+    else aValue--;
+    [model setDataCycle:aValue];
+}
+
+- (void) controlTextDidChange: (NSNotification *)note {
+    NSTextField * field = [note object];
+    if(field==customTypeField){
+        [model setCustomType:[field stringValue]];
+    }
+}
+
+- (IBAction) customTypeAction:(id)sender
+{
+    [model setCustomType:[sender stringValue]];
+}
+
+- (IBAction) dataTypePopupAction:(id)sender
+{
+    [model setDataType:(int)[sender selectedTag]];
+}
 
 #pragma mark •••Interface Management
 

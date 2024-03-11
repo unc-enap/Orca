@@ -1402,7 +1402,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
         NSInteger ss = [burstcomp second];
         NSInteger dateint = yy + mmo + dd;
         NSInteger timeint = ss + mmi + hh;
-        NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+        NSDateFormatter* dateFormatter = [[[NSDateFormatter alloc] init]autorelease];
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSDate* now = [NSDate date];
         NSString* burstDateString = [dateFormatter stringFromDate:burstdate];
@@ -1474,6 +1474,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
         NSDate* now = [NSDate date];
         NSString* burstDateString = [dateFormatter stringFromDate:burstdate];
         NSString* nowDateString = [dateFormatter stringFromDate:now];
+        [dateFormatter release];
         NSInteger century = ([burstcomp year]/100);
         NSInteger yy = [burstcomp year] - (100*century);
         NSInteger mmo = 100*[burstcomp month];
@@ -1665,7 +1666,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
     revfile =[piperev fileHandleForReading];  //maybe need declare here
     revdata = [revfile readDataToEndOfFile];
     //NSLog(@"part 3\n");
-    revstring = [[NSString alloc] initWithData:revdata encoding:NSUTF8StringEncoding];
+    revstring = [[[NSString alloc] initWithData:revdata encoding:NSUTF8StringEncoding]autorelease];
     //revstring = [revstring stringByAppendingString:@"{\"_id\":\"card8channel0\",\"_rev\":\"37-5b3dc887d615db963492927bfb3fb124\",\"Run\":\"3832\",\"Card\":\"8\",\"Channel\":\"0\",\"Centroids\":\"187.524,324.44,457.7,593.55,727.29,860.39,994.6,1127.99,1262.36,1396.07\",\"Standard_deviation_centroids\":\"1.15036,0.316961,0.299833,0.30639,0.336242,0.317772,0.294958,0.277667,0.333023,0.325655\",\"Fit_parameter 0\":\"-2.43283\",\"Error_param 0\":\"0.643567\",\"Fit_parameter 1\":\"9.61408\",\"Error_param 1\":\"0.0160168\",\"Fit_parameter 2\":\"-0.000254695\",\"Error_param 2\":\"8.90062e-05\",\"Reduced_chisquare\":\"3.91508\"}"]; //Set to this for test
     NSLog(@"early allburstdata is %@\n", allBurstData);
     NSLog(@"early revstring is %@\n", revstring);

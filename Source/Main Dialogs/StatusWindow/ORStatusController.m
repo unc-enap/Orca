@@ -693,6 +693,16 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(StatusController);
     NSString* s = [userInputField stringValue];
     if([s length]){
         NSLog(@"%@\n",s);
+        
+        //also post for database inclusion (requires an attributed string
+        NSAttributedString* s1 = [[[NSAttributedString alloc]
+                                   initWithString:[[[NSString alloc] initWithFormat:s
+                                                                             locale:nil
+                                                                          arguments:nil] autorelease]
+                                   attributes:[NSDictionary dictionaryWithObject:[NSColor blackColor]
+                                                                          forKey:NSForegroundColorAttributeName ]]autorelease];
+
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ORDBPostLogMessage" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:s1 ,@"UserMessage",nil]];
         [userInputField setStringValue:@""];
     }
 }

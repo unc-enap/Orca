@@ -1537,7 +1537,7 @@ static NSString* ORCouchDBModelInConnector 	= @"ORCouchDBModelInConnector";
             NSTimeZone* gmt = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
             [dateFormatter setTimeZone:gmt];
             NSString *lastTimeStamp = [dateFormatter stringFromDate:[NSDate date]];
-
+            [dateFormatter release];
             [runInfo setObject:@"runinfo" forKey:@"_id"];
 			[runInfo setObject:@"runinfo" forKey:@"type"];
 			[runInfo setObject:experimentName forKey:@"experiment"];

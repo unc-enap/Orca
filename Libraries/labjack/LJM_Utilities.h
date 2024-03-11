@@ -347,7 +347,7 @@ void PrintDeviceInfo(int deviceType, int connectionType, int serialNumber,
         packetMaxBytes);
 }
 
-void WaitForUserIfWindows()
+void WaitForUserIfWindows(void)
 {
     #ifdef _WIN32
         #ifndef AUTOMATED_TEST
@@ -356,7 +356,7 @@ void WaitForUserIfWindows()
     #endif
 }
 
-void WaitForUser()
+void WaitForUser(void)
 {
     printf("Press enter to continue\n");
     getchar();
@@ -725,7 +725,7 @@ void EnableLoggingLevel(double logLevel)
         "Setting LJM_DEBUG_LOG_FILE_MAX_SIZE");
 }
 
-unsigned int GetCurrentTimeMS()
+unsigned int GetCurrentTimeMS(void)
 {
     return (int)(LJM_GetHostTick() / 1000L);
 }
@@ -796,7 +796,7 @@ int DoesDeviceHaveWiFi(int handle)
     return 0;
 }
 
-void DisplayDebugLoggingConfigurations()
+void DisplayDebugLoggingConfigurations(void)
 {
     double mode;
     int err = LJM_ReadLibraryConfigS(LJM_DEBUG_LOG_MODE, &mode);
