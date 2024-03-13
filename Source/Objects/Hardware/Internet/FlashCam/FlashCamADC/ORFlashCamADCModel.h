@@ -23,8 +23,9 @@
 #import "ORDataTaker.h"
 #import "ORHWWizard.h"
 #import "ORAdcInfoProviding.h"
-#import "fcio.h"
 #import "ORInFluxDBModel.h"
+
+#import "fcio.h"
 
 #define kMaxFlashCamADCChannels 24
 #define kFlashCamADCChannels 6
@@ -35,6 +36,7 @@
 #define kFlashCamADCDeadRegionLength 5
 #define kFlashCamADCTimeStampLength 4
 #define kFlashCamADCWFHeaderLength 19
+#define kMaxSWTTypes 7
 
 #define kDeadBandTime 5
 
@@ -46,14 +48,17 @@
     int baseline[kMaxFlashCamADCChannels];        // bldac
     int threshold[kMaxFlashCamADCChannels];       // athr
     int adcGain[kMaxFlashCamADCChannels];         // ag
-    float trigGain[kMaxFlashCamADCChannels];      // tgm
+//    float trigGain[kMaxFlashCamADCChannels];      // tgm
     int shapeTime[kMaxFlashCamADCChannels];       // gs
-    int filterType[kMaxFlashCamADCChannels];
-    float flatTopTime[kMaxFlashCamADCChannels];   // gf
+//    int filterType[kMaxFlashCamADCChannels];
+//    float flatTopTime[kMaxFlashCamADCChannels];   // gf
     float poleZeroTime[kMaxFlashCamADCChannels];  // gpz
-    float postTrigger[kMaxFlashCamADCChannels];   // pthr
+//    float postTrigger[kMaxFlashCamADCChannels];   // pthr
     int baselineSlew[kMaxFlashCamADCChannels];    // gbs
-    bool swTrigInclude[kMaxFlashCamADCChannels];
+    int swtInclude[kMaxFlashCamADCChannels];   // LPP Channel Type
+    float swtCalibration[kMaxFlashCamADCChannels];       // LPP Channel Gain if type is analog
+    float swtThreshold[kMaxFlashCamADCChannels];  // LPP Channel Threshold if type is analog
+    int swtShapingTime[kMaxFlashCamADCChannels]; // LPP Channel Shaping time / samples
     int baseBias;                                 // blbias
     int majorityLevel;                            // majl
     int majorityWidth;                            // majw
@@ -94,14 +99,17 @@
 - (int) baseline:(unsigned int)chan;
 - (int) threshold:(unsigned int)chan;
 - (int) adcGain:(unsigned int)chan;
-- (float) trigGain:(unsigned int)chan;
+//- (float) trigGain:(unsigned int)chan;
 - (int) shapeTime:(unsigned int)chan;
-- (int) filterType:(unsigned int)chan;
-- (float) flatTopTime:(unsigned int)chan;
+//- (int) filterType:(unsigned int)chan;
+//- (float) flatTopTime:(unsigned int)chan;
 - (float) poleZeroTime:(unsigned int)chan;
-- (float) postTrigger:(unsigned int)chan;
+//- (float) postTrigger:(unsigned int)chan;
 - (int) baselineSlew:(unsigned int)chan;
-- (bool) swTrigInclude:(unsigned int)chan;
+- (int) swtInclude:(unsigned int)chan;
+- (float) swtCalibration:(unsigned int)chan;
+- (float) swtThreshold:(unsigned int)chan;
+- (int) swtShapingTime:(unsigned int)chan;
 - (int) baseBias;
 - (int) majorityLevel;
 - (int) majorityWidth;
@@ -126,14 +134,17 @@
 - (void) setBaseline:(unsigned int)chan       withValue:(int)base;
 - (void) setThreshold:(unsigned int)chan      withValue:(int)thresh;
 - (void) setADCGain:(unsigned int)chan        withValue:(int)gain;
-- (void) setTrigGain:(unsigned int)chan       withValue:(float)gain;
+//- (void) setTrigGain:(unsigned int)chan       withValue:(float)gain;
 - (void) setShapeTime:(unsigned int)chan      withValue:(int)time;
-- (void) setFilterType:(unsigned int)chan     withValue:(int)type;
-- (void) setFlatTopTime:(unsigned int)chan    withValue:(float)time;
+//- (void) setFilterType:(unsigned int)chan     withValue:(int)type;
+//- (void) setFlatTopTime:(unsigned int)chan    withValue:(float)time;
 - (void) setPoleZeroTime:(unsigned int)chan   withValue:(float)time;
-- (void) setPostTrigger:(unsigned int)chan    withValue:(float)time;
+//- (void) setPostTrigger:(unsigned int)chan    withValue:(float)time;
 - (void) setBaselineSlew:(unsigned int)chan   withValue:(int)slew;
-- (void) setSWTrigInclude:(unsigned int)chan  withValue:(bool)include;
+- (void) setSWTInclude:(unsigned int)chan  withValue:(int)swTrigType;
+- (void) setSWTCalibration:(unsigned int)chan     withValue:(float)swTrigGain;
+- (void) setSWTThreshold:(unsigned int)chan  withValue:(float)swTrigThreshold;
+- (void) setSWTShapingTime:(unsigned int)chan    withValue:(int)swTrigShaping;
 - (void) setBaseBias:(int)bias;
 - (void) setMajorityLevel:(int)level;
 - (void) setMajorityWidth:(int)width;
@@ -213,14 +224,17 @@ extern NSString* ORFlashCamADCModelBaselineChanged;
 extern NSString* ORFlashCamADCModelBaseBiasChanged;
 extern NSString* ORFlashCamADCModelThresholdChanged;
 extern NSString* ORFlashCamADCModelADCGainChanged;
-extern NSString* ORFlashCamADCModelTrigGainChanged;
+//extern NSString* ORFlashCamADCModelTrigGainChanged;
 extern NSString* ORFlashCamADCModelShapeTimeChanged;
-extern NSString* ORFlashCamADCModelFilterTypeChanged;
-extern NSString* ORFlashCamADCModelFlatTopTimeChanged;
+//extern NSString* ORFlashCamADCModelFilterTypeChanged;
+//extern NSString* ORFlashCamADCModelFlatTopTimeChanged;
 extern NSString* ORFlashCamADCModelPoleZeroTimeChanged;
-extern NSString* ORFlashCamADCModelPostTriggerChanged;
+//extern NSString* ORFlashCamADCModelPostTriggerChanged;
 extern NSString* ORFlashCamADCModelBaselineSlewChanged;
-extern NSString* ORFlashCamADCModelSWTrigIncludeChanged;
+extern NSString* ORFlashCamADCModelSWTIncludeChanged;
+extern NSString* ORFlashCamADCModelSWTCalibrationChanged;
+extern NSString* ORFlashCamADCModelSWTThresholdChanged;
+extern NSString* ORFlashCamADCModelSWTShapingTimeChanged;
 extern NSString* ORFlashCamADCModelMajorityLevelChanged;
 extern NSString* ORFlashCamADCModelMajorityWidthChanged;
 extern NSString* ORFlashCamADCModelRateGroupChanged;

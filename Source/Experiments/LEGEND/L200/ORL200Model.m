@@ -1171,15 +1171,15 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
             [aCmd addField: @"trigOutEnable" withBoolean:[hw trigOutEnabled:chan]];
             [aCmd addField: @"threshold"     withLong:[hw threshold:chan]];
             [aCmd addField: @"adcGain"       withLong:[hw adcGain:chan]];
-            [aCmd addField: @"trigGain"      withLong:[hw trigGain:chan]];
+//            [aCmd addField: @"trigGain"      withLong:[hw trigGain:chan]];
             [aCmd addField: @"baseLineDAC"   withLong:[hw baseline:chan]];
             [aCmd addField: @"shapeTime"     withLong:[hw shapeTime:chan]];
-            [aCmd addField: @"filterType"    withLong:[hw filterType:chan]];
-            [aCmd addField: @"flatTopTime"   withLong:[hw flatTopTime:chan]];
+//            [aCmd addField: @"filterType"    withLong:[hw filterType:chan]];
+//            [aCmd addField: @"flatTopTime"   withLong:[hw flatTopTime:chan]];
             [aCmd addField: @"poleZeroTime"  withLong:[hw poleZeroTime:chan]];
-            [aCmd addField: @"postTrigger"   withLong:[hw postTrigger:chan]];
+//            [aCmd addField: @"postTrigger"   withLong:[hw postTrigger:chan]];
             [aCmd addField: @"baselineSlew"  withLong:[hw baselineSlew:chan]];
-            [aCmd addField: @"swTrigInclude" withLong:[hw swTrigInclude:chan]];
+            [aCmd addField: @"swTrigInclude" withLong:[hw swtInclude:chan]];
             
             //card level settings
             [aCmd addField: @"promSlot"       withLong:[hw promSlot]];

@@ -25,6 +25,7 @@
 #import "ORDataFileModel.h"
 #import "fcio.h"
 #import "ANSIEscapeHelper.h"
+#import "lpp.h"
 
 #define kFlashCamConfigBufferLength 64
 #define kFlashCamStatusBufferLength 256
@@ -43,6 +44,7 @@
     FCIOStateReader* reader;
     int readerRecordCount;
     int bufferedRecords;
+    PostProcessor* postprocessor;
     uint32_t  configId;
     uint32_t* configBuffer;
     uint32_t  configBufferIndex;
@@ -70,6 +72,7 @@
     ORTimeRate* eventRateHistory;
     ORTimeRate* deadTimeHistory;
     NSTask*     runTask;            //added. MAH 9/17/22
+    NSThread* readoutThread;
     ORReadOutList* readOutList;
     NSArray* dataTakers;
     NSMutableArray* readOutArgs;
@@ -77,6 +80,7 @@
     NSMutableArray* cardMap;
     bool listenerRemoteIsFile;
     int fcio_last_tag;
+    bool enablePostProcessor;
     ORDataPacket* dataPacketForThread;
     NSString* dataFileName;
     NSUInteger fclogIndex;
@@ -96,6 +100,29 @@
     //new
     NSDateFormatter*  logDateFormatter;
     ANSIEscapeHelper* ansieHelper;
+//     LPP Internal Parser stuff
+    int nlppHWChannels;
+    int* lppHWChannelMap;
+    unsigned short* lppHWPrescalingThresholds;
+
+    int nlppPSChannels;
+    int* lppPSChannelMap;
+    float* lppPSChannelGains;
+    float* lppPSChannelThresholds;
+    int* lppPSChannelShapings;
+    float* lppPSChannelLowPass;
+    
+    int nlppFlagChannels;
+    int* lppFlagChannelMap;
+    int* lppFlagChannelThresholds;
+    
+    int lppPulserChannel;
+    int lppPulserChannelThreshold;
+    int lppBaselineChannel;
+    int lppBaselineChannelThreshold;
+    int lppMuonChannel;
+    int lppMuonChannelThreshold;
+    bool debug;
 }
 
 #pragma mark •••Initialization
@@ -234,3 +261,4 @@ extern NSString* ORFlashCamListenerModelStatusBufferFull;
 extern NSString* ORFlashCamListenerModelFCLogChanged;
 extern NSString* ORFlashCamListenerModelFCRunLogChanged;
 extern NSString* ORFlashCamListenerModelFCRunLogFlushed;
+extern NSString* ORFlashCamListenerModelLPPConfigChanged;
