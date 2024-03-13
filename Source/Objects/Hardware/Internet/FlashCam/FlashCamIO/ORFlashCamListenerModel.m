@@ -108,6 +108,7 @@ NSString* ORFlashCamListenerModelLPPConfigChanged    = @"ORFlashCamListenerModel
     [self setConfigParam:@"lppPSPreScalingRate"  withValue:[NSNumber numberWithDouble:0.0]];
     [self setConfigParam:@"lppPSMuonCoincidence"  withValue:[NSNumber numberWithBool:NO]];
     [self setConfigParam:@"lppPSSumWindowStart"  withValue:[NSNumber numberWithInt:-1]];
+    [self setConfigParam:@"lppPSSumWindowStop"  withValue:[NSNumber numberWithInt:-1]];
     [self setConfigParam:@"lppPSSumWindowSize"  withValue:[NSNumber numberWithInt:-1]];
     [self setConfigParam:@"lppPSCoincidenceThreshold"  withValue:[NSNumber numberWithDouble:20.0]];
     [self setConfigParam:@"lppPSAbsoluteThreshold"  withValue:[NSNumber numberWithDouble:1200.0]];
@@ -491,6 +492,8 @@ NSString* ORFlashCamListenerModelLPPConfigChanged    = @"ORFlashCamListenerModel
     else if([p isEqualToString:@"lppPSMuonCoincidence"])
         return [NSNumber numberWithBool:[[configParams objectForKey:p] boolValue]];
     else if([p isEqualToString:@"lppPSSumWindowStart"])
+        return [NSNumber numberWithInt:[[configParams objectForKey:p] intValue]];
+    else if([p isEqualToString:@"lppPSSumWindowStop"])
         return [NSNumber numberWithInt:[[configParams objectForKey:p] intValue]];
     else if([p isEqualToString:@"lppPSSumWindowSize"])
         return [NSNumber numberWithInt:[[configParams objectForKey:p] intValue]];
@@ -937,6 +940,8 @@ NSString* ORFlashCamListenerModelLPPConfigChanged    = @"ORFlashCamListenerModel
         [configParams setObject:[NSNumber numberWithBool:[v boolValue]] forKey:p];
     else if([p isEqualToString:@"lppPSSumWindowStart"])
         [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0,[v intValue]),32768)] forKey:p];
+    else if([p isEqualToString:@"lppPSSumWindowStop"])
+        [configParams setObject:[NSNumber numberWithInt:MIN(MAX(-1,[v intValue]),32768)] forKey:p];
     else if([p isEqualToString:@"lppPSSumWindowSize"])
         [configParams setObject:[NSNumber numberWithInt:MIN(MAX(1,[v intValue]),32767)] forKey:p];
     else if([p isEqualToString:@"lppPSCoincidenceThreshold"])
@@ -1281,7 +1286,7 @@ NSString* ORFlashCamListenerModelLPPConfigChanged    = @"ORFlashCamListenerModel
                                   [[self configParam:@"lppPSPostWindow"] intValue],
                                   [[self configParam:@"lppPSSumWindowSize"] intValue],
                                   [[self configParam:@"lppPSSumWindowStart"] intValue],
-                                  [[self configParam:@"lppPSSumWindowStart"] intValue] + [[self configParam:@"lppPSSumWindowSize"] intValue],
+                                  [[self configParam:@"lppPSSumWindowStop"] intValue],
                                   [[self configParam:@"lppPSAbsoluteThreshold"] floatValue],
                                   [[self configParam:@"lppPSCoincidenceThreshold"] floatValue],
                                   [[self configParam:@"lppPSPreScalingRate"] floatValue],

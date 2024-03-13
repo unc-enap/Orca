@@ -971,9 +971,10 @@
         }
         else if(view == listenerLPPPeakSumParametersView){
             if(col == 1)      return [l configParam:@"lppPSSumWindowStart"];
-            else if(col == 2) return [l configParam:@"lppPSSumWindowSize"];
-            else if(col == 3) return [l configParam:@"lppPSCoincidenceThreshold"];
-            else if(col == 4) return [l configParam:@"lppPSAbsoluteThreshold"];
+            else if(col == 2) return [l configParam:@"lppPSSumWindowStop"];
+            else if(col == 3) return [l configParam:@"lppPSSumWindowSize"];
+            else if(col == 4) return [l configParam:@"lppPSCoincidenceThreshold"];
+            else if(col == 5) return [l configParam:@"lppPSAbsoluteThreshold"];
         }
     }
     return nil;
@@ -1109,11 +1110,13 @@
         else if(view == listenerLPPPeakSumParametersView){
             if(col == 1)      [l setConfigParam:@"lppPSSumWindowStart"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
-            else if(col == 2) [l setConfigParam:@"lppPSSumWindowSize"
+            else if(col == 2) [l setConfigParam:@"lppPSSumWindowStop"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
-            else if(col == 3) [l setConfigParam:@"lppPSCoincidenceThreshold"
+            else if(col == 3) [l setConfigParam:@"lppPSSumWindowSize"
+                                      withValue:[NSNumber numberWithInt:[object intValue]]];
+            else if(col == 4) [l setConfigParam:@"lppPSCoincidenceThreshold"
                                       withValue:[NSNumber numberWithDouble:[object doubleValue]]];
-            else if(col == 4) [l setConfigParam:@"lppPSAbsoluteThreshold"
+            else if(col == 5) [l setConfigParam:@"lppPSAbsoluteThreshold"
                                       withValue:[NSNumber numberWithDouble:[object doubleValue]]];
         }
     }
