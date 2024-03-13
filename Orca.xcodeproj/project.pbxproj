@@ -3511,6 +3511,16 @@
 		A8175F8B220D8D07003AC7E5 /* ADEIControl.nib in Resources */ = {isa = PBXBuildFile; fileRef = A8175F82220D8D06003AC7E5 /* ADEIControl.nib */; };
 		A8175F8C220D8D07003AC7E5 /* ORADEIControlController.h in Headers */ = {isa = PBXBuildFile; fileRef = A8175F83220D8D06003AC7E5 /* ORADEIControlController.h */; };
 		A86253F3221217E7005D26EC /* ORADEIControlDefs.h in Headers */ = {isa = PBXBuildFile; fileRef = A86253F2221217E6005D26EC /* ORADEIControlDefs.h */; };
+		A8E6694D2A702F2800A9775A /* dsp.h in Headers */ = {isa = PBXBuildFile; fileRef = A8E669412A702F2500A9775A /* dsp.h */; };
+		A8E6694E2A702F2800A9775A /* lpp_state.h in Headers */ = {isa = PBXBuildFile; fileRef = A8E669422A702F2500A9775A /* lpp_state.h */; };
+		A8E6694F2A702F2800A9775A /* lpp.c in Sources */ = {isa = PBXBuildFile; fileRef = A8E669432A702F2600A9775A /* lpp.c */; };
+		A8E669502A702F2800A9775A /* lpp_buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = A8E669442A702F2600A9775A /* lpp_buffer.c */; };
+		A8E669512A702F2800A9775A /* lpp.h in Headers */ = {isa = PBXBuildFile; fileRef = A8E669452A702F2600A9775A /* lpp.h */; };
+		A8E669522A702F2800A9775A /* l200_channelmaps.h in Headers */ = {isa = PBXBuildFile; fileRef = A8E669462A702F2600A9775A /* l200_channelmaps.h */; };
+		A8E669542A702F2800A9775A /* lpp_buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = A8E669482A702F2700A9775A /* lpp_buffer.h */; };
+		A8E669562A702F2800A9775A /* dsp.c in Sources */ = {isa = PBXBuildFile; fileRef = A8E6694A2A702F2800A9775A /* dsp.c */; };
+		A8E669572A702F2800A9775A /* timestamps.c in Sources */ = {isa = PBXBuildFile; fileRef = A8E6694B2A702F2800A9775A /* timestamps.c */; };
+		A8E669582A702F2800A9775A /* timestamps.h in Headers */ = {isa = PBXBuildFile; fileRef = A8E6694C2A702F2800A9775A /* timestamps.h */; };
 		A8E6695B2A710BB200A9775A /* time_utils.c in Sources */ = {isa = PBXBuildFile; fileRef = A8E669592A710BB200A9775A /* time_utils.c */; };
 		A8E6695C2A710BB200A9775A /* time_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = A8E6695A2A710BB200A9775A /* time_utils.h */; };
 		B322A309146D64D000491347 /* ORTcpIpProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = B322A308146D64D000491347 /* ORTcpIpProtocol.h */; };
@@ -7452,6 +7462,16 @@
 		A8175F82220D8D06003AC7E5 /* ADEIControl.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = ADEIControl.nib; sourceTree = "<group>"; };
 		A8175F83220D8D06003AC7E5 /* ORADEIControlController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORADEIControlController.h; sourceTree = "<group>"; };
 		A86253F2221217E6005D26EC /* ORADEIControlDefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORADEIControlDefs.h; sourceTree = "<group>"; };
+		A8E669412A702F2500A9775A /* dsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dsp.h; sourceTree = "<group>"; };
+		A8E669422A702F2500A9775A /* lpp_state.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lpp_state.h; sourceTree = "<group>"; };
+		A8E669432A702F2600A9775A /* lpp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lpp.c; sourceTree = "<group>"; };
+		A8E669442A702F2600A9775A /* lpp_buffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lpp_buffer.c; sourceTree = "<group>"; };
+		A8E669452A702F2600A9775A /* lpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lpp.h; sourceTree = "<group>"; };
+		A8E669462A702F2600A9775A /* l200_channelmaps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = l200_channelmaps.h; sourceTree = "<group>"; };
+		A8E669482A702F2700A9775A /* lpp_buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lpp_buffer.h; sourceTree = "<group>"; };
+		A8E6694A2A702F2800A9775A /* dsp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dsp.c; sourceTree = "<group>"; };
+		A8E6694B2A702F2800A9775A /* timestamps.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = timestamps.c; sourceTree = "<group>"; };
+		A8E6694C2A702F2800A9775A /* timestamps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timestamps.h; sourceTree = "<group>"; };
 		A8E669592A710BB200A9775A /* time_utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = time_utils.c; sourceTree = "<group>"; };
 		A8E6695A2A710BB200A9775A /* time_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = time_utils.h; sourceTree = "<group>"; };
 		B322A308146D64D000491347 /* ORTcpIpProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORTcpIpProtocol.h; sourceTree = "<group>"; };
@@ -15225,6 +15245,23 @@
 			path = fcio;
 			sourceTree = "<group>";
 		};
+		A8E669402A702EC000A9775A /* lpp */ = {
+			isa = PBXGroup;
+			children = (
+				A8E6694A2A702F2800A9775A /* dsp.c */,
+				A8E669412A702F2500A9775A /* dsp.h */,
+				A8E669462A702F2600A9775A /* l200_channelmaps.h */,
+				A8E669442A702F2600A9775A /* lpp_buffer.c */,
+				A8E669482A702F2700A9775A /* lpp_buffer.h */,
+				A8E669422A702F2500A9775A /* lpp_state.h */,
+				A8E669432A702F2600A9775A /* lpp.c */,
+				A8E669452A702F2600A9775A /* lpp.h */,
+				A8E6694B2A702F2800A9775A /* timestamps.c */,
+				A8E6694C2A702F2800A9775A /* timestamps.h */,
+			);
+			path = lpp;
+			sourceTree = "<group>";
+		};
 		B3808A931700F85C0019C27D /* CouchDBListener */ = {
 			isa = PBXGroup;
 			children = (
@@ -15367,6 +15404,7 @@
 		E63085C52681036B00687A6D /* FlashCamIO */ = {
 			isa = PBXGroup;
 			children = (
+				A8E669402A702EC000A9775A /* lpp */,
 				E63085D12681057800687A6D /* ORFlashCamListenerModel.h */,
 				E63085D22681057800687A6D /* ORFlashCamListenerModel.m */,
 				E684347229AFB5E5009067E2 /* ORFlashCamListenerController.h */,
@@ -16415,6 +16453,7 @@
 				84EB2DE31E32990D00C273AA /* ORLabJackU6Decoders.h in Headers */,
 				2A4553E308BCE9A3004BB15E /* ORTDC3377Controller.h in Headers */,
 				2A4553E508BCE9A3004BB15E /* ORTDC3377Decoders.h in Headers */,
+				A8E6694D2A702F2800A9775A /* dsp.h in Headers */,
 				2A4553E708BCE9A3004BB15E /* ORTDC3377Model.h in Headers */,
 				2A178E9E08DB3D91001D78BC /* ORCard.h in Headers */,
 				2A178EA008DB3D91001D78BC /* ORCrate.h in Headers */,
@@ -16437,6 +16476,7 @@
 				849DE3F108F597410052AFC6 /* ORK3655Model.h in Headers */,
 				84CD6BFB1A1E34D90089026F /* ORGretina4AModel.h in Headers */,
 				849DE73708F6F1FA0052AFC6 /* ORMacController.h in Headers */,
+				A8E669582A702F2800A9775A /* timestamps.h in Headers */,
 				842FCCB3197849C700B89723 /* OREHS8260pDecoders.h in Headers */,
 				849DE73908F6F1FA0052AFC6 /* ORMacModel.h in Headers */,
 				8494F8D41C440E2C00A35F8B /* ORMJDDewarScaleModel.h in Headers */,
@@ -16517,6 +16557,7 @@
 				842AECCB09538066009550DE /* ORCRGetterModel.h in Headers */,
 				842AECCD09538066009550DE /* ORCRGetterController.h in Headers */,
 				84DF474A0962140800ABE071 /* ORDataExplorerController.h in Headers */,
+				A8E669512A702F2800A9775A /* lpp.h in Headers */,
 				848648820975C1F6001C459D /* ORProcessInConnector.h in Headers */,
 				362020291CBD390A0089296E /* WPXMLRPCDecoderDelegate.h in Headers */,
 				84D613DF2017A9630038D662 /* ORTristanFLTDecoder.h in Headers */,
@@ -16529,6 +16570,7 @@
 				84B63CE609783832005B20A5 /* ORPushButtonModel.h in Headers */,
 				846F4B95098FDA7B00BF0031 /* ORRunVetoController.h in Headers */,
 				846F4B97098FDA7B00BF0031 /* ORRunVetoModel.h in Headers */,
+				A8E669542A702F2800A9775A /* lpp_buffer.h in Headers */,
 				84D29FE11843EAC800D320DB /* OROpSeqStep.h in Headers */,
 				84B7FBDD0993CF7300255787 /* ORScaleTask.h in Headers */,
 				84C12E780993E3FA006F2901 /* ORProcessHistoryController.h in Headers */,
@@ -16796,6 +16838,7 @@
 				842360B70ED1F4D800BECB64 /* ORSNOConstants.h in Headers */,
 				842376910ED46B7A00BECB64 /* OROrderedObjManager.h in Headers */,
 				8423770A0ED4710700BECB64 /* OROrderedObjHolding.h in Headers */,
+				A8E669522A702F2800A9775A /* l200_channelmaps.h in Headers */,
 				84EC7CCF0ED718570057C5D8 /* SynthesizeSingleton.h in Headers */,
 				84FAD2B30EE46AF500746B91 /* ORRunScriptModel.h in Headers */,
 				84FAF2910EE8246200746B91 /* SBC_Job.h in Headers */,
@@ -16904,6 +16947,7 @@
 				84BC88E00F9CDB5600336DF1 /* ORSerialPortController.h in Headers */,
 				84BC88EE0F9CDD5B00336DF1 /* ORSerialPortModel.h in Headers */,
 				840823CC0F9F83DC007E6061 /* ORFlippedView.h in Headers */,
+				A8E6694E2A702F2800A9775A /* lpp_state.h in Headers */,
 				84D2586C0FA7340B00626276 /* ORMotionNodeController.h in Headers */,
 				84D2586E0FA7340B00626276 /* ORMotionNodeModel.h in Headers */,
 				84CC16D00FAF157000CEE642 /* ORMCA927Controller.h in Headers */,
@@ -18807,6 +18851,7 @@
 				842A65BC0700E210007536B6 /* ORHPPulserDecoders.m in Sources */,
 				8427BF78294170E800C1C70A /* ORInFluxDBModel.m in Sources */,
 				84978A2A0701F02000B7887E /* ORDataGenDecoders.m in Sources */,
+				A8E669572A702F2800A9775A /* timestamps.c in Sources */,
 				84978B4D0702190100B7887E /* ORDataTypeAssigner.m in Sources */,
 				84662A69070A3249001CDA7E /* BiStateView.m in Sources */,
 				843A78200711B10E00B9FAA1 /* NSDictionary+Extensions.m in Sources */,
@@ -19628,6 +19673,7 @@
 				84B6CD4C14B37E9700386BE1 /* ORRGA300Model.m in Sources */,
 				840D0ECD14BBC56A008FAC82 /* SNOMonitoredHardware.m in Sources */,
 				840D0ED214BBC56A008FAC82 /* SNOSlowControl.m in Sources */,
+				A8E669562A702F2800A9775A /* dsp.c in Sources */,
 				840D0ED614BBC5DD008FAC82 /* SNODetectorView.m in Sources */,
 				8402B5B614C708A1007999C1 /* ORMJDPreAmpController.m in Sources */,
 				543BF2061E5481C3003E4582 /* ORHVcRIOController.m in Sources */,
@@ -19661,6 +19707,7 @@
 				8499A7591518D85800CD7AAC /* ORCP8CryopumpController.m in Sources */,
 				84E9C356194F42140028B7E2 /* ORPacFPModel.m in Sources */,
 				0F16E35A1C493AD7003C9EC9 /* sds.c in Sources */,
+				A8E6694F2A702F2800A9775A /* lpp.c in Sources */,
 				E6C2E7F223A9845700673DB8 /* ORFlashCamADCModel.m in Sources */,
 				8499A75B1518D85800CD7AAC /* ORCP8CryopumpDecoders.m in Sources */,
 				8499A75D1518D85800CD7AAC /* ORCP8CryopumpModel.m in Sources */,
@@ -19673,6 +19720,7 @@
 				8415E587152C7C560092C975 /* ORVacuumParts.m in Sources */,
 				8415EB64152DF0970092C975 /* ORAdcProcessorController.m in Sources */,
 				E6653F9623A7FA9100A53678 /* ORFlashCamCard.m in Sources */,
+				A8E669502A702F2800A9775A /* lpp_buffer.c in Sources */,
 				8415EB66152DF0970092C975 /* ORAdcProcessorModel.m in Sources */,
 				8491303415334EAA00597004 /* ORBitProcessorController.m in Sources */,
 				8491303615334EAA00597004 /* ORBitProcessorModel.m in Sources */,

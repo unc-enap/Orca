@@ -53,14 +53,14 @@
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-	<key>CFBundleSignature</key>
-	<string>ORCA</string>
 	<key>CFBundleShortVersionString</key>
 	<string>12.0h</string>
+	<key>CFBundleSignature</key>
+	<string>ORCA</string>
 	<key>CFfile://localhost/Users/markhowe/Dev/Orca/Source/Objects/Misc%20Objects/SQL/BundleGetInfoString</key>
 	<string>Orca 12, Copyright ©2014 Mark Howe Physics Dept, University of North Carolina</string>
 	<key>LSMinimumSystemVersion</key>
-	<string>10.6</string>
+	<string>10.15</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
