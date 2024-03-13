@@ -27,7 +27,7 @@
     IBOutlet NSTextField* usernameTextField;
     IBOutlet NSTableView* ethInterfaceView;
     IBOutlet NSButton* addEthInterfaceButton;
-    IBOutlet NSButton* removeEthInterfaeButton;
+    IBOutlet NSButton* removeEthInterfaceButton;
     IBOutlet NSButton* sendPingButton;
     IBOutlet NSTableView* listenerView;    
     IBOutlet NSTableView* listenerGPSView;
@@ -38,6 +38,10 @@
     IBOutlet NSTableView* listenerReadoutView;
     IBOutlet NSTableView* listenerExtraFlagsView;
     IBOutlet NSTableView* listenerExtraFilesView;
+    IBOutlet NSTableView* listenerLPPGeneralView;
+    IBOutlet NSTableView* listenerLPPHWMultiplicityView;
+    IBOutlet NSTableView* listenerLPPPeakSumTriggerView;
+    IBOutlet NSTableView* listenerLPPPeakSumParametersView;
     IBOutlet NSButton* updateIPButton;
     IBOutlet NSButton* listInterfaceButton;
     IBOutlet NSTableView* monitorView;

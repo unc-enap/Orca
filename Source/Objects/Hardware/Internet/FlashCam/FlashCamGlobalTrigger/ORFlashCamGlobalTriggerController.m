@@ -126,7 +126,9 @@
 
 - (void) settingsLock:(bool)lock
 {
-    lock |= [gOrcaGlobals runInProgress] || [gSecurity isLocked:ORFlashCamCardSettingsLock];
+//    lock |= [gOrcaGlobals runInProgress] || [gSecurity isLocked:ORFlashCamCardSettingsLock];
+    bool runInProgress = [[ORGlobal sharedGlobal] runInProgress];
+    lock |= runInProgress || [gSecurity isLocked:ORFlashCamCardSettingsLock];
     [super settingsLock:lock];
     [majorityLevelPU setEnabled:!lock];
     [majorityWidthTextField setEnabled:!lock];

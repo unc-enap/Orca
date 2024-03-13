@@ -56,6 +56,7 @@
     [self updateRmIfaceFromListenerIfacePUButton];
     [self updateRmIfaceFromListenerListenerPUButton];
     if([model localMode]) [fcSourcePathButton setTitle:@"Set Path to FC Readout Source:"];
+    if([model localMode]) [fcSourcePathButton setTitle:@"Set Path to FC Readout Source:"];
     else [fcSourcePathButton setTitle:@"Get Path to FC Readout Source:"];
 }
 
@@ -183,6 +184,22 @@
                      selector : @selector(tableViewSelectionDidChange:)
                          name : NSTableViewSelectionDidChangeNotification
                        object : monitorView];
+    [notifyCenter addObserver : self
+                     selector : @selector(tableViewSelectionDidChange:)
+                         name : NSTableViewSelectionDidChangeNotification
+                       object : listenerLPPGeneralView];
+    [notifyCenter addObserver : self
+                     selector : @selector(tableViewSelectionDidChange:)
+                         name : NSTableViewSelectionDidChangeNotification
+                       object : listenerLPPHWMultiplicityView];
+    [notifyCenter addObserver : self
+                     selector : @selector(tableViewSelectionDidChange:)
+                         name : NSTableViewSelectionDidChangeNotification
+                       object : listenerLPPPeakSumTriggerView];
+    [notifyCenter addObserver : self
+                     selector : @selector(tableViewSelectionDidChange:)
+                         name : NSTableViewSelectionDidChangeNotification
+                       object : listenerLPPPeakSumParametersView];
     [notifyCenter addObserver : self
                      selector : @selector(groupObjectAdded:)
                          name : ORGroupObjectsAdded
@@ -349,6 +366,10 @@
     [listenerReadoutView    reloadData];
     [listenerExtraFilesView reloadData];
     [listenerExtraFlagsView reloadData];
+    [listenerLPPGeneralView reloadData];
+    [listenerLPPHWMultiplicityView reloadData];
+    [listenerLPPPeakSumTriggerView reloadData];
+    [listenerLPPPeakSumParametersView reloadData];
 }
 
 - (void) pingStart:(NSNotification*)note
@@ -410,6 +431,10 @@
     [listenerTrigView    selectRowIndexes:indexSet byExtendingSelection:NO];
     [listenerBaseView    selectRowIndexes:indexSet byExtendingSelection:NO];
     [listenerReadoutView selectRowIndexes:indexSet byExtendingSelection:NO];
+    [listenerLPPGeneralView selectRowIndexes:indexSet byExtendingSelection:NO];
+    [listenerLPPHWMultiplicityView selectRowIndexes:indexSet byExtendingSelection:NO];
+    [listenerLPPPeakSumTriggerView selectRowIndexes:indexSet byExtendingSelection:NO];
+    [listenerLPPPeakSumParametersView selectRowIndexes:indexSet byExtendingSelection:NO];
     [ethInterfaceView reloadData];
     [monitorView reloadData];
     [self updateAddIfaceToListenerListenerPUButton];
@@ -431,6 +456,10 @@
     [listenerTrigView    selectRowIndexes:indexSet byExtendingSelection:NO];
     [listenerBaseView    selectRowIndexes:indexSet byExtendingSelection:NO];
     [listenerReadoutView selectRowIndexes:indexSet byExtendingSelection:NO];
+    [listenerLPPGeneralView selectRowIndexes:indexSet byExtendingSelection:NO];
+    [listenerLPPHWMultiplicityView selectRowIndexes:indexSet byExtendingSelection:NO];
+    [listenerLPPPeakSumTriggerView selectRowIndexes:indexSet byExtendingSelection:NO];
+    [listenerLPPPeakSumParametersView selectRowIndexes:indexSet byExtendingSelection:NO];
     [ethInterfaceView reloadData];
     [monitorView reloadData];
     [self updateAddIfaceToListenerListenerPUButton];
@@ -608,7 +637,7 @@
     [usernameTextField         setEnabled:!lock];
     [ethInterfaceView          setEnabled:!lock];
     [addEthInterfaceButton     setEnabled:!lock];
-    [removeEthInterfaeButton   setEnabled:!lock];
+    [removeEthInterfaceButton   setEnabled:!lock];
     [sendPingButton            setEnabled:!lock];
     [listenerView              setEnabled:!lock];
     [listenerGPSView           setEnabled:!lock];
@@ -619,6 +648,10 @@
     [listenerReadoutView       setEnabled:!lock];
     [listenerExtraFilesView    setEnabled:!lock];
     [listenerExtraFlagsView    setEnabled:!lock];
+    [listenerLPPGeneralView    setEnabled:!lock];
+    [listenerLPPHWMultiplicityView    setEnabled:!lock];
+    [listenerLPPPeakSumTriggerView    setEnabled:!lock];
+    [listenerLPPPeakSumParametersView    setEnabled:!lock];
     [addIfaceToListenerButton  setEnabled:!lock];
     [rmIfaceFromListenerButton setEnabled:!lock];
     [fcSourcePathButton        setEnabled:!lock];
@@ -741,7 +774,7 @@
     else [rmIfaceFromListenerRmButton setEnabled:NO];
 }
 
-- (IBAction) rmIfaceFromListenerListenerAction:(id)senmder
+- (IBAction) rmIfaceFromListenerListenerAction:(id)sender
 {
     [rmIfaceFromListenerListenerPUButton setTitle:[rmIfaceFromListenerListenerPUButton titleOfSelectedItem]];
     [self updateRmIfaceFromListenerIfacePUButton];
@@ -811,7 +844,7 @@
 {
     if([note object] == ethInterfaceView || note == nil){
         NSInteger index = [ethInterfaceView selectedRow];
-        [removeEthInterfaeButton setEnabled:index>=0];
+        [removeEthInterfaceButton setEnabled:index>=0];
     }
 }
 
@@ -832,7 +865,12 @@
     else if(view == listenerView        || view == listenerGPSView  || view == listenerDAQView  ||
             view == listenerWFView      || view == listenerTrigView || view == listenerBaseView ||
             view == listenerReadoutView || view == monitorView      || view == listenerExtraFilesView ||
-            view == listenerExtraFlagsView){
+            view == listenerExtraFlagsView
+            || view == listenerLPPGeneralView
+            || view == listenerLPPHWMultiplicityView
+            || view == listenerLPPPeakSumTriggerView
+            || view == listenerLPPPeakSumParametersView
+            ){
         ORFlashCamListenerModel* l = [model getListenerAtIndex:(int)row];
         if(!l) return nil;
         if(col == 0){
@@ -910,6 +948,32 @@
             else if(col == 5) return [NSNumber numberWithDouble:[l rateHz]];
             else if(col == 6) return [NSNumber numberWithDouble:[l curDead]];
             else if(col == 7) return [NSNumber numberWithInt:(int)[l bufferedRecords]];
+        }
+        else if(view == listenerLPPGeneralView){
+            if(col == 1)      return [l configParam:@"lppEnabled"];
+            if(col == 2)      return [l configParam:@"lppHWEnabled"];
+            if(col == 3)      return [l configParam:@"lppPSEnabled"];
+            else if(col == 4) return [l configParam:@"lppWriteNonTriggered"];
+            else if(col == 5) return [l configParam:@"lppLogTime"];
+            else if(col == 6) return [l configParam:@"lppLogLevel"];
+        }
+        else if(view == listenerLPPHWMultiplicityView){
+            if(col == 1)      return [l configParam:@"lppHWMajThreshold"];
+            else if(col == 2) return [l configParam:@"lppHWPreScalingRate"];
+//            else if(col == 3) return [l configParam:@"lppHWPreScalingThreshold"];
+//            else if(col == 3) return [l configParam:@"lppHWCheckAll"];
+        }
+        else if(view == listenerLPPPeakSumTriggerView){
+            if(col == 1)      return [l configParam:@"lppPSPreWindow"];
+            else if(col == 2) return [l configParam:@"lppPSPostWindow"];
+            else if(col == 3) return [l configParam:@"lppPSPreScalingRate"];
+            else if(col == 4) return [l configParam:@"lppPSMuonCoincidence"];
+        }
+        else if(view == listenerLPPPeakSumParametersView){
+            if(col == 1)      return [l configParam:@"lppPSSumWindowStart"];
+            else if(col == 2) return [l configParam:@"lppPSSumWindowSize"];
+            else if(col == 3) return [l configParam:@"lppPSCoincidenceThreshold"];
+            else if(col == 4) return [l configParam:@"lppPSAbsoluteThreshold"];
         }
     }
     return nil;
@@ -1012,6 +1076,46 @@
             else if(col == 6) [l setConfigParam:@"evPerRequest"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
         }
+        else if(view == listenerLPPGeneralView){
+            if(col == 1)      [l setConfigParam:@"lppEnabled"
+                                      withValue:[NSNumber numberWithBool:[object boolValue]]];
+            else if(col == 2)      [l setConfigParam:@"lppHWEnabled"
+                                      withValue:[NSNumber numberWithBool:[object boolValue]]];
+            else if(col == 3)      [l setConfigParam:@"lppPSEnabled"
+                                      withValue:[NSNumber numberWithBool:[object boolValue]]];
+            else if(col == 4) [l setConfigParam:@"lppWriteNonTriggered"
+                                      withValue:[NSNumber numberWithBool:[object boolValue]]];
+            else if(col == 5) [l setConfigParam:@"lppLogTime"
+                                      withValue:[NSNumber numberWithDouble:[object doubleValue]]];
+            else if(col == 6) [l setConfigParam:@"lppLogLevel"
+                                      withValue:[NSNumber numberWithInt:[object intValue]]];
+        }
+        else if(view == listenerLPPHWMultiplicityView){
+            if(col == 1)      [l setConfigParam:@"lppHWMajThreshold"
+                                      withValue:[NSNumber numberWithInt:[object intValue]]];
+            else if(col == 2) [l setConfigParam:@"lppHWPreScalingRate"
+                                      withValue:[NSNumber numberWithDouble:[object doubleValue]]];
+        }
+        else if(view == listenerLPPPeakSumTriggerView){
+            if(col == 1)      [l setConfigParam:@"lppPSPreWindow"
+                                      withValue:[NSNumber numberWithInt:[object intValue]]];
+            else if(col == 2) [l setConfigParam:@"lppPSPostWindow"
+                                      withValue:[NSNumber numberWithInt:[object intValue]]];
+            else if(col == 3) [l setConfigParam:@"lppPSPreScalingRate"
+                                      withValue:[NSNumber numberWithDouble:[object doubleValue]]];
+            else if(col == 4) [l setConfigParam:@"lppPSMuonCoincidence"
+                                      withValue:[NSNumber numberWithBool:[object boolValue]]];
+        }
+        else if(view == listenerLPPPeakSumParametersView){
+            if(col == 1)      [l setConfigParam:@"lppPSSumWindowStart"
+                                      withValue:[NSNumber numberWithInt:[object intValue]]];
+            else if(col == 2) [l setConfigParam:@"lppPSSumWindowSize"
+                                      withValue:[NSNumber numberWithInt:[object intValue]]];
+            else if(col == 3) [l setConfigParam:@"lppPSCoincidenceThreshold"
+                                      withValue:[NSNumber numberWithDouble:[object doubleValue]]];
+            else if(col == 4) [l setConfigParam:@"lppPSAbsoluteThreshold"
+                                      withValue:[NSNumber numberWithDouble:[object doubleValue]]];
+        }
     }
 }
 
@@ -1028,6 +1132,10 @@
     else if(view == listenerExtraFlagsView) return [model listenerCount];
     else if(view == listenerReadoutView) return [model listenerCount];
     else if(view == monitorView)         return [model listenerCount];
+    else if(view == listenerLPPGeneralView) return [model listenerCount];
+    else if(view == listenerLPPHWMultiplicityView) return [model listenerCount];
+    else if(view == listenerLPPPeakSumTriggerView) return [model listenerCount];
+    else if(view == listenerLPPPeakSumParametersView) return [model listenerCount];
     else return 0;
 }
 
