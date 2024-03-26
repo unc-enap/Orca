@@ -29,11 +29,11 @@
                 <outlet property="listenerExtraFilesView" destination="WZQ-lC-LTw" id="G1G-A3-q5w"/>
                 <outlet property="listenerExtraFlagsView" destination="iZ4-gN-tkV" id="jM5-PM-Iqw"/>
                 <outlet property="listenerGPSView" destination="M1E-kW-7rS" id="4e0-XE-hxz"/>
-                <outlet property="listenerLPPGeneralView" destination="vXI-fk-aFm" id="oak-NK-Ttu"/>
-                <outlet property="listenerLPPHWMultiplicityView" destination="BuA-C2-187" id="d0d-UJ-u60"/>
-                <outlet property="listenerLPPPeakSumParametersView" destination="6bH-U5-i1j" id="v7a-Jd-VaB"/>
-                <outlet property="listenerLPPPeakSumTriggerView" destination="bdc-LS-rhx" id="paS-jL-EMr"/>
                 <outlet property="listenerReadoutView" destination="zvr-u1-4Ng" id="wlO-ks-cQv"/>
+                <outlet property="listenerSWTGeneralView" destination="vXI-fk-aFm" id="oak-NK-Ttu"/>
+                <outlet property="listenerSWTHWMultiplicityView" destination="BuA-C2-187" id="d0d-UJ-u60"/>
+                <outlet property="listenerSWTPeakSumParametersView" destination="6bH-U5-i1j" id="v7a-Jd-VaB"/>
+                <outlet property="listenerSWTPeakSumTriggerView" destination="bdc-LS-rhx" id="paS-jL-EMr"/>
                 <outlet property="listenerTrigView" destination="Xrb-BK-R3q" id="oEI-2A-Bsm"/>
                 <outlet property="listenerView" destination="En3-oY-b9m" id="yjl-xg-WQh"/>
                 <outlet property="listenerWFView" destination="z1X-Ar-WHa" id="GAM-XX-NHR"/>
@@ -51,6 +51,7 @@
                 <outlet property="settingsLockButton" destination="Qpg-Bj-LhG" id="npS-Ud-n0N"/>
                 <outlet property="swtBufferFillLevelView" destination="HU9-rA-2S8" id="b9Z-r4-YrB"/>
                 <outlet property="swtDiscardRateView" destination="c2P-HN-JGO" id="hET-YF-YpC"/>
+                <outlet property="swtMonitorView" destination="bwm-4K-QZn" id="Z4z-aM-9Pp"/>
                 <outlet property="swtOutRateView" destination="qCW-vt-g9X" id="Tqx-P6-wFr"/>
                 <outlet property="updateIPButton" destination="ziH-u6-vRk" id="0OE-SM-Qll"/>
                 <outlet property="usernameTextField" destination="Rng-px-A9i" id="LVn-18-bXv"/>
@@ -1438,7 +1439,7 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <clipView key="contentView" drawsBackground="NO" id="HOQ-y0-tFr">
                                                 <rect key="frame" x="1" y="1" width="558" height="75"/>
-                                                <autoresizingMask key="autoresizingMask"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" alternatingRowBackgroundColors="YES" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="14" headerView="5to-HO-UkO" id="fsp-6o-wyI">
                                                         <rect key="frame" x="0.0" y="0.0" width="558" height="47"/>
@@ -2042,7 +2043,7 @@
                                                         <tableViewGridLines key="gridStyleMask" vertical="YES" horizontal="YES"/>
                                                         <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                         <tableColumns>
-                                                            <tableColumn identifier="kPersonName" editable="NO" width="58" minWidth="40" maxWidth="1000" id="pCK-l4-IQu">
+                                                            <tableColumn identifier="kPersonName" editable="NO" width="45" minWidth="40" maxWidth="1000" id="pCK-l4-IQu">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Tag">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
@@ -2079,7 +2080,7 @@
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             </tableColumn>
                                                             <tableColumn editable="NO" width="70" minWidth="10" maxWidth="3.4028234663852886e+38" id="eOs-fg-UrU">
-                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Input Rate">
+                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Input (Hz)">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
@@ -2091,7 +2092,7 @@
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             </tableColumn>
                                                             <tableColumn editable="NO" width="78" minWidth="10" maxWidth="3.4028234663852886e+38" id="BMk-Ba-3GN">
-                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Output Rate">
+                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Output (Hz)">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
@@ -2103,7 +2104,7 @@
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             </tableColumn>
                                                             <tableColumn editable="NO" width="75" minWidth="10" maxWidth="3.4028234663852886e+38" id="ZtI-lU-Yub">
-                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Discard Rate">
+                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Discard (Hz)">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
@@ -2114,8 +2115,8 @@
                                                                 </textFieldCell>
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             </tableColumn>
-                                                            <tableColumn editable="NO" width="54" minWidth="10" maxWidth="3.4028234663852886e+38" id="zBG-da-G4D">
-                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Buffer">
+                                                            <tableColumn editable="NO" width="67" minWidth="10" maxWidth="3.4028234663852886e+38" id="zBG-da-G4D">
+                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Buffer Free">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>

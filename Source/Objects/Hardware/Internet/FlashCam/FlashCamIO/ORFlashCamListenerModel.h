@@ -71,6 +71,9 @@
     ORTimeRate* dataRateHistory;
     ORTimeRate* eventRateHistory;
     ORTimeRate* deadTimeHistory;
+    ORTimeRate* swtBufferFillLevelHistory;
+    ORTimeRate* swtDiscardRateHistory;
+    ORTimeRate* swtOutputRateHistory;
     NSTask*     runTask;            //added. MAH 9/17/22
     NSThread* readoutThread;
     ORReadOutList* readOutList;
@@ -163,9 +166,18 @@
 - (double) deadTime;
 - (double) totDead;
 - (double) curDead;
+- (double) swtRunTime;
+- (int) swtEventCount;
+- (double) swtAvgInputRate;
+- (double) swtAvgOutputRate;
+- (double) swtAvgDiscardRate;
+- (int) swtFreeStates;
 - (ORTimeRate*) dataRateHistory;
 - (ORTimeRate*) eventRateHistory;
 - (ORTimeRate*) deadTimeHistory;
+- (ORTimeRate*) swtBufferFillLevelHistory;
+- (ORTimeRate*) swtDiscardRateHistory;
+- (ORTimeRate*) swtOutputRateHistory;
 - (ORReadOutList*) readOutList;
 - (NSMutableArray*) readOutArgs;
 - (NSMutableArray*) children;
@@ -263,3 +275,4 @@ extern NSString* ORFlashCamListenerModelFCLogChanged;
 extern NSString* ORFlashCamListenerModelFCRunLogChanged;
 extern NSString* ORFlashCamListenerModelFCRunLogFlushed;
 extern NSString* ORFlashCamListenerModelSWTConfigChanged;
+extern NSString* ORFlashCamListenerModelSWTStatusChanged;

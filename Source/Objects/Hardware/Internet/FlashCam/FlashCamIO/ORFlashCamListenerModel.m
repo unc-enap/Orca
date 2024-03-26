@@ -158,6 +158,15 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     deadTimeHistory    = [[ORTimeRate alloc] init];
     [deadTimeHistory   setLastAverageTime:[NSDate date]];
     [deadTimeHistory   setSampleTime:10];
+    swtBufferFillLevelHistory    = [[ORTimeRate alloc] init];
+    [swtBufferFillLevelHistory   setLastAverageTime:[NSDate date]];
+    [swtBufferFillLevelHistory   setSampleTime:10];
+    swtDiscardRateHistory   = [[ORTimeRate alloc] init];
+    [swtDiscardRateHistory  setLastAverageTime:[NSDate date]];
+    [swtDiscardRateHistory  setSampleTime:10];
+    swtOutputRateHistory    = [[ORTimeRate alloc] init];
+    [swtOutputRateHistory   setLastAverageTime:[NSDate date]];
+    [swtOutputRateHistory   setSampleTime:10];
     chanMap            = nil;
     cardMap            = nil;
     [self setRemoteInterfaces:[NSMutableArray array]];
@@ -223,6 +232,9 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     [dataRateHistory     release];
     [eventRateHistory    release];
     [deadTimeHistory     release];
+    [swtBufferFillLevelHistory     release];
+    [swtDiscardRateHistory    release];
+    [swtOutputRateHistory     release];
     [runTask             release];
     [listenerThread      release];
     [readOutList         release];
@@ -656,6 +668,48 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     return curDead;
 }
 
+- (double) swtRunTime
+{
+    if (processor)
+        return processor->stats->runtime;
+    return 0.0;
+}
+
+- (int) swtEventCount
+{
+    if (processor)
+        return processor->stats->n_written_events;
+    return 0;
+}
+
+- (double) swtAvgInputRate
+{
+    if (processor)
+        return processor->stats->avg_rate_read_events;
+    return 0.0;
+}
+
+- (double) swtAvgOutputRate
+{
+    if (processor)
+        return processor->stats->avg_rate_write_events;
+    return 0.0;
+}
+
+- (double) swtAvgDiscardRate
+{
+    if (processor)
+        return processor->stats->avg_rate_discard_events;
+    return 0.0;
+}
+
+- (int) swtFreeStates
+{
+    if (processor)
+        return FSPFreeStates(processor);
+    return 0;
+}
+
 - (ORTimeRate*) dataRateHistory
 {
     return dataRateHistory;
@@ -669,6 +723,21 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
 - (ORTimeRate*) deadTimeHistory
 {
     return deadTimeHistory;
+}
+
+- (ORTimeRate*) swtBufferFillLevelHistory
+{
+    return swtBufferFillLevelHistory;
+}
+
+- (ORTimeRate*) swtDiscardRateHistory
+{
+    return swtDiscardRateHistory;
+}
+
+- (ORTimeRate*) swtOutputRateHistory
+{
+    return swtOutputRateHistory;
 }
 
 - (ORReadOutList*) readOutList
@@ -1402,7 +1471,6 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     int timedout = 0; // contains timeout reason
     bool writeWaveforms = true;
     bool writeNonTriggered = [[self configParam:@"fspWriteNonTriggered"] boolValue];
-    int fspLogLevel = [[self configParam:@"fspLogLevel"] intValue];
     FCIOState* state = NULL;
     FSPState* fspstate = NULL;
     if (!processor) {
@@ -1426,7 +1494,18 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
                 NSLogColor([NSColor redColor], @"%@: post processor buffer overflow. Increase the ReadoutModel state buffer size.\n",[self identifier]);
         }
 
+        if (FSPStatsUpdate(processor, !fspstate)) {
+            // returns one if stats have been updated, or if the stream ends.
+            // only updates states for every fsp log time period
+            [swtBufferFillLevelHistory  addDataToTimeAverage:(float)FSPFreeStates(processor)];
+            [swtDiscardRateHistory addDataToTimeAverage:(float)processor->stats->dt_rate_discard_events];
+            [swtOutputRateHistory  addDataToTimeAverage:(float)processor->stats->dt_rate_write_events];
+
+            [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelSWTStatusChanged object:self];
+        }
+
 #ifdef DEBUG_FSP
+        int fspLogLevel = [[self configParam:@"fspLogLevel"] intValue];
         if (FSPStatsUpdate(processor, !fspstate)) {
             // returns one if stats have been updated, or if the stream ends.
             if (fspLogLevel > 0) {
@@ -2422,6 +2501,15 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     deadTimeHistory   = [[ORTimeRate alloc] init];
     [deadTimeHistory  setLastAverageTime:[NSDate date]];
     [deadTimeHistory  setSampleTime:10];
+    swtBufferFillLevelHistory    = [[ORTimeRate alloc] init];
+    [swtBufferFillLevelHistory   setLastAverageTime:[NSDate date]];
+    [swtBufferFillLevelHistory   setSampleTime:10];
+    swtDiscardRateHistory   = [[ORTimeRate alloc] init];
+    [swtDiscardRateHistory  setLastAverageTime:[NSDate date]];
+    [swtDiscardRateHistory  setSampleTime:10];
+    swtOutputRateHistory    = [[ORTimeRate alloc] init];
+    [swtOutputRateHistory   setLastAverageTime:[NSDate date]];
+    [swtOutputRateHistory   setSampleTime:10];
     chanMap           = nil;
     [self setReadOutList:[decoder decodeObjectForKey:@"readOutList"]];
     fclogIndex = 0;

@@ -149,6 +149,10 @@
                          name : ORFlashCamListenerModelStatusChanged
                        object : nil];
     [notifyCenter addObserver : self
+                     selector : @selector(swtMonitoringUpdated:)
+                         name : ORFlashCamListenerModelSWTStatusChanged
+                       object : nil];
+    [notifyCenter addObserver : self
                      selector : @selector(listenerChanged:)
                          name : ORFlashCamListenerModelConfigChanged
                        object : nil];
@@ -187,19 +191,23 @@
     [notifyCenter addObserver : self
                      selector : @selector(tableViewSelectionDidChange:)
                          name : NSTableViewSelectionDidChangeNotification
-                       object : listenerLPPGeneralView];
+                       object : swtMonitorView];
     [notifyCenter addObserver : self
                      selector : @selector(tableViewSelectionDidChange:)
                          name : NSTableViewSelectionDidChangeNotification
-                       object : listenerLPPHWMultiplicityView];
+                       object : listenerSWTGeneralView];
     [notifyCenter addObserver : self
                      selector : @selector(tableViewSelectionDidChange:)
                          name : NSTableViewSelectionDidChangeNotification
-                       object : listenerLPPPeakSumTriggerView];
+                       object : listenerSWTHWMultiplicityView];
     [notifyCenter addObserver : self
                      selector : @selector(tableViewSelectionDidChange:)
                          name : NSTableViewSelectionDidChangeNotification
-                       object : listenerLPPPeakSumParametersView];
+                       object : listenerSWTPeakSumTriggerView];
+    [notifyCenter addObserver : self
+                     selector : @selector(tableViewSelectionDidChange:)
+                         name : NSTableViewSelectionDidChangeNotification
+                       object : listenerSWTPeakSumParametersView];
     [notifyCenter addObserver : self
                      selector : @selector(groupObjectAdded:)
                          name : ORGroupObjectsAdded
@@ -284,6 +292,51 @@
     }
     [(ORTimeAxis*) [deadTimeView xAxis] setStartTime:[[NSDate date] timeIntervalSince1970]];
     [deadTimeView setShowLegend:YES];
+
+    [swtBufferFillLevelView setPlotTitle:@"SWT Buffer Free Level"];
+    [[swtBufferFillLevelView xAxis] setRngLow:0.0 withHigh:10000.0];
+    [[swtBufferFillLevelView xAxis] setRngLimitsLow:0.0 withHigh:200000.0 withMinRng:200.0];
+    [[swtBufferFillLevelView yAxis] setRngLow:-1.0 withHigh:100.0];
+    [[swtBufferFillLevelView yAxis] setRngLimitsLow:-1.0 withHigh:100.0 withMinRng:5.0];
+    for(int i=0; i<kFlashCamMaxListeners; i++){
+        ORTimeLinePlot* plot = [[ORTimeLinePlot alloc] initWithTag:i andDataSource:self];
+        [swtBufferFillLevelView addPlot:plot];
+        [plot setLineColor:colors[i]];
+        [plot setName:[NSString stringWithFormat:@"Listener %d", i]];
+        [plot release];
+    }
+    [(ORTimeAxis*) [swtBufferFillLevelView xAxis] setStartTime:[[NSDate date] timeIntervalSince1970]];
+    [swtBufferFillLevelView setShowLegend:YES];
+
+    [swtDiscardRateView setPlotTitle:@"SWT Discard Rate (Hz)"];
+    [[swtDiscardRateView xAxis] setRngLow:0.0 withHigh:10000.0];
+    [[swtDiscardRateView xAxis] setRngLimitsLow:0.0 withHigh:200000.0 withMinRng:200.0];
+    [[swtDiscardRateView yAxis] setRngLow:-1.0 withHigh:100.0];
+    [[swtDiscardRateView yAxis] setRngLimitsLow:-1.0 withHigh:5000.0 withMinRng:1.0];
+    for(int i=0; i<kFlashCamMaxListeners; i++){
+        ORTimeLinePlot* plot = [[ORTimeLinePlot alloc] initWithTag:i andDataSource:self];
+        [swtDiscardRateView addPlot:plot];
+        [plot setLineColor:colors[i]];
+        [plot setName:[NSString stringWithFormat:@"Listener %d", i]];
+        [plot release];
+    }
+    [(ORTimeAxis*) [swtDiscardRateView xAxis] setStartTime:[[NSDate date] timeIntervalSince1970]];
+    [swtDiscardRateView setShowLegend:YES];
+
+    [swtOutRateView setPlotTitle:@"SWT Write Rate (Hz)"];
+    [[swtOutRateView xAxis] setRngLow:0.0 withHigh:10000.0];
+    [[swtOutRateView xAxis] setRngLimitsLow:0.0 withHigh:200000.0 withMinRng:200.0];
+    [[swtOutRateView yAxis] setRngLow:-1.0 withHigh:100.0];
+    [[swtOutRateView yAxis] setRngLimitsLow:-1.0 withHigh:5000.0 withMinRng:5.0];
+    for(int i=0; i<kFlashCamMaxListeners; i++){
+        ORTimeLinePlot* plot = [[ORTimeLinePlot alloc] initWithTag:i andDataSource:self];
+        [swtOutRateView addPlot:plot];
+        [plot setLineColor:colors[i]];
+        [plot setName:[NSString stringWithFormat:@"Listener %d", i]];
+        [plot release];
+    }
+    [(ORTimeAxis*) [swtOutRateView xAxis] setStartTime:[[NSDate date] timeIntervalSince1970]];
+    [swtOutRateView setShowLegend:YES];
 }
 
 - (void) updateWindow
@@ -298,6 +351,7 @@
     [self fcSourcePathChanged:nil];
     [self reloadListenerData];
     [monitorView reloadData];
+    [swtMonitorView reloadData];
     [self updateTimePlot:nil];
     [self settingsLock:nil];
 }
@@ -366,10 +420,10 @@
     [listenerReadoutView    reloadData];
     [listenerExtraFilesView reloadData];
     [listenerExtraFlagsView reloadData];
-    [listenerLPPGeneralView reloadData];
-    [listenerLPPHWMultiplicityView reloadData];
-    [listenerLPPPeakSumTriggerView reloadData];
-    [listenerLPPPeakSumParametersView reloadData];
+    [listenerSWTGeneralView reloadData];
+    [listenerSWTHWMultiplicityView reloadData];
+    [listenerSWTPeakSumTriggerView reloadData];
+    [listenerSWTPeakSumParametersView reloadData];
 }
 
 - (void) pingStart:(NSNotification*)note
@@ -412,6 +466,7 @@
 {
     [self reloadListenerData];
     [monitorView  reloadData];
+    [swtMonitorView  reloadData];
     [self updateAddIfaceToListenerListenerPUButton];
     [self updateRmIfaceFromListenerListenerPUButton];
     int tag   = [[[note userInfo] objectForKey:@"tag"]   intValue];
@@ -431,12 +486,13 @@
     [listenerTrigView    selectRowIndexes:indexSet byExtendingSelection:NO];
     [listenerBaseView    selectRowIndexes:indexSet byExtendingSelection:NO];
     [listenerReadoutView selectRowIndexes:indexSet byExtendingSelection:NO];
-    [listenerLPPGeneralView selectRowIndexes:indexSet byExtendingSelection:NO];
-    [listenerLPPHWMultiplicityView selectRowIndexes:indexSet byExtendingSelection:NO];
-    [listenerLPPPeakSumTriggerView selectRowIndexes:indexSet byExtendingSelection:NO];
-    [listenerLPPPeakSumParametersView selectRowIndexes:indexSet byExtendingSelection:NO];
+    [listenerSWTGeneralView selectRowIndexes:indexSet byExtendingSelection:NO];
+    [listenerSWTHWMultiplicityView selectRowIndexes:indexSet byExtendingSelection:NO];
+    [listenerSWTPeakSumTriggerView selectRowIndexes:indexSet byExtendingSelection:NO];
+    [listenerSWTPeakSumParametersView selectRowIndexes:indexSet byExtendingSelection:NO];
     [ethInterfaceView reloadData];
     [monitorView reloadData];
+    [swtMonitorView reloadData];
     [self updateAddIfaceToListenerListenerPUButton];
     [self updateRmIfaceFromListenerListenerPUButton];
     [[printListenerFlagsPUButton itemAtIndex:tag] setEnabled:YES];
@@ -456,12 +512,13 @@
     [listenerTrigView    selectRowIndexes:indexSet byExtendingSelection:NO];
     [listenerBaseView    selectRowIndexes:indexSet byExtendingSelection:NO];
     [listenerReadoutView selectRowIndexes:indexSet byExtendingSelection:NO];
-    [listenerLPPGeneralView selectRowIndexes:indexSet byExtendingSelection:NO];
-    [listenerLPPHWMultiplicityView selectRowIndexes:indexSet byExtendingSelection:NO];
-    [listenerLPPPeakSumTriggerView selectRowIndexes:indexSet byExtendingSelection:NO];
-    [listenerLPPPeakSumParametersView selectRowIndexes:indexSet byExtendingSelection:NO];
+    [listenerSWTGeneralView selectRowIndexes:indexSet byExtendingSelection:NO];
+    [listenerSWTHWMultiplicityView selectRowIndexes:indexSet byExtendingSelection:NO];
+    [listenerSWTPeakSumTriggerView selectRowIndexes:indexSet byExtendingSelection:NO];
+    [listenerSWTPeakSumParametersView selectRowIndexes:indexSet byExtendingSelection:NO];
     [ethInterfaceView reloadData];
     [monitorView reloadData];
+    [swtMonitorView reloadData];
     [self updateAddIfaceToListenerListenerPUButton];
     [self updateRmIfaceFromListenerListenerPUButton];
     [[printListenerFlagsPUButton itemAtIndex:tag] setEnabled:NO];
@@ -471,6 +528,12 @@
 {
     if([NSThread isMainThread]) [monitorView reloadData];
     else dispatch_async(dispatch_get_main_queue(), ^{[monitorView reloadData];});
+}
+
+- (void) swtMonitoringUpdated:(NSNotification*)note
+{
+    if([NSThread isMainThread]) [swtMonitorView reloadData];
+    else dispatch_async(dispatch_get_main_queue(), ^{[swtMonitorView reloadData];});
 }
 
 - (void) groupObjectAdded:(NSNotification*)note
@@ -528,6 +591,18 @@
         [model setMiscAttributes:[(ORAxis*) [deadTimeView xAxis] attributes] forKey:@"XAttrib2"];
     if(note == nil || [note object] == [deadTimeView yAxis])
         [model setMiscAttributes:[(ORAxis*) [deadTimeView yAxis] attributes] forKey:@"YAttrib2"];
+    if(note == nil || [note object] == [swtBufferFillLevelView xAxis])
+        [model setMiscAttributes:[(ORAxis*) [swtBufferFillLevelView xAxis] attributes] forKey:@"XAttrib3"];
+    if(note == nil || [note object] == [swtBufferFillLevelView yAxis])
+        [model setMiscAttributes:[(ORAxis*) [swtBufferFillLevelView yAxis] attributes] forKey:@"YAttrib3"];
+    if(note == nil || [note object] == [swtDiscardRateView xAxis])
+        [model setMiscAttributes:[(ORAxis*) [swtDiscardRateView xAxis] attributes] forKey:@"XAttrib4"];
+    if(note == nil || [note object] == [swtDiscardRateView yAxis])
+        [model setMiscAttributes:[(ORAxis*) [swtDiscardRateView yAxis] attributes] forKey:@"YAttrib4"];
+    if(note == nil || [note object] == [swtOutRateView xAxis])
+        [model setMiscAttributes:[(ORAxis*) [swtOutRateView xAxis] attributes] forKey:@"XAttrib5"];
+    if(note == nil || [note object] == [swtOutRateView yAxis])
+        [model setMiscAttributes:[(ORAxis*) [swtOutRateView yAxis] attributes] forKey:@"YAttrib5"];
 }
 
 - (void) miscAttributesChanged:(NSNotification*)note
@@ -540,6 +615,13 @@
     if(note == nil || [key isEqualToString:@"YAttrib1"]) [self setPlot:eventRateView yAttributes:attrib];
     if(note == nil || [key isEqualToString:@"XAttrib2"]) [self setPlot:deadTimeView  xAttributes:attrib];
     if(note == nil || [key isEqualToString:@"YAttrib2"]) [self setPlot:deadTimeView  yAttributes:attrib];
+    if(note == nil || [key isEqualToString:@"XAttrib3"]) [self setPlot:swtBufferFillLevelView  xAttributes:attrib];
+    if(note == nil || [key isEqualToString:@"YAttrib3"]) [self setPlot:swtBufferFillLevelView  yAttributes:attrib];
+    if(note == nil || [key isEqualToString:@"XAttrib4"]) [self setPlot:swtDiscardRateView  xAttributes:attrib];
+    if(note == nil || [key isEqualToString:@"YAttrib4"]) [self setPlot:swtDiscardRateView  yAttributes:attrib];
+    if(note == nil || [key isEqualToString:@"XAttrib5"]) [self setPlot:swtOutRateView  xAttributes:attrib];
+    if(note == nil || [key isEqualToString:@"YAttrib5"]) [self setPlot:swtOutRateView  yAttributes:attrib];
+
 }
 
 - (void) setPlot:(id)plotter xAttributes:(id)attrib
@@ -574,6 +656,9 @@
     [dataRateView setNeedsDisplay:YES];
     [eventRateView setNeedsDisplay:YES];
     [deadTimeView setNeedsDisplay:YES];
+    [swtBufferFillLevelView setNeedsDisplay:YES];
+    [swtDiscardRateView setNeedsDisplay:YES];
+    [swtOutRateView setNeedsDisplay:YES];
 }
 
 - (void) updateAddIfaceToListenerIfacePUButton
@@ -648,10 +733,10 @@
     [listenerReadoutView       setEnabled:!lock];
     [listenerExtraFilesView    setEnabled:!lock];
     [listenerExtraFlagsView    setEnabled:!lock];
-    [listenerLPPGeneralView    setEnabled:!lock];
-    [listenerLPPHWMultiplicityView    setEnabled:!lock];
-    [listenerLPPPeakSumTriggerView    setEnabled:!lock];
-    [listenerLPPPeakSumParametersView    setEnabled:!lock];
+    [listenerSWTGeneralView    setEnabled:!lock];
+    [listenerSWTHWMultiplicityView    setEnabled:!lock];
+    [listenerSWTPeakSumTriggerView    setEnabled:!lock];
+    [listenerSWTPeakSumParametersView    setEnabled:!lock];
     [addIfaceToListenerButton  setEnabled:!lock];
     [rmIfaceFromListenerButton setEnabled:!lock];
     [fcSourcePathButton        setEnabled:!lock];
@@ -864,12 +949,13 @@
     }
     else if(view == listenerView        || view == listenerGPSView  || view == listenerDAQView  ||
             view == listenerWFView      || view == listenerTrigView || view == listenerBaseView ||
-            view == listenerReadoutView || view == monitorView      || view == listenerExtraFilesView ||
+            view == listenerReadoutView || view == monitorView      || view == swtMonitorView   ||
+            view == listenerExtraFilesView ||
             view == listenerExtraFlagsView
-            || view == listenerLPPGeneralView
-            || view == listenerLPPHWMultiplicityView
-            || view == listenerLPPPeakSumTriggerView
-            || view == listenerLPPPeakSumParametersView
+            || view == listenerSWTGeneralView
+            || view == listenerSWTHWMultiplicityView
+            || view == listenerSWTPeakSumTriggerView
+            || view == listenerSWTPeakSumParametersView
             ){
         ORFlashCamListenerModel* l = [model getListenerAtIndex:(int)row];
         if(!l) return nil;
@@ -949,32 +1035,38 @@
             else if(col == 6) return [NSNumber numberWithDouble:[l curDead]];
             else if(col == 7) return [NSNumber numberWithInt:(int)[l bufferedRecords]];
         }
-        else if(view == listenerLPPGeneralView){
-            if(col == 1)      return [l configParam:@"lppEnabled"];
-            if(col == 2)      return [l configParam:@"lppHWEnabled"];
-            if(col == 3)      return [l configParam:@"lppPSEnabled"];
-            else if(col == 4) return [l configParam:@"lppWriteNonTriggered"];
-            else if(col == 5) return [l configParam:@"lppLogTime"];
-            else if(col == 6) return [l configParam:@"lppLogLevel"];
+        else if(view == swtMonitorView){
+            if(col == 1) return [NSNumber numberWithDouble:[l swtRunTime]];
+            else if(col == 2) return [NSNumber numberWithInt:[l swtEventCount]];
+            else if(col == 3) return [NSNumber numberWithDouble:[l swtAvgInputRate]];
+            else if(col == 4) return [NSNumber numberWithDouble:[l swtAvgOutputRate]];
+            else if(col == 5) return [NSNumber numberWithDouble:[l swtAvgDiscardRate]];
+            else if(col == 6) return [NSNumber numberWithInt:[l swtFreeStates]];
         }
-        else if(view == listenerLPPHWMultiplicityView){
-            if(col == 1)      return [l configParam:@"lppHWMajThreshold"];
-            else if(col == 2) return [l configParam:@"lppHWPreScalingRate"];
-//            else if(col == 3) return [l configParam:@"lppHWPreScalingThreshold"];
-//            else if(col == 3) return [l configParam:@"lppHWCheckAll"];
+        else if(view == listenerSWTGeneralView){
+            if(col == 1)      return [l configParam:@"fspEnabled"];
+            if(col == 2)      return [l configParam:@"fspHWEnabled"];
+            if(col == 3)      return [l configParam:@"fspPSEnabled"];
+            else if(col == 4) return [l configParam:@"fspWriteNonTriggered"];
+            else if(col == 5) return [l configParam:@"fspLogTime"];
+            else if(col == 6) return [l configParam:@"fspLogLevel"];
         }
-        else if(view == listenerLPPPeakSumTriggerView){
-            if(col == 1)      return [l configParam:@"lppPSPreWindow"];
-            else if(col == 2) return [l configParam:@"lppPSPostWindow"];
-            else if(col == 3) return [l configParam:@"lppPSPreScalingRate"];
-            else if(col == 4) return [l configParam:@"lppPSMuonCoincidence"];
+        else if(view == listenerSWTHWMultiplicityView){
+            if(col == 1)      return [l configParam:@"fspHWMajThreshold"];
+            else if(col == 2) return [l configParam:@"fspHWPreScalingRate"];
         }
-        else if(view == listenerLPPPeakSumParametersView){
-            if(col == 1)      return [l configParam:@"lppPSSumWindowStart"];
-            else if(col == 2) return [l configParam:@"lppPSSumWindowStop"];
-            else if(col == 3) return [l configParam:@"lppPSSumWindowSize"];
-            else if(col == 4) return [l configParam:@"lppPSCoincidenceThreshold"];
-            else if(col == 5) return [l configParam:@"lppPSAbsoluteThreshold"];
+        else if(view == listenerSWTPeakSumTriggerView){
+            if(col == 1)      return [l configParam:@"fspPSPreWindow"];
+            else if(col == 2) return [l configParam:@"fspPSPostWindow"];
+            else if(col == 3) return [l configParam:@"fspPSPreScalingRate"];
+            else if(col == 4) return [l configParam:@"fspPSMuonCoincidence"];
+        }
+        else if(view == listenerSWTPeakSumParametersView){
+            if(col == 1)      return [l configParam:@"fspPSSumWindowStart"];
+            else if(col == 2) return [l configParam:@"fspPSSumWindowStop"];
+            else if(col == 3) return [l configParam:@"fspPSSumWindowSize"];
+            else if(col == 4) return [l configParam:@"fspPSCoincidenceThreshold"];
+            else if(col == 5) return [l configParam:@"fspPSAbsoluteThreshold"];
         }
     }
     return nil;
@@ -1077,46 +1169,46 @@
             else if(col == 6) [l setConfigParam:@"evPerRequest"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
         }
-        else if(view == listenerLPPGeneralView){
-            if(col == 1)      [l setConfigParam:@"lppEnabled"
+        else if(view == listenerSWTGeneralView){
+            if(col == 1)      [l setConfigParam:@"fspEnabled"
                                       withValue:[NSNumber numberWithBool:[object boolValue]]];
-            else if(col == 2)      [l setConfigParam:@"lppHWEnabled"
+            else if(col == 2)      [l setConfigParam:@"fspHWEnabled"
                                       withValue:[NSNumber numberWithBool:[object boolValue]]];
-            else if(col == 3)      [l setConfigParam:@"lppPSEnabled"
+            else if(col == 3)      [l setConfigParam:@"fspPSEnabled"
                                       withValue:[NSNumber numberWithBool:[object boolValue]]];
-            else if(col == 4) [l setConfigParam:@"lppWriteNonTriggered"
+            else if(col == 4) [l setConfigParam:@"fspWriteNonTriggered"
                                       withValue:[NSNumber numberWithBool:[object boolValue]]];
-            else if(col == 5) [l setConfigParam:@"lppLogTime"
+            else if(col == 5) [l setConfigParam:@"fspLogTime"
                                       withValue:[NSNumber numberWithDouble:[object doubleValue]]];
-            else if(col == 6) [l setConfigParam:@"lppLogLevel"
+            else if(col == 6) [l setConfigParam:@"fspLogLevel"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
         }
-        else if(view == listenerLPPHWMultiplicityView){
-            if(col == 1)      [l setConfigParam:@"lppHWMajThreshold"
+        else if(view == listenerSWTHWMultiplicityView){
+            if(col == 1)      [l setConfigParam:@"fspHWMajThreshold"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
-            else if(col == 2) [l setConfigParam:@"lppHWPreScalingRate"
+            else if(col == 2) [l setConfigParam:@"fspHWPreScalingRate"
                                       withValue:[NSNumber numberWithDouble:[object doubleValue]]];
         }
-        else if(view == listenerLPPPeakSumTriggerView){
-            if(col == 1)      [l setConfigParam:@"lppPSPreWindow"
+        else if(view == listenerSWTPeakSumTriggerView){
+            if(col == 1)      [l setConfigParam:@"fspPSPreWindow"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
-            else if(col == 2) [l setConfigParam:@"lppPSPostWindow"
+            else if(col == 2) [l setConfigParam:@"fspPSPostWindow"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
-            else if(col == 3) [l setConfigParam:@"lppPSPreScalingRate"
+            else if(col == 3) [l setConfigParam:@"fspPSPreScalingRate"
                                       withValue:[NSNumber numberWithDouble:[object doubleValue]]];
-            else if(col == 4) [l setConfigParam:@"lppPSMuonCoincidence"
+            else if(col == 4) [l setConfigParam:@"fspPSMuonCoincidence"
                                       withValue:[NSNumber numberWithBool:[object boolValue]]];
         }
-        else if(view == listenerLPPPeakSumParametersView){
-            if(col == 1)      [l setConfigParam:@"lppPSSumWindowStart"
+        else if(view == listenerSWTPeakSumParametersView){
+            if(col == 1)      [l setConfigParam:@"fspPSSumWindowStart"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
-            else if(col == 2) [l setConfigParam:@"lppPSSumWindowStop"
+            else if(col == 2) [l setConfigParam:@"fspPSSumWindowStop"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
-            else if(col == 3) [l setConfigParam:@"lppPSSumWindowSize"
+            else if(col == 3) [l setConfigParam:@"fspPSSumWindowSize"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
-            else if(col == 4) [l setConfigParam:@"lppPSCoincidenceThreshold"
+            else if(col == 4) [l setConfigParam:@"fspPSCoincidenceThreshold"
                                       withValue:[NSNumber numberWithDouble:[object doubleValue]]];
-            else if(col == 5) [l setConfigParam:@"lppPSAbsoluteThreshold"
+            else if(col == 5) [l setConfigParam:@"fspPSAbsoluteThreshold"
                                       withValue:[NSNumber numberWithDouble:[object doubleValue]]];
         }
     }
@@ -1135,10 +1227,11 @@
     else if(view == listenerExtraFlagsView) return [model listenerCount];
     else if(view == listenerReadoutView) return [model listenerCount];
     else if(view == monitorView)         return [model listenerCount];
-    else if(view == listenerLPPGeneralView) return [model listenerCount];
-    else if(view == listenerLPPHWMultiplicityView) return [model listenerCount];
-    else if(view == listenerLPPPeakSumTriggerView) return [model listenerCount];
-    else if(view == listenerLPPPeakSumParametersView) return [model listenerCount];
+    else if(view == swtMonitorView)         return [model listenerCount];
+    else if(view == listenerSWTGeneralView) return [model listenerCount];
+    else if(view == listenerSWTHWMultiplicityView) return [model listenerCount];
+    else if(view == listenerSWTPeakSumTriggerView) return [model listenerCount];
+    else if(view == listenerSWTPeakSumParametersView) return [model listenerCount];
     else return 0;
 }
 
@@ -1149,6 +1242,9 @@
     if([aPlotter plotView]      == [dataRateView plotView])  return (int) [[l dataRateHistory]  count];
     else if([aPlotter plotView] == [eventRateView plotView]) return (int) [[l eventRateHistory] count];
     else if([aPlotter plotView] == [deadTimeView  plotView]) return (int) [[l deadTimeHistory]  count];
+    else if([aPlotter plotView] == [swtBufferFillLevelView  plotView]) return (int) [[l swtBufferFillLevelHistory]  count];
+    else if([aPlotter plotView] == [swtDiscardRateView  plotView]) return (int) [[l swtDiscardRateHistory]  count];
+    else if([aPlotter plotView] == [swtOutRateView  plotView]) return (int) [[l swtOutputRateHistory]  count];
     return 0;
 }
 
@@ -1175,6 +1271,27 @@
         if(index >= 0){
             *xValue = [[l deadTimeHistory] timeSampledAtIndex:index];
             *yValue = [[l deadTimeHistory] valueAtIndex:index];
+        }
+    }
+    else if([aPlotter plotView] == [swtBufferFillLevelView plotView]){
+        int index = (int) [[l swtBufferFillLevelHistory] count] - i - 1;
+        if(index >= 0){
+            *xValue = [[l swtBufferFillLevelHistory] timeSampledAtIndex:index];
+            *yValue = [[l swtBufferFillLevelHistory] valueAtIndex:index];
+        }
+    }
+    else if([aPlotter plotView] == [swtDiscardRateView plotView]){
+        int index = (int) [[l swtDiscardRateHistory] count] - i - 1;
+        if(index >= 0){
+            *xValue = [[l swtDiscardRateHistory] timeSampledAtIndex:index];
+            *yValue = [[l swtDiscardRateHistory] valueAtIndex:index];
+        }
+    }
+    else if([aPlotter plotView] == [swtOutRateView plotView]){
+        int index = (int) [[l swtOutputRateHistory] count] - i - 1;
+        if(index >= 0){
+            *xValue = [[l swtOutputRateHistory] timeSampledAtIndex:index];
+            *yValue = [[l swtOutputRateHistory] valueAtIndex:index];
         }
     }
 }
