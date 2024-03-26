@@ -1,39 +1,52 @@
 #pragma once
 
+#include <fcio.h>
 #include <string.h>
 
-static inline int get_tracemap_for_subsystem(int max_channels, int *channels, const char *subsystem) {
-  if (strncmp(subsystem, "argon", 5) == 0) {
-    const int last_card = 10;
-    const int max_card_slots = 6;  // 16-bit firmware
-    const int baseaddress = 0x200;
+typedef enum FSPChannelFormat {
+  FCIO_TRACE_INDEX_FORMAT = 0,
+  FCIO_TRACE_MAP_FORMAT = 1,
+  L200_RAWID_FORMAT = 2,
+  FSPChannelFormatUnkown = 3
 
-    int nchannels = 0;
-    for (int i = 1; i <= last_card; i++) {
-      int card_address = baseaddress + i * 0x10;  // 0x10 == 16
-      for (int j = 0; j < max_card_slots && nchannels < max_channels; j++) {
-        if (i == 1 && j < 2) {
-          /* First 2 Channels not connected */
-          continue;
-        }
-        channels[nchannels++] = (card_address << 16) + j;
-      }
-    }
-    return nchannels;
+} FSPChannelFormat;
+
+static inline int is_known_channelmap_format(FSPChannelFormat format)
+{
+  unsigned int form = format;
+  if (form < FSPChannelFormatUnkown) {
+    return 1;
+  } else {
+    return 0;
   }
-  return 0;
 }
 
-static inline int get_channelmap_format(const char *channelmap_format) {
-  if (!channelmap_format || (strncmp(channelmap_format, "fcio-trace-index", 16) == 0)) {
-    return 0;
-  } else if (channelmap_format && strncmp(channelmap_format, "fcio-tracemap", 13) == 0) {
-    return 1;
-  } else if (channelmap_format && strncmp(channelmap_format, "rawid", 5) == 0) {
-    return 2;
-  } else {
-    return -1;
+static inline const char* channelmap_fmt2str(FSPChannelFormat format)
+{
+  switch (format) {
+    case FCIO_TRACE_INDEX_FORMAT:
+      return "fcio-trace-idx";
+    case FCIO_TRACE_MAP_FORMAT:
+      return "fcio-trace-map";
+    case L200_RAWID_FORMAT:
+      return "l200-rawid";
+    default:
+      return "";
   }
+}
+
+static inline FSPChannelFormat channelmap_str2fmt(const char* str)
+{
+  FSPChannelFormat ret = FSPChannelFormatUnkown;
+  if (strncmp(str, "fcio-trace-idx", 14) == 0)
+    ret = FCIO_TRACE_INDEX_FORMAT;
+  else if (strncmp(str, "fcio-trace-map", 14) == 0)
+    ret = FCIO_TRACE_MAP_FORMAT;
+  else if (strncmp(str, "l200-rawid", 10) == 0)
+    ret = L200_RAWID_FORMAT;
+  else
+    ret = FSPChannelFormatUnkown;
+  return ret;
 }
 
 static inline unsigned int rawid2tracemap(int input) {
@@ -47,16 +60,15 @@ static inline int tracemap2rawid(unsigned int input, int listener) {
   return listener * 1000000 + (input >> 16) * 100 + (input & 0xffff);
 }
 
-static inline int convert_rawid(int ninput, int *input, int format, unsigned int *tracemap, int listener) {
+static inline int convert2rawid(int ninput, int *input, FSPChannelFormat format, unsigned int *tracemap, int listener) {
   switch (format) {
-    case 1: {
+    case FCIO_TRACE_MAP_FORMAT: {
       for (int i = 0; i < ninput; i++) {
         unsigned int to_convert = input[i];
         int found = 0;
         for (int j = 0; j < FCIOMaxChannels || tracemap[j]; j++) {
           if (to_convert == tracemap[j]) {
             input[i] = tracemap2rawid(tracemap[j], listener);
-            ;
             found = 1;
             break;
           }
@@ -72,17 +84,17 @@ static inline int convert_rawid(int ninput, int *input, int format, unsigned int
   return 1;
 }
 
-static inline int convert_trace_idx(int ninput, int *input, int format, unsigned int *tracemap) {
+static inline int convert2traceidx(int ninput, int *input, FSPChannelFormat format, unsigned int *tracemap) {
   /*  quote from fcio.c to guide the reader:
       > unsigned int tracemap[FCIOMaxChannels]; // trace map identifiers - fadc/triggercard addresses and channels
       >                                         // stores the FADC and Trigger card addresses as follows: (address <<
-     16) + adc channel (channel number on the card) quote from src/pygama/raw/orca/orca_flashcam.py: the lpp library
+     16) + adc channel (channel number on the card) quote from src/pygama/raw/orca/orca_flashcam.py: the fsp library
      does not know about multiple flashcam streams, so fcid is discarded: > def get_key(fcid, board_id, fc_input: int)
      -> int: >   return fcid * 1000000 + board_id * 100 + fc_input
   */
   switch (format) {
     // fcio-tracemap
-    case 1: {
+    case FCIO_TRACE_MAP_FORMAT: {
       for (int i = 0; i < ninput; i++) {
         unsigned int to_convert = input[i];
         int found = 0;
@@ -98,7 +110,7 @@ static inline int convert_trace_idx(int ninput, int *input, int format, unsigned
       break;
     }
     // rawid
-    case 2: {
+    case L200_RAWID_FORMAT: {
       for (int i = 0; i < ninput; i++) {
         unsigned int to_convert = input[i];
         int found = 0;
@@ -113,6 +125,8 @@ static inline int convert_trace_idx(int ninput, int *input, int format, unsigned
       }
       break;
     }
+    case FCIO_TRACE_INDEX_FORMAT:
+      return 1;
 
     default:
       return 0;

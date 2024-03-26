@@ -25,7 +25,7 @@
 #import "ORDataFileModel.h"
 #import "fcio.h"
 #import "ANSIEscapeHelper.h"
-#import "lpp.h"
+#import "fsp.h"
 
 #define kFlashCamConfigBufferLength 64
 #define kFlashCamStatusBufferLength 256
@@ -44,7 +44,7 @@
     FCIOStateReader* reader;
     int readerRecordCount;
     int bufferedRecords;
-    PostProcessor* postprocessor;
+    StreamProcessor* processor;
     uint32_t  configId;
     uint32_t* configBuffer;
     uint32_t  configBufferIndex;
@@ -80,7 +80,7 @@
     NSMutableArray* cardMap;
     bool listenerRemoteIsFile;
     int fcio_last_tag;
-    bool enablePostProcessor;
+    bool enableStreamProcessor;
     ORDataPacket* dataPacketForThread;
     NSString* dataFileName;
     NSUInteger fclogIndex;
@@ -100,28 +100,29 @@
     //new
     NSDateFormatter*  logDateFormatter;
     ANSIEscapeHelper* ansieHelper;
-//     LPP Internal Parser stuff
-    int nlppHWChannels;
-    int* lppHWChannelMap;
-    unsigned short* lppHWPrescalingThresholds;
 
-    int nlppPSChannels;
-    int* lppPSChannelMap;
-    float* lppPSChannelGains;
-    float* lppPSChannelThresholds;
-    int* lppPSChannelShapings;
-    float* lppPSChannelLowPass;
+//     FSP Internal Parser variables
+    int nfspHWChannels;
+    int* fspHWChannelMap;
+    unsigned short* fspHWPrescalingThresholds;
+
+    int nfspPSChannels;
+    int* fspPSChannelMap;
+    float* fspPSChannelGains;
+    float* fspPSChannelThresholds;
+    int* fspPSChannelShapings;
+    float* fspPSChannelLowPass;
     
-    int nlppFlagChannels;
-    int* lppFlagChannelMap;
-    int* lppFlagChannelThresholds;
+    int nfspFlagChannels;
+    int* fspFlagChannelMap;
+    int* fspFlagChannelThresholds;
     
-    int lppPulserChannel;
-    int lppPulserChannelThreshold;
-    int lppBaselineChannel;
-    int lppBaselineChannelThreshold;
-    int lppMuonChannel;
-    int lppMuonChannelThreshold;
+    int fspPulserChannel;
+    int fspPulserChannelThreshold;
+    int fspBaselineChannel;
+    int fspBaselineChannelThreshold;
+    int fspMuonChannel;
+    int fspMuonChannelThreshold;
     bool debug;
 }
 
@@ -261,4 +262,4 @@ extern NSString* ORFlashCamListenerModelStatusBufferFull;
 extern NSString* ORFlashCamListenerModelFCLogChanged;
 extern NSString* ORFlashCamListenerModelFCRunLogChanged;
 extern NSString* ORFlashCamListenerModelFCRunLogFlushed;
-extern NSString* ORFlashCamListenerModelLPPConfigChanged;
+extern NSString* ORFlashCamListenerModelSWTConfigChanged;
