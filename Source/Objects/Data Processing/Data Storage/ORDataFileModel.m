@@ -76,11 +76,12 @@ static const int currentVersion = 1;           // Current version
     
     [[self undoManager] disableUndoRegistration];
     ignoreMode = YES;
-    [self setDataFolder:[[[ORSmartFolder alloc]init]autorelease]];
-    [self setGzipFolder:[[[ORSmartFolder alloc]init]autorelease]];
-    [self setStatusFolder:[[[ORSmartFolder alloc]init]autorelease]];
-    [self setConfigFolder:[[[ORSmartFolder alloc]init]autorelease]];
-    
+    [self setDataFolder:    [[[ORSmartFolder alloc]init]autorelease]];
+    [self setGzipFolder:    [[[ORSmartFolder alloc]init]autorelease]];
+    [self setStatusFolder:  [[[ORSmartFolder alloc]init]autorelease]];
+    [self setConfigFolder:  [[[ORSmartFolder alloc]init]autorelease]];
+    [self setMetaDataFolder:[[[ORSmartFolder alloc]init]autorelease]];
+
     [[self undoManager] enableUndoRegistration];
 	
 	[self registerNotificationObservers];
@@ -106,6 +107,7 @@ static const int currentVersion = 1;           // Current version
     [gzipFolder release];
     [statusFolder release];
     [configFolder release];
+    [metaDataFolder release];
     [md5Queue cancelAllOperations];
     [md5Queue release];
     [openFilePath release];
@@ -155,10 +157,11 @@ static const int currentVersion = 1;           // Current version
 
 - (void)setTitles
 {
-    [dataFolder setTitle:@"Data Files"];
-    [gzipFolder setTitle:@"gzip Files"];
-    [statusFolder setTitle:@"Status Logs"];
-    [configFolder setTitle:@"Config Files"];
+    [dataFolder     setTitle:@"Data Files"];
+    [gzipFolder     setTitle:@"gzip Files"];
+    [statusFolder   setTitle:@"Status Logs"];
+    [configFolder   setTitle:@"Config Files"];
+    [metaDataFolder setTitle:@"Meta Files"];
 }
 
 
@@ -316,11 +319,12 @@ static const int currentVersion = 1;           // Current version
     [[[self undoManager] prepareWithInvocationTarget:self] setUseFolderStructure:useFolderStructure];
     
     useFolderStructure = aUseFolderStructure;
-	[dataFolder setUseFolderStructure:aUseFolderStructure];
-    [gzipFolder setUseFolderStructure:aUseFolderStructure];
-	[configFolder setUseFolderStructure:aUseFolderStructure];
-	[statusFolder setUseFolderStructure:aUseFolderStructure];
-	
+	[dataFolder     setUseFolderStructure:aUseFolderStructure];
+    [gzipFolder     setUseFolderStructure:aUseFolderStructure];
+	[configFolder   setUseFolderStructure:aUseFolderStructure];
+    [statusFolder   setUseFolderStructure:aUseFolderStructure];
+    [metaDataFolder setUseFolderStructure:aUseFolderStructure];
+
     [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileModelUseFolderStructureChanged object:self];
 }
 
@@ -467,9 +471,21 @@ static const int currentVersion = 1;           // Current version
 	if(![configFolder defaultLastPathComponent]) [configFolder setDefaultLastPathComponent:@"Configurations"];
 }
 
+- (ORSmartFolder *)metaDataFolder
+{
+    return metaDataFolder;
+}
+
+- (void)setMetaDataFolder:(ORSmartFolder *)aMetaDataFolder
+{
+    [aMetaDataFolder retain];
+    [metaDataFolder release];
+    metaDataFolder = aMetaDataFolder;
+    if(![metaDataFolder defaultLastPathComponent]) [metaDataFolder setDefaultLastPathComponent:@"MetaData"];
+}
+
 - (void) setFileName:(NSString*)aFileName
 {
-    
     [fileName autorelease];
     fileName = [aFileName copy];
 	
@@ -908,8 +924,8 @@ static NSString* ORDataDataFolderName       = @"ORDataDataFolderName";
 static NSString* ORDataGzipFolderName       = @"ORDataGzipFolderName";
 static NSString* ORDataStatusFolderName     = @"ORDataStatusFolderName";
 static NSString* ORDataConfigFolderName     = @"ORDataConfigFolderName";
-static NSString* ORDataVersion		         = @"ORDataVersion";
-
+static NSString* ORDataMetaDataFolderName   = @"ORDataMetaDataFolderName";
+static NSString* ORDataVersion		        = @"ORDataVersion";
 static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
 
 - (id)initWithCoder:(NSCoder*)decoder
@@ -933,10 +949,12 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
     //-------------------------------------------------------------------------------
     //version 0 stuff
     if (version < currentVersion){
-        [self setDataFolder:[[[ORSmartFolder alloc]init] autorelease]];
-        [self setGzipFolder:[[[ORSmartFolder alloc]init] autorelease]];
-        [self setStatusFolder:[[[ORSmartFolder alloc]init] autorelease]];
-        [self setConfigFolder:[[[ORSmartFolder alloc]init] autorelease]];
+        [self setDataFolder:    [[[ORSmartFolder alloc]init] autorelease]];
+        [self setGzipFolder:    [[[ORSmartFolder alloc]init] autorelease]];
+        [self setStatusFolder:  [[[ORSmartFolder alloc]init] autorelease]];
+        [self setConfigFolder:  [[[ORSmartFolder alloc]init] autorelease]];
+        [self setMetaDataFolder:[[[ORSmartFolder alloc]init] autorelease]];
+        
         [dataFolder setDirectoryName:[decoder decodeObjectForKey:ORDataDirName]];
         [dataFolder setCopyEnabled:[decoder decodeBoolForKey:ORDataCopyEnabled]];
         [dataFolder setDeleteWhenCopied:[decoder decodeBoolForKey:ORDataDeleteWhenCopied]];
@@ -951,20 +969,23 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
         [statusFolder setDeleteWhenCopied:[decoder decodeBoolForKey:ORDataDeleteStatusWhenCopied]];
         [statusFolder setRemotePath:[decoder decodeObjectForKey:ORDataRemotePath]];
         [statusFolder setRemoteHost:[decoder decodeObjectForKey:ORDataRemoteHost]];
-        [statusFolder setPassWord:[decoder decodeObjectForKey:ORDataPassWord]];
+        [statusFolder setPassWord:  [decoder decodeObjectForKey:ORDataPassWord]];
         [statusFolder setRemoteUserName:[decoder decodeObjectForKey:ORDataRemoteUserName]];
-        [statusFolder setVerbose:[decoder decodeBoolForKey:ORDataVerbose]];
+        [statusFolder setVerbose:   [decoder decodeBoolForKey:ORDataVerbose]];
     }
     //-------------------------------------------------------------------------------
     else {
-        [self setDataFolder:[decoder decodeObjectForKey:ORDataDataFolderName]];
-        [self setGzipFolder:[decoder decodeObjectForKey:ORDataGzipFolderName]];
-        [self setStatusFolder:[decoder decodeObjectForKey:ORDataStatusFolderName]];
-        [self setConfigFolder:[decoder decodeObjectForKey:ORDataConfigFolderName]];
+        [self setDataFolder:    [decoder decodeObjectForKey:ORDataDataFolderName]];
+        [self setGzipFolder:    [decoder decodeObjectForKey:ORDataGzipFolderName]];
+        [self setStatusFolder:  [decoder decodeObjectForKey:ORDataStatusFolderName]];
+        [self setConfigFolder:  [decoder decodeObjectForKey:ORDataConfigFolderName]];
+        [self setMetaDataFolder:[decoder decodeObjectForKey:ORDataMetaDataFolderName]];
     }
-    
-    if(!gzipFolder) [self setGzipFolder:[[[ORSmartFolder alloc]init] autorelease]];
-    
+    //next two lines prevent issues with configs already having been setup and not having
+    //the zipFolder or metaData folder in place
+    if(!gzipFolder)     [self setGzipFolder:[[[ORSmartFolder alloc]init] autorelease]];
+    if(!metaDataFolder) [self setMetaDataFolder:[[[ORSmartFolder alloc]init] autorelease]];
+
 	[self setFilePrefix:[decoder decodeObjectForKey:@"ORDataFileModelFilePrefix"]];
     [self setFileStaticSuffix:[decoder decodeObjectForKey:@"ORDataFileModelFileStaticSuffix"]];
 	[self setUseFolderStructure:[decoder decodeBoolForKey:@"ORDataFileModelUseFolderStructure"]];
@@ -994,7 +1015,8 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
     [encoder encodeObject:dataFolder		forKey:ORDataDataFolderName];
     [encoder encodeObject:gzipFolder        forKey:ORDataGzipFolderName];
     [encoder encodeObject:statusFolder		forKey:ORDataStatusFolderName];
-    [encoder encodeObject:configFolder		forKey:ORDataConfigFolderName];
+    [encoder encodeObject:configFolder      forKey:ORDataConfigFolderName];
+    [encoder encodeObject:metaDataFolder    forKey:ORDataMetaDataFolderName];
     [encoder encodeBool:saveConfiguration	forKey:ORDataSaveConfiguration];
     [encoder encodeInteger:sizeLimitReachedAction forKey:@"sizeLimitReachedAction"];
     [encoder encodeInteger:fileCheckTimeInterval forKey:@"fileCheckTimeInterval"];
@@ -1008,6 +1030,7 @@ static NSString* ORDataSaveConfiguration    = @"ORDataSaveConfiguration";
     [objDictionary setObject:[gzipFolder addParametersToDictionary:[NSMutableDictionary dictionary]] forKey:@"gzipFolder"];
     [objDictionary setObject:[statusFolder addParametersToDictionary:[NSMutableDictionary dictionary]] forKey:@"StatusFolder"];
     [objDictionary setObject:[configFolder addParametersToDictionary:[NSMutableDictionary dictionary]] forKey:@"ConfigFolder"];
+    [objDictionary setObject:[metaDataFolder addParametersToDictionary:[NSMutableDictionary dictionary]] forKey:@"MetaDataFolder"];
     [objDictionary setObject:[NSNumber numberWithInt:saveConfiguration] forKey:@"SaveConfiguration"];
 	
     [dictionary setObject:objDictionary forKey:@"Data File"];
