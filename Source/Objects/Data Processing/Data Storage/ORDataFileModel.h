@@ -51,8 +51,9 @@
         ORSmartFolder*	dataFolder;
         ORSmartFolder*  gzipFolder;
         ORSmartFolder*	statusFolder;
-        ORSmartFolder*	configFolder;
-        
+        ORSmartFolder*  configFolder;
+        ORSmartFolder*  metaDataFolder;
+
         NSMutableData*	dataBuffer;
         NSTimeInterval	lastTime;
 		BOOL			limitSize;
@@ -116,6 +117,8 @@
 - (void)setStatusFolder:(ORSmartFolder *)aStatusFolder;
 - (ORSmartFolder *)configFolder;
 - (void)setConfigFolder:(ORSmartFolder *)aConfigFolder;
+- (ORSmartFolder *)metaDataFolder;
+- (void)setMetaDataFolder:(ORSmartFolder *)aMetaDataFolder;
 - (int)sizeLimitReachedAction;
 - (void) setSizeLimitReachedAction:(int)aValue;
 - (void) setFileName:(NSString*)aFileName;

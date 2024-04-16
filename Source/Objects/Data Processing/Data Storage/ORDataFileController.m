@@ -27,7 +27,8 @@ enum {
     kData,
     kGzip,
     kStatus,
-    kConfig
+    kConfig,
+    kMetaData
 };
 
 #if !defined(MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 // 10.10-specific
@@ -52,22 +53,24 @@ enum {
     if((index<0) || (index>[tabView numberOfTabViewItems]))index = 0;
     [tabView selectTabViewItemAtIndex: index];
 	
-    [[tabView tabViewItemAtIndex:kData] setView:[[model dataFolder]view]];
-    [[tabView tabViewItemAtIndex:kGzip] setView:[[model gzipFolder]view]];
-    [[tabView tabViewItemAtIndex:kStatus] setView:[[model statusFolder]view]];
-    [[tabView tabViewItemAtIndex:kConfig] setView:[[model configFolder]view]];
-	
+    [[tabView tabViewItemAtIndex:kData]     setView:[[model dataFolder]view]];
+    [[tabView tabViewItemAtIndex:kGzip]     setView:[[model gzipFolder]view]];
+    [[tabView tabViewItemAtIndex:kStatus]   setView:[[model statusFolder]view]];
+    [[tabView tabViewItemAtIndex:kConfig]   setView:[[model configFolder]view]];
+    [[tabView tabViewItemAtIndex:kMetaData] setView:[[model metaDataFolder]view]];
+
     [model setTitles];
-    [[model dataFolder] setWindow:[self window]];
-    [[model gzipFolder] setWindow:[self window]];
-    [[model statusFolder] setWindow:[self window]];
-    [[model configFolder] setWindow:[self window]];
-	
-	[[model dataFolder] updateWindow];
-    [[model gzipFolder] updateWindow];
-	[[model statusFolder] updateWindow];
-	[[model configFolder] updateWindow];
-	
+    [[model dataFolder]     setWindow:[self window]];
+    [[model gzipFolder]     setWindow:[self window]];
+    [[model statusFolder]   setWindow:[self window]];
+    [[model configFolder]   setWindow:[self window]];
+    [[model metaDataFolder] setWindow:[self window]];
+
+	[[model dataFolder]     updateWindow];
+    [[model gzipFolder]     updateWindow];
+	[[model statusFolder]   updateWindow];
+    [[model configFolder]   updateWindow];
+    [[model metaDataFolder] updateWindow];
 }
 
 #pragma mark ¥¥¥Accessors
@@ -156,10 +159,11 @@ enum {
     
     [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
         if(result == NSAlertFirstButtonReturn){
-            [[model dataFolder] stopTheQueue];
-            [[model gzipFolder] stopTheQueue];
-            [[model statusFolder] stopTheQueue];
-            [[model configFolder] stopTheQueue];
+            [[model dataFolder]     stopTheQueue];
+            [[model gzipFolder]     stopTheQueue];
+            [[model statusFolder]   stopTheQueue];
+            [[model configFolder]   stopTheQueue];
+            [[model metaDataFolder] stopTheQueue];
         }
     }];
 #else
@@ -178,10 +182,11 @@ enum {
 - (void)_stopSendingSheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSDictionary*)userInfo
 {
 	if(returnCode == NSAlertFirstButtonReturn){
-		[[model dataFolder] stopTheQueue];
-        [[model gzipFolder] stopTheQueue];
-		[[model statusFolder] stopTheQueue];
-		[[model configFolder] stopTheQueue];
+		[[model dataFolder]     stopTheQueue];
+        [[model gzipFolder]     stopTheQueue];
+		[[model statusFolder]   stopTheQueue];
+        [[model configFolder]   stopTheQueue];
+        [[model metaDataFolder] stopTheQueue];
     }
 }
 #endif
@@ -294,6 +299,12 @@ enum {
 						 name : ORFolderDirectoryNameChangedNotification
 						object: [model statusFolder]];
 
+    [notifyCenter addObserver : self
+                     selector : @selector(dirChanged:)
+                         name : ORFolderDirectoryNameChangedNotification
+                        object: [model metaDataFolder]];
+
+    
 	[notifyCenter addObserver : self
 					 selector : @selector(dirChanged:)
 						 name : ORFolderDirectoryNameChangedNotification
@@ -430,10 +441,11 @@ enum {
 #pragma mark ¥¥¥Interface Management
 - (void) drawerDidOpen:(NSNotification *)note
 {
-	[[model dataFolder]	updateButtons];
-    [[model gzipFolder] updateButtons];
-	[[model statusFolder] updateButtons];
-	[[model configFolder] updateButtons];
+	[[model dataFolder]	    updateButtons];
+    [[model gzipFolder]     updateButtons];
+	[[model statusFolder]   updateButtons];
+    [[model configFolder]   updateButtons];
+    [[model metaDataFolder] updateButtons];
 	[openLocationDrawerButton setTitle:@"Close Drawer"];
 }
 
@@ -501,6 +513,10 @@ enum {
     if(note == nil || [note object] == [model configFolder]){
 		[copyConfigField setStringValue:[[model configFolder]copyEnabled]?@"YES":@"NO"];
     }
+    if(note == nil || [note object] == [model metaDataFolder]){
+        [copyMetaDataField setStringValue:[[model metaDataFolder]copyEnabled]?@"YES":@"NO"];
+    }
+
 }
 
 - (void) deleteWhenCopiedChanged:(NSNotification*)note
@@ -516,6 +532,9 @@ enum {
     }
     if(note == nil || [note object] == [model configFolder]){
 		[deleteConfigField setStringValue:[[model configFolder]deleteWhenCopied]?@"YES":@"NO"];
+    }
+    if(note == nil || [note object] == [model metaDataFolder]){
+        [deleteMetaDataField setStringValue:[[model metaDataFolder]deleteWhenCopied]?@"YES":@"NO"];
     }
 }
 
@@ -533,11 +552,14 @@ enum {
     if(note == nil || [note object] == [model configFolder]){
 		[queueConfigField setStringValue:[[model configFolder]queueStatusString]];
     }
-    
+    if(note == nil || [note object] == [model metaDataFolder]){
+        [queueMetaDataField setStringValue:[[model metaDataFolder]queueStatusString]];
+    }
     [stopSendingButton setEnabled: [[model dataFolder]queueIsRunning] ||
-        [[model gzipFolder]queueIsRunning]   ||
-		[[model statusFolder]queueIsRunning] ||
-		[[model configFolder]queueIsRunning]];
+        [[model gzipFolder]     queueIsRunning] ||
+        [[model statusFolder]   queueIsRunning] ||
+        [[model metaDataFolder] queueIsRunning] ||
+		[[model configFolder]   queueIsRunning]];
 }
 
 
@@ -559,6 +581,12 @@ enum {
 		if([theStatusFolder finalDirectoryName]!=nil)[logTextField setStringValue: [theStatusFolder finalDirectoryName]];
     }
 	
+    ORSmartFolder* theMetaDataFolder = [model metaDataFolder];
+    if(note==nil || [note object] == theMetaDataFolder || [note object] == model){
+        if([theMetaDataFolder finalDirectoryName]!=nil)[logTextField setStringValue: [theMetaDataFolder finalDirectoryName]];
+    }
+
+    
 	ORSmartFolder* theConfigFolder = [model configFolder];
 	if(note==nil || [note object] == theConfigFolder || [note object] == model){
 		if(![model saveConfiguration])[configTextField setStringValue:@"No Config Snap Shot (option above)"];
