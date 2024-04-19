@@ -22,6 +22,8 @@
 #import "ORHistoModel.h"
 
 @class ORRunModel;
+@class ORLNGSSlowControlsModel;
+@class ORDataFileModel;
 
 #define kL200DetectorStrings  12
 #define kL200MaxDetsPerString 14
@@ -34,23 +36,29 @@
 
 @interface ORL200Model : ORExperimentModel
 {
-    int viewType;
+    int      viewType;
     uint32_t runType;
     ORInFluxDBModel* influxDB;
     ORRunModel*      rc;
-    int influxIndex;
+    ORLNGSSlowControlsModel* slowControls;
+    int  influxIndex;
     BOOL linked;
-    bool updateDataFilePath;
+    bool updateDataFilePaths;
     //----------------------
     int dataPeriod;
     int dataCycle;
+    int lastDataCycle;
     int dataType;
     NSString* customType;
     NSString* l200FileName;
+    NSString* metaInfo;
+    NSString* metaError;
+    NSString* metaFolder;
+    NSMutableArray* runGroup;
 }
 
 #pragma mark •••Accessors
-- (int) viewType;
+- (int)  viewType;
 - (void) getRunType:(ORRunModel*)rc;
 
 - (void) setViewType:(int)type;
@@ -59,8 +67,15 @@
 - (void) setPMTPositions;
 - (void) setAuxChanPositions;
 - (void) findInFluxDB;
+- (void) findSlowControls;
+- (void) findRunControl;
+- (void) findObjects:(NSNotification*)aNote;
 - (void) runTypeChanged:(NSNotification*) aNote;
-- (void) updateDataFilePath:(NSNotification*)aNote;
+- (void) dataFileWritten:(NSNotification*) aNote;
+- (void) updateDataFilePaths:(NSNotification*)aNote;
+
+- (void) runStarted:(NSNotification*) aNote;
+- (void) runStopped:(NSNotification*) aNote;
 //----------------------
 - (int)       dataPeriod;
 - (void)      setDataPeriod:(int)aValue;
@@ -71,7 +86,12 @@
 - (NSString*) customType;
 - (void)      setCustomType:(NSString*)aType;
 - (NSString*) l200FileName;
-- (void) setL200FileName:(NSString*)s;
+- (void)      setL200FileName:(NSString*)s;
+- (NSString*) metaInfo;
+- (void)      setMetaInfo:(NSString*)s;
+- (NSString*) metaError;
+- (void)      setMetaError:(NSString*)s;
+- (NSString*) getDataType;
 
 #pragma mark •••Segment Group Methods
 - (void) showDataSet:(NSString*)name forSet:(int)aSet segment:(int)index;
@@ -88,6 +108,13 @@
 - (id)   initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
 
+#pragma mark •••MetaInfo routines
+- (void) readRunGroup;
+- (void) writeRunGroup;
+- (void) checkGroupArray;
+- (void) finalizeMetaData;
+- (void) addRunToGroup:(NSString*)dataFile;
+
 @end
 
 extern NSString* ORL200ModelViewTypeChanged;
@@ -96,6 +123,8 @@ extern NSString* ORL200ModelDataPeriodChanged;
 extern NSString* ORL200ModelDataTypeChanged;
 extern NSString* ORL200ModelCustomTypeChanged;
 extern NSString* ORL200ModelL200FileNameChanged;
+extern NSString* ORL200ModelMetaInfoChanged;
+extern NSString* ORL200ModelMetaErrorChanged;
 
 @interface ORL200HeaderRecordID : NSObject
 - (NSString*) fullID;

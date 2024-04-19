@@ -47,7 +47,7 @@ NSString* ORDataSaveConfigurationChangedNotification    = @"ORDataSaveConfigurat
 NSString* ORDataFileModelSizeLimitReachedActionChanged	= @"ORDataFileModelSizeLimitReachedActionChanged";
 NSString* ORDataFileModelSpecialFilePrefixChanged       = @"ORDataFileModelSpecialFilePrefixChanged";
 NSString* ORDataFileCheckIntervalChanged                = @"ORDataFileCheckIntervalChanged";
-
+NSString* ORDataFileModelDataWrittenNotification        = @"ORDataFileModelDataWrittenNotification";
 NSString* ORDataFileLock					= @"ORDataFileLock";
 
 #pragma mark ¥¥¥Definitions
@@ -679,7 +679,9 @@ static const int currentVersion = 1;           // Current version
 
         NSString* tmpFileName = openFilePath;
         NSLog(@"Closing dataFile: %@\n",[tmpFileName stringByAbbreviatingWithTildeInPath]);
-        
+        [[NSNotificationCenter defaultCenter] postNotificationName:ORDataFileModelDataWrittenNotification
+                                                            object:self
+                                                          userInfo:userInfo];
         //move all files from the openFiles dir to the data dir.
         NSString* openFilesDir = [openFilePath stringByDeletingLastPathComponent];
         NSFileManager* fm = [NSFileManager defaultManager];
@@ -773,11 +775,12 @@ static const int currentVersion = 1;           // Current version
         statusEnd = [[ORStatusController sharedStatusController] statusTextlength];
                 
         @try {
-           NSString* text = [[ORStatusController sharedStatusController] substringWithRange:NSMakeRange(statusStart, statusEnd - statusStart)];
-            
-            [statusFilePointer writeData:[text dataUsingEncoding:NSASCIIStringEncoding]];
+            NSString* text = [[ORStatusController sharedStatusController] substringWithRange:NSMakeRange(statusStart, statusEnd - statusStart)];
+            NSData* textData = [text dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+            [statusFilePointer writeData:textData];
         }
         @catch(NSException* localException) {
+            NSLogError(@"Error writing Status Log",@"Data File",nil);
         }
         [statusFilePointer closeFile];
         

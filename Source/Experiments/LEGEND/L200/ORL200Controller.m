@@ -163,86 +163,117 @@
                      selector : @selector(groupChanged:)
                          name : ORGroupObjectsAdded
                        object : nil];
+    
     [notifyCenter addObserver : self
                      selector : @selector(groupChanged:)
                          name : ORGroupObjectsRemoved
                        object : nil];
+    
     [notifyCenter addObserver : self
                      selector : @selector(groupChanged:)
                          name : ORGroupSelectionChanged
                        object : nil];
+    
     [notifyCenter addObserver : self
                      selector : @selector(groupChanged:)
                          name : OROrcaObjectMoved
                        object : nil];
+    
     [notifyCenter addObserver : self
                      selector : @selector(viewTypeChanged:)
                          name : ORL200ModelViewTypeChanged
                         object: model];
+    
     [notifyCenter addObserver : self
                      selector : @selector(sipmColorAxisAttributesChanged:)
                          name : ORAxisRangeChangedNotification
                        object : [sipmColorScale colorAxis]];
+    
     [notifyCenter addObserver : self
                      selector : @selector(sipmAdcClassNameChanged:)
                          name : ORSegmentGroupAdcClassNameChanged
                         object: [model segmentGroup:kL200SiPMType]];
+    
     [notifyCenter addObserver : self
                      selector : @selector(sipmMapFileChanged:)
                          name : ORSegmentGroupMapFileChanged
                         object: [model segmentGroup:kL200SiPMType]];
+    
     [notifyCenter addObserver : self
                      selector : @selector(pmtColorAxisAttributesChanged:)
                          name : ORAxisRangeChangedNotification
                        object : [pmtColorScale colorAxis]];
+    
     [notifyCenter addObserver : self
                      selector : @selector(pmtAdcClassNameChanged:)
                          name : ORSegmentGroupAdcClassNameChanged
                         object: [model segmentGroup:kL200PMTType]];
+    
     [notifyCenter addObserver : self
                      selector : @selector(pmtMapFileChanged:)
                          name : ORSegmentGroupMapFileChanged
                         object: [model segmentGroup:kL200PMTType]];
+    
     [notifyCenter addObserver : self
                      selector : @selector(auxChanColorAxisAttributesChanged:)
                          name : ORAxisRangeChangedNotification
                        object : [auxChanColorScale colorAxis]];
+    
     [notifyCenter addObserver : self
                      selector : @selector(auxChanAdcClassNameChanged:)
                          name : ORSegmentGroupAdcClassNameChanged
                         object: [model segmentGroup:kL200AuxType]];
+    
     [notifyCenter addObserver : self
                      selector : @selector(auxChanMapFileChanged:)
                          name : ORSegmentGroupMapFileChanged
                         object: [model segmentGroup:kL200AuxType]];
+    
     [notifyCenter addObserver : self
                      selector : @selector(cc4ChanMapFileChanged:)
                          name : ORSegmentGroupMapFileChanged
                         object: [model segmentGroup:kL200CC4Type]];
+    
     [notifyCenter addObserver : self
                      selector : @selector(cc4ChanAdcClassNameChanged:)
                          name : ORSegmentGroupAdcClassNameChanged
                         object: [model segmentGroup:kL200CC4Type]];
+    
     [notifyCenter addObserver : self
                      selector : @selector(adcSerialMapFileChanged:)
                          name : ORSegmentGroupMapFileChanged
                        object : self];
+    
     [notifyCenter addObserver : self
                      selector : @selector(dataCycleChanged:)
                          name : ORL200ModelDataCycleChanged
                        object : nil];
+    
     [notifyCenter addObserver : self
                      selector : @selector(dataPeriodChanged:)
                          name : ORL200ModelDataPeriodChanged
                        object : nil];
+    
     [notifyCenter addObserver : self
                      selector : @selector(dataTypeChanged:)
                          name : ORL200ModelDataTypeChanged
                        object : nil];
+    
     [notifyCenter addObserver : self
                      selector : @selector(customTypeChanged:)
                          name : ORL200ModelCustomTypeChanged
                        object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(metaInfoChanged:)
+                         name : ORL200ModelMetaInfoChanged
+                       object : nil];
+
+    [notifyCenter addObserver : self
+                     selector : @selector(metaErrorChanged:)
+                         name : ORL200ModelMetaErrorChanged
+                       object : nil];
+    
 }
 
 - (void) updateWindow
@@ -267,16 +298,16 @@
     [self dataTypeChanged:nil];
     [self customTypeChanged:nil];
     [self l200FileNameChanged:nil];
+    [self metaInfoChanged:nil];
+    [self metaErrorChanged:nil];
 }
 
 - (void) populateDataTypePopup
 {
     //called after document is loaded or configchanged
     [dataTypePopup removeAllItems];
-    if(!rc){
-        rc = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORRunModel,1"] retain];
-    }
-    NSArray* types = [rc runTypeNames];
+
+    NSArray* types = [runControl runTypeNames];
     int count = 0;
     for(int i=0;i<32;i++){
         NSString* anItem = [types objectAtIndex:i];
@@ -297,6 +328,16 @@
 - (void) l200FileNameChanged:(NSNotification*) aNote
 {
     [l200FileNameField setStringValue:[model l200FileName]];
+}
+
+- (void) metaErrorChanged:(NSNotification*) aNote
+{
+    [metaErrorField setStringValue:[model metaError]];
+}
+
+- (void) metaInfoChanged:(NSNotification*) aNote
+{
+    [metaInfoField setStringValue:[model metaInfo]];
 }
 
 - (void) dataCycleChanged:(NSNotification*) aNote
@@ -458,6 +499,11 @@
 - (IBAction) viewTypeAction:(id)sender
 {
     [model setViewType:(int)[sender indexOfSelectedItem]];
+}
+
+- (IBAction) metaInfoAction:(id)sender
+{
+    [model setMetaInfo:[sender stringValue]];
 }
 
 - (void) autoscale:(ORColorScale*)colorScale forSegmentGroup:(int)sg
@@ -623,11 +669,13 @@
 
 - (IBAction) dataCycleAction:(id)sender
 {
+    [self endEditing];
     [model setDataCycle:[sender intValue]];
 }
 
 - (IBAction) dataPeriodAction:(id)sender
 {
+    [self endEditing];
     [model setDataPeriod:[sender intValue]];
 }
 - (IBAction) bumpDataPeriod:(id)sender
@@ -654,11 +702,13 @@
 
 - (IBAction) customTypeAction:(id)sender
 {
+    [self endEditing];
     [model setCustomType:[sender stringValue]];
 }
 
 - (IBAction) dataTypePopupAction:(id)sender
 {
+    [self endEditing];
     [model setDataType:(int)[sender selectedTag]];
 }
 

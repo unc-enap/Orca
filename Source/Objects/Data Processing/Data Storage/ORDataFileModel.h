@@ -39,7 +39,7 @@
 {
     @private
         NSFileHandle*	filePointer;
-        uint64_t	dataFileSize;
+        uint64_t	    dataFileSize;
         NSString*		fileName;
 
         NSUInteger	    statusStart;
@@ -191,6 +191,7 @@ extern NSString* ORDataSaveConfigurationChangedNotification;
 extern NSString* ORDataFileModelSizeLimitReachedActionChanged;
 extern NSString* ORDataFileModelSpecialFilePrefixChanged;
 extern NSString* ORDataFileCheckIntervalChanged;
+extern NSString* ORDataFileModelDataWrittenNotification;
 
 @interface ORMD5Op : NSOperation
 {

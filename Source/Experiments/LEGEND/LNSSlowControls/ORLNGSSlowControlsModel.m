@@ -141,6 +141,10 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
     sourceHeight = [anArray mutableCopy];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORL200SlowControlsSourceHeightChanged object:self];
 }
+- (NSArray*) sourceArray
+{
+    return sourceHeight;
+}
 
 - (void) setSource:(int)i height:(int)aHeight
 {

@@ -583,7 +583,7 @@ enum {
 	
     ORSmartFolder* theMetaDataFolder = [model metaDataFolder];
     if(note==nil || [note object] == theMetaDataFolder || [note object] == model){
-        if([theMetaDataFolder finalDirectoryName]!=nil)[logTextField setStringValue: [theMetaDataFolder finalDirectoryName]];
+        if([theMetaDataFolder finalDirectoryName]!=nil)[metaDataTextField setStringValue: [theMetaDataFolder finalDirectoryName]];
     }
 
     

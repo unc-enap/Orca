@@ -63,6 +63,11 @@
 - (OROnCallPerson*) secondaryPerson:(BOOL)check;
 - (OROnCallPerson*) tertiaryPerson:(BOOL)check;
 - (OROnCallPerson*) quaternaryPerson:(BOOL)check;
+- (OROnCallPerson*) primaryPerson;
+- (OROnCallPerson*) secondaryPerson;
+- (OROnCallPerson*) tertiaryPerson;
+- (OROnCallPerson*) quaternaryPerson;
+
 - (BOOL) notificationScheduled;
 - (void) sendMessageToOnCallPerson;
 - (void) broadcastMessage:(NSString*)aMessage;

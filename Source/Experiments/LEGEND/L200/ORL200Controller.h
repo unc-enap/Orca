@@ -71,7 +71,9 @@
     IBOutlet NSTextField* customTypeLabel;
     IBOutlet NSTextField* customTypeField;
     IBOutlet NSPopUpButton* dataTypePopup;
-    IBOutlet NSTextField*   l200FileNameField;
+    IBOutlet NSTextField* l200FileNameField;
+    IBOutlet NSTextField* metaInfoField;
+    IBOutlet NSTextField* metaErrorField;
     IBOutlet NSStepper*   cycleStepper;
     IBOutlet NSStepper*   periodStepper;
 }
@@ -146,7 +148,7 @@
 - (IBAction) customTypeAction:(id)sender;
 - (IBAction) bumpDataPeriod:(id)sender;
 - (IBAction) bumpDataCycle:(id)sender;
-
+- (IBAction) metaInfoAction:(id)sender;
 
 #pragma mark •••Interface Management
 - (int) segmentTypeFromTableView:(NSTableView*)view;
