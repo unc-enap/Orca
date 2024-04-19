@@ -28,9 +28,9 @@
                 <outlet property="gzipTextField" destination="ha8-ms-n0i" id="v36-Pd-Sn1"/>
                 <outlet property="limitSizeCB" destination="397" id="403"/>
                 <outlet property="lockButton" destination="246" id="249"/>
-                <outlet property="logTextField" destination="609" id="615"/>
+                <outlet property="logTextField" destination="609" id="kWG-Yr-NYL"/>
                 <outlet property="maxFileSizeTextField" destination="399" id="404"/>
-                <outlet property="metaDataTextField" destination="6Vj-Uw-yiV" id="Yj6-Mq-5xC"/>
+                <outlet property="metaDataTextField" destination="6Vj-Uw-yiV" id="Esv-CQ-U49"/>
                 <outlet property="openLocationDrawerButton" destination="150" id="618"/>
                 <outlet property="processLimitHighField" destination="590" id="597"/>
                 <outlet property="queueConfigField" destination="364" id="367"/>
@@ -782,8 +782,8 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </view>
                         </tabViewItem>
-                        <tabViewItem label="MetaData" identifier="" id="xFq-LY-Ogt">
-                            <view key="view" id="fwY-Ca-E0h">
+                        <tabViewItem label="MetaData" identifier="4" id="OQA-wW-MMS">
+                            <view key="view" id="IdH-aL-Mwq">
                                 <rect key="frame" x="10" y="25" width="374" height="266"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </view>
