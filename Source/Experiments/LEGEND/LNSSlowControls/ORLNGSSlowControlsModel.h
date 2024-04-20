@@ -56,6 +56,7 @@
 - (int)  sourceHeight:(int)i;
 - (void) setSource:(int)i height:(int)aHeight;
 - (void) setSourceArray:(NSMutableArray*)anArray;
+- (NSArray*) sourceArray;
 - (int) pollTime;
 - (void) setPollTime:(int)aPollTime;
 - (NSString*) ipAddress;

@@ -25,6 +25,7 @@
 #import "ORAlarm.h"
 #import "ORTimeRate.h"
 #import "ORRunModel.h"
+#import "ORLNGSSlowControlsModel.h"
 #import "ORCouchDBModel.h"
 #import "ORFlashCamCrateModel.h"
 #import "ORDataFileModel.h"
@@ -42,6 +43,8 @@ NSString* ORL200ModelDataPeriodChanged   = @"ORL200ModelDataPeriodChanged";
 NSString* ORL200ModelDataTypeChanged     = @"ORL200ModelDataTypeChanged";
 NSString* ORL200ModelCustomTypeChanged   = @"ORL200ModelCustomTypeChanged";
 NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
+NSString* ORL200ModelMetaInfoChanged     = @"ORL200ModelMetaInfoChanged";
+NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
 
 @implementation ORL200Model
 
@@ -52,14 +55,30 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     [influxDB release];
     [rc release];
+    [slowControls release];
+    [runGroup release];
+    [metaFolder release];
     [super dealloc];
 }
 
 - (void) awakeAfterDocumentLoaded
 {
-    [self getRunType:nil];
-    [self findInFluxDB];
     [super awakeAfterDocumentLoaded];
+    [self readRunGroup];
+}
+
+- (void) findObjects:(NSNotification*)aNote
+{
+    [self findRunControl];
+    [self findInFluxDB];
+    [self findSlowControls];
+}
+
+- (void) findRunControl
+{
+    [rc release];
+    rc = [[[self document] findObjectWithFullID:@"ORRunModel,1"]retain];
+    [self makeL200FileName];
 }
 
 - (void) findInFluxDB
@@ -68,6 +87,11 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
     influxDB = [[[self document] findObjectWithFullID:@"ORInFluxDBModel,1"]retain];
 }
 
+- (void) findSlowControls
+{
+    [slowControls release];
+    slowControls = [[[self document] findObjectWithFullID:@"ORLNGSSlowControlsModel,1"]retain];
+}
 
 - (void) sleep
 {
@@ -108,15 +132,10 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
                        object : nil];
     
     [notifyCenter addObserver : self
-                     selector : @selector(awakeAfterDocumentLoaded)
-                         name : ORGroupObjectsAdded
-                       object : nil];
-    
-    [notifyCenter addObserver : self
                      selector : @selector(linkCC4sToDetectors)
                          name : ORRelinkSegments
                        object : nil];
-
+    
     [notifyCenter addObserver : self
                      selector : @selector(awakeAfterDocumentLoaded)
                          name : ORGroupObjectsRemoved
@@ -126,21 +145,56 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
                      selector : @selector(runStarted:)
                          name : ORRunAboutToStartNotification
                        object : nil];
+  
+    [notifyCenter addObserver : self
+                     selector : @selector(runStopped:)
+                         name : ORRunAboutToStopNotification
+                       object : nil];
     
     [notifyCenter addObserver : self
                      selector : @selector(runStarted:)
                          name : ORRunStartSubRunNotification
                        object : nil];
-
+    
     [notifyCenter addObserver : self
-                     selector : @selector(updateDataFilePath:)
+                     selector : @selector(updateDataFilePaths:)
                          name : ORDataFileModelFilePrefixChanged
                        object : nil];
     
     [notifyCenter addObserver : self
-                     selector : @selector(updateDataFilePath:)
+                     selector : @selector(updateDataFilePaths:)
                          name : ORFolderDirectoryNameChangedNotification
                        object : nil];
+ 
+    [notifyCenter addObserver : self
+                     selector : @selector(dataFileWritten:)
+                         name : ORDataFileModelDataWrittenNotification
+                       object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(findObjects:)
+                         name : ORGroupObjectsAdded
+                       object : nil];
+    
+    [notifyCenter addObserver : self
+                     selector : @selector(findObjects:)
+                         name : ORGroupObjectsRemoved
+                       object : nil];
+    
+    [notifyCenter addObserver: self
+                     selector: @selector(findObjects:)
+                         name: ORDocumentLoadedNotification
+                       object: nil];
+}
+
+- (void) dataFileWritten:(NSNotification*) aNote
+{
+    ORDataFileModel* dataFileModel = (ORDataFileModel*)[aNote object];
+    //take this opertunity to grab the directory path for the metaFold
+    [metaFolder release];
+    metaFolder = [[[dataFileModel metaDataFolder] directoryName]retain];
+    NSString* theCurrentFile = [[dataFileModel fileName] lastPathComponent];
+    [self addRunToGroup:theCurrentFile];
 }
 
 - (void) runTypeChanged:(NSNotification*) aNote
@@ -151,19 +205,24 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
 - (void) runStarted:(NSNotification*) aNote
 {
     [self postInFluxRunTime];
+    [self makeL200FileName];
     [[NSNotificationCenter defaultCenter]
-        postNotificationName:ORDataFileModelSpecialFilePrefixChanged object:nil
-        userInfo:[NSDictionary dictionaryWithObject:l200FileName forKey:@"SpecialPrefix"]];
+     postNotificationName:ORDataFileModelSpecialFilePrefixChanged object:nil
+     userInfo:[NSDictionary dictionaryWithObject:l200FileName forKey:@"SpecialPrefix"]];
 }
 
-- (void) updateDataFilePath:(NSNotification*)aNote
+- (void) runStopped:(NSNotification*) aNote
+{
+}
+
+- (void) updateDataFilePaths:(NSNotification*)aNote
 {
     // update the data file path if the file prefix was changed or the data directory was changed
     ORDataFileModel* dfm = nil;
     if([[aNote object] isKindOfClass:NSClassFromString(@"ORDataFileModel")]){
         dfm = (ORDataFileModel*) [aNote object];
     }
-    else if([[aNote object] isKindOfClass:NSClassFromString(@"ORSmartFolder")] && updateDataFilePath){
+    else if([[aNote object] isKindOfClass:NSClassFromString(@"ORSmartFolder")] && updateDataFilePaths){
         NSArray* obj = [[(ORAppDelegate*)[NSApp delegate] document]
                         collectObjectsWithClassName:@"ORDataFileModel"];
         for(id df in obj)
@@ -219,10 +278,18 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
             [dir appendString:[path substringWithRange:NSMakeRange(range1.location+range1.length,
                                                                    [path length]-range1.location-range1.length)]];
         [[dfm dataFolder] setDefaultLastPathComponent:@""];
-        updateDataFilePath = false;
+        updateDataFilePaths = false;
         [[dfm dataFolder] setDirectoryName:dir];
+        
+        //also do the metaData dir
+        NSString* metaDir = [dir stringByReplacingOccurrencesOfString:@"Data/"
+                                                        withString:@"MetaData/"];
+        [[dfm metaDataFolder] setDefaultLastPathComponent:nil];
+        [[dfm metaDataFolder] setDirectoryName:metaDir];
+        //there was an uneeded folder created that we don't want... delete it.
+        [[NSFileManager defaultManager] removeItemAtPath:[[metaDir stringByAppendingPathComponent:@"MetaData"]stringByExpandingTildeInPath] error:nil];
     }
-    else{
+    else {
         [[dfm dataFolder] setDefaultLastPathComponent:@"Data"];
         NSRange range2 = [dir rangeOfString:@"/Data" options:NSBackwardsSearch];
         if(range2.location + range2.length == [dir length])
@@ -239,13 +306,27 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
         NSLogColor([NSColor redColor], @"ORL200Model: data directory %@ does not exist, defaulting to ~/\n", dir);
         dir = [NSMutableString stringWithString:@"~/"];
     }
+    
+    NSString* metaDir = [dir stringByReplacingOccurrencesOfString:@"Data/"
+                                                    withString:@"MetaData/"];
+    BOOL metaDirExists = [[NSFileManager defaultManager] fileExistsAtPath:[dir stringByExpandingTildeInPath]
+                                                       isDirectory:&isdir];
+    if(!metaDirExists || !isdir){
+        NSLogColor([NSColor redColor], @"ORL200Model: metaData directory %@ does not exist, defaulting to ~/\n", dir);
+        metaDir = [NSMutableString stringWithString:@"~/"];
+    }
+
+    
     // if defaulting to the base path, set the dir name after the above check to ensure correct default behavior
     if(!pr){
-        updateDataFilePath = false;
-        [[dfm dataFolder] setDirectoryName:dir];
+        updateDataFilePaths = false;
+        [[dfm dataFolder]     setDirectoryName:dir];
+        [[dfm metaDataFolder] setDefaultLastPathComponent:nil];
+        [[dfm metaDataFolder] setDirectoryName:metaDir];
     }
-    updateDataFilePath = true;
+    updateDataFilePaths = true;
 }
+
 
 #pragma mark •••Accessors
 - (int) viewType
@@ -255,12 +336,7 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
 
 - (void) getRunType:(ORRunModel*)rc
 {
-    if(!rc){
-        NSArray* objs = [[self document] collectObjectsOfClass:NSClassFromString(@"ORRunModel")];
-        if([objs count]) runType = [[objs objectAtIndex:0] runType];
-        else runType = 0x0;
-    }
-    else runType = [rc runType];
+    runType = [rc runType];
 }
 
 - (void) setViewType:(int)type
@@ -293,10 +369,11 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
     [[[self undoManager] prepareWithInvocationTarget:self] setDataCycle:dataCycle];
     if(aValue<0)aValue=0;
     else if(aValue>999)aValue=999;
-    dataCycle = aValue;
+    lastDataCycle = dataCycle;
+    dataCycle     = aValue;
     [[NSNotificationCenter defaultCenter] postNotificationName:ORL200ModelDataCycleChanged object:self userInfo:nil];
     [self makeL200FileName];
-
+    [self finalizeMetaInfo];
 }
 
 - (int) dataType
@@ -308,15 +385,13 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
 {
     [[[self undoManager] prepareWithInvocationTarget:self] setDataType:dataType];
     dataType = aValue;
-    [rc release];
-    rc = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORRunModel,1"] retain];
     
     uint32_t aMask = [rc runType] & 0x00000003;
     aMask |= (0x1<<aValue);
     [rc setRunType:aMask];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORL200ModelDataTypeChanged object:self userInfo:nil];
     [self makeL200FileName];
-
+    
 }
 
 - (NSString*) customType
@@ -329,7 +404,7 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
     //limit length to 3 letters.
     if(!aType)aType = @"";
     if([aType length]>3)aType = [aType substringToIndex:3];
-
+    
     NSCharacterSet *validChars = [NSCharacterSet letterCharacterSet] ;
     validChars = [validChars invertedSet];
     NSRange  range = [aType rangeOfCharacterFromSet:validChars];
@@ -344,15 +419,19 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
 
 - (void) makeL200FileName
 {
-    NSString* dt = customType;
-    if(dataType<32){
-        if(!rc){
-            rc = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORRunModel,1"] retain];
-        }
-        dt = [[rc runTypeNames]objectAtIndex:dataType];
-    }
+    
+    NSString* dt = [self getDataType];
     //{experiment}-{data period}-{data run}-{data type}-{timestamp}
     [self setL200FileName:[NSString stringWithFormat:@"l200-p%02d-r%03d-%@",dataPeriod,dataCycle,dt]];
+}
+
+- (NSString*) getDataType
+{
+    NSString* dt = customType;
+    if(dataType<32){
+        dt = [[rc runTypeNames]objectAtIndex:dataType];
+    }
+    return dt;
 }
 
 - (NSString*) l200FileName
@@ -362,12 +441,40 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
 
 - (void) setL200FileName:(NSString*)s
 {
-    [[[self undoManager] prepareWithInvocationTarget:self] setCustomType:customType];
+    [[[self undoManager] prepareWithInvocationTarget:self] setL200FileName:l200FileName];
     [l200FileName autorelease];
     l200FileName = [s copy];
     [[NSNotificationCenter defaultCenter] postNotificationName:ORL200ModelL200FileNameChanged object:self userInfo:nil];
-    
 }
+
+- (NSString*) metaInfo
+{
+    if(!metaInfo)return @"";
+    else return metaInfo;
+}
+
+- (void) setMetaInfo:(NSString*)s
+{
+    if(!s)return;
+    [[[self undoManager] prepareWithInvocationTarget:self] setMetaInfo:metaInfo];
+    [metaInfo autorelease];
+    metaInfo = [s copy];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORL200ModelMetaInfoChanged object:self userInfo:nil];
+}
+- (NSString*) metaError
+{
+    if(!metaError)return @"";
+    else return metaError;
+}
+
+- (void) setMetaError:(NSString*)s
+{
+    if(!s)return;
+    [metaError autorelease];
+    metaError = [s copy];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORL200ModelMetaErrorChanged object:self userInfo:nil];
+}
+
 - (void) setDetectorStringPositions
 {
     ORSegmentGroup* group = [self segmentGroup:kL200DetType];
@@ -522,13 +629,13 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
         [self setCardIndex:5    forGroup:groupIndex];
         [self setChannelIndex:6 forGroup:groupIndex];
         keys = [NSArray arrayWithObjects:@"cc4_name",  @"cc4_position", @"cc4_slot", @"cc4_chan",
-                                            @"daq_crate", @"daq_board_slot",     @"daq_board_ch", nil];
+                @"daq_crate", @"daq_board_slot",     @"daq_board_ch", nil];
     }
     else if(groupIndex == kL200ADCType){
         [self setCrateIndex:0   forGroup:groupIndex];
         [self setCardIndex:2    forGroup:groupIndex];
         keys = [NSArray arrayWithObjects:@"daq_crate", @"daq_board_id", @"daq_board_slot",
-                                         @"adc_serial_0", @"adc_serial_1", nil];
+                @"adc_serial_0", @"adc_serial_1", nil];
     }
     NSMutableArray* mapEntries = [NSMutableArray array];
     if(keys) for(id key in keys) [mapEntries addObject:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -667,7 +774,7 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
                                                        [NSString stringWithFormat:@"Channel %2d",[chan intValue]],
                                                        nil]];
                     [dataSet doDoubleClick:nil];
-
+                    
                 }
             }
         }
@@ -797,13 +904,13 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
     if([aString length] == 0) return @"Not mapped";
     NSArray* parts = [aString componentsSeparatedByString:@"\n"];
     NSMutableString* s = [NSMutableString string];
-
+    
     if(aSet == kL200DetType)       [s appendString:@"Detector\n"];
     else if(aSet == kL200SiPMType) [s appendString:@"SiPM\n"];
     else if(aSet == kL200PMTType)  [s appendString:@"PMT\n"];
     else if(aSet == kL200AuxType)  [s appendString:@"Aux Chan\n"];
     else if(aSet == kL200CC4Type)  [s appendString:@"CC4\n"];
-
+    
     if(aSet == kL200DetType){
         [s appendString:@"   String\n"];
         [s appendFormat:@"           Num: %@\n", [self valueForLabel:@"tr_number"      fromParts:parts]];
@@ -852,7 +959,7 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
             [s appendFormat:@"          Slot: %@\n",   [self valueForLabel:@"c4_slot"       fromParts:parts]];
             [s appendFormat:@"          Chan: %@\n",   [self valueForLabel:@"c4_chan"       fromParts:parts]];
             [s appendFormat:@"          Name: %@-%@\n",[self valueForLabel:@"c4_name"       fromParts:parts],
-                                                       [self valueForLabel:@"c4_chan"       fromParts:parts]];
+             [self valueForLabel:@"c4_chan"       fromParts:parts]];
             
             //NSString* name = [self valueForLabel:@"c4_name" fromParts:parts];
             [s appendString:@"      DAQ\n"];
@@ -883,7 +990,7 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
     return @"";
 }
 
-    
+
 #pragma mark •••Archival
 
 - (NSMutableDictionary*) addParametersToDictionary:(NSMutableDictionary*)dictionary
@@ -908,8 +1015,9 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
     [self setDataPeriod:    [decoder decodeIntForKey:   @"DataPeriod"]];
     [self setDataType:      [decoder decodeIntForKey:   @"DataType"]];
     [self setCustomType:    [decoder decodeObjectForKey:@"CustomType"]];
+    [self setMetaInfo:      [decoder decodeObjectForKey:@"MetaInfo"]];
     [[self undoManager] enableUndoRegistration];
-    updateDataFilePath = true;
+    updateDataFilePaths = true;
     return self;
 }
 
@@ -921,6 +1029,7 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
     [encoder encodeInteger:dataPeriod   forKey:@"DataPeriod"];
     [encoder encodeInteger:dataType     forKey:@"DataType"];
     [encoder encodeObject:customType    forKey:@"CustomType"];
+    [encoder encodeObject:metaInfo      forKey:@"MetaInfo"];
 }
 
 - (void) postCouchDBRecord
@@ -1009,7 +1118,7 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
     // commented out for now (04/30/2023) move functionality into the FlashCamAdc card
     //[self influxHistograms:@"Ge"    segmentId: kL200DetType   timeStamp:aTimeStamp];
     //---------------------------------------------------------------------------------
-
+    
 }
 
 - (void) influxLoadSetUp:(NSString*)name segmentId:(int)groupIndex timeStamp:(NSTimeInterval)aTimeStamp
@@ -1021,7 +1130,7 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
     for(int i=0; i<[self numberSegmentsInGroup:groupIndex]; i++){
         ORInFluxDBMeasurement* aCmd = [ORInFluxDBMeasurement measurementForBucket:[self objectName] org:[influxDB org]];
         [aCmd start : @"SetUp"];
-
+        
         //-----------------------------------------
         //-------------setup only------------------
         //-----------------------------------------
@@ -1031,7 +1140,7 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
         short slot    = [[aDet objectForKey:@"daq_board_slot"]intValue];
         short chan    = [[aDet objectForKey:@"daq_board_ch"]intValue];
         NSString* loc = [NSString stringWithFormat:@"%02d_%02d_%02d",crate,slot,chan];
-
+        
         [aCmd addTag:@"boardId"         withString:[aDet objectForKey:@"daq_board_id"]];
         [aCmd addTag:@"cc4Chan"         withString:[aDet objectForKey:@"fe_cc4_ch"]];
         [aCmd addTag:@"channel"         withString:[aDet objectForKey:@"daq_board_ch"]];
@@ -1045,9 +1154,9 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
         [aCmd addTag:@"slot"            withString:[aDet objectForKey:@"daq_board_slot"]];
         [aCmd addTag:@"strNumber"       withString:[aDet objectForKey:@"str_number"]];
         [aCmd addTag:@"strPosition"     withString:[aDet objectForKey:@"str_position"]];
-
+        
         [aCmd addField: @"HwPresent"    withBoolean:hw!=nil];
-
+        
         if(hw!=nil){
             //channel level values
             [aCmd addField: @"numChans"      withLong:[hw numberOfChannels]]; //make it a tag
@@ -1071,7 +1180,7 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
             [aCmd addField: @"majorityLevel"  withLong:[hw majorityLevel]];
             [aCmd addField: @"majorityWidth"  withLong:[hw majorityWidth]];
         }
-
+        
         [aCmd setTimeStamp:aTimeStamp];
         [influxDB executeDBCmd:aCmd];
     }
@@ -1116,8 +1225,205 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
         [influxDB executeDBCmd:aCmd];
     }
 }
-    
 
+#pragma mark •••MetaInfo routines
+- (void) finalizeMetaInfo
+{
+    if(![runGroup count])return;
+    //cycle has ended.. convert the runGroup into JSON
+    NSMutableDictionary* preJson = [NSMutableDictionary dictionary];
+    //how many run sets in group
+    NSArray*      firstSet = [runGroup objectAtIndex:0];
+    NSDictionary* firstRun = [firstSet objectAtIndex:0];
+    NSString*     type     = [firstRun objectForKey:@"type"];
+    //we assume:
+    //  1)the type doesn't change in a cycle
+    //  2)a phy cycle has just one set of runs
+    if([type isEqualToString:@"phy"]){
+        //phy cycle ... easy
+        NSString* run1 = [[firstSet firstObject] objectForKey:@"name"];
+        NSString* run2 = [[firstSet lastObject]  objectForKey:@"name"];
+        NSMutableArray* firstLastInCycle = [NSMutableArray array];
+        [firstLastInCycle addObject:run1];
+        if(![run1 isEqualToString:run2])[firstLastInCycle addObject:run2];
+        [preJson setObject:firstLastInCycle forKey:@"keys"];
+        [preJson setObject:[self metaInfo] forKey:@"info"];
+        [preJson setObject:[NSNumber numberWithLong:[firstSet count]] forKey:@"number_of_keys"];
+    }
+    else if([type isEqualToString:@"cal"]){
+        long runCount = 0;
+        //cal cycle... harder. Have to parse thru all the sets
+        //each set -should- have differing source positions
+        //have to make multiple passes
+        //fist get the keys
+        NSMutableArray* keys = [NSMutableArray array];
+        for(id aSet in runGroup){
+            runCount += [aSet count];
+            NSString* run1 = [[aSet firstObject] objectForKey:@"name"];
+            NSString* run2 = [[aSet lastObject]  objectForKey:@"name"];
+            [keys addObject:run1];
+            [keys addObject:run2];
+        }
+        [preJson setObject:keys forKey:@"keys"];
+
+        NSMutableDictionary* infoDict   = [NSMutableDictionary dictionary];
+        [preJson setObject:infoDict forKey:@"info"];
+        
+        NSMutableDictionary* sourceDict = [NSMutableDictionary dictionary];
+        int posIndex = 1;
+        for(id aSet in runGroup){
+            NSMutableDictionary* positionDict = [NSMutableDictionary dictionary];
+            
+            keys = [NSMutableArray array]; //new key array
+            NSString* run1 = [[aSet firstObject] objectForKey:@"name"];
+            NSString* run2 = [[aSet lastObject]  objectForKey:@"name"];
+            [keys addObject:run1];
+            [keys addObject:run2];
+            [positionDict setObject:keys forKey:@"keys"];
+            
+            //assume source doesn't move over this set
+            NSArray* sourceArray = [[aSet firstObject] objectForKey:@"sourcePositions"];
+            NSMutableDictionary* posInMMDict = [NSMutableDictionary dictionary];
+            for(int i=0;i<[sourceArray count];i++){
+                [posInMMDict setObject:[sourceArray objectAtIndex:i] forKey:[NSString stringWithFormat:@"SIS%d",i+1]];
+            }
+            [positionDict setObject:posInMMDict forKey:@"positions_in_mm"];
+            
+            [sourceDict setObject:positionDict forKey:[NSString stringWithFormat:@"pos%d",posIndex]];
+            posIndex++;
+        }
+        [preJson setObject:[NSNumber numberWithLong:runCount] forKey:@"number_of_keys"];
+        [preJson setObject:sourceDict forKey:@"info"];
+    }
+    
+ 
+    NSError* error;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:preJson
+                                                       options:NSJSONWritingPrettyPrinted
+                                                         error:&error];
+    if (!jsonData) {
+        [self setMetaError:@"Failed to make JSON file"];
+    }
+    else {
+        [self setMetaError:@""];
+        NSString* jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        
+        //{experiment}-{data period}-{data run}-{data type}-{timestamp}
+        NSString* path = [NSString stringWithFormat:@"l200-p%02d-r%03d-%@-T%c-keys",dataPeriod,lastDataCycle,type,'%'];
+        if(metaFolder){
+            NSString* fullPath = [metaFolder stringByAppendingPathComponent:path];
+            fullPath = [fullPath stringByExpandingTildeInPath];
+            NSError *error;
+            BOOL succeed = [jsonString writeToFile:fullPath
+                                        atomically:YES
+                                          encoding:NSUTF8StringEncoding
+                                             error:&error];
+            if (!succeed){
+                [self setMetaError:@"Failed to write Meta data"];
+            }
+        }
+        else {
+            [self setMetaError:@"Failed find Meta Folder"];
+        }
+    }
+    //clear the metaData for next cycle
+    [runGroup release];
+    runGroup = nil;
+    [self checkRunGroup];
+    [self writeRunGroup];
+}
+
+- (NSDictionary*) makeSourceDictionary:(NSArray*)sourcePositions
+{
+    NSMutableDictionary* aDict = [NSMutableDictionary dictionary];
+    for(int i=0;i<[sourcePositions count];i++){
+        [aDict setObject:[sourcePositions objectAtIndex:i] forKey:[NSString stringWithFormat:@"SIS%d",i]];
+    }
+    return aDict;
+}
+
+- (void) checkRunGroup
+{
+    if(!runGroup){
+        runGroup = [[NSMutableArray array] retain];
+    }
+}
+
+- (bool) isArray:(NSArray*) array1 differentFrom:(NSArray*)array2
+{
+    if([array1 count] != [array2 count])return YES;
+    for(int i=0;i<[array1 count];i++){
+        if(![[array1 objectAtIndex:i] isEqualTo:[array2 objectAtIndex:i]]){
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (void) addRunToGroup:(NSString*)dataFileName
+{
+    [self checkRunGroup];
+    //runGroup is array containing an array of runs with the same source position
+    //if the source position differs from the last run, then make a new
+    //-----get last run for reference
+    NSMutableArray* currentRunSet = [runGroup   lastObject];
+    NSDictionary*   lastRun       = [currentRunSet lastObject];
+    //-------------------------------
+    //create structures for this run
+    NSString* dt          = [self getDataType];
+    NSArray*  sourceArray = [slowControls sourceArray];
+    //-------------------------------
+    //create dictionary for this run
+    NSMutableDictionary* thisRun = [NSMutableDictionary dictionary];
+    [thisRun setObject: dt           forKey:@"type"];
+    [thisRun setObject: dataFileName forKey:@"name"];
+    if(sourceArray){
+        [thisRun setObject: sourceArray forKey:@"sourcePositions"];
+    }
+    //-------------------------------------
+    //-----figure out where to put this run
+    if(!currentRunSet){
+        //must be the first one
+        currentRunSet = [NSMutableArray array];
+        [currentRunSet addObject:thisRun];
+        [runGroup addObject:currentRunSet];
+    }
+    else {
+        //there have been others runs in this cycle
+        //check the last run and make new set if source positions changed
+        NSArray* lastSourceArray = [lastRun objectForKey:@"sourcePositions"];
+        bool sourceDidChange = [self isArray:sourceArray differentFrom:lastSourceArray];
+        if(sourceDidChange){
+            //source moved... start new run set
+            NSMutableArray* newSet = [NSMutableArray array];
+            [newSet addObject:thisRun];
+            [runGroup addObject:newSet];
+        }
+        else {
+            //source didn't move... add this run to current set
+            [currentRunSet addObject:thisRun];
+        }
+    }
+    
+     [self writeRunGroup];
+}
+
+- (void) readRunGroup
+{
+    //read in the rungroup and convert to a mutable array
+    if(runGroup)[runGroup release];
+    NSArray* aGroup = [[NSUserDefaults standardUserDefaults] objectForKey:@"L200RunGroup"];
+    runGroup = [[NSMutableArray array]retain];
+    for(id aRunSet in aGroup){
+        [runGroup addObject:[[aRunSet mutableCopy]autorelease]];
+    }
+    [self checkRunGroup];
+}
+
+- (void) writeRunGroup
+{
+    [[NSUserDefaults standardUserDefaults] setObject:runGroup forKey:@"L200RunGroup"];
+}
 
 @end
 

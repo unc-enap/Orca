@@ -124,7 +124,7 @@ NSString* ORRelinkSegments   = @"ORRelinkSegments";
     }
     else{
         for(id key in dict) [channels addObject:[NSString stringWithString:key]];
-        chans = [NSArray array];
+        //chans = [NSArray array];
         chans = [channels sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
         if(type == kL200CC4Type){
             for(id aPosition in chans){

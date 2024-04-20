@@ -35,7 +35,8 @@
 	IBOutlet NSButton*		limitSizeCB;
 	IBOutlet NSTextField* 	fileTextField;
     IBOutlet NSTextField*   gzipTextField;
-	IBOutlet NSTextField* 	statusTextField;
+    IBOutlet NSTextField*   statusTextField;
+    IBOutlet NSTextField*   metaDataTextField;
 	IBOutlet NSTextField* 	sizeTextField;
 	IBOutlet NSButton*      saveConfigurationCB;
     IBOutlet NSTextField*   fileCheckIntervalField;
@@ -50,14 +51,18 @@
 	IBOutlet NSTextField* 	copyStatusField;
 	IBOutlet NSTextField* 	deleteStatusField;
 
-	IBOutlet NSTextField* 	copyConfigField;
-	IBOutlet NSTextField* 	deleteConfigField;
+    IBOutlet NSTextField*   copyConfigField;
+    IBOutlet NSTextField*   deleteConfigField;
+
+    IBOutlet NSTextField*   copyMetaDataField;
+    IBOutlet NSTextField*   deleteMetaDataField;
 
 	IBOutlet NSButton*      stopSendingButton;
 	IBOutlet NSTextField* 	queueDataField;
     IBOutlet NSTextField*   queueGzipField;
 	IBOutlet NSTextField* 	queueStatusField;
-	IBOutlet NSTextField* 	queueConfigField;
+    IBOutlet NSTextField*   queueConfigField;
+    IBOutlet NSTextField*   queueMetaDataField;
 
 	IBOutlet NSButton*      openLocationDrawerButton;
 	IBOutlet NSButton*      lockButton;

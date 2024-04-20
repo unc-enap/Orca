@@ -63,7 +63,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ApplicationSupport);
 	NSString* hostAddress = @"Unknown";
 	NSArray* names =  [[NSHost currentHost] addresses];
 	id aName;
-	int index = 0;
 	int n = (int)[names count];
 	int i;
 	for(i=0;i<n;i++){
@@ -73,7 +72,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ApplicationSupport);
 				hostAddress = aName;
 				break;
 			}
-			index++;
 		}
 	}
 	return hostAddress;
