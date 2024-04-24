@@ -94,6 +94,7 @@ enum{
     BOOL			shipRecords;
     NSMutableDictionary* hvConstraints;
     ORAlarm*        safetyLoopNotGoodAlarm;
+    ORAlarm*        eventAlarm;
     BOOL            doNotPostSafetyLoopAlarm;
     NSDate*         lastHistoryPost;
 }
@@ -238,6 +239,9 @@ enum{
 - (void) removeHvConstraint:(NSString*)aName;
 - (NSDictionary*)hvConstraints;
 - (NSString*) constraintReport;
+
+- (NSString*) eventString:(unsigned long)events;
+- (NSString*) moduleEventString:(unsigned long)moduleEvents;
 
 @end
 
