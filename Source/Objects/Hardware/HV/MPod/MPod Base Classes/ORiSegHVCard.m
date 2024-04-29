@@ -287,13 +287,13 @@ NSString* ORiSegHVCardCustomInfoChanged         = @"ORiSegHVCardCustomInfoChange
         //handle other event alarms MAH 04/24/24
         if(events || (moduleEvents && !(moduleEvents & moduleEventSafetyLoopNotGood))){
             if(!eventAlarm){
-                NSString* s = [NSString stringWithFormat:@"%@ Event ", [self fullID] ];
+                NSString* s = [NSString stringWithFormat:@"%@ Event - See Info", [self fullID] ];
                 eventAlarm = [[ORAlarm alloc] initWithName:s  severity: kHardwareAlarm];
                 [eventAlarm setSticky: YES];
                 NSString* eventList = [NSString stringWithFormat:@"%@%@\n Clear Events to clear this alarm.",[self moduleEventString:moduleEvents],[self eventString:events]];
                 [eventAlarm setHelpString:eventList];
                 [eventAlarm postAlarm];
-                NSLog(@"MPod Module Events: %@", eventList);
+                NSLog(@"%@ Events: %@", [self fullID],eventList);
             }
         }
         else if( eventAlarm ){
