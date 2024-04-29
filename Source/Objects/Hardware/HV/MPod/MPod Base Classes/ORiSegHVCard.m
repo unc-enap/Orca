@@ -76,8 +76,13 @@ NSString* ORiSegHVCardCustomInfoChanged         = @"ORiSegHVCardCustomInfoChange
         [chanName[i] release];
 	}
     [hvConstraints release];
+    
     [safetyLoopNotGoodAlarm clearAlarm];
-    [safetyLoopNotGoodAlarm release];
+    [safetyLoopNotGoodAlarm release];  
+    
+    [eventAlarm clearAlarm];
+    [eventAlarm release];
+    
     [modParams release];
     [lastHistoryPost release];
     
@@ -260,7 +265,8 @@ NSString* ORiSegHVCardCustomInfoChanged         = @"ORiSegHVCardCustomInfoChange
         modParams = [[aDictionary objectForKey:moduleID] retain];
 
         int moduleEvents = (int)[self moduleFailureEvents];
-        
+        int events       = (int)[self failureEvents];
+
         if(!doNotPostSafetyLoopAlarm && (moduleEvents & moduleEventSafetyLoopNotGood)){
             if(!safetyLoopNotGoodAlarm){
                 NSString* s = [NSString stringWithFormat:@"%@ Safety Loop Not Good", [self fullID] ];
@@ -278,6 +284,24 @@ NSString* ORiSegHVCardCustomInfoChanged         = @"ORiSegHVCardCustomInfoChange
             safetyLoopNotGoodAlarm = nil;
         }
         
+        //handle other event alarms MAH 04/24/24
+        if(events || (moduleEvents && !(moduleEvents & moduleEventSafetyLoopNotGood))){
+            if(!eventAlarm){
+                NSString* s = [NSString stringWithFormat:@"%@ Event ", [self fullID] ];
+                eventAlarm = [[ORAlarm alloc] initWithName:s  severity: kHardwareAlarm];
+                [eventAlarm setSticky: YES];
+                NSString* eventList = [NSString stringWithFormat:@"%@%@",[self moduleEventString:moduleEvents],[self eventString:events]];
+                [eventAlarm setHelpString:eventList];
+                [eventAlarm postAlarm];
+                NSLog(@"MPod Module Events: %@\n%@\n", eventList);
+            }
+        }
+        else if( eventAlarm ){
+            [eventAlarm clearAlarm];
+            [eventAlarm release];
+            eventAlarm = nil;
+        }
+        //---------------------------
         
         if(shipRecords) [self shipDataRecords];
         
@@ -357,6 +381,7 @@ NSString* ORiSegHVCardCustomInfoChanged         = @"ORiSegHVCardCustomInfoChange
         
     }
 }
+
 - (void) requestMaxValues:(int)aChannel
 {
  	if([self channelInBounds:aChannel]){
@@ -769,6 +794,7 @@ NSString* ORiSegHVCardCustomInfoChanged         = @"ORiSegHVCardCustomInfoChange
 	}
 	return failEvents;
 }
+
 - (uint32_t) moduleFailureEvents
 {
     id oldModuleEventStatus = [[[modParams objectForKey:@"moduleEventStatus"] copy] autorelease];
@@ -1261,6 +1287,37 @@ NSString* ORiSegHVCardCustomInfoChanged         = @"ORiSegHVCardCustomInfoChange
     for(id aKey in hvConstraints){
         s = [s stringByAppendingFormat:@"%@ : %@\n",aKey,[hvConstraints objectForKey:aKey]];
     }
+    return s;
+}
+
+- (NSString*) eventString:(unsigned long)events
+{
+    NSString* s = @"";
+    if(events & outputFailureMinSenseVoltageMask)    s = [s stringByAppendingString:@"Min Voltage\n"];
+    if(events & outputFailureMaxSenseVoltageMask)    s = [s stringByAppendingString:@"Max Voltage\n"];
+    if(events & outputFailureMaxTerminalVoltageMask) s = [s stringByAppendingString:@"Term. Voltage\n"];
+    if(events & outputFailureMaxCurrentMask)         s = [s stringByAppendingString:@"Max Current\n"];
+    if(events & outputFailureMaxTemperatureMask)     s = [s stringByAppendingString:@"Max Temp\n"];
+    if(events & outputFailureMaxPowerMask)           s = [s stringByAppendingString:@"Max Power\n"];
+    if(events & outputFailureTimeoutMask)            s = [s stringByAppendingString:@"Timeout\n"];
+    if(events & outputCurrentLimitedMask)            s = [s stringByAppendingString:@"Current Limit\n"];
+    if(events & outputEmergencyOffMask)              s = [s stringByAppendingString:@"Emergency Off\n"];
+    return s;
+}
+
+- (NSString*) moduleEventString:(unsigned long)moduleEvents
+{
+    NSString* s = @"";
+    
+    if(moduleEvents & moduleEventPowerFail)          s = [s stringByAppendingString:@"Module Power Failure\n"];
+    if(moduleEvents & moduleEventLiveInsertion)      s = [s stringByAppendingString:@"Module Live Insertion\n"];
+    if(moduleEvents & moduleEventService)            s = [s stringByAppendingString:@"Module Requires Service\n"];
+    if(moduleEvents &
+       moduleHardwareLimitVoltageNotGood)            s = [s stringByAppendingString:@"Module Hard Limit Voltage Not Good\n"];
+    if(moduleEvents & moduleEventInputError)         s = [s stringByAppendingString:@"Module Input Error\n"];
+    if(moduleEvents & moduleEventSafetyLoopNotGood)  s = [s stringByAppendingString:@"Module Safety Loop Not Good\n"];
+    if(moduleEvents & moduleEventSupplyNotGood)      s = [s stringByAppendingString:@"Module Power Supply Not Good\n"];
+    if(moduleEvents & moduleEventTemperatureNotGood) s = [s stringByAppendingString:@"Module Temperature Not Good\n"];
     return s;
 }
 @end
