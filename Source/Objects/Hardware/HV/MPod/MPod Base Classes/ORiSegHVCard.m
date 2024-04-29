@@ -293,7 +293,7 @@ NSString* ORiSegHVCardCustomInfoChanged         = @"ORiSegHVCardCustomInfoChange
                 NSString* eventList = [NSString stringWithFormat:@"%@%@",[self moduleEventString:moduleEvents],[self eventString:events]];
                 [eventAlarm setHelpString:eventList];
                 [eventAlarm postAlarm];
-                NSLog(@"MPod Module Events: %@\n%@\n", eventList);
+                NSLog(@"MPod Module Events: %@", eventList);
             }
         }
         else if( eventAlarm ){
