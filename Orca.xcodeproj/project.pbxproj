@@ -3527,6 +3527,8 @@
 		A87C69A02BB32D43003017F4 /* fsp_buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = A87C69902BB32D3B003017F4 /* fsp_buffer.c */; };
 		A87C69A12BB32D43003017F4 /* fsp_stats.h in Headers */ = {isa = PBXBuildFile; fileRef = A87C69912BB32D3E003017F4 /* fsp_stats.h */; };
 		A87C69A22BB32D43003017F4 /* fsp.c in Sources */ = {isa = PBXBuildFile; fileRef = A87C69922BB32D42003017F4 /* fsp.c */; };
+		A8E562992BEE7A530035A419 /* fsp_serializers.c in Sources */ = {isa = PBXBuildFile; fileRef = A8E562972BEE7A510035A419 /* fsp_serializers.c */; };
+		A8E5629A2BEE7A530035A419 /* fsp_serializers.h in Headers */ = {isa = PBXBuildFile; fileRef = A8E562982BEE7A520035A419 /* fsp_serializers.h */; };
 		A8E6695B2A710BB200A9775A /* time_utils.c in Sources */ = {isa = PBXBuildFile; fileRef = A8E669592A710BB200A9775A /* time_utils.c */; };
 		A8E6695C2A710BB200A9775A /* time_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = A8E6695A2A710BB200A9775A /* time_utils.h */; };
 		B322A309146D64D000491347 /* ORTcpIpProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = B322A308146D64D000491347 /* ORTcpIpProtocol.h */; };
@@ -7484,6 +7486,8 @@
 		A87C69902BB32D3B003017F4 /* fsp_buffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fsp_buffer.c; sourceTree = "<group>"; };
 		A87C69912BB32D3E003017F4 /* fsp_stats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fsp_stats.h; sourceTree = "<group>"; };
 		A87C69922BB32D42003017F4 /* fsp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fsp.c; sourceTree = "<group>"; };
+		A8E562972BEE7A510035A419 /* fsp_serializers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fsp_serializers.c; sourceTree = "<group>"; };
+		A8E562982BEE7A520035A419 /* fsp_serializers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fsp_serializers.h; sourceTree = "<group>"; };
 		A8E669592A710BB200A9775A /* time_utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = time_utils.c; sourceTree = "<group>"; };
 		A8E6695A2A710BB200A9775A /* time_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = time_utils.h; sourceTree = "<group>"; };
 		B322A308146D64D000491347 /* ORTcpIpProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORTcpIpProtocol.h; sourceTree = "<group>"; };
@@ -15245,6 +15249,8 @@
 		A87C695E2BB323A4003017F4 /* fsp */ = {
 			isa = PBXGroup;
 			children = (
+				A8E562972BEE7A510035A419 /* fsp_serializers.c */,
+				A8E562982BEE7A520035A419 /* fsp_serializers.h */,
 				A87C69902BB32D3B003017F4 /* fsp_buffer.c */,
 				A87C69832BB32D0F003017F4 /* fsp_buffer.h */,
 				A87C698F2BB32D38003017F4 /* fsp_channelmaps.h */,
@@ -16385,6 +16391,7 @@
 				8402797207397B8700972B07 /* ORBit3Controller.h in Headers */,
 				8402797407397B8700972B07 /* ORBit3Model.h in Headers */,
 				840BB584201BCA7500F37939 /* ORUDPConnection.h in Headers */,
+				A8E5629A2BEE7A530035A419 /* fsp_serializers.h in Headers */,
 				84028033073BF49D00972B07 /* ORLAMhosting.h in Headers */,
 				849F4C790768DA930087E9A8 /* ORDataExplorerModel.h in Headers */,
 				849F4C7B0768DA930087E9A8 /* ORHeaderItem.h in Headers */,
@@ -19348,6 +19355,7 @@
 				840D56E30F39E9BF00F9A274 /* ORPacDecoders.m in Sources */,
 				840D56E50F39E9BF00F9A274 /* ORPacModel.m in Sources */,
 				84B28CE10F4C597900E2B056 /* ORBocTIC3Controller.m in Sources */,
+				A8E562992BEE7A530035A419 /* fsp_serializers.c in Sources */,
 				84B28CE30F4C597900E2B056 /* ORBocTIC3Decoders.m in Sources */,
 				84B28CE50F4C597900E2B056 /* ORBocTIC3Model.m in Sources */,
 				84B28CFB0F4C5DBB00E2B056 /* ORAmi286Controller.m in Sources */,

@@ -8,6 +8,8 @@
 
 #include <fcio.h>
 
+#define FC_MAXTICKS 249999999
+
 typedef struct StreamProcessor {
   Timestamp pre_trigger_window;
   Timestamp post_trigger_window;
@@ -25,21 +27,25 @@ typedef struct StreamProcessor {
   Timestamp post_trigger_timestamp;
   Timestamp pre_trigger_timestamp;
 
-  float relative_sum_threshold_pe;
-  float absolute_sum_threshold_pe;
-  int majority_threshold;
+  float relative_wps_threshold;
+  float absolute_wps_threshold;
+  int hwm_threshold;
   int muon_coincidence;
 
-  int sipm_prescaling_offset;
-  int sipm_prescaling_counter;
-  float sipm_prescaling_rate;
-  char *sipm_prescaling;
+  uint64_t wps_reference_flags_ct;
+  uint64_t wps_reference_flags_hwm;
+  uint64_t wps_reference_flags_wps;
 
-  Timestamp sipm_prescaling_timestamp;
-  Timestamp ge_prescaling_timestamp;
+  int wps_prescaling_offset;
+  int wps_prescaling_counter;
+  char *wps_prescaling;
+  float wps_prescaling_rate;
+  Timestamp wps_prescaling_timestamp;
 
-  int ge_prescaling_threshold_adc;
-  float ge_prescaling_rate;
+
+  Timestamp hwm_prescaling_timestamp;
+  int hwm_prescaling_threshold_adc;
+  float hwm_prescaling_rate;
 
   int loglevel;
 
@@ -47,21 +53,7 @@ typedef struct StreamProcessor {
 
   int checks;
 
-  unsigned int set_trigger_flags;
-  unsigned int set_event_flags;
-
-  struct {
-    int pulser_trace_index;
-    int pulser_adc_threshold;
-
-    int baseline_trace_index;
-    int baseline_adc_threshold;
-
-    int muon_trace_index;
-    int muon_adc_threshold;
-
-    int tracemap_format;
-  } aux;
+  FSPFlags enabled_flags;
 
   FSPBuffer *buffer;
   Timestamp minimum_buffer_window;
@@ -69,9 +61,10 @@ typedef struct StreamProcessor {
 
   WindowedPeakSumConfig *wps_cfg;
   HardwareMajorityConfig *hwm_cfg;
+  ChannelThresholdConfig *ct_cfg;
 
 } StreamProcessor;
 
 
 int fsp_process(StreamProcessor* processor, FSPState* fsp_state, FCIOState* state);
-unsigned int fsp_write_decision(StreamProcessor* processor, FSPState* fsp_state);
+unsigned int fsp_write_decision(FSPState* fsp_state);

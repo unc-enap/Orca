@@ -62,11 +62,11 @@ void FSPBufferCommitState(FSPBuffer *buffer) {
   fsp_state->in_buffer = 1;
   buffer->insert_state = (buffer->insert_state + 1) % buffer->max_states;
   buffer->nrecords_inserted++;
-  if (fsp_state->contains_timestamp)
+  if (fsp_state->has_timestamp)
     buffer->buffer_timestamp = timestamp_sub(fsp_state->timestamp, buffer->buffer_window);
 
   buffer->fill_level++;
-  // fprintf(stderr, "DEBUG/BUFFER: insert_state %d has_timestamp %d fill_level %d last_tag %d\n", buffer->insert_state-1, fsp_state->contains_timestamp, buffer->fill_level, fsp_state->state->last_tag);
+  // fprintf(stderr, "DEBUG/BUFFER: insert_state %d has_timestamp %d fill_level %d last_tag %d\n", buffer->insert_state-1, fsp_state->has_timestamp, buffer->fill_level, fsp_state->state->last_tag);
 }
 
 FSPState *FSPBufferFetchState(FSPBuffer *buffer) {
@@ -80,17 +80,10 @@ FSPState *FSPBufferFetchState(FSPBuffer *buffer) {
     buffer->nrecords_fetched++;
     buffer->fill_level--;
 
-    // record is handed off, forget about it ... until we reuse it.
+    // record is handed off, forget about it
     fsp_state->in_buffer = 0;
 
     return fsp_state;
-  // } else {
-    // Timestamp delta = timestamp_sub(buffer->buffer_timestamp, fsp_state->timestamp);
-    // fprintf(stderr, "DEBUG/BUFFER: Cannot fetch from buffer: fsp_state %p in_buffer %d buffer_ts=%ld.%09ld fsp_state_ts=%ld.%09ld delta_ts=%ld.%09ld\n",
-    //   (void*)fsp_state, fsp_state->in_buffer, buffer->buffer_timestamp.seconds, buffer->buffer_timestamp.nanoseconds,
-    //   fsp_state->timestamp.seconds, fsp_state->timestamp.nanoseconds,
-    //   delta.seconds, delta.nanoseconds
-    // );
   }
 
   return NULL;

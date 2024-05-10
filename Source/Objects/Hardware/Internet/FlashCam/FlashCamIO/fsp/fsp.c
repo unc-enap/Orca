@@ -43,12 +43,7 @@ FSPState* FSPOutput(StreamProcessor* processor) {
     return NULL;
   }
 
-  fsp_state->write = fsp_write_decision(processor, fsp_state);
-
-  if (processor->wps_cfg)
-    fsp_state->wps_trigger_list = &processor->wps_cfg->trigger_list;
-  else
-    fsp_state->wps_trigger_list = NULL;
+  fsp_state->write = fsp_write_decision(fsp_state);
 
   if (fsp_state->write) {
     processor->nrecords_written++;
@@ -64,14 +59,21 @@ FSPState* FSPOutput(StreamProcessor* processor) {
   return fsp_state;
 }
 
-void FSPEnableTriggerFlags(StreamProcessor* processor, unsigned int flags) {
-  processor->set_trigger_flags = flags;
-  if (processor->loglevel >= 4) fprintf(stderr, "DEBUG FSPEnableTriggerFlags: %u\n", flags);
+void FSPEnableTriggerFlags(StreamProcessor* processor, STFlags flags) {
+  processor->enabled_flags.trigger = flags;
+  if (processor->loglevel >= 4) fprintf(stderr, "DEBUG FSPEnableTriggerFlags: %llu\n", flags.is_flagged);
 }
 
-void FSPEnableEventFlags(StreamProcessor* processor, unsigned int flags) {
-  processor->set_event_flags = flags;
-  if (processor->loglevel >= 4) fprintf(stderr, "DEBUG FSPEnableEventFlags: %u\n", flags);
+void FSPEnableEventFlags(StreamProcessor* processor, EventFlags flags) {
+  processor->enabled_flags.event = flags;
+  if (processor->loglevel >= 4) fprintf(stderr, "DEBUG FSPEnableEventFlags: %llu\n", flags.is_flagged);
+}
+
+void FSPSetWPSReferenceFlag(StreamProcessor* processor, uint64_t hwm_flags, uint64_t ct_flags, uint64_t wps_flags) {
+  processor->wps_reference_flags_ct = ct_flags;
+  processor->wps_reference_flags_hwm = hwm_flags;
+  processor->wps_reference_flags_wps = wps_flags;
+  if (processor->loglevel >= 4) fprintf(stderr, "DEBUG FSPSetWPSReferenceFlags: hwm %llu ct %llu wps %llu\n", hwm_flags, ct_flags, wps_flags);
 }
 
 StreamProcessor* FSPCreate(void) {
@@ -84,19 +86,17 @@ StreamProcessor* FSPCreate(void) {
       (FCIOMaxSamples + 1) * 16;        // this is required to check for retrigger events
   processor->minimum_buffer_depth = 16; // the minimum buffer window * 30kHz event rate requires at least 16 records
   processor->stats->start_time = 0.0;    // reset, actual start time happens with the first record insertion.
-  processor->ge_prescaling_timestamp.seconds = -1; // will init when it's needed
-  processor->sipm_prescaling_timestamp.seconds = -1; // will init when it's needed
-
-  /* default tracemap for HW and PS are fine, as they are allocated to zero.
-     special aux channels need to be below zero, as they don't have an ntraces counter.
-  */
-  processor->aux.pulser_trace_index = -1;
-  processor->aux.baseline_trace_index = -1;
-  processor->aux.muon_trace_index = -1;
+  processor->hwm_prescaling_timestamp.seconds = -1; // will init when it's needed
+  processor->wps_prescaling_timestamp.seconds = -1; // will init when it's needed
 
   /* hardcoded defaults which should make sense. Used SetFunctions outside to overwrite */
-  FSPEnableEventFlags(processor, EVT_EXTENDED | EVT_RETRIGGER | EVT_DF_PULSER | EVT_DF_BASELINE);
-  FSPEnableTriggerFlags(processor, ST_HWM_TRIGGER | ST_HWM_PRESCALED | ST_WPS_ABS_TRIGGER | ST_WPS_REL_TRIGGER | ST_WPS_PRESCALED);
+  FSPEnableEventFlags(processor, (EventFlags){ .is_retrigger = 1, .is_extended = 1});
+  FSPEnableTriggerFlags(processor, (STFlags){ .hwm_multiplicity = 1, .hwm_prescaled = 1, .wps_abs = 1, .wps_rel = 1, .wps_prescaled = 1, .ct_multiplicity = 1} );
+  HWMFlags ref_hwm = {0};
+  ref_hwm.multiplicity_threshold = 1;
+  CTFlags ref_ct = {0};
+  WPSFlags ref_wps = {0};
+  FSPSetWPSReferenceFlag(processor, ref_hwm.is_flagged, ref_ct.is_flagged, ref_wps.is_flagged);
 
   return processor;
 }
@@ -135,6 +135,7 @@ void FSPDestroy(StreamProcessor* processor) {
   free(processor->stats);
   free(processor->hwm_cfg);
   free(processor->wps_cfg);
+  free(processor->ct_cfg);
   free(processor);
 }
 
@@ -176,7 +177,7 @@ FSPState* FSPGetNextState(StreamProcessor* processor, FCIOStateReader* reader, i
   int nfree = FSPFreeStates(processor);
 
   while (!(fsp_state = FSPOutput(processor))) {
-    /* this should handle the timeout, so we don't have to do it in the postprocessor.
+    /* this should handle the timeout, so we don't have to do it in the processor.
      */
     if (!nfree) {
       if (timedout) *timedout = 10;
@@ -185,21 +186,18 @@ FSPState* FSPGetNextState(StreamProcessor* processor, FCIOStateReader* reader, i
     state = FCIOGetNextState(reader, timedout);
 
     if (!state) {
-      /* End-of-Stream or timeout reached, we assume finish and flush
+      /* End-of-Stream or timeout reached, fcio will close with any of the following timedout states:
         timedout == 0 here means stream is closed, no timeout was reached
         timedout == 1 no event from buffer for specified timeout interval.
         timedout == 2 stream is still alive, but only unselected tags arrived
       */
       if (FSPFlush(processor)) {
-        continue;  // still something in the buffer, try to read the rest after unlocking the buffer window.
+        continue;  // still something in the buffer. FSPFlush unlocks the buffer and FSPOutput will read until the end.
       } else {
         return NULL;
       }
     } else {
-      // int n_free_buffer_states = FSPInput(processor, state); // got a valid state, process and hope that we get a new
-      // fsp_state
-      nfree = FSPInput(processor,
-                       state);  // got a valid state, process and hope that we get a new fsp_state on the next loop
+      nfree = FSPInput(processor,state);  // got a valid state
     }
   }
 
