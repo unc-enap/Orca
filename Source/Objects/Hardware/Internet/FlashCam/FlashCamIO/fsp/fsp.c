@@ -172,8 +172,8 @@ FSPState* FSPGetNextState(StreamProcessor* processor, FCIOStateReader* reader, i
 
   fsp_init_stats(processor);
 
-  FSPState* fsp_state;
-  FCIOState* state;
+  FSPState* fsp_state = NULL;
+  FCIOState* state = NULL;
   int nfree = FSPFreeStates(processor);
 
   while (!(fsp_state = FSPOutput(processor))) {
