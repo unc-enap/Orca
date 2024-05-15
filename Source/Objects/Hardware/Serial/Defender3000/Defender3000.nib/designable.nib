@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment version="1070" identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="ORDefender3000Controller">
+            <connections>
+                <outlet property="commandPopup" destination="vLQ-ku-pYE" id="VlT-aO-3Ab"/>
+                <outlet property="lockButton" destination="844" id="1287"/>
+                <outlet property="lockDocField" destination="843" id="1286"/>
+                <outlet property="openPortButton" destination="888" id="1285"/>
+                <outlet property="plotter0" destination="1308" id="1314"/>
+                <outlet property="pollTimePopup" destination="1176" id="1288"/>
+                <outlet property="portListPopup" destination="880" id="1289"/>
+                <outlet property="portStateField" destination="892" id="893"/>
+                <outlet property="printIntervalField" destination="mtn-bl-yZv" id="wkp-F0-grc"/>
+                <outlet property="sendAllButton" destination="0Qi-oL-eGz" id="iZy-Xd-XQG"/>
+                <outlet property="shipWeightButton" destination="1193" id="car-pb-6Sk"/>
+                <outlet property="tareField" destination="yYe-L6-DiA" id="eL0-NE-5Mu"/>
+                <outlet property="timeField" destination="1280" id="1283"/>
+                <outlet property="unitsPopup" destination="N5c-9E-Flo" id="nvw-kA-EcR"/>
+                <outlet property="weightField" destination="1278" id="BzO-aD-vIt"/>
+                <outlet property="window" destination="5" id="38"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application"/>
+        <window title="Defender 3000" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="5" userLabel="Window">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="25" y="880" width="381" height="293"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
+            <value key="minSize" type="size" width="213" height="107"/>
+            <view key="contentView" id="6">
+                <rect key="frame" x="0.0" y="0.0" width="381" height="293"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <popUpButton imageHugsTitle="YES" verticalHuggingPriority="750" id="880">
+                        <rect key="frame" x="225" y="259" width="126" height="15"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <popUpButtonCell key="cell" type="push" title="Item1" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="883" id="1292">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="miniSystem"/>
+                            <menu key="menu" title="OtherViews" id="881">
+                                <items>
+                                    <menuItem title="Item1" state="on" id="883"/>
+                                    <menuItem title="Item2" id="882"/>
+                                    <menuItem title="Item3" id="884"/>
+                                </items>
+                            </menu>
+                        </popUpButtonCell>
+                        <connections>
+                            <action selector="portListAction:" target="-2" id="887"/>
+                        </connections>
+                    </popUpButton>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="57" id="885">
+                        <rect key="frame" x="157" y="260" width="61" height="13"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="RS232 Port:" id="1293">
+                            <font key="font" metaFont="label"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button imageHugsTitle="YES" id="888">
+                        <rect key="frame" x="300" y="232" width="50" height="20"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <buttonCell key="cell" type="squareTextured" title="Open" bezelStyle="texturedSquare" alignment="center" controlSize="small" borderStyle="border" inset="2" id="1294">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="openPortAction:" target="-2" id="890"/>
+                        </connections>
+                    </button>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="57" id="891">
+                        <rect key="frame" x="157" y="236" width="61" height="13"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Port State:" id="1295">
+                            <font key="font" metaFont="label"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="57" id="892">
+                        <rect key="frame" x="226" y="231" width="61" height="18"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="---" id="1296">
+                            <font key="font" metaFont="label"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <imageView id="1112">
+                        <rect key="frame" x="31" y="215" width="50" height="62"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" image="Defender3000" id="1297"/>
+                    </imageView>
+                    <tabView controlSize="small" id="1196">
+                        <rect key="frame" x="-1" y="-10" width="383" height="223"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <tabViewItems>
+                            <tabViewItem label="Basic Ops" identifier="" id="1197">
+                                <view key="view" id="1199">
+                                    <rect key="frame" x="10" y="25" width="363" height="185"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <button imageHugsTitle="YES" verticalHuggingPriority="750" id="1110">
+                                            <rect key="frame" x="244" y="93" width="102" height="28"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <buttonCell key="cell" type="push" title="&lt;--Send Cmd" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="1300">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="smallSystem"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="sendCommandAction:" target="-2" id="26a-ka-Jpf"/>
+                                            </connections>
+                                        </button>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="44" id="1160">
+                                            <rect key="frame" x="30" y="162" width="38" height="13"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Weight" id="1301">
+                                                <font key="font" metaFont="label"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="109" id="1161">
+                                            <rect key="frame" x="86" y="162" width="113" height="13"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Time Measured (GMT)" id="1302">
+                                                <font key="font" metaFont="label"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <box verticalHuggingPriority="750" boxType="separator" id="1162">
+                                            <rect key="frame" x="7" y="155" width="197" height="5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </box>
+                                        <box horizontalHuggingPriority="750" boxType="separator" id="1164">
+                                            <rect key="frame" x="79" y="130" width="5" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </box>
+                                        <box verticalHuggingPriority="750" boxType="separator" id="1166">
+                                            <rect key="frame" x="7" y="177" width="197" height="5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </box>
+                                        <box horizontalHuggingPriority="750" boxType="separator" id="1168">
+                                            <rect key="frame" x="201" y="130" width="5" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </box>
+                                        <box verticalHuggingPriority="750" boxType="separator" id="1170">
+                                            <rect key="frame" x="7" y="124" width="197" height="5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </box>
+                                        <box horizontalHuggingPriority="750" boxType="separator" id="1172">
+                                            <rect key="frame" x="5" y="130" width="5" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </box>
+                                        <box verticalHuggingPriority="750" boxType="separator" id="1174">
+                                            <rect key="frame" x="7" y="179" width="197" height="5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </box>
+                                        <popUpButton imageHugsTitle="YES" verticalHuggingPriority="750" id="1176">
+                                            <rect key="frame" x="264" y="126" width="90" height="22"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <popUpButtonCell key="cell" type="push" title="10 sec" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="10" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1179" id="1303">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <menu key="menu" title="OtherViews" id="1177">
+                                                    <items>
+                                                        <menuItem title="Never" id="1178"/>
+                                                        <menuItem title="10 sec" state="on" tag="10" id="1179"/>
+                                                        <menuItem title="30 sec" tag="30" id="1180"/>
+                                                        <menuItem title="1 min" tag="60" id="1181"/>
+                                                        <menuItem title="5 min" tag="300" id="1182"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="pollTimeAction:" target="-2" id="1185"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <popUpButton imageHugsTitle="YES" verticalHuggingPriority="750" id="vLQ-ku-pYE">
+                                            <rect key="frame" x="96" y="97" width="150" height="22"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <popUpButtonCell key="cell" type="push" title="Displayed Wt" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="2Et-fb-MmO" id="Irn-U4-Rh8">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <menu key="menu" title="OtherViews" id="JWt-jz-RjY">
+                                                    <items>
+                                                        <menuItem title="Displayed Wt" id="2Et-fb-MmO"/>
+                                                        <menuItem title="Stable Displayed Wt" tag="1" id="z2D-dF-QfY"/>
+                                                        <menuItem title="Continuous Print" tag="2" id="m3C-3P-gLI"/>
+                                                        <menuItem title="Print When Stable" tag="3" id="Mnv-S9-eNt"/>
+                                                        <menuItem title="Interval Print" tag="4" id="eSk-bt-B88"/>
+                                                        <menuItem title="Zero" tag="5" id="WLm-c7-3MF"/>
+                                                        <menuItem title="Tare" tag="6" id="RDG-vi-qXj"/>
+                                                        <menuItem title="Get Tare Value" tag="7" id="fH1-Xn-3a9"/>
+                                                        <menuItem title="Get Unit" tag="8" id="4Tx-ir-ocz"/>
+                                                        <menuItem title="Set Unit" tag="9" id="xkZ-KE-eOR"/>
+                                                        <menuItem title="Get Version" tag="10" id="cAI-Pv-6CQ"/>
+                                                        <menuItem title="Full Reset" tag="11" id="WdL-M2-Fvl"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="commandAction:" target="-2" id="j7l-ms-Brh"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="50" id="1183">
+                                            <rect key="frame" x="210" y="131" width="55" height="13"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="ORCA Poll" id="1304">
+                                                <font key="font" metaFont="label"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <button imageHugsTitle="YES" id="1193">
+                                            <rect key="frame" x="6" y="100" width="85" height="18"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <buttonCell key="cell" type="check" title="Ship Weight" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="1306">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="smallSystem"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="shipWeightAction:" target="-2" id="gSq-gE-INN"/>
+                                            </connections>
+                                        </button>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="49" id="1278">
+                                            <rect key="frame" x="14" y="135" width="44" height="14"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="100" id="1123">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="49" id="NrC-BG-o0l">
+                                            <rect key="frame" x="59" y="131" width="18" height="18"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Kg" id="GFG-gd-HeO">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="95" id="1280">
+                                            <rect key="frame" x="93" y="135" width="99" height="14"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="10/12 12:12:12" id="1140">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField autoresizesSubviews="NO" horizontalHuggingPriority="251" verticalHuggingPriority="750" mirrorLayoutDirectionWhenInternationalizing="never" preferredMaxLayoutWidth="138" textCompletion="NO" id="VRm-HD-Zdp">
+                                            <rect key="frame" x="210" y="146" width="158" height="33"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" controlSize="small" enabled="NO" allowsUndo="NO" title="ORCA polling is independent of device interval printing" id="ts2-Yg-pu0">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mtn-bl-yZv">
+                                            <rect key="frame" x="268" y="48" width="46" height="19"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="right" title="1" drawsBackground="YES" id="piD-RJ-koz">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <connections>
+                                                <action selector="printIntervalAction:" target="-2" id="Ikv-9H-egi"/>
+                                            </connections>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1z9-yM-G6b">
+                                            <rect key="frame" x="316" y="51" width="29" height="14"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="sec" id="gg3-HW-kxk">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yYe-L6-DiA">
+                                            <rect key="frame" x="268" y="24" width="46" height="19"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="right" title="1" drawsBackground="YES" id="7jw-yF-uLR">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <connections>
+                                                <action selector="tareAction:" target="-2" id="vh5-bh-8VO"/>
+                                            </connections>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BL0-A3-iJR">
+                                            <rect key="frame" x="316" y="26" width="29" height="14"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="oz" id="HH6-Ba-uwE">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gWw-xR-13T">
+                                            <rect key="frame" x="196" y="27" width="70" height="14"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Tare Weight:" id="qHJ-1N-1fS">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dJe-1c-sm9">
+                                            <rect key="frame" x="230" y="73" width="35" height="14"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Units:" id="aaj-wI-7ZV">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kmm-LW-qfu">
+                                            <rect key="frame" x="154" y="49" width="112" height="14"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Interval (0 disables):" id="lYY-hC-zoh">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton imageHugsTitle="YES" verticalHuggingPriority="750" id="N5c-9E-Flo">
+                                            <rect key="frame" x="264" y="68" width="80" height="22"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <popUpButtonCell key="cell" type="push" title="g" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="qBU-OZ-pEz" id="FDF-a1-4n8">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <menu key="menu" title="OtherViews" id="YXo-VD-tcH">
+                                                    <items>
+                                                        <menuItem title="g" id="qBU-OZ-pEz"/>
+                                                        <menuItem title="kg" tag="1" id="faE-1K-OSk"/>
+                                                        <menuItem title="lbs" tag="2" id="jxO-P9-sew"/>
+                                                        <menuItem title="oz" tag="3" id="Lz8-UU-JFR"/>
+                                                        <menuItem title="lbs:oz" tag="4" id="RcO-e1-dcu"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="unitsAction:" target="-2" id="LrW-aW-9fW"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="194" id="843">
+                                            <rect key="frame" x="51" y="1" width="100" height="18"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Label Font Text" id="1298">
+                                                <font key="font" metaFont="label"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <button imageHugsTitle="YES" id="844">
+                                            <rect key="frame" x="7" y="8" width="36" height="33"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="Unlocked" imagePosition="above" alignment="center" alternateImage="Locked" inset="2" id="1299">
+                                                <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="label"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="lockAction:" target="-2" id="878"/>
+                                            </connections>
+                                        </button>
+                                        <button imageHugsTitle="YES" verticalHuggingPriority="750" id="0Qi-oL-eGz">
+                                            <rect key="frame" x="10" y="65" width="137" height="28"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <buttonCell key="cell" type="push" title="Send All User Values" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="kjN-cD-ReL">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="smallSystem"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="sendAllAction:" target="-2" id="09l-0q-WQ7"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                </view>
+                            </tabViewItem>
+                            <tabViewItem label="Charts" identifier="" id="1198">
+                                <view key="view" id="1200">
+                                    <rect key="frame" x="10" y="25" width="363" height="185"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="275" id="1204">
+                                            <rect key="frame" x="36" y="162" width="279" height="23"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Weight" id="1307">
+                                                <font key="font" size="12" name="Papyrus"/>
+                                                <color key="textColor" red="0.045761364999999998" green="0.018705428" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <customView id="1308" customClass="ORCompositeTimeLineView">
+                                            <rect key="frame" x="-3" y="-3" width="369" height="161"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <connections>
+                                                <outlet property="delegate" destination="-2" id="1311"/>
+                                            </connections>
+                                        </customView>
+                                    </subviews>
+                                </view>
+                            </tabViewItem>
+                        </tabViewItems>
+                    </tabView>
+                </subviews>
+            </view>
+            <connections>
+                <outlet property="delegate" destination="-2" id="61"/>
+            </connections>
+            <point key="canvasLocation" x="69.5" y="143.5"/>
+        </window>
+        <view id="1163">
+            <rect key="frame" x="0.0" y="0.0" width="125" height="1"/>
+            <autoresizingMask key="autoresizingMask"/>
+        </view>
+        <view id="1165">
+            <rect key="frame" x="0.0" y="0.0" width="1" height="111"/>
+            <autoresizingMask key="autoresizingMask"/>
+        </view>
+        <view id="1167">
+            <rect key="frame" x="0.0" y="0.0" width="125" height="1"/>
+            <autoresizingMask key="autoresizingMask"/>
+        </view>
+        <view id="1169">
+            <rect key="frame" x="0.0" y="0.0" width="1" height="111"/>
+            <autoresizingMask key="autoresizingMask"/>
+        </view>
+        <view id="1171">
+            <rect key="frame" x="0.0" y="0.0" width="125" height="1"/>
+            <autoresizingMask key="autoresizingMask"/>
+        </view>
+        <view id="1173">
+            <rect key="frame" x="0.0" y="0.0" width="1" height="111"/>
+            <autoresizingMask key="autoresizingMask"/>
+        </view>
+        <view id="1175">
+            <rect key="frame" x="0.0" y="0.0" width="125" height="1"/>
+            <autoresizingMask key="autoresizingMask"/>
+        </view>
+        <popUpButton imageHugsTitle="YES" verticalHuggingPriority="750" id="EcE-Gd-ZwJ">
+            <rect key="frame" x="0.0" y="0.0" width="90" height="22"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <popUpButtonCell key="cell" type="push" title="10 sec" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="10" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="HQa-8G-Ycl" id="r1J-VO-FuL">
+                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                <font key="font" metaFont="smallSystem"/>
+                <menu key="menu" title="OtherViews" id="Hit-v2-SdM">
+                    <items>
+                        <menuItem title="Never" id="8qx-Ri-urJ"/>
+                        <menuItem title="10 sec" state="on" tag="10" id="HQa-8G-Ycl"/>
+                        <menuItem title="30 sec" tag="30" id="jnr-0k-6lD"/>
+                        <menuItem title="1 min" tag="60" id="XBY-bI-e9o"/>
+                        <menuItem title="5 min" tag="300" id="10z-r8-Re4"/>
+                    </items>
+                </menu>
+            </popUpButtonCell>
+            <connections>
+                <action selector="pollTimeAction:" target="-2" id="9UE-Hm-Haa"/>
+            </connections>
+            <point key="canvasLocation" x="66" y="357"/>
+        </popUpButton>
+        <menuItem title="Print Stable" id="Ttc-5o-Av9"/>
+        <menuItem title="Set Unit" id="u80-jh-RNv"/>
+    </objects>
+    <resources>
+        <image name="Defender3000" width="75" height="64"/>
+        <image name="Locked" width="33" height="36"/>
+        <image name="Unlocked" width="33" height="36"/>
+    </resources>
+</document>
