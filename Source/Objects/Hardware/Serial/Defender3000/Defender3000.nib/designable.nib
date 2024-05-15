@@ -27,7 +27,7 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Defender 3000" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="5" userLabel="Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
@@ -105,7 +105,7 @@
                         <tabViewItems>
                             <tabViewItem label="Basic Ops" identifier="" id="1197">
                                 <view key="view" id="1199">
-                                    <rect key="frame" x="10" y="25" width="363" height="185"/>
+                                    <rect key="frame" x="10" y="29" width="363" height="181"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button imageHugsTitle="YES" verticalHuggingPriority="750" id="1110">
@@ -188,23 +188,22 @@
                                         <popUpButton imageHugsTitle="YES" verticalHuggingPriority="750" id="vLQ-ku-pYE">
                                             <rect key="frame" x="96" y="97" width="150" height="22"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <popUpButtonCell key="cell" type="push" title="Displayed Wt" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="2Et-fb-MmO" id="Irn-U4-Rh8">
+                                            <popUpButtonCell key="cell" type="push" title="Displayed Wt" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="2Et-fb-MmO" id="Irn-U4-Rh8">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <menu key="menu" title="OtherViews" id="JWt-jz-RjY">
                                                     <items>
-                                                        <menuItem title="Displayed Wt" id="2Et-fb-MmO"/>
+                                                        <menuItem title="Displayed Wt" state="on" id="2Et-fb-MmO"/>
                                                         <menuItem title="Stable Displayed Wt" tag="1" id="z2D-dF-QfY"/>
-                                                        <menuItem title="Continuous Print" tag="2" id="m3C-3P-gLI"/>
-                                                        <menuItem title="Print When Stable" tag="3" id="Mnv-S9-eNt"/>
-                                                        <menuItem title="Interval Print" tag="4" id="eSk-bt-B88"/>
-                                                        <menuItem title="Zero" tag="5" id="WLm-c7-3MF"/>
-                                                        <menuItem title="Tare" tag="6" id="RDG-vi-qXj"/>
-                                                        <menuItem title="Get Tare Value" tag="7" id="fH1-Xn-3a9"/>
-                                                        <menuItem title="Get Unit" tag="8" id="4Tx-ir-ocz"/>
-                                                        <menuItem title="Set Unit" tag="9" id="xkZ-KE-eOR"/>
-                                                        <menuItem title="Get Version" tag="10" id="cAI-Pv-6CQ"/>
-                                                        <menuItem title="Full Reset" tag="11" id="WdL-M2-Fvl"/>
+                                                        <menuItem title="Print When Stable" tag="2" id="Mnv-S9-eNt"/>
+                                                        <menuItem title="Interval Print" tag="3" id="eSk-bt-B88"/>
+                                                        <menuItem title="Zero" tag="4" id="WLm-c7-3MF"/>
+                                                        <menuItem title="Tare" tag="5" id="RDG-vi-qXj"/>
+                                                        <menuItem title="Get Tare Value" tag="6" id="fH1-Xn-3a9"/>
+                                                        <menuItem title="Get Unit" tag="7" id="4Tx-ir-ocz"/>
+                                                        <menuItem title="Set Unit" tag="8" id="xkZ-KE-eOR"/>
+                                                        <menuItem title="Get Version" tag="9" id="cAI-Pv-6CQ"/>
+                                                        <menuItem title="Full Reset" tag="10" id="WdL-M2-Fvl"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
@@ -260,7 +259,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField autoresizesSubviews="NO" horizontalHuggingPriority="251" verticalHuggingPriority="750" mirrorLayoutDirectionWhenInternationalizing="never" preferredMaxLayoutWidth="138" textCompletion="NO" id="VRm-HD-Zdp">
-                                            <rect key="frame" x="210" y="146" width="158" height="33"/>
+                                            <rect key="frame" x="210" y="142" width="158" height="33"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" enabled="NO" allowsUndo="NO" title="ORCA polling is independent of device interval printing" id="ts2-Yg-pu0">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -320,7 +319,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dJe-1c-sm9">
-                                            <rect key="frame" x="230" y="73" width="35" height="14"/>
+                                            <rect key="frame" x="230" y="69" width="35" height="14"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Units:" id="aaj-wI-7ZV">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -340,12 +339,12 @@
                                         <popUpButton imageHugsTitle="YES" verticalHuggingPriority="750" id="N5c-9E-Flo">
                                             <rect key="frame" x="264" y="68" width="80" height="22"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <popUpButtonCell key="cell" type="push" title="g" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="qBU-OZ-pEz" id="FDF-a1-4n8">
+                                            <popUpButtonCell key="cell" type="push" title="g" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="qBU-OZ-pEz" id="FDF-a1-4n8">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <menu key="menu" title="OtherViews" id="YXo-VD-tcH">
                                                     <items>
-                                                        <menuItem title="g" id="qBU-OZ-pEz"/>
+                                                        <menuItem title="g" state="on" id="qBU-OZ-pEz"/>
                                                         <menuItem title="kg" tag="1" id="faE-1K-OSk"/>
                                                         <menuItem title="lbs" tag="2" id="jxO-P9-sew"/>
                                                         <menuItem title="oz" tag="3" id="Lz8-UU-JFR"/>
