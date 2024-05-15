@@ -480,7 +480,9 @@ NSString* ORDefender3000Lock                   = @"ORDefender3000Lock";
 
 - (void) sendAllCommands
 {
-    
+    [self addCmdToQueue:[NSString stringWithFormat:@"%dP",printInterval]];
+    [self addCmdToQueue:[NSString stringWithFormat:@"%dT",tare]];
+    [self addCmdToQueue:[NSString stringWithFormat:@"%dU",units]];
 }
 
 - (void) sendCommand
@@ -556,12 +558,13 @@ NSString* ORDefender3000Lock                   = @"ORDefender3000Lock";
     else if([theResponse hasPrefix:@"OK"]){
     }
     else {
+        NSInteger len = [theResponse length];
         NSString* polarity = [theResponse substringWithRange:NSMakeRange(0,1)];
         NSString* wt       = [theResponse substringWithRange:NSMakeRange(2,7)];
         NSString* theUnit  = [theResponse substringWithRange:NSMakeRange(11,5)];
         NSString* stable   = [theResponse substringWithRange:NSMakeRange(15,1)];
-        NSString* legend   = [theResponse substringWithRange:NSMakeRange(16,3)];
-        
+        NSString* legend = @"";
+        if(len>=17)legend   = [theResponse substringWithRange:NSMakeRange(16,3)];
         float rawWt = [wt floatValue];
         if([polarity isEqualToString:@"-"])rawWt *= -1;
 		[self setWeight:rawWt];
