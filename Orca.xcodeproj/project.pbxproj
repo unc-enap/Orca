@@ -572,6 +572,14 @@
 		840775220CEE7CAD0073F5A9 /* SnapBack.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 840775140CEE7CAC0073F5A9 /* SnapBack.tiff */; };
 		840795DE11DA562300A91442 /* edu.washington.npl.orca.Katrin.plist in Resources */ = {isa = PBXBuildFile; fileRef = 840795DD11DA562300A91442 /* edu.washington.npl.orca.Katrin.plist */; };
 		840795EF11DA59AB00A91442 /* edu.washington.npl.orca.Prespectrometer.plist in Resources */ = {isa = PBXBuildFile; fileRef = 840795EE11DA59AB00A91442 /* edu.washington.npl.orca.Prespectrometer.plist */; };
+		8407F0602BF3A90D00668A6C /* Defender3000.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8407F0572BF3A90D00668A6C /* Defender3000.nib */; };
+		8407F0612BF3A90D00668A6C /* Defender3000.tif in Resources */ = {isa = PBXBuildFile; fileRef = 8407F0582BF3A90D00668A6C /* Defender3000.tif */; };
+		8407F0622BF3A90D00668A6C /* ORDefender3000Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 8407F0592BF3A90D00668A6C /* ORDefender3000Controller.h */; };
+		8407F0632BF3A90D00668A6C /* ORDefender3000Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 8407F05A2BF3A90D00668A6C /* ORDefender3000Controller.m */; };
+		8407F0642BF3A90D00668A6C /* ORDefender3000Decoders.h in Headers */ = {isa = PBXBuildFile; fileRef = 8407F05B2BF3A90D00668A6C /* ORDefender3000Decoders.h */; };
+		8407F0652BF3A90D00668A6C /* ORDefender3000Decoders.m in Sources */ = {isa = PBXBuildFile; fileRef = 8407F05C2BF3A90D00668A6C /* ORDefender3000Decoders.m */; };
+		8407F0662BF3A90D00668A6C /* ORDefender3000Model.h in Headers */ = {isa = PBXBuildFile; fileRef = 8407F05D2BF3A90D00668A6C /* ORDefender3000Model.h */; };
+		8407F0672BF3A90D00668A6C /* ORDefender3000Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 8407F05E2BF3A90D00668A6C /* ORDefender3000Model.m */; };
 		8407F0E50DEF66DB000F1441 /* Caen862.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8407F0DF0DEF66DB000F1441 /* Caen862.nib */; };
 		8407F0E60DEF66DB000F1441 /* ORCaen862Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 8407F0E00DEF66DB000F1441 /* ORCaen862Controller.h */; };
 		8407F0E70DEF66DB000F1441 /* ORCaen862Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 8407F0E10DEF66DB000F1441 /* ORCaen862Controller.m */; };
@@ -4595,6 +4603,14 @@
 		840775140CEE7CAC0073F5A9 /* SnapBack.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = SnapBack.tiff; path = "Source/Main Dialogs/HelpCenter/SnapBack.tiff"; sourceTree = SOURCE_ROOT; };
 		840795DD11DA562300A91442 /* edu.washington.npl.orca.Katrin.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = edu.washington.npl.orca.Katrin.plist; path = Source/Experiments/Katrin/edu.washington.npl.orca.Katrin.plist; sourceTree = SOURCE_ROOT; };
 		840795EE11DA59AB00A91442 /* edu.washington.npl.orca.Prespectrometer.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = edu.washington.npl.orca.Prespectrometer.plist; path = Source/Experiments/Prespectrometer/edu.washington.npl.orca.Prespectrometer.plist; sourceTree = SOURCE_ROOT; };
+		8407F0572BF3A90D00668A6C /* Defender3000.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = Defender3000.nib; sourceTree = "<group>"; };
+		8407F0582BF3A90D00668A6C /* Defender3000.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Defender3000.tif; sourceTree = "<group>"; };
+		8407F0592BF3A90D00668A6C /* ORDefender3000Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORDefender3000Controller.h; sourceTree = "<group>"; };
+		8407F05A2BF3A90D00668A6C /* ORDefender3000Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORDefender3000Controller.m; sourceTree = "<group>"; };
+		8407F05B2BF3A90D00668A6C /* ORDefender3000Decoders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORDefender3000Decoders.h; sourceTree = "<group>"; };
+		8407F05C2BF3A90D00668A6C /* ORDefender3000Decoders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORDefender3000Decoders.m; sourceTree = "<group>"; };
+		8407F05D2BF3A90D00668A6C /* ORDefender3000Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORDefender3000Model.h; sourceTree = "<group>"; };
+		8407F05E2BF3A90D00668A6C /* ORDefender3000Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORDefender3000Model.m; sourceTree = "<group>"; };
 		8407F0DF0DEF66DB000F1441 /* Caen862.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Caen862.nib; path = Source/Objects/Hardware/Vme/CAEN/CV862/Caen862.nib; sourceTree = SOURCE_ROOT; };
 		8407F0E00DEF66DB000F1441 /* ORCaen862Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORCaen862Controller.h; path = Source/Objects/Hardware/Vme/CAEN/CV862/ORCaen862Controller.h; sourceTree = SOURCE_ROOT; };
 		8407F0E10DEF66DB000F1441 /* ORCaen862Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORCaen862Controller.m; path = Source/Objects/Hardware/Vme/CAEN/CV862/ORCaen862Controller.m; sourceTree = SOURCE_ROOT; };
@@ -8765,6 +8781,21 @@
 			path = "Source/Main Dialogs/HelpCenter";
 			sourceTree = SOURCE_ROOT;
 		};
+		8407F05F2BF3A90D00668A6C /* Defender3000 */ = {
+			isa = PBXGroup;
+			children = (
+				8407F0572BF3A90D00668A6C /* Defender3000.nib */,
+				8407F0582BF3A90D00668A6C /* Defender3000.tif */,
+				8407F05D2BF3A90D00668A6C /* ORDefender3000Model.h */,
+				8407F05E2BF3A90D00668A6C /* ORDefender3000Model.m */,
+				8407F0592BF3A90D00668A6C /* ORDefender3000Controller.h */,
+				8407F05A2BF3A90D00668A6C /* ORDefender3000Controller.m */,
+				8407F05B2BF3A90D00668A6C /* ORDefender3000Decoders.h */,
+				8407F05C2BF3A90D00668A6C /* ORDefender3000Decoders.m */,
+			);
+			path = Defender3000;
+			sourceTree = "<group>";
+		};
 		8407F0DD0DEF66DB000F1441 /* CV862 */ = {
 			isa = PBXGroup;
 			children = (
@@ -10406,6 +10437,7 @@
 				84B28CEF0F4C5DBB00E2B056 /* Ami286 */,
 				84B28CD50F4C597900E2B056 /* BocTIC3 */,
 				84499CBD0F13E457004B855B /* CTITemp */,
+				8407F05F2BF3A90D00668A6C /* Defender3000 */,
 				84499B6E0F13BB6E004B855B /* MksPdr2000 */,
 				84098F4D0F964F0100036BE8 /* PDcu */,
 				840D56D70F39E9BF00F9A274 /* Pac */,
@@ -16363,6 +16395,7 @@
 				8435625A08FDB287002864C7 /* ORContainerInputController.h in Headers */,
 				8435625C08FDB287002864C7 /* ORContainerInputModel.h in Headers */,
 				8435626208FDB287002864C7 /* ORContainerOutputController.h in Headers */,
+				8407F0662BF3A90D00668A6C /* ORDefender3000Model.h in Headers */,
 				8435626408FDB287002864C7 /* ORContainerOutputModel.h in Headers */,
 				8435626608FDB287002864C7 /* ORContainerFeedThru.h in Headers */,
 				8435626808FDB287002864C7 /* ORContainerFeedThruController.h in Headers */,
@@ -16941,6 +16974,7 @@
 				844FD9E11180E89B00FD5A46 /* ORKJL2200IonGaugeDecoders.h in Headers */,
 				844FD9E31180E89B00FD5A46 /* ORKJL2200IonGaugeModel.h in Headers */,
 				84E966D111848BEF008D9119 /* MajoranaController.h in Headers */,
+				8407F0622BF3A90D00668A6C /* ORDefender3000Controller.h in Headers */,
 				84E966D311848BEF008D9119 /* MajoranaDetectorView.h in Headers */,
 				84E966D511848BEF008D9119 /* MajoranaModel.h in Headers */,
 				84BF43CE118793FA00F55216 /* ORCaen1785Controller.h in Headers */,
@@ -17186,6 +17220,7 @@
 				84F3085215483A4000663573 /* ORMks660BController.h in Headers */,
 				8467DE461E4E631900DDF735 /* ORDataPipeController.h in Headers */,
 				84F3085415483A4000663573 /* ORMks660BDecoders.h in Headers */,
+				8407F0642BF3A90D00668A6C /* ORDefender3000Decoders.h in Headers */,
 				84F3085615483A4000663573 /* ORMks660BModel.h in Headers */,
 				8418301D156153D2004EC81F /* ORTM700Controller.h in Headers */,
 				84E01B642A8FC81000EC712F /* ORBt610Controller.h in Headers */,
@@ -17583,6 +17618,7 @@
 				849191C70725B5DE00F454F1 /* edu.washington.npl.orca.Document.plist in Resources */,
 				849194460725CB6C00F454F1 /* edu.washington.npl.orca.Waveform.plist in Resources */,
 				E686441523BD292B00EA43D1 /* flashcam_ethlink.png in Resources */,
+				8407F0612BF3A90D00668A6C /* Defender3000.tif in Resources */,
 				8484811807288C26009EDCE2 /* dotcolormask.tiff in Resources */,
 				8484811907288C26009EDCE2 /* dotshadow.tiff in Resources */,
 				8484811A07288C26009EDCE2 /* dottopmask.tiff in Resources */,
@@ -18077,6 +18113,7 @@
 				8408ACC00FD9A7F500B0206D /* DataChain1.png in Resources */,
 				8408ACC10FD9A7F500B0206D /* DataChain2.png in Resources */,
 				8408ACC30FD9A81D00B0206D /* VMEBit3.png in Resources */,
+				8407F0602BF3A90D00668A6C /* Defender3000.nib in Resources */,
 				8408AE970FD9B64700B0206D /* VMESBC.png in Resources */,
 				8408AFA50FDD3E9A00B0206D /* CAMAC.png in Resources */,
 				8408B03A0FDD447000B0206D /* MCA.png in Resources */,
@@ -18574,6 +18611,7 @@
 				8434A301055B3287002D3102 /* ORDataFileController.m in Sources */,
 				8434A303055B3287002D3102 /* OReCPU147Model.m in Sources */,
 				84DF729C2A7A928600BB72DC /* ORSensorPushModel.m in Sources */,
+				8407F0632BF3A90D00668A6C /* ORDefender3000Controller.m in Sources */,
 				8434A305055B3287002D3102 /* OReCPU147Controller.m in Sources */,
 				8434A306055B3287002D3102 /* ORQueueView.m in Sources */,
 				8434A307055B3287002D3102 /* ORCircularBuffer.m in Sources */,
@@ -18798,6 +18836,7 @@
 				84F4B4D30822A875001F48F5 /* ORTimedTextField.m in Sources */,
 				844048AF08350BEE000D03DB /* MemoryWatcher.m in Sources */,
 				849F0A9018D0973B00FF3F36 /* ORDT5720Controller.m in Sources */,
+				8407F0652BF3A90D00668A6C /* ORDefender3000Decoders.m in Sources */,
 				844049C408353B65000D03DB /* MemoryWatcherController.m in Sources */,
 				2A556A380842A69900BBCB17 /* ORDGF4cDecoders.m in Sources */,
 				2A5D2A300870836F00C969E0 /* xiaUtilities.m in Sources */,
@@ -19302,6 +19341,7 @@
 				8494F8D51C440E2C00A35F8B /* ORMJDDewarScaleModel.m in Sources */,
 				84D34B0910B1D6C90013473E /* ORSIS3302Model.m in Sources */,
 				848A147C10BAE3D6002A80D0 /* ORFileReader.m in Sources */,
+				8407F0672BF3A90D00668A6C /* ORDefender3000Model.m in Sources */,
 				848A148010BAE3F8002A80D0 /* ORHeaderCollector.m in Sources */,
 				848A148410BAE404002A80D0 /* ORRecordIndexer.m in Sources */,
 				848A148810BAE40E002A80D0 /* ORDecoderOperation.m in Sources */,
