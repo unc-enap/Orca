@@ -95,11 +95,6 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <imageView id="1112">
-                        <rect key="frame" x="31" y="215" width="93" height="62"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" image="Defender3000" id="1297"/>
-                    </imageView>
                     <tabView controlSize="small" id="1196">
                         <rect key="frame" x="-1" y="-10" width="383" height="223"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -415,6 +410,11 @@
                             </tabViewItem>
                         </tabViewItems>
                     </tabView>
+                    <imageView id="1112">
+                        <rect key="frame" x="31" y="209" width="93" height="75"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" image="Defender3000" id="1297"/>
+                    </imageView>
                 </subviews>
             </view>
             <connections>
