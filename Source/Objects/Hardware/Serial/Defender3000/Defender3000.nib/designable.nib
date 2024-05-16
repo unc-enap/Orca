@@ -194,16 +194,14 @@
                                                 <menu key="menu" title="OtherViews" id="JWt-jz-RjY">
                                                     <items>
                                                         <menuItem title="Displayed Wt" state="on" id="2Et-fb-MmO"/>
-                                                        <menuItem title="Stable Displayed Wt" tag="1" id="z2D-dF-QfY"/>
-                                                        <menuItem title="Print When Stable" tag="2" id="Mnv-S9-eNt"/>
-                                                        <menuItem title="Interval Print" tag="3" id="eSk-bt-B88"/>
-                                                        <menuItem title="Zero" tag="4" id="WLm-c7-3MF"/>
-                                                        <menuItem title="Tare" tag="5" id="RDG-vi-qXj"/>
-                                                        <menuItem title="Get Tare Value" tag="6" id="fH1-Xn-3a9"/>
-                                                        <menuItem title="Get Unit" tag="7" id="4Tx-ir-ocz"/>
-                                                        <menuItem title="Set Unit" tag="8" id="xkZ-KE-eOR"/>
-                                                        <menuItem title="Get Version" tag="9" id="cAI-Pv-6CQ"/>
-                                                        <menuItem title="Full Reset" tag="10" id="WdL-M2-Fvl"/>
+                                                        <menuItem title="Interval Print" tag="1" id="eSk-bt-B88"/>
+                                                        <menuItem title="Zero" tag="2" id="WLm-c7-3MF"/>
+                                                        <menuItem title="Tare" tag="3" id="RDG-vi-qXj"/>
+                                                        <menuItem title="Get Tare Value" tag="4" id="fH1-Xn-3a9"/>
+                                                        <menuItem title="Get Unit" tag="5" id="4Tx-ir-ocz"/>
+                                                        <menuItem title="Set Unit" tag="6" id="xkZ-KE-eOR"/>
+                                                        <menuItem title="Get Version" tag="7" id="cAI-Pv-6CQ"/>
+                                                        <menuItem title="Full Reset" tag="8" id="WdL-M2-Fvl"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
