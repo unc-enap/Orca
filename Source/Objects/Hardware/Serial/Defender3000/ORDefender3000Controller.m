@@ -264,22 +264,30 @@
 
     [portListPopup      setEnabled:!locked];
     [openPortButton     setEnabled:!locked];
-    [pollTimePopup      setEnabled:!locked];
     
-    bool portOpen = [[model serialPort] isOpen];
-    [unitsPopup         setEnabled:!locked && portOpen];
-    [commandPopup       setEnabled:!locked && portOpen];
-    [printIntervalField setEnabled:!locked && portOpen];
-    [tareField          setEnabled:!locked && portOpen];
-    [shipWeightButton   setEnabled:!locked && portOpen];
-    [sendAllButton      setEnabled:!locked && portOpen];
-
+    [self updateButtonStates];
+    
     NSString* s = @"";
     if(lockedOrRunningMaintenance){
         if(runInProgress && ![gSecurity isLocked:ORDefender3000Lock])s = @"Not in Maintenance Run.";
     }
     [lockDocField setStringValue:s];
 
+}
+
+- (void) updateButtonStates
+{
+    BOOL locked   = [gSecurity isLocked:ORDefender3000Lock];
+    bool portOpen = [[model serialPort] isOpen];
+    
+    [unitsPopup         setEnabled:!locked && portOpen];
+    [commandPopup       setEnabled:!locked && portOpen];
+    [printIntervalField setEnabled:!locked && portOpen];
+    [tareField          setEnabled:!locked && portOpen];
+    [shipWeightButton   setEnabled:!locked && portOpen];
+    [sendAllButton      setEnabled:!locked && portOpen];
+    [pollTimePopup      setEnabled:!locked && portOpen];
+    [sendCmdButton      setEnabled:!locked && portOpen];
 }
 
 - (void) portStateChanged:(NSNotification*)aNote
@@ -305,6 +313,7 @@
             [portStateField setStringValue:@"---"];
             [openPortButton setTitle:@"---"];
         }
+        [self updateButtonStates];
     }
 }
 
@@ -343,11 +352,13 @@
 
 - (IBAction) sendCommandAction:(id)sender
 {
+    [self endEditing];
     [model sendCommand];
 }
 
 - (IBAction) sendAllAction:(id)sender
 {
+    [self endEditing];
     [model sendAllCommands];
 }
 
@@ -381,6 +392,7 @@
 }
 - (IBAction) commandAction:(id)sender
 {
+    [self endEditing];
     [model setCommand:(int)[[sender selectedItem] tag]];
 }
 

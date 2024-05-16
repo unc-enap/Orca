@@ -403,6 +403,7 @@ NSString* ORDefender3000Lock                   = @"ORDefender3000Lock";
     [self setUnits:      [decoder decodeIntForKey:   @"units"]];
     [self setTare:       [decoder decodeIntForKey:   @"tare"]];
     [self setCommand:    [decoder decodeIntForKey:   @"command"]];
+    [self setPrintInterval: [decoder decodeIntForKey:   @"printInterval"]];
 	[[self undoManager] enableUndoRegistration];
 	timeRate = [[ORTimeRate alloc] init];
 
@@ -414,13 +415,14 @@ NSString* ORDefender3000Lock                   = @"ORDefender3000Lock";
 - (void) encodeWithCoder:(NSCoder*)encoder
 {
     [super encodeWithCoder:encoder];
-    [encoder encodeBool:shipWeight  forKey:@"shipWeight"];
-    [encoder encodeInteger:pollTime forKey:@"pollTime"];
-    [encoder encodeBool:portWasOpen forKey:@"portWasOpen"];
-    [encoder encodeObject:portName  forKey:@"portName"];
-    [encoder encodeInteger:units    forKey:@"units"];
-    [encoder encodeInteger:command  forKey:@"command"];
-    [encoder encodeInteger:tare     forKey:@"tare"];
+    [encoder encodeBool:shipWeight          forKey:@"shipWeight"];
+    [encoder encodeInteger:pollTime         forKey:@"pollTime"];
+    [encoder encodeBool:portWasOpen         forKey:@"portWasOpen"];
+    [encoder encodeObject:portName          forKey:@"portName"];
+    [encoder encodeInteger:units            forKey:@"units"];
+    [encoder encodeInteger:command          forKey:@"command"];
+    [encoder encodeInteger:tare             forKey:@"tare"];
+    [encoder encodeInteger:printInterval    forKey:@"printInterval"];
 }
 
 #pragma mark *** Commands
@@ -489,22 +491,22 @@ NSString* ORDefender3000Lock                   = @"ORDefender3000Lock";
 {
     //format the command
     switch(command){
-        case 0: [self addCmdToQueue:@"IP"]; break;
-        case 1: [self addCmdToQueue:@"P"];  break;
-        case 2:
+        case 0: [self addCmdToQueue:@"P"]; break;
+        case 1:
             [self addCmdToQueue:[NSString stringWithFormat:@"%dP",printInterval]];
+            [self addCmdToQueue:@"P"];
         break;
-        case 3: [self addCmdToQueue:@"Z"];  break;
-        case 4: [self addCmdToQueue:@"T"];  break;
-        case 5:
+        case 2: [self addCmdToQueue:@"Z"];  break;
+        case 3: [self addCmdToQueue:@"T"];  break;
+        case 4:
             [self addCmdToQueue:[NSString stringWithFormat:@"%dT",tare]];
         break;
-        case 6:
+        case 5:
             [self addCmdToQueue:[NSString stringWithFormat:@"%dU",units]];
         break;
-        case 7:  [self addCmdToQueue:@"PU"];  break;
-        case 8: [self addCmdToQueue:@"PV"];  break;
-        case 9:
+        case 6:  [self addCmdToQueue:@"PU"];  break;
+        case 7: [self addCmdToQueue:@"PV"];  break;
+        case 8:
             [self addCmdToQueue:[NSString stringWithFormat:@"%cR",0x1B]];
         break;
     }
@@ -540,6 +542,8 @@ NSString* ORDefender3000Lock                   = @"ORDefender3000Lock";
 		[self setLastRequest:aCmd];
 		[self performSelector:@selector(timeout) withObject:nil afterDelay:3];
 		aCmd = [aCmd stringByAppendingString:@"\r\n"];
+        NSLog(@"%@",aCmd);
+
 		[serialPort writeString:aCmd];
 		if(!lastRequest){
 			[self performSelector:@selector(processOneCommandFromQueue) withObject:nil afterDelay:.01];
@@ -550,37 +554,32 @@ NSString* ORDefender3000Lock                   = @"ORDefender3000Lock";
 - (void) process_response:(NSString*)theResponse
 {	//012345678901234567890
     //P_NNNNNNN_UUUUUSLLLrn
+    NSLog(@"%@",theResponse);
+
+    NSString* wt        = @"";
+//    NSString* theUnit   = @"";
+//    NSString* stable    = @"";
+
     if([lastRequest isEqualToString:@"PV"]){
-        NSLog(@"%@",theResponse);
     }
     else if([theResponse hasPrefix:@"OK"]){
     }
     else {
         NSInteger len = [theResponse length];
-        NSString* polarity = [theResponse substringWithRange:NSMakeRange(0,1)];
-        NSString* wt       = [theResponse substringWithRange:NSMakeRange(2,7)];
-        NSString* theUnit  = [theResponse substringWithRange:NSMakeRange(11,5)];
-        NSString* stable   = [theResponse substringWithRange:NSMakeRange(15,1)];
-        NSString* legend = @"";
-        if(len>=17)legend   = [theResponse substringWithRange:NSMakeRange(16,3)];
-        float rawWt = [wt floatValue];
-        if([polarity isEqualToString:@"-"])rawWt *= -1;
-		[self setWeight:rawWt];
+        wt       = [theResponse substringWithRange:NSMakeRange(2,7)];
+//        if(len>=16)theUnit  = [theResponse substringWithRange:NSMakeRange(11,5)];
+//        if(len>=16)stable   = [theResponse substringWithRange:NSMakeRange(15,1)];
+		[self setWeight:[wt floatValue]];
         
-        legendData = 0;
-        if([legend isEqualToString:@"G  "])     legendData = 1;
-        else if([legend isEqualToString:@"NET"])legendData = 2;
-        else if([legend isEqualToString:@"T  "])legendData = 3;
-        
-        stabilityData = 0;
-        if([stable isEqualToString:@"?"]) stabilityData = 0;
+//        stabilityData = 0;
+//        if([stable isEqualToString:@"?"]) stabilityData = 0;
 
-        unitData = 0;
-        if([theUnit isEqualToString:     @"g    "])unitData = 1;
-        else if([theUnit isEqualToString:@"kg   "])unitData = 2;
-        else if([theUnit isEqualToString:@"lb   "])unitData = 3;
-        else if([theUnit isEqualToString:@"oz   "])unitData = 4;
-        else if([theUnit isEqualToString:@"lb:oz"])unitData = 5;
+//        unitData = 0;
+//        if([theUnit isEqualToString:     @"g    "])unitData = 1;
+//        else if([theUnit isEqualToString:@"kg   "])unitData = 2;
+//        else if([theUnit isEqualToString:@"lb   "])unitData = 3;
+//        else if([theUnit isEqualToString:@"oz   "])unitData = 4;
+//        else if([theUnit isEqualToString:@"lb:oz"])unitData = 5;
 	}
 }
 

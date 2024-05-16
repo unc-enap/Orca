@@ -25,6 +25,7 @@
     IBOutlet NSTextField*   lockDocField;
 	IBOutlet NSButton*		shipWeightButton;
     IBOutlet NSButton*      lockButton;
+    IBOutlet NSButton*      sendCmdButton;
     IBOutlet NSTextField*   portStateField;
     IBOutlet NSPopUpButton* portListPopup;
     IBOutlet NSPopUpButton* pollTimePopup;
@@ -60,6 +61,7 @@
 - (void) miscAttributesChanged:(NSNotification*)aNote;
 - (void) unitsChanged:(NSNotification*)aNote;
 - (void) commandChanged:(NSNotification*)aNote;
+- (void) updateButtonStates;
 
 #pragma mark ***Actions
 - (IBAction) shipWeightAction:(id)sender;
