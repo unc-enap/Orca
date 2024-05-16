@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment version="1070" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -32,13 +32,13 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="25" y="880" width="381" height="293"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
             <value key="minSize" type="size" width="213" height="107"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="381" height="293"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <popUpButton imageHugsTitle="YES" verticalHuggingPriority="750" id="880">
+                    <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="880">
                         <rect key="frame" x="225" y="259" width="126" height="15"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <popUpButtonCell key="cell" type="push" title="Item1" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="883" id="1292">
@@ -108,7 +108,7 @@
                                     <rect key="frame" x="10" y="29" width="363" height="181"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <button imageHugsTitle="YES" verticalHuggingPriority="750" id="1110">
+                                        <button verticalHuggingPriority="750" imageHugsTitle="YES" id="1110">
                                             <rect key="frame" x="244" y="93" width="102" height="28"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <buttonCell key="cell" type="push" title="&lt;--Send Cmd" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="1300">
@@ -165,7 +165,7 @@
                                             <rect key="frame" x="7" y="179" width="197" height="5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </box>
-                                        <popUpButton imageHugsTitle="YES" verticalHuggingPriority="750" id="1176">
+                                        <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="1176">
                                             <rect key="frame" x="264" y="126" width="90" height="22"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <popUpButtonCell key="cell" type="push" title="10 sec" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="10" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1179" id="1303">
@@ -185,7 +185,7 @@
                                                 <action selector="pollTimeAction:" target="-2" id="1185"/>
                                             </connections>
                                         </popUpButton>
-                                        <popUpButton imageHugsTitle="YES" verticalHuggingPriority="750" id="vLQ-ku-pYE">
+                                        <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="vLQ-ku-pYE">
                                             <rect key="frame" x="96" y="97" width="150" height="22"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <popUpButtonCell key="cell" type="push" title="Displayed Wt" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="2Et-fb-MmO" id="Irn-U4-Rh8">
@@ -194,16 +194,14 @@
                                                 <menu key="menu" title="OtherViews" id="JWt-jz-RjY">
                                                     <items>
                                                         <menuItem title="Displayed Wt" state="on" id="2Et-fb-MmO"/>
-                                                        <menuItem title="Stable Displayed Wt" tag="1" id="z2D-dF-QfY"/>
-                                                        <menuItem title="Print When Stable" tag="2" id="Mnv-S9-eNt"/>
-                                                        <menuItem title="Interval Print" tag="3" id="eSk-bt-B88"/>
-                                                        <menuItem title="Zero" tag="4" id="WLm-c7-3MF"/>
-                                                        <menuItem title="Tare" tag="5" id="RDG-vi-qXj"/>
-                                                        <menuItem title="Get Tare Value" tag="6" id="fH1-Xn-3a9"/>
-                                                        <menuItem title="Get Unit" tag="7" id="4Tx-ir-ocz"/>
-                                                        <menuItem title="Set Unit" tag="8" id="xkZ-KE-eOR"/>
-                                                        <menuItem title="Get Version" tag="9" id="cAI-Pv-6CQ"/>
-                                                        <menuItem title="Full Reset" tag="10" id="WdL-M2-Fvl"/>
+                                                        <menuItem title="Interval Print" tag="1" id="eSk-bt-B88"/>
+                                                        <menuItem title="Zero" tag="2" id="WLm-c7-3MF"/>
+                                                        <menuItem title="Tare" tag="3" id="RDG-vi-qXj"/>
+                                                        <menuItem title="Get Tare Value" tag="4" id="fH1-Xn-3a9"/>
+                                                        <menuItem title="Get Unit" tag="5" id="4Tx-ir-ocz"/>
+                                                        <menuItem title="Set Unit" tag="6" id="xkZ-KE-eOR"/>
+                                                        <menuItem title="Get Version" tag="7" id="cAI-Pv-6CQ"/>
+                                                        <menuItem title="Full Reset" tag="8" id="WdL-M2-Fvl"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
@@ -336,7 +334,7 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <popUpButton imageHugsTitle="YES" verticalHuggingPriority="750" id="N5c-9E-Flo">
+                                        <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="N5c-9E-Flo">
                                             <rect key="frame" x="264" y="68" width="80" height="22"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <popUpButtonCell key="cell" type="push" title="g" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="qBU-OZ-pEz" id="FDF-a1-4n8">
@@ -376,7 +374,7 @@
                                                 <action selector="lockAction:" target="-2" id="878"/>
                                             </connections>
                                         </button>
-                                        <button imageHugsTitle="YES" verticalHuggingPriority="750" id="0Qi-oL-eGz">
+                                        <button verticalHuggingPriority="750" imageHugsTitle="YES" id="0Qi-oL-eGz">
                                             <rect key="frame" x="10" y="65" width="137" height="28"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <buttonCell key="cell" type="push" title="Send All User Values" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="kjN-cD-ReL">
@@ -451,7 +449,7 @@
             <rect key="frame" x="0.0" y="0.0" width="125" height="1"/>
             <autoresizingMask key="autoresizingMask"/>
         </view>
-        <popUpButton imageHugsTitle="YES" verticalHuggingPriority="750" id="EcE-Gd-ZwJ">
+        <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="EcE-Gd-ZwJ">
             <rect key="frame" x="0.0" y="0.0" width="90" height="22"/>
             <autoresizingMask key="autoresizingMask"/>
             <popUpButtonCell key="cell" type="push" title="10 sec" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="10" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="HQa-8G-Ycl" id="r1J-VO-FuL">
