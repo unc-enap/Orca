@@ -491,22 +491,20 @@ NSString* ORDefender3000Lock                   = @"ORDefender3000Lock";
     switch(command){
         case 0: [self addCmdToQueue:@"IP"]; break;
         case 1: [self addCmdToQueue:@"P"];  break;
-        case 2: [self addCmdToQueue:@"CP"];  break;
-        case 3: [self addCmdToQueue:@"SP"];  break;
-        case 4:
+        case 2:
             [self addCmdToQueue:[NSString stringWithFormat:@"%dP",printInterval]];
         break;
-        case 5: [self addCmdToQueue:@"Z"];  break;
-        case 6: [self addCmdToQueue:@"T"];  break;
-        case 7:
+        case 3: [self addCmdToQueue:@"Z"];  break;
+        case 4: [self addCmdToQueue:@"T"];  break;
+        case 5:
             [self addCmdToQueue:[NSString stringWithFormat:@"%dT",tare]];
         break;
-        case 8:
+        case 6:
             [self addCmdToQueue:[NSString stringWithFormat:@"%dU",units]];
         break;
-        case 9:  [self addCmdToQueue:@"PU"];  break;
-        case 10: [self addCmdToQueue:@"PV"];  break;
-        case 11:
+        case 7:  [self addCmdToQueue:@"PU"];  break;
+        case 8: [self addCmdToQueue:@"PV"];  break;
+        case 9:
             [self addCmdToQueue:[NSString stringWithFormat:@"%cR",0x1B]];
         break;
     }

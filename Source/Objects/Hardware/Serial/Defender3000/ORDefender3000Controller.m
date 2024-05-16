@@ -265,12 +265,14 @@
     [portListPopup      setEnabled:!locked];
     [openPortButton     setEnabled:!locked];
     [pollTimePopup      setEnabled:!locked];
-    [unitsPopup         setEnabled:!locked];
-    [commandPopup       setEnabled:!locked];
-    [printIntervalField setEnabled:!locked];
-    [tareField          setEnabled:!locked];
-    [shipWeightButton   setEnabled:!locked];
-    [sendAllButton      setEnabled:!locked];
+    
+    bool portOpen = [[model serialPort] isOpen];
+    [unitsPopup         setEnabled:!locked && portOpen];
+    [commandPopup       setEnabled:!locked && portOpen];
+    [printIntervalField setEnabled:!locked && portOpen];
+    [tareField          setEnabled:!locked && portOpen];
+    [shipWeightButton   setEnabled:!locked && portOpen];
+    [sendAllButton      setEnabled:!locked && portOpen];
 
     NSString* s = @"";
     if(lockedOrRunningMaintenance){
@@ -327,7 +329,6 @@
 	}  
     [self portStateChanged:nil];
 }
-
 
 #pragma mark ***Actions
 - (IBAction) printIntervalAction:(id)sender
