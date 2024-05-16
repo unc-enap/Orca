@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment version="1070" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -33,13 +33,13 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="25" y="880" width="381" height="293"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
             <value key="minSize" type="size" width="213" height="107"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="381" height="293"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <popUpButton imageHugsTitle="YES" verticalHuggingPriority="750" id="880">
+                    <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="880">
                         <rect key="frame" x="225" y="259" width="126" height="15"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <popUpButtonCell key="cell" type="push" title="Item1" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="883" id="1292">
@@ -96,7 +96,7 @@
                         </textFieldCell>
                     </textField>
                     <imageView id="1112">
-                        <rect key="frame" x="31" y="215" width="50" height="62"/>
+                        <rect key="frame" x="31" y="215" width="93" height="62"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" image="Defender3000" id="1297"/>
                     </imageView>
@@ -109,7 +109,7 @@
                                     <rect key="frame" x="10" y="29" width="363" height="181"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <button imageHugsTitle="YES" verticalHuggingPriority="750" id="1110">
+                                        <button verticalHuggingPriority="750" imageHugsTitle="YES" id="1110">
                                             <rect key="frame" x="244" y="93" width="102" height="28"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <buttonCell key="cell" type="push" title="&lt;--Send Cmd" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="1300">
@@ -166,7 +166,7 @@
                                             <rect key="frame" x="7" y="179" width="197" height="5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </box>
-                                        <popUpButton imageHugsTitle="YES" verticalHuggingPriority="750" id="1176">
+                                        <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="1176">
                                             <rect key="frame" x="264" y="126" width="90" height="22"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <popUpButtonCell key="cell" type="push" title="10 sec" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="10" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1179" id="1303">
@@ -186,7 +186,7 @@
                                                 <action selector="pollTimeAction:" target="-2" id="1185"/>
                                             </connections>
                                         </popUpButton>
-                                        <popUpButton imageHugsTitle="YES" verticalHuggingPriority="750" id="vLQ-ku-pYE">
+                                        <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="vLQ-ku-pYE">
                                             <rect key="frame" x="96" y="97" width="150" height="22"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <popUpButtonCell key="cell" type="push" title="Displayed Wt" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="2Et-fb-MmO" id="Irn-U4-Rh8">
@@ -335,7 +335,7 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <popUpButton imageHugsTitle="YES" verticalHuggingPriority="750" id="N5c-9E-Flo">
+                                        <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="N5c-9E-Flo">
                                             <rect key="frame" x="264" y="68" width="80" height="22"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <popUpButtonCell key="cell" type="push" title="g" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="qBU-OZ-pEz" id="FDF-a1-4n8">
@@ -375,7 +375,7 @@
                                                 <action selector="lockAction:" target="-2" id="878"/>
                                             </connections>
                                         </button>
-                                        <button imageHugsTitle="YES" verticalHuggingPriority="750" id="0Qi-oL-eGz">
+                                        <button verticalHuggingPriority="750" imageHugsTitle="YES" id="0Qi-oL-eGz">
                                             <rect key="frame" x="10" y="65" width="137" height="28"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <buttonCell key="cell" type="push" title="Send All User Values" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="kjN-cD-ReL">
@@ -450,7 +450,7 @@
             <rect key="frame" x="0.0" y="0.0" width="125" height="1"/>
             <autoresizingMask key="autoresizingMask"/>
         </view>
-        <popUpButton imageHugsTitle="YES" verticalHuggingPriority="750" id="EcE-Gd-ZwJ">
+        <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="EcE-Gd-ZwJ">
             <rect key="frame" x="0.0" y="0.0" width="90" height="22"/>
             <autoresizingMask key="autoresizingMask"/>
             <popUpButtonCell key="cell" type="push" title="10 sec" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="10" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="HQa-8G-Ycl" id="r1J-VO-FuL">
