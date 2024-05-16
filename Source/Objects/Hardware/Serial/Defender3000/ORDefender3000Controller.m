@@ -146,7 +146,11 @@
                      selector : @selector(tareChanged:)
                          name : ORDefender3000TareChanged
                        object : nil];
-    
+
+    [notifyCenter addObserver : self
+                     selector : @selector(unitsDataChanged:)
+                         name : ORDefender3000ModelUnitDataChanged
+                       object : nil];
     
 }
 
@@ -165,6 +169,7 @@
     [self unitsChanged:nil];
     [self commandChanged:nil];
     [self tareChanged:nil];
+    [self unitsChanged:nil];
 }
 
 - (void) scaleAction:(NSNotification*)aNote
@@ -224,6 +229,11 @@
     [tareField setIntValue: [model tare]];
 }
 
+- (void) unitsDataChanged:(NSNotification*)aNote
+{
+    [unitsField setStringValue:[model getUnitString]];
+}
+
 - (void) unitsChanged:(NSNotification*)aNote
 {
     [unitsPopup selectItemWithTag: [(ORDefender3000Model*)model units]];
@@ -241,7 +251,7 @@
 	NSDate* theDate;
 	if(t){
 		theDate = [NSDate dateWithTimeIntervalSince1970:t];
-		[timeField setObjectValue:[theDate description]];
+		[timeField setObjectValue:[theDate stdDescription]];
 	}
 	else [timeField setObjectValue:@"--"];
 }

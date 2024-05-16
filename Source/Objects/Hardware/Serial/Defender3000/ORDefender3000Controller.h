@@ -35,6 +35,7 @@
     IBOutlet NSButton*      sendAllButton;
     IBOutlet NSTextField*   weightField;
     IBOutlet NSTextField*   timeField;
+    IBOutlet NSTextField*   unitsField;
     IBOutlet NSTextField*   printIntervalField;
     IBOutlet NSTextField*   tareField;
 	IBOutlet ORCompositeTimeLineView*   plotter0;

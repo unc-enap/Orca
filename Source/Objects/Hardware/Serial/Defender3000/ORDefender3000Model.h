@@ -40,9 +40,8 @@
         uint16_t        tare;
         uint8_t         units;
         uint8_t         command;
-        uint8_t         legendData;
         uint8_t         unitData;
-        uint8_t         stabilityData;
+        uint8_t         modeData;
 }
 
 #pragma mark ***Initialization
@@ -90,6 +89,7 @@
 
 - (void) shipWeightData;
 - (void) sendCommand;
+- (NSString*)  getUnitString;
 
 #pragma mark ***Commands
 - (void) addCmdToQueue:(NSString*)aCmd;
@@ -111,3 +111,4 @@ extern NSString* ORDefender3000PrintIntervalChanged;
 extern NSString* ORDefender3000UnitsChanged;
 extern NSString* ORDefender3000CommandChanged;
 extern NSString* ORDefender3000TareChanged;
+extern NSString* ORDefender3000ModelUnitDataChanged;

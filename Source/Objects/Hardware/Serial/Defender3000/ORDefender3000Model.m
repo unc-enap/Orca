@@ -38,7 +38,8 @@ NSString* ORDefender3000WeightChanged		   = @"ORDefender3000WeightChanged";
 NSString* ORDefender3000PrintIntervalChanged   = @"ORDefender3000PrintIntervalChanged";
 NSString* ORDefender3000UnitsChanged           = @"ORDefender3000UnitsChanged";
 NSString* ORDefender3000CommandChanged         = @"ORDefender3000CommandChanged";
-NSString* ORDefender3000TareChanged         = @"ORDefender3000TareChanged";
+NSString* ORDefender3000TareChanged            = @"ORDefender3000TareChanged";
+NSString* ORDefender3000ModelUnitDataChanged   = @"ORDefender3000ModelUnitDataChanged";
 NSString* ORDefender3000Lock                   = @"ORDefender3000Lock";
 
 @interface ORDefender3000Model (private)
@@ -48,6 +49,9 @@ NSString* ORDefender3000Lock                   = @"ORDefender3000Lock";
 - (void) processOneCommandFromQueue;
 - (void) process_response:(NSString*)theResponse;
 - (void) pollWeight;
+- (void) setUnitData:(NSString*)theUnit;
+- (void) setModeData:(NSString*)theMode;
+
 @end
 
 @implementation ORDefender3000Model
@@ -147,9 +151,8 @@ NSString* ORDefender3000Lock                   = @"ORDefender3000Lock";
     // xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  weight  encoded as a float
     // xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  time weight taken in seconds since Jan 1, 1970
     // xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  format data
-    //                                       ^- 0:unstable,1:stable
-    //                                    ^^^-- 1:g,2:kg,3:lb,4:oz,5:lb:oz
-    //                                ^^^------ 0:Gross,1:NET,2:PreTare
+    //                                     ^^^-- 1:g,2:kg,3:lb,4:oz,5:lb:oz
+    //                                ^^^------- 0:unknown,1:Dynamic
     //-------------------------------------------------------------------------------------
     if([[ORGlobal sharedGlobal] runInProgress]){
 		
@@ -166,9 +169,8 @@ NSString* ORDefender3000Lock                   = @"ORDefender3000Lock";
 		data[2] = theData.asLong;
         data[3] = timeMeasured;
         
-        data[4] =   (stabilityData & 0x1)  | //0:unstable,1:stable
-                    (unitData  & 0x7) << 1 | //1:g,2:kg,3:lb,4:oz,5:lb:oz
-                    (legendData& 0x7) << 4 ; //0:Gross,1:NET,2:PreTare
+        data[4] =   (unitData & 0x7) << 0 | //1:g,2:kg,3:lb,4:oz,5:lb:oz
+                    (modeData & 0x7) << 4 ; //0:Unknown,1:Dynamic
 
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORQueueRecordForShippingNotification 
 															object:[NSData dataWithBytes:data length:sizeof(int32_t)*4]];
@@ -494,21 +496,33 @@ NSString* ORDefender3000Lock                   = @"ORDefender3000Lock";
         case 0: [self addCmdToQueue:@"P"]; break;
         case 1:
             [self addCmdToQueue:[NSString stringWithFormat:@"%dP",printInterval]];
-            [self addCmdToQueue:@"P"];
+            //[self addCmdToQueue:@"P"];
         break;
         case 2: [self addCmdToQueue:@"Z"];  break;
-        case 3: [self addCmdToQueue:@"T"];  break;
-        case 4:
+        case 3:
             [self addCmdToQueue:[NSString stringWithFormat:@"%dT",tare]];
         break;
-        case 5:
+        case 4: [self addCmdToQueue:@"T"];  break;
+        case 5: [self addCmdToQueue:@"PU"];  break;
+        case 6:
             [self addCmdToQueue:[NSString stringWithFormat:@"%dU",units]];
         break;
-        case 6:  [self addCmdToQueue:@"PU"];  break;
         case 7: [self addCmdToQueue:@"PV"];  break;
         case 8:
             [self addCmdToQueue:[NSString stringWithFormat:@"%cR",0x1B]];
         break;
+    }
+}
+- (NSString*)  getUnitString
+{
+    switch(unitData){
+        case 0: return @"kg";
+        case 1: return @"g";
+        case 2: return @"kg";
+        case 3: return @"lb";
+        case 4: return @"oz";
+        case 5: return @"lb";
+        default:return @"kg";
     }
 }
 
@@ -538,11 +552,13 @@ NSString* ORDefender3000Lock                   = @"ORDefender3000Lock";
 	if([aCmd isEqualToString:@"++ShipRecords"]){
 		if(shipWeight) [self shipWeightData];
 	}
+    else if([aCmd isEqualToString:@"++Delay"]){
+        [ORTimer delay:1];
+    }
 	else {
 		[self setLastRequest:aCmd];
 		[self performSelector:@selector(timeout) withObject:nil afterDelay:3];
 		aCmd = [aCmd stringByAppendingString:@"\r\n"];
-        NSLog(@"%@",aCmd);
 
 		[serialPort writeString:aCmd];
 		if(!lastRequest){
@@ -552,34 +568,34 @@ NSString* ORDefender3000Lock                   = @"ORDefender3000Lock";
 }
 
 - (void) process_response:(NSString*)theResponse
-{	//012345678901234567890
-    //P_NNNNNNN_UUUUUSLLLrn
-    NSLog(@"%@",theResponse);
-
-    NSString* wt        = @"";
-//    NSString* theUnit   = @"";
-//    NSString* stable    = @"";
-
+{
+    //NSLog(@"%@",theResponse);
     if([lastRequest isEqualToString:@"PV"]){
     }
     else if([theResponse hasPrefix:@"OK"]){
     }
+    else if([theResponse hasPrefix:@"ES"]){
+    }
     else {
-        NSInteger len = [theResponse length];
-        wt       = [theResponse substringWithRange:NSMakeRange(2,7)];
-//        if(len>=16)theUnit  = [theResponse substringWithRange:NSMakeRange(11,5)];
-//        if(len>=16)stable   = [theResponse substringWithRange:NSMakeRange(15,1)];
-		[self setWeight:[wt floatValue]];
-        
-//        stabilityData = 0;
-//        if([stable isEqualToString:@"?"]) stabilityData = 0;
-
-//        unitData = 0;
-//        if([theUnit isEqualToString:     @"g    "])unitData = 1;
-//        else if([theUnit isEqualToString:@"kg   "])unitData = 2;
-//        else if([theUnit isEqualToString:@"lb   "])unitData = 3;
-//        else if([theUnit isEqualToString:@"oz   "])unitData = 4;
-//        else if([theUnit isEqualToString:@"lb:oz"])unitData = 5;
+        theResponse = [theResponse stringByReplacingOccurrencesOfString:@":" withString:@" "];
+        theResponse = [theResponse removeExtraSpaces];
+        theResponse = [theResponse uppercaseString];
+        NSArray* components;
+        components = [theResponse componentsSeparatedByString:@" "];
+        if([components count]>=3){
+            //format is wt unit mode
+            [self setWeight:[[components objectAtIndex:0]floatValue]];
+            [self setUnitData: [components objectAtIndex:1]];
+            [self setModeData:[components objectAtIndex:2]];
+        }
+        else if([components count]==2){
+            if([[components objectAtIndex:0] isEqualToString:@"UNIT"]){
+                [self setUnitData: [components objectAtIndex:1]];
+            }
+            else if([[components objectAtIndex:0] isEqualToString:@"MODE"]){
+                [self setModeData: [components objectAtIndex:1]];
+            }
+        }
 	}
 }
 
@@ -588,6 +604,25 @@ NSString* ORDefender3000Lock                   = @"ORDefender3000Lock";
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(pollWeight) object:nil];
 	[self readWeight];
 	[self performSelector:@selector(pollWeight) withObject:nil afterDelay:pollTime];
+}
+
+- (void) setUnitData:(NSString*)theUnit
+{
+    theUnit = 0;
+    if([theUnit isEqualToString:     @"G"])     unitData = 1;
+    else if([theUnit isEqualToString:@"KG"])    unitData = 2;
+    else if([theUnit isEqualToString:@"LB"])    unitData = 3;
+    else if([theUnit isEqualToString:@"OZ"])    unitData = 4;
+    else if([theUnit isEqualToString:@"LB:OZ"]) unitData = 5;
+    else theUnit = 0;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:ORDefender3000ModelUnitDataChanged object:self];
+}
+
+- (void) setModeData:(NSString*)theMode
+{
+    if([theMode isEqualToString: @"DYNAMIC"]) modeData = 1;
+    else modeData = 0;
 }
 
 @end

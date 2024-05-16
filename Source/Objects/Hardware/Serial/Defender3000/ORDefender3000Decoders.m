@@ -31,9 +31,8 @@
 // xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  weight  encoded as a float
 // xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  time weight taken in seconds since Jan 1, 1970
 // xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx  format data
-//                                       ^- 0:unstable,1:stable
-//                                    ^^^-- 1:g,2:kg,3:lb,4:oz,5:lb:oz
-//                                ^^^------ 0:Gross,1:NET,2:PreTare
+//                                     ^^^-- 1:g,2:kg,3:lb,4:oz,5:lb:oz
+//                                ^^^------- 0:unknown,1:Dynamic
 //-------------------------------------------------------------------------------------
 static NSString* kDefender3000Unit[8] = {
     //pre-make some keys for speed.
