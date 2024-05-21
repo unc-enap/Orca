@@ -55,6 +55,7 @@
     uint32_t  statusBufferIndex;
     uint32_t  takeDataStatusIndex;
     uint32_t  bufferedStatusCount;
+    uint32_t  eventId;
     NSString* status;
     ORAlarm* runFailedAlarm;
     bool unrecognizedPacket;

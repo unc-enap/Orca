@@ -617,6 +617,11 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     return statusId;
 }
 
+- (uint32_t) eventId
+{
+    return eventId;
+}
+
 - (NSString*) status
 {
     if(!status) return @"";
@@ -1059,16 +1064,23 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     statusId = sId;
 }
 
+- (void) setEventId:(uint32_t)eId
+{
+    eventId = eId;
+}
+
 - (void) setDataIds:(id)assigner
 {
     configId = [assigner assignDataIds:kLongForm];
     statusId = [assigner assignDataIds:kLongForm];
+    eventId = [assigner assignDataIds:kLongForm];
 }
 
 - (void) syncDataIdsWith:(id)anotherListener
 {
     [self setConfigId:[anotherListener configId]];
     [self setStatusId:[anotherListener statusId]];
+    [self setEventId:[anotherListener eventId]];
 }
 
 - (void) setReadOutList:(ORReadOutList*)newList
@@ -1556,6 +1568,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
         }
         case FCIOEvent:
         case FCIOSparseEvent: {
+            [self shipEvent:state->event withTag: state->last_tag use: aDataPacket includeSWT: fspstate];
 
 #ifdef DEBUG_FSP
             if (!fspstate->write) {
@@ -1572,13 +1585,13 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
             state->event->timestamp[9] = *(int*)(&fspstate->largest_pe);  // float
             state->event->timestamp_size = 10;
 #endif
-            for(int itr=0; itr<state->event->num_traces; itr++){
-                NSDictionary* dict = [chanMap objectAtIndex:state->event->trace_list[itr]];
-                ORFlashCamADCModel* card = [dict objectForKey:@"adc"];
-                unsigned int chan = [[dict objectForKey:@"channel"] unsignedIntValue];
-                [card shipEvent:state->event withIndex:state->event->trace_list[itr]
-                     andChannel:chan use:aDataPacket includeWF:writeWaveforms];
-            }
+            // for(int itr=0; itr<state->event->num_traces; itr++){
+            //     NSDictionary* dict = [chanMap objectAtIndex:state->event->trace_list[itr]];
+            //     ORFlashCamADCModel* card = [dict objectForKey:@"adc"];
+            //     unsigned int chan = [[dict objectForKey:@"channel"] unsignedIntValue];
+            //     [card shipEvent:state->event withIndex:state->event->trace_list[itr]
+            //          andChannel:chan use:aDataPacket includeWF:writeWaveforms];
+            // }
 
             break;
         }
@@ -1612,6 +1625,40 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     }
 
     return YES;
+}
+
+- (void) shipFCIOState:state use: aDataPacket includeSWT: fspstate
+{
+
+    /* OrcaPacket Header */
+
+    uint32_t requiredSize = 1
+
+
+    uint32_t* dataRecord = [aDataPacket getBlockForAddingLongs requiredSize];
+    dataRecord[0] = dataId | (dataRecordLength&0x3ffff);
+    FCIOSetAddress([self transientFCIOStream], &dataRecord[1]);
+
+    FCIOPutState([self transientFCIOStream], state);
+    if (fspstate)
+        FCIOPutProcessor([self transientFCIOStream], fspstate);
+    
+
+    //ship the data
+    uint32_t lengths = dataLengths;
+    if(!includeWF) lengths &= 0xFFFC0003F;
+    dataRecord[0] = dataId   | (dataRecordLength&0x3ffff);
+    dataRecord[1] = lengths  | (event->type&0x3f);
+    dataRecord[2] = location | ((channel&0x1f) << 9) | (index&0x1ff);
+    int offset = 3;
+    for(unsigned int i=0; i<kFlashCamADCTimeOffsetLength; i++) dataRecord[offset++] = event->timeoffset[i];
+    for(unsigned int i=0; i<kFlashCamADCDeadRegionLength; i++) dataRecord[offset++] = event->deadregion[i];
+    for(unsigned int i=0; i<kFlashCamADCTimeStampLength;  i++) dataRecord[offset++] = event->timestamp[i];
+    dataRecord[kFlashCamADCWFHeaderLength]  = (unsigned int)(*(event->theader[index]+1) << 16);
+    dataRecord[kFlashCamADCWFHeaderLength] |= (unsigned int)(*event->theader[index]);
+    if(includeWF)
+        memcpy(dataRecord+kFlashCamADCWFHeaderLength+1, event->theader[index]+2, wfSamples*sizeof(unsigned short));
+    [aDataPacket addLongsToFrameBuffer:dataRecord length:dataRecordLength];
 }
 
 - (void) runFailed
@@ -2440,8 +2487,14 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
                         [NSNumber numberWithLong:statusId],              @"dataId",
                         [NSNumber numberWithBool:YES],                   @"variable",
                         [NSNumber numberWithLong:-1],                    @"length", nil];
+    NSDictionary* de = [NSDictionary dictionaryWithObjectsAndKeys:
+                        @"ORFlashCamListenerEventDecoder",               @"decoder",
+                        [NSNumber numberWithLong:eventId],               @"dataId",
+                        [NSNumber numberWithBool:YES],                   @"variable",
+                        [NSNumber numberWithLong:-1],                    @"length", nil];
     [dict setObject:dc forKey:@"FlashCamConfig"];
     [dict setObject:ds forKey:@"FlashCamStatus"];
+    [dict setObject:de forKey:@"FlashCamEvent"];
     return dict;
 }
 
