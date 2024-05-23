@@ -1241,28 +1241,24 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     //  2)a phy cycle has just one set of runs
     if([type isEqualToString:@"phy"]){
         //phy cycle ... easy
-        NSString* run1 = [[firstSet firstObject] objectForKey:@"name"];
-        NSString* run2 = [[firstSet lastObject]  objectForKey:@"name"];
-        NSMutableArray* firstLastInCycle = [NSMutableArray array];
-        [firstLastInCycle addObject:run1];
-        if(![run1 isEqualToString:run2])[firstLastInCycle addObject:run2];
-        [preJson setObject:firstLastInCycle forKey:@"keys"];
+        NSMutableArray* allRuns = [NSMutableArray array];
+        for(id aRun in firstSet){
+            [allRuns addObject:[aRun objectForKey:@"name"]];
+        }
+        [preJson setObject:allRuns forKey:@"keys"];
         [preJson setObject:[self metaInfo] forKey:@"info"];
         [preJson setObject:[NSNumber numberWithLong:[firstSet count]] forKey:@"number_of_keys"];
     }
     else if([type isEqualToString:@"cal"]){
         long runCount = 0;
-        //cal cycle... harder. Have to parse thru all the sets
+        //cal cycle... a little harder. Have to parse thru all the sets
         //each set -should- have differing source positions
-        //have to make multiple passes
-        //fist get the keys
         NSMutableArray* keys = [NSMutableArray array];
         for(id aSet in runGroup){
             runCount += [aSet count];
-            NSString* run1 = [[aSet firstObject] objectForKey:@"name"];
-            NSString* run2 = [[aSet lastObject]  objectForKey:@"name"];
-            [keys addObject:run1];
-            [keys addObject:run2];
+            for(id aRun in aSet){
+                [keys addObject:[aRun objectForKey:@"name"]];
+            }
         }
         [preJson setObject:keys forKey:@"keys"];
 
@@ -1275,10 +1271,9 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
             NSMutableDictionary* positionDict = [NSMutableDictionary dictionary];
             
             keys = [NSMutableArray array]; //new key array
-            NSString* run1 = [[aSet firstObject] objectForKey:@"name"];
-            NSString* run2 = [[aSet lastObject]  objectForKey:@"name"];
-            [keys addObject:run1];
-            [keys addObject:run2];
+            for(id aRun in aSet){
+                [keys addObject:[aRun objectForKey:@"name"]];
+            }
             [positionDict setObject:keys forKey:@"keys"];
             
             //assume source doesn't move over this set
@@ -1296,11 +1291,10 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
         [preJson setObject:sourceDict forKey:@"info"];
     }
     
- 
     NSError* error;
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:preJson
                                                        options:NSJSONWritingPrettyPrinted
-                                                         error:&error];
+                                                        error:&error];
     if (!jsonData) {
         [self setMetaError:@"Failed to make JSON file"];
     }
@@ -1371,6 +1365,7 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     //-------------------------------
     //create structures for this run
     NSString* dt          = [self getDataType];
+    if(!dt)return;
     NSArray*  sourceArray = [slowControls sourceArray];
     //-------------------------------
     //create dictionary for this run
@@ -1412,7 +1407,7 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
 {
     //read in the rungroup and convert to a mutable array
     if(runGroup)[runGroup release];
-    NSArray* aGroup = [[NSUserDefaults standardUserDefaults] objectForKey:@"L200RunGroup"];
+    NSArray* aGroup = [[NSUserDefaults standardUserDefaults] objectForKey:@"L200RunGroupV2"];
     runGroup = [[NSMutableArray array]retain];
     for(id aRunSet in aGroup){
         [runGroup addObject:[[aRunSet mutableCopy]autorelease]];
@@ -1422,7 +1417,7 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
 
 - (void) writeRunGroup
 {
-    [[NSUserDefaults standardUserDefaults] setObject:runGroup forKey:@"L200RunGroup"];
+    [[NSUserDefaults standardUserDefaults] setObject:runGroup forKey:@"L200RunGroupV2"];
 }
 
 @end

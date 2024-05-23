@@ -146,6 +146,7 @@
 - (void) statusLogFlushed:(NSNotification*)aNotification;
 - (void) preCloseOut:(NSDictionary*)userInfo;
 - (void) closeOutLogFiles:(NSNotification*)aNote;
+- (void) setPrefixSpecial:(NSNotification*)aNote;
 
 #pragma mark ¥¥¥Data Handling
 - (void) processData:(NSArray*)dataArray decoder:(ORDecoder*)aDecoder;
@@ -209,6 +210,5 @@ extern NSString* ORDataFileModelDataWrittenNotification;
 }
 - (id) initWithFilePath:(NSString*)aPath delegate:(id)aDelegate;
 - (void) main;
-- (void) setPrefixSpecial:(NSNotification*)aNote;
 
 @end
