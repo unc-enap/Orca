@@ -1239,7 +1239,7 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     //we assume:
     //  1)the type doesn't change in a cycle
     //  2)a phy cycle has just one set of runs
-    if([type isEqualToString:@"phy"]){
+    if([type isEqualToString:@"phy"] || [type isEqualToString:@"tst"]){
         //phy cycle ... easy
         NSMutableArray* allRuns = [NSMutableArray array];
         for(id aRun in firstSet){
@@ -1261,9 +1261,7 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
             }
         }
         [preJson setObject:keys forKey:@"keys"];
-
-        NSMutableDictionary* infoDict   = [NSMutableDictionary dictionary];
-        [preJson setObject:infoDict forKey:@"info"];
+        [preJson setObject:[self metaInfo] forKey:@"info"];
         
         NSMutableDictionary* sourceDict = [NSMutableDictionary dictionary];
         int posIndex = 1;
@@ -1288,7 +1286,7 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
             posIndex++;
         }
         [preJson setObject:[NSNumber numberWithLong:runCount] forKey:@"number_of_keys"];
-        [preJson setObject:sourceDict forKey:@"info"];
+        [preJson setObject:sourceDict forKey:@"positionInfo"];
     }
     
     NSError* error;
