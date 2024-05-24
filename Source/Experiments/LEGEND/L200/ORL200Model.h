@@ -54,7 +54,7 @@
     NSString* metaInfo;
     NSString* metaError;
     NSString* metaFolder;
-    NSMutableArray* runGroup;
+    NSMutableDictionary* runGroups;
 }
 
 #pragma mark •••Accessors
@@ -111,7 +111,6 @@
 #pragma mark •••MetaInfo routines
 - (void) readRunGroup;
 - (void) writeRunGroup;
-- (void) checkGroupArray;
 - (void) finalizeMetaData;
 - (void) addRunToGroup:(NSString*)dataFile;
 
