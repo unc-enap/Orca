@@ -111,7 +111,7 @@
 #pragma mark •••MetaInfo routines
 - (void) readRunGroup;
 - (void) writeRunGroup;
-- (void) finalizeMetaData;
+- (void) finalizeMetaInfo;
 - (void) addRunToGroup:(NSString*)dataFile;
 
 @end
