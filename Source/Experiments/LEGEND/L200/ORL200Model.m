@@ -1415,7 +1415,7 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
 {
     //read in the rungroup and make it mutable so we can add to it
     if(runGroups)[runGroups release];
-    NSDictionary* oldGroups = [[NSUserDefaults standardUserDefaults] objectForKey:@"L200RunGroupV3"];
+    NSDictionary* oldGroups = [[NSUserDefaults standardUserDefaults] objectForKey:@"L200RunGroupV1"];
     runGroups = [[NSMutableDictionary dictionary]retain];
     for(id aKey in [oldGroups allKeys]){
         NSMutableArray* runsInGroup = [[[oldGroups objectForKey:aKey] mutableCopy]autorelease];
@@ -1426,7 +1426,7 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
 
 - (void) writeRunGroup
 {
-    [[NSUserDefaults standardUserDefaults] setObject:runGroups forKey:@"L200RunGroupV3"];
+    [[NSUserDefaults standardUserDefaults] setObject:runGroups forKey:@"L200RunGroupV1"];
 }
 
 @end
