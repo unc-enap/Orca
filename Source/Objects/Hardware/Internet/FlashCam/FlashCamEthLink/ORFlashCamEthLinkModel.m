@@ -130,7 +130,7 @@ static NSString* ORFlashCamEthLinkOutputConnection = @"ORFlashCamEthLinkOutputCo
     [colorForData([[NSUserDefaults standardUserDefaults] objectForKey:ORLineColor]) set];
     [path stroke];
     [self drawConnections:aRect withTransparency:aTransparency];
-    [self makeConnectors];
+    //[self makeConnectors]; //causes severe slow down
 }
 
 #pragma mark •••Accessors
