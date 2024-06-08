@@ -55,11 +55,11 @@ int FSPSetAuxParameters(StreamProcessor *processor, FSPChannelFormat format, int
 
 int FSPSetGeParameters(StreamProcessor *processor, int nchannels, int *channelmap, FSPChannelFormat format,
                        int majority_threshold, int skip_full_counting, unsigned short *ge_prescaling_threshold_adc,
-                       float ge_average_prescaling_rate_hz);
+                       int prescale_ratio);
 
 int FSPSetSiPMParameters(StreamProcessor *processor, int nchannels, int *channelmap, FSPChannelFormat format,
                          float *calibration_factors, float *channel_thresholds_pe, int *shaping_width_samples,
                          float *lowpass_factors, int coincidence_pre_window_ns, int coincidence_post_window_ns,
                          int coincidence_window_samples, int sum_window_start_sample, int sum_window_stop_sample,
-                         float sum_threshold_pe, float coincidence_sum_threshold_pe, float average_prescaling_rate_hz,
+                         float sum_threshold_pe, float coincidence_sum_threshold_pe, int prescale_ratio,
                          int enable_muon_coincidence);

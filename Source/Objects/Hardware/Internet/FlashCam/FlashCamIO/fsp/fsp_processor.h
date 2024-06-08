@@ -36,16 +36,15 @@ typedef struct StreamProcessor {
   uint64_t wps_reference_flags_hwm;
   uint64_t wps_reference_flags_wps;
 
-  int wps_prescaling_offset;
-  int wps_prescaling_counter;
-  char *wps_prescaling;
-  float wps_prescaling_rate;
-  Timestamp wps_prescaling_timestamp;
+  int wps_prescale_ratio;
+  int wps_prescale_ready_counter;
+  float wps_prescale_rate;
+  Timestamp wps_prescale_timestamp;
 
-
-  Timestamp hwm_prescaling_timestamp;
-  int hwm_prescaling_threshold_adc;
-  float hwm_prescaling_rate;
+  int hwm_prescale_ratio;
+  int hwm_prescale_ready_counter;
+  float hwm_prescale_rate;
+  Timestamp hwm_prescale_timestamp;
 
   int loglevel;
 
@@ -67,4 +66,4 @@ typedef struct StreamProcessor {
 
 
 int fsp_process(StreamProcessor* processor, FSPState* fsp_state, FCIOState* state);
-unsigned int fsp_write_decision(FSPState* fsp_state);
+// unsigned int fsp_write_decision(FSPState* fsp_state);

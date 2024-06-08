@@ -35,6 +35,7 @@ typedef union WPSFlags {
     uint8_t rel_reference; // the event is a WPS reference event
     uint8_t rel_pre_window; // the event is in the pre window of a reference event
     uint8_t rel_post_window; // the event is in the post window of a reference event
+    uint8_t prescaled; // in addition to the multiplicity_below condition the current event is ready to prescale to it's timestamp
   };
   uint64_t is_flagged;
 } WPSFlags;
@@ -44,6 +45,7 @@ typedef union HWMFlags {
   struct {
     uint8_t multiplicity_threshold; // the multiplicity threshold (number of channels) has been reached
     uint8_t multiplicity_below; // all non-zero channels have an hardware value below the set amplitude threshold
+    uint8_t prescaled; // in addition to the multiplicity_below condition the current event is ready to prescale to it's timestamp
   };
   uint64_t is_flagged;
 } HWMFlags;

@@ -33,6 +33,53 @@ int FSPInput(StreamProcessor* processor, FCIOState* state) {
   return FSPBufferFreeLevel(processor->buffer);
 }
 
+static inline void fsp_derive_triggerflags(StreamProcessor* processor, FSPState* fsp_state)
+{
+  /*
+    This function calculates the trigger flag fields from the individual processor flags
+  */
+  if (processor->enabled_flags.trigger.hwm_multiplicity && fsp_state->flags.hwm.multiplicity_threshold)
+    fsp_state->flags.trigger.hwm_multiplicity = 1;
+
+  if (processor->enabled_flags.trigger.hwm_prescaled && fsp_state->flags.hwm.prescaled) {
+    fsp_state->flags.trigger.hwm_multiplicity = 0;
+    fsp_state->flags.trigger.hwm_prescaled = 1;
+  }
+
+  if (processor->enabled_flags.trigger.ct_multiplicity && fsp_state->flags.ct.multiplicity)
+    fsp_state->flags.trigger.ct_multiplicity = 1;
+
+  if (processor->enabled_flags.trigger.wps_abs && fsp_state->flags.wps.abs_threshold)
+    fsp_state->flags.trigger.wps_abs = 1;
+
+  if (processor->enabled_flags.trigger.wps_rel && fsp_state->flags.wps.rel_threshold)
+    if (fsp_state->flags.wps.rel_pre_window || fsp_state->flags.wps.rel_post_window) {
+      fsp_state->flags.trigger.wps_rel = 1;
+    }
+
+  if (processor->enabled_flags.trigger.hwm_prescaled && fsp_state->flags.hwm.prescaled)
+    fsp_state->flags.trigger.hwm_prescaled = 1;
+
+  if (processor->enabled_flags.trigger.wps_prescaled && fsp_state->flags.wps.prescaled)
+    fsp_state->flags.trigger.wps_prescaled = 1;
+}
+
+static inline unsigned int fsp_write_decision(FSPState* fsp_state) {
+  if ((fsp_state->state->last_tag != FCIOEvent) && (fsp_state->state->last_tag != FCIOSparseEvent))
+  // if ((fsp_state->state->last_tag != FCIOEvent))
+    return 1;
+
+  // if ((fsp_state->flags.event.is_flagged & processor->enabled_flags.event.is_flagged) ||
+  //     (fsp_state->flags.trigger.is_flagged & processor->enabled_flags.trigger.is_flagged))
+  if (fsp_state->flags.event.is_flagged || fsp_state->flags.trigger.is_flagged)
+    return 1;
+
+  return 0;
+}
+
+
+
+
 
 FSPState* FSPOutput(StreamProcessor* processor) {
   if (!processor) return NULL;
@@ -42,6 +89,8 @@ FSPState* FSPOutput(StreamProcessor* processor) {
   if (!fsp_state) {
     return NULL;
   }
+
+  fsp_derive_triggerflags(processor, fsp_state);
 
   fsp_state->write = fsp_write_decision(fsp_state);
 
@@ -86,8 +135,11 @@ StreamProcessor* FSPCreate(void) {
       (FCIOMaxSamples + 1) * 16;        // this is required to check for retrigger events
   processor->minimum_buffer_depth = 16; // the minimum buffer window * 30kHz event rate requires at least 16 records
   processor->stats->start_time = 0.0;    // reset, actual start time happens with the first record insertion.
-  processor->hwm_prescaling_timestamp.seconds = -1; // will init when it's needed
-  processor->wps_prescaling_timestamp.seconds = -1; // will init when it's needed
+  processor->hwm_prescale_timestamp.seconds = -1; // will init when it's needed
+  processor->wps_prescale_timestamp.seconds = -1; // will init when it's needed
+
+  processor->hwm_prescale_ready_counter = 0; // start counters
+  processor->wps_prescale_ready_counter = 0; // start counters
 
   /* hardcoded defaults which should make sense. Used SetFunctions outside to overwrite */
   FSPEnableEventFlags(processor, (EventFlags){ .is_retrigger = 1, .is_extended = 1});
@@ -157,6 +209,9 @@ static inline void fsp_init_stats(StreamProcessor* processor) {
     stats->dt_logtime = stats->start_time = elapsed_time(0.0);
   }
 }
+
+
+
 
 FSPState* FSPGetNextState(StreamProcessor* processor, FCIOStateReader* reader, int* timedout) {
   /*

@@ -49,8 +49,8 @@ int FSPSetAuxParameters(StreamProcessor* processor, FSPChannelFormat format, int
 }
 
 int FSPSetGeParameters(StreamProcessor* processor, int nchannels, int* channelmap, FSPChannelFormat format,
-                       int majority_threshold, int skip_full_counting, unsigned short* ge_prescaling_threshold_adc,
-                       float ge_average_prescaling_rate_hz) {
+                       int majority_threshold, int skip_full_counting, unsigned short* ge_prescale_threshold_adc,
+                       int prescale_ratio) {
   processor->hwm_cfg = calloc(1, sizeof(HardwareMajorityConfig));
   HardwareMajorityConfig* fmc = processor->hwm_cfg;
 
@@ -68,7 +68,7 @@ int FSPSetGeParameters(StreamProcessor* processor, int nchannels, int* channelma
 
   for (int i = 0; i < nchannels && i < FCIOMaxChannels; i++) {
     fmc->tracemap[i] = channelmap[i];
-    fmc->fpga_energy_threshold_adc[i] = ge_prescaling_threshold_adc[i];
+    fmc->fpga_energy_threshold_adc[i] = ge_prescale_threshold_adc[i];
   }
   fmc->fast = skip_full_counting;
   if (majority_threshold >= 0)
@@ -77,19 +77,19 @@ int FSPSetGeParameters(StreamProcessor* processor, int nchannels, int* channelma
     fprintf(stderr, "CRITICAL majority_threshold needs to be >= 0 is %d\n", majority_threshold);
     return 0;
   }
-  if (ge_average_prescaling_rate_hz >= 0.0)
-    processor->hwm_prescaling_rate = ge_average_prescaling_rate_hz;
+  if (prescale_ratio >= 0)
+    processor->hwm_prescale_ratio = prescale_ratio;
   else {
-    fprintf(stderr, "CRITICAL ge_average_prescaling_rate_hz needs to be >= 0.0 is %f\n", ge_average_prescaling_rate_hz);
+    fprintf(stderr, "CRITICAL Ge prescale_ratio needs to be >= 0 is %d\n", prescale_ratio);
     return 0;
   }
 
   if (processor->loglevel >= 4) {
     fprintf(stderr, "DEBUG LPPSetGeParameters\n");
     fprintf(stderr, "DEBUG majority_threshold %d\n", majority_threshold);
-    fprintf(stderr, "DEBUG average_prescaling_rate_hz %f\n", ge_average_prescaling_rate_hz);
+    fprintf(stderr, "DEBUG prescale_ratio     %d\n", prescale_ratio);
     fprintf(stderr, "DEBUG skip_full_counting %d\n", fmc->fast);
-    fprintf(stderr, "DEBUG channelmap_format %d : %s\n", fmc->tracemap_format, channelmap_fmt2str(format));
+    fprintf(stderr, "DEBUG channelmap_format  %d : %s\n", fmc->tracemap_format, channelmap_fmt2str(format));
     for (int i = 0; i < fmc->ntraces; i++) {
       if (fmc->tracemap_format == FCIO_TRACE_MAP_FORMAT) {
         fprintf(stderr, "DEBUG channel 0x%x\n", fmc->tracemap[i]);
@@ -105,7 +105,7 @@ int FSPSetSiPMParameters(StreamProcessor* processor, int nchannels, int* channel
                          float* calibration_pe_adc, float* channel_thresholds_pe, int* shaping_width_samples,
                          float* lowpass_factors, int coincidence_pre_window_ns, int coincidence_post_window_ns,
                          int coincidence_window_samples, int sum_window_start_sample, int sum_window_stop_sample,
-                         float sum_threshold_pe, float coincidence_wps_threshold, float average_prescaling_rate_hz,
+                         float sum_threshold_pe, float coincidence_wps_threshold, int prescale_ratio,
                          int enable_muon_coincidence) {
   processor->wps_cfg = calloc(1, sizeof(WindowedPeakSumConfig));
   WindowedPeakSumConfig* wps_cfg = processor->wps_cfg;
@@ -139,12 +139,13 @@ int FSPSetSiPMParameters(StreamProcessor* processor, int nchannels, int* channel
   processor->pre_trigger_window.nanoseconds = coincidence_pre_window_ns % 1000000000L;
   processor->post_trigger_window.seconds = coincidence_post_window_ns / 1000000000L;
   processor->post_trigger_window.nanoseconds = coincidence_post_window_ns % 1000000000L;
-  processor->wps_prescaling_rate = average_prescaling_rate_hz;
-  if (processor->wps_prescaling_rate > 0.0)
-    processor->wps_prescaling = "average";  // could be "offset" when selecting ->wps_prescaling_offset, but is disabled here.
-  else
-    processor->wps_prescaling = NULL;
   processor->muon_coincidence = enable_muon_coincidence;
+  if (prescale_ratio >= 0)
+    processor->wps_prescale_ratio = prescale_ratio;
+  else {
+    fprintf(stderr, "CRITICAL SiPM prescale_ratio needs to be >= 0 is %d\n", prescale_ratio);
+    return 0;
+  }
 
   wps_cfg->coincidence_window = coincidence_window_samples;
   wps_cfg->sum_window_start_sample = sum_window_start_sample;
@@ -199,7 +200,7 @@ int FSPSetSiPMParameters(StreamProcessor* processor, int nchannels, int* channel
     /* DEBUGGING enabled, print all inputs */
     fprintf(stderr, "DEBUG LPPSetSiPMParameters:\n");
     fprintf(stderr, "DEBUG channelmap_format %d : %s\n", wps_cfg->tracemap_format, channelmap_fmt2str(format));
-    fprintf(stderr, "DEBUG average_prescaling_rate_hz   %f\n", processor->wps_prescaling_rate);
+    fprintf(stderr, "DEBUG prescale_ratio               %d\n", processor->wps_prescale_ratio);
     fprintf(stderr, "DEBUG sum_window_start_sample      %d\n", wps_cfg->sum_window_start_sample);
     fprintf(stderr, "DEBUG sum_window_stop_sample       %d\n", wps_cfg->sum_window_stop_sample);
     fprintf(stderr, "DEBUG dsp_pre_max_samples          %d\n", wps_cfg->dsp_pre_max_samples);
