@@ -1045,8 +1045,8 @@
         }
         else if(view == listenerSWTGeneralView){
             if(col == 1)      return [l configParam:@"fspEnabled"];
-            if(col == 2)      return [l configParam:@"fspHWEnabled"];
-            if(col == 3)      return [l configParam:@"fspPSEnabled"];
+            else if(col == 2) return [l configParam:@"fspHWEnabled"];
+            else if(col == 3) return [l configParam:@"fspPSEnabled"];
             else if(col == 4) return [l configParam:@"fspWriteNonTriggered"];
             else if(col == 5) return [l configParam:@"fspLogTime"];
             else if(col == 6) return [l configParam:@"fspLogLevel"];
@@ -1172,9 +1172,9 @@
         else if(view == listenerSWTGeneralView){
             if(col == 1)      [l setConfigParam:@"fspEnabled"
                                       withValue:[NSNumber numberWithBool:[object boolValue]]];
-            else if(col == 2)      [l setConfigParam:@"fspHWEnabled"
+            else if(col == 2) [l setConfigParam:@"fspHWEnabled"
                                       withValue:[NSNumber numberWithBool:[object boolValue]]];
-            else if(col == 3)      [l setConfigParam:@"fspPSEnabled"
+            else if(col == 3) [l setConfigParam:@"fspPSEnabled"
                                       withValue:[NSNumber numberWithBool:[object boolValue]]];
             else if(col == 4) [l setConfigParam:@"fspWriteNonTriggered"
                                       withValue:[NSNumber numberWithBool:[object boolValue]]];
