@@ -107,7 +107,7 @@
 //     FSP Internal Parser variables
     int nfspHWChannels;
     int* fspHWChannelMap;
-    unsigned short* fspHWPrescalingThresholds;
+    unsigned short* fspHWPrescaleThresholds;
 
     int nfspPSChannels;
     int* fspPSChannelMap;

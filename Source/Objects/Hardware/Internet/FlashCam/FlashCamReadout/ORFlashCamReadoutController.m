@@ -1053,12 +1053,12 @@
         }
         else if(view == listenerSWTHWMultiplicityView){
             if(col == 1)      return [l configParam:@"fspHWMajThreshold"];
-            else if(col == 2) return [l configParam:@"fspHWPreScalingRate"];
+            else if(col == 2) return [l configParam:@"fspHWPreScaleRatio"];
         }
         else if(view == listenerSWTPeakSumTriggerView){
             if(col == 1)      return [l configParam:@"fspPSPreWindow"];
             else if(col == 2) return [l configParam:@"fspPSPostWindow"];
-            else if(col == 3) return [l configParam:@"fspPSPreScalingRate"];
+            else if(col == 3) return [l configParam:@"fspPSPreScaleRatio"];
             else if(col == 4) return [l configParam:@"fspPSMuonCoincidence"];
         }
         else if(view == listenerSWTPeakSumParametersView){
@@ -1186,16 +1186,16 @@
         else if(view == listenerSWTHWMultiplicityView){
             if(col == 1)      [l setConfigParam:@"fspHWMajThreshold"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
-            else if(col == 2) [l setConfigParam:@"fspHWPreScalingRate"
-                                      withValue:[NSNumber numberWithDouble:[object doubleValue]]];
+            else if(col == 2) [l setConfigParam:@"fspHWPreScaleRatio"
+                                      withValue:[NSNumber numberWithInt:[object intValue]]];
         }
         else if(view == listenerSWTPeakSumTriggerView){
             if(col == 1)      [l setConfigParam:@"fspPSPreWindow"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
             else if(col == 2) [l setConfigParam:@"fspPSPostWindow"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
-            else if(col == 3) [l setConfigParam:@"fspPSPreScalingRate"
-                                      withValue:[NSNumber numberWithDouble:[object doubleValue]]];
+            else if(col == 3) [l setConfigParam:@"fspPSPreScaleRatio"
+                                      withValue:[NSNumber numberWithInt:[object intValue]]];
             else if(col == 4) [l setConfigParam:@"fspPSMuonCoincidence"
                                       withValue:[NSNumber numberWithBool:[object boolValue]]];
         }

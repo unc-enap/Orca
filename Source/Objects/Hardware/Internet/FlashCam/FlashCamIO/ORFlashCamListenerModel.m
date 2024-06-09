@@ -102,10 +102,10 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     [self setConfigParam:@"fspBaselineChan" withValue:[NSNumber numberWithInt:-1]];
     [self setConfigParam:@"fspMuonChan"     withValue:[NSNumber numberWithInt:-1]];
     [self setConfigParam:@"fspHWMajThreshold"  withValue:[NSNumber numberWithInt:-1]];
-    [self setConfigParam:@"fspHWPreScalingRate"  withValue:[NSNumber numberWithDouble:0.00]];
+    [self setConfigParam:@"fspHWPreScaleRatio"  withValue:[NSNumber numberWithInt:0]];
     [self setConfigParam:@"fspPSPreWindow"   withValue:[NSNumber numberWithInt:2000000]];
     [self setConfigParam:@"fspPSPostWindow"   withValue:[NSNumber numberWithInt:2000000]];
-    [self setConfigParam:@"fspPSPreScalingRate"  withValue:[NSNumber numberWithDouble:0.0]];
+    [self setConfigParam:@"fspPSPreScaleRatio"  withValue:[NSNumber numberWithInt:0]];
     [self setConfigParam:@"fspPSMuonCoincidence"  withValue:[NSNumber numberWithBool:NO]];
     [self setConfigParam:@"fspPSSumWindowStart"  withValue:[NSNumber numberWithInt:-1]];
     [self setConfigParam:@"fspPSSumWindowStop"  withValue:[NSNumber numberWithInt:-1]];
@@ -133,7 +133,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     fspPSChannelShapings = (int*)calloc(FCIOMaxChannels, sizeof(int));
     fspPSChannelLowPass = (float*)calloc(FCIOMaxChannels, sizeof(float));
     fspHWChannelMap = (int*)calloc(FCIOMaxChannels, sizeof(int));
-    fspHWPrescalingThresholds = (unsigned short*)calloc(FCIOMaxChannels, sizeof(unsigned short));
+    fspHWPrescaleThresholds = (unsigned short*)calloc(FCIOMaxChannels, sizeof(unsigned short));
     fspFlagChannelMap = (int*)calloc(FCIOMaxChannels, sizeof(int));
     fspFlagChannelThresholds = (int*)calloc(FCIOMaxChannels, sizeof(int));
     runFailedAlarm     = nil;
@@ -251,7 +251,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     free(fspPSChannelShapings);
     free(fspPSChannelLowPass);
     free(fspHWChannelMap);
-    free(fspHWPrescalingThresholds);
+    free(fspHWPrescaleThresholds);
     free(fspFlagChannelMap);
     free(fspFlagChannelThresholds);
     [super dealloc];
@@ -491,16 +491,16 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
         return [NSNumber numberWithInt:[[configParams objectForKey:p] intValue]];
     else if([p isEqualToString:@"fspHWMajThreshold"])
         return [NSNumber numberWithInt:[[configParams objectForKey:p] intValue]];
-    else if([p isEqualToString:@"fspHWPreScalingRate"])
-        return [NSNumber numberWithDouble:[[configParams objectForKey:p] doubleValue]];
+    else if([p isEqualToString:@"fspHWPreScaleRatio"])
+        return [NSNumber numberWithDouble:[[configParams objectForKey:p] intValue]];
 //    else if([p isEqualToString:@"fspHWCheckAll"])
 //        return [NSNumber numberWithBool:[[configParams objectForKey:p] boolValue]];
     else if([p isEqualToString:@"fspPSPreWindow"])
         return [NSNumber numberWithInt:[[configParams objectForKey:p] intValue]];
     else if([p isEqualToString:@"fspPSPostWindow"])
         return [NSNumber numberWithInt:[[configParams objectForKey:p] intValue]];
-    else if([p isEqualToString:@"fspPSPreScalingRate"])
-        return [NSNumber numberWithDouble:[[configParams objectForKey:p] doubleValue]];
+    else if([p isEqualToString:@"fspPSPreScaleRatio"])
+        return [NSNumber numberWithDouble:[[configParams objectForKey:p] intValue]];
     else if([p isEqualToString:@"fspPSMuonCoincidence"])
         return [NSNumber numberWithBool:[[configParams objectForKey:p] boolValue]];
     else if([p isEqualToString:@"fspPSSumWindowStart"])
@@ -993,9 +993,9 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
         [configParams setObject:[NSNumber numberWithInt:MIN(MAX(-1,[v intValue]),2304)] forKey:p];
     else if([p isEqualToString:@"fspHWMajThreshold"])
         [configParams setObject:[NSNumber numberWithInt:MIN(MAX(1,[v intValue]),2304)] forKey:p];
-    else if([p isEqualToString:@"fspHWPreScalingRate"])
-        [configParams setObject:[NSNumber numberWithDouble:MAX(0.0,[v doubleValue])] forKey:p];
-    else if([p isEqualToString:@"fspHWPreScalingThreshold"])
+    else if([p isEqualToString:@"fspHWPrescaleRatio"])
+        [configParams setObject:[NSNumber numberWithInt:MAX(0,[v intValue])] forKey:p];
+    else if([p isEqualToString:@"fspHWPreScaleThreshold"])
         [configParams setObject:[NSNumber numberWithInt:MAX(0,[v intValue])] forKey:p];
 //    else if([p isEqualToString:@"fspHWCheckAll"])
 //        [configParams setObject:[NSNumber numberWithBool:[v boolValue]] forKey:p];
@@ -1003,8 +1003,8 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
         [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0,[v intValue]),2147483647)] forKey:p];
     else if([p isEqualToString:@"fspPSPostWindow"])
         [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0,[v intValue]),2147483647)] forKey:p];
-    else if([p isEqualToString:@"fspPSPreScalingRate"])
-        [configParams setObject:[NSNumber numberWithDouble:MAX(0.0,[v doubleValue])] forKey:p];
+    else if([p isEqualToString:@"fspPSPreScaleRatio"])
+        [configParams setObject:[NSNumber numberWithInt:MAX(0.0,[v intValue])] forKey:p];
     else if([p isEqualToString:@"fspPSMuonCoincidence"])
         [configParams setObject:[NSNumber numberWithBool:[v boolValue]] forKey:p];
     else if([p isEqualToString:@"fspPSSumWindowStart"])
@@ -1263,7 +1263,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
                     }
                     case 2: { // HW Multiplicity
                         fspHWChannelMap[nfspHWChannels] = identifier;
-                        fspHWPrescalingThresholds[nfspHWChannels] = (unsigned short)[adc swtThreshold:ich];
+                        fspHWPrescaleThresholds[nfspHWChannels] = (unsigned short)[adc swtThreshold:ich];
                         nfspHWChannels++;
                         break;
                     }
@@ -1337,8 +1337,8 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
         if (!FSPSetGeParameters(processor, nfspHWChannels, fspHWChannelMap, FCIO_TRACE_MAP_FORMAT,
                                 [[self configParam:@"fspHWMajThreshold"] intValue],
                                 0, // do not skip any channels to check
-                                fspHWPrescalingThresholds,
-                                [[self configParam:@"fspHWPreScalingRate"] floatValue])) {
+                                fspHWPrescaleThresholds,
+                                [[self configParam:@"fspHWPreScaleRatio"] intValue])) {
             NSLogColor([NSColor redColor], @"%@: setupSoftwareTrigger: Error parsing HW Multiplicity parameters.\n", [self identifier]);
             return NO;
         }
@@ -1355,7 +1355,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
                                   [[self configParam:@"fspPSSumWindowStop"] intValue],
                                   [[self configParam:@"fspPSAbsoluteThreshold"] floatValue],
                                   [[self configParam:@"fspPSCoincidenceThreshold"] floatValue],
-                                  [[self configParam:@"fspPSPreScalingRate"] floatValue],
+                                  [[self configParam:@"fspPSPreScaleRatio"] intValue],
                                   [[self configParam:@"fspPSMuonCoincidence"] intValue])) {
             NSLogColor([NSColor redColor], @"%@: setupSoftwareTrigger: Error parsing Peak Sum parameters.\n", [self identifier]);
             return NO;
@@ -2471,7 +2471,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     fspPSChannelShapings = (int*)calloc(FCIOMaxChannels, sizeof(int));
     fspPSChannelLowPass = (float*)calloc(FCIOMaxChannels, sizeof(float));
     fspHWChannelMap = (int*)calloc(FCIOMaxChannels, sizeof(int));
-    fspHWPrescalingThresholds = (unsigned short*)calloc(FCIOMaxChannels, sizeof(unsigned short));
+    fspHWPrescaleThresholds = (unsigned short*)calloc(FCIOMaxChannels, sizeof(unsigned short));
     fspFlagChannelMap = (int*)calloc(FCIOMaxChannels, sizeof(int));
     fspFlagChannelThresholds = (int*)calloc(FCIOMaxChannels, sizeof(int));
 
