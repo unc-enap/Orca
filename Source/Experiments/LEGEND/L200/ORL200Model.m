@@ -1371,7 +1371,6 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     //create structures for this run
     NSString* dataType    = [self getDataType];
     if(!dataType)return;
-    NSArray*  sourceArray = [slowControls sourceArray];
     //-------------------------------
     //create dictionary for this run holding type, name, etc
     //use the run type as a key
@@ -1380,8 +1379,13 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     [thisRun setObject: dataType     forKey:@"type"];
     [thisRun setObject: dataFileName forKey:@"name"];
     NSString* runGroupKey = dataType;
-    if(sourceArray && [dataType isEqualToString:@"cal"]){
+    if(slowControls && [dataType isEqualToString:@"cal"]){
         //change the group key here to make things easier later
+        NSMutableArray* sourceArray = [NSMutableArray array];
+        for(int i=0;i<4;i++){
+            NSString* sourcePos = [slowControls cmd:@"Source" dataAtRow:i column:2];
+            [sourceArray addObject:sourcePos];
+        }
         runGroupKey = [self makeCalGroupKey:sourceArray];
         [thisRun setObject: sourceArray forKey:@"sourcePositions"];
         NSMutableArray* sourceTable = [runGroups objectForKey:@"SourceTable"];
