@@ -1085,7 +1085,7 @@
 	//blocks
 	NSString* s = NodeValue(0);
 	s = [s trimSpacesFromEnds];
-	s = [s removeExtraSpaces];
+	//s = [s removeExtraSpaces];
 	NSLog(@"Shell: %@\n",s);
 	NSMutableArray* parts = [[[s componentsSeparatedByString:@" "] mutableCopy] autorelease];
 	if([parts count]){
@@ -1108,7 +1108,14 @@
 		[task release];
 		[tempString autorelease];
         [readHandle closeFile];
-		NSLog(@"%@\n", tempString);
+        if([tempString length]>0){
+            NSLog(@"Shell Cmd returned:\n");
+            NSString* newLine = @"";
+            if(![tempString hasSuffix:@"\n"] && ![tempString hasSuffix:@"\r"]){
+                newLine = @"\n";
+            }
+            NSLog(@"%@%@", tempString,newLine);
+        }
 	}
 	return nil;
 }
