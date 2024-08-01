@@ -1584,6 +1584,12 @@
 		844CBDD11866010F0012AA3B /* scpExpectGetScript in Resources */ = {isa = PBXBuildFile; fileRef = 844CBDCA1866010F0012AA3B /* scpExpectGetScript */; };
 		844CD8FD18CA974E00F47A5B /* CouchUpdateHandler.txt in Resources */ = {isa = PBXBuildFile; fileRef = 844CD8FC18CA974E00F47A5B /* CouchUpdateHandler.txt */; };
 		844CD8FF18CA986F00F47A5B /* CouchHistoryEventsMap.txt in Resources */ = {isa = PBXBuildFile; fileRef = 844CD8FE18CA986F00F47A5B /* CouchHistoryEventsMap.txt */; };
+		844CD9E12C5BACA800694275 /* SHT35.tif in Resources */ = {isa = PBXBuildFile; fileRef = 844CD9D82C5BACA800694275 /* SHT35.tif */; };
+		844CD9E32C5BACA800694275 /* ORSHT35Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 844CD9DA2C5BACA800694275 /* ORSHT35Controller.h */; };
+		844CD9E42C5BACA800694275 /* ORSHT35Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 844CD9DB2C5BACA800694275 /* ORSHT35Controller.m */; };
+		844CD9E52C5BACA800694275 /* ORSHT35Model.h in Headers */ = {isa = PBXBuildFile; fileRef = 844CD9DC2C5BACA800694275 /* ORSHT35Model.h */; };
+		844CD9E62C5BACA800694275 /* ORSHT35Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 844CD9DD2C5BACA800694275 /* ORSHT35Model.m */; };
+		844CD9E82C5BAE5300694275 /* SHT35.nib in Resources */ = {isa = PBXBuildFile; fileRef = 844CD9E72C5BAE5300694275 /* SHT35.nib */; };
 		844D8CC80A069CA200E83C57 /* MCarrier.gif in Resources */ = {isa = PBXBuildFile; fileRef = 84749D1207D6526F001553EC /* MCarrier.gif */; };
 		844D93020A0A79AA00E83C57 /* ORPulser33220Model.h in Headers */ = {isa = PBXBuildFile; fileRef = 844D92FA0A0A79AA00E83C57 /* ORPulser33220Model.h */; };
 		844D93030A0A79AA00E83C57 /* ORPulser33220Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 844D92FB0A0A79AA00E83C57 /* ORPulser33220Model.m */; };
@@ -5354,6 +5360,13 @@
 		844CBDCA1866010F0012AA3B /* scpExpectGetScript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = scpExpectGetScript; sourceTree = "<group>"; };
 		844CD8FC18CA974E00F47A5B /* CouchUpdateHandler.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CouchUpdateHandler.txt; sourceTree = "<group>"; };
 		844CD8FE18CA986F00F47A5B /* CouchHistoryEventsMap.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CouchHistoryEventsMap.txt; sourceTree = "<group>"; };
+		844CD9D82C5BACA800694275 /* SHT35.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = SHT35.tif; sourceTree = "<group>"; };
+		844CD9DA2C5BACA800694275 /* ORSHT35Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORSHT35Controller.h; sourceTree = "<group>"; };
+		844CD9DB2C5BACA800694275 /* ORSHT35Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORSHT35Controller.m; sourceTree = "<group>"; };
+		844CD9DC2C5BACA800694275 /* ORSHT35Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORSHT35Model.h; sourceTree = "<group>"; };
+		844CD9DD2C5BACA800694275 /* ORSHT35Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORSHT35Model.m; sourceTree = "<group>"; };
+		844CD9E72C5BAE5300694275 /* SHT35.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = SHT35.nib; sourceTree = "<group>"; };
+		844CD9E92C5BD55F00694275 /* I2CProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = I2CProtocol.h; sourceTree = "<group>"; };
 		844D2B100455BFD7005F64B1 /* ORGenericData.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ORGenericData.h; sourceTree = "<group>"; };
 		844D2B110455BFD7005F64B1 /* ORGenericData.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORGenericData.m; sourceTree = "<group>"; };
 		844D92FA0A0A79AA00E83C57 /* ORPulser33220Model.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ORPulser33220Model.h; sourceTree = "<group>"; };
@@ -10565,6 +10578,28 @@
 			path = RaidMonitor;
 			sourceTree = "<group>";
 		};
+		844CD9DE2C5BACA800694275 /* SHT35 */ = {
+			isa = PBXGroup;
+			children = (
+				844CD9E72C5BAE5300694275 /* SHT35.nib */,
+				844CD9D82C5BACA800694275 /* SHT35.tif */,
+				844CD9DA2C5BACA800694275 /* ORSHT35Controller.h */,
+				844CD9DB2C5BACA800694275 /* ORSHT35Controller.m */,
+				844CD9DC2C5BACA800694275 /* ORSHT35Model.h */,
+				844CD9DD2C5BACA800694275 /* ORSHT35Model.m */,
+			);
+			path = SHT35;
+			sourceTree = "<group>";
+		};
+		844CD9DF2C5BACA800694275 /* I2C */ = {
+			isa = PBXGroup;
+			children = (
+				844CD9DE2C5BACA800694275 /* SHT35 */,
+				844CD9E92C5BD55F00694275 /* I2CProtocol.h */,
+			);
+			path = I2C;
+			sourceTree = "<group>";
+		};
 		844D2B0E0455BFD7005F64B1 /* Generic */ = {
 			isa = PBXGroup;
 			children = (
@@ -15750,6 +15785,7 @@
 		F51E698503AE4775015F64B1 /* Hardware */ = {
 			isa = PBXGroup;
 			children = (
+				844CD9DF2C5BACA800694275 /* I2C */,
 				8493CC2F0C99FA0700B46CD4 /* SBC */,
 				2A178E9908DB3D91001D78BC /* Hardware Base Classes */,
 				F51E698603AE4775015F64B1 /* Pci */,
@@ -16209,6 +16245,7 @@
 				84954B8305C87518004EBD3D /* ORHWWizParam.h in Headers */,
 				84B3EE2305CAFF150059BB49 /* ORHWWizSelection.h in Headers */,
 				84B3EEA405CB2FA40059BB49 /* ORHWWizard.h in Headers */,
+				844CD9E32C5BACA800694275 /* ORSHT35Controller.h in Headers */,
 				8465BE5A05DBCEFC00870151 /* NSInvocation+Extensions.h in Headers */,
 				847BC83805E2940D0054841E /* ORHWUndoSet.h in Headers */,
 				847BC83B05E2940D0054841E /* ORHWUndoManager.h in Headers */,
@@ -17192,6 +17229,7 @@
 				84D29FE51843EAC800D320DB /* ORShellStep.h in Headers */,
 				CE0216BF1512139A00456EB7 /* ORnEDMCoilModel.h in Headers */,
 				8499A7581518D85800CD7AAC /* ORCP8CryopumpController.h in Headers */,
+				844CD9E52C5BACA800694275 /* ORSHT35Model.h in Headers */,
 				8499A75A1518D85800CD7AAC /* ORCP8CryopumpDecoders.h in Headers */,
 				8499A75C1518D85800CD7AAC /* ORCP8CryopumpModel.h in Headers */,
 				8499AB8E151CA3B000CD7AAC /* ORManualPlot2DController.h in Headers */,
@@ -18168,6 +18206,7 @@
 				849516BA10C95382001C8112 /* StateLabel.nib in Resources */,
 				849516BB10C95382001C8112 /* StateLabel.tif in Resources */,
 				84522B9610CD723E0077DDFF /* adcMeter.tif in Resources */,
+				844CD9E82C5BAE5300694275 /* SHT35.nib in Resources */,
 				84522D4910CD90600077DDFF /* adcHorizontalBar.tif in Resources */,
 				84EE7DC510D2BEC200BBCBE5 /* adcText.tif in Resources */,
 				84EE877F10D94B3100BBCBE5 /* rightBug.tif in Resources */,
@@ -18379,6 +18418,7 @@
 				8491303115334EAA00597004 /* BitProcessor.nib in Resources */,
 				3AFC9E231D2AAD4600190989 /* NodePanelMap.png in Resources */,
 				8491303215334EAA00597004 /* BitProcessor.tif in Resources */,
+				844CD9E12C5BACA800694275 /* SHT35.tif in Resources */,
 				8491303B15334EAA00597004 /* TwoBitProcessor.nib in Resources */,
 				E635F3B823799E2200CDAAC4 /* VHS4060n.tif in Resources */,
 				84D29FE01843EAC800D320DB /* warn.png in Resources */,
@@ -18894,6 +18934,7 @@
 				84D153641BD53D2A005EC269 /* OROnCallListController.m in Sources */,
 				84178E0C0923F60F00C15D2B /* ORCommandClient.m in Sources */,
 				840E00050944B29000049827 /* ORProcessController.m in Sources */,
+				844CD9E42C5BACA800694275 /* ORSHT35Controller.m in Sources */,
 				840E00070944B29000049827 /* ORProcessModel.m in Sources */,
 				842F87BE1A40BD9B00FECB61 /* ORRemoteSocketModel.m in Sources */,
 				840E000B0944B29000049827 /* ORProcessElementController.m in Sources */,
@@ -19288,6 +19329,7 @@
 				84BC88DF0F9CDB5600336DF1 /* ORSerialPortController.m in Sources */,
 				842FCCB6197849C700B89723 /* OREHS8260pModel.m in Sources */,
 				84BC89130F9CDDAC00336DF1 /* ORSerialPortModel.m in Sources */,
+				844CD9E62C5BACA800694275 /* ORSHT35Model.m in Sources */,
 				84F16AF618900D530074B787 /* ORXTR6Model.m in Sources */,
 				E6B8BB7D27E90798000D17AC /* ORL200Model.m in Sources */,
 				840823CD0F9F83DC007E6061 /* ORFlippedView.m in Sources */,
