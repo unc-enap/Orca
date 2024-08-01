@@ -22,7 +22,7 @@
 #import "ORLabJackT7Model.h"
 #import "NSNotifications+Extensions.h"
 #import "ORDataTypeAssigner.h"
-
+#import "Utilities.h"
 #import "orca_t7.h"
 
 NSString* ORLabJackT7ModelDeviceSerialNumberChanged = @"ORLabJackT7ModelDeviceSerialNumberChanged";
@@ -56,6 +56,8 @@ NSString* ORLabJackT7EnabledChanged             = @"ORLabJackT7EnabledChanged";
 NSString* ORLabJackT7CounterEnabledChanged      = @"ORLabJackT7CounterEnabledChanged";
 NSString* ORLabJackT7RtcTimeChanged             = @"ORLabJackT7RtcTimeChanged";
 NSString* ORLabJackT7CalibrationInfoChanged     = @"ORLabJackT7CalibrationInfoChanged";
+
+static NSString* ORLabJackI2CConnection         = @"ORLabJackI2CConnection";
 
 @interface ORLabJackT7Model (private)
 - (void) pollHardware;
@@ -103,6 +105,18 @@ NSString* ORLabJackT7CalibrationInfoChanged     = @"ORLabJackT7CalibrationInfoCh
 - (void) makeMainController
 {
     [self linkToController:@"ORLabJackT7Controller"];
+}
+
+- (void) makeConnectors
+{
+    ORConnector* aConnector = [[ORConnector alloc]
+                                  initAt: NSMakePoint( [self frame].size.width-kConnectorSize, [self frame].size.height/2 )
+                                  withGuardian: self];
+    [[self connectors] setObject: aConnector forKey: ORLabJackI2CConnection ];
+    [aConnector setConnectorType: 'I2CO'];            //this is an I2C Output
+    [aConnector addRestrictedConnectionType: 'I2CI']; //can only connect to i2c inputs
+    [aConnector setOffColor:[NSColor magentaColor]];
+    [aConnector release];
 }
 
 - (NSString*) helpURL
@@ -1095,7 +1109,19 @@ NSString* ORLabJackT7CalibrationInfoChanged     = @"ORLabJackT7CalibrationInfoCh
         default: return 0;
     }
 }
+- (id <I2CProtocol>) getI2CMaster
+{
+    return self;
+}
 
+- (id) readI2CData
+{
+    //---FILL in the call to the I2C bus and return the data
+    NSMutableArray* fakeData = [NSMutableArray array];
+    [fakeData addObject:[NSNumber numberWithFloat:random_range(0,100)]];
+    [fakeData addObject:[NSNumber numberWithFloat:random_range(0,100)]];
+    return fakeData;
+}
 @end
 
 @implementation ORLabJackT7Model (private)
@@ -1311,4 +1337,5 @@ NSString* ORLabJackT7CalibrationInfoChanged     = @"ORLabJackT7CalibrationInfoCh
         [thePool release];
     }
 }
+
 @end

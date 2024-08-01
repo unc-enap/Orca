@@ -24,6 +24,7 @@
 #import "ORHPPulserModel.h"
 #import "ORAdcProcessing.h"
 #import "ORBitProcessing.h"
+#import "I2CProtocol.h"
 
 #include "orca_t7.h"
 
@@ -54,7 +55,7 @@
 #define kLabJackT7DataSize 34  // see ORLabJackT7Decoders.m
 
 
-@interface ORLabJackT7Model : OrcaObject <ORAdcProcessing,ORBitProcessing> {
+@interface ORLabJackT7Model : OrcaObject <ORAdcProcessing,ORBitProcessing,I2CProtocol> {
     NSLock* localLock;
     BOOL  enabled[kNumT7AdcChannels];
     double adc[kNumT7AdcChannels];
@@ -210,6 +211,11 @@
 #pragma mark ***Archival
 - (id)   initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
+
+//-------------------------------------------------------
+#pragma mark ***I2CProtocol
+- (id <I2CProtocol>) getI2CMaster;
+- (id) readI2CData;
 
 @end
 
