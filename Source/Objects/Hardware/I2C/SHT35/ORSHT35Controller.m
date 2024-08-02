@@ -108,7 +108,7 @@
     [(ORTimeAxis*)[temperaturePlot xAxis] setStartTime: [[NSDate date] timeIntervalSince1970]];
     [aPlot release];
 
-    aPlot= [[ORTimeLinePlot alloc] initWithTag:0 andDataSource:self];
+    aPlot= [[ORTimeLinePlot alloc] initWithTag:1 andDataSource:self];
     [humidityPlot addPlot: aPlot];
     [(ORTimeAxis*)[humidityPlot xAxis] setStartTime: [[NSDate date] timeIntervalSince1970]];
     [aPlot release];
@@ -303,10 +303,10 @@
     //---------------------------
     //tags are the millisecond delays
     //0 -> fastest possible -- no delay
-    //10000 -> 10Hz
+    //100 -> 10Hz
     //1000 -> 1Hz
-    //100 -> .1Hz
-    //store as tag.. use as delay in the thread...
+    //10000 -> .1Hz
+    //store as tag.. use as delay in the polling...
     //---------------------------
     [model setUpdateInterval:(int)[sender selectedTag]];
 }
