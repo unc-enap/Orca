@@ -35,8 +35,6 @@
 
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
-    if (self) {
-	}
     return self;
 }
 
@@ -59,6 +57,7 @@
 	[yAxis awakeFromNib];
 	[legend awakeFromNib];
 	[plotView awakeFromNib];
+
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustPositionsAndSizes) name:ORDataSetCalibrationChanged object:nil];
 	[self adjustPositionsAndSizes];
 }
@@ -135,7 +134,8 @@
 	
 	ORPlotView* aPlotView = [[ORPlotView alloc] initWithFrame:NSMakeRect(52,52,width-x,height-y)];
 	[aPlotView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
-    
+    aPlotView.clipsToBounds = true;
+
     [aPlotView setDelegate:delegate];
     [aPlotView setViewForPDF:self];
     
