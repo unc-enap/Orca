@@ -1313,7 +1313,7 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     }
     else {
         [self setMetaError:@""];
-        NSString* jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        NSString* jsonString = [[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]autorelease];
         
         //{experiment}-{data period}-{data run}-{data type}-{timestamp}
         NSString* path = [NSString stringWithFormat:@"l200-p%02d-r%03d-%@-T%c-keys",dataPeriod,lastDataCycle,type,'%'];
