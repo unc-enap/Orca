@@ -135,9 +135,9 @@
                             <menu key="menu" title="OtherViews" id="tFU-gq-31c">
                                 <items>
                                     <menuItem title="Fastest" state="on" id="n6p-Cv-yKr"/>
-                                    <menuItem title="10 Hz" tag="100" id="MBk-8p-NZQ"/>
+                                    <menuItem title="10 Hz" tag="10000" id="MBk-8p-NZQ"/>
                                     <menuItem title="  1 Hz" tag="1000" id="omU-J0-HKj"/>
-                                    <menuItem title="  .1 Hz" tag="10000" id="zNc-IA-wRw"/>
+                                    <menuItem title="  .1 Hz" tag="100" id="zNc-IA-wRw"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>
